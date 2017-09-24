@@ -23,6 +23,7 @@ LUCI_LANG.he=עִבְרִית (Hebrew)
 LUCI_LANG.hu=Magyar (Hungarian)
 LUCI_LANG.it=Italiano (Italian)
 LUCI_LANG.ja=日本語 (Japanese)
+LUCI_LANG.ko=한국어 (Korean)
 LUCI_LANG.ms=Bahasa Melayu (Malay)
 LUCI_LANG.no=Norsk (Norwegian)
 LUCI_LANG.pl=Polski (Polish)
@@ -30,12 +31,12 @@ LUCI_LANG.pt-br=Português do Brasil (Brazialian Portuguese)
 LUCI_LANG.pt=Português (Portuguese)
 LUCI_LANG.ro=Română (Romanian)
 LUCI_LANG.ru=Русский (Russian)
-LUCI_LANG.sk=Slovenčina (Slovene)
+LUCI_LANG.sk=Slovenčina (Slovak)
 LUCI_LANG.sv=Svenska (Swedish)
 LUCI_LANG.tr=Türkçe (Turkish)
 LUCI_LANG.uk=украї́нська (Ukrainian)
 LUCI_LANG.vi=Tiếng Việt (Vietnamese)
-LUCI_LANG.zh-cn=普通话 (Chinese)
+LUCI_LANG.zh-cn=中文 (Chinese)
 LUCI_LANG.zh-tw=臺灣華語 (Taiwanese)
 
 # Submenu titles
@@ -55,7 +56,7 @@ PKG_VERSION?=$(if $(DUMP),x,$(strip $(shell \
 	elif git log -1 >/dev/null 2>/dev/null; then \
 		revision="svn-r$$(LC_ALL=C git log -1 | sed -ne 's/.*git-svn-id: .*@\([0-9]\+\) .*/\1/p')"; \
 		if [ "$$revision" = "svn-r" ]; then \
-			set -- $$(git log -1 --format="%ct %h"); \
+			set -- $$(git log -1 --format="%ct %h" --abbrev=7); \
 			secs="$$(($$1 % 86400))"; \
 			yday="$$(date --utc --date="@$$1" "+%y.%j")"; \
 			revision="$$(printf 'git-%s.%05d-%s' "$$yday" "$$secs" "$$2")"; \
@@ -64,6 +65,20 @@ PKG_VERSION?=$(if $(DUMP),x,$(strip $(shell \
 		revision="unknown"; \
 	fi; \
 	echo "$$revision" \
+)))
+
+PKG_GITBRANCH?=$(if $(DUMP),x,$(strip $(shell \
+	variant="LuCI"; \
+	if git log -1 >/dev/null 2>/dev/null; then \
+		branch="$$(git branch --remote --verbose --no-abbrev --contains 2>/dev/null | \
+			sed -rne 's|^[^/]+/([^ ]+) [a-f0-9]{40} .+$$|\1|p' | head -n1)"; \
+		if [ "$$branch" != "master" ]; then \
+			variant="LuCI $$branch branch"; \
+		else \
+			variant="LuCI Master"; \
+		fi; \
+	fi; \
+	echo "$$variant" \
 )))
 
 PKG_RELEASE?=1
@@ -121,7 +136,7 @@ endef
 
 ifneq ($(wildcard ${CURDIR}/src/Makefile),)
  MAKE_PATH := src/
- MAKE_VARS += FPIC="$(FPIC)" LUCI_VERSION="$(PKG_VERSION)"
+ MAKE_VARS += FPIC="$(FPIC)" LUCI_VERSION="$(PKG_VERSION)" LUCI_GITBRANCH="$(PKG_GITBRANCH)"
 
  define Build/Compile
 	$(call Build/Compile/Default,clean compile)
@@ -137,9 +152,16 @@ LUCI_LIBRARYDIR = $(LUA_LIBRARYDIR)/luci
 
 define SrcDiet
 	$(FIND) $(1) -type f -name '*.lua' | while read src; do \
-		if $(STAGING_DIR_HOST)/bin/lua $(STAGING_DIR_HOST)/bin/LuaSrcDiet \
-			--noopt-binequiv -o "$$$$src.o" "$$$$src"; \
+		if LuaSrcDiet --noopt-binequiv -o "$$$$src.o" "$$$$src"; \
 		then mv "$$$$src.o" "$$$$src"; fi; \
+	done
+endef
+
+define SubstituteVersion
+	$(FIND) $(1) -type f -name '*.htm' | while read src; do \
+		$(SED) 's/<%# *\([^ ]*\)PKG_VERSION *%>/\1$(PKG_VERSION)/g' \
+		    -e 's/"\(<%= *\(media\|resource\) *%>[^"]*\.\(js\|css\)\)"/"\1?v=$(PKG_VERSION)"/g' \
+			"$$$$src"; \
 	done
 endef
 
@@ -149,6 +171,7 @@ define Package/$(PKG_NAME)/install
 	  cp -pR $(PKG_BUILD_DIR)/luasrc/* $(1)$(LUCI_LIBRARYDIR)/; \
 	  $(FIND) $(1)$(LUCI_LIBRARYDIR)/ -type f -name '*.luadoc' | $(XARGS) rm; \
 	  $(if $(CONFIG_LUCI_SRCDIET),$(call SrcDiet,$(1)$(LUCI_LIBRARYDIR)/),true); \
+	  $(call SubstituteVersion,$(1)$(LUCI_LIBRARYDIR)/); \
 	else true; fi
 	if [ -d $(PKG_BUILD_DIR)/htdocs ]; then \
 	  $(INSTALL_DIR) $(1)$(HTDOCS); \
@@ -182,7 +205,7 @@ define LuciTranslation
     CATEGORY:=LuCI
     TITLE:=$(PKG_NAME) - $(1) translation
     HIDDEN:=1
-    DEFAULT:=LUCI_LANG_$(1)||ALL
+    DEFAULT:=LUCI_LANG_$(1)||(ALL&&m)
     DEPENDS:=$(PKG_NAME)
     PKGARCH:=all
   endef

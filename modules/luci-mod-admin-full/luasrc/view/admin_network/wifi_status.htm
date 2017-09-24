@@ -1,12 +1,12 @@
 <%+cbi/valueheader%>
 
 <script type="text/javascript">//<![CDATA[
-	XHR.poll(5, '<%=luci.dispatcher.build_url("admin", "network", "wireless_status", self.ifname)%>', null,
+	XHR.poll(5, '<%=url('admin/network/wireless_status', self.ifname)%>', null,
 		function(x, iw)
 		{
 			if (iw && (iw = iw[0]))
 			{
-				var is_assoc = (iw.bssid && iw.bssid != '00:00:00:00:00:00' && iw.channel);
+				var is_assoc = (iw.bssid && iw.bssid != '00:00:00:00:00:00' && iw.channel && !iw.disabled);
 				var p = iw.quality;
 				var q = is_assoc ? p : -1;
 

@@ -1,5 +1,5 @@
 <script type="text/javascript">//<![CDATA[
-	XHR.poll(5, '<%=luci.dispatcher.build_url("admin", "network", "multiwan", "status")%>', null,
+	XHR.poll(5, '<%=url('admin/network/multiwan/status')%>', null,
 		function(x, st)
 		{
 			var tx = document.getElementById('multiwan_status_text');

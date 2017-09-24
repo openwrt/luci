@@ -1,6 +1,6 @@
 <script type="text/javascript">//<![CDATA[
 	var switches = [ '<%=table.concat(self.switches, "', '")%>' ];
-	XHR.poll(5, '<%=luci.dispatcher.build_url("admin", "network", "switch_status")%>/' + switches.join(','), null,
+	XHR.poll(5, '<%=url('admin/network/switch_status')%>/' + switches.join(','), null,
 		function(x, st)
 		{
 			for (var i = 0; i < switches.length; i++)
@@ -15,7 +15,10 @@
 
 					for (var j = 0; j < ports.length; j++)
 					{
-						var th = th0.parentNode.parentNode.childNodes[j+1];
+						var th = document.getElementById('portstatus-' + switches[i] + '-' + j);
+
+						if (!th)
+							continue;
 
 						if (ports[j].link)
 						{

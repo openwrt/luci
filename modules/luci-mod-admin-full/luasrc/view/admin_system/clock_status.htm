@@ -1,7 +1,7 @@
 <%+cbi/valueheader%>
 
 <script type="text/javascript">//<![CDATA[
-	XHR.poll(5, '<%=luci.dispatcher.build_url("admin", "system", "clock_status")%>', null,
+	XHR.poll(5, '<%=url('admin/system/clock_status')%>', null,
 		function(x, rv)
 		{
 			var s = document.getElementById('<%=self.option%>-clock-status');
@@ -17,8 +17,8 @@
 		btn.disabled = true;
 		btn.value    = '<%:Synchronizing...%>';
 
-		XHR.get('<%=luci.dispatcher.build_url("admin", "system", "clock_status")%>',
-			{ set: Math.floor((new Date()).getTime() / 1000) },
+		(new XHR()).post('<%=url('admin/system/clock_status')%>',
+			{ token: '<%=token%>', set: Math.floor((new Date()).getTime() / 1000) },
 			function()
 			{
 				btn.disabled = false;

@@ -122,27 +122,34 @@ function upgrade()
 end
 
 -- List helper
-function _list(action, pat, cb)
+local function _list(action, pat, cb)
 	local fd = io.popen(ipkg .. " " .. action ..
 		(pat and (" '%s'" % pat:gsub("'", "")) or ""))
 
 	if fd then
-		local name, version, desc
+		local name, version, sz, desc
 		while true do
 			local line = fd:read("*l")
 			if not line then break end
 
-			name, version, desc = line:match("^(.-) %- (.-) %- (.+)")
+			name, version, sz, desc = line:match("^(.-) %- (.-) %- (.-) %- (.+)")
 
 			if not name then
-				name, version = line:match("^(.-) %- (.+)")
+				name, version, sz = line:match("^(.-) %- (.-) %- (.+)")
 				desc = ""
 			end
 
-			cb(name, version, desc)
+			if name and version then
+				if #version > 26 then
+					version = version:sub(1,21) .. ".." .. version:sub(-3,-1)
+				end
+
+				cb(name, version, sz, desc)
+			end
 
 			name    = nil
 			version = nil
+			sz      = nil
 			desc    = nil
 		end
 
@@ -151,15 +158,15 @@ function _list(action, pat, cb)
 end
 
 function list_all(pat, cb)
-	_list("list", pat, cb)
+	_list("list --size", pat, cb)
 end
 
 function list_installed(pat, cb)
-	_list("list_installed", pat, cb)
+	_list("list_installed --size", pat, cb)
 end
 
 function find(pat, cb)
-	_list("find", pat, cb)
+	_list("find --size", pat, cb)
 end
 
 
@@ -188,4 +195,48 @@ function overlay_root()
 	end
 
 	return od
+end
+
+function compare_versions(ver1, comp, ver2)
+	if not ver1 or not ver2
+	or not comp or not (#comp > 0) then
+		error("Invalid parameters")
+		return nil
+	end
+	-- correct compare string
+	if comp == "<>" or comp == "><" or comp == "!=" or comp == "~=" then comp = "~="
+	elseif comp == "<=" or comp == "<" or comp == "=<" then comp = "<="
+	elseif comp == ">=" or comp == ">" or comp == "=>" then comp = ">="
+	elseif comp == "="  or comp == "==" then comp = "=="
+	elseif comp == "<<" then comp = "<"
+	elseif comp == ">>" then comp = ">"
+	else
+		error("Invalid compare string")
+		return nil
+	end
+
+	local av1 = util.split(ver1, "[%.%-]", nil, true)
+	local av2 = util.split(ver2, "[%.%-]", nil, true)
+
+	local max = table.getn(av1)
+	if (table.getn(av1) < table.getn(av2)) then
+		max = table.getn(av2)
+	end
+
+	for i = 1, max, 1  do
+		local s1 = av1[i] or ""
+		local s2 = av2[i] or ""
+
+		-- first "not equal" found return true
+		if comp == "~=" and (s1 ~= s2) then return true end
+		-- first "lower" found return true
+		if (comp == "<" or comp == "<=") and (s1 < s2) then return true end
+		-- first "greater" found return true
+		if (comp == ">" or comp == ">=") and (s1 > s2) then return true end
+		-- not equal then return false
+		if (s1 ~= s2) then return false end
+	end
+
+	-- all equal and not compare greater or lower then true
+	return not (comp == "<" or comp == ">")
 end

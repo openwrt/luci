@@ -56,7 +56,7 @@
 %>
 
 
-<form method="post" action="<%=luci.dispatcher.build_url("admin", "asterisk", "dialplans")%>" enctype="multipart/form-data">
+<form method="post" action="<%=url('admin/asterisk/dialplans')%>" enctype="multipart/form-data">
 	<div>
 		<script type="text/javascript" src="/luci-static/resources/cbi.js"></script>
 		<input type="hidden" name="cbi.submit" value="1" />
@@ -64,13 +64,13 @@
 	</div>
 
 <div class="cbi-map" id="cbi-asterisk">
-	<h2><a id="content" name="content">Outgoing Call Routing</a></h2>
+	<h2 name="content">Outgoing Call Routing</h2>
 	<div class="cbi-map-descr">
 		Here you can manage your dial plans which are used to route outgoing calls from your local extensions.<br /><br />
 		Related tasks:<br />
-		<a href="<%=luci.dispatcher.build_url('admin/asterisk/dialplans/zones')%>" class="cbi-title-ref">Manage dialzones</a> |
-		<a href="<%=luci.dispatcher.build_url('admin/asterisk/voicemail/mailboxes')%>" class="cbi-title-ref">Manage voicemail boxes</a> |
-		<a href="<%=luci.dispatcher.build_url('admin/asterisk/meetme/rooms')%>" class="cbi-title-ref">Manage meetme rooms</a>
+		<a href="<%=url('admin/asterisk/dialplans/zones')%>" class="cbi-title-ref">Manage dialzones</a> |
+		<a href="<%=url('admin/asterisk/voicemail/mailboxes')%>" class="cbi-title-ref">Manage voicemail boxes</a> |
+		<a href="<%=url('admin/asterisk/meetme/rooms')%>" class="cbi-title-ref">Manage meetme rooms</a>
 	</div>
 	<!-- tblsection -->
 	<fieldset class="cbi-section" id="cbi-asterisk-sip">
@@ -85,7 +85,7 @@
 						<big>Dialplan <em><%=plan.name%></em></big>
 					</th>
 					<td>
-						<a href="<%=luci.dispatcher.build_url('admin', 'asterisk', 'dialplans')%>?delplan=<%=plan.name%>">
+						<a href="<%=url('admin/asterisk/dialplans')%>?delplan=<%=plan.name%>">
 							<img style="border:none" alt="Remove this dialplan" title="Remove this dialplan" src="/luci-static/resources/cbi/remove.gif" />
 						</a>
 					</td>
@@ -109,10 +109,10 @@
 						</p>
 					</td>
 					<td style="width:5%" class="cbi-value-field">
-						<a href="<%=luci.dispatcher.build_url('admin/asterisk/dialplans/out', zone.name)%>">
+						<a href="<%=url('admin/asterisk/dialplans/out', zone.name)%>">
 							<img style="border:none" alt="Edit dialzone" title="Edit dialzone" src="/luci-static/resources/cbi/edit.gif" />
 						</a>
-						<a href="<%=luci.dispatcher.build_url('admin/asterisk/dialplans')%>?delzone.<%=plan.name%>=<%=zone.name%>">
+						<a href="<%=url('admin/asterisk/dialplans')%>?delzone.<%=plan.name%>=<%=zone.name%>">
 							<img style="border:none" alt="Remove from this dialplan" title="Remove from this dialplan" src="/luci-static/resources/cbi/remove.gif" />
 						</a>
 					</td>
@@ -134,10 +134,10 @@
 						</p>
 					</td>
 					<td style="width:5%" class="cbi-value-field">
-						<a href="<%=luci.dispatcher.build_url('admin/asterisk/voicemail/mailboxes')%>">
+						<a href="<%=url('admin/asterisk/voicemail/mailboxes')%>">
 							<img style="border:none" alt="Manage mailboxes ..." title="Manage mailboxes ..." src="/luci-static/resources/cbi/edit.gif" />
 						</a>
-						<a href="<%=luci.dispatcher.build_url('admin/asterisk/dialplans')%>?delvbox.<%=plan.name%>=<%=ext%>">
+						<a href="<%=url('admin/asterisk/dialplans')%>?delvbox.<%=plan.name%>=<%=ext%>">
 							<img style="border:none" alt="Remove from this dialplan" title="Remove from this dialplan" src="/luci-static/resources/cbi/remove.gif" />
 						</a>
 					</td>
@@ -157,10 +157,10 @@
 						</p>
 					</td>
 					<td style="width:5%" class="cbi-value-field">
-						<a href="<%=luci.dispatcher.build_url('admin/asterisk/meetme/rooms')%>">
+						<a href="<%=url('admin/asterisk/meetme/rooms')%>">
 							<img style="border:none" alt="Manage conferences ..." title="Manage conferences ..." src="/luci-static/resources/cbi/edit.gif" />
 						</a>
-						<a href="<%=luci.dispatcher.build_url('admin/asterisk/dialplans')%>?delmeetme.<%=plan.name%>=<%=ext%>">
+						<a href="<%=url('admin/asterisk/dialplans')%>?delmeetme.<%=plan.name%>=<%=ext%>">
 							<img style="border:none" alt="Remove from this dialplan" title="Remove from this dialplan" src="/luci-static/resources/cbi/remove.gif" />
 						</a>
 					</td>

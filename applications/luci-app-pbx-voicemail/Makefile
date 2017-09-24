@@ -7,7 +7,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=LuCI PBX Administration Voicemail Support
-LUCI_DEPENDS:=+luci-app-pbx +asterisk18 +msmtp +coreutils-base64
+LUCI_DEPENDS:=+luci-app-pbx +asterisk18 +msmtp +coreutils-base64 @BROKEN
 
 include ../../luci.mk
 

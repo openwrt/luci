@@ -8,7 +8,7 @@ local uci = require "luci.model.uci".cursor()
 local function dhcp_leases_common(family)
 	local rv = { }
 	local nfs = require "nixio.fs"
-	local leasefile = "/var/dhcp.leases"
+	local leasefile = "/tmp/dhcp.leases"
 
 	uci:foreach("dhcp", "dnsmasq",
 		function(s)
@@ -26,17 +26,18 @@ local function dhcp_leases_common(family)
 				break
 			else
 				local ts, mac, ip, name, duid = ln:match("^(%d+) (%S+) (%S+) (%S+) (%S+)")
+				local expire = tonumber(ts) or 0
 				if ts and mac and ip and name and duid then
 					if family == 4 and not ip:match(":") then
 						rv[#rv+1] = {
-							expires  = os.difftime(tonumber(ts) or 0, os.time()),
+							expires  = (expire ~= 0) and os.difftime(expire, os.time()),
 							macaddr  = mac,
 							ipaddr   = ip,
 							hostname = (name ~= "*") and name
 						}
 					elseif family == 6 and ip:match(":") then
 						rv[#rv+1] = {
-							expires  = os.difftime(tonumber(ts) or 0, os.time()),
+							expires  = (expire ~= 0) and os.difftime(expire, os.time()),
 							ip6addr  = ip,
 							duid     = (duid ~= "*") and duid,
 							hostname = (name ~= "*") and name
@@ -48,25 +49,44 @@ local function dhcp_leases_common(family)
 		fd:close()
 	end
 
-	local fd = io.open("/tmp/hosts/odhcpd", "r")
+	local lease6file = "/tmp/hosts/odhcpd"
+	uci:foreach("dhcp", "odhcpd",
+		function(t)
+			if t.leasefile and nfs.access(t.leasefile) then
+				lease6file = t.leasefile
+				return false
+			end
+		end)
+	local fd = io.open(lease6file, "r")
 	if fd then
 		while true do
 			local ln = fd:read("*l")
 			if not ln then
 				break
 			else
-				local iface, duid, iaid, name, ts, id, length, ip = ln:match("^# (%S+) (%S+) (%S+) (%S+) (%d+) (%S+) (%S+) (.*)")
+				local iface, duid, iaid, name, ts, id, length, ip = ln:match("^# (%S+) (%S+) (%S+) (%S+) (-?%d+) (%S+) (%S+) (.*)")
+				local expire = tonumber(ts) or 0
 				if ip and iaid ~= "ipv4" and family == 6 then
 					rv[#rv+1] = {
-						expires  = os.difftime(tonumber(ts) or 0, os.time()),
+						expires  = (expire >= 0) and os.difftime(expire, os.time()),
 						duid     = duid,
 						ip6addr  = ip,
 						hostname = (name ~= "-") and name
 					}
 				elseif ip and iaid == "ipv4" and family == 4 then
+					local mac, mac1, mac2, mac3, mac4, mac5, mac6
+					if duid and type(duid) == "string" then
+						 mac1, mac2, mac3, mac4, mac5, mac6 = duid:match("^(%x%x)(%x%x)(%x%x)(%x%x)(%x%x)(%x%x)$")
+					end
+					if not (mac1 and mac2 and mac3 and mac4 and mac5 and mac6) then
+						mac = "FF:FF:FF:FF:FF:FF"
+					else
+						mac = mac1..":"..mac2..":"..mac3..":"..mac4..":"..mac5..":"..mac6
+					end
 					rv[#rv+1] = {
-						expires  = os.difftime(tonumber(ts) or 0, os.time()),
+						expires  = (expire >= 0) and os.difftime(expire, os.time()),
 						macaddr  = duid,
+						macaddr  = mac:lower(),
 						ipaddr   = ip,
 						hostname = (name ~= "-") and name
 					}
@@ -120,7 +140,9 @@ function wifi_networks()
 				assoclist  = net:assoclist(),
 				country    = net:country(),
 				txpower    = net:txpower(),
-				txpoweroff = net:txpower_offset()
+				txpoweroff = net:txpower_offset(),
+				disabled   = (dev:get("disabled") == "1" or
+				             net:get("disabled") == "1")
 			}
 		end
 

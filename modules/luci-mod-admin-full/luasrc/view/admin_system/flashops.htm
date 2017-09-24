@@ -1,12 +1,12 @@
 <%#
  Copyright 2008 Steven Barth <steven@midlink.org>
- Copyright 2008 Jo-Philipp Wich <jow@openwrt.org>
+ Copyright 2008-2015 Jo-Philipp Wich <jow@openwrt.org>
  Licensed to the public under the Apache License 2.0.
 -%>
 
 <%+header%>
 
-<h2><a id="content" name="content"><%:Flash operations%></a></h2>
+<h2 name="content"><%:Flash operations%></h2>
 
 <ul class="cbi-tabmenu">
 	<li class="cbi-tab"><a href="#"><%:Actions%></a></li>
@@ -17,36 +17,43 @@
 
 	<fieldset class="cbi-section">
 		<legend><%:Backup / Restore%></legend>
-		<form method="post" action="<%=REQUEST_URI%>" enctype="multipart/form-data">
-			<div class="cbi-section-descr"><%:Click "Generate archive" to download a tar archive of the current configuration files. To reset the firmware to its initial state, click "Perform reset" (only possible with squashfs images).%></div>
-			<div class="cbi-section-node">
+		<div class="cbi-section-descr"><%:Click "Generate archive" to download a tar archive of the current configuration files. To reset the firmware to its initial state, click "Perform reset" (only possible with squashfs images).%></div>
+		<div class="cbi-section-node">
+			<form class="inline" method="post" action="<%=url('admin/system/flashops/backup')%>">
+				<input type="hidden" name="token" value="<%=token%>" />
 				<div class="cbi-value<% if not reset_avail then %> cbi-value-last<% end %>">
 					<label class="cbi-value-title" for="image"><%:Download backup%>:</label>
 					<div class="cbi-value-field">
 						<input class="cbi-button cbi-button-apply" type="submit" name="backup" value="<%:Generate archive%>" />
 					</div>
 				</div>
-				<% if reset_avail then %>
+			</form>
+			<% if reset_avail then %>
+			<form class="inline" method="post" action="<%=url('admin/system/flashops/reset')%>">
+				<input type="hidden" name="token" value="<%=token%>" />
 				<div class="cbi-value cbi-value-last">
 					<label class="cbi-value-title"><%:Reset to defaults%>:</label>
 					<div class="cbi-value-field">
 						<input onclick="return confirm('<%:Really reset all changes?%>')" class="cbi-button cbi-button-reset" type="submit" name="reset" value="<%:Perform reset%>" />
 					</div>
 				</div>
-				<% end %>
-			</div>
-			<br />
-			<div class="cbi-section-descr"><%:To restore configuration files, you can upload a previously generated backup archive here.%></div>
-			<div class="cbi-section-node">
+			</form>
+			<% end %>
+		</div>
+		<br />
+		<div class="cbi-section-descr"><%:To restore configuration files, you can upload a previously generated backup archive here.%></div>
+		<div class="cbi-section-node">
+			<form class="inline" method="post" action="<%=url('admin/system/flashops/restore')%>" enctype="multipart/form-data">
 				<div class="cbi-value cbi-value-last">
 					<label class="cbi-value-title" for="archive"><%:Restore backup%>:</label>
 					<div class="cbi-value-field">
+						<input type="hidden" name="token" value="<%=token%>" />
 						<input type="file" name="archive" id="archive" />
 						<input type="submit" class="cbi-button cbi-input-apply" name="restore" value="<%:Upload archive...%>" />
 					</div>
 				</div>
-			</div>
-		</form>
+			</form>
+		</div>
 	</fieldset>
 
 	<br />
@@ -54,8 +61,9 @@
 	<fieldset class="cbi-section">
 		<legend><%:Flash new firmware image%></legend>
 		<% if upgrade_avail then %>
-			<form method="post" action="<%=REQUEST_URI%>" enctype="multipart/form-data">
-				<div class="cbi-section-descr"><%:Upload a sysupgrade-compatible image here to replace the running firmware. Check "Keep settings" to retain the current configuration (requires an OpenWrt compatible firmware image).%></div>
+			<form method="post" action="<%=url('admin/system/flashops/sysupgrade')%>" enctype="multipart/form-data">
+				<input type="hidden" name="token" value="<%=token%>" />
+				<div class="cbi-section-descr"><%:Upload a sysupgrade-compatible image here to replace the running firmware. Check "Keep settings" to retain the current configuration (requires a compatible firmware image).%></div>
 				<div class="cbi-section-node">
 					<div class="cbi-value">
 						<label class="cbi-value-title" for="keep"><%:Keep settings%>:</label>
@@ -76,7 +84,7 @@
 				<% end %>
 			</form>
 		<% else %>
-			<div class="cbi-section-descr"><%:Sorry, there is no sysupgrade support present; a new firmware image must be flashed manually. Please refer to the OpenWrt wiki for device specific install instructions.%></div>
+			<div class="cbi-section-descr"><%:Sorry, there is no sysupgrade support present; a new firmware image must be flashed manually. Please refer to the wiki for device specific install instructions.%></div>
 		<% end %>
 	</fieldset>
 

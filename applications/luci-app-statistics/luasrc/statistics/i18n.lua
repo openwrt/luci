@@ -26,15 +26,6 @@ function Instance._subst( self, str, val )
 	return str
 end
 
-function Instance._translate( self, key, alt )
-	local val = self.i18n.string(key)
-	if val ~= key then
-		return val
-	else
-		return alt
-	end
-end
-
 function Instance.title( self, plugin, pinst, dtype, dinst, user_title )
 
 	local title = user_title or
@@ -73,24 +64,17 @@ end
 
 function Instance.ds( self, source )
 
-	local label = source.title or self:_translate(
-		string.format( "stat_ds_%s_%s_%s", source.type, source.instance, source.ds ),
-		self:_translate(
-			string.format( "stat_ds_%s_%s", source.type, source.instance ),
-			self:_translate(
-				string.format( "stat_ds_label_%s__%s", source.type, source.ds ),
-				self:_translate(
-					string.format( "stat_ds_%s", source.type ),
-					source.type .. "_" .. source.instance:gsub("[^%w]","_") .. "_" .. source.ds
-				)
-			)
-		)
-	)
+	local label = source.title or
+		"dt=%s/di=%s/ds=%s" % {
+			(source.type     and #source.type     > 0) and source.type     or "(nil)",
+			(source.instance and #source.instance > 0) and source.instance or "(nil)",
+			(source.ds       and #source.ds       > 0) and source.ds       or "(nil)"
+		}
 
 	return self:_subst( label, {
 		dtype = source.type,
 		dinst = source.instance,
 		dsrc  = source.ds
-	} )
+	} ):gsub(":", "\\:")
 
 end

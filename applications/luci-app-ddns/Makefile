@@ -1,36 +1,36 @@
 #
-# Copyright (C) 2008-2015 The LuCI Team <luci@lists.subsignal.org>
+# Copyright 2008 Steven Barth <steven@midlink.org>
+# Copyright 2008 Jo-Philipp Wich <jow@openwrt.org>
+# Copyright 2013 Manuel Munz <freifunk at somakoma dot de>
+# Copyright 2014-2017 Christian Schoenebeck <christian dot schoenebeck at gmail dot com>
 #
-# This is free software, licensed under the Apache License, Version 2.0 .
-#
+# This is free software, licensed under the Apache License, Version 2.0
 
 include $(TOPDIR)/rules.mk
+
+# PKG_NAME:=luci-app-ddns
+
+# Version == major.minor.patch
+# increase on new functionality (minor) or patches (patch)
+PKG_VERSION:=2.4.8
+
+# Release == build
+# increase on changes of translation files
+PKG_RELEASE:=2
+
+PKG_LICENSE:=Apache-2.0
+PKG_MAINTAINER:=Christian Schoenebeck <christian.schoenebeck@gmail.com>
 
 # LuCI specific settings
 LUCI_TITLE:=LuCI Support for Dynamic DNS Client (ddns-scripts)
 LUCI_DEPENDS:=+luci-mod-admin-full +ddns-scripts
-LUCI_PKGARCH:=all
-
-PKG_NAME:=luci-app-ddns
-
-# Version == major.minor.patch
-# increase on new functionality (minor) or patches (patch)
-PKG_VERSION:=2.2.0
-
-# Release == build
-# increase on changes of translation files
-PKG_RELEASE:=1
-
-PKG_LICENSE:=Apache-2.0
-PKG_MAINTAINER:=Christian Schoenebeck <christian.schoenebeck@gmail.com>
+# LUCI_PKGARCH:=all
 
 define Package/$(PKG_NAME)/config
 # shown in make menuconfig <Help>
 help
 	$(LUCI_TITLE)
-
-	Version   : $(PKG_VERSION)-$(PKG_RELEASE)
-	Maintainer: $(PKG_MAINTAINER)
+	Version: $(PKG_VERSION)-$(PKG_RELEASE)
 endef
 
 include ../../luci.mk

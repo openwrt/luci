@@ -84,11 +84,13 @@ function action_flashops()
 					fp = io.open(image_tmp, "w")
 				end
 			end
-			if chunk then
-				fp:write(chunk)
-			end
-			if eof then
-				fp:close()
+			if fp then
+				if chunk then
+					fp:write(chunk)
+				end
+				if eof then
+					fp:close()
+				end
 			end
 		end
 	)

@@ -13,9 +13,10 @@ s:tab("template", translate("Edit Template"))
 s:taboption("general", Value, "name", translate("Hostname"))
 s:taboption("general", Value, "description", translate("Description"))
 s:taboption("general", Value, "workgroup", translate("Workgroup"))
-s:taboption("general", Value, "homes", translate("Share home-directories"),
+h = s:taboption("general", Flag, "homes", translate("Share home-directories"),
         translate("Allow system users to reach their home directories via " ..
                 "network shares"))
+h.rmempty = false
 
 tmpl = s:taboption("template", Value, "_tmpl",
 	translate("Edit the template that is used for generating the samba configuration."), 
@@ -35,7 +36,8 @@ function tmpl.write(self, section, value)
 end
 
 
-s = m:section(TypedSection, "sambashare", translate("Shared Directories"))
+s = m:section(TypedSection, "sambashare", translate("Shared Directories")
+  , translate("Please add directories to share. Each directory refers to a folder on a mounted device."))
 s.anonymous = true
 s.addremove = true
 s.template = "cbi/tblsection"
@@ -52,6 +54,12 @@ ro = s:option(Flag, "read_only", translate("Read-only"))
 ro.rmempty = false
 ro.enabled = "yes"
 ro.disabled = "no"
+
+br = s:option(Flag, "browseable", translate("Browseable"))
+br.rmempty = false
+br.default = "yes"
+br.enabled = "yes"
+br.disabled = "no"
 
 go = s:option(Flag, "guest_ok", translate("Allow guests"))
 go.rmempty = false

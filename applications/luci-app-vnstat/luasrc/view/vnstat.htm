@@ -22,7 +22,7 @@ style = (style and #style > 0) and style or "s"
 --
 if iface then
 	style = style:gsub("[^%w]", "")
-	iface = iface:gsub("[^%w%.%-]", "")
+	iface = iface:gsub("[^%w%.%-%_]", "")
 
 	luci.http.prepare_content("image/png")
 
@@ -56,7 +56,7 @@ dbdir = dbdir or "/var/lib/vnstat"
 
 <%+header%>
 
-<h2><a id="content" name="content"><%:VnStat Graphs%></a></h2>
+<h2 name="content"><%:VnStat Graphs%></h2>
 
 <form action="" method="get">
 

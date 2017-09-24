@@ -1,5 +1,5 @@
 <%#
- Copyright 2009 Jo-Philipp Wich <jow@openwrt.org>
+ Copyright 2009-2015 Jo-Philipp Wich <jow@openwrt.org>
  Licensed to the public under the Apache License 2.0.
 -%>
 
@@ -87,7 +87,7 @@
 
 <%+header%>
 
-<h2><a id="content" name="content"><%:Join Network: Wireless Scan%></a></h2>
+<h2 name="content"><%:Join Network: Wireless Scan%></h2>
 
 <div class="cbi-map">
 	<fieldset class="cbi-section">
@@ -109,7 +109,8 @@
 					<strong>Encryption:</strong> <%=format_wifi_encryption(net.encryption)%>
 				</td>
 				<td class="cbi-value-field" style="width:40px">
-					<form action="<%=REQUEST_URI%>" method="post">
+					<form action="<%=url('admin/network/wireless_join')%>" method="post">
+						<input type="hidden" name="token" value="<%=token%>" />
 						<input type="hidden" name="device" value="<%=utl.pcdata(dev)%>" />
 						<input type="hidden" name="join" value="<%=utl.pcdata(net.ssid)%>" />
 						<input type="hidden" name="mode" value="<%=net.mode%>" />
@@ -135,10 +136,11 @@
 	</fieldset>
 </div>
 <div class="cbi-page-actions right">
-	<form class="inline" action="<%=luci.dispatcher.build_url("admin/network/wireless")%>" method="get">
+	<form class="inline" action="<%=url("admin/network/wireless")%>" method="get">
 		<input class="cbi-button cbi-button-reset" type="submit" value="<%:Back to overview%>" />
 	</form>
-	<form class="inline" action="<%=REQUEST_URI%>" method="get">
+	<form class="inline" action="<%=url('admin/network/wireless_join')%>" method="post">
+		<input type="hidden" name="token" value="<%=token%>" />
 		<input type="hidden" name="device" value="<%=utl.pcdata(dev)%>" />
 		<input class="cbi-button cbi-input-find" type="submit" value="<%:Repeat scan%>" />
 	</form>

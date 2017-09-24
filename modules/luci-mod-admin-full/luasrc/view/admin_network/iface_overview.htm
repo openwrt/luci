@@ -49,7 +49,7 @@
 			s.innerHTML = '<%:Waiting for changes to be applied...%>';
 		}
 
-		XHR.get('<%=luci.dispatcher.build_url("admin", "network")%>/iface_' + (reconnect ? 'reconnect' : 'shutdown') + '/' + id, null,
+		(new XHR()).post('<%=url('admin/network')%>/iface_' + (reconnect ? 'reconnect' : 'shutdown') + '/' + id, { token: '<%=token%>' },
 			function(x)
 			{
 				if (s)
@@ -66,12 +66,22 @@
 		);
 	}
 
+	function iface_delete(id) {
+		if (!confirm('<%:Really delete this interface? The deletion cannot be undone!\nYou might lose access to this device if you are connected via this interface.%>'))
+			return;
+
+		(new XHR()).post('<%=url('admin/network/iface_delete')%>/' + id, { token: '<%=token%>' },
+			function(x) {
+				location.href = '<%=url('admin/network/network')%>';
+			}
+		);
+	}
 
 	var iwxhr = new XHR();
 	var wifidevs = <%=luci.http.write_json(netdevs)%>;
 	var arptable = <%=luci.http.write_json(arpcache)%>;
 
-	XHR.poll(5, '<%=luci.dispatcher.build_url("admin", "network", "iface_status", table.concat(ifaces, ","))%>', null,
+	XHR.poll(5, '<%=url('admin/network/iface_status', table.concat(ifaces, ","))%>', null,
 		function(x, ifcs)
 		{
 			if (ifcs)
@@ -125,7 +135,7 @@
 							html += String.format('<strong><%:Uptime%>:</strong> %t<br />', ifc.uptime);
 						}
 
-						if (ifc.type != 'tunnel')
+						if (ifc.macaddr)
 						{
 							html += String.format('<strong><%:MAC-Address%>:</strong> %s<br />', ifc.macaddr);
 						}
@@ -139,32 +149,25 @@
 
 						if (ifc.ipaddrs && ifc.ipaddrs.length)
 						{
-							html += '<strong><%:IPv4%>: </strong>';
-
 							for (var i = 0; i < ifc.ipaddrs.length; i++)
 								html += String.format(
-									'%s%s/%d',
-									i ? ', ' : '',
-									ifc.ipaddrs[i].addr,
-									ifc.ipaddrs[i].prefix
+									'<strong><%:IPv4%>:</strong> %s<br />',
+									ifc.ipaddrs[i]
 								);
-
-							html += '<br />';
 						}
 
 						if (ifc.ip6addrs && ifc.ip6addrs.length)
 						{
-							html += '<strong><%:IPv6%>: </strong>';
-
 							for (var i = 0; i < ifc.ip6addrs.length; i++)
 								html += String.format(
-									'%s%s/%d',
-									i ? ', ' : '',
-									ifc.ip6addrs[i].addr.toUpperCase(),
-									ifc.ip6addrs[i].prefix
+									'<strong><%:IPv6%>:</strong> %s<br />',
+									ifc.ip6addrs[i]
 								);
-
-							html += '<br />';
+						}
+						
+						if (ifc.ip6prefix)
+						{
+							html += String.format('<strong><%:IPv6-PD%>:</strong> %s<br />', ifc.ip6prefix);
 						}
 
 						d.innerHTML = html;
@@ -178,14 +181,14 @@
 						d.innerHTML = String.format(
 							'<em><%:Unsupported protocol type.%></em><br />' +
 							'<a href="%h"><%:Install protocol extensions...%></a>',
-								'<%=luci.dispatcher.build_url("admin/system/packages")%>?query=luci-proto&display=available'
+								'<%=url("admin/system/packages")%>?query=luci-proto&display=available'
 						);
 					}
 					else if (d && !ifc.ifname)
 					{
 						d.innerHTML = String.format(
 							'<em><%:Network without interfaces.%></em><br />' +
-							'<a href="<%=luci.dispatcher.build_url("admin/network/network/%s")%>?tab.network.%s=physical"><%:Assign interfaces...%></a>',
+							'<a href="<%=url("admin/network/network/%s")%>?tab.network.%s=physical"><%:Assign interfaces...%></a>',
 								ifc.name, ifc.name
 						);
 					}
@@ -239,13 +242,13 @@
 					<td style="width:420px">
 						<input type="button" class="cbi-button cbi-button-reload" style="width:100px" onclick="iface_shutdown('<%=net[1]%>', true)" title="<%:Reconnect this interface%>" value="<%:Connect%>" />
 						<input type="button" class="cbi-button cbi-button-reset" style="width:100px" onclick="iface_shutdown('<%=net[1]%>', false)" title="<%:Shutdown this interface%>" value="<%:Stop%>" />
-						<input type="button" class="cbi-button cbi-button-edit" style="width:100px" onclick="location.href='<%=luci.dispatcher.build_url("admin/network/network", net[1])%>'" title="<%:Edit this interface%>" value="<%:Edit%>" id="<%=net[1]%>-ifc-edit" />
-						<input type="button" class="cbi-button cbi-button-remove" style="width:100px" onclick="if (confirm('<%:Really delete this interface? The deletion cannot be undone!\nYou might lose access to this device if you are connected via this interface.%>')) location.href='<%=luci.dispatcher.build_url("admin/network/iface_delete", net[1])%>'" title="<%:Delete this interface%>" value="<%:Delete%>" />
+						<input type="button" class="cbi-button cbi-button-edit" style="width:100px" onclick="location.href='<%=url("admin/network/network", net[1])%>'" title="<%:Edit this interface%>" value="<%:Edit%>" id="<%=net[1]%>-ifc-edit" />
+						<input type="button" class="cbi-button cbi-button-remove" style="width:100px" onclick="iface_delete('<%=net[1]%>')" value="<%:Delete%>" />
 					</td>
 				</tr>
 			<% end %>
 		</table>
 
-		<input type="button" class="cbi-button cbi-button-add" value="<%:Add new interface...%>" onclick="location.href='<%=luci.dispatcher.build_url("admin/network/iface_add")%>'" />
+		<input type="button" class="cbi-button cbi-button-add" value="<%:Add new interface...%>" onclick="location.href='<%=url("admin/network/iface_add")%>'" />
 	</fieldset>
 </div>

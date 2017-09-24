@@ -58,7 +58,7 @@
 			legend.parentNode.style.display = 'block';
 			legend.style.display = 'inline';
 
-			stxhr.get('<%=luci.dispatcher.build_url("admin", "system", "commands", "run")%>/' + id + (args ? '/' + args : ''), null,
+			stxhr.get('<%=url('admin/system/commands/run')%>/' + id + (args ? '/' + args : ''), null,
 				function(x, st)
 				{
 					if (st)
@@ -93,7 +93,7 @@
 		if (field)
 			args = encodeURIComponent(field.value);
 
-		location.href = '<%=luci.dispatcher.build_url("admin", "system", "commands", "download")%>/' + id + (args ? '/' + args : '');
+		location.href = '<%=url('admin/system/commands/download')%>/' + id + (args ? '/' + args : '');
 	}
 
 	function command_link(id)
@@ -108,16 +108,19 @@
 
 		if (legend && output)
 		{
-			var link = location.protocol + '//' + location.hostname +
+			var prefix = location.protocol + '//' + location.hostname +
 			           (location.port ? ':' + location.port : '') +
-					   location.pathname.split(';')[0] + 'command/' +
-					   id + (args ? '/' + args : '');
-
+					   location.pathname.split(';')[0] + 'command/';
+			var suffix = (args ? '/' + args : '');
+			
+			var link = prefix + id + suffix;
+			var link_nodownload = prefix + id + "s" + suffix;
+			
 			legend.style.display = 'none';
 			output.parentNode.style.display = 'block';
 			output.innerHTML = String.format(
-				'<div class="alert-message"><%:Access command with%> <a href="%s">%s</a></div>',
-				link, link
+				'<div class="alert-message"><p><%:Download execution result%> <a href="%s">%s</a></p><p><%:Or display result%> <a href="%s">%s</a></p></div>',
+				link, link, link_nodownload, link_nodownload
 			);
 
 			location.hash = '#output';
@@ -135,7 +138,7 @@
 
 <form method="get" action="<%=pcdata(luci.http.getenv("REQUEST_URI"))%>">
 	<div class="cbi-map">
-		<h2><a id="content" name="content"><%:Custom Commands%></a></h2>
+		<h2 name="content"><%:Custom Commands%></h2>
 
 		<fieldset class="cbi-section">
 			<% local _, command; for _, command in ipairs(commands) do %>

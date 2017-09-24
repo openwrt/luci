@@ -16,7 +16,7 @@ if not iw then
 	return
 end
 
-m = SimpleForm("network", translate("Join Network: Settings"))
+m = SimpleForm("network", translatef("Joining Network: %q", http.formvalue("join")))
 m.cancel = translate("Back to scan results")
 m.reset = false
 
@@ -44,9 +44,9 @@ m.hidden = {
 
 if iw and iw.mbssid_support then
 	replace = m:field(Flag, "replace", translate("Replace wireless configuration"),
-		translate("An additional network will be created if you leave this unchecked."))
+		translate("Check this option to delete the existing networks from this radio."))
 
-	function replace.cfgvalue() return "1" end
+	function replace.cfgvalue() return "0" end
 else
 	replace = m:field(DummyValue, "replace", translate("Replace wireless configuration"))
 	replace.default = translate("The hardware is not multi-SSID capable and the existing " ..

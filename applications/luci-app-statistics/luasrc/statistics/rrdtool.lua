@@ -25,6 +25,7 @@ function Graph.__init__( self, timespan, opts )
 	-- options
 	opts.timespan  = timespan       or sections.rrdtool.default_timespan or 900
 	opts.rrasingle = opts.rrasingle or ( sections.collectd_rrdtool.RRASingle == "1" )
+	opts.rramax    = opts.rramax    or ( sections.collectd_rrdtool.RRAMax == "1" )
 	opts.host      = opts.host      or sections.collectd.Hostname        or luci.sys.hostname()
 	opts.width     = opts.width     or sections.rrdtool.image_width      or 400
 	opts.rrdpath   = opts.rrdpath   or sections.collectd_rrdtool.DataDir or "/tmp/rrd"
@@ -171,16 +172,29 @@ function Graph._generic( self, opts, plugin, plugin_instance, dtype, index )
 
 		-- is first source in stack or overlay source: source_stk = source_nnl
 		if not prev or source.overlay then
+		     if self.opts.rrasingle or not self.opts.rramax then
 			-- create cdef statement for cumulative stack (no NaNs) and also
                         -- for display (preserving NaN where no points should be displayed)
 			_tif( _args, "CDEF:%s_stk=%s_nnl", source.sname, source.sname )
 			_tif( _args, "CDEF:%s_plot=%s_avg", source.sname, source.sname )
+		     else
+			-- create cdef statement for cumulative stack (no NaNs) and also
+                        -- for display (preserving NaN where no points should be displayed)
+			_tif( _args, "CDEF:%s_stk=%s_nnl", source.sname, source.sname )
+			_tif( _args, "CDEF:%s_plot=%s_max", source.sname, source.sname )
+		     end
 
 		-- is subsequent source without overlay: source_stk = source_nnl + previous_stk
 		else
+		     if self.opts.rrasingle or not self.opts.rramax then
 			-- create cdef statement
 			_tif( _args, "CDEF:%s_stk=%s_nnl,%s_stk,+", source.sname, source.sname, prev )
 			_tif( _args, "CDEF:%s_plot=%s_avg,%s_stk,+", source.sname, source.sname, prev )
+		     else
+			-- create cdef statement
+			_tif( _args, "CDEF:%s_stk=%s_nnl,%s_stk,+", source.sname, source.sname, prev )
+			_tif( _args, "CDEF:%s_plot=%s_max,%s_stk,+", source.sname, source.sname, prev )
+		     end
 		end
 
 		-- create multiply by minus one cdef if flip is enabled
@@ -264,7 +278,7 @@ function Graph._generic( self, opts, plugin, plugin_instance, dtype, index )
 
 		-- create line1 statement
 		_tif( _args, "LINE%d:%s_%s#%s:%s",
-			source.noarea and 2 or 1,
+			source.width or (source.noarea and 2 or 1),
 			source.sname, var, line_color, legend )
 	end
 
@@ -397,6 +411,7 @@ function Graph._generic( self, opts, plugin, plugin_instance, dtype, index )
 					transform_rpn = dopts.transform_rpn or "0,+",
 					noarea   = dopts.noarea  or false,
 					title    = dopts.title   or nil,
+					weight   = dopts.weight  or nil,
 					ds       = dsource,
 					type     = dtype,
 					instance = dinst,
@@ -457,12 +472,24 @@ function Graph._generic( self, opts, plugin, plugin_instance, dtype, index )
 			_ti ( _args, "-X" )
 			_ti ( _args, opts.units_exponent )
 		end
+		if opts.alt_autoscale then
+			_ti ( _args, "-A" )
+		end
+		if opts.alt_autoscale_max then
+			_ti ( _args, "-M" )
+		end
 
 		-- store additional rrd options
 		if opts.rrdopts then
 			for i, o in ipairs(opts.rrdopts) do _ti( _args, o ) end
 		end
 
+		-- sort sources
+		table.sort(_sources, function(a, b)
+			local x = a.weight or a.index or 0
+			local y = b.weight or b.index or 0
+			return x < y
+		end)
 
 		-- create DEF statements for each instance
 		for i, source in ipairs(_sources) do

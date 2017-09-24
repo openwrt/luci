@@ -1,8 +1,7 @@
 ---[[
 LuCI utility functions.
-
-module "luci.util"
 ]]
+module "luci.util"
 
 ---[[
 Create a Class object (Python-style object model).
@@ -182,7 +181,8 @@ Checks whether the given table contains the given value.
 @name contains
 @param table	Table value
 @param value	Value to search within the given table
-@return		Boolean indicating whether the given value occurs within table
+@return		number indicating the first index at which the given value occurs
+--			within table or false.
 ]]
 
 ---[[

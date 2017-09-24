@@ -17,7 +17,12 @@ newnet = m:field(Value, "_netname", translate("Name of the new interface"),
 
 newnet:depends("_attach", "")
 newnet.default = arg[1] and "net_" .. arg[1]:gsub("[^%w_]+", "_")
-newnet.datatype = "uciname"
+newnet.datatype = "and(uciname,maxlength(15))"
+
+advice = m:field(DummyValue, "d1", translate("Note: interface name length"),
+	 translate("Maximum length of the name is 15 characters including " ..
+		"the automatic protocol/bridge prefix (br-, 6in4-, pppoe- etc.)"
+	))
 
 newproto = m:field(ListValue, "_netproto", translate("Protocol of the new interface"))
 

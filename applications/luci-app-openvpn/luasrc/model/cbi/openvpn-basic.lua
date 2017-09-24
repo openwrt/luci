@@ -24,13 +24,14 @@ local basicParams = {
 	{ ListValue,"comp_lzo",{"yes","no","adaptive"}, translate("Use fast LZO compression") },
 	{ Value,"keepalive","10 60", translate("Helper directive to simplify the expression of --ping and --ping-restart in server mode configurations") },
 
-	{ ListValue,"proto",{ "udp", "tcp" }, translate("Use protocol") },
+	{ ListValue,"proto",{ "udp", "tcp-client", "tcp-server" }, translate("Use protocol") },
 
 	{ Flag,"client",0, translate("Configure client mode") },
 	{ Flag,"client_to_client",0, translate("Allow client-to-client traffic") },
 	{ DynamicList,"remote","vpnserver.example.org", translate("Remote host name or ip address") },
 
-	{ FileUpload,"secret","/etc/openvpn/secret.key 1", translate("Enable Static Key encryption mode (non-TLS)") },
+	{ FileUpload,"secret","/etc/openvpn/secret.key", translate("Enable Static Key encryption mode (non-TLS)") },
+	{ Value,"key_direction","1", translate("The key direction for 'tls-auth' and 'secret' options") },
 	{ FileUpload,"pkcs12","/etc/easy-rsa/keys/some-client.pk12", translate("PKCS#12 file containing keys") },
 	{ FileUpload,"ca","/etc/easy-rsa/keys/ca.crt", translate("Certificate authority") },
 	{ FileUpload,"dh","/etc/easy-rsa/keys/dh1024.pem", translate("Diffie Hellman parameters") },
@@ -61,7 +62,6 @@ for _, option in ipairs(basicParams) do
 		o.value = option[3]
 	else
 		if option[1] == DynamicList then
-			o.cast = nil
 			function o.cfgvalue(...)
 				local val = AbstractValue.cfgvalue(...)
 				return ( val and type(val) ~= "table" ) and { val } or val

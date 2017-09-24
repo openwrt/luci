@@ -63,6 +63,15 @@ if luci.model.network:has_ipv6() then
 	ip6prefix.datatype = "ip6addr"
 	ip6prefix:depends("ip6assign", "")
 
+	local ip6ifaceid = s:taboption("general", Value, "ip6ifaceid", translate("IPv6 suffix"),
+		translate("Optional. Allowed values: 'eui64', 'random', fixed value like '::1' " ..
+			"or '::1:2'. When IPv6 prefix (like 'a:b:c:d::') is received from a " ..
+			"delegating server, use the suffix (like '::1') to form the IPv6 address " ..
+			"('a:b:c:d::1') for the interface."))
+	ip6ifaceid.datatype = "ip6hostid"
+	ip6ifaceid.placeholder = "::1"
+	ip6ifaceid.rmempty = true
+
 end
 
 

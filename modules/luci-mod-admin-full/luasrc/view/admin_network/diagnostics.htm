@@ -9,6 +9,10 @@
 local fs   = require "nixio.fs"
 local has_ping6 = fs.access("/bin/ping6") or fs.access("/usr/bin/ping6")
 local has_traceroute6 = fs.access("/usr/bin/traceroute6")
+
+local dns_host = luci.config.diag and luci.config.diag.dns or "dev.openwrt.org"
+local ping_host = luci.config.diag and luci.config.diag.ping or "dev.openwrt.org"
+local route_host = luci.config.diag and luci.config.diag.route or "dev.openwrt.org"
 %>
 
 <script type="text/javascript" src="<%=resource%>/cbi.js"></script>
@@ -34,7 +38,7 @@ local has_traceroute6 = fs.access("/usr/bin/traceroute6")
 			legend.parentNode.style.display = 'block';
 			legend.style.display = 'inline';
 
-			stxhr.get('<%=luci.dispatcher.build_url("admin", "network")%>/diag_' + tool + protocol + '/' + addr, null,
+			stxhr.post('<%=url('admin/network')%>/diag_' + tool + protocol + '/' + addr, { token: '<%=token%>' },
 				function(x)
 				{
 					if (x.responseText)
@@ -53,9 +57,9 @@ local has_traceroute6 = fs.access("/usr/bin/traceroute6")
 	}
 //]]></script>
 
-<form method="post" action="<%=pcdata(luci.http.getenv("REQUEST_URI"))%>">
+<form method="post" action="<%=url('admin/network/diagnostics')%>">
 	<div class="cbi-map">
-		<h2><a id="content" name="content"><%:Diagnostics%></a></h2>
+		<h2 name="content"><%:Diagnostics%></h2>
 
 		<fieldset class="cbi-section">
 			<legend><%:Network Utilities%></legend>
@@ -63,7 +67,7 @@ local has_traceroute6 = fs.access("/usr/bin/traceroute6")
 			<br />
 
 			<div style="width:30%; float:left">
-				<input style="margin: 5px 0" type="text" value="openwrt.org" name="ping" /><br />
+				<input style="margin: 5px 0" type="text" value="<%=ping_host%>" name="ping" /><br />
 				<% if has_ping6 then %>
 				<select name="ping_proto" style="width:auto">
 					<option value="" selected="selected"><%:IPv4%></option>
@@ -76,7 +80,7 @@ local has_traceroute6 = fs.access("/usr/bin/traceroute6")
 			</div>
 
 			<div style="width:33%; float:left">
-				<input style="margin: 5px 0" type="text" value="openwrt.org" name="traceroute" /><br />
+				<input style="margin: 5px 0" type="text" value="<%=route_host%>" name="traceroute" /><br />
 				<% if has_traceroute6 then %>
 				<select name="traceroute_proto" style="width:auto">
 					<option value="" selected="selected"><%:IPv4%></option>
@@ -93,7 +97,7 @@ local has_traceroute6 = fs.access("/usr/bin/traceroute6")
 			</div>
 
 			<div style="width:33%; float:left;">
-				<input style="margin: 5px 0" type="text" value="openwrt.org" name="nslookup" /><br />
+				<input style="margin: 5px 0" type="text" value="<%=dns_host%>" name="nslookup" /><br />
 				<input type="button" value="<%:Nslookup%>" class="cbi-button cbi-button-apply" onclick="update_status(this.form.nslookup)" />
 			</div>
 

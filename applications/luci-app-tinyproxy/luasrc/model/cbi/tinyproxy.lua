@@ -227,7 +227,7 @@ ta = s:option(Value, "target", translate("Target host"),
 
 ta.rmempty = true
 ta.placeholder = "0.0.0.0/0"
-ta.datatype = "host"
+ta.datatype = "host(1)"
 
 
 v = s:option(Value, "via", translate("Via proxy"),
@@ -235,5 +235,6 @@ v = s:option(Value, "via", translate("Via proxy"),
 
 v:depends({type="proxy"})
 v.placeholder = "10.0.0.1:8080"
+v.datatype = "ip4addrport"
 
 return m

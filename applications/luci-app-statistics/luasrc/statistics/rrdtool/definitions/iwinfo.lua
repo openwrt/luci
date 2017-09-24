@@ -74,6 +74,8 @@ function rrdargs( graph, plugin, plugin_instance )
 	local stations = {
 		title = "%H: Associated stations on %pi",
 		vlabel = "Stations",
+		y_min = "0",
+		alt_autoscale_max = true,
 		number_format = "%3.0lf",
 		data = {
 			types = { "stations" },

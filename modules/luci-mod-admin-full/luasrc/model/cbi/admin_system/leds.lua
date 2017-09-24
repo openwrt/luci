@@ -7,10 +7,11 @@ local sysfs_path = "/sys/class/leds/"
 local leds = {}
 
 local fs   = require "nixio.fs"
-local util = require "nixio.util"
+local nu   = require "nixio.util"
+local util = require "luci.util"
 
 if fs.access(sysfs_path) then
-	leds = util.consume((fs.dir(sysfs_path)))
+	leds = nu.consume((fs.dir(sysfs_path)))
 end
 
 if #leds == 0 then
@@ -109,11 +110,46 @@ function usbdev.remove(self, section)
 	end
 end
 
+
+usbport = s:option(MultiValue, "port", translate("USB Ports"))
+usbport:depends("trigger", "usbport")
+usbport.rmempty = true
+usbport.widget = "checkbox"
+usbport.cast = "table"
+usbport.size = 1
+
+function usbport.valuelist(self, section)
+	local port, ports = nil, {}
+	for port in util.imatch(m.uci:get("system", section, "port")) do
+		local b, n = port:match("^usb(%d+)-port(%d+)$")
+		if not (b and n) then
+			b, n = port:match("^(%d+)-(%d+)$")
+		end
+		if b and n then
+			ports[#ports+1] = "usb%u-port%u" %{ tonumber(b), tonumber(n) }
+		end
+	end
+	return ports
+end
+
+function usbport.validate(self, value)
+	return type(value) == "string" and { value } or value
+end
+
+
 for p in nixio.fs.glob("/sys/bus/usb/devices/[0-9]*/manufacturer") do
 	local id = p:match("%d+-%d+")
 	local mf = nixio.fs.readfile("/sys/bus/usb/devices/" .. id .. "/manufacturer") or "?"
 	local pr = nixio.fs.readfile("/sys/bus/usb/devices/" .. id .. "/product")      or "?"
 	usbdev:value(id, "%s (%s - %s)" %{ id, mf, pr })
+end
+
+for p in nixio.fs.glob("/sys/bus/usb/devices/*/usb[0-9]*-port[0-9]*") do
+	local bus, port = p:match("usb(%d+)-port(%d+)")
+	if bus and port then
+		usbport:value("usb%u-port%u" %{ tonumber(bus), tonumber(port) },
+		              "Hub %u, Port %u" %{ tonumber(bus), tonumber(port) })
+	end
 end
 
 return m

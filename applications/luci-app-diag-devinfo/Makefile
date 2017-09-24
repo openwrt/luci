@@ -7,7 +7,11 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=LuCI Diagnostics Tools (Device Info)
-LUCI_DEPENDS:=+luci-app-diag-core +smap +netdiscover +mac-to-devinfo +httping +smap-to-devinfo +netdiscover-to-devinfo
+LUCI_DEPENDS:=+luci-app-diag-core +smap +netdiscover +mac-to-devinfo +httping +smap-to-devinfo +netdiscover-to-devinfo @BROKEN
+
+define Package/luci-app-diag-devinfo/conffiles
+/etc/config/luci_devinfo
+endef
 
 include ../../luci.mk
 

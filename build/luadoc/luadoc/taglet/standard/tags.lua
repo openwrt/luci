@@ -85,7 +85,7 @@ end
 -- Processes a parameter documentation.
 -- @param tag String with the name of the tag (it must be "param" always).
 -- @param block Table with previous information about the block.
--- @param text String with the current line beeing processed.
+-- @param text String with the current line being processed.
 
 local function param (tag, block, text)
 	block[tag] = block[tag] or {}

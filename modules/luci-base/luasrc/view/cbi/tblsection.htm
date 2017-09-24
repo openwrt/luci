@@ -99,7 +99,7 @@ end
 							%> onclick="location.href='<%=self.extedit:format(section)%>'"
 							<%- elseif type(self.extedit) == "function" then
 							%> onclick="location.href='<%=self:extedit(section)%>'"
-							<%- end 
+							<%- end
 							%> alt="<%:Edit%>" title="<%:Edit%>" />
 						<%- end; if self.addremove then %>
 							<input class="cbi-button cbi-button-remove" type="submit" value="<%:Delete%>"  onclick="this.form.cbi_state='del-section'; return true" name="cbi.rts.<%=self.config%>.<%=k%>" alt="<%:Delete%>" title="<%:Delete%>" />
@@ -131,8 +131,7 @@ end
 					<input class="cbi-button cbi-button-add" type="submit" value="<%:Add%>" name="cbi.cts.<%=self.config%>.<%=self.sectiontype%>.<%=section%>" title="<%:Add%>" />
 				<% else %>
 					<% if self.invalid_cts then -%><div class="cbi-section-error"><% end %>
-					<input type="text" class="cbi-section-create-name" id="cbi.cts.<%=self.config%>.<%=self.sectiontype%>.<%=section%>" name="cbi.cts.<%=self.config%>.<%=self.sectiontype%>.<%=section%>" />
-					<script type="text/javascript">cbi_validate_field('cbi.cts.<%=self.config%>.<%=self.sectiontype%>.<%=section%>', true, 'uciname');</script>
+					<input type="text" class="cbi-section-create-name" id="cbi.cts.<%=self.config%>.<%=self.sectiontype%>.<%=section%>" name="cbi.cts.<%=self.config%>.<%=self.sectiontype%>.<%=section%>" data-type="uciname" data-optional="true" />
 					<input class="cbi-button cbi-button-add" type="submit" onclick="this.form.cbi_state='add-section'; return true" value="<%:Add%>" title="<%:Add%>" />
 					<% if self.invalid_cts then -%>
 						<br /><%:Invalid%></div>

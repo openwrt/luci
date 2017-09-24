@@ -8,8 +8,8 @@ Cursor.commit the data to the actual config files.
 LuCI then needs to Cursor.apply the changes so deamons etc. are
 reloaded.
 @cstyle	instance
-module "luci.model.uci"
 ]]
+module "luci.model.uci"
 
 ---[[
 Create a new UCI-Cursor.
@@ -88,7 +88,8 @@ Get an option or list and return values as table.
 @param config	UCI config
 @param section	UCI section name
 @param option	UCI option
-@return			UCI value
+@return		table.  If the option was not found, you will simply get
+--		an empty table.
 ]]
 
 ---[[
@@ -104,14 +105,15 @@ Get the given option from the first section with the given type.
 ]]
 
 ---[[
-Set given values as list.
+Set given values as list. Setting a list option to an empty list
+has the same effect as deleting the option.
 
 @class function
 @name Cursor.set_list
 @param config	UCI config
 @param section	UCI section name
 @param option	UCI option
-@param value		UCI value
+@param value	value or table. Raw values will become a single item table.
 @return			Boolean whether operation succeeded
 ]]
 
@@ -235,12 +237,18 @@ Saves changes made to a config to make them committable.
 ---[[
 Set a value or create a named section.
 
+When invoked with three arguments `config`, `sectionname`, `sectiontype`,
+then a named section of the given type is created.
+
+When invoked with four arguments `config`, `sectionname`, `optionname` and
+`optionvalue` then the value of the specified option is set to the given value.
+
 @class function
 @name Cursor.set
 @param config	UCI config
 @param section	UCI section name
 @param option	UCI option or UCI section type
-@param value		UCI value or nil if you want to create a section
+@param value		UCI value or nothing if you want to create a section
 @return			Boolean whether operation succeeded
 ]]
 

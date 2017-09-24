@@ -1,35 +1,61 @@
 #!/bin/sh
-# This reads the settings we need to have to configure everything
-# Argument $1: community
+# These functions read the settings we need for configuration of the router
 
-. /lib/functions.sh
-community="$1"
+read_defaults() {
+	# read default values from the 3 relevant config files and export them
+	# into the environment. Later loaded configs overwrite earlier ones. The
+	# The ordering here is from most generic to most specific:
+	# freifunk (most generic defaults)
+	# profile_* (community defaults)
+	# nodes custom config from meshwizard config file
 
-# reads variables from uci files, parameter $1 is the section
-get_var() {
-	uci -q show $1 | cut -d "." -f 2-100 |grep "\." | sed -e 's/^\([A-Za-z0-9_]*\)\./\1_/g' -e 's/=\(.*\)$/="\1"/g'
+	local community="$1"
+
+	config_cb() {
+	local type="$1"
+	local name="$2"
+	local allowed_section_types="widget"
+	local allowed_section_names="
+		system
+		wifi_device
+		wifi_iface
+		interface
+		alias
+		dhcp
+		olsr_interface
+		olsr_interfacedefaults
+		profile
+		zone_freifunk
+		include
+		luci_splash
+		ipv6
+		luci_main
+		contact
+		community
+		wan
+		lan
+		general
+		ipv6
+		qos
+	"
+
+	if [ "$type" = "widget" ]; then
+		widgets=$(add_to_list "$widgets" "$name")
+	fi
+
+	if ([ -n "$name" ] && is_in_list "$allowed_section_names" $name) \
+		|| is_in_list "$allowed_section_types" $type ; then
+		option_cb() {
+		local option="$1"
+		local value="$2"
+		export "${CONFIG_SECTION}_${option}"="$value"
+		}
+	else
+		option_cb() { return; }
+	fi
+	}
+	config_load freifunk
+	config_load profile_${community}
+	config_load meshwizard
+	export widgets="$widgets"
 }
-
-handle_widgets() {
-        widgets="$widgets $1"
-}
-config_load freifunk
-config_foreach handle_widgets widget
-config_load profile_$community
-config_foreach handle_widgets widget
-echo "widgets=$widgets"
-
-# read default values from /etc/config/freifunk
-for v in system wifi_device wifi_iface interface alias dhcp olsr_interface olsr_interfacedefaults zone_freifunk include $widgets; do
-	get_var freifunk.$v
-done
-
-# now read all values from the selected community profile, will override some values from the defaults before
-for v in system wifi_device wifi_iface interface alias dhcp olsr_interface olsr_interfacedefaults profile zone_freifunk include luci_splash ipv6 $widgets; do
-	get_var profile_$community.$v
-done
-
-# read values from meshwizard
-for v in system luci_main contact community wan lan general ipv6 qos; do
-        get_var meshwizard.$v
-done

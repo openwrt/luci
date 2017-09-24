@@ -6,7 +6,7 @@
 		var txt = document.getElementById("cbid.ddns." + section + "._logview.txt");	// TextArea
 		if ( !txt ) { return; }	// security check
 
-		XHR.get('<%=luci.dispatcher.build_url("admin", "services", "ddns", "logview")%>/' + section, null,
+		XHR.get('<%=url([[admin]], [[services]], [[ddns]], [[logview]])%>/' + section, null,
 			function(x) {
 				if (x.responseText == "_nodata_")
 					txt.value = "<%:File not found or empty%>";

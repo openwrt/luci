@@ -1,26 +1,26 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-03-30 17:00+0200\n"
-"PO-Revision-Date: 2012-11-14 17:32+0200\n"
-"Last-Translator: Kentaro <kentaro.matsuyama@gmail.com>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2016-12-24 02:55+0900\n"
+"Last-Translator: INAGAKI Hiroshi <musashino.open@gmail.com>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Pootle 2.0.6\n"
+"X-Generator: Poedit 1.8.11\n"
+"Language-Team: \n"
 
 msgid "%s in %s"
-msgstr ""
+msgstr "%s (%s)"
 
 msgid "%s%s with %s"
 msgstr "%s%s ,%s"
 
 msgid "%s, %s in %s"
-msgstr ""
+msgstr "%s, %s (%s)"
 
 msgid "(Unnamed Entry)"
 msgstr "(名前設定の無いエントリー)"
@@ -30,12 +30,6 @@ msgstr "(名前設定の無いルール)"
 
 msgid "(Unnamed SNAT)"
 msgstr "(名前設定の無いSNAT)"
-
-msgid "-- Please choose --"
-msgstr "-- 選択してください --"
-
-msgid "-- custom --"
-msgstr "-- 手動設定 --"
 
 msgid "<var>%d</var> pkts. per <var>%s</var>"
 msgstr "<var>%d</var> パケット / <var>%s</var>"
@@ -75,7 +69,7 @@ msgid "Custom Rules"
 msgstr "手動設定ルール"
 
 msgid ""
-"Custom rules allow you to execute arbritary iptables commands which are not "
+"Custom rules allow you to execute arbitrary iptables commands which are not "
 "otherwise covered by the firewall framework. The commands are executed after "
 "each firewall restart, right after the default ruleset has been loaded."
 msgstr ""
@@ -148,7 +142,10 @@ msgid "Forward"
 msgstr "転送"
 
 msgid "Forward to"
-msgstr ""
+msgstr "転送先"
+
+msgid "Friday"
+msgstr "金曜日"
 
 msgid "From %s in %s"
 msgstr "送信元 %s (%s)"
@@ -202,7 +199,7 @@ msgid "Masquerading"
 msgstr "マスカレード"
 
 msgid "Match"
-msgstr ""
+msgstr "対象"
 
 msgid "Match ICMP type"
 msgstr "ICMPタイプの一致"
@@ -225,6 +222,12 @@ msgid ""
 msgstr ""
 "設定されたクライアントホストの送信元ポート(またはポート範囲)からの受信トラ"
 "フィックと一致したトラフィックが対象になります。"
+
+msgid "Monday"
+msgstr "月曜日"
+
+msgid "Month Days"
+msgstr "月間"
 
 msgid "Name"
 msgstr "名前"
@@ -298,6 +301,9 @@ msgstr ""
 msgid "Redirect matched incoming traffic to the specified internal host"
 msgstr "ルールに一致した受信トラフィックを、設定された内部ホストへ転送します"
 
+msgid "Restart Firewall"
+msgstr "ファイアウォールの再起動"
+
 msgid "Restrict Masquerading to given destination subnets"
 msgstr "設定された宛先サブネットへのマスカレードを制限する"
 
@@ -329,6 +335,9 @@ msgstr "SNAT IPアドレス"
 
 msgid "SNAT port"
 msgstr "SNAT ポート"
+
+msgid "Saturday"
+msgstr "土曜日"
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Generated from applications/luci-fw/luasrc/model/cbi/luci_fw/rrule.lua      #
@@ -387,6 +396,21 @@ msgstr "送信元ポート"
 msgid "Source zone"
 msgstr "送信元ゾーン"
 
+msgid "Start Date (yyyy-mm-dd)"
+msgstr "開始日 (yyyy-mm-dd)"
+
+msgid "Start Time (hh:mm:ss)"
+msgstr "開始時刻 (hh:mm:ss)"
+
+msgid "Stop Date (yyyy-mm-dd)"
+msgstr "停止日 (yyyy-mm-dd)"
+
+msgid "Stop Time (hh:mm:ss)"
+msgstr "停止時刻 (hh:mm:ss)"
+
+msgid "Sunday"
+msgstr "日曜日"
+
 msgid ""
 "The firewall creates zones over your network interfaces to control network "
 "traffic flow."
@@ -423,7 +447,6 @@ msgstr ""
 "このページでは、各トラフィックルールの送信元・宛先ホストの設定などの詳細設定"
 "を行うことができます。"
 
-#, fuzzy
 msgid ""
 "This section defines common properties of %q. The <em>input</em> and "
 "<em>output</em> options set the default policies for traffic entering and "
@@ -436,6 +459,12 @@ msgstr ""
 "シーを設定し、<em>転送</em>オプションは、ゾーン間の転送トラフィックに対する標"
 "準のポリシーになります。<em>対象ネットワーク</em>は、どのネットワーク設定がこ"
 "のゾーンに属するかを設定します。"
+
+msgid "Thursday"
+msgstr "木曜日"
+
+msgid "Time in UTC"
+msgstr "UTC時刻を使用"
 
 msgid "To %s at %s on <var>this device</var>"
 msgstr "宛先 %s, %s (<var>デバイス</var>)"
@@ -467,11 +496,20 @@ msgstr ""
 "します。例えば、特定のホスト間や、ルーターのWANポートへのトラフィックの拒否を"
 "設定することができます。"
 
+msgid "Tuesday"
+msgstr "火曜日"
+
 msgid "Via %s"
-msgstr ""
+msgstr "経由 %s"
 
 msgid "Via %s at %s"
-msgstr ""
+msgstr "経由 %s , %s"
+
+msgid "Wednesday"
+msgstr "水曜日"
+
+msgid "Week Days"
+msgstr "曜日"
 
 msgid ""
 "You may specify multiple by selecting \"-- custom --\" and then entering "
@@ -514,174 +552,4 @@ msgid "reject"
 msgstr "拒否"
 
 msgid "traffic"
-msgstr ""
-
-#~ msgid "Destination"
-#~ msgstr "宛先"
-
-#~ msgid "Family"
-#~ msgstr "アドレスファミリ"
-
-#~ msgid "Forward to %s in %s"
-#~ msgstr "転送先 %s (%s)"
-
-#~ msgid "Forward to %s, %s in %s"
-#~ msgstr "転送先 %s, %s (%s)"
-
-#~ msgid "SNAT"
-#~ msgstr "SNAT"
-
-#~ msgid "Source"
-#~ msgstr "送信元"
-
-#~ msgid "To %s"
-#~ msgstr "宛先 %s"
-
-#~ msgid "To %s at %s"
-#~ msgstr "宛先 %s, %s"
-
-#~ msgid "Via"
-#~ msgstr "経由"
-
-#~ msgid "Accept forward"
-#~ msgstr "転送を許可"
-
-#~ msgid "Accept input"
-#~ msgstr "受信を許可"
-
-#~ msgid "Disable"
-#~ msgstr "無効"
-
-#~ msgid "Discard forward"
-#~ msgstr "転送を破棄"
-
-#~ msgid "Discard input"
-#~ msgstr "入力を破棄"
-
-#~ msgid "Do not track forward"
-#~ msgstr "転送の追跡を行わない"
-
-#~ msgid "Do not track input"
-#~ msgstr "入力の追跡を行わない"
-
-#~ msgid "IP"
-#~ msgstr "IP"
-
-#~ msgid "IP range"
-#~ msgstr "IPレンジ"
-
-#~ msgid "IPs"
-#~ msgstr "IP"
-
-#~ msgid "MAC"
-#~ msgstr "MAC"
-
-#~ msgid "MACs"
-#~ msgstr "MAC"
-
-#~ msgid "Refuse forward"
-#~ msgstr "転送を拒否"
-
-#~ msgid "Refuse input"
-#~ msgstr "受信を拒否"
-
-#~ msgid "Rule is disabled"
-#~ msgstr "ルール設定は無効になっています"
-
-#~ msgid "Rule is enabled"
-#~ msgstr "ルール設定は有効になっています"
-
-#~ msgid "day"
-#~ msgstr "日"
-
-#~ msgid "hour"
-#~ msgstr "時"
-
-#~ msgid "minute"
-#~ msgstr "分"
-
-#~ msgid "not"
-#~ msgstr "not"
-
-#~ msgid "port"
-#~ msgstr "ポート"
-
-#~ msgid "ports"
-#~ msgstr "ポート"
-
-#~ msgid "second"
-#~ msgstr "秒"
-
-#~ msgid "type"
-#~ msgstr "タイプ"
-
-#~ msgid "types"
-#~ msgstr "タイプ"
-
-#~ msgid "(optional)"
-#~ msgstr "(オプション)"
-
-#~ msgid "Intended destination address"
-#~ msgstr "意図された宛先アドレス"
-
-#~ msgid "Internal port (optional)"
-#~ msgstr "内部ポート（オプション）"
-
-#~ msgid "Advanced Options"
-#~ msgstr "詳細なオプション"
-
-#~ msgid "Advanced Rules"
-#~ msgstr "詳細なルール"
-
-#~ msgid ""
-#~ "Advanced rules let you customize the firewall to your needs. Only new "
-#~ "connections will be matched. Packets belonging to already open "
-#~ "connections are automatically allowed to pass the firewall."
-#~ msgstr ""
-#~ "詳細なルール設定を行うことができます。ただし、すでに接続が行われているパ"
-#~ "ケットに関しては、自動的にファイアウォールの通過を許可されます。"
-
-#~ msgid "Custom Rules (/etc/firewall.user)"
-#~ msgstr "手動設定ルール (/etc/firewall.user)"
-
-#~ msgid "Device"
-#~ msgstr "デバイス"
-
-#~ msgid ""
-#~ "For DNAT, match incoming traffic directed at the given destination ip "
-#~ "address. For SNAT rewrite the source address to the given address."
-#~ msgstr ""
-#~ "DNATの場合、設定された宛先アドレスのトラフィックに対して合致を行います。"
-#~ "SNATの場合、送信元アドレスを設定されたアドレスで上書きします。"
-
-#~ msgid "Overview"
-#~ msgstr "概要"
-
-#~ msgid "Port forwarding"
-#~ msgstr "ポートフォワーディング"
-
-#~ msgid ""
-#~ "Port forwarding allows to provide network services in the internal "
-#~ "network to an external network."
-#~ msgstr ""
-#~ "ポートフォワーディングを使用することで、内部ネットワークのサービスを外部に"
-#~ "提供することができます。"
-
-#~ msgid "Redirection type"
-#~ msgstr "転送タイプ"
-
-#~ msgid "Redirections"
-#~ msgstr "転送"
-
-#~ msgid "Rules"
-#~ msgstr "ルール"
-
-#~ msgid "Traffic Redirection"
-#~ msgstr "トラフィック転送"
-
-#~ msgid ""
-#~ "Traffic redirection allows you to change the destination address of "
-#~ "forwarded packets."
-#~ msgstr ""
-#~ "トラフィック転送機能を用いることで、転送したパケットの宛先アドレスを変更す"
-#~ "ることが可能です。"
+msgstr "トラフィック"

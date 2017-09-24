@@ -33,12 +33,6 @@ msgstr "(Regla sense nom)"
 msgid "(Unnamed SNAT)"
 msgstr "(SNAT sense nom)"
 
-msgid "-- Please choose --"
-msgstr "-- Si us plau, trieu --"
-
-msgid "-- custom --"
-msgstr "-- personalitzats --"
-
 msgid "<var>%d</var> pkts. per <var>%s</var>"
 msgstr "<var>%d</var> paquets al <var>%s</var>"
 
@@ -76,7 +70,7 @@ msgid "Custom Rules"
 msgstr "Regles personalitzades"
 
 msgid ""
-"Custom rules allow you to execute arbritary iptables commands which are not "
+"Custom rules allow you to execute arbitrary iptables commands which are not "
 "otherwise covered by the firewall framework. The commands are executed after "
 "each firewall restart, right after the default ruleset has been loaded."
 msgstr ""
@@ -150,6 +144,9 @@ msgstr "Reenvia"
 
 msgid "Forward to"
 msgstr "Reenvia a"
+
+msgid "Friday"
+msgstr ""
 
 msgid "From %s in %s"
 msgstr "Des de %s en %s"
@@ -226,6 +223,12 @@ msgstr ""
 "Coincideix amb trànsit entrant originant en el host client des del port o "
 "rang de ports d'origen donat."
 
+msgid "Monday"
+msgstr ""
+
+msgid "Month Days"
+msgstr ""
+
 msgid "Name"
 msgstr "Nom"
 
@@ -292,6 +295,9 @@ msgstr "Redirigeix trànsit entrant coincidit al port donat en el host intern"
 msgid "Redirect matched incoming traffic to the specified internal host"
 msgstr "Redirigeix trànsit entrant coincidit al host intern especificat"
 
+msgid "Restart Firewall"
+msgstr ""
+
 msgid "Restrict Masquerading to given destination subnets"
 msgstr "Restringeix la mascarada a les subxarxes de destí donades"
 
@@ -323,6 +329,9 @@ msgstr "Adreça IP de SNAT"
 msgid "SNAT port"
 msgstr "Port SNAT"
 
+msgid "Saturday"
+msgstr ""
+
 msgid "Source IP address"
 msgstr "Adreça IP d'origen"
 
@@ -349,6 +358,21 @@ msgstr "Port d'origen"
 
 msgid "Source zone"
 msgstr "Zona d'origen"
+
+msgid "Start Date (yyyy-mm-dd)"
+msgstr ""
+
+msgid "Start Time (hh:mm:ss)"
+msgstr ""
+
+msgid "Stop Date (yyyy-mm-dd)"
+msgstr ""
+
+msgid "Stop Time (hh:mm:ss)"
+msgstr ""
+
+msgid "Sunday"
+msgstr ""
 
 msgid ""
 "The firewall creates zones over your network interfaces to control network "
@@ -402,6 +426,12 @@ msgstr ""
 "<em>Xarxes cobertes</em> especifica quines xarxes disponibles són membres "
 "d'aquesta zona."
 
+msgid "Thursday"
+msgstr ""
+
+msgid "Time in UTC"
+msgstr ""
+
 msgid "To %s at %s on <var>this device</var>"
 msgstr "A %s a %s en <var>aquest dispositiu</var>"
 
@@ -432,11 +462,20 @@ msgstr ""
 "zones distintes, per exemple per a rebutjar trànsit entre certs hosts o "
 "obrir ports WAN en el encaminador."
 
+msgid "Tuesday"
+msgstr ""
+
 msgid "Via %s"
 msgstr "Via %s"
 
 msgid "Via %s at %s"
 msgstr "Via %s a %s"
+
+msgid "Wednesday"
+msgstr ""
+
+msgid "Week Days"
+msgstr ""
 
 msgid ""
 "You may specify multiple by selecting \"-- custom --\" and then entering "
@@ -480,124 +519,3 @@ msgstr "rebutja"
 
 msgid "traffic"
 msgstr "trànsit"
-
-#~ msgid "Destination"
-#~ msgstr "Destí"
-
-#~ msgid "Source"
-#~ msgstr "Origen"
-
-#~ msgid "Internal port (optional)"
-#~ msgstr "Port intern (opcional)"
-
-#~ msgid "Advanced Rules"
-#~ msgstr "Regles avançades"
-
-#~ msgid ""
-#~ "Advanced rules let you customize the firewall to your needs. Only new "
-#~ "connections will be matched. Packets belonging to already open "
-#~ "connections are automatically allowed to pass the firewall."
-#~ msgstr ""
-#~ "Les regles avançades et deixen personalitzar el teu tallafocs per les "
-#~ "teves necessitats. Només s'hi correspondran les connexions noves. Als "
-#~ "paquets que pertanyen una connexió oberta se'ls permet passar el "
-#~ "tallafocs automàticament."
-
-#~ msgid "Port forwarding"
-#~ msgstr "Readreçament de port"
-
-#~ msgid ""
-#~ "Port forwarding allows to provide network services in the internal "
-#~ "network to an external network."
-#~ msgstr ""
-#~ "El readreçament de ports permet proveir serveis de la xarxa interna a una "
-#~ "xarxa externa."
-
-#~ msgid "Traffic Redirection"
-#~ msgstr "Readreçament de tràfic"
-
-#~ msgid ""
-#~ "Traffic redirection allows you to change the destination address of "
-#~ "forwarded packets."
-#~ msgstr ""
-#~ "El readreçament de tràfic et permet canviar l'adreça destí dels paquets "
-#~ "reenviats."
-
-#, fuzzy
-#~ msgid "Network"
-#~ msgstr "Xarxes"
-
-#~ msgid "Traffic Control"
-#~ msgstr "Control de tràfic"
-
-#~ msgid "Zone-to-Zone traffic"
-#~ msgstr "Tràfic zona a zona"
-
-#, fuzzy
-#~ msgid ""
-#~ "Here you can specify which network traffic is allowed to flow between "
-#~ "network zones. Only new connections will be matched.  Packets belonging "
-#~ "to already open connections are automatically allowed to pass the "
-#~ "firewall. If you experience occasional connection problems try enabling "
-#~ "MSS Clamping otherwise disable it for performance reasons."
-#~ msgstr ""
-#~ "Ací pots especificar quin tràfic de xarxes es permet entre les zones de "
-#~ "xarxa. Només s'hi correspondren les connexions noves. Als paquets que "
-#~ "pertanyen una connexió oberta se'ls permet passar el tallafocs "
-#~ "automàticament. Si experimentes problemes de connexió ocasionals, intenta "
-#~ "activar el Clamping MSS, si no desactiva'l per raons de rendiment."
-
-#~ msgid "Zone"
-#~ msgstr "Zona"
-
-#, fuzzy
-#~ msgid "Destination IP"
-#~ msgstr "Destí"
-
-#, fuzzy
-#~ msgid "IP address"
-#~ msgstr "Adreça IP"
-
-#, fuzzy
-#~ msgid "Source MAC-address"
-#~ msgstr "Adreça MAC d'origen"
-
-#~ msgid "Custom forwarding"
-#~ msgstr "Reenviament personalitzat"
-
-#~ msgid "Input Zone"
-#~ msgstr "Zona d'entrada"
-
-#~ msgid "Output Zone"
-#~ msgstr "Zona de sortida"
-
-#~ msgid "External Zone"
-#~ msgstr "Zona externa"
-
-#~ msgid "Source MAC"
-#~ msgstr "MAC origen"
-
-#~ msgid "Defaults"
-#~ msgstr "Per defecte"
-
-#~ msgid ""
-#~ "These are the default settings that are used if no other rules match."
-#~ msgstr ""
-#~ "Aquesta és la configuració per defecte utilitzada si no hi ha cap altra "
-#~ "regla que es correspongui."
-
-#~ msgid ""
-#~ "Zones part the network interfaces into certain isolated areas to separate "
-#~ "network traffic. One or more networks can belong to a zone. The MASQ-flag "
-#~ "enables NAT masquerading for all outgoing traffic on this zone."
-#~ msgstr ""
-#~ "Les zones parteixen les interfícies de xarxa en certes àrees aïllades per "
-#~ "separar el tràfic de xarxa. Una o més xarxes poden pertànyer a una zona. "
-#~ "El flag MASQ activa el NAT masquerading per tot el tràfic sortint "
-#~ "d'aquesta zona."
-
-#~ msgid "MASQ"
-#~ msgstr "MASQ"
-
-#~ msgid "contained networks"
-#~ msgstr "Xarxes contingudes"

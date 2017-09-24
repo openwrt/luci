@@ -6,7 +6,9 @@
 -%>
 
 <%
-local ipv = luci.model.uci.cursor():get_first("olsrd", "olsrd", "IpVersion", "4")
+
+has_ipv4_conf = luci.model.uci.cursor():get_first("olsrd", "olsrd", "IpVersion")
+has_ipv6_conf = luci.model.uci.cursor():get_first("olsrd6", "olsrd", "IpVersion")
 
 function write_conf(conf, file)
 	local fs = require "nixio.fs"
@@ -19,23 +21,23 @@ end
 
 conf = luci.http.formvalue()
 
-if conf.openwrt then
+if conf.openwrt_v4 then
 	write_conf("/etc/config/olsrd", "olsrd")
 	return false
 end
 
-if conf.conf_v4 then   
-	write_conf("/var/etc/olsrd.conf.ipv4", "olsrd.conf.ipv4")
+if conf.openwrt_v6 then
+	write_conf("/etc/config/olsrd6", "olsrd6")
+	return false
+end
+
+if conf.conf_v4 then
+	write_conf("/var/etc/olsrd.conf", "olsrd.conf")
 	return false
 end
 
 if conf.conf_v6 then
-	write_conf("/var/etc/olsrd.conf.ipv6", "olsrd.conf.ipv6")
-	return false
-end
-
-if conf.conf then
-	write_conf("/var/etc/olsrd.conf", "olsrd.conf")
+	write_conf("/var/etc/olsrd6.conf", "olsrd6.conf")
 	return false
 end
 
@@ -153,7 +155,7 @@ XHR.poll(10, '<%=REQUEST_URI%>/json', { },
 
 <div id="error" class="error"></div>
 
-<h2><a id="content" name="content">OLSR <%:Overview%></a></h2>
+<h2 name="content">OLSR <%:Overview%></h2>
 
 <fieldset class="cbi-section">
         <legend><%:Network%></legend>
@@ -200,13 +202,18 @@ XHR.poll(10, '<%=REQUEST_URI%>/json', { },
 			<span id="version">-<span>
 		</td></tr>
                 <tr><td width="33%"><%:Download Config%></td><td>
-				<a href="<%=REQUEST_URI%>?openwrt">OpenWrt</a>,
-				<% if ipv == "6and4" then %>
-					<a href="<%=REQUEST_URI%>?conf_v4">OLSRD IPv4</a>,
-					<a href="<%=REQUEST_URI%>?conf_v6">OLSRD IPv6</a>
-				<% else %>
-					<a href="<%=REQUEST_URI%>?conf">OLSRD</a>
-				<% end %>
+			<% if has_ipv4_conf then %>
+			    <a href="<%=REQUEST_URI%>?openwrt_v4">OpenWrt (IPv4)</a>,
+			<% end %>
+			<% if has_ipv6_conf then %>
+			    <a href="<%=REQUEST_URI%>?openwrt_v6">OpenWrt (IPv6)</a>,
+			<% end %>
+			<% if has_ipv4_conf then %>
+			    <a href="<%=REQUEST_URI%>?conf_v4">OLSRD (IPv4)</a>,
+			<% end %>
+			<% if has_ipv6_conf then %>
+			    <a href="<%=REQUEST_URI%>?conf_v6">OLSRD (IPv6)</a>
+			<% end %>
 		</td></tr>
 	</table>
 </fieldset>

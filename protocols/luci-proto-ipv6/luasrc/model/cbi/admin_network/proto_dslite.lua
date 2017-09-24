@@ -14,7 +14,7 @@ peeraddr = section:taboption("general", Value, "peeraddr",
 	translate("DS-Lite AFTR address"))
 
 peeraddr.rmempty  = false
-peeraddr.datatype = "ip6addr"
+peeraddr.datatype = "or(hostname,ip6addr)"
 
 ip6addr = section:taboption("general", Value, "ip6addr",
 	translate("Local IPv6 address"),

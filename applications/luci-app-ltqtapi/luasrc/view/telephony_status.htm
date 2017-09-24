@@ -1,5 +1,5 @@
 <script type="text/javascript">//<![CDATA[
-XHR.poll(5, '<%=luci.dispatcher.build_url("admin", "telephony", "status")%>', null,
+XHR.poll(5, '<%=url('admin/telephony/status')%>', null,
 	function(x, st)
 	{
 		var tb = document.getElementById('telephony_status_table');

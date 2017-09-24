@@ -33,7 +33,7 @@ end
 <div id="<%=name%>" style="width:<%=width%>;float:left">
 	<h2><%=title%></h2>
 	<div id="form_<%=name%>">
-		<form name="searchform" id="search_<%=name%>" action="<%=luci.dispatcher.build_url('freifunk', 'search_redirect')%>">
+		<form name="searchform" id="search_<%=name%>" action="<%=url('freifunk/search_redirect')%>">
 			<input type="text" name="searchterms" style="margin-bottom:15px; width: 90%"><br />
 			<%
 			local checked = " checked"

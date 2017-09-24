@@ -13,28 +13,36 @@
 
 var cbi_d = [];
 var cbi_t = [];
-var cbi_c = [];
+var cbi_strings = { path: {}, label: {} };
+
+function Int(x) {
+	return (/^-?\d+$/.test(x) ? +x : NaN);
+}
+
+function Dec(x) {
+	return (/^-?\d+(?:\.\d+)?$/.test(x) ? +x : NaN);
+}
 
 var cbi_validators = {
 
 	'integer': function()
 	{
-		return (this.match(/^-?[0-9]+$/) != null);
+		return !!Int(this);
 	},
 
 	'uinteger': function()
 	{
-		return (cbi_validators.integer.apply(this) && (this >= 0));
+		return (Int(this) >= 0);
 	},
 
 	'float': function()
 	{
-		return !isNaN(parseFloat(this));
+		return !!Dec(this);
 	},
 
 	'ufloat': function()
 	{
-		return (cbi_validators['float'].apply(this) && (this >= 0));
+		return (Dec(this) >= 0);
 	},
 
 	'ipaddr': function()
@@ -110,28 +118,106 @@ var cbi_validators = {
 		return false;
 	},
 
+	'ip4prefix': function()
+	{
+		return !isNaN(this) && this >= 0 && this <= 32;
+	},
+
+	'ip6prefix': function()
+	{
+		return !isNaN(this) && this >= 0 && this <= 128;
+	},
+
+	'cidr': function()
+	{
+		return cbi_validators.cidr4.apply(this) ||
+			cbi_validators.cidr6.apply(this);
+	},
+
+	'cidr4': function()
+	{
+		if (this.match(/^(\S+)\/(\S+)$/))
+		{
+			ip = RegExp.$1;
+			mask = RegExp.$2;
+			return cbi_validators.ip4addr.apply(ip) &&
+				cbi_validators.ip4prefix.apply(mask);
+		}
+		return false;
+	},
+
+	'cidr6': function()
+	{
+		if (this.match(/^(\S+)\/(\S+)$/))
+		{
+			ip = RegExp.$1;
+			mask = RegExp.$2;
+			return cbi_validators.ip6addr.apply(ip) &&
+				cbi_validators.ip6prefix.apply(mask);
+		}
+		return false;
+	},
+
+	'ipnet4': function()
+	{
+		if (this.match(/^(\S+)\/(\S+)$/))
+		{
+			ip = RegExp.$1;
+			net = RegExp.$2;
+			return cbi_validators.ip4addr.apply(ip) &&
+				cbi_validators.ip4addr.apply(net);
+		}
+		return false;
+	},
+
+	'ipnet6': function()
+	{
+		if (this.match(/^(\S+)\/(\S+)$/))
+		{
+			ip = RegExp.$1;
+			net = RegExp.$2;
+			return cbi_validators.ip6addr.apply(ip) &&
+				cbi_validators.ip6addr.apply(net);
+		}
+		return false;
+	},
+
+	'ipmask': function()
+	{
+		return cbi_validators.ipmask4.apply(this) ||
+			cbi_validators.ipmask6.apply(this);
+	},
+
+	'ipmask4': function()
+	{
+		return cbi_validators.cidr4.apply(this) ||
+			cbi_validators.ipnet4.apply(this) ||
+			cbi_validators.ip4addr.apply(this);
+	},
+
+	'ipmask6': function()
+	{
+		return cbi_validators.cidr6.apply(this) ||
+			cbi_validators.ipnet6.apply(this) ||
+			cbi_validators.ip6addr.apply(this);
+	},
+
 	'port': function()
 	{
-		return cbi_validators.integer.apply(this) &&
-			(this >= 0) && (this <= 65535);
+		var p = Int(this);
+		return (p >= 0 && p <= 65535);
 	},
 
 	'portrange': function()
 	{
 		if (this.match(/^(\d+)-(\d+)$/))
 		{
-			var p1 = RegExp.$1;
-			var p2 = RegExp.$2;
+			var p1 = +RegExp.$1;
+			var p2 = +RegExp.$2;
+			return (p1 <= p2 && p2 <= 65535);
+		}
 
-			return cbi_validators.port.apply(p1) &&
-			       cbi_validators.port.apply(p2) &&
-			       (parseInt(p1) <= parseInt(p2))
-			;
-		}
-		else
-		{
-			return cbi_validators.port.apply(this);
-		}
+		return cbi_validators.port.apply(this);
 	},
 
 	'macaddr': function()
@@ -139,10 +225,11 @@ var cbi_validators = {
 		return (this.match(/^([a-fA-F0-9]{2}:){5}[a-fA-F0-9]{2}$/) != null);
 	},
 
-	'host': function()
+	'host': function(ipv4only)
 	{
 		return cbi_validators.hostname.apply(this) ||
-			cbi_validators.ipaddr.apply(this);
+			((ipv4only != 1) && cbi_validators.ipaddr.apply(this)) ||
+			((ipv4only == 1) && cb_validators.ip4addr.apply(this));
 	},
 
 	'hostname': function()
@@ -159,6 +246,49 @@ var cbi_validators = {
 	{
 		return cbi_validators.uciname.apply(this) ||
 			cbi_validators.host.apply(this);
+	},
+
+	'hostport': function(ipv4only)
+	{
+		var hp = this.split(/:/);
+
+		if (hp.length == 2)
+			return (cbi_validators.host.apply(hp[0], ipv4only) &&
+			        cbi_validators.port.apply(hp[1]));
+
+		return false;
+	},
+
+	'ip4addrport': function()
+	{
+		var hp = this.split(/:/);
+
+		if (hp.length == 2)
+			return (cbi_validators.ipaddr.apply(hp[0]) &&
+			        cbi_validators.port.apply(hp[1]));
+		return false;
+	},
+
+	'ipaddrport': function(bracket)
+	{
+		if (this.match(/^([^\[\]:]+):([^:]+)$/)) {
+			var addr = RegExp.$1
+			var port = RegExp.$2
+			return (cbi_validators.ip4addr.apply(addr) &&
+				cbi_validators.port.apply(port));
+                } else if ((bracket == 1) && (this.match(/^\[(.+)\]:([^:]+)$/))) {
+			var addr = RegExp.$1
+			var port = RegExp.$2
+			return (cbi_validators.ip6addr.apply(addr) &&
+				cbi_validators.port.apply(port));
+                } else if ((bracket != 1) && (this.match(/^([^\[\]]+):([^:]+)$/))) {
+			var addr = RegExp.$1
+			var port = RegExp.$2
+			return (cbi_validators.ip6addr.apply(addr) &&
+				cbi_validators.port.apply(port));
+		} else {
+			return false;
+		}
 	},
 
 	'wpakey': function()
@@ -191,56 +321,34 @@ var cbi_validators = {
 
 	'range': function(min, max)
 	{
-		var val = parseFloat(this);
-		if (!isNaN(min) && !isNaN(max) && !isNaN(val))
-			return ((val >= min) && (val <= max));
-
-		return false;
+		var val = Dec(this);
+		return (val >= +min && val <= +max);
 	},
 
 	'min': function(min)
 	{
-		var val = parseFloat(this);
-		if (!isNaN(min) && !isNaN(val))
-			return (val >= min);
-
-		return false;
+		return (Dec(this) >= +min);
 	},
 
 	'max': function(max)
 	{
-		var val = parseFloat(this);
-		if (!isNaN(max) && !isNaN(val))
-			return (val <= max);
-
-		return false;
+		return (Dec(this) <= +max);
 	},
 
 	'rangelength': function(min, max)
 	{
 		var val = '' + this;
-		if (!isNaN(min) && !isNaN(max))
-			return ((val.length >= min) && (val.length <= max));
-
-		return false;
+		return ((val.length >= +min) && (val.length <= +max));
 	},
 
 	'minlength': function(min)
 	{
-		var val = '' + this;
-		if (!isNaN(min))
-			return (val.length >= min);
-
-		return false;
+		return ((''+this).length >= +min);
 	},
 
 	'maxlength': function(max)
 	{
-		var val = '' + this;
-		if (!isNaN(max))
-			return (val.length <= max);
-
-		return false;
+		return ((''+this).length <= +max);
 	},
 
 	'or': function()
@@ -300,16 +408,57 @@ var cbi_validators = {
 	'phonedigit': function()
 	{
 		return (this.match(/^[0-9\*#!\.]+$/) != null);
+	},
+	'timehhmmss': function()
+	{
+		return (this.match(/^[0-6][0-9]:[0-6][0-9]:[0-6][0-9]$/) != null);
+	},
+	'dateyyyymmdd': function()
+	{
+		if (this == null) {
+			return false;
+		}
+		if (this.match(/^(\d\d\d\d)-(\d\d)-(\d\d)/)) {
+			var year = RegExp.$1;
+			var month = RegExp.$2;
+			var day = RegExp.$2
+
+			var days_in_month = [ 31, 28, 31, 30, 31, 30, 31, 31, 30 , 31, 30, 31 ];
+			function is_leap_year(year) {
+				return ((year % 4) == 0) && ((year % 100) != 0) || ((year % 400) == 0);
+			}
+			function get_days_in_month(month, year) {
+				if ((month == 2) && is_leap_year(year)) {
+					return 29;
+				} else {
+					return days_in_month[month];
+				}
+			}
+			/* Firewall rules in the past don't make sense */
+			if (year < 2015) {
+				return false;
+			}
+			if ((month <= 0) || (month > 12)) {
+				return false;
+			}
+			if ((day <= 0) || (day > get_days_in_month(month, year))) {
+				return false;
+			}
+			return true;
+
+		} else {
+			return false;
+		}
 	}
 };
 
 
-function cbi_d_add(field, dep, next) {
-	var obj = document.getElementById(field);
+function cbi_d_add(field, dep, index) {
+	var obj = (typeof(field) === 'string') ? document.getElementById(field) : field;
 	if (obj) {
 		var entry
 		for (var i=0; i<cbi_d.length; i++) {
-			if (cbi_d[i].id == field) {
+			if (cbi_d[i].id == obj.id) {
 				entry = cbi_d[i];
 				break;
 			}
@@ -317,10 +466,10 @@ function cbi_d_add(field, dep, next) {
 		if (!entry) {
 			entry = {
 				"node": obj,
-				"id": field,
+				"id": obj.id,
 				"parent": obj.parentNode.id,
-				"next": next,
-				"deps": []
+				"deps": [],
+				"index": index
 			};
 			cbi_d.unshift(entry);
 		}
@@ -372,8 +521,9 @@ function cbi_d_check(deps) {
 				istat = (istat && cbi_d_checkvalue(j, deps[i][j]))
 			}
 		}
-		if (istat) {
-			return !reverse;
+
+		if (istat ^ reverse) {
+			return true;
 		}
 	}
 	return def;
@@ -383,25 +533,33 @@ function cbi_d_update() {
 	var state = false;
 	for (var i=0; i<cbi_d.length; i++) {
 		var entry = cbi_d[i];
-		var next  = document.getElementById(entry.next)
-		var node  = document.getElementById(entry.id)
-		var parent = document.getElementById(entry.parent)
+		var node  = document.getElementById(entry.id);
+		var parent = document.getElementById(entry.parent);
 
 		if (node && node.parentNode && !cbi_d_check(entry.deps)) {
 			node.parentNode.removeChild(node);
 			state = true;
-			if( entry.parent )
-				cbi_c[entry.parent]--;
-		} else if ((!node || !node.parentNode) && cbi_d_check(entry.deps)) {
+		} else if (parent && (!node || !node.parentNode) && cbi_d_check(entry.deps)) {
+			var next = undefined;
+
+			for (next = parent.firstChild; next; next = next.nextSibling) {
+				if (next.getAttribute && parseInt(next.getAttribute('data-index'), 10) > entry.index) {
+					break;
+				}
+			}
+
 			if (!next) {
 				parent.appendChild(entry.node);
 			} else {
-				next.parentNode.insertBefore(entry.node, next);
+				parent.insertBefore(entry.node, next);
 			}
+
 			state = true;
-			if( entry.parent )
-				cbi_c[entry.parent]++;
 		}
+
+		// hide optionals widget if no choices remaining
+		if (parent && parent.parentNode && parent.getAttribute('data-optionals'))
+			parent.parentNode.style.display = (parent.options.length <= 1) ? 'none' : '';
 	}
 
 	if (entry && entry.parent) {
@@ -412,6 +570,84 @@ function cbi_d_update() {
 	if (state) {
 		cbi_d_update();
 	}
+}
+
+function cbi_init() {
+	var nodes;
+
+	nodes = document.querySelectorAll('[data-strings]');
+
+	for (var i = 0, node; (node = nodes[i]) !== undefined; i++) {
+		var str = JSON.parse(node.getAttribute('data-strings'));
+		for (var key in str) {
+			for (var key2 in str[key]) {
+				var dst = cbi_strings[key] || (cbi_strings[key] = { });
+				    dst[key2] = str[key][key2];
+			}
+		}
+	}
+
+	nodes = document.querySelectorAll('[data-depends]');
+
+	for (var i = 0, node; (node = nodes[i]) !== undefined; i++) {
+		var index = parseInt(node.getAttribute('data-index'), 10);
+		var depends = JSON.parse(node.getAttribute('data-depends'));
+		if (!isNaN(index) && depends.length > 0) {
+			for (var alt = 0; alt < depends.length; alt++) {
+				cbi_d_add(node, depends[alt], index);
+			}
+		}
+	}
+
+	nodes = document.querySelectorAll('[data-update]');
+
+	for (var i = 0, node; (node = nodes[i]) !== undefined; i++) {
+		var events = node.getAttribute('data-update').split(' ');
+		for (var j = 0, event; (event = events[j]) !== undefined; j++) {
+			cbi_bind(node, event, cbi_d_update);
+		}
+	}
+
+	nodes = document.querySelectorAll('[data-choices]');
+
+	for (var i = 0, node; (node = nodes[i]) !== undefined; i++) {
+		var choices = JSON.parse(node.getAttribute('data-choices'));
+		var options = {};
+
+		for (var j = 0; j < choices[0].length; j++)
+			options[choices[0][j]] = choices[1][j];
+
+		var def = (node.getAttribute('data-optional') === 'true')
+			? node.placeholder || '' : null;
+
+		cbi_combobox_init(node, options, def,
+		                  node.getAttribute('data-manual'));
+	}
+
+	nodes = document.querySelectorAll('[data-dynlist]');
+
+	for (var i = 0, node; (node = nodes[i]) !== undefined; i++) {
+		var choices = JSON.parse(node.getAttribute('data-dynlist'));
+		var options = null;
+
+		if (choices[0] && choices[0].length) {
+			options = {};
+
+			for (var j = 0; j < choices[0].length; j++)
+				options[choices[0][j]] = choices[1][j];
+		}
+
+		cbi_dynlist_init(node, choices[2], choices[3], options);
+	}
+
+	nodes = document.querySelectorAll('[data-type]');
+
+	for (var i = 0, node; (node = nodes[i]) !== undefined; i++) {
+		cbi_validate_field(node, node.getAttribute('data-optional') === 'true',
+		                   node.getAttribute('data-type'));
+	}
+
+	cbi_d_update();
 }
 
 function cbi_bind(obj, type, callback, mode) {
@@ -432,7 +668,7 @@ function cbi_bind(obj, type, callback, mode) {
 	return obj;
 }
 
-function cbi_combobox(id, values, def, man) {
+function cbi_combobox(id, values, def, man, focus) {
 	var selid = "cbi.combobox." + id;
 	if (document.getElementById(selid)) {
 		return
@@ -441,6 +677,7 @@ function cbi_combobox(id, values, def, man) {
 	var obj = document.getElementById(id)
 	var sel = document.createElement("select");
 		sel.id = selid;
+		sel.index = obj.index;
 		sel.className = obj.className.replace(/cbi-input-text/, 'cbi-input-select');
 
 	if (obj.nextSibling) {
@@ -452,14 +689,11 @@ function cbi_combobox(id, values, def, man) {
 	var dt = obj.getAttribute('cbi_datatype');
 	var op = obj.getAttribute('cbi_optional');
 
-	if (dt)
-		cbi_validate_field(sel, op == 'true', dt);
-
 	if (!values[obj.value]) {
 		if (obj.value == "") {
 			var optdef = document.createElement("option");
 			optdef.value = "";
-			optdef.appendChild(document.createTextNode(def));
+			optdef.appendChild(document.createTextNode(typeof(def) === 'string' ? def : cbi_strings.label.choose));
 			sel.appendChild(optdef);
 		} else {
 			var opt = document.createElement("option");
@@ -484,14 +718,18 @@ function cbi_combobox(id, values, def, man) {
 
 	var optman = document.createElement("option");
 	optman.value = "";
-	optman.appendChild(document.createTextNode(man));
+	optman.appendChild(document.createTextNode(typeof(man) === 'string' ? man : cbi_strings.label.custom));
 	sel.appendChild(optman);
 
 	obj.style.display = "none";
 
+	if (dt)
+		cbi_validate_field(sel, op == 'true', dt);
+
 	cbi_bind(sel, "change", function() {
 		if (sel.selectedIndex == sel.options.length - 1) {
 			obj.style.display = "inline";
+			sel.blur();
 			sel.parentNode.removeChild(sel);
 			obj.focus();
 		} else {
@@ -506,32 +744,34 @@ function cbi_combobox(id, values, def, man) {
 	})
 
 	// Retrigger validation in select
-	sel.focus();
-	sel.blur();
+	if (focus) {
+		sel.focus();
+		sel.blur();
+	}
 }
 
 function cbi_combobox_init(id, values, def, man) {
-	var obj = document.getElementById(id);
+	var obj = (typeof(id) === 'string') ? document.getElementById(id) : id;
 	cbi_bind(obj, "blur", function() {
-		cbi_combobox(id, values, def, man)
+		cbi_combobox(obj.id, values, def, man, true);
 	});
-	cbi_combobox(id, values, def, man);
+	cbi_combobox(obj.id, values, def, man, false);
 }
 
-function cbi_filebrowser(id, url, defpath) {
+function cbi_filebrowser(id, defpath) {
 	var field   = document.getElementById(id);
 	var browser = window.open(
-		url + ( field.value || defpath || '' ) + '?field=' + id,
+		cbi_strings.path.browser + ( field.value || defpath || '' ) + '?field=' + id,
 		"luci_filebrowser", "width=300,height=400,left=100,top=200,scrollbars=yes"
 	);
 
 	browser.focus();
 }
 
-function cbi_browser_init(id, respath, url, defpath)
+function cbi_browser_init(id, resource, defpath)
 {
 	function cbi_browser_btnclick(e) {
-		cbi_filebrowser(id, url, defpath);
+		cbi_filebrowser(id, defpath);
 		return false;
 	}
 
@@ -539,18 +779,16 @@ function cbi_browser_init(id, respath, url, defpath)
 
 	var btn = document.createElement('img');
 	btn.className = 'cbi-image-button';
-	btn.src = respath + '/cbi/folder.gif';
+	btn.src = (resource || cbi_strings.path.resource) + '/cbi/folder.gif';
 	field.parentNode.insertBefore(btn, field.nextSibling);
 
 	cbi_bind(btn, 'click', cbi_browser_btnclick);
 }
 
-function cbi_dynlist_init(name, respath, datatype, optional, choices)
+function cbi_dynlist_init(parent, datatype, optional, choices)
 {
-	var input0 = document.getElementsByName(name)[0];
-	var prefix = input0.name;
-	var parent = input0.parentNode;
-	var holder = input0.placeholder;
+	var prefix = parent.getAttribute('data-prefix');
+	var holder = parent.getAttribute('data-placeholder');
 
 	var values;
 
@@ -561,7 +799,7 @@ function cbi_dynlist_init(name, respath, datatype, optional, choices)
 		while (parent.firstChild)
 		{
 			var n = parent.firstChild;
-			var i = parseInt(n.index);
+			var i = +n.index;
 
 			if (i != del)
 			{
@@ -601,11 +839,16 @@ function cbi_dynlist_init(name, respath, datatype, optional, choices)
 			}
 
 			var b = document.createElement('img');
-				b.src = respath + ((i+1) < values.length ? '/cbi/remove.gif' : '/cbi/add.gif');
+				b.src = cbi_strings.path.resource + ((i+1) < values.length ? '/cbi/remove.gif' : '/cbi/add.gif');
 				b.className = 'cbi-image-button';
 
 			parent.appendChild(t);
 			parent.appendChild(b);
+			if (datatype == 'file')
+			{
+				cbi_browser_init(t.id, null, parent.getAttribute('data-browser-path'));
+			}
+
 			parent.appendChild(document.createElement('br'));
 
 			if (datatype)
@@ -615,14 +858,14 @@ function cbi_dynlist_init(name, respath, datatype, optional, choices)
 
 			if (choices)
 			{
-				cbi_combobox_init(t.id, choices[0], '', choices[1]);
-				t.nextSibling.index = i;
+				cbi_combobox_init(t.id, choices, '', cbi_strings.label.custom);
+				b.index = i;
 
-				cbi_bind(t.nextSibling, 'keydown',  cbi_dynlist_keydown);
-				cbi_bind(t.nextSibling, 'keypress', cbi_dynlist_keypress);
+				cbi_bind(b, 'keydown',  cbi_dynlist_keydown);
+				cbi_bind(b, 'keypress', cbi_dynlist_keypress);
 
 				if (i == focus || -i == focus)
-					t.nextSibling.focus();
+					b.focus();
 			}
 			else
 			{
@@ -695,15 +938,15 @@ function cbi_dynlist_init(name, respath, datatype, optional, choices)
 			se = se.parentNode;
 
 		var prev = se.previousSibling;
-		while (prev && prev.name != name)
+		while (prev && prev.name != prefix)
 			prev = prev.previousSibling;
 
 		var next = se.nextSibling;
-		while (next && next.name != name)
+		while (next && next.name != prefix)
 			next = next.nextSibling;
 
 		/* advance one further in combobox case */
-		if (next && next.nextSibling.name == name)
+		if (next && next.nextSibling.name == prefix)
 			next = next.nextSibling;
 
 		switch (ev.keyCode)
@@ -758,20 +1001,24 @@ function cbi_dynlist_init(name, respath, datatype, optional, choices)
 		ev = ev ? ev : window.event;
 
 		var se = ev.target ? ev.target : ev.srcElement;
+		var input = se.previousSibling;
+		while (input && input.name != prefix) {
+			input = input.previousSibling;
+		}
 
 		if (se.src.indexOf('remove') > -1)
 		{
-			se.previousSibling.value = '';
+			input.value = '';
 
 			cbi_dynlist_keydown({
-				target:  se.previousSibling,
+				target:  input,
 				keyCode: 8
 			});
 		}
 		else
 		{
 			cbi_dynlist_keydown({
-				target:  se.previousSibling,
+				target:  input,
 				keyCode: 13
 			});
 		}
@@ -780,27 +1027,6 @@ function cbi_dynlist_init(name, respath, datatype, optional, choices)
 	}
 
 	cbi_dynlist_redraw(NaN, -1, -1);
-}
-
-//Hijacks the CBI form to send via XHR (requires Prototype)
-function cbi_hijack_forms(layer, win, fail, load) {
-	var forms = layer.getElementsByTagName('form');
-	for (var i=0; i<forms.length; i++) {
-		$(forms[i]).observe('submit', function(event) {
-			// Prevent the form from also submitting the regular way
-			event.stop();
-
-			// Submit via XHR
-			event.element().request({
-				onSuccess: win,
-				onFailure: fail
-			});
-
-			if (load) {
-				load();
-			}
-		});
-	}
 }
 
 
@@ -841,22 +1067,23 @@ function cbi_t_update() {
 	for( var sid in cbi_t )
 		for( var tid in cbi_t[sid] )
 		{
-			if( cbi_c[cbi_t[sid][tid].cid] == 0 ) {
-				cbi_t[sid][tid].tab.style.display = 'none';
-			}
-			else if( cbi_t[sid][tid].tab && cbi_t[sid][tid].tab.style.display == 'none' ) {
-				cbi_t[sid][tid].tab.style.display = '';
+			var t = cbi_t[sid][tid].tab;
+			var c = cbi_t[sid][tid].container;
 
-				var t = cbi_t[sid][tid].tab;
+			if (!c.firstElementChild) {
+				t.style.display = 'none';
+			}
+			else if (t.style.display == 'none') {
+				t.style.display = '';
 				t.className += ' cbi-tab-highlighted';
 				hl_tabs.push(t);
 			}
 
-			cbi_tag_last(cbi_t[sid][tid].container);
+			cbi_tag_last(c);
 			updated = true;
 		}
 
-	if( hl_tabs.length > 0 )
+	if (hl_tabs.length > 0)
 		window.setTimeout(function() {
 			for( var i = 0; i < hl_tabs.length; i++ )
 				hl_tabs[i].className = hl_tabs[i].className.replace(/ cbi-tab-highlighted/g, '');
@@ -1158,6 +1385,9 @@ String.prototype.format = function()
 	var quot_esc = [/"/g, '&#34;', /'/g, '&#39;'];
 
 	function esc(s, r) {
+		if (typeof(s) !== 'string' && !(s instanceof String))
+			return '';
+
 		for( var i = 0; i < r.length; i += 2 )
 			s = s.replace(r[i], r[i+1]);
 		return s;
@@ -1168,7 +1398,7 @@ String.prototype.format = function()
 	var re = /^(([^%]*)%('.|0|\x20)?(-)?(\d+)?(\.\d+)?(%|b|c|d|u|f|o|s|x|X|q|h|j|t|m))/;
 	var a = b = [], numSubstitutions = 0, numMatches = 0;
 
-	while( a = re.exec(str) )
+	while (a = re.exec(str))
 	{
 		var m = a[1];
 		var leftpart = a[2], pPad = a[3], pJustify = a[4], pMinLength = a[5];
@@ -1191,6 +1421,8 @@ String.prototype.format = function()
 					pad = leftpart.substr(1,1);
 				else if (pPad)
 					pad = pPad;
+				else
+					pad = ' ';
 
 				var justifyRight = true;
 				if (pJustify && pJustify === "-")
@@ -1198,40 +1430,40 @@ String.prototype.format = function()
 
 				var minLength = -1;
 				if (pMinLength)
-					minLength = parseInt(pMinLength);
+					minLength = +pMinLength;
 
 				var precision = -1;
 				if (pPrecision && pType == 'f')
-					precision = parseInt(pPrecision.substring(1));
+					precision = +pPrecision.substring(1);
 
 				var subst = param;
 
 				switch(pType)
 				{
 					case 'b':
-						subst = (parseInt(param) || 0).toString(2);
+						subst = (+param || 0).toString(2);
 						break;
 
 					case 'c':
-						subst = String.fromCharCode(parseInt(param) || 0);
+						subst = String.fromCharCode(+param || 0);
 						break;
 
 					case 'd':
-						subst = (parseInt(param) || 0);
+						subst = ~~(+param || 0);
 						break;
 
 					case 'u':
-						subst = Math.abs(parseInt(param) || 0);
+						subst = ~~Math.abs(+param || 0);
 						break;
 
 					case 'f':
 						subst = (precision > -1)
-							? ((parseFloat(param) || 0.0)).toFixed(precision)
-							: (parseFloat(param) || 0.0);
+							? ((+param || 0.0)).toFixed(precision)
+							: (+param || 0.0);
 						break;
 
 					case 'o':
-						subst = (parseInt(param) || 0).toString(8);
+						subst = (+param || 0).toString(8);
 						break;
 
 					case 's':
@@ -1239,11 +1471,11 @@ String.prototype.format = function()
 						break;
 
 					case 'x':
-						subst = ('' + (parseInt(param) || 0).toString(16)).toLowerCase();
+						subst = ('' + (+param || 0).toString(16)).toLowerCase();
 						break;
 
 					case 'X':
-						subst = ('' + (parseInt(param) || 0).toString(16)).toUpperCase();
+						subst = ('' + (+param || 0).toString(16)).toUpperCase();
 						break;
 
 					case 'h':
@@ -1286,20 +1518,30 @@ String.prototype.format = function()
 						break;
 
 					case 'm':
-						var mf = pMinLength ? parseInt(pMinLength) : 1000;
-						var pr = pPrecision ? Math.floor(10*parseFloat('0'+pPrecision)) : 2;
+						var mf = pMinLength ? +pMinLength : 1000;
+						var pr = pPrecision ? ~~(10 * +('0' + pPrecision)) : 2;
 
 						var i = 0;
-						var val = parseFloat(param || 0);
-						var units = [ '', 'K', 'M', 'G', 'T', 'P', 'E' ];
+						var val = (+param || 0);
+						var units = [ ' ', ' K', ' M', ' G', ' T', ' P', ' E' ];
 
 						for (i = 0; (i < units.length) && (val > mf); i++)
 							val /= mf;
 
-						subst = val.toFixed(pr) + ' ' + units[i];
+						subst = (i ? val.toFixed(pr) : val) + units[i];
+						pMinLength = null;
 						break;
 				}
 			}
+		}
+
+		if (pMinLength) {
+			subst = subst.toString();
+			for (var i = subst.length; i < pMinLength; i++)
+				if (pJustify == '-')
+					subst = subst + ' ';
+				else
+					subst = pad + subst;
 		}
 
 		out += leftpart + subst;

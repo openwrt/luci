@@ -7,7 +7,6 @@
 . $dir/functions.sh
 
 wan_is_olsr=$(uci -q get meshwizard.netconfig.wan_config)
-lan_is_olsr=$(uci -q get meshwizard.netconfig.lan_config)
 
 config_load firewall
 
@@ -34,7 +33,7 @@ handle_fwzone() {
 		fi
 	fi
 
-	if [ "$name" == "lan" ] && [ "$lan_is_olsr" == 1 ]; then
+	if [ "$name" == "lan" ] && [ "$lan_is_olsr" == "1" ]; then
 			uci set firewall.$1.network=' ' && uci_commitverbose "LAN is used for olsr, removed the lan interface from zone lan" firewall
 	fi
 }
@@ -80,23 +79,30 @@ if [ ! "$no_masq_lan" == "1" ] && [ ! "$(uci -q get meshwizard.netconfig.lan_con
 fi
 
 
-# Rules, Forwardings, advanced config and includes
+# Rules, Forwardings, advanced config and includes from freifunk and
+# profile_$community config files.
 
-for config in freifunk profile_$community; do
+add_fw_rules() {
+    config_cb() {
+	local type="$1"
+	local name="$2"
+	local allowed_section_types="advanced include fw_rule fw_forwarding"
+	if is_in_list "$allowed_section_types" $type ; then
+	    uci set firewall.${name}="${type/fw_/}"
+	    option_cb() {
+		local option="$1"
+		local value="$2"
+		uci set firewall.${CONFIG_SECTION}.${option}="$value"
+	    }
+	else
+	    option_cb() { return; }
+	fi
+    }
+    config_load freifunk
+    config_load profile_${community}
+}
+add_fw_rules
 
-	config_load $config
-
-	for section in advanced include fw_rule fw_forwarding; do
-		handle_firewall() {
-		        local options=$(uci show $config."$1")
-			options=$(echo "$options" | sed -e "s/fw_//g" -e "s/^$config/firewall/g")
-			for o in $options; do
-				uci set $o
-			done
-		}
-		config_foreach handle_firewall $section
-	done
-done
 
 # If we use auto-ipv6-dhcp then allow 547/udp on the freifunk zone
 if [ "$ipv6_config" = "auto-ipv6-dhcpv6" ]; then

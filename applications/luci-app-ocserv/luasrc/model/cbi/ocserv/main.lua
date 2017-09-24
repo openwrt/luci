@@ -74,12 +74,6 @@ o.default = "plain"
 o:value("plain")
 o:value("PAM")
 
-o = s:taboption("general", Value, "zone", translate("Firewall Zone"),
-	translate("The firewall zone that the VPN clients will be set to"))
-o.nocreate = true
-o.default = "lan"
-o.template = "cbi/firewall_zonelist"
-
 s:taboption("general", Value, "port", translate("Port"),
 	translate("The same UDP and TCP ports will be used"))
 s:taboption("general", Value, "max_clients", translate("Max clients"))
@@ -101,22 +95,6 @@ udp.default = "1"
 local cisco = s:taboption("general", Flag, "cisco_compat", translate("AnyConnect client compatibility"),
 	translate("Enable support for CISCO AnyConnect clients"))
 cisco.default = "1"
-
-ipaddr = s:taboption("general", Value, "ipaddr", translate("VPN <abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Network-Address"))
-ipaddr.datatype = "ip4addr"
-ipaddr.default = "192.168.100.1"
-
-nm = s:taboption("general", Value, "netmask", translate("VPN <abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Netmask"))
-nm.datatype = "ip4addr"
-nm.default = "255.255.255.0"
-nm:value("255.255.255.0")
-nm:value("255.255.0.0")
-nm:value("255.0.0.0")
-
-if has_ipv6 then
-	ip6addr = s:taboption("general", Value, "ip6addr", translate("VPN <abbr title=\"Internet Protocol Version 6\">IPv6</abbr>-Network-Address"), translate("<abbr title=\"Classless Inter-Domain Routing\">CIDR</abbr>-Notation: address/prefix"))
-	ip6addr.datatype = "ip6addr"
-end
 
 
 tmpl = s:taboption("template", Value, "_tmpl",
@@ -144,10 +122,36 @@ function ca.cfgvalue(self, section)
 	return nixio.fs.readfile("/etc/ocserv/ca.pem")
 end
 
+--[[Networking options]]--
+
+local parp = s:taboption("general", Flag, "proxy_arp", translate("Enable proxy arp"),
+	translate("Provide addresses to clients from a subnet of LAN; if enabled the network below must be a subnet of LAN. Note that the first address of the specified subnet will be reserved by ocserv, so it should not be in use. If you have a network in LAN covering 192.168.1.0/24 use 192.168.1.192/26 to reserve the upper 62 addresses."))
+parp.default = "0"
+
+ipaddr = s:taboption("general", Value, "ipaddr", translate("VPN <abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Network-Address"),
+        translate("The IPv4 subnet address to provide to clients; this should be some private network different than the LAN addresses unless proxy ARP is enabled. Leave empty to attempt auto-configuration."))
+ipaddr.datatype = "ip4addr"
+ipaddr.default = "192.168.100.1"
+
+nm = s:taboption("general", Value, "netmask", translate("VPN <abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Netmask"),
+        translate("The mask of the subnet above."))
+nm.datatype = "ip4addr"
+nm.default = "255.255.255.0"
+nm:value("255.255.255.0")
+nm:value("255.255.0.0")
+nm:value("255.0.0.0")
+
+if has_ipv6 then
+	ip6addr = s:taboption("general", Value, "ip6addr", translate("VPN <abbr title=\"Internet Protocol Version 6\">IPv6</abbr>-Network-Address"), translate("<abbr title=\"Classless Inter-Domain Routing\">CIDR</abbr>-Notation: address/prefix"),
+	                      translate("The IPv6 subnet address to provide to clients; leave empty to attempt auto-configuration."))
+	ip6addr.datatype = "ip6addr"
+end
+
+
 --[[DNS]]--
 
 s = m:section(TypedSection, "dns", translate("DNS servers"),
-	translate("The DNS servers to be provided to clients; can be either IPv6 or IPv4"))
+	translate("The DNS servers to be provided to clients; can be either IPv6 or IPv4. Typically you should include the address of this device"))
 s.anonymous = true
 s.addremove = true
 s.template = "cbi/tblsection"

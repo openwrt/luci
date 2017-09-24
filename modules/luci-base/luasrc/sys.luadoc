@@ -1,8 +1,7 @@
 ---[[
 LuCI Linux and POSIX system utilities.
-
-module "luci.sys"
 ]]
+module "luci.sys"
 
 ---[[
 Execute a given shell command and return the error code
@@ -149,6 +148,16 @@ Returns a two-dimensional table of IPv6 address hints.
 @return  Table of table containing known hosts from various sources.
          Each entry contains the values in the following order:
          [ "ip", "name" ]
+]]
+
+---[[
+Returns a two-dimensional table of host hints.
+
+@class function
+@name net.host_hints
+@return  Table of table containing known hosts from various sources,
+         indexed by mac address. Each subtable contains at least one
+         of the fields "name", "ipv4" or "ipv6".
 ]]
 
 ---[[

@@ -12,7 +12,7 @@ local type, table, string, io, assert, tostring, setmetatable, pcall = type, tab
 module "luadoc.util"
 
 -------------------------------------------------------------------------------
--- Removes spaces from the begining and end of a given string
+-- Removes spaces from the beginning and end of a given string
 -- @param s string to be trimmed
 -- @return trimmed string
 
@@ -21,7 +21,7 @@ function trim (s)
 end
 
 -------------------------------------------------------------------------------
--- Removes spaces from the begining and end of a given string, considering the
+-- Removes spaces from the beginning and end of a given string, considering the
 -- string is inside a lua comment.
 -- @param s string to be trimmed
 -- @return trimmed string
@@ -61,7 +61,7 @@ end
 -- Split text into a list consisting of the strings in text,
 -- separated by strings matching delim (which may be a pattern).
 -- @param delim if delim is "" then action is the same as %s+ except that
--- field 1 may be preceeded by leading whitespace
+-- field 1 may be preceded by leading whitespace
 -- @usage split(",%s*", "Anna, Bob, Charlie,Dolores")
 -- @usage split(""," x y") gives {"x","y"}
 -- @usage split("%s+"," x y") gives {"", "x","y"}

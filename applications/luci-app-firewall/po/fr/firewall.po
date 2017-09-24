@@ -31,12 +31,6 @@ msgstr ""
 msgid "(Unnamed SNAT)"
 msgstr ""
 
-msgid "-- Please choose --"
-msgstr "-- Choisissez SVP --"
-
-msgid "-- custom --"
-msgstr ""
-
 msgid "<var>%d</var> pkts. per <var>%s</var>"
 msgstr ""
 
@@ -74,7 +68,7 @@ msgid "Custom Rules"
 msgstr "Régles spécifiques"
 
 msgid ""
-"Custom rules allow you to execute arbritary iptables commands which are not "
+"Custom rules allow you to execute arbitrary iptables commands which are not "
 "otherwise covered by the firewall framework. The commands are executed after "
 "each firewall restart, right after the default ruleset has been loaded."
 msgstr ""
@@ -149,6 +143,9 @@ msgstr "Transfert"
 msgid "Forward to"
 msgstr "Transférer à"
 
+msgid "Friday"
+msgstr ""
+
 msgid "From %s in %s"
 msgstr ""
 
@@ -221,6 +218,12 @@ msgid ""
 "on the client host."
 msgstr ""
 
+msgid "Monday"
+msgstr ""
+
+msgid "Month Days"
+msgstr ""
+
 msgid "Name"
 msgstr "Nom"
 
@@ -287,6 +290,9 @@ msgstr ""
 msgid "Redirect matched incoming traffic to the specified internal host"
 msgstr "Rediriger le trafic entrant correspondant vers l'hôte interne spécifié"
 
+msgid "Restart Firewall"
+msgstr ""
+
 msgid "Restrict Masquerading to given destination subnets"
 msgstr ""
 "Restreindre la substitution d'adresses (Masquerade) à ces sous-réseaux "
@@ -319,6 +325,9 @@ msgstr "Adresse IP SNAT"
 
 msgid "SNAT port"
 msgstr "Port SNAT"
+
+msgid "Saturday"
+msgstr ""
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 #  applications/luci-fw/luasrc/model/cbi/luci_fw/rrule.lua                    #
@@ -374,6 +383,21 @@ msgstr "Port source"
 msgid "Source zone"
 msgstr "Zone source"
 
+msgid "Start Date (yyyy-mm-dd)"
+msgstr ""
+
+msgid "Start Time (hh:mm:ss)"
+msgstr ""
+
+msgid "Stop Date (yyyy-mm-dd)"
+msgstr ""
+
+msgid "Stop Time (hh:mm:ss)"
+msgstr ""
+
+msgid "Sunday"
+msgstr ""
+
 msgid ""
 "The firewall creates zones over your network interfaces to control network "
 "traffic flow."
@@ -425,6 +449,12 @@ msgstr ""
 "cette zone. Les <em>réseaux couverts</em> indiquent quels réseaux "
 "disponibles sont membre de cette zone."
 
+msgid "Thursday"
+msgstr ""
+
+msgid "Time in UTC"
+msgstr ""
+
 msgid "To %s at %s on <var>this device</var>"
 msgstr ""
 
@@ -452,10 +482,19 @@ msgid ""
 "the router."
 msgstr ""
 
+msgid "Tuesday"
+msgstr ""
+
 msgid "Via %s"
 msgstr ""
 
 msgid "Via %s at %s"
+msgstr ""
+
+msgid "Wednesday"
+msgstr ""
+
+msgid "Week Days"
 msgstr ""
 
 msgid ""
@@ -499,195 +538,3 @@ msgstr "rejeter"
 
 msgid "traffic"
 msgstr ""
-
-#~ msgid "Destination"
-#~ msgstr "Destination"
-
-#~ msgid "Family"
-#~ msgstr "Famille"
-
-#~ msgid "Source"
-#~ msgstr "Source"
-
-#~ msgid "Via"
-#~ msgstr "Via"
-
-#~ msgid "(optional)"
-#~ msgstr "(optionnel)"
-
-#~ msgid "Intended destination address"
-#~ msgstr "Adresse de destination voulue"
-
-#~ msgid "Internal port (optional)"
-#~ msgstr "Port interne (optionnel)"
-
-#~ msgid "Advanced Options"
-#~ msgstr "Options avancées"
-
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-#  applications/luci-fw/luasrc/model/cbi/luci_fw/trule.lua                    #
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-#
-# msgid "Name"
-# msgstr ""
-#
-# msgid "(optional)"
-# msgstr ""
-#
-# msgid "Protocol"
-# msgstr ""
-#
-# msgid "Source port"
-# msgstr ""
-#
-# msgid "Destination port"
-# msgstr ""
-#
-# msgid "Action"
-# msgstr ""
-#
-# msgid "drop"
-# msgstr ""
-#
-# msgid "accept"
-# msgstr ""
-#
-# msgid "reject"
-# msgstr ""
-#
-#~ msgid "Advanced Rules"
-#~ msgstr "Règles avancées"
-
-#~ msgid ""
-#~ "Advanced rules let you customize the firewall to your needs. Only new "
-#~ "connections will be matched. Packets belonging to already open "
-#~ "connections are automatically allowed to pass the firewall."
-#~ msgstr ""
-#~ "Les règles avancées vous laissent personnaliser le pare-feu selon vos "
-#~ "besoins. Seules les nouvelles connexions seront prises en compte. Les "
-#~ "paquets appartenant à des connexions déjà ouvertes sont automatiquement "
-#~ "admis à passer le pare-feu."
-
-#~ msgid "Custom Rules (/etc/firewall.user)"
-#~ msgstr "Règles spécifiques (/etc/firewall.user)"
-
-#~ msgid "Device"
-#~ msgstr "Équipement"
-
-#~ msgid ""
-#~ "For DNAT, match incoming traffic directed at the given destination ip "
-#~ "address. For SNAT rewrite the source address to the given address."
-#~ msgstr ""
-#~ "Pour le DNAT, sélectionne le trafic entrant correspondant à l'adresse IP "
-#~ "destinataire. Pour le SNAT, ré-écrit l'adresse source avec l'adresse "
-#~ "donnée."
-
-#~ msgid ""
-#~ "Match incoming traffic originating from the given source port or port "
-#~ "range on the client host"
-#~ msgstr ""
-#~ "Prendre en compte le trafic entrant provenant du port source donné (ou la "
-#~ "gamme de ports) sur l'hôte client"
-
-#~ msgid "Overview"
-#~ msgstr "Vue d'ensemble"
-
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-#  applications/luci-fw/luasrc/model/cbi/luci_fw/miniportfw.lua               #
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-#
-# msgid "Name"
-# msgstr ""
-#
-# msgid "(optional)"
-# msgstr ""
-#
-# msgid "Protocol"
-# msgstr ""
-#
-# msgid "External port"
-# msgstr ""
-#
-# msgid "Internal IP address"
-# msgstr ""
-#
-#~ msgid "Port forwarding"
-#~ msgstr "Redirection de port"
-
-#~ msgid ""
-#~ "Port forwarding allows to provide network services in the internal "
-#~ "network to an external network."
-#~ msgstr ""
-#~ "La redirection de port vous permet d'exposer des services réseaux de "
-#~ "votre réseau local au réseau externe."
-
-#~ msgid "Redirection type"
-#~ msgstr "Type de redirection"
-
-#~ msgid "Redirections"
-#~ msgstr "Redirections"
-
-#~ msgid "Rules"
-#~ msgstr "Règles"
-
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-#  applications/luci-fw/luasrc/model/cbi/luci_fw/redirect.lua                 #
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-#
-# msgid "Name"
-# msgstr ""
-#
-# msgid "Protocol"
-# msgstr ""
-#
-#~ msgid "Traffic Redirection"
-#~ msgstr "Redirection du trafic"
-
-#~ msgid ""
-#~ "Traffic redirection allows you to change the destination address of "
-#~ "forwarded packets."
-#~ msgstr ""
-#~ "La redirection de trafic vous permet de changer l'adresse de destination "
-#~ "des paquets transférés."
-
-#~ msgid "Network"
-#~ msgstr "Réseau"
-
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-#  applications/luci-fw/luasrc/model/cbi/luci_fw/traffic.lua                  #
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-#
-# msgid "Name"
-# msgstr ""
-#
-#~ msgid "Traffic Control"
-#~ msgstr "Contrôle de trafic"
-
-#~ msgid "Zone-to-Zone traffic"
-#~ msgstr "Trafic zone-à-zone"
-
-#~ msgid ""
-#~ "Here you can specify which network traffic is allowed to flow between "
-#~ "network zones. Only new connections will be matched.  Packets belonging "
-#~ "to already open connections are automatically allowed to pass the "
-#~ "firewall. If you experience occasional connection problems try enabling "
-#~ "MSS Clamping otherwise disable it for performance reasons."
-#~ msgstr ""
-#~ "Ici, vous pouvez spécifier quel trafic réseau est autorisé à transiter "
-#~ "entre les zones réseau. Seules les nouvelles connexions seront prises en "
-#~ "compte. Les paquets appartenant à des connexions déjà ouvertes sont "
-#~ "automatiquement admis à passer le pare-feu. Si vous subissez des "
-#~ "problèmes de connexion occasionnels, essayer d'activer le MSS clamping; "
-#~ "sinon laissez-le désactivé pour des raisons de performance."
-
-#~ msgid "Zone"
-#~ msgstr "Zone"
-
-#~ msgid "Destination IP"
-#~ msgstr "IP de destination"
-
-#~ msgid "IP address"
-#~ msgstr "Adresse IP"
-
-#~ msgid "Source MAC-address"
-#~ msgstr "Adresse MAC source"

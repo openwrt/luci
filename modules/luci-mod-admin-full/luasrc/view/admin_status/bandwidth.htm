@@ -14,8 +14,7 @@
 		end
 	end
 
-	local curdev = luci.dispatcher.context.requestpath
-	      curdev = curdev[#curdev] ~= "bandwidth" and curdev[#curdev] or devices[1]
+	local curdev = luci.http.formvalue("dev") or devices[1]
 -%>
 
 <%+header%>
@@ -264,11 +263,11 @@
 	);
 //]]></script>
 
-<h2><a id="content" name="content"><%:Realtime Traffic%></a></h2>
+<h2 name="content"><%:Realtime Traffic%></h2>
 
 <ul class="cbi-tabmenu">
 	<% for _, dev in ipairs(devices) do %>
-		<li class="cbi-tab<%= dev == curdev and "" or "-disabled" %>"><a href="<%=pcdata(dev)%>"><%=pcdata(dev)%></a></li>
+		<li class="cbi-tab<%= dev == curdev and "" or "-disabled" %>"><a href="?dev=<%=pcdata(dev)%>"><%=pcdata(dev)%></a></li>
 	<% end %>
 </ul>
 

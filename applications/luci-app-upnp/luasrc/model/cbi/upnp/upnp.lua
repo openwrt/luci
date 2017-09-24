@@ -12,21 +12,21 @@ s.addremove = false
 s:tab("general",  translate("General Settings"))
 s:tab("advanced", translate("Advanced Settings"))
 
-e = s:taboption("general", Flag, "_init", translate("Start UPnP and NAT-PMP service"))
+e = s:taboption("general", Flag, "enabled", translate("Start UPnP and NAT-PMP service"))
 e.rmempty  = false
 
-function e.cfgvalue(self, section)
-	return luci.sys.init.enabled("miniupnpd") and self.enabled or self.disabled
-end
+--function e.cfgvalue(self, section)
+--	return luci.sys.init.enabled("miniupnpd") and self.enabled or self.disabled
+--end
 
 function e.write(self, section, value)
 	if value == "1" then
-		luci.sys.call("/etc/init.d/miniupnpd enable >/dev/null")
 		luci.sys.call("/etc/init.d/miniupnpd start >/dev/null")
 	else
 		luci.sys.call("/etc/init.d/miniupnpd stop >/dev/null")
-		luci.sys.call("/etc/init.d/miniupnpd disable >/dev/null")
 	end
+
+	return Flag.write(self, section, value)
 end
 
 s:taboption("general", Flag, "enable_upnp", translate("Enable UPnP functionality")).default = "1"

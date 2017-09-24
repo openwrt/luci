@@ -8,7 +8,7 @@ local ipv6, defaultroute, metric, peerdns, dns, mtu
 
 
 server = section:taboption("general", Value, "server", translate("L2TP Server"))
-server.datatype = "host"
+server.datatype = "or(host(1), hostport(1))"
 
 
 username = section:taboption("general", Value, "username", translate("PAP/CHAP username"))
@@ -19,10 +19,11 @@ password.password = true
 
 if luci.model.network:has_ipv6() then
 
-	ipv6 = section:taboption("advanced", Flag, "ipv6",
-		translate("Enable IPv6 negotiation on the PPP link"))
-
-	ipv6.default = ipv6.disabled
+        ipv6 = section:taboption("advanced", ListValue, "ipv6")
+        ipv6:value("auto", translate("Automatic"))
+        ipv6:value("0", translate("Disabled"))
+        ipv6:value("1", translate("Manual"))
+        ipv6.default = "auto"
 
 end
 

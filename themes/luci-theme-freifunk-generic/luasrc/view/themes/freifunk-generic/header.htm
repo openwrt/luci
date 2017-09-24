@@ -105,8 +105,8 @@
 <%- end -%>
 
 <p class="skiplink">
-<span id="skiplink1"><a href="#navigation"><%:skiplink1 Skip to navigation%></a></span>
-<span id="skiplink2"><a href="#content"><%:skiplink2 Skip to content%></a></span>
+<span id="skiplink1"><a href="#navigation"><%:Skip to navigation%></a></span>
+<span id="skiplink2"><a href="#content"><%:Skip to content%></a></span>
 </p>
 
 <div id="header">
@@ -163,7 +163,7 @@
 %>
 
 <div id="menubar">
-<h2 class="navigation"><a id="navigation" name="navigation"><%:navigation Navigation%></a></h2>
+<h2 class="navigation"><a id="navigation" name="navigation"><%:Navigation%></a></h2>
 <ul id="mainmenu" class="dropdowns">
 	<%
 		local childs = disp.node_childs(cattree)
@@ -216,8 +216,8 @@ if tree.nodes[category] and tree.nodes[category].ucidata then
 <% if category ~= "freifunk" and category ~= "splash" then %>
 <noscript>
 	<div class="errorbox">
-		<strong><%:Java Script required!%></strong><br />
-		<%:You must enable Java Script in your browser or LuCI will not work properly.%>
+		<strong><%:JavaScript required!%></strong><br />
+		<%:You must enable JavaScript in your browser or LuCI will not work properly.%>
 	</div>
 </noscript>
 <% end %>

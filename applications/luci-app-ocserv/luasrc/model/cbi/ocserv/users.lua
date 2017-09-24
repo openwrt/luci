@@ -30,7 +30,7 @@ function pwd.write(self, section, value)
 		pass = value
 	else
 		local t = tonumber(nixio.getpid()*os.time())
-		local salt = "$5$" .. t .. "$"
+		local salt = "$1$" .. t .. "$"
 		pass = nixio.crypt(value, salt)
 	end
 	Value.write(self, section, pass)
@@ -47,7 +47,7 @@ if fd then local ln
 		if not ln then break end
 
 		local id, user, group, vpn_ip, ip, device, time, cipher, status = 
-			ln:match("^%s*(%d+)%s+([-_%w]+)%s+([%.%*-_%w]+)%s+([%:%.-_%w]+)%s+([%:%.-_%w]+)%s+([%:%.-_%w]+)%s+([%:%.-_%w]+)%s+([%(%)%:%.-_%w]+)%s+([%:%.-_%w]+).*")
+			ln:match("^%s*(%d+)%s+([-_%w]+)%s+([%(%)%.%*-_%w]+)%s+([%:%.-_%w]+)%s+([%:%.-_%w]+)%s+([%:%.-_%w]+)%s+([%:%.-_%w]+)%s+([%(%)%:%.-_%w]+)%s+([%:%.-_%w]+).*")
 		if id then
 			table.insert(lusers, {id, user, group, vpn_ip, ip, device, time, cipher, status})
 		end

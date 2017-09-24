@@ -5,7 +5,7 @@ local fs = require "nixio.fs"
 
 local f = SimpleForm("firewall",
 	translate("Firewall - Custom Rules"),
-	translate("Custom rules allow you to execute arbritary iptables commands \
+	translate("Custom rules allow you to execute arbitrary iptables commands \
 		which are not otherwise covered by the firewall framework. \
 		The commands are executed after each firewall restart, right after \
 		the default ruleset has been loaded."))
@@ -22,6 +22,10 @@ end
 function o.write(self, section, value)
 	value = value:gsub("\r\n?", "\n")
 	fs.writefile("/etc/firewall.user", value)
+	require("luci.sys").call("/etc/init.d/firewall restart >/dev/null 2<&1")
+	require("nixio").syslog('info', 'Restarting firewall on custom /etc/firewall.user change')
 end
+
+f.submit = translate("Restart Firewall")
 
 return f

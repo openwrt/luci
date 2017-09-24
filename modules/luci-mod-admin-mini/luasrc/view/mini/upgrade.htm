@@ -6,14 +6,14 @@
 
 <%+header%>
 
-<h2><a id="content" name="content"><%:System%></a></h2>
+<h2 name="content"><%:System%></h2>
 <h3><%:Flash Firmware%></h3>
 
 <% if step == 1 then %>
 	<% if supported then %>
 	<form method="post" action="<%=REQUEST_URI%>" enctype="multipart/form-data">
 	<p>
-		<%:Upload an OpenWrt image file to reflash the device.%>
+		<%:Upload a sysupgrade-compatible image file to reflash the device.%>
 		<% if bad_image then %>
 			<br /><br />
 			<div class="error"><%:The uploaded image file does not
@@ -38,7 +38,7 @@
 	</form>
 	<% else %>
 		<div class="error"><%_ Sorry.
-			OpenWrt does not support a system upgrade on this platform.<br />
+			A system upgrade is not supported on this platform.<br />
 			You need to manually flash your device. %></div>
 	<% end %>
 <% elseif step == 2 then %>

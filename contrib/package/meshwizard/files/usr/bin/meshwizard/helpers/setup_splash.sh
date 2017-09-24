@@ -25,7 +25,7 @@ splash_net_add() {
 	EOF
 }
 
-if [ "$(uci -q get meshwizard.netconfig.$net\_dhcp)" == 1 ] && [ -n "$dhcprange" ]; then
+if [ "$(uci -q get meshwizard.netconfig.$net\_dhcp)" = 1 ] && [ -n "$dhcprange" ]; then
 	handle_splash() {
 		config_get network "$1" network
 		if [ "$network" == "${netrenamed}dhcp" ]; then
@@ -38,13 +38,15 @@ if [ "$(uci -q get meshwizard.netconfig.$net\_dhcp)" == 1 ] && [ -n "$dhcprange"
 	config_foreach handle_splash iface
 
 	if [ "$supports_vap" = 1 -a "$vap" = 1 ]; then
-		splash_net_add ${netrenamed}dhcp		
+		splash_net_add ${netrenamed}dhcp
 		uci_commitverbose "Setup dhcpsplash for ${netrenamed}dhcp" luci_splash
 	fi
 
 	ahdhcp_when_vap="$(uci get profile_$community.profile.adhoc_dhcp_when_vap)"
-	if [ "$supports_vap" = 0 ] || [ "$supports_vap" = 1 -a "$vap" = 1 -a "$ahdhcp_when_vap" = 1 ]; then
-		splash_net_add ${netrenamed}ahdhcp		
+	if [ "$supports_vap" = 0 ] || \
+		[ "$supports_vap" = 1 -a "$vap" = 1 -a "$ahdhcp_when_vap" = 1 ] || \
+		[ "$lan_dhcp" = 1 ]; then
+		splash_net_add ${netrenamed}ahdhcp
 		uci_commitverbose "Setup dhcpsplash for ${netrenamed}ahdhcp" luci_splash
 	fi
 	/etc/init.d/luci_splash enable

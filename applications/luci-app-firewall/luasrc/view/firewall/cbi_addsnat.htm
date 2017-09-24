@@ -3,6 +3,14 @@
 	local nw = require "luci.model.network".init()
 	local wz = fw:get_zone("wan")
 	local lz = fw:get_zone("lan")
+
+	local keys, vals, a, k, v = {}, {}
+	for k, v in ipairs(nw:get_interfaces()) do
+		for k, a in ipairs(v:ipaddrs()) do
+			keys[#keys+1] = a:host():string()
+			vals[#vals+1] = '%s (%s)' %{ a:host(), v:shortname() }
+		end
+	end
 %>
 
 <div class="cbi-section-create cbi-tblsection-create">
@@ -39,27 +47,18 @@
 					</select>
 				</td>
 				<td class="cbi-section-table-cell" style="width:110px">
-					<input type="text" class="cbi-input-text" id="_newsnat.dip" name="_newsnat.dip" />
+					<input type="text" class="cbi-input-text" id="_newsnat.dip" name="_newsnat.dip" placeholder="<%:Do not rewrite%>" data-type="ip4addr" data-optional="true"<%=
+						ifattr(#keys > 0, "data-choices", { keys, vals })
+					%> />
 				</td>
 				<td class="cbi-section-table-cell" style="width:110px">
-					<input type="text" class="cbi-input-text" id="_newsnat.dport" name="_newsnat.dport" placeholder="<%:Do not rewrite%>" />
+					<input type="text" class="cbi-input-text" id="_newsnat.dport" name="_newsnat.dport" placeholder="<%:Do not rewrite%>" data-type="portrange" data-optional="true" />
 				</td>
 				<td class="cbi-section-table-cell">
 					<input type="submit" class="cbi-button cbi-button-link" name="_newsnat.submit" value="<%:Add and edit...%>" />
 				</td>
 			</tr>
 		</table>
-
-		<script type="text/javascript">//<![CDATA[
-			cbi_validate_field('_newsnat.dport', true, 'portrange');
-			cbi_validate_field('_newsnat.dip', true, 'ip4addr');
-			cbi_combobox_init('_newsnat.dip', {
-				<% local c, k, v = 0; for k, v in ipairs(nw:get_interfaces()) do -%>
-					<%- local a; for k, a in ipairs(v:ipaddrs()) do c = c + 1 -%>
-						<% if c > 1 then %>,<% end %>'<%=a:host():string()%>': '<%=a:host():string()%> (<%=v:shortname()%>)'
-					<%- end %>
-				<%- end %> }, '<%: -- Please choose -- %>', '<%: -- custom -- %>');
-		//]]></script>
 	<% else %>
 		<input type="submit" class="cbi-button cbi-button-add" name="cbi.cts.<%=self.config%>.<%=self.sectiontype%>.<%=section%>" value="<%:Add%>" />
 	<% end %>

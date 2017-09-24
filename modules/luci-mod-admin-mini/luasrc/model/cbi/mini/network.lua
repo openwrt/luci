@@ -5,14 +5,39 @@
 local wa  = require "luci.tools.webadmin"
 local sys = require "luci.sys"
 local fs  = require "nixio.fs"
+local nx  = require "nixio"
 
 local has_pptp  = fs.access("/usr/sbin/pptp")
 local has_pppoe = fs.glob("/usr/lib/pppd/*/rp-pppoe.so")()
 
 local network = luci.model.uci.cursor_state():get_all("network")
 
-local netstat = sys.net.deviceinfo()
+local netstat = {}
 local ifaces = {}
+
+local k, v
+for k, v in ipairs(nx.getifaddrs()) do
+	if v.family == "packet" then
+		local d = v.data
+		d[1] = d.rx_bytes
+		d[2] = d.rx_packets
+		d[3] = d.rx_errors
+		d[4] = d.rx_dropped
+		d[5] = 0
+		d[6] = 0
+		d[7] = 0
+		d[8] = d.multicast
+		d[9] = d.tx_bytes
+		d[10] = d.tx_packets
+		d[11] = d.tx_errors
+		d[12] = d.tx_dropped
+		d[13] = 0
+		d[14] = d.collisions
+		d[15] = 0
+		d[16] = 0
+		netstat[v.name] = d
+	end
+end
 
 for k, v in pairs(network) do
 	if v[".type"] == "interface" and k ~= "loopback" then

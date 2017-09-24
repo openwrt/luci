@@ -153,7 +153,8 @@
 						{
 							var c  = conn[i];
 
-							if (c.src == '127.0.0.1' && c.dst == '127.0.0.1')
+							if ((c.src == '127.0.0.1' && c.dst == '127.0.0.1')
+							|| (c.src == '::1' && c.dst == '::1'))
 								continue;
 
 							var tr = conn_table.rows[0].parentNode.insertRow(-1);
@@ -312,7 +313,7 @@
 	);
 //]]></script>
 
-<h2><a id="content" name="content"><%:Realtime Connections%></a></h2>
+<h2 name="content"><%:Realtime Connections%></h2>
 
 <div class="cbi-map-descr"><%:This page gives an overview over currently active network connections.%></div>
 

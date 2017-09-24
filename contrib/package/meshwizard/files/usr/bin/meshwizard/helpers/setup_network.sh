@@ -1,6 +1,6 @@
 # setup entry in /etc/config/network for a interface
 # Argument $1: network interface
- 
+
 net="$1"
 . /lib/functions.sh
 . $dir/functions.sh
@@ -24,8 +24,14 @@ uci batch << EOF
 	set network.$netrenamed.netmask="$netmask"
 EOF
 
+if [ "$netrenamed" = "lan" ]; then
+	# remove the bridge if the interface is used for olsr
+	# since this script is only run in this case, no need
+	# to check for lan_proto = "olsr" currently.
+	uci -q delete network.lan.type
+fi
+
 # Setup IPv6 for the interface
-local ip6addr
 if [ "$ipv6_enabled" = 1 ]; then
 	if [ "$ipv6_config" = "auto-ipv6-dhcpv6" ]; then
 		ip6addr="$($dir/helpers/gen_auto-ipv6-dhcpv6-ip.sh $netrenamed)"
@@ -75,8 +81,6 @@ if [ "$net_dhcp" == 1 ]; then
 	if [ "$supports_vap" = 1 -a "$vap" = 1 -a "$ahdhcp_when_vap" = 1 ]; then
 		# VAPs are enabled for this interface, supported and we want to
 		# also use DHCP on the adhoc interface
-		local network
-		local mask
 		network=${dhcprange%%/*}
 		mask=${dhcprange##*/}
 		# Divide network size by adding 1 to the netmask
@@ -116,9 +120,16 @@ if [ "$net_dhcp" == 1 ]; then
 
 
 	# Setup alias for $net adhoc interface 
-	if  [ "$supports_vap" = 0 ] || [ "$vap" = 0 ] || [ "$supports_vap" = 1 -a "$vap" = 1 -a "$ahdhcp_when_vap" = 1 ]; then
-		# vaps are either not supported or enabled or they are supported and enabled
-		# but we also want to use DHCP on the adhoc interface
+	if  [ "$supports_vap" = 0 ] || \
+		[ "$vap" = 0 ] || \
+		[ "$supports_vap" = 1 -a "$vap" = 1 -a "$ahdhcp_when_vap" = 1 ] || \
+		[ "$lan_is_olsr" = "1" ]; then
+		# setup an alias interface for the main interface to use as a network for clients
+		# when one of the following conditions is met
+		# * vaps are not supported
+		# * or not enabled
+		# * or they are supported and enabled but we also want to use DHCP on the adhoc interface
+		# * or this is the lan interface and it is used for olsrd (and dhcp is enabled)
 		uci batch <<- EOF
 			set network.${netrenamed}ahdhcp=interface
 			set network.${netrenamed}ahdhcp.ifname="@${netrenamed}"
@@ -126,6 +137,6 @@ if [ "$net_dhcp" == 1 ]; then
 			set network.${netrenamed}ahdhcp.ipaddr="$STARTADHOC"
 			set network.${netrenamed}ahdhcp.netmask="$NETMASKADHOC"
 		EOF
+		uci_commitverbose  "Setup interface for ${netrenamed}ahdhcp" network
 	fi
-	uci_commitverbose  "Setup interface for ${netrenamed}ahdhcp" network
 fi

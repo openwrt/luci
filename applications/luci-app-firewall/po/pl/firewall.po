@@ -32,12 +32,6 @@ msgstr "(Nienazwana reguła)"
 msgid "(Unnamed SNAT)"
 msgstr "(Nienazwany SNAT)"
 
-msgid "-- Please choose --"
-msgstr "-- Proszę wybrać --"
-
-msgid "-- custom --"
-msgstr "-- własne --"
-
 msgid "<var>%d</var> pkts. per <var>%s</var>"
 msgstr "<var>%d</var> pakiet. na <var>%s</var>"
 
@@ -76,7 +70,7 @@ msgid "Custom Rules"
 msgstr "Własne reguły"
 
 msgid ""
-"Custom rules allow you to execute arbritary iptables commands which are not "
+"Custom rules allow you to execute arbitrary iptables commands which are not "
 "otherwise covered by the firewall framework. The commands are executed after "
 "each firewall restart, right after the default ruleset has been loaded."
 msgstr ""
@@ -153,6 +147,9 @@ msgstr "Przekazuj"
 msgid "Forward to"
 msgstr "Przekazuj do"
 
+msgid "Friday"
+msgstr ""
+
 msgid "From %s in %s"
 msgstr "Z %s w %s"
 
@@ -228,6 +225,12 @@ msgstr ""
 "Dopasuj przychodzący ruch pochodzący z danego portu źródłowego lub zakresu "
 "portów na hoście klienta."
 
+msgid "Monday"
+msgstr ""
+
+msgid "Month Days"
+msgstr ""
+
 msgid "Name"
 msgstr "Nazwa"
 
@@ -297,11 +300,14 @@ msgstr ""
 msgid "Redirect matched incoming traffic to the specified internal host"
 msgstr "Przekieruj ruch przychodzący do wskazanego hosta w sieci wewnętrznej"
 
+msgid "Restart Firewall"
+msgstr ""
+
 msgid "Restrict Masquerading to given destination subnets"
 msgstr "Ogranicz maskaradę do wskazanych sieci docelowych"
 
 msgid "Restrict Masquerading to given source subnets"
-msgstr "Ogranicz maskaradę do wskazanych sieci żródłowych"
+msgstr "Ogranicz maskaradę do wskazanych sieci źródłowych"
 
 # Wstawiłem rodzinę gdyż gdzieś wcześniej było tak opisane ale klasa pasuje mi tu bardziej.
 # Obsy - niestety ale "rodzina". W gui dotyczy to wyboru IPv4/IPv6, więc "rodzina" a nie klasa.
@@ -317,7 +323,7 @@ msgid ""
 "Rewrite matched traffic to the given source port. May be left empty to only "
 "rewrite the IP address."
 msgstr ""
-"Przepisz dopasowany ruch do danego portu żródłowego. Można zostawić puste "
+"Przepisz dopasowany ruch do danego portu źródłowego. Można zostawić puste "
 "aby przepisać tylko adres IP"
 
 msgid "Rewrite to source %s"
@@ -332,6 +338,9 @@ msgstr "Adres IP SNAT"
 msgid "SNAT port"
 msgstr "Port SNAT"
 
+msgid "Saturday"
+msgstr ""
+
 msgid "Source IP address"
 msgstr "Źródłowy adres IP"
 
@@ -339,7 +348,7 @@ msgid "Source MAC address"
 msgstr "Źródłowy adres MAC"
 
 msgid "Source NAT"
-msgstr "NAT żródłowy"
+msgstr "NAT źródłowy"
 
 # http://www.digipedia.pl/def/doc/id/677604507/name/SNAT/
 msgid ""
@@ -348,7 +357,7 @@ msgid ""
 "multiple WAN addresses to internal subnets."
 msgstr ""
 "SNAT używany jest wtedy, gdy zmieniane są adresy pakietów połączenia "
-"wychodzącego, czyli pakiety żródłowe. Wykonywany jest zawsze po routowaniu "
+"wychodzącego, czyli pakiety źródłowe. Wykonywany jest zawsze po routowaniu "
 "(POSTROUTING), a więc w chwili, gdy pakiety są gotowe opuścić host. "
 "IPmasquerading jest formą SNAT."
 
@@ -360,6 +369,21 @@ msgstr "Port źródłowy"
 
 msgid "Source zone"
 msgstr "Strefa źródłowa"
+
+msgid "Start Date (yyyy-mm-dd)"
+msgstr ""
+
+msgid "Start Time (hh:mm:ss)"
+msgstr ""
+
+msgid "Stop Date (yyyy-mm-dd)"
+msgstr ""
+
+msgid "Stop Time (hh:mm:ss)"
+msgstr ""
+
+msgid "Sunday"
+msgstr ""
 
 msgid ""
 "The firewall creates zones over your network interfaces to control network "
@@ -411,6 +435,12 @@ msgstr ""
 "politykę ruchu przekazywanego pomiędzy różnymi sieciami wewnątrz strefy. "
 "<em>Objęte sieci</em> określają dostępne sieci będące członkami tej strefy."
 
+msgid "Thursday"
+msgstr ""
+
+msgid "Time in UTC"
+msgstr ""
+
 msgid "To %s at %s on <var>this device</var>"
 msgstr "Do %s w %s na <var>tym urządzeniu</var>"
 
@@ -441,11 +471,20 @@ msgstr ""
 "między strefami, na przykład aby odrzucać ruch między konkretnymi hostami "
 "albo otworzyć porty WAN routera."
 
+msgid "Tuesday"
+msgstr ""
+
 msgid "Via %s"
 msgstr "Przez %s"
 
 msgid "Via %s at %s"
 msgstr "Przez %s w %s"
+
+msgid "Wednesday"
+msgstr ""
+
+msgid "Week Days"
+msgstr ""
 
 msgid ""
 "You may specify multiple by selecting \"-- custom --\" and then entering "
@@ -489,133 +528,3 @@ msgstr "odrzucaj"
 
 msgid "traffic"
 msgstr ""
-
-#~ msgid "Destination"
-#~ msgstr "Miejsce przeznaczenia"
-
-#~ msgid "Family"
-#~ msgstr "Rodzina"
-
-#~ msgid "Forward to %s in %s"
-#~ msgstr "Przekazuj do %s w %s"
-
-#~ msgid "Forward to %s, %s in %s"
-#~ msgstr "Przekazuj d0 %s, %s w %s"
-
-#~ msgid "SNAT"
-#~ msgstr "SNAT"
-
-#~ msgid "Source"
-#~ msgstr "Źródło"
-
-#~ msgid "To %s"
-#~ msgstr "Do %s"
-
-#~ msgid "Via"
-#~ msgstr "przez"
-
-#~ msgid "Accept forward"
-#~ msgstr "Akceptuj przekazywanie"
-
-#~ msgid "Accept input"
-#~ msgstr "Akceptuj wejście"
-
-#~ msgid "Disable"
-#~ msgstr "Wyłącz"
-
-#~ msgid "Discard forward"
-#~ msgstr "Odrzuć przekazywanie"
-
-#~ msgid "Discard input"
-#~ msgstr "Odrzuć wejście"
-
-#~ msgid "Do not track forward"
-#~ msgstr "Nie śledź przekazywania"
-
-#~ msgid "Do not track input"
-#~ msgstr "Nie śledź wejścia"
-
-#~ msgid "IP"
-#~ msgstr "IP"
-
-#~ msgid "IP range"
-#~ msgstr "Zakres IP"
-
-#~ msgid "IPs"
-#~ msgstr "Numery IP"
-
-#~ msgid "MAC"
-#~ msgstr "MAC"
-
-#~ msgid "MACs"
-#~ msgstr "Adresy MAC"
-
-#~ msgid "Rule is disabled"
-#~ msgstr "Reguła jest wyłączona"
-
-#~ msgid "Rule is enabled"
-#~ msgstr "Reguła jest włączona"
-
-#~ msgid "day"
-#~ msgstr "dzień"
-
-#~ msgid "port"
-#~ msgstr "port"
-
-#~ msgid "ports"
-#~ msgstr "porty"
-
-#~ msgid "(optional)"
-#~ msgstr "(opcjonalne)"
-
-#~ msgid "Internal port (optional)"
-#~ msgstr "Wewnętrzny port (opcjonalnie)"
-
-#~ msgid "Advanced Options"
-#~ msgstr "Opcje zaawansowane"
-
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-# Generated from applications/luci-fw/luasrc/model/cbi/luci_fw/trule.lua      #
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-# msgid "Name"
-# msgstr ""
-# msgid "(optional)"
-# msgstr ""
-# msgid "Protocol"
-# msgstr ""
-# msgid "Source port"
-# msgstr ""
-# msgid "Destination port"
-# msgstr ""
-# msgid "Action"
-# msgstr ""
-# msgid "drop"
-# msgstr ""
-# msgid "accept"
-# msgstr ""
-# msgid "reject"
-# msgstr ""
-#~ msgid "Advanced Rules"
-#~ msgstr "Reguły zaawansowane"
-
-#~ msgid ""
-#~ "Advanced rules let you customize the firewall to your needs. Only new "
-#~ "connections will be matched. Packets belonging to already open "
-#~ "connections are automatically allowed to pass the firewall."
-#~ msgstr ""
-#~ "Reguły zaawansowane pozwalają dostosować zaporę do Twoich potrzeb. Tylko "
-#~ "nowe połączenia zostaną nimi objęte. Pakiety należące do połączeń już "
-#~ "otwarte są automatycznie przepuszczane przez zaporę."
-
-#~ msgid "Custom Rules (/etc/firewall.user)"
-#~ msgstr "Reguły własne (/etc/firewall.user)"
-
-#~ msgid "Device"
-#~ msgstr "Urządzenie"
-
-#~ msgid ""
-#~ "For DNAT, match incoming traffic directed at the given destination ip "
-#~ "address. For SNAT rewrite the source address to the given address."
-#~ msgstr ""
-#~ "Dla DNAT, dopasuj ruch przychodzący kierowane na podany adres IP. Dla "
-#~ "SNAT zmienić adres źródłowy na podany adres."

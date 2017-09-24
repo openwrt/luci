@@ -49,8 +49,10 @@ function rpc_auth()
 	server.challenge = function(user, pass)
 		local sid, token, secret
 
+		local config = require "luci.config"
+
 		if sys.user.checkpasswd(user, pass) then
-			local sdat = util.ubus("session", "create", { timeout = luci.config.sauth.sessiontime })
+			local sdat = util.ubus("session", "create", { timeout = config.sauth.sessiontime })
 			if sdat then
 				sid = sdat.ubus_rpc_session
 				token = sys.uniqueid(16)

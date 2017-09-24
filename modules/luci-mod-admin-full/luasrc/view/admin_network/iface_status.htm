@@ -1,7 +1,7 @@
 <%+cbi/valueheader%>
 
 <script type="text/javascript">//<![CDATA[
-	XHR.poll(5, '<%=luci.dispatcher.build_url("admin", "network", "iface_status", self.network)%>', null,
+	XHR.poll(5, '<%=url('admin/network/iface_status', self.network)%>', null,
 		function(x, ifc)
 		{
 			if (ifc && (ifc = ifc[0]))
@@ -25,7 +25,7 @@
 						html += String.format('<strong><%:Uptime%>:</strong> %t<br />', ifc.uptime);
 					}
 
-					if (ifc.type != 'tunnel')
+					if (ifc.macaddr)
 					{
 						html += String.format('<strong><%:MAC-Address%>:</strong> %s<br />', ifc.macaddr);
 					}
@@ -39,32 +39,25 @@
 
 					if (ifc.ipaddrs && ifc.ipaddrs.length)
 					{
-						html += '<strong><%:IPv4%>: </strong>';
-
 						for (var i = 0; i < ifc.ipaddrs.length; i++)
 							html += String.format(
-								'%s%s/%d',
-								i ? ', ' : '',
-								ifc.ipaddrs[i].addr,
-								ifc.ipaddrs[i].prefix
+								'<strong><%:IPv4%>:</strong> %s<br />',
+								ifc.ipaddrs[i]
 							);
-
-						html += '<br />';
 					}
 
 					if (ifc.ip6addrs && ifc.ip6addrs.length)
 					{
-						html += '<strong><%:IPv6%>: </strong>';
-
 						for (var i = 0; i < ifc.ip6addrs.length; i++)
 							html += String.format(
-								'%s%s/%d',
-								i ? ', ' : '',
-								ifc.ip6addrs[i].addr.toUpperCase(),
-								ifc.ip6addrs[i].prefix
+								'<strong><%:IPv6%>:</strong> %s<br />',
+								ifc.ip6addrs[i]
 							);
-
-						html += '<br />';
+					}
+					
+					if (ifc.ip6prefix)
+					{
+						html += String.format('<strong><%:IPv6-PD%>:</strong> %s<br />', ifc.ip6prefix);
 					}
 
 					d.innerHTML = html;

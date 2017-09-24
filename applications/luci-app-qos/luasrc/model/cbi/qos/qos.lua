@@ -41,6 +41,16 @@ t:value("Priority", translate("priority"))
 t:value("Express", translate("express"))
 t:value("Normal", translate("normal"))
 t:value("Bulk", translate("low"))
+
+local uci = require "luci.model.uci"
+uci.cursor():foreach("qos", "class",
+    function (section)
+        local n = section[".name"]
+        if string.sub(n,-string.len("_down"))~="_down" then
+            t:value(n)
+        end
+    end)
+
 t.default = "Normal"
 
 srch = s:option(Value, "srchost", translate("Source host"))
@@ -52,25 +62,6 @@ dsth = s:option(Value, "dsthost", translate("Destination host"))
 dsth.rmempty = true
 dsth:value("", translate("all"))
 wa.cbi_add_knownips(dsth)
-
-l7 = s:option(ListValue, "layer7", translate("Service"))
-l7.rmempty = true
-l7:value("", translate("all"))
-
-local pats = io.popen("find /etc/l7-protocols/ -type f -name '*.pat'")
-if pats then
-	local l
-	while true do
-		l = pats:read("*l")
-		if not l then break end
-
-		l = l:match("([^/]+)%.pat$")
-		if l then
-			l7:value(l)
-		end
-	end
-	pats:close()
-end
 
 p = s:option(Value, "proto", translate("Protocol"))
 p:value("", translate("all"))

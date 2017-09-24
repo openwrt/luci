@@ -1,4 +1,5 @@
 -- Copyright 2008 Steven Barth <steven@midlink.org>
+-- Copyright 2008-2015 Jo-Philipp Wich <jow@openwrt.org>
 -- Licensed to the public under the Apache License 2.0.
 
 local fs = require "nixio.fs"
@@ -13,8 +14,6 @@ uci = require "luci.model.uci"
 i18n = require "luci.i18n"
 _M.fs = fs
 
-authenticator = {}
-
 -- Index table
 local index = nil
 
@@ -26,20 +25,16 @@ function build_url(...)
 	local path = {...}
 	local url = { http.getenv("SCRIPT_NAME") or "" }
 
-	local k, v
-	for k, v in pairs(context.urltoken) do
-		url[#url+1] = "/;"
-		url[#url+1] = http.urlencode(k)
-		url[#url+1] = "="
-		url[#url+1] = http.urlencode(v)
-	end
-
 	local p
 	for _, p in ipairs(path) do
 		if p:match("^[a-zA-Z0-9_%-%.%%/,;]+$") then
 			url[#url+1] = "/"
 			url[#url+1] = p
 		end
+	end
+
+	if #path == 0 then
+		url[#url+1] = "/"
 	end
 
 	return table.concat(url, "")
@@ -104,43 +99,11 @@ function error500(message)
 	return false
 end
 
-function authenticator.htmlauth(validator, accs, default)
-	local user = http.formvalue("luci_username")
-	local pass = http.formvalue("luci_password")
-
-	if user and validator(user, pass) then
-		return user
-	end
-
-	if context.urltoken.stok then
-		context.urltoken.stok = nil
-
-		local cookie = 'sysauth=%s; expires=%s; path=%s/' %{
-		    http.getcookie('sysauth') or 'x',
-			'Thu, 01 Jan 1970 01:00:00 GMT',
-			build_url()
-		}
-
-		http.header("Set-Cookie", cookie)
-		http.redirect(build_url())
-	else
-		require("luci.i18n")
-		require("luci.template")
-		context.path = {}
-		http.status(403, "Forbidden")
-		luci.template.render("sysauth", {duser=default, fuser=user})
-	end
-
-	return false
-
-end
-
 function httpdispatch(request, prefix)
 	http.context.request = request
 
 	local r = {}
 	context.request = r
-	context.urltoken = {}
 
 	local pathinfo = http.urldecode(request:getenv("PATH_INFO") or "", true)
 
@@ -150,18 +113,8 @@ function httpdispatch(request, prefix)
 		end
 	end
 
-	local tokensok = true
 	for node in pathinfo:gmatch("[^/]+") do
-		local tkey, tval
-		if tokensok then
-			tkey, tval = node:match(";(%w+)=([a-fA-F0-9]*)")
-		end
-		if tkey then
-			context.urltoken[tkey] = tval
-		else
-			tokensok = false
-			r[#r+1] = node
-		end
+		r[#r+1] = node
 	end
 
 	local stat, err = util.coxpcall(function()
@@ -173,6 +126,86 @@ function httpdispatch(request, prefix)
 	--context._disable_memtrace()
 end
 
+local function require_post_security(target)
+	if type(target) == "table" then
+		if type(target.post) == "table" then
+			local param_name, required_val, request_val
+
+			for param_name, required_val in pairs(target.post) do
+				request_val = http.formvalue(param_name)
+
+				if (type(required_val) == "string" and
+				    request_val ~= required_val) or
+				   (required_val == true and
+				    (request_val == nil or request_val == ""))
+				then
+					return false
+				end
+			end
+
+			return true
+		end
+
+		return (target.post == true)
+	end
+
+	return false
+end
+
+function test_post_security()
+	if http.getenv("REQUEST_METHOD") ~= "POST" then
+		http.status(405, "Method Not Allowed")
+		http.header("Allow", "POST")
+		return false
+	end
+
+	if http.formvalue("token") ~= context.authtoken then
+		http.status(403, "Forbidden")
+		luci.template.render("csrftoken")
+		return false
+	end
+
+	return true
+end
+
+local function session_retrieve(sid, allowed_users)
+	local sdat = util.ubus("session", "get", { ubus_rpc_session = sid })
+
+	if type(sdat) == "table" and
+	   type(sdat.values) == "table" and
+	   type(sdat.values.token) == "string" and
+	   (not allowed_users or
+	    util.contains(allowed_users, sdat.values.username))
+	then
+		return sid, sdat.values
+	end
+
+	return nil, nil
+end
+
+local function session_setup(user, pass, allowed_users)
+	if util.contains(allowed_users, user) then
+		local login = util.ubus("session", "login", {
+			username = user,
+			password = pass,
+			timeout  = tonumber(luci.config.sauth.sessiontime)
+		})
+
+		if type(login) == "table" and
+		   type(login.ubus_rpc_session) == "string"
+		then
+			util.ubus("session", "set", {
+				ubus_rpc_session = login.ubus_rpc_session,
+				values = { token = sys.uniqueid(16) }
+			})
+
+			return session_retrieve(login.ubus_rpc_session)
+		end
+	end
+
+	return nil, nil
+end
+
 function dispatch(request)
 	--context._disable_memtrace = require "luci.debug".trap_memtrace("l")
 	local ctx = context
@@ -182,18 +215,31 @@ function dispatch(request)
 	assert(conf.main,
 		"/etc/config/luci seems to be corrupt, unable to find section 'main'")
 
+	local i18n = require "luci.i18n"
 	local lang = conf.main.lang or "auto"
 	if lang == "auto" then
 		local aclang = http.getenv("HTTP_ACCEPT_LANGUAGE") or ""
-		for lpat in aclang:gmatch("[%w-]+") do
-			lpat = lpat and lpat:gsub("-", "_")
-			if conf.languages[lpat] then
-				lang = lpat
+		for aclang in aclang:gmatch("[%w_-]+") do
+			local country, culture = aclang:match("^([a-z][a-z])[_-]([a-zA-Z][a-zA-Z])$")
+			if country and culture then
+				local cc = "%s_%s" %{ country, culture:lower() }
+				if conf.languages[cc] then
+					lang = cc
+					break
+				elseif conf.languages[country] then
+					lang = country
+					break
+				end
+			elseif conf.languages[aclang] then
+				lang = aclang
 				break
 			end
 		end
 	end
-	require "luci.i18n".setlanguage(lang)
+	if lang == "auto" then
+		lang = i18n.default
+	end
+	i18n.setlanguage(lang)
 
 	local c = ctx.tree
 	local stat
@@ -206,7 +252,6 @@ function dispatch(request)
 	ctx.args = args
 	ctx.requestargs = ctx.requestargs or args
 	local n
-	local token = ctx.urltoken
 	local preq = {}
 	local freq = {}
 
@@ -259,6 +304,13 @@ function dispatch(request)
 			if cond then
 				local env = getfenv(3)
 				local scope = (type(env.self) == "table") and env.self
+				if type(val) == "table" then
+					if not next(val) then
+						return ''
+					else
+						val = util.serialize_json(val)
+					end
+				end
 				return string.format(
 					' %s="%s"', tostring(key),
 					util.pcdata(tostring( val
@@ -284,11 +336,14 @@ function dispatch(request)
 		   resource    = luci.config.main.resourcebase;
 		   ifattr      = function(...) return _ifattr(...) end;
 		   attr        = function(...) return _ifattr(true, ...) end;
+		   url         = build_url;
 		}, {__index=function(table, key)
 			if key == "controller" then
 				return build_url()
 			elseif key == "REQUEST_URI" then
 				return build_url(unpack(ctx.requestpath))
+			elseif key == "token" then
+				return ctx.authtoken
 			else
 				return rawget(table, key) or _G[key]
 			end
@@ -300,81 +355,74 @@ function dispatch(request)
 		"Access Violation\nThe page at '" .. table.concat(request, "/") .. "/' " ..
 		"has no parent node so the access to this location has been denied.\n" ..
 		"This is a software bug, please report this message at " ..
-		"http://luci.subsignal.org/trac/newticket"
+		"https://github.com/openwrt/luci/issues"
 	)
 
 	if track.sysauth then
-		local authen = type(track.sysauth_authenticator) == "function"
-		 and track.sysauth_authenticator
-		 or authenticator[track.sysauth_authenticator]
+		local authen = track.sysauth_authenticator
+		local _, sid, sdat, default_user, allowed_users
 
-		local def  = (type(track.sysauth) == "string") and track.sysauth
-		local accs = def and {track.sysauth} or track.sysauth
-		local sess = ctx.authsession
-		local verifytoken = false
-		if not sess then
-			sess = http.getcookie("sysauth")
-			sess = sess and sess:match("^[a-f0-9]*$")
-			verifytoken = true
+		if type(authen) == "string" and authen ~= "htmlauth" then
+			error500("Unsupported authenticator %q configured" % authen)
+			return
 		end
 
-		local sdat = (util.ubus("session", "get", { ubus_rpc_session = sess }) or { }).values
-		local user
-
-		if sdat then
-			if not verifytoken or ctx.urltoken.stok == sdat.token then
-				user = sdat.user
-			end
+		if type(track.sysauth) == "table" then
+			default_user, allowed_users = nil, track.sysauth
 		else
-			local eu = http.getenv("HTTP_AUTH_USER")
-			local ep = http.getenv("HTTP_AUTH_PASS")
-			if eu and ep and sys.user.checkpasswd(eu, ep) then
-				authen = function() return eu end
-			end
+			default_user, allowed_users = track.sysauth, { track.sysauth }
 		end
 
-		if not util.contains(accs, user) then
-			if authen then
-				local user, sess = authen(sys.user.checkpasswd, accs, def)
-				local token
-				if not user or not util.contains(accs, user) then
-					return
-				else
-					if not sess then
-						local sdat = util.ubus("session", "create", { timeout = tonumber(luci.config.sauth.sessiontime) })
-						if sdat then
-							token = sys.uniqueid(16)
-							util.ubus("session", "set", {
-								ubus_rpc_session = sdat.ubus_rpc_session,
-								values = {
-									user = user,
-									token = token,
-									section = sys.uniqueid(16)
-								}
-							})
-							sess = sdat.ubus_rpc_session
-						end
-					end
+		if type(authen) == "function" then
+			_, sid = authen(sys.user.checkpasswd, allowed_users)
+		else
+			sid = http.getcookie("sysauth")
+		end
 
-					if sess and token then
-						http.header("Set-Cookie", 'sysauth=%s; path=%s/' %{
-						   sess, build_url()
-						})
+		sid, sdat = session_retrieve(sid, allowed_users)
 
-						ctx.urltoken.stok = token
-						ctx.authsession = sess
-						ctx.authuser = user
+		if not (sid and sdat) and authen == "htmlauth" then
+			local user = http.getenv("HTTP_AUTH_USER")
+			local pass = http.getenv("HTTP_AUTH_PASS")
 
-						http.redirect(build_url(unpack(ctx.requestpath)))
-					end
-				end
-			else
+			if user == nil and pass == nil then
+				user = http.formvalue("luci_username")
+				pass = http.formvalue("luci_password")
+			end
+
+			sid, sdat = session_setup(user, pass, allowed_users)
+
+			if not sid then
+				local tmpl = require "luci.template"
+
+				context.path = {}
+
 				http.status(403, "Forbidden")
+				tmpl.render(track.sysauth_template or "sysauth", {
+					duser = default_user,
+					fuser = user
+				})
+
 				return
 			end
-		else
-			ctx.authsession = sess
-			ctx.authuser = user
+
+			http.header("Set-Cookie", 'sysauth=%s; path=%s' %{ sid, build_url() })
+			http.redirect(build_url(unpack(ctx.requestpath)))
+		end
+
+		if not sid or not sdat then
+			http.status(403, "Forbidden")
+			return
+		end
+
+		ctx.authsession = sid
+		ctx.authtoken = sdat.token
+		ctx.authuser = sdat.username
+	end
+
+	if c and require_post_security(c.target) then
+		if not test_post_security(c) then
+			return
 		end
 	end
 
@@ -383,9 +431,6 @@ function dispatch(request)
 	end
 
 	if track.setuser then
-		-- trigger ubus connection before dropping root privs
-		util.ubus()
-
 		sys.process.setuser(track.setuser)
 	end
 
@@ -703,6 +748,20 @@ function call(name, ...)
 	return {type = "call", argv = {...}, name = name, target = _call}
 end
 
+function post_on(params, name, ...)
+	return {
+		type = "call",
+		post = params,
+		argv = { ... },
+		name = name,
+		target = _call
+	}
+end
+
+function post(...)
+	return post_on(true, ...)
+end
+
 
 local _template = function(self, ...)
 	require "luci.template".render(self.view)
@@ -814,7 +873,13 @@ local function _cbi(self, ...)
 end
 
 function cbi(model, config)
-	return {type = "cbi", config = config, model = model, target = _cbi}
+	return {
+		type = "cbi",
+		post = { ["cbi.submit"] = "1" },
+		config = config,
+		model = model,
+		target = _cbi
+	}
 end
 
 
@@ -854,7 +919,12 @@ local function _form(self, ...)
 end
 
 function form(model)
-	return {type = "cbi", model = model, target = _form}
+	return {
+		type = "cbi",
+		post = { ["cbi.submit"] = "1" },
+		model = model,
+		target = _form
+	}
 end
 
 translate = i18n.translate

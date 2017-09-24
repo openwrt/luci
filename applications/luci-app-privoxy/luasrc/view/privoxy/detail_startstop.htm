@@ -21,12 +21,12 @@
 	function onclick_startstop(id) {
 		// do start/stop
 		var btnXHR = new XHR();
-		btnXHR.get('<%=luci.dispatcher.build_url("admin", "services", "privoxy", "startstop")%>', null,
+		btnXHR.post('<%=url('admin/services/privoxy/startstop')%>', { token: '<%=token%>' },
 			function(x) { _data2elements(x); }
 		);
 	}
 
-	XHR.poll(5, '<%=luci.dispatcher.build_url("admin", "services", "privoxy", "status")%>', null,
+	XHR.poll(5, '<%=url('admin/services/privoxy/status')%>', null,
 		function(x, data) { _data2elements(x); }
 	);
 

@@ -187,9 +187,9 @@ function _list_expand( c, l, nopad )
 			end
 
 			if n:find("(%w+)ses") then
-				k = n:gsub("(%w+)ses", "%1s")
+				k = n:gsub("(%w+)ses$", "%1s")
 			else
-				k = n:gsub("(%w+)s", "%1")
+				k = n:gsub("(%w+)s$", "%1")
 			end
 
 			str = str .. _expand( c[n], k, nopad )
@@ -255,6 +255,12 @@ end
 
 
 plugins = {
+	apcups = {
+		{ "Host", "Port" },
+		{ },
+		{ }
+	},
+
 	collectd = {
 		{ "BaseDir", "Include", "PIDFile", "PluginDir", "TypesDB", "Interval", "ReadThreads", "Hostname" },
 		{ },
@@ -272,6 +278,18 @@ plugins = {
 		{ },
 		{ }
 	},
+
+	cpufreq	= {
+		{ },
+		{ },
+		{ }
+	},
+
+        contextswitch = {
+                { },
+                { },
+                { }
+        },
 
 	csv	= {
 		{ "DataDir" },
@@ -299,6 +317,12 @@ plugins = {
 
 	email	= {
 		{ "SocketFile", "SocketGroup", "SocketPerms", "MaxConns" },
+		{ },
+		{ }
+	},
+
+	entropy = {
+		{ },
 		{ },
 		{ }
 	},
@@ -337,12 +361,6 @@ plugins = {
 		{ }
 	},
 
-	madwifi = {
-		{ "WatchSet" },
-		{ },
-		{ "Interfaces", "WatchAdds" }
-	},
-
 	memory = { 
 		{ },
 		{ },
@@ -369,6 +387,12 @@ plugins = {
 		{ }
 	},
 
+	openvpn = {
+		{ },
+		{ "CollectIndividualUsers", "CollectUserCount", "CollectCompression", "ImprovedNamingSchema" },
+		{ "StatusFile" }
+	},
+
 	ping	= {
 		{ "TTL", "Interval" },
 		{ },
@@ -387,6 +411,12 @@ plugins = {
 		{ "RRATimespans" }
 	},
 
+	sensors = {
+		{ },
+		{ "IgnoreSelected" },
+		{ "Sensor" }
+	},
+
         splash_leases = {
           { },
           { },
@@ -397,6 +427,12 @@ plugins = {
 		{ },
 		{ "ListeningPorts" },
 		{ "LocalPorts", "RemotePorts" }
+	},
+
+	thermal	= {
+		{ },
+		{ "IgnoreSelected" },
+		{ "Device" }
 	},
 
 	unixsock = {
@@ -431,8 +467,10 @@ preprocess = {
 
 section("collectd")
 
+section("logfile")
+
 for plugin in pairs(plugins) do
-	if plugin ~= "collectd" then
+	if (plugin ~= "collectd") and (plugin ~= "logfile") then
 		section( plugin )
 	end
 end

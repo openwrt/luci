@@ -264,7 +264,7 @@ h = s:taboption("remote_usage", Value, "externhost", translate("Domain/IP Addres
                 The best thing to input is a static IP address. If your IP address is dynamic and it changes, \
                 your configuration will become invalid. Hence, it's recommended to set up Dynamic DNS in this case. \
                 and enter your Dynamic DNS hostname here. You can configure Dynamic DNS with the luci-app-ddns package."))
-h.datatype = "host"
+h.datatype = "host(0)"
 
 p = s:taboption("remote_usage", Value, "bindport", translate("External SIP Port"),
                 translate("Pick a random port number between 6500 and 9500 for the service to listen on. \

@@ -23,15 +23,19 @@ config_foreach handle_dnsmasq dhcp
 if [ "$supports_vap" = 1 -a "$vap" = 1 ]; then
 	uci batch <<- EOF
 		set dhcp.${netrenamed}dhcp="dhcp"
+		set dhcp.${netrenamed}dhcp.ignore="0"
 		set dhcp.${netrenamed}dhcp.interface="${netrenamed}dhcp"
 	EOF
 	set_defaults "dhcp_" dhcp.${netrenamed}dhcp
 fi
 
 ahdhcp_when_vap="$(uci get profile_$community.profile.adhoc_dhcp_when_vap)"
-if [ "$supports_vap" = 0 ] || [ "$supports_vap" = 1 -a "$vap" = 1 -a "$ahdhcp_when_vap" = 1 ]; then
+if [ "$supports_vap" = 0 ] || \
+	[ "$supports_vap" = 1 -a "$vap" = 1 -a "$ahdhcp_when_vap" = 1 ] || \
+	[ "$lan_is_olsr" = "1" -a "$lan_dhcp" = 1 ]; then
 	uci batch <<- EOF
 		set dhcp.${netrenamed}ahdhcp="dhcp"
+		set dhcp.${netrenamed}ahdhcp.ignore="0"
 		set dhcp.${netrenamed}ahdhcp.interface="${netrenamed}ahdhcp"
 	EOF
 fi

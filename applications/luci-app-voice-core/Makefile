@@ -7,7 +7,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=LuCI Voice Software (Core)
-LUCI_DEPENDS:=
+LUCI_DEPENDS:=@BROKEN
 
 include ../../luci.mk
 

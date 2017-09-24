@@ -28,7 +28,7 @@ function index()
 		call("ocserv_status")).leaf = true
 
 	entry({"admin", "services", "ocserv", "disconnect"},
-		call("ocserv_disconnect")).leaf = true
+		post("ocserv_disconnect")).leaf = true
 
 end
 
@@ -44,7 +44,7 @@ function ocserv_status()
 			if not ln then break end
 		
 			local id, user, group, vpn_ip, ip, device, time, cipher, status = 
-				ln:match("^%s*(%d+)%s+([-_%w]+)%s+([%.%*-_%w]+)%s+([%:%.-_%w]+)%s+([%:%.-_%w]+)%s+([%:%.-_%w]+)%s+([%:%.-_%w]+)%s+([%(%)%:%.-_%w]+)%s+([%:%.-_%w]+).*")
+				ln:match("^%s*(%d+)%s+([-_%w]+)%s+([%(%)%.%*-_%w]+)%s+([%:%.-_%w]+)%s+([%:%.-_%w]+)%s+([%:%.-_%w]+)%s+([%:%.-_%w]+)%s+([%(%)%:%.-_%w]+)%s+([%:%.-_%w]+).*")
 			if id then
 				fwd[#fwd+1] = {
 					id = id,

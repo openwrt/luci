@@ -10,6 +10,7 @@
 	attr("id", cbid) .. attr("name", cbid) .. attr("value", self.enabled or 1) ..
 	ifattr((self:cfgvalue(section) or self.default) == self.enabled, "checked", "checked")
 %> />
+<label<%= attr("for", cbid)%>></label>
 
 <%+cbi/valuefooter%>
 <!-- ++ END ++ Dynamic DNS ++ overview_enabled.htm ++ -->

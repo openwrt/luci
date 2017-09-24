@@ -59,11 +59,6 @@ uci set wireless.$net\_iface=wifi-iface
 # create new wifi-iface for $net from defaults
 set_defaults "wifi_iface_" wireless.$net\_iface
 
-# overwrite some settings for type atheros (madwifi)
-if [ "$type" = "atheros" ]; then
-       set_defaults "madwifi_wifi_iface_" wireless.${net}
-fi
-
 # overwrite defaults
 bssid="$($dir/helpers/gen_bssid.sh $channel $community)"
 

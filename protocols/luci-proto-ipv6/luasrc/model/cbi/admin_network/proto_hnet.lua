@@ -6,8 +6,11 @@ local map, section, net = ...
 local mode = section:taboption("general", ListValue, "mode", translate("Category"))
 mode:value("auto", translate("Automatic"))
 mode:value("external", translate("External"))
+mode:value("internal", translate("Internal"))
+mode:value("leaf", translate("Leaf"))
 mode:value("guest", translate("Guest"))
 mode:value("adhoc", translate("Ad-Hoc"))
+mode:value("hybrid", translate("Hybrid"))
 mode.default = "auto"
 
 

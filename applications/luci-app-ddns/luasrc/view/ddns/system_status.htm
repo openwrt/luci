@@ -69,15 +69,15 @@
 					break;
 			}
 
-			// domain
-			if (data[j].domain == "_nodomain_")
+			// lookup
+			if (data[j].lookup == "_nolookup_")
 				tr.insertCell(-1).innerHTML = '<em><%:config error%></em>';
 			else
-				tr.insertCell(-1).innerHTML = data[j].domain;
+				tr.insertCell(-1).innerHTML = data[j].lookup;
 
 			// registered IP
 			switch (data[j].reg_ip) {
-				case "_nodomain_":
+				case "_nolookup_":
 					tr.insertCell(-1).innerHTML = '<em><%:Config error%></em>';
 					break;
 				case "_nodata_":
@@ -111,13 +111,13 @@
 	}
 
 	// force to immediate show status (not waiting for XHR.poll)
-	XHR.get('<%=luci.dispatcher.build_url("admin", "services", "ddns", "status")%>', null,
+	XHR.get('<%=url([[admin]], [[services]], [[ddns]], [[status]])%>', null,
 		function(x, data) {
 			if (data) { _data2elements(x, data); }
 		}
 	);
 
-	XHR.poll(5, '<%=luci.dispatcher.build_url("admin", "services", "ddns", "status")%>', null,
+	XHR.poll(15, '<%=url([[admin]], [[services]], [[ddns]], [[status]])%>', null,
 		function(x, data) {
 			if (data) { _data2elements(x, data); }
 		}
@@ -126,13 +126,13 @@
 //]]></script>
 
 <fieldset class="cbi-section" id="ddns_status_section">
-	<legend><a href="<%=luci.dispatcher.build_url([[admin]], [[services]], [[ddns]])%>"><%:Dynamic DNS%></a></legend>
+	<legend><a href="<%=url([[admin]], [[services]], [[ddns]])%>"><%:Dynamic DNS%></a></legend>
 
 	<table class="cbi-section-table" id="ddns_status_table">
 		<tr class="cbi-section-table-titles">
 			<th class="cbi-section-table-cell"><%:Configuration%></th>
 			<th class="cbi-section-table-cell"><%:Next Update%></th>
-			<th class="cbi-section-table-cell"><%:Hostname/Domain%></th>
+			<th class="cbi-section-table-cell"><%:Lookup Hostname%></th>
 			<th class="cbi-section-table-cell"><%:Registered IP%></th>
 			<th class="cbi-section-table-cell"><%:Network%></th>
 		</tr>
