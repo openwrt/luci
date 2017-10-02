@@ -3,9 +3,9 @@
 
 local nxfs      = require("nixio.fs")
 local util      = require("luci.util")
-local uci_input = "/etc/config/dhcp"
+local res_input = "/etc/resolv-crypt.conf"
 
-if not nxfs.access(uci_input) then
+if not nxfs.access(res_input) then
 	m = SimpleForm("error", nil, translate("Input file not found, please check your configuration."))
 	m.reset = false
 	m.submit = false
@@ -18,18 +18,18 @@ m.submit = translate("Save")
 m.reset = false
 
 s = m:section(SimpleSection, nil,
-	translate("This form allows you to modify the content of the main Dnsmasq configuration file (/etc/config/dhcp)."))
+	translate("This form allows you to modify the content of the resolv-crypt configuration file (/etc/resolv-crypt.conf)."))
 
 f = s:option(TextValue, "data")
 f.rows = 20
 f.rmempty = true
 
 function f.cfgvalue()
-	return nxfs.readfile(uci_input) or ""
+	return nxfs.readfile(res_input) or ""
 end
 
 function f.write(self, section, data)
-	return nxfs.writefile(uci_input, "\n" .. util.trim(data:gsub("\r\n", "\n")) .. "\n")
+	return nxfs.writefile(res_input, "\n" .. util.trim(data:gsub("\r\n", "\n")) .. "\n")
 end
 
 function s.handle(self, state, data)
