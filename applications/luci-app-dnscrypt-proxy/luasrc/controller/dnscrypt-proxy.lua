@@ -17,8 +17,8 @@ function index()
 	entry({"admin", "services", "dnscrypt-proxy", "advanced"}, firstchild(), _("Advanced"), 100)
 	entry({"admin", "services", "dnscrypt-proxy", "advanced", "configuration"}, cbi("dnscrypt-proxy/configuration_tab"), _("Edit DNSCrypt-Proxy Configuration"), 110).leaf = true
 	entry({"admin", "services", "dnscrypt-proxy", "advanced", "cfg_dnsmasq"}, cbi("dnscrypt-proxy/cfg_dnsmasq_tab"), _("Edit Dnsmasq Configuration"), 120).leaf = true
-	entry({"admin", "services", "dnscrypt-proxy", "advanced", "view_reslist"}, call("view_reslist"), _("View Resolver List"), 130).leaf = true
-
+	entry({"admin", "services", "dnscrypt-proxy", "advanced", "cfg_resolvcrypt"}, cbi("dnscrypt-proxy/cfg_resolvcrypt_tab"), _("Edit Resolvcrypt Configuration"), 130).leaf = true
+	entry({"admin", "services", "dnscrypt-proxy", "advanced", "view_reslist"}, call("view_reslist"), _("View Resolver List"), 140).leaf = true
 end
 
 function view_reslist()
@@ -27,6 +27,12 @@ function view_reslist()
 end
 
 function logread()
-	local logfile = util.trim(util.exec("logread -e 'dnscrypt-proxy'"))
+	local logfile
+
+	if nixio.fs.access("/var/log/messages") then
+		logfile = util.trim(util.exec("cat /var/log/messages | grep 'dnscrypt-proxy'"))
+	else
+		logfile = util.trim(util.exec("logread -e 'dnscrypt-proxy'"))
+	end
 	templ.render("dnscrypt-proxy/logread", {title = i18n.translate("DNSCrypt-Proxy Logfile"), content = logfile})
 end
