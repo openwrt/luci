@@ -33,8 +33,19 @@ for line in io.lines(res_input) do
 	local name,
 	location,
 	dnssec,
-	nolog = line:match("^([^,]+),.-,\".-\",\"(.-)\",.-,[0-9],([yesno]+),([yesno]+)")
-	res_list[#res_list + 1] = { name = name, location = location, dnssec = dnssec, nolog = nolog }
+	nolog = line:match("^([^,]+),.-,\".-\",\"*(.-)\"*,.-,[0-9],\"*([yesno]+)\"*,\"*([yesno]+)\"*,.*")
+	if name ~= "" and name ~= "Name" then
+		if location == "" then
+			location = "-"
+		end
+		if dnssec == "" then
+			dnssec = "-"
+		end
+		if nolog == "" then
+			nolog = "-"
+		end
+		res_list[#res_list + 1] = { name = name, location = location, dnssec = dnssec, nolog = nolog }
+	end
 end
 
 m = Map("dnscrypt-proxy", translate("DNSCrypt-Proxy"),
@@ -174,7 +185,7 @@ i3.datatype = "hostname"
 i3.widget = "select"
 local i, v
 for i, v in ipairs(res_list) do
-	if v.name and v.location and v.dnssec and v.nolog and v.name ~= "Name" then
+	if v.name then
 		i3:value(v.name, v.name .. " (" .. v.location .. "/" .. v.dnssec .. "/" .. v.nolog .. ")")
 	end
 end
