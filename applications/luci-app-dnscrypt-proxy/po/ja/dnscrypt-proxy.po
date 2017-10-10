@@ -7,16 +7,23 @@ msgstr ""
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.0.3\n"
+"X-Generator: Poedit 2.0.4\n"
 "Last-Translator: INAGAKI Hiroshi <musashino.open@gmail.com>\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "Language: ja\n"
+
+msgid "-------"
+msgstr "（利用不可）"
 
 msgid "Advanced"
 msgstr "詳細"
 
 msgid "Alternate Resolver List"
 msgstr "代替 リゾルバ リスト"
+
+msgid ""
+"Apply DNSCrypt-Proxy specific settings to the Dnsmasq configuration.<br />"
+msgstr "Dnsmasq の構成に、DNSCrypt-Proxy を指定する設定を適用します。<br />"
 
 msgid "Blacklist"
 msgstr "ブラックリスト"
@@ -26,26 +33,26 @@ msgstr "IPv6 のブロック"
 
 msgid ""
 "By default the DNSCrypt-Proxy startup will be triggered by ifup events of "
-"multiple network interfaces."
+"'All' available network interfaces.<br />"
 msgstr ""
-"デフォルトでは、 DNSCrypt-Proxy は全ネットワーク インターフェースの ifup イベ"
-"ントによりトリガされ起動します。"
+"デフォルトでは、 DNSCrypt-Proxy は利用可能な全ネットワーク インターフェース"
+"の ifup イベントによりトリガされ起動します。<br />"
 
 msgid "Configuration of the DNSCrypt-Proxy package."
 msgstr "DNSCrypt-Proxy パッケージの設定です。"
 
 msgid ""
 "Create '/etc/resolv-crypt.conf' with 'options timeout:1' to reduce DNS "
-"upstream timeouts with multiple DNSCrypt instances."
+"upstream timeouts with multiple DNSCrypt instances.<br />"
 msgstr ""
 "複数の DNSCrypt インスタンスで DNS アップストリーム タイムアウトの設定値を共"
 "用するため、 'options timeout:1' を含めた '/etc/resolv-crypt.conf' を作成しま"
-"す。"
+"す。<br />"
 
 msgid "Create Config File"
 msgstr "設定ファイルの作成"
 
-msgid "Create custom config file"
+msgid "Create Custom Config File"
 msgstr "カスタム設定ファイルの作成"
 
 msgid "DNS Query Logfile"
@@ -66,20 +73,27 @@ msgstr "デフォルト リゾルバ リスト"
 msgid "Disable IPv6 to speed up DNSCrypt-Proxy."
 msgstr "DNSCrypt-Proxy の高速化のため、IPv6 を無効化します。"
 
+msgid "Dnsmasq Options"
+msgstr "Dnsmasq オプション"
+
+msgid "Download the current resolver list from 'download.dnscrypt.org'."
+msgstr ""
+"現在のリゾルバ リストを 'download.dnscrypt.org' からダウンロードします。"
+
 msgid "Edit DNSCrypt-Proxy Configuration"
 msgstr "DNSCrypt-Proxy 設定の編集"
 
 msgid "Edit Dnsmasq Configuration"
 msgstr "Dnsmasq 設定の編集"
 
+msgid "Edit Resolvcrypt Configuration"
+msgstr "Resolvcrypt 設定の編集"
+
 msgid "Enable Caching to speed up DNSCcrypt-Proxy."
 msgstr "DNSCrypt-Proxy の高速化のため、キャッシュ機能を有効化します。"
 
 msgid "Ephemeral Keys"
 msgstr "一時的なキー"
-
-msgid "Extra options"
-msgstr "拡張オプション"
 
 msgid "File Checksum"
 msgstr "ファイル チェックサム"
@@ -94,8 +108,8 @@ msgstr ""
 "詳細な情報は <a href=\"%s\" target=\"_blank\">オンライン Wiki</a> を確認して"
 "ください。"
 
-msgid "General options"
-msgstr "全般設定"
+msgid "General Options"
+msgstr "全般オプション"
 
 msgid "IP Address"
 msgstr "IP アドレス"
@@ -107,11 +121,8 @@ msgstr ""
 msgid "Input file not found, please check your configuration."
 msgstr "入力ファイルが見つかりません。設定を確認してください。"
 
-msgid "Instance options"
+msgid "Instance Options"
 msgstr "インスタンス オプション"
-
-msgid "Keep in mind to configure Dnsmasq as well."
-msgstr "Dnsmasq を適切に設定する必要があることに留意してください。"
 
 msgid "Local Cache"
 msgstr "ローカル キャッシュ"
@@ -129,15 +140,46 @@ msgstr ""
 "受信した DNS クエリをファイルに記録します。これにより、ネットワークで何が起き"
 "ているかをリアルタイムに把握することが可能です。"
 
-msgid "Name of the remote DNS service for resolving queries."
-msgstr "クエリの名前解決を行う、リモートの DNS サービス名です。"
-
 msgid ""
-"Options for further tweaking in case the defaults are not suitable for you."
-msgstr "デフォルト設定が適切でない場合、追加で設定するためのオプションです。"
+"Name of the remote DNS service for resolving queries incl. Location, DNSSEC- "
+"and NOLOG-Flag."
+msgstr ""
+"クエリの名前解決を行う、ロケーション, DNSSECの有無, NOLOG フラグを含めたリ"
+"モート DNS サービスの名前です。"
+
+msgid "No SSL support available.<br />"
+msgstr "利用可能な SSL サポートがありません。<br />"
+
+msgid "No default resolver list and no SSL support available.<br />"
+msgstr ""
+"デフォルトのリゾルバ リストと、利用可能な SSL サポートがありません。<br />"
 
 msgid "Overview"
 msgstr "概要"
+
+msgid "Please edit the file manually in the 'Advanced' section."
+msgstr "'詳細' タブで手動でファイルを編集してください。"
+
+msgid ""
+"Please install a 'libustream-ssl' library to download the current resolver "
+"list from 'download.dnscrypt.org'."
+msgstr ""
+"現在のリゾルバ リストを 'download.dnscrypt.org' からダウンロードするために、 "
+"'libustream-ssl' ライブラリをインストールしてください。"
+
+msgid ""
+"Please install a resolver list to '/usr/share/dnscrypt-proxy/dnscrypt-"
+"resolvers.csv' to use this package."
+msgstr ""
+"このパッケージを利用するには、リゾルバ リストを '/usr/share/dnscrypt-proxy/"
+"dnscrypt-resolvers.csv' にインストールしてください。"
+
+msgid ""
+"Please note: This may change the values for 'noresolv', 'resolvfile', "
+"'allservers' and the list 'server' settings."
+msgstr ""
+"注: これは、 'noresolv' および 'resolvfile', 'allservers', 'list server' の設"
+"定値を変更する場合があります。"
 
 msgid "Port"
 msgstr "ポート"
@@ -148,15 +190,8 @@ msgstr "リストのリフレッシュ"
 msgid "Refresh Resolver List"
 msgstr "リゾルバ リストのリフレッシュ"
 
-msgid "Resolver"
-msgstr "リゾルバ"
-
-msgid ""
-"SSL support not available, please install an libustream-ssl variant to use "
-"this package."
-msgstr ""
-"SSL サポートが利用できません。このパッケージを使用するには libustream-ssl 等"
-"をインストールし、 SSL サポートを有効にしてください。"
+msgid "Resolver (LOC/SEC/NOLOG)"
+msgstr "リゾルバ（LOC/SEC/NOLOG）"
 
 msgid "Save"
 msgstr "保存"
@@ -166,6 +201,9 @@ msgstr "デフォルトとは異なるリゾルバ リストを設定します�
 
 msgid "Startup Trigger"
 msgstr "スタートアップ トリガ"
+
+msgid "The config file '/etc/resolv-crypt.conf' already exist.<br />"
+msgstr "設定ファイル '/etc/resolv-crypt.conf' は既に存在しています。<br />"
 
 msgid "The listening port for DNS queries."
 msgstr "DNS クエリを待ち受けるポートです。"
@@ -199,6 +237,13 @@ msgstr ""
 "このフォームでは、メインの Dnsmasq 設定ファイル (/etc/config/dhcp) の内容を変"
 "更することができます。"
 
+msgid ""
+"This form allows you to modify the content of the resolv-crypt configuration "
+"file (/etc/resolv-crypt.conf)."
+msgstr ""
+"このフォームでは、 resolv-crypt 設定ファイル（/etc/resolv-crypt.conf）の内容"
+"を変更することができます。"
+
 msgid "This form shows the content of the current DNSCrypt Resolver List."
 msgstr ""
 "このフォームには、現在の DNSCrypt リゾルバ リストの内容が表示されます。"
@@ -217,13 +262,15 @@ msgstr ""
 "このオプションは、通常よりも CPU リソースを多く使用するほか、ほとんどの "
 "DNSCrypt サーバーでは不要なものです。"
 
-msgid "To restrict the trigger, add only the relevant network interface(s)."
+msgid ""
+"To restrict the trigger, select only the relevant network interface. Usually "
+"the 'wan' interface should work for most users."
 msgstr ""
-"トリガを限定するには、適切なネットワーク インターフェースのみを追加してくださ"
-"い。"
+"トリガを限定するには、適切なインターフェースを選択してください。通常、 'wan' "
+"インターフェースがほとんどのユーザーに適しています。"
 
-msgid "Usually the 'wan' interface should work for most users."
-msgstr "通常、 'wan' インターフェースがほとんどのユーザーに適しています。"
+msgid "Transfer Options To Dnsmasq"
+msgstr "Dnsmasq の転送オプション"
 
 msgid "View Logfile"
 msgstr "ログファイルの確認"
