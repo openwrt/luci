@@ -23,4 +23,4 @@ if [ "$hmac_key" != "" ]; then
 qr="$qr HMAC_KEY:$hmac_key"
 fi
 
-qrencode -o - "$qr"
+qrencode -t svg -o - "$qr"
