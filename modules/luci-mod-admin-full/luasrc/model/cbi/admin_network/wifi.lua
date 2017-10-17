@@ -518,7 +518,7 @@ if hwtype == "mac80211" then
 	wmm:depends({mode="ap"})
 	wmm:depends({mode="ap-wds"})
 	wmm.default = wmm.enabled
-	
+
 	ifname = s:taboption("advanced", Value, "ifname", translate("Interface name"), translate("Override default interface name"))
 	ifname.optional = true
 end
@@ -1161,6 +1161,17 @@ if hwtype == "mac80211" then
 	retry_timeout.datatype = "uinteger"
 	retry_timeout.placeholder = "201"
 	retry_timeout.rmempty = true
+
+	local key_retries = s:taboption("encryption", Flag, "wpa_disable_eapol_key_retries",
+		translate("Enable key reinstallation (KRACK) countermeasures"),
+		translate("Works around key reinstallation attacks on the client side by disabling retransmission of EAPOL-Key frames that are used to install keys. This workaround might cause interoperability issues and reduced robustness of key negotiation especially in environments with heavy traffic load."))
+
+	key_retries:depends({mode="ap", encryption="wpa2"})
+	key_retries:depends({mode="ap", encryption="psk2"})
+	key_retries:depends({mode="ap", encryption="psk-mixed"})
+	key_retries:depends({mode="ap-wds", encryption="wpa2"})
+	key_retries:depends({mode="ap-wds", encryption="psk2"})
+	key_retries:depends({mode="ap-wds", encryption="psk-mixed"})
    end
 end
 
