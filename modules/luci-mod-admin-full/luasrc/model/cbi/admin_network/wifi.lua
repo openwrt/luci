@@ -1125,42 +1125,43 @@ end
 
 -- ieee802.11w options
 if hwtype == "mac80211" then
-   local has_80211w = (os.execute("hostapd -v11w 2>/dev/null || hostapd -veap 2>/dev/null") == 0)
-   if has_80211w then
-	ieee80211w = s:taboption("encryption", ListValue, "ieee80211w",
-		translate("802.11w Management Frame Protection"),
-		translate("Requires the 'full' version of wpad/hostapd " ..
-			"and support from the wifi driver <br />(as of Feb 2017: " ..
-			"ath9k and ath10k, in LEDE also mwlwifi and mt76)"))
-	ieee80211w.default = ""
-	ieee80211w.rmempty = true
-	ieee80211w:value("", translate("Disabled (default)"))
-	ieee80211w:value("1", translate("Optional"))
-	ieee80211w:value("2", translate("Required"))
-	ieee80211w:depends({mode="ap", encryption="wpa2"})
-	ieee80211w:depends({mode="ap-wds", encryption="wpa2"})
-	ieee80211w:depends({mode="ap", encryption="psk2"})
-	ieee80211w:depends({mode="ap", encryption="psk-mixed"})
-	ieee80211w:depends({mode="ap-wds", encryption="psk2"})
-	ieee80211w:depends({mode="ap-wds", encryption="psk-mixed"})
+	local has_80211w = (os.execute("hostapd -v11w 2>/dev/null || hostapd -veap 2>/dev/null") == 0)
+	if has_80211w then
+		ieee80211w = s:taboption("encryption", ListValue, "ieee80211w",
+			translate("802.11w Management Frame Protection"),
+			translate("Requires the 'full' version of wpad/hostapd " ..
+				"and support from the wifi driver <br />(as of Feb 2017: " ..
+				"ath9k and ath10k, in LEDE also mwlwifi and mt76)"))
+		ieee80211w.default = ""
+		ieee80211w.rmempty = true
+		ieee80211w:value("", translate("Disabled (default)"))
+		ieee80211w:value("1", translate("Optional"))
+		ieee80211w:value("2", translate("Required"))
+		ieee80211w:depends({mode="ap", encryption="wpa2"})
+		ieee80211w:depends({mode="ap-wds", encryption="wpa2"})
+		ieee80211w:depends({mode="ap", encryption="psk2"})
+		ieee80211w:depends({mode="ap", encryption="psk-mixed"})
+		ieee80211w:depends({mode="ap-wds", encryption="psk2"})
+		ieee80211w:depends({mode="ap-wds", encryption="psk-mixed"})
 
-	max_timeout = s:taboption("encryption", Value, "ieee80211w_max_timeout",
+		max_timeout = s:taboption("encryption", Value, "ieee80211w_max_timeout",
 			translate("802.11w maximum timeout"),
 			translate("802.11w Association SA Query maximum timeout"))
-	max_timeout:depends({ieee80211w="1"})
-	max_timeout:depends({ieee80211w="2"})
-	max_timeout.datatype = "uinteger"
-	max_timeout.placeholder = "1000"
-	max_timeout.rmempty = true
+		max_timeout:depends({ieee80211w="1"})
+		max_timeout:depends({ieee80211w="2"})
+		max_timeout.datatype = "uinteger"
+		max_timeout.placeholder = "1000"
+		max_timeout.rmempty = true
 
-	retry_timeout = s:taboption("encryption", Value, "ieee80211w_retry_timeout",
+		retry_timeout = s:taboption("encryption", Value, "ieee80211w_retry_timeout",
 			translate("802.11w retry timeout"),
 			translate("802.11w Association SA Query retry timeout"))
-	retry_timeout:depends({ieee80211w="1"})
-	retry_timeout:depends({ieee80211w="2"})
-	retry_timeout.datatype = "uinteger"
-	retry_timeout.placeholder = "201"
-	retry_timeout.rmempty = true
+		retry_timeout:depends({ieee80211w="1"})
+		retry_timeout:depends({ieee80211w="2"})
+		retry_timeout.datatype = "uinteger"
+		retry_timeout.placeholder = "201"
+		retry_timeout.rmempty = true
+	end
 
 	local key_retries = s:taboption("encryption", Flag, "wpa_disable_eapol_key_retries",
 		translate("Enable key reinstallation (KRACK) countermeasures"),
@@ -1172,7 +1173,6 @@ if hwtype == "mac80211" then
 	key_retries:depends({mode="ap-wds", encryption="wpa2"})
 	key_retries:depends({mode="ap-wds", encryption="psk2"})
 	key_retries:depends({mode="ap-wds", encryption="psk-mixed"})
-   end
 end
 
 if hwtype == "atheros" or hwtype == "mac80211" or hwtype == "prism2" then
