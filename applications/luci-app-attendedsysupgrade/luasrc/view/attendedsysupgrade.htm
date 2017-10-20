@@ -79,19 +79,28 @@
 	<div style="display: none" id="update_info" class="alert-message info"></div>
 	<div style="display: none" id="update_error" class="alert-message danger"></div>
 </div>
-<input class="cbi-button" value="search for updates" onclick="update_request()" type="button" id="update_button">
+<p>
+	<input class="cbi-button" style="display: none;" value="edit installed packages" onclick="edit_packages()" type="button" id="edit_button">
+	<textarea style="display: none; width: 100%;" id="edit_packages" rows="15"></textarea>
+</P>
+<p>
+	<input class="cbi-button" value="search for updates" onclick="update_request()" type="button" id="update_button">
+</p>
+<p>
+	<input style="display: none" class="cbi-button" value="show build log" onclick="window.open(data.log_url);" type="button" id="log_button">
+</p>
 <div style="display: none" id="packages" class="alert-message success"></div>
 <div class="cbi-value" id="update_packages_container" style="display: block">
-	<label class="cbi-value-title" for="keep">search for package updates:</label>
-	<div class="cbi-value-field">
-		<input type="checkbox" name="update_packages" id="update_packages" />
-	</div>
+	<label class="cbi-value-title" for="update_packages">
+			<input type="checkbox" name="update_packages" id="update_packages" />
+		Search for package updates
+	</label>
 </div>
 <div class="cbi-value" id="keep_container" style="display: none">
-	<label class="cbi-value-title" for="keep">keep settings:</label>
-	<div class="cbi-value-field">
-		<input type="checkbox" name="keep" id="keep" checked="checked" />
-	</div>
+	<label class="cbi-value-title" for="keep">
+			<input type="checkbox" name="keep" id="keep" checked="checked" />
+		Keep settings
+	</label>
 </div>
 
 <script type="text/javascript">
@@ -101,6 +110,13 @@ data = {};
 ubus_counter = 1
 origin = document.location.href.replace(location.pathname, "")
 ubus_url = origin + "/ubus/"
+
+function edit_packages() {
+	data.edit_packages = true
+	document.getElementById("edit_button").style.display = "none";
+	document.getElementById("edit_packages").value = data.packages.join("\n");
+	document.getElementById("edit_packages").style.display = "block";
+}
 
 // requests to the update server
 function server_request(request_dict, path, callback) {
@@ -238,6 +254,8 @@ function update_request_callback(response_object) {
 	} else if (response_object.status === 200) {
 		// new release/updates
 		response_object_content = JSON.parse(response_object.responseText)
+		document.getElementById("edit_button").style.display = "block";
+		document.getElementById("update_button").disabled = false;
 		update_request_200(response_object_content)
 	}
 }
@@ -280,11 +298,18 @@ function update_request_200(response_content) {
 // request the image, need merge with update_request
 function image_request() {
 	console.log("image_request")
+	document.getElementById("update_button").disabled = true;
 	document.getElementById("update_packages_container").style.display = "none";
+	document.getElementById("edit_packages").style.display = "none";
+	document.getElementById("edit_button").style.display = "none";
 	request_dict = {}
 	request_dict.version = latest_version;
 	request_dict.board = data.board_name
-	request_dict.packages = data.packages;
+	if(data.edit_packages == true) {
+		request_dict.packages = document.getElementById("edit_packages").value.split("\n")
+	} else {
+		request_dict.packages = data.packages;
+	}
 	request_dict.model = data.model
 	server_request(request_dict, "image-request", image_request_handler)
 }
@@ -294,7 +319,12 @@ function image_request_handler(response) {
 		response_content = JSON.parse(response.responseText)
 		update_error(response_content.error)
 	} else if (response.status === 500) {
-		image_request_500()
+		response_content = JSON.parse(response.responseText)
+		update_error(response_content.error)
+		if(response_content.log != undefined) {
+			data.log_url = response_content.log
+			document.getElementById("log_button").style.display = "block";
+		}
 	} else if (response.status === 503) {
 		update_error("please wait. server overloaded")
 		// handle overload
@@ -317,10 +347,14 @@ function image_request_handler(response) {
 		setTimeout(image_request, 5000)
 	} else if (response.status === 200) {
 		// ready to download
-		response_content = JSON.parse(response.responseText)
-		update_info("image created")
-		document.getElementById("update_button").value = "sysupgrade"
-		document.getElementById("update_button").onclick = function() {download_image(response_content.url); }
+		response_content = JSON.parse(response.responseText);
+		data.image_url = response_content.url;
+		data.log_url = data.image_url + ".log";
+		update_info("image created");
+		document.getElementById("log_button").style.display = "block";
+		document.getElementById("update_button").disabled = false;
+		document.getElementById("update_button").value = "sysupgrade";
+		document.getElementById("update_button").onclick = download_image;
 		document.getElementById("keep_container").style.display = "block";
 	}
 }
@@ -338,7 +372,7 @@ function upload_image(blob) {
 
 	upload_request.addEventListener('load', function(event) {
 		// this checksum should be parsed
-		document.getElementById("update_info").innerHTML = "flashing... please wait" // show fancy indicator http://www.ajaxload.info/
+		document.getElementById("update_info").innerHTML = "flashing... please wait"; // show fancy indicator http://www.ajaxload.info/
 
 		ubus_request("attendedsysupgrade", "sysupgrade", { "keep_settings": document.getElementById("keep").checked }, 'done');
   	});
@@ -352,12 +386,12 @@ function upload_image(blob) {
 }
 
 // download image from server once the url was received by image_request
-function download_image(url) {
+function download_image() {
 	console.log("download_image")
-	document.getElementById("update_button").value = "flashing..."
+	document.getElementById("update_button").value = "downloading image";
 	document.getElementById("update_button").disabled = true;
 	var download_request = new XMLHttpRequest();
-	download_request.open("GET", url);
+	download_request.open("GET", data.image_url);
 	download_request.responseType = "arraybuffer";
 
 	download_request.onload = function () {
@@ -366,7 +400,7 @@ function download_image(url) {
 			upload_image(blob)
 		}
 	};
-	document.getElementById("update_info").innerHTML = "downloading image"
+	document.getElementById("update_info").innerHTML = "downloading image";
 	download_request.send();
 }
 
