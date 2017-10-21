@@ -1,0 +1,26 @@
+{
+	"attendedsysupgrade": {
+		"description": "attended sysupgrade via rpcd and luci",
+		"read": {
+			"ubus": {
+				"attendedsysupgrade": [
+					"sysupgrade"
+				],
+				"system": [
+					"board"
+				],
+				"uci": [
+					"get"
+				]
+			},
+			"uci": [
+				"*"
+			]
+		},
+		"write": {
+			"cgi-io": [
+				"upload"
+			]
+		}
+	}
+}
