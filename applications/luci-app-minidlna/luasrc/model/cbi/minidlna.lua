@@ -126,7 +126,7 @@ o:value("P", translate("Pictures"))
 
 
 s:taboption("general", DynamicList, "media_dir", translate("Media directories:"),
-	translate("Set this to the directory you want scanned. If you want to restrict the directory to a specific content type, you can prepend the type ('A' for audio, 'V' for video, 'P' for images), followed by a comma, to the directory (eg. media_dir=A,/mnt/media/Music). Multiple directories can be specified."))
+	translate("Set this to the directory you want scanned. If you want to restrict the directory to a specific content type, you can prepend the type ('A' for audio, 'V' for video, 'P' for images), followed by a comma, to the directory (eg. A,/mnt/media/Music). Multiple directories can be specified."))
 
 
 o = s:taboption("general", DynamicList, "album_art_names", translate("Album art names:"),
