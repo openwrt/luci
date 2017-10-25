@@ -91,7 +91,7 @@ s:taboption("advanced", Flag, "enable_tivo", translate("Enable TIVO:"),
 	translate("Set this to enable support for streaming .jpg and .mp3 files to a TiVo supporting HMO."))
 o.rmempty = true
 
-s:taboption("advanced", Flag, "wide_links", translate("Allow wide links"),
+s:taboption("advanced", Flag, "wide_links", translate("Allow wide links:"),
 	translate("Set this to allow serving content outside the media root (via symlinks)."))
 o.rmempty = true
 
