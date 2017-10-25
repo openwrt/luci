@@ -189,7 +189,7 @@ var cbi_validators = {
 	{
 		return cbi_validators.hostname.apply(this) ||
 			((ipv4only != 1) && cbi_validators.ipaddr.apply(this)) ||
-			((ipv4only == 1) && cb_validators.ip4addr.apply(this));
+			((ipv4only == 1) && cbi_validators.ip4addr.apply(this));
 	},
 
 	'hostname': function()
