@@ -19,7 +19,7 @@ repeat
 
 		for key, val in ln:gmatch([[(%w+)="(.-)"]]) do
 			e[key:lower()] = val
-			devices[val] = e
+			devices[val:lower()] = e
 		end
 
 		s = tonumber((fs.readfile("/sys/class/block/%s/size" % dev)))
