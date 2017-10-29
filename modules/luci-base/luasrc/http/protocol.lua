@@ -264,7 +264,7 @@ function header_source( sock )
 end
 
 -- Content-Type. Stores all extracted data associated with its parameter name
--- in the params table withing the given message object. Multiple parameter
+-- in the params table within the given message object. Multiple parameter
 -- values are stored as tables, ordinary ones as strings.
 -- If an optional file callback function is given then it is feeded with the
 -- file contents chunk by chunk and only the extracted file name is stored
@@ -433,7 +433,7 @@ function mimedecode_message_body( src, msg, filecb )
 end
 
 -- Content-Type. Stores all extracted data associated with its parameter name
--- in the params table withing the given message object. Multiple parameter
+-- in the params table within the given message object. Multiple parameter
 -- values are stored as tables, ordinary ones as strings.
 function urldecode_message_body( src, msg )
 
