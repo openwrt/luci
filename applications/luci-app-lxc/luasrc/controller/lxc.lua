@@ -73,14 +73,15 @@ end
 function lxc_get_downloadable()
 	luci.http.prepare_content("application/json")
 
-	local f = io.popen('uname -m', 'r')
-	local target = f:read('*a')
-	f:close()
-	target = target:gsub("^%s*(.-)%s*$", "%1")
+	local uci = require("uci").cursor()
+
+        local url = uci:get("lxc", "lxc", "url")
+
+        local target = lxc_get_arch_target()
 
 	local templates = {}
 
-	local f = io.popen('lxc-create -n just_want_to_list_available_lxc_templates -t download -- --list', 'r')
+	local f = io.popen('sh /usr/share/lxc/templates/lxc-download --list --no-validate --server ' .. url, 'r')
 
 	for line in f:lines() do
 		local dist,version = line:match("^(%S+)%s+(%S+)%s+" .. target .. "%s+default%s+%S+$")
@@ -102,10 +103,7 @@ function lxc_create(lxc_name, lxc_template)
 		return luci.http.write("1")
 	end
 
-	local f = io.popen('uname -m', 'r')
-	local target = f:read('*a')
-	f:close()
-	target = target:gsub("^%s*(.-)%s*$", "%1")
+	local target = lxc_get_arch_target()
 
 	local lxc_dist = lxc_template:gsub("(.*):(.*)", '%1')
 	local lxc_release = lxc_template:gsub("(.*):(.*)", '%2')
@@ -165,3 +163,24 @@ function lxc_configuration_set(lxc_name)
 	luci.http.write("0")
 end
 
+function lxc_get_arch_target()
+        local f = io.popen('uname -m', 'r')                                                                                                                                                                                                                                    
+        local target = f:read('*a')                                                                                                                                                                                                                                            
+        f:close()                                                                                                                                                                                                                                                              
+
+        if string.find(target, 'armv5') or string.find(target, 'armv6') then
+                return 'armel'
+        end
+
+        if string.find(target, 'armv7') then
+                return 'armhf'
+        end
+
+        if string.find(target, 'armv8') then
+                return 'arm64'
+        end
+
+        if string.find(target, 'x86i%_64') then
+                return 'amd64'
+        end
+end
