@@ -13,7 +13,7 @@ end
 
 function ruleWarn() -- display warning message at the top of the page
 	if error_protocol == 1 then
-		return "<font color=\"ff0000\"><strong>" .. translate("WARNING: this rule is incorrectly configured with no or improper protocol specified! Please configure a specific protocol!") .. "</strong></font>"
+		return "<font color=\"ff0000\"><strong>" .. translate("WARNING: This rule is incorrectly configured with no or improper protocol specified! Please configure a specific protocol!") .. "</strong></font>"
 	else
 		return ""
 	end
