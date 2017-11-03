@@ -64,19 +64,19 @@ function interfaceWarnings() -- display status and warning messages at the top o
 		warnings = "<font color=\"ff0000\"><strong>" .. translatef("WARNING: %d interfaces are configured exceeding the maximum of 250!", interfaceNumber) .. "</strong></font>"
 	end
 	if errorReliabilityList ~= " " then
-		warnings = warnings .. "<br /><br /><font color=\"ff0000\"><strong>" .. translate("WARNING: some interfaces have a higher reliability requirement than there are tracking IP addresses!") .. "</strong></font>"
+		warnings = warnings .. "<br /><br /><font color=\"ff0000\"><strong>" .. translate("WARNING: Some interfaces have a higher reliability requirement than there are tracking IP addresses!") .. "</strong></font>"
 	end
 	if errorRouteList ~= " " then
-		warnings = warnings .. "<br /><br /><font color=\"ff0000\"><strong>" .. translate("WARNING: some interfaces have no default route in the main routing table!") .. "</strong></font>"
+		warnings = warnings .. "<br /><br /><font color=\"ff0000\"><strong>" .. translate("WARNING: Some interfaces have no default route in the main routing table!") .. "</strong></font>"
 	end
 	if errorNetConfigList ~= " " then
-		warnings = warnings .. "<br /><br /><font color=\"ff0000\"><strong>" .. translate("WARNING: some interfaces are configured incorrectly or not at all in /etc/config/network!") .. "</strong></font>"
+		warnings = warnings .. "<br /><br /><font color=\"ff0000\"><strong>" .. translate("WARNING: Some interfaces are configured incorrectly or not at all in /etc/config/network!") .. "</strong></font>"
 	end
 	if errorNoMetricList ~= " " then
-		warnings = warnings .. "<br /><br /><font color=\"ff0000\"><strong>" .. translate("WARNING: some interfaces have no metric configured in /etc/config/network!") .. "</strong></font>"
+		warnings = warnings .. "<br /><br /><font color=\"ff0000\"><strong>" .. translate("WARNING: Some interfaces have no metric configured in /etc/config/network!") .. "</strong></font>"
 	end
 	if errorDuplicateMetricList ~= " " then
-		warnings = warnings .. "<br /><br /><font color=\"ff0000\"><strong>" .. translate("WARNING: some interfaces have duplicate metrics configured in /etc/config/network!") .. "</strong></font>"
+		warnings = warnings .. "<br /><br /><font color=\"ff0000\"><strong>" .. translate("WARNING: Some interfaces have duplicate metrics configured in /etc/config/network!") .. "</strong></font>"
 	end
 	return warnings
 end

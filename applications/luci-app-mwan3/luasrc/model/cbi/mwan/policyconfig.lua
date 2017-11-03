@@ -9,7 +9,7 @@ end
 
 function policyWarn() -- display status and warning messages at the top of the page
 	if nameTooLong == 1 then
-		return "<font color=\"ff0000\"><strong>" .. translatef("WARNING: this policy's name is %d characters exceeding the maximum of 15!", policyNameLength) .. "</strong></font>"
+		return "<font color=\"ff0000\"><strong>" .. translatef("WARNING: This policy's name is %d characters exceeding the maximum of 15!", policyNameLength) .. "</strong></font>"
 	else
 		return ""
 	end
