@@ -42,19 +42,28 @@ msgstr "可用的 blocklist 来源。"
 msgid "Backup Directory"
 msgstr "备份目录"
 
+msgid "Backup Mode"
+msgstr ""
+
+msgid ""
+"Block access to all domains except those explicitly listed in the whitelist "
+"file."
+msgstr ""
+
 msgid "Blocklist Sources"
 msgstr "拦截列表来源"
 
 msgid ""
-"Caution: Please don't select big lists or many lists at once on low memory "
-"devices to prevent OOM exceptions!"
-msgstr "注意：请勿在内存较小的设备上选择过长的列表或同时选择多个列表，以防止 OOM 异常！"
+"Caution: To prevent OOM exceptions on low memory devices with less than 64 "
+"MB free RAM, please do not select too many lists - 5-6 should be sufficient!"
+msgstr ""
 
 msgid ""
 "Choose 'none' to disable automatic startups, 'timed' to use a classic "
 "timeout (default 30 sec.) or select another trigger interface."
 msgstr ""
-"选择“none”以禁用自动启动，“timed”以使用默认的超时设定（默认 30 秒），或选择另一个触发接口。"
+"选择“none”以禁用自动启动，“timed”以使用默认的超时设定（默认 30 秒），或选择另"
+"一个触发接口。"
 
 msgid "Collecting data..."
 msgstr "正在收集数据..."
@@ -65,8 +74,8 @@ msgstr "Adblock 配置工具，通过 DNS 来拦截广告和阻止域名。"
 
 msgid ""
 "Create compressed blocklist backups, they will be used in case of download "
-"errors or during startup in manual mode."
-msgstr "创建压缩的 blocklist 备份，它们将在下载错误或手动模式下启动时使用。"
+"errors or during startup in backup mode."
+msgstr ""
 
 msgid "DNS Backend (DNS Directory)"
 msgstr "DNS 后端（DNS 目录）"
@@ -85,6 +94,12 @@ msgstr "启动期间不要自动更新 blocklists，改用 blocklists 的备份�
 msgid "Download Utility (SSL Library)"
 msgstr "下载实用程序（SSL 库）"
 
+msgid ""
+"During opkg package installation use the '--force-maintainer' option to "
+"overwrite the pre-existing config file or download a fresh default config "
+"from <a href=\"%s\" target=\"_blank\">here</a>"
+msgstr ""
+
 msgid "Edit Blacklist"
 msgstr "编辑黑名单"
 
@@ -102,8 +117,8 @@ msgstr "启用 Blocklist 备份"
 
 msgid ""
 "Enable memory intense overall sort / duplicate removal on low memory devices "
-"(&lt; 64 MB RAM)"
-msgstr "在低内存设备上启用耗用内存的整体排序/重复规则删除（&lt;64 MB RAM）"
+"(&lt; 64 MB free RAM)"
+msgstr ""
 
 msgid "Enable verbose debug logging in case of any processing error."
 msgstr "在出现任何处理错误的情况下启用详细调试日志记录。"
@@ -122,9 +137,9 @@ msgstr ""
 "ssl'或 wget'built-in'。"
 
 msgid ""
-"For further information <a href=\"%s\" target=\"_blank\">see online "
+"For further information <a href=\"%s\" target=\"_blank\">check the online "
 "documentation</a>"
-msgstr "有关更多信息，请<a href=\"%s\" target=\"_blank\">参阅在线文档</a>"
+msgstr ""
 
 msgid "Force Local DNS"
 msgstr "强制本地 DNS"
@@ -132,13 +147,8 @@ msgstr "强制本地 DNS"
 msgid "Force Overall Sort"
 msgstr "强制整体排序"
 
-msgid ""
-"In OPKG use the '--force-maintainer' option to overwrite the pre-existing "
-"config file or download a fresh default config from <a href=\"%s\" target="
-"\"_blank\">here</a>"
+msgid "Full path to the whitelist file."
 msgstr ""
-"在 OPKG 中，使用“--force-maintainer”选项覆盖预先存在的配置文件，或从<a href="
-"\"%s\" target=\"_blank\">此处</a>下载新的默认配置"
 
 msgid "Input file not found, please check your configuration."
 msgstr "输入文件未找到，请检查您的配置。"
@@ -155,9 +165,9 @@ msgid ""
 msgstr "列表 URL 和 Shallalist 类别选择可在“高级”选项卡中配置。<br />"
 
 msgid ""
-"List of available network interfaces. By default the startup will be "
-"triggered by the 'wan' interface.<br />"
-msgstr "可用网络接口列表。默认情况下，将由“wan”界面触发启动。<br />"
+"List of available network interfaces. Usually the startup will be triggered "
+"by the 'wan' interface.<br />"
+msgstr ""
 
 msgid ""
 "List of supported DNS backends with their default list export directory.<br /"
@@ -167,9 +177,6 @@ msgstr "支持的 DNS 后端列表及其默认列表导出目录。<br />"
 msgid "Loading"
 msgstr "加载中"
 
-msgid "Manual / Backup mode"
-msgstr "手动/备份模式"
-
 msgid "No"
 msgstr "否"
 
@@ -177,8 +184,8 @@ msgid ""
 "Options for further tweaking in case the defaults are not suitable for you."
 msgstr "在默认设置并不适合您时的额外选项。"
 
-msgid "Overall Blocked Domains"
-msgstr "整体封锁域名"
+msgid "Overall Domains"
+msgstr ""
 
 msgid "Overview"
 msgstr "总览"
@@ -193,8 +200,8 @@ msgstr ""
 msgid "Please edit this file directly in a terminal session."
 msgstr "请在终端会话中直接编辑此文件。"
 
-msgid "Please update your adblock config file to use this package."
-msgstr "请更新您的 adblock 配置文件以使用此软件包。"
+msgid "Please update your adblock config file to use this package.<br />"
+msgstr ""
 
 msgid "Query"
 msgstr "查询"
@@ -227,10 +234,9 @@ msgid "Suspend / Resume Adblock"
 msgstr "暂停/恢复 Adblock"
 
 msgid ""
-"Target directory for adblock backups. Please use only non-volatile disks, no "
-"ram/tmpfs drives."
+"Target directory for adblock backups. Please use only non-volatile disks, e."
+"g. an external usb stick."
 msgstr ""
-"adblock 备份的目标目录。请仅使用非易失性磁盘，不使用 ram/tmpfs 驱动器。"
 
 msgid "Target directory for the generated blocklist 'adb_list.overall'."
 msgstr "生成的 blocklist 'adb_list.overall'的目标目录。"
@@ -280,6 +286,12 @@ msgstr "查看日志文件"
 msgid "Waiting for command to complete..."
 msgstr "正在执行命令..."
 
+msgid "Whitelist File"
+msgstr ""
+
+msgid "Whitelist Mode"
+msgstr ""
+
 msgid "Yes"
 msgstr "是"
 
@@ -297,6 +309,56 @@ msgstr "不可用"
 
 msgid "paused"
 msgstr "已暂停"
+
+#~ msgid ""
+#~ "Caution: Please don't select big lists or many lists at once on low "
+#~ "memory devices to prevent OOM exceptions!"
+#~ msgstr ""
+#~ "注意：请勿在内存较小的设备上选择过长的列表或同时选择多个列表，以防止 OOM "
+#~ "异常！"
+
+#~ msgid ""
+#~ "Create compressed blocklist backups, they will be used in case of "
+#~ "download errors or during startup in manual mode."
+#~ msgstr "创建压缩的 blocklist 备份，它们将在下载错误或手动模式下启动时使用。"
+
+#~ msgid ""
+#~ "Enable memory intense overall sort / duplicate removal on low memory "
+#~ "devices (&lt; 64 MB RAM)"
+#~ msgstr "在低内存设备上启用耗用内存的整体排序/重复规则删除（&lt;64 MB RAM）"
+
+#~ msgid ""
+#~ "For further information <a href=\"%s\" target=\"_blank\">see online "
+#~ "documentation</a>"
+#~ msgstr "有关更多信息，请<a href=\"%s\" target=\"_blank\">参阅在线文档</a>"
+
+#~ msgid ""
+#~ "In OPKG use the '--force-maintainer' option to overwrite the pre-existing "
+#~ "config file or download a fresh default config from <a href=\"%s\" target="
+#~ "\"_blank\">here</a>"
+#~ msgstr ""
+#~ "在 OPKG 中，使用“--force-maintainer”选项覆盖预先存在的配置文件，或从<a "
+#~ "href=\"%s\" target=\"_blank\">此处</a>下载新的默认配置"
+
+#~ msgid ""
+#~ "List of available network interfaces. By default the startup will be "
+#~ "triggered by the 'wan' interface.<br />"
+#~ msgstr "可用网络接口列表。默认情况下，将由“wan”界面触发启动。<br />"
+
+#~ msgid "Manual / Backup mode"
+#~ msgstr "手动/备份模式"
+
+#~ msgid "Overall Blocked Domains"
+#~ msgstr "整体封锁域名"
+
+#~ msgid "Please update your adblock config file to use this package."
+#~ msgstr "请更新您的 adblock 配置文件以使用此软件包。"
+
+#~ msgid ""
+#~ "Target directory for adblock backups. Please use only non-volatile disks, "
+#~ "no ram/tmpfs drives."
+#~ msgstr ""
+#~ "adblock 备份的目标目录。请仅使用非易失性磁盘，不使用 ram/tmpfs 驱动器。"
 
 #~ msgid "DNS backend"
 #~ msgstr "DNS 后端"
