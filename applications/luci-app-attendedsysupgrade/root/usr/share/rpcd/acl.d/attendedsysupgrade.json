@@ -3,23 +3,26 @@
 		"description": "attended sysupgrade via rpcd and luci",
 		"read": {
 			"ubus": {
-				"attendedsysupgrade": [
-					"sysupgrade"
+				"rpc-sys": [
+					"upgrade_start"
 				],
 				"system": [
 					"board"
 				],
 				"uci": [
-					"get"
+					"get", "set", "commit"
 				]
 			},
 			"uci": [
-				"*"
+				"attendedsysupgrade"
 			]
 		},
 		"write": {
 			"cgi-io": [
 				"upload"
+			],
+			"uci": [
+				"attendedsysupgrade"
 			]
 		}
 	}

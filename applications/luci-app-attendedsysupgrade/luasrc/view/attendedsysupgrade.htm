@@ -98,22 +98,60 @@
 			</div>
 			<div class="cbi-value" id="edit_button" style="display: none">
 				<div class="cbi-value-field">
-					<input class="cbi-button" value="edit installed packages" onclick="edit_packages()" type="button">
+					<input class="cbi-button" value="Edit installed packages" onclick="edit_packages()" type="button">
+				</div>
+			</div>
+			<div class="cbi-value cbi-value" id="server_div" style="display:none">
+				<label class="cbi-value-title" for="server">Server:</label>
+				<div class="cbi-value-field">
+					<input onclick="edit_server()" class="cbi-button cbi-button-edit" value="" type="button" id="server" name="server">
 				</div>
 			</div>
 			<div class="cbi-value cbi-value-last">
 				<div class="cbi-value-field">
-					<input class="cbi-button cbi-input-apply" value="Search for upgrades" style="display: none" onclick="upgrade_check()" type="button" id="upgrade_button">
+					<input class="cbi-button cbi-button-apply" value="Search for upgrades" style="display: none" onclick="upgrade_check()" type="button" id="upgrade_button">
 				</div>
 			</div>
 		</div>
 	</form>
 </fieldset>
 <script type="text/javascript">
-latest_version = "";
 data = {};
 origin = document.location.href.replace(location.pathname, "")
 ubus_url = origin + "/ubus/"
+
+function set_server() {
+	data.url = document.getElementById("server").value;
+	ubus_call("uci", "set", { "config": "attendedsysupgrade", "section": "server", values: { "url": data.url } })
+	ubus_call("uci", "commit", { "config": "attendedsysupgrade" })
+	var server = document.getElementById("server")
+	server.type = 'button';
+	server.className = 'cbi-button cbi-button-edit';
+	server.parentElement.removeChild(document.getElementById("button_set"));
+	server.onclick = edit_server;
+}
+
+function edit_server() {
+	document.getElementById("server").type = 'text';
+	document.getElementById("server").onkeydown = function(event) {
+		if(event.key === 'Enter') {
+			set_server();
+			return false;
+		}
+	}
+	document.getElementById("server").className = '';
+	document.getElementById("server").onclick = null;
+
+	button_set = document.createElement("input");
+	button_set.type = "button";
+	button_set.value = "Save";
+	button_set.name = "button_set";
+	button_set.id = "button_set";
+	button_set.className = 'cbi-button cbi-button-edit';
+	button_set.style = 'background-image: url("/luci-static/resources/cbi/save.gif");'
+	button_set.onclick = set_server
+	document.getElementById("server").parentElement.appendChild(button_set);
+}
 
 function edit_packages() {
 	data.edit_packages = true
@@ -133,6 +171,7 @@ function server_request(request_dict, path, callback) {
 	request.send(JSON.stringify(request_dict));
 	request.onerror = function(e) {
 		upgrade_error("upgrade server down")
+		document.getElementById("server_div").style.display = "block";
 	}
 	request.addEventListener('load', function(event) {
 		callback(request)
@@ -161,6 +200,8 @@ function setup_ready() {
 			upgrade_check();
 		} else {
 			document.getElementById("upgrade_button").style.display = "block";
+			document.getElementById("server_div").style.display = "block";
+			document.getElementById("server").value = data.url;
 		}
 	}
 }
@@ -177,32 +218,36 @@ function ubus_call(command, argument, params, variable) {
 	request_data.id = ubus_counter;
 	request_data.method = "call";
 	request_data.params = [ data.ubus_rpc_session, command, argument, params ]
+	request_json = JSON.stringify(request_data)
 	ubus_counter++;
 	var request = new XMLHttpRequest();
 	request.open("POST", ubus_url, true);
 	request.setRequestHeader("Content-type", "application/json");
 	request.addEventListener('load', function(event) {
 		if(request.status === 200) {
-			request_json = JSON.parse(request.responseText).result[1]
-			if(command === "uci") {
-				data[variable] = request_json.value
-			} else {
-				if (variable == "release") {
-					latest_version = request_json.release.version
+			response = JSON.parse(request.responseText).result
+			if(response[0] == 0) {
+				if(response.length == 2) {
+					if(command === "uci") {
+						data[variable] = response[1].value
+					} else {
+						data[variable] = response[1][variable]
+					}
 				}
-				data[variable] = request_json[variable]
+			} else {
+				upgrade_error("ubus call faild: " + request_json)
 			}
 			ubus_closed++;
 		}
 	});
-	request.send(JSON.stringify(request_data));
+	request.send(request_json);
 }
 
 // shows notification if upgrade is available
 function upgrade_info(info_output, loading) {
 	document.getElementById("upgrade_info").style.display = "block";
 	if(loading) {
-		loading_image = '<img src="/luci-static/resources/icons/loading.gif">'
+		loading_image = '<img src="/luci-static/resources/icons/loading.gif" alt="Loading" style="vertical-align:middle">'
 	} else {
 		loading_image = ''
 	}
@@ -217,6 +262,8 @@ function upgrade_error(error_output) {
 
 // asks server for news upgrades, actually only based on relesae not packages
 function upgrade_check() {
+	document.getElementById("upgrade_error").style.display = "none";
+	document.getElementById("server_div").style.display = "none";
 	upgrade_info("Searching for upgrades", true);
 	request_dict = {}
 	request_dict.version = data.release.version;
@@ -234,7 +281,7 @@ function upgrade_request() {
 	document.getElementById("edit_button").style.display = "none";
 	document.getElementById("keep_container").style.display = "none";
 	request_dict = {}
-	request_dict.version = latest_version;
+	request_dict.version = data.latest_version;
 	request_dict.board = data.board_name
 
 	if(data.edit_packages == true) {
@@ -289,10 +336,11 @@ function upgrade_request_callback(response) {
 		upgrade_info(info_output);
 
 		document.getElementById("keep_container").style.display = "block";
-		document.getElementById("upgrade_button").disabled = false;
-		document.getElementById("upgrade_button").style.display = "block";
-		document.getElementById("upgrade_button").value = "Sysupgrade";
-		document.getElementById("upgrade_button").onclick = download_image;
+		var upgrade_button = document.getElementById("upgrade_button")
+		upgrade_button.disabled = false;
+		upgrade_button.style.display = "block";
+		upgrade_button.value = "Flash firmware";
+		upgrade_button.onclick = download_image;
 	}
 }
 
@@ -302,14 +350,14 @@ function upload_image(blob) {
 	var form_data  = new FormData();
 
 	form_data.append("sessionid", data.ubus_rpc_session)
-	form_data.append("filename", "/tmp/sysupgrade.bin")
+	form_data.append("filename", "/tmp/firmware.bin")
 	form_data.append("filemode", 755) // insecure?
 	form_data.append("filedata", blob)
 
 	upload_request.addEventListener('load', function(event) {
 		// this checksum should be parsed
 		upgrade_info("Flashing firmware", true)
-		ubus_call("attendedsysupgrade", "sysupgrade", { "keep_settings": document.getElementById("keep").checked }, 'message');
+		ubus_call("rpc-sys", "upgrade_start", { "keep": document.getElementById("keep").checked }, 'message');
 		setTimeout(ping_ubus, 5000)
 		console.log(data.message);
 	});
@@ -393,7 +441,7 @@ function upgrade_check_callback(response_object) {
 		if(response_content.version != undefined) {
 			info_output += "<h3>new upgrade available</h3>"
 			info_output += data.release.version + " to " + response_content.version
-			latest_version = response_content.version;
+			data.latest_version = response_content.version;
 		}
 		if(response_content.upgrades != undefined) {
 			info_output += "<h3>package upgrades available</h3>"
@@ -404,16 +452,14 @@ function upgrade_check_callback(response_object) {
 		data.packages = response_content.packages
 		upgrade_info(info_output)
 
-		// directly request image if not in advanced mode
 		if(data.advanced_mode == 1) {
 			document.getElementById("edit_button").style.display = "block";
-			document.getElementById("upgrade_button").value = "request image";
-			document.getElementById("upgrade_button").style.display = "block";
-			document.getElementById("upgrade_button").disabled = false;
-			document.getElementById("upgrade_button").onclick = upgrade_request;
-		} else {
-			upgrade_request();
 		}
+		var upgrade_button = document.getElementById("upgrade_button")
+		upgrade_button.value = "Request image";
+		upgrade_button.style.display = "block";
+		upgrade_button.disabled = false;
+		upgrade_button.onclick = upgrade_request;
 	}
 }
 document.onload = setup()
