@@ -78,16 +78,16 @@
 						tr.className = 'cbi-section-table-row cbi-rowstyle-' + ((i % 2) + 1);
 
 					var host = hosts[duid2mac(st[1][i].duid)];
-					if (host)
-						tr.insertCell(-1).innerHTML = String.format(
-							'<div style="max-width:200px;overflow:hidden;text-overflow:ellipsis">%s</div>',
-							((host.name && (host.ipv4 || host.ipv6))
-								? '%h (%s)'.format(host.name, host.ipv4 || host.ipv6)
-								: '%h'.format(host.name || host.ipv4 || host.ipv6)).nobr()
-						);
-					else
-						tr.insertCell(-1).innerHTML = st[1][i].hostname ? st[1][i].hostname : '?';
+					var hoststr = st[1][i].hostname
+							? st[1][i].hostname
+							: (host ? host.name : '?');
 
+					if (host && (host.ipv4 || host.ipv6))
+						hoststr = String.format(
+							'<div style="max-width:200px;overflow:hidden;text-overflow:ellipsis">%h (%s)</div>',
+							hoststr, host.ipv4 || host.ipv6);
+
+					tr.insertCell(-1).innerHTML = hoststr;
 					tr.insertCell(-1).innerHTML = st[1][i].ip6addr;
 					tr.insertCell(-1).innerHTML = st[1][i].duid;
 					tr.insertCell(-1).innerHTML = timestr;
