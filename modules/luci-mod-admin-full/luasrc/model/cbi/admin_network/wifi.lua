@@ -793,21 +793,6 @@ if hwtype == "mac80211" or hwtype == "prism2" then
 	mobility_domain.datatype = "and(hexstring,rangelength(4,4))"
 	mobility_domain.rmempty = true
 
-	r0_key_lifetime = s:taboption("encryption", Value, "r0_key_lifetime",
-			translate("R0 Key Lifetime"), translate("minutes"))
-	r0_key_lifetime:depends({ieee80211r="1"})
-	r0_key_lifetime.placeholder = "10000"
-	r0_key_lifetime.datatype = "uinteger"
-	r0_key_lifetime.rmempty = true
-
-	r1_key_holder = s:taboption("encryption", Value, "r1_key_holder",
-			translate("R1 Key Holder"),
-			translate("6-octet identifier as a hex string - no colons"))
-	r1_key_holder:depends({ieee80211r="1"})
-	r1_key_holder.placeholder = "00004f577274"
-	r1_key_holder.datatype = "and(hexstring,rangelength(12,12))"
-	r1_key_holder.rmempty = true
-
 	reassociation_deadline = s:taboption("encryption", Value, "reassociation_deadline",
 		translate("Reassociation Deadline"),
 		translate("time units (TUs / 1.024 ms) [1000-65535]"))
@@ -816,8 +801,34 @@ if hwtype == "mac80211" or hwtype == "prism2" then
 	reassociation_deadline.datatype = "range(1000,65535)"
 	reassociation_deadline.rmempty = true
 
+	ft_protocol = s:taboption("encryption", ListValue, "ft_over_ds", translate("FT protocol"))
+	ft_protocol:depends({ieee80211r="1"})
+	ft_protocol:value("1", translatef("FT over DS"))
+	ft_protocol:value("0", translatef("FT over the Air"))
+	ft_protocol.rmempty = true
+
+	ft_psk_generate_local = s:taboption("encryption", Flag, "ft_psk_generate_local",
+		translate("Generate PMK locally"),
+		translate("When using a PSK, the PMK can be generated locally without inter AP communications"))
+	ft_psk_generate_local:depends({ieee80211r="1"})
+
+	r0_key_lifetime = s:taboption("encryption", Value, "r0_key_lifetime",
+			translate("R0 Key Lifetime"), translate("minutes"))
+	r0_key_lifetime:depends({ieee80211r="1", ft_psk_generate_local=""})
+	r0_key_lifetime.placeholder = "10000"
+	r0_key_lifetime.datatype = "uinteger"
+	r0_key_lifetime.rmempty = true
+
+	r1_key_holder = s:taboption("encryption", Value, "r1_key_holder",
+			translate("R1 Key Holder"),
+			translate("6-octet identifier as a hex string - no colons"))
+	r1_key_holder:depends({ieee80211r="1", ft_psk_generate_local=""})
+	r1_key_holder.placeholder = "00004f577274"
+	r1_key_holder.datatype = "and(hexstring,rangelength(12,12))"
+	r1_key_holder.rmempty = true
+
 	pmk_r1_push = s:taboption("encryption", Flag, "pmk_r1_push", translate("PMK R1 Push"))
-	pmk_r1_push:depends({ieee80211r="1"})
+	pmk_r1_push:depends({ieee80211r="1", ft_psk_generate_local=""})
 	pmk_r1_push.placeholder = "0"
 	pmk_r1_push.rmempty = true
 
@@ -827,8 +838,7 @@ if hwtype == "mac80211" or hwtype == "prism2" then
 			"<br />This list is used to map R0KH-ID (NAS Identifier) to a destination " ..
 			"MAC address when requesting PMK-R1 key from the R0KH that the STA " ..
 			"used during the Initial Mobility Domain Association."))
-
-	r0kh:depends({ieee80211r="1"})
+	r0kh:depends({ieee80211r="1", ft_psk_generate_local=""})
 	r0kh.rmempty = true
 
 	r1kh = s:taboption("encryption", DynamicList, "r1kh", translate("External R1 Key Holder List"),
@@ -837,7 +847,7 @@ if hwtype == "mac80211" or hwtype == "prism2" then
 			"<br />This list is used to map R1KH-ID to a destination MAC address " ..
 			"when sending PMK-R1 key from the R0KH. This is also the " ..
 			"list of authorized R1KHs in the MD that can request PMK-R1 keys."))
-	r1kh:depends({ieee80211r="1"})
+	r1kh:depends({ieee80211r="1", ft_psk_generate_local=""})
 	r1kh.rmempty = true
 	-- End of 802.11r options
 
