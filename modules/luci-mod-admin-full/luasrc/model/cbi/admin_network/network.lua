@@ -3,14 +3,21 @@
 -- Licensed to the public under the Apache License 2.0.
 
 local fs = require "nixio.fs"
+local json = require "luci.jsonc"
 
 m = Map("network", translate("Interfaces"))
 m.pageaction = false
 m:section(SimpleSection).template = "admin_network/iface_overview"
 
 if fs.access("/etc/init.d/dsl_control") then
-	dsl = m:section(TypedSection, "dsl", translate("DSL"))
+	local ok, boarddata = pcall(json.parse, fs.readfile("/etc/board.json"))
+	local modemtype = (ok == true)
+		and (type(boarddata) == "table")
+		and (type(boarddata.dsl) == "table")
+		and (type(boarddata.dsl.modem) == "table")
+		and boarddata.dsl.modem.type
 
+	dsl = m:section(TypedSection, "dsl", translate("DSL"))
 	dsl.anonymous = true
 
 	annex = dsl:option(ListValue, "annex", translate("Annex"))
@@ -37,15 +44,17 @@ if fs.access("/etc/init.d/dsl_control") then
 	tone:value("b", translate("B43 + B43C"))
 	tone:value("bv", translate("B43 + B43C + V43"))
 
-	xfer_mode = dsl:option(ListValue, "xfer_mode", translate("Encapsulation mode"))
-	xfer_mode:value("", translate("auto"))
-	xfer_mode:value("atm", translate("ATM (Asynchronous Transfer Mode)"))
-	xfer_mode:value("ptm", translate("PTM/EFM (Packet Transfer Mode)"))
+	if modemtype == "vdsl" then
+		xfer_mode = dsl:option(ListValue, "xfer_mode", translate("Encapsulation mode"))
+		xfer_mode:value("", translate("auto"))
+		xfer_mode:value("atm", translate("ATM (Asynchronous Transfer Mode)"))
+		xfer_mode:value("ptm", translate("PTM/EFM (Packet Transfer Mode)"))
 
-	line_mode = dsl:option(ListValue, "line_mode", translate("DSL line mode"))
-	line_mode:value("", translate("auto"))
-	line_mode:value("adsl", translate("ADSL"))
-	line_mode:value("vdsl", translate("VDSL"))
+		line_mode = dsl:option(ListValue, "line_mode", translate("DSL line mode"))
+		line_mode:value("", translate("auto"))
+		line_mode:value("adsl", translate("ADSL"))
+		line_mode:value("vdsl", translate("VDSL"))
+	end
 
 	firmware = dsl:option(Value, "firmware", translate("Firmware File"))
 
