@@ -54,10 +54,10 @@ for _, p in ipairs({"dslite", "map", "464xlat"}) do
 	end
 
 	if p == "dslite" then
-		netmod:register_pattern_virtual("^ds-%w")
+		netmod:register_pattern_virtual("^ds%-%w")
 	elseif p == "map" then
-		netmod:register_pattern_virtual("^map-%w")
+		netmod:register_pattern_virtual("^map%-%w")
 	elseif p == "464xlat" then
-		netmod:register_pattern_virtual("^464-%w")
+		netmod:register_pattern_virtual("^464%-%w")
 	end
 end
