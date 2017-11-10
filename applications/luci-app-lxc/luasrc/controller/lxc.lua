@@ -74,10 +74,9 @@ function lxc_get_downloadable()
 	luci.http.prepare_content("application/json")
 
 	local uci = require("uci").cursor()
+	local url = uci:get("lxc", "lxc", "url")
 
-        local url = uci:get("lxc", "lxc", "url")
-
-        local target = lxc_get_arch_target()
+	local target = lxc_get_arch_target()
 
 	local templates = {}
 
@@ -96,7 +95,6 @@ function lxc_create(lxc_name, lxc_template)
 	luci.http.prepare_content("text/plain")
 
 	local uci = require("uci").cursor()
-
 	local url = uci:get("lxc", "lxc", "url")
 
 	if not pcall(dofile, "/etc/openwrt_release") then
@@ -164,23 +162,21 @@ function lxc_configuration_set(lxc_name)
 end
 
 function lxc_get_arch_target()
-        local f = io.popen('uname -m', 'r')                                                                                                                                                                                                                                    
-        local target = f:read('*a')                                                                                                                                                                                                                                            
-        f:close()                                                                                                                                                                                                                                                              
+	local target = nixio.uname().machine
 
-        if string.find(target, 'armv5') or string.find(target, 'armv6') then
-                return 'armel'
-        end
+	if string.find(target, 'armv5') or string.find(target, 'armv6') then
+		return "armel"
+	end
 
-        if string.find(target, 'armv7') then
-                return 'armhf'
-        end
+	if string.find(target, 'armv7') then
+		return "armhf"
+	end
 
-        if string.find(target, 'armv8') then
-                return 'arm64'
-        end
+	if string.find(target, 'armv8') then
+		return "arm64"
+	end
 
-        if string.find(target, 'x86i%_64') then
-                return 'amd64'
-        end
+	if string.find(target, 'x86_64') then
+		return "amd64"
+	end
 end
