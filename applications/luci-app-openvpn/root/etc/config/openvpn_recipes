@@ -100,3 +100,10 @@ config openvpn_recipe client_tap_bridge
 	option reneg_sec		"0"
 	option float			"1"
 
+
+#
+# .ovpn VPN client
+#
+config openvpn_recipe client_tun
+	option _description		"Client configuration with .ovpn config file"
+	option config			"config.ovpn"	
