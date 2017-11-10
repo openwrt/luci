@@ -90,5 +90,5 @@ for _, p in ipairs({"ppp", "pptp", "pppoe", "pppoa", "3g", "l2tp", "pppossh"}) d
 		end
 	end
 
-	netmod:register_pattern_virtual("^%s-%%w" % p)
+	netmod:register_pattern_virtual("^%s%%-%%w" % p)
 end

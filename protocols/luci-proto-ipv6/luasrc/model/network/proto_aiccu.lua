@@ -46,4 +46,4 @@ function proto.contains_interface(self, ifname)
 	end
 end
 
-netmod:register_pattern_virtual("^aiccu-%%w")
+netmod:register_pattern_virtual("^aiccu%-%w")

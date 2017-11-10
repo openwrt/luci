@@ -4,7 +4,7 @@
 local netmod = luci.model.network
 local device = luci.util.class(netmod.interface)
 
-netmod:register_pattern_virtual("^relay-%w")
+netmod:register_pattern_virtual("^relay%-%w")
 
 local proto = netmod:register_protocol("relay")
 

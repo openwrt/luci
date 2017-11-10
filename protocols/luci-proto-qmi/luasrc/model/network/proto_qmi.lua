@@ -48,4 +48,4 @@ function proto.contains_interface(self, ifc)
 	 return (netmod:ifnameof(ifc) == self:ifname())
 end
 
-netmod:register_pattern_virtual("^qmi-%w")
+netmod:register_pattern_virtual("^qmi%-%w")

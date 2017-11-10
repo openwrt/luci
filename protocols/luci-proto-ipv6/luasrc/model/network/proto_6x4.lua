@@ -46,5 +46,5 @@ for _, p in ipairs({"6in4", "6to4", "6rd"}) do
 		return (netmod:ifnameof(ifc) == self:ifname())
 	end
 
-	netmod:register_pattern_virtual("^%s-%%w" % p)
+	netmod:register_pattern_virtual("^%s%%-%%w" % p)
 end

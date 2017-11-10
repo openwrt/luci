@@ -37,4 +37,4 @@ function proto.contains_interface(self, ifc)
 	 return (netmod:ifnameof(ifc) == self:ifname())
 end
 
-netmod:register_pattern_virtual("^ipip-%w")
+netmod:register_pattern_virtual("^ipip%-%w")
