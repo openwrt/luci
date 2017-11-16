@@ -78,7 +78,7 @@
 						tr.className = 'cbi-section-table-row cbi-rowstyle-' + ((i % 2) + 1);
 
 					var host = hosts[duid2mac(st[1][i].duid)];
-					if (host)
+					if (!st[1][i].hostname && host)
 						tr.insertCell(-1).innerHTML = String.format(
 							'<div style="max-width:200px;overflow:hidden;text-overflow:ellipsis">%s</div>',
 							((host.name && (host.ipv4 || host.ipv6))
