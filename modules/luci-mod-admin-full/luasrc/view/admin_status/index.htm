@@ -423,7 +423,10 @@
 								? '<div style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space: nowrap">? (%h)</div>'.format(host.name || host.ipv4 || host.ipv6)
 								: '?';
 					else
-						tr.insertCell(-1).innerHTML = info.leases6[i].hostname;
+						tr.insertCell(-1).innerHTML =
+							(host && host.name && info.leases6[i].hostname != host.name)
+								? '<div style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space: nowrap">%h (%h)</div>'.format(info.leases6[i].hostname, host.name)
+								: info.leases6[i].hostname;
 
 					tr.insertCell(-1).innerHTML = info.leases6[i].ip6addr;
 					tr.insertCell(-1).innerHTML = info.leases6[i].duid;

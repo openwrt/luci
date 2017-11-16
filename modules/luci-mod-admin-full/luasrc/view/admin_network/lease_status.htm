@@ -84,7 +84,10 @@
 								? '<div style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space: nowrap">? (%h)</div>'.format(host.name || host.ipv4 || host.ipv6)
 								: '?';
 					else
-						tr.insertCell(-1).innerHTML = st[1][i].hostname;
+						tr.insertCell(-1).innerHTML =
+							(host && host.name && st[1][i].hostname != host.name)
+								? '<div style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space: nowrap">%h (%h)</div>'.format(st[1][i].hostname, host.name)
+								: st[1][i].hostname;
 
 					tr.insertCell(-1).innerHTML = st[1][i].ip6addr;
 					tr.insertCell(-1).innerHTML = st[1][i].duid;
