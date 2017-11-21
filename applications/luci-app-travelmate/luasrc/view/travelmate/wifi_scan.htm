@@ -59,7 +59,7 @@ This is free software, licensed under the Apache License, Version 2.0
                     <%=percent_wifi_signal(net)%> %
                 </td>
                 <td class="cbi-value-field" style="width:100px;text-align:right">
-                    <form class="inline" action="<%=url('admin/services/travelmate/wifiadd')%>" method="post">
+                    <form class="inline" action="<%=luci.dispatcher.build_url('admin/services/travelmate/wifiadd')%>" method="post">
                         <input type="hidden" name="token" value="<%=token%>"/>
                         <input type="hidden" name="device" value="<%=utl.pcdata(dev)%>"/>
                         <input type="hidden" name="ssid" value="<%=utl.pcdata(net.ssid)%>"/>
@@ -76,12 +76,12 @@ This is free software, licensed under the Apache License, Version 2.0
         </table>
     </fieldset>
 <div class="cbi-page-actions right">
-    <form class="inline" action="<%=url('admin/services/travelmate/wifiscan')%>" method="post">
+    <form class="inline" action="<%=luci.dispatcher.build_url('admin/services/travelmate/wifiscan')%>" method="post">
         <input type="hidden" name="token" value="<%=token%>"/>
         <input type="hidden" name="device" value="<%=utl.pcdata(dev)%>"/>
         <input class="cbi-button cbi-input-find" type="submit" value="<%:Repeat scan%>"/>
     </form>
-    <form class="inline" action="<%=url('admin/services/travelmate/stations')%>" method="post">
+    <form class="inline" action="<%=luci.dispatcher.build_url('admin/services/travelmate/stations')%>" method="post">
         <input class="cbi-button cbi-button-reset" type="submit" value="<%:Back to overview%>"/>
     </form>
 </div>
