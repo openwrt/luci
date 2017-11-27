@@ -145,6 +145,16 @@ df.optional = true
 df.placeholder = "/example.org/10.1.2.3"
 
 
+if luci.util.contains(features, "ipset") then
+	is = s:taboption("general", DynamicList, "ipset",
+		translate("Domain IP Sets"),
+		translate("Places the resolved IP addresses of queries for " ..
+				"domains in the specified Netfilter IP Sets"))
+	is.optional = true
+	is.placeholder = "/example.org/ipset_ipv4,ipset_ipv6"
+end
+
+
 rp = s:taboption("general", Flag, "rebind_protection",
 	translate("Rebind protection"),
 	translate("Discard upstream RFC1918 responses"))
