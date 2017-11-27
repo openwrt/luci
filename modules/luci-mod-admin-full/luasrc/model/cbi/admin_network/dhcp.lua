@@ -5,6 +5,12 @@ local ipc = require "luci.ip"
 local o
 require "luci.util"
 
+local features = {}
+local verstr = luci.util.exec("/usr/sbin/dnsmasq --version")
+if verstr then
+	features = (verstr:match("\nCompile time options: ([^\n]+)") or ""):split(" ")
+end
+
 m = Map("dhcp", translate("DHCP and DNS"),
 	translate("Dnsmasq is a combined <abbr title=\"Dynamic Host Configuration Protocol" ..
 		"\">DHCP</abbr>-Server and <abbr title=\"Domain Name System\">DNS</abbr>-" ..
@@ -82,9 +88,7 @@ s:taboption("advanced", Flag, "localise_queries",
 	translate("Localise queries"),
 	translate("Localise hostname depending on the requesting subnet if multiple IPs are available"))
 
-local have_dnssec_support = luci.util.checklib("/usr/sbin/dnsmasq", "libhogweed.so")
-
-if have_dnssec_support then
+if luci.util.contains(features, "DNSSEC") then
 	o = s:taboption("advanced", Flag, "dnssec",
 		translate("DNSSEC"))
 	o.optional = true
