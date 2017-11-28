@@ -27,8 +27,8 @@ interface = mwan_member:option(Value, "interface", translate("Interface"))
 	cbi_add_interface(interface)
 
 metric = mwan_member:option(Value, "metric", translate("Metric"),
-	translate("Acceptable values: 1-1000. Defaults to 1 if not set"))
-	metric.datatype = "range(1, 1000)"
+	translate("Acceptable values: 1-256. Defaults to 1 if not set"))
+	metric.datatype = "range(1, 256)"
 
 weight = mwan_member:option(Value, "weight", translate("Weight"),
 	translate("Acceptable values: 1-1000. Defaults to 1 if not set"))
