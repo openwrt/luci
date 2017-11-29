@@ -195,7 +195,7 @@ local function supports_sysupgrade()
 end
 
 local function supports_reset()
-	return (os.execute([[grep -sqE '"rootfs_data"|"ubi"' /proc/mtd]]) == 0)
+	return (os.execute([[grep "^overlayfs:/overlay / overlay " 1>/dev/null 2>&1 /proc/mounts]]) == 0)
 end
 
 local function storage_size()
