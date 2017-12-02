@@ -467,8 +467,10 @@ preprocess = {
 
 section("collectd")
 
+section("logfile")
+
 for plugin in pairs(plugins) do
-	if plugin ~= "collectd" then
+	if (plugin ~= "collectd") and (plugin ~= "logfile") then
 		section( plugin )
 	end
 end
