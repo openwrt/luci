@@ -158,7 +158,7 @@ target = s:option(DummyValue, "target", translate("Action"))
 target.rawhtml = true
 target.width   = "20%"
 function target.cfgvalue(self, s)
-	local t = ft.fmt_target(self.map:get(s, "target"), self.map:get(s, "dest"))
+	local t = ft.fmt_target(self.map:get(s, "target"), self.map:get(s, "dest"), self.map:get(s, "src"))
 	local l = ft.fmt_limit(self.map:get(s, "limit"),
 		self.map:get(s, "limit_burst"))
 
