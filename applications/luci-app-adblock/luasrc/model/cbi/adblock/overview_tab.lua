@@ -98,64 +98,63 @@ o3.rmempty = false
 
 -- Runtime information
 
-ds = s:option(DummyValue, "", translate("Runtime Information"))
-ds.template = "cbi/nullsection"
+ri = m:section(NamedSection, "global", "adblock", translate("Runtime Information"))
 
-dv1 = s:option(DummyValue, "", translate("Adblock Status"))
-dv1.template = "adblock/runtime"
+ri1 = ri:option(DummyValue, "", translate("Adblock Status"))
+ri1.template = "adblock/runtime"
 if parse == nil then
-	dv1.value = translate("n/a")
+	ri1.value = translate("n/a")
 else
 	if status == "error" then
-		dv1.value = translate("error")
+		ri1.value = translate("error")
 	elseif status == "disabled" then
-		dv1.value = translate("disabled")
+		ri1.value = translate("disabled")
 	elseif status == "paused" then
-		dv1.value = translate("paused")
+		ri1.value = translate("paused")
 	else
-		dv1.value = translate("enabled")
+		ri1.value = translate("enabled")
 	end
 end
 
-dv2 = s:option(DummyValue, "", translate("Adblock Version"))
-dv2.template = "adblock/runtime"
+ri2 = ri:option(DummyValue, "", translate("Adblock Version"))
+ri2.template = "adblock/runtime"
 if parse == nil then
-	dv2.value = translate("n/a")
+	ri2.value = translate("n/a")
 else
-	dv2.value = version
+	ri2.value = version
 end
 
-dv3 = s:option(DummyValue, "", translate("Download Utility (SSL Library)"),
+ri3 = ri:option(DummyValue, "", translate("Download Utility (SSL Library)"),
 	translate("For SSL protected blocklist sources you need a suitable SSL library, e.g. 'libustream-ssl' or the wget 'built-in'."))
-dv3.template = "adblock/runtime"
+ri3.template = "adblock/runtime"
 if parse == nil then
-	dv3.value = translate("n/a")
+	ri3.value = translate("n/a")
 else
-	dv3.value = fetch
+	ri3.value = fetch
 end
 
-dv4 = s:option(DummyValue, "", translate("DNS Backend (DNS Directory)"))
-dv4.template = "adblock/runtime"
+ri4 = ri:option(DummyValue, "", translate("DNS Backend (DNS Directory)"))
+ri4.template = "adblock/runtime"
 if parse == nil then
-	dv4.value = translate("n/a")
+	ri4.value = translate("n/a")
 else
-	dv4.value = backend
+	ri4.value = backend
 end
 
-dv5 = s:option(DummyValue, "", translate("Overall Domains"))
-dv5.template = "adblock/runtime"
+ri5 = ri:option(DummyValue, "", translate("Overall Domains"))
+ri5.template = "adblock/runtime"
 if parse == nil then
-	dv5.value = translate("n/a")
+	ri5.value = translate("n/a")
 else
-	dv5.value = domains
+	ri5.value = domains
 end
 
-dv6 = s:option(DummyValue, "", translate("Last Run"))
-dv6.template = "adblock/runtime"
+ri6 = ri:option(DummyValue, "", translate("Last Run"))
+ri6.template = "adblock/runtime"
 if parse == nil then
-	dv6.value = translate("n/a")
+	ri6.value = translate("n/a")
 else
-	dv6.value = rundate
+	ri6.value = rundate
 end
 
 -- Blocklist table
