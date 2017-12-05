@@ -98,10 +98,9 @@ o3.rmempty = false
 
 -- Runtime information
 
-ds = s:option(DummyValue, "", translate("Runtime Information"))
-ds.template = "cbi/nullsection"
+ds = m:section(NamedSection, "global", "adblock", translate("Runtime Information"))
 
-dv1 = s:option(DummyValue, "", translate("Adblock Status"))
+dv1 = ds:option(DummyValue, "", translate("Adblock Status"))
 dv1.template = "adblock/runtime"
 if parse == nil then
 	dv1.value = translate("n/a")
@@ -117,7 +116,7 @@ else
 	end
 end
 
-dv2 = s:option(DummyValue, "", translate("Adblock Version"))
+dv2 = ds:option(DummyValue, "", translate("Adblock Version"))
 dv2.template = "adblock/runtime"
 if parse == nil then
 	dv2.value = translate("n/a")
@@ -125,7 +124,7 @@ else
 	dv2.value = version
 end
 
-dv3 = s:option(DummyValue, "", translate("Download Utility (SSL Library)"),
+dv3 = ds:option(DummyValue, "", translate("Download Utility (SSL Library)"),
 	translate("For SSL protected blocklist sources you need a suitable SSL library, e.g. 'libustream-ssl' or the wget 'built-in'."))
 dv3.template = "adblock/runtime"
 if parse == nil then
@@ -134,7 +133,7 @@ else
 	dv3.value = fetch
 end
 
-dv4 = s:option(DummyValue, "", translate("DNS Backend (DNS Directory)"))
+dv4 = ds:option(DummyValue, "", translate("DNS Backend (DNS Directory)"))
 dv4.template = "adblock/runtime"
 if parse == nil then
 	dv4.value = translate("n/a")
@@ -142,7 +141,7 @@ else
 	dv4.value = backend
 end
 
-dv5 = s:option(DummyValue, "", translate("Overall Domains"))
+dv5 = ds:option(DummyValue, "", translate("Overall Domains"))
 dv5.template = "adblock/runtime"
 if parse == nil then
 	dv5.value = translate("n/a")
@@ -150,7 +149,7 @@ else
 	dv5.value = domains
 end
 
-dv6 = s:option(DummyValue, "", translate("Last Run"))
+dv6 = ds:option(DummyValue, "", translate("Last Run"))
 dv6.template = "adblock/runtime"
 if parse == nil then
 	dv6.value = translate("n/a")
