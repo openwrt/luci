@@ -5,7 +5,7 @@
 			return duid.substr(16).replace(/(..)(?=..)/g, '$1:').toUpperCase();
 
 		// DUID-LL / Ethernet
-		if (duid.length === 24 && duid.substr(0, 8) === '00030001')
+		if (duid.length === 20 && duid.substr(0, 8) === '00030001')
 			return duid.substr(8).replace(/(..)(?=..)/g, '$1:').toUpperCase();
 
 		return null;

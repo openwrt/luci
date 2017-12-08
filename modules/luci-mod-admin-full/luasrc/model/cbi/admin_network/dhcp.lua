@@ -297,7 +297,7 @@ time = s:option(Value, "leasetime", translate("Lease time"))
 time.rmempty  = true
 
 duid = s:option(Value, "duid", translate("<abbr title=\"The DHCP Unique Identifier\">DUID</abbr>"))
-duid.datatype = "and(rangelength(28,36),hexstring)"
+duid.datatype = "and(rangelength(20,36),hexstring)"
 fp = io.open("/var/hosts/odhcpd")
 if fp then
 	for line in fp:lines() do
