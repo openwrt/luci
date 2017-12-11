@@ -5,7 +5,7 @@
 %>
 
 <div class="cbi-section-create cbi-tblsection-create">
-	<% if wz and lz then %>
+	<% if wz then %>
 		<br />
 		<table class="cbi-section-table" style="margin-left:5px">
 			<tr class="cbi-section-table-titles">
@@ -37,7 +37,8 @@
 				</td>
 			</tr>
 		</table>
-
+	<% end %>
+	<% if wz and lz then %>
 		<table class="cbi-section-table" style="margin-left:5px">
 			<tr class="cbi-section-table-titles">
 				<th class="cbi-section-table-cell left" colspan="6"><br /><%:New forward rule%>:</th>
@@ -71,7 +72,11 @@
 				</td>
 			</tr>
 		</table>
+	<% else %>
+		<input type="submit" class="cbi-button cbi-button-add" name="cbi.cts.<%=self.config%>.<%=self.sectiontype%>.<%=section%>" value="<%:Add%>" />
+	<% end %>
 
+	<% if wz then %>
 		<script type="text/javascript">//<![CDATA[
 			cbi_validate_field('_newopen.extport', true, 'list(neg(portrange))');
 			cbi_bind(document.getElementById('_newopen.extport'), 'blur',
@@ -106,7 +111,5 @@
 
 			cbi_validate_field('cbi.cts.<%=self.config%>.<%=self.sectiontype%>.<%=section%>', true, 'uciname');
 		//]]></script>
-	<% else %>
-		<input type="submit" class="cbi-button cbi-button-add" name="cbi.cts.<%=self.config%>.<%=self.sectiontype%>.<%=section%>" value="<%:Add%>" />
 	<% end %>
 </div>
