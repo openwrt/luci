@@ -17,7 +17,7 @@ This is free software, licensed under the Apache License, Version 2.0
         if info.wep == true then
             return translate("WEP")
         elseif info.wpa > 0 then
-            return translate("WPA/WPA2 - " .. table.concat(info.auth_suites))
+            return translatef("%s (%s/%s)", (info.wpa == 3) and translate("WPA/WPA2") or (info.wpa == 2 and "WPA2" or "WPA"), table.concat(info.auth_suites), table.concat(info.group_ciphers))
         elseif info.enabled then
             return translate("Unknown")
         else
@@ -70,9 +70,9 @@ This is free software, licensed under the Apache License, Version 2.0
                         <input type="hidden" name="bssid" value="<%=utl.pcdata(net.bssid)%>"/>
                         <input type="hidden" name="wep" value="<%=net.encryption.wep and 1 or 0%>"/>
                         <% if net.encryption.wpa then %>
-                        <input type="hidden" name="wpa_version" value="<%=net.encryption.wpa%>"/>
-                        <% for _, v in ipairs(net.encryption.auth_suites) do %><input type="hidden" name="wpa_suites" value="<%=v%>"/>
-                        <% end; end %>
+                            <input type="hidden" name="wpa_version" value="<%=net.encryption.wpa%>"/>
+                            <% for _, v in ipairs(net.encryption.auth_suites) do %><input type="hidden" name="wpa_suites" value="<%=v%>"/><% end %>
+                        <% end %>
                         <input class="cbi-button cbi-button-apply" type="submit" value="<%:Add Uplink%>"/>
                     </form>
                 </td>
