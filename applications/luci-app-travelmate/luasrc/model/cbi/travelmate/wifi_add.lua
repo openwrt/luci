@@ -5,7 +5,6 @@ local fs       = require("nixio.fs")
 local uci      = require("luci.model.uci").cursor()
 local http     = require("luci.http")
 local trmiface = uci.get("travelmate", "global", "trm_iface") or "trm_wwan"
-local val      = ""
 
 m = SimpleForm("add", translate("Add Wireless Uplink Configuration"))
 m.submit = translate("Save")
@@ -38,35 +37,88 @@ bssid.datatype = "macaddr"
 bssid.default = m.hidden.bssid or ""
 
 if (tonumber(m.hidden.wep) or 0) == 1 then
-	wkey = m:field(Value, "key", translate("WEP passphrase"),
-		translate("Specify the secret encryption key here."))
+	encr = m:field(ListValue, "encryption", translate("Encryption"))
+	encr:value("wep", "WEP")
+	encr:value("wep+open", "WEP Open System")
+	encr:value("wep+mixed", "WEP mixed")
+	encr:value("wep+shared", "WEP Shared Key")
+	encr.default = "wep+open"
+
+	wkey = m:field(Value, "key", translate("WEP-Passphrase"))
 	wkey.password = true
 	wkey.datatype = "wepkey"
 elseif (tonumber(m.hidden.wpa_version) or 0) > 0 then
 	if m.hidden.wpa_suites == "PSK" or m.hidden.wpa_suites == "PSK2" then
-		wkey = m:field(Value, "key", translate("WPA passphrase"),
-			translate("Specify the secret encryption key here."))
+		encr = m:field(ListValue, "encryption", translate("Encryption"))
+		encr:value("psk", "WPA PSK")
+		encr:value("psk-mixed", "WPA/WPA2 mixed")
+		encr:value("psk2", "WPA2 PSK")
+		encr.default = "psk2"
+
+		ciph = m:field(ListValue, "cipher", translate("Cipher"))
+		ciph:value("auto", translate("Automatic"))
+		ciph:value("ccmp", translate("Force CCMP (AES)"))
+		ciph:value("tkip", translate("Force TKIP"))
+		ciph:value("tkip+ccmp", translate("Force TKIP and CCMP (AES)"))
+		ciph.default = "auto"
+
+		wkey = m:field(Value, "key", translate("WPA-Passphrase"))
 		wkey.password = true
 		wkey.datatype = "wpakey"
 	elseif m.hidden.wpa_suites == "802.1X" then
+		encr = m:field(ListValue, "encryption", translate("Encryption"))
+		encr:value("wpa", "WPA Enterprise")
+		encr:value("wpa-mixed", "WPA/WPA2 Enterprise mixed")
+		encr:value("wpa2", "WPA2 Enterprise")
+		encr.default = "wpa2"
+
+		ciph = m:field(ListValue, "cipher", translate("Cipher"))
+		ciph:value("auto", translate("Automatic"))
+		ciph:value("ccmp", translate("Force CCMP (AES)"))
+		ciph:value("tkip", translate("Force TKIP"))
+		ciph:value("tkip+ccmp", translate("Force TKIP and CCMP (AES)"))
+		ciph.default = "auto"
+
 		eaptype = m:field(ListValue, "eap_type", translate("EAP-Method"))
-		eaptype:value("TLS")
-		eaptype:value("TTLS")
-		eaptype:value("PEAP")
-		eaptype.default = "PEAP"
+		eaptype:value("tls", "TLS")
+		eaptype:value("ttls", "TTLS")
+		eaptype:value("peap", "PEAP")
+		eaptype:value("fast", "FAST")
+		eaptype.default = "peap"
 
 		authentication = m:field(ListValue, "auth", translate("Authentication"))
 		authentication:value("PAP")
 		authentication:value("CHAP")
 		authentication:value("MSCHAP")
 		authentication:value("MSCHAPV2")
-		authentication.default = "MSCHAPV2"
+		authentication:value("EAP-GTC")
+		authentication:value("EAP-MD5")
+		authentication:value("EAP-MSCHAPV2")
+		authentication:value("EAP-TLS")
+		authentication.default = "EAP-MSCHAPV2"
 
 		ident = m:field(Value, "identity", translate("Identity"))
 
-		pass = m:field(Value, "password", translate("Password"))
-		pass.datatype = "wpakey"
-		pass.password = true
+		wkey = m:field(Value, "password", translate("Password"))
+		wkey.password = true
+		wkey.datatype = "wpakey"
+
+		cacert = m:field(Value, "ca_cert", translate("Path to CA-Certificate"))
+		cacert.rmempty = true
+
+		clientcert = m:field(Value, "client_cert", translate("Path to Client-Certificate"))
+		clientcert:depends("eap_type","tls")
+		clientcert.rmempty = true
+
+		privkey = m:field(Value, "priv_key", translate("Path to Private Key"))
+		privkey:depends("eap_type","tls")
+		privkey.rmempty = true
+
+		privkeypwd = m:field(Value, "priv_key_pwd", translate("Password of Private Key"))
+		privkeypwd:depends("eap_type","tls")
+		privkeypwd.datatype = "wpakey"
+		privkeypwd.password = true
+		privkeypwd.rmempty = true
 	end
 end
 
@@ -79,34 +131,32 @@ function wssid.write(self, section, value)
 		bssid    = bssid:formvalue(section),
 		disabled = "1"
 	})
-	if wkey ~= nil then
-		val = wkey:formvalue(section)
-		if val == "" then
-			val = "changeme"
-		end
-	end
+	
 	if (tonumber(m.hidden.wep) or 0) == 1 then
-		uci:set("wireless", newsection, "encryption", "wep-open")
-		uci:set("wireless", newsection, "key", "1")
-		uci:set("wireless", newsection, "key1", val)
+		uci:set("wireless", newsection, "encryption", encr:formvalue(section))
+		uci:set("wireless", newsection, "key", wkey:formvalue(section) or "")
 	elseif (tonumber(m.hidden.wpa_version) or 0) > 0 then
 		if m.hidden.wpa_suites == "PSK" or m.hidden.wpa_suites == "PSK2" then
-			uci:set("wireless", newsection, "encryption", "psk2")
-			uci:set("wireless", newsection, "key", val)
+			if ciph:formvalue(section) ~= "auto" then
+				uci:set("wireless", newsection, "encryption", encr:formvalue(section) .. "+" .. ciph:formvalue(section))
+			else
+				uci:set("wireless", newsection, "encryption", encr:formvalue(section))
+			end
+			uci:set("wireless", newsection, "key", wkey:formvalue(section) or "")
 		elseif m.hidden.wpa_suites == "802.1X" then
-			uci:set("wireless", newsection, "encryption", "wpa2")
+			if ciph:formvalue(section) ~= "auto" then
+				uci:set("wireless", newsection, "encryption", encr:formvalue(section) .. "+" .. ciph:formvalue(section))
+			else
+				uci:set("wireless", newsection, "encryption", encr:formvalue(section))
+			end
 			uci:set("wireless", newsection, "eap_type", eaptype:formvalue(section))
 			uci:set("wireless", newsection, "auth", authentication:formvalue(section))
-			val = ident:formvalue(section)
-			if val == "" then
-				val = "changeme"
-			end
-			uci:set("wireless", newsection, "identity", val)
-			val = pass:formvalue(section)
-			if val == "" then
-				val = "changeme"
-			end
-			uci:set("wireless", newsection, "password", val)
+			uci:set("wireless", newsection, "identity", ident:formvalue(section) or "")
+			uci:set("wireless", newsection, "password", wkey:formvalue(section) or "")
+			uci:set("wireless", newsection, "ca_cert", cacert:formvalue(section) or "")
+			uci:set("wireless", newsection, "client_cert", clientcert:formvalue(section) or "")
+			uci:set("wireless", newsection, "priv_key", privkey:formvalue(section) or "")
+			uci:set("wireless", newsection, "priv_key_pwd", privkeypwd:formvalue(section) or "")
 		end
 	else
 		uci:set("wireless", newsection, "encryption", "none")
