@@ -17,7 +17,7 @@ This is free software, licensed under the Apache License, Version 2.0
         if info.wep == true then
             return translate("WEP")
         elseif info.wpa > 0 then
-            return translatef("%s (%s/%s)", (info.wpa == 3) and translate("WPA/WPA2") or (info.wpa == 2 and "WPA2" or "WPA"), table.concat(info.auth_suites), table.concat(info.group_ciphers))
+            return string.format("%s (%s/%s)", (info.wpa == 3 and translate("WPA/WPA2")) or (info.wpa == 2 and translate("WPA2")) or translate("WPA"), table.concat(info.auth_suites), table.concat(info.group_ciphers))
         elseif info.enabled then
             return translate("Unknown")
         else
