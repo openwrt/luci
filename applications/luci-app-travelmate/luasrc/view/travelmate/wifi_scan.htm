@@ -7,7 +7,8 @@ This is free software, licensed under the Apache License, Version 2.0
     local sys = require("luci.sys")
     local utl = require("luci.util")
     local dev = luci.http.formvalue("device")
-    local iw = luci.sys.wifi.getiwinfo(dev)
+    local iw  = luci.sys.wifi.getiwinfo(dev)
+    local wpa_label = {translate("WPA"), translate("WPA2"), translate("WPA/WPA2")}
 
     if not iw then
         luci.http.redirect(luci.dispatcher.build_url("admin/services/travelmate/stations"))
@@ -17,7 +18,7 @@ This is free software, licensed under the Apache License, Version 2.0
         if info.wep == true then
             return translate("WEP")
         elseif info.wpa > 0 then
-            return translatef("%s (%s/%s)", (info.wpa == 3) and translate("WPA/WPA2") or (info.wpa == 2 and "WPA2" or "WPA"), table.concat(info.auth_suites), table.concat(info.group_ciphers))
+            return "%s (%s/%s)" %{wpa_label[info.wpa], table.concat(info.auth_suites), table.concat(info.group_ciphers)}
         elseif info.enabled then
             return translate("Unknown")
         else

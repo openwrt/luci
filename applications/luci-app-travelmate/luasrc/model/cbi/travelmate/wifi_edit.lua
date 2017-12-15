@@ -22,17 +22,17 @@ local s = uci:get_all("wireless", m.hidden.cfg)
 if s ~= nil then
 	wssid = m:field(Value, "ssid", translate("SSID"))
 	wssid.datatype = "rangelength(1,32)"
-	wssid.default = s.ssid
+	wssid.default = s.ssid or ""
+
 	bssid = m:field(Value, "bssid", translate("BSSID"))
 	bssid.datatype = "macaddr"
-	bssid.default = s.bssid
+	bssid.default = s.bssid or ""
 
+	s.cipher = "auto"
 	if string.match(s.encryption, '\+') and not string.match(s.encryption, '^wep') then
 		s.pos = string.find(s.encryption, '\+')
 		s.cipher = string.sub(s.encryption, s.pos + 1)
 		s.encryption = string.sub(s.encryption, 0, s.pos - 1)
-	else
-		s.cipher = "auto"
 	end
 
 	if s.encryption and s.encryption ~= "none" then

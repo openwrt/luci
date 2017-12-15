@@ -5,6 +5,8 @@ local fs       = require("nixio.fs")
 local uci      = require("luci.model.uci").cursor()
 local http     = require("luci.http")
 local trmiface = uci.get("travelmate", "global", "trm_iface") or "trm_wwan"
+local encr_psk = {"psk", "psk2", "psk-mixed"}
+local encr_wpa = {"wpa", "wpa2", "wpa-mixed"}
 
 m = SimpleForm("add", translate("Add Wireless Uplink Configuration"))
 m.submit = translate("Save")
@@ -53,7 +55,7 @@ elseif (tonumber(m.hidden.wpa_version) or 0) > 0 then
 		encr:value("psk", "WPA PSK")
 		encr:value("psk-mixed", "WPA/WPA2 mixed")
 		encr:value("psk2", "WPA2 PSK")
-		encr.default = "psk2"
+		encr.default = encr_psk[tonumber(m.hidden.wpa_version)] or "psk2"
 
 		ciph = m:field(ListValue, "cipher", translate("Cipher"))
 		ciph:value("auto", translate("Automatic"))
@@ -70,7 +72,7 @@ elseif (tonumber(m.hidden.wpa_version) or 0) > 0 then
 		encr:value("wpa", "WPA Enterprise")
 		encr:value("wpa-mixed", "WPA/WPA2 Enterprise mixed")
 		encr:value("wpa2", "WPA2 Enterprise")
-		encr.default = "wpa2"
+		encr.default = encr_wpa[tonumber(m.hidden.wpa_version)] or "wpa2"
 
 		ciph = m:field(ListValue, "cipher", translate("Cipher"))
 		ciph:value("auto", translate("Automatic"))
@@ -131,7 +133,7 @@ function wssid.write(self, section, value)
 		bssid    = bssid:formvalue(section),
 		disabled = "1"
 	})
-	
+
 	if (tonumber(m.hidden.wep) or 0) == 1 then
 		uci:set("wireless", newsection, "encryption", encr:formvalue(section))
 		uci:set("wireless", newsection, "key", wkey:formvalue(section) or "")

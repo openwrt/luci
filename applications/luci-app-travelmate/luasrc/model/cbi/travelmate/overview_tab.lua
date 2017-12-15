@@ -1,15 +1,17 @@
 -- Copyright 2017 Dirk Brenken (dev@brenken.org)
 -- This is free software, licensed under the Apache License, Version 2.0
 
-local fs         = require("nixio.fs")
-local uci        = require("luci.model.uci").cursor()
-local json       = require("luci.jsonc")
-local nw         = require("luci.model.network").init()
-local fw         = require("luci.model.firewall").init()
+local fs       = require("nixio.fs")
+local uci      = require("luci.model.uci").cursor()
+local json     = require("luci.jsonc")
+local util     = require("luci.util")
+local nw       = require("luci.model.network").init()
+local fw       = require("luci.model.firewall").init()
+local dump     = util.ubus("network.interface", "dump", {})
 local trmiface = uci.get("travelmate", "global", "trm_iface") or "trm_wwan"
-local trminput   = uci.get("travelmate", "global", "trm_rtfile") or "/tmp/trm_runtime.json"
-local uplink     = uci.get("network", trmiface) or ""
-local parse      = json.parse(fs.readfile(trminput) or "")
+local trminput = uci.get("travelmate", "global", "trm_rtfile") or "/tmp/trm_runtime.json"
+local uplink   = uci.get("network", trmiface) or ""
+local parse    = json.parse(fs.readfile(trminput) or "")
 
 m = Map("travelmate", translate("Travelmate"),
 	translate("Configuration of the travelmate package to to enable travel router functionality. ")
@@ -38,7 +40,8 @@ if uplink == "" then
 	btn.inputtitle = translate("Add Interface")
 	btn.inputstyle = "apply"
 	btn.disabled = false
-	function btn.write(self, section, value)
+
+	function btn.write(self, section)
 		local iface = o:formvalue(section)
 		if iface then
 			uci:set("travelmate", section, "trm_iface", iface)
@@ -75,19 +78,16 @@ o2 = s:option(Flag, "trm_automatic", translate("Enable 'automatic' mode"),
 o2.default = o2.enabled
 o2.rmempty = false
 
-btn = s:option(Button, "", translate("Manual Rescan"))
-btn:depends("trm_automatic", "")
-btn.inputtitle = translate("Rescan")
-btn.inputstyle = "find"
-btn.disabled = false
-function btn.write()
-	luci.sys.call("env -i /etc/init.d/travelmate start >/dev/null 2>&1")
-	luci.http.redirect(luci.dispatcher.build_url("admin", "services", "travelmate"))
+o3 = s:option(ListValue, "trm_iface", translate("Uplink / Trigger interface"),
+	translate("Name of the used uplink interface."))
+if dump then
+	local i, v
+	for i, v in ipairs(dump.interface) do
+		if v.interface ~= "loopback" and v.interface ~= "lan" then
+			o3:value(v.interface)
+		end
+	end
 end
-
-o3 = s:option(Value, "trm_iface", translate("Uplink / Trigger interface"),
-	translate("Name of the uplink interface that triggers travelmate processing in 'manual' mode."))
-o3.datatype = "and(uciname,rangelength(3,15))"
 o3.default = trmiface
 o3.rmempty = false
 
@@ -96,6 +96,18 @@ o4 = s:option(Value, "trm_triggerdelay", translate("Trigger delay"),
 o4.default = 2
 o4.datatype = "range(1,90)"
 o4.rmempty = false
+
+btn = s:option(Button, "", translate("Manual Rescan"),
+	translate("Force a manual uplink rescan / reconnect in 'trigger' mode."))
+btn:depends("trm_automatic", "")
+btn.inputtitle = translate("Rescan")
+btn.inputstyle = "find"
+btn.disabled = false
+
+function btn.write()
+	luci.sys.call("env -i /etc/init.d/travelmate start >/dev/null 2>&1")
+	luci.http.redirect(luci.dispatcher.build_url("admin", "services", "travelmate"))
+end
 
 -- Runtime information
 
