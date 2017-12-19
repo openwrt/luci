@@ -103,10 +103,7 @@ function updown.cfgvalue(self, section)
 end
 function updown.write(self, section, value)
 	if self.option == "stop" then
-		local pid = s.getPID(section)
-		if pid ~= nil then
-			sys.process.signal(pid,15)
-		end
+		luci.sys.call("/etc/init.d/openvpn stop %s" % section)
 	else
 		luci.sys.call("/etc/init.d/openvpn start %s" % section)
 	end
