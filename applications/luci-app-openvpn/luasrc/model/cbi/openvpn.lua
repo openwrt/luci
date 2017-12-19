@@ -125,5 +125,8 @@ function proto.cfgvalue(self, section)
 	return val or "udp"
 end
 
+function m.on_after_commit(self,map)
+	require("luci.sys").call('/etc/init.d/openvpn reload')
+end
 
 return m
