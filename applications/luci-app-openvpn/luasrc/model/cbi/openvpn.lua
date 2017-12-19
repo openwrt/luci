@@ -56,7 +56,7 @@ function s.create(self, name)
 		luci.cbi.CREATE_PREFIX .. self.config .. "." ..
 		self.sectiontype .. ".text"
 	)
-	if string.len(name)>3 and not name:match("[^a-zA-Z0-9_]") then
+	if #name > 3 and not name:match("[^a-zA-Z0-9_]") then
 		uci:section(
 			"openvpn", "openvpn", name,
 			uci:get_all( "openvpn_recipes", recipe )
@@ -67,9 +67,11 @@ function s.create(self, name)
 		uci:save("openvpn")
 
 		luci.http.redirect( self.extedit:format(name) )
-	else
+	elseif #name > 0 then
 		self.invalid_cts = true
 	end
+
+	return 0
 end
 
 
