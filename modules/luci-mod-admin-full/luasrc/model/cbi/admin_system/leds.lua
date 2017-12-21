@@ -152,4 +152,7 @@ for p in nixio.fs.glob("/sys/bus/usb/devices/*/usb[0-9]*-port[0-9]*") do
 	end
 end
 
+port_mask = s:option(Value, "port_mask", translate ("Switch Port Mask"))
+port_mask:depends("trigger", "switch0")
+
 return m
