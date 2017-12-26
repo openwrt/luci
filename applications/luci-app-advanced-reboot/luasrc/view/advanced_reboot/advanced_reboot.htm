@@ -14,6 +14,10 @@
 	<p class="alert-message warning"><%:Warning: There are unsaved changes that will get lost on reboot!%></p>
 <%- end -%>
 
+<%- if errorMessage and errorMessage ~= "" then -%>
+	<p class="alert-message warning"><%:ERROR: %><%=errorMessage%></p>
+<%- end -%>
+
 <%- if device_name then -%>
 <fieldset class="cbi-section">
   <legend><%=device_name%><%: Partitions%></legend>
@@ -26,7 +30,7 @@
     </tr>
     <tr class="cbi-section-table-row">
       <td>
-        <%=boot_envvar1_partition_one%>
+        <%=string.format("%X", boot_envvar1_partition_one)%>
       </td>
       <td>
         <%- if boot_envvar1_partition_one == current_partition then -%><%:Current%><%- else -%><%:Alternative%><%- end -%>
@@ -50,7 +54,7 @@
     </tr>
     <tr class="cbi-section-table-row">
       <td>
-        <%=boot_envvar1_partition_two%>
+        <%=string.format("%X", boot_envvar1_partition_two)%>
       </td>
       <td>
         <%- if boot_envvar1_partition_two == current_partition then -%><%:Current%><%- else -%><%:Alternative%><%- end -%>
