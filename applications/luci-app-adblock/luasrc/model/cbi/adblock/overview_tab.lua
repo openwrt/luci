@@ -74,7 +74,7 @@ end
 o2 = s:option(ListValue, "adb_dns", translate("DNS Backend (DNS Directory)"),
 	translate("List of supported DNS backends with their default list export directory.<br />")
 	.. translate("To overwrite the default path use the 'DNS Directory' option in the extra section below."))
-o2:value("dnsmasq", "dnsmasq (/tmp/dnsmasq.d)")
+o2:value("dnsmasq", "dnsmasq (/tmp)")
 o2:value("unbound", "unbound (/var/lib/unbound)")
 o2:value("named", "named (/var/lib/bind)")
 o2:value("kresd", "kresd (/etc/kresd)")
@@ -222,20 +222,37 @@ e7 = e:option(Flag, "adb_whitelist_mode", translate("Whitelist Mode"),
 e7.default = e7.disabled
 e7.rmempty = true
 
-e8 = e:option(Value, "adb_dnsdir", translate("DNS Directory"),
-	translate("Target directory for the generated blocklist 'adb_list.overall'."))
-e8.datatype = "directory"
-e8.optional = true
+e8 = e:option(Flag, "adb_dnsflush", translate("Flush DNS Cache"),
+	translate("Flush DNS Cache after adblock processing."))
+e8.default = e8.disabled
+e8.rmempty = true
 
-e9 = e:option(Value, "adb_whitelist", translate("Whitelist File"),
-	translate("Full path to the whitelist file."))
-e9.datatype = "file"
-e9.default = "/etc/adblock/adblock.whitelist"
-e9.optional = true
+e9 = e:option(Flag, "adb_notify", translate("Email Notification"),
+	translate("Send notification emails in case of a processing error or if domain count is &le; 0.<br />")
+	.. translate("Please note: this needs additional 'mstmp' installation and setup (see readme)."))
+e9.default = e9.disabled
+e9.rmempty = true
 
-e10 = e:option(Value, "adb_triggerdelay", translate("Trigger Delay"),
-	translate("Additional trigger delay in seconds before adblock processing begins."))
-e10.datatype = "range(1,60)"
+e10 = e:option(Value, "adb_notifycnt", translate("Email Notification Count"),
+translate("Raise minimum domain count email notification trigger, to get emails if the overall count is &le; the given limit (default 0)."))
+e10.default = 0
+e10.datatype = "min(0)"
 e10.optional = true
+
+e11 = e:option(Value, "adb_dnsdir", translate("DNS Directory"),
+	translate("Target directory for the generated blocklist 'adb_list.overall'."))
+e11.datatype = "directory"
+e11.optional = true
+
+e12 = e:option(Value, "adb_whitelist", translate("Whitelist File"),
+	translate("Full path to the whitelist file."))
+e12.datatype = "file"
+e12.default = "/etc/adblock/adblock.whitelist"
+e12.optional = true
+
+e13 = e:option(Value, "adb_triggerdelay", translate("Trigger Delay"),
+	translate("Additional trigger delay in seconds before adblock processing begins."))
+e13.datatype = "range(1,60)"
+e13.optional = true
 
 return m
