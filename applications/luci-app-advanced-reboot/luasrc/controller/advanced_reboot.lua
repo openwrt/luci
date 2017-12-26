@@ -5,15 +5,18 @@ module("luci.controller.advanced_reboot", package.seeall)
 
 -- device, board_name, part1, part2, offset, env_var_1, value_1_1, value_1_2, env_var_2, value_2_1, value_2_2
 devices = {
+  {"Linksys EA3500", "linksys-audi", "mtd3", "mtd5", 32, "boot_part", 1, 2, "bootcmd", "run nandboot", "run altnandboot"},
+  {"Linksys E4200v2/EA4500", "linksys-viper", "mtd3", "mtd5", 32, "boot_part", 1, 2, "bootcmd", "run nandboot", "run altnandboot"},
+  {"Linksys EA8500", "ea8500", "mtd13", "mtd15", 32, "boot_part", 1, 2},
   {"Linksys WRT1200AC", "armada-385-linksys-caiman", "mtd4", "mtd6", 32, "boot_part", 1, 2, "bootcmd", "run nandboot", "run altnandboot"},
   {"Linksys WRT1900AC", "armada-xp-linksys-mamba", "mtd4", "mtd6", 32, "boot_part", 1, 2, "bootcmd", "run nandboot", "run altnandboot"},
   {"Linksys WRT1900ACv2", "armada-385-linksys-cobra", "mtd4", "mtd6", 32, "boot_part", 1, 2, "bootcmd", "run nandboot", "run altnandboot"},
   {"Linksys WRT1900ACS", "armada-385-linksys-shelby", "mtd4", "mtd6", 32, "boot_part", 1, 2, "bootcmd", "run nandboot", "run altnandboot"},
   {"Linksys WRT3200ACM", "armada-385-linksys-rango", "mtd5", "mtd7", 32, "boot_part", 1, 2, "bootcmd", "run nandboot", "run altnandboot"},
-  {"Linksys E4200v2/EA4500", "linksys-viper", "mtd3", "mtd5", 32, "boot_part", 1, 2, "bootcmd", "run nandboot", "run altnandboot"},
-  {"Linksys EA8500", "ea8500", "mtd13", "mtd15", 32, "boot_part", 1, 2}
+  {"ZyXEL NBG6817","nbg6817","mmcblk0p4","mmcblk0p7",32,nil,255,1}
 }
 
+errorMessage = ""
 board_name = luci.util.trim(luci.sys.exec("cat /tmp/sysinfo/board_name"))
 for i=1, #devices do
   if board_name and devices[i][2] == board_name then
@@ -41,14 +44,29 @@ for i=1, #devices do
     if string.find(partition_two_label, "LEDE") then partition_two_os = "LEDE" end
     if string.find(partition_two_label, "OpenWrt") then partition_two_os = "OpenWrt" end
     if string.find(partition_two_label, "Linksys") then partition_two_os = "Linksys" end
+    if device_name and device_name == "ZyXEL NBG6817" then
+      if not partition_one_os then partition_one_os = "ZyXEL" end
+      if not partition_two_os then partition_two_os = "ZyXEL" end
+    end
     if not partition_one_os then partition_one_os = "Unknown" end
     if not partition_two_os then partition_two_os = "Unknown" end
     if partition_one_os and partition_one_version then partition_one_os = partition_one_os .. " (Linux " .. partition_one_version .. ")" end
     if partition_two_os and partition_two_version then partition_two_os = partition_two_os .. " (Linux " .. partition_two_version .. ")" end
-    if nixio.fs.access("/usr/sbin/fw_printenv") and nixio.fs.access("/usr/sbin/fw_setenv") then
-      current_partition = tonumber(luci.util.trim(luci.sys.exec("/usr/sbin/fw_printenv -n " .. boot_envvar1)))
-      other_partition = current_partition == boot_envvar1_partition_one and boot_envvar1_partition_two or boot_envvar1_partition_one
+
+    if device_name and device_name == "ZyXEL NBG6817" then
+      if not zyxelFlagPartition then zyxelFlagPartition = luci.util.trim(luci.sys.exec("source /lib/functions.sh; find_mtd_part 0:DUAL_FLAG")) end
+      if not zyxelFlagPartition then
+        errorMessage = errorMessage .. luci.i18n.translate("Unable to find Dual Boot Flag Partition." .. " ")
+        luci.util.perror(luci.i18n.translate("Unable to find Dual Boot Flag Partition."))
+      else
+        current_partition = tonumber(luci.sys.exec("dd if=" .. zyxelFlagPartition .. " bs=1 count=1 2>/dev/null | hexdump -n 1 -e '1/1 \"%d\"'"))
+      end
+    else
+      if nixio.fs.access("/usr/sbin/fw_printenv") and nixio.fs.access("/usr/sbin/fw_setenv") then
+        current_partition = tonumber(luci.util.trim(luci.sys.exec("/usr/sbin/fw_printenv -n " .. boot_envvar1)))
+      end
     end
+    other_partition = current_partition == boot_envvar1_partition_two and boot_envvar1_partition_one or boot_envvar1_partition_two
   end
 end
 
@@ -70,8 +88,19 @@ function action_reboot()
 end
 
 function action_altreboot()
+  local zyxelFlagPartition, zyxelBootFlag, zyxelNewBootFlag, errorCode, curEnvSetting, newEnvSetting
+  errorMessage = ""
+  errorCode = 0
   if luci.http.formvalue("cancel") then
     luci.http.redirect(luci.dispatcher.build_url('admin/system/advanced_reboot'))
+--    luci.template.render("advanced_reboot/advanced_reboot",{
+--      device_name=device_name,
+--      boot_envvar1_partition_one=boot_envvar1_partition_one,
+--      partition_one_os=partition_one_os,
+--      boot_envvar1_partition_two=boot_envvar1_partition_two,
+--      partition_two_os=partition_two_os,
+--      current_partition=current_partition,
+--      errorMessage = luci.i18n.translate("Alternative reboot cancelled.")})
     return
   end
   local step = tonumber(luci.http.formvalue("step") or 1)
@@ -79,21 +108,72 @@ function action_altreboot()
     if device_name and nixio.fs.access("/usr/sbin/fw_printenv") and nixio.fs.access("/usr/sbin/fw_setenv") then
       luci.template.render("advanced_reboot/alternative_reboot",{})
     else
-      luci.template.render("advanced_reboot/advanced_reboot",{})
+      luci.template.render("advanced_reboot/advanced_reboot",{errorMessage = luci.i18n.translate("No access to fw_printenv or fw_printenv!")})
     end
   elseif step == 2 then
-    luci.template.render("admin_system/applyreboot", {
-          title = luci.i18n.translate("Rebooting..."),
-          msg   = luci.i18n.translate("The system is rebooting to an alternative partition now.<br /> DO NOT POWER OFF THE DEVICE!<br /> Wait a few minutes before you try to reconnect. It might be necessary to renew the address of your computer to reach the device again, depending on your settings."),
-          addr  = luci.ip.new(uci.cursor():get("network", "lan", "ipaddr")) or "192.168.1.1"
-        })
-    if boot_envvar1 then env1 = tonumber(luci.util.trim(luci.sys.exec("/usr/sbin/fw_printenv -n " .. boot_envvar1))) end
-    if boot_envvar2 then env2 = luci.util.trim(luci.sys.exec("/usr/sbin/fw_printenv -n " .. boot_envvar2)) end
-    if env1 and env1 == boot_envvar1_partition_one then luci.sys.call("/usr/sbin/fw_setenv " .. boot_envvar1 .. " " .. boot_envvar1_partition_two) end
-    if env1 and env1 == boot_envvar1_partition_two then luci.sys.call("/usr/sbin/fw_setenv " .. boot_envvar1 .. " " .. boot_envvar1_partition_one) end
-    if env2 and env2 == boot_envvar2_partition_one then luci.sys.call("/usr/sbin/fw_setenv " .. boot_envvar2 .. " '" .. boot_envvar2_partition_two .. "'") end
-    if env2 and env2 == boot_envvar2_partition_two then luci.sys.call("/usr/sbin/fw_setenv " .. boot_envvar2 .. " '" .. boot_envvar2_partition_one .. "'") end
-    luci.sys.reboot()
+    if boot_envvar1 or boot_envvar2 then -- Linksys devices
+      if boot_envvar1 then
+        curEnvSetting = tonumber(luci.util.trim(luci.sys.exec("/usr/sbin/fw_printenv -n " .. boot_envvar1)))
+        if not curEnvSetting then
+          errorMessage = errorMessage .. luci.i18n.translate("Unable to obtain firmware environment variable") .. ": " .. boot_envvar1 .. ". "
+          luci.util.perror(luci.i18n.translate("Unable to obtain firmware environment variable") .. ": " .. boot_envvar1 .. ".")
+        else
+          newEnvSetting = curEnvSetting == boot_envvar1_partition_one and boot_envvar1_partition_two or boot_envvar1_partition_one
+          errorCode = luci.sys.call("/usr/sbin/fw_setenv " .. boot_envvar1 .. " " .. newEnvSetting)
+            if errorCode ~= 0 then
+              errorMessage = errorMessage .. luci.i18n.translate("Unable to set firmware environment variable") .. ": " .. boot_envvar1 .. " " .. luci.i18n.translate("to") .. " " .. newEnvSetting .. ". "
+              luci.util.perror(luci.i18n.translate("Unable to set firmware environment variable") .. ": " .. boot_envvar1 .. " " .. luci.i18n.translate("to") .. " " .. newEnvSetting .. ".")
+            end
+        end
+      end
+      if boot_envvar2 then
+        curEnvSetting = luci.util.trim(luci.sys.exec("/usr/sbin/fw_printenv -n " .. boot_envvar2))
+        if not curEnvSetting then
+          errorMessage = errorMessage .. luci.i18n.translate("Unable to obtain firmware environment variable") .. ": " .. boot_envvar2 .. ". "
+          luci.util.perror(luci.i18n.translate("Unable to obtain firmware environment variable") .. ": " .. boot_envvar2 .. ".")
+        else
+          newEnvSetting = curEnvSetting == boot_envvar2_partition_one and boot_envvar2_partition_two or boot_envvar2_partition_one
+          errorCode = luci.sys.call("/usr/sbin/fw_setenv " .. boot_envvar2 .. " '" .. newEnvSetting .. "'")
+          if errorCode ~= 0 then
+            errorMessage = errorMessage .. luci.i18n.translate("Unable to set firmware environment variable") .. ": " .. boot_envvar2 .. " " .. luci.i18n.translate("to") .. " " .. newEnvSetting .. ". "
+            luci.util.perror(luci.i18n.translate("Unable to set firmware environment variable") .. ": " .. boot_envvar2 .. " " .. luci.i18n.translate("to") .. " " .. newEnvSetting .. ".")
+          end
+        end
+      end
+    else -- NetGear device
+      if not zyxelFlagPartition then zyxelFlagPartition = luci.util.trim(luci.sys.exec("source /lib/functions.sh; find_mtd_part 0:DUAL_FLAG")) end
+      if not zyxelFlagPartition then
+        errorMessage = errorMessage .. luci.i18n.translate("Unable to find Dual Boot Flag Partition." .. " ")
+        luci.util.perror(luci.i18n.translate("Unable to find Dual Boot Flag Partition."))
+      else
+        zyxelBootFlag = tonumber(luci.sys.exec("dd if=" .. zyxelFlagPartition .. " bs=1 count=1 2>/dev/null | hexdump -n 1 -e '1/1 \"%d\"'"))
+        zyxelNewBootFlag = zyxelBootFlag and zyxelBootFlag == 1 and "\\xff" or "\\x01"
+        if zyxelNewBootFlag then
+          errorCode = luci.sys.call("printf \"" .. zyxelNewBootFlag .. "\" >" .. zyxelFlagPartition )
+          if errorCode ~= 0 then
+            errorMessage = errorMessage .. luci.i18n.translate("Unable to set Dual Boot Flag Partition entry for partition") .. ": " .. zyxelFlagPartition .. ". "
+            luci.util.perror(luci.i18n.translate("Unable to set Dual Boot Flag Partition entry for partition") .. ": " .. zyxelFlagPartition .. ".")
+          end
+        end
+      end
+    end
+    if errorMessage == "" then
+      luci.template.render("admin_system/applyreboot", {
+            title = luci.i18n.translate("Rebooting..."),
+            msg   = luci.i18n.translate("The system is rebooting to an alternative partition now.<br /> DO NOT POWER OFF THE DEVICE!<br /> Wait a few minutes before you try to reconnect. It might be necessary to renew the address of your computer to reach the device again, depending on your settings."),
+            addr  = luci.ip.new(uci.cursor():get("network", "lan", "ipaddr")) or "192.168.1.1"
+          })
+      luci.sys.reboot()
+    else
+      luci.template.render("advanced_reboot/advanced_reboot",{
+        device_name=device_name,
+        boot_envvar1_partition_one=boot_envvar1_partition_one,
+        partition_one_os=partition_one_os,
+        boot_envvar1_partition_two=boot_envvar1_partition_two,
+        partition_two_os=partition_two_os,
+        current_partition=current_partition,
+        errorMessage = errorMessage})
+    end
   end
 end
 
