@@ -71,7 +71,6 @@ function server_request(request_dict, path, callback) {
 
 // initial setup, get system information
 function setup() {
-	data["ubus_rpc_session"] = "<%=luci.dispatcher.context.authsession%>"
 	ubus_call("rpc-sys", "packagelist", {}, "packages");
 	ubus_call("system", "board", {}, "release");
 	ubus_call("system", "board", {}, "board_name");
@@ -228,10 +227,11 @@ function upgrade_request_callback(request) {
 	// ready to download
 	var request_json = JSON.parse(request);
 	data.sysupgrade_url = request_json.sysupgrade;
-	data.checksum = request_json.checksum;
-	data.filesize = request_json.filesize;
 
-	info_output = "Firmware created"
+	var filename_split = data.sysupgrade_url.split("/")
+	data.filename = filename_split[filename_split.length - 1]
+
+	info_output = "Firmware created</br><b>" + data.filename + "</b>"
 	if(data.advanced_mode == 1) {
 		info_output += '</br><a target="_blank" href="' + data.sysupgrade_url + '.log">Build log</a>'
 	}
@@ -266,7 +266,7 @@ function ping_ubus() {
 		});
 		request.addEventListener('load', function(event) {
 			info_box("Success! Please reload web interface");
-			$("#upgrade_button").value = "reload page";
+			$("#upgrade_button").value = "Reload page";
 			show("#upgrade_button");
 			$("#upgrade_button").disabled = false;
 			$("#upgrade_button").onclick = function() { location.reload(); }
@@ -289,11 +289,7 @@ function upload_image(blob) {
 
 	request.addEventListener('load', function(event) {
 		request_json = JSON.parse(request.responseText)
-		if(data.checksum != request_json.checksum) {
-			error_box("Checksum missmatch! Please retry")
-		} else {
-			flash_image();
-		}
+		flash_image();
 	});
 
 	request.addEventListener('error', function(event) {
@@ -307,24 +303,20 @@ function upload_image(blob) {
 
 function download_image() {
 	// Download image from server once the url was received by upgrade_request
-	if(data.filesize > data.memory.free) {
-		error_box("Not enough free memory to download firmware. Please stop unneeded services on router and retry")
-	} else {
-		hide("#keep_container");
-		hide("#upgrade_button");
-		var download_request = new XMLHttpRequest();
-		download_request.open("GET", data.sysupgrade_url);
-		download_request.responseType = "arraybuffer";
+	hide("#keep_container");
+	hide("#upgrade_button");
+	var download_request = new XMLHttpRequest();
+	download_request.open("GET", data.sysupgrade_url);
+	download_request.responseType = "arraybuffer";
 
-		download_request.onload = function () {
-			if (this.status === 200) {
-				var blob = new Blob([download_request.response], {type: "application/octet-stream"});
-				upload_image(blob)
-			}
-		};
-		info_box("Downloading firmware", true);
-		download_request.send();
-	}
+	download_request.onload = function () {
+		if (this.status === 200) {
+			var blob = new Blob([download_request.response], {type: "application/octet-stream"});
+			upload_image(blob)
+		}
+	};
+	info_box("Downloading firmware", true);
+	download_request.send();
 }
 
 function server_request(request_dict, path, callback) {
@@ -355,10 +347,11 @@ function server_request(request_dict, path, callback) {
 				info_box("Setting up ImageBuilder", true)
 				console.log("Setting up imagebuilder");
 			} else if(imagebuilder === "building") {
-				info_box("Building image");
+				info_box("Building image", true);
 				console.log("building");
 			} else {
-				info_box("Processing request");
+				// fallback if for some reasons the headers are missing e.g. browser blocks access
+				info_box("Processing request", true);
 				console.log(imagebuilder)
 			}
 			setTimeout(function() { server_request(request_dict, path, callback) }, 5000)
@@ -377,7 +370,7 @@ function server_request(request_dict, path, callback) {
 			error_box("Unsupported device, release, target, subtraget or board")
 
 		} else if (request.status === 413) {
-			error_box("No firmware created due to image size. Try again with less packages selected.")
+		error_box("No firmware created due to image size. Try again with less packages selected.")
 
 		} else if (request.status === 422) {
 			error_box("Unknown package in request")
