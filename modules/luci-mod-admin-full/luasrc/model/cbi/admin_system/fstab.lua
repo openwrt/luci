@@ -62,7 +62,7 @@ o = s:option(Flag, "auto_mount", translate("Automount Filesystem"), translate("A
 o.default = o.enabled
 o.rmempty = false
 
-o = s:option(Flag, "check_fs", translate("Check fileystems before mount"), translate("Automatically check filesystem for errors before mounting"))
+o = s:option(Flag, "check_fs", translate("Check filesystems before mount"), translate("Automatically check filesystem for errors before mounting"))
 o.default = o.disabled
 o.rmempty = false
 
