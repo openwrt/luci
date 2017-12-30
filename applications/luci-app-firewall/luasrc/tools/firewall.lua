@@ -219,6 +219,7 @@ function fmt_target(x, dest, src)
 				return tr("Do not track output")
 			else --if x == "DROP" then
 				return tr("Discard output")
+			end
 		else
 			if x == "ACCEPT" then
 				return tr("Accept input")
@@ -228,6 +229,7 @@ function fmt_target(x, dest, src)
 				return tr("Do not track input")
 			else --if x == "DROP" then
 				return tr("Discard input")
+			end
 		end
 	end
 end
