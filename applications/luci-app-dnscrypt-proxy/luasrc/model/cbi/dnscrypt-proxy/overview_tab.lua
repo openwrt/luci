@@ -147,7 +147,7 @@ end
 
 -- Trigger settings
 
-t = s:option(ListValue, "procd_trigger", translate("Startup Trigger"),
+t = s:option(ListValue, "procd_trigger", translate("Restrict interface trigger to certain interface(s)"),
 	translate("By default the DNSCrypt-Proxy startup will be triggered by ifup events of 'All' available network interfaces.<br />")
 	.. translate("To restrict the trigger, select only the relevant network interface. Usually the 'wan' interface should work for most users."))
 t:value("", "All")
