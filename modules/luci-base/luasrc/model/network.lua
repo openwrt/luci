@@ -113,6 +113,51 @@ local function _wifi_state()
 	return _ubuswificache
 end
 
+local function _wifi_state_by_sid(sid)
+	local t1, n1 = _uci:get("wireless", sid)
+	if t1 == "wifi-iface" and n1 ~= nil then
+		local radioname, radiostate
+		for radioname, radiostate in pairs(_wifi_state()) do
+			if type(radiostate) == "table" and
+			   type(radiostate.interfaces) == "table"
+			then
+				local netidx, netstate
+				for netidx, netstate in ipairs(radiostate.interfaces) do
+					if type(netstate) == "table" and
+					   type(netstate.section) == "string"
+					then
+						local t2, n2 = _uci:get("wireless", netstate.section)
+						if t1 == t2 and n1 == n2 then
+							return radioname, radiostate, netstate
+						end
+					end
+				end
+			end
+		end
+	end
+end
+
+local function _wifi_state_by_ifname(ifname)
+	if type(ifname) == "string" then
+		local radioname, radiostate
+		for radioname, radiostate in pairs(_wifi_state()) do
+			if type(radiostate) == "table" and
+			   type(radiostate.interfaces) == "table"
+			then
+				local netidx, netstate
+				for netidx, netstate in ipairs(radiostate.interfaces) do
+					if type(netstate) == "table" and
+					   type(netstate.ifname) == "string" and
+					   netstate.ifname == ifname
+					then
+						return radioname, radiostate, netstate
+					end
+				end
+			end
+		end
+	end
+end
+
 function _wifi_iface(x)
 	local _, p
 	for _, p in ipairs(IFACE_PATTERNS_WIRELESS) do
@@ -228,51 +273,6 @@ local function _wifi_netid_by_netname(name)
 		end)
 
 	return netid
-end
-
-local function _wifi_state_by_sid(sid)
-	local t1, n1 = _uci:get("wireless", sid)
-	if t1 == "wifi-iface" and n1 ~= nil then
-		local radioname, radiostate
-		for radioname, radiostate in pairs(_wifi_state()) do
-			if type(radiostate) == "table" and
-			   type(radiostate.interfaces) == "table"
-			then
-				local netidx, netstate
-				for netidx, netstate in ipairs(radiostate.interfaces) do
-					if type(netstate) == "table" and
-					   type(netstate.section) == "string"
-					then
-						local t2, n2 = _uci:get("wireless", netstate.section)
-						if t1 == t2 and n1 == n2 then
-							return radioname, radiostate, netstate
-						end
-					end
-				end
-			end
-		end
-	end
-end
-
-local function _wifi_state_by_ifname(ifname)
-	if type(ifname) == "string" then
-		local radioname, radiostate
-		for radioname, radiostate in pairs(_wifi_state()) do
-			if type(radiostate) == "table" and
-			   type(radiostate.interfaces) == "table"
-			then
-				local netidx, netstate
-				for netidx, netstate in ipairs(radiostate.interfaces) do
-					if type(netstate) == "table" and
-					   type(netstate.ifname) == "string" and
-					   netstate.ifname == ifname
-					then
-						return radioname, radiostate, netstate
-					end
-				end
-			end
-		end
-	end
 end
 
 function _iface_virtual(x)
