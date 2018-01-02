@@ -57,8 +57,8 @@ if fs.access("/etc/init.d/dsl_control") then
 
 		ds_snr = dsl:option(ListValue, "ds_snr_offset", translate("Downstream SNR offset"))
 		ds_snr:depends("line_mode", "adsl")
-		for i = -50, 50, 5 do
-			ds_snr:value(i, translate("%.1f dB" %{ i / 10} ))
+		for i = -100, 100, 5 do
+			ds_snr:value(i, translatef("%.1f dB", i / 10))
 		end
 	end
 
