@@ -453,8 +453,18 @@ wifi = {}
 
 function wifi.getiwinfo(ifname)
 	ntm.init()
-	local wnet = ntm.wifinet(ifname)
-	return wnet.iwinfo or { ifname = ifname }
+
+	local wnet = ntm:get_wifinet(ifname)
+	if wnet and wnet.iwinfo then
+		return wnet.iwinfo
+	end
+
+	local wdev = ntm:get_wifidev(ifname)
+	if wdev and wdev.iwinfo then
+		return wdev.iwinfo
+	end
+
+	return { ifname = ifname }
 end
 
 
