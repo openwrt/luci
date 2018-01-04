@@ -34,8 +34,6 @@ if stype == "ss_server" then
 	o.datatype = "ipaddr"
 	o.placeholder = "0.0.0.0"
 	ss.values_ipaddr(o)
-	o = s:taboption("general", Value, "manager_address", translate("Manager address"))
-	o.datatype = "hostport"
 else
 	ss.options_client(s, "general")
 	if stype == "ss_tunnel" then

@@ -139,7 +139,6 @@ function cfgvalue_overview(sdata)
 		cfgvalue_overview_(sdata, lines, names_options_common)
 		cfgvalue_overview_(sdata, lines, {
 			"bind_address",
-			"manager_address",
 		})
 	elseif stype == "ss_local" or stype == "ss_redir" or stype == "ss_tunnel" then
 		cfgvalue_overview_(sdata, lines, names_options_client)
