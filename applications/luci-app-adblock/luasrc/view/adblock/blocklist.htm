@@ -1,0 +1,80 @@
+<%#
+Copyright 2017-2018 Dirk Brenken (dev@brenken.org)
+This is free software, licensed under the Apache License, Version 2.0
+-%>
+
+<%-
+local rowcnt = 1
+function rowstyle()
+	rowcnt = rowcnt + 1
+	return (rowcnt % 2) + 1
+end
+
+function width(o)
+	if o.width then
+		if type(o.width) == 'number' then
+			return ' style="width:%dpx"' % o.width
+		end
+		return ' style="width:%s"' % o.width
+	end
+	return ''
+end
+-%>
+
+<style type="text/css">
+<!--
+.cbi-section-table-cell,
+.cbi-section-table-row
+{
+	text-align:left;
+	margin-right:auto;
+	margin-left:0px;
+}
+-->
+</style>
+
+<fieldset class="cbi-section" id="cbi-<%=self.config%>-<%=self.sectiontype%>">
+	<% if self.title then -%>
+		<legend><%=self.title%></legend>
+	<%- end %>
+	<div class="cbi-section-descr"><%=self.description%></div>
+	<div class="cbi-section-node">
+		<%- local count = 0 -%>
+		<table class="cbi-section-table">
+			<tr class="cbi-section-table-titles">
+			<%- if self.sectionhead then -%>
+				<th class="cbi-section-table-cell"><%=self.sectionhead%></th>
+			<%- else -%>
+				<th>&#160;</th>
+			<%- end -%>
+			<%- for i, k in pairs(self.children) do -%>
+				<th class="cbi-section-table-cell"<%=width(k)%>>
+					<%-=k.title-%>
+				</th>
+			<%- count = count + 1; end; -%>
+			</tr>
+			<%- local isempty = true
+				for i, k in ipairs(self:cfgsections()) do
+					section = k
+					isempty = false
+					scope = { valueheader = "cbi/cell_valueheader", valuefooter = "cbi/cell_valuefooter" }
+			-%>
+			<tr class="cbi-section-table-row" id="cbi-<%=self.config%>-<%=section%>">
+					<th><%=k%></th>
+				<%-
+					for k, node in ipairs(self.children) do
+						if not node.optional then
+							node:render(section, scope or {})
+						end
+					end
+				-%>
+			</tr>
+			<%- end -%>
+			<%- if isempty then -%>
+			<tr class="cbi-section-table-row">
+				<td colspan="<%=count%>"><em><br /><%:This section contains no values yet%></em></td>
+			</tr>
+			<%- end -%>
+		</table>
+	</div>
+</fieldset>

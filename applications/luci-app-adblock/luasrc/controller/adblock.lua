@@ -1,4 +1,4 @@
--- Copyright 2017 Dirk Brenken (dev@brenken.org)
+-- Copyright 2017-2018 Dirk Brenken (dev@brenken.org)
 -- This is free software, licensed under the Apache License, Version 2.0
 
 module("luci.controller.adblock", package.seeall)
@@ -27,9 +27,9 @@ function logread()
 	local logfile
 
 	if nixio.fs.access("/var/log/messages") then
-		logfile = util.trim(util.exec("cat /var/log/messages | grep 'adblock'"))
+		logfile = util.trim(util.exec("cat /var/log/messages | grep -F 'adblock-'"))
 	else
-		logfile = util.trim(util.exec("logread -e 'adblock'"))
+		logfile = util.trim(util.exec("logread -e 'adblock-'"))
 	end
 	templ.render("adblock/logread", {title = i18n.translate("Adblock Logfile"), content = logfile})
 end
