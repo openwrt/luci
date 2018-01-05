@@ -1,4 +1,4 @@
--- Copyright 2017 Dirk Brenken (dev@brenken.org)
+-- Copyright 2017-2018 Dirk Brenken (dev@brenken.org)
 -- This is free software, licensed under the Apache License, Version 2.0
 
 local fs       = require("nixio.fs")
@@ -162,8 +162,8 @@ end
 bl = m:section(TypedSection, "source", translate("Blocklist Sources"),
 	translate("Available blocklist sources. ")
 	.. translate("List URLs and Shallalist category selections are configurable in the 'Advanced' section.<br />")
-	.. translate("Caution: To prevent OOM exceptions on low memory devices with less than 64 MB free RAM, please do not select too many lists - 5-6 should be sufficient!"))
-bl.template = "cbi/tblsection"
+	.. translate("Caution: To prevent OOM exceptions on low memory devices with less than 64 MB free RAM, please do not select more than five blocklist sources!"))
+bl.template = "adblock/blocklist"
 
 name = bl:option(Flag, "enabled", translate("Enabled"))
 name.rmempty = false
@@ -234,7 +234,8 @@ e9.default = e9.disabled
 e9.rmempty = true
 
 e10 = e:option(Value, "adb_notifycnt", translate("Email Notification Count"),
-translate("Raise minimum domain count email notification trigger, to get emails if the overall count is &le; the given limit (default 0)."))
+	translate("Raise the minimum email notification count, to get emails if the overall count is less or equal to the given limit (default 0),<br />")
+	.. translate("e.g. to receive an email notification with every adblock update set this value to 150000."))
 e10.default = 0
 e10.datatype = "min(0)"
 e10.optional = true
