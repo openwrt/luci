@@ -42,7 +42,8 @@ function values_serverlist(o)
 		local server = sdata["server"]
 		local server_port = sdata["server_port"]
 		if server and server_port then
-			local desc = "%s - %s:%s" % {sname, sdata["server"], sdata["server_port"]}
+			local disabled = ucival_to_bool(sdata[".disabled"]) and " - disabled" or ""
+			local desc = "%s - %s:%s%s" % {sname, server, server_port, disabled}
 			o:value(sname, desc)
 		end
 	end)
@@ -121,6 +122,7 @@ function options_common(s, tab)
 	s:taboption(tab, Flag, "verbose", translate("Verbose"))
 	s:taboption(tab, Flag, "ipv6_first", translate("IPv6 First"), translate("Prefer IPv6 addresses when resolving names"))
 	s:taboption(tab, Flag, "fast_open", translate("Enable TCP Fast Open"))
+	s:taboption(tab, Flag, "no_delay", translate("Enable TCP_NODELAY"))
 	s:taboption(tab, Flag, "reuse_port", translate("Enable SO_REUSEPORT"))
 end
 
@@ -137,7 +139,6 @@ function cfgvalue_overview(sdata)
 		cfgvalue_overview_(sdata, lines, names_options_common)
 		cfgvalue_overview_(sdata, lines, {
 			"bind_address",
-			"manager_address",
 		})
 	elseif stype == "ss_local" or stype == "ss_redir" or stype == "ss_tunnel" then
 		cfgvalue_overview_(sdata, lines, names_options_client)
