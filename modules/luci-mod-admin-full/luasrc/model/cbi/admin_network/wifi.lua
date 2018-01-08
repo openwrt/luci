@@ -228,6 +228,10 @@ if hwtype == "mac80211" then
 		s:taboption("advanced", Value, "country", translate("Country Code"), translate("Use ISO/IEC 3166 alpha2 country codes."))
 	end
 
+	legacyrates = s:taboption("advanced", Flag, "legacy_rates", translate("802.11b rates"))
+	legacyrates.rmempty = false
+	legacyrates.default = "1"
+
 	s:taboption("advanced", Value, "distance", translate("Distance Optimization"),
 		translate("Distance to farthest network member in meters."))
 
