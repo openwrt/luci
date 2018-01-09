@@ -355,6 +355,10 @@ mode:value("adhoc", translate("Ad-Hoc"))
 
 meshid = s:taboption("general", Value, "mesh_id", translate("Mesh Id"))
 meshid:depends({mode="mesh"})
+meshfwd = s:taboption("advanced", Flag, "mesh_fwding", translate("internal forwarding of Mesh-peers"))
+meshfwd.rmempty = false
+meshfwd.default = "1"
+meshfwd:depends({mode="mesh"})
 
 meshfwd = s:taboption("advanced", Flag, "mesh_fwding", translate("internal forwarding of Mesh-peers"))
 meshfwd.rmempty = false
