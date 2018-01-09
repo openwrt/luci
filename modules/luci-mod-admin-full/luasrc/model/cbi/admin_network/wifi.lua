@@ -228,7 +228,7 @@ if hwtype == "mac80211" then
 		s:taboption("advanced", Value, "country", translate("Country Code"), translate("Use ISO/IEC 3166 alpha2 country codes."))
 	end
 
-	legacyrates = s:taboption("advanced", Flag, "legacy_rates", translate("802.11b rates"))
+	legacyrates = s:taboption("advanced", Flag, "legacy_rates", translate("Allow legacy 802.11b rates"))
 	legacyrates.rmempty = false
 	legacyrates.default = "1"
 
@@ -360,7 +360,7 @@ mode:value("adhoc", translate("Ad-Hoc"))
 meshid = s:taboption("general", Value, "mesh_id", translate("Mesh Id"))
 meshid:depends({mode="mesh"})
 
-meshfwd = s:taboption("advanced", Flag, "mesh_fwding", translate("internal forwarding of Mesh-peers"))
+meshfwd = s:taboption("advanced", Flag, "mesh_fwding", translate("Forward mesh peer traffic"))
 meshfwd.rmempty = false
 meshfwd.default = "1"
 meshfwd:depends({mode="mesh"})
