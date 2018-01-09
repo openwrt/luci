@@ -1,4 +1,4 @@
--- Copyright 2017 Dirk Brenken (dev@brenken.org)
+-- Copyright 2017-2018 Dirk Brenken (dev@brenken.org)
 -- This is free software, licensed under the Apache License, Version 2.0
 
 local fs        = require("nixio.fs")
@@ -6,10 +6,11 @@ local uci       = require("luci.model.uci").cursor()
 local util      = require("luci.util")
 local date      = require("luci.http.protocol.date")
 local res_input = "/usr/share/dnscrypt-proxy/dnscrypt-resolvers.csv"
+local res_dir   = fs.dirname(res_input)
 local dump      = util.ubus("network.interface", "dump", {})
 local plug_cnt  = tonumber(luci.sys.exec("env -i /usr/sbin/dnscrypt-proxy --version | grep 'Support for plugins: present' | wc -l"))
 local res_list  = {}
-local url       = "https://download.dnscrypt.org/dnscrypt-proxy/dnscrypt-resolvers.csv"
+local url       = "https://raw.githubusercontent.com/dyne/dnscrypt-proxy/master/dnscrypt-resolvers.csv"
 
 if not fs.access(res_input) then
 	if not fs.access("/lib/libustream-ssl.so") then
@@ -29,22 +30,24 @@ if not uci:get_first("dnscrypt-proxy", "global") then
 	uci:commit("dnscrypt-proxy")
 end
 
-for line in io.lines(res_input) do
-	local name,
-	location,
-	dnssec,
-	nolog = line:match("^([^,]+),.-,\".-\",\"*(.-)\"*,.-,[0-9],\"*([yesno]+)\"*,\"*([yesno]+)\"*,.*")
-	if name ~= "" and name ~= "Name" then
-		if location == "" then
-			location = "-"
+if fs.access(res_input) then
+	for line in io.lines(res_input) or {} do
+		local name,
+		location,
+		dnssec,
+		nolog = line:match("^([^,]+),.-,\".-\",\"*(.-)\"*,.-,[0-9],\"*([yesno]+)\"*,\"*([yesno]+)\"*,.*")
+		if name ~= "" and name ~= "Name" then
+			if location == "" then
+				location = "-"
+			end
+			if dnssec == "" then
+				dnssec = "-"
+			end
+			if nolog == "" then
+				nolog = "-"
+			end
+			res_list[#res_list + 1] = { name = name, location = location, dnssec = dnssec, nolog = nolog }
 		end
-		if dnssec == "" then
-			dnssec = "-"
-		end
-		if nolog == "" then
-			nolog = "-"
-		end
-		res_list[#res_list + 1] = { name = name, location = location, dnssec = dnssec, nolog = nolog }
 	end
 end
 
@@ -60,7 +63,7 @@ function m.on_after_commit(self)
 		if value == "1" then
 			uci:commit("dnscrypt-proxy")
 			uci:set("dhcp", s1, "noresolv", 1)
-			if not fs.access("/etc/resolv-crypt.conf") or nixio.fs.stat("/etc/resolv-crypt.conf").size == 0 then
+			if not fs.access("/etc/resolv-crypt.conf") or fs.stat("/etc/resolv-crypt.conf").size == 0 then
 				uci:set("dhcp", s1, "resolvfile", "/tmp/resolv.conf.auto")
 			else
 				uci:set("dhcp", s1, "resolvfile", "/etc/resolv-crypt.conf")
@@ -98,32 +101,43 @@ o1.value = res_input
 
 o2 = s:option(DummyValue, "", translate("File Date"))
 o2.template = "dnscrypt-proxy/res_options"
-o2.value = date.to_http(nixio.fs.stat(res_input).mtime)
+if fs.access(res_input) then
+	o2.value = date.to_http(fs.stat(res_input).mtime)
+else
+	o2.value = "-"
+end
 
 o3 = s:option(DummyValue, "", translate("File Checksum"))
 o3.template = "dnscrypt-proxy/res_options"
-o3.value = luci.sys.exec("sha256sum " .. res_input .. " | awk '{print $1}'")
+if fs.access(res_input) then
+	o3.value = luci.sys.exec("sha256sum " .. res_input .. " | awk '{print $1}'")
+else
+	o3.value = "-"
+end
 
 if fs.access("/lib/libustream-ssl.so") then
 	btn1 = s:option(Button, "", translate("Refresh Resolver List"),
-		translate("Download the current resolver list from 'download.dnscrypt.org'."))
+		translate("Download the current resolver list from 'github.com/dyne/dnscrypt-proxy'."))
 	btn1.inputtitle = translate("Refresh List")
 	btn1.inputstyle = "apply"
 	btn1.disabled = false
 	function btn1.write()
+		if not fs.access(res_dir) then
+			fs.mkdir(res_dir)
+		end
 		luci.sys.call("env -i /bin/uclient-fetch --no-check-certificate -O " .. res_input .. " " .. url .. " >/dev/null 2>&1")
 		luci.http.redirect(luci.dispatcher.build_url("admin", "services", "dnscrypt-proxy"))
 	end
 else
 	btn1 = s:option(Button, "", translate("Refresh Resolver List"),
 		translate("No SSL support available.<br />")
-		.. translate("Please install a 'libustream-ssl' library to download the current resolver list from 'download.dnscrypt.org'."))
+		.. translate("Please install a 'libustream-ssl' library to download the current resolver list from 'github.com/dyne/dnscrypt-proxy'."))
 	btn1.inputtitle = translate("-------")
 	btn1.inputstyle = "button"
 	btn1.disabled = true
 end
 
-if not fs.access("/etc/resolv-crypt.conf") or nixio.fs.stat("/etc/resolv-crypt.conf").size == 0 then
+if not fs.access("/etc/resolv-crypt.conf") or fs.stat("/etc/resolv-crypt.conf").size == 0 then
 	btn2 = s:option(Button, "", translate("Create Custom Config File"),
 		translate("Create '/etc/resolv-crypt.conf' with 'options timeout:1' to reduce DNS upstream timeouts with multiple DNSCrypt instances.<br />")
 		.. translatef("For further information "
