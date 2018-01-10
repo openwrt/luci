@@ -1,13 +1,12 @@
 -- ------ hotplug script configuration ------ --
 
-fs = require "nixio.fs"
-ut = require "luci.util"
-
+local fs = require "nixio.fs"
+local ut = require "luci.util"
 script = "/etc/mwan3.user"
 
 m5 = SimpleForm("luci", nil)
 
-f = m5:section(SimpleSection, nil,
+f = m5:section(SimpleSection, translate("MWAN Notification"),
 	translate("This section allows you to modify the content of \"/etc/mwan3.user\".<br />" ..
 	"The file is also preserved during sysupgrade.<br />" ..
 	"<br />" ..
@@ -27,13 +26,13 @@ f = m5:section(SimpleSection, nil,
 	"<br />"))
 
 t = f:option(TextValue, "lines")
-	t.rmempty = true
-	t.rows = 20
-	function t.cfgvalue()
-		return fs.readfile(script)
-	end
-	function t.write(self, section, data) -- format and write new data to script
-		return fs.writefile(script, ut.trim(data:gsub("\r\n", "\n")) .. "\n")
-	end
+t.rmempty = true
+t.rows = 20
+function t.cfgvalue()
+	return fs.readfile(script)
+end
+function t.write(self, section, data)
+	return fs.writefile(script, ut.trim(data:gsub("\r\n", "\n")) .. "\n")
+end
 
 return m5
