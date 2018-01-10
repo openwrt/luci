@@ -1,4 +1,4 @@
--- Copyright 2017 Dirk Brenken (dev@brenken.org)
+-- Copyright 2017-2018 Dirk Brenken (dev@brenken.org)
 -- This is free software, licensed under the Apache License, Version 2.0
 
 local fs   = require("nixio.fs")
@@ -92,6 +92,8 @@ if s ~= nil then
 			authentication:value("EAP-MD5")
 			authentication:value("EAP-MSCHAPV2")
 			authentication:value("EAP-TLS")
+			authentication:value("auth=PAP")
+			authentication:value("auth=MSCHAPV2")
 			authentication.default = s.auth or "EAP-MSCHAPV2"
 
 			ident = m:field(Value, "identity", translate("Identity"))

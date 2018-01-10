@@ -1,4 +1,4 @@
--- Copyright 2017 Dirk Brenken (dev@brenken.org)
+-- Copyright 2017-2018 Dirk Brenken (dev@brenken.org)
 -- This is free software, licensed under the Apache License, Version 2.0
 
 local fs       = require("nixio.fs")
@@ -113,17 +113,21 @@ end
 
 ds = m:section(NamedSection, "global", "travelmate", translate("Runtime Information"))
 
-dv1 = ds:option(DummyValue, "status", translate("Online Status"))
+dv1 = ds:option(DummyValue, "status", translate("Travelmate Status"))
 dv1.template = "travelmate/runtime"
 if parse == nil then
 	dv1.value = translate("n/a")
-elseif parse.data.station_connection == "true" then
+elseif parse.data.travelmate_status == "connected" then
 	dv1.value = translate("connected")
-else
+elseif parse.data.travelmate_status == "not connected" then
 	dv1.value = translate("not connected")
+elseif parse.data.travelmate_status == "running" then
+	dv1.value = translate("running")
+elseif parse.data.travelmate_status == "error" then
+	dv1.value = translate("error")
 end
 
-dv2 = ds:option(DummyValue, "travelmate_version", translate("Travelmate version"))
+dv2 = ds:option(DummyValue, "travelmate_version", translate("Travelmate Version"))
 dv2.template = "travelmate/runtime"
 if parse ~= nil then
 	dv2.value = parse.data.travelmate_version or translate("n/a")

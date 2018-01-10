@@ -101,6 +101,8 @@ elseif (tonumber(m.hidden.wpa_version) or 0) > 0 then
 		authentication:value("EAP-MD5")
 		authentication:value("EAP-MSCHAPV2")
 		authentication:value("EAP-TLS")
+		authentication:value("auth=PAP")
+		authentication:value("auth=MSCHAPV2")
 		authentication.default = "EAP-MSCHAPV2"
 
 		ident = m:field(Value, "identity", translate("Identity"))
