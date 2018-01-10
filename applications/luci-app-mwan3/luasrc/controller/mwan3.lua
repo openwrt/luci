@@ -43,12 +43,13 @@ function index()
 	entry({"admin", "network", "mwan", "configuration", "rule"},
 		arcombine(cbi("mwan/rule"), cbi("mwan/ruleconfig")),
 		_("Rules"), 40).leaf = true
+	entry({"admin", "network", "mwan", "configuration", "notify"},
+		cbi("mwan/notify"),
+		_("Notification"), 50).leaf = true
 
 	entry({"admin", "network", "mwan", "advanced"},
-		alias("admin", "network", "mwan", "advanced", "hotplugscript"),
+		alias("admin", "network", "mwan", "advanced", "mwanconfig"),
 		_("Advanced"), 100)
-	entry({"admin", "network", "mwan", "advanced", "hotplugscript"},
-		form("mwan/advanced_hotplugscript"))
 	entry({"admin", "network", "mwan", "advanced", "mwanconfig"},
 		form("mwan/advanced_mwanconfig"))
 	entry({"admin", "network", "mwan", "advanced", "networkconfig"},

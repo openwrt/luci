@@ -6,7 +6,6 @@ ut = require "luci.util"
 script = "/etc/mwan3.user"
 
 m5 = SimpleForm("luci", nil)
-	m5:append(Template("mwan/advanced_hotplugscript")) -- highlight current tab
 
 f = m5:section(SimpleSection, nil,
 	translate("This section allows you to modify the content of \"/etc/mwan3.user\".<br />" ..
