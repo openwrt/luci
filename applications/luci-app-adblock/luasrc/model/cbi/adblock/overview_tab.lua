@@ -79,22 +79,34 @@ o2:value("unbound", "unbound (/var/lib/unbound)")
 o2:value("named", "named (/var/lib/bind)")
 o2:value("kresd", "kresd (/etc/kresd)")
 o2:value("dnscrypt-proxy","dnscrypt-proxy (/tmp)")
+o2.default = "dnsmasq (/tmp)"
 o2.rmempty = false
 
-o3 = s:option(ListValue, "adb_trigger", translate("Startup Trigger"),
+o3 = s:option(ListValue, "adb_fetchutil", translate("Download Utility"),
+translate("List of supported and fully pre-configured download utilities."))
+o3:value("uclient-fetch")
+o3:value("wget")
+o3:value("curl")
+o3:value("aria2c")
+o3:value("wget-nossl", "wget-nossl (noSSL)")
+o3:value("busybox", "wget-busybox (noSSL)")
+o3.default = "uclient-fetch"
+o3.rmempty = false
+
+o4 = s:option(ListValue, "adb_trigger", translate("Startup Trigger"),
 	translate("List of available network interfaces. Usually the startup will be triggered by the 'wan' interface.<br />")
 	.. translate("Choose 'none' to disable automatic startups, 'timed' to use a classic timeout (default 30 sec.) or select another trigger interface."))
-o3:value("none")
-o3:value("timed")
+o4:value("none")
+o4:value("timed")
 if dump then
 	local i, v
 	for i, v in ipairs(dump.interface) do
 		if v.interface ~= "loopback" then
-			o3:value(v.interface)
+			o4:value(v.interface)
 		end
 	end
 end
-o3.rmempty = false
+o4.rmempty = false
 
 -- Runtime information
 
@@ -111,6 +123,8 @@ else
 		dv1.value = translate("disabled")
 	elseif status == "paused" then
 		dv1.value = translate("paused")
+	elseif status == "running" then
+		dv1.value = translate("running")
 	else
 		dv1.value = translate("enabled")
 	end
@@ -125,7 +139,7 @@ else
 end
 
 dv3 = ds:option(DummyValue, "", translate("Download Utility (SSL Library)"),
-	translate("For SSL protected blocklist sources you need a suitable SSL library, e.g. 'libustream-ssl' or the wget 'built-in'."))
+	translate("For SSL protected blocklist sources you need a suitable SSL library, e.g. 'libustream-ssl' or 'built-in'."))
 dv3.template = "adblock/runtime"
 if parse == nil then
 	dv3.value = translate("n/a")
