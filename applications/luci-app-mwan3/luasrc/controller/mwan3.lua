@@ -15,13 +15,13 @@ function index()
 		_("Load Balancing"), 600)
 
 	entry({"admin", "status", "mwan", "overview"},
-		template("mwan/overview_interface"))
+		template("mwan/status_interface"))
 	entry({"admin", "status", "mwan", "detail"},
-		template("mwan/overview_detailed"))
+		template("mwan/status_detail"))
 	entry({"admin", "status", "mwan", "diagnostics"},
-		template("mwan/advanced_diagnostics"))
+		template("mwan/status_diagnostics"))
 	entry({"admin", "status", "mwan", "troubleshooting"},
-		template("mwan/advanced_troubleshooting"))
+		template("mwan/status_troubleshooting"))
 	entry({"admin", "status", "mwan", "interface_status"},
 		call("interfaceStatus"))
 	entry({"admin", "status", "mwan", "detailed_status"},
