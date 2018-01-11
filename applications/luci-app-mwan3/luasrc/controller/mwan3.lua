@@ -19,10 +19,19 @@ function index()
 		template("mwan/overview_interface"))
 	entry({"admin", "status", "mwan", "overview_detailed"},
 		template("mwan/overview_detailed"))
+	entry({"admin", "status", "mwan", "diagnostics"},
+		template("mwan/advanced_diagnostics"))
+	entry({"admin", "status", "mwan", "troubleshooting"},
+		template("mwan/advanced_troubleshooting"))
 	entry({"admin", "status", "mwan", "interface_status"},
 		call("interfaceStatus"))
 	entry({"admin", "status", "mwan", "detailed_status"},
 		call("detailedStatus"))
+	entry({"admin", "status", "mwan", "diagnostics_display"},
+		call("diagnosticsData"), nil).leaf = true
+	entry({"admin", "status", "mwan", "troubleshooting_display"},
+		call("troubleshootingData"))
+
 
 	entry({"admin", "network", "mwan"},
 		alias("admin", "network", "mwan", "configuration"),
@@ -58,14 +67,6 @@ function index()
 		form("mwan/advanced_networkconfig"))
 	entry({"admin", "network", "mwan", "advanced", "wirelessconfig"},
 		form("mwan/advanced_wirelessconfig"))
-	entry({"admin", "network", "mwan", "advanced", "diagnostics"},
-		template("mwan/advanced_diagnostics"))
-	entry({"admin", "network", "mwan", "advanced", "diagnostics_display"},
-		call("diagnosticsData"), nil).leaf = true
-	entry({"admin", "network", "mwan", "advanced", "troubleshooting"},
-		template("mwan/advanced_troubleshooting"))
-	entry({"admin", "network", "mwan", "advanced", "troubleshooting_display"},
-		call("troubleshootingData"))
 end
 
 function getInterfaceStatus(ruleNumber, interfaceName)
