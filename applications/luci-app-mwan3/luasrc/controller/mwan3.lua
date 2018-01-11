@@ -56,16 +56,6 @@ function index()
 	entry({"admin", "network", "mwan", "configuration", "notify"},
 		cbi("mwan/notify"),
 		_("Notification"), 50).leaf = true
-
-	entry({"admin", "network", "mwan", "advanced"},
-		alias("admin", "network", "mwan", "advanced", "mwanconfig"),
-		_("Advanced"), 100)
-	entry({"admin", "network", "mwan", "advanced", "mwanconfig"},
-		form("mwan/advanced_mwanconfig"))
-	entry({"admin", "network", "mwan", "advanced", "networkconfig"},
-		form("mwan/advanced_networkconfig"))
-	entry({"admin", "network", "mwan", "advanced", "wirelessconfig"},
-		form("mwan/advanced_wirelessconfig"))
 end
 
 function getInterfaceStatus(ruleNumber, interfaceName)
