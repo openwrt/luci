@@ -10,21 +10,23 @@ function index()
 		return
 	end
 
-	entry({"admin", "network", "mwan"},
-		alias("admin", "network", "mwan", "overview"),
+
+	entry({"admin", "status", "mwan"},
+		alias("admin", "status", "mwan", "overview_interface"),
 		_("Load Balancing"), 600)
 
-	entry({"admin", "network", "mwan", "overview"},
-		alias("admin", "network", "mwan", "overview", "overview_interface"),
-		_("Overview"), 10)
-	entry({"admin", "network", "mwan", "overview", "overview_interface"},
+	entry({"admin", "status", "mwan", "overview_interface"},
 		template("mwan/overview_interface"))
-	entry({"admin", "network", "mwan", "overview", "interface_status"},
-		call("interfaceStatus"))
-	entry({"admin", "network", "mwan", "overview", "overview_detailed"},
+	entry({"admin", "status", "mwan", "overview_detailed"},
 		template("mwan/overview_detailed"))
-	entry({"admin", "network", "mwan", "overview", "detailed_status"},
+	entry({"admin", "status", "mwan", "interface_status"},
+		call("interfaceStatus"))
+	entry({"admin", "status", "mwan", "detailed_status"},
 		call("detailedStatus"))
+
+	entry({"admin", "network", "mwan"},
+		alias("admin", "network", "mwan", "configuration"),
+		_("Load Balancing"), 600)
 
 	entry({"admin", "network", "mwan", "configuration"},
 		alias("admin", "network", "mwan", "configuration", "interface"),
