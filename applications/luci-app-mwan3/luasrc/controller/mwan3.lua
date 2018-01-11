@@ -10,14 +10,13 @@ function index()
 		return
 	end
 
-
 	entry({"admin", "status", "mwan"},
-		alias("admin", "status", "mwan", "overview_interface"),
+		alias("admin", "status", "mwan", "overview"),
 		_("Load Balancing"), 600)
 
-	entry({"admin", "status", "mwan", "overview_interface"},
+	entry({"admin", "status", "mwan", "overview"},
 		template("mwan/overview_interface"))
-	entry({"admin", "status", "mwan", "overview_detailed"},
+	entry({"admin", "status", "mwan", "detail"},
 		template("mwan/overview_detailed"))
 	entry({"admin", "status", "mwan", "diagnostics"},
 		template("mwan/advanced_diagnostics"))
