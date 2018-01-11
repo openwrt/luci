@@ -1,5 +1,5 @@
 <script type="text/javascript">//<![CDATA[
-	XHR.poll(5, '<%=luci.dispatcher.build_url("admin", "network", "mwan", "overview", "interface_status")%>', null,
+	XHR.poll(5, '<%=luci.dispatcher.build_url("admin", "status", "mwan", "interface_status")%>', null,
 		function(x, mArray)
 		{
 			var status = document.getElementById('mwan_status_text');

@@ -16,11 +16,11 @@ mwan_member = m5:section(TypedSection, "member", translate("Members"),
 	mwan_member.sectionhead = translate("Member")
 	mwan_member.sortable = true
 	mwan_member.template = "cbi/tblsection"
-	mwan_member.extedit = ds.build_url("admin", "network", "mwan", "configuration", "member", "%s")
+	mwan_member.extedit = ds.build_url("admin", "network", "mwan", "member", "%s")
 	function mwan_member.create(self, section)
 		TypedSection.create(self, section)
 		m5.uci:save("mwan3")
-		luci.http.redirect(ds.build_url("admin", "network", "mwan", "configuration", "member", section))
+		luci.http.redirect(ds.build_url("admin", "network", "mwan", "member", section))
 	end
 
 

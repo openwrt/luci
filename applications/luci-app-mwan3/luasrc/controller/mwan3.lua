@@ -10,59 +10,50 @@ function index()
 		return
 	end
 
-	entry({"admin", "network", "mwan"},
-		alias("admin", "network", "mwan", "overview"),
+	entry({"admin", "status", "mwan"},
+		alias("admin", "status", "mwan", "overview"),
 		_("Load Balancing"), 600)
 
-	entry({"admin", "network", "mwan", "overview"},
-		alias("admin", "network", "mwan", "overview", "overview_interface"),
-		_("Overview"), 10)
-	entry({"admin", "network", "mwan", "overview", "overview_interface"},
-		template("mwan/overview_interface"))
-	entry({"admin", "network", "mwan", "overview", "interface_status"},
+	entry({"admin", "status", "mwan", "overview"},
+		template("mwan/status_interface"))
+	entry({"admin", "status", "mwan", "detail"},
+		template("mwan/status_detail"))
+	entry({"admin", "status", "mwan", "diagnostics"},
+		template("mwan/status_diagnostics"))
+	entry({"admin", "status", "mwan", "troubleshooting"},
+		template("mwan/status_troubleshooting"))
+	entry({"admin", "status", "mwan", "interface_status"},
 		call("interfaceStatus"))
-	entry({"admin", "network", "mwan", "overview", "overview_detailed"},
-		template("mwan/overview_detailed"))
-	entry({"admin", "network", "mwan", "overview", "detailed_status"},
+	entry({"admin", "status", "mwan", "detailed_status"},
 		call("detailedStatus"))
+	entry({"admin", "status", "mwan", "diagnostics_display"},
+		call("diagnosticsData"), nil).leaf = true
+	entry({"admin", "status", "mwan", "troubleshooting_display"},
+		call("troubleshootingData"))
 
-	entry({"admin", "network", "mwan", "configuration"},
-		alias("admin", "network", "mwan", "configuration", "interface"),
-		_("Configuration"), 20)
-	entry({"admin", "network", "mwan", "configuration", "globals"},
-		cbi("mwan/globalsconfig"),_("Globals"), 5).leaf = true
-	entry({"admin", "network", "mwan", "configuration", "interface"},
+
+	entry({"admin", "network", "mwan"},
+		alias("admin", "network", "mwan", "interface"),
+		_("Load Balancing"), 600)
+
+	entry({"admin", "network", "mwan", "globals"},
+		cbi("mwan/globalsconfig"),
+		_("Globals"), 5).leaf = true
+	entry({"admin", "network", "mwan", "interface"},
 		arcombine(cbi("mwan/interface"), cbi("mwan/interfaceconfig")),
 		_("Interfaces"), 10).leaf = true
-	entry({"admin", "network", "mwan", "configuration", "member"},
+	entry({"admin", "network", "mwan", "member"},
 		arcombine(cbi("mwan/member"), cbi("mwan/memberconfig")),
 		_("Members"), 20).leaf = true
-	entry({"admin", "network", "mwan", "configuration", "policy"},
+	entry({"admin", "network", "mwan", "policy"},
 		arcombine(cbi("mwan/policy"), cbi("mwan/policyconfig")),
 		_("Policies"), 30).leaf = true
-	entry({"admin", "network", "mwan", "configuration", "rule"},
+	entry({"admin", "network", "mwan", "rule"},
 		arcombine(cbi("mwan/rule"), cbi("mwan/ruleconfig")),
 		_("Rules"), 40).leaf = true
-
-	entry({"admin", "network", "mwan", "advanced"},
-		alias("admin", "network", "mwan", "advanced", "hotplugscript"),
-		_("Advanced"), 100)
-	entry({"admin", "network", "mwan", "advanced", "hotplugscript"},
-		form("mwan/advanced_hotplugscript"))
-	entry({"admin", "network", "mwan", "advanced", "mwanconfig"},
-		form("mwan/advanced_mwanconfig"))
-	entry({"admin", "network", "mwan", "advanced", "networkconfig"},
-		form("mwan/advanced_networkconfig"))
-	entry({"admin", "network", "mwan", "advanced", "wirelessconfig"},
-		form("mwan/advanced_wirelessconfig"))
-	entry({"admin", "network", "mwan", "advanced", "diagnostics"},
-		template("mwan/advanced_diagnostics"))
-	entry({"admin", "network", "mwan", "advanced", "diagnostics_display"},
-		call("diagnosticsData"), nil).leaf = true
-	entry({"admin", "network", "mwan", "advanced", "troubleshooting"},
-		template("mwan/advanced_troubleshooting"))
-	entry({"admin", "network", "mwan", "advanced", "troubleshooting_display"},
-		call("troubleshootingData"))
+	entry({"admin", "network", "mwan", "notify"},
+		cbi("mwan/notify"),
+		_("Notification"), 50).leaf = true
 end
 
 function getInterfaceStatus(ruleNumber, interfaceName)
