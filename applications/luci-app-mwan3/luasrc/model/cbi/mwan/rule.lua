@@ -50,11 +50,11 @@ mwan_rule = m5:section(TypedSection, "rule", translate("Traffic Rules"),
 	mwan_rule.sectionhead = translate("Rule")
 	mwan_rule.sortable = true
 	mwan_rule.template = "cbi/tblsection"
-	mwan_rule.extedit = dsp.build_url("admin", "network", "mwan", "configuration", "rule", "%s")
+	mwan_rule.extedit = dsp.build_url("admin", "network", "mwan", "rule", "%s")
 	function mwan_rule.create(self, section)
 		TypedSection.create(self, section)
 		m5.uci:save("mwan3")
-		luci.http.redirect(dsp.build_url("admin", "network", "mwan", "configuration", "rule", section))
+		luci.http.redirect(dsp.build_url("admin", "network", "mwan", "rule", section))
 	end
 
 

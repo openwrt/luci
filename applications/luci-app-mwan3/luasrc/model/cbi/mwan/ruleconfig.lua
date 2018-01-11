@@ -47,7 +47,7 @@ ruleCheck()
 
 m5 = Map("mwan3", translatef("MWAN Rule Configuration - %s", arg[1]),
 	ruleWarn())
-	m5.redirect = dsp.build_url("admin", "network", "mwan", "configuration", "rule")
+	m5.redirect = dsp.build_url("admin", "network", "mwan", "rule")
 
 
 mwan_rule = m5:section(NamedSection, arg[1], "rule", "")

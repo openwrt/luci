@@ -34,7 +34,7 @@ policyCheck()
 
 m5 = Map("mwan3", translatef("MWAN Policy Configuration - %s", arg[1]),
 	policyWarn())
-	m5.redirect = dsp.build_url("admin", "network", "mwan", "configuration", "policy")
+	m5.redirect = dsp.build_url("admin", "network", "mwan", "policy")
 
 
 mwan_policy = m5:section(NamedSection, arg[1], "policy", "")

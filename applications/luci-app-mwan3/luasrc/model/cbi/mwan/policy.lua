@@ -45,11 +45,11 @@ mwan_policy = m5:section(TypedSection, "policy", translate("Policies"),
 	mwan_policy.sectionhead = translate("Policy")
 	mwan_policy.sortable = true
 	mwan_policy.template = "cbi/tblsection"
-	mwan_policy.extedit = ds.build_url("admin", "network", "mwan", "configuration", "policy", "%s")
+	mwan_policy.extedit = ds.build_url("admin", "network", "mwan", "policy", "%s")
 	function mwan_policy.create(self, section)
 		TypedSection.create(self, section)
 		m5.uci:save("mwan3")
-		luci.http.redirect(ds.build_url("admin", "network", "mwan", "configuration", "policy", section))
+		luci.http.redirect(ds.build_url("admin", "network", "mwan", "policy", section))
 	end
 
 

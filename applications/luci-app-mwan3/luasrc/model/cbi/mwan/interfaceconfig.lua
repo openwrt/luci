@@ -89,7 +89,7 @@ interfaceCheck()
 
 m5 = Map("mwan3", translatef("MWAN Interface Configuration - %s", arg[1]),
 	interfaceWarnings())
-	m5.redirect = dsp.build_url("admin", "network", "mwan", "configuration", "interface")
+	m5.redirect = dsp.build_url("admin", "network", "mwan", "interface")
 
 
 mwan_interface = m5:section(NamedSection, arg[1], "interface", "")

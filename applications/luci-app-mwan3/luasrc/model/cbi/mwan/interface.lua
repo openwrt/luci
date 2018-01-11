@@ -114,11 +114,11 @@ mwan_interface = m5:section(TypedSection, "interface", translate("Interfaces"),
 	mwan_interface.sectionhead = translate("Interface")
 	mwan_interface.sortable = false
 	mwan_interface.template = "cbi/tblsection"
-	mwan_interface.extedit = dsp.build_url("admin", "network", "mwan", "configuration", "interface", "%s")
+	mwan_interface.extedit = dsp.build_url("admin", "network", "mwan", "interface", "%s")
 	function mwan_interface.create(self, section)
 		TypedSection.create(self, section)
 		m5.uci:save("mwan3")
-		luci.http.redirect(dsp.build_url("admin", "network", "mwan", "configuration", "interface", section))
+		luci.http.redirect(dsp.build_url("admin", "network", "mwan", "interface", section))
 	end
 
 

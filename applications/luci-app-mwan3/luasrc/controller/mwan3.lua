@@ -33,27 +33,25 @@ function index()
 
 
 	entry({"admin", "network", "mwan"},
-		alias("admin", "network", "mwan", "configuration"),
+		alias("admin", "network", "mwan", "interface"),
 		_("Load Balancing"), 600)
 
-	entry({"admin", "network", "mwan", "configuration"},
-		alias("admin", "network", "mwan", "configuration", "interface"),
-		_("Configuration"), 20)
-	entry({"admin", "network", "mwan", "configuration", "globals"},
-		cbi("mwan/globalsconfig"),_("Globals"), 5).leaf = true
-	entry({"admin", "network", "mwan", "configuration", "interface"},
+	entry({"admin", "network", "mwan", "globals"},
+		cbi("mwan/globalsconfig"),
+		_("Globals"), 5).leaf = true
+	entry({"admin", "network", "mwan", "interface"},
 		arcombine(cbi("mwan/interface"), cbi("mwan/interfaceconfig")),
 		_("Interfaces"), 10).leaf = true
-	entry({"admin", "network", "mwan", "configuration", "member"},
+	entry({"admin", "network", "mwan", "member"},
 		arcombine(cbi("mwan/member"), cbi("mwan/memberconfig")),
 		_("Members"), 20).leaf = true
-	entry({"admin", "network", "mwan", "configuration", "policy"},
+	entry({"admin", "network", "mwan", "policy"},
 		arcombine(cbi("mwan/policy"), cbi("mwan/policyconfig")),
 		_("Policies"), 30).leaf = true
-	entry({"admin", "network", "mwan", "configuration", "rule"},
+	entry({"admin", "network", "mwan", "rule"},
 		arcombine(cbi("mwan/rule"), cbi("mwan/ruleconfig")),
 		_("Rules"), 40).leaf = true
-	entry({"admin", "network", "mwan", "configuration", "notify"},
+	entry({"admin", "network", "mwan", "notify"},
 		cbi("mwan/notify"),
 		_("Notification"), 50).leaf = true
 end
