@@ -225,6 +225,7 @@ names_options_common = {
 	"verbose",
 	"ipv6_first",
 	"fast_open",
+	"no_delay",
 	"reuse_port",
 	"mode",
 	"mtu",
