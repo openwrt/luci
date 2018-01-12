@@ -9,7 +9,7 @@ local nx = require "nixio"
 
 local translate, translatef = luci.i18n.translate, luci.i18n.translatef
 
-local function tr(...)
+local function _(...)
 	return tostring(translate(...))
 end
 
@@ -17,7 +17,7 @@ function fmt_neg(x)
 	if type(x) == "string" then
 		local v, neg = x:gsub("^ *! *", "")
 		if neg > 0 then
-			return v, "%s " % tr("not")
+			return v, "%s " % _("not")
 		else
 			return x, ""
 		end
@@ -28,7 +28,7 @@ end
 function fmt_mac(x)
 	if x and #x > 0 then
 		local m, n
-		local l = { tr("MAC"), " " }
+		local l = { _("MAC"), " " }
 		for m in ut.imatch(x) do
 			m, n = fmt_neg(m)
 			l[#l+1] = "<var>%s%s</var>" %{ n, m }
@@ -37,7 +37,7 @@ function fmt_mac(x)
 		if #l > 1 then
 			l[#l] = nil
 			if #l > 3 then
-				l[1] = tr("MACs")
+				l[1] = _("MACs")
 			end
 			return table.concat(l, "")
 		end
@@ -47,12 +47,12 @@ end
 function fmt_port(x, d)
 	if x and #x > 0 then
 		local p, n
-		local l = { tr("port"), " " }
+		local l = { _("port"), " " }
 		for p in ut.imatch(x) do
 			p, n = fmt_neg(p)
 			local a, b = p:match("(%d+)%D+(%d+)")
 			if a and b then
-				l[1] = tr("ports")
+				l[1] = _("ports")
 				l[#l+1] = "<var>%s%d-%d</var>" %{ n, a, b }
 			else
 				l[#l+1] = "<var>%s%d</var>" %{ n, p }
@@ -62,7 +62,7 @@ function fmt_port(x, d)
 		if #l > 1 then
 			l[#l] = nil
 			if #l > 3 then
-				l[1] = tr("ports")
+				l[1] = _("ports")
 			end
 			return table.concat(l, "")
 		end
@@ -72,7 +72,7 @@ end
 
 function fmt_ip(x, d)
 	if x and #x > 0 then
-		local l = { tr("IP"), " " }
+		local l = { _("IP"), " " }
 		local v, a, n
 		for v in ut.imatch(x) do
 			v, n = fmt_neg(v)
@@ -80,7 +80,7 @@ function fmt_ip(x, d)
 			a = a or v
 			a = a:match(":") and ip.IPv6(a, m) or ip.IPv4(a, m)
 			if a and (a:is6() and a:prefix() < 128 or a:prefix() < 32) then
-				l[1] = tr("IP range")
+				l[1] = _("IP range")
 				l[#l+1] = "<var title='%s - %s'>%s%s</var>" %{
 					a:minhost():string(),
 					a:maxhost():string(),
@@ -97,7 +97,7 @@ function fmt_ip(x, d)
 		if #l > 1 then
 			l[#l] = nil
 			if #l > 3 then
-				l[1] = tr("IPs")
+				l[1] = _("IPs")
 			end
 			return table.concat(l, "")
 		end
@@ -107,7 +107,7 @@ end
 
 function fmt_zone(x, d)
 	if x == "*" then
-		return "<var>%s</var>" % tr("any zone")
+		return "<var>%s</var>" % _("any zone")
 	elseif x and #x > 0 then
 		return "<var>%s</var>" % x
 	elseif d then
@@ -118,7 +118,7 @@ end
 function fmt_icmp_type(x)
 	if x and #x > 0 then
 		local t, v, n
-		local l = { tr("type"), " " }
+		local l = { _("type"), " " }
 		for v in ut.imatch(x) do
 			v, n = fmt_neg(v)
 			l[#l+1] = "<var>%s%s</var>" %{ n, v }
@@ -127,7 +127,7 @@ function fmt_icmp_type(x)
 		if #l > 1 then
 			l[#l] = nil
 			if #l > 3 then
-				l[1] = tr("types")
+				l[1] = _("types")
 			end
 			return table.concat(l, "")
 		end
@@ -180,13 +180,13 @@ function fmt_limit(limit, burst)
 		u = u or "second"
 		if l then
 			if u:match("^s") then
-				u = tr("second")
+				u = _("second")
 			elseif u:match("^m") then
-				u = tr("minute")
+				u = _("minute")
 			elseif u:match("^h") then
-				u = tr("hour")
+				u = _("hour")
 			elseif u:match("^d") then
-				u = tr("day")
+				u = _("day")
 			end
 			if burst and burst > 0 then
 				return translatef("<var>%d</var> pkts. per <var>%s</var>, \
@@ -201,23 +201,23 @@ end
 function fmt_target(x, dest)
 	if dest and #dest > 0 then
 		if x == "ACCEPT" then
-			return tr("Accept forward")
+			return _("Accept forward")
 		elseif x == "REJECT" then
-			return tr("Refuse forward")
+			return _("Refuse forward")
 		elseif x == "NOTRACK" then
-			return tr("Do not track forward")
+			return _("Do not track forward")
 		else --if x == "DROP" then
-			return tr("Discard forward")
+			return _("Discard forward")
 		end
 	else
 		if x == "ACCEPT" then
-			return tr("Accept input")
+			return _("Accept input")
 		elseif x == "REJECT" then
-			return tr("Refuse input")
+			return _("Refuse input")
 		elseif x == "NOTRACK" then
-			return tr("Do not track input")
+			return _("Do not track input")
 		else --if x == "DROP" then
-			return tr("Discard input")
+			return _("Discard input")
 		end
 	end
 end
@@ -228,12 +228,12 @@ function opt_enabled(s, t, ...)
 		local o = s:option(t, "__enabled")
 		function o.render(self, section)
 			if self.map:get(section, "enabled") ~= "0" then
-				self.title      = tr("Rule is enabled")
-				self.inputtitle = tr("Disable")
+				self.title      = _("Rule is enabled")
+				self.inputtitle = _("Disable")
 				self.inputstyle = "reset"
 			else
-				self.title      = tr("Rule is disabled")
-				self.inputtitle = tr("Enable")
+				self.title      = _("Rule is disabled")
+				self.inputtitle = _("Enable")
 				self.inputstyle = "apply"
 			end
 			t.render(self, section)
