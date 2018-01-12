@@ -3,11 +3,11 @@
 ds = require "luci.dispatcher"
 
 
-m5 = Map("mwan3", translate("MWAN Member Configuration"))
+m5 = Map("mwan3", translate("MWAN - Members"))
 	m5:append(Template("mwan/config_css"))
 
 
-mwan_member = m5:section(TypedSection, "member", translate("Members"),
+mwan_member = m5:section(TypedSection, "member", nil,
 	translate("Members are profiles attaching a metric and weight to an MWAN interface<br />" ..
 	"Names may contain characters A-Z, a-z, 0-9, _ and no spaces<br />" ..
 	"Members may not share the same name as configured interfaces, policies or rules"))

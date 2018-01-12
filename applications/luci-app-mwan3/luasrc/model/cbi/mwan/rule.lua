@@ -33,12 +33,12 @@ error_protocol_list = " "
 ruleCheck()
 
 
-m5 = Map("mwan3", translate("MWAN Rule Configuration"),
+m5 = Map("mwan3", translate("MWAN - Rules"),
 	ruleWarn())
 	m5:append(Template("mwan/config_css"))
 
 
-mwan_rule = m5:section(TypedSection, "rule", translate("Traffic Rules"),
+mwan_rule = m5:section(TypedSection, "rule", nil,
 	translate("Rules specify which traffic will use a particular MWAN policy based on IP address, port or protocol<br />" ..
 	"Rules are matched from top to bottom. Rules below a matching rule are ignored. Traffic not matching any rule is routed using the main routing table<br />" ..
 	"Traffic destined for known (other than default) networks is handled by the main routing table. Traffic matching a rule, but all WAN interfaces for that policy are down will be blackholed<br />" ..

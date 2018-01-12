@@ -29,12 +29,12 @@ err_name_list = " "
 policyCheck()
 
 
-m5 = Map("mwan3", translate("MWAN Policy Configuration"),
+m5 = Map("mwan3", translate("MWAN - Policies"),
 	policyWarn())
 	m5:append(Template("mwan/config_css"))
 
 
-mwan_policy = m5:section(TypedSection, "policy", translate("Policies"),
+mwan_policy = m5:section(TypedSection, "policy", nil,
 	translate("Policies are profiles grouping one or more members controlling how MWAN distributes traffic<br />" ..
 	"Member interfaces with lower metrics are used first. Interfaces with the same metric load-balance<br />" ..
 	"Load-balanced member interfaces distribute more traffic out those with higher weights<br />" ..

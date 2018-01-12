@@ -98,12 +98,12 @@ errorRouteList = " "
 interfaceCheck()
 
 
-m5 = Map("mwan3", translate("MWAN Interface Configuration"),
+m5 = Map("mwan3", translate("MWAN - Interfaces"),
 	interfaceWarnings())
 	m5:append(Template("mwan/config_css"))
 
 
-mwan_interface = m5:section(TypedSection, "interface", translate("Interfaces"),
+mwan_interface = m5:section(TypedSection, "interface", nil,
 	translate("MWAN supports up to 250 physical and/or logical interfaces<br />" ..
 	"MWAN requires that all interfaces have a unique metric configured in /etc/config/network<br />" ..
 	"Names must match the interface name found in /etc/config/network (see advanced tab)<br />" ..
