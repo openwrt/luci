@@ -23,7 +23,7 @@ function index()
 	entry({"admin", "status", "mwan", "troubleshooting"},
 		template("mwan/status_troubleshooting"))
 	entry({"admin", "status", "mwan", "interface_status"},
-		call("interfaceStatus"))
+		call("mwan_Status"))
 	entry({"admin", "status", "mwan", "detailed_status"},
 		call("detailedStatus"))
 	entry({"admin", "status", "mwan", "diagnostics_display"},
@@ -56,65 +56,15 @@ function index()
 		_("Notification"), 50).leaf = true
 end
 
-function getInterfaceStatus(ruleNumber, interfaceName)
-	if ut.trim(sys.exec("uci -q -p /var/state get mwan3." .. interfaceName .. ".enabled")) == "1" then
-		if ut.trim(sys.exec(ip .. "route list table " .. ruleNumber)) ~= "" then
-			if ut.trim(sys.exec("uci -q -p /var/state get mwan3." .. interfaceName .. ".track_ip")) ~= "" then
-				return "online"
-			else
-				return "notMonitored"
-			end
-		else
-			return "offline"
-		end
-	else
-		return "notEnabled"
-	end
-end
-
-function getInterfaceName()
-	local ruleNumber, status = 0, ""
-	uci.cursor():foreach("mwan3", "interface",
-		function (section)
-			ruleNumber = ruleNumber+1
-			status = status .. section[".name"] .. "[" .. getInterfaceStatus(ruleNumber, section[".name"]) .. "]"
-		end
-	)
-	return status
-end
-
-function interfaceStatus()
-	local ntm = require "luci.model.network".init()
-
-	local mArray = {}
-
-	-- overview status
-	local statusString = getInterfaceName()
-	if statusString ~= "" then
-		mArray.wans = {}
-		wansid = {}
-
-		for wanName, interfaceState in string.gfind(statusString, "([^%[]+)%[([^%]]+)%]") do
-			local wanInterfaceName = ut.trim(sys.exec("uci -q -p /var/state get network." .. wanName .. ".ifname"))
-				if wanInterfaceName == "" then
-					wanInterfaceName = "X"
-				end
-			local wanDeviceLink = ntm:get_interface(wanInterfaceName)
-				wanDeviceLink = wanDeviceLink and wanDeviceLink:get_network()
-				wanDeviceLink = wanDeviceLink and wanDeviceLink:adminlink() or "#"
-			wansid[wanName] = #mArray.wans + 1
-			mArray.wans[wansid[wanName]] = { name = wanName, link = wanDeviceLink, ifname = wanInterfaceName, status = interfaceState }
-		end
-	end
-
-	-- overview status log
-	local mwanLog = ut.trim(sys.exec("logread | grep mwan3 | tail -n 50 | sed 'x;1!H;$!d;x' 2>/dev/null"))
-	if mwanLog ~= "" then
-		mArray.mwanlog = { mwanLog }
-	end
+function mwan_Status()
+	local status = ut.ubus("mwan3", "status", {})
 
 	luci.http.prepare_content("application/json")
-	luci.http.write_json(mArray)
+	if status ~= nil then
+		luci.http.write_json(status)
+	else
+		luci.http.write_json({})
+	end
 end
 
 function detailedStatus()

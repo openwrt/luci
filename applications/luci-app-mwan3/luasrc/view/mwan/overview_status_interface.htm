@@ -1,44 +1,46 @@
 <script type="text/javascript">//<![CDATA[
-	XHR.poll(5, '<%=luci.dispatcher.build_url("admin", "status", "mwan", "interface_status")%>', null,
-		function(x, mArray)
+XHR.poll(5, '<%=luci.dispatcher.build_url("admin", "status", "mwan", "interface_status")%>', null,
+		function(x, status)
 		{
-			var status = document.getElementById('mwan_status_text');
-			if (mArray.wans)
+			var statusDiv = document.getElementById('mwan_status_text');
+			if (status.interfaces)
 			{
-				var temp = '';
-				for ( var i = 0; i < mArray.wans.length; i++ )
+				var statusview = '';
+				for ( var iface in status.interfaces)
 				{
-					var stat = '';
-					var cssc = '';
-					switch (mArray.wans[i].status)
+					var state = '';
+					var css = '';
+					switch (status.interfaces[iface].status)
 					{
 						case 'online':
-							stat = '<%:Online (tracking active)%>';
-							cssc = 'wanon';
+							state = '<%:Online (tracking active)%>';
+							css = 'wanon';
 							break;
 						case 'notMonitored':
-							stat = '<%:Online (tracking off)%>';
-							cssc = 'wanon';
+							state = '<%:Online (tracking off)%>';
+							css = 'wanon';
 							break;
 						case 'offline':
-							stat = '<%:Offline%>';
-							cssc = 'wanoff';
+							state = '<%:Offline%>';
+							css = 'wanoff';
 							break;
-						case 'notEnabled':
-							stat = '<%:Disabled%>';
-							cssc = 'wanoff';
+						default:
+							state = '<%:Disabled%>';
+							css = 'wanoff';
 							break;
 					}
-					temp += String.format(
-						'<span class="%s"><strong>%s (<a href="%q">%s</a>)</strong><br />%s</span>',
-						cssc, mArray.wans[i].name, mArray.wans[i].link, mArray.wans[i].ifname, stat
+					statusview += String.format(
+						'<span class="%s"><strong>%s</strong><br />%s</span>',
+						css,
+						iface,
+						state
 					);
 				}
-				status.innerHTML = temp;
+				statusDiv.innerHTML = statusview;
 			}
 			else
 			{
-				status.innerHTML = '<strong><%:No MWAN interfaces found%></strong>';
+				statusDiv.innerHTML = '<strong><%:No MWAN interfaces found%></strong>';
 			}
 		}
 	);

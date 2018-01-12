@@ -10,56 +10,47 @@
 <script type="text/javascript" src="<%=resource%>/cbi.js"></script>
 <script type="text/javascript">//<![CDATA[
 	XHR.poll(5, '<%=luci.dispatcher.build_url("admin", "status", "mwan", "interface_status")%>', null,
-		function(x, mArray)
+		function(x, status)
 		{
 			var statusDiv = document.getElementById('mwan_status_text');
-			if (mArray.wans)
+			if (status.interfaces)
 			{
-				var interfaceStatus = '';
-				for ( var i = 0; i < mArray.wans.length; i++ )
+				var statusview = '';
+				for ( var iface in status.interfaces)
 				{
-					var status = '';
+					var state = '';
 					var css = '';
-					switch (mArray.wans[i].status)
+					switch (status.interfaces[iface].status)
 					{
 						case 'online':
-							status = '<%:Online (tracking active)%>';
+							state = '<%:Online (tracking active)%>';
 							css = 'wanon';
 							break;
 						case 'notMonitored':
-							status = '<%:Online (tracking off)%>';
+							state = '<%:Online (tracking off)%>';
 							css = 'wanon';
 							break;
 						case 'offline':
-							status = '<%:Offline%>';
+							state = '<%:Offline%>';
 							css = 'wanoff';
 							break;
-						case 'notEnabled':
-							status = '<%:Disabled%>';
+						default:
+							state = '<%:Disabled%>';
 							css = 'wanoff';
 							break;
 					}
-					interfaceStatus += String.format(
-						'<span class="%s"><strong>%s (<a href="%q">%s</a>)</strong><br />%s</span>',
-						css, mArray.wans[i].name, mArray.wans[i].link, mArray.wans[i].ifname, status
+					statusview += String.format(
+						'<span class="%s"><strong>%s</strong><br />%s</span>',
+						css,
+						iface,
+						state
 					);
 				}
-				statusDiv.innerHTML = interfaceStatus;
+				statusDiv.innerHTML = statusview;
 			}
 			else
 			{
 				statusDiv.innerHTML = '<strong><%:No MWAN interfaces found%></strong>';
-			}
-
-			var logs = document.getElementById('mwan_statuslog_text');
-			if (mArray.mwanlog)
-			{
-				var mwanLog = '<%:Last 50 MWAN systemlog entries. Newest entries sorted at the top :%>';
-				logs.innerHTML = String.format('<pre>%s<br /><br />%s</pre>', mwanLog, mArray.mwanlog[0]);
-			}
-			else
-			{
-				logs.innerHTML = '<strong><%:No MWAN systemlog history found%></strong>';
 			}
 		}
 	);
@@ -69,10 +60,6 @@
 	<fieldset id="interface_field" class="cbi-section">
 		<legend><%:MWAN Interface Live Status%></legend>
 		<div id="mwan_status_text"><img src="<%=resource%>/icons/loading.gif" alt="<%:Loading%>" style="vertical-align:middle" /><%:Collecting data...%></div>
-	</fieldset>
-	<fieldset class="cbi-section">
-		<legend><%:MWAN Interface Systemlog%></legend>
-		<div id="mwan_statuslog_text"><img src="<%=resource%>/icons/loading.gif" alt="<%:Loading%>" style="vertical-align:middle" /><%:Collecting data...%></div>
 	</fieldset>
 </div>
 
