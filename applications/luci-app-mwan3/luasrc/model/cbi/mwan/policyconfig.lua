@@ -52,14 +52,4 @@ last_resort = mwan_policy:option(ListValue, "last_resort", translate("Last resor
 	last_resort:value("blackhole", translate("blackhole (drop)"))
 	last_resort:value("default", translate("default (use main routing table)"))
 
-
--- ------ currently configured members ------ --
-
-mwan_member = m5:section(TypedSection, "member", translate("Currently Configured Members"))
-	mwan_member.addremove = false
-	mwan_member.dynamic = false
-	mwan_member.sortable = false
-	mwan_member.template = "cbi/tblsection"
-
-
 return m5

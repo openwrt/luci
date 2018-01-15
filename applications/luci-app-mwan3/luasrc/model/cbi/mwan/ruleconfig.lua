@@ -100,14 +100,4 @@ use_policy = mwan_rule:option(Value, "use_policy", translate("Policy assigned"))
 	use_policy:value("blackhole", translate("blackhole (drop)"))
 	use_policy:value("default", translate("default (use main routing table)"))
 
-
--- ------ currently configured policies ------ --
-
-mwan_policy = m5:section(TypedSection, "policy", translate("Currently Configured Policies"))
-	mwan_policy.addremove = false
-	mwan_policy.dynamic = false
-	mwan_policy.sortable = false
-	mwan_policy.template = "cbi/tblsection"
-
-
 return m5

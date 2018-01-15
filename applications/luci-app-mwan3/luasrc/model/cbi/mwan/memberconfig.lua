@@ -34,14 +34,4 @@ weight = mwan_member:option(Value, "weight", translate("Weight"),
 	translate("Acceptable values: 1-1000. Defaults to 1 if not set"))
 	weight.datatype = "range(1, 1000)"
 
-
--- ------ currently configured interfaces ------ --
-
-mwan_interface = m5:section(TypedSection, "interface", translate("Currently Configured Interfaces"))
-	mwan_interface.addremove = false
-	mwan_interface.dynamic = false
-	mwan_interface.sortable = false
-	mwan_interface.template = "cbi/tblsection"
-
-
 return m5
