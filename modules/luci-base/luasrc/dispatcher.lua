@@ -406,7 +406,7 @@ function dispatch(request)
 				return
 			end
 
-			http.header("Set-Cookie", 'sysauth=%s; path=%s' %{ sid, build_url() })
+			http.header("Set-Cookie", 'sysauth=%s; path=%s; HttpOnly; secure' %{ sid, build_url() })
 			http.redirect(build_url(unpack(ctx.requestpath)))
 		end
 
