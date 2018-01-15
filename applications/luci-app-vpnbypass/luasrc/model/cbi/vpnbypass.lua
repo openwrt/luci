@@ -56,6 +56,6 @@ s4.anonymous = true
 di = s4:option(DynamicList, "ipset", translate("Domains to Bypass"),
     translate("Domains to be accessed directly (outside of the VPN tunnel), see ")
 		.. [[<a href="]] .. readmeURL .. [[#bypass-domains-formatsyntax" target="_blank">]]
-    .. translate("README") .. [[</a>]] .. translate(" for syntax"))
+    .. translate("README") .. [[</a> ]] .. translate("for syntax"))
 
 return m, d
