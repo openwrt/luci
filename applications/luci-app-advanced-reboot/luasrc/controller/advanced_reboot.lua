@@ -19,7 +19,7 @@ devices = {
 errorMessage = ""
 board_name = luci.util.trim(luci.sys.exec("cat /tmp/sysinfo/board_name"))
 for i=1, #devices do
-  if board_name and devices[i][2] == board_name then
+  if board_name and string.match(board_name, devices[i][2]) then
     device_name = devices[i][1]
     partition_one_mtd = devices[i][3] or nil
     partition_two_mtd = devices[i][4] or nil
