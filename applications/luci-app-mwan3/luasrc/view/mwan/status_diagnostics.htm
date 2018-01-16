@@ -27,20 +27,10 @@
 		var iface = document.getElementById('mwaniface').value;
 		var output = document.getElementById('diag_output');
 
-		if (tool == "service")
-			{
-				output.innerHTML =
-					'<img src="<%=resource%>/icons/loading.gif" alt="<%:Loading%>" style="padding: 20px; vertical-align: middle;" /> ' +
-					String.format("<%:Waiting for MWAN to %s...%>", task_name)
-				;
-			}
-			else
-			{
-				output.innerHTML =
-					'<img src="<%=resource%>/icons/loading.gif" alt="<%:Loading%>" style="padding: 20px; vertical-align: middle;" /> ' +
-					"<%:Waiting for diagnostic results...%>"
-				;
-			}
+		output.innerHTML = '<img src="<%=resource%>/icons/loading.gif" ' +
+			'alt="<%:Loading%>" ' +
+			'style="padding: 20px; vertical-align: middle;" />' +
+			"<%:Waiting for diagnostic results...%>";
 
 		output.parentNode.style.display = 'block';
 		output.style.display = 'inline';
@@ -74,14 +64,6 @@
 			<input type="button" value="<%:Check routing table%>" class="cbi-button cbi-button-apply" onclick="update_status('routechk', null, null)" />
 			<input type="button" value="<%:Hotplug ifup%>" class="cbi-button cbi-button-apply" onclick="update_status('hotplug', 'ifup', null)" />
 			<input type="button" value="<%:Hotplug ifdown%>" class="cbi-button cbi-button-apply" onclick="update_status('hotplug', 'ifdown', null)" />
-		</div>
-	</fieldset>
-	<fieldset id="diag_select" class="cbi-section">
-		<legend><%:MWAN Service Control%></legend>
-		<div id="buttoncss">
-			<input type="button" value="<%:Restart MWAN%>" class="cbi-button cbi-button-apply" onclick="update_status('service', 'restart', '<%:restart%>')" />
-			<input type="button" value="<%:Stop MWAN%>" class="cbi-button cbi-button-apply" onclick="update_status('service', 'stop', '<%:stop%>')" />
-			<input type="button" value="<%:Start MWAN%>" class="cbi-button cbi-button-apply" onclick="update_status('service', 'start', '<%:start%>')" />
 		</div>
 	</fieldset>
 	<fieldset class="cbi-section" style="display:none">

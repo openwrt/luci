@@ -96,69 +96,58 @@ function diagnosticsData(interface, tool, task)
 	local mArray = {}
 
 	local results = ""
-	if tool == "service" then
-		os.execute("/usr/sbin/mwan3 " .. task)
-		if task == "restart" then
-			results = "MWAN3 restarted"
-		elseif task == "stop" then
-			results = "MWAN3 stopped"
-		else
-			results = "MWAN3 started"
+	local interfaceDevice = ut.trim(sys.exec("uci -q -p /var/state get network." .. interface .. ".ifname"))
+	if interfaceDevice ~= "" then
+		if tool == "ping" then
+			local gateway = ut.trim(sys.exec("route -n | awk '{if ($8 == \"" .. interfaceDevice .. "\" && $1 == \"0.0.0.0\" && $3 == \"0.0.0.0\") print $2}'"))
+			if gateway ~= "" then
+				if task == "gateway" then
+					local pingCommand = "ping -c 3 -W 2 -I " .. interfaceDevice .. " " .. gateway
+					results = pingCommand .. "\n\n" .. sys.exec(pingCommand)
+				else
+					local tracked = ut.trim(sys.exec("uci -q -p /var/state get mwan3." .. interface .. ".track_ip"))
+					if tracked ~= "" then
+						for z in tracked:gmatch("[^ ]+") do
+							local pingCommand = "ping -c 3 -W 2 -I " .. interfaceDevice .. " " .. z
+							results = results .. pingCommand .. "\n\n" .. sys.exec(pingCommand) .. "\n\n"
+						end
+					else
+						results = "No tracking IP addresses configured on " .. interface
+					end
+				end
+			else
+				results = "No default gateway for " .. interface .. " found. Default route does not exist or is configured incorrectly"
+			end
+		elseif tool == "rulechk" then
+			getInterfaceNumber()
+			local rule1 = sys.exec(ip .. "rule | grep $(echo $((" .. interfaceNumber .. " + 1000)))")
+			local rule2 = sys.exec(ip .. "rule | grep $(echo $((" .. interfaceNumber .. " + 2000)))")
+			if rule1 ~= "" and rule2 ~= "" then
+				results = "All required interface IP rules found:\n\n" .. rule1 .. rule2
+			elseif rule1 ~= "" or rule2 ~= "" then
+				results = "Missing 1 of the 2 required interface IP rules\n\n\nRules found:\n\n" .. rule1 .. rule2
+			else
+				results = "Missing both of the required interface IP rules"
+			end
+		elseif tool == "routechk" then
+			getInterfaceNumber()
+			local routeTable = sys.exec(ip .. "route list table " .. interfaceNumber)
+			if routeTable ~= "" then
+				results = "Interface routing table " .. interfaceNumber .. " was found:\n\n" .. routeTable
+			else
+				results = "Missing required interface routing table " .. interfaceNumber
+			end
+		elseif tool == "hotplug" then
+			if task == "ifup" then
+				os.execute("/usr/sbin/mwan3 ifup " .. interface)
+				results = "Hotplug ifup sent to interface " .. interface .. "..."
+			else
+				os.execute("/usr/sbin/mwan3 ifdown " .. interface)
+				results = "Hotplug ifdown sent to interface " .. interface .. "..."
+			end
 		end
 	else
-		local interfaceDevice = ut.trim(sys.exec("uci -q -p /var/state get network." .. interface .. ".ifname"))
-		if interfaceDevice ~= "" then
-			if tool == "ping" then
-				local gateway = ut.trim(sys.exec("route -n | awk '{if ($8 == \"" .. interfaceDevice .. "\" && $1 == \"0.0.0.0\" && $3 == \"0.0.0.0\") print $2}'"))
-				if gateway ~= "" then
-					if task == "gateway" then
-						local pingCommand = "ping -c 3 -W 2 -I " .. interfaceDevice .. " " .. gateway
-						results = pingCommand .. "\n\n" .. sys.exec(pingCommand)
-					else
-						local tracked = ut.trim(sys.exec("uci -q -p /var/state get mwan3." .. interface .. ".track_ip"))
-						if tracked ~= "" then
-							for z in tracked:gmatch("[^ ]+") do
-								local pingCommand = "ping -c 3 -W 2 -I " .. interfaceDevice .. " " .. z
-								results = results .. pingCommand .. "\n\n" .. sys.exec(pingCommand) .. "\n\n"
-							end
-						else
-							results = "No tracking IP addresses configured on " .. interface
-						end
-					end
-				else
-					results = "No default gateway for " .. interface .. " found. Default route does not exist or is configured incorrectly"
-				end
-			elseif tool == "rulechk" then
-				getInterfaceNumber()
-				local rule1 = sys.exec(ip .. "rule | grep $(echo $((" .. interfaceNumber .. " + 1000)))")
-				local rule2 = sys.exec(ip .. "rule | grep $(echo $((" .. interfaceNumber .. " + 2000)))")
-				if rule1 ~= "" and rule2 ~= "" then
-					results = "All required interface IP rules found:\n\n" .. rule1 .. rule2
-				elseif rule1 ~= "" or rule2 ~= "" then
-					results = "Missing 1 of the 2 required interface IP rules\n\n\nRules found:\n\n" .. rule1 .. rule2
-				else
-					results = "Missing both of the required interface IP rules"
-				end
-			elseif tool == "routechk" then
-				getInterfaceNumber()
-				local routeTable = sys.exec(ip .. "route list table " .. interfaceNumber)
-				if routeTable ~= "" then
-					results = "Interface routing table " .. interfaceNumber .. " was found:\n\n" .. routeTable
-				else
-					results = "Missing required interface routing table " .. interfaceNumber
-				end
-			elseif tool == "hotplug" then
-				if task == "ifup" then
-					os.execute("/usr/sbin/mwan3 ifup " .. interface)
-					results = "Hotplug ifup sent to interface " .. interface .. "..."
-				else
-					os.execute("/usr/sbin/mwan3 ifdown " .. interface)
-					results = "Hotplug ifdown sent to interface " .. interface .. "..."
-				end
-			end
-		else
-			results = "Unable to perform diagnostic tests on " .. interface .. ". There is no physical or virtual device associated with this interface"
-		end
+		results = "Unable to perform diagnostic tests on " .. interface .. ". There is no physical or virtual device associated with this interface"
 	end
 	if results ~= "" then
 		results = ut.trim(results)
