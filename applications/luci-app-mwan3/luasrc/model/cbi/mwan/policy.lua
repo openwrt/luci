@@ -1,36 +1,36 @@
--- ------ extra functions ------ --
-
-function policyCheck() -- check to see if any policy names exceed the maximum of 15 characters
-	uci.cursor():foreach("mwan3", "policy",
-		function (section)
-			if string.len(section[".name"]) > 15 then
-				nameTooLong = 1
-				err_name_list = err_name_list .. section[".name"] .. " "
-			end
-		end
-	)
-end
-
-function policyWarn() -- display status and warning messages at the top of the page
-	if nameTooLong == 1 then
-		return "<font color=\"ff0000\"><strong>" .. translate("WARNING: Some policies have names exceeding the maximum of 15 characters!") .. "</strong></font>"
-	else
-		return ""
-	end
-end
-
--- ------ policy configuration ------ --
-
 ds = require "luci.dispatcher"
 sys = require "luci.sys"
 
-nameTooLong = 0
-err_name_list = " "
-policyCheck()
+function policyCheck()
+	local policy_error = {}
 
+	uci.cursor():foreach("mwan3", "policy",
+		function (section)
+			policy_error[section[".name"]] = false
+			if string.len(section[".name"]) > 15 then
+				policy_error[section[".name"]] = true
+			end
+		end
+	)
+
+	return policy_error
+end
+
+function policyError(policy_error)
+	local warnings = ""
+	for i, k in pairs(policy_error) do
+		if policy_error[i] == true then
+			warnings = warnings .. string.format("<strong>%s</strong></br>",
+				translatef("WARNING: Policie %s has exceeding the maximum name of 15 characters", i)
+				)
+		end
+	end
+
+	return warnings
+end
 
 m5 = Map("mwan3", translate("MWAN - Policies"),
-	policyWarn())
+	policyError(policyCheck()))
 
 
 mwan_policy = m5:section(TypedSection, "policy", nil,
@@ -78,16 +78,5 @@ last_resort = mwan_policy:option(DummyValue, "last_resort", translate("Last reso
 			return translate("unreachable (reject)")
 		end
 	end
-
-errors = mwan_policy:option(DummyValue, "errors", translate("Errors"))
-	errors.rawhtml = true
-	function errors.cfgvalue(self, s)
-		if not string.find(err_name_list, " " .. s .. " ") then
-			return ""
-		else
-			return "<span title=\"Name exceeds 15 characters\"><img src=\"/luci-static/resources/cbi/reset.gif\" alt=\"error\"></img></span>"
-		end
-	end
-
 
 return m5
