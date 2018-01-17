@@ -1,5 +1,3 @@
--- ------ member configuration ------ --
-
 ds = require "luci.dispatcher"
 
 
@@ -21,7 +19,6 @@ mwan_member = m5:section(TypedSection, "member", nil,
 		luci.http.redirect(ds.build_url("admin", "network", "mwan", "member", section))
 	end
 
-
 interface = mwan_member:option(DummyValue, "interface", translate("Interface"))
 	interface.rawhtml = true
 	function interface.cfgvalue(self, s)
@@ -39,6 +36,5 @@ weight = mwan_member:option(DummyValue, "weight", translate("Weight"))
 	function weight.cfgvalue(self, s)
 		return self.map:get(s, "weight") or "1"
 	end
-
 
 return m5
