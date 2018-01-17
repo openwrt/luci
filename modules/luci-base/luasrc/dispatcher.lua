@@ -191,6 +191,9 @@ local function session_setup(user, pass, allowed_users)
 			timeout  = tonumber(luci.config.sauth.sessiontime)
 		})
 
+		local rp = context.requestpath
+			and table.concat(context.requestpath, "/") or ""
+
 		if type(login) == "table" and
 		   type(login.ubus_rpc_session) == "string"
 		then
@@ -199,8 +202,14 @@ local function session_setup(user, pass, allowed_users)
 				values = { token = sys.uniqueid(16) }
 			})
 
+			io.stderr:write("luci: accepted login on /%s for %s from %s\n"
+				%{ rp, user, http.getenv("REMOTE_ADDR") or "?" })
+
 			return session_retrieve(login.ubus_rpc_session)
 		end
+
+		io.stderr:write("luci: failed login on /%s for %s from %s\n"
+			%{ rp, user, http.getenv("REMOTE_ADDR") or "?" })
 	end
 
 	return nil, nil
@@ -358,7 +367,7 @@ function dispatch(request)
 		"https://github.com/openwrt/luci/issues"
 	)
 
-	if track.sysauth then
+	if track.sysauth and not ctx.authsession then
 		local authen = track.sysauth_authenticator
 		local _, sid, sdat, default_user, allowed_users
 
