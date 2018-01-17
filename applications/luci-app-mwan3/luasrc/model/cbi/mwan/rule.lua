@@ -1,40 +1,42 @@
--- ------ extra functions ------ --
-
-function ruleCheck() -- determine if rules needs a proper protocol configured
-	uci.cursor():foreach("mwan3", "rule",
-		function (section)
-			local sourcePort = ut.trim(sys.exec("uci -p /var/state get mwan3." .. section[".name"] .. ".src_port"))
-			local destPort = ut.trim(sys.exec("uci -p /var/state get mwan3." .. section[".name"] .. ".dest_port"))
-			if sourcePort ~= "" or destPort ~= "" then -- ports configured
-				local protocol = ut.trim(sys.exec("uci -p /var/state get mwan3." .. section[".name"] .. ".proto"))
-				if protocol == "" or protocol == "all" then -- no or improper protocol
-					error_protocol_list = error_protocol_list .. section[".name"] .. " "
-				end
-			end
-		end
-	)
-end
-
-function ruleWarn() -- display warning messages at the top of the page
-	if error_protocol_list ~= " " then
-		return "<font color=\"ff0000\"><strong>" .. translate("WARNING: Some rules have a port configured with no or improper protocol specified! Please configure a specific protocol!") .. "</strong></font>"
-	else
-		return ""
-	end
-end
-
--- ------ rule configuration ------ --
-
 dsp = require "luci.dispatcher"
 sys = require "luci.sys"
 ut = require "luci.util"
 
-error_protocol_list = " "
-ruleCheck()
+function ruleCheck()
+	local rule_error = {}
+	uci.cursor():foreach("mwan3", "rule",
+		function (section)
+			rule_error[section[".name"]] = false
+			local uci = uci.cursor(nil, "/var/state")
+			local sourcePort = uci:get("mwan3", section[".name"], "src_port")
+			local destPort = uci:get("mwan3", section[".name"], "dest_port")
+			if sourcePort ~= nil or destPort ~= nil then
+				local protocol = uci:get("mwan3", section[".name"], "proto")
+				if protocol == nil or protocol == "all" then
+					rule_error[section[".name"]] = true
+				end
+			end
+		end
+	)
+	return rule_error
+end
 
+function ruleWarn(rule_error)
+	local warnings = ""
+	for i, k in pairs(rule_error) do
+		if rule_error[i] == true then
+			warnings = warnings .. string.format("<strong>%s</strong></br>",
+				translatef("WARNING: Rule %s have a port configured with no or improper protocol specified!", i)
+				)
+		end
+	end
+
+	return warnings
+end
 
 m5 = Map("mwan3", translate("MWAN - Rules"),
-	ruleWarn())
+	ruleWarn(ruleCheck())
+	)
 
 mwan_rule = m5:section(TypedSection, "rule", nil,
 	translate("Rules specify which traffic will use a particular MWAN policy<br />" ..

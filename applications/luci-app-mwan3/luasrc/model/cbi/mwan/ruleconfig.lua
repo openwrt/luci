@@ -1,23 +1,7 @@
--- ------ extra functions ------ --
-
-function ruleCheck() -- determine if rule needs a protocol specified
-	local sourcePort = ut.trim(sys.exec("uci -p /var/state get mwan3." .. arg[1] .. ".src_port"))
-	local destPort = ut.trim(sys.exec("uci -p /var/state get mwan3." .. arg[1] .. ".dest_port"))
-	if sourcePort ~= "" or destPort ~= "" then -- ports configured
-		local protocol = ut.trim(sys.exec("uci -p /var/state get mwan3." .. arg[1] .. ".proto"))
-		if protocol == "" or protocol == "all" then -- no or improper protocol
-			error_protocol = 1
-		end
-	end
-end
-
-function ruleWarn() -- display warning message at the top of the page
-	if error_protocol == 1 then
-		return "<font color=\"ff0000\"><strong>" .. translate("WARNING: This rule is incorrectly configured with no or improper protocol specified! Please configure a specific protocol!") .. "</strong></font>"
-	else
-		return ""
-	end
-end
+dsp = require "luci.dispatcher"
+sys = require "luci.sys"
+ut = require "luci.util"
+arg[1] = arg[1] or ""
 
 function cbiAddPolicy(field)
 	uci.cursor():foreach("mwan3", "policy",
@@ -34,20 +18,8 @@ function cbiAddProtocol(field)
 	end
 end
 
--- ------ rule configuration ------ --
-
-dsp = require "luci.dispatcher"
-sys = require "luci.sys"
-ut = require "luci.util"
-arg[1] = arg[1] or ""
-
-error_protocol = 0
-ruleCheck()
-
-
-m5 = Map("mwan3", translatef("MWAN Rule Configuration - %s", arg[1]),
-	ruleWarn())
-	m5.redirect = dsp.build_url("admin", "network", "mwan", "rule")
+m5 = Map("mwan3", translatef("MWAN Rule Configuration - %s", arg[1]))
+m5.redirect = dsp.build_url("admin", "network", "mwan", "rule")
 
 
 mwan_rule = m5:section(NamedSection, arg[1], "rule", "")
