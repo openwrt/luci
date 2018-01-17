@@ -4,8 +4,6 @@ ds = require "luci.dispatcher"
 
 
 m5 = Map("mwan3", translate("MWAN - Members"))
-	m5:append(Template("mwan/config_css"))
-
 
 mwan_member = m5:section(TypedSection, "member", nil,
 	translate("Members are profiles attaching a metric and weight to an MWAN interface<br />" ..

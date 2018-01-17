@@ -35,8 +35,6 @@ ruleCheck()
 
 m5 = Map("mwan3", translate("MWAN - Rules"),
 	ruleWarn())
-	m5:append(Template("mwan/config_css"))
-
 
 mwan_rule = m5:section(TypedSection, "rule", nil,
 	translate("Rules specify which traffic will use a particular MWAN policy based on IP address, port or protocol<br />" ..

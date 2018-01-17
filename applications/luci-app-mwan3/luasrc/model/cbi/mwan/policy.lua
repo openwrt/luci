@@ -31,7 +31,6 @@ policyCheck()
 
 m5 = Map("mwan3", translate("MWAN - Policies"),
 	policyWarn())
-	m5:append(Template("mwan/config_css"))
 
 
 mwan_policy = m5:section(TypedSection, "policy", nil,
