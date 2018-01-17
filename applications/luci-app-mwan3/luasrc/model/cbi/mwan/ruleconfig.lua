@@ -3,24 +3,8 @@ sys = require "luci.sys"
 ut = require "luci.util"
 arg[1] = arg[1] or ""
 
-function cbiAddPolicy(field)
-	uci.cursor():foreach("mwan3", "policy",
-		function (section)
-			field:value(section[".name"])
-		end
-	)
-end
-
-function cbiAddProtocol(field)
-	local protocols = ut.trim(sys.exec("cat /etc/protocols | grep '	# ' | awk '{print $1}' | grep -vw -e 'ip' -e 'tcp' -e 'udp' -e 'icmp' -e 'esp' | grep -v 'ipv6' | sort | tr '\n' ' '"))
-	for p in string.gmatch(protocols, "%S+") do
-		field:value(p)
-	end
-end
-
 m5 = Map("mwan3", translatef("MWAN Rule Configuration - %s", arg[1]))
 m5.redirect = dsp.build_url("admin", "network", "mwan", "rule")
-
 
 mwan_rule = m5:section(NamedSection, arg[1], "rule", "")
 	mwan_rule.addremove = false
@@ -42,16 +26,14 @@ dest_port = mwan_rule:option(Value, "dest_port", translate("Destination port"),
 	translate("May be entered as a single or multiple port(s) (eg \"22\" or \"80,443\") or as a portrange (eg \"1024:2048\") without quotes"))
 
 proto = mwan_rule:option(Value, "proto", translate("Protocol"),
-	translate("View the contents of /etc/protocols for protocol descriptions"))
+	translate("View the content of /etc/protocols for protocol description"))
 	proto.default = "all"
 	proto.rmempty = false
 	proto:value("all")
-	proto:value("ip")
 	proto:value("tcp")
 	proto:value("udp")
 	proto:value("icmp")
 	proto:value("esp")
-	cbiAddProtocol(proto)
 
 sticky = mwan_rule:option(ListValue, "sticky", translate("Sticky"),
 	translate("Traffic from the same source IP address that previously matched this rule within the sticky timeout period will use the same WAN interface"))
@@ -66,10 +48,14 @@ timeout = mwan_rule:option(Value, "timeout", translate("Sticky timeout"),
 ipset = mwan_rule:option(Value, "ipset", translate("IPset"),
 	translate("Name of IPset rule. Requires IPset rule in /etc/dnsmasq.conf (eg \"ipset=/youtube.com/youtube\")"))
 
-use_policy = mwan_rule:option(Value, "use_policy", translate("Policy assigned"))
-	cbiAddPolicy(use_policy)
-	use_policy:value("unreachable", translate("unreachable (reject)"))
-	use_policy:value("blackhole", translate("blackhole (drop)"))
-	use_policy:value("default", translate("default (use main routing table)"))
+policy = mwan_rule:option(Value, "use_policy", translate("Policy assigned"))
+m5.uci:foreach("mwan3", "policy",
+	function(s)
+		policy:value(s['.name'], s['.name'])
+	end
+)
+policy:value("unreachable", translate("unreachable (reject)"))
+policy:value("blackhole", translate("blackhole (drop)"))
+policy:value("default", translate("default (use main routing table)"))
 
 return m5
