@@ -130,9 +130,9 @@ enabled = mwan_interface:option(DummyValue, "enabled", translate("Enabled"))
 	enabled.rawhtml = true
 	function enabled.cfgvalue(self, s)
 		if self.map:get(s, "enabled") == "1" then
-			return "Yes"
+			return translate("Yes")
 		else
-			return "No"
+			return translate("No")
 		end
 	end
 

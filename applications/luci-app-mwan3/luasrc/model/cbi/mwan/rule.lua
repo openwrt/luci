@@ -90,54 +90,10 @@ proto = mwan_rule:option(DummyValue, "proto", translate("Protocol"))
 		return self.map:get(s, "proto") or "all"
 	end
 
-sticky = mwan_rule:option(DummyValue, "sticky", translate("Sticky"))
-	sticky.rawhtml = true
-	function sticky.cfgvalue(self, s)
-		if self.map:get(s, "sticky") == "1" then
-			stickied = 1
-			return translate("Yes")
-		else
-			stickied = nil
-			return translate("No")
-		end
-	end
-
-timeout = mwan_rule:option(DummyValue, "timeout", translate("Sticky timeout"))
-	timeout.rawhtml = true
-	function timeout.cfgvalue(self, s)
-		if stickied then
-			local timeoutValue = self.map:get(s, "timeout")
-			if timeoutValue then
-				return timeoutValue .. "s"
-			else
-				return "600s"
-			end
-		else
-			return "&#8212;"
-		end
-	end
-
-ipset = mwan_rule:option(DummyValue, "ipset", translate("IPset"))
-	ipset.rawhtml = true
-	function ipset.cfgvalue(self, s)
-		return self.map:get(s, "ipset") or "&#8212;"
-	end
-
 use_policy = mwan_rule:option(DummyValue, "use_policy", translate("Policy assigned"))
 	use_policy.rawhtml = true
 	function use_policy.cfgvalue(self, s)
 		return self.map:get(s, "use_policy") or "&#8212;"
 	end
-
-errors = mwan_rule:option(DummyValue, "errors", translate("Errors"))
-	errors.rawhtml = true
-	function errors.cfgvalue(self, s)
-		if not string.find(error_protocol_list, " " .. s .. " ") then
-			return ""
-		else
-			return "<span title=\"" .. translate("No protocol specified") .. "\"><img src=\"/luci-static/resources/cbi/reset.gif\" alt=\"error\"></img></span>"
-		end
-	end
-
 
 return m5
