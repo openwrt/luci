@@ -105,7 +105,6 @@ end
 
 m5 = Map("mwan3", translate("MWAN - Interfaces"),
 	interfaceWarnings(configCheck()))
-	m5:append(Template("mwan/config_css"))
 
 
 mwan_interface = m5:section(TypedSection, "interface", nil,
@@ -137,24 +136,10 @@ enabled = mwan_interface:option(DummyValue, "enabled", translate("Enabled"))
 		end
 	end
 
-track_ip = mwan_interface:option(DummyValue, "track_ip", translate("Tracking IP"))
-	track_ip.rawhtml = true
-	function track_ip.cfgvalue(self, s)
-		tracked = self.map:get(s, "track_ip")
-		if tracked then
-			local ipList = ""
-			for k,v in pairs(tracked) do
-				ipList = ipList .. v .. "<br />"
-			end
-			return ipList
-		else
-			return "&#8212;"
-		end
-	end
-
 track_method = mwan_interface:option(DummyValue, "track_method", translate("Tracking method"))
 	track_method.rawhtml = true
 	function track_method.cfgvalue(self, s)
+		local tracked = self.map:get(s, "track_ip")
 		if tracked then
 			return self.map:get(s, "track_method") or "&#8212;"
 		else
@@ -165,33 +150,9 @@ track_method = mwan_interface:option(DummyValue, "track_method", translate("Trac
 reliability = mwan_interface:option(DummyValue, "reliability", translate("Tracking reliability"))
 	reliability.rawhtml = true
 	function reliability.cfgvalue(self, s)
+		local tracked = self.map:get(s, "track_ip")
 		if tracked then
 			return self.map:get(s, "reliability") or "&#8212;"
-		else
-			return "&#8212;"
-		end
-	end
-
-count = mwan_interface:option(DummyValue, "count", translate("Ping count"))
-	count.rawhtml = true
-	function count.cfgvalue(self, s)
-		if tracked then
-			return self.map:get(s, "count") or "&#8212;"
-		else
-			return "&#8212;"
-		end
-	end
-
-timeout = mwan_interface:option(DummyValue, "timeout", translate("Ping timeout"))
-	timeout.rawhtml = true
-	function timeout.cfgvalue(self, s)
-		if tracked then
-			local timeoutValue = self.map:get(s, "timeout")
-			if timeoutValue then
-				return timeoutValue .. "s"
-			else
-				return "&#8212;"
-			end
 		else
 			return "&#8212;"
 		end
@@ -200,6 +161,7 @@ timeout = mwan_interface:option(DummyValue, "timeout", translate("Ping timeout")
 interval = mwan_interface:option(DummyValue, "interval", translate("Ping interval"))
 	interval.rawhtml = true
 	function interval.cfgvalue(self, s)
+		local tracked = self.map:get(s, "track_ip")
 		if tracked then
 			local intervalValue = self.map:get(s, "interval")
 			if intervalValue then
@@ -215,6 +177,7 @@ interval = mwan_interface:option(DummyValue, "interval", translate("Ping interva
 down = mwan_interface:option(DummyValue, "down", translate("Interface down"))
 	down.rawhtml = true
 	function down.cfgvalue(self, s)
+		local tracked = self.map:get(s, "track_ip")
 		if tracked then
 			return self.map:get(s, "down") or "&#8212;"
 		else
@@ -225,6 +188,7 @@ down = mwan_interface:option(DummyValue, "down", translate("Interface down"))
 up = mwan_interface:option(DummyValue, "up", translate("Interface up"))
 	up.rawhtml = true
 	function up.cfgvalue(self, s)
+		local tracked = self.map:get(s, "track_ip")
 		if tracked then
 			return self.map:get(s, "up") or "&#8212;"
 		else
@@ -235,9 +199,10 @@ up = mwan_interface:option(DummyValue, "up", translate("Interface up"))
 metric = mwan_interface:option(DummyValue, "metric", translate("Metric"))
 	metric.rawhtml = true
 	function metric.cfgvalue(self, s)
-		local metricValue = sys.exec("uci -p /var/state get network." .. s .. ".metric")
-		if metricValue ~= "" then
-			return metricValue
+		local uci = uci.cursor(nil, "/var/state")
+		local metric = uci:get("network", s, "metric")
+		if metric then
+			return metric
 		else
 			return "&#8212;"
 		end
