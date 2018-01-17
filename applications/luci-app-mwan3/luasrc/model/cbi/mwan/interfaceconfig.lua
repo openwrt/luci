@@ -1,94 +1,10 @@
--- ------ extra functions ------ --
-
-function interfaceCheck()
-	metricValue = ut.trim(sys.exec("uci -p /var/state get network." .. arg[1] .. ".metric"))
-	if metricValue == "" then -- no metric
-		errorNoMetric = 1
-	else -- if metric exists create list of interface metrics to compare against for duplicates
-		uci.cursor():foreach("mwan3", "interface",
-			function (section)
-				local metricValue = ut.trim(sys.exec("uci -p /var/state get network." .. section[".name"] .. ".metric"))
-				metricList = metricList .. section[".name"] .. " " .. metricValue .. "\n"
-			end
-		)
-		-- compare metric against list
-		local metricDuplicateNumbers, metricDuplicates = sys.exec("echo '" .. metricList .. "' | awk '{print $2}' | uniq -d"), ""
-		for line in metricDuplicateNumbers:gmatch("[^\r\n]+") do
-			metricDuplicates = sys.exec("echo '" .. metricList .. "' | grep '" .. line .. "' | awk '{print $1}'")
-			errorDuplicateMetricList = errorDuplicateMetricList .. metricDuplicates
-		end
-		if sys.exec("echo '" .. errorDuplicateMetricList .. "' | grep -w " .. arg[1]) ~= "" then
-			errorDuplicateMetric = 1
-		end
-	end
-	-- check if this interface has a higher reliability requirement than track IPs configured
-	local trackingNumber = tonumber(ut.trim(sys.exec("echo $(uci -p /var/state get mwan3." .. arg[1] .. ".track_ip) | wc -w")))
-	if trackingNumber > 0 then
-		local reliabilityNumber = tonumber(ut.trim(sys.exec("uci -p /var/state get mwan3." .. arg[1] .. ".reliability")))
-		if reliabilityNumber and reliabilityNumber > trackingNumber then
-			errorReliability = 1
-		end
-	end
-	-- check if any interfaces are not properly configured in /etc/config/network or have no default route in main routing table
-	if ut.trim(sys.exec("uci -p /var/state get network." .. arg[1])) == "interface" then
-		local interfaceDevice = ut.trim(sys.exec("uci -p /var/state get network." .. arg[1] .. ".ifname"))
-		if interfaceDevice == "uci: Entry not found" or interfaceDevice == "" then
-			errorNetConfig = 1
-			errorRoute = 1
-		else
-			local routeCheck = ut.trim(sys.exec("route -n | awk '{if ($8 == \"" .. interfaceDevice .. "\" && $1 == \"0.0.0.0\" && $3 == \"0.0.0.0\") print $1}'"))
-			if routeCheck == "" then
-				errorRoute = 1
-			end
-		end
-	else
-		errorNetConfig = 1
-		errorRoute = 1
-	end
-end
-
-function interfaceWarnings() -- display warning messages at the top of the page
-	local warns, lineBreak = "", ""
-	if errorReliability == 1 then
-		warns = "<font color=\"ff0000\"><strong>" .. translate("WARNING: This interface has a higher reliability requirement than there are tracking IP addresses!") .. "</strong></font>"
-		lineBreak = "<br /><br />"
-	end
-	if errorRoute == 1 then
-		warns = warns .. lineBreak .. "<font color=\"ff0000\"><strong>" .. translate("WARNING: This interface has no default route in the main routing table!") .. "</strong></font>"
-		lineBreak = "<br /><br />"
-	end
-	if errorNetConfig == 1 then
-		warns = warns .. lineBreak .. "<font color=\"ff0000\"><strong>" .. translate("WARNING: This interface is configured incorrectly or not at all in /etc/config/network!") .. "</strong></font>"
-		lineBreak = "<br /><br />"
-	end
-	if errorNoMetric == 1 then
-		warns = warns .. lineBreak .. "<font color=\"ff0000\"><strong>" .. translate("WARNING: This interface has no metric configured in /etc/config/network!") .. "</strong></font>"
-	elseif errorDuplicateMetric == 1 then
-		warns = warns .. lineBreak .. "<font color=\"ff0000\"><strong>" .. translate("WARNING: This and other interfaces have duplicate metrics configured in /etc/config/network!") .. "</strong></font>"
-	end
-	return warns
-end
-
--- ------ interface configuration ------ --
-
 dsp = require "luci.dispatcher"
 sys = require "luci.sys"
 ut = require "luci.util"
 arg[1] = arg[1] or ""
 
-metricValue = ""
-metricList = ""
-errorDuplicateMetricList = ""
-errorNoMetric = 0
-errorDuplicateMetric = 0
-errorRoute = 0
-errorNetConfig = 0
-errorReliability = 0
-interfaceCheck()
 
-
-m5 = Map("mwan3", translatef("MWAN Interface Configuration - %s", arg[1]),
-	interfaceWarnings())
+m5 = Map("mwan3", translatef("MWAN Interface Configuration - %s", arg[1]))
 	m5.redirect = dsp.build_url("admin", "network", "mwan", "interface")
 
 
@@ -255,12 +171,13 @@ metric = mwan_interface:option(DummyValue, "metric", translate("Metric"),
 	translate("This displays the metric assigned to this interface in /etc/config/network"))
 	metric.rawhtml = true
 	function metric.cfgvalue(self, s)
-		if errorNoMetric == 0 then
-			return metricValue
+		local uci = uci.cursor(nil, "/var/state")
+		local metric = uci:get("network", arg[1], "metric")
+		if metric then
+			return metric
 		else
 			return "&#8212;"
 		end
 	end
-
 
 return m5
