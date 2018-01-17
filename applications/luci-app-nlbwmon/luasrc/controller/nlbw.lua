@@ -28,16 +28,17 @@ local function exec(cmd, args, writer)
 
 		while true do
 			local buffer = fdi:read(2048)
-			local wpid, stat, code = nixio.waitpid(pid, "nohang")
 
-			if writer and buffer and #buffer > 0 then
-				writer(buffer)
-			end
-
-			if wpid and stat == "exited" then
+			if not buffer or #buffer == 0 then
 				break
 			end
+
+			if writer then
+				writer(buffer)
+			end
 		end
+
+		nixio.waitpid(pid)
 	elseif pid == 0 then
 		nixio.dup(fdo, nixio.stdout)
 		fdi:close()
