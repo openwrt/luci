@@ -105,106 +105,104 @@ end
 m5 = Map("mwan3", translate("MWAN - Interfaces"),
 	interfaceWarnings(configCheck()))
 
-
 mwan_interface = m5:section(TypedSection, "interface", nil,
 	translate("MWAN supports up to 250 physical and/or logical interfaces<br />" ..
 	"MWAN requires that all interfaces have a unique metric configured in /etc/config/network<br />" ..
 	"Names must match the interface name found in /etc/config/network (see advanced tab)<br />" ..
 	"Names may contain characters A-Z, a-z, 0-9, _ and no spaces<br />" ..
 	"Interfaces may not share the same name as configured members, policies or rules"))
-	mwan_interface.addremove = true
-	mwan_interface.dynamic = false
-	mwan_interface.sectionhead = translate("Interface")
-	mwan_interface.sortable = false
-	mwan_interface.template = "cbi/tblsection"
-	mwan_interface.extedit = dsp.build_url("admin", "network", "mwan", "interface", "%s")
-	function mwan_interface.create(self, section)
-		TypedSection.create(self, section)
-		m5.uci:save("mwan3")
-		luci.http.redirect(dsp.build_url("admin", "network", "mwan", "interface", section))
-	end
-
+mwan_interface.addremove = true
+mwan_interface.dynamic = false
+mwan_interface.sectionhead = translate("Interface")
+mwan_interface.sortable = false
+mwan_interface.template = "cbi/tblsection"
+mwan_interface.extedit = dsp.build_url("admin", "network", "mwan", "interface", "%s")
+function mwan_interface.create(self, section)
+	TypedSection.create(self, section)
+	m5.uci:save("mwan3")
+	luci.http.redirect(dsp.build_url("admin", "network", "mwan", "interface", section))
+end
 
 enabled = mwan_interface:option(DummyValue, "enabled", translate("Enabled"))
-	enabled.rawhtml = true
-	function enabled.cfgvalue(self, s)
-		if self.map:get(s, "enabled") == "1" then
-			return translate("Yes")
-		else
-			return translate("No")
-		end
+enabled.rawhtml = true
+function enabled.cfgvalue(self, s)
+	if self.map:get(s, "enabled") == "1" then
+		return translate("Yes")
+	else
+		return translate("No")
 	end
+end
 
 track_method = mwan_interface:option(DummyValue, "track_method", translate("Tracking method"))
-	track_method.rawhtml = true
-	function track_method.cfgvalue(self, s)
-		local tracked = self.map:get(s, "track_ip")
-		if tracked then
-			return self.map:get(s, "track_method") or "&#8212;"
-		else
-			return "&#8212;"
-		end
+track_method.rawhtml = true
+function track_method.cfgvalue(self, s)
+	local tracked = self.map:get(s, "track_ip")
+	if tracked then
+		return self.map:get(s, "track_method") or "&#8212;"
+	else
+		return "&#8212;"
 	end
+end
 
 reliability = mwan_interface:option(DummyValue, "reliability", translate("Tracking reliability"))
-	reliability.rawhtml = true
-	function reliability.cfgvalue(self, s)
-		local tracked = self.map:get(s, "track_ip")
-		if tracked then
-			return self.map:get(s, "reliability") or "&#8212;"
-		else
-			return "&#8212;"
-		end
+reliability.rawhtml = true
+function reliability.cfgvalue(self, s)
+	local tracked = self.map:get(s, "track_ip")
+	if tracked then
+		return self.map:get(s, "reliability") or "&#8212;"
+	else
+		return "&#8212;"
 	end
+end
 
 interval = mwan_interface:option(DummyValue, "interval", translate("Ping interval"))
-	interval.rawhtml = true
-	function interval.cfgvalue(self, s)
-		local tracked = self.map:get(s, "track_ip")
-		if tracked then
-			local intervalValue = self.map:get(s, "interval")
-			if intervalValue then
-				return intervalValue .. "s"
-			else
-				return "&#8212;"
-			end
+interval.rawhtml = true
+function interval.cfgvalue(self, s)
+	local tracked = self.map:get(s, "track_ip")
+	if tracked then
+		local intervalValue = self.map:get(s, "interval")
+		if intervalValue then
+			return intervalValue .. "s"
 		else
 			return "&#8212;"
 		end
+	else
+		return "&#8212;"
 	end
+end
 
 down = mwan_interface:option(DummyValue, "down", translate("Interface down"))
-	down.rawhtml = true
-	function down.cfgvalue(self, s)
-		local tracked = self.map:get(s, "track_ip")
-		if tracked then
-			return self.map:get(s, "down") or "&#8212;"
-		else
-			return "&#8212;"
-		end
+down.rawhtml = true
+function down.cfgvalue(self, s)
+	local tracked = self.map:get(s, "track_ip")
+	if tracked then
+		return self.map:get(s, "down") or "&#8212;"
+	else
+		return "&#8212;"
 	end
+end
 
 up = mwan_interface:option(DummyValue, "up", translate("Interface up"))
-	up.rawhtml = true
-	function up.cfgvalue(self, s)
-		local tracked = self.map:get(s, "track_ip")
-		if tracked then
-			return self.map:get(s, "up") or "&#8212;"
-		else
-			return "&#8212;"
-		end
+up.rawhtml = true
+function up.cfgvalue(self, s)
+	local tracked = self.map:get(s, "track_ip")
+	if tracked then
+		return self.map:get(s, "up") or "&#8212;"
+	else
+		return "&#8212;"
 	end
+end
 
 metric = mwan_interface:option(DummyValue, "metric", translate("Metric"))
-	metric.rawhtml = true
-	function metric.cfgvalue(self, s)
-		local uci = uci.cursor(nil, "/var/state")
-		local metric = uci:get("network", s, "metric")
-		if metric then
-			return metric
-		else
-			return "&#8212;"
-		end
+metric.rawhtml = true
+function metric.cfgvalue(self, s)
+	local uci = uci.cursor(nil, "/var/state")
+	local metric = uci:get("network", s, "metric")
+	if metric then
+		return metric
+	else
+		return "&#8212;"
 	end
+end
 
 return m5
