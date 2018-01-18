@@ -1,276 +1,208 @@
--- ------ extra functions ------ --
+dsp = require "luci.dispatcher"
 
-function interfaceCheck() -- find issues with too many interfaces, reliability and metric
-	uci.cursor():foreach("mwan3", "interface",
-		function (section)
-			local interfaceName = section[".name"]
-			interfaceNumber = interfaceNumber+1 -- count number of mwan interfaces configured
-			-- create list of metrics for none and duplicate checking
-			local metricValue = ut.trim(sys.exec("uci -p /var/state get network." .. interfaceName .. ".metric"))
-			if metricValue == "" then
-				errorFound = 1
-				errorNoMetricList = errorNoMetricList .. interfaceName .. " "
-			else
-				metricList = metricList .. interfaceName .. " " .. metricValue .. "\n"
-			end
-			-- check if any interfaces have a higher reliability requirement than tracking IPs configured
-			local trackingNumber = tonumber(ut.trim(sys.exec("echo $(uci -p /var/state get mwan3." .. interfaceName .. ".track_ip) | wc -w")))
-			if trackingNumber > 0 then
-				local reliabilityNumber = tonumber(ut.trim(sys.exec("uci -p /var/state get mwan3." .. interfaceName .. ".reliability")))
-				if reliabilityNumber and reliabilityNumber > trackingNumber then
-					errorFound = 1
-					errorReliabilityList = errorReliabilityList .. interfaceName .. " "
-				end
-			end
-			-- check if any interfaces are not properly configured in /etc/config/network or have no default route in main routing table
-			if ut.trim(sys.exec("uci -p /var/state get network." .. interfaceName)) == "interface" then
-				local interfaceDevice = ut.trim(sys.exec("uci -p /var/state get network." .. interfaceName .. ".ifname"))
-				if interfaceDevice == "uci: Entry not found" or interfaceDevice == "" then
-					errorFound = 1
-					errorNetConfigList = errorNetConfigList .. interfaceName .. " "
-					errorRouteList = errorRouteList .. interfaceName .. " "
-				else
-					local routeCheck = ut.trim(sys.exec("route -n | awk '{if ($8 == \"" .. interfaceDevice .. "\" && $1 == \"0.0.0.0\" && $3 == \"0.0.0.0\") print $1}'"))
-					if routeCheck == "" then
-						errorFound = 1
-						errorRouteList = errorRouteList .. interfaceName .. " "
-					end
-				end
-			else
-				errorFound = 1
-				errorNetConfigList = errorNetConfigList .. interfaceName .. " "
-				errorRouteList = errorRouteList .. interfaceName .. " "
-			end
-		end
-	)
-	-- check if any interfaces have duplicate metrics
-	local metricDuplicateNumbers = sys.exec("echo '" .. metricList .. "' | awk '{print $2}' | uniq -d")
-	if metricDuplicateNumbers ~= "" then
-		errorFound = 1
-		local metricDuplicates = ""
-		for line in metricDuplicateNumbers:gmatch("[^\r\n]+") do
-			metricDuplicates = sys.exec("echo '" .. metricList .. "' | grep '" .. line .. "' | awk '{print $1}'")
-			errorDuplicateMetricList = errorDuplicateMetricList .. metricDuplicates
-		end
-		errorDuplicateMetricList = sys.exec("echo '" .. errorDuplicateMetricList .. "' | tr '\n' ' '")
-	end
-end
 
-function interfaceWarnings() -- display status and warning messages at the top of the page
+function interfaceWarnings(overview, count)
 	local warnings = ""
-	if interfaceNumber <= 250 then
-		warnings = "<strong>" .. translatef("There are currently %d of 250 supported interfaces configured", interfaceNumber) .. "</strong>"
+	if count <= 250 then
+		warnings = string.format("<strong>%s</strong></br>",
+			translatef("There are currently %d of 250 supported interfaces configured", count)
+			)
 	else
-		warnings = "<font color=\"ff0000\"><strong>" .. translatef("WARNING: %d interfaces are configured exceeding the maximum of 250!", interfaceNumber) .. "</strong></font>"
+		warnings = string.format("<strong>%s</strong></br>",
+			translatef("WARNING: %d interfaces are configured exceeding the maximum of 250!", count)
+			)
 	end
-	if errorReliabilityList ~= " " then
-		warnings = warnings .. "<br /><br /><font color=\"ff0000\"><strong>" .. translate("WARNING: Some interfaces have a higher reliability requirement than there are tracking IP addresses!") .. "</strong></font>"
+
+	for i, k in pairs(overview) do
+		if overview[i]["network"] == false then
+			warnings = warnings .. string.format("<strong>%s</strong></br>",
+					translatef("WARNING: Interface %s are not found in /etc/config/network", i)
+					)
+		end
+
+		if overview[i]["default_route"] == false then
+			warnings = warnings .. string.format("<strong>%s</strong></br>",
+				translatef("WARNING: Interface %s has no default route in the main routing table", i)
+				)
+		end
+
+		if overview[i]["reliability"] == false then
+			warnings = warnings .. string.format("<strong>%s</strong></br>",
+				translatef("WARNING: Interface %s has a higher reliability " ..
+				"requirement than tracking hosts (%d)", i, overview[i]["tracking"])
+				)
+		end
+
+		if overview[i]["duplicate_metric"] == true then
+			warnings = warnings .. string.format("<strong>%s</strong></br>",
+				translatef("WARNING: Interface %s has a duplicate metric %s configured", i, overview[i]["metric"])
+				)
+		end
 	end
-	if errorRouteList ~= " " then
-		warnings = warnings .. "<br /><br /><font color=\"ff0000\"><strong>" .. translate("WARNING: Some interfaces have no default route in the main routing table!") .. "</strong></font>"
-	end
-	if errorNetConfigList ~= " " then
-		warnings = warnings .. "<br /><br /><font color=\"ff0000\"><strong>" .. translate("WARNING: Some interfaces are configured incorrectly or not at all in /etc/config/network!") .. "</strong></font>"
-	end
-	if errorNoMetricList ~= " " then
-		warnings = warnings .. "<br /><br /><font color=\"ff0000\"><strong>" .. translate("WARNING: Some interfaces have no metric configured in /etc/config/network!") .. "</strong></font>"
-	end
-	if errorDuplicateMetricList ~= " " then
-		warnings = warnings .. "<br /><br /><font color=\"ff0000\"><strong>" .. translate("WARNING: Some interfaces have duplicate metrics configured in /etc/config/network!") .. "</strong></font>"
-	end
+
 	return warnings
 end
 
--- ------ interface configuration ------ --
+function configCheck()
+	local overview = {}
+	local count = 0
+	local duplicate_metric = {}
+	uci.cursor():foreach("mwan3", "interface",
+		function (section)
+			local uci = uci.cursor(nil, "/var/state")
+			local iface = section[".name"]
+			overview[iface] = {}
+			count = count + 1
+			local network = uci:get("network", iface)
+			overview[iface]["network"] = false
+			if network ~= nil then
+				overview[iface]["network"] = true
 
-dsp = require "luci.dispatcher"
-sys = require "luci.sys"
-ut = require "luci.util"
+				local device = uci:get("network", iface, "ifname")
+				if device ~= nil then
+					overview[iface]["device"] = device
+				end
 
-interfaceNumber = 0
-metricList = ""
-errorFound = 0
-errorDuplicateMetricList = " "
-errorNetConfigList = " "
-errorNoMetricList = " "
-errorReliabilityList = " "
-errorRouteList = " "
-interfaceCheck()
+				local metric = uci:get("network", iface, "metric")
+				if metric ~= nil then
+					overview[iface]["metric"] = metric
+					overview[iface]["duplicate_metric"] = false
+					for _, m in ipairs(duplicate_metric) do
+						if m == metric then
+							overview[iface]["duplicate_metric"] = true
+						end
+					end
+					table.insert(duplicate_metric, metric)
+				end
 
+				local dump = require("luci.util").ubus("network.interface.%s" % iface, "status", {})
+				overview[iface]["default_route"] = false
+				if dump then
+					local _, route
+					for _, route in ipairs(dump.route) do
+						if dump.route[_].target == "0.0.0.0" then
+							overview[iface]["default_route"] = true
+						end
+					end
+				end
+			end
 
-m5 = Map("mwan3", translate("MWAN Interface Configuration"),
-	interfaceWarnings())
-	m5:append(Template("mwan/config_css"))
+			local trackingNumber = uci:get("mwan3", iface, "track_ip")
+			overview[iface]["tracking"] = 0
+			if #trackingNumber > 0 then
+				overview[iface]["tracking"] = #trackingNumber
+				overview[iface]["reliability"] = false
+				local reliabilityNumber = tonumber(uci:get("mwan3", iface, "reliability"))
+				if reliabilityNumber and reliabilityNumber <= #trackingNumber then
+					overview[iface]["reliability"] = true
+				end
+			end
+		end
+	)
+	return overview, count
+end
 
+m5 = Map("mwan3", translate("MWAN - Interfaces"),
+	interfaceWarnings(configCheck()))
 
-mwan_interface = m5:section(TypedSection, "interface", translate("Interfaces"),
+mwan_interface = m5:section(TypedSection, "interface", nil,
 	translate("MWAN supports up to 250 physical and/or logical interfaces<br />" ..
 	"MWAN requires that all interfaces have a unique metric configured in /etc/config/network<br />" ..
 	"Names must match the interface name found in /etc/config/network (see advanced tab)<br />" ..
 	"Names may contain characters A-Z, a-z, 0-9, _ and no spaces<br />" ..
 	"Interfaces may not share the same name as configured members, policies or rules"))
-	mwan_interface.addremove = true
-	mwan_interface.dynamic = false
-	mwan_interface.sectionhead = translate("Interface")
-	mwan_interface.sortable = false
-	mwan_interface.template = "cbi/tblsection"
-	mwan_interface.extedit = dsp.build_url("admin", "network", "mwan", "interface", "%s")
-	function mwan_interface.create(self, section)
-		TypedSection.create(self, section)
-		m5.uci:save("mwan3")
-		luci.http.redirect(dsp.build_url("admin", "network", "mwan", "interface", section))
-	end
-
+mwan_interface.addremove = true
+mwan_interface.dynamic = false
+mwan_interface.sectionhead = translate("Interface")
+mwan_interface.sortable = false
+mwan_interface.template = "cbi/tblsection"
+mwan_interface.extedit = dsp.build_url("admin", "network", "mwan", "interface", "%s")
+function mwan_interface.create(self, section)
+	TypedSection.create(self, section)
+	m5.uci:save("mwan3")
+	luci.http.redirect(dsp.build_url("admin", "network", "mwan", "interface", section))
+end
 
 enabled = mwan_interface:option(DummyValue, "enabled", translate("Enabled"))
-	enabled.rawhtml = true
-	function enabled.cfgvalue(self, s)
-		if self.map:get(s, "enabled") == "1" then
-			return "Yes"
-		else
-			return "No"
-		end
+enabled.rawhtml = true
+function enabled.cfgvalue(self, s)
+	if self.map:get(s, "enabled") == "1" then
+		return translate("Yes")
+	else
+		return translate("No")
 	end
-
-track_ip = mwan_interface:option(DummyValue, "track_ip", translate("Tracking IP"))
-	track_ip.rawhtml = true
-	function track_ip.cfgvalue(self, s)
-		tracked = self.map:get(s, "track_ip")
-		if tracked then
-			local ipList = ""
-			for k,v in pairs(tracked) do
-				ipList = ipList .. v .. "<br />"
-			end
-			return ipList
-		else
-			return "&#8212;"
-		end
-	end
+end
 
 track_method = mwan_interface:option(DummyValue, "track_method", translate("Tracking method"))
-	track_method.rawhtml = true
-	function track_method.cfgvalue(self, s)
-		if tracked then
-			return self.map:get(s, "track_method") or "&#8212;"
-		else
-			return "&#8212;"
-		end
+track_method.rawhtml = true
+function track_method.cfgvalue(self, s)
+	local tracked = self.map:get(s, "track_ip")
+	if tracked then
+		return self.map:get(s, "track_method") or "&#8212;"
+	else
+		return "&#8212;"
 	end
+end
 
 reliability = mwan_interface:option(DummyValue, "reliability", translate("Tracking reliability"))
-	reliability.rawhtml = true
-	function reliability.cfgvalue(self, s)
-		if tracked then
-			return self.map:get(s, "reliability") or "&#8212;"
-		else
-			return "&#8212;"
-		end
+reliability.rawhtml = true
+function reliability.cfgvalue(self, s)
+	local tracked = self.map:get(s, "track_ip")
+	if tracked then
+		return self.map:get(s, "reliability") or "&#8212;"
+	else
+		return "&#8212;"
 	end
-
-count = mwan_interface:option(DummyValue, "count", translate("Ping count"))
-	count.rawhtml = true
-	function count.cfgvalue(self, s)
-		if tracked then
-			return self.map:get(s, "count") or "&#8212;"
-		else
-			return "&#8212;"
-		end
-	end
-
-timeout = mwan_interface:option(DummyValue, "timeout", translate("Ping timeout"))
-	timeout.rawhtml = true
-	function timeout.cfgvalue(self, s)
-		if tracked then
-			local timeoutValue = self.map:get(s, "timeout")
-			if timeoutValue then
-				return timeoutValue .. "s"
-			else
-				return "&#8212;"
-			end
-		else
-			return "&#8212;"
-		end
-	end
+end
 
 interval = mwan_interface:option(DummyValue, "interval", translate("Ping interval"))
-	interval.rawhtml = true
-	function interval.cfgvalue(self, s)
-		if tracked then
-			local intervalValue = self.map:get(s, "interval")
-			if intervalValue then
-				return intervalValue .. "s"
-			else
-				return "&#8212;"
-			end
+interval.rawhtml = true
+function interval.cfgvalue(self, s)
+	local tracked = self.map:get(s, "track_ip")
+	if tracked then
+		local intervalValue = self.map:get(s, "interval")
+		if intervalValue then
+			return intervalValue .. "s"
 		else
 			return "&#8212;"
 		end
+	else
+		return "&#8212;"
 	end
+end
 
 down = mwan_interface:option(DummyValue, "down", translate("Interface down"))
-	down.rawhtml = true
-	function down.cfgvalue(self, s)
-		if tracked then
-			return self.map:get(s, "down") or "&#8212;"
-		else
-			return "&#8212;"
-		end
+down.rawhtml = true
+function down.cfgvalue(self, s)
+	local tracked = self.map:get(s, "track_ip")
+	if tracked then
+		return self.map:get(s, "down") or "&#8212;"
+	else
+		return "&#8212;"
 	end
+end
 
 up = mwan_interface:option(DummyValue, "up", translate("Interface up"))
-	up.rawhtml = true
-	function up.cfgvalue(self, s)
-		if tracked then
-			return self.map:get(s, "up") or "&#8212;"
-		else
-			return "&#8212;"
-		end
+up.rawhtml = true
+function up.cfgvalue(self, s)
+	local tracked = self.map:get(s, "track_ip")
+	if tracked then
+		return self.map:get(s, "up") or "&#8212;"
+	else
+		return "&#8212;"
 	end
+end
 
 metric = mwan_interface:option(DummyValue, "metric", translate("Metric"))
-	metric.rawhtml = true
-	function metric.cfgvalue(self, s)
-		local metricValue = sys.exec("uci -p /var/state get network." .. s .. ".metric")
-		if metricValue ~= "" then
-			return metricValue
-		else
-			return "&#8212;"
-		end
+metric.rawhtml = true
+function metric.cfgvalue(self, s)
+	local uci = uci.cursor(nil, "/var/state")
+	local metric = uci:get("network", s, "metric")
+	if metric then
+		return metric
+	else
+		return "&#8212;"
 	end
-
-errors = mwan_interface:option(DummyValue, "errors", translate("Errors"))
-	errors.rawhtml = true
-	function errors.cfgvalue(self, s)
-		if errorFound == 1 then
-			local mouseOver, lineBreak = "", ""
-			if string.find(errorReliabilityList, " " .. s .. " ") then
-				mouseOver = "Higher reliability requirement than there are tracking IP addresses"
-				lineBreak = "&#10;&#10;"
-			end
-			if string.find(errorRouteList, " " .. s .. " ") then
-				mouseOver = mouseOver .. lineBreak .. "No default route in the main routing table"
-				lineBreak = "&#10;&#10;"
-			end
-			if string.find(errorNetConfigList, " " .. s .. " ") then
-				mouseOver = mouseOver .. lineBreak .. "Configured incorrectly or not at all in /etc/config/network"
-				lineBreak = "&#10;&#10;"
-			end
-			if string.find(errorNoMetricList, " " .. s .. " ") then
-				mouseOver = mouseOver .. lineBreak .. "No metric configured in /etc/config/network"
-				lineBreak = "&#10;&#10;"
-			end
-			if string.find(errorDuplicateMetricList, " " .. s .. " ") then
-				mouseOver = mouseOver .. lineBreak .. "Duplicate metric configured in /etc/config/network"
-			end
-			if mouseOver == "" then
-				return ""
-			else
-				return "<span title=\"" .. mouseOver .. "\"><img src=\"/luci-static/resources/cbi/reset.gif\" alt=\"error\"></img></span>"
-			end
-		else
-			return ""
-		end
-	end
-
+end
 
 return m5
