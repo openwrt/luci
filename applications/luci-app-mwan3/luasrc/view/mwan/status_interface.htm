@@ -1,8 +1,8 @@
 <%+header%>
 
 <ul class="cbi-tabmenu">
-	<li class="cbi-tab"><a href="<%=luci.dispatcher.build_url("admin/status/mwan/overview")%>"><%:Interface Status%></a></li>
-	<li class="cbi-tab-disabled"><a href="<%=luci.dispatcher.build_url("admin/status/mwan/detail")%>"><%:Detailed Status%></a></li>
+	<li class="cbi-tab"><a href="<%=luci.dispatcher.build_url("admin/status/mwan/overview")%>"><%:Interface%></a></li>
+	<li class="cbi-tab-disabled"><a href="<%=luci.dispatcher.build_url("admin/status/mwan/detail")%>"><%:Detail%></a></li>
 	<li class="cbi-tab-disabled"><a href="<%=luci.dispatcher.build_url("admin/status/mwan/diagnostics")%>"><%:Diagnostics%></a></li>
 	<li class="cbi-tab-disabled"><a href="<%=luci.dispatcher.build_url("admin/status/mwan/troubleshooting")%>"><%:Troubleshooting%></a></li>
 </ul>
@@ -58,7 +58,7 @@
 
 <div id="mwan_interface_status">
 	<fieldset id="interface_field" class="cbi-section">
-		<legend><%:MWAN Interface Live Status%></legend>
+		<legend><%:MWAN status - Interface Live Status%></legend>
 		<div id="mwan_status_text"><img src="<%=resource%>/icons/loading.gif" alt="<%:Loading%>" style="vertical-align:middle" /><%:Collecting data...%></div>
 	</fieldset>
 </div>
