@@ -198,104 +198,104 @@ end
 
 function troubleshootingData()
 	local ver = require "luci.version"
+	local dash = "-------------------------------------------------"
 
-	local mArray = {}
+	luci.http.prepare_content("text/plain")
 
-	-- software versions
-	local wrtRelease = ut.trim(ver.distversion)
-		if wrtRelease ~= "" then
-			wrtRelease = "OpenWrt - " .. wrtRelease
-		else
-			wrtRelease = "OpenWrt - unknown"
-		end
-	local luciRelease = ut.trim(ver.luciversion)
-		if luciRelease ~= "" then
-			luciRelease = "\nLuCI - " .. luciRelease
-		else
-			luciRelease = "\nLuCI - unknown"
-		end
-	local mwanVersion = ut.trim(sys.exec("opkg info mwan3 | grep Version | awk '{print $2}'"))
-		if mwanVersion ~= "" then
-			mwanVersion = "\n\nmwan3 - " .. mwanVersion
-		else
-			mwanVersion = "\n\nmwan3 - unknown"
-		end
-	local mwanLuciVersion = ut.trim(sys.exec("opkg info luci-app-mwan3 | grep Version | awk '{print $2}'"))
-		if mwanLuciVersion ~= "" then
-			mwanLuciVersion = "\nmwan3-luci - " .. mwanLuciVersion
-		else
-			mwanLuciVersion = "\nmwan3-luci - unknown"
-		end
-	mArray.versions = { wrtRelease .. luciRelease .. mwanVersion .. mwanLuciVersion }
+	luci.http.write("\n")
+	luci.http.write("\n")
+	luci.http.write("Software-Version")
+	luci.http.write("\n")
+	luci.http.write(dash)
+	luci.http.write("\n")
+	if ver.distversion then
+		luci.http.write(string.format("OpenWrt - %s", ver.distversion))
+		luci.http.write("\n")
+	else
+		luci.http.write("OpenWrt - unknown")
+		luci.http.write("\n")
+	end
 
-	-- mwan config
-	local mwanConfig = ut.trim(sys.exec("cat /etc/config/mwan3"))
-		if mwanConfig == "" then
-			mwanConfig = "No data found"
-		end
-	mArray.mwanconfig = { mwanConfig }
+	if ver.luciversion then
+		luci.http.write(string.format("LuCI - %s", ver.luciversion))
+		luci.http.write("\n")
+	else
+		luci.http.write("LuCI - unknown")
+		luci.http.write("\n")
+	end
 
-	-- network config
-	local networkConfig = ut.trim(sys.exec("cat /etc/config/network | sed -e 's/.*username.*/	USERNAME HIDDEN/' -e 's/.*password.*/	PASSWORD HIDDEN/'"))
-		if networkConfig == "" then
-			networkConfig = "No data found"
-		end
-	mArray.netconfig = { networkConfig }
+	luci.http.write("\n")
+	luci.http.write("\n")
+	local output = ut.trim(sys.exec("ip a show"))
+	luci.http.write("Output of \"ip a show\"")
+	luci.http.write("\n")
+	luci.http.write(dash)
+	luci.http.write("\n")
+	if output ~= "" then
+		luci.http.write(output)
+		luci.http.write("\n")
+	else
+		luci.http.write("No data found")
+		luci.http.write("\n")
+	end
 
-	-- wireless config
-	local wirelessConfig = ut.trim(sys.exec("cat /etc/config/wireless | sed -e 's/.*username.*/	USERNAME HIDDEN/' -e 's/.*password.*/	PASSWORD HIDDEN/' -e 's/.*key.*/	KEY HIDDEN/'"))
-		if wirelessConfig == "" then
-			wirelessConfig = "No data found"
-		end
-	mArray.wificonfig = { wirelessConfig }
-	
-	-- ifconfig
-	local ifconfig = ut.trim(sys.exec("ifconfig"))
-		if ifconfig == "" then
-			ifconfig = "No data found"
-		end
-	mArray.ifconfig = { ifconfig }
+	luci.http.write("\n")
+	luci.http.write("\n")
+	local output = ut.trim(sys.exec("ip route show"))
+	luci.http.write("Output of \"ip route show\"")
+	luci.http.write("\n")
+	luci.http.write(dash)
+	luci.http.write("\n")
+	if output ~= "" then
+		luci.http.write(output)
+		luci.http.write("\n")
+	else
+		luci.http.write("No data found")
+		luci.http.write("\n")
+	end
 
-	-- route -n
-	local routeShow = ut.trim(sys.exec("route -n"))
-		if routeShow == "" then
-			routeShow = "No data found"
-		end
-	mArray.routeshow = { routeShow }
+	luci.http.write("\n")
+	luci.http.write("\n")
+	local output = ut.trim(sys.exec("ip rule show"))
+	luci.http.write("Output of \"ip rule show\"")
+	luci.http.write("\n")
+	luci.http.write(dash)
+	luci.http.write("\n")
+	if output ~= "" then
+		luci.http.write(output)
+		luci.http.write("\n")
+	else
+		luci.http.write("No data found")
+		luci.http.write("\n")
+	end
 
-	-- ip rule show
-	local ipRuleShow = ut.trim(sys.exec(ip .. "rule show"))
-		if ipRuleShow == "" then
-			ipRuleShow = "No data found"
+	luci.http.write("\n")
+	luci.http.write("\n")
+	luci.http.write("Output of \"ip route list table 1-250\"")
+	luci.http.write("\n")
+	luci.http.write(dash)
+	luci.http.write("\n")
+	for i=1,250 do
+		local output = ut.trim(sys.exec(string.format("ip route list table %d", i)))
+		if output ~= "" then
+			luci.http.write(string.format("Table %s: ", i))
+			luci.http.write(output)
+			luci.http.write("\n")
 		end
-	mArray.iprule = { ipRuleShow }
+	end
 
-	-- ip route list table 1-250
-	local routeList, routeString = ut.trim(sys.exec(ip .. "rule | sed 's/://g' 2>/dev/null | awk '$1>=2001 && $1<=2250' | awk '{print $NF}'")), ""
-		if routeList ~= "" then
-			for line in routeList:gmatch("[^\r\n]+") do
-				routeString = routeString .. line .. "\n" .. sys.exec(ip .. "route list table " .. line)
-			end
-			routeString = ut.trim(routeString)
-		else
-			routeString = "No data found"
-		end
-	mArray.routelist = { routeString }
-
-	-- default firewall output policy
-	local firewallOut = ut.trim(sys.exec("uci -q -p /var/state get firewall.@defaults[0].output"))
-		if firewallOut == "" then
-			firewallOut = "No data found"
-		end
-	mArray.firewallout = { firewallOut }
-
-	-- iptables
-	local iptables = ut.trim(sys.exec("iptables -L -t mangle -v -n"))
-		if iptables == "" then
-			iptables = "No data found"
-		end
-	mArray.iptables = { iptables }
-
-	luci.http.prepare_content("application/json")
-	luci.http.write_json(mArray)
+	luci.http.write("\n")
+	luci.http.write("\n")
+	local output = ut.trim(sys.exec("iptables -L -t mangle -v -n"))
+	luci.http.write("Output of \"iptables -L -t mangle -v -n\"")
+	luci.http.write("\n")
+	luci.http.write(dash)
+	luci.http.write("\n")
+	if output ~= "" then
+		luci.http.write(output)
+		luci.http.write("\n")
+	else
+		luci.http.write("No data found")
+		luci.http.write("\n")
+	end
 end
