@@ -50,26 +50,14 @@ msgstr "Проверить таблицу маршрутизации"
 msgid "Collecting data..."
 msgstr "Сбор информации..."
 
-msgid "Currently Configured Interfaces"
-msgstr "Настроенные интерфейсы"
-
-msgid "Currently Configured Members"
-msgstr "Настроенные узлы"
-
-msgid "Currently Configured Policies"
-msgstr "Настроенных политики"
-
 msgid "Destination address"
 msgstr "Адрес назначения"
 
 msgid "Destination port"
 msgstr "Порт назначения"
 
-msgid "Detailed Status"
-msgstr "Подробная Информация"
-
-msgid "Diagnostic Results"
-msgstr "Результаты диагностики"
+msgid "Detail"
+msgstr ""
 
 msgid "Diagnostics"
 msgstr "Диагностика"
@@ -88,11 +76,8 @@ msgstr "Включено"
 msgid "Enter value in hex, starting with <code>0x</code>"
 msgstr "Введите значение в шестнадцатеричной форме, начиная с <code>0x</code>."
 
-msgid "Error collecting troubleshooting information"
-msgstr "Сбор сведений об устранении неполадок."
-
-msgid "Errors"
-msgstr "Ошибки"
+msgid "Execute"
+msgstr ""
 
 msgid "Expect interface state on up event"
 msgstr "Ожидание "
@@ -114,9 +99,6 @@ msgstr ""
 msgid "Globals"
 msgstr "Общие"
 
-msgid "Globals mwan3 options"
-msgstr "Общие mwan3 настройки"
-
 msgid "Hotplug ifdown"
 msgstr "Hotplug ifdown"
 
@@ -137,9 +119,6 @@ msgstr "Исходное состояние"
 
 msgid "Interface"
 msgstr "Интерфейс"
-
-msgid "Interface Status"
-msgstr "Состояние интерфейса"
 
 msgid "Interface down"
 msgstr "Интерфейс отключить"
@@ -163,11 +142,6 @@ msgstr "Сохранить интервал сбоя"
 msgid "Keep ping failure interval during failure state"
 msgstr "Сохранить интервал сбоя пинг-запроса, во время состояния сбоя."
 
-msgid "Last 50 MWAN systemlog entries. Newest entries sorted at the top :"
-msgstr ""
-"Последние 50 записей системного журнала MWAN . Новые записи расположены "
-"сверху :"
-
 msgid "Last resort"
 msgstr "Последнее средство"
 
@@ -180,47 +154,50 @@ msgstr "Загрузка"
 msgid "Local source interface"
 msgstr "Локальный исходящий интефейс"
 
-msgid "MWAN Detailed Status"
-msgstr "Детализация состояния MWAN"
+msgid "MWAN - Globals"
+msgstr ""
 
-msgid "MWAN Interface Configuration"
-msgstr "Настройка интерфейсов MWAN"
+msgid "MWAN - Interfaces"
+msgstr ""
+
+msgid "MWAN - Members"
+msgstr ""
+
+msgid "MWAN - Notification"
+msgstr ""
+
+msgid "MWAN - Policies"
+msgstr ""
+
+msgid "MWAN - Rules"
+msgstr ""
 
 msgid "MWAN Interface Configuration - %s"
 msgstr "Настройка интерфейсов MWAN  - %s"
 
-msgid "MWAN Interface Diagnostics"
-msgstr "Диагностика интерфейса MWAN"
-
 msgid "MWAN Interface Live Status"
 msgstr "Состояние интерфейса MWAN"
-
-msgid "MWAN Interface Systemlog"
-msgstr "Системный журнал MWAN интерфейса"
-
-msgid "MWAN Member Configuration"
-msgstr "MWAN настройка узлов"
 
 msgid "MWAN Member Configuration - %s"
 msgstr "MWAN настройка узлов - %s"
 
-msgid "MWAN Notification"
-msgstr "Уведомления MWAN"
-
-msgid "MWAN Policy Configuration"
-msgstr "MWAN настройка политики"
-
 msgid "MWAN Policy Configuration - %s"
 msgstr "MWAN настройка политики - %s"
-
-msgid "MWAN Rule Configuration"
-msgstr "MWAN настройка правил"
 
 msgid "MWAN Rule Configuration - %s"
 msgstr "MWAN настройка правил - %s"
 
-msgid "MWAN Service Control"
-msgstr "Управление службой MWAN"
+msgid "MWAN Status - Detail"
+msgstr ""
+
+msgid "MWAN Status - Diagnostics"
+msgstr ""
+
+msgid "MWAN Status - Troubleshooting"
+msgstr ""
+
+msgid "MWAN status - Interface Live Status"
+msgstr ""
 
 msgid ""
 "MWAN supports up to 250 physical and/or logical interfaces<br />MWAN "
@@ -281,18 +258,6 @@ msgstr "Нет"
 
 msgid "No MWAN interfaces found"
 msgstr "Интерфейсы MWAN не найдены"
-
-msgid "No MWAN systemlog history found"
-msgstr "Не найдено записей в системном журнале MWAN"
-
-msgid "No detailed status information available"
-msgstr "Подробная информация о состоянии отсутствует"
-
-msgid "No diagnostic results returned"
-msgstr "Результаты диагностики не возвращаются"
-
-msgid "No protocol specified"
-msgstr "Протокол не указан"
 
 msgid "Notification"
 msgstr "Уведомления"
@@ -366,9 +331,6 @@ msgstr "Протокол"
 msgid "Recovery interval"
 msgstr "Интервал восстановления"
 
-msgid "Restart MWAN"
-msgstr "Рестарт MWAN"
-
 msgid "Rule"
 msgstr "Правило"
 
@@ -376,25 +338,16 @@ msgid "Rules"
 msgstr "Правила"
 
 msgid ""
-"Rules specify which traffic will use a particular MWAN policy based on IP "
-"address, port or protocol<br />Rules are matched from top to bottom. Rules "
-"below a matching rule are ignored. Traffic not matching any rule is routed "
-"using the main routing table<br />Traffic destined for known (other than "
-"default) networks is handled by the main routing table. Traffic matching a "
-"rule, but all WAN interfaces for that policy are down will be blackholed<br /"
-">Names may contain characters A-Z, a-z, 0-9, _ and no spaces<br />Rules may "
-"not share the same name as configured interfaces, members or policies"
+"Rules specify which traffic will use a particular MWAN policy<br />Rules are "
+"based on IP address, port or protocol<br />Rules are matched from top to "
+"bottom<br />Rules below a matching rule are ignored<br />Traffic not "
+"matching any rule is routed using the main routing table<br />Traffic "
+"destined for known (other than default) networks is handled by the main "
+"routing table<br />Traffic matching a rule, but all WAN interfaces for that "
+"policy are down will be blackholed<br />Names may contain characters A-Z, a-"
+"z, 0-9, _ and no spaces<br />Rules may not share the same name as configured "
+"interfaces, members or policies"
 msgstr ""
-"Правила определяют, какой трафик будет использовать конкретную политику MWAN "
-"на основе IP-адреса, порта или протокола.<br />Список правил исполняется "
-"сверху вниз. Правила, расположенные ниже правила сопоставления, "
-"игнорируются. Трафик, не совпадающий с каким-либо правилом, перенаправляется "
-"с помощью основной таблицы маршрутизации.<br />Трафик, предназначенный для "
-"известных (не по умолчанию) сетей, обрабатывается основной таблицей "
-"маршрутизации. Трафик соответствует правилам, но все интерфейсы WAN для этой "
-"политики будут заблокированы.<br />Имена могут содержать символы A-Z, a-z, "
-"0-9, _ , пробелы запрещены.<br />Правила не могут иметь одинаковые имена с "
-"настроенными интерфейсами, узлами или политиками."
 
 msgid "Seconds. Acceptable values: 1-1000000. Defaults to 600 if not set"
 msgstr ""
@@ -407,20 +360,17 @@ msgstr "Исходящий адрес"
 msgid "Source port"
 msgstr "Исходящий порт"
 
-msgid "Start MWAN"
-msgstr "Старт MWAN"
-
 msgid "Sticky"
 msgstr "Липкий"
 
 msgid "Sticky timeout"
 msgstr "Липкое значение времени ожидания"
 
-msgid "Stop MWAN"
-msgstr "Стоп MWAN"
-
 msgid "Supports CIDR notation (eg \"192.168.100.0/24\") without quotes"
 msgstr "Поддерживает CIDR нотацию (например '192.168.100.0/24') без кавычек."
+
+msgid "Task"
+msgstr ""
 
 msgid "There are currently %d of 250 supported interfaces configured"
 msgstr "В настоящее время настроено %d из 250 поддерживаемых интерфейсов."
@@ -466,9 +416,6 @@ msgstr ""
 "устройства, чей интерфейс включили или отключили  (например, 'eth0' или "
 "'wwan0')<br /><br />."
 
-msgid "Tracking IP"
-msgstr "Отслеживание IP"
-
 msgid "Tracking hostname or IP address"
 msgstr "Отслеживание имени хоста или IP-адреса"
 
@@ -477,9 +424,6 @@ msgstr "Метод отслеживания"
 
 msgid "Tracking reliability"
 msgstr "Надежность отслеживания"
-
-msgid "Traffic Rules"
-msgstr "Правила трафика"
 
 msgid ""
 "Traffic from the same source IP address that previously matched this rule "
@@ -492,9 +436,6 @@ msgstr ""
 msgid "Troubleshooting"
 msgstr "Устранение неполадок"
 
-msgid "Troubleshooting Data"
-msgstr "Устранение неполадок данных"
-
 msgid ""
 "Use the IP address of this interface as source IP address for traffic "
 "initiated by the router itself"
@@ -502,109 +443,38 @@ msgstr ""
 "Используйте IP-адрес этого интерфейса в качестве IP-адреса источника для "
 "трафика, инициированного самим маршрутизатором."
 
-msgid "View the contents of /etc/protocols for protocol descriptions"
-msgstr "Просмотреть содержимое файла /etc/protocols для описания протокола."
+msgid "View the content of /etc/protocols for protocol description"
+msgstr ""
 
 msgid "WARNING: %d interfaces are configured exceeding the maximum of 250!"
 msgstr ""
 "ВНИМАНИЕ: интерфейсы %d настроены, превышая установленное ограничение в "
 "количестве 250шт.!"
 
-msgid ""
-"WARNING: Some interfaces are configured incorrectly or not at all in /etc/"
-"config/network!"
+msgid "WARNING: Interface %s are not found in /etc/config/network"
 msgstr ""
-"ВНИМАНИЕ: Некоторые интерфейсы настроены неправильно или вовсе отсутствуют в "
-"config файле /etc/config/network!"
 
-msgid ""
-"WARNING: Some interfaces have a higher reliability requirement than there "
-"are tracking IP addresses!"
+msgid "WARNING: Interface %s has a duplicate metric %s configured"
 msgstr ""
-"ВНИМАНИЕ: Некоторые интерфейсы имеют более высокое требования к надежности "
-"чем простое отслеживание IP-адреса!"
 
 msgid ""
-"WARNING: Some interfaces have duplicate metrics configured in /etc/config/"
-"network!"
+"WARNING: Interface %s has a higher reliability requirement than tracking "
+"hosts (%d)"
 msgstr ""
-"ВНИМАНИЕ: Некоторые интерфейсы имеют одинаковые настройки в config файле /"
-"etc/config/network!"
+
+msgid "WARNING: Interface %s has no default route in the main routing table"
+msgstr ""
+
+msgid "WARNING: Policie %s has exceeding the maximum name of 15 characters"
+msgstr ""
 
 msgid ""
-"WARNING: Some interfaces have no default route in the main routing table!"
+"WARNING: Rule %s have a port configured with no or improper protocol "
+"specified!"
 msgstr ""
-"ВНИМАНИЕ: Некоторые интерфейсы не имеют маршрута по умолчанию в основной "
-"таблице маршрутизации!"
 
-msgid ""
-"WARNING: Some interfaces have no metric configured in /etc/config/network!"
+msgid "Waiting for command to complete..."
 msgstr ""
-"ВНИМАНИЕ: Некоторые интерфейсы не настроены в config файле /etc/config/"
-"network!"
-
-msgid ""
-"WARNING: Some policies have names exceeding the maximum of 15 characters!"
-msgstr ""
-"ВНИМАНИЕ: Некоторые политики имеют имена, превышающие заданный максимум в 15 "
-"символов!"
-
-msgid ""
-"WARNING: Some rules have a port configured with no or improper protocol "
-"specified! Please configure a specific protocol!"
-msgstr ""
-"ВНИМАНИЕ: некоторые правила имеют порт для которого неправильно указан или "
-"отсутствует протокол! Настройте конкретный протокол!"
-
-msgid ""
-"WARNING: This and other interfaces have duplicate metrics configured in /etc/"
-"config/network!"
-msgstr ""
-"ВНИМАНИЕ: этот и другие интерфейсы имеют одинаковые настройки в config "
-"файле /etc/config/network!"
-
-msgid ""
-"WARNING: This interface has a higher reliability requirement than there are "
-"tracking IP addresses!"
-msgstr ""
-"ВНИМАНИЕ: этот интерфейс имеет более высокое требование к надежности, чем "
-"простое отслеживание IP-адресов!"
-
-msgid "WARNING: This interface has no default route in the main routing table!"
-msgstr ""
-"ВНИМАНИЕ: этот интерфейс не имеет маршрута по умолчанию в основной таблице "
-"маршрутизации!"
-
-msgid ""
-"WARNING: This interface has no metric configured in /etc/config/network!"
-msgstr ""
-"ВНИМАНИЕ: этот интерфейс не настроен в config файле /etc/config/network!"
-
-msgid ""
-"WARNING: This interface is configured incorrectly or not at all in /etc/"
-"config/network!"
-msgstr ""
-"ВНИМАНИЕ: этот интерфейс настроен неправильно или он вообще отсутствует в "
-"config файле /etc/config/network!"
-
-msgid ""
-"WARNING: This policy's name is %d characters exceeding the maximum of 15!"
-msgstr ""
-"ВНИМАНИЕ: имя этой политики содержит- % D символов, что превышает заданный "
-"максимум в 15 символов!"
-
-msgid ""
-"WARNING: This rule is incorrectly configured with no or improper protocol "
-"specified! Please configure a specific protocol!"
-msgstr ""
-"ВНИМАНИЕ: это правило неправильно настроено или неправильно указан протокол! "
-"Настройте конкретный протокол!"
-
-msgid "Waiting for MWAN to %s..."
-msgstr "Ожидание MWAN до %s..."
-
-msgid "Waiting for diagnostic results..."
-msgstr "Ожидание результатов диагностики..."
 
 msgid "Weight"
 msgstr "Вес"
@@ -636,14 +506,226 @@ msgstr "ifup"
 msgid "never"
 msgstr "никогда"
 
-msgid "restart"
-msgstr "рестарт"
-
-msgid "start"
-msgstr "cтарт"
-
-msgid "stop"
-msgstr "стоп"
-
 msgid "unreachable (reject)"
 msgstr "недоступен (отклонить)"
+
+#~ msgid "Currently Configured Interfaces"
+#~ msgstr "Настроенные интерфейсы"
+
+#~ msgid "Currently Configured Members"
+#~ msgstr "Настроенные узлы"
+
+#~ msgid "Currently Configured Policies"
+#~ msgstr "Настроенных политики"
+
+#~ msgid "Detailed Status"
+#~ msgstr "Подробная Информация"
+
+#~ msgid "Diagnostic Results"
+#~ msgstr "Результаты диагностики"
+
+#~ msgid "Error collecting troubleshooting information"
+#~ msgstr "Сбор сведений об устранении неполадок."
+
+#~ msgid "Errors"
+#~ msgstr "Ошибки"
+
+#~ msgid "Globals mwan3 options"
+#~ msgstr "Общие mwan3 настройки"
+
+#~ msgid "Interface Status"
+#~ msgstr "Состояние интерфейса"
+
+#~ msgid "Last 50 MWAN systemlog entries. Newest entries sorted at the top :"
+#~ msgstr ""
+#~ "Последние 50 записей системного журнала MWAN . Новые записи расположены "
+#~ "сверху :"
+
+#~ msgid "MWAN Detailed Status"
+#~ msgstr "Детализация состояния MWAN"
+
+#~ msgid "MWAN Interface Configuration"
+#~ msgstr "Настройка интерфейсов MWAN"
+
+#~ msgid "MWAN Interface Diagnostics"
+#~ msgstr "Диагностика интерфейса MWAN"
+
+#~ msgid "MWAN Interface Systemlog"
+#~ msgstr "Системный журнал MWAN интерфейса"
+
+#~ msgid "MWAN Member Configuration"
+#~ msgstr "MWAN настройка узлов"
+
+#~ msgid "MWAN Notification"
+#~ msgstr "Уведомления MWAN"
+
+#~ msgid "MWAN Policy Configuration"
+#~ msgstr "MWAN настройка политики"
+
+#~ msgid "MWAN Rule Configuration"
+#~ msgstr "MWAN настройка правил"
+
+#~ msgid "MWAN Service Control"
+#~ msgstr "Управление службой MWAN"
+
+#~ msgid "No MWAN systemlog history found"
+#~ msgstr "Не найдено записей в системном журнале MWAN"
+
+#~ msgid "No detailed status information available"
+#~ msgstr "Подробная информация о состоянии отсутствует"
+
+#~ msgid "No diagnostic results returned"
+#~ msgstr "Результаты диагностики не возвращаются"
+
+#~ msgid "No protocol specified"
+#~ msgstr "Протокол не указан"
+
+#~ msgid "Restart MWAN"
+#~ msgstr "Рестарт MWAN"
+
+#~ msgid ""
+#~ "Rules specify which traffic will use a particular MWAN policy based on IP "
+#~ "address, port or protocol<br />Rules are matched from top to bottom. "
+#~ "Rules below a matching rule are ignored. Traffic not matching any rule is "
+#~ "routed using the main routing table<br />Traffic destined for known "
+#~ "(other than default) networks is handled by the main routing table. "
+#~ "Traffic matching a rule, but all WAN interfaces for that policy are down "
+#~ "will be blackholed<br />Names may contain characters A-Z, a-z, 0-9, _ and "
+#~ "no spaces<br />Rules may not share the same name as configured "
+#~ "interfaces, members or policies"
+#~ msgstr ""
+#~ "Правила определяют, какой трафик будет использовать конкретную политику "
+#~ "MWAN на основе IP-адреса, порта или протокола.<br />Список правил "
+#~ "исполняется сверху вниз. Правила, расположенные ниже правила "
+#~ "сопоставления, игнорируются. Трафик, не совпадающий с каким-либо "
+#~ "правилом, перенаправляется с помощью основной таблицы маршрутизации.<br /"
+#~ ">Трафик, предназначенный для известных (не по умолчанию) сетей, "
+#~ "обрабатывается основной таблицей маршрутизации. Трафик соответствует "
+#~ "правилам, но все интерфейсы WAN для этой политики будут заблокированы."
+#~ "<br />Имена могут содержать символы A-Z, a-z, 0-9, _ , пробелы запрещены."
+#~ "<br />Правила не могут иметь одинаковые имена с настроенными "
+#~ "интерфейсами, узлами или политиками."
+
+#~ msgid "Start MWAN"
+#~ msgstr "Старт MWAN"
+
+#~ msgid "Stop MWAN"
+#~ msgstr "Стоп MWAN"
+
+#~ msgid "Tracking IP"
+#~ msgstr "Отслеживание IP"
+
+#~ msgid "Traffic Rules"
+#~ msgstr "Правила трафика"
+
+#~ msgid "Troubleshooting Data"
+#~ msgstr "Устранение неполадок данных"
+
+#~ msgid "View the contents of /etc/protocols for protocol descriptions"
+#~ msgstr "Просмотреть содержимое файла /etc/protocols для описания протокола."
+
+#~ msgid ""
+#~ "WARNING: Some interfaces are configured incorrectly or not at all in /etc/"
+#~ "config/network!"
+#~ msgstr ""
+#~ "ВНИМАНИЕ: Некоторые интерфейсы настроены неправильно или вовсе "
+#~ "отсутствуют в config файле /etc/config/network!"
+
+#~ msgid ""
+#~ "WARNING: Some interfaces have a higher reliability requirement than there "
+#~ "are tracking IP addresses!"
+#~ msgstr ""
+#~ "ВНИМАНИЕ: Некоторые интерфейсы имеют более высокое требования к "
+#~ "надежности чем простое отслеживание IP-адреса!"
+
+#~ msgid ""
+#~ "WARNING: Some interfaces have duplicate metrics configured in /etc/config/"
+#~ "network!"
+#~ msgstr ""
+#~ "ВНИМАНИЕ: Некоторые интерфейсы имеют одинаковые настройки в config файле /"
+#~ "etc/config/network!"
+
+#~ msgid ""
+#~ "WARNING: Some interfaces have no default route in the main routing table!"
+#~ msgstr ""
+#~ "ВНИМАНИЕ: Некоторые интерфейсы не имеют маршрута по умолчанию в основной "
+#~ "таблице маршрутизации!"
+
+#~ msgid ""
+#~ "WARNING: Some interfaces have no metric configured in /etc/config/network!"
+#~ msgstr ""
+#~ "ВНИМАНИЕ: Некоторые интерфейсы не настроены в config файле /etc/config/"
+#~ "network!"
+
+#~ msgid ""
+#~ "WARNING: Some policies have names exceeding the maximum of 15 characters!"
+#~ msgstr ""
+#~ "ВНИМАНИЕ: Некоторые политики имеют имена, превышающие заданный максимум в "
+#~ "15 символов!"
+
+#~ msgid ""
+#~ "WARNING: Some rules have a port configured with no or improper protocol "
+#~ "specified! Please configure a specific protocol!"
+#~ msgstr ""
+#~ "ВНИМАНИЕ: некоторые правила имеют порт для которого неправильно указан "
+#~ "или отсутствует протокол! Настройте конкретный протокол!"
+
+#~ msgid ""
+#~ "WARNING: This and other interfaces have duplicate metrics configured in /"
+#~ "etc/config/network!"
+#~ msgstr ""
+#~ "ВНИМАНИЕ: этот и другие интерфейсы имеют одинаковые настройки в config "
+#~ "файле /etc/config/network!"
+
+#~ msgid ""
+#~ "WARNING: This interface has a higher reliability requirement than there "
+#~ "are tracking IP addresses!"
+#~ msgstr ""
+#~ "ВНИМАНИЕ: этот интерфейс имеет более высокое требование к надежности, чем "
+#~ "простое отслеживание IP-адресов!"
+
+#~ msgid ""
+#~ "WARNING: This interface has no default route in the main routing table!"
+#~ msgstr ""
+#~ "ВНИМАНИЕ: этот интерфейс не имеет маршрута по умолчанию в основной "
+#~ "таблице маршрутизации!"
+
+#~ msgid ""
+#~ "WARNING: This interface has no metric configured in /etc/config/network!"
+#~ msgstr ""
+#~ "ВНИМАНИЕ: этот интерфейс не настроен в config файле /etc/config/network!"
+
+#~ msgid ""
+#~ "WARNING: This interface is configured incorrectly or not at all in /etc/"
+#~ "config/network!"
+#~ msgstr ""
+#~ "ВНИМАНИЕ: этот интерфейс настроен неправильно или он вообще отсутствует в "
+#~ "config файле /etc/config/network!"
+
+#~ msgid ""
+#~ "WARNING: This policy's name is %d characters exceeding the maximum of 15!"
+#~ msgstr ""
+#~ "ВНИМАНИЕ: имя этой политики содержит- % D символов, что превышает "
+#~ "заданный максимум в 15 символов!"
+
+#~ msgid ""
+#~ "WARNING: This rule is incorrectly configured with no or improper protocol "
+#~ "specified! Please configure a specific protocol!"
+#~ msgstr ""
+#~ "ВНИМАНИЕ: это правило неправильно настроено или неправильно указан "
+#~ "протокол! Настройте конкретный протокол!"
+
+#~ msgid "Waiting for MWAN to %s..."
+#~ msgstr "Ожидание MWAN до %s..."
+
+#~ msgid "Waiting for diagnostic results..."
+#~ msgstr "Ожидание результатов диагностики..."
+
+#~ msgid "restart"
+#~ msgstr "рестарт"
+
+#~ msgid "start"
+#~ msgstr "cтарт"
+
+#~ msgid "stop"
+#~ msgstr "стоп"
