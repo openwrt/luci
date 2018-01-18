@@ -10,10 +10,11 @@
 <%
 	local uci = require "luci.model.uci"
 
-	interfaceNames = ""
+	local iface = {}
+
 	uci.cursor():foreach("mwan3", "interface",
 		function (section)
-			interfaceNames = interfaceNames .. section[".name"] .. " "
+			table.insert(iface, section[".name"])
 		end
 	)
 %>
@@ -22,74 +23,64 @@
 <script type="text/javascript">//<![CDATA[
 	var stxhr = new XHR();
 
-	function update_status(tool, task, task_name)
+	function update_status(iface, task)
 	{
-		var iface = document.getElementById('mwaniface').value;
-		var output = document.getElementById('diag_output');
+		var legend = document.getElementById('diag-rc-legend');
+		var output = document.getElementById('diag-rc-output');
 
-		output.innerHTML = '<img src="<%=resource%>/icons/loading.gif" ' +
-			'alt="<%:Loading%>" ' +
-			'style="padding: 20px; vertical-align: middle;" />' +
-			"<%:Waiting for diagnostic results...%>";
+		output.innerHTML =
+			'<img src="<%=resource%>/icons/loading.gif" alt="<%:Loading%>" style="vertical-align: middle;" />' +
+			"<%:Waiting for command to complete...%>"
+		;
 
 		output.parentNode.style.display = 'block';
 		output.style.display = 'inline';
 
-		stxhr.get('<%=luci.dispatcher.build_url("admin", "status", "mwan")%>/diagnostics_display' + '/' + iface + '/' + tool + '/' + task, null,
-			function(x, mArray)
+		stxhr.post('<%=url('admin/status/mwan')%>/diagnostics_display' + '/' + iface + '/' + task, { token: '<%=token%>' },
+			function(x)
 			{
-				if (mArray.diagnostics)
-				{
-					output.innerHTML = String.format('<pre id="diag_output_css">%h</pre>', mArray.diagnostics[0]);
-				}
-				else
-				{
-					output.innerHTML = '<pre id="diag_output_css"><strong><%:No diagnostic results returned%></strong></pre>';
-				}
+				legend.style.display = 'none';
+				output.innerHTML = String.format('<pre>%h</pre>', x.responseText);
 			}
 		);
 	}
 //]]></script>
 
-<div id="mwan_diagnostics" class="cbi-map">
-	<fieldset id="diag_select" class="cbi-section">
-		<legend><%:MWAN Interface Diagnostics%></legend>
-		<select id="mwaniface">
-			<% for z in interfaceNames:gmatch("[^ ]+") do -%><option value="<%=z%>"><%=z%></option><%- end %>
-		</select>
-		<div id="buttoncss">
-			<input type="button" value="<%:Ping default gateway%>" class="cbi-button cbi-button-apply" onclick="update_status('ping', 'gateway', null)" />
-			<input type="button" value="<%:Ping tracking IP%>" class="cbi-button cbi-button-apply" onclick="update_status('ping', 'track_ip', null)" />
-			<input type="button" value="<%:Check IP rules%>" class="cbi-button cbi-button-apply" onclick="update_status('rulechk', null, null)" />
-			<input type="button" value="<%:Check routing table%>" class="cbi-button cbi-button-apply" onclick="update_status('routechk', null, null)" />
-			<input type="button" value="<%:Hotplug ifup%>" class="cbi-button cbi-button-apply" onclick="update_status('hotplug', 'ifup', null)" />
-			<input type="button" value="<%:Hotplug ifdown%>" class="cbi-button cbi-button-apply" onclick="update_status('hotplug', 'ifdown', null)" />
-		</div>
-	</fieldset>
-	<fieldset class="cbi-section" style="display:none">
-		<legend><%:Diagnostic Results%></legend>
-		<div id="diag_output"></div>
-	</fieldset>
-</div>
+<form method="post" action="<%=url('admin/network/diagnostics')%>">
+	<div class="cbi-map">
+		<h2 name="content"><%:MWAN Status - Diagnostics%></h2>
 
-<style type="text/css">
-  #mwaniface {
-	float: left;
-	margin: 8px 20px 0px 0px;
-  }
-  #buttoncss {
-	display: table;
-	float: left;
-	text-align: left;
-  }
-  .cbi-button {
-	margin: 8px 20px 0px 0px;
-	min-width: 153px;
-  }
-  #diag_output_css {
-	padding: 20px;
-	text-align: left;
-  }
-</style>
+		<fieldset class="cbi-section">
+			<br />
+
+			<div style="width:30%; float:left">
+				<label class="cbi-value-title"><%:Interface%></label>
+				<select name="iface" style="width:auto">
+					<% for _, z in ipairs(iface) do -%><option value="<%=z%>"><%=z%></option><%- end %>
+				</select>
+			</div>
+
+			<div style="width:30%; float:left">
+				<label class="cbi-value-title"><%:Task%></label>
+				<select name="task" style="width:auto">
+					<option value="ping_gateway"><%:Ping default gateway%></option>
+					<option value="ping_trackips"><%:Ping tracking IP%></option>
+					<option value="check_rules"><%:Check IP rules%></option>
+					<option value="check_routes"><%:Check routing table%></option>
+					<option value="hotplug_ifup"><%:Hotplug ifup%>"</option>
+					<option value="hotplug_ifdown"><%:Hotplug ifdown%></option>
+				</select>
+			</div>
+
+			<div style="width:30%; float:left">
+				<input type="button" value="<%:Execute%>" class="cbi-button cbi-button-apply" onclick="update_status(this.form.iface.value, this.form.task.value)"/>
+			</div>
+		</fieldset>
+	</div>
+	<fieldset class="cbi-section" style="display:none">
+		<legend id="diag-rc-legend"><%:Collecting data...%></legend>
+		<span id="diag-rc-output"></span>
+	</fieldset>
+</form>
 
 <%+footer%>
