@@ -10,33 +10,23 @@
 <script type="text/javascript" src="<%=resource%>/cbi.js"></script>
 <script type="text/javascript">//<![CDATA[
 	XHR.poll(5, '<%=luci.dispatcher.build_url("admin", "status", "mwan", "detailed_status")%>', null,
-		function(x, mArray)
+		function(x)
 		{
-			var status = document.getElementById('mwan_detail_text');
-			if (mArray.mwandetail)
-			{
-				status.innerHTML = String.format('<pre>%s</pre>', mArray.mwandetail[0]);
-			}
-			else
-			{
-				status.innerHTML = '<strong><%:No detailed status information available%></strong>';
-			}
+			var legend = document.getElementById('diag-rc-legend');
+			var output = document.getElementById('diag-rc-output');
+			legend.style.display = 'none';
+			output.innerHTML = String.format('<pre>%h</pre>', x.responseText);
 		}
 	);
 //]]></script>
 
-<div id="mwan_detail_status">
+<div>
 	<fieldset class="cbi-section">
-		<legend><%:MWAN Detailed Status%></legend>
-		<div id="mwan_detail_text"><img src="<%=resource%>/icons/loading.gif" alt="<%:Loading%>" style="vertical-align:middle" /><%:Collecting data...%></div>
+		<legend id="diag-rc-legend"><%:Collecting data...%></legend>
+		<span id="diag-rc-output">
+			<img src="<%=resource%>/icons/loading.gif" alt="<%:Loading%>" style="vertical-align: middle;" />
+		</span>
 	</fieldset>
 </div>
-
-<style type="text/css">
-  #mwan_detail_text {
-	padding: 20px;
-	text-align: left;
-  }
-</style>
 
 <%+footer%>

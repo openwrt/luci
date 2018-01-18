@@ -68,16 +68,13 @@ function mwan_Status()
 end
 
 function detailedStatus()
-	local mArray = {}
-
-	-- detailed mwan status
-	local detailStatusInfo = ut.trim(sys.exec("/usr/sbin/mwan3 status"))
-	if detailStatusInfo ~= "" then
-		mArray.mwandetail = { detailStatusInfo }
+	local statusInfo = ut.trim(sys.exec("/usr/sbin/mwan3 status"))
+	luci.http.prepare_content("text/plain")
+	if statusInfo ~= "" then
+		luci.http.write(statusInfo)
+	else
+		luci.http.write("Unable to get status information")
 	end
-
-	luci.http.prepare_content("application/json")
-	luci.http.write_json(mArray)
 end
 
 function diagnosticsData(interface, task)
