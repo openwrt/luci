@@ -1,5 +1,5 @@
-ds = require "luci.dispatcher"
-sys = require "luci.sys"
+dsp = require "luci.dispatcher"
+
 
 function policyCheck()
 	local policy_error = {}
@@ -44,11 +44,11 @@ mwan_policy = m5:section(TypedSection, "policy", nil,
 	mwan_policy.sectionhead = translate("Policy")
 	mwan_policy.sortable = true
 	mwan_policy.template = "cbi/tblsection"
-	mwan_policy.extedit = ds.build_url("admin", "network", "mwan", "policy", "%s")
+	mwan_policy.extedit = dsp.build_url("admin", "network", "mwan", "policy", "%s")
 	function mwan_policy.create(self, section)
 		TypedSection.create(self, section)
 		m5.uci:save("mwan3")
-		luci.http.redirect(ds.build_url("admin", "network", "mwan", "policy", section))
+		luci.http.redirect(dsp.build_url("admin", "network", "mwan", "policy", section))
 	end
 
 

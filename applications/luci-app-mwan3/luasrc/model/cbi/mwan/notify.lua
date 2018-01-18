@@ -1,8 +1,7 @@
--- ------ hotplug script configuration ------ --
-
 local fs = require "nixio.fs"
 local ut = require "luci.util"
 script = "/etc/mwan3.user"
+
 
 m5 = SimpleForm("luci", translate("MWAN - Notification"))
 

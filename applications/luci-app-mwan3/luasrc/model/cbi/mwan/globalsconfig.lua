@@ -14,12 +14,14 @@ $Id$
 
 local net = require "luci.model.network".init()
 
+
 m = Map("mwan3", translate("MWAN - Globals"))
 
 s = m:section(NamedSection, "globals", "globals", nil)
 n = s:option(ListValue, "local_source",
 	translate("Local source interface"),
-	translate("Use the IP address of this interface as source IP address for traffic initiated by the router itself"))
+	translate("Use the IP address of this interface as source IP " ..
+	"address for traffic initiated by the router itself"))
 n:value("none")
 n.default = "none"
 for _, net in ipairs(net:get_networks()) do

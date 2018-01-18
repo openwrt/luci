@@ -1,6 +1,4 @@
 dsp = require "luci.dispatcher"
-sys = require "luci.sys"
-ut = require "luci.util"
 arg[1] = arg[1] or ""
 
 

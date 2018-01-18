@@ -1,6 +1,5 @@
 dsp = require "luci.dispatcher"
-sys = require "luci.sys"
-ut = require "luci.util"
+
 
 function ruleCheck()
 	local rule_error = {}
