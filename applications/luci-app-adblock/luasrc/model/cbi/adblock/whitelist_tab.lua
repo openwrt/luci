@@ -8,11 +8,23 @@ local adbinput = uci.get("adblock", "global", "adb_whitelist") or "/etc/adblock/
 
 if not nixio.fs.access(adbinput) then
 	m = SimpleForm("error", nil, translate("Input file not found, please check your configuration."))
+	m.reset = false
+	m.submit = false
+	return m
+end
+
+if nixio.fs.stat(adbinput).size > 524288 then
+	m = SimpleForm("error", nil,
+	translate("The file size is too large for online editing in LuCI (&gt; 512 KB). ")
+	.. translate("Please edit this file directly in a terminal session."))
+	m.reset = false
+	m.submit = false
 	return m
 end
 
 m = SimpleForm("input", nil)
 m:append(Template("adblock/config_css"))
+m.submit = translate("Save")
 m.reset = false
 
 s = m:section(SimpleSection, nil,
