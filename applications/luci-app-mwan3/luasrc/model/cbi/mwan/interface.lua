@@ -77,7 +77,7 @@ function configCheck()
 
 				local dump = require("luci.util").ubus("network.interface.%s" % iface, "status", {})
 				overview[iface]["default_route"] = false
-				if dump then
+				if dump and dump.route then
 					local _, route
 					for _, route in ipairs(dump.route) do
 						if dump.route[_].target == "0.0.0.0" then

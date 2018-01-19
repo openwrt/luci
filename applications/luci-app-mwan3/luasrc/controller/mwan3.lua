@@ -111,11 +111,11 @@ function diagnosticsData(interface, task)
 	function get_gateway(inteface)
 		local dump = require("luci.util").ubus("network.interface.%s" % interface, "status", {})
 		local gateway
-		if dump then
+		if dump and dump.route then
 			local _, route
 			for _, route in ipairs(dump.route) do
 				if dump.route[_].target == "0.0.0.0" then
-					gateway =  dump.route[_].nexthop
+					gateway = dump.route[_].nexthop
 				end
 			end
 		end
