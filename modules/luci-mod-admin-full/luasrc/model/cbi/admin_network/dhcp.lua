@@ -263,7 +263,7 @@ s = m:section(TypedSection, "host", translate("Static Leases"),
 		"DHCP clients. They are also required for non-dynamic interface configurations where " ..
 		"only hosts with a corresponding lease are served.") .. "<br />" ..
 	translate("Use the <em>Add</em> Button to add a new lease entry. The <em>MAC-Address</em> " ..
-		"indentifies the host, the <em>IPv4-Address</em> specifies to the fixed address to " ..
+		"indentifies the host, the <em>IPv4-Address</em> specifies the fixed address to " ..
 		"use and the <em>Hostname</em> is assigned as symbolic name to the requesting host. " ..
 		"The optional <em>Lease time</em> can be used to set non-standard host-specific " ..
 		"lease time, e.g. 12h, 3d or infinite."))
