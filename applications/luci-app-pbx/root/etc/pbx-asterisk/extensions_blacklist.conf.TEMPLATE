@@ -1,1 +1,0 @@
-exten => s,n,Gotoif($[ "${CALLERID(NUM)}" = "|BLACKLISTITEM|" ]?context-user-hangup,s,1)
