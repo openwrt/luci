@@ -3,7 +3,7 @@
 
 module("luci.controller.advanced_reboot", package.seeall)
 
--- device, board_name, part1, part2, offset, env_var_1, value_1_1, value_1_2, env_var_2, value_2_1, value_2_2
+-- device_name, board_name, part1, part2, offset, env_var_1, value_1_1, value_1_2, env_var_2, value_2_1, value_2_2
 devices = {
   {"Linksys EA3500", "linksys-audi", "mtd3", "mtd5", 32, "boot_part", 1, 2, "bootcmd", "run nandboot", "run altnandboot"},
   {"Linksys E4200v2/EA4500", "linksys-viper", "mtd3", "mtd5", 32, "boot_part", 1, 2, "bootcmd", "run nandboot", "run altnandboot"},
@@ -17,9 +17,10 @@ devices = {
 }
 
 errorMessage = ""
-board_name = luci.util.trim(luci.sys.exec("cat /tmp/sysinfo/board_name"))
+device_board_name = luci.util.trim(luci.sys.exec("cat /tmp/sysinfo/board_name"))
 for i=1, #devices do
-  if board_name and string.match(board_name, devices[i][2]) then
+  table_board_name = devices[i][2]:gsub('-','')
+  if device_board_name and device_board_name:gsub('-',''):match(table_board_name) then
     device_name = devices[i][1]
     partition_one_mtd = devices[i][3] or nil
     partition_two_mtd = devices[i][4] or nil
