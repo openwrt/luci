@@ -11,10 +11,11 @@ end
 
 function e.write(self, section, value)
 	if value == "1" then
-		luci.sys.call("/etc/init.d/simple-adblock enable >/dev/null")
-		luci.sys.call("/etc/init.d/simple-adblock start >/dev/null")
+		luci.sys.init.enable("simple-adblock")
+		luci.sys.init.start("simple-adblock")
 	else
-		luci.sys.call("/etc/init.d/simple-adblock stop >/dev/null")
+		luci.sys.init.stop("simple-adblock")
+		luci.sys.init.disable("simple-adblock")
 	end
 	return Flag.write(self, section, value)
 end
