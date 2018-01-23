@@ -41,11 +41,10 @@ if (a.installed("curl") == true) then
   curl_interface:depends("use_curl","1")
   curl_interface.placeholder = "eth0"
 else
-  use_curl = s:option(Flag, "use_curl", translate("Use curl instead of wget"), translate("Curl is currently not installed.")
-  .." Please install the package in the "
-  ..[[<a href="]] .. DISP.build_url("admin", "system", "packages")
+  use_curl = s:option(Flag, "use_curl", translate("Use curl instead of wget"), translate("Curl is currently not installed. Please install the package in the")
+  ..[[ <a href="]] .. DISP.build_url("admin", "system", "packages")
   .. "?display=available&query=curl"..[[">]]
-  .. "Software Section" .. [[</a>]]
+  .. translate ("Software Section") .. [[</a>]]
   .. "."
   )
   use_curl.rmempty = false
