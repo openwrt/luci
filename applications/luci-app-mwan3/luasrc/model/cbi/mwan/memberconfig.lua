@@ -1,3 +1,7 @@
+-- Copyright 2014 Aedan Renner <chipdankly@gmail.com>
+-- Copyright 2018 Florian Eckert <fe@dev.tdt.de>
+-- Licensed to the public under the GNU General Public License v2.
+
 dsp = require "luci.dispatcher"
 arg[1] = arg[1] or ""
 
