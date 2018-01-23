@@ -39,8 +39,8 @@ if nixio.fs.access(sysfs_path) then
 	leds = nixio.util.consume((nixio.fs.dir(sysfs_path)))
 end
 if #leds ~= 0 then
-	o3 = s:option(Value, "led", translate("LED to indicate status"), translate("Pick the LED not already used in ")
-		.. [[<a href="]] .. luci.dispatcher.build_url("admin/system/leds") .. [[">]]
+	o3 = s:option(Value, "led", translate("LED to indicate status"), translate("Pick the LED not already used in")
+		.. [[ <a href="]] .. luci.dispatcher.build_url("admin/system/leds") .. [[">]]
 		.. translate("System LED Configuration") .. [[</a>]])
 	o3.rmempty = true
 	o3:value("", translate("none"))
