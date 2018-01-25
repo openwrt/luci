@@ -2,20 +2,11 @@ m = Map("simple-adblock", translate("Simple AdBlock Settings"))
 s = m:section(NamedSection, "config", "simple-adblock")
 
 -- General options
-e = s:option(Flag, "enabled", translate("Enable/start service"))
+e = s:option(Flag, "enabled", translate("Start Simple Adblock service"))
 e.rmempty  = false
-
-function e.cfgvalue(self, section)
-	return self.map:get(section, "enabled") == "1" and luci.sys.init.enabled("simple-adblock") and self.enabled or self.disabled
-end
-
 function e.write(self, section, value)
-	if value == "1" then
-		luci.sys.init.enable("simple-adblock")
-		luci.sys.init.start("simple-adblock")
-	else
+	if value ~= "1" then
 		luci.sys.init.stop("simple-adblock")
-		luci.sys.init.disable("simple-adblock")
 	end
 	return Flag.write(self, section, value)
 end
@@ -33,7 +24,6 @@ o3:value("1", translate("Force Router DNS server to all local devices"))
 o3.rmempty = false
 o3.default = 1
 
-
 local sysfs_path = "/sys/class/leds/"
 local leds = {}
 if nixio.fs.access(sysfs_path) then
@@ -49,7 +39,6 @@ if #leds ~= 0 then
 		o3:value(v)
 	end
 end
-
 
 s2 = m:section(NamedSection, "config", "simple-adblock")
 -- Whitelisted Domains
