@@ -7,9 +7,10 @@ PKG_LICENSE:=GPL-3.0+
 PKG_MAINTAINER:=Stan Grishin <stangri@melmac.net>
 
 LUCI_TITLE:=Simple Adblock Web UI
-LUCI_DEPENDS:=+simple-adblock
+LUCI_DESCRIPTION:=Provides Web UI for simple-adblock service.
+LUCI_DEPENDS:=+luci +simple-adblock
 LUCI_PKGARCH:=all
-PKG_RELEASE:=2
+PKG_RELEASE:=5
 
 include ../../luci.mk
 
