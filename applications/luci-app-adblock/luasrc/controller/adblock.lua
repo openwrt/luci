@@ -27,7 +27,7 @@ function logread()
 	local logfile
 
 	if nixio.fs.access("/var/log/messages") then
-		logfile = util.trim(util.exec("cat /var/log/messages | grep -F 'adblock-'"))
+		logfile = util.trim(util.exec("grep -F 'adblock-' /var/log/messages"))
 	else
 		logfile = util.trim(util.exec("logread -e 'adblock-'"))
 	end
@@ -35,7 +35,7 @@ function logread()
 end
 
 function queryData(domain)
-	if domain and domain:match("^[a-zA-Z0-9%-%._]+$") then
+	if domain then
 		luci.http.prepare_content("text/plain")
 		local cmd = "/etc/init.d/adblock query %q 2>&1"
 		local util = io.popen(cmd % domain)
