@@ -17,7 +17,7 @@ for i, dev in ipairs(devices) do
 end
 
 
-m = Map("fstab", translate("Mount Points - Swap Entry"))
+m = Map("fstab", translate("Mount Swap - Settings"))
 m.redirect = luci.dispatcher.build_url("admin/system/fstab")
 
 if not arg[1] or m.uci:get("fstab", arg[1]) ~= "swap" then
@@ -26,7 +26,7 @@ if not arg[1] or m.uci:get("fstab", arg[1]) ~= "swap" then
 end
 
 
-mount = m:section(NamedSection, arg[1], "swap", translate("Swap Entry"))
+mount = m:section(NamedSection, arg[1], "swap", translate("Configuration fstab"))
 mount.anonymous = true
 mount.addremove = false
 
