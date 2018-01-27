@@ -33,12 +33,12 @@ until not ln
 
 block:close()
 
-m = Map("fstab", translate("Mount Points"))
+m = Map("fstab", translate("Mount Partitions"))
 s = m:section(TypedSection, "global", translate("Global Settings"))
 s.addremove = false
 s.anonymous = true
 
-detect = s:option(Button, "block_detect", translate("Generate Config"), translate("Find all currently attached filesystems and swap and replace configuration with defaults based on what was detected"))
+detect = s:option(Button, "block_detect", translate("Generate Config"), translate("Find all currently attached partitions and swap and replace configuration with defaults based on what was detected."))
 detect.inputstyle = "reload"
 
 detect.write = function(self, section)
@@ -46,23 +46,23 @@ detect.write = function(self, section)
 	luci.http.redirect(luci.dispatcher.build_url("admin/system", "fstab"))
 end
 
-o = s:option(Flag, "anon_swap", translate("Anonymous Swap"), translate("Mount swap not specifically configured"))
+o = s:option(Flag, "anon_swap", translate("Anonymous Swap"), translate("Mount swap not specifically configured."))
 o.default = o.disabled
 o.rmempty = false
 
-o = s:option(Flag, "anon_mount", translate("Anonymous Mount"), translate("Mount filesystems not specifically configured"))
+o = s:option(Flag, "anon_mount", translate("Anonymous Mount"), translate("Mount partitions not specifically configured."))
 o.default = o.disabled
 o.rmempty = false
 
-o = s:option(Flag, "auto_swap", translate("Automount Swap"), translate("Automatically mount swap on hotplug"))
+o = s:option(Flag, "auto_swap", translate("Automount Swap"), translate("Automatically mount swap on hotplug."))
 o.default = o.enabled
 o.rmempty = false
 
-o = s:option(Flag, "auto_mount", translate("Automount Filesystem"), translate("Automatically mount filesystems on hotplug"))
+o = s:option(Flag, "auto_mount", translate("Automount Partition"), translate("Automatically mount partitions on hotplug."))
 o.default = o.enabled
 o.rmempty = false
 
-o = s:option(Flag, "check_fs", translate("Check filesystems before mount"), translate("Automatically check filesystem for errors before mounting"))
+o = s:option(Flag, "check_fs", translate("Check"), translate("Automatically check filesystem for errors before mounting."))
 o.default = o.disabled
 o.rmempty = false
 
@@ -93,9 +93,9 @@ for rawmount, val in pairs(mounts) do
    end   
 end
 
-v = m:section(Table, non_system_mounts, translate("Mounted file systems"))
+v = m:section(Table, non_system_mounts, translate("Mounted partitions"))
 
-fs = v:option(DummyValue, "fs", translate("Filesystem"))
+fs = v:option(DummyValue, "fs", translate("Partitions"))
 
 mp = v:option(DummyValue, "mountpoint", translate("Mount Point"))
 
@@ -149,7 +149,7 @@ end
 
 mount:option(Flag, "enabled", translate("Enabled")).rmempty = false
 
-dev = mount:option(DummyValue, "device", translate("Device"))
+dev = mount:option(DummyValue, "device", translate("Device partition"))
 dev.rawhtml = true
 dev.cfgvalue = function(self, section)
 	local v, e
@@ -248,7 +248,7 @@ end
 
 swap:option(Flag, "enabled", translate("Enabled")).rmempty = false
 
-dev = swap:option(DummyValue, "device", translate("Device"))
+dev = swap:option(DummyValue, "device", translate("Device swap"))
 dev.cfgvalue = function(self, section)
 	local v
 

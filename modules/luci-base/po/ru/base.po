@@ -3,7 +3,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Project-Id-Version: LuCI: base\n"
 "POT-Creation-Date: 2010-05-09 01:01+0300\n"
-"PO-Revision-Date: 2018-01-24 15:00+0300\n"
+"PO-Revision-Date: 2018-01-27 13:53+0300\n"
 "Language-Team: http://cyber-place.ru\n"
 "MIME-Version: 1.0\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -465,23 +465,17 @@ msgstr "Автоматически"
 msgid "Automatic Homenet (HNCP)"
 msgstr "Автоматическая Homenet (HNCP)"
 
-msgid "Automatically check filesystem for errors before mounting"
+msgid "Automatically check filesystem for errors before mounting."
 msgstr ""
-"Автоматическая проверка файловой системы раздела на ошибки, перед "
-"монтированием."
 
-msgid "Automatically mount filesystems on hotplug"
+msgid "Automatically mount partitions on hotplug."
 msgstr ""
-"Автоматическое монтирование раздела, при подключении к системе во время ее "
-"работы, без выключения питания и остановки системы (hotplug)."
 
-msgid "Automatically mount swap on hotplug"
+msgid "Automatically mount swap on hotplug."
 msgstr ""
-"Автоматическое монтирование swap-а при подключении к системе во время ее "
-"работы без выключения питания и остановки системы (hotplug)."
 
-msgid "Automount Filesystem"
-msgstr "Hotplug раздела"
+msgid "Automount Partition"
+msgstr ""
 
 msgid "Automount Swap"
 msgstr "Hotplug swap-а"
@@ -520,7 +514,7 @@ msgid "Back to overview"
 msgstr "назад в меню"
 
 msgid "Back to scan results"
-msgstr "Назад к результатам сканирования"
+msgstr "Назад к результатам поиска"
 
 msgid "Backup / Flash Firmware"
 msgstr "Резервное копирование / Перепрошивка"
@@ -625,9 +619,6 @@ msgstr "Канал"
 msgid "Check"
 msgstr "Проверить"
 
-msgid "Check filesystems before mount"
-msgstr "Проверка"
-
 msgid "Check this option to delete the existing networks from this radio."
 msgstr ""
 "Проверьте эту опцию, чтобы удалить существующие сети беспроводного "
@@ -656,7 +647,7 @@ msgstr ""
 "интерфейс."
 
 msgid "Cipher"
-msgstr "Протокол шифрования"
+msgstr "Способ шифрования"
 
 msgid "Cisco UDP encapsulation"
 msgstr "формирование пакетов данных Cisco UDP "
@@ -715,6 +706,9 @@ msgstr "Изменение настроек config файлов."
 
 msgid "Configuration files will be kept."
 msgstr "Config файлы будут сохранены."
+
+msgid "Configuration fstab"
+msgstr "Настройка config файла fstab (/etc/config/fstab)"
 
 msgid "Confirmation"
 msgstr "Подтверждение пароля"
@@ -900,6 +894,12 @@ msgstr "Настройка устройства"
 
 msgid "Device is rebooting..."
 msgstr "Перезагрузка..."
+
+msgid "Device partition"
+msgstr "Раздел устройства"
+
+msgid "Device swap"
+msgstr ""
 
 msgid "Device unreachable"
 msgstr "Устройство недоступно"
@@ -1201,7 +1201,7 @@ msgid "Filename of the boot image advertised to clients"
 msgstr "Имя загрузочного образа, извещаемого клиентам"
 
 msgid "Filesystem"
-msgstr "Раздел"
+msgstr "Файловая система"
 
 msgid "Filter"
 msgstr "Фильтр"
@@ -1213,12 +1213,9 @@ msgid "Filter useless"
 msgstr "Фильтровать бесполезные"
 
 msgid ""
-"Find all currently attached filesystems and swap and replace configuration "
-"with defaults based on what was detected"
+"Find all currently attached partitions and swap and replace configuration "
+"with defaults based on what was detected."
 msgstr ""
-"Найти все разделы включая swap и изменить config файл fstab с дефолтными "
-"значениями всех обнаруженных разделов, т.е. выполнить команду 'block detect "
-"> /etc/config/fstab'."
 
 msgid "Find and join network"
 msgstr "Найти и присоединиться к сети"
@@ -1566,15 +1563,15 @@ msgstr "Если проверено, что шифрование выключе�
 msgid ""
 "If specified, mount the device by its UUID instead of a fixed device node"
 msgstr ""
-"Если выбрано, монтировать устройство, используя его UUID, вместо "
+"Если выбрано монтировать устройство используя его UUID, вместо "
 "фиксированного файла устройства."
 
 msgid ""
 "If specified, mount the device by the partition label instead of a fixed "
 "device node"
 msgstr ""
-"Если выбрано, монтировать устройство, используя название его раздела, вместо "
-"фиксированного файла устройства"
+"Если выбрано монтировать устройство используя название его раздела, вместо "
+"фиксированного файла устройства."
 
 msgid "If unchecked, no default route is configured"
 msgstr "Если не выбрано, то маршрут по умолчанию не настраивается."
@@ -1936,7 +1933,7 @@ msgid "Log output level"
 msgstr "Запись событий вывода"
 
 msgid "Log queries"
-msgstr "Логирование запросов"
+msgstr "Запись запросов"
 
 msgid "Logging"
 msgstr "Настройка журнала"
@@ -2057,20 +2054,17 @@ msgstr "Время ожидания инициализации модема"
 msgid "Monitor"
 msgstr "Монитор"
 
-msgid "Mount Entry"
-msgstr "Настройка config файла fstab (/etc/config/fstab)"
+msgid "Mount Partitions"
+msgstr "Монтирование разделов"
+
+msgid "Mount Partitions - Settings"
+msgstr ""
 
 msgid "Mount Point"
 msgstr "Точка монтирования"
 
 msgid "Mount Points"
 msgstr "Монтирование разделов"
-
-msgid "Mount Points - Mount Entry"
-msgstr "Точки монтирования - Настройка разделов"
-
-msgid "Mount Points - Swap Entry"
-msgstr "Точки монтирования - Настройка Swap"
 
 msgid ""
 "Mount Points define at which point a memory device will be attached to the "
@@ -2079,19 +2073,22 @@ msgstr ""
 "Точки монтирования определяют, куда в файловой системе будут смонтированы "
 "разделы запоминающего устройства."
 
-msgid "Mount filesystems not specifically configured"
-msgstr "Монтирование не подготовленного раздела."
+msgid "Mount Swap - Settings"
+msgstr ""
 
 msgid "Mount options"
 msgstr "Опции монтирования"
 
+msgid "Mount partitions not specifically configured."
+msgstr ""
+
 msgid "Mount point"
 msgstr "Точка монтирования"
 
-msgid "Mount swap not specifically configured"
-msgstr "Монтирование не подготовленного swap-а."
+msgid "Mount swap not specifically configured."
+msgstr ""
 
-msgid "Mounted file systems"
+msgid "Mounted partitions"
 msgstr "Смонтированные разделы"
 
 msgid "Move down"
@@ -2467,6 +2464,9 @@ msgstr "Пакеты"
 msgid "Part of zone %q"
 msgstr "Часть зоны %q"
 
+msgid "Partitions"
+msgstr "Разделы"
+
 msgid "Password"
 msgstr "Пароль"
 
@@ -2785,7 +2785,7 @@ msgid "Remove"
 msgstr "Удалить"
 
 msgid "Repeat scan"
-msgstr "Повторить сканирование"
+msgstr "Повторить поиск"
 
 msgid "Replace entry"
 msgstr "Заменить запись"
@@ -2951,7 +2951,7 @@ msgid "Save &#38; Apply"
 msgstr "Сохранить и применить"
 
 msgid "Scan"
-msgstr "Сканировать"
+msgstr "Найти"
 
 msgid "Scheduled Tasks"
 msgstr "Запланированные задания"
@@ -2963,8 +2963,7 @@ msgid "Section removed"
 msgstr "Строки удалены"
 
 msgid "See \"mount\" manpage for details"
-msgstr ""
-"Для подробной информации обратитесь к справке по \"mount\" (man mount)."
+msgstr "Для подробной информации обратитесь к справке по 'mount' (man mount)."
 
 msgid ""
 "Send LCP echo requests at the given interval in seconds, only effective in "
@@ -3089,7 +3088,7 @@ msgid "Source routing"
 msgstr "маршрутизация от источника"
 
 msgid "Specifies the directory the device is attached to"
-msgstr "Папка, к которой монтируется устройство."
+msgstr "Папка, к которой монтируется раздел устройства."
 
 msgid "Specifies the listening port of this <em>Dropbear</em> instance"
 msgstr "Порт данного процесса <em>Dropbear</em>."
@@ -3180,9 +3179,6 @@ msgstr "Подавить логирование стандартной рабо�
 
 msgid "Swap"
 msgstr "Раздел подкачки (Swap)"
-
-msgid "Swap Entry"
-msgstr "Настройка config файла fstab (/etc/config/fstab)"
 
 msgid "Switch"
 msgstr "Коммутатор"
@@ -4055,3 +4051,65 @@ msgstr "да"
 
 msgid "« Back"
 msgstr "« Назад"
+
+#~ msgid "Automatically check filesystem for errors before mounting"
+#~ msgstr ""
+#~ "Автоматическая проверка файловой системы раздела на ошибки, перед "
+#~ "монтированием."
+
+#~ msgid "Automatically mount filesystems on hotplug"
+#~ msgstr ""
+#~ "Автоматическое монтирование раздела, при подключении к системе во время "
+#~ "ее работы, без выключения питания и остановки системы (hotplug)."
+
+#~ msgid "Automatically mount swap on hotplug"
+#~ msgstr ""
+#~ "Автоматическое монтирование swap-а при подключении к системе во время ее "
+#~ "работы без выключения питания и остановки системы (hotplug)."
+
+#~ msgid "Automount Filesystem"
+#~ msgstr "Hotplug раздела"
+
+#~ msgid ""
+#~ "Find all currently attached partitions and swap and replace configuration "
+#~ "with defaults based on what was detected"
+#~ msgstr ""
+#~ "Найти все разделы включая swap и изменить config файл fstab с дефолтными "
+#~ "значениями всех обнаруженных разделов, т.е. выполнить команду 'block "
+#~ "detect > /etc/config/fstab'."
+
+#~ msgid "Mount filesystems not specifically configured"
+#~ msgstr "Монтирование не подготовленного раздела."
+
+#~ msgid "Mount swap not specifically configured"
+#~ msgstr "Монтирование не подготовленного swap-а."
+
+#~ msgid "Mount Partitions settings"
+#~ msgstr "Настройки монтирования разделов"
+
+#~ msgid "Mount Swap settings"
+#~ msgstr "Настройки монтирования Swap"
+
+#~ msgid "Mount Partitions - Mount settings"
+#~ msgstr "Монтирование разделов - Настройки монтирования"
+
+#~ msgid "Mount Swap - Mount settings"
+#~ msgstr "Монтирование Swap - Настройки монтирования"
+
+#~ msgid "Check filesystems before mount"
+#~ msgstr "Проверка"
+
+#~ msgid "Mount Entry"
+#~ msgstr "Настройка config файла fstab (/etc/config/fstab)"
+
+#~ msgid "Mount Points - Mount Entry"
+#~ msgstr "Точки монтирования - Настройка разделов"
+
+#~ msgid "Mount Points - Swap Entry"
+#~ msgstr "Точки монтирования - Настройка Swap"
+
+#~ msgid "Mounted file systems"
+#~ msgstr "Смонтированные разделы"
+
+#~ msgid "Swap Entry"
+#~ msgstr "Настройка config файла fstab (/etc/config/fstab)"

@@ -32,7 +32,7 @@ until not ln
 block:close()
 
 
-m = Map("fstab", translate("Mount Points - Mount Entry"))
+m = Map("fstab", translate("Mount Partitions - Settings"))
 m.redirect = luci.dispatcher.build_url("admin/system/fstab")
 
 if not arg[1] or m.uci:get("fstab", arg[1]) ~= "mount" then
@@ -42,7 +42,7 @@ end
 
 
 
-mount = m:section(NamedSection, arg[1], "mount", translate("Mount Entry"))
+mount = m:section(NamedSection, arg[1], "mount", translate("Configuration fstab"))
 mount.anonymous = true
 mount.addremove = false
 
