@@ -1,4 +1,4 @@
--- Copyright 2014-2016 Christian Schoenebeck <christian dot schoenebeck at gmail dot com>
+-- Copyright 2014-2018 Christian Schoenebeck <christian dot schoenebeck at gmail dot com>
 -- Licensed to the public under the Apache License 2.0.
 
 module("luci.tools.ddns", package.seeall)
@@ -72,6 +72,23 @@ function get_lastupd(section)
 	local etime = tonumber(NXFS.readfile("%s/%s.update" % { rdir, section } ) or 0 )
 	uci:unload("ddns")
 	return etime
+end
+
+-- read registered IP from [section].ip file
+function get_regip(section, chk_sec)
+	local uci   = UCI.cursor()
+	local rdir  = uci:get("ddns", "global", "ddns_rundir") or "/var/run/ddns"
+	local ip = "NOFILE"
+	if NXFS.access("%s/%s.ip" % { rdir, section }) then
+		local ftime = NXFS.stat("%s/%s.ip" % { rdir, section }, "ctime") or 0
+		local otime = os.time()
+		-- give ddns-scripts time (9 sec) to update file
+		if otime < (ftime + chk_sec + 9) then
+			ip = NXFS.readfile("%s/%s.ip" % { rdir, section })
+		end
+	end
+	uci:unload("ddns")
+	return ip
 end
 
 -- read PID from run file and verify if still running
