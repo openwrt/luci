@@ -1,7 +1,7 @@
 -- Copyright 2008 Steven Barth <steven@midlink.org>
 -- Copyright 2008 Jo-Philipp Wich <jow@openwrt.org>
 -- Copyright 2013 Manuel Munz <freifunk at somakoma dot de>
--- Copyright 2014-2017 Christian Schoenebeck <christian dot schoenebeck at gmail dot com>
+-- Copyright 2014-2018 Christian Schoenebeck <christian dot schoenebeck at gmail dot com>
 -- Licensed to the public under the Apache License 2.0.
 
 module("luci.controller.ddns", package.seeall)
@@ -20,11 +20,11 @@ local DDNS = require "luci.tools.ddns"		-- ddns multiused functions
 luci_helper = "/usr/lib/ddns/dynamic_dns_lucihelper.sh"
 
 local srv_name    = "ddns-scripts"
-local srv_ver_min = "2.7.6"			-- minimum version of service required
+local srv_ver_min = "2.7.7"			-- minimum version of service required
 local srv_ver_cmd = luci_helper .. [[ -V | awk {'print $2'}]]
 local app_name    = "luci-app-ddns"
 local app_title   = "Dynamic DNS"
-local app_version = "2.4.8-2"
+local app_version = "2.4.9-1"
 
 function index()
 	local nxfs	= require "nixio.fs"		-- global definitions not available
@@ -187,19 +187,26 @@ local function _get_status()
 
 		-- try to get registered IP
 		local lookup_host = s["lookup_host"] or "_nolookup_"
-		local dnsserver	= s["dns_server"] or ""
-		local force_ipversion = tonumber(s["force_ipversion"] or 0)
-		local force_dnstcp = tonumber(s["force_dnstcp"] or 0)
-		local is_glue = tonumber(s["is_glue"] or 0)
-		local command = luci_helper .. [[ -]]
-		if (use_ipv6 == 1) then command = command .. [[6]] end
-		if (force_ipversion == 1) then command = command .. [[f]] end
-		if (force_dnstcp == 1) then command = command .. [[t]] end
-		if (is_glue == 1) then command = command .. [[g]] end
-		command = command .. [[l ]] .. lookup_host
-		if (#dnsserver > 0) then command = command .. [[ -d ]] .. dnsserver end
-		command = command .. [[ -- get_registered_ip]]
-		local reg_ip = SYS.exec(command)
+		local chk_sec  = DDNS.calc_seconds(
+					tonumber(s["check_interval"]) or 10,
+					s["check_unit"] or "minutes" )
+		local reg_ip = DDNS.get_regip(section, chk_sec)
+		if reg_ip == "NOFILE" then
+			local dnsserver	= s["dns_server"] or ""
+			local force_ipversion = tonumber(s["force_ipversion"] or 0)
+			local force_dnstcp = tonumber(s["force_dnstcp"] or 0)
+			local is_glue = tonumber(s["is_glue"] or 0)
+			local command = luci_helper .. [[ -]]
+			if (use_ipv6 == 1) then command = command .. [[6]] end
+			if (force_ipversion == 1) then command = command .. [[f]] end
+			if (force_dnstcp == 1) then command = command .. [[t]] end
+			if (is_glue == 1) then command = command .. [[g]] end
+			command = command .. [[l ]] .. lookup_host
+			command = command .. [[ -S ]] .. section
+			if (#dnsserver > 0) then command = command .. [[ -d ]] .. dnsserver end
+			command = command .. [[ -- get_registered_ip]]
+			reg_ip = SYS.exec(command)
+		end
 		if reg_ip == "" then
 			reg_ip = "_nodata_"
 		end

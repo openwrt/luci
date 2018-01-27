@@ -1,4 +1,4 @@
--- Copyright 2014-2016 Christian Schoenebeck <christian dot schoenebeck at gmail dot com>
+-- Copyright 2014-2018 Christian Schoenebeck <christian dot schoenebeck at gmail dot com>
 -- Licensed to the public under the Apache License 2.0.
 
 local NXFS = require "nixio.fs"
@@ -122,22 +122,29 @@ function dom.set_one(self, section)
 	end
 end
 function dom.set_two(self, section)
-	local lookup_host = self.map:get(section, "lookup_host") or ""
-	if lookup_host == "" then return "" end
-	local dnsserver = self.map:get(section, "dnsserver") or ""
-	local use_ipv6 = tonumber(self.map:get(section, "use_ipv6") or 0)
-	local force_ipversion = tonumber(self.map:get(section, "force_ipversion") or 0)
-	local force_dnstcp = tonumber(self.map:get(section, "force_dnstcp") or 0)
-	local is_glue = tonumber(self.map:get(section, "is_glue") or 0)
-	local command = CTRL.luci_helper .. [[ -]]
-	if (use_ipv6 == 1) then command = command .. [[6]] end
-	if (force_ipversion == 1) then command = command .. [[f]] end
-	if (force_dnstcp == 1) then command = command .. [[t]] end
-	if (is_glue == 1) then command = command .. [[g]] end
-	command = command .. [[l ]] .. lookup_host
-	if (#dnsserver > 0) then command = command .. [[ -d ]] .. dnsserver end
-	command = command .. [[ -- get_registered_ip]]
-	local ip = SYS.exec(command)
+	local chk_sec  = DDNS.calc_seconds(
+				tonumber(self.map:get(section, "check_interval")) or 10,
+				self.map:get(section, "check_unit") or "minutes" )
+	local ip = DDNS.get_regip(section, chk_sec)
+	if ip == "NOFILE" then
+		local lookup_host = self.map:get(section, "lookup_host") or ""
+		if lookup_host == "" then return "" end
+		local dnsserver = self.map:get(section, "dnsserver") or ""
+		local use_ipv6 = tonumber(self.map:get(section, "use_ipv6") or 0)
+		local force_ipversion = tonumber(self.map:get(section, "force_ipversion") or 0)
+		local force_dnstcp = tonumber(self.map:get(section, "force_dnstcp") or 0)
+		local is_glue = tonumber(self.map:get(section, "is_glue") or 0)
+		local command = CTRL.luci_helper .. [[ -]]
+		if (use_ipv6 == 1) then command = command .. [[6]] end
+		if (force_ipversion == 1) then command = command .. [[f]] end
+		if (force_dnstcp == 1) then command = command .. [[t]] end
+		if (is_glue == 1) then command = command .. [[g]] end
+		command = command .. [[l ]] .. lookup_host
+		command = command .. [[ -S ]] .. section
+		if (#dnsserver > 0) then command = command .. [[ -d ]] .. dnsserver end
+		command = command .. [[ -- get_registered_ip]]
+		ip = SYS.exec(command)
+	end
 	if ip == "" then ip = translate("no data") end
 	return ip
 end
