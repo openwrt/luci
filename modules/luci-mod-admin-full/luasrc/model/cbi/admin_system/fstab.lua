@@ -62,7 +62,7 @@ o = s:option(Flag, "auto_mount", translate("Automount Filesystem"), translate("A
 o.default = o.enabled
 o.rmempty = false
 
-o = s:option(Flag, "check_fs", translate("Check filesystems before mount"), translate("Automatically check filesystem for errors before mounting"))
+o = s:option(Flag, "check_fs", translate("Check"), translate("Automatically check filesystem for errors before mounting"))
 o.default = o.disabled
 o.rmempty = false
 
@@ -95,7 +95,7 @@ end
 
 v = m:section(Table, non_system_mounts, translate("Mounted file systems"))
 
-fs = v:option(DummyValue, "fs", translate("Filesystem"))
+fs = v:option(DummyValue, "fs", translate("Partition"))
 
 mp = v:option(DummyValue, "mountpoint", translate("Mount Point"))
 
