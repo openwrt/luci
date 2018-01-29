@@ -56,6 +56,23 @@ dns:depends("peerdns", "")
 dns.datatype = "ipaddr"
 dns.cast     = "string"
 
+
 mtu = section:taboption("advanced", Value, "mtu", translate("Override MTU"))
 mtu.placeholder = "1500"
 mtu.datatype    = "max(9200)"
+
+
+redial = section:taboption("advanced", Flag, "redial",
+	translate("Redial"),
+	translate("Redial the connection if it is disconnected"))
+
+redial.default = redial.enabled
+
+
+redial_timeout = section:taboption("advanced", Value, "redial_timeout",
+	translate("Redial timeout"),
+	translate("Wait for a certain number of seconds before attempting redial"))
+
+redial_timeout:depends("redial", "1")
+redial_timeout.placeholder = "15"
+redial_timeout.datatype    = "and(uinteger,min(0))"
