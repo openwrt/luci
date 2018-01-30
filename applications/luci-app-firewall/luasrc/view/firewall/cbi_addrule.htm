@@ -57,14 +57,14 @@
 				<td class="cbi-section-table-cell" style="width:110px">
 					<select class="cbi-input-text" id="_newfwd.src" name="_newfwd.src">
 						<% local k, v; for k, v in ipairs(fw:get_zones()) do -%>
-							<option<%=ifattr(v:name() == "lan", "selected", "selected")%> value="<%=v:name()%>"><%=v:name()%></option>
+							<option<%=ifattr(v:name() == "wan", "selected", "selected")%> value="<%=v:name()%>"><%=v:name()%></option>
 						<%- end %>
 					</select>
 				</td>
 				<td class="cbi-section-table-cell" style="width:110px">
 					<select class="cbi-input-text" id="_newfwd.dest" name="_newfwd.dest">
 						<% local k, v; for k, v in ipairs(fw:get_zones()) do -%>
-							<option<%=ifattr(v:name() == "wan", "selected", "selected")%> value="<%=v:name()%>"><%=v:name()%></option>
+							<option<%=ifattr(v:name() == "lan", "selected", "selected")%> value="<%=v:name()%>"><%=v:name()%></option>
 						<%- end %>
 					</select>
 				</td>
