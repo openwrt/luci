@@ -55,7 +55,9 @@
 <form method="post" action="<%=url('admin/network/diagnostics')%>">
 	<div class="cbi-map">
 		<h2 name="content"><%:MWAN Status - Diagnostics%></h2>
-
+		<%if not require("luci.sys").init.enabled("mwan3") then%>
+		<div><strong><%:INFO: MWAN not running%></strong></div>
+		<%end%>
 		<fieldset class="cbi-section">
 			<br />
 

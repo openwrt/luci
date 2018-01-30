@@ -28,6 +28,9 @@
 
 <div class="cbi-map">
 	<h2 name="content"><%:MWAN Status - Detail%></h2>
+	<%if not require("luci.sys").init.enabled("mwan3") then%>
+	<div><strong><%:INFO: MWAN not running%></strong></div>
+	<%end%>
 	<fieldset class="cbi-section">
 		<legend id="diag-rc-legend"><%:Collecting data...%></legend>
 		<span id="diag-rc-output">
