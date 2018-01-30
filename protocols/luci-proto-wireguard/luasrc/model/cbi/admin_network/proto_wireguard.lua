@@ -31,7 +31,7 @@ listen_port = section:taboption(
   translate("Optional. UDP port used for outgoing and incoming packets.")
 )
 listen_port.datatype = "port"
-listen_port.placeholder = "51820"
+listen_port.placeholder = translate("random")
 listen_port.optional = true
 
 addresses = section:taboption(
