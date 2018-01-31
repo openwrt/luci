@@ -231,43 +231,51 @@ e6:depends("adb_backup", 1)
 e6.default = e6.disabled
 e6.rmempty = true
 
-e7 = e:option(Flag, "adb_whitelist_mode", translate("Whitelist Mode"),
-	translate("Block access to all domains except those explicitly listed in the whitelist file."))
-e7.default = e7.disabled
-e7.rmempty = true
+e7 = e:option(Value, "adb_maxqueue", translate("Max. Download Queue"),
+	translate("Size of the download queue to handle downloads & list processing in parallel (default '4').<br />")
+	.. translate("For further performance improvements you can raise this value, e.g. '8' or '16' should be safe."))
+e7.default = 4
+e7.datatype = "range(1,32)"
+e7.rmempty = false
 
-e8 = e:option(Flag, "adb_dnsflush", translate("Flush DNS Cache"),
-	translate("Flush DNS Cache after adblock processing."))
+e8 = e:option(Flag, "adb_jail", translate("'Jail' Blocklist Creation"),
+	translate("Builds an additional 'Jail' list (/tmp/adb_list.jail) to block access to all domains except those listed in the whitelist file.<br />")
+	.. translate("You can use this restrictive blocklist manually e.g. for guest wifi or kidsafe configurations."))
 e8.default = e8.disabled
 e8.rmempty = true
 
-e9 = e:option(Flag, "adb_notify", translate("Email Notification"),
-	translate("Send notification emails in case of a processing error or if domain count is &le; 0.<br />")
-	.. translate("Please note: this needs additional 'mstmp' installation and setup (see readme)."))
+e9 = e:option(Flag, "adb_dnsflush", translate("Flush DNS Cache"),
+	translate("Flush DNS Cache after adblock processing."))
 e9.default = e9.disabled
 e9.rmempty = true
 
-e10 = e:option(Value, "adb_notifycnt", translate("Email Notification Count"),
+e10 = e:option(Flag, "adb_notify", translate("Email Notification"),
+	translate("Send notification emails in case of a processing error or if domain count is &le; 0.<br />")
+	.. translate("Please note: this needs additional 'mstmp' package installation and setup."))
+e10.default = e10.disabled
+e10.rmempty = true
+
+e11 = e:option(Value, "adb_notifycnt", translate("Email Notification Count"),
 	translate("Raise the minimum email notification count, to get emails if the overall count is less or equal to the given limit (default 0),<br />")
 	.. translate("e.g. to receive an email notification with every adblock update set this value to 150000."))
-e10.default = 0
-e10.datatype = "min(0)"
-e10.optional = true
-
-e11 = e:option(Value, "adb_dnsdir", translate("DNS Directory"),
-	translate("Target directory for the generated blocklist 'adb_list.overall'."))
-e11.datatype = "directory"
+e11.default = 0
+e11.datatype = "min(0)"
 e11.optional = true
 
-e12 = e:option(Value, "adb_whitelist", translate("Whitelist File"),
-	translate("Full path to the whitelist file."))
-e12.datatype = "file"
-e12.default = "/etc/adblock/adblock.whitelist"
+e12 = e:option(Value, "adb_dnsdir", translate("DNS Directory"),
+	translate("Target directory for the generated blocklist 'adb_list.overall'."))
+e12.datatype = "directory"
 e12.optional = true
 
-e13 = e:option(Value, "adb_triggerdelay", translate("Trigger Delay"),
-	translate("Additional trigger delay in seconds before adblock processing begins."))
-e13.datatype = "range(1,60)"
+e13 = e:option(Value, "adb_whitelist", translate("Whitelist File"),
+	translate("Full path to the whitelist file."))
+e13.datatype = "file"
+e13.default = "/etc/adblock/adblock.whitelist"
 e13.optional = true
+
+e14 = e:option(Value, "adb_triggerdelay", translate("Trigger Delay"),
+	translate("Additional trigger delay in seconds before adblock processing begins."))
+e14.datatype = "range(1,60)"
+e14.optional = true
 
 return m
