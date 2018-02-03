@@ -232,7 +232,7 @@ e6.default = e6.disabled
 e6.rmempty = true
 
 e7 = e:option(Value, "adb_maxqueue", translate("Max. Download Queue"),
-	translate("Size of the download queue to handle downloads & list processing in parallel (default '4').<br />")
+	translate("Size of the download queue to handle downloads &amp; list processing in parallel (default '4').<br />")
 	.. translate("For further performance improvements you can raise this value, e.g. '8' or '16' should be safe."))
 e7.default = 4
 e7.datatype = "range(1,32)"
