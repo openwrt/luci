@@ -40,10 +40,9 @@
 		local conn_count = tonumber(
 			fs.readfile("/proc/sys/net/netfilter/nf_conntrack_count") or "") or 0
 
-		local conn_max = tonumber((
-			luci.sys.exec("sysctl net.nf_conntrack_max") or
-			luci.sys.exec("sysctl net.ipv4.netfilter.ip_conntrack_max") or
-			""):match("%d+")) or 4096
+		local conn_max = tonumber(luci.sys.exec(
+			"sysctl -n -e net.nf_conntrack_max net.ipv4.netfilter.ip_conntrack_max"
+		):match("%d+")) or 4096
 
 		local rv = {
 			uptime     = sysinfo.uptime or 0,
