@@ -41,10 +41,6 @@ else
 			translate("Tunnel address"),
 			translate("The address ss-tunnel will forward traffic to"))
 		o.datatype = "hostport"
-	elseif stype == "ss_redir" then
-		o = s:taboption("advanced", Flag, "disable_sni",
-			translate("Disable SNI"),
-			translate("Disable parsing HTTP/HTTPS payload to find then resolve hostname at remote server"))
 	end
 end
 

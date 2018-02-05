@@ -144,8 +144,6 @@ function cfgvalue_overview(sdata)
 		cfgvalue_overview_(sdata, lines, names_options_client)
 		if stype == "ss_tunnel" then
 			cfgvalue_overview_(sdata, lines, {"tunnel_address"})
-		elseif stype == "ss_redir" then
-			cfgvalue_overview_(sdata, lines, {"disable_sni"})
 		end
 		cfgvalue_overview_(sdata, lines, names_options_common)
 	else
