@@ -18,7 +18,9 @@
 	XHR.poll(5, '<%=luci.dispatcher.build_url("admin", "status", "mwan", "interface_status")%>', null,
 		function(x, status)
 		{
-			var statusDiv = document.getElementById('mwan_status_text');
+			var legend = document.getElementById('diag-rc-legend');
+			var statusDiv = document.getElementById('diag-rc-output');
+			legend.style.display = 'none';
 			if (status.interfaces)
 			{
 				var statusview = '';
@@ -62,10 +64,16 @@
 	);
 //]]></script>
 
-<div id="mwan_interface_status">
-	<fieldset id="interface_field" class="cbi-section">
-		<legend><%:MWAN status - Interface Live Status%></legend>
-		<div id="mwan_status_text"><img src="<%=resource%>/icons/loading.gif" alt="<%:Loading%>" style="vertical-align:middle" /><%:Collecting data...%></div>
+<div class="cbi-map">
+	<h2 name="content"><%:MWAN Status - Interface%></h2>
+	<%if not require("luci.sys").init.enabled("mwan3") then%>
+	<div><strong><%:INFO: MWAN not running%></strong></div>
+	<%end%>
+	<fieldset class="cbi-section">
+		<legend id="diag-rc-legend"><%:Collecting data...%></legend>
+		<span id="diag-rc-output">
+			<img src="<%=resource%>/icons/loading.gif" alt="<%:Loading%>" style="vertical-align: middle;" />
+		</span>
 	</fieldset>
 </div>
 
