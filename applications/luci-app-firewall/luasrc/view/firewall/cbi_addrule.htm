@@ -2,6 +2,7 @@
 	local fw = require "luci.model.firewall".init()
 	local wz = fw:get_zone("wan")
 	local lz = fw:get_zone("lan")
+	local zones = fw:get_zones()
 %>
 
 <div class="cbi-section-create cbi-tblsection-create">
@@ -38,7 +39,7 @@
 			</tr>
 		</table>
 	<% end %>
-	<% if wz and lz then %>
+	<% if #zones > 1 then %>
 		<table class="cbi-section-table" style="margin-left:5px">
 			<tr class="cbi-section-table-titles">
 				<th class="cbi-section-table-cell left" colspan="6"><br /><%:New forward rule%>:</th>
