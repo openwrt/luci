@@ -2,6 +2,7 @@
 <%+cbi/valueheader%>
 	<input class="cbi-input-text" type="text"<%= attr("value", v) .. attr("name", cbid) .. attr("id", cbid) %> />
 	<script type="text/javascript">
+cbi_init()
 cbi_browser_init('<%=cbid%>', '<%=resource%>', '<%=url('admin/filebrowser')%>'<%=self.default_path and ", '"..self.default_path.."'"%>);
 	</script>
 <%+cbi/valuefooter%>
