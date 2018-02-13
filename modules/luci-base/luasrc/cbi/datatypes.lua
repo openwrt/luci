@@ -169,8 +169,13 @@ function ipmask6(val)
 end
 
 function ip6hostid(val)
-	if val and val:match("^[a-fA-F0-9:]+$") and (#val > 2) then
-		return (ip6addr("2001:db8:0:0" .. val) or ip6addr("2001:db8:0:0:" .. val))
+	if val == "eui64" or val == "random" then
+		return true
+	else
+		local addr = ip.IPv6(val)
+		if addr and addr:prefix() == 128 and addr:lower("::1:0:0:0:0") then
+			return true
+		end
 	end
 
 	return false
