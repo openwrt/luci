@@ -70,7 +70,7 @@ for i, v in ipairs(p) do
 	v:value("ACCEPT", translate("accept"))
 end
 
-s:option(Flag, "masq", translate("Masquerading"))
-s:option(Flag, "mtu_fix", translate("MSS clamping"))
+s:option(Flag, "masq", translate("NAT"))
+s:option(Flag, "mtu_fix", translate("Adjust MTU"))
 
 return m
