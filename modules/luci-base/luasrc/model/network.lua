@@ -998,7 +998,12 @@ function protocol.ip6addrs(self)
 
 	if type(addrs) == "table" then
 		for n, addr in ipairs(addrs) do
-			rv[#rv+1] = "%s1/%d" %{ addr.address, addr.mask }
+			if type(addr["local-address"]) == "table" then
+				rv[#rv+1] = "%s/%d" %{
+					addr["local-address"].address,
+					addr["local-address"].mask
+				}
+			end
 		end
 	end
 
