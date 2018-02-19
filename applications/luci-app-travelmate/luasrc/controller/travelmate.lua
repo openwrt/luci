@@ -33,7 +33,7 @@ function logread()
 	local logfile
 
 	if nixio.fs.access("/var/log/messages") then
-		logfile = util.trim(util.exec("cat /var/log/messages | grep 'travelmate-'"))
+		logfile = util.trim(util.exec("grep -F 'travelmate-' /var/log/messages"))
 	else
 		logfile = util.trim(util.exec("logread -e 'travelmate-'"))
 	end
