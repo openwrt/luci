@@ -1,5 +1,8 @@
 #!/bin/sh /etc/rc.common
 
+# check if we are on real system
+[ -n "${IPKG_INSTROOT}" ] && exit 0
+
 START=15
 . /lib/functions/network.sh
 . /lib/functions.sh
