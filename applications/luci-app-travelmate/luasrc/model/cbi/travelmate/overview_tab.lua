@@ -78,24 +78,29 @@ o2 = s:option(Flag, "trm_automatic", translate("Enable 'automatic' mode"),
 o2.default = o2.enabled
 o2.rmempty = false
 
-o3 = s:option(ListValue, "trm_iface", translate("Uplink / Trigger interface"),
+o3 = s:option(Flag, "trm_captive", translate("Captive Portal Detection"),
+	translate("Check the internet availability, log captive portal redirections and keep the uplink connection 'alive'."))
+o3.default = o3.enabled
+o3.rmempty = false
+
+o4 = s:option(ListValue, "trm_iface", translate("Uplink / Trigger interface"),
 	translate("Name of the used uplink interface."))
 if dump then
 	local i, v
 	for i, v in ipairs(dump.interface) do
 		if v.interface ~= "loopback" and v.interface ~= "lan" then
-			o3:value(v.interface)
+			o4:value(v.interface)
 		end
 	end
 end
-o3.default = trmiface
-o3.rmempty = false
-
-o4 = s:option(Value, "trm_triggerdelay", translate("Trigger delay"),
-	translate("Additional trigger delay in seconds before travelmate processing begins."))
-o4.default = 2
-o4.datatype = "range(1,90)"
+o4.default = trmiface
 o4.rmempty = false
+
+o5 = s:option(Value, "trm_triggerdelay", translate("Trigger Delay"),
+	translate("Additional trigger delay in seconds before travelmate processing begins."))
+o5.datatype = "range(1,60)"
+o5.default = 2
+o5.rmempty = false
 
 btn = s:option(Button, "", translate("Manual Rescan"),
 	translate("Force a manual uplink rescan / reconnect in 'trigger' mode."))
@@ -113,18 +118,12 @@ end
 
 ds = m:section(NamedSection, "global", "travelmate", translate("Runtime Information"))
 
-dv1 = ds:option(DummyValue, "status", translate("Travelmate Status"))
+dv1 = ds:option(DummyValue, "status", translate("Travelmate Status (Quality)"))
 dv1.template = "travelmate/runtime"
-if parse == nil then
+if parse ~= nil then
+	dv1.value = parse.data.travelmate_status or translate("n/a")
+else
 	dv1.value = translate("n/a")
-elseif parse.data.travelmate_status == "connected" then
-	dv1.value = translate("connected")
-elseif parse.data.travelmate_status == "not connected" then
-	dv1.value = translate("not connected")
-elseif parse.data.travelmate_status == "running" then
-	dv1.value = translate("running")
-elseif parse.data.travelmate_status == "error" then
-	dv1.value = translate("error")
 end
 
 dv2 = ds:option(DummyValue, "travelmate_version", translate("Travelmate Version"))
@@ -182,22 +181,28 @@ e2.datatype = "and(uciname,rangelength(6,6))"
 e2.rmempty = true
 
 e3 = e:option(Value, "trm_maxretry", translate("Connection Limit"),
-	translate("How many times should travelmate try to connect to an Uplink. ")
+	translate("Retry limit to connect to an uplink. ")
 	.. translate("To disable this feature set it to '0' which means unlimited retries."))
 e3.default = 3
 e3.datatype = "range(0,30)"
 e3.rmempty = false
 
-e4 = e:option(Value, "trm_maxwait", translate("Interface Timeout"),
-	translate("How long should travelmate wait for a successful wlan interface reload."))
+e4 = e:option(Value, "trm_minquality", translate("Signal Quality Threshold"),
+	translate("Minimum signal quality threshold as percent for conditional uplink (dis-) connections."))
 e4.default = 30
-e4.datatype = "range(5,60)"
+e4.datatype = "range(0,100)"
 e4.rmempty = false
 
-e5 = e:option(Value, "trm_timeout", translate("Overall Timeout"),
-	translate("Timeout in seconds between retries in 'automatic' mode."))
-e5.default = 60
-e5.datatype = "range(60,300)"
+e5 = e:option(Value, "trm_maxwait", translate("Interface Timeout"),
+	translate("How long should travelmate wait for a successful wlan interface reload."))
+e5.default = 30
+e5.datatype = "range(5,60)"
 e5.rmempty = false
+
+e6 = e:option(Value, "trm_timeout", translate("Overall Timeout"),
+	translate("Timeout in seconds between retries in 'automatic' mode."))
+e6.default = 60
+e6.datatype = "range(60,300)"
+e6.rmempty = false
 
 return m
