@@ -140,6 +140,11 @@ df = s:taboption("general", DynamicList, "server", translate("DNS forwardings"),
 df.optional = true
 df.placeholder = "/example.org/10.1.2.3"
 
+dl = s:taboption("general", DynamicList, "alias", translate("Alias list"),
+	translate("List of aliases"))
+
+dl.optional = true
+dl.placeholder = "192.168.3.0,172.16.3.0,255.255.255.0"
 
 rp = s:taboption("general", Flag, "rebind_protection",
 	translate("Rebind protection"),
