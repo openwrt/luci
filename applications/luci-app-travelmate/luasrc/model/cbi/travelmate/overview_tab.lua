@@ -181,28 +181,27 @@ e2.datatype = "and(uciname,rangelength(6,6))"
 e2.rmempty = true
 
 e3 = e:option(Value, "trm_maxretry", translate("Connection Limit"),
-	translate("Retry limit to connect to an uplink. ")
-	.. translate("To disable this feature set it to '0' which means unlimited retries."))
+	translate("Retry limit to connect to an uplink."))
 e3.default = 3
-e3.datatype = "range(0,30)"
+e3.datatype = "range(1,10)"
 e3.rmempty = false
 
 e4 = e:option(Value, "trm_minquality", translate("Signal Quality Threshold"),
 	translate("Minimum signal quality threshold as percent for conditional uplink (dis-) connections."))
-e4.default = 30
-e4.datatype = "range(0,100)"
+e4.default = 35
+e4.datatype = "range(20,80)"
 e4.rmempty = false
 
 e5 = e:option(Value, "trm_maxwait", translate("Interface Timeout"),
-	translate("How long should travelmate wait for a successful wlan interface reload."))
+	translate("How long should travelmate wait for a successful wlan uplink connection."))
 e5.default = 30
-e5.datatype = "range(5,60)"
+e5.datatype = "range(20,40)"
 e5.rmempty = false
 
 e6 = e:option(Value, "trm_timeout", translate("Overall Timeout"),
 	translate("Timeout in seconds between retries in 'automatic' mode."))
 e6.default = 60
-e6.datatype = "range(60,300)"
+e6.datatype = "range(30,300)"
 e6.rmempty = false
 
 return m
