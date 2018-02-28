@@ -251,7 +251,7 @@ e9.rmempty = true
 
 e10 = e:option(Flag, "adb_notify", translate("Email Notification"),
 	translate("Send notification emails in case of a processing error or if domain count is &le; 0.<br />")
-	.. translate("Please note: this needs additional 'mstmp' package installation and setup."))
+	.. translate("Please note: this needs additional 'msmtp' package installation and setup."))
 e10.default = e10.disabled
 e10.rmempty = true
 
