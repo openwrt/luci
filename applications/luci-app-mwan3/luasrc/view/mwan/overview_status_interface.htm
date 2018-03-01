@@ -15,30 +15,27 @@ XHR.poll(5, '<%=luci.dispatcher.build_url("admin", "status", "mwan", "interface_
 				for ( var iface in status.interfaces)
 				{
 					var state = '';
-					var css = '';
 					switch (status.interfaces[iface].status)
 					{
 						case 'online':
 							state = '<%:Online (tracking active)%>';
-							css = 'wanon';
 							break;
 						case 'notMonitored':
 							state = '<%:Online (tracking off)%>';
-							css = 'wanon';
 							break;
 						case 'offline':
 							state = '<%:Offline%>';
-							css = 'wanoff';
 							break;
 						default:
 							state = '<%:Disabled%>';
-							css = 'wanoff';
 							break;
 					}
 					statusview += String.format(
-						'<span class="%s"><strong>%s</strong><br />%s</span>',
-						css,
-						iface,
+						'<div><strong>Interface: </strong>%s</div>',
+						iface
+					);
+					statusview += String.format(
+						'<div><strong>Status: </strong>%s</div></br></br>',
 						state
 					);
 				}
