@@ -14,67 +14,7 @@
 </ul>
 
 <script type="text/javascript" src="<%=resource%>/cbi.js"></script>
-<script type="text/javascript">//<![CDATA[
-	XHR.poll(5, '<%=luci.dispatcher.build_url("admin", "status", "mwan", "interface_status")%>', null,
-		function(x, status)
-		{
-			var legend = document.getElementById('diag-rc-legend');
-			var statusDiv = document.getElementById('diag-rc-output');
-			legend.style.display = 'none';
-			if (status.interfaces)
-			{
-				var statusview = '';
-				for ( var iface in status.interfaces)
-				{
-					var state = '';
-					var css = '';
-					switch (status.interfaces[iface].status)
-					{
-						case 'online':
-							state = '<%:Online (tracking active)%>';
-							css = 'wanon';
-							break;
-						case 'notMonitored':
-							state = '<%:Online (tracking off)%>';
-							css = 'wanon';
-							break;
-						case 'offline':
-							state = '<%:Offline%>';
-							css = 'wanoff';
-							break;
-						default:
-							state = '<%:Disabled%>';
-							css = 'wanoff';
-							break;
-					}
-					statusview += String.format(
-						'<span class="%s"><strong>%s</strong><br />%s</span>',
-						css,
-						iface,
-						state
-					);
-				}
-				statusDiv.innerHTML = statusview;
-			}
-			else
-			{
-				statusDiv.innerHTML = '<strong><%:No MWAN interfaces found%></strong>';
-			}
-		}
-	);
-//]]></script>
 
-<div class="cbi-map">
-	<h2 name="content"><%:MWAN Status - Interface%></h2>
-	<%if not require("luci.sys").init.enabled("mwan3") then%>
-	<div><strong><%:INFO: MWAN not running%></strong></div>
-	<%end%>
-	<fieldset class="cbi-section">
-		<legend id="diag-rc-legend"><%:Collecting data...%></legend>
-		<span id="diag-rc-output">
-			<img src="<%=resource%>/icons/loading.gif" alt="<%:Loading%>" style="vertical-align: middle;" />
-		</span>
-	</fieldset>
-</div>
+<%+mwan/overview_status_interface%>
 
 <%+footer%>
