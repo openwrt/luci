@@ -93,7 +93,7 @@ function configCheck()
 
 			local trackingNumber = uci:get("mwan3", iface, "track_ip")
 			overview[iface]["tracking"] = 0
-			if #trackingNumber > 0 then
+			if trackingNumber and #trackingNumber > 0 then
 				overview[iface]["tracking"] = #trackingNumber
 				overview[iface]["reliability"] = false
 				local reliabilityNumber = tonumber(uci:get("mwan3", iface, "reliability"))

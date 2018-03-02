@@ -15,30 +15,27 @@ XHR.poll(5, '<%=luci.dispatcher.build_url("admin", "status", "mwan", "interface_
 				for ( var iface in status.interfaces)
 				{
 					var state = '';
-					var css = '';
 					switch (status.interfaces[iface].status)
 					{
 						case 'online':
 							state = '<%:Online (tracking active)%>';
-							css = 'wanon';
 							break;
 						case 'notMonitored':
 							state = '<%:Online (tracking off)%>';
-							css = 'wanon';
 							break;
 						case 'offline':
 							state = '<%:Offline%>';
-							css = 'wanoff';
 							break;
 						default:
 							state = '<%:Disabled%>';
-							css = 'wanoff';
 							break;
 					}
 					statusview += String.format(
-						'<span class="%s"><strong>%s</strong><br />%s</span>',
-						css,
-						iface,
+						'<div><strong>Interface: </strong>%s</div>',
+						iface
+					);
+					statusview += String.format(
+						'<div><strong>Status: </strong>%s</div></br></br>',
 						state
 					);
 				}
@@ -53,36 +50,8 @@ XHR.poll(5, '<%=luci.dispatcher.build_url("admin", "status", "mwan", "interface_
 //]]></script>
 
 <fieldset id="interface_field" class="cbi-section">
-	<legend><%:MWAN Interface Live Status%></legend>
-	<div id="mwan_status_text"><img src="<%=resource%>/icons/loading.gif" alt="<%:Loading%>" style="vertical-align:middle" /><%:Collecting data...%></div>
+	<legend><%:MWAN Interfaces%></legend>
+	<div id="mwan_status_text">
+		<img src="<%=resource%>/icons/loading.gif" alt="<%:Loading%>" style="vertical-align:middle" /><%:Collecting data...%>
+	</div>
 </fieldset>
-
-<style type="text/css">
-  .container {	/* container for entire page. fixes bootstrap theme's ridiculously small page width */
-	max-width: 1044px;
-  }
-  #mwan_status_text {
-	display: table;
-	font-size: 14px;
-	margin: auto;
-	max-width: 1044px;
-	min-width: 246px;
-	width: 100%;
-  }
-  .wanon {
-	background-color: rgb(144, 240, 144);
-  }
-  .wanoff {
-	background-color: rgb(240, 144, 144);
-  }
-  .wanon, .wanoff {
-	border-radius: 60px;
-	box-shadow: 0px 2px 5px -3px;
-	float: left;
-	margin: 8px 3px 0px 3px;
-	min-height: 30px;
-	min-width: 235px;
-	padding: 5px 10px 8px 10px;
-	text-align: center;
-  }
-</style>
