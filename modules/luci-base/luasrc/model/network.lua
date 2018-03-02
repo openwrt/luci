@@ -543,6 +543,9 @@ end
 function del_network(self, n)
 	local r = _uci:delete("network", n)
 	if r then
+		_uci:delete_all("luci", "ifstate",
+			function(s) return (s.interface == n) end)
+
 		_uci:delete_all("network", "alias",
 			function(s) return (s.interface == n) end)
 

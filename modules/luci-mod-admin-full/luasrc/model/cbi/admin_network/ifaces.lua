@@ -16,6 +16,7 @@ local has_firewall = fs.access("/etc/config/firewall")
 m = Map("network", translate("Interfaces") .. " - " .. arg[1]:upper(), translate("On this page you can configure the network interfaces. You can bridge several interfaces by ticking the \"bridge interfaces\" field and enter the names of several network interfaces separated by spaces. You can also use <abbr title=\"Virtual Local Area Network\">VLAN</abbr> notation <samp>INTERFACE.VLANNR</samp> (<abbr title=\"for example\">e.g.</abbr>: <samp>eth0.1</samp>)."))
 m.redirect = luci.dispatcher.build_url("admin", "network", "network")
 m:chain("wireless")
+m:chain("luci")
 
 if has_firewall then
 	m:chain("firewall")
@@ -27,18 +28,52 @@ fw.init(m.uci)
 
 local net = nw:get_network(arg[1])
 
+local function set_ifstate(name, option, value)
+	local found = false
+
+	m.uci:foreach("luci", "ifstate", function (s)
+		if s.interface == name then
+			m.uci:set("luci", s[".name"], option, value)
+			found = true
+			return false
+		end
+	end)
+
+	if not found then
+		local sid = m.uci:add("luci", "ifstate")
+		m.uci:set("luci", sid, "interface", name)
+		m.uci:set("luci", sid, option, value)
+	end
+
+	m.uci:save("luci")
+end
+
+local function get_ifstate(name, option)
+	local val
+
+	m.uci:foreach("luci", "ifstate", function (s)
+		if s.interface == name then
+			val = m.uci:get("luci", s[".name"], option)
+			return false
+		end
+	end)
+
+	return val
+end
+
 local function backup_ifnames(is_bridge)
-	if not net:is_floating() and not m:get(net:name(), "_orig_ifname") then
+	if not net:is_floating() and not get_ifstate(net:name(), "ifname") then
 		local ifcs = net:get_interfaces() or { net:get_interface() }
 		if ifcs then
 			local _, ifn
 			local ifns = { }
 			for _, ifn in ipairs(ifcs) do
-				ifns[#ifns+1] = ifn:name()
+				local wif = ifn:get_wifinet()
+				ifns[#ifns+1] = wif and wif:id() or ifn:name()
 			end
 			if #ifns > 0 then
-				m:set(net:name(), "_orig_ifname", table.concat(ifns, " "))
-				m:set(net:name(), "_orig_bridge", tostring(net:is_bridge()))
+				set_ifstate(net:name(), "ifname", table.concat(ifns, " "))
+				set_ifstate(net:name(), "bridge", tostring(net:is_bridge()))
 			end
 		end
 	end
@@ -84,10 +119,10 @@ if m:formvalue("cbid.network.%s._switch" % net:name()) then
 		elseif net:is_floating() and not proto:is_floating() then
 			-- if we have backup data, then re-add all orphaned interfaces
 			-- from it and restore the bridge choice
-			local br = (m:get(net:name(), "_orig_bridge") == "true")
+			local br = (get_ifstate(net:name(), "bridge") == "true")
 			local ifn
 			local ifns = { }
-			for ifn in ut.imatch(m:get(net:name(), "_orig_ifname")) do
+			for ifn in ut.imatch(get_ifstate(net:name(), "ifname")) do
 				ifn = nw:get_interface(ifn)
 				if ifn and not ifn:get_network() then
 					proto:add_interface(ifn)
@@ -114,9 +149,7 @@ if m:formvalue("cbid.network.%s._switch" % net:name()) then
 		for k, v in pairs(m:get(net:name())) do
 			if k:sub(1,1) ~= "." and
 			   k ~= "type" and
-			   k ~= "ifname" and
-			   k ~= "_orig_ifname" and
-			   k ~= "_orig_bridge"
+			   k ~= "ifname"
 			then
 				m:del(net:name(), k)
 			end
