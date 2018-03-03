@@ -1,0 +1,63 @@
+<%#
+Copyright 2018 Dirk Brenken (dev@brenken.org)
+This is free software, licensed under the Apache License, Version 2.0
+-%>
+
+<%+header%>
+
+<div class="cbi-map">
+    <div class="cbi-map-descr">
+        <%=translate("Here you'll find the QR codes from all of your configured Access Points. It allows you to connect your Android or iOS devices to your router's WiFi using the QR code shown below.")%>
+    </div>
+<%-
+  local write = io.write
+  local uci   = require("luci.model.uci").cursor()
+
+  uci:foreach("wireless", "wifi-iface", function(s)
+    local device = s.device or ""
+    local mode = s.mode or ""
+    local ssid = s.ssid or ""
+    local enc = s.encryption or ""
+    local key = s.key or "nokey"
+    local hidden = s.hidden or "false"
+    local disabled = s.disabled or ""
+    if device ~= "" and mode == "ap" and disabled ~= "1" then
+      if string.match(enc, '^psk2') then
+        enc = "wpa2"
+      elseif string.match(enc, '^psk') then
+        enc = "wpa"
+      elseif string.match(enc, '^wep') then
+        if tonumber(key) then
+          enc = ""
+        else
+          enc = "wep"
+        end
+      elseif enc == "none" then
+        enc = "nopass"
+        key = "nokey"
+      else
+        enc = ""
+      end
+      if hidden == "1" then
+        hidden = "true"
+      end
+      if ssid ~= "" and enc ~= "" then
+        local e_ssid = string.gsub(ssid,"[\";\\:, ]","\\%1")
+        local e_key = string.gsub(key,"[\";\\:, ]","\\%1")
+        local qrcode = ""
+        if nixio.fs.access("/usr/bin/qrencode") then
+          qrcode = luci.sys.exec("/usr/bin/qrencode -I -t SVG -8 -o - 'WIFI:S:\"'" .. e_ssid .. "'\";T:'" .. enc .. "';P:\"'" .. e_key .. "'\";H:'" .. hidden .. "';'")
+        end
+-%>
+    <fieldset class="cbi-section">
+        <legend>AP on <%=device%> with SSID "<%=ssid%>"</legend>
+        <h3 name="content"><%=qrcode%></h3>
+    </fieldset>
+<%-
+      end
+    end
+  end)
+%>
+</div>
+
+<%+footer%>
