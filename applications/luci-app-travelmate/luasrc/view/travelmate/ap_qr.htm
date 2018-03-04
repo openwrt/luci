@@ -18,19 +18,18 @@ This is free software, licensed under the Apache License, Version 2.0
     local mode = s.mode or ""
     local ssid = s.ssid or ""
     local enc = s.encryption or ""
-    local key = s.key or "nokey"
+    local key = s.key or ""
     local hidden = s.hidden or "false"
     local disabled = s.disabled or ""
-    if device ~= "" and mode == "ap" and disabled ~= "1" then
-      if string.match(enc, '^psk2') then
-        enc = "wpa2"
-      elseif string.match(enc, '^psk') then
-        enc = "wpa"
+    local wep_slots = {s.key1 or "", s.key2 or "", s.key3 or "", s.key4 or ""}
+
+    if device and mode == "ap" and disabled ~= "1" then
+      if string.match(enc, '^psk') then
+        enc = "WPA"
       elseif string.match(enc, '^wep') then
+        enc = "WEP"
         if tonumber(key) then
-          enc = ""
-        else
-          enc = "wep"
+          key = wep_slots[tonumber(key)]
         end
       elseif enc == "none" then
         enc = "nopass"
@@ -41,9 +40,9 @@ This is free software, licensed under the Apache License, Version 2.0
       if hidden == "1" then
         hidden = "true"
       end
-      if ssid ~= "" and enc ~= "" then
-        local e_ssid = string.gsub(ssid,"[\";\\:, ]","\\%1")
-        local e_key = string.gsub(key,"[\";\\:, ]","\\%1")
+      if ssid and enc and key then
+        local e_ssid = string.gsub(ssid,"[\"\\';:, ]",[[\\\%1]])
+        local e_key = string.gsub(key,"[\"\\';:, ]",[[\\\%1]])
         local qrcode = ""
         if nixio.fs.access("/usr/bin/qrencode") then
           qrcode = luci.sys.exec("/usr/bin/qrencode -I -t SVG -8 -o - 'WIFI:S:\"'" .. e_ssid .. "'\";T:'" .. enc .. "';P:\"'" .. e_key .. "'\";H:'" .. hidden .. "';'")
