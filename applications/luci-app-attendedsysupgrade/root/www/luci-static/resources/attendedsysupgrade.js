@@ -373,8 +373,8 @@ function server_request(request_dict, path, callback) {
 		error_box("No firmware created due to image size. Try again with less packages selected.")
 
 		} else if (request.status === 422) {
-			error_box("Unknown package in request")
-
+			var package_missing = response.getResponseHeader("X-Unknown-Package");
+			error_box("Unknown package in request: <b>" + package_missing + "</b>")
 		} else if (request.status === 500) {
 			request_json = JSON.parse(request_text)
 
