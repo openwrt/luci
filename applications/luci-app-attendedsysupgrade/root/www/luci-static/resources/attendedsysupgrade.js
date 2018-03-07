@@ -128,7 +128,7 @@ function ubus_call(command, argument, params, variable) {
 					}
 				}
 			} else {
-				error_box("<b>Ubus call faild:</b></br>Request: " + request_json + "</br>Response: " + JSON.stringify(response))
+				error_box("<b>Ubus call faild:</b><br />Request: " + request_json + "<br />Response: " + JSON.stringify(response))
 			}
 			ubus_closed++;
 		}
@@ -180,7 +180,7 @@ function upgrade_check_callback(request_text) {
 	if(request_json.upgrades != undefined) {
 		info_output += "<h3>Package upgrades available</h3>"
 		for (upgrade in request_json.upgrades) {
-			info_output += "<b>" + upgrade + "</b>: " + request_json.upgrades[upgrade][1] + " to " + request_json.upgrades[upgrade][0] + "</br>"
+			info_output += "<b>" + upgrade + "</b>: " + request_json.upgrades[upgrade][1] + " to " + request_json.upgrades[upgrade][0] + "<br />"
 		}
 	}
 	data.packages = request_json.packages
@@ -231,9 +231,9 @@ function upgrade_request_callback(request) {
 	var filename_split = data.sysupgrade_url.split("/")
 	data.filename = filename_split[filename_split.length - 1]
 
-	info_output = "Firmware created</br><b>" + data.filename + "</b>"
+	info_output = 'Firmware created: <a href="' + data.sysupgrade_url + '"><b>' + data.filename + '</b></a>'
 	if(data.advanced_mode == 1) {
-		info_output += '</br><a target="_blank" href="' + data.sysupgrade_url + '.log">Build log</a>'
+		info_output += '<br /><a target="_blank" href="' + data.sysupgrade_url + '.log">Build log</a>'
 	}
 	info_box(info_output);
 
@@ -378,7 +378,7 @@ function server_request(request_dict, path, callback) {
 		} else if (request.status === 500) {
 			request_json = JSON.parse(request_text)
 
-			error_box_content = "<b>Internal server error</b></br>"
+			error_box_content = "<b>Internal server error</b><br />"
 			error_box_content += request_json.error
 			if(request_json.log != undefined) {
 				data.log_url = request_json.log
