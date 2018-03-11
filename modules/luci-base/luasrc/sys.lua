@@ -146,9 +146,13 @@ local function _nethints(what, callback)
 
 	if fs.access("/etc/ethers") then
 		for e in io.lines("/etc/ethers") do
-			mac, ip = e:match("^([a-f0-9]%S+) (%S+)")
-			if mac and ip then
-				_add(what, mac:upper(), ip, nil, nil)
+			mac, name = e:match("^([a-fA-F0-9:]+)%s+(%S+)")
+			if mac and name then
+				if luci.ip.IPv4(name) then
+					_add(what, mac:upper(), name, nil, nil)
+				else
+					_add(what, mac:upper(), nil, nil, name)
+				end
 			end
 		end
 	end
