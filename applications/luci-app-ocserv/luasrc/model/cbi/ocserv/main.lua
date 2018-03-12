@@ -86,7 +86,7 @@ pip.default = "1"
 
 local compr = s:taboption("general", Flag, "compression", translate("Enable compression"),
 	translate("Enable compression"))
-compr.default = "1"
+compr.default = "0"
 
 local udp = s:taboption("general", Flag, "udp", translate("Enable UDP"),
 	translate("Enable UDP channel support; this must be enabled unless you know what you are doing"))
