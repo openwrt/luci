@@ -27,6 +27,7 @@ addr6 = luci.ip.new("fe80::221:63ff:fe75:aa17", "ffff:ffff:ffff:ffff::")
 addr6 = luci.ip.new("fe80::221:63ff:fe75:aa17/64", 128) -- override netmask`
 @see IPv4
 @see IPv6
+@see MAC
 ]]
 
 ---[[
@@ -47,6 +48,7 @@ addr = luci.ip.IPv4("10.24.0.1/255.255.255.0")
 addr = luci.ip.IPv4("10.24.0.1", "255.255.255.0")        -- separate netmask
 addr = luci.ip.IPv4("10.24.0.1/24", 16)                  -- override netmask`
 @see IPv6
+@see MAC
 ]]
 
 ---[[
@@ -67,12 +69,112 @@ addr6 = luci.ip.IPv6("fe80::221:63ff:fe75:aa17/ffff:ffff:ffff:ffff::")
 addr6 = luci.ip.IPv6("fe80::221:63ff:fe75:aa17", "ffff:ffff:ffff:ffff::")
 addr6 = luci.ip.IPv6("fe80::221:63ff:fe75:aa17/64", 128) -- override netmask`
 @see IPv4
+@see MAC
+]]
+
+---[[
+Construct a new MAC luci.ip.cidr instance.
+Throws an error if the given string does not represent a valid ethernet MAC
+address or if the given optional mask is of a different family.
+@class function
+@sort 4
+@name MAC
+@param address  String containing a valid ethernet MAC address, optionally with
+prefix size (CIDR notation) or mask separated by slash.
+@param netmask  String containing a valid MAC address mask or number
+containing a prefix size between `0` and `48` bit.
+Overrides mask embedded in the first argument if specified. (optional)
+@return A `luci.ip.cidr` object representing the given MAC address range.
+@usage `intel_macs = luci.ip.MAC("C0:B6:F9:00:00:00/24")
+intel_macs = luci.ip.MAC("C0:B6:F9:00:00:00/FF:FF:FF:0:0:0")
+intel_macs = luci.ip.MAC("C0:B6:F9:00:00:00", "FF:FF:FF:0:0:0")
+intel_macs = luci.ip.MAC("C0:B6:F9:00:00:00/24", 48) -- override mask`
+@see IPv4
+@see IPv6
+]]
+
+---[[
+Verify an IPv4 address.
+
+Checks whether given argument is a preexisting luci.ip.cidr IPv4 address
+instance or a string literal convertible to an IPv4 address and returns a
+plain Lua string containing the canonical representation of the address.
+
+If the argument is not a valid address, returns nothing. This function is
+intended to aid in safely verifying address literals without having to deal
+with exceptions.
+@class function
+@sort 5
+@name checkip4
+@param address  String containing a valid IPv4 address or existing
+luci.ip.cidr IPv4 instance.
+@return A string representing the given IPv4 address.
+@usage `ipv4 = luci.ip.checkip4(luci.ip.new("127.0.0.1"))  -- "127.0.0.1"
+ipv4 = luci.ip.checkip4("127.0.0.1")               -- "127.0.0.1"
+ipv4 = luci.ip.checkip4("nonesense")               -- nothing
+ipv4 = luci.ip.checkip4(123)                       -- nothing
+ipv4 = luci.ip.checkip4(nil)                       -- nothing
+ipv4 = luci.ip.checkip4()                          -- nothing`
+@see checkip6
+@see checkmac
+]]
+
+---[[
+Verify an IPv6 address.
+
+Checks whether given argument is a preexisting luci.ip.cidr IPv6 address
+instance or a string literal convertible to an IPv6 address and returns a
+plain Lua string containing the canonical representation of the address.
+
+If the argument is not a valid address, returns nothing. This function is
+intended to aid in safely verifying address literals without having to deal
+with exceptions.
+@class function
+@sort 6
+@name checkip6
+@param address  String containing a valid IPv6 address or existing
+luci.ip.cidr IPv6 instance.
+@return A string representing the given IPv6 address.
+@usage `ipv6 = luci.ip.checkip6(luci.ip.new("0:0:0:0:0:0:0:1"))  -- "::1"
+ipv6 = luci.ip.checkip6("0:0:0:0:0:0:0:1")               -- "::1"
+ipv6 = luci.ip.checkip6("nonesense")                     -- nothing
+ipv6 = luci.ip.checkip6(123)                             -- nothing
+ipv6 = luci.ip.checkip6(nil)                             -- nothing
+ipv6 = luci.ip.checkip6()                                -- nothing`
+@see checkip4
+@see checkmac
+]]
+
+---[[
+Verify an ethernet MAC address.
+
+Checks whether given argument is a preexisting luci.ip.cidr MAC address
+instance or a string literal convertible to an ethernet MAC and returns a
+plain Lua string containing the canonical representation of the address.
+
+If the argument is not a valid address, returns nothing. This function is
+intended to aid in safely verifying address literals without having to deal
+with exceptions.
+@class function
+@sort 7
+@name checkmac
+@param address  String containing a valid MAC address or existing luci.ip.cidr
+MAC address instance.
+@return A string representing the given MAC address.
+@usage `mac = luci.ip.checkmac(luci.ip.new("00-11-22-cc-dd-ee"))  -- "00:11:22:CC:DD:EE"
+mac = luci.ip.checkmac("00:11:22:cc:dd:ee")               -- "00:11:22:CC:DD:EE"
+mac = luci.ip.checkmac("nonesense")                       -- nothing
+mac = luci.ip.checkmac(123)                               -- nothing
+mac = luci.ip.checkmac(nil)                               -- nothing
+mac = luci.ip.checkmac()                                  -- nothing`
+@see checkip4
+@see checkip6
 ]]
 
 ---[[
 Determine the route leading to the given destination.
 @class function
-@sort 4
+@sort 8
 @name route
 @param address	A `luci.ip.cidr` instance or a string containing
 a valid IPv4 or IPv6 range as specified by `luci.ip.new()`.
@@ -178,7 +280,7 @@ end`</li>
 ---[[
 Fetch all routes, optionally matching the given criteria.
 @class function
-@sort 5
+@sort 9
 @name routes
 @param filter  <p>Table containing one or more of the possible filter
 critera described below (optional)</p><table>
@@ -258,7 +360,7 @@ end`</li>
 ---[[
 Fetches entries from the IPv4 ARP and IPv6 neighbour kernel table
 @class function
-@sort 6
+@sort 10
 @name neighbors
 @param filter  <p>Table containing one or more of the possible filter
 critera described below (optional)</p><table>
@@ -306,7 +408,7 @@ A neighbour entry is a table containing the following fields:
 </tr>
 <tr>
   <td>`mac`</td>
-  <td>String containing the associated MAC address</td>
+  <td>MAC address `luci.ip.cidr` instance</td>
 </tr>
 <tr>
   <td>`router`</td>
@@ -367,7 +469,7 @@ end)`</li>
 ---[[
 Fetch basic device information
 @class function
-@sort 7
+@sort 11
 @name link
 @param device  String containing the network device to query
 @return  If the given interface is found, a table containing the fields
@@ -403,8 +505,8 @@ described below is returned, else an empty table.
 </tr>
 <tr>
   <td>`mac`</td>
-  <td>String containing the link local address of the device in
-      dotted hex notation</td>
+  <td>MAC address `luci.ip.cidr` instance representing the device ethernet
+      address</td>
 </tr>
 </table>
 @usage <ul>
@@ -430,6 +532,7 @@ Checks whether the CIDR instance is an IPv4 address range
 @sort 1
 @name cidr.is4
 @see cidr.is6
+@see cidr.ismac
 @return `true` if the CIDR is an IPv4 range, else `false`
 ]]
 
@@ -470,6 +573,7 @@ Checks whether the CIDR instance is an IPv6 address range
 @sort 4
 @name cidr.is6
 @see cidr.is4
+@see cidr.ismac
 @return `true` if the CIDR is an IPv6 range, else `false`
 ]]
 
@@ -502,13 +606,51 @@ end`
 ]]
 
 ---[[
-Checks whether this CIDR instance is lower than the given argument.
-The comparisation follows these rules:
-<ul><li>An IPv4 address is always lower than an IPv6 address</li>
-<li>Prefix sizes are ignored</li></ul>
+Checks whether the CIDR instance is an ethernet MAC address range
 
 @class function
 @sort 7
+@name cidr.ismac
+@see cidr.is4
+@see cidr.is6
+@return `true` if the CIDR is a MAC address range, else `false`
+]]
+
+---[[
+Checks whether the CIDR instance is a locally administered (LAA) MAC address
+
+@class function
+@sort 8
+@name cidr.ismaclocal
+@return `true` if the MAC address sets the locally administered bit.
+@usage `local mac = luci.ip.new("02:C0:FF:EE:00:01")
+if mac:ismaclocal() then
+  print("Is an LAA MAC address")
+end`
+]]
+
+---[[
+Checks whether the CIDR instance is a multicast MAC address
+
+@class function
+@sort 9
+@name cidr.ismacmcast
+@return `true` if the MAC address sets the multicast bit.
+@usage `local mac = luci.ip.new("01:00:5E:7F:00:10")
+if addr:ismacmcast() then
+  print("Is a multicast MAC address")
+end`
+]]
+
+---[[
+Checks whether this CIDR instance is lower than the given argument.
+The comparisation follows these rules:
+<ul><li>An IPv4 address is always lower than an IPv6 address and IPv6 addresses
+are considered lower than MAC addresses</li>
+<li>Prefix sizes are ignored</li></ul>
+
+@class function
+@sort 10
 @name cidr.lower
 @param addr A `luci.ip.cidr` instance or a string convertable by
 	`luci.ip.new()` to compare against.
@@ -518,7 +660,8 @@ The comparisation follows these rules:
 print(addr:lower(addr)) -- false
 print(addr:lower("10.10.10.10/24")) -- false
 print(addr:lower(luci.ip.new("::1"))) -- true
-print(addr:lower(luci.ip.new("192.168.200.1"))) -- true`
+print(addr:lower(luci.ip.new("192.168.200.1"))) -- true
+print(addr:lower(luci.ip.new("00:14:22:01:23:45"))) -- true`
 @see cidr.higher
 @see cidr.equal
 ]]
@@ -526,11 +669,12 @@ print(addr:lower(luci.ip.new("192.168.200.1"))) -- true`
 ---[[
 Checks whether this CIDR instance is higher than the given argument.
 The comparisation follows these rules:
-<ul><li>An IPv4 address is always lower than an IPv6 address</li>
+<ul><li>An IPv4 address is always lower than an IPv6 address and IPv6 addresses
+are considered lower than MAC addresses</li>
 <li>Prefix sizes are ignored</li></ul>
 
 @class function
-@sort 8
+@sort 11
 @name cidr.higher
 @param addr A `luci.ip.cidr` instance or a string convertable by
 	`luci.ip.new()` to compare against.
@@ -540,7 +684,8 @@ The comparisation follows these rules:
 print(addr:higher(addr)) -- false
 print(addr:higher("10.10.10.10/24")) -- true
 print(addr:higher(luci.ip.new("::1"))) -- false
-print(addr:higher(luci.ip.new("192.168.200.1"))) -- false`
+print(addr:higher(luci.ip.new("192.168.200.1"))) -- false
+print(addr:higher(luci.ip.new("00:14:22:01:23:45"))) -- false`
 @see cidr.lower
 @see cidr.equal
 ]]
@@ -549,7 +694,7 @@ print(addr:higher(luci.ip.new("192.168.200.1"))) -- false`
 Checks whether this CIDR instance is equal to the given argument.
 
 @class function
-@sort 9
+@sort 12
 @name cidr.equal
 @param addr A `luci.ip.cidr` instance or a string convertable by
 	`luci.ip.new()` to compare against.
@@ -562,7 +707,11 @@ print(addr:equal(luci.ip.new("::1"))) -- false
 
 local addr6 = luci.ip.new("::1")
 print(addr6:equal("0:0:0:0:0:0:0:1/64")) -- true
-print(addr6:equal(luci.ip.new("fe80::221:63ff:fe75:aa17"))) -- false`
+print(addr6:equal(luci.ip.new("fe80::221:63ff:fe75:aa17"))) -- false
+
+local mac = luci.ip.new("00:14:22:01:23:45")
+print(mac:equal("0:14:22:1:23:45")) -- true
+print(mac:equal(luci.ip.new("01:23:45:67:89:AB")) -- false`
 @see cidr.lower
 @see cidr.higher
 ]]
@@ -573,11 +722,11 @@ If the optional mask parameter is given, the prefix size of this CIDR is altered
 else the current prefix size is returned.
 
 @class function
-@sort 10
+@sort 13
 @name cidr.prefix
 @param mask Either a number containing the number of bits (`0..32`
-	for IPv4, `0..128` for IPv6) or a string containing a valid
-	netmask (optional)
+	for IPv4, `0..128` for IPv6 or `0..48` for MAC addresses) or a string
+  containing a valid netmask (optional)
 @return Bit count of the current prefix size
 @usage `local range = luci.ip.new("192.168.1.1/255.255.255.0")
 print(range:prefix()) -- 24
@@ -597,11 +746,11 @@ with all host parts masked out. The used prefix size can be overridden by the
 optional mask parameter.
 
 @class function
-@sort 11
+@sort 14
 @name cidr.network
 @param mask Either a number containing the number of bits (`0..32`
-	for IPv4, `0..128` for IPv6) or a string containing a valid
-	netmask (optional)
+	for IPv4, `0..128` for IPv6 or `0..48` for MAC addresses) or a string
+  containing a valid netmask (optional)
 @return CIDR instance representing the network address
 @usage `local range = luci.ip.new("192.168.62.243/255.255.0.0")
 print(range:network())                -- "192.168.0.0"
@@ -616,10 +765,10 @@ print(range6:network())               -- "fd9b:62b3:9cc5::"`
 Derive host address of CIDR instance.
 
 This function essentially constructs a copy of this CIDR with the prefix size
-set to `32` for IPv4 and `128` for IPv6.
+set to `32` for IPv4, `128` for IPv6 or `48` for MAC addresses.
 
 @class function
-@sort 12
+@sort 15
 @name cidr.host
 @return CIDR instance representing the host address
 @usage `local range = luci.ip.new("172.19.37.45/16")
@@ -634,11 +783,11 @@ Constructs a CIDR instance representing the netmask of this instance. The used
 prefix size can be overridden by the optional mask parameter.
 
 @class function
-@sort 13
+@sort 16
 @name cidr.mask
 @param mask Either a number containing the number of bits (`0..32`
-	for IPv4, `0..128` for IPv6) or a string containing a valid
-	netmask (optional)
+	for IPv4, `0..128` for IPv6 or `0..48` for MAC addresses) or a string
+  containing a valid netmask (optional)
 @return CIDR instance representing the netmask
 @usage `local range = luci.ip.new("172.19.37.45/16")
 print(range:mask())            -- "255.255.0.0"
@@ -652,15 +801,14 @@ Derive broadcast address of CIDR instance.
 Constructs a CIDR instance representing the broadcast address of this instance.
 The used prefix size can be overridden by the optional mask parameter.
 
-This function has no effect on IPv6 instances, it will return nothing in this
-case.
+This function has no effect on IPv6 or MAC address instances, it will return
+nothing in this case.
 
 @class function
-@sort 14
+@sort 17
 @name cidr.broadcast
-@param mask Either a number containing the number of bits (`0..32`
-	for IPv4, `0..128` for IPv6) or a string containing a valid
-	netmask (optional)
+@param mask Either a number containing the number of bits (`0..32` for IPv4) or
+  a string containing a valid netmask (optional)
 @return Return a new CIDR instance representing the broadcast address if this
 	instance is an IPv4 range, else return nothing.
 @usage `local range = luci.ip.new("172.19.37.45/16")
@@ -675,11 +823,11 @@ Derive mapped IPv4 address of CIDR instance.
 Constructs a CIDR instance representing the IPv4 address of the IPv6 mapped
 IPv4 address in this instance.
 
-This function has no effect on IPv4 instances or IPv6 instances which are not a
-mapped address, it will return nothing in this case.
+This function has no effect on IPv4 instances, MAC address instances or IPv6
+instances which are not a mapped address, it will return nothing in this case.
 
 @class function
-@sort 15
+@sort 18
 @name cidr.mapped4
 @return Return a new CIDR instance representing the IPv4 address if this
 	instance is an IPv6 mapped IPv4 address, else return nothing.
@@ -688,10 +836,46 @@ print(addr:mapped4()) -- "172.16.19.1"`
 ]]
 
 ---[[
+Derive MAC address of IPv6 link local CIDR instance.
+
+Constructs a CIDR instance representing the MAC address contained in the IPv6
+link local address of this instance.
+
+This function has no effect on IPv4 instances, MAC address instances or IPv6
+instances which are not a link local address, it will return nothing in this
+case.
+
+@class function
+@sort 19
+@name cidr.tomac
+@return Return a new CIDR instance representing the MAC address if this
+  instance is an IPv6 link local address, else return nothing.
+@usage `local addr = luci.ip.new("fe80::6666:b3ff:fe47:e1b9")
+print(addr:tomac()) -- "64:66:B3:47:E1:B9"`
+]]
+
+---[[
+Derive IPv6 link local address from MAC address CIDR instance.
+
+Constructs a CIDR instance representing the IPv6 link local address of the
+MAC address represented by this instance.
+
+This function has no effect on IPv4 instances or IPv6 instances, it will return
+nothing in this case.
+
+@class function
+@sort 20
+@name cidr.tolinklocal
+@return Return a new CIDR instance representing the IPv6 link local address.
+@usage `local mac = luci.ip.new("64:66:B3:47:E1:B9")
+print(mac:tolinklocal()) -- "fe80::6666:b3ff:fe47:e1b9"`
+]]
+
+---[[
 Test whether CIDR contains given range.
 
 @class function
-@sort 16
+@sort 21
 @name cidr.contains
 @param addr A `luci.ip.cidr` instance or a string convertable by
 	`luci.ip.new()` to test.
@@ -704,7 +888,11 @@ print(range:contains("10.0.0.0/8")) -- false
 
 local range6 = luci.ip.new("fe80::/10")
 print(range6:contains("fe80::221:63f:fe75:aa17/64"))         -- true
-print(range6:contains("fd9b:6b3:c5:0:221:63f:fe75:aa17/64")) -- false`
+print(range6:contains("fd9b:6b3:c5:0:221:63f:fe75:aa17/64")) -- false
+
+local intel_macs = luci.ip.MAC("C0:B6:F9:00:00:00/24")
+print(intel_macs:contains("C0:B6:F9:A3:C:11"))  -- true
+print(intel_macs:contains("64:66:B3:47:E1:B9")) -- false`
 ]]
 
 ---[[
@@ -712,7 +900,7 @@ Add given amount to CIDR instance. If the result would overflow the maximum
 address space, the result is set to the highest possible address.
 
 @class function
-@sort 17
+@sort 22
 @name cidr.add
 @param amount A numeric value between 0 and 0xFFFFFFFF, a
 	`luci.ip.cidr` instance or a string convertable by
@@ -726,32 +914,42 @@ address space, the result is set to the highest possible address.
         this instance plus the added amount or the highest possible address if
 	    the addition overflowed the available address space.</li></ul>
 @usage `local addr = luci.ip.new("192.168.1.1/24")
-print(addr:add(250))         -- "192.168.1.251/24"
-print(addr:add("0.0.99.0"))  -- "192.168.100.1/24"
+print(addr:add(250))           -- "192.168.1.251/24"
+print(addr:add("0.0.99.0"))    -- "192.168.100.1/24"
 
-addr:add(256, true)          -- true
-print(addr)                  -- "192.168.2.1/24
+addr:add(256, true)            -- true
+print(addr)                    -- "192.168.2.1/24
 
-addr:add("255.0.0.0", true)  -- false (overflow)
-print(addr)                  -- "255.255.255.255/24
+addr:add("255.0.0.0", true)    -- false (overflow)
+print(addr)                    -- "255.255.255.255/24
 
 local addr6 = luci.ip.new("fe80::221:63f:fe75:aa17/64")
-print(addr6:add(256))        -- "fe80::221:63f:fe75:ab17/64"
-print(addr6:add("::ffff:0")) -- "fe80::221:640:fe74:aa17/64"
+print(addr6:add(256))          -- "fe80::221:63f:fe75:ab17/64"
+print(addr6:add("::ffff:0"))   -- "fe80::221:640:fe74:aa17/64"
 
-addr:add(256, true)          -- true
-print(addr)                  -- "fe80::221:63f:fe75:ab17/64
+addr6:add(256, true)           -- true
+print(addr6)                   -- "fe80::221:63f:fe75:ab17/64
 
-addr:add("ffff::", true)     -- false (overflow)
-print(addr)                  -- "ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff/64"`
+addr6:add("ffff::", true)      -- false (overflow)
+print(addr6)                   -- "ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff/64"
+
+local mac = luci.ip.new("00:14:22:01:23:45")
+print(mac:add(256))            -- "00:14:22:01:24:45"
+print(mac:add("0:0:0:0:FF:0")  -- "00:14:22:02:22:45"
+
+mac:add(256, true)             -- true
+print(mac)                     -- "00:14:22:01:24:45"
+
+mac:add("FF:FF:0:0:0:0", true) -- false (overflow)
+print(mac)                     -- "FF:FF:FF:FF:FF:FF"`
 ]]
 
 ---[[
-Substract given amount from CIDR instance. If the result would under, the lowest
+Subtract given amount from CIDR instance. If the result would under, the lowest
 possible address is returned.
 
 @class function
-@sort 18
+@sort 23
 @name cidr.sub
 @param amount A numeric value between 0 and 0xFFFFFFFF, a
 	`luci.ip.cidr` instance or a string convertable by
@@ -759,11 +957,11 @@ possible address is returned.
 @param inplace If `true`, modify this instance instead of returning
 	a new derived CIDR instance.
 @return <ul>
-	<li>When substracting inplace: Return `true` if the substraction
-	    succeded or `false` when the substraction underflowed.</li>
+	<li>When subtracting inplace: Return `true` if the subtraction
+	    succeeded or `false` when the subtraction underflowed.</li>
 	<li>When deriving new CIDR: Return new instance representing the value of
-        this instance minus the substracted amount or the lowest address if
-	    the substraction underflowed.</li></ul>
+        this instance minus the subtracted amount or the lowest address if
+	    the subtraction underflowed.</li></ul>
 @usage `local addr = luci.ip.new("192.168.1.1/24")
 print(addr:sub(256))         -- "192.168.0.1/24"
 print(addr:sub("0.168.0.0")) -- "192.0.1.1/24"
@@ -782,14 +980,24 @@ addr:sub(256, true)          -- true
 print(addr)                  -- "fe80::221:63f:fe75:a917/64"
 
 addr:sub("ffff::", true)     -- false (underflow)
-print(addr)                  -- "::/64"`
+print(addr)                  -- "::/64"
+
+local mac = luci.ip.new("00:14:22:01:23:45")
+print(mac:sub(256))            -- "00:14:22:01:22:45"
+print(mac:sub("0:0:0:0:FF:0")  -- "00:14:22:00:24:45"
+
+mac:sub(256, true)             -- true
+print(mac)                     -- "00:14:22:01:22:45"
+
+mac:sub("FF:FF:0:0:0:0", true) -- false (overflow)
+print(mac)                     -- "00:00:00:00:00:00"`
 ]]
 
 ---[[
 Calculate the lowest possible host address within this CIDR instance.
 
 @class function
-@sort 19
+@sort 24
 @name cidr.minhost
 @return Returns a new CIDR instance representing the lowest host address
 	within this range.
@@ -797,14 +1005,17 @@ Calculate the lowest possible host address within this CIDR instance.
 print(addr:minhost())  -- "192.168.123.1"
 
 local addr6 = luci.ip.new("fd9b:62b3:9cc5:0:221:63ff:fe75:aa17/64")
-print(addr6:minhost()) -- "fd9b:62b3:9cc5::1"`
+print(addr6:minhost()) -- "fd9b:62b3:9cc5::1"
+
+local mac = luci.ip.new("00:14:22:01:22:45/32")
+print(mac:minhost())   -- "00:14:22:01:00:01"`
 ]]
 
 ---[[
 Calculate the highest possible host address within this CIDR instance.
 
 @class function
-@sort 20
+@sort 25
 @name cidr.maxhost
 @return Returns a new CIDR instance representing the highest host address
 	within this range.
@@ -812,20 +1023,24 @@ Calculate the highest possible host address within this CIDR instance.
 print(addr:maxhost())  -- "192.168.123.254" (.255 is broadcast)
 
 local addr6 = luci.ip.new("fd9b:62b3:9cc5:0:221:63ff:fe75:aa17/64")
-print(addr6:maxhost()) -- "fd9b:62b3:9cc5:0:ffff:ffff:ffff:ffff"`
+print(addr6:maxhost()) -- "fd9b:62b3:9cc5:0:ffff:ffff:ffff:ffff"
+
+local mac = luci.ip.new("00:14:22:01:22:45/32")
+print(mac:maxhost())   -- "00:14:22:01:FF:FF"`
 ]]
 
 ---[[
 Convert CIDR instance into string representation.
 
-If the prefix size of instance is less than 32 for IPv4 or 128 for IPv6, the
-address is returned in the form "address/prefix" otherwise just "address".
+If the prefix size of instance is less than 32 for IPv4, 128 for IPv6 or 48 for
+MACs, the address is returned in the form "address/prefix" otherwise just
+"address".
 
 It is usually not required to call this function directly as CIDR objects
 define it as __tostring function in the associated metatable.
 
 @class function
-@sort 21
+@sort 26
 @name cidr.string
 @return Returns a string representing the range or address of this CIDR instance
 ]]

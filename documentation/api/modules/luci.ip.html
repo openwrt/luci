@@ -232,6 +232,34 @@ Construct a new IPv6 luci.ip.cidr instance.</td>
 	</tr>
 
 	<tr>
+	<td class="name" nowrap><a href="#MAC">MAC</a>&nbsp;(address, netmask)</td>
+	<td class="summary">
+ 
+Construct a new MAC luci.ip.cidr instance.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#checkip4">checkip4</a>&nbsp;(address)</td>
+	<td class="summary">
+ 
+Verify an IPv4 address.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#checkip6">checkip6</a>&nbsp;(address)</td>
+	<td class="summary">
+ 
+Verify an IPv6 address.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#checkmac">checkmac</a>&nbsp;(address)</td>
+	<td class="summary">
+ 
+Verify an ethernet MAC address.</td>
+	</tr>
+
+	<tr>
 	<td class="name" nowrap><a href="#route">route</a>&nbsp;(address)</td>
 	<td class="summary">
  
@@ -334,6 +362,10 @@ address/mask range.
 		IPv6
 	</a>
 	
+	<li><a href="#MAC">
+		MAC
+	</a>
+	
 </ul>
 
 </dd>
@@ -389,6 +421,10 @@ A <code>luci.ip.cidr</code> object representing the given IPv4 range.
 		IPv6
 	</a>
 	
+	<li><a href="#MAC">
+		MAC
+	</a>
+	
 </ul>
 
 </dd>
@@ -442,6 +478,252 @@ A <code>luci.ip.cidr</code> object representing the given IPv6 range.
 	
 	<li><a href="#IPv4">
 		IPv4
+	</a>
+	
+	<li><a href="#MAC">
+		MAC
+	</a>
+	
+</ul>
+
+</dd>
+
+
+
+
+<dt><a name="MAC"></a><strong>MAC</strong>&nbsp;(address, netmask)</dt>
+<dd>
+
+ 
+Construct a new MAC luci.ip.cidr instance. 
+Throws an error if the given string does not represent a valid ethernet MAC 
+address or if the given optional mask is of a different family.
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  address: String containing a valid ethernet MAC address, optionally with 
+prefix size (CIDR notation) or mask separated by slash.
+	</li>
+	
+	<li>
+	  netmask: String containing a valid MAC address mask or number 
+containing a prefix size between <code>0</code> and <code>48</code> bit. 
+Overrides mask embedded in the first argument if specified. (optional)
+	</li>
+	
+</ul>
+
+
+
+
+<h3>Usage:</h3>
+<pre>intel_macs = luci.ip.MAC("C0:B6:F9:00:00:00/24") 
+intel_macs = luci.ip.MAC("C0:B6:F9:00:00:00/FF:FF:FF:0:0:0") 
+intel_macs = luci.ip.MAC("C0:B6:F9:00:00:00", "FF:FF:FF:0:0:0") 
+intel_macs = luci.ip.MAC("C0:B6:F9:00:00:00/24", 48) -- override mask</pre>
+
+
+
+<h3>Return value:</h3>
+A <code>luci.ip.cidr</code> object representing the given MAC address range.
+
+
+
+<h3>See also:</h3>
+<ul>
+	
+	<li><a href="#IPv4">
+		IPv4
+	</a>
+	
+	<li><a href="#IPv6">
+		IPv6
+	</a>
+	
+</ul>
+
+</dd>
+
+
+
+
+<dt><a name="checkip4"></a><strong>checkip4</strong>&nbsp;(address)</dt>
+<dd>
+
+ 
+Verify an IPv4 address. 
+ 
+Checks whether given argument is a preexisting luci.ip.cidr IPv4 address 
+instance or a string literal convertible to an IPv4 address and returns a 
+plain Lua string containing the canonical representation of the address. 
+ 
+If the argument is not a valid address, returns nothing. This function is 
+intended to aid in safely verifying address literals without having to deal 
+with exceptions.
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  address: String containing a valid IPv4 address or existing 
+luci.ip.cidr IPv4 instance.
+	</li>
+	
+</ul>
+
+
+
+
+<h3>Usage:</h3>
+<pre>ipv4 = luci.ip.checkip4(luci.ip.new("127.0.0.1"))  -- "127.0.0.1" 
+ipv4 = luci.ip.checkip4("127.0.0.1")               -- "127.0.0.1" 
+ipv4 = luci.ip.checkip4("nonesense")               -- nothing 
+ipv4 = luci.ip.checkip4(123)                       -- nothing 
+ipv4 = luci.ip.checkip4(nil)                       -- nothing 
+ipv4 = luci.ip.checkip4()                          -- nothing</pre>
+
+
+
+<h3>Return value:</h3>
+A string representing the given IPv4 address.
+
+
+
+<h3>See also:</h3>
+<ul>
+	
+	<li><a href="#checkip6">
+		checkip6
+	</a>
+	
+	<li><a href="#checkmac">
+		checkmac
+	</a>
+	
+</ul>
+
+</dd>
+
+
+
+
+<dt><a name="checkip6"></a><strong>checkip6</strong>&nbsp;(address)</dt>
+<dd>
+
+ 
+Verify an IPv6 address. 
+ 
+Checks whether given argument is a preexisting luci.ip.cidr IPv6 address 
+instance or a string literal convertible to an IPv6 address and returns a 
+plain Lua string containing the canonical representation of the address. 
+ 
+If the argument is not a valid address, returns nothing. This function is 
+intended to aid in safely verifying address literals without having to deal 
+with exceptions.
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  address: String containing a valid IPv6 address or existing 
+luci.ip.cidr IPv6 instance.
+	</li>
+	
+</ul>
+
+
+
+
+<h3>Usage:</h3>
+<pre>ipv6 = luci.ip.checkip6(luci.ip.new("0:0:0:0:0:0:0:1"))  -- "::1" 
+ipv6 = luci.ip.checkip6("0:0:0:0:0:0:0:1")               -- "::1" 
+ipv6 = luci.ip.checkip6("nonesense")                     -- nothing 
+ipv6 = luci.ip.checkip6(123)                             -- nothing 
+ipv6 = luci.ip.checkip6(nil)                             -- nothing 
+ipv6 = luci.ip.checkip6()                                -- nothing</pre>
+
+
+
+<h3>Return value:</h3>
+A string representing the given IPv6 address.
+
+
+
+<h3>See also:</h3>
+<ul>
+	
+	<li><a href="#checkip4">
+		checkip4
+	</a>
+	
+	<li><a href="#checkmac">
+		checkmac
+	</a>
+	
+</ul>
+
+</dd>
+
+
+
+
+<dt><a name="checkmac"></a><strong>checkmac</strong>&nbsp;(address)</dt>
+<dd>
+
+ 
+Verify an ethernet MAC address. 
+ 
+Checks whether given argument is a preexisting luci.ip.cidr MAC address 
+instance or a string literal convertible to an ethernet MAC and returns a 
+plain Lua string containing the canonical representation of the address. 
+ 
+If the argument is not a valid address, returns nothing. This function is 
+intended to aid in safely verifying address literals without having to deal 
+with exceptions.
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  address: String containing a valid MAC address or existing luci.ip.cidr 
+MAC address instance.
+	</li>
+	
+</ul>
+
+
+
+
+<h3>Usage:</h3>
+<pre>mac = luci.ip.checkmac(luci.ip.new("00-11-22-cc-dd-ee"))  -- "00:11:22:CC:DD:EE" 
+mac = luci.ip.checkmac("00:11:22:cc:dd:ee")               -- "00:11:22:CC:DD:EE" 
+mac = luci.ip.checkmac("nonesense")                       -- nothing 
+mac = luci.ip.checkmac(123)                               -- nothing 
+mac = luci.ip.checkmac(nil)                               -- nothing 
+mac = luci.ip.checkmac()                                  -- nothing</pre>
+
+
+
+<h3>Return value:</h3>
+A string representing the given MAC address.
+
+
+
+<h3>See also:</h3>
+<ul>
+	
+	<li><a href="#checkip4">
+		checkip4
+	</a>
+	
+	<li><a href="#checkip6">
+		checkip6
 	</a>
 	
 </ul>
@@ -787,7 +1069,7 @@ A neighbour entry is a table containing the following fields:
 </tr> 
 <tr> 
   <td><code>mac</code></td> 
-  <td>String containing the associated MAC address</td> 
+  <td>MAC address <code>luci.ip.cidr</code> instance</td> 
 </tr> 
 <tr> 
   <td><code>router</code></td> 
@@ -905,8 +1187,8 @@ described below is returned, else an empty table.
 </tr> 
 <tr> 
   <td><code>mac</code></td> 
-  <td>String containing the link local address of the device in 
-      dotted hex notation</td> 
+  <td>MAC address <code>luci.ip.cidr</code> instance representing the device ethernet 
+      address</td> 
 </tr> 
 </table>
 

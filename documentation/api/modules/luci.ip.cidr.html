@@ -260,6 +260,30 @@ Checks whether the CIDR instance is an IPv6 mapped IPv4 address
 	</tr>
 
 	<tr>
+	<td class="name" nowrap><a href="#cidr.ismac">cidr:ismac</a>&nbsp;()</td>
+	<td class="summary">
+ 
+Checks whether the CIDR instance is an ethernet MAC address range 
+ </td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#cidr.ismaclocal">cidr:ismaclocal</a>&nbsp;()</td>
+	<td class="summary">
+ 
+Checks whether the CIDR instance is a locally administered (LAA) MAC address 
+ </td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#cidr.ismacmcast">cidr:ismacmcast</a>&nbsp;()</td>
+	<td class="summary">
+ 
+Checks whether the CIDR instance is a multicast MAC address 
+ </td>
+	</tr>
+
+	<tr>
 	<td class="name" nowrap><a href="#cidr.lower">cidr:lower</a>&nbsp;(addr)</td>
 	<td class="summary">
  
@@ -320,6 +344,20 @@ Derive broadcast address of CIDR instance.</td>
 	<td class="summary">
  
 Derive mapped IPv4 address of CIDR instance.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#cidr.tomac">cidr:tomac</a>&nbsp;()</td>
+	<td class="summary">
+ 
+Derive MAC address of IPv6 link local CIDR instance.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#cidr.tolinklocal">cidr:tolinklocal</a>&nbsp;()</td>
+	<td class="summary">
+ 
+Derive IPv6 link local address from MAC address CIDR instance.</td>
 	</tr>
 
 	<tr>
@@ -403,6 +441,10 @@ Checks whether the CIDR instance is an IPv4 address range
 	
 	<li><a href="#cidr.is6">
 		cidr:is6
+	</a>
+	
+	<li><a href="#cidr.ismac">
+		cidr:ismac
 	</a>
 	
 </ul>
@@ -499,6 +541,10 @@ Checks whether the CIDR instance is an IPv6 address range
 		cidr:is4
 	</a>
 	
+	<li><a href="#cidr.ismac">
+		cidr:ismac
+	</a>
+	
 </ul>
 
 </dd>
@@ -566,13 +612,108 @@ end</pre>
 
 
 
+<dt><a name="cidr.ismac"></a><strong>cidr:ismac</strong>&nbsp;()</dt>
+<dd>
+
+ 
+Checks whether the CIDR instance is an ethernet MAC address range 
+
+
+
+
+
+
+
+
+<h3>Return value:</h3>
+<code>true</code> if the CIDR is a MAC address range, else <code>false</code>
+
+
+
+<h3>See also:</h3>
+<ul>
+	
+	<li><a href="#cidr.is4">
+		cidr:is4
+	</a>
+	
+	<li><a href="#cidr.is6">
+		cidr:is6
+	</a>
+	
+</ul>
+
+</dd>
+
+
+
+
+<dt><a name="cidr.ismaclocal"></a><strong>cidr:ismaclocal</strong>&nbsp;()</dt>
+<dd>
+
+ 
+Checks whether the CIDR instance is a locally administered (LAA) MAC address 
+
+
+
+
+
+
+<h3>Usage:</h3>
+<pre>local mac = luci.ip.new("02:C0:FF:EE:00:01") 
+if mac:ismaclocal() then 
+  print("Is an LAA MAC address") 
+end</pre>
+
+
+
+<h3>Return value:</h3>
+<code>true</code> if the MAC address sets the locally administered bit.
+
+
+
+</dd>
+
+
+
+
+<dt><a name="cidr.ismacmcast"></a><strong>cidr:ismacmcast</strong>&nbsp;()</dt>
+<dd>
+
+ 
+Checks whether the CIDR instance is a multicast MAC address 
+
+
+
+
+
+
+<h3>Usage:</h3>
+<pre>local mac = luci.ip.new("01:00:5E:7F:00:10") 
+if addr:ismacmcast() then 
+  print("Is a multicast MAC address") 
+end</pre>
+
+
+
+<h3>Return value:</h3>
+<code>true</code> if the MAC address sets the multicast bit.
+
+
+
+</dd>
+
+
+
+
 <dt><a name="cidr.lower"></a><strong>cidr:lower</strong>&nbsp;(addr)</dt>
 <dd>
 
  
 Checks whether this CIDR instance is lower than the given argument. 
 The comparisation follows these rules: 
-<ul><li>An IPv4 address is always lower than an IPv6 address</li> 
+<ul><li>An IPv4 address is always lower than an IPv6 address and IPv6 addresses 
+are considered lower than MAC addresses</li> 
 <li>Prefix sizes are ignored</li></ul> 
 
 
@@ -595,7 +736,8 @@ The comparisation follows these rules:
 print(addr:lower(addr)) -- false 
 print(addr:lower("10.10.10.10/24")) -- false 
 print(addr:lower(luci.ip.new("::1"))) -- true 
-print(addr:lower(luci.ip.new("192.168.200.1"))) -- true</pre>
+print(addr:lower(luci.ip.new("192.168.200.1"))) -- true 
+print(addr:lower(luci.ip.new("00:14:22:01:23:45"))) -- true</pre>
 
 
 
@@ -629,7 +771,8 @@ print(addr:lower(luci.ip.new("192.168.200.1"))) -- true</pre>
  
 Checks whether this CIDR instance is higher than the given argument. 
 The comparisation follows these rules: 
-<ul><li>An IPv4 address is always lower than an IPv6 address</li> 
+<ul><li>An IPv4 address is always lower than an IPv6 address and IPv6 addresses 
+are considered lower than MAC addresses</li> 
 <li>Prefix sizes are ignored</li></ul> 
 
 
@@ -652,7 +795,8 @@ The comparisation follows these rules:
 print(addr:higher(addr)) -- false 
 print(addr:higher("10.10.10.10/24")) -- true 
 print(addr:higher(luci.ip.new("::1"))) -- false 
-print(addr:higher(luci.ip.new("192.168.200.1"))) -- false</pre>
+print(addr:higher(luci.ip.new("192.168.200.1"))) -- false 
+print(addr:higher(luci.ip.new("00:14:22:01:23:45"))) -- false</pre>
 
 
 
@@ -709,7 +853,11 @@ print(addr:equal(luci.ip.new("::1"))) -- false
  
 local addr6 = luci.ip.new("::1") 
 print(addr6:equal("0:0:0:0:0:0:0:1/64")) -- true 
-print(addr6:equal(luci.ip.new("fe80::221:63ff:fe75:aa17"))) -- false</pre>
+print(addr6:equal(luci.ip.new("fe80::221:63ff:fe75:aa17"))) -- false 
+ 
+local mac = luci.ip.new("00:14:22:01:23:45") 
+print(mac:equal("0:14:22:1:23:45")) -- true 
+print(mac:equal(luci.ip.new("01:23:45:67:89:AB")) -- false</pre>
 
 
 
@@ -752,8 +900,8 @@ else the current prefix size is returned.
 	
 	<li>
 	  mask: Either a number containing the number of bits (<code>0..32</code> 
-	for IPv4, <code>0..128</code> for IPv6) or a string containing a valid 
-	netmask (optional)
+	for IPv4, <code>0..128</code> for IPv6 or <code>0..48</code> for MAC addresses) or a string 
+  containing a valid netmask (optional)
 	</li>
 	
 </ul>
@@ -800,8 +948,8 @@ optional mask parameter.
 	
 	<li>
 	  mask: Either a number containing the number of bits (<code>0..32</code> 
-	for IPv4, <code>0..128</code> for IPv6) or a string containing a valid 
-	netmask (optional)
+	for IPv4, <code>0..128</code> for IPv6 or <code>0..48</code> for MAC addresses) or a string 
+  containing a valid netmask (optional)
 	</li>
 	
 </ul>
@@ -837,7 +985,7 @@ CIDR instance representing the network address
 Derive host address of CIDR instance. 
  
 This function essentially constructs a copy of this CIDR with the prefix size 
-set to <code>32</code> for IPv4 and <code>128</code> for IPv6. 
+set to <code>32</code> for IPv4, <code>128</code> for IPv6 or <code>48</code> for MAC addresses. 
 
 
 
@@ -877,8 +1025,8 @@ prefix size can be overridden by the optional mask parameter.
 	
 	<li>
 	  mask: Either a number containing the number of bits (<code>0..32</code> 
-	for IPv4, <code>0..128</code> for IPv6) or a string containing a valid 
-	netmask (optional)
+	for IPv4, <code>0..128</code> for IPv6 or <code>0..48</code> for MAC addresses) or a string 
+  containing a valid netmask (optional)
 	</li>
 	
 </ul>
@@ -913,8 +1061,8 @@ Derive broadcast address of CIDR instance.
 Constructs a CIDR instance representing the broadcast address of this instance. 
 The used prefix size can be overridden by the optional mask parameter. 
  
-This function has no effect on IPv6 instances, it will return nothing in this 
-case. 
+This function has no effect on IPv6 or MAC address instances, it will return 
+nothing in this case. 
 
 
 
@@ -922,9 +1070,8 @@ case.
 <ul>
 	
 	<li>
-	  mask: Either a number containing the number of bits (<code>0..32</code> 
-	for IPv4, <code>0..128</code> for IPv6) or a string containing a valid 
-	netmask (optional)
+	  mask: Either a number containing the number of bits (<code>0..32</code> for IPv4) or 
+  a string containing a valid netmask (optional)
 	</li>
 	
 </ul>
@@ -960,8 +1107,8 @@ Derive mapped IPv4 address of CIDR instance.
 Constructs a CIDR instance representing the IPv4 address of the IPv6 mapped 
 IPv4 address in this instance. 
  
-This function has no effect on IPv4 instances or IPv6 instances which are not a 
-mapped address, it will return nothing in this case. 
+This function has no effect on IPv4 instances, MAC address instances or IPv6 
+instances which are not a mapped address, it will return nothing in this case. 
 
 
 
@@ -977,6 +1124,74 @@ print(addr:mapped4()) -- "172.16.19.1"</pre>
 <h3>Return value:</h3>
 Return a new CIDR instance representing the IPv4 address if this 
 	instance is an IPv6 mapped IPv4 address, else return nothing.
+
+
+
+</dd>
+
+
+
+
+<dt><a name="cidr.tomac"></a><strong>cidr:tomac</strong>&nbsp;()</dt>
+<dd>
+
+ 
+Derive MAC address of IPv6 link local CIDR instance. 
+ 
+Constructs a CIDR instance representing the MAC address contained in the IPv6 
+link local address of this instance. 
+ 
+This function has no effect on IPv4 instances, MAC address instances or IPv6 
+instances which are not a link local address, it will return nothing in this 
+case. 
+
+
+
+
+
+
+<h3>Usage:</h3>
+<pre>local addr = luci.ip.new("fe80::6666:b3ff:fe47:e1b9") 
+print(addr:tomac()) -- "64:66:B3:47:E1:B9"</pre>
+
+
+
+<h3>Return value:</h3>
+Return a new CIDR instance representing the MAC address if this 
+  instance is an IPv6 link local address, else return nothing.
+
+
+
+</dd>
+
+
+
+
+<dt><a name="cidr.tolinklocal"></a><strong>cidr:tolinklocal</strong>&nbsp;()</dt>
+<dd>
+
+ 
+Derive IPv6 link local address from MAC address CIDR instance. 
+ 
+Constructs a CIDR instance representing the IPv6 link local address of the 
+MAC address represented by this instance. 
+ 
+This function has no effect on IPv4 instances or IPv6 instances, it will return 
+nothing in this case. 
+
+
+
+
+
+
+<h3>Usage:</h3>
+<pre>local mac = luci.ip.new("64:66:B3:47:E1:B9") 
+print(mac:tolinklocal()) -- "fe80::6666:b3ff:fe47:e1b9"</pre>
+
+
+
+<h3>Return value:</h3>
+Return a new CIDR instance representing the IPv6 link local address.
 
 
 
@@ -1014,7 +1229,11 @@ print(range:contains("10.0.0.0/8")) -- false
  
 local range6 = luci.ip.new("fe80::/10") 
 print(range6:contains("fe80::221:63f:fe75:aa17/64"))         -- true 
-print(range6:contains("fd9b:6b3:c5:0:221:63f:fe75:aa17/64")) -- false</pre>
+print(range6:contains("fd9b:6b3:c5:0:221:63f:fe75:aa17/64")) -- false 
+ 
+local intel_macs = luci.ip.MAC("C0:B6:F9:00:00:00/24") 
+print(intel_macs:contains("C0:B6:F9:A3:C:11"))  -- true 
+print(intel_macs:contains("64:66:B3:47:E1:B9")) -- false</pre>
 
 
 
@@ -1059,30 +1278,40 @@ address space, the result is set to the highest possible address.
 
 <h3>Usage:</h3>
 <pre>local addr = luci.ip.new("192.168.1.1/24") 
-print(addr:add(250))         -- "192.168.1.251/24" 
-print(addr:add("0.0.99.0"))  -- "192.168.100.1/24" 
+print(addr:add(250))           -- "192.168.1.251/24" 
+print(addr:add("0.0.99.0"))    -- "192.168.100.1/24" 
  
-addr:add(256, true)          -- true 
-print(addr)                  -- "192.168.2.1/24 
+addr:add(256, true)            -- true 
+print(addr)                    -- "192.168.2.1/24 
  
-addr:add("255.0.0.0", true)  -- false (overflow) 
-print(addr)                  -- "255.255.255.255/24 
+addr:add("255.0.0.0", true)    -- false (overflow) 
+print(addr)                    -- "255.255.255.255/24 
  
 local addr6 = luci.ip.new("fe80::221:63f:fe75:aa17/64") 
-print(addr6:add(256))        -- "fe80::221:63f:fe75:ab17/64" 
-print(addr6:add("::ffff:0")) -- "fe80::221:640:fe74:aa17/64" 
+print(addr6:add(256))          -- "fe80::221:63f:fe75:ab17/64" 
+print(addr6:add("::ffff:0"))   -- "fe80::221:640:fe74:aa17/64" 
  
-addr:add(256, true)          -- true 
-print(addr)                  -- "fe80::221:63f:fe75:ab17/64 
+addr6:add(256, true)           -- true 
+print(addr6)                   -- "fe80::221:63f:fe75:ab17/64 
  
-addr:add("ffff::", true)     -- false (overflow) 
-print(addr)                  -- "ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff/64"</pre>
+addr6:add("ffff::", true)      -- false (overflow) 
+print(addr6)                   -- "ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff/64" 
+ 
+local mac = luci.ip.new("00:14:22:01:23:45") 
+print(mac:add(256))            -- "00:14:22:01:24:45" 
+print(mac:add("0:0:0:0:FF:0")  -- "00:14:22:02:22:45" 
+ 
+mac:add(256, true)             -- true 
+print(mac)                     -- "00:14:22:01:24:45" 
+ 
+mac:add("FF:FF:0:0:0:0", true) -- false (overflow) 
+print(mac)                     -- "FF:FF:FF:FF:FF:FF"</pre>
 
 
 
 <h3>Return value:</h3>
 <ul> 
-	<li>When adding inplace: Return <code>true</code> if the addition succeeded
+	<li>When adding inplace: Return <code>true</code> if the addition succeded 
 	    or <code>false</code> when the addition overflowed.</li> 
 	<li>When deriving new CIDR: Return new instance representing the value of 
         this instance plus the added amount or the highest possible address if 
@@ -1099,7 +1328,7 @@ print(addr)                  -- "ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff/64"</pr
 <dd>
 
  
-Subtract given amount from CIDR instance. If the result would under, the lowest
+Subtract given amount from CIDR instance. If the result would under, the lowest 
 possible address is returned. 
 
 
@@ -1142,16 +1371,26 @@ addr:sub(256, true)          -- true
 print(addr)                  -- "fe80::221:63f:fe75:a917/64" 
  
 addr:sub("ffff::", true)     -- false (underflow) 
-print(addr)                  -- "::/64"</pre>
+print(addr)                  -- "::/64" 
+ 
+local mac = luci.ip.new("00:14:22:01:23:45") 
+print(mac:sub(256))            -- "00:14:22:01:22:45" 
+print(mac:sub("0:0:0:0:FF:0")  -- "00:14:22:00:24:45" 
+ 
+mac:sub(256, true)             -- true 
+print(mac)                     -- "00:14:22:01:22:45" 
+ 
+mac:sub("FF:FF:0:0:0:0", true) -- false (overflow) 
+print(mac)                     -- "00:00:00:00:00:00"</pre>
 
 
 
 <h3>Return value:</h3>
 <ul> 
-	<li>When subtracting inplace: Return <code>true</code> if the subtraction
-	    succeeded or <code>false</code> when the subtraction underflowed.</li>
+	<li>When subtracting inplace: Return <code>true</code> if the subtraction 
+	    succeeded or <code>false</code> when the subtraction underflowed.</li> 
 	<li>When deriving new CIDR: Return new instance representing the value of 
-        this instance minus the subtracted amount or the lowest address if
+        this instance minus the subtracted amount or the lowest address if 
 	    the subtraction underflowed.</li></ul>
 
 
@@ -1177,7 +1416,10 @@ Calculate the lowest possible host address within this CIDR instance.
 print(addr:minhost())  -- "192.168.123.1" 
  
 local addr6 = luci.ip.new("fd9b:62b3:9cc5:0:221:63ff:fe75:aa17/64") 
-print(addr6:minhost()) -- "fd9b:62b3:9cc5::1"</pre>
+print(addr6:minhost()) -- "fd9b:62b3:9cc5::1" 
+ 
+local mac = luci.ip.new("00:14:22:01:22:45/32") 
+print(mac:minhost())   -- "00:14:22:01:00:01"</pre>
 
 
 
@@ -1208,7 +1450,10 @@ Calculate the highest possible host address within this CIDR instance.
 print(addr:maxhost())  -- "192.168.123.254" (.255 is broadcast) 
  
 local addr6 = luci.ip.new("fd9b:62b3:9cc5:0:221:63ff:fe75:aa17/64") 
-print(addr6:maxhost()) -- "fd9b:62b3:9cc5:0:ffff:ffff:ffff:ffff"</pre>
+print(addr6:maxhost()) -- "fd9b:62b3:9cc5:0:ffff:ffff:ffff:ffff" 
+ 
+local mac = luci.ip.new("00:14:22:01:22:45/32") 
+print(mac:maxhost())   -- "00:14:22:01:FF:FF"</pre>
 
 
 
@@ -1229,8 +1474,9 @@ Returns a new CIDR instance representing the highest host address
  
 Convert CIDR instance into string representation. 
  
-If the prefix size of instance is less than 32 for IPv4 or 128 for IPv6, the 
-address is returned in the form "address/prefix" otherwise just "address". 
+If the prefix size of instance is less than 32 for IPv4, 128 for IPv6 or 48 for 
+MACs, the address is returned in the form "address/prefix" otherwise just 
+"address". 
  
 It is usually not required to call this function directly as CIDR objects 
 define it as __tostring function in the associated metatable. 
