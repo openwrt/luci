@@ -288,7 +288,7 @@
  <br />In general all functions are namend and behave like their POSIX API 
  counterparts - where applicable - applying the following rules: 
  <ul> 
- <li>Functions should be named like the underlying POSIX API function omitting
+ <li>Functions should be named like the underlying POSIX API function omitting 
  prefixes or suffixes - especially when placed in an object-context ( 
  lockf -> File:lock, fsync -> File:sync, dup2 -> dup, ...)</li> 
  <li>If you are unclear about the behaviour of a function you should consult 
@@ -296,10 +296,10 @@
  <li>If the name is significantly different from the POSIX-function, the 
  underlying function(s) are stated in the documentation.</li> 
  <li>Parameters should reflect those of the C-API, buffer length arguments and  
- by-reference parameters should be omitted for pratical purposes.</li>
+ by-reference parameters should be omitted for practical purposes.</li> 
  <li>If a C function accepts a bitfield as parameter, it should be translated 
  into lower case string flags representing the flags if the bitfield is the  
- last parameter and also omitting prefixes or suffixes. (e.g.  waitpid
+ last parameter and also omitting prefixes or suffixes. (e.g.  waitpid 
  (pid, &s, WNOHANG | WUNTRACED) -> waitpid(pid, "nohang", "untraced"),  
  getsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) -> 
  Socket:getopt("socket", "reuseaddr"), etc.) </li> 

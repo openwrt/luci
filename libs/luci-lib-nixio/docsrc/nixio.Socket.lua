@@ -71,7 +71,7 @@ module "nixio.Socket"
 
 --- Send a message on the socket.
 -- This function is identical to sendto except for the missing destination
--- paramters. See the sendto description for a detailed description.
+-- parameters. See the sendto description for a detailed description.
 -- @class function
 -- @name Socket.send
 -- @param buffer	Buffer holding the data to be written.

@@ -47,7 +47,7 @@ module "nixio.fs"
 -- @name nixio.fs.rename
 -- @param	src	Source path
 -- @param 	dest Destination path
--- @usage	It is normally not possible to rename files accross filesystems.
+-- @usage	It is normally not possible to rename files across filesystems.
 -- @return	true
 
 --- Remove an empty directory.

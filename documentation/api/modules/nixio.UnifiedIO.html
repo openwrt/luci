@@ -326,7 +326,7 @@
 	<li>The blocksize given is only advisory and to be seen as an upper limit, 
  if an underlying read returns less bytes the chunk is nevertheless returned.
 	
-	<li>If the limit parameter is omitted, the iterator returns data
+	<li>If the limit parameter is omitted, the iterator returns data 
  until an end-of-file, end-of-stream, connection shutdown or similar happens.
 	
 	<li>The iterator will not buffer so it is safe to mix with calls to read.
@@ -402,7 +402,7 @@ true
 	<li>This function uses the blocksource function of the source descriptor 
  and the sink function of the target descriptor.
 	
-	<li>If the limit parameter is omitted, data is copied
+	<li>If the limit parameter is omitted, data is copied 
  until an end-of-file, end-of-stream, connection shutdown or similar happens.
 	
 	<li>If the descriptor is non-blocking the function may fail with EAGAIN.
@@ -461,7 +461,7 @@ true
  blocksource function of the source descriptor and the sink function 
  of the target descriptor as a fallback mechanism.
 	
-	<li>If the limit parameter is omitted, data is copied
+	<li>If the limit parameter is omitted, data is copied 
  until an end-of-file, end-of-stream, connection shutdown or similar happens.
 	
 	<li>If the descriptor is non-blocking the function may fail with EAGAIN.
@@ -584,7 +584,7 @@ boolean
  you can pass "true" to the iterator which will flush the buffer  
  and return the bufferd data.
 	
-	<li>If the limit parameter is omitted, this function uses the nixio
+	<li>If the limit parameter is omitted, this function uses the nixio 
  buffersize (8192B by default).
 	
 	<li>If the descriptor is non-blocking the iterator may fail with EAGAIN.
@@ -628,7 +628,7 @@ Line-based Iterator
 	
 	<li>This function uses the low-level read function of the descriptor.
 	
-	<li>If the length parameter is omitted, this function returns all data
+	<li>If the length parameter is omitted, this function returns all data 
  that can be read before an end-of-file, end-of-stream, connection shutdown 
  or similar happens.
 	

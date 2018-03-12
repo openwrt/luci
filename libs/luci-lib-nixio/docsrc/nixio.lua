@@ -118,7 +118,7 @@ module "nixio"
 -- @param flag1 First Flag ["append", "creat", "excl", "nonblock", "ndelay",
 -- "sync", "trunc", "rdonly", "wronly", "rdwr"]
 -- @param ...	More Flags [-"-]
--- @return flag to be used as second paramter to open
+-- @return flag to be used as second parameter to open
 
 --- Duplicate a file descriptor.
 -- @class function
@@ -167,7 +167,7 @@ module "nixio"
 
 --- Wait for some event on a file descriptor.
 -- poll() sets the revents-field of the tables provided by fds to a bitfield
--- indicating the events that occured.
+-- indicating the events that occurred.
 -- @class function
 -- @usage This function works in-place on the provided table and only
 -- writes the revents field, you can use other fields on your demand.
@@ -303,7 +303,7 @@ module "nixio"
 --- Set or unset a environment variable.
 -- @class function
 -- @name nixio.setenv
--- @usage The environment variable will be unset if value is ommited.
+-- @usage The environment variable will be unset if value is omitted.
 -- @param variable	Variable
 -- @param value		Value (optional)
 -- @return true
