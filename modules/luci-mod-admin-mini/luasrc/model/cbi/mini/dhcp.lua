@@ -3,7 +3,7 @@
 -- Licensed to the public under the Apache License 2.0.
 
 local uci = require "luci.model.uci".cursor()
-local ipc = require "luci.ip"
+local sys = require "luci.sys"
 local wa  = require "luci.tools.webadmin"
 local fs  = require "nixio.fs"
 
@@ -87,12 +87,11 @@ name = s2:option(Value, "name", translate("Hostname"))
 mac = s2:option(Value, "mac", translate("<abbr title=\"Media Access Control\">MAC</abbr>-Address"))
 ip = s2:option(Value, "ip", translate("<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Address"))
 
-ipc.neighbors({ family = 4 }, function(n)
-	if n.mac and n.dest then
-		ip:value(n.dest:string())
-		mac:value(n.mac, "%s (%s)" %{ n.mac, n.dest:string() })
+sys.host_hints(function(m, v4, v6, name)
+	if m and v4 then
+		ip:value(v4)
+		mac:value(m, "%s (%s)" %{ m, name or v4 })
 	end
 end)
 
 return m
-

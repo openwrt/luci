@@ -53,7 +53,7 @@
 				<tr class="cbi-section-table-row cbi-rowstyle-<%=(style and 1 or 2)%>">
 					<td class="cbi-value-field"><%=v.dest%></td>
 					<td class="cbi-value-field"><%=v.mac%></td>
-					<td class="cbi-value-field"><%=v.dev%></td>
+					<td class="cbi-value-field"><%=luci.tools.webadmin.iface_get_network(v.dev) or '(' .. v.dev .. ')'%></td>
 				</tr>
 				<%
 							style = not style

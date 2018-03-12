@@ -330,7 +330,7 @@ function init(cursor)
 			if i.family == "packet" then
 				_interfaces[name].flags   = i.flags
 				_interfaces[name].stats   = i.data
-				_interfaces[name].macaddr = i.addr
+				_interfaces[name].macaddr = ipc.checkmac(i.addr)
 			elseif i.family == "inet" then
 				_interfaces[name].ipaddrs[#_interfaces[name].ipaddrs+1] = ipc.IPv4(i.addr, i.netmask)
 			elseif i.family == "inet6" then
@@ -1233,8 +1233,7 @@ function interface.name(self)
 end
 
 function interface.mac(self)
-	local mac = self:_ubus("macaddr")
-	return mac and mac:upper()
+	return ipc.checkmac(self:_ubus("macaddr"))
 end
 
 function interface.ipaddrs(self)

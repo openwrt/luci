@@ -196,23 +196,7 @@ function portrange(val)
 end
 
 function macaddr(val)
-	if val and val:match(
-		"^[a-fA-F0-9]+:[a-fA-F0-9]+:[a-fA-F0-9]+:" ..
-		 "[a-fA-F0-9]+:[a-fA-F0-9]+:[a-fA-F0-9]+$"
-	) then
-		local parts = util.split( val, ":" )
-
-		for i = 1,6 do
-			parts[i] = tonumber( parts[i], 16 )
-			if parts[i] < 0 or parts[i] > 255 then
-				return false
-			end
-		end
-
-		return true
-	end
-
-	return false
+	return ip.checkmac(val) and true or false
 end
 
 function hostname(val)

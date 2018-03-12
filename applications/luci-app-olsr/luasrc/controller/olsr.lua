@@ -101,41 +101,19 @@ end
 
 
 local function local_mac_lookup(ipaddr)
-	local _, ifa, dev
-
-	ipaddr = tostring(ipaddr)
-
-	if not ifaddr_table then
-		ifaddr_table = nixio.getifaddrs()
-	end
-
-	-- ipaddr -> ifname
-	for _, ifa in ipairs(ifaddr_table) do
-		if ifa.addr == ipaddr then
-			dev = ifa.name
-			break
-		end
-	end
-
-	-- ifname -> macaddr
-	for _, ifa in ipairs(ifaddr_table) do
-		if ifa.name == dev and ifa.family == "packet" then
-			return ifa.addr
-		end
+	local _, rt
+	for _, rt in ipairs(luci.ip.routes({ type = 1, src = ipaddr })) do
+		local link = rt.dev and luci.ip.link(rt.dev)
+		local mac = link and luci.ip.checkmac(link.mac)
+		if mac then return mac end
 	end
 end
 
 local function remote_mac_lookup(ipaddr)
 	local _, n
-
-	if not neigh_table then
-		neigh_table = luci.ip.neighbors()
-	end
-
-	for _, n in ipairs(neigh_table) do
-		if n.mac and n.dest and n.dest:equal(ipaddr) then
-			return n.mac
-		end
+	for _, n in ipairs(luci.ip.neighbors({ dest = ipaddr })) do
+		local mac = luci.ip.checkmac(n.mac)
+		if mac then return mac end
 	end
 end
 
@@ -201,9 +179,9 @@ function action_neigh(json)
 
 		for _, val in ipairs(assoclist) do
 			if val.network == interface and val.list then
+				local assocmac, assot
 				for assocmac, assot in pairs(val.list) do
-					assocmac = string.lower(assocmac or "")
-					if rmac == assocmac then
+					if rmac == luci.ip.checkmac(assocmac) then
 						signal = tonumber(assot.signal)
 						noise = tonumber(assot.noise)
 						snr = (noise*-1) - (signal*-1)

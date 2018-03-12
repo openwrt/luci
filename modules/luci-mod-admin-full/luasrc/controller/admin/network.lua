@@ -258,7 +258,6 @@ function iface_status(ifaces)
 					type       = device:type(),
 					ifname     = device:name(),
 					macaddr    = device:mac(),
-					macaddr    = device:mac(),
 					is_up      = device:is_up(),
 					rx_bytes   = device:rx_bytes(),
 					tx_bytes   = device:tx_bytes(),

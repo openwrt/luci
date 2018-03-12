@@ -138,20 +138,21 @@ local function _nethints(what, callback)
 
 	luci.ip.neighbors(nil, function(neigh)
 		if neigh.mac and neigh.family == 4 then
-			_add(what, neigh.mac:upper(), neigh.dest:string(), nil, nil)
+			_add(what, neigh.mac:string(), neigh.dest:string(), nil, nil)
 		elseif neigh.mac and neigh.family == 6 then
-			_add(what, neigh.mac:upper(), nil, neigh.dest:string(), nil)
+			_add(what, neigh.mac:string(), nil, neigh.dest:string(), nil)
 		end
 	end)
 
 	if fs.access("/etc/ethers") then
 		for e in io.lines("/etc/ethers") do
-			mac, name = e:match("^([a-fA-F0-9:]+)%s+(%S+)")
+			mac, name = e:match("^([a-fA-F0-9:-]+)%s+(%S+)")
+			mac = luci.ip.checkmac(mac)
 			if mac and name then
-				if luci.ip.IPv4(name) then
-					_add(what, mac:upper(), name, nil, nil)
+				if luci.ip.checkip4(name) then
+					_add(what, mac, name, nil, nil)
 				else
-					_add(what, mac:upper(), nil, nil, name)
+					_add(what, mac, nil, nil, name)
 				end
 			end
 		end
@@ -162,8 +163,9 @@ local function _nethints(what, callback)
 			if s.leasefile and fs.access(s.leasefile) then
 				for e in io.lines(s.leasefile) do
 					mac, ip, name = e:match("^%d+ (%S+) (%S+) (%S+)")
+					mac = luci.ip.checkmac(mac)
 					if mac and ip then
-						_add(what, mac:upper(), ip, nil, name ~= "*" and name)
+						_add(what, mac, ip, nil, name ~= "*" and name)
 					end
 				end
 			end
@@ -173,7 +175,10 @@ local function _nethints(what, callback)
 	cur:foreach("dhcp", "host",
 		function(s)
 			for mac in luci.util.imatch(s.mac) do
-				_add(what, mac:upper(), s.ip, nil, s.name)
+				mac = luci.ip.checkmac(mac)
+				if mac then
+					_add(what, mac, s.ip, nil, s.name)
+				end
 			end
 		end)
 
