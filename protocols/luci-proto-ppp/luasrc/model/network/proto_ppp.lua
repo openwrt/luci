@@ -4,7 +4,7 @@
 local netmod = luci.model.network
 
 local _, p
-for _, p in ipairs({"ppp", "pptp", "pppoe", "pppoa", "3g", "l2tp", "pppossh"}) do
+for _, p in ipairs({"ppp", "pptp", "pppoe", "pppoa", "l2tp", "pppossh"}) do
 
 	local proto = netmod:register_protocol(p)
 
@@ -13,8 +13,6 @@ for _, p in ipairs({"ppp", "pptp", "pppoe", "pppoa", "3g", "l2tp", "pppossh"}) d
 			return luci.i18n.translate("PPP")
 		elseif p == "pptp" then
 			return luci.i18n.translate("PPtP")
-		elseif p == "3g" then
-			return luci.i18n.translate("UMTS/GPRS/EV-DO")
 		elseif p == "pppoe" then
 			return luci.i18n.translate("PPPoE")
 		elseif p == "pppoa" then
@@ -33,8 +31,6 @@ for _, p in ipairs({"ppp", "pptp", "pppoe", "pppoa", "3g", "l2tp", "pppossh"}) d
 	function proto.opkg_package(self)
 		if p == "ppp" then
 			return p
-		elseif p == "3g" then
-			return "comgt"
 		elseif p == "pptp" then
 			return "ppp-mod-pptp"
 		elseif p == "pppoe" then
@@ -55,8 +51,6 @@ for _, p in ipairs({"ppp", "pptp", "pppoe", "pppoa", "3g", "l2tp", "pppossh"}) d
 			return (nixio.fs.glob("/usr/lib/pppd/*/rp-pppoe.so")() ~= nil)
 		elseif p == "pptp" then
 			return (nixio.fs.glob("/usr/lib/pppd/*/pptp.so")() ~= nil)
-		elseif p == "3g" then
-			return nixio.fs.access("/lib/netifd/proto/3g.sh")
 		elseif p == "l2tp" then
 			return nixio.fs.access("/lib/netifd/proto/l2tp.sh")
 		elseif p == "pppossh" then
