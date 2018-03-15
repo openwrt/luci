@@ -1,8 +1,7 @@
 <%
 	local fw = require "luci.model.firewall".init()
 	local nw = require "luci.model.network".init()
-	local wz = fw:get_zone("wan")
-	local lz = fw:get_zone("lan")
+	local zones = fw:get_zones()
 
 	local keys, vals, a, k, v = {}, {}
 	for k, v in ipairs(nw:get_interfaces()) do
@@ -14,7 +13,7 @@
 %>
 
 <div class="cbi-section-create cbi-tblsection-create">
-	<% if wz and lz then %>
+	<% if #zones > 1 then %>
 		<br />
 		<table class="cbi-section-table" style="width:700px; margin-left:5px">
 			<tr class="cbi-section-table-titles">

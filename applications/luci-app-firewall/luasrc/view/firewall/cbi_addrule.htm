@@ -2,6 +2,7 @@
 	local fw = require "luci.model.firewall".init()
 	local wz = fw:get_zone("wan")
 	local lz = fw:get_zone("lan")
+	local zones = fw:get_zones()
 %>
 
 <div class="cbi-section-create cbi-tblsection-create">
@@ -38,7 +39,7 @@
 			</tr>
 		</table>
 	<% end %>
-	<% if wz and lz then %>
+	<% if #zones > 1 then %>
 		<table class="cbi-section-table" style="margin-left:5px">
 			<tr class="cbi-section-table-titles">
 				<th class="cbi-section-table-cell left" colspan="6"><br /><%:New forward rule%>:</th>
@@ -56,14 +57,14 @@
 				<td class="cbi-section-table-cell" style="width:110px">
 					<select class="cbi-input-text" id="_newfwd.src" name="_newfwd.src">
 						<% local k, v; for k, v in ipairs(fw:get_zones()) do -%>
-							<option<%=ifattr(v:name() == "lan", "selected", "selected")%> value="<%=v:name()%>"><%=v:name()%></option>
+							<option<%=ifattr(v:name() == "wan", "selected", "selected")%> value="<%=v:name()%>"><%=v:name()%></option>
 						<%- end %>
 					</select>
 				</td>
 				<td class="cbi-section-table-cell" style="width:110px">
 					<select class="cbi-input-text" id="_newfwd.dest" name="_newfwd.dest">
 						<% local k, v; for k, v in ipairs(fw:get_zones()) do -%>
-							<option<%=ifattr(v:name() == "wan", "selected", "selected")%> value="<%=v:name()%>"><%=v:name()%></option>
+							<option<%=ifattr(v:name() == "lan", "selected", "selected")%> value="<%=v:name()%>"><%=v:name()%></option>
 						<%- end %>
 					</select>
 				</td>
