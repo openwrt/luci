@@ -7,7 +7,7 @@ local sys      = require("luci.sys")
 local util     = require("luci.util")
 local dump     = util.ubus("network.interface", "dump", {})
 local json     = require("luci.jsonc")
-local adbinput = uci.get("adblock", "global", "adb_rtfile") or "/tmp/adb_runtime.json"
+local adbinput = uci:get("adblock", "global", "adb_rtfile") or "/tmp/adb_runtime.json"
 
 if not uci:get("adblock", "extra") then
 	m = SimpleForm("", nil, translate("Please update your adblock config file to use this package.<br />")
