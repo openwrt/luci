@@ -12,8 +12,9 @@
 --
 -- Author: Nils Koenig <openwrt@newk.it>
 
-local fs = require "nixio.fs"
+local fs  = require "nixio.fs"
 local sys = require "luci.sys"
+local uci = require("luci.model.uci").cursor()
 
 function time_validator(self, value, desc)
     if value ~= nil then
@@ -110,7 +111,7 @@ modules.wrap = "off"
 modules.rows = 10
 
 function modules.cfgvalue(self, section)
-    mod = uci.get("wifi_schedule", section, "modules")
+    mod = uci:get("wifi_schedule", section, "modules")
     if mod == nil then
         mod = ""
     end
@@ -121,7 +122,7 @@ function modules.write(self, section, value)
     if value then
         value_list = value:gsub("\r\n", " ")
         ListValue.write(self, section, value_list)
-        uci.set("wifi_schedule", section, "modules", value_list)
+        uci:set("wifi_schedule", section, "modules", value_list)
     end
 end
 -- END Modules
