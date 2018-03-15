@@ -4,7 +4,7 @@
 local fs       = require("nixio.fs")
 local uci      = require("luci.model.uci").cursor()
 local http     = require("luci.http")
-local trmiface = uci.get("travelmate", "global", "trm_iface") or "trm_wwan"
+local trmiface = uci:get("travelmate", "global", "trm_iface") or "trm_wwan"
 local encr_psk = {"psk", "psk2", "psk-mixed"}
 local encr_wpa = {"wpa", "wpa2", "wpa-mixed"}
 
