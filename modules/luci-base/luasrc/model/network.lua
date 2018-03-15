@@ -861,6 +861,28 @@ function protocol._ubus(self, field)
 	return _ubusnetcache[self.sid]
 end
 
+function protocol._ubussubv4(self, field)
+	if not _ubusnetcache[self.sid .. "_4"] then
+		_ubusnetcache[self.sid .. "_4"] = utl.ubus("network.interface.%s_4" % self.sid,
+		                                   "status", { })
+	end
+	if _ubusnetcache[self.sid .. "_4"] and field then
+		return _ubusnetcache[self.sid .. "_4"][field]
+	end
+	return _ubusnetcache[self.sid .. "_4"]
+end
+
+function protocol._ubussubv6(self, field)
+	if not _ubusnetcache[self.sid .. "_6"] then
+		_ubusnetcache[self.sid .. "_6"] = utl.ubus("network.interface.%s_6" % self.sid,
+		                                   "status", { })
+	end
+	if _ubusnetcache[self.sid .. "_6"] and field then
+		return _ubusnetcache[self.sid .. "_6"][field]
+	end
+	return _ubusnetcache[self.sid .. "_6"]
+end
+
 function protocol.get(self, opt)
 	return _get("network", self.sid, opt)
 end
@@ -938,6 +960,10 @@ function protocol.ipaddrs(self)
 	local addrs = self:_ubus("ipv4-address")
 	local rv = { }
 
+	if not ( addrs and #addrs > 0 and addrs[1].address ) then
+		addrs = self:_ubussubv4("ipv4-address")
+	end
+
 	if type(addrs) == "table" then
 		local n, addr
 		for n, addr in ipairs(addrs) do
@@ -991,6 +1017,10 @@ function protocol.ip6addrs(self)
 	local rv = { }
 	local n, addr
 
+	if not ( addrs and #addrs > 0 and addrs[1].address ) then
+		addrs = self:_ubussubv6("ipv6-address")
+	end
+
 	if type(addrs) == "table" then
 		for n, addr in ipairs(addrs) do
 			rv[#rv+1] = "%s/%d" %{ addr.address, addr.mask }
@@ -998,6 +1028,10 @@ function protocol.ip6addrs(self)
 	end
 
 	addrs = self:_ubus("ipv6-prefix-assignment")
+
+	if not ( addrs and #addrs > 0 and addrs[1].address ) then
+		addrs = self:_ubussubv6("ipv6-prefix-assignment")
+	end
 
 	if type(addrs) == "table" then
 		for n, addr in ipairs(addrs) do
