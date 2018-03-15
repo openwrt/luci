@@ -4,7 +4,7 @@
 local netmod = luci.model.network
 
 local _, p
-for _, p in ipairs({"ppp", "pptp", "pppoe", "pppoa", "l2tp", "pppossh"}) do
+for _, p in ipairs({"ppp", "pptp", "pppoe", "pppoa", "l2tp"}) do
 
 	local proto = netmod:register_protocol(p)
 
@@ -19,8 +19,6 @@ for _, p in ipairs({"ppp", "pptp", "pppoe", "pppoa", "l2tp", "pppossh"}) do
 			return luci.i18n.translate("PPPoATM")
 		elseif p == "l2tp" then
 			return luci.i18n.translate("L2TP")
-		elseif p == "pppossh" then
-			return luci.i18n.translate("PPPoSSH")
 		end
 	end
 
@@ -39,8 +37,6 @@ for _, p in ipairs({"ppp", "pptp", "pppoe", "pppoa", "l2tp", "pppossh"}) do
 			return "ppp-mod-pppoa"
 		elseif p == "l2tp" then
 			return "xl2tpd"
-		elseif p == "pppossh" then
-			return "pppossh"
 		end
 	end
 
@@ -53,8 +49,6 @@ for _, p in ipairs({"ppp", "pptp", "pppoe", "pppoa", "l2tp", "pppossh"}) do
 			return (nixio.fs.glob("/usr/lib/pppd/*/pptp.so")() ~= nil)
 		elseif p == "l2tp" then
 			return nixio.fs.access("/lib/netifd/proto/l2tp.sh")
-		elseif p == "pppossh" then
-			return nixio.fs.access("/lib/netifd/proto/pppossh.sh")
 		else
 			return nixio.fs.access("/lib/netifd/proto/ppp.sh")
 		end
