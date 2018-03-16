@@ -4,7 +4,7 @@
 local fs = require("nixio.fs")
 local util = require("luci.util")
 local uci = require("uci")
-local adbinput = uci.get("adblock", "global", "adb_whitelist") or "/etc/adblock/adblock.whitelist"
+local adbinput = uci:get("adblock", "global", "adb_whitelist") or "/etc/adblock/adblock.whitelist"
 
 if not nixio.fs.access(adbinput) then
 	m = SimpleForm("error", nil, translate("Input file not found, please check your configuration."))

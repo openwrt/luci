@@ -3,7 +3,6 @@
 
 module("luci.controller.adblock", package.seeall)
 
-local fs    = require("nixio.fs")
 local util  = require("luci.util")
 local templ = require("luci.template")
 local i18n  = require("luci.i18n")
