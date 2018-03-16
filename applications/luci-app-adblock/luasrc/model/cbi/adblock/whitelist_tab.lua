@@ -3,7 +3,7 @@
 
 local fs = require("nixio.fs")
 local util = require("luci.util")
-local uci = require("uci")
+local uci = require("luci.model.uci").cursor()
 local adbinput = uci:get("adblock", "global", "adb_whitelist") or "/etc/adblock/adblock.whitelist"
 
 if not nixio.fs.access(adbinput) then
