@@ -4,9 +4,12 @@
 -- Licensed to the public under the Apache License 2.0.
 
 local m1, s1
-local ena, mcf, lci, lsv, rlh, rpv, vld, nvd, eds, prt, tlm
-local ctl, dlk, dom, dty, lfq, wfq, exa, dp6, d64, pfx, qry, qrs
+local ena, mcf, lci, lsv
+local rlh, rpv, vld, nvd, eds, prt, tlm
+local ctl, dlk, dom, dty, lfq, wfq, exa
+local dp6, d64, pfx, qry, qrs
 local pro, tgr, rsc, rsn, ag2, stt
+local rpn, din, dfw
 local ucl = luci.model.uci.cursor()
 local valman = ucl:get_first("unbound", "unbound", "manual_conf")
 
@@ -19,10 +22,10 @@ s1.anonymous = true
 --LuCI, Unbound, or Not
 s1:tab("basic", translate("Basic"),
   translatef("<h3>Unbound Basic Settings</h3>\n"
-  .. "<a href=\"%s\" target=\"_blank\">Unbound</a>"
+  .. "<a href=\"%s\" target=\"_blank\">Unbound (link)</a>"
   .. " is a validating, recursive, and caching DNS resolver. "
-  .. "UCI help can be found on "
-  .. "<a href=\"%s\" target=\"_blank\">github</a>.",
+  .. "UCI documentation can be found on "
+  .. "<a href=\"%s\" target=\"_blank\">github (link)</a>.",
   "https://www.unbound.net/",
   "https://github.com/openwrt/packages/blob/master/net/unbound/files/README.md"))
 
@@ -34,8 +37,8 @@ mcf = s1:taboption("basic", Flag, "manual_conf", translate("Manual Conf:"),
   translate("Skip UCI and use /etc/unbound/unbound.conf"))
 mcf.rmempty = false
 
-lci = s1:taboption("basic", Flag, "extended_luci", translate("Advanced LuCI:"),
-  translate("See detailed tabs for debug and advanced manual configuration"))
+lci = s1:taboption("basic", Flag, "extended_luci", translate("Extended Tabs:"),
+  translate("See detailed tabs for statistics, debug, and manual configuration"))
 lci.rmempty = false
 
 
@@ -61,28 +64,22 @@ if valman ~= "1" then
   -- Not in manual configuration mode; show UCI
   s1:tab("advanced", translate("Advanced"),
     translatef("<h3>Unbound Advanced Settings</h3>\n"
-    .. "Advanced setttings and plugin modules for "
-    .. "<a href=\"%s\" target=\"_blank\">Unbound</a>"
+    .. "Link DHCP-DNS, Manipulate DNS, or protect your local domain in "
+    .. "<a href=\"%s\" target=\"_blank\">Unbound </a>"
     .. " DNS resolver.", "https://www.unbound.net/"))
+
 
   s1:tab("resource", translate("Resource"),
     translatef("<h3>Unbound Resource Settings</h3>\n"
     .. "Memory and protocol setttings for "
-    .. "<a href=\"%s\" target=\"_blank\">Unbound</a>"
+    .. "<a href=\"%s\" target=\"_blank\">Unbound </a>"
     .. " DNS resolver.", "https://www.unbound.net/"))
+
 
   --Basic Tab
   lsv = s1:taboption("basic", Flag, "localservice", translate("Local Service:"),
     translate("Accept queries only from local subnets"))
   lsv.rmempty = false
-
-  rlh = s1:taboption("basic", Flag, "rebind_localhost", translate("Block Localhost Rebind:"),
-    translate("Prevent upstream response of 127.0.0.0/8"))
-  rlh.rmempty = false
-
-  rpv = s1:taboption("basic", Flag, "rebind_protection", translate("Block Private Rebind:"),
-    translate("Prevent upstream response of RFC1918 ranges"))
-  rpv.rmempty = false
 
   vld = s1:taboption("basic", Flag, "validator", translate("Enable DNSSEC:"),
     translate("Enable the DNSSEC validator module"))
@@ -93,37 +90,48 @@ if valman ~= "1" then
   nvd.rmempty = false
   nvd:depends({ validator = true })
 
-  eds = s1:taboption("basic", Value, "edns_size", translate("EDNS Size:"),
-    translate("Limit extended DNS packet size"))
-  eds.datatype = "and(uinteger,min(512),max(4096))"
-  eds.rmempty = false
+  din = s1:taboption("basic", DynamicList, "domain_insecure",
+    translate("Domain Insecure:"),
+    translate("List domains to bypass checks of DNSSEC"))
+  din:depends({ validator = true })
+
+  d64 = s1:taboption("basic", Flag, "dns64", translate("Enable DNS64:"),
+    translate("Enable the DNS64 module"))
+  d64.rmempty = false
+
+  pfx = s1:taboption("basic", Value, "dns64_prefix", translate("DNS64 Prefix:"),
+    translate("Prefix for generated DNS64 addresses"))
+  pfx.datatype = "ip6addr"
+  pfx.placeholder = "64:ff9b::/96"
+  pfx.optional = true
+  pfx:depends({ dns64 = true })
+
+  qry = s1:taboption("basic", Flag, "query_minimize", translate("Query Minimize:"),
+    translate("Break down query components for limited added privacy"))
+  qry.rmempty = false
+
+  qrs = s1:taboption("basic", Flag, "query_min_strict", translate("Strict Minimize:"),
+    translate("Strict version of 'query minimize' but it can break DNS"))
+  qrs.rmempty = false
+  qrs:depends({ query_minimize = true })
 
   prt = s1:taboption("basic", Value, "listen_port", translate("Listening Port:"),
     translate("Choose Unbounds listening port"))
   prt.datatype = "port"
   prt.rmempty = false
 
-  tlm = s1:taboption("basic", Value, "ttl_min", translate("TTL Minimum:"),
-    translate("Prevent excessively short cache periods"))
-  tlm.datatype = "and(uinteger,min(0),max(600))"
-  tlm.rmempty = false
-
-  --Advanced Tab
-  ctl = s1:taboption("advanced", ListValue, "unbound_control", translate("Unbound Control App:"),
-    translate("Enable access for unbound-control"))
-  ctl.rmempty = false
-  ctl:value("0", translate("No Remote Control"))
-  ctl:value("1", translate("Local Host, No Encryption"))
-  ctl:value("2", translate("Local Host, Encrypted"))
-  ctl:value("3", translate("Local Subnet, Encrypted"))
-  ctl:value("4", translate("Local Subnet, Static Encryption"))
-
+  --Avanced Tab
   dlk = s1:taboption("advanced", ListValue, "dhcp_link", translate("DHCP Link:"),
     translate("Link to supported programs to load DHCP into DNS"))
   dlk:value("none", translate("No Link"))
   dlk:value("dnsmasq", "dnsmasq")
   dlk:value("odhcpd", "odhcpd")
   dlk.rmempty = false
+
+  dp6 = s1:taboption("advanced", Flag, "dhcp4_slaac6", translate("DHCPv4 to SLAAC:"),
+    translate("Use DHCPv4 MAC to discover IP6 hosts SLAAC (EUI64)"))
+  dp6.rmempty = false
+  dp6:depends({ dhcp_link = "odhcpd" })
 
   dom = s1:taboption("advanced", Value, "domain", translate("Local Domain:"),
     translate("Domain suffix for this router and DHCP clients"))
@@ -142,7 +150,7 @@ if valman ~= "1" then
 
   lfq = s1:taboption("advanced", ListValue, "add_local_fqdn", translate("LAN DNS:"),
     translate("How to enter the LAN or local network router in DNS"))
-  lfq:value("0", translate("No DNS"))
+  lfq:value("0", translate("No Entry"))
   lfq:value("1", translate("Hostname, Primary Address"))
   lfq:value("2", translate("Hostname, All Addresses"))
   lfq:value("3", translate("Host FQDN, All Addresses"))
@@ -152,7 +160,7 @@ if valman ~= "1" then
 
   wfq = s1:taboption("advanced", ListValue, "add_wan_fqdn", translate("WAN DNS:"),
     translate("Override the WAN side router entry in DNS"))
-  wfq:value("0", translate("Upstream"))
+  wfq:value("0", translate("Use Upstream"))
   wfq:value("1", translate("Hostname, Primary Address"))
   wfq:value("2", translate("Hostname, All Addresses"))
   wfq:value("3", translate("Host FQDN, All Addresses"))
@@ -169,33 +177,41 @@ if valman ~= "1" then
   exa:depends({ dhcp_link = "none" })
   exa:depends({ dhcp_link = "odhcpd" })
 
-  dp6 = s1:taboption("advanced", Flag, "dhcp4_slaac6", translate("DHCPv4 to SLAAC:"),
-    translate("Use DHCPv4 MAC to discover IP6 hosts SLAAC (EUI64)"))
-  dp6.rmempty = false
+  dfw = s1:taboption("advanced", DynamicList, "domain_forward",
+    translate("Domain Forward:"),
+    translate("List domains to simply forward to stub resolvers in /tmp/resolve.auto"))
 
-  d64 = s1:taboption("advanced", Flag, "dns64", translate("Enable DNS64:"),
-    translate("Enable the DNS64 module"))
-  d64.rmempty = false
+  rlh = s1:taboption("advanced", Flag, "rebind_localhost", translate("Filter Localhost Rebind:"),
+    translate("Protect against upstream response of 127.0.0.0/8"))
+  rlh.rmempty = false
 
-  pfx = s1:taboption("advanced", Value, "dns64_prefix", translate("DNS64 Prefix:"),
-    translate("Prefix for generated DNS64 addresses"))
-  pfx.datatype = "ip6addr"
-  pfx.placeholder = "64:ff9b::/96"
-  pfx.optional = true
-  pfx:depends({ dns64 = true })
+  rpv = s1:taboption("advanced", ListValue, "rebind_protection", translate("Filter Private Rebind:"),
+    translate("Protect against upstream responses within local subnets"))
+  rpv:value("0", translate("No Filter"))
+  rpv:value("1", translate("Filter RFC1918/4193"))
+  rpv:value("2", translate("Filter Entire Subnet"))
+  rpv.rmempty = false
 
-  qry = s1:taboption("advanced", Flag, "query_minimize", translate("Query Minimize:"),
-    translate("Break down query components for limited added privacy"))
-  qry.rmempty = false
-
-  qrs = s1:taboption("advanced", Flag, "query_min_strict", translate("Strict Minimize:"),
-    translate("Strict version of 'query minimize' but it can break DNS"))
-  qrs.rmempty = false
-  qrs:depends({ query_minimize = true })
+  rpn = s1:taboption("advanced", Value, "rebind_interface", translate("Rebind Network Filter:"),
+    translate("Network subnets to filter from upstream responses"))
+  rpn.template = "cbi/network_netlist"
+  rpn.widget = "checkbox"
+  rpn.cast = "string"
+  rpn:depends({ rebind_protection = 2 })
+  rpn:depends({ rebind_protection = 3 })
 
   --TODO: dnsmasq needs to not reference resolve-file and get off port 53.
 
   --Resource Tuning Tab
+  ctl = s1:taboption("resource", ListValue, "unbound_control", translate("Unbound Control App:"),
+    translate("Enable access for unbound-control"))
+  ctl.rmempty = false
+  ctl:value("0", translate("No Remote Control"))
+  ctl:value("1", translate("Local Host, No Encryption"))
+  ctl:value("2", translate("Local Host, Encrypted"))
+  ctl:value("3", translate("Local Subnet, Encrypted"))
+  ctl:value("4", translate("Local Subnet, Static Encryption"))
+
   pro = s1:taboption("resource", ListValue, "protocol", translate("Recursion Protocol:"),
     translate("Chose the protocol recursion queries leave on"))
   pro:value("mixed", translate("IP4 and IP6"))
@@ -220,7 +236,7 @@ if valman ~= "1" then
   rsc.rmempty = false
 
   ag2 = s1:taboption("resource", Value, "root_age", translate("Root DSKEY Age:"),
-    translate("Limit days between RFC5011 to reduce flash writes"))
+    translate("Limit days between RFC 5011 copies to reduce flash writes"))
   ag2.datatype = "and(uinteger,min(1),max(99))"
   ag2:value("3", "3")
   ag2:value("9", "9 ("..translate("default")..")")
@@ -228,11 +244,21 @@ if valman ~= "1" then
   ag2:value("24", "24")
   ag2:value("99", "99 ("..translate("never")..")")
 
+  eds = s1:taboption("resource", Value, "edns_size", translate("EDNS Size:"),
+    translate("Limit extended DNS packet size"))
+  eds.datatype = "and(uinteger,min(512),max(4096))"
+  eds.rmempty = false
+
+  tlm = s1:taboption("resource", Value, "ttl_min", translate("TTL Minimum:"),
+    translate("Prevent excessively short cache periods"))
+  tlm.datatype = "and(uinteger,min(0),max(600))"
+  tlm.rmempty = false
+
   stt = s1:taboption("resource", Flag, "extended_stats", translate("Extended Statistics:"),
     translate("Extended statistics are printed from unbound-control"))
   stt.rmempty = false
 
-  tgr = s1:taboption("resource", Value, "trigger", translate("Trigger Networks:"),
+  tgr = s1:taboption("resource", Value, "trigger_interface", translate("Trigger Networks:"),
     translate("Networks that may trigger Unbound to reload (avoid wan6)"))
   tgr.template = "cbi/network_netlist"
   tgr.widget = "checkbox"
