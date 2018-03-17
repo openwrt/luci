@@ -14,14 +14,14 @@ function index()
 	entry({"admin", "services", "travelmate"}, firstchild(), _("Travelmate"), 40).dependent = false
 	entry({"admin", "services", "travelmate", "tab_from_cbi"}, cbi("travelmate/overview_tab", {hideresetbtn=true, hidesavebtn=true}), _("Overview"), 10).leaf = true
 	entry({"admin", "services", "travelmate", "stations"}, template("travelmate/stations"), _("Wireless Stations"), 20).leaf = true
-	entry({"admin", "services", "travelmate", "apqr"}, template("travelmate/ap_qr"), _("AP QR-Codes"), 30).leaf = true
-	entry({"admin", "services", "travelmate", "logfile"}, call("logread"), _("View Logfile"), 40).leaf = true
+	entry({"admin", "services", "travelmate", "logfile"}, call("logread"), _("View Logfile"), 30).leaf = true
 	entry({"admin", "services", "travelmate", "advanced"}, firstchild(), _("Advanced"), 100)
 	entry({"admin", "services", "travelmate", "advanced", "configuration"}, cbi("travelmate/configuration_tab"), _("Edit Travelmate Configuration"), 110).leaf = true
 	entry({"admin", "services", "travelmate", "advanced", "cfg_wireless"}, cbi("travelmate/cfg_wireless_tab"), _("Edit Wireless Configuration"), 120).leaf = true
 	entry({"admin", "services", "travelmate", "advanced", "cfg_network"}, cbi("travelmate/cfg_network_tab"), _("Edit Network Configuration"), 130).leaf = true
 	entry({"admin", "services", "travelmate", "advanced", "cfg_firewall"}, cbi("travelmate/cfg_firewall_tab"), _("Edit Firewall Configuration"), 140).leaf = true
 
+	entry({"admin", "services", "travelmate", "apqr"}, template("travelmate/ap_qr")).leaf = true
 	entry({"admin", "services", "travelmate", "wifiscan"}, template("travelmate/wifi_scan")).leaf = true
 	entry({"admin", "services", "travelmate", "wifiadd"}, cbi("travelmate/wifi_add", {hideresetbtn=true, hidesavebtn=true})).leaf = true
 	entry({"admin", "services", "travelmate", "wifiedit"}, cbi("travelmate/wifi_edit", {hideresetbtn=true, hidesavebtn=true})).leaf = true
