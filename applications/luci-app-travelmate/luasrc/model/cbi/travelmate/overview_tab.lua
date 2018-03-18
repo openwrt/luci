@@ -96,20 +96,26 @@ end
 o4.default = trmiface
 o4.rmempty = false
 
-o5 = s:option(Value, "trm_triggerdelay", translate("Trigger Delay"),
-	translate("Additional trigger delay in seconds before travelmate processing begins."))
-o5.datatype = "range(1,60)"
-o5.default = 2
-o5.rmempty = false
+if fs.access("/usr/bin/qrencode") then
+	btn1 = s:option(Button, "btn1", translate("View AP QR-Codes"),
+		translate("Connect your Android or iOS devices to your router's WiFi using the shown QR code."))
+	btn1.inputtitle = translate("QR-Codes")
+	btn1.inputstyle = "apply"
+	btn1.disabled = false
 
-btn = s:option(Button, "", translate("Manual Rescan"),
+	function btn1.write()
+		luci.http.redirect(luci.dispatcher.build_url("admin", "services", "travelmate", "apqr"))
+	end
+end
+
+btn2 = s:option(Button, "btn2", translate("Manual Rescan"),
 	translate("Force a manual uplink rescan / reconnect in 'trigger' mode."))
-btn:depends("trm_automatic", "")
-btn.inputtitle = translate("Rescan")
-btn.inputstyle = "find"
-btn.disabled = false
+btn2:depends("trm_automatic", "")
+btn2.inputtitle = translate("Rescan")
+btn2.inputstyle = "find"
+btn2.disabled = false
 
-function btn.write()
+function btn2.write()
 	luci.sys.call("env -i /etc/init.d/travelmate start >/dev/null 2>&1")
 	luci.http.redirect(luci.dispatcher.build_url("admin", "services", "travelmate"))
 end
@@ -180,28 +186,34 @@ e2 = e:option(Value, "trm_radio", translate("Radio selection"),
 e2.datatype = "and(uciname,rangelength(6,6))"
 e2.rmempty = true
 
-e3 = e:option(Value, "trm_maxretry", translate("Connection Limit"),
-	translate("Retry limit to connect to an uplink."))
-e3.default = 3
-e3.datatype = "range(1,10)"
+e3 = e:option(Value, "trm_triggerdelay", translate("Trigger Delay"),
+	translate("Additional trigger delay in seconds before travelmate processing begins."))
+e3.datatype = "range(1,60)"
+e3.default = 2
 e3.rmempty = false
 
-e4 = e:option(Value, "trm_minquality", translate("Signal Quality Threshold"),
-	translate("Minimum signal quality threshold as percent for conditional uplink (dis-) connections."))
-e4.default = 35
-e4.datatype = "range(20,80)"
+e4 = e:option(Value, "trm_maxretry", translate("Connection Limit"),
+	translate("Retry limit to connect to an uplink."))
+e4.default = 3
+e4.datatype = "range(1,10)"
 e4.rmempty = false
 
-e5 = e:option(Value, "trm_maxwait", translate("Interface Timeout"),
-	translate("How long should travelmate wait for a successful wlan uplink connection."))
-e5.default = 30
-e5.datatype = "range(20,40)"
+e5 = e:option(Value, "trm_minquality", translate("Signal Quality Threshold"),
+	translate("Minimum signal quality threshold as percent for conditional uplink (dis-) connections."))
+e5.default = 35
+e5.datatype = "range(20,80)"
 e5.rmempty = false
 
-e6 = e:option(Value, "trm_timeout", translate("Overall Timeout"),
-	translate("Timeout in seconds between retries in 'automatic' mode."))
-e6.default = 60
-e6.datatype = "range(30,300)"
+e6 = e:option(Value, "trm_maxwait", translate("Interface Timeout"),
+	translate("How long should travelmate wait for a successful wlan uplink connection."))
+e6.default = 30
+e6.datatype = "range(20,40)"
 e6.rmempty = false
+
+e7 = e:option(Value, "trm_timeout", translate("Overall Timeout"),
+	translate("Timeout in seconds between retries in 'automatic' mode."))
+e7.default = 60
+e7.datatype = "range(30,300)"
+e7.rmempty = false
 
 return m

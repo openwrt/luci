@@ -44,9 +44,7 @@ This is free software, licensed under the Apache License, Version 2.0
         local e_ssid = string.gsub(ssid,"[\"\\';:, ]",[[\\\%1]])
         local e_key = string.gsub(key,"[\"\\';:, ]",[[\\\%1]])
         local qrcode = ""
-        if nixio.fs.access("/usr/bin/qrencode") then
-          qrcode = luci.sys.exec("/usr/bin/qrencode --inline --8bit --type=SVG --output=- 'WIFI:S:\"'" .. e_ssid .. "'\";T:'" .. enc .. "';P:\"'" .. e_key .. "'\";H:'" .. hidden .. "';'")
-        end
+        qrcode = luci.sys.exec("/usr/bin/qrencode --inline --8bit --type=SVG --output=- 'WIFI:S:\"'" .. e_ssid .. "'\";T:'" .. enc .. "';P:\"'" .. e_key .. "'\";H:'" .. hidden .. "';'")
 -%>
     <fieldset class="cbi-section">
         <legend>AP on <%=device%> with SSID "<%=ssid%>"</legend>
@@ -57,6 +55,11 @@ This is free software, licensed under the Apache License, Version 2.0
     end
   end)
 %>
+</div>
+<div class="cbi-page-actions right">
+    <form class="inline" action="<%=luci.dispatcher.build_url('admin/services/travelmate/tab_from_cbi')%>" method="post">
+        <input class="cbi-button cbi-button-reset" type="submit" value="<%:Back to overview%>"/>
+    </form>
 </div>
 
 <%+footer%>
