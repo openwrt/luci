@@ -274,7 +274,7 @@ s.anonymous = true
 s.template = "cbi/tblsection"
 
 name = s:option(Value, "name", translate("Hostname"))
-name.datatype = "hostname"
+name.datatype = "hostname('strict')"
 name.rmempty  = true
 
 function name.write(self, section, value)
