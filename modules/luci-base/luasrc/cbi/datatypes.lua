@@ -199,13 +199,13 @@ function macaddr(val)
 	return ip.checkmac(val) and true or false
 end
 
-function hostname(val)
+function hostname(val, strict)
 	if val and (#val < 254) and (
 	   val:match("^[a-zA-Z_]+$") or
 	   (val:match("^[a-zA-Z0-9_][a-zA-Z0-9_%-%.]*[a-zA-Z0-9]$") and
 	    val:match("[^0-9%.]"))
 	) then
-		return true
+		return (not strict or not val:match("^_"))
 	end
 	return false
 end

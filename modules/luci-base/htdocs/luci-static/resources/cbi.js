@@ -218,12 +218,13 @@ var cbi_validators = {
 			((ipv4only == 1) && cbi_validators.ip4addr.apply(this));
 	},
 
-	'hostname': function()
+	'hostname': function(strict)
 	{
 		if (this.length <= 253)
-			return (this.match(/^[a-zA-Z0-9]+$/) != null ||
+			return (this.match(/^[a-zA-Z0-9_]+$/) != null ||
 			        (this.match(/^[a-zA-Z0-9_][a-zA-Z0-9_\-.]*[a-zA-Z0-9]$/) &&
-			         this.match(/[^0-9.]/)));
+			         this.match(/[^0-9.]/))) &&
+			       (!strict || !this.match(/^_/));
 
 		return false;
 	},
