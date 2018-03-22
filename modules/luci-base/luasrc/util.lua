@@ -652,7 +652,8 @@ end
 function checklib(fullpathexe, wantedlib)
 	local fs = require "nixio.fs"
 	local haveldd = fs.access('/usr/bin/ldd')
-	if not haveldd then
+	local haveexe = fs.access(fullpathexe)
+	if not haveldd or not haveexe then
 		return false
 	end
 	local libs = exec("/usr/bin/ldd " .. fullpathexe)
