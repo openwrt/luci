@@ -122,6 +122,9 @@ s:taboption("advanced", Flag, "strictorder",
 	translate("<abbr title=\"Domain Name System\">DNS</abbr> servers will be queried in the " ..
 		"order of the resolvfile")).optional = true
 
+s:taboption("advanced", Flag, "allservers",
+        translate("All Servers"),
+        translate("Query all available upstream <abbr title=\"Domain Name System\">DNS</abbr> servers")).optional = true
 
 bn = s:taboption("advanced", DynamicList, "bogusnxdomain", translate("Bogus NX Domain Override"),
 	translate("List of hosts that supply bogus NX domain results"))
@@ -212,6 +215,13 @@ cq.optional = true
 cq.datatype = "uinteger"
 cq.placeholder = 150
 
+cs = s:taboption("advanced", Value, "cachesize",
+        translate("<abbr title=\"Domain Name System\">DNS</abbr> Cache size"),
+        translate("Set size of DNS Cache"))
+
+cs.optional = true
+cs.datatype = "uinteger"
+cs.placeholder = 150
 
 s:taboption("tftp", Flag, "enable_tftp",
 	translate("Enable TFTP server")).optional = true
