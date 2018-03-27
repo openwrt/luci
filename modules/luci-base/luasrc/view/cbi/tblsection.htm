@@ -35,7 +35,7 @@ end
 				<%- else -%>
 					<th>&#160;</th>
 				<%- end -%>
-			<%- end -%>
+			<%- count = count +1; end -%>
 			<%- for i, k in pairs(self.children) do if not k.optional then -%>
 				<th class="cbi-section-table-cell"<%=width(k)%>>
 				<%- if k.titleref then -%><a title="<%=self.titledesc or translate('Go to relevant configuration page')%>" class="cbi-title-ref" href="<%=k.titleref%>"><%- end -%>
@@ -44,7 +44,7 @@ end
 				</th>
 			<%- count = count + 1; end; end; if self.sortable then -%>
 				<th class="cbi-section-table-cell"><%:Sort%></th>
-			<%- end; if self.extedit or self.addremove then -%>
+			<%- count = count + 1; end; if self.extedit or self.addremove then -%>
 				<th class="cbi-section-table-cell">&#160;</th>
 			<%- count = count + 1; end -%>
 			</tr>
