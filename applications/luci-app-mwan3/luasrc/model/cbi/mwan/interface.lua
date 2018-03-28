@@ -8,37 +8,37 @@ dsp = require "luci.dispatcher"
 function interfaceWarnings(overview, count)
 	local warnings = ""
 	if count <= 250 then
-		warnings = string.format("<strong>%s</strong></br>",
+		warnings = string.format("<strong>%s</strong><br />",
 			translatef("There are currently %d of 250 supported interfaces configured", count)
 			)
 	else
-		warnings = string.format("<strong>%s</strong></br>",
+		warnings = string.format("<strong>%s</strong><br />",
 			translatef("WARNING: %d interfaces are configured exceeding the maximum of 250!", count)
 			)
 	end
 
 	for i, k in pairs(overview) do
 		if overview[i]["network"] == false then
-			warnings = warnings .. string.format("<strong>%s</strong></br>",
+			warnings = warnings .. string.format("<strong>%s</strong><br />",
 					translatef("WARNING: Interface %s are not found in /etc/config/network", i)
 					)
 		end
 
 		if overview[i]["default_route"] == false then
-			warnings = warnings .. string.format("<strong>%s</strong></br>",
+			warnings = warnings .. string.format("<strong>%s</strong><br />",
 				translatef("WARNING: Interface %s has no default route in the main routing table", i)
 				)
 		end
 
 		if overview[i]["reliability"] == false then
-			warnings = warnings .. string.format("<strong>%s</strong></br>",
+			warnings = warnings .. string.format("<strong>%s</strong><br />",
 				translatef("WARNING: Interface %s has a higher reliability " ..
 				"requirement than tracking hosts (%d)", i, overview[i]["tracking"])
 				)
 		end
 
 		if overview[i]["duplicate_metric"] == true then
-			warnings = warnings .. string.format("<strong>%s</strong></br>",
+			warnings = warnings .. string.format("<strong>%s</strong><br />",
 				translatef("WARNING: Interface %s has a duplicate metric %s configured", i, overview[i]["metric"])
 				)
 		end

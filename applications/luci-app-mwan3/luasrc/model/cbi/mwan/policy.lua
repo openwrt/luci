@@ -24,7 +24,7 @@ function policyError(policy_error)
 	local warnings = ""
 	for i, k in pairs(policy_error) do
 		if policy_error[i] == true then
-			warnings = warnings .. string.format("<strong>%s</strong></br>",
+			warnings = warnings .. string.format("<strong>%s</strong><br />",
 				translatef("WARNING: Policie %s has exceeding the maximum name of 15 characters", i)
 				)
 		end

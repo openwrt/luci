@@ -23,7 +23,11 @@ f = m5:section(SimpleSection, nil,
 	"<br />" ..
 	"There are three main environment variables that are passed to this script.<br />" ..
 	"<br />" ..
-	"$ACTION Either \"ifup\" or \"ifdown\"<br />" ..
+	"$ACTION <br />" ..
+	"* \"ifup\" Is called by netifd and mwan3track <br />" ..
+	"* \"ifdown\" Is called by netifd and mwan3track <br />" ..
+	"* \"connected\" Is only called by mwan3track if tracking was successful <br />" ..
+	"* \"disconnected\" Is only called by mwan3track if tracking has failed <br />" ..
 	"$INTERFACE Name of the interface which went up or down (e.g. \"wan\" or \"wwan\")<br />" ..
 	"$DEVICE Physical device name which interface went up or down (e.g. \"eth0\" or \"wwan0\")<br />" ..
 	"<br />"))
