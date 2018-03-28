@@ -272,6 +272,11 @@ if not net:is_virtual() then
 		translate("Enables the Spanning Tree Protocol on this bridge"))
 	stp:depends("type", "bridge")
 	stp.rmempty = true
+
+	igmp = s:taboption("physical", Flag, "igmp_snooping", translate("Enable <abbr title=\"Internet Group Management Protocol\">IGMP</abbr> snooping"),
+		translate("Enables IGMP snooping on this bridge"))
+	igmp:depends("type", "bridge")
+	igmp.rmempty = true
 end
 
 
