@@ -26,16 +26,20 @@ m.hidden = {
 	wpa_version = http.formvalue("wpa_version")
 }
 
-if m.hidden.ssid ~= "" then
+if m.hidden.ssid == "" then
+	wssid = m:field(Value, "ssid", translate("SSID (hidden)"))
+else
 	wssid = m:field(Value, "ssid", translate("SSID"))
 	wssid.datatype = "rangelength(1,32)"
 	wssid.default = m.hidden.ssid or ""
-else
-	wssid = m:field(Value, "ssid", translate("SSID (hidden)"))
 end
 
 nobssid = m:field(Flag, "no_bssid", translate("Ignore BSSID"))
-nobssid.default = nobssid.enabled
+if m.hidden.ssid == "" then
+	nobssid.default = nobssid.disabled
+else
+	nobssid.default = nobssid.enabled
+end
 
 bssid = m:field(Value, "bssid", translate("BSSID"))
 bssid:depends("no_bssid", 0)
