@@ -1,5 +1,6 @@
 #include "cyassl-compat.h"
 
+#ifndef WOLFSSL_MD5_H_
 int MD5_Init(MD5_CTX *md5) {
 	InitMd5(md5);
 	return 1;
@@ -14,7 +15,9 @@ int MD5_Final(void *input, MD5_CTX *md5) {
 	Md5Final(md5, input);
 	return 1;
 }
+#endif
 
+#ifndef WOLFSSL_SHA_H_
 int SHA1_Init(SHA_CTX *sha) {
 	InitSha(sha);
 	return 1;
@@ -29,3 +32,4 @@ int SHA1_Final(void *input, SHA_CTX *sha) {
 	ShaFinal(sha, input);
 	return 1;
 }
+#endif
