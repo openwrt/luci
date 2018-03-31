@@ -629,7 +629,7 @@ function get_interface(self, i)
 	if _interfaces[i] or _wifi_iface(i) then
 		return interface(i)
 	else
-		local netid = _wifi_netid_by_netname(i)
+		local netid = _wifi_netid_by_sid(i)
 		return netid and interface(netid)
 	end
 end
