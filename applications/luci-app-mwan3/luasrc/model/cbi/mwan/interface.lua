@@ -5,15 +5,15 @@
 dsp = require "luci.dispatcher"
 
 
-function interfaceWarnings(overview, count)
+function interfaceWarnings(overview, count, iface_max)
 	local warnings = ""
-	if count <= 250 then
+	if count <= iface_max then
 		warnings = string.format("<strong>%s</strong><br />",
-			translatef("There are currently %d of 250 supported interfaces configured", count)
+			translatef("There are currently %d of %d supported interfaces configured", count, iface_max)
 			)
 	else
 		warnings = string.format("<strong>%s</strong><br />",
-			translatef("WARNING: %d interfaces are configured exceeding the maximum of 250!", count)
+			translatef("WARNING: %d interfaces are configured exceeding the maximum of %d!", count, iface_max)
 			)
 	end
 
@@ -103,7 +103,34 @@ function configCheck()
 			end
 		end
 	)
-	return overview, count
+
+	-- calculate iface_max usage from firewall mmx_mask
+	function bit(p)
+		return 2 ^ (p - 1)
+	end
+	function hasbit(x, p)
+		return x % (p + p) >= p
+	end
+	function setbit(x, p)
+		return hasbit(x, p) and x or x + p
+	end
+
+	local uci = require("uci").cursor(nil, "/var/state")
+	local mmx_mask = uci:get("mwan3", "globals", "mmx_mask") or "0x3F00"
+	local number = tonumber(mmx_mask, 16)
+	local bits = 0
+	local iface_max = 0
+	for i=1,16 do
+		if hasbit(number, bit(i)) then
+			bits = bits + 1
+			iface_max = setbit( iface_max, bit(bits))
+		end
+	end
+
+	-- subtract blackhole, unreachable and default table from iface_max
+	iface_max = iface_max - 3
+
+	return overview, count, iface_max
 end
 
 m5 = Map("mwan3", translate("MWAN - Interfaces"),
