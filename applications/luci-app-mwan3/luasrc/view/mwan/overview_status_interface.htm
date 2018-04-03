@@ -19,7 +19,7 @@ XHR.poll(5, '<%=luci.dispatcher.build_url("admin", "status", "mwan", "interface_
 					switch (status.interfaces[iface].status)
 					{
 						case 'online':
-							state = '<%:Online (tracking active)%>';
+							state = '<%:Online%>';
 							css = 'success';
 							break;
 						case 'offline':
@@ -69,6 +69,7 @@ XHR.poll(5, '<%=luci.dispatcher.build_url("admin", "status", "mwan", "interface_
 <fieldset id="interface_field" class="cbi-section">
 	<legend><%:MWAN Interfaces%></legend>
 	<div id="mwan_status_text">
-		<img src="<%=resource%>/icons/loading.gif" alt="<%:Loading%>" style="vertical-align:middle" /><%:Collecting data...%>
+		<img src="<%=resource%>/icons/loading.gif" alt="<%:Loading%>" style="vertical-align:middle" />
+		<%:Collecting data...%>
 	</div>
 </fieldset>
