@@ -31,7 +31,6 @@
 
 	function update_status(iface, task)
 	{
-		var legend = document.getElementById('diag-rc-legend');
 		var output = document.getElementById('diag-rc-output');
 
 		output.innerHTML =
@@ -45,7 +44,6 @@
 		stxhr.post('<%=url('admin/status/mwan')%>/diagnostics_display' + '/' + iface + '/' + task, { token: '<%=token%>' },
 			function(x)
 			{
-				legend.style.display = 'none';
 				output.innerHTML = String.format('<pre>%h</pre>', x.responseText);
 			}
 		);
@@ -86,7 +84,6 @@
 		</fieldset>
 	</div>
 	<fieldset class="cbi-section" style="display:none">
-		<legend id="diag-rc-legend"><%:Collecting data...%></legend>
 		<span id="diag-rc-output"></span>
 	</fieldset>
 </form>

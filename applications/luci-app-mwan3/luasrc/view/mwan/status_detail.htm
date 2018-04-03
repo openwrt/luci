@@ -18,9 +18,7 @@
 	XHR.poll(5, '<%=luci.dispatcher.build_url("admin", "status", "mwan", "detailed_status")%>', null,
 		function(x)
 		{
-			var legend = document.getElementById('diag-rc-legend');
 			var output = document.getElementById('diag-rc-output');
-			legend.style.display = 'none';
 			output.innerHTML = String.format('<pre>%h</pre>', x.responseText);
 		}
 	);
@@ -32,9 +30,9 @@
 	<div><strong><%:INFO: MWAN not running%></strong></div>
 	<%end%>
 	<fieldset class="cbi-section">
-		<legend id="diag-rc-legend"><%:Collecting data...%></legend>
 		<span id="diag-rc-output">
 			<img src="<%=resource%>/icons/loading.gif" alt="<%:Loading%>" style="vertical-align: middle;" />
+			<%:Collecting data...%>
 		</span>
 	</fieldset>
 </div>
