@@ -136,7 +136,7 @@
 	uci:foreach("luci", "command", function(s) commands[#commands+1] = s end)
 %>
 
-<form method="get" action="<%=pcdata(luci.http.getenv("REQUEST_URI"))%>">
+<form method="get" action="<%=pcdata(FULL_REQUEST_URI)%>">
 	<div class="cbi-map">
 		<h2 name="content"><%:Custom Commands%></h2>
 
