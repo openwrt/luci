@@ -175,6 +175,7 @@ function wssid.write(self, section, value)
 	end
 	uci:save("wireless")
 	uci:commit("wireless")
+	luci.sys.call("env -i /bin/ubus call network reload >/dev/null 2>&1")
 	http.redirect(luci.dispatcher.build_url("admin/services/travelmate/stations"))
 end
 

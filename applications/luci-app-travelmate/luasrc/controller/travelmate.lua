@@ -30,11 +30,11 @@ function index()
 end
 
 function logread()
-	local logfile
+	local logfile = ""
 
 	if nixio.fs.access("/var/log/messages") then
 		logfile = util.trim(util.exec("grep -F 'travelmate-' /var/log/messages"))
-	else
+	elseif nixio.fs.access("/sbin/logread") then
 		logfile = util.trim(util.exec("logread -e 'travelmate-'"))
 	end
 	templ.render("travelmate/logread", {title = i18n.translate("Travelmate Logfile"), content = logfile})
