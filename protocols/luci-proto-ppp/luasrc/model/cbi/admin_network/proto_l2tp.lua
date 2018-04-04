@@ -18,13 +18,13 @@ password = section:taboption("general", Value, "password", translate("PAP/CHAP p
 password.password = true
 
 if luci.model.network:has_ipv6() then
-
-        ipv6 = section:taboption("advanced", ListValue, "ipv6")
-        ipv6:value("auto", translate("Automatic"))
-        ipv6:value("0", translate("Disabled"))
-        ipv6:value("1", translate("Manual"))
-        ipv6.default = "auto"
-
+	ipv6 = section:taboption("advanced", ListValue, "ipv6",
+		translate("Obtain IPv6-Address"),
+		translate("Enable IPv6 negotiation on the PPP link"))
+	ipv6:value("auto", translate("Automatic"))
+	ipv6:value("0", translate("Disabled"))
+	ipv6:value("1", translate("Manual"))
+	ipv6.default = "auto"
 end
 
 defaultroute = section:taboption("advanced", Flag, "defaultroute",
