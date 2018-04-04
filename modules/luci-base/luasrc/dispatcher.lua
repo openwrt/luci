@@ -892,7 +892,7 @@ end
 function cbi(model, config)
 	return {
 		type = "cbi",
-		post = { ["cbi.submit"] = "1" },
+		post = { ["cbi.submit"] = true },
 		config = config,
 		model = model,
 		target = _cbi
@@ -938,7 +938,7 @@ end
 function form(model)
 	return {
 		type = "cbi",
-		post = { ["cbi.submit"] = "1" },
+		post = { ["cbi.submit"] = true },
 		model = model,
 		target = _form
 	}
