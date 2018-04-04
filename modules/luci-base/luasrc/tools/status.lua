@@ -187,7 +187,7 @@ function switch_status(devs)
 	local switches = { }
 	for dev in devs:gmatch("[^%s,]+") do
 		local ports = { }
-		local swc = io.popen("swconfig dev %q show" % dev, "r")
+		local swc = io.popen("swconfig dev '%s' show" % dev:gsub("'", ""), "r")
 		if swc then
 			local l
 			repeat
