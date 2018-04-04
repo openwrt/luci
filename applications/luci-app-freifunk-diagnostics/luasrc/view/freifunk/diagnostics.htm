@@ -53,7 +53,7 @@ local has_traceroute6 = fs.access("/usr/bin/traceroute6")
 	}
 //]]></script>
 
-<form method="post" action="<%=pcdata(luci.http.getenv("REQUEST_URI"))%>">
+<form method="post" action="<%=pcdata(FULL_REQUEST_URI)%>">
 	<div class="cbi-map">
 		<h2 name="content"><%:Diagnostics%></h2>
 
