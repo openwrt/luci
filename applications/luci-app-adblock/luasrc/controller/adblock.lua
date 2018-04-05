@@ -15,9 +15,9 @@ function index()
 	entry({"admin", "services", "adblock", "tab_from_cbi"}, cbi("adblock/overview_tab", {hideresetbtn=true, hidesavebtn=true}), _("Overview"), 10).leaf = true
 	entry({"admin", "services", "adblock", "logfile"}, call("logread"), _("View Logfile"), 20).leaf = true
 	entry({"admin", "services", "adblock", "advanced"}, firstchild(), _("Advanced"), 100)
-	entry({"admin", "services", "adblock", "advanced", "blacklist"}, cbi("adblock/blacklist_tab"), _("Edit Blacklist"), 110).leaf = true
-	entry({"admin", "services", "adblock", "advanced", "whitelist"}, cbi("adblock/whitelist_tab"), _("Edit Whitelist"), 120).leaf = true
-	entry({"admin", "services", "adblock", "advanced", "configuration"}, cbi("adblock/configuration_tab"), _("Edit Configuration"), 130).leaf = true
+	entry({"admin", "services", "adblock", "advanced", "blacklist"}, form("adblock/blacklist_tab"), _("Edit Blacklist"), 110).leaf = true
+	entry({"admin", "services", "adblock", "advanced", "whitelist"}, form("adblock/whitelist_tab"), _("Edit Whitelist"), 120).leaf = true
+	entry({"admin", "services", "adblock", "advanced", "configuration"}, form("adblock/configuration_tab"), _("Edit Configuration"), 130).leaf = true
 	entry({"admin", "services", "adblock", "advanced", "query"}, template("adblock/query"), _("Query domains"), 140).leaf = true
 	entry({"admin", "services", "adblock", "advanced", "result"}, call("queryData"), nil, 150).leaf = true
 end
