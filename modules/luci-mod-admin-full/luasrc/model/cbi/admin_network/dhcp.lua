@@ -212,6 +212,12 @@ cq.optional = true
 cq.datatype = "uinteger"
 cq.placeholder = 150
 
+cs = s:taboption("advanced", Value, "cachesize",
+        translate("Size of dnsmasq query cache"),
+        translate("Maximum number of dnsmasq cached entries"))
+cs.optional = true
+cs.datatype = "uinteger"
+cs.placeholder = 150
 
 s:taboption("tftp", Flag, "enable_tftp",
 	translate("Enable TFTP server")).optional = true
