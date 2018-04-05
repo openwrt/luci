@@ -18,10 +18,12 @@
 	<p><strong><%:There are no pending changes to revert!%></strong></p>
 <% end %>
 
-<div class="cbi-page-actions">
-	<form class="inline" method="get" action="<%=luci.util.pcdata(luci.http.formvalue("redir"))%>">
-		<input class="cbi-button cbi-button-link" style="margin:0" type="submit" value="<%:Back%>" />
-	</form>
-</div>
+<% local node, url = luci.dispatcher.lookup(luci.http.formvalue("redir")); if url then %>
+	<div class="cbi-page-actions">
+		<form class="inline" method="get" action="<%=luci.util.pcdata(url)%>">
+			<input class="cbi-button cbi-button-link" style="margin:0" type="submit" value="<%:Back%>" />
+		</form>
+	</div>
+<% end %>
 
 <%+footer%>

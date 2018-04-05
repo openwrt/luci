@@ -147,7 +147,7 @@
 			if ucichanges > 0 then
 				write('<a class="label notice" href="%s?redir=%s">%s: %d</a>' %{
 					url(category, 'uci/changes'),
-					http.urlencode(http.formvalue('redir') or REQUEST_URI),
+					http.urlencode(http.formvalue('redir') or table.concat(disp.context.request, "/")),
 					translate('Unsaved Changes'),
 					ucichanges
 				})
