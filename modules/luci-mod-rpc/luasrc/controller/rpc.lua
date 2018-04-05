@@ -16,8 +16,8 @@ function index()
 		if auth then -- if authentication token was given
 			local sdat = (luci.util.ubus("session", "get", { ubus_rpc_session = auth }) or { }).values
 			if sdat then -- if given token is valid
-				if sdat.user and luci.util.contains(accs, sdat.user) then
-					return sdat.user, auth
+				if sdat.username and luci.util.contains(accs, sdat.username) then
+					return sdat.username, auth
 				end
 			end
 		end
@@ -62,7 +62,7 @@ function rpc_auth()
 				util.ubus("session", "set", {
 					ubus_rpc_session = sid,
 					values = {
-						user = user,
+						username = user,
 						token = token,
 						secret = secret
 					}
