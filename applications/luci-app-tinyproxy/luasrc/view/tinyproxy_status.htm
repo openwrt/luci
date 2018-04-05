@@ -13,7 +13,11 @@ if luci.http.formvalue("frame") == "1" then
 		end)
 
 	local data = false
-	local wget = io.popen("wget -qO- http://%s:%s" % { addr, port })
+	local wget = io.popen("wget -qO- http://%s:%s" %{
+		luci.util.shellquote(addr),
+		luci.util.shellquote(port)
+	})
+
 	if wget then
 		while true do
 			local l = wget:read("*l")
@@ -30,7 +34,10 @@ if luci.http.formvalue("frame") == "1" then
 
 	if not data then
 		luci.http.write(translate("Failed to retrieve statistics from url:"))
-		luci.http.write(" http://%s:%s" % { addr, port })
+		luci.http.write(" http://%s:%s" %{
+			luci.util.pcdata(addr),
+			luci.util.pcdata(port)
+		})
 	end
 
 	return
@@ -43,7 +50,7 @@ end
 <div class="cbi-map">
 	<h2 name="content"><%:Tinyproxy Status%></h2>
 	<div class="cbi-section">
-		<iframe src="<%=REQUESTURL%>?frame=1" style="width:100%; height:350px; border:none"></iframe>
+		<iframe src="<%=REQUEST_URI%>?frame=1" style="width:100%; height:350px; border:none"></iframe>
 	</div>
 </div>
 

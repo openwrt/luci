@@ -87,10 +87,10 @@ end
 function httpget(url, stream, target)
 	if not target then
 		local source = stream and io.popen or luci.util.exec
-		return source("wget -qO- '"..url:gsub("'", "").."'")
+		return source("wget -qO- %s" % luci.util.shellquote(url))
 	else
-		return os.execute("wget -qO '%s' '%s'" %
-			{target:gsub("'", ""), url:gsub("'", "")})
+		return os.execute("wget -qO %s %s" %
+			{luci.util.shellquote(target), luci.util.shellquote(url)})
 	end
 end
 
@@ -443,18 +443,11 @@ function user.checkpasswd(username, pass)
 end
 
 function user.setpasswd(username, password)
-	if password then
-		password = password:gsub("'", [['"'"']])
-	end
-
-	if username then
-		username = username:gsub("'", [['"'"']])
-	end
-
-	return os.execute(
-		"(echo '" .. password .. "'; sleep 1; echo '" .. password .. "') | " ..
-		"passwd '" .. username .. "' >/dev/null 2>&1"
-	)
+	return os.execute("(echo %s; sleep 1; echo %s) | passwd %s >/dev/null 2>&1" %{
+		luci.util.shellquote(password),
+		luci.util.shellquote(password),
+		luci.util.shellquote(username)
+	})
 end
 
 

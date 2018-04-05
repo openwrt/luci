@@ -53,7 +53,13 @@ function cshark_iface_dump_start(ifname, value, flag, filter)
 
 	luci.http.prepare_content("text/plain")
 
-	local res = os.execute("(/sbin/cshark -i " .. ifname .. " -" .. flag .. " " .. value .. " -p /tmp/cshark-luci.pid " .. filter .. " > /tmp/cshark-luci.out 2>&1) &")
+	local res = os.execute("(/sbin/cshark -i %s -%s %s -p /tmp/cshark-luci.pid %s > /tmp/cshark-luci.out 2>&1) &" %{
+		luci.util.shellquote(ifname),
+		luci.util.shellquote(flag),
+		luci.util.shellquote(value),
+		luci.util.shellquote(filter)
+	})
+
 	luci.http.write(tostring(res))
 end
 

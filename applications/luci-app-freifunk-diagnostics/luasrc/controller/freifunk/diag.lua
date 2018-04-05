@@ -33,7 +33,7 @@ function diag_command(cmd, addr)
 	if addr and addr:match("^[a-zA-Z0-9%-%.:_]+$") then
 		luci.http.prepare_content("text/plain")
 
-		local util = io.popen(cmd % addr)
+		local util = io.popen(cmd % luci.util.shellquote(addr))
 		if util then
 			while true do
 				local ln = util:read("*l")
@@ -52,21 +52,21 @@ function diag_command(cmd, addr)
 end
 
 function diag_ping(addr)
-	diag_command("ping -c 5 -W 1 %q 2>&1", addr)
+	diag_command("ping -c 5 -W 1 %s 2>&1", addr)
 end
 
 function diag_traceroute(addr)
-	diag_command("traceroute -q 1 -w 1 -n %q 2>&1", addr)
+	diag_command("traceroute -q 1 -w 1 -n %s 2>&1", addr)
 end
 
 function diag_nslookup(addr)
-	diag_command("nslookup %q 2>&1", addr)
+	diag_command("nslookup %s 2>&1", addr)
 end
 
 function diag_ping6(addr)
-	diag_command("ping6 -c 5 %q 2>&1", addr)
+	diag_command("ping6 -c 5 %s 2>&1", addr)
 end
 
 function diag_traceroute6(addr)
-	diag_command("traceroute6 -q 1 -w 2 -n %q 2>&1", addr)
+	diag_command("traceroute6 -q 1 -w 2 -n %s 2>&1", addr)
 end

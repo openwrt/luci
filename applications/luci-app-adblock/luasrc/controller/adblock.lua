@@ -36,8 +36,8 @@ end
 function queryData(domain)
 	if domain then
 		luci.http.prepare_content("text/plain")
-		local cmd = "/etc/init.d/adblock query %q 2>&1"
-		local util = io.popen(cmd % domain)
+		local cmd = "/etc/init.d/adblock query %s 2>&1"
+		local util = io.popen(cmd % util.shellquote(domain))
 		if util then
 			while true do
 				local line = util:read("*l")

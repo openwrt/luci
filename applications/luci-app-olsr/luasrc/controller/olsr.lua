@@ -84,11 +84,11 @@ function action_json()
 	local jsonreq4
 	local jsonreq6
 
-	local v4_port = uci:get("olsrd", "olsrd_jsoninfo", "port") or 9090
-	local v6_port = uci:get("olsrd6", "olsrd_jsoninfo", "port") or 9090
+	local v4_port = tonumber(uci:get("olsrd", "olsrd_jsoninfo", "port") or "") or 9090
+	local v6_port = tonumber(uci:get("olsrd6", "olsrd_jsoninfo", "port") or "") or 9090
 
-	jsonreq4 = utl.exec("(echo /status | nc 127.0.0.1 " .. v4_port .. " | sed -n '/^[}{ ]/p') 2>/dev/null" )
-	jsonreq6 = utl.exec("(echo /status | nc ::1 " .. v6_port .. " | sed -n '/^[}{ ]/p') 2>/dev/null")
+	jsonreq4 = utl.exec("(echo /status | nc 127.0.0.1 %d | sed -n '/^[}{ ]/p') 2>/dev/null" % v4_port)
+	jsonreq6 = utl.exec("(echo /status | nc ::1 %d | sed -n '/^[}{ ]/p') 2>/dev/null" % v6_port)
 	http.prepare_content("application/json")
 	if not jsonreq4 or jsonreq4 == "" then
 		jsonreq4 = "{}"
@@ -150,7 +150,7 @@ function action_neigh(json)
 	for _, dev in ipairs(devices) do
 		for _, net in ipairs(dev:get_wifinets()) do
 			local radio = net:get_device()
-			assoclist[#assoclist+1] = {} 
+			assoclist[#assoclist+1] = {}
 			assoclist[#assoclist]['ifname'] = net:ifname()
 			assoclist[#assoclist]['network'] = net:network()[1]
 			assoclist[#assoclist]['device'] = radio and radio:name() or nil
@@ -165,7 +165,7 @@ function action_neigh(json)
 		local mac = ""
 		local ip
 		local neihgt = {}
-		
+
 		if resolve == "1" then
 			hostname = nixio.getnameinfo(v.remoteIP, nil, 100)
 			if hostname then
@@ -350,11 +350,11 @@ function fetch_jsoninfo(otable)
 	local IpVersion = uci:get_first("olsrd", "olsrd","IpVersion")
 	local jsonreq4 = ""
 	local jsonreq6 = ""
-	local v4_port = uci:get("olsrd", "olsrd_jsoninfo", "port") or 9090
-	local v6_port = uci:get("olsrd6", "olsrd_jsoninfo", "port") or 9090
+	local v4_port = tonumber(uci:get("olsrd", "olsrd_jsoninfo", "port") or "") or 9090
+	local v6_port = tonumber(uci:get("olsrd6", "olsrd_jsoninfo", "port") or "") or 9090
 
-	jsonreq4 = utl.exec("(echo /" .. otable .. " | nc 127.0.0.1 " .. v4_port .. " | sed -n '/^[}{ ]/p') 2>/dev/null")
-	jsonreq6 = utl.exec("(echo /" .. otable .. " | nc ::1 " .. v6_port .. " | sed -n '/^[}{ ]/p') 2>/dev/null")
+	jsonreq4 = utl.exec("(echo /%s | nc 127.0.0.1 %d | sed -n '/^[}{ ]/p') 2>/dev/null" %{ otable, v4_port })
+	jsonreq6 = utl.exec("(echo /%s | nc ::1 %d | sed -n '/^[}{ ]/p') 2>/dev/null" %{ otable, v6_port })
 	local jsondata4 = {}
 	local jsondata6 = {}
 	local data4 = {}

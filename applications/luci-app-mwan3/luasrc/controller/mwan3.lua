@@ -98,7 +98,7 @@ function diagnosticsData(interface, task)
 
 	function diag_command(cmd, addr)
 		if addr and addr:match("^[a-zA-Z0-9%-%.:_]+$") then
-			local util = io.popen(cmd % addr)
+			local util = io.popen(cmd % ut.shellquote(addr))
 			if util then
 				while true do
 					local ln = util:read("*l")
@@ -138,7 +138,7 @@ function diagnosticsData(interface, task)
 		if task == "ping_gateway" then
 			local gateway = get_gateway(interface)
 			if gateway ~= nil then
-				diag_command("ping -c 5 -W 1 %q 2>&1", gateway)
+				diag_command("ping -c 5 -W 1 %s 2>&1", gateway)
 			else
 				luci.http.prepare_content("text/plain")
 				luci.http.write(string.format("No gateway for interface %s found.", interface))
@@ -147,7 +147,7 @@ function diagnosticsData(interface, task)
 			local trackips = uci:get("mwan3", interface, "track_ip")
 			if #trackips > 0 then
 				for i in pairs(trackips) do
-					diag_command("ping -c 5 -W 1 %q 2>&1", trackips[i])
+					diag_command("ping -c 5 -W 1 %s 2>&1", trackips[i])
 				end
 			else
 				luci.http.write(string.format("No tracking Hosts for interface %s defined.", interface))
@@ -185,10 +185,10 @@ function diagnosticsData(interface, task)
 				luci.http.write(string.format("Routing table %s for interface %s not found", number, interface))
 			end
 		elseif task == "hotplug_ifup" then
-			os.execute(string.format("/usr/sbin/mwan3 ifup %s", interface))
+			os.execute(string.format("/usr/sbin/mwan3 ifup %s", ut.shellquote(interface)))
 			luci.http.write(string.format("Hotplug ifup sent to interface %s", interface))
 		elseif task == "hotplug_ifdown" then
-			os.execute(string.format("/usr/sbin/mwan3 ifdown %s", interface))
+			os.execute(string.format("/usr/sbin/mwan3 ifdown %s", ut.shellquote(interface)))
 			luci.http.write(string.format("Hotplug ifdown sent to interface %s", interface))
 		else
 			luci.http.write("Unknown task")

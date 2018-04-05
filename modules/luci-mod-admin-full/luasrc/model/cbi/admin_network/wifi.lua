@@ -63,7 +63,7 @@ function m.parse(map)
 	Map.parse(map)
 
 	if m:get(wdev:name(), "type") == "mac80211" and new_cc and new_cc ~= old_cc then
-		luci.sys.call("iw reg set %q" % new_cc)
+		luci.sys.call("iw reg set %s" % ut.shellquote(new_cc))
 		luci.http.redirect(luci.dispatcher.build_url("admin/network/wireless", arg[1]))
 		return
 	end

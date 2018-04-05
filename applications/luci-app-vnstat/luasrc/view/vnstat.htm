@@ -21,12 +21,13 @@ style = (style and #style > 0) and style or "s"
 -- render image
 --
 if iface then
-	style = style:gsub("[^%w]", "")
-	iface = iface:gsub("[^%w%.%-%_]", "")
-
 	luci.http.prepare_content("image/png")
 
-	local png = io.popen("vnstati -i '%s' '-%s' -o -" % { iface, style })
+	local png = io.popen("vnstati -i %s -%s -o -" %{
+		utl.shellquote(iface),
+		utl.shellquote(style)
+	})
+
 	luci.http.write(png:read("*a"))
 	png:close()
 
@@ -89,7 +90,7 @@ dbdir = dbdir or "/var/lib/vnstat"
 <%
        end
      end
-   end 
+   end
 %>
 
 <% if empty then %>
