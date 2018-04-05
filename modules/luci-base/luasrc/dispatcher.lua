@@ -658,6 +658,23 @@ function node(...)
 	return c
 end
 
+function lookup(...)
+	local i, path = nil, {}
+	for i = 1, select('#', ...) do
+		local name, arg = nil, tostring(select(i, ...))
+		for name in arg:gmatch("[^/]+") do
+			path[#path+1] = name
+		end
+	end
+
+	for i = #path, 1, -1 do
+		local node = context.treecache[table.concat(path, ".", 1, i)]
+		if node and (i == #path or node.leaf) then
+			return node, build_url(unpack(path))
+		end
+	end
+end
+
 function _create_node(path)
 	if #path == 0 then
 		return context.tree

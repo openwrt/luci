@@ -116,8 +116,8 @@ Create a new dispatching node and define common parameters.
 
 ---[[
 Fetch or create a dispatching node without setting the target module or
-
 enabling the node.
+
 @class function
 @name get
 @param	...		Virtual path
@@ -131,6 +131,15 @@ Fetch or create a new dispatching node.
 @name node
 @param	...		Virtual path
 @return			Dispatching tree node
+]]
+
+---[[
+Lookup node in dispatching tree.
+
+@class function
+@name lookup
+@param  ...		Virtual path
+@return Node object, canonical url or nil if the path was not found.
 ]]
 
 ---[[
