@@ -162,6 +162,7 @@ function wssid.write(self, section, value)
 	end
 	uci:save("wireless")
 	uci:commit("wireless")
+	luci.sys.call("env -i /bin/ubus call network reload >/dev/null 2>&1")
 	m.on_cancel()
 end
 

@@ -73,51 +73,34 @@ o1 = s:option(Flag, "trm_enabled", translate("Enable travelmate"))
 o1.default = o1.disabled
 o1.rmempty = false
 
-o2 = s:option(Flag, "trm_automatic", translate("Enable 'automatic' mode"),
-	translate("Keep travelmate in an active state. Check every n seconds the connection status, i.e. the uplink availability."))
+o2 = s:option(Flag, "trm_captive", translate("Captive Portal Detection"),
+	translate("Check the internet availability, log captive portal redirections and keep the uplink connection 'alive'."))
 o2.default = o2.enabled
 o2.rmempty = false
 
-o3 = s:option(Flag, "trm_captive", translate("Captive Portal Detection"),
-	translate("Check the internet availability, log captive portal redirections and keep the uplink connection 'alive'."))
-o3.default = o3.enabled
-o3.rmempty = false
-
-o4 = s:option(ListValue, "trm_iface", translate("Uplink / Trigger interface"),
+o3 = s:option(ListValue, "trm_iface", translate("Uplink / Trigger interface"),
 	translate("Name of the used uplink interface."))
 if dump then
 	local i, v
 	for i, v in ipairs(dump.interface) do
 		if v.interface ~= "loopback" and v.interface ~= "lan" then
-			o4:value(v.interface)
+			o3:value(v.interface)
 		end
 	end
 end
-o4.default = trmiface
-o4.rmempty = false
+o3.default = trmiface
+o3.rmempty = false
 
 if fs.access("/usr/bin/qrencode") then
-	btn1 = s:option(Button, "btn1", translate("View AP QR-Codes"),
+	btn = s:option(Button, "btn", translate("View AP QR-Codes"),
 		translate("Connect your Android or iOS devices to your router's WiFi using the shown QR code."))
-	btn1.inputtitle = translate("QR-Codes")
-	btn1.inputstyle = "apply"
-	btn1.disabled = false
+	btn.inputtitle = translate("QR-Codes")
+	btn.inputstyle = "apply"
+	btn.disabled = false
 
-	function btn1.write()
+	function btn.write()
 		luci.http.redirect(luci.dispatcher.build_url("admin", "services", "travelmate", "apqr"))
 	end
-end
-
-btn2 = s:option(Button, "btn2", translate("Manual Rescan"),
-	translate("Force a manual uplink rescan / reconnect in 'trigger' mode."))
-btn2:depends("trm_automatic", "")
-btn2.inputtitle = translate("Rescan")
-btn2.inputstyle = "find"
-btn2.disabled = false
-
-function btn2.write()
-	luci.sys.call("env -i /etc/init.d/travelmate start >/dev/null 2>&1")
-	luci.http.redirect(luci.dispatcher.build_url("admin", "services", "travelmate"))
 end
 
 -- Runtime information
@@ -211,7 +194,7 @@ e6.datatype = "range(20,40)"
 e6.rmempty = false
 
 e7 = e:option(Value, "trm_timeout", translate("Overall Timeout"),
-	translate("Timeout in seconds between retries in 'automatic' mode."))
+	translate("Overall retry timeout in seconds."))
 e7.default = 60
 e7.datatype = "range(30,300)"
 e7.rmempty = false

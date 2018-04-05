@@ -9,5 +9,6 @@ if cfg ~= nil then
 	uci:delete("wireless", cfg)
 	uci:save("wireless")
 	uci:commit("wireless")
+	luci.sys.call("env -i /bin/ubus call network reload >/dev/null 2>&1")
 end
 http.redirect(luci.dispatcher.build_url("admin/services/travelmate/stations"))
