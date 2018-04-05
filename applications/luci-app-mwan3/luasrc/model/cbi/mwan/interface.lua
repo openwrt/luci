@@ -170,7 +170,7 @@ track_method.rawhtml = true
 function track_method.cfgvalue(self, s)
 	local tracked = self.map:get(s, "track_ip")
 	if tracked then
-		return self.map:get(s, "track_method") or "&#8212;"
+		return self.map:get(s, "track_method") or "ping"
 	else
 		return "&#8212;"
 	end
@@ -181,7 +181,7 @@ reliability.rawhtml = true
 function reliability.cfgvalue(self, s)
 	local tracked = self.map:get(s, "track_ip")
 	if tracked then
-		return self.map:get(s, "reliability") or "&#8212;"
+		return self.map:get(s, "reliability") or "1"
 	else
 		return "&#8212;"
 	end
@@ -196,7 +196,7 @@ function interval.cfgvalue(self, s)
 		if intervalValue then
 			return intervalValue .. "s"
 		else
-			return "&#8212;"
+			return "5s"
 		end
 	else
 		return "&#8212;"
@@ -208,7 +208,7 @@ down.rawhtml = true
 function down.cfgvalue(self, s)
 	local tracked = self.map:get(s, "track_ip")
 	if tracked then
-		return self.map:get(s, "down") or "&#8212;"
+		return self.map:get(s, "down") or "3"
 	else
 		return "&#8212;"
 	end
@@ -219,7 +219,7 @@ up.rawhtml = true
 function up.cfgvalue(self, s)
 	local tracked = self.map:get(s, "track_ip")
 	if tracked then
-		return self.map:get(s, "up") or "&#8212;"
+		return self.map:get(s, "up") or "3"
 	else
 		return "&#8212;"
 	end
