@@ -164,6 +164,10 @@ function striptags(value)
 	return value and tparser.striptags(tostring(value))
 end
 
+function shellquote(value)
+	return string.format("'%s'", string.gsub(value or "", "'", "'\\''"))
+end
+
 -- for bash, ash and similar shells single-quoted strings are taken
 -- literally except for single quotes (which terminate the string)
 -- (and the exception noted below for dash (-) at the start of a
@@ -656,7 +660,7 @@ function checklib(fullpathexe, wantedlib)
 	if not haveldd or not haveexe then
 		return false
 	end
-	local libs = exec("/usr/bin/ldd " .. fullpathexe)
+	local libs = exec(string.format("/usr/bin/ldd %s", shellquote(fullpathexe)))
 	if not libs then
 		return false
 	end
