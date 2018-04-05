@@ -69,7 +69,7 @@ end
 				<% if querypat then %>
 				<div class="cbi-value">
 					<%:Displaying only packages containing%> <strong>"<%=pcdata(query)%>"</strong>
-					<input type="button" onclick="location.href='?display=<%=pcdata(display)%>'" href="#" class="cbi-button cbi-button-reset" style="margin-left:1em" value="<%:Reset%>" />
+					<input type="button" onclick="location.href='?display=<%=luci.http.urlencode(display)%>'" href="#" class="cbi-button cbi-button-reset" style="margin-left:1em" value="<%:Reset%>" />
 					<br style="clear:both" />
 				</div>
 				<% end %>
