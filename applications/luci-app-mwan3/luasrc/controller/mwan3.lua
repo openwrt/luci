@@ -56,7 +56,7 @@ function index()
 		arcombine(cbi("mwan/rule"), cbi("mwan/ruleconfig")),
 		_("Rules"), 40).leaf = true
 	entry({"admin", "network", "mwan", "notify"},
-		cbi("mwan/notify"),
+		form("mwan/notify"),
 		_("Notification"), 50).leaf = true
 end
 

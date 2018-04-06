@@ -3,6 +3,7 @@
 -- Licensed to the public under the GNU General Public License v2.
 
 dsp = require "luci.dispatcher"
+uci = require "uci"
 
 
 function interfaceWarnings(overview, count, iface_max)
