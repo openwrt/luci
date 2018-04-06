@@ -24,7 +24,7 @@ peeraddr.datatype = "ip4addr"
 
 ip6addr = s:taboption("general", Value, "ip6addr",
 	translate("Local IPv6 address"),
-	translate("This is the local endpoint address assigned by the tunnel broker, it usually ends with <code>:2</code>"))
+	translate("This is the local endpoint address assigned by the tunnel broker, it usually ends with <code>...:2/64</code>"))
 
 ip6addr.datatype = "ip6addr"
 
