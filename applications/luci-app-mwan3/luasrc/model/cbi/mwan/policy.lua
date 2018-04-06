@@ -26,7 +26,7 @@ function policyError(policy_error)
 	for i, k in pairs(policy_error) do
 		if policy_error[i] == true then
 			warnings = warnings .. string.format("<strong>%s</strong><br />",
-				translatef("WARNING: Policie %s has exceeding the maximum name of 15 characters", i)
+				translatef("WARNING: Policy %s has exceeding the maximum name of 15 characters", i)
 				)
 		end
 	end
@@ -39,9 +39,11 @@ m5 = Map("mwan3", translate("MWAN - Policies"),
 
 mwan_policy = m5:section(TypedSection, "policy", nil,
 	translate("Policies are profiles grouping one or more members controlling how MWAN distributes traffic<br />" ..
-	"Member interfaces with lower metrics are used first. Interfaces with the same metric load-balance<br />" ..
+	"Member interfaces with lower metrics are used first<br />" ..
+	"Member interfaces with the same metric will be load-balanced<br />" ..
 	"Load-balanced member interfaces distribute more traffic out those with higher weights<br />" ..
-	"Names may contain characters A-Z, a-z, 0-9, _ and no spaces. Names must be 15 characters or less<br />" ..
+	"Names may contain characters A-Z, a-z, 0-9, _ and no spaces<br />" ..
+	"Names must be 15 characters or less<br />" ..
 	"Policies may not share the same name as configured interfaces, members or rules"))
 mwan_policy.addremove = true
 mwan_policy.dynamic = false
