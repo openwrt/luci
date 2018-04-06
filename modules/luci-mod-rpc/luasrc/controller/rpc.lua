@@ -7,23 +7,45 @@ local pairs = pairs
 local print = print
 local pcall = pcall
 local table = table
+local type = type
+local tonumber = tonumber
 
 module "luci.controller.rpc"
 
-function index()
-	local function authenticator(validator, accs)
-		local auth = luci.http.formvalue("auth", true)
-		if auth then -- if authentication token was given
-			local sdat = (luci.util.ubus("session", "get", { ubus_rpc_session = auth }) or { }).values
-			if sdat then -- if given token is valid
-				if sdat.user and luci.util.contains(accs, sdat.user) then
-					return sdat.user, auth
-				end
-			end
+
+local function session_retrieve(sid, allowed_users)
+	local util = require "luci.util"
+	local sdat = util.ubus("session", "get", {
+		ubus_rpc_session = sid
+	})
+
+	if type(sdat) == "table" and
+	   type(sdat.values) == "table" and
+	   type(sdat.values.token) == "string" and
+	   type(sdat.values.secret) == "string" and
+	   type(sdat.values.username) == "string" and
+	   util.contains(allowed_users, sdat.values.username)
+	then
+		return sid, sdat.values
+	end
+
+	return nil
+end
+
+local function authenticator(validator, accs)
+	local auth = luci.http.formvalue("auth", true)
+		or luci.http.getcookie("sysauth")
+
+	if auth then -- if authentication token was given
+		local sid, sdat = session_retrieve(auth, accs)
+		if sdat then -- if given token is valid
+			return sdat.username, sid
 		end
 		luci.http.status(403, "Forbidden")
 	end
+end
 
+function index()
 	local rpc = node("rpc")
 	rpc.sysauth = "root"
 	rpc.sysauth_authenticator = authenticator
@@ -43,39 +65,48 @@ function rpc_auth()
 	local ltn12   = require "luci.ltn12"
 	local util    = require "luci.util"
 
-	local loginstat
-
 	local server = {}
 	server.challenge = function(user, pass)
-		local sid, token, secret
-
 		local config = require "luci.config"
+		local login = util.ubus("session", "login", {
+			username = user,
+			password = pass,
+			timeout  = tonumber(config.sauth.sessiontime)
+		})
 
-		if sys.user.checkpasswd(user, pass) then
-			local sdat = util.ubus("session", "create", { timeout = config.sauth.sessiontime })
+		if type(login) == "table" and
+		   type(login.ubus_rpc_session) == "string"
+		then
+			util.ubus("session", "set", {
+				ubus_rpc_session = login.ubus_rpc_session,
+				values = {
+					token = sys.uniqueid(16),
+					secret = sys.uniqueid(16)
+				}
+			})
+
+			local sid, sdat = session_retrieve(login.ubus_rpc_session, { user })
 			if sdat then
-				sid = sdat.ubus_rpc_session
-				token = sys.uniqueid(16)
-				secret = sys.uniqueid(16)
-
-				http.header("Set-Cookie", "sysauth="..sid.."; path=/")
-				util.ubus("session", "set", {
-					ubus_rpc_session = sid,
-					values = {
-						user = user,
-						token = token,
-						secret = secret
-					}
-				})
+				return {
+					sid = sid,
+					token = sdat.token,
+					secret = sdat.secret
+				}
 			end
 		end
 
-		return sid and {sid=sid, token=token, secret=secret}
+		return nil
 	end
 
 	server.login = function(...)
 		local challenge = server.challenge(...)
-		return challenge and challenge.sid
+		if challenge then
+			http.header("Set-Cookie", 'sysauth=%s; path=%s' %{
+				challenge.sid,
+				http.getenv("SCRIPT_NAME")
+			})
+			return challenge.sid
+		end
 	end
 
 	http.prepare_content("application/json")
