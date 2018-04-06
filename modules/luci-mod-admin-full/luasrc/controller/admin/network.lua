@@ -82,7 +82,7 @@ function index()
 		end
 
 
-		page = entry({"admin", "network", "iface_add"}, cbi("admin_network/iface_add"), nil)
+		page = entry({"admin", "network", "iface_add"}, form("admin_network/iface_add"), nil)
 		page.leaf = true
 
 		page = entry({"admin", "network", "iface_delete"}, post("iface_delete"), nil)
