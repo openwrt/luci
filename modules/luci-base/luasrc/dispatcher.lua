@@ -816,7 +816,16 @@ local function _cbi(self, ...)
 
 	local state = nil
 
+	local i, res
 	for i, res in ipairs(maps) do
+		if util.instanceof(res, cbi.SimpleForm) then
+			io.stderr:write("Model %s returns SimpleForm but is dispatched via cbi(),\n"
+				% self.model)
+
+			io.stderr:write("please change %s to use the form() action instead.\n"
+				% table.concat(context.request, "/"))
+		end
+
 		res.flow = config
 		local cstate = res:parse()
 		if cstate and (not state or cstate < state) then
@@ -937,6 +946,7 @@ local function _form(self, ...)
 	local maps = luci.cbi.load(self.model, ...)
 	local state = nil
 
+	local i, res
 	for i, res in ipairs(maps) do
 		local cstate = res:parse()
 		if cstate and (not state or cstate < state) then
