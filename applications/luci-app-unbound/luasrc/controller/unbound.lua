@@ -47,12 +47,12 @@ function index()
     if valman ~= "1" then
       entry({"admin", "services", "unbound", "files", "base"}, call("ShowUnboundConf"), _("UCI: Unbound"), 10).leaf = true
     else
-      entry({"admin", "services", "unbound", "files", "base"}, cbi("unbound/manual"), _("Edit: Unbound"), 10).leaf = true
+      entry({"admin", "services", "unbound", "files", "base"}, form("unbound/manual"), _("Edit: Unbound"), 10).leaf = true
     end
 
 
-    entry({"admin", "services", "unbound", "files", "server"}, cbi("unbound/server"), _("Edit: Server"), 20).leaf = true
-    entry({"admin", "services", "unbound", "files", "extended"}, cbi("unbound/extended"), _("Edit: Extended"), 30).leaf = true
+    entry({"admin", "services", "unbound", "files", "server"}, form("unbound/server"), _("Edit: Server"), 20).leaf = true
+    entry({"admin", "services", "unbound", "files", "extended"}, form("unbound/extended"), _("Edit: Extended"), 30).leaf = true
 
 
     if nixio.fs.access("/var/lib/unbound/unbound_dhcp.conf") then
