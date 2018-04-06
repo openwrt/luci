@@ -182,11 +182,11 @@ function foreach(self, config, stype, callback)
 	end
 end
 
-function get(self, config, section, option)
+local function _get(self, operation, config, section, option)
 	if section == nil then
 		return nil
 	elseif type(option) == "string" and option:byte(1) ~= 46 then
-		local rv, err = util.ubus("uci", "get", {
+		local rv, err = util.ubus("uci", operation, {
 			config  = config,
 			section = section,
 			option  = option
@@ -209,6 +209,14 @@ function get(self, config, section, option)
 	else
 		return false, "Invalid argument"
 	end
+end
+
+function get(self, ...)
+	return _get(self, "get", ...)
+end
+
+function get_state(self, ...)
+	return _get(self, "state", ...)
 end
 
 function get_all(self, config, section)
