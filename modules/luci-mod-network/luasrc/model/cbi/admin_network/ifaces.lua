@@ -247,7 +247,7 @@ for _, pr in ipairs(nw:get_protocols()) do
 end
 
 
-auto = s:taboption("advanced", Flag, "auto", translate("Bring up on boot"))
+auto = s:taboption("general", Flag, "auto", translate("Bring up on boot"))
 auto.default = (net:proto() == "none") and auto.disabled or auto.enabled
 
 delegate = s:taboption("advanced", Flag, "delegate", translate("Use builtin IPv6-management"))
