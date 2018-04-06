@@ -18,6 +18,6 @@ function index()
 		_("Traffic Rules"), 30).leaf = true
 
 	entry({"admin", "network", "firewall", "custom"},
-		cbi("firewall/custom"),
+		form("firewall/custom"),
 		_("Custom Rules"), 40).leaf = true
 end
