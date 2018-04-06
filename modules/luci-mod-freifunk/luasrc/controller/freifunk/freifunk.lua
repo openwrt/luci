@@ -77,7 +77,7 @@ function index()
 	page.order  = 10
 
 	page        = node("admin", "freifunk", "basics", "profile_expert")
-	page.target = cbi("freifunk/profile_expert")
+	page.target = form("freifunk/profile_expert")
 	page.title  = _("Profile (Expert)")
 	page.order  = 20
 
