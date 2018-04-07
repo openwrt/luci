@@ -242,7 +242,7 @@ end
 function get_first(self, config, stype, option, default)
 	local rv = default
 
-	self:foreach(conf, stype, function(s)
+	self:foreach(config, stype, function(s)
 		local val = not option and s[".name"] or s[option]
 
 		if type(default) == "number" then
