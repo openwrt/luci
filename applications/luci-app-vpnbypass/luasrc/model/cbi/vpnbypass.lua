@@ -1,5 +1,7 @@
 readmeURL = "https://github.com/openwrt/packages/blob/master/net/vpnbypass/files/README.md"
 
+uci = require "uci"
+
 m = Map("vpnbypass", translate("VPN Bypass Settings"))
 s = m:section(NamedSection, "config", "vpnbypass")
 
