@@ -19,7 +19,7 @@ Currently supported dual-partition devices include:
 If you're interested in having your device supported, please post in [LEDE Project Forum Support Thread](https://forum.lede-project.org/t/web-ui-to-reboot-to-another-partition-dual-partition-routers/3423).
 
 ## Screenshot (luci-app-advanced-reboot)
-![screenshot](https://raw.githubusercontent.com/stangri/screenshots/master/luci-app-advanced-reboot/screenshot01.png "screenshot")
+![screenshot](https://raw.githubusercontent.com/stangri/openwrt_packages/master/screenshots/luci-app-advanced-reboot/screenshot01.png "screenshot")
 
 ## How to install
 Install ```luci-app-advanced-reboot``` from Web UI or connect to your router via ssh and run the following commands:

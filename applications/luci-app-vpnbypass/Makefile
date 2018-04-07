@@ -10,7 +10,7 @@ LUCI_TITLE:=VPN Bypass Web UI
 LUCI_DESCRIPTION:=Provides Web UI for VPNBypass service.
 LUCI_DEPENDS:=+luci +vpnbypass
 LUCI_PKGARCH:=all
-PKG_RELEASE:=3
+PKG_RELEASE:=4
 
 include ../../luci.mk
 
