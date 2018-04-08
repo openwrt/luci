@@ -26,9 +26,9 @@ uci:foreach( "openvpn_recipes", "openvpn_recipe",
 )
 
 function s.getPID(section) -- Universal function which returns valid pid # or nil
-	local pid = sys.exec("%s | grep -w '[o]penvpn(%s)' | awk '{print $1}'" % { psstring, section })
+	local pid = sys.exec("%s | grep -w '[o]penvpn(%s)'" % { psstring, section })
 	if pid and #pid > 0 then
-		return tonumber(pid:match("^%d+"))
+		return tonumber(pid:match("%d+"))
 	else
 		return nil
 	end
