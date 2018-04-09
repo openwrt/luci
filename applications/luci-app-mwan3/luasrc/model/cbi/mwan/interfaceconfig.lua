@@ -171,7 +171,7 @@ metric = mwan_interface:option(DummyValue, "metric", translate("Metric"),
 	translate("This displays the metric assigned to this interface in /etc/config/network"))
 metric.rawhtml = true
 function metric.cfgvalue(self, s)
-	local uci = uci.cursor(nil, "/var/state")
+	local uci = require "luci.model.uci".cursor(nil, "/var/state")
 	local metric = uci:get("network", arg[1], "metric")
 	if metric then
 		return metric
