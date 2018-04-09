@@ -247,8 +247,16 @@ if hwtype == "mac80211" then
 		end
 	end
 
+	noscan=s:taboption("advanced", Flag, "noscan", translate("Force 40MHz mode"),"Always use 40MHz channels even if the secondary channel overlaps. Using this option does not comply with IEEE 802.11n-2009!")
+        noscan.optional = true
+
 	s:taboption("advanced", Value, "frag", translate("Fragmentation Threshold"))
 	s:taboption("advanced", Value, "rts", translate("RTS/CTS Threshold"))
+
+	beacon_int = s:taboption("advanced", Value, "beacon_int", translate("Beacon Interval"),"(15 - 65535)")
+        beacon_int.optional = true
+        beacon_int.placeholder = 100
+
 end
 
 
@@ -488,6 +496,16 @@ if hwtype == "mac80211" then
 
 	ifname = s:taboption("advanced", Value, "ifname", translate("Interface name"), translate("Override default interface name"))
 	ifname.optional = true
+
+	short_preamble = s:taboption("general", Flag, "short_preamble", translate("Short Preamble"))
+        short_preamble.default = short_preamble.enabled
+
+        dtim_period = s:taboption("general", Value, "dtim_period", translate("DTIM Interval"),"Delivery Traffic Indication Message Interval")
+        dtim_period.optional = true
+        dtim_period.placeholder = 2
+
+        disassoc_low_ack = s:taboption("general", Flag, "disassoc_low_ack", translate("Disassociate On Low Acknowledgement"),"Allow AP mode to disconnect STAs based on low ACK condition")
+        disassoc_low_ack.default = disassoc_low_ack.enabled
 end
 
 
