@@ -136,8 +136,7 @@ local function require_post_security(target)
 
 				if (type(required_val) == "string" and
 				    request_val ~= required_val) or
-				   (required_val == true and
-				    (request_val == nil or request_val == ""))
+				   (required_val == true and request_val == nil)
 				then
 					return false
 				end
