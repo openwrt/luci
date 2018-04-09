@@ -1,7 +1,7 @@
 /*
  * LuCI Template - Utility header
  *
- *   Copyright (C) 2010-2012 Jo-Philipp Wich <jow@openwrt.org>
+ *   Copyright (C) 2010-2018 Jo-Philipp Wich <jo@mein.io>
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -22,6 +22,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <stdbool.h>
+#include <ctype.h>
 
 
 /* buffer object */
@@ -42,6 +44,8 @@ char * buf_destroy(struct template_buffer *buf);
 char * utf8(const char *s, unsigned int l);
 char * pcdata(const char *s, unsigned int l);
 char * striptags(const char *s, unsigned int l);
+char * urlencode(const char *s, size_t *encoded_len);
+char * urldecode(const char *s, size_t *decoded_len, bool keep_plus);
 
 void luastr_escape(struct template_buffer *out, const char *s, unsigned int l, int escape_xml);
 void luastr_translate(struct template_buffer *out, const char *s, unsigned int l, int escape_xml);

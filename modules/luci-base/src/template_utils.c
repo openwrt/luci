@@ -1,7 +1,7 @@
 /*
  * LuCI Template - Utility functions
  *
- *   Copyright (C) 2010 Jo-Philipp Wich <jow@openwrt.org>
+ *   Copyright (C) 2010-2018 Jo-Philipp Wich <jo@mein.io>
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -426,6 +426,128 @@ char * striptags(const char *s, unsigned int l)
 	}
 
 	return buf_destroy(buf);
+}
+
+
+static inline bool is_urlencode_char(char c)
+{
+	return !((c >= 'a' && c <= 'z') ||
+	         (c >= 'A' && c <= 'Z') ||
+	         (c >= '0' && c <= '9') ||
+	         (c == '$') || (c == '_') ||
+	         (c == '-') || (c == '.') ||
+	         (c == '~'));
+}
+
+/*
+ * URL-encode all special characters in given string and return
+ * encoded copy.
+ *
+ * If no encoding was required, returns NULL. If an encoded_len
+ * pointer is passed, it is set to the length of the encoded string.
+ *
+ * Sets encoded_len and returns NULL if memory allocation failed.
+ */
+char *urlencode(const char *s, size_t *encoded_len)
+{
+	size_t i, enc_len;
+	char *enc, *ptr;
+
+	for (i = 0, enc_len = 0; s[i]; i++)
+		if (is_urlencode_char(s[i]))
+			enc_len += 3;
+		else
+			enc_len++;
+
+	if (i != enc_len)
+	{
+		if (encoded_len)
+			*encoded_len = enc_len;
+
+		enc = calloc(1, enc_len + 1);
+
+		if (!enc)
+			return NULL;
+
+		for (i = 0, ptr = enc; s[i]; i++)
+			if (is_urlencode_char(s[i]))
+				ptr += snprintf(ptr, 4, "%%%02x", (unsigned char)s[i]);
+			else
+				*ptr++ = s[i];
+
+		return enc;
+	}
+
+	return NULL;
+}
+
+/*
+ * URL-decode given string and return decoded copy.
+ *
+ * If no decoding was required, returns NULL. If an decoded_len
+ * pointer is passed, it is set to the length of the decoded string.
+ *
+ * When keep_plus is true, skip decoding of plus ("+") signs into
+ * space (0x20) characters.
+ *
+ * Sets decoded_len and returns NULL if memory allocation failed.
+ */
+
+#define hex(x) \
+	(((x) <= '9') ? ((x) - '0') : \
+		(((x) <= 'F') ? ((x) - 'A' + 10) : \
+			((x) - 'a' + 10)))
+
+char *urldecode(const char *s, size_t *decoded_len, bool keep_plus)
+{
+	bool changed = false;
+	size_t i, dec_len;
+	char *dec, *ptr;
+
+	for (i = 0, dec_len = 0; s[i]; i++, dec_len++)
+	{
+		if (s[i] == '%' && isxdigit(s[i+1]) && isxdigit(s[i+2]))
+		{
+			changed = true;
+			i += 2;
+		}
+		else if (!keep_plus && s[i] == '+')
+		{
+			changed = true;
+		}
+	}
+
+	if (changed)
+	{
+		if (decoded_len)
+			*decoded_len = dec_len;
+
+		dec = calloc(1, dec_len + 1);
+
+		if (!dec)
+			return NULL;
+
+		for (i = 0, ptr = dec; s[i]; i++)
+		{
+			if (s[i] == '%' && isxdigit(s[i+1]) && isxdigit(s[i+2]))
+			{
+				*ptr++ = (char)(16 * hex(s[i+1]) + hex(s[i+2]));
+				i += 2;
+			}
+			else if (!keep_plus && s[i] == '+')
+			{
+				*ptr++ = ' ';
+			}
+			else
+			{
+				*ptr++ = s[i];
+			}
+		}
+
+		return dec;
+	}
+
+	return NULL;
 }
 
 void luastr_escape(struct template_buffer *out, const char *s, unsigned int l,
