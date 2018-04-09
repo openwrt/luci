@@ -115,7 +115,7 @@ s:taboption("advanced", Flag, "nonegcache",
 s:taboption("advanced", Value, "serversfile",
 	translate("Additional servers file"),
 	translate("This file may contain lines like 'server=/domain/1.2.3.4' or 'server=1.2.3.4' for"..
-	        "domain-specific or full upstream <abbr title=\"Domain Name System\">DNS</abbr> servers."))
+		"domain-specific or full upstream <abbr title=\"Domain Name System\">DNS</abbr> servers."))
 
 s:taboption("advanced", Flag, "strictorder",
 	translate("Strict order"),
@@ -212,6 +212,12 @@ cq.optional = true
 cq.datatype = "uinteger"
 cq.placeholder = 150
 
+cs = s:taboption("advanced", Value, "cachesize",
+	translate("Size of DNS query cache"),
+	translate("Maximum number of cached DNS entries"))
+cs.optional = true
+cs.datatype = "uinteger"
+cs.placeholder = 150
 
 s:taboption("tftp", Flag, "enable_tftp",
 	translate("Enable TFTP server")).optional = true
@@ -295,7 +301,7 @@ ip = s:option(Value, "ip", translate("<abbr title=\"Internet Protocol Version 4\
 ip.datatype = "or(ip4addr,'ignore')"
 
 time = s:option(Value, "leasetime", translate("Lease time"))
-time.rmempty  = true
+time.rmempty = true
 
 duid = s:option(Value, "duid", translate("<abbr title=\"The DHCP Unique Identifier\">DUID</abbr>"))
 duid.datatype = "and(rangelength(20,36),hexstring)"
