@@ -75,11 +75,16 @@ function error404(message)
 	http.status(404, "Not Found")
 	message = message or "Not Found"
 
-	require("luci.template")
-	if not util.copcall(luci.template.render, "error404") then
+	local function render()
+		local template = require "luci.template"
+		template.render("error404")
+	end
+
+	if not util.copcall(render) then
 		http.prepare_content("text/plain")
 		http.write(message)
 	end
+
 	return false
 end
 
