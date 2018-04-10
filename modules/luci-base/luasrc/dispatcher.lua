@@ -113,7 +113,8 @@ function httpdispatch(request, prefix)
 		end
 	end
 
-	for node in pathinfo:gmatch("[^/]+") do
+	local node
+	for node in pathinfo:gmatch("[^/%z]+") do
 		r[#r+1] = node
 	end
 
