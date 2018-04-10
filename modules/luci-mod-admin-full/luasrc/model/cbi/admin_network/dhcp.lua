@@ -214,9 +214,9 @@ cq.placeholder = 150
 
 cs = s:taboption("advanced", Value, "cachesize",
 	translate("Size of DNS query cache"),
-	translate("Maximum number of cached DNS entries"))
+	translate("Number of cached DNS entries (max is 10000, 0 is no caching)"))
 cs.optional = true
-cs.datatype = "uinteger"
+cs.datatype = "range(0,10000)"
 cs.placeholder = 150
 
 s:taboption("tftp", Flag, "enable_tftp",
