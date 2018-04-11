@@ -85,7 +85,8 @@ function diagnosticsData(interface, task)
 	function getInterfaceNumber(interface)
 		local number = 0
 		local interfaceNumber
-		uci.cursor():foreach("mwan3", "interface",
+		local uci = require "luci.model.uci".cursor()
+		uci:foreach("mwan3", "interface",
 			function (section)
 				number = number+1
 				if section[".name"] == interface then
@@ -130,7 +131,7 @@ function diagnosticsData(interface, task)
 	local results = ""
 	local number = getInterfaceNumber(interface)
 
-	local uci = uci.cursor(nil, "/var/state")
+	local uci = require "luci.model.uci".cursor(nil, "/var/state")
 	local device = uci:get("network", interface, "ifname")
 
 	luci.http.prepare_content("text/plain")
