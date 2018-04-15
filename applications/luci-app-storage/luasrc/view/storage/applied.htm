@@ -1,0 +1,22 @@
+<%#
+ Copyright 2017 Alberto Bursi <alberto.bursi@outlook.it>
+ Licensed to the public under the Apache License 2.0.
+-%>
+
+<%+header%>
+
+<h2 name="content">Setup completed!</h2>
+<br />
+<form method="post" action="<%=url('admin/services/storage')%>">
+	<input type="hidden" name="token" value="<%=token%>" />
+	<input id="back-button" type="submit" class="cbi-button cbi-button-apply" value="<%:Prepare another drive%>" />
+</form>
+
+<h2 name="content">Output of issued commands</h2>
+<br />
+
+<p><%=output%></p>
+
+<hr />
+
+<%+footer%>

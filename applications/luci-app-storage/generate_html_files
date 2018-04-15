@@ -1,0 +1,186 @@
+#! /bin/sh
+
+#  Copyright 2017 Alberto Bursi <alberto.bursi@outlook.it>
+#  Licensed to the public under the Apache License 2.0.
+
+# this script helps generate/update the html files and function list since they are quite large
+# doing it by hand would be tedious and error-prone
+
+
+block_device_list="sda sdb sdc sdd sde sdf sdg sdh sdi sdj sdk sdl sdm sdn sdo sdp sdq sdr sds sdt sdu sdv sdw sdx sdy sdz"
+
+filesystem_list="ext4 xfs f2fs vfat"
+
+generate_select_storage_htm(){
+
+file_name="select_storage.htm"
+
+#header part that stays the same
+cat << EOF > ./luasrc/view/storage/$file_name
+<%#
+ Copyright 2017 Alberto Bursi <alberto.bursi@outlook.it>
+ Licensed to the public under the Apache License 2.0.
+
+ this file was mostly machine-generated using a script due because of its structure is quite repetitive,
+ it's recommended to use the same tools to generate updated versions instead of doing it manually
+-%>
+
+<%+header%>
+
+<h2 name="content"><%:Select drive to use%></h2>
+<br />
+
+<p class="alert-message warning"><%:Warning: This wizard deletes and reformats the selected drive(s). ALL DATA IN THE SELECTED DRIVES WILL BE DELETED.%> </p>
+
+EOF
+
+#part that is generated
+
+for block_device in $block_device_list ; do
+
+echo '<%- if '$block_device' == "y" then -%>' >> ./luasrc/view/storage/$file_name
+
+	for filesystem in $filesystem_list ; do
+
+	block_and_filesystem="$block_device"_"$filesystem"
+
+	cat << EOF >> ./luasrc/view/storage/$file_name
+		<%- if chosen_filesystem == "$filesystem" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_$block_and_filesystem')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-$block_device-$filesystem-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive $block_device to $filesystem%>" />
+	</form>
+	<%- end -%>
+EOF
+	done
+
+echo '<%- end -%>' >> ./luasrc/view/storage/$file_name
+
+done
+
+# footer part that stays the same
+cat << EOF >> ./luasrc/view/storage/$file_name
+<hr />
+
+<%+footer%>
+EOF
+
+}
+
+generate_select_filesystem_htm(){
+
+file_name="select_filesystem.htm"
+
+echo "" > ./luasrc/view/storage/$file_name
+
+#header part that stays the same
+cat << EOF >> ./luasrc/view/storage/$file_name
+<%#
+ Copyright 2017 Alberto Bursi <alberto.bursi@outlook.it>
+ Licensed to the public under the Apache License 2.0.
+
+ this file was mostly machine-generated using a script due because of its structure is quite repetitive,
+ it's recommended to use the same tools to generate updated versions instead of doing it manually
+-%>
+
+<%+header%>
+
+<h2 name="content"><%:Select filesystem to use%></h2>
+<br />
+
+<p class="alert-message warning"><%:Warning: This wizard deletes and reformats the selected drive(s). ALL DATA IN THE SELECTED DRIVES WILL BE DELETED.%> </p>
+
+EOF
+
+#part that is generated
+for filesystem in $filesystem_list ; do
+
+cat << EOF >> ./luasrc/view/storage/$file_name
+<%- if fs_$filesystem == "y" then -%>
+	<form method="post" action="<%=url('admin/services/storage/select_drive_$filesystem')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-$filesystem-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format a single drive with $filesystem%>" />
+	</form>
+<%- end -%>
+EOF
+done
+
+# footer part that stays the same
+cat << EOF >> ./luasrc/view/storage/$file_name
+<hr />
+
+<%+footer%>
+EOF
+
+}
+
+generate_function_calls(){
+
+file_name="function_calls_to_paste"
+
+	echo "paste these function calls in the 'function index()' block of ./control/storage.lua" > ./$file_name
+
+for filesystem in $filesystem_list ; do
+
+	cat << EOF >> ./$file_name
+	entry({"admin", "services", "storage", "select_drive_$filesystem"}, post("action_select_drive_$filesystem"))
+EOF
+
+	done
+
+for block_device in $block_device_list ; do
+
+	for filesystem in $filesystem_list ; do
+
+	block_and_filesystem="$block_device"_"$filesystem"
+
+	cat << EOF >> ./$file_name
+	entry({"admin", "services", "storage", "format_$block_and_filesystem"}, post("action_format_$block_and_filesystem"))
+EOF
+
+	done
+
+done
+
+echo "" >> ./$file_name
+echo "" >> ./$file_name
+echo "paste these function calls at the end of ./control/storage.lua, replacing the similar ones" >> ./$file_name
+
+
+for filesystem in $filesystem_list ; do
+
+	cat << EOF >> ./$file_name
+
+function action_select_drive_$filesystem()
+	action_select_drive_generic("$filesystem")
+end
+EOF
+
+done
+
+for block_device in $block_device_list ; do
+
+	for filesystem in $filesystem_list ; do
+
+	block_and_filesystem="$block_device"_"$filesystem"
+
+	cat << EOF >> ./$file_name
+
+function action_format_$block_and_filesystem()
+	format_block_device_generic("$block_device", "$filesystem")
+end
+EOF
+
+	done
+
+done
+
+}
+
+# calling functions
+
+generate_select_storage_htm
+
+generate_select_filesystem_htm
+
+generate_function_calls

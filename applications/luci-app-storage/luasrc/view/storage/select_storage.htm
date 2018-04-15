@@ -1,0 +1,694 @@
+<%#
+ Copyright 2017 Alberto Bursi <alberto.bursi@outlook.it>
+ Licensed to the public under the Apache License 2.0.
+
+ this file was mostly machine-generated using a script due because of its structure is quite repetitive,
+ it's recommended to use the same tools to generate updated versions instead of doing it manually
+-%>
+
+<%+header%>
+
+<h2 name="content"><%:Select drive to use%></h2>
+<br />
+
+<p class="alert-message warning"><%:Warning: This wizard deletes and reformats the selected drive(s). ALL DATA IN THE SELECTED DRIVES WILL BE DELETED.%> </p>
+
+<%- if sda == "y" then -%>
+		<%- if chosen_filesystem == "ext4" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sda_ext4')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sda-ext4-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sda to ext4%>" />
+	</form>
+	<%- end -%>
+		<%- if chosen_filesystem == "xfs" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sda_xfs')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sda-xfs-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sda to xfs%>" />
+	</form>
+	<%- end -%>
+		<%- if chosen_filesystem == "f2fs" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sda_f2fs')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sda-f2fs-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sda to f2fs%>" />
+	</form>
+	<%- end -%>
+		<%- if chosen_filesystem == "vfat" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sda_vfat')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sda-vfat-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sda to vfat%>" />
+	</form>
+	<%- end -%>
+<%- end -%>
+<%- if sdb == "y" then -%>
+		<%- if chosen_filesystem == "ext4" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdb_ext4')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdb-ext4-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdb to ext4%>" />
+	</form>
+	<%- end -%>
+		<%- if chosen_filesystem == "xfs" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdb_xfs')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdb-xfs-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdb to xfs%>" />
+	</form>
+	<%- end -%>
+		<%- if chosen_filesystem == "f2fs" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdb_f2fs')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdb-f2fs-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdb to f2fs%>" />
+	</form>
+	<%- end -%>
+		<%- if chosen_filesystem == "vfat" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdb_vfat')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdb-vfat-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdb to vfat%>" />
+	</form>
+	<%- end -%>
+<%- end -%>
+<%- if sdc == "y" then -%>
+		<%- if chosen_filesystem == "ext4" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdc_ext4')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdc-ext4-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdc to ext4%>" />
+	</form>
+	<%- end -%>
+		<%- if chosen_filesystem == "xfs" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdc_xfs')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdc-xfs-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdc to xfs%>" />
+	</form>
+	<%- end -%>
+		<%- if chosen_filesystem == "f2fs" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdc_f2fs')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdc-f2fs-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdc to f2fs%>" />
+	</form>
+	<%- end -%>
+		<%- if chosen_filesystem == "vfat" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdc_vfat')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdc-vfat-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdc to vfat%>" />
+	</form>
+	<%- end -%>
+<%- end -%>
+<%- if sdd == "y" then -%>
+		<%- if chosen_filesystem == "ext4" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdd_ext4')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdd-ext4-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdd to ext4%>" />
+	</form>
+	<%- end -%>
+		<%- if chosen_filesystem == "xfs" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdd_xfs')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdd-xfs-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdd to xfs%>" />
+	</form>
+	<%- end -%>
+		<%- if chosen_filesystem == "f2fs" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdd_f2fs')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdd-f2fs-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdd to f2fs%>" />
+	</form>
+	<%- end -%>
+		<%- if chosen_filesystem == "vfat" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdd_vfat')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdd-vfat-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdd to vfat%>" />
+	</form>
+	<%- end -%>
+<%- end -%>
+<%- if sde == "y" then -%>
+		<%- if chosen_filesystem == "ext4" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sde_ext4')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sde-ext4-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sde to ext4%>" />
+	</form>
+	<%- end -%>
+		<%- if chosen_filesystem == "xfs" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sde_xfs')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sde-xfs-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sde to xfs%>" />
+	</form>
+	<%- end -%>
+		<%- if chosen_filesystem == "f2fs" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sde_f2fs')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sde-f2fs-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sde to f2fs%>" />
+	</form>
+	<%- end -%>
+		<%- if chosen_filesystem == "vfat" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sde_vfat')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sde-vfat-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sde to vfat%>" />
+	</form>
+	<%- end -%>
+<%- end -%>
+<%- if sdf == "y" then -%>
+		<%- if chosen_filesystem == "ext4" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdf_ext4')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdf-ext4-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdf to ext4%>" />
+	</form>
+	<%- end -%>
+		<%- if chosen_filesystem == "xfs" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdf_xfs')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdf-xfs-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdf to xfs%>" />
+	</form>
+	<%- end -%>
+		<%- if chosen_filesystem == "f2fs" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdf_f2fs')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdf-f2fs-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdf to f2fs%>" />
+	</form>
+	<%- end -%>
+		<%- if chosen_filesystem == "vfat" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdf_vfat')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdf-vfat-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdf to vfat%>" />
+	</form>
+	<%- end -%>
+<%- end -%>
+<%- if sdg == "y" then -%>
+		<%- if chosen_filesystem == "ext4" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdg_ext4')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdg-ext4-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdg to ext4%>" />
+	</form>
+	<%- end -%>
+		<%- if chosen_filesystem == "xfs" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdg_xfs')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdg-xfs-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdg to xfs%>" />
+	</form>
+	<%- end -%>
+		<%- if chosen_filesystem == "f2fs" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdg_f2fs')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdg-f2fs-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdg to f2fs%>" />
+	</form>
+	<%- end -%>
+		<%- if chosen_filesystem == "vfat" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdg_vfat')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdg-vfat-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdg to vfat%>" />
+	</form>
+	<%- end -%>
+<%- end -%>
+<%- if sdh == "y" then -%>
+		<%- if chosen_filesystem == "ext4" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdh_ext4')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdh-ext4-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdh to ext4%>" />
+	</form>
+	<%- end -%>
+		<%- if chosen_filesystem == "xfs" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdh_xfs')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdh-xfs-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdh to xfs%>" />
+	</form>
+	<%- end -%>
+		<%- if chosen_filesystem == "f2fs" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdh_f2fs')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdh-f2fs-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdh to f2fs%>" />
+	</form>
+	<%- end -%>
+		<%- if chosen_filesystem == "vfat" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdh_vfat')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdh-vfat-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdh to vfat%>" />
+	</form>
+	<%- end -%>
+<%- end -%>
+<%- if sdi == "y" then -%>
+		<%- if chosen_filesystem == "ext4" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdi_ext4')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdi-ext4-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdi to ext4%>" />
+	</form>
+	<%- end -%>
+		<%- if chosen_filesystem == "xfs" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdi_xfs')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdi-xfs-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdi to xfs%>" />
+	</form>
+	<%- end -%>
+		<%- if chosen_filesystem == "f2fs" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdi_f2fs')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdi-f2fs-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdi to f2fs%>" />
+	</form>
+	<%- end -%>
+		<%- if chosen_filesystem == "vfat" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdi_vfat')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdi-vfat-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdi to vfat%>" />
+	</form>
+	<%- end -%>
+<%- end -%>
+<%- if sdj == "y" then -%>
+		<%- if chosen_filesystem == "ext4" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdj_ext4')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdj-ext4-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdj to ext4%>" />
+	</form>
+	<%- end -%>
+		<%- if chosen_filesystem == "xfs" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdj_xfs')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdj-xfs-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdj to xfs%>" />
+	</form>
+	<%- end -%>
+		<%- if chosen_filesystem == "f2fs" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdj_f2fs')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdj-f2fs-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdj to f2fs%>" />
+	</form>
+	<%- end -%>
+		<%- if chosen_filesystem == "vfat" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdj_vfat')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdj-vfat-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdj to vfat%>" />
+	</form>
+	<%- end -%>
+<%- end -%>
+<%- if sdk == "y" then -%>
+		<%- if chosen_filesystem == "ext4" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdk_ext4')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdk-ext4-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdk to ext4%>" />
+	</form>
+	<%- end -%>
+		<%- if chosen_filesystem == "xfs" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdk_xfs')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdk-xfs-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdk to xfs%>" />
+	</form>
+	<%- end -%>
+		<%- if chosen_filesystem == "f2fs" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdk_f2fs')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdk-f2fs-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdk to f2fs%>" />
+	</form>
+	<%- end -%>
+		<%- if chosen_filesystem == "vfat" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdk_vfat')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdk-vfat-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdk to vfat%>" />
+	</form>
+	<%- end -%>
+<%- end -%>
+<%- if sdl == "y" then -%>
+		<%- if chosen_filesystem == "ext4" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdl_ext4')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdl-ext4-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdl to ext4%>" />
+	</form>
+	<%- end -%>
+		<%- if chosen_filesystem == "xfs" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdl_xfs')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdl-xfs-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdl to xfs%>" />
+	</form>
+	<%- end -%>
+		<%- if chosen_filesystem == "f2fs" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdl_f2fs')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdl-f2fs-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdl to f2fs%>" />
+	</form>
+	<%- end -%>
+		<%- if chosen_filesystem == "vfat" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdl_vfat')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdl-vfat-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdl to vfat%>" />
+	</form>
+	<%- end -%>
+<%- end -%>
+<%- if sdm == "y" then -%>
+		<%- if chosen_filesystem == "ext4" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdm_ext4')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdm-ext4-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdm to ext4%>" />
+	</form>
+	<%- end -%>
+		<%- if chosen_filesystem == "xfs" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdm_xfs')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdm-xfs-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdm to xfs%>" />
+	</form>
+	<%- end -%>
+		<%- if chosen_filesystem == "f2fs" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdm_f2fs')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdm-f2fs-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdm to f2fs%>" />
+	</form>
+	<%- end -%>
+		<%- if chosen_filesystem == "vfat" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdm_vfat')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdm-vfat-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdm to vfat%>" />
+	</form>
+	<%- end -%>
+<%- end -%>
+<%- if sdn == "y" then -%>
+		<%- if chosen_filesystem == "ext4" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdn_ext4')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdn-ext4-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdn to ext4%>" />
+	</form>
+	<%- end -%>
+		<%- if chosen_filesystem == "xfs" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdn_xfs')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdn-xfs-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdn to xfs%>" />
+	</form>
+	<%- end -%>
+		<%- if chosen_filesystem == "f2fs" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdn_f2fs')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdn-f2fs-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdn to f2fs%>" />
+	</form>
+	<%- end -%>
+		<%- if chosen_filesystem == "vfat" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdn_vfat')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdn-vfat-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdn to vfat%>" />
+	</form>
+	<%- end -%>
+<%- end -%>
+<%- if sdo == "y" then -%>
+		<%- if chosen_filesystem == "ext4" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdo_ext4')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdo-ext4-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdo to ext4%>" />
+	</form>
+	<%- end -%>
+		<%- if chosen_filesystem == "xfs" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdo_xfs')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdo-xfs-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdo to xfs%>" />
+	</form>
+	<%- end -%>
+		<%- if chosen_filesystem == "f2fs" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdo_f2fs')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdo-f2fs-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdo to f2fs%>" />
+	</form>
+	<%- end -%>
+		<%- if chosen_filesystem == "vfat" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdo_vfat')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdo-vfat-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdo to vfat%>" />
+	</form>
+	<%- end -%>
+<%- end -%>
+<%- if sdp == "y" then -%>
+		<%- if chosen_filesystem == "ext4" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdp_ext4')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdp-ext4-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdp to ext4%>" />
+	</form>
+	<%- end -%>
+		<%- if chosen_filesystem == "xfs" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdp_xfs')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdp-xfs-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdp to xfs%>" />
+	</form>
+	<%- end -%>
+		<%- if chosen_filesystem == "f2fs" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdp_f2fs')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdp-f2fs-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdp to f2fs%>" />
+	</form>
+	<%- end -%>
+		<%- if chosen_filesystem == "vfat" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdp_vfat')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdp-vfat-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdp to vfat%>" />
+	</form>
+	<%- end -%>
+<%- end -%>
+<%- if sdq == "y" then -%>
+		<%- if chosen_filesystem == "ext4" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdq_ext4')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdq-ext4-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdq to ext4%>" />
+	</form>
+	<%- end -%>
+		<%- if chosen_filesystem == "xfs" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdq_xfs')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdq-xfs-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdq to xfs%>" />
+	</form>
+	<%- end -%>
+		<%- if chosen_filesystem == "f2fs" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdq_f2fs')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdq-f2fs-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdq to f2fs%>" />
+	</form>
+	<%- end -%>
+		<%- if chosen_filesystem == "vfat" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdq_vfat')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdq-vfat-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdq to vfat%>" />
+	</form>
+	<%- end -%>
+<%- end -%>
+<%- if sdr == "y" then -%>
+		<%- if chosen_filesystem == "ext4" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdr_ext4')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdr-ext4-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdr to ext4%>" />
+	</form>
+	<%- end -%>
+		<%- if chosen_filesystem == "xfs" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdr_xfs')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdr-xfs-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdr to xfs%>" />
+	</form>
+	<%- end -%>
+		<%- if chosen_filesystem == "f2fs" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdr_f2fs')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdr-f2fs-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdr to f2fs%>" />
+	</form>
+	<%- end -%>
+		<%- if chosen_filesystem == "vfat" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdr_vfat')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdr-vfat-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdr to vfat%>" />
+	</form>
+	<%- end -%>
+<%- end -%>
+<%- if sds == "y" then -%>
+		<%- if chosen_filesystem == "ext4" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sds_ext4')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sds-ext4-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sds to ext4%>" />
+	</form>
+	<%- end -%>
+		<%- if chosen_filesystem == "xfs" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sds_xfs')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sds-xfs-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sds to xfs%>" />
+	</form>
+	<%- end -%>
+		<%- if chosen_filesystem == "f2fs" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sds_f2fs')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sds-f2fs-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sds to f2fs%>" />
+	</form>
+	<%- end -%>
+		<%- if chosen_filesystem == "vfat" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sds_vfat')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sds-vfat-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sds to vfat%>" />
+	</form>
+	<%- end -%>
+<%- end -%>
+<%- if sdt == "y" then -%>
+		<%- if chosen_filesystem == "ext4" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdt_ext4')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdt-ext4-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdt to ext4%>" />
+	</form>
+	<%- end -%>
+		<%- if chosen_filesystem == "xfs" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdt_xfs')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdt-xfs-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdt to xfs%>" />
+	</form>
+	<%- end -%>
+		<%- if chosen_filesystem == "f2fs" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdt_f2fs')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdt-f2fs-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdt to f2fs%>" />
+	</form>
+	<%- end -%>
+		<%- if chosen_filesystem == "vfat" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdt_vfat')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdt-vfat-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdt to vfat%>" />
+	</form>
+	<%- end -%>
+<%- end -%>
+<%- if sdu == "y" then -%>
+		<%- if chosen_filesystem == "ext4" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdu_ext4')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdu-ext4-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdu to ext4%>" />
+	</form>
+	<%- end -%>
+		<%- if chosen_filesystem == "xfs" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdu_xfs')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdu-xfs-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdu to xfs%>" />
+	</form>
+	<%- end -%>
+		<%- if chosen_filesystem == "f2fs" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdu_f2fs')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdu-f2fs-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdu to f2fs%>" />
+	</form>
+	<%- end -%>
+		<%- if chosen_filesystem == "vfat" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdu_vfat')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdu-vfat-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdu to vfat%>" />
+	</form>
+	<%- end -%>
+<%- end -%>
+<%- if sdv == "y" then -%>
+		<%- if chosen_filesystem == "ext4" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdv_ext4')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdv-ext4-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdv to ext4%>" />
+	</form>
+	<%- end -%>
+		<%- if chosen_filesystem == "xfs" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdv_xfs')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdv-xfs-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdv to xfs%>" />
+	</form>
+	<%- end -%>
+		<%- if chosen_filesystem == "f2fs" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdv_f2fs')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdv-f2fs-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdv to f2fs%>" />
+	</form>
+	<%- end -%>
+		<%- if chosen_filesystem == "vfat" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdv_vfat')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdv-vfat-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdv to vfat%>" />
+	</form>
+	<%- end -%>
+<%- end -%>
+<%- if sdw == "y" then -%>
+		<%- if chosen_filesystem == "ext4" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdw_ext4')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdw-ext4-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdw to ext4%>" />
+	</form>
+	<%- end -%>
+		<%- if chosen_filesystem == "xfs" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdw_xfs')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdw-xfs-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdw to xfs%>" />
+	</form>
+	<%- end -%>
+		<%- if chosen_filesystem == "f2fs" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdw_f2fs')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdw-f2fs-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdw to f2fs%>" />
+	</form>
+	<%- end -%>
+		<%- if chosen_filesystem == "vfat" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdw_vfat')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdw-vfat-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdw to vfat%>" />
+	</form>
+	<%- end -%>
+<%- end -%>
+<%- if sdx == "y" then -%>
+		<%- if chosen_filesystem == "ext4" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdx_ext4')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdx-ext4-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdx to ext4%>" />
+	</form>
+	<%- end -%>
+		<%- if chosen_filesystem == "xfs" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdx_xfs')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdx-xfs-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdx to xfs%>" />
+	</form>
+	<%- end -%>
+		<%- if chosen_filesystem == "f2fs" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdx_f2fs')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdx-f2fs-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdx to f2fs%>" />
+	</form>
+	<%- end -%>
+		<%- if chosen_filesystem == "vfat" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdx_vfat')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdx-vfat-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdx to vfat%>" />
+	</form>
+	<%- end -%>
+<%- end -%>
+<%- if sdy == "y" then -%>
+		<%- if chosen_filesystem == "ext4" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdy_ext4')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdy-ext4-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdy to ext4%>" />
+	</form>
+	<%- end -%>
+		<%- if chosen_filesystem == "xfs" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdy_xfs')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdy-xfs-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdy to xfs%>" />
+	</form>
+	<%- end -%>
+		<%- if chosen_filesystem == "f2fs" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdy_f2fs')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdy-f2fs-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdy to f2fs%>" />
+	</form>
+	<%- end -%>
+		<%- if chosen_filesystem == "vfat" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdy_vfat')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdy-vfat-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdy to vfat%>" />
+	</form>
+	<%- end -%>
+<%- end -%>
+<%- if sdz == "y" then -%>
+		<%- if chosen_filesystem == "ext4" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdz_ext4')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdz-ext4-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdz to ext4%>" />
+	</form>
+	<%- end -%>
+		<%- if chosen_filesystem == "xfs" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdz_xfs')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdz-xfs-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdz to xfs%>" />
+	</form>
+	<%- end -%>
+		<%- if chosen_filesystem == "f2fs" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdz_f2fs')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdz-f2fs-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdz to f2fs%>" />
+	</form>
+	<%- end -%>
+		<%- if chosen_filesystem == "vfat" then -%>
+		<form method="post" action="<%=url('admin/services/storage/format_sdz_vfat')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-sdz-vfat-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format drive sdz to vfat%>" />
+	</form>
+	<%- end -%>
+<%- end -%>
+<hr />
+
+<%+footer%>
