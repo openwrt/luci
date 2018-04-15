@@ -21,6 +21,7 @@ local function prepare_fd(target)
 	-- Acquire lock
 	local stat, code, msg = file:lock("tlock")
 	if not stat then
+		file:close()
 		return stat, code, msg
 	end
 	

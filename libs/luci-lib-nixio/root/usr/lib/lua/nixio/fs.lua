@@ -55,6 +55,7 @@ function datacopy(src, dest, size)
 	
 	local fdout, code, msg = nixio.open(dest, "w")
 	if not fdout then
+		fdin:close()
 		return nil, code, msg
 	end	
 	

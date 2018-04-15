@@ -60,7 +60,7 @@ end
 
 
 function request_to_buffer(uri, options)
-	local source, code, msg = request_to_source(uri, options)
+	local source, code, msg, sock = request_to_source(uri, options)
 	local output = {}
 	
 	if not source then
@@ -68,6 +68,10 @@ function request_to_buffer(uri, options)
 	end
 	
 	source, code = ltn12.pump.all(source, (ltn12.sink.table(output)))
+	
+	if not sock then
+		sock:close()
+	end
 	
 	if not source then
 		return nil, code
@@ -81,13 +85,13 @@ function request_to_source(uri, options)
 	if not status then
 		return status, response, buffer
 	elseif status ~= 200 and status ~= 206 then
-		return nil, status, buffer
+		return nil, status, buffer, sock
 	end
 	
 	if response.headers["Transfer-Encoding"] == "chunked" then
-		return chunksource(sock, buffer)
+		return chunksource(sock, buffer), sock
 	else
-		return ltn12.source.cat(ltn12.source.string(buffer), sock:blocksource())
+		return ltn12.source.cat(ltn12.source.string(buffer), sock:blocksource()), sock
 	end
 end
 
