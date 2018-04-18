@@ -7,18 +7,6 @@ decoding and to retrive form data from raw http messages.
 module "luci.http.protocol"
 
 ---[[
-Decode an urlencoded string - optionally without decoding
-
-the "+" sign to " " - and return the decoded string.
-@class function
-@name urldecode
-@param str		Input string in x-www-urlencoded format
-@param no_plus	Don't decode "+" signs to spaces
-@return			The decoded string
-@see				urlencode
-]]
-
----[[
 Extract and split urlencoded data pairs, separated bei either "&" or ";"
 
 from given url or string. Returns a table with urldecoded values.
@@ -31,16 +19,6 @@ containing the corresponding values.
 @param tbl	Use the given table for storing values (optional)
 @return		Table containing the urldecoded parameters
 @see			urlencode_params
-]]
-
----[[
-Encode given string to x-www-urlencoded format.
-
-@class function
-@name urlencode
-@param str	String to encode
-@return		String containing the encoded data
-@see			urldecode
 ]]
 
 ---[[

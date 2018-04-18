@@ -12,7 +12,7 @@ LUCI_TYPE:=mod
 LUCI_BASENAME:=base
 
 LUCI_TITLE:=LuCI core libraries
-LUCI_DEPENDS:=+lua +libuci-lua +luci-lib-nixio +luci-lib-ip +rpcd +libubus-lua +luci-lib-jsonc
+LUCI_DEPENDS:=+lua +libuci-lua +luci-lib-nixio +luci-lib-ip +rpcd +libubus-lua +luci-lib-jsonc +liblucihttp-lua
 LUCI_EXTRA_DEPENDS:=libuci-lua (>= 2018-01-01)
 
 PKG_SOURCE:=LuaSrcDiet-0.12.1.tar.bz2

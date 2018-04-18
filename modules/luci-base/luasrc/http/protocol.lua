@@ -6,26 +6,9 @@
 module("luci.http.protocol", package.seeall)
 
 local ltn12 = require("luci.ltn12")
+local util = require("luci.util")
 
 HTTP_MAX_CONTENT      = 1024*8		-- 8 kB maximum content size
-
--- the "+" sign to " " - and return the decoded string.
-function urldecode( str, no_plus )
-
-	local function __chrdec( hex )
-		return string.char( tonumber( hex, 16 ) )
-	end
-
-	if type(str) == "string" then
-		if not no_plus then
-			str = str:gsub( "+", " " )
-		end
-
-		str = str:gsub( "%%([a-fA-F0-9][a-fA-F0-9])", __chrdec )
-	end
-
-	return str
-end
 
 -- from given url or string. Returns a table with urldecoded values.
 -- Simple parameters are stored as string values associated with the parameter
@@ -42,8 +25,8 @@ function urldecode_params( url, tbl )
 	for pair in url:gmatch( "[^&;]+" ) do
 
 		-- find key and value
-		local key = urldecode( pair:match("^([^=]+)")     )
-		local val = urldecode( pair:match("^[^=]+=(.+)$") )
+		local key = util.urldecode( pair:match("^([^=]+)")     )
+		local val = util.urldecode( pair:match("^[^=]+=(.+)$") )
 
 		-- store
 		if type(key) == "string" and key:len() > 0 then
@@ -62,24 +45,6 @@ function urldecode_params( url, tbl )
 	return params
 end
 
-function urlencode( str )
-
-	local function __chrenc( chr )
-		return string.format(
-			"%%%02x", string.byte( chr )
-		)
-	end
-
-	if type(str) == "string" then
-		str = str:gsub(
-			"([^a-zA-Z0-9$_%-%.%~])",
-			__chrenc
-		)
-	end
-
-	return str
-end
-
 -- separated by "&". Tables are encoded as parameters with multiple values by
 -- repeating the parameter name with each value.
 function urlencode_params( tbl )
@@ -89,11 +54,11 @@ function urlencode_params( tbl )
 		if type(v) == "table" then
 			for i, v2 in ipairs(v) do
 				enc = enc .. ( #enc > 0 and "&" or "" ) ..
-					urlencode(k) .. "=" .. urlencode(v2)
+					util.urlencode(k) .. "=" .. util.urlencode(v2)
 			end
 		else
 			enc = enc .. ( #enc > 0 and "&" or "" ) ..
-				urlencode(k) .. "=" .. urlencode(v)
+				util.urlencode(k) .. "=" .. util.urlencode(v)
 		end
 	end
 

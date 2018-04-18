@@ -267,9 +267,9 @@ function build_querystring(q)
 	return table.concat(s, "")
 end
 
-urldecode = protocol.urldecode
+urldecode = util.urldecode
 
-urlencode = protocol.urlencode
+urlencode = util.urlencode
 
 function write_json(x)
 	util.serialize_json(x, write)
