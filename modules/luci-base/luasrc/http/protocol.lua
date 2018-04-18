@@ -1,12 +1,16 @@
--- Copyright 2008 Freifunk Leipzig / Jo-Philipp Wich <jow@openwrt.org>
+-- Copyright 2008-2018 Jo-Philipp Wich <jo@mein.io>
 -- Licensed to the public under the Apache License 2.0.
 
 -- This class contains several functions useful for http message- and content
 -- decoding and to retrive form data from raw http messages.
-module("luci.http.protocol", package.seeall)
 
-local ltn12 = require("luci.ltn12")
-local util = require("luci.util")
+local require, type, tonumber = require, type, tonumber
+local table, pairs, ipairs, pcall = table, pairs, ipairs, pcall
+
+module "luci.http.protocol"
+
+local ltn12 = require "luci.ltn12"
+local lhttp = require "lucihttp"
 
 HTTP_MAX_CONTENT      = 1024*8		-- 8 kB maximum content size
 
@@ -14,32 +18,25 @@ HTTP_MAX_CONTENT      = 1024*8		-- 8 kB maximum content size
 -- Simple parameters are stored as string values associated with the parameter
 -- name within the table. Parameters with multiple values are stored as array
 -- containing the corresponding values.
-function urldecode_params( url, tbl )
-
+function urldecode_params(url, tbl)
+	local parser, name
 	local params = tbl or { }
 
-	if url:find("?") then
-		url = url:gsub( "^.+%?([^?]+)", "%1" )
-	end
-
-	for pair in url:gmatch( "[^&;]+" ) do
-
-		-- find key and value
-		local key = util.urldecode( pair:match("^([^=]+)")     )
-		local val = util.urldecode( pair:match("^[^=]+=(.+)$") )
-
-		-- store
-		if type(key) == "string" and key:len() > 0 then
-			if type(val) ~= "string" then val = "" end
-
-			if not params[key] then
-				params[key] = val
-			elseif type(params[key]) ~= "table" then
-				params[key] = { params[key], val }
-			else
-				table.insert( params[key], val )
-			end
+	parser = lhttp.urlencoded_parser(function (what, buffer, length)
+		if what == parser.TUPLE then
+			name, value = nil, nil
+		elseif what == parser.NAME then
+			name = lhttp.urldecode(buffer)
+		elseif what == parser.VALUE and name then
+			params[name] = lhttp.urldecode(buffer) or ""
 		end
+
+		return true
+	end)
+
+	if parser then
+		parser:parse((url or ""):match("[^?]*$"))
+		parser:parse(nil)
 	end
 
 	return params
@@ -47,185 +44,37 @@ end
 
 -- separated by "&". Tables are encoded as parameters with multiple values by
 -- repeating the parameter name with each value.
-function urlencode_params( tbl )
-	local enc = ""
-
+function urlencode_params(tbl)
+	local k, v
+	local n, enc = 1, {}
 	for k, v in pairs(tbl) do
 		if type(v) == "table" then
+			local i, v2
 			for i, v2 in ipairs(v) do
-				enc = enc .. ( #enc > 0 and "&" or "" ) ..
-					util.urlencode(k) .. "=" .. util.urlencode(v2)
-			end
-		else
-			enc = enc .. ( #enc > 0 and "&" or "" ) ..
-				util.urlencode(k) .. "=" .. util.urlencode(v)
-		end
-	end
-
-	return enc
-end
-
--- (Internal function)
--- Initialize given parameter and coerce string into table when the parameter
--- already exists.
-local function __initval( tbl, key )
-	if tbl[key] == nil then
-		tbl[key] = ""
-	elseif type(tbl[key]) == "string" then
-		tbl[key] = { tbl[key], "" }
-	else
-		table.insert( tbl[key], "" )
-	end
-end
-
--- (Internal function)
--- Initialize given file parameter.
-local function __initfileval( tbl, key, filename, fd )
-	if tbl[key] == nil then
-		tbl[key] = { file=filename, fd=fd, name=key, "" }
-	else
-		table.insert( tbl[key], "" )
-	end
-end
-
--- (Internal function)
--- Append given data to given parameter, either by extending the string value
--- or by appending it to the last string in the parameter's value table.
-local function __appendval( tbl, key, chunk )
-	if type(tbl[key]) == "table" then
-		tbl[key][#tbl[key]] = tbl[key][#tbl[key]] .. chunk
-	else
-		tbl[key] = tbl[key] .. chunk
-	end
-end
-
--- (Internal function)
--- Finish the value of given parameter, either by transforming the string value
--- or - in the case of multi value parameters - the last element in the
--- associated values table.
-local function __finishval( tbl, key, handler )
-	if handler then
-		if type(tbl[key]) == "table" then
-			tbl[key][#tbl[key]] = handler( tbl[key][#tbl[key]] )
-		else
-			tbl[key] = handler( tbl[key] )
-		end
-	end
-end
-
-
--- Table of our process states
-local process_states = { }
-
--- Extract "magic", the first line of a http message.
--- Extracts the message type ("get", "post" or "response"), the requested uri
--- or the status code if the line descripes a http response.
-process_states['magic'] = function( msg, chunk, err )
-
-	if chunk ~= nil then
-		-- ignore empty lines before request
-		if #chunk == 0 then
-			return true, nil
-		end
-
-		-- Is it a request?
-		local method, uri, http_ver = chunk:match("^([A-Z]+) ([^ ]+) HTTP/([01]%.[019])$")
-
-		-- Yup, it is
-		if method then
-
-			msg.type           = "request"
-			msg.request_method = method:lower()
-			msg.request_uri    = uri
-			msg.http_version   = tonumber( http_ver )
-			msg.headers        = { }
-
-			-- We're done, next state is header parsing
-			return true, function( chunk )
-				return process_states['headers']( msg, chunk )
-			end
-
-		-- Is it a response?
-		else
-
-			local http_ver, code, message = chunk:match("^HTTP/([01]%.[019]) ([0-9]+) ([^\r\n]+)$")
-
-			-- Is a response
-			if code then
-
-				msg.type           = "response"
-				msg.status_code    = code
-				msg.status_message = message
-				msg.http_version   = tonumber( http_ver )
-				msg.headers        = { }
-
-				-- We're done, next state is header parsing
-				return true, function( chunk )
-					return process_states['headers']( msg, chunk )
+				if enc[1] then
+					enc[n] = "&"
+					n = n + 1
 				end
+
+				enc[n+0] = lhttp.urlencode(k)
+				enc[n+1] = "="
+				enc[n+2] = lhttp.urlencode(v2)
+				n = n + 3
 			end
-		end
-	end
-
-	-- Can't handle it
-	return nil, "Invalid HTTP message magic"
-end
-
-
--- Extract headers from given string.
-process_states['headers'] = function( msg, chunk )
-
-	if chunk ~= nil then
-
-		-- Look for a valid header format
-		local hdr, val = chunk:match( "^([A-Za-z][A-Za-z0-9%-_]+): +(.+)$" )
-
-		if type(hdr) == "string" and hdr:len() > 0 and
-		   type(val) == "string" and val:len() > 0
-		then
-			msg.headers[hdr] = val
-
-			-- Valid header line, proceed
-			return true, nil
-
-		elseif #chunk == 0 then
-			-- Empty line, we won't accept data anymore
-			return false, nil
 		else
-			-- Junk data
-			return nil, "Invalid HTTP header received"
-		end
-	else
-		return nil, "Unexpected EOF"
-	end
-end
-
-
--- data line by line with the trailing \r\n stripped of.
-function header_source( sock )
-	return ltn12.source.simplify( function()
-
-		local chunk, err, part = sock:receive("*l")
-
-		-- Line too long
-		if chunk == nil then
-			if err ~= "timeout" then
-				return nil, part
-					and "Line exceeds maximum allowed length"
-					or  "Unexpected EOF"
-			else
-				return nil, err
+			if enc[1] then
+				enc[n] = "&"
+				n = n + 1
 			end
 
-		-- Line ok
-		elseif chunk ~= nil then
-
-			-- Strip trailing CR
-			chunk = chunk:gsub("\r$","")
-
-			return chunk, nil
+			enc[n+0] = lhttp.urlencode(k)
+			enc[n+1] = "="
+			enc[n+2] = lhttp.urlencode(v)
+			n = n + 3
 		end
-	end )
+	end
+
+	return table.concat(enc, "")
 end
 
 -- Content-Type. Stores all extracted data associated with its parameter name
@@ -238,286 +87,125 @@ end
 --  o Table containing decoded (name, file) and raw (headers) mime header data
 --  o String value containing a chunk of the file data
 --  o Boolean which indicates wheather the current chunk is the last one (eof)
-function mimedecode_message_body( src, msg, filecb )
+function mimedecode_message_body(src, msg, file_cb)
+	local parser, header, field
+	local len, maxlen = 0, tonumber(msg.env.CONTENT_LENGTH or nil)
 
-	if msg and msg.env.CONTENT_TYPE then
-		msg.mime_boundary = msg.env.CONTENT_TYPE:match("^multipart/form%-data; boundary=(.+)$")
-	end
+	parser, err = lhttp.multipart_parser(msg.env.CONTENT_TYPE, function (what, buffer, length)
+		if what == parser.PART_INIT then
+			field = { }
 
-	if not msg.mime_boundary then
-		return nil, "Invalid Content-Type found"
-	end
+		elseif what == parser.HEADER_NAME then
+			header = buffer:lower()
 
-
-	local tlen   = 0
-	local inhdr  = false
-	local field  = nil
-	local store  = nil
-	local lchunk = nil
-
-	local function parse_headers( chunk, field )
-
-		local stat
-		repeat
-			chunk, stat = chunk:gsub(
-				"^([A-Z][A-Za-z0-9%-_]+): +([^\r\n]+)\r\n",
-				function(k,v)
-					field.headers[k] = v
-					return ""
-				end
-			)
-		until stat == 0
-
-		chunk, stat = chunk:gsub("^\r\n","")
-
-		-- End of headers
-		if stat > 0 then
-			if field.headers["Content-Disposition"] then
-				if field.headers["Content-Disposition"]:match("^form%-data; ") then
-					field.name = field.headers["Content-Disposition"]:match('name="(.-)"')
-					field.file = field.headers["Content-Disposition"]:match('filename="(.+)"$')
-				end
+		elseif what == parser.HEADER_VALUE and header then
+			if header:lower() == "content-disposition" and
+			   lhttp.header_attribute(buffer, nil) == "form-data"
+			then
+				field.name = lhttp.header_attribute(buffer, "name")
+				field.file = lhttp.header_attribute(buffer, "filename")
 			end
 
-			if not field.headers["Content-Type"] then
-				field.headers["Content-Type"] = "text/plain"
+			if field.headers then
+				field.headers[header] = buffer
+			else
+				field.headers = { [header] = buffer }
 			end
 
-			if field.name and field.file and filecb then
-				__initval( msg.params, field.name )
-				__appendval( msg.params, field.name, field.file )
+		elseif what == parser.PART_BEGIN then
+			return not field.file
 
-				store = filecb
-			elseif field.name and field.file then
-				local nxf = require "nixio"
-				local fd = nxf.mkstemp(field.name)
-				__initfileval ( msg.params, field.name, field.file, fd )
-				if fd then
-					store = function(hdr, buf, eof)
-						fd:write(buf)
-						if (eof) then
-							fd:seek(0, "set")
-						end
-					end
+		elseif what == parser.PART_DATA and field.name and length > 0 then
+			if field.file then
+				if file_cb then
+					file_cb(field, buffer, false)
+					msg.params[field.name] = msg.params[field.name] or field
 				else
-					store = function( hdr, buf, eof )
-						__appendval( msg.params, field.name, buf )
+					if not field.fd then
+						local ok, nx = pcall(require, "nixio")
+						field.fd = ok and nx.mkstemp(field.name)
 					end
-				end
-			elseif field.name then
-				__initval( msg.params, field.name )
 
-				store = function( hdr, buf, eof )
-					__appendval( msg.params, field.name, buf )
+					if field.fd then
+						field.fd:write(buffer)
+						msg.params[field.name] = msg.params[field.name] or field
+					end
 				end
 			else
-				store = nil
+				field.value = buffer
 			end
 
-			return chunk, true
-		end
-
-		return chunk, false
-	end
-
-	local function snk( chunk )
-
-		tlen = tlen + ( chunk and #chunk or 0 )
-
-		if msg.env.CONTENT_LENGTH and tlen > tonumber(msg.env.CONTENT_LENGTH) + 2 then
-			return nil, "Message body size exceeds Content-Length"
-		end
-
-		if chunk and not lchunk then
-			lchunk = "\r\n" .. chunk
-
-		elseif lchunk then
-			local data = lchunk .. ( chunk or "" )
-			local spos, epos, found
-
-			repeat
-				spos, epos = data:find( "\r\n--" .. msg.mime_boundary .. "\r\n", 1, true )
-
-				if not spos then
-					spos, epos = data:find( "\r\n--" .. msg.mime_boundary .. "--\r\n", 1, true )
+		elseif what == parser.PART_END and field.name then
+			if field.file and msg.params[field.name] then
+				if file_cb then
+					file_cb(field, "", true)
+				elseif field.fd then
+					field.fd:seek(0, "set")
 				end
-
-
-				if spos then
-					local predata = data:sub( 1, spos - 1 )
-
-					if inhdr then
-						predata, eof = parse_headers( predata, field )
-
-						if not eof then
-							return nil, "Invalid MIME section header"
-						elseif not field.name then
-							return nil, "Invalid Content-Disposition header"
-						end
-					end
-
-					if store then
-						store( field, predata, true )
-					end
-
-
-					field = { headers = { } }
-					found = found or true
-
-					data, eof = parse_headers( data:sub( epos + 1, #data ), field )
-					inhdr = not eof
-				end
-			until not spos
-
-			if found then
-				-- We found at least some boundary. Save
-				-- the unparsed remaining data for the
-				-- next chunk.
-				lchunk, data = data, nil
 			else
-				-- There was a complete chunk without a boundary. Parse it as headers or
-				-- append it as data, depending on our current state.
-				if inhdr then
-					lchunk, eof = parse_headers( data, field )
-					inhdr = not eof
-				else
-					-- We're inside data, so append the data. Note that we only append
-					-- lchunk, not all of data, since there is a chance that chunk
-					-- contains half a boundary. Assuming that each chunk is at least the
-					-- boundary in size, this should prevent problems
-					store( field, lchunk, false )
-					lchunk, chunk = chunk, nil
-				end
+				msg.params[field.name] = field.value or ""
 			end
+
+			field = nil
+
+		elseif what == parser.ERROR then
+			err = buffer
 		end
 
 		return true
-	end
+	end)
 
-	return ltn12.pump.all( src, snk )
+	return ltn12.pump.all(src, function (chunk)
+		len = len + (chunk and #chunk or 0)
+
+		if maxlen and len > maxlen + 2 then
+			return nil, "Message body size exceeds Content-Length"
+		end
+
+		if not parser or not parser:parse(chunk) then
+			return nil, err
+		end
+
+		return true
+	end)
 end
 
 -- Content-Type. Stores all extracted data associated with its parameter name
 -- in the params table within the given message object. Multiple parameter
 -- values are stored as tables, ordinary ones as strings.
-function urldecode_message_body( src, msg )
+function urldecode_message_body(src, msg)
+	local err, name, value, parser
+	local len, maxlen = 0, tonumber(msg.env.CONTENT_LENGTH or nil)
 
-	local tlen   = 0
-	local lchunk = nil
-
-	local function snk( chunk )
-
-		tlen = tlen + ( chunk and #chunk or 0 )
-
-		if msg.env.CONTENT_LENGTH and tlen > tonumber(msg.env.CONTENT_LENGTH) + 2 then
-			return nil, "Message body size exceeds Content-Length"
-		elseif tlen > HTTP_MAX_CONTENT then
-			return nil, "Message body size exceeds maximum allowed length"
-		end
-
-		if not lchunk and chunk then
-			lchunk = chunk
-
-		elseif lchunk then
-			local data = lchunk .. ( chunk or "&" )
-			local spos, epos
-
-			repeat
-				spos, epos = data:find("^.-[;&]")
-
-				if spos then
-					local pair = data:sub( spos, epos - 1 )
-					local key  = pair:match("^(.-)=")
-					local val  = pair:match("=([^%s]*)%s*$")
-
-					if key and #key > 0 then
-						__initval( msg.params, key )
-						__appendval( msg.params, key, val )
-						__finishval( msg.params, key, urldecode )
-					end
-
-					data = data:sub( epos + 1, #data )
-				end
-			until not spos
-
-			lchunk = data
+	parser = lhttp.urlencoded_parser(function (what, buffer, length)
+		if what == parser.TUPLE then
+			name, value = nil, nil
+		elseif what == parser.NAME then
+			name = lhttp.urldecode(buffer)
+		elseif what == parser.VALUE and name then
+			msg.params[name] = lhttp.urldecode(buffer) or ""
+		elseif what == parser.ERROR then
+			err = buffer
 		end
 
 		return true
-	end
+	end)
 
-	return ltn12.pump.all( src, snk )
-end
+	return ltn12.pump.all(src, function (chunk)
+		len = len + (chunk and #chunk or 0)
 
--- version, message headers and resulting CGI environment variables from the
--- given ltn12 source.
-function parse_message_header( src )
-
-	local ok   = true
-	local msg  = { }
-
-	local sink = ltn12.sink.simplify(
-		function( chunk )
-			return process_states['magic']( msg, chunk )
+		if maxlen and len > maxlen + 2 then
+			return nil, "Message body size exceeds Content-Length"
+		elseif len > HTTP_MAX_CONTENT then
+			return nil, "Message body size exceeds maximum allowed length"
 		end
-	)
 
-	-- Pump input data...
-	while ok do
-
-		-- get data
-		ok, err = ltn12.pump.step( src, sink )
-
-		-- error
-		if not ok and err then
+		if not parser or not parser:parse(chunk) then
 			return nil, err
-
-		-- eof
-		elseif not ok then
-
-			-- Process get parameters
-			if ( msg.request_method == "get" or msg.request_method == "post" ) and
-			   msg.request_uri:match("?")
-			then
-				msg.params = urldecode_params( msg.request_uri )
-			else
-				msg.params = { }
-			end
-
-			-- Populate common environment variables
-			msg.env = {
-				CONTENT_LENGTH    = msg.headers['Content-Length'];
-				CONTENT_TYPE      = msg.headers['Content-Type'] or msg.headers['Content-type'];
-				REQUEST_METHOD    = msg.request_method:upper();
-				REQUEST_URI       = msg.request_uri;
-				SCRIPT_NAME       = msg.request_uri:gsub("?.+$","");
-				SCRIPT_FILENAME   = "";		-- XXX implement me
-				SERVER_PROTOCOL   = "HTTP/" .. string.format("%.1f", msg.http_version);
-				QUERY_STRING      = msg.request_uri:match("?")
-					and msg.request_uri:gsub("^.+?","") or ""
-			}
-
-			-- Populate HTTP_* environment variables
-			for i, hdr in ipairs( {
-				'Accept',
-				'Accept-Charset',
-				'Accept-Encoding',
-				'Accept-Language',
-				'Connection',
-				'Cookie',
-				'Host',
-				'Referer',
-				'User-Agent',
-			} ) do
-				local var = 'HTTP_' .. hdr:upper():gsub("%-","_")
-				local val = msg.headers[hdr]
-
-				msg.env[var] = val
-			end
 		end
-	end
 
-	return msg
+		return true
+	end)
 end
 
 -- This function will examine the Content-Type within the given message object
@@ -526,17 +214,18 @@ end
 -- mime types are supported. If the encountered content encoding can't be
 -- handled then the whole message body will be stored unaltered as "content"
 -- property within the given message object.
-function parse_message_body( src, msg, filecb )
-	-- Is it multipart/mime ?
-	if msg.env.REQUEST_METHOD == "POST" and msg.env.CONTENT_TYPE and
-	   msg.env.CONTENT_TYPE:match("^multipart/form%-data")
-	then
+function parse_message_body(src, msg, filecb)
+	local ctype = lhttp.header_attribute(msg.env.CONTENT_TYPE, nil)
 
+	-- Is it multipart/mime ?
+	if msg.env.REQUEST_METHOD == "POST" and
+	   ctype == "multipart/form-data"
+	then
 		return mimedecode_message_body( src, msg, filecb )
 
 	-- Is it application/x-www-form-urlencoded ?
-	elseif msg.env.REQUEST_METHOD == "POST" and msg.env.CONTENT_TYPE and
-	       msg.env.CONTENT_TYPE:match("^application/x%-www%-form%-urlencoded")
+	elseif msg.env.REQUEST_METHOD == "POST" and
+	       ctype == "application/x-www-form-urlencoded"
 	then
 		return urldecode_message_body( src, msg, filecb )
 
@@ -594,21 +283,3 @@ function parse_message_body( src, msg, filecb )
 		return true
 	end
 end
-
-statusmsg = {
-	[200] = "OK",
-	[206] = "Partial Content",
-	[301] = "Moved Permanently",
-	[302] = "Found",
-	[304] = "Not Modified",
-	[400] = "Bad Request",
-	[403] = "Forbidden",
-	[404] = "Not Found",
-	[405] = "Method Not Allowed",
-	[408] = "Request Time-out",
-	[411] = "Length Required",
-	[412] = "Precondition Failed",
-	[416] = "Requested range not satisfiable",
-	[500] = "Internal Server Error",
-	[503] = "Server Unavailable",
-}
