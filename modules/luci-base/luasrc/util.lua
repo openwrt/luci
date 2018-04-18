@@ -407,16 +407,6 @@ function clone(object, deep)
 end
 
 
-function dtable()
-        return setmetatable({}, { __index =
-                function(tbl, key)
-                        return rawget(tbl, key)
-                         or rawget(rawset(tbl, key, dtable()), key)
-                end
-        })
-end
-
-
 -- Serialize the contents of a table value.
 function _serialize_table(t, seen)
 	assert(not seen[t], "Recursion detected.")
