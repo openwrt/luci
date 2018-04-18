@@ -7,6 +7,7 @@ local util  = require "luci.util"
 local string = require "string"
 local coroutine = require "coroutine"
 local table = require "table"
+local lhttp = require "lucihttp"
 
 local ipairs, pairs, next, type, tostring, error =
 	ipairs, pairs, next, type, tostring, error
@@ -73,10 +74,7 @@ function Request.content(self)
 end
 
 function Request.getcookie(self, name)
-  local c = string.gsub(";" .. (self:getenv("HTTP_COOKIE") or "") .. ";", "%s*;%s*", ";")
-  local p = ";" .. name .. "=(.-);"
-  local i, j, value = c:find(p)
-  return value and urldecode(value)
+	return lhttp.header_attribute("cookie; " .. (self:getenv("HTTP_COOKIE") or ""), name)
 end
 
 function Request.getenv(self, name)
@@ -90,34 +88,28 @@ end
 function Request.setfilehandler(self, callback)
 	self.filehandler = callback
 
-	-- If input has already been parsed then any files are either in temporary files
-	-- or are in self.message.params[key]
-	if self.parsed_input then
-		for param, value in pairs(self.message.params) do
-		repeat
-			-- We're only interested in files
-			if (not value["file"]) then break end
-			-- If we were able to write to temporary file
-			if (value["fd"]) then 
-				fd = value["fd"]
-				local eof = false
-				repeat	
-					filedata = fd:read(1024)
-					if (filedata:len() < 1024) then
-						eof = true
-					end
-					callback({ name=value["name"], file=value["file"] }, filedata, eof)
-				until (eof)
-				fd:close()
-				value["fd"] = nil
-			-- We had to read into memory
-			else
-				-- There should only be one numbered value in table - the data
-				for k, v in ipairs(value) do
-					callback({ name=value["name"], file=value["file"] }, v, true)
+	if not self.parsed_input then
+		return
+	end
+
+	-- If input has already been parsed then uploads are stored as unlinked
+	-- temporary files pointed to by open file handles in the parameter
+	-- value table. Loop all params, and invoke the file callback for any
+	-- param with an open file handle.
+	local name, value
+	for name, value in pairs(self.message.params) do
+		if type(value) == "table" then
+			while value.fd do
+				local data = value.fd:read(1024)
+				local eof = (not data or data == "")
+
+				callback(value, data, eof)
+
+				if eof then
+					value.fd:close()
+					value.fd = nil
 				end
 			end
-		until true
 		end
 	end
 end
@@ -254,14 +246,14 @@ function redirect(url)
 end
 
 function build_querystring(q)
-	local s = { "?" }
+	local s, n, k, v = {}, 1, nil, nil
 
 	for k, v in pairs(q) do
-		if #s > 1 then s[#s+1] = "&" end
-
-		s[#s+1] = urldecode(k)
-		s[#s+1] = "="
-		s[#s+1] = urldecode(v)
+		s[n+0] = (n == 1) and "?" or "&"
+		s[n+1] = util.urlencode(k)
+		s[n+2] = "="
+		s[n+3] = util.urlencode(v)
+		n = n + 4
 	end
 
 	return table.concat(s, "")
