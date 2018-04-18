@@ -3,7 +3,7 @@
 
 -- This class provides functions to guess mime types from file extensions and
 -- vice versa.
-module("luci.http.protocol.mime", package.seeall)
+module("luci.http.mime", package.seeall)
 
 require("luci.util")
 
