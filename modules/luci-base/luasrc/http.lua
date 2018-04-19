@@ -397,7 +397,15 @@ function mimedecode_message_body(src, msg, file_cb)
 					field.fd:seek(0, "set")
 				end
 			else
-				msg.params[field.name] = field.value or ""
+				local val = msg.params[field.name]
+
+				if type(val) == "table" then
+					val[#val+1] = field.value or ""
+				elseif val ~= nil then
+					msg.params[field.name] = { val, field.value or "" }
+				else
+					msg.params[field.name] = field.value or ""
+				end
 			end
 
 			field = nil
@@ -437,7 +445,15 @@ function urldecode_message_body(src, msg)
 		elseif what == parser.NAME then
 			name = lhttp.urldecode(buffer)
 		elseif what == parser.VALUE and name then
-			msg.params[name] = lhttp.urldecode(buffer) or ""
+			local val = msg.params[name]
+
+			if type(val) == "table" then
+				val[#val+1] = lhttp.urldecode(buffer) or ""
+			elseif val ~= nil then
+				msg.params[name] = { val, lhttp.urldecode(buffer) or "" }
+			else
+				msg.params[name] = lhttp.urldecode(buffer) or ""
+			end
 		elseif what == parser.ERROR then
 			err = buffer
 		end
