@@ -161,7 +161,7 @@ end
 
 function lxc_get_arch_target()
 	local target = nixio.uname().machine
-	local target_map {
+	local target_map = {
 		armv5  = "armel",
 		armv6  = "armel",
 		armv7  = "armhf",
