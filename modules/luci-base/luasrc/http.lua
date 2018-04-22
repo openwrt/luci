@@ -443,16 +443,16 @@ function urldecode_message_body(src, msg)
 		if what == parser.TUPLE then
 			name, value = nil, nil
 		elseif what == parser.NAME then
-			name = lhttp.urldecode(buffer)
+			name = lhttp.urldecode(buffer, lhttp.DECODE_PLUS)
 		elseif what == parser.VALUE and name then
 			local val = msg.params[name]
 
 			if type(val) == "table" then
-				val[#val+1] = lhttp.urldecode(buffer) or ""
+				val[#val+1] = lhttp.urldecode(buffer, lhttp.DECODE_PLUS) or ""
 			elseif val ~= nil then
-				msg.params[name] = { val, lhttp.urldecode(buffer) or "" }
+				msg.params[name] = { val, lhttp.urldecode(buffer, lhttp.DECODE_PLUS) or "" }
 			else
-				msg.params[name] = lhttp.urldecode(buffer) or ""
+				msg.params[name] = lhttp.urldecode(buffer, lhttp.DECODE_PLUS) or ""
 			end
 		elseif what == parser.ERROR then
 			err = buffer
