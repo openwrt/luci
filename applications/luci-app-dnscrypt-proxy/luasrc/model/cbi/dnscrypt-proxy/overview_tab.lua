@@ -4,13 +4,17 @@
 local fs        = require("nixio.fs")
 local uci       = require("luci.model.uci").cursor()
 local util      = require("luci.util")
-local date      = require("luci.http.protocol.date")
 local res_input = "/usr/share/dnscrypt-proxy/dnscrypt-resolvers.csv"
 local res_dir   = fs.dirname(res_input)
 local dump      = util.ubus("network.interface", "dump", {})
 local plug_cnt  = tonumber(luci.sys.exec("env -i /usr/sbin/dnscrypt-proxy --version | grep 'Support for plugins: present' | wc -l"))
 local res_list  = {}
 local url       = "https://raw.githubusercontent.com/dyne/dnscrypt-proxy/master/dnscrypt-resolvers.csv"
+
+local _, date = pcall(require, "luci.http.date")
+if not date then
+	_, date = pcall(require, "luci.http.protocol.date")
+end
 
 if not fs.access(res_input) then
 	if not fs.access("/lib/libustream-ssl.so") then

@@ -2,7 +2,7 @@
 -- Licensed to the public under the Apache License 2.0.
 
 -- This class contains functions to parse, compare and format http dates.
-module("luci.http.protocol.date", package.seeall)
+module("luci.http.date", package.seeall)
 
 require("luci.sys.zoneinfo")
 

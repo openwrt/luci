@@ -1,7 +1,7 @@
 /*
  * LuCI Template - Lua binding
  *
- *   Copyright (C) 2009-2018 Jo-Philipp Wich <jo@mein.io>
+ *   Copyright (C) 2009 Jo-Philipp Wich <jow@openwrt.org>
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -110,51 +110,6 @@ int template_L_striptags(lua_State *L)
 	return 0;
 }
 
-int template_L_urlencode(lua_State *L)
-{
-	size_t len = 0;
-	const char *str = luaL_checkstring(L, 1);
-	char *res = urlencode(str, &len);
-
-	if (res != NULL)
-	{
-		lua_pushlstring(L, res, len);
-		free(res);
-
-		return 1;
-	}
-	else if (len == 0)
-	{
-		lua_pushvalue(L, 1);
-		return 1;
-	}
-
-	return 0;
-}
-
-int template_L_urldecode(lua_State *L)
-{
-	size_t len = 0;
-	const char *str = luaL_checkstring(L, 1);
-	int keep_plus = lua_toboolean(L, 2);
-	char *res = urldecode(str, &len, keep_plus == 1);
-
-	if (res != NULL)
-	{
-		lua_pushlstring(L, res, len);
-		free(res);
-
-		return 1;
-	}
-	else if (len == 0)
-	{
-		lua_pushvalue(L, 1);
-		return 1;
-	}
-
-	return 0;
-}
-
 static int template_L_load_catalog(lua_State *L) {
 	const char *lang = luaL_optstring(L, 1, "en");
 	const char *dir  = luaL_optstring(L, 2, NULL);
@@ -210,8 +165,6 @@ static const luaL_reg R[] = {
 	{ "utf8",				template_L_utf8 },
 	{ "pcdata",				template_L_pcdata },
 	{ "striptags",			template_L_striptags },
-	{ "urlencode",			template_L_urlencode },
-	{ "urldecode",			template_L_urldecode },
 	{ "load_catalog",		template_L_load_catalog },
 	{ "close_catalog",		template_L_close_catalog },
 	{ "change_catalog",		template_L_change_catalog },

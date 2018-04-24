@@ -32,6 +32,15 @@ local ERRSTR = {
 	"Connection failed"
 }
 
+local session_id = nil
+
+local function call(cmd, args)
+	if type(args) == "table" and session_id then
+		args.ubus_rpc_session = session_id
+	end
+	return util.ubus("uci", cmd, args)
+end
+
 
 function cursor()
 	return _M
@@ -54,12 +63,21 @@ function get_savedir(self)
 	return "/tmp/.uci"
 end
 
+function get_session_id(self)
+	return session_id
+end
+
 function set_confdir(self, directory)
 	return false
 end
 
 function set_savedir(self, directory)
 	return false
+end
+
+function set_session_id(self, id)
+	session_id = id
+	return true
 end
 
 
@@ -77,7 +95,7 @@ end
 
 
 function changes(self, config)
-	local rv = util.ubus("uci", "changes", { config = config })
+	local rv = call("changes", { config = config })
 	local res = {}
 
 	if type(rv) == "table" and type(rv.changes) == "table" then
@@ -116,12 +134,12 @@ end
 
 
 function revert(self, config)
-	local _, err = util.ubus("uci", "revert", { config = config })
+	local _, err = call("revert", { config = config })
 	return (err == nil), ERRSTR[err]
 end
 
 function commit(self, config)
-	local _, err = util.ubus("uci", "commit", { config = config })
+	local _, err = call("commit", { config = config })
 	return (err == nil), ERRSTR[err]
 end
 
@@ -133,7 +151,7 @@ function apply(self, configs, command)
 
 	if type(configs) == "table" then
 		for _, config in ipairs(configs) do
-			util.ubus("service", "event", {
+			call("service", "event", {
 				type = "config.change",
 				data = { package = config }
 			})
@@ -145,7 +163,7 @@ end
 
 function foreach(self, config, stype, callback)
 	if type(callback) == "function" then
-		local rv, err = util.ubus("uci", "get", {
+		local rv, err = call("get", {
 			config = config,
 			type   = stype
 		})
@@ -186,7 +204,7 @@ local function _get(self, operation, config, section, option)
 	if section == nil then
 		return nil
 	elseif type(option) == "string" and option:byte(1) ~= 46 then
-		local rv, err = util.ubus("uci", operation, {
+		local rv, err = call(operation, {
 			config  = config,
 			section = section,
 			option  = option
@@ -220,7 +238,7 @@ function get_state(self, ...)
 end
 
 function get_all(self, config, section)
-	local rv, err = util.ubus("uci", "get", {
+	local rv, err = call("get", {
 		config  = config,
 		section = section
 	})
@@ -271,7 +289,7 @@ end
 
 
 function section(self, config, stype, name, values)
-	local rv, err = util.ubus("uci", "add", {
+	local rv, err = call("add", {
 		config = config,
 		type   = stype,
 		name   = name,
@@ -297,7 +315,7 @@ function set(self, config, section, option, value)
 		local sname, err = self:section(config, option, section)
 		return (not not sname), err
 	else
-		local _, err = util.ubus("uci", "set", {
+		local _, err = call("set", {
 			config  = config,
 			section = section,
 			values  = { [option] = value }
@@ -319,7 +337,7 @@ function set_list(self, config, section, option, value)
 end
 
 function tset(self, config, section, values)
-	local _, err = util.ubus("uci", "set", {
+	local _, err = call("set", {
 		config  = config,
 		section = section,
 		values  = values
@@ -353,7 +371,7 @@ function reorder(self, config, section, index)
 		return false, "Invalid argument"
 	end
 
-	local _, err = util.ubus("uci", "order", {
+	local _, err = call("order", {
 		config   = config,
 		sections = sections
 	})
@@ -363,7 +381,7 @@ end
 
 
 function delete(self, config, section, option)
-	local _, err = util.ubus("uci", "delete", {
+	local _, err = call("delete", {
 		config  = config,
 		section = section,
 		option  = option
@@ -374,13 +392,13 @@ end
 function delete_all(self, config, stype, comparator)
 	local _, err
 	if type(comparator) == "table" then
-		_, err = util.ubus("uci", "delete", {
+		_, err = call("delete", {
 			config = config,
 			type   = stype,
 			match  = comparator
 		})
 	elseif type(comparator) == "function" then
-		local rv = util.ubus("uci", "get", {
+		local rv = call("get", {
 			config = config,
 			type   = stype
 		})
@@ -389,7 +407,7 @@ function delete_all(self, config, stype, comparator)
 			local sname, section
 			for sname, section in pairs(rv.values) do
 				if comparator(section) then
-					_, err = util.ubus("uci", "delete", {
+					_, err = call("delete", {
 						config  = config,
 						section = sname
 					})
@@ -397,7 +415,7 @@ function delete_all(self, config, stype, comparator)
 			end
 		end
 	elseif comparator == nil then
-		_, err = util.ubus("uci", "delete", {
+		_, err = call("delete", {
 			config  = config,
 			type    = stype
 		})

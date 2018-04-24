@@ -14,14 +14,11 @@ Author: Petar Koretic <petar.koretic@sartura.hr>
 
 ]]--
 
+local uci = require "luci.model.uci"
+local util = require "luci.util"
+local nixio = require "nixio"
+
 module("luci.controller.lxc", package.seeall)
-
-require "ubus"
-local conn = ubus.connect()
-if not conn then
-    error("Failed to connect to ubus")
-end
-
 
 function fork_exec(command)
 	local pid = nixio.fork()
@@ -71,55 +68,52 @@ function index()
 end
 
 function lxc_get_downloadable()
-	luci.http.prepare_content("application/json")
-
-	local f = io.popen('uname -m', 'r')
-	local target = f:read('*a')
-	f:close()
-	target = target:gsub("^%s*(.-)%s*$", "%1")
-
+	local target = lxc_get_arch_target()
 	local templates = {}
 
-	local f = io.popen('lxc-create -n just_want_to_list_available_lxc_templates -t download -- --list', 'r')
+	local f = io.popen('sh /usr/share/lxc/templates/lxc-download --list --no-validate --server %s'
+		% util.shellquote(uci.cursor():get("lxc", "lxc", "url")), 'r')
 
+	local line
 	for line in f:lines() do
-		local dist,version = line:match("^(%S+)%s+(%S+)%s+" .. target .. "%s+default%s+%S+$")
-		if dist~=nil and version~=nil then templates[#templates + 1] = dist .. ":" .. version end
+		local dist, version, dist_target = line:match("^(%S+)%s+(%S+)%s+(%S+)%s+default%s+%S+$")
+		if dist and version and dist_target == target then
+			templates[#templates+1] = "%s:%s" %{ dist, version }
+		end
 	end
 
 	f:close()
+
+	luci.http.prepare_content("application/json")
 	luci.http.write_json(templates)
 end
 
 function lxc_create(lxc_name, lxc_template)
 	luci.http.prepare_content("text/plain")
 
-	local uci = require("uci").cursor()
-
-	local url = uci:get("lxc", "lxc", "url")
-
 	if not pcall(dofile, "/etc/openwrt_release") then
 		return luci.http.write("1")
 	end
 
-	local f = io.popen('uname -m', 'r')
-	local target = f:read('*a')
-	f:close()
-	target = target:gsub("^%s*(.-)%s*$", "%1")
+	local lxc_dist, lxc_release = lxc_template:match("^(.+):(.+)$")
 
-	local lxc_dist = lxc_template:gsub("(.*):(.*)", '%1')
-	local lxc_release = lxc_template:gsub("(.*):(.*)", '%2')
-
-	local data = conn:call("lxc", "create", { name = lxc_name, template = "download", args = { "--server", url,  "--no-validate", "--dist", lxc_dist, "--release", lxc_release, "--arch", target } } )
-
-	luci.http.write(data)
+	luci.http.write(util.ubus("lxc", "create", {
+		name = lxc_name,
+		template = "download",
+		args = {
+			"--server", uci.cursor():get("lxc", "lxc", "url"),
+			"--no-validate",
+			"--dist", lxc_dist,
+			"--release", lxc_release,
+			"--arch", lxc_get_arch_target()
+		}
+	}))
 end
 
 function lxc_action(lxc_action, lxc_name)
+	local data, ec = util.ubus("lxc", lxc_action, lxc_name and { name = lxc_name } or {})
+
 	luci.http.prepare_content("application/json")
-
-	local data, ec = conn:call("lxc", lxc_action, lxc_name and { name = lxc_name} or {} )
-
 	luci.http.write_json(ec and {} or data)
 end
 
@@ -165,3 +159,22 @@ function lxc_configuration_set(lxc_name)
 	luci.http.write("0")
 end
 
+function lxc_get_arch_target()
+	local target = nixio.uname().machine
+	local target_map = {
+		armv5  = "armel",
+		armv6  = "armel",
+		armv7  = "armhf",
+		armv8  = "arm64",
+		x86_64 = "amd64"
+	}
+
+	local k, v
+	for k, v in pairs(target_map) do
+		if target:find(k) then
+			return v
+		end
+	end
+
+	return target
+end

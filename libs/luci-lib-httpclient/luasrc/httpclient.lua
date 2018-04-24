@@ -7,8 +7,8 @@ local nixio = require "nixio"
 local ltn12 = require "luci.ltn12"
 local util = require "luci.util"
 local table = require "table"
-local http = require "luci.http.protocol"
-local date = require "luci.http.protocol.date"
+local http = require "luci.http"
+local date = require "luci.http.date"
 
 local type, pairs, ipairs, tonumber = type, pairs, ipairs, tonumber
 local unpack = unpack

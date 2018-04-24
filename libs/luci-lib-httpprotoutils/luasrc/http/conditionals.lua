@@ -3,9 +3,9 @@
 
 -- This class provides basic ETag handling and implements most of the
 -- conditional HTTP/1.1 headers specified in RFC2616 Sct. 14.24 - 14.28 .
-module("luci.http.protocol.conditionals", package.seeall)
+module("luci.http.conditionals", package.seeall)
 
-local date = require("luci.http.protocol.date")
+local date = require("luci.http.date")
 
 
 function mk_etag( stat )

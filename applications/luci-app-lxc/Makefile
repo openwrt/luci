@@ -7,7 +7,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=LXC management Web UI
-LUCI_DEPENDS:=+luci-mod-admin-full +lxc +lxc-create +liblxc +rpcd-mod-lxc +getopt +xz
+LUCI_DEPENDS:=+luci-mod-admin-full +lxc +lxc-attach +lxc-console +lxc-create +liblxc +rpcd-mod-lxc +getopt
 LUCI_PKGARCH:=all
 
 PKG_MAINTAINER:=Petar Koretic <petar.koretic@sartura.hr>
