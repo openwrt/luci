@@ -182,6 +182,7 @@ local function session_retrieve(sid, allowed_users)
 	   (not allowed_users or
 	    util.contains(allowed_users, sdat.values.username))
 	then
+		uci:set_session_id(sid)
 		return sid, sdat.values
 	end
 
