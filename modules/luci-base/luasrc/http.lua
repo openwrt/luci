@@ -359,6 +359,7 @@ function mimedecode_message_body(src, msg, file_cb)
 			then
 				field.name = lhttp.header_attribute(buffer, "name")
 				field.file = lhttp.header_attribute(buffer, "filename")
+				field[1] = field.file
 			end
 
 			if field.headers then
