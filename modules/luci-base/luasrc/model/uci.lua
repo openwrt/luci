@@ -3,6 +3,7 @@
 
 local os    = require "os"
 local util  = require "luci.util"
+local conf  = require "luci.config"
 local table = require "table"
 
 
@@ -143,22 +144,84 @@ function commit(self, config)
 	return (err == nil), ERRSTR[err]
 end
 
---[[
-function apply(self, configs, command)
-	local _, config
+function apply(self, rollback)
+	local _, err
 
-	assert(not command, "Apply command not supported anymore")
+	if rollback then
+		local timeout = tonumber(conf.apply and conf.apply.rollback or "") or 0
 
-	if type(configs) == "table" then
-		for _, config in ipairs(configs) do
-			call("service", "event", {
-				type = "config.change",
-				data = { package = config }
+		_, err = call("apply", {
+			timeout  = (timeout > 30) and timeout or 30,
+			rollback = true
+		})
+
+		if not err then
+			util.ubus("session", "set", {
+				ubus_rpc_session = session_id,
+				values = { rollback = os.time() + timeout }
 			})
 		end
+	else
+		_, err = call("changes", {})
+
+		if not err then
+			if type(_) == "table" and type(_.changes) == "table" then
+				local k, v
+				for k, v in pairs(_.changes) do
+					_, err = call("commit", { config = k })
+					if err then
+						break
+					end
+				end
+			end
+		end
+
+		if not err then
+			_, err = call("apply", { rollback = false })
+		end
 	end
+
+	return (err == nil), ERRSTR[err]
 end
-]]
+
+function confirm(self)
+	local _, err = call("confirm", {})
+	if not err then
+		util.ubus("session", "set", {
+			ubus_rpc_session = session_id,
+			values = { rollback = 0 }
+		})
+	end
+	return (err == nil), ERRSTR[err]
+end
+
+function rollback(self)
+	local _, err = call("rollback", {})
+	if not err then
+		util.ubus("session", "set", {
+			ubus_rpc_session = session_id,
+			values = { rollback = 0 }
+		})
+	end
+	return (err == nil), ERRSTR[err]
+end
+
+function rollback_pending(self)
+	local deadline, err = util.ubus("session", "get", {
+		ubus_rpc_session = session_id,
+		keys = { "rollback" }
+	})
+
+	if type(deadline) == "table" and
+	   type(deadline.values) == "table" and
+	   type(deadline.values.rollback) == "number" and
+	   deadline.values.rollback > os.time()
+	then
+		return true, deadline.values.rollback - os.time()
+	end
+
+	return false, ERRSTR[err]
+end
 
 
 function foreach(self, config, stype, callback)
@@ -424,60 +487,4 @@ function delete_all(self, config, stype, comparator)
 	end
 
 	return (err == nil), ERRSTR[err]
-end
-
-
-function apply(self, configlist, command)
-	configlist = self:_affected(configlist)
-	if command then
-		return { "/sbin/luci-reload", unpack(configlist) }
-	else
-		return os.execute("/sbin/luci-reload %s >/dev/null 2>&1"
-			% util.shellquote(table.concat(configlist, " ")))
-	end
-end
-
--- Return a list of initscripts affected by configuration changes.
-function _affected(self, configlist)
-	configlist = type(configlist) == "table" and configlist or { configlist }
-
-	-- Resolve dependencies
-	local reloadlist = { }
-
-	local function _resolve_deps(name)
-		local reload = { name }
-		local deps = { }
-
-		self:foreach("ucitrack", name,
-			function(section)
-				if section.affects then
-					for i, aff in ipairs(section.affects) do
-						deps[#deps+1] = aff
-					end
-				end
-			end)
-
-		local i, dep
-		for i, dep in ipairs(deps) do
-			local j, add
-			for j, add in ipairs(_resolve_deps(dep)) do
-				reload[#reload+1] = add
-			end
-		end
-
-		return reload
-	end
-
-	-- Collect initscripts
-	local j, config
-	for j, config in ipairs(configlist) do
-		local i, e
-		for i, e in ipairs(_resolve_deps(config)) do
-			if not util.contains(reloadlist, e) then
-				reloadlist[#reloadlist+1] = e
-			end
-		end
-	end
-
-	return reloadlist
 end
