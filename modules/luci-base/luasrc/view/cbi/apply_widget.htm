@@ -1,0 +1,136 @@
+<% export("cbi_apply_widget", function(redirect_ok) -%>
+<style type="text/css">
+	#cbi_apply_status {
+		display: flex;
+		flex-wrap: wrap;
+		min-height: 32px;
+		align-items: center;
+		margin: 1.5em 0 1.5em 0;
+	}
+
+	#cbi_apply_status > * {
+		flex-basis: 100%;
+	}
+
+	#cbi_apply_status > img {
+		margin-right: 1em;
+		flex-basis: 32px;
+	}
+
+	#cbi_apply_status + script + .cbi-section {
+		margin-top: -1em;
+	}
+
+	.alert-message.notice {
+		background: linear-gradient(#fff 0%, #eee 100%);
+	}
+</style>
+
+<script type="text/javascript" src="<%=resource%>/cbi.js"></script>
+<script type="text/javascript">//<![CDATA[
+	var xhr = new XHR(),
+	    stat, indicator,
+	    uci_apply_auth = { sid: '<%=luci.dispatcher.context.authsession%>', token: '<%=token%>' },
+	    uci_apply_timeout = <%=math.max(luci.config and luci.config.apply and luci.config.apply.timeout or 0, 30)%>;
+
+	function uci_rollback(checked) {
+		if (checked) {
+			stat.classList.remove('notice');
+			stat.classList.add('warning');
+			stat.innerHTML = '<img src="<%=resource%>/icons/loading.gif" alt="" style="vertical-align:middle" /> ' +
+			                 '<%:Failed to confirm apply within %ds, waiting for rollback…%>'.format(uci_apply_timeout);
+
+			var ts = Date.now();
+			var cf = function(r) {
+				if (r.status === 204) {
+					stat.innerHTML = '<h4><%:Configuration has been rolled back!%></h4>' +
+						'<p><%:The device could not be reached within %d seconds after applying the pending changes, which caused the configuration to be rolled back for safety reasons. If you believe that the configuration changes are correct nonetheless, perform an unchecked configuration apply.%></p>'.format(uci_apply_timeout) +
+						'<div class="right">' +
+							'<input type="button" class="btn" onclick="this.parentNode.parentNode.style.display=\'none\'" value="<%:Dismiss%>" /> ' +
+							'<input type="button" class="btn danger" onclick="uci_apply(false)" value="<%:Apply unchecked%>" />' +
+						'</div>';
+
+					return;
+				}
+
+				window.setTimeout(function() {
+					ts = Date.now();
+					xhr.post('<%=url("admin/uci/confirm")%>', uci_apply_auth, cf, 950);
+				}, Math.max(1000 - (Date.now() - ts)), 0);
+			};
+
+			cf({ status: 0 });
+		}
+		else {
+			stat.classList.remove('notice');
+			stat.classList.add('warning');
+			stat.innerHTML = '<h4><%:Device unreachable!%></h4>' +
+				'<p><%:Could not regain access to the device after applying the configuration changes. You might need to reconnect if you modified network related settings such as the IP address or wireless security credentials.%></p>';
+		}
+	}
+
+	function uci_confirm(checked, deadline) {
+		stat.innerHTML = '<img src="<%=resource%>/icons/loading.gif" alt="" style="vertical-align:middle" /> ' +
+			             '<%:Waiting for configuration to get applied… %ds%>'.format(Math.floor((deadline - Date.now()) / 1000));
+
+		var ts = Date.now();
+		var cf = function(r) {
+			if (Date.now() >= deadline) {
+				uci_rollback(checked);
+				return;
+			}
+			else if (r.status === 200 || r.status === 204) {
+				if (indicator)
+					indicator.style.display = 'none';
+				stat.innerHTML = '<%:Configuration has been applied.%>';
+				window.setTimeout(function() {
+					stat.style.display = 'none';
+					<% if redirect_ok then %>location.href = decodeURIComponent('<%=luci.util.urlencode(redirect_ok)%>');<% end %>
+				}, 1000);
+				return;
+			}
+
+			stat.innerHTML = '<img src="<%=resource%>/icons/loading.gif" alt="" style="vertical-align:middle" /> ' +
+			                 '<%:Waiting for configuration to get applied… %ds%>'.format(Math.floor((deadline - Date.now()) / 1000));
+
+			window.setTimeout(function() {
+				ts = Date.now();
+				xhr.post('<%=url("admin/uci/confirm")%>', uci_apply_auth, cf, 950);
+			}, Math.max(1000 - (Date.now() - ts), 0));
+		};
+
+		cf({ status: 0 });
+	}
+
+	function uci_apply(checked) {
+	    stat = document.getElementById('cbi_apply_status');
+	    indicator = document.querySelector('.uci_change_indicator');
+
+		stat.style.display = '';
+		stat.classList.remove('warning');
+		stat.classList.add('notice');
+		stat.innerHTML = '<img src="<%=resource%>/icons/loading.gif" alt="" style="vertical-align:middle" /> ' +
+		                 '<%:Starting configuration apply…%>';
+
+		xhr.post('<%=url("admin/uci")%>/' + (checked ? 'apply_rollback' : 'apply_unchecked'), uci_apply_auth, function(r) {
+			if (r.status === (checked ? 200 : 204)) {
+				/* wait a few seconds for the settings to become effective */
+				var deadline = Date.now() + uci_apply_timeout * 1000;
+				window.setTimeout(function() {
+					uci_confirm(checked, deadline);
+				}, 2000);
+			}
+			else if (checked && r.status === 204) {
+				stat.innerHTML = '<%:There are no changes to apply.%>';
+				window.setTimeout(function() {
+					stat.style.display = 'none';
+					<% if redirect_ok then %>location.href = decodeURIComponent('<%=luci.util.urlencode(redirect_ok)%>');<% end %>
+				}, 1000);
+			}
+			else {
+				stat.innerHTML = '<%_Apply request failed with status <code>%h</code>%>'.format(r.responseText || r.statusText || r.status);
+			}
+		});
+	}
+//]]></script>
+<%-	end) %>

@@ -388,6 +388,7 @@ function Map.parse(self, readinput, ...)
 
 	if self.save then
 		self:_run_hooks("on_save", "on_before_save")
+		local i, config
 		for i, config in ipairs(self.parsechain) do
 			self.uci:save(config)
 		end
@@ -396,13 +397,10 @@ function Map.parse(self, readinput, ...)
 			self:_run_hooks("on_before_commit")
 			for i, config in ipairs(self.parsechain) do
 				self.uci:commit(config)
-
-				-- Refresh data because commit changes section names
-				self.uci:load(config)
 			end
 			self:_run_hooks("on_commit", "on_after_commit", "on_before_apply")
 			if self.apply_on_parse then
-				self.uci:apply(self.parsechain)
+				self.uci:apply(false)
 				self:_run_hooks("on_apply", "on_after_apply")
 			else
 				-- This is evaluated by the dispatcher and delegated to the
