@@ -4,7 +4,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=freifunk-policyrouting
-PKG_RELEASE:=6
+PKG_RELEASE:=7
 
 PKG_BUILD_DIR := $(BUILD_DIR)/$(PKG_NAME)
 

@@ -1,4 +1,9 @@
 #!/bin/sh
+
+if [ "$(uci -q get ucitrack.@freifunk-policyrouting[-1].exec)" = "'/etc/init.d/freifunk-policyrouting restart'" ]
+        exit 0
+fi
+
 uci batch <<-EOF
         add ucitrack freifunk-policyrouting
         add_list ucitrack.@freifunk-policyrouting[-1].exec="/etc/init.d/freifunk-policyrouting restart"
