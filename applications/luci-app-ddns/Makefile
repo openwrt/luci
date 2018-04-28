@@ -16,7 +16,7 @@ PKG_VERSION:=2.4.8
 
 # Release == build
 # increase on changes of translation files
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_LICENSE:=Apache-2.0
 PKG_MAINTAINER:=Christian Schoenebeck <christian.schoenebeck@gmail.com>
