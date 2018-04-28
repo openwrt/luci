@@ -54,10 +54,10 @@ XHR = function()
 			else
 				url += '?' + code;
 
+		xhr.open('GET', url, true);
+
 		if (!isNaN(timeout))
 			xhr.timeout = timeout;
-
-		xhr.open('GET', url, true);
 
 		xhr.onreadystatechange = function()
 		{
@@ -92,10 +92,11 @@ XHR = function()
 				callback(xhr);
 		}
 
+		xhr.open('POST', url, true);
+
 		if (!isNaN(timeout))
 			xhr.timeout = timeout;
 
-		xhr.open('POST', url, true);
 		xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 		xhr.send(code);
 	}
