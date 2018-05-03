@@ -1,6 +1,6 @@
 	<%- if pageaction then -%>
 	<div class="cbi-page-actions">
-		<% if redirect and not flow.hidebackbtn then %>
+		<% if redirect then %>
 		<div style="float:left">
 			<input class="cbi-button cbi-button-link" type="button" value="<%:Back to Overview%>" onclick="location.href='<%=pcdata(redirect)%>'" />
 		</div>
