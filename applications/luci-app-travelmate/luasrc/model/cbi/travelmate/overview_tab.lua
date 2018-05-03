@@ -19,8 +19,12 @@ m = Map("travelmate", translate("Travelmate"),
 	.. "<a href=\"%s\" target=\"_blank\">"
 	.. "see online documentation</a>", "https://github.com/openwrt/packages/blob/master/net/travelmate/files/README.md"))
 
+-- We might modify these configs too:
+m:chain("network")
+m:chain("firewall")
+
 function m.on_after_commit(self)
-	luci.sys.call("env -i /etc/init.d/travelmate restart >/dev/null 2>&1")
+	uci:apply(true)
 	luci.http.redirect(luci.dispatcher.build_url("admin", "services", "travelmate"))
 end
 
@@ -42,25 +46,24 @@ if uplink == "" then
 	btn.disabled = false
 
 	function btn.write(self, section)
+		-- Do uci changes. Note that we must not commit here as the rollback handler
+		-- needs to see "unsaved changes" in order to roll them back.
 		local iface = o:formvalue(section)
 		if iface then
 			uci:set("travelmate", section, "trm_iface", iface)
-			uci:save("travelmate")
-			uci:commit("travelmate")
 			local net = nw:add_network(iface, { proto = "dhcp" })
 			if net then
-				nw:save("network")
-				nw:commit("network")
 				local zone = fw:get_zone_by_network("wan")
 				if zone then
 					zone:add_network(iface)
-					fw:save("firewall")
-					fw:commit("firewall")
 				end
 			end
-			luci.sys.call("env -i /bin/ubus call network reload >/dev/null 2>&1")
 		end
-		luci.http.redirect(luci.dispatcher.build_url("admin", "services", "travelmate"))
+
+		-- Since we're prematurely terminating the cbi logic flow here and since we trigger
+		-- our modifications in a button write callback and not via cbi.apply, we do need to
+		-- tell cbi to trigger apply/rollback.
+		m.flow.autoapply = true
 	end
 	return m
 end
