@@ -1428,7 +1428,7 @@ function wifidev.hwmodes(self)
 end
 
 function wifidev.get_i18n(self)
-	local t = "Generic"
+	local t = self.iwinfo.hardware_name or "Generic"
 	if self.iwinfo.type == "wl" then
 		t = "Broadcom"
 	end
