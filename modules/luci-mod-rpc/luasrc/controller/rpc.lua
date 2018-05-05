@@ -2,50 +2,42 @@
 -- Copyright 2008 Jo-Philipp Wich <jow@openwrt.org>
 -- Licensed to the public under the Apache License 2.0.
 
-local require = require
-local pairs = pairs
-local print = print
-local pcall = pcall
-local table = table
-local type = type
-local tonumber = tonumber
+module("luci.controller.rpc", package.seeall)
 
-module "luci.controller.rpc"
-
-
-local function session_retrieve(sid, allowed_users)
-	local util = require "luci.util"
-	local sdat = util.ubus("session", "get", {
-		ubus_rpc_session = sid
-	})
-
-	if type(sdat) == "table" and
-	   type(sdat.values) == "table" and
-	   type(sdat.values.token) == "string" and
-	   type(sdat.values.secret) == "string" and
-	   type(sdat.values.username) == "string" and
-	   util.contains(allowed_users, sdat.values.username)
-	then
-		return sid, sdat.values
-	end
-
-	return nil
-end
-
-local function authenticator(validator, accs)
-	local auth = luci.http.formvalue("auth", true)
-		or luci.http.getcookie("sysauth")
-
-	if auth then -- if authentication token was given
-		local sid, sdat = session_retrieve(auth, accs)
-		if sdat then -- if given token is valid
-			return sdat.username, sid
-		end
-		luci.http.status(403, "Forbidden")
-	end
-end
 
 function index()
+	local function session_retrieve(sid, allowed_users)
+		local util = require "luci.util"
+		local sdat = util.ubus("session", "get", {
+			ubus_rpc_session = sid
+		})
+
+		if type(sdat) == "table" and
+		   type(sdat.values) == "table" and
+		   type(sdat.values.token) == "string" and
+		   type(sdat.values.secret) == "string" and
+		   type(sdat.values.username) == "string" and
+		   util.contains(allowed_users, sdat.values.username)
+		then
+			return sid, sdat.values
+		end
+
+		return nil
+	end
+
+	local function authenticator(validator, accs)
+		local http = require "luci.http"
+		local auth = http.formvalue("auth", true) or http.getcookie("sysauth")
+
+		if auth then -- if authentication token was given
+			local sid, sdat = session_retrieve(auth, accs)
+			if sdat then -- if given token is valid
+				return sdat.username, sid
+			end
+			http.status(403, "Forbidden")
+		end
+	end
+
 	local rpc = node("rpc")
 	rpc.sysauth = "root"
 	rpc.sysauth_authenticator = authenticator
