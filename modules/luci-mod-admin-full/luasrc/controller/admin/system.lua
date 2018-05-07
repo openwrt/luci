@@ -28,7 +28,10 @@ function index()
 	end
 
 	if fs.access("/sys/class/leds") then
-		entry({"admin", "system", "leds"}, cbi("admin_system/leds"), _("<abbr title=\"Light Emitting Diode\">LED</abbr> Configuration"), 60)
+		local nodes, number=nixio.fs.glob("/sys/class/leds/*")
+		if number > 0 then
+			entry({"admin", "system", "leds"}, cbi("admin_system/leds"), _("<abbr title=\"Light Emitting Diode\">LED</abbr> Configuration"), 60)
+		end
 	end
 
 	entry({"admin", "system", "flashops"}, call("action_flashops"), _("Backup / Flash Firmware"), 70)
@@ -195,7 +198,7 @@ local function supports_sysupgrade()
 end
 
 local function supports_reset()
-	return (os.execute([[grep -sqE '"rootfs_data"|"ubi"' /proc/mtd]]) == 0)
+	return (os.execute([[grep "^overlayfs:/overlay / overlay " 1>/dev/null 2>&1 /proc/mounts]]) == 0)
 end
 
 local function storage_size()
