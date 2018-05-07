@@ -109,8 +109,7 @@
 		if (legend && output)
 		{
 			var prefix = location.protocol + '//' + location.hostname +
-			           (location.port ? ':' + location.port : '') +
-					   location.pathname.split(';')[0] + 'command/';
+			           (location.port ? ':' + location.port : '') + '<%=url('command')%>/';
 			var suffix = (args ? '/' + args : '');
 			
 			var link = prefix + id + suffix;
