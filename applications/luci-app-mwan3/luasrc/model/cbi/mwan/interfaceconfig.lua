@@ -54,6 +54,7 @@ count:value("5")
 
 size = mwan_interface:option(Value, "size", translate("Ping size"))
 size.default = "56"
+size:depends("track_method", "ping")
 size:value("8")
 size:value("24")
 size:value("56")
