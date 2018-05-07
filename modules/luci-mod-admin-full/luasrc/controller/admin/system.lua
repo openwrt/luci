@@ -27,7 +27,7 @@ function index()
 		entry({"admin", "system", "fstab", "swap"},  cbi("admin_system/fstab/swap"),  nil).leaf = true
 	end
 
-	local nodes, number = nixio.fs.glob("/sys/class/leds/*")
+	local nodes, number = fs.glob("/sys/class/leds/*")
 	if number > 0 then
 		entry({"admin", "system", "leds"}, cbi("admin_system/leds"), _("<abbr title=\"Light Emitting Diode\">LED</abbr> Configuration"), 60)
 	end
