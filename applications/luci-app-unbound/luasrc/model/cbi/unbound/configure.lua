@@ -280,7 +280,7 @@ else
 end
 
 
-function m1.on_after_commit(self)
+function m1.on_apply(self)
   function ena.validate(self, value)
     if value ~= "0" then
       luci.sys.call("/etc/init.d/unbound restart >/dev/null 2>&1")
