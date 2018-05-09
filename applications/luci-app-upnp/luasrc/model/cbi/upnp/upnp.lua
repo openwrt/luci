@@ -74,7 +74,7 @@ pu = s:taboption("advanced", Value, "presentation_url", translate("Presentation 
 pu.placeholder = "http://192.168.1.1/"
 
 lf = s:taboption("advanced", Value, "upnp_lease_file", translate("UPnP lease file"))
-lf.placeholder = "/var/log/upnp.leases"
+lf.placeholder = "/var/run/miniupnpd.leases"
 
 
 s2 = m:section(TypedSection, "perm_rule", translate("MiniUPnP ACLs"),
