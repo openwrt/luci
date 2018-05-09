@@ -97,9 +97,9 @@ function diagnosticsData(interface, task)
 		return interfaceNumber
 	end
 
-	function diag_command(cmd, addr)
+	function diag_command(cmd, device, addr)
 		if addr and addr:match("^[a-zA-Z0-9%-%.:_]+$") then
-			local util = io.popen(cmd % ut.shellquote(addr))
+			local util = io.popen(cmd %{ut.shellquote(device), ut.shellquote(addr)})
 			if util then
 				while true do
 					local ln = util:read("*l")
@@ -145,7 +145,7 @@ function diagnosticsData(interface, task)
 		if task == "ping_gateway" then
 			local gateway = get_gateway(interface)
 			if gateway ~= nil then
-				diag_command("ping -c 5 -W 1 %s 2>&1", gateway)
+				diag_command("ping -I %s -c 5 -W 1 %s 2>&1", device, gateway)
 			else
 				luci.http.prepare_content("text/plain")
 				luci.http.write(string.format("No gateway for interface %s found.", interface))
@@ -154,7 +154,7 @@ function diagnosticsData(interface, task)
 			local trackips = uci:get("mwan3", interface, "track_ip")
 			if #trackips > 0 then
 				for i in pairs(trackips) do
-					diag_command("ping -c 5 -W 1 %s 2>&1", trackips[i])
+					diag_command("ping -I %s -c 5 -W 1 %s 2>&1", device, trackips[i])
 				end
 			else
 				luci.http.write(string.format("No tracking Hosts for interface %s defined.", interface))
