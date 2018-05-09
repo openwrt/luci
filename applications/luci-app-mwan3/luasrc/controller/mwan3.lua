@@ -114,8 +114,14 @@ function diagnosticsData(interface, task)
 	end
 
 	function get_gateway(inteface)
-		local dump = require("luci.util").ubus("network.interface.%s" % interface, "status", {})
-		local gateway
+		local gateway = nil
+		local dump = nil
+
+		dump = require("luci.util").ubus("network.interface.%s_4" % interface, "status", {})
+		if not dump then
+			dump = require("luci.util").ubus("network.interface.%s" % interface, "status", {})
+		end
+
 		if dump and dump.route then
 			local _, route
 			for _, route in ipairs(dump.route) do
