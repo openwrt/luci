@@ -41,12 +41,14 @@ if uplink == "" then
 
 	function o.validate(self, value)
 		if value then
-			local net = nw:add_network(value, { proto = "dhcp" })
-			if net then
-				local zone = fw:get_zone_by_network("wan")
-				if zone then
-					zone:add_network(value)
-				end
+			local nwnet = nw:get_network(value)
+			local zone  = fw:get_zone("wan")
+			local fwnet = fw:get_zone_by_network(value)
+			if not nwnet then
+				nwnet = nw:add_network(value, { proto = "dhcp" })
+			end
+			if zone and not fwnet then
+				fwnet = zone:add_network(value)
 			end
 		end
 		return value
