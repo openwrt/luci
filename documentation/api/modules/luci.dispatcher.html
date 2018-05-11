@@ -41,19 +41,15 @@
 	</li>
 
 	<li>
-		<a href="../modules/luci.http.protocol.html">luci.http.protocol</a>
+		<a href="../modules/luci.http.conditionals.html">luci.http.conditionals</a>
 	</li>
 
 	<li>
-		<a href="../modules/luci.http.protocol.conditionals.html">luci.http.protocol.conditionals</a>
+		<a href="../modules/luci.http.date.html">luci.http.date</a>
 	</li>
 
 	<li>
-		<a href="../modules/luci.http.protocol.date.html">luci.http.protocol.date</a>
-	</li>
-
-	<li>
-		<a href="../modules/luci.http.protocol.mime.html">luci.http.protocol.mime</a>
+		<a href="../modules/luci.http.mime.html">luci.http.mime</a>
 	</li>
 
 	<li>
@@ -321,7 +317,6 @@ Create a CBI form model dispatching target.</td>
 	<td class="summary">
  
 Fetch or create a dispatching node without setting the target module or 
- 
 enabling the node.</td>
 	</tr>
 
@@ -330,6 +325,13 @@ enabling the node.</td>
 	<td class="summary">
  
 Dispatch an HTTP request.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#lookup">lookup</a>&nbsp;(...)</td>
+	<td class="summary">
+ 
+Lookup node in dispatching tree.</td>
 	</tr>
 
 	<tr>
@@ -857,8 +859,8 @@ Create a CBI form model dispatching target.
 
  
 Fetch or create a dispatching node without setting the target module or 
- 
-enabling the node.
+enabling the node. 
+
 
 
 <h3>Parameters</h3>
@@ -906,6 +908,38 @@ Dispatch an HTTP request.
 
 
 
+
+
+
+</dd>
+
+
+
+
+<dt><a name="lookup"></a><strong>lookup</strong>&nbsp;(...)</dt>
+<dd>
+
+ 
+Lookup node in dispatching tree. 
+
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  ...: Virtual path
+	</li>
+	
+</ul>
+
+
+
+
+
+
+<h3>Return value:</h3>
+Node object, canonical url or nil if the path was not found.
 
 
 

@@ -486,26 +486,22 @@ end
 -- handled then the whole message body will be stored unaltered as "content"
 -- property within the given message object.
 function parse_message_body(src, msg, filecb)
-	local ctype = lhttp.header_attribute(msg.env.CONTENT_TYPE, nil)
+	if msg.env.CONTENT_LENGTH or msg.env.REQUEST_METHOD == "POST" then
+		local ctype = lhttp.header_attribute(msg.env.CONTENT_TYPE, nil)
 
-	-- Is it multipart/mime ?
-	if msg.env.REQUEST_METHOD == "POST" and
-	   ctype == "multipart/form-data"
-	then
-		return mimedecode_message_body(src, msg, filecb)
+		-- Is it multipart/mime ?
+		if ctype == "multipart/form-data" then
+			return mimedecode_message_body(src, msg, filecb)
 
-	-- Is it application/x-www-form-urlencoded ?
-	elseif msg.env.REQUEST_METHOD == "POST" and
-	       ctype == "application/x-www-form-urlencoded"
-	then
-		return urldecode_message_body(src, msg)
+		-- Is it application/x-www-form-urlencoded ?
+		elseif ctype == "application/x-www-form-urlencoded" then
+			return urldecode_message_body(src, msg)
 
+		end
 
-	-- Unhandled encoding
-	-- If a file callback is given then feed it chunk by chunk, else
-	-- store whole buffer in message.content
-	else
-
+		-- Unhandled encoding
+		-- If a file callback is given then feed it chunk by chunk, else
+		-- store whole buffer in message.content
 		local sink
 
 		-- If we have a file callback then feed it
@@ -553,4 +549,6 @@ function parse_message_body(src, msg, filecb)
 
 		return true
 	end
+
+	return false
 end

@@ -99,22 +99,14 @@
 				end
 			end
 
-			write('<div id="savemenu">')
-
 			if ucic > 0 then
-				write('<a class="warning" href="%s?redir=%s">%s: %d</a>' %{
+				write('<div id="savemenu" class="uci_change_indicator"><a class="warning" href="%s?redir=%s">%s: %d</a></div>' %{
 					url(category, 'uci/changes'),
 					http.urlencode(http.formvalue('redir') or table.concat(disp.context.request, "/")),
 					translate('Unsaved Changes'),
 					ucic
 				})
-			else
-				write('<a href="#">%s: 0</a>' %{
-					translate('Unsaved Changes')
-				})
 			end
-
-			write('</div>')
 		end
 	end
 -%>

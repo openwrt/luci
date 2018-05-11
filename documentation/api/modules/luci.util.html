@@ -43,19 +43,15 @@
 	</li>
 
 	<li>
-		<a href="../modules/luci.http.protocol.html">luci.http.protocol</a>
+		<a href="../modules/luci.http.conditionals.html">luci.http.conditionals</a>
 	</li>
 
 	<li>
-		<a href="../modules/luci.http.protocol.conditionals.html">luci.http.protocol.conditionals</a>
+		<a href="../modules/luci.http.date.html">luci.http.date</a>
 	</li>
 
 	<li>
-		<a href="../modules/luci.http.protocol.date.html">luci.http.protocol.date</a>
-	</li>
-
-	<li>
-		<a href="../modules/luci.http.protocol.mime.html">luci.http.protocol.mime</a>
+		<a href="../modules/luci.http.mime.html">luci.http.mime</a>
 	</li>
 
 	<li>
@@ -275,13 +271,6 @@ This is a coroutine-safe drop-in replacement for Lua's "xpcall"-function
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#dtable">dtable</a>&nbsp;()</td>
-	<td class="summary">
- 
-Create a dynamic table which automatically creates subtables.</td>
-	</tr>
-
-	<tr>
 	<td class="name" nowrap><a href="#dumptable">dumptable</a>&nbsp;(t, maxdepth)</td>
 	<td class="summary">
  
@@ -349,7 +338,6 @@ Returns the absolute path to LuCI base directory.</td>
 	<td class="summary">
  
 Parse certain units from the given string and return the canonical integer 
- 
 value or 0 if the unit is unknown.</td>
 	</tr>
 
@@ -379,7 +367,6 @@ Restore data previously serialized with serialize_data().</td>
 	<td class="summary">
  
 Recursively serialize given data to lua code, suitable for restoring 
- 
 with loadstring().</td>
 	</tr>
 
@@ -392,11 +379,17 @@ Convert data structure to JSON
 	</tr>
 
 	<tr>
+	<td class="name" nowrap><a href="#shellquote">shellquote</a>&nbsp;(value)</td>
+	<td class="summary">
+ 
+Safely quote value for use in shell commands.</td>
+	</tr>
+
+	<tr>
 	<td class="name" nowrap><a href="#spairs">spairs</a>&nbsp;(t, f)</td>
 	<td class="summary">
  
 Return a key, value iterator which returns the values sorted according to 
- 
 the provided callback function.</td>
 	</tr>
 
@@ -405,7 +398,6 @@ the provided callback function.</td>
 	<td class="summary">
  
 Splits given string on a defined separator sequence and return a table 
- 
 containing the resulting substrings.</td>
 	</tr>
 
@@ -428,7 +420,6 @@ Strip HTML tags from given string.</td>
 	<td class="summary">
  
 Create a new or get an already existing thread local store associated with 
- 
 the current active coroutine.</td>
 	</tr>
 
@@ -451,6 +442,20 @@ Issue an ubus call.</td>
 	<td class="summary">
  
 Update values in given table with the values from the second given table.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#urldecode">urldecode</a>&nbsp;(str, decode_plus)</td>
+	<td class="summary">
+ 
+Decode an URL-encoded string - optionally decoding the "+" sign to space.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#urlencode">urlencode</a>&nbsp;(str)</td>
+	<td class="summary">
+ 
+URL-encode given string.</td>
 	</tr>
 
 	<tr>
@@ -549,7 +554,8 @@ Classes can inherit member functions and values from a base class.
 Class can be instantiated by calling them. All parameters will be passed 
 to the __init__ function of this class - if such a function exists. 
 The __init__ function must be used to set any object parameters that are not shared 
-with other objects of this class. Any return values will be ignored.
+with other objects of this class. Any return values will be ignored. 
+
 
 
 <h3>Parameters</h3>
@@ -728,8 +734,8 @@ Checks whether the given table contains the given value.
 
 
 <h3>Return value:</h3>
-number indicating the first index at which the given value occurs 
-			within table or false.
+Number indicating the first index at which the given value occurs 
+					within table or false.
 
 
 
@@ -766,7 +772,7 @@ This is a coroutine-safe drop-in replacement for Lua's "pcall"-function
 
 <h3>Return value:</h3>
 A boolean whether the function call succeeded and the returns 
-				values of the function or the error object
+					values of the function or the error object
 
 
 
@@ -807,30 +813,7 @@ This is a coroutine-safe drop-in replacement for Lua's "xpcall"-function
 
 <h3>Return value:</h3>
 A boolean whether the function call succeeded and the return 
-				values of either the function or the error handler
-
-
-
-</dd>
-
-
-
-
-<dt><a name="dtable"></a><strong>dtable</strong>&nbsp;()</dt>
-<dd>
-
- 
-Create a dynamic table which automatically creates subtables. 
-
-
-
-
-
-
-
-
-<h3>Return value:</h3>
-Dynamic Table
+					values of either the function or the error handler
 
 
 
@@ -944,8 +927,8 @@ Iterator
 
  
 Return the current runtime bytecode of the given data. The byte code 
- 
-will be stripped before it is returned.
+will be stripped before it is returned. 
+
 
 
 <h3>Parameters</h3>
@@ -976,11 +959,12 @@ String value containing the bytecode of the given data
 <dd>
 
  
-Return a matching iterator for the given value. The iterator will return 
+Return a matching iterator for the given value. 
  
-one token per invocation, the tokens are separated by whitespace. If the 
-input value is a table, it is transformed into a string first. A nil value 
-will result in a valid interator which aborts with the first invocation.
+The iterator will return one token per invocation, the tokens are separated by 
+whitespace. If the input value is a table, it is transformed into a string first. 
+A nil value will result in a valid interator which aborts with the first invocation. 
+
 
 
 <h3>Parameters</h3>
@@ -1094,7 +1078,8 @@ Sorted table containing the keys
  
 Return a key, value iterator for the given table. 
  
-The table pairs are sorted by key.
+The table pairs are sorted by key. 
+
 
 
 <h3>Parameters</h3>
@@ -1149,9 +1134,11 @@ String containing the directory path
 
  
 Parse certain units from the given string and return the canonical integer 
+value or 0 if the unit is unknown. 
  
-value or 0 if the unit is unknown. Upper- or lower case is irrelevant. 
+Upper- or lower case is irrelevant. 
 Recognized units are: 
+ 
 	o "y"	- one year   (60*60*24*366) 
  o "m"	- one month  (60*60*24*31) 
  o "w"	- one week   (60*60*24*7) 
@@ -1163,7 +1150,8 @@ Recognized units are:
  o "gb"	- one gigabyte (1024*1024*1024) 
  o "kib" - one si kilobyte (1000) 
  o "mib"	- one si megabyte (1000*1000) 
- o "gib"	- one si gigabyte (1000*1000*1000)
+ o "gib"	- one si gigabyte (1000*1000*1000) 
+
 
 
 <h3>Parameters</h3>
@@ -1304,8 +1292,8 @@ Value containing the restored data structure
 
  
 Recursively serialize given data to lua code, suitable for restoring 
- 
-with loadstring().
+with loadstring(). 
+
 
 
 <h3>Parameters</h3>
@@ -1381,13 +1369,45 @@ String containing the JSON if called without write callback
 
 
 
+<dt><a name="shellquote"></a><strong>shellquote</strong>&nbsp;(value)</dt>
+<dd>
+
+ 
+Safely quote value for use in shell commands. 
+
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  value: String containing the value to quote
+	</li>
+	
+</ul>
+
+
+
+
+
+
+<h3>Return value:</h3>
+Single-quote enclosed string with embedded quotes escaped
+
+
+
+</dd>
+
+
+
+
 <dt><a name="spairs"></a><strong>spairs</strong>&nbsp;(t, f)</dt>
 <dd>
 
  
 Return a key, value iterator which returns the values sorted according to 
- 
-the provided callback function.
+the provided callback function. 
+
 
 
 <h3>Parameters</h3>
@@ -1423,11 +1443,13 @@ Function value containing the corresponding iterator
 
  
 Splits given string on a defined separator sequence and return a table 
+containing the resulting substrings. 
  
-containing the resulting substrings. The optional max parameter specifies 
-the number of bytes to process, regardless of the actual length of the given 
-string. The optional last parameter, regex, specifies whether the separator 
-sequence is interpreted as regular expression.
+The optional max parameter specifies the number of bytes to process, 
+regardless of the actual length of the given string. The optional last 
+parameter, regex, specifies whether the separator sequence is 
+nterpreted as regular expression. 
+
 
 
 <h3>Parameters</h3>
@@ -1471,10 +1493,11 @@ Table containing the resulting substrings
 <dd>
 
  
-Strips unnescessary lua bytecode from given string. Information like line 
+Strips unnescessary lua bytecode from given string. 
  
-numbers and debugging numbers will be discarded. Original version by 
-Peter Cawley (http://lua-users.org/lists/lua-l/2008-02/msg01158.html)
+Information like line numbers and debugging numbers will be discarded. 
+Original version by Peter Cawley (http://lua-users.org/lists/lua-l/2008-02/msg01158.html) 
+
 
 
 <h3>Parameters</h3>
@@ -1538,9 +1561,11 @@ String with HTML tags stripped of
 
  
 Create a new or get an already existing thread local store associated with 
+the current active coroutine. 
  
-the current active coroutine. A thread local store is private a table object 
-whose values can't be accessed from outside of the running coroutine.
+A thread local store is private a table object 
+whose values can't be accessed from outside of the running coroutine. 
+
 
 
 
@@ -1636,7 +1661,8 @@ Table containin the ubus result
  
 Update values in given table with the values from the second given table. 
  
-Both table are - in fact - merged together.
+Both table are - in fact - merged together. 
+
 
 
 <h3>Parameters</h3>
@@ -1667,13 +1693,100 @@ Always nil
 
 
 
+<dt><a name="urldecode"></a><strong>urldecode</strong>&nbsp;(str, decode_plus)</dt>
+<dd>
+
+ 
+Decode an URL-encoded string - optionally decoding the "+" sign to space. 
+
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  str: Input string in x-www-urlencoded format
+	</li>
+	
+	<li>
+	  decode_plus: Decode "+" signs to spaces if true (optional)
+	</li>
+	
+</ul>
+
+
+
+
+
+
+<h3>Return value:</h3>
+The decoded string
+
+
+
+<h3>See also:</h3>
+<ul>
+	
+	<li><a href="#urlencode">
+		urlencode
+	</a>
+	
+</ul>
+
+</dd>
+
+
+
+
+<dt><a name="urlencode"></a><strong>urlencode</strong>&nbsp;(str)</dt>
+<dd>
+
+ 
+URL-encode given string. 
+
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  str: String to encode
+	</li>
+	
+</ul>
+
+
+
+
+
+
+<h3>Return value:</h3>
+String containing the encoded data
+
+
+
+<h3>See also:</h3>
+<ul>
+	
+	<li><a href="#urldecode">
+		urldecode
+	</a>
+	
+</ul>
+
+</dd>
+
+
+
+
 <dt><a name="vspairs"></a><strong>vspairs</strong>&nbsp;(t)</dt>
 <dd>
 
  
 Return a key, value iterator for the given table. 
  
-The table pairs are sorted by value.
+The table pairs are sorted by value. 
+
 
 
 <h3>Parameters</h3>

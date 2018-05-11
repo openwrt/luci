@@ -1229,7 +1229,7 @@ if DDNS.has_proxy or ( ( m:get(section, "proxy") or "" ) ~= "" ) then
 		elseif DDNS.has_proxy then
 			local ipv6  = usev6:formvalue(section) or "0"
 			local force = fipv:formvalue(section) or "0"
-			local command = CRTL.luci_helper .. [[ -]]
+			local command = CTRL.luci_helper .. [[ -]]
 			if (ipv6 == 1)  then command = command .. [[6]] end
 			if (force == 1) then command = command .. [[f]] end
 			command = command .. [[p ]] .. value .. [[ -- verify_proxy]]

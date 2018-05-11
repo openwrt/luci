@@ -18,8 +18,11 @@ m = Map("travelmate", translate("Travelmate"),
 	.. translatef("For further information "
 	.. "<a href=\"%s\" target=\"_blank\">"
 	.. "see online documentation</a>", "https://github.com/openwrt/packages/blob/master/net/travelmate/files/README.md"))
+m:chain("network")
+m:chain("firewall")
+m.apply_on_parse = true
 
-function m.on_after_commit(self)
+function m.on_apply(self)
 	luci.sys.call("env -i /etc/init.d/travelmate restart >/dev/null 2>&1")
 	luci.http.redirect(luci.dispatcher.build_url("admin", "services", "travelmate"))
 end
@@ -28,39 +31,25 @@ end
 
 if uplink == "" then
 	ds = m:section(NamedSection, "global", "travelmate", translate("Interface Wizard"))
-
-	o = ds:option(Value, "", translate("Uplink interface"))
+	o = ds:option(Value, "trm_iface", translate("Create Uplink interface"),
+		translate("Create a new wireless wan uplink interface, configure it to use dhcp and ")
+		.. translate("add it to the wan zone of the firewall.<br />")
+		.. translate("This step has only to be done once."))
 	o.datatype = "and(uciname,rangelength(3,15))"
 	o.default = trmiface
 	o.rmempty = false
 
-	btn = ds:option(Button, "trm_iface", translate("Create Uplink Interface"),
-		translate("Create a new wireless wan uplink interface, configure it to use dhcp and ")
-		.. translate("add it to the wan zone of the firewall. This step has only to be done once."))
-	btn.inputtitle = translate("Add Interface")
-	btn.inputstyle = "apply"
-	btn.disabled = false
-
-	function btn.write(self, section)
-		local iface = o:formvalue(section)
-		if iface then
-			uci:set("travelmate", section, "trm_iface", iface)
-			uci:save("travelmate")
-			uci:commit("travelmate")
-			local net = nw:add_network(iface, { proto = "dhcp" })
+	function o.validate(self, value)
+		if value then
+			local net = nw:add_network(value, { proto = "dhcp" })
 			if net then
-				nw:save("network")
-				nw:commit("network")
 				local zone = fw:get_zone_by_network("wan")
 				if zone then
-					zone:add_network(iface)
-					fw:save("firewall")
-					fw:commit("firewall")
+					zone:add_network(value)
 				end
 			end
-			luci.sys.call("env -i /bin/ubus call network reload >/dev/null 2>&1")
 		end
-		luci.http.redirect(luci.dispatcher.build_url("admin", "services", "travelmate"))
+		return value
 	end
 	return m
 end

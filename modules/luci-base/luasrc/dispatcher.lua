@@ -442,6 +442,13 @@ function dispatch(request)
 		ctx.authuser = sdat.username
 	end
 
+	if track.cors and http.getenv("REQUEST_METHOD") == "OPTIONS" then
+		luci.http.status(200, "OK")
+		luci.http.header("Access-Control-Allow-Origin", http.getenv("HTTP_ORIGIN") or "*")
+		luci.http.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+		return
+	end
+
 	if c and require_post_security(c.target) then
 		if not test_post_security(c) then
 			return

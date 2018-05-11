@@ -631,6 +631,20 @@ function execl(command)
 	return data
 end
 
+
+local ubus_codes = {
+	"INVALID_COMMAND",
+	"INVALID_ARGUMENT",
+	"METHOD_NOT_FOUND",
+	"NOT_FOUND",
+	"NO_DATA",
+	"PERMISSION_DENIED",
+	"TIMEOUT",
+	"NOT_SUPPORTED",
+	"UNKNOWN_ERROR",
+	"CONNECTION_FAILED"
+}
+
 function ubus(object, method, data)
 	if not _ubus_connection then
 		_ubus_connection = _ubus.connect()
@@ -641,7 +655,8 @@ function ubus(object, method, data)
 		if type(data) ~= "table" then
 			data = { }
 		end
-		return _ubus_connection:call(object, method, data)
+		local rv, err = _ubus_connection:call(object, method, data)
+		return rv, err, ubus_codes[err]
 	elseif object then
 		return _ubus_connection:signatures(object)
 	else

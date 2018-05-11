@@ -39,7 +39,7 @@ XHR = function()
 			this._xmlHttp.abort();
 	}
 
-	this.get = function(url,data,callback)
+	this.get = function(url,data,callback,timeout)
 	{
 		this.reinit();
 
@@ -55,6 +55,9 @@ XHR = function()
 				url += '?' + code;
 
 		xhr.open('GET', url, true);
+
+		if (!isNaN(timeout))
+			xhr.timeout = timeout;
 
 		xhr.onreadystatechange = function()
 		{
@@ -76,7 +79,7 @@ XHR = function()
 		xhr.send(null);
 	}
 
-	this.post = function(url,data,callback)
+	this.post = function(url,data,callback,timeout)
 	{
 		this.reinit();
 
@@ -90,6 +93,10 @@ XHR = function()
 		}
 
 		xhr.open('POST', url, true);
+
+		if (!isNaN(timeout))
+			xhr.timeout = timeout;
+
 		xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 		xhr.send(code);
 	}
@@ -168,7 +175,7 @@ XHR.get = function(url, data, callback)
 	(new XHR()).get(url, data, callback);
 }
 
-XHR.poll = function(interval, url, data, callback)
+XHR.poll = function(interval, url, data, callback, post)
 {
 	if (isNaN(interval) || interval < 1)
 		interval = 5;
@@ -181,22 +188,38 @@ XHR.poll = function(interval, url, data, callback)
 			for (var i = 0, e = XHR._q[0]; i < XHR._q.length; e = XHR._q[++i])
 			{
 				if (!(XHR._t % e.interval) && !e.xhr.busy())
-					e.xhr.get(e.url, e.data, e.callback);
+					e.xhr[post ? 'post' : 'get'](e.url, e.data, e.callback, e.interval * 1000 - 5);
 			}
 
 			XHR._t++;
 		};
 	}
 
-	XHR._q.push({
+	var e = {
 		interval: interval,
 		callback: callback,
 		url:      url,
 		data:     data,
 		xhr:      new XHR()
-	});
+	};
 
+	XHR._q.push(e);
 	XHR.run();
+
+	return e;
+}
+
+XHR.stop = function(e)
+{
+	for (var i = 0; XHR._q && XHR._q[i]; i++) {
+		if (XHR._q[i] === e) {
+			e.xhr.cancel();
+			XHR._q.splice(i, 1);
+			return true;
+		}
+	}
+
+	return false;
 }
 
 XHR.halt = function()

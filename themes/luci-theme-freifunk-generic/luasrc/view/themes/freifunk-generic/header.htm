@@ -205,7 +205,7 @@ if tree.nodes[category] and tree.nodes[category].ucidata then
 -%>
 	<div id="savemenu">
 		<% if ucic > 0 then %>
-			<a class="warning" href="<%=controller%>/<%=category%>/uci/changes/?redir=<%=http.urlencode(http.formvalue('redir') or table.concat(disp.context.request, "/"))%>"><%:Unsaved Changes%>: <%=ucic%></a>
+			<a class="uci_change_indicator warning" href="<%=controller%>/<%=category%>/uci/changes/?redir=<%=http.urlencode(http.formvalue('redir') or table.concat(disp.context.request, "/"))%>"><%:Unsaved Changes%>: <%=ucic%></a>
 		<% end -%>
 	</div>
 <% end %>

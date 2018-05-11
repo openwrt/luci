@@ -41,19 +41,15 @@
 	<li><strong>luci.http</strong></li>
 	
 	<li>
-		<a href="../modules/luci.http.protocol.html">luci.http.protocol</a>
+		<a href="../modules/luci.http.conditionals.html">luci.http.conditionals</a>
 	</li>
 
 	<li>
-		<a href="../modules/luci.http.protocol.conditionals.html">luci.http.protocol.conditionals</a>
+		<a href="../modules/luci.http.date.html">luci.http.date</a>
 	</li>
 
 	<li>
-		<a href="../modules/luci.http.protocol.date.html">luci.http.protocol.date</a>
-	</li>
-
-	<li>
-		<a href="../modules/luci.http.protocol.mime.html">luci.http.protocol.mime</a>
+		<a href="../modules/luci.http.mime.html">luci.http.mime</a>
 	</li>
 
 	<li>
@@ -256,7 +252,6 @@ Get the value of a certain HTTP-Cookie.</td>
 	<td class="summary">
  
 Get the value of a certain HTTP environment variable 
- 
 or the environment table itself.</td>
 	</tr>
 
@@ -265,6 +260,20 @@ or the environment table itself.</td>
 	<td class="summary">
  
 Send a HTTP-Header.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#mimedecode_message_body">mimedecode_message_body</a>&nbsp;(src, msg, filecb)</td>
+	<td class="summary">
+ 
+Decode a mime encoded http message body with multipart/form-data Content-Type.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#parse_message_body">parse_message_body</a>&nbsp;(src, msg, filecb)</td>
+	<td class="summary">
+ 
+Try to extract and decode a http message body from the given ltn12 source.</td>
 	</tr>
 
 	<tr>
@@ -308,6 +317,44 @@ Splice data from a filedescriptor to the client.</td>
 	<td class="summary">
  
 Set the HTTP status code and status message.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#urldecode">urldecode</a>&nbsp;(str, no_plus)</td>
+	<td class="summary">
+ 
+Return the URL-decoded equivalent of a string.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#urldecode_message_body">urldecode_message_body</a>&nbsp;(src, msg)</td>
+	<td class="summary">
+ 
+Decode an urlencoded http message body with application/x-www-urlencoded 
+Content-Type.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#urldecode_params">urldecode_params</a>&nbsp;(url, tbl)</td>
+	<td class="summary">
+ 
+Extract and split urlencoded data pairs, separated bei either "&" or ";" 
+from given url or string.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#urlencode">urlencode</a>&nbsp;(str)</td>
+	<td class="summary">
+ 
+Return the URL-encoded equivalent of a string.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#urlencode_params">urlencode_params</a>&nbsp;(tbl)</td>
+	<td class="summary">
+ 
+Encode each key-value-pair in given table to x-www-urlencoded format, 
+separated by "&".</td>
 	</tr>
 
 	<tr>
@@ -377,7 +424,6 @@ Encoded HTTP query string
 
  
 Close the HTTP-Connection. 
- 
 
 
 
@@ -527,8 +573,8 @@ String containing cookie data
 
  
 Get the value of a certain HTTP environment variable 
- 
-or the environment table itself.
+or the environment table itself. 
+
 
 
 <h3>Parameters</h3>
@@ -582,6 +628,135 @@ Send a HTTP-Header.
 
 
 
+
+</dd>
+
+
+
+
+<dt><a name="mimedecode_message_body"></a><strong>mimedecode_message_body</strong>&nbsp;(src, msg, filecb)</dt>
+<dd>
+
+ 
+Decode a mime encoded http message body with multipart/form-data Content-Type. 
+ 
+Stores all extracted data associated with its parameter name 
+in the params table within the given message object. Multiple parameter 
+values are stored as tables, ordinary ones as strings. 
+ 
+If an optional file callback function is given then it is feeded with the 
+file contents chunk by chunk and only the extracted file name is stored 
+within the params table. The callback function will be called subsequently 
+with three arguments: 
+ o Table containing decoded (name, file) and raw (headers) mime header data 
+ o String value containing a chunk of the file data 
+ o Boolean which indicates wheather the current chunk is the last one (eof) 
+
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  src: Ltn12 source function
+	</li>
+	
+	<li>
+	  msg: HTTP message object
+	</li>
+	
+	<li>
+	  filecb: File callback function (optional)
+	</li>
+	
+</ul>
+
+
+
+
+
+
+<h3>Return values:</h3>
+<ol>
+	
+	<li>Value indicating successful operation (not nil means "ok")
+	
+	<li>String containing the error if unsuccessful
+	
+</ol>
+
+
+
+<h3>See also:</h3>
+<ul>
+	
+	<li><a href="">
+		parse_message_header
+	</a>
+	
+</ul>
+
+</dd>
+
+
+
+
+<dt><a name="parse_message_body"></a><strong>parse_message_body</strong>&nbsp;(src, msg, filecb)</dt>
+<dd>
+
+ 
+Try to extract and decode a http message body from the given ltn12 source. 
+This function will examine the Content-Type within the given message object 
+to select the appropriate content decoder. 
+ 
+Currently the application/x-www-urlencoded and application/form-data 
+mime types are supported. If the encountered content encoding can't be 
+handled then the whole message body will be stored unaltered as "content" 
+property within the given message object. 
+
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  src: Ltn12 source function
+	</li>
+	
+	<li>
+	  msg: HTTP message object
+	</li>
+	
+	<li>
+	  filecb: File data callback (optional, see mimedecode_message_body())
+	</li>
+	
+</ul>
+
+
+
+
+
+
+<h3>Return values:</h3>
+<ol>
+	
+	<li>Value indicating successful operation (not nil means "ok")
+	
+	<li>String containing the error if unsuccessful
+	
+</ol>
+
+
+
+<h3>See also:</h3>
+<ul>
+	
+	<li><a href="">
+		parse_message_header
+	</a>
+	
+</ul>
 
 </dd>
 
@@ -764,6 +939,243 @@ Set the HTTP status code and status message.
 
 
 
+<dt><a name="urldecode"></a><strong>urldecode</strong>&nbsp;(str, no_plus)</dt>
+<dd>
+
+ 
+Return the URL-decoded equivalent of a string. 
+
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  str: URL-encoded string
+	</li>
+	
+	<li>
+	  no_plus: Don't decode + to " "
+	</li>
+	
+</ul>
+
+
+
+
+
+
+<h3>Return value:</h3>
+URL-decoded string
+
+
+
+<h3>See also:</h3>
+<ul>
+	
+	<li><a href="#urlencode">
+		urlencode
+	</a>
+	
+</ul>
+
+</dd>
+
+
+
+
+<dt><a name="urldecode_message_body"></a><strong>urldecode_message_body</strong>&nbsp;(src, msg)</dt>
+<dd>
+
+ 
+Decode an urlencoded http message body with application/x-www-urlencoded 
+Content-Type. 
+ 
+Stores all extracted data associated with its parameter name in the params 
+table within the given message object. Multiple parameter values are stored 
+as tables, ordinary ones as strings. 
+
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  src: Ltn12 source function
+	</li>
+	
+	<li>
+	  msg: HTTP message object
+	</li>
+	
+</ul>
+
+
+
+
+
+
+<h3>Return values:</h3>
+<ol>
+	
+	<li>Value indicating successful operation (not nil means "ok")
+	
+	<li>String containing the error if unsuccessful
+	
+</ol>
+
+
+
+<h3>See also:</h3>
+<ul>
+	
+	<li><a href="">
+		parse_message_header
+	</a>
+	
+</ul>
+
+</dd>
+
+
+
+
+<dt><a name="urldecode_params"></a><strong>urldecode_params</strong>&nbsp;(url, tbl)</dt>
+<dd>
+
+ 
+Extract and split urlencoded data pairs, separated bei either "&" or ";" 
+from given url or string. Returns a table with urldecoded values. 
+ 
+Simple parameters are stored as string values associated with the parameter 
+name within the table. Parameters with multiple values are stored as array 
+containing the corresponding values. 
+
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  url: The url or string which contains x-www-urlencoded form data
+	</li>
+	
+	<li>
+	  tbl: Use the given table for storing values (optional)
+	</li>
+	
+</ul>
+
+
+
+
+
+
+<h3>Return value:</h3>
+Table containing the urldecoded parameters
+
+
+
+<h3>See also:</h3>
+<ul>
+	
+	<li><a href="#urlencode_params">
+		urlencode_params
+	</a>
+	
+</ul>
+
+</dd>
+
+
+
+
+<dt><a name="urlencode"></a><strong>urlencode</strong>&nbsp;(str)</dt>
+<dd>
+
+ 
+Return the URL-encoded equivalent of a string. 
+
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  str: Source string
+	</li>
+	
+</ul>
+
+
+
+
+
+
+<h3>Return value:</h3>
+URL-encoded string
+
+
+
+<h3>See also:</h3>
+<ul>
+	
+	<li><a href="#urldecode">
+		urldecode
+	</a>
+	
+</ul>
+
+</dd>
+
+
+
+
+<dt><a name="urlencode_params"></a><strong>urlencode_params</strong>&nbsp;(tbl)</dt>
+<dd>
+
+ 
+Encode each key-value-pair in given table to x-www-urlencoded format, 
+separated by "&". 
+ 
+Tables are encoded as parameters with multiple values by repeating the 
+parameter name with each value. 
+
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  tbl: Table with the values
+	</li>
+	
+</ul>
+
+
+
+
+
+
+<h3>Return value:</h3>
+String containing encoded values
+
+
+
+<h3>See also:</h3>
+<ul>
+	
+	<li><a href="#urldecode_params">
+		urldecode_params
+	</a>
+	
+</ul>
+
+</dd>
+
+
+
+
 <dt><a name="write"></a><strong>write</strong>&nbsp;(content, src_err)</dt>
 <dd>
 
@@ -771,7 +1183,8 @@ Set the HTTP status code and status message.
 Send a chunk of content data to the client. 
  
 This function is as a valid LTN12 sink. 
-If the content chunk is nil this function will automatically invoke close.
+If the content chunk is nil this function will automatically invoke close. 
+
 
 
 <h3>Parameters</h3>

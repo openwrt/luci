@@ -43,19 +43,15 @@
 	</li>
 
 	<li>
-		<a href="../modules/luci.http.protocol.html">luci.http.protocol</a>
+		<a href="../modules/luci.http.conditionals.html">luci.http.conditionals</a>
 	</li>
 
 	<li>
-		<a href="../modules/luci.http.protocol.conditionals.html">luci.http.protocol.conditionals</a>
+		<a href="../modules/luci.http.date.html">luci.http.date</a>
 	</li>
 
 	<li>
-		<a href="../modules/luci.http.protocol.date.html">luci.http.protocol.date</a>
-	</li>
-
-	<li>
-		<a href="../modules/luci.http.protocol.mime.html">luci.http.protocol.mime</a>
+		<a href="../modules/luci.http.mime.html">luci.http.mime</a>
 	</li>
 
 	<li>
@@ -310,6 +306,13 @@ Get the directory for uncomitted changes.</td>
 	</tr>
 
 	<tr>
+	<td class="name" nowrap><a href="#Cursor.get_session_id">Cursor:get_session_id</a>&nbsp;()</td>
+	<td class="summary">
+ 
+Get the effective session ID.</td>
+	</tr>
+
+	<tr>
 	<td class="name" nowrap><a href="#Cursor.load">Cursor:load</a>&nbsp;(config)</td>
 	<td class="summary">
  
@@ -363,6 +366,13 @@ Set given values as list.</td>
 	<td class="summary">
  
 Set the directory for uncommited changes.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Cursor.set_session_id">Cursor:set_session_id</a>&nbsp;(id)</td>
+	<td class="summary">
+ 
+Set the effective session ID.</td>
 	</tr>
 
 	<tr>
@@ -631,8 +641,8 @@ Delete all sections of a given type that match certain criteria.
 	</li>
 	
 	<li>
-	  comparator: Function that will be called for each section and 
-returns a boolean whether to delete the current section (optional)
+	  comparator: Function that will be called for each section and returns 
+					a boolean whether to delete the current section (optional)
 	</li>
 	
 </ul>
@@ -903,8 +913,8 @@ Get an option or list and return values as table.
 
 
 <h3>Return value:</h3>
-table.  If the option was not found, you will simply get 
-		an empty table.
+table.  	If the option was not found, you will simply get an empty 
+					table.
 
 
 
@@ -928,6 +938,29 @@ Get the directory for uncomitted changes.
 
 <h3>Return value:</h3>
 Save directory
+
+
+
+</dd>
+
+
+
+
+<dt><a name="Cursor.get_session_id"></a><strong>Cursor:get_session_id</strong>&nbsp;()</dt>
+<dd>
+
+ 
+Get the effective session ID. 
+
+
+
+
+
+
+
+
+<h3>Return value:</h3>
+String containing the session ID
 
 
 
@@ -1222,7 +1255,8 @@ has the same effect as deleting the option.
 	</li>
 	
 	<li>
-	  value: value or table. Raw values will become a single item table.
+	  value: Value or table. Non-table values will be set as single 
+					item UCI list.
 	</li>
 	
 </ul>
@@ -1274,14 +1308,47 @@ Boolean whether operation succeeded
 
 
 
+<dt><a name="Cursor.set_session_id"></a><strong>Cursor:set_session_id</strong>&nbsp;(id)</dt>
+<dd>
+
+ 
+Set the effective session ID. 
+
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  id: String containing the session ID to set
+	</li>
+	
+</ul>
+
+
+
+
+
+
+<h3>Return value:</h3>
+Boolean whether operation succeeded
+
+
+
+</dd>
+
+
+
+
 <dt><a name="Cursor.substate"></a><strong>Cursor:substate</strong>&nbsp;()</dt>
 <dd>
 
  
-Create a sub-state of this cursor. The sub-state is tied to the parent 
+Create a sub-state of this cursor. 
  
-curser, means it the parent unloads or loads configs, the sub state will 
-do so as well.
+The sub-state is tied to the parent curser, means it the parent unloads or 
+loads configs, the sub state will do so as well. 
+
 
 
 
