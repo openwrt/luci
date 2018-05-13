@@ -428,7 +428,7 @@ function dispatch(request)
 				return
 			end
 
-			http.header("Set-Cookie", 'sysauth=%s; path=%s' %{ sid, build_url() })
+			http.header("Set-Cookie", 'sysauth=%s; path=%s; HttpOnly; secure' %{ sid, build_url() })
 			http.redirect(build_url(unpack(ctx.requestpath)))
 		end
 
@@ -440,6 +440,13 @@ function dispatch(request)
 		ctx.authsession = sid
 		ctx.authtoken = sdat.token
 		ctx.authuser = sdat.username
+
+		if http.getenv("HTTPS") == "on" then
+			local forcehsts = conf.main.forcehsts
+			if forcehsts then
+				http.header("Strict-Transport-Security", 'max-age=%s' % forcehsts)
+			end
+		end
 	end
 
 	if track.cors and http.getenv("REQUEST_METHOD") == "OPTIONS" then
