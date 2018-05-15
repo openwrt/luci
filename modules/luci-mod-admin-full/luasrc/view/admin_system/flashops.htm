@@ -46,13 +46,18 @@
 			<form class="inline" method="post" action="<%=url('admin/system/flashops/restore')%>" enctype="multipart/form-data">
 				<div class="cbi-value cbi-value-last">
 					<label class="cbi-value-title" for="archive"><%:Restore backup%>:</label>
-					<div class="cbi-value-field">
+					<div class="cbi-value-field<% if backup_invalid then %> cbi-value-error<% end %>">
 						<input type="hidden" name="token" value="<%=token%>" />
 						<input type="file" name="archive" id="archive" />
 						<input type="submit" class="cbi-button cbi-input-apply" name="restore" value="<%:Upload archive...%>" />
 					</div>
 				</div>
 			</form>
+			<% if backup_invalid then %>
+			<div class="cbi-section-error">
+				<%:Unable to apply damaged backup archive.%>
+			</div>
+			<% end %>
 		</div>
 		<% if reset_avail then %>
 		<div class="alert-message warning"><%:Custom files (certificates, scripts) may remain on the system. To prevent this, perform a factory-reset first.%></div>
