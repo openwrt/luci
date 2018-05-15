@@ -54,6 +54,7 @@ count:value("5")
 
 size = mwan_interface:option(Value, "size", translate("Ping size"))
 size.default = "56"
+size:depends("track_method", "ping")
 size:value("8")
 size:value("24")
 size:value("56")
@@ -66,6 +67,52 @@ size:value("2040")
 size.datatype = "range(1, 65507)"
 size.rmempty = false
 size.optional = false
+
+check_quality = mwan_interface:option(Flag, "check_quality", translate("Check link quality"))
+check_quality:depends("track_method", "ping")
+check_quality.default = false
+
+failure_latency = mwan_interface:option(Value, "failure_latency", translate("Max packet latency [ms]"))
+failure_latency:depends("check_quality", 1)
+failure_latency.default = "1000"
+failure_latency:value("25")
+failure_latency:value("50")
+failure_latency:value("75")
+failure_latency:value("100")
+failure_latency:value("150")
+failure_latency:value("200")
+failure_latency:value("250")
+failure_latency:value("300")
+
+failure_loss = mwan_interface:option(Value, "failure_loss", translate("Max packet loss [%]"))
+failure_loss:depends("check_quality", 1)
+failure_loss.default = "20"
+failure_loss:value("2")
+failure_loss:value("5")
+failure_loss:value("10")
+failure_loss:value("20")
+failure_loss:value("25")
+
+recovery_latency = mwan_interface:option(Value, "recovery_latency", translate("Min packet latency [ms]"))
+recovery_latency:depends("check_quality", 1)
+recovery_latency.default = "500"
+recovery_latency:value("25")
+recovery_latency:value("50")
+recovery_latency:value("75")
+recovery_latency:value("100")
+recovery_latency:value("150")
+recovery_latency:value("200")
+recovery_latency:value("250")
+recovery_latency:value("300")
+
+recovery_loss = mwan_interface:option(Value, "recovery_loss", translate("Min packet loss [%]"))
+recovery_loss:depends("check_quality", 1)
+recovery_loss.default = "5"
+recovery_loss:value("2")
+recovery_loss:value("5")
+recovery_loss:value("10")
+recovery_loss:value("20")
+recovery_loss:value("25")
 
 timeout = mwan_interface:option(ListValue, "timeout", translate("Ping timeout"))
 timeout.default = "2"
