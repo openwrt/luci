@@ -50,9 +50,12 @@
 				</div>
 			</div>
 		</form>
+		<% if backup_invalid then %>
+			<div class="cbi-section-error"><%:The backup archive does not appear to be a valid gzip file.%></div>
+		<% end %>
 	</div>
 	<% if reset_avail then %>
-	<div class="alert-message warning"><%:Custom files (certificates, scripts) may remain on the system. To prevent this, perform a factory-reset first.%></div>
+		<div class="alert-message warning"><%:Custom files (certificates, scripts) may remain on the system. To prevent this, perform a factory-reset first.%></div>
 	<% end %>
 </div>
 
