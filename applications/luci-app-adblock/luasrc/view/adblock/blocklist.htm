@@ -22,15 +22,27 @@ end
 -%>
 
 <style type="text/css">
-<!--
+table.cbi-section-table th,
+table.cbi-section-table td,
 .cbi-section-table-cell,
-.cbi-section-table-row
+.cbi-section-table-row,
+.cbi-input-text
 {
 	text-align:left;
+	vertical-align:top;
 	margin-right:auto;
 	margin-left:0px;
 }
--->
+.cbi-input-text
+{
+	outline:none;
+	box-shadow:none;
+	background:transparent;
+	padding-left:2px;
+	line-height:25px;
+	height:25px;
+	width:10em;
+}
 </style>
 
 <fieldset class="cbi-section" id="cbi-<%=self.config%>-<%=self.sectiontype%>">
@@ -39,7 +51,6 @@ end
 	<%- end %>
 	<div class="cbi-section-descr"><%=self.description%></div>
 	<div class="cbi-section-node">
-		<%- local count = 0 -%>
 		<table class="cbi-section-table">
 			<tr class="cbi-section-table-titles">
 			<%- if self.sectionhead then -%>
@@ -51,7 +62,7 @@ end
 				<th class="cbi-section-table-cell"<%=width(k)%>>
 					<%-=k.title-%>
 				</th>
-			<%- count = count + 1; end; -%>
+			<%- end -%>
 			</tr>
 			<%- local isempty = true
 				for i, k in ipairs(self:cfgsections()) do
@@ -60,19 +71,15 @@ end
 					scope = { valueheader = "cbi/cell_valueheader", valuefooter = "cbi/cell_valuefooter" }
 			-%>
 			<tr class="cbi-section-table-row" id="cbi-<%=self.config%>-<%=section%>">
-					<th><%=k%></th>
+				<th><%=k%></th>
 				<%-
 					for k, node in ipairs(self.children) do
-						if not node.optional then
-							node:render(section, scope or {})
-						end
+						node:render(section, scope or {})
 					end
+					if not scope.cbid:match("adb_src_cat") then
 				-%>
-			</tr>
-			<%- end -%>
-			<%- if isempty then -%>
-			<tr class="cbi-section-table-row">
-				<td colspan="<%=count%>"><em><br /><%:This section contains no values yet%></em></td>
+					<td class="cbi-value-field">&#160;</td>
+				<%- end -%>
 			</tr>
 			<%- end -%>
 		</table>
