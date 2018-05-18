@@ -28,12 +28,63 @@ Create a new Cursor initialized to the state directory.
 ]]
 
 ---[[
-Applies UCI configuration changes
+Applies UCI configuration changes.
+
+If the rollback parameter is set to true, the apply function will invoke the
+rollback mechanism which causes the configuration to be automatically reverted
+if no confirm() call occurs within a certain timeout.
+
+The current default timeout is 30s and can be increased using the
+"luci.apply.timeout" uci configuration key.
 
 @class				function
 @name				Cursor.apply
-@param configlist	List of UCI configurations
-@param command		Don't apply only return the command
+@param rollback		Enable rollback mechanism
+@return				Boolean whether operation succeeded
+]]
+
+---[[
+Confirms UCI apply process.
+
+If a previous UCI apply with rollback has been invoked using apply(true),
+this function confirms the process and cancels the pending rollback timer.
+
+If no apply with rollback session is active, the function has no effect and
+returns with a "No data" error.
+
+@class				function
+@name				Cursor.confirm
+@return				Boolean whether operation succeeded
+]]
+
+---[[
+Cancels UCI apply process.
+
+If a previous UCI apply with rollback has been invoked using apply(true),
+this function cancels the process and rolls back the configuration to the
+pre-apply state.
+
+If no apply with rollback session is active, the function has no effect and
+returns with a "No data" error.
+
+@class				function
+@name				Cursor.rollback
+@return				Boolean whether operation succeeded
+]]
+
+---[[
+Checks whether a pending rollback is scheduled.
+
+If a previous UCI apply with rollback has been invoked using apply(true),
+and has not been confirmed or rolled back yet, this function returns true
+and the remaining time until rollback in seconds. If no rollback is pending,
+the function returns false. On error, the function returns false and an
+additional string describing the error.
+
+@class				function
+@name				Cursor.rollback_pending
+@return				Boolean whether rollback is pending
+@return				Remaining time in seconds
 ]]
 
 ---[[

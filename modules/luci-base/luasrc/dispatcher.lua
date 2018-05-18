@@ -182,6 +182,7 @@ local function session_retrieve(sid, allowed_users)
 	   (not allowed_users or
 	    util.contains(allowed_users, sdat.values.username))
 	then
+		uci:set_session_id(sid)
 		return sid, sdat.values
 	end
 
@@ -884,6 +885,8 @@ local function _cbi(self, ...)
 	local pageaction = true
 	local parsechain = { }
 
+	local is_rollback, time_remaining = uci:rollback_pending()
+
 	for i, res in ipairs(maps) do
 		if res.apply_needed and res.parsechain then
 			local c
@@ -911,6 +914,7 @@ local function _cbi(self, ...)
 		res:render({
 			firstmap   = (i == 1),
 			applymap   = applymap,
+			confirmmap = (is_rollback and time_remaining or nil),
 			redirect   = redirect,
 			messages   = messages,
 			pageaction = pageaction,
