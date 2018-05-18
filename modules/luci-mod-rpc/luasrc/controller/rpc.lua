@@ -56,6 +56,7 @@ function index()
 end
 
 function rpc_auth()
+	local ctrl    = require "luci.controller.rpc"
 	local jsonrpc = require "luci.jsonrpc"
 	local http    = require "luci.http"
 	local sys     = require "luci.sys"
