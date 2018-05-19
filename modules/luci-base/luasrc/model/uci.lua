@@ -3,7 +3,6 @@
 
 local os    = require "os"
 local util  = require "luci.util"
-local conf  = require "luci.config"
 local table = require "table"
 
 
@@ -148,7 +147,8 @@ function apply(self, rollback)
 	local _, err
 
 	if rollback then
-		local timeout = tonumber(conf.apply and conf.apply.rollback or "") or 0
+		local conf = require "luci.config"
+		local timeout = tonumber(conf and conf.apply and conf.apply.rollback or "") or 0
 
 		_, err = call("apply", {
 			timeout  = (timeout > 30) and timeout or 30,
