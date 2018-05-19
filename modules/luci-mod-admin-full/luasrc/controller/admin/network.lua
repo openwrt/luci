@@ -330,9 +330,11 @@ function wifi_status(devs)
 	local s    = require "luci.tools.status"
 	local rv   = { }
 
-	local dev
-	for dev in devs:gmatch("[%w%.%-]+") do
-		rv[#rv+1] = s.wifi_network(dev)
+	if type(devs) == "string" then
+		local dev
+		for dev in devs:gmatch("[%w%.%-]+") do
+			rv[#rv+1] = s.wifi_network(dev)
+		end
 	end
 
 	if #rv > 0 then
