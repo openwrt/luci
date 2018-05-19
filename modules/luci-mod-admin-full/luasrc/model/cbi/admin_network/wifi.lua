@@ -11,7 +11,7 @@ local acct_port, acct_secret, acct_server, anonymous_identity, ant1, ant2,
 	auth, auth_port, auth_secret, auth_server, bssid, cacert, cacert2,
 	cc, ch, cipher, clientcert, clientcert2, ea, eaptype, en, encr,
 	ft_protocol, ft_psk_generate_local, hidden, htmode, identity,
-	ieee80211r, ieee80211w, ifname, ifsection, isolate, key_retries,
+	ieee80211r, ieee80211w, ifname, isolate, key_retries,
 	legacyrates, max_timeout, meshfwd, meshid, ml, mobility_domain, mode,
 	mp, nasid, network, password, pmk_r1_push, privkey, privkey2, privkeypwd,
 	privkeypwd2, r0_key_lifetime, r0kh, r1_key_holder, r1kh,
@@ -29,14 +29,6 @@ m = Map("wireless", "",
 m:chain("network")
 m:chain("firewall")
 m.redirect = luci.dispatcher.build_url("admin/network/wireless")
-
-function m.on_commit(map)
-	local wnet = nw:get_wifinet(arg[1])
-	if ifsection and wnet then
-		ifsection.section = wnet.sid
-		m.title = luci.util.pcdata(wnet:get_i18n())
-	end
-end
 
 nw.init(m.uci)
 
@@ -350,7 +342,6 @@ end
 ----------------------- Interface -----------------------
 
 s = m:section(NamedSection, wnet.sid, "wifi-iface", translate("Interface Configuration"))
-ifsection = s
 s.addremove = false
 s.anonymous = true
 s.defaults.device = wdev:name()
