@@ -409,11 +409,11 @@ msgstr "Antennenkonfiguration"
 msgid "Any zone"
 msgstr "Beliebige Zone"
 
-msgid "Apply"
-msgstr "Anwenden"
+msgid "Apply request failed with status <code>%h</code>"
+msgstr ""
 
-msgid "Applying changes"
-msgstr "Änderungen werden angewandt"
+msgid "Apply unchecked"
+msgstr ""
 
 msgid ""
 "Assign a part of given length of every public IPv6-prefix to this interface"
@@ -604,11 +604,19 @@ msgstr "Änderungen"
 msgid "Changes applied."
 msgstr "Änderungen angewendet."
 
+msgid "Changes have been reverted."
+msgstr ""
+
 msgid "Changes the administrator password for accessing the device"
 msgstr "Ändert das Administratorpasswort für den Zugriff auf dieses Gerät"
 
 msgid "Channel"
 msgstr "Kanal"
+
+msgid ""
+"Channel %d is not available in the %s regulatory domain and has been auto-"
+"adjusted to %d."
+msgstr ""
 
 msgid "Check"
 msgstr "Prüfen"
@@ -696,11 +704,14 @@ msgstr ""
 msgid "Configuration"
 msgstr "Konfiguration"
 
-msgid "Configuration applied."
-msgstr "Konfiguration angewendet."
-
 msgid "Configuration files will be kept."
 msgstr "Konfigurationsdateien sichern"
+
+msgid "Configuration has been applied."
+msgstr ""
+
+msgid "Configuration has been rolled back!"
+msgstr ""
 
 msgid "Confirmation"
 msgstr "Bestätigung"
@@ -719,6 +730,12 @@ msgstr "TLS zwingend vorraussetzen und abbrechen wenn TLS fehlschlägt."
 
 msgid "Connections"
 msgstr "Verbindungen"
+
+msgid ""
+"Could not regain access to the device after applying the configuration "
+"changes. You might need to reconnect if you modified network related "
+"settings such as the IP address or wireless security credentials."
+msgstr ""
 
 msgid "Country"
 msgstr "Land"
@@ -892,6 +909,9 @@ msgstr "Das Gerät startet neu..."
 msgid "Device unreachable"
 msgstr "Das Gerät ist nicht erreichbar"
 
+msgid "Device unreachable!"
+msgstr ""
+
 msgid "Diagnostics"
 msgstr "Diagnosen"
 
@@ -925,6 +945,9 @@ msgstr "Deaktiviert (Standard)"
 
 msgid "Discard upstream RFC1918 responses"
 msgstr "Eingehende RFC1918-Antworten verwerfen"
+
+msgid "Dismiss"
+msgstr ""
 
 msgid "Displaying only packages containing"
 msgstr "Nur Pakete mit folgendem Inhalt anzeigen"
@@ -1190,6 +1213,9 @@ msgid "FT over the Air"
 msgstr ""
 
 msgid "FT protocol"
+msgstr ""
+
+msgid "Failed to confirm apply within %ds, waiting for rollback…"
 msgstr ""
 
 msgid "File"
@@ -2256,6 +2282,9 @@ msgstr "Chiffriertes Gruppenpasswort"
 msgid "Obfuscated Password"
 msgstr "Chiffriertes Passwort"
 
+msgid "Obtain IPv6-Address"
+msgstr ""
+
 msgid "Off-State Delay"
 msgstr "Verzögerung für Ausschalt-Zustand"
 
@@ -2879,6 +2908,15 @@ msgstr "Passwort zeigen/verstecken"
 msgid "Revert"
 msgstr "Verwerfen"
 
+msgid "Revert changes"
+msgstr ""
+
+msgid "Revert request failed with status <code>%h</code>"
+msgstr ""
+
+msgid "Reverting configuration…"
+msgstr ""
+
 msgid "Root"
 msgstr "Root"
 
@@ -2956,9 +2994,6 @@ msgstr "Speichern"
 
 msgid "Save & Apply"
 msgstr "Speichern & Anwenden"
-
-msgid "Save &#38; Apply"
-msgstr "Speichern &#38; Anwenden"
 
 msgid "Scan"
 msgstr "Scan"
@@ -3150,6 +3185,9 @@ msgstr "Start"
 msgid "Start priority"
 msgstr "Startpriorität"
 
+msgid "Starting configuration apply…"
+msgstr ""
+
 msgid "Startup"
 msgstr "Systemstart"
 
@@ -3325,6 +3363,16 @@ msgstr ""
 "werden:"
 
 msgid ""
+"The device could not be reached within %d seconds after applying the pending "
+"changes, which caused the configuration to be rolled back for safety "
+"reasons. If you believe that the configuration changes are correct "
+"nonetheless, perform an unchecked configuration apply. Alternatively, you "
+"can dismiss this warning and edit changes before attempting to apply again, "
+"or revert all pending changes to keep the currently working configuration "
+"state."
+msgstr ""
+
+msgid ""
 "The device file of the memory or partition (<abbr title=\"for example\">e.g."
 "</abbr> <code>/dev/sda1</code>)"
 msgstr "Die Gerätedatei des Speichers oder der Partition (z.B.: /dev/sda)"
@@ -3344,9 +3392,6 @@ msgstr ""
 "Dateigröße gelistet. Vergleichen Sie diese mit der Originaldatei um die "
 "Integrität sicherzustellen.<br /> Klicken Sie \"Fortfahren\" um die Flash-"
 "Prozedur zu starten."
-
-msgid "The following changes have been committed"
-msgstr "Die folgenden Änderungen wurden angewendet"
 
 msgid "The following changes have been reverted"
 msgstr "Die folgenden Änderungen wurden verworfen"
@@ -3438,8 +3483,8 @@ msgstr ""
 msgid "There are no active leases."
 msgstr "Es gibt z.Z. keine aktiven Leases."
 
-msgid "There are no pending changes to apply!"
-msgstr "Es gibt keine ausstehenen Änderungen anzuwenden!"
+msgid "There are no changes to apply."
+msgstr ""
 
 msgid "There are no pending changes to revert!"
 msgstr "Es gibt keine ausstehenen Änderungen zurückzusetzen!"
@@ -3839,6 +3884,9 @@ msgstr "Änderungen werden angewandt..."
 msgid "Waiting for command to complete..."
 msgstr "Der Befehl wird ausgeführt..."
 
+msgid "Waiting for configuration to get applied… %ds"
+msgstr ""
+
 msgid "Waiting for device..."
 msgstr "Warte auf Gerät..."
 
@@ -4082,6 +4130,24 @@ msgstr "ja"
 
 msgid "« Back"
 msgstr "« Zurück"
+
+#~ msgid "Apply"
+#~ msgstr "Anwenden"
+
+#~ msgid "Applying changes"
+#~ msgstr "Änderungen werden angewandt"
+
+#~ msgid "Configuration applied."
+#~ msgstr "Konfiguration angewendet."
+
+#~ msgid "Save &#38; Apply"
+#~ msgstr "Speichern &#38; Anwenden"
+
+#~ msgid "The following changes have been committed"
+#~ msgstr "Die folgenden Änderungen wurden angewendet"
+
+#~ msgid "There are no pending changes to apply!"
+#~ msgstr "Es gibt keine ausstehenen Änderungen anzuwenden!"
 
 #~ msgid "Action"
 #~ msgstr "Aktion"
