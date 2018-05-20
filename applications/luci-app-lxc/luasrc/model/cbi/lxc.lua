@@ -16,7 +16,9 @@ Author: Petar Koretic <petar.koretic@sartura.hr>
 
 local fs = require "nixio.fs"
 
-m = Map("lxc", translate("LXC Containers"))
+m = Map("lxc", translate("LXC Containers"),
+	translate("<b>Please note:</b> For LXC Containers you need a custom OpenWrt image.<br />")
+	.. translate("The image should include at least support for 'kernel cgroups', 'kernel namespaces' and 'miscellaneous LXC related options'."))
 
 if fs.access("/etc/config/lxc") then
 	m:section(SimpleSection).template = "lxc"
