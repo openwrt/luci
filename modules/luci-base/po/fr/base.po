@@ -412,11 +412,11 @@ msgstr "Configuration de l'antenne"
 msgid "Any zone"
 msgstr "N'importe quelle zone"
 
-msgid "Apply"
-msgstr "Appliquer"
+msgid "Apply request failed with status <code>%h</code>"
+msgstr ""
 
-msgid "Applying changes"
-msgstr "Changements en cours"
+msgid "Apply unchecked"
+msgstr ""
 
 msgid ""
 "Assign a part of given length of every public IPv6-prefix to this interface"
@@ -596,11 +596,19 @@ msgstr "Changements"
 msgid "Changes applied."
 msgstr "Changements appliqués."
 
+msgid "Changes have been reverted."
+msgstr ""
+
 msgid "Changes the administrator password for accessing the device"
 msgstr "Change le mot de passe administrateur pour accéder à l'équipement"
 
 msgid "Channel"
 msgstr "Canal"
+
+msgid ""
+"Channel %d is not available in the %s regulatory domain and has been auto-"
+"adjusted to %d."
+msgstr ""
 
 msgid "Check"
 msgstr "Vérification"
@@ -684,11 +692,14 @@ msgstr ""
 msgid "Configuration"
 msgstr "Configuration"
 
-msgid "Configuration applied."
-msgstr "Configuration appliquée."
-
 msgid "Configuration files will be kept."
 msgstr "Les fichiers de configuration seront préservés."
+
+msgid "Configuration has been applied."
+msgstr ""
+
+msgid "Configuration has been rolled back!"
+msgstr ""
 
 msgid "Confirmation"
 msgstr "Confirmation"
@@ -707,6 +718,12 @@ msgstr ""
 
 msgid "Connections"
 msgstr "Connexions"
+
+msgid ""
+"Could not regain access to the device after applying the configuration "
+"changes. You might need to reconnect if you modified network related "
+"settings such as the IP address or wireless security credentials."
+msgstr ""
 
 msgid "Country"
 msgstr "Pays"
@@ -881,6 +898,9 @@ msgstr ""
 msgid "Device unreachable"
 msgstr ""
 
+msgid "Device unreachable!"
+msgstr ""
+
 msgid "Diagnostics"
 msgstr "Diagnostics"
 
@@ -914,6 +934,9 @@ msgstr ""
 
 msgid "Discard upstream RFC1918 responses"
 msgstr "Jeter les réponses en RFC1918 amont"
+
+msgid "Dismiss"
+msgstr ""
 
 msgid "Displaying only packages containing"
 msgstr "N'afficher que les paquets contenant"
@@ -1179,6 +1202,9 @@ msgid "FT over the Air"
 msgstr ""
 
 msgid "FT protocol"
+msgstr ""
+
+msgid "Failed to confirm apply within %ds, waiting for rollback…"
 msgstr ""
 
 msgid "File"
@@ -2218,6 +2244,9 @@ msgstr ""
 msgid "Obfuscated Password"
 msgstr ""
 
+msgid "Obtain IPv6-Address"
+msgstr ""
+
 msgid "Off-State Delay"
 msgstr "Durée éteinte"
 
@@ -2810,6 +2839,15 @@ msgstr "Montrer/cacher le mot de passe"
 msgid "Revert"
 msgstr "Revenir"
 
+msgid "Revert changes"
+msgstr ""
+
+msgid "Revert request failed with status <code>%h</code>"
+msgstr ""
+
+msgid "Reverting configuration…"
+msgstr ""
+
 msgid "Root"
 msgstr "Racine"
 
@@ -2888,9 +2926,6 @@ msgstr "Sauvegarder"
 
 msgid "Save & Apply"
 msgstr "Sauvegarder et Appliquer"
-
-msgid "Save &#38; Apply"
-msgstr "Sauvegarder et appliquer"
 
 msgid "Scan"
 msgstr "Scan"
@@ -3071,6 +3106,9 @@ msgstr "Démarrer"
 msgid "Start priority"
 msgstr "Priorité de démarrage"
 
+msgid "Starting configuration apply…"
+msgstr ""
+
 msgid "Startup"
 msgstr "Démarrage"
 
@@ -3238,6 +3276,16 @@ msgid "The configuration file could not be loaded due to the following error:"
 msgstr ""
 
 msgid ""
+"The device could not be reached within %d seconds after applying the pending "
+"changes, which caused the configuration to be rolled back for safety "
+"reasons. If you believe that the configuration changes are correct "
+"nonetheless, perform an unchecked configuration apply. Alternatively, you "
+"can dismiss this warning and edit changes before attempting to apply again, "
+"or revert all pending changes to keep the currently working configuration "
+"state."
+msgstr ""
+
+msgid ""
 "The device file of the memory or partition (<abbr title=\"for example\">e.g."
 "</abbr> <code>/dev/sda1</code>)"
 msgstr "Le périphérique de bloc contenant la partition (ex : /dev/sda1)"
@@ -3259,9 +3307,6 @@ msgstr ""
 "contrôle de cette image, comparez-les avec le fichier original pour vous "
 "assurer de son intégrité.<br /> Cliquez sur \"Continuer\" pour lancer la "
 "procédure d'écriture."
-
-msgid "The following changes have been committed"
-msgstr "Les changements suivants ont été appliqués"
 
 msgid "The following changes have been reverted"
 msgstr "Les changements suivants ont été annulés"
@@ -3349,8 +3394,8 @@ msgstr ""
 msgid "There are no active leases."
 msgstr "Il n'y a aucun bail actif."
 
-msgid "There are no pending changes to apply!"
-msgstr "Il n'y a aucun changement en attente d'être appliqués !"
+msgid "There are no changes to apply."
+msgstr ""
 
 msgid "There are no pending changes to revert!"
 msgstr "Il n'y a aucun changement à annuler !"
@@ -3742,6 +3787,9 @@ msgstr "En attente de l'application des changements..."
 msgid "Waiting for command to complete..."
 msgstr "En attente de la fin de la commande..."
 
+msgid "Waiting for configuration to get applied… %ds"
+msgstr ""
+
 msgid "Waiting for device..."
 msgstr ""
 
@@ -3980,6 +4028,24 @@ msgstr "oui"
 
 msgid "« Back"
 msgstr "« Retour"
+
+#~ msgid "Apply"
+#~ msgstr "Appliquer"
+
+#~ msgid "Applying changes"
+#~ msgstr "Changements en cours"
+
+#~ msgid "Configuration applied."
+#~ msgstr "Configuration appliquée."
+
+#~ msgid "Save &#38; Apply"
+#~ msgstr "Sauvegarder et appliquer"
+
+#~ msgid "The following changes have been committed"
+#~ msgstr "Les changements suivants ont été appliqués"
+
+#~ msgid "There are no pending changes to apply!"
+#~ msgstr "Il n'y a aucun changement en attente d'être appliqués !"
 
 #~ msgid "Action"
 #~ msgstr "Action"
