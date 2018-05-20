@@ -364,7 +364,7 @@ function dispatch(request)
 					url[#url+1] = "?"
 					url[#url+1] = query
 				end
-				return table.concat(url, "")
+				return url[0] and table.concat(url, "") or ""
 			elseif key == "token" then
 				return ctx.authtoken
 			else
