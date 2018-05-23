@@ -14,6 +14,32 @@ Author: Petar Koretic <petar.koretic@sartura.hr>
 
 -%>
 
+<%
+local fs     = require "nixio"
+local target = fs.uname().machine
+%>
+
+<style type="text/css">
+table.cbi-section-table th,
+table.cbi-section-table td,
+.cbi-section-table-cell,
+.cbi-input-select,
+.cbi-input-text
+{
+	text-align:left;
+	vertical-align:top;
+	padding-left:2px;
+	margin-right:auto;
+	margin-left:0px;
+}
+
+.cbi-input-select,
+.cbi-input-text
+{
+	width:15em;
+}
+</style>
+
 <fieldset class="cbi-section">
 	<legend><%:Available Containers%></legend>
 	<div class="cbi-section-node">
@@ -43,7 +69,7 @@ Author: Petar Koretic <petar.koretic@sartura.hr>
 			</tr>
 			<tr id="tr_holder">
 				<td>
-					<input type="text" id="tx_name" placeholder="<%:Enter new name%>" value='' />
+					<input class="cbi-input-text" type="text" id="tx_name" placeholder="<%:Enter new name%>" value='' />
 				</td>
 				<td>
 					<select id="s_template" class="cbi-input-select cbi-button">
@@ -65,21 +91,23 @@ Author: Petar Koretic <petar.koretic@sartura.hr>
 <hr/>
 
 <script type="text/javascript" src="<%=resource%>/cbi.js"></script>
-<script type="text/javascript">//<![CDATA[
+<script type="text/javascript">
+//<![CDATA[
+	window.img    = { "red" : "<%=resource%>/cbi/red.gif", "green" : "<%=resource%>/cbi/green.gif", "purple" : "<%=resource%>/cbi/purple.gif" }
+	window.states = { "STOPPED" : "red", "RUNNING" : "green", "FROZEN" : "purple" }
 
-	window.img = { "red" : "<%=resource%>/cbi/red.gif", "green" : "<%=resource%>/cbi/green.gif", "purple" : "<%=resource%>/cbi/purple.gif" }
-	window.states = {  "STOPPED" : "red", "RUNNING" : "green", "FROZEN" : "purple"}
-
-	var t_lxc_list = document.getElementById('t_lxc_list');
-	var loader_html = '<img src="<%=resource%>/icons/loading.gif" alt="<%:Loading%>" width="16" height="16" style="vertical-align:middle" /> ';
+	var t_lxc_list  = document.getElementById('t_lxc_list');
+	var loader_html = '<img src="<%=resource%>/icons/loading.gif" alt="<%:Loading%>" width="16" height="16" style="vertical-align:middle" />';
 	var timeout_msg = 0
 	var output_list = document.getElementById("lxc-list-output")
-	var output_add = document.getElementById("lxc-add-output")
-	var loader_add = document.getElementById("lxc-add-loader")
+	var output_add  = document.getElementById("lxc-add-output")
+	var loader_add  = document.getElementById("lxc-add-loader")
+
+	info_message(output_add, "Template download in progress, please be patient!", 10000)
 
 	function lxc_create(tr)
 	{
-		var lxc_name = tr.querySelector("#tx_name").value.trim()
+		var lxc_name = tr.querySelector("#tx_name").value.replace(/\s/g,'')
 		var lxc_template = tr.querySelector("#s_template").value
 		var bt_create = tr.querySelector("#bt_create")
 
@@ -92,7 +120,13 @@ Author: Petar Koretic <petar.koretic@sartura.hr>
 		if (!lxc_name || !lxc_name.length)
 		{
 			bt_create.disabled = false
-			return info_message(output_add, "Name cannot be empty!", 4000)
+			return info_message(output_add, "The 'Name' field must not be empty!", 4000)
+		}
+
+		if (!lxc_template)
+		{
+			bt_create.disabled = false
+			return info_message(output_add, "The 'Template' field must not be empty!", 4000)
 		}
 
 		loading(loader_add)
@@ -101,6 +135,7 @@ Author: Petar Koretic <petar.koretic@sartura.hr>
 		function(x)
 		{
 			bt_create.disabled = false
+
 			loading(loader_add, 0)
 
 			if (!x)
@@ -116,16 +151,16 @@ Author: Petar Koretic <petar.koretic@sartura.hr>
 
 		var actions = ''
 		actions += '<input type="button" onclick="action_handler(this)" data-action="start" value="<%:Start%>" class="cbi-button cbi-button-apply" />'
-		actions+= '<input type="button" onclick="action_handler(this)" data-action="stop" value="<%:Stop%>" class="cbi-button cbi-button-reset" />'
-		actions+= '<input type="button" onclick="action_handler(this)" data-action="destroy" value="<%:Delete%>" class="cbi-button cbi-button-remove" />'
-		actions+= ' <select class="cbi-input-select cbi-button" onchange="action_more_handler(this)">\
-						<option selected disabled>more</option>\
+		actions += '&#160;<input type="button" onclick="action_handler(this)" data-action="stop" value="<%:Stop%>" class="cbi-button cbi-button-reset" />'
+		actions += '&#160;<input type="button" onclick="action_handler(this)" data-action="destroy" value="<%:Delete%>" class="cbi-button cbi-button-remove" />'
+		actions += '&#160;<select class="cbi-input-select cbi-button" onchange="action_more_handler(this)">\
+						<option selected="selected" disabled="disabled">more</option>\
 						<option>configure</option>\
 						<option>freeze</option>\
 						<option>unfreeze</option>\
 						<option>reboot</option>\
 					</select>'
-		actions+= '<span data-loader style="display:inline-block; width:16px; height:16px; margin:0 5px"></span>'
+		actions += '<span data-loader="" style="display:inline-block; width:16px; height:16px; margin:0 5px"></span>'
 
 		var row = t_lxc_list.insertRow(-1)
 		var cell = row.insertCell(-1)
@@ -144,12 +179,11 @@ Author: Petar Koretic <petar.koretic@sartura.hr>
 
 	function action_handler(self)
 	{
-		var action = self.getAttribute("data-action");
-
-		var bt_action = self
-		var lxc_name = self.parentNode.parentNode.children[0].getAttribute('data-id')
+		var action     = self.getAttribute("data-action");
+		var bt_action  = self
+		var lxc_name   = self.parentNode.parentNode.children[0].getAttribute('data-id')
 		var status_img = self.parentNode.parentNode.querySelector('img')
-		var loader = self.parentNode.querySelector('[data-loader]')
+		var loader     = self.parentNode.querySelector('[data-loader]')
 
 		bt_action.disabled = true
 
@@ -181,18 +215,16 @@ Author: Petar Koretic <petar.koretic@sartura.hr>
 				loading(loader, 0)
 				bt_action.disabled = false
 
-				//FIXME: uncomment after fixing 'lxc-start'
 				if (!x /*|| ec */)
 					return info_message(output_list,"Action failed!")
 
-				//FIXME: uncomment after fixing 'lxc-start'
-				//set_status(status_img, "green")
+				set_status(status_img, "green")
 			});
 		}
 
 		else if (action == "destroy")
 		{
-			if (!confirm("This will completely remove LXC container from the disk. Are you sure? (container will be stopped if running)"))
+			if (!confirm("This will completely remove a stopped LXC container from disk. Are you sure?"))
 				return
 
 			loading(loader)
@@ -253,13 +285,12 @@ Author: Petar Koretic <petar.koretic@sartura.hr>
 	function action_more_handler(self)
 	{
 		var lxc_name = self.parentNode.parentNode.querySelector('[data-id]').getAttribute('data-id')
-		var loader = self.parentNode.parentNode.querySelector('[data-loader]')
-
-		var option = self.options[self.selectedIndex].text
+		var loader   = self.parentNode.parentNode.querySelector('[data-loader]')
+		var option   = self.options[self.selectedIndex].text
 
 		self.value = "more"
 
-		switch (option)
+		switch(option)
 		{
 			case "configure":
 				var tr = document.createElement('tr')
@@ -352,8 +383,23 @@ Author: Petar Koretic <petar.koretic@sartura.hr>
 		var row = t_lxc_list.insertRow(-1);
 		row.id = 'empty'
 		var cell = row.insertCell(0);
-		cell.colSpan = 4;
+		cell.colSpan = 3;
 		cell.innerHTML = '<em><br />There are no containers available yet.</em>';
+	}
+
+	function set_empty_template()
+	{
+		if (document.getElementById('tr_holder') !== null)
+			return
+
+		var row_count = t_lxc_create.rows.length;
+		while(--row_count) t_lxc_create.deleteRow(row_count);
+
+		var row = t_lxc_create.insertRow(-1);
+		row.id = 'tr_holder'
+		var cell = row.insertCell(0);
+		cell.colSpan = 3;
+		cell.innerHTML = '<em><br />There are no templates for your architecture (<%=target%>) available, please select another Containers URL.</em>';
 	}
 
 	function lxc_list_update()
@@ -363,8 +409,11 @@ Author: Petar Koretic <petar.koretic@sartura.hr>
 		{
 			if (!x) return;
 
+			if (!data)
+				return set_empty(t_lxc_list)
+
 			var lxc_count = Object.keys(data).length
-			if (!data || !lxc_count)
+			if (!lxc_count)
 				return set_empty(t_lxc_list)
 
 			if (document.getElementById('empty') !== null)
@@ -443,8 +492,11 @@ Author: Petar Koretic <petar.koretic@sartura.hr>
 	{
 		if (!x) return;
 
-		var lxc_count = Object.keys(data).length
-		if (!data || !lxc_count) return;
+		if (!data) return set_empty_template();
+
+		var lxc_count = Object.keys(data).length;
+		if (!lxc_count) return set_empty_template();
+
 		var select = document.getElementById("s_template");
 		for(var key in data)
 		{
@@ -454,5 +506,5 @@ Author: Petar Koretic <petar.koretic@sartura.hr>
 			select.add(option, -1);
 		}
 	})
-
-//]]></script>
+//]]>
+</script>
