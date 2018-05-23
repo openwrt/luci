@@ -358,7 +358,7 @@ function dispatch(request)
 			elseif key == "REQUEST_URI" then
 				return build_url(unpack(ctx.requestpath))
 			elseif key == "FULL_REQUEST_URI" then
-				local url = { http.getenv("SCRIPT_NAME"), http.getenv("PATH_INFO") }
+				local url = { http.getenv("SCRIPT_NAME") or "" , http.getenv("PATH_INFO") }
 				local query = http.getenv("QUERY_STRING")
 				if query and #query > 0 then
 					url[#url+1] = "?"
