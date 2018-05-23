@@ -389,9 +389,6 @@ table.cbi-section-table td,
 
 	function set_empty_template()
 	{
-		if (document.getElementById('tr_holder') !== null)
-			return
-
 		var row_count = t_lxc_create.rows.length;
 		while(--row_count) t_lxc_create.deleteRow(row_count);
 
