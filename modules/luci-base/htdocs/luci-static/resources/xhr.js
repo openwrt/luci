@@ -62,21 +62,25 @@ XHR = function()
 		xhr.onreadystatechange = function()
 		{
 			if (xhr.readyState == 4) {
-				var json = null;
-				if (xhr.getResponseHeader("Content-Type") == "application/json") {
-					try {
-						json = eval('(' + xhr.responseText + ')');
+				if (xhr.status == 200) {
+					var json = null;
+					if (xhr.getResponseHeader("Content-Type") == "application/json") {
+						try {
+							json = eval('(' + xhr.responseText + ')');
+						}
+						catch(e) {
+							json = null;
+						}
 					}
-					catch(e) {
-						json = null;
-					}
+	
+					callback(xhr, json);
+				} else {
+					console.error("xhr.js: Xhr request timeout, abort and retrying!");
 				}
-
-				callback(xhr, json);
-			}
+			}	
 		}
 
-		xhr.send(null);
+		xhr.send(null); 
 	}
 
 	this.post = function(url,data,callback,timeout)
