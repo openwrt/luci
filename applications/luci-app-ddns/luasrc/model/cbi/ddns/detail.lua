@@ -172,7 +172,7 @@ local function _option_used(option, urlscript)
 end
 
 -- function to verify if option is valid
-local function _option_validate(self, value)
+local function _option_validate(self, value, optional)
 	-- section is globally defined here be calling agrument (see above)
 	local fusev6 = usev6:formvalue(section) or "0"
 	local fsvc4  = svc4:formvalue(section) or "-"
@@ -204,6 +204,7 @@ local function _option_validate(self, value)
 	if used < 1 then return "" end
 	-- needed but no data then return error
 	if not value or (#value == 0) then
+		if optional then return nil end						 
 		return nil, err_tab_basic(self) .. translate("missing / required")
 	end
 	return value
@@ -513,18 +514,18 @@ pe = ns:taboption("basic", Value, "param_enc",
 		translate("Optional Encoded Parameter"),
 		translate("Optional: Replaces [PARAMENC] in Update-URL (URL-encoded)") )
 function pe.validate(self, value)
-	return _option_validate(self, value)
+	return _option_validate(self, value, true)
 end
 function pe.parse(self, section, novld)
 	DDNS.value_parse(self, section, novld)
 end
 
--- IPv4/IPv6 - param_enc -- ###################################################
+-- IPv4/IPv6 - param_opt -- ###################################################
 po = ns:taboption("basic", Value, "param_opt",
 		translate("Optional Parameter"),
 		translate("Optional: Replaces [PARAMOPT] in Update-URL (NOT URL-encoded)") )
 function po.validate(self, value)
-	return _option_validate(self, value)
+	return _option_validate(self, value, true)
 end
 function po.parse(self, section, novld)
 	DDNS.value_parse(self, section, novld)
