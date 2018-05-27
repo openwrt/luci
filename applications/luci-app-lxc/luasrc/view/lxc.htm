@@ -107,9 +107,9 @@ table.cbi-section-table td,
 
 	function lxc_create(tr)
 	{
-		var lxc_name = tr.querySelector("#tx_name").value.replace(/\s/g,'')
+		var lxc_name     = tr.querySelector("#tx_name").value.replace(/[\s!@#$%^&*()+=\[\]{};':"\\|,<>\/?]/g,'')
 		var lxc_template = tr.querySelector("#s_template").value
-		var bt_create = tr.querySelector("#bt_create")
+		var bt_create    = tr.querySelector("#bt_create")
 
 		if (t_lxc_list.querySelector("[data-id='" + lxc_name + "']") != null)
 			return info_message(output_add, "Container with that name already exists!", 4000)
@@ -224,6 +224,14 @@ table.cbi-section-table td,
 
 		else if (action == "destroy")
 		{
+			var tr = self.parentNode.parentNode
+			var img = tr.querySelector('img')
+			if (img.getAttribute('src') != window.img["red"])
+			{
+				bt_action.disabled = false
+				return info_message(output_list,"Container is still running!")
+			}
+
 			if (!confirm("This will completely remove a stopped LXC container from disk. Are you sure?"))
 				return
 
@@ -396,7 +404,7 @@ table.cbi-section-table td,
 		row.id = 'tr_holder'
 		var cell = row.insertCell(0);
 		cell.colSpan = 3;
-		cell.innerHTML = '<em><br />There are no templates for your architecture (<%=target%>) available, please select another Containers URL.</em>';
+		cell.innerHTML = '<em><br />There are no templates for your architecture (<%=target%>) available, please select another containers URL.</em>';
 	}
 
 	function lxc_list_update()
