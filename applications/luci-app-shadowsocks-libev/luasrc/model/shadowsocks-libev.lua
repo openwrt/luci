@@ -23,7 +23,7 @@ function values_actions(o)
 end
 
 function values_redir(o, xmode)
-	o.map.uci.foreach("shadowsocks-libev", "ss_redir", function(sdata)
+	o.map.uci:foreach("shadowsocks-libev", "ss_redir", function(sdata)
 		local disabled = ucival_to_bool(sdata["disabled"])
 		local sname = sdata[".name"]
 		local mode = sdata["mode"] or "tcp_only"
@@ -37,7 +37,7 @@ function values_redir(o, xmode)
 end
 
 function values_serverlist(o)
-	o.map.uci.foreach("shadowsocks-libev", "server", function(sdata)
+	o.map.uci:foreach("shadowsocks-libev", "server", function(sdata)
 		local sname = sdata[".name"]
 		local server = sdata["server"]
 		local server_port = sdata["server_port"]
