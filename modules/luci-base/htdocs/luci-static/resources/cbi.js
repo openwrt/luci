@@ -1566,3 +1566,75 @@ String.nobr = function()
 		a.push(arguments[i]);
 	return ''.nobr.apply(arguments[0], a);
 }
+
+
+var dummyElem, domParser;
+
+function isElem(e)
+{
+	return (typeof(e) === 'object' && e !== null && 'nodeType' in e);
+}
+
+function toElem(s)
+{
+	var elem;
+
+	try {
+		domParser = domParser || new DOMParser();
+		elem = domParser.parseFromString(s, 'text/html').body.firstChild;
+	}
+	catch(e) {}
+
+	if (!elem) {
+		try {
+			dummyElem = dummyElem || document.createElement('div');
+			dummyElem.innerHTML = s;
+			elem = dummyElem.firstChild;
+		}
+		catch (e) {}
+	}
+
+	return elem || null;
+}
+
+function E()
+{
+	var html = arguments[0],
+	    attr = (arguments[1] instanceof Object && !Array.isArray(arguments[1])) ? arguments[1] : null,
+	    data = attr ? arguments[2] : arguments[1],
+	    elem;
+
+	if (isElem(html))
+		elem = html;
+	else if (html.charCodeAt(0) === 60)
+		elem = toElem(html);
+	else
+		elem = document.createElement(html);
+
+	if (!elem)
+		return null;
+
+	if (attr)
+		for (var key in attr)
+			if (attr.hasOwnProperty(key))
+				elem.setAttribute(key, attr[key]);
+
+	if (typeof(data) === 'function')
+		data = data(elem);
+
+	if (isElem(data)) {
+		elem.appendChild(data);
+	}
+	else if (Array.isArray(data)) {
+		for (var i = 0; i < data.length; i++)
+			if (isElem(data[i]))
+				elem.appendChild(data[i]);
+			else
+				elem.appendChild(document.createTextNode('' + data[i]));
+	}
+	else if (data !== null && data !== undefined) {
+		elem.innerHTML = '' + data;
+	}
+
+	return elem;
+}
