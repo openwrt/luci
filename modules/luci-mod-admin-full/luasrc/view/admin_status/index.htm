@@ -166,7 +166,10 @@
 
 	XHR.poll(5, '<%=REQUEST_URI%>', { status: 1 },
 		function(x, info)
-		{
+		{	
+			if (!info)
+				return; //Failed Xhr request, return now or function will return error
+			
 			if (!(npoll++ % 5))
 				updateHosts();
 
