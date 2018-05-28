@@ -39,28 +39,28 @@
 	<fieldset class="cbi-section">
 		<legend>ARP</legend>
 		<div class="cbi-section-node">
-			<table class="cbi-section-table">
-				<tr class="cbi-section-table-titles">
-					<th class="cbi-section-table-cell"><%_<abbr title="Internet Protocol Version 4">IPv4</abbr>-Address%></th>
-					<th class="cbi-section-table-cell"><%_<abbr title="Media Access Control">MAC</abbr>-Address%></th>
-					<th class="cbi-section-table-cell"><%:Interface%></th>
-				</tr>
+			<div class="table cbi-section-table">
+				<div class="tr cbi-section-table-titles">
+					<div class="th cbi-section-table-cell"><%_<abbr title="Internet Protocol Version 4">IPv4</abbr>-Address%></div>
+					<div class="th cbi-section-table-cell"><%_<abbr title="Media Access Control">MAC</abbr>-Address%></div>
+					<div class="th cbi-section-table-cell"><%:Interface%></div>
+				</div>
 
 				<%
 					for _, v in ipairs(ip.neighbors({ family = 4 })) do
 						if v.mac then
 				%>
-				<tr class="cbi-section-table-row cbi-rowstyle-<%=(style and 1 or 2)%>">
-					<td class="cbi-value-field"><%=v.dest%></td>
-					<td class="cbi-value-field"><%=v.mac%></td>
-					<td class="cbi-value-field"><%=luci.tools.webadmin.iface_get_network(v.dev) or '(' .. v.dev .. ')'%></td>
-				</tr>
+				<div class="tr cbi-section-table-row cbi-rowstyle-<%=(style and 1 or 2)%>">
+					<div class="td cbi-value-field"><%=v.dest%></div>
+					<div class="td cbi-value-field"><%=v.mac%></div>
+					<div class="td cbi-value-field"><%=luci.tools.webadmin.iface_get_network(v.dev) or '(' .. v.dev .. ')'%></div>
+				</div>
 				<%
 							style = not style
 						end
 					end
 				%>
-			</table>
+			</div>
 		</div>
 	</fieldset>
 	<br />
@@ -69,24 +69,24 @@
 		<legend><%_Active <abbr title="Internet Protocol Version 4">IPv4</abbr>-Routes%></legend>
 
 		<div class="cbi-section-node">
-			<table class="cbi-section-table">
-				<tr class="cbi-section-table-titles">
-					<th class="cbi-section-table-cell"><%:Network%></th>
-					<th class="cbi-section-table-cell"><%:Target%></th>
-					<th class="cbi-section-table-cell"><%_<abbr title="Internet Protocol Version 4">IPv4</abbr>-Gateway%></th>
-					<th class="cbi-section-table-cell"><%:Metric%></th>
-					<th class="cbi-section-table-cell"><%:Table%></th>
-				</tr>
+			<div class="table cbi-section-table">
+				<div class="tr cbi-section-table-titles">
+					<div class="th cbi-section-table-cell"><%:Network%></div>
+					<div class="th cbi-section-table-cell"><%:Target%></div>
+					<div class="th cbi-section-table-cell"><%_<abbr title="Internet Protocol Version 4">IPv4</abbr>-Gateway%></div>
+					<div class="th cbi-section-table-cell"><%:Metric%></div>
+					<div class="th cbi-section-table-cell"><%:Table%></div>
+				</div>
 				<% for _, v in ipairs(ip.routes({ family = 4, type = 1 })) do %>
-				<tr class="cbi-section-table-row cbi-rowstyle-<%=(style and 1 or 2)%>">
-					<td class="cbi-value-field"><%=luci.tools.webadmin.iface_get_network(v.dev) or v.dev%></td>
-					<td class="cbi-value-field"><%=v.dest%></td>
-					<td class="cbi-value-field"><%=v.gw%></td>
-					<td class="cbi-value-field"><%=v.metric or 0%></td>
-					<td class="cbi-value-field"><%=rtn[v.table] or v.table%></td>
-				</tr>
+				<div class="tr cbi-section-table-row cbi-rowstyle-<%=(style and 1 or 2)%>">
+					<div class="td cbi-value-field"><%=luci.tools.webadmin.iface_get_network(v.dev) or v.dev%></div>
+					<div class="td cbi-value-field"><%=v.dest%></div>
+					<div class="td cbi-value-field"><%=v.gw%></div>
+					<div class="td cbi-value-field"><%=v.metric or 0%></div>
+					<div class="td cbi-value-field"><%=rtn[v.table] or v.table%></div>
+				</div>
 				<% style = not style end %>
-			</table>
+			</div>
 		</div>
 	</fieldset>
 	<br />
@@ -99,31 +99,31 @@
 		<legend><%_Active <abbr title="Internet Protocol Version 6">IPv6</abbr>-Routes%></legend>
 
 		<div class="cbi-section-node">
-			<table class="cbi-section-table">
-				<tr class="cbi-section-table-titles">
-					<th class="cbi-section-table-cell"><%:Network%></th>
-					<th class="cbi-section-table-cell"><%:Target%></th>
-					<th class="cbi-section-table-cell"><%:Source%></th>
-					<th class="cbi-section-table-cell"><%:Metric%></th>
-					<th class="cbi-section-table-cell"><%:Table%></th>
-				</tr>
+			<div class="table cbi-section-table">
+				<div class="tr cbi-section-table-titles">
+					<div class="th cbi-section-table-cell"><%:Network%></div>
+					<div class="th cbi-section-table-cell"><%:Target%></div>
+					<div class="th cbi-section-table-cell"><%:Source%></div>
+					<div class="th cbi-section-table-cell"><%:Metric%></div>
+					<div class="th cbi-section-table-cell"><%:Table%></div>
+				</div>
 				<%
 					for _, v in ipairs(ip.routes({ family = 6, type = 1 })) do
 						if v.dest and not v.dest:is6linklocal() then
 				%>
-				<tr class="cbi-section-table-row cbi-rowstyle-<%=(style and 1 or 2)%>">
-					<td class="cbi-value-field"><%=luci.tools.webadmin.iface_get_network(v.dev) or '(' .. v.dev .. ')'%></td>
-					<td class="cbi-value-field"><%=v.dest%></td>
-					<td class="cbi-value-field"><%=v.from%></td>
-					<td class="cbi-value-field"><%=v.metric or 0%></td>
-					<td class="cbi-value-field"><%=rtn[v.table] or v.table%></td>
-				</tr>
+				<div class="tr cbi-section-table-row cbi-rowstyle-<%=(style and 1 or 2)%>">
+					<div class="td cbi-value-field"><%=luci.tools.webadmin.iface_get_network(v.dev) or '(' .. v.dev .. ')'%></div>
+					<div class="td cbi-value-field"><%=v.dest%></div>
+					<div class="td cbi-value-field"><%=v.from%></div>
+					<div class="td cbi-value-field"><%=v.metric or 0%></div>
+					<div class="td cbi-value-field"><%=rtn[v.table] or v.table%></div>
+				</div>
 				<%
 							style = not style
 						end
 					end
 				%>
-			</table>
+			</div>
 		</div>
 	</fieldset>
 	<br />
@@ -132,27 +132,27 @@
 		<legend><%:IPv6 Neighbours%></legend>
 
 		<div class="cbi-section-node">
-			<table class="cbi-section-table">
-				<tr class="cbi-section-table-titles">
-					<th class="cbi-section-table-cell"><%:IPv6-Address%></th>
-					<th class="cbi-section-table-cell"><%:MAC-Address%></th>
-					<th class="cbi-section-table-cell"><%:Interface%></th>
-				</tr>
+			<div class="table cbi-section-table">
+				<div class="tr cbi-section-table-titles">
+					<div class="th cbi-section-table-cell"><%:IPv6-Address%></div>
+					<div class="th cbi-section-table-cell"><%:MAC-Address%></div>
+					<div class="th cbi-section-table-cell"><%:Interface%></div>
+				</div>
 				<%
 					for _, v in ipairs(ip.neighbors({ family = 6 })) do
 						if v.dest and not v.dest:is6linklocal() and v.mac then
 				%>
-				<tr class="cbi-section-table-row cbi-rowstyle-<%=(style and 1 or 2)%>">
-					<td class="cbi-value-field"><%=v.dest%></td>
-					<td class="cbi-value-field"><%=v.mac%></td>
-					<td class="cbi-value-field"><%=luci.tools.webadmin.iface_get_network(v.dev) or '(' .. v.dev .. ')'%></td>
-				</tr>
+				<div class="tr cbi-section-table-row cbi-rowstyle-<%=(style and 1 or 2)%>">
+					<div class="td cbi-value-field"><%=v.dest%></div>
+					<div class="td cbi-value-field"><%=v.mac%></div>
+					<div class="td cbi-value-field"><%=luci.tools.webadmin.iface_get_network(v.dev) or '(' .. v.dev .. ')'%></div>
+				</div>
 				<%
 							style = not style
 						end
 					end
 				%>
-			</table>
+			</div>
 		</div>
 	</fieldset>
 	<br />

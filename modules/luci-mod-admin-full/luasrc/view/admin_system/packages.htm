@@ -128,34 +128,34 @@ end
 
 	<% if display ~= "available" then %>
 		<fieldset class="cbi-section">
-			<table class="cbi-section-table" style="width:100%">
-				<tr class="cbi-section-table-titles">
-					<th class="cbi-section-table-cell" style="text-align:left">&#160;</th>
-					<th class="cbi-section-table-cell" style="text-align:left"><%:Package name%></th>
-					<th class="cbi-section-table-cell" style="text-align:left"><%:Version%></th>
-				</tr>
+			<div class="table cbi-section-table" style="width:100%">
+				<div class="tr cbi-section-table-titles">
+					<div class="th cbi-section-table-cell" style="text-align:left">&#160;</div>
+					<div class="th cbi-section-table-cell" style="text-align:left"><%:Package name%></div>
+					<div class="th cbi-section-table-cell" style="text-align:left"><%:Version%></div>
+				</div>
 				<% local empty = true; luci.model.ipkg.list_installed(querypat, function(n, v, s, d) empty = false; filter[n] = true %>
-				<tr class="cbi-section-table-row cbi-rowstyle-<%=rowstyle()%>">
-					<td style="text-align:left; width:10%">
+				<div class="tr cbi-section-table-row cbi-rowstyle-<%=rowstyle()%>">
+					<div class="td" style="text-align:left; width:10%">
 						<form method="post" class="inline" action="<%=REQUEST_URI%>">
 							<input type="hidden" name="exec" value="1" />
 							<input type="hidden" name="token" value="<%=token%>" />
 							<input type="hidden" name="remove" value="<%=pcdata(n)%>" />
 							<a onclick="window.confirm('<%:Remove%> &quot;<%=luci.util.pcdata(n)%>&quot; ?') &#38;&#38; this.parentNode.submit(); return false" href="#"><%:Remove%></a>
 						</form>
-					</td>
-					<td style="text-align:left"><%=luci.util.pcdata(n)%></td>
-					<td style="text-align:left"><%=luci.util.pcdata(v)%></td>
-				</tr>
+					</div>
+					<div class="td" style="text-align:left"><%=luci.util.pcdata(n)%></div>
+					<div class="td" style="text-align:left"><%=luci.util.pcdata(v)%></div>
+				</div>
 				<% end) %>
 				<% if empty then %>
-				<tr class="cbi-section-table-row">
-					<td style="text-align:left">&#160;</td>
-					<td style="text-align:left"><em><%:none%></em></td>
-					<td style="text-align:left"><em><%:none%></em></td>
-				</tr>
+				<div class="tr cbi-section-table-row">
+					<div class="td" style="text-align:left">&#160;</div>
+					<div class="td" style="text-align:left"><em><%:none%></em></div>
+					<div class="td" style="text-align:left"><em><%:none%></em></div>
+				</div>
 				<% end %>
-			</table>
+			</div>
 		</fieldset>
 	<% else %>
 		<fieldset class="cbi-section">
@@ -168,40 +168,40 @@ end
 			</ul>
 			<div class="cbi-section-node">
 		<% end %>
-			<table class="cbi-section-table" style="width:100%">
-				<tr class="cbi-section-table-titles">
-					<th class="cbi-section-table-cell" style="text-align:left">&#160;</th>
-					<th class="cbi-section-table-cell" style="text-align:left"><%:Package name%></th>
-					<th class="cbi-section-table-cell" style="text-align:left"><%:Version%></th>
-					<th class="cbi-section-table-cell" style="text-align:right"><%:Size (.ipk)%></th>
-					<th class="cbi-section-table-cell" style="text-align:left"><%:Description%></th>
-				</tr>
+			<div class="table cbi-section-table" style="width:100%">
+				<div class="tr cbi-section-table-titles">
+					<div class="th cbi-section-table-cell" style="text-align:left">&#160;</div>
+					<div class="th cbi-section-table-cell" style="text-align:left"><%:Package name%></div>
+					<div class="th cbi-section-table-cell" style="text-align:left"><%:Version%></div>
+					<div class="th cbi-section-table-cell" style="text-align:right"><%:Size (.ipk)%></div>
+					<div class="th cbi-section-table-cell" style="text-align:left"><%:Description%></div>
+				</div>
 				<% local empty = true; opkg_list(querypat or letterpat, function(n, v, s, d) if filter[n] then return end; empty = false %>
-				<tr class="cbi-section-table-row cbi-rowstyle-<%=rowstyle()%>">
-					<td style="text-align:left; width:10%">
+				<div class="tr cbi-section-table-row cbi-rowstyle-<%=rowstyle()%>">
+					<div class="td" style="text-align:left; width:10%">
 						<form method="post" class="inline" action="<%=REQUEST_URI%>">
 							<input type="hidden" name="exec" value="1" />
 							<input type="hidden" name="token" value="<%=token%>" />
 							<input type="hidden" name="install" value="<%=pcdata(n)%>" />
 							<a onclick="window.confirm('<%:Install%> &quot;<%=luci.util.pcdata(n)%>&quot; ?') &#38;&#38; this.parentNode.submit(); return false" href="#"><%:Install%></a>
 						</form>
-					</td>
-					<td style="text-align:left"><%=luci.util.pcdata(n)%></td>
-					<td style="text-align:left"><%=luci.util.pcdata(v)%></td>
-					<td style="text-align:right"><%=luci.util.pcdata(s)%></td>
-					<td style="text-align:left"><%=luci.util.pcdata(d)%></td>
-				</tr>
+					</div>
+					<div class="td" style="text-align:left"><%=luci.util.pcdata(n)%></div>
+					<div class="td" style="text-align:left"><%=luci.util.pcdata(v)%></div>
+					<div class="td" style="text-align:right"><%=luci.util.pcdata(s)%></div>
+					<div class="td" style="text-align:left"><%=luci.util.pcdata(d)%></div>
+				</div>
 				<% end) %>
 				<% if empty then %>
-				<tr class="cbi-section-table-row">
-					<td style="text-align:left">&#160;</td>
-					<td style="text-align:left"><em><%:none%></em></td>
-					<td style="text-align:left"><em><%:none%></em></td>
-					<td style="text-align:right"><em><%:none%></em></td>
-					<td style="text-align:left"><em><%:none%></em></td>
-				</tr>
+				<div class="tr cbi-section-table-row">
+					<div class="td" style="text-align:left">&#160;</div>
+					<div class="td" style="text-align:left"><em><%:none%></em></div>
+					<div class="td" style="text-align:left"><em><%:none%></em></div>
+					<div class="td" style="text-align:right"><em><%:none%></em></div>
+					<div class="td" style="text-align:left"><em><%:none%></em></div>
+				</div>
 				<% end %>
-			</table>
+			</div>
 		<% if not querypat then %>
 			</div>
 		<% end %>

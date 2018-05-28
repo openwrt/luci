@@ -51,37 +51,37 @@ table.cbi-section-table td,
 	<%- end %>
 	<div class="cbi-section-descr"><%=self.description%></div>
 	<div class="cbi-section-node">
-		<table class="cbi-section-table">
-			<tr class="cbi-section-table-titles">
+		<div class="table cbi-section-table">
+			<div class="tr cbi-section-table-titles">
 			<%- if self.sectionhead then -%>
-				<th class="cbi-section-table-cell"><%=self.sectionhead%></th>
+				<div class="th cbi-section-table-cell"><%=self.sectionhead%></div>
 			<%- else -%>
-				<th>&#160;</th>
+				<div class="th">&#160;</div>
 			<%- end -%>
 			<%- for i, k in pairs(self.children) do -%>
-				<th class="cbi-section-table-cell"<%=width(k)%>>
+				<div class="th cbi-section-table-cell"<%=width(k)%>>
 					<%-=k.title-%>
-				</th>
+				</div>
 			<%- end -%>
-			</tr>
+			</div>
 			<%- local isempty = true
 				for i, k in ipairs(self:cfgsections()) do
 					section = k
 					isempty = false
 					scope = { valueheader = "cbi/cell_valueheader", valuefooter = "cbi/cell_valuefooter" }
 			-%>
-			<tr class="cbi-section-table-row" id="cbi-<%=self.config%>-<%=section%>">
-				<th><%=k%></th>
+			<div class="tr cbi-section-table-row" id="cbi-<%=self.config%>-<%=section%>">
+				<div class="th"><%=k%></div>
 				<%-
 					for k, node in ipairs(self.children) do
 						node:render(section, scope or {})
 					end
 					if not scope.cbid:match("adb_src_cat") then
 				-%>
-					<td class="cbi-value-field">&#160;</td>
+					<div class="td cbi-value-field">&#160;</div>
 				<%- end -%>
-			</tr>
+			</div>
 			<%- end -%>
-		</table>
+		</div>
 	</div>
 </fieldset>

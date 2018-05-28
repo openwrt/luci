@@ -164,7 +164,7 @@
 									ifc.ip6addrs[i]
 								);
 						}
-						
+
 						if (ifc.ip6prefix)
 						{
 							html += String.format('<strong><%:IPv6-PD%>:</strong> %s<br />', ifc.ip6prefix);
@@ -212,20 +212,20 @@
 	<fieldset class="cbi-section">
 		<legend><%:Interface Overview%></legend>
 
-		<table class="cbi-section-table" style="margin:10px; empty-cells:hide">
-			<tr class="cbi-section-table-titles">
-				<th class="cbi-section-table-cell"><%:Network%></th>
-				<th class="cbi-section-table-cell" style="text-align:left"><%:Status%></th>
-				<th class="cbi-section-table-cell"><%:Actions%></th>
-			</tr>
+		<div class="table cbi-section-table" style="margin:10px; empty-cells:hide">
+			<div class="tr cbi-section-table-titles">
+				<div class="th"><%:Network%></div>
+				<div class="th left"><%:Status%></div>
+				<div class="th"><%:Actions%></div>
+			</div>
 			<%
 				for i, net in ipairs(netlist) do
 					local z = net[3]
 					local c = z and z:get_color() or "#EEEEEE"
 					local t = z and translate("Part of zone %q" % z:name()) or translate("No zone assigned")
 			%>
-				<tr class="cbi-section-table-row cbi-rowstyle-<%=i % 2 + 1%>">
-					<td class="cbi-value-field" style="padding:3px">
+				<div class="tr cbi-section-table-row cbi-rowstyle-<%=i % 2 + 1%>">
+					<div class="td">
 						<div class="ifacebox">
 							<div class="ifacebox-head" style="background-color:<%=c%>" title="<%=pcdata(t)%>">
 								<strong><%=net[1]:upper()%></strong>
@@ -235,19 +235,19 @@
 								<small>?</small>
 							</div>
 						</div>
-					</td>
-					<td class="cbi-value-field" style="vertical-align:middle; text-align:left; padding:3px" id="<%=net[1]%>-ifc-description">
+					</div>
+					<div class="td left" id="<%=net[1]%>-ifc-description">
 						<em><%:Collecting data...%></em>
-					</td>
-					<td style="width:420px">
+					</div>
+					<div class="td">
 						<input type="button" class="cbi-button cbi-button-reload" style="width:100px" onclick="iface_shutdown('<%=net[1]%>', true)" title="<%:Reconnect this interface%>" value="<%:Connect%>" />
 						<input type="button" class="cbi-button cbi-button-reset" style="width:100px" onclick="iface_shutdown('<%=net[1]%>', false)" title="<%:Shutdown this interface%>" value="<%:Stop%>" />
 						<input type="button" class="cbi-button cbi-button-edit" style="width:100px" onclick="location.href='<%=url("admin/network/network", net[1])%>'" title="<%:Edit this interface%>" value="<%:Edit%>" id="<%=net[1]%>-ifc-edit" />
 						<input type="button" class="cbi-button cbi-button-remove" style="width:100px" onclick="iface_delete('<%=net[1]%>')" value="<%:Delete%>" />
-					</td>
-				</tr>
+					</div>
+				</div>
 			<% end %>
-		</table>
+		</div>
 
 		<input type="button" class="cbi-button cbi-button-add" value="<%:Add new interface...%>" onclick="location.href='<%=url("admin/network/iface_add")%>'" />
 	</fieldset>

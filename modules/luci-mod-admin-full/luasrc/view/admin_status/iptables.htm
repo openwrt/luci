@@ -92,14 +92,14 @@
 
 		<% for _, tbl in ipairs(tables) do chaincnt = 0 %>
 			<h3><%:Table%>: <%=tbl%></h3>
-			<table class="cbi-section-table" style="font-size:90%">
+			<div class="table cbi-section-table" style="font-size:90%">
 				<% for _, chain in ipairs(ipt:chains(tbl)) do
 					rowcnt    = 0
 					chaincnt  = chaincnt + 1
 					chaininfo = ipt:chain(tbl, chain)
 				%>
-					<tr class="cbi-section-table-titles cbi-rowstyle-<%=rowstyle()%>">
-						<th class="cbi-section-table-cell" style="text-align:left" colspan="11">
+					<div class="tr cbi-section-table-titles cbi-rowstyle-<%=rowstyle()%>">
+						<div class="th cbi-section-table-cell" style="text-align:left" colspan="11">
 							<br /><span id="rule_<%=tbl:lower()%>_<%=chain%>">
 							<%:Chain%> <em><%=chain%></em>
 							(<%- if chaininfo.policy then -%>
@@ -107,47 +107,47 @@
 							<%- else -%>
 								<%:References%>: <%=chaininfo.references-%>
 							<%- end -%>)</span>
-						</th>
-					</tr>
-					<tr class="cbi-section-table-descr">
-						<th class="cbi-section-table-cell"><%:Pkts.%></th>
-						<th class="cbi-section-table-cell"><%:Traffic%></th>
-						<th class="cbi-section-table-cell"><%:Target%></th>
-						<th class="cbi-section-table-cell"><%:Prot.%></th>
-						<th class="cbi-section-table-cell"><%:In%></th>
-						<th class="cbi-section-table-cell"><%:Out%></th>
-						<th class="cbi-section-table-cell"><%:Source%></th>
-						<th class="cbi-section-table-cell"><%:Destination%></th>
-						<th class="cbi-section-table-cell" style="width:30%"><%:Options%></th>
-					</tr>
+						</div>
+					</div>
+					<div class="tr cbi-section-table-descr">
+						<div class="th cbi-section-table-cell"><%:Pkts.%></div>
+						<div class="th cbi-section-table-cell"><%:Traffic%></div>
+						<div class="th cbi-section-table-cell"><%:Target%></div>
+						<div class="th cbi-section-table-cell"><%:Prot.%></div>
+						<div class="th cbi-section-table-cell"><%:In%></div>
+						<div class="th cbi-section-table-cell"><%:Out%></div>
+						<div class="th cbi-section-table-cell"><%:Source%></div>
+						<div class="th cbi-section-table-cell"><%:Destination%></div>
+						<div class="th cbi-section-table-cell" style="width:30%"><%:Options%></div>
+					</div>
 
 					<% for _, rule in ipairs(ipt:find({table=tbl, chain=chain})) do %>
-						<tr class="cbi-section-table-row cbi-rowstyle-<%=rowstyle()%>">
-							<td><%=rule.packets%></td>
-							<td style="white-space: nowrap"><%=wba.byte_format(rule.bytes)%></td>
-							<td><%=rule.target and link_target(tbl, rule.target) or "-"%></td>
-							<td><%=rule.protocol%></td>
-							<td><%=link_iface(rule.inputif)%></td>
-							<td><%=link_iface(rule.outputif)%></td>
-							<td><%=rule.source%></td>
-							<td><%=rule.destination%></td>
-							<td style="width:30%"><small><%=#rule.options > 0 and luci.util.pcdata(table.concat(rule.options, " ")) or "-"%></small></td>
-						</tr>
+						<div class="tr cbi-section-table-row cbi-rowstyle-<%=rowstyle()%>">
+							<div class="td"><%=rule.packets%></div>
+							<div class="td" style="white-space: nowrap"><%=wba.byte_format(rule.bytes)%></div>
+							<div class="td"><%=rule.target and link_target(tbl, rule.target) or "-"%></div>
+							<div class="td"><%=rule.protocol%></div>
+							<div class="td"><%=link_iface(rule.inputif)%></div>
+							<div class="td"><%=link_iface(rule.outputif)%></div>
+							<div class="td"><%=rule.source%></div>
+							<div class="td"><%=rule.destination%></div>
+							<div class="td" style="width:30%"><small><%=#rule.options > 0 and luci.util.pcdata(table.concat(rule.options, " ")) or "-"%></small></div>
+						</div>
 					<% end %>
 
 					<% if rowcnt == 1 then %>
-						<tr class="cbi-section-table-titles cbi-rowstyle-<%=rowstyle()%>">
-							<td colspan="9"><em><%:No rules in this chain%></em></td>
-						</tr>
+						<div class="tr cbi-section-table-titles cbi-rowstyle-<%=rowstyle()%>">
+							<div class="td" colspan="9"><em><%:No rules in this chain%></em></div>
+						</div>
 					<% end %>
 				<% end %>
 
 				<% if chaincnt == 0 then %>
-					<tr class="cbi-section-table-titles cbi-rowstyle-<%=rowstyle()%>">
-						<td colspan="9"><em><%:No chains in this table%></em></td>
-					</tr>
+					<div class="tr cbi-section-table-titles cbi-rowstyle-<%=rowstyle()%>">
+						<div class="td" colspan="9"><em><%:No chains in this table%></em></div>
+					</div>
 				<% end %>
-			</table>
+			</div>
 			<br /><br />
 		<% end %>
 	</fieldset>

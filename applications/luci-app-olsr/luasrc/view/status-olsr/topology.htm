@@ -17,14 +17,14 @@ local olsrtools = require "luci.tools.olsr"
 
 <fieldset class="cbi-section">
 	<legend><%:Overview of currently known OLSR nodes%></legend>
-	<table class="cbi-section-table">
-		<tr class="cbi-section-table-titles">
-			<th class="cbi-section-table-cell"><%:OLSR node%></th>
-			<th class="cbi-section-table-cell"><%:Last hop%></th>
-			<th class="cbi-section-table-cell"><%:LQ%></th>
-			<th class="cbi-section-table-cell"><%:NLQ%></th>
-			<th class="cbi-section-table-cell"><%:ETX%></th>
-		</tr>
+	<div class="table cbi-section-table">
+		<div class="tr cbi-section-table-titles">
+			<div class="th cbi-section-table-cell"><%:OLSR node%></div>
+			<div class="th cbi-section-table-cell"><%:Last hop%></div>
+			<div class="th cbi-section-table-cell"><%:LQ%></div>
+			<div class="th cbi-section-table-cell"><%:NLQ%></div>
+			<div class="th cbi-section-table-cell"><%:ETX%></div>
+		</div>
 
 		<% for k, route in ipairs(routes) do 
 			local cost = string.format("%.3f", tonumber(route.tcEdgeCost/1024) or 0)
@@ -33,28 +33,28 @@ local olsrtools = require "luci.tools.olsr"
 			local nlq = string.format("%.3f", tonumber(route.neighborLinkQuality) or 0)
 		%>
 
-		<tr class="cbi-section-table-row cbi-rowstyle-<%=i%> proto-<%=route.proto%>">
+		<div class="tr cbi-section-table-row cbi-rowstyle-<%=i%> proto-<%=route.proto%>">
 
 			<% if route.proto == "6" then %>
 
-			<td class="cbi-section-table-cell"><a href="http://[<%=route.destinationIP%>]/cgi-bin-status.html"><%=route.destinationIP%></a></td>
-			<td class="cbi-section-table-cell"><a href="http://[<%=route.lastHopIP%>]/cgi-bin-status.html"><%=route.lastHopIP%></a></td>
+			<div class="td cbi-section-table-cell"><a href="http://[<%=route.destinationIP%>]/cgi-bin-status.html"><%=route.destinationIP%></a></div>
+			<div class="td cbi-section-table-cell"><a href="http://[<%=route.lastHopIP%>]/cgi-bin-status.html"><%=route.lastHopIP%></a></div>
 
 			<% else %>
 
-			<td class="cbi-section-table-cell"><a href="http://<%=route.destinationIP%>/cgi-bin-status.html"><%=route.destinationIP%></a></td>
-			<td class="cbi-section-table-cell"><a href="http://<%=route.lastHopIP%>/cgi-bin-status.html"><%=route.lastHopIP%></a></td>
+			<div class="td cbi-section-table-cell"><a href="http://<%=route.destinationIP%>/cgi-bin-status.html"><%=route.destinationIP%></a></div>
+			<div class="td cbi-section-table-cell"><a href="http://<%=route.lastHopIP%>/cgi-bin-status.html"><%=route.lastHopIP%></a></div>
 
 			<%end%>
 
-			<td class="cbi-section-table-cell"><%=lq%></td>
-			<td class="cbi-section-table-cell"><%=nlq%></td>
-			<td class="cbi-section-table-cell" style="background-color:<%=color%>"><%=cost%></td>
-		</tr>
+			<div class="td cbi-section-table-cell"><%=lq%></div>
+			<div class="td cbi-section-table-cell"><%=nlq%></div>
+			<div class="td cbi-section-table-cell" style="background-color:<%=color%>"><%=cost%></div>
+		</div>
 
 		<%	i = ((i % 2) + 1)
 		end %>
-	</table>
+	</div>
 <%+status-olsr/legend%>
 </fieldset>
 

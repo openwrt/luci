@@ -195,8 +195,8 @@
 			{
 				var assoctable = document.getElementById('iw-assoclist');
 				if (assoctable)
-					while (assoctable.rows.length > 1)
-						assoctable.rows[1].parentNode.removeChild(assoctable.rows[1]);
+					while (assoctable.firstElementChild !== assoctable.lastElementChild)
+						assoctable.removeChild(assoctable.lastElementChild);
 
 				var devup = { };
 				var rowstyle = 1;
@@ -293,7 +293,7 @@
 					if (assoctable)
 					{
 						var assoclist = [ ];
-						for( var bssid in iw.assoclist )
+						for (var bssid in iw.assoclist)
 						{
 							assoclist.push(iw.assoclist[bssid]);
 							assoclist[assoclist.length-1].bssid = bssid;
@@ -301,11 +301,8 @@
 
 						assoclist.sort(function(a, b) { a.bssid < b.bssid });
 
-						for( var j = 0; j < assoclist.length; j++ )
+						for (var j = 0; j < assoclist.length; j++)
 						{
-							var tr = assoctable.insertRow(-1);
-							    tr.className = 'cbi-section-table-row cbi-rowstyle-' + rowstyle;
-
 							var icon;
 							var q = (-1 * (assoclist[j].noise - assoclist[j].signal)) / 5;
 							if (q < 1)
@@ -319,48 +316,35 @@
 							else
 								icon = "<%=resource%>/icons/signal-75-100.png";
 
-							tr.insertCell(-1).innerHTML = String.format(
-								'<span class="ifacebadge" title="%q"><img src="<%=resource%>/icons/wifi.png" /> %h</span>',
-								iw.device.name, iw.ifname
-							);
+							var host = hosts[assoclist[j].bssid],
+							    name = host ? (host.name || host.ipv4 || host.ipv6) : null,
+							    hint = (host && host.name && (host.ipv4 || host.ipv6)) ? (host.ipv4 || host.ipv6) : null;
 
-							tr.insertCell(-1).innerHTML = nowrap(String.format('%h', iw.ssid ? iw.ssid : '?'));
-							tr.insertCell(-1).innerHTML = assoclist[j].bssid;
-
-							var host = hosts[assoclist[j].bssid];
-							if (host)
-								tr.insertCell(-1).innerHTML = String.format(
-									'<div style="max-width:200px;overflow:hidden;text-overflow:ellipsis">%s</div>',
-									((host.name && (host.ipv4 || host.ipv6))
-										? '%h (%s)'.format(host.name, host.ipv4 || host.ipv6)
-										: '%h'.format(host.name || host.ipv4 || host.ipv6)).nobr()
-								);
-							else
-								tr.insertCell(-1).innerHTML = '?';
-
-							tr.insertCell(-1).innerHTML = String.format(
-								'<span class="ifacebadge" title="<%:Signal%>: %d <%:dBm%> / <%:Noise%>: %d <%:dBm%> / <%:SNR%>: %d"><img src="%s" /> %d / %d <%:dBm%></span>',
-								assoclist[j].signal, assoclist[j].noise, assoclist[j].signal - assoclist[j].noise,
-								icon,
-								assoclist[j].signal, assoclist[j].noise
-							);
-
-							tr.insertCell(-1).innerHTML = nowrap(wifirate(assoclist[j], true)) + '<br />' + nowrap(wifirate(assoclist[j], false));
+							assoctable.appendChild(E('<div class="tr cbi-section-table-row cbi-rowstyle-%d">'.format(rowstyle), [
+								E('<div class="td"><span class="ifacebadge" title="%q"><img src="<%=resource%>/icons/wifi.png" /> %h</span></div>'
+									.format(iw.device.name, iw.ifname)),
+								E('<div class="td" style="white-space:nowrap">%h</div>'
+									.format(iw.ssid || '?')),
+								E('<div class="td">%h</div>'
+									.format(assoclist[j].bssid)),
+								E('<div class="td">', hint ? '<div style="max-width:200px;overflow:hidden;text-overflow:ellipsis">%h (%h)</div>'
+									.format(name || '?', hint) : (name || '?')),
+								E('<div class="td"><span class="ifacebadge" title="<%:Signal%>: %d <%:dBm%> / <%:Noise%>: %d <%:dBm%> / <%:SNR%>: %d"><img src="%s" /> %d / %d <%:dBm%></span></div>'
+									.format(assoclist[j].signal, assoclist[j].noise, assoclist[j].signal - assoclist[j].noise, icon, assoclist[j].signal, assoclist[j].noise)),
+								E('<div class="td">', [
+									E('<span style="white-space:nowrap">', wifirate(assoclist[j], true)),
+									E('<br />'),
+									E('<span style="white-space:nowrap">', wifirate(assoclist[j], false))
+								])
+							]));
 
 							rowstyle = (rowstyle == 1) ? 2 : 1;
 						}
 					}
 				}
 
-				if (assoctable && assoctable.rows.length == 1)
-				{
-					var tr = assoctable.insertRow(-1);
-					    tr.className = 'cbi-section-table-row';
-
-					var td = tr.insertCell(-1);
-					    td.colSpan = 8;
-					    td.innerHTML = '<br /><em><%:No information available%></em>';
-				}
+				if (assoctable && assoctable.firstElementChild === assoctable.lastElementChild)
+					assoctable.appendChild(E('<div class="tr cbi-section-table-row"><div class="td"><em><br /><%:No information available%></em></div></div>'));
 
 				for (var dev in devup)
 				{
@@ -386,15 +370,17 @@
 	<% for _, dev in ipairs(devices) do local nets = dev:get_wifinets() %>
 	<!-- device <%=dev:name()%> -->
 	<fieldset class="cbi-section">
-		<table class="cbi-section-table" style="margin:10px; empty-cells:hide">
+		<div class="table cbi-section-table" style="margin:10px; empty-cells:hide">
 			<!-- physical device -->
-			<tr>
-				<td style="width:34px"><img src="<%=resource%>/icons/wifi_big_disabled.png" style="float:left; margin-right:10px" id="<%=dev:name()%>-iw-upstate" /></td>
-				<td colspan="2" style="text-align:left">
+			<div class="tr">
+				<div class="td">
+					<img src="<%=resource%>/icons/wifi_big_disabled.png" id="<%=dev:name()%>-iw-upstate" />
+				</div>
+				<div class="td left">
 					<big><strong><%=guess_wifi_hw(dev)%> (<%=dev:name()%>)</strong></big><br />
 					<span id="<%=dev:name()%>-iw-devinfo"></span>
-				</td>
-				<td style="width:310px;text-align:right">
+				</div>
+				<div class="td right">
 					<form action="<%=url('admin/network/wireless_join')%>" method="post" class="inline">
 						<input type="hidden" name="device" value="<%=dev:name()%>" />
 						<input type="hidden" name="token" value="<%=token%>" />
@@ -405,38 +391,36 @@
 						<input type="hidden" name="token" value="<%=token%>" />
 						<input type="submit" class="cbi-button cbi-button-add" style="width:100px" title="<%:Provide new network%>" value="<%:Add%>" />
 					</form>
-				</td>
-			</tr>
+				</div>
+			</div>
 			<!-- /physical device -->
 
 			<!-- network list -->
 			<% if #nets > 0 then %>
 				<% for i, net in ipairs(nets) do %>
-				<tr class="cbi-section-table-row cbi-rowstyle-<%=1 + ((i-1) % 2)%>">
-					<td></td>
-					<td class="cbi-value-field" style="vertical-align:middle; padding:3px" id="<%=net:id()%>-iw-signal">
+				<div class="tr cbi-section-table-row cbi-rowstyle-<%=1 + ((i-1) % 2)%>">
+					<div class="td" id="<%=net:id()%>-iw-signal">
 						<span class="ifacebadge" title="<%:Not associated%>"><img src="<%=resource%>/icons/signal-none.png" /> 0%</span>
-					</td>
-					<td class="cbi-value-field" style="vertical-align:middle; text-align:left; padding:3px" id="<%=net:id()%>-iw-status">
+					</div>
+					<div class="td left" id="<%=net:id()%>-iw-status">
 						<em><%:Collecting data...%></em>
-					</td>
-					<td class="cbi-value-field" style="width:310px;text-align:right">
+					</div>
+					<div class="td right">
 						<input id="<%=net:id()%>-iw-toggle" type="button" class="cbi-button cbi-button-reload" style="width:100px" onclick="wifi_shutdown('<%=net:id()%>', this)" title="<%:Delete this network%>" value="<%:Enable%>" />
 						<input type="button" class="cbi-button cbi-button-edit" style="width:100px" onclick="location.href='<%=net:adminlink()%>'" title="<%:Edit this network%>" value="<%:Edit%>" />
 						<input type="button" class="cbi-button cbi-button-remove" style="width:100px" onclick="wifi_delete('<%=net:id()%>')" title="<%:Delete this network%>" value="<%:Remove%>" />
-					</td>
-				</tr>
+					</div>
+				</div>
 				<% end %>
 			<% else %>
-				<tr class="cbi-section-table-row cbi-rowstyle-2">
-					<td></td>
-					<td colspan="3" class="cbi-value-field" style="vertical-align:middle; text-align:left; padding:3px">
+				<div class="tr cbi-section-table-row cbi-rowstyle-2">
+					<div class="td left">
 						<em><%:No network configured on this device%></em>
-					</td>
-				</tr>
+					</div>
+				</div>
 			<% end %>
 			<!-- /network list -->
-		</table>
+		</div>
 	</fieldset>
 	<!-- /device <%=dev:name()%> -->
 	<% end %>
@@ -445,21 +429,21 @@
 	<h2><%:Associated Stations%></h2>
 
 	<fieldset class="cbi-section">
-		<table class="cbi-section-table valign-middle" style="margin:10px" id="iw-assoclist">
-			<tr class="cbi-section-table-titles">
-				<th class="cbi-section-table-cell"></th>
-				<th class="cbi-section-table-cell"><%:SSID%></th>
-				<th class="cbi-section-table-cell"><%:MAC-Address%></th>
-				<th class="cbi-section-table-cell"><%:Host%></th>
-				<th class="cbi-section-table-cell"><%:Signal%> / <%:Noise%></th>
-				<th class="cbi-section-table-cell"><%:RX Rate%> / <%:TX Rate%></th>
-			</tr>
-			<tr class="cbi-section-table-row cbi-rowstyle-2">
-				<td class="cbi-value-field" colspan="6">
+		<div class="table cbi-section-table valign-middle" style="margin:10px" id="iw-assoclist">
+			<div class="tr cbi-section-table-titles">
+				<div class="th cbi-section-table-cell"></div>
+				<div class="th cbi-section-table-cell"><%:SSID%></div>
+				<div class="th cbi-section-table-cell"><%:MAC-Address%></div>
+				<div class="th cbi-section-table-cell"><%:Host%></div>
+				<div class="th cbi-section-table-cell"><%:Signal%> / <%:Noise%></div>
+				<div class="th cbi-section-table-cell"><%:RX Rate%> / <%:TX Rate%></div>
+			</div>
+			<div class="tr cbi-section-table-row cbi-rowstyle-2">
+				<div class="td">
 					<em><%:Collecting data...%></em>
-				</td>
-			</tr>
-		</table>
+				</div>
+			</div>
+		</div>
 	</fieldset>
 </div>
 

@@ -18,31 +18,31 @@ local i = 1
 <fieldset class="cbi-section">
 	<legend><%:Overview of interfaces where OLSR is running%></legend>
 
-	<table class="cbi-section-table">
-		<tr>
-			<th class="cbi-section-table-cell"><%:Interface%></th>
-			<th class="cbi-section-table-cell"><%:State%></th>
-			<th class="cbi-section-table-cell"><%:MTU%></th>
-			<th class="cbi-section-table-cell"><%:WLAN%></th>
-			<th class="cbi-section-table-cell"><%:Source address%></th>
-			<th class="cbi-section-table-cell"><%:Netmask%></th>
-			<th class="cbi-section-table-cell"><%:Broadcast address%></th>
-		</tr>
+	<div class="table cbi-section-table">
+		<div class="tr">
+			<div class="th cbi-section-table-cell"><%:Interface%></div>
+			<div class="th cbi-section-table-cell"><%:State%></div>
+			<div class="th cbi-section-table-cell"><%:MTU%></div>
+			<div class="th cbi-section-table-cell"><%:WLAN%></div>
+			<div class="th cbi-section-table-cell"><%:Source address%></div>
+			<div class="th cbi-section-table-cell"><%:Netmask%></div>
+			<div class="th cbi-section-table-cell"><%:Broadcast address%></div>
+		</div>
 
 		<% for k, iface in ipairs(iface) do %>
 
-		<tr class="cbi-section-table-row cbi-rowstyle-<%=i%> proto-<%=iface.proto%>">
-			<td class="cbi-section-table-cell"><%=iface.name%></td>
-			<td class="cbi-section-table-cell"><%=iface.state%></td>
-			<td class="cbi-section-table-cell"><%=iface.olsrMTU%></td>
-			<td class="cbi-section-table-cell"><%=iface.wireless and luci.i18n.translate('yes') or luci.i18n.translate('no')%></td>
-			<td class="cbi-section-table-cell"><%=iface.ipv4Address or iface.ipv6Address%></td>
-			<td class="cbi-section-table-cell"><%=iface.netmask%></td>
-			<td class="cbi-section-table-cell"><%=iface.broadcast or iface.multicast%></td>
-		</tr>
+		<div class="tr cbi-section-table-row cbi-rowstyle-<%=i%> proto-<%=iface.proto%>">
+			<div class="td cbi-section-table-cell"><%=iface.name%></div>
+			<div class="td cbi-section-table-cell"><%=iface.state%></div>
+			<div class="td cbi-section-table-cell"><%=iface.olsrMTU%></div>
+			<div class="td cbi-section-table-cell"><%=iface.wireless and luci.i18n.translate('yes') or luci.i18n.translate('no')%></div>
+			<div class="td cbi-section-table-cell"><%=iface.ipv4Address or iface.ipv6Address%></div>
+			<div class="td cbi-section-table-cell"><%=iface.netmask%></div>
+			<div class="td cbi-section-table-cell"><%=iface.broadcast or iface.multicast%></div>
+		</div>
 		<% i = ((i % 2) + 1)
 		end %>
-	</table>
+	</div>
 </fieldset>
 <%+status-olsr/common_js%>
 <%+footer%>
