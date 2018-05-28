@@ -32,6 +32,25 @@
     font-style: normal;
 }
 
+.table { display: table; }
+.tr { display: table-row; }
+.thead { display: table-header-group; }
+.tbody { display: table-row-group; }
+.tfoot { display: table-footer-group; }
+.td, .th {
+    vertical-align: middle;
+    text-align: center;
+    display: table-cell;
+    padding: .5em;
+}
+
+.th {
+    font-weight: bold;
+}
+
+.table[width="33%"], .th[width="33%"], .td[width="33%"] { width: 33%; }
+.table[width="100%"], .th[width="100%"], .td[width="100%"] { width: 100%; }
+
 .cbi-button-up,
 .cbi-button-down,
 .cbi-value-helpicon,
@@ -468,14 +487,16 @@ fieldset > fieldset {
     border-bottom: 1px solid #eee;
 }
 
-table {
+table,
+.table {
     border-spacing: 0;
     border-collapse: collapse;
     width: 100%;
     border: 1px solid #eee;
 }
 
-table > tbody > tr > td, table > tbody > tr > th, table > tfoot > tr > td, table > tfoot > tr > th, table > thead > tr > td, table > thead > tr > th {
+table > tbody > tr > td, table > tbody > tr > th, table > tfoot > tr > td, table > tfoot > tr > th, table > thead > tr > td, table > thead > tr > th,
+.table > .tbody > .tr > .td, .table > .tbody > .tr > .th, .table > .tfoot > .tr > .td, .table > .tfoot > .tr > .th, .table > .thead > .tr > .td, .table > .thead > .tr > .th {
     padding: .5rem;
     border-top: 1px solid #ddd;
     white-space: nowrap;
@@ -489,7 +510,13 @@ table > tbody > tr > td, table > tbody > tr > th, table > tfoot > tr > td, table
     text-align: center;
 }
 
-fieldset > table > tbody > tr:nth-of-type(2n) {
+fieldset > table > tbody > tr:nth-of-type(2n),
+fieldset > .table > .tbody > .tr:nth-of-type(2n) {
+    background-color: #f9f9f9;
+}
+
+fieldset > table > tbody > tr:nth-of-type(2n),
+fieldset > .table > .tbody > .tr:nth-of-type(2n) {
     background-color: #f9f9f9;
 }
 
@@ -516,19 +543,23 @@ fieldset > table > tbody > tr:nth-of-type(2n) {
 
 /* fix multiple table */
 
-table table {
+table table,
+.table .table {
     border: none;
 }
 
-.cbi-value-field table {
+.cbi-value-field table,
+.cbi-value-field .table {
     border: none;
 }
 
-td > table > tbody > tr > td {
+td > table > tbody > tr > td,
+.td > .table > .tbody > .tr > .td {
     border: none;
 }
 
-.cbi-value-field > table > tbody > tr > td {
+.cbi-value-field > table > tbody > tr > td,
+.cbi-value-field > .table > .tbody > .tr > .td {
     border: none;
 }
 
@@ -776,6 +807,10 @@ form.inline + form.inline,
     text-align: right !important;
 }
 
+.center {
+    text-align: center !important;
+}
+
 .inline {
     display: inline;
 }
@@ -806,7 +841,8 @@ form.inline + form.inline,
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
-td > .ifacebadge {
+td > .ifacebadge,
+.td > .ifacebadge {
     background-color: #F0F0F0;
     font-size: 0.9rem;
 }
@@ -986,7 +1022,7 @@ td > .ifacebadge {
     padding: 0.5rem;
 }
 
-div.cbi-value var, td.cbi-value-field var {
+div.cbi-value var, td.cbi-value-field var, .td.cbi-value-field var {
     font-style: italic;
     color: #0069D6;
 }
@@ -1134,13 +1170,13 @@ header > .container > .pull-right > * {
 
 /* fix status overview */
 
-.node-status-overview > .main fieldset:nth-child(4) td:nth-child(2) {
+.node-status-overview > .main fieldset:nth-child(4) .td:nth-child(2) {
     white-space: normal;
 }
 
 /* fix status processes */
 
-.node-status-processes > .main table tr td:nth-child(3) {
+.node-status-processes > .main .table .tr .td:nth-child(3) {
     white-space: normal;
 }
 

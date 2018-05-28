@@ -25,7 +25,8 @@ body {
 
 h1, h2, h3, h4, h5, h6, p, pre, a, abbr, acronym, code, del, em, img, q, s,
 small, strike, strong, sub, sup, tt, var, dd, dl, dt, li, ol, ul, fieldset,
-form, label, legend, button, table, caption, tbody, tfoot, thead, tr, th, td {
+form, label, legend, button, table, caption, tbody, tfoot, thead, tr, th, td,
+.table, .tbody, .tfoot, .thead, .tr, .th, .td {
 	margin: 0;
 	padding: 0;
 	border: 0;
@@ -671,7 +672,7 @@ textarea[readonly] {
 .cbi-page-actions {
 	background: #f5f5f5;
 	margin-bottom: 18px;
-	padding: 17px 20px 18px 150px;
+	padding: 17px 20px 18px 17px;
 	border-top: 1px solid #ddd;
 	-webkit-border-radius: 0 0 3px 3px;
 	-moz-border-radius: 0 0 3px 3px;
@@ -719,7 +720,12 @@ textarea[readonly] {
  * Tables.less
  * Tables for, you guessed it, tabular data
  * ---------------------------------------- */
-table {
+.tr { display: table-row; }
+.table[width="33%"], .th[width="33%"], .td[width="33%"] { width: 33%; }
+.table[width="100%"], .th[width="100%"], .td[width="100%"] { width: 100%; }
+
+.table {
+	display: table;
 	width: 100%;
 	margin-bottom: 18px;
 	padding: 0;
@@ -727,24 +733,26 @@ table {
 	border-collapse: collapse;
 }
 
-table th, table td {
+.table .th, .table .td {
+	display: table-cell;
+	vertical-align: middle; /* Fixme */
 	padding: 10px 10px 9px;
 	line-height: 18px;
 	text-align: left;
 }
 
-table th {
+.table .th {
 	padding-top: 9px;
 	font-weight: bold;
 	vertical-align: middle;
 }
 
-table td {
+.table .td {
 	vertical-align: top;
 	border-top: 1px solid #ddd;
 }
 
-table tbody th {
+.table .tbody .th {
 	border-top: 1px solid #ddd;
 	vertical-align: top;
 }
@@ -1585,10 +1593,6 @@ footer {
 	  padding: 3px 9px 3px 27px;
 }
 
-:root .alert-message, :root .btn {
-	border-radius: 0 0;
-}
-
 button.btn::-moz-focus-inner, input[type=submit].btn::-moz-focus-inner {
 	padding: 0;
 	border: 0;
@@ -1765,6 +1769,8 @@ header .pull-right { padding-top: 8px; }
 
 .right { text-align: right !important; }
 
+.center { text-align: center !important; }
+
 .cbi-value-field { line-height: 1.5em; }
 
 .cbi-value-field input[type=checkbox],
@@ -1778,22 +1784,22 @@ table table td,
 	border: none;
 }
 
-table.cbi-section-table input,
-table.cbi-section-table textarea,
-table.cbi-section-table select {
+.table.cbi-section-table input,
+.table.cbi-section-table textarea,
+.table.cbi-section-table select {
 	width: auto;
 }
 
-table.cbi-section-table td.cbi-section-table-cell {
+.table.cbi-section-table .td.cbi-section-table-cell {
 	white-space: nowrap;
 	text-align: right;
 }
 
-table.cbi-section-table td.cbi-section-table-cell select {
+.table.cbi-section-table .td.cbi-section-table-cell select {
 	width: inherit;
 }
 
-table.valign-middle td {
+.table.valign-middle .td {
 	vertical-align: middle;
 }
 
@@ -1909,7 +1915,7 @@ table.valign-middle td {
 }
 
 div.cbi-value var,
-td.cbi-value-field var {
+.td.cbi-value-field var {
 	font-style: italic;
 	color: #0069D6;
 }
@@ -1945,12 +1951,14 @@ td.cbi-value-field var {
 	display: block;
 	font-style: normal;
 	padding: 2px;
+	line-height: 19px;
+	white-space: pre;
 }
 
 .uci-change-list var ins,
 .uci-change-list var del {
-	/*display: inline;*/
-	border: none;
+	display: inline;
+	/*border: none;*/
 	white-space: pre;
 	font-style: normal;
 	padding: 0px;
