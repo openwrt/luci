@@ -36,7 +36,7 @@
 
 	<div style="text-align:right">
 		<input class="cbi-button cbi-button-save" type="button" id="apply_button" value="<%:Save & Apply%>" onclick="uci_apply(true); this.blur()" />
-		<form class="inline" method="post" action="<%=controller%>/admin/uci/revert">
+		<form class="inline" method="post" action="<%=url("admin/uci/revert")%>">
 			<input type="hidden" name="token" value="<%=token%>" />
 			<input type="hidden" name="redir" value="<%=pcdata(luci.http.formvalue("redir"))%>" />
 			<input class="cbi-button cbi-button-reset" type="submit" value="<%:Revert%>" />
