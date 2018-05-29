@@ -9,7 +9,7 @@ local rlh, rpv, vld, nvd, eds, prt, tlm
 local ctl, dlk, dom, dty, lfq, wfq, exa
 local dp6, d64, pfx, qry, qrs
 local pro, tgr, rsc, rsn, ag2, stt
-local rpn, din, dfw
+local rpn, din, dfw, ath
 local ucl = luci.model.uci.cursor()
 local valman = ucl:get_first("unbound", "unbound", "manual_conf")
 
@@ -99,15 +99,6 @@ if valman ~= "1" then
   pfx.placeholder = "64:ff9b::/96"
   pfx.optional = true
   pfx:depends({ dns64 = true })
-
-  qry = s1:taboption("basic", Flag, "query_minimize", translate("Query Minimize:"),
-    translate("Break down query components for limited added privacy"))
-  qry.rmempty = false
-
-  qrs = s1:taboption("basic", Flag, "query_min_strict", translate("Strict Minimize:"),
-    translate("Strict version of 'query minimize' but it can break DNS"))
-  qrs.rmempty = false
-  qrs:depends({ query_minimize = true })
 
   prt = s1:taboption("basic", Value, "listen_port", translate("Listening Port:"),
     translate("Choose Unbounds listening port"))
@@ -216,26 +207,43 @@ if valman ~= "1" then
 
   pro = s1:taboption("resource", ListValue, "protocol", translate("Recursion Protocol:"),
     translate("Chose the protocol recursion queries leave on"))
-  pro:value("mixed", translate("IP4 and IP6"))
-  pro:value("ip6_prefer", translate("IP6 Preferred"))
+  pro:value("default", translate("Default"))
   pro:value("ip4_only", translate("IP4 Only"))
   pro:value("ip6_only", translate("IP6 Only"))
+  pro:value("ip6_prefer", translate("IP6 Preferred"))
+  pro:value("mixed", translate("IP4 and IP6"))
   pro.rmempty = false
-
-  rsn = s1:taboption("resource", ListValue, "recursion", translate("Recursion Strength:"),
-    translate("Recursion activity affects memory growth and CPU load"))
-  rsn:value("aggressive", translate("Aggressive"))
-  rsn:value("default", translate("Default"))
-  rsn:value("passive", translate("Passive"))
-  rsn.rmempty = false
 
   rsc = s1:taboption("resource", ListValue, "resource", translate("Memory Resource:"),
     translate("Use menu System/Processes to observe any memory growth"))
-  rsc:value("large", translate("Large"))
-  rsc:value("medium", translate("Medium"))
-  rsc:value("small", translate("Small"))
+  rsc:value("default", translate("Default"))
   rsc:value("tiny", translate("Tiny"))
+  rsc:value("small", translate("Small"))
+  rsc:value("medium", translate("Medium"))
+  rsc:value("large", translate("Large"))
   rsc.rmempty = false
+
+  rsn = s1:taboption("resource", ListValue, "recursion", translate("Recursion Strength:"),
+    translate("Recursion activity affects memory growth and CPU load"))
+  rsn:value("default", translate("Default"))
+  rsn:value("passive", translate("Passive"))
+  rsn:value("aggressive", translate("Aggressive"))
+  rsn.rmempty = false
+
+  qry = s1:taboption("resource", Flag, "query_minimize", translate("Query Minimize:"),
+    translate("Break down query components for limited added privacy"))
+  qry.rmempty = false
+  qry:depends({ recursion = "passive" })
+  qry:depends({ recursion = "aggressive" })
+
+  qrs = s1:taboption("resource", Flag, "query_min_strict", translate("Strict Minimize:"),
+    translate("Strict version of 'query minimize' but it can break DNS"))
+  qrs.rmempty = false
+  qrs:depends({ query_minimize = true })
+
+  ath = s1:taboption("resource", Flag, "prefetch_root", translate("Prefetch Root:"),
+    translate("Obtain complete root zone files and install in auth-zone: clause"))
+  ath.rmempty = false
 
   eds = s1:taboption("resource", Value, "edns_size", translate("EDNS Size:"),
     translate("Limit extended DNS packet size"))
