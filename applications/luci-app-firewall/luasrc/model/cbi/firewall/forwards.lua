@@ -54,7 +54,7 @@ function s.parse(self, ...)
 	if created then
 		m.uci:save("firewall")
 		luci.http.redirect(ds.build_url(
-			"admin/network/firewall/redirect", created
+			"admin/network/firewall/forwards", created
 		))
 	end
 end
