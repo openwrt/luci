@@ -9,7 +9,7 @@ local rlh, rpv, vld, nvd, eds, prt, tlm
 local ctl, dlk, dom, dty, lfq, wfq, exa
 local dp6, d64, pfx, qry, qrs
 local pro, tgr, rsc, rsn, ag2, stt
-local rpn, din, dfw
+local rpn, din, dfw, ath
 local ucl = luci.model.uci.cursor()
 local valman = ucl:get_first("unbound", "unbound", "manual_conf")
 
@@ -240,6 +240,10 @@ if valman ~= "1" then
     translate("Strict version of 'query minimize' but it can break DNS"))
   qrs.rmempty = false
   qrs:depends({ query_minimize = true })
+
+  ath = s1:taboption("resource", Flag, "prefetch_root", translate("Prefetch Root:"),
+    translate("Obtain complete root zone files and install in auth-zone: clause"))
+  ath.rmempty = false
 
   eds = s1:taboption("resource", Value, "edns_size", translate("EDNS Size:"),
     translate("Limit extended DNS packet size"))
