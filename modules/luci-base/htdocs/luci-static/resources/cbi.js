@@ -1244,44 +1244,44 @@ function cbi_validate_field(cbid, optional, type)
 function cbi_row_swap(elem, up, store)
 {
 	var tr = elem.parentNode;
-	while (tr && tr.nodeName.toLowerCase() != 'tr')
+
+	while (tr && !tr.classList.contains('cbi-section-table-row'))
 		tr = tr.parentNode;
 
 	if (!tr)
 		return false;
 
-	var table = tr.parentNode;
-	while (table && table.nodeName.toLowerCase() != 'table')
-		table = table.parentNode;
+	if (up) {
+		var prev = tr.previousElementSibling;
 
-	if (!table)
-		return false;
+		if (prev && prev.classList.contains('cbi-section-table-row'))
+			tr.parentNode.insertBefore(tr, prev);
+		else
+			return;
+	}
+	else {
+		var next = tr.nextElementSibling ? tr.nextElementSibling.nextElementSibling : null;
 
-	var s = up ? 3 : 2;
-	var e = up ? table.rows.length : table.rows.length - 1;
-
-	for (var idx = s; idx < e; idx++)
-	{
-		if (table.rows[idx] == tr)
-		{
-			if (up)
-				tr.parentNode.insertBefore(table.rows[idx], table.rows[idx-1]);
-			else
-				tr.parentNode.insertBefore(table.rows[idx+1], table.rows[idx]);
-
-			break;
-		}
+		if (next && next.classList.contains('cbi-section-table-row'))
+			tr.parentNode.insertBefore(tr, next);
+		else if (!next)
+			tr.parentNode.appendChild(tr);
+		else
+			return;
 	}
 
 	var ids = [ ];
-	for (idx = 2; idx < table.rows.length; idx++)
-	{
-		table.rows[idx].className = table.rows[idx].className.replace(
-			/cbi-rowstyle-[12]/, 'cbi-rowstyle-' + (1 + (idx % 2))
-		);
 
-		if (table.rows[idx].id && table.rows[idx].id.match(/-([^\-]+)$/) )
-			ids.push(RegExp.$1);
+	for (var i = 0, n = 0; i < tr.parentNode.childNodes.length; i++) {
+		var node = tr.parentNode.childNodes[i];
+		if (node.classList && node.classList.contains('cbi-section-table-row')) {
+			node.classList.remove('cbi-rowstyle-1');
+			node.classList.remove('cbi-rowstyle-2');
+			node.classList.add((n++ % 2) ? 'cbi-rowstyle-2' : 'cbi-rowstyle-1');
+
+			if (/-([^\-]+)$/.test(node.id))
+				ids.push(RegExp.$1);
+		}
 	}
 
 	var input = document.getElementById(store);
