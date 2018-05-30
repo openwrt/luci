@@ -1311,58 +1311,6 @@ function cbi_tag_last(container)
 	}
 }
 
-String.prototype.serialize = function()
-{
-	var o = this;
-	switch(typeof(o))
-	{
-		case 'object':
-			// null
-			if( o == null )
-			{
-				return 'null';
-			}
-
-			// array
-			else if( o.length )
-			{
-				var i, s = '';
-
-				for( var i = 0; i < o.length; i++ )
-					s += (s ? ', ' : '') + String.serialize(o[i]);
-
-				return '[ ' + s + ' ]';
-			}
-
-			// object
-			else
-			{
-				var k, s = '';
-
-				for( k in o )
-					s += (s ? ', ' : '') + k + ': ' + String.serialize(o[k]);
-
-				return '{ ' + s + ' }';
-			}
-
-			break;
-
-		case 'string':
-			// complex string
-			if( o.match(/[^a-zA-Z0-9_,.: -]/) )
-				return 'decodeURIComponent("' + encodeURIComponent(o) + '")';
-
-			// simple string
-			else
-				return '"' + o + '"';
-
-			break;
-
-		default:
-			return o.toString();
-	}
-}
-
 String.prototype.format = function()
 {
 	if (!RegExp)
@@ -1473,10 +1421,6 @@ String.prototype.format = function()
 						subst = esc(param, quot_esc);
 						break;
 
-					case 'j':
-						subst = String.serialize(param);
-						break;
-
 					case 't':
 						var td = 0;
 						var th = 0;
@@ -1541,14 +1485,6 @@ String.prototype.format = function()
 String.prototype.nobr = function()
 {
 	return this.replace(/[\s\n]+/g, '&#160;');
-}
-
-String.serialize = function()
-{
-	var a = [ ];
-	for (var i = 1; i < arguments.length; i++)
-		a.push(arguments[i]);
-	return ''.serialize.apply(arguments[0], a);
 }
 
 String.format = function()
