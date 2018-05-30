@@ -40,6 +40,10 @@ body {
 .table[width="33%"], .th[width="33%"], .td[width="33%"] { width: 33%; }
 .table[width="100%"], .th[width="100%"], .td[width="100%"] { width: 100%; }
 
+.nowrap {
+	white-space: nowrap;
+}
+
 a img {
 	border: none;
 	text-decoration: none;
@@ -952,8 +956,17 @@ div.cbi-tab-descr {
 	margin: .25em .5em;
 }
 
+.ifacebox-head {
+	background: #eee;
+}
+
+.ifacebox-head.active {
+	background: #90c0e0;
+}
+
 .ifacebadge > img {
-	margin-right: 2px;
+	margin-right: 5px;
+	align-self: start;
 }
 
 .ifacebadge-active {
@@ -965,11 +978,46 @@ div.cbi-tab-descr {
 	flex-direction: column;
 	margin: 0 10px;
 	padding: 0;
-	min-width: 70px;
+	min-width: 100px;
 }
 
 .ifacebox > * {
 	padding: 2px;
+}
+
+
+.network-status-table {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.network-status-table .ifacebox {
+	margin: .5em;
+	font-size: 90%;
+	flex-grow: 1;
+}
+
+.network-status-table .ifacebox-body {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+}
+
+.network-status-table .ifacebox-body > span {
+	flex: 10;
+}
+
+.network-status-table .ifacebox-body > div {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.network-status-table .ifacebox-body .ifacebadge {
+	flex: 1;
+	margin: .5em .25em .25em .25em;
+	padding: .5em;
+	min-width: 220px;
+	white-space: nowrap;
 }
 
 
