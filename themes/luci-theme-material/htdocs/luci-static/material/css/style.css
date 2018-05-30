@@ -850,6 +850,41 @@ td > .ifacebadge,
 .ifacebadge > img {
     float: right;
     margin: 0 0.3rem;
+    align-self: start;
+}
+
+.network-status-table {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.network-status-table .ifacebox {
+    margin: .5em;
+    flex-grow: 1;
+}
+
+.network-status-table .ifacebox-body {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.network-status-table .ifacebox-body > span {
+    flex: 10;
+}
+
+.network-status-table .ifacebox-body > div {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.network-status-table .ifacebox-body .ifacebadge {
+    flex: 1;
+    margin: .5em .25em 0 .25em;
+    padding: .5em;
+    min-width: 220px;
+    background-color: #fff;
+    align-items: center;
 }
 
 /*textarea*/
@@ -962,6 +997,23 @@ td > .ifacebadge,
 .ifacebox {
     border: 1px solid #999;
     background-color: #f9f9f9;
+    display: inline-flex;
+    flex-direction: column;
+    line-height: 1.2em;
+    min-width: 100px;
+}
+
+.ifacebox-head {
+    padding: .25em;
+    background: #eee;
+}
+
+.ifacebox-head.active {
+    background: #90c0e0;
+}
+
+.ifacebox-body {
+    padding: .25em;
 }
 
 .cbi-image-button {
