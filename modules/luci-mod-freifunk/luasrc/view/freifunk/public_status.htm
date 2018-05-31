@@ -238,9 +238,9 @@ end
 	<h2><%:Wireless Overview%></h2>
 
 		<% if not has_iwinfo then %>
-			<div class="errorbox">
-				<strong><%:Package libiwinfo required!%></strong><br />
-				<%_The <em>libiwinfo</em> package is not installed. You must install this component for working wireless configuration!%>
+			<div class="alert-message warning">
+				<h4><%:Package libiwinfo required!%></h4>
+				<p><%_The <em>libiwinfo</em> package is not installed. You must install this component for working wireless configuration!%></p>
 			</div>
 		<% end %>
 
