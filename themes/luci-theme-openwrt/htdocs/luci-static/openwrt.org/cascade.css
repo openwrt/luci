@@ -181,6 +181,33 @@ code {
 	background-color: white;
 }
 
+.alert-message {
+	font-size: 9pt;
+	font-weight: normal;
+	padding: .5em;
+	border-radius: 3px;
+	color: #000;
+}
+
+.alert-message.notice {
+	background: linear-gradient(#ccc 0%, #eee 100%);
+	color: #4a6b7c;
+}
+
+.alert-message.warning {
+	background: linear-gradient(#dda 0%, #dd8 100%);
+	color: #c00;
+}
+
+.alert-message > * {
+	margin: .5em;
+}
+
+.alert-message > h4 {
+	font-weight: bold;
+	font-size: 10pt;
+}
+
 div.hostinfo {
 	float: left;
 	margin: 0;
@@ -447,18 +474,20 @@ img.cbi-image-button {
 	vertical-align: middle;
 }
 
-.cbi-button {
+.btn, .cbi-button {
 	padding: 2px;
 	border-radius: 3px;
 	border: 1px solid #aaa;
 	background: #eee 1px center no-repeat;
 }
 
-.cbi-button:hover {
+.btn:hover, .cbi-button:hover {
 	border-color: #4a6b7c;
 	background-color: #fff;
 }
 
+.btn[disabled],
+.btn[disabled]:hover,
 .cbi-button[disabled],
 .cbi-button[disabled]:hover {
 	opacity: .6;
