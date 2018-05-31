@@ -1,5 +1,5 @@
 <%- if firstmap and messages then local msg; for _, msg in ipairs(messages) do -%>
-	<div class="errorbox"><%=pcdata(msg)%></div>
+	<div class="alert-message warning"><%=pcdata(msg)%></div>
 <%- end end -%>
 
 <div class="cbi-map" id="cbi-<%=self.config%>">

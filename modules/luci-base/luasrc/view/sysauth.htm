@@ -8,7 +8,9 @@
 
 <form method="post" action="<%=pcdata(FULL_REQUEST_URI)%>">
 	<%- if fuser then %>
-	<div class="errorbox"><%:Invalid username and/or password! Please try again.%></div>
+		<div class="alert-message warning">
+			<p><%:Invalid username and/or password! Please try again.%></p>
+		</div>
 	<% end -%>
 
 	<div class="cbi-map">
