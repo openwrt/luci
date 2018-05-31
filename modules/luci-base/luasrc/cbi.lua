@@ -1226,13 +1226,14 @@ function TypedSection.parse(self, novld)
 		local stval = RESORT_PREFIX .. self.config .. "." .. self.sectiontype
 		local order = self.map:formvalue(stval)
 		if order and #order > 0 then
-			local sid
-			local num = 0
+			local sids, sid = { }, nil
 			for sid in util.imatch(order) do
-				self.map.uci:reorder(self.config, sid, num)
-				num = num + 1
+				sids[#sids+1] = sid
 			end
-			self.changed = (num > 0)
+			if #sids > 0 then
+				self.map.uci:reorder(self.config, sids)
+				self.changed = true
+			end
 		end
 	end
 
