@@ -167,16 +167,16 @@
 
 	<div id="maincontent">
 		<noscript>
-			<div class="errorbox">
-				<strong><%:JavaScript required!%></strong><br />
-				<%:You must enable JavaScript in your browser or LuCI will not work properly.%>
+			<div class="alert-message warning">
+				<h4><%:JavaScript required!%></h4>
+				<p><%:You must enable JavaScript in your browser or LuCI will not work properly.%></p>
 			</div>
 		</noscript>
 
 		<%- if luci.sys.process.info("uid") == 0 and luci.sys.user.getuser("root") and not luci.sys.user.getpasswd("root") and category ~= "failsafe" then -%>
-		<div class="errorbox">
-			<strong><%:No password set!%></strong><br />
-			<%:There is no password set on this router. Please configure a root password to protect the web interface and enable SSH.%><br />
-			<a href="<%=pcdata(luci.dispatcher.build_url("admin/system/admin"))%>"><%:Go to password configuration...%></a>
+		<div class="alert-message warning">
+			<h4><%:No password set!%></h4>
+			<p><%:There is no password set on this router. Please configure a root password to protect the web interface and enable SSH.%></p>
+			<div class="right"><a class="btn" href="<%=url("admin/system/admin")%>"><%:Go to password configuration...%></a></div>
 		</div>
 		<%- end -%>

@@ -290,7 +290,7 @@ header > .container > .brand {
 .errorbox,
 .alert-message {
     margin: 2rem 0 0 0;
-    padding: 2rem;
+    padding: 1rem;
     border: 0;
     font-weight: normal;
     font-style: normal;
@@ -313,10 +313,13 @@ header > .container > .brand {
     color: red;
 }
 
-.alert-message h4 {
+.alert-message > h4 {
     font-weight: bold;
     font-size: 110%;
-    padding-bottom: 1em;
+}
+
+.alert-message > * {
+    margin: .5rem 0;
 }
 
 #maincontent > .container > div:nth-child(1).alert-message.warning > a {
@@ -594,6 +597,8 @@ td > table > tbody > tr > td,
     user-select: none;
     font-size: 0.8rem;
     width: auto !important;
+    display: inline-block;
+    text-decoration: none;
 }
 
 .btn:hover,
@@ -1349,6 +1354,7 @@ body.lang_pl.node-main-login .cbi-value-title {
         width: calc(100% - 13rem);
     }
 
+    .btn,
     .cbi-button {
         padding: 0.3rem 0.6rem;
         font-size: 0.8rem;
