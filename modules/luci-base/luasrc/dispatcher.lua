@@ -358,7 +358,7 @@ function dispatch(request)
 			elseif key == "REQUEST_URI" then
 				return build_url(unpack(ctx.requestpath))
 			elseif key == "FULL_REQUEST_URI" then
-				local url = { http.getenv("SCRIPT_NAME") or "" , http.getenv("PATH_INFO") }
+				local url = { http.getenv("SCRIPT_NAME") or "", http.getenv("PATH_INFO") }
 				local query = http.getenv("QUERY_STRING")
 				if query and #query > 0 then
 					url[#url+1] = "?"
@@ -507,10 +507,11 @@ function dispatch(request)
 		else
 			ok, err = util.copcall(target, unpack(args))
 		end
-		assert(ok,
-		       "Failed to execute " .. (type(c.target) == "function" and "function" or c.target.type or "unknown") ..
-		       " dispatcher target for entry '/" .. table.concat(request, "/") .. "'.\n" ..
-		       "The called action terminated with an exception:\n" .. tostring(err or "(unknown)"))
+		if not ok then
+			error500("Failed to execute " .. (type(c.target) == "function" and "function" or c.target.type or "unknown") ..
+			         " dispatcher target for entry '/" .. table.concat(request, "/") .. "'.\n" ..
+			         "The called action terminated with an exception:\n" .. tostring(err or "(unknown)"))
+		end
 	else
 		local root = node()
 		if not root or not root.target then
