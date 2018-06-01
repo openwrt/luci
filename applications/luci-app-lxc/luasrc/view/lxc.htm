@@ -36,7 +36,7 @@ local target = fs.uname().machine
 	<span id="lxc-list-output"></span>
 </fieldset>
 
-<hr/>
+<hr />
 <fieldset class="cbi-section">
 	<legend><%:Create New Container%></legend>
 	<div class="cbi-section-node">
@@ -46,11 +46,11 @@ local target = fs.uname().machine
 				<div class="th cbi-section-table-cell"><%:Template%></div>
 				<div class="th cbi-section-table-cell"><%:Actions%></div>
 			</div>
-			<div class="tr cbi-section-table-row" id="div_holder">
+			<div class="tr cbi-section-table-row" id="div_create">
 				<div class="td"><input class="cbi-input-text" type="text" id="tx_name" placeholder="<%:Enter new name%>" value='' /></div>
 				<div class="td"><select id="s_template" class="cbi-input-select cbi-button"></select></div>
 				<div class="td">
-					<input type="button" id="bt_create" value="<%:Create%>" onclick="lxc_create(div_holder)" class="cbi-button cbi-button-add" />
+					<input type="button" id="bt_create" value="<%:Create%>" onclick="lxc_create()" class="cbi-button cbi-button-add" />
 					<span id="lxc-add-loader" style="display:inline-block; width:16px; height:16px; margin:0 5px"></span>
 				</div>
 			</div>
@@ -62,25 +62,29 @@ local target = fs.uname().machine
 	<span id="lxc-add-output"></span>
 </fieldset>
 
-<hr/>
+<hr />
 
 <script type="text/javascript" src="<%=resource%>/cbi.js"></script>
 <script type="text/javascript">
 //<![CDATA[
-	window.img    = { "red" : "<%=resource%>/cbi/red.gif", "green" : "<%=resource%>/cbi/green.gif", "purple" : "<%=resource%>/cbi/purple.gif" }
-	window.states = { "STOPPED" : "red", "RUNNING" : "green", "FROZEN" : "purple" }
+	window.img    = { "red" : "<%=resource%>/cbi/red.gif", "green" : "<%=resource%>/cbi/green.gif", "purple" : "<%=resource%>/cbi/purple.gif" };
+	window.states = { "STOPPED" : "red", "RUNNING" : "green", "FROZEN" : "purple" };
 
 	var t_lxc_list  = document.getElementById('t_lxc_list');
 	var loader_html = '<img src="<%=resource%>/icons/loading.gif" alt="<%:Loading%>" width="16" height="16" style="vertical-align:middle" />';
-	var output_list = document.getElementById("lxc-list-output")
-	var output_add  = document.getElementById("lxc-add-output")
-	var loader_add  = document.getElementById("lxc-add-loader")
+	var output_list = document.getElementById("lxc-list-output");
+	var output_add  = document.getElementById("lxc-add-output");
+	var loader_add  = document.getElementById("lxc-add-loader");
+	var div_create  = document.getElementById("div_create");
+	var bt_create   = div_create.querySelector("#bt_create");
 
-	function lxc_create(div)
+	bt_create.disabled = true;
+	info_message(output_add, "Template download in progress, please be patient!");
+
+	function lxc_create()
 	{
-		var lxc_name     = div.querySelector("#tx_name").value.replace(/[\s!@#$%^&*()+=\[\]{};':"\\|,<>\/?]/g,'');
-		var lxc_template = div.querySelector("#s_template").value;
-		var bt_create    = div.querySelector("#bt_create");
+		var lxc_name     = div_create.querySelector("#tx_name").value.replace(/[\s!@#$%^&*()+=\[\]{};':"\\|,<>\/?]/g,'');
+		var lxc_template = div_create.querySelector("#s_template").value;
 
 		if (t_lxc_list.querySelector("[data-id='" + lxc_name + "']") != null)
 		{
@@ -434,7 +438,7 @@ local target = fs.uname().machine
 		}
 		else
 		{
-			setTimeout(function() { elem.innerHTML = ''}, 1000);
+			setTimeout(function() { elem.innerHTML = ''}, 2000);
 		}
 	}
 
@@ -466,10 +470,6 @@ local target = fs.uname().machine
 		}
 	}
 
-	lxc_list_update();
-
-	info_message(output_add, "Template download in progress, please be patient!");
-
 	new XHR().get('<%=luci.dispatcher.build_url("admin", "services")%>/lxc_get_downloadable', null,
 	function(x, data)
 	{
@@ -489,7 +489,6 @@ local target = fs.uname().machine
 			return set_no_template();
 		}
 
-		bt_create.disabled = false;
 		var select = document.getElementById("s_template");
 		for(var key in data)
 		{
@@ -498,7 +497,11 @@ local target = fs.uname().machine
 			option.text = data[key].replace(/[_:]/g, ' ');
 			select.add(option, -1);
 		}
+
 		info_message(output_add, "");
+		bt_create.disabled = false;
 	})
+
+	lxc_list_update();
 //]]>
 </script>
