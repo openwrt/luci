@@ -48,7 +48,7 @@ if not SYS.init.enabled("ddns") then
 end
 
 -- No IPv6 support
-if not DDNS.has_ipv6 then
+if not DDNS.env_info("has_ipv6") then
 	local v6 = s:option(DummyValue, "_no_ipv6")
 	v6.titleref = 'http://www.openwrt.org" target="_blank'
 	v6.rawhtml  = true
@@ -60,7 +60,7 @@ if not DDNS.has_ipv6 then
 end
 
 -- No HTTPS support
-if not DDNS.has_ssl then
+if not DDNS.env_info("has_ssl") then
 	local sl = s:option(DummyValue, "_no_https")
 	sl.titleref = DISP.build_url("admin", "system", "packages")
 	sl.rawhtml  = true
@@ -74,7 +74,7 @@ if not DDNS.has_ssl then
 end
 
 -- No bind_network
-if not DDNS.has_bindnet then
+if not DDNS.env_info("has_bindnet") then
 	local bn = s:option(DummyValue, "_no_bind_network")
 	bn.titleref = DISP.build_url("admin", "system", "packages")
 	bn.rawhtml  = true
@@ -90,7 +90,7 @@ if not DDNS.has_bindnet then
 end
 
 -- currently only cURL possibly without proxy support
-if not DDNS.has_proxy then
+if not DDNS.env_info("has_proxy") then
 	local px = s:option(DummyValue, "_no_proxy")
 	px.titleref = DISP.build_url("admin", "system", "packages")
 	px.rawhtml  = true
@@ -104,7 +104,7 @@ if not DDNS.has_proxy then
 end
 
 -- "Force IP Version not supported"
-if not DDNS.has_forceip then
+if not DDNS.env_info("has_forceip") then
 	local fi = s:option(DummyValue, "_no_force_ip")
 	fi.titleref = DISP.build_url("admin", "system", "packages")
 	fi.rawhtml  = true
@@ -112,11 +112,11 @@ if not DDNS.has_forceip then
 		translate("Force IP Version not supported") .. bold_off
 	local value = translate("BusyBox's nslookup and Wget do not support to specify " ..
 				"the IP version to use for communication with DDNS Provider!")
-	if not (DDNS.has_wgetssl or DDNS.has_curl or DDNS.has_fetch) then
+	if not (DDNS.env_info("has_wgetssl") or DDNS.env_info("has_curl") or DDNS.env_info("has_fetch")) then
 		value = value .. "<br />- " ..
 			translate("You should install 'wget' or 'curl' or 'uclient-fetch' package.")
 	end
-	if not DDNS.has_bindhost then
+	if not DDNS.env_info("has_bindhost") then
 		value = value .. "<br />- " ..
 			translate("You should install 'bind-host' or 'knot-host' or 'drill' package for DNS requests.")
 	end
@@ -124,7 +124,7 @@ if not DDNS.has_forceip then
 end
 
 -- "DNS requests via TCP not supported"
-if not DDNS.has_bindhost then
+if not DDNS.env_info("has_bindhost") then
 	local dt = s:option(DummyValue, "_no_dnstcp")
 	dt.titleref = DISP.build_url("admin", "system", "packages")
 	dt.rawhtml  = true
@@ -137,7 +137,7 @@ if not DDNS.has_bindhost then
 end
 
 -- nslookup compiled with musl produce problems when using
-if not DDNS.has_dnsserver then
+if not DDNS.env_info("has_dnsserver") then
 	local ds = s:option(DummyValue, "_no_dnsserver")
 	ds.titleref = DISP.build_url("admin", "system", "packages")
 	ds.rawhtml  = true
@@ -151,7 +151,7 @@ if not DDNS.has_dnsserver then
 end
 
 -- certificates installed
-if DDNS.has_ssl and not DDNS.has_cacerts then
+if DDNS.env_info("has_ssl") and not DDNS.env_info("has_cacerts") then
 	local ca = s:option(DummyValue, "_no_certs")
 	ca.titleref = DISP.build_url("admin", "system", "packages")
 	ca.rawhtml  = true
