@@ -29,7 +29,6 @@ local app_version = "2.4.9-1"
 function index()
 	local nxfs	= require "nixio.fs"		-- global definitions not available
 	local sys	= require "luci.sys"		-- in function index()
-	local ddns	= require "luci.tools.ddns"	-- ddns multiused functions
 	local muci	= require "luci.model.uci"
 
 	-- no config create an empty one
