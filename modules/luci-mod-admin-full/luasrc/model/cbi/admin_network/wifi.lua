@@ -49,12 +49,12 @@ local function txpower_list(iw)
 	local _, val
 	for _, val in ipairs(list) do
 		local dbm = val.dbm + off
-		local mw  = math.floor(10 ^ (dbm / 10))
-		if mw ~= prev then
-			prev = mw
+		local mw = math.floor(10 ^ ( dbm/10 ))
+		if val.dbm ~= prev then
+			prev = val.dbm
 			new[#new+1] = {
 				display_dbm = dbm,
-				display_mw  = mw,
+				display_mw  = not tostring(mw):match("%.") and mw or nil,
 				driver_dbm  = val.dbm,
 				driver_mw   = val.mw
 			}
@@ -213,8 +213,8 @@ if hwtype == "mac80211" then
 
 		tp:value("", translate("auto"))
 		for _, p in ipairs(tx_power_list) do
-			tp:value(p.driver_dbm, "%i dBm (%i mW)"
-				%{ p.display_dbm, p.display_mw })
+			tp:value(p.driver_dbm, "%i dBm (%s mW)"
+				%{ p.display_dbm, p.display_mw or "Can't convert to"})
 		end
 	end
 

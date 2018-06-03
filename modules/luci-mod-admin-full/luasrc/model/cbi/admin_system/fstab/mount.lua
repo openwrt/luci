@@ -59,7 +59,7 @@ o = mount:taboption("general", Value, "uuid", translate("UUID"),
 o:value("", translate("-- match by uuid --"))
 
 for i, d in ipairs(devices) do
-	if d.uuid and d.size then
+	if d.uuid and d.size and not tostring(d.size):match("%.") then
 		o:value(d.uuid, "%s (%s, %d MB)" %{ d.uuid, d.dev, d.size })
 	elseif d.uuid then
 		o:value(d.uuid, "%s (%s)" %{ d.uuid, d.dev })
@@ -75,7 +75,7 @@ o:value("", translate("-- match by label --"))
 o:depends("uuid", "")
 
 for i, d in ipairs(devices) do
-	if d.label and d.size then
+	if d.label and d.size and not tostring(d.size):match("%.") then
 		o:value(d.label, "%s (%s, %d MB)" %{ d.label, d.dev, d.size })
 	elseif d.label then
 		o:value(d.label, "%s (%s)" %{ d.label, d.dev })
@@ -91,7 +91,7 @@ o:value("", translate("-- match by device --"))
 o:depends({ uuid = "", label = "" })
 
 for i, d in ipairs(devices) do
-	if d.size then
+	if d.size and not tostring(d.size):match("%.") then
 		o:value(d.dev, "%s (%d MB)" %{ d.dev, d.size })
 	else
 		o:value(d.dev)

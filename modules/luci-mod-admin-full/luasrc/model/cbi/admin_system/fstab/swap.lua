@@ -41,7 +41,11 @@ o = mount:taboption("general", Value, "device", translate("Device"),
 	translate("The device file of the memory or partition (<abbr title=\"for example\">e.g.</abbr> <code>/dev/sda1</code>)"))
 
 for i, d in ipairs(devices) do
-	o:value(d, size[d] and "%s (%s MB)" % {d, size[d]})
+	if d and size[d] and not tostring(size[d]):match("%.") then
+		o:value(d, "%s (%s MB)" %{ d, size[d] })
+	elseif d then
+		o:value(d, "%s" % {d})
+	end
 end
 
 o = mount:taboption("advanced", Value, "uuid", translate("UUID"),
