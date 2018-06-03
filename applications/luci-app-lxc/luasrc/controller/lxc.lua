@@ -18,7 +18,7 @@ module("luci.controller.lxc", package.seeall)
 
 local uci  = require "luci.model.uci".cursor()
 local util = require "luci.util"
-local fs   = require "nixio"
+local nx   = require "nixio"
 
 function index()
 	if not nixio.fs.access("/etc/config/lxc") then
@@ -60,8 +60,8 @@ end
 function lxc_create(lxc_name, lxc_template)
 	luci.http.prepare_content("text/plain")
 
-	local check = lxc_get_config_path()
-	if not check then
+	local path = lxc_get_config_path()
+	if not path then
 		return
 	end
 
@@ -80,6 +80,10 @@ function lxc_create(lxc_name, lxc_template)
 			ssl_status
 		}
 	}), src_err)
+
+	while (nx.fs.access(path .. lxc_name .. "/partial")) do
+		nx.nanosleep(1)
+	end
 end
 
 function lxc_action(lxc_action, lxc_name)
@@ -96,7 +100,7 @@ function lxc_get_config_path()
 
 	local ret = content:match('^%s*lxc.lxcpath%s*=%s*([^%s]*)')
 	if ret then
-		if nixio.fs.access(ret) then
+		if nx.fs.access(ret) then
 			local min_space = tonumber(uci:get("lxc", "lxc", "min_space")) or 100000
 			local free_space = tonumber(util.exec("df " ..ret.. " | awk '{if(NR==2)print $4}'"))
 			if free_space and free_space >= min_space then
@@ -150,7 +154,7 @@ function lxc_configuration_set(lxc_name)
 end
 
 function lxc_get_arch_target()
-	local target = fs.uname().machine
+	local target = nx.uname().machine
 	local target_map = {
 		armv5  = "armel",
 		armv6  = "armel",
