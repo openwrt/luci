@@ -115,6 +115,10 @@ elseif rule_type == "redirect" then
 	o.datatype = "neg(portrange)"
 	o.placeholder = translate("any")
 
+	o:depends("proto", "tcp")
+	o:depends("proto", "udp")
+	o:depends("proto", "tcp udp")
+	o:depends("proto", "tcpudp")
 
 	o = s:option(Value, "dest", translate("Destination zone"))
 	o.nocreate = true
@@ -139,6 +143,10 @@ elseif rule_type == "redirect" then
 	o.placeholder = translate("any")
 	o.datatype = "neg(portrange)"
 
+	o:depends("proto", "tcp")
+	o:depends("proto", "udp")
+	o:depends("proto", "tcp udp")
+	o:depends("proto", "tcpudp")
 
 	o = s:option(Value, "src_dip",
 		translate("SNAT IP address"),
@@ -163,6 +171,10 @@ elseif rule_type == "redirect" then
 	o.rmempty = true
 	o.placeholder = translate('Do not rewrite')
 
+	o:depends("proto", "tcp")
+	o:depends("proto", "udp")
+	o:depends("proto", "tcp udp")
+	o:depends("proto", "tcpudp")
 
 	s:option(Value, "extra",
 		translate("Extra arguments"),
@@ -281,6 +293,10 @@ else
 	o.datatype = "list(neg(portrange))"
 	o.placeholder = translate("any")
 
+	o:depends("proto", "tcp")
+	o:depends("proto", "udp")
+	o:depends("proto", "tcp udp")
+	o:depends("proto", "tcpudp")
 
 	o = s:option(Value, "dest_local", translate("Output zone"))
 	o.nocreate = true
@@ -312,6 +328,10 @@ else
 	o.datatype = "list(neg(portrange))"
 	o.placeholder = translate("any")
 
+	o:depends("proto", "tcp")
+	o:depends("proto", "udp")
+	o:depends("proto", "tcp udp")
+	o:depends("proto", "tcpudp")
 
 	o = s:option(ListValue, "target", translate("Action"))
 	o.default = "ACCEPT"
