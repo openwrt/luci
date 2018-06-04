@@ -120,7 +120,6 @@ elseif rule_type == "redirect" then
 	o:depends("proto", "tcp udp")
 	o:depends("proto", "tcpudp")
 
-
 	o = s:option(Value, "dest", translate("Destination zone"))
 	o.nocreate = true
 	o.default = "lan"
@@ -149,7 +148,6 @@ elseif rule_type == "redirect" then
 	o:depends("proto", "tcp udp")
 	o:depends("proto", "tcpudp")
 
-
 	o = s:option(Value, "src_dip",
 		translate("SNAT IP address"),
 		translate("Rewrite matched traffic to the given address."))
@@ -177,7 +175,6 @@ elseif rule_type == "redirect" then
 	o:depends("proto", "udp")
 	o:depends("proto", "tcp udp")
 	o:depends("proto", "tcpudp")
-
 
 	s:option(Value, "extra",
 		translate("Extra arguments"),
