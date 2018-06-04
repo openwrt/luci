@@ -178,7 +178,6 @@ elseif rule_type == "redirect" then
 	o:depends("proto", "tcp udp")
 	o:depends("proto", "tcpudp")
 
-
 	s:option(Value, "extra",
 		translate("Extra arguments"),
 		translate("Passes additional arguments to iptables. Use with care!"))

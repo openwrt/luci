@@ -93,7 +93,6 @@ o:depends("proto", "udp")
 o:depends("proto", "tcp udp")
 o:depends("proto", "tcpudp")
 
-
 o = s:option(Value, "src_dip",
 	translate("External IP address"),
 	translate("Only match incoming traffic directed at the given IP address."))
@@ -117,8 +116,6 @@ o:depends("proto", "tcp")
 o:depends("proto", "udp")
 o:depends("proto", "tcp udp")
 o:depends("proto", "tcpudp")
-
-
 
 o = s:option(Value, "dest", translate("Internal zone"))
 o.nocreate = true
@@ -147,7 +144,6 @@ o:depends("proto", "tcp")
 o:depends("proto", "udp")
 o:depends("proto", "tcp udp")
 o:depends("proto", "tcpudp")
-
 
 o = s:option(Flag, "reflection", translate("Enable NAT Loopback"))
 o.rmempty = true
