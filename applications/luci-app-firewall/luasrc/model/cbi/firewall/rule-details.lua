@@ -118,6 +118,7 @@ elseif rule_type == "redirect" then
 	o:depends("proto", "tcp")
 	o:depends("proto", "udp")
 	o:depends("proto", "tcp udp")
+	o:depends("proto", "tcpudp")
 
 
 	o = s:option(Value, "dest", translate("Destination zone"))
@@ -146,6 +147,7 @@ elseif rule_type == "redirect" then
 	o:depends("proto", "tcp")
 	o:depends("proto", "udp")
 	o:depends("proto", "tcp udp")
+	o:depends("proto", "tcpudp")
 
 
 	o = s:option(Value, "src_dip",
@@ -174,6 +176,7 @@ elseif rule_type == "redirect" then
 	o:depends("proto", "tcp")
 	o:depends("proto", "udp")
 	o:depends("proto", "tcp udp")
+	o:depends("proto", "tcpudp")
 
 
 	s:option(Value, "extra",
@@ -296,6 +299,7 @@ else
 	o:depends("proto", "tcp")
 	o:depends("proto", "udp")
 	o:depends("proto", "tcp udp")
+	o:depends("proto", "tcpudp")
 
 	o = s:option(Value, "dest", translate("Destination zone"))
 	o.nocreate = true
@@ -320,6 +324,7 @@ else
 	o:depends("proto", "tcp")
 	o:depends("proto", "udp")
 	o:depends("proto", "tcp udp")
+	o:depends("proto", "tcpudp")
 
 	o = s:option(ListValue, "target", translate("Action"))
 	o.default = "ACCEPT"

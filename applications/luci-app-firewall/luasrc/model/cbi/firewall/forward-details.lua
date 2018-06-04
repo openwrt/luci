@@ -91,6 +91,7 @@ o.placeholder = translate("any")
 o:depends("proto", "tcp")
 o:depends("proto", "udp")
 o:depends("proto", "tcp udp")
+o:depends("proto", "tcpudp")
 
 
 o = s:option(Value, "src_dip",
@@ -115,6 +116,7 @@ o.datatype = "neg(portrange)"
 o:depends("proto", "tcp")
 o:depends("proto", "udp")
 o:depends("proto", "tcp udp")
+o:depends("proto", "tcpudp")
 
 
 
@@ -144,6 +146,7 @@ o.datatype = "portrange"
 o:depends("proto", "tcp")
 o:depends("proto", "udp")
 o:depends("proto", "tcp udp")
+o:depends("proto", "tcpudp")
 
 
 o = s:option(Flag, "reflection", translate("Enable NAT Loopback"))
