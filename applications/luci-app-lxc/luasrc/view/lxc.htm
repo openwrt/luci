@@ -15,8 +15,8 @@ Author: Petar Koretic <petar.koretic@sartura.hr>
 -%>
 
 <%-
-local fs     = require "nixio"
-local target = fs.uname().machine
+local nx     = require "nixio"
+local target = nx.uname().machine
 -%>
 
 <fieldset class="cbi-section">
@@ -159,7 +159,7 @@ local target = fs.uname().machine
 		var div3 = document.createElement("div");
 		div3.className = "td";
 		div3.style.width = "50%";
-		div3.innerHTML = actions
+		div3.innerHTML = actions;
 
 		document.getElementById("t_lxc_list").appendChild(div0);
 		div0.appendChild(div1);
@@ -213,8 +213,8 @@ local target = fs.uname().machine
 		}
 		else if (action == "destroy")
 		{
-			var div = self.parentNode.parentNode
-			var img = div.querySelector('img')
+			var div = self.parentNode.parentNode;
+			var img = div.querySelector('img');
 
 			if (img.getAttribute('src') != window.img["red"])
 			{
