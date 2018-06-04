@@ -280,7 +280,10 @@ else
 	o = s:option(Value, "src_port", translate("Source port"))
 	o.datatype = "list(neg(portrange))"
 	o.placeholder = translate("any")
-
+  
+	o:depends("proto", "tcp")
+	o:depends("proto", "udp")
+	o:depends("proto", "tcp udp")
 
 	o = s:option(Value, "dest", translate("Destination zone"))
 	o.nocreate = true
@@ -302,6 +305,9 @@ else
 	o.datatype = "list(neg(portrange))"
 	o.placeholder = translate("any")
 
+	o:depends("proto", "tcp")
+	o:depends("proto", "udp")
+	o:depends("proto", "tcp udp")
 
 	o = s:option(ListValue, "target", translate("Action"))
 	o.default = "ACCEPT"
