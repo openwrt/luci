@@ -88,6 +88,10 @@ o.rmempty = true
 o.datatype = "neg(portrange)"
 o.placeholder = translate("any")
 
+o:depends("proto", "tcp")
+o:depends("proto", "udp")
+o:depends("proto", "tcp udp")
+
 
 o = s:option(Value, "src_dip",
 	translate("External IP address"),
@@ -107,6 +111,10 @@ o = s:option(Value, "src_dport", translate("External port"),
 	translate("Match incoming traffic directed at the given " ..
 		"destination port or port range on this host"))
 o.datatype = "neg(portrange)"
+
+o:depends("proto", "tcp")
+o:depends("proto", "udp")
+o:depends("proto", "tcp udp")
 
 
 
@@ -132,6 +140,10 @@ o = s:option(Value, "dest_port",
 		the internal host"))
 o.placeholder = translate("any")
 o.datatype = "portrange"
+
+o:depends("proto", "tcp")
+o:depends("proto", "udp")
+o:depends("proto", "tcp udp")
 
 
 o = s:option(Flag, "reflection", translate("Enable NAT Loopback"))
