@@ -21,13 +21,12 @@
 	var tries = 0;
 
 	function ok() {
-		window.location = '<%=controller%>/admin';
+		window.location = '<%=url("admin")%>';
 	}
 
 	function check() {
-		if (tries++ < 12)
-			window.setTimeout(ping, 5000);
-		else
+		window.setTimeout(ping, 5000);
+		if (tries++ == 30)
 			alert('<%:Device unreachable%>');
 	}
 
@@ -37,15 +36,18 @@
 		img.onload = ok;
 		img.onerror = check;
 		img.src = '<%=resource%>/icons/loading.gif?' + Math.random();
-
-		document.getElementById('reboot-message').innerHTML = '<%:Waiting for device...%>';
+		
+		if (tries++ < 30)
+			document.getElementById('reboot-message').innerHTML = '<%:Waiting for device...%>';
+		else
+			document.getElementById('reboot-message').innerHTML = '<%:Device unreachable! Still waiting for device...%>';
 	}
 
 	function reboot(button) {
 		button.style.display = 'none';
 		document.getElementById('reboot-message').parentNode.style.display = '';
 
-		(new XHR()).post('<%=controller%>/admin/system/reboot/call', { token: '<%=token%>' }, check);
+		(new XHR()).post('<%=url("admin/system/reboot/call")%>', { token: '<%=token%>' }, check);
 	}
 //]]></script>
 
