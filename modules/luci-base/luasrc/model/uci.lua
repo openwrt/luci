@@ -8,7 +8,7 @@ local table = require "table"
 
 local setmetatable, rawget, rawset = setmetatable, rawget, rawset
 local require, getmetatable, assert = require, getmetatable, assert
-local error, pairs, ipairs = error, pairs, ipairs
+local error, pairs, ipairs, select = error, pairs, ipairs, select
 local type, tostring, tonumber, unpack = type, tostring, tonumber, unpack
 
 -- The typical workflow for UCI is:  Get a cursor instance from the
@@ -106,7 +106,7 @@ function changes(self, config)
 			local _, change
 			for _, change in ipairs(changes) do
 				local operation, section, option, value = unpack(change)
-				if option and value and operation ~= "add" then
+				if option and operation ~= "add" then
 					res[package][section] = res[package][section] or { }
 
 					if operation == "list-add" then
@@ -373,15 +373,15 @@ function add(self, config, stype)
 	return self:section(config, stype)
 end
 
-function set(self, config, section, option, value)
-	if value == nil then
+function set(self, config, section, option, ...)
+	if select('#', ...) == 0 then
 		local sname, err = self:section(config, option, section)
 		return (not not sname), err
 	else
 		local _, err = call("set", {
 			config  = config,
 			section = section,
-			values  = { [option] = value }
+			values  = { [option] = select(1, ...) }
 		})
 		return (err == nil), ERRSTR[err]
 	end
