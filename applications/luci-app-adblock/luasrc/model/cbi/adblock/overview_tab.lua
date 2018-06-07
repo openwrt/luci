@@ -171,7 +171,7 @@ bl.template = "adblock/blocklist"
 name = bl:option(Flag, "enabled", translate("Enabled"))
 name.rmempty = false
 
-ssl = bl:option(DummyValue, "adb_src", translate("SSL req."))
+ssl = bl:option(DummyValue, "adb_src", translate("SSL&#160;req."))
 function ssl.cfgvalue(self, section)
 	local source = self.map:get(section, "adb_src")
 	if source and source:match("https://") then
@@ -183,7 +183,7 @@ end
 
 des = bl:option(DummyValue, "adb_src_desc", translate("Description"))
 
-cat = bl:option(DynamicList, "adb_src_cat", translate("Categories"))
+cat = bl:option(DynamicList, "adb_src_cat", translate("Archive&#160;Categories"))
 cat.datatype = "uciname"
 cat.optional = true
 
