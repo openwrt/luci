@@ -255,7 +255,7 @@ else
 	o = s:option(Value, "src", translate("Source zone"))
 	o.nocreate = true
 	o.allowany = true
-	o.default = "wan"
+	o.allowlocal = "src"
 	o.template = "cbi/firewall_zonelist"
 
 
@@ -282,11 +282,21 @@ else
 	o.placeholder = translate("any")
 
 
-	o = s:option(Value, "dest", translate("Destination zone"))
+	o = s:option(Value, "dest_local", translate("Output zone"))
+	o.nocreate = true
+	o.allowany = true
+	o.rmempty = false
+	o.template = "cbi/firewall_zonelist"
+	o.alias = "dest"
+	o:depends("src", "")
+
+	o = s:option(Value, "dest_remote", translate("Destination zone"))
 	o.nocreate = true
 	o.allowany = true
 	o.allowlocal = true
 	o.template = "cbi/firewall_zonelist"
+	o.alias = "dest"
+	o:depends({["src"] = "", ["!reverse"] = true})
 
 
 	o = s:option(Value, "dest_ip", translate("Destination address"))
@@ -316,9 +326,9 @@ else
 		translate("Passes additional arguments to iptables. Use with care!"))
 end
 
-o = s:option(MultiValue, "weekdays", translate("Week Days"))
-o.oneline = true
-o.widget = "checkbox"
+o = s:option(DropDown, "weekdays", translate("Week Days"))
+o.multiple = true
+o.display = 5
 o:value("Sun", translate("Sunday"))
 o:value("Mon", translate("Monday"))
 o:value("Tue", translate("Tuesday"))
@@ -327,9 +337,9 @@ o:value("Thu", translate("Thursday"))
 o:value("Fri", translate("Friday"))
 o:value("Sat", translate("Saturday"))
 
-o = s:option(MultiValue, "monthdays", translate("Month Days"))
-o.oneline = true
-o.widget = "checkbox"
+o = s:option(DropDown, "monthdays", translate("Month Days"))
+o.multiple = true
+o.display = 15
 for i = 1,31 do
 	o:value(translate(i))
 end

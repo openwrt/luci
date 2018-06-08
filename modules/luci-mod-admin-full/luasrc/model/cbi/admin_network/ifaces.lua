@@ -351,7 +351,6 @@ if has_firewall then
 
 	fwzone.template = "cbi/firewall_zonelist"
 	fwzone.network = arg[1]
-	fwzone.rmempty = false
 
 	function fwzone.cfgvalue(self, section)
 		self.iface = section
@@ -360,21 +359,15 @@ if has_firewall then
 	end
 
 	function fwzone.write(self, section, value)
-		local zone = fw:get_zone(value)
-
-		if not zone and value == '-' then
-			value = m:formvalue(self:cbid(section) .. ".newzone")
-			if value and #value > 0 then
-				zone = fw:add_zone(value)
-			else
-				fw:del_network(section)
-			end
-		end
-
+		local zone = fw:get_zone(value) or fw:add_zone(value)
 		if zone then
 			fw:del_network(section)
 			zone:add_network(section)
 		end
+	end
+
+	function fwzone.remove(self, section)
+		fw:del_network(section)
 	end
 end
 

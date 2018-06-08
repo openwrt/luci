@@ -55,6 +55,7 @@ o = s:option(Value, "src", translate("Source zone"))
 o.nocreate = true
 o.default = "wan"
 o.template = "cbi/firewall_zonelist"
+o.rmempty = false
 
 
 o = s:option(DynamicList, "src_mac",

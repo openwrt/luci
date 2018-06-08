@@ -101,9 +101,12 @@ end
 function net.write(self, section, value)
 	zone:clear_networks()
 
-	local n
-	for n in ut.imatch(value) do
-		zone:add_network(n)
+	local net
+	for net in ut.imatch(value) do
+		local n = nw:get_network(net) or nw:add_network(net, { proto = "none" })
+		if n then
+			zone:add_network(n:name())
+		end
 	end
 end
 

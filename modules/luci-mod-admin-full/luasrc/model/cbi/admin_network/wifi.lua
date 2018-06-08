@@ -390,27 +390,30 @@ network.novirtual = true
 function network.write(self, section, value)
 	local i = nw:get_interface(section)
 	if i then
-		if value == '-' then
-			value = m:formvalue(self:cbid(section) .. ".newnet")
-			if value and #value > 0 then
-				local n = nw:add_network(value, {proto="none"})
-				if n then n:add_interface(i) end
-			else
-				local n = i:get_network()
-				if n then n:del_interface(i) end
-			end
-		else
-			local v
-			for _, v in ipairs(i:get_networks()) do
-				v:del_interface(i)
-			end
-			for v in ut.imatch(value) do
-				local n = nw:get_network(v)
+		local _, net, old, new = nil, nil, {}, {}
+
+		for _, net in ipairs(i:get_networks()) do
+			old[net:name()] = true
+		end
+
+		for net in ut.imatch(value) do
+			new[net] = true
+			if not old[net] then
+				local n = nw:get_network(net) or nw:add_network(net, { proto = "none" })
 				if n then
 					if not n:is_empty() then
 						n:set("type", "bridge")
 					end
 					n:add_interface(i)
+				end
+			end
+		end
+
+		for net, _ in pairs(old) do
+			if not new[net] then
+				local n = nw:get_network(net)
+				if n then
+					n:del_interface(i)
 				end
 			end
 		end
