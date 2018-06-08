@@ -89,17 +89,31 @@ local function rule_proto_txt(self, s)
 end
 
 local function rule_src_txt(self, s)
-	local z = ft.fmt_zone(self.map:get(s, "src"), translate("any zone"))
-	local a = ft.fmt_ip(self.map:get(s, "src_ip"), translate("any host"))
+	local z = ft.fmt_zone(self.map:get(s, "src"))
 	local p = ft.fmt_port(self.map:get(s, "src_port"))
 	local m = ft.fmt_mac(self.map:get(s, "src_mac"))
 
-	if p and m then
-		return translatef("From %s in %s with source %s and %s", a, z, p, m)
-	elseif p or m then
-		return translatef("From %s in %s with source %s", a, z, p or m)
+	-- Forward/Input
+	if z and #z > 0 then
+		local a = ft.fmt_ip(self.map:get(s, "src_ip"), translate("any host"))
+		if p and m then
+			return translatef("From %s in %s with source %s and %s", a, z, p, m)
+		elseif p or m then
+			return translatef("From %s in %s with source %s", a, z, p or m)
+		else
+			return translatef("From %s in %s", a, z)
+		end
+
+	-- Output
 	else
-		return translatef("From %s in %s", a, z)
+		local a = ft.fmt_ip(self.map:get(s, "src_ip"), translate("any router IP"))
+		if p and m then
+			return translatef("From %s on <var>this device</var> with source %s and %s", a, p, m)
+		elseif p or m then
+			return translatef("From %s on <var>this device</var> with source %s", a, p or m)
+		else
+			return translatef("From %s on <var>this device</var>", a)
+		end
 	end
 end
 
@@ -158,7 +172,7 @@ target = s:option(DummyValue, "target", translate("Action"))
 target.rawhtml = true
 target.width   = "20%"
 function target.cfgvalue(self, s)
-	local t = ft.fmt_target(self.map:get(s, "target"), self.map:get(s, "dest"))
+	local t = ft.fmt_target(self.map:get(s, "target"), self.map:get(s, "src"), self.map:get(s, "dest"))
 	local l = ft.fmt_limit(self.map:get(s, "limit"),
 		self.map:get(s, "limit_burst"))
 
