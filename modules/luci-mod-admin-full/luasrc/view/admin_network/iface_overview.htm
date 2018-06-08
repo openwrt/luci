@@ -33,7 +33,7 @@
 <script type="text/javascript" src="<%=resource%>/cbi.js"></script>
 <script type="text/javascript">//<![CDATA[
 	function iface_shutdown(id, reconnect) {
-		if (!reconnect && !confirm(String.format('<%:Really shutdown interface "%s"? You might lose access to this device if you are connected via this interface.%>', id)))
+		if (!reconnect && !confirm(String.format('<%=translate("Really shutdown interface \"%s\"? You might lose access to this device if you are connected via this interface.")%>', id)))
 			return;
 
 		var d = document.getElementById(id + '-ifc-description');
@@ -67,7 +67,7 @@
 	}
 
 	function iface_delete(id) {
-		if (!confirm('<%:Really delete this interface? The deletion cannot be undone! You might lose access to this device if you are connected via this interface.%>'))
+		if (!confirm('<%=translate("Really delete this interface? The deletion cannot be undone! You might lose access to this device if you are connected via this interface.")%>'))
 			return;
 
 		(new XHR()).post('<%=url('admin/network/iface_delete')%>/' + id, { token: '<%=token%>' },
