@@ -1846,6 +1846,15 @@ function DynamicList.formvalue(self, section)
 end
 
 
+DropDown = class(MultiValue)
+
+function DropDown.__init__(self, ...)
+	ListValue.__init__(self, ...)
+	self.template = "cbi/dropdown"
+	self.delimiter = " "
+end
+
+
 --[[
 TextValue - A multi-line value
 	rows:	Rows

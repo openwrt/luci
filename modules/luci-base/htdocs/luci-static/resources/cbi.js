@@ -465,31 +465,16 @@ function cbi_d_add(field, dep, index) {
 }
 
 function cbi_d_checkvalue(target, ref) {
-	var t = document.getElementById(target);
-	var value;
+	var value = null,
+	    query = 'input[id="'+target+'"], input[name="'+target+'"], ' +
+	            'select[id="'+target+'"], select[name="'+target+'"]';
 
-	if (!t) {
-		var tl = document.getElementsByName(target);
+	document.querySelectorAll(query).forEach(function(i) {
+		if (value === null && ((i.type !== 'radio' && i.type !== 'checkbox') || i.checked === true))
+			value = i.value;
+	});
 
-		if( tl.length > 0 && (tl[0].type == 'radio' || tl[0].type == 'checkbox'))
-			for( var i = 0; i < tl.length; i++ )
-				if( tl[i].checked ) {
-					value = tl[i].value;
-					break;
-				}
-
-		value = value ? value : "";
-	} else if (!t.value) {
-		value = "";
-	} else {
-		value = t.value;
-
-		if (t.type == "checkbox") {
-			value = t.checked ? value : "";
-		}
-	}
-
-	return (value == ref)
+	return (((value !== null) ? value : "") == ref);
 }
 
 function cbi_d_check(deps) {
@@ -633,6 +618,10 @@ function cbi_init() {
 		cbi_validate_field(node, node.getAttribute('data-optional') === 'true',
 		                   node.getAttribute('data-type'));
 	}
+
+	document.querySelectorAll('.cbi-dropdown').forEach(function(s) {
+		 cbi_dropdown_init(s);
+	});
 
 	cbi_d_update();
 }
@@ -1574,3 +1563,484 @@ function E()
 
 	return elem;
 }
+
+if (typeof(window.CustomEvent) !== 'function') {
+	function CustomEvent(event, params) {
+		params = params || { bubbles: false, cancelable: false, detail: undefined };
+		var evt = document.createEvent('CustomEvent');
+		    evt.initCustomEvent( event, params.bubbles, params.cancelable, params.detail );
+		return evt;
+	}
+
+	CustomEvent.prototype = window.Event.prototype;
+	window.CustomEvent = CustomEvent;
+}
+
+CBIDropdown = {
+	openDropdown: function(sb) {
+		var st = window.getComputedStyle(sb, null),
+		    ul = sb.querySelector('ul'),
+		    li = ul.querySelectorAll('li'),
+		    sel = ul.querySelector('[selected]'),
+		    rect = sb.getBoundingClientRect(),
+		    h = sb.clientHeight - parseFloat(st.paddingTop) - parseFloat(st.paddingBottom),
+		    mh = this.dropdown_items * h,
+		    eh = Math.min(mh, li.length * h);
+
+		document.querySelectorAll('.cbi-dropdown[open]').forEach(function(s) {
+			s.dispatchEvent(new CustomEvent('cbi-dropdown-close', {}));
+		});
+
+		ul.style.maxHeight = mh + 'px';
+		sb.setAttribute('open', '');
+
+		ul.scrollTop = sel ? Math.max(sel.offsetTop - sel.offsetHeight, 0) : 0;
+		ul.querySelectorAll('[selected] input[type="checkbox"]').forEach(function(c) {
+			c.checked = true;
+		});
+
+		ul.style.top = ul.style.bottom = '';
+		ul.style[((sb.getBoundingClientRect().top + eh) > window.innerHeight) ? 'bottom' : 'top'] = rect.height + 'px';
+		ul.classList.add('dropdown');
+
+		var pv = ul.cloneNode(true);
+		    pv.classList.remove('dropdown');
+		    pv.classList.add('preview');
+
+		sb.insertBefore(pv, ul.nextElementSibling);
+
+		li.forEach(function(l) {
+			l.setAttribute('tabindex', 0);
+		});
+
+		sb.lastElementChild.setAttribute('tabindex', 0);
+
+		this.setFocus(sb, sel || li[0], true);
+	},
+
+	closeDropdown: function(sb, no_focus) {
+		if (!sb.hasAttribute('open'))
+			return;
+
+		var pv = sb.querySelector('ul.preview'),
+		    ul = sb.querySelector('ul.dropdown'),
+		    li = ul.querySelectorAll('li');
+
+		li.forEach(function(l) { l.removeAttribute('tabindex'); });
+		sb.lastElementChild.removeAttribute('tabindex');
+
+		sb.removeChild(pv);
+		sb.removeAttribute('open');
+		sb.style.width = sb.style.height = '';
+
+		ul.classList.remove('dropdown');
+
+		if (!no_focus)
+			this.setFocus(sb, sb);
+
+		this.saveValues(sb, ul);
+	},
+
+	toggleItem: function(sb, li, force_state) {
+		if (li.hasAttribute('unselectable'))
+			return;
+
+		if (this.multi) {
+			var cbox = li.querySelector('input[type="checkbox"]'),
+			    items = li.parentNode.querySelectorAll('li'),
+			    label = sb.querySelector('ul.preview'),
+			    sel = li.parentNode.querySelectorAll('[selected]').length,
+			    more = sb.querySelector('.more'),
+			    ndisplay = this.display_items,
+			    n = 0;
+
+			if (li.hasAttribute('selected')) {
+				if (force_state !== true) {
+					if (sel > 1 || this.optional) {
+						li.removeAttribute('selected');
+						cbox.checked = cbox.disabled = false;
+						sel--;
+					}
+					else {
+						cbox.disabled = true;
+					}
+				}
+			}
+			else {
+				if (force_state !== false) {
+					li.setAttribute('selected', '');
+					cbox.checked = true;
+					cbox.disabled = false;
+					sel++;
+				}
+			}
+
+			while (label.firstElementChild)
+				label.removeChild(label.firstElementChild);
+
+			for (var i = 0; i < items.length; i++) {
+				items[i].removeAttribute('display');
+				if (items[i].hasAttribute('selected')) {
+					if (ndisplay-- > 0) {
+						items[i].setAttribute('display', n++);
+						label.appendChild(items[i].cloneNode(true));
+					}
+					var c = items[i].querySelector('input[type="checkbox"]');
+					if (c)
+						c.disabled = (sel == 1 && !this.optional);
+				}
+			}
+
+			if (ndisplay < 0)
+				sb.setAttribute('more', '');
+			else
+				sb.removeAttribute('more');
+
+			if (ndisplay === this.display_items)
+				sb.setAttribute('empty', '');
+			else
+				sb.removeAttribute('empty');
+
+			more.innerHTML = (ndisplay === this.display_items) ? this.placeholder : '···';
+		}
+		else {
+			var sel = li.parentNode.querySelector('[selected]');
+			if (sel) {
+				sel.removeAttribute('display');
+				sel.removeAttribute('selected');
+			}
+
+			li.setAttribute('display', 0);
+			li.setAttribute('selected', '');
+
+			this.closeDropdown(sb, true);
+		}
+
+		this.saveValues(sb, li.parentNode);
+	},
+
+	transformItem: function(sb, li) {
+		var cbox = E('form', {}, E('input', { type: 'checkbox', tabindex: -1, onclick: 'event.preventDefault()' })),
+		    label = E('label');
+
+		while (li.firstChild)
+			label.appendChild(li.firstChild);
+
+		li.appendChild(cbox);
+		li.appendChild(label);
+	},
+
+	saveValues: function(sb, ul) {
+		var sel = ul.querySelectorAll('[selected]'),
+		    div = sb.lastElementChild;
+
+		while (div.lastElementChild)
+			div.removeChild(div.lastElementChild);
+
+		sel.forEach(function (s) {
+			div.appendChild(E('input', {
+				type: 'hidden',
+				name: s.hasAttribute('name') ? s.getAttribute('name') : (sb.getAttribute('name') || ''),
+				value: s.hasAttribute('value') ? s.getAttribute('value') : s.innerText
+			}));
+		});
+
+		cbi_d_update();
+	},
+
+	setFocus: function(sb, elem, scroll) {
+		if (sb && sb.hasAttribute && sb.hasAttribute('locked-in'))
+			return;
+
+		document.querySelectorAll('.focus').forEach(function(e) {
+			if (e.nodeName.toLowerCase() !== 'input') {
+				e.classList.remove('focus');
+				e.blur();
+			}
+		});
+
+		if (elem) {
+			elem.focus();
+			elem.classList.add('focus');
+
+			if (scroll)
+				elem.parentNode.scrollTop = elem.offsetTop - elem.parentNode.offsetTop;
+		}
+	},
+
+	createItems: function(sb, value) {
+		var sbox = this,
+		    val = (value || '').trim().split(/\s+/),
+		    ul = sb.querySelector('ul');
+
+		if (!sbox.multi)
+			val.length = Math.min(val.length, 1);
+
+		val.forEach(function(item) {
+			var new_item = null;
+
+			ul.childNodes.forEach(function(li) {
+				if (li.getAttribute && li.getAttribute('value') === item)
+					new_item = li;
+			});
+
+			if (!new_item) {
+				var markup,
+				    tpl = sb.querySelector(sbox.template);
+
+				if (tpl)
+					markup = (tpl.textContent || tpl.innerHTML || tpl.firstChild.data).replace(/^<!--|-->$/, '').trim();
+				else
+					markup = '<li value="{{value}}">{{value}}</li>';
+
+				new_item = E(markup.replace(/{{value}}/g, item));
+
+				if (sbox.multi) {
+					sbox.transformItem(sb, new_item);
+				}
+				else {
+					var old = ul.querySelector('li[created]');
+					if (old)
+						ul.removeChild(old);
+
+					new_item.setAttribute('created', '');
+				}
+
+				new_item = ul.insertBefore(new_item, ul.lastElementChild);
+			}
+
+			sbox.toggleItem(sb, new_item, true);
+			sbox.setFocus(sb, new_item, true);
+		});
+	},
+
+	closeAllDropdowns: function() {
+		document.querySelectorAll('.cbi-dropdown[open]').forEach(function(s) {
+			s.dispatchEvent(new CustomEvent('cbi-dropdown-close', {}));
+		});
+	},
+
+	findParent: function(node, selector) {
+		while (node)
+			if (node.msMatchesSelector && node.msMatchesSelector(selector))
+				return node;
+			else if (node.matches && node.matches(selector))
+				return node;
+			else
+				node = node.parentNode;
+
+		return null;
+	}
+};
+
+function cbi_dropdown_init(sb) {
+	if (!(this instanceof cbi_dropdown_init))
+		return new cbi_dropdown_init(sb);
+
+	this.multi = sb.hasAttribute('multiple');
+	this.optional = sb.hasAttribute('optional');
+	this.placeholder = sb.getAttribute('placeholder') || '---';
+	this.display_items = parseInt(sb.getAttribute('display-items') || 3);
+	this.dropdown_items = parseInt(sb.getAttribute('dropdown-items') || 5);
+	this.create = sb.getAttribute('item-create') || '.create-item-input';
+	this.template = sb.getAttribute('item-template') || 'script[type="item-template"]';
+
+	var sbox = this,
+	    ul = sb.querySelector('ul'),
+	    items = ul.querySelectorAll('li'),
+	    more = sb.appendChild(E('span', { class: 'more', tabindex: -1 }, '···')),
+	    open = sb.appendChild(E('span', { class: 'open', tabindex: -1 }, '▾')),
+	    canary = sb.appendChild(E('div')),
+	    create = sb.querySelector(this.create),
+	    ndisplay = this.display_items,
+	    n = 0;
+
+	if (this.multi) {
+		for (var i = 0; i < items.length; i++) {
+			sbox.transformItem(sb, items[i]);
+
+			if (items[i].hasAttribute('selected') && ndisplay-- > 0)
+				items[i].setAttribute('display', n++);
+		}
+	}
+	else {
+		var sel = sb.querySelectorAll('[selected]');
+
+		sel.forEach(function(s) {
+			s.removeAttribute('selected');
+		});
+
+		var s = sel[0] || items[0];
+		if (s) {
+			s.setAttribute('selected', '');
+			s.setAttribute('display', n++);
+		}
+
+		ndisplay--;
+
+		if (this.optional && !ul.querySelector('li[value=""]')) {
+			var placeholder = E('li', { placeholder: '' }, this.placeholder);
+			ul.firstChild ? ul.insertBefore(placeholder, ul.firstChild) : ul.appendChild(placeholder);
+		}
+	}
+
+	sbox.saveValues(sb, ul);
+
+	ul.setAttribute('tabindex', -1);
+	sb.setAttribute('tabindex', 0);
+
+	if (ndisplay < 0)
+		sb.setAttribute('more', '')
+	else
+		sb.removeAttribute('more');
+
+	if (ndisplay === this.display_items)
+		sb.setAttribute('empty', '')
+	else
+		sb.removeAttribute('empty');
+
+	more.innerHTML = (ndisplay === this.display_items) ? this.placeholder : '···';
+
+
+	sb.addEventListener('click', function(ev) {
+		if (!this.hasAttribute('open')) {
+			if (ev.target.nodeName.toLowerCase() !== 'input')
+				sbox.openDropdown(this);
+		}
+		else {
+			var li = sbox.findParent(ev.target, 'li');
+			if (li && li.parentNode.classList.contains('dropdown'))
+				sbox.toggleItem(this, li);
+		}
+
+		ev.preventDefault();
+		ev.stopPropagation();
+	});
+
+	sb.addEventListener('keydown', function(ev) {
+		if (ev.target.nodeName.toLowerCase() === 'input')
+			return;
+
+		if (!this.hasAttribute('open')) {
+			switch (ev.keyCode) {
+			case 37:
+			case 38:
+			case 39:
+			case 40:
+				sbox.openDropdown(this);
+				ev.preventDefault();
+			}
+		}
+		else
+		{
+			var active = sbox.findParent(document.activeElement, 'li');
+
+			switch (ev.keyCode) {
+			case 27:
+				sbox.closeDropdown(this);
+				break;
+
+			case 13:
+				if (active) {
+					if (!active.hasAttribute('selected'))
+						sbox.toggleItem(this, active);
+					sbox.closeDropdown(this);
+					ev.preventDefault();
+				}
+				break;
+
+			case 32:
+				if (active) {
+					sbox.toggleItem(this, active);
+					ev.preventDefault();
+				}
+				break;
+
+			case 38:
+				if (active && active.previousElementSibling) {
+					sbox.setFocus(this, active.previousElementSibling);
+					ev.preventDefault();
+				}
+				break;
+
+			case 40:
+				if (active && active.nextElementSibling) {
+					sbox.setFocus(this, active.nextElementSibling);
+					ev.preventDefault();
+				}
+				break;
+			}
+		}
+	});
+
+	sb.addEventListener('cbi-dropdown-close', function(ev) {
+		sbox.closeDropdown(this, true);
+	});
+
+	if ('ontouchstart' in window) {
+		sb.addEventListener('touchstart', function(ev) { ev.stopPropagation(); });
+		window.addEventListener('touchstart', sbox.closeAllDropdowns);
+	}
+	else {
+		sb.addEventListener('mouseover', function(ev) {
+			if (!this.hasAttribute('open'))
+				return;
+
+			var li = sbox.findParent(ev.target, 'li');
+			if (li) {
+				if (li.parentNode.classList.contains('dropdown'))
+					sbox.setFocus(this, li);
+
+				ev.stopPropagation();
+			}
+		});
+
+		sb.addEventListener('focus', function(ev) {
+			document.querySelectorAll('.cbi-dropdown[open]').forEach(function(s) {
+				if (s !== this || this.hasAttribute('open'))
+					s.dispatchEvent(new CustomEvent('cbi-dropdown-close', {}));
+			});
+		});
+
+		canary.addEventListener('focus', function(ev) {
+			sbox.closeDropdown(this.parentNode);
+		});
+
+		window.addEventListener('mouseover', sbox.setFocus);
+		window.addEventListener('click', sbox.closeAllDropdowns);
+	}
+
+	if (create) {
+		create.addEventListener('keydown', function(ev) {
+			switch (ev.keyCode) {
+			case 13:
+				sbox.createItems(sb, this.value);
+				ev.preventDefault();
+				this.value = '';
+				this.blur();
+				break;
+			}
+		});
+
+		create.addEventListener('focus', function(ev) {
+			var cbox = sbox.findParent(this, 'li').querySelector('input[type="checkbox"]');
+			if (cbox) cbox.checked = true;
+			sb.setAttribute('locked-in', '');
+		});
+
+		create.addEventListener('blur', function(ev) {
+			var cbox = sbox.findParent(this, 'li').querySelector('input[type="checkbox"]');
+			if (cbox) cbox.checked = false;
+			sb.removeAttribute('locked-in');
+		});
+
+		var li = sbox.findParent(create, 'li');
+
+		li.setAttribute('unselectable', '');
+		li.addEventListener('click', function(ev) {
+			this.querySelector(sbox.create).focus();
+		});
+	}
+}
+
+cbi_dropdown_init.prototype = CBIDropdown;

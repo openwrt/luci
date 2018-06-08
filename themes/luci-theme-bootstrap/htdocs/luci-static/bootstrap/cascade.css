@@ -430,7 +430,6 @@ form .clearfix,
 form .cbi-value {
 	margin-bottom: 18px;
 	zoom: 1;
-	overflow: hidden;
 }
 
 form .clearfix:before, form .clearfix:after,
@@ -477,6 +476,7 @@ input[type=checkbox], input[type=radio] {
 input,
 textarea,
 select,
+.cbi-dropdown,
 .uneditable-input {
 	display: inline-block;
 	width: 210px;
@@ -487,6 +487,13 @@ select,
 	color: #808080;
 	border: 1px solid #ccc;
 	border-radius: 3px;
+	box-sizing: border-box;
+}
+
+.cbi-dropdown {
+	min-width: 210px;
+	max-width: 400px;
+	width: auto;
 }
 
 select {
@@ -1332,6 +1339,159 @@ footer {
 	background-image: url('../resources/cbi/download.gif'), linear-gradient(#ffffff, #ffffff 25%, #e6e6e6);
 }
 
+.cbi-dropdown {
+	border: 1px solid #ccc;
+	border-radius: 3px;
+	display: inline-flex;
+	padding: 0;
+	cursor: pointer;
+	height: auto;
+	background: linear-gradient(#fff 0%, #e9e8e6 100%);
+	position: relative;
+	color: #404040;
+}
+
+.cbi-dropdown:focus {
+	outline: 2px solid #4b6e9b;
+}
+
+.cbi-dropdown > ul {
+	margin: 0 !important;
+	padding: 0;
+	list-style: none;
+	overflow-x: hidden;
+	overflow-y: auto;
+	display: flex;
+	width: 100%;
+}
+
+.cbi-dropdown > ul.preview {
+	display: none;
+}
+
+.cbi-dropdown > .open,
+.cbi-dropdown > .more {
+	flex-grow: 0;
+	flex-shrink: 0;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	text-align: center;
+	line-height: 2em;
+	padding: 0 .25em;
+}
+
+.cbi-dropdown > .more,
+.cbi-dropdown > ul > li[placeholder] {
+	color: #777;
+	font-weight: bold;
+	text-shadow: 1px 1px 0px #fff;
+	display: none;
+}
+
+.cbi-dropdown > ul > li {
+	display: none;
+	padding: .25em;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	flex-shrink: 1;
+	flex-grow: 1;
+	align-items: center;
+	align-self: center;
+	color: #404040;
+	min-height: 20px;
+}
+
+.cbi-dropdown > ul > li .hide-open { display: initial; }
+.cbi-dropdown > ul > li .hide-close { display: none; }
+
+.cbi-dropdown > ul > li[display]:not([display="0"]) {
+	border-left: 1px solid #ccc;
+}
+
+.cbi-dropdown[empty] > ul {
+	max-width: 1px;
+}
+
+.cbi-dropdown > ul > li > form {
+	display: none;
+	margin: 0;
+	padding: 0;
+	pointer-events: none;
+}
+
+.cbi-dropdown > ul > li img {
+	vertical-align: middle;
+	margin-right: .25em;
+}
+
+.cbi-dropdown > ul > li > form > input[type="checkbox"] {
+	margin: 0;
+}
+
+.cbi-dropdown > ul > li input[type="text"] {
+	height: 20px;
+}
+
+.cbi-dropdown[open] {
+	position: relative;
+}
+
+.cbi-dropdown[open] > ul.dropdown {
+	display: block;
+	background: #f6f6f5;
+	border: 1px solid #918e8c;
+	box-shadow: 0 0 4px #918e8c;
+	position: absolute;
+	z-index: 1000;
+	max-width: none;
+	min-width: 100%;
+	width: auto;
+}
+
+.cbi-dropdown > ul > li[display],
+.cbi-dropdown[open] > ul.preview,
+.cbi-dropdown[open] > ul.dropdown > li,
+.cbi-dropdown[multiple] > ul > li > label,
+.cbi-dropdown[multiple][open] > ul.dropdown > li,
+.cbi-dropdown[multiple][more] > .more,
+.cbi-dropdown[multiple][empty] > .more {
+	flex-grow: 1;
+	display: flex;
+}
+
+.cbi-dropdown[empty] > ul > li,
+.cbi-dropdown[optional][open] > ul.dropdown > li[placeholder],
+.cbi-dropdown[multiple][open] > ul.dropdown > li > form {
+	display: block;
+}
+
+.cbi-dropdown[open] > ul.dropdown > li .hide-open { display: none; }
+.cbi-dropdown[open] > ul.dropdown > li .hide-close { display: initial; }
+
+.cbi-dropdown[open] > ul.dropdown > li {
+	border-bottom: 1px solid #ccc;
+}
+
+.cbi-dropdown[open] > ul.dropdown > li[selected] {
+	background: #b0d0f0;
+}
+
+.cbi-dropdown[open] > ul.dropdown > li.focus {
+	background: linear-gradient(90deg, #a3c2e8 0%, #84aad9 100%);
+}
+
+.cbi-dropdown[open] > ul.dropdown > li:last-child {
+	margin-bottom: 0;
+	border-bottom: none;
+}
+
+.cbi-dropdown[disabled] {
+	pointer-events: none;
+	opacity: .6;
+}
+
 .btn.active, .btn:active {
 	box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.25), 0 1px 2px rgba(0, 0, 0, 0.05);
 }
@@ -1423,7 +1583,7 @@ button.btn::-moz-focus-inner, input[type=submit].btn::-moz-focus-inner {
 	opacity: 0.4;
 }
 
-.alert-message, .errorbox {
+.alert-message {
 	position: relative;
 	padding: 7px 15px;
 	margin-bottom: 18px;
@@ -1646,7 +1806,6 @@ table table td,
 	background-color: #FFFFFF;
 	border: 1px solid #CCCCCC;
 	padding: 2px;
-	margin-left: 2px;
 	background-image: linear-gradient(#ffffff, #ffffff 25%, #e6e6e6);
 	text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
 	border-radius: 4px;
@@ -1712,12 +1871,16 @@ table table td,
 
 .zonebadge > em,
 .zonebadge > strong {
-	margin: 5px;
+	margin: 0 2px;
 	display: inline-block;
 }
 
 .zonebadge input {
 	width: 6em;
+}
+
+.zonebadge > .ifacebadge {
+	margin-left: 2px;
 }
 
 .zonebadge-empty {

@@ -107,7 +107,8 @@ select {
 }
 
 select,
-input {
+input,
+.cbi-dropdown {
     background-color: transparent;
     color: rgba(0, 0, 0, .87);
     border: none;
@@ -157,7 +158,7 @@ header {
     transition: box-shadow .2s;
     float: left;
     position: fixed;
-    z-index: 101;
+    z-index: 2000;
 }
 
 footer {
@@ -452,11 +453,7 @@ fieldset {
     font-style: normal;
     line-height: 1;
     font-family: inherit;
-
     min-width: inherit;
-    overflow-x: auto;
-    overflow-y: hidden;
-
     border-radius: 0;
     background-color: #FFF;
     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .16), 0 0 2px 0 rgba(0, 0, 0, .12);
@@ -626,6 +623,7 @@ td > table > tbody > tr > td,
     box-shadow: none;
 }
 
+.btn + .btn,
 form.inline + form.inline,
 .cbi-button + .cbi-button {
     margin-left: 0.6rem;
@@ -804,6 +802,172 @@ form.inline + form.inline,
     font-size: small;
 }
 
+
+.cbi-dropdown {
+    display: inline-flex;
+    cursor: pointer;
+    position: relative;
+    padding: 0;
+    height: auto;
+}
+
+.cbi-dropdown:focus {
+    outline: 2px solid #4b6e9b;
+}
+
+.cbi-dropdown > ul {
+    margin: 0 !important;
+    padding: 0;
+    list-style: none;
+    overflow-x: hidden;
+    overflow-y: auto;
+    display: flex;
+    width: 100%;
+}
+
+.cbi-dropdown > ul.preview {
+    display: none;
+}
+
+.cbi-dropdown > .open {
+    border: 2px outset #eee;
+    flex-basis: 15px;
+    background: #eee;
+}
+
+.cbi-dropdown > .open,
+.cbi-dropdown > .more {
+    flex-grow: 0;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    line-height: 2em;
+    padding: 0 .25em;
+}
+
+.cbi-dropdown > .more,
+.cbi-dropdown > ul > li[placeholder] {
+    color: #777;
+    font-weight: bold;
+    text-shadow: 1px 1px 0px #fff;
+    display: none;
+}
+
+.cbi-dropdown > ul > li {
+    display: none;
+    padding: .25em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex-shrink: 1;
+    flex-grow: 1;
+    align-items: center;
+    align-self: center;
+    min-height: 20px;
+}
+
+.cbi-dropdown > ul > li .hide-open { display: initial; }
+.cbi-dropdown > ul > li .hide-close { display: none; }
+
+.cbi-dropdown > ul > li[display]:not([display="0"]) {
+    border-left: 1px solid #ccc;
+}
+
+.cbi-dropdown[empty] > ul {
+    max-width: 1px;
+}
+
+.cbi-dropdown > ul > li > form {
+    display: none;
+    margin: 0;
+    padding: 0;
+    pointer-events: none;
+}
+
+.cbi-dropdown > ul > li img {
+    vertical-align: middle;
+    margin-right: .25em;
+}
+
+.cbi-dropdown > ul > li > form > input[type="checkbox"] {
+    margin: 0;
+    height: auto;
+}
+
+.cbi-dropdown > ul > li input[type="text"] {
+    height: 20px;
+}
+
+.cbi-dropdown[open] {
+    position: relative;
+}
+
+.cbi-dropdown[open] > ul.dropdown {
+    display: block;
+    background: #f6f6f5;
+    border: 1px solid #918e8c;
+    box-shadow: 0 0 4px #918e8c;
+    position: absolute;
+    z-index: 1000;
+    max-width: none;
+    min-width: 100%;
+    width: auto;
+}
+
+.cbi-dropdown > ul > li[display],
+.cbi-dropdown[open] > ul.preview,
+.cbi-dropdown[open] > ul.dropdown > li,
+.cbi-dropdown[multiple] > ul > li > label,
+.cbi-dropdown[multiple][open] > ul.dropdown > li,
+.cbi-dropdown[multiple][more] > .more,
+.cbi-dropdown[multiple][empty] > .more {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+}
+
+.cbi-dropdown[empty] > ul > li,
+.cbi-dropdown[optional][open] > ul.dropdown > li[placeholder],
+.cbi-dropdown[multiple][open] > ul.dropdown > li > form {
+    display: block;
+}
+
+.cbi-dropdown[open] > ul.dropdown > li .hide-open { display: none; }
+.cbi-dropdown[open] > ul.dropdown > li .hide-close { display: initial; }
+
+.cbi-dropdown[open] > ul.dropdown > li {
+    border-bottom: 1px solid #ccc;
+}
+
+.cbi-dropdown[open] > ul.dropdown > li[selected] {
+    background: #b0d0f0;
+}
+
+.cbi-dropdown[open] > ul.dropdown > li.focus {
+    background: linear-gradient(90deg, #a3c2e8 0%, #84aad9 100%);
+}
+
+.cbi-dropdown[open] > ul.dropdown > li:last-child {
+    margin-bottom: 0;
+    border-bottom: none;
+}
+
+.cbi-dropdown[disabled] {
+    pointer-events: none;
+    opacity: .6;
+}
+
+.cbi-dropdown .zonebadge {
+    width: 100%;
+}
+
+.cbi-dropdown[open] .zonebadge {
+    width: auto;
+}
+
+
 /* luci */
 
 .hidden {
@@ -839,17 +1003,20 @@ form.inline + form.inline,
 }
 
 /* select */
-.cbi-value-field .cbi-input-select {
+.cbi-value-field .cbi-dropdown {
     min-width: 15rem;
+}
+
+.cbi-value-field .cbi-input-select {
+    width: 15rem;
 }
 
 .ifacebadge {
     display: inline-flex;
     border-bottom: 1px solid #CCCCCC;
     padding: 0.5rem 1rem;
-    -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
-    -moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+    background: #fff;
 }
 
 td > .ifacebadge,
@@ -858,10 +1025,15 @@ td > .ifacebadge,
     font-size: 0.9rem;
 }
 
+.ifacebadge > em,
 .ifacebadge > img {
-    float: right;
-    margin: 0 0.3rem;
+    display: inline-block;
+    margin: 0 .2rem;
     align-self: start;
+}
+
+.ifacebadge > img + img {
+    margin: 0 .2rem 0 0;
 }
 
 .network-status-table {
@@ -1038,8 +1210,8 @@ td > .ifacebadge,
 }
 
 .zonebadge > .ifacebadge {
-    padding: 0.2rem 1rem;
-    margin: 0.3rem;
+    padding: .2rem .3rem;
+    margin: 0.1rem 0.2rem;
     border: 1px solid #6C6C6C;
 }
 
@@ -1047,6 +1219,12 @@ td > .ifacebadge,
     padding: 0.16rem 1rem;
     min-width: 10rem;
     margin-top: 0.3rem;
+}
+
+.zonebadge > em,
+.zonebadge > strong {
+    margin: 0 0.2rem;
+    display: inline-block;
 }
 
 .cbi-value-field .cbi-input-checkbox,
@@ -1073,8 +1251,12 @@ td > .ifacebadge,
     margin-top: -0.5rem;
 }
 
-.cbi-section-table-row > .cbi-value-field .cbi-input-select {
+.cbi-section-table-row > .cbi-value-field .cbi-dropdown {
     min-width: 7rem;
+}
+
+.cbi-section-table-row > .cbi-value-field .cbi-input-select {
+    width: 7rem;
 }
 
 .cbi-section-create > .cbi-button-add {
@@ -1607,8 +1789,6 @@ body.lang_pl.node-main-login .cbi-value-title {
         line-height: 1;
         font-family: inherit;
         min-width: inherit;
-        overflow-x: auto;
-        overflow-y: hidden;
         border-radius: 0;
         background-color: #FFF;
         box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .16), 0 0 2px 0 rgba(0, 0, 0, .12);
@@ -1627,33 +1807,36 @@ body.lang_pl.node-main-login .cbi-value-title {
 
 @media screen and (min-width: 992px) {
     .cbi-value input[type="password"],
-    .cbi-value input[type="text"] {
-        min-width: 20rem;
+    .cbi-value input[type="text"],
+    .cbi-value-field .cbi-input-select {
+        width: 20rem;
     }
 
-    .cbi-value-field .cbi-input-select {
+    .cbi-value-field .cbi-dropdown {
         min-width: 20rem;
     }
 }
 
 @media screen and (min-width: 1280px) {
     .cbi-value input[type="password"],
-    .cbi-value input[type="text"] {
-        min-width: 22rem;
+    .cbi-value input[type="text"],
+    .cbi-value-field .cbi-input-select {
+        width: 22rem;
     }
 
-    .cbi-value-field .cbi-input-select {
+    .cbi-value-field .cbi-dropdown {
         min-width: 22rem;
     }
 }
 
 @media screen and (min-width: 1600px) {
     .cbi-value input[type="password"],
-    .cbi-value input[type="text"] {
-        min-width: 25rem;
+    .cbi-value input[type="text"],
+    .cbi-value-field .cbi-input-select {
+        width: 25rem;
     }
 
-    .cbi-value-field .cbi-input-select {
+    .cbi-value-field .cbi-dropdown {
         min-width: 25rem;
     }
 }
