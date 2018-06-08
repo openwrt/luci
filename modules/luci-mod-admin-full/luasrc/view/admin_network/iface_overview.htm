@@ -67,7 +67,7 @@
 	}
 
 	function iface_delete(id) {
-		if (!confirm(<%=luci.http.write_json(translate('Really delete this interface? The deletion cannot be undone! You might lose access to this device if you are connected via this interface'))%>))
+		if (!confirm(<%=luci.http.write_json(translate('Really delete this interface? The deletion cannot be undone! You might lose access to this device if you are connected via this interface.'))%>))
 			return;
 
 		(new XHR()).post('<%=url('admin/network/iface_delete')%>/' + id, { token: '<%=token%>' },
