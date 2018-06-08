@@ -378,13 +378,13 @@ msgid "Any zone"
 msgstr "任意区域"
 
 msgid "Apply request failed with status <code>%h</code>"
-msgstr ""
+msgstr "应用请求失败，状态 <code>%h</code>"
 
 msgid "Apply unchecked"
-msgstr ""
+msgstr "应用未选中"
 
 msgid "Architecture"
-msgstr ""
+msgstr "架构"
 
 msgid ""
 "Assign a part of given length of every public IPv6-prefix to this interface"
@@ -401,7 +401,7 @@ msgid "Associated Stations"
 msgstr "已连接站点"
 
 msgid "Associations"
-msgstr ""
+msgstr "关联数"
 
 msgid "Auth Group"
 msgstr "认证组"
@@ -561,10 +561,10 @@ msgid "Changes"
 msgstr "修改数"
 
 msgid "Changes applied."
-msgstr "更改已应用"
+msgstr "更改已应用。"
 
 msgid "Changes have been reverted."
-msgstr ""
+msgstr "更改已取消。"
 
 msgid "Changes the administrator password for accessing the device"
 msgstr "修改访问设备的管理员密码"
@@ -575,7 +575,7 @@ msgstr "信道"
 msgid ""
 "Channel %d is not available in the %s regulatory domain and has been auto-"
 "adjusted to %d."
-msgstr ""
+msgstr "信道 %d 在 %s 监管区域内不可用并已自动调整到 %d。"
 
 msgid "Check"
 msgstr "检查"
@@ -657,10 +657,10 @@ msgid "Configuration files will be kept."
 msgstr "配置文件将被保留。"
 
 msgid "Configuration has been applied."
-msgstr ""
+msgstr "配置已应用。"
 
 msgid "Configuration has been rolled back!"
-msgstr ""
+msgstr "配置已回滚！"
 
 msgid "Confirmation"
 msgstr "确认密码"
@@ -682,6 +682,8 @@ msgid ""
 "changes. You might need to reconnect if you modified network related "
 "settings such as the IP address or wireless security credentials."
 msgstr ""
+"应用配置更改后，无法重新获得对设备的访问权限。如果您修改了网络相关设置"
+"如 IP 地址或无线安全证书，则可能需要重新连接。"
 
 msgid "Country"
 msgstr "国家"
@@ -852,7 +854,7 @@ msgid "Device unreachable"
 msgstr "无法连接到设备"
 
 msgid "Device unreachable!"
-msgstr ""
+msgstr "无法连接到设备！"
 
 msgid "Diagnostics"
 msgstr "网络诊断"
@@ -889,7 +891,7 @@ msgid "Discard upstream RFC1918 responses"
 msgstr "丢弃 RFC1918 上行响应数据"
 
 msgid "Dismiss"
-msgstr ""
+msgstr "解除"
 
 msgid "Displaying only packages containing"
 msgstr "只显示有内容的软件包"
@@ -1003,7 +1005,7 @@ msgstr "启用"
 msgid ""
 "Enable <abbr title=\"Internet Group Management Protocol\">IGMP</abbr> "
 "snooping"
-msgstr ""
+msgstr "启用 <abbr title=\"Internet Group Management Protocol\">IGMP</abbr> 窥探"
 
 msgid "Enable <abbr title=\"Spanning Tree Protocol\">STP</abbr>"
 msgstr "开启 <abbr title=\"Spanning Tree Protocol\">STP</abbr>"
@@ -1063,7 +1065,7 @@ msgid "Enabled"
 msgstr "启用"
 
 msgid "Enables IGMP snooping on this bridge"
-msgstr ""
+msgstr "在此桥接上启用 IGMP 窥探"
 
 msgid ""
 "Enables fast roaming among access points that belong to the same Mobility "
@@ -1144,7 +1146,7 @@ msgid "FT protocol"
 msgstr "FT 协议"
 
 msgid "Failed to confirm apply within %ds, waiting for rollback…"
-msgstr ""
+msgstr "在 %d 秒内确认应用失败，等待回滚..."
 
 msgid "File"
 msgstr "文件"
@@ -1397,7 +1399,7 @@ msgid "IPv4 Firewall"
 msgstr "IPv4 防火墙"
 
 msgid "IPv4 Upstream"
-msgstr ""
+msgstr "IPv4 上游"
 
 msgid "IPv4 address"
 msgstr "IPv4 地址"
@@ -1448,7 +1450,7 @@ msgid "IPv6 ULA-Prefix"
 msgstr "IPv6 ULA 前缀"
 
 msgid "IPv6 Upstream"
-msgstr ""
+msgstr "IPv6 上游"
 
 msgid "IPv6 address"
 msgstr "IPv6 地址"
@@ -2158,7 +2160,7 @@ msgid "Obfuscated Password"
 msgstr "混淆密码"
 
 msgid "Obtain IPv6-Address"
-msgstr ""
+msgstr "获取 IPv6 地址"
 
 msgid "Off-State Delay"
 msgstr "关闭时间"
@@ -2742,16 +2744,16 @@ msgid "Reveal/hide password"
 msgstr "显示/隐藏 密码"
 
 msgid "Revert"
-msgstr "放弃"
+msgstr "恢复"
 
 msgid "Revert changes"
-msgstr ""
+msgstr "恢复更改"
 
 msgid "Revert request failed with status <code>%h</code>"
-msgstr ""
+msgstr "恢复请求失败，状态 <code>%h</code>"
 
 msgid "Reverting configuration…"
-msgstr ""
+msgstr "正在恢复配置..."
 
 msgid "Root"
 msgstr "Root"
@@ -2816,7 +2818,7 @@ msgid "Save"
 msgstr "保存"
 
 msgid "Save & Apply"
-msgstr "保存&应用"
+msgstr "保存并应用"
 
 msgid "Scan"
 msgstr "扫描"
@@ -2979,7 +2981,7 @@ msgid "Start priority"
 msgstr "启动优先级"
 
 msgid "Starting configuration apply…"
-msgstr ""
+msgstr "开始应用配置..."
 
 msgid "Startup"
 msgstr "启动项"
@@ -3146,6 +3148,9 @@ msgid ""
 "or revert all pending changes to keep the currently working configuration "
 "state."
 msgstr ""
+"在应用挂起的更改后 %d 秒内无法到达该设备，出于安全原因导致配置回滚。如果您认为配置更改仍"
+"然正确，请执行未选中的配置应用。或者您可以在尝试再次应用之前解除此警告并编辑更改，或者还原"
+"所有未完成的更改以保持当前正在工作的配置状态。"
 
 msgid ""
 "The device file of the memory or partition (<abbr title=\"for example\">e.g."
@@ -3235,7 +3240,7 @@ msgid "There are no active leases."
 msgstr "没有已分配的租约。"
 
 msgid "There are no changes to apply."
-msgstr ""
+msgstr "没有待生效的更改。"
 
 msgid "There are no pending changes to revert!"
 msgstr "没有可放弃的更改！"
@@ -3592,7 +3597,7 @@ msgid "Waiting for command to complete..."
 msgstr "等待命令执行完成..."
 
 msgid "Waiting for configuration to get applied… %ds"
-msgstr ""
+msgstr "等待应用配置... %d 秒"
 
 msgid "Waiting for device..."
 msgstr "等待设备..."
@@ -3777,7 +3782,7 @@ msgid "overlay"
 msgstr "覆盖"
 
 msgid "random"
-msgstr ""
+msgstr "随机"
 
 msgid "relay mode"
 msgstr "中继模式"
