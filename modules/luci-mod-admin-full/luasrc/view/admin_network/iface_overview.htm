@@ -33,7 +33,7 @@
 <script type="text/javascript" src="<%=resource%>/cbi.js"></script>
 <script type="text/javascript">//<![CDATA[
 	function iface_shutdown(id, reconnect) {
-		if (!reconnect && !confirm(String.format('<%_Really shutdown interface "%s" ?\nYou might lose access to this device if you are connected via this interface.%>', id)))
+		if (!reconnect && !confirm(String.format('<%:Really shutdown interface "%s" ?\nYou might lose access to this device if you are connected via this interface.%>', id)))
 			return;
 
 		var d = document.getElementById(id + '-ifc-description');
