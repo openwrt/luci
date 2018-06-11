@@ -95,11 +95,11 @@ end
 
 
 function info(pkg)
-	return _lookup("info", pkg)
+	return _lookup("info", pkg)[pkg]
 end
 
 function status(pkg)
-	return _lookup("status", pkg)
+	return _lookup("status", pkg)[pkg]
 end
 
 function install(...)
