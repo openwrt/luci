@@ -83,12 +83,12 @@ function app_title_main()
 	tmp[#tmp+1] = 	[[<a href="javascript:alert(']]
 	tmp[#tmp+1] = 		 I18N.translate("Version Information")
 	tmp[#tmp+1] = 		 [[\n\n]] .. app_name
-	tmp[#tmp+1] = 		 [[\n\t]] .. I18N.translate("Version") .. [[:\t]] .. app_version
+	tmp[#tmp+1] = 		 [[\n]] .. I18N.translate("Version") .. [[: ]] .. app_version
 	tmp[#tmp+1] = 		 [[\n\n]] .. srv_name .. [[ ]] .. I18N.translate("required") .. [[:]]
-	tmp[#tmp+1] = 		 [[\n\t]] .. I18N.translate("Version") .. [[:\t]]
+	tmp[#tmp+1] = 		 [[\n]] .. I18N.translate("Version") .. [[: ]]
 	tmp[#tmp+1] = 			 srv_ver_min .. [[ ]] .. I18N.translate("or higher")
 	tmp[#tmp+1] = 		 [[\n\n]] .. srv_name .. [[ ]] .. I18N.translate("installed") .. [[:]]
-	tmp[#tmp+1] = 		 [[\n\t]] .. I18N.translate("Version") .. [[:\t]]
+	tmp[#tmp+1] = 		 [[\n]] .. I18N.translate("Version") .. [[: ]]
 	tmp[#tmp+1] = 			 (service_version() or I18N.translate("NOT installed"))
 	tmp[#tmp+1] = 		 [[\n\n]]
 	tmp[#tmp+1] = 	 [[')">]]
@@ -97,29 +97,20 @@ function app_title_main()
 		
 	return table.concat(tmp)
 end
+
 function service_version()
-
-	local nxfs	= require "nixio.fs"
-
-	local ver = nil
-	local ver_helper
 	
-	if nxfs.access("/bin/opkg") then
-		ver_helper = "/bin/opkg info " .. srv_name .. " | grep 'Version'"
+	local srv_ver_cmd = luci_helper .. " -V | awk {'print $2'} "
+	local ver
+	
+	if IPKG then
+		ver = IPKG.info(srv_name)[srv_name].Version
 	else
-		ver_helper = luci_helper .. " -V"
+		ver = UTIL.exec(srv_ver_cmd)
 	end
 	
-	local srv_ver_cmd = ver_helper .. " | awk {'print $2'} "
+	if ver and #ver > 0 then return ver or nil end
 	
-	ver = UTIL.exec(srv_ver_cmd)
-	if ver and #ver > 0 then return ver end
-
-	IPKG.list_installed(srv_name, function(n, v, d)
-			if v and (#v > 0) then ver = v end
-		end
-	)
-	return	ver
 end
 
 function service_ok()
