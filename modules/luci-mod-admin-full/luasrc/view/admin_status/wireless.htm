@@ -276,7 +276,7 @@
 						function wireless_label(dbm, noise)
 						{
 							if (noise)
-								return String.format("%d <%:dBm%> (SNR %d <%:dBm%>)", noise_floor + dbm - 255, dbm - noise);
+								return String.format("%d <%:dBm%> (SNR %d <%:dB%>)", noise_floor + dbm - 255, dbm - noise);
 							else
 								return String.format("%d <%:dBm%>", noise_floor + dbm - 255);
 						}
