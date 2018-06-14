@@ -1,0 +1,43 @@
+
+<%#
+ Copyright 2017 Alberto Bursi <alberto.bursi@outlook.it>
+ Licensed to the public under the Apache License 2.0.
+
+ this file was mostly machine-generated using a script due because of its structure is quite repetitive,
+ it's recommended to use the same tools to generate updated versions instead of doing it manually
+-%>
+
+<%+header%>
+
+<h2 name="content"><%:Select filesystem to use%></h2>
+<br />
+
+<p class="alert-message warning"><%:Warning: This wizard deletes and reformats the selected drive(s). ALL DATA IN THE SELECTED DRIVES WILL BE DELETED.%> </p>
+
+<%- if fs_ext4 == "y" then -%>
+	<form method="post" action="<%=url('admin/services/storage/select_drive_ext4')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-ext4-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format a single drive with ext4%>" />
+	</form>
+<%- end -%>
+<%- if fs_xfs == "y" then -%>
+	<form method="post" action="<%=url('admin/services/storage/select_drive_xfs')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-xfs-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format a single drive with xfs%>" />
+	</form>
+<%- end -%>
+<%- if fs_f2fs == "y" then -%>
+	<form method="post" action="<%=url('admin/services/storage/select_drive_f2fs')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-f2fs-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format a single drive with f2fs%>" />
+	</form>
+<%- end -%>
+<%- if fs_vfat == "y" then -%>
+	<form method="post" action="<%=url('admin/services/storage/select_drive_vfat')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="format-vfat-button" type="submit" class="cbi-button cbi-button-apply" value="<%:format a single drive with vfat%>" />
+	</form>
+<%- end -%>
+<hr />
+
+<%+footer%>

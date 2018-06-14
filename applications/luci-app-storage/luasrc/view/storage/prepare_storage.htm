@@ -1,0 +1,26 @@
+<%#
+ Copyright 2017 Alberto Bursi <alberto.bursi@outlook.it>
+ Licensed to the public under the Apache License 2.0.
+-%>
+
+<%+header%>
+
+<h2 name="content"><%:Prepare storage%></h2>
+<br />
+
+<p class="alert-message warning"><%:Warning: clicking on the buttons in the following page will DELETE data from the selected drives and will set them up as storage for your device%></p>
+
+<p>This wizard deletes and reformats the selected drive(s). If you want to make sure you are working on the right drive, connect only the ones you want to use, and then click on the button. Depending from the power of the device's processor and from the number of drives it's working on, it may take up to some minutes to complete the setup.</p>
+
+<p>While the wizard will detect and ignore system drives/partitions if you use default partition setup, if you have a customized partition configuration or if you have set up an extroot DO NOT use this wizard. </p>
+
+	<form method="post" action="<%=url('admin/services/storage/select_filesystem')%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input id="filesystem-button" type="submit" class="cbi-button cbi-button-apply" value="<%:select the filesystem%>" />
+	</form>
+
+<p>NOTE: If you don't see any button here then you must install the tools to format the drive. Install "e2fsprogs" package for ext4, "f2fs-tools" for f2fs, "xfs-mkfs" for xfs and "dosfstools" for FAT32 </p>
+
+<hr />
+
+<%+footer%>
