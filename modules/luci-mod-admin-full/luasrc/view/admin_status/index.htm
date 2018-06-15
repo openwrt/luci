@@ -128,12 +128,19 @@
 		var vn = parseInt(v) || 0;
 		var mn = parseInt(m) || 100;
 		var pc = Math.floor((100 / mn) * vn);
-
+		
+		var detail_text
+		
+		if (pc>65)
+			detail_text = '<small style="color:#fff;">%s / %s (%d%%)</small>';
+		else
+			detail_text = '<small>%s / %s (%d%%)</small>';
+		
 		return String.format(
 			'<div style="width:100%%; max-width:200px; position:relative; border:1px solid #999999">' +
 				'<div style="background-color:#CCCCCC; width:%d%%; height:15px">' +
 					'<div style="position:absolute; left:0; top:0; text-align:center; width:100%%; color:#000000">' +
-						'<small>%s / %s (%d%%)</small>' +
+						detail_text +
 					'</div>' +
 				'</div>' +
 			'</div>', pc, v, m, pc
@@ -536,10 +543,12 @@
 <div class="cbi-section">
 	<h3><%:Network%></h3>
 
-	<div id="upstream_status_table" class="network-status-table">
-		<em><%:Collecting data...%></em>
+	<div class="table" width="100%" style="border:0px;">
+		<div id="upstream_status_table" class="network-status-table">
+			<em><%:Collecting data...%></em>
+		</div>
 	</div>
-
+	
 	<div class="table" width="100%">
 		<div class="tr"><div class="td left" width="33%"><%:Active Connections%></div><div class="td left" id="conns">-</div></div>
 	</div>
