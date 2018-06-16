@@ -1,46 +1,70 @@
 <script type="text/javascript">//<![CDATA[
 	function upnp_delete_fwd(idx) {
-		(new XHR()).post('<%=url('admin/services/upnp/delete')%>/' + idx, { token: '<%=token%>' },
+		(new XHR()).post('<%=url("admin/services/upnp/delete")%>' + idx, { token: '<%=token%>' },
 			function(x)
 			{
-				var tb = document.getElementById('upnp_status_table');
-				if (tb && (idx + 1 < tb.childNodes.length))
-					tb.removeChild(tb.childNodes[idx + 1]);
+				var status_table = document.getElementById('upnp_status_table');
+				if (status_table && (idx + 1 < status_table.childNodes.length))
+					status_table.removeChild(status_table.childNodes[idx + 1]);
 			}
 		);
 	}
-
-	XHR.poll(5, '<%=url('admin/services/upnp/status')%>', null,
-		function(x, st)
+	
+	function _loadtableUPnP(x, data) {
+		var status_table = document.getElementById('upnp_status_table');
+		var legendtb = document.getElementById('upnp_status_table_legend');
+		if (status_table)
 		{
-			var tb = document.getElementById('upnp_status_table');
-			if (st && tb)
-			{
-				/* clear all rows */
-				while (tb.firstElementChild !== tb.lastElementChild)
-					tb.removeChild(tb.lastElementChild);
+			/* clear all rows */
+			while (status_table.firstElementChild !== status_table.lastElementChild)
+				status_table.removeChild(status_table.lastElementChild);
 
-				for (var i = 0; i < st.length; i++)
-					tb.appendChild(E('<div class="tr cbi-section-table-row cbi-rowstyle-%d">'.format((i % 2) + 1), [
-						E('<div class="td">', st[i].proto),
-						E('<div class="td">', st[i].extport),
-						E('<div class="td">', st[i].intaddr),
-						E('<div class="td">', st[i].intport),
-						E('<div class="td">', st[i].descr),
-						E('<input class="cbi-button cbi-input-remove" type="button" value="<%:Delete%>" onclick="upnp_delete_fwd(%d)" />'.format(st[i].num))
-					]));
+			for (var i = 0; i < data.length; i++)
+				status_table.appendChild(E('<div class="tr cbi-section-table-row cbi-rowstyle-%d">'.format((i % 2) + 1), [
+					E('<div class="td">', data[i].proto),
+					E('<div class="td">', data[i].extport),
+					E('<div class="td">', data[i].intaddr),
+					E('<div class="td">', data[i].intport),
+					E('<div class="td">', data[i].descr),
+					E('<input class="cbi-button cbi-input-remove" type="button" value="<%:Delete%>" onclick="upnp_delete_fwd(%d)" />'.format(data[i].num))
+				]));
 
-				if (tb.firstElementChild === tb.lastElementChild)
-					tb.appendChild(E('<div class="tr cbi-section-table-row"><div class="td"><em><br /><%:There are no active redirects.%></em></div></div>'));
-			}
+			if (status_table.firstElementChild === status_table.lastElementChild)
+				status_table.appendChild(E('<div class="tr cbi-section-table-row"><div class="td"><em><br /><%:There are no active redirects.%></em></div></div>'));
+			else
+				if (legendtb)
+					legendtb.setAttribute("style", "display:table-row");
 		}
-	);
+		return ;
+	}
+	
+	var mutationObserver = new MutationObserver(function(mutations) {
+		// force to immediate show status (not waiting for XHR.poll)
+		XHR.get('<%=url([[admin]], [[services]], [[upnp]], [[status]])%>', null,
+			function(x, data) {
+				if (data) { return _loadtableUPnP(x, data); }
+			}
+		);
+
+		//start polling data every 5 second
+		XHR.poll(5, '<%=url([[admin]], [[services]], [[upnp]], [[status]])%>', null,
+			function(x, data)
+			{
+				if (data) { return _loadtableUPnP(x, data); } 
+			}
+		);
+		this.disconnect()
+	});
+	
+	mutationObserver.observe(document.getElementById("ddns_status_table") || document.getElementById("wifi_assoc_table"), {
+		childList: true,
+	});
 //]]></script>
 
 <fieldset class="cbi-section">
 	<legend><%:Active UPnP Redirects%></legend>
 	<div class="table cbi-section-table" id="upnp_status_table">
-		<div class="tr cbi-section-table-titles">
+		<div class="tr cbi-section-table-titles" id="upnp_status_table_legend" style="display:none;">
 			<div class="th cbi-section-table-cell"><%:Protocol%></div>
 			<div class="th cbi-section-table-cell"><%:External Port%></div>
 			<div class="th cbi-section-table-cell"><%:Client Address%></div>
@@ -49,7 +73,7 @@
 			<div class="th cbi-section-table-cell">&#160;</div>
 		</div>
 		<div class="tr cbi-section-table-row">
-			<div class="td" colspan="5"><em><br /><%:Collecting data...%></em></div>
+			<div class="td" colspan="5"><em><br /><img src="<%=resource%>/icons/loading.gif" style="vertical-align:middle" /><%:Collecting data...%></em></div>
 		</div>
 	</div>
 </fieldset>
