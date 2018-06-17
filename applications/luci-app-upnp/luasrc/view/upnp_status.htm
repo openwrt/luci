@@ -23,6 +23,7 @@
 						st[i].proto,
 						st[i].extport,
 						st[i].intaddr,
+						st[i].host_hint || "<%:Unknown%>",
 						st[i].intport,
 						st[i].descr,
 						E('<div><input class="cbi-button cbi-button-remove" type="button" value="<%:Delete%>" onclick="upnp_delete_fwd(%d)" /></div>'.format(st[i].num))
@@ -41,6 +42,7 @@
 			<div class="th"><%:Protocol%></div>
 			<div class="th"><%:External Port%></div>
 			<div class="th"><%:Client Address%></div>
+			<div class="th"><%:Host%></div>
 			<div class="th"><%:Client Port%></div>
 			<div class="th"><%:Description%></div>
 			<div class="th cbi-section-actions">&#160;</div>
