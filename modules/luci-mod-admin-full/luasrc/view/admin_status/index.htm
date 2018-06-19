@@ -130,7 +130,7 @@
 		var pc = Math.floor((100 / mn) * vn);
 
 		return String.format(
-			'<div style="width:200px; position:relative; border:1px solid #999999">' +
+			'<div style="width:100%%; max-width:200px; position:relative; border:1px solid #999999">' +
 				'<div style="background-color:#CCCCCC; width:%d%%; height:15px">' +
 					'<div style="position:absolute; left:0; top:0; text-align:center; width:100%%; color:#000000">' +
 						'<small>%s / %s (%d%%)</small>' +
@@ -205,7 +205,7 @@
 		return E('div', { class: 'ifacebox' }, [
 			E('div', { class: 'ifacebox-head center ' + (active ? 'active' : '') },
 				E('strong', title)),
-			E('div', { class: 'ifacebox-body' }, childs)
+			E('div', { class: 'ifacebox-body left' }, childs)
 		]);
 	}
 
@@ -334,9 +334,7 @@
 			var ls = document.getElementById('lease_status_table');
 			if (ls)
 			{
-				/* clear all rows */
-				while (ls.firstElementChild !== ls.lastElementChild)
-					ls.removeChild(ls.lastElementChild);
+				var rows = [];
 
 				for (var i = 0; i < info.leases.length; i++)
 				{
@@ -349,26 +347,23 @@
 					else
 						timestr = String.format('%t', info.leases[i].expires);
 
-					ls.appendChild(E('<div class="tr cbi-section-table-row cbi-rowstyle-%d">'.format((i % 2) + 1), [
-						E('<div class="td">', info.leases[i].hostname ? info.leases[i].hostname : '?'),
-						E('<div class="td">', info.leases[i].ipaddr),
-						E('<div class="td">', info.leases[i].macaddr),
-						E('<div class="td">', timestr)
-					]));
+					rows.push([
+						info.leases[i].hostname ? info.leases[i].hostname : '?',
+						info.leases[i].ipaddr,
+						info.leases[i].macaddr,
+						timestr
+					]);
 				}
 
-				if (ls.firstElementChild === ls.lastElementChild)
-					ls.appendChild(E('<div class="tr cbi-section-table-row"><div class="td"><em><br /><%:There are no active leases.%></em></div></div>'));
+				cbi_update_table(ls, rows, '<em><%:There are no active leases.%></em>');
 			}
 
 			var ls6 = document.getElementById('lease6_status_table');
 			if (ls6 && info.leases6)
 			{
-				ls6.parentNode.style.display = 'block';
+				ls6.parentNode.parentNode.style.display = 'block';
 
-				/* clear all rows */
-				while (ls6.firstElementChild !== ls6.lastElementChild)
-					ls6.removeChild(ls6.lastElementChild);
+				var rows = [];
 
 				for (var i = 0; i < info.leases6.length; i++)
 				{
@@ -394,16 +389,15 @@
 							hint = host.name;
 					}
 
-					ls6.appendChild(E('<div class="tr cbi-section-table-row cbi-rowstyle-%d">'.format((i % 2) + 1), [
-						E('<div class="td nowrap">', hint ? '<div>%h (%h)</div>'.format(name || '?', hint) : (name || '?')),
-						E('<div class="td nowrap">', info.leases6[i].ip6addr),
-						E('<div class="td nowrap">', info.leases6[i].duid),
-						E('<div class="td nowrap">', timestr)
-					]));
+					rows.push([
+						hint ? '%h (%h)'.format(name || '?', hint) : (name || '?'),
+						info.leases6[i].ip6addr,
+						info.leases6[i].duid,
+						timestr
+					]);
 				}
 
-				if (ls6.firstElementChild === ls6.lastElementChild)
-					ls6.appendChild(E('<div class="tr cbi-section-table-row"><div class="td"><em><br /><%:There are no active leases.%></em></div></div>'));
+				cbi_update_table(ls6, rows, '<em><%:There are no active leases.%></em>');
 			}
 			<% end %>
 
@@ -482,9 +476,7 @@
 			var ac = document.getElementById('wifi_assoc_table');
 			if (ac)
 			{
-				/* clear all rows */
-				while (ac.firstElementChild !== ac.lastElementChild)
-					ac.removeChild(ac.lastElementChild);
+				var rows = [];
 
 				assoclist.sort(function(a, b) {
 					return (a.name == b.name)
@@ -512,27 +504,30 @@
 					    name = host ? (host.name || host.ipv4 || host.ipv6) : null,
 					    hint = (host && host.name && (host.ipv4 || host.ipv6)) ? (host.ipv4 || host.ipv6) : null;
 
-					ac.appendChild(E('<div class="tr cbi-section-table-row cbi-rowstyle-%d">'.format(1 + (i % 2)), [
-						E('<div class="td"><span class="ifacebadge" title="%q"><img src="<%=resource%>/icons/wifi.png" /> %h</span></div>'
-							.format(assoclist[i].radio, assoclist[i].ifname)),
-						E('<div class="td"><a href="%s" style="white-space:nowrap">%h</a></div>'
-							.format(assoclist[i].link, assoclist[i].name)),
-						E('<div class="td">',
-							assoclist[i].bssid),
-						E('<div class="td nowrap">',
-							hint ? '<div>%h (%h)</div>'.format(name || '?', hint) : (name || '?')),
-						E('<div class="td"><span class="ifacebadge" title="<%:Signal%>: %d <%:dBm%> / <%:Noise%>: %d <%:dBm%> / <%:SNR%>: %d"><img src="%s" /> %d / %d <%:dBm%></span></div>'
-							.format(assoclist[i].signal, assoclist[i].noise, assoclist[i].signal - assoclist[i].noise, icon, assoclist[i].signal, assoclist[i].noise)),
-						E('<div class="td nowrap">', [
-							E('<span style="white-space:nowrap">', wifirate(assoclist[i], true)),
-							E('<br />'),
-							E('<span style="white-space:nowrap">', wifirate(assoclist[i], false))
+					rows.push([
+						'<span class="ifacebadge" title="%q"><img src="<%=resource%>/icons/wifi.png" /> <a href="%s">%h</a><small>&#160;(%h)</small></span>'.format(
+							assoclist[i].radio,
+							assoclist[i].link,
+							assoclist[i].name,
+							assoclist[i].ifname),
+						assoclist[i].bssid,
+						hint ? '%h (%h)'.format(name || '?', hint) : (name || '?'),
+						'<span class="ifacebadge" title="<%:Signal%>: %d <%:dBm%> / <%:Noise%>: %d <%:dBm%> / <%:SNR%>: %d"><img src="%s" /> %d / %d <%:dBm%></span>'.format(
+							assoclist[i].signal,
+							assoclist[i].noise,
+							assoclist[i].signal - assoclist[i].noise,
+							icon,
+							assoclist[i].signal,
+							assoclist[i].noise),
+						E('span', {}, [
+							E('span', wifirate(assoclist[i], true)),
+							E('br'),
+							E('span', wifirate(assoclist[i], false))
 						])
-					]));
+					]);
 				}
 
-				if (ac.firstElementChild === ac.lastElementChild)
-					ac.appendChild(E('<div class="tr cbi-section-table-row"><div class="td"><em><br /><%:No information available%></em></div></div>'));
+				cbi_update_table(ac, rows, '<em><%:No information available%></em>');
 			}
 			<% end %>
 
@@ -591,7 +586,7 @@
 
 <h2 name="content"><%:Status%></h2>
 
-<fieldset class="cbi-section">
+<div class="cbi-section">
 	<legend><%:System%></legend>
 
 	<div class="table" width="100%">
@@ -607,9 +602,9 @@
 		<div class="tr"><div class="td left" width="33%"><%:Uptime%></div><div class="td left" id="uptime">-</div></div>
 		<div class="tr"><div class="td left" width="33%"><%:Load Average%></div><div class="td left" id="loadavg">-</div></div>
 	</div>
-</fieldset>
+</div>
 
-<fieldset class="cbi-section">
+<div class="cbi-section">
 	<legend><%:Memory%></legend>
 
 	<div class="table" width="100%">
@@ -617,20 +612,20 @@
 		<div class="tr"><div class="td left" width="33%"><%:Free%></div><div class="td left" id="memfree">-</div></div>
 		<div class="tr"><div class="td left" width="33%"><%:Buffered%></div><div class="td left" id="membuff">-</div></div>
 	</div>
-</fieldset>
+</div>
 
 <% if swapinfo.total > 0 then %>
-<fieldset class="cbi-section">
+<div class="cbi-section">
 	<legend><%:Swap%></legend>
 
 	<div class="table" width="100%">
 		<div class="tr"><div class="td left" width="33%"><%:Total Available%></div><div class="td left" id="swaptotal">-</div></div>
 		<div class="tr"><div class="td left" width="33%"><%:Free%></div><div class="td left" id="swapfree">-</div></div>
 	</div>
-</fieldset>
+</div>
 <% end %>
 
-<fieldset class="cbi-section">
+<div class="cbi-section">
 	<legend><%:Network%></legend>
 
 	<div id="upstream_status_table" class="network-status-table">
@@ -640,87 +635,95 @@
 	<div class="table" width="100%">
 		<div class="tr"><div class="td left" width="33%"><%:Active Connections%></div><div class="td left" id="conns">-</div></div>
 	</div>
-</fieldset>
+</div>
 
 <% if has_dhcp then %>
-<fieldset class="cbi-section">
+<div class="cbi-section">
 	<legend><%:DHCP Leases%></legend>
 
-	<div class="table cbi-section-table" id="lease_status_table">
-		<div class="tr cbi-section-table-titles">
-			<div class="th"><%:Hostname%></div>
-			<div class="th"><%:IPv4-Address%></div>
-			<div class="th"><%:MAC-Address%></div>
-			<div class="th"><%:Leasetime remaining%></div>
-		</div>
-		<div class="tr cbi-section-table-row">
-			<div class="td" colspan="4"><em><br /><%:Collecting data...%></em></div>
+	<div class="cbi-section-node">
+		<div class="table" id="lease_status_table">
+			<div class="tr table-titles">
+				<div class="th"><%:Hostname%></div>
+				<div class="th"><%:IPv4-Address%></div>
+				<div class="th"><%:MAC-Address%></div>
+				<div class="th"><%:Leasetime remaining%></div>
+			</div>
+			<div class="tr cbi-section-table-row">
+				<div class="td" colspan="4"><em><br /><%:Collecting data...%></em></div>
+			</div>
 		</div>
 	</div>
-</fieldset>
+</div>
 
-<fieldset class="cbi-section" style="display:none">
+<div class="cbi-section" style="display:none">
 	<legend><%:DHCPv6 Leases%></legend>
 
-	<div class="table cbi-section-table" id="lease6_status_table">
-		<div class="tr cbi-section-table-titles">
-			<div class="th"><%:Host%></div>
-			<div class="th"><%:IPv6-Address%></div>
-			<div class="th"><%:DUID%></div>
-			<div class="th"><%:Leasetime remaining%></div>
-		</div>
-		<div class="tr cbi-section-table-row">
-			<div class="td" colspan="4"><em><br /><%:Collecting data...%></em></div>
+	<div class="cbi-section-node">
+		<div class="table" id="lease6_status_table">
+			<div class="tr table-titles">
+				<div class="th"><%:Host%></div>
+				<div class="th"><%:IPv6-Address%></div>
+				<div class="th"><%:DUID%></div>
+				<div class="th"><%:Leasetime remaining%></div>
+			</div>
+			<div class="tr cbi-section-table-row">
+				<div class="td" colspan="4"><em><br /><%:Collecting data...%></em></div>
+			</div>
 		</div>
 	</div>
-</fieldset>
+</div>
 <% end %>
 
 <% if has_dsl then %>
-<fieldset class="cbi-section">
+<div class="cbi-section">
 	<legend><%:DSL%></legend>
-	<div class="table" width="100%">
-		<div class="tr">
-			<div class="td left" width="33%" style="vertical-align:top"><%:DSL Status%></div>
-			<div class="td">
-				<div class="table">
-					<div class="tr">
-						<div class="td" id="dsl_i" style="width:16px; text-align:center; padding:3px"><img src="<%=resource%>/icons/ethernet_disabled.png" /><br /><small>?</small></div>
-						<div class="td left" id="dsl_s" style="vertical-align:middle; padding: 3px"><em><%:Collecting data...%></em></div>
+
+	<div class="cbi-section-node">
+		<div class="table" width="100%">
+			<div class="tr">
+				<div class="td left" width="33%" style="vertical-align:top"><%:DSL Status%></div>
+				<div class="td">
+					<div class="table">
+						<div class="tr">
+							<div class="td" id="dsl_i" style="width:16px; text-align:center; padding:3px"><img src="<%=resource%>/icons/ethernet_disabled.png" /><br /><small>?</small></div>
+							<div class="td left" id="dsl_s" style="vertical-align:middle; padding: 3px"><em><%:Collecting data...%></em></div>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-</fieldset>
+</div>
 <% end %>
 
 <% if has_wifi then %>
-<fieldset class="cbi-section">
+<div class="cbi-section">
 	<legend><%:Wireless%></legend>
 
 	<div id="wifi_status_table" class="network-status-table">
 		<em><%:Collecting data...%></em>
 	</div>
-</fieldset>
+</div>
 
-<fieldset class="cbi-section">
+<div class="cbi-section">
 	<legend><%:Associated Stations%></legend>
 
-	<div class="table cbi-section-table valign-middle" id="wifi_assoc_table">
-		<div class="tr cbi-section-table-titles">
-			<div class="th">&#160;</div>
-			<div class="th"><%:Network%></div>
-			<div class="th"><%:MAC-Address%></div>
-			<div class="th"><%:Host%></div>
-			<div class="th"><%:Signal%> / <%:Noise%></div>
-			<div class="th"><%:RX Rate%> / <%:TX Rate%></div>
-		</div>
-		<div class="tr cbi-section-table-row">
-			<div class="td" colspan="6"><em><br /><%:Collecting data...%></em></div>
+	<div class="cbi-section-node">
+		<div class="table" id="wifi_assoc_table">
+			<div class="tr table-titles">
+				<div class="th nowrap"><%:Network%></div>
+				<div class="th hide-xs"><%:MAC-Address%></div>
+				<div class="th nowrap"><%:Host%></div>
+				<div class="th nowrap"><%:Signal%> / <%:Noise%></div>
+				<div class="th nowrap"><%:RX Rate%> / <%:TX Rate%></div>
+			</div>
+			<div class="tr">
+				<div class="td" colspan="6"><em><br /><%:Collecting data...%></em></div>
+			</div>
 		</div>
 	</div>
-</fieldset>
+</div>
 <% end %>
 
 <%-
