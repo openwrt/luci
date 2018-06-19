@@ -224,7 +224,13 @@ else
 	end
 
 
-	o = s:option(DynamicList, "icmp_type", translate("Match ICMP type"))
+	o = s:option(DropDown, "icmp_type", translate("Match ICMP type"))
+	o.multiple = true
+	o.display = 10
+	o.dropdown = 10
+	o.custom = true
+	o.cast = "table"
+
 	o:value("", "any")
 	o:value("echo-reply")
 	o:value("destination-unreachable")
@@ -263,6 +269,8 @@ else
 	o:value("address-mask-request")
 	o:value("address-mask-reply")
 
+	o:depends("proto", "icmp")
+
 
 	o = s:option(Value, "src", translate("Source zone"))
 	o.nocreate = true
@@ -281,7 +289,7 @@ else
 
 
 	o = s:option(Value, "src_ip", translate("Source address"))
-	o.datatype = "neg(ipmask)"
+	o.datatype = "list(neg(ipmask))"
 	o.placeholder = translate("any")
 
 	luci.sys.net.ipv4_hints(function(ip, name)
@@ -301,7 +309,6 @@ else
 	o = s:option(Value, "dest_local", translate("Output zone"))
 	o.nocreate = true
 	o.allowany = true
-	o.rmempty = false
 	o.template = "cbi/firewall_zonelist"
 	o.alias = "dest"
 	o:depends("src", "")
@@ -316,7 +323,7 @@ else
 
 
 	o = s:option(Value, "dest_ip", translate("Destination address"))
-	o.datatype = "neg(ipmask)"
+	o.datatype = "list(neg(ipmask))"
 	o.placeholder = translate("any")
 
 	luci.sys.net.ipv4_hints(function(ip, name)

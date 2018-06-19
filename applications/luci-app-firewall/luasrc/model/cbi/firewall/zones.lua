@@ -62,6 +62,11 @@ s.anonymous = true
 s.addremove = true
 s.extedit   = ds.build_url("admin", "network", "firewall", "zones", "%s")
 
+function s.sectiontitle(self, sid)
+	local z = fw:get_zone(sid)
+	return z:name()
+end
+
 function s.create(self)
 	local z = fw:new_zone()
 	if z then
