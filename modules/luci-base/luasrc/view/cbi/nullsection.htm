@@ -1,4 +1,4 @@
-<fieldset class="cbi-section">
+<div class="cbi-section">
 	<% if self.title and #self.title > 0 then -%>
 		<legend><%=self.title%></legend>
 	<%- end %>
@@ -25,8 +25,7 @@
 			</div>
 		<%- end %>
 	</div>
-	<br />
-</fieldset>
+</div>
 <%-
 	if type(self.hidden) == "table" then
 		for k, v in pairs(self.hidden) do

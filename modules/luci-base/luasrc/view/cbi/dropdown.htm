@@ -36,6 +36,18 @@
 				<%=pcdata(self.vallist[i])%>
 			</li>
 		<% end %>
+		<% if self.custom then %>
+			<li>
+				<input type="password" style="display:none" />
+				<input class="create-item-input" type="text"<%=
+					attr("placeholder", self.custom ~= true and
+						self.custom or
+						(self.multiple and
+							translate("Enter custom values") or
+							translate("Enter custom value")))
+				%> />
+			</li>
+		<% end %>
 	</ul>
 </div>
 
