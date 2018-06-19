@@ -12,53 +12,48 @@
 	end
 %>
 
-<div class="cbi-section-create cbi-tblsection-create">
-	<% if #zones > 1 then %>
-		<br />
-		<div class="table cbi-section-table" style="width:700px; margin-left:5px">
-			<div class="tr cbi-section-table-titles">
-				<div class="th cbi-section-table-cell left" colspan="6"><%:New source NAT%>:</div>
+<% if #zones > 1 then %>
+	<h4><%:New source NAT%></h4>
+	<div class="table">
+		<div class="tr cbi-section-table-titles">
+			<div class="th"><%:Name%></div>
+			<div class="th"><%:Source zone%></div>
+			<div class="th"><%:Destination zone%></div>
+			<div class="th"><%:To source IP%></div>
+			<div class="th"><%:To source port%></div>
+			<div class="th"></div>
+		</div>
+		<div class="tr">
+			<div class="td">
+				<input type="text" class="cbi-input-text" id="_newsnat.name" name="_newsnat.name" placeholder="<%:New SNAT rule%>" />
 			</div>
-			<div class="tr cbi-section-table-descr">
-				<div class="th cbi-section-table-cell"><%:Name%></div>
-				<div class="th cbi-section-table-cell"><%:Source zone%></div>
-				<div class="th cbi-section-table-cell"><%:Destination zone%></div>
-				<div class="th cbi-section-table-cell"><%:To source IP%></div>
-				<div class="th cbi-section-table-cell"><%:To source port%></div>
-				<div class="th cbi-section-table-cell"></div>
+			<div class="td">
+				<select class="cbi-input-text" id="_newsnat.src" name="_newsnat.src">
+					<% local k, v; for k, v in ipairs(fw:get_zones()) do -%>
+						<option<%=ifattr(v:name() == "lan", "selected", "selected")%> value="<%=v:name()%>"><%=v:name()%></option>
+					<%- end %>
+				</select>
 			</div>
-			<div class="tr cbi-section-table-row">
-				<div class="td cbi-section-table-cell">
-					<input type="text" class="cbi-input-text" id="_newsnat.name" name="_newsnat.name" placeholder="<%:New SNAT rule%>" />
-				</div>
-				<div class="td cbi-section-table-cell" style="width:110px">
-					<select class="cbi-input-text" id="_newsnat.src" name="_newsnat.src">
-						<% local k, v; for k, v in ipairs(fw:get_zones()) do -%>
-							<option<%=ifattr(v:name() == "lan", "selected", "selected")%> value="<%=v:name()%>"><%=v:name()%></option>
-						<%- end %>
-					</select>
-				</div>
-				<div class="td cbi-section-table-cell" style="width:110px">
-					<select class="cbi-input-text" id="_newsnat.dest" name="_newsnat.dest">
-						<% local k, v; for k, v in ipairs(fw:get_zones()) do -%>
-							<option<%=ifattr(v:name() == "wan", "selected", "selected")%> value="<%=v:name()%>"><%=v:name()%></option>
-						<%- end %>
-					</select>
-				</div>
-				<div class="td cbi-section-table-cell" style="width:110px">
-					<input type="text" class="cbi-input-text" id="_newsnat.dip" name="_newsnat.dip" placeholder="<%:Do not rewrite%>" data-type="ip4addr" data-optional="true"<%=
-						ifattr(#keys > 0, "data-choices", { keys, vals })
-					%> />
-				</div>
-				<div class="td cbi-section-table-cell" style="width:110px">
-					<input type="text" class="cbi-input-text" id="_newsnat.dport" name="_newsnat.dport" placeholder="<%:Do not rewrite%>" data-type="portrange" data-optional="true" />
-				</div>
-				<div class="td cbi-section-table-cell">
-					<input type="submit" class="cbi-button cbi-button-link" name="_newsnat.submit" value="<%:Add and edit...%>" />
-				</div>
+			<div class="td">
+				<select class="cbi-input-text" id="_newsnat.dest" name="_newsnat.dest">
+					<% local k, v; for k, v in ipairs(fw:get_zones()) do -%>
+						<option<%=ifattr(v:name() == "wan", "selected", "selected")%> value="<%=v:name()%>"><%=v:name()%></option>
+					<%- end %>
+				</select>
+			</div>
+			<div class="td">
+				<input type="text" class="cbi-input-text" id="_newsnat.dip" name="_newsnat.dip" placeholder="<%:Do not rewrite%>" data-type="ip4addr" data-optional="true"<%=
+					ifattr(#keys > 0, "data-choices", { keys, vals })
+				%> />
+			</div>
+			<div class="td">
+				<input type="text" class="cbi-input-text" id="_newsnat.dport" name="_newsnat.dport" placeholder="<%:Do not rewrite%>" data-type="portrange" data-optional="true" />
+			</div>
+			<div class="td bottom">
+				<input type="submit" class="cbi-button cbi-button-link" name="_newsnat.submit" value="<%:Add and edit...%>" />
 			</div>
 		</div>
-	<% else %>
-		<input type="submit" class="cbi-button cbi-button-add" name="cbi.cts.<%=self.config%>.<%=self.sectiontype%>.<%=section%>" value="<%:Add%>" />
-	<% end %>
-</div>
+	</div>
+<% else %>
+	<input type="submit" class="cbi-button cbi-button-add" name="cbi.cts.<%=self.config%>.<%=self.sectiontype%>.<%=section%>" value="<%:Add%>" />
+<% end %>
