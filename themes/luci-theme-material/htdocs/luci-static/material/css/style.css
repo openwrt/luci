@@ -32,8 +32,8 @@
     font-style: normal;
 }
 
-.table { display: table; }
-.tr { display: table-row; }
+.table { display: table; position: relative; }
+.tr    { display: table-row; }
 .thead { display: table-header-group; }
 .tbody { display: table-row-group; }
 .tfoot { display: table-footer-group; }
@@ -46,6 +46,19 @@
 
 .th {
     font-weight: bold;
+}
+
+.tr.placeholder {
+    height: 4em;
+}
+
+.tr.placeholder > .td {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    text-align: center;
+    line-height: 3em;
 }
 
 .table[width="33%"], .th[width="33%"], .td[width="33%"] { width: 33%; }
@@ -442,10 +455,12 @@ h3 {
 }
 
 h4 {
-
+    margin: 2rem 0 0 0;
+    font-size: 1.2rem;
+    padding-bottom: 10px;
 }
 
-fieldset {
+.cbi-section {
     margin: 2rem 0 0 0;
     padding: 2rem;
     border: 0;
@@ -465,7 +480,7 @@ fieldset {
     margin-top: 1rem;
 }
 
-fieldset > legend {
+.cbi-section > legend {
     display: none !important;
 }
 
@@ -486,10 +501,12 @@ fieldset > fieldset {
     border-bottom: 1px solid #eee;
 }
 
-table,
-.table {
+table {
     border-spacing: 0;
     border-collapse: collapse;
+}
+
+table, .table {
     width: 100%;
     border: 1px solid #eee;
 }
@@ -501,21 +518,75 @@ table > tbody > tr > td, table > tbody > tr > th, table > tfoot > tr > td, table
     white-space: nowrap;
 }
 
+.td.cbi-value-field,
 .cbi-section-table-cell {
     text-align: center;
+    display: inline-block;
+    flex: 10;
+}
+
+.cbi-section-table-cell {
+    white-space: nowrap;
+    align-self: flex-end;
+    flex: 1;
+}
+
+.td.cbi-value-field[data-title]::before {
+    content: attr(data-title);
+    padding: .5rem;
+    display: block;
+    white-space: nowrap;
+}
+
+.cbi-section-table {
+    border: none;
+}
+
+.cbi-section-table-titles,
+.cbi-section-table-descr {
+    display: none;
 }
 
 .cbi-section-table-row {
     text-align: center;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    background: #f4f4f4;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .16), 0 0 2px 0 rgba(0, 0, 0, .12);
 }
 
-fieldset > table > tbody > tr:nth-of-type(2n),
-fieldset > .table > .tbody > .tr:nth-of-type(2n) {
+.cbi-section-table-row:last-child {
+    margin-bottom: 0;
+}
+
+.cbi-section-table-row[data-title]::before {
+    content: attr(data-title);
+    display: block;
+    width: 100%;
+    margin: .25rem;
+    padding: .25rem .25rem .5rem .25rem;
+    border-bottom: 1px solid rgba(0, 0, 0, .26);
+    text-align: center;
+    font-size: 1rem;
+}
+
+.cbi-section-table-row > .cbi-value-field .cbi-input-select,
+.cbi-section-table-row > .cbi-value-field .cbi-input-text,
+.cbi-section-table-row > .cbi-value-field .cbi-input-password,
+.cbi-section-table-row > .cbi-value-field .cbi-dropdown {
+    width: 100%;
+}
+
+div > table > tbody > tr:nth-of-type(2n),
+div > .table > .tbody > .tr:nth-of-type(2n) {
     background-color: #f9f9f9;
 }
 
-fieldset > table > tbody > tr:nth-of-type(2n),
-fieldset > .table > .tbody > .tr:nth-of-type(2n) {
+div > table > tbody > tr:nth-of-type(2n),
+div > .table > .tbody > .tr:nth-of-type(2n) {
     background-color: #f9f9f9;
 }
 
@@ -1029,7 +1100,7 @@ td > .ifacebadge,
 .ifacebadge > img {
     display: inline-block;
     margin: 0 .2rem;
-    align-self: start;
+    align-self: flex-start;
 }
 
 .ifacebadge > img + img {
@@ -1206,10 +1277,9 @@ td > .ifacebadge,
 .zonebadge {
     padding: 0.2rem 0.5rem;
     display: inline-block;
-    cursor: pointer;
 }
 
-.zonebadge > .ifacebadge {
+.zonebadge .ifacebadge {
     padding: .2rem .3rem;
     margin: 0.1rem 0.2rem;
     border: 1px solid #6C6C6C;
@@ -1255,11 +1325,13 @@ td > .ifacebadge,
     min-width: 7rem;
 }
 
-.cbi-section-table-row > .cbi-value-field .cbi-input-select {
-    width: 7rem;
+.cbi-section-create {
+    margin: .5rem -3px;
+    display: inline-flex;
+    align-items: center;
 }
 
-.cbi-section-create > .cbi-button-add {
+.cbi-section-create > * {
     margin: 0.5rem;
 }
 
@@ -1289,6 +1361,62 @@ small {
 .cbi-optionals {
     padding: 1rem 1rem 0 1rem;
     border-top: 1px solid #CCC;
+}
+
+.cbi-dropdown-container {
+    position: relative;
+}
+
+.cbi-tooltip-container {
+    cursor: help;
+}
+
+.cbi-tooltip {
+    position: absolute;
+    z-index: 1000;
+    left: -1000px;
+    opacity: 0;
+    transition: opacity .25s ease-out;
+    pointer-events: none;
+    box-shadow: 0 0 2px #444;
+}
+
+.cbi-tooltip-container:hover .cbi-tooltip {
+    left: auto;
+    opacity: 1;
+    transition: opacity .25s ease-in;
+}
+
+.zonebadge .cbi-tooltip {
+    padding: .25rem;
+    background: inherit;
+    margin: -1.5rem 0 0 -.5rem;
+}
+
+.zonebadge-empty {
+    background: repeating-linear-gradient(45deg,rgba(204,204,204,0.5),rgba(204,204,204,0.5) 5px,rgba(255,255,255,0.5) 5px,rgba(255,255,255,0.5) 10px);
+    color: #404040;
+}
+
+.zone-forwards {
+    display: flex;
+    min-width: 10rem;
+}
+
+.zone-forwards > * {
+    flex: 1 1 45%;
+}
+
+.zone-forwards > span {
+    flex-basis: 10%;
+    text-align: center;
+    padding: 0 .25rem;
+}
+
+.zone-forwards .zone-src,
+.zone-forwards .zone-dest {
+    display: flex;
+    flex-direction: column;
 }
 
 #diag-rc-output > pre {
@@ -1473,11 +1601,6 @@ header > .container > .pull-right > * {
 
 .cbi-tabmenu + .cbi-section {
     margin-top: 0;
-}
-
-/* fix network firewall*/
-.node-network-firewall > .main .cbi-section-table-row > .cbi-value-field .cbi-input-select {
-    min-width: 4rem;
 }
 
 .node-status-iptables fieldset,
@@ -1669,6 +1792,26 @@ body.lang_pl.node-main-login .cbi-value-title {
     .node-main-login > .main .cbi-value-title {
         text-align: left;
     }
+
+    .tr {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .th, .td {
+        flex: 1;
+        flex-basis: 33%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .th.cbi-value-field,
+    .td.cbi-value-field,
+    .th.cbi-section-table-cell,
+    .td.cbi-section-table-cell {
+        flex-basis: auto;
+    }
 }
 
 @media screen and (max-width: 480px) {
@@ -1802,6 +1945,14 @@ body.lang_pl.node-main-login .cbi-value-title {
 
     .node-status-iptables > .main div > .cbi-map > form input[type="submit"] + input[type="submit"] {
         margin-top: 1rem;
+    }
+
+    .th, .td {
+        flex-basis: 50%;
+    }
+
+    .td.cbi-value-field {
+        flex-basis: 100%;
     }
 }
 
