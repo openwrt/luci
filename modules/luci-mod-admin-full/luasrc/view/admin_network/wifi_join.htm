@@ -80,7 +80,9 @@
 				end
 			end
 		end
-
+		
+		table.sort(l, function(a, b) return a.signal > b.signal end)
+		
 		return l
 	end
 -%>
