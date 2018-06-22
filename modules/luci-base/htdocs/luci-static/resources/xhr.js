@@ -204,7 +204,6 @@ XHR.poll = function(interval, url, data, callback, post)
 	};
 
 	XHR._q.push(e);
-	XHR.run();
 
 	return e;
 }
@@ -260,3 +259,5 @@ XHR.running = function()
 {
 	return !!(XHR._r && XHR._i);
 }
+
+document.addEventListener('DOMContentLoaded', XHR.run);
