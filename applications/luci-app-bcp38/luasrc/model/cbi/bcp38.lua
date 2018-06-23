@@ -14,7 +14,8 @@ $Id$
 
 local wa = require "luci.tools.webadmin"
 local net = require "luci.model.network".init()
-local ifaces = net:get_interfaces()
+local sys = require "luci.sys"
+local ifaces = sys.net:devices()
 
 m = Map("bcp38", translate("BCP38"),
 	translate("This function blocks packets with private address destinations " ..
@@ -37,10 +38,17 @@ a.rmempty = false
 
 n = s:option(ListValue, "interface", translate("Interface name"), translate("Interface to apply the blocking to " ..
 							"(should be the upstream WAN interface)."))
+
 for _, iface in ipairs(ifaces) do
-     if iface:is_up() then
-	n:value(iface:name())
-     end
+	if not (iface == "lo" or iface:match("^ifb.*")) then
+		local nets = net:get_interface(iface)
+		nets = nets and nets:get_networks() or {}
+		for k, v in pairs(nets) do
+			nets[k] = nets[k].sid
+		end
+		nets = table.concat(nets, ",")
+		n:value(iface, ((#nets > 0) and "%s (%s)" % {iface, nets} or iface))
+	end
 end
 n.rmempty = false
 
