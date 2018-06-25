@@ -15,6 +15,9 @@ function width(o)
 	return ''
 end
 
+local anonclass = (not self.anonymous or self.sectiontitle) and "named" or "anonymous"
+local titlename = ifattr(not self.anonymous or self.sectiontitle, "data-title", translate("Name"))
+
 -%>
 
 <!-- tblsection -->
@@ -28,7 +31,7 @@ end
 	<div class="cbi-section-descr"><%=self.description%></div>
 	<%- local count = 0 -%>
 	<div class="table cbi-section-table">
-		<div class="tr cbi-section-table-titles <%=(not self.anonymous or self.sectiontitle) and "named" or "anonymous"%>">
+		<div class="tr cbi-section-table-titles <%=anonclass%>"<%=titlename%>>
 		<%- for i, k in pairs(self.children) do if not k.optional then -%>
 			<div class="th cbi-section-table-cell"<%=
 				width(k) ..
@@ -42,7 +45,7 @@ end
 			<div class="th cbi-section-table-cell cbi-section-actions"></div>
 		<%- count = count + 1; end -%>
 		</div>
-		<div class="tr cbi-section-table-descr <%=(not self.anonymous or self.sectiontitle) and "named" or "anonymous"%>">
+		<div class="tr cbi-section-table-descr <%=anonclass%>">
 		<%- for i, k in pairs(self.children) do if not k.optional then -%>
 			<div class="th cbi-section-table-cell"<%=
 			width(k) ..
@@ -52,18 +55,22 @@ end
 			<div class="th cbi-section-table-cell cbi-section-actions"></div>
 		<%- end -%>
 		</div>
-		<%- local isempty = true
+		<%- local isempty, i, k = true, nil, nil
 		    for i, k in ipairs(self:cfgsections()) do
-				section = k
 				isempty = false
-				title = striptags((type(self.sectiontitle) == "function") and self:sectiontitle(section) or k)
-				scope = {
+
+				local section = k
+				local sectionname = striptags((type(self.sectiontitle) == "function") and self:sectiontitle(section) or k)
+				local sectiontitle = ifattr(sectionname and (not self.anonymous or self.sectiontitle), "data-title", sectionname)
+				local colorclass = (self.extedit or self.rowcolors) and " cbi-rowstyle-%d" % rowstyle() or ""
+				local scope = {
 					valueheader = "cbi/cell_valueheader",
 					valuefooter = "cbi/cell_valuefooter"
 				}
 		-%>
-		<div class="tr cbi-section-table-row<% if self.extedit or self.rowcolors then %> cbi-rowstyle-<%=rowstyle()%><% end %>" id="cbi-<%=self.config%>-<%=section%>"<%=ifattr(title and (not self.anonymous or self.sectiontitle), "data-title", striptags((type(self.sectiontitle) == "function") and self:sectiontitle(section) or k))%>>
+		<div class="tr cbi-section-table-row<%=colorclass%>" id="cbi-<%=self.config%>-<%=section%>"<%=sectiontitle%>>
 			<%-
+				local node
 				for k, node in ipairs(self.children) do
 					if not node.optional then
 						node:render(section, scope or {})
