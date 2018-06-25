@@ -42,7 +42,7 @@ end
 			<div class="th cbi-section-table-cell cbi-section-actions"></div>
 		<%- count = count + 1; end -%>
 		</div>
-		<div class="tr cbi-section-table-descr">
+		<div class="tr cbi-section-table-descr <%=(not self.anonymous or self.sectiontitle) and "named" or "anonymous"%>">
 		<%- for i, k in pairs(self.children) do if not k.optional then -%>
 			<div class="th cbi-section-table-cell"<%=
 			width(k) ..
