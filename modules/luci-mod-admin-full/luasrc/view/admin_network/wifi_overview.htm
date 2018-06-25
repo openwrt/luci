@@ -113,28 +113,6 @@
 
 	var is_reconnecting = false;
 
-	function nowrap(s) {
-		return s.replace(/ /g, '&#160;');
-	}
-
-	function wifirate(bss, rx) {
-		var p = rx ? 'rx_' : 'tx_',
-		    s = '%.1f <%:Mbit/s%>, %d<%:MHz%>'
-					.format(bss[p+'rate'] / 1000, bss[p+'mhz']),
-		    ht = bss[p+'ht'], vht = bss[p+'vht'],
-			mhz = bss[p+'mhz'], nss = bss[p+'nss'],
-			mcs = bss[p+'mcs'], sgi = bss[p+'short_gi'];
-
-		if (ht || vht) {
-			if (vht) s += ', VHT-MCS %d'.format(mcs);
-			if (nss) s += ', VHT-NSS %d'.format(nss);
-			if (ht)  s += ', MCS %s'.format(mcs);
-			if (sgi) s += ', <%:Short GI%>';
-		}
-
-		return s;
-	}
-
 	function wifi_shutdown(id, toggle) {
 		var reconnect = (toggle.getAttribute('active') == 'false');
 
@@ -193,20 +171,25 @@
 		{
 			if (st)
 			{
-				var assoctable = document.getElementById('iw-assoclist');
-				if (assoctable)
-					while (assoctable.firstElementChild !== assoctable.lastElementChild)
-						assoctable.removeChild(assoctable.lastElementChild);
-
-				var devup = { };
 				var rowstyle = 1;
+				var radiostate = { };
+
+				st.forEach(function(s) {
+					var r = radiostate[wifidevs[s.id]] || (radiostate[wifidevs[s.id]] = {});
+
+					s.is_assoc = (s.bssid && s.bssid != '00:00:00:00:00:00' && s.channel && s.mode != 'Unknown' && !s.disabled);
+
+					r.up        = r.up        || s.is_assoc;
+					r.channel   = r.channel   || s.channel;
+					r.bitrate   = r.bitrate   || s.bitrate;
+					r.frequency = r.frequency || s.frequency;
+				});
 
 				for( var i = 0; i < st.length; i++ )
 				{
 					var iw = st[i];
-					var is_assoc = (iw.bssid && iw.bssid != '00:00:00:00:00:00' && iw.channel && iw.mode != 'Unknown' && !iw.disabled);
 					var p = iw.quality;
-					var q = is_assoc ? p : -1;
+					var q = iw.is_assoc ? p : -1;
 
 					var icon;
 					if (q < 0)
@@ -221,9 +204,6 @@
 						icon = "<%=resource%>/icons/signal-50-75.png";
 					else
 						icon = "<%=resource%>/icons/signal-75-100.png";
-
-					if (!devup[wifidevs[iw.id]])
-						devup[wifidevs[iw.id]] = is_assoc;
 
 					var sig = document.getElementById(iw.id + '-iw-signal');
 					if (sig)
@@ -254,7 +234,7 @@
 					var info = document.getElementById(iw.id + '-iw-status');
 					if (info)
 					{
-						if (is_assoc)
+						if (iw.is_assoc)
 							info.innerHTML = String.format(
 								'<strong><%:SSID%>:</strong> %h | ' +
 								'<strong><%:Mode%>:</strong> %s<br />' +
@@ -274,83 +254,23 @@
 										: '<em><%:Wireless is disabled or not associated%></em>'
 							);
 					}
-
-					var dev = document.getElementById(wifidevs[iw.id] + '-iw-devinfo');
-					if (dev)
-					{
-						if (is_assoc)
-							dev.innerHTML = String.format(
-								'<strong><%:Channel%>:</strong> %s (%s <%:GHz%>) | ' +
-								'<strong><%:Bitrate%>:</strong> %s <%:Mbit/s%>',
-									iw.channel ? iw.channel : '?',
-									iw.frequency ? iw.frequency : '?',
-									iw.bitrate ? iw.bitrate : '?'
-							);
-						else
-							dev.innerHTML = '';
-					}
-
-					if (assoctable)
-					{
-						var assoclist = [ ];
-						for (var bssid in iw.assoclist)
-						{
-							assoclist.push(iw.assoclist[bssid]);
-							assoclist[assoclist.length-1].bssid = bssid;
-						}
-
-						assoclist.sort(function(a, b) { a.bssid < b.bssid });
-
-						for (var j = 0; j < assoclist.length; j++)
-						{
-							var icon;
-							var q = (-1 * (assoclist[j].noise - assoclist[j].signal)) / 5;
-							if (q < 1)
-								icon = "<%=resource%>/icons/signal-0.png";
-							else if (q < 2)
-								icon = "<%=resource%>/icons/signal-0-25.png";
-							else if (q < 3)
-								icon = "<%=resource%>/icons/signal-25-50.png";
-							else if (q < 4)
-								icon = "<%=resource%>/icons/signal-50-75.png";
-							else
-								icon = "<%=resource%>/icons/signal-75-100.png";
-
-							var host = hosts[assoclist[j].bssid],
-							    name = host ? (host.name || host.ipv4 || host.ipv6) : null,
-							    hint = (host && host.name && (host.ipv4 || host.ipv6)) ? (host.ipv4 || host.ipv6) : null;
-
-							assoctable.appendChild(E('<div class="tr cbi-rowstyle-%d">'.format(rowstyle), [
-								E('<div class="td"><span class="ifacebadge" title="%q"><img src="<%=resource%>/icons/wifi.png" /> %h</span></div>'
-									.format(iw.device.name, iw.ifname)),
-								E('<div class="td" style="white-space:nowrap">%h</div>'
-									.format(iw.ssid || '?')),
-								E('<div class="td">%h</div>'
-									.format(assoclist[j].bssid)),
-								E('<div class="td">', hint ? '<div style="max-width:200px;overflow:hidden;text-overflow:ellipsis">%h (%h)</div>'
-									.format(name || '?', hint) : (name || '?')),
-								E('<div class="td"><span class="ifacebadge" title="<%:Signal%>: %d <%:dBm%> / <%:Noise%>: %d <%:dBm%> / <%:SNR%>: %d"><img src="%s" /> %d / %d <%:dBm%></span></div>'
-									.format(assoclist[j].signal, assoclist[j].noise, assoclist[j].signal - assoclist[j].noise, icon, assoclist[j].signal, assoclist[j].noise)),
-								E('<div class="td">', [
-									E('<span style="white-space:nowrap">', wifirate(assoclist[j], true)),
-									E('<br />'),
-									E('<span style="white-space:nowrap">', wifirate(assoclist[j], false))
-								])
-							]));
-
-							rowstyle = (rowstyle == 1) ? 2 : 1;
-						}
-					}
 				}
 
-				if (assoctable && assoctable.firstElementChild === assoctable.lastElementChild)
-					assoctable.appendChild(E('<div class="tr cbi-section-table-row"><div class="td"><em><br /><%:No information available%></em></div></div>'));
-
-				for (var dev in devup)
+				for (var dev in radiostate)
 				{
 					var img = document.getElementById(dev + '-iw-upstate');
 					if (img)
-						img.src = '<%=resource%>/icons/wifi' + (devup[dev] ? '' : '_disabled') + '.png';
+						img.src = '<%=resource%>/icons/wifi' + (radiostate[dev].up ? '' : '_disabled') + '.png';
+
+					var stat = document.getElementById(dev + '-iw-devinfo');
+					if (stat)
+						stat.innerHTML = String.format(
+							'<strong><%:Channel%>:</strong> %s (%s <%:GHz%>) | ' +
+							'<strong><%:Bitrate%>:</strong> %s <%:Mbit/s%>',
+								radiostate[dev].channel ? radiostate[dev].channel : '?',
+								radiostate[dev].frequency ? radiostate[dev].frequency : '?',
+								radiostate[dev].bitrate ? radiostate[dev].bitrate : '?'
+						);
 				}
 			}
 		}
@@ -428,23 +348,7 @@
 
 	<h2><%:Associated Stations%></h2>
 
-	<div class="cbi-section-node">
-		<div class="table" id="iw-assoclist">
-			<div class="tr">
-				<div class="th"><%:Interface%></div>
-				<div class="th"><%:SSID%></div>
-				<div class="th"><%:MAC-Address%></div>
-				<div class="th"><%:Host%></div>
-				<div class="th"><%:Signal%> / <%:Noise%></div>
-				<div class="th"><%:RX Rate%> / <%:TX Rate%></div>
-			</div>
-			<div class="tr cbi-rowstyle-2">
-				<div class="td">
-					<em><%:Collecting data...%></em>
-				</div>
-			</div>
-		</div>
-	</div>
+	<%+admin_network/wifi_assoclist%>
 </div>
 
 <%+footer%>
