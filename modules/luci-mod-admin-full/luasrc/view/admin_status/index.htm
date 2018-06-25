@@ -587,7 +587,7 @@
 <h2 name="content"><%:Status%></h2>
 
 <div class="cbi-section">
-	<legend><%:System%></legend>
+	<h3><%:System%></h3>
 
 	<div class="table" width="100%">
 		<div class="tr"><div class="td left" width="33%"><%:Hostname%></div><div class="td left"><%=luci.sys.hostname() or "?"%></div></div>
@@ -605,7 +605,7 @@
 </div>
 
 <div class="cbi-section">
-	<legend><%:Memory%></legend>
+	<h3><%:Memory%></h3>
 
 	<div class="table" width="100%">
 		<div class="tr"><div class="td left" width="33%"><%:Total Available%></div><div class="td left" id="memtotal">-</div></div>
@@ -616,7 +616,7 @@
 
 <% if swapinfo.total > 0 then %>
 <div class="cbi-section">
-	<legend><%:Swap%></legend>
+	<h3><%:Swap%></h3>
 
 	<div class="table" width="100%">
 		<div class="tr"><div class="td left" width="33%"><%:Total Available%></div><div class="td left" id="swaptotal">-</div></div>
@@ -626,7 +626,7 @@
 <% end %>
 
 <div class="cbi-section">
-	<legend><%:Network%></legend>
+	<h3><%:Network%></h3>
 
 	<div id="upstream_status_table" class="network-status-table">
 		<em><%:Collecting data...%></em>
@@ -639,7 +639,7 @@
 
 <% if has_dhcp then %>
 <div class="cbi-section">
-	<legend><%:DHCP Leases%></legend>
+	<h3><%:DHCP Leases%></h3>
 
 	<div class="cbi-section-node">
 		<div class="table" id="lease_status_table">
@@ -657,7 +657,7 @@
 </div>
 
 <div class="cbi-section" style="display:none">
-	<legend><%:DHCPv6 Leases%></legend>
+	<h3><%:DHCPv6 Leases%></h3>
 
 	<div class="cbi-section-node">
 		<div class="table" id="lease6_status_table">
@@ -677,7 +677,7 @@
 
 <% if has_dsl then %>
 <div class="cbi-section">
-	<legend><%:DSL%></legend>
+	<h3><%:DSL%></h3>
 
 	<div class="cbi-section-node">
 		<div class="table" width="100%">
@@ -699,7 +699,7 @@
 
 <% if has_wifi then %>
 <div class="cbi-section">
-	<legend><%:Wireless%></legend>
+	<h3><%:Wireless%></h3>
 
 	<div id="wifi_status_table" class="network-status-table">
 		<em><%:Collecting data...%></em>
@@ -707,7 +707,7 @@
 </div>
 
 <div class="cbi-section">
-	<legend><%:Associated Stations%></legend>
+	<h3><%:Associated Stations%></h3>
 
 	<div class="cbi-section-node">
 		<div class="table" id="wifi_assoc_table">
