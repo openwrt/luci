@@ -202,17 +202,12 @@
 							data_rx_peak = Math.max(data_rx_peak, data_rx[i]);
 							data_tx_peak = Math.max(data_tx_peak, data_tx[i]);
 
-							if (i > 0)
-							{
-								data_rx_avg = (data_rx_avg + data_rx[i]) / 2;
-								data_tx_avg = (data_tx_avg + data_tx[i]) / 2;
-							}
-							else
-							{
-								data_rx_avg = data_rx[i];
-								data_tx_avg = data_tx[i];
-							}
+							data_rx_avg += data_rx[i];
+							data_tx_avg += data_tx[i];
 						}
+
+						data_rx_avg = (data_rx_avg / Math.max(data_rx.length, 1));
+						data_tx_avg = (data_tx_avg / Math.max(data_tx.length, 1));
 
 						/* remember current timestamp, calculate horizontal scale */
 						data_stamp = data[data.length-1][TIME];
