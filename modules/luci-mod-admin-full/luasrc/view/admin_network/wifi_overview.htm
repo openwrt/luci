@@ -138,7 +138,7 @@
 	function wifi_shutdown(id, toggle) {
 		var reconnect = (toggle.getAttribute('active') == 'false');
 
-		if (!reconnect && !confirm(<%=luci.http.write_json(translate('Really shut down network? You might lose access to this device if you are connected via this interface.'))%>))
+		if (!reconnect && !confirm(<%=luci.http.write_json(translate('Really shut down network? You might lose access to this device if you are connected via this interface'))%>))
 			return;
 
 		is_reconnecting = true;
@@ -237,13 +237,13 @@
 					{
 						if (!iw.disabled)
 						{
-							toggle.className = 'cbi-button cbi-button-reset';
+							toggle.className = 'cbi-button cbi-button-neutral';
 							toggle.value = '<%:Disable%>';
 							toggle.title = '<%:Shutdown this network%>';
 						}
 						else
 						{
-							toggle.className = 'cbi-button cbi-button-reload';
+							toggle.className = 'cbi-button cbi-button-neutral';
 							toggle.value = '<%:Enable%>';
 							toggle.title = '<%:Activate this network%>';
 						}
@@ -320,7 +320,7 @@
 							    name = host ? (host.name || host.ipv4 || host.ipv6) : null,
 							    hint = (host && host.name && (host.ipv4 || host.ipv6)) ? (host.ipv4 || host.ipv6) : null;
 
-							assoctable.appendChild(E('<div class="tr cbi-section-table-row cbi-rowstyle-%d">'.format(rowstyle), [
+							assoctable.appendChild(E('<div class="tr cbi-rowstyle-%d">'.format(rowstyle), [
 								E('<div class="td"><span class="ifacebadge" title="%q"><img src="<%=resource%>/icons/wifi.png" /> %h</span></div>'
 									.format(iw.device.name, iw.ifname)),
 								E('<div class="td" style="white-space:nowrap">%h</div>'
@@ -350,7 +350,7 @@
 				{
 					var img = document.getElementById(dev + '-iw-upstate');
 					if (img)
-						img.src = '<%=resource%>/icons/wifi_big' + (devup[dev] ? '' : '_disabled') + '.png';
+						img.src = '<%=resource%>/icons/wifi' + (devup[dev] ? '' : '_disabled') + '.png';
 				}
 			}
 		}
@@ -359,37 +359,37 @@
 
 <h2 name="content"><%:Wireless Overview%></h2>
 
-<fieldset class="cbi-section" style="display:none">
+<div class="cbi-section" style="display:none">
 	<legend><%:Reconnecting interface%></legend>
 	<img src="<%=resource%>/icons/loading.gif" alt="<%:Loading%>" style="vertical-align:middle" />
 	<span id="iw-rc-status"><%:Waiting for changes to be applied...%></span>
-</fieldset>
+</div>
 
-<div class="cbi-map">
+<div id="cbi-wireless-overview" class="cbi-map">
 
 	<% for _, dev in ipairs(devices) do local nets = dev:get_wifinets() %>
 	<!-- device <%=dev:name()%> -->
-	<fieldset class="cbi-section">
-		<div class="table cbi-section-table" style="margin:10px; empty-cells:hide">
+	<div class="cbi-section-node">
+		<div class="table">
 			<!-- physical device -->
 			<div class="tr">
-				<div class="td">
-					<img src="<%=resource%>/icons/wifi_big_disabled.png" id="<%=dev:name()%>-iw-upstate" />
+				<div class="td col-2 center">
+					<span class="ifacebadge"><img src="<%=resource%>/icons/wifi_disabled.png" id="<%=dev:name()%>-iw-upstate" /> <%=dev:name()%></span>
 				</div>
-				<div class="td left">
-					<big><strong><%=guess_wifi_hw(dev)%> (<%=dev:name()%>)</strong></big><br />
+				<div class="td col-7 left">
+					<big><strong><%=guess_wifi_hw(dev)%></strong></big><br />
 					<span id="<%=dev:name()%>-iw-devinfo"></span>
 				</div>
-				<div class="td right">
+				<div class="td cbi-section-actions">
 					<form action="<%=url('admin/network/wireless_join')%>" method="post" class="inline">
 						<input type="hidden" name="device" value="<%=dev:name()%>" />
 						<input type="hidden" name="token" value="<%=token%>" />
-						<input type="submit" class="cbi-button cbi-button-find" style="width:100px" title="<%:Find and join network%>" value="<%:Scan%>" />
+						<input type="submit" class="cbi-button cbi-button-action" title="<%:Find and join network%>" value="<%:Scan%>" />
 					</form>
 					<form action="<%=url('admin/network/wireless_add')%>" method="post" class="inline">
 						<input type="hidden" name="device" value="<%=dev:name()%>" />
 						<input type="hidden" name="token" value="<%=token%>" />
-						<input type="submit" class="cbi-button cbi-button-add" style="width:100px" title="<%:Provide new network%>" value="<%:Add%>" />
+						<input type="submit" class="cbi-button cbi-button-add" title="<%:Provide new network%>" value="<%:Add%>" />
 					</form>
 				</div>
 			</div>
@@ -398,22 +398,22 @@
 			<!-- network list -->
 			<% if #nets > 0 then %>
 				<% for i, net in ipairs(nets) do %>
-				<div class="tr cbi-section-table-row cbi-rowstyle-<%=1 + ((i-1) % 2)%>">
-					<div class="td" id="<%=net:id()%>-iw-signal">
+				<div class="tr cbi-rowstyle-<%=1 + ((i-1) % 2)%>">
+					<div class="td col-2 center" id="<%=net:id()%>-iw-signal">
 						<span class="ifacebadge" title="<%:Not associated%>"><img src="<%=resource%>/icons/signal-none.png" /> 0%</span>
 					</div>
-					<div class="td left" id="<%=net:id()%>-iw-status">
+					<div class="td col-7 left" id="<%=net:id()%>-iw-status">
 						<em><%:Collecting data...%></em>
 					</div>
-					<div class="td right">
-						<input id="<%=net:id()%>-iw-toggle" type="button" class="cbi-button cbi-button-reload" style="width:100px" onclick="wifi_shutdown('<%=net:id()%>', this)" title="<%:Delete this network%>" value="<%:Enable%>" />
-						<input type="button" class="cbi-button cbi-button-edit" style="width:100px" onclick="location.href='<%=net:adminlink()%>'" title="<%:Edit this network%>" value="<%:Edit%>" />
-						<input type="button" class="cbi-button cbi-button-remove" style="width:100px" onclick="wifi_delete('<%=net:id()%>')" title="<%:Delete this network%>" value="<%:Remove%>" />
+					<div class="td cbi-section-actions">
+						<input id="<%=net:id()%>-iw-toggle" type="button" class="cbi-button cbi-button-neutral" onclick="wifi_shutdown('<%=net:id()%>', this)" title="<%:Enable this network%>" value="<%:Enable%>" />
+						<input type="button" class="cbi-button cbi-button-action important" onclick="location.href='<%=net:adminlink()%>'" title="<%:Edit this network%>" value="<%:Edit%>" />
+						<input type="button" class="cbi-button cbi-button-negative" onclick="wifi_delete('<%=net:id()%>')" title="<%:Delete this network%>" value="<%:Remove%>" />
 					</div>
 				</div>
 				<% end %>
 			<% else %>
-				<div class="tr cbi-section-table-row cbi-rowstyle-2">
+				<div class="tr cbi-rowstyle-2">
 					<div class="td left">
 						<em><%:No network configured on this device%></em>
 					</div>
@@ -421,30 +421,30 @@
 			<% end %>
 			<!-- /network list -->
 		</div>
-	</fieldset>
+	</div>
 	<!-- /device <%=dev:name()%> -->
 	<% end %>
 
 
 	<h2><%:Associated Stations%></h2>
 
-	<fieldset class="cbi-section">
-		<div class="table cbi-section-table valign-middle" style="margin:10px" id="iw-assoclist">
-			<div class="tr cbi-section-table-titles">
-				<div class="th cbi-section-table-cell"></div>
-				<div class="th cbi-section-table-cell"><%:SSID%></div>
-				<div class="th cbi-section-table-cell"><%:MAC-Address%></div>
-				<div class="th cbi-section-table-cell"><%:Host%></div>
-				<div class="th cbi-section-table-cell"><%:Signal%> / <%:Noise%></div>
-				<div class="th cbi-section-table-cell"><%:RX Rate%> / <%:TX Rate%></div>
+	<div class="cbi-section-node">
+		<div class="table" id="iw-assoclist">
+			<div class="tr">
+				<div class="th"><%:Interface%></div>
+				<div class="th"><%:SSID%></div>
+				<div class="th"><%:MAC-Address%></div>
+				<div class="th"><%:Host%></div>
+				<div class="th"><%:Signal%> / <%:Noise%></div>
+				<div class="th"><%:RX Rate%> / <%:TX Rate%></div>
 			</div>
-			<div class="tr cbi-section-table-row cbi-rowstyle-2">
+			<div class="tr cbi-rowstyle-2">
 				<div class="td">
 					<em><%:Collecting data...%></em>
 				</div>
 			</div>
 		</div>
-	</fieldset>
+	</div>
 </div>
 
 <%+footer%>

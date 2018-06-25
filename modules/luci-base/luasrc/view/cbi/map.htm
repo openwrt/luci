@@ -31,7 +31,6 @@
 				</li>
 			<% end %>
 		</ul>
-		<br />
 		<% for i, section in ipairs(self.children) do %>
 			<div class="cbi-tabcontainer" id="container.m-<%=self.config%>.<%=section.section or section.sectiontype%>"<% if section.sectiontype ~= self.selected_tab then %> style="display:none"<% end %>>
 				<% section:render() %>
@@ -53,6 +52,4 @@
 	<% else %>
 		<%- self:render_children() %>
 	<% end %>
-
-	<br />
 </div>

@@ -34,7 +34,7 @@
 					else
 						timestr = String.format('%t', st[0][i].expires);
 
-					tb.appendChild(E('<div class="tr cbi-section-table-row cbi-rowstyle-%d">'.format((i % 2) + 1), [
+					tb.appendChild(E('<div class="tr cbi-rowstyle-%d">'.format((i % 2) + 1), [
 						E('<div class="td">', st[0][i].hostname || '?'),
 						E('<div class="td">', st[0][i].ipaddr),
 						E('<div class="td">', st[0][i].macaddr),
@@ -43,7 +43,7 @@
 				}
 
 				if (tb.firstElementChild === tb.lastElementChild)
-					tb.appendChild(E('<div class="tr cbi-section-table-row"><div class="td"><em><br /><%:There are no active leases.%></em></div></div>'));
+					tb.appendChild(E('<div class="tr"><div class="td"><em><br /><%:There are no active leases.%></em></div></div>'));
 			}
 
 			var tb6 = document.getElementById('lease6_status_table');
@@ -79,8 +79,8 @@
 							hint = host.name;
 					}
 
-					tb6.appendChild(E('<div class="tr cbi-section-table-row cbi-rowstyle-%d" style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space: nowrap">'.format((i % 2) + 1), [
-						E('<div class="td">', hint ? '<div style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space: nowrap">%h (%h)</div>'.format(name || '?', hint) : (name || '?')),
+					tb6.appendChild(E('<div class="tr cbi-rowstyle-%d">'.format((i % 2) + 1), [
+						E('<div class="td nowrap">', hint ? '%h (%h)'.format(name || '?', hint) : (name || '?')),
 						E('<div class="td">', st[1][i].ip6addr),
 						E('<div class="td">', st[1][i].duid),
 						E('<div class="td">', timestr)
@@ -88,7 +88,7 @@
 				}
 
 				if (tb6.firstElementChild === tb6.lastElementChild)
-					tb6.appendChild(E('<div class="tr cbi-section-table-row"><div class="td"><em><br /><%:There are no active leases.%></em></div></div>'));
+					tb6.appendChild(E('<div class="tr"><div class="td"><em><br /><%:There are no active leases.%></em></div></div>'));
 			}
 		}
 	);
@@ -96,14 +96,14 @@
 
 <fieldset class="cbi-section">
 	<legend><%:Active DHCP Leases%></legend>
-	<div class="table cbi-section-table" id="lease_status_table">
-		<div class="tr cbi-section-table-titles">
-			<div class="th cbi-section-table-cell"><%:Hostname%></div>
-			<div class="th cbi-section-table-cell"><%:IPv4-Address%></div>
-			<div class="th cbi-section-table-cell"><%:MAC-Address%></div>
-			<div class="th cbi-section-table-cell"><%:Leasetime remaining%></div>
+	<div class="table" id="lease_status_table">
+		<div class="tr">
+			<div class="th"><%:Hostname%></div>
+			<div class="th"><%:IPv4-Address%></div>
+			<div class="th"><%:MAC-Address%></div>
+			<div class="th"><%:Leasetime remaining%></div>
 		</div>
-		<div class="tr cbi-section-table-row">
+		<div class="tr">
 			<div class="td" colspan="4"><em><br /><%:Collecting data...%></em></div>
 		</div>
 	</div>
@@ -111,14 +111,14 @@
 
 <fieldset class="cbi-section" style="display:none">
 	<legend><%:Active DHCPv6 Leases%></legend>
-	<div class="table cbi-section-table" id="lease6_status_table">
-		<div class="tr cbi-section-table-titles">
-			<div class="th cbi-section-table-cell"><%:Host%></div>
-			<div class="th cbi-section-table-cell"><%:IPv6-Address%></div>
-			<div class="th cbi-section-table-cell"><%:DUID%></div>
-			<div class="th cbi-section-table-cell"><%:Leasetime remaining%></div>
+	<div class="table" id="lease6_status_table">
+		<div class="tr">
+			<div class="th"><%:Host%></div>
+			<div class="th"><%:IPv6-Address%></div>
+			<div class="th"><%:DUID%></div>
+			<div class="th"><%:Leasetime remaining%></div>
 		</div>
-		<div class="tr cbi-section-table-row">
+		<div class="tr">
 			<div class="td" colspan="4"><em><br /><%:Collecting data...%></em></div>
 		</div>
 	</div>

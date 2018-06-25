@@ -11,19 +11,21 @@ This is free software, licensed under the Apache License, Version 2.0
 
 <%+header%>
 
+<script type="text/javascript" src="<%=resource%>/cbi.js"></script>
+
 <div class="cbi-map">
 <div class="cbi-map-descr">
   <%=translatef("Provides an overview of all configured uplinks for the travelmate interface (%s). You can edit, delete or re-order existing uplinks or scan for a new one. The currently used uplink is emphasized in blue.", trmiface)%>
 </div>
 
-<fieldset class="cbi-section">
-  <div class="table cbi-section-table" style="empty-cells:hide">
+<div class="cbi-section">
+  <div class="table cbi-section-table">
     <div class="tr cbi-section-table-titles">
-      <div class="th cbi-section-table-cell" style="text-align:left"><%:Device%></div>
-      <div class="th cbi-section-table-cell" style="text-align:left"><%:SSID%></div>
-      <div class="th cbi-section-table-cell" style="text-align:left"><%:BSSID%></div>
-      <div class="th cbi-section-table-cell" style="text-align:left"><%:Encryption%></div>
-      <div class="th cbi-section-table-cell" style="text-align:center" colspan="2"><%:Actions%></div>
+      <div class="th left"><%:Device%></div>
+      <div class="th left"><%:SSID%></div>
+      <div class="th left"><%:BSSID%></div>
+      <div class="th left"><%:Encryption%></div>
+      <div class="th center">&#160;</div>
     </div>
 <%
   uci:foreach("wireless", "wifi-iface", function(s)
@@ -45,11 +47,9 @@ This is free software, licensed under the Apache License, Version 2.0
       <div class="td" style="<%=style%>"><%=ssid%></div>
       <div class="td" style="<%=style%>"><%=bssid%></div>
       <div class="td" style="<%=style%>"><%=encryption%></div>
-      <div class="td cbi-value-field" style="width:80px">
-        <input class="cbi-button cbi-button-up" type="button" value="" onclick="location.href='<%=luci.dispatcher.build_url('admin/services/travelmate/wifiorder')%>?cfg=<%=section%>&amp;dir=up'" alt="<%:Move up%>" title="<%:Move up%>"/>
-        <input class="cbi-button cbi-button-down" type="button" value="" onclick="location.href='<%=luci.dispatcher.build_url('admin/services/travelmate/wifiorder')%>?cfg=<%=section%>&amp;dir=down'" alt="<%:Move down%>" title="<%:Move down%>"/>
-      </div>
-      <div class="td cbi-value-field" style="width:150px">
+      <div class="td cbi-section-actions">
+        <input class="cbi-button cbi-button-up" type="button" value="<%:Up%>" onclick="location.href='<%=luci.dispatcher.build_url('admin/services/travelmate/wifiorder')%>?cfg=<%=section%>&amp;dir=up'" alt="<%:Move up%>" title="<%:Move up%>"/>
+        <input class="cbi-button cbi-button-down" type="button" value="<%:Down%>" onclick="location.href='<%=luci.dispatcher.build_url('admin/services/travelmate/wifiorder')%>?cfg=<%=section%>&amp;dir=down'" alt="<%:Move down%>" title="<%:Move down%>"/>
         <input type="button" class="cbi-button cbi-button-edit" onclick="location.href='<%=luci.dispatcher.build_url('admin/services/travelmate/wifiedit')%>?cfg=<%=section%>'" title="<%:Edit this Uplink%>" value="<%:Edit%>"/>
         <input type="button" class="cbi-button cbi-button-remove" onclick="location.href='<%=luci.dispatcher.build_url('admin/services/travelmate/wifidelete')%>?cfg=<%=section%>'" title="<%:Delete this Uplink%>" value="<%:Delete%>"/>
       </div>
@@ -59,7 +59,7 @@ This is free software, licensed under the Apache License, Version 2.0
   end)
 %>
   </div>
-</fieldset>
+</div>
 <div class="cbi-page-actions right">
 <%
   uci:foreach("wireless", "wifi-device", function(s)
@@ -68,7 +68,7 @@ This is free software, licensed under the Apache License, Version 2.0
   <form class="inline" action="<%=luci.dispatcher.build_url('admin/services/travelmate/wifiscan')%>" method="post">
     <input type="hidden" name="device" value="<%=device%>"/>
     <input type="hidden" name="token" value="<%=token%>"/>
-    <input type="submit" class="cbi-button cbi-button-find" title="<%:Find and join network on%> <%=device%>" value="<%:Scan%> <%=device%>"/>
+    <input type="submit" class="cbi-button cbi-button-action important" title="<%:Find and join network on%> <%=device%>" value="<%:Scan%> <%=device%>"/>
   </form>
 <%
   end)

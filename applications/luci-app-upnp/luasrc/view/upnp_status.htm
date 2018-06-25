@@ -16,40 +16,39 @@
 			var tb = document.getElementById('upnp_status_table');
 			if (st && tb)
 			{
-				/* clear all rows */
-				while (tb.firstElementChild !== tb.lastElementChild)
-					tb.removeChild(tb.lastElementChild);
+				var rows = [];
 
 				for (var i = 0; i < st.length; i++)
-					tb.appendChild(E('<div class="tr cbi-section-table-row cbi-rowstyle-%d">'.format((i % 2) + 1), [
-						E('<div class="td">', st[i].proto),
-						E('<div class="td">', st[i].extport),
-						E('<div class="td">', st[i].intaddr),
-						E('<div class="td">', st[i].intport),
-						E('<div class="td">', st[i].descr),
-						E('<input class="cbi-button cbi-input-remove" type="button" value="<%:Delete%>" onclick="upnp_delete_fwd(%d)" />'.format(st[i].num))
-					]));
+					rows.push([
+						st[i].proto,
+						st[i].extport,
+						st[i].intaddr,
+						st[i].intport,
+						st[i].descr,
+						E('<input class="cbi-button cbi-button-remove" type="button" value="<%:Delete%>" onclick="upnp_delete_fwd(%d)" />'.format(st[i].num))
+					]);
 
-				if (tb.firstElementChild === tb.lastElementChild)
-					tb.appendChild(E('<div class="tr cbi-section-table-row"><div class="td"><em><br /><%:There are no active redirects.%></em></div></div>'));
+				cbi_update_table(tb, rows, '<em><%:There are no active redirects.%></em>');
 			}
 		}
 	);
 //]]></script>
 
-<fieldset class="cbi-section">
+<div class="cbi-section">
 	<legend><%:Active UPnP Redirects%></legend>
-	<div class="table cbi-section-table" id="upnp_status_table">
-		<div class="tr cbi-section-table-titles">
-			<div class="th cbi-section-table-cell"><%:Protocol%></div>
-			<div class="th cbi-section-table-cell"><%:External Port%></div>
-			<div class="th cbi-section-table-cell"><%:Client Address%></div>
-			<div class="th cbi-section-table-cell"><%:Client Port%></div>
-			<div class="th cbi-section-table-cell"><%:Description%></div>
-			<div class="th cbi-section-table-cell">&#160;</div>
-		</div>
-		<div class="tr cbi-section-table-row">
-			<div class="td" colspan="5"><em><br /><%:Collecting data...%></em></div>
+	<div class="cbi-section-node">
+		<div class="table" id="upnp_status_table">
+			<div class="tr table-titles">
+				<div class="th"><%:Protocol%></div>
+				<div class="th"><%:External Port%></div>
+				<div class="th"><%:Client Address%></div>
+				<div class="th"><%:Client Port%></div>
+				<div class="th"><%:Description%></div>
+				<div class="th cbi-section-actions">&#160;</div>
+			</div>
+			<div class="tr">
+				<div class="td" colspan="5"><em><%:Collecting data...%></em></div>
+			</div>
 		</div>
 	</div>
-</fieldset>
+</div>

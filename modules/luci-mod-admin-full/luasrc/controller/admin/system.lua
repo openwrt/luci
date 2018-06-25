@@ -74,7 +74,7 @@ function action_packages()
 	local out, err
 
 	-- Display
-	local display = luci.http.formvalue("display") or "installed"
+	local display = luci.http.formvalue("display") or "available"
 
 	-- Letter
 	local letter = string.byte(luci.http.formvalue("letter") or "A", 1)

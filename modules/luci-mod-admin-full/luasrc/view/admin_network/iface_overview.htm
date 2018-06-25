@@ -67,7 +67,7 @@
 	}
 
 	function iface_delete(id) {
-		if (!confirm(<%=luci.http.write_json(translate('Really delete this interface? The deletion cannot be undone! You might lose access to this device if you are connected via this interface.'))%>))
+		if (!confirm(<%=luci.http.write_json(translate('Really delete this interface? The deletion cannot be undone! You might lose access to this device if you are connected via this interface'))%>))
 			return;
 
 		(new XHR()).post('<%=url('admin/network/iface_delete')%>/' + id, { token: '<%=token%>' },
@@ -141,8 +141,8 @@
 						}
 
 						html += String.format(
-							'<strong><%:RX%></strong>: %.2mB (%d <%:Pkts.%>)<br />' +
-							'<strong><%:TX%></strong>: %.2mB (%d <%:Pkts.%>)<br />',
+							'<strong><%:RX%>:</strong> %.2mB (%d <%:Pkts.%>)<br />' +
+							'<strong><%:TX%>:</strong> %.2mB (%d <%:Pkts.%>)<br />',
 								ifc.rx_bytes, ifc.rx_packets,
 								ifc.tx_bytes, ifc.tx_packets
 						);
@@ -209,46 +209,43 @@
 </fieldset>
 
 <div class="cbi-map">
-	<fieldset class="cbi-section">
+	<div class="cbi-section">
 		<legend><%:Interface Overview%></legend>
 
-		<div class="table cbi-section-table" style="margin:10px; empty-cells:hide">
-			<div class="tr cbi-section-table-titles">
-				<div class="th"><%:Network%></div>
-				<div class="th left"><%:Status%></div>
-				<div class="th"><%:Actions%></div>
-			</div>
-			<%
-				for i, net in ipairs(netlist) do
-					local z = net[3]
-					local c = z and z:get_color() or "#EEEEEE"
-					local t = z and translate("Part of zone %q" % z:name()) or translate("No zone assigned")
-			%>
-				<div class="tr cbi-section-table-row cbi-rowstyle-<%=i % 2 + 1%>">
-					<div class="td">
-						<div class="ifacebox">
-							<div class="ifacebox-head" style="background-color:<%=c%>" title="<%=pcdata(t)%>">
-								<strong><%=net[1]:upper()%></strong>
-							</div>
-							<div class="ifacebox-body" id="<%=net[1]%>-ifc-devices">
-								<img src="<%=resource%>/icons/ethernet_disabled.png" style="width:16px; height:16px" /><br />
-								<small>?</small>
+		<div class="cbi-section-node">
+			<div class="table">
+				<%
+					for i, net in ipairs(netlist) do
+						local z = net[3]
+						local c = z and z:get_color() or "#EEEEEE"
+						local t = z and translate("Part of zone %q" % z:name()) or translate("No zone assigned")
+				%>
+					<div class="tr cbi-rowstyle-<%=i % 2 + 1%>">
+						<div class="td col-3 center middle">
+							<div class="ifacebox">
+								<div class="ifacebox-head" style="background-color:<%=c%>" title="<%=pcdata(t)%>">
+									<strong><%=net[1]:upper()%></strong>
+								</div>
+								<div class="ifacebox-body" id="<%=net[1]%>-ifc-devices">
+									<img src="<%=resource%>/icons/ethernet_disabled.png" style="width:16px; height:16px" /><br />
+									<small>?</small>
+								</div>
 							</div>
 						</div>
+						<div class="td col-5 left" id="<%=net[1]%>-ifc-description">
+							<em><%:Collecting data...%></em>
+						</div>
+						<div class="td cbi-section-actions">
+							<input type="button" class="cbi-button cbi-button-neutral" onclick="iface_shutdown('<%=net[1]%>', true)" title="<%:Reconnect this interface%>" value="<%:Connect%>" />
+							<input type="button" class="cbi-button cbi-button-neutral" onclick="iface_shutdown('<%=net[1]%>', false)" title="<%:Shutdown this interface%>" value="<%:Stop%>" />
+							<input type="button" class="cbi-button cbi-button-action important" onclick="location.href='<%=url("admin/network/network", net[1])%>'" title="<%:Edit this interface%>" value="<%:Edit%>" id="<%=net[1]%>-ifc-edit" />
+							<input type="button" class="cbi-button cbi-button-negative" onclick="iface_delete('<%=net[1]%>')" value="<%:Delete%>" />
+						</div>
 					</div>
-					<div class="td left" id="<%=net[1]%>-ifc-description">
-						<em><%:Collecting data...%></em>
-					</div>
-					<div class="td">
-						<input type="button" class="cbi-button cbi-button-reload" style="width:100px" onclick="iface_shutdown('<%=net[1]%>', true)" title="<%:Reconnect this interface%>" value="<%:Connect%>" />
-						<input type="button" class="cbi-button cbi-button-reset" style="width:100px" onclick="iface_shutdown('<%=net[1]%>', false)" title="<%:Shutdown this interface%>" value="<%:Stop%>" />
-						<input type="button" class="cbi-button cbi-button-edit" style="width:100px" onclick="location.href='<%=url("admin/network/network", net[1])%>'" title="<%:Edit this interface%>" value="<%:Edit%>" id="<%=net[1]%>-ifc-edit" />
-						<input type="button" class="cbi-button cbi-button-remove" style="width:100px" onclick="iface_delete('<%=net[1]%>')" value="<%:Delete%>" />
-					</div>
-				</div>
-			<% end %>
+				<% end %>
+			</div>
 		</div>
 
 		<input type="button" class="cbi-button cbi-button-add" value="<%:Add new interface...%>" onclick="location.href='<%=url("admin/network/iface_add")%>'" />
-	</fieldset>
+	</div>
 </div>

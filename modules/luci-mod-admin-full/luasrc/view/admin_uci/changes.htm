@@ -27,21 +27,17 @@
 
 <div class="cbi-page-actions">
 	<% if redir_url then %>
-	<div style="float:left">
-		<form class="inline" method="get" action="<%=luci.util.pcdata(redir_url)%>">
-			<input class="cbi-button cbi-button-link" style="float:left; margin:0" type="submit" value="<%:Back%>" />
-		</form>
-	</div>
+	<form method="get" action="<%=luci.util.pcdata(redir_url)%>">
+		<input class="cbi-button cbi-button-link" type="submit" value="<%:Back%>" />
+	</form>
 	<% end %>
 
-	<div style="text-align:right">
-		<input class="cbi-button cbi-button-save" type="button" id="apply_button" value="<%:Save & Apply%>" onclick="uci_apply(true); this.blur()" />
-		<form class="inline" method="post" action="<%=url("admin/uci/revert")%>">
-			<input type="hidden" name="token" value="<%=token%>" />
-			<input type="hidden" name="redir" value="<%=pcdata(luci.http.formvalue("redir"))%>" />
-			<input class="cbi-button cbi-button-reset" type="submit" value="<%:Revert%>" />
-		</form>
-	</div>
+	<input class="cbi-button cbi-button-save" type="button" id="apply_button" value="<%:Save & Apply%>" onclick="uci_apply(true); this.blur()" />
+	<form method="post" action="<%=url("admin/uci/revert")%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input type="hidden" name="redir" value="<%=pcdata(luci.http.formvalue("redir"))%>" />
+		<input class="cbi-button cbi-button-reset" type="submit" value="<%:Revert%>" />
+	</form>
 </div>
 
 <%+footer%>

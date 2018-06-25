@@ -39,31 +39,33 @@ This is free software, licensed under the Apache License, Version 2.0
 
 <%+header%>
 
+<script type="text/javascript" src="<%=resource%>/cbi.js"></script>
+
 <div class="cbi-map">
 <h2 name="content"><%:Wireless Scan%></h2>
-    <fieldset class="cbi-section">
-        <div class="table cbi-section-table" style="empty-cells:hide">
+    <div class="cbi-section">
+        <div class="table cbi-section-table">
             <div class="tr cbi-section-table-titles">
-                <div class="th cbi-section-table-cell" style="text-align:left"><%:Uplink SSID%></div>
-                <div class="th cbi-section-table-cell" style="text-align:left"><%:Uplink BSSID%></div>
-                <div class="th cbi-section-table-cell" style="text-align:left"><%:Encryption%></div>
-                <div class="th cbi-section-table-cell" style="text-align:left" colspan="2"><%:Signal strength%></div>
+                <div class="th left"><%:Uplink SSID%></div>
+                <div class="th left"><%:Uplink BSSID%></div>
+                <div class="th left"><%:Encryption%></div>
+                <div class="th left"><%:Signal strength%></div>
             </div>
             <% for i, net in ipairs(iw.scanlist or { }) do %>
             <div class="tr cbi-section-table-row cbi-rowstyle-1">
-                <div class="td cbi-value-field" style="text-align:left">
+                <div class="td left">
                     <%=net.ssid and utl.pcdata(net.ssid) or "<em>%s</em>" % translate("hidden")%>
                 </div>
-                <div class="td cbi-value-field" style="text-align:left">
+                <div class="td left">
                     <%=net.bssid and utl.pcdata(net.bssid)%>
                 </div>
-                <div class="td cbi-value-field" style="text-align:left">
+                <div class="td left">
                     <%=format_wifi_encryption(net.encryption)%>
                 </div>
-                <div class="td cbi-value-field" style="text-align:left">
+                <div class="td left">
                     <%=percent_wifi_signal(net)%> %
                 </div>
-                <div class="td cbi-value-field" style="width:100px;text-align:right">
+                <div class="td cbi-section-actions">
                     <form class="inline" action="<%=luci.dispatcher.build_url('admin/services/travelmate/wifiadd')%>" method="post">
                         <input type="hidden" name="token" value="<%=token%>"/>
                         <input type="hidden" name="device" value="<%=utl.pcdata(dev)%>"/>
@@ -80,15 +82,15 @@ This is free software, licensed under the Apache License, Version 2.0
             </div>
             <% end %>
         </div>
-    </fieldset>
+    </div>
 <div class="cbi-page-actions right">
+    <form class="inline" action="<%=luci.dispatcher.build_url('admin/services/travelmate/stations')%>" method="get">
+        <input class="cbi-button cbi-button-reset" type="submit" value="<%:Back to overview%>"/>
+    </form>
     <form class="inline" action="<%=luci.dispatcher.build_url('admin/services/travelmate/wifiscan')%>" method="post">
         <input type="hidden" name="token" value="<%=token%>"/>
         <input type="hidden" name="device" value="<%=utl.pcdata(dev)%>"/>
         <input class="cbi-button cbi-input-find" type="submit" value="<%:Repeat scan%>"/>
-    </form>
-    <form class="inline" action="<%=luci.dispatcher.build_url('admin/services/travelmate/stations')%>" method="post">
-        <input class="cbi-button cbi-button-reset" type="submit" value="<%:Back to overview%>"/>
     </form>
 </div>
 </div>
