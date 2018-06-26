@@ -542,8 +542,8 @@ table > tbody > tr > td, table > tbody > tr > th, table > tfoot > tr > td, table
     border: none;
 }
 
-.cbi-section-table-titles,
-.cbi-section-table-descr {
+.tr.cbi-section-table-titles,
+.tr.cbi-section-table-descr {
     display: none;
 }
 
@@ -1636,6 +1636,11 @@ header > .container > .pull-right > * {
 #cbi-network-switch_vlan table select,
 #cbi-firewall-zone table select {
     min-width: 3.5rem;
+}
+
+#cbi-network-switch_vlan .th,
+#cbi-network-switch_vlan .td {
+    flex-basis: 12%;
 }
 
 /* language fix */
