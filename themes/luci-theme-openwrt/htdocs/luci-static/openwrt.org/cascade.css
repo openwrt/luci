@@ -410,6 +410,7 @@ h4 {
 	font-size: 112%;
 }
 
+fieldset { border: none; }
 fieldset > legend { float: left; }
 fieldset > legend + * { clear: both; }
 
@@ -418,7 +419,7 @@ fieldset > legend + * { clear: both; }
 }
 
 .cbi-section {
-	padding: .5em;
+	padding: .5em 0;
 	margin-top: .5em;
 }
 
@@ -495,6 +496,10 @@ input[type=password] {
 	font-size: inherit;
 	line-height: 13pt;
 	height: 14pt;
+}
+
+select[multiple] {
+	height: auto;
 }
 
 input[type=radio],
@@ -753,6 +758,11 @@ div.cbi-optionals {
 	border: 1px dotted #444;
 	background: #fff;
 	margin: 0 0 .5em 0;
+}
+
+.cbi-section-node > .table.cbi-section-table {
+	border: none;
+	margin: 0;
 }
 
 @keyframes flash {
@@ -1266,10 +1276,11 @@ ul.cbi-tabmenu li.cbi-tab {
 .network-status-table {
 	display: flex;
 	flex-wrap: wrap;
+	margin: -.25em;
 }
 
 .network-status-table .ifacebox {
-	margin: .5em;
+	margin: .25em;
 	font-size: 90%;
 	flex-grow: 1;
 }
