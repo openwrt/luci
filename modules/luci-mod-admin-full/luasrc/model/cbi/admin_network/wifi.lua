@@ -660,7 +660,7 @@ if hwtype == "mac80211" or hwtype == "prism2" then
 			"and ad-hoc mode) to be installed."
 		)
 	end
-elseif hwtype == "broadcom" then
+elseif hwtype == "broadcom" or hwtype == "ralink" then
 	encr:value("psk", "WPA-PSK")
 	encr:value("psk2", "WPA2-PSK")
 	encr:value("psk+psk2", "WPA-PSK/WPA2-PSK Mixed Mode")
