@@ -43,6 +43,9 @@ function index()
 			end)
 
 		if has_wifi then
+			page = entry({"admin", "network", "wireless_assoclist"}, call("wifi_assoclist"), nil)
+			page.leaf = true
+		
 			page = entry({"admin", "network", "wireless_join"}, post("wifi_join"), nil)
 			page.leaf = true
 
@@ -370,6 +373,13 @@ end
 
 function wifi_shutdown(wnet)
 	wifi_reconnect_shutdown(true, wnet)
+end
+
+function wifi_assoclist()
+	local s = require "luci.tools.status"
+	
+	luci.http.prepare_content("application/json")
+	luci.http.write_json(s.wifi_assoclist())
 end
 
 function lease_status()
