@@ -33,9 +33,9 @@
 				{
 					for (var j = 0; j < ports.length; j++)
 					{
-						var th = tr.childNodes[j+1];
+						var th = tr.querySelector('[data-name="%d"]'.format(j));
 
-						if (!th || !th.hasAttribute('data-name'))
+						if (!th)
 							continue;
 
 						if (ports[j].link)
