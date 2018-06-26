@@ -35,7 +35,7 @@
 					{
 						var th = tr.childNodes[j+1];
 
-						if (!th)
+						if (!th || !th.hasAttribute('data-name'))
 							continue;
 
 						if (ports[j].link)
