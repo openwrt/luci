@@ -14,12 +14,13 @@ LUCI_BASENAME:=base
 LUCI_TITLE:=LuCI core libraries
 LUCI_DEPENDS:=+lua +luci-lib-nixio +luci-lib-ip +rpcd +libubus-lua +luci-lib-jsonc +liblucihttp-lua
 
-PKG_SOURCE:=LuaSrcDiet-0.12.1.tar.bz2
-PKG_SOURCE_URL:=https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/luasrcdiet
-PKG_HASH:=ed7680f2896269ae8633756e7edcf09050812f78c8f49e280e63c30d14f35aea
-PKG_LICENSE:=Apache-2.0
 
-HOST_BUILD_DIR:=$(BUILD_DIR_HOST)/LuaSrcDiet-0.12.1
+PKG_SOURCE:=v1.0.0.tar.gz
+PKG_SOURCE_URL:=https://github.com/jirutka/luasrcdiet/archive/
+PKG_HASH:=48162e63e77d009f5848f18a5cabffbdfc867d0e5e73c6d407f6af5d6880151b
+PKG_LICENSE:=MIT
+
+HOST_BUILD_DIR:=$(BUILD_DIR_HOST)/luasrcdiet-1.0.0
 
 include $(INCLUDE_DIR)/host-build.mk
 
@@ -36,13 +37,13 @@ endef
 
 define Host/Compile
 	$(MAKE) -C src/ clean po2lmo
-	$(MAKE) -C $(HOST_BUILD_DIR) bin/LuaSrcDiet.lua
+	$(MAKE) -C $(HOST_BUILD_DIR) bin/luasrcdiet
 endef
 
 define Host/Install
 	$(INSTALL_DIR) $(1)/bin
 	$(INSTALL_BIN) src/po2lmo $(1)/bin/po2lmo
-	$(INSTALL_BIN) $(HOST_BUILD_DIR)/bin/LuaSrcDiet.lua $(1)/bin/LuaSrcDiet
+	$(INSTALL_BIN) $(HOST_BUILD_DIR)/bin/luasrcdiet $(1)/bin/luasrcdiet
 endef
 
 $(eval $(call HostBuild))
