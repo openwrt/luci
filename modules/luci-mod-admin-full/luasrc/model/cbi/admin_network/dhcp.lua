@@ -142,6 +142,14 @@ df.optional = true
 df.placeholder = "/example.org/10.1.2.3"
 
 
+ad = s:taboption("general", DynamicList, "address",
+	translate("Local defined domains"),
+	translate("List of customized domains resolved locally and never forwarded to upstream"))
+
+ad.optional = true
+ad.placeholder = "/myservice.lan/192.168.1.123"
+
+
 rp = s:taboption("general", Flag, "rebind_protection",
 	translate("Rebind protection"),
 	translate("Discard upstream RFC1918 responses"))
