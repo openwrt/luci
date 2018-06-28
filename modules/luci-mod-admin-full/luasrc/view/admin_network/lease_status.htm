@@ -1,27 +1,11 @@
 <script type="text/javascript">//<![CDATA[
-	function duid2mac(duid) {
-		// DUID-LLT / Ethernet
-		if (duid.length === 28 && duid.substr(0, 8) === '00010001')
-			return duid.substr(16).replace(/(..)(?=..)/g, '$1:').toUpperCase();
-
-		// DUID-LL / Ethernet
-		if (duid.length === 20 && duid.substr(0, 8) === '00030001')
-			return duid.substr(8).replace(/(..)(?=..)/g, '$1:').toUpperCase();
-
-		return null;
-	}
-
-	var hosts = <%=luci.http.write_json(luci.sys.net.host_hints())%>;
-
 	XHR.poll(5, '<%=url('admin/network/dhcplease_status')%>', null,
 		function(x, st)
 		{
 			var tb = document.getElementById('lease_status_table');
 			if (st && st[0] && tb)
 			{
-				/* clear all rows */
-				while (tb.firstElementChild !== tb.lastElementChild)
-					tb.removeChild(tb.lastElementChild);
+				var rows = [];
 
 				for (var i = 0; i < st[0].length; i++)
 				{
@@ -34,16 +18,15 @@
 					else
 						timestr = String.format('%t', st[0][i].expires);
 
-					tb.appendChild(E('<div class="tr cbi-rowstyle-%d">'.format((i % 2) + 1), [
-						E('<div class="td">', st[0][i].hostname || '?'),
-						E('<div class="td">', st[0][i].ipaddr),
-						E('<div class="td">', st[0][i].macaddr),
-						E('<div class="td">', timestr)
-					]));
+					rows.push([
+						st[0][i].hostname || '?',
+						st[0][i].ipaddr,
+						st[0][i].macaddr,
+						timestr
+					]);
 				}
 
-				if (tb.firstElementChild === tb.lastElementChild)
-					tb.appendChild(E('<div class="tr"><div class="td"><em><br /><%:There are no active leases.%></em></div></div>'));
+				cbi_update_table(tb, rows, '<em><%:There are no active leases.%></em>');
 			}
 
 			var tb6 = document.getElementById('lease6_status_table');
@@ -51,9 +34,7 @@
 			{
 				tb6.parentNode.style.display = 'block';
 
-				/* clear all rows */
-				while (tb6.firstElementChild !== tb6.lastElementChild)
-					tb6.removeChild(tb6.lastElementChild);
+				var rows = [];
 
 				for (var i = 0; i < st[1].length; i++)
 				{
@@ -66,60 +47,49 @@
 					else
 						timestr = String.format('%t', st[1][i].expires);
 
-					var host = hosts[duid2mac(st[1][i].duid)],
-					    name = st[1][i].hostname,
-					    hint = null;
+					var name = st[1][i].hostname,
+					    hint = st[1][i].host_hint;
 
-					if (!name) {
-						if (host)
-							hint = host.name || host.ipv4 || host.ipv6;
-					}
-					else {
-						if (host && host.name && st[1][i].hostname != host.name)
-							hint = host.name;
-					}
-
-					tb6.appendChild(E('<div class="tr cbi-rowstyle-%d">'.format((i % 2) + 1), [
-						E('<div class="td nowrap">', hint ? '%h (%h)'.format(name || '?', hint) : (name || '?')),
-						E('<div class="td">', st[1][i].ip6addr),
-						E('<div class="td">', st[1][i].duid),
-						E('<div class="td">', timestr)
-					]));
+					rows.push([
+						hint ? '%h (%h)'.format(name || '?', hint) : (name || '?'),
+						st[1][i].ip6addr,
+						st[1][i].duid,
+						timestr
+					]);
 				}
 
-				if (tb6.firstElementChild === tb6.lastElementChild)
-					tb6.appendChild(E('<div class="tr"><div class="td"><em><br /><%:There are no active leases.%></em></div></div>'));
+				cbi_update_table(tb6, rows, '<em><%:There are no active leases.%></em>');
 			}
 		}
 	);
 //]]></script>
 
-<fieldset class="cbi-section">
-	<legend><%:Active DHCP Leases%></legend>
+<div class="cbi-section">
+	<h3><%:Active DHCP Leases%></h3>
 	<div class="table" id="lease_status_table">
-		<div class="tr">
+		<div class="tr table-titles">
 			<div class="th"><%:Hostname%></div>
 			<div class="th"><%:IPv4-Address%></div>
 			<div class="th"><%:MAC-Address%></div>
 			<div class="th"><%:Leasetime remaining%></div>
 		</div>
-		<div class="tr">
-			<div class="td" colspan="4"><em><br /><%:Collecting data...%></em></div>
+		<div class="tr placeholder">
+			<div class="td"><em><%:Collecting data...%></em></div>
 		</div>
 	</div>
-</fieldset>
+</div>
 
-<fieldset class="cbi-section" style="display:none">
-	<legend><%:Active DHCPv6 Leases%></legend>
+<div class="cbi-section" style="display:none">
+	<h3><%:Active DHCPv6 Leases%></h3>
 	<div class="table" id="lease6_status_table">
-		<div class="tr">
+		<div class="tr table-titles">
 			<div class="th"><%:Host%></div>
 			<div class="th"><%:IPv6-Address%></div>
 			<div class="th"><%:DUID%></div>
 			<div class="th"><%:Leasetime remaining%></div>
 		</div>
-		<div class="tr">
-			<div class="td" colspan="4"><em><br /><%:Collecting data...%></em></div>
+		<div class="tr placeholder">
+			<div class="td"><em><%:Collecting data...%></em></div>
 		</div>
 	</div>
-</fieldset>
+</div>
