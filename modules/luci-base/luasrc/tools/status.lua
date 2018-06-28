@@ -6,9 +6,25 @@ module("luci.tools.status", package.seeall)
 local uci = require "luci.model.uci".cursor()
 local ipc = require "luci.ip"
 
+local function duid_to_mac(duid)
+	local b1, b2, b3, b4, b5, b6
+
+	-- DUID-LLT / Ethernet
+	if type(duid) == "string" and #duid == 28 then
+		b1, b2, b3, b4, b5, b6 = duid:match("^00010001(%x%x)(%x%x)(%x%x)(%x%x)(%x%x)(%x%x)%x%x%x%x%x%x%x%x$")
+
+	-- DUID-LL / Ethernet
+	elseif type(duid) == "string" and #duid == 20 then
+		b1, b2, b3, b4, b5, b6 = duid:match("^00030001(%x%x)(%x%x)(%x%x)(%x%x)(%x%x)(%x%x)$")
+	end
+
+	return b1 and ipc.checkmac(table.concat({ b1, b2, b3, b4, b5, b6 }, ":"))
+end
+
 local function dhcp_leases_common(family)
 	local rv = { }
 	local nfs = require "nixio.fs"
+	local sys = require "luci.sys"
 	local leasefile = "/tmp/dhcp.leases"
 
 	uci:foreach("dhcp", "dnsmasq",
@@ -85,6 +101,22 @@ local function dhcp_leases_common(family)
 			end
 		end
 		fd:close()
+	end
+
+	if family == 6 then
+		local _, lease
+		local hosts = sys.net.host_hints()
+		for _, lease in ipairs(rv) do
+			local mac = duid_to_mac(lease.duid)
+			local host = mac and hosts[mac]
+			if host then
+				if not lease.name then
+					lease.host_hint = host.name or host.ipv4 or host.ipv6
+				elseif host.name and lease.hostname ~= host.name then
+					lease.host_hint = host.name
+				end
+			end
+		end
 	end
 
 	return rv
