@@ -1,7 +1,7 @@
 #!/bin/sh
 
 uci -q batch <<-EOF >/dev/null
-	delete ucitrack.@tranmsmission[-1]
+	delete ucitrack.@transmission[-1]
 	add ucitrack transmission
 	set ucitrack.@transmission[-1].init=transmission
 	commit ucitrack
