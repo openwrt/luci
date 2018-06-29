@@ -703,15 +703,22 @@ function _create_node(path)
 		local last = table.remove(path)
 		local parent = _create_node(path)
 
-		c = {nodes={}, auto=true}
-		-- the node is "in request" if the request path matches
-		-- at least up to the length of the node path
-		if parent.inreq and context.path[#path+1] == last then
-		  c.inreq = true
+		c = {nodes={}, auto=true, inreq=true}
+
+		local _, n
+		for _, n in ipairs(path) do
+			if context.path[_] ~= n then
+				c.inreq = false
+				break
+			end
 		end
+
+		c.inreq = c.inreq and (context.path[#path + 1] == last)
+
 		parent.nodes[last] = c
 		context.treecache[name] = c
 	end
+
 	return c
 end
 
