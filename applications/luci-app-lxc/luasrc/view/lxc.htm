@@ -19,8 +19,8 @@ local nx     = require "nixio"
 local target = nx.uname().machine
 -%>
 
-<fieldset class="cbi-section">
-	<legend><%:Available Containers%></legend>
+<div class="cbi-section">
+	<h3><%:Available Containers%></h3>
 	<div class="cbi-section-node">
 		<div class="table cbi-section-table" id="t_lxc_list">
 			<div class="tr cbi-section-table-titles">
@@ -30,15 +30,15 @@ local target = nx.uname().machine
 			</div>
 		</div>
 	</div>
-</fieldset>
+</div>
 
-<fieldset class="cbi-section">
+<div class="cbi-section">
 	<span id="lxc-list-output"></span>
-</fieldset>
+</div>
 
 <hr />
-<fieldset class="cbi-section">
-	<legend><%:Create New Container%></legend>
+<div class="cbi-section">
+	<h3><%:Create New Container%></h3>
 	<div class="cbi-section-node">
 		<div class="table cbi-section-table" id="t_lxc_create">
 			<div class="tr cbi-section-table-titles">
@@ -56,11 +56,11 @@ local target = nx.uname().machine
 			</div>
 		</div>
 	</div>
-</fieldset>
+</div>
 
-<fieldset class="cbi-section">
+<div class="cbi-section">
 	<span id="lxc-add-output"></span>
-</fieldset>
+</div>
 
 <hr />
 
