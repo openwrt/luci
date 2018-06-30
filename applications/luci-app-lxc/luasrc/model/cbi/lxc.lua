@@ -16,7 +16,7 @@ Author: Petar Koretic <petar.koretic@sartura.hr>
 
 m = Map("lxc", translate("LXC Containers"),
 	translate("<b>Please note:</b> For LXC Containers you need a custom OpenWrt image.<br />")
-	.. translate("The image should include at least support for 'kernel cgroups', 'kernel namespaces' and 'miscellaneous LXC related options'."))
+	.. translate("The image should include at least support for 'kernel cgroups', 'kernel namespaces' and 'miscellaneous LXC related options' plus 'kmod-veth' for optional network support."))
 m:section(SimpleSection).template = "lxc"
 
 s = m:section(TypedSection, "lxc", translate("Options"))

@@ -19,6 +19,7 @@ module("luci.controller.lxc", package.seeall)
 local uci  = require "luci.model.uci".cursor()
 local util = require "luci.util"
 local nx   = require "nixio"
+local url  = uci:get("lxc", "lxc", "url")
 
 function index()
 	if not nixio.fs.access("/etc/config/lxc") then
@@ -38,12 +39,12 @@ function index()
 end
 
 function lxc_get_downloadable()
-	local target = lxc_get_arch_target()
-	local templates = {}
+	local target = lxc_get_arch_target(url)
 	local ssl_status = lxc_get_ssl_status()
+	local templates = {}
 
 	local f = io.popen('sh /usr/share/lxc/templates/lxc-download --list %s --server %s 2>/dev/null'
-		%{ ssl_status, util.shellquote(uci:get("lxc", "lxc", "url")) }, 'r')
+		%{ ssl_status, util.shellquote(url) }, 'r')
 	local line
 	for line in f:lines() do
 		local dist, version, dist_target = line:match("^(%S+)%s+(%S+)%s+(%S+)%s+default%s+%S+$")
@@ -65,18 +66,17 @@ function lxc_create(lxc_name, lxc_template)
 		return
 	end
 
-	local ssl_status = lxc_get_ssl_status()
-
 	local src_err
+	local ssl_status = lxc_get_ssl_status()
 	local lxc_dist, lxc_release = lxc_template:match("^(.+):(.+)$")
 	luci.http.write(util.ubus("lxc", "create", {
 		name = lxc_name,
 		template = "download",
 		args = {
-			"--server", uci:get("lxc", "lxc", "url"),
+			"--server", url,
 			"--dist", lxc_dist,
 			"--release", lxc_release,
-			"--arch", lxc_get_arch_target(),
+			"--arch", lxc_get_arch_target(url),
 			ssl_status
 		}
 	}), src_err)
@@ -153,19 +153,21 @@ function lxc_configuration_set(lxc_name)
 	luci.http.write("0")
 end
 
-function lxc_get_arch_target()
+function lxc_get_arch_target(url)
 	local target = nx.uname().machine
-	local target_map = {
-		armv5  = "armel",
-		armv6  = "armel",
-		armv7  = "armhf",
-		armv8  = "arm64",
-		x86_64 = "amd64"
-	}
-	local k, v
-	for k, v in pairs(target_map) do
-		if target:find("^" ..k.. "$") then
-			return v
+	if url and url:match("images.linuxcontainers.org") then
+		local target_map = {
+			armv5  = "armel",
+			armv6  = "armel",
+			armv7  = "armhf",
+			armv8  = "arm64",
+			x86_64 = "amd64"
+		}
+		local k, v
+		for k, v in pairs(target_map) do
+			if target:find(k) then
+				return v
+			end
 		end
 	end
 	return target
