@@ -19,7 +19,7 @@ module("luci.controller.lxc", package.seeall)
 local uci  = require "luci.model.uci".cursor()
 local util = require "luci.util"
 local nx   = require "nixio"
-local url  = uci:get("lxc", "lxc", "url")
+local url  = util.shellquote(uci:get("lxc", "lxc", "url"))
 
 function index()
 	if not nixio.fs.access("/etc/config/lxc") then
@@ -44,7 +44,7 @@ function lxc_get_downloadable()
 	local templates = {}
 
 	local f = io.popen('sh /usr/share/lxc/templates/lxc-download --list %s --server %s 2>/dev/null'
-		%{ ssl_status, util.shellquote(url) }, 'r')
+		%{ ssl_status, url }, 'r')
 	local line
 	for line in f:lines() do
 		local dist, version, dist_target = line:match("^(%S+)%s+(%S+)%s+(%S+)%s+default%s+%S+$")
@@ -60,30 +60,21 @@ end
 
 function lxc_create(lxc_name, lxc_template)
 	luci.http.prepare_content("text/plain")
-
 	local path = lxc_get_config_path()
 	if not path then
 		return
 	end
 
-	local src_err
 	local ssl_status = lxc_get_ssl_status()
 	local lxc_dist, lxc_release = lxc_template:match("^(.+):(.+)$")
-	luci.http.write(util.ubus("lxc", "create", {
-		name = lxc_name,
-		template = "download",
-		args = {
-			"--server", url,
-			"--dist", lxc_dist,
-			"--release", lxc_release,
-			"--arch", lxc_get_arch_target(url),
-			ssl_status
-		}
-	}), src_err)
+	luci.sys.call('/usr/bin/lxc-create --quiet --name %s --bdev best --template download -- --dist %s --release %s --arch %s --server %s %s'
+		%{ lxc_name, lxc_dist, lxc_release, lxc_get_arch_target(url), url, ssl_status })
 
 	while (nx.fs.access(path .. lxc_name .. "/partial")) do
 		nx.nanosleep(1)
 	end
+
+	luci.http.write("0")
 end
 
 function lxc_action(lxc_action, lxc_name)
