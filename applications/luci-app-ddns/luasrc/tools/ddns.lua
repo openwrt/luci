@@ -113,7 +113,7 @@ function env_info(type)
 			return has_hostip()
 		elseif type == "has_nslookup" then
 			return has_nslookup()
-		elseif tyep == "has_dnsserver" then
+		elseif type == "has_dnsserver" then
 			if has_bindhost() then return true end
 			if has_hostip() then return true end
 			if has_nslookup() then return true end
