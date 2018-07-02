@@ -14,7 +14,7 @@
 </ul>
 
 <div class="cbi-section">
-	<legend><%:Backup / Restore%></legend>
+	<h3><%:Backup / Restore%></h3>
 	<div class="cbi-section-descr"><%:Click "Generate archive" to download a tar archive of the current configuration files. To reset the firmware to its initial state, click "Perform reset" (only possible with squashfs images).%></div>
 	<div class="cbi-section-node">
 		<form class="inline" method="post" action="<%=url('admin/system/flashops/backup')%>">
@@ -38,7 +38,6 @@
 		</form>
 		<% end %>
 	</div>
-	<br />
 	<div class="cbi-section-descr"><%:To restore configuration files, you can upload a previously generated backup archive here.%></div>
 	<div class="cbi-section-node">
 		<form class="inline" method="post" action="<%=url('admin/system/flashops/restore')%>" enctype="multipart/form-data">
@@ -58,7 +57,7 @@
 </div>
 
 <div class="cbi-section">
-	<legend><%:Flash new firmware image%></legend>
+	<h3><%:Flash new firmware image%></h3>
 	<% if upgrade_avail then %>
 		<form method="post" action="<%=url('admin/system/flashops/sysupgrade')%>" enctype="multipart/form-data">
 			<input type="hidden" name="token" value="<%=token%>" />
