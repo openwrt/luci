@@ -111,7 +111,7 @@ a img {
 
 #mainmenu ul li.selected > a {
 	background: #fff;
-	color: #59d;
+	color: #37c;
 	border: 1px dotted #444;
 	border-width: 1px 0;
 }
@@ -145,7 +145,7 @@ a img {
 
 #tabmenu {
 	padding: 0;
-	margin: -.5em -.5em 1em -.5em;
+	margin: -.5em -.5em .5em -.5em;
 	background: #bbb;
 }
 
@@ -231,25 +231,28 @@ hr {
 	font-weight: normal;
 	padding: .5em;
 	border-radius: 3px;
-	color: #000;
+	border: 1px solid #a22;
+	color: #a22;
+	background: #fee;
+	margin: 0 0 .5em 0;
 }
 
 .alert-message.notice {
-	background: linear-gradient(#ccc 0%, #eee 100%);
-	color: #4a6b7c;
+	border-color: #15a;
+	background: #e6f6ff;
+	color: #15a;
 }
 
 .alert-message.warning {
-	background: linear-gradient(#dda 0%, #dd8 100%);
-	color: #c00;
+	border-color: #ed5;
+	background: #fe9;
+	color: #650;
 }
 
-.alert-message > * {
-	margin: .5em;
-}
-
-.alert-message > h4 {
-	font-weight: bold;
+.alert-message .btn,
+.alert-message .cbi-button {
+	background: inherit;
+	border-color: inherit;
 }
 
 div.hostinfo {
@@ -419,7 +422,11 @@ fieldset > legend + * { clear: both; }
 }
 
 .cbi-section {
-	padding: .5em 0;
+	margin: 0 0 .5em 0;
+}
+
+.cbi-section > h3,
+.cbi-section > legend {
 	margin-top: .5em;
 }
 
@@ -539,11 +546,11 @@ img.cbi-image-button {
 	text-align: center;
 	font-weight: bold;
 	line-height: 13pt;
-	height: 14pt;
+	height: 16pt;
 }
 
 .btn:hover, .cbi-button:hover {
-	box-shadow: 0 0 3px #59d;
+	box-shadow: 0 0 3px #37c;
 }
 
 .btn[disabled],
@@ -559,8 +566,8 @@ img.cbi-image-button {
 .cbi-button-fieldadd,
 .cbi-button-add,
 .cbi-button-save {
-	border-color: #7b7;
-	color: #7b7;
+	border-color: #595;
+	color: #595;
 }
 
 .cbi-button-neutral,
@@ -578,33 +585,33 @@ img.cbi-image-button {
 .cbi-button-apply,
 .cbi-button-reload,
 .cbi-button-edit {
-	border-color: #59d;
-	color: #59d;
+	border-color: #37c;
+	color: #37c;
 }
 
 .cbi-button-negative,
 .cbi-section-remove .cbi-button,
 .cbi-button-remove {
-	border-color: #b77;
-	color: #b77;
+	border-color: #a22;
+	color: #a22;
 }
 
 .cbi-button-action.important,
 .cbi-page-actions .cbi-button-apply,
 .cbi-section-actions .cbi-button-edit {
 	color: #fff;
-	background: #59d;
+	background: #37c;
 }
 
 .cbi-button-positive.important,
 .cbi-page-actions .cbi-button-save {
 	color: #fff;
-	background: #7b7;
+	background: #595;
 }
 
 .cbi-page-actions .cbi-button-apply + .cbi-button-save {
 	background: #fff;
-	color: #7b7;
+	color: #595;
 }
 
 .cbi-input-invalid {
@@ -741,14 +748,16 @@ div.cbi-optionals {
 	position: relative;
 	border: 1px dotted #555;
 	background: #fff;
-	margin-bottom: 5px;
+	margin-bottom: .5em;
 }
 
 .cbi-section-node-tabbed {
 	border-top: none;
+	margin-top: -.5em;
 }
 
-.cbi-section-node .cbi-value:last-child {
+.cbi-section-node .cbi-value:last-child,
+.cbi-section-node .cbi-optionals:last-child {
 	border-bottom: none;
 }
 
@@ -809,7 +818,6 @@ div.cbi-optionals {
 	display: flex;
 	justify-content: flex-end;
 	margin: -3px;
-	padding: 0 .25em .25em .25em;
 }
 
 .cbi-page-actions > form {
@@ -903,7 +911,7 @@ div.cbi-optionals {
 ul.cbi-tabmenu {
 	list-style-type: none;
 	display: flex;
-	margin: 0 !important;
+	margin: 0 0 .5em 0 !important;
 	padding: 0 0 0 5px;
 	border-bottom: 1px solid #bbb;
 }
@@ -1636,7 +1644,7 @@ ul.cbi-tabmenu li.cbi-tab {
 
 	.btn, .cbi-button {
 		font-size: 9pt !important;
-		line-height: 11pt;
+		line-height: 13pt;
 	}
 
 	#maincontent {
@@ -1665,10 +1673,6 @@ ul.cbi-tabmenu li.cbi-tab {
 		text-align: left;
 	}
 
-	.cbi-section {
-		padding: .25em;
-	}
-
 	.cbi-value-title {
 		float: none;
 		font-weight: bold;
@@ -1690,6 +1694,7 @@ ul.cbi-tabmenu li.cbi-tab {
 
 	.cbi-page-actions {
 		flex-wrap: wrap;
+		margin: -2px;
 	}
 
 	.cbi-page-actions > .cbi-button-link {
