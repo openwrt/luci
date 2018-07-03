@@ -209,10 +209,16 @@
 						data_rx_avg = (data_rx_avg / Math.max(data_rx.length, 1));
 						data_tx_avg = (data_tx_avg / Math.max(data_tx.length, 1));
 
+						var size = Math.floor(Math.log2(data_max)),
+						    div = Math.pow(2, size - (size % 10)),
+						    mult = data_max / div,
+						    mult = (mult < 5) ? 2 : ((mult < 50) ? 10 : ((mult < 500) ? 100 : 1000));
+
+						data_max = data_max + (mult * div) - (data_max % (mult * div));
+
 						/* remember current timestamp, calculate horizontal scale */
 						data_stamp = data[data.length-1][TIME];
-						data_scale = height / (data_max * 1.1);
-
+						data_scale = height / data_max;
 
 						/* plot data */
 						var pt_rx = '0,' + height;
@@ -239,9 +245,9 @@
 						line_rx.setAttribute('points', pt_rx);
 						line_tx.setAttribute('points', pt_tx);
 
-						label_25.firstChild.data = bandwidth_label(1.1 * 0.25 * data_max);
-						label_50.firstChild.data = bandwidth_label(1.1 * 0.50 * data_max);
-						label_75.firstChild.data = bandwidth_label(1.1 * 0.75 * data_max);
+						label_25.firstChild.data = bandwidth_label(0.25 * data_max);
+						label_50.firstChild.data = bandwidth_label(0.50 * data_max);
+						label_75.firstChild.data = bandwidth_label(0.75 * data_max);
 
 						label_rx_cur.innerHTML = bandwidth_label(data_rx[data_rx.length-1], true);
 						label_tx_cur.innerHTML = bandwidth_label(data_tx[data_tx.length-1], true);
