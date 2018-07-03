@@ -7,7 +7,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=LuCI JSON library
-LUCI_DEPENDS:=+luci-base
+LUCI_DEPENDS:=
 
 PKG_LICENSE:=Apache-2.0
 
