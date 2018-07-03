@@ -14,8 +14,8 @@
 </ul>
 
 <div class="cbi-section">
-	<h3><%:Backup / Restore%></h3>
-	<div class="cbi-section-descr"><%:Click "Generate archive" to download a tar archive of the current configuration files. To reset the firmware to its initial state, click "Perform reset" (only possible with squashfs images).%></div>
+	<h3><%:Backup%></h3>
+	<div class="cbi-section-descr"><%:Click "Generate archive" to download a tar archive of the current configuration files.%></div>
 	<div class="cbi-section-node">
 		<form class="inline" method="post" action="<%=url('admin/system/flashops/backup')%>">
 			<input type="hidden" name="token" value="<%=token%>" />
@@ -26,6 +26,11 @@
 				</div>
 			</div>
 		</form>
+	</div>
+
+	<h3><%:Restore%></h3>
+	<div class="cbi-section-descr"><%:To restore configuration files, you can upload a previously generated backup archive here. To reset the firmware to its initial state, click "Perform reset" (only possible with squashfs images).%></div>
+	<div class="cbi-section-node">
 		<% if reset_avail then %>
 		<form class="inline" method="post" action="<%=url('admin/system/flashops/reset')%>">
 			<input type="hidden" name="token" value="<%=token%>" />
@@ -37,9 +42,6 @@
 			</div>
 		</form>
 		<% end %>
-	</div>
-	<div class="cbi-section-descr"><%:To restore configuration files, you can upload a previously generated backup archive here.%></div>
-	<div class="cbi-section-node">
 		<form class="inline" method="post" action="<%=url('admin/system/flashops/restore')%>" enctype="multipart/form-data">
 			<div class="cbi-value cbi-value-last">
 				<label class="cbi-value-title" for="archive"><%:Restore backup%>:</label>
@@ -47,6 +49,9 @@
 					<input type="hidden" name="token" value="<%=token%>" />
 					<input type="file" name="archive" id="archive" />
 					<input type="submit" class="cbi-button cbi-button-action important" name="restore" value="<%:Upload archive...%>" />
+					<% if reset_avail then %>
+						<div class="cbi-value-description"><%:Custom files (certificates, scripts) may remain on the system. To prevent this, perform a factory-reset first.%></div>
+					<% end %>
 				</div>
 			</div>
 		</form>
@@ -54,9 +59,6 @@
 			<div class="cbi-section-error"><%:The backup archive does not appear to be a valid gzip file.%></div>
 		<% end %>
 	</div>
-	<% if reset_avail then %>
-		<div class="alert-message warning"><%:Custom files (certificates, scripts) may remain on the system. To prevent this, perform a factory-reset first.%></div>
-	<% end %>
 </div>
 
 <div class="cbi-section">
