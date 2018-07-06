@@ -421,42 +421,72 @@ function timehhmmss(val)
 	return (val:match("^[0-6][0-9]:[0-6][0-9]:[0-6][0-9]$") ~= nil)
 end
 
-function dateyyyymmdd(val)
-	if val ~= nil then
-		yearstr, monthstr, daystr = val:match("^(%d%d%d%d)-(%d%d)-(%d%d)$")
-		if (yearstr == nil) or (monthstr == nil) or (daystr == nil) then
-			return false;
-		end
-		year = tonumber(yearstr)
-		month = tonumber(monthstr)
-		day = tonumber(daystr)
-		if (year == nil) or (month == nil) or (day == nil) then
-			return false;
-		end
+function dateyyyymmdd(val, allow_time)
+	if val == nil then
+		return false
+	end
 
-		local days_in_month = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 }
+	datestr_postfix = "$"
 
-		local function is_leap_year(year)
-			return (year % 4 == 0) and ((year % 100 ~= 0) or (year % 400 == 0))
-		end
+	if allow_time then
+		datestr_postfix = ""
+	end
 
-		function get_days_in_month(month, year)
-			if (month == 2) and is_leap_year(year) then
-				return 29
-			else
-				return days_in_month[month]
-			end
+	yearstr, monthstr, daystr = val:match("^(%d%d%d%d)-(%d%d)-(%d%d)" .. datestr_postfix)
+	if (yearstr == nil) or (monthstr == nil) or (daystr == nil) then
+		return false;
+	end
+	year = tonumber(yearstr)
+	month = tonumber(monthstr)
+	day = tonumber(daystr)
+	if (year == nil) or (month == nil) or (day == nil) then
+		return false;
+	end
+
+	local days_in_month = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 }
+
+	local function is_leap_year(year)
+		return (year % 4 == 0) and ((year % 100 ~= 0) or (year % 400 == 0))
+	end
+
+	function get_days_in_month(month, year)
+		if (month == 2) and is_leap_year(year) then
+			return 29
+		else
+			return days_in_month[month]
 		end
-		if (year < 2015) then
-			return false
-		end
-		if ((month == 0) or (month > 12)) then
-			return false
-		end
-		if ((day == 0) or (day > get_days_in_month(month, year))) then
-			return false
-		end
+	end
+	if (year < 2015) then
+		return false
+	end
+	if ((month == 0) or (month > 12)) then
+		return false
+	end
+	if ((day == 0) or (day > get_days_in_month(month, year))) then
+		return false
+	end
+
+	-- The date part of the string (yyyy-mm-dd) is ten characthers long, so
+	-- there is no point checking for time is length is shorter than 11
+	if not allow_time or (val:len() < 11) then
 		return true
 	end
-	return false
+
+	timestr = val:sub(11)
+
+	hourstr, minutestr, secstr = timestr:match("^T(%d%d):(%d%d):(%d%d)$")
+
+	if (hourstr == nil) or (minutestr == nil) or (secstr == nil) then
+		return false
+	end
+
+	hour = tonumber(hourstr)
+	minute = tonumber(minutestr)
+	sec = tonumber(secstr)
+
+	if ((hour > 23) or (minute > 59) or (sec > 59)) then
+		return false
+	end
+
+	return true
 end
