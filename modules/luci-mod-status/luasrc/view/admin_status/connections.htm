@@ -131,15 +131,21 @@
 				}
 
 				label_scale.innerHTML = String.format('<%:(%d minute window, %d second interval)%>', data_wanted / 60, 3);
+				
+				var recheck_lookup_queue = {};
 
 				/* render datasets, start update interval */
 				XHR.poll(3, '<%=build_url("admin/status/realtime/connections_status")%>', null,
 					function(x, json)
 					{
-						var rows = [];
+
+						if (!json.connections)
+							return;
+
 						var conn = json.connections;
 
 						var lookup_queue = [ ];
+						var rows = [];
 
 						conn.sort(function(a, b) {
 							return b.bytes - a.bytes;
@@ -150,13 +156,13 @@
 							var c  = conn[i];
 
 							if ((c.src == '127.0.0.1' && c.dst == '127.0.0.1') ||
-							    (c.src == '::1'       && c.dst == '::1'))
+								(c.src == '::1'       && c.dst == '::1'))
 								continue;
 
-							if (!dns_cache[c.src])
+							if (!dns_cache[c.src] && lookup_queue.indexOf(c.src) == -1)
 								lookup_queue.push(c.src);
 
-							if (!dns_cache[c.dst])
+							if (!dns_cache[c.dst] && lookup_queue.indexOf(c.dst) == -1)
 								lookup_queue.push(c.dst);
 
 							var src = dns_cache[c.src] || (c.layer3 == 'ipv6' ? '[' + c.src + ']' : c.src);
@@ -173,14 +179,39 @@
 
 						cbi_update_table(conn_table, rows, '<em><%:No information available%></em>');
 
-						if (lookup_queue.length > 0)
-							XHR.get('<%=build_url("admin/status/nameinfo")%>/' + lookup_queue.slice(0, 100).join('/'), null,
-								function(x, json)
-								{
-									for (var addr in json)
-										dns_cache[addr] = json[addr];
+						if (lookup_queue.length > 0) {
+							var reduced_lookup_queue = lookup_queue;
+						
+							if (lookup_queue.length > 100)
+								reduced_lookup_queue = lookup_queue.slice(0, 100);
+
+							XHR.get('<%=build_url("admin/status/nameinfo")%>/' + reduced_lookup_queue.join('/'), null,
+								function(x, json) {
+									if (!json)
+										return;
+									
+									for (var index in reduced_lookup_queue) {
+										var address = reduced_lookup_queue[index];
+										
+										if (!address)
+											continue;
+										
+										if (json[address]) {
+											dns_cache[address] = json[address];
+											lookup_queue.splice(reduced_lookup_queue.indexOf(address),1);
+											continue;
+										}
+	
+										if(recheck_lookup_queue[address] > 2) {
+											dns_cache[address] = (address.match(/:/)) ? '[' + address + ']' : address;
+											lookup_queue.splice(index,1);
+										} else {
+											recheck_lookup_queue[address] != null ? recheck_lookup_queue[address]++ : recheck_lookup_queue[address] = 0;
+										}
+									}
 								}
 							);
+						}
 
 
 						var data = json.statistics;
