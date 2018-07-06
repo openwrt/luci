@@ -421,42 +421,61 @@ function timehhmmss(val)
 	return (val:match("^[0-6][0-9]:[0-6][0-9]:[0-6][0-9]$") ~= nil)
 end
 
-function dateyyyymmdd(val)
-	if val ~= nil then
-		yearstr, monthstr, daystr = val:match("^(%d%d%d%d)-(%d%d)-(%d%d)$")
-		if (yearstr == nil) or (monthstr == nil) or (daystr == nil) then
-			return false;
-		end
-		year = tonumber(yearstr)
-		month = tonumber(monthstr)
-		day = tonumber(daystr)
-		if (year == nil) or (month == nil) or (day == nil) then
-			return false;
-		end
-
-		local days_in_month = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 }
-
-		local function is_leap_year(year)
-			return (year % 4 == 0) and ((year % 100 ~= 0) or (year % 400 == 0))
-		end
-
-		function get_days_in_month(month, year)
-			if (month == 2) and is_leap_year(year) then
-				return 29
-			else
-				return days_in_month[month]
-			end
-		end
-		if (year < 2015) then
-			return false
-		end
-		if ((month == 0) or (month > 12)) then
-			return false
-		end
-		if ((day == 0) or (day > get_days_in_month(month, year))) then
-			return false
-		end
-		return true
+function check_date(yearstr, monthstr, datestr)
+	year = tonumber(yearstr)
+	month = tonumber(monthstr)
+	day = tonumber(daystr)
+	if (year == nil) or (month == nil) or (day == nil) then
+		return false;
 	end
-	return false
+
+	local days_in_month = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 }
+
+	local function is_leap_year(year)
+		return (year % 4 == 0) and ((year % 100 ~= 0) or (year % 400 == 0))
+	end
+
+	function get_days_in_month(month, year)
+		if (month == 2) and is_leap_year(year) then
+			return 29
+		else
+			return days_in_month[month]
+		end
+	end
+	if (year < 2015) then
+		return false
+	end
+	if ((month == 0) or (month > 12)) then
+		return false
+	end
+	if ((day == 0) or (day > get_days_in_month(month, year))) then
+		return false
+	end
+	return true
+end
+
+function dateyyyymmdd(val)
+	if val == nil then
+		return false
+	end
+
+	yearstr, monthstr, daystr = val:match("^(%d%d%d%d)-(%d%d)-(%d%d)$")
+	if (yearstr == nil) or (monthstr == nil) or (daystr == nil) then
+		return false;
+	end
+
+	return check_date(yearstr, monthstr, datestr)
+end
+
+function dateyyyymmddthhmmss(val)
+	if val == nil then
+		return false
+	end
+
+	yearstr, monthstr, daystr = val:match("^(%d%d%d%d)-(%d%d)-(%d%d)T[0-6][0-9]:[0-6][0-9]:[0-6][0-9]$")
+	if (yearstr == nil) or (monthstr == nil) or (daystr == nil) then
+		return false;
+	end
+
+	return check_date(yearstr, monthstr, datestr)
 end
