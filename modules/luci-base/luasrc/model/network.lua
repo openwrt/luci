@@ -1476,11 +1476,24 @@ function wifidev.get_wifinets(self)
 	return nets
 end
 
-function wifidev.add_wifinet(self, options)
+function wifidev.get_num_wifinets(self)
+	local num_wifinets = 0
+
+	_uci:foreach("wireless", "wifi-iface",
+		function(s)
+			if s.device == self.sid then
+				num_wifinets = num_wifinets + 1
+			end
+		end)
+
+	return num_wifinets
+end
+
+function wifidev.add_wifinet(self, name, options)
 	options = options or { }
 	options.device = self.sid
 
-	local wnet = _uci:section("wireless", "wifi-iface", nil, options)
+	local wnet = _uci:section("wireless", "wifi-iface", name, options)
 	if wnet then
 		return wifinet(wnet, options)
 	end

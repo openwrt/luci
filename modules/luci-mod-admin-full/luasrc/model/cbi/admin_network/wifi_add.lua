@@ -141,7 +141,7 @@ function newnet.parse(self, section)
 	else
 		wconf.network = net:name()
 
-		local wnet = wdev:add_wifinet(wconf)
+		local wnet = wdev:add_wifinet("default_" .. m.hidden.device, wconf)
 		if wnet then
 			if zone then
 				fw:del_network(net:name())
