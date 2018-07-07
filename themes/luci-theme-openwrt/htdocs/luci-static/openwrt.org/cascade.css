@@ -839,6 +839,11 @@ div.cbi-optionals {
 	margin-right: auto;
 }
 
+*::-ms-backdrop,
+.cbi-page-actions > .cbi-button-link,
+.cbi-page-actions > form[method="get"]:first-child {
+	margin-right: 50%;
+}
 
 .th[data-type="button"], .td[data-type="button"],
 .th[data-type="fvalue"], .td[data-type="fvalue"] {
@@ -849,10 +854,6 @@ div.cbi-optionals {
 #cbi-network-switch_vlan .th,
 #cbi-network-switch_vlan .td {
 	flex-basis: 12%;
-}
-
-#cbi-wireless-overview .td:first-child {
-	align-self: center;
 }
 
 .td[data-title]::before {
@@ -935,7 +936,7 @@ ul.cbi-tabmenu li a:hover {
 	text-decoration: none;
 	color: inherit;
 	padding: 5px;
-	flex: 1;
+	flex: 1 1 auto;
 	width: 100%;
 	height: 100%;
 }
@@ -1296,11 +1297,11 @@ ul.cbi-tabmenu li.cbi-tab {
 .network-status-table .ifacebox-body {
 	display: flex;
 	flex-direction: column;
-	flex: 1 0;
+	flex: 1 0 auto;
 }
 
 .network-status-table .ifacebox-body > span {
-	flex: 10;
+	flex: 10 10 auto;
 }
 
 .network-status-table .ifacebox-body > div {
@@ -1440,6 +1441,7 @@ ul.cbi-tabmenu li.cbi-tab {
 	#maincontent {
 		width: 96%;
 		margin: auto;
+		flex-basis: auto;
 	}
 
 	#mainmenu {
@@ -1465,7 +1467,7 @@ ul.cbi-tabmenu li.cbi-tab {
 	}
 
 	#mainmenu ul > li > a {
-		flex: 1;
+		flex: 1 1 auto;
 		color: #fff;
 		border: 1px solid #444;
 		border-width: 0 0 1px 1px;
