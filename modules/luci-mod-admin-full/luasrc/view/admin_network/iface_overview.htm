@@ -30,7 +30,6 @@
 		end)
 -%>
 
-<script type="text/javascript" src="<%=resource%>/cbi.js"></script>
 <script type="text/javascript">//<![CDATA[
 	function iface_shutdown(id, reconnect) {
 		if (!reconnect && !confirm(<%=luci.http.write_json(translate('Really shutdown interface "%s"? You might lose access to this device if you are connected via this interface.'))%>.format(id)))
