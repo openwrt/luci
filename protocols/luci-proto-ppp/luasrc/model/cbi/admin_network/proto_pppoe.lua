@@ -114,6 +114,14 @@ keepalive_interval.placeholder = "5"
 keepalive_interval.datatype    = "min(1)"
 
 
+host_uniq = section:taboption("advanced", Value, "host_uniq",
+	translate("Host-Uniq tag content"),
+	translate("Raw hex-encoded bytes. Leave empty unless your ISP require this"))
+
+host_uniq.placeholder = translate("auto")
+host_uniq.datatype    = "hex"
+
+
 demand = section:taboption("advanced", Value, "demand",
 	translate("Inactivity timeout"),
 	translate("Close inactive connection after the given amount of seconds, use 0 to persist connection"))
