@@ -2081,10 +2081,10 @@ function cbi_update_table(table, data, placeholder) {
 				var trow = E('div', { 'class': 'tr' });
 
 				for (var i = 0; i < titles.length; i++) {
-					var text = titles[i].innerText;
+					var text = (titles[i].innerText || '').trim();
 					var td = trow.appendChild(E('div', {
 						'class': titles[i].className,
-						'data-title': text ? text.trim() : null
+						'data-title': (text !== '') ? text : null
 					}, row[i] || ''));
 
 					td.classList.remove('th');
