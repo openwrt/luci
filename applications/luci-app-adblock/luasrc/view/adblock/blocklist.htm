@@ -33,7 +33,6 @@ end
 	margin-left:0px;
 	padding-left:2px;
 	line-height:20px;
-	height:20px;
 }
 .table.cbi-section-table .th
 {
@@ -55,6 +54,11 @@ end
 }
 </style>
 
+<%-
+	local anonclass = (not self.anonymous or self.sectiontitle) and "named" or "anonymous"
+	local titlename = ifattr(not self.anonymous or self.sectiontitle, "data-title", translate("Name"))
+-%>
+
 <fieldset class="cbi-section" id="cbi-<%=self.config%>-<%=self.sectiontype%>">
 	<% if self.title then -%>
 		<legend><%=self.title%></legend>
@@ -62,12 +66,7 @@ end
 	<div class="cbi-section-descr"><%=self.description%></div>
 	<div class="cbi-section-node">
 		<div class="table cbi-section-table">
-			<div class="tr cbi-section-table-titles">
-			<%- if self.sectionhead then -%>
-				<div class="th cbi-section-table-cell"><%=self.sectionhead%></div>
-			<%- else -%>
-				<div class="th">&#160;</div>
-			<%- end -%>
+			<div class="tr cbi-section-table-titles <%=anonclass%>"<%=titlename%>>
 			<%- for i, k in pairs(self.children) do -%>
 				<div class="th cbi-section-table-cell"<%=width(k)%>>
 					<%-=k.title-%>
@@ -76,12 +75,14 @@ end
 			</div>
 			<%- local isempty = true
 				for i, k in ipairs(self:cfgsections()) do
-					section = k
+					local section = k
+					local sectionname = striptags((type(self.sectiontitle) == "function") and self:sectiontitle(section) or k)
+					local sectiontitle = ifattr(sectionname and (not self.anonymous or self.sectiontitle), "data-title", sectionname)
+
 					isempty = false
 					scope = { valueheader = "cbi/cell_valueheader", valuefooter = "cbi/cell_valuefooter" }
 			-%>
-			<div class="tr cbi-section-table-row" id="cbi-<%=self.config%>-<%=section%>">
-				<div class="th"><%=k%></div>
+			<div class="tr cbi-section-table-row" id="cbi-<%=self.config%>-<%=section%>"<%=sectiontitle%>>
 				<%-
 					for k, node in ipairs(self.children) do
 						node:render(section, scope or {})
