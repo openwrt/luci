@@ -5,7 +5,7 @@
 local map, section, net = ...
 local ifname = net:get_interface():name()
 local private_key, listen_port
-local metric, mtu, preshared_key
+local metric, mtu, preshared_key, description
 local peers, public_key, allowed_ips, endpoint, persistent_keepalive
 
 
@@ -94,6 +94,16 @@ peers = map:section(
 peers.template = "cbi/tsection"
 peers.anonymous = true
 peers.addremove = true
+
+
+description = peers:option(
+  Value,
+  "description",
+  translate("Description"),
+  translate("Optional. Description of peer."))
+description.placeholder = "My Peer"
+description.datatype = "string"
+description.optional = true
 
 
 public_key = peers:option(
