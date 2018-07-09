@@ -59,10 +59,22 @@
     bottom: 0;
     text-align: center;
     line-height: 3em;
+    background: inherit;
 }
 
 .table[width="33%"], .th[width="33%"], .td[width="33%"] { width: 33%; }
 .table[width="100%"], .th[width="100%"], .td[width="100%"] { width: 100%; }
+
+.col-1 { flex: 1 1 30px !important; -webkit-flex: 1 1 30px !important; }
+.col-2 { flex: 2 2 60px !important; -webkit-flex: 2 2 60px !important; }
+.col-3 { flex: 3 3 90px !important; -webkit-flex: 3 3 90px !important; }
+.col-4 { flex: 4 4 120px !important; -webkit-flex: 4 4 120px !important; }
+.col-5 { flex: 5 5 150px !important; -webkit-flex: 5 5 150px !important; }
+.col-6 { flex: 6 6 180px !important; -webkit-flex: 6 6 180px !important; }
+.col-7 { flex: 7 7 210px !important; -webkit-flex: 7 7 210px !important; }
+.col-8 { flex: 8 8 240px !important; -webkit-flex: 8 8 240px !important; }
+.col-9 { flex: 9 9 270px !important; -webkit-flex: 9 9 270px !important; }
+.col-10 { flex: 10 10 300px !important; -webkit-flex: 10 10 300px !important; }
 
 .cbi-button-up,
 .cbi-button-down,
@@ -461,7 +473,7 @@ h4 {
 }
 
 .cbi-section {
-    margin: 2rem 0 0 0;
+    margin: 1rem 0 0 0;
     padding: 2rem;
     border: 0;
     font-weight: normal;
@@ -491,6 +503,7 @@ fieldset > fieldset {
     box-shadow: none;
 }
 
+.cbi-section > h3:first-child,
 .panel-title {
     width: 100%;
     display: block;
@@ -499,6 +512,7 @@ fieldset > fieldset {
     font-size: 1.4rem;
     padding-bottom: 1rem;
     border-bottom: 1px solid #eee;
+    margin: 0;
 }
 
 table {
@@ -518,41 +532,18 @@ table > tbody > tr > td, table > tbody > tr > th, table > tfoot > tr > td, table
     white-space: nowrap;
 }
 
-.td.cbi-value-field,
-.cbi-section-table-cell {
-    text-align: center;
-    display: inline-block;
-    flex: 10;
-}
-
 .cbi-section-table-cell {
     white-space: nowrap;
     align-self: flex-end;
-    flex: 1;
-}
-
-.td.cbi-value-field[data-title]::before {
-    content: attr(data-title);
-    padding: .5rem;
-    display: block;
-    white-space: nowrap;
+    flex: 1 1 auto;
 }
 
 .cbi-section-table {
     border: none;
 }
 
-.tr.cbi-section-table-titles,
-.tr.cbi-section-table-descr {
-    display: none;
-}
-
 .cbi-section-table-row {
     text-align: center;
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: row;
-    justify-content: space-between;
     margin-bottom: 1rem;
     background: #f4f4f4;
     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .16), 0 0 2px 0 rgba(0, 0, 0, .12);
@@ -562,22 +553,16 @@ table > tbody > tr > td, table > tbody > tr > th, table > tfoot > tr > td, table
     margin-bottom: 0;
 }
 
-.cbi-section-table-row[data-title]::before {
-    content: attr(data-title);
-    display: block;
-    width: 100%;
-    margin: .25rem;
-    padding: .25rem .25rem .5rem .25rem;
-    border-bottom: 1px solid rgba(0, 0, 0, .26);
-    text-align: center;
-    font-size: 1rem;
-}
-
 .cbi-section-table-row > .cbi-value-field .cbi-input-select,
 .cbi-section-table-row > .cbi-value-field .cbi-input-text,
 .cbi-section-table-row > .cbi-value-field .cbi-input-password,
 .cbi-section-table-row > .cbi-value-field .cbi-dropdown {
     width: 100%;
+}
+
+.cbi-section-table-row > .cbi-value-field [data-dynlist] > input,
+.cbi-section-table-row > .cbi-value-field input.cbi-input-password {
+    width: calc(100% - 1.5rem);
 }
 
 div > table > tbody > tr:nth-of-type(2n),
@@ -852,6 +837,33 @@ form.inline + form.inline,
     border: none;
 }
 
+.td[data-title]::before {
+    content: attr(data-title) ":\20";
+    font-weight: bold;
+    text-align: left;
+    display: none;
+    padding: .25rem 0;
+    white-space: nowrap;
+}
+
+.tr.placeholder .td[data-title]::before {
+    display: none;
+}
+
+.tr[data-title]::before,
+.tr.cbi-section-table-titles.named::before {
+    content: attr(data-title) "\20";
+    font-weight: bold;
+    text-align: center;
+    display: table-cell;
+    align-self: center;
+    flex: 1 1 5%;
+    padding: .25rem;
+    white-space: normal;
+    word-wrap: break-word;
+    vertical-align: middle;
+}
+
 .cbi-rowstyle-2 {
     background-color: #eee;
 }
@@ -1045,16 +1057,26 @@ form.inline + form.inline,
     display: none
 }
 
-.left {
+.left, .left::before {
     text-align: left !important;
 }
 
-.right {
+.right, .right::before {
     text-align: right !important;
 }
 
-.center {
+.center, .center::before {
     text-align: center !important;
+}
+
+.top {
+    align-self: flex-start !important;
+    vertical-align: top !important;
+}
+
+.bottom {
+    align-self: flex-end !important;
+    vertical-align: bottom !important;
 }
 
 .inline {
@@ -1080,6 +1102,12 @@ form.inline + form.inline,
 
 .cbi-value-field .cbi-input-select {
     width: 15rem;
+}
+
+.th[data-type="button"], .td[data-type="button"],
+.th[data-type="fvalue"], .td[data-type="fvalue"] {
+    flex: 1 1 2em;
+    text-align: center;
 }
 
 .ifacebadge {
@@ -1124,7 +1152,7 @@ td > .ifacebadge,
 }
 
 .network-status-table .ifacebox-body > span {
-    flex: 10;
+    flex: 10 10 auto;
 }
 
 .network-status-table .ifacebox-body > div {
@@ -1133,7 +1161,7 @@ td > .ifacebadge,
 }
 
 .network-status-table .ifacebox-body .ifacebadge {
-    flex: 1;
+    flex: 1 1 auto;
     margin: .5em .25em 0 .25em;
     padding: .5em;
     min-width: 220px;
@@ -1301,6 +1329,11 @@ td > .ifacebadge,
 .cbi-value-field .cbi-input-radio {
     margin-top: 0.5rem;
     height: 1rem;
+}
+
+.td .cbi-input-checkbox,
+.td .cbi-input-radio {
+    margin-top: 0;
 }
 
 .cbi-value-field > input + .cbi-value-description {
@@ -1805,10 +1838,29 @@ body.lang_pl.node-main-login .cbi-value-title {
     }
 
     .th, .td {
-        flex: 1;
-        flex-basis: 33%;
+        flex: 2 2 25%;
+        align-self: flex-start;
         overflow: hidden;
         text-overflow: ellipsis;
+        word-wrap: break-word;
+        display: inline-block;
+    }
+
+    .td select,
+    .td input[type="text"] {
+        word-wrap: normal;
+        width: 100%;
+    }
+
+    .td [data-dynlist] > input,
+    .td input.cbi-input-password {
+        width: calc(100% - 1.5rem);
+    }
+
+    .td[data-type="button"],
+    .td[data-type="fvalue"] {
+        flex: 1 1 12.5%;
+        text-align: left;
     }
 
     .th.cbi-value-field,
@@ -1816,6 +1868,54 @@ body.lang_pl.node-main-login .cbi-value-title {
     .th.cbi-section-table-cell,
     .td.cbi-section-table-cell {
         flex-basis: auto;
+    }
+
+    .cbi-section-table-row {
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    .td.cbi-value-field,
+    .cbi-section-table-cell {
+        text-align: center;
+        display: inline-block;
+        flex: 10 10 auto;
+    }
+
+    .td.cbi-section-actions {
+        text-align: right;
+        align-self: flex-end;
+        vertical-align: bottom;
+    }
+
+    .tr.table-titles,
+    .tr.cbi-section-table-titles,
+    .tr.cbi-section-table-descr {
+        display: none;
+    }
+
+    .tr[data-title]::before,
+    .tr.cbi-section-table-titles.named::before {
+        display: block;
+        flex: 1 1 100%;
+        background: #eef;
+        font-size: .9rem;
+        border-bottom: 1px solid rgba(0, 0, 0, .26);
+    }
+
+    .td[data-title] {
+        text-align: left;
+    }
+
+    .td[data-title]::before {
+        display: block;
+    }
+
+    .hide-sm,
+    .hide-xs {
+        display: none;
     }
 }
 
@@ -1958,6 +2058,25 @@ body.lang_pl.node-main-login .cbi-value-title {
 
     .td.cbi-value-field {
         flex-basis: 100%;
+    }
+
+    .td.cbi-value-field[data-type="dvalue"] {
+        flex-basis: 50%;
+    }
+
+    .td.cbi-value-field[data-type="button"],
+    .td.cbi-value-field[data-type="fvalue"] {
+        flex-basis: 25%;
+        text-align: left;
+    }
+
+    .tr[data-title]::before,
+    .tr.cbi-section-table-titles.named::before {
+        font-size: 1rem;
+    }
+
+    .hide-xs {
+        display: none;
     }
 }
 
