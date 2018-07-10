@@ -14,6 +14,7 @@ Currently supported dual-partition devices include:
 - Linksys WRT1900ACv2
 - Linksys WRT1900ACS
 - Linksys WRT3200ACM
+- Linksys WRT32X
 - ZyXEL NBG6817
 
 If you're interested in having your device supported, please post in [LEDE Project Forum Support Thread](https://forum.lede-project.org/t/web-ui-to-reboot-to-another-partition-dual-partition-routers/3423).
@@ -34,4 +35,4 @@ opkg install luci-app-advanced-reboot
 - Some devices allow you to trigger reboot to an alternative partition by interrupting boot 3 times in a row (by resetting/switching off the device or pulling power). As these methods might be different for different devices, do your own homework.
 
 ## Thanks
-I'd like to thank everyone who helped create, test and troubleshoot this package. Without contributions from [@hnyman](https://github.com/hnyman), [@jpstyves](https://github.com/jpstyves) and [@slh](https://github.com/pkgadd) it wouldn't have been possible.
+I'd like to thank everyone who helped create, test and troubleshoot this package. Without help from [@hnyman](https://github.com/hnyman), [@jpstyves](https://github.com/jpstyves) and many contributions from [@slh](https://github.com/pkgadd) it wouldn't have been possible.

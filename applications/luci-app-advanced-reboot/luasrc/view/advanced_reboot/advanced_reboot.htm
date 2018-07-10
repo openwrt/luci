@@ -79,7 +79,11 @@
   </div>
 </fieldset>
 <%- else -%>
-  <p class="alert-message warning"><%:Warning: This system does not have two partitions!%></p>
+  <%- if rom_board_name then -%>
+    <p class="alert-message warning"><%:Warning: Device (%><%=rom_board_name%><%:) is unknown or isn't a dual-partition device!%></p>
+  <%- else -%>
+    <p class="alert-message warning"><%:Warning: Unable to obtain device information!%></p>
+  <%- end -%>
 <%- end -%>
 
 <hr />
