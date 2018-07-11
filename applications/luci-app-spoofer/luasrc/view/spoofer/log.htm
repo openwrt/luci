@@ -1,0 +1,6 @@
+<%+header%>
+<h2 name="content"><%:Spoofer Prober Log%> <%=logname%></h2>
+<div id="content_spooferlog">
+<textarea style="font-size: 12px; width:100%;" readonly="readonly" wrap="off" rows="<%=spooferlog:cmatch("\n")+1%>" id="spooferlog"><%=spooferlog:pcdata()%></textarea>
+</div>
+<%+footer%>
