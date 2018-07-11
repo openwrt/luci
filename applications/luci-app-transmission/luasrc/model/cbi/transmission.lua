@@ -8,7 +8,7 @@ require("luci.model.ipkg")
 local uci = require "luci.model.uci".cursor()
 local trport = uci:get_first("transmission", "transmission", "rpc_port") or 9091
 local running = (luci.sys.call("pidof transmission-daemon > /dev/null") == 0)
-local webinstalled = luci.model.ipkg.installed("transmission-web") 
+local webinstalled = luci.model.ipkg.installed("transmission-web") or uci:get_first("transmission", "transmission", "web_home")
 local button = ""
 if running and webinstalled then
 	button = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type=\"button\" value=\" " .. translate("Open Web Interface") .. " \" onclick=\"window.open('http://'+window.location.hostname+':" .. trport .. "')\"/>"
@@ -29,6 +29,7 @@ for _, p_user in luci.util.vspairs(luci.util.split(luci.sys.exec("cat /etc/passw
 	user:value(p_user)
 end
 cache_size_mb=s:option(Value, "cache_size_mb", translate("Cache size in MB"))
+web_home=s:option(Value, "web_home", translate("Custom WEB UI directory"))
 
 bandwidth=m:section(TypedSection, "transmission", translate("Bandwidth settings"))
 bandwidth.anonymous=true
