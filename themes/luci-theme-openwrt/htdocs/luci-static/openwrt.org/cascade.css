@@ -19,8 +19,7 @@ body {
 	background-position: bottom center;
 	background-repeat: repeat-x;
 	font-family: Arial, Verdana, sans-serif;
-	font-size: 16px;
-	line-height: 100%;
+	font-size: 10pt;
 	padding-bottom: 1.5em;
 }
 
@@ -87,7 +86,7 @@ a img {
 	background: #f5f5f5;
 	border: 1px solid #444;
 	border-width: 0 0 1px 1px;
-	font-size: 85%;
+	font-size: 11pt;
 	padding-bottom: 1em;
 }
 
@@ -249,18 +248,11 @@ hr {
 	color: #650;
 }
 
-.alert-message .btn,
-.alert-message .cbi-button {
-	background: inherit;
-	border-color: inherit;
-}
-
 div.hostinfo {
 	float: left;
 	margin: 0;
 	padding: 0;
 	width: auto;
-	font-size: 80%;
 	padding: 0.5em;
 }
 
@@ -302,8 +294,6 @@ html #menubar a:visited {
 	background: #000000;
 	color: #ffffff;
 	text-decoration: none;
-	font-size: 80%;
-	font-weight: normal;
 }
 
 
@@ -384,7 +374,6 @@ textarea#syslog {
 	padding: 0.5em;
 	background: #f5f5f5;
 	color: #000000;
-	font-size: 80%;
 	border-width: 0 1px 1px 1px;
 	border-style: solid;
 	border-color: #444444;
@@ -417,8 +406,8 @@ fieldset { border: none; }
 fieldset > legend { float: left; }
 fieldset > legend + * { clear: both; }
 
-#maincontent p {
-	margin-bottom: 1em;
+p {
+	margin-bottom: .5em;
 }
 
 .cbi-section {
@@ -484,7 +473,7 @@ input[type=image] {
 }
 
 input:focus,
-input:not(.cbi-button):hover,
+input:not(.btn):not(.cbi-button):hover,
 select:focus,
 select:hover {
 	background-color: #ffffff;
@@ -607,6 +596,11 @@ img.cbi-image-button {
 .cbi-page-actions .cbi-button-save {
 	color: #fff;
 	background: #595;
+}
+
+.cbi-button-negative.important {
+	color: #fff;
+	background: #a22;
 }
 
 .cbi-page-actions .cbi-button-apply + .cbi-button-save {
@@ -1203,6 +1197,7 @@ ul.cbi-tabmenu li.cbi-tab {
 	left: 1em;
 	height: 1.5em;
 	font-size: 80%;
+	margin-bottom: 0;
 }
 
 .luci a:link,
