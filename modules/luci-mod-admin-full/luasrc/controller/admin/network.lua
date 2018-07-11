@@ -45,14 +45,11 @@ function index()
 		if has_wifi then
 			page = entry({"admin", "network", "wireless_assoclist"}, call("wifi_assoclist"), nil)
 			page.leaf = true
-		
+
 			page = entry({"admin", "network", "wireless_join"}, post("wifi_join"), nil)
 			page.leaf = true
 
 			page = entry({"admin", "network", "wireless_add"}, post("wifi_add"), nil)
-			page.leaf = true
-
-			page = entry({"admin", "network", "wireless_delete"}, post("wifi_delete"), nil)
 			page.leaf = true
 
 			page = entry({"admin", "network", "wireless_status"}, call("wifi_status"), nil)
@@ -61,10 +58,7 @@ function index()
 			page = entry({"admin", "network", "wireless_reconnect"}, post("wifi_reconnect"), nil)
 			page.leaf = true
 
-			page = entry({"admin", "network", "wireless_shutdown"}, post("wifi_shutdown"), nil)
-			page.leaf = true
-
-			page = entry({"admin", "network", "wireless"}, arcombine(template("admin_network/wifi_overview"), cbi("admin_network/wifi")), _("Wireless"), 15)
+			page = entry({"admin", "network", "wireless"}, arcombine(cbi("admin_network/wifi_overview"), cbi("admin_network/wifi")), _("Wireless"), 15)
 			page.leaf = true
 			page.subindex = true
 
@@ -201,29 +195,6 @@ function wifi_add()
 	end
 end
 
-function wifi_delete(network)
-	local ntm = require "luci.model.network".init()
-	local wnet = ntm:get_wifinet(network)
-	if wnet then
-		local dev = wnet:get_device()
-		local nets = wnet:get_networks()
-		if dev then
-			ntm:del_wifinet(network)
-			ntm:commit("wireless")
-			local _, net
-			for _, net in ipairs(nets) do
-				if net:is_empty() then
-					ntm:del_network(net:name())
-					ntm:commit("network")
-				end
-			end
-			luci.sys.call("env -i /bin/ubus call network reload >/dev/null 2>/dev/null")
-		end
-	end
-
-	luci.http.redirect(luci.dispatcher.build_url("admin/network/wireless"))
-end
-
 function iface_status(ifaces)
 	local netm = require "luci.model.network".init()
 	local rv   = { }
@@ -349,35 +320,19 @@ function wifi_status(devs)
 	luci.http.status(404, "No such device")
 end
 
-local function wifi_reconnect_shutdown(shutdown, wnet)
-	local netmd = require "luci.model.network".init()
-	local net = netmd:get_wifinet(wnet)
-	local dev = net:get_device()
-	if dev and net then
-		dev:set("disabled", nil)
-		net:set("disabled", shutdown and 1 or nil)
-		netmd:commit("wireless")
+function wifi_reconnect(radio)
+	local rc = luci.sys.call("env -i /sbin/wifi up %s" % luci.util.shellquote(radio))
 
-		luci.sys.call("env -i /bin/ubus call network reload >/dev/null 2>/dev/null")
-		luci.http.status(200, shutdown and "Shutdown" or "Reconnected")
-
-		return
+	if rc == 0 then
+		luci.http.status(200, "Reconnected")
+	else
+		luci.http.status(500, "Error")
 	end
-
-	luci.http.status(404, "No such radio")
-end
-
-function wifi_reconnect(wnet)
-	wifi_reconnect_shutdown(false, wnet)
-end
-
-function wifi_shutdown(wnet)
-	wifi_reconnect_shutdown(true, wnet)
 end
 
 function wifi_assoclist()
 	local s = require "luci.tools.status"
-	
+
 	luci.http.prepare_content("application/json")
 	luci.http.write_json(s.wifi_assoclist())
 end
