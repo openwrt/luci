@@ -1,9 +1,5 @@
 <% export("cbi_apply_widget", function(redirect_ok) -%>
 <style type="text/css">
-	.alert-message.notice {
-		background: linear-gradient(#fff 0%, #eee 100%);
-	}
-
 	#cbi_apply_overlay {
 		position: absolute;
 		top: 0;
@@ -47,13 +43,15 @@
 	}
 </style>
 
+<script type="text/javascript" src="<%=resource%>/cbi.js?v=git-18.138.59467-72fe5dd"></script>
 <script type="text/javascript">//<![CDATA[
 	var xhr = new XHR(),
 	    uci_apply_auth = { sid: '<%=luci.dispatcher.context.authsession%>', token: '<%=token%>' },
 	    uci_apply_rollback = <%=math.max(luci.config and luci.config.apply and luci.config.apply.rollback or 30, 30)%>,
 	    uci_apply_holdoff = <%=math.max(luci.config and luci.config.apply and luci.config.apply.holdoff or 4, 1)%>,
 	    uci_apply_timeout = <%=math.max(luci.config and luci.config.apply and luci.config.apply.timeout or 5, 1)%>,
-	    uci_apply_display = <%=math.max(luci.config and luci.config.apply and luci.config.apply.display or 1.5, 1)%>;
+	    uci_apply_display = <%=math.max(luci.config and luci.config.apply and luci.config.apply.display or 1.5, 1)%>,
+	    was_xhr_poll_running = false;
 
 	function uci_status_message(type, content) {
 		var overlay = document.getElementById('cbi_apply_overlay') || document.body.appendChild(E('<div id="cbi_apply_overlay"><div class="alert-message"></div></div>')),
@@ -70,9 +68,17 @@
 				message.innerHTML = content;
 
 			document.body.classList.add('apply-overlay-active');
+
+			if (!was_xhr_poll_running) {
+				was_xhr_poll_running = XHR.running();
+				XHR.halt();
+			}
 		}
 		else {
 			document.body.classList.remove('apply-overlay-active');
+
+			if (was_xhr_poll_running)
+				XHR.run();
 		}
 	}
 
@@ -82,21 +88,24 @@
 				'<img src="<%=resource%>/icons/loading.gif" alt="" style="vertical-align:middle" /> ' +
 				'<%:Failed to confirm apply within %ds, waiting for rollback…%>'.format(uci_apply_rollback));
 
-			var call = function(r) {
+			var call = function(r, data, duration) {
 				if (r.status === 204) {
 					uci_status_message('warning',
 						'<h4><%:Configuration has been rolled back!%></h4>' +
 						'<p><%:The device could not be reached within %d seconds after applying the pending changes, which caused the configuration to be rolled back for safety reasons. If you believe that the configuration changes are correct nonetheless, perform an unchecked configuration apply. Alternatively, you can dismiss this warning and edit changes before attempting to apply again, or revert all pending changes to keep the currently working configuration state.%></p>'.format(uci_apply_rollback) +
 						'<div class="right">' +
 							'<input type="button" class="btn" onclick="uci_status_message(false)" value="<%:Dismiss%>" /> ' +
-							'<input type="button" class="btn" onclick="uci_revert()" value="<%:Revert changes%>" /> ' +
-							'<input type="button" class="btn danger" onclick="uci_apply(false)" value="<%:Apply unchecked%>" />' +
+							'<input type="button" class="btn cbi-button-action important" onclick="uci_revert()" value="<%:Revert changes%>" /> ' +
+							'<input type="button" class="btn cbi-button-negative important" onclick="uci_apply(false)" value="<%:Apply unchecked%>" />' +
 						'</div>');
 
 					return;
 				}
 
-				xhr.post('<%=url("admin/uci/confirm")%>', uci_apply_auth, call, uci_apply_timeout * 1000);
+				var delay = isNaN(duration) ? 0 : Math.max(1000 - duration, 0);
+				window.setTimeout(function() {
+					xhr.post('<%=url("admin/uci/confirm")%>', uci_apply_auth, call, uci_apply_timeout * 1000);
+				}, delay);
 			};
 
 			call({ status: 0 });
@@ -114,7 +123,7 @@
 
 		uci_status_message('notice');
 
-		var call = function(r) {
+		var call = function(r, data, duration) {
 			if (Date.now() >= deadline) {
 				uci_rollback(checked);
 				return;
@@ -137,7 +146,10 @@
 				return;
 			}
 
-			xhr.post('<%=url("admin/uci/confirm")%>', uci_apply_auth, call, uci_apply_timeout * 1000);
+			var delay = isNaN(duration) ? 0 : Math.max(1000 - duration, 0);
+			window.setTimeout(function() {
+				xhr.post('<%=url("admin/uci/confirm")%>', uci_apply_auth, call, uci_apply_timeout * 1000);
+			}, delay);
 		};
 
 		var tick = function() {
