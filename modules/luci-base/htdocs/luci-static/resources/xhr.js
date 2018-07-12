@@ -43,6 +43,7 @@ XHR = function()
 	{
 		this.reinit();
 
+		var ts   = Date.now();
 		var xhr  = this._xmlHttp;
 		var code = this._encode(data);
 
@@ -65,14 +66,14 @@ XHR = function()
 				var json = null;
 				if (xhr.getResponseHeader("Content-Type") == "application/json") {
 					try {
-						json = eval('(' + xhr.responseText + ')');
+						json = JSON.parse(xhr.responseText);
 					}
 					catch(e) {
 						json = null;
 					}
 				}
 
-				callback(xhr, json);
+				callback(xhr, json, Date.now() - ts);
 			}
 		}
 
@@ -83,13 +84,14 @@ XHR = function()
 	{
 		this.reinit();
 
+		var ts   = Date.now();
 		var xhr  = this._xmlHttp;
 		var code = this._encode(data);
 
 		xhr.onreadystatechange = function()
 		{
 			if (xhr.readyState == 4)
-				callback(xhr);
+				callback(xhr, null, Date.now() - ts);
 		}
 
 		xhr.open('POST', url, true);
