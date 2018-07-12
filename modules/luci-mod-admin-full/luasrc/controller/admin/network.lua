@@ -1,5 +1,5 @@
 -- Copyright 2008 Steven Barth <steven@midlink.org>
--- Copyright 2011-2015 Jo-Philipp Wich <jow@openwrt.org>
+-- Copyright 2011-2018 Jo-Philipp Wich <jo@mein.io>
 -- Licensed to the public under the Apache License 2.0.
 
 module("luci.controller.admin.network", package.seeall)
@@ -82,16 +82,10 @@ function index()
 		page = entry({"admin", "network", "iface_add"}, form("admin_network/iface_add"), nil)
 		page.leaf = true
 
-		page = entry({"admin", "network", "iface_delete"}, post("iface_delete"), nil)
-		page.leaf = true
-
 		page = entry({"admin", "network", "iface_status"}, call("iface_status"), nil)
 		page.leaf = true
 
 		page = entry({"admin", "network", "iface_reconnect"}, post("iface_reconnect"), nil)
-		page.leaf = true
-
-		page = entry({"admin", "network", "iface_shutdown"}, post("iface_shutdown"), nil)
 		page.leaf = true
 
 		page = entry({"admin", "network", "network"}, arcombine(cbi("admin_network/network"), cbi("admin_network/ifaces")), _("Interfaces"), 10)
@@ -270,34 +264,6 @@ function iface_reconnect(iface)
 		luci.sys.call("env -i /sbin/ifup %s >/dev/null 2>/dev/null"
 			% luci.util.shellquote(iface))
 		luci.http.status(200, "Reconnected")
-		return
-	end
-
-	luci.http.status(404, "No such interface")
-end
-
-function iface_shutdown(iface)
-	local netmd = require "luci.model.network".init()
-	local net = netmd:get_network(iface)
-	if net then
-		luci.sys.call("env -i /sbin/ifdown %s >/dev/null 2>/dev/null"
-			% luci.util.shellquote(iface))
-		luci.http.status(200, "Shutdown")
-		return
-	end
-
-	luci.http.status(404, "No such interface")
-end
-
-function iface_delete(iface)
-	local netmd = require "luci.model.network".init()
-	local net = netmd:del_network(iface)
-	if net then
-		luci.sys.call("env -i /sbin/ifdown %s >/dev/null 2>/dev/null"
-			% luci.util.shellquote(iface))
-		luci.http.redirect(luci.dispatcher.build_url("admin/network/network"))
-		netmd:commit("network")
-		netmd:commit("wireless")
 		return
 	end
 
