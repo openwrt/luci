@@ -68,7 +68,7 @@ local tpl_radio = tpl.Template(nil, [[
 	<div class="cbi-section-node">
 		<div class="table">
 			<!-- physical device -->
-			<div class="tr">
+			<div class="tr cbi-rowstyle-2">
 				<div class="td col-2 center">
 					<span class="ifacebadge"><img src="<%=resource%>/icons/wifi_toggled.png" id="<%=dev:name()%>-iw-upstate" /> <%=dev:name()%></span>
 				</div>
