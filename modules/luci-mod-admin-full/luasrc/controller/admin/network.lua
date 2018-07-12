@@ -206,6 +206,7 @@ function iface_status(ifaces)
 		if device then
 			local data = {
 				id         = iface,
+				desc       = net:get_i18n(),
 				proto      = net:proto(),
 				uptime     = net:uptime(),
 				gwaddr     = net:gwaddr(),
@@ -213,11 +214,14 @@ function iface_status(ifaces)
 				ip6addrs   = net:ip6addrs(),
 				dnsaddrs   = net:dnsaddrs(),
 				ip6prefix  = net:ip6prefix(),
+				errors     = net:errors(),
 				name       = device:shortname(),
 				type       = device:type(),
 				ifname     = device:name(),
 				macaddr    = device:mac(),
-				is_up      = device:is_up(),
+				is_up      = net:is_up() and device:is_up(),
+				is_alias   = net:is_alias(),
+				is_dynamic = net:is_dynamic(),
 				rx_bytes   = device:rx_bytes(),
 				tx_bytes   = device:tx_bytes(),
 				rx_packets = device:rx_packets(),
