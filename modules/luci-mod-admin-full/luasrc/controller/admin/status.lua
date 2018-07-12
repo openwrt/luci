@@ -122,12 +122,12 @@ function action_connections()
 
 	luci.http.prepare_content("application/json")
 
-	luci.http.write("{ connections: ")
+	luci.http.write('{ "connections": ')
 	luci.http.write_json(sys.net.conntrack())
 
 	local bwc = io.popen("luci-bwc -c 2>/dev/null")
 	if bwc then
-		luci.http.write(", statistics: [")
+		luci.http.write(', "statistics": [')
 
 		while true do
 			local ln = bwc:read("*l")
