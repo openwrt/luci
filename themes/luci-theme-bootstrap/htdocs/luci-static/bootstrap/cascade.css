@@ -572,75 +572,16 @@ input, textarea {
 	box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
+.btn:hover, .cbi-button:hover,
 input:focus, textarea:focus {
 	outline: 0;
-	border-color: rgba(82, 168, 236, 0.8);
+	border-color: rgba(82, 168, 236, 0.8) !important;
 	box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1), 0 0 8px rgba(82, 168, 236, 0.6);
 }
 
 input[type=file]:focus, input[type=checkbox]:focus, select:focus {
 	box-shadow: none;
 	outline: 1px dotted #666;
-}
-
-form .clearfix.error > label, form .clearfix.error .help-block, form .clearfix.error .help-inline {
-	color: #b94a48;
-}
-
-form .clearfix.error input, form .clearfix.error textarea {
-	color: #b94a48;
-	border-color: #ee5f5b;
-}
-
-form .clearfix.error input:focus, form .clearfix.error textarea:focus {
-	border-color: #e9322d;
-	box-shadow: 0 0 6px #f8b9b7;
-}
-
-form .clearfix.error .input-prepend .add-on, form .clearfix.error .input-append .add-on {
-	color: #b94a48;
-	background-color: #fce6e6;
-	border-color: #b94a48;
-}
-
-form .clearfix.warning > label, form .clearfix.warning .help-block, form .clearfix.warning .help-inline {
-	color: #c09853;
-}
-
-form .clearfix.warning input, form .clearfix.warning textarea {
-	color: #c09853;
-	border-color: #ccae64;
-}
-
-form .clearfix.warning input:focus, form .clearfix.warning textarea:focus {
-	border-color: #be9a3f;
-	box-shadow: 0 0 6px #e5d6b1;
-}
-
-form .clearfix.warning .input-prepend .add-on, form .clearfix.warning .input-append .add-on {
-	color: #c09853;
-	background-color: #d2b877;
-	border-color: #c09853;
-}
-
-form .clearfix.success > label, form .clearfix.success .help-block, form .clearfix.success .help-inline {
-	color: #468847;
-}
-
-form .clearfix.success input, form .clearfix.success textarea {
-	color: #468847;
-	border-color: #57a957;
-}
-
-form .clearfix.success input:focus, form .clearfix.success textarea:focus {
-	border-color: #458845;
-	box-shadow: 0 0 6px #9acc9a;
-}
-
-form .clearfix.success .input-prepend .add-on, form .clearfix.success .input-append .add-on {
-	color: #468847;
-	background-color: #bcddbc;
-	border-color: #468847;
 }
 
 input[disabled],
@@ -651,6 +592,8 @@ select[readonly],
 textarea[readonly] {
 	background-color: #f5f5f5;
 	border-color: #ddd;
+	pointer-events: none;
+	cursor: default;
 }
 
 .cbi-optionals,
@@ -755,14 +698,8 @@ textarea[readonly] {
 	vertical-align: middle;
 }
 
-.table .td {
-	vertical-align: top;
+.table .td, .table .tbody .th {
 	border-top: 1px solid #ddd;
-}
-
-.table .tbody .th {
-	border-top: 1px solid #ddd;
-	vertical-align: top;
 }
 
 .tr.placeholder {
@@ -1235,29 +1172,26 @@ footer {
 .alert-message.danger,
 .btn.error,
 .alert-message.error {
-	background-color: #c43c35;
-	background-repeat: repeat-x;
-	background-image: linear-gradient(to bottom, #ee5f5b, #c43c35);
+	background: linear-gradient(to bottom, #ee5f5b, #c43c35) repeat-x;
 	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
-	border-color: #c43c35 #c43c35 #882a25;
 	border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
 }
 
 .btn.success, .alert-message.success {
-	background-color: #57a957;
-	background-repeat: repeat-x;
-	background-image: linear-gradient(to bottom, #62c462, #57a957);
+	background: linear-gradient(to bottom, #62c462, #57a957) repeat-x;
 	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
-	border-color: #57a957 #57a957 #3d773d;
 	border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
 }
 
 .btn.info, .alert-message.info {
-	background-color: #339bb9;
-	background-repeat: repeat-x;
-	background-image: linear-gradient(to bottom, #5bc0de, #339bb9);
+	background: linear-gradient(to bottom, #5bc0de, #339bb9) repeat-x;
 	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
-	border-color: #339bb9 #339bb9 #22697d;
+	border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+}
+
+.alert-message.notice {
+	background: linear-gradient(to bottom, #efefef, #fefefe) repeat-x;
+	text-shadow: 0 -1px 0 rgba(255, 255, 255, 0.25);
 	border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
 }
 
@@ -1265,9 +1199,7 @@ footer {
 .cbi-button {
 	cursor: pointer;
 	display: inline-block;
-	background-color: #e6e6e6;
-	background-repeat: no-repeat;
-	background-image: linear-gradient(#fff, #fff 25%, #e6e6e6);
+	background: linear-gradient(#fff, #fff 25%, #e6e6e6) no-repeat;
 	padding: 5px 14px 6px;
 	text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
 	color: #333;
@@ -1277,12 +1209,6 @@ footer {
 	border-bottom-color: #bbb;
 	border-radius: 4px;
 	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
-}
-
-.btn:hover,
-.cbi-button:hover {
-	color: #333;
-	text-decoration: none;
 }
 
 .btn:focus,
@@ -1340,14 +1266,20 @@ footer {
 .cbi-page-actions .cbi-button-apply,
 .cbi-section-actions .cbi-button-edit {
 	color: #fff;
-	background: #0069d6;
+	background: linear-gradient(to bottom, #0069d6, #0049d6) no-repeat;
 	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
 }
 
 .cbi-button-positive.important,
 .cbi-page-actions .cbi-button-save {
 	color: #fff;
-	background: #4a4;
+	background: linear-gradient(to bottom, #4a4, #484) no-repeat;
+	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+}
+
+.cbi-button-negative.important {
+	color: #fff;
+	background: linear-gradient(to bottom, #c44, #c00) no-repeat;
 	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
 }
 
@@ -1618,11 +1550,8 @@ button.btn::-moz-focus-inner, input[type=submit].btn::-moz-focus-inner {
 	padding: 7px 15px;
 	margin-bottom: 18px;
 	color: #404040;
-	background-color: #eedc94;
-	background-repeat: repeat-x;
-	background-image: linear-gradient(to bottom, #fceec1, #eedc94);
+	background: linear-gradient(to bottom, #fceec1, #eedc94) repeat-x;
 	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
-	border-color: #eedc94 #eedc94 #e4c652;
 	border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
 	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
 	border-width: 1px;
@@ -1751,6 +1680,7 @@ header .pull-right { padding-top: 8px; }
 	padding: 10px 10px 9px;
 	line-height: 18px;
 	font-weight: bold;
+	vertical-align: middle;
 }
 
 .cbi-section-table-row[data-title]::before {
@@ -1758,10 +1688,11 @@ header .pull-right { padding-top: 8px; }
 }
 
 .left { text-align: left !important; }
-
 .right { text-align: right !important; }
-
 .center { text-align: center !important; }
+.top { vertical-align: top !important; }
+.middle { vertical-align: middle !important; }
+.bottom { vertical-align: bottom !important; }
 
 .cbi-value-field { line-height: 1.5em; }
 
@@ -1776,10 +1707,11 @@ table table td,
 	border: none;
 }
 
-.table.cbi-section-table input,
+.table.cbi-section-table input[type="password"],
+.table.cbi-section-table input[type="text"],
 .table.cbi-section-table textarea,
 .table.cbi-section-table select {
-	width: auto;
+	width: 100%;
 }
 
 .table.cbi-section-table .td.cbi-section-table-cell {
@@ -1789,6 +1721,26 @@ table table td,
 
 .table.cbi-section-table .td.cbi-section-table-cell select {
 	width: inherit;
+}
+
+.td.cbi-section-actions {
+	text-align: right;
+	vertical-align: middle;
+}
+
+.td.cbi-section-actions > * {
+	display: flex;
+}
+
+.td.cbi-section-actions > * > *,
+.td.cbi-section-actions > * > form > * {
+	flex: 1 1 4em;
+	margin: 0 1px;
+}
+
+.td.cbi-section-actions > * > form {
+	display: inline-flex;
+	margin: 0;
 }
 
 .table.valign-middle .td {
@@ -1849,11 +1801,11 @@ table table td,
 }
 
 .ifacebox .ifacebox-body {
-	padding: 6px;
+	padding: .25em;
 }
 
 .ifacebadge {
-	display: inline-flex;
+	display: inline-block;
 	flex-direction: row;
 	white-space: nowrap;
 	background-color: #fff;
@@ -1871,7 +1823,6 @@ table table td,
 	width: 16px;
 	height: 16px;
 	vertical-align: middle;
-	margin-right: .25em;
 }
 
 .ifacebadge-active {
@@ -1896,6 +1847,10 @@ table table td,
 	text-align: left;
 }
 
+.network-status-table .ifacebox-body > * {
+	margin: .25em;
+}
+
 .network-status-table .ifacebox-body > span {
 	flex: 10 10 auto;
 }
@@ -1907,10 +1862,15 @@ table table td,
 
 .ifacebadge.large,
 .network-status-table .ifacebox-body .ifacebadge {
+	display: inline-flex;
 	flex: 1;
-	margin: .5em .25em 0 .25em;
-	padding: .5em;
+	padding: .25em;
 	min-width: 220px;
+}
+
+.ifacebadge > *,
+.ifacebadge.large > * {
+	margin: 0 .125em;
 }
 
 .zonebadge {
