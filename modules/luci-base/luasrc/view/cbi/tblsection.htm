@@ -80,20 +80,22 @@ local titlename = ifattr(not self.anonymous or self.sectiontitle, "data-title", 
 
 			<%- if self.sortable or self.extedit or self.addremove then -%>
 				<div class="td cbi-section-table-cell nowrap cbi-section-actions">
-					<%- if self.sortable then -%>
-						<input class="cbi-button cbi-button-up" type="button" value="<%:Up%>" onclick="return cbi_row_swap(this, true, 'cbi.sts.<%=self.config%>.<%=self.sectiontype%>')" title="<%:Move up%>" />
-						<input class="cbi-button cbi-button-down" type="button" value="<%:Down%>" onclick="return cbi_row_swap(this, false, 'cbi.sts.<%=self.config%>.<%=self.sectiontype%>')" title="<%:Move down%>" />
-					<% end; if self.extedit then -%>
-						<input class="cbi-button cbi-button-edit" type="button" value="<%:Edit%>"
-						<%- if type(self.extedit) == "string" then
-						%> onclick="location.href='<%=self.extedit:format(section)%>'"
-						<%- elseif type(self.extedit) == "function" then
-						%> onclick="location.href='<%=self:extedit(section)%>'"
-						<%- end
-						%> alt="<%:Edit%>" title="<%:Edit%>" />
-					<% end; if self.addremove then %>
-						<input class="cbi-button cbi-button-remove" type="submit" value="<%:Delete%>"  onclick="this.form.cbi_state='del-section'; return true" name="cbi.rts.<%=self.config%>.<%=k%>" alt="<%:Delete%>" title="<%:Delete%>" />
-					<%- end -%>
+					<div>
+						<%- if self.sortable then -%>
+							<input class="cbi-button cbi-button-up" type="button" value="<%:Up%>" onclick="return cbi_row_swap(this, true, 'cbi.sts.<%=self.config%>.<%=self.sectiontype%>')" title="<%:Move up%>" />
+							<input class="cbi-button cbi-button-down" type="button" value="<%:Down%>" onclick="return cbi_row_swap(this, false, 'cbi.sts.<%=self.config%>.<%=self.sectiontype%>')" title="<%:Move down%>" />
+						<% end; if self.extedit then -%>
+							<input class="cbi-button cbi-button-edit" type="button" value="<%:Edit%>"
+							<%- if type(self.extedit) == "string" then
+							%> onclick="location.href='<%=self.extedit:format(section)%>'"
+							<%- elseif type(self.extedit) == "function" then
+							%> onclick="location.href='<%=self:extedit(section)%>'"
+							<%- end
+							%> alt="<%:Edit%>" title="<%:Edit%>" />
+						<% end; if self.addremove then %>
+							<input class="cbi-button cbi-button-remove" type="submit" value="<%:Delete%>"  onclick="this.form.cbi_state='del-section'; return true" name="cbi.rts.<%=self.config%>.<%=k%>" alt="<%:Delete%>" title="<%:Delete%>" />
+						<%- end -%>
+					</div>
 				</div>
 			<%- end -%>
 		</div>
