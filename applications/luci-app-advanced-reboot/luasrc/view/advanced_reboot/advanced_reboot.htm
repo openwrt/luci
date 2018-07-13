@@ -80,7 +80,7 @@
 </fieldset>
 <%- else -%>
   <%- if rom_board_name then -%>
-    <p class="alert-message warning"><%:Warning: Device (%><%=rom_board_name%><%:) is unknown or isn't a dual-partition device!%></p>
+    <p class="alert-message warning"><%=pcdata(translatef("Warning: Device (%s) is unknown or isn't a dual-partition device!", rom_board_name))%></p>
   <%- else -%>
     <p class="alert-message warning"><%:Warning: Unable to obtain device information!%></p>
   <%- end -%>
