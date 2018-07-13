@@ -190,7 +190,7 @@ XHR.poll = function(interval, url, data, callback, post)
 			for (var i = 0, e = XHR._q[0]; i < XHR._q.length; e = XHR._q[++i])
 			{
 				if (!(XHR._t % e.interval) && !e.xhr.busy())
-					e.xhr[post ? 'post' : 'get'](e.url, e.data, e.callback, e.interval * 1000 - 5);
+					e.xhr[post ? 'post' : 'get'](e.url, e.data, e.callback, e.interval * 1000 * 5 - 5);
 			}
 
 			XHR._t++;
