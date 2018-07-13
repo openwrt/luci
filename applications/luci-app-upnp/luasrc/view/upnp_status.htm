@@ -25,7 +25,7 @@
 						st[i].intaddr,
 						st[i].intport,
 						st[i].descr,
-						E('<input class="cbi-button cbi-button-remove" type="button" value="<%:Delete%>" onclick="upnp_delete_fwd(%d)" />'.format(st[i].num))
+						E('<div><input class="cbi-button cbi-button-remove" type="button" value="<%:Delete%>" onclick="upnp_delete_fwd(%d)" /></div>'.format(st[i].num))
 					]);
 
 				cbi_update_table(tb, rows, '<em><%:There are no active redirects.%></em>');
