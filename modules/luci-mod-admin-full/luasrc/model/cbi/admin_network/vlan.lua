@@ -260,7 +260,7 @@ m.uci:foreach("network", "switch",
 		end
 
 
-		local vid = s:option(Value, has_vlan4k or "vlan", "VLAN ID", "<div id='portstatus-%s'></div>" % switch_name)
+		local vid = s:option(Value, has_vlan4k or "vlan", "VLAN ID")
 		local mx_vid = has_vlan4k and 4094 or (num_vlans - 1)
 
 		vid.rmempty = false
@@ -333,7 +333,7 @@ m.uci:foreach("network", "switch",
 
 		local _, pt
 		for _, pt in ipairs(topo.ports) do
-			local po = s:option(ListValue, tostring(pt.num), pt.label, '<div id="portstatus-%s-%d"></div>' %{ switch_name, pt.num })
+			local po = s:option(ListValue, tostring(pt.num), pt.label)
 
 			po:value("",  translate("off"))
 

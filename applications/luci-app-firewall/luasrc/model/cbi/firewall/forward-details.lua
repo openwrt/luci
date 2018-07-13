@@ -55,6 +55,7 @@ o = s:option(Value, "src", translate("Source zone"))
 o.nocreate = true
 o.default = "wan"
 o.template = "cbi/firewall_zonelist"
+o.rmempty = false
 
 
 o = s:option(DynamicList, "src_mac",
@@ -88,6 +89,10 @@ o.rmempty = true
 o.datatype = "neg(portrange)"
 o.placeholder = translate("any")
 
+o:depends("proto", "tcp")
+o:depends("proto", "udp")
+o:depends("proto", "tcp udp")
+o:depends("proto", "tcpudp")
 
 o = s:option(Value, "src_dip",
 	translate("External IP address"),
@@ -108,7 +113,10 @@ o = s:option(Value, "src_dport", translate("External port"),
 		"destination port or port range on this host"))
 o.datatype = "neg(portrange)"
 
-
+o:depends("proto", "tcp")
+o:depends("proto", "udp")
+o:depends("proto", "tcp udp")
+o:depends("proto", "tcpudp")
 
 o = s:option(Value, "dest", translate("Internal zone"))
 o.nocreate = true
@@ -133,6 +141,10 @@ o = s:option(Value, "dest_port",
 o.placeholder = translate("any")
 o.datatype = "portrange"
 
+o:depends("proto", "tcp")
+o:depends("proto", "udp")
+o:depends("proto", "tcp udp")
+o:depends("proto", "tcpudp")
 
 o = s:option(Flag, "reflection", translate("Enable NAT Loopback"))
 o.rmempty = true

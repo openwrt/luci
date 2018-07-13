@@ -181,13 +181,18 @@ function Encoder.parse_iter(self, obj)
 	end
 end
 
+function Encoder.parse_udata(self, obj)
+	return self:parse_string(tostring(obj))
+end
+
 Encoder.parsers = {
 	['nil']      = Encoder.parse_nil,
 	['table']    = Encoder.parse_iter,
 	['number']   = Encoder.parse_number,
 	['string']   = Encoder.parse_string,
 	['boolean']  = Encoder.parse_bool,
-	['function'] = Encoder.parse_iter
+	['function'] = Encoder.parse_iter,
+	['userdata'] = Encoder.parse_udata,
 }
 
 

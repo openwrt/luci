@@ -8,7 +8,7 @@
 			{
 				var is_assoc = (iw.bssid && iw.bssid != '00:00:00:00:00:00' && iw.channel && !iw.disabled);
 				var p = iw.quality;
-				var q = is_assoc ? p : -1;
+				var q = iw.disabled ? -1 : p;
 
 				var icon;
 				if (q < 0)
@@ -24,21 +24,22 @@
 				else
 					icon = "<%=resource%>/icons/signal-75-100.png";
 
-				var s = document.getElementById('<%=self.option%>-iw-signal');
-				if (s)
-					s.innerHTML = String.format(
-						'<img src="%s" title="<%:Signal%>: %d <%:dBm%> / <%:Noise%>: %d <%:dBm%>" /><br />' +
-						'<small>%d%%</small>', icon, iw.signal, iw.noise, p
-					);
+				var s = document.getElementById('<%=self.option%>-iw-status'),
+				    small = s.querySelector('small'),
+				    info = s.querySelector('span');
 
-				var d = document.getElementById('<%=self.option%>-iw-description');
-				if (d && is_assoc)
-					d.innerHTML = String.format(
+				small.innerHTML = info.innerHTML = String.format(
+					'<img src="%s" title="<%:Signal%>: %d <%:dBm%> / <%:Noise%>: %d <%:dBm%>" />&#160;<br />%d%%&#160;',
+						icon, iw.signal, iw.noise, p
+				);
+
+				if (is_assoc)
+					info.innerHTML = String.format(
 						'<strong><%:Mode%>:</strong> %s | ' +
 						'<strong><%:SSID%>:</strong> %h<br />' +
-						'<strong><%:BSSID%>:</strong> %s | ' +
+						'<strong><%:BSSID%>:</strong> %s<br />' +
 						'<strong><%:Encryption%>:</strong> %s<br />' +
-						'<strong><%:Channel%>:</strong> %d (%.3f <%:GHz%>) | ' +
+						'<strong><%:Channel%>:</strong> %d (%.3f <%:GHz%>)<br />' +
 						'<strong><%:Tx-Power%>:</strong> %d <%:dBm%><br />' +
 						'<strong><%:Signal%>:</strong> %d <%:dBm%> | ' +
 						'<strong><%:Noise%>:</strong> %d <%:dBm%><br />' +
@@ -50,29 +51,27 @@
 							iw.txpower, iw.signal, iw.noise,
 							iw.bitrate ? iw.bitrate : 0, iw.country
 					);
-				else if (d)
-					d.innerHTML = String.format(
+				else
+					info.innerHTML = String.format(
 						'<strong><%:SSID%>:</strong> %h | ' +
 						'<strong><%:Mode%>:</strong> %s<br />' +
-						'<em><%:Wireless is disabled or not associated%></em>',
-							iw.ssid || '?', iw.mode
+						'<em>%s</em>',
+							iw.ssid || '?', iw.mode,
+							iw.disabled ? '<em><%:Wireless is disabled%></em>'
+							            : '<em><%:Wireless is not associated%></em>'
 					);
 			}
 		}
 	);
 //]]></script>
 
-<table>
-	<tr class="cbi-section-table">
-		<td></td>
-		<td class="cbi-value-field" style="width:16px; padding:3px" id="<%=self.option%>-iw-signal">
-			<img src="<%=resource%>/icons/signal-none.png" title="<%:Not associated%>" /><br />
-			<small>0%</small>
-		</td>
-		<td class="cbi-value-field" style="vertical-align:middle; text-align:left; padding:3px" id="<%=self.option%>-iw-description">
-			<em><%:Collecting data...%></em>
-		</td>
-	</tr>
-</table>
+<span class="ifacebadge large" id="<%=self.option%>-iw-status">
+	<small>
+		<img src="<%=resource%>/icons/signal-none.png" title="<%:Not associated%>" />&#160;
+	</small>
+	<span>
+		<em><%:Collecting data...%></em>
+	</span>
+</span>
 
 <%+cbi/valuefooter%>

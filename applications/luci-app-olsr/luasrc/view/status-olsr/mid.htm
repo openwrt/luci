@@ -15,11 +15,11 @@ local i = 1
 <div id="togglebuttons"></div> 
 <fieldset class="cbi-section">
 	<legend><%:Overview of known multiple interface announcements%></legend>
-	<table class="cbi-section-table">
-		<tr class="cbi-section-table-titles">
-			<th class="cbi-section-table-cell"><%:OLSR node%></th>
-			<th class="cbi-section-table-cell" ><%:Secondary OLSR interfaces%></th>
-		</tr>
+	<div class="table cbi-section-table">
+		<div class="tr cbi-section-table-titles">
+			<div class="th cbi-section-table-cell"><%:OLSR node%></div>
+			<div class="th cbi-section-table-cell" ><%:Secondary OLSR interfaces%></div>
+		</div>
 
 		<% for k, mid in ipairs(mids) do 
 			local aliases = ''
@@ -37,14 +37,14 @@ local i = 1
 			end
 		%>
 
-		<tr class="cbi-section-table-row cbi-rowstyle-<%=i%> proto-<%=mid.proto%>">
-			<td class="cbi-section-table-cell"><a href="http://<%=host%>/cgi-bin-status.html"><%=mid.ipAddress%></a></td>
-			<td class="cbi-section-table-cell"><%=aliases%></td>
-		</tr>
+		<div class="tr cbi-section-table-row cbi-rowstyle-<%=i%> proto-<%=mid.proto%>">
+			<div class="td cbi-section-table-cell"><a href="http://<%=host%>/cgi-bin-status.html"><%=mid.ipAddress%></a></div>
+			<div class="td cbi-section-table-cell"><%=aliases%></div>
+		</div>
 
 		<% i = ((i % 2) + 1)
 		end %>
-	</table>
+	</div>
 </fieldset>
 <%+status-olsr/common_js%>
 <%+footer%>

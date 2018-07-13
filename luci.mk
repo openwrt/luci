@@ -34,7 +34,7 @@ LUCI_LANG.ru=Русский (Russian)
 LUCI_LANG.sk=Slovenčina (Slovak)
 LUCI_LANG.sv=Svenska (Swedish)
 LUCI_LANG.tr=Türkçe (Turkish)
-LUCI_LANG.uk=украї́нська (Ukrainian)
+LUCI_LANG.uk=Українська (Ukrainian)
 LUCI_LANG.vi=Tiếng Việt (Vietnamese)
 LUCI_LANG.zh-cn=中文 (Chinese)
 LUCI_LANG.zh-tw=臺灣華語 (Taiwanese)
@@ -153,7 +153,7 @@ LUCI_LIBRARYDIR = $(LUA_LIBRARYDIR)/luci
 
 define SrcDiet
 	$(FIND) $(1) -type f -name '*.lua' | while read src; do \
-		if LuaSrcDiet --noopt-binequiv -o "$$$$src.o" "$$$$src"; \
+		if luasrcdiet --noopt-binequiv -o "$$$$src.o" "$$$$src"; \
 		then mv "$$$$src.o" "$$$$src"; fi; \
 	done
 endef

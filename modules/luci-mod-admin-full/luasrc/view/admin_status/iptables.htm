@@ -70,7 +70,6 @@
 </style>
 
 <h2 name="content"><%:Firewall Status%></h2>
-<br />
 
 <% if has_ip6tables then %>
 <ul class="cbi-tabmenu">
@@ -88,69 +87,69 @@
 		<input type="submit" class="cbi-button" name="restart" value="<%:Restart Firewall%>" />
 	</form>
 
-	<fieldset class="cbi-section">
+	<div class="cbi-section">
 
 		<% for _, tbl in ipairs(tables) do chaincnt = 0 %>
 			<h3><%:Table%>: <%=tbl%></h3>
-			<table class="cbi-section-table" style="font-size:90%">
-				<% for _, chain in ipairs(ipt:chains(tbl)) do
-					rowcnt    = 0
-					chaincnt  = chaincnt + 1
-					chaininfo = ipt:chain(tbl, chain)
-				%>
-					<tr class="cbi-section-table-titles cbi-rowstyle-<%=rowstyle()%>">
-						<th class="cbi-section-table-cell" style="text-align:left" colspan="11">
-							<br /><span id="rule_<%=tbl:lower()%>_<%=chain%>">
-							<%:Chain%> <em><%=chain%></em>
-							(<%- if chaininfo.policy then -%>
-								<%:Policy%>: <em><%=chaininfo.policy%></em>, <%:Packets%>: <%=chaininfo.packets%>, <%:Traffic%>: <%=wba.byte_format(chaininfo.bytes)-%>
-							<%- else -%>
-								<%:References%>: <%=chaininfo.references-%>
-							<%- end -%>)</span>
-						</th>
-					</tr>
-					<tr class="cbi-section-table-descr">
-						<th class="cbi-section-table-cell"><%:Pkts.%></th>
-						<th class="cbi-section-table-cell"><%:Traffic%></th>
-						<th class="cbi-section-table-cell"><%:Target%></th>
-						<th class="cbi-section-table-cell"><%:Prot.%></th>
-						<th class="cbi-section-table-cell"><%:In%></th>
-						<th class="cbi-section-table-cell"><%:Out%></th>
-						<th class="cbi-section-table-cell"><%:Source%></th>
-						<th class="cbi-section-table-cell"><%:Destination%></th>
-						<th class="cbi-section-table-cell" style="width:30%"><%:Options%></th>
-					</tr>
 
-					<% for _, rule in ipairs(ipt:find({table=tbl, chain=chain})) do %>
-						<tr class="cbi-section-table-row cbi-rowstyle-<%=rowstyle()%>">
-							<td><%=rule.packets%></td>
-							<td style="white-space: nowrap"><%=wba.byte_format(rule.bytes)%></td>
-							<td><%=rule.target and link_target(tbl, rule.target) or "-"%></td>
-							<td><%=rule.protocol%></td>
-							<td><%=link_iface(rule.inputif)%></td>
-							<td><%=link_iface(rule.outputif)%></td>
-							<td><%=rule.source%></td>
-							<td><%=rule.destination%></td>
-							<td style="width:30%"><small><%=#rule.options > 0 and luci.util.pcdata(table.concat(rule.options, " ")) or "-"%></small></td>
-						</tr>
-					<% end %>
+			<% for _, chain in ipairs(ipt:chains(tbl)) do
+				rowcnt    = 0
+				chaincnt  = chaincnt + 1
+				chaininfo = ipt:chain(tbl, chain)
+			%>
+				<h4  id="rule_<%=tbl:lower()%>_<%=chain%>">
+					<%:Chain%> <em><%=chain%></em>
+					(<%- if chaininfo.policy then -%>
+						<%:Policy%>: <em><%=chaininfo.policy%></em>, <%:Packets%>: <%=chaininfo.packets%>, <%:Traffic%>: <%=wba.byte_format(chaininfo.bytes)-%>
+					<%- else -%>
+						<%:References%>: <%=chaininfo.references-%>
+					<%- end -%>)
+				</h4>
 
-					<% if rowcnt == 1 then %>
-						<tr class="cbi-section-table-titles cbi-rowstyle-<%=rowstyle()%>">
-							<td colspan="9"><em><%:No rules in this chain%></em></td>
-						</tr>
-					<% end %>
-				<% end %>
+				<div class="cbi-section-node">
+					<div class="table" style="font-size:90%">
+						<div class="tr table-titles cbi-rowstyle-<%=rowstyle()%>">
+							<div class="th hide-xs"><%:Pkts.%></div>
+							<div class="th nowrap"><%:Traffic%></div>
+							<div class="th col-5"><%:Target%></div>
+							<div class="th"><%:Prot.%></div>
+							<div class="th"><%:In%></div>
+							<div class="th"><%:Out%></div>
+							<div class="th"><%:Source%></div>
+							<div class="th"><%:Destination%></div>
+							<div class="th col-9 hide-xs"><%:Options%></div>
+						</div>
 
-				<% if chaincnt == 0 then %>
-					<tr class="cbi-section-table-titles cbi-rowstyle-<%=rowstyle()%>">
-						<td colspan="9"><em><%:No chains in this table%></em></td>
-					</tr>
-				<% end %>
-			</table>
+						<% for _, rule in ipairs(ipt:find({table=tbl, chain=chain})) do %>
+							<div class="tr cbi-rowstyle-<%=rowstyle()%>">
+								<div class="td"><%=rule.packets%></div>
+								<div class="td nowrap"><%=wba.byte_format(rule.bytes)%></div>
+								<div class="td col-5"><%=rule.target and link_target(tbl, rule.target) or "-"%></div>
+								<div class="td"><%=rule.protocol%></div>
+								<div class="td"><%=link_iface(rule.inputif)%></div>
+								<div class="td"><%=link_iface(rule.outputif)%></div>
+								<div class="td"><%=rule.source%></div>
+								<div class="td"><%=rule.destination%></div>
+								<div class="td col-9 hide-xs"><%=#rule.options > 0 and luci.util.pcdata(table.concat(rule.options, " ")) or "-"%></div>
+							</div>
+						<% end %>
+
+						<% if rowcnt == 1 then %>
+							<div class="tr cbi-rowstyle-<%=rowstyle()%>">
+								<div class="td" colspan="9"><em><%:No rules in this chain%></em></div>
+							</div>
+						<% end %>
+					</div>
+				</div>
+			<% end %>
+
+			<% if chaincnt == 0 then %>
+				<em><%:No chains in this table%></em>
+			<% end %>
+
 			<br /><br />
 		<% end %>
-	</fieldset>
+	</div>
 </div>
 
 <%+footer%>

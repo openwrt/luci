@@ -198,8 +198,18 @@ function fmt_limit(limit, burst)
 	end
 end
 
-function fmt_target(x, dest)
-	if dest and #dest > 0 then
+function fmt_target(x, src, dest)
+	if not src or #src == 0 then
+		if x == "ACCEPT" then
+			return _("Accept output")
+		elseif x == "REJECT" then
+			return _("Refuse output")
+		elseif x == "NOTRACK" then
+			return _("Do not track output")
+		else --if x == "DROP" then
+			return _("Discard output")
+		end
+	elseif dest and #dest > 0 then
 		if x == "ACCEPT" then
 			return _("Accept forward")
 		elseif x == "REJECT" then

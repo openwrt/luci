@@ -3,11 +3,146 @@
 -- Licensed to the public under the Apache License 2.0.
 
 local fs = require "nixio.fs"
+local tpl = require "luci.template"
+local ntm = require "luci.model.network".init()
+local fwm = require "luci.model.firewall".init()
 local json = require "luci.jsonc"
 
 m = Map("network", translate("Interfaces"))
+m:chain("wireless")
+m:chain("firewall")
+m:chain("dhcp")
 m.pageaction = false
-m:section(SimpleSection).template = "admin_network/iface_overview"
+
+
+local tpl_networks = tpl.Template(nil, [[
+	<div class="cbi-section-node">
+		<div class="table">
+			<%
+				for i, net in ipairs(netlist) do
+					local z = net[3]
+					local c = z and z:get_color() or "#EEEEEE"
+					local t = z and translate("Part of zone %q" % z:name()) or translate("No zone assigned")
+					local disabled = (net[4]:get("auto") == "0")
+					local dynamic = net[4]:is_dynamic()
+			%>
+				<div class="tr cbi-rowstyle-<%=i % 2 + 1%>">
+					<div class="td col-3 center middle">
+						<div class="ifacebox">
+							<div class="ifacebox-head" style="background-color:<%=c%>" title="<%=pcdata(t)%>">
+								<strong><%=net[1]:upper()%></strong>
+							</div>
+							<div class="ifacebox-body" id="<%=net[1]%>-ifc-devices" data-network="<%=net[1]%>">
+								<img src="<%=resource%>/icons/ethernet_disabled.png" style="width:16px; height:16px" /><br />
+								<small>?</small>
+							</div>
+						</div>
+					</div>
+					<div class="td col-5 left middle" id="<%=net[1]%>-ifc-description">
+						<em><%:Collecting data...%></em>
+					</div>
+					<div class="td cbi-section-actions">
+						<div>
+							<input type="button" class="cbi-button cbi-button-neutral" onclick="iface_reconnect('<%=net[1]%>')" title="<%:Reconnect this interface%>" value="<%:Restart%>"<%=ifattr(disabled or dynamic, "disabled", "disabled")%> />
+
+							<% if disabled then %>
+								<input type="hidden" name="cbid.network.<%=net[1]%>.__disable__" value="1" />
+								<input type="submit" name="cbi.apply" class="cbi-button cbi-button-neutral" onclick="this.previousElementSibling.value='0'" title="<%:Reconnect this interface%>" value="<%:Connect%>"<%=ifattr(dynamic, "disabled", "disabled")%> />
+							<% else %>
+								<input type="hidden" name="cbid.network.<%=net[1]%>.__disable__" value="0" />
+								<input type="submit" name="cbi.apply" class="cbi-button cbi-button-neutral" onclick="this.previousElementSibling.value='1'" title="<%:Shutdown this interface%>" value="<%:Stop%>"<%=ifattr(dynamic, "disabled", "disabled")%> />
+							<% end %>
+
+							<input type="button" class="cbi-button cbi-button-action important" onclick="location.href='<%=url("admin/network/network", net[1])%>'" title="<%:Edit this interface%>" value="<%:Edit%>" id="<%=net[1]%>-ifc-edit"<%=ifattr(dynamic, "disabled", "disabled")%> />
+
+							<input type="hidden" name="cbid.network.<%=net[1]%>.__delete__" value="" />
+							<input type="submit" name="cbi.apply" class="cbi-button cbi-button-negative" onclick="iface_delete(event)" value="<%:Delete%>"<%=ifattr(dynamic, "disabled", "disabled")%> />
+						</div>
+					</div>
+				</div>
+			<% end %>
+		</div>
+	</div>
+	<div class="cbi-section-create">
+		<input type="button" class="cbi-button cbi-button-add" value="<%:Add new interface...%>" onclick="location.href='<%=url("admin/network/iface_add")%>'" />
+	</div>
+]])
+
+local _, net
+local ifaces, netlist = { }, { }
+
+for _, net in ipairs(ntm:get_networks()) do
+	if net:name() ~= "loopback" then
+		local zn = net:zonename()
+		local z = zn and fwm:get_zone(zn) or fwm:get_zone_by_network(net:name())
+
+		local w = 1
+		if net:is_alias() then
+			w = 2
+		elseif net:is_dynamic() then
+			w = 3
+		end
+
+		ifaces[#ifaces+1] = net:name()
+		netlist[#netlist+1] = {
+			net:name(), z and z:name() or "-", z, net, w
+		}
+	end
+end
+
+table.sort(netlist,
+	function(a, b)
+		if a[2] ~= b[2] then
+			return a[2] < b[2]
+		elseif a[5] ~= b[5] then
+			return a[5] < b[5]
+		else
+			return a[1] < b[1]
+		end
+	end)
+
+s = m:section(TypedSection, "interface", translate("Interface Overview"))
+
+function s.sections(self)
+	local _, net, sl = nil, nil, { }
+
+	for _, net in ipairs(netlist) do
+		sl[#sl+1] = net[1]
+	end
+
+	return sl
+end
+
+function s.render(self)
+	tpl_networks:render({
+		netlist = netlist
+	})
+end
+
+o = s:option(Value, "__disable__")
+
+function o.cfgvalue(self, sid)
+	return (m:get(sid, "auto") == "0") and "1" or "0"
+end
+
+function o.write(self, sid, value)
+	if value ~= "1" then
+		m:set(sid, "auto", "")
+	else
+		m:set(sid, "auto", "0")
+	end
+end
+
+o.remove = o.write
+
+o = s:option(Value, "__delete__")
+
+function o.write(self, sid, value)
+	ntm:del_network(sid)
+end
+
+
+m:section(SimpleSection).template = "admin_network/iface_overview_status"
 
 if fs.access("/etc/init.d/dsl_control") then
 	local ok, boarddata = pcall(json.parse, fs.readfile("/etc/board.json"))

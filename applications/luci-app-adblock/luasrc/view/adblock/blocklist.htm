@@ -22,28 +22,42 @@ end
 -%>
 
 <style type="text/css">
-table.cbi-section-table th,
-table.cbi-section-table td,
+.table.cbi-section-table .th,
+.table.cbi-section-table .td,
 .cbi-section-table-cell,
-.cbi-section-table-row,
-.cbi-input-text
+.cbi-section-table-row
 {
 	text-align:left;
 	vertical-align:top;
 	margin-right:auto;
 	margin-left:0px;
+	padding-left:2px;
+	line-height:20px;
+}
+.table.cbi-section-table .th
+{
+	white-space:nowrap;
+}
+.table.cbi-section-table input
+{
+	width:7em;
 }
 .cbi-input-text
 {
+	text-align:left;
+	padding-left:2px;
 	outline:none;
 	box-shadow:none;
 	background:transparent;
-	padding-left:2px;
-	line-height:25px;
-	height:25px;
+	height:20px;
 	width:10em;
 }
 </style>
+
+<%-
+	local anonclass = (not self.anonymous or self.sectiontitle) and "named" or "anonymous"
+	local titlename = ifattr(not self.anonymous or self.sectiontitle, "data-title", translate("Name"))
+-%>
 
 <fieldset class="cbi-section" id="cbi-<%=self.config%>-<%=self.sectiontype%>">
 	<% if self.title then -%>
@@ -51,37 +65,34 @@ table.cbi-section-table td,
 	<%- end %>
 	<div class="cbi-section-descr"><%=self.description%></div>
 	<div class="cbi-section-node">
-		<table class="cbi-section-table">
-			<tr class="cbi-section-table-titles">
-			<%- if self.sectionhead then -%>
-				<th class="cbi-section-table-cell"><%=self.sectionhead%></th>
-			<%- else -%>
-				<th>&#160;</th>
-			<%- end -%>
+		<div class="table cbi-section-table">
+			<div class="tr cbi-section-table-titles <%=anonclass%>"<%=titlename%>>
 			<%- for i, k in pairs(self.children) do -%>
-				<th class="cbi-section-table-cell"<%=width(k)%>>
+				<div class="th cbi-section-table-cell"<%=width(k)%>>
 					<%-=k.title-%>
-				</th>
+				</div>
 			<%- end -%>
-			</tr>
+			</div>
 			<%- local isempty = true
 				for i, k in ipairs(self:cfgsections()) do
-					section = k
+					local section = k
+					local sectionname = striptags((type(self.sectiontitle) == "function") and self:sectiontitle(section) or k)
+					local sectiontitle = ifattr(sectionname and (not self.anonymous or self.sectiontitle), "data-title", sectionname)
+
 					isempty = false
 					scope = { valueheader = "cbi/cell_valueheader", valuefooter = "cbi/cell_valuefooter" }
 			-%>
-			<tr class="cbi-section-table-row" id="cbi-<%=self.config%>-<%=section%>">
-				<th><%=k%></th>
+			<div class="tr cbi-section-table-row" id="cbi-<%=self.config%>-<%=section%>"<%=sectiontitle%>>
 				<%-
 					for k, node in ipairs(self.children) do
 						node:render(section, scope or {})
 					end
 					if not scope.cbid:match("adb_src_cat") then
 				-%>
-					<td class="cbi-value-field">&#160;</td>
+					<div class="td cbi-value-field">&#160;</div>
 				<%- end -%>
-			</tr>
+			</div>
 			<%- end -%>
-		</table>
+		</div>
 	</div>
 </fieldset>

@@ -52,7 +52,6 @@
 
 <%+header%>
 
-<script type="text/javascript" src="<%=resource%>/cbi.js"></script>
 <script type="text/javascript">//<![CDATA[
 
   function bytes_to_str(bytes) {
@@ -164,43 +163,43 @@
 for ikey, iface in pairs(data) do
   -%>
   <legend><%:Interface%> <%=ikey%></legend>
-  <table width="100%" cellspacing="10">
-    <tr>
-      <td width="33%" style="vertical-align:top"><%:Configuration%></td>
-      <td>
-        <table>
-          <tr>
-            <td id="<%=ikey%>_icon" style="width:16px; text-align:center; padding:3px">
+  <div class="table" width="100%" cellspacing="10">
+    <div class="tr">
+      <div class="td" width="33%" style="vertical-align:top"><%:Configuration%></div>
+      <div class="td">
+        <div class="table">
+          <div class="tr">
+            <div class="td" id="<%=ikey%>_icon" style="width:16px; text-align:center; padding:3px">
               &nbsp;
-            </td>
-            <td id="<%=ikey%>_info" style="vertical-align:middle; padding: 3px">
+            </div>
+            <div class="td" id="<%=ikey%>_info" style="vertical-align:middle; padding: 3px">
               <em><%:Collecting data...%></em>
-            </td>
-        </tr></table>
-      </td>
-    </tr>
+            </div>
+        </div></div>
+      </div>
+    </div>
   <%-
   for pkey, peer in pairs(iface.peers) do
     -%>
-    <tr>
-      <td width="33%" style="vertical-align:top"><%:Peer%></td>
-      <td>
-        <table>
-          <tr>
-            <td id="<%=ikey%>_<%=peer.public_key%>_icon" style="width:16px; text-align:center; padding:3px">
+    <div class="tr">
+      <div class="td" width="33%" style="vertical-align:top"><%:Peer%></div>
+      <div class="td">
+        <div class="table">
+          <div class="tr">
+            <div class="td" id="<%=ikey%>_<%=peer.public_key%>_icon" style="width:16px; text-align:center; padding:3px">
               <img src="<%=resource%>/icons/tunnel_disabled.png" /><br />
               <small>?</small>
-            </td>
-            <td id="<%=ikey%>_<%=peer.public_key%>_info" style="vertical-align:middle; padding: 3px">
+            </div>
+            <div class="td" id="<%=ikey%>_<%=peer.public_key%>_info" style="vertical-align:middle; padding: 3px">
               <em><%:Collecting data...%></em>
-            </td>
-        </tr></table>
-      </td>
-    </tr>
+            </div>
+        </div></div>
+      </div>
+    </div>
     <%-
   end
   -%>
-  </table>
+  </div>
   <%-
 end
 -%>

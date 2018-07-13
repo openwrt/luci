@@ -118,7 +118,6 @@ end
 
 <%+header%>
 
-<script type="text/javascript" src="<%=resource%>/cbi.js"></script>
 <script type="text/javascript">//<![CDATA[
 
 	XHR.poll(10 , '<%=REQUEST_URI%>', { status: 1 },
@@ -132,11 +131,11 @@ end
 				{
 				var service = info[idx];
 				s += String.format(
-					'<tr class="cbi-section-table-row cbi-rowstyle-'+(1 + (idx % 2))+'">' +
-						'<td class="cbi-section-table-titles"><a href="%s">%s</a></td>' +
-						'<td class="cbi-section-table-titles">%s</td>' +
-						'<td class="cbi-section-table-titles"><a href="http://%s/cgi-bin-status.html">%s</a></td>' +
-					'</tr>',
+					'<div class="tr cbi-section-table-row cbi-rowstyle-'+(1 + (idx % 2))+'">' +
+						'<div class="td cbi-section-table-titles"><a href="%s">%s</a></div>' +
+						'<div class="td cbi-section-table-titles">%s</div>' +
+						'<div class="td cbi-section-table-titles"><a href="http://%s/cgi-bin-status.html">%s</a></div>' +
+					'</div>',
 					service.url, service.descr, service.proto, service.origin_link, service.origin || '?'
 					);
 				}
@@ -153,16 +152,16 @@ end
 
 	<fieldset class="cbi-section">
 	<legend><%:Internal services%></legend>
-	<table class="cbi-section-table">
-		<thead>
-			<tr class="cbi-section-table-titles">
-				<th class="cbi-section-table-cell"><%:Url%></th>
-				<th class="cbi-section-table-cell"><%:Protocol%></th>
-				<th class="cbi-section-table-cell"><%:Source%></th>
-			</tr>
-		</thead>
+	<div class="table cbi-section-table">
+		<div class="thead">
+			<div class="tr cbi-section-table-titles">
+				<div class="th cbi-section-table-cell"><%:Url%></div>
+				<div class="th cbi-section-table-cell"><%:Protocol%></div>
+				<div class="th cbi-section-table-cell"><%:Source%></div>
+			</div>
+		</div>
 
-		<tbody id="olsr_services">
+		<div class="tbody" id="olsr_services">
 	<%
 		for k, line in ipairs(services) do
 			local field = {}
@@ -178,15 +177,15 @@ end
 			local url, proto, descr, origin = pcdata(field[1]), pcdata(field[2]), utl.trim(pcdata(field[3])), pcdata(field[4])
 			%>
 
-			<tr class="cbi-section-table-row cbi-rowstyle-<%=i%>">
-				<td class="cbi-section-table-titles"><a href="<%=url%>"><%=descr%></a></td>
-				<td class="cbi-section-table-titles"><%=proto%></td>
-				<td class="cbi-section-table-titles"><a href="http://<%=origin_link%>/cgi-bin-status.html"><%=origin%></a></td>
-			</tr>
+			<div class="tr cbi-section-table-row cbi-rowstyle-<%=i%>">
+				<div class="td cbi-section-table-titles"><a href="<%=url%>"><%=descr%></a></div>
+				<div class="td cbi-section-table-titles"><%=proto%></div>
+				<div class="td cbi-section-table-titles"><a href="http://<%=origin_link%>/cgi-bin-status.html"><%=origin%></a></div>
+			</div>
 			<% i = ((i % 2) + 1)
 		end %>
-		</tbody>
-	</table>
+		</div>
+	</div>
 	<br />
 	<%=last_update%>
 	</fieldset>

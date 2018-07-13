@@ -45,7 +45,6 @@ end
 
 <%+header%>
 
-<script type="text/javascript" src="<%=resource%>/cbi.js"></script>
 <script type="text/javascript">//<![CDATA[
 
 XHR.poll(10, '<%=REQUEST_URI%>/json', { },
@@ -160,48 +159,48 @@ XHR.poll(10, '<%=REQUEST_URI%>/json', { },
 <fieldset class="cbi-section">
         <legend><%:Network%></legend>
 
-        <table width="100%" cellspacing="10">
-                <tr><td width="33%"><%:Interfaces%></td><td>
+        <div class="table" width="100%" cellspacing="10">
+                <div class="tr"><div class="td" width="33%"><%:Interfaces%></div><div class="td">
 			<a href="<%=REQUEST_URI%>/interfaces">
 				<span id="nr_ifaces">-<span>
 			</a>
-		</td></tr>
-                <tr><td width="33%"><%:Neighbors%></td><td>
+		</div></div>
+                <div class="tr"><div class="td" width="33%"><%:Neighbors%></div><div class="td">
 			<a href="<%=REQUEST_URI%>/neighbors">
 				<span id="nr_neigh">-</span>
 			</a>
-		</td></tr>
-                <tr><td width="33%"><%:Nodes%></td><td>
+		</div></div>
+                <div class="tr"><div class="td" width="33%"><%:Nodes%></div><div class="td">
 			<a href="<%=REQUEST_URI%>/topology">
 				<span id="nr_nodes">-</span>
 			</a>
-		</td></tr>
-                <tr><td width="33%"><%:HNA%></td><td>
+		</div></div>
+                <div class="tr"><div class="td" width="33%"><%:HNA%></div><div class="td">
 			<a href="<%=REQUEST_URI%>/hna">
 				<span id="nr_hna">-</span>
 			</a>
-		</td></tr>
-                <tr><td width="33%"><%:Links total%></td><td>
+		</div></div>
+                <div class="tr"><div class="td" width="33%"><%:Links total%></div><div class="td">
 			<a href="<%=REQUEST_URI%>/topology">
 				<span id="nr_topo">-</span>
 			</a>
-		</td></tr>
-                <tr><td width="33%"><%:Links per node (average)%></td><td>
+		</div></div>
+                <div class="tr"><div class="td" width="33%"><%:Links per node (average)%></div><div class="td">
 			<span id="meshfactor">-</span>
-		</td></tr>
+		</div></div>
 
 
-        </table>
+        </div>
 </fieldset>
 
 
 <fieldset class="cbi-section">
         <legend>OLSR <%:Configuration%></legend>
-        <table width="100%" cellspacing="10">
-                <tr><td width="33%"><%:Version%></td><td>
+        <div class="table" width="100%" cellspacing="10">
+                <div class="tr"><div class="td" width="33%"><%:Version%></div><div class="td">
 			<span id="version">-<span>
-		</td></tr>
-                <tr><td width="33%"><%:Download Config%></td><td>
+		</div></div>
+                <div class="tr"><div class="td" width="33%"><%:Download Config%></div><div class="td">
 			<% if has_ipv4_conf then %>
 			    <a href="<%=REQUEST_URI%>?openwrt_v4">OpenWrt (IPv4)</a>,
 			<% end %>
@@ -214,8 +213,8 @@ XHR.poll(10, '<%=REQUEST_URI%>/json', { },
 			<% if has_ipv6_conf then %>
 			    <a href="<%=REQUEST_URI%>?conf_v6">OLSRD (IPv6)</a>
 			<% end %>
-		</td></tr>
-	</table>
+		</div></div>
+	</div>
 </fieldset>
 
 <%+footer%>

@@ -14,7 +14,7 @@ local table, ipairs, pairs, type, tostring, tonumber, error =
 
 module "luci.http"
 
-HTTP_MAX_CONTENT      = 1024*8		-- 8 kB maximum content size
+HTTP_MAX_CONTENT      = 1024*100		-- 100 kB maximum content size
 
 context = util.threadlocal()
 
@@ -416,7 +416,7 @@ function mimedecode_message_body(src, msg, file_cb)
 		end
 
 		return true
-	end)
+	end, HTTP_MAX_CONTENT)
 
 	return ltn12.pump.all(src, function (chunk)
 		len = len + (chunk and #chunk or 0)
@@ -460,7 +460,7 @@ function urldecode_message_body(src, msg)
 		end
 
 		return true
-	end)
+	end, HTTP_MAX_CONTENT)
 
 	return ltn12.pump.all(src, function (chunk)
 		len = len + (chunk and #chunk or 0)

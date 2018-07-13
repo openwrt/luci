@@ -74,7 +74,6 @@
 <link rel="stylesheet" media="only screen and (max-device-width: 854px)" href="<%=media%>/mobile.css" type="text/css" />
 <link rel="stylesheet" media="only screen and (max-width: 854px)" href="<%=media%>/smallscreen.css" type="text/css" />
 <link rel="stylesheet" media="handheld" href="<%=media%>/mobile.css" type="text/css" />
-<!--[if IE 7]><link rel="stylesheet" type="text/css" media="screen" href="<%=media%>/ie7.css" /><![endif]-->
 <% if node and node.css then %><link rel="stylesheet" type="text/css" media="screen" href="<%=resource%>/<%=node.css%>" />
 <% end -%>
 <% if css then %><style title="text/css">
@@ -82,6 +81,7 @@
 </style>
 <% end -%>
 <meta name="viewport" content="initial-scale=1.0" />
+<script type="text/javascript" src="<%=resource%>/cbi.js"></script>
 <script type="text/javascript" src="<%=resource%>/xhr.js"></script>
 
 <title><%=striptags( (boardinfo.hostname or "?") .. ( (node and node.title) and ' - ' .. translate(tostring(node.title)) or '')) %> - LuCI</title>

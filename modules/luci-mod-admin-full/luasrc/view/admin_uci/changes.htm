@@ -1,46 +1,43 @@
 <%#
  Copyright 2008 Steven Barth <steven@midlink.org>
- Copyright 2008-2015 Jo-Philipp Wich <jow@openwrt.org>
+ Copyright 2008-2018 Jo-Philipp Wich <jo@mein.io>
  Licensed to the public under the Apache License 2.0.
 -%>
 
 <%+header%>
 
+<%-
+	local node, redir_url = luci.dispatcher.lookup(luci.http.formvalue("redir"))
+
+	include("cbi/apply_widget")
+	include("admin_uci/changelog")
+
+	cbi_apply_widget(redir_url or url("admin/uci/changes"))
+-%>
+
 <h2 name="content"><%:Configuration%> / <%:Changes%></h2>
 
 <% if changes then %>
-	<%+admin_uci/changelog%>
 	<%- uci_changelog(changes) -%>
 <% else %>
 	<p><strong><%:There are no pending changes!%></strong></p>
 <% end %>
 
+<div class="alert-message" id="cbi_apply_status" style="display:none"></div>
+
 <div class="cbi-page-actions">
-	<% local node, url = luci.dispatcher.lookup(luci.http.formvalue("redir")); if url then %>
-	<div style="float:left">
-		<form class="inline" method="get" action="<%=luci.util.pcdata(url)%>">
-			<input class="cbi-button cbi-button-link" style="float:left; margin:0" type="submit" value="<%:Back%>" />
-		</form>
-	</div>
+	<% if redir_url then %>
+	<form method="get" action="<%=luci.util.pcdata(redir_url)%>">
+		<input class="cbi-button cbi-button-link" type="submit" value="<%:Back%>" />
+	</form>
 	<% end %>
 
-	<div style="text-align:right">
-		<form class="inline" method="post" action="<%=controller%>/admin/uci/apply">
-			<input type="hidden" name="token" value="<%=token%>" />
-			<input type="hidden" name="redir" value="<%=pcdata(luci.http.formvalue("redir"))%>" />
-			<input class="cbi-button cbi-button-apply" type="submit" value="<%:Apply%>" />
-		</form>
-		<form class="inline" method="post" action="<%=controller%>/admin/uci/saveapply">
-			<input type="hidden" name="token" value="<%=token%>" />
-			<input type="hidden" name="redir" value="<%=pcdata(luci.http.formvalue("redir"))%>" />
-			<input class="cbi-button cbi-button-save" type="submit" value="<%:Save & Apply%>" />
-		</form>
-		<form class="inline" method="post" action="<%=controller%>/admin/uci/revert">
-			<input type="hidden" name="token" value="<%=token%>" />
-			<input type="hidden" name="redir" value="<%=pcdata(luci.http.formvalue("redir"))%>" />
-			<input class="cbi-button cbi-button-reset" type="submit" value="<%:Revert%>" />
-		</form>
-	</div>
+	<input class="cbi-button cbi-button-save" type="button" id="apply_button" value="<%:Save & Apply%>" onclick="uci_apply(true); this.blur()" />
+	<form method="post" action="<%=url("admin/uci/revert")%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input type="hidden" name="redir" value="<%=pcdata(luci.http.formvalue("redir"))%>" />
+		<input class="cbi-button cbi-button-reset" type="submit" value="<%:Revert%>" />
+	</form>
 </div>
 
 <%+footer%>

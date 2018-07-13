@@ -9,7 +9,7 @@ local rlh, rpv, vld, nvd, eds, prt, tlm
 local ctl, dlk, dom, dty, lfq, wfq, exa
 local dp6, d64, pfx, qry, qrs
 local pro, tgr, rsc, rsn, ag2, stt
-local rpn, din, dfw
+local rpn, din, dfw, ath
 local ucl = luci.model.uci.cursor()
 local valman = ucl:get_first("unbound", "unbound", "manual_conf")
 

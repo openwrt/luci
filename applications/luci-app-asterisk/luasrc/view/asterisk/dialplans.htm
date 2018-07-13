@@ -58,7 +58,6 @@
 
 <form method="post" action="<%=url('admin/asterisk/dialplans')%>" enctype="multipart/form-data">
 	<div>
-		<script type="text/javascript" src="/luci-static/resources/cbi.js"></script>
 		<input type="hidden" name="cbi.submit" value="1" />
 		<input type="submit" value="Save" class="hidden" />
 	</div>
@@ -79,23 +78,23 @@
 
 		<% for i, plan in pairs(ast.dialplan.plans()) do %>
 		<div class="cbi-section-node">
-			<table class="cbi-section-table">
-				<tr class="cbi-section-table-titles">
-					<th style="text-align: left; padding: 3px" class="cbi-section-table-cell">
+			<div class="table cbi-section-table">
+				<div class="tr cbi-section-table-titles">
+					<div style="text-align: left; padding: 3px" class="th cbi-section-table-cell">
 						<big>Dialplan <em><%=plan.name%></em></big>
-					</th>
-					<td>
+					</div>
+					<div class="td">
 						<a href="<%=url('admin/asterisk/dialplans')%>?delplan=<%=plan.name%>">
 							<img style="border:none" alt="Remove this dialplan" title="Remove this dialplan" src="/luci-static/resources/cbi/remove.gif" />
 						</a>
-					</td>
-				</tr>
+					</div>
+				</div>
 
 				<!-- dialzones -->
 				<% local zones_used = { }; local row = 0 %>
 				<% for i, zone in ipairs(plan.zones) do zones_used[zone.name] = true %>
-				<tr class="cbi-section-table-row <%=rowstyle(row)%>">
-					<td style="text-align: left; padding: 3px" class="cbi-section-table-cell">
+				<div class="tr cbi-section-table-row <%=rowstyle(row)%>">
+					<div style="text-align: left; padding: 3px" class="td cbi-section-table-cell">
 						<strong>&#x2514; Dialzone <em><%=zone.name%></em></strong> (<%=zone.description%>)
 						<p style="padding-left: 1em; margin-bottom:0">
 							Lines:
@@ -107,24 +106,24 @@
 							Matches:
 							<%=format_matches(zone)%>
 						</p>
-					</td>
-					<td style="width:5%" class="cbi-value-field">
+					</div>
+					<div style="width:5%" class="td cbi-value-field">
 						<a href="<%=url('admin/asterisk/dialplans/out', zone.name)%>">
 							<img style="border:none" alt="Edit dialzone" title="Edit dialzone" src="/luci-static/resources/cbi/edit.gif" />
 						</a>
 						<a href="<%=url('admin/asterisk/dialplans')%>?delzone.<%=plan.name%>=<%=zone.name%>">
 							<img style="border:none" alt="Remove from this dialplan" title="Remove from this dialplan" src="/luci-static/resources/cbi/remove.gif" />
 						</a>
-					</td>
-				</tr>
+					</div>
+				</div>
 				<% row = row + 1; end %>
 				<!-- /dialzones -->
 
 				<!-- voicemail -->
 				<% local boxes_used = { } %>
 				<% for ext, box in luci.util.kspairs(plan.voicemailboxes) do boxes_used[box.id] = true %>
-				<tr class="cbi-section-table-row <%=rowstyle(row)%>">
-					<td style="text-align: left; padding: 3px" class="cbi-section-table-cell">
+				<div class="tr cbi-section-table-row <%=rowstyle(row)%>">
+					<div style="text-align: left; padding: 3px" class="td cbi-section-table-cell">
 						<strong>&#x2514; Voicemailbox <em><%=box.id%></em></strong> (<%=box.name%>)
 						<p style="padding-left: 1em; margin-bottom:0">
 							Owner: <%=box.name%> |
@@ -132,44 +131,44 @@
 							Pager: <%=#box.page  > 0 and box.page  or 'n/a'%><br />
 							Matches: <%=format_matches(ext)%>
 						</p>
-					</td>
-					<td style="width:5%" class="cbi-value-field">
+					</div>
+					<div style="width:5%" class="td cbi-value-field">
 						<a href="<%=url('admin/asterisk/voicemail/mailboxes')%>">
 							<img style="border:none" alt="Manage mailboxes ..." title="Manage mailboxes ..." src="/luci-static/resources/cbi/edit.gif" />
 						</a>
 						<a href="<%=url('admin/asterisk/dialplans')%>?delvbox.<%=plan.name%>=<%=ext%>">
 							<img style="border:none" alt="Remove from this dialplan" title="Remove from this dialplan" src="/luci-static/resources/cbi/remove.gif" />
 						</a>
-					</td>
-				</tr>
+					</div>
+				</div>
 				<% row = row + 1; end %>
 				<!-- /voicemail -->
 
 				<!-- meetme -->
 				<% local rooms_used = { } %>
 				<% for ext, room in luci.util.kspairs(plan.meetmerooms) do rooms_used[room.room] = true %>
-				<tr class="cbi-section-table-row <%=rowstyle(row)%>">
-					<td style="text-align: left; padding: 3px" class="cbi-section-table-cell">
+				<div class="tr cbi-section-table-row <%=rowstyle(row)%>">
+					<div style="text-align: left; padding: 3px" class="td cbi-section-table-cell">
 						<strong>&#x2514; MeetMe Room <em><%=room.room%></em></strong>
 						<% if room.description and #room.description > 0 then %> (<%=room.description%>)<% end %>
 						<p style="padding-left: 1em; margin-bottom:0">
 							Matches: <%=format_matches(ext)%>
 						</p>
-					</td>
-					<td style="width:5%" class="cbi-value-field">
+					</div>
+					<div style="width:5%" class="td cbi-value-field">
 						<a href="<%=url('admin/asterisk/meetme/rooms')%>">
 							<img style="border:none" alt="Manage conferences ..." title="Manage conferences ..." src="/luci-static/resources/cbi/edit.gif" />
 						</a>
 						<a href="<%=url('admin/asterisk/dialplans')%>?delmeetme.<%=plan.name%>=<%=ext%>">
 							<img style="border:none" alt="Remove from this dialplan" title="Remove from this dialplan" src="/luci-static/resources/cbi/remove.gif" />
 						</a>
-					</td>
-				</tr>
+					</div>
+				</div>
 				<% row = row + 1; end %>
 				<!-- /meetme -->
 
-				<tr class="cbi-section-table-row">
-					<td style="text-align: left; padding: 3px" class="cbi-section-table-cell" colspan="2">
+				<div class="tr cbi-section-table-row">
+					<div style="text-align: left; padding: 3px" class="td cbi-section-table-cell" colspan="2">
 						<hr style="margin-bottom:0.5em; border-width:0 0 1px 0" />
 
 						Add Dialzone:<br />
@@ -213,10 +212,10 @@
 						<br /><br />
 
 						<input type="submit" class="cbi-button cbi-button-add" value="Add item &raquo;" title="Add item ..."/>
-					</td>
-				</tr>
+					</div>
+				</div>
 
-			</table>
+			</div>
 
 			<div class="cbi-section-create cbi-tblsection-create"></div>
 		</div>

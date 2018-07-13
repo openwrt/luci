@@ -1,9 +1,9 @@
 <%+cbi/valueheader%>
 
 <script type="text/javascript">//<![CDATA[
-	var freqlist = <%= luci.http.write_json(self.freqlist) %>;
-	var hwmodes  = <%= luci.http.write_json(self.hwmodes) %>;
-	var htmodes  = <%= luci.http.write_json(self.htmodes) %>;
+	var freqlist = <%= luci.http.write_json(self.iwinfo.freqlist) %>;
+	var hwmodes  = <%= luci.http.write_json(self.iwinfo.hwmodelist or {}) %>;
+	var htmodes  = <%= luci.http.write_json(self.iwinfo.htmodelist) %>;
 
 	var channels = {
 		'11g': [

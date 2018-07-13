@@ -72,7 +72,9 @@ function s.parse(self, ...)
 	end
 end
 
-ft.opt_name(s, DummyValue, translate("Name"))
+function s.sectiontitle(self, sid)
+	return (self.map:get(sid, "name") or translate("Unnamed rule"))
+end
 
 local function rule_proto_txt(self, s)
 	local f = self.map:get(s, "family")
@@ -89,17 +91,31 @@ local function rule_proto_txt(self, s)
 end
 
 local function rule_src_txt(self, s)
-	local z = ft.fmt_zone(self.map:get(s, "src"), translate("any zone"))
-	local a = ft.fmt_ip(self.map:get(s, "src_ip"), translate("any host"))
+	local z = ft.fmt_zone(self.map:get(s, "src"))
 	local p = ft.fmt_port(self.map:get(s, "src_port"))
 	local m = ft.fmt_mac(self.map:get(s, "src_mac"))
 
-	if p and m then
-		return translatef("From %s in %s with source %s and %s", a, z, p, m)
-	elseif p or m then
-		return translatef("From %s in %s with source %s", a, z, p or m)
+	-- Forward/Input
+	if z and #z > 0 then
+		local a = ft.fmt_ip(self.map:get(s, "src_ip"), translate("any host"))
+		if p and m then
+			return translatef("From %s in %s with source %s and %s", a, z, p, m)
+		elseif p or m then
+			return translatef("From %s in %s with source %s", a, z, p or m)
+		else
+			return translatef("From %s in %s", a, z)
+		end
+
+	-- Output
 	else
-		return translatef("From %s in %s", a, z)
+		local a = ft.fmt_ip(self.map:get(s, "src_ip"), translate("any router IP"))
+		if p and m then
+			return translatef("From %s on <var>this device</var> with source %s and %s", a, p, m)
+		elseif p or m then
+			return translatef("From %s on <var>this device</var> with source %s", a, p or m)
+		else
+			return translatef("From %s on <var>this device</var>", a)
+		end
 	end
 end
 
@@ -145,7 +161,6 @@ end
 
 match = s:option(DummyValue, "match", translate("Match"))
 match.rawhtml = true
-match.width   = "70%"
 function match.cfgvalue(self, s)
 	return "<small>%s<br />%s<br />%s</small>" % {
 		rule_proto_txt(self, s),
@@ -156,9 +171,8 @@ end
 
 target = s:option(DummyValue, "target", translate("Action"))
 target.rawhtml = true
-target.width   = "20%"
 function target.cfgvalue(self, s)
-	local t = ft.fmt_target(self.map:get(s, "target"), self.map:get(s, "dest"))
+	local t = ft.fmt_target(self.map:get(s, "target"), self.map:get(s, "src"), self.map:get(s, "dest"))
 	local l = ft.fmt_limit(self.map:get(s, "limit"),
 		self.map:get(s, "limit_burst"))
 
@@ -169,7 +183,7 @@ function target.cfgvalue(self, s)
 	end
 end
 
-ft.opt_enabled(s, Flag, translate("Enable")).width = "1%"
+ft.opt_enabled(s, Flag, translate("Enable"))
 
 
 --
@@ -226,11 +240,12 @@ function s.filter(self, sid)
 	return (self.map:get(sid, "target") == "SNAT")
 end
 
-ft.opt_name(s, DummyValue, translate("Name"))
+function s.sectiontitle(self, sid)
+	return (self.map:get(sid, "name") or translate("Unnamed SNAT"))
+end
 
 match = s:option(DummyValue, "match", translate("Match"))
 match.rawhtml = true
-match.width   = "70%"
 function match.cfgvalue(self, s)
 	return "<small>%s<br />%s<br />%s</small>" % {
 		rule_proto_txt(self, s),
@@ -241,7 +256,6 @@ end
 
 snat = s:option(DummyValue, "via", translate("Action"))
 snat.rawhtml = true
-snat.width   = "20%"
 function snat.cfgvalue(self, s)
 	local a = ft.fmt_ip(self.map:get(s, "src_dip"))
 	local p = ft.fmt_port(self.map:get(s, "src_dport"))
@@ -253,7 +267,7 @@ function snat.cfgvalue(self, s)
 	end
 end
 
-ft.opt_enabled(s, Flag, translate("Enable")).width = "1%"
+ft.opt_enabled(s, Flag, translate("Enable"))
 
 
 return m

@@ -1,21 +1,39 @@
 <script type="text/javascript">//<![CDATA[
-	var switches = [ '<%=table.concat(self.switches, "', '")%>' ];
+	var switches = [ '<%=table.concat(self.switches, "', '")%>' ],
+	    tables = document.querySelectorAll('.cbi-section-table');
+
+	function add_status_row(table) {
+		var first_row = table.querySelector('.cbi-section-table-row');
+		if (first_row.classList.contains('port-status'))
+			return first_row;
+
+		var status_row = first_row.parentNode.insertBefore(
+			E('div', { 'class': first_row.className }), first_row);
+
+		first_row.querySelectorAll('.td').forEach(function(td) {
+			status_row.appendChild(td.cloneNode(false));
+			status_row.lastElementChild.removeAttribute('data-title');
+		});
+
+		status_row.firstElementChild.innerHTML = '<%:Port status:%>';
+		status_row.classList.add('port-status')	;
+
+		return status_row;
+	}
+
 	XHR.poll(5, '<%=url('admin/network/switch_status')%>/' + switches.join(','), null,
 		function(x, st)
 		{
 			for (var i = 0; i < switches.length; i++)
 			{
 				var ports = st[switches[i]];
-				var th0 = document.getElementById('portstatus-' + switches[i]);
+				var tr = add_status_row(tables[i]);
 
-				if (th0 && ports && ports.length)
+				if (tr && ports && ports.length)
 				{
-					if (!th0.innerHTML)
-						th0.innerHTML = '<%:Port status:%>';
-
 					for (var j = 0; j < ports.length; j++)
 					{
-						var th = document.getElementById('portstatus-' + switches[i] + '-' + j);
+						var th = tr.querySelector('[data-name="%d"]'.format(j));
 
 						if (!th)
 							continue;

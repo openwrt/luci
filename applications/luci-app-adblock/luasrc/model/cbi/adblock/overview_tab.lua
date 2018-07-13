@@ -183,7 +183,7 @@ end
 
 des = bl:option(DummyValue, "adb_src_desc", translate("Description"))
 
-cat = bl:option(DynamicList, "adb_src_cat", translate("Categories"))
+cat = bl:option(DynamicList, "adb_src_cat", translate("Archive Categories"))
 cat.datatype = "uciname"
 cat.optional = true
 

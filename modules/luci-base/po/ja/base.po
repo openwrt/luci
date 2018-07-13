@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-06-10 03:40+0200\n"
-"PO-Revision-Date: 2018-05-03 00:23+0900\n"
+"PO-Revision-Date: 2018-07-07 17:55+0900\n"
 "Last-Translator: INAGAKI Hiroshi <musashino.open@gmail.com>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
@@ -48,6 +48,9 @@ msgstr "-- ラベルを指定 --"
 
 msgid "-- match by uuid --"
 msgstr "-- UUID を指定 --"
+
+msgid "-- please select --"
+msgstr "-- 選択してください --"
 
 msgid "1 Minute Load:"
 msgstr "過去1分の負荷:"
@@ -217,9 +220,6 @@ msgstr "アクセスポイント"
 msgid "Actions"
 msgstr "動作"
 
-msgid "Activate this network"
-msgstr "このネットワークを有効にする"
-
 msgid "Active <abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Routes"
 msgstr ""
 "稼働中の <abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-経路情報"
@@ -274,6 +274,9 @@ msgstr ""
 
 msgid "Alert"
 msgstr "警告"
+
+msgid "Alias interface"
+msgstr ""
 
 msgid ""
 "Allocate IP addresses sequentially, starting from the lowest available "
@@ -395,11 +398,14 @@ msgstr "アンテナ設定"
 msgid "Any zone"
 msgstr "全てのゾーン"
 
-msgid "Apply"
-msgstr "適用"
+msgid "Apply request failed with status <code>%h</code>"
+msgstr "適用リクエストはステータス <code>%h</code> により失敗しました"
 
-msgid "Applying changes"
-msgstr "変更を適用"
+msgid "Apply unchecked"
+msgstr "チェックなしの適用"
+
+msgid "Architecture"
+msgstr "アーキテクチャ"
 
 msgid ""
 "Assign a part of given length of every public IPv6-prefix to this interface"
@@ -414,6 +420,9 @@ msgstr ""
 
 msgid "Associated Stations"
 msgstr "認証済み端末"
+
+msgid "Associations"
+msgstr "アソシエーション数"
 
 msgid "Auth Group"
 msgstr "認証グループ"
@@ -490,11 +499,11 @@ msgstr "概要へ戻る"
 msgid "Back to scan results"
 msgstr "スキャン結果へ戻る"
 
+msgid "Backup"
+msgstr "バックアップ"
+
 msgid "Backup / Flash Firmware"
 msgstr "バックアップ / ファームウェア更新"
-
-msgid "Backup / Restore"
-msgstr "バックアップ / 復元"
 
 msgid "Backup file list"
 msgstr "バックアップファイル リスト"
@@ -564,6 +573,9 @@ msgstr "CA証明書（空白の場合、初回の接続後に保存されます�
 msgid "CPU usage (%)"
 msgstr "CPU使用率 (%)"
 
+msgid "Call failed"
+msgstr ""
+
 msgid "Cancel"
 msgstr "キャンセル"
 
@@ -579,11 +591,21 @@ msgstr "変更"
 msgid "Changes applied."
 msgstr "変更が適用されました。"
 
+msgid "Changes have been reverted."
+msgstr "変更は取り消されました。"
+
 msgid "Changes the administrator password for accessing the device"
 msgstr "デバイスの管理者パスワードを変更します"
 
 msgid "Channel"
 msgstr "チャネル"
+
+msgid ""
+"Channel %d is not available in the %s regulatory domain and has been auto-"
+"adjusted to %d."
+msgstr ""
+"チャンネル %d は、 %s 領域内では規制により利用できません。%d へ自動調整されま"
+"した。"
 
 msgid "Check"
 msgstr "チェック"
@@ -624,13 +646,10 @@ msgstr ""
 
 msgid ""
 "Click \"Generate archive\" to download a tar archive of the current "
-"configuration files. To reset the firmware to its initial state, click "
-"\"Perform reset\" (only possible with squashfs images)."
+"configuration files."
 msgstr ""
 "\"バックアップ アーカイブの作成\"をクリックすると、現在の設定ファイルをtar形"
-"式のアーカイブファイルとしてダウンロードします。設定のリセットを行う場"
-"合、\"設定リセット\"をクリックしてください。(ただし、squashfsをお使いの場合の"
-"み使用可能です)"
+"式のアーカイブファイルとしてダウンロードします。"
 
 msgid "Client"
 msgstr "クライアント"
@@ -671,11 +690,17 @@ msgstr ""
 msgid "Configuration"
 msgstr "設定"
 
-msgid "Configuration applied."
-msgstr "設定を適用しました。"
+msgid "Configuration failed"
+msgstr ""
 
 msgid "Configuration files will be kept."
 msgstr "設定ファイルは保持されます。"
+
+msgid "Configuration has been applied."
+msgstr "設定が適用されました。"
+
+msgid "Configuration has been rolled back!"
+msgstr "設定はロールバックされました！"
 
 msgid "Confirmation"
 msgstr "確認"
@@ -691,6 +716,15 @@ msgstr "接続制限"
 
 msgid "Connections"
 msgstr "ネットワーク接続"
+
+msgid ""
+"Could not regain access to the device after applying the configuration "
+"changes. You might need to reconnect if you modified network related "
+"settings such as the IP address or wireless security credentials."
+msgstr ""
+"設定の変更を適用後、デバイスへのアクセスを回復できませんでした。もし IP アド"
+"レスや無線のセキュリティ認証情報などのネットワーク関連の設定を変更した場合、"
+"再接続が必要かもしれません。"
 
 msgid "Country"
 msgstr "国"
@@ -749,9 +783,6 @@ msgstr ""
 "<abbr title=\"Light Emitting Diode\">LED</abbr> デバイスの挙動をカスタマイズ"
 "します。"
 
-msgid "DHCP Leases"
-msgstr "DHCPリース"
-
 msgid "DHCP Server"
 msgstr "DHCPサーバー"
 
@@ -763,9 +794,6 @@ msgstr "DHCP クライアント"
 
 msgid "DHCP-Options"
 msgstr "DHCPオプション"
-
-msgid "DHCPv6 Leases"
-msgstr "DHCPv6 リース"
 
 msgid "DHCPv6 client"
 msgstr "DHCPv6 クライアント"
@@ -862,8 +890,11 @@ msgstr "デバイス設定"
 msgid "Device is rebooting..."
 msgstr "デバイスを再起動中です..."
 
-msgid "Device unreachable"
+msgid "Device unreachable!"
 msgstr "デバイスに到達できません"
+
+msgid "Device unreachable! Still waiting for device..."
+msgstr "デバイスに到達できません！まだデバイスを待っています..."
 
 msgid "Diagnostics"
 msgstr "診断機能"
@@ -890,6 +921,9 @@ msgstr "DNSセットアップを無効にする"
 msgid "Disable Encryption"
 msgstr "暗号化を無効にする"
 
+msgid "Disable this network"
+msgstr ""
+
 msgid "Disabled"
 msgstr "無効"
 
@@ -898,6 +932,12 @@ msgstr "無効（デフォルト）"
 
 msgid "Discard upstream RFC1918 responses"
 msgstr "RFC1918の応答を破棄します"
+
+msgid "Disconnection attempt failed"
+msgstr ""
+
+msgid "Dismiss"
+msgstr "警告の除去"
 
 msgid "Displaying only packages containing"
 msgstr "右記の文字列を含んだパッケージのみを表示中"
@@ -950,6 +990,9 @@ msgid ""
 msgstr ""
 "<abbr title=\"Domain Name System\">DNS</abbr>名の無い <abbr title=\"Domain "
 "Name System\">DNS</abbr>リクエストを転送しません"
+
+msgid "Down"
+msgstr "下へ"
 
 msgid "Download and install package"
 msgstr "パッケージのダウンロードとインストール"
@@ -1068,6 +1111,9 @@ msgstr "カプセル化されたパケットの DF (Don't Fragment) フラグを
 msgid "Enable this mount"
 msgstr "マウント設定を有効にする"
 
+msgid "Enable this network"
+msgstr ""
+
 msgid "Enable this swap"
 msgstr "スワップ設定を有効にする"
 
@@ -1099,6 +1145,12 @@ msgstr "エンドポイント ホスト"
 
 msgid "Endpoint Port"
 msgstr "エンドポイント ポート"
+
+msgid "Enter custom value"
+msgstr ""
+
+msgid "Enter custom values"
+msgstr ""
 
 msgid "Erasing..."
 msgstr "消去中..."
@@ -1160,6 +1212,9 @@ msgstr ""
 msgid "FT protocol"
 msgstr ""
 
+msgid "Failed to confirm apply within %ds, waiting for rollback…"
+msgstr "%d 秒以内の適用を確認できませんでした。ロールバック中です..."
+
 msgid "File"
 msgstr "ファイル"
 
@@ -1176,6 +1231,9 @@ msgid "Filter private"
 msgstr "プライベートフィルター"
 
 msgid "Filter useless"
+msgstr ""
+
+msgid "Finalizing failed"
 msgstr ""
 
 msgid ""
@@ -1284,10 +1342,10 @@ msgstr "ディスクの空き容量"
 
 msgid ""
 "Further information about WireGuard interfaces and peers at <a href=\"http://"
-"wireguard.io\">wireguard.io</a>."
+"wireguard.com\">wireguard.com</a>."
 msgstr ""
 "WireGuard インターフェースとピアについての詳細情報: <a href=\"http://"
-"wireguard.io\">wireguard.io</a>"
+"wireguard.com\">wireguard.com</a>"
 
 msgid "GHz"
 msgstr "GHz"
@@ -1297,6 +1355,9 @@ msgstr "GPRSのみ"
 
 msgid "Gateway"
 msgstr "ゲートウェイ"
+
+msgid "Gateway address is invalid"
+msgstr ""
 
 msgid "Gateway ports"
 msgstr "ゲートウェイ ポート"
@@ -1369,9 +1430,6 @@ msgid ""
 "authentication."
 msgstr "SSH公開鍵認証で使用するSSH公開鍵を1行づつペーストしてください。"
 
-msgid "Hermes 802.11b Wireless Controller"
-msgstr "Hermes 802.11b 無線LANコントローラ"
-
 msgid "Hide <abbr title=\"Extended Service Set Identifier\">ESSID</abbr>"
 msgstr "<abbr title=\"Extended Service Set Identifier\">ESSID</abbr>の隠匿"
 
@@ -1387,6 +1445,9 @@ msgstr ""
 msgid "Host-<abbr title=\"Internet Protocol Address\">IP</abbr> or Network"
 msgstr ""
 "ホスト<abbr title=\"Internet Protocol Address\">IP</abbr> または ネットワーク"
+
+msgid "Host-Uniq tag content"
+msgstr ""
 
 msgid "Hostname"
 msgstr "ホスト名"
@@ -1409,14 +1470,20 @@ msgstr "IPアドレス"
 msgid "IP address"
 msgstr "IPアドレス"
 
+msgid "IP address in invalid"
+msgstr ""
+
+msgid "IP address is missing"
+msgstr ""
+
 msgid "IPv4"
 msgstr "IPv4"
 
 msgid "IPv4 Firewall"
 msgstr "IPv4 ファイアウォール"
 
-msgid "IPv4 WAN Status"
-msgstr "IPv4 WAN ステータス"
+msgid "IPv4 Upstream"
+msgstr "IPv4 アップストリーム"
 
 msgid "IPv4 address"
 msgstr "IPv4 アドレス"
@@ -1466,8 +1533,8 @@ msgstr "IPv6 設定"
 msgid "IPv6 ULA-Prefix"
 msgstr "IPv6 ULA-プレフィクス"
 
-msgid "IPv6 WAN Status"
-msgstr "IPv6 WAN ステータス"
+msgid "IPv6 Upstream"
+msgstr "IPv6 アップストリーム"
 
 msgid "IPv6 address"
 msgstr "IPv6 アドレス"
@@ -1580,6 +1647,9 @@ msgstr "受信:"
 msgid "Info"
 msgstr "情報"
 
+msgid "Initialization failure"
+msgstr ""
+
 msgid "Initscript"
 msgstr "起動スクリプト"
 
@@ -1618,20 +1688,11 @@ msgstr "インターフェース一覧"
 msgid "Interface is reconnecting..."
 msgstr "インターフェース再接続中..."
 
-msgid "Interface is shutting down..."
-msgstr "インターフェース終了中..."
-
 msgid "Interface name"
 msgstr "インターフェース名"
 
 msgid "Interface not present or not connected yet."
 msgstr "インターフェースが存在しないか、接続していません"
-
-msgid "Interface reconnected"
-msgstr "インターフェースの再接続"
-
-msgid "Interface shut down"
-msgstr "インターフェースの終了"
 
 msgid "Interfaces"
 msgstr "インターフェース"
@@ -1827,6 +1888,9 @@ msgstr "システム平均負荷"
 msgid "Loading"
 msgstr "ロード中"
 
+msgid "Local IP address is invalid"
+msgstr ""
+
 msgid "Local IP address to assign"
 msgstr "割り当てるローカル IPアドレス"
 
@@ -1911,6 +1975,9 @@ msgstr "MAC-リスト"
 msgid "MAP / LW4over6"
 msgstr "MAP / LW4over6"
 
+msgid "MAP rule is invalid"
+msgstr ""
+
 msgid "MB/s"
 msgstr "MB/s"
 
@@ -1993,6 +2060,9 @@ msgstr "モデル"
 msgid "Modem device"
 msgstr "モデム デバイス"
 
+msgid "Modem information query failed"
+msgstr ""
+
 msgid "Modem init timeout"
 msgstr "モデム初期化タイムアウト"
 
@@ -2037,10 +2107,10 @@ msgid "Mounted file systems"
 msgstr "マウント中のファイルシステム"
 
 msgid "Move down"
-msgstr "下へ"
+msgstr "下へ移動"
 
 msgid "Move up"
-msgstr "上へ"
+msgstr "上へ移動"
 
 msgid "Multicast address"
 msgstr "マルチキャスト アドレス"
@@ -2090,6 +2160,9 @@ msgstr "ネットワーク ユーティリティ"
 msgid "Network boot image"
 msgstr "ネットワークブート用イメージ"
 
+msgid "Network device is not present"
+msgstr ""
+
 msgid "Network without interfaces."
 msgstr "インターフェースの無いネットワークです。"
 
@@ -2110,6 +2183,9 @@ msgstr "ファイルが見つかりませんでした"
 
 msgid "No information available"
 msgstr "情報がありません"
+
+msgid "No matching prefix delegation"
+msgstr ""
 
 msgid "No negative cache"
 msgstr "ネガティブキャッシュを行なわない"
@@ -2265,6 +2341,9 @@ msgstr ""
 msgid "Optional. Create routes for Allowed IPs for this peer."
 msgstr ""
 
+msgid "Optional. Description of peer."
+msgstr ""
+
 msgid ""
 "Optional. Host of peer. Names are resolved prior to bringing up the "
 "interface."
@@ -2348,6 +2427,9 @@ msgstr "PID"
 
 msgid "PIN"
 msgstr "PIN"
+
+msgid "PIN code rejected"
+msgstr ""
 
 msgid "PMK R1 Push"
 msgstr ""
@@ -2436,6 +2518,9 @@ msgstr "ピーク:"
 msgid "Peer IP address to assign"
 msgstr ""
 
+msgid "Peer address is missing"
+msgstr ""
+
 msgid "Peers"
 msgstr "ピア"
 
@@ -2506,9 +2591,6 @@ msgstr "これらのインターフェースでの待ち受けを停止します
 msgid "Prevents client-to-client communication"
 msgstr "クライアント同士の通信を制限します"
 
-msgid "Prism2/2.5/3 802.11b Wireless Controller"
-msgstr "Prism2/2.5/3 802.11b 無線LANコントローラ"
-
 msgid "Private Key"
 msgstr "秘密鍵"
 
@@ -2575,9 +2657,6 @@ msgstr "RX"
 msgid "RX Rate"
 msgstr "受信レート"
 
-msgid "RaLink 802.11%s Wireless Controller"
-msgstr "RaLink 802.11%s 無線LANコントローラ"
-
 msgid "Radius-Accounting-Port"
 msgstr "Radiusアカウントサーバー ポート番号"
 
@@ -2596,6 +2675,9 @@ msgstr "Radius認証秘密鍵"
 msgid "Radius-Authentication-Server"
 msgstr "Radius認証サーバー"
 
+msgid "Raw hex-encoded bytes. Leave empty unless your ISP require this"
+msgstr ""
+
 msgid ""
 "Read <code>/etc/ethers</code> to configure the <abbr title=\"Dynamic Host "
 "Configuration Protocol\">DHCP</abbr>-Server"
@@ -2604,16 +2686,16 @@ msgstr ""
 "として<code>/etc/ethers</code> をロードします"
 
 msgid ""
-"Really delete this interface? The deletion cannot be undone!\\nYou might "
-"lose access to this device if you are connected via this interface."
+"Really delete this interface? The deletion cannot be undone! You might lose "
+"access to this device if you are connected via this interface"
 msgstr ""
-"本当にこのインターフェースを削除しますか?一度削除すると、元に戻すことはできま"
-"せん!\n"
-"このインターフェースを経由して接続している場合、デバイスにアクセスできなくな"
-"る場合があります。"
+"本当にこのインターフェースを削除しますか？一度削除すると、元に戻すことはでき"
+"ません！\n"
+"もしこのインターフェースを経由して接続している場合、このデバイスにアクセスで"
+"きなくなる場合があります"
 
 msgid ""
-"Really delete this wireless network? The deletion cannot be undone!\\nYou "
+"Really delete this wireless network? The deletion cannot be undone! You "
 "might lose access to this device if you are connected via this network."
 msgstr ""
 "本当にこの無線ネットワークを削除しますか?一度削除すると、元に戻すことはできま"
@@ -2623,22 +2705,6 @@ msgstr ""
 
 msgid "Really reset all changes?"
 msgstr "本当に全ての変更をリセットしますか?"
-
-msgid ""
-"Really shut down network?\\nYou might lose access to this device if you are "
-"connected via this interface."
-msgstr ""
-"本当にネットワークを停止しますか?\n"
-"このネットワークを経由して接続している場合、デバイスにアクセスできなくなる場"
-"合があります。"
-
-msgid ""
-"Really shutdown interface \"%s\" ?\\nYou might lose access to this device if "
-"you are connected via this interface."
-msgstr ""
-"本当にインターフェース \"%s\" を停止しますか?\n"
-"このインターフェースを経由して接続している場合、デバイスにアクセスできなくな"
-"る場合があります。"
 
 msgid "Really switch protocol?"
 msgstr "本当にプロトコルを切り替えますか?"
@@ -2684,9 +2750,6 @@ msgstr "WireGuard インターフェースのIPアドレスです。（推奨）
 
 msgid "Reconnect this interface"
 msgstr "インターフェースの再接続"
-
-msgid "Reconnecting interface"
-msgstr "インターフェース再接続中"
 
 msgid "References"
 msgstr "参照カウンタ"
@@ -2778,6 +2841,12 @@ msgstr "再起動"
 msgid "Restart Firewall"
 msgstr "ファイアウォールの再起動"
 
+msgid "Restart radio interface"
+msgstr ""
+
+msgid "Restore"
+msgstr "復元"
+
 msgid "Restore backup"
 msgstr "バックアップから復元する"
 
@@ -2786,6 +2855,15 @@ msgstr "パスワードを表示する/隠す"
 
 msgid "Revert"
 msgstr "元に戻す"
+
+msgid "Revert changes"
+msgstr "変更の取り消し"
+
+msgid "Revert request failed with status <code>%h</code>"
+msgstr "取り消しのリクエストはステータス <code>%h</code> により失敗しました"
+
+msgid "Reverting configuration…"
+msgstr "設定を元に戻しています..."
 
 msgid "Root"
 msgstr "ルート"
@@ -2854,9 +2932,6 @@ msgstr "保存"
 msgid "Save & Apply"
 msgstr "保存 & 適用"
 
-msgid "Save &#38; Apply"
-msgstr "保存 &#38; 適用"
-
 msgid "Scan"
 msgstr "スキャン"
 
@@ -2902,6 +2977,12 @@ msgstr ""
 msgid "Set up Time Synchronization"
 msgstr "時刻同期設定"
 
+msgid "Setting PLMN failed"
+msgstr ""
+
+msgid "Setting operation mode failed"
+msgstr ""
+
 msgid "Setup DHCP Server"
 msgstr "DHCPサーバーを設定"
 
@@ -2916,9 +2997,6 @@ msgstr "現在のバックアップファイルのリストを表示する"
 
 msgid "Shutdown this interface"
 msgstr "インターフェースを終了"
-
-msgid "Shutdown this network"
-msgstr "ネットワークを終了"
 
 msgid "Signal"
 msgstr "信号強度"
@@ -2974,9 +3052,6 @@ msgstr ""
 "ファームウェア更新は手動で行っていただく必要があります。wikiを参照して、この"
 "デバイスのインストール手順を参照してください。"
 
-msgid "Sort"
-msgstr "ソート"
-
 msgid "Source"
 msgstr "送信元"
 
@@ -3017,6 +3092,9 @@ msgstr "開始"
 
 msgid "Start priority"
 msgstr "優先順位"
+
+msgid "Starting configuration apply…"
+msgstr "設定の適用を開始しています..."
 
 msgid "Startup"
 msgstr "スタートアップ"
@@ -3081,6 +3159,8 @@ msgstr "スイッチ %q (%s)"
 msgid ""
 "Switch %q has an unknown topology - the VLAN settings might not be accurate."
 msgstr ""
+"スイッチ %q は不明なトポロジを持っています - VLAN 設定は正確ではないかもしれ"
+"ません。"
 
 msgid "Switch Port Mask"
 msgstr "スイッチポート マスク"
@@ -3176,8 +3256,27 @@ msgstr ""
 "使用可能な文字は右記の通りです: <code>A-Z</code>, <code>a-z</code>, "
 "<code>0-9</code>, <code>_</code>"
 
+msgid "The backup archive does not appear to be a valid gzip file."
+msgstr ""
+
 msgid "The configuration file could not be loaded due to the following error:"
 msgstr "設定ファイルは以下のエラーにより読み込めませんでした:"
+
+msgid ""
+"The device could not be reached within %d seconds after applying the pending "
+"changes, which caused the configuration to be rolled back for safety "
+"reasons. If you believe that the configuration changes are correct "
+"nonetheless, perform an unchecked configuration apply. Alternatively, you "
+"can dismiss this warning and edit changes before attempting to apply again, "
+"or revert all pending changes to keep the currently working configuration "
+"state."
+msgstr ""
+"未適用の変更を適用後、デバイスは %d 秒以内に完了できなかった可能性がありま"
+"す。これは、安全上の理由によりロールバックされる設定に起因するものです。それ"
+"でも設定の変更が正しいと思う場合は、チェックなしの変更の適用を行ってくださ"
+"い。もしくは、再度適用を試行する前にこの警告を除去して設定内容の編集を行う"
+"か、現在動作している設定状況を維持するために未適用の変更を取り消してくださ"
+"い。"
 
 msgid ""
 "The device file of the memory or partition (<abbr title=\"for example\">e.g."
@@ -3203,9 +3302,6 @@ msgstr ""
 "更新用イメージがアップロードされました。以下はそのチェックサム及びファイルサ"
 "イズです。オリジナルファイルと比較し、整合性を確認してください。<br />\"続行"
 "\"ボタンをクリックすると、更新処理を開始します。"
-
-msgid "The following changes have been committed"
-msgstr "以下の変更が適用されました"
 
 msgid "The following changes have been reverted"
 msgstr "以下の変更が取り消されました"
@@ -3282,8 +3378,8 @@ msgstr ""
 msgid "There are no active leases."
 msgstr "リース中のIPアドレスはありません。"
 
-msgid "There are no pending changes to apply!"
-msgstr "適用が未完了の変更はありません！"
+msgid "There are no changes to apply."
+msgstr "適用する変更はありません。"
 
 msgid "There are no pending changes to revert!"
 msgstr "復元が未完了の変更はありません！"
@@ -3392,10 +3488,12 @@ msgstr "タイムゾーン"
 
 msgid ""
 "To restore configuration files, you can upload a previously generated backup "
-"archive here."
+"archive here. To reset the firmware to its initial state, click \"Perform "
+"reset\" (only possible with squashfs images)."
 msgstr ""
 "設定を復元するには、作成しておいたバックアップ アーカイブをアップロードしてく"
-"ださい。"
+"ださい。設定のリセットを行う場合、\"設定リセット\"をクリックしてください。(た"
+"だし、squashfsをお使いの場合のみ使用可能です)"
 
 msgid "Tone"
 msgstr ""
@@ -3463,8 +3561,26 @@ msgstr "USB ポート"
 msgid "UUID"
 msgstr "UUID"
 
+msgid "Unable to determine device name"
+msgstr ""
+
+msgid "Unable to determine external IP address"
+msgstr ""
+
+msgid "Unable to determine upstream interface"
+msgstr ""
+
 msgid "Unable to dispatch"
 msgstr "ディスパッチできません"
+
+msgid "Unable to obtain client ID"
+msgstr ""
+
+msgid "Unable to resolve AFTR host name"
+msgstr ""
+
+msgid "Unable to resolve peer host name"
+msgstr ""
 
 msgid "Unavailable Seconds (UAS)"
 msgstr ""
@@ -3475,6 +3591,9 @@ msgstr "不明"
 msgid "Unknown Error, password not changed!"
 msgstr "不明なエラーです。パスワードは変更されていません！"
 
+msgid "Unknown error (%s)"
+msgstr ""
+
 msgid "Unmanaged"
 msgstr "Unmanaged"
 
@@ -3484,8 +3603,17 @@ msgstr "アンマウント"
 msgid "Unsaved Changes"
 msgstr "保存されていない変更"
 
+msgid "Unsupported MAP type"
+msgstr ""
+
+msgid "Unsupported modem"
+msgstr ""
+
 msgid "Unsupported protocol type."
 msgstr "サポートされていないプロトコルタイプ"
+
+msgid "Up"
+msgstr "上へ"
 
 msgid "Update lists"
 msgstr "リストの更新"
@@ -3625,6 +3753,9 @@ msgstr "確認"
 msgid "Version"
 msgstr "バージョン"
 
+msgid "Virtual dynamic interface"
+msgstr ""
+
 msgid "WDS"
 msgstr "WDS"
 
@@ -3656,6 +3787,9 @@ msgstr "変更を適用中です..."
 
 msgid "Waiting for command to complete..."
 msgstr "コマンド実行中です..."
+
+msgid "Waiting for configuration to get applied… %ds"
+msgstr "設定を適用中です... %d 秒"
 
 msgid "Waiting for device..."
 msgstr "デバイスを起動中です..."
@@ -3692,8 +3826,11 @@ msgstr "無線LANデバイス一覧"
 msgid "Wireless Security"
 msgstr "無線LANセキュリティ"
 
-msgid "Wireless is disabled or not associated"
-msgstr "無線LAN機能が無効になっているか、アソシエーションされていません"
+msgid "Wireless is disabled"
+msgstr "無線LAN機能が無効になっている"
+
+msgid "Wireless is not associated"
+msgstr "無線LAN機能がアソシエーションされていません"
 
 msgid "Wireless is restarting..."
 msgstr "無線LAN機能再起動中..."
@@ -3703,12 +3840,6 @@ msgstr "無線LAN機能は無効になっています"
 
 msgid "Wireless network is enabled"
 msgstr "無線LAN機能は有効になっています"
-
-msgid "Wireless restarted"
-msgstr "無線LAN機能の再起動"
-
-msgid "Wireless shut down"
-msgstr "無線LAN機能停止"
 
 msgid "Write received DNS requests to syslog"
 msgstr "受信したDNSリクエストをsyslogへ記録します"
@@ -3751,6 +3882,9 @@ msgstr "baseT"
 msgid "bridged"
 msgstr "ブリッジ"
 
+msgid "create"
+msgstr "作成"
+
 msgid "create:"
 msgstr "作成:"
 
@@ -3780,16 +3914,13 @@ msgstr ""
 "録するファイル"
 
 msgid "forward"
-msgstr ""
+msgstr "転送"
 
 msgid "full-duplex"
 msgstr "全二重"
 
 msgid "half-duplex"
 msgstr "半二重"
-
-msgid "help"
-msgstr "ヘルプ"
 
 msgid "hidden"
 msgstr "(不明)"
@@ -3838,6 +3969,9 @@ msgstr "オン"
 
 msgid "open"
 msgstr "オープン"
+
+msgid "output"
+msgstr ""
 
 msgid "overlay"
 msgstr "オーバーレイ"
@@ -3889,3 +4023,52 @@ msgstr "はい"
 
 msgid "« Back"
 msgstr "« 戻る"
+
+#~ msgid "Activate this network"
+#~ msgstr "このネットワークを有効にする"
+
+#~ msgid "Hermes 802.11b Wireless Controller"
+#~ msgstr "Hermes 802.11b 無線LANコントローラ"
+
+#~ msgid "Interface is shutting down..."
+#~ msgstr "インターフェース終了中..."
+
+#~ msgid "Interface reconnected"
+#~ msgstr "インターフェースの再接続"
+
+#~ msgid "Interface shut down"
+#~ msgstr "インターフェースの終了"
+
+#~ msgid "Prism2/2.5/3 802.11b Wireless Controller"
+#~ msgstr "Prism2/2.5/3 802.11b 無線LANコントローラ"
+
+#~ msgid "RaLink 802.11%s Wireless Controller"
+#~ msgstr "RaLink 802.11%s 無線LANコントローラ"
+
+#~ msgid ""
+#~ "Really shut down network? You might lose access to this device if you are "
+#~ "connected via this interface"
+#~ msgstr ""
+#~ "本当にネットワークを停止しますか？\n"
+#~ "このネットワークを経由して接続している場合、デバイスにアクセスできなくなる"
+#~ "場合があります"
+
+#~ msgid ""
+#~ "Really shutdown interface \"%s\"? You might lose access to this device if "
+#~ "you are connected via this interface."
+#~ msgstr ""
+#~ "本当にインターフェース \"%s\" を停止しますか?\n"
+#~ "このインターフェースを経由して接続している場合、デバイスにアクセスできなく"
+#~ "なる場合があります。"
+
+#~ msgid "Reconnecting interface"
+#~ msgstr "インターフェース再接続中"
+
+#~ msgid "Shutdown this network"
+#~ msgstr "ネットワークを終了"
+
+#~ msgid "Wireless restarted"
+#~ msgstr "無線LAN機能の再起動"
+
+#~ msgid "Wireless shut down"
+#~ msgstr "無線LAN機能停止"

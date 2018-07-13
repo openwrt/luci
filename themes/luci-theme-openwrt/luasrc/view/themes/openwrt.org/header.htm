@@ -56,9 +56,42 @@
 
 		local childs = disp.node_childs(node)
 		if #childs > 0 then
-			write('<div class="tabmenu%d"><ul class="tabmenu l%d">' %{
-				level, level
-			})
+			write('<ul class="mainmenu l%d">' % level)
+
+			local i, v
+			for i, v in ipairs(childs) do
+				local nnode = node.nodes[v]
+
+				write('<li class="mainmenu-item-%s %s"><a href="%s">%s</a>' %{
+					v, (nnode._menu_selected or (node.leaf and v == leaf)) and 'selected' or '',
+					nodeurl(prefix, v, nnode.query),
+					striptags(translate(nnode.title))
+				})
+
+				if level < 2 then
+					render_menu(prefix .. "/" .. v, nnode, level + 1)
+				end
+
+				write('</li>')
+			end
+
+			write('</ul>')
+		end
+	end
+
+	local function render_tabmenu(prefix, node, level)
+		if not level then
+			level = 1
+		end
+
+		local childs = disp.node_childs(node)
+		if #childs > 0 then
+			if level > 2 then
+				if level == 3 then
+					write('<div id="tabmenu">')
+				end
+				write('<ul class="cbi-tabmenu">')
+			end
 
 			local selected_node
 			local selected_name
@@ -71,20 +104,25 @@
 					selected_name = v
 				end
 
-				write('<li class="tabmenu-item-%s %s"><a href="%s">%s</a></li>' %{
-					v, (nnode._menu_selected or (node.leaf and v == leaf)) and 'active' or '',
-					nodeurl(prefix, v, nnode.query),
-					striptags(translate(nnode.title))
-				})
+				if level > 2 then
+					write('<li class="tabmenu-item-%s %s"><a href="%s">%s</a></li>' %{
+						v, (nnode._menu_selected or (node.leaf and v == leaf)) and 'cbi-tab' or '',
+						nodeurl(prefix, v, nnode.query),
+						striptags(translate(nnode.title))
+					})
+				end
 			end
 
-			write('</ul><br style="clear:both" />')
+			if level > 2 then
+				write('</ul>')
+				if level == 3 then
+					write('</div>')
+				end
+			end
 
 			if selected_node then
-				render_menu(prefix .. "/" .. selected_name, selected_node, level + 1)
+				render_tabmenu(prefix .. "/" .. selected_name, selected_node, level + 1)
 			end
-
-			write('</div>')
 		end
 	end
 
@@ -116,18 +154,58 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<%=luci.i18n.context.lang%>" lang="<%=luci.i18n.context.lang%>">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta http-equiv="Content-Script-Type" content="text/javascript" />
 <link rel="stylesheet" type="text/css" media="screen" href="<%=media%>/cascade.css" />
-<!--[if IE 6]><link rel="stylesheet" type="text/css" media="screen" href="<%=media%>/ie6.css" /><![endif]-->
-<!--[if IE 7]><link rel="stylesheet" type="text/css" media="screen" href="<%=media%>/ie7.css" /><![endif]-->
-<!--[if IE 8]><link rel="stylesheet" type="text/css" media="screen" href="<%=media%>/ie8.css" /><![endif]-->
 <% if node and node.css then %><link rel="stylesheet" type="text/css" media="screen" href="<%=resource%>/<%=node.css%>" />
 <% end -%>
 <% if css then %><style title="text/css">
 <%= css %>
 </style>
 <% end -%>
+<script type="text/javascript" src="<%=resource%>/cbi.js"></script>
 <script type="text/javascript" src="<%=resource%>/xhr.js"></script>
+<script type="text/javascript">//<![CDATA[
+	document.addEventListener('DOMContentLoaded', function() {
+		var event = ('ontouchstart' in window) ? 'touchstart' : 'click';
+
+		document.querySelectorAll('ul.mainmenu.l1 > li > a').forEach(function(a) {
+			a.addEventListener(event, function(ev) {
+				var a = ev.target, ul1 = a.parentNode.parentNode, ul2 = a.nextElementSibling;
+
+				document.querySelectorAll('ul.mainmenu.l1 > li.active').forEach(function(li) {
+					if (li !== a.parentNode)
+						li.classList.remove('active');
+				});
+
+				if (!ul2)
+					return;
+
+				if (ul2.parentNode.offsetLeft + ul2.offsetWidth <= ul1.offsetLeft + ul1.offsetWidth)
+					ul2.classList.add('align-left');
+
+				ul1.classList.add('active');
+				a.parentNode.classList.add('active');
+				a.blur();
+
+				ev.preventDefault();
+				ev.stopPropagation();
+			});
+		});
+
+		document.addEventListener(event, function(ev) {
+			var t = ev.target;
+
+			while (t && t.id != 'mainmenu')
+				t = t.parentNode;
+
+			if (!t)
+				document.querySelectorAll('ul.mainmenu > li.active').forEach(function(li) {
+					li.classList.remove('active');
+				});
+		});
+	});
+//]]></script>
 <title><%=striptags( (boardinfo.hostname or "?") .. ( (node and node.title) and ' - ' .. translate(node.title) or '')) %> - LuCI</title>
 </head>
 <body class="lang_<%=luci.i18n.context.lang%>">
@@ -164,22 +242,24 @@
 </div>
 
 <div id="maincontainer">
-	<div id="tabmenu">
+	<div id="mainmenu">
 		<% if category then render_menu(category, cattree) end %>
 	</div>
 
 	<div id="maincontent">
+		<% if category then render_tabmenu(category, cattree) end %>
+
 		<noscript>
-			<div class="errorbox">
-				<strong><%:JavaScript required!%></strong><br />
-				<%:You must enable JavaScript in your browser or LuCI will not work properly.%>
+			<div class="alert-message warning">
+				<h4><%:JavaScript required!%></h4>
+				<p><%:You must enable JavaScript in your browser or LuCI will not work properly.%></p>
 			</div>
 		</noscript>
 
 		<%- if luci.sys.process.info("uid") == 0 and luci.sys.user.getuser("root") and not luci.sys.user.getpasswd("root") and category ~= "failsafe" then -%>
-		<div class="errorbox">
-			<strong><%:No password set!%></strong><br />
-			<%:There is no password set on this router. Please configure a root password to protect the web interface and enable SSH.%><br />
-			<a href="<%=pcdata(luci.dispatcher.build_url("admin/system/admin"))%>"><%:Go to password configuration...%></a>
+		<div class="alert-message warning">
+			<h4><%:No password set!%></h4>
+			<p><%:There is no password set on this router. Please configure a root password to protect the web interface and enable SSH.%></p>
+			<div class="right"><a class="btn" href="<%=url("admin/system/admin")%>"><%:Go to password configuration...%></a></div>
 		</div>
 		<%- end -%>

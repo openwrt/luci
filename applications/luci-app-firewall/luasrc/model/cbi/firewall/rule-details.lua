@@ -115,6 +115,10 @@ elseif rule_type == "redirect" then
 	o.datatype = "neg(portrange)"
 	o.placeholder = translate("any")
 
+	o:depends("proto", "tcp")
+	o:depends("proto", "udp")
+	o:depends("proto", "tcp udp")
+	o:depends("proto", "tcpudp")
 
 	o = s:option(Value, "dest", translate("Destination zone"))
 	o.nocreate = true
@@ -139,6 +143,10 @@ elseif rule_type == "redirect" then
 	o.placeholder = translate("any")
 	o.datatype = "neg(portrange)"
 
+	o:depends("proto", "tcp")
+	o:depends("proto", "udp")
+	o:depends("proto", "tcp udp")
+	o:depends("proto", "tcpudp")
 
 	o = s:option(Value, "src_dip",
 		translate("SNAT IP address"),
@@ -163,6 +171,10 @@ elseif rule_type == "redirect" then
 	o.rmempty = true
 	o.placeholder = translate('Do not rewrite')
 
+	o:depends("proto", "tcp")
+	o:depends("proto", "udp")
+	o:depends("proto", "tcp udp")
+	o:depends("proto", "tcpudp")
 
 	s:option(Value, "extra",
 		translate("Extra arguments"),
@@ -212,7 +224,13 @@ else
 	end
 
 
-	o = s:option(DynamicList, "icmp_type", translate("Match ICMP type"))
+	o = s:option(DropDown, "icmp_type", translate("Match ICMP type"))
+	o.multiple = true
+	o.display = 10
+	o.dropdown = 10
+	o.custom = true
+	o.cast = "table"
+
 	o:value("", "any")
 	o:value("echo-reply")
 	o:value("destination-unreachable")
@@ -251,11 +269,13 @@ else
 	o:value("address-mask-request")
 	o:value("address-mask-reply")
 
+	o:depends("proto", "icmp")
+
 
 	o = s:option(Value, "src", translate("Source zone"))
 	o.nocreate = true
 	o.allowany = true
-	o.default = "wan"
+	o.allowlocal = "src"
 	o.template = "cbi/firewall_zonelist"
 
 
@@ -269,7 +289,7 @@ else
 
 
 	o = s:option(Value, "src_ip", translate("Source address"))
-	o.datatype = "neg(ipmask)"
+	o.datatype = "list(neg(ipmask))"
 	o.placeholder = translate("any")
 
 	luci.sys.net.ipv4_hints(function(ip, name)
@@ -281,16 +301,29 @@ else
 	o.datatype = "list(neg(portrange))"
 	o.placeholder = translate("any")
 
+	o:depends("proto", "tcp")
+	o:depends("proto", "udp")
+	o:depends("proto", "tcp udp")
+	o:depends("proto", "tcpudp")
 
-	o = s:option(Value, "dest", translate("Destination zone"))
+	o = s:option(Value, "dest_local", translate("Output zone"))
+	o.nocreate = true
+	o.allowany = true
+	o.template = "cbi/firewall_zonelist"
+	o.alias = "dest"
+	o:depends("src", "")
+
+	o = s:option(Value, "dest_remote", translate("Destination zone"))
 	o.nocreate = true
 	o.allowany = true
 	o.allowlocal = true
 	o.template = "cbi/firewall_zonelist"
+	o.alias = "dest"
+	o:depends({["src"] = "", ["!reverse"] = true})
 
 
 	o = s:option(Value, "dest_ip", translate("Destination address"))
-	o.datatype = "neg(ipmask)"
+	o.datatype = "list(neg(ipmask))"
 	o.placeholder = translate("any")
 
 	luci.sys.net.ipv4_hints(function(ip, name)
@@ -302,6 +335,10 @@ else
 	o.datatype = "list(neg(portrange))"
 	o.placeholder = translate("any")
 
+	o:depends("proto", "tcp")
+	o:depends("proto", "udp")
+	o:depends("proto", "tcp udp")
+	o:depends("proto", "tcpudp")
 
 	o = s:option(ListValue, "target", translate("Action"))
 	o.default = "ACCEPT"
@@ -316,9 +353,9 @@ else
 		translate("Passes additional arguments to iptables. Use with care!"))
 end
 
-o = s:option(MultiValue, "weekdays", translate("Week Days"))
-o.oneline = true
-o.widget = "checkbox"
+o = s:option(DropDown, "weekdays", translate("Week Days"))
+o.multiple = true
+o.display = 5
 o:value("Sun", translate("Sunday"))
 o:value("Mon", translate("Monday"))
 o:value("Tue", translate("Tuesday"))
@@ -327,9 +364,9 @@ o:value("Thu", translate("Thursday"))
 o:value("Fri", translate("Friday"))
 o:value("Sat", translate("Saturday"))
 
-o = s:option(MultiValue, "monthdays", translate("Month Days"))
-o.oneline = true
-o.widget = "checkbox"
+o = s:option(DropDown, "monthdays", translate("Month Days"))
+o.multiple = true
+o.display = 15
 for i = 1,31 do
 	o:value(translate(i))
 end

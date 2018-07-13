@@ -5,7 +5,6 @@
 
 <%+header%>
 
-<script type="text/javascript" src="<%=resource%>/cbi.js"></script>
 <script type="text/javascript">//<![CDATA[
 	var bwxhr = new XHR();
 
@@ -119,7 +118,7 @@
 					var text = G.createElementNS('http://www.w3.org/2000/svg', 'text');
 						text.setAttribute('x', i + 5);
 						text.setAttribute('y', 15);
-						text.setAttribute('style', 'fill:#999999; font-size:9pt');
+						text.setAttribute('style', 'fill:#eee; font-size:9pt; font-family:sans-serif; text-shadow:1px 1px 1px #000');
 						text.appendChild(G.createTextNode(Math.round((width - i) / step / 60) + 'm'));
 
 					label_25.parentNode.appendChild(line);
@@ -237,6 +236,8 @@
 						label_15_peak.innerHTML = (data_15_peak / 100).toFixed(2);
 					}
 				);
+
+				XHR.run();
 			}
 		}, 1000
 	);
@@ -248,37 +249,37 @@
 <div style="text-align:right"><small id="scale">-</small></div>
 <br />
 
-<table style="width:100%; table-layout:fixed" cellspacing="5">
-	<tr>
-		<td style="text-align:right; vertical-align:top"><strong style="border-bottom:2px solid #ff0000; white-space:nowrap"><%:1 Minute Load:%></strong></td>
-		<td id="lb_load01_cur">0</td>
+<div class="table" style="width:100%; table-layout:fixed" cellspacing="5">
+	<div class="tr">
+		<div class="td" style="text-align:right; vertical-align:top"><strong style="border-bottom:2px solid #ff0000; white-space:nowrap"><%:1 Minute Load:%></strong></div>
+		<div class="td" id="lb_load01_cur">0</div>
 
-		<td style="text-align:right; vertical-align:top"><strong><%:Average:%></strong></td>
-		<td id="lb_load01_avg">0</td>
+		<div class="td" style="text-align:right; vertical-align:top"><strong><%:Average:%></strong></div>
+		<div class="td" id="lb_load01_avg">0</div>
 
-		<td style="text-align:right; vertical-align:top"><strong><%:Peak:%></strong></td>
-		<td id="lb_load01_peak">0</td>
-	</tr>
-	<tr>
-		<td style="text-align:right; vertical-align:top"><strong style="border-bottom:2px solid #ff6600; white-space:nowrap"><%:5 Minute Load:%></strong></td>
-		<td id="lb_load05_cur">0</td>
+		<div class="td" style="text-align:right; vertical-align:top"><strong><%:Peak:%></strong></div>
+		<div class="td" id="lb_load01_peak">0</div>
+	</div>
+	<div class="tr">
+		<div class="td" style="text-align:right; vertical-align:top"><strong style="border-bottom:2px solid #ff6600; white-space:nowrap"><%:5 Minute Load:%></strong></div>
+		<div class="td" id="lb_load05_cur">0</div>
 
-		<td style="text-align:right; vertical-align:top"><strong><%:Average:%></strong></td>
-		<td id="lb_load05_avg">0</td>
+		<div class="td" style="text-align:right; vertical-align:top"><strong><%:Average:%></strong></div>
+		<div class="td" id="lb_load05_avg">0</div>
 
-		<td style="text-align:right; vertical-align:top"><strong><%:Peak:%></strong></td>
-		<td id="lb_load05_peak">0</td>
-	</tr>
-	<tr>
-		<td style="text-align:right; vertical-align:top"><strong style="border-bottom:2px solid #ffaa00; white-space:nowrap"><%:15 Minute Load:%></strong></td>
-		<td id="lb_load15_cur">0</td>
+		<div class="td" style="text-align:right; vertical-align:top"><strong><%:Peak:%></strong></div>
+		<div class="td" id="lb_load05_peak">0</div>
+	</div>
+	<div class="tr">
+		<div class="td" style="text-align:right; vertical-align:top"><strong style="border-bottom:2px solid #ffaa00; white-space:nowrap"><%:15 Minute Load:%></strong></div>
+		<div class="td" id="lb_load15_cur">0</div>
 
-		<td style="text-align:right; vertical-align:top"><strong><%:Average:%></strong></td>
-		<td id="lb_load15_avg">0</td>
+		<div class="td" style="text-align:right; vertical-align:top"><strong><%:Average:%></strong></div>
+		<div class="td" id="lb_load15_avg">0</div>
 
-		<td style="text-align:right; vertical-align:top"><strong><%:Peak:%></strong></td>
-		<td id="lb_load15_peak">0</td>
-	</tr>
-</table>
+		<div class="td" style="text-align:right; vertical-align:top"><strong><%:Peak:%></strong></div>
+		<div class="td" id="lb_load15_peak">0</div>
+	</div>
+</div>
 
 <%+footer%>

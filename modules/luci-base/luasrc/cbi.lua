@@ -388,21 +388,21 @@ function Map.parse(self, readinput, ...)
 
 	if self.save then
 		self:_run_hooks("on_save", "on_before_save")
+		local i, config
 		for i, config in ipairs(self.parsechain) do
 			self.uci:save(config)
 		end
 		self:_run_hooks("on_after_save")
 		if (not self.proceed and self.flow.autoapply) or luci.http.formvalue("cbi.apply") then
 			self:_run_hooks("on_before_commit")
-			for i, config in ipairs(self.parsechain) do
-				self.uci:commit(config)
-
-				-- Refresh data because commit changes section names
-				self.uci:load(config)
+			if self.apply_on_parse == false then
+				for i, config in ipairs(self.parsechain) do
+					self.uci:commit(config)
+				end
 			end
 			self:_run_hooks("on_commit", "on_after_commit", "on_before_apply")
-			if self.apply_on_parse then
-				self.uci:apply(self.parsechain)
+			if self.apply_on_parse == true or self.apply_on_parse == false then
+				self.uci:apply(self.apply_on_parse)
 				self:_run_hooks("on_apply", "on_after_apply")
 			else
 				-- This is evaluated by the dispatcher and delegated to the
@@ -1226,13 +1226,14 @@ function TypedSection.parse(self, novld)
 		local stval = RESORT_PREFIX .. self.config .. "." .. self.sectiontype
 		local order = self.map:formvalue(stval)
 		if order and #order > 0 then
-			local sid
-			local num = 0
+			local sids, sid = { }, nil
 			for sid in util.imatch(order) do
-				self.map.uci:reorder(self.config, sid, num)
-				num = num + 1
+				sids[#sids+1] = sid
 			end
-			self.changed = (num > 0)
+			if #sids > 0 then
+				self.map.uci:reorder(self.config, sids)
+				self.changed = true
+			end
 		end
 	end
 
@@ -1416,6 +1417,12 @@ function AbstractValue.parse(self, section, novld)
 			self:add_error(section, "invalid", val_err)
 		end
 
+		if self.alias then
+			self.section.aliased = self.section.aliased or {}
+			self.section.aliased[section] = self.section.aliased[section] or {}
+			self.section.aliased[section][self.alias] = true
+		end
+
 		if fvalue and (self.forcewrite or not (fvalue == cvalue)) then
 			if self:write(section, fvalue) then
 				-- Push events
@@ -1425,10 +1432,16 @@ function AbstractValue.parse(self, section, novld)
 		end
 	else							-- Unset the UCI or error
 		if self.rmempty or self.optional then
-			if self:remove(section) then
-				-- Push events
-				self.section.changed = true
-				--luci.util.append(self.map.events, self.events)
+			if not self.alias or
+			   not self.section.aliased or
+			   not self.section.aliased[section] or
+			   not self.section.aliased[section][self.alias]
+			then
+				if self:remove(section) then
+					-- Push events
+					self.section.changed = true
+					--luci.util.append(self.map.events, self.events)
+				end
 			end
 		elseif cvalue ~= fvalue and not novld then
 			-- trigger validator with nil value to get custom user error msg.
@@ -1454,7 +1467,7 @@ function AbstractValue.cfgvalue(self, section)
 	if self.tag_error[section] then
 		value = self:formvalue(section)
 	else
-		value = self.map:get(section, self.option)
+		value = self.map:get(section, self.alias or self.option)
 	end
 
 	if not value then
@@ -1495,12 +1508,12 @@ AbstractValue.transform = AbstractValue.validate
 
 -- Write to UCI
 function AbstractValue.write(self, section, value)
-	return self.map:set(section, self.option, value)
+	return self.map:set(section, self.alias or self.option, value)
 end
 
 -- Remove from UCI
 function AbstractValue.remove(self, section)
-	return self.map:del(section, self.option)
+	return self.map:del(section, self.alias or self.option)
 end
 
 
@@ -1830,6 +1843,15 @@ function DynamicList.formvalue(self, section)
 	end
 
 	return value
+end
+
+
+DropDown = class(MultiValue)
+
+function DropDown.__init__(self, ...)
+	ListValue.__init__(self, ...)
+	self.template = "cbi/dropdown"
+	self.delimiter = " "
 end
 
 

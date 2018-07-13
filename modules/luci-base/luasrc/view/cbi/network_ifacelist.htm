@@ -19,7 +19,9 @@
 
 	if value then
 		for value in utl.imatch(value) do
-			checked[value] = true
+			for value in utl.imatch(value) do
+				checked[value] = true
+			end
 		end
 	else
 		local n = self.network and net:get_network(self.network)
@@ -33,57 +35,51 @@
 -%>
 
 <input type="hidden" name="<%=cbeid%>" value="1" />
-<ul style="margin:0; list-style-type:none">
-	<% for _, iface in ipairs(ifaces) do
-	     local link = iface:adminlink()
-         if (not self.nobridges  or not iface:is_bridge()) and
-		    (not self.noinactive or iface:is_up()) and
-		    iface:name() ~= self.exclude
-		 then %>
-	<li>
-		<input class="cbi-input-<%=self.widget or "radio"%>" data-update="click change"<%=
-			attr("type", self.widget or "radio") ..
-			attr("id", cbid .. "." .. iface:name()) ..
-			attr("name", cbid) .. attr("value", iface:name()) ..
-			ifattr(checked[iface:name()], "checked", "checked")
-		%> />
-		<%- if not self.widget or self.widget == "checkbox" or self.widget == "radio" then -%>
-			<label<%=attr("for", cbid .. "." .. iface:name())%>></label>
-		<%- end -%>
-		&#160;
-		<label<%=attr("for", cbid .. "." .. iface:name())%>>
-			<% if link then -%><a href="<%=link%>"><% end -%>
-			<img<%=attr("title", iface:get_i18n())%> style="width:16px; height:16px; vertical-align:middle" src="<%=resource%>/icons/<%=iface:type()%><%=iface:is_up() and "" or "_disabled"%>.png" />
-			<% if link then -%></a><% end -%>
-			<%=pcdata(iface:get_i18n())%>
-			<% local ns = iface:get_networks(); if #ns > 0 then %>(
-				<%- local i, n; for i, n in ipairs(ns) do -%>
-					<%-= (i>1) and ', ' -%>
-					<a href="<%=n:adminlink()%>"><%=n:name()%></a>
-				<%- end -%>
-			)<% end %>
-		</label>
-	</li>
-	<% end end %>
-	<% if not self.nocreate then %>
-	<li>
-		<input class="cbi-input-<%=self.widget or "radio"%>" data-update="click change"<%=
-			attr("type", self.widget or "radio") ..
-			attr("id", cbid .. "_custom") ..
-			attr("name", cbid) ..
-			attr("value", " ")
-		%> />
-		<%- if not self.widget or self.widget == "checkbox" or self.widget == "radio" then -%>
-			<label<%=attr("for", cbid .. "_custom")%>></label>
-		<%- end -%>
-		&#160;
-		<label<%=attr("for", cbid .. "_custom")%>>
-			<img title="<%:Custom Interface%>" style="width:16px; height:16px; vertical-align:middle" src="<%=resource%>/icons/ethernet_disabled.png" />
-			<%:Custom Interface%>:
-		</label>
-		<input type="text" style="width:50px" onfocus="document.getElementById('<%=cbid%>_custom').checked=true" onblur="var x=document.getElementById('<%=cbid%>_custom'); x.value=this.value; x.checked=true" />
-	</li>
-	<% end %>
-</ul>
+
+<div class="cbi-dropdown" display-items="5" placeholder="<%:-- please select -- %>"<%=
+	attr("name", cbid) ..
+	ifattr(self.widget == "checkbox", "multiple", "multiple") ..
+	ifattr(self.widget == "checkbox", "optional", "optional")
+%>>
+	<script type="item-template"><!--
+		<li value="{{value}}">
+			<img title="<%:Custom Interface%>: &quot;{{value}}&quot;" src="<%=resource%>/icons/ethernet_disabled.png" />
+			<span class="hide-open">{{value}}</span>
+			<span class="hide-close"><%:Custom Interface%>: "{{value}}"</span>
+		</li>
+	--></script>
+	<ul>
+		<% for _, iface in ipairs(ifaces) do
+			if (not self.nobridges  or not iface:is_bridge()) and
+			   (not self.noinactive or iface:is_up()) and
+			   iface:name() ~= self.exclude
+			then %>
+		<li<%=
+			attr("value", iface:name()) ..
+			ifattr(checked[iface:name()], "selected", "selected")
+		%>>
+			<img<%=attr("title", iface:get_i18n())%> src="<%=resource%>/icons/<%=iface:type()%><%=iface:is_up() and "" or "_disabled"%>.png" />
+			<span class="hide-open"><%=pcdata(iface:name())%></span>
+			<span class="hide-close">
+				<%=pcdata(iface:get_i18n())%>
+				<% local ns = iface:get_networks(); if #ns > 0 then %>(
+					<%- local i, n; for i, n in ipairs(ns) do -%>
+						<%-= (i>1) and ', ' -%>
+						<a href="<%=n:adminlink()%>"><%=n:name()%></a>
+					<%- end -%>
+				)<% end %>
+			</span>
+		</li>
+		<% end end %>
+		<% if not self.nocreate then %>
+		<li value="">
+			<img title="<%:Custom Interface%>" src="<%=resource%>/icons/ethernet_disabled.png" />
+			<span><%:Custom Interface%>:</span>
+			<input type="password" style="display:none" />
+			<input class="create-item-input" type="text" />
+		</li>
+		<% end %>
+	</ul>
+</div>
 
 <%+cbi/valuefooter%>

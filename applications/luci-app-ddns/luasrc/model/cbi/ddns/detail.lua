@@ -172,7 +172,7 @@ local function _option_used(option, urlscript)
 end
 
 -- function to verify if option is valid
-local function _option_validate(self, value)
+local function _option_validate(self, value, optional)
 	-- section is globally defined here be calling agrument (see above)
 	local fusev6 = usev6:formvalue(section) or "0"
 	local fsvc4  = svc4:formvalue(section) or "-"
@@ -204,6 +204,7 @@ local function _option_validate(self, value)
 	if used < 1 then return "" end
 	-- needed but no data then return error
 	if not value or (#value == 0) then
+		if optional then return nil end						 
 		return nil, err_tab_basic(self) .. translate("missing / required")
 	end
 	return value
@@ -292,6 +293,10 @@ function luh.parse(self, section, novld)
 end
 
 -- use_ipv6 -- ################################################################
+
+--We call it globally as it's called 11 times even outside specific function, saves 11 os.execute slow command!
+local has_ipv6 = DDNS.env_info("has_ipv6") 
+
 usev6 = ns:taboption("basic", ListValue, "use_ipv6",
 	translate("IP address version"),
 	translate("Defines which IP address 'IPv4/IPv6' is send to the DDNS provider") )
@@ -300,16 +305,16 @@ usev6.default = "0"
 usev6:value("0", translate("IPv4-Address") )
 function usev6.cfgvalue(self, section)
 	local value = AbstractValue.cfgvalue(self, section) or "0"
-	if DDNS.has_ipv6 or (value == "1" and not DDNS.has_ipv6) then
+	if has_ipv6 or (value == "1" and not has_ipv6) then
 		self:value("1", translate("IPv6-Address") )
 	end
-	if value == "1" and not DDNS.has_ipv6 then
+	if value == "1" and not has_ipv6 then
 		self.description = err_ipv6_basic
 	end
 	return value
 end
 function usev6.validate(self, value)
-	if (value == "1" and DDNS.has_ipv6) or value == "0" then
+	if (value == "1" and has_ipv6) or value == "0" then
 		return value
 	end
 	return nil, err_tab_basic(self) .. err_ipv6_plain
@@ -360,7 +365,7 @@ svc6 = ns:taboption("basic", ListValue, "ipv6_service_name",
 	translate("DDNS Service provider") .. " [IPv6]" )
 svc6.default	= "-"
 svc6:depends("use_ipv6", "1")	-- only show on IPv6
-if not DDNS.has_ipv6 then
+if not has_ipv6 then
 	svc6.description = err_ipv6_basic
 end
 function svc6.cfgvalue(self, section)
@@ -374,7 +379,7 @@ function svc6.cfgvalue(self, section)
 end
 function svc6.validate(self, value)
 	if usev6:formvalue(section) == "1" then	-- do only on IPv6
-		if DDNS.has_ipv6 then return value end
+		if has_ipv6 then return value end
 		return nil, err_tab_basic(self) .. err_ipv6_plain
 	else
 		return ""	-- suppress validate error
@@ -509,18 +514,18 @@ pe = ns:taboption("basic", Value, "param_enc",
 		translate("Optional Encoded Parameter"),
 		translate("Optional: Replaces [PARAMENC] in Update-URL (URL-encoded)") )
 function pe.validate(self, value)
-	return _option_validate(self, value)
+	return _option_validate(self, value, true)
 end
 function pe.parse(self, section, novld)
 	DDNS.value_parse(self, section, novld)
 end
 
--- IPv4/IPv6 - param_enc -- ###################################################
+-- IPv4/IPv6 - param_opt -- ###################################################
 po = ns:taboption("basic", Value, "param_opt",
 		translate("Optional Parameter"),
 		translate("Optional: Replaces [PARAMOPT] in Update-URL (NOT URL-encoded)") )
 function po.validate(self, value)
-	return _option_validate(self, value)
+	return _option_validate(self, value, true)
 end
 function po.parse(self, section, novld)
 	DDNS.value_parse(self, section, novld)
@@ -586,13 +591,17 @@ end
 svc6:value("-", translate("-- custom --") )
 
 -- IPv4/IPv6 - use_https -- ###################################################
-if DDNS.has_ssl or ( ( m:get(section, "use_https") or "0" ) == "1" ) then
+
+--We call it globally as it's called 4 times outside specific function.
+local has_ssl = DDNS.env_info("has_ssl")
+
+if has_ssl or ( ( m:get(section, "use_https") or "0" ) == "1" ) then
 	https = ns:taboption("basic", Flag, "use_https",
 		translate("Use HTTP Secure") )
 	https.orientation = "horizontal"
 	function https.cfgvalue(self, section)
 		local value = AbstractValue.cfgvalue(self, section)
-		if not DDNS.has_ssl and value == "1" then
+		if not has_ssl and value == "1" then
 			self.description = bold_on .. font_red ..
 				translate("HTTPS not supported") .. font_off .. "<br />" ..
 				translate("please disable") .. " !" .. bold_off
@@ -602,7 +611,7 @@ if DDNS.has_ssl or ( ( m:get(section, "use_https") or "0" ) == "1" ) then
 		return value
 	end
 	function https.validate(self, value)
-		if (value == "1" and DDNS.has_ssl ) or value == "0" then return value end
+		if (value == "1" and has_ssl ) or value == "0" then return value end
 		return nil, err_tab_basic(self) .. translate("HTTPS not supported") .. " !"
 	end
 	function https.write(self, section, value)
@@ -616,7 +625,7 @@ if DDNS.has_ssl or ( ( m:get(section, "use_https") or "0" ) == "1" ) then
 end
 
 -- IPv4/IPv6 - cacert -- ######################################################
-if DDNS.has_ssl then
+if has_ssl then
 	cert = ns:taboption("basic", Value, "cacert",
 		translate("Path to CA-Certificate"),
 		translate("directory or path/file") .. "<br />" ..
@@ -706,7 +715,7 @@ src6:value("network", translate("Network"))
 src6:value("web", translate("URL"))
 src6:value("interface", translate("Interface"))
 src6:value("script", translate("Script"))
-if not DDNS.has_ipv6 then
+if not has_ipv6 then
 	src6.description = err_ipv6_other
 end
 function src6.cfgvalue(self, section)
@@ -715,7 +724,7 @@ end
 function src6.validate(self, value)
 	if usev6:formvalue(section) ~= "1" then
 		return ""	-- ignore on IPv4 selected
-	elseif not DDNS.has_ipv6 then
+	elseif not has_ipv6 then
 		return nil, err_tab_adv(self) .. err_ipv6_plain
 	elseif not _verify_ip_source() then
 		return nil, err_tab_adv(self) ..
@@ -794,7 +803,7 @@ ipn6 = ns:taboption("advanced", ListValue, "ipv6_network",
 ipn6:depends("ipv6_source", "network")
 ipn6.default = "wan6"
 WADM.cbi_add_networks(ipn6)
-if DDNS.has_ipv6 then
+if has_ipv6 then
 	ipn6.description = translate("Defines the network to read systems IPv6-Address from")
 else
 	ipn6.description = err_ipv6_other
@@ -808,7 +817,7 @@ function ipn6.validate(self, value)
 		-- ignore if IPv4 selected OR
 		-- ignore everything except "network"
 		return ""
-	elseif DDNS.has_ipv6 then
+	elseif has_ipv6 then
 		return value
 	else
 		return nil, err_tab_adv(self) .. err_ipv6_plain
@@ -881,7 +890,7 @@ iurl6 = ns:taboption("advanced", Value, "ipv6_url",
 	translate("URL to detect") .. " [IPv6]" )
 iurl6:depends("ipv6_source", "web")
 iurl6.default = "http://checkipv6.dyndns.com"
-if DDNS.has_ipv6 then
+if has_ipv6 then
 	iurl6.description = translate("Defines the Web page to read systems IPv6-Address from")
 else
 	iurl6.description = err_ipv6_other
@@ -895,7 +904,7 @@ function iurl6.validate(self, value)
 		-- ignore if IPv4 selected OR
 		-- ignore everything except "web"
 		return ""
-	elseif not DDNS.has_ipv6 then
+	elseif not has_ipv6 then
 		return nil, err_tab_adv(self) .. err_ipv6_plain
 	elseif not value or #value == 0 then
 		return nil, err_tab_adv(self) .. translate("missing / required")
@@ -1051,7 +1060,7 @@ eif6:depends("ipv6_source", "web")
 eif6:depends("ipv6_source", "script")
 eif6.default = "wan6"
 WADM.cbi_add_networks(eif6)
-if not DDNS.has_ipv6 then
+if not has_ipv6 then
 	eif6.description = err_ipv6_other
 else
 	eif6.description = translate("Network on which the ddns-updater scripts will be started")
@@ -1065,7 +1074,7 @@ function eif6.validate(self, value)
 	 or fsrc6 == "network"
 	 or fsrc6 == "interface" then
 		return ""	-- ignore IPv4, network, interface
-	elseif not DDNS.has_ipv6 then
+	elseif not has_ipv6 then
 		return nil, err_tab_adv(self) .. err_ipv6_plain
 	else
 		return value
@@ -1084,10 +1093,13 @@ function eif6.write(self, section, value)
 end
 function eif6.parse(self, section, novld)
 	DDNS.value_parse(self, section, novld)
-end
+end 
 
 -- IPv4/IPv6 - bind_network -- ################################################
-if DDNS.has_bindnet or ( ( m:get(section, "bind_network") or "" ) ~= "" ) then
+
+local has_bindnet = DDNS.env_info("has_bindnet")
+
+if has_bindnet or ( ( m:get(section, "bind_network") or "" ) ~= "" ) then
 	bnet = ns:taboption("advanced", ListValue, "bind_network",
 		translate("Bind Network") )
 	bnet:depends("ipv4_source", "web")
@@ -1097,7 +1109,7 @@ if DDNS.has_bindnet or ( ( m:get(section, "bind_network") or "" ) ~= "" ) then
 	WADM.cbi_add_networks(bnet)
 	function bnet.cfgvalue(self, section)
 		local value = AbstractValue.cfgvalue(self, section)
-		if not DDNS.has_bindnet and value ~= "" then
+		if not has_bindnet and value ~= "" then
 			self.description = bold_on .. font_red ..
 				translate("Binding to a specific network not supported") .. font_off .. "<br />" ..
 				translate("please set to 'default'") .. " !" .. bold_off
@@ -1108,7 +1120,7 @@ if DDNS.has_bindnet or ( ( m:get(section, "bind_network") or "" ) ~= "" ) then
 		return value
 	end
 	function bnet.validate(self, value)
-		if ( (value ~= "") and DDNS.has_bindnet ) or (value == "") then return value end
+		if ( (value ~= "") and has_bindnet ) or (value == "") then return value end
 		return nil, err_tab_adv(self) .. translate("Binding to a specific network not supported") .. " !"
 	end
 	function bnet.parse(self, section, novld)
@@ -1119,13 +1131,16 @@ end
 -- IPv4 + IPv6 - force_ipversion -- ###########################################
 -- optional to force wget/curl and host to use only selected IP version
 -- command parameter "-4" or "-6"
-if DDNS.has_forceip or ( ( m:get(section, "force_ipversion") or "0" ) ~= "0" ) then
+
+local has_forceip = DDNS.env_info("has_forceip")
+
+if has_forceip or ( ( m:get(section, "force_ipversion") or "0" ) ~= "0" ) then
 	fipv = ns:taboption("advanced", Flag, "force_ipversion",
 		translate("Force IP Version") )
 	fipv.orientation = "horizontal"
 	function fipv.cfgvalue(self, section)
 		local value = AbstractValue.cfgvalue(self, section)
-		if not DDNS.has_forceip and value ~= "0" then
+		if not has_forceip and value ~= "0" then
 			self.description = bold_on .. font_red ..
 				translate("Force IP Version not supported") .. font_off .. "<br />" ..
 				translate("please disable") .. " !" .. bold_off
@@ -1135,14 +1150,17 @@ if DDNS.has_forceip or ( ( m:get(section, "force_ipversion") or "0" ) ~= "0" ) t
 		return value
 	end
 	function fipv.validate(self, value)
-		if (value == "1" and DDNS.has_forceip) or value == "0" then return value end
+		if (value == "1" and has_forceip) or value == "0" then return value end
 		return nil, err_tab_adv(self) .. translate("Force IP Version not supported")
 	end
 end
 
 -- IPv4 + IPv6 - dns_server -- ################################################
 -- optional DNS Server to use resolving my IP
-if DDNS.has_dnsserver or ( ( m:get(section, "dns_server") or "" ) ~= "" ) then
+
+local has_dnsserver = DDNS.env_info("has_dnsserver")
+
+if has_dnsserver or ( ( m:get(section, "dns_server") or "" ) ~= "" ) then
 	dns = ns:taboption("advanced", Value, "dns_server",
 		translate("DNS-Server"),
 		translate("OPTIONAL: Use non-default DNS-Server to detect 'Registered IP'.") .. "<br />" ..
@@ -1152,7 +1170,7 @@ if DDNS.has_dnsserver or ( ( m:get(section, "dns_server") or "" ) ~= "" ) then
 		-- if .datatype is set, then it is checked before calling this function
 		if not value or (#value == 0) then
 			return ""	-- ignore on empty
-		elseif not DDNS.has_dnsserver then
+		elseif not has_dnsserver then
 			return nil, err_tab_adv(self) .. translate("Specifying a DNS-Server is not supported")
 		elseif not DTYP.host(value) then
 			return nil, err_tab_adv(self) .. translate("use hostname, FQDN, IPv4- or IPv6-Address")
@@ -1179,13 +1197,16 @@ if DDNS.has_dnsserver or ( ( m:get(section, "dns_server") or "" ) ~= "" ) then
 end
 
 -- IPv4 + IPv6 - force_dnstcp -- ##############################################
-if DDNS.has_bindhost or ( ( m:get(section, "force_dnstcp") or "0" ) ~= "0" ) then
+
+local has_bindhost = DDNS.env_info("has_bindhost")
+
+if has_bindhost or ( ( m:get(section, "force_dnstcp") or "0" ) ~= "0" ) then
 	tcp = ns:taboption("advanced", Flag, "force_dnstcp",
 		translate("Force TCP on DNS") )
 	tcp.orientation = "horizontal"
 	function tcp.cfgvalue(self, section)
 		local value = AbstractValue.cfgvalue(self, section)
-		if not DDNS.has_bindhost and value ~= "0" then
+		if not has_bindhost and value ~= "0" then
 			self.description = bold_on .. font_red ..
 				translate("DNS requests via TCP not supported") .. font_off .. "<br />" ..
 				translate("please disable") .. " !" .. bold_off
@@ -1195,7 +1216,7 @@ if DDNS.has_bindhost or ( ( m:get(section, "force_dnstcp") or "0" ) ~= "0" ) the
 		return value
 	end
 	function tcp.validate(self, value)
-		if (value == "1" and DDNS.has_bindhost ) or value == "0" then
+		if (value == "1" and has_bindhost ) or value == "0" then
 			return value
 		end
 		return nil, err_tab_adv(self) .. translate("DNS requests via TCP not supported")
@@ -1204,13 +1225,16 @@ end
 
 -- IPv4 + IPv6 - proxy -- #####################################################
 -- optional Proxy to use for http/https requests  [user:password@]proxyhost[:port]
-if DDNS.has_proxy or ( ( m:get(section, "proxy") or "" ) ~= "" ) then
+
+local has_proxy = DDNS.env_info("has_proxy")
+
+if has_proxy or ( ( m:get(section, "proxy") or "" ) ~= "" ) then
 	pxy = ns:taboption("advanced", Value, "proxy",
 		translate("PROXY-Server") )
 	pxy.placeholder="user:password@myproxy.lan:8080"
 	function pxy.cfgvalue(self, section)
 		local value = AbstractValue.cfgvalue(self, section)
-		if not DDNS.has_proxy and value ~= "" then
+		if not has_proxy and value ~= "" then
 			self.description = bold_on .. font_red ..
 				translate("PROXY-Server not supported") .. font_off .. "<br />" ..
 				translate("please remove entry") .. "!" .. bold_off
@@ -1226,7 +1250,7 @@ if DDNS.has_proxy or ( ( m:get(section, "proxy") or "" ) ~= "" ) then
 		-- if .datatype is set, then it is checked before calling this function
 		if not value or (#value == 0) then
 			return ""	-- ignore on empty
-		elseif DDNS.has_proxy then
+		elseif has_proxy then
 			local ipv6  = usev6:formvalue(section) or "0"
 			local force = fipv:formvalue(section) or "0"
 			local command = CTRL.luci_helper .. [[ -]]

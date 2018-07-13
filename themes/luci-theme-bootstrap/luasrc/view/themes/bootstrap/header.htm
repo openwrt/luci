@@ -160,7 +160,6 @@
 	<head>
 		<meta charset="utf-8">
 		<title><%=striptags( (boardinfo.hostname or "?") .. ( (node and node.title) and ' - ' .. translate(node.title) or '')) %> - LuCI</title>
-		<!--[if lt IE 9]><script src="<%=media%>/html5.js"></script><![endif]-->
 		<meta name="viewport" content="initial-scale=1.0">
 		<link rel="stylesheet" href="<%=media%>/cascade.css">
 		<link rel="stylesheet" media="only screen and (max-device-width: 854px)" href="<%=media%>/mobile.css" type="text/css" />
@@ -171,6 +170,7 @@
 		<% if css then %>
 			<style title="text/css"><%= css %></style>
 		<% end -%>
+		<script src="<%=resource%>/cbi.js"></script>
 		<script src="<%=resource%>/xhr.js"></script>
 	</head>
 
@@ -191,22 +191,20 @@
 			</div>
 		</header>
 
-		<%- if luci.sys.process.info("uid") == 0 and luci.sys.user.getuser("root") and not luci.sys.user.getpasswd("root") then -%>
-			<div class="container">
+		<div id="maincontent" class="container">
+			<%- if luci.sys.process.info("uid") == 0 and luci.sys.user.getuser("root") and not luci.sys.user.getpasswd("root") then -%>
 				<div class="alert-message warning">
 					<h4><%:No password set!%></h4>
-					<%:There is no password set on this router. Please configure a root password to protect the web interface and enable SSH.%><br>
-					<a href="<%=pcdata(luci.dispatcher.build_url("admin/system/admin"))%>"><%:Go to password configuration...%></a>
+					<p><%:There is no password set on this router. Please configure a root password to protect the web interface and enable SSH.%></p>
+					<div class="right"><a class="btn" href="<%=url("admin/system/admin")%>"><%:Go to password configuration...%></a></div>
 				</div>
-			</div>
-		<%- end -%>
+			<%- end -%>
 
-		<noscript>
-			<div class="alert-message warning">
-				<strong><%:JavaScript required!%></strong><br />
-				<%:You must enable JavaScript in your browser or LuCI will not work properly.%>
-			</div>
-		</noscript>
+			<noscript>
+				<div class="alert-message warning">
+					<h4><%:JavaScript required!%></h4>
+					<p><%:You must enable JavaScript in your browser or LuCI will not work properly.%></p>
+				</div>
+			</noscript>
 
-		<div id="maincontent" class="container">
 			<% if category then render_tabmenu(category, cattree) end %>

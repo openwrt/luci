@@ -19,7 +19,6 @@
 
 <%+header%>
 
-<script type="text/javascript" src="<%=resource%>/cbi.js"></script>
 <script type="text/javascript">//<![CDATA[
 	var bwxhr = new XHR();
 
@@ -58,6 +57,8 @@
 
 	var label_scale;
 
+
+	Math.log2 = Math.log2 || function(x) { return Math.log(x) * Math.LOG2E; };
 
 	function bandwidth_label(bytes, br)
 	{
@@ -149,7 +150,7 @@
 					var text = G.createElementNS('http://www.w3.org/2000/svg', 'text');
 						text.setAttribute('x', i + 5);
 						text.setAttribute('y', 15);
-						text.setAttribute('style', 'fill:#999999; font-size:9pt');
+						text.setAttribute('style', 'fill:#eee; font-size:9pt; font-family:sans-serif; text-shadow:1px 1px 1px #000');
 						text.appendChild(G.createTextNode(Math.round((width - i) / step / 60) + 'm'));
 
 					label_25.parentNode.appendChild(line);
@@ -202,22 +203,23 @@
 							data_rx_peak = Math.max(data_rx_peak, data_rx[i]);
 							data_tx_peak = Math.max(data_tx_peak, data_tx[i]);
 
-							if (i > 0)
-							{
-								data_rx_avg = (data_rx_avg + data_rx[i]) / 2;
-								data_tx_avg = (data_tx_avg + data_tx[i]) / 2;
-							}
-							else
-							{
-								data_rx_avg = data_rx[i];
-								data_tx_avg = data_tx[i];
-							}
+							data_rx_avg += data_rx[i];
+							data_tx_avg += data_tx[i];
 						}
+
+						data_rx_avg = (data_rx_avg / Math.max(data_rx.length, 1));
+						data_tx_avg = (data_tx_avg / Math.max(data_tx.length, 1));
+
+						var size = Math.floor(Math.log2(data_max)),
+						    div = Math.pow(2, size - (size % 10)),
+						    mult = data_max / div,
+						    mult = (mult < 5) ? 2 : ((mult < 50) ? 10 : ((mult < 500) ? 100 : 1000));
+
+						data_max = data_max + (mult * div) - (data_max % (mult * div));
 
 						/* remember current timestamp, calculate horizontal scale */
 						data_stamp = data[data.length-1][TIME];
-						data_scale = height / (data_max * 1.1);
-
+						data_scale = height / data_max;
 
 						/* plot data */
 						var pt_rx = '0,' + height;
@@ -244,9 +246,9 @@
 						line_rx.setAttribute('points', pt_rx);
 						line_tx.setAttribute('points', pt_tx);
 
-						label_25.firstChild.data = bandwidth_label(1.1 * 0.25 * data_max);
-						label_50.firstChild.data = bandwidth_label(1.1 * 0.50 * data_max);
-						label_75.firstChild.data = bandwidth_label(1.1 * 0.75 * data_max);
+						label_25.firstChild.data = bandwidth_label(0.25 * data_max);
+						label_50.firstChild.data = bandwidth_label(0.50 * data_max);
+						label_75.firstChild.data = bandwidth_label(0.75 * data_max);
 
 						label_rx_cur.innerHTML = bandwidth_label(data_rx[data_rx.length-1], true);
 						label_tx_cur.innerHTML = bandwidth_label(data_tx[data_tx.length-1], true);
@@ -258,6 +260,8 @@
 						label_tx_peak.innerHTML = bandwidth_label(data_tx_peak, true);
 					}
 				);
+
+				XHR.run();
 			}
 		}, 1000
 	);
@@ -275,27 +279,27 @@
 <div style="text-align:right"><small id="scale">-</small></div>
 <br />
 
-<table style="width:100%; table-layout:fixed" cellspacing="5">
-	<tr>
-		<td style="text-align:right; vertical-align:top"><strong style="border-bottom:2px solid blue"><%:Inbound:%></strong></td>
-		<td id="rx_bw_cur">0 <%:kbit/s%><br />(0 <%:kB/s%>)</td>
+<div class="table" style="width:100%; table-layout:fixed" cellspacing="5">
+	<div class="tr">
+		<div class="td" style="text-align:right; vertical-align:top"><strong style="border-bottom:2px solid blue"><%:Inbound:%></strong></div>
+		<div class="td" id="rx_bw_cur">0 <%:kbit/s%><br />(0 <%:kB/s%>)</div>
 
-		<td style="text-align:right; vertical-align:top"><strong><%:Average:%></strong></td>
-		<td id="rx_bw_avg">0 <%:kbit/s%><br />(0 <%:kB/s%>)</td>
+		<div class="td" style="text-align:right; vertical-align:top"><strong><%:Average:%></strong></div>
+		<div class="td" id="rx_bw_avg">0 <%:kbit/s%><br />(0 <%:kB/s%>)</div>
 
-		<td style="text-align:right; vertical-align:top"><strong><%:Peak:%></strong></td>
-		<td id="rx_bw_peak">0 <%:kbit/s%><br />(0 <%:kB/s%>)</td>
-	</tr>
-	<tr>
-		<td style="text-align:right; vertical-align:top"><strong style="border-bottom:2px solid green"><%:Outbound:%></strong></td>
-		<td id="tx_bw_cur">0 <%:kbit/s%><br />(0 <%:kB/s%>)</td>
+		<div class="td" style="text-align:right; vertical-align:top"><strong><%:Peak:%></strong></div>
+		<div class="td" id="rx_bw_peak">0 <%:kbit/s%><br />(0 <%:kB/s%>)</div>
+	</div>
+	<div class="tr">
+		<div class="td" style="text-align:right; vertical-align:top"><strong style="border-bottom:2px solid green"><%:Outbound:%></strong></div>
+		<div class="td" id="tx_bw_cur">0 <%:kbit/s%><br />(0 <%:kB/s%>)</div>
 
-		<td style="text-align:right; vertical-align:top"><strong><%:Average:%></strong></td>
-		<td id="tx_bw_avg">0 <%:kbit/s%><br />(0 <%:kB/s%>)</td>
+		<div class="td" style="text-align:right; vertical-align:top"><strong><%:Average:%></strong></div>
+		<div class="td" id="tx_bw_avg">0 <%:kbit/s%><br />(0 <%:kB/s%>)</div>
 
-		<td style="text-align:right; vertical-align:top"><strong><%:Peak:%></strong></td>
-		<td id="tx_bw_peak">0 <%:kbit/s%><br />(0 <%:kB/s%>)</td>
-	</tr>
-</table>
+		<div class="td" style="text-align:right; vertical-align:top"><strong><%:Peak:%></strong></div>
+		<div class="td" id="tx_bw_peak">0 <%:kbit/s%><br />(0 <%:kB/s%>)</div>
+	</div>
+</div>
 
 <%+footer%>

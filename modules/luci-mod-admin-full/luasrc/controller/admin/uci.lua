@@ -11,54 +11,91 @@ function index()
 	entry({"admin", "uci"}, nil, _("Configuration"))
 	entry({"admin", "uci", "changes"}, call("action_changes"), _("Changes"), 40).query = {redir=redir}
 	entry({"admin", "uci", "revert"}, post("action_revert"), _("Revert"), 30).query = {redir=redir}
-	entry({"admin", "uci", "apply"}, post("action_apply"), _("Apply"), 20).query = {redir=redir}
-	entry({"admin", "uci", "saveapply"}, post("action_apply"), _("Save &#38; Apply"), 10).query = {redir=redir}
+
+	local node
+	local authen = function(checkpass, allowed_users)
+		return "root", luci.http.formvalue("sid")
+	end
+
+	node = entry({"admin", "uci", "apply_rollback"}, post("action_apply_rollback"), nil)
+	node.cors = true
+	node.sysauth_authenticator = authen
+
+	node = entry({"admin", "uci", "apply_unchecked"}, post("action_apply_unchecked"), nil)
+	node.cors = true
+	node.sysauth_authenticator = authen
+
+	node = entry({"admin", "uci", "confirm"}, post("action_confirm"), nil)
+	node.cors = true
+	node.sysauth_authenticator = authen
 end
 
+
 function action_changes()
-	local uci = luci.model.uci.cursor()
+	local uci  = require "luci.model.uci"
 	local changes = uci:changes()
 
 	luci.template.render("admin_uci/changes", {
-		changes = next(changes) and changes
+		changes  = next(changes) and changes,
+		timeout  = timeout
 	})
 end
-
-function action_apply()
-	local path = luci.dispatcher.context.path
-	local uci = luci.model.uci.cursor()
-	local changes = uci:changes()
-	local reload = {}
-
-	-- Collect files to be applied and commit changes
-	for r, tbl in pairs(changes) do
-		table.insert(reload, r)
-		if path[#path] ~= "apply" then
-			uci:load(r)
-			uci:commit(r)
-			uci:unload(r)
-		end
-	end
-
-	luci.template.render("admin_uci/apply", {
-		changes = next(changes) and changes,
-		configs = reload
-	})
-end
-
 
 function action_revert()
-	local uci = luci.model.uci.cursor()
+	local uci = require "luci.model.uci"
 	local changes = uci:changes()
 
 	-- Collect files to be reverted
+	local r, tbl
 	for r, tbl in pairs(changes) do
-		uci:load(r)
 		uci:revert(r)
-		uci:unload(r)
 	end
 
 	luci.template.render("admin_uci/revert", {
 		changes = next(changes) and changes
 	})
+end
+
+
+local function ubus_state_to_http(errstr)
+	local map = {
+		["Invalid command"]   = 400,
+		["Invalid argument"]  = 400,
+		["Method not found"]  = 404,
+		["Entry not found"]   = 404,
+		["No data"]           = 204,
+		["Permission denied"] = 403,
+		["Timeout"]           = 504,
+		["Not supported"]     = 500,
+		["Unknown error"]     = 500,
+		["Connection failed"] = 503
+	}
+
+	local code = map[errstr] or 200
+	local msg  = errstr      or "OK"
+
+	luci.http.status(code, msg)
+
+	if code ~= 204 then
+		luci.http.prepare_content("text/plain")
+		luci.http.write(msg)
+	end
+end
+
+function action_apply_rollback()
+	local uci = require "luci.model.uci"
+	local _, errstr = uci:apply(true)
+	ubus_state_to_http(errstr)
+end
+
+function action_apply_unchecked()
+	local uci = require "luci.model.uci"
+	local _, errstr = uci:apply(false)
+	ubus_state_to_http(errstr)
+end
+
+function action_confirm()
+	local uci = require "luci.model.uci"
+	local _, errstr = uci:confirm()
+	ubus_state_to_http(errstr)
 end

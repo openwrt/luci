@@ -28,7 +28,6 @@ end
 
 <%+header%>
 
-<script type="text/javascript" src="<%=resource%>/cbi.js"></script>
 <script type="text/javascript">//<![CDATA[
 XHR.poll(10, '<%=REQUEST_URI%>', { status: 1 },
 	function(x, info)
@@ -41,7 +40,7 @@ XHR.poll(10, '<%=REQUEST_URI%>', { status: 1 },
 		{
 			var hna = info[idx];
 			var linkgw = ''
-			s += '<tr class="cbi-section-table-row cbi-rowstyle-'+(1 + (idx % 2))+' proto-' + hna.proto + '">'
+			s += '<div class="tr cbi-section-table-row cbi-rowstyle-'+(1 + (idx % 2))+' proto-' + hna.proto + '">'
 			if (hna.proto == '6') {
 				linkgw = '<a href="http://[' + hna.gateway + ']/cgi-bin-status.html">' + hna.gateway + '</a>'
 			} else {
@@ -61,11 +60,11 @@ XHR.poll(10, '<%=REQUEST_URI%>', { status: 1 },
 			}
 
 			s += String.format(
-                                '<td class="cbi-section-table-cell">%s</td>' +
-                                '<td class="cbi-section-table-cell">%s</td>' +
-                                '<td class="cbi-section-table-cell">%s</td>', hna.destination + '/' + hna.genmask, linkgw + hostname, validity
+                                '<div class="td cbi-section-table-cell">%s</div>' +
+                                '<div class="td cbi-section-table-cell">%s</div>' +
+                                '<div class="td cbi-section-table-cell">%s</div>', hna.destination + '/' + hna.genmask, linkgw + hostname, validity
                                 )
-			s += '</tr>'
+			s += '</div>'
 		}
 		hnadiv.innerHTML = s;
 	}
@@ -79,21 +78,21 @@ XHR.poll(10, '<%=REQUEST_URI%>', { status: 1 },
 <fieldset class="cbi-section">
 
 	<legend><%:Overview of currently active OLSR host net announcements%></legend>
-	<table class="cbi-section-table">
-		<thead>
-		<tr class="cbi-section-table-titles">
-			<th class="cbi-section-table-cell"><%:Announced network%></th>
-			<th class="cbi-section-table-cell"><%:OLSR gateway%></th>
-			<th class="cbi-section-table-cell"><%:Validity Time%></th>
-		</tr>
+	<div class="table cbi-section-table">
+		<div class="thead">
+		<div class="tr cbi-section-table-titles">
+			<div class="th cbi-section-table-cell"><%:Announced network%></div>
+			<div class="th cbi-section-table-cell"><%:OLSR gateway%></div>
+			<div class="th cbi-section-table-cell"><%:Validity Time%></div>
+		</div>
 
-		</thead>
-		<tbody id="olsrd_hna">
+		</div>
+		<div class="tbody" id="olsrd_hna">
 		<% for k, route in ipairs(hna) do %>
 
-		<tr class="cbi-section-table-row cbi-rowstyle-<%=i%> proto-<%=hna[k].proto%>">
-			<td class="cbi-section-table-cell"><%=hna[k].destination%>/<%=hna[k].genmask%> </td>
-			<td class="cbi-section-table-cell">
+		<div class="tr cbi-section-table-row cbi-rowstyle-<%=i%> proto-<%=hna[k].proto%>">
+			<div class="td cbi-section-table-cell"><%=hna[k].destination%>/<%=hna[k].genmask%> </div>
+			<div class="td cbi-section-table-cell">
 				<% if hna[k].proto == '6' then %>
 				<a href="http://[<%=hna[k].gateway%>]/cgi-bin-status.html"><%=hna[k].gateway%></a>
 				<% else %>
@@ -102,20 +101,20 @@ XHR.poll(10, '<%=REQUEST_URI%>', { status: 1 },
 				<% if hna[k].hostname then %>
 				 / <a href="http://<%=hna[k].hostname%>/cgi-bin-status.html"><%=hna[k].hostname%></a>
 				<% end %>
-			</td>
+			</div>
 			<% if hna[k].validityTime then
 				validity = hna[k].validityTime .. 's'
 			else
 				validity = '-'
 			end %>
 
-			<td class="cbi-section-table-cell"><%=validity%></td>
-		</tr>
+			<div class="td cbi-section-table-cell"><%=validity%></div>
+		</div>
 
 		<% i = ((i % 2) + 1)
 		end %>
-		</tbody>
-	</table>
+		</div>
+	</div>
 </fieldset>
 
 <%+status-olsr/common_js%>

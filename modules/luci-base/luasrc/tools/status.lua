@@ -6,9 +6,25 @@ module("luci.tools.status", package.seeall)
 local uci = require "luci.model.uci".cursor()
 local ipc = require "luci.ip"
 
+local function duid_to_mac(duid)
+	local b1, b2, b3, b4, b5, b6
+
+	-- DUID-LLT / Ethernet
+	if type(duid) == "string" and #duid == 28 then
+		b1, b2, b3, b4, b5, b6 = duid:match("^00010001(%x%x)(%x%x)(%x%x)(%x%x)(%x%x)(%x%x)%x%x%x%x%x%x%x%x$")
+
+	-- DUID-LL / Ethernet
+	elseif type(duid) == "string" and #duid == 20 then
+		b1, b2, b3, b4, b5, b6 = duid:match("^00030001(%x%x)(%x%x)(%x%x)(%x%x)(%x%x)(%x%x)$")
+	end
+
+	return b1 and ipc.checkmac(table.concat({ b1, b2, b3, b4, b5, b6 }, ":"))
+end
+
 local function dhcp_leases_common(family)
 	local rv = { }
 	local nfs = require "nixio.fs"
+	local sys = require "luci.sys"
 	local leasefile = "/tmp/dhcp.leases"
 
 	uci:foreach("dhcp", "dnsmasq",
@@ -87,6 +103,22 @@ local function dhcp_leases_common(family)
 		fd:close()
 	end
 
+	if family == 6 then
+		local _, lease
+		local hosts = sys.net.host_hints()
+		for _, lease in ipairs(rv) do
+			local mac = duid_to_mac(lease.duid)
+			local host = mac and hosts[mac]
+			if host then
+				if not lease.name then
+					lease.host_hint = host.name or host.ipv4 or host.ipv6
+				elseif host.name and lease.hostname ~= host.name then
+					lease.host_hint = host.name
+				end
+			end
+		end
+	end
+
 	return rv
 end
 
@@ -113,6 +145,11 @@ function wifi_networks()
 
 		local net
 		for _, net in ipairs(dev:get_wifinets()) do
+			local a, an = nil, 0
+			for _, a in pairs(net:assoclist() or {}) do
+				an = an + 1
+			end
+
 			rd.networks[#rd.networks+1] = {
 				name       = net:shortname(),
 				link       = net:adminlink(),
@@ -128,10 +165,10 @@ function wifi_networks()
 				noise      = net:noise(),
 				bitrate    = net:bitrate(),
 				ifname     = net:ifname(),
-				assoclist  = net:assoclist(),
 				country    = net:country(),
 				txpower    = net:txpower(),
 				txpoweroff = net:txpower_offset(),
+				num_assoc  = an,
 				disabled   = (dev:get("disabled") == "1" or
 				             net:get("disabled") == "1")
 			}
@@ -165,7 +202,6 @@ function wifi_network(id)
 				noise      = net:noise(),
 				bitrate    = net:bitrate(),
 				ifname     = net:ifname(),
-				assoclist  = net:assoclist(),
 				country    = net:country(),
 				txpower    = net:txpower(),
 				txpoweroff = net:txpower_offset(),
@@ -180,6 +216,52 @@ function wifi_network(id)
 		end
 	end
 	return { }
+end
+
+function wifi_assoclist()
+	local sys = require "luci.sys"
+	local ntm = require "luci.model.network".init()
+	local hosts = sys.net.host_hints()
+
+	local assoc = {}
+	local _, dev, net, bss
+
+	for _, dev in ipairs(ntm:get_wifidevs()) do
+		local radioname = dev:get_i18n()
+
+		for _, net in ipairs(dev:get_wifinets()) do
+			local netname = net:shortname()
+			local netlink = net:adminlink()
+			local ifname  = net:ifname()
+
+			for _, bss in pairs(net:assoclist() or {}) do
+				local host = hosts[_]
+
+				bss.bssid  = _
+				bss.ifname = ifname
+				bss.radio  = radioname
+				bss.name   = netname
+				bss.link   = netlink
+
+				bss.host_name = (host) and (host.name or host.ipv4 or host.ipv6)
+				bss.host_hint = (host and host.name and (host.ipv4 or host.ipv6)) and (host.ipv4 or host.ipv6)
+
+				assoc[#assoc+1] = bss
+			end
+		end
+	end
+
+	table.sort(assoc, function(a, b)
+		if a.radio ~= b.radio then
+			return a.radio < b.radio
+		elseif a.ifname ~= b.ifname then
+			return a.ifname < b.ifname
+		else
+			return a.bssid < b.bssid
+		end
+	end)
+
+	return assoc
 end
 
 function switch_status(devs)

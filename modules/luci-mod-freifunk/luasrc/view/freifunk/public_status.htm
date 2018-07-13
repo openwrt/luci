@@ -110,7 +110,6 @@ end
 
 <%+header%>
 
-<script type="text/javascript" src="<%=resource%>/cbi.js"></script>
 
 <script type="text/javascript">//<![CDATA[
 	 XHR.poll(<%=interval%> , '<%=REQUEST_URI%>', { status: 1 },
@@ -238,25 +237,25 @@ end
 	<h2><%:Wireless Overview%></h2>
 
 		<% if not has_iwinfo then %>
-			<div class="errorbox">
-				<strong><%:Package libiwinfo required!%></strong><br />
-				<%_The <em>libiwinfo</em> package is not installed. You must install this component for working wireless configuration!%>
+			<div class="alert-message warning">
+				<h4><%:Package libiwinfo required!%></h4>
+				<p><%_The <em>libiwinfo</em> package is not installed. You must install this component for working wireless configuration!%></p>
 			</div>
 		<% end %>
 
 		<div class="cbi-section">
 			<div class="cbi-section-node">
-				<table class="cbi-section-table">
-					<tr class="cbi-section-table-titles">
-						<th class="cbi-section-table-cell"><%:Signal%></th>
-						<th class="cbi-section-table-cell"><%:Bitrate%></th>
-						<th class="cbi-section-table-cell"><%:SSID%></th>
-						<th class="cbi-section-table-cell"><%:BSSID%></th>
-						<th class="cbi-section-table-cell"><%:Channel%></th>
-						<th class="cbi-section-table-cell"><%:Mode%></th>
-						<th class="cbi-section-table-cell"><%:TX%>-<%:Power%></th>
-						<th class="cbi-section-table-cell"><%:Interface%></th>
-					</tr>
+				<div class="table cbi-section-table">
+					<div class="tr cbi-section-table-titles">
+						<div class="th cbi-section-table-cell"><%:Signal%></div>
+						<div class="th cbi-section-table-cell"><%:Bitrate%></div>
+						<div class="th cbi-section-table-cell"><%:SSID%></div>
+						<div class="th cbi-section-table-cell"><%:BSSID%></div>
+						<div class="th cbi-section-table-cell"><%:Channel%></div>
+						<div class="th cbi-section-table-cell"><%:Mode%></div>
+						<div class="th cbi-section-table-cell"><%:TX%>-<%:Power%></div>
+						<div class="th cbi-section-table-cell"><%:Interface%></div>
+					</div>
 	<%
 	for _, dev in ipairs(devices) do
 	local net
@@ -301,20 +300,20 @@ end
 				end
 				local interface = net.iwinfo.ifname or "N/A"
 	%>
-						<tr class="cbi-section-table-row cbi-rowstyle-1">
-						<td class="cbi-value-field" id="<%=net:ifname()%>-signal"><%=signal_string%></td>
-						<td class="cbi-value-field" id="<%=net:ifname()%>-bitrate"><%=bitrate%></td>
-						<td class="cbi-value-field" id="<%=net:ifname()%>-ssid"><%=ssid%></td>
-						<td class="cbi-value-field" id="<%=net:ifname()%>-bssid"><%=bssid%></td>
-						<td class="cbi-value-field" id="<%=net:ifname()%>-channel"><%=chan%></td>
-						<td class="cbi-value-field" id="<%=net:ifname()%>-mode"><%=mode%></td>
-						<td class="cbi-value-field" id="<%=net:ifname()%>-txpower"><%=txpwr%></td>
-						<td class="cbi-value-field"><%=interface%></td>
-					</tr>
+						<div class="tr cbi-section-table-row cbi-rowstyle-1">
+						<div class="td cbi-value-field" id="<%=net:ifname()%>-signal"><%=signal_string%></div>
+						<div class="td cbi-value-field" id="<%=net:ifname()%>-bitrate"><%=bitrate%></div>
+						<div class="td cbi-value-field" id="<%=net:ifname()%>-ssid"><%=ssid%></div>
+						<div class="td cbi-value-field" id="<%=net:ifname()%>-bssid"><%=bssid%></div>
+						<div class="td cbi-value-field" id="<%=net:ifname()%>-channel"><%=chan%></div>
+						<div class="td cbi-value-field" id="<%=net:ifname()%>-mode"><%=mode%></div>
+						<div class="td cbi-value-field" id="<%=net:ifname()%>-txpower"><%=txpwr%></div>
+						<div class="td cbi-value-field"><%=interface%></div>
+					</div>
 			<% end
 		end
 	end %>
-			</table>
+			</div>
 		</div>
 	</div>
 </div>
@@ -328,35 +327,35 @@ end
 <% if not def4 and not def6 then %>
 	<%:No default routes known.%>
 <%else%>
-				<table class="cbi-section-table">
-						<tr class="cbi-section-table-titles">
-							<th class="cbi-section-table-cell"><%:Network%></th>
-							<th class="cbi-section-table-cell"><%:Interface%></th>
-							<th class="cbi-section-table-cell"><%:Gateway%></th>
-							<th class="cbi-section-table-cell"><%:Metric%></th>
-						</tr>
+				<div class="table cbi-section-table">
+						<div class="tr cbi-section-table-titles">
+							<div class="th cbi-section-table-cell"><%:Network%></div>
+							<div class="th cbi-section-table-cell"><%:Interface%></div>
+							<div class="th cbi-section-table-cell"><%:Gateway%></div>
+							<div class="th cbi-section-table-cell"><%:Metric%></div>
+						</div>
 
 	<% if def4 then %>
-						<tr class="cbi-section-table-row cbi-rowstyle-1">
-							<td class="cbi-value-field" id="v4dst"><%=def4.dest%></td>
-							<td class="cbi-value-field" id="v4dev"><%=def4.dev%></td>
-							<td class="cbi-value-field" id="v4gw"><%=def4.gateway%></td>
-							<td class="cbi-value-field" id="v4metr"><%=def4.metr%></td>
-						</tr>
+						<div class="tr cbi-section-table-row cbi-rowstyle-1">
+							<div class="td cbi-value-field" id="v4dst"><%=def4.dest%></div>
+							<div class="td cbi-value-field" id="v4dev"><%=def4.dev%></div>
+							<div class="td cbi-value-field" id="v4gw"><%=def4.gateway%></div>
+							<div class="td cbi-value-field" id="v4metr"><%=def4.metr%></div>
+						</div>
 
 	<% end
 	if def6 then %>
 
-						<tr class="cbi-section-table-row cbi-rowstyle-2">
-							<td class="cbi-value-field" id="v6dst"><%=def6.dest%></td>
-							<td class="cbi-value-field" id="v6dev"><%=def6.dev%></td>
-							<td class="cbi-value-field" id="v6gw"><%=def6.gateway%></td>
-							<td class="cbi-value-field" id="v6metr"><%=def6.metr%></td>
-						</tr>
+						<div class="tr cbi-section-table-row cbi-rowstyle-2">
+							<div class="td cbi-value-field" id="v6dst"><%=def6.dest%></div>
+							<div class="td cbi-value-field" id="v6dev"><%=def6.dev%></div>
+							<div class="td cbi-value-field" id="v6gw"><%=def6.gateway%></div>
+							<div class="td cbi-value-field" id="v6metr"><%=def6.metr%></div>
+						</div>
 
 	<% end %>
 
-				</table>
+				</div>
 <% end %>
 		</div>
 	</div>

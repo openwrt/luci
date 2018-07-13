@@ -39,6 +39,9 @@ msgstr "-- 根据标签匹配 --"
 msgid "-- match by uuid --"
 msgstr "-- 根据 UUID 匹配 --"
 
+msgid "-- please select --"
+msgstr ""
+
 msgid "1 Minute Load:"
 msgstr "1 分钟负载："
 
@@ -206,9 +209,6 @@ msgstr "接入点 AP"
 msgid "Actions"
 msgstr "动作"
 
-msgid "Activate this network"
-msgstr "激活此网络"
-
 msgid "Active <abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Routes"
 msgstr "活动的 <abbr title=\"Internet Protocol Version 4\">IPv4</abbr> 路由"
 
@@ -259,6 +259,9 @@ msgstr "总发射功率（ACTATP）"
 
 msgid "Alert"
 msgstr "警戒"
+
+msgid "Alias interface"
+msgstr ""
 
 msgid ""
 "Allocate IP addresses sequentially, starting from the lowest available "
@@ -377,11 +380,14 @@ msgstr "天线配置"
 msgid "Any zone"
 msgstr "任意区域"
 
-msgid "Apply"
-msgstr "应用"
+msgid "Apply request failed with status <code>%h</code>"
+msgstr "应用请求失败，状态 <code>%h</code>"
 
-msgid "Applying changes"
-msgstr "正在应用更改"
+msgid "Apply unchecked"
+msgstr "应用未选中"
+
+msgid "Architecture"
+msgstr "架构"
 
 msgid ""
 "Assign a part of given length of every public IPv6-prefix to this interface"
@@ -396,6 +402,9 @@ msgstr "将此十六进制子 ID 前缀分配给此接口"
 
 msgid "Associated Stations"
 msgstr "已连接站点"
+
+msgid "Associations"
+msgstr "关联数"
 
 msgid "Auth Group"
 msgstr "认证组"
@@ -472,11 +481,11 @@ msgstr "返回至概况"
 msgid "Back to scan results"
 msgstr "返回至扫描结果"
 
+msgid "Backup"
+msgstr "备份"
+
 msgid "Backup / Flash Firmware"
 msgstr "备份/升级"
-
-msgid "Backup / Restore"
-msgstr "备份/恢复"
 
 msgid "Backup file list"
 msgstr "文件备份列表"
@@ -542,6 +551,9 @@ msgstr "CA 证书，如果留空，则证书将在第一次连接后被保存。
 msgid "CPU usage (%)"
 msgstr "CPU 使用率（%）"
 
+msgid "Call failed"
+msgstr ""
+
 msgid "Cancel"
 msgstr "取消"
 
@@ -555,13 +567,21 @@ msgid "Changes"
 msgstr "修改数"
 
 msgid "Changes applied."
-msgstr "更改已应用"
+msgstr "更改已应用。"
+
+msgid "Changes have been reverted."
+msgstr "更改已取消。"
 
 msgid "Changes the administrator password for accessing the device"
 msgstr "修改访问设备的管理员密码"
 
 msgid "Channel"
 msgstr "信道"
+
+msgid ""
+"Channel %d is not available in the %s regulatory domain and has been auto-"
+"adjusted to %d."
+msgstr "信道 %d 在 %s 监管区域内不可用并已自动调整到 %d。"
 
 msgid "Check"
 msgstr "检查"
@@ -597,11 +617,8 @@ msgstr "Cisco UDP 封装"
 
 msgid ""
 "Click \"Generate archive\" to download a tar archive of the current "
-"configuration files. To reset the firmware to its initial state, click "
-"\"Perform reset\" (only possible with squashfs images)."
-msgstr ""
-"点击“生成备份”下载当前配置文件的 tar 存档。要将固件恢复到初始状态，请单击“执"
-"行重置”（仅 squashfs 格式的固件有效）。"
+"configuration files."
+msgstr "点击“生成备份”下载当前配置文件的 tar 存档。"
 
 msgid "Client"
 msgstr "客户端 Client"
@@ -639,11 +656,17 @@ msgstr ""
 msgid "Configuration"
 msgstr "配置"
 
-msgid "Configuration applied."
-msgstr "配置已应用。"
+msgid "Configuration failed"
+msgstr ""
 
 msgid "Configuration files will be kept."
 msgstr "配置文件将被保留。"
+
+msgid "Configuration has been applied."
+msgstr "配置已应用。"
+
+msgid "Configuration has been rolled back!"
+msgstr "配置已回滚！"
 
 msgid "Confirmation"
 msgstr "确认密码"
@@ -659,6 +682,14 @@ msgstr "连接数限制"
 
 msgid "Connections"
 msgstr "连接"
+
+msgid ""
+"Could not regain access to the device after applying the configuration "
+"changes. You might need to reconnect if you modified network related "
+"settings such as the IP address or wireless security credentials."
+msgstr ""
+"应用配置更改后，无法重新获得对设备的访问权限。如果您修改了网络相关设置如 IP "
+"地址或无线安全证书，则可能需要重新连接。"
 
 msgid "Country"
 msgstr "国家"
@@ -712,9 +743,6 @@ msgid ""
 "\">LED</abbr>s if possible."
 msgstr "自定义此设备的 <abbr title=\"Light Emitting Diode\">LED</abbr> 行为。"
 
-msgid "DHCP Leases"
-msgstr "DHCP 分配"
-
 msgid "DHCP Server"
 msgstr "DHCP 服务器"
 
@@ -726,9 +754,6 @@ msgstr "DHCP 客户端"
 
 msgid "DHCP-Options"
 msgstr "DHCP 选项"
-
-msgid "DHCPv6 Leases"
-msgstr "DHCPv6 分配"
 
 msgid "DHCPv6 client"
 msgstr "DHCPv6 客户端"
@@ -825,8 +850,11 @@ msgstr "设备配置"
 msgid "Device is rebooting..."
 msgstr "设备正在重启..."
 
-msgid "Device unreachable"
+msgid "Device unreachable!"
 msgstr "无法连接到设备"
+
+msgid "Device unreachable! Still waiting for device..."
+msgstr ""
 
 msgid "Diagnostics"
 msgstr "网络诊断"
@@ -853,6 +881,9 @@ msgstr "停用 DNS 设定"
 msgid "Disable Encryption"
 msgstr "禁用加密"
 
+msgid "Disable this network"
+msgstr ""
+
 msgid "Disabled"
 msgstr "禁用"
 
@@ -861,6 +892,12 @@ msgstr "禁用（默认）"
 
 msgid "Discard upstream RFC1918 responses"
 msgstr "丢弃 RFC1918 上行响应数据"
+
+msgid "Disconnection attempt failed"
+msgstr ""
+
+msgid "Dismiss"
+msgstr "解除"
 
 msgid "Displaying only packages containing"
 msgstr "只显示有内容的软件包"
@@ -910,6 +947,9 @@ msgid ""
 "<abbr title=\"Domain Name System\">DNS</abbr>-Name"
 msgstr ""
 "不转发没有 <abbr title=\"Domain Name System\">DNS</abbr> 名称的解析请求"
+
+msgid "Down"
+msgstr ""
 
 msgid "Download and install package"
 msgstr "下载并安装软件包"
@@ -1024,6 +1064,9 @@ msgstr "启用后报文的 DF（禁止分片）标志。"
 msgid "Enable this mount"
 msgstr "启用此挂载点"
 
+msgid "Enable this network"
+msgstr ""
+
 msgid "Enable this swap"
 msgstr "启用此 swap 分区"
 
@@ -1031,7 +1074,7 @@ msgid "Enable/Disable"
 msgstr "启用/禁用"
 
 msgid "Enabled"
-msgstr "启用"
+msgstr "已启用"
 
 msgid "Enables IGMP snooping on this bridge"
 msgstr "在此桥接上启用 IGMP 窥探"
@@ -1055,6 +1098,12 @@ msgstr "端点主机"
 
 msgid "Endpoint Port"
 msgstr "端点端口"
+
+msgid "Enter custom value"
+msgstr ""
+
+msgid "Enter custom values"
+msgstr ""
 
 msgid "Erasing..."
 msgstr "擦除中..."
@@ -1114,6 +1163,9 @@ msgstr ""
 msgid "FT protocol"
 msgstr "FT 协议"
 
+msgid "Failed to confirm apply within %ds, waiting for rollback…"
+msgstr "在 %d 秒内确认应用失败，等待回滚..."
+
 msgid "File"
 msgstr "文件"
 
@@ -1131,6 +1183,9 @@ msgstr "过滤本地包"
 
 msgid "Filter useless"
 msgstr "过滤无用包"
+
+msgid "Finalizing failed"
+msgstr ""
 
 msgid ""
 "Find all currently attached filesystems and swap and replace configuration "
@@ -1235,10 +1290,10 @@ msgstr "空闲空间"
 
 msgid ""
 "Further information about WireGuard interfaces and peers at <a href=\"http://"
-"wireguard.io\">wireguard.io</a>."
+"wireguard.com\">wireguard.com</a>."
 msgstr ""
-"有关 WireGuard 接口和 Peer 的更多信息：<a href=\"http://wireguard.io"
-"\">wireguard.io</a>。"
+"有关 WireGuard 接口和 Peer 的更多信息：<a href=\"http://wireguard.com"
+"\">wireguard.com</a>。"
 
 msgid "GHz"
 msgstr "GHz"
@@ -1248,6 +1303,9 @@ msgstr "仅 GPRS"
 
 msgid "Gateway"
 msgstr "网关"
+
+msgid "Gateway address is invalid"
+msgstr ""
 
 msgid "Gateway ports"
 msgstr "网关端口"
@@ -1312,15 +1370,12 @@ msgstr "请求头错误代码错误（HEC）"
 msgid ""
 "Here you can configure the basic aspects of your device like its hostname or "
 "the timezone."
-msgstr "配置路由器的部分基础信息。"
+msgstr "此处配置设备的基础信息，如主机名称或时区。"
 
 msgid ""
 "Here you can paste public SSH-Keys (one per line) for SSH public-key "
 "authentication."
 msgstr "请在此处粘贴 SSH 公钥，每行一个，用于 SSH 公钥认证。"
-
-msgid "Hermes 802.11b Wireless Controller"
-msgstr "Hermes 802.11b 无线控制器"
 
 msgid "Hide <abbr title=\"Extended Service Set Identifier\">ESSID</abbr>"
 msgstr "隐藏 <abbr title=\"Extended Service Set Identifier\">ESSID</abbr>"
@@ -1336,6 +1391,9 @@ msgstr "主机到期超时"
 
 msgid "Host-<abbr title=\"Internet Protocol Address\">IP</abbr> or Network"
 msgstr "主机 <abbr title=\"Internet Protocol Address\">IP</abbr> 或网络"
+
+msgid "Host-Uniq tag content"
+msgstr ""
 
 msgid "Hostname"
 msgstr "主机名"
@@ -1358,14 +1416,20 @@ msgstr "IP 地址"
 msgid "IP address"
 msgstr "IP 地址"
 
+msgid "IP address in invalid"
+msgstr ""
+
+msgid "IP address is missing"
+msgstr ""
+
 msgid "IPv4"
 msgstr "IPv4"
 
 msgid "IPv4 Firewall"
 msgstr "IPv4 防火墙"
 
-msgid "IPv4 WAN Status"
-msgstr "IPv4 WAN 状态"
+msgid "IPv4 Upstream"
+msgstr "IPv4 上游"
 
 msgid "IPv4 address"
 msgstr "IPv4 地址"
@@ -1415,8 +1479,8 @@ msgstr "IPv6 设置"
 msgid "IPv6 ULA-Prefix"
 msgstr "IPv6 ULA 前缀"
 
-msgid "IPv6 WAN Status"
-msgstr "IPv6 WAN 状态"
+msgid "IPv6 Upstream"
+msgstr "IPv6 上游"
 
 msgid "IPv6 address"
 msgstr "IPv6 地址"
@@ -1464,10 +1528,10 @@ msgid "Identity"
 msgstr "鉴权"
 
 msgid "If checked, 1DES is enabled"
-msgstr "选中以启用 1DES"
+msgstr "如果选中，则启用1DES。"
 
 msgid "If checked, encryption is disabled"
-msgstr "选中以禁用加密"
+msgstr "如果选中，则禁用加密"
 
 msgid ""
 "If specified, mount the device by its UUID instead of a fixed device node"
@@ -1527,6 +1591,9 @@ msgstr "入站："
 msgid "Info"
 msgstr "信息"
 
+msgid "Initialization failure"
+msgstr ""
+
 msgid "Initscript"
 msgstr "启动脚本"
 
@@ -1563,20 +1630,11 @@ msgstr "接口总览"
 msgid "Interface is reconnecting..."
 msgstr "正在重新连接接口..."
 
-msgid "Interface is shutting down..."
-msgstr "正在关闭接口..."
-
 msgid "Interface name"
 msgstr "接口名称"
 
 msgid "Interface not present or not connected yet."
 msgstr "接口不存在或未连接。"
-
-msgid "Interface reconnected"
-msgstr "接口已重新连接"
-
-msgid "Interface shut down"
-msgstr "接口已关闭"
 
 msgid "Interfaces"
 msgstr "接口"
@@ -1771,6 +1829,9 @@ msgstr "平均负载"
 msgid "Loading"
 msgstr "加载中"
 
+msgid "Local IP address is invalid"
+msgstr ""
+
 msgid "Local IP address to assign"
 msgstr "要分配的本地 IP 地址"
 
@@ -1849,6 +1910,9 @@ msgstr "MAC 列表"
 
 msgid "MAP / LW4over6"
 msgstr "MAP / LW4over6"
+
+msgid "MAP rule is invalid"
+msgstr ""
 
 msgid "MB/s"
 msgstr "MB/s"
@@ -1930,6 +1994,9 @@ msgstr "主机型号"
 
 msgid "Modem device"
 msgstr "调制解调器节点"
+
+msgid "Modem information query failed"
+msgstr ""
 
 msgid "Modem init timeout"
 msgstr "调制解调器初始化超时"
@@ -2026,6 +2093,9 @@ msgstr "网络工具"
 msgid "Network boot image"
 msgstr "网络启动镜像"
 
+msgid "Network device is not present"
+msgstr ""
+
 msgid "Network without interfaces."
 msgstr "无接口的网络。"
 
@@ -2046,6 +2116,9 @@ msgstr "未找到文件"
 
 msgid "No information available"
 msgstr "无可用信息"
+
+msgid "No matching prefix delegation"
+msgstr ""
 
 msgid "No negative cache"
 msgstr "禁用无效信息缓存"
@@ -2201,6 +2274,9 @@ msgstr "可选，Base64 编码的预共享密钥。"
 msgid "Optional. Create routes for Allowed IPs for this peer."
 msgstr "可选，为此 Peer 创建允许 IP 的路由。"
 
+msgid "Optional. Description of peer."
+msgstr ""
+
 msgid ""
 "Optional. Host of peer. Names are resolved prior to bringing up the "
 "interface."
@@ -2280,6 +2356,9 @@ msgstr "PID"
 
 msgid "PIN"
 msgstr "PIN"
+
+msgid "PIN code rejected"
+msgstr ""
 
 msgid "PMK R1 Push"
 msgstr "R1 推送 PMK"
@@ -2368,6 +2447,9 @@ msgstr "峰值："
 msgid "Peer IP address to assign"
 msgstr "要分配的 Peer IP 地址"
 
+msgid "Peer address is missing"
+msgstr ""
+
 msgid "Peers"
 msgstr "Peers"
 
@@ -2436,9 +2518,6 @@ msgstr "不监听这些接口。"
 msgid "Prevents client-to-client communication"
 msgstr "禁止客户端间通信"
 
-msgid "Prism2/2.5/3 802.11b Wireless Controller"
-msgstr "Prism2/2.5/3 802.11b 无线控制器"
-
 msgid "Private Key"
 msgstr "私钥"
 
@@ -2505,9 +2584,6 @@ msgstr "接收"
 msgid "RX Rate"
 msgstr "接收速率"
 
-msgid "RaLink 802.11%s Wireless Controller"
-msgstr "RaLink 802.11%s 无线控制器"
-
 msgid "Radius-Accounting-Port"
 msgstr "Radius 计费端口"
 
@@ -2526,6 +2602,9 @@ msgstr "Radius 认证密钥"
 msgid "Radius-Authentication-Server"
 msgstr "Radius 认证服务器"
 
+msgid "Raw hex-encoded bytes. Leave empty unless your ISP require this"
+msgstr ""
+
 msgid ""
 "Read <code>/etc/ethers</code> to configure the <abbr title=\"Dynamic Host "
 "Configuration Protocol\">DHCP</abbr>-Server"
@@ -2534,13 +2613,12 @@ msgstr ""
 "Configuration Protocol\">DHCP</abbr> 服务器"
 
 msgid ""
-"Really delete this interface? The deletion cannot be undone!\\nYou might "
-"lose access to this device if you are connected via this interface."
+"Really delete this interface? The deletion cannot be undone! You might lose "
+"access to this device if you are connected via this interface"
 msgstr ""
-"确定要删除此接口？删除操作无法撤销！\\n删除此接口，可能导致无法再访问路由器！"
 
 msgid ""
-"Really delete this wireless network? The deletion cannot be undone!\\nYou "
+"Really delete this wireless network? The deletion cannot be undone! You "
 "might lose access to this device if you are connected via this network."
 msgstr ""
 "确定要删除此无线网络？删除操作无法撤销！\\n删除此无线网络，可能导致无法再访问"
@@ -2548,20 +2626,6 @@ msgstr ""
 
 msgid "Really reset all changes?"
 msgstr "确定要放弃所有更改？"
-
-msgid ""
-"Really shut down network?\\nYou might lose access to this device if you are "
-"connected via this interface."
-msgstr ""
-"确定要关闭此网络？\\n如果您正在使用此接口连接路由器，关闭此网络可能导致连接断"
-"开！"
-
-msgid ""
-"Really shutdown interface \"%s\" ?\\nYou might lose access to this device if "
-"you are connected via this interface."
-msgstr ""
-"确定要关闭接口 \"%s\"？\\n如果您正在使用此接口连接路由器，关闭此网络可能导致"
-"连接断开！"
 
 msgid "Really switch protocol?"
 msgstr "确定要切换协议？"
@@ -2607,9 +2671,6 @@ msgstr "推荐，Wire Guard 接口的 IP 地址。"
 
 msgid "Reconnect this interface"
 msgstr "重连此接口"
-
-msgid "Reconnecting interface"
-msgstr "重连接口中..."
 
 msgid "References"
 msgstr "引用"
@@ -2703,6 +2764,12 @@ msgstr "重启"
 msgid "Restart Firewall"
 msgstr "重启防火墙"
 
+msgid "Restart radio interface"
+msgstr ""
+
+msgid "Restore"
+msgstr "恢复"
+
 msgid "Restore backup"
 msgstr "恢复配置"
 
@@ -2710,7 +2777,16 @@ msgid "Reveal/hide password"
 msgstr "显示/隐藏 密码"
 
 msgid "Revert"
-msgstr "放弃"
+msgstr "恢复"
+
+msgid "Revert changes"
+msgstr "恢复更改"
+
+msgid "Revert request failed with status <code>%h</code>"
+msgstr "恢复请求失败，状态 <code>%h</code>"
+
+msgid "Reverting configuration…"
+msgstr "正在恢复配置..."
 
 msgid "Root"
 msgstr "Root"
@@ -2775,10 +2851,7 @@ msgid "Save"
 msgstr "保存"
 
 msgid "Save & Apply"
-msgstr "保存&应用"
-
-msgid "Save &#38; Apply"
-msgstr "保存&#38;应用"
+msgstr "保存并应用"
 
 msgid "Scan"
 msgstr "扫描"
@@ -2825,6 +2898,12 @@ msgstr ""
 msgid "Set up Time Synchronization"
 msgstr "设置时间同步"
 
+msgid "Setting PLMN failed"
+msgstr ""
+
+msgid "Setting operation mode failed"
+msgstr ""
+
 msgid "Setup DHCP Server"
 msgstr "配置 DHCP 服务器"
 
@@ -2839,9 +2918,6 @@ msgstr "显示当前备份文件列表"
 
 msgid "Shutdown this interface"
 msgstr "关闭此接口"
-
-msgid "Shutdown this network"
-msgstr "关闭此网络"
 
 msgid "Signal"
 msgstr "信号"
@@ -2896,9 +2972,6 @@ msgstr ""
 "抱歉，您的设备暂不支持 sysupgrade 升级，需手动更新固件。请参考 Wiki 中关于此"
 "设备的固件更新说明。"
 
-msgid "Sort"
-msgstr "排序"
-
 msgid "Source"
 msgstr "源地址"
 
@@ -2939,6 +3012,9 @@ msgstr "开始"
 
 msgid "Start priority"
 msgstr "启动优先级"
+
+msgid "Starting configuration apply…"
+msgstr "开始应用配置..."
 
 msgid "Startup"
 msgstr "启动项"
@@ -3093,8 +3169,24 @@ msgstr ""
 "合法字符：<code>A-Z</code>, <code>a-z</code>, <code>0-9</code> 和 <code>_</"
 "code>"
 
+msgid "The backup archive does not appear to be a valid gzip file."
+msgstr ""
+
 msgid "The configuration file could not be loaded due to the following error:"
 msgstr "由于以下错误，配置文件无法被加载："
+
+msgid ""
+"The device could not be reached within %d seconds after applying the pending "
+"changes, which caused the configuration to be rolled back for safety "
+"reasons. If you believe that the configuration changes are correct "
+"nonetheless, perform an unchecked configuration apply. Alternatively, you "
+"can dismiss this warning and edit changes before attempting to apply again, "
+"or revert all pending changes to keep the currently working configuration "
+"state."
+msgstr ""
+"在应用挂起的更改后 %d 秒内无法到达该设备，出于安全原因导致配置回滚。如果您认"
+"为配置更改仍然正确，请执行未选中的配置应用。或者您可以在尝试再次应用之前解除"
+"此警告并编辑更改，或者还原所有未完成的更改以保持当前正在工作的配置状态。"
 
 msgid ""
 "The device file of the memory or partition (<abbr title=\"for example\">e.g."
@@ -3116,9 +3208,6 @@ msgid ""
 msgstr ""
 "固件已上传，请注意核对文件大小和校验值！<br />点击下面的“继续”开始刷写，刷新"
 "过程中切勿断电！"
-
-msgid "The following changes have been committed"
-msgstr "以下更改已提交"
 
 msgid "The following changes have been reverted"
 msgstr "以下更改已放弃"
@@ -3186,8 +3275,8 @@ msgstr "不支持所上传的映像文件格式，请选择适合当前平台的
 msgid "There are no active leases."
 msgstr "没有已分配的租约。"
 
-msgid "There are no pending changes to apply!"
-msgstr "没有待生效的更改！"
+msgid "There are no changes to apply."
+msgstr "没有待生效的更改。"
 
 msgid "There are no pending changes to revert!"
 msgstr "没有可放弃的更改！"
@@ -3282,8 +3371,11 @@ msgstr "时区"
 
 msgid ""
 "To restore configuration files, you can upload a previously generated backup "
-"archive here."
-msgstr "上传备份存档以恢复配置。"
+"archive here. To reset the firmware to its initial state, click \"Perform "
+"reset\" (only possible with squashfs images)."
+msgstr ""
+"上传备份存档以恢复配置。要将固件恢复到初始状态，请单击“执行重置”（仅 "
+"squashfs 格式的固件有效）。"
 
 msgid "Tone"
 msgstr "Tone"
@@ -3351,8 +3443,26 @@ msgstr "USB 接口"
 msgid "UUID"
 msgstr "UUID"
 
+msgid "Unable to determine device name"
+msgstr ""
+
+msgid "Unable to determine external IP address"
+msgstr ""
+
+msgid "Unable to determine upstream interface"
+msgstr ""
+
 msgid "Unable to dispatch"
 msgstr "无法调度"
+
+msgid "Unable to obtain client ID"
+msgstr ""
+
+msgid "Unable to resolve AFTR host name"
+msgstr ""
+
+msgid "Unable to resolve peer host name"
+msgstr ""
 
 msgid "Unavailable Seconds (UAS)"
 msgstr "不可用秒数（UAS）"
@@ -3363,6 +3473,9 @@ msgstr "未知"
 msgid "Unknown Error, password not changed!"
 msgstr "未知错误，密码未更改！"
 
+msgid "Unknown error (%s)"
+msgstr ""
+
 msgid "Unmanaged"
 msgstr "不配置协议"
 
@@ -3372,8 +3485,17 @@ msgstr "卸载分区"
 msgid "Unsaved Changes"
 msgstr "未保存的配置"
 
+msgid "Unsupported MAP type"
+msgstr ""
+
+msgid "Unsupported modem"
+msgstr ""
+
 msgid "Unsupported protocol type."
 msgstr "不支持的协议类型"
+
+msgid "Up"
+msgstr ""
 
 msgid "Update lists"
 msgstr "刷新列表"
@@ -3512,6 +3634,9 @@ msgstr "验证"
 msgid "Version"
 msgstr "版本"
 
+msgid "Virtual dynamic interface"
+msgstr ""
+
 msgid "WDS"
 msgstr "WDS"
 
@@ -3542,6 +3667,9 @@ msgstr "正在应用更改..."
 
 msgid "Waiting for command to complete..."
 msgstr "等待命令执行完成..."
+
+msgid "Waiting for configuration to get applied… %ds"
+msgstr "等待应用配置... %d 秒"
 
 msgid "Waiting for device..."
 msgstr "等待设备..."
@@ -3578,23 +3706,20 @@ msgstr "无线概况"
 msgid "Wireless Security"
 msgstr "无线安全"
 
-msgid "Wireless is disabled or not associated"
-msgstr "无线未开启或未关联"
+msgid "Wireless is disabled"
+msgstr "无线未开启"
+
+msgid "Wireless is not associated"
+msgstr "无线未未关联"
 
 msgid "Wireless is restarting..."
 msgstr "无线重启中..."
 
 msgid "Wireless network is disabled"
-msgstr "无线已禁用"
+msgstr "无线网络已禁用"
 
 msgid "Wireless network is enabled"
-msgstr "无线网络开关"
-
-msgid "Wireless restarted"
-msgstr "无线已重启"
-
-msgid "Wireless shut down"
-msgstr "无线已关闭"
+msgstr "无线网络已启用"
 
 msgid "Write received DNS requests to syslog"
 msgstr "将收到的 DNS 请求写入系统日志"
@@ -3634,6 +3759,9 @@ msgstr "baseT"
 msgid "bridged"
 msgstr "桥接的"
 
+msgid "create"
+msgstr ""
+
 msgid "create:"
 msgstr "创建："
 
@@ -3670,9 +3798,6 @@ msgstr "全双工"
 
 msgid "half-duplex"
 msgstr "半双工"
-
-msgid "help"
-msgstr "帮助"
 
 msgid "hidden"
 msgstr "隐藏"
@@ -3721,6 +3846,9 @@ msgstr "开"
 
 msgid "open"
 msgstr "开放式"
+
+msgid "output"
+msgstr ""
 
 msgid "overlay"
 msgstr "覆盖"

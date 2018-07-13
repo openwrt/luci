@@ -134,7 +134,6 @@ end
 
 <%+header%>
 
-<script type="text/javascript" src="<%=resource%>/cbi.js"></script>
 <script type="text/javascript">//<![CDATA[
 
 	XHR.poll(10 , '<%=REQUEST_URI%>', { status: 1 },
@@ -145,19 +144,19 @@ end
 			{
 				var s = '';
 				if (info.length == undefined) {
-					s += '<tr class="cbi-section-table-row"><td colspan="7" class="cbi-section-table-cell"><br /><em><%:No clients connected%></em><br /></td></tr>'
+					s += '<div class="tr cbi-section-table-row"><div colspan="7" class="td cbi-section-table-cell"><br /><em><%:No clients connected%></em><br /></div></div>'
 				};
 				for (var idx = 0; idx < info.length; idx++)
 				{
 					var splash = info[idx];
 					s += String.format(
-						'<tr class="cbi-section-table-row cbi-rowstyle-'+(1 + (idx % 2))+'">' +
-						'<td class="cbi-section-table-cell">%s</td>' +
-						'<td class="cbi-section-table-cell">%s</td>' +
-						'<td class="cbi-section-table-cell">%s</td>' +
-						'<td class="cbi-section-table-cell">%s</td>' +
-						'<td class="cbi-section-table-cell">%s/%s</td>' +
-						'<td class="cbi-section-table-cell">',
+						'<div class="tr cbi-section-table-row cbi-rowstyle-'+(1 + (idx % 2))+'">' +
+						'<div class="td cbi-section-table-cell">%s</div>' +
+						'<div class="td cbi-section-table-cell">%s</div>' +
+						'<div class="td cbi-section-table-cell">%s</div>' +
+						'<div class="td cbi-section-table-cell">%s</div>' +
+						'<div class="td cbi-section-table-cell">%s/%s</div>' +
+						'<div class="td cbi-section-table-cell">',
 						splash.hostname, splash.ip, splash.mac, splash.timeleft, splash.trafficin, splash.trafficout);
 
 				<% if is_admin then %>
@@ -185,7 +184,7 @@ end
 				<% else %>
 					s += String.format('%s', splash.policy);
 				<% end %>
-					s += '</td></tr>'
+					s += '</div></div>'
 				}
 				tbody.innerHTML = s;
 			}
@@ -200,18 +199,18 @@ end
 		<legend><%:Active Clients%></legend>
 		<div class="cbi-section-node">
 			<% if is_admin then %><form action="<%=REQUEST_URI%>" method="post"><input type="hidden" name="token" value="<%=token%>" /><% end %>
-			<table class="cbi-section-table">
-				<thead>
-					<tr class="cbi-section-table-titles">
-						<th class="cbi-section-table-cell"><%:Hostname%></th>
-						<th class="cbi-section-table-cell"><%:IP Address%></th>
-						<th class="cbi-section-table-cell"><%:MAC Address%></th>
-						<th class="cbi-section-table-cell"><%:Time remaining%></th>
-						<th class="cbi-section-table-cell"><%:Traffic in/out%></th>
-						<th class="cbi-section-table-cell"><%:Policy%></th>
-					</tr>
-				</thead>
-				<tbody id="splash_table">
+			<div class="table cbi-section-table">
+				<div class="thead">
+					<div class="tr cbi-section-table-titles">
+						<div class="th cbi-section-table-cell"><%:Hostname%></div>
+						<div class="th cbi-section-table-cell"><%:IP Address%></div>
+						<div class="th cbi-section-table-cell"><%:MAC Address%></div>
+						<div class="th cbi-section-table-cell"><%:Time remaining%></div>
+						<div class="th cbi-section-table-cell"><%:Traffic in/out%></div>
+						<div class="th cbi-section-table-cell"><%:Policy%></div>
+					</div>
+				</div>
+				<div class="tbody" id="splash_table">
 
 				<%-
 					local count = 0
@@ -227,16 +226,16 @@ end
 						if c.ip then
 							count = count + 1
 				-%>
-						<tr class="cbi-section-table-row cbi-rowstyle-<%=2-(count%2)%>">
-						<td class="cbi-section-table-cell"><%=c.hostname or "<em>" .. translate("unknown") .. "</em>"%></td>
-						<td class="cbi-section-table-cell"><%=c.ip or "<em>" .. translate("unknown") .. "</em>"%></td>
-						<td class="cbi-section-table-cell"><%=showmac(c.mac)%></td>
-						<td class="cbi-section-table-cell"><%=
+						<div class="tr cbi-section-table-row cbi-rowstyle-<%=2-(count%2)%>">
+						<div class="td cbi-section-table-cell"><%=c.hostname or "<em>" .. translate("unknown") .. "</em>"%></div>
+						<div class="td cbi-section-table-cell"><%=c.ip or "<em>" .. translate("unknown") .. "</em>"%></div>
+						<div class="td cbi-section-table-cell"><%=showmac(c.mac)%></div>
+						<div class="td cbi-section-table-cell"><%=
 							(c.limit >= os.time()) and wat.date_format(c.limit-os.time()) or
 								(c.policy ~= "normal") and "-" or "<em>" .. translate("expired") .. "</em>"
-						%></td>
-						<td class="cbi-section-table-cell"><%=wat.byte_format(c.bytes_in)%> / <%=wat.byte_format(c.bytes_out)%></td>
-						<td class="cbi-section-table-cell">
+						%></div>
+						<div class="td cbi-section-table-cell"><%=wat.byte_format(c.bytes_in)%> / <%=wat.byte_format(c.bytes_out)%></div>
+						<div class="td cbi-section-table-cell">
 							<% if is_admin then %>
 							<select name="policy.<%=c.mac:lower()%>" style="width:200px">
 								<option value="whitelist"<%=c.policy=="whitelist" and ' selected="selected"'%>><%:whitelisted%></option>
@@ -250,21 +249,21 @@ end
 							<% else %>
 							<%=c.policy%>
 							<% end %>
-						</td>
-						</tr>
+						</div>
+						</div>
 						<%- 
 							end
 						end
 						if count == 0 then
 						-%>
-						<tr class="cbi-section-table-row">
-							<td colspan="7" class="cbi-section-table-cell">
+						<div class="tr cbi-section-table-row">
+							<div colspan="7" class="td cbi-section-table-cell">
 								<br /><em><%:No clients connected%></em><br />
-							</td>
-						</tr>
+							</div>
+						</div>
 				<%- end -%>
-				</tbody>
-			</table>
+				</div>
+			</div>
 			<% if is_admin then %></form><% end %>
 		</div>
 	</fieldset>

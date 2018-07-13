@@ -11,7 +11,7 @@ cat<<EOF
 </HEAD>
 <BODY>
 
-<script langauge='JavaScript1.2' type='text/javascript'>
+<script language='JavaScript1.2' type='text/javascript'>
 EOF
 
 # sed + txtinfo plugin

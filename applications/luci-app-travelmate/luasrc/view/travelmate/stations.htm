@@ -11,20 +11,21 @@ This is free software, licensed under the Apache License, Version 2.0
 
 <%+header%>
 
+
 <div class="cbi-map">
 <div class="cbi-map-descr">
   <%=translatef("Provides an overview of all configured uplinks for the travelmate interface (%s). You can edit, delete or re-order existing uplinks or scan for a new one. The currently used uplink is emphasized in blue.", trmiface)%>
 </div>
 
-<fieldset class="cbi-section">
-  <table class="cbi-section-table" style="empty-cells:hide">
-    <tr class="cbi-section-table-titles">
-      <th class="cbi-section-table-cell" style="text-align:left"><%:Device%></th>
-      <th class="cbi-section-table-cell" style="text-align:left"><%:SSID%></th>
-      <th class="cbi-section-table-cell" style="text-align:left"><%:BSSID%></th>
-      <th class="cbi-section-table-cell" style="text-align:left"><%:Encryption%></th>
-      <th class="cbi-section-table-cell" style="text-align:center" colspan="2"><%:Actions%></th>
-    </tr>
+<div class="cbi-section">
+  <div class="table cbi-section-table">
+    <div class="tr cbi-section-table-titles">
+      <div class="th left"><%:Device%></div>
+      <div class="th left"><%:SSID%></div>
+      <div class="th left"><%:BSSID%></div>
+      <div class="th left"><%:Encryption%></div>
+      <div class="th center">&#160;</div>
+    </div>
 <%
   uci:foreach("wireless", "wifi-iface", function(s)
     local iface = s.network or ""
@@ -52,14 +53,14 @@ This is free software, licensed under the Apache License, Version 2.0
       <td class="cbi-value-field" style="width:150px">
         <input type="button" class="cbi-button cbi-button-edit" onclick="location.href='<%=luci.dispatcher.build_url('admin/services/travelmate/wifiedit')%>?cfg=<%=section%>'" title="<%:Edit this Uplink%>" value="<%:Edit%>"/>
         <input type="button" class="cbi-button cbi-button-remove" onclick="location.href='<%=luci.dispatcher.build_url('admin/services/travelmate/wifidelete')%>?cfg=<%=section%>'" title="<%:Delete this Uplink%>" value="<%:Delete%>"/>
-      </td>
-    </tr>
+      </div>
+    </div>
 <%
     end
   end)
 %>
-  </table>
-</fieldset>
+  </div>
+</div>
 <div class="cbi-page-actions right">
 <%
   uci:foreach("wireless", "wifi-device", function(s)
@@ -68,7 +69,7 @@ This is free software, licensed under the Apache License, Version 2.0
   <form class="inline" action="<%=luci.dispatcher.build_url('admin/services/travelmate/wifiscan')%>" method="post">
     <input type="hidden" name="device" value="<%=device%>"/>
     <input type="hidden" name="token" value="<%=token%>"/>
-    <input type="submit" class="cbi-button cbi-button-find" title="<%:Find and join network on%> <%=device%>" value="<%:Scan%> <%=device%>"/>
+    <input type="submit" class="cbi-button cbi-button-action important" title="<%:Find and join network on%> <%=device%>" value="<%:Scan%> <%=device%>"/>
   </form>
 <%
   end)

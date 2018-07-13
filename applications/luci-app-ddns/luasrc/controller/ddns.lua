@@ -21,7 +21,6 @@ luci_helper = "/usr/lib/ddns/dynamic_dns_lucihelper.sh"
 
 local srv_name    = "ddns-scripts"
 local srv_ver_min = "2.7.7"			-- minimum version of service required
-local srv_ver_cmd = luci_helper .. [[ -V | awk {'print $2'}]]
 local app_name    = "luci-app-ddns"
 local app_title   = "Dynamic DNS"
 local app_version = "2.4.9-1"
@@ -29,7 +28,6 @@ local app_version = "2.4.9-1"
 function index()
 	local nxfs	= require "nixio.fs"		-- global definitions not available
 	local sys	= require "luci.sys"		-- in function index()
-	local ddns	= require "luci.tools.ddns"	-- ddns multiused functions
 	local muci	= require "luci.model.uci"
 
 	-- no config create an empty one
@@ -81,33 +79,40 @@ end
 
 -- Standardized application/service functions
 function app_title_main()
-	return	[[<a href="javascript:alert(']]
-			.. I18N.translate("Version Information")
-			.. [[\n\n]] .. app_name
-			.. [[\n\t]] .. I18N.translate("Version") .. [[:\t]] .. app_version
-			.. [[\n\n]] .. srv_name .. [[ ]] .. I18N.translate("required") .. [[:]]
-			.. [[\n\t]] .. I18N.translate("Version") .. [[:\t]]
-				.. srv_ver_min .. [[ ]] .. I18N.translate("or higher")
-			.. [[\n\n]] .. srv_name .. [[ ]] .. I18N.translate("installed") .. [[:]]
-			.. [[\n\t]] .. I18N.translate("Version") .. [[:\t]]
-				.. (service_version() or I18N.translate("NOT installed"))
-			.. [[\n\n]]
-	 	.. [[')">]]
-		.. I18N.translate(app_title)
-		.. [[</a>]]
+	tmp = {}
+	tmp[#tmp+1] = 	[[<a href="javascript:alert(']]
+	tmp[#tmp+1] = 		 I18N.translate("Version Information")
+	tmp[#tmp+1] = 		 [[\n\n]] .. app_name
+	tmp[#tmp+1] = 		 [[\n]] .. I18N.translate("Version") .. [[: ]] .. app_version
+	tmp[#tmp+1] = 		 [[\n\n]] .. srv_name .. [[ ]] .. I18N.translate("required") .. [[:]]
+	tmp[#tmp+1] = 		 [[\n]] .. I18N.translate("Version") .. [[: ]]
+	tmp[#tmp+1] = 			 srv_ver_min .. [[ ]] .. I18N.translate("or higher")
+	tmp[#tmp+1] = 		 [[\n\n]] .. srv_name .. [[ ]] .. I18N.translate("installed") .. [[:]]
+	tmp[#tmp+1] = 		 [[\n]] .. I18N.translate("Version") .. [[: ]]
+	tmp[#tmp+1] = 			 (service_version() or I18N.translate("NOT installed"))
+	tmp[#tmp+1] = 		 [[\n\n]]
+	tmp[#tmp+1] = 	 [[')">]]
+	tmp[#tmp+1] = 	 I18N.translate(app_title)
+	tmp[#tmp+1] = 	 [[</a>]]
+		
+	return table.concat(tmp)
 end
+
 function service_version()
-	local ver = nil
-
-	ver = UTIL.exec(srv_ver_cmd)
-	if #ver > 0 then return ver end
-
-	IPKG.list_installed(srv_name, function(n, v, d)
-			if v and (#v > 0) then ver = v end
-		end
-	)
-	return	ver
+	
+	local srv_ver_cmd = luci_helper .. " -V | awk {'print $2'} "
+	local ver
+	
+	if IPKG then
+		ver = IPKG.info(srv_name)[srv_name].Version
+	else
+		ver = UTIL.exec(srv_ver_cmd)
+	end
+	
+	if ver and #ver > 0 then return ver or nil end
+	
 end
+
 function service_ok()
 	return	IPKG.compare_versions((service_version() or "0"), ">=", srv_ver_min)
 end

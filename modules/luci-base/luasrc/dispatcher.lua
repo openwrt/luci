@@ -182,6 +182,7 @@ local function session_retrieve(sid, allowed_users)
 	   (not allowed_users or
 	    util.contains(allowed_users, sdat.values.username))
 	then
+		uci:set_session_id(sid)
 		return sid, sdat.values
 	end
 
@@ -357,7 +358,7 @@ function dispatch(request)
 			elseif key == "REQUEST_URI" then
 				return build_url(unpack(ctx.requestpath))
 			elseif key == "FULL_REQUEST_URI" then
-				local url = { http.getenv("SCRIPT_NAME"), http.getenv("PATH_INFO") }
+				local url = { http.getenv("SCRIPT_NAME") or "", http.getenv("PATH_INFO") }
 				local query = http.getenv("QUERY_STRING")
 				if query and #query > 0 then
 					url[#url+1] = "?"
@@ -506,10 +507,11 @@ function dispatch(request)
 		else
 			ok, err = util.copcall(target, unpack(args))
 		end
-		assert(ok,
-		       "Failed to execute " .. (type(c.target) == "function" and "function" or c.target.type or "unknown") ..
-		       " dispatcher target for entry '/" .. table.concat(request, "/") .. "'.\n" ..
-		       "The called action terminated with an exception:\n" .. tostring(err or "(unknown)"))
+		if not ok then
+			error500("Failed to execute " .. (type(c.target) == "function" and "function" or c.target.type or "unknown") ..
+			         " dispatcher target for entry '/" .. table.concat(request, "/") .. "'.\n" ..
+			         "The called action terminated with an exception:\n" .. tostring(err or "(unknown)"))
+		end
 	else
 		local root = node()
 		if not root or not root.target then
@@ -701,15 +703,22 @@ function _create_node(path)
 		local last = table.remove(path)
 		local parent = _create_node(path)
 
-		c = {nodes={}, auto=true}
-		-- the node is "in request" if the request path matches
-		-- at least up to the length of the node path
-		if parent.inreq and context.path[#path+1] == last then
-		  c.inreq = true
+		c = {nodes={}, auto=true, inreq=true}
+
+		local _, n
+		for _, n in ipairs(path) do
+			if context.path[_] ~= n then
+				c.inreq = false
+				break
+			end
 		end
+
+		c.inreq = c.inreq and (context.path[#path + 1] == last)
+
 		parent.nodes[last] = c
 		context.treecache[name] = c
 	end
+
 	return c
 end
 
@@ -884,6 +893,8 @@ local function _cbi(self, ...)
 	local pageaction = true
 	local parsechain = { }
 
+	local is_rollback, time_remaining = uci:rollback_pending()
+
 	for i, res in ipairs(maps) do
 		if res.apply_needed and res.parsechain then
 			local c
@@ -911,6 +922,7 @@ local function _cbi(self, ...)
 		res:render({
 			firstmap   = (i == 1),
 			applymap   = applymap,
+			confirmmap = (is_rollback and time_remaining or nil),
 			redirect   = redirect,
 			messages   = messages,
 			pageaction = pageaction,

@@ -100,6 +100,8 @@ end
 -- Scope manipulation routines
 --
 
+coxpt = setmetatable({}, { __mode = "kv" })
+
 local tl_meta = {
 	__mode = "k",
 
@@ -697,73 +699,69 @@ function checklib(fullpathexe, wantedlib)
 	return false
 end
 
+-------------------------------------------------------------------------------
+-- Coroutine safe xpcall and pcall versions
 --
--- Coroutine safe xpcall and pcall versions modified for Luci
--- original version:
--- coxpcall 1.13 - Copyright 2005 - Kepler Project (www.keplerproject.org)
+-- Encapsulates the protected calls with a coroutine based loop, so errors can
+-- be dealed without the usual Lua 5.x pcall/xpcall issues with coroutines
+-- yielding inside the call to pcall or xpcall.
 --
--- Copyright © 2005 Kepler Project.
--- Permission is hereby granted, free of charge, to any person obtaining a
--- copy of this software and associated documentation files (the "Software"),
--- to deal in the Software without restriction, including without limitation
--- the rights to use, copy, modify, merge, publish, distribute, sublicense,
--- and/or sell copies of the Software, and to permit persons to whom the
--- Software is furnished to do so, subject to the following conditions:
+-- Authors: Roberto Ierusalimschy and Andre Carregal
+-- Contributors: Thomas Harning Jr., Ignacio Burgueño, Fabio Mascarenhas
 --
--- The above copyright notice and this permission notice shall be
--- included in all copies or substantial portions of the Software.
+-- Copyright 2005 - Kepler Project
 --
--- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
--- EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
--- OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
--- IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
--- DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
--- TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
--- OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+-- $Id: coxpcall.lua,v 1.13 2008/05/19 19:20:02 mascarenhas Exp $
+-------------------------------------------------------------------------------
 
-local performResume, handleReturnValue
-local oldpcall, oldxpcall = pcall, xpcall
-coxpt = {}
-setmetatable(coxpt, {__mode = "kv"})
+-------------------------------------------------------------------------------
+-- Implements xpcall with coroutines
+-------------------------------------------------------------------------------
+local coromap = setmetatable({}, { __mode = "k" })
 
--- Identity function for copcall
-local function copcall_id(trace, ...)
-  return ...
-end
-
---				values of either the function or the error handler
-function coxpcall(f, err, ...)
-	local res, co = oldpcall(coroutine.create, f)
-	if not res then
-		local params = {...}
-		local newf = function() return f(unpack(params)) end
-		co = coroutine.create(newf)
-	end
-	local c = coroutine.running()
-	coxpt[co] = coxpt[c] or c or 0
-
-	return performResume(err, co, ...)
-end
-
---				values of the function or the error object
-function copcall(f, ...)
-	return coxpcall(f, copcall_id, ...)
-end
-
--- Handle return value of protected call
-function handleReturnValue(err, co, status, ...)
+local function handleReturnValue(err, co, status, ...)
 	if not status then
 		return false, err(debug.traceback(co, (...)), ...)
 	end
-
-	if coroutine.status(co) ~= 'suspended' then
+	if coroutine.status(co) == 'suspended' then
+		return performResume(err, co, coroutine.yield(...))
+	else
 		return true, ...
 	end
-
-	return performResume(err, co, coroutine.yield(...))
 end
 
--- Resume execution of protected function call
 function performResume(err, co, ...)
 	return handleReturnValue(err, co, coroutine.resume(co, ...))
+end
+
+local function id(trace, ...)
+	return trace
+end
+
+function coxpcall(f, err, ...)
+	local current = coroutine.running()
+	if not current then
+		if err == id then
+			return pcall(f, ...)
+		else
+			if select("#", ...) > 0 then
+				local oldf, params = f, { ... }
+				f = function() return oldf(unpack(params)) end
+			end
+			return xpcall(f, err)
+		end
+	else
+		local res, co = pcall(coroutine.create, f)
+		if not res then
+			local newf = function(...) return f(...) end
+			co = coroutine.create(newf)
+		end
+		coromap[co] = current
+		coxpt[co] = coxpt[current] or current or 0
+		return performResume(err, co, ...)
+	end
+end
+
+function copcall(f, ...)
+	return coxpcall(f, id, ...)
 end

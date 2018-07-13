@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2012-12-29 12:53+0200\n"
+"PO-Revision-Date: 2018-07-01 23:45+0300\n"
 "Last-Translator: Yurii <yuripet@gmail.com>\n"
 "Language-Team: none\n"
 "Language: uk\n"
@@ -10,7 +10,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
 "10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Pootle 2.0.6\n"
 
 msgid "%s in %s"
 msgstr "%s у %s"
@@ -22,13 +21,13 @@ msgid "%s, %s in %s"
 msgstr "%s, %s у %s"
 
 msgid "(Unnamed Entry)"
-msgstr "(Запис без імені)"
+msgstr "(Запис без назви)"
 
 msgid "(Unnamed Rule)"
-msgstr "(Правило без імені)"
+msgstr "(Правило без назви)"
 
 msgid "(Unnamed SNAT)"
-msgstr "(SNAT без імені)"
+msgstr "(SNAT без назви)"
 
 msgid "<var>%d</var> pkts. per <var>%s</var>"
 msgstr "<var>%d</var> пакетів за <var>%s</var>"
@@ -40,10 +39,13 @@ msgid "<var>%s</var> and limit to %s"
 msgstr "<var>%s</var> з лімітом %s"
 
 msgid "Accept forward"
-msgstr ""
+msgstr "Приймати переспрямовування"
 
 msgid "Accept input"
-msgstr ""
+msgstr "Приймати вхідний"
+
+msgid "Accept output"
+msgstr "Приймати вихідний"
 
 msgid "Action"
 msgstr "Дія"
@@ -58,10 +60,10 @@ msgid "Advanced Settings"
 msgstr "Розширені настройки"
 
 msgid "Allow forward from <em>source zones</em>:"
-msgstr "Дозволити спрямовування від <em>зон-джерел</em>:"
+msgstr "Дозволити переспрямовування від <em>зон джерела</em>:"
 
 msgid "Allow forward to <em>destination zones</em>:"
-msgstr "Дозволити спрямовування до <em>зон призначення</em>:"
+msgstr "Дозволити переспрямовування до <em>зон призначення</em>:"
 
 msgid "Any"
 msgstr "Будь-який"
@@ -95,22 +97,28 @@ msgid "Destination zone"
 msgstr "Зона призначення"
 
 msgid "Disable"
-msgstr ""
+msgstr "Вимкнути"
 
 msgid "Discard forward"
-msgstr ""
+msgstr "Відкидати переспрямовування"
 
 msgid "Discard input"
-msgstr ""
+msgstr "Відкидати вхідний"
+
+msgid "Discard output"
+msgstr "Відкидати вихідний"
 
 msgid "Do not rewrite"
 msgstr "Не перезаписувати"
 
 msgid "Do not track forward"
-msgstr ""
+msgstr "Не відслідковувати переспрямовування"
 
 msgid "Do not track input"
-msgstr ""
+msgstr "Не відслідковувати вхідний"
+
+msgid "Do not track output"
+msgstr "Не відслідковувати вихідний"
 
 msgid "Drop invalid packets"
 msgstr "Відкидати помилкові пакети"
@@ -149,7 +157,7 @@ msgid "Firewall - Custom Rules"
 msgstr "Брандмауер — Настроювані правила"
 
 msgid "Firewall - Port Forwards"
-msgstr "Брандмауер — Спрямовування портів"
+msgstr "Брандмауер — Переспрямовування портів"
 
 msgid "Firewall - Traffic Rules"
 msgstr "Брандмауер — Правила трафіка"
@@ -161,22 +169,31 @@ msgid "Force connection tracking"
 msgstr "Увімкнути відстеження з'єднань"
 
 msgid "Forward"
-msgstr "Спрямовування"
+msgstr "Переспрямовування"
 
 msgid "Forward to"
-msgstr "спрямовування до"
+msgstr "переспрямовування до"
 
 msgid "Friday"
-msgstr ""
+msgstr "П'ятниця"
 
 msgid "From %s in %s"
 msgstr "%s у %s"
 
 msgid "From %s in %s with source %s"
-msgstr "%s у %s з вихідним %s"
+msgstr "%s у %s з джерелом %s"
 
 msgid "From %s in %s with source %s and %s"
-msgstr "%s у %s з вихідним %s та %s"
+msgstr "%s у %s з джерелом %s та %s"
+
+msgid "From %s on <var>this device</var>"
+msgstr "Від %s на <var>цьому пристрої</var>"
+
+msgid "From %s on <var>this device</var> with source %s"
+msgstr "Від %s на <var>цьому пристрої</var> з джерелом %s"
+
+msgid "From %s on <var>this device</var> with source %s and %s"
+msgstr "Від %s на <var>цьому пристрої</var> з джерелом %s та %s"
 
 msgid "General Settings"
 msgstr "Загальні настройки"
@@ -185,13 +202,13 @@ msgid "Hardware flow offloading"
 msgstr ""
 
 msgid "IP"
-msgstr ""
+msgstr "IP-адреса"
 
 msgid "IP range"
-msgstr ""
+msgstr "Діапазон IP"
 
 msgid "IPs"
-msgstr ""
+msgstr "IP-адреси"
 
 msgid "IPv4"
 msgstr "IPv4"
@@ -212,7 +229,7 @@ msgid "Input"
 msgstr "Вхідний"
 
 msgid "Inter-Zone Forwarding"
-msgstr "Спрямовування крізь зони"
+msgstr "Переспрямовування між зонами"
 
 msgid "Internal IP address"
 msgstr "Внутрішня IP-адреса"
@@ -227,10 +244,10 @@ msgid "Limit log messages"
 msgstr "Обмеження повідомлень журналу"
 
 msgid "MAC"
-msgstr ""
+msgstr "MAC-адреса"
 
 msgid "MACs"
-msgstr ""
+msgstr "MAC-адреси"
 
 msgid "MSS clamping"
 msgstr "Затискання MSS"
@@ -246,8 +263,8 @@ msgstr "Зіставляти ICMP типу"
 
 msgid "Match forwarded traffic to the given destination port or port range."
 msgstr ""
-"Зіставляти трафік, що спрямовується на заданий порт призначення або діапазон "
-"портів."
+"Зіставляти трафік, що переспрямовується на заданий порт призначення або "
+"діапазон портів."
 
 msgid ""
 "Match incoming traffic directed at the given destination port or port range "
@@ -264,10 +281,10 @@ msgstr ""
 "діапазоні портів вузла клієнта."
 
 msgid "Monday"
-msgstr ""
+msgstr "Понеділок"
 
 msgid "Month Days"
-msgstr ""
+msgstr "Дні місяця"
 
 msgid "Name"
 msgstr "Ім'я"
@@ -276,13 +293,13 @@ msgid "New SNAT rule"
 msgstr "Нове правило SNAT"
 
 msgid "New forward rule"
-msgstr "Нове правило спрямовування"
+msgstr "Нове правило переспрямовування"
 
 msgid "New input rule"
 msgstr "Нове вхідне правило"
 
 msgid "New port forward"
-msgstr "Нове спрямовування порту"
+msgstr "Нове переспрямовування порту"
 
 msgid "New source NAT"
 msgstr "Новий NAT джерела"
@@ -312,18 +329,21 @@ msgstr "Інше..."
 msgid "Output"
 msgstr "Вихідний"
 
+msgid "Output zone"
+msgstr "Вихідна зона"
+
 msgid "Passes additional arguments to iptables. Use with care!"
 msgstr ""
 "Передача додаткових аргументів для IPTables. Використовуйте з обережністю!"
 
 msgid "Port Forwards"
-msgstr "Спрямовування портів"
+msgstr "Переспрямовування портів"
 
 msgid ""
 "Port forwarding allows remote computers on the Internet to connect to a "
 "specific computer or service within the private LAN."
 msgstr ""
-"Спрямовування портів дозволяє віддаленим комп'ютерам з Інтернету "
+"Переспрямовування портів дозволяє віддаленим комп'ютерам з Інтернету "
 "підключатися до певного комп'ютера або служби у приватній мережі."
 
 msgid "Protocol"
@@ -338,22 +358,28 @@ msgid "Redirect matched incoming traffic to the specified internal host"
 msgstr "Переспрямувати відповідний вхідний трафік на заданий внутрішній вузол"
 
 msgid "Refuse forward"
-msgstr ""
+msgstr "Відхиляти переспрямовування"
 
 msgid "Refuse input"
-msgstr ""
+msgstr "Відхиляти вхідний"
+
+msgid "Refuse output"
+msgstr "Відхиляти вихідний"
+
+msgid "Requires hardware NAT support. Implemented at least for mt7621"
+msgstr "Необхідна апаратна підтримка NAT. Впроваджено принаймні для mt7621"
 
 msgid "Requires hardware NAT support. Implemented at least for mt7621"
 msgstr ""
 
 msgid "Restart Firewall"
-msgstr ""
+msgstr "Перезавантажити брандмауер"
 
 msgid "Restrict Masquerading to given destination subnets"
 msgstr "Обмежити підміну заданими підмережами призначення"
 
 msgid "Restrict Masquerading to given source subnets"
-msgstr "Обмежити підміну заданими вихідними підмережами"
+msgstr "Обмежити підміну заданими підмережами джерела"
 
 msgid "Restrict to address family"
 msgstr "Обмежити сімейство протоколів"
@@ -369,19 +395,22 @@ msgstr ""
 "порожнім, щоб переписувати тільки IP-адресу."
 
 msgid "Rewrite to source %s"
-msgstr "перезапис на вихідний %s"
+msgstr "перезапис на джерело %s"
 
 msgid "Rewrite to source %s, %s"
-msgstr "перезапис на вихідний %s, %s"
+msgstr "перезапис на джерело %s, %s"
+
+msgid "Routing/NAT Offloading"
+msgstr "Розвантаження маршрутизації/NAT"
 
 msgid "Routing/NAT Offloading"
 msgstr ""
 
 msgid "Rule is disabled"
-msgstr ""
+msgstr "Правило вимкнено"
 
 msgid "Rule is enabled"
-msgstr ""
+msgstr "Правило ввімкнено"
 
 msgid "SNAT IP address"
 msgstr "IP-адреса SNAT"
@@ -390,7 +419,13 @@ msgid "SNAT port"
 msgstr "Порт SNAT"
 
 msgid "Saturday"
-msgstr ""
+msgstr "Субота"
+
+msgid "Software based offloading for routing/NAT"
+msgstr "Програмне розвантаження для маршрутизації/NAT"
+
+msgid "Software flow offloading"
+msgstr "Програмне розвантаження потоку"
 
 msgid "Software based offloading for routing/NAT"
 msgstr ""
@@ -423,22 +458,22 @@ msgid "Source port"
 msgstr "Порт джерела"
 
 msgid "Source zone"
-msgstr "Зона-джерело"
+msgstr "Зона джерела"
 
 msgid "Start Date (yyyy-mm-dd)"
-msgstr ""
+msgstr "Дата початку (рррр-мм-дд)"
 
 msgid "Start Time (hh:mm:ss)"
-msgstr ""
+msgstr "Час початку (гг:хх:сс)"
 
 msgid "Stop Date (yyyy-mm-dd)"
-msgstr ""
+msgstr "Дата зупинки (рррр-мм-дд)"
 
 msgid "Stop Time (hh:mm:ss)"
-msgstr ""
+msgstr "Час зупинки (гг:хх:сс)"
 
 msgid "Sunday"
-msgstr ""
+msgstr "Неділя"
 
 msgid ""
 "The firewall creates zones over your network interfaces to control network "
@@ -455,19 +490,21 @@ msgid ""
 "rule is <em>unidirectional</em>, e.g. a forward from lan to wan does "
 "<em>not</em> imply a permission to forward from wan to lan as well."
 msgstr ""
-"Опції, наведені нижче, управляють політиками спрямовування між цією (%s) та "
-"іншими зонами. <em>Зони призначення</em> покриваються трафіком, що "
-"<strong>виходить з %q</strong>. <em>Зони-джерела</em> покриваються трафіком "
-"з інших зон, <strong>спрямованим на %q</strong>. Правила спрямування є "
-"<em>односпрямованим</em>, тобто, спрямування від LAN до WAN <em>не</em> "
-"означає, що є також дозвіл спрямовувати від WAN в LAN."
+"Опції, наведені нижче, керують політиками переспрямовування між цією (%s) та "
+"іншими зонами. <em>Зони призначення</em> покриваються переспрямованим "
+"трафіком, що <strong>виходить з %q</strong>. <em>Зони джерела</em> "
+"покриваються трафіком з інших зон, <strong>переспрямованим на %q</strong>. "
+"Правило переспрямовування є <em>односпрямованим</em>, тобто, спрямовування "
+"від LAN до WAN <em>не</em> означає, що є також дозвіл спрямовувати від WAN "
+"до LAN."
 
 msgid ""
 "This page allows you to change advanced properties of the port forwarding "
 "entry. In most cases there is no need to modify those settings."
 msgstr ""
-"На цій сторінці можна змінити додаткові властивості елемента спрямовування "
-"портів. У більшості випадків змінювати ці параметри немає необхідності."
+"На цій сторінці можна змінити додаткові властивості елемента "
+"переспрямовування портів. У більшості випадків змінювати ці параметри немає "
+"потреби."
 
 msgid ""
 "This page allows you to change advanced properties of the traffic rule "
@@ -476,7 +513,6 @@ msgstr ""
 "На цій сторінці можна змінити додаткові властивості елемента правил трафіка, "
 "таких як відповідні параметри джерела та вузлів призначення."
 
-#, fuzzy
 msgid ""
 "This section defines common properties of %q. The <em>input</em> and "
 "<em>output</em> options set the default policies for traffic entering and "
@@ -486,15 +522,15 @@ msgid ""
 msgstr ""
 "Цей розділ визначає загальні властивості %q. Параметри <em>вхідний</em> і "
 "<em>вихідний</em> задають типову політику для трафіку на вході й виході з "
-"цієї зони, а параметр \"спрямовування\" описує політику спрямовування "
-"трафіку між різними мережами в межах зони. Пункт <em>вкриті мережі</em> "
+"цієї зони, а параметр \"переспрямовування\" описує політику спрямовування "
+"трафіку між різними мережами в межах зони. Пункт <em>Покриті мережі</em> "
 "визначає, які доступні мережі є членами цієї зони."
 
 msgid "Thursday"
-msgstr ""
+msgstr "Четвер"
 
 msgid "Time in UTC"
-msgstr ""
+msgstr "Час в UTC"
 
 msgid "To %s at %s on <var>this device</var>"
 msgstr "%s на %s <var>цього пристрою</var>"
@@ -527,7 +563,16 @@ msgstr ""
 "порти WAN на маршрутизаторі."
 
 msgid "Tuesday"
-msgstr ""
+msgstr "Вівторок"
+
+msgid "Unnamed SNAT"
+msgstr "SNAT без назви"
+
+msgid "Unnamed forward"
+msgstr "Переспрямовування без назви"
+
+msgid "Unnamed rule"
+msgstr "Правило без назви"
 
 msgid "Via %s"
 msgstr "Через %s"
@@ -536,10 +581,10 @@ msgid "Via %s at %s"
 msgstr "Через %s на %s"
 
 msgid "Wednesday"
-msgstr ""
+msgstr "Середа"
 
 msgid "Week Days"
-msgstr ""
+msgstr "Дні тижня"
 
 msgid ""
 "You may specify multiple by selecting \"-- custom --\" and then entering "
@@ -552,7 +597,7 @@ msgid "Zone %q"
 msgstr "Зона %q"
 
 msgid "Zone ⇒ Forwardings"
-msgstr "Зона ⇒ Спрямовування"
+msgstr "Зона ⇒ Переспрямовування"
 
 msgid "Zones"
 msgstr "Зони"
@@ -573,7 +618,7 @@ msgid "any zone"
 msgstr "будь-якій зоні"
 
 msgid "day"
-msgstr ""
+msgstr "день"
 
 msgid "don't track"
 msgstr "не відстеж."
@@ -582,31 +627,31 @@ msgid "drop"
 msgstr "опускати"
 
 msgid "hour"
-msgstr ""
+msgstr "година"
 
 msgid "minute"
-msgstr ""
+msgstr "хвилина"
 
 msgid "not"
-msgstr ""
+msgstr "не"
 
 msgid "port"
-msgstr ""
+msgstr "порт"
 
 msgid "ports"
-msgstr ""
+msgstr "порти"
 
 msgid "reject"
 msgstr "відкидати"
 
 msgid "second"
-msgstr ""
+msgstr "секунда"
 
 msgid "traffic"
-msgstr ""
+msgstr "трафік"
 
 msgid "type"
-msgstr ""
+msgstr "типом"
 
 msgid "types"
-msgstr ""
+msgstr "типами"
