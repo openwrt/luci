@@ -692,6 +692,7 @@ table td, table th {
 	width: auto;
 	margin-left: 0;
 	align-self: center;
+	vertical-align: middle;
 }
 
 .cbi-value-description {
@@ -791,6 +792,13 @@ div.cbi-optionals {
 
 .th.cbi-section-actions,
 .td.cbi-section-actions {
+	overflow: visible;
+	align-self: center;
+	vertical-align: middle;
+}
+
+.th.cbi-section-actions > *,
+.td.cbi-section-actions > * {
 	display: flex;
 	justify-content: flex-end;
 	flex-direction: row;
@@ -798,14 +806,15 @@ div.cbi-optionals {
 	margin: auto -1px auto auto;
 }
 
-.td.cbi-section-actions > form {
-	display: flex;
+.td.cbi-section-actions > * > *,
+.td.cbi-section-actions > * > form > * {
+	flex: 1 1 4em;
+	margin: 0 1px;
 }
 
-.td.cbi-section-actions > *,
-.td.cbi-section-actions > form > * {
-	flex: 1 1 4em;
-	margin: 1px;
+.td.cbi-section-actions > * > form {
+	display: flex;
+	margin: 0;
 }
 
 .cbi-page-actions {
@@ -868,12 +877,13 @@ div.cbi-optionals {
 	content: attr(data-title) "\20";
 	font-weight: bold;
 	text-align: left;
-	display: inline-block;
+	display: table-cell;
 	align-self: center;
 	flex: 1 1 5%;
 	padding: .25em;
 	white-space: normal;
 	word-wrap: break-word;
+	vertical-align: middle;
 }
 
 .cbi-value-helpicon img {
@@ -1167,29 +1177,17 @@ ul.cbi-tabmenu li.cbi-tab {
 }
 
 
-.left, .left::before {
-	text-align: left !important;
-}
+.left, .left::before { text-align: left !important; }
+.right, .right::before { text-align: right !important; }
+.center, .center::before { text-align: center !important; }
 
-.right, .right::before {
-	text-align: right !important;
-}
+.top, .top::before { vertical-align: top !important; }
+.middle, .middle::before { vertical-align: middle !important; }
+.bottom, .bottom::before { vertical-align: bottom !important; }
 
-.center, .center::before {
-	text-align: center !important;
-}
-
-.td.bottom {
-	align-self: flex-end;
-}
-
-.td.top {
-	align-self: flex-start;
-}
-
-.td.middle {
-	align-self: center;
-}
+.td.top { align-self: flex-start; vertical-align: top; }
+.td.middle { align-self: center; vertical-align: middle; }
+.td.bottom { align-self: flex-end; vertical-align: bottom; }
 
 .luci {
 	position: absolute;
@@ -1228,7 +1226,6 @@ ul.cbi-tabmenu li.cbi-tab {
 	border-radius: 3px;
 	padding: 2px;
 	background: #fff;
-	margin: .25em .5em;
 }
 
 .ifacebox-head {
@@ -1280,7 +1277,7 @@ ul.cbi-tabmenu li.cbi-tab {
 .network-status-table {
 	display: flex;
 	flex-wrap: wrap;
-	margin: -.25em;
+	margin: -.25em -.25em .25em -.25em;
 }
 
 .network-status-table .ifacebox {
@@ -1293,6 +1290,7 @@ ul.cbi-tabmenu li.cbi-tab {
 	display: flex;
 	flex-direction: column;
 	flex: 1 0 auto;
+	padding: .5em;
 }
 
 .network-status-table .ifacebox-body > span {
@@ -1308,10 +1306,13 @@ ul.cbi-tabmenu li.cbi-tab {
 .network-status-table .ifacebox-body .ifacebadge {
 	flex: 1;
 	-webkit-flex: 1 1 auto;
-	margin: .5em .25em .25em .25em;
 	padding: .5em;
 	min-width: 220px;
 	white-space: nowrap;
+}
+
+.network-status-table .ifacebox-body .ifacebadge {
+	margin: .5em 0 0 0;
 }
 
 
@@ -1599,15 +1600,8 @@ ul.cbi-tabmenu li.cbi-tab {
 		display: block;
 	}
 
-	.td.cbi-section-actions {
-		flex-basis: 100%;
-		margin: auto -1px 0 auto;
-	}
-
-	.td.cbi-section-actions > *,
-	.td.cbi-section-actions > form > * {
-		flex: 0 1 100%;
-		max-width: 150px;
+	.td[data-title] ~ .td.cbi-section-actions {
+		align-self: flex-end;
 	}
 
 	.hide-sm,
