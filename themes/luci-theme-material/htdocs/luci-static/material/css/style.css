@@ -652,11 +652,13 @@ td > table > tbody > tr > td,
 .btn:active,
 .cbi-button:hover,
 .cbi-button:focus,
-.cbi-button:active {
-    color: rgba(0, 0, 0, 0.87);
+.cbi-button:active,
+.cbi-page-actions .cbi-button-apply + .cbi-button-save:hover,
+.cbi-page-actions .cbi-button-apply + .cbi-button-save:focus,
+.cbi-page-actions .cbi-button-apply + .cbi-button-save:active {
     outline: 0;
     text-decoration: none;
-    color: rgba(0, 0, 0, 0.87);
+    background-color: rgba(250, 250, 250, 0.7);
 }
 
 .btn:hover,
@@ -679,45 +681,69 @@ td > table > tbody > tr > td,
     box-shadow: none;
 }
 
-.btn + .btn,
-form.inline + form.inline,
-.cbi-button + .cbi-button {
-    margin-left: 0.6rem;
+.cbi-page-actions .cbi-button-apply,
+.cbi-section-actions .cbi-button-edit,
+.cbi-button-edit.important,
+.cbi-button-apply.important,
+.cbi-button-reload.important,
+.cbi-button-action.important {
+    color: #fff;
+    background-color: #337ab7;
 }
 
-.cbi-button-reset,
-.cbi-input-remove {
-    color: #fff !important;
-    background-color: #f0ad4e !important;
-    border-color: #eea236 !important;
+.cbi-page-actions .cbi-button-save,
+.cbi-button-add.important,
+.cbi-button-save.important,
+.cbi-button-positive.important {
+    color: #fff;
+    background-color: #5bc0de;
 }
 
-.cbi-input-find,
-.cbi-input-save,
+.cbi-button-remove.important,
+.cbi-button-reset.important,
+.cbi-button-negative.important {
+    color: #fff;
+    background-color: #d9534f;
+}
+
+.cbi-button-find,
+.cbi-button-link,
+.cbi-button-up,
+.cbi-button-down,
+.cbi-button-neutral {
+    border: 1px solid #bfbfbf;
+    background-color: transparent;
+}
+
+.cbi-button-edit,
+.cbi-button-apply,
+.cbi-button-reload,
+.cbi-button-action {
+    color: #2e6da4;
+    border: 1px solid #2e6da4;
+    background-color: transparent;
+}
+
+.cbi-page-actions .cbi-button-apply + .cbi-button-save,
 .cbi-button-add,
 .cbi-button-save,
-.cbi-button-find,
-.cbi-input-reload,
-.cbi-button-reload {
-    color: #fff !important;
-    background-color: #337ab7 !important;
-    border-color: #2e6da4 !important;
+.cbi-button-positive {
+    color: #46b8da;
+    border: 1px solid #46b8da;
+    background-color: transparent;
 }
 
-.cbi-input-apply,
-.cbi-button-apply,
-.cbi-button-edit {
-    color: #fff !important;
-    background-color: #5bc0de !important;
-    border-color: #46b8da !important;
-}
-
-.cbi-input-reset,
 .cbi-section-remove > .cbi-button,
-.cbi-button-remove {
-    color: #fff !important;
-    background-color: #d9534f !important;
-    border-color: #d43f3a !important;
+.cbi-button-remove,
+.cbi-button-reset,
+.cbi-button-negative {
+    color: #d43f3a;
+    border: 1px solid #d43f3a;
+    background-color: transparent;
+}
+
+.cbi-page-actions .cbi-button-link:first-child {
+    float: left;
 }
 
 .a-to-btn {
@@ -864,6 +890,10 @@ form.inline + form.inline,
     vertical-align: middle;
 }
 
+.cbi-rowstyle-1 {
+    background-color: #f9f9f9;
+}
+
 .cbi-rowstyle-2 {
     background-color: #eee;
 }
@@ -875,6 +905,26 @@ form.inline + form.inline,
 
 .cbi-section-table .cbi-section-table-titles .cbi-section-table-cell {
     width: auto !important;
+}
+
+.td.cbi-section-actions {
+    text-align: right;
+    vertical-align: middle;
+}
+
+.td.cbi-section-actions > * {
+    display: flex;
+}
+
+.td.cbi-section-actions > * > *,
+.td.cbi-section-actions > * > form > * {
+    flex: 1 1 4em;
+    margin: 0 1px;
+}
+
+.td.cbi-section-actions > * > form {
+    display: inline-flex;
+    margin: 0;
 }
 
 /* desc */
@@ -1277,7 +1327,8 @@ td > .ifacebadge,
 }
 
 .ifacebox {
-    border: 1px solid #999;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 1px 2px rgba(0, 0, 0, 0.2);
+    border-bottom: 1px solid #ccc;
     background-color: #f9f9f9;
     display: inline-flex;
     flex-direction: column;
