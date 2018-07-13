@@ -299,9 +299,9 @@
 						var is_assoc = (net.bssid != '00:00:00:00:00:00' && net.channel && !net.disabled);
 
 						var icon;
-						if (!is_assoc)
+						if (net.disabled)
 							icon = "<%=resource%>/icons/signal-none.png";
-						else if (net.quality == 0)
+						else if (net.quality <= 0)
 							icon = "<%=resource%>/icons/signal-0.png";
 						else if (net.quality < 25)
 							icon = "<%=resource%>/icons/signal-0-25.png";
@@ -320,7 +320,7 @@
 							'<%:BSSID%>', is_assoc ? (net.bssid || '-') : null,
 							'<%:Encryption%>', is_assoc ? net.encryption : null,
 							'<%:Associations%>', is_assoc ? (net.num_assoc || '-') : null,
-							null, is_assoc ? null : E('em', '<%:Wireless is disabled or not associated%>')));
+							null, is_assoc ? null : E('em', net.disabled ? '<%:Wireless is disabled%>' : '<%:Wireless is not associated%>')));
 					}
 
 					ws.appendChild(renderBox(

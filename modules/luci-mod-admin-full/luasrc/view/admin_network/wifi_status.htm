@@ -8,7 +8,7 @@
 			{
 				var is_assoc = (iw.bssid && iw.bssid != '00:00:00:00:00:00' && iw.channel && !iw.disabled);
 				var p = iw.quality;
-				var q = is_assoc ? p : -1;
+				var q = iw.disabled ? -1 : p;
 
 				var icon;
 				if (q < 0)
@@ -55,8 +55,10 @@
 					info.innerHTML = String.format(
 						'<strong><%:SSID%>:</strong> %h | ' +
 						'<strong><%:Mode%>:</strong> %s<br />' +
-						'<em><%:Wireless is disabled or not associated%></em>',
-							iw.ssid || '?', iw.mode
+						'<em>%s</em>',
+							iw.ssid || '?', iw.mode,
+							iw.disabled ? '<em><%:Wireless is disabled%></em>'
+							            : '<em><%:Wireless is not associated%></em>'
 					);
 			}
 		}
