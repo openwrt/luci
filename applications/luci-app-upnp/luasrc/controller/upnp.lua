@@ -21,6 +21,8 @@ end
 function act_status()
 	local uci = luci.model.uci.cursor()
 	local lease_file = uci:get("upnpd", "config", "upnp_lease_file")
+	
+	local ipv4_hints = luci.sys.net.ipv4_hints()
 
 	local ipt = io.popen("iptables --line-numbers -t nat -xnvL MINIUPNPD 2>/dev/null")
 	if ipt then
@@ -45,12 +47,22 @@ function act_status()
 						if uln then descr = uln:match(string.format("^%s:%d:%s:%d:%%d*:(.*)$", proto:upper(), extport, intaddr, intport)) end
 						if not descr then descr = "" end
 					end
+		
+					local host_hint, _, e
+					
+					for _,e in pairs(ipv4_hints) do
+						if e[1] == intaddr then
+							host_hint = e[2]
+							break
+						end
+					end
 
 					fwd[#fwd+1] = {
 						num     = num,
 						proto   = proto:upper(),
 						extport = extport,
 						intaddr = intaddr,
+						host_hint = host_hint,
 						intport = intport,
 						descr = descr
 					}
