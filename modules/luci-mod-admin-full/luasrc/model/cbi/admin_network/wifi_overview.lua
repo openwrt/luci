@@ -69,26 +69,28 @@ local tpl_radio = tpl.Template(nil, [[
 		<div class="table">
 			<!-- physical device -->
 			<div class="tr cbi-rowstyle-2">
-				<div class="td col-2 center">
+				<div class="td col-2 center middle">
 					<span class="ifacebadge"><img src="<%=resource%>/icons/wifi_toggled.png" id="<%=dev:name()%>-iw-upstate" /> <%=dev:name()%></span>
 				</div>
-				<div class="td col-7 left">
+				<div class="td col-7 left middle">
 					<big><strong><%=hw%></strong></big><br />
 					<span id="<%=dev:name()%>-iw-devinfo"></span>
 				</div>
-				<div class="td cbi-section-actions">
-					<input type="button" class="cbi-button cbi-button-neutral" title="<%:Restart radio interface%>" value="<%:Restart%>" onclick="wifi_restart(event)" data-radio="<%=dev:name()%>" />
+				<div class="td middle cbi-section-actions">
+					<div>
+						<input type="button" class="cbi-button cbi-button-neutral" title="<%:Restart radio interface%>" value="<%:Restart%>" onclick="wifi_restart(event)" data-radio="<%=dev:name()%>" />
 
-					<form action="<%=url('admin/network/wireless_join')%>" method="post" class="inline">
-						<input type="hidden" name="device" value="<%=dev:name()%>" />
-						<input type="hidden" name="token" value="<%=token%>" />
-						<input type="submit" class="cbi-button cbi-button-action important" title="<%:Find and join network%>" value="<%:Scan%>" />
-					</form>
-					<form action="<%=url('admin/network/wireless_add')%>" method="post" class="inline">
-						<input type="hidden" name="device" value="<%=dev:name()%>" />
-						<input type="hidden" name="token" value="<%=token%>" />
-						<input type="submit" class="cbi-button cbi-button-add" title="<%:Provide new network%>" value="<%:Add%>" />
-					</form>
+						<form action="<%=url('admin/network/wireless_join')%>" method="post" class="inline">
+							<input type="hidden" name="device" value="<%=dev:name()%>" />
+							<input type="hidden" name="token" value="<%=token%>" />
+							<input type="submit" class="cbi-button cbi-button-action important" title="<%:Find and join network%>" value="<%:Scan%>" />
+						</form>
+						<form action="<%=url('admin/network/wireless_add')%>" method="post" class="inline">
+							<input type="hidden" name="device" value="<%=dev:name()%>" />
+							<input type="hidden" name="token" value="<%=token%>" />
+							<input type="submit" class="cbi-button cbi-button-add" title="<%:Provide new network%>" value="<%:Add%>" />
+						</form>
+					</div>
 				</div>
 			</div>
 			<!-- /physical device -->
@@ -97,25 +99,27 @@ local tpl_radio = tpl.Template(nil, [[
 			<% if #wnets > 0 then %>
 				<% for i, net in ipairs(wnets) do local disabled = (dev:get("disabled") == "1" or net:get("disabled") == "1") %>
 				<div class="tr cbi-rowstyle-<%=1 + ((i-1) % 2)%>">
-					<div class="td col-2 center" id="<%=net:id()%>-iw-signal">
+					<div class="td col-2 center middle" id="<%=net:id()%>-iw-signal">
 						<span class="ifacebadge" title="<%:Not associated%>"><img src="<%=resource%>/icons/signal-<%= disabled and "none" or "0" %>.png" /> 0%</span>
 					</div>
-					<div class="td col-7 left" id="<%=net:id()%>-iw-status" data-network="<%=net:id()%>" data-disabled="<%= disabled and "true" or "false" %>">
+					<div class="td col-7 left middle" id="<%=net:id()%>-iw-status" data-network="<%=net:id()%>" data-disabled="<%= disabled and "true" or "false" %>">
 						<em><%= disabled and translate("Wireless is disabled") or translate("Collecting data...") %></em>
 					</div>
-					<div class="td cbi-section-actions">
-						<% if disabled then %>
-							<input name="cbid.wireless.<%=net:name()%>.__disable__" type="hidden" value="1" />
-							<input name="cbi.apply" type="submit" class="cbi-button cbi-button-neutral" title="<%:Enable this network%>" value="<%:Enable%>" onclick="this.previousElementSibling.value='0'" />
-						<% else %>
-							<input name="cbid.wireless.<%=net:name()%>.__disable__" type="hidden" value="0" />
-							<input name="cbi.apply" type="submit" class="cbi-button cbi-button-neutral" title="<%:Disable this network%>" value="<%:Disable%>" onclick="this.previousElementSibling.value='1'" />
-						<% end %>
+					<div class="td middle cbi-section-actions">
+						<div>
+							<% if disabled then %>
+								<input name="cbid.wireless.<%=net:name()%>.__disable__" type="hidden" value="1" />
+								<input name="cbi.apply" type="submit" class="cbi-button cbi-button-neutral" title="<%:Enable this network%>" value="<%:Enable%>" onclick="this.previousElementSibling.value='0'" />
+							<% else %>
+								<input name="cbid.wireless.<%=net:name()%>.__disable__" type="hidden" value="0" />
+								<input name="cbi.apply" type="submit" class="cbi-button cbi-button-neutral" title="<%:Disable this network%>" value="<%:Disable%>" onclick="this.previousElementSibling.value='1'" />
+							<% end %>
 
-						<input type="button" class="cbi-button cbi-button-action important" onclick="location.href='<%=net:adminlink()%>'" title="<%:Edit this network%>" value="<%:Edit%>" />
+							<input type="button" class="cbi-button cbi-button-action important" onclick="location.href='<%=net:adminlink()%>'" title="<%:Edit this network%>" value="<%:Edit%>" />
 
-						<input name="cbid.wireless.<%=net:name()%>.__delete__" type="hidden" value="" />
-						<input name="cbi.apply" type="submit" class="cbi-button cbi-button-negative" title="<%:Delete this network%>" value="<%:Remove%>" onclick="wifi_delete(event)" />
+							<input name="cbid.wireless.<%=net:name()%>.__delete__" type="hidden" value="" />
+							<input name="cbi.apply" type="submit" class="cbi-button cbi-button-negative" title="<%:Delete this network%>" value="<%:Remove%>" onclick="wifi_delete(event)" />
+						</div>
 					</div>
 				</div>
 				<% end %>
