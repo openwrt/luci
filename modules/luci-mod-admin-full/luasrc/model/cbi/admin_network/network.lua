@@ -38,31 +38,34 @@ local tpl_networks = tpl.Template(nil, [[
 							</div>
 						</div>
 					</div>
-					<div class="td col-5 left" id="<%=net[1]%>-ifc-description">
+					<div class="td col-5 left middle" id="<%=net[1]%>-ifc-description">
 						<em><%:Collecting data...%></em>
 					</div>
 					<div class="td cbi-section-actions">
-						<input type="button" class="cbi-button cbi-button-neutral" onclick="iface_reconnect('<%=net[1]%>')" title="<%:Reconnect this interface%>" value="<%:Restart%>"<%=ifattr(disabled or dynamic, "disabled", "disabled")%> />
+						<div>
+							<input type="button" class="cbi-button cbi-button-neutral" onclick="iface_reconnect('<%=net[1]%>')" title="<%:Reconnect this interface%>" value="<%:Restart%>"<%=ifattr(disabled or dynamic, "disabled", "disabled")%> />
 
-						<% if disabled then %>
-							<input type="hidden" name="cbid.network.<%=net[1]%>.__disable__" value="1" />
-							<input type="submit" name="cbi.apply" class="cbi-button cbi-button-neutral" onclick="this.previousElementSibling.value='0'" title="<%:Reconnect this interface%>" value="<%:Connect%>"<%=ifattr(dynamic, "disabled", "disabled")%> />
-						<% else %>
-							<input type="hidden" name="cbid.network.<%=net[1]%>.__disable__" value="0" />
-							<input type="submit" name="cbi.apply" class="cbi-button cbi-button-neutral" onclick="this.previousElementSibling.value='1'" title="<%:Shutdown this interface%>" value="<%:Stop%>"<%=ifattr(dynamic, "disabled", "disabled")%> />
-						<% end %>
+							<% if disabled then %>
+								<input type="hidden" name="cbid.network.<%=net[1]%>.__disable__" value="1" />
+								<input type="submit" name="cbi.apply" class="cbi-button cbi-button-neutral" onclick="this.previousElementSibling.value='0'" title="<%:Reconnect this interface%>" value="<%:Connect%>"<%=ifattr(dynamic, "disabled", "disabled")%> />
+							<% else %>
+								<input type="hidden" name="cbid.network.<%=net[1]%>.__disable__" value="0" />
+								<input type="submit" name="cbi.apply" class="cbi-button cbi-button-neutral" onclick="this.previousElementSibling.value='1'" title="<%:Shutdown this interface%>" value="<%:Stop%>"<%=ifattr(dynamic, "disabled", "disabled")%> />
+							<% end %>
 
-						<input type="button" class="cbi-button cbi-button-action important" onclick="location.href='<%=url("admin/network/network", net[1])%>'" title="<%:Edit this interface%>" value="<%:Edit%>" id="<%=net[1]%>-ifc-edit"<%=ifattr(dynamic, "disabled", "disabled")%> />
+							<input type="button" class="cbi-button cbi-button-action important" onclick="location.href='<%=url("admin/network/network", net[1])%>'" title="<%:Edit this interface%>" value="<%:Edit%>" id="<%=net[1]%>-ifc-edit"<%=ifattr(dynamic, "disabled", "disabled")%> />
 
-						<input type="hidden" name="cbid.network.<%=net[1]%>.__delete__" value="" />
-						<input type="submit" name="cbi.apply" class="cbi-button cbi-button-negative" onclick="iface_delete(event)" value="<%:Delete%>"<%=ifattr(dynamic, "disabled", "disabled")%> />
+							<input type="hidden" name="cbid.network.<%=net[1]%>.__delete__" value="" />
+							<input type="submit" name="cbi.apply" class="cbi-button cbi-button-negative" onclick="iface_delete(event)" value="<%:Delete%>"<%=ifattr(dynamic, "disabled", "disabled")%> />
+						</div>
 					</div>
 				</div>
 			<% end %>
 		</div>
 	</div>
-
-	<input type="button" class="cbi-button cbi-button-add" value="<%:Add new interface...%>" onclick="location.href='<%=url("admin/network/iface_add")%>'" />
+	<div class="cbi-section-create">
+		<input type="button" class="cbi-button cbi-button-add" value="<%:Add new interface...%>" onclick="location.href='<%=url("admin/network/iface_add")%>'" />
+	</div>
 ]])
 
 local _, net
