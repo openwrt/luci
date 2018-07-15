@@ -285,6 +285,7 @@ if not net:is_floating() then
 	ifname_single.template = "cbi/network_ifacelist"
 	ifname_single.widget = "radio"
 	ifname_single.nobridges = true
+	ifname_single.noaliases = false
 	ifname_single.rmempty = false
 	ifname_single.network = arg[1]
 	ifname_single:depends("type", "")
@@ -295,12 +296,18 @@ if not net:is_floating() then
 	end
 
 	function ifname_single.write(self, s, val)
-		local i
+		local _, i
 		local new_ifs = { }
 		local old_ifs = { }
 
-		for _, i in ipairs(net:get_interfaces() or { net:get_interface() }) do
-			old_ifs[#old_ifs+1] = i:name()
+		local alias = net:is_alias()
+
+		if alias then
+			old_ifs[1] = '@' .. alias
+		else
+			for _, i in ipairs(net:get_interfaces() or { net:get_interface() }) do
+				old_ifs[#old_ifs+1] = i:name()
+			end
 		end
 
 		for i in ut.imatch(val) do
@@ -335,6 +342,7 @@ if not net:is_virtual() then
 	ifname_multi = s:taboption("physical", Value, "ifname_multi", translate("Interface"))
 	ifname_multi.template = "cbi/network_ifacelist"
 	ifname_multi.nobridges = true
+	ifname_multi.noaliases = true
 	ifname_multi.rmempty = false
 	ifname_multi.network = arg[1]
 	ifname_multi.widget = "checkbox"
