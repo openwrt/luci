@@ -1348,7 +1348,9 @@ function interface.ip6addrs(self)
 end
 
 function interface.type(self)
-	if self.wif or _wifi_iface(self.ifname) then
+	if self.ifname and self.ifname:byte(1) == 64 then
+		return "alias"
+	elseif self.wif or _wifi_iface(self.ifname) then
 		return "wifi"
 	elseif _bridge[self.ifname] then
 		return "bridge"
@@ -1385,7 +1387,9 @@ end
 
 function interface.get_type_i18n(self)
 	local x = self:type()
-	if x == "wifi" then
+	if x == "alias" then
+		return lng.translate("Alias Interface")
+	elseif x == "wifi" then
 		return lng.translate("Wireless Adapter")
 	elseif x == "bridge" then
 		return lng.translate("Bridge")
@@ -1438,7 +1442,11 @@ function interface.bridge_stp(self)
 end
 
 function interface.is_up(self)
-	return self:_ubus("up") or false
+	local up = self:_ubus("up")
+	if up == nil then
+		up = (self:type() == "alias")
+	end
+	return up or false
 end
 
 function interface.is_bridge(self)
