@@ -78,18 +78,9 @@ local tpl_radio = tpl.Template(nil, [[
 				</div>
 				<div class="td middle cbi-section-actions">
 					<div>
-						<input type="button" class="cbi-button cbi-button-neutral" title="<%:Restart radio interface%>" value="<%:Restart%>" onclick="wifi_restart(event)" data-radio="<%=dev:name()%>" />
-
-						<form action="<%=url('admin/network/wireless_join')%>" method="post" class="inline">
-							<input type="hidden" name="device" value="<%=dev:name()%>" />
-							<input type="hidden" name="token" value="<%=token%>" />
-							<input type="submit" class="cbi-button cbi-button-action important" title="<%:Find and join network%>" value="<%:Scan%>" />
-						</form>
-						<form action="<%=url('admin/network/wireless_add')%>" method="post" class="inline">
-							<input type="hidden" name="device" value="<%=dev:name()%>" />
-							<input type="hidden" name="token" value="<%=token%>" />
-							<input type="submit" class="cbi-button cbi-button-add" title="<%:Provide new network%>" value="<%:Add%>" />
-						</form>
+						<input type="button" class="cbi-button cbi-button-neutral" title="<%:Restart radio interface%>" value="<%:Restart%>" data-radio="<%=dev:name()%>" onclick="wifi_restart(event)" />
+						<input type="submit" class="cbi-button cbi-button-action important" title="<%:Find and join network%>" value="<%:Scan%>" data-radio="<%=dev:name()%>" onclick="wifi_action(event, 'join')" />
+						<input type="submit" class="cbi-button cbi-button-add" title="<%:Provide new network%>" value="<%:Add%>" data-radio="<%=dev:name()%>" onclick="wifi_action(event, 'add')" />
 					</div>
 				</div>
 			</div>
