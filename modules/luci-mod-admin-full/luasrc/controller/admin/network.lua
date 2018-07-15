@@ -211,6 +211,7 @@ function iface_status(ifaces)
 				errors     = net:errors(),
 				name       = device:shortname(),
 				type       = device:type(),
+				typename   = device:get_type_i18n(),
 				ifname     = device:name(),
 				macaddr    = device:mac(),
 				is_up      = net:is_up() and device:is_up(),
@@ -228,6 +229,7 @@ function iface_status(ifaces)
 				data.subdevices[#data.subdevices+1] = {
 					name       = device:shortname(),
 					type       = device:type(),
+					typename   = device:get_type_i18n(),
 					ifname     = device:name(),
 					macaddr    = device:mac(),
 					is_up      = device:is_up(),

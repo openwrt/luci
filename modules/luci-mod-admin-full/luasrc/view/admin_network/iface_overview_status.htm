@@ -30,21 +30,33 @@
 		networks.push(n.getAttribute('data-network'));
 	});
 
+	function render_iface(ifc) {
+		return E('span', { class: 'cbi-tooltip-container' }, [
+			E('img', { 'class' : 'middle', 'src': '<%=resource%>/icons/%s%s.png'.format(
+				ifc.is_alias ? 'alias' : ifc.type,
+				ifc.is_up ? '' : '_disabled') }),
+			E('span', { 'class': 'cbi-tooltip ifacebadge large' }, [
+				E('img', { 'src': '<%=resource%>/icons/%s%s.png'.format(
+					ifc.type, ifc.is_up ? '' : '_disabled') }),
+				E('span', { 'class': 'left' }, [
+					E('strong', '<%:Type%>: '), ifc.typename, E('br'),
+					E('strong', '<%:Device%>: '), ifc.ifname, E('br'),
+					E('strong', '<%:Connected%>: '), ifc.is_up ? '<%:yes%>' : '<%:no%>', E('br'),
+					ifc.macaddr ? E('strong', '<%:MAC%>: ') : '',
+					ifc.macaddr ? ifc.macaddr : '',
+					ifc.macaddr ? E('br') : '',
+					E('strong', '<%:RX%>: '), '%.2mB (%d <%:Pkts.%>)'.format(ifc.rx_bytes, ifc.rx_packets), E('br'),
+					E('strong', '<%:TX%>: '), '%.2mB (%d <%:Pkts.%>)'.format(ifc.tx_bytes, ifc.tx_packets)
+				])
+			])
+		]);
+	}
+
 	XHR.poll(5, '<%=url('admin/network/iface_status')%>/' + networks.join(','), null,
 		function(x, ifcs)
 		{
 			if (ifcs)
 			{
-				var primary_devices = { };
-
-				for (var idx = 0; idx < ifcs.length; idx++)
-				{
-					var ifc = ifcs[idx];
-
-					if (!ifc.is_alias && !ifc.is_dynamic)
-						primary_devices[ifc.name] = ifc;
-				}
-
 				for (var idx = 0; idx < ifcs.length; idx++)
 				{
 					var ifc = ifcs[idx];
@@ -53,37 +65,25 @@
 					var s = document.getElementById(ifc.id + '-ifc-devices');
 					if (s)
 					{
-						var stat = String.format(
-							'<img src="<%=resource%>/icons/%s%s.png" style="width:16px; height:16px; vertical-align:middle" />',
-								(ifc.is_dynamic || ifc.is_alias) ? 'alias' : ifc.type,
-								ifc.is_up ? '' : '_disabled'
-						);
+						while (s.firstChild)
+							s.removeChild(s.firstChild);
+
+						s.appendChild(render_iface(ifc));
 
 						if (ifc.subdevices && ifc.subdevices.length)
 						{
-							stat += ' <strong>(';
+							var sifs = [ ' (' ];
 
 							for (var j = 0; j < ifc.subdevices.length; j++)
-							{
-								var sif = ifc.subdevices[j];
+								sifs.push(render_iface(ifc.subdevices[j]));
 
-								stat += String.format(
-									'<img src="<%=resource%>/icons/%s%s.png" style="width:16px; height:16px; vertical-align:middle" title="%h" />',
-										sif.type,
-										sif.is_up ? '' : '_disabled',
-										sif.name
-								);
-							}
+							sifs.push(')');
 
-							stat += ')</strong>';
+							s.appendChild(E('span', {}, sifs));
 						}
 
-						stat += String.format(
-							'<br /><small>%h</small>',
-								ifc.name
-						);
-
-						s.innerHTML = stat;
+						s.appendChild(E('br'));
+						s.appendChild(E('small', {}, ifc.is_alias ? '<%:Alias of "%s"%>'.format(ifc.is_alias) : ifc.name));
 					}
 
 					var d = document.getElementById(ifc.id + '-ifc-description');
@@ -106,7 +106,8 @@
 							html += String.format('<strong><%:Uptime%>:</strong> %t<br />', ifc.uptime);
 						}
 
-						if (!primary_devices[ifc.name] || primary_devices[ifc.name] === ifc)
+
+						if (!ifc.is_dynamic && !ifc.is_alias)
 						{
 							if (ifc.macaddr)
 								html += String.format('<strong><%:MAC-Address%>:</strong> %s<br />', ifc.macaddr);
