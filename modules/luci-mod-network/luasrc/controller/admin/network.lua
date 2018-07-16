@@ -175,7 +175,8 @@ function wifi_add()
 		local net = dev:add_wifinet({
 			mode       = "ap",
 			ssid       = "OpenWrt",
-			encryption = "none"
+			encryption = "none",
+			disabled   = 1
 		})
 
 		ntm:save("wireless")
