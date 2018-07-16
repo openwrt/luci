@@ -25,6 +25,8 @@ local app_name    = "luci-app-ddns"
 local app_title   = "Dynamic DNS"
 local app_version = "2.4.9-1"
 
+local translate = I18N.translate
+
 function index()
 	local nxfs	= require "nixio.fs"		-- global definitions not available
 	local sys	= require "luci.sys"		-- in function index()
@@ -59,40 +61,47 @@ end
 
 -- Application specific information functions
 function app_description()
-	return	I18N.translate("Dynamic DNS allows that your router can be reached with " ..
-			"a fixed hostname while having a dynamically changing IP address.")
-		.. [[<br />]]
-		.. I18N.translate("OpenWrt Wiki") .. ": "
-		.. [[<a href="http://wiki.openwrt.org/doc/howto/ddns.client" target="_blank">]]
-		.. I18N.translate("DDNS Client Documentation") .. [[</a>]]
-		.. " --- "
-		.. [[<a href="http://wiki.openwrt.org/doc/uci/ddns" target="_blank">]]
-		.. I18N.translate("DDNS Client Configuration") .. [[</a>]]
+	local tmp = {}
+	tmp[#tmp+1] =	translate("Dynamic DNS allows that your router can be reached with \
+								a fixed hostname while having a dynamically changing IP address.")
+	tmp[#tmp+1] =	[[<br />]]
+	tmp[#tmp+1] =	translate("OpenWrt Wiki") .. ": "
+	tmp[#tmp+1] =	[[<a href="https://openwrt.org/docs/guide-user/services/ddns/client" target="_blank">]]
+	tmp[#tmp+1] =	translate("DDNS Client Documentation")
+	tmp[#tmp+1] =	[[</a>]]
+	tmp[#tmp+1] =	" --- "
+	tmp[#tmp+1] =	[[<a href="https://openwrt.org/docs/guide-user/base-system/ddns" target="_blank">]]
+	tmp[#tmp+1] =	translate("DDNS Client Configuration")
+	tmp[#tmp+1] =	[[</a>]]
+	
+	return table.concat(tmp)
 end
 function app_title_back()
-	return	[[<a href="]]
-		.. DISP.build_url("admin", "services", "ddns")
-		.. [[">]]
-		.. I18N.translate(app_title)
-		.. [[</a>]]
+	local tmp = {}
+	tmp[#tmp+1] = 	[[<a href="]]
+	tmp[#tmp+1] =	DISP.build_url("admin", "services", "ddns")
+	tmp[#tmp+1] =	[[">]]
+	tmp[#tmp+1] =	  translate(app_title)
+	tmp[#tmp+1] = 	[[</a>]]
+	return table.concat(tmp)
 end
 
 -- Standardized application/service functions
 function app_title_main()
-	tmp = {}
+	local tmp = {}
 	tmp[#tmp+1] = 	[[<a href="javascript:alert(']]
-	tmp[#tmp+1] = 		 I18N.translate("Version Information")
+	tmp[#tmp+1] = 		 translate("Version Information")
 	tmp[#tmp+1] = 		 [[\n\n]] .. app_name
-	tmp[#tmp+1] = 		 [[\n]] .. I18N.translate("Version") .. [[: ]] .. app_version
-	tmp[#tmp+1] = 		 [[\n\n]] .. srv_name .. [[ ]] .. I18N.translate("required") .. [[:]]
-	tmp[#tmp+1] = 		 [[\n]] .. I18N.translate("Version") .. [[: ]]
-	tmp[#tmp+1] = 			 srv_ver_min .. [[ ]] .. I18N.translate("or higher")
-	tmp[#tmp+1] = 		 [[\n\n]] .. srv_name .. [[ ]] .. I18N.translate("installed") .. [[:]]
-	tmp[#tmp+1] = 		 [[\n]] .. I18N.translate("Version") .. [[: ]]
-	tmp[#tmp+1] = 			 (service_version() or I18N.translate("NOT installed"))
+	tmp[#tmp+1] = 		 [[\n]] .. translate("Version") .. [[: ]] .. app_version
+	tmp[#tmp+1] = 		 [[\n\n]] .. srv_name .. [[ ]] .. translate("required") .. [[:]]
+	tmp[#tmp+1] = 		 [[\n]] .. translate("Version") .. [[: ]]
+	tmp[#tmp+1] = 			 srv_ver_min .. [[ ]] .. translate("or higher")
+	tmp[#tmp+1] = 		 [[\n\n]] .. srv_name .. [[ ]] .. translate("installed") .. [[:]]
+	tmp[#tmp+1] = 		 [[\n]] .. translate("Version") .. [[: ]]
+	tmp[#tmp+1] = 			 (service_version() or translate("NOT installed"))
 	tmp[#tmp+1] = 		 [[\n\n]]
 	tmp[#tmp+1] = 	 [[')">]]
-	tmp[#tmp+1] = 	 I18N.translate(app_title)
+	tmp[#tmp+1] = 	 translate(app_title)
 	tmp[#tmp+1] = 	 [[</a>]]
 		
 	return table.concat(tmp)
@@ -102,7 +111,7 @@ function service_version()
 	
 	local srv_ver_cmd = luci_helper .. " -V | awk {'print $2'} "
 	local ver
-	
+
 	if IPKG then
 		ver = IPKG.info(srv_name)[srv_name].Version
 	else
@@ -137,6 +146,7 @@ local function _get_status()
 		local enabled	= tonumber(s["enabled"]) or 0
 		local datelast	= "_empty_"	-- formatted date of last update
 		local datenext	= "_empty_"	-- formatted date of next update
+		local datenextstat = nil
 
 		-- get force seconds
 		local force_seconds = DDNS.calc_seconds(
@@ -170,18 +180,22 @@ local function _get_status()
 		force_seconds = (force_seconds > uptime) and uptime or force_seconds
 		if pid > 0 and ( lasttime + force_seconds - uptime ) <= 0 then
 			datenext = "_verify_"
+			datenextstat = translate("Verify")
 
 		-- run once
 		elseif force_seconds == 0 then
 			datenext = "_runonce_"
+			datenextstat = translate("Run once")
 
 		-- no process running and NOT enabled
 		elseif pid == 0 and enabled == 0 then
 			datenext  = "_disabled_"
+			datenextstat = translate("Disabled")
 
 		-- no process running and enabled
 		elseif pid == 0 and enabled ~= 0 then
 			datenext = "_stopped_"
+			datenextstat = translate("Stopped")
 		end
 
 		-- get/set monitored interface and IP version
@@ -192,10 +206,12 @@ local function _get_status()
 
 		-- try to get registered IP
 		local lookup_host = s["lookup_host"] or "_nolookup_"
+
 		local chk_sec  = DDNS.calc_seconds(
 					tonumber(s["check_interval"]) or 10,
 					s["check_unit"] or "minutes" )
 		local reg_ip = DDNS.get_regip(section, chk_sec)
+		
 		if reg_ip == "NOFILE" then
 			local dnsserver	= s["dns_server"] or ""
 			local force_ipversion = tonumber(s["force_ipversion"] or 0)
@@ -212,9 +228,6 @@ local function _get_status()
 			command = command .. [[ -- get_registered_ip]]
 			reg_ip = SYS.exec(command)
 		end
-		if reg_ip == "" then
-			reg_ip = "_nodata_"
-		end
 
 		-- fill transfer array
 		data[#data+1]	= {
@@ -225,7 +238,8 @@ local function _get_status()
 			reg_ip   = reg_ip,
 			pid      = pid,
 			datelast = datelast,
-			datenext = datenext
+			datenext = datenext,
+			datenextstat = datenextstat
 		}
 	end)
 

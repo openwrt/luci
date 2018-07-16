@@ -1,150 +1,59 @@
 <!-- ++ BEGIN ++ Dynamic DNS ++ system_status.htm ++ -->
 <script type="text/javascript">//<![CDATA[
-	// helper to move status data to the relevant
-	// screen objects
-	// called by XHR.poll and XHR.get
-	function _data2elements(x, data) {
-		var tbl = document.getElementById('ddns_status_table');
-		// security check
-		if ( !(tbl) ) { return; }
 
-		// clear all rows
-		while (tbl.firstElementChild !== tbl.lastElementChild)
-			tbl.removeChild(tbl.lastElementChild);
-
-		// variable for Modulo-Division use to set cbi-rowstyle-? (0 or 1)
-		var i = -1;
-		var j = 1;
-
-		// DDNS Service disabled
-		if (data[0].enabled == 0) {
-			var txt = '<strong><font color="red"><%:DDNS Autostart disabled%></font>' ;
-			var url = '<a href="' + data[0].url_up + '"><%:enable here%></a></strong>' ;
-			tbl.appendChild(E('<div class="tr cbi-section-table-row cbi-rowstyle-%d">'.format(((j + i) % 2) + 1), [
-					E('<div class="td">', [ txt," - ", url ])
-					]));
-			i++ ;
-		}
-
-		var configuration;
-		var next_update;
-		var lookup;
-		var registered_ip;
-		var network;
-
-		for( j = 1; j < data.length; j++ )
-		{
-			// configuration
-			configuration = data[j].section;
-
-			// pid
-			// data[j].pid ignored here
-
-			// last update
-			// data[j].datelast ignored here
-
-			// next update
-			switch (data[j].datenext) {
-				case "_empty_":
-					next_update = '<em><%:Unknown error%></em>';
-					break;
-				case "_stopped_":
-					next_update = '<em><%:Stopped%></em>';
-					break;
-				case "_disabled_":
-					next_update = '<em><%:Disabled%></em>';
-					break;
-				case "_noupdate_":
-					next_update = '<em><%:Update error%></em>';
-					break;
-				case "_runonce_":
-					next_update = '<em><%:Run once%></em>';
-					break;
-				case "_verify_":
-					next_update = '<em><%:Verify%></em>';
-					break;
-				default:
-					next_update = data[j].datenext;
-					break;
-			}
-
-			// lookup
-			if (data[j].lookup == "_nolookup_")
-				lookup = '<em><%:config error%></em>';
-			else
-				lookup = data[j].lookup;
-
-			// registered IP
-			switch (data[j].reg_ip) {
-				case "_nolookup_":
-					registered_ip = '<em><%:config error%></em>';
-					break;
-				case "_nodata_":
-					registered_ip = '<em><%:No data%></em>';
-					break;
-				case "_noipv6_":
-					registered_ip = '<em><%:IPv6 not supported%></em>';
-					break;
-				default:
-					registered_ip = data[j].reg_ip;
-					break;
-			}
-
-			// monitored interface
-			if (data[j].iface == "_nonet_")
-				network = '<em><%:Config error%></em>';
-			else
-				network = data[j].iface;
-
-			tbl.appendChild(E('<div class="tr cbi-section-table-row cbi-rowstyle-%d">'.format(((j + i) % 2) + 1), [
-					E('<div class="td">', [ E('<strong>', configuration) ]),
-					E('<div class="td">', next_update),
-					E('<div class="td">', lookup),
-					E('<div class="td">', registered_ip),
-					E('<div class="td">', network)
-					]));
-		}
-
-		if (tbl.firstElementChild === tbl.lastElementChild || (data[0].enabled == 0 && tbl.childNodes.length == 2) ) {
-			var br = '<br />';
-			var msg = '<%:There is no service configured.%>';
-			if (tbl.firstElementChild !== tbl.lastElementChild)
-				br = '';
-			msg = br + msg;
-			tbl.appendChild(E('<div class="tr cbi-section-table-row">', [
-					E('<div class="td">', [ E('<em>', msg) ])
-					]));
-		}
-	}
-
-	// force to immediate show status (not waiting for XHR.poll)
-	XHR.get('<%=url([[admin]], [[services]], [[ddns]], [[status]])%>', null,
+	//start polling data every 30 second, this doesn't change so much
+	XHR.poll(30, '<%=url([[admin]], [[services]], [[ddns]], [[status]])%>', null,
 		function(x, data) {
-			if (data) { _data2elements(x, data); }
+			if (data) { 
+				var tbl = document.getElementById('ddns_status_table');
+				// security check
+				if ( !(tbl) ) { return; }
+				
+				var rows = [];
+		
+				// DDNS Service disabled
+				if (data[0].enabled == 0) {
+					var ddns_legend = document.getElementById('ddns_status_legend');
+					ddns_legend.style.display='none';
+					rows.push([
+							'<strong><font color="red"><%:DDNS Autostart disabled%></font>',
+							'<a class="cbi-button cbi-button-action important" type="button" href="' + data[0].url_up + '"><%:enable here%></a></strong>'
+							]);
+				} else {
+					for( j = 1; j < data.length; j++ )
+					{
+						
+						rows.push([
+								'<strong>' + data[j].section + '</strong>', //configuration
+								data[j].datenextstat ? '<em>'+data[j].datenextstat+'</em>' : '<em><%:Unknown error%></em>',
+								data[j].lookup ? data[j].lookup : '<em><%:config error%></em>',
+								data[j].reg_ip ? data[j].reg_ip : '<em><%:No data%></em>',
+								data[j].iface        // monitored interface
+								]);
+					}
+				}
+				
+				cbi_update_table(tbl, rows, '<%:There is no service configured.%>'); 
+			}
 		}
 	);
-
-	XHR.poll(15, '<%=url([[admin]], [[services]], [[ddns]], [[status]])%>', null,
-		function(x, data) {
-			if (data) { _data2elements(x, data); }
-		}
-	);
-
+	
 //]]></script>
 
 <fieldset class="cbi-section" id="ddns_status_section">
 	<legend><a href="<%=url([[admin]], [[services]], [[ddns]])%>"><%:Dynamic DNS%></a></legend>
-
-	<div class="table cbi-section-table" id="ddns_status_table">
-		<div class="tr cbi-section-table-titles">
-			<div class="th cbi-section-table-cell"><%:Configuration%></div>
-			<div class="th cbi-section-table-cell"><%:Next Update%></div>
-			<div class="th cbi-section-table-cell"><%:Lookup Hostname%></div>
-			<div class="th cbi-section-table-cell"><%:Registered IP%></div>
-			<div class="th cbi-section-table-cell"><%:Network%></div>
-		</div>
-		<div class="tr cbi-section-table-row">
-			<div class="td"><em><br /><%:Collecting data...%></em></div>
+	<div class="cbi-section-node">
+		<div class="table" id="ddns_status_table">
+			<div class="tr table-titles" id="ddns_status_legend">
+				<div class="th"><%:Configuration%></div>
+				<div class="th"><%:Next Update%></div>
+				<div class="th"><%:Lookup Hostname%></div>
+				<div class="th"><%:Registered IP%></div>
+				<div class="th"><%:Network%></div>
+			</div>
+			<div class="tr">
+				<div class="td"><em><br /><%:Collecting data...%></em></div>
+			</div>
 		</div>
 	</div>
 </fieldset>
