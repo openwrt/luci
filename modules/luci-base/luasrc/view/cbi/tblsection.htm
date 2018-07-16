@@ -55,11 +55,11 @@ local titlename = ifattr(not self.anonymous or self.sectiontitle, "data-title", 
 			<div class="th cbi-section-table-cell cbi-section-actions"></div>
 		<%- end -%>
 		</div>
-		<%- local isempty, i, k = true, nil, nil
+		<%- local isempty, section, i, k = true, nil, nil
 		    for i, k in ipairs(self:cfgsections()) do
 				isempty = false
+				section = k
 
-				local section = k
 				local sectionname = striptags((type(self.sectiontitle) == "function") and self:sectiontitle(section) or k)
 				local sectiontitle = ifattr(sectionname and (not self.anonymous or self.sectiontitle), "data-title", sectionname)
 				local colorclass = (self.extedit or self.rowcolors) and " cbi-rowstyle-%d" % rowstyle() or ""
@@ -126,7 +126,7 @@ local titlename = ifattr(not self.anonymous or self.sectiontitle, "data-title", 
 					<div class="cbi-section-error"><%:Invalid%></div>
 				<%- end %>
 				<div>
-					<input type="text" class="cbi-section-create-name" id="cbi.cts.<%=self.config%>.<%=self.sectiontype%>." name="cbi.cts.<%=self.config%>.<%=self.sectiontype%>." data-type="uciname" data-optional="true" />
+					<input type="text" class="cbi-section-create-name" id="cbi.cts.<%=self.config%>.<%=self.sectiontype%>.<%=section%>" name="cbi.cts.<%=self.config%>.<%=self.sectiontype%>.<%=section%>" data-type="uciname" data-optional="true" />
 				</div>
 				<input class="cbi-button cbi-button-add" type="submit" onclick="this.form.cbi_state='add-section'; return true" value="<%:Add%>" title="<%:Add%>" />
 			<% end %>
