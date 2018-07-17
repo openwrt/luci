@@ -16,7 +16,7 @@ local acct_port, acct_secret, acct_server, anonymous_identity, ant1, ant2,
 	mp, nasid, network, password, pmk_r1_push, privkey, privkey2, privkeypwd,
 	privkeypwd2, r0_key_lifetime, r0kh, r1_key_holder, r1kh,
 	reassociation_deadline, retry_timeout, ssid, st, tp, wepkey, wepslot,
-	wmm, wpakey, wps
+	wmm, wpakey, wps, disassoc_low_ack, short_preamble, beacon_int, dtim_period
 
 arg[1] = arg[1] or ""
 
@@ -250,6 +250,14 @@ if hwtype == "mac80211" then
 
 	s:taboption("advanced", Value, "frag", translate("Fragmentation Threshold"))
 	s:taboption("advanced", Value, "rts", translate("RTS/CTS Threshold"))
+	
+	s:taboption("advanced", Flag, "noscan", translate("Force 40MHz mode"),
+		translate("Always use 40MHz channels even if the secondary channel overlaps. Using this option does not comply with IEEE 802.11n-2009!")).optional = true
+
+	beacon_int = s:taboption("advanced", Value, "beacon_int", translate("Beacon Interval"))
+	beacon_int.optional = true
+	beacon_int.placeholder = 100
+	beacon_int.datatype = "range(15,65535)"
 end
 
 
@@ -491,6 +499,18 @@ if hwtype == "mac80211" then
 
 	ifname = s:taboption("advanced", Value, "ifname", translate("Interface name"), translate("Override default interface name"))
 	ifname.optional = true
+
+	short_preamble = s:taboption("advanced", Flag, "short_preamble", translate("Short Preamble"))
+	short_preamble.default = short_preamble.enabled
+
+	dtim_period = s:taboption("advanced", Value, "dtim_period", translate("DTIM Interval"), translate("Delivery Traffic Indication Message Interval"))
+	dtim_period.optional = true
+	dtim_period.placeholder = 2
+	dtim_period.datatype = "range(1,255)"
+
+	disassoc_low_ack = s:taboption("advanced", Flag, "disassoc_low_ack", translate("Disassociate On Low Acknowledgement"),
+		translate("Allow AP mode to disconnect STAs based on low ACK condition"))
+	disassoc_low_ack.default = disassoc_low_ack.enabled
 end
 
 
