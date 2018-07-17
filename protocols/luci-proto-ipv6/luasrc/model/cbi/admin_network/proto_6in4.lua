@@ -33,7 +33,7 @@ local ip6prefix = s:taboption("general", Value, "ip6prefix",
 	translate("IPv6 routed prefix"),
 	translate("This is the prefix routed to you by the tunnel broker for use by clients"))
 
-ip6prefix.datatype = "ip6addr"
+ip6prefix.datatype = "list(ip6addr)"
 
 
 local update = section:taboption("general", Flag, "_update",
