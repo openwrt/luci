@@ -122,6 +122,9 @@ s:taboption("advanced", Flag, "strictorder",
 	translate("<abbr title=\"Domain Name System\">DNS</abbr> servers will be queried in the " ..
 		"order of the resolvfile")).optional = true
 
+s:taboption("advanced", Flag, "allservers",
+	translate("All Servers"),
+	translate("Query all available upstream <abbr title=\"Domain Name System\">DNS</abbr> servers")).optional = true
 
 bn = s:taboption("advanced", DynamicList, "bogusnxdomain", translate("Bogus NX Domain Override"),
 	translate("List of hosts that supply bogus NX domain results"))
