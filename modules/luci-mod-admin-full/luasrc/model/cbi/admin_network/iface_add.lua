@@ -10,6 +10,10 @@ m = SimpleForm("network", translate("Create Interface"))
 m.redirect = luci.dispatcher.build_url("admin/network/network")
 m.reset = false
 
+function m.on_cancel()
+	luci.http.redirect(luci.dispatcher.build_url("admin/network/network"))
+end
+
 newnet = m:field(Value, "_netname", translate("Name of the new interface"),
 	translate("The allowed characters are: <code>A-Z</code>, <code>a-z</code>, " ..
 		"<code>0-9</code> and <code>_</code>"
