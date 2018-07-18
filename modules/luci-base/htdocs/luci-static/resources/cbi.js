@@ -1306,6 +1306,28 @@ function cbi_tag_last(container)
 	}
 }
 
+function cbi_submit(elem, name, value, action)
+{
+	var form = elem.form || findParent(elem, 'form');
+
+	if (!form)
+		return false;
+
+	if (action)
+		form.action = action;
+
+	if (name) {
+		var hidden = form.querySelector('input[type="hidden"][name="%s"]'.format(name)) ||
+			E('input', { type: 'hidden', name: name });
+
+		hidden.value = value || '1';
+		form.appendChild(hidden);
+	}
+
+	form.submit();
+	return true;
+}
+
 String.prototype.format = function()
 {
 	if (!RegExp)
