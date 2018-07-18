@@ -26,14 +26,6 @@
 			{ token: '<%=token%>' }, XHR.run);
 	}
 
-	function wifi_action(ev, action) {
-		var i = ev.target,
-		    e = i.getAttribute('data-radio');
-
-		i.parentNode.appendChild(E('input', { type: 'hidden', name: 'device', value: e }));
-		i.form.action = '<%=url('admin/network/wireless_')%>' + action;
-	}
-
 	var networks = [ ];
 
 	document.querySelectorAll('[data-network]').forEach(function(n) {
