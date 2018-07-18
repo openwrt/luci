@@ -79,8 +79,8 @@ local tpl_radio = tpl.Template(nil, [[
 				<div class="td middle cbi-section-actions">
 					<div>
 						<input type="button" class="cbi-button cbi-button-neutral" title="<%:Restart radio interface%>" value="<%:Restart%>" data-radio="<%=dev:name()%>" onclick="wifi_restart(event)" />
-						<input type="submit" class="cbi-button cbi-button-action important" title="<%:Find and join network%>" value="<%:Scan%>" data-radio="<%=dev:name()%>" onclick="wifi_action(event, 'join')" />
-						<input type="submit" class="cbi-button cbi-button-add" title="<%:Provide new network%>" value="<%:Add%>" data-radio="<%=dev:name()%>" onclick="wifi_action(event, 'add')" />
+						<input type="button" class="cbi-button cbi-button-action important" title="<%:Find and join network%>" value="<%:Scan%>" onclick="cbi_submit(this, 'device', '<%=dev:name()%>', '<%=url('admin/network/wireless_join')%>')" />
+						<input type="button" class="cbi-button cbi-button-add" title="<%:Provide new network%>" value="<%:Add%>" onclick="cbi_submit(this, 'device', '<%=dev:name()%>', '<%=url('admin/network/wireless_add')%>')" />
 					</div>
 				</div>
 			</div>
