@@ -8,56 +8,6 @@
 	local sys = require "luci.sys"
 	local utl = require "luci.util"
 
-	function guess_wifi_signal(info)
-		local scale = (100 / (info.quality_max or 100) * (info.quality or 0))
-		local icon
-
-		if not info.bssid or info.bssid == "00:00:00:00:00:00" then
-			icon = resource .. "/icons/signal-none.png"
-		elseif scale < 15 then
-			icon = resource .. "/icons/signal-0.png"
-		elseif scale < 35 then
-			icon = resource .. "/icons/signal-0-25.png"
-		elseif scale < 55 then
-			icon = resource .. "/icons/signal-25-50.png"
-		elseif scale < 75 then
-			icon = resource .. "/icons/signal-50-75.png"
-		else
-			icon = resource .. "/icons/signal-75-100.png"
-		end
-
-		return icon
-	end
-
-	function percent_wifi_signal(info)
-		local qc = info.quality or 0
-		local qm = info.quality_max or 0
-
-		if info.bssid and qc > 0 and qm > 0 then
-			return math.floor((100 / qm) * qc)
-		else
-			return 0
-		end
-	end
-
-	function format_wifi_encryption(info)
-		if info.wep == true then
-			return "WEP"
-		elseif info.wpa > 0 then
-			return translatef("<abbr title='Pairwise: %s / Group: %s'>%s - %s</abbr>",
-				table.concat(info.pair_ciphers, ", "),
-				table.concat(info.group_ciphers, ", "),
-				(info.wpa == 3) and translate("mixed WPA/WPA2")
-					or (info.wpa == 2 and "WPA2" or "WPA"),
-				table.concat(info.auth_suites, ", ")
-			)
-		elseif info.enabled then
-			return "<em>%s</em>" % translate("unknown")
-		else
-			return "<em>%s</em>" % translate("open")
-		end
-	end
-
 	local dev = luci.http.formvalue("device")
 	local iw = luci.sys.wifi.getiwinfo(dev)
 
@@ -65,91 +15,198 @@
 		luci.http.redirect(luci.dispatcher.build_url("admin/network/wireless"))
 		return
 	end
-
-
-	function scanlist(times)
-		local i, k, v
-		local l = { }
-		local s = { }
-
-		for i = 1, times do
-			for k, v in ipairs(iw.scanlist or { }) do
-				if not s[v.bssid] then
-					l[#l+1] = v
-					s[v.bssid] = true
-				end
-			end
-		end
-
-		return l
-	end
 -%>
 
 <%+header%>
+
+<script type="text/javascript">//<![CDATA[
+	var xhr = new XHR(),
+	    poll = null;
+
+	function format_signal(bss) {
+		var qval = bss.quality || 0,
+		    qmax = bss.quality_max || 100,
+		    scale = 100 / qmax * qval,
+		    range = 'none';
+
+		if (!bss.bssid || bss.bssid == '00:00:00:00:00:00')
+			range = 'none';
+		else if (scale < 15)
+			range = '0';
+		else if (scale < 35)
+			range = '0-25';
+		else if (scale < 55)
+			range = '25-50';
+		else if (scale < 75)
+			range = '50-75';
+		else
+			range = '75-100';
+
+		return E('span', {
+			class: 'ifacebadge',
+			title: '<%:Signal%>: %d<%:dB%> / <%:Quality%>: %d/%d'.format(bss.signal, qval, qmax)
+		}, [
+			E('img', { src: '<%=resource%>/icons/signal-%s.png'.format(range) }),
+			' %d%%'.format(scale)
+		]);
+	}
+
+	function format_encryption(bss) {
+		var enc = bss.encryption || { }
+
+		if (enc.wep === true)
+			return 'WEP';
+		else if (enc.wpa > 0)
+			return E('abbr', {
+				title: 'Pairwise: %h / Group: %h'.format(
+					enc.pair_ciphers.join(', '),
+					enc.group_ciphers.join(', '))
+				},
+				'%h - %h'.format(
+					(enc.wpa === 3) ? '<%:mixed WPA/WPA2%>' : (enc.wpa === 2 ? 'WPA2' : 'WPA'),
+					enc.auth_suites.join(', ')));
+		else if (enc.enabled)
+			return '<em><%:unknown%></em>';
+		else
+			return '<em><%:open%></em>';
+	}
+
+	function format_actions(bss) {
+		var enc = bss.encryption || { },
+		    input = [
+				E('input', { type: 'submit', class: 'cbi-button cbi-button-action important', value: '<%:Join Network%>' }),
+				E('input', { type: 'hidden', name: 'token',    value: '<%=token%>' }),
+				E('input', { type: 'hidden', name: 'device',   value: '<%=dev%>' }),
+				E('input', { type: 'hidden', name: 'join',     value: bss.ssid }),
+				E('input', { type: 'hidden', name: 'mode',     value: bss.mode }),
+				E('input', { type: 'hidden', name: 'bssid',    value: bss.bssid }),
+				E('input', { type: 'hidden', name: 'channel',  value: bss.channel }),
+				E('input', { type: 'hidden', name: 'clbridge', value: <%=iw.type == "wl" and 1 or 0%> }),
+				E('input', { type: 'hidden', name: 'wep',      value: enc.wep ? 1 : 0 })
+			];
+
+		if (enc.wpa) {
+			input.push(E('input', { type: 'hidden', name: 'wpa_version', value: enc.wpa }));
+
+			enc.auth_suites.forEach(function(s) {
+				input.push(E('input', { type: 'hidden', name: 'wpa_suites', value: s }));
+			});
+
+			enc.group_ciphers.forEach(function(s) {
+				input.push(E('input', { type: 'hidden', name: 'wpa_group', value: s }));
+			});
+
+			enc.pair_ciphers.forEach(function(s) {
+				input.push(E('input', { type: 'hidden', name: 'wpa_pairwise', value: s }));
+			});
+		}
+
+		return E('form', {
+			class: 'inline',
+			method: 'post',
+			action: '<%=url("admin/network/wireless_join")%>'
+		}, input);
+	}
+
+	function fade(bss, content) {
+		if (bss.stale)
+			return E('span', { style: 'opacity:0.5' }, content);
+		else
+			return content;
+	}
+
+	function flush() {
+		XHR.stop(poll);
+		XHR.halt();
+
+		scan();
+	}
+
+	function scan() {
+		var tbl = document.getElementById('scan_results');
+
+		cbi_update_table(tbl, [], '<em><img src="<%=resource%>/icons/loading.gif" class="middle" /> <%:Starting wireless scan...%></em>');
+
+		xhr.post('<%=url("admin/network/wireless_scan_trigger", dev)%>', { token: '<%=token%>' },
+			function(s) {
+				if (s.status !== 200) {
+					cbi_update_table(tbl, [], '<em><%:Scan request failed%></em>');
+					return;
+				}
+
+				var count = 0;
+
+				poll = XHR.poll(3, '<%=url("admin/network/wireless_scan_results", dev)%>', null,
+					function(s, results) {
+						if (Array.isArray(results)) {
+							var bss = [];
+
+							results.sort(function(a, b) {
+								var diff = (b.quality - a.quality) || (a.channel - b.channel);
+
+								if (diff)
+									return diff;
+
+								if (a.ssid < b.ssid)
+									return -1;
+								else if (a.ssid > b.ssid)
+									return 1;
+
+								if (a.bssid < b.bssid)
+									return -1;
+								else if (a.bssid > b.bssid)
+									return 1;
+							}).forEach(function(res) {
+								bss.push([
+									fade(res, format_signal(res)),
+									fade(res, res.ssid ? '%h'.format(res.ssid) : E('em', {}, '<%:hidden%>')),
+									fade(res, res.channel),
+									fade(res, res.mode),
+									fade(res, res.bssid),
+									fade(res, format_encryption(res)),
+									format_actions(res)
+								]);
+							});
+
+							cbi_update_table(tbl, bss, '<em><img src="<%=resource%>/icons/loading.gif" class="middle" /> <%:No scan results available yet...%>');
+						}
+
+						if (count++ >= 3) {
+							count = 0;
+							xhr.post('<%=url("admin/network/wireless_scan_trigger", dev, "1")%>',
+								{ token: '<%=token%>' }, function() { });
+						}
+					});
+
+				XHR.run();
+			});
+	}
+
+	document.addEventListener('DOMContentLoaded', scan);
+
+//]]></script>
 
 <h2 name="content"><%:Join Network: Wireless Scan%></h2>
 
 <div class="cbi-map">
 	<div class="cbi-section">
-		<div class="table">
+		<div class="table" id="scan_results">
 			<div class="tr table-titles">
-				<div class="th col-1 center"><%:Signal%></div>
-				<div class="th col-5 left"><%:SSID%></div>
-				<div class="th col-2 center"><%:Channel%></div>
-				<div class="th col-2 left"><%:Mode%></div>
-				<div class="th col-3 left"><%:BSSID%></div>
-				<div class="th col-2 left"><%:Encryption%></div>
+				<div class="th col-1 middle center"><%:Signal%></div>
+				<div class="th col-5 middle left"><%:SSID%></div>
+				<div class="th col-2 middle center"><%:Channel%></div>
+				<div class="th col-2 middle left"><%:Mode%></div>
+				<div class="th col-3 middle left"><%:BSSID%></div>
+				<div class="th col-2 middle left"><%:Encryption%></div>
 				<div class="th cbi-section-actions">&#160;</div>
 			</div>
 
-			<!-- scan list -->
-			<% for i, net in ipairs(scanlist(3)) do net.encryption = net.encryption or { } %>
-			<div class="tr cbi-rowstyle-<%=1 + ((i-1) % 2)%>">
-				<div class="td col-1 center">
-					<abbr title="<%:Signal%>: <%=net.signal%> <%:dB%> / <%:Quality%>: <%=net.quality%>/<%=net.quality_max%>">
-						<img src="<%=guess_wifi_signal(net)%>" /><br />
-						<small><%=percent_wifi_signal(net)%>%</small>
-					</abbr>
-				</div>
-				<div class="td col-5 left" data-title="<%:SSID%>">
-					<strong><%=net.ssid and utl.pcdata(net.ssid) or "<em>%s</em>" % translate("hidden")%></strong>
-				</div>
-				<div class="td col-2 center" data-title="<%:Channel%>">
-					<%=net.channel%>
-				</div>
-				<div class="td col-2 left" data-title="<%:Mode%>">
-					<%=net.mode%>
-				</div>
-				<div class="td col-3 left" data-title="<%:BSSID%>">
-					<%=net.bssid%>
-				</div>
-				<div class="td col-2 left" data-title="<%:Encryption%>">
-					<%=format_wifi_encryption(net.encryption)%>
-				</div>
-				<div class="td cbi-section-actions">
-					<form action="<%=url('admin/network/wireless_join')%>" method="post">
-						<input type="hidden" name="token" value="<%=token%>" />
-						<input type="hidden" name="device" value="<%=utl.pcdata(dev)%>" />
-						<input type="hidden" name="join" value="<%=utl.pcdata(net.ssid)%>" />
-						<input type="hidden" name="mode" value="<%=net.mode%>" />
-						<input type="hidden" name="bssid" value="<%=net.bssid%>" />
-						<input type="hidden" name="channel" value="<%=net.channel%>" />
-						<input type="hidden" name="wep" value="<%=net.encryption.wep and 1 or 0%>" />
-						<% if net.encryption.wpa then %>
-						<input type="hidden" name="wpa_version" value="<%=net.encryption.wpa%>" />
-						<% for _, v in ipairs(net.encryption.auth_suites) do %><input type="hidden" name="wpa_suites" value="<%=v%>" />
-						<% end; for _, v in ipairs(net.encryption.group_ciphers) do %><input type="hidden" name="wpa_group" value="<%=v%>" />
-						<% end; for _, v in ipairs(net.encryption.pair_ciphers) do %><input type="hidden" name="wpa_pairwise" value="<%=v%>" />
-						<% end; end %>
-
-						<input type="hidden" name="clbridge" value="<%=iw.type == "wl" and 1 or 0%>" />
-
-						<input class="cbi-button cbi-button-action important" type="submit" value="<%:Join Network%>" />
-					</form>
+			<div class="tr placeholder">
+				<div class="td">
+					<img src="<%=resource%>/icons/loading.gif" class="middle" />
+					<em><%:Collecting data...%></em>
 				</div>
 			</div>
-			<% end %>
-			<!-- /scan list -->
 		</div>
 	</div>
 </div>
@@ -160,7 +217,7 @@
 	<form class="inline" action="<%=url('admin/network/wireless_join')%>" method="post">
 		<input type="hidden" name="token" value="<%=token%>" />
 		<input type="hidden" name="device" value="<%=utl.pcdata(dev)%>" />
-		<input class="cbi-button cbi-button-action" type="submit" value="<%:Repeat scan%>" />
+		<input type="button" class="cbi-button cbi-button-action" value="<%:Repeat scan%>" onclick="flush()" />
 	</form>
 </div>
 
