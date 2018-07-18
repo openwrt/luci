@@ -58,6 +58,12 @@ function index()
 			page = entry({"admin", "network", "wireless_reconnect"}, post("wifi_reconnect"), nil)
 			page.leaf = true
 
+			page = entry({"admin", "network", "wireless_scan_trigger"}, post("wifi_scan_trigger"), nil)
+			page.leaf = true
+
+			page = entry({"admin", "network", "wireless_scan_results"}, call("wifi_scan_results"), nil)
+			page.leaf = true
+
 			page = entry({"admin", "network", "wireless"}, arcombine(cbi("admin_network/wifi_overview"), cbi("admin_network/wifi")), _("Wireless"), 15)
 			page.leaf = true
 			page.subindex = true
@@ -307,6 +313,78 @@ function wifi_assoclist()
 
 	luci.http.prepare_content("application/json")
 	luci.http.write_json(s.wifi_assoclist())
+end
+
+
+local function _wifi_get_scan_results(cache_key)
+	local results = luci.util.ubus("session", "get", {
+		ubus_rpc_session = luci.model.uci:get_session_id(),
+		keys = { cache_key }
+	})
+
+	if type(results) == "table" and
+	   type(results.values) == "table" and
+	   type(results.values[cache_key]) == "table"
+	then
+		return results.values[cache_key]
+	end
+
+	return { }
+end
+
+function wifi_scan_trigger(radio, update)
+	local iw = radio and luci.sys.wifi.getiwinfo(radio)
+
+	if not iw then
+		luci.http.status(404, "No such radio device")
+		return
+	end
+
+	luci.http.status(200, "Scan scheduled")
+
+	if nixio.fork() == 0 then
+		io.stderr:close()
+		io.stdout:close()
+
+		local _, bss
+		local data, bssids = { }, { }
+		local cache_key = "scan_%s" % radio
+
+		luci.util.ubus("session", "set", {
+			ubus_rpc_session = luci.model.uci:get_session_id(),
+			values = { [cache_key] = nil }
+		})
+
+		for _, bss in ipairs(iw.scanlist or { }) do
+			data[_] = bss
+			bssids[bss.bssid] = bss
+		end
+
+		if update then
+			for _, bss in ipairs(_wifi_get_scan_results(cache_key)) do
+				if not bssids[bss.bssid] then
+					bss.stale = true
+					data[#data + 1] = bss
+				end
+			end
+		end
+
+		luci.util.ubus("session", "set", {
+			ubus_rpc_session = luci.model.uci:get_session_id(),
+			values = { [cache_key] = data }
+		})
+	end
+end
+
+function wifi_scan_results(radio)
+	local results = radio and _wifi_get_scan_results("scan_%s" % radio)
+
+	if results and #results > 0 then
+		luci.http.prepare_content("application/json")
+		luci.http.write_json(results)
+	else
+		luci.http.status(404, "No wireless scan results")
+	end
 end
 
 function lease_status()
