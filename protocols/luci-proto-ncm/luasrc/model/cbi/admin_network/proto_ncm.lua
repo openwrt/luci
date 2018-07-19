@@ -32,7 +32,7 @@ end
 
 
 mode = section:taboption("general", Value, "mode", translate("Service Type"))
-mode.default = "auto"
+mode:value("", translate("Modem default"))
 mode:value("preferlte", translate("Prefer LTE"))
 mode:value("preferumts", translate("Prefer UMTS"))
 mode:value("lte", "LTE")
