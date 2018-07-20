@@ -3,14 +3,14 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-06-10 03:40+0200\n"
-"PO-Revision-Date: 2018-07-07 17:55+0900\n"
+"PO-Revision-Date: 2018-07-20 15:27+0900\n"
 "Last-Translator: INAGAKI Hiroshi <musashino.open@gmail.com>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 2.0.7\n"
+"X-Generator: Poedit 2.0.8\n"
 "Language-Team: \n"
 
 msgid "%.1f dB"
@@ -159,9 +159,6 @@ msgstr ""
 msgid "<abbr title=\"maximal\">Max.</abbr> concurrent queries"
 msgstr "<abbr title=\"maximal\">最大</abbr> 並列処理クエリ"
 
-msgid "<abbr title='Pairwise: %s / Group: %s'>%s - %s</abbr>"
-msgstr ""
-
 msgid ""
 "<br/>Note: you need to manually restart the cron service if the crontab file "
 "was empty before editing."
@@ -275,8 +272,17 @@ msgstr ""
 msgid "Alert"
 msgstr "警告"
 
+msgid "Alias Interface"
+msgstr ""
+
 msgid "Alias interface"
 msgstr ""
+
+msgid "Alias of \"%s\""
+msgstr ""
+
+msgid "All Servers"
+msgstr "全てのサーバー"
 
 msgid ""
 "Allocate IP addresses sequentially, starting from the lowest available "
@@ -289,11 +295,14 @@ msgstr ""
 msgid "Allow <abbr title=\"Secure Shell\">SSH</abbr> password authentication"
 msgstr "<abbr title=\"Secure Shell\">SSH</abbr> パスワード認証を許可します。"
 
+msgid "Allow AP mode to disconnect STAs based on low ACK condition"
+msgstr "AP モード動作時に、低 ACK（確認応答）状態の STA の切断を許可します。"
+
 msgid "Allow all except listed"
 msgstr "リスト内の端末からのアクセスを禁止"
 
 msgid "Allow legacy 802.11b rates"
-msgstr ""
+msgstr "レガシー 802.11b レートを許可"
 
 msgid "Allow listed only"
 msgstr "リスト内の端末からのアクセスを許可"
@@ -319,7 +328,14 @@ msgid "Allowed IPs"
 msgstr "許可されるIP"
 
 msgid "Always announce default router"
-msgstr "常にデフォルト ルーターとして通知する"
+msgstr "常にデフォルト ルーターを通知する"
+
+msgid ""
+"Always use 40MHz channels even if the secondary channel overlaps. Using this "
+"option does not comply with IEEE 802.11n-2009!"
+msgstr ""
+"セカンダリ チャンネルの重複にかかわらず、常に 40MHz チャンネルを使用します。"
+"このオプションの使用は、 IEEE 802.11n-2009 に準拠しません！"
 
 msgid "Annex"
 msgstr ""
@@ -419,7 +435,7 @@ msgid ""
 msgstr ""
 
 msgid "Associated Stations"
-msgstr "認証済み端末"
+msgstr "アソシエーション済み端末"
 
 msgid "Associations"
 msgstr "アソシエーション数"
@@ -513,6 +529,9 @@ msgstr "無効なアドレスです!"
 
 msgid "Band"
 msgstr ""
+
+msgid "Beacon Interval"
+msgstr "ビーコン間隔"
 
 msgid ""
 "Below is the determined list of files to backup. It consists of changed "
@@ -715,7 +734,7 @@ msgid "Connection Limit"
 msgstr "接続制限"
 
 msgid "Connection attempt failed"
-msgstr ""
+msgstr "接続の試行が失敗しました"
 
 msgid "Connections"
 msgstr "ネットワーク接続"
@@ -837,6 +856,9 @@ msgstr "DSL ステータス"
 msgid "DSL line mode"
 msgstr ""
 
+msgid "DTIM Interval"
+msgstr "DTIM インターバル"
+
 msgid "DUID"
 msgstr "DUID"
 
@@ -874,6 +896,9 @@ msgstr "削除"
 
 msgid "Delete this network"
 msgstr "ネットワークを削除します"
+
+msgid "Delivery Traffic Indication Message Interval"
+msgstr "Delivery Traffic Indication Message インターバル"
 
 msgid "Description"
 msgstr "詳細"
@@ -925,7 +950,7 @@ msgid "Disable Encryption"
 msgstr "暗号化を無効にする"
 
 msgid "Disable this network"
-msgstr ""
+msgstr "このネットワークを無効化"
 
 msgid "Disabled"
 msgstr "無効"
@@ -933,11 +958,14 @@ msgstr "無効"
 msgid "Disabled (default)"
 msgstr "無効（デフォルト）"
 
+msgid "Disassociate On Low Acknowledgement"
+msgstr "低 Acknowledgement 時のアソシエーション解除"
+
 msgid "Discard upstream RFC1918 responses"
 msgstr "RFC1918の応答を破棄します"
 
 msgid "Disconnection attempt failed"
-msgstr ""
+msgstr "切断の試行が失敗しました"
 
 msgid "Dismiss"
 msgstr "警告の除去"
@@ -1046,6 +1074,8 @@ msgid ""
 "Edit the raw configuration data above to fix any error and hit \"Save\" to "
 "reload the page."
 msgstr ""
+"上記の設定データを直接編集してエラーを修正し、 \"保存\" ボタンを押してこの"
+"ページをリロードします。"
 
 msgid "Edit this interface"
 msgstr "インターフェースを編集"
@@ -1115,7 +1145,7 @@ msgid "Enable this mount"
 msgstr "マウント設定を有効にする"
 
 msgid "Enable this network"
-msgstr ""
+msgstr "このネットワークを有効化"
 
 msgid "Enable this swap"
 msgstr "スワップ設定を有効にする"
@@ -1133,6 +1163,8 @@ msgid ""
 "Enables fast roaming among access points that belong to the same Mobility "
 "Domain"
 msgstr ""
+"同一のモビリティ ドメイン（モビリティ グループ）に属するアクセスポイント間の"
+"高速ローミングを有効にします。"
 
 msgid "Enables the Spanning Tree Protocol on this bridge"
 msgstr "スパニングツリー プロトコルを有効にする"
@@ -1150,10 +1182,10 @@ msgid "Endpoint Port"
 msgstr "エンドポイント ポート"
 
 msgid "Enter custom value"
-msgstr ""
+msgstr "カスタム値を入力"
 
 msgid "Enter custom values"
-msgstr ""
+msgstr "カスタム値を入力"
 
 msgid "Erasing..."
 msgstr "消去中..."
@@ -1294,6 +1326,9 @@ msgstr "更新中..."
 msgid "Force"
 msgstr "強制"
 
+msgid "Force 40MHz mode"
+msgstr "強制 40MHz モード"
+
 msgid "Force CCMP (AES)"
 msgstr "CCMP (AES) を使用"
 
@@ -1360,7 +1395,7 @@ msgid "Gateway"
 msgstr "ゲートウェイ"
 
 msgid "Gateway address is invalid"
-msgstr ""
+msgstr "無効なゲートウェイ アドレスです"
 
 msgid "Gateway ports"
 msgstr "ゲートウェイ ポート"
@@ -1474,10 +1509,10 @@ msgid "IP address"
 msgstr "IPアドレス"
 
 msgid "IP address in invalid"
-msgstr ""
+msgstr "無効な IP アドレスです"
 
 msgid "IP address is missing"
-msgstr ""
+msgstr "IP アドレスがありません"
 
 msgid "IPv4"
 msgstr "IPv4"
@@ -1892,7 +1927,7 @@ msgid "Loading"
 msgstr "ロード中"
 
 msgid "Local IP address is invalid"
-msgstr ""
+msgstr "無効なローカル IP アドレスです"
 
 msgid "Local IP address to assign"
 msgstr "割り当てるローカル IPアドレス"
@@ -1963,6 +1998,9 @@ msgid "Lowest leased address as offset from the network address."
 msgstr ""
 "ネットワークアドレスをオフセットとして、最小のアドレスを設定してください"
 
+msgid "MAC"
+msgstr ""
+
 msgid "MAC-Address"
 msgstr "MAC-アドレス"
 
@@ -1979,7 +2017,7 @@ msgid "MAP / LW4over6"
 msgstr "MAP / LW4over6"
 
 msgid "MAP rule is invalid"
-msgstr ""
+msgstr "無効な MAP ルールです"
 
 msgid "MB/s"
 msgstr "MB/s"
@@ -2052,7 +2090,7 @@ msgid "Missing protocol extension for proto %q"
 msgstr "プロトコル %qのプロトコル拡張が見つかりません"
 
 msgid "Mobility Domain"
-msgstr ""
+msgstr "モビリティ ドメイン"
 
 msgid "Mode"
 msgstr "モード"
@@ -2164,7 +2202,7 @@ msgid "Network boot image"
 msgstr "ネットワークブート用イメージ"
 
 msgid "Network device is not present"
-msgstr ""
+msgstr "ネットワーク デバイスが存在しません"
 
 msgid "Network without interfaces."
 msgstr "インターフェースの無いネットワークです。"
@@ -2207,6 +2245,9 @@ msgstr "パスワードが設定されていません!"
 
 msgid "No rules in this chain"
 msgstr "チェイン内にルールがありません"
+
+msgid "No scan results available yet..."
+msgstr "利用可能なスキャン結果はまだありません..."
 
 msgid "No zone assigned"
 msgstr "ゾーンが設定されていません"
@@ -2432,7 +2473,7 @@ msgid "PIN"
 msgstr "PIN"
 
 msgid "PIN code rejected"
-msgstr ""
+msgstr "PIN コードが拒否されました"
 
 msgid "PMK R1 Push"
 msgstr ""
@@ -2522,7 +2563,7 @@ msgid "Peer IP address to assign"
 msgstr ""
 
 msgid "Peer address is missing"
-msgstr ""
+msgstr "ピアのアドレスがありません"
 
 msgid "Peers"
 msgstr "ピア"
@@ -2641,6 +2682,13 @@ msgstr ""
 
 msgid "Quality"
 msgstr "クオリティ"
+
+msgid ""
+"Query all available upstream <abbr title=\"Domain Name System\">DNS</abbr> "
+"servers"
+msgstr ""
+"アップストリームの利用可能な全 <abbr title=\"Domain Name System\">DNS</abbr> "
+"サーバを問い合わせます"
 
 msgid "R0 Key Lifetime"
 msgstr ""
@@ -2845,7 +2893,7 @@ msgid "Restart Firewall"
 msgstr "ファイアウォールの再起動"
 
 msgid "Restart radio interface"
-msgstr ""
+msgstr "無線インターフェースの再起動"
 
 msgid "Restore"
 msgstr "復元"
@@ -2938,6 +2986,9 @@ msgstr "保存 & 適用"
 msgid "Scan"
 msgstr "スキャン"
 
+msgid "Scan request failed"
+msgstr "スキャン要求が失敗しました"
+
 msgid "Scheduled Tasks"
 msgstr "スケジュールタスク"
 
@@ -2994,6 +3045,9 @@ msgstr ""
 
 msgid "Short GI"
 msgstr "Short GI"
+
+msgid "Short Preamble"
+msgstr "Short Preamble"
 
 msgid "Show current backup file list"
 msgstr "現在のバックアップファイルのリストを表示する"
@@ -3098,6 +3152,9 @@ msgstr "優先順位"
 
 msgid "Starting configuration apply…"
 msgstr "設定の適用を開始しています..."
+
+msgid "Starting wireless scan..."
+msgstr "無線LANのスキャンを開始しています..."
 
 msgid "Startup"
 msgstr "スタートアップ"
@@ -3565,13 +3622,13 @@ msgid "UUID"
 msgstr "UUID"
 
 msgid "Unable to determine device name"
-msgstr ""
+msgstr "デバイス名を確定できません"
 
 msgid "Unable to determine external IP address"
-msgstr ""
+msgstr "外部 IP アドレスを確定できません"
 
 msgid "Unable to determine upstream interface"
-msgstr ""
+msgstr "アップストリーム インターフェースを確定できません"
 
 msgid "Unable to dispatch"
 msgstr "ディスパッチできません"
@@ -3580,10 +3637,10 @@ msgid "Unable to obtain client ID"
 msgstr ""
 
 msgid "Unable to resolve AFTR host name"
-msgstr ""
+msgstr "AFTR ホスト名を解決できません"
 
 msgid "Unable to resolve peer host name"
-msgstr ""
+msgstr "ピアのホスト名を解決できません"
 
 msgid "Unavailable Seconds (UAS)"
 msgstr ""
@@ -3595,7 +3652,7 @@ msgid "Unknown Error, password not changed!"
 msgstr "不明なエラーです。パスワードは変更されていません！"
 
 msgid "Unknown error (%s)"
-msgstr ""
+msgstr "不明なエラー (%s)"
 
 msgid "Unmanaged"
 msgstr "Unmanaged"
@@ -3607,7 +3664,7 @@ msgid "Unsaved Changes"
 msgstr "保存されていない変更"
 
 msgid "Unsupported MAP type"
-msgstr ""
+msgstr "非対応の MAP タイプです"
 
 msgid "Unsupported modem"
 msgstr ""
@@ -3757,7 +3814,7 @@ msgid "Version"
 msgstr "バージョン"
 
 msgid "Virtual dynamic interface"
-msgstr ""
+msgstr "仮想ダイナミックインターフェース"
 
 msgid "WDS"
 msgstr "WDS"
@@ -3830,7 +3887,7 @@ msgid "Wireless Security"
 msgstr "無線LANセキュリティ"
 
 msgid "Wireless is disabled"
-msgstr "無線LAN機能が無効になっている"
+msgstr "無線LAN機能は無効になっています"
 
 msgid "Wireless is not associated"
 msgstr "無線LAN機能がアソシエーションされていません"
@@ -3951,6 +4008,9 @@ msgstr "ローカル <abbr title=\"Domain Name System\">DNS</abbr>ファイル"
 
 msgid "minutes"
 msgstr "分"
+
+msgid "mixed WPA/WPA2"
+msgstr "mixed WPA/WPA2"
 
 msgid "no"
 msgstr "いいえ"
