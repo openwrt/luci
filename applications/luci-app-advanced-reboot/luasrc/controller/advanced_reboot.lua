@@ -1,4 +1,4 @@
--- Copyright 2017 Stan Grishin <stangri@melmac.net>
+-- Copyright 2017-2018 Stan Grishin <stangri@melmac.net>
 -- Licensed to the public under the Apache License 2.0.
 
 module("luci.controller.advanced_reboot", package.seeall)
