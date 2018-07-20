@@ -24,7 +24,7 @@ else
 	if enabledFlag ~= "1" or status:match("Stopped") then
 		en.title      = translate("Service is disabled/stopped")
 		en.inputtitle = translate("Enable/Start")
-		en.inputstyle = "apply"
+		en.inputstyle = "apply important"
 		if nixio.fs.access("/var/simple-adblock.cache") then
 			ds = h:option(DummyValue, "_dummy", translate("Service Status"))
 			ds.template = "simple-adblock/status"
@@ -33,7 +33,7 @@ else
 	else
 		en.title      = translate("Service is enabled/started")
 		en.inputtitle = translate("Stop/Disable")
-		en.inputstyle = "reset"
+		en.inputstyle = "reset important"
 		ds = h:option(DummyValue, "_dummy", translate("Service Status"))
 		ds.template = "simple-adblock/status"
 		ds.value = status
@@ -41,7 +41,7 @@ else
 			reload = h:option(Button, "__reload")
 			reload.title      = translate("Service started with error")
 			reload.inputtitle = translate("Reload")
-			reload.inputstyle = "apply"
+			reload.inputstyle = "apply important"
 			function reload.write()
 				luci.sys.exec("/etc/init.d/simple-adblock reload")
 				luci.http.redirect(luci.dispatcher.build_url("admin/services/" .. packageName))
