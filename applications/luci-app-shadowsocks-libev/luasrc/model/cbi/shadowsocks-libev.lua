@@ -38,7 +38,7 @@ o.default = 1
 o.rmempty = false
 
 o = s:option(Value, "server", translate("Server Address"))
-o.datatype = "ipaddr"
+o.datatype = "host"
 o.rmempty = false
 
 o = s:option(Value, "server_port", translate("Server Port"))
