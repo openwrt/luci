@@ -41,6 +41,13 @@ mode:value("gsm", translate("GPRS only"))
 mode:value("auto", translate("auto"))
 
 
+mode = section:taboption("general", Value, "pdptype", translate("IP Protocol"))
+mode.default = "IP"
+mode:value("IP", translate("IPv4"))
+mode:value("IPV4V6", translate("IPv4+IPv6"))
+mode:value("IPV6", translate("IPv6"))
+
+
 apn = section:taboption("general", Value, "apn", translate("APN"))
 
 
