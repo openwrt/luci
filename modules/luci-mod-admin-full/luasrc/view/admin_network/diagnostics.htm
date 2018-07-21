@@ -8,7 +8,7 @@
 <%
 local fs   = require "nixio.fs"
 local has_ping6 = fs.access("/bin/ping6") or fs.access("/usr/bin/ping6")
-local has_traceroute6 = fs.access("/usr/bin/traceroute6")
+local has_traceroute6 = fs.access("/bin/traceroute6") or fs.access("/usr/bin/traceroute6")
 
 local dns_host = luci.config.diag and luci.config.diag.dns or "dev.openwrt.org"
 local ping_host = luci.config.diag and luci.config.diag.ping or "dev.openwrt.org"
