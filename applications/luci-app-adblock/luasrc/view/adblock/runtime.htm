@@ -27,8 +27,10 @@ local sys     = require("luci.sys")
 			view.innerHTML = input || "-";
 			if (input === "enabled")
 			{
-				btn1.value = "Suspend";
-				btn2.value = "Refresh";
+				btn1.value = "<%:Suspend%>";
+				btn1.name  = "do_suspend";
+				btn2.value = "<%:Refresh%>";
+				btn2.name  = "do_refresh";
 				btn1.disabled = false;
 				running(btn1_running, 0);
 				btn2.disabled = false;
@@ -36,8 +38,10 @@ local sys     = require("luci.sys")
 			}
 			else if (input === "paused")
 			{
-				btn1.value = "Resume";
-				btn2.value = "Refresh";
+				btn1.value = "<%:Resume%>";
+				btn1.name  = "do_resume";
+				btn2.value = "<%:Refresh%>";
+				btn2.name  = "do_refresh";
 				btn1.disabled = false;
 				running(btn1_running, 0);
 				btn2.disabled = false;
@@ -45,8 +49,10 @@ local sys     = require("luci.sys")
 			}
 			else
 			{
-				btn1.value = "Suspend";
-				btn2.value = "Refresh";
+				btn1.value = "<%:Suspend%>";
+				btn1.name  = "do_suspend";
+				btn2.value = "<%:Refresh%>";
+				btn2.name  = "do_refresh";
 				btn1.disabled = true;
 				btn2.disabled = true;
 			}
@@ -77,7 +83,7 @@ local sys     = require("luci.sys")
 		btn1.disabled = true;
 		btn2.disabled = true;
 
-		if (action.value === "Refresh")
+		if (action.name === "do_refresh")
 		{
 			running(btn2_running, 1);
 		}
@@ -86,7 +92,7 @@ local sys     = require("luci.sys")
 			running(btn1_running, 1);
 		}
 
-		new XHR.get('<%=luci.dispatcher.build_url("admin", "services", "adblock")%>/action/' + action.value, null,
+		new XHR.get('<%=luci.dispatcher.build_url("admin", "services", "adblock")%>/action/' + action.name, null,
 		function(x)
 		{
 			if (!x)
@@ -116,8 +122,10 @@ local sys     = require("luci.sys")
 		{
 			var btn1 = document.getElementById("btn1");
 			var btn2 = document.getElementById("btn2");
-			btn1.value = "Suspend";
-			btn2.value = "Refresh";
+			btn1.value = "<%:Suspend%>";
+			btn1.name  = "do_suspend";
+			btn2.value = "<%:Refresh%>";
+			btn2.name  = "do_refresh";
 			btn1.disabled = true;
 			btn2.disabled = false;
 			return;
@@ -137,46 +145,46 @@ local sys     = require("luci.sys")
 //]]>
 </script>
 
-<h3>Runtime Information</h3>
+<h3><%:Runtime Information%></h3>
 <div class="cbi-value" id="status_1">
-	<label class="cbi-value-title" for="status_1">Adblock Status</label>
+	<label class="cbi-value-title" for="status_1"><%:Adblock Status%></label>
 	<div class="cbi-value-field">
 		<span class="runtime" id="value_1">-</span>
 	</div>
 </div>
 <div class="cbi-value" id="status_2">
-	<label class="cbi-value-title" for="status_2">Adblock Version</label>
+	<label class="cbi-value-title" for="status_2"><%:Adblock Version%></label>
 	<div class="cbi-value-field">
 		<span class="runtime" id="value_2">-</span>
 	</div>
 </div>
 <div class="cbi-value" id="status_3">
-	<label class="cbi-value-title" for="status_3">Download Utility (SSL Library)</label>
+	<label class="cbi-value-title" for="status_3"><%:Download Utility (SSL Library)%></label>
 	<div class="cbi-value-field">
 		<span class="runtime" id="value_3">-</span>
 	</div>
 </div>
 <div class="cbi-value" id="status_4">
-	<label class="cbi-value-title" for="status_4">DNS Backend (DNS Directory)</label>
+	<label class="cbi-value-title" for="status_4"><%:DNS Backend (DNS Directory)%></label>
 	<div class="cbi-value-field">
 		<span class="runtime" id="value_4">-</span>
 	</div>
 </div>
 <div class="cbi-value" id="status_5">
-	<label class="cbi-value-title" for="status_5">Overall Domains</label>
+	<label class="cbi-value-title" for="status_5"><%:Overall Domains%></label>
 	<div class="cbi-value-field">
 		<span class="runtime" id="value_5">-</span>
 	</div>
 </div>
 <div class="cbi-value" id="status_6">
-	<label class="cbi-value-title" for="status_6">Last Run</label>
+	<label class="cbi-value-title" for="status_6"><%:Last Run%></label>
 	<div class="cbi-value-field">
 		<span class="runtime" id="value_6">-</span>
 	</div>
 </div>
 <hr />
 <div class="cbi-value" id="button_1">
-	<label class="cbi-value-title" for="button_1">Suspend / Resume Adblock</label>
+	<label class="cbi-value-title" for="button_1"><%:Suspend / Resume Adblock%></label>
 	<div class="cbi-value-field">
 		<input class="cbi-button cbi-button-reset" id="btn1" type="button" value="" onclick="btn_action(this)" />
 		<span id="btn1_running" style="display:inline-block; width:16px; height:16px; margin:0 5px"></span>
@@ -184,7 +192,7 @@ local sys     = require("luci.sys")
 </div>
 <p />
 <div class="cbi-value" id="button_2">
-	<label class="cbi-value-title" for="button_2">Refresh Blocklist Sources</label>
+	<label class="cbi-value-title" for="button_2"><%:Refresh Blocklist Sources%></label>
 	<div class="cbi-value-field">
 		<input class="cbi-button cbi-button-apply" id="btn2" type="button" value="" onclick="btn_action(this)" />
 		<span id="btn2_running" style="display:inline-block; width:16px; height:16px; margin:0 5px"></span>
