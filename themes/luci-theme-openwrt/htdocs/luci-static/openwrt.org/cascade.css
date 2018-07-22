@@ -874,7 +874,18 @@ div.cbi-optionals {
 	white-space: nowrap;
 }
 
-.tr.placeholder .td[data-title]::before {
+.td[data-description]::after {
+	content: attr(data-description);
+	font-size: 90%;
+	text-align: left;
+	display: none;
+	background: url(/luci-static/resources/cbi/help.gif) left top no-repeat;
+	padding: .125em 0 .125em 18px;
+	margin: .125em 0;
+}
+
+.tr.placeholder .td[data-title]::before,
+.tr.placeholder .td[data-description]::after {
 	display: none;
 }
 
@@ -1183,13 +1194,13 @@ ul.cbi-tabmenu li.cbi-tab {
 }
 
 
-.left, .left::before { text-align: left !important; }
-.right, .right::before { text-align: right !important; }
-.center, .center::before { text-align: center !important; }
+.left, .left::before, .left::after { text-align: left !important; }
+.right, .right::before, .right::after { text-align: right !important; }
+.center, .center::before, .center::after { text-align: center !important; }
 
-.top, .top::before { vertical-align: top !important; }
-.middle, .middle::before { vertical-align: middle !important; }
-.bottom, .bottom::before { vertical-align: bottom !important; }
+.top, .top::before, .top::after { vertical-align: top !important; }
+.middle, .middle::before, .middle::after { vertical-align: middle !important; }
+.bottom, .bottom::before, .bottom::after { vertical-align: bottom !important; }
 
 .td.top { align-self: flex-start; vertical-align: top; }
 .td.middle { align-self: center; vertical-align: middle; }
@@ -1602,12 +1613,18 @@ ul.cbi-tabmenu li.cbi-tab {
 		background: #eef;
 	}
 
-	.td[data-title]::before {
+	.td[data-title]::before,
+	.td[data-description]::after {
 		display: block;
 	}
 
 	.td[data-title] ~ .td.cbi-section-actions {
-		align-self: flex-end;
+		align-self: flex-start;
+	}
+
+	.td[data-title] ~ .td.cbi-section-actions::before {
+		display: block;
+		content: "\a0";
 	}
 
 	.hide-sm,
