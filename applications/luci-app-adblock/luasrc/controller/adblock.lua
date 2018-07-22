@@ -30,12 +30,12 @@ function index()
 	entry({"admin", "services", "adblock", "action"}, call("adb_action"), nil).leaf = true
 end
 
-function adb_action(value)
-	if value == "Suspend" then
+function adb_action(name)
+	if name == "do_suspend" then
 		luci.sys.call("/etc/init.d/adblock suspend >/dev/null 2>&1")
-	elseif value == "Resume" then
+	elseif name == "do_resume" then
 		luci.sys.call("/etc/init.d/adblock resume >/dev/null 2>&1")
-	elseif value == "Refresh" then
+	elseif name == "do_refresh" then
 		luci.sys.call("/etc/init.d/adblock reload >/dev/null 2>&1")
 	end
 	luci.http.prepare_content("text/plain")	
