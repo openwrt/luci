@@ -627,6 +627,18 @@ function cbi_init() {
 		s.parentNode.classList.add('cbi-tooltip-container');
 	});
 
+	document.querySelectorAll('.cbi-section-remove > input[name^="cbi.rts"]').forEach(function(i) {
+		var handler = function(ev) {
+			var bits = this.name.split(/\./),
+			    section = document.getElementById('cbi-' + bits[2] + '-' + bits[3]);
+
+		    section.style.opacity = (ev.type === 'mouseover') ? 0.5 : '';
+		};
+
+		i.addEventListener('mouseover', handler);
+		i.addEventListener('mouseout', handler);
+	});
+
 	cbi_d_update();
 }
 
