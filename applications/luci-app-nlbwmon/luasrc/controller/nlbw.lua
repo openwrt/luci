@@ -57,6 +57,8 @@ function action_data()
 		json = "application/json"
 	}
 
+	local filename = "data." .. mtype
+
 	local args = { }
 	local mtype = http.formvalue("type") or "json"
 	local delim = http.formvalue("delim") or ";"
@@ -92,6 +94,7 @@ function action_data()
 	end
 
 	http.prepare_content(types[mtype])
+	http.header("Content-Disposition", "attachment; filename=\"%s\"" % filename)
 	exec("/usr/sbin/nlbw", args, http.write)
 end
 
