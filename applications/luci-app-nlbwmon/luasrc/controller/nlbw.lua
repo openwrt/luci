@@ -56,6 +56,8 @@ function action_data()
 		csv = "text/csv",
 		json = "application/json"
 	}
+	
+	local filename = "data." .. mtype
 
 	local args = { }
 	local mtype = http.formvalue("type") or "json"
@@ -92,6 +94,7 @@ function action_data()
 	end
 
 	http.prepare_content(types[mtype])
+	http.header("Content-disposition", "filename=\"" .. filename .. "\"")
 	exec("/usr/sbin/nlbw", args, http.write)
 end
 
