@@ -32,25 +32,25 @@
 
 <% if self.optionals[section] and #self.optionals[section] > 0 or self.dynamic then %>
 	<div class="cbi-optionals" data-index="<%=#self.children + 1%>">
-		<%
+		<%-
 		if self.dynamic then
 			local keys, vals, name, opt = { }, { }
 			for name, opt in pairs(self.optionals[section]) do
 				keys[#keys+1] = name
 				vals[#vals+1] = opt.title
 			end
-		%>
+		-%>
 			<input type="text" id="cbi.opt.<%=self.config%>.<%=section%>" name="cbi.opt.<%=self.config%>.<%=section%>" data-type="uciname" data-optional="true"<%=
 				ifattr(#keys > 0, "data-choices", luci.util.json_encode({keys, vals}))
 			%> />
-		<% else %>
+		<%- else -%>
 			<select id="cbi.opt.<%=self.config%>.<%=section%>" name="cbi.opt.<%=self.config%>.<%=section%>" data-optionals="true">
 				<option><%: -- Additional Field -- %></option>
 				<% for key, val in pairs(self.optionals[section]) do -%>
 					<option id="cbi-<%=self.config.."-"..section.."-"..val.option%>" value="<%=val.option%>" data-index="<%=val.index%>" data-depends="<%=pcdata(val:deplist2json(section))%>"><%=striptags(val.title)%></option>
 				<%- end %>
 			</select>
-		<% end %>
+		<%- end -%>
 		<input type="submit" class="cbi-button cbi-button-fieldadd" value="<%:Add%>" />
 	</div>
 <% end %>
