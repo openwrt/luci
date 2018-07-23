@@ -818,9 +818,9 @@ function cbi_dynlist_init(parent, datatype, optional, choices)
 				t.placeholder = holder;
 			}
 
-			var b = document.createElement('img');
-				b.src = cbi_strings.path.resource + ((i+1) < values.length ? '/cbi/remove.gif' : '/cbi/add.gif');
-				b.className = 'cbi-image-button';
+			var b = E('div', {
+				class: 'cbi-button cbi-button-' + ((i+1) < values.length ? 'remove' : 'add')
+			}, (i+1) < values.length ? '×' : '+');
 
 			parent.appendChild(t);
 			parent.appendChild(b);
@@ -986,8 +986,7 @@ function cbi_dynlist_init(parent, datatype, optional, choices)
 			input = input.previousSibling;
 		}
 
-		if (se.src.indexOf('remove') > -1)
-		{
+		if (se.classList.contains('cbi-button-remove')) {
 			input.value = '';
 
 			cbi_dynlist_keydown({
@@ -995,8 +994,7 @@ function cbi_dynlist_init(parent, datatype, optional, choices)
 				keyCode: 8
 			});
 		}
-		else
-		{
+		else {
 			cbi_dynlist_keydown({
 				target:  input,
 				keyCode: 13
