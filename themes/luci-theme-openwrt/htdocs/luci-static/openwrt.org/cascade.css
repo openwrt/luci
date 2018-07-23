@@ -429,11 +429,11 @@ p {
 }
 
 .cbi-title-ref {
-	color: inherit;
-	text-decoration: none;
-	padding-right: 18px;
-	background: url('../resources/cbi/link.gif') no-repeat scroll right center;
-	background-color: inherit;
+	color: #37c;
+}
+
+.cbi-title-ref::after {
+	content: "➙";
 }
 
 ul.cbi-apply {
@@ -850,7 +850,8 @@ div.cbi-optionals {
 	margin-left: 50%;
 }
 
-.cbi-page-actions > .cbi-button-apply + .cbi-button-save {
+.cbi-page-actions > .cbi-button-apply + .cbi-button-save,
+.cbi-page-actions > .cbi-button-save + form[method="post"] {
 	margin-left: 3px;
 }
 
@@ -1144,6 +1145,19 @@ ul.cbi-tabmenu li.cbi-tab {
 	opacity: .6;
 }
 
+input[type="text"] + .cbi-button,
+input[type="password"] + .cbi-button,
+select + .cbi-button {
+	border-radius: 0 3px 3px 0;
+	border: 1px outset #000;
+	margin: 0 0 1px -2px;
+	padding: 0 6px;
+	vertical-align: top;
+	display: inline-block;
+	height: 14pt;
+	font-size: 10pt;
+	line-height: 12pt;
+}
 
 .cbi-tooltip-container {
 	cursor: help;
