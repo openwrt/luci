@@ -61,7 +61,7 @@ function action_data()
 
 	local args = { }
 	local mtype = http.formvalue("type") or "json"
-	local delim = http.formvalue("delim") or ";"
+	local delim = http.formvalue("delim") or ","
 	local period = http.formvalue("period")
 	local group_by = http.formvalue("group_by")
 	local order_by = http.formvalue("order_by")
