@@ -4,6 +4,21 @@ This is free software, licensed under the Apache License, Version 2.0
 -%>
 
 <%+header%>
+<style type="text/css">
+	select[readonly],
+	textarea[readonly]
+	{
+		width: 100%;
+		height: 450px;
+		border: 1px solid #cccccc;
+		padding: 5px;
+		font-size: 12px;
+		font-family: monospace;
+		resize: none;
+		pointer-events: auto;
+		cursor: auto;
+	}
+</style>
 
 <script type="text/javascript">
 //<![CDATA[
@@ -28,7 +43,7 @@ This is free software, licensed under the Apache License, Version 2.0
 <div class="cbi-map">
 	<div class="cbi-section">
 		<div class="cbi-section-descr"><%:The syslog output, pre-filtered for adblock related messages only.%></div>
-		<textarea id="view_id" style="width:100%;height:450px;border:1px solid #cccccc;padding:5px;font-size:12px;font-family:monospace;resize:none;" readonly="readonly" wrap="off" value=""></textarea>
+		<textarea id="view_id" readonly="readonly" wrap="off" value=""></textarea>
 	</div>
 </div>
 
