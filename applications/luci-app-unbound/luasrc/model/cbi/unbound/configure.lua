@@ -27,7 +27,7 @@ s1:tab("basic", translate("Basic"),
   .. "UCI documentation can be found on "
   .. "<a href=\"%s\" target=\"_blank\">github (link)</a>.",
   "https://www.unbound.net/",
-  "https://github.com/openwrt/packages/blob/master/net/unbound/files/README.md"))
+  "https://github.com/openwrt/packages/blob/openwrt-18.06/net/unbound/files/README.md"))
 
 
 if valman ~= "1" then
