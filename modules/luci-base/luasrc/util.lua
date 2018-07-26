@@ -16,7 +16,7 @@ local _ubus = require "ubus"
 local _ubus_connection = nil
 
 local getmetatable, setmetatable = getmetatable, setmetatable
-local rawget, rawset, unpack = rawget, rawset, unpack
+local rawget, rawset, unpack, select = rawget, rawset, unpack, select
 local tostring, type, assert, error = tostring, type, assert, error
 local ipairs, pairs, next, loadstring = ipairs, pairs, next, loadstring
 local require, pcall, xpcall = require, pcall, xpcall
@@ -647,6 +647,17 @@ local ubus_codes = {
 	"CONNECTION_FAILED"
 }
 
+local function ubus_return(...)
+	if select('#', ...) == 2 then
+		local rv, err = select(1, ...), select(2, ...)
+		if rv == nil and type(err) == "number" then
+			return nil, err, ubus_codes[err]
+		end
+	end
+
+	return ...
+end
+
 function ubus(object, method, data)
 	if not _ubus_connection then
 		_ubus_connection = _ubus.connect()
@@ -657,8 +668,7 @@ function ubus(object, method, data)
 		if type(data) ~= "table" then
 			data = { }
 		end
-		local rv, err = _ubus_connection:call(object, method, data)
-		return rv, err, ubus_codes[err]
+		return ubus_return(_ubus_connection:call(object, method, data))
 	elseif object then
 		return _ubus_connection:signatures(object)
 	else
