@@ -1,4 +1,4 @@
-<% export("cbi_apply_widget", function(redirect_ok) -%>
+<% export("cbi_apply_widget", function(redirect_ok, rollback_token) -%>
 <style type="text/css">
 	#cbi_apply_overlay {
 		position: absolute;
@@ -51,6 +51,7 @@
 	    uci_apply_holdoff = <%=math.max(luci.config and luci.config.apply and luci.config.apply.holdoff or 4, 1)%>,
 	    uci_apply_timeout = <%=math.max(luci.config and luci.config.apply and luci.config.apply.timeout or 5, 1)%>,
 	    uci_apply_display = <%=math.max(luci.config and luci.config.apply and luci.config.apply.display or 1.5, 1)%>,
+	    uci_confirm_auth = <% if rollback_token then %>{ token: '<%=rollback_token%>' }<% else %>null<% end %>,
 	    was_xhr_poll_running = false;
 
 	function uci_status_message(type, content) {
@@ -148,7 +149,7 @@
 
 			var delay = isNaN(duration) ? 0 : Math.max(1000 - duration, 0);
 			window.setTimeout(function() {
-				xhr.post('<%=url("admin/uci/confirm")%>', uci_apply_auth, call, uci_apply_timeout * 1000);
+				xhr.post('<%=url("admin/uci/confirm")%>', uci_confirm_auth, call, uci_apply_timeout * 1000);
 			}, delay);
 		};
 
@@ -177,8 +178,11 @@
 			'<img src="<%=resource%>/icons/loading.gif" alt="" style="vertical-align:middle" /> ' +
 			'<%:Starting configuration apply…%>');
 
-		xhr.post('<%=url("admin/uci")%>/' + (checked ? 'apply_rollback' : 'apply_unchecked'), uci_apply_auth, function(r) {
+		xhr.post('<%=url("admin/uci")%>/' + (checked ? 'apply_rollback' : 'apply_unchecked'), uci_apply_auth, function(r, tok) {
 			if (r.status === (checked ? 200 : 204)) {
+				if (checked && tok !== null && typeof(tok) === 'object' && typeof(tok.token) === 'string')
+					uci_confirm_auth = tok;
+
 				uci_confirm(checked, Date.now() + uci_apply_rollback * 1000);
 			}
 			else if (checked && r.status === 204) {

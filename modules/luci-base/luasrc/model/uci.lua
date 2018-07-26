@@ -147,19 +147,31 @@ function apply(self, rollback)
 	local _, err
 
 	if rollback then
+		local sys = require "luci.sys"
 		local conf = require "luci.config"
-		local timeout = tonumber(conf and conf.apply and conf.apply.rollback or "") or 0
+		local timeout = tonumber(conf and conf.apply and conf.apply.rollback or 30) or 0
 
 		_, err = call("apply", {
-			timeout  = (timeout > 30) and timeout or 30,
+			timeout = (timeout > 30) and timeout or 30,
 			rollback = true
 		})
 
 		if not err then
+			local now = os.time()
+			local token = sys.uniqueid(16)
+
 			util.ubus("session", "set", {
-				ubus_rpc_session = session_id,
-				values = { rollback = os.time() + timeout }
+				ubus_rpc_session = "00000000000000000000000000000000",
+				values = {
+					rollback = {
+						token   = token,
+						session = session_id,
+						timeout = now + timeout
+					}
+				}
 			})
+
+			return token
 		end
 	else
 		_, err = call("changes", {})
@@ -184,40 +196,72 @@ function apply(self, rollback)
 	return (err == nil), ERRSTR[err]
 end
 
-function confirm(self)
-	local _, err = call("confirm", {})
-	if not err then
-		util.ubus("session", "set", {
-			ubus_rpc_session = session_id,
-			values = { rollback = 0 }
+function confirm(self, token)
+	local is_pending, time_remaining, rollback_sid, rollback_token = self:rollback_pending()
+
+	if is_pending then
+		if token ~= rollback_token then
+			return false, "Permission denied"
+		end
+
+		local _, err = util.ubus("uci", "confirm", {
+			ubus_rpc_session = rollback_sid
 		})
+
+		if not err then
+			util.ubus("session", "set", {
+				ubus_rpc_session = "00000000000000000000000000000000",
+				values = { rollback = {} }
+			})
+		end
+
+		return (err == nil), ERRSTR[err]
 	end
-	return (err == nil), ERRSTR[err]
+
+	return false, "No data"
 end
 
 function rollback(self)
-	local _, err = call("rollback", {})
-	if not err then
-		util.ubus("session", "set", {
-			ubus_rpc_session = session_id,
-			values = { rollback = 0 }
+	local is_pending, time_remaining, rollback_sid = self:rollback_pending()
+
+	if is_pending then
+		local _, err = util.ubus("uci", "rollback", {
+			ubus_rpc_session = rollback_sid
 		})
+
+		if not err then
+			util.ubus("session", "set", {
+				ubus_rpc_session = "00000000000000000000000000000000",
+				values = { rollback = {} }
+			})
+		end
+
+		return (err == nil), ERRSTR[err]
 	end
-	return (err == nil), ERRSTR[err]
+
+	return false, "No data"
 end
 
 function rollback_pending(self)
-	local deadline, err = util.ubus("session", "get", {
-		ubus_rpc_session = session_id,
+	local rv, err = util.ubus("session", "get", {
+		ubus_rpc_session = "00000000000000000000000000000000",
 		keys = { "rollback" }
 	})
 
-	if type(deadline) == "table" and
-	   type(deadline.values) == "table" and
-	   type(deadline.values.rollback) == "number" and
-	   deadline.values.rollback > os.time()
+	local now = os.time()
+
+	if type(rv) == "table" and
+	   type(rv.values) == "table" and
+	   type(rv.values.rollback) == "table" and
+	   type(rv.values.rollback.token) == "string" and
+	   type(rv.values.rollback.session) == "string" and
+	   type(rv.values.rollback.timeout) == "number" and
+	   rv.values.rollback.timeout > now
 	then
-		return true, deadline.values.rollback - os.time()
+		return true,
+			rv.values.rollback.timeout - now,
+			rv.values.rollback.session,
+			rv.values.rollback.token
 	end
 
 	return false, ERRSTR[err]
