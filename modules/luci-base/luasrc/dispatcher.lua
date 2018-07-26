@@ -893,8 +893,6 @@ local function _cbi(self, ...)
 	local pageaction = true
 	local parsechain = { }
 
-	local is_rollback, time_remaining = uci:rollback_pending()
-
 	for i, res in ipairs(maps) do
 		if res.apply_needed and res.parsechain then
 			local c
@@ -921,8 +919,6 @@ local function _cbi(self, ...)
 	for i, res in ipairs(maps) do
 		res:render({
 			firstmap   = (i == 1),
-			applymap   = applymap,
-			confirmmap = (is_rollback and time_remaining or nil),
 			redirect   = redirect,
 			messages   = messages,
 			pageaction = pageaction,
@@ -932,11 +928,12 @@ local function _cbi(self, ...)
 
 	if not config.nofooter then
 		tpl.render("cbi/footer", {
-			flow       = config,
-			pageaction = pageaction,
-			redirect   = redirect,
-			state      = state,
-			autoapply  = config.autoapply
+			flow          = config,
+			pageaction    = pageaction,
+			redirect      = redirect,
+			state         = state,
+			autoapply     = config.autoapply,
+			trigger_apply = applymap
 		})
 	end
 end
