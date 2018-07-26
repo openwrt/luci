@@ -70,7 +70,7 @@ local tpl_radio = tpl.Template(nil, [[
 			<!-- physical device -->
 			<div class="tr cbi-rowstyle-2">
 				<div class="td col-2 center middle">
-					<span class="ifacebadge"><img src="<%=resource%>/icons/wifi_toggled.png" id="<%=dev:name()%>-iw-upstate" /> <%=dev:name()%></span>
+					<span class="ifacebadge"><img src="<%=resource%>/icons/wifi_disabled.png" id="<%=dev:name()%>-iw-upstate" /> <%=dev:name()%></span>
 				</div>
 				<div class="td col-7 left middle">
 					<big><strong><%=hw%></strong></big><br />
@@ -115,8 +115,8 @@ local tpl_radio = tpl.Template(nil, [[
 				</div>
 				<% end %>
 			<% else %>
-				<div class="tr cbi-rowstyle-2">
-					<div class="td left">
+				<div class="tr placeholder">
+					<div class="td">
 						<em><%:No network configured on this device%></em>
 					</div>
 				</div>
