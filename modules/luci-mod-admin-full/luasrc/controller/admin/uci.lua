@@ -9,7 +9,7 @@ function index()
 		or table.concat(luci.dispatcher.context.request, "/")
 
 	entry({"admin", "uci"}, nil, _("Configuration"))
-	entry({"admin", "uci", "changes"}, call("action_changes"), _("Changes"), 40).query = {redir=redir}
+	entry({"admin", "uci", "changes"}, post_on({ trigger_apply = true }, "action_changes"), _("Changes"), 40).query = {redir=redir}
 	entry({"admin", "uci", "revert"}, post("action_revert"), _("Revert"), 30).query = {redir=redir}
 
 	local node
@@ -25,9 +25,9 @@ function index()
 	node.cors = true
 	node.sysauth_authenticator = authen
 
-	node = entry({"admin", "uci", "confirm"}, post("action_confirm"), nil)
+	node = entry({"admin", "uci", "confirm"}, call("action_confirm"), nil)
 	node.cors = true
-	node.sysauth_authenticator = authen
+	node.sysauth = false
 end
 
 
@@ -36,8 +36,9 @@ function action_changes()
 	local changes = uci:changes()
 
 	luci.template.render("admin_uci/changes", {
-		changes  = next(changes) and changes,
-		timeout  = timeout
+		changes       = next(changes) and changes,
+		timeout       = timeout,
+		trigger_apply = luci.http.formvalue("trigger_apply") and true or false
 	})
 end
 
@@ -52,7 +53,8 @@ function action_revert()
 	end
 
 	luci.template.render("admin_uci/revert", {
-		changes = next(changes) and changes
+		changes        = next(changes) and changes,
+		trigger_revert = true
 	})
 end
 
@@ -84,8 +86,13 @@ end
 
 function action_apply_rollback()
 	local uci = require "luci.model.uci"
-	local _, errstr = uci:apply(true)
-	ubus_state_to_http(errstr)
+	local token, errstr = uci:apply(true)
+	if token then
+		luci.http.prepare_content("application/json")
+		luci.http.write_json({ token = token })
+	else
+		ubus_state_to_http(errstr)
+	end
 end
 
 function action_apply_unchecked()
@@ -96,6 +103,7 @@ end
 
 function action_confirm()
 	local uci = require "luci.model.uci"
-	local _, errstr = uci:confirm()
+	local token = luci.http.formvalue("token")
+	local _, errstr = uci:confirm(token)
 	ubus_state_to_http(errstr)
 end
