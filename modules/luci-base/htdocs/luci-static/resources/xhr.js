@@ -65,12 +65,8 @@ XHR = function()
 			if (xhr.readyState == 4) {
 				var json = null;
 				if (xhr.getResponseHeader("Content-Type") == "application/json") {
-					try {
-						json = JSON.parse(xhr.responseText);
-					}
-					catch(e) {
-						json = null;
-					}
+					try { json = JSON.parse(xhr.responseText); }
+					catch(e) { json = null; }
 				}
 
 				callback(xhr, json, Date.now() - ts);
@@ -90,8 +86,15 @@ XHR = function()
 
 		xhr.onreadystatechange = function()
 		{
-			if (xhr.readyState == 4)
-				callback(xhr, null, Date.now() - ts);
+			if (xhr.readyState == 4) {
+				var json = null;
+				if (xhr.getResponseHeader("Content-Type") == "application/json") {
+					try { json = JSON.parse(xhr.responseText); }
+					catch(e) { json = null; }
+				}
+
+				callback(xhr, json, Date.now() - ts);
+			}
 		}
 
 		xhr.open('POST', url, true);
