@@ -94,7 +94,7 @@ function action_data()
 	end
 
 	http.prepare_content(types[mtype])
-	http.header("Content-disposition", "filename=\"" .. filename .. "\"")
+	http.header("Content-Disposition", "attachment; filename=\"%s\"" % filename)
 	exec("/usr/sbin/nlbw", args, http.write)
 end
 
