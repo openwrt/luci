@@ -5,8 +5,6 @@
 -%>
 
 <%
-	include("themes/" .. theme .. "/footer")
-
 	local is_rollback_pending, rollback_time_remaining, rollback_session, rollback_token = luci.model.uci:rollback_pending()
 
 	if is_rollback_pending or trigger_apply or trigger_revert then
@@ -27,4 +25,6 @@
 	</script>
 <%
 	end
+
+	include("themes/" .. theme .. "/footer")
 %>
