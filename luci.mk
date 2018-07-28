@@ -153,7 +153,7 @@ LUCI_LIBRARYDIR = $(LUA_LIBRARYDIR)/luci
 
 define SrcDiet
 	$(FIND) $(1) -type f -name '*.lua' | while read src; do \
-		if luasrcdiet --noopt-binequiv -o "$$$$src.o" "$$$$src"; \
+		if LUA_PATH="$(STAGING_DIR_HOSTPKG)/lib/lua/5.1/?.lua" luasrcdiet --noopt-binequiv -o "$$$$src.o" "$$$$src"; \
 		then mv "$$$$src.o" "$$$$src"; fi; \
 	done
 endef
