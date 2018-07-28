@@ -1,11 +1,11 @@
--- Copyright 2017 Dirk Brenken (dev@brenken.org)
+-- Copyright 2017-2018 Dirk Brenken (dev@brenken.org)
 -- This is free software, licensed under the Apache License, Version 2.0
 
-local fs = require("nixio.fs")
-local util = require("luci.util")
-local trminput = "/etc/config/wireless"
+local fs    = require("nixio.fs")
+local util  = require("luci.util")
+local input = "/etc/config/wireless"
 
-if not nixio.fs.access(trminput) then
+if not fs.access(input) then
 	m = SimpleForm("error", nil, translate("Input file not found, please check your configuration."))
 	return m
 end
@@ -23,11 +23,15 @@ f.rows = 20
 f.rmempty = true
 
 function f.cfgvalue()
-	return nixio.fs.readfile(trminput) or ""
+	return fs.readfile(input) or ""
 end
 
 function f.write(self, section, data)
-	return nixio.fs.writefile(trminput, "\n" .. util.trim(data:gsub("\r\n", "\n")) .. "\n")
+	return fs.writefile(input, "\n" .. util.trim(data:gsub("\r\n", "\n")) .. "\n")
+end
+
+function f.remove(self, section, value)
+	return fs.writefile(input, "")
 end
 
 function s.handle(self, state, data)
