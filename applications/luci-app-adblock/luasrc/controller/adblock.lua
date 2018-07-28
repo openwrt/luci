@@ -6,11 +6,9 @@ module("luci.controller.adblock", package.seeall)
 local sys   = require("luci.sys")
 local util  = require("luci.util")
 local http  = require("luci.http")
-local templ = require("luci.template")
 local i18n  = require("luci.i18n")
 local json  = require("luci.jsonc")
 local uci   = require("luci.model.uci").cursor()
-local fs    = require("nixio.fs")
 
 function index()
 	if not nixio.fs.access("/etc/config/adblock") then
@@ -48,12 +46,10 @@ function status_update()
 
 	rt_file = uci:get("adblock", "global", "adb_rtfile") or "/tmp/adb_runtime.json"
 
-	if fs.access(rt_file) then
-		content = json.parse(fs.readfile(rt_file))
-		if content then
-			http.prepare_content("application/json")
-			http.write_json(content)
-		end
+	if nixio.fs.access(rt_file) then
+		content = json.parse(nixio.fs.readfile(rt_file) or "")
+		http.prepare_content("application/json")
+		http.write_json(content)
 	end
 end
 
