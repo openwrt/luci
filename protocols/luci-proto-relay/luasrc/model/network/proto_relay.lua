@@ -32,6 +32,11 @@ function proto.is_virtual(self)
 	return true
 end
 
+function proto.is_up(self)
+	local iface = self:get_interface()
+	return iface and iface:is_up() or false
+end
+
 function proto.get_interface(self)
 	return device(self.sid, self)
 end
@@ -78,6 +83,10 @@ function proto.uptime(self)
 		end
 	end
 	return upt
+end
+
+function proto.errors(self)
+	return nil
 end
 
 
