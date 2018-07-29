@@ -221,63 +221,36 @@
 			<% end %>
 
 			<% if has_dsl then %>
-				var dsl_i = document.getElementById('dsl_i');
-				var dsl_s = document.getElementById('dsl_s');
+				var ds = document.getElementById('dsl_status_table');
 
-				var s = String.format(
-					'<strong><%:Status%>: </strong>%s<br />' +
-					'<strong><%:Line State%>: </strong>%s [0x%x]<br />' +
-					'<strong><%:Line Mode%>: </strong>%s<br />' +
-					'<strong><%:Annex%>: </strong>%s<br />' +
-					'<strong><%:Profile%>: </strong>%s<br />' +
-					'<strong><%:Data Rate%>: </strong>%s/s / %s/s<br />' +
-					'<strong><%:Max. Attainable Data Rate (ATTNDR)%>: </strong>%s/s / %s/s<br />' +
-					'<strong><%:Latency%>: </strong>%s / %s<br />' +
-					'<strong><%:Line Attenuation (LATN)%>: </strong>%s dB / %s dB<br />' +
-					'<strong><%:Signal Attenuation (SATN)%>: </strong>%s dB / %s dB<br />' +
-					'<strong><%:Noise Margin (SNR)%>: </strong>%s dB / %s dB<br />' +
-					'<strong><%:Aggregate Transmit Power(ACTATP)%>: </strong>%s dB / %s dB<br />' +
-					'<strong><%:Forward Error Correction Seconds (FECS)%>: </strong>%s / %s<br />' +
-					'<strong><%:Errored seconds (ES)%>: </strong>%s / %s<br />' +
-					'<strong><%:Severely Errored Seconds (SES)%>: </strong>%s / %s<br />' +
-					'<strong><%:Loss of Signal Seconds (LOSS)%>: </strong>%s / %s<br />' +
-					'<strong><%:Unavailable Seconds (UAS)%>: </strong>%s / %s<br />' +
-					'<strong><%:Header Error Code Errors (HEC)%>: </strong>%s / %s<br />' +
-					'<strong><%:Non Pre-emtive CRC errors (CRC_P)%>: </strong>%s / %s<br />' +
-					'<strong><%:Pre-emtive CRC errors (CRCP_P)%>: </strong>%s / %s<br />' +
-					'<strong><%:Line Uptime%>: </strong>%s<br />' +
-					'<strong><%:ATU-C System Vendor ID%>: </strong>%s<br />' +
-					'<strong><%:Power Management Mode%>: </strong>%s<br />',
-						info.dsl.line_state, info.dsl.line_state_detail,
-						info.dsl.line_state_num,
-						info.dsl.line_mode_s,
-						info.dsl.annex_s,
-						info.dsl.profile_s,
-						info.dsl.data_rate_down_s, info.dsl.data_rate_up_s,
-						info.dsl.max_data_rate_down_s, info.dsl.max_data_rate_up_s,
-						info.dsl.latency_num_down, info.dsl.latency_num_up,
-						info.dsl.line_attenuation_down, info.dsl.line_attenuation_up,
-						info.dsl.signal_attenuation_down, info.dsl.signal_attenuation_up,
-						info.dsl.noise_margin_down, info.dsl.noise_margin_up,
-						info.dsl.actatp_down, info.dsl.actatp_up,
-						info.dsl.errors_fec_near, info.dsl.errors_fec_far,
-						info.dsl.errors_es_near, info.dsl.errors_es_far,
-						info.dsl.errors_ses_near, info.dsl.errors_ses_far,
-						info.dsl.errors_loss_near, info.dsl.errors_loss_far,
-						info.dsl.errors_uas_near, info.dsl.errors_uas_far,
-						info.dsl.errors_hec_near, info.dsl.errors_hec_far,
-						info.dsl.errors_crc_p_near, info.dsl.errors_crc_p_far,
-						info.dsl.errors_crcp_p_near, info.dsl.errors_crcp_p_far,
-						info.dsl.line_uptime_s,
-						info.dsl.atuc_vendor_id,
-						info.dsl.power_mode_s
-				);
+				while (ds.lastElementChild)
+					ds.removeChild(ds.lastElementChild);
 
-				dsl_s.innerHTML = String.format('<small>%s</small>', s);
-				dsl_i.innerHTML = String.format(
-					'<img src="<%=resource%>/icons/ethernet.png" />' +
-					'<br /><small>DSL</small>'
-				);
+				ds.appendChild(renderBox(
+					'<%:DSL Status%>',
+					(info.dsl.line_state === 'UP'), [ ],
+					'<%:Line State%>', '%s [0x%x]'.format(info.dsl.line_state, info.dsl.line_state_detail),
+					'<%:Line Mode%>', info.dsl.line_mode_s || '-',
+					'<%:Line Uptime%>', info.dsl.line_uptime_s || '-',
+					'<%:Annex%>', info.dsl.annex_s || '-',
+					'<%:Profile%>', info.dsl.profile_s || '-',
+					'<%:Data Rate%>', '%s/s / %s/s'.format(info.dsl.data_rate_down_s, info.dsl.data_rate_up_s),
+					'<%:Max. Attainable Data Rate (ATTNDR)%>', '%s/s / %s/s'.format(info.dsl.max_data_rate_down_s, info.dsl.max_data_rate_up_s),
+					'<%:Latency%>', '%s / %s'.format(info.dsl.latency_num_down, info.dsl.latency_num_up),
+					'<%:Line Attenuation (LATN)%>', '%d dB / %d dB'.format(info.dsl.line_attenuation_down, info.dsl.line_attenuation_up),
+					'<%:Signal Attenuation (SATN)%>', '%d dB / %d dB'.format(info.dsl.signal_attenuation_down, info.dsl.signal_attenuation_up),
+					'<%:Noise Margin (SNR)%>', '%d dB / %d dB'.format(info.dsl.noise_margin_down, info.dsl.noise_margin_up),
+					'<%:Aggregate Transmit Power(ACTATP)%>', '%d dB / %d dB'.format(info.dsl.actatp_down, info.dsl.actatp_up),
+					'<%:Forward Error Correction Seconds (FECS)%>', '%d / %d'.format(info.dsl.errors_fec_near, info.dsl.errors_fec_far),
+					'<%:Errored seconds (ES)%>', '%d / %d'.format(info.dsl.errors_es_near, info.dsl.errors_es_far),
+					'<%:Severely Errored Seconds (SES)%>', '%d / %d'.format(info.dsl.errors_ses_near, info.dsl.errors_ses_far),
+					'<%:Loss of Signal Seconds (LOSS)%>', '%d / %d'.format(info.dsl.errors_loss_near, info.dsl.errors_loss_far),
+					'<%:Unavailable Seconds (UAS)%>', '%d / %d'.format(info.dsl.errors_uas_near, info.dsl.errors_uas_far),
+					'<%:Header Error Code Errors (HEC)%>', '%d / %d'.format(info.dsl.errors_hec_near, info.dsl.errors_hec_far),
+					'<%:Non Pre-emtive CRC errors (CRC_P)%>', '%d / %d'.format(info.dsl.errors_crc_p_near, info.dsl.errors_crc_p_far),
+					'<%:Pre-emtive CRC errors (CRCP_P)%>', '%d / %d'.format(info.dsl.errors_crcp_p_near, info.dsl.errors_crcp_p_far),
+					'<%:ATU-C System Vendor ID%>', info.dsl.atuc_vendor_id,
+					'<%:Power Management Mode%>', info.dsl.power_mode_s));
 			<% end %>
 
 			<% if has_wifi then %>
@@ -452,18 +425,8 @@
 <div class="cbi-section">
 	<h3><%:DSL%></h3>
 
-	<div class="table" width="100%">
-		<div class="tr">
-			<div class="td left" width="33%" style="vertical-align:top"><%:DSL Status%></div>
-			<div class="td">
-				<div class="table">
-					<div class="tr">
-						<div class="td" id="dsl_i" style="width:16px; text-align:center; padding:3px"><img src="<%=resource%>/icons/ethernet_disabled.png" /><br /><small>?</small></div>
-						<div class="td left" id="dsl_s" style="vertical-align:middle; padding: 3px"><em><%:Collecting data...%></em></div>
-					</div>
-				</div>
-			</div>
-		</div>
+	<div id="dsl_status_table" class="network-status-table">
+		<p><em><%:Collecting data...%></em></p>
 	</div>
 </div>
 <% end %>
