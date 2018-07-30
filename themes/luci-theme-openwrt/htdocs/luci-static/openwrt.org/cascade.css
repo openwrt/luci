@@ -1347,6 +1347,11 @@ select + .cbi-button {
 	margin: .5em 0 0 0;
 }
 
+#dsl_status_table .ifacebox-body > span > strong {
+	display: inline-block;
+	min-width: 35%;
+}
+
 
 .zonebadge {
 	padding: 2px;
@@ -1646,6 +1651,10 @@ select + .cbi-button {
 	.hide-xs {
 		display: none;
 	}
+
+	#dsl_status_table .ifacebox-body > span > strong {
+		min-width: 50%;
+	}
 }
 
 @media screen and (max-width: 480px) {
@@ -1756,5 +1765,11 @@ select + .cbi-button {
 
 	#cbi-network-switch_vlan .td.cbi-section-actions {
 		flex-basis: 100%;
+	}
+
+	#dsl_status_table .ifacebox-body > span > strong {
+		display: block;
+		width: 100%;
+		margin-top: .5em;
 	}
 }
