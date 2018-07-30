@@ -4,81 +4,65 @@ This is free software, licensed under the Apache License, Version 2.0
 -%>
 
 <%-
-local rowcnt = 1
-function rowstyle()
-	rowcnt = rowcnt + 1
-	return (rowcnt % 2) + 1
-end
-
-function width(o)
-	if o.width then
-		if type(o.width) == 'number' then
-			return ' style="width:%dpx"' % o.width
-		end
-		return ' style="width:%s"' % o.width
-	end
-	return ''
-end
+local anonclass  = (not self.anonymous or self.sectiontitle) and "named" or "anonymous"
 -%>
 
 <style type="text/css">
 .table.cbi-section-table .th,
 .table.cbi-section-table .td,
 .cbi-section-table-cell,
-.cbi-section-table-row
+.cbi-section-table-row,
+.tr[data-title]::before
 {
-	text-align:left;
-	vertical-align:top;
-	margin-right:auto;
-	margin-left:0px;
-	padding-left:2px;
-	line-height:20px;
+	text-align: left;
+	vertical-align: top;
+	margin-left: 0px;
+	padding-left: 2px;
 }
 .table.cbi-section-table .th
 {
-	white-space:nowrap;
+	white-space: nowrap;
 }
 .table.cbi-section-table input
 {
-	width:7em;
+	width: 7em;
 }
+.cbi-section-table-row > .cbi-value-field [data-dynlist] > input,
+.table.cbi-section-table input
+{
+	width: 7em;
+}
+
 .cbi-input-text
 {
-	text-align:left;
-	padding-left:2px;
-	outline:none;
-	box-shadow:none;
-	background:transparent;
-	height:20px;
-	width:10em;
+	text-align: left;
+	padding-left: 2px;
+	outline: none;
+	box-shadow: none;
+	background: transparent;
+	width: 7em;
 }
 </style>
 
-<%-
-	local anonclass = (not self.anonymous or self.sectiontitle) and "named" or "anonymous"
-	local titlename = ifattr(not self.anonymous or self.sectiontitle, "data-title", translate("Name"))
--%>
-
-<fieldset class="cbi-section" id="cbi-<%=self.config%>-<%=self.sectiontype%>">
+<div class="cbi-section" id="cbi-<%=self.config%>-<%=self.sectiontype%>">
 	<% if self.title then -%>
-		<legend><%=self.title%></legend>
+		<h3><%=self.title%></h3>
 	<%- end %>
 	<div class="cbi-section-descr"><%=self.description%></div>
 	<div class="cbi-section-node">
 		<div class="table cbi-section-table">
-			<div class="tr cbi-section-table-titles <%=anonclass%>"<%=titlename%>>
+			<div class="tr cbi-section-table-titles <%=anonclass%>">
 			<%- for i, k in pairs(self.children) do -%>
-				<div class="th cbi-section-table-cell"<%=width(k)%>>
+				<div class="th cbi-section-table-cell">
 					<%-=k.title-%>
 				</div>
 			<%- end -%>
 			</div>
-			<%- local isempty = true
+			<%- local section, scope, isempty = true
 				for i, k in ipairs(self:cfgsections()) do
-					local section = k
-					local sectionname = striptags((type(self.sectiontitle) == "function") and self:sectiontitle(section) or k)
+					section = k
+					local sectionname  = striptags((type(self.sectiontitle) == "function") and self:sectiontitle(section) or k)
 					local sectiontitle = ifattr(sectionname and (not self.anonymous or self.sectiontitle), "data-title", sectionname)
-
 					isempty = false
 					scope = { valueheader = "cbi/cell_valueheader", valuefooter = "cbi/cell_valuefooter" }
 			-%>
@@ -95,4 +79,4 @@ end
 			<%- end -%>
 		</div>
 	</div>
-</fieldset>
+</div>
