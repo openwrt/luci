@@ -14,10 +14,10 @@ PKG_VERSION:=1.1.0
 
 # Release == build
 # increase on changes of translation files
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_LICENSE:=Apache-2.0
-PKG_MAINTAINER:=Christian Schoenebeck <christian.schoenebeck@gmail.com>
+PKG_MAINTAINER:=
 
 # LuCI specific settings
 LUCI_TITLE:=LuCI Support for Radicale CardDAV/CalDAV
