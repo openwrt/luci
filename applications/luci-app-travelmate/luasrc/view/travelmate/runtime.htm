@@ -7,7 +7,6 @@ This is free software, licensed under the Apache License, Version 2.0
 	.runtime
 	{
 		color: #37c;
-		//#0069d6;
 		font-weight: bold;
 		display: inline-block;
 		width: 100%;
@@ -22,7 +21,7 @@ This is free software, licensed under the Apache License, Version 2.0
 			var btn1  = document.getElementById("btn1");
 			var view  = document.getElementById("value_1");
 			var input = json.data.travelmate_status;
-			
+
 			btn1.value = "<%:Restart%>";
 			btn1.name  = "do_restart";
 			view.innerHTML = input || "-";
@@ -41,8 +40,6 @@ This is free software, licensed under the Apache License, Version 2.0
 			view = document.getElementById("value_6");
 			input = json.data.last_rundate;
 			view.innerHTML = input || "-";
-			btn1.disabled = false;
-			running(btn1_running, 0);
 	}
 
 	function btn_action(action)
@@ -60,6 +57,8 @@ This is free software, licensed under the Apache License, Version 2.0
 			{
 				return;
 			}
+			btn1.disabled = false;
+			running(btn1_running, 0);
 		});
 	}
 
@@ -139,7 +138,7 @@ This is free software, licensed under the Apache License, Version 2.0
 <div class="cbi-value" id="button_1">
 	<label class="cbi-value-title" for="button_1"><%:Restart Travelmate%></label>
 	<div class="cbi-value-field">
-		<input class="cbi-button cbi-button-reset" id="btn1" type="button" value="" onclick="btn_action(this)" />
+		<input class="cbi-button cbi-button-reset" id="btn1" type="button" name="do_restart" value="<%:Restart%>" onclick="btn_action(this)" />
 		<span id="btn1_running" style="display:inline-block; width:16px; height:16px; margin:0 5px"></span>
 	</div>
 </div>
