@@ -6,7 +6,7 @@ This is free software, licensed under the Apache License, Version 2.0
 <style type="text/css">
 .runtime
 {
-	color: #0069d6;
+	color: #37c;
 	font-weight: bold;
 	display: inline-block;
 	width: 100%;
@@ -18,10 +18,12 @@ This is free software, licensed under the Apache License, Version 2.0
 //<![CDATA[
 	function status_update(json)
 	{
-			var view  = document.getElementById("value_1");
-			var btn1  = document.getElementById("btn1");
-			var btn2  = document.getElementById("btn2");
-			var input = json.data.adblock_status;
+			var view         = document.getElementById("value_1");
+			var btn1         = document.getElementById("btn1");
+			var btn1_running = document.getElementById("btn1_running");
+			var btn2         = document.getElementById("btn2");
+			var btn2_running = document.getElementById("btn2_running");
+			var input        = json.data.adblock_status;
 
 			view.innerHTML = input || "-";
 			if (input === "enabled")
@@ -126,7 +128,7 @@ This is free software, licensed under the Apache License, Version 2.0
 			btn2.value = "<%:Refresh%>";
 			btn2.name  = "do_refresh";
 			btn1.disabled = true;
-			btn2.disabled = false;
+			btn2.disabled = true;
 			return;
 		}
 		status_update(json_info)

@@ -3,7 +3,6 @@
 
 local fs   = require("nixio.fs")
 local uci  = require("luci.model.uci").cursor()
-local sys  = require("luci.sys")
 local util = require("luci.util")
 local dump = util.ubus("network.interface", "dump", {})
 
@@ -12,10 +11,6 @@ m = Map("adblock", translate("Adblock"),
 	.. translatef("For further information "
 	.. "<a href=\"%s\" target=\"_blank\">"
 	.. "check the online documentation</a>", "https://github.com/openwrt/packages/blob/master/net/adblock/files/README.md"))
-
-function m.on_apply(self)
-	luci.sys.call("/etc/init.d/adblock reload >/dev/null 2>&1")
-end
 
 -- Main adblock options
 
