@@ -39,7 +39,7 @@ function trm_action(name)
 	if name == "do_restart" then
 		luci.sys.call("/etc/init.d/travelmate restart >/dev/null 2>&1")
 	end
-	luci.http.prepare_content("text/plain")	
+	luci.http.prepare_content("text/plain")
 	luci.http.write("0")
 end
 
