@@ -17,9 +17,10 @@ m = Map("travelmate", translate("Travelmate"),
 	.. "see online documentation</a>", "https://github.com/openwrt/packages/blob/master/net/travelmate/files/README.md"))
 m:chain("network")
 m:chain("firewall")
+m.apply_on_parse = true
 
 function m.on_apply(self)
-	luci.sys.call("env -i /etc/init.d/travelmate restart >/dev/null 2>&1")
+	luci.sys.call("/etc/init.d/travelmate restart >/dev/null 2>&1")
 end
 
 -- Interface Wizard
