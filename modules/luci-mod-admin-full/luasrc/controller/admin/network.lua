@@ -8,12 +8,6 @@ function index()
 	local uci = require("luci.model.uci").cursor()
 	local page
 
-	page = node("admin", "network")
-	page.target = firstchild()
-	page.title  = _("Network")
-	page.order  = 50
-	page.index  = true
-
 --	if page.inreq then
 		local has_switch = false
 
