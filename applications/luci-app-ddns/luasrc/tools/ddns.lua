@@ -10,121 +10,120 @@ local SYS  = require "luci.sys"
 
 function env_info(type)
 
-	if ( type == "has_ssl" ) or ( type == "has_proxy" ) or ( type == "has_forceip" ) 
-	    or ( type == "has_bindnet" ) or ( type == "has_fetch" ) 
-		or ( type == "has_wgetssl" ) or ( type == "has_curl" ) 
-		or ( type == "has_curlssl" ) or ( type == "has_curlpxy" ) 
-		or ( type == "has_fetchssl" ) or ( type == "has_bbwget" ) then 
-		
-		local function has_wgetssl() 
+	if ( type == "has_ssl" ) or ( type == "has_proxy" ) or ( type == "has_forceip" )
+	    or ( type == "has_bindnet" ) or ( type == "has_fetch" )
+		or ( type == "has_wgetssl" ) or ( type == "has_curl" )
+		or ( type == "has_curlssl" ) or ( type == "has_curlpxy" )
+		or ( type == "has_fetchssl" ) or ( type == "has_bbwget" ) then
+
+		local function has_wgetssl()
 			return (SYS.call( [[which wget-ssl >/dev/null 2>&1]] ) == 0)	-- and true or nil
 		end
-		
-		local function has_curlssl() 
+
+		local function has_curlssl()
 			return (SYS.call( [[$(which curl) -V 2>&1 | grep "Protocols:" | grep -qF "https"]] ) ~= 0)
 		end
-		
+
 		local function has_fetch()
 			return (SYS.call( [[which uclient-fetch >/dev/null 2>&1]] ) == 0)
 		end
-		
+
 		local function has_fetchssl()
 			return NXFS.access("/lib/libustream-ssl.so")
 		end
-		
+
 		local function has_curl()
 			return (SYS.call( [[which curl >/dev/null 2>&1]] ) == 0)
 		end
-		
+
 		local function has_curlpxy()
 			return (SYS.call( [[grep -i "all_proxy" /usr/lib/libcurl.so* >/dev/null 2>&1]] ) == 0)
 		end
-		
+
 		local function has_bbwget()
 			return (SYS.call( [[$(which wget) -V 2>&1 | grep -iqF "busybox"]] ) == 0)
 		end
-		
+
 		if type == "has_wgetssl" then
 			return has_wgetssl()
-		
+
 		elseif type == "has_curl" then
 			return has_curl()
-			
+
 		elseif type == "has_curlssl" then
 			return has_curlssl()
-			
+
 		elseif type == "has_curlpxy" then
 			return has_curlpxy()
-			
+
 		elseif type == "has_fetch" then
 			return has_fetch()
-			
+
 		elseif type == "has_fetchssl" then
 			return has_fetchssl()
-			
+
 		elseif type == "has_bbwget" then
 			return has_bbwget()
-		
+
 		elseif type == "has_ssl" then
 			if has_wgetssl() then return true end
 			if has_curlssl() then return true end
 			if (has_fetch() and has_fetchssl()) then return true end
 			return false
-			
+
 		elseif type == "has_proxy" then
 			if has_wgetssl() then return true end
 			if has_curlpxy() then return true end
 			if has_fetch() then return true end
 			if has_bbwget() then return true end
 			return false
-			
+
 		elseif type == "has_forceip" then
 			if has_wgetssl() then return true end
 			if has_curl() then return true end
 			if has_fetch() then return true end -- only really needed for transfer
 			return false
-			
+
 		elseif type == "has_bindnet" then
 			if has_curl() then return true end
 			if has_wgetssl() then return true end
 			return false
 		end
-	
+
 	elseif ( type == "has_dnsserver" ) or ( type == "has_bindhost" ) or ( type == "has_hostip" ) or ( type == "has_nslookup" ) then
-		local function has_bindhost() 
-			if (SYS.call( [[which host >/dev/null 2>&1]] ) == 0) then return true end
+		local function has_bindhost()
 			if (SYS.call( [[which host >/dev/null 2>&1]] ) == 0) then return true end
 			if (SYS.call( [[which khost >/dev/null 2>&1]] ) == 0) then return true end
 			if (SYS.call( [[which drill >/dev/null 2>&1]] ) == 0) then return true end
 			return false
 		end
-		
+
 		local function has_hostip()
 			return (SYS.call( [[which hostip >/dev/null 2>&1]] ) == 0)
 		end
-		
+
 		local function has_nslookup()
 			return (SYS.call( [[$(which nslookup) localhost 2>&1 | grep -qF "(null)"]] ) ~= 0)
 		end
-		
+
 		if type == "has_bindhost" then
 			return has_bindhost()
 		elseif type == "has_hostip" then
 			return has_hostip()
 		elseif type == "has_nslookup" then
 			return has_nslookup()
-		elseif tyep == "has_dnsserver" then
+		elseif type == "has_dnsserver" then
 			if has_bindhost() then return true end
 			if has_hostip() then return true end
 			if has_nslookup() then return true end
 			return false
 		end
-		
+
 	elseif type == "has_ipv6" then
 		return (NXFS.access("/proc/net/ipv6_route") and NXFS.access("/usr/sbin/ip6tables"))
-		
+
 	elseif type == "has_cacerts" then
-		--old _check_certs() local function 
+		--old _check_certs() local function
 		local _, v = NXFS.glob("/etc/ssl/certs/*.crt")
 		if ( v == 0 ) then _, v = NXFS.glob("/etc/ssl/certs/*.pem") end
 		return (v > 0)
