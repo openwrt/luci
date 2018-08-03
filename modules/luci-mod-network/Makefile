@@ -6,8 +6,8 @@
 
 include $(TOPDIR)/rules.mk
 
-LUCI_TITLE:=LuCI Administration - full-featured for full control
-LUCI_DEPENDS:=+luci-base +luci-mod-status +luci-mod-system +luci-mod-network
+LUCI_TITLE:=LuCI Network Administration
+LUCI_DEPENDS:=+luci-base +libiwinfo-lua
 
 PKG_LICENSE:=Apache-2.0
 
