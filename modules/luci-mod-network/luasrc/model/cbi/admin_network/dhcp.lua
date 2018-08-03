@@ -266,7 +266,7 @@ o = s:taboption("general", DynamicList, "notinterface",
 o.optional = true
 o:depends("nonwildcard", true)
 
-m:section(SimpleSection).template = "admin_network/lease_status"
+m:section(SimpleSection).template = "lease_status"
 
 s = m:section(TypedSection, "host", translate("Static Leases"),
 	translate("Static leases are used to assign fixed IP addresses and symbolic hostnames to " ..

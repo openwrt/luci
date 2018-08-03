@@ -16,6 +16,8 @@ function index()
 		end
 	end
 
+	local uci = require("luci.model.uci").cursor()
+
 	local root = node()
 	if not root.target then
 		root.target = alias("admin")
@@ -23,6 +25,7 @@ function index()
 	end
 
 	local page   = node("admin")
+	
 	page.title   = _("Administration")
 	page.order   = 10
 	page.sysauth = "root"
@@ -61,6 +64,24 @@ function index()
 	page.index = true
 	toplevel_page(page, false, false)
 
+	if nixio.fs.access("/etc/config/dhcp") then
+		page = entry({"admin", "dhcplease_status"}, call("lease_status"), nil)
+		page.leaf = true
+	end
+
+	local has_wifi = false
+
+	uci:foreach("wireless", "wifi-device",
+		function(s)
+			has_wifi = true
+			return false
+		end)
+
+	if has_wifi then
+		page = entry({"admin", "wireless_assoclist"}, call("wifi_assoclist"), nil)
+		page.leaf = true
+	end
+
 	-- Logout is last
 	entry({"admin", "logout"}, call("action_logout"), _("Logout"), 999)
 end
@@ -79,4 +100,23 @@ function action_logout()
 	end
 
 	luci.http.redirect(dsp.build_url())
+end
+
+
+function lease_status()
+	local s = require "luci.tools.status"
+
+	luci.http.prepare_content("application/json")
+	luci.http.write('[')
+	luci.http.write_json(s.dhcp_leases())
+	luci.http.write(',')
+	luci.http.write_json(s.dhcp6_leases())
+	luci.http.write(']')
+end
+
+function wifi_assoclist()
+	local s = require "luci.tools.status"
+
+	luci.http.prepare_content("application/json")
+	luci.http.write_json(s.wifi_assoclist())
 end
