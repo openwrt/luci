@@ -95,41 +95,15 @@ end
 
 
 function changes(self, config)
-	local rv = call("changes", { config = config })
-	local res = {}
+	local rv, err = call("changes", { config = config })
 
 	if type(rv) == "table" and type(rv.changes) == "table" then
-		local package, changes
-		for package, changes in pairs(rv.changes) do
-			res[package] = {}
-
-			local _, change
-			for _, change in ipairs(changes) do
-				local operation, section, option, value = unpack(change)
-				if option and operation ~= "add" then
-					res[package][section] = res[package][section] or { }
-
-					if operation == "list-add" then
-						local v = res[package][section][option]
-						if type(v) == "table" then
-							v[#v+1] = value or ""
-						elseif v ~= nil then
-							res[package][section][option] = { v, value }
-						else
-							res[package][section][option] = { value }
-						end
-					else
-						res[package][section][option] = value or ""
-					end
-				else
-					res[package][section] = res[package][section] or {}
-					res[package][section][".type"] = option or ""
-				end
-			end
-		end
+		return rv.changes
+	elseif err then
+		return nil, ERRSTR[err]
+	else
+		return { }
 	end
-
-	return res
 end
 
 

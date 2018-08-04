@@ -1,5 +1,5 @@
 <%#
- Copyright 2010 Jo-Philipp Wich <jow@openwrt.org>
+ Copyright 2010 Jo-Philipp Wich <jo@mein.io>
  Licensed to the public under the Apache License 2.0.
 -%>
 
@@ -17,65 +17,50 @@
 
 	<div class="uci-change-list"><%
 		local util = luci.util
-		local ret  = { }
+		local tpl = {
+			["add-3"] = "<ins>uci add %0 <strong>%3</strong> # =%2</ins>",
+			["set-3"] = "<ins>uci set %0.<strong>%2</strong></ins>=%3",
+			["set-4"] = "<var><ins>uci set %0.%2.%3=<strong>%4</strong></ins></var>",
+			["remove-2"] = "<del>uci del %0.<strong>%2</strong></del>",
+			["remove-3"] = "<var><del>uci del %0.%2.<strong>%3</strong></del></var>",
+			["order-3"] = "<var>uci reorder %0.%2=<strong>%3</strong></var>",
+			["list-add-4"] = "<var><ins>uci add_list %0.%2.%3=<strong>%4</strong></ins></var>",
+			["list-del-4"] = "<var><del>uci del_list %0.%2.%3=<strong>%4</strong></del></var>",
+			["rename-3"] = "<var>uci rename %0.%2=<strong>%3</strong></var>",
+			["rename-4"] = "<var>uci rename %0.%2.%3=<strong>%4</strong></var>"
+		}
 
-		for r, tbl in pairs(changes) do
-			for s, os in pairs(tbl) do
-				-- section add
-				if os['.type'] and os['.type'] ~= "" then
-					ret[#ret+1] = "<ins>%s.%s=<strong>%s</strong>" %{ r, s, os['.type'] }
-					for o, v in util.kspairs(os) do
-						if o:sub(1,1) ~= "." then
-							if type(v) == "table" then
-								local i
-								for i = 1, #v do
-									ret[#ret+1] = "<br />%s.%s.%s+=<strong>%s</strong>"
-										%{ r, s, o, util.pcdata(v[i]) }
-								end
-							elseif v ~= "" then
-								ret[#ret+1] = "<br />%s.%s.%s=<strong>%s</strong>"
-									%{ r, s, o, util.pcdata(v) }
-							else
-								ret[#ret+1] = "<br /><del>%s.%s.<strong>%s</strong></del>" %{ r, s, o }
-							end
+		local conf, deltas
+		for conf, deltas in util.kspairs(changes) do
+			write("<h3># /etc/config/%s</h3>" % conf)
+
+			local _, delta, added
+			for _, delta in pairs(deltas) do
+				local t = tpl["%s-%d" %{ delta[1], #delta }]
+
+				write(t:gsub("%%(%d)", function(n)
+					if n == "0" then
+						return conf
+					elseif n == "2" then
+						if added and delta[2] == added[1] then
+							return "@%s[-1]" % added[2]
+						else
+							return delta[2]
 						end
+					elseif n == "4" then
+						return util.shellquote(delta[4])
+					else
+						return delta[tonumber(n)]
 					end
-					ret[#ret+1] = "</ins><br />"
+				end))
 
-				-- section delete
-				elseif os['.type'] and os['.type'] == "" then
-					ret[#ret+1] = "<del>%s.<strong>%s</strong></del><br />" %{ r, s }
-
-				-- modifications
-				else
-					ret[#ret+1] = "<var>%s.%s<br />" %{ r, s }
-					for o, v in util.kspairs(os) do
-						if o:sub(1,1) ~= "." then
-							if v and #v > 0 then
-								ret[#ret+1] = "<ins>"
-								if type(v) == "table" then
-									local i
-									for i = 1, #v do
-										ret[#ret+1] = "%s.%s.%s+=<strong>%s</strong><br />"
-											%{ r, s, o, util.pcdata(v[i]) }
-									end
-
-								else
-									ret[#ret+1] = "%s.%s.%s=<strong>%s</strong><br />"
-										%{ r, s, o, util.pcdata(v) }
-								end
-								ret[#ret+1] = "</ins>"
-							else
-								ret[#ret+1] = "<del>%s.%s.<strong>%s</strong><br /></del>" %{ r, s, o }
-							end
-						end
-					end
-					ret[#ret+1] = "</var><br />"
+				if delta[1] == "add" then
+					added = { delta[2], delta[3] }
 				end
 			end
-		end
 
-		write(table.concat(ret))
+			write("<br />")
+		end
 	%></div>
 </div>
 <%- end) %>

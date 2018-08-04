@@ -23,7 +23,7 @@ body {
 	padding: 5px;
 }
 
-h1, h2, h3, h4, h5, h6, p, pre, a, abbr, acronym, code, del, em, img, q, s,
+h1, h2, h3, h4, h5, h6, p, pre, a, abbr, acronym, code, del, em, img, ins, q, s,
 small, strike, strong, sub, sup, tt, var, dd, dl, dt, li, ol, ul, fieldset,
 form, label, legend, button, table, caption, tbody, tfoot, thead, tr, th, td,
 .table, .tbody, .tfoot, .thead, .tr, .th, .td {
@@ -1956,47 +1956,51 @@ div.cbi-value var,
 }
 
 .uci-change-list {
+	line-height: 170%;
+	white-space: pre;
+}
+
+.uci-change-list del,
+.uci-change-list ins,
+.uci-change-list var,
+.uci-change-legend-label del,
+.uci-change-legend-label ins,
+.uci-change-legend-label var {
+	text-decoration: none;
 	font-family: monospace;
+	font-style: normal;
+	border: 1px solid #ccc;
+	background: #eee;
+	padding: 2px;
+	display: block;
+	line-height: 15px;
+	margin-bottom: 1px;
 }
 
 .uci-change-list ins,
 .uci-change-legend-label ins {
-	text-decoration: none;
-	border: 1px solid #0f0;
-	background-color: #cfc;
-	display: block;
-	padding: 2px;
+	border-color: #0f0;
+	background: #cfc;
 }
 
 .uci-change-list del,
 .uci-change-legend-label del {
-	text-decoration: none;
-	border: 1px solid #f00;
-	background-color: #fcc;
-	display: block;
-	font-style: normal;
-	padding: 2px;
+	border-color: #f00;
+	background: #fcc;
 }
 
 .uci-change-list var,
 .uci-change-legend-label var {
-	text-decoration: none;
-	border: 1px solid #ccc;
-	background-color: #eee;
-	display: block;
-	font-style: normal;
-	padding: 2px;
-	line-height: 19px;
-	white-space: pre;
+	border-color: #ccc;
+	background: #eee;
 }
 
 .uci-change-list var ins,
 .uci-change-list var del {
-	display: inline;
-	/*border: none;*/
-	white-space: pre;
-	font-style: normal;
-	padding: 0px;
+	display: inline-block;
+	border: none;
+	width: 100%;
+	padding: 0;
 }
 
 .uci-change-legend {
@@ -2016,12 +2020,17 @@ div.cbi-value var,
 	width: 10px;
 	height: 10px;
 	display: block;
+	position: relative;
 }
 
 .uci-change-legend-label var ins,
 .uci-change-legend-label var del {
-	line-height: 6px;
 	border: none;
+	position: absolute;
+	top: 2px;
+	left: 2px;
+	right: 2px;
+	bottom: 2px;
 }
 
 html body.apply-overlay-active {
