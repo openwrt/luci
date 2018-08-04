@@ -1397,44 +1397,49 @@ select + .cbi-button {
 
 .uci-change-list {
 	font-family: monospace;
+	white-space: pre;
+}
+
+.uci-change-list del,
+.uci-change-list ins,
+.uci-change-list var,
+.uci-change-legend-label del,
+.uci-change-legend-label ins,
+.uci-change-legend-label var {
+	text-decoration: none;
+	font-style: normal;
+	border: 1px solid #ccc;
+	background: #eee;
+	padding: 2px;
+	display: block;
+	line-height: 15px;
+	margin-bottom: 1px;
 }
 
 .uci-change-list ins,
 .uci-change-legend-label ins {
-	text-decoration: none;
-	border: 1px solid #00FF00;
-	background-color: #CCFFCC;
-	display: block;
-	padding: 2px;
+	border-color: #0f0;
+	background: #cfc;
 }
 
 .uci-change-list del,
 .uci-change-legend-label del {
-	text-decoration: none;
-	border: 1px solid #FF0000;
-	background-color: #FFCCCC;
-	display: block;
-	font-style: normal;
-	padding: 2px;
+	border-color: #f00;
+	background: #fcc;
 }
 
 .uci-change-list var,
 .uci-change-legend-label var {
-	text-decoration: none;
-	border: 1px solid #CCCCCC;
-	background-color: #EEEEEE;
-	display: block;
-	font-style: normal;
-	padding: 2px;
+	border-color: #ccc;
+	background: #eee;
 }
 
 .uci-change-list var ins,
 .uci-change-list var del {
-	/*display: inline;*/
+	display: inline-block;
 	border: none;
-	white-space: pre;
-	font-style: normal;
-	padding: 0px;
+	width: 100%;
+	padding: 0;
 }
 
 .uci-change-legend {
@@ -1452,15 +1457,20 @@ select + .cbi-button {
 .uci-change-legend-label>var {
 	float: left;
 	margin-right: 4px;
-	width: 10px;
-	height: 10px;
+	width: 12px;
+	height: 12px;
 	display: block;
+	position: relative;
 }
 
 .uci-change-legend-label var ins,
 .uci-change-legend-label var del {
-	line-height: 6px;
 	border: none;
+	position: absolute;
+	top: 1px;
+	left: 1px;
+	right: 1px;
+	bottom: 1px;
 }
 
 
