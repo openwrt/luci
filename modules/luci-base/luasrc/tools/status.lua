@@ -303,3 +303,19 @@ function switch_status(devs)
 	end
 	return switches
 end
+
+function ieee80211_frequency_to_channel(freq)
+	local channel = 0
+	if freq == 2484 then
+		channel = 14
+	elseif freq < 2484 then
+		channel = (freq - 2407) / 5
+	elseif freq >= 4910 and freq <= 4980 then
+		channel = (freq - 4000) / 5
+	elseif freq <= 45000 then
+		channel= (freq - 5000) / 5
+	elseif freq >= 58320 and freq <= 64800 then
+		channel =(freq - 56160) / 2160
+	end
+	return channel
+end
