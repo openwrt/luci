@@ -203,7 +203,7 @@
 	<link rel="icon" href="<%=media%>/logo.png" sizes="144x144">
 	<link rel="apple-touch-icon-precomposed" href="<%=media%>/logo.png" sizes="144x144">
 
-	<link rel="stylesheet" href="<%=media%>/css/style.css">
+	<link rel="stylesheet" href="<%=media%>/cascade.css">
 	<link rel="shortcut icon" href="<%=media%>/favicon.ico">
 	<% if node and node.css then %>
 		<link rel="stylesheet" href="<%=resource%>/<%=node.css%>">
@@ -216,15 +216,17 @@
 </head>
 <body class="lang_<%=luci.i18n.context.lang%> <%- if node then %><%= striptags( node.title ) %><%- end %> <% if luci.dispatcher.context.authsession then %>logged-in<% end %>">
 <header>
-	<div class="container">
-		<span class="showSide"></span>
-		<a class="brand" href="#"><%=boardinfo.hostname or "?"%></a>
-		<div class="pull-right">
-			<% render_changes() %>
-			<span id="xhr_poll_status" style="display:none" onclick="XHR.running() ? XHR.halt() : XHR.run()">
-				<span class="label success" id="xhr_poll_status_on"><span class="mobile-hide"><%:Auto Refresh%></span> <%:on%></span>
-				<span class="label" id="xhr_poll_status_off" style="display:none"><span class="mobile-hide"><%:Auto Refresh%></span> <%:off%></span>
-			</span>
+	<div class="fill">
+		<div class="container">
+			<span class="showSide"></span>
+			<a class="brand" href="#"><%=boardinfo.hostname or "?"%></a>
+			<div class="pull-right">
+				<% render_changes() %>
+				<span id="xhr_poll_status" style="display:none" onclick="XHR.running() ? XHR.halt() : XHR.run()">
+					<span class="label success" id="xhr_poll_status_on"><span class="mobile-hide"><%:Auto Refresh%></span> <%:on%></span>
+					<span class="label" id="xhr_poll_status_off" style="display:none"><span class="mobile-hide"><%:Auto Refresh%></span> <%:off%></span>
+				</span>
+			</div>
 		</div>
 	</div>
 </header>
