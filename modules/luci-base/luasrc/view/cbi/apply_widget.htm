@@ -158,7 +158,7 @@
 
 			uci_status_message('notice',
 				'<img src="<%=resource%>/icons/loading.gif" alt="" style="vertical-align:middle" /> ' +
-				'<%:Waiting for configuration to get applied… %ds%>'.format(Math.max(Math.floor((deadline - Date.now()) / 1000), 0)));
+				'<%:Waiting for configuration to be applied… %ds%>'.format(Math.max(Math.floor((deadline - Date.now()) / 1000), 0)));
 
 			if (now >= deadline)
 				return;
