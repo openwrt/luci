@@ -1,4 +1,4 @@
--- Copyright 2017 Eric Luehrsen <ericluehrsen@gmail.com>
+-- Copyright 2018 Eric Luehrsen <ericluehrsen@gmail.com>
 -- Licensed to the public under the Apache License 2.0.
 
 local m5, s5
@@ -7,18 +7,22 @@ local ztype, zones, servers, fallback, enabled
 local fs = require "nixio.fs"
 local ut = require "luci.util"
 local sy = require "luci.sys"
+local ds = require "luci.dispatcher"
 local resolvfile = "/tmp/resolv.conf.auto"
+local logerr = ut.exec("logread -e 'unbound.*error.*ssl library'")
 
 m5 = Map("unbound")
 s5 = m5:section(TypedSection, "zone", "Zones",
-    translatef("This shows extended zones and more details can be "
-    .. "changed in Files tab and <a href=\"%s\">Edit:UCI</a> subtab.",
-    "/cgi-bin/luci/admin/services/unbound/files" ))
+    translatef("Organize directed forward, stub, and authoritative zones"
+    .. " <a href=\"%s\" target=\"_blank\">(help)</a>.",
+    "https://www.unbound.net/",
+    "https://github.com/openwrt/packages/blob/master/net/unbound/files/README.md"))
 
-s5.addremove = false
+s5.addremove = true
 s5.anonymous = true
 s5.sortable = true
 s5.template = "cbi/tblsection"
+s5.extedit = ds.build_url("admin/services/unbound/zones/%s")
 
 ztype = s5:option(DummyValue, "DummyType", translate("Type"))
 ztype.rawhtml = true
@@ -34,6 +38,23 @@ fallback.rmempty = false
 
 enabled = s5:option(Flag, "enabled", translate("Enable"))
 enabled.rmempty = false
+
+
+if logerr and (#logerr > 0) then
+    logerr = logerr:sub((1 + #logerr - math.min(#logerr, 250)), #logerr)
+    m5.message = translatef( "Note: SSL/TLS library is missing an API. "
+        .. "Please review syslog. >> logread ... " .. logerr )
+end
+
+
+function s5.create(self, section)
+    created = TypedSection.create(self, section)
+end
+
+
+function s5.parse(self, ...)
+    TypedSection.parse(self, ...)
+end
 
 
 function ztype.cfgvalue(self, s)
@@ -57,7 +78,7 @@ function ztype.cfgvalue(self, s)
         return translate("AXFR")
 
     else
-        return translate("Error")
+        return translate("Undefined")
     end
 end
 
@@ -85,22 +106,22 @@ function zones.cfgvalue(self, s)
     end
 
 
-    if itype and itype:match("forward") then
-        -- from zone_type create a readable hint for the action
-        otxt = translate("accept upstream results for ") .. otxt
-
-    elseif itype and itype:match("stub") then
-        otxt = translate("select recursion for ") .. otxt
-
-    elseif itype and itype:match("auth") then
-        otxt = translate("prefetch zone files for ") .. otxt
-
-    else
-        otxt = translate("unknown action for ") .. otxt
-    end
-
-
     if otxt and (#otxt > 0) then
+        if itype and itype:match("forward") then
+            -- from zone_type create a readable hint for the action
+            otxt = translate("accept upstream results for ") .. otxt
+
+        elseif itype and itype:match("stub") then
+            otxt = translate("select recursion for ") .. otxt
+
+        elseif itype and itype:match("auth") then
+            otxt = translate("prefetch zone files for ") .. otxt
+
+        else
+            otxt = translate("unknown action for ") .. otxt
+        end
+
+
         return otxt
 
     else
@@ -131,14 +152,17 @@ function servers.cfgvalue(self, s)
     end
 
 
+    if otxt and (#otxt > 0) then
+        otxt = translate("use nameservers ") .. otxt
+    end
+
+
     if otxt and (#otxt > 0)
     and itls and (itls == "1")
     and iidx and (#iidx > 0) then
         -- show TLS certificate name index if provided
-        otxt = translatef("use nameservers by <var>%s</var> at ", iidx) .. otxt
-
-    elseif otxt and (#otxt > 0) then
-        otxt = translate("use nameservers ") .. otxt
+        otxt = otxt .. translatef(
+                    " with default certificate for <var>%s</var>", iidx)
     end
 
 
@@ -174,11 +198,12 @@ function servers.cfgvalue(self, s)
 
 
         if otxt and (#otxt > 0) and rtxt and (#rtxt > 0) then
-            otxt = otxt
-                .. translatef(", and <var>%s</var> entries ", resolvfile) .. rtxt
+            otxt = otxt .. translatef(
+                    ", and <var>%s</var> entries ", resolvfile) .. rtxt
 
         elseif rtxt and (#rtxt > 0) then
-            otxt = translatef("use <var>%s</var> nameservers ", resolvfile) .. rtxt
+            otxt = translatef(
+                    "use <var>%s</var> nameservers ", resolvfile) .. rtxt
         end
     end
 
