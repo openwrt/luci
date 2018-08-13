@@ -19,10 +19,12 @@ local ucl = luci.model.uci.cursor()
 local valman = ucl:get_first("unbound", "unbound", "manual_conf")
 
 m1 = Map("unbound")
-s1 = m1:section(TypedSection, "unbound", translate("DNS Resolver"),
+s1 = m1:section(TypedSection, "unbound", translate("Recursive DNS"),
     translatef("Unbound <a href=\"%s\" target=\"_blank\">(NLnet Labs)</a>"
-    .. " is a validating, recursive, and caching DNS resolver.",
-    "https://www.unbound.net/"))
+    .. " is a validating, recursive, and caching DNS resolver"
+    .. " <a href=\"%s\" target=\"_blank\">(help)</a>.",
+    "https://www.unbound.net/",
+    "https://github.com/openwrt/packages/blob/master/net/unbound/files/README.md"))
 
 s1.addremove = false
 s1.anonymous = true
@@ -40,11 +42,11 @@ end
 
 
 --Basic Tab, unconditional pieces
-ena = s1:taboption("basic", Flag, "enabled", translate("Enable Unbound:"),
+ena = s1:taboption("basic", Flag, "enabled", translate("Enable Unbound"),
     translate("Enable the initialization scripts for Unbound"))
 ena.rmempty = false
 
-mcf = s1:taboption("basic", Flag, "manual_conf", translate("Manual Conf:"),
+mcf = s1:taboption("basic", Flag, "manual_conf", translate("Manual Conf"),
     translate("Skip UCI and use /etc/unbound/unbound.conf"))
 mcf.rmempty = false
 
@@ -53,60 +55,60 @@ if (valman == "0") then
     -- Not in manual configuration mode; show UCI
     --Basic Tab
     lsv = s1:taboption("basic", Flag, "localservice",
-        translate("Local Service:"),
+        translate("Local Service"),
         translate("Accept queries only from local subnets"))
     lsv.rmempty = false
 
     vld = s1:taboption("basic", Flag, "validator",
-        translate("Enable DNSSEC:"),
+        translate("Enable DNSSEC"),
         translate("Enable the DNSSEC validator module"))
     vld.rmempty = false
 
     nvd = s1:taboption("basic", Flag, "validator_ntp",
-        translate("DNSSEC NTP Fix:"),
+        translate("DNSSEC NTP Fix"),
         translate("Break the loop where DNSSEC needs NTP and NTP needs DNS"))
-    nvd.rmempty = false
-    nvd:depends({ validator = true })
+    nvd.optional = true
+    nvd:depends("validator", true)
 
     prt = s1:taboption("basic", Value, "listen_port",
-        translate("Listening Port:"),
+        translate("Listening Port"),
         translate("Choose Unbounds listening port"))
     prt.datatype = "port"
-    prt.rmempty = false
+    prt.placeholder = "53"
 
     --Avanced Tab
     rlh = s1:taboption("advanced", Flag, "rebind_localhost",
-        translate("Filter Localhost Rebind:"),
+        translate("Filter Localhost Rebind"),
         translate("Protect against upstream response of 127.0.0.0/8"))
     rlh.rmempty = false
 
     rpv = s1:taboption("advanced", ListValue, "rebind_protection",
-        translate("Filter Private Rebind:"),
+        translate("Filter Private Rebind"),
         translate("Protect against upstream responses within local subnets"))
     rpv:value("0", translate("No Filter"))
-    rpv:value("1", translate("Filter RFC1918/4193"))
+    rpv:value("1", translate("Filter Private Address"))
     rpv:value("2", translate("Filter Entire Subnet"))
     rpv.rmempty = false
 
-    d64 = s1:taboption("advanced", Flag, "dns64", translate("Enable DNS64:"),
+    d64 = s1:taboption("advanced", Flag, "dns64", translate("Enable DNS64"),
         translate("Enable the DNS64 module"))
     d64.rmempty = false
 
     pfx = s1:taboption("advanced", Value, "dns64_prefix",
-        translate("DNS64 Prefix:"),
+        translate("DNS64 Prefix"),
         translate("Prefix for generated DNS64 addresses"))
     pfx.datatype = "ip6addr"
     pfx.placeholder = "64:ff9b::/96"
     pfx.optional = true
-    pfx:depends({ dns64 = true })
+    pfx:depends("dns64", true)
 
     din = s1:taboption("advanced", DynamicList, "domain_insecure",
-        translate("Domain Insecure:"),
+        translate("Domain Insecure"),
         translate("List domains to bypass checks of DNSSEC"))
-    din:depends({ validator = true })
+    din:depends("validator", true)
 
     ag2 = s1:taboption("advanced", Value, "root_age",
-        translate("Root DSKEY Age:"),
+        translate("Root DSKEY Age"),
         translate("Limit days between RFC5011 copies to reduce flash writes"))
     ag2.datatype = "and(uinteger,min(1),max(99))"
     ag2:value("3", "3")
@@ -116,7 +118,7 @@ if (valman == "0") then
     ag2:value("99", "99 ("..translate("never")..")")
 
     tgr = s1:taboption("advanced", Value, "trigger_interface",
-        translate("Trigger Networks:"),
+        translate("Trigger Networks"),
         translate("Networks that may trigger Unbound to reload (avoid wan6)"))
     tgr.template = "cbi/network_netlist"
     tgr.widget = "checkbox"
@@ -126,7 +128,7 @@ if (valman == "0") then
 
     --DHCP Tab
     dlk = s1:taboption("DHCP", ListValue, "dhcp_link",
-        translate("DHCP Link:"),
+        translate("DHCP Link"),
         translate("Link to supported programs to load DHCP into DNS"))
     dlk:value("none", translate("No Link"))
     dlk:value("dnsmasq", "dnsmasq")
@@ -134,65 +136,70 @@ if (valman == "0") then
     dlk.rmempty = false
 
     dp6 = s1:taboption("DHCP", Flag, "dhcp4_slaac6",
-        translate("DHCPv4 to SLAAC:"),
+        translate("DHCPv4 to SLAAC"),
         translate("Use DHCPv4 MAC to discover IP6 hosts SLAAC (EUI64)"))
-    dp6.rmempty = false
-    dp6:depends({ dhcp_link = "odhcpd" })
+    dp6.optional = true
+    dp6:depends("dhcp_link", "odhcpd")
 
     dom = s1:taboption("DHCP", Value, "domain",
-        translate("Local Domain:"),
+        translate("Local Domain"),
         translate("Domain suffix for this router and DHCP clients"))
     dom.placeholder = "lan"
-    dom:depends({ dhcp_link = "none" })
-    dom:depends({ dhcp_link = "odhcpd" })
+    dom.optional = true
+    dom:depends("dhcp_link", "none")
+    dom:depends("dhcp_link", "odhcpd")
 
     dty = s1:taboption("DHCP", ListValue, "domain_type",
-        translate("Local Domain Type:"),
+        translate("Local Domain Type"),
         translate("How to treat queries of this local domain"))
+    dty.optional = true
     dty:value("deny", translate("Denied (nxdomain)"))
     dty:value("refuse", translate("Refused"))
     dty:value("static", translate("Static (local only)"))
     dty:value("transparent", translate("Transparent (local/global)"))
-    dty:depends({ dhcp_link = "none" })
-    dty:depends({ dhcp_link = "odhcpd" })
+    dty:depends("dhcp_link", "none")
+    dty:depends("dhcp_link", "odhcpd")
 
     lfq = s1:taboption("DHCP", ListValue, "add_local_fqdn",
-        translate("LAN DNS:"),
+        translate("LAN DNS"),
         translate("How to enter the LAN or local network router in DNS"))
+    lfq.optional = true
     lfq:value("0", translate("No Entry"))
     lfq:value("1", translate("Hostname, Primary Address"))
     lfq:value("2", translate("Hostname, All Addresses"))
     lfq:value("3", translate("Host FQDN, All Addresses"))
     lfq:value("4", translate("Interface FQDN, All Addresses"))
-    lfq:depends({ dhcp_link = "none" })
-    lfq:depends({ dhcp_link = "odhcpd" })
+    lfq:depends("dhcp_link", "none")
+    lfq:depends("dhcp_link", "odhcpd")
 
     wfq = s1:taboption("DHCP", ListValue, "add_wan_fqdn",
-        translate("WAN DNS:"),
+        translate("WAN DNS"),
         translate("Override the WAN side router entry in DNS"))
+    wfq.optional = true
     wfq:value("0", translate("Use Upstream"))
     wfq:value("1", translate("Hostname, Primary Address"))
     wfq:value("2", translate("Hostname, All Addresses"))
     wfq:value("3", translate("Host FQDN, All Addresses"))
     wfq:value("4", translate("Interface FQDN, All Addresses"))
-    wfq:depends({ dhcp_link = "none" })
-    wfq:depends({ dhcp_link = "odhcpd" })
+    wfq:depends("dhcp_link", "none")
+    wfq:depends("dhcp_link", "odhcpd")
 
     exa = s1:taboption("DHCP", ListValue, "add_extra_dns",
-        translate("Extra DNS:"),
+        translate("Extra DNS"),
         translate("Use extra DNS entries found in /etc/config/dhcp"))
+    exa.optional = true
     exa:value("0", translate("Ignore"))
     exa:value("1", translate("Host Records"))
     exa:value("2", translate("Host/MX/SRV RR"))
     exa:value("3", translate("Host/MX/SRV/CNAME RR"))
-    exa:depends({ dhcp_link = "none" })
-    exa:depends({ dhcp_link = "odhcpd" })
+    exa:depends("dhcp_link", "none")
+    exa:depends("dhcp_link", "odhcpd")
 
     --TODO: dnsmasq needs to not reference resolve-file and get off port 53.
 
     --Resource Tuning Tab
     ctl = s1:taboption("resource", ListValue, "unbound_control",
-        translate("Unbound Control App:"),
+        translate("Unbound Control App"),
         translate("Enable access for unbound-control"))
     ctl.rmempty = false
     ctl:value("0", translate("No Remote Control"))
@@ -202,7 +209,7 @@ if (valman == "0") then
     ctl:value("4", translate("Local Subnet, Static Encryption"))
 
     pro = s1:taboption("resource", ListValue, "protocol",
-        translate("Recursion Protocol:"),
+        translate("Recursion Protocol"),
         translate("Chose the protocol recursion queries leave on"))
     pro:value("default", translate("Default"))
     pro:value("ip4_only", translate("IP4 Only"))
@@ -212,7 +219,7 @@ if (valman == "0") then
     pro.rmempty = false
 
     rsc = s1:taboption("resource", ListValue, "resource",
-        translate("Memory Resource:"),
+        translate("Memory Resource"),
         translate("Use menu System/Processes to observe any memory growth"))
     rsc:value("default", translate("Default"))
     rsc:value("tiny", translate("Tiny"))
@@ -222,7 +229,7 @@ if (valman == "0") then
     rsc.rmempty = false
 
     rsn = s1:taboption("resource", ListValue, "recursion",
-        translate("Recursion Strength:"),
+        translate("Recursion Strength"),
         translate("Recursion activity affects memory growth and CPU load"))
     rsn:value("default", translate("Default"))
     rsn:value("passive", translate("Passive"))
@@ -230,38 +237,38 @@ if (valman == "0") then
     rsn.rmempty = false
 
     qry = s1:taboption("resource", Flag, "query_minimize",
-        translate("Query Minimize:"),
+        translate("Query Minimize"),
         translate("Break down query components for limited added privacy"))
-    qry.rmempty = false
-    qry:depends({ recursion = "passive" })
-    qry:depends({ recursion = "aggressive" })
+    qry.optional = true
+    qry:depends("recursion", "passive")
+    qry:depends("recursion", "aggressive")
 
     qrs = s1:taboption("resource", Flag, "query_min_strict",
-        translate("Strict Minimize:"),
+        translate("Strict Minimize"),
         translate("Strict version of 'query minimize' but it can break DNS"))
-    qrs.rmempty = false
-    qrs:depends({ query_minimize = true })
+    qrs.optional = true
+    qrs:depends("query_minimize", true)
 
     eds = s1:taboption("resource", Value, "edns_size",
         translate("EDNS Size:"),
         translate("Limit extended DNS packet size"))
     eds.datatype = "and(uinteger,min(512),max(4096))"
-    eds.rmempty = false
+    eds.placeholder = "1280"
 
     tlm = s1:taboption("resource", Value, "ttl_min",
-        translate("TTL Minimum:"),
+        translate("TTL Minimum"),
         translate("Prevent excessively short cache periods"))
-    tlm.datatype = "and(uinteger,min(0),max(600))"
-    tlm.rmempty = false
+    tlm.datatype = "and(uinteger,min(0),max(1200))"
+    tlm.placeholder = "120"
 
     stt = s1:taboption("resource", Flag, "extended_stats",
-        translate("Extended Statistics:"),
+        translate("Extended Statistics"),
         translate("Extended statistics are printed from unbound-control"))
     stt.rmempty = false
 
 else
     ag2 = s1:taboption("basic", Value, "root_age",
-        translate("Root DSKEY Age:"),
+        translate("Root DSKEY Age"),
         translate("Limit days between RFC5011 copies to reduce flash writes"))
     ag2.datatype = "and(uinteger,min(1),max(99))"
     ag2:value("3", "3")
@@ -271,7 +278,7 @@ else
     ag2:value("99", "99 ("..translate("never")..")")
 
     tgr = s1:taboption("basic", Value, "trigger_interface",
-        translate("Trigger Networks:"),
+        translate("Trigger Networks"),
         translate("Networks that may trigger Unbound to reload (avoid wan6)"))
     tgr.template = "cbi/network_netlist"
     tgr.widget = "checkbox"

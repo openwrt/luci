@@ -28,7 +28,8 @@ function index()
 
     if (valman == "0") then
         entry({"admin", "services", "unbound", "zones"},
-            cbi("unbound/zones"), _("Zones"), 15)
+            arcombine(cbi("unbound/zones"), cbi("unbound/zone-details")),
+            _("Zones"), 15).leaf = true
     end
 
 
@@ -106,7 +107,7 @@ end
 
 
 function QuerySysLog()
-    local lcldata = luci.util.exec("logread | grep -i unbound")
+    local lcldata = luci.util.exec("logread -e 'unbound'")
     local lcldesc = luci.i18n.translate(
         "This shows syslog filtered for events involving Unbound.")
 
