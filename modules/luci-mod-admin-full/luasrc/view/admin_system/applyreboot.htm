@@ -16,6 +16,7 @@
 		
 				img.onload = function() {
 					window.clearInterval(interval);
+					window.location.replace(target);
 				};
 				
 				img.src = target + '<%=resource%>/icons/loading.gif?' + Math.random();
