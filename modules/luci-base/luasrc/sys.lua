@@ -340,6 +340,32 @@ function net.conntrack(callback)
 					if entry[key] == nil then
 						entry[key] = val
 					end
+					if entry["ptype"] == nil then
+						val = tonumber(val)
+						if key == "sport" then
+							if (val == 443) then
+								entry["ptype"] = "Https / SSL"
+							elseif val == 80 then
+								entry["ptype"] = "Http"
+							elseif val == 53 then
+								entry["ptype"] = "Dns"
+							elseif val == 22 then
+								entry["ptype"] = "SSH"
+							elseif val == 1900 then
+								entry["ptype"] = "UPnP"
+							elseif val == 123 then
+								entry["ptype"] = "NTP"
+							elseif val == 137 then
+								entry["ptype"] = "NetBIOS"
+							elseif val == 139 or val == 445 then
+								entry["ptype"] = "Samba"	
+							elseif val == 993 then
+								entry["ptype"] = "IMAP-SSL"
+							end
+						elseif (val >= 6902) and (val <= 6968) then
+								entry["ptype"] = "Torrent"
+						end
+					end
 				elseif val then
 					entry[key] = val
 				end
