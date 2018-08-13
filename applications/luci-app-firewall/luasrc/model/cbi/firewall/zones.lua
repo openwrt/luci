@@ -38,20 +38,28 @@ end
 local offload = fs.access("/sys/module/xt_FLOWOFFLOAD/refcnt")
 
 if offload then
-	s:option(DummyValue, "offload_advice",
+	if not m.uci:get(m.config, "@offload_option[0]" , "flow_offloading") then
+		m.uci:add(m.config, "offload_option")
+		m.uci:set(m.config, "@offload_option[0]", "flow_offloading", 0)
+		m.uci:commit(m.config)
+	end
+	
+	of = m:section(TypedSection, "offload_option",
 		translate("Routing/NAT Offloading"),
 		translate("Experimental feature. Not fully compatible with QoS/SQM."))
+	of.anonymous = true
+	of.addremove = false
 
-	o = s:option(Flag, "flow_offloading",
+	of1 = of:option(Flag, "flow_offloading",
 		translate("Software flow offloading"),
 		translate("Software based offloading for routing/NAT"))
-	o.optional = true
+	of1.optional = true
 
-	o = s:option(Flag, "flow_offloading_hw",
+	of2 = of:option(Flag, "flow_offloading_hw",
 		translate("Hardware flow offloading"),
 		translate("Requires hardware NAT support. Implemented at least for mt7621"))
-	o.optional = true
-	o:depends( "flow_offloading", 1)
+	of2.optional = true
+	of2:depends( "flow_offloading", 1)
 end
 
 -- Firewall zones
