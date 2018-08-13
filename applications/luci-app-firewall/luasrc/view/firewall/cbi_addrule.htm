@@ -1,11 +1,9 @@
 <%
 	local fw = require "luci.model.firewall".init()
-	local wz = fw:get_zone("wan")
-	local lz = fw:get_zone("lan")
 	local zones = fw:get_zones()
 %>
 
-<% if wz then %>
+<% if #zones > 0 then %>
 	<h4><%:Open ports on router%></h4>
 	<div class="table">
 		<div class="tr cbi-section-table-titles">
@@ -71,7 +69,7 @@
 	<input type="submit" class="cbi-button cbi-button-add" name="cbi.cts.<%=self.config%>.<%=self.sectiontype%>.<%=section%>" value="<%:Add%>" />
 <% end %>
 
-<% if wz then %>
+<% if #zones > 0 then %>
 	<script type="text/javascript">//<![CDATA[
 		cbi_validate_field('_newopen.extport', true, 'list(neg(portrange))');
 		cbi_bind(document.getElementById('_newopen.extport'), 'blur',
