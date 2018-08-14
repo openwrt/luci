@@ -1,9 +1,4 @@
 <%+cbi/valueheader%>
-	<%- if self.password then -%>
-		<input type="password" style="position:absolute; left:-1000px"<%=
-			attr("name", "password." .. cbid)
-		%> />
-	<%- end -%>
 	<input data-update="change"<%=
 		attr("id", cbid) ..
 		attr("name", cbid) ..
