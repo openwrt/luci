@@ -1,6 +1,6 @@
 <%+cbi/valueheader%>
 	<%- if self.password then -%>
-		<input type="password" style="position:absolute; left:-1000px"<%=
+		<input type="password" style="position:absolute; left:-1000px" aria-hidden="true"<%=
 			attr("name", "password." .. cbid)
 		%> />
 	<%- end -%>
