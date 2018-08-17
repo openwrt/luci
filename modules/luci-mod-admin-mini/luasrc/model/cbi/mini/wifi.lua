@@ -209,7 +209,7 @@ end
 
 encr = s:option(ListValue, "encryption", translate("Encryption"))
 encr.override_values = true
-encr:value("none", "No Encryption")
+encr:value("none", translate("No Encryption"))
 encr:value("wep", "WEP")
 
 if hwtype == "mac80211" then
@@ -217,31 +217,31 @@ if hwtype == "mac80211" then
 	local hostapd    = fs.access("/usr/sbin/hostapd")
 
 	if hostapd and supplicant then
-		encr:value("psk", "WPA-PSK")
-		encr:value("psk2", "WPA2-PSK")
-		encr:value("psk-mixed", "WPA-PSK/WPA2-PSK Mixed Mode")
-		encr:value("wpa", "WPA-Radius", {mode="ap"}, {mode="sta"})
-		encr:value("wpa2", "WPA2-Radius", {mode="ap"}, {mode="sta"})
+		encr:value("psk", translate("WPA-PSK"))
+		encr:value("psk2", translate("WPA2-PSK"))
+		encr:value("psk-mixed", translate("WPA-PSK/WPA2-PSK Mixed Mode"))
+		encr:value("wpa", translate("WPA-Radius"), {mode="ap"}, {mode="sta"})
+		encr:value("wpa2", translate("WPA2-Radius"), {mode="ap"}, {mode="sta"})
 	elseif hostapd and not supplicant then
-		encr:value("psk", "WPA-PSK", {mode="ap"}, {mode="adhoc"})
-		encr:value("psk2", "WPA2-PSK", {mode="ap"}, {mode="adhoc"})
-		encr:value("psk-mixed", "WPA-PSK/WPA2-PSK Mixed Mode", {mode="ap"}, {mode="adhoc"})
-		encr:value("wpa", "WPA-Radius", {mode="ap"})
-		encr:value("wpa2", "WPA2-Radius", {mode="ap"})
+		encr:value("psk", translate("WPA-PSK"), {mode="ap"}, {mode="adhoc"})
+		encr:value("psk2", translate("WPA2-PSK"), {mode="ap"}, {mode="adhoc"})
+		encr:value("psk-mixed", translate("WPA-PSK/WPA2-PSK Mixed Mode"), {mode="ap"}, {mode="adhoc"})
+		encr:value("wpa", translate("WPA-Radius"), {mode="ap"})
+		encr:value("wpa2", translate("WPA2-Radius"), {mode="ap"})
 		encr.description = translate(
 			"WPA-Encryption requires wpa_supplicant (for client mode) or hostapd (for AP " ..
 			"and ad-hoc mode) to be installed."
 		)
 	elseif not hostapd and supplicant then
-		encr:value("psk", "WPA-PSK", {mode="sta"})
-		encr:value("psk2", "WPA2-PSK", {mode="sta"})
-		encr:value("psk-mixed", "WPA-PSK/WPA2-PSK Mixed Mode", {mode="sta"})
-		encr:value("wpa", "WPA-EAP", {mode="sta"})
-		encr:value("wpa2", "WPA2-EAP", {mode="sta"})
+		encr:value("psk", translate("WPA-PSK"), {mode="sta"})
+		encr:value("psk2", translate("WPA2-PSK"), {mode="sta"})
+		encr:value("psk-mixed", translate("WPA-PSK/WPA2-PSK Mixed Mode"), {mode="sta"})
+		encr:value("wpa", translate("WPA-EAP"), {mode="sta"})
+		encr:value("wpa2", translate("WPA2-EAP"), {mode="sta"})
 		encr.description = translate(
 			"WPA-Encryption requires wpa_supplicant (for client mode) or hostapd (for AP " ..
 			"and ad-hoc mode) to be installed."
-		)		
+		)
 	else
 		encr.description = translate(
 			"WPA-Encryption requires wpa_supplicant (for client mode) or hostapd (for AP " ..
@@ -249,9 +249,9 @@ if hwtype == "mac80211" then
 		)
 	end
 elseif hwtype == "broadcom" then
-	encr:value("psk", "WPA-PSK")
-	encr:value("psk2", "WPA2-PSK")
-	encr:value("psk+psk2", "WPA-PSK/WPA2-PSK Mixed Mode")
+	encr:value("psk", translate("WPA-PSK"))
+	encr:value("psk2", translate("WPA2-PSK"))
+	encr:value("psk+psk2", translate("WPA-PSK/WPA2-PSK Mixed Mode"))
 end
 
 key = s:option(Value, "key", translate("Key"))
