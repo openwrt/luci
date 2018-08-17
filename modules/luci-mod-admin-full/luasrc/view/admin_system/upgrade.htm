@@ -22,7 +22,7 @@
 
 </p>
 
-<fieldset class="cbi-section">
+<div class="cbi-section">
 	<ul>
 		<li><%:Checksum%><br />
 		<%:MD5%>: <code><%=checksum%></code><br />
@@ -39,18 +39,24 @@
 			end
 		%></li>
 		<li><% if keep then %>
-			<%:Configuration files will be kept.%>
+			<%:Configuration files will be kept%>
 		<% else %>
-			<%:Note: Configuration files will be erased.%>
+			<%:Caution: Configuration files will be erased%>
 		<% end %></li>
+		<% if force then %>
+		<li>
+			<%:Caution: System upgrade will be forced%>
+		</li>
+		<% end %>
 	</ul>
-</fieldset>
+</div>
 
 <div class="cbi-page-actions right">
 	<form class="inline" action="<%=REQUEST_URI%>" method="post">
 		<input type="hidden" name="token" value="<%=token%>" />
 		<input type="hidden" name="step" value="2" />
 		<input type="hidden" name="keep" value="<%=keep and "1" or ""%>" />
+		<input type="hidden" name="force" value="<%=force and "1" or ""%>" />
 		<input class="cbi-button cbi-button-reset" name="cancel" type="submit" value="<%:Cancel%>" />
 		<input class="cbi-button cbi-button-apply" type="submit" value="<%:Proceed%>" />
 	</form>
