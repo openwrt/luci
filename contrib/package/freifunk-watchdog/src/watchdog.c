@@ -21,7 +21,7 @@
 /* Global watchdog fd, required by signal handler */
 int wdfd = -1;
 
-/* Handle finished childs */
+/* Handle finished children */
 static void sigchld_handler(int sig)
 {
 	pid_t pid;
@@ -406,7 +406,7 @@ static int do_daemon(void)
 		ioctl(wdfd, WDIOC_SETTIMEOUT, &wdtimeout);
 	}
 
-	/* Install signal handler to reap childs */
+	/* Install signal handler to reap children */
 	sa.sa_handler = sigchld_handler;
 	sa.sa_flags = 0;
 	sigaction(SIGCHLD, &sa, NULL);

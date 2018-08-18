@@ -64,7 +64,7 @@
 #define WATCH_SHUTDOWN	'V'
 #define WATCH_KEEPALIVE	'\0'
 
-/* System load error action and treshold */
+/* System load error action and threshold */
 #define LOAD_TRESHOLD	15.00
 #define LOAD_ACTION		"/sbin/reboot", "/sbin/reboot"
 
