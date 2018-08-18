@@ -167,7 +167,7 @@ s2 = m:section(NamedSection, zone.sid, "fwd_out",
 	))
 
 out = s2:option(Value, "out",
-	translate("Allow forward to <em>destination zones</em>:"))
+	translate("Allow forward to <em>destination zones</em>"))
 
 out.nocreate = true
 out.widget = "checkbox"
@@ -175,7 +175,7 @@ out.exclude = zone:name()
 out.template = "cbi/firewall_zonelist"
 
 inp = s2:option(Value, "in",
-	translate("Allow forward from <em>source zones</em>:"))
+	translate("Allow forward from <em>source zones</em>"))
 
 inp.nocreate = true
 inp.widget = "checkbox"
