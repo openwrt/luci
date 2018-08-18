@@ -262,7 +262,7 @@ end
 
 -- one token per invocation, the tokens are separated by whitespace. If the
 -- input value is a table, it is transformed into a string first. A nil value
--- will result in a valid interator which aborts with the first invocation.
+-- will result in a valid iterator which aborts with the first invocation.
 function imatch(v)
 	if type(v) == "table" then
 		local k = nil

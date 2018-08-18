@@ -59,7 +59,7 @@ module "nixio"
 -- <li>aliases = Table of alias names</li>
 -- </ul>
 
---- Get all or a specifc proto entry.
+--- Get all or a specific proto entry.
 -- @class function
 -- @name nixio.getproto
 -- @param proto		protocol number or name to lookup (optional)

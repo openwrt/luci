@@ -544,7 +544,7 @@ function bl.validate(self, value)
 	elseif v < 1 or v > 4096 then
 		return nil, err_tab_access(self.title_base, translate("Value not between 1 and 4096") )
 	elseif v == self.default then
-		return ""	-- dont need to save default
+		return ""	-- don't need to save default
 	end
 	return value
 end
@@ -721,7 +721,7 @@ function st.validate(self, value)
 	elseif v < 1 then
 		return nil, err_tab_misc(self.title_base, translate("Value not greater 0 or empty") )
 	elseif v == self.default then
-		return ""	-- dont need to save default
+		return ""	-- don't need to save default
 	end
 	return value
 end
@@ -740,7 +740,7 @@ function mcc.validate(self, value)
 	elseif v < 1 then
 		return nil, err_tab_misc(self.title_base, translate("Value not greater 0 or empty") )
 	elseif v == self.default then
-		return ""	-- dont need to save default
+		return ""	-- don't need to save default
 	end
 	return value
 end

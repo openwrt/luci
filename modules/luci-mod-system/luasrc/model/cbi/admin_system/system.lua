@@ -130,7 +130,7 @@ end
 
 
 --
--- Langauge & Style
+-- Language & Style
 --
 
 o = s:taboption("language", ListValue, "_lang", translate("Language"))

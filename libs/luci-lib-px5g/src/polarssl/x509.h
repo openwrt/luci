@@ -375,7 +375,7 @@ int x509write_add_pubkey( x509_raw *chain, rsa_context *pubkey );
  *                 the string parse.
  *
  * \param chain    points to the raw certificate data
- * \param names    a string that can hold (separete with ";"):
+ * \param names    a string that can hold (separate with ";"):
  *                     CN=CommonName
  *                 --   O=Organization
  *                 --  OU=OrgUnit
@@ -402,7 +402,7 @@ int x509write_add_customize ( x509_raw *crt,
 * \brief          Add x509 issuer field
 *
 * \param chain    points to the raw certificate data
-* \param issuer   a string holding (separete with ";"):
+* \param issuer   a string holding (separate with ";"):
 *                     CN=CommonName
 *                 --   O=Organization
 *                 --  OU=OrgUnit
@@ -419,7 +419,7 @@ int x509write_add_issuer( x509_raw *crt, unsigned char *issuer);
  * \brief          Add x509 subject field
  *
  * \param chain    points to the raw certificate data
- * \param subject  a string holding (separete with ";"):
+ * \param subject  a string holding (separate with ";"):
  *                     CN=CommonName
  *                 --   O=Organization
  *                 --  OU=OrgUnit

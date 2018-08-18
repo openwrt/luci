@@ -46,7 +46,7 @@ set_defaults() {
 		b="${b//_/ }"
 		string_contains "$a" "_LENGTH" && continue
 		string_contains "$a" "_ITEM" && {
-		    # special threatment for lists. use add_list and remove the
+		    # special treatment for lists. use add_list and remove the
 		    # item index (_ITEMx).
 		    uci add_list $2.${a//_ITEM[0-9]*/}="$b"
 		} || {

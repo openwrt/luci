@@ -35,7 +35,7 @@ function io.exec(command)
 	return buffer
 end
 
---- Execute command and invoke given callback for each readed line
+--- Execute command and invoke given callback for each read line
 -- @param command	String containing the command to execute
 -- @param callback	Function to call back for each line
 -- @return			Always true
@@ -53,7 +53,7 @@ function io.execl(command, callback)
 	return true
 end
 
---- Execute command and return an iterator that returns one line per invokation
+--- Execute command and return an iterator that returns one line per invocation
 -- @param command	String containing the command to execute
 -- @return			Iterator function
 function io.execi(command)
@@ -71,7 +71,7 @@ end
 --- LuCI Asterisk - core status
 core = luci.util.class()
 
---- Retrive version string.
+--- Retrieve version string.
 -- @return	String containing the reported asterisk version
 function core.version(self)
 	local version = io.exec("core show version")
@@ -141,7 +141,7 @@ function sip.peers(self)
 	return peers
 end
 
---- Get informations of given SIP peer
+--- Get information of given SIP peer
 -- @param peer	String containing the name of the SIP peer
 function sip.peer(peer)
 	local info = { }
@@ -217,7 +217,7 @@ end
 --- Convert given list to a collection of hyperlinks
 -- @param list	Table of tokens
 -- @param url	String pattern or callback function to construct urls (optional)
--- @param sep	String containing the seperator (optional, default is ", ")
+-- @param sep	String containing the separator (optional, default is ", ")
 -- @return		String containing the html fragment
 function tools.hyperlinks(list, url, sep)
 	local html

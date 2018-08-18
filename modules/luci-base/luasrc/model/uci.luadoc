@@ -5,7 +5,7 @@ The typical workflow for UCI is:  Get a cursor instance from the
 cursor factory, modify data (via Cursor.add, Cursor.delete, etc.),
 save the changes to the staging area via Cursor.save and finally
 Cursor.commit the data to the actual config files.
-LuCI then needs to Cursor.apply the changes so deamons etc. are
+LuCI then needs to Cursor.apply the changes so daemons etc. are
 reloaded.
 @cstyle	instance
 ]]
@@ -172,7 +172,7 @@ has the same effect as deleting the option.
 ---[[
 Create a sub-state of this cursor.
 
-The sub-state is tied to the parent curser, means it the parent unloads or
+The sub-state is tied to the parent cursor, means it the parent unloads or
 loads configs, the sub state will do so as well.
 
 @class				function
@@ -339,7 +339,7 @@ Set the configuration directory.
 ]]
 
 ---[[
-Set the directory for uncommited changes.
+Set the directory for uncommitted changes.
 
 @class				function
 @name				Cursor.set_savedir

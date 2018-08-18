@@ -258,7 +258,7 @@ static int _validate_utf8(unsigned char **s, int l, struct template_buffer *buf)
 				break;
 		}
 
-		/* advance beyound the last found valid continuation char */
+		/* advance beyond the last found valid continuation char */
 		o = v;
 		ptr += v;
 	}

@@ -15,7 +15,7 @@ local type, tostring, tonumber, unpack = type, tostring, tonumber, unpack
 -- cursor factory, modify data (via Cursor.add, Cursor.delete, etc.),
 -- save the changes to the staging area via Cursor.save and finally
 -- Cursor.commit the data to the actual config files.
--- LuCI then needs to Cursor.apply the changes so deamons etc. are
+-- LuCI then needs to Cursor.apply the changes so daemons etc. are
 -- reloaded.
 module "luci.model.uci"
 

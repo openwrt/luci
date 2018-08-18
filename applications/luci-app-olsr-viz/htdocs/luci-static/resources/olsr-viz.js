@@ -329,7 +329,7 @@ function place_new_nodes() {
 			}
 		}
 		else {
-			// beginn somewhere
+			// begin somewhere
 			n.x = Math.random()*400;
 			n.y = Math.random()*400;
 		}
