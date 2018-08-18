@@ -136,8 +136,8 @@ no_crc_check.default = false
 phase_enhance=s:option(Flag, "phase_enhance", translate("Enable phase enhancement"))
 phase_enhance.default = false
 
-agressive=s:option(Flag, "agressive", translate("More CPU for more messages"))
-agressive.default = false
+aggressive=s:option(Flag, "aggressive", translate("More CPU for more messages"))
+aggressive.default = false
 
 mlat=s:option(Flag, "mlat", translate("Display raw messages in Beast ascii mode"))
 mlat.default = false
