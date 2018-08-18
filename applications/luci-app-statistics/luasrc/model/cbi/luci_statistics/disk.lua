@@ -4,7 +4,7 @@
 m = Map("luci_statistics",
 	translate("Disk Plugin Configuration"),
 	translate(
-		"The disk plugin collects detailled usage statistics " ..
+		"The disk plugin collects detailed usage statistics " ..
 		"for selected partitions or whole disks."
 	))
 

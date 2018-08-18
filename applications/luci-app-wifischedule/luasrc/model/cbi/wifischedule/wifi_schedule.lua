@@ -239,7 +239,7 @@ function force_wifi.validate(self, value, d)
         if fs.access("/usr/bin/iwinfo") then
             return value
         else
-            return nil, translate("Could not find required programm /usr/bin/iwinfo")
+            return nil, translate("Could not find required program /usr/bin/iwinfo")
         end
     else
         return "1"

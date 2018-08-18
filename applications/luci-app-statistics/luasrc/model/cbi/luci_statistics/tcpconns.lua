@@ -4,7 +4,7 @@
 m = Map("luci_statistics",
 	translate("TCPConns Plugin Configuration"),
 	translate(
-		"The tcpconns plugin collects informations about open tcp " ..
+		"The tcpconns plugin collects information about open tcp " ..
 		"connections on selected ports."
 	))
 

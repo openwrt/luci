@@ -84,7 +84,7 @@ function lqmult.validate(self, value)
 			local host = val[1]
 			local mult = val[2]
 			if not host or not mult then
-				return nil, translate("LQMult requires two values (IP address or 'default' and multiplicator) seperated by space.")
+				return nil, translate("LQMult requires two values (IP address or 'default' and multiplicator) separated by space.")
 			end
 			if not (host == "default" or ip.IPv4(host) or ip.IPv6(host)) then
 				return nil, translate("Can only be a valid IPv4 or IPv6 address or 'default'")

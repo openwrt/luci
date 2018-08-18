@@ -7,7 +7,7 @@ require("luci.sys")
 m = Map("luci_statistics",
 	translate("DNS Plugin Configuration"),
 	translate(
-		"The dns plugin collects detailled statistics about dns " ..
+		"The dns plugin collects detailed statistics about dns " ..
 		"related traffic on selected interfaces."
 	))
 

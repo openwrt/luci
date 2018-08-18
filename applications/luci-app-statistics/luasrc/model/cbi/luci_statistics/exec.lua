@@ -51,8 +51,8 @@ notify = m:section( TypedSection, "collectd_exec_notify",
 	translate(
 		"Here you can define external commands which will be " ..
 		"started by collectd when certain threshold values have " ..
-		"been reached. The values leading to invokation will be " ..
-		"feeded to the the called programs stdin."
+		"been reached. The values leading to invocation will be " ..
+		"fed to the the called programs stdin."
 	))
 notify.addremove = true
 notify.anonymous = true

@@ -4,7 +4,7 @@
 local uci = require "luci.model.uci".cursor()
 
 m = Map("freifunk-policyrouting", translate("Policy Routing"), translate("These pages can be used to setup policy routing for certain firewall zones. "..
-	"This is useful if you need to use your own internet connection for yourself but you don't want to share it with others (thats why it can also be "..
+	"This is useful if you need to use your own internet connection for yourself but you don't want to share it with others (that's why it can also be "..
 	"called 'Ego Mode'). Your own traffic is then sent via your internet connection while traffic originating from the mesh will use another gateway in the mesh. "))
 m:chain("network")
 

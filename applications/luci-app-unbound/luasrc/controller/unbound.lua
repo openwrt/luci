@@ -158,7 +158,7 @@ function QueryCacheDump()
         "unbound-control -c /var/lib/unbound/unbound.conf dump_cache")
 
     local lcldesc = luci.i18n.translate(
-        "This shows Unbound 'cache_dump'. Usefull to check if unbound is actually caching dns entities.")
+        "This shows Unbound 'cache_dump'. Useful to check if unbound is actually caching dns entities.")
 
     luci.template.render("unbound/show-textbox",
         {heading = "", description = lcldesc, content = lcldata})

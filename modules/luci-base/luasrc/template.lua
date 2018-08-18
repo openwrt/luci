@@ -95,6 +95,6 @@ function Template.render(self, scope)
 	local stat, err = util.copcall(self.template)
 	if not stat then
 		error("Failed to execute template '" .. self.name .. "'.\n" ..
-		      "A runtime error occured: " .. tostring(err or "(nil)"))
+		      "A runtime error occurred: " .. tostring(err or "(nil)"))
 	end
 end

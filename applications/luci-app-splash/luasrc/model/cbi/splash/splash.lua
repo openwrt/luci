@@ -2,7 +2,7 @@
 
 require("luci.model.uci")
 
-m = Map("luci_splash", translate("Client-Splash"), translate("Client-Splash is a hotspot authentification system for wireless mesh networks."))
+m = Map("luci_splash", translate("Client-Splash"), translate("Client-Splash is a hotspot authentication system for wireless mesh networks."))
 
 s = m:section(NamedSection, "general", "core", translate("General"))
 s.addremove = false

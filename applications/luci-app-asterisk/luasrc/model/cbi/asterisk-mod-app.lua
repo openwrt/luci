@@ -153,7 +153,7 @@ app_lookupblacklist:value("no", "Do Not Load")
 app_lookupblacklist:value("auto", "Load as Required")
 app_lookupblacklist.rmempty = true
 
-app_lookupcidname = module:option(ListValue, "app_lookupcidname", "Look up CallerID Name from local databas", "")
+app_lookupcidname = module:option(ListValue, "app_lookupcidname", "Look up CallerID Name from local database", "")
 app_lookupcidname:value("yes", "Load")
 app_lookupcidname:value("no", "Do Not Load")
 app_lookupcidname:value("auto", "Load as Required")
