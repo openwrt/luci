@@ -87,7 +87,7 @@ mode = aps:option(DummyValue, "mode", translate("Mode"))
 ssid = aps:option(DummyValue, "ssid", translate("SSID"))
 
 
-action = aps:option(ListValue, "dynapoint_rule", translate("Activate this wVIF if status is:"))
+action = aps:option(ListValue, "dynapoint_rule", translate("Activate this wVIF if status is"))
 action.widget="select"
 action:value("internet",translate("Online"))
 action:value("!internet",translate("Offline"))
