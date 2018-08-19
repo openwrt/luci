@@ -46,6 +46,12 @@ local s = m:section(TypedSection, "vnstat")
 s.anonymous = true
 s.addremove = false
 
+backup_dir = s:option(Value, "backup_dir", translate("Backup Dir"), translate("Directory from which to retrieve data backups"))
+
+remote_backup = s:option(Value, "remote", translate("Remote Backup URL"), translate("URL from which to retrieve data backups"))
+
+symlink = s:option(Value, "symlink", translate("Alternate database access"), translate("Access the vnstat database files from an alternate directory"))
+
 mon_ifaces = s:option(Value, "interface", translate("Monitor selected interfaces"))
 mon_ifaces.template   = "cbi/network_ifacelist"
 mon_ifaces.widget     = "checkbox"
