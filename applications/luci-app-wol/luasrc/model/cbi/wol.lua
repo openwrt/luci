@@ -79,7 +79,7 @@ function host.write(self, s, val)
 		end
 
 		local msg = "<p><strong>%s</strong><br /><br /><code>%s<br /><br />" %{
-			translate("Starting WoL utility:"), utl.pcdata(cmd)
+			translate("Starting WoL utility"), utl.pcdata(cmd)
 		}
 
 		local p = io.popen(cmd .. " 2>&1")
