@@ -10,7 +10,7 @@ local fs = require "nixio.fs"
 local acct_port, acct_secret, acct_server, anonymous_identity, ant1, ant2,
 	auth, auth_port, auth_secret, auth_server, bssid, cacert, cacert2,
 	cc, ch, cipher, clientcert, clientcert2, ea, eaptype, en, encr,
-	ft_protocol, ft_psk_generate_local, hidden, htmode, identity,
+	ft_protocol, hidden, htmode, identity,
 	ieee80211r, ieee80211w, ifname, isolate, key_retries,
 	legacyrates, max_timeout, meshfwd, meshid, ml, mobility_domain, mode,
 	mp, nasid, network, password, pmk_r1_push, privkey, privkey2, privkeypwd,
@@ -797,13 +797,24 @@ end
 
 if hwtype == "mac80211" or hwtype == "prism2" then
 
+	nasid = s:taboption("encryption", Value, "nasid", translate("NAS ID"),
+	translate("Used for two different purposes: RADIUS NAS ID and " ..
+		"802.11r R0KH-ID."))
+	nasid:depends({mode="ap", encryption="wpa"})
+	nasid:depends({mode="ap", encryption="wpa2"})
+	nasid:depends({mode="ap-wds", encryption="wpa"})
+	nasid:depends({mode="ap-wds", encryption="wpa2"})
+	nasid.rmempty = true
+
 	-- Probe 802.11r support (and EAP support as a proxy for Openwrt)
 	local has_80211r = (os.execute("hostapd -v11r 2>/dev/null || hostapd -veap 2>/dev/null") == 0)
 
 	ieee80211r = s:taboption("encryption", Flag, "ieee80211r",
 		translate("802.11r Fast Transition"),
 		translate("Enables fast roaming among access points that belong " ..
-			"to the same Mobility Domain"))
+			"to the same Mobility Domain." ..
+			"<br />When using a PSK, the PMK is generated locally without " ..
+			"inter AP communications."))
 	ieee80211r:depends({mode="ap", encryption="wpa"})
 	ieee80211r:depends({mode="ap", encryption="wpa2"})
 	ieee80211r:depends({mode="ap-wds", encryption="wpa"})
@@ -818,21 +829,12 @@ if hwtype == "mac80211" or hwtype == "prism2" then
 	end
 	ieee80211r.rmempty = true
 
-	nasid = s:taboption("encryption", Value, "nasid", translate("NAS ID"),
-		translate("Used for two different purposes: RADIUS NAS ID and " ..
-			"802.11r R0KH-ID. Not needed with normal WPA(2)-PSK."))
-	nasid:depends({mode="ap", encryption="wpa"})
-	nasid:depends({mode="ap", encryption="wpa2"})
-	nasid:depends({mode="ap-wds", encryption="wpa"})
-	nasid:depends({mode="ap-wds", encryption="wpa2"})
-	nasid:depends({ieee80211r="1"})
-	nasid.rmempty = true
-
 	mobility_domain = s:taboption("encryption", Value, "mobility_domain",
-			translate("Mobility Domain"),
-			translate("4-character hexadecimal ID"))
+		translate("Mobility Domain"),
+		translate("4-character hexadecimal ID" ..
+			"<br />(Default generated from SSID)"))
 	mobility_domain:depends({ieee80211r="1"})
-	mobility_domain.placeholder = "4f57"
+	mobility_domain.placeholder = ut.exec("echo " .. ut.shellquote(wnet:get("ssid")) .. " | md5sum | head -c 4")
 	mobility_domain.datatype = "and(hexstring,rangelength(4,4))"
 	mobility_domain.rmempty = true
 
@@ -850,14 +852,11 @@ if hwtype == "mac80211" or hwtype == "prism2" then
 	ft_protocol:value("0", translatef("FT over the Air"))
 	ft_protocol.rmempty = true
 
-	ft_psk_generate_local = s:taboption("encryption", Flag, "ft_psk_generate_local",
-		translate("Generate PMK locally"),
-		translate("When using a PSK, the PMK can be generated locally without inter AP communications"))
-	ft_psk_generate_local:depends({ieee80211r="1"})
 
 	r0_key_lifetime = s:taboption("encryption", Value, "r0_key_lifetime",
 			translate("R0 Key Lifetime"), translate("minutes"))
-	r0_key_lifetime:depends({ieee80211r="1", ft_psk_generate_local=""})
+	r0_key_lifetime:depends({ieee80211r="1", encryption="wpa"})
+	r0_key_lifetime:depends({ieee80211r="1", encryption="wpa2"})
 	r0_key_lifetime.placeholder = "10000"
 	r0_key_lifetime.datatype = "uinteger"
 	r0_key_lifetime.rmempty = true
@@ -865,13 +864,15 @@ if hwtype == "mac80211" or hwtype == "prism2" then
 	r1_key_holder = s:taboption("encryption", Value, "r1_key_holder",
 			translate("R1 Key Holder"),
 			translate("6-octet identifier as a hex string - no colons"))
-	r1_key_holder:depends({ieee80211r="1", ft_psk_generate_local=""})
+	r1_key_holder:depends({ieee80211r="1", encryption="wpa"})
+	r1_key_holder:depends({ieee80211r="1", encryption="wpa2"})
 	r1_key_holder.placeholder = "00004f577274"
 	r1_key_holder.datatype = "and(hexstring,rangelength(12,12))"
 	r1_key_holder.rmempty = true
 
 	pmk_r1_push = s:taboption("encryption", Flag, "pmk_r1_push", translate("PMK R1 Push"))
-	pmk_r1_push:depends({ieee80211r="1", ft_psk_generate_local=""})
+	pmk_r1_push:depends({ieee80211r="1", encryption="wpa"})
+	pmk_r1_push:depends({ieee80211r="1", encryption="wpa2"})
 	pmk_r1_push.placeholder = "0"
 	pmk_r1_push.rmempty = true
 
@@ -881,7 +882,8 @@ if hwtype == "mac80211" or hwtype == "prism2" then
 			"<br />This list is used to map R0KH-ID (NAS Identifier) to a destination " ..
 			"MAC address when requesting PMK-R1 key from the R0KH that the STA " ..
 			"used during the Initial Mobility Domain Association."))
-	r0kh:depends({ieee80211r="1", ft_psk_generate_local=""})
+	r0kh:depends({ieee80211r="1", encryption="wpa"})
+	r0kh:depends({ieee80211r="1", encryption="wpa2"})
 	r0kh.rmempty = true
 
 	r1kh = s:taboption("encryption", DynamicList, "r1kh", translate("External R1 Key Holder List"),
@@ -890,7 +892,8 @@ if hwtype == "mac80211" or hwtype == "prism2" then
 			"<br />This list is used to map R1KH-ID to a destination MAC address " ..
 			"when sending PMK-R1 key from the R0KH. This is also the " ..
 			"list of authorized R1KHs in the MD that can request PMK-R1 keys."))
-	r1kh:depends({ieee80211r="1", ft_psk_generate_local=""})
+	r1kh:depends({ieee80211r="1", encryption="wpa"})
+	r1kh:depends({ieee80211r="1", encryption="wpa2"})
 	r1kh.rmempty = true
 	-- End of 802.11r options
 
