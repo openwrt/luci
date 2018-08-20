@@ -250,7 +250,7 @@ if (valman == "0") then
     qrs:depends("query_minimize", true)
 
     eds = s1:taboption("resource", Value, "edns_size",
-        translate("EDNS Size:"),
+        translate("EDNS Size"),
         translate("Limit extended DNS packet size"))
     eds.datatype = "and(uinteger,min(512),max(4096))"
     eds.placeholder = "1280"
