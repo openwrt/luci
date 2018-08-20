@@ -295,7 +295,7 @@ function action_sysupgrade()
 	--
 	elseif step == 2 then
 		local keep = (http.formvalue("keep") == "1") and "" or "-n"
-		local force = (http.formvalue("force") == "1") and "" or "-F"
+		local force = (http.formvalue("force") == "1") and "-F" or ""
 		luci.template.render("admin_system/applyreboot", {
 			title = luci.i18n.translate("Flashing..."),
 			msg   = luci.i18n.translate("The system is flashing now.<br /> DO NOT POWER OFF THE DEVICE!<br /> Wait a few minutes before you try to reconnect. It might be necessary to renew the address of your computer to reach the device again, depending on your settings."),
