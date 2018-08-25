@@ -179,10 +179,26 @@ for ikey, iface in pairs(data) do
       </div>
     </div>
   <%-
+  local cur = uci.cursor()
   for pkey, peer in pairs(iface.peers) do
+    local desc, tmp_desc, pub_key = "", "", ""
+    cur:foreach("network", "wireguard_" .. ikey, function(s)
+      local tmp_desc, pub_key = "", ""
+      for key, value in pairs(s) do
+        if key == "description" then
+          tmp_desc = value
+        end
+        if value == peer.public_key then
+          pub_key = value
+        end
+        if pub_key == peer.public_key and tmp_desc ~= "" then
+          desc = ': ' .. tmp_desc
+        end
+      end
+    end)
     -%>
     <div class="tr">
-      <div class="td" width="33%" style="vertical-align:top"><%:Peer%></div>
+      <div class="td" width="33%" style="vertical-align:top"><%:Peer%><%=desc%></div>
       <div class="td">
         <div class="table">
           <div class="tr">
