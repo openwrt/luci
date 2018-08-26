@@ -191,7 +191,7 @@ for ikey, iface in pairs(data) do
         if value == peer.public_key then
           pub_key = value;
         end
-        if value == peer.public_key and tmp_desc ~= "" then
+        if pub_key == peer.public_key and tmp_desc ~= "" then
           desc = ': ' .. tmp_desc;
         end   
       end
