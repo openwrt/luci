@@ -212,6 +212,7 @@ function iface_status(ifaces)
 				is_up      = net:is_up() and device:is_up(),
 				is_alias   = net:is_alias(),
 				is_dynamic = net:is_dynamic(),
+				is_auto    = net:is_auto(),
 				rx_bytes   = device:rx_bytes(),
 				tx_bytes   = device:tx_bytes(),
 				rx_packets = device:rx_packets(),
