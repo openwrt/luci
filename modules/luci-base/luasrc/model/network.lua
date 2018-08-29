@@ -1159,6 +1159,16 @@ function protocol.is_dynamic(self)
 	return (self:_ubus("dynamic") == true)
 end
 
+function protocol.is_auto(self)
+	local auto = self:_get("auto")
+
+	if auto == "0" then
+		return false
+	else
+		return true
+	end
+end
+
 function protocol.is_alias(self)
 	local ifn, parent = nil, nil
 
