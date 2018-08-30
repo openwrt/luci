@@ -24,6 +24,12 @@
 	XHR.poll(5, '<%=url('admin/network/switch_status')%>/' + switches.join(','), null,
 		function(x, st)
 		{
+			var el = document.getElementsByClassName('cbi-section-table-descr');
+			for(var i = 0; i < el.length; i++){
+				if (el[i].style.display == 'none')
+					el[i].style.display = ''
+			}
+
 			for (var i = 0; i < switches.length; i++)
 			{
 				var ports = st[switches[i]];
