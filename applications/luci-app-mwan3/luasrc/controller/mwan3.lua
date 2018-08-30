@@ -144,7 +144,8 @@ function diagnosticsData(interface, task)
 	local uci = require "luci.model.uci".cursor(nil, "/var/state")
 	local nw = require "luci.model.network".init()
 	local network = nw:get_network(interface)
-	local device = network and network:ifname()
+	local device = network and network:get_interface()
+	device = device:name()
 
 	luci.http.prepare_content("text/plain")
 	if device then
