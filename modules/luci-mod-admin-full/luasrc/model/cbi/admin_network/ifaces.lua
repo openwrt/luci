@@ -53,7 +53,7 @@ local function get_ifstate(name, option)
 
 	m.uci:foreach("luci", "ifstate", function (s)
 		if s.interface == name then
-			val = m.uci:get("luci", s[".name"], option)
+			val = s[option]
 			return false
 		end
 	end)
