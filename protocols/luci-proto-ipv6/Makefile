@@ -7,7 +7,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=Support for DHCPv6/6in4/6to4/6rd/DS-Lite
-LUCI_DEPENDS:=
+LUCI_DEPENDS:=@IPV6
 
 PKG_LICENSE:=Apache-2.0
 
