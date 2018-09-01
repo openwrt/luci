@@ -18,60 +18,50 @@ This is free software, licensed under the Apache License, Version 2.0
 //<![CDATA[
 	function status_update(json)
 	{
-			var view         = document.getElementById("value_1");
-			var btn1         = document.getElementById("btn1");
-			var btn1_running = document.getElementById("btn1_running");
-			var btn2         = document.getElementById("btn2");
-			var btn2_running = document.getElementById("btn2_running");
-			var input        = json.data.adblock_status;
+		var btn1         = document.getElementById("btn1");
+		var btn1_running = document.getElementById("btn1_running");
+		var btn2         = document.getElementById("btn2");
+		var btn2_running = document.getElementById("btn2_running");
+		var input        = json.data.adblock_status || "-";
 
-			view.innerHTML = input || "-";
-			if (input === "enabled")
-			{
-				btn1.value = "<%:Suspend%>";
-				btn1.name  = "do_suspend";
-				btn2.value = "<%:Refresh%>";
-				btn2.name  = "do_refresh";
-				btn1.disabled = false;
-				running(btn1_running, 0);
-				btn2.disabled = false;
-				running(btn2_running, 0);
-			}
-			else if (input === "paused")
-			{
-				btn1.value = "<%:Resume%>";
-				btn1.name  = "do_resume";
-				btn2.value = "<%:Refresh%>";
-				btn2.name  = "do_refresh";
-				btn1.disabled = false;
-				running(btn1_running, 0);
-				btn2.disabled = false;
-				running(btn2_running, 0);
-			}
-			else
-			{
-				btn1.value = "<%:Suspend%>";
-				btn1.name  = "do_suspend";
-				btn2.value = "<%:Refresh%>";
-				btn2.name  = "do_refresh";
-				btn1.disabled = true;
-				btn2.disabled = true;
-			}
-			view = document.getElementById("value_2");
-			input = json.data.adblock_version;
-			view.innerHTML = input || "-";
-			view = document.getElementById("value_3");
-			input = json.data.fetch_utility;
-			view.innerHTML = input || "-";
-			view = document.getElementById("value_4");
-			input = json.data.dns_backend;
-			view.innerHTML = input || "-";
-			view = document.getElementById("value_5");
-			input = json.data.overall_domains;
-			view.innerHTML = input || "-";
-			view = document.getElementById("value_6");
-			input = json.data.last_rundate;
-			view.innerHTML = input || "-";
+		document.getElementById("value_1").innerHTML = input;
+		if (input === "enabled")
+		{
+			btn1.value = "<%:Suspend%>";
+			btn1.name  = "do_suspend";
+			btn2.value = "<%:Refresh%>";
+			btn2.name  = "do_refresh";
+			btn1.disabled = false;
+			running(btn1_running, 0);
+			btn2.disabled = false;
+			running(btn2_running, 0);
+		}
+		else if (input === "paused")
+		{
+			btn1.value = "<%:Resume%>";
+			btn1.name  = "do_resume";
+			btn2.value = "<%:Refresh%>";
+			btn2.name  = "do_refresh";
+			btn1.disabled = false;
+			running(btn1_running, 0);
+			btn2.disabled = false;
+			running(btn2_running, 0);
+		}
+		else
+		{
+			btn1.value = "<%:Suspend%>";
+			btn1.name  = "do_suspend";
+			btn2.value = "<%:Refresh%>";
+			btn2.name  = "do_refresh";
+			btn1.disabled = true;
+			btn2.disabled = true;
+		}
+
+		document.getElementById("value_2").innerHTML = json.data.adblock_version || "-";
+		document.getElementById("value_3").innerHTML = json.data.fetch_utility || "-";
+		document.getElementById("value_4").innerHTML = json.data.dns_backend || "-";
+		document.getElementById("value_5").innerHTML = json.data.overall_domains || "-";
+		document.getElementById("value_6").innerHTML = json.data.last_rundate || "-";
 	}
 
 	function btn_action(action)
@@ -116,32 +106,42 @@ This is free software, licensed under the Apache License, Version 2.0
 		}
 	}
 
+	function reset_view()
+	{
+		document.getElementById("btn1").value        = "<%:Suspend%>";
+		document.getElementById("btn1").name         = "do_suspend";
+		document.getElementById("btn2").value        = "<%:Refresh%>";
+		document.getElementById("btn2").name         = "do_refresh";
+		document.getElementById("btn1").disabled     = true;
+		document.getElementById("btn2").disabled     = true;
+		document.getElementById("value_1").innerHTML = "-";
+		document.getElementById("value_2").innerHTML = "-";
+		document.getElementById("value_3").innerHTML = "-";
+		document.getElementById("value_4").innerHTML = "-";
+		document.getElementById("value_5").innerHTML = "-";
+		document.getElementById("value_6").innerHTML = "-";
+	}
+
 	XHR.get('<%=luci.dispatcher.build_url("admin", "services", "adblock", "status")%>', null,
 	function(x, json_info)
 	{
-		if (!x || !json_info)
+		if (!x || !json_info || !json_info.data)
 		{
-			var btn1 = document.getElementById("btn1");
-			var btn2 = document.getElementById("btn2");
-			btn1.value = "<%:Suspend%>";
-			btn1.name  = "do_suspend";
-			btn2.value = "<%:Refresh%>";
-			btn2.name  = "do_refresh";
-			btn1.disabled = true;
-			btn2.disabled = true;
+			reset_view();
 			return;
 		}
-		status_update(json_info)
+		status_update(json_info);
 	});
 
 	XHR.poll(5, '<%=luci.dispatcher.build_url("admin", "services", "adblock", "status")%>', null,
 	function(x, json_info)
 	{
-		if (!x || !json_info)
+		if (!x || !json_info || !json_info.data)
 		{
+			reset_view();
 			return;
 		}
-		status_update(json_info)
+		status_update(json_info);
 	});
 //]]>
 </script>
