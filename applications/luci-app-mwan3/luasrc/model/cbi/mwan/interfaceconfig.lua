@@ -13,10 +13,8 @@ mwan_interface = m5:section(NamedSection, arg[1], "interface", "")
 mwan_interface.addremove = false
 mwan_interface.dynamic = false
 
-enabled = mwan_interface:option(ListValue, "enabled", translate("Enabled"))
-enabled.default = "1"
-enabled:value("1", translate("Yes"))
-enabled:value("0", translate("No"))
+enabled = mwan_interface:option(Flag, "enabled", translate("Enabled"))
+enabled.default = false
 
 initial_state = mwan_interface:option(ListValue, "initial_state", translate("Initial state"),
 	translate("Expect interface state on up event"))
