@@ -305,7 +305,7 @@ function mac.cfgvalue(self, section)
 	return ipc.checkmac(val) or val
 end
 
-ip = s:option(Value, "ip", translate("<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Address"))
+ip = s:option(Value, "ip", translate("<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Address xxx.xxx.xxx.xxx"))
 ip.datatype = "or(ip4addr,'ignore')"
 
 time = s:option(Value, "leasetime", translate("Lease time"))
