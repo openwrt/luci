@@ -184,7 +184,9 @@ function wifi_add()
 	dev = dev and ntm:get_wifidev(dev)
 
 	if dev then
-		local net = dev:add_wifinet({
+		local num_wifinets = dev:get_num_wifinets()
+		local wifinet_name = num_wifinets == 0 and "default_" .. dev.sid or nil
+		local net = dev:add_wifinet(wifinet_name, {
 			mode       = "ap",
 			ssid       = "OpenWrt",
 			encryption = "none"
