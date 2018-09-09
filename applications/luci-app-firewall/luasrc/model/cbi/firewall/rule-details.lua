@@ -375,10 +375,10 @@ o = s:option(Value, "start_time", translate("Start Time (hh:mm:ss)"))
 o.datatype = "timehhmmss"
 o = s:option(Value, "stop_time", translate("Stop Time (hh:mm:ss)"))
 o.datatype = "timehhmmss"
-o = s:option(Value, "start_date", translate("Start Date<br />(yyyy-mm-ddThh:mm:ss)"))
-o.datatype = "dateyyyymmddthhmmss"
-o = s:option(Value, "stop_date", translate("Stop Date<br />(yyyy-mm-ddThh:mm:ss)"))
-o.datatype = "dateyyyymmddthhmmss"
+o = s:option(Value, "start_date", translate("Start Date (yyyy-mm-ddThh:mm:ss)"))
+o.datatype = "dateyyyymmdd(1)"
+o = s:option(Value, "stop_date", translate("Stop Date (yyyy-mm-ddThh:mm:ss)"))
+o.datatype = "dateyyyymmdd(1)"
 
 o = s:option(Flag, "utc_time", translate("Time in UTC"))
 o.default = o.disabled

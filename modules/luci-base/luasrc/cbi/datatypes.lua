@@ -421,7 +421,21 @@ function timehhmmss(val)
 	return (val:match("^[0-6][0-9]:[0-6][0-9]:[0-6][0-9]$") ~= nil)
 end
 
-function check_date(yearstr, monthstr, datestr)
+function dateyyyymmdd(val, allow_time)
+	if val == nil then
+		return false
+	end
+
+	datestr_postfix = "$"
+
+	if allow_time then
+		datestr_postfix = ""
+	end
+
+	yearstr, monthstr, daystr = val:match("^(%d%d%d%d)-(%d%d)-(%d%d)" .. datestr_postfix)
+	if (yearstr == nil) or (monthstr == nil) or (daystr == nil) then
+		return false;
+	end
 	year = tonumber(yearstr)
 	month = tonumber(monthstr)
 	day = tonumber(daystr)
@@ -451,31 +465,28 @@ function check_date(yearstr, monthstr, datestr)
 	if ((day == 0) or (day > get_days_in_month(month, year))) then
 		return false
 	end
+
+	-- The date part of the string (yyyy-mm-dd) is ten characthers long, so
+	-- there is no point checking for time is length is shorter than 11
+	if not allow_time or (val:len() < 11) then
+		return true
+	end
+
+	timestr = val:sub(11)
+
+	hourstr, minutestr, secstr = timestr:match("^T(%d%d):(%d%d):(%d%d)$")
+
+	if (hourstr == nil) or (minutestr == nil) or (secstr == nil) then
+		return false
+	end
+
+	hour = tonumber(hourstr)
+	minute = tonumber(minutestr)
+	sec = tonumber(secstr)
+
+	if ((hour > 23) or (minute > 59) or (sec > 59)) then
+		return false
+	end
+
 	return true
-end
-
-function dateyyyymmdd(val)
-	if val == nil then
-		return false
-	end
-
-	yearstr, monthstr, daystr = val:match("^(%d%d%d%d)-(%d%d)-(%d%d)$")
-	if (yearstr == nil) or (monthstr == nil) or (daystr == nil) then
-		return false;
-	end
-
-	return check_date(yearstr, monthstr, datestr)
-end
-
-function dateyyyymmddthhmmss(val)
-	if val == nil then
-		return false
-	end
-
-	yearstr, monthstr, daystr = val:match("^(%d%d%d%d)-(%d%d)-(%d%d)T[0-6][0-9]:[0-6][0-9]:[0-6][0-9]$")
-	if (yearstr == nil) or (monthstr == nil) or (daystr == nil) then
-		return false;
-	end
-
-	return check_date(yearstr, monthstr, datestr)
 end
