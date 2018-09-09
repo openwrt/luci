@@ -8,11 +8,9 @@
 
 <%-
 	local node, redir_url = luci.dispatcher.lookup(luci.http.formvalue("redir"))
+	export("redirect", redir_url or url("admin/uci/changes"))
 
-	include("cbi/apply_widget")
 	include("admin_uci/changelog")
-
-	cbi_apply_widget(redir_url or url("admin/uci/revert"))
 -%>
 
 <h2 name="content"><%:Configuration%> / <%:Revert%></h2>
@@ -23,13 +21,6 @@
 <% else %>
 	<p><strong><%:There are no pending changes to revert!%></strong></p>
 <% end %>
-
-<div class="alert-message" id="cbi_apply_status" style="display:none"></div>
-<script type="text/javascript">
-	document.addEventListener("DOMContentLoaded", function() {
-		uci_revert();
-	});
-</script>
 
 <% if redir_url then %>
 	<div class="cbi-page-actions">

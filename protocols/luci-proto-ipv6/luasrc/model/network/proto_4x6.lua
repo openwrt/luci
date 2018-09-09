@@ -52,12 +52,13 @@ for _, p in ipairs({"dslite", "map", "464xlat"}) do
 	function proto.contains_interface(self, ifname)
 		return (netmod:ifnameof(ifc) == self:ifname())
 	end
-
-	if p == "dslite" then
-		netmod:register_pattern_virtual("^ds%-%w")
-	elseif p == "map" then
-		netmod:register_pattern_virtual("^map%-%w")
-	elseif p == "464xlat" then
-		netmod:register_pattern_virtual("^464%-%w")
-	end
 end
+
+netmod:register_pattern_virtual("^464%-%w")
+netmod:register_pattern_virtual("^ds%-%w")
+netmod:register_pattern_virtual("^map%-%w")
+
+netmod:register_error_code("AFTR_DNS_FAIL",		luci.i18n.translate("Unable to resolve AFTR host name"))
+netmod:register_error_code("INVALID_MAP_RULE",	luci.i18n.translate("MAP rule is invalid"))
+netmod:register_error_code("NO_MATCHING_PD",	luci.i18n.translate("No matching prefix delegation"))
+netmod:register_error_code("UNSUPPORTED_TYPE",	luci.i18n.translate("Unsupported MAP type"))

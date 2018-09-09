@@ -59,3 +59,11 @@ function proto.contains_interface(self, ifc)
 end
 
 netmod:register_pattern_virtual("^ncm%-%w")
+
+netmod:register_error_code("CONFIGURE_FAILED",	luci.i18n.translate("Configuration failed"))
+netmod:register_error_code("DISCONNECT_FAILED",	luci.i18n.translate("Disconnection attempt failed"))
+netmod:register_error_code("FINALIZE_FAILED",	luci.i18n.translate("Finalizing failed"))
+netmod:register_error_code("GETINFO_FAILED",	luci.i18n.translate("Modem information query failed"))
+netmod:register_error_code("INITIALIZE_FAILED",	luci.i18n.translate("Initialization failure"))
+netmod:register_error_code("SETMODE_FAILED",	luci.i18n.translate("Setting operation mode failed"))
+netmod:register_error_code("UNSUPPORTED_MODEM",	luci.i18n.translate("Unsupported modem"))

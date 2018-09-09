@@ -95,41 +95,15 @@ end
 
 
 function changes(self, config)
-	local rv = call("changes", { config = config })
-	local res = {}
+	local rv, err = call("changes", { config = config })
 
 	if type(rv) == "table" and type(rv.changes) == "table" then
-		local package, changes
-		for package, changes in pairs(rv.changes) do
-			res[package] = {}
-
-			local _, change
-			for _, change in ipairs(changes) do
-				local operation, section, option, value = unpack(change)
-				if option and operation ~= "add" then
-					res[package][section] = res[package][section] or { }
-
-					if operation == "list-add" then
-						local v = res[package][section][option]
-						if type(v) == "table" then
-							v[#v+1] = value or ""
-						elseif v ~= nil then
-							res[package][section][option] = { v, value }
-						else
-							res[package][section][option] = { value }
-						end
-					else
-						res[package][section][option] = value or ""
-					end
-				else
-					res[package][section] = res[package][section] or {}
-					res[package][section][".type"] = option or ""
-				end
-			end
-		end
+		return rv.changes
+	elseif err then
+		return nil, ERRSTR[err]
+	else
+		return { }
 	end
-
-	return res
 end
 
 
@@ -147,19 +121,31 @@ function apply(self, rollback)
 	local _, err
 
 	if rollback then
+		local sys = require "luci.sys"
 		local conf = require "luci.config"
-		local timeout = tonumber(conf and conf.apply and conf.apply.rollback or "") or 0
+		local timeout = tonumber(conf and conf.apply and conf.apply.rollback or 30) or 0
 
 		_, err = call("apply", {
-			timeout  = (timeout > 30) and timeout or 30,
+			timeout = (timeout > 30) and timeout or 30,
 			rollback = true
 		})
 
 		if not err then
+			local now = os.time()
+			local token = sys.uniqueid(16)
+
 			util.ubus("session", "set", {
-				ubus_rpc_session = session_id,
-				values = { rollback = os.time() + timeout }
+				ubus_rpc_session = "00000000000000000000000000000000",
+				values = {
+					rollback = {
+						token   = token,
+						session = session_id,
+						timeout = now + timeout
+					}
+				}
 			})
+
+			return token
 		end
 	else
 		_, err = call("changes", {})
@@ -184,40 +170,72 @@ function apply(self, rollback)
 	return (err == nil), ERRSTR[err]
 end
 
-function confirm(self)
-	local _, err = call("confirm", {})
-	if not err then
-		util.ubus("session", "set", {
-			ubus_rpc_session = session_id,
-			values = { rollback = 0 }
+function confirm(self, token)
+	local is_pending, time_remaining, rollback_sid, rollback_token = self:rollback_pending()
+
+	if is_pending then
+		if token ~= rollback_token then
+			return false, "Permission denied"
+		end
+
+		local _, err = util.ubus("uci", "confirm", {
+			ubus_rpc_session = rollback_sid
 		})
+
+		if not err then
+			util.ubus("session", "set", {
+				ubus_rpc_session = "00000000000000000000000000000000",
+				values = { rollback = {} }
+			})
+		end
+
+		return (err == nil), ERRSTR[err]
 	end
-	return (err == nil), ERRSTR[err]
+
+	return false, "No data"
 end
 
 function rollback(self)
-	local _, err = call("rollback", {})
-	if not err then
-		util.ubus("session", "set", {
-			ubus_rpc_session = session_id,
-			values = { rollback = 0 }
+	local is_pending, time_remaining, rollback_sid = self:rollback_pending()
+
+	if is_pending then
+		local _, err = util.ubus("uci", "rollback", {
+			ubus_rpc_session = rollback_sid
 		})
+
+		if not err then
+			util.ubus("session", "set", {
+				ubus_rpc_session = "00000000000000000000000000000000",
+				values = { rollback = {} }
+			})
+		end
+
+		return (err == nil), ERRSTR[err]
 	end
-	return (err == nil), ERRSTR[err]
+
+	return false, "No data"
 end
 
 function rollback_pending(self)
-	local deadline, err = util.ubus("session", "get", {
-		ubus_rpc_session = session_id,
+	local rv, err = util.ubus("session", "get", {
+		ubus_rpc_session = "00000000000000000000000000000000",
 		keys = { "rollback" }
 	})
 
-	if type(deadline) == "table" and
-	   type(deadline.values) == "table" and
-	   type(deadline.values.rollback) == "number" and
-	   deadline.values.rollback > os.time()
+	local now = os.time()
+
+	if type(rv) == "table" and
+	   type(rv.values) == "table" and
+	   type(rv.values.rollback) == "table" and
+	   type(rv.values.rollback.token) == "string" and
+	   type(rv.values.rollback.session) == "string" and
+	   type(rv.values.rollback.timeout) == "number" and
+	   rv.values.rollback.timeout > now
 	then
-		return true, deadline.values.rollback - os.time()
+		return true,
+			rv.values.rollback.timeout - now,
+			rv.values.rollback.session,
+			rv.values.rollback.token
 	end
 
 	return false, ERRSTR[err]

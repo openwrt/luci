@@ -26,9 +26,14 @@
 	else
 		local n = self.network and net:get_network(self.network)
 		if n then
-			local i
-			for _, i in ipairs(n:get_interfaces() or { n:get_interface() }) do
-				checked[i:name()] = true
+			local a = n:is_alias()
+			if a then
+				checked['@' .. a] = true
+			else
+				local i
+				for _, i in ipairs(n:get_interfaces() or { n:get_interface() }) do
+					checked[i:name()] = true
+				end
 			end
 		end
 	end
@@ -50,7 +55,8 @@
 	--></script>
 	<ul>
 		<% for _, iface in ipairs(ifaces) do
-			if (not self.nobridges  or not iface:is_bridge()) and
+			if (not self.noaliases  or iface:type() ~= "alias") and
+			   (not self.nobridges  or not iface:is_bridge()) and
 			   (not self.noinactive or iface:is_up()) and
 			   iface:name() ~= self.exclude
 			then %>

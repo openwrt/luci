@@ -87,6 +87,9 @@
 		local childs = disp.node_childs(node)
 		if #childs > 0 then
 			if level > 2 then
+				if level == 3 then
+					write('<div id="tabmenu">')
+				end
 				write('<ul class="cbi-tabmenu">')
 			end
 
@@ -112,6 +115,9 @@
 
 			if level > 2 then
 				write('</ul>')
+				if level == 3 then
+					write('</div>')
+				end
 			end
 
 			if selected_node then
@@ -123,12 +129,9 @@
 	local function render_changes()
 		if tree.nodes[category] and tree.nodes[category].ucidata then
 			local ucic = 0
+			local i, j
 			for i, j in pairs(require("luci.model.uci").cursor():changes()) do
-				for k, l in pairs(j) do
-					for m, n in pairs(l) do
-						ucic = ucic + 1;
-					end
-				end
+				ucic = ucic + #j
 			end
 
 			if ucic > 0 then
@@ -157,6 +160,7 @@
 <%= css %>
 </style>
 <% end -%>
+<script type="text/javascript" src="<%=resource%>/cbi.js"></script>
 <script type="text/javascript" src="<%=resource%>/xhr.js"></script>
 <script type="text/javascript">//<![CDATA[
 	document.addEventListener('DOMContentLoaded', function() {
@@ -240,9 +244,7 @@
 	</div>
 
 	<div id="maincontent">
-		<div id="tabmenu">
-			<% if category then render_tabmenu(category, cattree) end %>
-		</div>
+		<% if category then render_tabmenu(category, cattree) end %>
 
 		<noscript>
 			<div class="alert-message warning">

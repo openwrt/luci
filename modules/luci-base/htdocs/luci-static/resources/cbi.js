@@ -627,6 +627,18 @@ function cbi_init() {
 		s.parentNode.classList.add('cbi-tooltip-container');
 	});
 
+	document.querySelectorAll('.cbi-section-remove > input[name^="cbi.rts"]').forEach(function(i) {
+		var handler = function(ev) {
+			var bits = this.name.split(/\./),
+			    section = document.getElementById('cbi-' + bits[2] + '-' + bits[3]);
+
+		    section.style.opacity = (ev.type === 'mouseover') ? 0.5 : '';
+		};
+
+		i.addEventListener('mouseover', handler);
+		i.addEventListener('mouseout', handler);
+	});
+
 	cbi_d_update();
 }
 
@@ -818,9 +830,9 @@ function cbi_dynlist_init(parent, datatype, optional, choices)
 				t.placeholder = holder;
 			}
 
-			var b = document.createElement('img');
-				b.src = cbi_strings.path.resource + ((i+1) < values.length ? '/cbi/remove.gif' : '/cbi/add.gif');
-				b.className = 'cbi-image-button';
+			var b = E('div', {
+				class: 'cbi-button cbi-button-' + ((i+1) < values.length ? 'remove' : 'add')
+			}, (i+1) < values.length ? '×' : '+');
 
 			parent.appendChild(t);
 			parent.appendChild(b);
@@ -986,8 +998,7 @@ function cbi_dynlist_init(parent, datatype, optional, choices)
 			input = input.previousSibling;
 		}
 
-		if (se.src.indexOf('remove') > -1)
-		{
+		if (se.classList.contains('cbi-button-remove')) {
 			input.value = '';
 
 			cbi_dynlist_keydown({
@@ -995,8 +1006,7 @@ function cbi_dynlist_init(parent, datatype, optional, choices)
 				keyCode: 8
 			});
 		}
-		else
-		{
+		else {
 			cbi_dynlist_keydown({
 				target:  input,
 				keyCode: 13
@@ -1306,6 +1316,28 @@ function cbi_tag_last(container)
 	}
 }
 
+function cbi_submit(elem, name, value, action)
+{
+	var form = elem.form || findParent(elem, 'form');
+
+	if (!form)
+		return false;
+
+	if (action)
+		form.action = action;
+
+	if (name) {
+		var hidden = form.querySelector('input[type="hidden"][name="%s"]'.format(name)) ||
+			E('input', { type: 'hidden', name: name });
+
+		hidden.value = value || '1';
+		form.appendChild(hidden);
+	}
+
+	form.submit();
+	return true;
+}
+
 String.prototype.format = function()
 {
 	if (!RegExp)
@@ -1496,6 +1528,15 @@ String.nobr = function()
 	for (var i = 1; i < arguments.length; i++)
 		a.push(arguments[i]);
 	return ''.nobr.apply(arguments[0], a);
+}
+
+if (window.NodeList && !NodeList.prototype.forEach) {
+	NodeList.prototype.forEach = function (callback, thisArg) {
+		thisArg = thisArg || window;
+		for (var i = 0; i < this.length; i++) {
+			callback.call(thisArg, this[i], i, this);
+		}
+	};
 }
 
 
@@ -2072,10 +2113,10 @@ function cbi_update_table(table, data, placeholder) {
 				var trow = E('div', { 'class': 'tr' });
 
 				for (var i = 0; i < titles.length; i++) {
-					var text = titles[i].innerText;
+					var text = (titles[i].innerText || '').trim();
 					var td = trow.appendChild(E('div', {
 						'class': titles[i].className,
-						'data-title': text ? text.trim() : null
+						'data-title': (text !== '') ? text : null
 					}, row[i] || ''));
 
 					td.classList.remove('th');

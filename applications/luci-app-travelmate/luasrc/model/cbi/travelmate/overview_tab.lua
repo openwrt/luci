@@ -3,15 +3,12 @@
 
 local fs       = require("nixio.fs")
 local uci      = require("luci.model.uci").cursor()
-local json     = require("luci.jsonc")
 local util     = require("luci.util")
 local nw       = require("luci.model.network").init()
 local fw       = require("luci.model.firewall").init()
 local dump     = util.ubus("network.interface", "dump", {})
 local trmiface = uci:get("travelmate", "global", "trm_iface") or "trm_wwan"
-local trminput = uci:get("travelmate", "global", "trm_rtfile") or "/tmp/trm_runtime.json"
 local uplink   = uci:get("network", trmiface) or ""
-local parse    = json.parse(fs.readfile(trminput) or "")
 
 m = Map("travelmate", translate("Travelmate"),
 	translate("Configuration of the travelmate package to to enable travel router functionality. ")
@@ -23,8 +20,7 @@ m:chain("firewall")
 m.apply_on_parse = true
 
 function m.on_apply(self)
-	luci.sys.call("env -i /etc/init.d/travelmate restart >/dev/null 2>&1")
-	luci.http.redirect(luci.dispatcher.build_url("admin", "services", "travelmate"))
+	luci.sys.call("/etc/init.d/travelmate restart >/dev/null 2>&1")
 end
 
 -- Interface Wizard
@@ -33,7 +29,7 @@ if uplink == "" then
 	ds = m:section(NamedSection, "global", "travelmate", translate("Interface Wizard"))
 	o = ds:option(Value, "trm_iface", translate("Create Uplink interface"),
 		translate("Create a new wireless wan uplink interface, configure it to use dhcp and ")
-		.. translate("add it to the wan zone of the firewall.<br />")
+		.. translate("add it to the wan zone of the firewall. ")
 		.. translate("This step has only to be done once."))
 	o.datatype = "and(uciname,rangelength(3,15))"
 	o.default = trmiface
@@ -96,55 +92,8 @@ end
 
 -- Runtime information
 
-ds = m:section(NamedSection, "global", "travelmate", translate("Runtime Information"))
-
-dv1 = ds:option(DummyValue, "status", translate("Travelmate Status (Quality)"))
-dv1.template = "travelmate/runtime"
-if parse ~= nil then
-	dv1.value = parse.data.travelmate_status or translate("n/a")
-else
-	dv1.value = translate("n/a")
-end
-
-dv2 = ds:option(DummyValue, "travelmate_version", translate("Travelmate Version"))
-dv2.template = "travelmate/runtime"
-if parse ~= nil then
-	dv2.value = parse.data.travelmate_version or translate("n/a")
-else
-	dv2.value = translate("n/a")
-end
-
-dv3 = ds:option(DummyValue, "station_id", translate("Station ID (SSID/BSSID)"))
-dv3.template = "travelmate/runtime"
-if parse ~= nil then
-	dv3.value = parse.data.station_id or translate("n/a")
-else
-	dv3.value = translate("n/a")
-end
-
-dv4 = ds:option(DummyValue, "station_interface", translate("Station Interface"))
-dv4.template = "travelmate/runtime"
-if parse ~= nil then
-	dv4.value = parse.data.station_interface or translate("n/a")
-else
-	dv4.value = translate("n/a")
-end
-
-dv5 = ds:option(DummyValue, "station_radio", translate("Station Radio"))
-dv5.template = "travelmate/runtime"
-if parse ~= nil then
-	dv5.value = parse.data.station_radio or translate("n/a")
-else
-	dv5.value = translate("n/a")
-end
-
-dv6 = ds:option(DummyValue, "last_rundate", translate("Last rundate"))
-dv6.template = "travelmate/runtime"
-if parse ~= nil then
-	dv6.value = parse.data.last_rundate or translate("n/a")
-else
-	dv6.value = translate("n/a")
-end
+ds = s:option(DummyValue, "_dummy")
+ds.template = "travelmate/runtime"
 
 -- Extra options
 

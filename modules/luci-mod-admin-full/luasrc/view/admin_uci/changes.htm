@@ -8,11 +8,9 @@
 
 <%-
 	local node, redir_url = luci.dispatcher.lookup(luci.http.formvalue("redir"))
+	export("redirect", redir_url or url("admin/uci/changes"))
 
-	include("cbi/apply_widget")
 	include("admin_uci/changelog")
-
-	cbi_apply_widget(redir_url or url("admin/uci/changes"))
 -%>
 
 <h2 name="content"><%:Configuration%> / <%:Changes%></h2>
@@ -32,7 +30,11 @@
 	</form>
 	<% end %>
 
-	<input class="cbi-button cbi-button-save" type="button" id="apply_button" value="<%:Save & Apply%>" onclick="uci_apply(true); this.blur()" />
+	<form method="post" action="<%=url("admin/uci/changes")%>">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input type="hidden" name="redir" value="<%=pcdata(luci.http.formvalue("redir"))%>" />
+		<input class="cbi-button cbi-button-save" type="submit" name="trigger_apply" value="<%:Save & Apply%>" />
+	</form>
 	<form method="post" action="<%=url("admin/uci/revert")%>">
 		<input type="hidden" name="token" value="<%=token%>" />
 		<input type="hidden" name="redir" value="<%=pcdata(luci.http.formvalue("redir"))%>" />

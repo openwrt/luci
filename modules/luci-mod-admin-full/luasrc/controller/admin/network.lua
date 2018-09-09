@@ -1,5 +1,5 @@
 -- Copyright 2008 Steven Barth <steven@midlink.org>
--- Copyright 2011-2015 Jo-Philipp Wich <jow@openwrt.org>
+-- Copyright 2011-2018 Jo-Philipp Wich <jo@mein.io>
 -- Licensed to the public under the Apache License 2.0.
 
 module("luci.controller.admin.network", package.seeall)
@@ -45,14 +45,11 @@ function index()
 		if has_wifi then
 			page = entry({"admin", "network", "wireless_assoclist"}, call("wifi_assoclist"), nil)
 			page.leaf = true
-		
+
 			page = entry({"admin", "network", "wireless_join"}, post("wifi_join"), nil)
 			page.leaf = true
 
 			page = entry({"admin", "network", "wireless_add"}, post("wifi_add"), nil)
-			page.leaf = true
-
-			page = entry({"admin", "network", "wireless_delete"}, post("wifi_delete"), nil)
 			page.leaf = true
 
 			page = entry({"admin", "network", "wireless_status"}, call("wifi_status"), nil)
@@ -61,10 +58,13 @@ function index()
 			page = entry({"admin", "network", "wireless_reconnect"}, post("wifi_reconnect"), nil)
 			page.leaf = true
 
-			page = entry({"admin", "network", "wireless_shutdown"}, post("wifi_shutdown"), nil)
+			page = entry({"admin", "network", "wireless_scan_trigger"}, post("wifi_scan_trigger"), nil)
 			page.leaf = true
 
-			page = entry({"admin", "network", "wireless"}, arcombine(template("admin_network/wifi_overview"), cbi("admin_network/wifi")), _("Wireless"), 15)
+			page = entry({"admin", "network", "wireless_scan_results"}, call("wifi_scan_results"), nil)
+			page.leaf = true
+
+			page = entry({"admin", "network", "wireless"}, arcombine(cbi("admin_network/wifi_overview"), cbi("admin_network/wifi")), _("Wireless"), 15)
 			page.leaf = true
 			page.subindex = true
 
@@ -88,16 +88,10 @@ function index()
 		page = entry({"admin", "network", "iface_add"}, form("admin_network/iface_add"), nil)
 		page.leaf = true
 
-		page = entry({"admin", "network", "iface_delete"}, post("iface_delete"), nil)
-		page.leaf = true
-
 		page = entry({"admin", "network", "iface_status"}, call("iface_status"), nil)
 		page.leaf = true
 
 		page = entry({"admin", "network", "iface_reconnect"}, post("iface_reconnect"), nil)
-		page.leaf = true
-
-		page = entry({"admin", "network", "iface_shutdown"}, post("iface_shutdown"), nil)
 		page.leaf = true
 
 		page = entry({"admin", "network", "network"}, arcombine(cbi("admin_network/network"), cbi("admin_network/ifaces")), _("Interfaces"), 10)
@@ -201,29 +195,6 @@ function wifi_add()
 	end
 end
 
-function wifi_delete(network)
-	local ntm = require "luci.model.network".init()
-	local wnet = ntm:get_wifinet(network)
-	if wnet then
-		local dev = wnet:get_device()
-		local nets = wnet:get_networks()
-		if dev then
-			ntm:del_wifinet(network)
-			ntm:commit("wireless")
-			local _, net
-			for _, net in ipairs(nets) do
-				if net:is_empty() then
-					ntm:del_network(net:name())
-					ntm:commit("network")
-				end
-			end
-			luci.sys.call("env -i /bin/ubus call network reload >/dev/null 2>/dev/null")
-		end
-	end
-
-	luci.http.redirect(luci.dispatcher.build_url("admin/network/wireless"))
-end
-
 function iface_status(ifaces)
 	local netm = require "luci.model.network".init()
 	local rv   = { }
@@ -235,6 +206,7 @@ function iface_status(ifaces)
 		if device then
 			local data = {
 				id         = iface,
+				desc       = net:get_i18n(),
 				proto      = net:proto(),
 				uptime     = net:uptime(),
 				gwaddr     = net:gwaddr(),
@@ -242,11 +214,15 @@ function iface_status(ifaces)
 				ip6addrs   = net:ip6addrs(),
 				dnsaddrs   = net:dnsaddrs(),
 				ip6prefix  = net:ip6prefix(),
+				errors     = net:errors(),
 				name       = device:shortname(),
 				type       = device:type(),
+				typename   = device:get_type_i18n(),
 				ifname     = device:name(),
 				macaddr    = device:mac(),
-				is_up      = device:is_up(),
+				is_up      = net:is_up() and device:is_up(),
+				is_alias   = net:is_alias(),
+				is_dynamic = net:is_dynamic(),
 				rx_bytes   = device:rx_bytes(),
 				tx_bytes   = device:tx_bytes(),
 				rx_packets = device:rx_packets(),
@@ -259,6 +235,7 @@ function iface_status(ifaces)
 				data.subdevices[#data.subdevices+1] = {
 					name       = device:shortname(),
 					type       = device:type(),
+					typename   = device:get_type_i18n(),
 					ifname     = device:name(),
 					macaddr    = device:mac(),
 					is_up      = device:is_up(),
@@ -301,34 +278,6 @@ function iface_reconnect(iface)
 	luci.http.status(404, "No such interface")
 end
 
-function iface_shutdown(iface)
-	local netmd = require "luci.model.network".init()
-	local net = netmd:get_network(iface)
-	if net then
-		luci.sys.call("env -i /sbin/ifdown %s >/dev/null 2>/dev/null"
-			% luci.util.shellquote(iface))
-		luci.http.status(200, "Shutdown")
-		return
-	end
-
-	luci.http.status(404, "No such interface")
-end
-
-function iface_delete(iface)
-	local netmd = require "luci.model.network".init()
-	local net = netmd:del_network(iface)
-	if net then
-		luci.sys.call("env -i /sbin/ifdown %s >/dev/null 2>/dev/null"
-			% luci.util.shellquote(iface))
-		luci.http.redirect(luci.dispatcher.build_url("admin/network/network"))
-		netmd:commit("network")
-		netmd:commit("wireless")
-		return
-	end
-
-	luci.http.status(404, "No such interface")
-end
-
 function wifi_status(devs)
 	local s    = require "luci.tools.status"
 	local rv   = { }
@@ -349,37 +298,93 @@ function wifi_status(devs)
 	luci.http.status(404, "No such device")
 end
 
-local function wifi_reconnect_shutdown(shutdown, wnet)
-	local netmd = require "luci.model.network".init()
-	local net = netmd:get_wifinet(wnet)
-	local dev = net:get_device()
-	if dev and net then
-		dev:set("disabled", nil)
-		net:set("disabled", shutdown and 1 or nil)
-		netmd:commit("wireless")
+function wifi_reconnect(radio)
+	local rc = luci.sys.call("env -i /sbin/wifi up %s" % luci.util.shellquote(radio))
 
-		luci.sys.call("env -i /bin/ubus call network reload >/dev/null 2>/dev/null")
-		luci.http.status(200, shutdown and "Shutdown" or "Reconnected")
-
-		return
+	if rc == 0 then
+		luci.http.status(200, "Reconnected")
+	else
+		luci.http.status(500, "Error")
 	end
-
-	luci.http.status(404, "No such radio")
-end
-
-function wifi_reconnect(wnet)
-	wifi_reconnect_shutdown(false, wnet)
-end
-
-function wifi_shutdown(wnet)
-	wifi_reconnect_shutdown(true, wnet)
 end
 
 function wifi_assoclist()
 	local s = require "luci.tools.status"
-	
+
 	luci.http.prepare_content("application/json")
 	luci.http.write_json(s.wifi_assoclist())
+end
+
+
+local function _wifi_get_scan_results(cache_key)
+	local results = luci.util.ubus("session", "get", {
+		ubus_rpc_session = luci.model.uci:get_session_id(),
+		keys = { cache_key }
+	})
+
+	if type(results) == "table" and
+	   type(results.values) == "table" and
+	   type(results.values[cache_key]) == "table"
+	then
+		return results.values[cache_key]
+	end
+
+	return { }
+end
+
+function wifi_scan_trigger(radio, update)
+	local iw = radio and luci.sys.wifi.getiwinfo(radio)
+
+	if not iw then
+		luci.http.status(404, "No such radio device")
+		return
+	end
+
+	luci.http.status(200, "Scan scheduled")
+
+	if nixio.fork() == 0 then
+		io.stderr:close()
+		io.stdout:close()
+
+		local _, bss
+		local data, bssids = { }, { }
+		local cache_key = "scan_%s" % radio
+
+		luci.util.ubus("session", "set", {
+			ubus_rpc_session = luci.model.uci:get_session_id(),
+			values = { [cache_key] = nil }
+		})
+
+		for _, bss in ipairs(iw.scanlist or { }) do
+			data[_] = bss
+			bssids[bss.bssid] = bss
+		end
+
+		if update then
+			for _, bss in ipairs(_wifi_get_scan_results(cache_key)) do
+				if not bssids[bss.bssid] then
+					bss.stale = true
+					data[#data + 1] = bss
+				end
+			end
+		end
+
+		luci.util.ubus("session", "set", {
+			ubus_rpc_session = luci.model.uci:get_session_id(),
+			values = { [cache_key] = data }
+		})
+	end
+end
+
+function wifi_scan_results(radio)
+	local results = radio and _wifi_get_scan_results("scan_%s" % radio)
+
+	if results and #results > 0 then
+		luci.http.prepare_content("application/json")
+		luci.http.write_json(results)
+	else
+		luci.http.status(404, "No wireless scan results")
+	end
 end
 
 function lease_status()

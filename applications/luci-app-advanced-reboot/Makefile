@@ -1,4 +1,4 @@
-# Copyright (c) 2017 Stan Grishin (stangri@melmac.net)
+# Copyright 2017-2018 Stan Grishin (stangri@melmac.net)
 # This is free software, licensed under the GNU General Public License v3.
 
 include $(TOPDIR)/rules.mk
@@ -11,9 +11,9 @@ LUCI_DESCRIPTION:=Provides Web UI (found under System/Advanced Reboot) to reboot
 	an altnerative partition. Also provides Web UI to shut down (power off) your device. 	Supported dual-partition\
 	routers are listed at https://github.com/stangri/openwrt-luci/blob/luci-app-advanced-reboot/applications/luci-app-advanced-reboot/README.md
 
-LUCI_DEPENDS:=+luci
+LUCI_DEPENDS:=+luci-mod-admin-full
 LUCI_PKGARCH:=all
-PKG_RELEASE:=27
+PKG_RELEASE:=33
 
 include ../../luci.mk
 

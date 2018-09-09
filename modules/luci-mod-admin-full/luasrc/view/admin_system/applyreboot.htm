@@ -6,35 +6,47 @@
 
 <html>
 	<head>
-		<title><%=luci.sys.hostname()%> - <% if title then %><%=title%><% else %><%:Rebooting...%><% end %></title>
+		<title><%=luci.sys.hostname()%> - <%= title or translate("Rebooting...") %></title>
 		<link rel="stylesheet" type="text/css" media="screen" href="<%=media%>/cascade.css" />
 		<script type="text/javascript" src="<%=resource%>/xhr.js"></script>
 		<script type="text/javascript">//<![CDATA[
 			var interval = window.setInterval(function() {
 				var img = new Image();
-
+				var target = ('https:' == document.location.protocol ? 'https://' : 'http://') + <%=addr and "'%s'" % addr or "window.location.host"%>;
+		
 				img.onload = function() {
 					window.clearInterval(interval);
-					location.href = ('https:' == document.location.protocol ? 'https://' : 'http://') + '<%=addr or luci.http.getenv("SERVER_NAME")%>/';
+					window.location.replace(target);
 				};
-
-				img.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + '<%=addr or luci.http.getenv("SERVER_NAME")%><%=resource%>/icons/loading.gif?' + Math.random();
+				
+				img.src = target + '<%=resource%>/icons/loading.gif?' + Math.random();
+				
 			}, 5000);
 		//]]></script>
 	</head>
 	<body>
-		<div id="maincontainer">
-			<div id="maincontent">
-				<h2 name="content"><%:System%> - <% if title then %><%=title%><% else %><%:Rebooting...%><% end %></h2>
-				<fieldset class="cbi-section">
-					<p>
-						<% if msg then %><%=msg%><% else %><%:Changes applied.%><% end %>
-					</p>
-					<p>
-						<img src="<%=resource%>/icons/loading.gif" alt="<%:Loading%>" style="vertical-align:middle" />
-						<%:Waiting for changes to be applied...%>
-					</p>
-				</fieldset>
+		<header>
+			<div class="fill">
+				<div class="container">
+					<p class="brand"><%=luci.sys.hostname() or "?"%></p>
+				</div>
+			</div>
+		</header>
+		&#160;
+		<div class="main">
+			<div id="maincontainer">
+				<div id="maincontent" class="container">
+					<h2 name="content" id="applyreboot-container" ><%:System%> - <%= title or translate("Rebooting...") %></h2>
+					<div class="cbi-section" id="applyreboot-section">
+						<div>
+							<%= msg or translate("Changes applied.") %>
+						</div>
+						<div>
+							<img src="<%=resource%>/icons/loading.gif" alt="<%:Loading%>" style="vertical-align:middle" />
+							<%:Waiting for changes to be applied...%>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 	</body>

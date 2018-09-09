@@ -17,29 +17,28 @@
 			var tb = document.getElementById('ocserv_status_table');
 			if (st && tb)
 			{
-				/* clear all rows */
-				while (tb.firstElementChild !== tb.lastElementChild)
-					tb.removeChild(tb.lastElementChild);
+				var rows = [];
 
 				for (var i = 0; i < st.length; i++)
 				{
-					tb.appendChild(E('<div class="tr cbi-section-table-row cbi-rowstyle-%d">'.format((i % 2) + 1), [
-						E('<div class="td">', st[i].user),
-						E('<div class="td">', st[i].group),
-						E('<div class="td">', st[i].vpn_ip),
-						E('<div class="td">', st[i].ip),
-						E('<div class="td">', st[i].device),
-						E('<div class="td">', st[i].time),
-						E('<div class="td">', st[i].cipher),
-						E('<div class="td">', st[i].status),
-						E('<div class="td">',
-							E('<input class="cbi-button cbi-input-remove" type="button" value="<%:Disconnect%>" onclick="ocserv_disconnect(%d)" />'
-								.format(st[i].id)))
-					]));
+					rows.push([
+						st[i].user,
+						st[i].group,
+						st[i].vpn_ip,
+						st[i].ip,
+						st[i].device,
+						st[i].time,
+						st[i].cipher,
+						st[i].status,
+						E('input', {
+							type: 'button',
+							class: 'cbi-button cbi-button-remove',
+							onclick: 'ocserv_disconnect(%d)'.format(st[i].id)
+						})
+					]);
 				}
 
-				if (tb.firstElementChild === tb.lastElementChild)
-					tb.appendChild(E('<div class="tr cbi-section-table-row"><div class="td"><em><br /><%:There are no active users.%></em></div></div>'));
+				cbi_update_table(tb, rows, '<em><%:There are no active users.%></em>');
 			}
 		}
 	);
@@ -47,20 +46,20 @@
 
 <fieldset class="cbi-section">
 	<legend><%:Active OpenConnect Users%></legend>
-	<div class="table cbi-section-table" id="ocserv_status_table">
-		<div class="tr cbi-section-table-titles">
-			<div class="th cbi-section-table-cell"><%:User%></div>
-			<div class="th cbi-section-table-cell"><%:Group%></div>
-			<div class="th cbi-section-table-cell"><%:IP Address%></div>
-			<div class="th cbi-section-table-cell"><%:VPN IP Address%></div>
-			<div class="th cbi-section-table-cell"><%:Device%></div>
-			<div class="th cbi-section-table-cell"><%:Time%></div>
-			<div class="th cbi-section-table-cell"><%:Cipher%></div>
-			<div class="th cbi-section-table-cell"><%:Status%></div>
-			<div class="th cbi-section-table-cell">&#160;</div>
+	<div class="table" id="ocserv_status_table">
+		<div class="tr table-titles">
+			<div class="th"><%:User%></div>
+			<div class="th"><%:Group%></div>
+			<div class="th"><%:IP Address%></div>
+			<div class="th"><%:VPN IP Address%></div>
+			<div class="th"><%:Device%></div>
+			<div class="th"><%:Time%></div>
+			<div class="th"><%:Cipher%></div>
+			<div class="th"><%:Status%></div>
+			<div class="th">&#160;</div>
 		</div>
-		<div class="tr cbi-section-table-row">
-			<div class="td" colspan="5"><em><br /><%:Collecting data...%></em></div>
+		<div class="tr placeholder">
+			<div class="td"><em><%:Collecting data...%></em></div>
 		</div>
 	</div>
 </fieldset>

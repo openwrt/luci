@@ -1,69 +1,27 @@
 -- Copyright 2017-2018 Dirk Brenken (dev@brenken.org)
 -- This is free software, licensed under the Apache License, Version 2.0
 
-local fs       = require("nixio.fs")
-local uci      = require("luci.model.uci").cursor()
-local sys      = require("luci.sys")
-local util     = require("luci.util")
-local dump     = util.ubus("network.interface", "dump", {})
-local json     = require("luci.jsonc")
-local adbinput = uci:get("adblock", "global", "adb_rtfile") or "/tmp/adb_runtime.json"
+local fs   = require("nixio.fs")
+local uci  = require("luci.model.uci").cursor()
+local util = require("luci.util")
+local dump = util.ubus("network.interface", "dump", {})
 
 m = Map("adblock", translate("Adblock"),
 	translate("Configuration of the adblock package to block ad/abuse domains by using DNS. ")
 	.. translatef("For further information "
 	.. "<a href=\"%s\" target=\"_blank\">"
 	.. "check the online documentation</a>", "https://github.com/openwrt/packages/blob/master/net/adblock/files/README.md"))
-m.apply_on_parse = true
-
-function m.on_apply(self)
-	luci.sys.call("/etc/init.d/adblock reload >/dev/null 2>&1")
-	luci.http.redirect(luci.dispatcher.build_url("admin", "services", "adblock"))
-end
 
 -- Main adblock options
 
 s = m:section(NamedSection, "global", "adblock")
 
-local parse = json.parse(fs.readfile(adbinput) or "")
-if parse then
-	status  = parse.data.adblock_status
-	version = parse.data.adblock_version
-	domains = parse.data.overall_domains
-	fetch   = parse.data.fetch_utility
-	backend = parse.data.dns_backend
-	rundate = parse.data.last_rundate
-end
-
 o1 = s:option(Flag, "adb_enabled", translate("Enable Adblock"))
 o1.default = o1.disabled
 o1.rmempty = false
 
-btn = s:option(Button, "", translate("Suspend / Resume Adblock"))
-if parse and status == "enabled" then
-	btn.inputtitle = translate("Suspend")
-	btn.inputstyle = "reset"
-	btn.disabled = false
-	function btn.write()
-		luci.sys.call("/etc/init.d/adblock suspend >/dev/null 2>&1")
-		luci.http.redirect(luci.dispatcher.build_url("admin", "services", "adblock"))
-	end
-elseif parse and status == "paused" then
-	btn.inputtitle = translate("Resume")
-	btn.inputstyle = "apply"
-	btn.disabled = false
-	function btn.write()
-		luci.sys.call("/etc/init.d/adblock resume >/dev/null 2>&1")
-		luci.http.redirect(luci.dispatcher.build_url("admin", "services", "adblock"))
-	end
-else
-	btn.inputtitle = translate("-------")
-	btn.inputstyle = "button"
-	btn.disabled = true
-end
-
 o2 = s:option(ListValue, "adb_dns", translate("DNS Backend (DNS Directory)"),
-	translate("List of supported DNS backends with their default list export directory.<br />")
+	translate("List of supported DNS backends with their default list export directory. ")
 	.. translate("To overwrite the default path use the 'DNS Directory' option in the extra section below."))
 o2:value("dnsmasq", "dnsmasq (/tmp)")
 o2:value("unbound", "unbound (/var/lib/unbound)")
@@ -85,7 +43,7 @@ o3.default = "uclient-fetch"
 o3.rmempty = false
 
 o4 = s:option(ListValue, "adb_trigger", translate("Startup Trigger"),
-	translate("List of available network interfaces. Usually the startup will be triggered by the 'wan' interface.<br />")
+	translate("List of available network interfaces. Usually the startup will be triggered by the 'wan' interface. ")
 	.. translate("Choose 'none' to disable automatic startups, 'timed' to use a classic timeout (default 30 sec.) or select another trigger interface."))
 o4:value("none")
 o4:value("timed")
@@ -101,66 +59,8 @@ o4.rmempty = false
 
 -- Runtime information
 
-ds = m:section(NamedSection, "global", "adblock", translate("Runtime Information"))
-
-dv1 = ds:option(DummyValue, "", translate("Adblock Status"))
-dv1.template = "adblock/runtime"
-if parse == nil then
-	dv1.value = translate("n/a")
-else
-	if status == "error" then
-		dv1.value = translate("error")
-	elseif status == "disabled" then
-		dv1.value = translate("disabled")
-	elseif status == "paused" then
-		dv1.value = translate("paused")
-	elseif status == "running" then
-		dv1.value = translate("running")
-	else
-		dv1.value = translate("enabled")
-	end
-end
-
-dv2 = ds:option(DummyValue, "", translate("Adblock Version"))
-dv2.template = "adblock/runtime"
-if parse == nil then
-	dv2.value = translate("n/a")
-else
-	dv2.value = version
-end
-
-dv3 = ds:option(DummyValue, "", translate("Download Utility (SSL Library)"),
-	translate("For SSL protected blocklist sources you need a suitable SSL library, e.g. 'libustream-ssl' or 'built-in'."))
-dv3.template = "adblock/runtime"
-if parse == nil then
-	dv3.value = translate("n/a")
-else
-	dv3.value = fetch
-end
-
-dv4 = ds:option(DummyValue, "", translate("DNS Backend (DNS Directory)"))
-dv4.template = "adblock/runtime"
-if parse == nil then
-	dv4.value = translate("n/a")
-else
-	dv4.value = backend
-end
-
-dv5 = ds:option(DummyValue, "", translate("Overall Domains"))
-dv5.template = "adblock/runtime"
-if parse == nil then
-	dv5.value = translate("n/a")
-else
-	dv5.value = domains
-end
-
-dv6 = ds:option(DummyValue, "", translate("Last Run"))
-dv6.template = "adblock/runtime"
-if parse == nil then
-	dv6.value = translate("n/a")
-else
-	dv6.value = rundate
-end
+ds = s:option(DummyValue, "_dummy")
+ds.template = "adblock/runtime"
 
 -- Blocklist table
 
@@ -197,46 +97,54 @@ e1 = e:option(Flag, "adb_debug", translate("Verbose Debug Logging"),
 e1.default = e1.disabled
 e1.rmempty = false
 
-e2 = e:option(Flag, "adb_forcedns", translate("Force Local DNS"),
-	translate("Redirect all DNS queries from 'lan' zone to the local resolver."))
+e2 = e:option(Flag, "adb_nice", translate("Low Priority Service"),
+	translate("Set the nice level to 'low priority' and the adblock background processing will take less resources from the system. ")
+	..translate("This change requires a manual service stop/re-start to take effect."))
 e2.default = e2.disabled
+e2.disabled = "0"
+e2.enabled = "10"
 e2.rmempty = false
 
-e3 = e:option(Flag, "adb_forcesrt", translate("Force Overall Sort"),
-	translate("Enable memory intense overall sort / duplicate removal on low memory devices (&lt; 64 MB free RAM)"))
+e3 = e:option(Flag, "adb_forcedns", translate("Force Local DNS"),
+	translate("Redirect all DNS queries from 'lan' zone to the local resolver, apply to udp and tcp protocol on ports 53, 853 and 5353."))
 e3.default = e3.disabled
 e3.rmempty = false
 
-e4 = e:option(Flag, "adb_backup", translate("Enable Blocklist Backup"),
-	translate("Create compressed blocklist backups, they will be used in case of download errors or during startup in backup mode."))
+e4 = e:option(Flag, "adb_forcesrt", translate("Force Overall Sort"),
+	translate("Enable memory intense overall sort / duplicate removal on low memory devices (&lt; 64 MB free RAM)"))
 e4.default = e4.disabled
 e4.rmempty = false
 
-e5 = e:option(Value, "adb_backupdir", translate("Backup Directory"),
+e5 = e:option(Flag, "adb_backup", translate("Enable Blocklist Backup"),
+	translate("Create compressed blocklist backups, they will be used in case of download errors or during startup in backup mode."))
+e5.default = e5.disabled
+e5.rmempty = false
+
+e6 = e:option(Value, "adb_backupdir", translate("Backup Directory"),
 	translate("Target directory for adblock backups. Please use only non-volatile disks, e.g. an external usb stick."))
-e5:depends("adb_backup", 1)
-e5.datatype = "directory"
-e5.default = "/mnt"
+e6:depends("adb_backup", 1)
+e6.datatype = "directory"
+e6.default = "/mnt"
 e5.rmempty = true
 
-e6 = e:option(Flag, "adb_backup_mode", translate("Backup Mode"),
+e7 = e:option(Flag, "adb_backup_mode", translate("Backup Mode"),
 	translate("Do not automatically update blocklists during startup, use blocklist backups instead."))
-e6:depends("adb_backup", 1)
-e6.default = e6.disabled
-e6.rmempty = true
+e7:depends("adb_backup", 1)
+e7.default = e7.disabled
+e7.rmempty = true
 
-e7 = e:option(Value, "adb_maxqueue", translate("Max. Download Queue"),
-	translate("Size of the download queue to handle downloads &amp; list processing in parallel (default '4').<br />")
+e8 = e:option(Value, "adb_maxqueue", translate("Max. Download Queue"),
+	translate("Size of the download queue to handle downloads &amp; list processing in parallel (default '4'). ")
 	.. translate("For further performance improvements you can raise this value, e.g. '8' or '16' should be safe."))
-e7.default = 4
-e7.datatype = "range(1,32)"
-e7.rmempty = false
+e8.default = 4
+e8.datatype = "range(1,32)"
+e8.rmempty = false
 
-e8 = e:option(Flag, "adb_jail", translate("'Jail' Blocklist Creation"),
-	translate("Builds an additional 'Jail' list (/tmp/adb_list.jail) to block access to all domains except those listed in the whitelist file.<br />")
+e9 = e:option(Flag, "adb_jail", translate("'Jail' Blocklist Creation"),
+	translate("Builds an additional 'Jail' list (/tmp/adb_list.jail) to block access to all domains except those listed in the whitelist file. ")
 	.. translate("You can use this restrictive blocklist manually e.g. for guest wifi or kidsafe configurations."))
-e8.default = e8.disabled
-e8.rmempty = true
+e9.default = e9.disabled
+e9.rmempty = true
 
 e9 = e:option(Flag, "adb_dnsflush", translate("Flush DNS Cache"),
 	translate("Flush DNS Cache after adblock processing."))
@@ -244,13 +152,13 @@ e9.default = e9.disabled
 e9.rmempty = true
 
 e10 = e:option(Flag, "adb_notify", translate("Email Notification"),
-	translate("Send notification emails in case of a processing error or if domain count is &le; 0.<br />")
+	translate("Send notification emails in case of a processing error or if domain count is &le; 0. ")
 	.. translate("Please note: this needs additional 'msmtp' package installation and setup."))
 e10.default = e10.disabled
 e10.rmempty = true
 
 e11 = e:option(Value, "adb_notifycnt", translate("Email Notification Count"),
-	translate("Raise the minimum email notification count, to get emails if the overall count is less or equal to the given limit (default 0),<br />")
+	translate("Raise the minimum email notification count, to get emails if the overall count is less or equal to the given limit (default 0), ")
 	.. translate("e.g. to receive an email notification with every adblock update set this value to 150000."))
 e11.default = 0
 e11.datatype = "min(0)"

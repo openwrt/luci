@@ -19,8 +19,7 @@ body {
 	background-position: bottom center;
 	background-repeat: repeat-x;
 	font-family: Arial, Verdana, sans-serif;
-	font-size: 16px;
-	line-height: 100%;
+	font-size: 10pt;
 	padding-bottom: 1.5em;
 }
 
@@ -87,7 +86,7 @@ a img {
 	background: #f5f5f5;
 	border: 1px solid #444;
 	border-width: 0 0 1px 1px;
-	font-size: 85%;
+	font-size: 11pt;
 	padding-bottom: 1em;
 }
 
@@ -249,18 +248,11 @@ hr {
 	color: #650;
 }
 
-.alert-message .btn,
-.alert-message .cbi-button {
-	background: inherit;
-	border-color: inherit;
-}
-
 div.hostinfo {
 	float: left;
 	margin: 0;
 	padding: 0;
 	width: auto;
-	font-size: 80%;
 	padding: 0.5em;
 }
 
@@ -302,8 +294,6 @@ html #menubar a:visited {
 	background: #000000;
 	color: #ffffff;
 	text-decoration: none;
-	font-size: 80%;
-	font-weight: normal;
 }
 
 
@@ -384,10 +374,14 @@ textarea#syslog {
 	padding: 0.5em;
 	background: #f5f5f5;
 	color: #000000;
-	font-size: 80%;
 	border-width: 0 1px 1px 1px;
 	border-style: solid;
 	border-color: #444444;
+}
+
+#applyreboot-section {
+	margin: 2rem;
+	line-height: 300%;
 }
 
 .lang_he #maincontent {
@@ -417,8 +411,8 @@ fieldset { border: none; }
 fieldset > legend { float: left; }
 fieldset > legend + * { clear: both; }
 
-#maincontent p {
-	margin-bottom: 1em;
+p {
+	margin-bottom: .5em;
 }
 
 .cbi-section {
@@ -440,11 +434,11 @@ fieldset > legend + * { clear: both; }
 }
 
 .cbi-title-ref {
-	color: inherit;
-	text-decoration: none;
-	padding-right: 18px;
-	background: url('../resources/cbi/link.gif') no-repeat scroll right center;
-	background-color: inherit;
+	color: #37c;
+}
+
+.cbi-title-ref::after {
+	content: "➙";
 }
 
 ul.cbi-apply {
@@ -484,7 +478,7 @@ input[type=image] {
 }
 
 input:focus,
-input:not(.cbi-button):hover,
+input:not(.btn):not(.cbi-button):hover,
 select:focus,
 select:hover {
 	background-color: #ffffff;
@@ -609,6 +603,11 @@ img.cbi-image-button {
 	background: #595;
 }
 
+.cbi-button-negative.important {
+	color: #fff;
+	background: #a22;
+}
+
 .cbi-page-actions .cbi-button-apply + .cbi-button-save {
 	background: #fff;
 	color: #595;
@@ -698,6 +697,7 @@ table td, table th {
 	width: auto;
 	margin-left: 0;
 	align-self: center;
+	vertical-align: middle;
 }
 
 .cbi-value-description {
@@ -797,6 +797,13 @@ div.cbi-optionals {
 
 .th.cbi-section-actions,
 .td.cbi-section-actions {
+	overflow: visible;
+	align-self: center;
+	vertical-align: middle;
+}
+
+.th.cbi-section-actions > *,
+.td.cbi-section-actions > * {
 	display: flex;
 	justify-content: flex-end;
 	flex-direction: row;
@@ -804,14 +811,15 @@ div.cbi-optionals {
 	margin: auto -1px auto auto;
 }
 
-.td.cbi-section-actions > form {
-	display: flex;
+.td.cbi-section-actions > * > *,
+.td.cbi-section-actions > * > form > * {
+	flex: 1 1 4em;
+	margin: 0 1px;
 }
 
-.td.cbi-section-actions > *,
-.td.cbi-section-actions > form > * {
-	flex: 1 1 4em;
-	margin: 1px;
+.td.cbi-section-actions > * > form {
+	display: flex;
+	margin: 0;
 }
 
 .cbi-page-actions {
@@ -834,11 +842,24 @@ div.cbi-optionals {
 	margin: 0 3px 0 0;
 }
 
-.cbi-page-actions > .cbi-button-link,
-.cbi-page-actions > form[method="get"]:first-child {
-	margin-right: auto;
+.cbi-page-actions > .cbi-button-save,
+.cbi-page-actions > .cbi-button-apply,
+.cbi-page-actions > form[method="post"] {
+	margin-left: auto;
 }
 
+*::-ms-backdrop,
+.cbi-page-actions > .cbi-button-save,
+.cbi-page-actions > .cbi-button-apply,
+.cbi-page-actions > form[method="post"] {
+	margin-left: 50%;
+}
+
+.cbi-page-actions > .cbi-button-apply + .cbi-button-save,
+.cbi-page-actions > .cbi-button-save + form[method="post"],
+.cbi-page-actions > form[method="post"] + form[method="post"] {
+	margin-left: 3px;
+}
 
 .th[data-type="button"], .td[data-type="button"],
 .th[data-type="fvalue"], .td[data-type="fvalue"] {
@@ -851,10 +872,6 @@ div.cbi-optionals {
 	flex-basis: 12%;
 }
 
-#cbi-wireless-overview .td:first-child {
-	align-self: center;
-}
-
 .td[data-title]::before {
 	content: attr(data-title) ":\20";
 	font-weight: bold;
@@ -864,7 +881,18 @@ div.cbi-optionals {
 	white-space: nowrap;
 }
 
-.tr.placeholder .td[data-title]::before {
+.td[data-description]::after {
+	content: attr(data-description);
+	font-size: 90%;
+	text-align: left;
+	display: none;
+	background: url(/luci-static/resources/cbi/help.gif) left top no-repeat;
+	padding: .125em 0 .125em 18px;
+	margin: .125em 0;
+}
+
+.tr.placeholder .td[data-title]::before,
+.tr.placeholder .td[data-description]::after {
 	display: none;
 }
 
@@ -873,12 +901,13 @@ div.cbi-optionals {
 	content: attr(data-title) "\20";
 	font-weight: bold;
 	text-align: left;
-	display: inline-block;
+	display: table-cell;
 	align-self: center;
 	flex: 1 1 5%;
 	padding: .25em;
 	white-space: normal;
 	word-wrap: break-word;
+	vertical-align: middle;
 }
 
 .cbi-value-helpicon img {
@@ -935,7 +964,7 @@ ul.cbi-tabmenu li a:hover {
 	text-decoration: none;
 	color: inherit;
 	padding: 5px;
-	flex: 1;
+	flex: 1 1 auto;
 	width: 100%;
 	height: 100%;
 }
@@ -1122,6 +1151,19 @@ ul.cbi-tabmenu li.cbi-tab {
 	opacity: .6;
 }
 
+input[type="text"] + .cbi-button,
+input[type="password"] + .cbi-button,
+select + .cbi-button {
+	border-radius: 0 3px 3px 0;
+	border: 1px outset #000;
+	margin: 0 0 1px -2px;
+	padding: 0 6px;
+	vertical-align: top;
+	display: inline-block;
+	height: 14pt;
+	font-size: 10pt;
+	line-height: 12pt;
+}
 
 .cbi-tooltip-container {
 	cursor: help;
@@ -1172,29 +1214,17 @@ ul.cbi-tabmenu li.cbi-tab {
 }
 
 
-.left, .left::before {
-	text-align: left !important;
-}
+.left, .left::before, .left::after { text-align: left !important; }
+.right, .right::before, .right::after { text-align: right !important; }
+.center, .center::before, .center::after { text-align: center !important; }
 
-.right, .right::before {
-	text-align: right !important;
-}
+.top, .top::before, .top::after { vertical-align: top !important; }
+.middle, .middle::before, .middle::after { vertical-align: middle !important; }
+.bottom, .bottom::before, .bottom::after { vertical-align: bottom !important; }
 
-.center, .center::before {
-	text-align: center !important;
-}
-
-.td.bottom {
-	align-self: flex-end;
-}
-
-.td.top {
-	align-self: flex-start;
-}
-
-.td.middle {
-	align-self: center;
-}
+.td.top { align-self: flex-start; vertical-align: top; }
+.td.middle { align-self: center; vertical-align: middle; }
+.td.bottom { align-self: flex-end; vertical-align: bottom; }
 
 .luci {
 	position: absolute;
@@ -1202,6 +1232,7 @@ ul.cbi-tabmenu li.cbi-tab {
 	left: 1em;
 	height: 1.5em;
 	font-size: 80%;
+	margin-bottom: 0;
 }
 
 .luci a:link,
@@ -1232,7 +1263,6 @@ ul.cbi-tabmenu li.cbi-tab {
 	border-radius: 3px;
 	padding: 2px;
 	background: #fff;
-	margin: .25em .5em;
 }
 
 .ifacebox-head {
@@ -1284,7 +1314,7 @@ ul.cbi-tabmenu li.cbi-tab {
 .network-status-table {
 	display: flex;
 	flex-wrap: wrap;
-	margin: -.25em;
+	margin: -.25em -.25em .25em -.25em;
 }
 
 .network-status-table .ifacebox {
@@ -1296,11 +1326,12 @@ ul.cbi-tabmenu li.cbi-tab {
 .network-status-table .ifacebox-body {
 	display: flex;
 	flex-direction: column;
-	flex: 1 0;
+	flex: 1 0 auto;
+	padding: .5em;
 }
 
 .network-status-table .ifacebox-body > span {
-	flex: 10;
+	flex: 10 10 auto;
 }
 
 .network-status-table .ifacebox-body > div {
@@ -1312,10 +1343,18 @@ ul.cbi-tabmenu li.cbi-tab {
 .network-status-table .ifacebox-body .ifacebadge {
 	flex: 1;
 	-webkit-flex: 1 1 auto;
-	margin: .5em .25em .25em .25em;
 	padding: .5em;
 	min-width: 220px;
 	white-space: nowrap;
+}
+
+.network-status-table .ifacebox-body .ifacebadge {
+	margin: .5em 0 0 0;
+}
+
+#dsl_status_table .ifacebox-body > span > strong {
+	display: inline-block;
+	min-width: 35%;
 }
 
 
@@ -1358,44 +1397,49 @@ ul.cbi-tabmenu li.cbi-tab {
 
 .uci-change-list {
 	font-family: monospace;
+	white-space: pre;
+}
+
+.uci-change-list del,
+.uci-change-list ins,
+.uci-change-list var,
+.uci-change-legend-label del,
+.uci-change-legend-label ins,
+.uci-change-legend-label var {
+	text-decoration: none;
+	font-style: normal;
+	border: 1px solid #ccc;
+	background: #eee;
+	padding: 2px;
+	display: block;
+	line-height: 15px;
+	margin-bottom: 1px;
 }
 
 .uci-change-list ins,
 .uci-change-legend-label ins {
-	text-decoration: none;
-	border: 1px solid #00FF00;
-	background-color: #CCFFCC;
-	display: block;
-	padding: 2px;
+	border-color: #0f0;
+	background: #cfc;
 }
 
 .uci-change-list del,
 .uci-change-legend-label del {
-	text-decoration: none;
-	border: 1px solid #FF0000;
-	background-color: #FFCCCC;
-	display: block;
-	font-style: normal;
-	padding: 2px;
+	border-color: #f00;
+	background: #fcc;
 }
 
 .uci-change-list var,
 .uci-change-legend-label var {
-	text-decoration: none;
-	border: 1px solid #CCCCCC;
-	background-color: #EEEEEE;
-	display: block;
-	font-style: normal;
-	padding: 2px;
+	border-color: #ccc;
+	background: #eee;
 }
 
 .uci-change-list var ins,
 .uci-change-list var del {
-	/*display: inline;*/
+	display: inline-block;
 	border: none;
-	white-space: pre;
-	font-style: normal;
-	padding: 0px;
+	width: 100%;
+	padding: 0;
 }
 
 .uci-change-legend {
@@ -1413,15 +1457,20 @@ ul.cbi-tabmenu li.cbi-tab {
 .uci-change-legend-label>var {
 	float: left;
 	margin-right: 4px;
-	width: 10px;
-	height: 10px;
+	width: 12px;
+	height: 12px;
 	display: block;
+	position: relative;
 }
 
 .uci-change-legend-label var ins,
 .uci-change-legend-label var del {
-	line-height: 6px;
 	border: none;
+	position: absolute;
+	top: 1px;
+	left: 1px;
+	right: 1px;
+	bottom: 1px;
 }
 
 
@@ -1440,6 +1489,7 @@ ul.cbi-tabmenu li.cbi-tab {
 	#maincontent {
 		width: 96%;
 		margin: auto;
+		flex-basis: auto;
 	}
 
 	#mainmenu {
@@ -1465,7 +1515,7 @@ ul.cbi-tabmenu li.cbi-tab {
 	}
 
 	#mainmenu ul > li > a {
-		flex: 1;
+		flex: 1 1 auto;
 		color: #fff;
 		border: 1px solid #444;
 		border-width: 0 0 1px 1px;
@@ -1598,24 +1648,27 @@ ul.cbi-tabmenu li.cbi-tab {
 		background: #eef;
 	}
 
-	.td[data-title]::before {
+	.td[data-title]::before,
+	.td[data-description]::after {
 		display: block;
 	}
 
-	.td.cbi-section-actions {
-		flex-basis: 100%;
-		margin: auto -1px 0 auto;
+	.td[data-title] ~ .td.cbi-section-actions {
+		align-self: flex-start;
 	}
 
-	.td.cbi-section-actions > *,
-	.td.cbi-section-actions > form > * {
-		flex: 0 1 100%;
-		max-width: 150px;
+	.td[data-title] ~ .td.cbi-section-actions::before {
+		display: block;
+		content: "\a0";
 	}
 
 	.hide-sm,
 	.hide-xs {
 		display: none;
+	}
+
+	#dsl_status_table .ifacebox-body > span > strong {
+		min-width: 50%;
 	}
 }
 
@@ -1727,5 +1780,11 @@ ul.cbi-tabmenu li.cbi-tab {
 
 	#cbi-network-switch_vlan .td.cbi-section-actions {
 		flex-basis: 100%;
+	}
+
+	#dsl_status_table .ifacebox-body > span > strong {
+		display: block;
+		width: 100%;
+		margin-top: .5em;
 	}
 }
