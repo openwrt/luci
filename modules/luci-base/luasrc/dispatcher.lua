@@ -741,11 +741,12 @@ function _firstchild()
 	  end
    end
 
-   assert(lowest ~= nil,
-		  "The requested node contains no childs, unable to redispatch")
-
-   path[#path+1] = lowest
-   dispatch(path)
+   if lowest == nil then
+	require "luci.template".render("empty_node_placeholder")
+   else
+	path[#path+1] = lowest
+	dispatch(path)
+   end
 end
 
 function firstchild()

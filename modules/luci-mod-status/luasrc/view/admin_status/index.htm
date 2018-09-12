@@ -417,7 +417,7 @@
 
 <%
 	if has_dhcp then
-		include("admin_network/lease_status")
+		include("lease_status")
 	end
 %>
 
@@ -443,7 +443,7 @@
 <div class="cbi-section">
 	<h3><%:Associated Stations%></h3>
 
-	<%+admin_network/wifi_assoclist%>
+	<%+wifi_assoclist%>
 </div>
 <% end %>
 
