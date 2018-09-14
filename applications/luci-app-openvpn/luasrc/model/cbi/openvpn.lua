@@ -59,7 +59,7 @@ function s.create(self, name)
 	if #name > 3 and not name:match("[^a-zA-Z0-9_]") then
 		uci:section(
 			"openvpn", "openvpn", name,
-			uci:get_all( "openvpn_recipes", recipe )
+			{ uci:get_all( "openvpn_recipes", recipe ) }
 		)
 
 		uci:delete("openvpn", name, "_role")
