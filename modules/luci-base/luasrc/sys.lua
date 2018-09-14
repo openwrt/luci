@@ -70,6 +70,24 @@ function mounts()
 	return data
 end
 
+function mtds()
+	local data = {}
+
+	if fs.access("/proc/mtd") then
+		for l in io.lines("/proc/mtd") do
+			local d, s, e, n = l:match('^([^%s]+)%s+([^%s]+)%s+([^%s]+)%s+"([^%s]+)"')
+			if s and n then
+				local d = {}
+				d.size = tonumber(s, 16)
+				d.name = n
+				table.insert(data, d)
+			end
+		end
+	end
+
+	return data
+end
+
 -- containing the whole environment is returned otherwise this function returns
 -- the corresponding string value for the given name or nil if no such variable
 -- exists.
