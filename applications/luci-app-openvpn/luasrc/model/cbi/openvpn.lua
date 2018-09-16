@@ -52,21 +52,22 @@ function s.create(self, name)
 		luci.cbi.CREATE_PREFIX .. self.config .. "." ..
 		self.sectiontype .. ".select"
 	)
-	name = luci.http.formvalue(
+	local name = luci.http.formvalue(
 		luci.cbi.CREATE_PREFIX .. self.config .. "." ..
 		self.sectiontype .. ".text"
 	)
 	if #name > 3 and not name:match("[^a-zA-Z0-9_]") then
-		uci:section(
-			"openvpn", "openvpn", name,
-			{ uci:get_all( "openvpn_recipes", recipe ) }
-		)
-
-		uci:delete("openvpn", name, "_role")
-		uci:delete("openvpn", name, "_description")
-		uci:save("openvpn")
-
-		luci.http.redirect( self.extedit:format(name) )
+		local s = uci:section("openvpn", "openvpn", name)
+		if s then
+			local options = uci:get_all("openvpn_recipes", recipe)
+			for k, v in pairs(options) do
+				uci:set("openvpn", name, k, v)
+			end
+			uci:delete("openvpn", name, "_role")
+			uci:delete("openvpn", name, "_description")
+			uci:save("openvpn")
+			luci.http.redirect( self.extedit:format(name) )
+		end
 	elseif #name > 0 then
 		self.invalid_cts = true
 	end
