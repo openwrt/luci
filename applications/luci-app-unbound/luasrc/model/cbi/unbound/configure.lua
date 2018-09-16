@@ -210,10 +210,11 @@ if (valman == "0") then
 
     pro = s1:taboption("resource", ListValue, "protocol",
         translate("Recursion Protocol"),
-        translate("Chose the protocol recursion queries leave on"))
+        translate("Chose the IP versions used upstream and downstream"))
     pro:value("default", translate("Default"))
     pro:value("ip4_only", translate("IP4 Only"))
-    pro:value("ip6_only", translate("IP6 Only"))
+    pro:value("ip6_local", translate("IP4 All and IP6 Local"))
+    pro:value("ip6_only", translate("IP6 Only*"))
     pro:value("ip6_prefer", translate("IP6 Preferred"))
     pro:value("mixed", translate("IP4 and IP6"))
     pro.rmempty = false
