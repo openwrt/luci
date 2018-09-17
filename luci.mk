@@ -47,41 +47,37 @@ LUCI_MENU.theme=4. Themes
 LUCI_MENU.proto=5. Protocols
 LUCI_MENU.lib=6. Libraries
 
+LUCI_RELEASE=1
 
 PKG_NAME?=$(LUCI_NAME)
 
-PKG_VERSION?=$(if $(DUMP),x,$(strip $(shell \
-	if svn info >/dev/null 2>/dev/null; then \
-		revision="svn-r$$(LC_ALL=C svn info | sed -ne 's/^Revision: //p')"; \
-	elif git log -1 >/dev/null 2>/dev/null; then \
-		revision="svn-r$$(LC_ALL=C git log -1 | sed -ne 's/.*git-svn-id: .*@\([0-9]\+\) .*/\1/p')"; \
-		if [ "$$revision" = "svn-r" ]; then \
-			set -- $$(git log -1 --format="%ct %h" --abbrev=7); \
-			secs="$$(($$1 % 86400))"; \
-			yday="$$(date --utc --date="@$$1" "+%y.%j")"; \
-			revision="$$(printf 'git-%s.%05d-%s' "$$yday" "$$secs" "$$2")"; \
-		fi; \
+GIT_COMMIT=$(shell \
+	branch="$$(git rev-parse --abbrev-ref HEAD)"; \
+	if [ "$$branch" != "master" ]; then \
+		git merge-base $$branch master; \
 	else \
-		revision="unknown"; \
+		echo HEAD; \
 	fi; \
-	echo "$$revision" \
-)))
+)
+GIT_COMMIT_COUNT=$(shell git rev-list --count $(GIT_COMMIT)..HEAD -- $(CURDIR))
 
+PKG_VERSION=$(if $(DUMP),x,$(strip $(shell \
+        set -- $$(git log -1 --format="%ct %h" --abbrev=7 $(GIT_COMMIT)); \
+        secs="$$(($$1 % 86400))"; \
+        yday="$$(date --utc --date="@$$1" "+%y.%j")"; \
+        revision="$$(printf 'git-%s.%05d-%s' "$$yday" "$$secs" "$$2")"; \
+        echo "$$revision" \
+)))
 PKG_GITBRANCH?=$(if $(DUMP),x,$(strip $(shell \
-	variant="LuCI"; \
-	if git log -1 >/dev/null 2>/dev/null; then \
-		branch="$$(git branch --remote --verbose --no-abbrev --contains 2>/dev/null | \
-			sed -rne 's|^[^/]+/([^ ]+) [a-f0-9]{40} .+$$|\1|p' | head -n1)"; \
-		if [ "$$branch" != "master" ]; then \
-			variant="LuCI $$branch branch"; \
-		else \
-			variant="LuCI Master"; \
-		fi; \
+	branch="$$(git rev-parse --abbrev-ref HEAD)"; \
+	if [ "$$branch" != "master" ]; then \
+		echo "LuCI $$branch branch"; \
+	else \
+		echo "LuCI Master"; \
 	fi; \
-	echo "$$variant" \
 )))
 
-PKG_RELEASE?=1
+PKG_RELEASE?=$(shell echo $$(( $(LUCI_RELEASE) + $(GIT_COMMIT_COUNT) )))
 PKG_INSTALL:=$(if $(realpath src/Makefile),1)
 PKG_BUILD_DEPENDS += lua/host luci-base/host $(LUCI_BUILD_DEPENDS)
 PKG_CONFIG_DEPENDS += CONFIG_LUCI_SRCDIET
