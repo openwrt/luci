@@ -4,11 +4,11 @@
  Licensed to the public under the Apache License 2.0.
 -%>
 
-<fieldset class="cbi-section">
-	<legend>
+<div class="cbi-section">
+	<h3>
 		<a href="<%=url('admin/services/openvpn')%>"><%:Overview%></a> &raquo;
 		<%=luci.i18n.translatef("Instance \"%s\"", self.instance)%>
-	</legend>
+	</h3>
 
 	<% if self.mode == "basic" then %>
 		<a href="<%=url('admin/services/openvpn/advanced', self.instance, "Service")%>"><%:Switch to advanced configuration »%></a>
@@ -27,4 +27,4 @@
 			<% if next(self.categories, i) then %>|<% end %>
 		<% end %>
 	<% end %>
-</fieldset>
+</div>
