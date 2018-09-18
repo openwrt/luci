@@ -68,10 +68,12 @@ local route_host = luci.config.diag and luci.config.diag.route or "dev.openwrt.o
 					<div class="td left">
 						<input style="margin: 5px 0" type="text" value="<%=ping_host%>" name="ping" /><br />
 						<% if has_ping6 then %>
-						<select name="ping_proto" style="width:auto">
-							<option value="" selected="selected"><%:IPv4%></option>
-							<option value="6"><%:IPv6%></option>
-						</select>
+						<span>
+							<select name="ping_proto" style="width:auto">
+								<option value="" selected="selected"><%:IPv4%></option>
+								<option value="6"><%:IPv6%></option>
+							</select>
+						</span>
 						<input type="button" value="<%:Ping%>" class="cbi-button cbi-button-apply" onclick="update_status(this.form.ping, this.form.ping_proto.selectedIndex)" />
 						<% else %>
 						<input type="button" value="<%:Ping%>" class="cbi-button cbi-button-apply" onclick="update_status(this.form.ping)" />
@@ -81,10 +83,12 @@ local route_host = luci.config.diag and luci.config.diag.route or "dev.openwrt.o
 					<div class="td left">
 						<input style="margin: 5px 0" type="text" value="<%=route_host%>" name="traceroute" /><br />
 						<% if has_traceroute6 then %>
-						<select name="traceroute_proto" style="width:auto">
-							<option value="" selected="selected"><%:IPv4%></option>
-							<option value="6"><%:IPv6%></option>
-						</select>
+						<span>
+							<select name="traceroute_proto" style="width:auto">
+								<option value="" selected="selected"><%:IPv4%></option>
+								<option value="6"><%:IPv6%></option>
+							</select>
+						</span>
 						<input type="button" value="<%:Traceroute%>" class="cbi-button cbi-button-apply" onclick="update_status(this.form.traceroute, this.form.traceroute_proto.selectedIndex)" />
 						<% else %>
 						<input type="button" value="<%:Traceroute%>" class="cbi-button cbi-button-apply" onclick="update_status(this.form.traceroute)" />
