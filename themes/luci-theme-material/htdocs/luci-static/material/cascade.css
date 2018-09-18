@@ -19,6 +19,11 @@
  */
 
 /*
+ *  Include custom css
+ */
+@import url("custom.css");
+
+/*
  *  Font generate by Icomoon<icomoon.io>
  */
 @font-face {
@@ -255,7 +260,7 @@ footer > a {
     width: calc(0% + 15rem);
     height: 100%;
     height: calc(100% - 4rem);
-    background-color: white;
+    background-color: var(--menu-bg-color, #FFFFFF);
     overflow-x: auto;
     position: fixed;
 }
@@ -281,8 +286,8 @@ footer > a {
 }
 
 header {
-    background: #0099CC;
-    color: white;
+    background: var(--header-bg, #0099CC);
+    color: var(--header-color, #FFFFFF);
 }
 
 header > .fill > .container {
@@ -292,7 +297,7 @@ header > .fill > .container {
 
 header > .fill > .container > .brand {
     font-size: 1.4rem;
-    color: white;
+    color: var(--header-color, #FFFFFF);
     text-decoration: none;
     cursor: default;
     vertical-align: text-bottom;
@@ -374,7 +379,7 @@ header > .fill > .container > .brand {
 }
 
 .main > .main-left > .nav > li a {
-    color: #404040;
+    color: var(--menu-color, #404040);
     display: block;
 }
 
@@ -406,7 +411,7 @@ header > .fill > .container > .brand {
 
 .main > .main-left > .nav > li:hover,
 .main > .main-left > .nav > .slide > .menu:hover {
-    background: #D4D4D4;
+    background: var(--submenu-bg-hover, #D4D4D4)
 }
 
 .main > .main-left > .nav > .slide:hover {
@@ -418,7 +423,7 @@ header > .fill > .container > .brand {
 }
 
 .main > .main-left > .nav > .slide > .slide-menu > .active {
-    background-color: #0099CC;
+    background-color: var(--submenu-bg-hover-active, #0099CC);
 }
 
 .main > .main-left > .nav > .slide > .slide-menu > li > a {
@@ -431,7 +436,7 @@ header > .fill > .container > .brand {
 }
 
 .main > .main-left > .nav > .slide > .slide-menu > li:hover {
-    background: #D4D4D4;
+    background: var(--submenu-bg-hover, #D4D4D4)
 }
 
 .main > .main-left > .nav > .slide > .slide-menu > .active:hover {
