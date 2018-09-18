@@ -4,6 +4,7 @@
 	var freqlist = <%= luci.http.write_json(self.iwinfo.freqlist) %>;
 	var hwmodes  = <%= luci.http.write_json(self.iwinfo.hwmodelist or {}) %>;
 	var htmodes  = <%= luci.http.write_json(self.iwinfo.htmodelist) %>;
+	var acs =  <%= luci.http.write_json(self.hostapd_acs or 0) %>;
 
 	var channels = {
 		'11g': [
@@ -13,6 +14,10 @@
 			'auto', 'auto', true
 		]
 	};
+
+	if (acs < 1) {
+		channels[(freqlist[freqlist.length - 1].mhz > 2484) ? '11a' : '11g'].length = 0;
+	}
 
 	for (var i = 0; i < freqlist.length; i++)
 		channels[(freqlist[i].mhz > 2484) ? '11a' : '11g'].push(
