@@ -52,6 +52,8 @@ function index()
         entry({"admin", "services", "unbound", "status", "localzone"},
             call("QueryLocalZone"), _("Local Zones"), 30).leaf = true
 
+        entry({"admin", "services", "unbound", "status", "dumpcache"},
+            call("QueryCacheDump"), _("Cache Dump"), 40).leaf = true
     else
         entry({"admin", "services", "unbound", "status", "statistics"},
             call("ShowEmpty"), _("Statistics"), 10).leaf = true
@@ -151,6 +153,16 @@ function QueryLocalZone()
         {heading = "", description = lcldesc, content = lcldata})
 end
 
+function QueryCacheDump()
+    local lcldata = luci.util.exec(
+        "unbound-control -c /var/lib/unbound/unbound.conf dump_cache")
+
+    local lcldesc = luci.i18n.translate(
+        "This shows Unbound 'cache_dump'. Usefull to check if unbound is actually caching dns entities.")
+
+    luci.template.render("unbound/show-textbox",
+        {heading = "", description = lcldesc, content = lcldata})
+end
 
 function ShowUnboundConf()
     local unboundfile = "/var/lib/unbound/unbound.conf"
