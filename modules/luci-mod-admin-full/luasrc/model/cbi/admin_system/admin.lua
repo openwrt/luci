@@ -6,6 +6,7 @@ local fs = require "nixio.fs"
 
 m = Map("system", translate("Router Password"),
 	translate("Changes the administrator password for accessing the device"))
+m.apply_on_parse = true
 
 s = m:section(TypedSection, "_dummy", "")
 s.addremove = false
@@ -45,6 +46,7 @@ if fs.access("/etc/config/dropbear") then
 
 m2 = Map("dropbear", translate("SSH Access"),
 	translate("Dropbear offers <abbr title=\"Secure Shell\">SSH</abbr> network shell access and an integrated <abbr title=\"Secure Copy\">SCP</abbr> server"))
+m2.apply_on_parse = true
 
 s = m2:section(TypedSection, "dropbear", translate("Dropbear Instance"))
 s.anonymous = true
