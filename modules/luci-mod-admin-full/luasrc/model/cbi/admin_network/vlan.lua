@@ -17,7 +17,7 @@ local update_interfaces = function(old_ifname, new_ifname)
 	local info = { }
 
 	m.uci:foreach("network", "interface", function(section)
-		local old_ifnames = m.uci:get("network", section[".name"], "ifname")
+		local old_ifnames = section.ifname
 		local new_ifnames = { }
 		local cur_ifname
 		local changed = false
