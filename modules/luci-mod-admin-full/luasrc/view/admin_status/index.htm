@@ -210,7 +210,7 @@
 					'<%:MAC-Address%>', (ifc6 && ifc6.ether) ? ifc6.mac : null)) ],
 				'<%:Protocol%>', ifc6.i18n ? (ifc6.i18n + (ifc6.proto === 'dhcp' && ifc6.ip6prefix ? '-PD' : '')) : E('em', '<%:Not connected%>'),
 				'<%:Prefix Delegated%>', ifc6.ip6prefix,
-				'<%:Address%>', (ifc6.ip6prefix) ? (ifc6.ip6addr || null) : (ifc6.ipaddr || '::'),
+				'<%:Address%>', (ifc6.ip6prefix) ? (ifc6.ip6addr || null) : (ifc6.ip6addr || '::'),
 				'<%:Gateway%>', (ifc6.gw6addr) ? ifc6.gw6addr : '::',
 				'<%:DNS%> 1', (ifc6.dns) ? ifc6.dns[0] : null,
 				'<%:DNS%> 2', (ifc6.dns) ? ifc6.dns[1] : null,
