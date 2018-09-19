@@ -724,33 +724,82 @@ end
 
 -- Subdispatchers --
 
+function _find_eligible_node(root, prefix, deep, types, descend)
+	local _, cur_name, cur_node
+	local childs = { }
+
+	for cur_name, cur_node in pairs(root.nodes) do
+		childs[#childs+1] = {
+			node = cur_node,
+			name = cur_name,
+			order = cur_node.order or 100
+		}
+	end
+
+	table.sort(childs, function(a, b)
+		if a.order == b.order then
+			return a.name < b.name
+		else
+			return a.order < b.order
+		end
+	end)
+
+	if not root.leaf and deep ~= nil then
+		local sub_path = { unpack(prefix) }
+
+		if deep == false then
+			deep = nil
+		end
+
+		for _, cur_node in ipairs(childs) do
+			sub_path[#prefix+1] = cur_node.name
+
+			local res_path = _find_eligible_node(cur_node.node, sub_path,
+			                                     deep, types, true)
+
+			if res_path then
+				return res_path
+			end
+		end
+	end
+
+	if descend and
+	   (not types or
+	    (type(root.target) == "table" and
+	     util.contains(types, root.target.type)))
+	then
+		return prefix
+	end
+end
+
+function _find_node(recurse, types)
+	local path = { unpack(context.path) }
+	local name = table.concat(path, ".")
+	local node = context.treecache[name]
+
+	path = _find_eligible_node(node, path, recurse, types)
+
+	if path then
+		dispatch(path)
+	else
+		require "luci.template".render("empty_node_placeholder")
+	end
+end
+
 function _firstchild()
-   local path = { unpack(context.path) }
-   local name = table.concat(path, ".")
-   local node = context.treecache[name]
-
-   local lowest
-   if node and node.nodes and next(node.nodes) then
-	  local k, v
-	  for k, v in pairs(node.nodes) do
-		 if not lowest or
-			(v.order or 100) < (node.nodes[lowest].order or 100)
-		 then
-			lowest = k
-		 end
-	  end
-   end
-
-   if lowest == nil then
-	require "luci.template".render("empty_node_placeholder")
-   else
-	path[#path+1] = lowest
-	dispatch(path)
-   end
+	return _find_node(false, nil)
 end
 
 function firstchild()
-   return { type = "firstchild", target = _firstchild }
+	return { type = "firstchild", target = _firstchild }
+end
+
+function _firstnode()
+	return _find_node(true, { "cbi", "form", "template", "arcombine" })
+end
+
+function firstnode()
+	return { type = "firstnode", target = _firstnode }
 end
 
 function alias(...)
