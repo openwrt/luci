@@ -25,14 +25,14 @@ function index()
 	end
 
 	local page   = node("admin")
-	
+
 	page.title   = _("Administration")
 	page.order   = 10
 	page.sysauth = "root"
 	page.sysauth_authenticator = "htmlauth"
 	page.ucidata = true
 	page.index = true
-	toplevel_page(page, "admin/status/overview", alias("admin", "status"))
+	page.target = firstnode()
 
 	-- Empty menu tree to be populated by addons and modules
 
@@ -48,7 +48,7 @@ function index()
 	page.order = 20
 	page.index = true
 	-- system/system is from mod-admin-full
-	toplevel_page(page, "admin/system/system", alias("admin", "system", "system")) 
+	toplevel_page(page, "admin/system/system", alias("admin", "system", "system"))
 
 	-- Only used if applications add items
 	page = node("admin", "services")
