@@ -79,17 +79,24 @@
 	</div>
 </div>
 
-<div class="cbi-section" style="display:none">
-	<h3><%:Active DHCPv6 Leases%></h3>
-	<div class="table" id="lease6_status_table">
-		<div class="tr table-titles">
-			<div class="th"><%:Host%></div>
-			<div class="th"><%:IPv6-Address%></div>
-			<div class="th"><%:DUID%></div>
-			<div class="th"><%:Leasetime remaining%></div>
-		</div>
-		<div class="tr placeholder">
-			<div class="td"><em><%:Collecting data...%></em></div>
+<%
+	local fs = require "nixio.fs"
+	local has_ipv6 = fs.access("/proc/net/ipv6_route")
+
+	if has_ipv6 then
+-%>
+	<div class="cbi-section" style="display:none">
+		<h3><%:Active DHCPv6 Leases%></h3>
+		<div class="table" id="lease6_status_table">
+			<div class="tr table-titles">
+				<div class="th"><%:Host%></div>
+				<div class="th"><%:IPv6-Address%></div>
+				<div class="th"><%:DUID%></div>
+				<div class="th"><%:Leasetime remaining%></div>
+			</div>
+			<div class="tr placeholder">
+				<div class="td"><em><%:Collecting data...%></em></div>
+			</div>
 		</div>
 	</div>
-</div>
+<% end -%>
