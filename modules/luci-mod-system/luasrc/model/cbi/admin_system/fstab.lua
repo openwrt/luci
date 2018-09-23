@@ -33,7 +33,7 @@ until not ln
 
 block:close()
 
-m = Map("fstab", translate("Mount Points"))
+m = Map("fstab", translate("Mount Points / SCSI Devices"))
 s = m:section(TypedSection, "global", translate("Global Settings"))
 s.addremove = false
 s.anonymous = true
@@ -95,7 +95,7 @@ end
 
 v = m:section(Table, non_system_mounts, translate("Mounted file systems"))
 
-fs = v:option(DummyValue, "fs", translate("Filesystem"))
+f = v:option(DummyValue, "fs", translate("Filesystem"))
 
 mp = v:option(DummyValue, "mountpoint", translate("Mount Point"))
 
@@ -194,8 +194,8 @@ mp.cfgvalue = function(self, section)
 	end
 end
 
-fs = mount:option(DummyValue, "fstype", translate("Filesystem"))
-fs.cfgvalue = function(self, section)
+f = mount:option(DummyValue, "fstype", translate("Filesystem"))
+f.cfgvalue = function(self, section)
 	local v, e
 
 	v = m.uci:get("fstab", section, "uuid")
@@ -264,6 +264,35 @@ dev.cfgvalue = function(self, section)
 		return "%s (%s MB)" % {v, e.size}
 	else
 		return v
+	end
+end
+
+if fs.access("/usr/bin/lsblk") and fs.access("/usr/bin/eject") then
+
+	local scsis = luci.sys.scsis()
+
+	if #scsis > 0 then
+		v = m:section(Table, scsis, translate("SCSI Devices"))
+
+		n = v:option(DummyValue, "name", translate("Name"))
+		t = v:option(DummyValue, "type", translate("Type"))
+		vr = v:option(DummyValue, "vendor", translate("Vendor"))
+		mo = v:option(DummyValue, "model", translate("Model"))
+		r = v:option(DummyValue, "rev", translate("Rev"))
+		tr = v:option(DummyValue, "tran", translate("Tran"))
+		s = v:option(DummyValue, "size", translate("Size"))
+
+		eject = v:option(Button, "eject", translate("Eject"))
+		eject.render = function(self, section, scope)
+			self.title = translate("Eject")
+			self.inputstyle = "remove"
+			Button.render(self, section, scope)
+		end
+
+		eject.write = function(self, section)
+			luci.sys.call("/usr/bin/eject -p -s /dev/'%s'" % luci.util.shellstartsqescape(scsis[section].name))
+			return luci.http.redirect(luci.dispatcher.build_url("admin/system", "fstab"))
+		end
 	end
 end
 

@@ -70,6 +70,32 @@ function mounts()
 	return data
 end
 
+function scsis()
+	local data = {}
+	local ps = luci.util.execi("lsblk -d -n -P -S -o NAME,TYPE,VENDOR,MODEL,REV,TRAN,SIZE")
+
+	if not ps then
+		return
+	end
+
+	for line in ps do
+		local n, t, v, m, r, tr, s = line:match('^NAME="([^"]+)"%s+TYPE="([^"]+)"%s+VENDOR="([^"]+)"%s+MODEL="([^"]+)"%s+REV="([^"]+)"%s+TRAN="([^"]+)"%s+SIZE="([^"]+)"')
+		if n and s then
+			local row = {}
+			row.name = n
+			row.type = t
+			row.vendor = v
+			row.model = m
+			row.rev = r
+			row.tran = tr
+			row.size = s
+			table.insert(data, row)
+		end
+	end
+
+	return data
+end
+
 function mtds()
 	local data = {}
 
