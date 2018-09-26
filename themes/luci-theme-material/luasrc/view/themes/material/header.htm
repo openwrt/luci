@@ -215,8 +215,9 @@
 	<div class="fill">
 		<div class="container">
 			<span class="showSide"></span>
+			<img src="<%=media%>/brand.png"/>
 			<a class="brand" href="#"><%=boardinfo.hostname or "?"%></a>
-			<div class="pull-right">
+			<div class="status">
 				<% render_changes() %>
 				<span id="xhr_poll_status" style="display:none" onclick="XHR.running() ? XHR.halt() : XHR.run()">
 					<span class="label success" id="xhr_poll_status_on"><span class="mobile-hide"><%:Auto Refresh%></span> <%:on%></span>
