@@ -183,7 +183,6 @@ header, .main {
 }
 
 header {
-    height: 4rem;
     box-shadow: 0 2px 5px rgba(0, 0, 0, .26);
     transition: box-shadow .2s;
     float: left;
@@ -205,7 +204,7 @@ footer > a {
 }
 
 .main {
-    top: 4rem;
+    top: 5rem;
     bottom: 0rem;
     position: relative;
     height: 100%;
@@ -255,7 +254,7 @@ footer > a {
 
 .main-left {
     float: left;
-    top: 4rem;
+    top: 5rem;
     width: 15%;
     width: calc(0% + 15rem);
     height: 100%;
@@ -288,19 +287,36 @@ footer > a {
 header {
     background: var(--header-bg, #0099CC);
     color: var(--header-color, #FFFFFF);
+    height: 5rem;
 }
 
 header > .fill > .container {
-    margin-top: 0.5rem;
-    padding: 0.5rem 1rem 0 1rem;
+    padding-top: 0.25rem; 
+    padding-right: 1rem;
+    padding-bottom: 0.25rem;
+    display: flex;
+    align-items: center;
+    height: 5rem;
 }
 
 header > .fill > .container > .brand {
-    font-size: 1.4rem;
+    font-size: 2rem;
     color: var(--header-color, #FFFFFF);
     text-decoration: none;
     cursor: default;
-    vertical-align: text-bottom;
+    margin-left: 1rem;
+}
+
+header > .fill > .container > img{
+    max-height: 4.5rem;
+    width: calc(0% + 13rem);
+    margin: 1rem;
+}
+
+header > .fill > .container > .status {
+    display: flex;
+    justify-content: flex-end;
+    flex-grow: 8;
 }
 
 .danger {
@@ -384,7 +400,8 @@ header > .fill > .container > .brand {
 }
 
 .main > .main-left > .nav > li:nth-last-child(1) {
-    margin-top: 2rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
     font-size: 1.2rem;
 }
 
@@ -1537,6 +1554,10 @@ header > .container > .pull-right > * {
     background-color: #14CE14;
 }
 
+#xhr_poll_status {
+    display: flex;
+}
+
 .label {
     padding: 0.3rem 0.8rem;
     font-size: 0.8rem;
@@ -1749,14 +1770,6 @@ body.lang_pl.node-main-login .cbi-value-title {
 }
 
 @media screen and (max-width: 1600px) {
-    .main-left {
-        width: calc(0% + 13rem);
-    }
-
-    .main-right {
-        width: calc(100% - 13rem);
-    }
-
     .btn,
     .cbi-button {
         padding: 0.3rem 0.6rem;
@@ -1790,27 +1803,8 @@ body.lang_pl.node-main-login .cbi-value-title {
 }
 
 @media screen and (max-width: 1280px) {
-    header {
-        height: 3.5rem;
-    }
-
     header > .container {
         margin-top: 0.25rem;
-    }
-
-    .main {
-        top: 3.5rem;
-        height: calc(100% - 3.5rem);
-    }
-
-    .main-left {
-        width: calc(0% + 13rem);
-        top: 3.5rem;
-        height: calc(100% - 3.5rem);
-    }
-
-    .main-right {
-        width: calc(100% - 13rem);
     }
 
     .cbi-tabmenu > li > a, .tabs > li > a {
@@ -1826,19 +1820,13 @@ body.lang_pl.node-main-login .cbi-value-title {
         font-size: 0.7rem !important;
         width: 100% !important;
     }
-
-    .main > .main-left > .nav > li,
-    .main > .main-left > .nav > li a,
-    .main > .main-left > .nav > .slide > .menu {
-        font-size: 0.9rem;
-    }
-
-    .main > .main-left > .nav > .slide > .slide-menu > li > a {
-        font-size: 0.7rem;
-    }
 }
 
 @media screen and (max-width: 992px) {
+    header > .fill > .container > img {
+        display: none;
+    }
+
     .main-left {
         width: 0;
         position: fixed;
