@@ -66,6 +66,18 @@ size.datatype = "range(1, 65507)"
 size.rmempty = false
 size.optional = false
 
+max_ttl = mwan_interface:option(Value, "max_ttl", translate("Max TTL"))
+max_ttl.default = "60"
+max_ttl:depends("track_method", "ping")
+max_ttl:value("10")
+max_ttl:value("20")
+max_ttl:value("30")
+max_ttl:value("40")
+max_ttl:value("50")
+max_ttl:value("60")
+max_ttl:value("70")
+max_ttl.datatype = "range(1, 255)"
+
 check_quality = mwan_interface:option(Flag, "check_quality", translate("Check link quality"))
 check_quality:depends("track_method", "ping")
 check_quality.default = false
