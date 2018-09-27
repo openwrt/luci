@@ -98,7 +98,7 @@
 				local nnode = node.nodes[r]
 				write('<li><a href="%s">%s</a></li>' %{
 					nodeurl(prefix, r, nnode.query),
-					pcdata(striptags(translate(nnode.title)))
+					striptags(translate(nnode.title))
 				})
 			end
 
@@ -116,13 +116,13 @@
 				local grandchildren = disp.node_childs(nnode)
 
 				if #grandchildren > 0 then
-					write('<li class="dropdown"><a class="menu" href="#">%s</a>' % pcdata(striptags(translate(nnode.title))))
+					write('<li class="dropdown"><a class="menu" href="#">%s</a>' % striptags(translate(nnode.title)))
 					render_submenu(category .. "/" .. r, nnode)
 					write('</li>')
 				else
 					write('<li><a href="%s">%s</a></li>' %{
 						nodeurl(category, r, nnode.query),
-						pcdata(striptags(translate(nnode.title)))
+						striptags(translate(nnode.title))
 					})
 				end
 			end
