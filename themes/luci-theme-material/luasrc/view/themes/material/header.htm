@@ -109,7 +109,7 @@
 
 			for i, r in ipairs(childs) do
 				local nnode = node.nodes[r]
-				local title = pcdata(striptags(translate(nnode.title)))
+				local title = striptags(translate(nnode.title))
 
 				write('<li><a data-title="%s" href="%s">%s</a></li>' %{
 					title,
@@ -132,7 +132,7 @@
 				local grandchildren = disp.node_childs(nnode)
 
 				if #grandchildren > 0 then
-					local title = pcdata(striptags(translate(nnode.title)))
+					local title = striptags(translate(nnode.title))
 
 					write('<li class="slide"><a class="menu" data-title="%s" href="#">%s</a>' %{
 						title,
@@ -142,7 +142,7 @@
 					render_submenu(category .. "/" .. r, nnode)
 					write('</li>')
 				else
-					local title = pcdata(striptags(translate(nnode.title)))
+					local title = striptags(translate(nnode.title))
 
 					write('<li><a data-title="%s" href="%s">%s</a></li>' %{
 						title,
