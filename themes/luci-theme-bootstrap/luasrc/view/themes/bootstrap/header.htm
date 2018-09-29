@@ -171,7 +171,7 @@
 		<script src="<%=resource%>/xhr.js"></script>
 	</head>
 
-	<body class="lang_<%=luci.i18n.context.lang%> <%- if node then %><%= striptags( node.title ) %><%- end %>">
+	<body class="lang_<%=luci.i18n.context.lang%> <% if node then %><%= striptags( node.title ) %><%- end %>" data-page="<%= table.concat(disp.context.requestpath, "-") %>">
 		<header>
 			<div class="fill">
 				<div class="container">
