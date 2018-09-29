@@ -1200,18 +1200,19 @@ function TypedSection.parse(self, novld)
 				-- Ignore if it already exists
 				if self:cfgvalue(name) then
 					name = nil;
-				end
-
-				name = self:checkscope(name)
-
-				if not name then
 					self.err_invalid = true
-				end
+				else
+					name = self:checkscope(name)
 
-				if name and #name > 0 then
-					created = self:create(name, origin) and name
-					if not created then
-						self.invalid_cts = true
+					if not name then
+						self.err_invalid = true
+					end
+
+					if name and #name > 0 then
+						created = self:create(name, origin) and name
+						if not created then
+							self.invalid_cts = true
+						end
 					end
 				end
 			end
