@@ -122,6 +122,8 @@ unmount.render = function(self, section, scope)
 		self.title = translate("Unmount")
 		self.inputstyle = "remove"
         	Button.render(self, section, scope)
+	else
+		luci.http.write("&#160;")
 	end
 end
 
