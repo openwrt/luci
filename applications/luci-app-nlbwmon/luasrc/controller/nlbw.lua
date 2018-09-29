@@ -56,6 +56,8 @@ function action_data()
 		csv = "text/csv",
 		json = "application/json"
 	}
+	
+	local filename = "data." .. mtype
 
 	local filename = "data." .. mtype
 
