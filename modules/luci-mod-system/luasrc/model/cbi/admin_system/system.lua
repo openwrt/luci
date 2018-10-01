@@ -9,6 +9,7 @@ local conf  = require "luci.config"
 
 local m, s, o
 local has_ntpd = fs.access("/usr/sbin/ntpd")
+local has_zram = fs.access("/etc/init.d/zram")
 
 m = Map("system", translate("System"), translate("Here you can configure the basic aspects of your device like its hostname or the timezone."))
 m:chain("luci")
@@ -21,7 +22,7 @@ s.addremove = false
 s:tab("general",  translate("General Settings"))
 s:tab("logging",  translate("Logging"))
 s:tab("language", translate("Language and Style"))
-
+if has_zram then s:tab("zram", translate("ZRam Settings")) end
 
 --
 -- System Properties
@@ -103,6 +104,29 @@ o.default = 8
 o:value(5, translate("Debug"))
 o:value(8, translate("Normal"))
 o:value(9, translate("Warning"))
+
+
+--
+-- Zram Properties
+--
+if has_zram then
+	o = s:taboption("zram", Value, "zram_size_mb", translate("ZRam Size"), translate("Size of the ZRam device in megabytes"))
+	o.optional    = true
+	o.placeholder = 16
+	o.datatype    = "uinteger"
+	
+	o = s:taboption("zram", ListValue, "zram_comp_algo", translate("ZRam Compression Algorithm"))
+	o.optional    = true
+	o.placeholder = lzo
+	o:value("lzo", "lzo")
+	o:value("lz4", "lz4")
+	o:value("deflate", "deflate")
+	
+	o = s:taboption("zram", Value, "zram_comp_streams", translate("ZRam Compression Streams"), translate("Number of parallel threads used for compression"))
+	o.optional    = true
+	o.placeholder = 1
+	o.datatype    = "uinteger"
+end
 
 
 --
