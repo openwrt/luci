@@ -16,7 +16,8 @@ local acct_port, acct_secret, acct_server, anonymous_identity, ant1, ant2,
 	mp, nasid, network, password, pmk_r1_push, privkey, privkey2, privkeypwd,
 	privkeypwd2, r0_key_lifetime, r0kh, r1_key_holder, r1kh,
 	reassociation_deadline, retry_timeout, ssid, st, tp, wepkey, wepslot,
-	wmm, wpakey, wps, disassoc_low_ack, short_preamble, beacon_int, dtim_period
+	wmm, wpakey, wps, disassoc_low_ack, short_preamble, beacon_int, dtim_period,
+	wparekey, inactivitypool, maxinactivity, listeninterval
 
 arg[1] = arg[1] or ""
 
@@ -507,6 +508,26 @@ if hwtype == "mac80211" then
 	dtim_period.optional = true
 	dtim_period.placeholder = 2
 	dtim_period.datatype = "range(1,255)"
+	
+	
+	wparekey = s:taboption("advanced", Value, "wpa_group_rekey", translate("Time interval for rekeying GTK"), translate("sec"))
+	wparekey.optional    = true
+	wparekey.placeholder = 600
+	wparekey.datatype    = "uinteger"
+	
+	inactivitypool = s:taboption("advanced", Flag , "skip_inactivity_poll", translate("Disable Inactivity Polling"))
+	inactivitypool.optional    = true
+	inactivitypool.datatype    = "uinteger"
+	
+	maxinactivity = s:taboption("advanced", Value, "max_inactivity", translate("Station inactivity limit"), translate("sec"))
+	maxinactivity.optional    = true
+	maxinactivity.placeholder = 300
+	maxinactivity.datatype    = "uinteger"
+	
+	listeninterval = s:taboption("advanced", Value, "max_listen_interval", translate("Maximum allowed Listen Interval"))
+	listeninterval.optional    = true
+	listeninterval.placeholder = 65535
+	listeninterval.datatype    = "uinteger"
 
 	disassoc_low_ack = s:taboption("advanced", Flag, "disassoc_low_ack", translate("Disassociate On Low Acknowledgement"),
 		translate("Allow AP mode to disconnect STAs based on low ACK condition"))
@@ -793,7 +814,6 @@ for slot=1,4 do
 		return Value.write(self, section, value)
 	end
 end
-
 
 if hwtype == "mac80211" or hwtype == "prism2" then
 
