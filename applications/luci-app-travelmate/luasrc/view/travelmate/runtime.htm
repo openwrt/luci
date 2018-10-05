@@ -75,6 +75,15 @@ This is free software, licensed under the Apache License, Version 2.0
 		}
 	}
 
+	function toggle_qrcode() {
+		var view = document.getElementById("qrcode");
+		if (view.style.display === "none") {
+			view.style.display = "block";
+		} else {
+			view.style.display = "none";
+		}
+	}
+
 	XHR.get('<%=luci.dispatcher.build_url("admin", "services", "travelmate", "status")%>', null,
 	function(x, json_info)
 	{
@@ -141,4 +150,75 @@ This is free software, licensed under the Apache License, Version 2.0
 		<input class="cbi-button cbi-button-reset" id="btn1" type="button" name="do_restart" value="<%:Restart%>" onclick="btn_action(this)" />
 		<span id="btn1_running" style="display:inline-block; width:16px; height:16px; margin:0 5px"></span>
 	</div>
+</div>
+<div class="cbi-value" id="button_2">
+	<label class="cbi-value-title" for="button_2"><%:View AP QR-Codes%></label>
+	<div class="cbi-value-field">
+		<input class="cbi-button cbi-button-apply" type="button" value="<%:Show/Hide QR-Codes%>" onclick="toggle_qrcode()" />
+	</div>
+</div>
+<div class="cbi-value" style="margin-bottom: 0px">
+	<span class="cbi-value" style="display: none" id="qrcode">
+<%-
+		local fs  = require("nixio.fs")
+		local uci = require("luci.model.uci").cursor()
+		local qrcode
+
+		uci:foreach("wireless", "wifi-iface", function(s)
+			local device = s.device or ""
+			local mode = s.mode or ""
+			local ssid = s.ssid or ""
+			local enc = s.encryption or ""
+			local key = s.key or ""
+			local hidden = s.hidden or "false"
+			local disabled = s.disabled or ""
+			local wep_slots = {s.key1 or "", s.key2 or "", s.key3 or "", s.key4 or ""}
+
+			if device and mode == "ap" and disabled ~= "1" then
+				if string.match(enc, '^psk') then
+					enc = "WPA"
+				elseif string.match(enc, '^wep') then
+					enc = "WEP"
+					if tonumber(key) then
+						key = wep_slots[tonumber(key)]
+					end
+				elseif enc == "none" then
+					enc = "nopass"
+					key = "nokey"
+				else
+					enc = ""
+				end
+
+				if hidden == "1" then
+					hidden = "true"
+				end
+
+				if ssid and enc and key then
+					local e_ssid = string.gsub(ssid,"[\"\\';:, ]",[[\\\%1]])
+					local e_key = string.gsub(key,"[\"\\';:, ]",[[\\\%1]])
+
+					if fs.access("/usr/bin/qrencode") then
+						qrcode = luci.sys.exec("/usr/bin/qrencode --inline --8bit --type=SVG --output=- 'WIFI:S:\"'" .. e_ssid .. "'\";T:'" .. enc .. "';P:\"'" .. e_key .. "'\";H:'" .. hidden .. "';'")
+-%>
+		<div class="cbi-value" style="border-bottom: 0px; margin-bottom: 0px; padding: 0.25em 0.6em; text-align: left">
+			<%=qrcode%>
+		</div>
+		<div class="cbi-value" style="border-bottom: 0px; margin-bottom: 0px; padding: 0.25em 0.6em; text-align: left">
+			<em><%:AP on %><%=device%><%: with SSID %>"<%=ssid%>"</em>
+			<hr />
+		</div>
+<%-
+					end
+				end
+			end
+		end)
+		if not qrcode then
+-%>
+		<div class="cbi-value" style="border-bottom: 0px; margin-bottom: 0px; padding: 0.25em 0.6em; text-align: left">
+			<em><%:For QR-Code support please install package 'qrencode'!%></em>
+		</div>
+<%-
+		end
+-%>
+	</span>
 </div>
