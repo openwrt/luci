@@ -56,7 +56,7 @@ end
 
 s = m:section(NamedSection, "global", "travelmate")
 
-o1 = s:option(Flag, "trm_enabled", translate("Enable travelmate"))
+o1 = s:option(Flag, "trm_enabled", translate("Enable Travelmate"))
 o1.default = o1.disabled
 o1.rmempty = false
 
@@ -78,18 +78,6 @@ end
 o3.default = trmiface
 o3.rmempty = false
 
-if fs.access("/usr/bin/qrencode") then
-	btn = s:option(Button, "btn", translate("View AP QR-Codes"),
-		translate("Connect your Android or iOS devices to your router's WiFi using the shown QR code."))
-	btn.inputtitle = translate("QR-Codes")
-	btn.inputstyle = "apply"
-	btn.disabled = false
-
-	function btn.write()
-		luci.http.redirect(luci.dispatcher.build_url("admin", "services", "travelmate", "apqr"))
-	end
-end
-
 -- Runtime information
 
 ds = s:option(DummyValue, "_dummy")
@@ -97,16 +85,15 @@ ds.template = "travelmate/runtime"
 
 -- Extra options
 
-e = m:section(NamedSection, "global", "travelmate", translate("Extra options"),
+e = m:section(NamedSection, "global", "travelmate", translate("Extra Options"),
 translate("Options for further tweaking in case the defaults are not suitable for you."))
 
-e1 = e:option(Flag, "trm_debug", translate("Enable verbose debug logging"))
+e1 = e:option(Flag, "trm_debug", translate("Enable Verbose Debug Logging"))
 e1.default = e1.disabled
 e1.rmempty = false
 
-e2 = e:option(Value, "trm_radio", translate("Radio selection"),
-	translate("Restrict travelmate to a dedicated radio, e.g. 'radio0'."))
-e2.datatype = "and(uciname,rangelength(6,6))"
+e2 = e:option(Value, "trm_radio", translate("Radio Selection / Order"),
+	translate("Restrict travelmate to a single radio (e.g. 'radio1') or change the overall scanning order (e.g. 'radio1 radio2 radio0')."))
 e2.rmempty = true
 
 e3 = e:option(Value, "trm_triggerdelay", translate("Trigger Delay"),

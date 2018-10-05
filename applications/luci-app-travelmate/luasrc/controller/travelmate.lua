@@ -27,7 +27,6 @@ function index()
 	entry({"admin", "services", "travelmate", "logread"}, call("logread"), nil).leaf = true
 	entry({"admin", "services", "travelmate", "status"}, call("status_update"), nil).leaf = true
 	entry({"admin", "services", "travelmate", "action"}, call("trm_action"), nil).leaf = true
-	entry({"admin", "services", "travelmate", "apqr"}, template("travelmate/ap_qr")).leaf = true
 	entry({"admin", "services", "travelmate", "wifiscan"}, template("travelmate/wifi_scan")).leaf = true
 	entry({"admin", "services", "travelmate", "wifiadd"}, form("travelmate/wifi_add", {hideresetbtn=true, hidesavebtn=true})).leaf = true
 	entry({"admin", "services", "travelmate", "wifiedit"}, form("travelmate/wifi_edit", {hideresetbtn=true, hidesavebtn=true})).leaf = true
