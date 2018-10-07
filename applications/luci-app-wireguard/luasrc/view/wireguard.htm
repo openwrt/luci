@@ -9,6 +9,13 @@
 	local last_device = ""
 	local enc = { }
 
+	local function wg_clean(value)
+		if value and value == "(none)" then
+			value = ""
+		end
+		return value
+	end
+
 	local wg_dump = io.popen("wg show all dump")
 	if wg_dump then
 		local line
@@ -33,7 +40,7 @@
 						address = value
 					end
 				end
-				enc[line[1]] = "[Interface]\nPrivateKey = " ..line[2].. "\nAddress = " ..address
+				enc[line[1]] = "[Interface]\nPrivateKey = " ..wg_clean(line[2]).. "\nAddress = " ..address
 			else
 				local peer = {
 					public_key		= line[2],
@@ -53,7 +60,7 @@
 					end
 				end
 				table.insert(data[line[1]].peers, peer)
-				enc[line[1]] = enc[line[1]].. "\n\n[Peer]\nEndpoint = " ..line[4].. "\nPublicKey = " ..line[2].. "\nAllowedIPs = " ..line[5]
+				enc[line[1]] = enc[line[1]].. "\n\n[Peer]\nEndpoint = " ..wg_clean(line[4]).. "\nPublicKey = " ..wg_clean(line[2]).. "\nAllowedIPs = " ..wg_clean(line[5])
 			end
 		end
 	end
@@ -194,7 +201,7 @@ for ikey, iface in pairs(data) do
 <%-
 	local qrcode
 	if fs.access("/usr/bin/qrencode") then
-		if enc[ikey]:sub(26,31) ~= "(none)" then
+		if enc[ikey]:sub(26, 26) ~= "\n" then
 			qrcode = luci.sys.exec("/usr/bin/qrencode --inline --8bit --type=SVG --output=- '" ..enc[ikey].. "'")
 		end
 	else
