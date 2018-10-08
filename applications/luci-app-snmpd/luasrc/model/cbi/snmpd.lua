@@ -26,11 +26,12 @@ s.anonymous = true
 p = s:option(Value, "agentaddress", "The address the agent should listen on",
 	[[Eg: UDP:161, or UDP:10.5.4.3:161 to only listen on a given interface]])
 
-s = m:section(TypedSection, "agentx", "AgentX settings")
+s = m:section(TypedSection, "agentx", "AgentX settings", "Delete this section to disable agentx")
 s.anonymous = true
 p = s:option(Value, "agentxsocket", "The address the agent should allow agentX connections to",
     [[This is only necessary if you have subagents using the agentX socket protocol.
-    Note that agentX requires TCP transport]])
+    Eg: /var/run/agentx.sock]])
+s.addremove=true
 
 s = m:section(TypedSection, "com2sec", "com2sec security")
 p = s:option(Value, "secname", "secname")
