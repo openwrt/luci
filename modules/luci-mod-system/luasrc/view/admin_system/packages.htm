@@ -102,16 +102,16 @@ end
 				<div class="cbi-value">
 					<label class="cbi-value-title"><%:Download and install package%>:</label>
 					<div class="cbi-value-field">
-						<span><input type="text" name="url" size="30" value="" /></span>
-						<input class="cbi-button cbi-button-save" type="submit" name="go" value="<%:OK%>" />
+						<span><input type="text" name="url" size="30" <% if no_lists then %>disabled="disabled" placeholder="<%:Please update package lists first%>"<% end %> value="" /></span>
+						<input class="cbi-button cbi-button-save" type="submit" name="go" <% if no_lists then %>disabled="disabled"<% end %> value="<%:OK%>" />
 					</div>
 				</div>
 
 				<div class="cbi-value cbi-value-last">
 					<label class="cbi-value-title"><%:Filter%>:</label>
 					<div class="cbi-value-field">
-						<span><input type="text" name="query" size="20" value="<%=pcdata(query)%>" /></span>
-						<input type="submit" class="cbi-button cbi-button-action" name="search" value="<%:Find package%>" />
+						<span><input type="text" name="query" size="20" <% if no_lists then %>disabled="disabled" placeholder="<%:Please update package lists first%>"<% else %>value="<%=pcdata(query)%>"<% end %> /></span>
+						<input type="submit" class="cbi-button cbi-button-action" name="search" <% if no_lists then %>disabled="disabled"<% end %> value="<%:Find package%>" />
 					</div>
 				</div>
 			</div>
