@@ -284,7 +284,7 @@ if not net:is_floating() then
 	ifname_single = s:taboption("physical", Value, "ifname_single", translate("Interface"))
 	ifname_single.template = "cbi/network_ifacelist"
 	ifname_single.widget = "radio"
-	ifname_single.nobridges = true
+	ifname_single.nobridges = net:is_bridge()
 	ifname_single.noaliases = false
 	ifname_single.rmempty = false
 	ifname_single.network = arg[1]
@@ -341,7 +341,7 @@ end
 if not net:is_virtual() then
 	ifname_multi = s:taboption("physical", Value, "ifname_multi", translate("Interface"))
 	ifname_multi.template = "cbi/network_ifacelist"
-	ifname_multi.nobridges = true
+	ifname_multi.nobridges = net:is_bridge()
 	ifname_multi.noaliases = true
 	ifname_multi.rmempty = false
 	ifname_multi.network = arg[1]
