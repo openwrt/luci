@@ -1,16 +1,11 @@
 <%#
  Copyright 2008-2009 Steven Barth <steven@midlink.org>
- Copyright 2008-2015 Jo-Philipp Wich <jow@openwrt.org>
+ Copyright 2008-2018 Jo-Philipp Wich <jo@mein.io>
  Licensed to the public under the Apache License 2.0.
 -%>
 
 <%-
-
-	require "luci.sys.iptparser"
-	local wba = require "luci.tools.webadmin"
 	local fs = require "nixio.fs"
-	local io = require "io"
-
 	local has_ip6tables = fs.access("/usr/sbin/ip6tables")
 	local mode = 4
 
@@ -18,56 +13,286 @@
 		mode = luci.dispatcher.context.requestpath
 	    mode = tonumber(mode[#mode] ~= "iptables" and mode[#mode]) or 4
 	end
-
-	local ipt = luci.sys.iptparser.IptParser(mode)
-
-	local rowcnt = 1
-	function rowstyle()
-		rowcnt = rowcnt + 1
-		return (rowcnt % 2) + 1
-	end
-
-	function link_target(t,c)
-		if ipt:is_custom_target(c) then
-			return '<a href="#rule_%s_%s">%s</a>' %{ t:lower(), c, c }
-		end
-		return c
-	end
-
-	function link_iface(i)
-		local net = wba.iface_get_network(i)
-		if net and i ~= "lo" then
-			return '<a href="%s">%s</a>' %{
-				url("admin/network/network", net), i
-			}
-
-		end
-		return i
-	end
-
-	local tables = { "Filter", "NAT", "Mangle", "Raw" }
-	if mode == 6 then
-		tables = { "Filter", "Mangle", "Raw" }
-		local ok, lines = pcall(io.lines, "/proc/net/ip6_tables_names")
-		if ok and lines then
-			local line
-			for line in lines do
-				if line == "nat" then
-					tables = { "Filter", "NAT", "Mangle", "Raw" }
-				end
-			end
-		end
-	end
 -%>
 
 <%+header%>
 
 <style type="text/css">
-	span:target {
-		color: blue;
-		text-decoration: underline;
+	span.jump, .cbi-tooltip-container {
+		border-bottom: 1px dotted blue;
+		cursor: pointer;
+	}
+
+	ul {
+		list-style: none;
+	}
+
+	.references {
+		position: relative;
+	}
+
+	.references .cbi-tooltip {
+		left: 0 !important;
+		top: 1.5em !important;
+	}
+
+	h4 > span {
+		font-size: 90%;
 	}
 </style>
+
+<script type="text/javascript">//<[!CDATA[
+	var table_names = [ 'Filter', 'NAT', 'Mangle', 'Raw' ];
+
+	function create_table_section(table)
+	{
+		var idiv = document.getElementById('iptables'),
+		    tdiv = idiv.querySelector('[data-table="%s"]'.format(table)),
+		    title = '<%:Table%>: %s'.format(table);
+
+		if (!tdiv) {
+			tdiv = E('div', { 'data-table': table }, [
+				E('h3', {}, title),
+				E('div')
+			]);
+
+			if (idiv.firstElementChild.nodeName.toLowerCase() === 'p')
+				idiv.removeChild(idiv.firstElementChild);
+
+			var added = false, thisIdx = table_names.indexOf(table);
+
+			idiv.querySelectorAll('[data-table]').forEach(function(child) {
+				var childIdx = table_names.indexOf(child.getAttribute('data-table'));
+
+				if (added === false && childIdx > thisIdx) {
+					idiv.insertBefore(tdiv, child);
+					added = true;
+				}
+			});
+
+			if (added === false)
+				idiv.appendChild(tdiv);
+		}
+
+		return tdiv.lastElementChild;
+	}
+
+	function create_chain_section(table, chain, policy, packets, bytes, references)
+	{
+		var tdiv = create_table_section(table),
+		    cdiv = tdiv.querySelector('[data-chain="%s"]'.format(chain)),
+		    title;
+
+		if (policy)
+			title = '<%:Chain%> <em>%s</em> <span>(<%:Policy%>: <em>%s</em>, %d <%:Packets%>, %.2mB <%:Traffic%>)</span>'.format(chain, policy, packets, bytes);
+		else
+			title = '<%:Chain%> <em>%s</em> <span class="references">(%d <%:References%>)</span>'.format(chain, references);
+
+		if (!cdiv) {
+			cdiv = E('div', { 'data-chain': chain }, [
+				E('h4', { 'id': 'rule_%s_%s'.format(table.toLowerCase(), chain) }, title),
+				E('div', { 'class': 'table' }, [
+					E('div', { 'class': 'tr table-titles' }, [
+						E('div', { 'class': 'th center' }, '<%:Pkts.%>'),
+						E('div', { 'class': 'th center' }, '<%:Traffic%>'),
+						E('div', { 'class': 'th' }, '<%:Target%>'),
+						E('div', { 'class': 'th' }, '<%:Prot.%>'),
+						E('div', { 'class': 'th' }, '<%:In%>'),
+						E('div', { 'class': 'th' }, '<%:Out%>'),
+						E('div', { 'class': 'th' }, '<%:Source%>'),
+						E('div', { 'class': 'th' }, '<%:Destination%>'),
+						E('div', { 'class': 'th' }, '<%:Options%>'),
+						E('div', { 'class': 'th' }, '<%:Comment%>')
+					])
+				])
+			]);
+
+			tdiv.appendChild(cdiv);
+		}
+		else {
+			cdiv.firstElementChild.innerHTML = title;
+		}
+
+		return cdiv.lastElementChild;
+	}
+
+	function update_chain_section(chaintable, rows)
+	{
+		if (!chaintable)
+			return;
+
+		cbi_update_table(chaintable, rows, '<%:No rules in this chain.%>');
+
+		if (rows.length === 0 &&
+		    document.querySelector('form > [data-hide-empty="true"]'))
+			chaintable.parentNode.style.display = 'none';
+		else
+			chaintable.parentNode.style.display = '';
+
+		chaintable.parentNode.setAttribute('data-empty', rows.length === 0);
+	}
+
+	function hide_empty(btn)
+	{
+		var hide = (btn.getAttribute('data-hide-empty') === 'false');
+
+		btn.setAttribute('data-hide-empty', hide);
+		btn.value = hide ? '<%:Show empty chains%>' : '<%:Hide empty chains%>';
+		btn.blur();
+
+		document.querySelectorAll('[data-chain][data-empty="true"]')
+			.forEach(function(chaintable) {
+				chaintable.style.display = hide ? 'none' : '';
+			});
+	}
+
+	function jump_target(ev)
+	{
+		var link = ev.target,
+		    table = findParent(link, '[data-table]').getAttribute('data-table'),
+		    chain = link.textContent,
+		    num = +link.getAttribute('data-num'),
+		    elem = document.getElementById('rule_%s_%s'.format(table.toLowerCase(), chain));
+
+		if (elem) {
+			(document.documentElement || document.body.parentNode || document.body).scrollTop = elem.offsetTop - 40;
+			elem.classList.remove('flash');
+			void elem.offsetWidth;
+			elem.classList.add('flash');
+
+			if (num) {
+				var rule = elem.nextElementSibling.childNodes[num];
+				if (rule) {
+					rule.classList.remove('flash');
+					void rule.offsetWidth;
+					rule.classList.add('flash');
+				}
+			}
+		}
+	}
+
+	function parse_output(table, s)
+	{
+		var current_chain = null;
+		var current_rules = [];
+		var seen_chains = {};
+		var chain_refs = {};
+		var re = /([^\n]*)\n/g;
+		var m, m2;
+
+		while ((m = re.exec(s)) != null) {
+			if (m[1].match(/^Chain (.+) \(policy (\w+) (\d+) packets, (\d+) bytes\)$/)) {
+				var chain = RegExp.$1,
+				    policy = RegExp.$2,
+				    packets = +RegExp.$3,
+				    bytes = +RegExp.$4;
+
+				update_chain_section(current_chain, current_rules);
+
+				seen_chains[chain] = true;
+				current_chain = create_chain_section(table, chain, policy, packets, bytes);
+				current_rules = [];
+			}
+			else if (m[1].match(/^Chain (.+) \((\d+) references\)$/)) {
+				var chain = RegExp.$1,
+				    references = +RegExp.$2;
+
+				update_chain_section(current_chain, current_rules);
+
+				seen_chains[chain] = true;
+				current_chain = create_chain_section(table, chain, null, null, null, references);
+				current_rules = [];
+			}
+			else if (m[1].match(/^num /)) {
+				continue;
+			}
+			else if ((m2 = m[1].match(/^(\d+) +(\d+) +(\d+) +(.*?) +(\S+) +(\S*) +(\S+) +(\S+) +([a-f0-9:.]+\/\d+) +([a-f0-9:.]+\/\d+) +(.+)$/)) !== null) {
+				var num = +m2[1],
+				    pkts = +m2[2],
+				    bytes = +m2[3],
+				    target = m2[4],
+				    proto = m2[5],
+				    indev = m2[7],
+				    outdev = m2[8],
+				    srcnet = m2[9],
+				    dstnet = m2[10],
+				    options = m2[11] || '-',
+				    comment = '-';
+
+				options = options.trim().replace(/(?:^| )\/\* (.+) \*\//,
+					function(m1, m2) {
+						comment = m2.replace(/^!fw3(: |$)/, '').trim() || '-';
+						return '';
+					}) || '-';
+
+				current_rules.push([
+					'%.2m'.format(pkts).nobr(),
+					'%.2mB'.format(bytes).nobr(),
+					target ? '<span class="target">%s</span>'.format(target) : '-',
+					proto,
+					(indev !== '*') ? '<span class="ifacebadge">%s</span>'.format(indev) : '*',
+					(outdev !== '*') ? '<span class="ifacebadge">%s</span>'.format(outdev) : '*',
+					srcnet,
+					dstnet,
+					options,
+					comment
+				]);
+
+				if (target) {
+					chain_refs[target] = chain_refs[target] || [];
+					chain_refs[target].push([ current_chain, num ]);
+				}
+			}
+		}
+
+		update_chain_section(current_chain, current_rules);
+
+		document.querySelectorAll('[data-table="%s"] [data-chain]'.format(table))
+			.forEach(function(cdiv) {
+				if (!seen_chains[cdiv.getAttribute('data-chain')]) {
+					cdiv.parentNode.removeChild(cdiv);
+					return;
+				}
+
+				cdiv.querySelectorAll('.target').forEach(function(tspan) {
+					if (seen_chains[tspan.textContent]) {
+						tspan.classList.add('jump');
+						tspan.addEventListener('click', jump_target);
+					}
+				});
+
+				cdiv.querySelectorAll('.references').forEach(function(rspan) {
+					var refs = chain_refs[cdiv.getAttribute('data-chain')];
+					if (refs && refs.length) {
+						rspan.classList.add('cbi-tooltip-container');
+						rspan.appendChild(E('small', { 'class': 'cbi-tooltip ifacebadge', 'style': 'top:1em; left:auto' }, [ E('ul') ]));
+
+						refs.forEach(function(ref) {
+							var chain = ref[0].parentNode.getAttribute('data-chain'),
+							    num = ref[1];
+
+							rspan.lastElementChild.lastElementChild.appendChild(E('li', {}, [
+								'<%:Chain%> ',
+								E('span', {
+									'class': 'jump',
+									'data-num': num,
+									'onclick': 'jump_target(event)'
+								}, chain),
+								', <%:Rule%> #%d'.format(num)
+							]));
+						});
+					}
+				});
+			});
+	}
+
+	table_names.forEach(function(table) {
+		XHR.poll(5, '<%=url("admin/status/iptables_dump", tostring(mode))%>/' + table.toLowerCase(), null,
+			function (xhr) {
+				parse_output(table, xhr.responseText);
+			});
+	});
+//]]></script>
 
 <h2 name="content"><%:Firewall Status%></h2>
 
@@ -78,78 +303,18 @@
 </ul>
 <% end %>
 
-<div class="cbi-map" style="position: relative">
-
+<div style="position: relative">
 	<form method="post" action="<%=url("admin/status/iptables_action")%>" style="position: absolute; right: 0">
 		<input type="hidden" name="token" value="<%=token%>" />
 		<input type="hidden" name="family" value="<%=mode%>" />
+		<input type="button" class="cbi-button" data-hide-empty="false" value="<%:Hide empty chains%>" onclick="hide_empty(this)" />
 		<input type="submit" class="cbi-button" name="zero" value="<%:Reset Counters%>" />
 		<input type="submit" class="cbi-button" name="restart" value="<%:Restart Firewall%>" />
 	</form>
+</div>
 
-	<div class="cbi-section">
-
-		<% for _, tbl in ipairs(tables) do chaincnt = 0 %>
-			<h3><%:Table%>: <%=tbl%></h3>
-
-			<% for _, chain in ipairs(ipt:chains(tbl)) do
-				rowcnt    = 0
-				chaincnt  = chaincnt + 1
-				chaininfo = ipt:chain(tbl, chain)
-			%>
-				<h4  id="rule_<%=tbl:lower()%>_<%=chain%>">
-					<%:Chain%> <em><%=chain%></em>
-					(<%- if chaininfo.policy then -%>
-						<%:Policy%>: <em><%=chaininfo.policy%></em>, <%:Packets%>: <%=chaininfo.packets%>, <%:Traffic%>: <%=wba.byte_format(chaininfo.bytes)-%>
-					<%- else -%>
-						<%:References%>: <%=chaininfo.references-%>
-					<%- end -%>)
-				</h4>
-
-				<div class="cbi-section-node">
-					<div class="table" style="font-size:90%">
-						<div class="tr table-titles cbi-rowstyle-<%=rowstyle()%>">
-							<div class="th hide-xs"><%:Pkts.%></div>
-							<div class="th nowrap"><%:Traffic%></div>
-							<div class="th col-5"><%:Target%></div>
-							<div class="th"><%:Prot.%></div>
-							<div class="th"><%:In%></div>
-							<div class="th"><%:Out%></div>
-							<div class="th"><%:Source%></div>
-							<div class="th"><%:Destination%></div>
-							<div class="th col-9 hide-xs"><%:Options%></div>
-						</div>
-
-						<% for _, rule in ipairs(ipt:find({table=tbl, chain=chain})) do %>
-							<div class="tr cbi-rowstyle-<%=rowstyle()%>">
-								<div class="td"><%=rule.packets%></div>
-								<div class="td nowrap"><%=wba.byte_format(rule.bytes)%></div>
-								<div class="td col-5"><%=rule.target and link_target(tbl, rule.target) or "-"%></div>
-								<div class="td"><%=rule.protocol%></div>
-								<div class="td"><%=link_iface(rule.inputif)%></div>
-								<div class="td"><%=link_iface(rule.outputif)%></div>
-								<div class="td"><%=rule.source%></div>
-								<div class="td"><%=rule.destination%></div>
-								<div class="td col-9 hide-xs"><%=#rule.options > 0 and luci.util.pcdata(table.concat(rule.options, " ")) or "-"%></div>
-							</div>
-						<% end %>
-
-						<% if rowcnt == 1 then %>
-							<div class="tr cbi-rowstyle-<%=rowstyle()%>">
-								<div class="td" colspan="9"><em><%:No rules in this chain%></em></div>
-							</div>
-						<% end %>
-					</div>
-				</div>
-			<% end %>
-
-			<% if chaincnt == 0 then %>
-				<em><%:No chains in this table%></em>
-			<% end %>
-
-			<br /><br />
-		<% end %>
-	</div>
+<div id="iptables">
+	<p><em><%:Collecting data...%></em></p>
 </div>
 
 <%+footer%>
