@@ -2062,8 +2062,12 @@ function cbi_dropdown_init(sb) {
 		create.addEventListener('keydown', function(ev) {
 			switch (ev.keyCode) {
 			case 13:
-				sbox.createItems(sb, this.value);
 				ev.preventDefault();
+
+				if (this.classList.contains('cbi-input-invalid'))
+					return;
+
+				sbox.createItems(sb, this.value);
 				this.value = '';
 				this.blur();
 				break;
