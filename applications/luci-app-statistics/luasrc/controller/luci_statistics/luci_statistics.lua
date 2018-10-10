@@ -10,7 +10,7 @@ function index()
 	require("luci.util")
 	require("luci.statistics.datatree")
 
-	-- override entry(): check for existance <plugin>.so where <plugin> is derived from the called path
+	-- override entry(): check for existence <plugin>.so where <plugin> is derived from the called path
 	function _entry( path, ... )
 		local file = path[5] or path[4]
 		if nixio.fs.access( "/usr/lib/collectd/" .. file .. ".so" ) then

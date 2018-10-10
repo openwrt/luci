@@ -237,12 +237,12 @@ start() {
 	[ -s $IPT_REPLAY ] && . $IPT_REPLAY
 	echo -n > $IPT_REPLAY
 
-	### Add interface independant prerouting rules
+	### Add interface independent prerouting rules
 	$IPT -t nat -A luci_splash_prerouting -j luci_splash_leases
 	$IPT -t nat -A luci_splash_leases -p udp --dport 53 -j REDIRECT --to-ports 53
 	$IPT -t nat -A luci_splash_leases -p tcp --dport 80 -j REDIRECT --to-ports 8082
 
-	### Add interface independant forwarding rules
+	### Add interface independent forwarding rules
 	$IPT -t filter -A luci_splash_forwarding -j luci_splash_filter
 	$IPT -t filter -A luci_splash_filter -p tcp -j REJECT --reject-with tcp-reset
 	$IPT -t filter -A luci_splash_filter -j REJECT --reject-with icmp-net-prohibited

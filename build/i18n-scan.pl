@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use Text::Balanced qw(extract_bracketed extract_delimited extract_tagged);
 
-@ARGV >= 1 || die "Usage: $0 <source direcory>\n";
+@ARGV >= 1 || die "Usage: $0 <source directory>\n";
 
 
 my %stringtable;

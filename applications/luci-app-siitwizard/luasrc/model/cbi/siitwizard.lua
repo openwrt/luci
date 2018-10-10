@@ -167,7 +167,7 @@ function mode.write(self, section, value)
 	--	* wl0 gets an ipv6 address, in this case the fdca:ffee:babe::1:1/64
 	--	* we do a ::ffff:ffff:0/96 route into siit0, so everything from 6mesh goes into translation.
 	--	* an HNA6 of ::ffff:ffff:0:0/96 announces the mapped 0.0.0.0/0 ipv4 space.
-	--	* MTU on WAN, LAN down to 1400, ipv6 headers are slighly larger.
+	--	* MTU on WAN, LAN down to 1400, ipv6 headers are slightly larger.
 
 	if value == "gateway" then
 

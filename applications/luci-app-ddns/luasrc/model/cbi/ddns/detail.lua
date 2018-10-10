@@ -90,7 +90,7 @@ end
 -- will use dynamic_dns_lucihelper to check if
 -- local IP can be read
 local function _verify_ip_source()
-	-- section is globally defined here be calling agrument (see above)
+	-- section is globally defined here be calling argument (see above)
 	local _arg
 
 	local _ipv6   = usev6:formvalue(section)
@@ -173,7 +173,7 @@ end
 
 -- function to verify if option is valid
 local function _option_validate(self, value, optional)
-	-- section is globally defined here be calling agrument (see above)
+	-- section is globally defined here be calling argument (see above)
 	local fusev6 = usev6:formvalue(section) or "0"
 	local fsvc4  = svc4:formvalue(section) or "-"
 	local fsvc6  = svc6:formvalue(section) or "-"
@@ -200,7 +200,7 @@ local function _option_validate(self, value, optional)
 	if (#urlsh == 0) then return "" end
 
 	used = _option_used(self.option, urlsh)
-	-- on error or not used return empty sting
+	-- on error or not used return empty string
 	if used < 1 then return "" end
 	-- needed but no data then return error
 	if not value or (#value == 0) then

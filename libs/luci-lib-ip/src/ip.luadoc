@@ -283,7 +283,7 @@ Fetch all routes, optionally matching the given criteria.
 @sort 9
 @name routes
 @param filter  <p>Table containing one or more of the possible filter
-critera described below (optional)</p><table>
+criteria described below (optional)</p><table>
 <tr><th>Field</th><th>Description</th></tr>
 <tr><td>`family`</td><td>
  Number describing the address family to return - `4` selects
@@ -363,7 +363,7 @@ Fetches entries from the IPv4 ARP and IPv6 neighbour kernel table
 @sort 10
 @name neighbors
 @param filter  <p>Table containing one or more of the possible filter
-critera described below (optional)</p><table>
+criteria described below (optional)</p><table>
 <tr><th>Field</th><th>Description</th></tr>
 <tr><td>`family`</td><td>
  Number describing the address family to return - `4` selects
@@ -652,7 +652,7 @@ are considered lower than MAC addresses</li>
 @class function
 @sort 10
 @name cidr.lower
-@param addr A `luci.ip.cidr` instance or a string convertable by
+@param addr A `luci.ip.cidr` instance or a string convertible by
 	`luci.ip.new()` to compare against.
 @return `true` if this CIDR is lower than the given address,
 	else `false`.
@@ -676,7 +676,7 @@ are considered lower than MAC addresses</li>
 @class function
 @sort 11
 @name cidr.higher
-@param addr A `luci.ip.cidr` instance or a string convertable by
+@param addr A `luci.ip.cidr` instance or a string convertible by
 	`luci.ip.new()` to compare against.
 @return `true` if this CIDR is higher than the given address,
 	else `false`.
@@ -696,7 +696,7 @@ Checks whether this CIDR instance is equal to the given argument.
 @class function
 @sort 12
 @name cidr.equal
-@param addr A `luci.ip.cidr` instance or a string convertable by
+@param addr A `luci.ip.cidr` instance or a string convertible by
 	`luci.ip.new()` to compare against.
 @return `true` if this CIDR is equal to the given address,
 	else `false`.
@@ -877,7 +877,7 @@ Test whether CIDR contains given range.
 @class function
 @sort 21
 @name cidr.contains
-@param addr A `luci.ip.cidr` instance or a string convertable by
+@param addr A `luci.ip.cidr` instance or a string convertible by
 	`luci.ip.new()` to test.
 @return `true` if this instance fully contains the given address else
 	`false`.
@@ -903,12 +903,12 @@ address space, the result is set to the highest possible address.
 @sort 22
 @name cidr.add
 @param amount A numeric value between 0 and 0xFFFFFFFF, a
-	`luci.ip.cidr` instance or a string convertable by
+	`luci.ip.cidr` instance or a string convertible by
 	`luci.ip.new()`.
 @param inplace If `true`, modify this instance instead of returning
 	a new derived CIDR instance.
 @return <ul>
-	<li>When adding inplace: Return `true` if the addition succeded
+	<li>When adding inplace: Return `true` if the addition succeeded
 	    or `false` when the addition overflowed.</li>
 	<li>When deriving new CIDR: Return new instance representing the value of
         this instance plus the added amount or the highest possible address if
@@ -952,7 +952,7 @@ possible address is returned.
 @sort 23
 @name cidr.sub
 @param amount A numeric value between 0 and 0xFFFFFFFF, a
-	`luci.ip.cidr` instance or a string convertable by
+	`luci.ip.cidr` instance or a string convertible by
 	`luci.ip.new()`.
 @param inplace If `true`, modify this instance instead of returning
 	a new derived CIDR instance.

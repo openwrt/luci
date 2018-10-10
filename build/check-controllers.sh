@@ -14,7 +14,7 @@ find . -type f -name '*.lua' -path '*/controller/*' | while read controller; do
 		package="${controller##*/controller/}"; package="${package%.lua}"; package="luci.controller.${package//\//.}"
 
 		if ! grep -sqE '\bmodule[[:space:]]*\(?[[:space:]]*("|\047|\[=*\[)'"$package" "$controller"; then
-			echo "'$controller' does not containt the expected\n\t'module(\"$package\", ...)' line.\n"
+			echo "'$controller' does not contain the expected\n\t'module(\"$package\", ...)' line.\n"
 		fi
 
 		grep -sqE '\b(Form|SimpleForm)[[:space:]]*\(' "$model" && ! grep -sqE '\bMap[[:space:]]*\(' "$model" && is_form=1 || is_form=0

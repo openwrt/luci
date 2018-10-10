@@ -131,7 +131,7 @@ If you call this function several times the dependencies will be linked with **"
 Adds an entry to the selection list
 
 #### property .widget = "select"
-**"select"** shows a selction list, **"radio"** shows a list of radio buttons inside form
+**"select"** shows a selection list, **"radio"** shows a list of radio buttons inside form
 
 #### property .default = nil
 The default value
@@ -194,7 +194,7 @@ If you call this function several times the dependencies will be linked with **"
 Adds an entry to the list
 
 #### property .widget = "checkbox"
-**"select"** shows a selction list, **"checkbox"** shows a list of checkboxes inside form
+**"select"** shows a selection list, **"checkbox"** shows a list of checkboxes inside form
 
 #### property .delimiter = " "
 The string which will be used to delimit the values inside stored option

@@ -335,13 +335,13 @@ end
 -- Content-Type. Stores all extracted data associated with its parameter name
 -- in the params table within the given message object. Multiple parameter
 -- values are stored as tables, ordinary ones as strings.
--- If an optional file callback function is given then it is feeded with the
+-- If an optional file callback function is given then it is fed with the
 -- file contents chunk by chunk and only the extracted file name is stored
 -- within the params table. The callback function will be called subsequently
 -- with three arguments:
 --  o Table containing decoded (name, file) and raw (headers) mime header data
 --  o String value containing a chunk of the file data
---  o Boolean which indicates wheather the current chunk is the last one (eof)
+--  o Boolean which indicates whether the current chunk is the last one (eof)
 function mimedecode_message_body(src, msg, file_cb)
 	local parser, header, field
 	local len, maxlen = 0, tonumber(msg.env.CONTENT_LENGTH or nil)

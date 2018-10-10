@@ -14,7 +14,7 @@ function rrdargs( graph, plugin, plugin_instance )
 
 		-- diagram data description
 		data = {
-			-- defined sources for data types, if ommitted assume a single DS named "value" (optional)
+			-- defined sources for data types, if omitted assume a single DS named "value" (optional)
 			sources = {
 				if_octets = { "tx", "rx" }
 			},

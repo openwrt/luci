@@ -272,7 +272,7 @@ int mpi_cmp_int( mpi *X, int z );
 int mpi_add_abs( mpi *X, mpi *A, mpi *B );
 
 /**
- * \brief          Unsigned substraction: X = |A| - |B|
+ * \brief          Unsigned subtraction: X = |A| - |B|
  *
  * \return         0 if successful,
  *                 POLARSSL_ERR_MPI_NEGATIVE_VALUE if B is greater than A
@@ -288,7 +288,7 @@ int mpi_sub_abs( mpi *X, mpi *A, mpi *B );
 int mpi_add_mpi( mpi *X, mpi *A, mpi *B );
 
 /**
- * \brief          Signed substraction: X = A - B
+ * \brief          Signed subtraction: X = A - B
  *
  * \return         0 if successful,
  *                 1 if memory allocation failed
@@ -304,7 +304,7 @@ int mpi_sub_mpi( mpi *X, mpi *A, mpi *B );
 int mpi_add_int( mpi *X, mpi *A, int b );
 
 /**
- * \brief          Signed substraction: X = A - b
+ * \brief          Signed subtraction: X = A - b
  *
  * \return         0 if successful,
  *                 1 if memory allocation failed

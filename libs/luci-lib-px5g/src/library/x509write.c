@@ -19,7 +19,7 @@
  *  MA  02110-1301  USA
  */
 /*
- *  The ITU-T X.509 standard defines a certificat format for PKI.
+ *  The ITU-T X.509 standard defines a certificate format for PKI.
  *
  *  http://www.ietf.org/rfc/rfc2459.txt
  *  http://www.ietf.org/rfc/rfc3279.txt
@@ -68,7 +68,7 @@ static int asn1_eval_octet(unsigned int digit)
 }
 
 /*
- * write the asn.1 lenght form into p
+ * write the asn.1 length form into p
  */
 static int asn1_add_len(unsigned int size, x509_node *node)
 {
@@ -788,7 +788,7 @@ static int x509write_parse_names(x509_node *node, unsigned char *names)
                     R_len = len;
                 }
 
-                /* set tag poiner to begin */
+                /* set tag pointer to begin */
                 tag_sp = tag;
 
                 /* is at end? */
@@ -866,7 +866,7 @@ static int x509write_parse_names(x509_node *node, unsigned char *names)
 }
 
 /*
- * Copy raw data from orginal ca to node
+ * Copy raw data from original ca to node
  */
 static int x509write_copy_from_raw(x509_node *node, x509_buf *raw)
 {

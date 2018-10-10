@@ -7,7 +7,7 @@ Turns WiFi on and off according to a schedule on an openwrt router
 
 
 ## Use cases
-You can create user-defined events when to enable or disable WiFi. 
+You can create user-defined events when to enable or disable WiFi.
 There are various use cases why you would like to do so:
 
 1. Reduce power consumption and therefore reduce CO2 emissions.
@@ -17,13 +17,13 @@ There are various use cases why you would like to do so:
 Regarding 1: Please note, that you need to unload the wireless driver modules in order to get the most effect of saving power.
 In my test scenario only disabling WiFi saves about ~0.4 Watt, unloading the modules removes another ~0.4 Watt.
 
-Regarding 2: Think of a wireless accesspoint e.g. in your bedrom, kids room where you want to remove the ammount of radiation emitted.
+Regarding 2: Think of a wireless accesspoint e.g. in your bedrom, kids room where you want to remove the amount of radiation emitted.
 
-Regarding 3: E.g. in a company, why would wireless need to be enabled weekends if no one is there working? 
+Regarding 3: E.g. in a company, why would wireless need to be enabled weekends if no one is there working?
 Or think of an accesspoint in your kids room when you want the youngsters to sleep after 10 pm instead of facebooking...
 
 ## Configuration
-You can create an arbitrary number of schedule events. Please note that there is on sanity check done wheather the start / stop times overlap or make sense.
+You can create an arbitrary number of schedule events. Please note that there is on sanity check done whether the start / stop times overlap or make sense.
 If start and stop time are equal, this leads to disabling the WiFi at the given time.
 
 Logging if enabled is done to the file `/var/log/wifi_schedule.log` and can be reviewed through the "View Logfile" tab.
@@ -71,7 +71,7 @@ Then call the script as follows in order to get the necessary cron jobs created:
 `wifi_schedule.sh cron`
 
 All commands:
- 
+
 ```
 wifi_schedule.sh cron|start|stop|forcestop|recheck|getmodules|savemodules|help
 

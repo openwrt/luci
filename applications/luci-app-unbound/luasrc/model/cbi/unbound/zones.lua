@@ -58,7 +58,7 @@ end
 
 
 function ztype.cfgvalue(self, s)
-    -- Format a meaninful tile for the Zone Type column
+    -- Format a meaningful tile for the Zone Type column
     local itxt = self.map:get(s, "zone_type")
     local itls = self.map:get(s, "tls_upstream")
 
@@ -84,7 +84,7 @@ end
 
 
 function zones.cfgvalue(self, s)
-    -- Format a meaninful sentence for the Zones viewed column
+    -- Format a meaningful sentence for the Zones viewed column
     local xtxt, otxt
     local itxt = self.map:get(s, "zone_name")
     local itype = self.map:get(s, "zone_type")
@@ -131,7 +131,7 @@ end
 
 
 function servers.cfgvalue(self, s)
-    -- Format a meaninful sentence for the Servers (and URL) column
+    -- Format a meaningful sentence for the Servers (and URL) column
     local xtxt, otxt, rtxt, found
     local itxt = self.map:get(s, "server")
     local iurl = self.map:get(s, "url_dir")
