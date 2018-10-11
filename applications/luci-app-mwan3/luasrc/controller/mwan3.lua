@@ -117,7 +117,7 @@ function diagnosticsData(interface, task)
 		end
 	end
 
-	function get_gateway(inteface)
+	function get_gateway(interface)
 		local gateway = nil
 		local dump = nil
 
