@@ -511,20 +511,19 @@ function cbi_d_update() {
 		if (node && node.parentNode && !cbi_d_check(entry.deps)) {
 			node.parentNode.removeChild(node);
 			state = true;
-		} else if (parent && (!node || !node.parentNode) && cbi_d_check(entry.deps)) {
+		}
+		else if (parent && (!node || !node.parentNode) && cbi_d_check(entry.deps)) {
 			var next = undefined;
 
 			for (next = parent.firstChild; next; next = next.nextSibling) {
-				if (next.getAttribute && parseInt(next.getAttribute('data-index'), 10) > entry.index) {
+				if (next.getAttribute && parseInt(next.getAttribute('data-index'), 10) > entry.index)
 					break;
-				}
 			}
 
-			if (!next) {
+			if (!next)
 				parent.appendChild(entry.node);
-			} else {
+			else
 				parent.insertBefore(entry.node, next);
-			}
 
 			state = true;
 		}
@@ -539,9 +538,8 @@ function cbi_d_update() {
 			cbi_tag_last(parent);
 	}
 
-	if (state) {
+	if (state)
 		cbi_d_update();
-	}
 }
 
 function cbi_init() {
@@ -565,9 +563,8 @@ function cbi_init() {
 		var index = parseInt(node.getAttribute('data-index'), 10);
 		var depends = JSON.parse(node.getAttribute('data-depends'));
 		if (!isNaN(index) && depends.length > 0) {
-			for (var alt = 0; alt < depends.length; alt++) {
+			for (var alt = 0; alt < depends.length; alt++)
 				cbi_d_add(node, depends[alt], index);
-			}
 		}
 	}
 
@@ -575,9 +572,8 @@ function cbi_init() {
 
 	for (var i = 0, node; (node = nodes[i]) !== undefined; i++) {
 		var events = node.getAttribute('data-update').split(' ');
-		for (var j = 0, event; (event = events[j]) !== undefined; j++) {
+		for (var j = 0, event; (event = events[j]) !== undefined; j++)
 			cbi_bind(node, event, cbi_d_update);
-		}
 	}
 
 	nodes = document.querySelectorAll('[data-choices]');
@@ -670,13 +666,13 @@ function cbi_combobox(id, values, def, man, focus) {
 	var sel = document.createElement("select");
 		sel.id = selid;
 		sel.index = obj.index;
-		sel.className = obj.className.replace(/cbi-input-text/, 'cbi-input-select');
+		sel.classList.remove('cbi-input-text');
+		sel.classList.add('cbi-input-select');
 
-	if (obj.nextSibling) {
+	if (obj.nextSibling)
 		obj.parentNode.insertBefore(sel, obj.nextSibling);
-	} else {
+	else
 		obj.parentNode.appendChild(sel);
-	}
 
 	var dt = obj.getAttribute('cbi_datatype');
 	var op = obj.getAttribute('cbi_optional');
@@ -687,7 +683,8 @@ function cbi_combobox(id, values, def, man, focus) {
 			optdef.value = "";
 			optdef.appendChild(document.createTextNode(typeof(def) === 'string' ? def : cbi_strings.label.choose));
 			sel.appendChild(optdef);
-		} else {
+		}
+		else {
 			var opt = document.createElement("option");
 			opt.value = obj.value;
 			opt.selected = "selected";
@@ -700,9 +697,8 @@ function cbi_combobox(id, values, def, man, focus) {
 		var opt = document.createElement("option");
 		opt.value = i;
 
-		if (obj.value == i) {
+		if (obj.value == i)
 			opt.selected = "selected";
-		}
 
 		opt.appendChild(document.createTextNode(values[i]));
 		sel.appendChild(opt);
@@ -724,7 +720,8 @@ function cbi_combobox(id, values, def, man, focus) {
 			sel.blur();
 			sel.parentNode.removeChild(sel);
 			obj.focus();
-		} else {
+		}
+		else {
 			obj.value = sel.options[sel.selectedIndex].value;
 		}
 
@@ -788,35 +785,30 @@ function cbi_dynlist_init(parent, datatype, optional, choices)
 	{
 		values = [ ];
 
-		while (parent.firstChild)
-		{
+		while (parent.firstChild) {
 			var n = parent.firstChild;
 			var i = +n.index;
 
-			if (i != del)
-			{
-				if (n.nodeName.toLowerCase() == 'input')
+			if (i != del) {
+				if (matchesElem(n, 'input'))
 					values.push(n.value || '');
-				else if (n.nodeName.toLowerCase() == 'select')
+				else if (matchesElem(n, 'select'))
 					values[values.length-1] = n.options[n.selectedIndex].value;
 			}
 
 			parent.removeChild(n);
 		}
 
-		if (add >= 0)
-		{
+		if (add >= 0) {
 			focus = add+1;
 			values.splice(focus, 0, '');
 		}
-		else if (values.length == 0)
-		{
+		else if (values.length == 0) {
 			focus = 0;
 			values.push('');
 		}
 
-		for (var i = 0; i < values.length; i++)
-		{
+		for (var i = 0; i < values.length; i++) {
 			var t = document.createElement('input');
 				t.id = prefix + '.' + (i+1);
 				t.name = prefix;
@@ -826,9 +818,7 @@ function cbi_dynlist_init(parent, datatype, optional, choices)
 				t.className = 'cbi-input-text';
 
 			if (i == 0 && holder)
-			{
 				t.placeholder = holder;
-			}
 
 			var b = E('div', {
 				class: 'cbi-button cbi-button-' + ((i+1) < values.length ? 'remove' : 'add')
@@ -836,20 +826,16 @@ function cbi_dynlist_init(parent, datatype, optional, choices)
 
 			parent.appendChild(t);
 			parent.appendChild(b);
+
 			if (datatype == 'file')
-			{
 				cbi_browser_init(t.id, null, parent.getAttribute('data-browser-path'));
-			}
 
 			parent.appendChild(document.createElement('br'));
 
 			if (datatype)
-			{
 				cbi_validate_field(t.id, ((i+1) == values.length) || optional, datatype);
-			}
 
-			if (choices)
-			{
+			if (choices) {
 				cbi_combobox_init(t.id, choices, '', cbi_strings.label.custom);
 				b.index = i;
 
@@ -859,17 +845,14 @@ function cbi_dynlist_init(parent, datatype, optional, choices)
 				if (i == focus || -i == focus)
 					b.focus();
 			}
-			else
-			{
+			else {
 				cbi_bind(t, 'keydown',  cbi_dynlist_keydown);
 				cbi_bind(t, 'keypress', cbi_dynlist_keypress);
 
-				if (i == focus)
-				{
+				if (i == focus) {
 					t.focus();
 				}
-				else if (-i == focus)
-				{
+				else if (-i == focus) {
 					t.focus();
 
 					/* force cursor to end */
@@ -892,13 +875,11 @@ function cbi_dynlist_init(parent, datatype, optional, choices)
 		if (se.nodeType == 3)
 			se = se.parentNode;
 
-		switch (ev.keyCode)
-		{
+		switch (ev.keyCode) {
 			/* backspace, delete */
 			case 8:
 			case 46:
-				if (se.value.length == 0)
-				{
+				if (se.value.length == 0) {
 					if (ev.preventDefault)
 						ev.preventDefault();
 
@@ -941,16 +922,14 @@ function cbi_dynlist_init(parent, datatype, optional, choices)
 		if (next && next.nextSibling.name == prefix)
 			next = next.nextSibling;
 
-		switch (ev.keyCode)
-		{
+		switch (ev.keyCode) {
 			/* backspace, delete */
 			case 8:
 			case 46:
-				var del = (se.nodeName.toLowerCase() == 'select')
+				var del = (matchesElem(se, 'select'))
 					? true : (se.value.length == 0);
 
-				if (del)
-				{
+				if (del) {
 					if (ev.preventDefault)
 						ev.preventDefault();
 
@@ -994,9 +973,8 @@ function cbi_dynlist_init(parent, datatype, optional, choices)
 
 		var se = ev.target ? ev.target : ev.srcElement;
 		var input = se.previousSibling;
-		while (input && input.name != prefix) {
+		while (input && input.name != prefix)
 			input = input.previousSibling;
-		}
 
 		if (se.classList.contains('cbi-button-remove')) {
 			input.value = '';
@@ -1024,39 +1002,45 @@ function cbi_t_add(section, tab) {
 	var t = document.getElementById('tab.' + section + '.' + tab);
 	var c = document.getElementById('container.' + section + '.' + tab);
 
-	if( t && c ) {
+	if (t && c) {
 		cbi_t[section] = (cbi_t[section] || [ ]);
 		cbi_t[section][tab] = { 'tab': t, 'container': c, 'cid': c.id };
 	}
 }
 
 function cbi_t_switch(section, tab) {
-	if( cbi_t[section] && cbi_t[section][tab] ) {
+	if (cbi_t[section] && cbi_t[section][tab]) {
 		var o = cbi_t[section][tab];
 		var h = document.getElementById('tab.' + section);
-		for( var tid in cbi_t[section] ) {
+
+		for (var tid in cbi_t[section]) {
 			var o2 = cbi_t[section][tid];
-			if( o.tab.id != o2.tab.id ) {
-				o2.tab.className = o2.tab.className.replace(/(^| )cbi-tab( |$)/, " cbi-tab-disabled ");
+
+			if (o.tab.id != o2.tab.id) {
+				o2.tab.classList.remove('cbi-tab');
+				o2.tab.classList.add('cbi-tab-disabled');
 				o2.container.style.display = 'none';
 			}
 			else {
-				if(h) h.value = tab;
-				o2.tab.className = o2.tab.className.replace(/(^| )cbi-tab-disabled( |$)/, " cbi-tab ");
+				if(h)
+					h.value = tab;
+
+				o2.tab.classList.remove('cbi-tab-disabled');
+				o2.tab.classList.add('cbi-tab');
 				o2.container.style.display = 'block';
 			}
 		}
 	}
-	return false
+
+	return false;
 }
 
 function cbi_t_update() {
 	var hl_tabs = [ ];
 	var updated = false;
 
-	for( var sid in cbi_t )
-		for( var tid in cbi_t[sid] )
-		{
+	for (var sid in cbi_t)
+		for (var tid in cbi_t[sid]) {
 			var t = cbi_t[sid][tid].tab;
 			var c = cbi_t[sid][tid].container;
 
@@ -1065,7 +1049,7 @@ function cbi_t_update() {
 			}
 			else if (t.style.display == 'none') {
 				t.style.display = '';
-				t.className += ' cbi-tab-highlighted';
+				t.classList.add('cbi-tab-highlighted');
 				hl_tabs.push(t);
 			}
 
@@ -1075,8 +1059,8 @@ function cbi_t_update() {
 
 	if (hl_tabs.length > 0)
 		window.setTimeout(function() {
-			for( var i = 0; i < hl_tabs.length; i++ )
-				hl_tabs[i].className = hl_tabs[i].className.replace(/ cbi-tab-highlighted/g, '');
+			for (var i = 0; i < hl_tabs.length; i++)
+				hl_tabs[i].classList.remove('cbi-tab-highlighted');
 		}, 750);
 
 	return updated;
@@ -1086,16 +1070,14 @@ function cbi_t_update() {
 function cbi_validate_form(form, errmsg)
 {
 	/* if triggered by a section removal or addition, don't validate */
-	if( form.cbi_state == 'add-section' || form.cbi_state == 'del-section' )
+	if (form.cbi_state == 'add-section' || form.cbi_state == 'del-section')
 		return true;
 
-	if( form.cbi_validators )
-	{
-		for( var i = 0; i < form.cbi_validators.length; i++ )
-		{
+	if (form.cbi_validators) {
+		for (var i = 0; i < form.cbi_validators.length; i++) {
 			var validator = form.cbi_validators[i];
-			if( !validator() && errmsg )
-			{
+
+			if (!validator() && errmsg) {
 				alert(errmsg);
 				return false;
 			}
@@ -1123,10 +1105,8 @@ function cbi_validate_compile(code)
 
 	code += ',';
 
-	for (var i = 0; i < code.length; i++)
-	{
-		if (esc)
-		{
+	for (var i = 0; i < code.length; i++) {
+		if (esc) {
 			esc = false;
 			continue;
 		}
@@ -1139,41 +1119,36 @@ function cbi_validate_compile(code)
 
 		case 40:
 		case 44:
-			if (depth <= 0)
-			{
-				if (pos < i)
-				{
+			if (depth <= 0) {
+				if (pos < i) {
 					var label = code.substring(pos, i);
 						label = label.replace(/\\(.)/g, '$1');
 						label = label.replace(/^[ \t]+/g, '');
 						label = label.replace(/[ \t]+$/g, '');
 
-					if (label && !isNaN(label))
-					{
+					if (label && !isNaN(label)) {
 						stack.push(parseFloat(label));
 					}
-					else if (label.match(/^(['"]).*\1$/))
-					{
+					else if (label.match(/^(['"]).*\1$/)) {
 						stack.push(label.replace(/^(['"])(.*)\1$/, '$2'));
 					}
-					else if (typeof cbi_validators[label] == 'function')
-					{
+					else if (typeof cbi_validators[label] == 'function') {
 						stack.push(cbi_validators[label]);
 						stack.push(null);
 					}
-					else
-					{
+					else {
 						throw "Syntax error, unhandled token '"+label+"'";
 					}
 				}
+
 				pos = i+1;
 			}
+
 			depth += (code.charCodeAt(i) == 40);
 			break;
 
 		case 41:
-			if (--depth <= 0)
-			{
+			if (--depth <= 0) {
 				if (typeof stack[stack.length-2] != 'function')
 					throw "Syntax error, argument list follows non-function";
 
@@ -1182,6 +1157,7 @@ function cbi_validate_compile(code)
 
 				pos = i+1;
 			}
+
 			break;
 		}
 	}
@@ -1194,23 +1170,20 @@ function cbi_validate_field(cbid, optional, type)
 	var field = (typeof cbid == "string") ? document.getElementById(cbid) : cbid;
 	var vstack; try { vstack = cbi_validate_compile(type); } catch(e) { };
 
-	if (field && vstack && typeof vstack[0] == "function")
-	{
+	if (field && vstack && typeof vstack[0] == "function") {
 		var validator = function()
 		{
 			// is not detached
-			if( field.form )
-			{
-				field.className = field.className.replace(/ cbi-input-invalid/g, '');
+			if (field.form) {
+				field.classList.remove('cbi-input-invalid');
 
 				// validate value
 				var value = (field.options && field.options.selectedIndex > -1)
 					? field.options[field.options.selectedIndex].value : field.value;
 
-				if (!(((value.length == 0) && optional) || vstack[0].apply(value, vstack[1])))
-				{
+				if (!(((value.length == 0) && optional) || vstack[0].apply(value, vstack[1]))) {
 					// invalid
-					field.className += ' cbi-input-invalid';
+					field.classList.add('cbi-input-invalid');
 					return false;
 				}
 			}
@@ -1218,7 +1191,7 @@ function cbi_validate_field(cbid, optional, type)
 			return true;
 		};
 
-		if( ! field.form.cbi_validators )
+		if (!field.form.cbi_validators)
 			field.form.cbi_validators = [ ];
 
 		field.form.cbi_validators.push(validator);
@@ -1226,8 +1199,7 @@ function cbi_validate_field(cbid, optional, type)
 		cbi_bind(field, "blur",  validator);
 		cbi_bind(field, "keyup", validator);
 
-		if (field.nodeName == 'SELECT')
-		{
+		if (matchesElem(field, 'select')) {
 			cbi_bind(field, "change", validator);
 			cbi_bind(field, "click",  validator);
 		}
@@ -1291,7 +1263,8 @@ function cbi_row_swap(elem, up, store)
 		input.value = ids.join(' ');
 
 	window.scrollTo(0, tr.offsetTop);
-	window.setTimeout(function() { tr.classList.add('flash'); }, 1);
+	void tr.offsetWidth;
+	tr.classList.add('flash');
 
 	return false;
 }
@@ -1300,20 +1273,16 @@ function cbi_tag_last(container)
 {
 	var last;
 
-	for (var i = 0; i < container.childNodes.length; i++)
-	{
+	for (var i = 0; i < container.childNodes.length; i++) {
 		var c = container.childNodes[i];
-		if (c.nodeType == 1 && c.nodeName.toLowerCase() == 'div')
-		{
-			c.className = c.className.replace(/ cbi-value-last$/, '');
+		if (matchesElem(c, 'div')) {
+			c.classList.remove('cbi-value-last');
 			last = c;
 		}
 	}
 
 	if (last)
-	{
-		last.className += ' cbi-value-last';
-	}
+		last.classList.add('cbi-value-last');
 }
 
 function cbi_submit(elem, name, value, action)
@@ -1350,8 +1319,9 @@ String.prototype.format = function()
 		if (typeof(s) !== 'string' && !(s instanceof String))
 			return '';
 
-		for( var i = 0; i < r.length; i += 2 )
+		for (var i = 0; i < r.length; i += 2)
 			s = s.replace(r[i], r[i+1]);
+
 		return s;
 	}
 
@@ -1360,22 +1330,18 @@ String.prototype.format = function()
 	var re = /^(([^%]*)%('.|0|\x20)?(-)?(\d+)?(\.\d+)?(%|b|c|d|u|f|o|s|x|X|q|h|j|t|m))/;
 	var a = b = [], numSubstitutions = 0, numMatches = 0;
 
-	while (a = re.exec(str))
-	{
+	while (a = re.exec(str)) {
 		var m = a[1];
 		var leftpart = a[2], pPad = a[3], pJustify = a[4], pMinLength = a[5];
 		var pPrecision = a[6], pType = a[7];
 
 		numMatches++;
 
-		if (pType == '%')
-		{
+		if (pType == '%') {
 			subst = '%';
 		}
-		else
-		{
-			if (numSubstitutions < arguments.length)
-			{
+		else {
+			if (numSubstitutions < arguments.length) {
 				var param = arguments[numSubstitutions++];
 
 				var pad = '';
@@ -1400,8 +1366,7 @@ String.prototype.format = function()
 
 				var subst = param;
 
-				switch(pType)
-				{
+				switch(pType) {
 					case 'b':
 						subst = (+param || 0).toString(2);
 						break;
@@ -1517,16 +1482,20 @@ String.prototype.nobr = function()
 String.format = function()
 {
 	var a = [ ];
+
 	for (var i = 1; i < arguments.length; i++)
 		a.push(arguments[i]);
+
 	return ''.format.apply(arguments[0], a);
 }
 
 String.nobr = function()
 {
 	var a = [ ];
+
 	for (var i = 1; i < arguments.length; i++)
 		a.push(arguments[i]);
+
 	return ''.nobr.apply(arguments[0], a);
 }
 
@@ -1569,12 +1538,16 @@ function toElem(s)
 	return elem || null;
 }
 
+function matchesElem(node, selector)
+{
+	return ((node.matches && node.matches(selector)) ||
+	        (node.msMatchesSelector && node.msMatchesSelector(selector)));
+}
+
 function findParent(node, selector)
 {
 	while (node)
-		if (node.msMatchesSelector && node.msMatchesSelector(selector))
-			return node;
-		else if (node.matches && node.matches(selector))
+		if (matchesElem(node, selector))
 			return node;
 		else
 			node = node.parentNode;
@@ -1813,7 +1786,7 @@ CBIDropdown = {
 			return;
 
 		document.querySelectorAll('.focus').forEach(function(e) {
-			if (e.nodeName.toLowerCase() !== 'input') {
+			if (!matchesElem(e, 'input')) {
 				e.classList.remove('focus');
 				e.blur();
 			}
@@ -1952,7 +1925,7 @@ function cbi_dropdown_init(sb) {
 
 	sb.addEventListener('click', function(ev) {
 		if (!this.hasAttribute('open')) {
-			if (ev.target.nodeName.toLowerCase() !== 'input')
+			if (!matchesElem(ev.target, 'input'))
 				sbox.openDropdown(this);
 		}
 		else {
@@ -1966,7 +1939,7 @@ function cbi_dropdown_init(sb) {
 	});
 
 	sb.addEventListener('keydown', function(ev) {
-		if (ev.target.nodeName.toLowerCase() === 'input')
+		if (matchesElem(ev.target, 'input'))
 			return;
 
 		if (!this.hasAttribute('open')) {
@@ -2167,6 +2140,77 @@ function cbi_update_table(table, data, placeholder) {
 	});
 }
 
+function renderPreview(section) {
+	var preview = E('div', { class: 'cbi-section-preview' }, [
+		E('ul'), E('div')
+	]);
+
+	section.querySelectorAll('.cbi-value-field[data-name], .cbi-value').forEach(function(field) {
+		var name = null, title = null, value = null;
+
+		if (field.classList.contains('cbi-value-field')) {
+			name  = field.getAttribute('data-name');
+			title = field.getAttribute('data-title');
+		}
+		else {
+			var label = field.querySelector('label.cbi-value-title[for]');
+			if (label) {
+				name  = label.getAttribute('for').split(/\./)[3];
+				title = (label.innerText || '').trim();
+			}
+		}
+
+		if (name === null)
+			return;
+
+		field.querySelectorAll('select, input').forEach(function(input) {
+			var n = (input.name || input.id || '').split(/\./);
+
+			if (n.length === 6 && n[0] === 'cbi' && n[1] === 'combobox') {
+				if (value && input.selectedIndex >= 0)
+					value = input.options[input.selectedIndex].text;
+			}
+			else if (n.length === 4 && n[0] === 'cbid' && n[3] === name) {
+				var v = null;
+
+				switch (input.type) {
+				case 'checkbox':
+					v = input.checked ? '✔' : '✘';
+					break;
+
+				case 'password':
+					v = input.value ? '***' : null;
+					break;
+
+				case 'submit':
+					v = null;
+					break;
+
+				default:
+					if (matchesElem(input, 'select') && input.selectedIndex >= 0)
+						v = input.options[input.selectedIndex].text;
+					else
+						v = input.value;
+					break;
+				}
+
+				if (v !== undefined && v !== null && v !== '')
+					value = (value === null) ? v : value + ', ' + v;
+			}
+		});
+
+		if (value !== null)
+			preview.firstChild.appendChild(E('li', {}, [
+				(title || name), ': ',
+				E('strong', {}, value)
+			]));
+	});
+
+	section.parentNode.insertBefore(preview, section);
+}
+
 document.addEventListener('DOMContentLoaded', function() {
 	document.querySelectorAll('.table').forEach(cbi_update_table);
+
+	document.querySelectorAll('.cbi-section-node').forEach(renderPreview);
 });
