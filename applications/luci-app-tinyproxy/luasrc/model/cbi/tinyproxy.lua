@@ -216,7 +216,7 @@ s.addremove = true
 
 
 t = s:option(ListValue, "type", translate("Policy"),
-	translate("<em>Via proxy</em> routes requests to the given target via the specifed upstream proxy, <em>Reject access</em> disables any upstream proxy for the target"))
+	translate("<em>Via proxy</em> routes requests to the given target via the specified upstream proxy, <em>Reject access</em> disables any upstream proxy for the target"))
 
 t:value("proxy", translate("Via proxy"))
 t:value("reject", translate("Reject access"))

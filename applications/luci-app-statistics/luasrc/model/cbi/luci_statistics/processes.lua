@@ -4,7 +4,7 @@
 m = Map("luci_statistics",
 	translate("Processes Plugin Configuration"),
 	translate(
-		"The processes plugin collects informations like cpu time, " ..
+		"The processes plugin collects information like cpu time, " ..
 		"page faults and memory usage of selected processes."
 	))
 

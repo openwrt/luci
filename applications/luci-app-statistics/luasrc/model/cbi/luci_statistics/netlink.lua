@@ -9,7 +9,7 @@ local devices = luci.sys.net.devices()
 m = Map("luci_statistics",
 	translate("Netlink Plugin Configuration"),
 	translate(
-		"The netlink plugin collects extended informations like " ..
+		"The netlink plugin collects extended information like " ..
 		"qdisc-, class- and filter-statistics for selected interfaces."
 	))
 

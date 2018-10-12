@@ -128,7 +128,7 @@ function ubus_call(command, argument, params, variable) {
 					}
 				}
 			} else {
-				error_box("<b>Ubus call faild:</b><br />Request: " + request_json + "<br />Response: " + JSON.stringify(response))
+				error_box("<b>Ubus call failed:</b><br />Request: " + request_json + "<br />Response: " + JSON.stringify(response))
 			}
 			ubus_closed++;
 		}
@@ -170,7 +170,7 @@ function upgrade_check() {
 function upgrade_check_callback(request_text) {
 	var request_json = JSON.parse(request_text)
 
-	// create simple output to tell user whats going to be upgrade (release/packages)
+	// create simple output to tell user what's going to be upgrade (release/packages)
 	var info_output = ""
 	if(request_json.version != undefined) {
 		info_output += "<h3>New firmware release available</h3>"
@@ -201,7 +201,7 @@ function upgrade_request() {
 	// Request the image
 	// Needed values
 	// version/release
-	// board_name or model (server tries to find the corrent profile)
+	// board_name or model (server tries to find the correct profile)
 	// packages
 	// The rest is added by server_request()
 	$("#upgrade_button").disabled = true;
@@ -386,7 +386,7 @@ function server_request(request_dict, path, callback) {
 			error_box(error_box_content)
 
 		} else if (request.status === 501) {
-			error_box("No sysupgrade file produced, may not supported by modell.")
+			error_box("No sysupgrade file produced, may not supported by model.")
 
 		} else if (request.status === 502) {
 			// python part offline

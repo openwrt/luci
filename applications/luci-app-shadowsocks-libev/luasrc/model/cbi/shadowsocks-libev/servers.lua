@@ -9,7 +9,7 @@ local m, s
 m = Map("shadowsocks-libev",
 	translate("Remote Servers"),
 	translate("Definition of remote shadowsocks servers.  \
-			Disable any of them will also disable instances refering to it."))
+			Disable any of them will also disable instances referring to it."))
 
 local sname = arg[1]
 if sname then

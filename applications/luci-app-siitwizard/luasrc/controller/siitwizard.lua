@@ -5,5 +5,5 @@
 module "luci.controller.siitwizard"
 
 function index()
-	entry({"admin", "network", "siitwizard"}, form("siitwizard"), "SIIT 4over6 assistent", 99)
+	entry({"admin", "network", "siitwizard"}, form("siitwizard"), "SIIT 4over6 assistant", 99)
 end

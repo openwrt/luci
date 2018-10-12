@@ -19,7 +19,7 @@ m = Map("luci_statistics",
 	translate("Iptables Plugin Configuration"),
 	translate(
 		"The iptables plugin will monitor selected firewall rules and " ..
-		"collect informations about processed bytes and packets per rule."
+		"collect information about processed bytes and packets per rule."
 	))
 
 -- collectd_iptables config section
