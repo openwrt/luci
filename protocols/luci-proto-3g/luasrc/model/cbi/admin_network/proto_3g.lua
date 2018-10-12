@@ -47,7 +47,9 @@ dialnumber.placeholder = "*99***1#"
 
 if luci.model.network:has_ipv6() then
 
-	ipv6 = section:taboption("advanced", ListValue, "ipv6")
+	ipv6 = section:taboption("advanced", ListValue, "ipv6",
+		translate("Obtain IPv6-Address"))
+
 	ipv6:value("auto", translate("Automatic"))
 	ipv6:value("0", translate("Disabled"))
 	ipv6:value("1", translate("Manual"))
