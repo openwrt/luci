@@ -29,6 +29,7 @@ function index()
 		cpu			= _("Processor"),
 		cpufreq		= _("CPU Frequency"),
 		csv			= _("CSV Output"),
+		curl		= _("cUrl"),
 		df			= _("Disk Space Usage"),
 		disk		= _("Disk Usage"),
 		dns			= _("DNS"),
@@ -63,7 +64,7 @@ function index()
 		general = { "apcups", "contextswitch", "cpu", "cpufreq", "df",
 			"disk", "email", "entropy", "exec", "irq", "load", "memory",
 			"nut", "processes", "sensors", "thermal", "uptime" },
-		network = { "conntrack", "dns", "interface", "iptables",
+		network = { "conntrack", "curl", "dns", "interface", "iptables",
 			"netlink", "olsrd", "openvpn", "ping",
 			"splash_leases", "tcpconns", "iwinfo" }
 	}

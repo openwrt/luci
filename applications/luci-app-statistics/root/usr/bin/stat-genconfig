@@ -117,6 +117,21 @@ function config_exec( c )
 	return str
 end
 
+function config_curl( c )
+	local str = ""
+
+	for s in pairs(sections) do
+		if sections[s][".type"] == "collectd_curl_page" then
+			str = str .. "\t<Page \"" .. sections[s].name .. "\">\n" ..
+						 "\t\tURL \"" .. sections[s].url .. "\"\n" ..
+						 "\t\tMeasureResponseTime true\n" ..
+						 "\t</Page>\n"
+		end
+	end
+
+	return str
+end
+
 function config_iptables( c )
 	local str = ""
 
@@ -296,6 +311,8 @@ plugins = {
 		{ "StoreRates" },
 		{ }
 	},
+
+	curl = config_curl,
 
 	df	= {
 		{ },
