@@ -3,6 +3,7 @@
 
 local net = require "luci.model.network".init()
 
+local s, m, n, mask
 
 m = Map("mwan3", translate("MWAN - Globals"))
 
