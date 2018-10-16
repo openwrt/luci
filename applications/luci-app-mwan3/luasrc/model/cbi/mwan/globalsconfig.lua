@@ -3,7 +3,7 @@
 
 local net = require "luci.model.network".init()
 
-local s, m, local_source, mask
+local s, m, local_source, mask, rtmon
 
 m = Map("mwan3", translate("MWAN - Globals"))
 
@@ -29,5 +29,18 @@ mask = s:option(
 	translate("Enter value in hex, starting with <code>0x</code>"))
 mask.datatype = "hex(4)"
 mask.default = "0xff00"
+
+rtmon = s:option(
+	Value,
+	"rtmon_interval",
+	translate("Update interval"),
+	translate("How often should rtmon update the interface routing table"))
+rtmon.datatype = "integer"
+rtmon.default = "5"
+rtmon:value("1", translatef("%d second", 1))
+rtmon:value("3", translatef("%d seconds", 3))
+rtmon:value("5", translatef("%d seconds", 5))
+rtmon:value("7", translatef("%d seconds", 7))
+rtmon:value("10", translatef("%d seconds", 10))
 
 return m
