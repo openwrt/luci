@@ -3,23 +3,24 @@
 
 local net = require "luci.model.network".init()
 
-local s, m, n, mask
+local s, m, local_source, mask
 
 m = Map("mwan3", translate("MWAN - Globals"))
 
 s = m:section(NamedSection, "globals", "globals", nil)
-n = s:option(ListValue, "local_source",
+
+local_source = s:option(ListValue, "local_source",
 	translate("Local source interface"),
 	translate("Use the IP address of this interface as source IP " ..
 	"address for traffic initiated by the router itself"))
-n:value("none")
-n.default = "none"
+local_source:value("none")
+local_source.default = "none"
 for _, net in ipairs(net:get_networks()) do
 	if net:name() ~= "loopback" then
-		n:value(net:name())
+		local_source:value(net:name())
 	end
 end
-n.rmempty = false
+local_source.rmempty = false
 
 mask = s:option(
 	Value,
