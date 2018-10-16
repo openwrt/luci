@@ -3,7 +3,7 @@
 
 local net = require "luci.model.network".init()
 
-local s, m, local_source, mask, rtmon
+local s, m, local_source, mask, rtmon, rtlookup
 
 m = Map("mwan3", translate("MWAN - Globals"))
 
@@ -42,5 +42,14 @@ rtmon:value("3", translatef("%d seconds", 3))
 rtmon:value("5", translatef("%d seconds", 5))
 rtmon:value("7", translatef("%d seconds", 7))
 rtmon:value("10", translatef("%d seconds", 10))
+
+rtlookup = s:option(DynamicList,
+	"rt_table_lookup",
+	translate("Routing table lookup"),
+	translate("Also scan this Routing table for connected networks"))
+rtlookup.datatype = "integer"
+rtlookup:value("1", translatef("Routing table %d", 1))
+rtlookup:value("2", translatef("Routing table %d", 2))
+rtlookup:value("220", translatef("Routing table %d", 220))
 
 return m
