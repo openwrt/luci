@@ -129,6 +129,24 @@ static int template_L_change_catalog(lua_State *L) {
 	return 1;
 }
 
+static void template_L_get_translations_cb(uint32_t key, const char *val, int len, void *priv) {
+	lua_State *L = priv;
+	char hex[9];
+
+	luaL_checktype(L, 1, LUA_TFUNCTION);
+	snprintf(hex, sizeof(hex), "%08x", key);
+
+	lua_pushvalue(L, 1);
+	lua_pushstring(L, hex);
+	lua_pushlstring(L, val, len);
+	lua_call(L, 2, 0);
+}
+
+static int template_L_get_translations(lua_State *L) {
+	lmo_iterate(template_L_get_translations_cb, L);
+	return 0;
+}
+
 static int template_L_translate(lua_State *L) {
 	size_t len;
 	char *tr;
@@ -168,6 +186,7 @@ static const luaL_reg R[] = {
 	{ "load_catalog",		template_L_load_catalog },
 	{ "close_catalog",		template_L_close_catalog },
 	{ "change_catalog",		template_L_change_catalog },
+	{ "get_translations",		template_L_get_translations },
 	{ "translate",			template_L_translate },
 	{ "hash",				template_L_hash },
 	{ NULL,					NULL }
