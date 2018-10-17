@@ -3,6 +3,9 @@
 use strict;
 use warnings;
 use Text::Balanced qw(extract_bracketed extract_delimited extract_tagged);
+use POSIX;
+
+POSIX::setlocale(POSIX::LC_ALL, "C");
 
 @ARGV >= 1 || die "Usage: $0 <source directory>\n";
 
@@ -33,7 +36,7 @@ sub dec_tpl_str
 }
 
 
-if( open F, "find @ARGV -type f '(' -name '*.htm' -o -name '*.lua' ')' |" )
+if( open F, "find @ARGV -type f '(' -name '*.htm' -o -name '*.lua' -o -name '*.js' ')' | sort |" )
 {
 	while( defined( my $file = readline F ) )
 	{
@@ -47,10 +50,20 @@ if( open F, "find @ARGV -type f '(' -name '*.htm' -o -name '*.lua' ')' |" )
 
 
 			my $text = $raw;
+			my $line = 1;
 
-			while( $text =~ s/ ^ .*? (?:translate|translatef|i18n|_) [\n\s]* \( /(/sgx )
+			while( $text =~ s/ ^ (.*?) (?:translate|translatef|i18n|_) ([\n\s]*) \( /(/sgx )
 			{
+				my ($prefix, $suffix) = ($1, $2);
+
 				( my $code, $text ) = extract_bracketed($text, q{('")});
+
+				$line += () = $prefix =~ /\n/g;
+
+				my $position = "$file:$line";
+
+				$line += () = $suffix =~ /\n/g;
+				$line += () = $code   =~ /\n/g;
 
 				$code =~ s/\\\n/ /g;
 				$code =~ s/^\([\n\s]*//;
@@ -88,20 +101,33 @@ if( open F, "find @ARGV -type f '(' -name '*.htm' -o -name '*.lua' ')' |" )
 				}
 
 				$res = dec_lua_str($res);
-				$stringtable{$res}++ if $res;
+
+				if ($res) {
+					$stringtable{$res} ||= [ ];
+					push @{$stringtable{$res}}, $position;
+				}
 			}
 
 
 			$text = $raw;
+			$line = 1;
 
-			while( $text =~ s/ ^ .*? <% -? [:_] /<%/sgx )
+			while( $text =~ s/ ^ (.*?) <% -? [:_] /<%/sgx )
 			{
+				$line += () = $1 =~ /\n/g;
+
 				( my $code, $text ) = extract_tagged($text, '<%', '%>');
 
 				if( defined $code )
 				{
+					my $position = "$file:$line";
+
+					$line += () = $code =~ /\n/g;
+
 					$code = dec_tpl_str(substr $code, 2, length($code) - 4);
-					$stringtable{$code}++;
+
+					$stringtable{$code} ||= [];
+					push @{$stringtable{$code}}, $position;
 				}
 			}
 		}
@@ -119,8 +145,15 @@ if( open C, "| msgcat -" )
 	{
 		if( length $key )
 		{
+			my @positions = @{$stringtable{$key}};
+
+			$key =~ s/\\/\\\\/g;
+			$key =~ s/\n/\\n/g;
+			$key =~ s/\t/\\t/g;
 			$key =~ s/"/\\"/g;
-			printf C "msgid \"%s\"\nmsgstr \"\"\n\n", $key;
+
+			printf C "#: %s\nmsgid \"%s\"\nmsgstr \"\"\n\n",
+				join(' ', @positions), $key;
 		}
 	}
 
