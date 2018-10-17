@@ -30,7 +30,7 @@
 			<li<%=
 				attr("data-index", i) ..
 				attr("data-depends", self:deplist2json(section, self.deplist[i])) ..
-				attr("value", key) ..
+				attr("data-value", key) ..
 				ifattr(selected[key], "selected", "selected")
 			%>>
 				<%=pcdata(self.vallist[i])%>

@@ -30,7 +30,7 @@
 	ifattr(self.rmempty or self.optional, "optional", "optional")
 %>>
 	<script type="item-template"><!--
-		<li value="{{value}}">
+		<li data-value="{{value}}">
 			<span class="zonebadge" style="background:repeating-linear-gradient(45deg,rgba(204,204,204,0.5),rgba(204,204,204,0.5) 5px,rgba(255,255,255,0.5) 5px,rgba(255,255,255,0.5) 10px)">
 				<strong>{{value}}:</strong><em>(<%:create%>)</em>
 			</span>
@@ -38,7 +38,7 @@
 	--></script>
 	<ul>
 		<% if self.allowlocal then %>
-		<li value=""<%=ifattr(checked[""], "selected", "selected")%>>
+		<li data-value=""<%=ifattr(checked[""], "selected", "selected")%>>
 			<span style="background-color:<%=fwm.zone.get_color()%>" class="zonebadge">
 				<strong><%:Device%></strong>
 				<% if self.allowany and self.allowlocal then -%>
@@ -48,14 +48,14 @@
 			</span>
 		</li>
 		<% elseif self.widget ~= "checkbox" and (self.rmempty or self.optional) then %>
-		<li value=""<%=ifattr(checked[""], "selected", "selected")%>>
+		<li data-value=""<%=ifattr(checked[""], "selected", "selected")%>>
 			<span class="zonebadge">
 				<em><%:unspecified%></em>
 			</span>
 		</li>
 		<% end %>
 		<% if self.allowany then %>
-		<li value="*"<%=ifattr(checked["*"], "selected", "selected")%>>
+		<li data-value="*"<%=ifattr(checked["*"], "selected", "selected")%>>
 			<span style="background-color:<%=fwm.zone.get_color()%>" class="zonebadge">
 				<strong><%:Any zone%></strong>
 				<% if self.allowany and self.allowlocal then %>(<%:forward%>)<% end %>
@@ -67,7 +67,7 @@
 				if zone:name() ~= self.exclude then
 					selected = selected or (value == zone:name())
 		%>
-		<li<%=attr("value", zone:name()) .. ifattr(checked[zone:name()], "selected", "selected")%>>
+		<li<%=attr("data-value", zone:name()) .. ifattr(checked[zone:name()], "selected", "selected")%>>
 			<span style="background-color:<%=zone:get_color()%>" class="zonebadge">
 				<strong><%=zone:name()%>:</strong>
 				<%-
@@ -94,7 +94,7 @@
 		<% end end %>
 
 		<% if self.widget ~= "checkbox" and not self.nocreate then %>
-		<li value="-">
+		<li data-value="-">
 			<span class="zonebadge">
 				<em><%:create%>:</em>
 				<input type="password" style="display:none" />

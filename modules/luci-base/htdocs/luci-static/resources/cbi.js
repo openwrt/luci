@@ -1801,7 +1801,7 @@ CBIDropdown = {
 			div.appendChild(E('input', {
 				type: 'hidden',
 				name: s.hasAttribute('name') ? s.getAttribute('name') : (sb.getAttribute('name') || ''),
-				value: s.hasAttribute('value') ? s.getAttribute('value') : s.innerText
+				value: s.hasAttribute('data-value') ? s.getAttribute('data-value') : s.innerText
 			}));
 		});
 
@@ -1840,7 +1840,7 @@ CBIDropdown = {
 			var new_item = null;
 
 			ul.childNodes.forEach(function(li) {
-				if (li.getAttribute && li.getAttribute('value') === item)
+				if (li.getAttribute && li.getAttribute('data-value') === item)
 					new_item = li;
 			});
 
@@ -1851,7 +1851,7 @@ CBIDropdown = {
 				if (tpl)
 					markup = (tpl.textContent || tpl.innerHTML || tpl.firstChild.data).replace(/^<!--|-->$/, '').trim();
 				else
-					markup = '<li value="{{value}}">{{value}}</li>';
+					markup = '<li data-value="{{value}}">{{value}}</li>';
 
 				new_item = E(markup.replace(/{{value}}/g, item));
 
@@ -1926,7 +1926,7 @@ function cbi_dropdown_init(sb) {
 
 		ndisplay--;
 
-		if (this.optional && !ul.querySelector('li[value=""]')) {
+		if (this.optional && !ul.querySelector('li[data-value=""]')) {
 			var placeholder = E('li', { placeholder: '' }, this.placeholder);
 			ul.firstChild ? ul.insertBefore(placeholder, ul.firstChild) : ul.appendChild(placeholder);
 		}

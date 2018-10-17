@@ -26,7 +26,7 @@
 	ifattr(self.widget == "checkbox", "optional", "optional")
 %>>
 	<script type="item-template"><!--
-		<li value="{{value}}">
+		<li data-value="{{value}}">
 			<span class="ifacebadge" style="background:repeating-linear-gradient(45deg,rgba(204,204,204,0.5),rgba(204,204,204,0.5) 5px,rgba(255,255,255,0.5) 5px,rgba(255,255,255,0.5) 10px)">
 				{{value}}: <em>(<%:create%>)</em>
 			</span>
@@ -34,7 +34,7 @@
 	--></script>
 	<ul>
 		<% if self.widget ~= "checkbox" then %>
-		<li value=""<%= ifattr(not value, "selected", "selected") %>>
+		<li data-value=""<%= ifattr(not value, "selected", "selected") %>>
 			<em><%:unspecified%></em>
 		</li>
 		<% end %>
@@ -44,7 +44,7 @@
 			      (net:name() ~= self.exclude) and
 			      (not self.novirtual or not net:is_virtual())
 			   then %>
-		<li<%= attr("value", net:name()) .. ifattr(checked[net:name()], "selected", "selected") %>>
+		<li<%= attr("data-value", net:name()) .. ifattr(checked[net:name()], "selected", "selected") %>>
 			<span class="ifacebadge"><%=net:name()%>:
 				<%
 					local empty = true
@@ -63,7 +63,7 @@
 		<% end end %>
 
 		<% if not self.nocreate then %>
-		<li value="-"<%= ifattr(not value and self.widget ~= "checkbox", "selected", "selected") %>>
+		<li data-value="-"<%= ifattr(not value and self.widget ~= "checkbox", "selected", "selected") %>>
 			<em>
 				<%- if self.widget == "checkbox" then -%>
 					<%:create:%>
