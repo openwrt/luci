@@ -231,18 +231,22 @@ hr {
 	padding: .5em;
 	border-radius: 3px;
 	border: 1px solid #a22;
-	color: #a22;
-	background: #fee;
 	margin: 0 0 .5em 0;
 }
 
-.alert-message.notice {
+.alert-message, .cbi-tooltip.error {
+	border-color: #a22;
+	background: #fee;
+	color: #a22;
+}
+
+.alert-message.notice, .cbi-tooltip.notice {
 	border-color: #15a;
 	background: #e6f6ff;
 	color: #15a;
 }
 
-.alert-message.warning {
+.alert-message.warning, .cbi-tooltip.warning {
 	border-color: #ed5;
 	background: #fe9;
 	color: #650;
@@ -1173,6 +1177,10 @@ select + .cbi-button {
 	position: absolute;
 	z-index: 1000;
 	left: -1000px;
+	border-radius: 3px;
+	background: #fff;
+	padding: 2px 5px;
+	white-space: pre;
 	opacity: 0;
 	transition: opacity .25s ease-out;
 	pointer-events: none;

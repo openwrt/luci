@@ -1168,7 +1168,8 @@ footer {
 .btn.info,
 .alert-message.info,
 .btn.info:hover,
-.alert-message.info:hover {
+.alert-message.info:hover,
+.cbi-tooltip.error, .cbi-tooltip.success, .cbi-tooltip.info {
 	color: #fff;
 }
 
@@ -1180,25 +1181,26 @@ footer {
 .btn.danger,
 .alert-message.danger,
 .btn.error,
-.alert-message.error {
+.alert-message.error,
+.cbi-tooltip.error {
 	background: linear-gradient(to bottom, #ee5f5b, #c43c35) repeat-x;
 	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
 	border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
 }
 
-.btn.success, .alert-message.success {
+.btn.success, .alert-message.success, .cbi-tooltip.success {
 	background: linear-gradient(to bottom, #62c462, #57a957) repeat-x;
 	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
 	border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
 }
 
-.btn.info, .alert-message.info {
+.btn.info, .alert-message.info, .cbi-tooltip.info {
 	background: linear-gradient(to bottom, #5bc0de, #339bb9) repeat-x;
 	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
 	border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
 }
 
-.alert-message.notice {
+.alert-message.notice, .cbi-tooltip.notice {
 	background: linear-gradient(to bottom, #efefef, #fefefe) repeat-x;
 	text-shadow: 0 -1px 0 rgba(255, 255, 255, 0.25);
 	border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
@@ -1491,8 +1493,13 @@ select + .cbi-button {
 	position: absolute;
 	z-index: 1000;
 	left: -1000px;
+	box-shadow: 0 0 2px #ccc;
+	border-radius: 3px;
+	background: #fff;
+	white-space: pre;
+	padding: 2px 5px;
 	opacity: 0;
-	transition: opacity .25s ease-out;
+	transition: opacity .25s ease-in;
 }
 
 .cbi-tooltip-container:hover .cbi-tooltip:not(:empty) {

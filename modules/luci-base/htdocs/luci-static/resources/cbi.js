@@ -2191,6 +2191,58 @@ function cbi_update_table(table, data, placeholder) {
 	});
 }
 
+var tooltipDiv = null, tooltipTimeout = null;
+
+function showTooltip(ev) {
+	if (!matchesElem(ev.target, '[data-tooltip]'))
+		return;
+
+	if (tooltipTimeout !== null) {
+		window.clearTimeout(tooltipTimeout);
+		tooltipTimeout = null;
+	}
+
+	var rect = ev.target.getBoundingClientRect(),
+	    x = rect.left              + window.pageXOffset,
+	    y = rect.top + rect.height + window.pageYOffset;
+
+	tooltipDiv.className = 'cbi-tooltip';
+	tooltipDiv.innerHTML = '▲ ';
+	tooltipDiv.firstChild.data += ev.target.getAttribute('data-tooltip');
+
+	if (ev.target.hasAttribute('data-tooltip-style'))
+		tooltipDiv.classList.add(ev.target.getAttribute('data-tooltip-style'));
+
+	if ((y + tooltipDiv.offsetHeight) > (window.innerHeight + window.pageYOffset)) {
+		y -= (tooltipDiv.offsetHeight + ev.target.offsetHeight);
+		tooltipDiv.firstChild.data = '▼ ' + tooltipDiv.firstChild.data.substr(2);
+	}
+
+	tooltipDiv.style.top = y + 'px';
+	tooltipDiv.style.left = x + 'px';
+	tooltipDiv.style.opacity = 1;
+}
+
+function hideTooltip(ev) {
+	if (ev.target === tooltipDiv || ev.relatedTarget === tooltipDiv)
+		return;
+
+	if (tooltipTimeout !== null) {
+		window.clearTimeout(tooltipTimeout);
+		tooltipTimeout = null;
+	}
+
+	tooltipDiv.style.opacity = 0;
+	tooltipTimeout = window.setTimeout(function() { tooltipDiv.removeAttribute('style'); }, 250);
+}
+
 document.addEventListener('DOMContentLoaded', function() {
+	tooltipDiv = document.body.appendChild(E('div', { 'class': 'cbi-tooltip' }));
+
+	document.addEventListener('mouseover', showTooltip, true);
+	document.addEventListener('mouseout', hideTooltip, true);
+	document.addEventListener('focus', showTooltip, true);
+	document.addEventListener('blur', hideTooltip, true);
+
 	document.querySelectorAll('.table').forEach(cbi_update_table);
 });

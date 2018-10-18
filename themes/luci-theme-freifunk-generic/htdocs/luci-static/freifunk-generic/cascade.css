@@ -156,12 +156,17 @@ a img {
 	color: #000;
 }
 
-.alert-message.notice {
+.alert-message, .cbi-tooltip.error {
+	background: #fee;
+	color: #a22;
+}
+
+.alert-message.notice, .cbi-tooltip.notice {
 	background: linear-gradient(#ccc 0%, #eee 100%);
 	color: #4a6b7c;
 }
 
-.alert-message.warning {
+.alert-message.warning, .cbi-tooltip.warning {
 	background: linear-gradient(#dda 0%, #dd8 100%);
 	color: #c00;
 }
@@ -1354,6 +1359,10 @@ td.cbi-value-error {
 	position: absolute;
 	z-index: 1000;
 	left: -1000px;
+	border-radius: 3px;
+	background: #fff;
+	padding: 2px 5px;
+	white-space: pre;
 	opacity: 0;
 	transition: opacity .25s ease-out;
 	pointer-events: none;
