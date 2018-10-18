@@ -15,6 +15,57 @@ var cbi_d = [];
 var cbi_t = [];
 var cbi_strings = { path: {}, label: {} };
 
+function sfh(s) {
+	if (s === null || s.length === 0)
+		return null;
+
+	var hash = (s.length >>> 0),
+	    len = (s.length >>> 2),
+	    off = 0, tmp;
+
+	while (len--) {
+		hash += ((s.charCodeAt(off + 1) << 8) + s.charCodeAt(off)) >>> 0;
+		tmp   = ((((s.charCodeAt(off + 3) << 8) + s.charCodeAt(off + 2)) << 11) ^ hash) >>> 0;
+		hash  = ((hash << 16) ^ tmp) >>> 0;
+		hash += hash >>> 11;
+		off  += 4;
+	}
+
+	switch ((s.length & 3) >>> 0) {
+	case 3:
+		hash += ((s.charCodeAt(off + 1) << 8) + s.charCodeAt(off)) >>> 0;
+		hash  = (hash ^ (hash << 16)) >>> 0;
+		hash  = (hash ^ (s.charCodeAt(off + 2) << 18)) >>> 0;
+		hash += hash >> 11;
+		break;
+
+	case 2:
+		hash += ((s.charCodeAt(off + 1) << 8) + s.charCodeAt(off)) >>> 0;
+		hash  = (hash ^ (hash << 11)) >>> 0;
+		hash += hash >>> 17;
+		break;
+
+	case 1:
+		hash += s.charCodeAt(off);
+		hash  = (hash ^ (hash << 10)) >>> 0;
+		hash += hash >>> 1;
+		break;
+	}
+
+	hash  = (hash ^ (hash << 3)) >>> 0;
+	hash += hash >>> 5;
+	hash  = (hash ^ (hash << 4)) >>> 0;
+	hash += hash >>> 17;
+	hash  = (hash ^ (hash << 25)) >>> 0;
+	hash += hash >>> 6;
+
+	return (0x100000000 + hash).toString(16).substr(1);
+}
+
+function _(s) {
+	return (window.TR && TR[sfh(s)]) || s;
+}
+
 function Int(x) {
 	return (/^-?\d+$/.test(x) ? +x : NaN);
 }
