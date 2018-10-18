@@ -296,10 +296,6 @@ function dispatch(request)
 	ctx.requestpath = ctx.requestpath or freq
 	ctx.path = preq
 
-	if track.i18n then
-		i18n.loadc(track.i18n)
-	end
-
 	-- Init template engine
 	if (c and c.index) or not track.notemplate then
 		local tpl = require("luci.template")
@@ -602,9 +598,6 @@ function createtree()
 	ctx.treecache = setmetatable({}, {__mode="v"})
 	ctx.tree = tree
 	ctx.modifiers = modi
-
-	-- Load default translation
-	require "luci.i18n".loadc("base")
 
 	local scope = setmetatable({}, {__index = luci.dispatcher})
 
