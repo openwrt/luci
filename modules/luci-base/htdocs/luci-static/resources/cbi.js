@@ -732,7 +732,7 @@ function cbi_combobox(id, values, def, man, focus) {
 		if (obj.value == "") {
 			var optdef = document.createElement("option");
 			optdef.value = "";
-			optdef.appendChild(document.createTextNode(typeof(def) === 'string' ? def : cbi_strings.label.choose));
+			optdef.appendChild(document.createTextNode(typeof(def) === 'string' ? def : _('-- Please choose --')));
 			sel.appendChild(optdef);
 		}
 		else {
@@ -757,7 +757,7 @@ function cbi_combobox(id, values, def, man, focus) {
 
 	var optman = document.createElement("option");
 	optman.value = "";
-	optman.appendChild(document.createTextNode(typeof(man) === 'string' ? man : cbi_strings.label.custom));
+	optman.appendChild(document.createTextNode(typeof(man) === 'string' ? man : _('-- custom --')));
 	sel.appendChild(optman);
 
 	obj.style.display = "none";
@@ -887,7 +887,7 @@ function cbi_dynlist_init(parent, datatype, optional, choices)
 				cbi_validate_field(t.id, ((i+1) == values.length) || optional, datatype);
 
 			if (choices) {
-				cbi_combobox_init(t.id, choices, '', cbi_strings.label.custom);
+				cbi_combobox_init(t.id, choices, '', _('-- custom --'));
 				b.index = i;
 
 				cbi_bind(b, 'keydown',  cbi_dynlist_keydown);
