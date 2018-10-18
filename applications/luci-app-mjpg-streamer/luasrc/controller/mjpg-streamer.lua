@@ -5,7 +5,6 @@ module("luci.controller.mjpg-streamer", package.seeall)
 
 function index()
 	require("luci.i18n")
-	luci.i18n.loadc("mjpg-streamer")
 	if not nixio.fs.access("/etc/config/mjpg-streamer") then
 		return
 	end
