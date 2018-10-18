@@ -1,26 +1,16 @@
 -- Copyright 2008 Steven Barth <steven@midlink.org>
 -- Licensed to the public under the Apache License 2.0.
 
-module("luci.i18n", package.seeall)
-require("luci.util")
+local tparser  = require "luci.template.parser"
+local util     = require "luci.util"
+local tostring = tostring
 
-local tparser = require "luci.template.parser"
+module "luci.i18n"
 
-table   = {}
-i18ndir = luci.util.libpath() .. "/i18n/"
-loaded  = {}
-context = luci.util.threadlocal()
+i18ndir = util.libpath() .. "/i18n/"
+context = util.threadlocal()
 default = "en"
 
-function clear()
-end
-
-function load(file, lang, force)
-end
-
--- Alternatively load the translation of the fallback language.
-function loadc(file, force)
-end
 
 function setlanguage(lang)
 	local code, subcode = lang:match("^([A-Za-z][A-Za-z])[%-_]([A-Za-z][A-Za-z])$")
@@ -55,18 +45,6 @@ function translate(key)
 end
 
 function translatef(key, ...)
-	return tostring(translate(key)):format(...)
-end
-
--- and ensure that the returned value is a Lua string value.
--- This is the same as calling <code>tostring(translate(...))</code>
-function string(key)
-	return tostring(translate(key))
-end
-
--- Ensure that the returned value is a Lua string value.
--- This is the same as calling <code>tostring(translatef(...))</code>
-function stringf(key, ...)
 	return tostring(translate(key)):format(...)
 end
 
