@@ -23,15 +23,31 @@ function loadc(file, force)
 end
 
 function setlanguage(lang)
-	context.lang   = lang:gsub("_", "-")
-	context.parent = (context.lang:match("^([a-z][a-z])_"))
-	if not tparser.load_catalog(context.lang, i18ndir) then
-		if context.parent then
-			tparser.load_catalog(context.parent, i18ndir)
+	local code, subcode = lang:match("^([A-Za-z][A-Za-z])[%-_]([A-Za-z][A-Za-z])$")
+	if not (code and subcode) then
+		subcode = lang:match("^([A-Za-z][A-Za-z])$")
+		if not subcode then
+			return nil
+		end
+	end
+
+	context.parent = code and code:lower()
+	context.lang   = context.parent and context.parent.."-"..subcode:lower() or subcode:lower()
+
+	if tparser.load_catalog(context.lang, i18ndir) and
+	   tparser.change_catalog(context.lang)
+	then
+		return context.lang
+
+	elseif context.parent then
+		if tparser.load_catalog(context.parent, i18ndir) and
+		   tparser.change_catalog(context.parent)
+		then
 			return context.parent
 		end
 	end
-	return context.lang
+
+	return nil
 end
 
 function translate(key)
