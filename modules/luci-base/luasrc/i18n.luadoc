@@ -6,7 +6,6 @@ module "luci.i18n"
 ---[[
 Clear the translation table.
 
-
 @class function
 @name clear
 ]]
@@ -26,6 +25,7 @@ Load a translation and copy its data into the translation table.
 Load a translation file using the default translation language.
 
 Alternatively load the translation of the fallback language.
+
 @class function
 @name loadc
 @param file	Language file
@@ -62,9 +62,10 @@ Return the translated value for a specific translation key and use it as sprintf
 
 ---[[
 Return the translated value for a specific translation key
-
 and ensure that the returned value is a Lua string value.
+
 This is the same as calling <code>tostring(translate(...))</code>
+
 @class function
 @name string
 @param key		Default translation text
@@ -75,7 +76,9 @@ This is the same as calling <code>tostring(translate(...))</code>
 Return the translated value for a specific translation key and use it as sprintf pattern.
 
 Ensure that the returned value is a Lua string value.
+
 This is the same as calling <code>tostring(translatef(...))</code>
+
 @class function
 @name stringf
 @param key		Default translation text
@@ -83,3 +86,12 @@ This is the same as calling <code>tostring(translatef(...))</code>
 @return			Translated and formatted string
 ]]
 
+---[[
+Return all currently loaded translation strings as a key-value table. The key is the
+hexadecimal representation of the translation key while the value is the translated
+text content.
+
+@class function
+@name dump
+@return			Key-value translation string table.
+]]
