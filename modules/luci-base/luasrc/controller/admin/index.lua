@@ -82,6 +82,9 @@ function index()
 		page.leaf = true
 	end
 
+	page = entry({"admin", "translations"}, call("action_translations"), nil)
+	page.leaf = true
+
 	-- Logout is last
 	entry({"admin", "logout"}, call("action_logout"), _("Logout"), 999)
 end
@@ -100,6 +103,27 @@ function action_logout()
 	end
 
 	luci.http.redirect(dsp.build_url())
+end
+
+function action_translations(lang)
+	local i18n = require "luci.i18n"
+	local http = require "luci.http"
+	local fs = require "nixio".fs
+
+	if lang and #lang > 0 then
+		lang = i18n.setlanguage(lang)
+		if lang then
+			local s = fs.stat("%s/base.%s.lmo" %{ i18n.i18ndir, lang })
+			if s then
+				http.header("Cache-Control", "public, max-age=31536000")
+				http.header("ETag", "%x-%x-%x" %{ s["ino"], s["size"], s["mtime"] })
+			end
+		end
+	end
+
+	http.prepare_content("application/javascript; charset=utf-8")
+	http.write("window.TR=")
+	http.write_json(i18n.dump())
 end
 
 
