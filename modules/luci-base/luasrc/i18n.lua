@@ -69,3 +69,9 @@ end
 function stringf(key, ...)
 	return tostring(translate(key)):format(...)
 end
+
+function dump()
+	local rv = {}
+	tparser.get_translations(function(k, v) rv[k] = v end)
+	return rv
+end
