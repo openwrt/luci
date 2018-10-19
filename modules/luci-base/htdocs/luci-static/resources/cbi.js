@@ -729,7 +729,7 @@ function cbi_init() {
 	for (var i = 0, node; (node = nodes[i]) !== undefined; i++) {
 		var events = node.getAttribute('data-update').split(' ');
 		for (var j = 0, event; (event = events[j]) !== undefined; j++)
-			cbi_bind(node, event, cbi_d_update);
+			node.addEventListener(event, cbi_d_update);
 	}
 
 	nodes = document.querySelectorAll('[data-choices]');
@@ -794,24 +794,6 @@ function cbi_init() {
 	cbi_d_update();
 }
 
-function cbi_bind(obj, type, callback, mode) {
-	if (!obj.addEventListener) {
-		obj.attachEvent('on' + type,
-			function(){
-				var e = window.event;
-
-				if (!e.target && e.srcElement)
-					e.target = e.srcElement;
-
-				return !!callback(e);
-			}
-		);
-	} else {
-		obj.addEventListener(type, callback, !!mode);
-	}
-	return obj;
-}
-
 function cbi_combobox(id, values, def, man, focus) {
 	var selid = "cbi.combobox." + id;
 	if (document.getElementById(selid)) {
@@ -870,7 +852,7 @@ function cbi_combobox(id, values, def, man, focus) {
 	if (dt)
 		cbi_validate_field(sel, op == 'true', dt);
 
-	cbi_bind(sel, "change", function() {
+	sel.addEventListener("change", function() {
 		if (sel.selectedIndex == sel.options.length - 1) {
 			obj.style.display = "inline";
 			sel.blur();
@@ -897,7 +879,7 @@ function cbi_combobox(id, values, def, man, focus) {
 
 function cbi_combobox_init(id, values, def, man) {
 	var obj = (typeof(id) === 'string') ? document.getElementById(id) : id;
-	cbi_bind(obj, "blur", function() {
+	obj.addEventListener("blur", function() {
 		cbi_combobox(obj.id, values, def, man, true);
 	});
 	cbi_combobox(obj.id, values, def, man, false);
@@ -927,7 +909,7 @@ function cbi_browser_init(id, resource, defpath)
 	btn.src = (resource || cbi_strings.path.resource) + '/cbi/folder.gif';
 	field.parentNode.insertBefore(btn, field.nextSibling);
 
-	cbi_bind(btn, 'click', cbi_browser_btnclick);
+	btn.addEventListener('click', cbi_browser_btnclick);
 }
 
 function cbi_dynlist_init(parent, datatype, optional, choices)
@@ -995,15 +977,15 @@ function cbi_dynlist_init(parent, datatype, optional, choices)
 				cbi_combobox_init(t.id, choices, '', _('-- custom --'));
 				b.index = i;
 
-				cbi_bind(b, 'keydown',  cbi_dynlist_keydown);
-				cbi_bind(b, 'keypress', cbi_dynlist_keypress);
+				b.addEventListener('keydown',  cbi_dynlist_keydown);
+				b.addEventListener('keypress', cbi_dynlist_keypress);
 
 				if (i == focus || -i == focus)
 					b.focus();
 			}
 			else {
-				cbi_bind(t, 'keydown',  cbi_dynlist_keydown);
-				cbi_bind(t, 'keypress', cbi_dynlist_keypress);
+				t.addEventListener('keydown',  cbi_dynlist_keydown);
+				t.addEventListener('keypress', cbi_dynlist_keypress);
 
 				if (i == focus) {
 					t.focus();
@@ -1018,7 +1000,7 @@ function cbi_dynlist_init(parent, datatype, optional, choices)
 				}
 			}
 
-			cbi_bind(b, 'click', cbi_dynlist_btnclick);
+			b.addEventListener('click', cbi_dynlist_btnclick);
 		}
 	}
 
@@ -1274,12 +1256,12 @@ function cbi_validate_field(cbid, optional, type)
 
 		field.form.cbi_validators.push(validatorFn);
 
-		cbi_bind(field, "blur",  validatorFn);
-		cbi_bind(field, "keyup", validatorFn);
+		field.addEventListener("blur",  validatorFn);
+		field.addEventListener("keyup", validatorFn);
 
 		if (matchesElem(field, 'select')) {
-			cbi_bind(field, "change", validatorFn);
-			cbi_bind(field, "click",  validatorFn);
+			field.addEventListener("change", validatorFn);
+			field.addEventListener("click",  validatorFn);
 		}
 
 		field.setAttribute("cbi_validate", validatorFn);
