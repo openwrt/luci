@@ -131,365 +131,469 @@ function IPv6(x) {
 	return words;
 }
 
-var cbi_validators = {
+var CBIValidatorPrototype = {
+	apply: function(name, value, args) {
+		var func;
 
-	'integer': function()
-	{
-		return !!Int(this);
+		if (typeof(name) === 'function')
+			func = name;
+		else if (typeof(this.types[name]) === 'function')
+			func = this.types[name];
+		else
+			return false;
+
+		if (value !== undefined && value !== null)
+			this.value = value;
+
+		return func.apply(this, args);
 	},
 
-	'uinteger': function()
-	{
-		return (Int(this) >= 0);
+	assert: function(condition, message) {
+		if (!condition) {
+			this.field.classList.add('cbi-input-invalid');
+			this.error = message;
+			return false;
+		}
+
+		this.field.classList.remove('cbi-input-invalid');
+		this.error = null;
+		return true;
 	},
 
-	'float': function()
-	{
-		return !!Dec(this);
+	compile: function(code) {
+		var pos = 0;
+		var esc = false;
+		var depth = 0;
+		var stack = [ ];
+
+		code += ',';
+
+		for (var i = 0; i < code.length; i++) {
+			if (esc) {
+				esc = false;
+				continue;
+			}
+
+			switch (code.charCodeAt(i))
+			{
+			case 92:
+				esc = true;
+				break;
+
+			case 40:
+			case 44:
+				if (depth <= 0) {
+					if (pos < i) {
+						var label = code.substring(pos, i);
+							label = label.replace(/\\(.)/g, '$1');
+							label = label.replace(/^[ \t]+/g, '');
+							label = label.replace(/[ \t]+$/g, '');
+
+						if (label && !isNaN(label)) {
+							stack.push(parseFloat(label));
+						}
+						else if (label.match(/^(['"]).*\1$/)) {
+							stack.push(label.replace(/^(['"])(.*)\1$/, '$2'));
+						}
+						else if (typeof this.types[label] == 'function') {
+							stack.push(this.types[label]);
+							stack.push(null);
+						}
+						else {
+							throw "Syntax error, unhandled token '"+label+"'";
+						}
+					}
+
+					pos = i+1;
+				}
+
+				depth += (code.charCodeAt(i) == 40);
+				break;
+
+			case 41:
+				if (--depth <= 0) {
+					if (typeof stack[stack.length-2] != 'function')
+						throw "Syntax error, argument list follows non-function";
+
+					stack[stack.length-1] = this.compile(code.substring(pos, i));
+					pos = i+1;
+				}
+
+				break;
+			}
+		}
+
+		return stack;
 	},
 
-	'ufloat': function()
-	{
-		return (Dec(this) >= 0);
-	},
-
-	'ipaddr': function()
-	{
-		return cbi_validators.ip4addr.apply(this) ||
-			cbi_validators.ip6addr.apply(this);
-	},
-
-	'ip4addr': function()
-	{
-		var m = this.match(/^(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})(?:\/(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})|\/(\d{1,2}))?$/);
-		return !!(m && IPv4(m[1]) && (m[2] ? IPv4(m[2]) : (m[3] ? cbi_validators.ip4prefix.apply(m[3]) : true)));
-	},
-
-	'ip6addr': function()
-	{
-		var m = this.match(/^([0-9a-fA-F:.]+)(?:\/(\d{1,3}))?$/);
-		return !!(m && IPv6(m[1]) && (m[2] ? cbi_validators.ip6prefix.apply(m[2]) : true));
-	},
-
-	'ip4prefix': function()
-	{
-		return !isNaN(this) && this >= 0 && this <= 32;
-	},
-
-	'ip6prefix': function()
-	{
-		return !isNaN(this) && this >= 0 && this <= 128;
-	},
-
-	'cidr': function()
-	{
-		return cbi_validators.cidr4.apply(this) ||
-			cbi_validators.cidr6.apply(this);
-	},
-
-	'cidr4': function()
-	{
-		var m = this.match(/^(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\/(\d{1,2})$/);
-		return !!(m && IPv4(m[1]) && cbi_validators.ip4prefix.apply(m[2]));
-	},
-
-	'cidr6': function()
-	{
-		var m = this.match(/^([0-9a-fA-F:.]+)\/(\d{1,3})$/);
-		return !!(m && IPv6(m[1]) && cbi_validators.ip6prefix.apply(m[2]));
-	},
-
-	'ipnet4': function()
-	{
-		var m = this.match(/^(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\/(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})$/);
-		return !!(m && IPv4(m[1]) && IPv4(m[2]));
-	},
-
-	'ipnet6': function()
-	{
-		var m = this.match(/^([0-9a-fA-F:.]+)\/([0-9a-fA-F:.]+)$/);
-		return !!(m && IPv6(m[1]) && IPv6(m[2]));
-	},
-
-	'ip6hostid': function()
-	{
-		if (this == "eui64" || this == "random")
+	validate: function() {
+		/* element is detached */
+		if (!this.field.form)
 			return true;
 
-		var v6 = IPv6(this);
-		return !(!v6 || v6[0] || v6[1] || v6[2] || v6[3]);
-	},
+		this.field.classList.remove('cbi-input-invalid');
+		this.value = matchesElem(this.field, 'select') ? this.field.options[this.field.selectedIndex].value : this.field.value;
+		this.error = null;
 
-	'ipmask': function()
-	{
-		return cbi_validators.ipmask4.apply(this) ||
-			cbi_validators.ipmask6.apply(this);
-	},
+		var valid;
 
-	'ipmask4': function()
-	{
-		return cbi_validators.cidr4.apply(this) ||
-			cbi_validators.ipnet4.apply(this) ||
-			cbi_validators.ip4addr.apply(this);
-	},
+		if (this.value.length === 0)
+			valid = this.assert(this.optional, _('non-empty value'));
+		else
+			valid = this.vstack[0].apply(this, this.vstack[1]);
 
-	'ipmask6': function()
-	{
-		return cbi_validators.cidr6.apply(this) ||
-			cbi_validators.ipnet6.apply(this) ||
-			cbi_validators.ip6addr.apply(this);
-	},
-
-	'port': function()
-	{
-		var p = Int(this);
-		return (p >= 0 && p <= 65535);
-	},
-
-	'portrange': function()
-	{
-		if (this.match(/^(\d+)-(\d+)$/))
-		{
-			var p1 = +RegExp.$1;
-			var p2 = +RegExp.$2;
-			return (p1 <= p2 && p2 <= 65535);
+		if (!valid) {
+			this.field.setAttribute('data-tooltip', 'Expecting ' + this.error);
+			this.field.setAttribute('data-tooltip-style', 'error');
+			this.field.dispatchEvent(new CustomEvent('validation-failure', { bubbles: true }));
+		}
+		else {
+			this.field.removeAttribute('data-tooltip');
+			this.field.removeAttribute('data-tooltip-style');
+			this.field.dispatchEvent(new CustomEvent('validation-success', { bubbles: true }));
 		}
 
-		return cbi_validators.port.apply(this);
+		return valid;
 	},
 
-	'macaddr': function()
-	{
-		return (this.match(/^([a-fA-F0-9]{2}:){5}[a-fA-F0-9]{2}$/) != null);
-	},
+	types: {
+		integer: function() {
+			return this.assert(Int(this.value) !== NaN, _('valid integer value'));
+		},
 
-	'host': function(ipv4only)
-	{
-		return cbi_validators.hostname.apply(this) ||
-			((ipv4only != 1) && cbi_validators.ipaddr.apply(this)) ||
-			((ipv4only == 1) && cbi_validators.ip4addr.apply(this));
-	},
+		uinteger: function() {
+			return this.assert(Int(this.value) >= 0, _('positive integer value'));
+		},
 
-	'hostname': function(strict)
-	{
-		if (this.length <= 253)
-			return (this.match(/^[a-zA-Z0-9_]+$/) != null ||
-			        (this.match(/^[a-zA-Z0-9_][a-zA-Z0-9_\-.]*[a-zA-Z0-9]$/) &&
-			         this.match(/[^0-9.]/))) &&
-			       (!strict || !this.match(/^_/));
+		float: function() {
+			return this.assert(Dec(this.value) !== NaN, _('valid decimal value'));
+		},
 
-		return false;
-	},
+		ufloat: function() {
+			return this.assert(Dec(this.value) >= 0, _('positive decimal value'));
+		},
 
-	'network': function()
-	{
-		return cbi_validators.uciname.apply(this) ||
-			cbi_validators.host.apply(this);
-	},
+		ipaddr: function(nomask) {
+			return this.assert(this.apply('ip4addr', null, [nomask]) || this.apply('ip6addr', null, [nomask]),
+				nomask ? _('valid IP address') : _('valid IP address or prefix'));
+		},
 
-	'hostport': function(ipv4only)
-	{
-		var hp = this.split(/:/);
+		ip4addr: function(nomask) {
+			var re = nomask ? /^(\d+\.\d+\.\d+\.\d+)$/ : /^(\d+\.\d+\.\d+\.\d+)(?:\/(\d+\.\d+\.\d+\.\d+)|\/(\d{1,2}))?$/,
+			    m = this.value.match(re);
 
-		if (hp.length == 2)
-			return (cbi_validators.host.apply(hp[0], ipv4only) &&
-			        cbi_validators.port.apply(hp[1]));
+			return this.assert(m && IPv4(m[1]) && (m[2] ? IPv4(m[2]) : (m[3] ? this.apply('ip4prefix', m[3]) : true)),
+				nomask ? _('valid IPv4 address') : _('valid IPv4 address or network'));
+		},
 
-		return false;
-	},
+		ip6addr: function(nomask) {
+			var re = nomask ? /^([0-9a-fA-F:.]+)$/ : /^([0-9a-fA-F:.]+)(?:\/(\d{1,3}))?$/,
+			    m = this.value.match(re);
 
-	'ip4addrport': function()
-	{
-		var hp = this.split(/:/);
+			return this.assert(m && IPv6(m[1]) && (m[2] ? this.apply('ip6prefix', m[2]) : true),
+				nomask ? _('valid IPv6 address') : _('valid IPv6 address or prefix'));
+		},
 
-		if (hp.length == 2)
-			return (cbi_validators.ipaddr.apply(hp[0]) &&
-			        cbi_validators.port.apply(hp[1]));
-		return false;
-	},
+		ip4prefix: function() {
+			return this.assert(!isNaN(this.value) && this.value >= 0 && this.value <= 32,
+				_('valid IPv4 prefix value (0-32)'));
+		},
 
-	'ipaddrport': function(bracket)
-	{
-		if (this.match(/^([^\[\]:]+):([^:]+)$/)) {
-			var addr = RegExp.$1
-			var port = RegExp.$2
-			return (cbi_validators.ip4addr.apply(addr) &&
-				cbi_validators.port.apply(port));
-                } else if ((bracket == 1) && (this.match(/^\[(.+)\]:([^:]+)$/))) {
-			var addr = RegExp.$1
-			var port = RegExp.$2
-			return (cbi_validators.ip6addr.apply(addr) &&
-				cbi_validators.port.apply(port));
-                } else if ((bracket != 1) && (this.match(/^([^\[\]]+):([^:]+)$/))) {
-			var addr = RegExp.$1
-			var port = RegExp.$2
-			return (cbi_validators.ip6addr.apply(addr) &&
-				cbi_validators.port.apply(port));
-		} else {
-			return false;
-		}
-	},
+		ip6prefix: function() {
+			return this.assert(!isNaN(this.value) && this.value >= 0 && this.value <= 128,
+				_('valid IPv6 prefix value (0-128)'));
+		},
 
-	'wpakey': function()
-	{
-		var v = this;
+		cidr: function() {
+			return this.assert(this.apply('cidr4') || this.apply('cidr6'), _('valid IPv4 or IPv6 CIDR'));
+		},
 
-		if( v.length == 64 )
-			return (v.match(/^[a-fA-F0-9]{64}$/) != null);
-		else
-			return (v.length >= 8) && (v.length <= 63);
-	},
+		cidr4: function() {
+			var m = this.value.match(/^(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\/(\d{1,2})$/);
+			return this.assert(m && IPv4(m[1]) && this.apply('ip4prefix', m[2]), _('valid IPv4 CIDR'));
+		},
 
-	'wepkey': function()
-	{
-		var v = this;
+		cidr6: function() {
+			var m = this.value.match(/^([0-9a-fA-F:.]+)\/(\d{1,3})$/);
+			return this.assert(m && IPv6(m[1]) && this.apply('ip6prefix', m[2]), _('valid IPv6 CIDR'));
+		},
 
-		if ( v.substr(0,2) == 's:' )
-			v = v.substr(2);
+		ipnet4: function() {
+			var m = this.value.match(/^(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\/(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})$/);
+			return this.assert(m && IPv4(m[1]) && IPv4(m[2]), _('IPv4 network in address/netmask notation'));
+		},
 
-		if( (v.length == 10) || (v.length == 26) )
-			return (v.match(/^[a-fA-F0-9]{10,26}$/) != null);
-		else
-			return (v.length == 5) || (v.length == 13);
-	},
+		ipnet6: function() {
+			var m = this.value.match(/^([0-9a-fA-F:.]+)\/([0-9a-fA-F:.]+)$/);
+			return this.assert(m && IPv6(m[1]) && IPv6(m[2]), _('IPv6 network in address/netmask notation'));
+		},
 
-	'uciname': function()
-	{
-		return (this.match(/^[a-zA-Z0-9_]+$/) != null);
-	},
-
-	'range': function(min, max)
-	{
-		var val = Dec(this);
-		return (val >= +min && val <= +max);
-	},
-
-	'min': function(min)
-	{
-		return (Dec(this) >= +min);
-	},
-
-	'max': function(max)
-	{
-		return (Dec(this) <= +max);
-	},
-
-	'rangelength': function(min, max)
-	{
-		var val = '' + this;
-		return ((val.length >= +min) && (val.length <= +max));
-	},
-
-	'minlength': function(min)
-	{
-		return ((''+this).length >= +min);
-	},
-
-	'maxlength': function(max)
-	{
-		return ((''+this).length <= +max);
-	},
-
-	'or': function()
-	{
-		for (var i = 0; i < arguments.length; i += 2)
-		{
-			if (typeof arguments[i] != 'function')
-			{
-				if (arguments[i] == this)
-					return true;
-				i--;
-			}
-			else if (arguments[i].apply(this, arguments[i+1]))
-			{
+		ip6hostid: function() {
+			if (this.value == "eui64" || this.value == "random")
 				return true;
+
+			var v6 = IPv6(this.value);
+			return this.assert(!(!v6 || v6[0] || v6[1] || v6[2] || v6[3]), _('valid IPv6 host id'));
+		},
+
+		ipmask: function() {
+			return this.assert(this.apply('ipmask4') || this.apply('ipmask6'),
+				_('valid network in address/netmask notation'));
+		},
+
+		ipmask4: function() {
+			return this.assert(this.apply('cidr4') || this.apply('ipnet4') || this.apply('ip4addr'),
+				_('valid IPv4 network'));
+		},
+
+		ipmask6: function() {
+			return this.assert(this.apply('cidr6') || this.apply('ipnet6') || this.apply('ip6addr'),
+				_('valid IPv6 network'));
+		},
+
+		port: function() {
+			var p = Int(this.value);
+			return this.assert(p >= 0 && p <= 65535, _('valid port value'));
+		},
+
+		portrange: function() {
+			if (this.value.match(/^(\d+)-(\d+)$/)) {
+				var p1 = +RegExp.$1;
+				var p2 = +RegExp.$2;
+				return this.assert(p1 <= p2 && p2 <= 65535,
+					_('valid port or port range (port1-port2)'));
 			}
-		}
-		return false;
-	},
 
-	'and': function()
-	{
-		for (var i = 0; i < arguments.length; i += 2)
-		{
-			if (typeof arguments[i] != 'function')
-			{
-				if (arguments[i] != this)
-					return false;
-				i--;
-			}
-			else if (!arguments[i].apply(this, arguments[i+1]))
-			{
-				return false;
-			}
-		}
-		return true;
-	},
+			return this.assert(this.apply('port'), _('valid port or port range (port1-port2)'));
+		},
 
-	'neg': function()
-	{
-		return cbi_validators.or.apply(
-			this.replace(/^[ \t]*![ \t]*/, ''), arguments);
-	},
+		macaddr: function() {
+			return this.assert(this.value.match(/^([a-fA-F0-9]{2}:){5}[a-fA-F0-9]{2}$/) != null,
+				_('valid MAC address'));
+		},
 
-	'list': function(subvalidator, subargs)
-	{
-		if (typeof subvalidator != 'function')
-			return false;
+		host: function(ipv4only) {
+			return this.assert(this.apply('hostname') || this.apply(ipv4only == 1 ? 'ip4addr' : 'ipaddr'),
+				_('valid hostname or IP address'));
+		},
 
-		var tokens = this.match(/[^ \t]+/g);
-		for (var i = 0; i < tokens.length; i++)
-			if (!subvalidator.apply(tokens[i], subargs))
-				return false;
+		hostname: function(strict) {
+			if (this.value.length <= 253)
+				return this.assert(
+					(this.value.match(/^[a-zA-Z0-9_]+$/) != null ||
+						(this.value.match(/^[a-zA-Z0-9_][a-zA-Z0-9_\-.]*[a-zA-Z0-9]$/) &&
+						 this.value.match(/[^0-9.]/))) &&
+					(!strict || !this.value.match(/^_/)),
+					_('valid hostname'));
 
-		return true;
-	},
-	'phonedigit': function()
-	{
-		return (this.match(/^[0-9\*#!\.]+$/) != null);
-	},
-	'timehhmmss': function()
-	{
-		return (this.match(/^[0-6][0-9]:[0-6][0-9]:[0-6][0-9]$/) != null);
-	},
-	'dateyyyymmdd': function()
-	{
-		if (this == null) {
-			return false;
-		}
-		if (this.match(/^(\d\d\d\d)-(\d\d)-(\d\d)/)) {
-			var year = RegExp.$1;
-			var month = RegExp.$2;
-			var day = RegExp.$2
+			return this.assert(false, _('valid hostname'));
+		},
 
-			var days_in_month = [ 31, 28, 31, 30, 31, 30, 31, 31, 30 , 31, 30, 31 ];
-			function is_leap_year(year) {
-				return ((year % 4) == 0) && ((year % 100) != 0) || ((year % 400) == 0);
-			}
-			function get_days_in_month(month, year) {
-				if ((month == 2) && is_leap_year(year)) {
-					return 29;
-				} else {
-					return days_in_month[month];
+		network: function() {
+			return this.assert(this.apply('uciname') || this.apply('host'),
+				_('valid UCI identifier, hostname or IP address'));
+		},
+
+		hostport: function(ipv4only) {
+			var hp = this.value.split(/:/);
+			return this.assert(hp.length == 2 && this.apply('host', hp[0], [ipv4only]) && this.apply('port', hp[1]),
+				_('valid host:port'));
+		},
+
+		ip4addrport: function() {
+			var hp = this.value.split(/:/);
+			return this.assert(hp.length == 2 && this.apply('ip4addr', hp[0], [true]) && this.apply('port', hp[1]),
+				_('valid IPv4 address:port'));
+		},
+
+		ipaddrport: function(bracket) {
+			var m4 = this.value.match(/^([^\[\]:]+):(\d+)$/),
+			    m6 = this.value.match((bracket == 1) ? /^\[(.+)\]:(\d+)$/ : /^([^\[\]]+):(\d+)$/);
+
+			if (m4)
+				return this.assert(this.apply('ip4addr', m4[0], [true]) && this.apply('port', m4[1]),
+					_('valid address:port'));
+
+			return this.assert(m6 && this.apply('ip6addr', m6[0], [true]) && this.apply('port', m6[1]),
+				_('valid address:port'));
+		},
+
+		wpakey: function() {
+			var v = this.value;
+
+			if (v.length == 64)
+				return this.assert(v.match(/^[a-fA-F0-9]{64}$/), _('valid hexadecimal WPA key'));
+
+			return this.assert((v.length >= 8) && (v.length <= 63), _('key between 8 and 63 characters'));
+		},
+
+		wepkey: function() {
+			var v = this.value;
+
+			if (v.substr(0, 2) === 's:')
+				v = v.substr(2);
+
+			if ((v.length == 10) || (v.length == 26))
+				return this.assert(v.match(/^[a-fA-F0-9]{10,26}$/), _('valid hexadecimal WEP key'));
+
+			return this.assert((v.length === 5) || (v.length === 13), _('key with either 5 or 13 characters'));
+		},
+
+		uciname: function() {
+			return this.assert(this.value.match(/^[a-zA-Z0-9_]+$/), _('valid UCI identifier'));
+		},
+
+		range: function(min, max) {
+			var val = Dec(this.value);
+			return this.assert(val >= +min && val <= +max, _('value between %f and %f').format(min, max));
+		},
+
+		min: function(min) {
+			return this.assert(Dec(this.value) >= +min, _('value greater or equal to %f').format(min));
+		},
+
+		max: function(max) {
+			return this.assert(Dec(this.value) <= +max, _('value smaller or equal to %f').format(max));
+		},
+
+		rangelength: function(min, max) {
+			var val = '' + this.value;
+			return this.assert((val.length >= +min) && (val.length <= +max),
+				_('value between %d and %d characters').format(min, max));
+		},
+
+		minlength: function(min) {
+			return this.assert((''+this.value).length >= +min,
+				_('value with at least %d characters').format(min));
+		},
+
+		maxlength: function(max) {
+			return this.assert((''+this.value).length <= +max,
+				_('value with at most %d characters').format(max));
+		},
+
+		or: function() {
+			var errors = [];
+
+			for (var i = 0; i < arguments.length; i += 2) {
+				if (typeof arguments[i] != 'function') {
+					if (arguments[i] == this.value)
+						return this.assert(true);
+					errors.push('"%s"'.format(arguments[i]));
+					i--;
+				}
+				else if (arguments[i].apply(this, arguments[i+1])) {
+					return this.assert(true);
+				}
+				else {
+					errors.push(this.error);
 				}
 			}
-			/* Firewall rules in the past don't make sense */
-			if (year < 2015) {
-				return false;
-			}
-			if ((month <= 0) || (month > 12)) {
-				return false;
-			}
-			if ((day <= 0) || (day > get_days_in_month(month, year))) {
-				return false;
-			}
-			return true;
 
-		} else {
-			return false;
+			return this.assert(false, _('one of:\n - %s'.format(errors.join('\n - '))));
+		},
+
+		and: function() {
+			for (var i = 0; i < arguments.length; i += 2) {
+				if (typeof arguments[i] != 'function') {
+					if (arguments[i] != this.value)
+						return this.assert(false, '"%s"'.format(arguments[i]));
+					i--;
+				}
+				else if (!arguments[i].apply(this, arguments[i+1])) {
+					return this.assert(false, this.error);
+				}
+			}
+
+			return this.assert(true);
+		},
+
+		neg: function() {
+			return this.apply('or', this.value.replace(/^[ \t]*![ \t]*/, ''), arguments);
+		},
+
+		list: function(subvalidator, subargs) {
+			this.field.setAttribute('data-is-list', 'true');
+
+			var tokens = this.value.match(/[^ \t]+/g);
+			for (var i = 0; i < tokens.length; i++)
+				if (!this.apply(subvalidator, tokens[i], subargs))
+					return this.assert(false, this.error);
+
+			return this.assert(true);
+		},
+
+		phonedigit: function() {
+			return this.assert(this.value.match(/^[0-9\*#!\.]+$/),
+				_('valid phone digit (0-9, "*", "#", "!" or ".")'));
+		},
+
+		timehhmmss: function() {
+			return this.assert(this.value.match(/^[0-6][0-9]:[0-6][0-9]:[0-6][0-9]$/),
+				_('valid time (HH:MM:SS'));
+		},
+
+		dateyyyymmdd: function() {
+			if (this.value.match(/^(\d\d\d\d)-(\d\d)-(\d\d)/)) {
+				var year  = +RegExp.$1,
+				    month = +RegExp.$2,
+				    day   = +RegExp.$3,
+				    days_in_month = [ 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 ];
+
+				function is_leap_year(year) {
+					return ((!(year % 4) && (year % 100)) || !(year % 400));
+				}
+
+				function get_days_in_month(month, year) {
+					return (month === 2 && is_leap_year(year)) ? 29 : days_in_month[month - 1];
+				}
+
+				/* Firewall rules in the past don't make sense */
+				return this.assert(year >= 2015 && month && month <= 12 && day && day <= get_days_in_month(month, year),
+					_('valid date (YYYY-MM-DD)'));
+
+			}
+
+			return this.assert(false, _('valid date (YYYY-MM-DD)'));
+		},
+
+		unique: function(subvalidator, subargs) {
+			var ctx = this,
+				option = findParent(ctx.field, '[data-type][data-name]'),
+			    section = findParent(option, '.cbi-section'),
+			    query = '[data-type="%s"][data-name="%s"]'.format(option.getAttribute('data-type'), option.getAttribute('data-name')),
+			    unique = true;
+
+			section.querySelectorAll(query).forEach(function(sibling) {
+				if (sibling === option)
+					return;
+
+				var input = sibling.querySelector('[data-type]'),
+				    values = input.getAttribute('data-is-list') ? input.value.match(/[^ \t]+/g) : [ input.value ];
+
+				if (values !== null && values.indexOf(ctx.value) !== -1)
+					unique = false;
+			});
+
+			if (!unique)
+				return this.assert(false, _('unique value'));
+
+			if (typeof(subvalidator) === 'function')
+				return this.apply(subvalidator, undefined, subargs);
+
+			return this.assert(true);
 		}
 	}
 };
+
+function CBIValidator(field, type, optional)
+{
+	this.field = field;
+	this.optional = optional;
+	this.vstack = this.compile(type);
+}
+
+CBIValidator.prototype = CBIValidatorPrototype;
 
 
 function cbi_d_add(field, dep, index) {
@@ -1148,119 +1252,41 @@ function cbi_validate_reset(form)
 	return true;
 }
 
-function cbi_validate_compile(code)
-{
-	var pos = 0;
-	var esc = false;
-	var depth = 0;
-	var stack = [ ];
-
-	code += ',';
-
-	for (var i = 0; i < code.length; i++) {
-		if (esc) {
-			esc = false;
-			continue;
-		}
-
-		switch (code.charCodeAt(i))
-		{
-		case 92:
-			esc = true;
-			break;
-
-		case 40:
-		case 44:
-			if (depth <= 0) {
-				if (pos < i) {
-					var label = code.substring(pos, i);
-						label = label.replace(/\\(.)/g, '$1');
-						label = label.replace(/^[ \t]+/g, '');
-						label = label.replace(/[ \t]+$/g, '');
-
-					if (label && !isNaN(label)) {
-						stack.push(parseFloat(label));
-					}
-					else if (label.match(/^(['"]).*\1$/)) {
-						stack.push(label.replace(/^(['"])(.*)\1$/, '$2'));
-					}
-					else if (typeof cbi_validators[label] == 'function') {
-						stack.push(cbi_validators[label]);
-						stack.push(null);
-					}
-					else {
-						throw "Syntax error, unhandled token '"+label+"'";
-					}
-				}
-
-				pos = i+1;
-			}
-
-			depth += (code.charCodeAt(i) == 40);
-			break;
-
-		case 41:
-			if (--depth <= 0) {
-				if (typeof stack[stack.length-2] != 'function')
-					throw "Syntax error, argument list follows non-function";
-
-				stack[stack.length-1] =
-					arguments.callee(code.substring(pos, i));
-
-				pos = i+1;
-			}
-
-			break;
-		}
-	}
-
-	return stack;
-}
-
 function cbi_validate_field(cbid, optional, type)
 {
-	var field = (typeof cbid == "string") ? document.getElementById(cbid) : cbid;
-	var vstack; try { vstack = cbi_validate_compile(type); } catch(e) { };
+	var field = isElem(cbid) ? cbid : document.getElementById(cbid);
+	var validatorFn;
 
-	if (field && vstack && typeof vstack[0] == "function") {
-		var validator = function()
-		{
-			// is not detached
-			if (field.form) {
-				field.classList.remove('cbi-input-invalid');
+	try {
+		var cbiValidator = new CBIValidator(field, type, optional);
 
-				// validate value
-				var value = (field.options && field.options.selectedIndex > -1)
-					? field.options[field.options.selectedIndex].value : field.value;
-
-				if (!(((value.length == 0) && optional) || vstack[0].apply(value, vstack[1]))) {
-					// invalid
-					field.classList.add('cbi-input-invalid');
-					return false;
-				}
-			}
-
-			return true;
+		validatorFn = function() {
+			return cbiValidator.validate();
 		};
+	}
+	catch(e) {
+		validatorFn = null;
+	};
 
+	if (validatorFn !== null) {
 		if (!field.form.cbi_validators)
 			field.form.cbi_validators = [ ];
 
-		field.form.cbi_validators.push(validator);
+		field.form.cbi_validators.push(validatorFn);
 
-		cbi_bind(field, "blur",  validator);
-		cbi_bind(field, "keyup", validator);
+		cbi_bind(field, "blur",  validatorFn);
+		cbi_bind(field, "keyup", validatorFn);
 
 		if (matchesElem(field, 'select')) {
-			cbi_bind(field, "change", validator);
-			cbi_bind(field, "click",  validator);
+			cbi_bind(field, "change", validatorFn);
+			cbi_bind(field, "click",  validatorFn);
 		}
 
-		field.setAttribute("cbi_validate", validator);
+		field.setAttribute("cbi_validate", validatorFn);
 		field.setAttribute("cbi_datatype", type);
 		field.setAttribute("cbi_optional", (!!optional).toString());
 
-		validator();
+		validatorFn();
 
 		var fcbox = document.getElementById('cbi.combobox.' + field.id);
 		if (fcbox)
@@ -2244,6 +2270,16 @@ document.addEventListener('DOMContentLoaded', function() {
 	document.addEventListener('mouseout', hideTooltip, true);
 	document.addEventListener('focus', showTooltip, true);
 	document.addEventListener('blur', hideTooltip, true);
+
+	document.addEventListener('validation-failure', function(ev) {
+		if (ev.target === document.activeElement)
+			showTooltip(ev);
+	});
+
+	document.addEventListener('validation-success', function(ev) {
+		if (ev.target === document.activeElement)
+			hideTooltip(ev);
+	});
 
 	document.querySelectorAll('.table').forEach(cbi_update_table);
 });
