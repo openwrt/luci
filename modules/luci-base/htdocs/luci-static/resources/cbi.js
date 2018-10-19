@@ -106,7 +106,8 @@ function IPv6(x) {
 	var prefix = (prefix_suffix[0] || '0').split(/:/);
 	var suffix = prefix_suffix.length > 1 ? (prefix_suffix[1] || '0').split(/:/) : [];
 
-	if (suffix.length ? (prefix.length + suffix.length > 7) : (prefix.length > 8))
+	if (suffix.length ? (prefix.length + suffix.length > 7)
+	                  : ((prefix_suffix.length < 2 && prefix.length < 8) || prefix.length > 8))
 		return null;
 
 	var i, word;
