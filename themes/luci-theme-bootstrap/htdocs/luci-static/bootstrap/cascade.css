@@ -2051,3 +2051,13 @@ html body.apply-overlay-active {
 [data-page="admin-network-dhcp"] [data-name="ip"] {
 	width: 15%;
 }
+
+@keyframes flash {
+	0% { opacity: 1; }
+	50% { opacity: .5; }
+	100% { opacity: 1; }
+}
+
+.flash {
+	animation: flash .35s;
+}
