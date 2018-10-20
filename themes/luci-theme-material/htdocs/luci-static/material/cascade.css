@@ -153,7 +153,9 @@ input,
 }
 
 select:not([multiple="multiple"]):focus,
-input:focus {
+input:focus,
+.cbi-dropdown:focus,
+.cbi-dynlist > .item:focus {
     border-color: var(--main-color, #0099CC);
 }
 
@@ -642,7 +644,7 @@ td > table > tbody > tr > td,
 
 /* button style */
 
-.btn, .cbi-button {
+.btn, .cbi-button, .item::after {
     -webkit-appearance: none;
     text-transform: uppercase;
     color: rgba(0, 0, 0, 0.87);
@@ -675,6 +677,7 @@ td > table > tbody > tr > td,
 .cbi-button:hover,
 .cbi-button:focus,
 .cbi-button:active,
+.item:hover::after,
 .cbi-page-actions .cbi-button-apply + .cbi-button-save:hover,
 .cbi-page-actions .cbi-button-apply + .cbi-button-save:focus,
 .cbi-page-actions .cbi-button-apply + .cbi-button-save:active {
@@ -958,16 +961,13 @@ td > table > tbody > tr > td,
 }
 
 
+.cbi-dynlist,
 .cbi-dropdown {
     display: inline-flex;
     cursor: pointer;
     position: relative;
     padding: 0;
     height: auto;
-}
-
-.cbi-dropdown:focus {
-    outline: 2px solid #4b6e9b;
 }
 
 .cbi-dropdown > ul {
@@ -1109,6 +1109,22 @@ td > table > tbody > tr > td,
     border-bottom: none;
 }
 
+.cbi-dropdown[open] > ul.dropdown > li[unselectable] {
+    opacity: 0.7;
+}
+
+.cbi-dropdown[open] > ul.dropdown > li > input.create-item-input:first-child:last-child {
+    width: 100%;
+}
+
+.cbi-dropdown[open] > ul.dropdown > li[unselectable] {
+    opacity: 0.7;
+}
+
+.cbi-dropdown[open] > ul.dropdown > li > input.create-item-input:first-child:last-child {
+    width: 100%;
+}
+
 .cbi-dropdown[disabled] {
     pointer-events: none;
     opacity: .6;
@@ -1120,6 +1136,68 @@ td > table > tbody > tr > td,
 
 .cbi-dropdown[open] .zonebadge {
     width: auto;
+}
+
+.cbi-dynlist {
+    height: auto;
+    min-height: 30px;
+    display: inline-flex;
+    flex-direction: column;
+}
+
+.cbi-dynlist > .item {
+    margin: 0 2em 4px 0;
+    padding: 2px 4px;
+    border-bottom: 2px solid rgba(0, 0, 0, .26);
+    position: relative;
+    pointer-events: none;
+    cursor: default;
+}
+
+.cbi-dynlist > .item::after {
+    content: "×";
+    position: absolute;
+    display: inline-flex;
+    align-items: center;
+    top: 0;
+    right: -2em;
+    bottom: 0;
+    padding: 0 6px;
+    border: 1px solid #c44;
+    font-weight: bold;
+    color: #c44;
+    pointer-events: auto;
+}
+
+.cbi-dynlist {
+    height: auto;
+    min-height: 30px;
+    display: inline-flex;
+    flex-direction: column;
+}
+
+.cbi-dynlist > .item {
+    margin: 0 2em 4px 0;
+    padding: 2px 4px;
+    border-bottom: 2px solid rgba(0, 0, 0, .26);
+    position: relative;
+    pointer-events: none;
+    cursor: default;
+}
+
+.cbi-dynlist > .item::after {
+    content: "×";
+    position: absolute;
+    display: inline-flex;
+    align-items: center;
+    top: 0;
+    right: -2em;
+    bottom: 0;
+    padding: 0 6px;
+    border: 1px solid #c44;
+    font-weight: bold;
+    color: #c44;
+    pointer-events: auto;
 }
 
 
