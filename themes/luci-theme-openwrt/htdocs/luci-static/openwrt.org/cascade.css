@@ -516,7 +516,8 @@ input.cbi-input-password + img {
 
 .td select,
 .td .cbi-dropdown,
-.td input[type=text] {
+.td input[type=text],
+.cbi-dynlist > .add-item > .cbi-dropdown {
 	width: 100%;
 }
 
@@ -531,7 +532,7 @@ img.cbi-image-button {
 	vertical-align: middle;
 }
 
-.btn, .cbi-button {
+.btn, .cbi-button, .item::after {
 	padding: 0 .5em;
 	border-radius: 3px;
 	border: 1px solid #aaa;
@@ -545,9 +546,11 @@ img.cbi-image-button {
 	font-weight: bold;
 	line-height: 13pt;
 	height: 16pt;
+	box-sizing: border-box;
+	cursor: pointer;
 }
 
-.btn:hover, .cbi-button:hover {
+.btn:hover, .cbi-button:hover, .item:hover::after {
 	box-shadow: 0 0 3px #37c;
 }
 
@@ -1009,7 +1012,8 @@ ul.cbi-tabmenu li.cbi-tab {
 	background: #fff;
 }
 
-.cbi-dropdown:focus {
+.cbi-dropdown:focus,
+.cbi-dynlist > .item:focus {
 	outline: 2px solid #4b6e9b;
 }
 
@@ -1150,9 +1154,58 @@ ul.cbi-tabmenu li.cbi-tab {
 	border-bottom: none;
 }
 
+.cbi-dropdown[open] > ul.dropdown > li[unselectable] {
+	opacity: 0.7;
+}
+
+.cbi-dropdown[open] > ul.dropdown > li > input.create-item-input:first-child:last-child {
+	width: 100%;
+}
+
 .cbi-dropdown[disabled] {
 	pointer-events: none;
 	opacity: .6;
+}
+
+.cbi-dynlist {
+	height: auto;
+	min-height: 30px;
+	min-width: 210px;
+	max-width: 100%;
+	width: auto;
+	display: inline-flex;
+	flex-direction: column;
+}
+
+.cbi-dynlist > .item {
+	margin-bottom: 4px;
+	background: #eee;
+	padding: 2px 2em 2px 4px;
+	border: 1px outset #000;
+	border-radius: 3px;
+	position: relative;
+	pointer-events: none;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.cbi-dynlist > .item::after {
+	content: "×";
+	position: absolute;
+	display: inline-flex;
+	align-items: center;
+	top: -1px;
+	right: -1px;
+	bottom: -1px;
+	padding: 0 6px;
+	border: 1px outset #000;
+	background: #fff;
+	border-radius: 0 3px 3px 0;
+	font-weight: bold;
+	color: #c44;
+	pointer-events: auto;
+	height: auto;
 }
 
 input[type="text"] + .cbi-button,
@@ -1695,13 +1748,14 @@ select + .cbi-button {
 		height: 1.4em;
 	}
 
-	[data-dynlist] > input,
 	input.cbi-input-password {
 		width: calc(100% - 20px);
 	}
 
+	.cbi-dynlist,
 	.cbi-dropdown {
 		min-width: 100%;
+		display: flex;
 	}
 
 	.btn, .cbi-button {

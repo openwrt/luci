@@ -794,95 +794,41 @@ function cbi_init() {
 	cbi_d_update();
 }
 
-function cbi_combobox(id, values, def, man, focus) {
-	var selid = "cbi.combobox." + id;
-	if (document.getElementById(selid)) {
-		return
-	}
+function cbi_combobox_init(id, values, def, man) {
+	var obj = (typeof(id) === 'string') ? document.getElementById(id) : id;
+	var sb = E('div', {
+		'name': obj.name,
+		'class': 'cbi-dropdown',
+		'display-items': 5,
+		'optional': obj.getAttribute('data-optional'),
+		'placeholder': _('-- Please choose --')
+	}, [ E('ul') ]);
 
-	var obj = document.getElementById(id)
-	var sel = document.createElement("select");
-		sel.id = selid;
-		sel.index = obj.index;
-		sel.classList.remove('cbi-input-text');
-		sel.classList.add('cbi-input-select');
-
-	if (obj.nextSibling)
-		obj.parentNode.insertBefore(sel, obj.nextSibling);
-	else
-		obj.parentNode.appendChild(sel);
-
-	var dt = obj.getAttribute('cbi_datatype');
-	var op = obj.getAttribute('cbi_optional');
-
-	if (!values[obj.value]) {
-		if (obj.value == "") {
-			var optdef = document.createElement("option");
-			optdef.value = "";
-			optdef.appendChild(document.createTextNode(typeof(def) === 'string' ? def : _('-- Please choose --')));
-			sel.appendChild(optdef);
-		}
-		else {
-			var opt = document.createElement("option");
-			opt.value = obj.value;
-			opt.selected = "selected";
-			opt.appendChild(document.createTextNode(obj.value));
-			sel.appendChild(opt);
-		}
+	if (!(obj.value in values) && obj.value.length) {
+		sb.lastElementChild.appendChild(E('li', {
+			'data-value': obj.value,
+			'selected': ''
+		}, obj.value.length ? obj.value : (def || _('-- Please choose --'))));
 	}
 
 	for (var i in values) {
-		var opt = document.createElement("option");
-		opt.value = i;
-
-		if (obj.value == i)
-			opt.selected = "selected";
-
-		opt.appendChild(document.createTextNode(values[i]));
-		sel.appendChild(opt);
+		sb.lastElementChild.appendChild(E('li', {
+			'data-value': i,
+			'selected': (i == obj.value) ? '' : null
+		}, values[i]));
 	}
 
-	var optman = document.createElement("option");
-	optman.value = "";
-	optman.appendChild(document.createTextNode(typeof(man) === 'string' ? man : _('-- custom --')));
-	sel.appendChild(optman);
+	sb.lastElementChild.appendChild(E('li', { 'data-value': '-' }, [
+		E('input', {
+			'type': 'text',
+			'class': 'create-item-input',
+			'data-type': obj.getAttribute('data-type'),
+			'data-optional': true,
+			'placeholder': (man || _('-- custom --'))
+		})
+	]));
 
-	obj.style.display = "none";
-
-	if (dt)
-		cbi_validate_field(sel, op == 'true', dt);
-
-	sel.addEventListener("change", function() {
-		if (sel.selectedIndex == sel.options.length - 1) {
-			obj.style.display = "inline";
-			sel.blur();
-			sel.parentNode.removeChild(sel);
-			obj.focus();
-		}
-		else {
-			obj.value = sel.options[sel.selectedIndex].value;
-		}
-
-		try {
-			cbi_d_update();
-		} catch (e) {
-			//Do nothing
-		}
-	})
-
-	// Retrigger validation in select
-	if (focus) {
-		sel.focus();
-		sel.blur();
-	}
-}
-
-function cbi_combobox_init(id, values, def, man) {
-	var obj = (typeof(id) === 'string') ? document.getElementById(id) : id;
-	obj.addEventListener("blur", function() {
-		cbi_combobox(obj.id, values, def, man, true);
-	});
-	cbi_combobox(obj.id, values, def, man, false);
+	obj.parentNode.replaceChild(sb, obj);
 }
 
 function cbi_filebrowser(id, defpath) {
@@ -912,228 +858,150 @@ function cbi_browser_init(id, resource, defpath)
 	btn.addEventListener('click', cbi_browser_btnclick);
 }
 
-function cbi_dynlist_init(parent, datatype, optional, choices)
+CBIDynamicList = {
+	addItem: function(dl, value, text, flash) {
+		var exists = false,
+		    new_item = E('div', { 'class': flash ? 'item flash' : 'item', 'tabindex': 0 }, [
+				E('span', {}, text || value),
+				E('input', {
+					'type': 'hidden',
+					'name': dl.getAttribute('data-prefix'),
+					'value': value })]);
+
+		dl.querySelectorAll('.item, .add-item').forEach(function(item) {
+			if (exists)
+				return;
+
+			var hidden = item.querySelector('input[type="hidden"]');
+
+			if (hidden && hidden.value === value)
+				exists = true;
+			else if (!hidden || hidden.value >= value)
+				exists = !!item.parentNode.insertBefore(new_item, item);
+		});
+	},
+
+	removeItem: function(dl, item) {
+		var sb = dl.querySelector('.cbi-dropdown');
+		if (sb) {
+			var value = item.querySelector('input[type="hidden"]').value;
+
+			sb.querySelectorAll('ul > li').forEach(function(li) {
+				if (li.getAttribute('data-value') === value)
+					li.removeAttribute('unselectable');
+			});
+		}
+
+		item.parentNode.removeChild(item);
+	},
+
+	handleClick: function(ev) {
+		var dl = ev.currentTarget,
+		    item = findParent(ev.target, '.item');
+
+		if (item) {
+			this.removeItem(dl, item);
+		}
+		else if (matchesElem(ev.target, '.cbi-button-add')) {
+			var input = ev.target.previousElementSibling;
+			if (input.value.length && !input.classList.contains('cbi-input-invalid')) {
+				this.addItem(dl, input.value, null, true);
+				input.value = '';
+			}
+		}
+	},
+
+	handleDropdownChange: function(ev) {
+		var dl = ev.currentTarget,
+		    sbIn = ev.detail.instance,
+		    sbEl = ev.detail.element,
+		    sbVal = ev.detail.value;
+
+		if (sbVal === null)
+			return;
+
+		sbIn.setValues(sbEl, null);
+		sbVal.element.setAttribute('unselectable', '');
+
+		this.addItem(dl, sbVal.value, sbVal.text, true);
+	},
+
+	handleKeydown: function(ev) {
+		var dl = ev.currentTarget,
+		    item = findParent(ev.target, '.item');
+
+		if (item) {
+			switch (ev.keyCode) {
+			case 8: /* backspace */
+				if (item.previousElementSibling)
+					item.previousElementSibling.focus();
+
+				this.removeItem(dl, item);
+				break;
+
+			case 46: /* delete */
+				if (item.nextElementSibling) {
+					if (item.nextElementSibling.classList.contains('item'))
+						item.nextElementSibling.focus();
+					else
+						item.nextElementSibling.firstElementChild.focus();
+				}
+
+				this.removeItem(dl, item);
+				break;
+			}
+		}
+		else if (matchesElem(ev.target, '.cbi-input-text')) {
+			switch (ev.keyCode) {
+			case 13: /* enter */
+				if (ev.target.value.length && !ev.target.classList.contains('cbi-input-invalid')) {
+					this.addItem(dl, ev.target.value, null, true);
+					ev.target.value = '';
+					ev.target.blur();
+					ev.target.focus();
+				}
+
+				ev.preventDefault();
+				break;
+			}
+		}
+	}
+};
+
+function cbi_dynlist_init(dl, datatype, optional, choices)
 {
-	var prefix = parent.getAttribute('data-prefix');
-	var holder = parent.getAttribute('data-placeholder');
+	if (!(this instanceof cbi_dynlist_init))
+		return new cbi_dynlist_init(dl, datatype, optional, choices);
 
-	var values;
+	dl.classList.add('cbi-dynlist');
+	dl.appendChild(E('div', { 'class': 'add-item' }, E('input', {
+		'type': 'text',
+		'name': 'cbi.dynlist.' + dl.getAttribute('data-prefix'),
+		'class': 'cbi-input-text',
+		'data-type': datatype,
+		'data-optional': true
+	})));
 
-	function cbi_dynlist_redraw(focus, add, del)
-	{
-		values = [ ];
+	if (choices)
+		cbi_combobox_init(dl.lastElementChild.lastElementChild, choices, '', _('-- custom --'));
+	else
+		dl.lastElementChild.appendChild(E('div', { 'class': 'cbi-button cbi-button-add' }, '+'));
 
-		while (parent.firstChild) {
-			var n = parent.firstChild;
-			var i = +n.index;
+	dl.addEventListener('click', this.handleClick.bind(this));
+	dl.addEventListener('keydown', this.handleKeydown.bind(this));
+	dl.addEventListener('cbi-dropdown-change', this.handleDropdownChange.bind(this));
 
-			if (i != del) {
-				if (matchesElem(n, 'input'))
-					values.push(n.value || '');
-				else if (matchesElem(n, 'select'))
-					values[values.length-1] = n.options[n.selectedIndex].value;
-			}
+	try {
+		var values = JSON.parse(dl.getAttribute('data-values') || '[]');
 
-			parent.removeChild(n);
-		}
-
-		if (add >= 0) {
-			focus = add+1;
-			values.splice(focus, 0, '');
-		}
-		else if (values.length == 0) {
-			focus = 0;
-			values.push('');
-		}
-
-		for (var i = 0; i < values.length; i++) {
-			var t = document.createElement('input');
-				t.id = prefix + '.' + (i+1);
-				t.name = prefix;
-				t.value = values[i];
-				t.type = 'text';
-				t.index = i;
-				t.className = 'cbi-input-text';
-
-			if (i == 0 && holder)
-				t.placeholder = holder;
-
-			var b = E('div', {
-				class: 'cbi-button cbi-button-' + ((i+1) < values.length ? 'remove' : 'add')
-			}, (i+1) < values.length ? '×' : '+');
-
-			parent.appendChild(t);
-			parent.appendChild(b);
-
-			if (datatype == 'file')
-				cbi_browser_init(t.id, null, parent.getAttribute('data-browser-path'));
-
-			parent.appendChild(document.createElement('br'));
-
-			if (datatype)
-				cbi_validate_field(t.id, ((i+1) == values.length) || optional, datatype);
-
-			if (choices) {
-				cbi_combobox_init(t.id, choices, '', _('-- custom --'));
-				b.index = i;
-
-				b.addEventListener('keydown',  cbi_dynlist_keydown);
-				b.addEventListener('keypress', cbi_dynlist_keypress);
-
-				if (i == focus || -i == focus)
-					b.focus();
-			}
-			else {
-				t.addEventListener('keydown',  cbi_dynlist_keydown);
-				t.addEventListener('keypress', cbi_dynlist_keypress);
-
-				if (i == focus) {
-					t.focus();
-				}
-				else if (-i == focus) {
-					t.focus();
-
-					/* force cursor to end */
-					var v = t.value;
-					t.value = ' '
-					t.value = v;
-				}
-			}
-
-			b.addEventListener('click', cbi_dynlist_btnclick);
-		}
+		if (typeof(values) === 'object' && Array.isArray(values))
+			for (var i = 0; i < values.length; i++)
+				this.addItem(dl, values[i], choices ? choices[values[i]] : null);
 	}
-
-	function cbi_dynlist_keypress(ev)
-	{
-		ev = ev ? ev : window.event;
-
-		var se = ev.target ? ev.target : ev.srcElement;
-
-		if (se.nodeType == 3)
-			se = se.parentNode;
-
-		switch (ev.keyCode) {
-			/* backspace, delete */
-			case 8:
-			case 46:
-				if (se.value.length == 0) {
-					if (ev.preventDefault)
-						ev.preventDefault();
-
-					return false;
-				}
-
-				return true;
-
-			/* enter, arrow up, arrow down */
-			case 13:
-			case 38:
-			case 40:
-				if (ev.preventDefault)
-					ev.preventDefault();
-
-				return false;
-		}
-
-		return true;
-	}
-
-	function cbi_dynlist_keydown(ev)
-	{
-		ev = ev ? ev : window.event;
-
-		var se = ev.target ? ev.target : ev.srcElement;
-
-		if (se.nodeType == 3)
-			se = se.parentNode;
-
-		var prev = se.previousSibling;
-		while (prev && prev.name != prefix)
-			prev = prev.previousSibling;
-
-		var next = se.nextSibling;
-		while (next && next.name != prefix)
-			next = next.nextSibling;
-
-		/* advance one further in combobox case */
-		if (next && next.nextSibling.name == prefix)
-			next = next.nextSibling;
-
-		switch (ev.keyCode) {
-			/* backspace, delete */
-			case 8:
-			case 46:
-				var del = (matchesElem(se, 'select'))
-					? true : (se.value.length == 0);
-
-				if (del) {
-					if (ev.preventDefault)
-						ev.preventDefault();
-
-					var focus = se.index;
-					if (ev.keyCode == 8)
-						focus = -focus+1;
-
-					cbi_dynlist_redraw(focus, -1, se.index);
-
-					return false;
-				}
-
-				break;
-
-			/* enter */
-			case 13:
-				cbi_dynlist_redraw(-1, se.index, -1);
-				break;
-
-			/* arrow up */
-			case 38:
-				if (prev)
-					prev.focus();
-
-				break;
-
-			/* arrow down */
-			case 40:
-				if (next)
-					next.focus();
-
-				break;
-		}
-
-		return true;
-	}
-
-	function cbi_dynlist_btnclick(ev)
-	{
-		ev = ev ? ev : window.event;
-
-		var se = ev.target ? ev.target : ev.srcElement;
-		var input = se.previousSibling;
-		while (input && input.name != prefix)
-			input = input.previousSibling;
-
-		if (se.classList.contains('cbi-button-remove')) {
-			input.value = '';
-
-			cbi_dynlist_keydown({
-				target:  input,
-				keyCode: 8
-			});
-		}
-		else {
-			cbi_dynlist_keydown({
-				target:  input,
-				keyCode: 13
-			});
-		}
-
-		return false;
-	}
-
-	cbi_dynlist_redraw(NaN, -1, -1);
+	catch (e) {}
 }
+
+cbi_dynlist_init.prototype = CBIDynamicList;
 
 
 function cbi_t_add(section, tab) {

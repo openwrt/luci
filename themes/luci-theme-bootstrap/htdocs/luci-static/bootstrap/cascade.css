@@ -492,10 +492,45 @@ select,
 	box-sizing: border-box;
 }
 
-.cbi-dropdown {
+.cbi-dropdown,
+.cbi-dynlist {
 	min-width: 210px;
 	max-width: 400px;
 	width: auto;
+}
+
+.cbi-dynlist {
+	height: auto;
+	min-height: 30px;
+	display: inline-flex;
+	flex-direction: column;
+}
+
+.cbi-dynlist > .item {
+	margin-bottom: 4px;
+	box-shadow: 0 0 2px #ccc;
+	background: #fff;
+	padding: 2px 2em 2px 4px;
+	border: 1px solid #ccc;
+	border-radius: 3px;
+	position: relative;
+	pointer-events: none;
+}
+
+.cbi-dynlist > .item::after {
+	content: "×";
+	position: absolute;
+	display: inline-flex;
+	align-items: center;
+	top: -1px;
+	right: -1px;
+	bottom: -1px;
+	padding: 0 6px;
+	border: 1px solid #ccc;
+	border-radius: 0 3px 3px 0;
+	font-weight: bold;
+	color: #c44;
+	pointer-events: auto;
 }
 
 select {
@@ -548,7 +583,8 @@ textarea {
 .td > input[type=text],
 .td > input[type=password],
 .td > select,
-.td > .cbi-dropdown {
+.td > .cbi-dropdown,
+.cbi-dynlist > .add-item > .cbi-dropdown {
 	width: 100%;
 }
 
@@ -568,11 +604,12 @@ textarea {
 	color: #bfbfbf;
 }
 
-.btn, .cbi-button, input, textarea {
+.item::after, .btn, .cbi-button, input, textarea {
 	transition: border linear 0.2s, box-shadow linear 0.2s;
 	box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
+.item:hover::after,
 .btn:hover, .cbi-button:hover,
 input:focus, textarea:focus {
 	outline: 0;
@@ -1206,6 +1243,7 @@ footer {
 	border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
 }
 
+.item::after,
 .btn,
 .cbi-button {
 	cursor: pointer;
@@ -1318,6 +1356,7 @@ footer {
 	color: #404040;
 }
 
+.cbi-dynlist > .item:focus,
 .cbi-dropdown:focus {
 	outline: 2px solid #4b6e9b;
 }
@@ -1354,6 +1393,7 @@ footer {
 	font-weight: bold;
 	text-shadow: 1px 1px 0px #fff;
 	display: none;
+	justify-content: center;
 }
 
 .cbi-dropdown > ul > li {
@@ -1452,6 +1492,14 @@ footer {
 .cbi-dropdown[open] > ul.dropdown > li:last-child {
 	margin-bottom: 0;
 	border-bottom: none;
+}
+
+.cbi-dropdown[open] > ul.dropdown > li[unselectable] {
+	opacity: 0.7;
+}
+
+.cbi-dropdown[open] > ul.dropdown > li > input.create-item-input:first-child:last-child {
+	width: 100%;
 }
 
 .cbi-dropdown[disabled] {
