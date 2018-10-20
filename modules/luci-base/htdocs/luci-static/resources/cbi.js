@@ -1606,6 +1606,9 @@ function matchesElem(node, selector)
 
 function findParent(node, selector)
 {
+	if (node.closest)
+		return node.closest(selector);
+
 	while (node)
 		if (matchesElem(node, selector))
 			return node;
