@@ -4,25 +4,31 @@
  Licensed to the public under the Apache License 2.0.
 -%>
 
+<%+openvpn/ovpn_css%>
+
 <div class="cbi-section">
 	<h3>
-		<a href="<%=url('admin/services/openvpn')%>"><%:Overview%></a> &raquo;
+		<a href="<%=url('admin/services/openvpn')%>"><%:Overview%></a> &#187;
 		<%=luci.i18n.translatef("Instance \"%s\"", self.instance)%>
 	</h3>
-
-	<% if self.mode == "basic" then %>
-		<a href="<%=url('admin/services/openvpn/advanced', self.instance, "Service")%>"><%:Switch to advanced configuration »%></a>
-	<% else %>
-		<a href="<%=url('admin/services/openvpn/basic', self.instance)%>"><%:« Switch to basic configuration%></a>
-		<hr style="margin:0.5em 0" />
+	<% if self.mode == "file" then %>
+		<a href="<%=url('admin/services/openvpn/basic', self.instance)%>"><%:Switch to basic configuration%> &#187;</a><p/>
+		<a href="<%=url('admin/services/openvpn/advanced', self.instance, "Service")%>"><%:Switch to advanced configuration%> &#187;</a>
+		<hr />
+	<% elseif self.mode == "basic" then %>
+		<a href="<%=url('admin/services/openvpn/advanced', self.instance, "Service")%>"><%:Switch to advanced configuration%> &#187;</a><p/>
+		<a href="<%=url('admin/services/openvpn/file', self.instance)%>"><%:Switch to file based configuration%> &#187;</a>
+		<hr />
+	<% elseif self.mode == "advanced" then %>
+		<a href="<%=url('admin/services/openvpn/basic', self.instance)%>"><%:Switch to basic configuration%> &#187;</a><p/>
+		<a href="<%=url('admin/services/openvpn/file', self.instance)%>"><%:Switch to file based configuration%> &#187;</a>
+		<hr />
 		<%:Configuration category%>:
 		<% for i, c in ipairs(self.categories) do %>
 			<% if c == self.category then %>
 				<strong><%=translate(c)%></strong>
 			<% else %>
-				<a href="<%=luci.dispatcher.build_url(
-					"admin", "services", "openvpn", "advanced", self.instance, c
-				)%>"><%=translate(c)%></a>
+				<a href="<%=luci.dispatcher.build_url("admin", "services", "openvpn", "advanced", self.instance, c)%>"><%=translate(c)%></a>
 			<% end %>
 			<% if next(self.categories, i) then %>|<% end %>
 		<% end %>
