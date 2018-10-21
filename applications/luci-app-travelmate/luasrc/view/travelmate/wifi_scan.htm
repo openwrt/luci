@@ -18,7 +18,7 @@ This is free software, licensed under the Apache License, Version 2.0
 		if info.wep == true then
 			return translate("WEP")
 		elseif info.wpa > 0 then
-			return "%s (%s/%s)" %{label[info.wpa], table.concat(info.auth_suites), table.concat(info.group_ciphers)}
+			return "%s (%s/%s)" %{label[info.wpa] or translate("Unknown"), table.concat(info.auth_suites), table.concat(info.group_ciphers)}
 		elseif info.enabled then
 			return translate("Unknown")
 		else
