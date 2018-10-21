@@ -154,7 +154,7 @@ input,
 
 select:not([multiple="multiple"]):focus,
 input:focus {
-    border-color: #0099CC;
+    border-color: var(--main-color, #0099CC);
 }
 
 select[multiple="multiple"] {
@@ -162,7 +162,7 @@ select[multiple="multiple"] {
 }
 
 code {
-    color: #0099CC;
+    color: var(--main-color, #0099CC);
 }
 
 abbr {
@@ -457,7 +457,7 @@ header > .fill > .container > .status {
 }
 
 .main > .main-left > .nav > .slide > .slide-menu > .active:hover {
-    background-color: #0099CC;
+    background-color: var(--main-color, #0099CC);
     cursor: hand;
 }
 
@@ -615,7 +615,7 @@ div > .table > .tbody > .tr:nth-of-type(2n) {
 #conns > div > div,
 #memtotal > div > div {
     height: 100% !important;
-    background-color: #0099CC !important;
+    background-color: var(--main-color, #0099CC) !important;
 }
 
 /* fix multiple table */
@@ -796,13 +796,13 @@ td > table > tbody > tr > td,
 .tabs > li[class~="active"],
 .tabs > li:hover {
     cursor: pointer;
-    border-bottom: 0.2rem solid #0099CC;
-    color: #0099CC;
+    border-bottom: 0.2rem solid var(--main-color, #0099CC);
+    color: var(--main-color, #0099CC);
     margin-bottom: -0.18751rem;
 }
 
 .tabs > li[class~="active"] > a {
-    color: #0099cc;
+    color: var(--main-color, #0099CC);
 }
 
 .tabs > li:hover {
