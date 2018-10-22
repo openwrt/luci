@@ -153,7 +153,7 @@ function o.write(self, section, value)
 end
 
 
-o = s:taboption("language", ListValue, "_mediaurlbase", translate("Design"))
+o = s:taboption("language", ListValue, "_mediaurlbase", translate("Theme"))
 for k, v in pairs(conf.themes) do
 	if k:sub(1, 1) ~= "." then
 		o:value(v, k)
