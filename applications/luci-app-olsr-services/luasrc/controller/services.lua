@@ -4,7 +4,7 @@ function index()
 	local uci = require "luci.model.uci".cursor()
 
 	uci:foreach("olsrd", "LoadPlugin", function(s)
-		if s.library == "olsrd_nameservice.so.0.3" then
+		if s.library == "olsrd_nameservice" then
 			has_serv = true
 		end
 	end)
