@@ -4,7 +4,7 @@
 local fs  = require "nixio.fs"
 local sys = require "luci.sys"
 local uci = require "luci.model.uci".cursor()
-local testfullps = luci.sys.exec("ps --help 2>&1 | grep BusyBox") --check which ps do we have
+local testfullps = sys.exec("ps --help 2>&1 | grep BusyBox") --check which ps do we have
 local psstring = (string.len(testfullps)>0) and  "ps w" or  "ps axfw" --set command we use to get pid
 
 local m = Map("openvpn", translate("OpenVPN"))
@@ -13,9 +13,16 @@ s.template = "cbi/tblsection"
 s.template_addremove = "openvpn/cbi-select-input-add"
 s.addremove = true
 s.add_select_options = { }
-s.extedit = luci.dispatcher.build_url(
-	"admin", "services", "openvpn", "basic", "%s"
-)
+
+file_cfg = s:option(DummyValue, "config")
+function file_cfg.cfgvalue(self, section)
+	local file_cfg = self.map:get(section, "config")
+	if file_cfg then
+		s.extedit = luci.dispatcher.build_url("admin", "services", "openvpn", "file", "%s")
+	else
+		s.extedit = luci.dispatcher.build_url("admin", "services", "openvpn", "basic", "%s")
+	end
+end
 
 uci:load("openvpn_recipes")
 uci:foreach( "openvpn_recipes", "openvpn_recipe",
@@ -61,10 +68,10 @@ function s.create(self, name)
 		if s then
 			local options = uci:get_all("openvpn_recipes", recipe)
 			for k, v in pairs(options) do
-				uci:set("openvpn", name, k, v)
+				if k ~= "_role" and k ~= "_description" then
+					uci:set("openvpn", name, k, v)
+				end
 			end
-			uci:delete("openvpn", name, "_role")
-			uci:delete("openvpn", name, "_description")
 			uci:save("openvpn")
 			luci.http.redirect( self.extedit:format(name) )
 		end
@@ -74,7 +81,6 @@ function s.create(self, name)
 
 	return 0
 end
-
 
 s:option( Flag, "enabled", translate("Enabled") )
 
@@ -106,28 +112,27 @@ function updown.cfgvalue(self, section)
 end
 function updown.write(self, section, value)
 	if self.option == "stop" then
-		luci.sys.call("/etc/init.d/openvpn stop %s" % section)
+		sys.call("/etc/init.d/openvpn stop %s" % section)
 	else
-		luci.sys.call("/etc/init.d/openvpn start %s" % section)
+		sys.call("/etc/init.d/openvpn start %s" % section)
 	end
 	luci.http.redirect( self.redirect )
 end
 
-
 local port = s:option( DummyValue, "port", translate("Port") )
 function port.cfgvalue(self, section)
 	local val = AbstractValue.cfgvalue(self, section)
-	return val or "1194"
+	return val or "-"
 end
 
 local proto = s:option( DummyValue, "proto", translate("Protocol") )
 function proto.cfgvalue(self, section)
 	local val = AbstractValue.cfgvalue(self, section)
-	return val or "udp"
+	return val or "-"
 end
 
-function m.on_after_commit(self,map)
-	require("luci.sys").call('/etc/init.d/openvpn reload')
+function m.on_after_apply(self,map)
+	sys.call('/etc/init.d/openvpn reload')
 end
 
 return m
