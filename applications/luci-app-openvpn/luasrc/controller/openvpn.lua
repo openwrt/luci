@@ -18,7 +18,7 @@ function ovpn_upload()
 	local util   = require("luci.util")
 	local uci    = require("luci.model.uci").cursor()
 	local upload = http.formvalue("ovpn_file")
-	local name   = util.shellquote(http.formvalue("instance_name2"))
+	local name   = string.gsub(util.shellquote(http.formvalue("instance_name2")), "'", "")
 	local file   = "/etc/openvpn/" ..name.. ".ovpn"
 
 	if name and upload then
