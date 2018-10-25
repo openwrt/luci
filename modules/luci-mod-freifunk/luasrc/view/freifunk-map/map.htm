@@ -85,7 +85,7 @@
 					local uci = require "luci.model.uci".cursor()
 
 					uci:foreach("olsrd", "LoadPlugin", function(s)
-						if s.library == "olsrd_nameservice.so.0.3" and s.latlon_file then
+						if s.library == "olsrd_nameservice" and s.latlon_file then
 							fd = io.open(s.latlon_file)
 						end
 					end)
