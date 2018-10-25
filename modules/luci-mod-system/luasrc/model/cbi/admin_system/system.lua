@@ -67,7 +67,7 @@ end
 -- Logging
 --
 
-o = s:taboption("logging", Value, "log_size", translate("System log buffer size"), "kiB")
+o = s:taboption("logging", Value, "log_size", translate("System log buffer size"), translate("KiB"))
 o.optional    = true
 o.placeholder = 16
 o.datatype    = "uinteger"
