@@ -16,7 +16,7 @@ local uci = require "luci.model.uci".cursor()
 local ip = require "luci.ip"
 
 uci:foreach("olsrd", "LoadPlugin", function(s)
-	if s.library == "olsrd_nameservice.so.0.3" then
+	if s.library == "olsrd_nameservice" then
 		local services_file=s.services_file
 		if services_file and fs.access(services_file) then
 			has_services = true

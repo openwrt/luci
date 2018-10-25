@@ -11,7 +11,7 @@ if fs.access("/var/run/olsrd.pid") or fs.access("/var/run/olsrd4.pid") then
 
 	x:foreach("olsrd", "LoadPlugin",
 		function(s)
-			if s.library == "olsrd_watchdog.so.0.1" then
+			if s.library == "olsrd_watchdog" then
 				intv  = tonumber(s.interval)
 				stamp = s.file
 			end

@@ -4,7 +4,7 @@
 	local has_latlon = false
 	local uci = require "luci.model.uci".cursor()
 	uci:foreach("olsrd", "LoadPlugin", function(s)
-		if s.library == "olsrd_nameservice.so.0.3" and s.latlon_file then
+		if s.library == "olsrd_nameservice" and s.latlon_file then
 			has_latlon = true
 		end
 	end)

@@ -10,7 +10,7 @@ hostsfile_getname()
 
 	while value="$( uci -q get $config.@LoadPlugin[$i].library )"; do {
 		case "$value" in
-			'olsrd_nameservice.so.'*)
+			'olsrd_nameservice'*)
 				file="$( uci -q get $config.@LoadPlugin[$i].hosts_file )"
 				break
 			;;
