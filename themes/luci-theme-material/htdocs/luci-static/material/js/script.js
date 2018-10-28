@@ -35,6 +35,7 @@
 
     var nodeUrl = "";
     (function(node){
+        var luciLocation;
         if (node[0] == "admin"){
             luciLocation = [node[1], node[2]];
         }else{

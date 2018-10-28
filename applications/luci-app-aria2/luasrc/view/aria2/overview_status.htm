@@ -24,7 +24,7 @@ function randomString(len) {
 	var $chars = 'abcdefghijklmnopqrstuvwxyz1234567890';
 	var maxPos = $chars.length;
 	var pwd = '';
-	for (i = 0; i < len; i++) {
+	for (var i = 0; i < len; i++) {
 		pwd += $chars.charAt(Math.floor(Math.random() * maxPos));
 	}
 	return pwd;
@@ -41,6 +41,7 @@ function showRPCURL() {
 	var newTextNode = document.getElementById("aria2rpcpath");
 	var auth_method = document.getElementById("cbid.aria2.main.rpc_auth_method");
 	var auth_port = document.getElementById("cbid.aria2.main.rpc_listen_port");
+	var auth_port_value;
 	if (auth_port.value == "") {
 		auth_port_value = "6800"
 	} else {
