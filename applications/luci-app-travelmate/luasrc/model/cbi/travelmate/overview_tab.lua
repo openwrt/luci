@@ -65,18 +65,23 @@ o2 = s:option(Flag, "trm_captive", translate("Captive Portal Detection"),
 o2.default = o2.enabled
 o2.rmempty = false
 
-o3 = s:option(ListValue, "trm_iface", translate("Uplink / Trigger interface"),
+o3 = s:option(Flag, "trm_proactive", translate("ProActive Uplink Switch"),
+	translate("Proactively scan and switch to a higher prioritized uplink, despite of an already existing connection."))
+o3.default = o3.enabled
+o3.rmempty = false
+
+o4 = s:option(ListValue, "trm_iface", translate("Uplink / Trigger interface"),
 	translate("Name of the used uplink interface."))
 if dump then
 	local i, v
 	for i, v in ipairs(dump.interface) do
 		if v.interface ~= "loopback" and v.interface ~= "lan" then
-			o3:value(v.interface)
+			o4:value(v.interface)
 		end
 	end
 end
-o3.default = trmiface
-o3.rmempty = false
+o4.default = trmiface
+o4.rmempty = false
 
 -- Runtime information
 
