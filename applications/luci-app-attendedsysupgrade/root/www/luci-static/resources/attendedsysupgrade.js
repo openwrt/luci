@@ -33,7 +33,7 @@ function edit_server() {
 	$("#server").className = '';
 	$("#server").onclick = null;
 
-	button_set = document.createElement("input");
+	var button_set = document.createElement("input");
 	button_set.type = "button";
 	button_set.value = "Save";
 	button_set.name = "button_set";
@@ -111,7 +111,7 @@ function ubus_call(command, argument, params, variable) {
 	request_data.id = ubus_counter;
 	request_data.method = "call";
 	request_data.params = [ data.ubus_rpc_session, command, argument, params ]
-	request_json = JSON.stringify(request_data)
+	var request_json = JSON.stringify(request_data)
 	ubus_counter++;
 	var request = new XMLHttpRequest();
 	request.open("POST", ubus_url, true);
@@ -179,7 +179,7 @@ function upgrade_check_callback(request_text) {
 	}
 	if(request_json.upgrades != undefined) {
 		info_output += "<h3>Package upgrades available</h3>"
-		for (upgrade in request_json.upgrades) {
+		for (var upgrade in request_json.upgrades) {
 			info_output += "<b>" + upgrade + "</b>: " + request_json.upgrades[upgrade][1] + " to " + request_json.upgrades[upgrade][0] + "<br />"
 		}
 	}
@@ -231,7 +231,7 @@ function upgrade_request_callback(request) {
 	var filename_split = data.sysupgrade_url.split("/")
 	data.filename = filename_split[filename_split.length - 1]
 
-	info_output = 'Firmware created: <a href="' + data.sysupgrade_url + '"><b>' + data.filename + '</b></a>'
+	var info_output = 'Firmware created: <a href="' + data.sysupgrade_url + '"><b>' + data.filename + '</b></a>'
 	if(data.advanced_mode == 1) {
 		info_output += '<br /><a target="_blank" href="' + data.sysupgrade_url + '.log">Build log</a>'
 	}
@@ -320,6 +320,7 @@ function download_image() {
 }
 
 function server_request(request_dict, path, callback) {
+	var request_json;
 	request_dict.distro = data.release.distribution;
 	request_dict.target = data.release.target.split("\/")[0];
 	request_dict.subtarget = data.release.target.split("\/")[1];
@@ -332,7 +333,7 @@ function server_request(request_dict, path, callback) {
 		show("#server_div");
 	}
 	request.addEventListener('load', function(event) {
-		request_text = request.responseText;
+		var request_text = request.responseText;
 		if (request.status === 200) {
 			callback(request_text)
 
@@ -378,7 +379,7 @@ function server_request(request_dict, path, callback) {
 		} else if (request.status === 500) {
 			request_json = JSON.parse(request_text)
 
-			error_box_content = "<b>Internal server error</b><br />"
+			var error_box_content = "<b>Internal server error</b><br />"
 			error_box_content += request_json.error
 			if(request_json.log != undefined) {
 				data.log_url = request_json.log

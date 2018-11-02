@@ -2071,7 +2071,7 @@ function cbi_dropdown_init(sb) {
 cbi_dropdown_init.prototype = CBIDropdown;
 
 function cbi_update_table(table, data, placeholder) {
-	target = isElem(table) ? table : document.querySelector(table);
+	var target = isElem(table) ? table : document.querySelector(table);
 
 	if (!isElem(target))
 		return;

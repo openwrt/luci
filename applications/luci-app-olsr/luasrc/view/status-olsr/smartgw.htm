@@ -55,6 +55,7 @@ XHR.poll(10, '<%=REQUEST_URI%>', { status: 1 },
 		for (var idx = 0; idx < info.length; idx++)
 		{
 			var smartgw = info[idx];
+			var linkgw;
 			s += '<div class="tr cbi-section-table-row cbi-rowstyle-'+(1 + (idx % 2))+' proto-' + smartgw.proto + '">'
 			if (smartgw.proto == '6') {
 				linkgw = '<a href="http://[' + smartgw.ipAddress + ']/cgi-bin-status.html">' + smartgw.ipAddress + '</a>'

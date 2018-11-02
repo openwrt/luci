@@ -47,12 +47,14 @@ XHR.poll(10, '<%=REQUEST_URI%>', { status: 1 },
 				linkgw = '<a href="http://' + hna.gateway + '/cgi-bin-status.html">' + hna.gateway + '</a>'
 			}
 
+			var validity;
 			if (hna.validityTime != undefined) {
 				validity = hna.validityTime + 's'
 			} else {
 				validity = '-'
 			}
 
+			var hostname;
 			if (hna.hostname != undefined) {
 				hostname = ' / <a href="http://' + hna.hostname + '/cgi-bin-status.html">' + hna.hostname + '</a>'
 			} else {

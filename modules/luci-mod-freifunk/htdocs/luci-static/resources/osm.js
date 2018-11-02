@@ -53,8 +53,8 @@ OpenLayers.Control.Click = OpenLayers.Class(OpenLayers.Control, {
 
 	trigger: function(e) {
 		var lonlat = map.getLonLatFromViewPortPx(e.xy);	
-		lat=merc2lat(lonlat.lat);
-		lon=merc2lon(lonlat.lon);
+		var lat=merc2lat(lonlat.lat);
+		var lon=merc2lon(lonlat.lon);
 		if(parent.document.getElementById(latfield_id)==null){
 			latfield=document.getElementById('osmlat');
 		}else{
@@ -92,7 +92,7 @@ function init(){
 
 function drawmap() {
 	OpenLayers.Lang.setCode('de'); 
-	mapdiv=document.getElementById('map');
+	var mapdiv=document.getElementById('map');
 	mapdiv.style.height=window.innerHeight+"px";
 	mapdiv.style.width=window.innerWidth+"px";
 	map = new OpenLayers.Map('map', {
