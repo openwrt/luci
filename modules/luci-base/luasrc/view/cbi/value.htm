@@ -21,6 +21,6 @@
 		ifattr(#self.keylist > 0, "data-choices", { self.keylist, self.vallist })
 	%> />
 	<%- if self.password then -%>
-		<div class="cbi-button cbi-button-neutral" title="<%:Reveal/hide password%>" onclick="var e = this.previousElementSibling; e.type = (e.type === 'password') ? 'text' : 'password'">∗</div>
+		<button class="cbi-button cbi-button-neutral" title="<%:Reveal/hide password%>" aria-label="<%:Reveal/hide password%>" onclick="var e = this.previousElementSibling; e.type = (e.type === 'password') ? 'text' : 'password'">∗</button>
 	<% end %>
 <%+cbi/valuefooter%>
