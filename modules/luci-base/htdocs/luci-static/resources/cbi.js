@@ -2207,7 +2207,9 @@ function cbi_update_table(table, data, placeholder) {
 var tooltipDiv = null, tooltipTimeout = null;
 
 function showTooltip(ev) {
-	if (!matchesElem(ev.target, '[data-tooltip]'))
+	var target = findParent(ev.target, '[data-tooltip]');
+
+	if (!target)
 		return;
 
 	if (tooltipTimeout !== null) {
@@ -2215,19 +2217,19 @@ function showTooltip(ev) {
 		tooltipTimeout = null;
 	}
 
-	var rect = ev.target.getBoundingClientRect(),
+	var rect = target.getBoundingClientRect(),
 	    x = rect.left              + window.pageXOffset,
 	    y = rect.top + rect.height + window.pageYOffset;
 
 	tooltipDiv.className = 'cbi-tooltip';
 	tooltipDiv.innerHTML = '▲ ';
-	tooltipDiv.firstChild.data += ev.target.getAttribute('data-tooltip');
+	tooltipDiv.firstChild.data += target.getAttribute('data-tooltip');
 
-	if (ev.target.hasAttribute('data-tooltip-style'))
-		tooltipDiv.classList.add(ev.target.getAttribute('data-tooltip-style'));
+	if (target.hasAttribute('data-tooltip-style'))
+		tooltipDiv.classList.add(target.getAttribute('data-tooltip-style'));
 
 	if ((y + tooltipDiv.offsetHeight) > (window.innerHeight + window.pageYOffset)) {
-		y -= (tooltipDiv.offsetHeight + ev.target.offsetHeight);
+		y -= (tooltipDiv.offsetHeight + target.offsetHeight);
 		tooltipDiv.firstChild.data = '▼ ' + tooltipDiv.firstChild.data.substr(2);
 	}
 
