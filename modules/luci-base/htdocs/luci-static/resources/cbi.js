@@ -1117,10 +1117,7 @@ function cbi_validate_field(cbid, optional, type)
 
 	try {
 		var cbiValidator = new CBIValidator(field, type, optional);
-
-		validatorFn = function() {
-			return cbiValidator.validate();
-		};
+		validatorFn = cbiValidator.validate.bind(cbiValidator);
 	}
 	catch(e) {
 		validatorFn = null;
@@ -1143,15 +1140,7 @@ function cbi_validate_field(cbid, optional, type)
 			field.addEventListener("click",  validatorFn);
 		}
 
-		field.setAttribute("cbi_validate", validatorFn);
-		field.setAttribute("cbi_datatype", type);
-		field.setAttribute("cbi_optional", (!!optional).toString());
-
 		validatorFn();
-
-		var fcbox = document.getElementById('cbi.combobox.' + field.id);
-		if (fcbox)
-			cbi_validate_field(fcbox, optional, type);
 	}
 }
 
