@@ -53,6 +53,7 @@ metric.datatype    = "uinteger"
 
 clientid = section:taboption("advanced", Value, "clientid",
 	translate("Client ID to send when requesting DHCP"))
+clientid.datatype  = "hexstring"
 
 
 vendorclass = section:taboption("advanced", Value, "vendorid",
