@@ -61,12 +61,12 @@ XHR.poll(10, '<%=REQUEST_URI%>/json', { },
 		if (e = document.getElementById('version'))
 			var version;
 			var date;
-			if (info.v4.config.olsrdVersion != undefined) {
-				version = info.v4.config.olsrdVersion
-				date = info.v4.config.olsrdBuildDate
-			} else if (info.v6.config.olsrdVersion != undefined) {
-				version = info.v6.config.olsrdVersion
-				date = info.v6.config.olsrdBuildDate
+			if (info.v4.version.version != undefined) {
+				version = info.v4.version.version
+				date = info.v4.version.date
+			} else if (info.v6.version.version != undefined) {
+				version = info.v6.version.version
+				date = info.v6.version.date
 			} else {
 				version = 'unknown'
 				date = 'unknown'

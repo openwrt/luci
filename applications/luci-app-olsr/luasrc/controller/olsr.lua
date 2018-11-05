@@ -87,8 +87,8 @@ function action_json()
 	local v4_port = tonumber(uci:get("olsrd", "olsrd_jsoninfo", "port") or "") or 9090
 	local v6_port = tonumber(uci:get("olsrd6", "olsrd_jsoninfo", "port") or "") or 9090
 
-	jsonreq4 = utl.exec("(echo /status | nc 127.0.0.1 %d | sed -n '/^[}{ ]/p') 2>/dev/null" % v4_port)
-	jsonreq6 = utl.exec("(echo /status | nc ::1 %d | sed -n '/^[}{ ]/p') 2>/dev/null" % v6_port)
+	jsonreq4 = utl.exec("(echo /all | nc 127.0.0.1 %d | sed -n '/^[}{ ]/p') 2>/dev/null" % v4_port)
+	jsonreq6 = utl.exec("(echo /all | nc ::1 %d | sed -n '/^[}{ ]/p') 2>/dev/null" % v6_port)
 	http.prepare_content("application/json")
 	if not jsonreq4 or jsonreq4 == "" then
 		jsonreq4 = "{}"
