@@ -33,12 +33,12 @@ local i = 1
 
 		<div class="tr cbi-section-table-row cbi-rowstyle-<%=i%> proto-<%=iface.proto%>">
 			<div class="td cbi-section-table-cell"><%=iface.name%></div>
-			<div class="td cbi-section-table-cell"><%=iface.state%></div>
-			<div class="td cbi-section-table-cell"><%=iface.olsrMTU%></div>
-			<div class="td cbi-section-table-cell"><%=iface.wireless and luci.i18n.translate('yes') or luci.i18n.translate('no')%></div>
-			<div class="td cbi-section-table-cell"><%=iface.ipv4Address or iface.ipv6Address%></div>
-			<div class="td cbi-section-table-cell"><%=iface.netmask%></div>
-			<div class="td cbi-section-table-cell"><%=iface.broadcast or iface.multicast%></div>
+			<div class="td cbi-section-table-cell"><%=iface.olsrInterface.up and luci.i18n.translate('up') or luci.i18n.translate('down')%></div>
+			<div class="td cbi-section-table-cell"><%=iface.olsrInterface.mtu%></div>
+			<div class="td cbi-section-table-cell"><%=iface.olsrInterface.wireless and luci.i18n.translate('yes') or luci.i18n.translate('no')%></div>
+			<div class="td cbi-section-table-cell"><%=iface.olsrInterface.ipAddress%></div>
+			<div class="td cbi-section-table-cell"><%=iface.olsrInterface.ipv4Address ~= '0.0.0.0' and iface.olsrInterface.ipv4Netmask%></div>
+			<div class="td cbi-section-table-cell"><%=iface.olsrInterface.ipv4Address ~= '0.0.0.0' and iface.olsrInterface.ipv4Broadcast or iface.olsrInterface.ipv6Multicast%></div>
 		</div>
 		<% i = ((i % 2) + 1)
 		end %>
