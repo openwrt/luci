@@ -318,13 +318,14 @@ function action_smartgw()
 
 	local function compare(a,b)
 		if a.proto == b.proto then
-			return a.tcPathCost < b.tcPathCost
+			return a.cost < b.cost
 		else
 			return a.proto < b.proto
 		end
 	end
 
-	table.sort(data, compare)
+	table.sort(data.ipv4, compare)
+	table.sort(data.ipv6, compare)
 	luci.template.render("status-olsr/smartgw", {gws=data, has_v4=has_v4, has_v6=has_v6})
 end
 
