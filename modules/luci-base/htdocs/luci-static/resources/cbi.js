@@ -569,7 +569,7 @@ var CBIValidatorPrototype = {
 					return;
 
 				var input = sibling.querySelector('[data-type]'),
-				    values = input.getAttribute('data-is-list') ? input.value.match(/[^ \t]+/g) : [ input.value ];
+				    values = input ? (input.getAttribute('data-is-list') ? input.value.match(/[^ \t]+/g) : [ input.value ]) : null;
 
 				if (values !== null && values.indexOf(ctx.value) !== -1)
 					unique = false;
@@ -806,7 +806,9 @@ function cbi_combobox_init(id, values, def, man) {
 		'class': 'cbi-dropdown',
 		'display-items': 5,
 		'optional': obj.getAttribute('data-optional'),
-		'placeholder': _('-- Please choose --')
+		'placeholder': _('-- Please choose --'),
+		'data-type': obj.getAttribute('data-type'),
+		'data-optional': obj.getAttribute('data-optional')
 	}, [ E('ul') ]);
 
 	if (!(obj.value in values) && obj.value.length) {
@@ -1134,6 +1136,7 @@ function cbi_validate_field(cbid, optional, type)
 
 		field.addEventListener("blur",  validatorFn);
 		field.addEventListener("keyup", validatorFn);
+		field.addEventListener("cbi-dropdown-change", validatorFn);
 
 		if (matchesElem(field, 'select')) {
 			field.addEventListener("change", validatorFn);
