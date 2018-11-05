@@ -1506,7 +1506,18 @@ function E()
 	if (attr)
 		for (var key in attr)
 			if (attr.hasOwnProperty(key) && attr[key] !== null && attr[key] !== undefined)
-				elem.setAttribute(key, attr[key]);
+				switch (typeof(attr[key])) {
+				case 'function':
+					elem.addEventListener(key, attr[key]);
+					break;
+
+				case 'object':
+					elem.setAttribute(key, JSON.stringify(attr[key]));
+					break;
+
+				default:
+					elem.setAttribute(key, attr[key]);
+				}
 
 	if (typeof(data) === 'function')
 		data = data(elem);
