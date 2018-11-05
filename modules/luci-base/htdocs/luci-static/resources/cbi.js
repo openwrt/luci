@@ -833,6 +833,7 @@ function cbi_combobox_init(id, values, def, man) {
 		})
 	]));
 
+	sb.value = obj.value;
 	obj.parentNode.replaceChild(sb, obj);
 }
 
@@ -1729,6 +1730,7 @@ CBIDropdown = {
 	saveValues: function(sb, ul) {
 		var sel = ul.querySelectorAll('li[selected]'),
 		    div = sb.lastElementChild,
+		    strval = '',
 		    values = [];
 
 		while (div.lastElementChild)
@@ -1738,17 +1740,21 @@ CBIDropdown = {
 			if (s.hasAttribute('placeholder'))
 				return;
 
-			div.appendChild(E('input', {
-				type: 'hidden',
-				name: s.hasAttribute('name') ? s.getAttribute('name') : (sb.getAttribute('name') || ''),
-				value: s.hasAttribute('data-value') ? s.getAttribute('data-value') : s.innerText
-			}));
-
-			values.push({
+			var v = {
 				text: s.innerText,
 				value: s.hasAttribute('data-value') ? s.getAttribute('data-value') : s.innerText,
 				element: s
-			});
+			};
+
+			div.appendChild(E('input', {
+				type: 'hidden',
+				name: s.hasAttribute('name') ? s.getAttribute('name') : (sb.getAttribute('name') || ''),
+				value: v.value
+			}));
+
+			values.push(v);
+
+			strval += strval.length ? ' ' + v.value : v.value;
 		});
 
 		var detail = {
@@ -1760,6 +1766,8 @@ CBIDropdown = {
 			detail.values = values;
 		else
 			detail.value = values.length ? values[0] : null;
+
+		sb.value = strval;
 
 		sb.dispatchEvent(new CustomEvent('cbi-dropdown-change', {
 			bubbles: true,
