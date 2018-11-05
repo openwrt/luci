@@ -300,7 +300,7 @@ function action_mid()
 
 	local function compare(a,b)
 		if a.proto == b.proto then
-			return a.ipAddress < b.ipAddress
+			return a.main.ipAddress < b.main.ipAddress
 		else
 			return a.proto < b.proto
 		end
