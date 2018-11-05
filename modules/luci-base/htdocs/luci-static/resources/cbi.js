@@ -228,7 +228,7 @@ var CBIValidatorPrototype = {
 
 	validate: function() {
 		/* element is detached */
-		if (!this.field.form)
+		if (!findParent(this.field, 'form'))
 			return true;
 
 		this.field.classList.remove('cbi-input-invalid');
@@ -1124,10 +1124,12 @@ function cbi_validate_field(cbid, optional, type)
 	};
 
 	if (validatorFn !== null) {
-		if (!field.form.cbi_validators)
-			field.form.cbi_validators = [ ];
+		var form = findParent(field, 'form');
 
-		field.form.cbi_validators.push(validatorFn);
+		if (!form.cbi_validators)
+			form.cbi_validators = [ ];
+
+		form.cbi_validators.push(validatorFn);
 
 		field.addEventListener("blur",  validatorFn);
 		field.addEventListener("keyup", validatorFn);
