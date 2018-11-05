@@ -852,6 +852,14 @@ function get_status_by_address(self, addr)
 					end
 				end
 			end
+			if s and s['ipv6-prefix-assignment'] then
+				local a
+				for _, a in ipairs(s['ipv6-prefix-assignment']) do
+					if a and a['local-address'] and a['local-address'].address == addr then
+						return net, s
+					end
+				end
+			end
 		end
 	end
 end
