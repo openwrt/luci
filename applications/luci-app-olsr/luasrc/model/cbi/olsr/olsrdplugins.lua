@@ -227,6 +227,7 @@ else
 	-- create a loadplugin section for each found plugin
 	for v in fs.dir("/usr/lib") do
 		if v:sub(1, 6) == "olsrd_" then
+			v = string.match(v, "^(olsrd.*)%.so%..*")
 			if not plugins[v] then
 				mpi.uci:section(
 					"olsrd", "LoadPlugin", nil,
