@@ -1754,7 +1754,7 @@ CBIDropdown = {
 			element: sb
 		};
 
-		if (this.mult)
+		if (this.multi)
 			detail.values = values;
 		else
 			detail.value = values.length ? values[0] : null;
