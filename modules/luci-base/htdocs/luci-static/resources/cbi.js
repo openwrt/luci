@@ -582,6 +582,11 @@ var CBIValidatorPrototype = {
 				return this.apply(subvalidator, undefined, subargs);
 
 			return this.assert(true);
+		},
+
+		hexstring: function() {
+			return this.assert(this.value.match(/^([a-f0-9][a-f0-9]|[A-F0-9][A-F0-9])+$/),
+				_('hexadecimal encoded value'));
 		}
 	}
 };
