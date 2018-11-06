@@ -273,11 +273,12 @@
 		</div>
 		<div class="main-right">
 			<div id="maincontent">
+				<div class="logoImg">                                                       
+                                        <img class="mobile-hide" src="<%=media%>/logo.png" alt="Rosy">                                                                 
+                                        <img src="<%=media%>/mobile-loginBG.png" class="PC-hide">
+                                	<a class="brand" href="#"><%=boardinfo.hostname or "?"%></a>                             
+                                </div>
 				<div class="container">
-					<div class="logoImg">
-						<img src="<%=media%>/logo.png" alt="Rosy">
-						<a class="brand" href="#"><%=boardinfo.hostname or "?"%></a>
-					</div>
 					<%- if luci.sys.process.info("uid") == 0 and luci.sys.user.getuser("root") and not luci.sys.user.getpasswd("root") then -%>
 					<div class="alert-message warning">
 						<h4>
