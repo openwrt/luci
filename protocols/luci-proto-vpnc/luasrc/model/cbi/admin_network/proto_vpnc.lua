@@ -8,7 +8,7 @@ local authgroup, interface, passgroup, hexpassgroup
 local domain, vendor, natt_mode, dh_group
 local pfs, enable_single_des, enable_no_enc
 local mtu, local_addr, local_port, dpd_idle
-local auth_mode, target_network
+local auth_mode, target_network, defaultroute
 
 local ifc = net:get_interface():name()
 
@@ -77,3 +77,9 @@ dpd_idle.placeholder = "600"
 ifname = section:taboption("general", Value, "target_network", translate("Target network"))
 port.placeholder = "0.0.0.0/0"
 port.datatype    = "network"
+
+defaultroute = section:taboption("general", ListValue, "defaultroute",
+	translate("Default Route"),
+	translate("Set VPN as Default Route"))
+defaultroute:value("0", translate("No"))
+defaultroute:value("1", translate("Yes"))
