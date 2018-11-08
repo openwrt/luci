@@ -1436,6 +1436,14 @@ if (window.NodeList && !NodeList.prototype.forEach) {
 	};
 }
 
+if (!window.requestAnimationFrame) {
+	window.requestAnimationFrame = function(f) {
+		window.setTimeout(function() {
+			f(new Date().getTime())
+		}, 1000/30);
+	};
+}
+
 
 var dummyElem, domParser;
 
@@ -1556,11 +1564,10 @@ CBIDropdown = {
 		var st = window.getComputedStyle(sb, null),
 		    ul = sb.querySelector('ul'),
 		    li = ul.querySelectorAll('li'),
+		    fl = findParent(sb, '.cbi-value-field'),
 		    sel = ul.querySelector('[selected]'),
 		    rect = sb.getBoundingClientRect(),
-		    h = sb.clientHeight - parseFloat(st.paddingTop) - parseFloat(st.paddingBottom),
-		    mh = this.dropdown_items * h,
-		    eh = Math.min(mh, li.length * h);
+		    items = Math.min(this.dropdown_items, li.length);
 
 		document.querySelectorAll('.cbi-dropdown[open]').forEach(function(s) {
 			s.dispatchEvent(new CustomEvent('cbi-dropdown-close', {}));
@@ -1568,22 +1575,54 @@ CBIDropdown = {
 
 		sb.setAttribute('open', '');
 
-		if ('ontouchstart' in window) {
-			var scroll = document.documentElement.scrollTop,
-			    vpWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0),
-			    vpHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+		var pv = ul.cloneNode(true);
+		    pv.classList.add('preview');
 
-			ul.style.top = h + 'px';
+		if (fl)
+			fl.classList.add('cbi-dropdown-open');
+
+		if ('ontouchstart' in window) {
+			var vpWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0),
+			    vpHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0),
+			    scrollFrom = window.pageYOffset,
+			    scrollTo = scrollFrom + rect.top - vpHeight * 0.5,
+			    start = null;
+
+			ul.style.top = sb.offsetHeight + 'px';
 			ul.style.left = -rect.left + 'px';
 			ul.style.right = (rect.right - vpWidth) + 'px';
+			ul.style.maxHeight = (vpHeight * 0.5) + 'px';
+			ul.style.WebkitOverflowScrolling = 'touch';
 
-			window.scrollTo(0, (scroll + rect.top - vpHeight * 0.6));
+			var scrollStep = function(timestamp) {
+				if (!start) {
+					start = timestamp;
+					ul.scrollTop = sel ? Math.max(sel.offsetTop - sel.offsetHeight, 0) : 0;
+				}
+
+				var duration = Math.max(timestamp - start, 1);
+				if (duration < 100) {
+					document.body.scrollTop = scrollFrom + (scrollTo - scrollFrom) * (duration / 100);
+					window.requestAnimationFrame(scrollStep);
+				}
+				else {
+					document.body.scrollTop = scrollTo;
+				}
+			};
+
+			window.requestAnimationFrame(scrollStep);
 		}
 		else {
-			ul.style.maxHeight = mh + 'px';
-			ul.scrollTop = sel ? Math.max(sel.offsetTop - sel.offsetHeight, 0) : 0;
+			ul.style.maxHeight = '1px';
 			ul.style.top = ul.style.bottom = '';
-			ul.style[((rect.top + rect.height + eh) > window.innerHeight) ? 'bottom' : 'top'] = rect.height + 'px';
+
+			window.requestAnimationFrame(function() {
+				var height = items * li[Math.max(0, li.length - 2)].offsetHeight;
+
+				ul.scrollTop = sel ? Math.max(sel.offsetTop - sel.offsetHeight, 0) : 0;
+				ul.style[((rect.top + rect.height + height) > window.innerHeight) ? 'bottom' : 'top'] = rect.height + 'px';
+				ul.style.maxHeight = height + 'px';
+			});
 		}
 
 		ul.querySelectorAll('[selected] input[type="checkbox"]').forEach(function(c) {
@@ -1591,10 +1630,6 @@ CBIDropdown = {
 		});
 
 		ul.classList.add('dropdown');
-
-		var pv = ul.cloneNode(true);
-		    pv.classList.remove('dropdown');
-		    pv.classList.add('preview');
 
 		sb.insertBefore(pv, ul.nextElementSibling);
 
@@ -1613,7 +1648,8 @@ CBIDropdown = {
 
 		var pv = sb.querySelector('ul.preview'),
 		    ul = sb.querySelector('ul.dropdown'),
-		    li = ul.querySelectorAll('li');
+		    li = ul.querySelectorAll('li'),
+		    fl = findParent(sb, '.cbi-value-field');
 
 		li.forEach(function(l) { l.removeAttribute('tabindex'); });
 		sb.lastElementChild.removeAttribute('tabindex');
@@ -1623,6 +1659,10 @@ CBIDropdown = {
 		sb.style.width = sb.style.height = '';
 
 		ul.classList.remove('dropdown');
+		ul.style.top = ul.style.bottom = ul.style.maxHeight = '';
+
+		if (fl)
+			fl.classList.remove('cbi-dropdown-open');
 
 		if (!no_focus)
 			this.setFocus(sb, sb);
@@ -1817,14 +1857,13 @@ CBIDropdown = {
 
 	createItems: function(sb, value) {
 		var sbox = this,
-		    val = (value || '').trim().split(/\s+/),
+		    val = (value || '').trim(),
 		    ul = sb.querySelector('ul');
 
 		if (!sbox.multi)
-			val.length = Math.min(val.length, 1);
-
-		if (val.length === 1 && val[0].length === 0)
-			val.length = 0;
+			val = val.length ? [ val ] : [];
+		else
+			val = val.length ? val.split(/\s+/) : [];
 
 		val.forEach(function(item) {
 			var new_item = null;
@@ -1881,6 +1920,8 @@ CBIDropdown = {
 			var li = findParent(ev.target, 'li');
 			if (li && li.parentNode.classList.contains('dropdown'))
 				this.toggleItem(sb, li);
+			else if (li && li.parentNode.classList.contains('preview'))
+				this.closeDropdown(sb);
 		}
 
 		ev.preventDefault();

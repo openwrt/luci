@@ -491,16 +491,16 @@ select:hover {
 
 input[type=text],
 input[type=password] {
-	padding: 0 3px;
+	padding: .25em;
 }
 
 select,
 input[type=text],
-input[type=password] {
+input[type=password],
+.cbi-dropdown {
 	width: 20em;
-	font-size: inherit;
-	line-height: 13pt;
-	height: 14pt;
+	font-size: 10pt;
+	height: 22px;
 }
 
 select[multiple] {
@@ -521,7 +521,6 @@ input.cbi-input-password + img {
 	width: 100%;
 }
 
-.td [data-dynlist] > input,
 .td input.cbi-input-password {
 	width: calc(100% - 20px);
 }
@@ -1050,6 +1049,7 @@ ul.cbi-tabmenu li.cbi-tab {
 	font-weight: bold;
 	text-shadow: 1px 1px 0px #fff;
 	display: none;
+	min-height: 22px;
 }
 
 .cbi-dropdown > ul > li {
@@ -1062,7 +1062,7 @@ ul.cbi-tabmenu li.cbi-tab {
 	flex-grow: 1;
 	align-items: center;
 	align-self: center;
-	min-height: 20px;
+	min-height: 22px;
 }
 
 .cbi-dropdown > ul > li .hide-open { display: initial; }
@@ -1092,10 +1092,6 @@ ul.cbi-tabmenu li.cbi-tab {
 	margin: 0;
 }
 
-.cbi-dropdown > ul > li input[type="text"] {
-	height: 20px;
-}
-
 .cbi-dropdown[open] {
 	position: relative;
 }
@@ -1110,6 +1106,7 @@ ul.cbi-tabmenu li.cbi-tab {
 	max-width: none;
 	min-width: 100%;
 	width: auto;
+	transition: max-height .125s ease-in;
 }
 
 .cbi-dropdown > ul > li[display],
@@ -1125,7 +1122,6 @@ ul.cbi-tabmenu li.cbi-tab {
 }
 
 .cbi-dropdown[empty] > ul > li,
-.cbi-dropdown[optional][open] > ul.dropdown > li[placeholder],
 .cbi-dropdown[multiple][open] > ul.dropdown > li > form {
 	display: block;
 }
@@ -1213,9 +1209,9 @@ select + .cbi-button {
 	padding: 0 6px;
 	vertical-align: top;
 	display: inline-block;
-	height: 14pt;
+	height: 22px;
 	font-size: 10pt;
-	line-height: 12pt;
+	line-height: 20px;
 }
 
 .cbi-tooltip-container {
@@ -1240,6 +1236,7 @@ select + .cbi-button {
 	left: auto;
 	opacity: 1;
 	transition: opacity .25s ease-in;
+	white-space: normal;
 }
 
 .zonebadge .cbi-tooltip {
@@ -1652,6 +1649,10 @@ select + .cbi-button {
 		display: inline-block;
 	}
 
+	.td.cbi-dropdown-open {
+		overflow: visible;
+	}
+
 	.td select {
 		word-wrap: normal;
 	}
@@ -1734,24 +1735,39 @@ select + .cbi-button {
 		font-size: 12pt;
 	}
 
-	input, textarea, select {
+	input, textarea, select, .cbi-button {
 		font-size: 12pt !important;
-		line-height: 1.4em;
+		line-height: 30px;
 	}
 
 	select, input[type="text"], input[type="password"] {
 		width: 100%;
-		height: 1.4em;
+		height: 30px;
 	}
 
-	input.cbi-input-password {
+	input[type="text"] + .cbi-button,
+	input[type="password"] + .cbi-button,
+	select + .cbi-button {
+		height: 30px;
+		line-height: 28px;
+	}
+
+	input.cbi-input-password,
+	[data-dynlist] > .add-item > input {
 		width: calc(100% - 20px);
 	}
 
 	.cbi-dynlist,
 	.cbi-dropdown {
 		min-width: 100%;
+		height: auto;
 		display: flex;
+	}
+
+	.cbi-dropdown > .more,
+	.cbi-dropdown > ul > li,
+	.cbi-dropdown > ul > li[placeholder] {
+		min-height: 30px;
 	}
 
 	.btn, .cbi-button {
