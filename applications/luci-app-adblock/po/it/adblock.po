@@ -14,9 +14,6 @@ msgstr ""
 msgid "'Jail' Blocklist Creation"
 msgstr ""
 
-msgid "-------"
-msgstr ""
-
 msgid ""
 "<b>Caution:</b> To prevent OOM exceptions on low memory devices with less "
 "than 64 MB free RAM, please only select a few of them!"
@@ -24,9 +21,6 @@ msgstr ""
 
 msgid "Adblock"
 msgstr "Adblock"
-
-msgid "Adblock Logfile"
-msgstr "Registro Adblock"
 
 msgid "Adblock Status"
 msgstr "Status Adblock"
@@ -40,6 +34,9 @@ msgstr "Tempo addizionale in secondi di attesa prima che adblock si avvii."
 msgid "Advanced"
 msgstr "Avanzato"
 
+msgid "Archive Categories"
+msgstr ""
+
 msgid "Backup Directory"
 msgstr "Directory del Backup"
 
@@ -52,7 +49,9 @@ msgstr "Fonti lista di Blocco"
 msgid "Blocklist not found!"
 msgstr ""
 
-msgid "Categories"
+msgid ""
+"Builds an additional 'Jail' list (/tmp/adb_list.jail) to block access to all "
+"domains except those listed in the whitelist file."
 msgstr ""
 
 msgid ""
@@ -141,11 +140,6 @@ msgid "Flush DNS Cache after adblock processing."
 msgstr ""
 
 msgid ""
-"For SSL protected blocklist sources you need a suitable SSL library, e.g. "
-"'libustream-ssl' or 'built-in'."
-msgstr ""
-
-msgid ""
 "For further information <a href=\"%s\" target=\"_blank\">check the online "
 "documentation</a>"
 msgstr ""
@@ -172,15 +166,14 @@ msgstr "Ultimo Avvio"
 
 msgid ""
 "List of available network interfaces. Usually the startup will be triggered "
-"by the 'wan' interface.<br />"
+"by the 'wan' interface."
 msgstr ""
 
 msgid ""
-"List of supported DNS backends with their default list export directory.<br /"
-">"
+"List of supported DNS backends with their default list export directory."
 msgstr ""
 "Lista dei backend DNS supportati con la loro directory di default di esporto "
-"della lista.<br />"
+"della lista."
 
 msgid "List of supported and fully pre-configured download utilities."
 msgstr ""
@@ -188,10 +181,10 @@ msgstr ""
 msgid "Loading"
 msgstr "Caricando"
 
-msgid "Max. Download Queue"
+msgid "Low Priority Service"
 msgstr ""
 
-msgid "Name"
+msgid "Max. Download Queue"
 msgstr ""
 
 msgid "No"
@@ -232,12 +225,19 @@ msgstr "Interrogazione domini"
 
 msgid ""
 "Raise the minimum email notification count, to get emails if the overall "
-"count is less or equal to the given limit (default 0),<br />"
+"count is less or equal to the given limit (default 0),"
 msgstr ""
 
-msgid "Redirect all DNS queries from 'lan' zone to the local resolver."
+msgid ""
+"Redirect all DNS queries from 'lan' zone to the local resolver, apply to udp "
+"and tcp protocol on ports 53, 853 and 5353."
 msgstr ""
-"Reindirizza tutte le richieste DNS dalla zona 'lan' al risolvitore locale."
+
+msgid "Refresh"
+msgstr ""
+
+msgid "Refresh Blocklist Sources"
+msgstr ""
 
 msgid "Resume"
 msgstr "Riprendi"
@@ -253,12 +253,17 @@ msgstr "Salva"
 
 msgid ""
 "Send notification emails in case of a processing error or if domain count is "
-"&le; 0.<br />"
+"&le; 0."
+msgstr ""
+
+msgid ""
+"Set the nice level to 'low priority' and the adblock background processing "
+"will take less resources from the system."
 msgstr ""
 
 msgid ""
 "Size of the download queue to handle downloads &amp; list processing in "
-"parallel (default '4').<br />"
+"parallel (default '4')."
 msgstr ""
 
 msgid "Startup Trigger"
@@ -281,19 +286,25 @@ msgstr "Directory per la lista di blocco generata 'adb_list.overall'."
 msgid "The file size is too large for online editing in LuCI (&ge; 100 KB)."
 msgstr ""
 
+msgid "The syslog output, pre-filtered for adblock related messages only."
+msgstr ""
+"Questo form mostra l'output del registro, prefiltrato per messaggi relativi "
+"solo ad adblock."
+
+msgid "This change requires a manual service stop/re-start to take effect."
+msgstr ""
+
 msgid ""
 "This form allows you to modify the content of the adblock blacklist (%s)."
-"<br />"
 msgstr ""
 "Questo form ti consente di modificare il contenuto della lista nera di "
-"adblock (%s).<br />"
+"adblock (%s)."
 
 msgid ""
 "This form allows you to modify the content of the adblock whitelist (%s)."
-"<br />"
 msgstr ""
 "Questo form ti consente di modificare il contenuto della lista bianca di "
-"adblock (%s).<br />"
+"adblock (%s)."
 
 msgid ""
 "This form allows you to modify the content of the main adblock configuration "
@@ -308,13 +319,6 @@ msgid ""
 msgstr ""
 "Questo form ti consente di interrogare le liste di blocco attive per "
 "determinati domini, p.e. per metterli nella lista bianca."
-
-msgid ""
-"This form shows the syslog output, pre-filtered for adblock related messages "
-"only."
-msgstr ""
-"Questo form mostra l'output del registro, prefiltrato per messaggi relativi "
-"solo ad adblock."
 
 msgid ""
 "To overwrite the default path use the 'DNS Directory' option in the extra "
@@ -346,28 +350,32 @@ msgid ""
 "kidsafe configurations."
 msgstr ""
 
-msgid "disabled"
-msgstr "disabilitato"
-
 msgid ""
 "e.g. to receive an email notification with every adblock update set this "
 "value to 150000."
 msgstr ""
 
-msgid "enabled"
-msgstr "abilitato"
+#~ msgid "Adblock Logfile"
+#~ msgstr "Registro Adblock"
 
-msgid "error"
-msgstr "errore"
+#~ msgid "Redirect all DNS queries from 'lan' zone to the local resolver."
+#~ msgstr ""
+#~ "Reindirizza tutte le richieste DNS dalla zona 'lan' al risolvitore locale."
 
-msgid "n/a"
-msgstr "n/d"
+#~ msgid "disabled"
+#~ msgstr "disabilitato"
 
-msgid "paused"
-msgstr "in pausa"
+#~ msgid "enabled"
+#~ msgstr "abilitato"
 
-msgid "running"
-msgstr ""
+#~ msgid "error"
+#~ msgstr "errore"
+
+#~ msgid "n/a"
+#~ msgstr "n/d"
+
+#~ msgid "paused"
+#~ msgstr "in pausa"
 
 #~ msgid "Available blocklist sources."
 #~ msgstr "Fonti lista di blocco disponibili."

@@ -18,9 +18,6 @@ msgstr ""
 msgid "'Jail' Blocklist Creation"
 msgstr "“Jail” 拦截名单创建"
 
-msgid "-------"
-msgstr "-------"
-
 msgid ""
 "<b>Caution:</b> To prevent OOM exceptions on low memory devices with less "
 "than 64 MB free RAM, please only select a few of them!"
@@ -30,9 +27,6 @@ msgstr ""
 
 msgid "Adblock"
 msgstr "Adblock"
-
-msgid "Adblock Logfile"
-msgstr "Adblock 日志文件"
 
 msgid "Adblock Status"
 msgstr "Adblock 状态"
@@ -46,6 +40,9 @@ msgstr "触发 Adblock 开始处理前的额外延迟（以秒为单位）。"
 msgid "Advanced"
 msgstr "高级"
 
+msgid "Archive Categories"
+msgstr ""
+
 msgid "Backup Directory"
 msgstr "备份目录"
 
@@ -58,7 +55,9 @@ msgstr "拦截列表来源"
 msgid "Blocklist not found!"
 msgstr ""
 
-msgid "Categories"
+msgid ""
+"Builds an additional 'Jail' list (/tmp/adb_list.jail) to block access to all "
+"domains except those listed in the whitelist file."
 msgstr ""
 
 msgid ""
@@ -142,13 +141,6 @@ msgid "Flush DNS Cache after adblock processing."
 msgstr "在 adblock 进程启动后清空 DNS 缓存。"
 
 msgid ""
-"For SSL protected blocklist sources you need a suitable SSL library, e.g. "
-"'libustream-ssl' or 'built-in'."
-msgstr ""
-"对受 SSL 保护的拦截列表源，您需要一个合适的 SSL 库，如 “libustream-ssl” 或 "
-"“built-in”。"
-
-msgid ""
 "For further information <a href=\"%s\" target=\"_blank\">check the online "
 "documentation</a>"
 msgstr "进一步信息<a href=\"%s\" target=\"_blank\">请访问在线文档</a>"
@@ -175,13 +167,12 @@ msgstr "最后运行"
 
 msgid ""
 "List of available network interfaces. Usually the startup will be triggered "
-"by the 'wan' interface.<br />"
-msgstr "可用网络接口列表。通常启动将由 “wan” 接口触发。<br />"
+"by the 'wan' interface."
+msgstr "可用网络接口列表。通常启动将由 “wan” 接口触发。"
 
 msgid ""
-"List of supported DNS backends with their default list export directory.<br /"
-">"
-msgstr "支持的 DNS 后端列表及其默认列表导出目录。<br />"
+"List of supported DNS backends with their default list export directory."
+msgstr "支持的 DNS 后端列表及其默认列表导出目录。"
 
 msgid "List of supported and fully pre-configured download utilities."
 msgstr "支持和完全预配置的下载工具列表。"
@@ -189,11 +180,11 @@ msgstr "支持和完全预配置的下载工具列表。"
 msgid "Loading"
 msgstr "加载中"
 
+msgid "Low Priority Service"
+msgstr ""
+
 msgid "Max. Download Queue"
 msgstr "最大下载队列"
-
-msgid "Name"
-msgstr ""
 
 msgid "No"
 msgstr "否"
@@ -230,13 +221,21 @@ msgstr "查询域"
 
 msgid ""
 "Raise the minimum email notification count, to get emails if the overall "
-"count is less or equal to the given limit (default 0),<br />"
+"count is less or equal to the given limit (default 0),"
 msgstr ""
 "如果总数小于或等于给定限制（默认为 0），请提高最小电子邮件通知数，以获取电子"
 "邮件。"
 
-msgid "Redirect all DNS queries from 'lan' zone to the local resolver."
-msgstr "将所有 DNS 查询从“lan”区域重定向到本地解析器。"
+msgid ""
+"Redirect all DNS queries from 'lan' zone to the local resolver, apply to udp "
+"and tcp protocol on ports 53, 853 and 5353."
+msgstr ""
+
+msgid "Refresh"
+msgstr ""
+
+msgid "Refresh Blocklist Sources"
+msgstr ""
 
 msgid "Resume"
 msgstr "恢复"
@@ -252,13 +251,18 @@ msgstr "保存"
 
 msgid ""
 "Send notification emails in case of a processing error or if domain count is "
-"&le; 0.<br />"
-msgstr "如果发生错误或域计数 &le; 0，发送通知电子邮件。<br />"
+"&le; 0."
+msgstr "如果发生错误或域计数 &le; 0，发送通知电子邮件。"
+
+msgid ""
+"Set the nice level to 'low priority' and the adblock background processing "
+"will take less resources from the system."
+msgstr ""
 
 msgid ""
 "Size of the download queue to handle downloads &amp; list processing in "
-"parallel (default '4').<br />"
-msgstr "处理下载队列的大小 ＆amp; 并行处理列表（默认 “4”）。<br />"
+"parallel (default '4')."
+msgstr "处理下载队列的大小 ＆amp; 并行处理列表（默认 “4”）。"
 
 msgid "Startup Trigger"
 msgstr "启动触发器"
@@ -280,14 +284,18 @@ msgstr "生成的 blocklist 'adb_list.overall'的目标目录。"
 msgid "The file size is too large for online editing in LuCI (&ge; 100 KB)."
 msgstr "文件过大，无法使用 LuCI 的在线编辑（&ge; 100 KB）。"
 
+msgid "The syslog output, pre-filtered for adblock related messages only."
+msgstr "此表单显示系统日志输出，仅针对 adblock 相关的消息进行了预筛选。"
+
+msgid "This change requires a manual service stop/re-start to take effect."
+msgstr ""
+
 msgid ""
 "This form allows you to modify the content of the adblock blacklist (%s)."
-"<br />"
 msgstr "此表单允许您修改 adblock 黑名单（%s）的内容。<br />"
 
 msgid ""
 "This form allows you to modify the content of the adblock whitelist (%s)."
-"<br />"
 msgstr "此表单允许您修改 adblock 白名单（%s）的内容。<br />"
 
 msgid ""
@@ -299,11 +307,6 @@ msgid ""
 "This form allows you to query active block lists for certain domains, e.g. "
 "for whitelisting."
 msgstr "此表单允许您查询某些域的活动块列表，例如用于列出白名单。"
-
-msgid ""
-"This form shows the syslog output, pre-filtered for adblock related messages "
-"only."
-msgstr "此表单显示系统日志输出，仅针对 adblock 相关的消息进行了预筛选。"
 
 msgid ""
 "To overwrite the default path use the 'DNS Directory' option in the extra "
@@ -334,28 +337,44 @@ msgid ""
 msgstr ""
 "您可以手动使用此限制性拦截列表，例如：为客人提供 wifi 或 kidsafe 配置。"
 
-msgid "disabled"
-msgstr "已禁用"
-
 msgid ""
 "e.g. to receive an email notification with every adblock update set this "
 "value to 150000."
 msgstr "例如：要接收每个 adblock 更新的电子邮件通知时将此值设置为150000。"
 
-msgid "enabled"
-msgstr "已启用"
+#~ msgid "-------"
+#~ msgstr "-------"
 
-msgid "error"
-msgstr "错误"
+#~ msgid "Adblock Logfile"
+#~ msgstr "Adblock 日志文件"
 
-msgid "n/a"
-msgstr "不可用"
+#~ msgid ""
+#~ "For SSL protected blocklist sources you need a suitable SSL library, e.g. "
+#~ "'libustream-ssl' or 'built-in'."
+#~ msgstr ""
+#~ "对受 SSL 保护的拦截列表源，您需要一个合适的 SSL 库，如 “libustream-ssl” "
+#~ "或 “built-in”。"
 
-msgid "paused"
-msgstr "已暂停"
+#~ msgid "Redirect all DNS queries from 'lan' zone to the local resolver."
+#~ msgstr "将所有 DNS 查询从“lan”区域重定向到本地解析器。"
 
-msgid "running"
-msgstr "运行中"
+#~ msgid "disabled"
+#~ msgstr "已禁用"
+
+#~ msgid "enabled"
+#~ msgstr "已启用"
+
+#~ msgid "error"
+#~ msgstr "错误"
+
+#~ msgid "n/a"
+#~ msgstr "不可用"
+
+#~ msgid "paused"
+#~ msgstr "已暂停"
+
+#~ msgid "running"
+#~ msgstr "运行中"
 
 #~ msgid "Invalid domain specified!"
 #~ msgstr "无效域名！"

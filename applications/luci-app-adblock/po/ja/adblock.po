@@ -14,9 +14,6 @@ msgstr ""
 msgid "'Jail' Blocklist Creation"
 msgstr "'Jail' ブロックリストの作成"
 
-msgid "-------"
-msgstr "（利用不可）"
-
 msgid ""
 "<b>Caution:</b> To prevent OOM exceptions on low memory devices with less "
 "than 64 MB free RAM, please only select a few of them!"
@@ -26,9 +23,6 @@ msgstr ""
 
 msgid "Adblock"
 msgstr "Adblock"
-
-msgid "Adblock Logfile"
-msgstr "Adblock ログファイル"
 
 msgid "Adblock Status"
 msgstr "Adblock ステータス"
@@ -41,6 +35,9 @@ msgstr "Adblock の処理が開始されるまでの、追加の遅延時間（�
 
 msgid "Advanced"
 msgstr "詳細設定"
+
+msgid "Archive Categories"
+msgstr ""
 
 msgid "Backup Directory"
 msgstr "バックアップ先 ディレクトリ"
@@ -56,13 +53,10 @@ msgstr ""
 
 msgid ""
 "Builds an additional 'Jail' list (/tmp/adb_list.jail) to block access to all "
-"domains except those listed in the whitelist file.<br />"
+"domains except those listed in the whitelist file."
 msgstr ""
 "ホワイトリストに存在しない全ドメインへのアクセスをブロックするために、追加で "
-"'Jail' リスト (/tmp/adb_list.jail) を作成します。<br />"
-
-msgid "Categories"
-msgstr "カテゴリー"
+"'Jail' リスト (/tmp/adb_list.jail) を作成します。"
 
 msgid ""
 "Choose 'none' to disable automatic startups, 'timed' to use a classic "
@@ -156,13 +150,6 @@ msgid "Flush DNS Cache after adblock processing."
 msgstr "Adblock 処理の後に DNS キャッシュをクリアします。"
 
 msgid ""
-"For SSL protected blocklist sources you need a suitable SSL library, e.g. "
-"'libustream-ssl' or 'built-in'."
-msgstr ""
-"SSLで保護されているブロックリストの取得には、適切なSSL ライブラリが必要です。"
-"例: 'libustream-ssl' または 'built-in'"
-
-msgid ""
 "For further information <a href=\"%s\" target=\"_blank\">check the online "
 "documentation</a>"
 msgstr ""
@@ -193,17 +180,16 @@ msgstr "最終実行"
 
 msgid ""
 "List of available network interfaces. Usually the startup will be triggered "
-"by the 'wan' interface.<br />"
+"by the 'wan' interface."
 msgstr ""
 "利用可能なネットワーク インターフェースの一覧です。通常、 'wan' インター"
-"フェースによりスタートアップがトリガされます。<br />"
+"フェースによりスタートアップがトリガされます。"
 
 msgid ""
-"List of supported DNS backends with their default list export directory.<br /"
-">"
+"List of supported DNS backends with their default list export directory."
 msgstr ""
 "サポートされる DNS バックエンドと、それぞれのデフォルトのリスト出力先ディレク"
-"トリのリストです<br />"
+"トリのリストです"
 
 msgid "List of supported and fully pre-configured download utilities."
 msgstr "サポートされ、かつ設定済のダウンロード ユーティリティの一覧です。"
@@ -211,11 +197,11 @@ msgstr "サポートされ、かつ設定済のダウンロード ユーティ�
 msgid "Loading"
 msgstr "読込中"
 
+msgid "Low Priority Service"
+msgstr ""
+
 msgid "Max. Download Queue"
 msgstr "ダウンロード キューの上限"
-
-msgid "Name"
-msgstr ""
 
 msgid "No"
 msgstr "いいえ"
@@ -254,14 +240,21 @@ msgstr "ドメインの検索"
 
 msgid ""
 "Raise the minimum email notification count, to get emails if the overall "
-"count is less or equal to the given limit (default 0),<br />"
+"count is less or equal to the given limit (default 0),"
 msgstr ""
 "メール通知を行うドメイン カウントの下限を設定します。全体カウントが指定された"
-"値以下の場合、メールを受け取ります（規定値: 0）。<br />"
+"値以下の場合、メールを受け取ります（規定値: 0）。"
 
-msgid "Redirect all DNS queries from 'lan' zone to the local resolver."
+msgid ""
+"Redirect all DNS queries from 'lan' zone to the local resolver, apply to udp "
+"and tcp protocol on ports 53, 853 and 5353."
 msgstr ""
-"'lan' ゾーンからの全 DNS クエリを、ローカル リゾルバにリダイレクトします。"
+
+msgid "Refresh"
+msgstr ""
+
+msgid "Refresh Blocklist Sources"
+msgstr ""
 
 msgid "Resume"
 msgstr "再開"
@@ -277,16 +270,20 @@ msgstr "保存"
 
 msgid ""
 "Send notification emails in case of a processing error or if domain count is "
-"&le; 0.<br />"
+"&le; 0."
+msgstr "処理エラーまたはドメイン カウントが0以下の場合、メールを送信します。"
+
+msgid ""
+"Set the nice level to 'low priority' and the adblock background processing "
+"will take less resources from the system."
 msgstr ""
-"処理エラーまたはドメイン カウントが0以下の場合、メールを送信します。<br />"
 
 msgid ""
 "Size of the download queue to handle downloads &amp; list processing in "
-"parallel (default '4').<br />"
+"parallel (default '4')."
 msgstr ""
 "ダウンロードの制御とリストの処理を同時並行的に行うダウンロード キューのサイズ"
-"です（既定値: '4'）。<br />"
+"です（既定値: '4'）。"
 
 msgid "Startup Trigger"
 msgstr "スタートアップ トリガ"
@@ -312,19 +309,25 @@ msgstr ""
 "LuCI上でのオンライン編集を行うには、ファイルサイズが大きすぎます (&ge; 100 "
 "KB)。"
 
+msgid "The syslog output, pre-filtered for adblock related messages only."
+msgstr ""
+"このフォームには、システムログ内の Adblock に関連するメッセージのみが表示され"
+"ます。"
+
+msgid "This change requires a manual service stop/re-start to take effect."
+msgstr ""
+
 msgid ""
 "This form allows you to modify the content of the adblock blacklist (%s)."
-"<br />"
 msgstr ""
 "このフォームでは、Adblock ブラックリスト (%s) の内容を変更することができま"
-"す。<br />"
+"す。"
 
 msgid ""
 "This form allows you to modify the content of the adblock whitelist (%s)."
-"<br />"
 msgstr ""
 "このフォームでは、Adblock ホワイトリスト (%s) の内容を変更することができま"
-"す。<br />"
+"す。"
 
 msgid ""
 "This form allows you to modify the content of the main adblock configuration "
@@ -339,13 +342,6 @@ msgid ""
 msgstr ""
 "このフォームでは、現在有効なリスト内で特定のドメインを検索することができま"
 "す。例: ホワイトリスト内"
-
-msgid ""
-"This form shows the syslog output, pre-filtered for adblock related messages "
-"only."
-msgstr ""
-"このフォームには、システムログ内の Adblock に関連するメッセージのみが表示され"
-"ます。"
 
 msgid ""
 "To overwrite the default path use the 'DNS Directory' option in the extra "
@@ -379,27 +375,46 @@ msgstr ""
 "この制約の厳しいブロックリストを、ゲスト WiFi や子供の安全を守る設定などに手"
 "動で利用することができます。"
 
-msgid "disabled"
-msgstr "無効"
-
 msgid ""
 "e.g. to receive an email notification with every adblock update set this "
 "value to 150000."
 msgstr ""
 "例: Adblock のアップデート毎にメールを受け取るには、150000 に設定します。"
 
-msgid "enabled"
-msgstr "有効"
+#~ msgid "-------"
+#~ msgstr "（利用不可）"
 
-msgid "error"
-msgstr "エラー"
+#~ msgid "Adblock Logfile"
+#~ msgstr "Adblock ログファイル"
 
-msgid "n/a"
-msgstr "利用不可"
+#~ msgid "Categories"
+#~ msgstr "カテゴリー"
 
-msgid "paused"
-msgstr "一時停止"
+#~ msgid ""
+#~ "For SSL protected blocklist sources you need a suitable SSL library, e.g. "
+#~ "'libustream-ssl' or 'built-in'."
+#~ msgstr ""
+#~ "SSLで保護されているブロックリストの取得には、適切なSSL ライブラリが必要で"
+#~ "す。例: 'libustream-ssl' または 'built-in'"
 
-msgid "running"
-msgstr "実行中"
+#~ msgid "Redirect all DNS queries from 'lan' zone to the local resolver."
+#~ msgstr ""
+#~ "'lan' ゾーンからの全 DNS クエリを、ローカル リゾルバにリダイレクトします。"
 
+#~ msgid "disabled"
+#~ msgstr "無効"
+
+#~ msgid "enabled"
+#~ msgstr "有効"
+
+#~ msgid "error"
+#~ msgstr "エラー"
+
+#~ msgid "n/a"
+#~ msgstr "利用不可"
+
+#~ msgid "paused"
+#~ msgstr "一時停止"
+
+#~ msgid "running"
+#~ msgstr "実行中"
