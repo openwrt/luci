@@ -103,7 +103,7 @@ table.sort(netlist,
 
 s = m:section(TypedSection, "interface", translate("Interface Overview"))
 
-function s.sections(self)
+function s.cfgsections(self)
 	local _, net, sl = nil, nil, { }
 
 	for _, net in ipairs(netlist) do
@@ -120,10 +120,6 @@ function s.render(self)
 end
 
 o = s:option(Value, "__disable__")
-
-function o.cfgvalue(self, sid)
-	return (m:get(sid, "auto") == "0") and "1" or "0"
-end
 
 function o.write(self, sid, value)
 	if value ~= "1" then
