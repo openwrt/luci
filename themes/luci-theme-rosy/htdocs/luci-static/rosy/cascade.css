@@ -288,11 +288,11 @@ h4 {
     overflow: hidden;
 }
 
-.table > .tbody > .tr > .td, 
-.table > .tbody > .tr > .th, 
-.table > .tfoot > .tr > .td, 
-.table > .tfoot > .tr > .th, 
-.table > .thead > .tr > .td, 
+.table > .tbody > .tr > .td,
+.table > .tbody > .tr > .th,
+.table > .tfoot > .tr > .td,
+.table > .tfoot > .tr > .th,
+.table > .thead > .tr > .td,
 .table > .thead > .tr > .th {
     padding: .5rem;
     border-top: 1px solid #ddd;
@@ -341,8 +341,8 @@ div > .table > .tbody > .tr:nth-of-type(2n) {
     background-color: #f9f9f9;
 }
 
-.cbi-section .table #memtotal > div, 
-.cbi-section .table #memfree > div, 
+.cbi-section .table #memtotal > div,
+.cbi-section .table #memfree > div,
 .cbi-section .table #membuff > div,
 .cbi-section .table #conns > div {
     border-radius: 20px;
@@ -351,8 +351,8 @@ div > .table > .tbody > .tr:nth-of-type(2n) {
     background-color: #9bc1cc;
 }
 
-.cbi-section .table #memtotal > div > div > div, 
-.cbi-section .table #memfree > div > div > div, 
+.cbi-section .table #memtotal > div > div > div,
+.cbi-section .table #memfree > div > div > div,
 .cbi-section .table #membuff > div > div > div,
 .cbi-section .table #conns > div > div > div {
     color: #fff !important;
@@ -524,7 +524,7 @@ td > table > tbody > tr > td,
 /* table */
 
 .container > .tabs,
-.container > .tabs > li[class~="active"], 
+.container > .tabs > li[class~="active"],
 .container > .tabs > li:hover,
 .container > .cbi-tabmenu,
 .container > .cbi-tabmenu > li[class~="cbi-tab"],
@@ -645,6 +645,7 @@ td > table > tbody > tr > td,
 }
 
 .cbi-value {
+    padding: 6px 0;
     display: inline-block;
     width: 100%;
 }
@@ -1510,6 +1511,9 @@ header > .container > .pull-right > * {
 .node-network-network .cbi-rowstyle-2 .ifacebox-body {
     background-color: #fff;
 }
+.lang_zh-cnInterfaces .container .cbi-map .cbi-tabmenu + div {
+    overflow: inherit;
+}
 /* fix Network Wireless*/
 .node-network-wireless .cbi-section-node {
     margin-bottom: 1rem;
@@ -1944,11 +1948,13 @@ footer {
 
 
 /* Interface after login */
+.logged-in {
+    background-color: #EBF1F6;
+}
 .logged-in header {
     height: 70px;
 }
 .logged-in .main {
-    background-color: #EBF1F6;
     overflow: hidden;
 }
 .logged-in .main-right {
@@ -2249,7 +2255,7 @@ footer {
     .table .tr.cbi-rowstyle-1:nth-child(n), .table .tr:nth-child(n) {
         font-size: 12px;
     }
-    .node-network-firewall .table .tr.cbi-rowstyle-1:nth-child(n), 
+    .node-network-firewall .table .tr.cbi-rowstyle-1:nth-child(n),
     .node-network-firewall .table .tr:nth-child(n) {
         border-radius: 20px;
         overflow: hidden;
@@ -2274,7 +2280,7 @@ footer {
         border-bottom: 1px solid rgba(0, 0, 0, .26);
     }
 
-    .node-status-processes .table .tr.cbi-rowstyle-1:nth-child(n), 
+    .node-status-processes .table .tr.cbi-rowstyle-1:nth-child(n),
     .node-status-processes .table .tr:nth-child(n) {
         border-radius: 20px;
     }

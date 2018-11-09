@@ -268,5 +268,6 @@
         $('.logged-in .main-right').width( $(window).width() - $('.logged-in .main-left').width() - 50 );
     }
     
+    $('body.logged-in').css('min-height', $(window).height());
     
 })(jQuery);
