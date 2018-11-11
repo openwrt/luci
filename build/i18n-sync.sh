@@ -7,7 +7,7 @@
 
 ./build/mkbasepot.sh
 
-find . -name '*.pot' -and -not -name base.pot -and -not -name rrdtool.pot | \
+find . -name '*.pot' -and -not -name base.pot | \
 	while read path; do
 		dir="${path%/po/templates/*}"
 		echo -n "Updating ${path#./} ... "
