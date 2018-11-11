@@ -243,7 +243,7 @@ var CBIValidatorPrototype = {
 			valid = this.vstack[0].apply(this, this.vstack[1]);
 
 		if (!valid) {
-			this.field.setAttribute('data-tooltip', 'Expecting ' + this.error);
+			this.field.setAttribute('data-tooltip', _('Expecting %s').format(this.error));
 			this.field.setAttribute('data-tooltip-style', 'error');
 			this.field.dispatchEvent(new CustomEvent('validation-failure', { bubbles: true }));
 		}
@@ -530,7 +530,7 @@ var CBIValidatorPrototype = {
 
 		timehhmmss: function() {
 			return this.assert(this.value.match(/^[0-6][0-9]:[0-6][0-9]:[0-6][0-9]$/),
-				_('valid time (HH:MM:SS'));
+				_('valid time (HH:MM:SS)'));
 		},
 
 		dateyyyymmdd: function() {
