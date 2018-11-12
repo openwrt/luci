@@ -6,6 +6,7 @@ module("luci.controller.admin.status", package.seeall)
 
 function index()
 	entry({"admin", "status", "overview"}, template("admin_status/index"), _("Overview"), 1)
+	entry({"admin", "status", "overview", "kick"}, post("act_kick")).leaf = true
 
 	entry({"admin", "status", "iptables"}, template("admin_status/iptables"), _("Firewall"), 2).leaf = true
 	entry({"admin", "status", "iptables_dump"}, call("dump_iptables")).leaf = true
@@ -182,4 +183,14 @@ function action_nameinfo(...)
 		timeout = 5000,
 		limit = 1000
 	}) or { })
+end
+
+function act_kick()
+	local iface = luci.http.formvalue("iface")
+	local mac = luci.http.formvalue("mac")
+	if iface and mac then
+		local cmd = string.format("ubus call hostapd.%s del_client \"{'addr':'%s', 'reason':5, 'deauth':true, 'ban_time':60000}\"", iface, mac)
+		luci.sys.call(cmd)
+	end
+	luci.http.status(200, "OK")
 end
