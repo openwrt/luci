@@ -16,6 +16,13 @@
 
 		return s;
 	}
+	
+	function handleDisconnect(ev) {
+		var iface = ev.target.getAttribute('data-iface');
+		var bssid = ev.target.getAttribute('data-bssid');
+		(new XHR()).post('<%=url('admin/status/overview/disconnect')%>', {token: '<%=token%>', iface: iface, bssid: bssid}, function(x) {
+		});
+	}
 
 	XHR.poll(5, '<%=url('admin/wireless_assoclist')%>', null,
 		function(x, st)
@@ -59,9 +66,14 @@
 							E('br'),
 							E('span', wifirate(bss, false))
 						]),
-						'<input class="cbi-button cbi-input-remove" type="button" value="Kick" onclick="kick_client(\'%s\', \'%s\')" />'.format(
-							bss.ifname, 
-							bss.bssid)
+						E('input', {
+							type: 'button',
+							class: 'cbi-button cbi-button-remove',
+							value: '<%:Disconnect%>',
+							'data-bssid': bss.bssid,
+							'data-iface': bss.ifname,
+							click: handleDisconnect
+						})
 					]);
 				});
 
@@ -71,13 +83,6 @@
 	);
 //]]></script>
 
-<script type="text/javascript">//<![CDATA[
-	function kick_client(iface, mac) {
-		(new XHR()).post('<%=url('admin/status/overview/kick')%>/', {token: '<%=token%>', iface: iface, mac: mac}, function(x) {
-		});
-	}
-//]]></script>
-
 <div class="table" id="wifi_assoclist_table">
 	<div class="tr table-titles">
 		<div class="th nowrap"><%:Network%></div>
@@ -85,7 +90,7 @@
 		<div class="th nowrap"><%:Host%></div>
 		<div class="th nowrap"><%:Signal%> / <%:Noise%></div>
 		<div class="th nowrap"><%:RX Rate%> / <%:TX Rate%></div>
-		<div class="th nowrap">Kick</div>
+		<div class="th nowrap"><%:Disconnect%></div>
 	</div>
 	<div class="tr placeholder">
 		<div class="td"><em><%:Collecting data...%></em></div>
