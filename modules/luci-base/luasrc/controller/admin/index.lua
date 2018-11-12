@@ -80,6 +80,9 @@ function index()
 	if has_wifi then
 		page = entry({"admin", "wireless_assoclist"}, call("wifi_assoclist"), nil)
 		page.leaf = true
+
+		page = entry({"admin", "wireless_deauth"}, post("wifi_deauth"), nil)
+		page.leaf = true
 	end
 
 	page = entry({"admin", "translations"}, call("action_translations"), nil)
@@ -143,4 +146,19 @@ function wifi_assoclist()
 
 	luci.http.prepare_content("application/json")
 	luci.http.write_json(s.wifi_assoclist())
+end
+
+function wifi_deauth()
+	local iface = luci.http.formvalue("iface")
+	local bssid = luci.http.formvalue("bssid")
+
+	if iface and bssid then
+		luci.util.ubus("hostapd.%s" % iface, "del_client", {
+			addr = bssid,
+			deauth = true,
+			reason = 5,
+			ban_time = 60000
+		})
+	end
+	luci.http.status(200, "OK")
 end

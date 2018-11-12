@@ -1,4 +1,21 @@
+<%
+	local supports_deauth = {}
+
+	local _, v
+	for _, v in ipairs(luci.util.ubus()) do
+		local iface = v:match("^hostapd%.(.+)$")
+		if iface then
+			local funcs = luci.util.ubus(v)
+			if type(funcs) == "table" and funcs.del_client then
+				supports_deauth[iface] = true
+			end
+		end
+	end
+%>
+
 <script type="text/javascript">//<![CDATA[
+	var supports_deauth = <%= luci.http.write_json(supports_deauth) %>;
+
 	function wifirate(bss, rx) {
 		var p = rx ? 'rx_' : 'tx_',
 		    s = '%.1f <%:Mbit/s%>, %d<%:MHz%>'
@@ -15,6 +32,16 @@
 		}
 
 		return s;
+	}
+
+	function handleDeauth(ev) {
+		(new XHR()).post('<%=url('admin/wireless_deauth')%>', {
+			token: '<%=token%>',
+			iface: ev.target.getAttribute('data-iface'),
+			bssid: ev.target.getAttribute('data-bssid')
+		}, function() {
+			ev.target.disabled = true;
+		});
 	}
 
 	XHR.poll(5, '<%=url('admin/wireless_assoclist')%>', null,
@@ -58,7 +85,15 @@
 							E('span', wifirate(bss, true)),
 							E('br'),
 							E('span', wifirate(bss, false))
-						])
+						]),
+						supports_deauth[bss.ifname] ? E('input', {
+							type: 'button',
+							class: 'cbi-button cbi-button-remove',
+							value: '<%:Disconnect%>',
+							'data-bssid': bss.bssid,
+							'data-iface': bss.ifname,
+							click: handleDeauth
+						}) : '-'
 					]);
 				});
 
@@ -75,6 +110,9 @@
 		<div class="th nowrap"><%:Host%></div>
 		<div class="th nowrap"><%:Signal%> / <%:Noise%></div>
 		<div class="th nowrap"><%:RX Rate%> / <%:TX Rate%></div>
+		<% if next(supports_deauth) then %>
+			<div class="th right"><%:Disconnect%></div>
+		<% end %>
 	</div>
 	<div class="tr placeholder">
 		<div class="td"><em><%:Collecting data...%></em></div>
