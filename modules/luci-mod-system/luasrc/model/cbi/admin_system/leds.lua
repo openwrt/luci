@@ -55,7 +55,7 @@ delayoff = s:option(Value, "delayoff", translate ("Off-State Delay"))
 delayoff:depends("trigger", "timer")
 
 
-dev = s:option(ListValue, "_net_dev", translate("Device"))
+dev = s:option(Value, "_net_dev", translate("Device"))
 dev.rmempty = true
 dev:value("")
 dev:depends("trigger", "netdev")
