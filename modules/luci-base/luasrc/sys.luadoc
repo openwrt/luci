@@ -272,6 +272,42 @@ Send a signal to a process identified by given pid.
 ]]
 
 ---[[
+Execute a process, optionally capturing stdio.
+
+Executes the process specified by the given argv vector, e.g.
+`{ "/bin/sh", "-c", "echo 1" }` and waits for it to terminate unless a true
+value has been passed for the "nowait" parameter.
+
+When a function value is passed for the stdout or stderr arguments, the passed
+function is repeatedly called for each chunk read from the corresponding stdio
+stream. The read data is passed as string containing at most 4096 bytes at a
+time.
+
+When a true, non-function value is passed for the stdout or stderr arguments,
+the data of the corresponding stdio stream is read into an internal string
+buffer and returned as "stdout" or "stderr" field respectively in the result
+table.
+
+When a true value is passed to the nowait parameter, the function does not
+await process termination but returns as soon as all captured stdio streams
+have been closed or - if no streams are captured - immediately after launching
+the process.
+
+@class function
+@name  process.exec
+@param commend	Table containing the argv vector to execute
+@param stdout	Callback function or boolean to indicate capturing (optional)
+@param stderr	Callback function or boolean to indicate capturing (optional)
+@param nowait	Don't wait for process termination when true (optional)
+@return		Table containing at least the fields "code" which holds the exit
+            status of the invoked process or "-1" on error and "pid", which
+            contains the process id assigned to the spawned process. When
+            stdout and/or stderr capturing has been requested, it additionally
+            contains "stdout" and "stderr" fields respectively, holding the
+            captured stdio data as string.
+]]
+
+---[[
 LuCI system utilities / user related functions.
 
 @class	module

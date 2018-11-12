@@ -13,8 +13,8 @@ local luci  = {}
 luci.util   = require "luci.util"
 luci.ip     = require "luci.ip"
 
-local tonumber, ipairs, pairs, pcall, type, next, setmetatable, require, select =
-	tonumber, ipairs, pairs, pcall, type, next, setmetatable, require, select
+local tonumber, ipairs, pairs, pcall, type, next, setmetatable, require, select, unpack =
+	tonumber, ipairs, pairs, pcall, type, next, setmetatable, require, select, unpack
 
 
 module "luci.sys"
@@ -435,6 +435,96 @@ function process.setuser(uid)
 end
 
 process.signal = nixio.kill
+
+local function xclose(fd)
+	if fd and fd:fileno() > 2 then
+		fd:close()
+	end
+end
+
+function process.exec(command, stdout, stderr, nowait)
+	local out_r, out_w, err_r, err_w
+	if stdout then out_r, out_w = nixio.pipe() end
+	if stderr then err_r, err_w = nixio.pipe() end
+
+	local pid = nixio.fork()
+	if pid == 0 then
+		nixio.chdir("/")
+
+		local null = nixio.open("/dev/null", "w+")
+		if null then
+			nixio.dup(out_w or null, nixio.stdout)
+			nixio.dup(err_w or null, nixio.stderr)
+			nixio.dup(null, nixio.stdin)
+			xclose(out_w)
+			xclose(out_r)
+			xclose(err_w)
+			xclose(err_r)
+			xclose(null)
+		end
+
+		nixio.exec(unpack(command))
+		os.exit(-1)
+	end
+
+	local _, pfds, rv = nil, {}, { code = -1, pid = pid }
+
+	xclose(out_w)
+	xclose(err_w)
+
+	if out_r then
+		pfds[#pfds+1] = {
+			fd = out_r,
+			cb = type(stdout) == "function" and stdout,
+			name = "stdout",
+			events = nixio.poll_flags("in", "err", "hup")
+		}
+	end
+
+	if err_r then
+		pfds[#pfds+1] = {
+			fd = err_r,
+			cb = type(stderr) == "function" and stderr,
+			name = "stderr",
+			events = nixio.poll_flags("in", "err", "hup")
+		}
+	end
+
+	while #pfds > 0 do
+		local nfds, err = nixio.poll(pfds, -1)
+		if not nfds and err ~= nixio.const.EINTR then
+			break
+		end
+
+		local i
+		for i = #pfds, 1, -1 do
+			local rfd = pfds[i]
+			if rfd.revents > 0 then
+				local chunk, err = rfd.fd:read(4096)
+				if chunk and #chunk > 0 then
+					if rfd.cb then
+						rfd.cb(chunk)
+					else
+						rfd.buf = rfd.buf or {}
+						rfd.buf[#rfd.buf + 1] = chunk
+					end
+				else
+					table.remove(pfds, i)
+					if rfd.buf then
+						rv[rfd.name] = table.concat(rfd.buf, "")
+					end
+					rfd.fd:close()
+				end
+			end
+		end
+	end
+
+	if not nowait then
+		_, _, rv.code = nixio.waitpid(pid)
+	end
+
+	return rv
+end
 
 
 user = {}
