@@ -10,8 +10,9 @@ This is free software, licensed under the Apache License, Version 2.0
 //<![CDATA[
 	function ripe_desc()
 	{
-		var query  = div_ripe.querySelector("#s_ripe").value;
-		var output = document.getElementById("ripe_desc");
+		var div_ripe = document.getElementById("div_ripe");
+		var query    = div_ripe.querySelector("#s_ripe").value;
+		var output   = document.getElementById("ripe_desc");
 		
 		switch (query) {
 			case "geoloc":
@@ -45,9 +46,10 @@ This is free software, licensed under the Apache License, Version 2.0
 
 	function ripe_view()
 	{
-		var query = div_ripe.querySelector("#s_ripe").value;
-		var input = document.getElementById("ripe_input");
-		var view  = document.getElementById("view_id");
+		var div_ripe = document.getElementById("div_ripe");
+		var query    = div_ripe.querySelector("#s_ripe").value;
+		var input    = document.getElementById("ripe_input");
+		var view     = document.getElementById("view_id");
 
 		if (!input.value)
 		{

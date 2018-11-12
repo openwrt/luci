@@ -15,9 +15,10 @@ This is free software, licensed under the Apache License, Version 2.0
 //<![CDATA[
 	function ipset_view()
 	{
-		var ipset  = div_ipsets.querySelector("#s_ipsets").value;
-		var filter = document.getElementById("checkbox_filter").checked;
-		var view   = document.getElementById("view_id");
+		var div_ipsets = document.getElementById("div_ipsets");
+		var ipset      = div_ipsets.querySelector("#s_ipsets").value;
+		var filter     = document.getElementById("checkbox_filter").checked;
+		var view       = document.getElementById("view_id");
 
 		if (!ipset)
 		{
