@@ -2292,8 +2292,43 @@ function hideTooltip(ev) {
 	tooltipTimeout = window.setTimeout(function() { tooltipDiv.removeAttribute('style'); }, 250);
 }
 
+
+var modalDiv = null;
+
+function showModal(title, children)
+{
+	var dlg = modalDiv.firstElementChild;
+
+	while (dlg.firstChild)
+		dlg.removeChild(dlg.firstChild);
+
+	dlg.setAttribute('class', 'modal');
+	dlg.appendChild(E('h4', {}, title));
+
+	if (!Array.isArray(children))
+		children = [ children ];
+
+	for (var i = 0; i < children.length; i++)
+		if (isElem(children[i]))
+			dlg.appendChild(children[i]);
+		else
+			dlg.appendChild(document.createTextNode('' + children[i]));
+
+	document.body.classList.add('modal-overlay-active');
+
+	return dlg;
+}
+
+function hideModal()
+{
+	document.body.classList.remove('modal-overlay-active');
+}
+
+
 document.addEventListener('DOMContentLoaded', function() {
 	tooltipDiv = document.body.appendChild(E('div', { 'class': 'cbi-tooltip' }));
+	modalDiv = document.body.appendChild(E('div', { 'id': 'modal_overlay' },
+		E('div', { 'class': 'modal' })));
 
 	document.addEventListener('mouseover', showTooltip, true);
 	document.addEventListener('mouseout', hideTooltip, true);
