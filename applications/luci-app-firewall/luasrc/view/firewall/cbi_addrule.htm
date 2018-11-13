@@ -72,7 +72,7 @@
 <% if #zones > 0 then %>
 	<script type="text/javascript">//<![CDATA[
 		cbi_validate_field('_newopen.extport', true, 'list(neg(portrange))');
-		cbi_bind(document.getElementById('_newopen.extport'), 'blur',
+		document.getElementById('_newopen.extport').addEventListener('blur',
 			function() {
 				var n = document.getElementById('_newopen.name');
 				var p = document.getElementById('_newopen.proto');
@@ -100,8 +100,5 @@
 					}
 				}
 			});
-
-
-		cbi_validate_field('cbi.cts.<%=self.config%>.<%=self.sectiontype%>.<%=section%>', true, 'uciname');
 	//]]></script>
 <% end %>
