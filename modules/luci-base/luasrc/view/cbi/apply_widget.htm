@@ -1,49 +1,4 @@
 <% export("cbi_apply_widget", function(redirect_ok, rollback_token) -%>
-<style type="text/css">
-	#cbi_apply_overlay {
-		position: absolute;
-		top: 0;
-		left: 0;
-		bottom: 0;
-		right: 0;
-		background: rgba(0, 0, 0, 0.7);
-		display: none;
-		z-index: 20000;
-	}
-
-	#cbi_apply_overlay .alert-message {
-		position: relative;
-		top: 10%;
-		width: 60%;
-		margin: auto;
-		display: flex;
-		flex-wrap: wrap;
-		min-height: 32px;
-		align-items: center;
-	}
-
-	#cbi_apply_overlay .alert-message > h4,
-	#cbi_apply_overlay .alert-message > p,
-	#cbi_apply_overlay .alert-message > div {
-		flex-basis: 100%;
-	}
-
-	#cbi_apply_overlay .alert-message > img {
-		margin-right: 1em;
-		flex-basis: 32px;
-	}
-
-	body.apply-overlay-active {
-		overflow: hidden;
-		height: 100vh;
-	}
-
-	body.apply-overlay-active #cbi_apply_overlay {
-		display: block;
-	}
-</style>
-
-<script type="text/javascript" src="<%=resource%>/cbi.js?v=git-18.138.59467-72fe5dd"></script>
 <script type="text/javascript">//<![CDATA[
 	var xhr = new XHR(),
 	    uci_apply_auth = { sid: '<%=luci.dispatcher.context.authsession%>', token: '<%=token%>' },
@@ -55,20 +10,14 @@
 	    was_xhr_poll_running = false;
 
 	function uci_status_message(type, content) {
-		var overlay = document.getElementById('cbi_apply_overlay') || document.body.appendChild(E('<div id="cbi_apply_overlay"><div class="alert-message"></div></div>')),
-		    message = overlay.querySelector('.alert-message');
+		if (type) {
+			var message = showModal('', '');
 
-		if (message && type) {
-			if (!message.classList.contains(type)) {
-				message.classList.remove('notice');
-				message.classList.remove('warning');
-				message.classList.add(type);
-			}
+			message.classList.add('alert-message');
+			DOMTokenList.prototype.add.apply(message.classList, type.split(/\s+/));
 
 			if (content)
 				message.innerHTML = content;
-
-			document.body.classList.add('apply-overlay-active');
 
 			if (!was_xhr_poll_running) {
 				was_xhr_poll_running = XHR.running();
@@ -76,7 +25,7 @@
 			}
 		}
 		else {
-			document.body.classList.remove('apply-overlay-active');
+			hideModal();
 
 			if (was_xhr_poll_running)
 				XHR.run();
@@ -85,19 +34,18 @@
 
 	function uci_rollback(checked) {
 		if (checked) {
-			uci_status_message('warning',
-				'<img src="<%=resource%>/icons/loading.gif" alt="" style="vertical-align:middle" /> ' +
-				'<%:Failed to confirm apply within %ds, waiting for rollback…%>'.format(uci_apply_rollback));
+			uci_status_message('warning spinning',
+				'<p><%:Failed to confirm apply within %ds, waiting for rollback…%></p>'.format(uci_apply_rollback));
 
 			var call = function(r, data, duration) {
 				if (r.status === 204) {
 					uci_status_message('warning',
 						'<h4><%:Configuration has been rolled back!%></h4>' +
-						'<p><%:The device could not be reached within %d seconds after applying the pending changes, which caused the configuration to be rolled back for safety reasons. If you believe that the configuration changes are correct nonetheless, proceed by applying anyway. Alternatively, you can dismiss this warning and edit changes before attempting to apply again, or revert all pending changes to keep the currently working configuration state.%></p>'.format(uci_apply_rollback) +
+						'<p><%:The device could not be reached within %d seconds after applying the pending changes, which caused the configuration to be rolled back for safety reasons. If you believe that the configuration changes are correct nonetheless, perform an unchecked configuration apply. Alternatively, you can dismiss this warning and edit changes before attempting to apply again, or revert all pending changes to keep the currently working configuration state.%></p>'.format(uci_apply_rollback) +
 						'<div class="right">' +
 							'<input type="button" class="btn" onclick="uci_status_message(false)" value="<%:Dismiss%>" /> ' +
 							'<input type="button" class="btn cbi-button-action important" onclick="uci_revert()" value="<%:Revert changes%>" /> ' +
-							'<input type="button" class="btn cbi-button-negative important" onclick="uci_apply(false)" value="<%:Apply anyway%>" />' +
+							'<input type="button" class="btn cbi-button-negative important" onclick="uci_apply(false)" value="<%:Apply unchecked%>" />' +
 						'</div>');
 
 					return;
@@ -126,6 +74,7 @@
 
 		var call = function(r, data, duration) {
 			if (Date.now() >= deadline) {
+				window.clearTimeout(tt);
 				uci_rollback(checked);
 				return;
 			}
@@ -133,7 +82,7 @@
 				var indicator = document.querySelector('.uci_change_indicator');
 				if (indicator) indicator.style.display = 'none';
 
-				uci_status_message('notice', '<%:Configuration has been applied.%>');
+				uci_status_message('notice', '<p><%:Configuration has been applied.%></p>');
 
 				window.clearTimeout(tt);
 				window.setTimeout(function() {
@@ -156,9 +105,8 @@
 		var tick = function() {
 			var now = Date.now();
 
-			uci_status_message('notice',
-				'<img src="<%=resource%>/icons/loading.gif" alt="" style="vertical-align:middle" /> ' +
-				'<%:Waiting for configuration to be applied… %ds%>'.format(Math.max(Math.floor((deadline - Date.now()) / 1000), 0)));
+			uci_status_message('notice spinning',
+				'<p><%:Waiting for configuration to get applied… %ds%></p>'.format(Math.max(Math.floor((deadline - Date.now()) / 1000), 0)));
 
 			if (now >= deadline)
 				return;
@@ -174,9 +122,7 @@
 	}
 
 	function uci_apply(checked) {
-		uci_status_message('notice',
-			'<img src="<%=resource%>/icons/loading.gif" alt="" style="vertical-align:middle" /> ' +
-			'<%:Starting configuration apply…%>');
+		uci_status_message('notice spinning', '<p><%:Starting configuration apply…%></p>');
 
 		xhr.post('<%=url("admin/uci")%>/' + (checked ? 'apply_rollback' : 'apply_unchecked'), uci_apply_auth, function(r, tok) {
 			if (r.status === (checked ? 200 : 204)) {
@@ -186,7 +132,7 @@
 				uci_confirm(checked, Date.now() + uci_apply_rollback * 1000);
 			}
 			else if (checked && r.status === 204) {
-				uci_status_message('notice', '<%:There are no changes to apply.%>');
+				uci_status_message('notice', '<p><%:There are no changes to apply.%></p>');
 				window.setTimeout(function() {
 					<% if redirect_ok then -%>
 						location.href = decodeURIComponent('<%=luci.util.urlencode(redirect_ok)%>');
@@ -196,20 +142,18 @@
 				}, uci_apply_display * 1000);
 			}
 			else {
-				uci_status_message('warning', '<%_Apply request failed with status <code>%h</code>%>'.format(r.responseText || r.statusText || r.status));
+				uci_status_message('warning', '<p><%_Apply request failed with status <code>%h</code>%></p>'.format(r.responseText || r.statusText || r.status));
 				window.setTimeout(function() { uci_status_message(false); }, uci_apply_display * 1000);
 			}
 		});
 	}
 
 	function uci_revert() {
-		uci_status_message('notice',
-			'<img src="<%=resource%>/icons/loading.gif" alt="" style="vertical-align:middle" /> ' +
-			'<%:Reverting configuration…%>');
+		uci_status_message('notice spinning', '<p><%:Reverting configuration…%></p>');
 
 		xhr.post('<%=url("admin/uci/revert")%>', uci_apply_auth, function(r) {
 			if (r.status === 200) {
-				uci_status_message('notice', '<%:Changes have been reverted.%>');
+				uci_status_message('notice', '<p><%:Changes have been reverted.%></p>');
 				window.setTimeout(function() {
 					<% if redirect_ok then -%>
 						location.href = decodeURIComponent('<%=luci.util.urlencode(redirect_ok)%>');
@@ -219,7 +163,7 @@
 				}, uci_apply_display * 1000);
 			}
 			else {
-				uci_status_message('warning', '<%_Revert request failed with status <code>%h</code>%>'.format(r.statusText || r.status));
+				uci_status_message('warning', '<p><%_Revert request failed with status <code>%h</code>%></p>'.format(r.statusText || r.status));
 				window.setTimeout(function() { uci_status_message(false); }, uci_apply_display * 1000);
 			}
 		});
