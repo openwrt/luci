@@ -132,21 +132,17 @@
 <%+header%>
 
 <script type="text/javascript">//<![CDATA[
-	function progressbar(v, m)
+	function progressbar(q, v, m)
 	{
-		var vn = parseInt(v) || 0;
-		var mn = parseInt(m) || 100;
-		var pc = Math.floor((100 / mn) * vn);
+		var pg = document.querySelector(q),
+		    vn = parseInt(v) || 0,
+		    mn = parseInt(m) || 100,
+		    pc = Math.floor((100 / mn) * vn);
 
-		return String.format(
-			'<div style="width:100%%; max-width:200px; position:relative; border:1px solid #999999">' +
-				'<div style="background-color:#CCCCCC; width:%d%%; height:15px">' +
-					'<div style="position:absolute; left:0; top:0; text-align:center; width:100%%; color:#000000">' +
-						'<small>%s / %s (%d%%)</small>' +
-					'</div>' +
-				'</div>' +
-			'</div>', pc, v, m, pc
-		);
+		if (pg) {
+			pg.firstElementChild.style.width = pc + '%';
+			pg.setAttribute('title', '%s / %s (%d%%)'.format(v, m, pc));
+		}
 	}
 
 	function labelList(items, offset) {
@@ -350,38 +346,28 @@
 					info.loadavg[2] / 65535.0
 				);
 
-			if (e = document.getElementById('memtotal'))
-				e.innerHTML = progressbar(
-					((info.memory.free + info.memory.buffered) / 1024) + " <%:kB%>",
-					(info.memory.total / 1024) + " <%:kB%>"
-				);
+			progressbar('#memtotal',
+				((info.memory.free + info.memory.buffered) / 1024) + " <%:kB%>",
+				(info.memory.total / 1024) + " <%:kB%>");
 
-			if (e = document.getElementById('memfree'))
-				e.innerHTML = progressbar(
-					(info.memory.free / 1024) + " <%:kB%>",
-					(info.memory.total / 1024) + " <%:kB%>"
-				);
+			progressbar('#memfree',
+				(info.memory.free / 1024) + " <%:kB%>",
+				(info.memory.total / 1024) + " <%:kB%>");
 
-			if (e = document.getElementById('membuff'))
-				e.innerHTML = progressbar(
-					(info.memory.buffered / 1024) + " <%:kB%>",
-					(info.memory.total / 1024) + " <%:kB%>"
-				);
+			progressbar('#membuff',
+				(info.memory.buffered / 1024) + " <%:kB%>",
+				(info.memory.total / 1024) + " <%:kB%>");
 
-			if (e = document.getElementById('swaptotal'))
-				e.innerHTML = progressbar(
-					(info.swap.free / 1024) + " <%:kB%>",
-					(info.swap.total / 1024) + " <%:kB%>"
-				);
+			progressbar('#swaptotal',
+				(info.swap.free / 1024) + " <%:kB%>",
+				(info.swap.total / 1024) + " <%:kB%>");
 
-			if (e = document.getElementById('swapfree'))
-				e.innerHTML = progressbar(
-					(info.swap.free / 1024) + " <%:kB%>",
-					(info.swap.total / 1024) + " <%:kB%>"
-				);
+			progressbar('#swapfree',
+				(info.swap.free / 1024) + " <%:kB%>",
+				(info.swap.total / 1024) + " <%:kB%>");
 
-			if (e = document.getElementById('conns'))
-				e.innerHTML = progressbar(info.conncount, info.connmax);
+			progressbar('#conns',
+				info.conncount, info.connmax);
 
 		}
 	);
@@ -411,9 +397,9 @@
 	<h3><%:Memory%></h3>
 
 	<div class="table" width="100%">
-		<div class="tr"><div class="td left" width="33%"><%:Total Available%></div><div class="td left" id="memtotal">-</div></div>
-		<div class="tr"><div class="td left" width="33%"><%:Free%></div><div class="td left" id="memfree">-</div></div>
-		<div class="tr"><div class="td left" width="33%"><%:Buffered%></div><div class="td left" id="membuff">-</div></div>
+		<div class="tr"><div class="td left" width="33%"><%:Total Available%></div><div class="td left"><div id="memtotal" class="cbi-progressbar" title="-"><div></div></div></div></div>
+		<div class="tr"><div class="td left" width="33%"><%:Free%></div><div class="td left"><div id="memfree" class="cbi-progressbar" title="-"><div></div></div></div></div>
+		<div class="tr"><div class="td left" width="33%"><%:Buffered%></div><div class="td left"><div id="membuff" class="cbi-progressbar" title="-"><div></div></div></div></div>
 	</div>
 </div>
 
@@ -422,8 +408,8 @@
 	<h3><%:Swap%></h3>
 
 	<div class="table" width="100%">
-		<div class="tr"><div class="td left" width="33%"><%:Total Available%></div><div class="td left" id="swaptotal">-</div></div>
-		<div class="tr"><div class="td left" width="33%"><%:Free%></div><div class="td left" id="swapfree">-</div></div>
+		<div class="tr"><div class="td left" width="33%"><%:Total Available%></div><div class="td left"><div id="swaptotal" class="cbi-progressbar" title="-"><div></div></div></div></div>
+		<div class="tr"><div class="td left" width="33%"><%:Free%></div><div class="td left"><div id="swapfree" class="cbi-progressbar" title="-"><div></div></div></div></div>
 	</div>
 </div>
 <% end %>
@@ -436,7 +422,7 @@
 	</div>
 
 	<div class="table" width="100%">
-		<div class="tr"><div class="td left" width="33%"><%:Active Connections%></div><div class="td left" id="conns">-</div></div>
+		<div class="tr"><div class="td left" width="33%"><%:Active Connections%></div><div class="td left"><div id="conns" class="cbi-progressbar" title="-"><div></div></div></div></div>
 	</div>
 </div>
 
