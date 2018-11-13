@@ -13,28 +13,12 @@
 /* Reset.less
  * Props to Eric Meyer (meyerweb.com) for his CSS reset file. We're using an adapted version here	that cuts out some of the reset HTML elements we will never need here (i.e., dfn, samp, etc).
  * ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- */
-html {
-	margin: 0;
-	padding: 0;
-}
 
-body {
-	margin: 0;
-	padding: 5px;
-}
-
-h1, h2, h3, h4, h5, h6, p, pre, a, abbr, acronym, code, del, em, img, ins, q, s,
-small, strike, strong, sub, sup, tt, var, dd, dl, dt, li, ol, ul, fieldset,
-form, label, legend, button, table, caption, tbody, tfoot, thead, tr, th, td,
-.table, .tbody, .tfoot, .thead, .tr, .th, .td {
+* {
 	margin: 0;
 	padding: 0;
 	border: 0;
-	font-weight: normal;
-	font-style: normal;
-	font-size: 100%;
-	line-height: 1;
-	font-family: inherit;
+	box-sizing: border-box;
 }
 
 abbr[title], acronym[title] {
@@ -52,13 +36,6 @@ ol, ul {
 	list-style: none;
 }
 
-q:before,
-q:after,
-blockquote:before,
-blockquote:after {
-	content: "";
-}
-
 html {
 	font-size: 100%;
 	-webkit-text-size-adjust: 100%;
@@ -73,14 +50,8 @@ a:hover, a:active {
 	outline: 0;
 }
 
-article,
-aside,
-details,
-figcaption,
-figure,
 footer,
 header,
-hgroup,
 nav,
 section {
 	display: block;
@@ -102,7 +73,6 @@ sub {
 }
 
 img {
-	border: 0;
 	-ms-interpolation-mode: bicubic;
 }
 
@@ -115,12 +85,7 @@ textarea {
 	margin: 0;
 	box-sizing: border-box;
 	vertical-align: baseline;
-	*vertical-align: middle;
-}
-
-button, input {
 	line-height: normal;
-	*overflow: visible;
 }
 
 button::-moz-focus-inner, input::-moz-focus-inner {
@@ -163,13 +128,12 @@ textarea {
  * ------------------------------------------------------------------------------------------- */
 body {
 	background-color: #fff;
-	margin: 0;
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 	font-size: 13px;
 	font-weight: normal;
 	line-height: 18px;
 	color: #404040;
-	padding-top: 58px;
+	padding: 58px 5px 5px 5px;
 }
 
 .container {
@@ -415,11 +379,6 @@ fieldset legend {
 	line-height: 1;
 	color: #404040;
 	padding-top: 20px;
-	*padding: 0 0 5px 0px;
-	/* IE6-7 */
-
-	*line-height: 1.5;
-	/* IE6-7 */
 
 }
 form .cbi-tab-descr {
@@ -474,6 +433,12 @@ input[type=checkbox], input[type=radio] {
 	cursor: pointer;
 }
 
+label > input[type="checkbox"],
+label > input[type="radio"] {
+	vertical-align: bottom;
+	margin: 0;
+}
+
 input,
 textarea,
 select,
@@ -488,7 +453,6 @@ select,
 	color: #808080;
 	border: 1px solid #ccc;
 	border-radius: 3px;
-	box-sizing: border-box;
 }
 
 .cbi-dropdown,
@@ -562,12 +526,6 @@ input[type=file] {
 input[type=button], input[type=reset], input[type=submit] {
 	width: auto;
 	height: auto;
-}
-
-select, input[type=file] {
-	*height: auto;
-	*margin-top: 4px;
-	/* For IE7, add top margin to align select with labels */
 }
 
 select[multiple] {
@@ -1189,6 +1147,59 @@ footer {
 	border-top: 1px solid #eee;
 }
 
+#modal_overlay {
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	left: -10000px;
+	right: 10000px;
+	background: rgba(0, 0, 0, 0.7);
+	z-index: 900;
+	overflow-y: scroll;
+	-webkit-overflow-scrolling: touch;
+	transition: opacity .125s ease-in;
+	opacity: 0;
+}
+
+.modal {
+	width: 90%;
+	margin: 5em auto;
+	display: flex;
+	flex-wrap: wrap;
+	min-height: 32px;
+	max-width: 600px;
+	align-items: center;
+	border-radius: 3px;
+	background: #fff;
+	box-shadow: 0 0 3px #444;
+	padding: 1em 1em .5em 1em;
+	max-height: 2400px;
+	min-width: 270px;
+}
+
+.modal > * {
+	flex-basis: 100%;
+	line-height: normal;
+	margin-bottom: .5em;
+}
+
+.modal > pre,
+.modal > textarea {
+	white-space: pre-wrap;
+	overflow: auto;
+}
+
+body.modal-overlay-active {
+	overflow: hidden;
+	height: 100vh;
+}
+
+body.modal-overlay-active #modal_overlay {
+	left: 0;
+	right: 0;
+	opacity: 1;
+}
+
 .btn.danger,
 .alert-message.danger,
 .btn.danger:hover,
@@ -1514,12 +1525,11 @@ input[type="password"] + .cbi-button,
 select + .cbi-button {
 	border-radius: 0 3px 3px 0;
 	border-color: #ccc;
-	margin: 0 0 1px -2px;
+	margin-left: -2px;
 	padding: 0 6px;
 	vertical-align: top;
-	height: 28px;
+	height: 30px;
 	font-size: 14px;
-	font-weight: bold;
 	line-height: 28px;
 }
 
@@ -1556,6 +1566,37 @@ select + .cbi-button {
 	left: auto;
 	opacity: 1;
 	transition: opacity .25s ease-in;
+}
+
+.cbi-progressbar {
+	border: 1px solid #ccc;
+	border-radius: 3px;
+	position: relative;
+	min-width: 170px;
+	height: 20px;
+	margin: 4px 0;
+	background: #f9f9f9;
+}
+
+.cbi-progressbar > div {
+	background: #90c0e0;
+	height: 100%;
+	transition: width .25s ease-in;
+	width: 0%;
+}
+
+.cbi-progressbar::after {
+	position: absolute;
+	bottom: 0;
+	top: 0;
+	right: 0;
+	left: 0;
+	text-align: center;
+	text-shadow: 0 0 2px #fff;
+	content: attr(title);
+	white-space: pre;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
 .zonebadge .cbi-tooltip {
@@ -2090,6 +2131,59 @@ div.cbi-value var,
 	bottom: 2px;
 }
 
+#modal_overlay {
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	left: -10000px;
+	right: 10000px;
+	background: rgba(0, 0, 0, 0.7);
+	z-index: 900;
+	overflow-y: scroll;
+	-webkit-overflow-scrolling: touch;
+	transition: opacity .125s ease-in;
+	opacity: 0;
+}
+
+#modal_overlay > .modal {
+	width: 90%;
+	margin: 5em auto;
+	display: flex;
+	flex-wrap: wrap;
+	min-height: 32px;
+	max-width: 600px;
+	align-items: center;
+	border-radius: 3px;
+	background: #fff;
+	box-shadow: 0 0 3px #444;
+	padding: 1em 1em .5em 1em;
+	max-height: 2400px;
+	min-width: 270px;
+}
+
+#modal_overlay .modal > * {
+	flex-basis: 100%;
+	line-height: normal;
+	margin-bottom: .5em;
+}
+
+#modal_overlay .modal > pre,
+#modal_overlay .modal > textarea {
+	white-space: pre-wrap;
+	overflow: auto;
+}
+
+body.modal-overlay-active {
+	overflow: hidden;
+	height: 100vh;
+}
+
+body.modal-overlay-active #modal_overlay {
+	left: 0;
+	right: 0;
+	opacity: 1;
+}
+
 html body.apply-overlay-active {
 	height: calc(100vh - 63px);
 }
@@ -2110,4 +2204,20 @@ html body.apply-overlay-active {
 
 .flash {
 	animation: flash .35s;
+}
+
+.spinning {
+	position: relative;
+	padding-left: 32px !important;
+}
+
+.spinning::before {
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	width: 32px;
+	content: " ";
+	background: url(../resources/icons/loading.gif) no-repeat center;
+	background-size: 16px;
 }
