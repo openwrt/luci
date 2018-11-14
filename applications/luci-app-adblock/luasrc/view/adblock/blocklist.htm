@@ -7,42 +7,7 @@ This is free software, licensed under the Apache License, Version 2.0
 local anonclass  = (not self.anonymous or self.sectiontitle) and "named" or "anonymous"
 -%>
 
-<style type="text/css">
-.table.cbi-section-table .th,
-.table.cbi-section-table .td,
-.cbi-section-table-cell,
-.cbi-section-table-row,
-.tr[data-title]::before
-{
-	text-align: left;
-	vertical-align: top;
-	margin-left: 0px;
-	padding-left: 2px;
-}
-.table.cbi-section-table .th
-{
-	white-space: nowrap;
-}
-.table.cbi-section-table input
-{
-	width: 7em;
-}
-.cbi-section-table-row > .cbi-value-field [data-dynlist] > input,
-.table.cbi-section-table input
-{
-	width: 7em;
-}
-
-.cbi-input-text
-{
-	text-align: left;
-	padding-left: 2px;
-	outline: none;
-	box-shadow: none;
-	background: transparent;
-	width: 7em;
-}
-</style>
+<%+adblock/adblock_css%>
 
 <div class="cbi-section" id="cbi-<%=self.config%>-<%=self.sectiontype%>">
 	<% if self.title then -%>
