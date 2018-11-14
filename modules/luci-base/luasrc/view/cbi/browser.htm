@@ -1,4 +1,4 @@
-<% local v = self:cfgvalue(section) -%>
+<% local v = self:cfgvalue(section) or self.default -%>
 <%+cbi/valueheader%>
 	<input class="cbi-input-text" type="text"<%= attr("value", v) .. attr("name", cbid) .. attr("id", cbid) %> />
 	<script type="text/javascript">
