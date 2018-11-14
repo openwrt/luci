@@ -87,8 +87,8 @@ function action_json()
 	local v4_port = tonumber(uci:get("olsrd", "olsrd_jsoninfo", "port") or "") or 9090
 	local v6_port = tonumber(uci:get("olsrd6", "olsrd_jsoninfo", "port") or "") or 9090
 
-	jsonreq4 = utl.exec("(echo /status | nc 127.0.0.1 %d | sed -n '/^[}{ ]/p') 2>/dev/null" % v4_port)
-	jsonreq6 = utl.exec("(echo /status | nc ::1 %d | sed -n '/^[}{ ]/p') 2>/dev/null" % v6_port)
+	jsonreq4 = utl.exec("(echo /all | nc 127.0.0.1 %d | sed -n '/^[}{ ]/p') 2>/dev/null" % v4_port)
+	jsonreq6 = utl.exec("(echo /all | nc ::1 %d | sed -n '/^[}{ ]/p') 2>/dev/null" % v6_port)
 	http.prepare_content("application/json")
 	if not jsonreq4 or jsonreq4 == "" then
 		jsonreq4 = "{}"
@@ -300,7 +300,7 @@ function action_mid()
 
 	local function compare(a,b)
 		if a.proto == b.proto then
-			return a.ipAddress < b.ipAddress
+			return a.main.ipAddress < b.main.ipAddress
 		else
 			return a.proto < b.proto
 		end
@@ -318,13 +318,14 @@ function action_smartgw()
 
 	local function compare(a,b)
 		if a.proto == b.proto then
-			return a.tcPathCost < b.tcPathCost
+			return a.cost < b.cost
 		else
 			return a.proto < b.proto
 		end
 	end
 
-	table.sort(data, compare)
+	table.sort(data.ipv4, compare)
+	table.sort(data.ipv6, compare)
 	luci.template.render("status-olsr/smartgw", {gws=data, has_v4=has_v4, has_v6=has_v6})
 end
 

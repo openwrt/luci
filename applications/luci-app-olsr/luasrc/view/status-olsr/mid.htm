@@ -31,14 +31,14 @@ local i = 1
 				end
 				aliases = v.ipAddress .. sep .. aliases
 			end
-			local host = mid.ipAddress
+			local host = mid.main.ipAddress
 			if mid.proto == '6' then
-				host = '[' .. mid.ipAddress .. ']'
+				host = '[' .. mid.main.ipAddress .. ']'
 			end
 		%>
 
 		<div class="tr cbi-section-table-row cbi-rowstyle-<%=i%> proto-<%=mid.proto%>">
-			<div class="td cbi-section-table-cell"><a href="http://<%=host%>/cgi-bin-status.html"><%=mid.ipAddress%></a></div>
+			<div class="td cbi-section-table-cell"><a href="http://<%=host%>/cgi-bin-status.html"><%=mid.main.ipAddress%></a></div>
 			<div class="td cbi-section-table-cell"><%=aliases%></div>
 		</div>
 
