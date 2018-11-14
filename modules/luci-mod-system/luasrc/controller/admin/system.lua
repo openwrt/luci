@@ -11,12 +11,6 @@ function index()
 	entry({"admin", "system", "clock_status"}, post_on({ set = true }, "action_clock_status"))
 
 	entry({"admin", "system", "admin"}, cbi("admin_system/admin"), _("Administration"), 2)
-
-	if fs.access("/bin/opkg") then
-		entry({"admin", "system", "packages"}, post_on({ exec = "1" }, "action_packages"), _("Software"), 10)
-		entry({"admin", "system", "packages", "ipkg"}, form("admin_system/ipkg"))
-	end
-
 	entry({"admin", "system", "startup"}, form("admin_system/startup"), _("Startup"), 45)
 	entry({"admin", "system", "crontab"}, form("admin_system/crontab"), _("Scheduled Tasks"), 46)
 
@@ -59,124 +53,6 @@ function action_clock_status()
 
 	luci.http.prepare_content("application/json")
 	luci.http.write_json({ timestring = os.date("%c") })
-end
-
-function action_packages()
-	local fs = require "nixio.fs"
-	local ipkg = require "luci.model.ipkg"
-	local submit = (luci.http.formvalue("exec") == "1")
-	local update, upgrade
-	local changes = false
-	local install = { }
-	local remove  = { }
-	local stdout  = { "" }
-	local stderr  = { "" }
-	local out, err
-
-	-- Display
-	local display = luci.http.formvalue("display") or "available"
-
-	-- Letter
-	local letter = string.byte(luci.http.formvalue("letter") or "A", 1)
-	letter = (letter == 35 or (letter >= 65 and letter <= 90)) and letter or 65
-
-	-- Search query
-	local query = luci.http.formvalue("query")
-	query = (query ~= '') and query or nil
-
-
-	-- Modifying actions
-	if submit then
-		-- Packets to be installed
-		local ninst = luci.http.formvalue("install")
-		local uinst = nil
-
-		-- Install from URL
-		local url = luci.http.formvalue("url")
-		if url and url ~= '' then
-			uinst = url
-		end
-
-		-- Do install
-		if ninst then
-			install[ninst], out, err = ipkg.install(ninst)
-			stdout[#stdout+1] = out
-			stderr[#stderr+1] = err
-			changes = true
-		end
-
-		if uinst then
-			local pkg
-			for pkg in luci.util.imatch(uinst) do
-				install[uinst], out, err = ipkg.install(pkg)
-				stdout[#stdout+1] = out
-				stderr[#stderr+1] = err
-				changes = true
-			end
-		end
-
-		-- Remove packets
-		local rem = luci.http.formvalue("remove")
-		if rem then
-			remove[rem], out, err = ipkg.remove(rem)
-			stdout[#stdout+1] = out
-			stderr[#stderr+1] = err
-			changes = true
-		end
-
-
-		-- Update all packets
-		update = luci.http.formvalue("update")
-		if update then
-			update, out, err = ipkg.update()
-			stdout[#stdout+1] = out
-			stderr[#stderr+1] = err
-		end
-
-
-		-- Upgrade all packets
-		upgrade = luci.http.formvalue("upgrade")
-		if upgrade then
-			upgrade, out, err = ipkg.upgrade()
-			stdout[#stdout+1] = out
-			stderr[#stderr+1] = err
-		end
-	end
-
-
-	-- List state
-	local no_lists = true
-	local old_lists = false
-	if fs.access("/var/opkg-lists/") then
-		local list
-		for list in fs.dir("/var/opkg-lists/") do
-			no_lists = false
-			if (fs.stat("/var/opkg-lists/"..list, "mtime") or 0) < (os.time() - (24 * 60 * 60)) then
-				old_lists = true
-				break
-			end
-		end
-	end
-
-
-	luci.template.render("admin_system/packages", {
-		display   = display,
-		letter    = letter,
-		query     = query,
-		install   = install,
-		remove    = remove,
-		update    = update,
-		upgrade   = upgrade,
-		no_lists  = no_lists,
-		old_lists = old_lists,
-		stdout    = table.concat(stdout, ""),
-		stderr    = table.concat(stderr, "")
-	})
-
-	-- Remove index cache
-	if changes then
-		fs.unlink("/tmp/luci-indexcache")
-	end
 end
 
 local function image_supported(image)
