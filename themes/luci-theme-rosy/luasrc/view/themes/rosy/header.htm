@@ -154,9 +154,7 @@
                                 local nnode = cattree.nodes[r]                                                      
                                 local grandchildren = disp.node_childs(nnode)          
                                                                                                                     
-                                if #grandchildren > 0 then                                
-                                                                                          
-                                else                                               
+                                if #grandchildren <= 0 then
                                         local title = pcdata(striptags(translate(nnode.title)))                      
                                                                                           
                                         write('<span class="label logout"><a data-title="%s" href="%s">%s</a></span>' %{                      
