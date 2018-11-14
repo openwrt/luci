@@ -3,17 +3,7 @@ Copyright 2017-2018 Dirk Brenken (dev@brenken.org)
 This is free software, licensed under the Apache License, Version 2.0
 -%>
 
-<style type="text/css">
-	.runtime
-	{
-		color: #37c;
-		font-weight: bold;
-		display: inline-block;
-		width: 100%;
-		padding-top: 0.5rem;
-	}
-</style>
-
+<%+travelmate/travelmate_css%>
 <script type="text/javascript">
 //<![CDATA[
 	function status_update(json)
@@ -148,7 +138,7 @@ This is free software, licensed under the Apache License, Version 2.0
 	<label class="cbi-value-title" for="button_1"><%:Restart Travelmate%></label>
 	<div class="cbi-value-field">
 		<input class="cbi-button cbi-button-reset" id="btn1" type="button" name="do_restart" value="<%:Restart%>" onclick="btn_action(this)" />
-		<span id="btn1_running" style="display:inline-block; width:16px; height:16px; margin:0 5px"></span>
+		<span id="btn1_running" class="btn_running"></span>
 	</div>
 </div>
 <div class="cbi-value" id="button_2">
@@ -200,10 +190,10 @@ This is free software, licensed under the Apache License, Version 2.0
 					if fs.access("/usr/bin/qrencode") then
 						qrcode = luci.sys.exec("/usr/bin/qrencode --inline --8bit --type=SVG --output=- 'WIFI:S:\"'" .. e_ssid .. "'\";T:'" .. enc .. "';P:\"'" .. e_key .. "'\";H:'" .. hidden .. "';'")
 -%>
-		<div class="cbi-value" style="border-bottom: 0px; margin-bottom: 0px; padding: 0.25em 0.6em; text-align: left">
+		<div class="qr-code">
 			<%=qrcode%>
 		</div>
-		<div class="cbi-value" style="border-bottom: 0px; margin-bottom: 0px; padding: 0.25em 0.6em; text-align: left">
+		<div class="qr-code">
 			<em><%:AP on %><%=device%><%: with SSID %>"<%=ssid%>"</em>
 			<hr />
 		</div>
@@ -214,7 +204,7 @@ This is free software, licensed under the Apache License, Version 2.0
 		end)
 		if not qrcode then
 -%>
-		<div class="cbi-value" style="border-bottom: 0px; margin-bottom: 0px; padding: 0.25em 0.6em; text-align: left">
+		<div class="qr-code">
 			<em><%:For QR-Code support please install package 'qrencode'!%></em>
 		</div>
 <%-
