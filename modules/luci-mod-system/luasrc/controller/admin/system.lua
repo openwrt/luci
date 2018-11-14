@@ -319,9 +319,13 @@ function action_backup()
 end
 
 function action_backupmtdblock()
-	local http = require "luci.http"
-	local mv = http.formvalue("mtdblockname")
-	local m, s, n = mv:match('^([^%s]+)/([^%s]+)/([^%s]+)')
+	local mv = luci.http.formvalue("mtdblockname") or ""
+	local m, n = mv:match('^([^%s%./"]+)/%d+/(%d+)$')
+
+	if not m and n then
+		luci.http.status(400, "Bad Request")
+		return
+	end
 
 	local reader = ltn12_popen("dd if=/dev/mtd%s conv=fsync,notrunc 2>/dev/null" % n)
 
