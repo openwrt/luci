@@ -21,7 +21,7 @@ PKG_MAINTAINER:=Hsing-Wang Liao <kuoruan@gmail.com>
 
 # LuCI specific settings
 LUCI_TITLE:=LuCI Support for Aria2
-LUCI_DEPENDS:=+aria2
+LUCI_DEPENDS:=+luci-lib-ipkg +aria2
 LUCI_PKGARCH:=all
 
 define Package/$(PKG_NAME)/config

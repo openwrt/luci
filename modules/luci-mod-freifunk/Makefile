@@ -7,7 +7,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=LuCI Freifunk module
-LUCI_DEPENDS:=+luci-mod-admin-full +luci-lib-json +freifunk-firewall +freifunk-common
+LUCI_DEPENDS:=+luci-mod-admin-full +luci-lib-json +luci-lib-ipkg +freifunk-firewall +freifunk-common
 
 include ../../luci.mk
 
