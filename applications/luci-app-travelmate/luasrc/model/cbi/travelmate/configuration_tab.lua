@@ -13,7 +13,7 @@ if not fs.access(input) then
 end
 
 m = SimpleForm("input", nil)
-m:append(Template("travelmate/config_css"))
+m:append(Template("travelmate/travelmate_css"))
 m.submit = translate("Save")
 m.reset = false
 
