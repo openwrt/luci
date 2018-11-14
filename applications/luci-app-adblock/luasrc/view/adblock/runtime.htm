@@ -3,17 +3,7 @@ Copyright 2017-2018 Dirk Brenken (dev@brenken.org)
 This is free software, licensed under the Apache License, Version 2.0
 -%>
 
-<style type="text/css">
-.runtime
-{
-	color: #37c;
-	font-weight: bold;
-	display: inline-block;
-	width: 100%;
-	padding-top: 0.5rem;
-}
-</style>
-
+<%+adblock/adblock_css%>
 <script type="text/javascript">
 //<![CDATA[
 	function status_update(json)
@@ -188,7 +178,7 @@ This is free software, licensed under the Apache License, Version 2.0
 	<label class="cbi-value-title" for="button_1"><%:Suspend / Resume Adblock%></label>
 	<div class="cbi-value-field">
 		<input class="cbi-button cbi-button-reset" id="btn1" type="button" value="" onclick="btn_action(this)" />
-		<span id="btn1_running" style="display:inline-block; width:16px; height:16px; margin:0 5px"></span>
+		<span id="btn1_running" class="btn_running"></span>
 	</div>
 </div>
 <p />
@@ -196,6 +186,6 @@ This is free software, licensed under the Apache License, Version 2.0
 	<label class="cbi-value-title" for="button_2"><%:Refresh Blocklist Sources%></label>
 	<div class="cbi-value-field">
 		<input class="cbi-button cbi-button-apply" id="btn2" type="button" value="" onclick="btn_action(this)" />
-		<span id="btn2_running" style="display:inline-block; width:16px; height:16px; margin:0 5px"></span>
+		<span id="btn2_running" class="btn_running"></span>
 	</div>
 </div>

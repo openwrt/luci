@@ -1,0 +1,108 @@
+<style type="text/css">
+	textarea
+	{
+		width: 100%;
+		height: 450px;
+		border: 1px solid #cccccc;
+		padding: 5px;
+		font-size: 12px;
+		font-family: monospace;
+		resize: none;
+		white-space: pre;
+		overflow-wrap: normal;
+		overflow-x: scroll;
+	}
+
+	select[readonly],
+	textarea[readonly]
+	{
+		width: 100%;
+		height: 450px;
+		border: 1px solid #cccccc;
+		padding: 5px;
+		font-size: 12px;
+		font-family: monospace;
+		resize: none;
+		pointer-events: auto;
+		cursor: auto;
+	}
+
+	.table.cbi-section-table .th,
+	.table.cbi-section-table .td,
+	.cbi-section-table-cell,
+	.cbi-section-table-row,
+	.tr[data-title]::before
+	{
+		text-align: left;
+		vertical-align: top;
+		margin-left: 0px;
+		padding-left: 2px;
+	}
+
+	.table.cbi-section-table .th
+	{
+		white-space: nowrap;
+	}
+
+	.cbi-section-table-row > .cbi-value-field .cbi-input-select,
+	.table.cbi-section-table select
+	{
+		width: 70px;
+	}
+
+	.cbi-section-table-row > .cbi-value-field [data-dynlist] > input,
+	.table.cbi-section-table input[type="text"],
+	.cbi-dynlist > .item,
+	.table.cbi-section-table input,
+	.cbi-dynlist
+	{
+		display: inline-block;
+		width: 7em;
+		margin: 1px;
+	}
+
+	.td.cbi-value-field .cbi-button
+	{
+		width: auto;
+		margin: 1px 0 1px -2px;
+	}
+
+	.btn,
+	.cbi-button,
+	.item::after
+	{
+		-webkit-appearance: menulist;
+	}
+
+	.cbi-input-checkbox
+	{
+		height: 1em;
+	}
+
+	.cbi-input-text
+	{
+		text-align: left;
+		padding-left: 2px;
+		outline: none;
+		box-shadow: none;
+		background: transparent;
+		width: 7em;
+	}
+
+	.runtime
+	{
+		color: #37c;
+		font-weight: bold;
+		display: inline-block;
+		width: 100%;
+		padding-top: 0.5rem;
+	}
+
+	.button_running
+	{
+		display: inline-block;
+		width: 16px;
+		height: 16px;
+		margin: 0 5px;
+	}
+</style>

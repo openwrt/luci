@@ -23,7 +23,7 @@ if fs.stat(input).size >= 102400 then
 end
 
 m = SimpleForm("input", nil)
-m:append(Template("adblock/config_css"))
+m:append(Template("adblock/adblock_css"))
 m.submit = translate("Save")
 m.reset = false
 
