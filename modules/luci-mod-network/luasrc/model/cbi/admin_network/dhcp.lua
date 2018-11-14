@@ -295,7 +295,7 @@ function name.remove(self, section)
 end
 
 mac = s:option(Value, "mac", translate("<abbr title=\"Media Access Control\">MAC</abbr>-Address"))
-mac.datatype = "list(macaddr)"
+mac.datatype = "list(unique(macaddr))"
 mac.rmempty  = true
 
 function mac.cfgvalue(self, section)
