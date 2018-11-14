@@ -460,3 +460,7 @@ function dateyyyymmdd(val)
 	end
 	return false
 end
+
+function unique(val)
+	return true
+end
