@@ -301,21 +301,16 @@ function action_sysupgrade()
 			msg   = luci.i18n.translate("The system is flashing now.<br /> DO NOT POWER OFF THE DEVICE!<br /> Wait a few minutes before you try to reconnect. It might be necessary to renew the address of your computer to reach the device again, depending on your settings."),
 			addr  = (#keep > 0) and (#force > 0) and "192.168.1.1" or nil
 		})
-		fork_exec("sleep 1; killall dropbear uhttpd; sleep 1; /sbin/sysupgrade %s %s %q" %{ keep, force, image_tmp })
+		luci.sys.process.exec({ "/bin/sh", "-c","sleep 1; killall dropbear uhttpd; sleep 1; /sbin/sysupgrade %s %s %q" %{ keep, force, image_tmp } }, nil, nil, true)
 	end
 end
 
 function action_backup()
-	local reader = ltn12_popen("sysupgrade --create-backup - 2>/dev/null")
-
-	luci.http.header(
-		'Content-Disposition', 'attachment; filename="backup-%s-%s.tar.gz"' %{
-			luci.sys.hostname(),
-			os.date("%Y-%m-%d")
-		})
+	luci.http.header('Content-Disposition', 'attachment; filename="backup-%s-%s.tar.gz"'
+		%{ luci.sys.hostname(), os.date("%Y-%m-%d") })
 
 	luci.http.prepare_content("application/x-targz")
-	luci.ltn12.pump.all(reader, luci.http.write)
+	luci.sys.process.exec({ "/sbin/sysupgrade", "--create-backup", "-" }, luci.http.write)
 end
 
 function action_backupmtdblock()
@@ -327,16 +322,11 @@ function action_backupmtdblock()
 		return
 	end
 
-	local reader = ltn12_popen("dd if=/dev/mtd%s conv=fsync,notrunc 2>/dev/null" % n)
-
-	luci.http.header(
-		'Content-Disposition', 'attachment; filename="backup-%s-%s-%s.bin"' %{
-			luci.sys.hostname(), m,
-			os.date("%Y-%m-%d")
-		})
+	luci.http.header('Content-Disposition', 'attachment; filename="backup-%s-%s-%s.bin"'
+		%{ luci.sys.hostname(), m, os.date("%Y-%m-%d") })
 
 	luci.http.prepare_content("application/octet-stream")
-	luci.ltn12.pump.all(reader, luci.http.write)
+	luci.sys.process.exec({ "/bin/dd", "if=/dev/mtd%s" % n, "conv=fsync,notrunc" }, luci.http.write)
 end
 
 function action_restore()
@@ -391,7 +381,7 @@ function action_reset()
 			addr  = "192.168.1.1"
 		})
 
-		fork_exec("sleep 1; killall dropbear uhttpd; sleep 1; jffs2reset -y && reboot")
+		luci.sys.process.exec({ "/bin/sh", "-c", "sleep 1; killall dropbear uhttpd; sleep 1; jffs2reset -y && reboot" }, nil, nil, true)
 		return
 	end
 
@@ -416,58 +406,4 @@ end
 
 function action_reboot()
 	luci.sys.reboot()
-end
-
-function fork_exec(command)
-	local pid = nixio.fork()
-	if pid > 0 then
-		return
-	elseif pid == 0 then
-		-- change to root dir
-		nixio.chdir("/")
-
-		-- patch stdin, out, err to /dev/null
-		local null = nixio.open("/dev/null", "w+")
-		if null then
-			nixio.dup(null, nixio.stderr)
-			nixio.dup(null, nixio.stdout)
-			nixio.dup(null, nixio.stdin)
-			if null:fileno() > 2 then
-				null:close()
-			end
-		end
-
-		-- replace with target command
-		nixio.exec("/bin/sh", "-c", command)
-	end
-end
-
-function ltn12_popen(command)
-
-	local fdi, fdo = nixio.pipe()
-	local pid = nixio.fork()
-
-	if pid > 0 then
-		fdo:close()
-		local close
-		return function()
-			local buffer = fdi:read(2048)
-			local wpid, stat = nixio.waitpid(pid, "nohang")
-			if not close and wpid and stat == "exited" then
-				close = true
-			end
-
-			if buffer and #buffer > 0 then
-				return buffer
-			elseif close then
-				fdi:close()
-				return nil
-			end
-		end
-	elseif pid == 0 then
-		nixio.dup(fdo, nixio.stdout)
-		fdi:close()
-		fdo:close()
-		nixio.exec("/bin/sh", "-c", command)
-	end
 end
