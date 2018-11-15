@@ -43,7 +43,7 @@ lp.rmempty     = true
 -- group.rmempty = true
 
 sa = s3:option(Value, "subnet_addr", translate("Subnet address"))
-sa.datatype = "ip4prefix"
+sa.datatype = "ip4addr"
 sa.rmempty  = true
 
 ps = s3:option(Value, "proxy_server", translate("Proxy server"))
