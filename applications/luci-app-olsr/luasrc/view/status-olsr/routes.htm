@@ -50,8 +50,8 @@ XHR.poll(20, '<%=REQUEST_URI%>', { status: 1 },
 
 					s += String.format(
 						'<div class="tr cbi-section-table-row cbi-rowstyle-'+(1 + (idx % 2))+' proto-%s">' +
-							'<div class="td cbi-section-table-cell">%s/%s</div>' +
-							'<div class="td cbi-section-table-cell">' +
+							'<div class="td cbi-section-table-cell" style="text-align: left">%s/%s</div>' +
+							'<div class="td cbi-section-table-cell" style="text-align: left">' +
 			                	                '<a href="http://%s/cgi-bin-status.html">%s</a>',
 								route.proto, route.dest, route.genmask, route.gw, route.gw
 						)
@@ -72,9 +72,9 @@ XHR.poll(20, '<%=REQUEST_URI%>', { status: 1 },
 					}
 					s += String.format(
 				                        '</div>' +
-							'<div class="td cbi-section-table-cell">%s</div>' +
-							'<div class="td cbi-section-table-cell">%s</div>' +
-							'<div class="td cbi-section-table-cell" style="background-color:%s">%s</div>' +
+							'<div class="td cbi-section-table-cell" style="text-align: left">%s</div>' +
+							'<div class="td cbi-section-table-cell" style="text-align: left">%s</div>' +
+							'<div class="td cbi-section-table-cell" style="background-color:%s; text-align: left">%s</div>' +
 						'</div>',
 						route.interface, route.metric, route.color, route.etx || '?'
 					);
@@ -96,7 +96,6 @@ XHR.poll(20, '<%=REQUEST_URI%>', { status: 1 },
 <legend><%:Overview of currently known routes to other OLSR nodes%></legend>
 
 <div class="table cbi-section-table">
-	<div class="thead">
 		<div class="tr cbi-section-table-titles">
 			<div class="th cbi-section-table-cell"><%:Announced network%></div>
 			<div class="th cbi-section-table-cell"><%:OLSR gateway%></div>
@@ -104,18 +103,15 @@ XHR.poll(20, '<%=REQUEST_URI%>', { status: 1 },
 			<div class="th cbi-section-table-cell"><%:Metric%></div>
 			<div class="th cbi-section-table-cell">ETX</div>
 		</div>
-	</div>
-
-	<div class="tbody" id="olsrd_routes">
 
 	<% for k, route in ipairs(routes) do
-		ETX = tonumber(route.rtpMetricCost)/1024 or '0'
+		ETX = tonumber(route.etx) or '0'
 		color = olsrtools.etx_color(ETX)
 	%>
 
 		<div class="tr cbi-section-table-row cbi-rowstyle-<%=i%> proto-<%=route.proto%>">
-			<div class="td cbi-section-table-cell"><%=route.destination%>/<%=route.genmask%></div>
-			<div class="td cbi-section-table-cell">
+			<div class="td cbi-section-table-cell" style="text-align: left"><%=route.destination%>/<%=route.genmask%></div>
+			<div class="td cbi-section-table-cell" style="text-align: left">
 				<% if route.proto == '6' then %>
 				<a href="http://[<%=route.gateway%>]/cgi-bin-status.html"><%=route.gateway%></a>
 				<% else  %>
@@ -125,14 +121,13 @@ XHR.poll(20, '<%=REQUEST_URI%>', { status: 1 },
 					/ <a href="http://<%=route.Hostname%>/cgi-bin-status.html"><%=route.hostname%></a>  
 				<% end %>
 			</div>
-			<div class="td cbi-section-table-cell"><%=route.networkInterface%></div>
-			<div class="td cbi-section-table-cell"><%=route.metric%></div>
-			<div class="td cbi-section-table-cell" style="background-color:<%=color%>"><%=string.format("%.3f", ETX)%></div>
+			<div class="td cbi-section-table-cell" style="text-align: left"><%=route.networkInterface%></div>
+			<div class="td cbi-section-table-cell" style="text-align: left"><%=route.metric%></div>
+			<div class="td cbi-section-table-cell" style="background-color:<%=color%>; text-align: left"><%=string.format("%.3f", ETX)%></div>
 		</div>
 	<% 
 		i = ((i % 2) + 1)
 	end %>
-	</div>
 </div>
 
 <%+status-olsr/legend%>
