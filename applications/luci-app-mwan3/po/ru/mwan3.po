@@ -42,6 +42,7 @@ msgstr "%d минута"
 msgid "%d minutes"
 msgstr "%d минут"
 
+#: applications/luci-app-mwan3/luasrc/model/cbi/mwan/globalsconfig.lua:27
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interfaceconfig.lua:129
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interfaceconfig.lua:142
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interfaceconfig.lua:158
@@ -49,6 +50,10 @@ msgstr "%d минут"
 msgid "%d second"
 msgstr "%d секунда"
 
+#: applications/luci-app-mwan3/luasrc/model/cbi/mwan/globalsconfig.lua:28
+#: applications/luci-app-mwan3/luasrc/model/cbi/mwan/globalsconfig.lua:29
+#: applications/luci-app-mwan3/luasrc/model/cbi/mwan/globalsconfig.lua:30
+#: applications/luci-app-mwan3/luasrc/model/cbi/mwan/globalsconfig.lua:31
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interfaceconfig.lua:130
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interfaceconfig.lua:131
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interfaceconfig.lua:132
@@ -94,6 +99,10 @@ msgstr "Допустимые значения: 1-256 По умолчанию 1, 
 
 #: applications/luci-app-mwan3/luasrc/controller/mwan3.lua:177
 msgid "All required IP rules for interface %s found"
+msgstr ""
+
+#: applications/luci-app-mwan3/luasrc/model/cbi/mwan/globalsconfig.lua:36
+msgid "Also scan this Routing table for connected networks"
 msgstr ""
 
 #: applications/luci-app-mwan3/luasrc/view/mwan/status_diagnostics.htm:73
@@ -153,7 +162,7 @@ msgstr ""
 msgid "Enabled"
 msgstr "Включено"
 
-#: applications/luci-app-mwan3/luasrc/model/cbi/mwan/globalsconfig.lua:27
+#: applications/luci-app-mwan3/luasrc/model/cbi/mwan/globalsconfig.lua:16
 msgid "Enter value in hex, starting with <code>0x</code>"
 msgstr "Введите значение в шестнадцатеричной форме, начиная с <code>0x</code>."
 
@@ -169,7 +178,7 @@ msgstr "Ожидание "
 msgid "Failure interval"
 msgstr "Интервал отказа"
 
-#: applications/luci-app-mwan3/luasrc/model/cbi/mwan/globalsconfig.lua:26
+#: applications/luci-app-mwan3/luasrc/model/cbi/mwan/globalsconfig.lua:15
 msgid "Firewall mask"
 msgstr "Маска межсетевого экрана"
 
@@ -194,6 +203,10 @@ msgstr "Hotplug ifdown"
 #: applications/luci-app-mwan3/luasrc/view/mwan/status_diagnostics.htm:75
 msgid "Hotplug ifup"
 msgstr "Hotplug ifup"
+
+#: applications/luci-app-mwan3/luasrc/model/cbi/mwan/globalsconfig.lua:24
+msgid "How often should rtmon update the interface routing table"
+msgstr ""
 
 #: applications/luci-app-mwan3/luasrc/view/mwan/status_detail.htm:29
 #: applications/luci-app-mwan3/luasrc/view/mwan/status_diagnostics.htm:56
@@ -276,11 +289,7 @@ msgstr "Балансировка WAN трафика"
 msgid "Loading"
 msgstr "Загрузка"
 
-#: applications/luci-app-mwan3/luasrc/model/cbi/mwan/globalsconfig.lua:11
-msgid "Local source interface"
-msgstr "Локальный исходящий интефейс"
-
-#: applications/luci-app-mwan3/luasrc/model/cbi/mwan/globalsconfig.lua:7
+#: applications/luci-app-mwan3/luasrc/model/cbi/mwan/globalsconfig.lua:8
 msgid "MWAN - Globals"
 msgstr "MWAN - Общие"
 
@@ -536,12 +545,22 @@ msgstr "Протокол"
 msgid "Recovery interval"
 msgstr "Интервал восстановления"
 
+#: applications/luci-app-mwan3/luasrc/model/cbi/mwan/globalsconfig.lua:38
+#: applications/luci-app-mwan3/luasrc/model/cbi/mwan/globalsconfig.lua:39
+#: applications/luci-app-mwan3/luasrc/model/cbi/mwan/globalsconfig.lua:40
+msgid "Routing table %d"
+msgstr ""
+
 #: applications/luci-app-mwan3/luasrc/controller/mwan3.lua:196
 msgid "Routing table %s for interface %s found"
 msgstr ""
 
 #: applications/luci-app-mwan3/luasrc/controller/mwan3.lua:200
 msgid "Routing table %s for interface %s not found"
+msgstr ""
+
+#: applications/luci-app-mwan3/luasrc/model/cbi/mwan/globalsconfig.lua:35
+msgid "Routing table lookup"
 msgstr ""
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/rule.lua:58
@@ -678,13 +697,9 @@ msgstr ""
 msgid "Troubleshooting"
 msgstr "Устранение неполадок"
 
-#: applications/luci-app-mwan3/luasrc/model/cbi/mwan/globalsconfig.lua:12
-msgid ""
-"Use the IP address of this interface as source IP address for traffic "
-"initiated by the router itself"
+#: applications/luci-app-mwan3/luasrc/model/cbi/mwan/globalsconfig.lua:23
+msgid "Update interval"
 msgstr ""
-"Используйте IP-адрес этого интерфейса в качестве IP-адреса источника для "
-"трафика, инициированного самим маршрутизатором."
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/ruleconfig.lua:31
 msgid "View the content of /etc/protocols for protocol description"
@@ -784,6 +799,16 @@ msgstr "никогда"
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/ruleconfig.lua:59
 msgid "unreachable (reject)"
 msgstr "недоступен (отклонить)"
+
+#~ msgid "Local source interface"
+#~ msgstr "Локальный исходящий интефейс"
+
+#~ msgid ""
+#~ "Use the IP address of this interface as source IP address for traffic "
+#~ "initiated by the router itself"
+#~ msgstr ""
+#~ "Используйте IP-адрес этого интерфейса в качестве IP-адреса источника для "
+#~ "трафика, инициированного самим маршрутизатором."
 
 #~ msgid "Online (tracking active)"
 #~ msgstr "Онлайн (отслеживание активно)"

@@ -38,6 +38,7 @@ msgstr "%d 分鐘"
 msgid "%d minutes"
 msgstr "%d 分鐘"
 
+#: applications/luci-app-mwan3/luasrc/model/cbi/mwan/globalsconfig.lua:27
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interfaceconfig.lua:129
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interfaceconfig.lua:142
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interfaceconfig.lua:158
@@ -45,6 +46,10 @@ msgstr "%d 分鐘"
 msgid "%d second"
 msgstr "%d 秒"
 
+#: applications/luci-app-mwan3/luasrc/model/cbi/mwan/globalsconfig.lua:28
+#: applications/luci-app-mwan3/luasrc/model/cbi/mwan/globalsconfig.lua:29
+#: applications/luci-app-mwan3/luasrc/model/cbi/mwan/globalsconfig.lua:30
+#: applications/luci-app-mwan3/luasrc/model/cbi/mwan/globalsconfig.lua:31
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interfaceconfig.lua:130
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interfaceconfig.lua:131
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interfaceconfig.lua:132
@@ -90,6 +95,10 @@ msgstr "取值範圍：1-256。如果不填寫，預設值為 1"
 #: applications/luci-app-mwan3/luasrc/controller/mwan3.lua:177
 msgid "All required IP rules for interface %s found"
 msgstr "找到介面 %s 的所有必需 IP 規則"
+
+#: applications/luci-app-mwan3/luasrc/model/cbi/mwan/globalsconfig.lua:36
+msgid "Also scan this Routing table for connected networks"
+msgstr ""
 
 #: applications/luci-app-mwan3/luasrc/view/mwan/status_diagnostics.htm:73
 msgid "Check IP rules"
@@ -147,7 +156,7 @@ msgstr "當 Ping 成功次數達到這個數值後，已經被認為離線的介
 msgid "Enabled"
 msgstr "已啟用"
 
-#: applications/luci-app-mwan3/luasrc/model/cbi/mwan/globalsconfig.lua:27
+#: applications/luci-app-mwan3/luasrc/model/cbi/mwan/globalsconfig.lua:16
 msgid "Enter value in hex, starting with <code>0x</code>"
 msgstr "輸入十六進位制值，以 <code>0x</code> 開頭"
 
@@ -163,7 +172,7 @@ msgstr "在 up 事件發生時的預期介面狀態"
 msgid "Failure interval"
 msgstr "故障檢測間隔"
 
-#: applications/luci-app-mwan3/luasrc/model/cbi/mwan/globalsconfig.lua:26
+#: applications/luci-app-mwan3/luasrc/model/cbi/mwan/globalsconfig.lua:15
 msgid "Firewall mask"
 msgstr "防火牆掩碼"
 
@@ -186,6 +195,10 @@ msgstr "Hotplug ifdown"
 #: applications/luci-app-mwan3/luasrc/view/mwan/status_diagnostics.htm:75
 msgid "Hotplug ifup"
 msgstr "Hotplug ifup"
+
+#: applications/luci-app-mwan3/luasrc/model/cbi/mwan/globalsconfig.lua:24
+msgid "How often should rtmon update the interface routing table"
+msgstr ""
 
 #: applications/luci-app-mwan3/luasrc/view/mwan/status_detail.htm:29
 #: applications/luci-app-mwan3/luasrc/view/mwan/status_diagnostics.htm:56
@@ -267,11 +280,7 @@ msgstr "負載均衡"
 msgid "Loading"
 msgstr "載入中"
 
-#: applications/luci-app-mwan3/luasrc/model/cbi/mwan/globalsconfig.lua:11
-msgid "Local source interface"
-msgstr "本地源介面"
-
-#: applications/luci-app-mwan3/luasrc/model/cbi/mwan/globalsconfig.lua:7
+#: applications/luci-app-mwan3/luasrc/model/cbi/mwan/globalsconfig.lua:8
 msgid "MWAN - Globals"
 msgstr "MWAN - 全局"
 
@@ -522,6 +531,12 @@ msgstr "通訊協議"
 msgid "Recovery interval"
 msgstr "故障恢復間隔"
 
+#: applications/luci-app-mwan3/luasrc/model/cbi/mwan/globalsconfig.lua:38
+#: applications/luci-app-mwan3/luasrc/model/cbi/mwan/globalsconfig.lua:39
+#: applications/luci-app-mwan3/luasrc/model/cbi/mwan/globalsconfig.lua:40
+msgid "Routing table %d"
+msgstr ""
+
 #: applications/luci-app-mwan3/luasrc/controller/mwan3.lua:196
 msgid "Routing table %s for interface %s found"
 msgstr "找到路由表 %s，為介面 %s"
@@ -529,6 +544,10 @@ msgstr "找到路由表 %s，為介面 %s"
 #: applications/luci-app-mwan3/luasrc/controller/mwan3.lua:200
 msgid "Routing table %s for interface %s not found"
 msgstr "沒有找到路由表 %s，為介面 %s"
+
+#: applications/luci-app-mwan3/luasrc/model/cbi/mwan/globalsconfig.lua:35
+msgid "Routing table lookup"
+msgstr ""
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/rule.lua:58
 msgid "Rule"
@@ -658,11 +677,9 @@ msgstr ""
 msgid "Troubleshooting"
 msgstr "故障排除"
 
-#: applications/luci-app-mwan3/luasrc/model/cbi/mwan/globalsconfig.lua:12
-msgid ""
-"Use the IP address of this interface as source IP address for traffic "
-"initiated by the router itself"
-msgstr "使用該介面的 IP 位址作為路由器本身發起的流量的源 IP 位址"
+#: applications/luci-app-mwan3/luasrc/model/cbi/mwan/globalsconfig.lua:23
+msgid "Update interval"
+msgstr ""
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/ruleconfig.lua:31
 msgid "View the content of /etc/protocols for protocol description"
@@ -752,3 +769,11 @@ msgstr "從不"
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/ruleconfig.lua:59
 msgid "unreachable (reject)"
 msgstr "不可達（拒絕）"
+
+#~ msgid "Local source interface"
+#~ msgstr "本地源介面"
+
+#~ msgid ""
+#~ "Use the IP address of this interface as source IP address for traffic "
+#~ "initiated by the router itself"
+#~ msgstr "使用該介面的 IP 位址作為路由器本身發起的流量的源 IP 位址"
