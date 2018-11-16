@@ -1,24 +1,65 @@
 /*
  * xhr.js - XMLHttpRequest helper class
- * (c) 2008-2010 Jo-Philipp Wich
+ * (c) 2008-2018 Jo-Philipp Wich <jo@mein.io>
  */
 
-XHR = function()
-{
-	this.reinit = function()
-	{
-		if (window.XMLHttpRequest) {
-			this._xmlHttp = new XMLHttpRequest();
-		}
-		else if (window.ActiveXObject) {
-			this._xmlHttp = new ActiveXObject("Microsoft.XMLHTTP");
-		}
-		else {
-			alert("xhr.js: XMLHttpRequest is not supported by this browser!");
-		}
-	}
+XHR.prototype = {
+	_encode: function(obj) {
+		obj = obj ? obj : { };
+		obj['_'] = Math.random();
 
-	this.busy = function() {
+		if (typeof obj == 'object') {
+			var code = '';
+			var self = this;
+
+			for (var k in obj)
+				code += (code ? '&' : '') +
+					k + '=' + encodeURIComponent(obj[k]);
+
+			return code;
+		}
+
+		return obj;
+	},
+
+	_response: function(callback, ts) {
+		if (this._xmlHttp.readyState !== 4)
+			return;
+
+		var status = this._xmlHttp.status,
+		    login = this._xmlHttp.getResponseHeader("X-LuCI-Login-Required"),
+		    type = this._xmlHttp.getResponseHeader("Content-Type"),
+		    json = null;
+
+		if (status === 403 && login === 'yes') {
+			XHR.halt();
+
+			showModal(_('Session expired'), [
+				E('div', { class: 'alert-message warning' },
+					_('A new login is required since the authentication session expired.')),
+				E('div', { class: 'right' },
+					E('div', {
+						class: 'btn primary',
+						click: function() {
+							var loc = window.location;
+							window.location = loc.protocol + '//' + loc.host + loc.pathname + loc.search;
+						}
+					}, _('To login…')))
+			]);
+		}
+		else if (type && type.toLowerCase().match(/^application\/json\b/)) {
+			try {
+				json = JSON.parse(this._xmlHttp.responseText);
+			}
+			catch(e) {
+				json = null;
+			}
+		}
+
+		callback(this._xmlHttp, json, Date.now() - ts);
+	},
+
+	busy: function() {
 		if (!this._xmlHttp)
 			return false;
 
@@ -32,20 +73,18 @@ XHR = function()
 			default:
 				return false;
 		}
-	}
+	},
 
-	this.abort = function() {
+	abort: function() {
 		if (this.busy())
 			this._xmlHttp.abort();
-	}
+	},
 
-	this.get = function(url,data,callback,timeout)
-	{
-		this.reinit();
+	get: function(url, data, callback, timeout) {
+		this._xmlHttp = new XMLHttpRequest();
 
-		var ts   = Date.now();
-		var xhr  = this._xmlHttp;
-		var code = this._encode(data);
+		var xhr = this._xmlHttp,
+		    code = this._encode(data);
 
 		url = location.protocol + '//' + location.host + url;
 
@@ -60,83 +99,51 @@ XHR = function()
 		if (!isNaN(timeout))
 			xhr.timeout = timeout;
 
-		xhr.onreadystatechange = function()
-		{
-			if (xhr.readyState == 4) {
-				var json = null;
-				if (xhr.getResponseHeader("Content-Type") == "application/json") {
-					try { json = JSON.parse(xhr.responseText); }
-					catch(e) { json = null; }
-				}
-
-				callback(xhr, json, Date.now() - ts);
-			}
-		}
-
+		xhr.onreadystatechange = this._response.bind(this, callback, Date.now());
 		xhr.send(null);
-	}
+	},
 
-	this.post = function(url,data,callback,timeout)
-	{
-		this.reinit();
+	post: function(url, data, callback, timeout) {
+		this._xmlHttp = new XMLHttpRequest();
 
-		var ts   = Date.now();
-		var xhr  = this._xmlHttp;
-		var code = this._encode(data);
-
-		xhr.onreadystatechange = function()
-		{
-			if (xhr.readyState == 4) {
-				var json = null;
-				if (xhr.getResponseHeader("Content-Type") == "application/json") {
-					try { json = JSON.parse(xhr.responseText); }
-					catch(e) { json = null; }
-				}
-
-				callback(xhr, json, Date.now() - ts);
-			}
-		}
+		var xhr = this._xmlHttp,
+		    code = this._encode(data);
 
 		xhr.open('POST', url, true);
 
 		if (!isNaN(timeout))
 			xhr.timeout = timeout;
 
+		xhr.onreadystatechange = this._response.bind(this, callback, Date.now());
 		xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 		xhr.send(code);
-	}
+	},
 
-	this.cancel = function()
-	{
-		this._xmlHttp.onreadystatechange = function(){};
+	cancel: function() {
+		this._xmlHttp.onreadystatechange = function() {};
 		this._xmlHttp.abort();
-	}
+	},
 
-	this.send_form = function(form,callback,extra_values)
-	{
+	send_form: function(form, callback, extra_values) {
 		var code = '';
 
-		for (var i = 0; i < form.elements.length; i++)
-		{
+		for (var i = 0; i < form.elements.length; i++) {
 			var e = form.elements[i];
 
-			if (e.options)
-			{
+			if (e.options) {
 				code += (code ? '&' : '') +
 					form.elements[i].name + '=' + encodeURIComponent(
 						e.options[e.selectedIndex].value
 					);
 			}
-			else if (e.length)
-			{
+			else if (e.length) {
 				for (var j = 0; j < e.length; j++)
 					if (e[j].name) {
 						code += (code ? '&' : '') +
 							e[j].name + '=' + encodeURIComponent(e[j].value);
 					}
 			}
-			else
-			{
+			else {
 				code += (code ? '&' : '') +
 					e.name + '=' + encodeURIComponent(e.value);
 			}
@@ -147,46 +154,25 @@ XHR = function()
 				code += (code ? '&' : '') +
 					key + '=' + encodeURIComponent(extra_values[key]);
 
-		return(
-			(form.method == 'get')
-				? this.get(form.getAttribute('action'), code, callback)
-				: this.post(form.getAttribute('action'), code, callback)
-		);
-	}
-
-	this._encode = function(obj)
-	{
-		obj = obj ? obj : { };
-		obj['_'] = Math.random();
-
-		if (typeof obj == 'object')
-		{
-			var code = '';
-			var self = this;
-
-			for (var k in obj)
-				code += (code ? '&' : '') +
-					k + '=' + encodeURIComponent(obj[k]);
-
-			return code;
-		}
-
-		return obj;
+		return (form.method == 'get'
+			? this.get(form.getAttribute('action'), code, callback)
+			: this.post(form.getAttribute('action'), code, callback));
 	}
 }
 
-XHR.get = function(url, data, callback)
-{
+XHR.get = function(url, data, callback) {
 	(new XHR()).get(url, data, callback);
 }
 
-XHR.poll = function(interval, url, data, callback, post)
-{
+XHR.post = function(url, data, callback) {
+	(new XHR()).post(url, data, callback);
+}
+
+XHR.poll = function(interval, url, data, callback, post) {
 	if (isNaN(interval) || interval < 1)
 		interval = 5;
 
-	if (!XHR._q)
-	{
+	if (!XHR._q) {
 		XHR._t = 0;
 		XHR._q = [ ];
 		XHR._r = function() {
@@ -213,8 +199,7 @@ XHR.poll = function(interval, url, data, callback, post)
 	return e;
 }
 
-XHR.stop = function(e)
-{
+XHR.stop = function(e) {
 	for (var i = 0; XHR._q && XHR._q[i]; i++) {
 		if (XHR._q[i] === e) {
 			e.xhr.cancel();
@@ -226,10 +211,8 @@ XHR.stop = function(e)
 	return false;
 }
 
-XHR.halt = function()
-{
-	if (XHR._i)
-	{
+XHR.halt = function() {
+	if (XHR._i) {
 		/* show & set poll indicator */
 		try {
 			document.getElementById('xhr_poll_status').style.display = '';
@@ -242,10 +225,8 @@ XHR.halt = function()
 	}
 }
 
-XHR.run = function()
-{
-	if (XHR._r && !XHR._i)
-	{
+XHR.run = function() {
+	if (XHR._r && !XHR._i) {
 		/* show & set poll indicator */
 		try {
 			document.getElementById('xhr_poll_status').style.display = '';
@@ -260,9 +241,10 @@ XHR.run = function()
 	}
 }
 
-XHR.running = function()
-{
+XHR.running = function() {
 	return !!(XHR._r && XHR._i);
 }
+
+function XHR() {}
 
 document.addEventListener('DOMContentLoaded', XHR.run);
