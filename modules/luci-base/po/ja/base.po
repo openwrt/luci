@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-06-10 03:40+0200\n"
-"PO-Revision-Date: 2018-11-11 15:46+0900\n"
+"PO-Revision-Date: 2018-11-16 23:07+0900\n"
 "Last-Translator: INAGAKI Hiroshi <musashino.open@gmail.com>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
@@ -589,7 +589,7 @@ msgstr "適用リクエストはステータス <code>%h</code> により失敗�
 
 #: modules/luci-base/luasrc/view/cbi/apply_widget.htm:48
 msgid "Apply unchecked"
-msgstr ""
+msgstr "チェックせず適用"
 
 #: modules/luci-mod-status/luasrc/view/admin_status/index.htm:384
 msgid "Architecture"
@@ -786,10 +786,12 @@ msgid ""
 "Bind dynamically to interfaces rather than wildcard address (recommended as "
 "linux default)"
 msgstr ""
+"ワイルドカード アドレスよりもインターフェースへ動的にバインド（Linux のデフォ"
+"ルトとして推奨されます）"
 
 #: protocols/luci-proto-ipip/luasrc/model/cbi/admin_network/proto_ipip.lua:16
 msgid "Bind interface"
-msgstr ""
+msgstr "インターフェースのバインド"
 
 #: protocols/luci-proto-ipip/luasrc/model/cbi/admin_network/proto_ipip.lua:16
 msgid "Bind the tunnel to this interface (optional)."
@@ -1267,7 +1269,7 @@ msgstr "標準設定 %d"
 
 #: protocols/luci-proto-vpnc/luasrc/model/cbi/admin_network/proto_vpnc.lua:82
 msgid "Default Route"
-msgstr ""
+msgstr "デフォルト ルート"
 
 #: protocols/luci-proto-ipv6/luasrc/model/cbi/admin_network/proto_464xlat.lua:17
 #: protocols/luci-proto-ipv6/luasrc/model/cbi/admin_network/proto_6in4.lua:81
@@ -1414,7 +1416,7 @@ msgstr "RFC1918の応答を破棄します"
 #: modules/luci-base/luasrc/view/wifi_assoclist.htm:92
 #: modules/luci-base/luasrc/view/wifi_assoclist.htm:114
 msgid "Disconnect"
-msgstr ""
+msgstr "切断"
 
 #: protocols/luci-proto-ncm/luasrc/model/network/proto_ncm.lua:64
 msgid "Disconnection attempt failed"
@@ -3222,7 +3224,7 @@ msgstr "次 »"
 
 #: protocols/luci-proto-vpnc/luasrc/model/cbi/admin_network/proto_vpnc.lua:84
 msgid "No"
-msgstr ""
+msgstr "いいえ"
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/ifaces.lua:453
 msgid "No DHCP Server configured for this interface"
@@ -4400,7 +4402,7 @@ msgstr "サービス"
 
 #: protocols/luci-proto-vpnc/luasrc/model/cbi/admin_network/proto_vpnc.lua:83
 msgid "Set VPN as Default Route"
-msgstr ""
+msgstr "VPN をデフォルト ルートとして設定します。"
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/ifaces.lua:258
 msgid ""
@@ -4836,6 +4838,12 @@ msgid ""
 "or revert all pending changes to keep the currently working configuration "
 "state."
 msgstr ""
+"保留されている変更を適用後、 %d 秒以内にデバイスに到達できなかった可能性があ"
+"ります。これは、設定内容に起因するものです（安全上の理由から、変更はロール"
+"バックされます）。もし設定の変更が確かに正しいと思われる場合、チェック無しで"
+"の設定の適用を行ってください。そのほか、この警告を閉じて変更の編集を行って再"
+"度の適用を試行したり、現在機能している設定状況を保持するために、保留されてい"
+"る全ての変更を取り消すこともできます。"
 
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/fstab/mount.lua:87
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/fstab/swap.lua:41
@@ -4956,7 +4964,7 @@ msgstr ""
 
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:156
 msgid "Theme"
-msgstr "デザイン"
+msgstr "テーマ"
 
 #: modules/luci-base/luasrc/view/lease_status.htm:29
 #: modules/luci-base/luasrc/view/lease_status.htm:61
@@ -5663,7 +5671,7 @@ msgstr "システムログをファイルに書き込む"
 
 #: protocols/luci-proto-vpnc/luasrc/model/cbi/admin_network/proto_vpnc.lua:85
 msgid "Yes"
-msgstr ""
+msgstr "はい"
 
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/startup.lua:25
 msgid ""
@@ -5929,6 +5937,8 @@ msgid ""
 "one of:\n"
 " - %s"
 msgstr ""
+"以下を満たす1つ:\n"
+" - %s"
 
 #: modules/luci-mod-network/luasrc/view/admin_network/wifi_join.htm:71
 msgid "open"
@@ -6186,133 +6196,3 @@ msgstr "はい"
 #: modules/luci-base/luasrc/view/cbi/delegator.htm:20
 msgid "« Back"
 msgstr "« 戻る"
-
-#~ msgid "Design"
-#~ msgstr "デザイン"
-
-#~ msgid "Apply anyway"
-#~ msgstr "チェックなしの適用"
-
-#~ msgid "Available packages"
-#~ msgstr "インストール可能なパッケージ"
-
-#~ msgid "Bind only to specific interfaces rather than wildcard address."
-#~ msgstr ""
-#~ "ワイルドカード アドレスではなく、特定のインターフェースのみにバインドしま"
-#~ "す。"
-
-#~ msgid ""
-#~ "Build/distribution specific feed definitions. This file will NOT be "
-#~ "preserved in any sysupgrade."
-#~ msgstr ""
-#~ "ビルド / ディストリビューション固有のフィード定義です。このファイルは"
-#~ "sysupgradeの際に引き継がれません。"
-
-#~ msgid ""
-#~ "Custom feed definitions, e.g. private feeds. This file can be preserved "
-#~ "in a sysupgrade."
-#~ msgstr ""
-#~ "プライベート フィードなどのカスタム フィード定義です。このファイルは"
-#~ "sysupgrade時に引き継ぐことができます。"
-
-#~ msgid "Custom feeds"
-#~ msgstr "カスタム フィード"
-
-#~ msgid "Displaying only packages containing"
-#~ msgstr "右記の文字列を含んだパッケージのみを表示中"
-
-#~ msgid "Distribution feeds"
-#~ msgstr "ディストリビューション フィード"
-
-#~ msgid "Download and install package"
-#~ msgstr "パッケージのダウンロードとインストール"
-
-#~ msgid "Filter"
-#~ msgstr "フィルタ"
-
-#~ msgid "Find package"
-#~ msgstr "パッケージを検索"
-
-#~ msgid "Free space"
-#~ msgstr "ディスクの空き容量"
-
-#~ msgid "General options for opkg"
-#~ msgstr "opkgの一般設定"
-
-#~ msgid "Install"
-#~ msgstr "インストール"
-
-#~ msgid "Installed packages"
-#~ msgstr "インストール済みパッケージ"
-
-#~ msgid "No package lists available"
-#~ msgstr "パッケージ リストがありません"
-
-#~ msgid "OK"
-#~ msgstr "OK"
-
-#~ msgid "OPKG-Configuration"
-#~ msgstr "OPKG-設定"
-
-#~ msgid "Package lists are older than 24 hours"
-#~ msgstr "パッケージ リストは24時間以上前のものです"
-
-#~ msgid "Package name"
-#~ msgstr "パッケージ名"
-
-#~ msgid "Please update package lists first"
-#~ msgstr "最初にパッケージ リストを更新してください"
-
-#~ msgid "Size (.ipk)"
-#~ msgstr "サイズ (.ipk)"
-
-#~ msgid "Software"
-#~ msgstr "ソフトウェア"
-
-#~ msgid ""
-#~ "The device could not be reached within %d seconds after applying the "
-#~ "pending changes, which caused the configuration to be rolled back for "
-#~ "safety reasons. If you believe that the configuration changes are correct "
-#~ "nonetheless, proceed by applying anyway. Alternatively, you can dismiss "
-#~ "this warning and edit changes before attempting to apply again, or revert "
-#~ "all pending changes to keep the currently working configuration state."
-#~ msgstr ""
-#~ "未適用の変更を適用後、デバイスは %d 秒以内に完了できなかった可能性がありま"
-#~ "す。これは、安全上の理由によりロールバックされる設定に起因するものです。そ"
-#~ "れでも設定の変更が正しいと思う場合は、チェックなしの変更の適用を行ってくだ"
-#~ "さい。もしくは、再度適用を試行する前にこの警告を除去して設定内容の編集を行"
-#~ "うか、現在動作している設定状況を維持するために未適用の変更を取り消してくだ"
-#~ "さい。"
-
-#~ msgid "Update lists"
-#~ msgstr "リストを更新"
-
-#~ msgid "Version"
-#~ msgstr "バージョン"
-
-#~ msgid "Waiting for configuration to be applied… %ds"
-#~ msgstr "設定を適用中です... %d 秒"
-
-#~ msgid "none"
-#~ msgstr "なし"
-
-#~ msgid "Disable DNS setup"
-#~ msgstr "DNSセットアップを無効にする"
-
-#~ msgid "IPv4 and IPv6"
-#~ msgstr "IPv4及びIPv6"
-
-#~ msgid "IPv4 only"
-#~ msgstr "IPv4のみ"
-
-#~ msgid "IPv6 only"
-#~ msgstr "IPv6のみ"
-
-#~ msgid "Lease validity time"
-#~ msgstr "リース有効時間"
-
-#~ msgid "Multicast address"
-#~ msgstr "マルチキャスト アドレス"
-
-#~ msgid "Protocol family"
-#~ msgstr "プロトコルファミリ"
