@@ -64,34 +64,34 @@ end
 					if (neigh.proto == '6') {
 						s += String.format(
 							'<div class="tr cbi-section-table-row cbi-rowstyle-'+(1 + (idx % 2))+' proto-%s">' +
-							'<div class="td cbi-section-table-cell" style="background-color:%s; text-align: left"><a href="http://[%s]/cgi-bin-status.html">%s</a></div>',
+							'<div class="td cbi-section-table-cell left" style="background-color:%s"><a href="http://[%s]/cgi-bin-status.html">%s</a></div>',
 							neigh.proto, neigh.dfgcolor, neigh.rip, neigh.rip
 						);
 					} else {
 						s += String.format(
 							'<div class="tr cbi-section-table-row cbi-rowstyle-'+(1 + (idx % 2))+' proto-%s">' +
-							'<div class="td cbi-section-table-cell" style="background-color:%s; text-align: left"><a href="http://%s/cgi-bin-status.html">%s</a></div>',
+							'<div class="td cbi-section-table-cell left" style="background-color:%s"><a href="http://%s/cgi-bin-status.html">%s</a></div>',
 							neigh.proto, neigh.dfgcolor, neigh.rip, neigh.rip
 						);
 					}
 					if (neigh.hn) {
 						s += String.format(
-							'<div class="td cbi-section-table-cell" style="background-color:%s; text-align: left"><a href="http://%s/cgi-bin-status.html">%s</a></div>',
+							'<div class="td cbi-section-table-cell left" style="background-color:%s"><a href="http://%s/cgi-bin-status.html">%s</a></div>',
 							neigh.dfgcolor, neigh.hn, neigh.hn
 						);
 					} else {
 						s += String.format(
-							'<div class="td cbi-section-table-cell" style="background-color:%s; text-align: left">?</div>',
+							'<div class="td cbi-section-table-cell left" style="background-color:%s">?</div>',
 							neigh.dfgcolor
 						);
 					}
 					s += String.format(
-						'<div class="td cbi-section-table-cell" style="background-color:%s; text-align: left">%s</div>' +
-						'<div class="td cbi-section-table-cell" style="background-color:%s; text-align: left">%s</div>' +
-						'<div class="td cbi-section-table-cell" style="background-color:%s; text-align: left">%s</div>' +
-						'<div class="td cbi-section-table-cell" style="background-color:%s; text-align: left">%s</div>' +
-						'<div class="td cbi-section-table-cell" style="background-color:%s; text-align: left">%s</div>' +
-						'<div class="td cbi-section-table-cell" style="background-color:%s; text-align: left" title="Signal: %s Noise: %s">%s</div>' +
+						'<div class="td cbi-section-table-cell left" style="background-color:%s">%s</div>' +
+						'<div class="td cbi-section-table-cell left" style="background-color:%s">%s</div>' +
+						'<div class="td cbi-section-table-cell left" style="background-color:%s">%s</div>' +
+						'<div class="td cbi-section-table-cell left" style="background-color:%s">%s</div>' +
+						'<div class="td cbi-section-table-cell left" style="background-color:%s">%s</div>' +
+						'<div class="td cbi-section-table-cell left" style="background-color:%s title="Signal: %s Noise: %s">%s</div>' +
 						'</div>',
 						neigh.dfgcolor, neigh.ifn, neigh.dfgcolor, neigh.lip, neigh.dfgcolor, neigh.lq, neigh.dfgcolor, neigh.nlq, neigh.color, neigh.cost, neigh.snr_color, neigh.signal, neigh.noise, neigh.snr || '?'
 					);
@@ -145,17 +145,17 @@ end
 
 		<div class="tr cbi-section-table-row cbi-rowstyle-<%=i%> proto-<%=link.proto%>">
 			<% if link.proto == "6" then %>
-			<div class="td cbi-section-table-cell" style="background-color:<%=defaultgw_color%>; text-align: left"><a href="http://[<%=link.remoteIP%>]/cgi-bin-status.html"><%=link.remoteIP%></a></div>
+			<div class="td cbi-section-table-cell left" style="background-color:<%=defaultgw_color%>"><a href="http://[<%=link.remoteIP%>]/cgi-bin-status.html"><%=link.remoteIP%></a></div>
 			<% else %>
-			<div class="td cbi-section-table-cell" style="background-color:<%=defaultgw_color%>; text-align: left"><a href="http://<%=link.remoteIP%>/cgi-bin-status.html"><%=link.remoteIP%></a></div>
+			<div class="td cbi-section-table-cell left" style="background-color:<%=defaultgw_color%>"><a href="http://<%=link.remoteIP%>/cgi-bin-status.html"><%=link.remoteIP%></a></div>
 			<% end %>
-			<div class="td cbi-section-table-cell" style="background-color:<%=defaultgw_color%>; text-align: left"><a href="http://<%=link.hostname%>/cgi-bin-status.html"><%=link.hostname%></a></div>
-			<div class="td cbi-section-table-cell" style="background-color:<%=defaultgw_color%>; text-align: left"><%=link.interface%></div>
-			<div class="td cbi-section-table-cell" style="background-color:<%=defaultgw_color%>; text-align: left"><%=link.localIP%></div>
-			<div class="td cbi-section-table-cell" style="background-color:<%=defaultgw_color%>; text-align: left"><%=string.format("%.3f", link.linkQuality)%></div>
-			<div class="td cbi-section-table-cell" style="background-color:<%=defaultgw_color%>; text-align: left"><%=string.format("%.3f", link.neighborLinkQuality)%></div>
-			<div class="td cbi-section-table-cell" style="background-color:<%=color%>; text-align: left"><%=string.format("%.3f", link.linkCost)%></div>
-			<div class="td cbi-section-table-cell" style="background-color:<%=snr_color%>; text-align: left" title="Signal: <%=link.signal%> Noise: <%=link.noise%>"><%=link.snr%></div>
+			<div class="td cbi-section-table-cell left" style="background-color:<%=defaultgw_color%>"><a href="http://<%=link.hostname%>/cgi-bin-status.html"><%=link.hostname%></a></div>
+			<div class="td cbi-section-table-cell left" style="background-color:<%=defaultgw_color%>"><%=link.interface%></div>
+			<div class="td cbi-section-table-cell left" style="background-color:<%=defaultgw_color%>"><%=link.localIP%></div>
+			<div class="td cbi-section-table-cell left" style="background-color:<%=defaultgw_color%>"><%=string.format("%.3f", link.linkQuality)%></div>
+			<div class="td cbi-section-table-cell left" style="background-color:<%=defaultgw_color%>"><%=string.format("%.3f", link.neighborLinkQuality)%></div>
+			<div class="td cbi-section-table-cell left" style="background-color:<%=color%>"><%=string.format("%.3f", link.linkCost)%></div>
+			<div class="td cbi-section-table-cell left" style="background-color:<%=snr_color%>" title="Signal: <%=link.signal%> Noise: <%=link.noise%>"><%=link.snr%></div>
 		</div>
 		<% 
 			i = ((i % 2) + 1)
