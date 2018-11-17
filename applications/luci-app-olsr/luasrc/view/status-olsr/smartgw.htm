@@ -64,15 +64,15 @@ XHR.poll(10, '<%=REQUEST_URI%>', { status: 1 },
 			}
 
 			s += String.format(
-                                '<div class="td cbi-section-table-cell" style="text-align: left">%s</div>' +
-                                '<div class="td cbi-section-table-cell" style="text-align: left">%s</div>' +
-                                '<div class="td cbi-section-table-cell" style="text-align: left">%s</div>' +
-                                '<div class="td cbi-section-table-cell" style="text-align: left">%s</div>' +
-                                '<div class="td cbi-section-table-cell" style="text-align: left">%s</div>' +
-                                '<div class="td cbi-section-table-cell" style="text-align: left">%s</div>' +
-                                '<div class="td cbi-section-table-cell" style="text-align: left">%s</div>' +
-                                '<div class="td cbi-section-table-cell" style="text-align: left">%s</div>' +
-                                '<div class="td cbi-section-table-cell" style="text-align: left">%s</div>',
+                                '<div class="td cbi-section-table-cell left">%s</div>' +
+                                '<div class="td cbi-section-table-cell left">%s</div>' +
+                                '<div class="td cbi-section-table-cell left">%s</div>' +
+                                '<div class="td cbi-section-table-cell left">%s</div>' +
+                                '<div class="td cbi-section-table-cell left">%s</div>' +
+                                '<div class="td cbi-section-table-cell left">%s</div>' +
+                                '<div class="td cbi-section-table-cell left">%s</div>' +
+                                '<div class="td cbi-section-table-cell left">%s</div>' +
+                                '<div class="td cbi-section-table-cell left">%s</div>',
 				linkgw, smartgw.selected, smartgw.cost, smartgw.hops, smartgw.uplink, smartgw.downlink, smartgw.v4, smartgw.v6, smartgw.prefix
                                 )
 			s += '</div>'
@@ -115,19 +115,19 @@ XHR.poll(10, '<%=REQUEST_URI%>', { status: 1 },
 
 			<div class="tr cbi-section-table-row cbi-rowstyle-<%=i%> proto-<%=proto%>">
 				<% if gw.proto == '6' then %>
-					<div class="td cbi-section-table-cell" style="text-align: left"><a href="http://[<%=gw.originator%>]/cgi-bin-status.html"><%=gw.originator%></a></div>
+					<div class="td cbi-section-table-cell left"><a href="http://[<%=gw.originator%>]/cgi-bin-status.html"><%=gw.originator%></a></div>
 				<% else %>
-					<div class="td cbi-section-table-cell" style="text-align: left"><a href="http://<%=gw.originator%>/cgi-bin-status.html"><%=gw.originator%></a></div>
+					<div class="td cbi-section-table-cell left"><a href="http://<%=gw.originator%>/cgi-bin-status.html"><%=gw.originator%></a></div>
 				<% end %>
 
-				<div class="td cbi-section-table-cell" style="text-align: left"><%=gw.selected and luci.i18n.translate('yes') or luci.i18n.translate('no')%></div>
-				<div class="td cbi-section-table-cell" style="text-align: left"><%=gw.cost > 0 and string.format("%.3f", gw.cost) or luci.i18n.translate('infinate')%></div>
-				<div class="td cbi-section-table-cell" style="text-align: left"><%=gw.hops%></div>
-				<div class="td cbi-section-table-cell" style="text-align: left"><%=gw.uplink%></div>
-				<div class="td cbi-section-table-cell" style="text-align: left"><%=gw.downlink%></div>
-				<div class="td cbi-section-table-cell" style="text-align: left"><%=gw.IPv4 and luci.i18n.translate('yes') or luci.i18n.translate('no')%></div>
-				<div class="td cbi-section-table-cell" style="text-align: left"><%=gw.IPv6 and luci.i18n.translate('yes') or luci.i18n.translate('no')%></div>
-				<div class="td cbi-section-table-cell" style="text-align: left"><%=gw.prefix%></div>
+				<div class="td cbi-section-table-cell left"><%=gw.selected and luci.i18n.translate('yes') or luci.i18n.translate('no')%></div>
+				<div class="td cbi-section-table-cell left"><%=gw.cost > 0 and string.format("%.3f", gw.cost) or luci.i18n.translate('infinate')%></div>
+				<div class="td cbi-section-table-cell left"><%=gw.hops%></div>
+				<div class="td cbi-section-table-cell left"><%=gw.uplink%></div>
+				<div class="td cbi-section-table-cell left"><%=gw.downlink%></div>
+				<div class="td cbi-section-table-cell left"><%=gw.IPv4 and luci.i18n.translate('yes') or luci.i18n.translate('no')%></div>
+				<div class="td cbi-section-table-cell left"><%=gw.IPv6 and luci.i18n.translate('yes') or luci.i18n.translate('no')%></div>
+				<div class="td cbi-section-table-cell left"><%=gw.prefix%></div>
 			</div>
 
 			<% i = ((i % 2) + 1)

@@ -62,9 +62,9 @@ XHR.poll(10, '<%=REQUEST_URI%>', { status: 1 },
 			}
 
 			s += String.format(
-                                '<div class="td cbi-section-table-cell" style="text-align: left">%s</div>' +
-                                '<div class="td cbi-section-table-cell" style="text-align: left">%s</div>' +
-                                '<div class="td cbi-section-table-cell" style="text-align: left">%s</div>', hna.destination + '/' + hna.genmask, linkgw + hostname, validity
+                                '<div class="td cbi-section-table-cell left">%s</div>' +
+                                '<div class="td cbi-section-table-cell left">%s</div>' +
+                                '<div class="td cbi-section-table-cell left">%s</div>', hna.destination + '/' + hna.genmask, linkgw + hostname, validity
                                 )
 			s += '</div>'
 		}
@@ -90,8 +90,8 @@ XHR.poll(10, '<%=REQUEST_URI%>', { status: 1 },
 		<% for k, route in ipairs(hna) do %>
 
 		<div class="tr cbi-section-table-row cbi-rowstyle-<%=i%> proto-<%=hna[k].proto%>">
-			<div class="td cbi-section-table-cell" style="text-align: left"><%=hna[k].destination%>/<%=hna[k].genmask%> </div>
-			<div class="td cbi-section-table-cell" style="text-align: left">
+			<div class="td cbi-section-table-cell left"><%=hna[k].destination%>/<%=hna[k].genmask%> </div>
+			<div class="td cbi-section-table-cell left">
 				<% if hna[k].proto == '6' then %>
 				<a href="http://[<%=hna[k].gateway%>]/cgi-bin-status.html"><%=hna[k].gateway%></a>
 				<% else %>
@@ -107,7 +107,7 @@ XHR.poll(10, '<%=REQUEST_URI%>', { status: 1 },
 				validity = '-'
 			end %>
 
-			<div class="td cbi-section-table-cell" style="text-align: left"><%=validity%></div>
+			<div class="td cbi-section-table-cell left"><%=validity%></div>
 		</div>
 
 		<% i = ((i % 2) + 1)

@@ -37,19 +37,19 @@ local olsrtools = require "luci.tools.olsr"
 
 			<% if route.proto == "6" then %>
 
-			<div class="td cbi-section-table-cell" style="text-align: left"><a href="http://[<%=route.destinationIP%>]/cgi-bin-status.html"><%=route.destinationIP%></a></div>
-			<div class="td cbi-section-table-cell" style="text-align: left"><a href="http://[<%=route.lastHopIP%>]/cgi-bin-status.html"><%=route.lastHopIP%></a></div>
+			<div class="td cbi-section-table-cell left"><a href="http://[<%=route.destinationIP%>]/cgi-bin-status.html"><%=route.destinationIP%></a></div>
+			<div class="td cbi-section-table-cell left"><a href="http://[<%=route.lastHopIP%>]/cgi-bin-status.html"><%=route.lastHopIP%></a></div>
 
 			<% else %>
 
-			<div class="td cbi-section-table-cell" style="text-align: left"><a href="http://<%=route.destinationIP%>/cgi-bin-status.html"><%=route.destinationIP%></a></div>
-			<div class="td cbi-section-table-cell" style="text-align: left"><a href="http://<%=route.lastHopIP%>/cgi-bin-status.html"><%=route.lastHopIP%></a></div>
+			<div class="td cbi-section-table-cell left"><a href="http://<%=route.destinationIP%>/cgi-bin-status.html"><%=route.destinationIP%></a></div>
+			<div class="td cbi-section-table-cell left"><a href="http://<%=route.lastHopIP%>/cgi-bin-status.html"><%=route.lastHopIP%></a></div>
 
 			<%end%>
 
-			<div class="td cbi-section-table-cell" style="text-align: left"><%=lq%></div>
-			<div class="td cbi-section-table-cell" style="text-align: left"><%=nlq%></div>
-			<div class="td cbi-section-table-cell" style="background-color:<%=color%>; text-align: left"><%=cost%></div>
+			<div class="td cbi-section-table-cell left"><%=lq%></div>
+			<div class="td cbi-section-table-cell left"><%=nlq%></div>
+			<div class="td cbi-section-table-cell left" style="background-color:<%=color%>"><%=cost%></div>
 		</div>
 
 		<%	i = ((i % 2) + 1)

@@ -132,9 +132,9 @@ end
 				var service = info[idx];
 				s += String.format(
 					'<div class="tr cbi-section-table-row cbi-rowstyle-'+(1 + (idx % 2))+'">' +
-						'<div class="td cbi-section-table-cell" style="text-align: left"><a href="%s">%s</a></div>' +
-						'<div class="td cbi-section-table-cell" style="text-align: left">%s</div>' +
-						'<div class="td cbi-section-table-cell" style="text-align: left"><a href="http://%s/cgi-bin-status.html">%s</a></div>' +
+						'<div class="td cbi-section-table-cell left"><a href="%s">%s</a></div>' +
+						'<div class="td cbi-section-table-cell left">%s</div>' +
+						'<div class="td cbi-section-table-cell left"><a href="http://%s/cgi-bin-status.html">%s</a></div>' +
 					'</div>',
 					service.url, service.descr, service.proto, service.origin_link, service.origin || '?'
 					);
@@ -175,9 +175,9 @@ end
 			%>
 
 			<div class="tr cbi-section-table-row cbi-rowstyle-<%=i%>">
-				<div class="td cbi-section-table-cell" style="text-align: left"><a href="<%=url%>"><%=descr%></a></div>
-				<div class="td cbi-section-table-cell" style="text-align: left"><%=proto%></div>
-				<div class="td cbi-section-table-cell" style="text-align: left"><a href="http://<%=origin_link%>/cgi-bin-status.html"><%=origin%></a></div>
+				<div class="td cbi-section-table-cell left"><a href="<%=url%>"><%=descr%></a></div>
+				<div class="td cbi-section-table-cell left"><%=proto%></div>
+				<div class="td cbi-section-table-cell left"><a href="http://<%=origin_link%>/cgi-bin-status.html"><%=origin%></a></div>
 			</div>
 			<% i = ((i % 2) + 1)
 		end %>
