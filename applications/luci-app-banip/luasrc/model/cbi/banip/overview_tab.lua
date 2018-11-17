@@ -27,7 +27,8 @@ o2 = s:option(Flag, "ban_automatic", translate("Automatic WAN Interface Detectio
 o2.default = o2.enabled
 o2.rmempty = false
 
-o3 = s:option(ListValue, "ban_iface", " ")
+o3 = s:option(MultiValue, "ban_iface", translate("Interface Selection"),
+	translate("Disable the automatic WAN detection and select your preferred interface(s) manually."))
 for _, dev in ipairs(devices) do
 	if dev ~= "lo" and dev ~= "br-lan" then
 		local iface = net:get_interface(dev)
@@ -42,6 +43,7 @@ for _, dev in ipairs(devices) do
 		end
 	end
 end
+o3.widget = "checkbox"
 o3.default = ban_iface
 o3.rmempty = false
 
