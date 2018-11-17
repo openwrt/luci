@@ -1,5 +1,5 @@
 <%#
- Copyright 2010 Jo-Philipp Wich <jow@openwrt.org>
+ Copyright 2010-2018 Jo-Philipp Wich <jo@mein.io>
  Licensed to the public under the Apache License 2.0.
 -%>
 
@@ -34,7 +34,7 @@
 	var step   = 5;
 
 	var data_wanted = Math.floor(width / step);
-	var data_fill   = 0;
+	var data_fill   = 1;
 	var data_stamp  = 0;
 
 	var data_rx = [ ];
@@ -178,6 +178,8 @@
 							if (data[i][TIME] <= data_stamp)
 								continue;
 
+							data_fill++;
+
 							/* normalize difference against time interval */
 							if (i > 0)
 							{
@@ -193,6 +195,7 @@
 						/* cut off outdated entries */
 						data_rx = data_rx.slice(data_rx.length - data_wanted, data_rx.length);
 						data_tx = data_tx.slice(data_tx.length - data_wanted, data_tx.length);
+						data_fill = Math.min(data_fill, data_wanted);
 
 						/* find peak */
 						for (var i = 0; i < data_rx.length; i++)
@@ -207,8 +210,8 @@
 							data_tx_avg += data_tx[i];
 						}
 
-						data_rx_avg = (data_rx_avg / Math.max(data_rx.length, 1));
-						data_tx_avg = (data_tx_avg / Math.max(data_tx.length, 1));
+						data_rx_avg = (data_rx_avg / data_fill);
+						data_tx_avg = (data_tx_avg / data_fill);
 
 						var size = Math.floor(Math.log2(data_max)),
 						    div = Math.pow(2, size - (size % 10)),

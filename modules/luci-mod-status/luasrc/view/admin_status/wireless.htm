@@ -1,5 +1,5 @@
 <%#
- Copyright 2011 Jo-Philipp Wich <jow@openwrt.org>
+ Copyright 2011-2018 Jo-Philipp Wich <jo@mein.io>
  Licensed to the public under the Apache License 2.0.
 -%>
 
@@ -33,7 +33,7 @@
 	var step   = 5;
 
 	var data_wanted = Math.floor(width / step);
-	var data_fill   = 0;
+	var data_fill   = 1;
 	var data_stamp  = 0;
 
 	var data_rssi = [ ];
@@ -201,12 +201,15 @@
 							if (data[i][TIME] <= data_stamp)
 								continue;
 
+							data_fill++;
+
 							data_rssi.push(data[i][RSSI] - noise_floor);
 							data_noise.push(data[i][NOISE] - noise_floor);
 							data_rate.push(Math.floor(data[i][RATE] / 1000));
 						}
 
 						/* cut off outdated entries */
+						data_fill = Math.min(data_fill, data_wanted);
 						data_rssi = data_rssi.slice(data_rssi.length - data_wanted, data_rssi.length);
 						data_noise = data_noise.slice(data_noise.length - data_wanted, data_noise.length);
 						data_rate = data_rate.slice(data_rate.length - data_wanted, data_rate.length);
@@ -221,19 +224,14 @@
 							data_noise_peak = Math.max(data_noise_peak, data_noise[i]);
 							data_rate_peak = Math.max(data_rate_peak, data_rate[i]);
 
-							if (i > 0)
-							{
-								data_rssi_avg = (data_rssi_avg + data_rssi[i]) / 2;
-								data_noise_avg = (data_noise_avg + data_noise[i]) / 2;
-								data_rate_avg = (data_rate_avg + data_rate[i]) / 2;
-							}
-							else
-							{
-								data_rssi_avg = data_rssi[i];
-								data_noise_avg = data_noise[i];
-								data_rate_avg = data_rate[i];
-							}
+							data_rssi_avg += data_rssi[i];
+							data_noise_avg += data_noise[i];
+							data_rate_avg += data_rate[i];
 						}
+
+						data_rssi_avg = data_rssi_avg / data_fill;
+						data_noise_avg = data_noise_avg / data_fill;
+						data_rate_avg = data_rate_avg / data_fill;
 
 						/* remember current timestamp, calculate horizontal scale */
 						data_stamp = data[data.length-1][TIME];

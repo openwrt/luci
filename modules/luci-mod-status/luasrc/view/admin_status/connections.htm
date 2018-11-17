@@ -1,5 +1,5 @@
 <%#
- Copyright 2010 Jo-Philipp Wich <jow@openwrt.org>
+ Copyright 2010-2018 Jo-Philipp Wich <jo@mein.io>
  Licensed to the public under the Apache License 2.0.
 -%>
 
@@ -19,7 +19,7 @@
 	var step   = 5;
 
 	var data_wanted = Math.floor(width / step);
-	var data_fill   = 0;
+	var data_fill   = 1;
 	var data_stamp  = 0;
 
 	var data_udp = [ ];
@@ -202,12 +202,15 @@
 							if (data[i][TIME] <= data_stamp)
 								continue;
 
+							data_fill++;
+
 							data_udp.push(data[i][UDP]);
 							data_tcp.push(data[i][TCP]);
 							data_otr.push(data[i][OTHER]);
 						}
 
 						/* cut off outdated entries */
+						data_fill = Math.min(data_fill, data_wanted);
 						data_udp = data_udp.slice(data_udp.length - data_wanted, data_udp.length);
 						data_tcp = data_tcp.slice(data_tcp.length - data_wanted, data_tcp.length);
 						data_otr = data_otr.slice(data_otr.length - data_wanted, data_otr.length);
@@ -223,19 +226,14 @@
 							data_tcp_peak = Math.max(data_tcp_peak, data_tcp[i]);
 							data_otr_peak = Math.max(data_otr_peak, data_otr[i]);
 
-							if (i > 0)
-							{
-								data_udp_avg = (data_udp_avg + data_udp[i]) / 2;
-								data_tcp_avg = (data_tcp_avg + data_tcp[i]) / 2;
-								data_otr_avg = (data_otr_avg + data_otr[i]) / 2;
-							}
-							else
-							{
-								data_udp_avg = data_udp[i];
-								data_tcp_avg = data_tcp[i];
-								data_otr_avg = data_otr[i];
-							}
+							data_udp_avg += data_udp[i];
+							data_tcp_avg += data_tcp[i];
+							data_otr_avg += data_otr[i];
 						}
+
+						data_udp_avg = data_udp_avg / data_fill;
+						data_tcp_avg = data_tcp_avg / data_fill;
+						data_otr_avg = data_otr_avg / data_fill;
 
 						/* remember current timestamp, calculate horizontal scale */
 						data_stamp = data[data.length-1][TIME];

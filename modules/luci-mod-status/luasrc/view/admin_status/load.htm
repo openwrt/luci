@@ -1,5 +1,5 @@
 <%#
- Copyright 2010 Jo-Philipp Wich <jow@openwrt.org>
+ Copyright 2010-2018 Jo-Philipp Wich <jo@mein.io>
  Licensed to the public under the Apache License 2.0.
 -%>
 
@@ -19,7 +19,7 @@
 	var step   = 5;
 
 	var data_wanted = Math.floor(width / step);
-	var data_fill   = 0;
+	var data_fill   = 1;
 	var data_stamp  = 0;
 
 	var data_01  = [ ];
@@ -148,12 +148,15 @@
 							if (data[i][TIME] <= data_stamp)
 								continue;
 
+							data_fill++;
+
 							data_01.push(data[i][L01]);
 							data_05.push(data[i][L05]);
 							data_15.push(data[i][L15]);
 						}
 
 						/* cut off outdated entries */
+						data_fill = Math.min(data_fill, data_wanted);
 						data_01 = data_01.slice(data_01.length - data_wanted, data_01.length);
 						data_05 = data_05.slice(data_05.length - data_wanted, data_05.length);
 						data_15 = data_15.slice(data_15.length - data_wanted, data_15.length);
@@ -169,19 +172,14 @@
 							data_05_peak = Math.max(data_05_peak, data_05[i]);
 							data_15_peak = Math.max(data_15_peak, data_15[i]);
 
-							if (i > 0)
-							{
-								data_01_avg = (data_01_avg + data_01[i]) / 2;
-								data_05_avg = (data_05_avg + data_05[i]) / 2;
-								data_15_avg = (data_15_avg + data_15[i]) / 2;
-							}
-							else
-							{
-								data_01_avg = data_01[i];
-								data_05_avg = data_05[i];
-								data_15_avg = data_15[i];
-							}
+							data_01_avg += data_01[i];
+							data_05_avg += data_05[i];
+							data_15_avg += data_15[i];
 						}
+
+						data_01_avg = data_01_avg / data_fill;
+						data_05_avg = data_05_avg / data_fill;
+						data_15_avg = data_15_avg / data_fill;
 
 						/* remember current timestamp, calculate horizontal scale */
 						data_stamp = data[data.length-1][TIME];
