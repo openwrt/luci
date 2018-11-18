@@ -126,7 +126,12 @@ end
 		var tbody = document.getElementById('olsr_services');
 			if (tbody)
 			{
-				var s = '';
+				var s = '<div class="tr cbi-section-table-titles">' +
+				'<div class="th cbi-section-table-cell"><%:Url%></div>' +
+				'<div class="th cbi-section-table-cell"><%:Protocol%></div>' +
+				'<div class="th cbi-section-table-cell"><%:Source%></div>' +
+				'</div>';
+
 				for (var idx = 0; idx < info.length; idx++)
 				{
 				var service = info[idx];
@@ -152,7 +157,7 @@ end
 
 	<fieldset class="cbi-section">
 	<legend><%:Internal services%></legend>
-	<div class="table cbi-section-table">
+	<div class="table cbi-section-table" id="olsr_services">
 			<div class="tr cbi-section-table-titles">
 				<div class="th cbi-section-table-cell"><%:Url%></div>
 				<div class="th cbi-section-table-cell"><%:Protocol%></div>

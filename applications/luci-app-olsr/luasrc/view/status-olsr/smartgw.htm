@@ -51,7 +51,18 @@ XHR.poll(10, '<%=REQUEST_URI%>', { status: 1 },
 	var smartgwdiv = document.getElementById('olsrd_smartgw');
 	if (smartgwdiv)
 	{
-		var s = '';
+		var s = '<div class="tr cbi-section-table-titles">' +
+			'<div class="th cbi-section-table-cell"><%:Gateway%></div>' +
+			'<div class="th cbi-section-table-cell"><%:Selected%></div>' +
+			'<div class="th cbi-section-table-cell"><%:ETX%></div>' +
+			'<div class="th cbi-section-table-cell"><%:Hops%></div>' +
+			'<div class="th cbi-section-table-cell"><%:Uplink%></div>' +
+			'<div class="th cbi-section-table-cell"><%:Downlink%></div>' +
+			'<div class="th cbi-section-table-cell"><%:IPv4%></div>' +
+			'<div class="th cbi-section-table-cell"><%:IPv6%></div>' +
+			'<div class="th cbi-section-table-cell"><%:Prefix%></div>' +
+			'</div>';
+
 		for (var idx = 0; idx < info.length; idx++)
 		{
 			var smartgw = info[idx];
@@ -91,7 +102,7 @@ XHR.poll(10, '<%=REQUEST_URI%>', { status: 1 },
 
 	<fieldset class="cbi-section">
 		<legend><%:Overview of smart gateways in this network%></legend>
-		<div class="table cbi-section-table">
+		<div class="table cbi-section-table" id="olsrd_smartgw">
 			<div class="tr cbi-section-table-titles">
 				<div class="th cbi-section-table-cell"><%:Gateway%></div>
 				<div class="th cbi-section-table-cell"><%:Selected%></div>
@@ -102,7 +113,6 @@ XHR.poll(10, '<%=REQUEST_URI%>', { status: 1 },
 				<div class="th cbi-section-table-cell"><%:IPv4%></div>
 				<div class="th cbi-section-table-cell"><%:IPv6%></div>
 				<div class="th cbi-section-table-cell"><%:Prefix%></div>
-
 			</div>
 
 			<% for k, gw in ipairs(gws.ipv4, gws.ipv6) do 

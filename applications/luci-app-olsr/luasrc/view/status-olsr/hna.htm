@@ -35,7 +35,12 @@ XHR.poll(10, '<%=REQUEST_URI%>', { status: 1 },
 	var hnadiv = document.getElementById('olsrd_hna');
 	if (hnadiv)
 	{
-		var s = '';
+		var s = '<div class="tr cbi-section-table-titles">' +
+			'<div class="th cbi-section-table-cell"><%:Announced network%></div>' +
+			'<div class="th cbi-section-table-cell"><%:OLSR gateway%></div>' +
+			'<div class="th cbi-section-table-cell"><%:Validity Time%></div>' +
+			'</div>';
+
 		for (var idx = 0; idx < info.length; idx++)
 		{
 			var hna = info[idx];
@@ -80,7 +85,7 @@ XHR.poll(10, '<%=REQUEST_URI%>', { status: 1 },
 <fieldset class="cbi-section">
 
 	<legend><%:Overview of currently active OLSR host net announcements%></legend>
-	<div class="table cbi-section-table">
+	<div class="table cbi-section-table" id="olsrd_hna">
 		<div class="tr cbi-section-table-titles">
 			<div class="th cbi-section-table-cell"><%:Announced network%></div>
 			<div class="th cbi-section-table-cell"><%:OLSR gateway%></div>

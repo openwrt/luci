@@ -13,7 +13,7 @@ local i = 1
 if luci.http.formvalue("status") == "1" then
 	local rv = {}
 	for k, route in ipairs(routes) do
-		local ETX = string.format("%.3f", tonumber(route.rtpMetricCost)/1024 or 0)
+		local ETX = string.format("%.3f", tonumber(route.etx) or 0)
 		rv[#rv+1] = {
 			hostname = route.hostname,
 	                dest = route.destination,
@@ -43,7 +43,14 @@ XHR.poll(20, '<%=REQUEST_URI%>', { status: 1 },
 		var rt = document.getElementById('olsrd_routes');
 			if (rt)
 			{
-				var s = '';
+				var s = '<div class="tr cbi-section-table-cell">' +
+				'<div class="th cbi-section-table-cell"><%:Announced network%></div>' +
+				'<div class="th cbi-section-table-cell"><%:OLSR gateway%></div>' +
+				'<div class="th cbi-section-table-cell"><%:Interface%></div>' +
+				'<div class="th cbi-section-table-cell"><%:Metric%></div>' +
+				'<div class="th cbi-section-table-cell">ETX</div>' +
+				'</div>';
+
 				for (var idx = 0; idx < info.length; idx++)
 				{
 					var route = info[idx];
@@ -57,7 +64,7 @@ XHR.poll(20, '<%=REQUEST_URI%>', { status: 1 },
 						)
 
 					if (route.hostname) {
-						if (hna.proto == '6') {
+						if (route.proto == '6') {
 							s += String.format(
 			                                        ' / <a href="http://[%s]/cgi-bin-status.html">%s</a>',
 								route.hostname, route.hostname || '?'
@@ -95,8 +102,8 @@ XHR.poll(20, '<%=REQUEST_URI%>', { status: 1 },
 <fieldset class="cbi-section">
 <legend><%:Overview of currently known routes to other OLSR nodes%></legend>
 
-<div class="table cbi-section-table">
-		<div class="tr cbi-section-table-titles">
+<div class="table cbi-section-table" id="olsrd_routes">
+		<div class="tr cbi-section-table-cell">
 			<div class="th cbi-section-table-cell"><%:Announced network%></div>
 			<div class="th cbi-section-table-cell"><%:OLSR gateway%></div>
 			<div class="th cbi-section-table-cell"><%:Interface%></div>

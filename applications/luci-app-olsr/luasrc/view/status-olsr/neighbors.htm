@@ -56,7 +56,17 @@ end
 		var nt = document.getElementById('olsr_neigh_table');
 			if (nt)
 			{
-				var s = '';
+				var s = '<div class="tr cbi-section-table-cell">' +
+				'<div class="th cbi-section-table-cell"><%:Neighbour IP%></div>' +
+				'<div class="th cbi-section-table-cell"><%:Hostname%></div>' +
+				'<div class="th cbi-section-table-cell"><%:Interface%></div>' +
+				'<div class="th cbi-section-table-cell"><%:Local interface IP%></div>' +
+				'<div class="th cbi-section-table-cell">LQ</div>' +
+				'<div class="th cbi-section-table-cell">NLQ</div>' +
+				'<div class="th cbi-section-table-cell">ETX</div>' +
+				'<div class="th cbi-section-table-cell">SNR</div>' +
+				'</div>';
+
 				for (var idx = 0; idx < info.length; idx++)
 				{
 					var neigh = info[idx];
@@ -91,7 +101,7 @@ end
 						'<div class="td cbi-section-table-cell left" style="background-color:%s">%s</div>' +
 						'<div class="td cbi-section-table-cell left" style="background-color:%s">%s</div>' +
 						'<div class="td cbi-section-table-cell left" style="background-color:%s">%s</div>' +
-						'<div class="td cbi-section-table-cell left" style="background-color:%s title="Signal: %s Noise: %s">%s</div>' +
+						'<div class="td cbi-section-table-cell left" style="background-color:%s" title="Signal: %s Noise: %s">%s</div>' +
 						'</div>',
 						neigh.dfgcolor, neigh.ifn, neigh.dfgcolor, neigh.lip, neigh.dfgcolor, neigh.lq, neigh.dfgcolor, neigh.nlq, neigh.color, neigh.cost, neigh.snr_color, neigh.signal, neigh.noise, neigh.snr || '?'
 					);
@@ -111,7 +121,7 @@ end
 <fieldset class="cbi-section">
 	<legend><%:Overview of currently established OLSR connections%></legend>
 
-	<div class="table cbi-section-table">
+	<div class="table cbi-section-table" id="olsr_neigh_table">
 			<div class="tr cbi-section-table-cell">
 				<div class="th cbi-section-table-cell"><%:Neighbour IP%></div>
 				<div class="th cbi-section-table-cell"><%:Hostname%></div>
