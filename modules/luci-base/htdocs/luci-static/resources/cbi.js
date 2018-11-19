@@ -19,34 +19,58 @@ function sfh(s) {
 	if (s === null || s.length === 0)
 		return null;
 
-	var hash = (s.length >>> 0),
-	    len = (s.length >>> 2),
+	var bytes = [];
+
+	for (var i = 0; i < s.length; i++) {
+		var ch = s.charCodeAt(i);
+
+		if (ch <= 0x7F)
+			bytes.push(ch);
+		else if (ch <= 0x7FF)
+			bytes.push(((ch >>>  6) & 0x1F) | 0xC0,
+			           ( ch         & 0x3F) | 0x80);
+		else if (ch <= 0xFFFF)
+			bytes.push(((ch >>> 12) & 0x0F) | 0xE0,
+			           ((ch >>>  6) & 0x3F) | 0x80,
+			           ( ch         & 0x3F) | 0x80);
+		else if (code <= 0x10FFFF)
+			bytes.push(((ch >>> 18) & 0x07) | 0xF0,
+			           ((ch >>> 12) & 0x3F) | 0x80,
+			           ((ch >>   6) & 0x3F) | 0x80,
+			           ( ch         & 0x3F) | 0x80);
+	}
+
+	if (!bytes.length)
+		return null;
+
+	var hash = (bytes.length >>> 0),
+	    len = (bytes.length >>> 2),
 	    off = 0, tmp;
 
 	while (len--) {
-		hash += ((s.charCodeAt(off + 1) << 8) + s.charCodeAt(off)) >>> 0;
-		tmp   = ((((s.charCodeAt(off + 3) << 8) + s.charCodeAt(off + 2)) << 11) ^ hash) >>> 0;
+		hash += ((bytes[off + 1] << 8) + bytes[off]) >>> 0;
+		tmp   = ((((bytes[off + 3] << 8) + bytes[off + 2]) << 11) ^ hash) >>> 0;
 		hash  = ((hash << 16) ^ tmp) >>> 0;
 		hash += hash >>> 11;
 		off  += 4;
 	}
 
-	switch ((s.length & 3) >>> 0) {
+	switch ((bytes.length & 3) >>> 0) {
 	case 3:
-		hash += ((s.charCodeAt(off + 1) << 8) + s.charCodeAt(off)) >>> 0;
+		hash += ((bytes[off + 1] << 8) + bytes[off]) >>> 0;
 		hash  = (hash ^ (hash << 16)) >>> 0;
-		hash  = (hash ^ (s.charCodeAt(off + 2) << 18)) >>> 0;
+		hash  = (hash ^ (bytes[off + 2] << 18)) >>> 0;
 		hash += hash >> 11;
 		break;
 
 	case 2:
-		hash += ((s.charCodeAt(off + 1) << 8) + s.charCodeAt(off)) >>> 0;
+		hash += ((bytes[off + 1] << 8) + bytes[off]) >>> 0;
 		hash  = (hash ^ (hash << 11)) >>> 0;
 		hash += hash >>> 17;
 		break;
 
 	case 1:
-		hash += s.charCodeAt(off);
+		hash += bytes[off];
 		hash  = (hash ^ (hash << 10)) >>> 0;
 		hash += hash >>> 1;
 		break;
