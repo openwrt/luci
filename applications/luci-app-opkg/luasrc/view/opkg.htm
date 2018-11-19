@@ -226,7 +226,7 @@
 					truncateVersion(pkg.version || '-'),
 					truncateVersion(avail.version || '-'));
 
-				btn = E('div', {
+				btn = E('button', {
 					'class': 'btn cbi-button-positive',
 					'data-package': name,
 					'click': handleInstall
@@ -234,7 +234,7 @@
 			}
 			else if (currentDisplayMode === 'installed') {
 				ver = truncateVersion(pkg.version || '-');
-				btn = E('div', {
+				btn = E('button', {
 					'class': 'btn cbi-button-negative',
 					'data-package': name,
 					'click': handleRemove
@@ -244,19 +244,19 @@
 				ver = truncateVersion(pkg.version || '-');
 
 				if (!packages.installed.pkgs[name])
-					btn = E('div', {
+					btn = E('button', {
 						'class': 'btn cbi-button-action',
 						'data-package': name,
 						'click': handleInstall
 					}, _('Install…'));
 				else if (packages.installed.pkgs[name].version != pkg.version)
-					btn = E('div', {
+					btn = E('button', {
 						'class': 'btn cbi-button-positive',
 						'data-package': name,
 						'click': handleInstall
 					}, _('Upgrade…'));
 				else
-					btn = E('div', {
+					btn = E('button', {
 						'class': 'btn cbi-button-neutral',
 						'disabled': 'disabled'
 					}, _('Installed'));
@@ -660,12 +660,12 @@
 			desc || '',
 			errs || inst || '',
 			E('div', { 'class': 'right' }, [
-				E('div', {
+				E('button', {
 					'class': 'btn',
 					'click': hideModal
 				}, _('Cancel')),
 				' ',
-				E('div', {
+				E('button', {
 					'data-command': 'install',
 					'data-package': name,
 					'class': 'btn cbi-button-action',
@@ -678,7 +678,7 @@
 	function handleManualInstall(ev)
 	{
 		var name_or_url = document.querySelector('input[name="install"]').value,
-		    install = E('div', {
+		    install = E('button', {
 				'class': 'btn cbi-button-action',
 				'data-command': 'install',
 				'data-package': name_or_url,
@@ -705,7 +705,7 @@
 		showModal(_('Manually install package'), [
 			warning,
 			E('div', { 'class': 'right' }, [
-				E('div', {
+				E('button', {
 					'click': hideModal,
 					'class': 'btn cbi-button-neutral'
 				}, _('Cancel')),
@@ -734,12 +734,12 @@
 			});
 
 			body.push(E('div', { 'class': 'right' }, [
-				E('div', {
+				E('button', {
 					'class': 'btn cbi-button-neutral',
 					'click': hideModal
 				}, _('Cancel')),
 				' ',
-				E('div', {
+				E('button', {
 					'class': 'btn cbi-button-positive',
 					'click': function(ev) {
 						var data = {};
@@ -795,12 +795,12 @@
 					_('Automatically remove unused dependencies')
 				]),
 				E('div', { 'style': 'flex-grow:1', 'class': 'right' }, [
-					E('div', {
+					E('button', {
 						'class': 'btn',
 						'click': hideModal
 					}, _('Cancel')),
 					' ',
-					E('div', {
+					E('button', {
 						'data-command': 'remove',
 						'data-package': name,
 						'class': 'btn cbi-button-negative',
@@ -842,7 +842,7 @@
 				dlg.appendChild(E('p', _('The <em>opkg %h</em> command failed with code <code>%d</code>.').format(cmd, (res.code & 0xff) || -1)));
 
 			dlg.appendChild(E('div', { 'class': 'right' },
-				E('div', {
+				E('button', {
 					'class': 'btn',
 					'click': function() {
 						hideModal();
@@ -914,20 +914,20 @@
 	<div>
 		<label><%:Filter%>:</label>
 		<input type="text" name="filter" placeholder="<%:Type to filter…%>" /><!--
-		--><div class="btn cbi-button" onclick="handleReset(event)"><%:Clear%></div>
+		--><button class="btn cbi-button" onclick="handleReset(event)"><%:Clear%></button>
 	</div>
 
 	<div>
 		<label><%:Download and install package%>:</label>
 		<input type="text" name="install" placeholder="<%:Package name or URL…%>" onkeydown="if (event.keyCode === 13) handleManualInstall(event)" /><!--
-		--><div class="btn cbi-button cbi-button-action" onclick="handleManualInstall(event)"><%:OK%></div>
+		--><button class="btn cbi-button cbi-button-action" onclick="handleManualInstall(event)"><%:OK%></button>
 	</div>
 
 	<div>
 		<label><%:Actions%>:</label>
-		<div class="btn cbi-button-positive" data-command="update" onclick="handleOpkg(event)"><%:Update lists…%></div>
+		<button class="btn cbi-button-positive" data-command="update" onclick="handleOpkg(event)"><%:Update lists…%></button>
 		&#160;
-		<div class="btn cbi-button-neutral" onclick="handleConfig(event)"><%:Configure opkg…%></div>
+		<button class="btn cbi-button-neutral" onclick="handleConfig(event)"><%:Configure opkg…%></button>
 	</div>
 </div>
 
@@ -939,9 +939,9 @@
 
 <div class="controls" style="display:none">
 	<div id="pager" class="center">
-		<div class="btn cbi-button-neutral prev">«</div>
+		<button class="btn cbi-button-neutral prev" aria-label="<%:Previous page%>">«</button>
 		<div class="text">dummy</div>
-		<div class="btn cbi-button-neutral next">»</div>
+		<button class="btn cbi-button-neutral next" aria-label="<%:Next page%>">»</button>
 	</div>
 </div>
 
