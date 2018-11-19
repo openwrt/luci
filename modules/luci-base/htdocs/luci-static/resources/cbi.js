@@ -60,7 +60,7 @@ function sfh(s) {
 		hash += ((bytes[off + 1] << 8) + bytes[off]) >>> 0;
 		hash  = (hash ^ (hash << 16)) >>> 0;
 		hash  = (hash ^ (bytes[off + 2] << 18)) >>> 0;
-		hash += hash >> 11;
+		hash += hash >>> 11;
 		break;
 
 	case 2:
