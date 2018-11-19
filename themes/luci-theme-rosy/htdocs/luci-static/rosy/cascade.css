@@ -285,7 +285,6 @@ h4 {
 .table {
     width: 100%;
     border-radius: 20px;
-    overflow: hidden;
 }
 
 .table > .tbody > .tr > .td,
@@ -361,18 +360,28 @@ div > .table > .tbody > .tr:nth-of-type(2n) {
 .cbi-section .table .tr.table-titles {
     background-color: #eee;
 }
+.table .tr:first-child .td:first-child,
+.table .tr:first-child::before,
+.table .tr:first-child .th:first-child {
+    border-top-left-radius: 10px;
+}
+.table .tr:first-child .td:last-child,
+.table .tr:first-child .th:last-child {
+    border-top-right-radius: 10px;
+}
+.table .tr:last-child .td:first-child, 
+.table .tr:last-child::before {
+    border-bottom-left-radius: 10px;
+}
+.table .tr:last-child .td:last-child {
+    border-bottom-right-radius: 10px;
+}
+.table .tr.placeholder:last-child {
+    background-color: transparent;
+}
 
 .cbi-section .table .cbi-section-table-titles {
     background-color: #e0e0e0;
-}
-
-.table .tr.cbi-rowstyle-1:nth-child(n),
-.table .tr:nth-child(n) {
-    background-color: #f9f9f9;
-}
-
-.table .tr:nth-child(2n) {
-    background-color: #fff;
 }
 
 /* fix progress bar */
@@ -546,6 +555,7 @@ td > table > tbody > tr > td,
 }
 
 .container .cbi-map .cbi-tabmenu + div {
+    border-radius: 0;
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
     overflow: hidden;
@@ -1362,7 +1372,6 @@ header > .container > .pull-right > * {
 }
 
 /* fix status processes */
-
 .node-status-processes > .main .table .tr .td:nth-child(3) {
     white-space: normal;
 }
@@ -1480,7 +1489,7 @@ header > .container > .pull-right > * {
     margin-left: 0;
 }
 
-.node-system-flashops .cbi-tabmenu {
+.lang_zh-cnBackup .cbi-tabmenu {
     margin-bottom: 1rem;
 }
 
@@ -1944,6 +1953,10 @@ footer {
     color: #fff;
     border-top-right-radius: 50px;
     border-bottom-right-radius: 50px;
+}
+
+.node-main-login input.cbi-input-text {
+    box-shadow: 0 0 0 1000px white inset;
 }
 
 
@@ -2530,8 +2543,4 @@ footer {
     .cbi-value-field .cbi-dropdown {
         min-width: 25rem;
     }
-}
-
-input.cbi-input-text {
-    box-shadow: 0 0 0 1000px white inset;
 }

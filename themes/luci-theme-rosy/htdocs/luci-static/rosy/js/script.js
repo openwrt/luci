@@ -264,10 +264,23 @@
         
     })
 
-    if(  $(window).width() > 992 ){
-        $('.logged-in .main-right').width( $(window).width() - $('.logged-in .main-left').width() - 50 );
-    }
-    
     $('body.logged-in').css('min-height', $(window).height());
     
+    $(function(){
+        if(  $(window).width() > 992 ){
+            $('.logged-in .main-right').outerWidth( $(window).width() - $('.logged-in .main-left').width() - 50 );
+        }
+        var a = window.getComputedStyle($(".cbi-section .table .tr:first-child")[0], ':before').getPropertyValue('content');
+        var b = window.getComputedStyle($('.cbi-section .table .tr:last-child')[0], ':before').getPropertyValue('content');
+        console.log(typeof a);
+        
+        if( a != 'none' || b != 'none' ){
+            $('.cbi-section .table .tr:first-child .td:first-child').css('border-top-left-radius', '0');
+            $('.cbi-section .table .tr:last-child .td:first-child').css('border-bottom-left-radius', '0');
+            $('.cbi-section .table .tr:first-child .th:first-child').css('border-top-left-radius', '0');
+            console.log($('.cbi-section .table .tr:last-child .td:first-child'));
+            
+        }
+    });
+
 })(jQuery);
