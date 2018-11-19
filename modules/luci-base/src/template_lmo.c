@@ -46,14 +46,14 @@ uint32_t sfh_hash(const char *data, int len)
 	switch (rem) {
 		case 3: hash += sfh_get16(data);
 			hash ^= hash << 16;
-			hash ^= data[sizeof(uint16_t)] << 18;
+			hash ^= (signed char)data[sizeof(uint16_t)] << 18;
 			hash += hash >> 11;
 			break;
 		case 2: hash += sfh_get16(data);
 			hash ^= hash << 11;
 			hash += hash >> 17;
 			break;
-		case 1: hash += *data;
+		case 1: hash += (signed char)*data;
 			hash ^= hash << 10;
 			hash += hash >> 1;
 	}

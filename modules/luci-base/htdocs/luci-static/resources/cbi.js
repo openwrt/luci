@@ -15,6 +15,15 @@ var cbi_d = [];
 var cbi_t = [];
 var cbi_strings = { path: {}, label: {} };
 
+function s8(bytes, off) {
+	var n = bytes[off];
+	return (n > 0x7F) ? (n - 256) >>> 0 : n;
+}
+
+function u16(bytes, off) {
+	return ((bytes[off + 1] << 8) + bytes[off]) >>> 0;
+}
+
 function sfh(s) {
 	if (s === null || s.length === 0)
 		return null;
@@ -48,8 +57,8 @@ function sfh(s) {
 	    off = 0, tmp;
 
 	while (len--) {
-		hash += ((bytes[off + 1] << 8) + bytes[off]) >>> 0;
-		tmp   = ((((bytes[off + 3] << 8) + bytes[off + 2]) << 11) ^ hash) >>> 0;
+		hash += u16(bytes, off);
+		tmp   = ((u16(bytes, off + 2) << 11) ^ hash) >>> 0;
 		hash  = ((hash << 16) ^ tmp) >>> 0;
 		hash += hash >>> 11;
 		off  += 4;
@@ -57,20 +66,20 @@ function sfh(s) {
 
 	switch ((bytes.length & 3) >>> 0) {
 	case 3:
-		hash += ((bytes[off + 1] << 8) + bytes[off]) >>> 0;
+		hash += u16(bytes, off);
 		hash  = (hash ^ (hash << 16)) >>> 0;
-		hash  = (hash ^ (bytes[off + 2] << 18)) >>> 0;
+		hash  = (hash ^ (s8(bytes, off + 2) << 18)) >>> 0;
 		hash += hash >>> 11;
 		break;
 
 	case 2:
-		hash += ((bytes[off + 1] << 8) + bytes[off]) >>> 0;
+		hash += u16(bytes, off);
 		hash  = (hash ^ (hash << 11)) >>> 0;
 		hash += hash >>> 17;
 		break;
 
 	case 1:
-		hash += bytes[off];
+		hash += s8(bytes, off);
 		hash  = (hash ^ (hash << 10)) >>> 0;
 		hash += hash >>> 1;
 		break;
