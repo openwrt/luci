@@ -17,7 +17,9 @@ local acct_port, acct_secret, acct_server, anonymous_identity, ant1, ant2,
 	privkeypwd2, r0_key_lifetime, r0kh, r1_key_holder, r1kh,
 	reassociation_deadline, retry_timeout, ssid, st, tp, wepkey, wepslot,
 	wmm, wpakey, wps, disassoc_low_ack, short_preamble, beacon_int, dtim_period,
-	wparekey, inactivitypool, maxinactivity, listeninterval
+	wparekey, inactivitypool, maxinactivity, listeninterval,
+	dae_client, dae_port, dae_port
+
 
 arg[1] = arg[1] or ""
 
@@ -754,6 +756,30 @@ acct_secret:depends({mode="ap-wds", encryption="wpa"})
 acct_secret:depends({mode="ap-wds", encryption="wpa2"})
 acct_secret.rmempty = true
 acct_secret.password = true
+
+dae_client = s:taboption("encryption", Value, "dae_client", translate("DAE-Client"))
+dae_client:depends({mode="ap", encryption="wpa"})
+dae_client:depends({mode="ap", encryption="wpa2"})
+dae_client:depends({mode="ap-wds", encryption="wpa"})
+dae_client:depends({mode="ap-wds", encryption="wpa2"})
+dae_client.rmempty = true
+dae_client.datatype = "host(0)"
+
+dae_port = s:taboption("encryption", Value, "dae_port", translate("DAE-Port"), translatef("Default %d", 3799))
+dae_port:depends({mode="ap", encryption="wpa"})
+dae_port:depends({mode="ap", encryption="wpa2"})
+dae_port:depends({mode="ap-wds", encryption="wpa"})
+dae_port:depends({mode="ap-wds", encryption="wpa2"})
+dae_port.rmempty = true
+dae_port.datatype = "port"
+
+dae_secret = s:taboption("encryption", Value, "dae_secret", translate("DAE-Secret"))
+dae_secret:depends({mode="ap", encryption="wpa"})
+dae_secret:depends({mode="ap", encryption="wpa2"})
+dae_secret:depends({mode="ap-wds", encryption="wpa"})
+dae_secret:depends({mode="ap-wds", encryption="wpa2"})
+dae_secret.rmempty = true
+dae_secret.password = true
 
 wpakey = s:taboption("encryption", Value, "_wpa_key", translate("Key"))
 wpakey:depends("encryption", "psk")
