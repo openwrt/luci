@@ -17,6 +17,10 @@ msgstr ""
 msgid "%.1f dB"
 msgstr ""
 
+#: modules/luci-mod-system/luasrc/view/admin_system/sshkeys.htm:118
+msgid "%d Bit"
+msgstr ""
+
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/vlan.lua:256
 msgid "%s is untagged in multiple VLANs!"
 msgstr ""
@@ -49,16 +53,16 @@ msgstr "(não existem interfaces ligadas)"
 msgid "-- Additional Field --"
 msgstr "-- Campo Adicional --"
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:809
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:818
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:842
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:851
 #: modules/luci-base/luasrc/view/cbi/header.htm:5
 #: protocols/luci-proto-3g/luasrc/model/cbi/admin_network/proto_3g.lua:26
 #: protocols/luci-proto-qmi/luasrc/model/cbi/admin_network/proto_qmi.lua:36
 msgid "-- Please choose --"
 msgstr "-- Por favor escolha --"
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:834
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:994
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:867
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:1027
 #: modules/luci-base/luasrc/view/cbi/header.htm:6
 msgid "-- custom --"
 msgstr "-- personalizado --"
@@ -82,11 +86,11 @@ msgstr ""
 msgid "-- please select --"
 msgstr ""
 
-#: modules/luci-mod-status/luasrc/view/admin_status/load.htm:254
+#: modules/luci-mod-status/luasrc/view/admin_status/load.htm:252
 msgid "1 Minute Load:"
 msgstr "Carga de 1 Minuto:"
 
-#: modules/luci-mod-status/luasrc/view/admin_status/load.htm:274
+#: modules/luci-mod-status/luasrc/view/admin_status/load.htm:272
 msgid "15 Minute Load:"
 msgstr "Carga de 15 minutos:"
 
@@ -98,7 +102,7 @@ msgstr ""
 msgid "464XLAT (CLAT)"
 msgstr ""
 
-#: modules/luci-mod-status/luasrc/view/admin_status/load.htm:264
+#: modules/luci-mod-status/luasrc/view/admin_status/load.htm:262
 msgid "5 Minute Load:"
 msgstr "Carga 5 Minutos:"
 
@@ -190,7 +194,7 @@ msgstr "Gateway <abbr title=\"Protocolo de Internet Versão 6\">IPv6</abbr>"
 msgid "<abbr title=\"Internet Protocol Version 6\">IPv6</abbr>-Suffix (hex)"
 msgstr ""
 
-#: modules/luci-mod-system/luasrc/controller/admin/system.lua:25
+#: modules/luci-mod-system/luasrc/controller/admin/system.lua:34
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:4
 msgid "<abbr title=\"Light Emitting Diode\">LED</abbr> Configuration"
 msgstr "Configuração do <abbr title=\"Diodo Emissor de Luz\">LED</abbr>"
@@ -232,6 +236,10 @@ msgstr "<abbr title=\"máximo\">Max.</abbr> consultas concorrentes"
 msgid ""
 "<br/>Note: you need to manually restart the cron service if the crontab file "
 "was empty before editing."
+msgstr ""
+
+#: modules/luci-base/htdocs/luci-static/resources/xhr.js:39
+msgid "A new login is required since the authentication session expired."
 msgstr ""
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:173
@@ -321,7 +329,7 @@ msgid "Active <abbr title=\"Internet Protocol Version 6\">IPv6</abbr>-Routes"
 msgstr ""
 "Rotas-<abbr title=\"Protocolo de Internet Versão 6\">IPv6</abbr> ativas"
 
-#: modules/luci-mod-status/luasrc/view/admin_status/connections.htm:317
+#: modules/luci-mod-status/luasrc/view/admin_status/connections.htm:315
 #: modules/luci-mod-status/luasrc/view/admin_status/index.htm:425
 msgid "Active Connections"
 msgstr "Ligações Ativas"
@@ -348,6 +356,13 @@ msgstr "Ad-Hoc"
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi_overview.lua:83
 msgid "Add"
 msgstr "Adicionar"
+
+#: modules/luci-mod-system/luasrc/view/admin_system/sshkeys.htm:129
+#: modules/luci-mod-system/luasrc/view/admin_system/sshkeys.htm:152
+#: modules/luci-mod-system/luasrc/view/admin_system/sshkeys.htm:158
+#: modules/luci-mod-system/luasrc/view/admin_system/sshkeys.htm:239
+msgid "Add key"
+msgstr ""
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/dhcp.lua:109
 msgid "Add local domain suffix to names served from hosts files"
@@ -423,7 +438,7 @@ msgstr ""
 msgid "Allocate IP sequentially"
 msgstr ""
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/admin.lua:72
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/dropbear.lua:30
 msgid "Allow <abbr title=\"Secure Shell\">SSH</abbr> password authentication"
 msgstr ""
 "Permitir autenticação <abbr title=\"Shell Seguro\">SSH</abbr> por senha"
@@ -450,16 +465,16 @@ msgstr "Permitir somente os listados"
 msgid "Allow localhost"
 msgstr "Permitir localhost"
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/admin.lua:89
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/dropbear.lua:47
 msgid "Allow remote hosts to connect to local SSH forwarded ports"
 msgstr ""
 "Permitir que hosts remotos se conectem às portas encaminhadas do SSH local"
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/admin.lua:80
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/dropbear.lua:38
 msgid "Allow root logins with password"
 msgstr "Permitir o login como root só com password"
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/admin.lua:81
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/dropbear.lua:39
 msgid "Allow the <em>root</em> user to login with password"
 msgstr "Permitir que o utilizador <em>root</em> faça login só com password"
 
@@ -586,12 +601,12 @@ msgstr "Configuração das Antenas"
 msgid "Any zone"
 msgstr "Qualquer zona"
 
-#: modules/luci-base/luasrc/view/cbi/apply_widget.htm:145
-msgid "Apply request failed with status <code>%h</code>"
+#: modules/luci-base/luasrc/view/cbi/apply_widget.htm:48
+msgid "Apply anyway"
 msgstr ""
 
-#: modules/luci-base/luasrc/view/cbi/apply_widget.htm:48
-msgid "Apply unchecked"
+#: modules/luci-base/luasrc/view/cbi/apply_widget.htm:145
+msgid "Apply request failed with status <code>%h</code>"
 msgstr ""
 
 #: modules/luci-mod-status/luasrc/view/admin_status/index.htm:384
@@ -694,17 +709,17 @@ msgstr ""
 msgid "Available"
 msgstr "Disponível"
 
-#: modules/luci-mod-status/luasrc/view/admin_status/bandwidth.htm:287
-#: modules/luci-mod-status/luasrc/view/admin_status/bandwidth.htm:297
-#: modules/luci-mod-status/luasrc/view/admin_status/connections.htm:328
-#: modules/luci-mod-status/luasrc/view/admin_status/connections.htm:338
-#: modules/luci-mod-status/luasrc/view/admin_status/connections.htm:348
-#: modules/luci-mod-status/luasrc/view/admin_status/load.htm:257
-#: modules/luci-mod-status/luasrc/view/admin_status/load.htm:267
-#: modules/luci-mod-status/luasrc/view/admin_status/load.htm:277
-#: modules/luci-mod-status/luasrc/view/admin_status/wireless.htm:335
-#: modules/luci-mod-status/luasrc/view/admin_status/wireless.htm:345
-#: modules/luci-mod-status/luasrc/view/admin_status/wireless.htm:364
+#: modules/luci-mod-status/luasrc/view/admin_status/bandwidth.htm:290
+#: modules/luci-mod-status/luasrc/view/admin_status/bandwidth.htm:300
+#: modules/luci-mod-status/luasrc/view/admin_status/connections.htm:326
+#: modules/luci-mod-status/luasrc/view/admin_status/connections.htm:336
+#: modules/luci-mod-status/luasrc/view/admin_status/connections.htm:346
+#: modules/luci-mod-status/luasrc/view/admin_status/load.htm:255
+#: modules/luci-mod-status/luasrc/view/admin_status/load.htm:265
+#: modules/luci-mod-status/luasrc/view/admin_status/load.htm:275
+#: modules/luci-mod-status/luasrc/view/admin_status/wireless.htm:333
+#: modules/luci-mod-status/luasrc/view/admin_status/wireless.htm:343
+#: modules/luci-mod-status/luasrc/view/admin_status/wireless.htm:362
 msgid "Average:"
 msgstr "Média:"
 
@@ -753,7 +768,7 @@ msgstr "Voltar aos resultados do scan"
 msgid "Backup"
 msgstr "Backup"
 
-#: modules/luci-mod-system/luasrc/controller/admin/system.lua:28
+#: modules/luci-mod-system/luasrc/controller/admin/system.lua:37
 msgid "Backup / Flash Firmware"
 msgstr "Backup / Flashar Firmware"
 
@@ -850,6 +865,7 @@ msgstr ""
 
 #: modules/luci-base/luasrc/view/cbi/delegator.htm:14
 #: modules/luci-base/luasrc/view/cbi/simpleform.htm:52
+#: modules/luci-mod-system/luasrc/view/admin_system/sshkeys.htm:185
 #: modules/luci-mod-system/luasrc/view/admin_system/upgrade.htm:60
 msgid "Cancel"
 msgstr "Cancelar"
@@ -872,6 +888,12 @@ msgstr ""
 msgid "Chain"
 msgstr "Cadeia"
 
+#: modules/luci-mod-system/luasrc/view/admin_system/password.htm:12
+#: modules/luci-mod-system/luasrc/view/admin_system/password.htm:18
+#: modules/luci-mod-system/luasrc/view/admin_system/password.htm:28
+msgid "Change login password"
+msgstr ""
+
 #: modules/luci-base/luasrc/controller/admin/uci.lua:12
 #: modules/luci-base/luasrc/view/admin_uci/changes.htm:16
 msgid "Changes"
@@ -885,9 +907,13 @@ msgstr "Alterações aplicadas."
 msgid "Changes have been reverted."
 msgstr ""
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/admin.lua:8
+#: modules/luci-mod-system/luasrc/view/admin_system/password.htm:44
 msgid "Changes the administrator password for accessing the device"
 msgstr "Altera a password de administrador para acesso ao dispositivo"
+
+#: modules/luci-mod-system/luasrc/view/admin_system/password.htm:13
+msgid "Changing password…"
+msgstr ""
 
 #: modules/luci-base/luasrc/view/cbi/wireless_modefreq.htm:157
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:172
@@ -977,6 +1003,11 @@ msgstr "Cliente"
 msgid "Client ID to send when requesting DHCP"
 msgstr "ID de cliente a enviar para pedidos de DHCP"
 
+#: modules/luci-mod-system/luasrc/view/admin_system/sshkeys.htm:154
+#: modules/luci-mod-system/luasrc/view/admin_system/sshkeys.htm:160
+msgid "Close"
+msgstr ""
+
 #: protocols/luci-proto-3g/luasrc/model/cbi/admin_network/proto_3g.lua:146
 #: protocols/luci-proto-ppp/luasrc/model/cbi/admin_network/proto_ppp.lua:119
 #: protocols/luci-proto-ppp/luasrc/model/cbi/admin_network/proto_pppoa.lua:125
@@ -1002,7 +1033,7 @@ msgstr "Fechar lista..."
 #: modules/luci-mod-network/luasrc/view/admin_network/iface_status.htm:62
 #: modules/luci-mod-network/luasrc/view/admin_network/wifi_join.htm:207
 #: modules/luci-mod-network/luasrc/view/admin_network/wifi_status.htm:73
-#: modules/luci-mod-status/luasrc/view/admin_status/connections.htm:369
+#: modules/luci-mod-status/luasrc/view/admin_status/connections.htm:367
 #: modules/luci-mod-status/luasrc/view/admin_status/index.htm:421
 #: modules/luci-mod-status/luasrc/view/admin_status/index.htm:440
 #: modules/luci-mod-status/luasrc/view/admin_status/index.htm:450
@@ -1055,7 +1086,7 @@ msgstr ""
 msgid "Configuration has been rolled back!"
 msgstr ""
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/admin.lua:18
+#: modules/luci-mod-system/luasrc/view/admin_system/password.htm:57
 msgid "Confirmation"
 msgstr "Confirmação"
 
@@ -1295,6 +1326,11 @@ msgstr ""
 msgid "Delete"
 msgstr "Apagar"
 
+#: modules/luci-mod-system/luasrc/view/admin_system/sshkeys.htm:187
+#: modules/luci-mod-system/luasrc/view/admin_system/sshkeys.htm:181
+msgid "Delete key"
+msgstr ""
+
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi_overview.lua:112
 msgid "Delete this network"
 msgstr "Apagar esta rede"
@@ -1307,7 +1343,7 @@ msgstr ""
 msgid "Description"
 msgstr "Descrição"
 
-#: modules/luci-mod-status/luasrc/view/admin_status/connections.htm:363
+#: modules/luci-mod-status/luasrc/view/admin_status/connections.htm:361
 #: modules/luci-mod-status/luasrc/view/admin_status/iptables.htm:103
 msgid "Destination"
 msgstr "Destino"
@@ -1411,6 +1447,8 @@ msgid "Disconnection attempt failed"
 msgstr ""
 
 #: modules/luci-base/luasrc/view/cbi/apply_widget.htm:46
+#: modules/luci-mod-system/luasrc/view/admin_system/password.htm:21
+#: modules/luci-mod-system/luasrc/view/admin_system/password.htm:32
 msgid "Dismiss"
 msgstr ""
 
@@ -1454,6 +1492,10 @@ msgstr ""
 msgid "Do not forward reverse lookups for local networks"
 msgstr "Não encaminhar lookups reversos para as redes locais"
 
+#: modules/luci-mod-system/luasrc/view/admin_system/sshkeys.htm:182
+msgid "Do you really want to delete the following SSH key?"
+msgstr ""
+
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/dhcp.lua:25
 msgid "Domain required"
 msgstr "Requerer domínio"
@@ -1490,11 +1532,11 @@ msgstr ""
 msgid "Downstream SNR offset"
 msgstr ""
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/admin.lua:51
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/dropbear.lua:9
 msgid "Dropbear Instance"
 msgstr "Instância do Dropbear"
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/admin.lua:48
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/dropbear.lua:6
 msgid ""
 "Dropbear offers <abbr title=\"Secure Shell\">SSH</abbr> network shell access "
 "and an integrated <abbr title=\"Secure Copy\">SCP</abbr> server"
@@ -1697,7 +1739,7 @@ msgstr ""
 msgid "Enter custom values"
 msgstr ""
 
-#: modules/luci-mod-system/luasrc/controller/admin/system.lua:255
+#: modules/luci-mod-system/luasrc/controller/admin/system.lua:264
 msgid "Erasing..."
 msgstr "A apagar..."
 
@@ -1726,7 +1768,7 @@ msgstr ""
 msgid "Expand hosts"
 msgstr "Expandir hosts"
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:246
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:279
 msgid "Expecting %s"
 msgstr ""
 
@@ -1870,7 +1912,7 @@ msgstr "Flashar nova imagem do firmware"
 msgid "Flash operations"
 msgstr ""
 
-#: modules/luci-mod-system/luasrc/controller/admin/system.lua:176
+#: modules/luci-mod-system/luasrc/controller/admin/system.lua:185
 msgid "Flashing..."
 msgstr "A programar...."
 
@@ -1974,7 +2016,7 @@ msgstr "Gateway"
 msgid "Gateway address is invalid"
 msgstr ""
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/admin.lua:88
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/dropbear.lua:46
 msgid "Gateway ports"
 msgstr "Portas de gateway"
 
@@ -2009,7 +2051,7 @@ msgstr "Gerar arquivo"
 msgid "Generic 802.11%s Wireless Controller"
 msgstr "Controlador Wireless Genérico 802.11%s"
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/admin.lua:37
+#: modules/luci-mod-system/luasrc/view/admin_system/password.htm:30
 msgid "Given password confirmation did not match, password not changed!"
 msgstr ""
 "A confirmação de password não corresponde, a password não foi alterada!"
@@ -2069,14 +2111,6 @@ msgid ""
 msgstr ""
 "Aqui pode configurar os aspectos básicos do seu equipamento, como o nome do "
 "host ou o fuso horário."
-
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/admin.lua:97
-msgid ""
-"Here you can paste public SSH-Keys (one per line) for SSH public-key "
-"authentication."
-msgstr ""
-"Aqui pode colar as chaves SSH (uma por linha) para a autenticação SSH por "
-"chave pública."
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:487
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:544
@@ -2195,7 +2229,7 @@ msgstr "Gateway IPv4"
 msgid "IPv4 netmask"
 msgstr "Máscara IPv4"
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:323
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:356
 msgid "IPv4 network in address/netmask notation"
 msgstr ""
 
@@ -2266,7 +2300,7 @@ msgstr ""
 msgid "IPv6 gateway"
 msgstr "Gateway IPv6"
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:328
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:361
 msgid "IPv6 network in address/netmask notation"
 msgstr ""
 
@@ -2419,7 +2453,7 @@ msgstr ""
 msgid "Inactivity timeout"
 msgstr "Tempo de inatividade"
 
-#: modules/luci-mod-status/luasrc/view/admin_status/bandwidth.htm:284
+#: modules/luci-mod-status/luasrc/view/admin_status/bandwidth.htm:287
 msgid "Inbound:"
 msgstr "Entrada:"
 
@@ -2457,7 +2491,7 @@ msgstr "Instalar extensões do protocolo..."
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/routes.lua:65
 #: modules/luci-mod-status/luasrc/view/admin_status/routes.htm:47
 #: modules/luci-mod-status/luasrc/view/admin_status/routes.htm:134
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/admin.lua:56
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/dropbear.lua:14
 msgid "Interface"
 msgstr "Interface"
 
@@ -2740,7 +2774,7 @@ msgstr ""
 msgid "Listen Port"
 msgstr ""
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/admin.lua:57
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/dropbear.lua:15
 msgid "Listen only on the given interface or, if unspecified, on all"
 msgstr ""
 "Escutar apenas na interface fornecida ou, se não especificada, em todas"
@@ -2764,6 +2798,10 @@ msgstr "Carga Média"
 #: modules/luci-mod-system/luasrc/view/admin_system/reboot.htm:22
 msgid "Loading"
 msgstr "A carregar"
+
+#: modules/luci-mod-system/luasrc/view/admin_system/sshkeys.htm:236
+msgid "Loading SSH keys…"
+msgstr ""
 
 #: modules/luci-base/luasrc/model/network.lua:30
 msgid "Local IP address is invalid"
@@ -2975,7 +3013,7 @@ msgstr "Número máximo de endereços concessionados."
 #: modules/luci-mod-network/luasrc/view/admin_network/wifi_status.htm:46
 #: modules/luci-mod-status/luasrc/view/admin_status/bandwidth.htm:79
 #: modules/luci-mod-status/luasrc/view/admin_status/index.htm:325
-#: modules/luci-mod-status/luasrc/view/admin_status/wireless.htm:286
+#: modules/luci-mod-status/luasrc/view/admin_status/wireless.htm:284
 msgid "Mbit/s"
 msgstr "Mbit/s"
 
@@ -3065,7 +3103,7 @@ msgstr "Montar Entrada"
 msgid "Mount Point"
 msgstr "Ponto de Montagem"
 
-#: modules/luci-mod-system/luasrc/controller/admin/system.lua:18
+#: modules/luci-mod-system/luasrc/controller/admin/system.lua:27
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/fstab.lua:36
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/fstab.lua:137
 msgid "Mount Points"
@@ -3169,7 +3207,7 @@ msgstr "Mascara de rede"
 #: modules/luci-base/luasrc/controller/admin/index.lua:62
 #: modules/luci-base/luasrc/view/wifi_assoclist.htm:108
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:390
-#: modules/luci-mod-status/luasrc/view/admin_status/connections.htm:360
+#: modules/luci-mod-status/luasrc/view/admin_status/connections.htm:358
 #: modules/luci-mod-status/luasrc/view/admin_status/index.htm:418
 #: modules/luci-mod-status/luasrc/view/admin_status/routes.htm:73
 #: modules/luci-mod-status/luasrc/view/admin_status/routes.htm:101
@@ -3242,6 +3280,10 @@ msgstr "Nome de rede não especificado"
 msgid "No password set!"
 msgstr "Sem password definida!"
 
+#: modules/luci-mod-system/luasrc/view/admin_system/sshkeys.htm:125
+msgid "No public keys present yet."
+msgstr ""
+
 #: modules/luci-mod-status/luasrc/view/admin_status/iptables.htm:124
 msgid "No rules in this chain."
 msgstr "Sem regras nesta cadeia"
@@ -3266,7 +3308,7 @@ msgstr "Ruído"
 msgid "Noise Margin (SNR)"
 msgstr ""
 
-#: modules/luci-mod-status/luasrc/view/admin_status/wireless.htm:342
+#: modules/luci-mod-status/luasrc/view/admin_status/wireless.htm:340
 msgid "Noise:"
 msgstr "Ruído:"
 
@@ -3461,7 +3503,7 @@ msgstr ""
 msgid "Options"
 msgstr "Opções"
 
-#: modules/luci-mod-status/luasrc/view/admin_status/connections.htm:345
+#: modules/luci-mod-status/luasrc/view/admin_status/connections.htm:343
 msgid "Other:"
 msgstr "Outro:"
 
@@ -3469,7 +3511,7 @@ msgstr "Outro:"
 msgid "Out"
 msgstr "Saída"
 
-#: modules/luci-mod-status/luasrc/view/admin_status/bandwidth.htm:294
+#: modules/luci-mod-status/luasrc/view/admin_status/bandwidth.htm:297
 msgid "Outbound:"
 msgstr "Saída:"
 
@@ -3622,13 +3664,13 @@ msgstr "Parte da zona %q"
 
 #: modules/luci-base/luasrc/view/sysauth.htm:29
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:1038
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/admin.lua:15
+#: modules/luci-mod-system/luasrc/view/admin_system/password.htm:49
 #: protocols/luci-proto-openconnect/luasrc/model/cbi/admin_network/proto_openconnect.lua:42
 #: protocols/luci-proto-vpnc/luasrc/model/cbi/admin_network/proto_vpnc.lua:33
 msgid "Password"
 msgstr "Senha"
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/admin.lua:71
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/dropbear.lua:29
 msgid "Password authentication"
 msgstr "Autenticação por senha"
 
@@ -3640,12 +3682,12 @@ msgstr "Senha da Chave Privada"
 msgid "Password of inner Private Key"
 msgstr ""
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/admin.lua:32
-msgid "Password successfully changed!"
-msgstr "Password alterada com sucesso!"
-
 #: protocols/luci-proto-openconnect/luasrc/model/cbi/admin_network/proto_openconnect.lua:44
 msgid "Password2"
+msgstr ""
+
+#: modules/luci-mod-system/luasrc/view/admin_system/sshkeys.htm:238
+msgid "Paste or drag SSH key file…"
 msgstr ""
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:927
@@ -3672,17 +3714,17 @@ msgstr ""
 msgid "Path to inner Private Key"
 msgstr ""
 
-#: modules/luci-mod-status/luasrc/view/admin_status/bandwidth.htm:290
-#: modules/luci-mod-status/luasrc/view/admin_status/bandwidth.htm:300
-#: modules/luci-mod-status/luasrc/view/admin_status/connections.htm:331
-#: modules/luci-mod-status/luasrc/view/admin_status/connections.htm:341
-#: modules/luci-mod-status/luasrc/view/admin_status/connections.htm:351
-#: modules/luci-mod-status/luasrc/view/admin_status/load.htm:260
-#: modules/luci-mod-status/luasrc/view/admin_status/load.htm:270
-#: modules/luci-mod-status/luasrc/view/admin_status/load.htm:280
-#: modules/luci-mod-status/luasrc/view/admin_status/wireless.htm:338
-#: modules/luci-mod-status/luasrc/view/admin_status/wireless.htm:348
-#: modules/luci-mod-status/luasrc/view/admin_status/wireless.htm:367
+#: modules/luci-mod-status/luasrc/view/admin_status/bandwidth.htm:293
+#: modules/luci-mod-status/luasrc/view/admin_status/bandwidth.htm:303
+#: modules/luci-mod-status/luasrc/view/admin_status/connections.htm:329
+#: modules/luci-mod-status/luasrc/view/admin_status/connections.htm:339
+#: modules/luci-mod-status/luasrc/view/admin_status/connections.htm:349
+#: modules/luci-mod-status/luasrc/view/admin_status/load.htm:258
+#: modules/luci-mod-status/luasrc/view/admin_status/load.htm:268
+#: modules/luci-mod-status/luasrc/view/admin_status/load.htm:278
+#: modules/luci-mod-status/luasrc/view/admin_status/wireless.htm:336
+#: modules/luci-mod-status/luasrc/view/admin_status/wireless.htm:346
+#: modules/luci-mod-status/luasrc/view/admin_status/wireless.htm:365
 msgid "Peak:"
 msgstr "Pico:"
 
@@ -3714,7 +3756,7 @@ msgstr "Executar reset"
 msgid "Persistent Keep Alive"
 msgstr ""
 
-#: modules/luci-mod-status/luasrc/view/admin_status/wireless.htm:361
+#: modules/luci-mod-status/luasrc/view/admin_status/wireless.htm:359
 msgid "Phy Rate:"
 msgstr ""
 
@@ -3746,7 +3788,7 @@ msgstr "Insira o seu username e password."
 msgid "Policy"
 msgstr "Política"
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/admin.lua:64
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/dropbear.lua:22
 msgid "Port"
 msgstr "Porta"
 
@@ -3821,7 +3863,7 @@ msgstr "Protocolo"
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/ifaces.lua:216
 #: modules/luci-mod-network/luasrc/view/admin_network/iface_overview_status.htm:102
-#: modules/luci-mod-status/luasrc/view/admin_status/connections.htm:361
+#: modules/luci-mod-status/luasrc/view/admin_status/connections.htm:359
 #: modules/luci-mod-status/luasrc/view/admin_status/index.htm:205
 #: modules/luci-mod-status/luasrc/view/admin_status/index.htm:231
 msgid "Protocol"
@@ -3849,6 +3891,14 @@ msgstr "Pseudo Ad-Hoc (ahdemo)"
 
 #: protocols/luci-proto-wireguard/luasrc/model/cbi/admin_network/proto_wireguard.lua:112
 msgid "Public Key"
+msgstr ""
+
+#: modules/luci-mod-system/luasrc/view/admin_system/sshkeys.htm:231
+msgid ""
+"Public keys allow for the passwordless SSH logins with a higher security "
+"compared to the use of plain passwords. In order to upload a new key to the "
+"device, paste an OpenSSH compatible public key line or drag a <code>.pub</"
+"code> file into the input field."
 msgstr ""
 
 #: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:62
@@ -3955,7 +4005,7 @@ msgstr "Deseja mesmo limpar todas as alterações?"
 msgid "Really switch protocol?"
 msgstr "Deseja mesmo trocar o protocolo?"
 
-#: modules/luci-mod-status/luasrc/view/admin_status/connections.htm:312
+#: modules/luci-mod-status/luasrc/view/admin_status/connections.htm:310
 msgid "Realtime Connections"
 msgstr "Ligações em Tempo Real"
 
@@ -3963,15 +4013,15 @@ msgstr "Ligações em Tempo Real"
 msgid "Realtime Graphs"
 msgstr "Gráficos em Tempo Real"
 
-#: modules/luci-mod-status/luasrc/view/admin_status/load.htm:246
+#: modules/luci-mod-status/luasrc/view/admin_status/load.htm:244
 msgid "Realtime Load"
 msgstr "Carga em Tempo Real"
 
-#: modules/luci-mod-status/luasrc/view/admin_status/bandwidth.htm:270
+#: modules/luci-mod-status/luasrc/view/admin_status/bandwidth.htm:273
 msgid "Realtime Traffic"
 msgstr "Tráfego em Tempo Real"
 
-#: modules/luci-mod-status/luasrc/view/admin_status/wireless.htm:318
+#: modules/luci-mod-status/luasrc/view/admin_status/wireless.htm:316
 msgid "Realtime Wireless"
 msgstr "Wireless em Tempo Real"
 
@@ -3983,7 +4033,7 @@ msgstr ""
 msgid "Rebind protection"
 msgstr "Religar protecção"
 
-#: modules/luci-mod-system/luasrc/controller/admin/system.lua:38
+#: modules/luci-mod-system/luasrc/controller/admin/system.lua:47
 #: modules/luci-mod-system/luasrc/view/admin_system/reboot.htm:9
 msgid "Reboot"
 msgstr "Reiniciar"
@@ -4150,6 +4200,8 @@ msgid "Restore backup"
 msgstr "Restaurar backup"
 
 #: modules/luci-base/luasrc/view/cbi/value.htm:24
+#: modules/luci-mod-system/luasrc/view/admin_system/password.htm:52
+#: modules/luci-mod-system/luasrc/view/admin_system/password.htm:60
 msgid "Reveal/hide password"
 msgstr "Revelar/esconder password"
 
@@ -4196,7 +4248,8 @@ msgstr ""
 msgid "Router Advertisement-Service"
 msgstr ""
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/admin.lua:7
+#: modules/luci-mod-system/luasrc/controller/admin/system.lua:14
+#: modules/luci-mod-system/luasrc/view/admin_system/password.htm:41
 msgid "Router Password"
 msgstr "Password do Router"
 
@@ -4235,7 +4288,8 @@ msgstr ""
 msgid "SNR"
 msgstr ""
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/admin.lua:47
+#: modules/luci-mod-system/luasrc/controller/admin/system.lua:18
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/dropbear.lua:5
 msgid "SSH Access"
 msgstr "Acesso SSH"
 
@@ -4251,7 +4305,8 @@ msgstr ""
 msgid "SSH username"
 msgstr ""
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/admin.lua:96
+#: modules/luci-mod-system/luasrc/controller/admin/system.lua:19
+#: modules/luci-mod-system/luasrc/view/admin_system/sshkeys.htm:228
 msgid "SSH-Keys"
 msgstr "Chaves-SSH"
 
@@ -4271,6 +4326,7 @@ msgstr ""
 #: modules/luci-base/luasrc/view/cbi/error.htm:17
 #: modules/luci-base/luasrc/view/cbi/footer.htm:26
 #: modules/luci-base/luasrc/view/cbi/header.htm:17
+#: modules/luci-mod-system/luasrc/view/admin_system/password.htm:67
 msgid "Save"
 msgstr "Salvar"
 
@@ -4287,6 +4343,10 @@ msgstr ""
 msgid "Save mtdblock contents"
 msgstr ""
 
+#: modules/luci-mod-system/luasrc/view/admin_system/sshkeys.htm:129
+msgid "Saving keys…"
+msgstr ""
+
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi_overview.lua:82
 msgid "Scan"
 msgstr "Procurar"
@@ -4295,7 +4355,7 @@ msgstr "Procurar"
 msgid "Scan request failed"
 msgstr ""
 
-#: modules/luci-mod-system/luasrc/controller/admin/system.lua:15
+#: modules/luci-mod-system/luasrc/controller/admin/system.lua:24
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/crontab.lua:8
 msgid "Scheduled Tasks"
 msgstr "Tarefas Agendadas"
@@ -4350,6 +4410,10 @@ msgstr "Tipo de Serviço"
 #: modules/luci-base/luasrc/controller/admin/index.lua:55
 msgid "Services"
 msgstr "Serviços"
+
+#: modules/luci-base/htdocs/luci-static/resources/xhr.js:37
+msgid "Session expired"
+msgstr ""
 
 #: protocols/luci-proto-vpnc/luasrc/model/cbi/admin_network/proto_vpnc.lua:83
 msgid "Set VPN as Default Route"
@@ -4417,7 +4481,7 @@ msgstr "Sinal"
 msgid "Signal Attenuation (SATN)"
 msgstr ""
 
-#: modules/luci-mod-status/luasrc/view/admin_status/wireless.htm:332
+#: modules/luci-mod-status/luasrc/view/admin_status/wireless.htm:330
 msgid "Signal:"
 msgstr "Sinal:"
 
@@ -4475,7 +4539,7 @@ msgid ""
 "instructions."
 msgstr ""
 
-#: modules/luci-mod-status/luasrc/view/admin_status/connections.htm:362
+#: modules/luci-mod-status/luasrc/view/admin_status/connections.htm:360
 #: modules/luci-mod-status/luasrc/view/admin_status/iptables.htm:102
 #: modules/luci-mod-status/luasrc/view/admin_status/routes.htm:103
 msgid "Source"
@@ -4485,7 +4549,7 @@ msgstr "Origem"
 msgid "Specifies the directory the device is attached to"
 msgstr ""
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/admin.lua:65
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/dropbear.lua:23
 msgid "Specifies the listening port of this <em>Dropbear</em> instance"
 msgstr "Especifica as portas de escuta desta instância <em>Dropbear</em>"
 
@@ -4539,7 +4603,7 @@ msgstr ""
 msgid "Starting wireless scan..."
 msgstr ""
 
-#: modules/luci-mod-system/luasrc/controller/admin/system.lua:14
+#: modules/luci-mod-system/luasrc/controller/admin/system.lua:23
 msgid "Startup"
 msgstr ""
 
@@ -4670,7 +4734,7 @@ msgstr "Propriedades do Sistema"
 msgid "System log buffer size"
 msgstr ""
 
-#: modules/luci-mod-status/luasrc/view/admin_status/connections.htm:335
+#: modules/luci-mod-status/luasrc/view/admin_status/connections.htm:333
 msgid "TCP:"
 msgstr "TCP:"
 
@@ -4772,10 +4836,9 @@ msgid ""
 "The device could not be reached within %d seconds after applying the pending "
 "changes, which caused the configuration to be rolled back for safety "
 "reasons. If you believe that the configuration changes are correct "
-"nonetheless, perform an unchecked configuration apply. Alternatively, you "
-"can dismiss this warning and edit changes before attempting to apply again, "
-"or revert all pending changes to keep the currently working configuration "
-"state."
+"nonetheless, proceed by applying anyway. Alternatively, you can dismiss this "
+"warning and edit changes before attempting to apply again, or revert all "
+"pending changes to keep the currently working configuration state."
 msgstr ""
 
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/fstab/mount.lua:87
@@ -4814,6 +4877,16 @@ msgstr "Foram recuperadas as seguintes alterações "
 #: modules/luci-mod-status/luasrc/view/admin_status/routes.htm:38
 msgid "The following rules are currently active on this system."
 msgstr "As seguintes regras estão actualmente acivas neste sistema."
+
+#: modules/luci-mod-system/luasrc/view/admin_system/sshkeys.htm:153
+msgid "The given SSH public key has already been added."
+msgstr ""
+
+#: modules/luci-mod-system/luasrc/view/admin_system/sshkeys.htm:159
+msgid ""
+"The given SSH public key is invalid. Please supply proper public RSA or "
+"ECDSA keys."
+msgstr ""
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/iface_add.lua:67
 msgid "The given network name is not unique"
@@ -4870,7 +4943,7 @@ msgstr "O protocolo escolhido precisa de um dispositivo atribuído."
 msgid "The submitted security token is invalid or already expired!"
 msgstr ""
 
-#: modules/luci-mod-system/luasrc/controller/admin/system.lua:256
+#: modules/luci-mod-system/luasrc/controller/admin/system.lua:265
 msgid ""
 "The system is erasing the configuration partition now and will reboot itself "
 "when finished."
@@ -4878,7 +4951,7 @@ msgstr ""
 "O sistema está agora a limpar a partição de configuração e irá reiniciar-se "
 "quando terminar."
 
-#: modules/luci-mod-system/luasrc/controller/admin/system.lua:177
+#: modules/luci-mod-system/luasrc/controller/admin/system.lua:186
 #, fuzzy
 msgid ""
 "The system is flashing now.<br /> DO NOT POWER OFF THE DEVICE!<br /> Wait a "
@@ -4890,6 +4963,10 @@ msgstr ""
 "EQUIPAMENTO!<br /> Espere alguns minutos até tentar uma ligação. Dependendo "
 "da sua configuração, ode ser necessário renovar o endereço do seu computador "
 "para poder ligar novamente ao router."
+
+#: modules/luci-mod-system/luasrc/view/admin_system/password.htm:19
+msgid "The system password has been successfully changed."
+msgstr ""
 
 #: modules/luci-mod-system/luasrc/view/admin_system/flashops.htm:118
 msgid ""
@@ -5011,7 +5088,7 @@ msgid ""
 msgstr ""
 "Esta lista fornece uma visão geral sobre os processos em execução no sistema."
 
-#: modules/luci-mod-status/luasrc/view/admin_status/connections.htm:314
+#: modules/luci-mod-status/luasrc/view/admin_status/connections.htm:312
 msgid "This page gives an overview over currently active network connections."
 msgstr "Esta página fornece informações sobre as ligações de rede ativas."
 
@@ -5036,6 +5113,10 @@ msgstr ""
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:44
 msgid "Timezone"
 msgstr "Fuso Horário"
+
+#: modules/luci-base/htdocs/luci-static/resources/xhr.js:47
+msgid "To login…"
+msgstr ""
 
 #: modules/luci-mod-system/luasrc/view/admin_system/flashops.htm:32
 msgid ""
@@ -5067,7 +5148,7 @@ msgstr "Traceroute"
 msgid "Traffic"
 msgstr "Tráfego"
 
-#: modules/luci-mod-status/luasrc/view/admin_status/connections.htm:364
+#: modules/luci-mod-status/luasrc/view/admin_status/connections.htm:362
 msgid "Transfer"
 msgstr "Transferências"
 
@@ -5122,7 +5203,7 @@ msgstr "Potência de Tx"
 msgid "Type"
 msgstr "Tipo"
 
-#: modules/luci-mod-status/luasrc/view/admin_status/connections.htm:325
+#: modules/luci-mod-status/luasrc/view/admin_status/connections.htm:323
 msgid "UDP:"
 msgstr "UDP:"
 
@@ -5184,10 +5265,6 @@ msgstr ""
 msgid "Unknown"
 msgstr "Desconhecido"
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/admin.lua:34
-msgid "Unknown Error, password not changed!"
-msgstr "Erro Desconhecido, a password não foi alterada!"
-
 #: modules/luci-base/luasrc/model/network.lua:1131
 msgid "Unknown error (%s)"
 msgstr ""
@@ -5197,8 +5274,12 @@ msgid "Unmanaged"
 msgstr "Não gerido"
 
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/fstab.lua:119
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/fstab.lua:122
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/fstab.lua:125
 msgid "Unmount"
+msgstr ""
+
+#: modules/luci-mod-system/luasrc/view/admin_system/sshkeys.htm:116
+msgid "Unnamed key"
 msgstr ""
 
 #: themes/luci-theme-bootstrap/luasrc/view/themes/bootstrap/header.htm:148
@@ -5500,7 +5581,7 @@ msgid "Waiting for command to complete..."
 msgstr "A aguardar que o comando termine..."
 
 #: modules/luci-base/luasrc/view/cbi/apply_widget.htm:109
-msgid "Waiting for configuration to get applied… %ds"
+msgid "Waiting for configuration to be applied… %ds"
 msgstr ""
 
 #: modules/luci-mod-system/luasrc/view/admin_system/reboot.htm:56
@@ -5678,7 +5759,7 @@ msgid "creates a bridge over specified interface(s)"
 msgstr "cria uma bridge sobre determinada(s) interface(s)"
 
 #: modules/luci-mod-network/luasrc/view/admin_network/wifi_join.htm:47
-#: modules/luci-mod-status/luasrc/view/admin_status/wireless.htm:279
+#: modules/luci-mod-status/luasrc/view/admin_status/wireless.htm:277
 msgid "dB"
 msgstr "dB"
 
@@ -5688,14 +5769,14 @@ msgstr "dB"
 #: modules/luci-mod-network/luasrc/view/admin_network/wifi_status.htm:43
 #: modules/luci-mod-network/luasrc/view/admin_network/wifi_status.htm:44
 #: modules/luci-mod-network/luasrc/view/admin_network/wifi_status.htm:45
+#: modules/luci-mod-status/luasrc/view/admin_status/wireless.htm:277
 #: modules/luci-mod-status/luasrc/view/admin_status/wireless.htm:279
-#: modules/luci-mod-status/luasrc/view/admin_status/wireless.htm:281
-#: modules/luci-mod-status/luasrc/view/admin_status/wireless.htm:333
-#: modules/luci-mod-status/luasrc/view/admin_status/wireless.htm:336
-#: modules/luci-mod-status/luasrc/view/admin_status/wireless.htm:339
-#: modules/luci-mod-status/luasrc/view/admin_status/wireless.htm:343
-#: modules/luci-mod-status/luasrc/view/admin_status/wireless.htm:346
-#: modules/luci-mod-status/luasrc/view/admin_status/wireless.htm:349
+#: modules/luci-mod-status/luasrc/view/admin_status/wireless.htm:331
+#: modules/luci-mod-status/luasrc/view/admin_status/wireless.htm:334
+#: modules/luci-mod-status/luasrc/view/admin_status/wireless.htm:337
+#: modules/luci-mod-status/luasrc/view/admin_status/wireless.htm:341
+#: modules/luci-mod-status/luasrc/view/admin_status/wireless.htm:344
+#: modules/luci-mod-status/luasrc/view/admin_status/wireless.htm:347
 msgid "dBm"
 msgstr "dBm"
 
@@ -5737,7 +5818,7 @@ msgstr "full-duplex"
 msgid "half-duplex"
 msgstr "half-duplex"
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:589
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:622
 msgid "hexadecimal encoded value"
 msgstr ""
 
@@ -5773,30 +5854,30 @@ msgid "kB"
 msgstr "kB"
 
 #: modules/luci-mod-status/luasrc/view/admin_status/bandwidth.htm:65
-#: modules/luci-mod-status/luasrc/view/admin_status/bandwidth.htm:285
 #: modules/luci-mod-status/luasrc/view/admin_status/bandwidth.htm:288
 #: modules/luci-mod-status/luasrc/view/admin_status/bandwidth.htm:291
-#: modules/luci-mod-status/luasrc/view/admin_status/bandwidth.htm:295
+#: modules/luci-mod-status/luasrc/view/admin_status/bandwidth.htm:294
 #: modules/luci-mod-status/luasrc/view/admin_status/bandwidth.htm:298
 #: modules/luci-mod-status/luasrc/view/admin_status/bandwidth.htm:301
+#: modules/luci-mod-status/luasrc/view/admin_status/bandwidth.htm:304
 msgid "kB/s"
 msgstr "kB/s"
 
 #: modules/luci-mod-status/luasrc/view/admin_status/bandwidth.htm:74
-#: modules/luci-mod-status/luasrc/view/admin_status/bandwidth.htm:285
 #: modules/luci-mod-status/luasrc/view/admin_status/bandwidth.htm:288
 #: modules/luci-mod-status/luasrc/view/admin_status/bandwidth.htm:291
-#: modules/luci-mod-status/luasrc/view/admin_status/bandwidth.htm:295
+#: modules/luci-mod-status/luasrc/view/admin_status/bandwidth.htm:294
 #: modules/luci-mod-status/luasrc/view/admin_status/bandwidth.htm:298
 #: modules/luci-mod-status/luasrc/view/admin_status/bandwidth.htm:301
+#: modules/luci-mod-status/luasrc/view/admin_status/bandwidth.htm:304
 msgid "kbit/s"
 msgstr "kbit/s"
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:427
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:460
 msgid "key between 8 and 63 characters"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:439
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:472
 msgid "key with either 5 or 13 characters"
 msgstr ""
 
@@ -5823,7 +5904,7 @@ msgstr "não"
 msgid "no link"
 msgstr "sem link"
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:241
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:274
 msgid "non-empty value"
 msgstr ""
 
@@ -5850,7 +5931,7 @@ msgstr "desligado"
 msgid "on"
 msgstr "ligado"
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:493
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:526
 msgid ""
 "one of:\n"
 " - %s"
@@ -5868,11 +5949,11 @@ msgstr ""
 msgid "overlay"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:273
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:306
 msgid "positive decimal value"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:265
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:298
 msgid "positive integer value"
 msgstr ""
 
@@ -5920,7 +6001,7 @@ msgstr ""
 msgid "time units (TUs / 1.024 ms) [1000-65535]"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:579
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:612
 msgid "unique value"
 msgstr ""
 
@@ -5947,159 +6028,159 @@ msgstr ""
 msgid "untagged"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:278
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:311
 msgid "valid IP address"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:278
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:311
 msgid "valid IP address or prefix"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:313
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:346
 msgid "valid IPv4 CIDR"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:286
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:319
 msgid "valid IPv4 address"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:286
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:319
 msgid "valid IPv4 address or network"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:406
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:439
 msgid "valid IPv4 address:port"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:346
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:379
 msgid "valid IPv4 network"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:308
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:341
 msgid "valid IPv4 or IPv6 CIDR"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:299
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:332
 msgid "valid IPv4 prefix value (0-32)"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:318
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:351
 msgid "valid IPv6 CIDR"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:294
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:327
 msgid "valid IPv6 address"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:294
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:327
 msgid "valid IPv6 address or prefix"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:336
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:369
 msgid "valid IPv6 host id"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:351
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:384
 msgid "valid IPv6 network"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:304
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:337
 msgid "valid IPv6 prefix value (0-128)"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:372
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:405
 msgid "valid MAC address"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:443
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:476
 msgid "valid UCI identifier"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:394
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:427
 msgid "valid UCI identifier, hostname or IP address"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:415
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:418
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:448
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:451
 msgid "valid address:port"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:553
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:557
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:586
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:590
 msgid "valid date (YYYY-MM-DD)"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:269
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:302
 msgid "valid decimal value"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:437
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:470
 msgid "valid hexadecimal WEP key"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:425
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:458
 msgid "valid hexadecimal WPA key"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:400
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:433
 msgid "valid host:port"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:387
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:389
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:420
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:422
 msgid "valid hostname"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:377
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:410
 msgid "valid hostname or IP address"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:261
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:294
 msgid "valid integer value"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:341
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:374
 msgid "valid network in address/netmask notation"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:528
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:561
 msgid "valid phone digit (0-9, \"*\", \"#\", \"!\" or \".\")"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:364
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:367
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:397
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:400
 msgid "valid port or port range (port1-port2)"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:356
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:389
 msgid "valid port value"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:533
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:566
 msgid "valid time (HH:MM:SS)"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:462
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:495
 msgid "value between %d and %d characters"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:448
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:481
 msgid "value between %f and %f"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:452
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:485
 msgid "value greater or equal to %f"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:456
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:489
 msgid "value smaller or equal to %f"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:467
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:500
 msgid "value with at least %d characters"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:472
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:505
 msgid "value with at most %d characters"
 msgstr ""
 
@@ -6112,6 +6193,19 @@ msgstr "sim"
 #: modules/luci-base/luasrc/view/cbi/delegator.htm:20
 msgid "« Back"
 msgstr "« Voltar"
+
+#~ msgid ""
+#~ "Here you can paste public SSH-Keys (one per line) for SSH public-key "
+#~ "authentication."
+#~ msgstr ""
+#~ "Aqui pode colar as chaves SSH (uma por linha) para a autenticação SSH por "
+#~ "chave pública."
+
+#~ msgid "Password successfully changed!"
+#~ msgstr "Password alterada com sucesso!"
+
+#~ msgid "Unknown Error, password not changed!"
+#~ msgstr "Erro Desconhecido, a password não foi alterada!"
 
 #~ msgid "Design"
 #~ msgstr "Tema"
