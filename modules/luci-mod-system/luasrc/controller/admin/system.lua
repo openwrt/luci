@@ -10,7 +10,16 @@ function index()
 	entry({"admin", "system", "system"}, cbi("admin_system/system"), _("System"), 1)
 	entry({"admin", "system", "clock_status"}, post_on({ set = true }, "action_clock_status"))
 
-	entry({"admin", "system", "admin"}, cbi("admin_system/admin"), _("Administration"), 2)
+	entry({"admin", "system", "admin"}, firstchild(), _("Administration"), 2)
+	entry({"admin", "system", "admin", "password"}, template("admin_system/password"), _("Router Password"), 1)
+	entry({"admin", "system", "admin", "password", "json"}, post("action_password"))
+
+	if fs.access("/etc/config/dropbear") then
+		entry({"admin", "system", "admin", "dropbear"}, cbi("admin_system/dropbear"), _("SSH Access"), 2)
+		entry({"admin", "system", "admin", "sshkeys"}, template("admin_system/sshkeys"), _("SSH-Keys"), 3)
+		entry({"admin", "system", "admin", "sshkeys", "json"}, post_on({ keys = true }, "action_sshkeys"))
+	end
+
 	entry({"admin", "system", "startup"}, form("admin_system/startup"), _("Startup"), 45)
 	entry({"admin", "system", "crontab"}, form("admin_system/crontab"), _("Scheduled Tasks"), 46)
 
@@ -264,20 +273,65 @@ function action_reset()
 	http.redirect(luci.dispatcher.build_url('admin/system/flashops'))
 end
 
-function action_passwd()
-	local p1 = luci.http.formvalue("pwd1")
-	local p2 = luci.http.formvalue("pwd2")
-	local stat = nil
+function action_password()
+	local password = luci.http.formvalue("password")
+	if not password then
+		luci.http.status(400, "Bad Request")
+		return
+	end
 
-	if p1 or p2 then
-		if p1 == p2 then
-			stat = luci.sys.user.setpasswd("root", p1)
-		else
-			stat = 10
+	luci.http.prepare_content("application/json")
+	luci.http.write_json({ code = luci.sys.user.setpasswd("root", password) })
+end
+
+function action_sshkeys()
+	local keys = luci.http.formvalue("keys")
+	if keys then
+		keys = luci.jsonc.parse(keys)
+		if not keys or type(keys) ~= "table" then
+			luci.http.status(400, "Bad Request")
+			return
+		end
+
+		local fd, err = io.open("/etc/dropbear/authorized_keys", "w")
+		if not fd then
+			luci.http.status(503, err)
+			return
+		end
+
+		local _, k
+		for _, k in ipairs(keys) do
+			if type(k) == "string" and k:match("^%w+%-") then
+				fd:write(k)
+				fd:write("\n")
+			end
+		end
+
+		fd:close()
+	end
+
+	local fd, err = io.open("/etc/dropbear/authorized_keys", "r")
+	if not fd then
+		luci.http.status(503, err)
+		return
+	end
+
+	local rv = {}
+	while true do
+		local ln = fd:read("*l")
+		if not ln then
+			break
+		elseif ln:match("^[%w%-]+%s+[A-Za-z0-9+/=]+$") or
+		       ln:match("^[%w%-]+%s+[A-Za-z0-9+/=]+%s")
+		then
+			rv[#rv+1] = ln
 		end
 	end
 
-	luci.template.render("admin_system/passwd", {stat=stat})
+	fd:close()
+
+	luci.http.prepare_content("application/json")
+	luci.http.write_json(rv)
 end
 
 function action_reboot()
