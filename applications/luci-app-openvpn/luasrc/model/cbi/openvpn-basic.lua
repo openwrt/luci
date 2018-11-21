@@ -4,7 +4,7 @@
 local fs = require("nixio.fs")
 
 local basicParams = {
-	--								
+	--
 	-- Widget, Name, Default(s), Description
 	--
 	{ ListValue, "verb", { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 }, translate("Set output verbosity") },
@@ -54,7 +54,7 @@ for _, option in ipairs(basicParams) do
 		option[1], option[2],
 		option[2], option[4]
 	)
-	
+
 	o.optional = true
 
 	if option[1] == DummyValue then
