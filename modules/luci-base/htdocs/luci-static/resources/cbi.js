@@ -2,7 +2,7 @@
 	LuCI - Lua Configuration Interface
 
 	Copyright 2008 Steven Barth <steven@midlink.org>
-	Copyright 2008-2012 Jo-Philipp Wich <jow@openwrt.org>
+	Copyright 2008-2018 Jo-Philipp Wich <jo@mein.io>
 
 	Licensed under the Apache License, Version 2.0 (the "License");
 	you may not use this file except in compliance with the License.
@@ -2278,96 +2278,18 @@ function cbi_update_table(table, data, placeholder) {
 	});
 }
 
-var tooltipDiv = null, tooltipTimeout = null;
-
-function showTooltip(ev) {
-	var target = findParent(ev.target, '[data-tooltip]');
-
-	if (!target)
-		return;
-
-	if (tooltipTimeout !== null) {
-		window.clearTimeout(tooltipTimeout);
-		tooltipTimeout = null;
-	}
-
-	var rect = target.getBoundingClientRect(),
-	    x = rect.left              + window.pageXOffset,
-	    y = rect.top + rect.height + window.pageYOffset;
-
-	tooltipDiv.className = 'cbi-tooltip';
-	tooltipDiv.innerHTML = '▲ ';
-	tooltipDiv.firstChild.data += target.getAttribute('data-tooltip');
-
-	if (target.hasAttribute('data-tooltip-style'))
-		tooltipDiv.classList.add(target.getAttribute('data-tooltip-style'));
-
-	if ((y + tooltipDiv.offsetHeight) > (window.innerHeight + window.pageYOffset)) {
-		y -= (tooltipDiv.offsetHeight + target.offsetHeight);
-		tooltipDiv.firstChild.data = '▼ ' + tooltipDiv.firstChild.data.substr(2);
-	}
-
-	tooltipDiv.style.top = y + 'px';
-	tooltipDiv.style.left = x + 'px';
-	tooltipDiv.style.opacity = 1;
-}
-
-function hideTooltip(ev) {
-	if (ev.target === tooltipDiv || ev.relatedTarget === tooltipDiv)
-		return;
-
-	if (tooltipTimeout !== null) {
-		window.clearTimeout(tooltipTimeout);
-		tooltipTimeout = null;
-	}
-
-	tooltipDiv.style.opacity = 0;
-	tooltipTimeout = window.setTimeout(function() { tooltipDiv.removeAttribute('style'); }, 250);
-}
-
-
-var modalDiv = null;
-
 function showModal(title, children)
 {
-	var dlg = modalDiv.firstElementChild;
-
-	while (dlg.firstChild)
-		dlg.removeChild(dlg.firstChild);
-
-	dlg.setAttribute('class', 'modal');
-	dlg.appendChild(E('h4', {}, title));
-
-	if (!Array.isArray(children))
-		children = [ children ];
-
-	for (var i = 0; i < children.length; i++)
-		if (isElem(children[i]))
-			dlg.appendChild(children[i]);
-		else
-			dlg.appendChild(document.createTextNode('' + children[i]));
-
-	document.body.classList.add('modal-overlay-active');
-
-	return dlg;
+	return L.showModal(title, children);
 }
 
 function hideModal()
 {
-	document.body.classList.remove('modal-overlay-active');
+	return L.hideModal();
 }
 
 
 document.addEventListener('DOMContentLoaded', function() {
-	tooltipDiv = document.body.appendChild(E('div', { 'class': 'cbi-tooltip' }));
-	modalDiv = document.body.appendChild(E('div', { 'id': 'modal_overlay' },
-		E('div', { 'class': 'modal' })));
-
-	document.addEventListener('mouseover', showTooltip, true);
-	document.addEventListener('mouseout', hideTooltip, true);
-	document.addEventListener('focus', showTooltip, true);
-	document.addEventListener('blur', hideTooltip, true);
-
 	document.addEventListener('validation-failure', function(ev) {
 		if (ev.target === document.activeElement)
 			showTooltip(ev);
