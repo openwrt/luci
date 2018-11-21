@@ -11,6 +11,9 @@ XHR.poll(5, '<%=luci.dispatcher.build_url("admin/services/aria2/status")%>', nul
 				if (data.webui) {
 					links += '<input class="cbi-button mar-10" type="button" value="<%:Open WebUI-Aria2%>" onclick="openWebUI(\'webui-aria2\');" />';
 				}
+				if (data.ariang) {
+					links += '<input class="cbi-button mar-10" type="button" value="<%:Open AriaNg%>" onclick="openWebUI(\'ariang\');" />';
+				}
 				tb.innerHTML = links;
 			} else {
 				tb.innerHTML = '<em><%:The Aria2 service is not running.%></em>';
