@@ -34,7 +34,8 @@ function status()
 	local status = {
 		running = (sys.call("pidof aria2c > /dev/null") == 0),
 		yaaw = ipkg.installed("yaaw"),
-		webui = ipkg.installed("webui-aria2")
+		webui = ipkg.installed("webui-aria2"),
+		ariang = (ipkg.installed("ariang") or ipkg.installed("ariang-nginx"))
 	}
 
 	http.prepare_content("application/json")
