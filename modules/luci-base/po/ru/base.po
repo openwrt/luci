@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LuCI: base\n"
 "POT-Creation-Date: 2010-05-09 01:01+0300\n"
-"PO-Revision-Date: 2018-11-16 19:48+0300\n"
+"PO-Revision-Date: 2018-11-20 20:01+0300\n"
 "Last-Translator: Anton Kikin <a.kikin@tano-systems.com>\n"
 "Language-Team: http://cyber-place.ru\n"
 "Language: ru\n"
@@ -21,7 +21,7 @@ msgstr "%.1f дБ"
 
 #: modules/luci-mod-system/luasrc/view/admin_system/sshkeys.htm:118
 msgid "%d Bit"
-msgstr ""
+msgstr "%d бит"
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/vlan.lua:256
 msgid "%s is untagged in multiple VLANs!"
@@ -239,7 +239,7 @@ msgstr ""
 
 #: modules/luci-base/htdocs/luci-static/resources/xhr.js:39
 msgid "A new login is required since the authentication session expired."
-msgstr ""
+msgstr "Время сессии истекло, требуется повторная аутентификация."
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:173
 msgid "A43C + J43 + A43"
@@ -361,7 +361,7 @@ msgstr "Добавить"
 #: modules/luci-mod-system/luasrc/view/admin_system/sshkeys.htm:158
 #: modules/luci-mod-system/luasrc/view/admin_system/sshkeys.htm:239
 msgid "Add key"
-msgstr ""
+msgstr "Добавить ключ"
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/dhcp.lua:109
 msgid "Add local domain suffix to names served from hosts files"
@@ -913,7 +913,7 @@ msgstr "Цепочка"
 #: modules/luci-mod-system/luasrc/view/admin_system/password.htm:18
 #: modules/luci-mod-system/luasrc/view/admin_system/password.htm:28
 msgid "Change login password"
-msgstr ""
+msgstr "Изменить пароль"
 
 #: modules/luci-base/luasrc/controller/admin/uci.lua:12
 #: modules/luci-base/luasrc/view/admin_uci/changes.htm:16
@@ -934,7 +934,7 @@ msgstr "Изменить пароль администратора для дос
 
 #: modules/luci-mod-system/luasrc/view/admin_system/password.htm:13
 msgid "Changing password…"
-msgstr ""
+msgstr "Изменение пароля..."
 
 #: modules/luci-base/luasrc/view/cbi/wireless_modefreq.htm:157
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:172
@@ -1034,7 +1034,7 @@ msgstr "ID клиента при DHCP-запросе"
 #: modules/luci-mod-system/luasrc/view/admin_system/sshkeys.htm:154
 #: modules/luci-mod-system/luasrc/view/admin_system/sshkeys.htm:160
 msgid "Close"
-msgstr ""
+msgstr "Закрыть"
 
 #: protocols/luci-proto-3g/luasrc/model/cbi/admin_network/proto_3g.lua:146
 #: protocols/luci-proto-ppp/luasrc/model/cbi/admin_network/proto_ppp.lua:119
@@ -1366,7 +1366,7 @@ msgstr "Удалить"
 #: modules/luci-mod-system/luasrc/view/admin_system/sshkeys.htm:187
 #: modules/luci-mod-system/luasrc/view/admin_system/sshkeys.htm:181
 msgid "Delete key"
-msgstr ""
+msgstr "Удалить ключ"
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi_overview.lua:112
 msgid "Delete this network"
@@ -1530,7 +1530,7 @@ msgstr "Не перенаправлять обратные DNS-запросы д
 
 #: modules/luci-mod-system/luasrc/view/admin_system/sshkeys.htm:182
 msgid "Do you really want to delete the following SSH key?"
-msgstr ""
+msgstr "Вы действительно хотите удалить следующий SSH-ключ?"
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/dhcp.lua:25
 msgid "Domain required"
@@ -2861,7 +2861,7 @@ msgstr "Загрузка"
 
 #: modules/luci-mod-system/luasrc/view/admin_system/sshkeys.htm:236
 msgid "Loading SSH keys…"
-msgstr ""
+msgstr "Загрузка SSH ключей..."
 
 #: modules/luci-base/luasrc/model/network.lua:30
 msgid "Local IP address is invalid"
@@ -3348,7 +3348,7 @@ msgstr "Пароль не установлен!"
 
 #: modules/luci-mod-system/luasrc/view/admin_system/sshkeys.htm:125
 msgid "No public keys present yet."
-msgstr ""
+msgstr "Нет публичных ключей"
 
 #: modules/luci-mod-status/luasrc/view/admin_status/iptables.htm:124
 msgid "No rules in this chain."
@@ -3772,7 +3772,7 @@ msgstr "Пароль2"
 
 #: modules/luci-mod-system/luasrc/view/admin_system/sshkeys.htm:238
 msgid "Paste or drag SSH key file…"
-msgstr ""
+msgstr "Перетащите файл SSH ключа или вставьте содержимое..."
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:927
 msgid "Path to CA-Certificate"
@@ -3986,6 +3986,10 @@ msgid ""
 "device, paste an OpenSSH compatible public key line or drag a <code>.pub</"
 "code> file into the input field."
 msgstr ""
+"Публичные SSH ключи позволяют выполнять беспарольный SSH вход с большим "
+"уровнем безопасности по сравнению с использованием входа по паролю. Чтобы "
+"загрузить новый публичный SSH ключ, вставьте строку публичного OpenSSH ключа "
+"или перетащите <code>.pub</code> файл в поле ввода ключа."
 
 #: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:62
 msgid "Public prefix routed to this device for distribution to clients."
@@ -4449,7 +4453,7 @@ msgstr "Сохранить содержимое MTD раздела"
 
 #: modules/luci-mod-system/luasrc/view/admin_system/sshkeys.htm:129
 msgid "Saving keys…"
-msgstr ""
+msgstr "Сохранение ключей..."
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi_overview.lua:82
 msgid "Scan"
@@ -4522,7 +4526,7 @@ msgstr "Сервисы"
 
 #: modules/luci-base/htdocs/luci-static/resources/xhr.js:37
 msgid "Session expired"
-msgstr ""
+msgstr "Сессия истекла"
 
 #: protocols/luci-proto-vpnc/luasrc/model/cbi/admin_network/proto_vpnc.lua:83
 msgid "Set VPN as Default Route"
@@ -5015,13 +5019,14 @@ msgstr "На данном устройстве активны следующие
 
 #: modules/luci-mod-system/luasrc/view/admin_system/sshkeys.htm:153
 msgid "The given SSH public key has already been added."
-msgstr ""
+msgstr "Указанный публичный SSH ключ уже добавлен."
 
 #: modules/luci-mod-system/luasrc/view/admin_system/sshkeys.htm:159
 msgid ""
 "The given SSH public key is invalid. Please supply proper public RSA or "
 "ECDSA keys."
 msgstr ""
+"Указанный публичный SSH ключ неверный. Укажите правильный RSA или ECDSA ключ."
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/iface_add.lua:67
 msgid "The given network name is not unique"
@@ -5098,7 +5103,7 @@ msgstr ""
 
 #: modules/luci-mod-system/luasrc/view/admin_system/password.htm:19
 msgid "The system password has been successfully changed."
-msgstr ""
+msgstr "Пароль администратора успешно изменен."
 
 #: modules/luci-mod-system/luasrc/view/admin_system/flashops.htm:118
 msgid ""
@@ -5262,7 +5267,7 @@ msgstr "Часовой пояс"
 
 #: modules/luci-base/htdocs/luci-static/resources/xhr.js:47
 msgid "To login…"
-msgstr ""
+msgstr "Аутентификация..."
 
 #: modules/luci-mod-system/luasrc/view/admin_system/flashops.htm:32
 msgid ""
@@ -5427,7 +5432,7 @@ msgstr "Отмонтировать"
 
 #: modules/luci-mod-system/luasrc/view/admin_system/sshkeys.htm:116
 msgid "Unnamed key"
-msgstr ""
+msgstr "Ключ без имени"
 
 #: themes/luci-theme-bootstrap/luasrc/view/themes/bootstrap/header.htm:148
 #: themes/luci-theme-freifunk-generic/luasrc/view/themes/freifunk-generic/header.htm:209
