@@ -84,7 +84,7 @@ PKG_GITBRANCH?=$(if $(DUMP),x,$(strip $(shell \
 PKG_RELEASE?=1
 PKG_INSTALL:=$(if $(realpath src/Makefile),1)
 PKG_BUILD_DEPENDS += lua/host luci-base/host $(LUCI_BUILD_DEPENDS)
-PKG_CONFIG_DEPENDS += CONFIG_LUCI_SRCDIET
+PKG_CONFIG_DEPENDS += CONFIG_LUCI_SRCDIET CONFIG_LUCI_JSMIN
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
 
@@ -112,6 +112,10 @@ ifeq ($(PKG_NAME),luci-base)
    config LUCI_SRCDIET
 	bool "Minify Lua sources"
 	default n
+
+   config LUCI_JSMIN
+	bool "Minify JavaScript sources"
+	default y
 
    menu "Translations"$(foreach lang,$(LUCI_LANGUAGES),
 
@@ -158,6 +162,13 @@ define SrcDiet
 	done
 endef
 
+define JsMin
+	$(FIND) $(1) -type f -name '*.js' | while read src; do \
+		if jsmin < "$$$$src" > "$$$$src.o"; \
+		then mv "$$$$src.o" "$$$$src"; fi; \
+	done
+endef
+
 define SubstituteVersion
 	$(FIND) $(1) -type f -name '*.htm' | while read src; do \
 		$(SED) 's/<%# *\([^ ]*\)PKG_VERSION *%>/\1$(PKG_VERSION)/g' \
@@ -177,6 +188,7 @@ define Package/$(PKG_NAME)/install
 	if [ -d $(PKG_BUILD_DIR)/htdocs ]; then \
 	  $(INSTALL_DIR) $(1)$(HTDOCS); \
 	  cp -pR $(PKG_BUILD_DIR)/htdocs/* $(1)$(HTDOCS)/; \
+	  $(if $(CONFIG_LUCI_JSMIN),$(call JsMin,$(1)$(HTDOCS)/),true); \
 	else true; fi
 	if [ -d $(PKG_BUILD_DIR)/root ]; then \
 	  $(INSTALL_DIR) $(1)/; \
