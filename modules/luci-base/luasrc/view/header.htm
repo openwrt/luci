@@ -10,3 +10,14 @@
 		luci.dispatcher.context.template_header_sent = true
 	end
 %>
+
+<script type="text/javascript" src="<%=resource%>/luci.js"></script>
+<script type="text/javascript">
+	L = new LuCI(<%= luci.http.write_json({
+		token       = token,
+		resource    = resource,
+		scriptname  = luci.http.getenv("SCRIPT_NAME"),
+		pathinfo    = luci.http.getenv("PATH_INFO"),
+		requestpath = luci.dispatcher.context.requestpath
+	}) %>);
+</script>
