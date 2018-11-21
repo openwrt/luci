@@ -1,14 +1,12 @@
 -- Copyright 2008 Steven Barth <steven@midlink.org>
 -- Licensed to the public under the Apache License 2.0.
 
-require("luci.ip")
-require("luci.model.uci")
+local fs = require("nixio.fs")
 
 local basicParams = {
 	--								
 	-- Widget, Name, Default(s), Description
 	--
-					
 	{ ListValue, "verb", { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 }, translate("Set output verbosity") },
 	{ Value, "nice",0, translate("Change process priority") },
 	{ Value,"port",1194, translate("TCP/UDP port # for both local and remote") },
@@ -28,17 +26,21 @@ local basicParams = {
 	{ DynamicList,"remote","vpnserver.example.org", translate("Remote host name or ip address") },
 
 	{ FileUpload,"secret","/etc/openvpn/secret.key", translate("Enable Static Key encryption mode (non-TLS)") },
-	{ Value,"key_direction","1", translate("The key direction for 'tls-auth' and 'secret' options") },
+	{ ListValue,"key_direction", { 0, 1 }, translate("The key direction for 'tls-auth' and 'secret' options") },
 	{ FileUpload,"pkcs12","/etc/easy-rsa/keys/some-client.pk12", translate("PKCS#12 file containing keys") },
 	{ FileUpload,"ca","/etc/easy-rsa/keys/ca.crt", translate("Certificate authority") },
 	{ FileUpload,"dh","/etc/easy-rsa/keys/dh1024.pem", translate("Diffie Hellman parameters") },
 	{ FileUpload,"cert","/etc/easy-rsa/keys/some-client.crt", translate("Local certificate") },
 	{ FileUpload,"key","/etc/easy-rsa/keys/some-client.key", translate("Local private key") },
+	{ Value,"config","/etc/openvpn/ovpn-file.ovpn", translate("Local OVPN configuration file") },
 }
 
 
 local m = Map("openvpn")
 local p = m:section( SimpleSection )
+
+m.apply_on_parse = true
+
 
 p.template = "openvpn/pageswitch"
 p.mode     = "basic"
@@ -57,6 +59,38 @@ for _, option in ipairs(basicParams) do
 
 	if option[1] == DummyValue then
 		o.value = option[3]
+	elseif option[1] == FileUpload then
+
+		function o.cfgvalue(self, section)
+			local cfg_val = AbstractValue.cfgvalue(self, section)
+
+			if cfg_val then
+				return cfg_val
+			end
+		end
+
+		function o.formvalue(self, section)
+			local sel_val = AbstractValue.formvalue(self, section)
+			local txt_val = luci.http.formvalue("cbid."..self.map.config.."."..section.."."..self.option..".textbox")
+
+			if sel_val and sel_val ~= "" then
+				return sel_val
+			end
+
+			if txt_val and txt_val ~= "" then
+				return txt_val
+			end
+		end
+
+		function o.remove(self, section)
+			local cfg_val = AbstractValue.cfgvalue(self, section)
+			local txt_val = luci.http.formvalue("cbid."..self.map.config.."."..section.."."..self.option..".textbox")
+			
+			if cfg_val and fs.access(cfg_val) and txt_val == "" then
+				fs.unlink(cfg_val)
+			end
+			return AbstractValue.remove(self, section)
+		end
 	else
 		if option[1] == DynamicList then
 			function o.cfgvalue(...)

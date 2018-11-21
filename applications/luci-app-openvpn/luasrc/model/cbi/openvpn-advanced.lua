@@ -1,9 +1,7 @@
 -- Copyright 2008 Steven Barth <steven@midlink.org>
 -- Licensed to the public under the Apache License 2.0.
 
-require("luci.ip")
-require("luci.model.uci")
-
+local fs = require("nixio.fs")
 
 local knownParams = {
 	--
@@ -160,6 +158,10 @@ local knownParams = {
 			"script_security",
 			{ 0, 1, 2, 3 },
 			translate("Policy level over usage of external programs and scripts") },
+		{ Value,
+			"config",
+			"/etc/openvpn/ovpn-file.ovpn",
+			translate("Local OVPN configuration file") },
 	} },
 
 	{ "Networking", {
@@ -464,7 +466,7 @@ local knownParams = {
 			0,
 			translate("Accept options pushed from server"),
 			{ client="1" } },
-		{ Value,
+		{ FileUpload,
 			"auth_user_pass",
 			"/etc/openvpn/userpass.txt",
 			translate("Authenticate using username/password"),
@@ -689,9 +691,9 @@ local knownParams = {
 			"tls_version_max",
 			"1.2",
 			translate("The highest supported TLS version") },
-		{ Value,
+		{ ListValue,
 			"key_direction",
-			"1",
+			{ 0, 1 },
 			translate("The key direction for 'tls-auth' and 'secret' options") },
 	} }
 }
@@ -702,6 +704,8 @@ local params = { }
 
 local m = Map("openvpn")
 local p = m:section( SimpleSection )
+
+m.apply_on_parse = true
 
 p.template = "openvpn/pageswitch"
 p.mode     = "advanced"
@@ -732,8 +736,42 @@ for _, option in ipairs(params) do
 		option[2], option[4]
 	)
 
+	o.optional = true
+
 	if option[1] == DummyValue then
 		o.value = option[3]
+	elseif option[1] == FileUpload then
+
+		function o.cfgvalue(self, section)
+			local cfg_val = AbstractValue.cfgvalue(self, section)
+
+			if cfg_val then
+				return cfg_val
+			end
+		end
+
+		function o.formvalue(self, section)
+			local sel_val = AbstractValue.formvalue(self, section)
+			local txt_val = luci.http.formvalue("cbid."..self.map.config.."."..section.."."..self.option..".textbox")
+
+			if sel_val and sel_val ~= "" then
+				return sel_val
+			end
+
+			if txt_val and txt_val ~= "" then
+				return txt_val
+			end
+		end
+
+		function o.remove(self, section)
+			local cfg_val = AbstractValue.cfgvalue(self, section)
+			local txt_val = luci.http.formvalue("cbid."..self.map.config.."."..section.."."..self.option..".textbox")
+			
+			if cfg_val and fs.access(cfg_val) and txt_val == "" then
+				fs.unlink(cfg_val)
+			end
+			return AbstractValue.remove(self, section)
+		end
 	else
 		if option[1] == DynamicList then
 			function o.cfgvalue(...)
@@ -741,8 +779,6 @@ for _, option in ipairs(params) do
 				return ( val and type(val) ~= "table" ) and { val } or val
 			end
 		end
-
-		o.optional = true
 
 		if type(option[3]) == "table" then
 			if o.optional then o:value("", "-- remove --") end
