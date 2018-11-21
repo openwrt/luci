@@ -95,11 +95,10 @@ local basicParams = {
 
 
 local m = Map("openvpn")
-local p = m:section( SimpleSection )
-
+m.redirect = luci.dispatcher.build_url("admin", "services", "openvpn")
 m.apply_on_parse = true
 
-
+local p = m:section( SimpleSection )
 p.template = "openvpn/pageswitch"
 p.mode     = "basic"
 p.instance = arg[1]
