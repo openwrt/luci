@@ -772,6 +772,8 @@ for _, option in ipairs(params) do
 			end
 			return AbstractValue.remove(self, section)
 		end
+	elseif option[1] == Flag then
+		o.default = nil
 	else
 		if option[1] == DynamicList then
 			function o.cfgvalue(...)
