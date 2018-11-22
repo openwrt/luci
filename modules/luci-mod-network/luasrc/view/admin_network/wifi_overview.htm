@@ -1,0 +1,61 @@
+<div class="cbi-section-node">
+	<div class="table">
+		<!-- physical device -->
+		<div class="tr cbi-rowstyle-2">
+			<div class="td col-2 center middle">
+				<span class="ifacebadge"><img src="<%=resource%>/icons/wifi_disabled.png" id="<%=self.dev:name()%>-iw-upstate" /> <%=self.dev:name()%></span>
+			</div>
+			<div class="td col-7 left middle">
+				<big><strong><%=self.hw%></strong></big><br />
+				<span id="<%=self.dev:name()%>-iw-devinfo"></span>
+			</div>
+			<div class="td middle cbi-section-actions">
+				<div>
+					<input type="button" class="cbi-button cbi-button-neutral" title="<%:Restart radio interface%>" value="<%:Restart%>" data-radio="<%=self.dev:name()%>" onclick="wifi_restart(event)" />
+					<input type="button" class="cbi-button cbi-button-action important" title="<%:Find and join network%>" value="<%:Scan%>" onclick="cbi_submit(this, 'device', '<%=self.dev:name()%>', '<%=url('admin/network/wireless_join')%>')" />
+					<input type="button" class="cbi-button cbi-button-add" title="<%:Provide new network%>" value="<%:Add%>" onclick="cbi_submit(this, 'device', '<%=self.dev:name()%>', '<%=url('admin/network/wireless_add')%>')" />
+				</div>
+			</div>
+		</div>
+		<!-- /physical device -->
+
+		<!-- network list -->
+		<% if #self.wnets > 0 then %>
+			<% for i, net in ipairs(self.wnets) do local disabled = (self.dev:get("disabled") == "1" or net:get("disabled") == "1") %>
+			<div class="tr cbi-rowstyle-<%=1 + ((i-1) % 2)%>">
+				<div class="td col-2 center middle" id="<%=net:id()%>-iw-signal">
+					<span class="ifacebadge" title="<%:Not associated%>"><img src="<%=resource%>/icons/signal-<%= disabled and "none" or "0" %>.png" /> 0%</span>
+				</div>
+				<div class="td col-7 left middle" id="<%=net:id()%>-iw-status" data-network="<%=net:id()%>" data-disabled="<%= disabled and "true" or "false" %>">
+					<em><%= disabled and translate("Wireless is disabled") or translate("Collecting data...") %></em>
+				</div>
+				<div class="td middle cbi-section-actions">
+					<div>
+						<% if disabled then %>
+							<input name="cbid.wireless.<%=net:name()%>.__disable__" type="hidden" value="1" />
+							<input name="cbi.apply" type="submit" class="cbi-button cbi-button-neutral" title="<%:Enable this network%>" value="<%:Enable%>" onclick="this.previousElementSibling.value='0'" />
+						<% else %>
+							<input name="cbid.wireless.<%=net:name()%>.__disable__" type="hidden" value="0" />
+							<input name="cbi.apply" type="submit" class="cbi-button cbi-button-neutral" title="<%:Disable this network%>" value="<%:Disable%>" onclick="this.previousElementSibling.value='1'" />
+						<% end %>
+
+						<input type="button" class="cbi-button cbi-button-action important" onclick="location.href='<%=net:adminlink()%>'" title="<%:Edit this network%>" value="<%:Edit%>" />
+
+						<input name="cbid.wireless.<%=net:name()%>.__delete__" type="hidden" value="" />
+						<input name="cbi.apply" type="submit" class="cbi-button cbi-button-negative" title="<%:Delete this network%>" value="<%:Remove%>" onclick="wifi_delete(event)" />
+					</div>
+				</div>
+			</div>
+			<% end %>
+		<% else %>
+			<div class="tr placeholder">
+				<div class="td">
+					<em><%:No network configured on this device%></em>
+				</div>
+			</div>
+		<% end %>
+		<!-- /network list -->
+	</div>
+</div>
+
+<script type="text/javascript" src="<%=resource%>/view/network/wireless.js"></script>

@@ -64,68 +64,6 @@ function guess_wifi_hw(dev)
 	end
 end
 
-local tpl_radio = tpl.Template(nil, [[
-	<div class="cbi-section-node">
-		<div class="table">
-			<!-- physical device -->
-			<div class="tr cbi-rowstyle-2">
-				<div class="td col-2 center middle">
-					<span class="ifacebadge"><img src="<%=resource%>/icons/wifi_disabled.png" id="<%=dev:name()%>-iw-upstate" /> <%=dev:name()%></span>
-				</div>
-				<div class="td col-7 left middle">
-					<big><strong><%=hw%></strong></big><br />
-					<span id="<%=dev:name()%>-iw-devinfo"></span>
-				</div>
-				<div class="td middle cbi-section-actions">
-					<div>
-						<input type="button" class="cbi-button cbi-button-neutral" title="<%:Restart radio interface%>" value="<%:Restart%>" data-radio="<%=dev:name()%>" onclick="wifi_restart(event)" />
-						<input type="button" class="cbi-button cbi-button-action important" title="<%:Find and join network%>" value="<%:Scan%>" onclick="cbi_submit(this, 'device', '<%=dev:name()%>', '<%=url('admin/network/wireless_join')%>')" />
-						<input type="button" class="cbi-button cbi-button-add" title="<%:Provide new network%>" value="<%:Add%>" onclick="cbi_submit(this, 'device', '<%=dev:name()%>', '<%=url('admin/network/wireless_add')%>')" />
-					</div>
-				</div>
-			</div>
-			<!-- /physical device -->
-
-			<!-- network list -->
-			<% if #wnets > 0 then %>
-				<% for i, net in ipairs(wnets) do local disabled = (dev:get("disabled") == "1" or net:get("disabled") == "1") %>
-				<div class="tr cbi-rowstyle-<%=1 + ((i-1) % 2)%>">
-					<div class="td col-2 center middle" id="<%=net:id()%>-iw-signal">
-						<span class="ifacebadge" title="<%:Not associated%>"><img src="<%=resource%>/icons/signal-<%= disabled and "none" or "0" %>.png" /> 0%</span>
-					</div>
-					<div class="td col-7 left middle" id="<%=net:id()%>-iw-status" data-network="<%=net:id()%>" data-disabled="<%= disabled and "true" or "false" %>">
-						<em><%= disabled and translate("Wireless is disabled") or translate("Collecting data...") %></em>
-					</div>
-					<div class="td middle cbi-section-actions">
-						<div>
-							<% if disabled then %>
-								<input name="cbid.wireless.<%=net:name()%>.__disable__" type="hidden" value="1" />
-								<input name="cbi.apply" type="submit" class="cbi-button cbi-button-neutral" title="<%:Enable this network%>" value="<%:Enable%>" onclick="this.previousElementSibling.value='0'" />
-							<% else %>
-								<input name="cbid.wireless.<%=net:name()%>.__disable__" type="hidden" value="0" />
-								<input name="cbi.apply" type="submit" class="cbi-button cbi-button-neutral" title="<%:Disable this network%>" value="<%:Disable%>" onclick="this.previousElementSibling.value='1'" />
-							<% end %>
-
-							<input type="button" class="cbi-button cbi-button-action important" onclick="location.href='<%=net:adminlink()%>'" title="<%:Edit this network%>" value="<%:Edit%>" />
-
-							<input name="cbid.wireless.<%=net:name()%>.__delete__" type="hidden" value="" />
-							<input name="cbi.apply" type="submit" class="cbi-button cbi-button-negative" title="<%:Delete this network%>" value="<%:Remove%>" onclick="wifi_delete(event)" />
-						</div>
-					</div>
-				</div>
-				<% end %>
-			<% else %>
-				<div class="tr placeholder">
-					<div class="td">
-						<em><%:No network configured on this device%></em>
-					</div>
-				</div>
-			<% end %>
-			<!-- /network list -->
-		</div>
-	</div>
-]])
-
 
 m = Map("wireless", translate("Wireless Overview"))
 m:chain("network")
@@ -147,15 +85,10 @@ end
 local _, dev, net
 for _, dev in ipairs(ntm:get_wifidevs()) do
 	s = m:section(TypedSection)
+	s.template = "admin_network/wifi_overview"
 	s.wnets = dev:get_wifinets()
-
-	function s.render(self, sid)
-		tpl_radio:render({
-			hw = guess_wifi_hw(dev),
-			dev = dev,
-			wnets = self.wnets
-		})
-	end
+	s.dev = dev
+	s.hw = guess_wifi_hw(dev)
 
 	function s.cfgsections(self)
 		local _, net, sl = nil, nil, { }
@@ -207,9 +140,6 @@ for _, dev in ipairs(ntm:get_wifidevs()) do
 		end
 	end
 end
-
-s = m:section(NamedSection, "__script__")
-s.template = "admin_network/wifi_overview_status"
 
 s = m:section(NamedSection, "__assoclist__")
 
