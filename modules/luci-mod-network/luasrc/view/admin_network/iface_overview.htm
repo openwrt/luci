@@ -4,7 +4,7 @@
 			for i, net in ipairs(self.netlist) do
 				local z = net[3]
 				local c = z and z:get_color() or "#EEEEEE"
-				local t = z and translate("Part of zone %q" % z:name()) or translate("No zone assigned")
+				local t = z and translate("Part of zone %q") % z:name() or translate("No zone assigned")
 				local disabled = (net[4]:get("auto") == "0")
 				local dynamic = net[4]:is_dynamic()
 		%>
