@@ -1478,107 +1478,11 @@ if (!window.requestAnimationFrame) {
 }
 
 
-var dummyElem, domParser;
-
-function isElem(e)
-{
-	return (typeof(e) === 'object' && e !== null && 'nodeType' in e);
-}
-
-function toElem(s)
-{
-	var elem;
-
-	try {
-		domParser = domParser || new DOMParser();
-		elem = domParser.parseFromString(s, 'text/html').body.firstChild;
-	}
-	catch(e) {}
-
-	if (!elem) {
-		try {
-			dummyElem = dummyElem || document.createElement('div');
-			dummyElem.innerHTML = s;
-			elem = dummyElem.firstChild;
-		}
-		catch (e) {}
-	}
-
-	return elem || null;
-}
-
-function matchesElem(node, selector)
-{
-	return ((node.matches && node.matches(selector)) ||
-	        (node.msMatchesSelector && node.msMatchesSelector(selector)));
-}
-
-function findParent(node, selector)
-{
-	if (node.closest)
-		return node.closest(selector);
-
-	while (node)
-		if (matchesElem(node, selector))
-			return node;
-		else
-			node = node.parentNode;
-
-	return null;
-}
-
-function E()
-{
-	var html = arguments[0],
-	    attr = (arguments[1] instanceof Object && !Array.isArray(arguments[1])) ? arguments[1] : null,
-	    data = attr ? arguments[2] : arguments[1],
-	    elem;
-
-	if (isElem(html))
-		elem = html;
-	else if (html.charCodeAt(0) === 60)
-		elem = toElem(html);
-	else
-		elem = document.createElement(html);
-
-	if (!elem)
-		return null;
-
-	if (attr)
-		for (var key in attr)
-			if (attr.hasOwnProperty(key) && attr[key] !== null && attr[key] !== undefined)
-				switch (typeof(attr[key])) {
-				case 'function':
-					elem.addEventListener(key, attr[key]);
-					break;
-
-				case 'object':
-					elem.setAttribute(key, JSON.stringify(attr[key]));
-					break;
-
-				default:
-					elem.setAttribute(key, attr[key]);
-				}
-
-	if (typeof(data) === 'function')
-		data = data(elem);
-
-	if (isElem(data)) {
-		elem.appendChild(data);
-	}
-	else if (Array.isArray(data)) {
-		for (var i = 0; i < data.length; i++)
-			if (isElem(data[i]))
-				elem.appendChild(data[i]);
-			else
-				elem.appendChild(document.createTextNode('' + data[i]));
-	}
-	else if (data !== null && data !== undefined) {
-		elem.innerHTML = '' + data;
-	}
-
-	return elem;
-}
+function isElem(e) { return L.dom.elem(e) }
+function toElem(s) { return L.dom.parse(s) }
+function matchesElem(node, selector) { return L.dom.matches(node, selector) }
+function findParent(node, selector) { return L.dom.parent(node, selector) }
+function E() { return L.dom.create.apply(L.dom, arguments) }
 
 if (typeof(window.CustomEvent) !== 'function') {
 	function CustomEvent(event, params) {

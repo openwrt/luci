@@ -1,7 +1,9 @@
-(function(window, document) {
+(function(window, document, undefined) {
 	var modalDiv = null,
 	    tooltipDiv = null,
-	    tooltipTimeout = null;
+	    tooltipTimeout = null,
+	    dummyElem = null,
+	    domParser = null;
 
 	LuCI.prototype = {
 		/* URL construction helpers */
@@ -72,25 +74,18 @@
 				return XHR.get(url, data, cb);
 		},
 
+		halt: function() { XHR.halt() },
+		run: function() { XHR.run() },
+
 
 		/* Modal dialog */
 		showModal: function(title, children) {
 			var dlg = modalDiv.firstElementChild;
 
-			while (dlg.firstChild)
-				dlg.removeChild(dlg.firstChild);
-
 			dlg.setAttribute('class', 'modal');
-			dlg.appendChild(E('h4', {}, title));
 
-			if (!Array.isArray(children))
-				children = [ children ];
-
-			for (var i = 0; i < children.length; i++)
-				if (isElem(children[i]))
-					dlg.appendChild(children[i]);
-				else
-					dlg.appendChild(document.createTextNode('' + children[i]));
+			this.dom.content(dlg, this.dom.create('h4', {}, title));
+			this.dom.append(dlg, children);
 
 			document.body.classList.add('modal-overlay-active');
 
@@ -146,14 +141,177 @@
 
 			tooltipDiv.style.opacity = 0;
 			tooltipTimeout = window.setTimeout(function() { tooltipDiv.removeAttribute('style'); }, 250);
+		},
+
+
+		/* Widget helper */
+		itemlist: function(node, items, separators) {
+			var children = [];
+
+			if (!Array.isArray(separators))
+				separators = [ separators || E('br') ];
+
+			for (var i = 0; i < items.length; i += 2) {
+				if (items[i+1] !== null && items[i+1] !== undefined) {
+					var sep = separators[(i/2) % separators.length],
+					    cld = [];
+
+					children.push(E('span', { class: 'nowrap' }, [
+						items[i] ? E('strong', items[i] + ': ') : '',
+						items[i+1]
+					]));
+
+					if ((i+2) < items.length)
+						children.push(this.dom.elem(sep) ? sep.cloneNode(true) : sep);
+				}
+			}
+
+			this.dom.content(node, children);
+
+			return node;
+		}
+	};
+
+	/* DOM manipulation */
+	LuCI.prototype.dom = {
+		elem: function(e) {
+			return (typeof(e) === 'object' && e !== null && 'nodeType' in e);
+		},
+
+		parse: function(s) {
+			var elem;
+
+			try {
+				domParser = domParser || new DOMParser();
+				elem = domParser.parseFromString(s, 'text/html').body.firstChild;
+			}
+			catch(e) {}
+
+			if (!elem) {
+				try {
+					dummyElem = dummyElem || document.createElement('div');
+					dummyElem.innerHTML = s;
+					elem = dummyElem.firstChild;
+				}
+				catch (e) {}
+			}
+
+			return elem || null;
+		},
+
+		matches: function(node, selector) {
+			var m = this.elem(node) ? node.matches || node.msMatchesSelector : null;
+			return m ? m.call(node, selector) : false;
+		},
+
+		parent: function(node, selector) {
+			if (this.elem(node) && node.closest)
+				return node.closest(selector);
+
+			while (this.elem(node))
+				if (this.matches(node, selector))
+					return node;
+				else
+					node = node.parentNode;
+
+			return null;
+		},
+
+		append: function(node, children) {
+			if (!this.elem(node))
+				return null;
+
+			if (Array.isArray(children)) {
+				for (var i = 0; i < children.length; i++)
+					if (this.elem(children[i]))
+						node.appendChild(children[i]);
+					else if (children !== null && children !== undefined)
+						node.appendChild(document.createTextNode('' + children[i]));
+
+				return node.lastChild;
+			}
+			else if (typeof(children) === 'function') {
+				return this.append(node, children(node));
+			}
+			else if (this.elem(children)) {
+				return node.appendChild(children);
+			}
+			else if (children !== null && children !== undefined) {
+				node.innerHTML = '' + children;
+				return node.lastChild;
+			}
+
+			return null;
+		},
+
+		content: function(node, children) {
+			if (!this.elem(node))
+				return null;
+
+			while (node.firstChild)
+				node.removeChild(node.firstChild);
+
+			return this.append(node, children);
+		},
+
+		attr: function(node, key, val) {
+			if (!this.elem(node))
+				return null;
+
+			var attr = null;
+
+			if (typeof(key) === 'object' && key !== null)
+				attr = key;
+			else if (typeof(key) === 'string')
+				attr = {}, attr[key] = val;
+
+			for (key in attr) {
+				if (!attr.hasOwnProperty(key) || attr[key] === null || attr[key] === undefined)
+					continue;
+
+				switch (typeof(attr[key])) {
+				case 'function':
+					node.addEventListener(key, attr[key]);
+					break;
+
+				case 'object':
+					node.setAttribute(key, JSON.stringify(attr[key]));
+					break;
+
+				default:
+					node.setAttribute(key, attr[key]);
+				}
+			}
+		},
+
+		create: function() {
+			var html = arguments[0],
+			    attr = (arguments[1] instanceof Object && !Array.isArray(arguments[1])) ? arguments[1] : null,
+			    data = attr ? arguments[2] : arguments[1],
+			    elem;
+
+			if (this.elem(html))
+				elem = html;
+			else if (html.charCodeAt(0) === 60)
+				elem = this.parse(html);
+			else
+				elem = document.createElement(html);
+
+			if (!elem)
+				return null;
+
+			this.attr(elem, attr);
+			this.append(elem, data);
+
+			return elem;
 		}
 	};
 
 	function LuCI(env) {
 		this.env = env;
 
-		modalDiv = document.body.appendChild(E('div', { id: 'modal_overlay' }, E('div', { class: 'modal' })));
-		tooltipDiv = document.body.appendChild(E('div', { 'class': 'cbi-tooltip' }));
+		modalDiv = document.body.appendChild(this.dom.create('div', { id: 'modal_overlay' }, this.dom.create('div', { class: 'modal' })));
+		tooltipDiv = document.body.appendChild(this.dom.create('div', { class: 'cbi-tooltip' }));
 
 		document.addEventListener('mouseover', this.showTooltip.bind(this), true);
 		document.addEventListener('mouseout', this.hideTooltip.bind(this), true);
