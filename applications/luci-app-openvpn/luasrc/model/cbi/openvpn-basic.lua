@@ -4,44 +4,101 @@
 local fs = require("nixio.fs")
 
 local basicParams = {
-	--								
+	--
 	-- Widget, Name, Default(s), Description
 	--
-	{ ListValue, "verb", { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 }, translate("Set output verbosity") },
-	{ Value, "nice",0, translate("Change process priority") },
-	{ Value,"port",1194, translate("TCP/UDP port # for both local and remote") },
-	{ ListValue,"dev_type",{ "tun", "tap" }, translate("Type of used device") },
-
-	{ Value,"ifconfig","10.200.200.3 10.200.200.1", translate("Set tun/tap adapter parameters") },
-	{ Value,"server","10.200.200.0 255.255.255.0", translate("Configure server mode") },
-	{ Value,"server_bridge","192.168.1.1 255.255.255.0 192.168.1.128 192.168.1.254", translate("Configure server bridge") },
-	{ Flag,"nobind",0, translate("Do not bind to local address and port") },
-
-	{ Value,"keepalive","10 60", translate("Helper directive to simplify the expression of --ping and --ping-restart in server mode configurations") },
-
-	{ ListValue,"proto",{ "udp", "tcp-client", "tcp-server" }, translate("Use protocol") },
-
-	{ Flag,"client",0, translate("Configure client mode") },
-	{ Flag,"client_to_client",0, translate("Allow client-to-client traffic") },
-	{ DynamicList,"remote","vpnserver.example.org", translate("Remote host name or ip address") },
-
-	{ FileUpload,"secret","/etc/openvpn/secret.key", translate("Enable Static Key encryption mode (non-TLS)") },
-	{ ListValue,"key_direction", { 0, 1 }, translate("The key direction for 'tls-auth' and 'secret' options") },
-	{ FileUpload,"pkcs12","/etc/easy-rsa/keys/some-client.pk12", translate("PKCS#12 file containing keys") },
-	{ FileUpload,"ca","/etc/easy-rsa/keys/ca.crt", translate("Certificate authority") },
-	{ FileUpload,"dh","/etc/easy-rsa/keys/dh1024.pem", translate("Diffie Hellman parameters") },
-	{ FileUpload,"cert","/etc/easy-rsa/keys/some-client.crt", translate("Local certificate") },
-	{ FileUpload,"key","/etc/easy-rsa/keys/some-client.key", translate("Local private key") },
-	{ Value,"config","/etc/openvpn/ovpn-file.ovpn", translate("Local OVPN configuration file") },
+	{ ListValue,
+		"verb",
+		{ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 },
+		translate("Set output verbosity") },
+	{ Value,
+		"nice",
+		0,
+		translate("Change process priority") },
+	{ Value,
+		"port",
+		1194,
+		translate("TCP/UDP port # for both local and remote") },
+	{ ListValue,
+		"dev_type",
+		{ "tun", "tap" },
+		translate("Type of used device") },
+	{ Value,
+		"ifconfig",
+		"10.200.200.3 10.200.200.1",
+		translate("Set tun/tap adapter parameters") },
+	{ Value,
+		"server",
+		"10.200.200.0 255.255.255.0",
+		translate("Configure server mode") },
+	{ Value,
+		"server_bridge",
+		"192.168.1.1 255.255.255.0 192.168.1.128 192.168.1.254",
+		translate("Configure server bridge") },
+	{ Flag,
+		"nobind",
+		0,
+		translate("Do not bind to local address and port") },
+	{ Value,
+		"keepalive",
+		"10 60",
+		translate("Helper directive to simplify the expression of --ping and --ping-restart in server mode configurations") },
+	{ ListValue,
+		"proto",
+		{ "udp", "tcp-client", "tcp-server" },
+		translate("Use protocol") },
+	{ Flag,
+		"client",
+		0,
+		translate("Configure client mode") },
+	{ Flag,
+		"client_to_client",
+		0,
+		translate("Allow client-to-client traffic") },
+	{ DynamicList,
+		"remote",
+		"vpnserver.example.org",
+		translate("Remote host name or ip address") },
+	{ FileUpload,
+		"secret",
+		"/etc/openvpn/secret.key",
+		translate("Enable Static Key encryption mode (non-TLS)") },
+	{ ListValue,
+		"key_direction",
+		{ 0, 1 },
+		translate("The key direction for 'tls-auth' and 'secret' options") },
+	{ FileUpload,
+		"pkcs12",
+		"/etc/easy-rsa/keys/some-client.pk12",
+		translate("PKCS#12 file containing keys") },
+	{ FileUpload,
+		"ca",
+		"/etc/easy-rsa/keys/ca.crt",
+		translate("Certificate authority") },
+	{ FileUpload,
+		"dh",
+		"/etc/easy-rsa/keys/dh1024.pem",
+		translate("Diffie Hellman parameters") },
+	{ FileUpload,
+		"cert",
+		"/etc/easy-rsa/keys/some-client.crt",
+		translate("Local certificate") },
+	{ FileUpload,
+		"key",
+		"/etc/easy-rsa/keys/some-client.key",
+		translate("Local private key") },
+	{ Value,
+		"config",
+		"/etc/openvpn/ovpn-file.ovpn",
+		translate("Local OVPN configuration file") },
 }
 
 
 local m = Map("openvpn")
-local p = m:section( SimpleSection )
-
+m.redirect = luci.dispatcher.build_url("admin", "services", "openvpn")
 m.apply_on_parse = true
 
-
+local p = m:section( SimpleSection )
 p.template = "openvpn/pageswitch"
 p.mode     = "basic"
 p.instance = arg[1]
@@ -54,7 +111,7 @@ for _, option in ipairs(basicParams) do
 		option[1], option[2],
 		option[2], option[4]
 	)
-	
+
 	o.optional = true
 
 	if option[1] == DummyValue then
@@ -91,6 +148,8 @@ for _, option in ipairs(basicParams) do
 			end
 			return AbstractValue.remove(self, section)
 		end
+	elseif option[1] == Flag then
+		o.default = nil
 	else
 		if option[1] == DynamicList then
 			function o.cfgvalue(...)
