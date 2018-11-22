@@ -93,7 +93,7 @@
 
 	<div>
 		<label><%:Filter%>:</label>
-		<input type="text" name="filter" placeholder="<%:Type to filter…%>" /><!--
+		<input type="text" name="filter" placeholder="<%:Type to filter…%>"<%=attr("value", luci.http.formvalue("query") or "")%> /><!--
 		--><button class="btn cbi-button" onclick="handleReset(event)"><%:Clear%></button>
 	</div>
 

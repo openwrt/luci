@@ -793,7 +793,7 @@ window.requestAnimationFrame(function() {
 	var filter = document.querySelector('input[name="filter"]'),
 	    keyTimeout = null;
 
-	filter.value = '';
+	filter.value = filter.getAttribute('value');
 	filter.addEventListener('keyup',
 		function(ev) {
 			if (keyTimeout !== null)
