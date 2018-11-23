@@ -321,7 +321,7 @@ function wifi_scan_trigger(radio, update)
 		return
 	end
 
-	luci.http.status(200, "Scan scheduled")
+	luci.http.status(204, "Scan scheduled")
 
 	if nixio.fork() == 0 then
 		io.stderr:close()

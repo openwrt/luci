@@ -19,178 +19,11 @@
 
 <%+header%>
 
-<script type="text/javascript">//<![CDATA[
-	var xhr = new XHR(),
-	    poll = null;
-
-	function format_signal(bss) {
-		var qval = bss.quality || 0,
-		    qmax = bss.quality_max || 100,
-		    scale = 100 / qmax * qval,
-		    range = 'none';
-
-		if (!bss.bssid || bss.bssid == '00:00:00:00:00:00')
-			range = 'none';
-		else if (scale < 15)
-			range = '0';
-		else if (scale < 35)
-			range = '0-25';
-		else if (scale < 55)
-			range = '25-50';
-		else if (scale < 75)
-			range = '50-75';
-		else
-			range = '75-100';
-
-		return E('span', {
-			class: 'ifacebadge',
-			title: '<%:Signal%>: %d<%:dB%> / <%:Quality%>: %d/%d'.format(bss.signal, qval, qmax)
-		}, [
-			E('img', { src: '<%=resource%>/icons/signal-%s.png'.format(range) }),
-			' %d%%'.format(scale)
-		]);
-	}
-
-	function format_encryption(bss) {
-		var enc = bss.encryption || { }
-
-		if (enc.wep === true)
-			return 'WEP';
-		else if (enc.wpa > 0)
-			return E('abbr', {
-				title: 'Pairwise: %h / Group: %h'.format(
-					enc.pair_ciphers.join(', '),
-					enc.group_ciphers.join(', '))
-				},
-				'%h - %h'.format(
-					(enc.wpa === 3) ? '<%:mixed WPA/WPA2%>' : (enc.wpa === 2 ? 'WPA2' : 'WPA'),
-					enc.auth_suites.join(', ')));
-		else if (enc.enabled)
-			return '<em><%:unknown%></em>';
-		else
-			return '<em><%:open%></em>';
-	}
-
-	function format_actions(bss) {
-		var enc = bss.encryption || { },
-		    input = [
-				E('input', { type: 'submit', class: 'cbi-button cbi-button-action important', value: '<%:Join Network%>' }),
-				E('input', { type: 'hidden', name: 'token',    value: '<%=token%>' }),
-				E('input', { type: 'hidden', name: 'device',   value: '<%=dev%>' }),
-				E('input', { type: 'hidden', name: 'join',     value: bss.ssid }),
-				E('input', { type: 'hidden', name: 'mode',     value: bss.mode }),
-				E('input', { type: 'hidden', name: 'bssid',    value: bss.bssid }),
-				E('input', { type: 'hidden', name: 'channel',  value: bss.channel }),
-				E('input', { type: 'hidden', name: 'clbridge', value: <%=iw.type == "wl" and 1 or 0%> }),
-				E('input', { type: 'hidden', name: 'wep',      value: enc.wep ? 1 : 0 })
-			];
-
-		if (enc.wpa) {
-			input.push(E('input', { type: 'hidden', name: 'wpa_version', value: enc.wpa }));
-
-			enc.auth_suites.forEach(function(s) {
-				input.push(E('input', { type: 'hidden', name: 'wpa_suites', value: s }));
-			});
-
-			enc.group_ciphers.forEach(function(s) {
-				input.push(E('input', { type: 'hidden', name: 'wpa_group', value: s }));
-			});
-
-			enc.pair_ciphers.forEach(function(s) {
-				input.push(E('input', { type: 'hidden', name: 'wpa_pairwise', value: s }));
-			});
-		}
-
-		return E('form', {
-			class: 'inline',
-			method: 'post',
-			action: '<%=url("admin/network/wireless_join")%>'
-		}, input);
-	}
-
-	function fade(bss, content) {
-		if (bss.stale)
-			return E('span', { style: 'opacity:0.5' }, content);
-		else
-			return content;
-	}
-
-	function flush() {
-		XHR.stop(poll);
-		XHR.halt();
-
-		scan();
-	}
-
-	function scan() {
-		var tbl = document.getElementById('scan_results');
-
-		cbi_update_table(tbl, [], '<em><img src="<%=resource%>/icons/loading.gif" class="middle" /> <%:Starting wireless scan...%></em>');
-
-		xhr.post('<%=url("admin/network/wireless_scan_trigger", dev)%>', { token: '<%=token%>' },
-			function(s) {
-				if (s.status !== 200) {
-					cbi_update_table(tbl, [], '<em><%:Scan request failed%></em>');
-					return;
-				}
-
-				var count = 0;
-
-				poll = XHR.poll(3, '<%=url("admin/network/wireless_scan_results", dev)%>', null,
-					function(s, results) {
-						if (Array.isArray(results)) {
-							var bss = [];
-
-							results.sort(function(a, b) {
-								var diff = (b.quality - a.quality) || (a.channel - b.channel);
-
-								if (diff)
-									return diff;
-
-								if (a.ssid < b.ssid)
-									return -1;
-								else if (a.ssid > b.ssid)
-									return 1;
-
-								if (a.bssid < b.bssid)
-									return -1;
-								else if (a.bssid > b.bssid)
-									return 1;
-							}).forEach(function(res) {
-								bss.push([
-									fade(res, format_signal(res)),
-									fade(res, res.ssid ? '%h'.format(res.ssid) : E('em', {}, '<%:hidden%>')),
-									fade(res, res.channel),
-									fade(res, res.mode),
-									fade(res, res.bssid),
-									fade(res, format_encryption(res)),
-									format_actions(res)
-								]);
-							});
-
-							cbi_update_table(tbl, bss, '<em><img src="<%=resource%>/icons/loading.gif" class="middle" /> <%:No scan results available yet...%>');
-						}
-
-						if (count++ >= 3) {
-							count = 0;
-							xhr.post('<%=url("admin/network/wireless_scan_trigger", dev, "1")%>',
-								{ token: '<%=token%>' }, function() { });
-						}
-					});
-
-				XHR.run();
-			});
-	}
-
-	document.addEventListener('DOMContentLoaded', scan);
-
-//]]></script>
-
 <h2 name="content"><%:Join Network: Wireless Scan%></h2>
 
 <div class="cbi-map">
 	<div class="cbi-section">
-		<div class="table" id="scan_results">
+		<div class="table"<%=attr("data-wifi-scan", dev) .. attr("data-wifi-type", iw.type)%>>
 			<div class="tr table-titles">
 				<div class="th col-2 middle center"><%:Signal%></div>
 				<div class="th col-4 middle left"><%:SSID%></div>
@@ -220,5 +53,7 @@
 		<input type="button" class="cbi-button cbi-button-action" value="<%:Repeat scan%>" onclick="flush()" />
 	</form>
 </div>
+
+<script type="text/javascript" src="<%=resource%>/view/network/wifi_join.js"></script>
 
 <%+footer%>
