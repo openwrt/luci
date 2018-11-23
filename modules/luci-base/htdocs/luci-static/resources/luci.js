@@ -74,6 +74,7 @@
 				return XHR.get(url, data, cb);
 		},
 
+		stop: function(entry) { XHR.stop(entry) },
 		halt: function() { XHR.halt() },
 		run: function() { XHR.run() },
 
@@ -310,7 +311,10 @@
 	function LuCI(env) {
 		this.env = env;
 
-		modalDiv = document.body.appendChild(this.dom.create('div', { id: 'modal_overlay' }, this.dom.create('div', { class: 'modal' })));
+		modalDiv = document.body.appendChild(
+			this.dom.create('div', { id: 'modal_overlay' },
+				this.dom.create('div', { class: 'modal', role: 'dialog', 'aria-modal': true })));
+
 		tooltipDiv = document.body.appendChild(this.dom.create('div', { class: 'cbi-tooltip' }));
 
 		document.addEventListener('mouseover', this.showTooltip.bind(this), true);
