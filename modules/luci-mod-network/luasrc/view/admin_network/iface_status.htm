@@ -1,66 +1,12 @@
 <%+cbi/valueheader%>
 
-<script type="text/javascript">//<![CDATA[
-	XHR.poll(5, '<%=url('admin/network/iface_status', self.network)%>', null,
-		function(x, ifc)
-		{
-			if (ifc && (ifc = ifc[0]))
-			{
-				var s = document.getElementById('<%=self.option%>-ifc-status'),
-				    img = s.querySelector('img'),
-				    info = s.querySelector('span'),
-				    html = '<strong><%:Device%>:</strong> %h<br />'.format(ifc.ifname);
-
-				if (ifc.ifname)
-				{
-					if (ifc.is_up)
-						html += String.format('<strong><%:Uptime%>:</strong> %t<br />', ifc.uptime);
-
-					if (ifc.macaddr)
-						html += String.format('<strong><%:MAC%>:</strong> %s<br />', ifc.macaddr);
-
-					html += String.format(
-						'<strong><%:RX%></strong>: %.2mB (%d <%:Pkts.%>)<br />' +
-						'<strong><%:TX%></strong>: %.2mB (%d <%:Pkts.%>)<br />',
-							ifc.rx_bytes, ifc.rx_packets,
-							ifc.tx_bytes, ifc.tx_packets
-					);
-
-					if (ifc.ipaddrs && ifc.ipaddrs.length)
-						for (var i = 0; i < ifc.ipaddrs.length; i++)
-							html += String.format(
-								'<strong><%:IPv4%>:</strong> %s<br />',
-								ifc.ipaddrs[i]
-							);
-
-					if (ifc.ip6addrs && ifc.ip6addrs.length)
-						for (var i = 0; i < ifc.ip6addrs.length; i++)
-							html += String.format(
-								'<strong><%:IPv6%>:</strong> %s<br />',
-								ifc.ip6addrs[i]
-							);
-
-					if (ifc.ip6prefix)
-						html += String.format('<strong><%:IPv6-PD%>:</strong> %s<br />', ifc.ip6prefix);
-
-					info.innerHTML = html;
-				}
-				else
-				{
-					info.innerHTML = '<em><%:Interface not present or not connected yet.%></em>';
-				}
-
-				img.src = '<%=resource%>/icons/%s%s.png'.format(ifc.type, ifc.is_up ? '' : '_disabled');
-			}
-		}
-	);
-//]]></script>
-
-<span class="ifacebadge large" id="<%=self.option%>-ifc-status">
+<span class="ifacebadge large"<%=attr("data-iface-status", self.network)%>>
 	<img src="<%=resource%>/icons/ethernet_disabled.png" />
 	<span>
-		<em><%:Collecting data...%></em>
+		<em class="spinning"><%:Collecting data...%></em>
 	</span>
 </span>
+
+<script type="text/javascript" src="<%=resource%>/view/network/iface_status.js"></script>
 
 <%+cbi/valuefooter%>

@@ -1,77 +1,14 @@
 <%+cbi/valueheader%>
 
-<script type="text/javascript">//<![CDATA[
-	XHR.poll(5, '<%=url('admin/network/wireless_status', self.ifname)%>', null,
-		function(x, iw)
-		{
-			if (iw && (iw = iw[0]))
-			{
-				var is_assoc = (iw.bssid && iw.bssid != '00:00:00:00:00:00' && iw.channel && !iw.disabled);
-				var p = iw.quality;
-				var q = iw.disabled ? -1 : p;
-
-				var icon;
-				if (q < 0)
-					icon = "<%=resource%>/icons/signal-none.png";
-				else if (q == 0)
-					icon = "<%=resource%>/icons/signal-0.png";
-				else if (q < 25)
-					icon = "<%=resource%>/icons/signal-0-25.png";
-				else if (q < 50)
-					icon = "<%=resource%>/icons/signal-25-50.png";
-				else if (q < 75)
-					icon = "<%=resource%>/icons/signal-50-75.png";
-				else
-					icon = "<%=resource%>/icons/signal-75-100.png";
-
-				var s = document.getElementById('<%=self.option%>-iw-status'),
-				    small = s.querySelector('small'),
-				    info = s.querySelector('span');
-
-				small.innerHTML = info.innerHTML = String.format(
-					'<img src="%s" title="<%:Signal%>: %d <%:dBm%> / <%:Noise%>: %d <%:dBm%>" />&#160;<br />%d%%&#160;',
-						icon, iw.signal, iw.noise, p
-				);
-
-				if (is_assoc)
-					info.innerHTML = String.format(
-						'<strong><%:Mode%>:</strong> %s | ' +
-						'<strong><%:SSID%>:</strong> %h<br />' +
-						'<strong><%:BSSID%>:</strong> %s<br />' +
-						'<strong><%:Encryption%>:</strong> %s<br />' +
-						'<strong><%:Channel%>:</strong> %d (%.3f <%:GHz%>)<br />' +
-						'<strong><%:Tx-Power%>:</strong> %d <%:dBm%><br />' +
-						'<strong><%:Signal%>:</strong> %d <%:dBm%> | ' +
-						'<strong><%:Noise%>:</strong> %d <%:dBm%><br />' +
-						'<strong><%:Bitrate%>:</strong> %.1f <%:Mbit/s%> | ' +
-						'<strong><%:Country%>:</strong> %s',
-							iw.mode, iw.ssid, iw.bssid,
-							iw.encryption ? iw.encryption : '<%:None%>',
-							iw.channel, iw.frequency ? iw.frequency : 0,
-							iw.txpower, iw.signal, iw.noise,
-							iw.bitrate ? iw.bitrate : 0, iw.country
-					);
-				else
-					info.innerHTML = String.format(
-						'<strong><%:SSID%>:</strong> %h | ' +
-						'<strong><%:Mode%>:</strong> %s<br />' +
-						'<em>%s</em>',
-							iw.ssid || '?', iw.mode,
-							iw.disabled ? '<em><%:Wireless is disabled%></em>'
-							            : '<em><%:Wireless is not associated%></em>'
-					);
-			}
-		}
-	);
-//]]></script>
-
-<span class="ifacebadge large" id="<%=self.option%>-iw-status">
+<span class="ifacebadge large"<%=attr("data-wifi-status", self.ifname)%>>
 	<small>
 		<img src="<%=resource%>/icons/signal-none.png" title="<%:Not associated%>" />&#160;
 	</small>
 	<span>
-		<em><%:Collecting data...%></em>
+		<em class="spinning"><%:Collecting data...%></em>
 	</span>
 </span>
+
+<script type="text/javascript" src="<%=resource%>/view/network/wifi_status.js"></script>
 
 <%+cbi/valuefooter%>
