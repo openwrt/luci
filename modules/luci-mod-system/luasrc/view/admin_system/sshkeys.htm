@@ -4,6 +4,19 @@
 	.cbi-dynlist {
 		max-width: 100%;
 	}
+
+	.cbi-dynlist .item > small {
+		display: block;
+		direction: rtl;
+		overflow: hidden;
+		text-align: left;
+	}
+
+	.cbi-dynlist .item > small > code {
+		direction: ltr;
+		white-space: nowrap;
+		unicode-bidi: bidi-override;
+	}
 </style>
 
 <div class="cbi-map">
