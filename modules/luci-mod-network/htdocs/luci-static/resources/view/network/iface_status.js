@@ -6,10 +6,8 @@ requestAnimationFrame(function() {
 
 		L.poll(5, L.url('admin/network/iface_status', network), null, function(xhr, ifaces) {
 			var ifc = Array.isArray(ifaces) ? ifaces[0] : null;
-			if (!ifc) {
-				alert('No ifc!');
+			if (!ifc)
 				return;
-			}
 
 			L.itemlist(info, [
 				_('Device'),  ifc.ifname,
