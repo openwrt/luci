@@ -1,0 +1,269 @@
+#!/bin/sh /etc/rc.common
+#
+# Copyright (C) 2014-2017 Jian Chang <aa65535@live.com>
+#
+# This is free software, licensed under the GNU General Public License v3.
+# See /LICENSE for more information.
+#
+
+START=90
+STOP=15
+
+NAME=shadowsocksr
+EXTRA_COMMANDS=rules
+
+uci_get_by_name() {
+	local ret=$(uci get $NAME.$1.$2 2>/dev/null)
+	echo ${ret:=$3}
+}
+
+uci_get_by_type() {
+	local ret=$(uci get $NAME.@$1[0].$2 2>/dev/null)
+	echo ${ret:=$3}
+}
+
+uci_bool_by_name() {
+	case "$(uci_get_by_name $1 $2)" in
+		1|on|true|yes|enabled) return 0;;
+	esac
+	return 1
+}
+
+validate_server() {
+	[ "$(uci get $NAME.$1 2>/dev/null)" = "servers" ]
+}
+
+has_valid_server() {
+	for server in $@; do
+		validate_server $server && return 0
+	done
+	return 1
+}
+
+get_arg_udp() {
+	local server=$(uci_get_by_type transparent_proxy udp_relay_server)
+	[ "$server" = "same" ] || validate_server $server && echo "-u"
+}
+
+get_arg_out() {
+	case "$(uci_get_by_type access_control self_proxy 1)" in
+		1) echo "-o";;
+		2) echo "-O";;
+	esac
+}
+
+get_arg_tfo() {
+	uci_bool_by_name $1 fast_open && echo "--fast-open"
+}
+
+get_arg_tnd() {
+	uci_bool_by_name $1 no_delay && echo "--no-delay"
+}
+
+get_server_ips() {
+	echo $(uci_get_by_name $1 server)
+}
+
+get_lan_hosts() {
+	uci_bool_by_name $1 enable && \
+		echo "$(uci_get_by_name $1 type),$(uci_get_by_name $1 host)"
+}
+
+gen_config_file() {
+	local config_file=/var/etc/$NAME.$1.json
+	cat <<-EOF >$config_file
+		{
+			"server": "$(uci_get_by_name $1 server)",
+			"server_port": $(uci_get_by_name $1 server_port),
+			"password": "$(uci_get_by_name $1 password)",
+			"method": "$(uci_get_by_name $1 encrypt_method)",
+			"local_address": "0.0.0.0",
+			"timeout": $(uci_get_by_name $1 timeout 60),
+			"protocol": "$(uci_get_by_name $1 protocol)",
+			"protocol_param": "$(uci_get_by_name $1 protocol_param)",
+			"obfs": "$(uci_get_by_name $1 obfs)",
+			"obfs_param": "$(uci_get_by_name $1 obfs_param)",
+			"reuse_port": true
+		}
+EOF
+	echo $config_file
+}
+
+start_rules() {
+	config_load $NAME
+	/usr/bin/ssr-rules \
+		-s "$(config_foreach get_server_ips servers)" \
+		-l "$(uci_get_by_type transparent_proxy local_port 1234)" \
+		-B "$(uci_get_by_type access_control wan_bp_list)" \
+		-b "$(uci_get_by_type access_control wan_bp_ips)" \
+		-W "$(uci_get_by_type access_control wan_fw_list)" \
+		-w "$(uci_get_by_type access_control wan_fw_ips)" \
+		-I "$(uci_get_by_type access_control lan_ifaces)" \
+		-d "$(uci_get_by_type access_control lan_target)" \
+		-a "$(config_foreach get_lan_hosts lan_hosts)" \
+		-e "$(uci_get_by_type access_control ipt_ext)" \
+		$(get_arg_out) $(get_arg_udp)
+}
+
+rules() {
+	pidof ssr-redir >/dev/null || return 0
+	start_rules || /usr/bin/ssr-rules -f
+}
+
+start_redir() {
+	validate_server $1 || return 0
+	ssr-redir -c $(gen_config_file $1) $2 $(get_arg_tfo $1) \
+		-l $(uci_get_by_type transparent_proxy local_port 1234) \
+		--mtu $(uci_get_by_type transparent_proxy mtu 1492) \
+		-f /var/run/ssr-redir$3-$1.pid
+}
+
+ssr_redir() {
+	command -v ssr-redir >/dev/null 2>&1 || return 1
+	local main_server=$(uci_get_by_type transparent_proxy main_server)
+	has_valid_server $main_server || return 1
+	local udp_relay_server=$(uci_get_by_type transparent_proxy udp_relay_server)
+	if [ "$udp_relay_server" = "same" ]; then
+		for server in $main_server; do
+			start_redir $server -u
+		done
+	else
+		for server in $main_server; do
+			start_redir $server
+		done
+		for server in $udp_relay_server; do
+			start_redir $server -U -udp
+		done
+	fi
+}
+
+start_local() {
+	validate_server $1 || return 0
+	ssr-local -c $(gen_config_file $1) -u $(get_arg_tfo $1) \
+		-l $(uci_get_by_type socks5_proxy local_port 1080) \
+		--mtu $(uci_get_by_type socks5_proxy mtu 1492) \
+		-f /var/run/ssr-local-$1.pid
+}
+
+ssr_local() {
+	command -v ssr-local >/dev/null 2>&1 || return 0
+	for server in $(uci_get_by_type socks5_proxy server); do
+		start_local $server
+	done
+}
+
+start_tunnel() {
+	validate_server $1 || return 0
+	ssr-tunnel -c $(gen_config_file $1) -u \
+		-l $(uci_get_by_type port_forward local_port 5300) \
+		-L $(uci_get_by_type port_forward destination 8.8.4.4:53) \
+		--mtu $(uci_get_by_type port_forward mtu 1492) \
+		-f /var/run/ssr-tunnel-$1.pid
+}
+
+ssr_tunnel() {
+	command -v ssr-tunnel >/dev/null 2>&1 || return 0
+	for server in $(uci_get_by_type port_forward server); do
+		start_tunnel $server
+	done
+}
+
+start_pdnsd() {
+	if [ ! -f /var/pdnsd/pdnsd.cache ]; then
+		mkdir -p /var/pdnsd
+		dd if=/dev/zero of=/var/pdnsd/pdnsd.cache bs=1 count=4 2> /dev/null
+		chown -R nobody.nogroup /var/pdnsd
+	fi
+	pdnsd --daemon -p /var/run/pdnsd.pid
+}
+
+get_dnsmasq_confdir() {
+	local pid=$(pidof dnsmasq)
+	[ $? -ne 0 ] && echo "/tmp/dnsmasq.d"
+	local conf_dir=$(cat /etc/dnsmasq.conf | grep conf-dir= | sed 's/.*=//')
+	local conf_tmp=$(cat /proc/$pid/cmdline | grep dnsmasq.conf)
+	local conf_dir_tmp=$(cat $conf_tmp | grep conf-dir= | sed 's/.*=//')
+	if [ -n "$conf_dir" ]; then
+		echo $conf_dir
+	elif [  -n "$conf_dir_tmp" ];then
+		echo $conf_dir_tmp
+	else
+		echo "/tmp/dnsmasq.d"
+	fi
+}
+
+dns_poisoning() {
+	local gfw_list=/etc/shadowsocksr/dnsmasq_gfwlist.conf
+	local gfw_list_tmp=$dnsmasq_confdir/dnsmasq_gfwlist.conf
+	local method=$(uci_get_by_type dns_poisoning method)
+	if [ $(uci_get_by_type dns_poisoning method) != "nil" ]; then
+		case "$method" in
+			cdns)
+				cdns -c /etc/cdns.json
+			;;
+			dnsforwarder)
+				uci set dns-forwarder.@dns-forwarder[0].enable=1
+				uci set dns-forwarder.@dns-forwarder[0].dns_servers=101.6.6.6
+				uci commit dns-forwarder
+				/etc/init.d/dns-forwarder start
+			;;
+			https_dns_proxy)
+				uci set https_dns_proxy.@https_dns_proxy[0].listen_port='5300'
+				uci commit https_dns_proxy
+				/etc/init.d/https_dns_proxy start
+			;;
+			pdnsd)
+				start_pdnsd
+			;;
+		esac
+		[ ! -f $gfw_list_tmp ] && {
+			ln -s $gfw_list $gfw_list_tmp
+			dnsmasq_restart=1
+		}
+	else
+		[ -f $gfw_list_tmp ] && {
+			rm $gfw_list_tmp
+			dnsmasq_restart=1
+		}
+	fi
+	ls /etc/rc.d/*dns-forwarder >/dev/null 2>&1
+	[ $? -eq 0 ] && /etc/init.d/dns-forwarder disable
+	ls /etc/rc.d/*https_dns_proxy >/dev/null 2>&1
+	[ $? -eq 0 ] && /etc/init.d/https_dns_proxy disable
+}
+
+corn() {
+	[ -n "$(grep -w "/usr/share/shadowsocksr/subscribe.sh" /etc/crontabs/root)" ] && sed -i '/\/usr\/share\/shadowsocksr\/subscribe.sh/d' /etc/crontabs/root
+	[ $(uci_get_by_type server_subscribe auto_update 0) -eq 1 ] && echo "0 $(uci_get_by_type server_subscribe auto_update_time) * * * /usr/share/shadowsocksr/subscribe.sh" >> /etc/crontabs/root
+	[ -z "$(grep -w "/usr/share/shadowsocksr/update.sh" /etc/crontabs/root)" ] && echo "0 0 * * 0 /usr/share/shadowsocksr/update.sh" >> /etc/crontabs/root
+}
+start() {
+	pidof ssr-redir ssr-local ssr-tunnel >/dev/null && return 0
+	dnsmasq_confdir=$(get_dnsmasq_confdir)
+	dnsmasq_restart=0
+	mkdir -p /var/run /var/etc
+	ssr_redir && rules
+	ssr_local
+	ssr_tunnel
+	dns_poisoning
+	corn
+	[ $dnsmasq_restart -eq 1 ] && /etc/init.d/dnsmasq restart >/dev/null 2>&1
+}
+
+boot() {
+	local delay=$(uci_get_by_type general startup_delay 0)
+	(sleep $delay && start >/dev/null 2>&1) &
+	return 0
+}
+
+kill_all() {
+	kill -9 $(pidof $@) >/dev/null 2>&1
+}
+
+stop() {
+	/usr/bin/ssr-rules -f
+	kill_all ssr-redir ssr-local ssr-tunnel cdns pdnsd
+	rm  -rf /var/pdnsd
+	/etc/init.d/dns-forwarder stop >/dev/null 2>&1
+	/etc/init.d/https_dns_proxy stop >/dev/null 2>&1
+}

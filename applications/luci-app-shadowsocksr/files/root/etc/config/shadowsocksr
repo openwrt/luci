@@ -1,0 +1,38 @@
+
+config general
+	option startup_delay '0'
+
+config transparent_proxy
+	list main_server 'nil'
+	option udp_relay_server 'nil'
+	option local_port '1234'
+
+config socks5_proxy
+	list server 'nil'
+	option local_port '1080'
+
+config port_forward
+	list server 'nil'
+	option local_port '5300'
+	option destination '8.8.4.4:53'
+
+config servers
+	option alias 'sample'
+	option fast_open '0'
+	option server '127.0.0.1'
+	option server_port '8388'
+	option timeout '60'
+	option password 'm'
+	option encrypt_method 'aes-128-ctr'
+	option protocol 'auth_aes128_md5'
+	option obfs 'tls1.2_ticket_auth'
+
+config access_control
+	option self_proxy '1'
+	option wan_bp_list '/etc/shadowsocksr/china_chnroute.txt'
+
+config server_subscribe
+	option auto_update '0'
+
+config dns_poisoning
+	option method 'nil'

@@ -1,0 +1,25 @@
+#!/bin/sh
+uci get shadowsocksr.@general[-1] >/dev/null 2>&1 || \
+	uci add shadowsocksr general >/dev/null 2>&1
+uci get shadowsocksr.@transparent_proxy[-1] >/dev/null 2>&1 || \
+	uci add shadowsocksr transparent_proxy >/dev/null 2>&1
+uci get shadowsocksr.@socks5_proxy[-1] >/dev/null 2>&1 || \
+	uci add shadowsocksr socks5_proxy >/dev/null 2>&1
+uci get shadowsocksr.@port_forward[-1] >/dev/null 2>&1 || \
+	uci add shadowsocksr port_forward >/dev/null 2>&1
+uci get shadowsocksr.@access_control[-1] >/dev/null 2>&1 || \
+	uci add shadowsocksr access_control >/dev/null 2>&1
+uci commit shadowsocksr
+uci -q batch <<-EOF >/dev/null
+	delete ucitrack.@shadowsocksr[-1]
+	add ucitrack shadowsocksr
+	set ucitrack.@shadowsocksr[-1].init=shadowsocksr
+	commit ucitrack
+	delete firewall.shadowsocksr
+	set firewall.shadowsocksr=include
+	set firewall.shadowsocksr.type=script
+	set firewall.shadowsocksr.path=/var/etc/shadowsocksr.include
+	set firewall.shadowsocksr.reload=1
+	commit firewall
+EOF
+exit 0
