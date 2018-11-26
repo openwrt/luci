@@ -87,10 +87,6 @@ local basicParams = {
 		"key",
 		"/etc/easy-rsa/keys/some-client.key",
 		translate("Local private key") },
-	{ Value,
-		"config",
-		"/etc/openvpn/ovpn-file.ovpn",
-		translate("Local OVPN configuration file") },
 }
 
 

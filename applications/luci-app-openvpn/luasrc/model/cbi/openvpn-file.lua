@@ -1,10 +1,11 @@
 -- Licensed to the public under the Apache License 2.0.
 
-local ip       = require("luci.ip")
-local fs       = require("nixio.fs")
-local util     = require("luci.util")
-local uci      = require("luci.model.uci").cursor()
-local cfg_file = uci:get("openvpn", arg[1], "config")
+local ip        = require("luci.ip")
+local fs        = require("nixio.fs")
+local util      = require("luci.util")
+local uci       = require("luci.model.uci").cursor()
+local cfg_file  = uci:get("openvpn", arg[1], "config")
+local auth_file = cfg_file:match("(.+)%..+").. ".auth"
 
 local m = Map("openvpn")
 
@@ -36,25 +37,45 @@ f:append(Template("openvpn/ovpn_css"))
 f.submit = translate("Save")
 f.reset = false
 
-s = f:section(SimpleSection, nil, translatef("This form allows you to modify the content of the OVPN config file (%s). ", cfg_file))
-file = s:option(TextValue, "data")
+s = f:section(SimpleSection, nil, translatef("Section to modify the OVPN config file (%s)", cfg_file))
+file = s:option(TextValue, "data1")
 file.datatype = "string"
 file.rows = 20
-file.rmempty = true
 
 function file.cfgvalue()
 	return fs.readfile(cfg_file) or ""
 end
 
-function file.write(self, section, data)
-	return fs.writefile(cfg_file, "\n" .. util.trim(data:gsub("\r\n", "\n")) .. "\n")
+function file.write(self, section, data1)
+	return fs.writefile(cfg_file, "\n" .. util.trim(data1:gsub("\r\n", "\n")) .. "\n")
 end
 
 function file.remove(self, section, value)
 	return fs.writefile(cfg_file, "")
 end
 
-function s.handle(self, state, data)
+function s.handle(self, state, data1)
+	return true
+end
+
+s = f:section(SimpleSection, nil, translatef("Section to add an optional 'auth-user-pass' file with your credentials (%s)", auth_file))
+file = s:option(TextValue, "data2")
+file.datatype = "string"
+file.rows = 5
+
+function file.cfgvalue()
+	return fs.readfile(auth_file) or ""
+end
+
+function file.write(self, section, data2)
+	return fs.writefile(auth_file, util.trim(data2:gsub("\r\n", "\n")) .. "\n")
+end
+
+function file.remove(self, section, value)
+	return fs.writefile(auth_file, "")
+end
+
+function s.handle(self, state, data2)
 	return true
 end
 

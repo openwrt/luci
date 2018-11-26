@@ -69,10 +69,14 @@ function s.create(self, name)
 			local options = uci:get_all("openvpn_recipes", recipe)
 			for k, v in pairs(options) do
 				if k ~= "_role" and k ~= "_description" then
+					if type(v) == "boolean" then
+						v = v and "1" or "0"
+					end
 					uci:set("openvpn", name, k, v)
 				end
 			end
 			uci:save("openvpn")
+			uci:commit("openvpn")
 			if extedit then
 				luci.http.redirect( self.extedit:format(name) )
 			end
@@ -80,8 +84,21 @@ function s.create(self, name)
 	elseif #name > 0 then
 		self.invalid_cts = true
 	end
-
 	return 0
+end
+
+function s.remove(self, name)
+	local cfg_file  = "/etc/openvpn/" ..name.. ".ovpn"
+	local auth_file = "/etc/openvpn/" ..name.. ".auth"
+	if fs.access(cfg_file) then
+		fs.unlink(cfg_file)
+	end
+	if fs.access(auth_file) then
+		fs.unlink(auth_file)
+	end
+	uci:delete("openvpn", name)
+	uci:save("openvpn")
+	uci:commit("openvpn")
 end
 
 s:option( Flag, "enabled", translate("Enabled") )
@@ -124,12 +141,30 @@ end
 local port = s:option( DummyValue, "port", translate("Port") )
 function port.cfgvalue(self, section)
 	local val = AbstractValue.cfgvalue(self, section)
+	if not val then
+		local file_cfg = self.map:get(section, "config")
+		if file_cfg  and fs.access(file_cfg) then
+			val = sys.exec("awk '{if(match(tolower($1),/^port$/)&&match($2,/[0-9]+/)){cnt++;printf $2;exit}}END{if(cnt==0)printf \"-\"}' " ..file_cfg)
+			if val == "-" then
+				val = sys.exec("awk '{if(match(tolower($1),/^remote$/)&&match($3,/[0-9]+/)){cnt++;printf $3;exit}}END{if(cnt==0)printf \"-\"}' " ..file_cfg)
+			end
+		end
+	end
 	return val or "-"
 end
 
 local proto = s:option( DummyValue, "proto", translate("Protocol") )
 function proto.cfgvalue(self, section)
 	local val = AbstractValue.cfgvalue(self, section)
+	if not val then
+		local file_cfg = self.map:get(section, "config")
+		if file_cfg and fs.access(file_cfg) then
+			val = sys.exec("awk '{if(match(tolower($1),/^proto$/)&&match(tolower($2),/^udp[46]*$|^tcp[46]*-server$|^tcp[46]*-client$/)){cnt++;printf tolower($2);exit}}END{if(cnt==0)printf \"-\"}' " ..file_cfg)
+			if val == "-" then
+				val = sys.exec("awk '{if(match(tolower($1),/^remote$/)&&match(tolower($4),/^udp[46]*$|^tcp[46]*-server$|^tcp[46]*-client$/)){cnt++;printf $4;exit}}END{if(cnt==0)printf \"-\"}' " ..file_cfg)
+			end
+		end
+	end
 	return val or "-"
 end
 
