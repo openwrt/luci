@@ -695,6 +695,10 @@ local knownParams = {
 			"key_direction",
 			{ 0, 1 },
 			translate("The key direction for 'tls-auth' and 'secret' options") },
+		{ Flag,
+			"ncp_disable",
+			0,
+			translate("This completely disables cipher negotiation") },
 	} }
 }
 
