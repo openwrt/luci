@@ -751,6 +751,10 @@ local knownParams = {
 			"ncp_disable",
 			0,
 			translate("This completely disables cipher negotiation") },
+		{ Value,
+			"ncp_ciphers",
+			"AES-256-GCM:AES-128-GCM",
+			translate("Restrict the allowed ciphers to be negotiated") },
 	} }
 }
 
