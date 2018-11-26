@@ -158,6 +158,10 @@ local knownParams = {
 			"script_security",
 			{ 0, 1, 2, 3 },
 			translate("Policy level over usage of external programs and scripts") },
+		{ ListValue,
+			"compress",
+			{ "lzo", "lz4" },
+			translate("Enable a compression algorithm") },
 	} },
 
 	{ "Networking", {
