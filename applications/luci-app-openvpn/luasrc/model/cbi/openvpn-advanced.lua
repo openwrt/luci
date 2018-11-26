@@ -546,6 +546,10 @@ local knownParams = {
 			{ "", "local", "def1", "local def1" },
 			translate("Automatically redirect default route"),
 			{ client="1" } },
+		{ Value,
+			"verify_client_cert",
+			{  "none", "optional", "require" },
+			translate("Specify whether the client is required to supply a valid certificate") },
 	} },
 
 	{ "Cryptography", {
