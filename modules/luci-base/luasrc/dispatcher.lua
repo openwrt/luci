@@ -40,6 +40,28 @@ function build_url(...)
 	return table.concat(url, "")
 end
 
+function _ordered_children(node)
+	local name, child, children = nil, nil, {}
+
+	for name, child in pairs(node.nodes) do
+		children[#children+1] = {
+			name  = name,
+			node  = child,
+			order = child.order or 100
+		}
+	end
+
+	table.sort(children, function(a, b)
+		if a.order == b.order then
+			return a.name < b.name
+		else
+			return a.order < b.order
+		end
+	end)
+
+	return children
+end
+
 function node_visible(node)
    if node then
 	  return not (
@@ -55,15 +77,10 @@ end
 function node_childs(node)
 	local rv = { }
 	if node then
-		local k, v
-		for k, v in util.spairs(node.nodes,
-			function(a, b)
-				return (node.nodes[a].order or 100)
-				     < (node.nodes[b].order or 100)
-			end)
-		do
-			if node_visible(v) then
-				rv[#rv+1] = k
+		local _, child
+		for _, child in ipairs(_ordered_children(node)) do
+			if node_visible(child.node) then
+				rv[#rv+1] = child.name
 			end
 		end
 	end
@@ -699,24 +716,7 @@ end
 -- Subdispatchers --
 
 function _find_eligible_node(root, prefix, deep, types, descend)
-	local _, cur_name, cur_node
-	local childs = { }
-
-	for cur_name, cur_node in pairs(root.nodes) do
-		childs[#childs+1] = {
-			node = cur_node,
-			name = cur_name,
-			order = cur_node.order or 100
-		}
-	end
-
-	table.sort(childs, function(a, b)
-		if a.order == b.order then
-			return a.name < b.name
-		else
-			return a.order < b.order
-		end
-	end)
+	local children = _ordered_children(root)
 
 	if not root.leaf and deep ~= nil then
 		local sub_path = { unpack(prefix) }
@@ -725,10 +725,11 @@ function _find_eligible_node(root, prefix, deep, types, descend)
 			deep = nil
 		end
 
-		for _, cur_node in ipairs(childs) do
-			sub_path[#prefix+1] = cur_node.name
+		local _, child
+		for _, child in ipairs(children) do
+			sub_path[#prefix+1] = child.name
 
-			local res_path = _find_eligible_node(cur_node.node, sub_path,
+			local res_path = _find_eligible_node(child.node, sub_path,
 			                                     deep, types, true)
 
 			if res_path then
