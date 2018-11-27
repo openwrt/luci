@@ -272,15 +272,21 @@
         }
         var a = window.getComputedStyle($(".cbi-section .table .tr:first-child")[0], ':before').getPropertyValue('content');
         var b = window.getComputedStyle($('.cbi-section .table .tr:last-child')[0], ':before').getPropertyValue('content');
-        console.log(typeof a);
         
         if( a != 'none' || b != 'none' ){
             $('.cbi-section .table .tr:first-child .td:first-child').css('border-top-left-radius', '0');
             $('.cbi-section .table .tr:last-child .td:first-child').css('border-bottom-left-radius', '0');
             $('.cbi-section .table .tr:first-child .th:first-child').css('border-top-left-radius', '0');
-            console.log($('.cbi-section .table .tr:last-child .td:first-child'));
             
         }
     });
+
+    $('<samll>').text($('.cbi-progressbar').attr('title')).appendTo('.cbi-progressbar');
+    setInterval(function(){
+        $('.cbi-progressbar').each(function(i, e){
+            $(this).children("samll").text($(this).attr('title'));
+        });
+        
+    }, 5000);
 
 })(jQuery);
