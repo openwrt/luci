@@ -76,30 +76,12 @@
 			var n = document.getElementById('_newfwd.name');
 			var p = document.getElementById('_newfwd.proto');
 			var i = document.getElementById('_newfwd.intport');
-			var hints = {
-			/*  port    name     0=both, 1=tcp, 2=udp, 3=other */
-				21:   [ 'FTP',   1 ],
-				22:   [ 'SSH',   1 ],
-				53:   [ 'DNS',   0 ],
-				80:   [ 'HTTP',  1 ],
-				443:  [ 'HTTPS', 1 ],
-				3389: [ 'RDP',   1 ],
-				5900: [ 'VNC',   1 ],
-			};
 
 			if (!this.className.match(/invalid/))
 			{
 				if (!i.value) i.value = this.value;
 
-				var hint = hints[this.value || 0] || hints[i.value || 0];
-				if (hint)
-				{
-					p.selectedIndex = hint[1];
-
-					if (!n.value)
-						n.value = hint[0];
-				}
-				else if (!n.value)
+				if (!n.value)
 				{
 					n.value = 'Forward' + this.value;
 				}
