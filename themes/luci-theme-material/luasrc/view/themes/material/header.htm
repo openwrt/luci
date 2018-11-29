@@ -182,23 +182,13 @@
 	<meta charset="utf-8">
 	<title><%=striptags( (boardinfo.hostname or "?") .. ( (node and node.title) and ' - ' .. translate(node.title) or '')) %> - LuCI</title>
 	<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"/>
-	<meta name="format-detection" content="telephone=no, email=no"/>
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name="mobile-web-app-capable" content="yes">
-	<meta name="x5-fullscreen" content="true">
-	<meta name="full-screen" content="yes">
-	<meta name="x5-page-mode" content="app">
-	<meta name="browsermode" content="application">
-	<meta name="theme-color" content="#0099CC">
+	<meta name="theme-color" content="#09c">
 	<meta name="msapplication-tap-highlight" content="no">
-	<meta name="msapplication-TileColor" content="#0099CC">
-
+	<meta name="msapplication-TileColor" content="#09c">
 	<meta name="application-name" content="<%=striptags( (boardinfo.hostname or "?") ) %> - LuCI">
 	<meta name="apple-mobile-web-app-title" content="<%=striptags( (boardinfo.hostname or "?") ) %> - LuCI">
-	<meta name="msapplication-TileImage" content="<%=media%>/logo.png"/>
-	<link rel="icon" href="<%=media%>/logo.png" sizes="144x144">
-	<link rel="apple-touch-icon-precomposed" href="<%=media%>/logo.png" sizes="144x144">
-
 	<link rel="stylesheet" href="<%=media%>/cascade.css">
 	<link rel="shortcut icon" href="<%=media%>/favicon.ico">
 	<% if node and node.css then %>
