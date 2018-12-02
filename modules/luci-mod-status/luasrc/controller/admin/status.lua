@@ -52,22 +52,12 @@ function dump_iptables(family, table)
 		local s
 		for s in lines do
 			if s == table then
-				local ipt = io.popen(
-					"/usr/sbin/%stables -w -t %s --line-numbers -nxvL"
-					%{ prefix, table })
-
-				if ipt then
-					luci.http.prepare_content("text/plain")
-
-					while true do
-						s = ipt:read(1024)
-						if not s then break end
-						luci.http.write(s)
-					end
-
-					ipt:close()
-					return
-				end
+				luci.http.prepare_content("text/plain")
+				luci.sys.process.exec({
+					"/usr/sbin/%stables" % prefix, "-w", "-t", table,
+					"--line-numbers", "-nxvL"
+				}, luci.http.write)
+				return
 			end
 		end
 	end
