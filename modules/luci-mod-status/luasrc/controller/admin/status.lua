@@ -53,7 +53,7 @@ function dump_iptables(family, table)
 		for s in lines do
 			if s == table then
 				local ipt = io.popen(
-					"/usr/sbin/%stables -t %s --line-numbers -nxvL"
+					"/usr/sbin/%stables -w -t %s --line-numbers -nxvL"
 					%{ prefix, table })
 
 				if ipt then
