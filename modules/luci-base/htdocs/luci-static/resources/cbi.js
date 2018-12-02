@@ -2196,12 +2196,12 @@ function hideModal()
 document.addEventListener('DOMContentLoaded', function() {
 	document.addEventListener('validation-failure', function(ev) {
 		if (ev.target === document.activeElement)
-			showTooltip(ev);
+			L.showTooltip(ev);
 	});
 
 	document.addEventListener('validation-success', function(ev) {
 		if (ev.target === document.activeElement)
-			hideTooltip(ev);
+			L.hideTooltip(ev);
 	});
 
 	document.querySelectorAll('.table').forEach(cbi_update_table);
