@@ -369,7 +369,6 @@ div>.table>.tbody>.tr:nth-of-type(2n) {
     background-color: #9bc1cc;
     border-radius: 20px;
     overflow: hidden;
-    border: none !important;
     position: relative;
 }
 .cbi-progressbar div {
@@ -377,7 +376,8 @@ div>.table>.tbody>.tr:nth-of-type(2n) {
     height: 20px;
     border-radius: 20px;
 }
-.cbi-progressbar samll {
+.cbi-progressbar::after {
+    content: attr(title);
     position: absolute;
     top: 0;
     left: 0;

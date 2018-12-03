@@ -286,13 +286,4 @@
         });
     });
 
-    $('<samll>').text($('.cbi-progressbar').attr('title')).appendTo('.cbi-progressbar');
-    setInterval(function(){
-        $('.cbi-progressbar').each(function(i, e){
-            $(this).children("samll").text($(this).attr('title'));
-        });
-        
-    }, 5000);
-    
-
 })(jQuery);
