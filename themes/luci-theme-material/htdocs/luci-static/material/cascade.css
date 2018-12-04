@@ -428,13 +428,16 @@ header > .fill > .container {
 	user-select: none;
 }
 
-header > .fill > .container > img {
-	width: calc(0% + 10rem);
-	margin: -.1rem 3.5rem 0 1.5rem;
-	pointer-events: none;
+header > .fill > .container > #logo {
+	margin: 0 3.5rem 0 1.5rem;
 }
 
-body:not(.logged-in) > header > .fill > .container > img {
+header > .fill > .container > #logo > img {
+	width: calc(0% + 10rem);
+	margin-top: -.1rem;
+}
+
+body:not(.logged-in) > header > .fill > .container > #logo {
 	display: none;
 }
 
@@ -2373,7 +2376,7 @@ input[name="nslookup"] {
 
 [data-page^="admin-system-commands"] .panel-title,
 [data-page^="command-cfg"] .mobile-hide,
-[data-page^="command-cfg"] header > .fill > .container > img {
+[data-page^="command-cfg"] header > .fill > .container > #logo {
 	display: none;
 }
 
@@ -2395,8 +2398,8 @@ input[name="nslookup"] {
 }
 
 @media screen and (max-width: 1600px) {
-	header > .fill > .container > img {
-		margin: -.1rem 2.5rem 0 .5rem;
+	header > .fill > .container > #logo {
+		margin: 0 2.5rem 0 .5rem;
 	}
 
 	.main-left {
@@ -2522,7 +2525,7 @@ input[name="nslookup"] {
 }
 
 @media screen and (max-width: 1152px) {
-	header > .fill > .container > img {
+	header > .fill > .container > #logo {
 		display: none;
 	}
 
