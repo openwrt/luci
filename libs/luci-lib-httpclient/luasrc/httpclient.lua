@@ -102,7 +102,9 @@ function request_raw(uri, options)
 		uri = uri .. '?' .. http.urlencode_params(options.params)
 	end
 
+	local ipv6_enabled = false
 	if uri:find("%[") then
+		ipv6_enabled = true
 		if uri:find("@") then
 			pr, auth, host, port, path = uri:match("(%w+)://(.+)@(%b[]):?([0-9]*)(.*)")
 			host = host:sub(2,-2)
@@ -162,7 +164,12 @@ function request_raw(uri, options)
 
 	-- Pre assemble fixes	
 	if protocol == "HTTP/1.1" then
-		headers.Host = headers.Host or host
+		if ipv6_enabled then
+			local ipv6_host = host:gmatch("[%w\\:]+")()
+			headers.Host = headers.Host or "[" .. ipv6_host .. "]:" .. port
+		else
+			headers.Host = headers.Host or host .. ':' .. port
+		end
 	end
 	
 	if type(options.body) == "table" then
