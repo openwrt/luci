@@ -12,7 +12,6 @@
 */
 
 var cbi_d = [];
-var cbi_t = [];
 var cbi_strings = { path: {}, label: {} };
 
 function s8(bytes, off) {
@@ -727,13 +726,13 @@ function cbi_d_update() {
 			parent.parentNode.style.display = (parent.options.length <= 1) ? 'none' : '';
 	}
 
-	if (entry && entry.parent) {
-		if (!cbi_t_update())
-			cbi_tag_last(parent);
-	}
+	if (entry && entry.parent)
+		cbi_tag_last(parent);
 
 	if (state)
 		cbi_d_update();
+	else if (parent)
+		parent.dispatchEvent(new CustomEvent('dependency-update', { bubbles: true }));
 }
 
 function cbi_init() {
@@ -1043,75 +1042,6 @@ function cbi_dynlist_init(dl, datatype, optional, choices)
 }
 
 cbi_dynlist_init.prototype = CBIDynamicList;
-
-
-function cbi_t_add(section, tab) {
-	var t = document.getElementById('tab.' + section + '.' + tab);
-	var c = document.getElementById('container.' + section + '.' + tab);
-
-	if (t && c) {
-		cbi_t[section] = (cbi_t[section] || [ ]);
-		cbi_t[section][tab] = { 'tab': t, 'container': c, 'cid': c.id };
-	}
-}
-
-function cbi_t_switch(section, tab) {
-	if (cbi_t[section] && cbi_t[section][tab]) {
-		var o = cbi_t[section][tab];
-		var h = document.getElementById('tab.' + section);
-
-		for (var tid in cbi_t[section]) {
-			var o2 = cbi_t[section][tid];
-
-			if (o.tab.id != o2.tab.id) {
-				o2.tab.classList.remove('cbi-tab');
-				o2.tab.classList.add('cbi-tab-disabled');
-				o2.container.style.display = 'none';
-			}
-			else {
-				if(h)
-					h.value = tab;
-
-				o2.tab.classList.remove('cbi-tab-disabled');
-				o2.tab.classList.add('cbi-tab');
-				o2.container.style.display = 'block';
-			}
-		}
-	}
-
-	return false;
-}
-
-function cbi_t_update() {
-	var hl_tabs = [ ];
-	var updated = false;
-
-	for (var sid in cbi_t)
-		for (var tid in cbi_t[sid]) {
-			var t = cbi_t[sid][tid].tab;
-			var c = cbi_t[sid][tid].container;
-
-			if (!c.firstElementChild) {
-				t.style.display = 'none';
-			}
-			else if (t.style.display == 'none') {
-				t.style.display = '';
-				t.classList.add('cbi-tab-highlighted');
-				hl_tabs.push(t);
-			}
-
-			cbi_tag_last(c);
-			updated = true;
-		}
-
-	if (hl_tabs.length > 0)
-		window.setTimeout(function() {
-			for (var i = 0; i < hl_tabs.length; i++)
-				hl_tabs[i].classList.remove('cbi-tab-highlighted');
-		}, 750);
-
-	return updated;
-}
 
 
 function cbi_validate_form(form, errmsg)
