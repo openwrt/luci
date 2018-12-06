@@ -331,12 +331,21 @@ end
 
 function action_interfaces()
 	local data, has_v4, has_v6, error = fetch_jsoninfo('interfaces')
+	local ntm = require "luci.model.network".init()
+
 	if error then
 		return
 	end
 
 	local function compare(a,b)
 		return a.proto < b.proto
+	end
+
+	for k, v in ipairs(data) do
+		local interface = ntm:get_status_by_address(v.olsrInterface.ipAddress)
+		if interface then
+			v.interface = interface
+		end
 	end
 
 	table.sort(data, compare)
