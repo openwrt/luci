@@ -159,7 +159,7 @@
             $(".main-left").stop(true).animate({
                 width: "0"
             }, "fast");
-            $(".main-right").css("overflow-y", "auto");
+            $(".main-right").css("overflow-y", "visible");
             showSide = false;
         } else {
             $(".darkMask").stop(true).fadeIn("fast");
@@ -179,7 +179,7 @@
             $(".main-left").stop(true).animate({
                 width: "0"
             }, "fast");
-            $(".main-right").css("overflow-y", "auto");
+            $(".main-right").css("overflow-y", "visible");
         }
     });
 
