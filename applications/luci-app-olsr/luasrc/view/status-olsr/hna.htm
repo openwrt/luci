@@ -35,7 +35,12 @@ XHR.poll(10, '<%=REQUEST_URI%>', { status: 1 },
 	var hnadiv = document.getElementById('olsrd_hna');
 	if (hnadiv)
 	{
-		var s = '';
+		var s = '<div class="tr cbi-section-table-titles">' +
+			'<div class="th cbi-section-table-cell"><%:Announced network%></div>' +
+			'<div class="th cbi-section-table-cell"><%:OLSR gateway%></div>' +
+			'<div class="th cbi-section-table-cell"><%:Validity Time%></div>' +
+			'</div>';
+
 		for (var idx = 0; idx < info.length; idx++)
 		{
 			var hna = info[idx];
@@ -60,9 +65,9 @@ XHR.poll(10, '<%=REQUEST_URI%>', { status: 1 },
 			}
 
 			s += String.format(
-                                '<div class="td cbi-section-table-cell">%s</div>' +
-                                '<div class="td cbi-section-table-cell">%s</div>' +
-                                '<div class="td cbi-section-table-cell">%s</div>', hna.destination + '/' + hna.genmask, linkgw + hostname, validity
+                                '<div class="td cbi-section-table-cell left">%s</div>' +
+                                '<div class="td cbi-section-table-cell left">%s</div>' +
+                                '<div class="td cbi-section-table-cell left">%s</div>', hna.destination + '/' + hna.genmask, linkgw + hostname, validity
                                 )
 			s += '</div>'
 		}
@@ -78,21 +83,18 @@ XHR.poll(10, '<%=REQUEST_URI%>', { status: 1 },
 <fieldset class="cbi-section">
 
 	<legend><%:Overview of currently active OLSR host net announcements%></legend>
-	<div class="table cbi-section-table">
-		<div class="thead">
+	<div class="table cbi-section-table" id="olsrd_hna">
 		<div class="tr cbi-section-table-titles">
 			<div class="th cbi-section-table-cell"><%:Announced network%></div>
 			<div class="th cbi-section-table-cell"><%:OLSR gateway%></div>
 			<div class="th cbi-section-table-cell"><%:Validity Time%></div>
 		</div>
 
-		</div>
-		<div class="tbody" id="olsrd_hna">
 		<% for k, route in ipairs(hna) do %>
 
 		<div class="tr cbi-section-table-row cbi-rowstyle-<%=i%> proto-<%=hna[k].proto%>">
-			<div class="td cbi-section-table-cell"><%=hna[k].destination%>/<%=hna[k].genmask%> </div>
-			<div class="td cbi-section-table-cell">
+			<div class="td cbi-section-table-cell left"><%=hna[k].destination%>/<%=hna[k].genmask%> </div>
+			<div class="td cbi-section-table-cell left">
 				<% if hna[k].proto == '6' then %>
 				<a href="http://[<%=hna[k].gateway%>]/cgi-bin-status.html"><%=hna[k].gateway%></a>
 				<% else %>
@@ -108,12 +110,11 @@ XHR.poll(10, '<%=REQUEST_URI%>', { status: 1 },
 				validity = '-'
 			end %>
 
-			<div class="td cbi-section-table-cell"><%=validity%></div>
+			<div class="td cbi-section-table-cell left"><%=validity%></div>
 		</div>
 
 		<% i = ((i % 2) + 1)
 		end %>
-		</div>
 	</div>
 </fieldset>
 

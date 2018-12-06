@@ -342,9 +342,9 @@ function mode.write(self, section, value)
 	-- txtinfo v6 & olsrd nameservice
 	uci:foreach("olsrd", "LoadPlugin",
 		function(s)
-			if s.library == "olsrd_txtinfo.so.0.1" then
+			if s.library == "olsrd_txtinfo" then
 				uci:set("olsrd", s['.name'], "accept", "::1")
-			elseif s.library == "olsrd_nameservice.so.0.3" then
+			elseif s.library == "olsrd_nameservice" then
 				uci:set("olsrd", s['.name'], "name", hostname)
 			end
 		end)

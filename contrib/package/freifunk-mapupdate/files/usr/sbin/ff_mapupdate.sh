@@ -8,7 +8,7 @@ MAPSERVER="$(uci -q get freifunk-mapupdate.mapupdate.mapserver)"
 [ -z "$MAPSERVER" ] && logger -t "freifunk-mapupdate:" "No mapserver configured" && exit 1
 
 #check if nameservice plugin is installed and enabled, else exit
-nslib=`uci show olsrd |grep olsrd_nameservice.so |awk {' FS="."; print $1"."$2 '}`
+nslib=`uci show olsrd |grep olsrd_nameservice |awk {' FS="."; print $1"."$2 '}`
 if [ -n "$nslib" ]; then
 		LATLONFILE="$(uci -q get $nslib.latlon_file)"
 		if [ -z "$LATLONFILE" ]; then

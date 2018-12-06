@@ -17,23 +17,23 @@ end)
 
 if luci.http.formvalue("status") == "1" then
 	local rv = {}
-	for k, gw in ipairs(gws) do
-		gw.tcPathCost = tonumber(gw.tcPathCost)/1024 or 0
-                if gw.tcPathCost == 4096 then
-                        gw.tcPathCost = 0
+	for k, gw in ipairs(gws.ipv4, gws.ipv6) do
+		gw.cost = tonumber(gw.cost)/1024 or 0
+		if gw.cost >= 100 then
+                        gw.cost = 0
                 end
 
 		rv[#rv+1] = {
-			proto = gw.proto,
-			ipAddress = gw.ipAddress,
-			status = gw.ipv4Status or gw.ipv6Status,
-			tcPathCost = string.format("%.3f", gw.tcPathCost),
-			hopCount = gw.hopCount,
-			uplinkSpeed = gw.uplinkSpeed,
-			downlinkSpeed = gw.downlinkSpeed,
-			v4 = gw.ipv4 and luci.i18n.translate('yes') or luci.i18n.translate('no'),
-			v6 = gw.ipv6 and luci.i18n.translate('yes') or luci.i18n.translate('no'),
-			externalPrefix = gw.externalPrefix
+			proto = gw.IPv4 and '4' or '6',
+			originator = gw.originator,
+			selected = gw.selected and luci.i18n.translate('yes') or luci.i18n.translate('no'),
+			cost = gw.cost > 0 and string.format("%.3f", gw.cost) or luci.i18n.translate('infinate'),
+			hops = gw.hops,
+			uplink = gw.uplink,
+			downlink = gw.downlink,
+			v4 = gw.IPv4 and luci.i18n.translate('yes') or luci.i18n.translate('no'),
+			v6 = gw.IPv6 and luci.i18n.translate('yes') or luci.i18n.translate('no'),
+			prefix = gw.prefix
 			}
 	end
 	luci.http.prepare_content("application/json")
@@ -51,28 +51,39 @@ XHR.poll(10, '<%=REQUEST_URI%>', { status: 1 },
 	var smartgwdiv = document.getElementById('olsrd_smartgw');
 	if (smartgwdiv)
 	{
-		var s = '';
+		var s = '<div class="tr cbi-section-table-titles">' +
+			'<div class="th cbi-section-table-cell"><%:Gateway%></div>' +
+			'<div class="th cbi-section-table-cell"><%:Selected%></div>' +
+			'<div class="th cbi-section-table-cell"><%:ETX%></div>' +
+			'<div class="th cbi-section-table-cell"><%:Hops%></div>' +
+			'<div class="th cbi-section-table-cell"><%:Uplink%></div>' +
+			'<div class="th cbi-section-table-cell"><%:Downlink%></div>' +
+			'<div class="th cbi-section-table-cell"><%:IPv4%></div>' +
+			'<div class="th cbi-section-table-cell"><%:IPv6%></div>' +
+			'<div class="th cbi-section-table-cell"><%:Prefix%></div>' +
+			'</div>';
+
 		for (var idx = 0; idx < info.length; idx++)
 		{
 			var smartgw = info[idx];
 			s += '<div class="tr cbi-section-table-row cbi-rowstyle-'+(1 + (idx % 2))+' proto-' + smartgw.proto + '">'
 			if (smartgw.proto == '6') {
-				linkgw = '<a href="http://[' + smartgw.ipAddress + ']/cgi-bin-status.html">' + smartgw.ipAddress + '</a>'
+				linkgw = '<a href="http://[' + smartgw.originator + ']/cgi-bin-status.html">' + smartgw.originator + '</a>'
 			} else {
-				linkgw = '<a href="http://' + smartgw.ipAddress + '/cgi-bin-status.html">' + smartgw.ipAddress + '</a>'
+				linkgw = '<a href="http://' + smartgw.originator + '/cgi-bin-status.html">' + smartgw.originator + '</a>'
 			}
 
 			s += String.format(
-                                '<div class="td cbi-section-table-cell">%s</div>' +
-                                '<div class="td cbi-section-table-cell">%s</div>' +
-                                '<div class="td cbi-section-table-cell">%s</div>' +
-                                '<div class="td cbi-section-table-cell">%s</div>' +
-                                '<div class="td cbi-section-table-cell">%s</div>' +
-                                '<div class="td cbi-section-table-cell">%s</div>' +
-                                '<div class="td cbi-section-table-cell">%s</div>' +
-                                '<div class="td cbi-section-table-cell">%s</div>' +
-                                '<div class="td cbi-section-table-cell">%s</div>',
-				linkgw, smartgw.status, smartgw.tcPathCost, smartgw.hopCount, smartgw.uplinkSpeed, smartgw.downlinkSpeed, smartgw.v4, smartgw.v6, smartgw.externalPrefix
+                                '<div class="td cbi-section-table-cell left">%s</div>' +
+                                '<div class="td cbi-section-table-cell left">%s</div>' +
+                                '<div class="td cbi-section-table-cell left">%s</div>' +
+                                '<div class="td cbi-section-table-cell left">%s</div>' +
+                                '<div class="td cbi-section-table-cell left">%s</div>' +
+                                '<div class="td cbi-section-table-cell left">%s</div>' +
+                                '<div class="td cbi-section-table-cell left">%s</div>' +
+                                '<div class="td cbi-section-table-cell left">%s</div>' +
+                                '<div class="td cbi-section-table-cell left">%s</div>',
+				linkgw, smartgw.selected, smartgw.cost, smartgw.hops, smartgw.uplink, smartgw.downlink, smartgw.v4, smartgw.v6, smartgw.prefix
                                 )
 			s += '</div>'
 		}
@@ -82,9 +93,6 @@ XHR.poll(10, '<%=REQUEST_URI%>', { status: 1 },
 );
 //]]></script>
 
-
-<%+header%>
-
 <h2 name="content"><%:SmartGW announcements%></h2>
 
 <div id="togglebuttons"></div>
@@ -93,11 +101,10 @@ XHR.poll(10, '<%=REQUEST_URI%>', { status: 1 },
 
 	<fieldset class="cbi-section">
 		<legend><%:Overview of smart gateways in this network%></legend>
-		<div class="table cbi-section-table">
-			<div class="thead">
+		<div class="table cbi-section-table" id="olsrd_smartgw">
 			<div class="tr cbi-section-table-titles">
 				<div class="th cbi-section-table-cell"><%:Gateway%></div>
-				<div class="th cbi-section-table-cell"><%:Status%></div>
+				<div class="th cbi-section-table-cell"><%:Selected%></div>
 				<div class="th cbi-section-table-cell"><%:ETX%></div>
 				<div class="th cbi-section-table-cell"><%:Hops%></div>
 				<div class="th cbi-section-table-cell"><%:Uplink%></div>
@@ -105,39 +112,35 @@ XHR.poll(10, '<%=REQUEST_URI%>', { status: 1 },
 				<div class="th cbi-section-table-cell"><%:IPv4%></div>
 				<div class="th cbi-section-table-cell"><%:IPv6%></div>
 				<div class="th cbi-section-table-cell"><%:Prefix%></div>
-
-			</div>
 			</div>
 
-			<div class="tbody" id="olsrd_smartgw">
-			<% for k, gw in ipairs(gws) do 
+			<% for k, gw in ipairs(gws.ipv4, gws.ipv6) do 
 
-			gw.tcPathCost = tonumber(gw.tcPathCost)/1024 or 0
-               		if gw.tcPathCost == 4096 then
-	                        gw.tcPathCost = 0
+			gw.cost = tonumber(gw.cost)/1024 or 0
+	 		if gw.cost >= 100 then
+	                        gw.cost = 0
                		end
 			%>
 
 			<div class="tr cbi-section-table-row cbi-rowstyle-<%=i%> proto-<%=proto%>">
 				<% if gw.proto == '6' then %>
-					<div class="td cbi-section-table-cell"><a href="http://[<%=gw.ipAddress%>]/cgi-bin-status.html"><%=gw.ipAddress%></a></div>
+					<div class="td cbi-section-table-cell left"><a href="http://[<%=gw.originator%>]/cgi-bin-status.html"><%=gw.originator%></a></div>
 				<% else %>
-					<div class="td cbi-section-table-cell"><a href="http://<%=gw.ipAddress%>/cgi-bin-status.html"><%=gw.ipAddress%></a></div>
+					<div class="td cbi-section-table-cell left"><a href="http://<%=gw.originator%>/cgi-bin-status.html"><%=gw.originator%></a></div>
 				<% end %>
 
-				<div class="td cbi-section-table-cell"><%=gw.ipv4Status or gw.ipv6Status or '-' %></div>
-				<div class="td cbi-section-table-cell"><%=string.format("%.3f", gw.tcPathCost)%></div>
-				<div class="td cbi-section-table-cell"><%=gw.hopCount%></div>
-				<div class="td cbi-section-table-cell"><%=gw.uplinkSpeed%></div>
-				<div class="td cbi-section-table-cell"><%=gw.downlinkSpeed%></div>
-				<div class="td cbi-section-table-cell"><%=gw.ipv4 and luci.i18n.translate('yes') or luci.i18n.translate('no')%></div>
-				<div class="td cbi-section-table-cell"><%=gw.ipv6 and luci.i18n.translate('yes') or luci.i18n.translate('no')%></div>
-				<div class="td cbi-section-table-cell"><%=gw.externalPrefix%></div>
+				<div class="td cbi-section-table-cell left"><%=gw.selected and luci.i18n.translate('yes') or luci.i18n.translate('no')%></div>
+				<div class="td cbi-section-table-cell left"><%=gw.cost > 0 and string.format("%.3f", gw.cost) or luci.i18n.translate('infinate')%></div>
+				<div class="td cbi-section-table-cell left"><%=gw.hops%></div>
+				<div class="td cbi-section-table-cell left"><%=gw.uplink%></div>
+				<div class="td cbi-section-table-cell left"><%=gw.downlink%></div>
+				<div class="td cbi-section-table-cell left"><%=gw.IPv4 and luci.i18n.translate('yes') or luci.i18n.translate('no')%></div>
+				<div class="td cbi-section-table-cell left"><%=gw.IPv6 and luci.i18n.translate('yes') or luci.i18n.translate('no')%></div>
+				<div class="td cbi-section-table-cell left"><%=gw.prefix%></div>
 			</div>
 
 			<% i = ((i % 2) + 1)
 			end %>
-			</div>
 		</div>
 	</fieldset>
 

@@ -73,7 +73,7 @@ setup_nameservice() {
 
 	uci batch <<- EOF
 		set $cfg.olsrd_nameservice=LoadPlugin
-		set $cfg.olsrd_nameservice.library="olsrd_nameservice.so.0.4"
+		set $cfg.olsrd_nameservice.library="olsrd_nameservice"
 		set $cfg.olsrd_nameservice.latlon_file="$llfile"
 		set $cfg.olsrd_nameservice.hosts_file="$hosts"
 		set $cfg.olsrd_nameservice.sighup_pid_file="/var/run/dnsmasq.pid"
@@ -91,7 +91,7 @@ setup_dyngw_plain() {
     if [ "$general_sharenet" == 1 ]; then
 	uci set $cfg.dyngw_plain=LoadPlugin
 	uci set $cfg.dyngw_plain.ignore=0
-	uci set $cfg.dyngw_plain.library="olsrd_dyn_gw_plain.so.0.4"
+	uci set $cfg.dyngw_plain.library="olsrd_dyn_gw_plain"
 	uci_commitverbose "Setup olsrd_dyngw_plain plugin" $cfg
     fi
 
@@ -106,7 +106,7 @@ setup_watchdog() {
 
 	uci batch <<- EOF
 		set $cfg.olsrd_watchdog=LoadPlugin
-		set $cfg.olsrd_watchdog.library="olsrd_watchdog.so.0.1"
+		set $cfg.olsrd_watchdog.library="olsrd_watchdog"
 		set $cfg.olsrd_watchdog.file="$watchdogfile"
 		set $cfg.olsrd_watchdog.interval=30
 	EOF
@@ -118,7 +118,7 @@ setup_jsoninfo() {
 	proto="$1"
 	uci batch <<- EOF
 		set $cfg.olsrd_jsoninfo=LoadPlugin
-		set $cfg.olsrd_jsoninfo.library="olsrd_jsoninfo.so.1.1"
+		set $cfg.olsrd_jsoninfo.library="olsrd_jsoninfo"
 	EOF
 	if [ "$proto" = "6" ]; then
 		uci set $cfg.olsrd_jsoninfo.ipv6only='1'
@@ -130,7 +130,7 @@ setup_txtinfo() {
 	proto="$1"
 	uci batch <<- EOF
 	    set $cfg.olsrd_txtinfo=LoadPlugin
-	    set $cfg.olsrd_txtinfo.library="olsrd_txtinfo.so.1.1"
+	    set $cfg.olsrd_txtinfo.library="olsrd_txtinfo"
 	EOF
 	if [ "$proto" = "6" ]; then
 		uci set $cfg.olsrd_txtinfo.ipv6only='1'

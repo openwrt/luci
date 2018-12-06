@@ -62,7 +62,7 @@ if arg[1] then
 
 
 	local knownPlParams = {
-		["olsrd_bmf.so.1.5.3"] = {
+		["olsrd_bmf"] = {
 			{ Value,	"BmfInterface",			"bmf0" },
 			{ Value, 	"BmfInterfaceIp",		"10.10.10.234/24" },
 			{ Flag,  	"DoLocalBroadcast",		"no" },
@@ -73,19 +73,19 @@ if arg[1] then
 			{ DynamicList,	"NonOlsrIf",			"br-lan" }
 		},
 
-		["olsrd_dyn_gw.so.0.4"] = {
+		["olsrd_dyn_gw"] = {
 			{ Value,	"Interval",			"40" },
 			{ DynamicList,  "Ping",				"141.1.1.1" },
 			{ DynamicList,	"HNA",				"192.168.80.0/24", IpMask2Cidr, Cidr2IpMask }
 		},
 
-		["olsrd_httpinfo.so.0.1"] = {
+		["olsrd_httpinfo"] = {
 			{ Value,	"port",				"80" },
 			{ DynamicList,	"Host",				"163.24.87.3" },
 			{ DynamicList,  "Net",				"0.0.0.0/0", Cidr2IpMask }
 		},
 
-		["olsrd_nameservice.so.0.3"] = {
+		["olsrd_nameservice"] = {
 			{ DynamicList,	"name",				"my-name.mesh" },
 			{ DynamicList,	"hosts",			"1.2.3.4 name-for-other-interface.mesh" },
 			{ Value,	"suffix",			".olsr" },
@@ -109,7 +109,7 @@ if arg[1] then
 			{ Value,	"macs_change_script",		"/path/to/script" }
 		},
 
-		["olsrd_quagga.so.0.2.2"] = {
+		["olsrd_quagga"] = {
 			{ StaticList,	"redistribute",			{
 				"system", "kernel", "connect", "static", "rip", "ripng", "ospf",
 				"ospf6", "isis", "bgp", "hsls"
@@ -119,40 +119,40 @@ if arg[1] then
 			{ Value,	"Distance",			Range(0,255) }
 		},
 
-		["olsrd_secure.so.0.5"] = {
+		["olsrd_secure"] = {
 			{ Value,	"Keyfile",			"/etc/private-olsr.key" }
 		},
 
-		["olsrd_txtinfo.so.0.1"] = {
+		["olsrd_txtinfo"] = {
 			{ Value,	"accept",			"::1/128" }
 		},
 
-		["olsrd_jsoninfo.so.0.0"] = {
+		["olsrd_jsoninfo"] = {
 			{ Value,	"accept",			"::1/128" },
 			{ Value,	"port",				"9090" },
 			{ Value,	"UUIDFile",			"/etc/olsrd/olsrd.uuid.ipv6" },
 
 		},
 
-		["olsrd_watchdog.so.0.1"] = {
+		["olsrd_watchdog"] = {
 			{ Value,	"file",				"/var/run/olsrd.watchdog.ipv6" },
 			{ Value,	"interval",			"30" }
 		},
 
-		["olsrd_mdns.so.1.0.0"] = {
+		["olsrd_mdns.so"] = {
 			{ DynamicList,	"NonOlsrIf",			"lan" }
 		},
 
-		["olsrd_p2pd.so.0.1.0"] = {
+		["olsrd_p2pd.so"] = {
 			{ DynamicList,	"NonOlsrIf",			"lan" },
 			{ Value,	"P2pdTtl",			"10" }
 		},
 
-		["olsrd_arprefresh.so.0.1"]		= {},
-		["olsrd_dot_draw.so.0.3"]		= {},
-		["olsrd_dyn_gw_plain.so.0.4"]	= {},
-		["olsrd_pgraph.so.1.1"]			= {},
-		["olsrd_tas.so.0.1"]			= {}
+		["olsrd_arprefresh"]		= {},
+		["olsrd_dot_draw"]		= {},
+		["olsrd_dyn_gw_plain"]	= {},
+		["olsrd_pgraph"]			= {},
+		["olsrd_tas"]			= {}
 	}
 
 
@@ -227,6 +227,7 @@ else
 	-- create a loadplugin section for each found plugin
 	for v in fs.dir("/usr/lib") do
 		if v:sub(1, 6) == "olsrd_" then
+			v=string.match(v, "^(olsrd_.*)%.so%..*")
 			if not plugins[v] then
 				mpi.uci:section(
 					"olsrd6", "LoadPlugin", nil,

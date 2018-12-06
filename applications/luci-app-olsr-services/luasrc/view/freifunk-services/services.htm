@@ -16,7 +16,7 @@ local uci = require "luci.model.uci".cursor()
 local ip = require "luci.ip"
 
 uci:foreach("olsrd", "LoadPlugin", function(s)
-	if s.library == "olsrd_nameservice.so.0.3" then
+	if s.library == "olsrd_nameservice" then
 		local services_file=s.services_file
 		if services_file and fs.access(services_file) then
 			has_services = true
@@ -126,15 +126,20 @@ end
 		var tbody = document.getElementById('olsr_services');
 			if (tbody)
 			{
-				var s = '';
+				var s = '<div class="tr cbi-section-table-titles">' +
+				'<div class="th cbi-section-table-cell"><%:Url%></div>' +
+				'<div class="th cbi-section-table-cell"><%:Protocol%></div>' +
+				'<div class="th cbi-section-table-cell"><%:Source%></div>' +
+				'</div>';
+
 				for (var idx = 0; idx < info.length; idx++)
 				{
 				var service = info[idx];
 				s += String.format(
 					'<div class="tr cbi-section-table-row cbi-rowstyle-'+(1 + (idx % 2))+'">' +
-						'<div class="td cbi-section-table-titles"><a href="%s">%s</a></div>' +
-						'<div class="td cbi-section-table-titles">%s</div>' +
-						'<div class="td cbi-section-table-titles"><a href="http://%s/cgi-bin-status.html">%s</a></div>' +
+						'<div class="td cbi-section-table-cell left"><a href="%s">%s</a></div>' +
+						'<div class="td cbi-section-table-cell left">%s</div>' +
+						'<div class="td cbi-section-table-cell left"><a href="http://%s/cgi-bin-status.html">%s</a></div>' +
 					'</div>',
 					service.url, service.descr, service.proto, service.origin_link, service.origin || '?'
 					);
@@ -152,16 +157,13 @@ end
 
 	<fieldset class="cbi-section">
 	<legend><%:Internal services%></legend>
-	<div class="table cbi-section-table">
-		<div class="thead">
+	<div class="table cbi-section-table" id="olsr_services">
 			<div class="tr cbi-section-table-titles">
 				<div class="th cbi-section-table-cell"><%:Url%></div>
 				<div class="th cbi-section-table-cell"><%:Protocol%></div>
 				<div class="th cbi-section-table-cell"><%:Source%></div>
 			</div>
-		</div>
 
-		<div class="tbody" id="olsr_services">
 	<%
 		for k, line in ipairs(services) do
 			local field = {}
@@ -178,13 +180,12 @@ end
 			%>
 
 			<div class="tr cbi-section-table-row cbi-rowstyle-<%=i%>">
-				<div class="td cbi-section-table-titles"><a href="<%=url%>"><%=descr%></a></div>
-				<div class="td cbi-section-table-titles"><%=proto%></div>
-				<div class="td cbi-section-table-titles"><a href="http://<%=origin_link%>/cgi-bin-status.html"><%=origin%></a></div>
+				<div class="td cbi-section-table-cell left"><a href="<%=url%>"><%=descr%></a></div>
+				<div class="td cbi-section-table-cell left"><%=proto%></div>
+				<div class="td cbi-section-table-cell left"><a href="http://<%=origin_link%>/cgi-bin-status.html"><%=origin%></a></div>
 			</div>
 			<% i = ((i % 2) + 1)
 		end %>
-		</div>
 	</div>
 	<br />
 	<%=last_update%>
