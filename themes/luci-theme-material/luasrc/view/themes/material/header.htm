@@ -105,17 +105,26 @@
 	local function render_submenu(prefix, node)
 		local childs = disp.node_childs(node)
 		if #childs > 0 then
-			write('<ul class="slide-menu">')
+			write('<ul class="slide-menu %s ">' %{node._menu_selected and 'active' or ''})
 
 			for i, r in ipairs(childs) do
 				local nnode = node.nodes[r]
 				local title = striptags(translate(nnode.title))
 
-				write('<li><a data-title="%s" href="%s">%s</a></li>' %{
-					title,
-					nodeurl(prefix, r, nnode.query),
-					title
-				})
+				if nnode._menu_selected then
+					write('<li class="active"><a data-title="%s" href="%s">%s</a></li>' %{
+						title,
+						nodeurl(prefix, r, nnode.query),
+						title
+					})
+				else
+					write('<li><a data-title="%s" href="%s">%s</a></li>' %{
+						title,
+						nodeurl(prefix, r, nnode.query),
+						title
+					})
+				end
+
 			end
 
 			write('</ul>')
@@ -134,7 +143,8 @@
 				if #grandchildren > 0 then
 					local title = striptags(translate(nnode.title))
 
-					write('<li class="slide"><a class="menu" data-title="%s" href="#">%s</a>' %{
+					write('<li class="slide"><a class="menu %s" data-title="%s" href="#">%s</a>' %{
+						nnode._menu_selected and 'active' or '',
 						title,
 						title
 					})
@@ -200,8 +210,79 @@
 	<script src="<%=url('admin/translations', luci.i18n.context.lang)%><%# ?v=PKG_VERSION %>"></script>
 	<script src="<%=resource%>/cbi.js"></script>
 	<script src="<%=resource%>/xhr.js"></script>
+	<script type="text/javascript">//<![CDATA[
+		document.addEventListener('DOMContentLoaded', function() {
+			document.querySelectorAll(".main > .loading").forEach(function (e) {
+				if (e) {
+					e.style.display = "none";
+				}
+			});
+
+			document.querySelectorAll(".main > .main-left > .nav > .slide > .menu").forEach(
+			function (e){
+				if(e){
+					e.addEventListener('click', function(){
+						var ul2 = this.nextElementSibling;
+						var tag = this;
+						if (ul2.style.display === "" || ul2.style.display === "none") {
+							ul2.classList.add("active");
+							tag.classList.add("active");
+							ul2.style.display = "block";
+						}else{
+							ul2.classList.remove("active");
+							tag.classList.remove("active");
+							ul2.style.display = "none";
+						}
+					});
+
+					e.nextElementSibling.querySelectorAll("a").forEach(
+					function (a){
+						if(a)
+						{
+							a.parentElement.addEventListener('click', function(ev){
+								ev.stopPropagation();
+								a.click();
+							});
+
+							a.addEventListener('click', function(ev){
+								ev.stopPropagation();
+							});
+						}
+					});
+
+					if (e.classList.contains("active")) {
+						e.click();
+					}
+				}
+			});
+
+			if (!document.querySelector('body').classList.contains('logged-in')) {
+				document.querySelector("body").classList.add("node-main-login");
+			};
+
+			var showSide = false;
+			document.querySelector(".showSide").addEventListener('click', function () {
+				if (showSide){
+					document.querySelector(".main-left").setAttribute("style", "width: 0");
+					document.querySelector(".main-right").setAttribute("style", "overflow-y: auto");
+					showSide = false;
+				}else{
+					document.querySelector(".main-left").setAttribute("style", "width: 15rem");
+					document.querySelector(".main-right").setAttribute("style", "overflow-y: scroll");
+					showSide = true;
+				}
+			});
+
+			window.onresize = function () {
+				if (window.innerWidth > 921) {
+					document.querySelector(".main-left").removeAttribute("style");
+					showSide = false;
+				}
+			};
+		});
+	//]]></script>
 </head>
-<body class="lang_<%=luci.i18n.context.lang%> <% if node then %><%= striptags( node.title ) %><% end %> <% if luci.dispatcher.context.authsession then %>logged-in<% end %>" data-page="<%= table.concat(disp.context.requestpath, "-") %>">
+<body class="lang_<%=luci.i18n.context.lang%> <% if node then %><%= striptags( node.title ) %><% end %> <% if disp.context.authsession then %>logged-in<% end %>" <% if next(request) then %>data-page="<%= table.concat(request, '-') %>"<% end %>>
 <header>
 	<div class="fill">
 		<div class="container">
@@ -224,7 +305,6 @@
 		<% render_topmenu() %>
 	</div>
 	<div class="main-right">
-		<div class="darkMask"></div>
 		<div id="maincontent">
 			<div class="container">
 				<%- if luci.sys.process.info("uid") == 0 and luci.sys.user.getuser("root") and not luci.sys.user.getpasswd("root") then -%>
