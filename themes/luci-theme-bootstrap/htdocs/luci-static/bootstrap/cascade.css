@@ -1053,6 +1053,7 @@ header .dropdown-menu a.hover,
 	text-decoration: none;
 	border-radius: 4px 4px 0 0;
 	line-height: 25px;
+	outline: none;
 }
 
 .tabs > li:not(.active):hover, .cbi-tabmenu > .cbi-tab-disabled:hover {
@@ -1062,6 +1063,18 @@ header .dropdown-menu a.hover,
 .tabs > li:not(.active), .cbi-tabmenu > .cbi-tab-disabled {
 	color: #999;
 	background: linear-gradient(#eee 90%, #ddd 100%);
+}
+
+.cbi-tab-disabled[data-errors]::after {
+	content: attr(data-errors);
+	background: #c43c35;
+	color: #fff;
+	min-width: 12px;
+	line-height: 14px;
+	border-radius: 7px;
+	text-align: center;
+	margin: 0 5px 0 0;
+	padding: 1px 2px;
 }
 
 .cbi-tabmenu.map {
@@ -2199,4 +2212,17 @@ html body.apply-overlay-active {
 	content: " ";
 	background: url(../resources/icons/loading.gif) no-repeat center;
 	background-size: 16px;
+}
+
+[data-tab-title] {
+	height: 0;
+	opacity: 0;
+	overflow: hidden;
+}
+
+[data-tab-active="true"] {
+	opacity: 1;
+	height: auto;
+	overflow: visible;
+	transition: opacity .25s ease-in;
 }
