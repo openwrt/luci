@@ -129,10 +129,16 @@
 			tooltipDiv.style.top = y + 'px';
 			tooltipDiv.style.left = x + 'px';
 			tooltipDiv.style.opacity = 1;
+
+			tooltipDiv.dispatchEvent(new CustomEvent('tooltip-open', {
+				bubbles: true,
+				detail: { target: target }
+			}));
 		},
 
 		hideTooltip: function(ev) {
-			if (ev.target === tooltipDiv || ev.relatedTarget === tooltipDiv)
+			if (ev.target === tooltipDiv || ev.relatedTarget === tooltipDiv ||
+			    tooltipDiv.contains(ev.target) || tooltipDiv.contains(ev.relatedTarget))
 				return;
 
 			if (tooltipTimeout !== null) {
@@ -142,6 +148,8 @@
 
 			tooltipDiv.style.opacity = 0;
 			tooltipTimeout = window.setTimeout(function() { tooltipDiv.removeAttribute('style'); }, 250);
+
+			tooltipDiv.dispatchEvent(new CustomEvent('tooltip-close', { bubbles: true }));
 		},
 
 
