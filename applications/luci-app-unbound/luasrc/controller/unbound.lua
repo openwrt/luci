@@ -53,7 +53,7 @@ function index()
             call("QueryLocalZone"), _("Local Zones"), 30).leaf = true
 
         entry({"admin", "services", "unbound", "status", "dumpcache"},
-            call("QueryCacheDump"), _("Cache Dump"), 40).leaf = true
+            call("QueryDumpCache"), _("DNS Cache"), 40).leaf = true
     else
         entry({"admin", "services", "unbound", "status", "statistics"},
             call("ShowEmpty"), _("Statistics"), 10).leaf = true
@@ -153,16 +153,32 @@ function QueryLocalZone()
         {heading = "", description = lcldesc, content = lcldata})
 end
 
-function QueryCacheDump()
+
+function QueryDumpCache()
+    local tp = require "luci.template"
+    local tr = require "luci.i18n"
+    local lcldesc 
     local lcldata = luci.util.exec(
         "unbound-control -c /var/lib/unbound/unbound.conf dump_cache")
 
-    local lcldesc = luci.i18n.translate(
-        "This shows Unbound 'cache_dump'. Useful to check if unbound is actually caching dns entities.")
 
-    luci.template.render("unbound/show-textbox",
-        {heading = "", description = lcldesc, content = lcldata})
+    if #lcldata > 262144 then
+        lcldesc = tr.translate(
+            "Unbound cache is too large to display in LuCI.")
+
+        tp.render("unbound/show-empty",
+            {heading = "", description = lcldesc})
+
+    else
+        lcldesc = tr.translate(
+            "This shows 'ubound-control dump_cache' for auditing records including DNSSEC.")
+
+        tp.render("unbound/show-textbox",
+            {heading = "", description = lcldesc, content = lcldata})
+    end
+
 end
+
 
 function ShowUnboundConf()
     local unboundfile = "/var/lib/unbound/unbound.conf"
@@ -196,7 +212,7 @@ function ShowAdblock()
 
     if fs.stat(adblockfile).size > 262144 then
         lcldesc = tr.translate(
-            "Adblock domain list '" .. adblockfile .. "' is too large for LuCI.")
+            "Adblock domain list is too large to display in LuCI.")
 
         tp.render("unbound/show-empty",
             {heading = "", description = lcldesc})
