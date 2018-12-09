@@ -127,11 +127,75 @@
 
 		return
 	end
+
+	local idx_includes = {}
+	local idx_knowntags = {
+		"before@system",
+		"after@system",
+		"before@memory",
+		"after@memory",
+		"before@swap",
+		"after@swap",
+		"before@network",
+		"after@network",
+		"before@dhcp",
+		"after@dhcp",
+		"before@dsl",
+		"after@dsl",
+		"before@wireless",
+		"after@wireless",
+		"before@wireless-assoclist",
+		"after@wireless-assoclist",
+		"atend"
+	}
+
+	local incdir = util.libpath() .. "/view/admin_status/index/"
+
+	if fs.access(incdir) then
+		local inc
+		for inc in fs.dir(incdir) do
+			if inc:match("%.htm$") then
+				local tag = inc:match('^%[(.*)%]')
+
+				if not tag or tag == "" or not util.contains(idx_knowntags, tag) then
+					tag = "atend"
+				end
+
+				if not idx_includes[tag] then
+					idx_includes[tag] = {}
+				end
+
+				idx_includes[tag][#idx_includes[tag]] = inc:gsub("%.htm$", "")
+			end
+		end
+	end
+
+	local function idx_include(tags)
+		local k, tag, tagslist = {}
+
+		if type(tags) ~= "table" then
+			tagslist = { tags }
+		else
+			tagslist = tags
+		end
+
+		for k, tag in pairs(tagslist) do
+			if idx_includes[tag] then
+				local _, v
+				for _, v in pairs(idx_includes[tag]) do
+					include("admin_status/index/" .. v)
+				end
+			end
+		end
+	end
+
 -%>
 
 <%+header%>
 
 <h2 name="content"><%:Status%></h2>
+
+<% idx_include("before@system") %>
 
 <div class="cbi-section">
 	<h3><%:System%></h3>
@@ -151,6 +215,8 @@
 	</div>
 </div>
 
+<% idx_include({ "after@system", "before@memory" }) %>
+
 <div class="cbi-section">
 	<h3><%:Memory%></h3>
 
@@ -160,6 +226,8 @@
 		<div class="tr"><div class="td left" width="33%"><%:Buffered%></div><div class="td left"><div id="membuff" class="cbi-progressbar" title="-"><div></div></div></div></div>
 	</div>
 </div>
+
+<% idx_include({ "after@memory", "before@swap" }) %>
 
 <% if swapinfo.total > 0 then %>
 <div class="cbi-section">
@@ -171,6 +239,8 @@
 	</div>
 </div>
 <% end %>
+
+<% idx_include({ "after@swap", "before@network" }) %>
 
 <div class="cbi-section">
 	<h3><%:Network%></h3>
@@ -185,9 +255,13 @@
 </div>
 
 <%
+	idx_include({ "after@network", "before@dhcp" })
+
 	if has_dhcp then
 		include("lease_status")
 	end
+
+	idx_include({ "after@dhcp", "before@dsl" })
 %>
 
 <% if has_dsl then %>
@@ -200,6 +274,8 @@
 </div>
 <% end %>
 
+<% idx_include({ "after@dsl", "before@wireless" }) %>
+
 <% if has_wifi then %>
 <div class="cbi-section">
 	<h3><%:Wireless%></h3>
@@ -209,6 +285,8 @@
 	</div>
 </div>
 
+<% idx_include({ "after@wireless", "before@wireless-assoclist" }) %>
+
 <div class="cbi-section">
 	<h3><%:Associated Stations%></h3>
 
@@ -216,17 +294,7 @@
 </div>
 <% end %>
 
-<%-
-	local incdir = util.libpath() .. "/view/admin_status/index/"
-	if fs.access(incdir) then
-		local inc
-		for inc in fs.dir(incdir) do
-			if inc:match("%.htm$") then
-				include("admin_status/index/" .. inc:gsub("%.htm$", ""))
-			end
-		end
-	end
--%>
+<% idx_include({ "after@wireless-assoclist", "atend" }) %>
 
 <script type="text/javascript" src="<%=resource%>/view/status/index.js"></script>
 
