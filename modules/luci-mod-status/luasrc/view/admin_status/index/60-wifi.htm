@@ -1,0 +1,26 @@
+<%#
+ Copyright 2008 Steven Barth <steven@midlink.org>
+ Copyright 2008-2018 Jo-Philipp Wich <jo@mein.io>
+ Licensed to the public under the Apache License 2.0.
+-%>
+
+<%
+	local fs = require "nixio.fs"
+	local has_wifi = ((fs.stat("/etc/config/wireless", "size") or 0) > 0)
+%>
+
+<% if has_wifi then %>
+<div class="cbi-section">
+	<h3><%:Wireless%></h3>
+
+	<div id="wifi_status_table" class="network-status-table">
+		<p><em><%:Collecting data...%></em></p>
+	</div>
+</div>
+
+<div class="cbi-section">
+	<h3><%:Associated Stations%></h3>
+
+	<%+wifi_assoclist%>
+</div>
+<% end %>

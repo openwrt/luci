@@ -1,0 +1,20 @@
+<%#
+ Copyright 2008 Steven Barth <steven@midlink.org>
+ Copyright 2008-2018 Jo-Philipp Wich <jo@mein.io>
+ Licensed to the public under the Apache License 2.0.
+-%>
+
+<%
+	local fs = require "nixio.fs"
+	local has_dsl = fs.access("/etc/init.d/dsl_control")
+%>
+
+<% if has_dsl then %>
+<div class="cbi-section">
+	<h3><%:DSL%></h3>
+
+	<div id="dsl_status_table" class="network-status-table">
+		<p><em><%:Collecting data...%></em></p>
+	</div>
+</div>
+<% end %>

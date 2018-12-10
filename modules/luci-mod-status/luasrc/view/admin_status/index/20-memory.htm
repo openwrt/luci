@@ -1,0 +1,31 @@
+<%#
+ Copyright 2008 Steven Barth <steven@midlink.org>
+ Copyright 2008-2018 Jo-Philipp Wich <jo@mein.io>
+ Licensed to the public under the Apache License 2.0.
+-%>
+
+<%
+	local sysinfo = luci.util.ubus("system", "info") or { }
+	local has_swap = sysinfo.swap and sysinfo.swap.total > 0 or false
+%>
+
+<div class="cbi-section">
+	<h3><%:Memory%></h3>
+
+	<div class="table" width="100%">
+		<div class="tr"><div class="td left" width="33%"><%:Total Available%></div><div class="td left"><div id="memtotal" class="cbi-progressbar" title="-"><div></div></div></div></div>
+		<div class="tr"><div class="td left" width="33%"><%:Free%></div><div class="td left"><div id="memfree" class="cbi-progressbar" title="-"><div></div></div></div></div>
+		<div class="tr"><div class="td left" width="33%"><%:Buffered%></div><div class="td left"><div id="membuff" class="cbi-progressbar" title="-"><div></div></div></div></div>
+	</div>
+</div>
+
+<% if has_swap then %>
+<div class="cbi-section">
+	<h3><%:Swap%></h3>
+
+	<div class="table" width="100%">
+		<div class="tr"><div class="td left" width="33%"><%:Total Available%></div><div class="td left"><div id="swaptotal" class="cbi-progressbar" title="-"><div></div></div></div></div>
+		<div class="tr"><div class="td left" width="33%"><%:Free%></div><div class="td left"><div id="swapfree" class="cbi-progressbar" title="-"><div></div></div></div></div>
+	</div>
+</div>
+<% end %>
