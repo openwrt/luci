@@ -11,29 +11,24 @@
 	local stat = require "luci.tools.status"
 	local ver = require "luci.version"
 
-	local has_ipv6 = fs.access("/proc/net/ipv6_route")
-	local has_dhcp = fs.access("/etc/config/dhcp")
-	local has_wifi = ((fs.stat("/etc/config/wireless", "size") or 0) > 0)
-
-	local sysinfo = luci.util.ubus("system", "info") or { }
-	local boardinfo = luci.util.ubus("system", "board") or { }
-	local unameinfo = nixio.uname() or { }
-
-	local meminfo = sysinfo.memory or {
-		total = 0,
-		free = 0,
-		buffered = 0,
-		shared = 0
-	}
-
-	local swapinfo = sysinfo.swap or {
-		total = 0,
-		free = 0
-	}
-
-	local has_dsl = fs.access("/etc/init.d/dsl_control")
-
 	if luci.http.formvalue("status") == "1" then
+
+		local sysinfo = luci.util.ubus("system", "info") or { }
+
+		local meminfo = sysinfo.memory or {
+			total = 0,
+			free = 0,
+			buffered = 0,
+			shared = 0
+		}
+
+		local swapinfo = sysinfo.swap or {
+			total = 0,
+			free = 0
+		}
+
+		local has_dsl = fs.access("/etc/init.d/dsl_control")
+
 		local ntm = require "luci.model.network".init()
 		local wan_nets = ntm:get_wan_networks()
 		local wan6_nets = ntm:get_wan6_networks()
@@ -133,97 +128,18 @@
 
 <h2 name="content"><%:Status%></h2>
 
-<div class="cbi-section">
-	<h3><%:System%></h3>
-
-	<div class="table" width="100%">
-		<div class="tr"><div class="td left" width="33%"><%:Hostname%></div><div class="td left"><%=luci.sys.hostname() or "?"%></div></div>
-		<div class="tr"><div class="td left" width="33%"><%:Model%></div><div class="td left"><%=pcdata(boardinfo.model or "?")%></div></div>
-		<div class="tr"><div class="td left" width="33%"><%:Architecture%></div><div class="td left"><%=pcdata(boardinfo.system or "?")%></div></div>
-		<div class="tr"><div class="td left" width="33%"><%:Firmware Version%></div><div class="td left">
-			<%=pcdata(ver.distname)%> <%=pcdata(ver.distversion)%> /
-			<%=pcdata(ver.luciname)%> (<%=pcdata(ver.luciversion)%>)
-		</div></div>
-		<div class="tr"><div class="td left" width="33%"><%:Kernel Version%></div><div class="td left"><%=unameinfo.release or "?"%></div></div>
-		<div class="tr"><div class="td left" width="33%"><%:Local Time%></div><div class="td left" id="localtime">-</div></div>
-		<div class="tr"><div class="td left" width="33%"><%:Uptime%></div><div class="td left" id="uptime">-</div></div>
-		<div class="tr"><div class="td left" width="33%"><%:Load Average%></div><div class="td left" id="loadavg">-</div></div>
-	</div>
-</div>
-
-<div class="cbi-section">
-	<h3><%:Memory%></h3>
-
-	<div class="table" width="100%">
-		<div class="tr"><div class="td left" width="33%"><%:Total Available%></div><div class="td left"><div id="memtotal" class="cbi-progressbar" title="-"><div></div></div></div></div>
-		<div class="tr"><div class="td left" width="33%"><%:Free%></div><div class="td left"><div id="memfree" class="cbi-progressbar" title="-"><div></div></div></div></div>
-		<div class="tr"><div class="td left" width="33%"><%:Buffered%></div><div class="td left"><div id="membuff" class="cbi-progressbar" title="-"><div></div></div></div></div>
-	</div>
-</div>
-
-<% if swapinfo.total > 0 then %>
-<div class="cbi-section">
-	<h3><%:Swap%></h3>
-
-	<div class="table" width="100%">
-		<div class="tr"><div class="td left" width="33%"><%:Total Available%></div><div class="td left"><div id="swaptotal" class="cbi-progressbar" title="-"><div></div></div></div></div>
-		<div class="tr"><div class="td left" width="33%"><%:Free%></div><div class="td left"><div id="swapfree" class="cbi-progressbar" title="-"><div></div></div></div></div>
-	</div>
-</div>
-<% end %>
-
-<div class="cbi-section">
-	<h3><%:Network%></h3>
-
-	<div id="upstream_status_table" class="network-status-table">
-		<p><em><%:Collecting data...%></em></p>
-	</div>
-
-	<div class="table" width="100%">
-		<div class="tr"><div class="td left" width="33%"><%:Active Connections%></div><div class="td left"><div id="conns" class="cbi-progressbar" title="-"><div></div></div></div></div>
-	</div>
-</div>
-
-<%
-	if has_dhcp then
-		include("lease_status")
-	end
-%>
-
-<% if has_dsl then %>
-<div class="cbi-section">
-	<h3><%:DSL%></h3>
-
-	<div id="dsl_status_table" class="network-status-table">
-		<p><em><%:Collecting data...%></em></p>
-	</div>
-</div>
-<% end %>
-
-<% if has_wifi then %>
-<div class="cbi-section">
-	<h3><%:Wireless%></h3>
-
-	<div id="wifi_status_table" class="network-status-table">
-		<p><em><%:Collecting data...%></em></p>
-	</div>
-</div>
-
-<div class="cbi-section">
-	<h3><%:Associated Stations%></h3>
-
-	<%+wifi_assoclist%>
-</div>
-<% end %>
-
 <%-
 	local incdir = util.libpath() .. "/view/admin_status/index/"
 	if fs.access(incdir) then
-		local inc
+		local _, inc
+		local includes = {}
 		for inc in fs.dir(incdir) do
 			if inc:match("%.htm$") then
-				include("admin_status/index/" .. inc:gsub("%.htm$", ""))
+				includes[#includes + 1] = inc:gsub("%.htm$", "")
 			end
+		end
+		for _, inc in luci.util.vspairs(includes) do
+			include("admin_status/index/" .. inc)
 		end
 	end
 -%>
