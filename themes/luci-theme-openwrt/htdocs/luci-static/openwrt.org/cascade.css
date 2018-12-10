@@ -29,12 +29,12 @@ body {
 	box-sizing: border-box;
 }
 
-.table { display: table; width: 100%; position: relative; }
+.table { display: table; width: 100%; position: relative; border-collapse: collapse; }
 .tr { display: table-row; }
 .thead { display: table-header-group; }
 .tbody { display: table-row-group; }
 .tfoot { display: table-footer-group; }
-.td, .th { display: table-cell; }
+.td, .th { display: table-cell; vertical-align: middle; }
 .th { font-weight: bold; }
 
 .table[width="33%"], .th[width="33%"], .td[width="33%"] { width: 33%; }
@@ -568,8 +568,9 @@ input[type=text],
 input[type=password],
 .cbi-dropdown {
 	width: 20em;
-	font-size: 12px;
 	height: 22px;
+	font-family: inherit;
+	font-size: inherit;
 }
 
 select[multiple] {
@@ -945,7 +946,7 @@ div.cbi-optionals {
 	font-weight: bold;
 	text-align: left;
 	display: none;
-	padding: 1px;
+	padding: 1px 0;
 	white-space: nowrap;
 }
 
