@@ -67,7 +67,7 @@ function openWebUI(path) {
 	var pathName = window.document.location.pathname;
 	var pos = curWwwPath.indexOf(pathName);
 	var localhostPath = curWwwPath.substring(0, pos);
-	var url = "http:" + localhostPath.substring(window.location.protocol.length) + "/" + path;
+	var url = localhostPath + "/" + path;
 	window.open(url)
 };
 //]]>
