@@ -11,24 +11,24 @@ Regardless of whether you send a patch or open a pull request, please try to fol
     (E.g.: "luci-mod-admin-full: fix wifi channel selection on multiple STA networks")
 * Shortly explain the changes made and - if applicable - the reasoning behind them
 * Commit message of each commit should include a Signed-off-by line
-    (See <https://dev.openwrt.org/wiki/SubmittingPatches#a10.Signyourwork>)
-	
+    (See <https://openwrt.org/docs/guide-developer/submittingpatches-tomerge#sign_your_work>)
+
 In case you like to send patches by mail, please use the [LuCI mailinglist](https://lists.subsignal.org/mailman/listinfo/luci)
 or the [OpenWrt Development List](https://lists.openwrt.org/cgi-bin/mailman/listinfo/openwrt-devel).
 
-If you send via the OpenWrt list, include a "[luci]" tag in your subject line.
-For general information on patch submission, follow the [OpenWrt patch submission guideline](https://dev.openwrt.org/wiki/SubmittingPatches).
+If you send via the OpenWrt list, include a `[luci]` tag in your subject line.
+For general information on patch submission, follow the [OpenWrt patch submission guideline](https://openwrt.org/submitting-patches).
 
 ## Advice on pull requests:
 
 Pull requests are the easiest way to contribute changes to git repos at Github. They are the preferred contribution method, as they offer a nice way for commenting and amending the proposed changes.
 
 * You need a local "fork" of the Github repo.
-* Use a "feature branch" for your changes. That separates the changes in the pull request from your other changes and makes it easy to edit/amend commits in the pull request. Workflow using "feature_x" as the example:
+* Use a "feature branch" for your changes. That separates the changes in the pull request from your other changes and makes it easy to edit/amend commits in the pull request. Workflow using `feature_x` as the example:
   - Update your local git fork to the tip (of the master, usually)
   - Create the feature branch with `git checkout -b feature_x`
   - Edit changes and commit them locally
-  - Push them to your Github fork by `git push -u origin feature_x`. That creates the "feature_x" branch at your Github fork and sets it as the remote of this branch
+  - Push them to your Github fork by `git push -u origin feature_x`. That creates the `feature_x` branch at your Github fork and sets it as the remote of this branch
   - When you now visit Github, you should see a proposal to create a pull request
 
 * If you later need to add new commits to the pull request, you can simply commit the changes to the local branch and then use `git push` to automatically update the pull request.
@@ -41,7 +41,7 @@ Pull requests are the easiest way to contribute changes to git repos at Github. 
 
 ## If you have commit access:
 
-* Do NOT use git push --force.
+* Do NOT use `git push --force`.
 * Use Pull Requests if you are unsure and to suggest changes to other developers.
 
 ## Gaining commit access:
@@ -53,7 +53,7 @@ Pull requests are the easiest way to contribute changes to git repos at Github. 
 
 ## Release Branches:
 
-* Branches named "for-XX.YY" or "luci-X.Y" (e.g. "for-15.05") are release branches.
+* Branches named `openwrt-xx.yy` (e.g. `openwrt-18.06`) are release branches.
 * These branches are built with the respective OpenWrt release and are created
   during the release stabilisation phase.
 * Please ONLY cherry-pick or commit security and bug-fixes to these branches.
