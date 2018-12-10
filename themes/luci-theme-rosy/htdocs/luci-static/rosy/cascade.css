@@ -568,6 +568,20 @@ td>table>tbody>tr>td,
 .cbi-tabmenu {
     background-color: #D4D4D4;
 }
+
+[data-tab-title] {
+	height: 0;
+	opacity: 0;
+	overflow: hidden;
+}
+
+[data-tab-active="true"] {
+	opacity: 1;
+	height: auto;
+	overflow: visible;
+	transition: opacity .25s ease-in;
+}
+
 .cbi-section-remove:nth-of-type(2n) {
     background-color: #f9f9f9;
 }

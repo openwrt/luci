@@ -693,6 +693,18 @@ ul.cbi-tabmenu + .cbi-section-node {
 	margin-top: -.5em;
 }
 
+[data-tab-title] {
+	height: 0;
+	opacity: 0;
+	overflow: hidden;
+}
+
+[data-tab-active="true"] {
+	opacity: 1;
+	height: auto;
+	overflow: visible;
+	transition: opacity .25s ease-in;
+}
 
 div.cbi-tab-descr {
 	background-image: url(/luci-static/resources/cbi/help.gif);
