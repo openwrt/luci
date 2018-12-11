@@ -409,12 +409,12 @@ td>table>tbody>tr>td,
 .cbi-button {
     margin: 0 .8rem .5rem 0;
     -webkit-appearance: none;
-    color: rgba(0, 0, 0, 0.87);
-    background-color: #F0F0F0;
+    color: #354057;
+    background-color: transparent;
     transition: all 0.2s ease-in-out;
     display: inline-block;
     padding: .5rem .8rem;
-    border: none;
+    border: 1px solid;
     border-radius: 25px;
     cursor: pointer;
     -ms-touch-action: manipulation;
@@ -1415,7 +1415,9 @@ header>.container>.pull-right>* {
 }
 
 /* fix Services  Network Shares*/
-
+.node-services-samba.lang_enNetwork #cbi-samba-sambashare .table-container {
+    overflow-x: scroll;
+}
 .node-services-samba>.main .cbi-tabcontainer:nth-child(3) .cbi-value-title {
     margin-bottom: 1rem;
     width: auto;
