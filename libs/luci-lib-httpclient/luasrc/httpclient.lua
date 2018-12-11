@@ -108,20 +108,20 @@ function parse_url(uri)
 	url.host, tmp = rest:match("^%[([0-9a-fA-F:]+)%](.*)$")
 	if url.host and tmp then
 		url.ip6addr = ip.IPv6(url.host)
-		url.host = string.format("[%s]", url.ip6addr:string())
-		rest = tmp
 		if not url.ip6addr then
 			return nil
 		end
+		url.host = string.format("[%s]", url.ip6addr:string())
+		rest = tmp
 	else
 		url.host, tmp = rest:match("^(%d+%.%d+%.%d+%.%d+)(.*)$")
 		if url.host and tmp then
 			url.ipaddr = ip.IPv4(url.host)
-			url.host = url.ipaddr:string()
-			rest = tmp
 			if not url.ipaddr then
 				return nil
 			end
+			url.host = url.ipaddr:string()
+			rest = tmp
 		else
 			url.host, tmp = rest:match("^([0-9a-zA-Z%.%-]+)(.*)$")
 			if url.host and tmp then
