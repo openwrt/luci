@@ -9,9 +9,10 @@ local util = require "luci.util"
 local table = require "table"
 local http = require "luci.http"
 local date = require "luci.http.date"
+local ip = require "luci.ip"
 
-local type, pairs, ipairs, tonumber = type, pairs, ipairs, tonumber
-local unpack = unpack
+local type, pairs, ipairs, tonumber, tostring = type, pairs, ipairs, tonumber, tostring
+local unpack, string = unpack, string
 
 module "luci.httpclient"
 
@@ -25,7 +26,7 @@ function chunksource(sock, buffer)
 			if not newblock then
 				return nil, code
 			end
-			buffer = buffer .. newblock  
+			buffer = buffer .. newblock
 			_, endp, count = buffer:find("^([0-9a-fA-F]+);?.-\r\n")
 		end
 		count = tonumber(count, 16)
@@ -62,17 +63,17 @@ end
 function request_to_buffer(uri, options)
 	local source, code, msg = request_to_source(uri, options)
 	local output = {}
-	
+
 	if not source then
 		return nil, code, msg
 	end
-	
+
 	source, code = ltn12.pump.all(source, (ltn12.sink.table(output)))
-	
+
 	if not source then
 		return nil, code
 	end
-	
+
 	return table.concat(output)
 end
 
@@ -83,7 +84,7 @@ function request_to_source(uri, options)
 	elseif status ~= 200 and status ~= 206 then
 		return nil, status, buffer
 	end
-	
+
 	if response.headers["Transfer-Encoding"] == "chunked" then
 		return chunksource(sock, buffer)
 	else
@@ -91,67 +92,115 @@ function request_to_source(uri, options)
 	end
 end
 
+function parse_url(uri)
+	local url, rest, tmp = {}, nil, nil
+
+	url.scheme, rest = uri:match("^(%w+)://(.+)$")
+	if not (url.scheme and rest) then
+		return nil
+	end
+
+	url.auth, tmp = rest:match("^([^@]+)@(.+)$")
+	if url.auth and tmp then
+		rest = tmp
+	end
+
+	url.host, tmp = rest:match("^%[([0-9a-fA-F:]+)%](.*)$")
+	if url.host and tmp then
+		url.ip6addr = ip.IPv6(url.host)
+		url.host = string.format("[%s]", url.ip6addr:string())
+		rest = tmp
+		if not url.ip6addr then
+			return nil
+		end
+	else
+		url.host, tmp = rest:match("^(%d+%.%d+%.%d+%.%d+)(.*)$")
+		if url.host and tmp then
+			url.ipaddr = ip.IPv4(url.host)
+			url.host = url.ipaddr:string()
+			rest = tmp
+			if not url.ipaddr then
+				return nil
+			end
+		else
+			url.host, tmp = rest:match("^([0-9a-zA-Z%.%-]+)(.*)$")
+			if url.host and tmp then
+				rest = tmp
+			else
+				return nil
+			end
+		end
+	end
+
+	url.port, tmp = rest:match("^:(%d+)(.*)$")
+	if url.port and tmp then
+		url.port = tonumber(url.port)
+		rest = tmp
+		if url.port < 1 or url.port > 65535 then
+			return nil
+		end
+	end
+
+	if url.scheme == "http" then
+		url.port = url.port or 80
+		url.default_port = (url.port == 80)
+	elseif url.scheme == "https" then
+		url.port = url.port or 443
+		url.default_port = (url.port == 443)
+	end
+
+	if rest == "" then
+		url.path = "/"
+	else
+		url.path = rest
+	end
+
+	return url
+end
+
 --
 -- GET HTTP-resource
 --
 function request_raw(uri, options)
 	options = options or {}
-	local pr, auth, host, port, path
 
 	if options.params then
 		uri = uri .. '?' .. http.urlencode_params(options.params)
 	end
 
-	if uri:find("%[") then
-		if uri:find("@") then
-			pr, auth, host, port, path = uri:match("(%w+)://(.+)@(%b[]):?([0-9]*)(.*)")
-			host = host:sub(2,-2)
-		else
-			pr, host, port, path = uri:match("(%w+)://(%b[]):?([0-9]*)(.*)")
-			host = host:sub(2,-2)
-		end
-	else
-		if uri:find("@") then
-			pr, auth, host, port, path =
-				uri:match("(%w+)://(.+)@([%w-.]+):?([0-9]*)(.*)")
-		else
-			pr, host, port, path = uri:match("(%w+)://([%w-.]+):?([0-9]*)(.*)")
-		end
-	end
+	local url = parse_url(uri)
 
-	if not host then
+	if not url then
 		return nil, -1, "unable to parse URI"
 	end
-	
-	if pr ~= "http" and pr ~= "https" then
+
+	if url.scheme ~= "http" and url.scheme ~= "https" then
 		return nil, -2, "protocol not supported"
 	end
-	
-	port = #port > 0 and port or (pr == "https" and 443 or 80)
-	path = #path > 0 and path or "/"
-	
+
 	options.depth = options.depth or 10
 	local headers = options.headers or {}
 	local protocol = options.protocol or "HTTP/1.1"
 	headers["User-Agent"] = headers["User-Agent"] or "LuCI httpclient 0.1"
-	
+
 	if headers.Connection == nil then
 		headers.Connection = "close"
 	end
-	
-	if auth and not headers.Authorization then
-		headers.Authorization = "Basic " .. nixio.bin.b64encode(auth)
+
+	if url.auth and not headers.Authorization then
+		headers.Authorization = "Basic " .. nixio.bin.b64encode(url.auth)
 	end
 
-	local sock, code, msg = nixio.connect(host, port)
+	local addr = tostring(url.ip6addr or url.ipaddr or url.host)
+	local sock, code, msg = nixio.connect(addr, url.port)
 	if not sock then
 		return nil, code, msg
 	end
-	
+
 	sock:setsockopt("socket", "sndtimeo", options.sndtimeo or 15)
 	sock:setsockopt("socket", "rcvtimeo", options.rcvtimeo or 15)
-	
-	if pr == "https" then
+
+	if url.scheme == "https" then
 		local tls = options.tls_context or nixio.tls()
 		sock = tls:create(sock)
 		local stat, code, error = sock:connect()
@@ -160,11 +209,12 @@ function request_raw(uri, options)
 		end
 	end
 
-	-- Pre assemble fixes	
+	-- Pre assemble fixes
 	if protocol == "HTTP/1.1" then
-		headers.Host = headers.Host or host
+		headers.Host = headers.Host or
+			(url.default_port and url.host or string.format("%s:%d", url.host, url.port))
 	end
-	
+
 	if type(options.body) == "table" then
 		options.body = http.urlencode_params(options.body)
 	end
@@ -175,7 +225,7 @@ function request_raw(uri, options)
 			"application/x-www-form-urlencoded"
 		options.method = options.method or "POST"
 	end
-	
+
 	if type(options.body) == "function" then
 		options.method = options.method or "POST"
 	end
@@ -185,12 +235,12 @@ function request_raw(uri, options)
 		for _, c in ipairs(options.cookies) do
 			local cdo = c.flags.domain
 			local cpa = c.flags.path
-			if   (cdo == host or cdo == "."..host or host:sub(-#cdo) == cdo) 
-			 and (cpa == path or cpa == "/" or cpa .. "/" == path:sub(#cpa+1))
-			 and (not c.flags.secure or pr == "https")
+			if   (cdo == url.host or cdo == "."..url.host or url.host:sub(-#cdo) == cdo)
+			 and (cpa == url.path or cpa == "/" or cpa .. "/" == url.path:sub(#cpa+1))
+			 and (not c.flags.secure or url.scheme == "https")
 			then
 				cookiedata[#cookiedata+1] = c.key .. "=" .. c.value
-			end 
+			end
 		end
 		if headers["Cookie"] then
 			headers["Cookie"] = headers["Cookie"] .. "; " .. table.concat(cookiedata, "; ")
@@ -200,8 +250,8 @@ function request_raw(uri, options)
 	end
 
 	-- Assemble message
-	local message = {(options.method or "GET") .. " " .. path .. " " .. protocol}
-	
+	local message = {(options.method or "GET") .. " " .. url.path .. " " .. protocol}
+
 	for k, v in pairs(headers) do
 		if type(v) == "string" or type(v) == "number" then
 			message[#message+1] = k .. ": " .. v
@@ -214,10 +264,10 @@ function request_raw(uri, options)
 
 	message[#message+1] = ""
 	message[#message+1] = ""
-	
+
 	-- Send request
 	sock:sendall(table.concat(message, "\r\n"))
-	
+
 	if type(options.body) == "string" then
 		sock:sendall(options.body)
 	elseif type(options.body) == "function" then
@@ -227,27 +277,27 @@ function request_raw(uri, options)
 			return unpack(res)
 		end
 	end
-	
+
 	-- Create source and fetch response
 	local linesrc = sock:linesource()
 	local line, code, error = linesrc()
-	
+
 	if not line then
 		sock:close()
 		return nil, code, error
 	end
-	
+
 	local protocol, status, msg = line:match("^([%w./]+) ([0-9]+) (.*)")
-	
+
 	if not protocol then
 		sock:close()
 		return nil, -3, "invalid response magic: " .. line
 	end
-	
+
 	local response = {
 		status = line, headers = {}, code = 0, cookies = {}, uri = uri
 	}
-	
+
 	line = linesrc()
 	while line and line ~= "" do
 		local key, val = line:match("^([%w-]+)%s?:%s?(.*)")
@@ -262,32 +312,32 @@ function request_raw(uri, options)
 		end
 		line = linesrc()
 	end
-	
+
 	if not line then
 		sock:close()
 		return nil, -4, "protocol error"
 	end
-	
+
 	-- Parse cookies
 	if response.headers["Set-Cookie"] then
 		local cookies = response.headers["Set-Cookie"]
 		for _, c in ipairs(type(cookies) == "table" and cookies or {cookies}) do
 			local cobj = cookie_parse(c)
-			cobj.flags.path = cobj.flags.path or path:match("(/.*)/?[^/]*")
+			cobj.flags.path = cobj.flags.path or url.path:match("(/.*)/?[^/]*")
 			if not cobj.flags.domain or cobj.flags.domain == "" then
-				cobj.flags.domain = host
+				cobj.flags.domain = url.host
 				response.cookies[#response.cookies+1] = cobj
 			else
 				local hprt, cprt = {}, {}
-				
+
 				-- Split hostnames and save them in reverse order
-				for part in host:gmatch("[^.]*") do
+				for part in url.host:gmatch("[^.]*") do
 					table.insert(hprt, 1, part)
 				end
 				for part in cobj.flags.domain:gmatch("[^.]*") do
 					table.insert(cprt, 1, part)
 				end
-				
+
 				local valid = true
 				for i, part in ipairs(cprt) do
 					-- If parts are different and no wildcard
@@ -309,8 +359,8 @@ function request_raw(uri, options)
 			end
 		end
 	end
-	
-	-- Follow 
+
+	-- Follow
 	response.code = tonumber(status)
 	if response.code and options.depth > 0 then
 		if (response.code == 301 or response.code == 302 or response.code == 307)
@@ -319,20 +369,21 @@ function request_raw(uri, options)
 			if not nuri then
 				return nil, -5, "invalid reference"
 			end
-			if not nuri:find("https?://") then
-				nuri = pr .. "://" .. host .. ":" .. port .. nuri
+			if not nuri:match("^%w+://") then
+				nuri = url.default_port and string.format("%s://%s%s", url.scheme, url.host, nuri)
+					or string.format("%s://%s:%d%s", url.scheme, url.host, url.port, nuri)
 			end
-			
+
 			options.depth = options.depth - 1
 			if options.headers then
 				options.headers.Host = nil
 			end
 			sock:close()
-			
+
 			return request_raw(nuri, options)
 		end
 	end
-	
+
 	return response.code, response, linesrc(true)..sock:readall(), sock
 end
 
