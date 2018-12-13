@@ -8,6 +8,7 @@ config openvpn_recipe server_tun_ptp
 	option ifconfig		'10.0.0.1 10.0.0.2'
 	option secret		'shared-secret.key'
 	option keepalive	'10 60'
+	option comp_lzo		'yes'
 	option verb		'3'
 	option mssfix		'1420'
 
@@ -22,6 +23,7 @@ config openvpn_recipe client_tun_ptp
 	option ifconfig		'10.0.0.2 10.0.0.1'
 	option secret		'shared-secret.key'
 	option nobind		'1'
+	option comp_lzo		'yes'
 	option verb		'3'
 
 #
@@ -37,6 +39,7 @@ config openvpn_recipe server_tun
 	option key 		'server.key'
 	option dh 		'dh1024.pem'
 	option keepalive	'10 60'
+	option comp_lzo		'yes'
 	option verb		'3'
 	option mssfix		'1420'
 
@@ -51,6 +54,7 @@ config openvpn_recipe client_tun
 	list remote		'vpnserver.example.org'
 	option pkcs12		'my_client.p12'
 	option remote_cert_tls	'server'
+	option comp_lzo		'yes'
 	option nobind		'1'
 	option persist_key	'1'
 	option persist_tun	'1'
@@ -71,6 +75,7 @@ config openvpn_recipe server_tap_bridge
 	option key 		'server.key'
 	option dh 		'dh1024.pem'
 	option keepalive	'10 60'
+	option comp_lzo		'yes'
 	option verb		'3'
 	option mssfix		'1420'
 
@@ -88,6 +93,7 @@ config openvpn_recipe client_tap_bridge
 	option key 		'my_client.key'
 	option dh 		'dh1024.pem'
 	option remote_cert_tls	'server'
+	option comp_lzo		'yes'
 	option nobind		'1'
 	option persist_key	'1'
 	option verb		'3'
