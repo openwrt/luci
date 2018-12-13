@@ -9,13 +9,17 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:192
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:133
 msgid "%.1f dB"
 msgstr "%.1f дБ"
 
-#: modules/luci-mod-system/luasrc/view/admin_system/sshkeys.htm:118
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:109
 msgid "%d Bit"
 msgstr "%d біт"
+
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:307
+msgid "%d invalid field(s)"
+msgstr ""
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/vlan.lua:256
 msgid "%s is untagged in multiple VLANs!"
@@ -49,16 +53,16 @@ msgstr "(нема приєднаних інтерфейсів)"
 msgid "-- Additional Field --"
 msgstr "-- Додаткові поля --"
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:842
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:851
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:841
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:850
 #: modules/luci-base/luasrc/view/cbi/header.htm:5
 #: protocols/luci-proto-3g/luasrc/model/cbi/admin_network/proto_3g.lua:26
 #: protocols/luci-proto-qmi/luasrc/model/cbi/admin_network/proto_qmi.lua:36
 msgid "-- Please choose --"
 msgstr "-- Оберіть --"
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:867
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:1027
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:866
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:1030
 #: modules/luci-base/luasrc/view/cbi/header.htm:6
 msgid "-- custom --"
 msgstr "-- нетипово --"
@@ -90,7 +94,7 @@ msgstr "Навантаження за 1 хвилину:"
 msgid "15 Minute Load:"
 msgstr "Навантаження за 15 хвилин:"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:853
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:879
 msgid "4-character hexadecimal ID"
 msgstr "4-симв. шістнадцятковий ID"
 
@@ -102,36 +106,36 @@ msgstr "464XLAT (CLAT)"
 msgid "5 Minute Load:"
 msgstr "Навантаження за 5 хвилин:"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:887
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:915
 msgid "6-octet identifier as a hex string - no colons"
 msgstr ""
 "6-октетний ідентифікатор у вигляді шістнадцяткового рядка – без двокрапок"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:824
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:850
 msgid "802.11r Fast Transition"
 msgstr "Швидкий перехід 802.11r"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:1078
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:1106
 msgid "802.11w Association SA Query maximum timeout"
 msgstr "Максимальний тайм-аут запиту асоціації 802.11w"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:1087
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:1115
 msgid "802.11w Association SA Query retry timeout"
 msgstr "Тайм-аут повторювання запиту асоціації 802.11w"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:1060
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:1088
 msgid "802.11w Management Frame Protection"
 msgstr "Захист кадрів управління 802.11w"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:1077
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:1105
 msgid "802.11w maximum timeout"
 msgstr "Максимальний тайм-аут 802.11w"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:1086
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:1114
 msgid "802.11w retry timeout"
 msgstr "Тайм-аут повторювання 802.11w"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:388
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:390
 msgid "<abbr title=\"Basic Service Set Identifier\">BSSID</abbr>"
 msgstr ""
 "<abbr title=\"Basic Service Set Identifier — ідентифікатор основної служби "
@@ -157,7 +161,7 @@ msgstr ""
 "<abbr title=\"Domain Name System — система доменних імен\">DNS</abbr>-"
 "сервери буде опитано в порядку, визначеному файлом <em>resolvfile</em>"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:377
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:379
 msgid "<abbr title=\"Extended Service Set Identifier\">ESSID</abbr>"
 msgstr ""
 "<abbr title=\"Extended Service Set Identifier — ідентифікатор розширеної "
@@ -249,19 +253,19 @@ msgid "A new login is required since the authentication session expired."
 msgstr ""
 "Оскільки сеанс автентифікації закінчився, потрібен новий вхід у систему."
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:173
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:114
 msgid "A43C + J43 + A43"
 msgstr ""
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:174
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:115
 msgid "A43C + J43 + A43 + V43"
 msgstr ""
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:186
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:127
 msgid "ADSL"
 msgstr ""
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:162
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:103
 msgid "ANSI T1.413"
 msgstr ""
 
@@ -276,31 +280,31 @@ msgstr ""
 msgid "ARP retry threshold"
 msgstr "Поріг повторювання ARP"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:181
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:122
 msgid "ATM (Asynchronous Transfer Mode)"
 msgstr ""
 "<abbr title=\"Asynchronous Transfer Mode — асинхронний режим передавання"
 "\">ATM</abbr>"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:203
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:144
 msgid "ATM Bridges"
 msgstr "ATM-мости"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:237
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:178
 #: protocols/luci-proto-ppp/luasrc/model/cbi/admin_network/proto_pppoa.lua:21
 msgid "ATM Virtual Channel Identifier (VCI)"
 msgstr ""
 "Ідентифікатор віртуального каналу ATM (<abbr title=\"Virtual Channel "
 "Identifier\">VCI</abbr>)"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:238
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:179
 #: protocols/luci-proto-ppp/luasrc/model/cbi/admin_network/proto_pppoa.lua:26
 msgid "ATM Virtual Path Identifier (VPI)"
 msgstr ""
 "Ідентифікатор віртуального шляху ATM (<abbr title=\"Virtual Path Identifier"
 "\">VPI</abbr>)"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:204
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:145
 msgid ""
 "ATM bridges expose encapsulated ethernet in AAL5 connections as virtual "
 "Linux network interfaces which can be used in conjunction with DHCP or PPP "
@@ -310,12 +314,12 @@ msgstr ""
 "віртуальні мережеві інтерфейси Linux, котрі можуть використовуватися в "
 "поєднанні з DHCP або PPP для підключення до мережі провайдера."
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:243
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:184
 #: protocols/luci-proto-ppp/luasrc/model/cbi/admin_network/proto_pppoa.lua:16
 msgid "ATM device number"
 msgstr "Номер ATM-пристрою"
 
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:273
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:117
 msgid "ATU-C System Vendor ID"
 msgstr ""
 
@@ -323,8 +327,8 @@ msgstr ""
 msgid "Access Concentrator"
 msgstr "Концентратор доступу"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:365
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:458
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:367
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:460
 msgid "Access Point"
 msgstr "Точка доступу"
 
@@ -342,7 +346,7 @@ msgid "Active <abbr title=\"Internet Protocol Version 6\">IPv6</abbr>-Routes"
 msgstr "<abbr title=\"Інтернет-протокол версії 6\">IPv6</abbr>-маршрути"
 
 #: modules/luci-mod-status/luasrc/view/admin_status/connections.htm:315
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:425
+#: modules/luci-mod-status/luasrc/view/admin_status/index/30-network.htm:15
 msgid "Active Connections"
 msgstr "Активні підключення"
 
@@ -354,25 +358,33 @@ msgstr "Активні оренди DHCP"
 msgid "Active DHCPv6 Leases"
 msgstr "Активні оренди DHCPv6"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:367
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:369
 #: protocols/luci-proto-hnet/luasrc/model/cbi/admin_network/proto_hnet.lua:12
 msgid "Ad-Hoc"
 msgstr "Ad-Hoc"
 
-#: modules/luci-base/luasrc/view/cbi/nsection.htm:26
+#: modules/luci-base/luasrc/view/cbi/nsection.htm:25
 #: modules/luci-base/luasrc/view/cbi/tblsection.htm:189
 #: modules/luci-base/luasrc/view/cbi/tblsection.htm:197
-#: modules/luci-base/luasrc/view/cbi/tsection.htm:36
-#: modules/luci-base/luasrc/view/cbi/tsection.htm:44
+#: modules/luci-base/luasrc/view/cbi/tsection.htm:34
+#: modules/luci-base/luasrc/view/cbi/tsection.htm:42
 #: modules/luci-base/luasrc/view/cbi/ucisection.htm:54
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi_overview.lua:83
+#: modules/luci-mod-network/luasrc/view/admin_network/wifi_overview.htm:16
 msgid "Add"
 msgstr "Додати"
 
-#: modules/luci-mod-system/luasrc/view/admin_system/sshkeys.htm:129
-#: modules/luci-mod-system/luasrc/view/admin_system/sshkeys.htm:152
-#: modules/luci-mod-system/luasrc/view/admin_system/sshkeys.htm:158
-#: modules/luci-mod-system/luasrc/view/admin_system/sshkeys.htm:239
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:56
+msgid "Add IPv4 address…"
+msgstr ""
+
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:123
+msgid "Add IPv6 address…"
+msgstr ""
+
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:120
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:143
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:149
+#: modules/luci-mod-system/luasrc/view/admin_system/sshkeys.htm:38
 msgid "Add key"
 msgstr "Додати ключ"
 
@@ -380,7 +392,7 @@ msgstr "Додати ключ"
 msgid "Add local domain suffix to names served from hosts files"
 msgstr "Додавати суфікс локального домену до імен, отриманих із файлів hosts"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:67
+#: modules/luci-mod-network/luasrc/view/admin_network/iface_overview.htm:50
 msgid "Add new interface..."
 msgstr "Додати новий інтерфейс..."
 
@@ -392,8 +404,8 @@ msgstr "Додаткові файли hosts"
 msgid "Additional servers file"
 msgstr "Додаткові файли servers"
 
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:206
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:233
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:53
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:79
 msgid "Address"
 msgstr "Адреса"
 
@@ -409,15 +421,15 @@ msgstr "Адміністрування"
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/dhcp.lua:22
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/ifaces.lua:189
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/ifaces.lua:463
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:235
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:141
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:361
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:176
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:143
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:363
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/fstab/mount.lua:50
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/fstab/swap.lua:34
 msgid "Advanced Settings"
 msgstr "Додаткові параметри"
 
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:264
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:108
 msgid "Aggregate Transmit Power(ACTATP)"
 msgstr "Сумарна потужність передавання"
 
@@ -426,11 +438,11 @@ msgid "Alert"
 msgstr "Тривога"
 
 #: modules/luci-base/luasrc/model/network.lua:1406
-#: modules/luci-mod-network/luasrc/view/admin_network/iface_overview_status.htm:97
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/network.js:78
 msgid "Alias Interface"
 msgstr "Інтерфейс псевдоніма"
 
-#: modules/luci-mod-network/luasrc/view/admin_network/iface_overview_status.htm:86
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/network.js:66
 msgid "Alias of \"%s\""
 msgstr "Псевдонім \"%s\""
 
@@ -454,24 +466,24 @@ msgstr ""
 "Дозволити <abbr title=\"Secure Shell — безпечна оболонка\">SSH</abbr>-"
 "перевірку пароля"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:533
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:535
 msgid "Allow AP mode to disconnect STAs based on low ACK condition"
 msgstr ""
 "Дозволити режиму AP відключення абонентів на підставі низького рівня <abbr "
 "title=\"Підтвердження (Acknowledge) успішності отримання TCP-сегменту\">ACK</"
 "abbr>"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:450
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:577
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:452
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:579
 msgid "Allow all except listed"
 msgstr "Дозволити всі, крім зазначених"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:233
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:235
 msgid "Allow legacy 802.11b rates"
 msgstr "Дозволити застарілі швидкості 802.11b"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:449
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:576
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:451
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:578
 msgid "Allow listed only"
 msgstr "Дозволити тільки зазначені"
 
@@ -508,7 +520,7 @@ msgstr "Дозволено IP-адреси"
 msgid "Always announce default router"
 msgstr "Завжди оголошувати типовим маршрутизатором"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:256
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:258
 msgid ""
 "Always use 40MHz channels even if the secondary channel overlaps. Using this "
 "option does not comply with IEEE 802.11n-2009!"
@@ -517,64 +529,64 @@ msgstr ""
 "перекривається. Використання цієї опції не відповідає стандарту IEEE "
 "802.11n-2009!"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:154
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:256
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:95
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:100
 msgid "Annex"
 msgstr ""
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:155
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:96
 msgid "Annex A + L + M (all)"
 msgstr ""
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:163
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:104
 msgid "Annex A G.992.1"
 msgstr ""
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:164
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:105
 msgid "Annex A G.992.2"
 msgstr ""
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:165
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:106
 msgid "Annex A G.992.3"
 msgstr ""
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:166
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:107
 msgid "Annex A G.992.5"
 msgstr ""
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:156
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:97
 msgid "Annex B (all)"
 msgstr ""
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:159
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:100
 msgid "Annex B G.992.1"
 msgstr ""
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:160
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:101
 msgid "Annex B G.992.3"
 msgstr ""
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:161
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:102
 msgid "Annex B G.992.5"
 msgstr ""
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:157
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:98
 msgid "Annex J (all)"
 msgstr ""
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:167
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:108
 msgid "Annex L G.992.3 POTS 1"
 msgstr ""
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:158
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:99
 msgid "Annex M (all)"
 msgstr ""
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:168
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:109
 msgid "Annex M G.992.3"
 msgstr ""
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:169
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:110
 msgid "Annex M G.992.5"
 msgstr ""
 
@@ -592,7 +604,7 @@ msgstr "Оголошено DNS-домени"
 msgid "Announced DNS servers"
 msgstr "Оголошено DNS-сервери"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:1020
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:1048
 msgid "Anonymous Identity"
 msgstr "Анонімне посвідчення"
 
@@ -604,17 +616,17 @@ msgstr "Анонімне монтування"
 msgid "Anonymous Swap"
 msgstr "Анонімний своп"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:319
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:326
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:321
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:328
 msgid "Antenna 1"
 msgstr "Антена 1"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:320
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:327
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:322
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:329
 msgid "Antenna 2"
 msgstr "Антена 2"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:243
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:245
 msgid "Antenna Configuration"
 msgstr "Конфигурація антени"
 
@@ -630,11 +642,11 @@ msgstr "Все одно застосувати"
 msgid "Apply request failed with status <code>%h</code>"
 msgstr "Сталася помилка запиту на застосування зі статусом <code>%h</code>"
 
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:384
+#: modules/luci-mod-status/luasrc/view/admin_status/index/10-system.htm:19
 msgid "Architecture"
 msgstr "Архітектура"
 
-#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:42
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:112
 #: protocols/luci-proto-hnet/luasrc/model/cbi/admin_network/proto_hnet.lua:19
 msgid ""
 "Assign a part of given length of every public IPv6-prefix to this interface"
@@ -642,11 +654,11 @@ msgstr ""
 "Призначати частину заданої довжини до кожного публічного IPv6-префікса цього "
 "інтерфейсу"
 
-#: modules/luci-mod-network/luasrc/view/admin_network/iface_overview_status.htm:171
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/network.js:126
 msgid "Assign interfaces..."
 msgstr "Призначення інтерфейсів..."
 
-#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:48
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:118
 #: protocols/luci-proto-hnet/luasrc/model/cbi/admin_network/proto_hnet.lua:24
 msgid ""
 "Assign prefix parts using this hexadecimal subprefix ID for this interface."
@@ -654,12 +666,12 @@ msgstr ""
 "Призначати для цього інтерфейсу частину префікса, використовуючи цей "
 "шістнадцятковий ID субпрефікса."
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi_overview.lua:218
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:455
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi_overview.lua:148
+#: modules/luci-mod-status/luasrc/view/admin_status/index/60-wifi.htm:22
 msgid "Associated Stations"
 msgstr "Приєднано станції"
 
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:316
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:159
 msgid "Associations"
 msgstr "З’єднань"
 
@@ -668,7 +680,7 @@ msgstr "З’єднань"
 msgid "Auth Group"
 msgstr "Група автентифікації"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:954
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:982
 msgid "Authentication"
 msgstr "Автентифікація"
 
@@ -687,8 +699,8 @@ msgstr "Потрібна авторизація"
 #: themes/luci-theme-bootstrap/luasrc/view/themes/bootstrap/header.htm:184
 #: themes/luci-theme-bootstrap/luasrc/view/themes/bootstrap/header.htm:185
 #: themes/luci-theme-freifunk-generic/luasrc/view/themes/freifunk-generic/header.htm:131
-#: themes/luci-theme-material/luasrc/view/themes/material/header.htm:224
-#: themes/luci-theme-material/luasrc/view/themes/material/header.htm:225
+#: themes/luci-theme-material/luasrc/view/themes/material/header.htm:214
+#: themes/luci-theme-material/luasrc/view/themes/material/header.htm:215
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:223
 #: themes/luci-theme-rosy/luasrc/view/themes/rosy/header.htm:246
 #: themes/luci-theme-rosy/luasrc/view/themes/rosy/header.htm:249
@@ -749,11 +761,11 @@ msgstr "Доступно"
 msgid "Average:"
 msgstr "Середнє значення:"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:175
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:116
 msgid "B43 + B43C"
 msgstr ""
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:176
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:117
 msgid "B43 + B43C + V43"
 msgstr ""
 
@@ -761,10 +773,10 @@ msgstr ""
 msgid "BR / DMR / AFTR"
 msgstr ""
 
-#: modules/luci-mod-network/luasrc/view/admin_network/wifi_join.htm:199
-#: modules/luci-mod-network/luasrc/view/admin_network/wifi_overview_status.htm:91
-#: modules/luci-mod-network/luasrc/view/admin_network/wifi_status.htm:40
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:314
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wifi_status.js:43
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:75
+#: modules/luci-mod-network/luasrc/view/admin_network/wifi_join.htm:32
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:157
 msgid "BSSID"
 msgstr "BSSID"
 
@@ -782,7 +794,7 @@ msgstr "Повернутися до переліку"
 msgid "Back to configuration"
 msgstr "Повернутися до конфігурації"
 
-#: modules/luci-mod-network/luasrc/view/admin_network/wifi_join.htm:215
+#: modules/luci-mod-network/luasrc/view/admin_network/wifi_join.htm:48
 msgid "Back to overview"
 msgstr "Повернутися до переліку"
 
@@ -807,11 +819,11 @@ msgid "Bad address specified!"
 msgstr "Вказано неправильну адресу!"
 
 #: modules/luci-base/luasrc/view/cbi/wireless_modefreq.htm:153
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:285
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:287
 msgid "Band"
 msgstr "Група"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:258
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:260
 msgid "Beacon Interval"
 msgstr "Інтервал маяка"
 
@@ -839,9 +851,9 @@ msgstr "Прив’язка інтерфейсу"
 msgid "Bind the tunnel to this interface (optional)."
 msgstr "Прив’язка тунелю до цього інтерфейсу (за бажання)."
 
-#: modules/luci-mod-network/luasrc/view/admin_network/wifi_overview_status.htm:118
-#: modules/luci-mod-network/luasrc/view/admin_network/wifi_status.htm:46
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:325
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wifi_status.js:49
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:88
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:168
 msgid "Bitrate"
 msgstr "Швидкість передавання даних"
 
@@ -857,7 +869,7 @@ msgstr "Міст"
 msgid "Bridge interfaces"
 msgstr "Об’єднати інтерфейси в міст"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:244
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:185
 msgid "Bridge unit number"
 msgstr "Номер моста"
 
@@ -873,7 +885,7 @@ msgstr "Бездротовий 802.11%s контролер Broadcom"
 msgid "Broadcom BCM%04x 802.11 Wireless Controller"
 msgstr "Бездротовий 802.11 контролер Broadcom BCM%04x"
 
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:402
+#: modules/luci-mod-status/luasrc/view/admin_status/index/20-memory.htm:18
 msgid "Buffered"
 msgstr "Буферизовано"
 
@@ -892,7 +904,7 @@ msgstr "Не вдалося здійснити виклик"
 
 #: modules/luci-base/luasrc/view/cbi/delegator.htm:14
 #: modules/luci-base/luasrc/view/cbi/simpleform.htm:52
-#: modules/luci-mod-system/luasrc/view/admin_system/sshkeys.htm:185
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:176
 #: modules/luci-mod-system/luasrc/view/admin_system/upgrade.htm:60
 msgid "Cancel"
 msgstr "Скасувати"
@@ -909,15 +921,15 @@ msgstr "Увага: файли конфігурації буде видален�
 msgid "Caution: System upgrade will be forced"
 msgstr "Увага: систему буде оновлено примусово"
 
-#: modules/luci-mod-status/luasrc/view/admin_status/iptables.htm:87
-#: modules/luci-mod-status/luasrc/view/admin_status/iptables.htm:89
-#: modules/luci-mod-status/luasrc/view/admin_status/iptables.htm:275
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:45
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:48
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:234
 msgid "Chain"
 msgstr "Ланцюжок"
 
-#: modules/luci-mod-system/luasrc/view/admin_system/password.htm:12
-#: modules/luci-mod-system/luasrc/view/admin_system/password.htm:18
-#: modules/luci-mod-system/luasrc/view/admin_system/password.htm:28
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js:9
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js:14
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js:24
 msgid "Change login password"
 msgstr "Змінити пароль для входу"
 
@@ -934,24 +946,24 @@ msgstr "Зміни застосовано."
 msgid "Changes have been reverted."
 msgstr "Зміни було скасовано."
 
-#: modules/luci-mod-system/luasrc/view/admin_system/password.htm:44
+#: modules/luci-mod-system/luasrc/view/admin_system/password.htm:9
 msgid "Changes the administrator password for accessing the device"
 msgstr "Зміна пароля адміністратора для доступу до пристрою"
 
-#: modules/luci-mod-system/luasrc/view/admin_system/password.htm:13
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js:10
 msgid "Changing password…"
 msgstr "Зміна пароля…"
 
 #: modules/luci-base/luasrc/view/cbi/wireless_modefreq.htm:157
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:172
-#: modules/luci-mod-network/luasrc/view/admin_network/wifi_join.htm:197
-#: modules/luci-mod-network/luasrc/view/admin_network/wifi_overview_status.htm:117
-#: modules/luci-mod-network/luasrc/view/admin_network/wifi_status.htm:42
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:324
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wifi_status.js:45
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:87
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:174
+#: modules/luci-mod-network/luasrc/view/admin_network/wifi_join.htm:30
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:167
 msgid "Channel"
 msgstr "Канал"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:117
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:119
 msgid ""
 "Channel %d is not available in the %s regulatory domain and has been auto-"
 "adjusted to %d."
@@ -992,7 +1004,7 @@ msgstr ""
 "або заповніть поле <em>створити</em>, щоб визначити нову зону і прикріпити "
 "до неї інтерфейс."
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:391
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:393
 msgid ""
 "Choose the network(s) you want to attach to this wireless interface or fill "
 "out the <em>create</em> field to define a new network."
@@ -1000,7 +1012,7 @@ msgstr ""
 "Оберіть мережі, які ви хочете прикріпити до цього бездротового інтерфейсу "
 "або заповніть поле <em>створити</em>, щоб визначити нову мережу."
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:602
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:604
 msgid "Cipher"
 msgstr "Шифр"
 
@@ -1024,8 +1036,8 @@ msgstr ""
 "Натисніть \"Зберегти mtdblock\", щоб завантажити вказаний файл mtdblock. "
 "(ПРИМІТКА: ЦЕ ФУНКЦІЯ ДЛЯ ПРОФЕСІОНАЛІВ!)"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:366
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:459
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:368
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:461
 msgid "Client"
 msgstr "Клієнт"
 
@@ -1034,8 +1046,8 @@ msgstr "Клієнт"
 msgid "Client ID to send when requesting DHCP"
 msgstr "Ідентифікатор клієнта для відправки при запиті DHCP"
 
-#: modules/luci-mod-system/luasrc/view/admin_system/sshkeys.htm:154
-#: modules/luci-mod-system/luasrc/view/admin_system/sshkeys.htm:160
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:145
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:151
 msgid "Close"
 msgstr "Закрити"
 
@@ -1059,16 +1071,16 @@ msgstr "Згорнути список..."
 #: modules/luci-base/luasrc/view/lease_status.htm:77
 #: modules/luci-base/luasrc/view/lease_status.htm:92
 #: modules/luci-base/luasrc/view/wifi_assoclist.htm:118
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:42
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi_overview.lua:97
-#: modules/luci-mod-network/luasrc/view/admin_network/iface_status.htm:62
-#: modules/luci-mod-network/luasrc/view/admin_network/wifi_join.htm:207
-#: modules/luci-mod-network/luasrc/view/admin_network/wifi_status.htm:73
+#: modules/luci-mod-network/luasrc/view/admin_network/iface_overview.htm:24
+#: modules/luci-mod-network/luasrc/view/admin_network/iface_status.htm:6
+#: modules/luci-mod-network/luasrc/view/admin_network/wifi_join.htm:40
+#: modules/luci-mod-network/luasrc/view/admin_network/wifi_overview.htm:30
+#: modules/luci-mod-network/luasrc/view/admin_network/wifi_status.htm:8
 #: modules/luci-mod-status/luasrc/view/admin_status/connections.htm:367
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:421
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:440
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:450
-#: modules/luci-mod-status/luasrc/view/admin_status/iptables.htm:317
+#: modules/luci-mod-status/luasrc/view/admin_status/index/30-network.htm:11
+#: modules/luci-mod-status/luasrc/view/admin_status/index/50-dsl.htm:17
+#: modules/luci-mod-status/luasrc/view/admin_status/index/60-wifi.htm:17
+#: modules/luci-mod-status/luasrc/view/admin_status/iptables.htm:68
 #: modules/luci-mod-system/luasrc/view/admin_system/clock_status.htm:33
 msgid "Collecting data..."
 msgstr "Збирання даних..."
@@ -1077,7 +1089,7 @@ msgstr "Збирання даних..."
 msgid "Command"
 msgstr "Команда"
 
-#: modules/luci-mod-status/luasrc/view/admin_status/iptables.htm:105
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:64
 msgid "Comment"
 msgstr "Примітка"
 
@@ -1085,7 +1097,7 @@ msgstr "Примітка"
 msgid "Common Configuration"
 msgstr "Загальна конфігурація"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:1097
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:1125
 msgid ""
 "Complicates key reinstallation attacks on the client side by disabling "
 "retransmission of EAPOL-Key frames that are used to install keys. This "
@@ -1121,21 +1133,21 @@ msgstr "Конфігурацію застосовано."
 msgid "Configuration has been rolled back!"
 msgstr "Конфігурацію було відкочено!"
 
-#: modules/luci-mod-system/luasrc/view/admin_system/password.htm:57
+#: modules/luci-mod-system/luasrc/view/admin_system/password.htm:22
 msgid "Confirmation"
 msgstr "Підтвердження"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:50
+#: modules/luci-mod-network/luasrc/view/admin_network/iface_overview.htm:32
 msgid "Connect"
 msgstr "Підключити"
 
-#: modules/luci-mod-network/luasrc/view/admin_network/iface_overview_status.htm:44
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:215
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:240
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/network.js:34
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:62
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:86
 msgid "Connected"
 msgstr "Підключено"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:335
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:337
 msgid "Connection Limit"
 msgstr "Гранична кількість підключень"
 
@@ -1158,13 +1170,13 @@ msgstr ""
 "налаштування мережі, такі як IP-адреса або облікові дані безпеки бездротової "
 "мережі."
 
-#: modules/luci-mod-network/luasrc/view/admin_network/wifi_status.htm:47
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wifi_status.js:50
 msgid "Country"
 msgstr "Країна"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:224
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:230
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:334
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:226
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:232
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:336
 msgid "Country Code"
 msgstr "Код країни"
 
@@ -1224,6 +1236,18 @@ msgstr ""
 "Налаштування поведінки <abbr title=\"Light Emitting Diode — світлодіод"
 "\">LED</abbr>, якщо це можливо."
 
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:760
+msgid "DAE-Client"
+msgstr ""
+
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:768
+msgid "DAE-Port"
+msgstr ""
+
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:776
+msgid "DAE-Secret"
+msgstr ""
+
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/ifaces.lua:448
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/ifaces.lua:459
 msgid "DHCP Server"
@@ -1254,16 +1278,16 @@ msgstr "Режим DHCPv6"
 msgid "DHCPv6-Service"
 msgstr "Служба DHCPv6"
 
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:209
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:210
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:211
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:212
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:213
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:235
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:236
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:237
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:238
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:239
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:56
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:57
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:58
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:59
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:60
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:81
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:82
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:83
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:84
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:85
 msgid "DNS"
 msgstr "DNS"
 
@@ -1291,20 +1315,20 @@ msgstr "Тайм-аут простою DPD"
 msgid "DS-Lite AFTR address"
 msgstr "AFTR-адреса DS-Lite"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:151
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:437
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:92
+#: modules/luci-mod-status/luasrc/view/admin_status/index/50-dsl.htm:14
 msgid "DSL"
 msgstr "DSL"
 
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:251
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:95
 msgid "DSL Status"
 msgstr "Стан DSL"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:184
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:125
 msgid "DSL line mode"
 msgstr "Режим лінії DSL"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:507
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:509
 msgid "DTIM Interval"
 msgstr ""
 "Інтервал <abbr title=\"Delivery Traffic Indication Message — Повідомлення "
@@ -1314,7 +1338,7 @@ msgstr ""
 msgid "DUID"
 msgstr "DUID"
 
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:258
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:102
 msgid "Data Rate"
 msgstr "Швидк. передавання"
 
@@ -1323,8 +1347,9 @@ msgstr "Швидк. передавання"
 msgid "Debug"
 msgstr "Зневаджування"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:718
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:742
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:720
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:744
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:768
 msgid "Default %d"
 msgstr "Типово %d"
 
@@ -1365,20 +1390,20 @@ msgstr ""
 #: modules/luci-base/luasrc/view/cbi/nsection.htm:11
 #: modules/luci-base/luasrc/view/cbi/tblsection.htm:162
 #: modules/luci-base/luasrc/view/cbi/tsection.htm:11
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:59
+#: modules/luci-mod-network/luasrc/view/admin_network/iface_overview.htm:41
 msgid "Delete"
 msgstr "Видалити"
 
-#: modules/luci-mod-system/luasrc/view/admin_system/sshkeys.htm:187
-#: modules/luci-mod-system/luasrc/view/admin_system/sshkeys.htm:181
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:172
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:178
 msgid "Delete key"
 msgstr "Видалити ключ"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi_overview.lua:112
+#: modules/luci-mod-network/luasrc/view/admin_network/wifi_overview.htm:45
 msgid "Delete this network"
 msgstr "Видалити цю мережу"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:507
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:509
 msgid "Delivery Traffic Indication Message Interval"
 msgstr "Інтервал повідомлень індикації доправлення трафіку"
 
@@ -1386,16 +1411,16 @@ msgstr "Інтервал повідомлень індикації доправ�
 msgid "Description"
 msgstr "Опис"
 
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:62
 #: modules/luci-mod-status/luasrc/view/admin_status/connections.htm:361
-#: modules/luci-mod-status/luasrc/view/admin_status/iptables.htm:103
 msgid "Destination"
 msgstr "Призначення"
 
 #: modules/luci-base/luasrc/view/cbi/firewall_zonelist.htm:43
-#: modules/luci-mod-network/luasrc/view/admin_network/iface_overview_status.htm:43
-#: modules/luci-mod-network/luasrc/view/admin_network/iface_status.htm:12
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:203
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:229
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/iface_status.js:13
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/network.js:33
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:50
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:75
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/fstab.lua:154
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/fstab.lua:253
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/fstab/mount.lua:86
@@ -1404,7 +1429,7 @@ msgstr "Призначення"
 msgid "Device"
 msgstr "Пристрій"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:136
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:138
 msgid "Device Configuration"
 msgstr "Конфігурація пристрою"
 
@@ -1433,8 +1458,8 @@ msgstr "Набір номера"
 msgid "Directory"
 msgstr "Каталог"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:129
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi_overview.lua:106
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:131
+#: modules/luci-mod-network/luasrc/view/admin_network/wifi_overview.htm:39
 msgid "Disable"
 msgstr "Вимкнути"
 
@@ -1450,11 +1475,11 @@ msgstr ""
 msgid "Disable Encryption"
 msgstr "Вимкнути шифрування"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:518
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:520
 msgid "Disable Inactivity Polling"
 msgstr "Вимкнути опитування неактивності"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi_overview.lua:106
+#: modules/luci-mod-network/luasrc/view/admin_network/wifi_overview.htm:39
 msgid "Disable this network"
 msgstr "Вимкнути цю мережу"
 
@@ -1468,11 +1493,11 @@ msgstr "Вимкнути цю мережу"
 msgid "Disabled"
 msgstr "Вимкнено"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:1066
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:1094
 msgid "Disabled (default)"
 msgstr "Вимкнено (типово)"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:532
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:534
 msgid "Disassociate On Low Acknowledgement"
 msgstr "Роз'єднувати за низького підтвердження"
 
@@ -1490,21 +1515,21 @@ msgid "Disconnection attempt failed"
 msgstr "Спроба від’єднання не вдалася"
 
 #: modules/luci-base/luasrc/view/cbi/apply_widget.htm:46
-#: modules/luci-mod-system/luasrc/view/admin_system/password.htm:21
-#: modules/luci-mod-system/luasrc/view/admin_system/password.htm:32
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js:17
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js:28
 msgid "Dismiss"
 msgstr "Відхилити"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:237
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:331
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:239
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:333
 msgid "Distance Optimization"
 msgstr "Оптимізація за відстанню"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:238
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:240
 msgid "Distance to farthest network member in meters."
 msgstr "Відстань до найвіддаленішого вузла мережі в метрах."
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:344
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:346
 msgid "Diversity"
 msgstr "Різновидність"
 
@@ -1537,7 +1562,7 @@ msgstr ""
 "Не переспрямовувати зворотні <abbr title=\"Domain Name System — система "
 "доменних імен\">DNS</abbr>-запити для локальних мереж"
 
-#: modules/luci-mod-system/luasrc/view/admin_system/sshkeys.htm:182
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:173
 msgid "Do you really want to delete the following SSH key?"
 msgstr "Справді видалити такий SSH ключ?"
 
@@ -1574,7 +1599,7 @@ msgstr "Завантажити резервну копію"
 msgid "Download mtdblock"
 msgstr "Завантажити mtdblock"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:189
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:130
 msgid "Downstream SNR offset"
 msgstr "Низхідний зсув SNR"
 
@@ -1616,14 +1641,14 @@ msgstr ""
 msgid "EA-bits length"
 msgstr "Довжина EA-бітів"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:917
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:945
 msgid "EAP-Method"
 msgstr "EAP-Метод"
 
 #: modules/luci-base/luasrc/view/cbi/tblsection.htm:154
 #: modules/luci-base/luasrc/view/cbi/tblsection.htm:160
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:56
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi_overview.lua:109
+#: modules/luci-mod-network/luasrc/view/admin_network/iface_overview.htm:38
+#: modules/luci-mod-network/luasrc/view/admin_network/wifi_overview.htm:42
 msgid "Edit"
 msgstr "Редагувати"
 
@@ -1635,11 +1660,11 @@ msgstr ""
 "Щоб виправити якусь помилку, відредагуйте вихідні дані конфігурації вище і "
 "натисніть \"Зберегти\", щоб перезавантажити сторінку."
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:56
+#: modules/luci-mod-network/luasrc/view/admin_network/iface_overview.htm:38
 msgid "Edit this interface"
 msgstr "Редагувати цей інтерфейс"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi_overview.lua:109
+#: modules/luci-mod-network/luasrc/view/admin_network/wifi_overview.htm:42
 msgid "Edit this network"
 msgstr "Редагувати цю мережу"
 
@@ -1647,8 +1672,8 @@ msgstr "Редагувати цю мережу"
 msgid "Emergency"
 msgstr "Аварійний"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:125
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi_overview.lua:103
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:127
+#: modules/luci-mod-network/luasrc/view/admin_network/wifi_overview.htm:36
 msgid "Enable"
 msgstr "Увімкнути"
 
@@ -1700,11 +1725,11 @@ msgstr "Увімкнути TFTP-сервер"
 msgid "Enable VLAN functionality"
 msgstr "Увімкнути підтримку VLAN"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:1111
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:1139
 msgid "Enable WPS pushbutton, requires WPA(2)-PSK"
 msgstr "Увімкнути кнопку WPS, потребує WPA(2)-PSK"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:1096
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:1124
 msgid "Enable key reinstallation (KRACK) countermeasures"
 msgstr "Увімкнути протидію<br />перевстановленню ключів (KRACK)"
 
@@ -1728,7 +1753,7 @@ msgstr "Увімкнути прапорець DF (Don't Fragment) для інк�
 msgid "Enable this mount"
 msgstr "Увімкнути це монтування"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi_overview.lua:103
+#: modules/luci-mod-network/luasrc/view/admin_network/wifi_overview.htm:36
 msgid "Enable this network"
 msgstr "Увімкнути цю мережу"
 
@@ -1750,7 +1775,7 @@ msgstr "Увімкнено"
 msgid "Enables IGMP snooping on this bridge"
 msgstr "Вмикає відстеження IGMP на цьому мосту"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:825
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:851
 msgid ""
 "Enables fast roaming among access points that belong to the same Mobility "
 "Domain"
@@ -1763,16 +1788,16 @@ msgid "Enables the Spanning Tree Protocol on this bridge"
 msgstr ""
 "Вмикає <abbr title=\"Spanning Tree Protocol\">STP</abbr> на цьому мосту"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:179
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:239
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:120
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:180
 msgid "Encapsulation mode"
 msgstr "Режим інкапсуляції"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:591
-#: modules/luci-mod-network/luasrc/view/admin_network/wifi_join.htm:200
-#: modules/luci-mod-network/luasrc/view/admin_network/wifi_overview_status.htm:92
-#: modules/luci-mod-network/luasrc/view/admin_network/wifi_status.htm:41
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:315
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wifi_status.js:44
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:76
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:593
+#: modules/luci-mod-network/luasrc/view/admin_network/wifi_join.htm:33
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:158
 msgid "Encryption"
 msgstr "Шифрування"
 
@@ -1796,12 +1821,16 @@ msgstr "Введіть власні значення"
 msgid "Erasing..."
 msgstr "Видалення..."
 
-#: modules/luci-mod-network/luasrc/view/admin_network/iface_overview_status.htm:148
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/network.js:105
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/network.js:106
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/network.js:107
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/network.js:108
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/network.js:109
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:97
 msgid "Error"
 msgstr "Помилка"
 
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:266
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:110
 msgid "Errored seconds (ES)"
 msgstr "Секунд з помилками (<abbr title=\"Errored seconds\">ES</abbr>)"
 
@@ -1821,11 +1850,11 @@ msgstr "Виключити інтерфейси"
 msgid "Expand hosts"
 msgstr "Розширення вузлів"
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:279
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:278
 msgid "Expecting %s"
 msgstr "Очікування %s"
 
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:214
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:61
 msgid "Expires"
 msgstr "Збігає за"
 
@@ -1839,11 +1868,11 @@ msgstr "Термін оренди адрес, мінімум 2 хвилини (<
 msgid "External"
 msgstr "Зовнішнє"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:898
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:926
 msgid "External R0 Key Holder List"
 msgstr "Зовнішній список власників ключів R0"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:907
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:935
 msgid "External R1 Key Holder List"
 msgstr "Зовнішній список власників ключів R1"
 
@@ -1863,15 +1892,15 @@ msgstr "Протокол зовнішнього сервера системно�
 msgid "Extra SSH command options"
 msgstr "Додаткові параметри команд SSH"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:869
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:895
 msgid "FT over DS"
 msgstr "FT через DS"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:870
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:896
 msgid "FT over the Air"
 msgstr "FT через повітря"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:867
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:893
 msgid "FT protocol"
 msgstr "Протокол FT"
 
@@ -1913,7 +1942,7 @@ msgstr ""
 "Знайти всі файлові системи та свопи, які наразі підключено і замінити "
 "конфігурацію типовою на підставі того, що було виявлено"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi_overview.lua:82
+#: modules/luci-mod-network/luasrc/view/admin_network/wifi_overview.htm:15
 msgid "Find and join network"
 msgstr "Знайти мережу й приєднатися"
 
@@ -1933,15 +1962,15 @@ msgstr "Позначка брандмауера"
 msgid "Firewall Settings"
 msgstr "Налаштування брандмауера"
 
-#: modules/luci-mod-status/luasrc/view/admin_status/iptables.htm:297
+#: modules/luci-mod-status/luasrc/view/admin_status/iptables.htm:44
 msgid "Firewall Status"
 msgstr "Стан брандмауера"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:196
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:137
 msgid "Firmware File"
 msgstr "Файл мікропрограми"
 
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:385
+#: modules/luci-mod-status/luasrc/view/admin_status/index/10-system.htm:20
 msgid "Firmware Version"
 msgstr "Версія мікропрограми"
 
@@ -1973,11 +2002,11 @@ msgstr "Перепрошиваємо..."
 msgid "Force"
 msgstr "Примусово"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:255
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:257
 msgid "Force 40MHz mode"
 msgstr "Примусово застосовувати режим '40MHz'"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:610
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:612
 msgid "Force CCMP (AES)"
 msgstr "Примусово CCMP (AES)"
 
@@ -1985,11 +2014,11 @@ msgstr "Примусово CCMP (AES)"
 msgid "Force DHCP on this network even if another server is detected."
 msgstr "Примусово DHCP у цій мережі, навіть якщо виявлено інший сервер."
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:611
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:613
 msgid "Force TKIP"
 msgstr "Примусово TKIP"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:612
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:614
 msgid "Force TKIP and CCMP (AES)"
 msgstr "Примусово TKIP та CCMP (AES)"
 
@@ -2013,7 +2042,7 @@ msgstr "Неузгодженість маркера форми"
 msgid "Forward DHCP traffic"
 msgstr "Переспрямовувати DHCP-трафік"
 
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:265
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:109
 msgid "Forward Error Correction Seconds (FECS)"
 msgstr "Секунди прямого коригування помилок (FECS)"
 
@@ -2021,25 +2050,25 @@ msgstr "Секунди прямого коригування помилок (FEC
 msgid "Forward broadcast traffic"
 msgstr "Переспрямовувати широкомовний трафік"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:372
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:374
 msgid "Forward mesh peer traffic"
 msgstr "Переспрямовувати одноранговий трафік"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:245
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:186
 msgid "Forwarding mode"
 msgstr "Режим переспрямовування"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:252
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:584
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:254
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:586
 msgid "Fragmentation Threshold"
 msgstr "Поріг фрагментації"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:329
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:331
 msgid "Frame Bursting"
 msgstr "Frame Bursting"
 
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:401
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:412
+#: modules/luci-mod-status/luasrc/view/admin_status/index/20-memory.htm:17
+#: modules/luci-mod-status/luasrc/view/admin_status/index/20-memory.htm:28
 msgid "Free"
 msgstr "Вільно"
 
@@ -2051,9 +2080,9 @@ msgstr ""
 "Більш детальна інформація про інтерфейси та вузли WireGuard на <a href="
 "\"http://wireguard.com\">wireguard.com</a>."
 
-#: modules/luci-mod-network/luasrc/view/admin_network/wifi_overview_status.htm:117
-#: modules/luci-mod-network/luasrc/view/admin_network/wifi_status.htm:42
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:324
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wifi_status.js:45
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:87
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:167
 msgid "GHz"
 msgstr "ГГц"
 
@@ -2062,8 +2091,8 @@ msgstr "ГГц"
 msgid "GPRS only"
 msgstr "Тільки GPRS"
 
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:208
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:234
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:55
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:80
 msgid "Gateway"
 msgstr "Шлюз"
 
@@ -2084,9 +2113,9 @@ msgstr "Загальні параметри"
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/ifaces.lua:188
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/ifaces.lua:462
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:234
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:139
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:358
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:175
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:141
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:360
 msgid "General Setup"
 msgstr "Загальні налаштування"
 
@@ -2094,7 +2123,7 @@ msgstr "Загальні налаштування"
 msgid "Generate Config"
 msgstr "Cтворити конфігурацію"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:874
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:900
 msgid "Generate PMK locally"
 msgstr "Генерувати PMK локально"
 
@@ -2106,7 +2135,7 @@ msgstr "Cтворити архів"
 msgid "Generic 802.11%s Wireless Controller"
 msgstr "Бездротовий 802.11%s контролер"
 
-#: modules/luci-mod-system/luasrc/view/admin_system/password.htm:30
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js:26
 msgid "Given password confirmation did not match, password not changed!"
 msgstr "Оскільки пароль і підтвердження не співпадають, то пароль не змінено!"
 
@@ -2114,12 +2143,12 @@ msgstr "Оскільки пароль і підтвердження не спі�
 msgid "Global Settings"
 msgstr "Загальні параметри"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:253
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:194
 msgid "Global network options"
 msgstr "Глобальні параметри мережі"
 
 #: themes/luci-theme-bootstrap/luasrc/view/themes/bootstrap/header.htm:198
-#: themes/luci-theme-material/luasrc/view/themes/material/header.htm:245
+#: themes/luci-theme-material/luasrc/view/themes/material/header.htm:235
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:262
 #: themes/luci-theme-rosy/luasrc/view/themes/rosy/header.htm:288
 msgid "Go to password configuration..."
@@ -2146,7 +2175,7 @@ msgstr "Пароль HE.net"
 msgid "HE.net username"
 msgstr "Ім’я користувача HE.net"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:307
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:309
 msgid "HT mode (802.11n)"
 msgstr "Режим HT (802.11n)"
 
@@ -2154,7 +2183,7 @@ msgstr "Режим HT (802.11n)"
 msgid "Hang Up"
 msgstr "Призупинити"
 
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:270
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:114
 msgid "Header Error Code Errors (HEC)"
 msgstr ""
 
@@ -2166,16 +2195,16 @@ msgstr ""
 "Тут ви можете налаштувати основні параметри вигляду вашого пристрою, такі як "
 "назва (ім’я) вузла або часовий пояс."
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:487
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:544
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:567
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:489
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:546
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:569
 msgid "Hide <abbr title=\"Extended Service Set Identifier\">ESSID</abbr>"
 msgstr ""
 "Приховати <abbr title=\"Extended Service Set Identifier — ідентифікатор "
 "розширеної служби послуг\">ESSID</abbr>"
 
-#: modules/luci-mod-status/luasrc/view/admin_status/iptables.htm:140
-#: modules/luci-mod-status/luasrc/view/admin_status/iptables.htm:310
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:99
+#: modules/luci-mod-status/luasrc/view/admin_status/iptables.htm:61
 msgid "Hide empty chains"
 msgstr "Приховати порожні ланцюжки"
 
@@ -2203,7 +2232,7 @@ msgstr "Зміст тегу Host-Uniq"
 #: modules/luci-base/luasrc/view/lease_status.htm:71
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/dhcp.lua:283
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/hosts.lua:15
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:382
+#: modules/luci-mod-status/luasrc/view/admin_status/index/10-system.htm:17
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:35
 #: themes/luci-theme-freifunk-generic/luasrc/view/themes/freifunk-generic/header.htm:129
 msgid "Hostname"
@@ -2246,23 +2275,32 @@ msgstr "Неприпустима IP-адреса"
 msgid "IP address is missing"
 msgstr "Відсутня IP-адреса"
 
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/iface_status.js:18
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/iface_status.js:19
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/iface_status.js:20
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/iface_status.js:21
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/iface_status.js:22
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/network.js:89
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/network.js:90
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/network.js:91
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/network.js:92
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/network.js:93
 #: modules/luci-mod-network/luasrc/view/admin_network/diagnostics.htm:73
 #: modules/luci-mod-network/luasrc/view/admin_network/diagnostics.htm:88
-#: modules/luci-mod-network/luasrc/view/admin_network/iface_overview_status.htm:127
-#: modules/luci-mod-network/luasrc/view/admin_network/iface_status.htm:32
 #: protocols/luci-proto-ncm/luasrc/model/cbi/admin_network/proto_ncm.lua:42
 msgid "IPv4"
 msgstr "IPv4"
 
-#: modules/luci-mod-status/luasrc/view/admin_status/iptables.htm:301
+#: modules/luci-mod-status/luasrc/view/admin_status/iptables.htm:49
 msgid "IPv4 Firewall"
 msgstr "Брандмауер IPv4"
 
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:199
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:46
 msgid "IPv4 Upstream"
 msgstr "Висхідне з’єднання IPv4"
 
-#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:11
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:53
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:78
 msgid "IPv4 address"
 msgstr "Адреса IPv4"
 
@@ -2270,19 +2308,19 @@ msgstr "Адреса IPv4"
 msgid "IPv4 assignment length"
 msgstr "Довжина присвоювання IPv4"
 
-#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:28
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:98
 msgid "IPv4 broadcast"
 msgstr "Широкомовний IPv4"
 
-#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:24
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:94
 msgid "IPv4 gateway"
 msgstr "Шлюз IPv4"
 
-#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:16
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:86
 msgid "IPv4 netmask"
 msgstr "Маска мережі IPv4"
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:356
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:355
 msgid "IPv4 network in address/netmask notation"
 msgstr "Мережа IPv4 у позначенні адреси / мережевої маски"
 
@@ -2307,15 +2345,33 @@ msgstr "IPv4-адреса"
 msgid "IPv4-in-IPv4 (RFC2003)"
 msgstr "IPv4 у IPv4 (RFC2003)"
 
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/iface_status.js:23
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/iface_status.js:24
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/iface_status.js:25
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/iface_status.js:26
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/iface_status.js:27
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/iface_status.js:28
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/iface_status.js:29
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/iface_status.js:30
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/iface_status.js:31
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/iface_status.js:32
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/network.js:94
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/network.js:95
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/network.js:96
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/network.js:97
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/network.js:98
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/network.js:99
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/network.js:100
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/network.js:101
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/network.js:102
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/network.js:103
 #: modules/luci-mod-network/luasrc/view/admin_network/diagnostics.htm:74
 #: modules/luci-mod-network/luasrc/view/admin_network/diagnostics.htm:89
-#: modules/luci-mod-network/luasrc/view/admin_network/iface_overview_status.htm:136
-#: modules/luci-mod-network/luasrc/view/admin_network/iface_status.htm:39
 #: protocols/luci-proto-ncm/luasrc/model/cbi/admin_network/proto_ncm.lua:44
 msgid "IPv6"
 msgstr "IPv6"
 
-#: modules/luci-mod-status/luasrc/view/admin_status/iptables.htm:302
+#: modules/luci-mod-status/luasrc/view/admin_status/iptables.htm:52
 msgid "IPv6 Firewall"
 msgstr "Брандмауер IPv6"
 
@@ -2327,35 +2383,35 @@ msgstr "Сусіди IPv6"
 msgid "IPv6 Settings"
 msgstr "Налаштування IPv6"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:254
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:195
 msgid "IPv6 ULA-Prefix"
 msgstr ""
 "<abbr title=\"Unique Local Address — унікальна локальна адреса\">ULA</abbr>-"
 "префікс IPv6"
 
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:225
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:71
 msgid "IPv6 Upstream"
 msgstr "Висхідне з’єднання IPv6"
 
-#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:51
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:121
 msgid "IPv6 address"
 msgstr "Адреса IPv6"
 
-#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:47
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:117
 #: protocols/luci-proto-hnet/luasrc/model/cbi/admin_network/proto_hnet.lua:23
 msgid "IPv6 assignment hint"
 msgstr "Натяк призначення IPv6"
 
-#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:41
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:111
 #: protocols/luci-proto-hnet/luasrc/model/cbi/admin_network/proto_hnet.lua:18
 msgid "IPv6 assignment length"
 msgstr "Довжина призначення IPv6"
 
-#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:56
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:127
 msgid "IPv6 gateway"
 msgstr "Шлюз IPv6"
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:361
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:360
 msgid "IPv6 network in address/netmask notation"
 msgstr "Мережа IPv6 у позначенні адреси / мережевої маски"
 
@@ -2369,12 +2425,12 @@ msgstr "Префікс IPv6"
 msgid "IPv6 prefix length"
 msgstr "Довжина префікса IPv6"
 
-#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:61
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:132
 #: protocols/luci-proto-ipv6/luasrc/model/cbi/admin_network/proto_6in4.lua:33
 msgid "IPv6 routed prefix"
 msgstr "Надісланий префікс IPv6"
 
-#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:66
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:137
 msgid "IPv6 suffix"
 msgstr "Суфікс IPv6"
 
@@ -2383,8 +2439,8 @@ msgstr "Суфікс IPv6"
 msgid "IPv6-Address"
 msgstr "IPv6-адреса"
 
-#: modules/luci-mod-network/luasrc/view/admin_network/iface_overview_status.htm:142
-#: modules/luci-mod-network/luasrc/view/admin_network/iface_status.htm:44
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/iface_status.js:33
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/network.js:104
 msgid "IPv6-PD"
 msgstr ""
 
@@ -2400,7 +2456,7 @@ msgstr "IPv6 через IPv4 (6rd)"
 msgid "IPv6-over-IPv4 (6to4)"
 msgstr "IPv6 через IPv4 (6to4)"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:1002
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:1030
 msgid "Identity"
 msgstr "Посвідчення"
 
@@ -2493,7 +2549,7 @@ msgstr "Ігнорувати файли resolv"
 msgid "Image"
 msgstr "Образ"
 
-#: modules/luci-mod-status/luasrc/view/admin_status/iptables.htm:100
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:59
 msgid "In"
 msgstr "Вх."
 
@@ -2543,7 +2599,7 @@ msgstr "Інсталюйте iputils-traceroute6 для трасування IPv
 msgid "Install package %q"
 msgstr "Інсталяція пакета %q"
 
-#: modules/luci-mod-network/luasrc/view/admin_network/iface_overview_status.htm:163
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/network.js:119
 msgid "Install protocol extensions..."
 msgstr "Інсталяція розширень протоколу..."
 
@@ -2561,24 +2617,24 @@ msgstr "Інтерфейс"
 msgid "Interface %q device auto-migrated from %q to %q."
 msgstr "Пристрій інтерфейсу %q автоматичного мігрував із %q на %q."
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:353
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:355
 msgid "Interface Configuration"
 msgstr "Конфігурація інтерфейсу"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:104
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:51
 msgid "Interface Overview"
 msgstr "Огляд інтерфейсів"
 
-#: modules/luci-mod-network/luasrc/view/admin_network/iface_overview_status.htm:11
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/network.js:3
 msgid "Interface is reconnecting..."
 msgstr "Перепідключення інтерфейсу..."
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:501
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:503
 msgid "Interface name"
 msgstr "Ім’я інтерфейсу"
 
-#: modules/luci-mod-network/luasrc/view/admin_network/iface_overview_status.htm:177
-#: modules/luci-mod-network/luasrc/view/admin_network/iface_status.htm:50
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/iface_status.js:34
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/network.js:130
 msgid "Interface not present or not connected yet."
 msgstr "Інтерфейс відсутній або його ще не підключено."
 
@@ -2597,7 +2653,7 @@ msgid "Internal Server Error"
 msgstr "Внутрішня помилка сервера"
 
 #: modules/luci-base/luasrc/view/cbi/tblsection.htm:192
-#: modules/luci-base/luasrc/view/cbi/tsection.htm:39
+#: modules/luci-base/luasrc/view/cbi/tsection.htm:37
 msgid "Invalid"
 msgstr "Неприпустимо"
 
@@ -2616,7 +2672,7 @@ msgstr ""
 msgid "Invalid username and/or password! Please try again."
 msgstr "Неприпустиме ім’я користувача та/або пароль! Спробуйте ще раз."
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:496
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:498
 msgid "Isolate Clients"
 msgstr "Ізолювати клієнтів"
 
@@ -2630,17 +2686,17 @@ msgstr ""
 
 #: themes/luci-theme-bootstrap/luasrc/view/themes/bootstrap/header.htm:205
 #: themes/luci-theme-freifunk-generic/luasrc/view/themes/freifunk-generic/header.htm:220
-#: themes/luci-theme-material/luasrc/view/themes/material/header.htm:252
+#: themes/luci-theme-material/luasrc/view/themes/material/header.htm:242
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:252
 #: themes/luci-theme-rosy/luasrc/view/themes/rosy/header.htm:295
 msgid "JavaScript required!"
 msgstr "Потрібен JavaScript!"
 
-#: modules/luci-mod-network/luasrc/view/admin_network/wifi_join.htm:77
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wifi_join.js:52
 msgid "Join Network"
 msgstr "Підключення до мережі"
 
-#: modules/luci-mod-network/luasrc/view/admin_network/wifi_join.htm:189
+#: modules/luci-mod-network/luasrc/view/admin_network/wifi_join.htm:22
 msgid "Join Network: Wireless Scan"
 msgstr "Підключення до мережі: Сканування бездротових мереж"
 
@@ -2657,19 +2713,19 @@ msgstr "Зберегти налаштування"
 msgid "Kernel Log"
 msgstr "Журнал ядра"
 
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:389
+#: modules/luci-mod-status/luasrc/view/admin_status/index/10-system.htm:24
 msgid "Kernel Version"
 msgstr "Версія ядра"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:758
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:784
 msgid "Key"
 msgstr "Ключ"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:784
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:785
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:786
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:787
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:803
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:810
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:811
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:812
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:813
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:829
 msgid "Key #%d"
 msgstr "Ключ #%d"
 
@@ -2703,7 +2759,7 @@ msgstr "Поріг помилок ехо-запитів LCP"
 msgid "LCP echo interval"
 msgstr "Інтервал ехо-запитів LCP"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:240
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:181
 msgid "LLC"
 msgstr "LLC"
 
@@ -2720,7 +2776,7 @@ msgstr "Мова"
 msgid "Language and Style"
 msgstr "Мова та стиль"
 
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:260
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:104
 msgid "Latency"
 msgstr "Затримка"
 
@@ -2773,19 +2829,19 @@ msgid "Limit listening to these interfaces, and loopback."
 msgstr ""
 "Обмежитися прослуховуванням цих інтерфейсів і повернутися до початку циклу."
 
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:261
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:105
 msgid "Line Attenuation (LATN)"
 msgstr "Затухання лінії"
 
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:254
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:98
 msgid "Line Mode"
 msgstr "Режим лінії"
 
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:253
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:97
 msgid "Line State"
 msgstr "Стан лінії"
 
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:255
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:99
 msgid "Line Uptime"
 msgstr "Час безперервної роботи лінії"
 
@@ -2801,7 +2857,7 @@ msgstr ""
 "Список <abbr title=\"Domain Name System\">DNS</abbr>-серверів для "
 "переспрямовування запитів"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:899
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:927
 msgid ""
 "List of R0KHs in the same Mobility Domain. <br />Format: MAC-address,NAS-"
 "Identifier,128-bit key as hex string. <br />This list is used to map R0KH-ID "
@@ -2817,7 +2873,7 @@ msgstr ""
 "ключа R0\">R0KH</abbr>, як станції, що була використана під час початкової "
 "асоціації домену мобільності."
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:908
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:936
 msgid ""
 "List of R1KHs in the same Mobility Domain. <br />Format: MAC-address,R1KH-ID "
 "as 6 octets with colons,128-bit key as hex string. <br />This list is used "
@@ -2871,7 +2927,7 @@ msgstr "Порт прослуховування для вхідних DNS-зап
 msgid "Load"
 msgstr "Навантаження"
 
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:392
+#: modules/luci-mod-status/luasrc/view/admin_status/index/10-system.htm:27
 msgid "Load Average"
 msgstr "Середнє навантаження"
 
@@ -2881,7 +2937,7 @@ msgstr "Середнє навантаження"
 msgid "Loading"
 msgstr "Завантаження"
 
-#: modules/luci-mod-system/luasrc/view/admin_system/sshkeys.htm:236
+#: modules/luci-mod-system/luasrc/view/admin_system/sshkeys.htm:35
 msgid "Loading SSH keys…"
 msgstr "Завантаження SSH-ключів…"
 
@@ -2914,7 +2970,7 @@ msgstr "Тільки локальна служба"
 msgid "Local Startup"
 msgstr "Локальний запуск"
 
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:390
+#: modules/luci-mod-status/luasrc/view/admin_status/index/10-system.htm:25
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:31
 msgid "Local Time"
 msgstr "Місцевий час"
@@ -2954,7 +3010,7 @@ msgstr ""
 msgid "Localise queries"
 msgstr "Локалізувати запити"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:173
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:175
 msgid "Locked to channel %s used by: %s"
 msgstr "Заблоковано до каналу %s, який використовує: %s"
 
@@ -2978,7 +3034,7 @@ msgstr "Увійти"
 msgid "Logout"
 msgstr "Вийти"
 
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:268
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:112
 msgid "Loss of Signal Seconds (LOSS)"
 msgstr ""
 
@@ -2986,32 +3042,32 @@ msgstr ""
 msgid "Lowest leased address as offset from the network address."
 msgstr "Найнижча орендована адреса."
 
-#: modules/luci-mod-network/luasrc/view/admin_network/iface_overview_status.htm:45
-#: modules/luci-mod-network/luasrc/view/admin_network/iface_overview_status.htm:113
-#: modules/luci-mod-network/luasrc/view/admin_network/iface_status.htm:20
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/iface_status.js:15
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/network.js:35
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/network.js:86
 msgid "MAC"
 msgstr "MAC"
 
 #: modules/luci-base/luasrc/view/lease_status.htm:73
 #: modules/luci-base/luasrc/view/wifi_assoclist.htm:109
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:204
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:230
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:51
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:76
 #: modules/luci-mod-status/luasrc/view/admin_status/routes.htm:133
 msgid "MAC-Address"
 msgstr "MAC-адреса"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:445
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:574
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:447
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:576
 msgid "MAC-Address Filter"
 msgstr "Фільтр MAC-адрес"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:140
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:360
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:142
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:362
 msgid "MAC-Filter"
 msgstr "MAC-фільтр"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:452
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:578
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:454
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:580
 msgid "MAC-List"
 msgstr "MAC-список"
 
@@ -3059,11 +3115,11 @@ msgstr ""
 msgid "Manual"
 msgstr "Вручну"
 
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:259
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:103
 msgid "Max. Attainable Data Rate (ATTNDR)"
 msgstr "Макс. досяжна швидкість передачі даних (ATTNDR)"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:527
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:529
 msgid "Maximum allowed Listen Interval"
 msgstr "Максимальний дозволений інтервал прослуховування"
 
@@ -3097,15 +3153,15 @@ msgid "Maximum number of leased addresses."
 msgstr "Максимальна кількість орендованих адрес."
 
 #: modules/luci-base/luasrc/view/wifi_assoclist.htm:21
-#: modules/luci-mod-network/luasrc/view/admin_network/wifi_overview_status.htm:118
-#: modules/luci-mod-network/luasrc/view/admin_network/wifi_status.htm:46
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wifi_status.js:49
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:88
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:168
 #: modules/luci-mod-status/luasrc/view/admin_status/bandwidth.htm:79
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:325
 #: modules/luci-mod-status/luasrc/view/admin_status/wireless.htm:284
 msgid "Mbit/s"
 msgstr "Мбіт/с"
 
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:397
+#: modules/luci-mod-status/luasrc/view/admin_status/index/20-memory.htm:13
 msgid "Memory"
 msgstr "Пам’ять"
 
@@ -3113,7 +3169,7 @@ msgstr "Пам’ять"
 msgid "Memory usage (%)"
 msgstr "Використання пам’яті, %"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:369
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:371
 msgid "Mesh Id"
 msgstr "Mesh Id"
 
@@ -3137,22 +3193,20 @@ msgstr "Дзеркало вихідного порту"
 msgid "Missing protocol extension for proto %q"
 msgstr "Відсутні розширення для протоколу %q"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:852
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:878
 msgid "Mobility Domain"
 msgstr "Домен мобільності"
 
 #: modules/luci-base/luasrc/view/cbi/wireless_modefreq.htm:149
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:363
-#: modules/luci-mod-network/luasrc/view/admin_network/wifi_join.htm:198
-#: modules/luci-mod-network/luasrc/view/admin_network/wifi_overview_status.htm:90
-#: modules/luci-mod-network/luasrc/view/admin_network/wifi_overview_status.htm:99
-#: modules/luci-mod-network/luasrc/view/admin_network/wifi_status.htm:38
-#: modules/luci-mod-network/luasrc/view/admin_network/wifi_status.htm:57
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:313
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wifi_status.js:41
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:74
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:365
+#: modules/luci-mod-network/luasrc/view/admin_network/wifi_join.htm:31
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:156
 msgid "Mode"
 msgstr "Режим"
 
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:383
+#: modules/luci-mod-status/luasrc/view/admin_status/index/10-system.htm:18
 msgid "Model"
 msgstr "Модель"
 
@@ -3176,9 +3230,9 @@ msgstr "Помилка запиту інформації про модем"
 msgid "Modem init timeout"
 msgstr "Тайм-аут ініціалізації модему"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:440
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:542
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:565
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:442
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:544
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:567
 msgid "Monitor"
 msgstr "Диспетчер"
 
@@ -3241,7 +3295,7 @@ msgstr "Вниз"
 msgid "Move up"
 msgstr "Вгору"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:841
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:867
 msgid "NAS ID"
 msgstr "Ідентифікатор NAS"
 
@@ -3288,15 +3342,15 @@ msgstr "Назва (ім’я) нової мережі"
 msgid "Navigation"
 msgstr "Навігація"
 
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:207
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:54
 msgid "Netmask"
 msgstr "Маска мережі"
 
 #: modules/luci-base/luasrc/controller/admin/index.lua:62
 #: modules/luci-base/luasrc/view/wifi_assoclist.htm:108
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:390
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:392
 #: modules/luci-mod-status/luasrc/view/admin_status/connections.htm:358
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:418
+#: modules/luci-mod-status/luasrc/view/admin_status/index/30-network.htm:8
 #: modules/luci-mod-status/luasrc/view/admin_status/routes.htm:73
 #: modules/luci-mod-status/luasrc/view/admin_status/routes.htm:101
 msgid "Network"
@@ -3314,7 +3368,7 @@ msgstr "Образ для мережевого завантаження"
 msgid "Network device is not present"
 msgstr "Мережевий пристрій відсутній"
 
-#: modules/luci-mod-network/luasrc/view/admin_network/iface_overview_status.htm:170
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/network.js:125
 msgid "Network without interfaces."
 msgstr "Мережа без інтерфейсів."
 
@@ -3339,8 +3393,8 @@ msgid "No files found"
 msgstr "Файли не знайдено"
 
 #: modules/luci-base/luasrc/view/wifi_assoclist.htm:100
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:172
 #: modules/luci-mod-status/luasrc/view/admin_status/connections.htm:174
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:329
 msgid "No information available"
 msgstr "Інформація відсутня"
 
@@ -3352,7 +3406,7 @@ msgstr "Делегування відповідних префіксів від�
 msgid "No negative cache"
 msgstr "Ніяких негативних кешувань"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi_overview.lua:120
+#: modules/luci-mod-network/luasrc/view/admin_network/wifi_overview.htm:53
 msgid "No network configured on this device"
 msgstr "На цьому пристрої немає налаштованої мережі"
 
@@ -3362,37 +3416,37 @@ msgstr "Ім’я мережі не визначено"
 
 #: themes/luci-theme-bootstrap/luasrc/view/themes/bootstrap/header.htm:195
 #: themes/luci-theme-freifunk-generic/luasrc/view/themes/freifunk-generic/header.htm:103
-#: themes/luci-theme-material/luasrc/view/themes/material/header.htm:242
+#: themes/luci-theme-material/luasrc/view/themes/material/header.htm:232
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:259
 #: themes/luci-theme-rosy/luasrc/view/themes/rosy/header.htm:283
 msgid "No password set!"
 msgstr "Пароль не встановлено!"
 
-#: modules/luci-mod-system/luasrc/view/admin_system/sshkeys.htm:125
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:116
 msgid "No public keys present yet."
 msgstr "Відкритих ключів поки що немає"
 
-#: modules/luci-mod-status/luasrc/view/admin_status/iptables.htm:124
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:83
 msgid "No rules in this chain."
 msgstr "У цьму ланцюжку нема правил."
 
-#: modules/luci-mod-network/luasrc/view/admin_network/wifi_join.htm:171
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wifi_join.js:146
 msgid "No scan results available yet..."
 msgstr "Результати сканування наразі недоступні"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:25
+#: modules/luci-mod-network/luasrc/view/admin_network/iface_overview.htm:7
 msgid "No zone assigned"
 msgstr "Зону не призначено"
 
 #: modules/luci-base/luasrc/view/wifi_assoclist.htm:77
 #: modules/luci-base/luasrc/view/wifi_assoclist.htm:111
-#: modules/luci-mod-network/luasrc/view/admin_network/wifi_overview_status.htm:81
-#: modules/luci-mod-network/luasrc/view/admin_network/wifi_status.htm:32
-#: modules/luci-mod-network/luasrc/view/admin_network/wifi_status.htm:45
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wifi_status.js:35
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wifi_status.js:48
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:69
 msgid "Noise"
 msgstr "Шум"
 
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:263
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:107
 msgid "Noise Margin (SNR)"
 msgstr "Співвідношення сигнал/шум"
 
@@ -3400,7 +3454,7 @@ msgstr "Співвідношення сигнал/шум"
 msgid "Noise:"
 msgstr "Шум:"
 
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:271
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:115
 msgid "Non Pre-emtive CRC errors (CRC_P)"
 msgstr "Не запобіжні помилки CRC (CRC_P)"
 
@@ -3408,8 +3462,8 @@ msgstr "Не запобіжні помилки CRC (CRC_P)"
 msgid "Non-wildcard"
 msgstr "Без шаблону заміни"
 
-#: modules/luci-mod-network/luasrc/view/admin_network/wifi_overview_status.htm:94
-#: modules/luci-mod-network/luasrc/view/admin_network/wifi_status.htm:49
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wifi_status.js:44
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:76
 msgid "None"
 msgstr "Жоден"
 
@@ -3421,13 +3475,13 @@ msgstr "Нормальний"
 msgid "Not Found"
 msgstr "Не знайдено"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi_overview.lua:94
-#: modules/luci-mod-network/luasrc/view/admin_network/wifi_status.htm:70
+#: modules/luci-mod-network/luasrc/view/admin_network/wifi_overview.htm:27
+#: modules/luci-mod-network/luasrc/view/admin_network/wifi_status.htm:5
 msgid "Not associated"
 msgstr "Не пов’язаний"
 
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:205
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:231
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:52
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:77
 msgid "Not connected"
 msgstr "Не підключено"
 
@@ -3517,7 +3571,7 @@ msgstr "Відкрити список..."
 msgid "OpenConnect (CISCO AnyConnect)"
 msgstr ""
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:176
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:178
 msgid "Operating frequency"
 msgstr "Робоча частота"
 
@@ -3529,7 +3583,7 @@ msgstr "Опція змінена"
 msgid "Option removed"
 msgstr "Опція видалена"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:1067
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:1095
 #: protocols/luci-proto-wireguard/luasrc/model/cbi/admin_network/proto_wireguard.lua:55
 msgid "Optional"
 msgstr "Необов’язково"
@@ -3542,7 +3596,7 @@ msgstr ""
 "Необов’язково. 32-бітна мітка для вихідних зашифрованих пакетів. Введіть "
 "значення в шістнадцятковому форматі, починаючи з <code>0x</code>."
 
-#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:67
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:138
 msgid ""
 "Optional. Allowed values: 'eui64', 'random', fixed value like '::1' or "
 "'::1:2'. When IPv6 prefix (like 'a:b:c:d::') is received from a delegating "
@@ -3601,7 +3655,7 @@ msgstr ""
 "Необов’язково. UDP-порт, який використовується для вихідних та вхідних "
 "пакетів."
 
-#: modules/luci-mod-status/luasrc/view/admin_status/iptables.htm:104
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:63
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/fstab.lua:212
 msgid "Options"
 msgstr "Опції"
@@ -3610,7 +3664,7 @@ msgstr "Опції"
 msgid "Other:"
 msgstr "Інше:"
 
-#: modules/luci-mod-status/luasrc/view/admin_status/iptables.htm:101
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:60
 msgid "Out"
 msgstr "Вих."
 
@@ -3623,14 +3677,14 @@ msgid "Output Interface"
 msgstr "Вихідний інтерфейс"
 
 #: modules/luci-base/luasrc/model/cbi/admin_network/proto_dhcp.lua:63
-#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:78
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:149
 #: protocols/luci-proto-hnet/luasrc/model/cbi/admin_network/proto_hnet.lua:33
 #: protocols/luci-proto-ipv6/luasrc/model/cbi/admin_network/proto_dhcpv6.lua:54
 msgid "Override MAC address"
 msgstr "Перевизначити MAC-адресу"
 
 #: modules/luci-base/luasrc/model/cbi/admin_network/proto_dhcp.lua:66
-#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:81
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:152
 #: protocols/luci-proto-hnet/luasrc/model/cbi/admin_network/proto_hnet.lua:35
 #: protocols/luci-proto-ipip/luasrc/model/cbi/admin_network/proto_ipip.lua:20
 #: protocols/luci-proto-ipv6/luasrc/model/cbi/admin_network/proto_dhcpv6.lua:56
@@ -3651,7 +3705,7 @@ msgstr "Перевизначити TOS"
 msgid "Override TTL"
 msgstr "Перевизначити TTL"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:501
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:503
 msgid "Override default interface name"
 msgstr "Перевизначення типового імені інтерфейсу"
 
@@ -3718,7 +3772,7 @@ msgstr ""
 msgid "PIN code rejected"
 msgstr "PIN-код відхилено"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:893
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:921
 msgid "PMK R1 Push"
 msgstr "Проштовхуваня PMK R1"
 
@@ -3754,25 +3808,25 @@ msgstr ""
 msgid "PSID-bits length"
 msgstr ""
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:182
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:123
 msgid "PTM/EFM (Packet Transfer Mode)"
 msgstr ""
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi_overview.lua:140
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi_overview.lua:78
 msgid "Package libiwinfo required!"
 msgstr "Потрібен пакет libiwinfo!"
 
-#: modules/luci-mod-status/luasrc/view/admin_status/iptables.htm:87
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:45
 msgid "Packets"
 msgstr "Пакети"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:25
+#: modules/luci-mod-network/luasrc/view/admin_network/iface_overview.htm:7
 msgid "Part of zone %q"
 msgstr "Частина зони %q"
 
 #: modules/luci-base/luasrc/view/sysauth.htm:29
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:1038
-#: modules/luci-mod-system/luasrc/view/admin_system/password.htm:49
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:1066
+#: modules/luci-mod-system/luasrc/view/admin_system/password.htm:14
 #: protocols/luci-proto-openconnect/luasrc/model/cbi/admin_network/proto_openconnect.lua:42
 #: protocols/luci-proto-vpnc/luasrc/model/cbi/admin_network/proto_vpnc.lua:33
 msgid "Password"
@@ -3782,11 +3836,11 @@ msgstr "Пароль"
 msgid "Password authentication"
 msgstr "Автентифікація за паролем"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:946
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:974
 msgid "Password of Private Key"
 msgstr "Пароль закритого ключа"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:994
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:1022
 msgid "Password of inner Private Key"
 msgstr "Пароль внутрішнього закритого ключа"
 
@@ -3794,31 +3848,31 @@ msgstr "Пароль внутрішнього закритого ключа"
 msgid "Password2"
 msgstr "Пароль2"
 
-#: modules/luci-mod-system/luasrc/view/admin_system/sshkeys.htm:238
+#: modules/luci-mod-system/luasrc/view/admin_system/sshkeys.htm:37
 msgid "Paste or drag SSH key file…"
 msgstr "Вставте або перетягніть файл SSH-ключа…"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:927
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:955
 msgid "Path to CA-Certificate"
 msgstr "Шлях до центру сертифікції"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:934
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:962
 msgid "Path to Client-Certificate"
 msgstr "Шлях до сертифікату клієнта"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:940
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:968
 msgid "Path to Private Key"
 msgstr "Шлях до закритого ключа"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:976
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:1004
 msgid "Path to inner CA-Certificate"
 msgstr "Шлях до внутрішнього CA-сертифікату"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:982
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:1010
 msgid "Path to inner Client-Certificate"
 msgstr "Шлях до внутрішнього сертифікату клієнта"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:988
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:1016
 msgid "Path to inner Private Key"
 msgstr "Шлях до внутрішнього закритого ключа"
 
@@ -3877,14 +3931,14 @@ msgstr "Фізичні параметри"
 msgid "Ping"
 msgstr "Ехо-запит"
 
-#: modules/luci-mod-network/luasrc/view/admin_network/iface_overview_status.htm:48
-#: modules/luci-mod-network/luasrc/view/admin_network/iface_overview_status.htm:49
-#: modules/luci-mod-network/luasrc/view/admin_network/iface_overview_status.htm:116
-#: modules/luci-mod-network/luasrc/view/admin_network/iface_overview_status.htm:117
-#: modules/luci-mod-network/luasrc/view/admin_network/iface_status.htm:23
-#: modules/luci-mod-network/luasrc/view/admin_network/iface_status.htm:24
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/iface_status.js:16
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/iface_status.js:17
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/network.js:36
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/network.js:37
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/network.js:87
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/network.js:88
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:55
 #: modules/luci-mod-status/luasrc/view/admin_status/connections.htm:170
-#: modules/luci-mod-status/luasrc/view/admin_status/iptables.htm:96
 msgid "Pkts."
 msgstr "пакетів"
 
@@ -3892,7 +3946,7 @@ msgstr "пакетів"
 msgid "Please enter your username and password."
 msgstr "Введіть ім’я користувача і пароль."
 
-#: modules/luci-mod-status/luasrc/view/admin_status/iptables.htm:87
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:45
 msgid "Policy"
 msgstr "Політика"
 
@@ -3904,11 +3958,11 @@ msgstr "Порт"
 msgid "Port status:"
 msgstr "Стан порту:"
 
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:274
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:118
 msgid "Power Management Mode"
 msgstr "Режим керування живленням"
 
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:272
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:116
 msgid "Pre-emtive CRC errors (CRCP_P)"
 msgstr "Попереджувати помилки CRC (CRCP_P)"
 
@@ -3920,7 +3974,7 @@ msgstr "Переважно LTE"
 msgid "Prefer UMTS"
 msgstr "Переважно UMTS"
 
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:232
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:78
 msgid "Prefix Delegated"
 msgstr "Делеговано префікс"
 
@@ -3945,8 +3999,8 @@ msgstr ""
 msgid "Prevent listening on these interfaces."
 msgstr "Перешкоджати прослуховуванню цих інтерфейсів."
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:497
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:550
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:499
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:552
 msgid "Prevents client-to-client communication"
 msgstr "Перешкоджати спілкуванню клієнт-клієнт"
 
@@ -3963,19 +4017,19 @@ msgstr "Продовжити"
 msgid "Processes"
 msgstr "Процеси"
 
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:257
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:101
 msgid "Profile"
 msgstr "Профіль"
 
-#: modules/luci-mod-status/luasrc/view/admin_status/iptables.htm:99
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:58
 msgid "Prot."
 msgstr "Прот."
 
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/network.js:84
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/ifaces.lua:216
-#: modules/luci-mod-network/luasrc/view/admin_network/iface_overview_status.htm:102
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:52
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:77
 #: modules/luci-mod-status/luasrc/view/admin_status/connections.htm:359
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:205
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:231
 msgid "Protocol"
 msgstr "Протокол"
 
@@ -3991,11 +4045,11 @@ msgstr "Підтримка протоколу не інстальована"
 msgid "Provide NTP server"
 msgstr "Забезпечувати сервер NTP"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi_overview.lua:83
+#: modules/luci-mod-network/luasrc/view/admin_network/wifi_overview.htm:16
 msgid "Provide new network"
 msgstr "Укажіть нову мережу"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:439
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:441
 msgid "Pseudo Ad-Hoc (ahdemo)"
 msgstr "Псевдо Ad-Hoc (ahdemo)"
 
@@ -4003,7 +4057,7 @@ msgstr "Псевдо Ad-Hoc (ahdemo)"
 msgid "Public Key"
 msgstr "Відкритий ключ"
 
-#: modules/luci-mod-system/luasrc/view/admin_system/sshkeys.htm:231
+#: modules/luci-mod-system/luasrc/view/admin_system/sshkeys.htm:30
 msgid ""
 "Public keys allow for the passwordless SSH logins with a higher security "
 "compared to the use of plain passwords. In order to upload a new key to the "
@@ -4015,7 +4069,7 @@ msgstr ""
 "ключ, вставте сумісний із OpenSSH відкритий ключ або перетягніть файл <code>."
 "pub</code> у поле введення."
 
-#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:62
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:133
 msgid "Public prefix routed to this device for distribution to clients."
 msgstr "Публічний префікс надісланий на цей пристрій для поширення клієнтам."
 
@@ -4023,8 +4077,8 @@ msgstr "Публічний префікс надісланий на цей пр�
 msgid "QMI Cellular"
 msgstr "Стільниковий QMI"
 
-#: modules/luci-mod-network/luasrc/view/admin_network/wifi_join.htm:47
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:311
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wifi_join.js:24
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:154
 msgid "Quality"
 msgstr "Якість"
 
@@ -4036,11 +4090,11 @@ msgstr ""
 "Запит усіх наявних висхідних <abbr title=\"Domain Name System — система "
 "доменних імен\">DNS</abbr>-серверів"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:879
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:907
 msgid "R0 Key Lifetime"
 msgstr "Тривалість життя ключа R0"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:886
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:914
 msgid "R1 Key Holder"
 msgstr "Власник ключа R1"
 
@@ -4048,14 +4102,14 @@ msgstr "Власник ключа R1"
 msgid "RFC3947 NAT-T mode"
 msgstr "Режим RFC3947 NAT-T"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:253
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:585
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:255
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:587
 msgid "RTS/CTS Threshold"
 msgstr "Поріг RTS/CTS"
 
-#: modules/luci-mod-network/luasrc/view/admin_network/iface_overview_status.htm:48
-#: modules/luci-mod-network/luasrc/view/admin_network/iface_overview_status.htm:116
-#: modules/luci-mod-network/luasrc/view/admin_network/iface_status.htm:23
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/iface_status.js:16
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/network.js:36
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/network.js:87
 msgid "RX"
 msgstr "Одержано"
 
@@ -4063,27 +4117,27 @@ msgstr "Одержано"
 msgid "RX Rate"
 msgstr "Швидкість приймання"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:742
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:744
 msgid "Radius-Accounting-Port"
 msgstr "Порт Radius-Accounting"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:750
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:752
 msgid "Radius-Accounting-Secret"
 msgstr "Секрет Radius-Accounting"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:734
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:736
 msgid "Radius-Accounting-Server"
 msgstr "Сервер Radius-Accounting"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:718
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:720
 msgid "Radius-Authentication-Port"
 msgstr "Порт Radius-Authentication"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:726
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:728
 msgid "Radius-Authentication-Secret"
 msgstr "Секрет Radius-Authentication"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:710
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:712
 msgid "Radius-Authentication-Server"
 msgstr "Сервер Radius-Authentication"
 
@@ -4102,7 +4156,7 @@ msgstr ""
 "Configuration Protocol — Протокол динамічної конфігурації вузла\">DHCP</"
 "abbr>-сервера"
 
-#: modules/luci-mod-network/luasrc/view/admin_network/iface_overview_status.htm:18
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/network.js:8
 msgid ""
 "Really delete this interface? The deletion cannot be undone! You might lose "
 "access to this device if you are connected via this interface"
@@ -4110,7 +4164,7 @@ msgstr ""
 "Дійсно видалити цей інтерфейс? Скасувати видалення неможливо! Ви можете "
 "втратити доступ до цього пристрою, якщо вас підключено через цей інтерфейс."
 
-#: modules/luci-mod-network/luasrc/view/admin_network/wifi_overview_status.htm:9
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2
 msgid ""
 "Really delete this wireless network? The deletion cannot be undone! You "
 "might lose access to this device if you are connected via this network."
@@ -4147,7 +4201,7 @@ msgstr "Трафік у реальному часі"
 msgid "Realtime Wireless"
 msgstr "Бездротові мережі у реальному часі"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:860
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:886
 msgid "Reassociation Deadline"
 msgstr "Кінцевий термін реассоціації"
 
@@ -4173,8 +4227,8 @@ msgstr "Перезавантажити операційну систему ва�
 msgid "Receive"
 msgstr "Приймання"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:322
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:347
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:324
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:349
 msgid "Receiver Antenna"
 msgstr "Антена приймача"
 
@@ -4182,12 +4236,12 @@ msgstr "Антена приймача"
 msgid "Recommended. IP addresses of the WireGuard interface."
 msgstr "Рекомендовано. IP-адреси інтерфейсу WireGuard."
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:46
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:50
+#: modules/luci-mod-network/luasrc/view/admin_network/iface_overview.htm:28
+#: modules/luci-mod-network/luasrc/view/admin_network/iface_overview.htm:32
 msgid "Reconnect this interface"
 msgstr "Перепідключити цей інтерфейс"
 
-#: modules/luci-mod-status/luasrc/view/admin_status/iptables.htm:89
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:48
 msgid "References"
 msgstr "Посилання"
 
@@ -4216,11 +4270,11 @@ msgstr "Віддалена адреса IPv4"
 msgid "Remote IPv4 address or FQDN"
 msgstr "Віддалена адреса IPv4 або FQDN"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi_overview.lua:112
+#: modules/luci-mod-network/luasrc/view/admin_network/wifi_overview.htm:45
 msgid "Remove"
 msgstr "Видалити"
 
-#: modules/luci-mod-network/luasrc/view/admin_network/wifi_join.htm:220
+#: modules/luci-mod-network/luasrc/view/admin_network/wifi_join.htm:53
 msgid "Repeat scan"
 msgstr "Повторити сканування"
 
@@ -4241,7 +4295,7 @@ msgstr "Запит IPv6-адреси"
 msgid "Request IPv6-prefix of length"
 msgstr "Запит довжини IPv6-префіксу"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:1068
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:1096
 msgid "Required"
 msgstr "Потрібно"
 
@@ -4264,7 +4318,7 @@ msgid ""
 "routes through the tunnel."
 msgstr ""
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:1061
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:1089
 msgid ""
 "Requires the 'full' version of wpad/hostapd and support from the wifi driver "
 "<br />(as of Feb 2017: ath9k and ath10k, in LEDE also mwlwifi and mt76)"
@@ -4285,7 +4339,7 @@ msgstr ""
 msgid "Reset"
 msgstr "Скинути"
 
-#: modules/luci-mod-status/luasrc/view/admin_status/iptables.htm:311
+#: modules/luci-mod-status/luasrc/view/admin_status/iptables.htm:62
 msgid "Reset Counters"
 msgstr "Скинути лічильники"
 
@@ -4301,17 +4355,17 @@ msgstr "Файли resolv і hosts"
 msgid "Resolve file"
 msgstr "Файл resolv"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:46
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi_overview.lua:81
+#: modules/luci-mod-network/luasrc/view/admin_network/iface_overview.htm:28
+#: modules/luci-mod-network/luasrc/view/admin_network/wifi_overview.htm:14
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/startup.lua:67
 msgid "Restart"
 msgstr "Перезавантажити"
 
-#: modules/luci-mod-status/luasrc/view/admin_status/iptables.htm:312
+#: modules/luci-mod-status/luasrc/view/admin_status/iptables.htm:63
 msgid "Restart Firewall"
 msgstr "Перезавантажити брандмауер"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi_overview.lua:81
+#: modules/luci-mod-network/luasrc/view/admin_network/wifi_overview.htm:14
 msgid "Restart radio interface"
 msgstr "Перезавантажити радіоінтерфейс"
 
@@ -4324,8 +4378,8 @@ msgid "Restore backup"
 msgstr "Відновити з резервної копії"
 
 #: modules/luci-base/luasrc/view/cbi/value.htm:24
-#: modules/luci-mod-system/luasrc/view/admin_system/password.htm:52
-#: modules/luci-mod-system/luasrc/view/admin_system/password.htm:60
+#: modules/luci-mod-system/luasrc/view/admin_system/password.htm:17
+#: modules/luci-mod-system/luasrc/view/admin_system/password.htm:25
 msgid "Reveal/hide password"
 msgstr "Показати/приховати пароль"
 
@@ -4373,7 +4427,7 @@ msgid "Router Advertisement-Service"
 msgstr "Служба оголошень маршрутизатора"
 
 #: modules/luci-mod-system/luasrc/controller/admin/system.lua:14
-#: modules/luci-mod-system/luasrc/view/admin_system/password.htm:41
+#: modules/luci-mod-system/luasrc/view/admin_system/password.htm:6
 msgid "Router Password"
 msgstr "Пароль маршрутизатора"
 
@@ -4391,7 +4445,7 @@ msgstr ""
 "Маршрути визначають через який інтерфейс і шлюз можна досягнути певного "
 "вузла або мережі."
 
-#: modules/luci-mod-status/luasrc/view/admin_status/iptables.htm:281
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:240
 msgid "Rule"
 msgstr "Правило"
 
@@ -4429,16 +4483,14 @@ msgid "SSH username"
 msgstr "Ім’я користувача SSH"
 
 #: modules/luci-mod-system/luasrc/controller/admin/system.lua:19
-#: modules/luci-mod-system/luasrc/view/admin_system/sshkeys.htm:228
+#: modules/luci-mod-system/luasrc/view/admin_system/sshkeys.htm:27
 msgid "SSH-Keys"
 msgstr "SSH-ключі"
 
-#: modules/luci-mod-network/luasrc/view/admin_network/wifi_join.htm:196
-#: modules/luci-mod-network/luasrc/view/admin_network/wifi_overview_status.htm:89
-#: modules/luci-mod-network/luasrc/view/admin_network/wifi_overview_status.htm:98
-#: modules/luci-mod-network/luasrc/view/admin_network/wifi_status.htm:39
-#: modules/luci-mod-network/luasrc/view/admin_network/wifi_status.htm:56
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:312
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wifi_status.js:42
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:73
+#: modules/luci-mod-network/luasrc/view/admin_network/wifi_join.htm:29
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:155
 msgid "SSID"
 msgstr "SSID"
 
@@ -4449,7 +4501,7 @@ msgstr ""
 #: modules/luci-base/luasrc/view/cbi/error.htm:17
 #: modules/luci-base/luasrc/view/cbi/footer.htm:26
 #: modules/luci-base/luasrc/view/cbi/header.htm:17
-#: modules/luci-mod-system/luasrc/view/admin_system/password.htm:67
+#: modules/luci-mod-system/luasrc/view/admin_system/password.htm:32
 msgid "Save"
 msgstr "Зберегти"
 
@@ -4466,15 +4518,15 @@ msgstr "Зберегти mtdblock"
 msgid "Save mtdblock contents"
 msgstr "Зберегти вміст mtdblock"
 
-#: modules/luci-mod-system/luasrc/view/admin_system/sshkeys.htm:129
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:120
 msgid "Saving keys…"
 msgstr ""
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi_overview.lua:82
+#: modules/luci-mod-network/luasrc/view/admin_network/wifi_overview.htm:15
 msgid "Scan"
 msgstr "Сканувати"
 
-#: modules/luci-mod-network/luasrc/view/admin_network/wifi_join.htm:133
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wifi_join.js:109
 msgid "Scan request failed"
 msgstr "Помилка запиту на сканування"
 
@@ -4518,7 +4570,7 @@ msgstr ""
 "Надсилати ехо-пакети LCP зі вказаним інтервалом (секунди), ефективно тільки "
 "в поєднанні з порогом помилок"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:549
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:551
 msgid "Separate Clients"
 msgstr "Розділяти клієнтів"
 
@@ -4571,7 +4623,7 @@ msgstr "Не вдалося налаштувати режим роботи"
 msgid "Setup DHCP Server"
 msgstr "Налаштування DHCP-сервера"
 
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:267
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:111
 msgid "Severely Errored Seconds (SES)"
 msgstr ""
 
@@ -4579,7 +4631,7 @@ msgstr ""
 msgid "Short GI"
 msgstr "Short GI"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:504
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:506
 msgid "Short Preamble"
 msgstr "Коротка преамбула"
 
@@ -4587,26 +4639,26 @@ msgstr "Коротка преамбула"
 msgid "Show current backup file list"
 msgstr "Показати поточний список файлів резервного копіювання"
 
-#: modules/luci-mod-status/luasrc/view/admin_status/iptables.htm:140
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:99
 msgid "Show empty chains"
 msgstr "Показати порожні ланцюжки"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:53
+#: modules/luci-mod-network/luasrc/view/admin_network/iface_overview.htm:35
 msgid "Shutdown this interface"
 msgstr "Вимкнути цей інтерфейс"
 
 #: modules/luci-base/luasrc/view/wifi_assoclist.htm:77
 #: modules/luci-base/luasrc/view/wifi_assoclist.htm:111
-#: modules/luci-mod-network/luasrc/view/admin_network/wifi_join.htm:47
-#: modules/luci-mod-network/luasrc/view/admin_network/wifi_join.htm:195
-#: modules/luci-mod-network/luasrc/view/admin_network/wifi_overview_status.htm:81
-#: modules/luci-mod-network/luasrc/view/admin_network/wifi_status.htm:32
-#: modules/luci-mod-network/luasrc/view/admin_network/wifi_status.htm:44
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:311
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wifi_join.js:24
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wifi_status.js:34
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wifi_status.js:47
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:69
+#: modules/luci-mod-network/luasrc/view/admin_network/wifi_join.htm:28
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:154
 msgid "Signal"
 msgstr "Сигнал"
 
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:262
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:106
 msgid "Signal Attenuation (SATN)"
 msgstr "Затухання сигналу (SATN)"
 
@@ -4641,7 +4693,7 @@ msgstr "Перейти до вмісту"
 msgid "Skip to navigation"
 msgstr "Перейти до навігації"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:332
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:334
 msgid "Slot time"
 msgstr "Час слота"
 
@@ -4671,8 +4723,8 @@ msgstr ""
 "прошити вручну. Зверніться до Wiki за інструкцією з інсталяції для "
 "конкретного пристрою."
 
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:61
 #: modules/luci-mod-status/luasrc/view/admin_status/connections.htm:360
-#: modules/luci-mod-status/luasrc/view/admin_status/iptables.htm:102
 #: modules/luci-mod-status/luasrc/view/admin_status/routes.htm:103
 msgid "Source"
 msgstr "Джерело"
@@ -4735,7 +4787,7 @@ msgstr "Стартовий пріоритет"
 msgid "Starting configuration apply…"
 msgstr "Розпочато застосування конфігурації…"
 
-#: modules/luci-mod-network/luasrc/view/admin_network/wifi_join.htm:128
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wifi_join.js:105
 msgid "Starting wireless scan..."
 msgstr "Розпочато сканування бездротових мереж..."
 
@@ -4774,18 +4826,18 @@ msgstr ""
 "конфігурацій інтерфейсів, коли обслуговуються тільки вузли з відповідною "
 "орендою."
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:522
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:524
 msgid "Station inactivity limit"
 msgstr "Обмеження бездіяльності станції"
 
 #: modules/luci-base/luasrc/controller/admin/index.lua:40
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/ifaces.lua:197
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:143
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:376
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:145
+#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:129
 msgid "Status"
 msgstr "Стан"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:53
+#: modules/luci-mod-network/luasrc/view/admin_network/iface_overview.htm:35
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/startup.lua:71
 msgid "Stop"
 msgstr "Зупинити"
@@ -4806,7 +4858,7 @@ msgstr "Блокувати журналювання"
 msgid "Suppress logging of the routine operation of these protocols"
 msgstr "Блокувати ведення журналу звичайної роботи цих протоколів"
 
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:408
+#: modules/luci-mod-status/luasrc/view/admin_status/index/20-memory.htm:24
 msgid "Swap"
 msgstr "Своп"
 
@@ -4846,6 +4898,10 @@ msgstr "VLAN комутатора"
 msgid "Switch protocol"
 msgstr "Протокол комутатора"
 
+#: modules/luci-base/luasrc/view/cbi/ipaddr.htm:26
+msgid "Switch to CIDR list notation"
+msgstr ""
+
 #: modules/luci-mod-system/luasrc/view/admin_system/clock_status.htm:25
 #: modules/luci-mod-system/luasrc/view/admin_system/clock_status.htm:34
 msgid "Sync with browser"
@@ -4856,7 +4912,7 @@ msgid "Synchronizing..."
 msgstr "Синхронізація..."
 
 #: modules/luci-base/luasrc/controller/admin/index.lua:47
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:379
+#: modules/luci-mod-status/luasrc/view/admin_status/index/10-system.htm:14
 #: modules/luci-mod-system/luasrc/controller/admin/system.lua:10
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:14
 #: modules/luci-mod-system/luasrc/view/admin_system/applyreboot.htm:39
@@ -4888,9 +4944,9 @@ msgstr "Налаштування TFTP"
 msgid "TFTP server root"
 msgstr "Корінь TFTP-сервера"
 
-#: modules/luci-mod-network/luasrc/view/admin_network/iface_overview_status.htm:49
-#: modules/luci-mod-network/luasrc/view/admin_network/iface_overview_status.htm:117
-#: modules/luci-mod-network/luasrc/view/admin_network/iface_status.htm:24
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/iface_status.js:17
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/network.js:37
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/network.js:88
 msgid "TX"
 msgstr "Передано"
 
@@ -4898,7 +4954,7 @@ msgstr "Передано"
 msgid "TX Rate"
 msgstr "Швидкість передавання"
 
-#: modules/luci-mod-status/luasrc/view/admin_status/iptables.htm:51
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:8
 #: modules/luci-mod-status/luasrc/view/admin_status/routes.htm:77
 #: modules/luci-mod-status/luasrc/view/admin_status/routes.htm:105
 msgid "Table"
@@ -4906,7 +4962,7 @@ msgstr "Таблиця"
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/routes.lua:21
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/routes.lua:68
-#: modules/luci-mod-status/luasrc/view/admin_status/iptables.htm:98
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:57
 #: modules/luci-mod-status/luasrc/view/admin_status/routes.htm:74
 #: modules/luci-mod-status/luasrc/view/admin_status/routes.htm:102
 msgid "Target"
@@ -4920,7 +4976,7 @@ msgstr "Цільова мережа"
 msgid "Terminate"
 msgstr "Завершити"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:25
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:27
 #, fuzzy
 msgid ""
 "The <em>Device Configuration</em> section covers physical settings of the "
@@ -4936,7 +4992,7 @@ msgstr ""
 "шифрування або режим роботи, згруповано в розділі <em>Конфігурація "
 "інтерфейсу</em>."
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi_overview.lua:141
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi_overview.lua:79
 msgid ""
 "The <em>libiwinfo-lua</em> package is not installed. You must install this "
 "component for working wireless configuration!"
@@ -5031,11 +5087,11 @@ msgstr "Наведені нижче зміни було скасовано"
 msgid "The following rules are currently active on this system."
 msgstr "Наразі в цій системі активні такі правила."
 
-#: modules/luci-mod-system/luasrc/view/admin_system/sshkeys.htm:153
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:144
 msgid "The given SSH public key has already been added."
 msgstr "Наданий відкритий SSH-ключ вже було додано."
 
-#: modules/luci-mod-system/luasrc/view/admin_system/sshkeys.htm:159
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:150
 msgid ""
 "The given SSH public key is invalid. Please supply proper public RSA or "
 "ECDSA keys."
@@ -5120,7 +5176,7 @@ msgstr ""
 "під’єднатися. Залежно від налаштувань, можливо, треба буде оновити адресу "
 "вашого комп’ютера, щоб знову отримати доступ до пристрою."
 
-#: modules/luci-mod-system/luasrc/view/admin_system/password.htm:19
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js:15
 msgid "The system password has been successfully changed."
 msgstr "Системний пароль успішно змінено."
 
@@ -5163,7 +5219,7 @@ msgstr ""
 
 #: themes/luci-theme-bootstrap/luasrc/view/themes/bootstrap/header.htm:196
 #: themes/luci-theme-freifunk-generic/luasrc/view/themes/freifunk-generic/header.htm:104
-#: themes/luci-theme-material/luasrc/view/themes/material/header.htm:243
+#: themes/luci-theme-material/luasrc/view/themes/material/header.htm:233
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:260
 #: themes/luci-theme-rosy/luasrc/view/themes/rosy/header.htm:286
 msgid ""
@@ -5264,7 +5320,7 @@ msgid "This page gives an overview over currently active network connections."
 msgstr "Ця сторінка надає огляд поточних активних мережевих підключень."
 
 #: modules/luci-base/luasrc/view/cbi/tblsection.htm:172
-#: modules/luci-base/luasrc/view/cbi/tsection.htm:29
+#: modules/luci-base/luasrc/view/cbi/tsection.htm:27
 msgid "This section contains no values yet"
 msgstr "Ця секція поки що не містить значень"
 
@@ -5277,7 +5333,7 @@ msgstr "Синхронізація часу"
 msgid "Time Synchronization is not configured yet."
 msgstr "Синхронізацію часу не налаштовано."
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:513
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:515
 msgid "Time interval for rekeying GTK"
 msgstr "Інтервал часу для зміни ключа GTK"
 
@@ -5300,12 +5356,12 @@ msgstr ""
 "натисніть кнопку \"Виконати відновлення\" (можливо тільки з образами "
 "SquashFS)."
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:171
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:112
 msgid "Tone"
 msgstr "Тоновий"
 
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:400
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:411
+#: modules/luci-mod-status/luasrc/view/admin_status/index/20-memory.htm:16
+#: modules/luci-mod-status/luasrc/view/admin_status/index/20-memory.htm:27
 msgid "Total Available"
 msgstr "Усього доступно"
 
@@ -5314,9 +5370,9 @@ msgstr "Усього доступно"
 msgid "Traceroute"
 msgstr "Трасування"
 
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:45
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:56
 #: modules/luci-mod-status/luasrc/controller/admin/status.lua:24
-#: modules/luci-mod-status/luasrc/view/admin_status/iptables.htm:87
-#: modules/luci-mod-status/luasrc/view/admin_status/iptables.htm:97
 msgid "Traffic"
 msgstr "Трафік"
 
@@ -5324,7 +5380,7 @@ msgstr "Трафік"
 msgid "Transfer"
 msgstr "Передано"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:583
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:585
 msgid "Transmission Rate"
 msgstr "Швидкість передавання"
 
@@ -5332,14 +5388,14 @@ msgstr "Швидкість передавання"
 msgid "Transmit"
 msgstr "Передавання"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:208
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:270
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:342
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:210
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:272
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:344
 msgid "Transmit Power"
 msgstr "Потужність передавача"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:315
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:346
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:317
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:348
 msgid "Transmitter Antenna"
 msgstr "Антена передавача"
 
@@ -5365,12 +5421,12 @@ msgstr "Інтерфейс тунелю"
 msgid "Tunnel Link"
 msgstr "Посилання тунелю"
 
-#: modules/luci-mod-network/luasrc/view/admin_network/wifi_status.htm:43
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wifi_status.js:46
 msgid "Tx-Power"
 msgstr "Потужність передавача"
 
-#: modules/luci-mod-network/luasrc/view/admin_network/iface_overview_status.htm:42
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:323
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/network.js:32
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:166
 #: protocols/luci-proto-ipv6/luasrc/model/cbi/admin_network/proto_map.lua:11
 msgid "Type"
 msgstr "Тип"
@@ -5429,7 +5485,7 @@ msgstr "Не вдається розрізнити ім’я хоста AFTR"
 msgid "Unable to resolve peer host name"
 msgstr "Не вдається розрізнити ім’я хоста вузла"
 
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:269
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:113
 msgid "Unavailable Seconds (UAS)"
 msgstr "Недоступні секунди (<abbr title=\"Unavailable Seconds\">UAS</abbr>)"
 
@@ -5450,7 +5506,7 @@ msgstr "Некерований"
 msgid "Unmount"
 msgstr "Демонтувати"
 
-#: modules/luci-mod-system/luasrc/view/admin_system/sshkeys.htm:116
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:107
 msgid "Unnamed key"
 msgstr "Безіменний ключ"
 
@@ -5470,7 +5526,7 @@ msgstr "Непідтримуваний тип MAP"
 msgid "Unsupported modem"
 msgstr "Непідтримуваний модем"
 
-#: modules/luci-mod-network/luasrc/view/admin_network/iface_overview_status.htm:162
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/network.js:118
 msgid "Unsupported protocol type."
 msgstr "Непідтримуваний тип протоколу."
 
@@ -5496,9 +5552,9 @@ msgstr "Відвантажити архів..."
 msgid "Uploaded File"
 msgstr "Відвантажений файл"
 
-#: modules/luci-mod-network/luasrc/view/admin_network/iface_overview_status.htm:106
-#: modules/luci-mod-network/luasrc/view/admin_network/iface_status.htm:17
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:391
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/iface_status.js:14
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/network.js:85
+#: modules/luci-mod-status/luasrc/view/admin_status/index/10-system.htm:26
 msgid "Uptime"
 msgstr "Час безперервної роботи"
 
@@ -5523,8 +5579,8 @@ msgstr "Використовувати DHCP-шлюз"
 msgid "Use DNS servers advertised by peer"
 msgstr "Використовувати DNS-сервери, оголошувані вузлом"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:224
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:230
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:226
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:232
 msgid "Use ISO/IEC 3166 alpha2 country codes."
 msgstr "Використовуйте коди країн згідно ISO/IEC 3166 alpha2."
 
@@ -5562,7 +5618,7 @@ msgid "Use builtin IPv6-management"
 msgstr "Використовувати вбудоване керування IPv6"
 
 #: modules/luci-base/luasrc/model/cbi/admin_network/proto_dhcp.lua:40
-#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:33
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:103
 #: protocols/luci-proto-3g/luasrc/model/cbi/admin_network/proto_3g.lua:92
 #: protocols/luci-proto-ipv6/luasrc/model/cbi/admin_network/proto_dhcpv6.lua:45
 #: protocols/luci-proto-ncm/luasrc/model/cbi/admin_network/proto_ncm.lua:101
@@ -5591,7 +5647,7 @@ msgid "Use default gateway"
 msgstr "Використовувати типовий шлюз"
 
 #: modules/luci-base/luasrc/model/cbi/admin_network/proto_dhcp.lua:48
-#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:87
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:158
 #: protocols/luci-proto-3g/luasrc/model/cbi/admin_network/proto_3g.lua:77
 #: protocols/luci-proto-ipv6/luasrc/model/cbi/admin_network/proto_464xlat.lua:24
 #: protocols/luci-proto-ipv6/luasrc/model/cbi/admin_network/proto_6in4.lua:88
@@ -5631,11 +5687,11 @@ msgstr ""
 msgid "Used"
 msgstr "Використано"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:781
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:807
 msgid "Used Key Slot"
 msgstr "Використовується слот ключа"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:842
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:868
 msgid ""
 "Used for two different purposes: RADIUS NAS ID and 802.11r R0KH-ID. Not "
 "needed with normal WPA(2)-PSK."
@@ -5658,11 +5714,11 @@ msgstr "Ключ користувача (PEM-кодований)"
 msgid "Username"
 msgstr "Ім’я користувача"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:241
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:182
 msgid "VC-Mux"
 msgstr "VC-Mux"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:187
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:128
 msgid "VDSL"
 msgstr "VDSL"
 
@@ -5712,22 +5768,22 @@ msgstr "Клас постачальника для відправки при з�
 msgid "Verify"
 msgstr "Перевірте"
 
-#: modules/luci-mod-network/luasrc/view/admin_network/iface_overview_status.htm:95
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/network.js:76
 msgid "Virtual dynamic interface"
 msgstr "Віртуальний динамічний інтерфейс"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:458
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:459
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:541
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:564
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:460
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:461
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:543
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:566
 msgid "WDS"
 msgstr "WDS"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:655
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:657
 msgid "WEP Open System"
 msgstr "Відкрита система WEP"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:656
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:658
 msgid "WEP Shared Key"
 msgstr "Спільний ключ WEP"
 
@@ -5735,8 +5791,8 @@ msgstr "Спільний ключ WEP"
 msgid "WEP passphrase"
 msgstr "Парольна фраза WEP"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:491
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:554
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:493
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:556
 msgid "WMM Mode"
 msgstr "Режим <abbr title=\"Wi-Fi Multimedia\">WMM</abbr>"
 
@@ -5744,9 +5800,9 @@ msgstr "Режим <abbr title=\"Wi-Fi Multimedia\">WMM</abbr>"
 msgid "WPA passphrase"
 msgstr "Парольна фраза WPA"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:682
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:694
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:699
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:684
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:696
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:701
 msgid ""
 "WPA-Encryption requires wpa_supplicant (for client mode) or hostapd (for AP "
 "and ad-hoc mode) to be installed."
@@ -5780,12 +5836,12 @@ msgid "Warning: There are unsaved changes that will get lost on reboot!"
 msgstr ""
 "Застереження: Є незбережені зміни, які буде втрачено при перезавантаженні!"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:875
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:901
 msgid ""
-"When using a PSK, the PMK can be generated locally without inter AP "
-"communications"
+"When using a PSK, the PMK can be automatically generated. When enabled, the "
+"R0/R1 key options below are not applied. Disable this to use the R0 and R1 "
+"key options."
 msgstr ""
-"При використанні PSK, PMK може бути створений локально без взаємодії між AP"
 
 #: modules/luci-base/luasrc/view/cbi/wireless_modefreq.htm:161
 msgid "Width"
@@ -5797,7 +5853,7 @@ msgstr "WireGuard VPN"
 
 #: modules/luci-mod-network/luasrc/controller/admin/network.lua:58
 #: modules/luci-mod-status/luasrc/controller/admin/status.lua:28
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:447
+#: modules/luci-mod-status/luasrc/view/admin_status/index/60-wifi.htm:14
 msgid "Wireless"
 msgstr "Бездротові мережі"
 
@@ -5810,36 +5866,36 @@ msgstr "Бездротовий адаптер"
 msgid "Wireless Network"
 msgstr "Бездротова мережа"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi_overview.lua:130
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi_overview.lua:68
 msgid "Wireless Overview"
 msgstr "Огляд бездротових мереж"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:359
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:361
 msgid "Wireless Security"
 msgstr "Безпека бездротової мережі"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi_overview.lua:97
-#: modules/luci-mod-network/luasrc/view/admin_network/wifi_overview_status.htm:102
-#: modules/luci-mod-network/luasrc/view/admin_network/wifi_status.htm:60
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:317
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wifi_status.js:54
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:77
+#: modules/luci-mod-network/luasrc/view/admin_network/wifi_overview.htm:30
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:160
 msgid "Wireless is disabled"
 msgstr "Бездротову мережу вимкнено"
 
-#: modules/luci-mod-network/luasrc/view/admin_network/wifi_overview_status.htm:103
-#: modules/luci-mod-network/luasrc/view/admin_network/wifi_status.htm:61
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:317
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wifi_status.js:54
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:77
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:160
 msgid "Wireless is not associated"
 msgstr "Бездротову мережу не пов’язано"
 
-#: modules/luci-mod-network/luasrc/view/admin_network/wifi_overview_status.htm:22
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:15
 msgid "Wireless is restarting..."
 msgstr "Бездротова мережа перезапускається..."
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:124
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:126
 msgid "Wireless network is disabled"
 msgstr "Бездротову мережу вимкнено"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:128
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:130
 msgid "Wireless network is enabled"
 msgstr "Бездротову мережу ввімкнено"
 
@@ -5868,7 +5924,7 @@ msgstr ""
 
 #: themes/luci-theme-bootstrap/luasrc/view/themes/bootstrap/header.htm:206
 #: themes/luci-theme-freifunk-generic/luasrc/view/themes/freifunk-generic/header.htm:221
-#: themes/luci-theme-material/luasrc/view/themes/material/header.htm:253
+#: themes/luci-theme-material/luasrc/view/themes/material/header.htm:243
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:253
 #: themes/luci-theme-rosy/luasrc/view/themes/rosy/header.htm:298
 msgid ""
@@ -5907,14 +5963,14 @@ msgstr "Розмір ZRam"
 msgid "any"
 msgstr "будь-який"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:172
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:180
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:185
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:215
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:279
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:318
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:325
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:609
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:113
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:121
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:126
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:217
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:281
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:320
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:327
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:611
 #: protocols/luci-proto-ncm/luasrc/model/cbi/admin_network/proto_ncm.lua:37
 #: protocols/luci-proto-ppp/luasrc/model/cbi/admin_network/proto_pppoe.lua:22
 #: protocols/luci-proto-ppp/luasrc/model/cbi/admin_network/proto_pppoe.lua:29
@@ -5926,7 +5982,7 @@ msgstr "авто"
 msgid "baseT"
 msgstr "baseT"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:246
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:187
 msgid "bridged"
 msgstr "зв’язано"
 
@@ -5944,17 +6000,18 @@ msgstr "створити:"
 msgid "creates a bridge over specified interface(s)"
 msgstr "Створює міст через зазначені інтерфейси"
 
-#: modules/luci-mod-network/luasrc/view/admin_network/wifi_join.htm:47
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wifi_join.js:24
 #: modules/luci-mod-status/luasrc/view/admin_status/wireless.htm:277
 msgid "dB"
 msgstr "дБ"
 
 #: modules/luci-base/luasrc/view/wifi_assoclist.htm:77
-#: modules/luci-mod-network/luasrc/view/admin_network/wifi_overview_status.htm:81
-#: modules/luci-mod-network/luasrc/view/admin_network/wifi_status.htm:32
-#: modules/luci-mod-network/luasrc/view/admin_network/wifi_status.htm:43
-#: modules/luci-mod-network/luasrc/view/admin_network/wifi_status.htm:44
-#: modules/luci-mod-network/luasrc/view/admin_network/wifi_status.htm:45
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wifi_status.js:34
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wifi_status.js:35
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wifi_status.js:46
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wifi_status.js:47
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wifi_status.js:48
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:69
 #: modules/luci-mod-status/luasrc/view/admin_status/wireless.htm:277
 #: modules/luci-mod-status/luasrc/view/admin_status/wireless.htm:279
 #: modules/luci-mod-status/luasrc/view/admin_status/wireless.htm:331
@@ -5966,12 +6023,12 @@ msgstr "дБ"
 msgid "dBm"
 msgstr "дБм"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:448
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:575
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:450
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:577
 msgid "disable"
 msgstr "вимкнено"
 
-#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:43
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:113
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/ifaces.lua:524
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/ifaces.lua:530
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/ifaces.lua:536
@@ -6004,11 +6061,11 @@ msgstr "повний дуплекс"
 msgid "half-duplex"
 msgstr "напівдуплекс"
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:622
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:621
 msgid "hexadecimal encoded value"
 msgstr "шістнадцяткове кодоване значення"
 
-#: modules/luci-mod-network/luasrc/view/admin_network/wifi_join.htm:162
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wifi_join.js:137
 msgid "hidden"
 msgstr "прихований"
 
@@ -6026,16 +6083,16 @@ msgstr "якщо ціль — мережа"
 msgid "input"
 msgstr "вхід"
 
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:350
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:351
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:354
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:355
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:358
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:359
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:362
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:363
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:366
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:367
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:192
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:193
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:196
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:197
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:200
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:201
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:204
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:205
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:208
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:209
 msgid "kB"
 msgstr "КБ"
 
@@ -6059,11 +6116,11 @@ msgstr "КБ/с"
 msgid "kbit/s"
 msgstr "Кбіт/с"
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:460
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:459
 msgid "key between 8 and 63 characters"
 msgstr "ключ від 8 до 63 символів"
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:472
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:471
 msgid "key with either 5 or 13 characters"
 msgstr "ключ із 5 або 13 символів"
 
@@ -6073,15 +6130,15 @@ msgstr ""
 "Локальний <abbr title=\"Domain Name System — система доменних імен\">DNS</"
 "abbr>-файл"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:879
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:907
 msgid "minutes"
 msgstr "хв."
 
-#: modules/luci-mod-network/luasrc/view/admin_network/wifi_join.htm:66
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wifi_join.js:43
 msgid "mixed WPA/WPA2"
 msgstr "змішаний WPA/WPA2"
 
-#: modules/luci-mod-network/luasrc/view/admin_network/iface_overview_status.htm:44
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/network.js:34
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/fstab.lua:225
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/fstab.lua:232
 msgid "no"
@@ -6091,7 +6148,7 @@ msgstr "ні"
 msgid "no link"
 msgstr "нема з’єднання"
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:274
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:273
 msgid "non-empty value"
 msgstr "непусте значення"
 
@@ -6104,7 +6161,7 @@ msgstr "не присутній"
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/vlan.lua:338
 #: themes/luci-theme-bootstrap/luasrc/view/themes/bootstrap/header.htm:185
 #: themes/luci-theme-freifunk-generic/luasrc/view/themes/freifunk-generic/header.htm:133
-#: themes/luci-theme-material/luasrc/view/themes/material/header.htm:225
+#: themes/luci-theme-material/luasrc/view/themes/material/header.htm:215
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:225
 #: themes/luci-theme-rosy/luasrc/view/themes/rosy/header.htm:250
 msgid "off"
@@ -6112,13 +6169,13 @@ msgstr "вимкнено"
 
 #: themes/luci-theme-bootstrap/luasrc/view/themes/bootstrap/header.htm:184
 #: themes/luci-theme-freifunk-generic/luasrc/view/themes/freifunk-generic/header.htm:132
-#: themes/luci-theme-material/luasrc/view/themes/material/header.htm:224
+#: themes/luci-theme-material/luasrc/view/themes/material/header.htm:214
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:224
 #: themes/luci-theme-rosy/luasrc/view/themes/rosy/header.htm:247
 msgid "on"
 msgstr "увімкнено"
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:526
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:525
 msgid ""
 "one of:\n"
 " - %s"
@@ -6126,7 +6183,7 @@ msgstr ""
 "одне з:\n"
 " - %s"
 
-#: modules/luci-mod-network/luasrc/view/admin_network/wifi_join.htm:71
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wifi_join.js:46
 msgid "open"
 msgstr "відкрита"
 
@@ -6138,11 +6195,11 @@ msgstr "вихід"
 msgid "overlay"
 msgstr "оверлей"
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:306
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:305
 msgid "positive decimal value"
 msgstr "додатне десяткове значення"
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:298
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:297
 msgid "positive integer value"
 msgstr "додатне ціле значення"
 
@@ -6156,12 +6213,12 @@ msgstr "випадковий"
 msgid "relay mode"
 msgstr "режим реле"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:247
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:188
 msgid "routed"
 msgstr "спрямовано"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:513
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:522
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:515
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:524
 msgid "sec"
 msgstr "с"
 
@@ -6186,15 +6243,15 @@ msgstr "БЕЗ та ЗІ збереженням стану"
 msgid "tagged"
 msgstr "позначено"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:861
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:887
 msgid "time units (TUs / 1.024 ms) [1000-65535]"
 msgstr "одиниці часу (TUs / 1.024 ms) [1000-65535]"
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:612
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:611
 msgid "unique value"
 msgstr "унікальне значення"
 
-#: modules/luci-mod-network/luasrc/view/admin_network/wifi_join.htm:69
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wifi_join.js:46
 msgid "unknown"
 msgstr "невідомий"
 
@@ -6217,163 +6274,163 @@ msgstr "не визначено -або- створити:"
 msgid "untagged"
 msgstr "не позначено"
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:311
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:310
 msgid "valid IP address"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:311
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:310
 msgid "valid IP address or prefix"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:346
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:345
 msgid "valid IPv4 CIDR"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:319
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:318
 msgid "valid IPv4 address"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:319
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:318
 msgid "valid IPv4 address or network"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:439
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:438
 msgid "valid IPv4 address:port"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:379
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:378
 msgid "valid IPv4 network"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:341
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:340
 msgid "valid IPv4 or IPv6 CIDR"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:332
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:331
 msgid "valid IPv4 prefix value (0-32)"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:351
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:350
 msgid "valid IPv6 CIDR"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:327
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:326
 msgid "valid IPv6 address"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:327
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:326
 msgid "valid IPv6 address or prefix"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:369
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:368
 msgid "valid IPv6 host id"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:384
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:383
 msgid "valid IPv6 network"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:337
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:336
 msgid "valid IPv6 prefix value (0-128)"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:405
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:404
 msgid "valid MAC address"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:476
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:475
 msgid "valid UCI identifier"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:427
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:426
 msgid "valid UCI identifier, hostname or IP address"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:448
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:451
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:447
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:450
 msgid "valid address:port"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:586
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:590
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:585
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:589
 msgid "valid date (YYYY-MM-DD)"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:302
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:301
 msgid "valid decimal value"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:470
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:469
 msgid "valid hexadecimal WEP key"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:458
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:457
 msgid "valid hexadecimal WPA key"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:433
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:432
 msgid "valid host:port"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:420
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:422
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:419
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:421
 msgid "valid hostname"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:410
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:409
 msgid "valid hostname or IP address"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:294
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:293
 msgid "valid integer value"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:374
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:373
 msgid "valid network in address/netmask notation"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:561
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:560
 msgid "valid phone digit (0-9, \"*\", \"#\", \"!\" or \".\")"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:397
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:400
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:396
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:399
 msgid "valid port or port range (port1-port2)"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:389
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:388
 msgid "valid port value"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:566
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:565
 msgid "valid time (HH:MM:SS)"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:495
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:494
 msgid "value between %d and %d characters"
 msgstr "значення від %d до %d символів"
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:481
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:480
 msgid "value between %f and %f"
 msgstr "значення від %f до %f"
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:485
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:484
 msgid "value greater or equal to %f"
 msgstr "значення, що більше або дорівнює %f"
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:489
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:488
 msgid "value smaller or equal to %f"
 msgstr "значення, що менше або дорівнює %f"
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:500
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:499
 msgid "value with at least %d characters"
 msgstr "значення з принаймні %d символів"
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:505
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:504
 msgid "value with at most %d characters"
 msgstr "значення з не більше %d символів"
 
-#: modules/luci-mod-network/luasrc/view/admin_network/iface_overview_status.htm:44
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/network.js:34
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/fstab.lua:221
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/fstab.lua:232
 msgid "yes"
@@ -6382,3 +6439,10 @@ msgstr "так"
 #: modules/luci-base/luasrc/view/cbi/delegator.htm:20
 msgid "« Back"
 msgstr "« Назад"
+
+#~ msgid ""
+#~ "When using a PSK, the PMK can be generated locally without inter AP "
+#~ "communications"
+#~ msgstr ""
+#~ "При використанні PSK, PMK може бути створений локально без взаємодії між "
+#~ "AP"
