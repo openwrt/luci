@@ -919,6 +919,8 @@ CBIDynamicList = {
 			else if (!hidden || hidden.value >= value)
 				exists = !!item.parentNode.insertBefore(new_item, item);
 		});
+
+		cbi_d_update();
 	},
 
 	removeItem: function(dl, item) {
@@ -933,6 +935,7 @@ CBIDynamicList = {
 		}
 
 		item.parentNode.removeChild(item);
+		cbi_d_update();
 	},
 
 	handleClick: function(ev) {
@@ -1018,6 +1021,7 @@ function cbi_dynlist_init(dl, datatype, optional, choices)
 		'type': 'text',
 		'name': 'cbi.dynlist.' + dl.getAttribute('data-prefix'),
 		'class': 'cbi-input-text',
+		'placeholder': dl.getAttribute('data-placeholder'),
 		'data-type': datatype,
 		'data-optional': true
 	})));
