@@ -34,7 +34,7 @@ usecidr.write = function(self, section)
 	local formvalue = (self:formvalue(section) == "1") and ipaddr_multi:formvalue(section) or ipaddr_single:formvalue(section)
 	local equal = (cfgvalue == formvalue)
 
-	if not equal and type(cfgvalue) == "table" and type(formvalue) == "table" then
+	if not equal and type(cfgvalue) == "table" and type(formvalue) == "table" and #cfgvalue == #formvalue then
 		equal = true
 
 		local _, v
