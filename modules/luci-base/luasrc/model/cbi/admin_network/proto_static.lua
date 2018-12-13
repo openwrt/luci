@@ -8,12 +8,16 @@ local netmask, gateway, broadcast, dns, accept_ra, send_rs, ip6addr, ip6gw
 local mtu, metric, usecidr, ipaddr_single, ipaddr_multi
 
 
+local function is_cidr(s)
+	return (type(s) == "string" and luci.ip.IPv4(s) and s:find("/"))
+end
+
 usecidr = section:taboption("general", Value, "ipaddr_usecidr")
 usecidr.forcewrite = true
 
 usecidr.cfgvalue = function(self, section)
 	local cfgvalue = self.map:get(section, "ipaddr")
-	return (type(cfgvalue) == "table") and "1" or "0"
+	return (type(cfgvalue) == "table" or is_cidr(cfgvalue)) and "1" or "0"
 end
 
 usecidr.render = function(self, section, scope)
@@ -62,9 +66,11 @@ ipaddr_multi.cfgvalue = function(self, section)
 	local addr = self.map:get(section, "ipaddr")
 	local mask = self.map:get(section, "netmask")
 
-	if type(addr) == "string" and
-	   type(mask) == "string" and
-	   #addr > 0 and #mask > 0
+	if is_cidr(addr) then
+		return { addr }
+	elseif type(addr) == "string" and
+	       type(mask) == "string" and
+	       #addr > 0 and #mask > 0
 	then
 		return { "%s/%s" %{ addr, mask } }
 	elseif type(addr) == "table" then
