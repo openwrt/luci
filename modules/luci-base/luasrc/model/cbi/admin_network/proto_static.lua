@@ -4,17 +4,87 @@
 local map, section, net = ...
 local ifc = net:get_interface()
 
-local ipaddr, netmask, gateway, broadcast, dns, accept_ra, send_rs, ip6addr, ip6gw
-local mtu, metric
+local netmask, gateway, broadcast, dns, accept_ra, send_rs, ip6addr, ip6gw
+local mtu, metric, usecidr, ipaddr_single, ipaddr_multi
 
 
-ipaddr = section:taboption("general", Value, "ipaddr", translate("IPv4 address"))
-ipaddr.datatype = "ip4addr"
+usecidr = section:taboption("general", Value, "ipaddr_usecidr")
+usecidr.forcewrite = true
+
+usecidr.cfgvalue = function(self, section)
+	local cfgvalue = self.map:get(section, "ipaddr")
+	return (type(cfgvalue) == "table") and "1" or "0"
+end
+
+usecidr.render = function(self, section, scope)
+	luci.template.Template(nil, [[
+		<input type="hidden"<%= attr("id", cbid) .. attr("name", cbid) .. attr("value", value) %> />
+	]]):render({
+		cbid = self:cbid(section),
+		value = self:cfgvalue(section)
+	})
+end
+
+usecidr.write = function(self, section)
+	local cfgvalue = self.map:get(section, "ipaddr")
+	local formvalue = (self:formvalue(section) == "1") and ipaddr_multi:formvalue(section) or ipaddr_single:formvalue(section)
+	local equal = (cfgvalue == formvalue)
+
+	if not equal and type(cfgvalue) == "table" and type(formvalue) == "table" then
+		equal = true
+
+		local _, v
+		for _, v in ipairs(cfgvalue) do
+			if v ~= formvalue[_] then
+				equal = false
+				break
+			end
+		end
+	end
+
+	if not equal then
+		self.map:set(section, "ipaddr", formvalue or "")
+	end
+
+	return not equal
+end
 
 
-netmask = section:taboption("general", Value, "netmask",
-	translate("IPv4 netmask"))
+ipaddr_multi = section:taboption("general", DynamicList, "ipaddrs", translate("IPv4 address"))
+ipaddr_multi:depends("ipaddr_usecidr", "1")
+ipaddr_multi.datatype = "or(cidr4,ipnet4)"
+ipaddr_multi.placeholder = translate("Add IPv4 address…")
 
+ipaddr_multi.alias = "ipaddr"
+ipaddr_multi.write = function() end
+ipaddr_multi.remove = function() end
+ipaddr_multi.cfgvalue = function(self, section)
+	local addr = self.map:get(section, "ipaddr")
+	local mask = self.map:get(section, "netmask")
+
+	if type(addr) == "string" and
+	   type(mask) == "string" and
+	   #addr > 0 and #mask > 0
+	then
+		return { "%s/%s" %{ addr, mask } }
+	elseif type(addr) == "table" then
+		return addr
+	else
+		return {}
+	end
+end
+
+
+ipaddr_single = section:taboption("general", Value, "ipaddr", translate("IPv4 address"))
+ipaddr_single:depends("ipaddr_usecidr", "0")
+ipaddr_single.datatype = "ip4addr"
+ipaddr_single.template = "cbi/ipaddr"
+ipaddr_single.write = function() end
+ipaddr_single.remove = function() end
+
+
+netmask = section:taboption("general", Value, "netmask", translate("IPv4 netmask"))
+netmask:depends("ipaddr_usecidr", "0")
 netmask.datatype = "ip4addr"
 netmask:value("255.255.255.0")
 netmask:value("255.255.0.0")
@@ -48,8 +118,9 @@ if luci.model.network:has_ipv6() then
 		translate("Assign prefix parts using this hexadecimal subprefix ID for this interface."))
 	for i=33,64 do ip6hint:depends("ip6assign", i) end
 
-	ip6addr = section:taboption("general", Value, "ip6addr", translate("IPv6 address"))
+	ip6addr = section:taboption("general", DynamicList, "ip6addr", translate("IPv6 address"))
 	ip6addr.datatype = "ip6addr"
+	ip6addr.placeholder = translate("Add IPv6 address…")
 	ip6addr:depends("ip6assign", "")
 
 
