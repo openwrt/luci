@@ -45,11 +45,14 @@ function showRPCURL() {
 	var auth_method = document.getElementById("cbid.aria2.main.rpc_auth_method");
 	var auth_port = document.getElementById("cbid.aria2.main.rpc_listen_port");
 	var auth_port_value;
+	if (window.location.protocol == "https:") {                                  
+		protocol += "s";                                                     
+	}
 	if (auth_port.value == "") {
-		auth_port_value = "6800"
+		auth_port_value = "6800";
 	} else {
-		auth_port_value = auth_port.value
-	};
+		auth_port_value = auth_port.value;
+	}
 	if (auth_method.value == "token") {
 		var auth_token = document.getElementById("cbid.aria2.main.rpc_secret");
 		newTextNode.value = protocol + "://token:" + auth_token.value + "@" + document.domain + ":" + auth_port_value + "/jsonrpc";
@@ -68,7 +71,7 @@ function openWebUI(path) {
 	var pos = curWwwPath.indexOf(pathName);
 	var localhostPath = curWwwPath.substring(0, pos);
 	var url = localhostPath + "/" + path;
-	window.open(url)
+	window.open(url);
 };
 //]]>
 </script>

@@ -14,7 +14,7 @@ PKG_VERSION:=1.0.1
 
 # Release == build
 # increase on changes of translation files
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_LICENSE:=Apache-2.0
 PKG_MAINTAINER:=Hsing-Wang Liao <kuoruan@gmail.com>
