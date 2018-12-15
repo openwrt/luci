@@ -89,12 +89,12 @@ o.rmempty = true
 o = s:taboption("file", Value, "config_dir", translate("Config file directory"))
 o.placeholder = "/var/etc/aria2"
 
-o = s:taboption("file", Flag, "enable_log", translate("Enable log"), translate("Log file is in the config file dir."))
+o = s:taboption("file", Flag, "enable_logging", translate("Enable log"), translate("The default log file is /var/log/aria2.log"))
 o.enabled = "true"
 o.disabled = "false"
  
 o = s:taboption("file", ListValue, "log_level", translate("Log level"))
-o:depends("enable_log", "true")
+o:depends("enable_logging", "true")
 o:value("debug", translate("Debug"))
 o:value("info", translate("Info"))
 o:value("notice", translate("Notice"))
