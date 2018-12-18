@@ -169,8 +169,8 @@ XHR.post = function(url, data, callback) {
 }
 
 XHR.poll = function(interval, url, data, callback, post) {
-	if (isNaN(interval) || interval < 1)
-		interval = 5;
+	if (isNaN(interval) || interval <= 0)
+		interval = L.env.pollinterval;
 
 	if (!XHR._q) {
 		XHR._t = 0;
