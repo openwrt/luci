@@ -44,7 +44,37 @@ trigger = s:option(ListValue, "trigger", translate("Trigger"))
 
 local triggers = fs.readfile(sysfs_path .. leds[1] .. "/trigger")
 for t in triggers:gmatch("[%w-]+") do
-	trigger:value(t, translate(t:gsub("-", "")))
+	if t == "default-on" then
+		trigger:value(t, translatef("Always on (%s)", t))
+	elseif t == "none" then
+		trigger:value(t, translatef("Always off (%s)", t))
+	elseif t == "timer" then
+		trigger:value(t, translatef("Custom flash intervall (%s)", t))
+	elseif t == "netdev" then
+		trigger:value(t, translatef("Network device activity (%s)", t))
+	elseif t == "heartbeat" then
+		trigger:value(t, translatef("Heartbeat intervall (%s)", t))
+	elseif t == "nand-disk" then
+		trigger:value(t, translatef("Flashmemory write access (%s)", t))
+	elseif t == "mtd" then
+		trigger:value(t, translatef("Flashmemory write access (%s)", t))
+	elseif t:match("mmc[0-9]") then
+		trigger:value(t, translatef("Flashmemory write access (%s)", t))
+	elseif t:match("switch[0-9]") then
+		trigger:value(t, translatef("Switchport activity (%s)", t))
+	elseif t:match("phy[0-9]rx") then
+		trigger:value(t, translatef("Wi-Fi data reception (%s)", t))
+	elseif t:match("phy[0-9]tx") then
+		trigger:value(t, translatef("Wi-Fi data transmission (%s)", t))
+	elseif t:match("phy[0-9]assoc") then
+		trigger:value(t, translatef("Wi-Fi client association (%s)", t))
+	elseif t:match("phy[0-9]radio") then
+		trigger:value(t, translatef("Wi-Fi on (%s)", t))
+	elseif t:match("phy[0-9]tpt") then
+		trigger:value(t, translatef("Wi-Fi activity (%s)", t))
+	else
+		trigger:value(t, translate(t:gsub("-", "")))
+	end
 end
 
 
