@@ -353,11 +353,11 @@ msgstr "点对点 Ad-Hoc"
 msgid "Add"
 msgstr "添加"
 
-#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:56
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:60
 msgid "Add IPv4 address…"
 msgstr "添加 IPv4 地址…"
 
-#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:123
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:129
 msgid "Add IPv6 address…"
 msgstr "添加 IPv6 地址…"
 
@@ -491,6 +491,14 @@ msgstr "允许的 IP"
 msgid "Always announce default router"
 msgstr "总是通告默认路由"
 
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:50
+msgid "Always off (%s)"
+msgstr ""
+
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:48
+msgid "Always on (%s)"
+msgstr ""
+
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:258
 msgid ""
 "Always use 40MHz channels even if the secondary channel overlaps. Using this "
@@ -613,7 +621,7 @@ msgstr "应用请求失败，状态 <code>%h</code>"
 msgid "Architecture"
 msgstr "架构"
 
-#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:112
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:118
 #: protocols/luci-proto-hnet/luasrc/model/cbi/admin_network/proto_hnet.lua:19
 msgid ""
 "Assign a part of given length of every public IPv6-prefix to this interface"
@@ -623,7 +631,7 @@ msgstr "将每个公共 IPv6 前缀的给定长度部分分配给此接口"
 msgid "Assign interfaces..."
 msgstr "分配接口…"
 
-#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:118
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:124
 #: protocols/luci-proto-hnet/luasrc/model/cbi/admin_network/proto_hnet.lua:24
 msgid ""
 "Assign prefix parts using this hexadecimal subprefix ID for this interface."
@@ -1174,6 +1182,10 @@ msgid ""
 msgstr ""
 "自定义文件（证书、脚本）会保留在系统上。若无需保留，请先执行恢复出厂设置。"
 
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:52
+msgid "Custom flash intervall (%s)"
+msgstr ""
+
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:4
 msgid ""
 "Customizes the behaviour of the device <abbr title=\"Light Emitting Diode"
@@ -1366,7 +1378,7 @@ msgstr "目标地址"
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/fstab.lua:253
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/fstab/mount.lua:86
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/fstab/swap.lua:40
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:58
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:88
 msgid "Device"
 msgstr "设备"
 
@@ -1919,6 +1931,12 @@ msgstr "刷新操作"
 msgid "Flashing..."
 msgstr "正在刷写…"
 
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:58
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:60
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:62
+msgid "Flashmemory write access (%s)"
+msgstr ""
+
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/ifaces.lua:498
 msgid "Force"
 msgstr "强制"
@@ -2108,6 +2126,10 @@ msgstr "挂起"
 msgid "Header Error Code Errors (HEC)"
 msgstr "请求头错误代码错误（HEC）"
 
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:56
+msgid "Heartbeat intervall (%s)"
+msgstr ""
+
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:14
 msgid ""
 "Here you can configure the basic aspects of your device like its hostname or "
@@ -2216,8 +2238,8 @@ msgstr "IPv4 防火墙"
 msgid "IPv4 Upstream"
 msgstr "IPv4 上游"
 
-#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:53
-#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:78
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:57
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:84
 msgid "IPv4 address"
 msgstr "IPv4 地址"
 
@@ -2225,15 +2247,15 @@ msgstr "IPv4 地址"
 msgid "IPv4 assignment length"
 msgstr "分配 IPv4 长度"
 
-#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:98
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:104
 msgid "IPv4 broadcast"
 msgstr "IPv4 广播"
 
-#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:94
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:100
 msgid "IPv4 gateway"
 msgstr "IPv4 网关"
 
-#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:86
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:92
 msgid "IPv4 netmask"
 msgstr "IPv4 子网掩码"
 
@@ -2308,21 +2330,21 @@ msgstr "IPv6 ULA 前缀"
 msgid "IPv6 Upstream"
 msgstr "IPv6 上游"
 
-#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:121
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:127
 msgid "IPv6 address"
 msgstr "IPv6 地址"
 
-#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:117
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:123
 #: protocols/luci-proto-hnet/luasrc/model/cbi/admin_network/proto_hnet.lua:23
 msgid "IPv6 assignment hint"
 msgstr "IPv6 分配提示"
 
-#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:111
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:117
 #: protocols/luci-proto-hnet/luasrc/model/cbi/admin_network/proto_hnet.lua:18
 msgid "IPv6 assignment length"
 msgstr "IPv6 分配长度"
 
-#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:127
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:133
 msgid "IPv6 gateway"
 msgstr "IPv6 网关"
 
@@ -2340,12 +2362,12 @@ msgstr "IPv6 地址前缀"
 msgid "IPv6 prefix length"
 msgstr "IPv6 地址前缀长度"
 
-#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:132
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:138
 #: protocols/luci-proto-ipv6/luasrc/model/cbi/admin_network/proto_6in4.lua:33
 msgid "IPv6 routed prefix"
 msgstr "IPv6 路由前缀"
 
-#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:137
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:143
 msgid "IPv6 suffix"
 msgstr "IPv6 后缀"
 
@@ -2746,7 +2768,7 @@ msgstr "线路状态"
 msgid "Line Uptime"
 msgstr "线路运行时间"
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:88
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:118
 msgid "Link On"
 msgstr "活动链接"
 
@@ -3242,6 +3264,10 @@ msgstr "网络工具"
 msgid "Network boot image"
 msgstr "网络启动镜像"
 
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:54
+msgid "Network device activity (%s)"
+msgstr ""
+
 #: modules/luci-base/luasrc/model/network.lua:33
 msgid "Network device is not present"
 msgstr "网络设备不存在"
@@ -3399,7 +3425,7 @@ msgstr "混淆密码"
 msgid "Obtain IPv6-Address"
 msgstr "获取 IPv6 地址"
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:54
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:84
 msgid "Off-State Delay"
 msgstr "关闭时间"
 
@@ -3417,7 +3443,7 @@ msgstr ""
 "Area Network\">VLAN</abbr> 记号 <samp>INTERFACE.VLANNR</samp>（例如："
 "<samp>eth0.1</samp>）。"
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:51
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:81
 msgid "On-State Delay"
 msgstr "通电时间"
 
@@ -3471,7 +3497,7 @@ msgid ""
 msgstr ""
 "可选，传出加密数据包的 32 位标记。请输入十六进制值，以 <code>0x</code> 开头。"
 
-#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:138
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:144
 msgid ""
 "Optional. Allowed values: 'eui64', 'random', fixed value like '::1' or "
 "'::1:2'. When IPv6 prefix (like 'a:b:c:d::') is received from a delegating "
@@ -3544,14 +3570,14 @@ msgid "Output Interface"
 msgstr "网络出口"
 
 #: modules/luci-base/luasrc/model/cbi/admin_network/proto_dhcp.lua:63
-#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:149
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:155
 #: protocols/luci-proto-hnet/luasrc/model/cbi/admin_network/proto_hnet.lua:33
 #: protocols/luci-proto-ipv6/luasrc/model/cbi/admin_network/proto_dhcpv6.lua:54
 msgid "Override MAC address"
 msgstr "重设 MAC 地址"
 
 #: modules/luci-base/luasrc/model/cbi/admin_network/proto_dhcp.lua:66
-#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:152
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:158
 #: protocols/luci-proto-hnet/luasrc/model/cbi/admin_network/proto_hnet.lua:35
 #: protocols/luci-proto-ipip/luasrc/model/cbi/admin_network/proto_ipip.lua:20
 #: protocols/luci-proto-ipv6/luasrc/model/cbi/admin_network/proto_dhcpv6.lua:56
@@ -3927,7 +3953,7 @@ msgstr ""
 "与使用普通密码相比，公钥允许无密码 SSH 登录具有更高的安全性。要将新密钥上传到"
 "设备，请粘贴 OpenSSH 兼容的公钥行或将 <code>.pub</code> 文件拖到输入字段中。"
 
-#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:133
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:139
 msgid "Public prefix routed to this device for distribution to clients."
 msgstr "分配到此设备的公共前缀，用以分发到客户端。"
 
@@ -4075,7 +4101,7 @@ msgstr "正在重启…"
 msgid "Reboots the operating system of your device"
 msgstr "重启您设备上的系统"
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:90
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:120
 msgid "Receive"
 msgstr "接收"
 
@@ -4726,7 +4752,7 @@ msgid ""
 "Switch %q has an unknown topology - the VLAN settings might not be accurate."
 msgstr "交换机 %q 具有未知的拓扑结构，VLAN 设置可能不正确。"
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:155
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:185
 msgid "Switch Port Mask"
 msgstr "交换机端口掩码"
 
@@ -4741,6 +4767,10 @@ msgstr "切换协议"
 #: modules/luci-base/luasrc/view/cbi/ipaddr.htm:26
 msgid "Switch to CIDR list notation"
 msgstr "切换到 CIDR 列表记法"
+
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:64
+msgid "Switchport activity (%s)"
+msgstr ""
 
 #: modules/luci-mod-system/luasrc/view/admin_system/clock_status.htm:25
 #: modules/luci-mod-system/luasrc/view/admin_system/clock_status.htm:34
@@ -5176,7 +5206,7 @@ msgstr "传输"
 msgid "Transmission Rate"
 msgstr "传送速率"
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:89
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:119
 msgid "Transmit"
 msgstr "传送"
 
@@ -5195,7 +5225,7 @@ msgstr "传送天线"
 msgid "Trigger"
 msgstr "触发器"
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:85
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:115
 msgid "Trigger Mode"
 msgstr "触发模式"
 
@@ -5235,11 +5265,11 @@ msgstr "仅 UMTS（WCDMA）"
 msgid "UMTS/GPRS/EV-DO"
 msgstr "UMTS/GPRS/EV-DO"
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:93
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:123
 msgid "USB Device"
 msgstr "USB 设备"
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:114
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:144
 msgid "USB Ports"
 msgstr "USB 接口"
 
@@ -5409,7 +5439,7 @@ msgid "Use builtin IPv6-management"
 msgstr "使用内置的 IPv6 管理"
 
 #: modules/luci-base/luasrc/model/cbi/admin_network/proto_dhcp.lua:40
-#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:103
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:109
 #: protocols/luci-proto-3g/luasrc/model/cbi/admin_network/proto_3g.lua:92
 #: protocols/luci-proto-ipv6/luasrc/model/cbi/admin_network/proto_dhcpv6.lua:45
 #: protocols/luci-proto-ncm/luasrc/model/cbi/admin_network/proto_ncm.lua:101
@@ -5438,7 +5468,7 @@ msgid "Use default gateway"
 msgstr "使用默认网关"
 
 #: modules/luci-base/luasrc/model/cbi/admin_network/proto_dhcp.lua:48
-#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:158
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:164
 #: protocols/luci-proto-3g/luasrc/model/cbi/admin_network/proto_3g.lua:77
 #: protocols/luci-proto-ipv6/luasrc/model/cbi/admin_network/proto_464xlat.lua:24
 #: protocols/luci-proto-ipv6/luasrc/model/cbi/admin_network/proto_6in4.lua:88
@@ -5633,6 +5663,26 @@ msgstr ""
 "使用 PSK 时，可以自动生成 PMK，因此以下 R0/R1 密钥选项不生效。若要使用 R0 和 "
 "R1 密钥则禁用此选项。"
 
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:74
+msgid "Wi-Fi activity (%s)"
+msgstr ""
+
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:70
+msgid "Wi-Fi client association (%s)"
+msgstr ""
+
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:66
+msgid "Wi-Fi data reception (%s)"
+msgstr ""
+
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:68
+msgid "Wi-Fi data transmission (%s)"
+msgstr ""
+
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:72
+msgid "Wi-Fi on (%s)"
+msgstr ""
+
 #: modules/luci-base/luasrc/view/cbi/wireless_modefreq.htm:161
 msgid "Width"
 msgstr "频宽"
@@ -5813,7 +5863,7 @@ msgstr "dBm"
 msgid "disable"
 msgstr "禁用"
 
-#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:113
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:119
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/ifaces.lua:524
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/ifaces.lua:530
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/ifaces.lua:536

@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-06-10 03:40+0200\n"
-"PO-Revision-Date: 2018-11-22 16:24+0900\n"
+"PO-Revision-Date: 2018-12-20 03:00+0900\n"
 "Last-Translator: INAGAKI Hiroshi <musashino.open@gmail.com>\n"
 "Language-Team: \n"
 "Language: ja\n"
@@ -23,7 +23,7 @@ msgstr "%d ビット"
 
 #: modules/luci-base/htdocs/luci-static/resources/luci.js:307
 msgid "%d invalid field(s)"
-msgstr ""
+msgstr "無効な入力欄: %d 個"
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/vlan.lua:256
 msgid "%s is untagged in multiple VLANs!"
@@ -356,13 +356,13 @@ msgstr "アドホック"
 msgid "Add"
 msgstr "追加"
 
-#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:56
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:60
 msgid "Add IPv4 address…"
-msgstr ""
+msgstr "IPv4 アドレスを追加…"
 
-#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:123
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:129
 msgid "Add IPv6 address…"
-msgstr ""
+msgstr "IPv6 アドレスを追加…"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:120
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:143
@@ -497,6 +497,14 @@ msgstr "許可されるIP"
 msgid "Always announce default router"
 msgstr "常にデフォルト ルーターを通知する"
 
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:50
+msgid "Always off (%s)"
+msgstr "常にオフ (%s)"
+
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:48
+msgid "Always on (%s)"
+msgstr "常にオン (%s)"
+
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:258
 msgid ""
 "Always use 40MHz channels even if the secondary channel overlaps. Using this "
@@ -622,7 +630,7 @@ msgstr "適用リクエストはステータス <code>%h</code> により失敗�
 msgid "Architecture"
 msgstr "アーキテクチャ"
 
-#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:112
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:118
 #: protocols/luci-proto-hnet/luasrc/model/cbi/admin_network/proto_hnet.lua:19
 msgid ""
 "Assign a part of given length of every public IPv6-prefix to this interface"
@@ -632,7 +640,7 @@ msgstr ""
 msgid "Assign interfaces..."
 msgstr "インターフェースの割当て..."
 
-#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:118
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:124
 #: protocols/luci-proto-hnet/luasrc/model/cbi/admin_network/proto_hnet.lua:24
 msgid ""
 "Assign prefix parts using this hexadecimal subprefix ID for this interface."
@@ -1200,6 +1208,10 @@ msgstr ""
 "カスタム ファイル（証明書, スクリプト）がシステムに残るかもしれません。これを"
 "防ぐには、まず最初に factory-reset を行います。"
 
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:52
+msgid "Custom flash intervall (%s)"
+msgstr "カスタムな点滅間隔 (%s)"
+
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:4
 msgid ""
 "Customizes the behaviour of the device <abbr title=\"Light Emitting Diode"
@@ -1394,7 +1406,7 @@ msgstr "宛先"
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/fstab.lua:253
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/fstab/mount.lua:86
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/fstab/swap.lua:40
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:58
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:88
 msgid "Device"
 msgstr "デバイス"
 
@@ -1961,6 +1973,12 @@ msgstr "更新機能"
 msgid "Flashing..."
 msgstr "更新中..."
 
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:58
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:60
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:62
+msgid "Flashmemory write access (%s)"
+msgstr "フラッシュメモリー 書込アクセス (%s)"
+
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/ifaces.lua:498
 msgid "Force"
 msgstr "強制"
@@ -2151,6 +2169,10 @@ msgstr "再起動"
 msgid "Header Error Code Errors (HEC)"
 msgstr ""
 
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:56
+msgid "Heartbeat intervall (%s)"
+msgstr "ハートビート (%s)"
+
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:14
 msgid ""
 "Here you can configure the basic aspects of your device like its hostname or "
@@ -2261,8 +2283,8 @@ msgstr "IPv4 ファイアウォール"
 msgid "IPv4 Upstream"
 msgstr "IPv4 アップストリーム"
 
-#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:53
-#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:78
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:57
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:84
 msgid "IPv4 address"
 msgstr "IPv4 アドレス"
 
@@ -2270,15 +2292,15 @@ msgstr "IPv4 アドレス"
 msgid "IPv4 assignment length"
 msgstr "IPv4 割り当て長"
 
-#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:98
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:104
 msgid "IPv4 broadcast"
 msgstr "IPv4 ブロードキャスト"
 
-#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:94
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:100
 msgid "IPv4 gateway"
 msgstr "IPv4 ゲートウェイ"
 
-#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:86
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:92
 msgid "IPv4 netmask"
 msgstr "IPv4 ネットマスク"
 
@@ -2353,21 +2375,21 @@ msgstr "IPv6 ULA-プレフィクス"
 msgid "IPv6 Upstream"
 msgstr "IPv6 アップストリーム"
 
-#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:121
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:127
 msgid "IPv6 address"
 msgstr "IPv6 アドレス"
 
-#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:117
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:123
 #: protocols/luci-proto-hnet/luasrc/model/cbi/admin_network/proto_hnet.lua:23
 msgid "IPv6 assignment hint"
 msgstr ""
 
-#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:111
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:117
 #: protocols/luci-proto-hnet/luasrc/model/cbi/admin_network/proto_hnet.lua:18
 msgid "IPv6 assignment length"
 msgstr "IPv6 割り当て長"
 
-#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:127
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:133
 msgid "IPv6 gateway"
 msgstr "IPv6 ゲートウェイ"
 
@@ -2385,12 +2407,12 @@ msgstr "IPv6 プレフィクス"
 msgid "IPv6 prefix length"
 msgstr "IPv6 プレフィクス長"
 
-#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:132
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:138
 #: protocols/luci-proto-ipv6/luasrc/model/cbi/admin_network/proto_6in4.lua:33
 msgid "IPv6 routed prefix"
 msgstr ""
 
-#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:137
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:143
 msgid "IPv6 suffix"
 msgstr "IPv6 サフィックス"
 
@@ -2802,7 +2824,7 @@ msgstr ""
 msgid "Line Uptime"
 msgstr ""
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:88
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:118
 msgid "Link On"
 msgstr "リンクオン"
 
@@ -3304,6 +3326,10 @@ msgstr "ネットワーク ユーティリティ"
 msgid "Network boot image"
 msgstr "ネットワークブート用イメージ"
 
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:54
+msgid "Network device activity (%s)"
+msgstr "ネットワークデバイス アクティビティ (%s)"
+
 #: modules/luci-base/luasrc/model/network.lua:33
 msgid "Network device is not present"
 msgstr "ネットワーク デバイスが存在しません"
@@ -3445,7 +3471,7 @@ msgstr ""
 
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:125
 msgid "Number of parallel threads used for compression"
-msgstr ""
+msgstr "圧縮に使用される、並列スレッド数です。"
 
 #: protocols/luci-proto-vpnc/luasrc/model/cbi/admin_network/proto_vpnc.lua:40
 msgid "Obfuscated Group Password"
@@ -3463,7 +3489,7 @@ msgstr ""
 msgid "Obtain IPv6-Address"
 msgstr ""
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:54
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:84
 msgid "Off-State Delay"
 msgstr "消灯時間"
 
@@ -3483,7 +3509,7 @@ msgstr ""
 "\"Virtual Local Area Network\">VLAN</abbr>も使用することが出来ます。(<abbr "
 "title=\"for example\">例</abbr>: <samp>eth0.1</samp>)"
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:51
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:81
 msgid "On-State Delay"
 msgstr "点灯時間"
 
@@ -3536,7 +3562,7 @@ msgid ""
 "starting with <code>0x</code>."
 msgstr ""
 
-#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:138
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:144
 msgid ""
 "Optional. Allowed values: 'eui64', 'random', fixed value like '::1' or "
 "'::1:2'. When IPv6 prefix (like 'a:b:c:d::') is received from a delegating "
@@ -3608,14 +3634,14 @@ msgid "Output Interface"
 msgstr "出力インターフェース"
 
 #: modules/luci-base/luasrc/model/cbi/admin_network/proto_dhcp.lua:63
-#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:149
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:155
 #: protocols/luci-proto-hnet/luasrc/model/cbi/admin_network/proto_hnet.lua:33
 #: protocols/luci-proto-ipv6/luasrc/model/cbi/admin_network/proto_dhcpv6.lua:54
 msgid "Override MAC address"
 msgstr "MACアドレスを上書きする"
 
 #: modules/luci-base/luasrc/model/cbi/admin_network/proto_dhcp.lua:66
-#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:152
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:158
 #: protocols/luci-proto-hnet/luasrc/model/cbi/admin_network/proto_hnet.lua:35
 #: protocols/luci-proto-ipip/luasrc/model/cbi/admin_network/proto_ipip.lua:20
 #: protocols/luci-proto-ipv6/luasrc/model/cbi/admin_network/proto_dhcpv6.lua:56
@@ -3997,7 +4023,7 @@ msgstr ""
 "力欄に OpenSSH 互換の公開鍵（1行）を貼り付けるか、 <code>.pub</code> ファイル"
 "をドラッグしてください。"
 
-#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:133
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:139
 msgid "Public prefix routed to this device for distribution to clients."
 msgstr ""
 
@@ -4150,7 +4176,7 @@ msgstr "再起動中..."
 msgid "Reboots the operating system of your device"
 msgstr "デバイスのオペレーティングシステムを再起動します。"
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:90
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:120
 msgid "Receive"
 msgstr "受信"
 
@@ -4806,7 +4832,7 @@ msgstr ""
 "スイッチ %q は不明なトポロジを持っています - VLAN 設定は正確ではないかもしれ"
 "ません。"
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:155
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:185
 msgid "Switch Port Mask"
 msgstr "スイッチポート マスク"
 
@@ -4820,7 +4846,11 @@ msgstr "プロトコルの切り替え"
 
 #: modules/luci-base/luasrc/view/cbi/ipaddr.htm:26
 msgid "Switch to CIDR list notation"
-msgstr ""
+msgstr "CIDR リスト表記へ切替"
+
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:64
+msgid "Switchport activity (%s)"
+msgstr "スイッチポート アクティビティ (%s)"
 
 #: modules/luci-mod-system/luasrc/view/admin_system/clock_status.htm:25
 #: modules/luci-mod-system/luasrc/view/admin_system/clock_status.htm:34
@@ -5294,7 +5324,7 @@ msgstr "転送"
 msgid "Transmission Rate"
 msgstr "転送レート"
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:89
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:119
 msgid "Transmit"
 msgstr "送信"
 
@@ -5313,7 +5343,7 @@ msgstr "送信アンテナ"
 msgid "Trigger"
 msgstr "トリガー"
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:85
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:115
 msgid "Trigger Mode"
 msgstr "トリガーモード"
 
@@ -5353,11 +5383,11 @@ msgstr "UMTSのみ"
 msgid "UMTS/GPRS/EV-DO"
 msgstr "UMTS/GPRS/EV-DO"
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:93
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:123
 msgid "USB Device"
 msgstr "USBデバイス"
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:114
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:144
 msgid "USB Ports"
 msgstr "USB ポート"
 
@@ -5529,7 +5559,7 @@ msgid "Use builtin IPv6-management"
 msgstr "ビルトインのIPv6-マネジメントを使用する"
 
 #: modules/luci-base/luasrc/model/cbi/admin_network/proto_dhcp.lua:40
-#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:103
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:109
 #: protocols/luci-proto-3g/luasrc/model/cbi/admin_network/proto_3g.lua:92
 #: protocols/luci-proto-ipv6/luasrc/model/cbi/admin_network/proto_dhcpv6.lua:45
 #: protocols/luci-proto-ncm/luasrc/model/cbi/admin_network/proto_ncm.lua:101
@@ -5558,7 +5588,7 @@ msgid "Use default gateway"
 msgstr "デフォルト ゲートウェイを使用する"
 
 #: modules/luci-base/luasrc/model/cbi/admin_network/proto_dhcp.lua:48
-#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:158
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:164
 #: protocols/luci-proto-3g/luasrc/model/cbi/admin_network/proto_3g.lua:77
 #: protocols/luci-proto-ipv6/luasrc/model/cbi/admin_network/proto_464xlat.lua:24
 #: protocols/luci-proto-ipv6/luasrc/model/cbi/admin_network/proto_6in4.lua:88
@@ -5751,6 +5781,26 @@ msgid ""
 "key options."
 msgstr ""
 
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:74
+msgid "Wi-Fi activity (%s)"
+msgstr "無線アクティビティ (%s)"
+
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:70
+msgid "Wi-Fi client association (%s)"
+msgstr "無線クライアント アソシエーション (%s)"
+
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:66
+msgid "Wi-Fi data reception (%s)"
+msgstr "無線データ受信状態 (%s)"
+
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:68
+msgid "Wi-Fi data transmission (%s)"
+msgstr "無線データ送信状態 (%s)"
+
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:72
+msgid "Wi-Fi on (%s)"
+msgstr "無線オン (%s)"
+
 #: modules/luci-base/luasrc/view/cbi/wireless_modefreq.htm:161
 msgid "Width"
 msgstr "帯域幅"
@@ -5934,7 +5984,7 @@ msgstr "dBm"
 msgid "disable"
 msgstr "無効"
 
-#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:113
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:119
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/ifaces.lua:524
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/ifaces.lua:530
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/ifaces.lua:536

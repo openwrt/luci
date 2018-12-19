@@ -377,11 +377,11 @@ msgstr "Ad-Hoc"
 msgid "Add"
 msgstr "Adicionar"
 
-#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:56
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:60
 msgid "Add IPv4 address…"
 msgstr ""
 
-#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:123
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:129
 msgid "Add IPv6 address…"
 msgstr ""
 
@@ -526,6 +526,14 @@ msgstr "Endereços IP autorizados"
 msgid "Always announce default router"
 msgstr "Sempre anuncie o roteador padrão"
 
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:50
+msgid "Always off (%s)"
+msgstr ""
+
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:48
+msgid "Always on (%s)"
+msgstr ""
+
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:258
 msgid ""
 "Always use 40MHz channels even if the secondary channel overlaps. Using this "
@@ -650,7 +658,7 @@ msgstr "Pedido para aplicar falhou com o estado <code>%h</code>"
 msgid "Architecture"
 msgstr "Arquitetura"
 
-#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:112
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:118
 #: protocols/luci-proto-hnet/luasrc/model/cbi/admin_network/proto_hnet.lua:19
 msgid ""
 "Assign a part of given length of every public IPv6-prefix to this interface"
@@ -662,7 +670,7 @@ msgstr ""
 msgid "Assign interfaces..."
 msgstr "Atribuir as interfaces..."
 
-#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:118
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:124
 #: protocols/luci-proto-hnet/luasrc/model/cbi/admin_network/proto_hnet.lua:24
 msgid ""
 "Assign prefix parts using this hexadecimal subprefix ID for this interface."
@@ -1238,6 +1246,10 @@ msgstr ""
 "Arquivos personalizados (certificados, scripts) podem permanecer no sistema. "
 "Para evitar isso, restaure antes as configurações inicias."
 
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:52
+msgid "Custom flash intervall (%s)"
+msgstr ""
+
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:4
 msgid ""
 "Customizes the behaviour of the device <abbr title=\"Light Emitting Diode"
@@ -1435,7 +1447,7 @@ msgstr "Destino"
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/fstab.lua:253
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/fstab/mount.lua:86
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/fstab/swap.lua:40
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:58
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:88
 msgid "Device"
 msgstr "Dispositivo"
 
@@ -2023,6 +2035,12 @@ msgstr "Operações na memória flash"
 msgid "Flashing..."
 msgstr "Gravando na flash..."
 
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:58
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:60
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:62
+msgid "Flashmemory write access (%s)"
+msgstr ""
+
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/ifaces.lua:498
 msgid "Force"
 msgstr "Forçar"
@@ -2220,6 +2238,10 @@ msgstr ""
 "Erros de Código de Erro de Cabeçalho (<abbr title=\"Header Error Code\">HEC</"
 "abbr>)"
 
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:56
+msgid "Heartbeat intervall (%s)"
+msgstr ""
+
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:14
 msgid ""
 "Here you can configure the basic aspects of your device like its hostname or "
@@ -2336,8 +2358,8 @@ msgstr "Firewall para IPv4"
 msgid "IPv4 Upstream"
 msgstr "Enlace IPv4 Superior"
 
-#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:53
-#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:78
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:57
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:84
 msgid "IPv4 address"
 msgstr "Endereço IPv4"
 
@@ -2345,15 +2367,15 @@ msgstr "Endereço IPv4"
 msgid "IPv4 assignment length"
 msgstr "Tamanho da atribuição IPv4"
 
-#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:98
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:104
 msgid "IPv4 broadcast"
 msgstr "Broadcast IPv4"
 
-#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:94
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:100
 msgid "IPv4 gateway"
 msgstr "Roteador padrão IPv4"
 
-#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:86
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:92
 msgid "IPv4 netmask"
 msgstr "Máscara de rede IPv4"
 
@@ -2430,21 +2452,21 @@ msgstr ""
 msgid "IPv6 Upstream"
 msgstr "Enlace IPv6 Superior"
 
-#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:121
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:127
 msgid "IPv6 address"
 msgstr "Endereço IPv6"
 
-#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:117
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:123
 #: protocols/luci-proto-hnet/luasrc/model/cbi/admin_network/proto_hnet.lua:23
 msgid "IPv6 assignment hint"
 msgstr "Sugestão de atribuição IPv6"
 
-#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:111
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:117
 #: protocols/luci-proto-hnet/luasrc/model/cbi/admin_network/proto_hnet.lua:18
 msgid "IPv6 assignment length"
 msgstr "Tamanho da atribuição IPv6"
 
-#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:127
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:133
 msgid "IPv6 gateway"
 msgstr "Roteador padrão do IPv6"
 
@@ -2462,12 +2484,12 @@ msgstr "Prefixo IPv6"
 msgid "IPv6 prefix length"
 msgstr "Tamanho Prefixo IPv6"
 
-#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:132
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:138
 #: protocols/luci-proto-ipv6/luasrc/model/cbi/admin_network/proto_6in4.lua:33
 msgid "IPv6 routed prefix"
 msgstr "Prefixo roteável IPv6"
 
-#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:137
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:143
 msgid "IPv6 suffix"
 msgstr "Sufixo IPv6"
 
@@ -2884,7 +2906,7 @@ msgstr "Estado da Linha"
 msgid "Line Uptime"
 msgstr "Tempo de Atividade da Linha"
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:88
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:118
 msgid "Link On"
 msgstr "Enlace Ativo"
 
@@ -3406,6 +3428,10 @@ msgstr "Utilitários de Rede"
 msgid "Network boot image"
 msgstr "Imagem de boot pela rede"
 
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:54
+msgid "Network device activity (%s)"
+msgstr ""
+
 #: modules/luci-base/luasrc/model/network.lua:33
 msgid "Network device is not present"
 msgstr "O dispositivo de rede não está presente"
@@ -3567,7 +3593,7 @@ msgstr "Senha Ofuscada"
 msgid "Obtain IPv6-Address"
 msgstr "Obter Endereço IPv6"
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:54
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:84
 msgid "Off-State Delay"
 msgstr "Atraso no estado de desligado"
 
@@ -3587,7 +3613,7 @@ msgstr ""
 "abbr> <samp>INTERFACE.VLANNR</samp> (<abbr title=\"por exemplo\">ex.</abbr>: "
 "<samp>eth0.1</samp>)."
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:51
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:81
 msgid "On-State Delay"
 msgstr "Atraso no estado de conexões"
 
@@ -3643,7 +3669,7 @@ msgstr ""
 "Opcional. Marca 32 bits dos pacotes cifrados que estão saindo. Entre valores "
 "em hexadecimal, começando com <code>0x</code>."
 
-#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:138
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:144
 msgid ""
 "Optional. Allowed values: 'eui64', 'random', fixed value like '::1' or "
 "'::1:2'. When IPv6 prefix (like 'a:b:c:d::') is received from a delegating "
@@ -3722,14 +3748,14 @@ msgid "Output Interface"
 msgstr "Interface de Saída"
 
 #: modules/luci-base/luasrc/model/cbi/admin_network/proto_dhcp.lua:63
-#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:149
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:155
 #: protocols/luci-proto-hnet/luasrc/model/cbi/admin_network/proto_hnet.lua:33
 #: protocols/luci-proto-ipv6/luasrc/model/cbi/admin_network/proto_dhcpv6.lua:54
 msgid "Override MAC address"
 msgstr "Sobrescrever o endereço MAC"
 
 #: modules/luci-base/luasrc/model/cbi/admin_network/proto_dhcp.lua:66
-#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:152
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:158
 #: protocols/luci-proto-hnet/luasrc/model/cbi/admin_network/proto_hnet.lua:35
 #: protocols/luci-proto-ipip/luasrc/model/cbi/admin_network/proto_ipip.lua:20
 #: protocols/luci-proto-ipv6/luasrc/model/cbi/admin_network/proto_dhcpv6.lua:56
@@ -4111,7 +4137,7 @@ msgid ""
 "code> file into the input field."
 msgstr ""
 
-#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:133
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:139
 msgid "Public prefix routed to this device for distribution to clients."
 msgstr ""
 "Prefixo público roteado para este dispositivo para distribuição a seus "
@@ -4268,7 +4294,7 @@ msgstr "Reiniciando..."
 msgid "Reboots the operating system of your device"
 msgstr "Reinicia o sistema operacional do seu dispositivo"
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:90
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:120
 msgid "Receive"
 msgstr "Receber"
 
@@ -4946,7 +4972,7 @@ msgstr ""
 "O Switch %q tem uma topologia desconhecida - as configurações de VLAN podem "
 "não ser precisas."
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:155
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:185
 msgid "Switch Port Mask"
 msgstr "Máscara da porta do Switch"
 
@@ -4960,6 +4986,10 @@ msgstr "Trocar o protocolo"
 
 #: modules/luci-base/luasrc/view/cbi/ipaddr.htm:26
 msgid "Switch to CIDR list notation"
+msgstr ""
+
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:64
+msgid "Switchport activity (%s)"
 msgstr ""
 
 #: modules/luci-mod-system/luasrc/view/admin_system/clock_status.htm:25
@@ -5446,7 +5476,7 @@ msgstr "Transferências"
 msgid "Transmission Rate"
 msgstr "Taxa de Transmissão"
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:89
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:119
 msgid "Transmit"
 msgstr "Transmitir"
 
@@ -5465,7 +5495,7 @@ msgstr "Antena de Transmissão"
 msgid "Trigger"
 msgstr "Disparo"
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:85
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:115
 msgid "Trigger Mode"
 msgstr "Modo de disparo"
 
@@ -5505,11 +5535,11 @@ msgstr "UMTS somente"
 msgid "UMTS/GPRS/EV-DO"
 msgstr "UMTS/GPRS/EV-DO"
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:93
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:123
 msgid "USB Device"
 msgstr "Dispositivo USB"
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:114
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:144
 msgid "USB Ports"
 msgstr "Portas USB"
 
@@ -5686,7 +5716,7 @@ msgid "Use builtin IPv6-management"
 msgstr "Use o gerenciamento do IPv6 embarcado"
 
 #: modules/luci-base/luasrc/model/cbi/admin_network/proto_dhcp.lua:40
-#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:103
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:109
 #: protocols/luci-proto-3g/luasrc/model/cbi/admin_network/proto_3g.lua:92
 #: protocols/luci-proto-ipv6/luasrc/model/cbi/admin_network/proto_dhcpv6.lua:45
 #: protocols/luci-proto-ncm/luasrc/model/cbi/admin_network/proto_ncm.lua:101
@@ -5715,7 +5745,7 @@ msgid "Use default gateway"
 msgstr "Use o roteador padrão"
 
 #: modules/luci-base/luasrc/model/cbi/admin_network/proto_dhcp.lua:48
-#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:158
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:164
 #: protocols/luci-proto-3g/luasrc/model/cbi/admin_network/proto_3g.lua:77
 #: protocols/luci-proto-ipv6/luasrc/model/cbi/admin_network/proto_464xlat.lua:24
 #: protocols/luci-proto-ipv6/luasrc/model/cbi/admin_network/proto_6in4.lua:88
@@ -5910,6 +5940,26 @@ msgid ""
 "key options."
 msgstr ""
 
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:74
+msgid "Wi-Fi activity (%s)"
+msgstr ""
+
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:70
+msgid "Wi-Fi client association (%s)"
+msgstr ""
+
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:66
+msgid "Wi-Fi data reception (%s)"
+msgstr ""
+
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:68
+msgid "Wi-Fi data transmission (%s)"
+msgstr ""
+
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/leds.lua:72
+msgid "Wi-Fi on (%s)"
+msgstr ""
+
 #: modules/luci-base/luasrc/view/cbi/wireless_modefreq.htm:161
 msgid "Width"
 msgstr "Largura"
@@ -6096,7 +6146,7 @@ msgstr "dBm"
 msgid "disable"
 msgstr "desativar"
 
-#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:113
+#: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:119
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/ifaces.lua:524
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/ifaces.lua:530
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/ifaces.lua:536
