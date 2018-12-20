@@ -123,7 +123,7 @@ This is free software, licensed under the Apache License, Version 2.0
 		status_update(json_info);
 	});
 
-	XHR.poll(5, '<%=luci.dispatcher.build_url("admin", "services", "adblock", "status_update")%>', null,
+	XHR.poll(-1, '<%=luci.dispatcher.build_url("admin", "services", "adblock", "status_update")%>', null,
 	function(x, json_info)
 	{
 		if (!x || !json_info || !json_info.data)

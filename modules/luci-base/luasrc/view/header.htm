@@ -18,6 +18,7 @@
 		resource    = resource,
 		scriptname  = luci.http.getenv("SCRIPT_NAME"),
 		pathinfo    = luci.http.getenv("PATH_INFO"),
-		requestpath = luci.dispatcher.context.requestpath
+		requestpath = luci.dispatcher.context.requestpath,
+		pollinterval    = luci.config.main.pollinterval or 5
 	}) %>);
 </script>

@@ -164,7 +164,7 @@
 	// define only ONE XHR.poll in a page because if one is running it blocks the other one
 	// optimum is to define on Map or Section Level from here you can reach all elements
 	// we need update every 15 seconds only
-	XHR.poll(5, '<%=url([[admin]], [[services]], [[ddns]], [[status]])%>', null,
+	XHR.poll(-1, '<%=url([[admin]], [[services]], [[ddns]], [[status]])%>', null,
 		function(x, data) {
 			if (data) { _data2elements(data); }
 		}

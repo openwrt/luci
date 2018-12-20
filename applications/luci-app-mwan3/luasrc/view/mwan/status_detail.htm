@@ -14,7 +14,7 @@
 </ul>
 
 <script type="text/javascript">//<![CDATA[
-	XHR.poll(5, '<%=luci.dispatcher.build_url("admin", "status", "mwan", "detailed_status")%>', null,
+	XHR.poll(-1, '<%=luci.dispatcher.build_url("admin", "status", "mwan", "detailed_status")%>', null,
 		function(x)
 		{
 			var output = document.getElementById('diag-rc-output');

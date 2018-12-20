@@ -10,7 +10,7 @@ This is free software, licensed under the Apache License, Version 2.0
 //<![CDATA[
 	function log_update()
 	{
-		XHR.poll(5, '<%=luci.dispatcher.build_url("admin", "services", "adblock", "logread")%>', null,
+		XHR.poll(-1, '<%=luci.dispatcher.build_url("admin", "services", "adblock", "logread")%>', null,
 		function(x)
 		{
 			if (!x)

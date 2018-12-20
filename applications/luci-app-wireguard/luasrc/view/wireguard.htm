@@ -113,7 +113,7 @@
 		}
 	}
 
-	XHR.poll(5, '<%=REQUEST_URI%>', { status: 1 },
+	XHR.poll(-1, '<%=REQUEST_URI%>', { status: 1 },
 	function(x, data) {
 		for (var key in data) {
 			if (!data.hasOwnProperty(key)) { continue; }

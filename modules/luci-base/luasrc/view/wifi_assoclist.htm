@@ -44,7 +44,7 @@
 		});
 	}
 
-	XHR.poll(5, '<%=url('admin/wireless_assoclist')%>', null,
+	XHR.poll(-1, '<%=url('admin/wireless_assoclist')%>', null,
 		function(x, st)
 		{
 			var tb = document.getElementById('wifi_assoclist_table');
