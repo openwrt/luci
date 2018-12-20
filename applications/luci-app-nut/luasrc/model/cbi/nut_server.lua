@@ -87,9 +87,26 @@ for driver in driverlist do
 end
 o.optional = false
 
-o = s:option(Value, "port", translate("Port"))
-o.optional = false
-o.default = "auto"
+o = s:option(Value, "bus", translate("USB Bus(es) (regex)"))
+o.optional = true
+o.datatype = "uinteger"
+
+o = s:option(Value, "community", translate("SNMP Community"))
+o.optional = true
+o.placeholder = "private"
+
+o = s:option(Flag, "interruptonly", translate("Interrupt Only"))
+o.optional = true
+o.default = false
+
+o = s:option(Value, "interruptsize", translate("Interrupt Size"), translate("Bytes to read from interrupt pipe"))
+o.optional = true
+o.datatype = "integer"
+
+o = s:option(Value, "maxreport", translate("Max USB HID Length Reported"), translate("Workaround for buggy firmware"))
+o.optional = true
+o.datatype = "integer"
+o.default = nil
 
 o = s:option(Value, "mfr", translate("Manufacturer (Display)"))
 o.optional = true
@@ -97,11 +114,9 @@ o.optional = true
 o = s:option(Value, "model", translate("Model (Display)"))
 o.optional = true
 
-o = s:option(Value, "serial", translate("Serial Number"))
+o = s:option(Flag, "notransferoids", translate("No low/high voltage transfer OIDs"))
 o.optional = true
-
-o = s:option(Value, "sdtime", translate("Additional Shutdown Time(s)"))
-o.optional = true
+o.default = false
 
 o = s:option(Value, "offdelay", translate("Off Delay(s)"), translate("Delay for kill power command"))
 o.optional = true
@@ -128,30 +143,11 @@ o.optional = true
 o.datatype = "integer"
 o.placeholder = 30
 
-o = s:option(Value, "vendor", translate("Vendor (regex)"))
-o.optional = true
+o = s:option(Value, "port", translate("Port"))
+o.optional = false
+o.default = "auto"
 
 o = s:option(Value, "product", translate("Product (regex)"))
-o.optional = true
-
-o = s:option(Value, "bus", translate("USB Bus(es) (regex)"))
-o.optional = true
-o.datatype = "uinteger"
-
-o = s:option(Flag, "interruptonly", translate("Interrupt Only"))
-o.optional = true
-o.default = false
-
-o = s:option(Value, "interruptsize", translate("Interrupt Size"), translate("Bytes to read from interrupt pipe"))
-o.optional = true
-o.datatype = "integer"
-
-o = s:option(Value, "maxreport", translate("Max USB HID Length Reported"), translate("Workaround for buggy firmware"))
-o.optional = true
-o.datatype = "integer"
-o.default = nil
-
-o = s:option(Value, "vendorid", translate("USB Vendor Id"))
 o.optional = true
 
 o = s:option(Value, "productid", translate("USB Product Id"))
@@ -161,17 +157,11 @@ o = s:option(Value, "runas", translate("RunAs User"), translate("User as which t
 o.optional = true
 o.placeholder = "nut"
 
-o = s:option(Value, "community", translate("SNMP Community"))
+o = s:option(Value, "sdtime", translate("Additional Shutdown Time(s)"))
 o.optional = true
-o.placeholder = "private"
 
-o = s:option(ListValue, "snmp_version", translate("SNMP version"))
+o = s:option(Value, "serial", translate("Serial Number"))
 o.optional = true
-o:value("v1", translate("SNMPv1"))
-o:value("v2c", translate("SNMPv2c"))
-o:value("v3", translate("SNMPv3"))
-o:value("", "")
-o.default = ""
 
 o = s:option(Value, "snmp_retries", translate("SNMP retries"))
 o.optional = true
@@ -181,9 +171,19 @@ o = s:option(Value, "snmp_timeout", translate("SNMP timeout(s)"))
 o.optional = true
 o.datatype = "uinteger"
 
-o = s:option(Flag, "notransferoids", translate("No low/high voltage transfer OIDs"))
+o = s:option(ListValue, "snmp_version", translate("SNMP version"))
 o.optional = true
-o.default = false
+o:value("v1", translate("SNMPv1"))
+o:value("v2c", translate("SNMPv2c"))
+o:value("v3", translate("SNMPv3"))
+o:value("", "")
+o.default = ""
+
+o = s:option(Value, "vendor", translate("Vendor (regex)"))
+o.optional = true
+
+o = s:option(Value, "vendorid", translate("USB Vendor Id"))
+o.optional = true
 
 o = s:option(Value, "other", translate("Additional Parameters"))
 o.optional = true
