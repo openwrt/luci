@@ -34,6 +34,10 @@ track_ip.datatype = "host"
 track_method = mwan_interface:option(ListValue, "track_method", translate("Tracking method"))
 track_method.default = "ping"
 track_method:value("ping")
+track_method:value("nping-tcp")
+track_method:value("nping-udp")
+track_method:value("nping-icmp")
+track_method:value("nping-arp")
 track_method:value("arping")
 track_method:value("httping")
 
