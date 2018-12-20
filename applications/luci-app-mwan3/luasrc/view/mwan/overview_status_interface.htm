@@ -5,7 +5,7 @@
 -%>
 
 <script type="text/javascript">//<![CDATA[
-XHR.poll(5, '<%=luci.dispatcher.build_url("admin", "status", "mwan", "interface_status")%>', null,
+XHR.poll(-1, '<%=luci.dispatcher.build_url("admin", "status", "mwan", "interface_status")%>', null,
 		function(x, status)
 		{
 			var statusDiv = document.getElementById('mwan_status_text');

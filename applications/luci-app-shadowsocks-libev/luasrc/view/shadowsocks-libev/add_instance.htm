@@ -14,7 +14,7 @@
 	<input type="submit" class="cbi-button cbi-button-add" name="cbi.cts.<%=self.config%>" value="<%:Add%>" />
 </div>
 <script type="text/javascript">//<![CDATA[
-	XHR.poll(5, '<%=url('admin/services/shadowsocks-libev/status')%>', null,
+	XHR.poll(-1, '<%=url('admin/services/shadowsocks-libev/status')%>', null,
 		function(x, st)
 		{
 			var names = [

@@ -26,7 +26,7 @@
 		);
 	}
 
-	XHR.poll(5, '<%=url('admin/services/privoxy/status')%>', null,
+	XHR.poll(-1, '<%=url('admin/services/privoxy/status')%>', null,
 		function(x, data) { _data2elements(x); }
 	);
 
