@@ -1,7 +1,7 @@
 <%+cbi/valueheader%>
 
 <script type="text/javascript">//<![CDATA[
-	XHR.poll(5, '<%=url('admin/system/clock_status')%>', null,
+	XHR.poll(-1, '<%=url('admin/system/clock_status')%>', null,
 		function(x, rv)
 		{
 			var s = document.getElementById('<%=self.option%>-clock-status');
