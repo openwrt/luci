@@ -42,7 +42,7 @@ function lhttp.validate(self, value, section)
 		end
 	end
 	if not (have_http_listener or have_https_listener) then
-		return nil, "must listen on at list one address:port"
+		return nil, "must listen on at least one address:port"
 	end
 	return DynamicList.validate(self, value, section)
 end
@@ -78,7 +78,7 @@ function lhttps.validate(self, value, section)
 		end
 	end
 	if not (have_http_listener or have_https_listener) then
-		return nil, "must listen on at list one address:port"
+		return nil, "must listen on at least one address:port"
 	end
 	return DynamicList.validate(self, value, section)
 end
