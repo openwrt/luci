@@ -48,7 +48,7 @@ o.optional = true
 o.datatype = "port"
 o.placeholder = "3493"
 
-s = m:section(NamedSection, "upsd", "upsd", translate("Global Settings"))
+s = m:section(NamedSection, "upsd", "upsd", translate("UPS Server Global Settings"))
 s.addremove = true
 
 o = s:option(Value, "maxage", translate("Maximum Age of Data"), translate("Period after which data is considered stale"))
@@ -74,18 +74,49 @@ if luci.util.checklib("/usr/sbin/upsd", "libssl.so") then
 	o.optional = true
 end
 
+s = m:section(NamedSection, "driver_global", "driver_global", translate("Driver Global Settings"))
+s.addremove = true
+
+o = s:option(Value, "chroot", translate("chroot"), translate("Run drivers in a chroot(2) environment"))
+o.optional = true
+
+o = s:option(Value, "driverpath", translate("Driver Path"), translate("Path to drivers (instead of default)"))
+o.optional = true
+o.placeholder = "/lib/lnut"
+
+o = s:option(Value, "maxstartdelay", translate("Maximum Start Delay"), translate("Default for UPSes without this field."))
+o.optional = true
+o.datatype = "uinteger"
+
+o = s:option(Value, "maxretry", translate("Maxium Retries"), translate("Maximum number of times to try starting a driver."))
+o.optional = true
+o.placeholder = 1
+o.datatype = "uinteger"
+
+o = s:option(Value, "retrydelay", translate("Retry Delay"), translate("Time in seconds between driver start retry attempts."))
+o.optional = true
+o.placeholder = 5
+o.datatype = "uinteger"
+
+o = s:option(Value, "pollinterval", translate("Poll Interval"), translate("Maximum time in seconds between refresh of UPS status"))
+o.optional = true
+o.placeholder = 2
+o.datatype = "uinteger"
+
+o = s:option(Flag, "synchronous", translate("Synchronous Communication"), translate("Driver waits for data to be consumed by upsd before publishing more."))
+o.optional = true
+o.default = false
+
+o = s:option(Value, "user", translate("RunAs User"), translate("User as which to execute driver; requires device file accessed by driver to be read-write for that user."))
+o.optional = true
+o.placeholder = "nut"
+
 s = m:section(TypedSection, "driver", translate("Driver Configuration"),
 	translate("The name of this section will be used as UPS name elsewhere"))
 s.addremove = true
 s.anonymous = false
 
 driverlist = nixio.fs.dir("/lib/nut")
-
-o = s:option(ListValue, "driver", translate("Driver"))
-for driver in driverlist do
-	o:value(driver)
-end
-o.optional = false
 
 o = s:option(Value, "bus", translate("USB Bus(es) (regex)"))
 o.optional = true
@@ -95,24 +126,49 @@ o = s:option(Value, "community", translate("SNMP Community"))
 o.optional = true
 o.placeholder = "private"
 
+o = s:option(Value, "desc", translate("Description (Display)"))
+o.optional = true
+
+o = s:option(ListValue, "driver", translate("Driver"))
+for driver in driverlist do
+	o:value(driver)
+end
+o.optional = false
+
+o = s:option(Flag, "enable_usb_serial", translate("Set USB serial port permissions"), translate("Enables a hotplug script that makes all ttyUSB devices (e.g. serial USB) group read-write as user 'nut'"))
+o.optional = true
+o.default = false
+
+o = s:option(Flag, "ignorelb", translate("Ignore Low Battery"))
+o.optional = true
+o.default = false
+
 o = s:option(Flag, "interruptonly", translate("Interrupt Only"))
 o.optional = true
 o.default = false
 
 o = s:option(Value, "interruptsize", translate("Interrupt Size"), translate("Bytes to read from interrupt pipe"))
 o.optional = true
-o.datatype = "integer"
+o.datatype = "uinteger"
 
 o = s:option(Value, "maxreport", translate("Max USB HID Length Reported"), translate("Workaround for buggy firmware"))
 o.optional = true
-o.datatype = "integer"
-o.default = nil
+o.datatype = "uinteger"
+
+o = s:option(Value, "maxstartdelay", translate("Maxium Start Delay"), translate("Time in seconds that upsdrvctl will wait for driver to finish starting"))
+o.optional = true
+o.datatype = "uinteger"
+o.placeholder = 45
 
 o = s:option(Value, "mfr", translate("Manufacturer (Display)"))
 o.optional = true
 
 o = s:option(Value, "model", translate("Model (Display)"))
 o.optional = true
+
+o = s:option(Flag, "nolock", translate("No Lock"), translate("Don't lock port when starting driver"))
+o.optional = true
+o.default = false
 
 o = s:option(Flag, "notransferoids", translate("No low/high voltage transfer OIDs"))
 o.optional = true
@@ -153,9 +209,9 @@ o.optional = true
 o = s:option(Value, "productid", translate("USB Product Id"))
 o.optional = true
 
-o = s:option(Value, "runas", translate("RunAs User"), translate("User as which to execute driver; requires device file accessed by driver be read-write for that user."))
+o = s:option(Value, "sdorder", translate("Driver Shutdown Order"))
 o.optional = true
-o.placeholder = "nut"
+o.datatype = "uinteger"
 
 o = s:option(Value, "sdtime", translate("Additional Shutdown Time(s)"))
 o.optional = true
@@ -185,7 +241,8 @@ o.optional = true
 o = s:option(Value, "vendorid", translate("USB Vendor Id"))
 o.optional = true
 
-o = s:option(Value, "other", translate("Additional Parameters"))
+o = s:option(Flag, "synchronous", translate("Synchronous Communication"), translate("Driver waits for data to be consumed by upsd before publishing more."))
 o.optional = true
+o.default = false
 
 return m
