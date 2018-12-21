@@ -103,7 +103,7 @@ function env_info(type)
 		end
 
 		local function has_nslookup()
-			return (SYS.call( [[$(which nslookup) localhost 2>&1 | grep -qF "(null)"]] ) ~= 0)
+			return (SYS.call( [[which nslookup >/dev/null 2>&1]] ) == 0)
 		end
 
 		if type == "has_bindhost" then
