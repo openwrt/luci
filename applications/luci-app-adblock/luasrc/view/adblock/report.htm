@@ -166,7 +166,7 @@ This is free software, licensed under the Apache License, Version 2.0
 		report_json(json_info);
 	});
 
-	XHR.poll(5, '<%=luci.dispatcher.build_url("admin", "services", "adblock", "report_json")%>', null,
+	XHR.poll(-1, '<%=luci.dispatcher.build_url("admin", "services", "adblock", "report_json")%>', null,
 	function(x, json_info)
 	{
 		if (!x || !json_info || !json_info.data)
@@ -188,7 +188,7 @@ This is free software, licensed under the Apache License, Version 2.0
 		report_text(x.responseText);
 	});
 
-	XHR.poll(5, '<%=luci.dispatcher.build_url("admin", "services", "adblock", "report_text")%>', null,
+	XHR.poll(-1, '<%=luci.dispatcher.build_url("admin", "services", "adblock", "report_text")%>', null,
 	function(x)
 	{
 		if (!x || !x.responseText)

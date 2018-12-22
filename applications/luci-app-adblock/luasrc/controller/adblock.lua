@@ -54,7 +54,7 @@ function adb_action(name, domain)
 		local file = uci:get("adblock", "blacklist", "adb_src") or "/etc/adblock/adblock.blacklist"
 		if nixio.fs.access(file) then
 			local blacklist = nixio.fs.readfile(file)
-			if not string.find(blacklist, domain, 1, plain)
+			if not string.find(blacklist, domain, 1, true)
 			then
 				nixio.fs.writefile(file, blacklist.. domain.. "\n")
 			end
@@ -63,7 +63,7 @@ function adb_action(name, domain)
 		local file = uci:get("adblock", "global", "adb_whitelist") or "/etc/adblock/adblock.whitelist"
 		if nixio.fs.access(file) then
 	 		local whitelist = nixio.fs.readfile(file)
-			if not string.find(whitelist, domain, 1, plain)
+			if not string.find(whitelist, domain, 1, true)
 			then
 				nixio.fs.writefile(file, whitelist.. domain.. "\n")
 			end
