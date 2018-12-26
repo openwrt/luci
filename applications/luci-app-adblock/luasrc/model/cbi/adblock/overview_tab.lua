@@ -1,12 +1,11 @@
 -- Copyright 2017-2018 Dirk Brenken (dev@brenken.org)
 -- This is free software, licensed under the Apache License, Version 2.0
 
-local fs      = require("nixio.fs")
-local uci     = require("luci.model.uci").cursor()
-local util    = require("luci.util")
-local net     = require "luci.model.network".init()
-local sys     = require("luci.sys")
-local devices = sys.net:devices()
+local fs   = require("nixio.fs")
+local uci  = require("luci.model.uci").cursor()
+local util = require("luci.util")
+local net  = require "luci.model.network".init()
+local dump = util.ubus("network.interface", "dump", {})
 
 m = Map("adblock", translate("Adblock"),
 	translate("Configuration of the adblock package to block ad/abuse domains by using DNS. ")
@@ -34,7 +33,7 @@ o2.default = "dnsmasq (/tmp)"
 o2.rmempty = false
 
 o3 = s:option(ListValue, "adb_fetchutil", translate("Download Utility"),
-translate("List of supported and fully pre-configured download utilities."))
+	translate("List of supported and fully pre-configured download utilities."))
 o3:value("uclient-fetch")
 o3:value("wget")
 o3:value("curl")
@@ -49,15 +48,12 @@ o4 = s:option(ListValue, "adb_trigger", translate("Startup Trigger"),
 	..translate("Choose 'none' to disable automatic startups, 'timed' to use a classic timeout (default 30 sec.) or select another trigger interface."))
 o4:value("none")
 o4:value("timed")
-for _, dev in ipairs(devices) do
-	if dev ~= "lo" then
-		local iface = net:get_interface(dev)
-		if iface then
-			iface = iface:get_networks() or {}
-			for k, v in pairs(iface) do
-				iface[k] = iface[k].sid
-				o4:value(iface[k], iface[k].. " (" ..dev.. ")")
-			end
+if dump then
+	local i, v
+	for i, v in ipairs(dump.interface) do
+		if v.interface ~= "loopback" then
+			local device = v.l3_device or v.device or "-"
+			o4:value(v.interface, v.interface.. " (" ..device.. ")")
 		end
 	end
 end
@@ -190,22 +186,40 @@ e25.optional = true
 e25.default = nil
 
 e26 = e:option(ListValue, "adb_repiface", translate("Report Interface"),
-	translate("Reporting interface used by tcpdump (default 'br-lan')."))
-for _, dev in ipairs(devices) do
-	if dev ~= "lo" then
-		e26:value(dev)
+	translate("Reporting interface used by tcpdump, set to 'any' for multiple interfaces (default 'br-lan'). ")
+	..translate("This change requires a manual service stop/re-start to take effect."))
+if dump then
+	local i, v
+	for i, v in ipairs(dump.interface) do
+		if v.interface ~= "loopback" then
+			local device = v.device
+			if device then
+				e26:value(device)
+			end
+		end
 	end
 end
+e26:value("any")
 e26.optional = true
 
+e27 = e:option(Value, "adb_replisten", translate("Report Listen Port(s)"),
+	translate("Space separated list of reporting port(s) used by tcpdump (default: '53'). ")
+	..translate("This change requires a manual service stop/re-start to take effect."))
+e27.default = 53
+e27.optional = true
+
 e28 = e:option(Value, "adb_repchunkcnt", translate("Report Chunk Count"),
-	translate("Report chunk count used by tcpdump (default '5')."))
+	translate("Report chunk count used by tcpdump (default '5'). ")
+	..translate("This change requires a manual service stop/re-start to take effect."))
 e28.datatype = "range(1,10)"
+e28.default = 5
 e28.optional = true
 
 e29 = e:option(Value, "adb_repchunksize", translate("Report Chunk Size"),
-	translate("Report chunk size used by tcpdump in MB (default '1')."))
+	translate("Report chunk size used by tcpdump in MB (default '1'). ")
+	..translate("This change requires a manual service stop/re-start to take effect."))
 e29.datatype = "range(1,10)"
+e29.default = 1
 e29.optional = true
 
 e30 = e:option(Flag, "adb_forcesrt", translate("Force Overall Sort"),
