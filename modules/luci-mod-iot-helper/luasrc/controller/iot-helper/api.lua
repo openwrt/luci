@@ -1,18 +1,18 @@
 -- Copyright 2018 TJ Kolev (tjkolev@gmail.com)
 -- This is free software, licensed under the Apache License, Version 2.0
 
-module("luci.controller.iot.api", package.seeall)
+module("luci.controller.iot-helper.api", package.seeall)
 
 function index()
-	entry({"iot","api","config"}, call("action_config")).dependent=false
-	entry({"iot","api","notify"}, call("action_notify")).dependent=false
+	entry({"iot-helper","api","config"}, call("action_config")).dependent=false
+	entry({"iot-helper","api","notify"}, call("action_notify")).dependent=false
 end
 
 
 local IOT_API_QRY_DEVICEID = "deviceid"
 local IOT_API_QRY_EVENTID = "eventid"
 
-local IOT_UCI_CONFIG = "iot"
+local IOT_UCI_CONFIG = "iot-helper"
 local IOT_UCI_SECTION_DEVICE = "device"
 local IOT_UCI_SECTION_EVENT = "event"
 local IOT_UCI_SECTION_GENERAL = "general"

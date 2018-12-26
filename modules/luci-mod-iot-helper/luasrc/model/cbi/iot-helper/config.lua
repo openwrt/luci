@@ -1,7 +1,7 @@
 -- Copyright 2018 TJ Kolev (tjkolev@gmail.com)
 -- This is free software, licensed under the Apache License, Version 2.0
 
-m = Map("iot", "IoT API Config", "Configuration for the utility API to support IoT devces.")
+m = Map("iot-helper", "IoT Helper API Config", "Configuration for the utility API to support IoT devces.")
 m.tabbed = true
 
 secSmtp = m:section(NamedSection, "general", "general", "General", "Configuration for the IoT helper API. For documentation please see <a href=https://github.com/openwrt/luci/blob/master/applications/luci-app-iot/README.md>the readme on the GitHub page.</a>.")
