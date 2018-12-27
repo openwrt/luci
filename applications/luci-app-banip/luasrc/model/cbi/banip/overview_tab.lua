@@ -1,17 +1,15 @@
 -- Copyright 2018 Dirk Brenken (dev@brenken.org)
 -- This is free software, licensed under the Apache License, Version 2.0
 
-local fs      = require("nixio.fs")
-local uci     = require("luci.model.uci").cursor()
-local sys     = require("luci.sys")
-local net     = require "luci.model.network".init()
-local util    = require("luci.util")
-local dump    = util.ubus("network.interface", "dump", {})
-local devices = sys.net:devices()
+local fs   = require("nixio.fs")
+local uci  = require("luci.model.uci").cursor()
+local net  = require "luci.model.network".init()
+local util = require("luci.util")
+local dump = util.ubus("network.interface", "dump", {})
 
 m = Map("banip", translate("banIP"),
 	translate("Configuration of the banIP package to block ip adresses/subnets via IPSet. ")
-	.. translatef("For further information "
+	..translatef("For further information "
 	.. "<a href=\"%s\" target=\"_blank\">"
 	.. "check the online documentation</a>", "https://github.com/openwrt/packages/blob/master/net/banip/files/README.md"))
 
@@ -29,22 +27,16 @@ o2.rmempty = false
 
 o3 = s:option(MultiValue, "ban_iface", translate("Interface Selection"),
 	translate("Disable the automatic WAN detection and select your preferred interface(s) manually."))
-for _, dev in ipairs(devices) do
-	if dev ~= "lo" and dev ~= "br-lan" then
-		local iface = net:get_interface(dev)
-		if iface then
-			iface = iface:get_networks() or {}
-			for k, v in pairs(iface) do
-				iface[k] = iface[k].sid
-				if iface[k] ~= "lan" then
-					o3:value(iface[k], iface[k].. " (" ..dev.. ")")
-				end
-			end
+if dump then
+	local i, v
+	for i, v in ipairs(dump.interface) do
+		if v.interface ~= "loopback" and v.interface ~= "lan" then
+			local device = v.l3_device or v.device or "-"
+			o3:value(v.interface, v.interface.. " (" ..device.. ")")
 		end
 	end
 end
 o3.widget = "checkbox"
-o3.default = ban_iface
 o3.rmempty = false
 
 o4 = s:option(ListValue, "ban_fetchutil", translate("Download Utility"),
