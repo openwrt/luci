@@ -76,7 +76,8 @@ if dump then
 	local i, v
 	for i, v in ipairs(dump.interface) do
 		if v.interface ~= "loopback" and v.interface ~= "lan" then
-			o4:value(v.interface)
+			local device = v.l3_device or v.device or "-"
+			o4:value(v.interface, v.interface.. " (" ..device.. ")")
 		end
 	end
 end
