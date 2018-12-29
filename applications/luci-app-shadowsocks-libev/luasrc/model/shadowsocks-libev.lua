@@ -199,7 +199,7 @@ function option_install_package(s, tab)
 
 	function p_install.write()
 		return luci.http.redirect(
-			luci.dispatcher.build_url("admin/system/packages") ..
+			luci.dispatcher.build_url("admin/system/opkg") ..
 			"?submit=1&install=%s" % opkg_package
 		)
 	end

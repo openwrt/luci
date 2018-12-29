@@ -226,7 +226,7 @@ if not net:is_installed() then
 
 	function p_install.write()
 		return luci.http.redirect(
-			luci.dispatcher.build_url("admin/system/packages") ..
+			luci.dispatcher.build_url("admin/system/opkg") ..
 			"?submit=1&install=%s" % net:opkg_package()
 		)
 	end
