@@ -1,8 +1,10 @@
-<% local v = self:cfgvalue(section) or self.default -%>
 <%+cbi/valueheader%>
-	<input class="cbi-input-text" type="text"<%= attr("value", v) .. attr("name", cbid) .. attr("id", cbid) %> />
-	<script type="text/javascript">
-cbi_init()
-cbi_browser_init('<%=cbid%>', '<%=resource%>', '<%=url('admin/filebrowser')%>'<%=self.default_path and ", '"..self.default_path.."'"%>);
-	</script>
+
+<input class="cbi-input-text" type="text"<%=
+	attr("id", cbid) ..
+	attr("name", cbid) ..
+	attr("value", self:cfgvalue(section) or self.default) ..
+	attr("data-browser", self.default_path or "")
+%> />
+
 <%+cbi/valuefooter%>

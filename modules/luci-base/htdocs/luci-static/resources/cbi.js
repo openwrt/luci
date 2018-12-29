@@ -808,9 +808,8 @@ function cbi_init() {
 		                   node.getAttribute('data-type'));
 	}
 
-	document.querySelectorAll('.cbi-dropdown').forEach(function(s) {
-		cbi_dropdown_init(s);
-	});
+	document.querySelectorAll('.cbi-dropdown').forEach(cbi_dropdown_init);
+	document.querySelectorAll('[data-browser]').forEach(cbi_browser_init);
 
 	document.querySelectorAll('.cbi-tooltip:not(:empty)').forEach(function(s) {
 		s.parentNode.classList.add('cbi-tooltip-container');
@@ -872,30 +871,26 @@ function cbi_combobox_init(id, values, def, man) {
 }
 
 function cbi_filebrowser(id, defpath) {
-	var field   = document.getElementById(id);
+	var field   = L.dom.elem(id) ? id : document.getElementById(id);
 	var browser = window.open(
-		cbi_strings.path.browser + ( field.value || defpath || '' ) + '?field=' + id,
+		cbi_strings.path.browser + (field.value || defpath || '') + '?field=' + field.id,
 		"luci_filebrowser", "width=300,height=400,left=100,top=200,scrollbars=yes"
 	);
 
 	browser.focus();
 }
 
-function cbi_browser_init(id, resource, defpath)
+function cbi_browser_init(field)
 {
-	function cbi_browser_btnclick(e) {
-		cbi_filebrowser(id, defpath);
-		return false;
-	}
-
-	var field = document.getElementById(id);
-
-	var btn = document.createElement('img');
-	btn.className = 'cbi-image-button';
-	btn.src = (resource || cbi_strings.path.resource) + '/cbi/folder.gif';
-	field.parentNode.insertBefore(btn, field.nextSibling);
-
-	btn.addEventListener('click', cbi_browser_btnclick);
+	field.parentNode.insertBefore(
+		E('img', {
+			'src': L.resource('cbi/folder.gif'),
+			'class': 'cbi-image-button',
+			'click': function(ev) {
+				cbi_filebrowser(field, field.getAttribute('data-browser'));
+				ev.preventDefault();
+			}
+		}), field.nextSibling);
 }
 
 CBIDynamicList = {
