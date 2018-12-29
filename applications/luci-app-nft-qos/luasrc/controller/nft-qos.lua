@@ -17,7 +17,12 @@ function index()
 end
 
 function _action_rate(rv, n)
-	local c = io.popen("nft list chain inet nft-qos-monitor " .. n .. " 2>/dev/null")
+	local has_ipv6 = nixio.fs.access("/proc/net/ipv6_route")
+	if has_ipv6 then
+		local c = io.popen("nft list chain inet nft-qos-monitor " .. n .. " 2>/dev/null")
+	else
+		local c = io.popen("nft list chain ip nft-qos-monitor " .. n .. " 2>/dev/null")
+	end
 	if c then
 		for l in c:lines() do
 			local _, i, p, b = l:match('^%s+ip ([^%s]+) ([^%s]+) counter packets (%d+) bytes (%d+)')
