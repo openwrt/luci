@@ -5,6 +5,17 @@
 -%>
 
 <script type="text/javascript">//<![CDATA[
+
+function secondsToString(time) {
+	var seconds = parseInt(time, 10);
+
+	var hrs   = Math.floor(seconds / 3600);
+	seconds  -= hrs*3600;
+	var mnts = Math.floor(seconds / 60);
+	seconds  -= mnts*60;
+	return String.format("%sh:%sm:%ss", hrs, mnts, seconds);
+}
+
 XHR.poll(-1, '<%=luci.dispatcher.build_url("admin", "status", "mwan", "interface_status")%>', null,
 		function(x, status)
 		{
@@ -15,15 +26,24 @@ XHR.poll(-1, '<%=luci.dispatcher.build_url("admin", "status", "mwan", "interface
 				for ( var iface in status.interfaces)
 				{
 					var state = '';
-					var css = ''
+					var css = '';
+					var time = '';
 					switch (status.interfaces[iface].status)
 					{
 						case 'online':
 							state = '<%:Online%>';
+							time = String.format(
+								'<div><strong>Uptime: </strong>%s</div>',
+								secondsToString(status.interfaces[iface].uptime)
+							);
 							css = 'success';
 							break;
 						case 'offline':
 							state = '<%:Offline%>';
+							time = String.format(
+								'<div><strong>Downtime: </strong>%s</div>',
+								secondsToString(status.interfaces[iface].downtime)
+							);
 							css = 'danger';
 							break;
 						default:
@@ -43,6 +63,10 @@ XHR.poll(-1, '<%=luci.dispatcher.build_url("admin", "status", "mwan", "interface
 						'<div><strong>Status: </strong>%s</div>',
 						state
 					);
+					if (time)
+					{
+						statusview += time;
+					}
 					statusview += '</div>'
 				}
 				statusDiv.innerHTML = statusview;
