@@ -99,7 +99,7 @@ else
 	o.write = function()
 		return luci.http.redirect(
 			luci.dispatcher.build_url("admin/system/opkg") ..
-			"?submit=1&install=iptables-mod-conntrack-extra"
+			"?query=iptables-mod-conntrack-extra"
 		)
 	end
 end
