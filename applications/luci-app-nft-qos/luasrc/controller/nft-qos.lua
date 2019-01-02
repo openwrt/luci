@@ -17,30 +17,29 @@ function index()
 end
 
 function _action_rate(rv, n)
-	local has_ipv6 = nixio.fs.access("/proc/net/ipv6_route")
-	if has_ipv6 then
-		local c = io.popen("nft list chain inet nft-qos-monitor " .. n .. " 2>/dev/null")
-	else
-		local c = io.popen("nft list chain ip nft-qos-monitor " .. n .. " 2>/dev/null")
-	end
+	local c = nixio.fs.access("/proc/net/ipv6_route") and
+		io.popen("nft list chain inet nft-qos-monitor " .. n .. " 2>/dev/null") or
+		io.popen("nft list chain ip nft-qos-monitor " .. n .. " 2>/dev/null")
+
 	if c then
 		for l in c:lines() do
-			local _, i, p, b = l:match('^%s+ip ([^%s]+) ([^%s]+) counter packets (%d+) bytes (%d+)')
+			local _, i, p, b = l:match(
+				'^%s+ip ([^%s]+) ([^%s]+) counter packets (%d+) bytes (%d+)'
+			)
 			if i and p and b then
 				-- handle expression
-				local r = {
+				rv[#rv + 1] = {
 					rule = {
-					family = "inet",
-					table = "nft-qos-monitor",
-					chain = n,
-					handle = 0,
-					expr = {
+						family = "inet",
+						table = "nft-qos-monitor",
+						chain = n,
+						handle = 0,
+						expr = {
 							{ match = { right = i } },
 							{ counter = { packets = p, bytes = b } }
 						}
 					}
 				}
-				rv[#rv + 1] = r
 			end
 		end
 		c:close()
