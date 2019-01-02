@@ -8,19 +8,31 @@ end
 
 function rrdargs( graph, plugin, plugin_instance, dtype )
 
-	local voltages = {
-		title = "%H: Voltages on UPS \"%pi\"",
+	local voltages_ac = {
+		title = "%H: AC voltages on UPS \"%pi\"",
 		vlabel = "V",
 		number_format = "%5.1lfV",
 		data = {
 			instances = {
-				voltage = { "battery", "input", "output" }
+				voltage = { "input", "output" }
 			},
-
 			options = {
 				voltage_output  = { color = "00e000", title = "Output voltage", noarea=true, overlay=true },
-				voltage_battery = { color = "0000ff", title = "Battery voltage", noarea=true, overlay=true },
 				voltage_input   = { color = "ffb000", title = "Input voltage", noarea=true, overlay=true }
+			}
+		}
+	}
+
+	local voltages_dc = {
+		title = "%H: Battery voltage on UPS \"%pi\"",
+		vlabel = "V",
+		number_format = "%5.1lfV",
+		data = {
+			instances = {
+				voltage = { "battery" }
+			},
+			options = {
+				voltage = { color = "0000ff", title = "Battery voltage", noarea=true, overlay=true }
 			}
 		}
 	}
@@ -33,7 +45,6 @@ function rrdargs( graph, plugin, plugin_instance, dtype )
 			instances = {
 				current = { "battery", "output" }
 			},
-
 			options = {
 				current_output  = { color = "00e000", title = "Output current", noarea=true, overlay=true },
 				current_battery = { color = "0000ff", title = "Battery current", noarea=true, overlay=true }
@@ -52,8 +63,8 @@ function rrdargs( graph, plugin, plugin_instance, dtype )
 				percent = { "charge", "load" }
 			},
 			options = {
-				percent_charge = { color = "00ff00", title = "Charge level"  },
-				percent_load = { color = "ff0000", title = "Load"  }
+				percent_charge = { color = "00ff00", title = "Charge level", noarea=true, overlay=true },
+				percent_load = { color = "ff0000", title = "Load", noarea=true, overlay=true }
 			}
 		}
 	}
@@ -67,9 +78,8 @@ function rrdargs( graph, plugin, plugin_instance, dtype )
 			instances = {
 				temperature = "battery"
 			},
-
 			options = {
-				temperature_battery = { color = "ffb000", title = "Battery temperature" }
+				temperature_battery = { color = "ffb000", title = "Battery temperature", noarea=true }
 			}
 		}
 	}
@@ -110,12 +120,11 @@ function rrdargs( graph, plugin, plugin_instance, dtype )
 			instances = {
 				frequency = { "input", "output" }
 			},
-
 			options = {
 				frequency_output  = { color = "00e000", title = "Output frequency", noarea=true, overlay=true },
 				frequency_input   = { color = "ffb000", title = "Input frequency", noarea=true, overlay=true }
 			}
 		}
 	}
-	return { voltages, currents, percentage, temperature, timeleft, power, frequencies }
+	return { voltages_ac, voltages_dc, currents, percentage, temperature, timeleft, power, frequencies }
 end
