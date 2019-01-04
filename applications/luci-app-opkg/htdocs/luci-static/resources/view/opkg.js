@@ -135,7 +135,7 @@ function display(pattern)
 
 		if (currentDisplayMode === 'updates') {
 			var avail = packages.available.pkgs[name];
-			if (!avail || avail.version === pkg.version)
+			if (!avail || compareVersion(avail.version, pkg.version) <= 0)
 				continue;
 
 			ver = '%s » %s'.format(
@@ -290,6 +290,9 @@ function compareVersion(val, ref)
 
 	val = val || '';
 	ref = ref || '';
+
+	if (val === ref)
+		return 0;
 
 	while (vi < val.length || ri < ref.length) {
 		var first_diff = 0;
