@@ -98,8 +98,8 @@ else
 	o.inputstyle = "apply"
 	o.write = function()
 		return luci.http.redirect(
-			luci.dispatcher.build_url("admin/system/packages") ..
-			"?submit=1&install=iptables-mod-conntrack-extra"
+			luci.dispatcher.build_url("admin/system/opkg") ..
+			"?query=iptables-mod-conntrack-extra"
 		)
 	end
 end

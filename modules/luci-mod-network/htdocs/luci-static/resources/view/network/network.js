@@ -113,7 +113,7 @@ L.poll(5, L.url('admin/network/iface_status', networks.join(',')), null,
 					var e = document.getElementById(ifc.id + '-ifc-edit');
 					if (e) e.disabled = true;
 
-					var link = L.url('admin/system/packages') + '?query=luci-proto&display=available';
+					var link = L.url('admin/system/opkg') + '?query=luci-proto';
 					L.dom.content(d, [
 						E('em', _('Unsupported protocol type.')), E('br'),
 						E('a', { href: link }, _('Install protocol extensions...'))
