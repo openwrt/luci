@@ -1,5 +1,5 @@
 <%#
-Copyright 2018 Dirk Brenken (dev@brenken.org)
+Copyright 2018-2019 Dirk Brenken (dev@brenken.org)
 This is free software, licensed under the Apache License, Version 2.0
 -%>
 
@@ -13,8 +13,8 @@ This is free software, licensed under the Apache License, Version 2.0
 			var view         = document.getElementById("value_1");
 			var input        = json.data.status;
 
-			btn1.value = "<%:Refresh%>";
-			btn1.name  = "do_refresh";
+			btn1.value = "<%:Reload%>";
+			btn1.name  = "do_reload";
 			view.innerHTML = input || "-";
 			if (input != "running")
 			{
@@ -121,9 +121,9 @@ function btn_action(action)
 </div>
 <hr />
 <div class="cbi-value" id="button_1">
-	<label class="cbi-value-title" for="button_1"><%:Refresh IPSets%></label>
+	<label class="cbi-value-title" for="button_1"><%:Reload IPSets%></label>
 	<div class="cbi-value-field">
-		<input class="cbi-button cbi-button-apply" id="btn1" type="button" name="do_refresh" value="<%:Refresh%>" onclick="btn_action(this)" />
+		<input class="cbi-button cbi-button-apply" id="btn1" type="button" name="do_reload" value="<%:Reload%>" onclick="btn_action(this)" />
 		<span id="btn1_running" class="btn_running"></span>
 	</div>
 </div>
