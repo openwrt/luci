@@ -21,7 +21,7 @@ function env_info(type)
 		end
 
 		local function has_curlssl()
-			return (SYS.call( [[$(which curl) -V 2>&1 | grep "Protocols:" | grep -qF "https"]] ) ~= 0)
+			return (SYS.call( [[$(which curl) -V 2>&1 | grep "Protocols:" | grep -qF "https"]] ) == 0)
 		end
 
 		local function has_fetch()
