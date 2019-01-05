@@ -9,7 +9,7 @@ m = Map("pppoe", translate("Roaring Penguin PPPoE Server"),
 	translate("PPPoE Server Configuration"))
 
 s = m:section(TypedSection, "pppoe_server", translate("Server Configuration"))
-s.addremove = false
+s.addremove = true
 s.anonymous = true
 
 o = s:option(Value, "interface", translate("Interface"), translate("Interface on which to listen."))
