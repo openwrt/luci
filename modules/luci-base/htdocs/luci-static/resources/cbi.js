@@ -443,10 +443,10 @@ var CBIValidatorPrototype = {
 			    m6 = this.value.match((bracket == 1) ? /^\[(.+)\]:(\d+)$/ : /^([^\[\]]+):(\d+)$/);
 
 			if (m4)
-				return this.assert(this.apply('ip4addr', m4[0], [true]) && this.apply('port', m4[1]),
+				return this.assert(this.apply('ip4addr', m4[1], [true]) && this.apply('port', m4[2]),
 					_('valid address:port'));
 
-			return this.assert(m6 && this.apply('ip6addr', m6[0], [true]) && this.apply('port', m6[1]),
+			return this.assert(m6 && this.apply('ip6addr', m6[1], [true]) && this.apply('port', m6[2]),
 				_('valid address:port'));
 		},
 
