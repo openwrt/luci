@@ -28,7 +28,7 @@ local ns = m:section( NamedSection, "global", "ddns",
 	.. [[<br /><strong>]]
 	.. translate("It is NOT recommended for casual users to change settings on this page.")
 	.. [[</strong><br />]]
-	.. [[<a href="http://wiki.openwrt.org/doc/uci/ddns#version_2x1" target="_blank">]]
+	.. [[<a href="https://openwrt.org/docs/guide-user/base-system/ddns#section_ddns" target="_blank">]]
 	.. translate("For detailed information about parameter settings look here.")
 	.. [[</a>]]
 	)

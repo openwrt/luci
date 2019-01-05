@@ -12,7 +12,7 @@ This Reference covers **the basics** of the CBI system.
 ## class Map (_config, title, description_)
 This is the root object of the model.
 
-* **config:** configuration filename to be mapped, see [UCI documentation](http://wiki.openwrt.org/doc/uci) and the files in /etc/config
+* **config:** configuration filename to be mapped, see [UCI documentation](https://openwrt.org/docs/guide-user/base-system/uci) and the files in /etc/config
 * **title:** title shown in the UI
 * **description:** description shown in the UI
 

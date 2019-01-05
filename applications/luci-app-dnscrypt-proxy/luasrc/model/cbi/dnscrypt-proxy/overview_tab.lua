@@ -59,7 +59,7 @@ m = Map("dnscrypt-proxy", translate("DNSCrypt-Proxy"),
 	translate("Configuration of the DNSCrypt-Proxy package. ")
 	.. translatef("For further information "
 	.. "<a href=\"%s\" target=\"_blank\">"
-	.. "see the wiki online</a>", "https://wiki.openwrt.org/inbox/dnscrypt"))
+	.. "see the wiki online</a>", "https://openwrt.org/docs/guide-user/services/dns/dnscrypt"))
 m:chain("dhcp")
 
 function m.on_after_commit(self)
@@ -146,7 +146,7 @@ if not fs.access("/etc/resolv-crypt.conf") or fs.stat("/etc/resolv-crypt.conf").
 		translate("Create '/etc/resolv-crypt.conf' with 'options timeout:1' to reduce DNS upstream timeouts with multiple DNSCrypt instances.<br />")
 		.. translatef("For further information "
 		.. "<a href=\"%s\" target=\"_blank\">"
-		.. "see the wiki online</a>", "https://wiki.openwrt.org/inbox/dnscrypt"))
+		.. "see the wiki online</a>", "https://openwrt.org/docs/guide-user/services/dns/dnscrypt"))
 	btn2.inputtitle = translate("Create Config File")
 	btn2.inputstyle = "apply"
 	btn2.disabled = false
