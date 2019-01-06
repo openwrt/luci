@@ -131,6 +131,298 @@
 		}
 	});
 
+
+	/*
+	 * HTTP Request helper
+	 */
+
+	Headers = Class.extend({
+		__name__: 'LuCI.XHR.Headers',
+		__init__: function(xhr) {
+			var hdrs = this.headers = {};
+			xhr.getAllResponseHeaders().split(/\r\n/).forEach(function(line) {
+				var m = /^([^:]+):(.*)$/.exec(line);
+				if (m != null)
+					hdrs[m[1].trim().toLowerCase()] = m[2].trim();
+			});
+		},
+
+		has: function(name) {
+			return this.headers.hasOwnProperty(String(name).toLowerCase());
+		},
+
+		get: function(name) {
+			var key = String(name).toLowerCase();
+			return this.headers.hasOwnProperty(key) ? this.headers[key] : null;
+		}
+	});
+
+	Response = Class.extend({
+		__name__: 'LuCI.XHR.Response',
+		__init__: function(xhr, url, duration) {
+			this.ok = (xhr.status >= 200 && xhr.status <= 299);
+			this.status = xhr.status;
+			this.statusText = xhr.statusText;
+			this.responseText = xhr.responseText;
+			this.headers = new Headers(xhr);
+			this.duration = duration;
+			this.url = url;
+			this.xhr = xhr;
+		},
+
+		json: function() {
+			return JSON.parse(this.responseText);
+		},
+
+		text: function() {
+			return this.responseText;
+		}
+	});
+
+	Request = Class.singleton({
+		__name__: 'LuCI.Request',
+
+		interceptors: [],
+
+		request: function(target, options) {
+			var state = { xhr: new XMLHttpRequest(), url: target, start: Date.now() },
+			    opt = Object.assign({}, options, state),
+			    content = null,
+			    contenttype = null,
+			    callback = this.handleReadyStateChange;
+
+			return new Promise(function(resolveFn, rejectFn) {
+				opt.xhr.onreadystatechange = callback.bind(opt, resolveFn, rejectFn);
+				opt.method = String(opt.method || 'GET').toUpperCase();
+
+				if ('query' in opt) {
+					var q = (opt.query != null) ? Object.keys(opt.query).map(function(k) {
+						if (opt.query[k] != null) {
+							var v = (typeof(opt.query[k]) == 'object')
+								? JSON.stringify(opt.query[k])
+								: String(opt.query[k]);
+
+							return '%s=%s'.format(encodeURIComponent(k), encodeURIComponent(v));
+						}
+						else {
+							return encodeURIComponent(k);
+						}
+					}).join('&') : '';
+
+					if (q !== '') {
+						switch (opt.method) {
+						case 'GET':
+						case 'HEAD':
+						case 'OPTIONS':
+							opt.url += ((/\?/).test(opt.url) ? '&' : '?') + q;
+							break;
+
+						default:
+							if (content == null) {
+								content = q;
+								contenttype = 'application/x-www-form-urlencoded';
+							}
+						}
+					}
+				}
+
+				if (!opt.cache)
+					opt.url += ((/\?/).test(opt.url) ? '&' : '?') + (new Date()).getTime();
+
+				if (!/^(?:[^/]+:)?\/\//.test(opt.url))
+					opt.url = location.protocol + '//' + location.host + opt.url;
+
+				if ('username' in opt && 'password' in opt)
+					opt.xhr.open(opt.method, opt.url, true, opt.username, opt.password);
+				else
+					opt.xhr.open(opt.method, opt.url, true);
+
+				opt.xhr.responseType = 'text';
+				opt.xhr.overrideMimeType('application/octet-stream');
+
+				if ('timeout' in opt)
+					opt.xhr.timeout = +opt.timeout;
+
+				if ('credentials' in opt)
+					opt.xhr.withCredentials = !!opt.credentials;
+
+				if (opt.content != null) {
+					switch (typeof(opt.content)) {
+					case 'function':
+						content = opt.content(xhr);
+						break;
+
+					case 'object':
+						content = JSON.stringify(opt.content);
+						contenttype = 'application/json';
+						break;
+
+					default:
+						content = String(opt.content);
+					}
+				}
+
+				if ('headers' in opt)
+					for (var header in opt.headers)
+						if (opt.headers.hasOwnProperty(header)) {
+							if (header.toLowerCase() != 'content-type')
+								opt.xhr.setRequestHeader(header, opt.headers[header]);
+							else
+								contenttype = opt.headers[header];
+						}
+
+				if (contenttype != null)
+					opt.xhr.setRequestHeader('Content-Type', contenttype);
+
+				try {
+					opt.xhr.send(content);
+				}
+				catch (e) {
+					rejectFn.call(opt, e);
+				}
+			});
+		},
+
+		handleReadyStateChange: function(resolveFn, rejectFn, ev) {
+			var xhr = this.xhr;
+
+			if (xhr.readyState !== 4)
+				return;
+
+			if (xhr.status === 0 && xhr.statusText === '') {
+				rejectFn.call(this, new Error('XHR request aborted by browser'));
+			}
+			else {
+				var response = new Response(
+					xhr, xhr.responseURL || this.url, Date.now() - this.start);
+
+				Promise.all(Request.interceptors.map(function(fn) { return fn(response) }))
+					.then(resolveFn.bind(this, response))
+					.catch(rejectFn.bind(this));
+			}
+
+			try {
+				xhr.abort();
+			}
+			catch(e) {}
+		},
+
+		get: function(url, options) {
+			return this.request(url, Object.assign({ method: 'GET' }, options));
+		},
+
+		post: function(url, data, options) {
+			return this.request(url, Object.assign({ method: 'POST', content: data }, options));
+		},
+
+		addInterceptor: function(interceptorFn) {
+			if (typeof(interceptorFn) == 'function')
+				this.interceptors.push(interceptorFn);
+			return interceptorFn;
+		},
+
+		removeInterceptor: function(interceptorFn) {
+			var oldlen = this.interceptors.length, i = oldlen;
+			while (i--)
+				if (this.interceptors[i] === interceptorFn)
+					this.interceptors.splice(i, 1);
+			return (this.interceptors.length < oldlen);
+		},
+
+		poll: Class.singleton({
+			__name__: 'LuCI.Request.Poll',
+
+			queue: [],
+
+			add: function(interval, url, options, callback) {
+				if (isNaN(interval) || interval <= 0)
+					throw new TypeError('Invalid poll interval');
+
+				var e = {
+					interval: interval,
+					url: url,
+					options: options,
+					callback: callback
+				};
+
+				this.queue.push(e);
+				return e;
+			},
+
+			remove: function(entry) {
+				var oldlen = this.queue.length, i = oldlen;
+
+				while (i--)
+					if (this.queue[i] === entry) {
+						delete this.queue[i].running;
+						this.queue.splice(i, 1);
+					}
+
+				if (!this.queue.length)
+					this.stop();
+
+				return (this.queue.length < oldlen);
+			},
+
+			start: function() {
+				if (!this.queue.length || this.active())
+					return false;
+
+				this.tick = 0;
+				this.timer = window.setInterval(this.step, 1000);
+				this.step();
+				document.dispatchEvent(new CustomEvent('poll-start'));
+				return true;
+			},
+
+			stop: function() {
+				if (!this.active())
+					return false;
+
+				document.dispatchEvent(new CustomEvent('poll-stop'));
+				window.clearInterval(this.timer);
+				delete this.timer;
+				delete this.tick;
+				return true;
+			},
+
+			step: function() {
+				Request.poll.queue.forEach(function(e) {
+					if ((Request.poll.tick % e.interval) != 0)
+						return;
+
+					if (e.running)
+						return;
+
+					var opts = Object.assign({}, e.options,
+						{ timeout: e.interval * 1000 - 5 });
+
+					e.running = true;
+					Request.request(e.url, opts)
+						.then(function(res) {
+							if (!e.running || !Request.poll.active())
+								return;
+
+							try {
+								e.callback(res, res.json(), res.duration);
+							}
+							catch (err) {
+								e.callback(res, null, res.duration);
+							}
+						})
+						.finally(function() { delete e.running });
+				});
+
+				Request.poll.tick = (Request.poll.tick + 1) % Math.pow(2, 32);
+			},
+
+			active: function() {
+				return (this.timer != null);
+			}
+		})
+	});
+
+
 	var modalDiv = null,
 	    tooltipDiv = null,
 	    tooltipTimeout = null,
@@ -167,48 +459,41 @@
 
 		/* HTTP resource fetching */
 		get: function(url, args, cb) {
-			return this.poll(0, url, args, cb, false);
+			return this.poll(null, url, args, cb, false);
 		},
 
 		post: function(url, args, cb) {
-			return this.poll(0, url, args, cb, true);
+			return this.poll(null, url, args, cb, true);
 		},
 
 		poll: function(interval, url, args, cb, post) {
-			var data = post ? { token: this.env.token } : null;
+			if (interval !== null && interval <= 0)
+				interval = this.env.pollinterval;
+
+			var data = post ? { token: this.env.token } : null,
+			    method = post ? 'POST' : 'GET';
 
 			if (!/^(?:\/|\S+:\/\/)/.test(url))
 				url = this.url(url);
 
-			if (typeof(args) === 'object' && args !== null) {
-				data = data || {};
+			if (args != null)
+				data = Object.assign(data || {}, args);
 
-				for (var key in args)
-					if (args.hasOwnProperty(key))
-						switch (typeof(args[key])) {
-						case 'string':
-						case 'number':
-						case 'boolean':
-							data[key] = args[key];
-							break;
-
-						case 'object':
-							data[key] = JSON.stringify(args[key]);
-							break;
-						}
-			}
-
-			if (interval > 0)
-				return XHR.poll(interval, url, data, cb, post);
-			else if (post)
-				return XHR.post(url, data, cb);
+			if (interval !== null)
+				return Request.poll.add(interval, url, { method: method, query: data }, cb);
 			else
-				return XHR.get(url, data, cb);
+				return Request.request(url, { method: method, query: data })
+					.then(function(res) {
+						var json = null;
+						if (/^application\/json\b/.test(res.headers.get('Content-Type')))
+							try { json = res.json() } catch(e) {}
+						cb(res.xhr, json, res.duration);
+					});
 		},
 
-		stop: function(entry) { XHR.stop(entry) },
-		halt: function() { XHR.halt() },
-		run: function() { XHR.run() },
+		stop: function(entry) { return Request.poll.remove(entry) },
+		halt: function() { return Request.poll.stop() },
+		run: function() { return Request.poll.start() },
 
 
 		/* Modal dialog */
@@ -312,7 +597,8 @@
 			return node;
 		},
 
-		Class: Class
+		Class: Class,
+		Request: Request
 	};
 
 	/* Tabs */
@@ -622,6 +908,30 @@
 	/* Setup */
 	LuCI.prototype.setupDOM = function(ev) {
 		this.tabs.init();
+
+		Request.addInterceptor(function(res) {
+			if (res.status != 403 || res.headers.get('X-LuCI-Login-Required') != 'yes')
+				return;
+
+			Request.poll.stop();
+
+			L.showModal(_('Session expired'), [
+				E('div', { class: 'alert-message warning' },
+					_('A new login is required since the authentication session expired.')),
+				E('div', { class: 'right' },
+					E('div', {
+						class: 'btn primary',
+						click: function() {
+							var loc = window.location;
+							window.location = loc.protocol + '//' + loc.host + loc.pathname + loc.search;
+						}
+					}, _('To login…')))
+			]);
+
+			return Promise.reject(new Error('Session expired'));
+		});
+
+		Request.poll.start();
 	};
 
 	function LuCI(env) {
@@ -638,8 +948,58 @@
 		document.addEventListener('focus', this.showTooltip.bind(this), true);
 		document.addEventListener('blur', this.hideTooltip.bind(this), true);
 
+		document.addEventListener('poll-start', function(ev) {
+			document.querySelectorAll('[id^="xhr_poll_status"]').forEach(function(e) {
+				e.style.display = (e.id == 'xhr_poll_status_off') ? 'none' : '';
+			});
+		});
+
+		document.addEventListener('poll-stop', function(ev) {
+			document.querySelectorAll('[id^="xhr_poll_status"]').forEach(function(e) {
+				e.style.display = (e.id == 'xhr_poll_status_on') ? 'none' : '';
+			});
+		});
+
 		document.addEventListener('DOMContentLoaded', this.setupDOM.bind(this));
 	}
 
+	XHR = Class.extend({
+		__name__: 'LuCI.XHR',
+		__init__: function() {
+			if (window.console && console.debug)
+				console.debug('Direct use XHR() is deprecated, please use L.Request instead');
+		},
+
+		_response: function(cb, res, json, duration) {
+			if (this.active)
+				cb(res, json, duration);
+			delete this.active;
+		},
+
+		get: function(url, data, callback, timeout) {
+			this.active = true;
+			L.get(url, data, this._response.bind(this, callback), timeout);
+		},
+
+		post: function(url, data, callback, timeout) {
+			this.active = true;
+			L.post(url, data, this._response.bind(this, callback), timeout);
+		},
+
+		cancel: function() { delete this.active },
+		busy: function() { return (this.active === true) },
+		abort: function() {},
+		send_form: function() { throw 'Not implemented' },
+	});
+
+	XHR.get = function() { return window.L.get.apply(window.L, arguments) };
+	XHR.post = function() { return window.L.post.apply(window.L, arguments) };
+	XHR.poll = function() { return window.L.poll.apply(window.L, arguments) };
+	XHR.stop = Request.poll.remove.bind(Request.poll);
+	XHR.halt = Request.poll.stop.bind(Request.poll);
+	XHR.run = Request.poll.start.bind(Request.poll);
+	XHR.running = Request.poll.active.bind(Request.poll);
+
+	window.XHR = XHR;
 	window.LuCI = LuCI;
 })(window, document);
