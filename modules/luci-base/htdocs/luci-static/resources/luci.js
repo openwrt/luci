@@ -21,6 +21,116 @@
 		});
 	}
 
+	/*
+	 * Class declaration and inheritance helper
+	 */
+
+	var toCamelCase = function(s) {
+		return s.replace(/(?:^|[\. -])(.)/g, function(m0, m1) { return m1.toUpperCase() });
+	};
+
+	var superContext = null, Class = Object.assign(function() {}, {
+		extend: function(properties) {
+			var props = {
+				__base__: { value: this.prototype },
+				__name__: { value: properties.__name__ || 'anonymous' }
+			};
+
+			var ClassConstructor = function() {
+				if (!(this instanceof ClassConstructor))
+					throw new TypeError('Constructor must not be called without "new"');
+
+				if (Object.getPrototypeOf(this).hasOwnProperty('__init__')) {
+					if (typeof(this.__init__) != 'function')
+						throw new TypeError('Class __init__ member is not a function');
+
+					this.__init__.apply(this, arguments)
+				}
+				else {
+					this.super('__init__', arguments);
+				}
+			};
+
+			for (var key in properties)
+				if (!props[key] && properties.hasOwnProperty(key))
+					props[key] = { value: properties[key], writable: true };
+
+			ClassConstructor.prototype = Object.create(this.prototype, props);
+			ClassConstructor.prototype.constructor = ClassConstructor;
+			Object.assign(ClassConstructor, this);
+			ClassConstructor.displayName = toCamelCase(props.__name__.value + 'Class');
+
+			return ClassConstructor;
+		},
+
+		singleton: function(properties /*, ... */) {
+			return Class.extend(properties)
+				.instantiate(Class.prototype.varargs(arguments, 1));
+		},
+
+		instantiate: function(args) {
+			return new (Function.prototype.bind.apply(this,
+				Class.prototype.varargs(args, 0, null)))();
+		},
+
+		call: function(self, method) {
+			if (typeof(this.prototype[method]) != 'function')
+				throw new ReferenceError(method + ' is not defined in class');
+
+			return this.prototype[method].apply(self, self.varargs(arguments, 1));
+		},
+
+		isSubclass: function(_class) {
+			return (_class != null &&
+			        typeof(_class) == 'function' &&
+			        _class.prototype instanceof this);
+		},
+
+		prototype: {
+			varargs: function(args, offset /*, ... */) {
+				return Array.prototype.slice.call(arguments, 2)
+					.concat(Array.prototype.slice.call(args, offset));
+			},
+
+			super: function(key, callArgs) {
+				for (superContext = Object.getPrototypeOf(superContext ||
+				                                          Object.getPrototypeOf(this));
+				     superContext && !superContext.hasOwnProperty(key);
+				     superContext = Object.getPrototypeOf(superContext)) { }
+
+				if (!superContext)
+					return null;
+
+				var res = superContext[key];
+
+				if (arguments.length > 1) {
+					if (typeof(res) != 'function')
+						throw new ReferenceError(key + ' is not a function in base class');
+
+					if (typeof(callArgs) != 'object')
+						callArgs = this.varargs(arguments, 1);
+
+					res = res.apply(this, callArgs);
+				}
+
+				superContext = null;
+
+				return res;
+			},
+
+			toString: function() {
+				var s = '[' + this.constructor.displayName + ']', f = true;
+				for (var k in this) {
+					if (this.hasOwnProperty(k)) {
+						s += (f ? ' {\n' : '') + '  ' + k + ': ' + typeof(this[k]) + '\n';
+						f = false;
+					}
+				}
+				return s + (f ? '' : '}');
+			}
+		}
+	});
+
 	var modalDiv = null,
 	    tooltipDiv = null,
 	    tooltipTimeout = null,
@@ -200,7 +310,9 @@
 			this.dom.content(node, children);
 
 			return node;
-		}
+		},
+
+		Class: Class
 	};
 
 	/* Tabs */
