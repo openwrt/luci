@@ -427,9 +427,75 @@
 	    tooltipDiv = null,
 	    tooltipTimeout = null,
 	    dummyElem = null,
-	    domParser = null;
+	    domParser = null,
+	    originalCBIInit = null;
 
-	LuCI.prototype = {
+	LuCI = Class.extend({
+		__name__: 'LuCI',
+		__init__: function(env) {
+			Object.assign(this.env, env);
+
+			modalDiv = document.body.appendChild(
+				this.dom.create('div', { id: 'modal_overlay' },
+					this.dom.create('div', { class: 'modal', role: 'dialog', 'aria-modal': true })));
+
+			tooltipDiv = document.body.appendChild(this.dom.create('div', { class: 'cbi-tooltip' }));
+
+			document.addEventListener('mouseover', this.showTooltip.bind(this), true);
+			document.addEventListener('mouseout', this.hideTooltip.bind(this), true);
+			document.addEventListener('focus', this.showTooltip.bind(this), true);
+			document.addEventListener('blur', this.hideTooltip.bind(this), true);
+
+			document.addEventListener('DOMContentLoaded', this.setupDOM.bind(this));
+
+			document.addEventListener('poll-start', function(ev) {
+				document.querySelectorAll('[id^="xhr_poll_status"]').forEach(function(e) {
+					e.style.display = (e.id == 'xhr_poll_status_off') ? 'none' : '';
+				});
+			});
+
+			document.addEventListener('poll-stop', function(ev) {
+				document.querySelectorAll('[id^="xhr_poll_status"]').forEach(function(e) {
+					e.style.display = (e.id == 'xhr_poll_status_on') ? 'none' : '';
+				});
+			});
+
+			originalCBIInit = window.cbi_init;
+			window.cbi_init = function() {};
+		},
+
+		/* DOM setup */
+		setupDOM: function(ev) {
+			this.tabs.init();
+
+			Request.addInterceptor(function(res) {
+				if (res.status != 403 || res.headers.get('X-LuCI-Login-Required') != 'yes')
+					return;
+
+				Request.poll.stop();
+
+				L.showModal(_('Session expired'), [
+					E('div', { class: 'alert-message warning' },
+						_('A new login is required since the authentication session expired.')),
+					E('div', { class: 'right' },
+						E('div', {
+							class: 'btn primary',
+							click: function() {
+								var loc = window.location;
+								window.location = loc.protocol + '//' + loc.host + loc.pathname + loc.search;
+							}
+						}, _('To login…')))
+				]);
+
+				return Promise.reject(new Error('Session expired'));
+			});
+
+			originalCBIInit();
+			Request.poll.start();
+		},
+
+		env: {},
+
 		/* URL construction helpers */
 		path: function(prefix, parts) {
 			var url = [ prefix || '' ];
@@ -599,7 +665,7 @@
 
 		Class: Class,
 		Request: Request
-	};
+	});
 
 	/* Tabs */
 	LuCI.prototype.tabs = {
@@ -904,64 +970,6 @@
 			return elem;
 		}
 	};
-
-	/* Setup */
-	LuCI.prototype.setupDOM = function(ev) {
-		this.tabs.init();
-
-		Request.addInterceptor(function(res) {
-			if (res.status != 403 || res.headers.get('X-LuCI-Login-Required') != 'yes')
-				return;
-
-			Request.poll.stop();
-
-			L.showModal(_('Session expired'), [
-				E('div', { class: 'alert-message warning' },
-					_('A new login is required since the authentication session expired.')),
-				E('div', { class: 'right' },
-					E('div', {
-						class: 'btn primary',
-						click: function() {
-							var loc = window.location;
-							window.location = loc.protocol + '//' + loc.host + loc.pathname + loc.search;
-						}
-					}, _('To login…')))
-			]);
-
-			return Promise.reject(new Error('Session expired'));
-		});
-
-		Request.poll.start();
-	};
-
-	function LuCI(env) {
-		this.env = env;
-
-		modalDiv = document.body.appendChild(
-			this.dom.create('div', { id: 'modal_overlay' },
-				this.dom.create('div', { class: 'modal', role: 'dialog', 'aria-modal': true })));
-
-		tooltipDiv = document.body.appendChild(this.dom.create('div', { class: 'cbi-tooltip' }));
-
-		document.addEventListener('mouseover', this.showTooltip.bind(this), true);
-		document.addEventListener('mouseout', this.hideTooltip.bind(this), true);
-		document.addEventListener('focus', this.showTooltip.bind(this), true);
-		document.addEventListener('blur', this.hideTooltip.bind(this), true);
-
-		document.addEventListener('poll-start', function(ev) {
-			document.querySelectorAll('[id^="xhr_poll_status"]').forEach(function(e) {
-				e.style.display = (e.id == 'xhr_poll_status_off') ? 'none' : '';
-			});
-		});
-
-		document.addEventListener('poll-stop', function(ev) {
-			document.querySelectorAll('[id^="xhr_poll_status"]').forEach(function(e) {
-				e.style.display = (e.id == 'xhr_poll_status_on') ? 'none' : '';
-			});
-		});
-
-		document.addEventListener('DOMContentLoaded', this.setupDOM.bind(this));
-	}
 
 	XHR = Class.extend({
 		__name__: 'LuCI.XHR',
