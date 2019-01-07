@@ -653,144 +653,157 @@
 		halt: function() { return Request.poll.stop() },
 		run: function() { return Request.poll.start() },
 
+		/* DOM manipulation */
+		dom: Class.singleton({
+			__name__: 'LuCI.DOM',
+
+			elem: function(e) {
+				return (e != null && typeof(e) == 'object' && 'nodeType' in e);
+			},
+
+			parse: function(s) {
+				var elem;
+
+				try {
+					domParser = domParser || new DOMParser();
+					elem = domParser.parseFromString(s, 'text/html').body.firstChild;
+				}
+				catch(e) {}
+
+				if (!elem) {
+					try {
+						dummyElem = dummyElem || document.createElement('div');
+						dummyElem.innerHTML = s;
+						elem = dummyElem.firstChild;
+					}
+					catch (e) {}
+				}
+
+				return elem || null;
+			},
+
+			matches: function(node, selector) {
+				var m = this.elem(node) ? node.matches || node.msMatchesSelector : null;
+				return m ? m.call(node, selector) : false;
+			},
+
+			parent: function(node, selector) {
+				if (this.elem(node) && node.closest)
+					return node.closest(selector);
+
+				while (this.elem(node))
+					if (this.matches(node, selector))
+						return node;
+					else
+						node = node.parentNode;
+
+				return null;
+			},
+
+			append: function(node, children) {
+				if (!this.elem(node))
+					return null;
+
+				if (Array.isArray(children)) {
+					for (var i = 0; i < children.length; i++)
+						if (this.elem(children[i]))
+							node.appendChild(children[i]);
+						else if (children !== null && children !== undefined)
+							node.appendChild(document.createTextNode('' + children[i]));
+
+					return node.lastChild;
+				}
+				else if (typeof(children) === 'function') {
+					return this.append(node, children(node));
+				}
+				else if (this.elem(children)) {
+					return node.appendChild(children);
+				}
+				else if (children !== null && children !== undefined) {
+					node.innerHTML = '' + children;
+					return node.lastChild;
+				}
+
+				return null;
+			},
+
+			content: function(node, children) {
+				if (!this.elem(node))
+					return null;
+
+				while (node.firstChild)
+					node.removeChild(node.firstChild);
+
+				return this.append(node, children);
+			},
+
+			attr: function(node, key, val) {
+				if (!this.elem(node))
+					return null;
+
+				var attr = null;
+
+				if (typeof(key) === 'object' && key !== null)
+					attr = key;
+				else if (typeof(key) === 'string')
+					attr = {}, attr[key] = val;
+
+				for (key in attr) {
+					if (!attr.hasOwnProperty(key) || attr[key] == null)
+						continue;
+
+					switch (typeof(attr[key])) {
+					case 'function':
+						node.addEventListener(key, attr[key]);
+						break;
+
+					case 'object':
+						node.setAttribute(key, JSON.stringify(attr[key]));
+						break;
+
+					default:
+						node.setAttribute(key, attr[key]);
+					}
+				}
+			},
+
+			create: function() {
+				var html = arguments[0],
+				    attr = arguments[1],
+				    data = arguments[2],
+				    elem;
+
+				if (!(attr instanceof Object) || Array.isArray(attr))
+					data = attr, attr = null;
+
+				if (Array.isArray(html)) {
+					elem = document.createDocumentFragment();
+					for (var i = 0; i < html.length; i++)
+						elem.appendChild(this.create(html[i]));
+				}
+				else if (this.elem(html)) {
+					elem = html;
+				}
+				else if (html.charCodeAt(0) === 60) {
+					elem = this.parse(html);
+				}
+				else {
+					elem = document.createElement(html);
+				}
+
+				if (!elem)
+					return null;
+
+				this.attr(elem, attr);
+				this.append(elem, data);
+
+				return elem;
+			}
+		}),
+
 		Class: Class,
 		Request: Request
 	});
-
-	/* DOM manipulation */
-	LuCI.prototype.dom = {
-		elem: function(e) {
-			return (typeof(e) === 'object' && e !== null && 'nodeType' in e);
-		},
-
-		parse: function(s) {
-			var elem;
-
-			try {
-				domParser = domParser || new DOMParser();
-				elem = domParser.parseFromString(s, 'text/html').body.firstChild;
-			}
-			catch(e) {}
-
-			if (!elem) {
-				try {
-					dummyElem = dummyElem || document.createElement('div');
-					dummyElem.innerHTML = s;
-					elem = dummyElem.firstChild;
-				}
-				catch (e) {}
-			}
-
-			return elem || null;
-		},
-
-		matches: function(node, selector) {
-			var m = this.elem(node) ? node.matches || node.msMatchesSelector : null;
-			return m ? m.call(node, selector) : false;
-		},
-
-		parent: function(node, selector) {
-			if (this.elem(node) && node.closest)
-				return node.closest(selector);
-
-			while (this.elem(node))
-				if (this.matches(node, selector))
-					return node;
-				else
-					node = node.parentNode;
-
-			return null;
-		},
-
-		append: function(node, children) {
-			if (!this.elem(node))
-				return null;
-
-			if (Array.isArray(children)) {
-				for (var i = 0; i < children.length; i++)
-					if (this.elem(children[i]))
-						node.appendChild(children[i]);
-					else if (children !== null && children !== undefined)
-						node.appendChild(document.createTextNode('' + children[i]));
-
-				return node.lastChild;
-			}
-			else if (typeof(children) === 'function') {
-				return this.append(node, children(node));
-			}
-			else if (this.elem(children)) {
-				return node.appendChild(children);
-			}
-			else if (children !== null && children !== undefined) {
-				node.innerHTML = '' + children;
-				return node.lastChild;
-			}
-
-			return null;
-		},
-
-		content: function(node, children) {
-			if (!this.elem(node))
-				return null;
-
-			while (node.firstChild)
-				node.removeChild(node.firstChild);
-
-			return this.append(node, children);
-		},
-
-		attr: function(node, key, val) {
-			if (!this.elem(node))
-				return null;
-
-			var attr = null;
-
-			if (typeof(key) === 'object' && key !== null)
-				attr = key;
-			else if (typeof(key) === 'string')
-				attr = {}, attr[key] = val;
-
-			for (key in attr) {
-				if (!attr.hasOwnProperty(key) || attr[key] === null || attr[key] === undefined)
-					continue;
-
-				switch (typeof(attr[key])) {
-				case 'function':
-					node.addEventListener(key, attr[key]);
-					break;
-
-				case 'object':
-					node.setAttribute(key, JSON.stringify(attr[key]));
-					break;
-
-				default:
-					node.setAttribute(key, attr[key]);
-				}
-			}
-		},
-
-		create: function() {
-			var html = arguments[0],
-			    attr = (arguments[1] instanceof Object && !Array.isArray(arguments[1])) ? arguments[1] : null,
-			    data = attr ? arguments[2] : arguments[1],
-			    elem;
-
-			if (this.elem(html))
-				elem = html;
-			else if (html.charCodeAt(0) === 60)
-				elem = this.parse(html);
-			else
-				elem = document.createElement(html);
-
-			if (!elem)
-				return null;
-
-			this.attr(elem, attr);
-			this.append(elem, data);
-
-			return elem;
-		}
-	};
 
 	XHR = Class.extend({
 		__name__: 'LuCI.XHR',
