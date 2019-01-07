@@ -428,7 +428,8 @@
 	    tooltipTimeout = null,
 	    dummyElem = null,
 	    domParser = null,
-	    originalCBIInit = null;
+	    originalCBIInit = null,
+	    classes = {};
 
 	LuCI = Class.extend({
 		__name__: 'LuCI',
@@ -462,6 +463,93 @@
 
 			originalCBIInit = window.cbi_init;
 			window.cbi_init = function() {};
+		},
+
+		/* Class require */
+		require: function(name, from) {
+			var L = this, url = null, from = from || [];
+
+			/* Class already loaded */
+			if (classes[name] != null) {
+				/* Circular dependency */
+				if (from.indexOf(name) != -1)
+					throw new Error('Circular dependency: class "%s" depends on "%s"'
+						.format(name, from.join('" which depends on "')));
+
+				return classes[name];
+			}
+
+			document.querySelectorAll('script[src$="/luci.js"]').forEach(function(s) {
+				url = '%s/%s.js'.format(
+					s.getAttribute('src').replace(/\/luci\.js$/, ''),
+					name.replace(/\./g, '/'));
+			});
+
+			if (url == null)
+				throw new Error('Cannot find url of luci.js');
+
+			from = [ name ].concat(from);
+
+			var compileClass = function(res) {
+				if (!res.ok)
+					throw new Error('HTTP error %d while loading class file "%s"'
+						.format(res.status, url));
+
+				var source = res.text(),
+				    reqmatch = /(?:^|\n)[ \t]*(?:["']require[ \t]+(\S+)(?:[ \t]+as[ \t]+([a-zA-Z_]\S*))?["']);/g,
+				    depends = [],
+				    args = '';
+
+				/* find require statements in source */
+				for (var m = reqmatch.exec(source); m; m = reqmatch.exec(source)) {
+					var dep = m[1], as = m[2] || dep.replace(/[^a-zA-Z0-9_]/g, '_');
+					depends.push(L.require(dep, from));
+					args += ', ' + as;
+				}
+
+				/* load dependencies and instantiate class */
+				return Promise.all(depends).then(function(instances) {
+					try {
+						_factory = eval(
+							'(function(window, document, L%s) { %s })\n\n//# sourceURL=%s\n'
+								.format(args, source, res.url));
+					}
+					catch (error) {
+						throw new SyntaxError('%s\n  in %s:%s'
+							.format(error.message, res.url, error.lineNumber || '?'));
+					}
+
+					_factory.displayName = toCamelCase(name + 'ClassFactory');
+					_class = _factory.apply(_factory, [window, document, L].concat(instances));
+
+					if (!Class.isSubclass(_class))
+						throw new TypeError('"%s" factory yields invalid constructor'
+							.format(name));
+
+					if (_class.displayName == 'AnonymousClass')
+						_class.displayName = toCamelCase(name + 'Class');
+
+					var ptr = Object.getPrototypeOf(L),
+					    parts = name.split(/\./),
+					    instance = new _class();
+
+					for (var i = 0; ptr && i < parts.length - 1; i++)
+						ptr = ptr[parts[i]];
+
+					if (!ptr)
+						throw new Error('Parent "%s" for class "%s" is missing'
+							.format(parts.slice(0, i).join('.'), name));
+
+					classes[name] = ptr[parts[i]] = instance;
+
+					return instance;
+				});
+			};
+
+			/* Request class file */
+			classes[name] = Request.get(url, { cache: true }).then(compileClass);
+
+			return classes[name];
 		},
 
 		/* DOM setup */
