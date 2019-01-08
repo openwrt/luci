@@ -451,6 +451,43 @@
 			window.cbi_init = function() {};
 		},
 
+		error: function(type, fmt /*, ...*/) {
+			var e = null,
+			    msg = fmt ? String.prototype.format.apply(fmt, this.varargs(arguments, 2)) : null,
+			    stack = null;
+
+			if (type instanceof Error) {
+				e = type;
+				stack = (e.stack || '').split(/\n/);
+
+				if (msg)
+					e.message = msg + ': ' + e.message;
+			}
+			else {
+				e = new (window[type || 'Error'] || Error)(msg || 'Unspecified error');
+				e.name = type || 'Error';
+
+				try { throw new Error('stacktrace') }
+				catch (e2) { stack = (e2.stack || '').split(/\n/) }
+
+				/* IE puts the exception message into the first line */
+				if (stack[0] == 'Error: stacktrace')
+					stack.shift();
+
+				/* Pop L.error() invocation from stack */
+				stack.shift();
+			}
+
+			/* Append shortened & beautified stacktrace to message */
+			e.message += '\n' + stack.join('\n')
+				.replace(/(.*?)@(.+):(\d+):(\d+)/g, '  at $1 ($2:$3:$4)');
+
+			if (window.console && console.debug)
+				console.debug(e);
+
+			throw e;
+		},
+
 		/* Class require */
 		require: function(name, from) {
 			var L = this, url = null, from = from || [];
@@ -459,8 +496,9 @@
 			if (classes[name] != null) {
 				/* Circular dependency */
 				if (from.indexOf(name) != -1)
-					throw new Error('Circular dependency: class "%s" depends on "%s"'
-						.format(name, from.join('" which depends on "')));
+					L.error('DependencyError',
+						'Circular dependency: class "%s" depends on "%s"',
+						name, from.join('" which depends on "'));
 
 				return classes[name];
 			}
@@ -472,14 +510,14 @@
 			});
 
 			if (url == null)
-				throw new Error('Cannot find url of luci.js');
+				L.error('InternalError', 'Cannot find url of luci.js');
 
 			from = [ name ].concat(from);
 
 			var compileClass = function(res) {
 				if (!res.ok)
-					throw new Error('HTTP error %d while loading class file "%s"'
-						.format(res.status, url));
+					L.error('NetworkError',
+						'HTTP error %d while loading class file "%s"', res.status, url);
 
 				var source = res.text(),
 				    reqmatch = /(?:^|\n)[ \t]*(?:["']require[ \t]+(\S+)(?:[ \t]+as[ \t]+([a-zA-Z_]\S*))?["']);/g,
@@ -501,16 +539,15 @@
 								.format(args, source, res.url));
 					}
 					catch (error) {
-						throw new SyntaxError('%s\n  in %s:%s'
-							.format(error.message, res.url, error.lineNumber || '?'));
+						L.error('SyntaxError', '%s\n  in %s:%s',
+							error.message, res.url, error.lineNumber || '?');
 					}
 
 					_factory.displayName = toCamelCase(name + 'ClassFactory');
 					_class = _factory.apply(_factory, [window, document, L].concat(instances));
 
 					if (!Class.isSubclass(_class))
-						throw new TypeError('"%s" factory yields invalid constructor'
-							.format(name));
+					    L.error('TypeError', '"%s" factory yields invalid constructor', name);
 
 					if (_class.displayName == 'AnonymousClass')
 						_class.displayName = toCamelCase(name + 'Class');
@@ -523,8 +560,9 @@
 						ptr = ptr[parts[i]];
 
 					if (!ptr)
-						throw new Error('Parent "%s" for class "%s" is missing'
-							.format(parts.slice(0, i).join('.'), name));
+						L.error('DependencyError',
+							'Parent "%s" for class "%s" is missing',
+							parts.slice(0, i).join('.'), name);
 
 					classes[name] = ptr[parts[i]] = instance;
 
@@ -562,7 +600,7 @@
 							}, _('To login…')))
 					]);
 
-					return Promise.reject(new Error('Session expired'));
+					L.error('AuthenticationError', 'Session expired');
 				});
 
 				originalCBIInit();
@@ -570,19 +608,7 @@
 
 				document.dispatchEvent(new CustomEvent('luci-loaded'));
 			}).catch(function(error) {
-				var msg = (error.stack || '').replace(/(.+?)@(.+):(\d+):(\d+)/g,
-						'  at $1 ($2:$3:$4)');
-
-				if (msg.indexOf(error.message) == -1)
-					msg = error.message + '\n' + msg;
-
-				if (error.name && msg.indexOf(error.name) != 0)
-					msg = error.name + ': ' + msg;
-
-				alert('LuCI class loading error:\n' + msg);
-
-				if (window.console && console.debug)
-					console.debug(error);
+				alert('LuCI class loading error:\n' + error);
 			});
 		},
 
@@ -831,7 +857,7 @@
 		cancel: function() { delete this.active },
 		busy: function() { return (this.active === true) },
 		abort: function() {},
-		send_form: function() { throw 'Not implemented' },
+		send_form: function() { L.error('InternalError', 'Not implemented') },
 	});
 
 	XHR.get = function() { return window.L.get.apply(window.L, arguments) };
