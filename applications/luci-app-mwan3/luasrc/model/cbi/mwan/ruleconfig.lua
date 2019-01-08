@@ -5,7 +5,7 @@
 local dsp = require "luci.dispatcher"
 
 local m, mwan_rule, src_ip, src_port, dest_ip, dest_port, proto, sticky
-local timeout, ipset, policy
+local timeout, ipset, logging, policy
 
 arg[1] = arg[1] or ""
 
@@ -52,6 +52,9 @@ timeout.datatype = "range(1, 1000000)"
 
 ipset = mwan_rule:option(Value, "ipset", translate("IPset"),
 	translate("Name of IPset rule. Requires IPset rule in /etc/dnsmasq.conf (eg \"ipset=/youtube.com/youtube\")"))
+
+logging = mwan_rule:option(Flag, "logging", translate("Logging"),
+	translate("Enables firewall rule logging (global mwan3 logging must also be enabled)"))
 
 policy = mwan_rule:option(Value, "use_policy", translate("Policy assigned"))
 m.uci:foreach("mwan3", "policy",
