@@ -1,10 +1,10 @@
 #
-# Yangfl <mmyangfl@gmail.com>, 2018.
+# Yangfl <mmyangfl@gmail.com>, 2018, 2019.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2018-10-01 11:10+0800\n"
+"PO-Revision-Date: 2019-01-10 15:44+0800\n"
 "Last-Translator: Yangfl <mmyangfl@gmail.com>\n"
 "Language-Team:  <debian-l10n-chinese@lists.debian.org>\n"
 "Language: zh_CN\n"
@@ -136,7 +136,7 @@ msgstr ""
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdiface.lua:36
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdiface6.lua:36
 msgid "Enable this interface."
-msgstr "启用这个端口"
+msgstr "启用这个接口"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdplugins.lua:249
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdplugins6.lua:249
@@ -162,7 +162,7 @@ msgid ""
 "value too, but does only update the hopcount if the nexthop changes too. "
 "Default is \"flat\"."
 msgstr ""
-"FIBMetric 控制主机路由 OLSRd 集的度量标准值。“flat”表示度量值始终为2。这是首"
+"FIBMetric 控制主机路由 OLSRd 集的度量标准值。“flat”表示度量值始终为 2。这是首"
 "选值，因为它有助于 linux 内核清理旧路由。“correct”使用 hopcount 作为度量"
 "值。“approx”也使用 hopcount 作为度量值，但只有在下一次更改时才更新 hopcount。"
 "默认为“flat”。"
@@ -409,8 +409,8 @@ msgid ""
 "with the etx_ffeth metric!<br />Defaults to \"1.0\"."
 msgstr ""
 "如果要更改到当前网关的路由，则在将该网关与新网关进行比较之前，将该网关的ETX值"
-"乘以该值。参数可以是介于0.1和1.0之间的值，但如果更改则应接近1.0。<br /><b>警"
-"告：</b>此参数不应与etx_ffeth指标一起使用！<br />默认值到“1.0”。"
+"乘以该值。参数可以是介于 0.1 和 1.0 之间的值，但如果更改则应接近 1.0。<br /"
+"><b>警告：</b>此参数不应与 etx_ffeth 指标一起使用！<br />默认值到“1.0”。"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:166
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:160
@@ -469,7 +469,7 @@ msgstr "轮询网络接口以进行配置更改的间隔（秒）。默认值为
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdiface.lua:93
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdiface6.lua:93
 msgid "Invalid Value for LQMult-Value. Must be between 0.01 and 1.0."
-msgstr "LQMult-Value 的值无效。必须介于0.01和1.0之间。"
+msgstr "LQMult-Value 的值无效。必须介于 0.01 和 1.0 之间。"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:271
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:265
@@ -478,7 +478,8 @@ msgstr "LQMult-Value 的值无效。必须介于0.01和1.0之间。"
 msgid ""
 "Invalid Value for LQMult-Value. You must use a decimal number between 0.01 "
 "and 1.0 here."
-msgstr "LQMult-Value 的值无效。您必须在此处使用介于0.01和1.0之间的十进制数。"
+msgstr ""
+"LQMult-Value 的值无效。您必须在此处使用介于 0.01 和 1.0 之间的十进制数。"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/routes.htm:98
 msgid "Known OLSR routes"
@@ -544,8 +545,8 @@ msgid ""
 "etx_float and etx_fpm, smaller values mean slower changes of ETX value. "
 "(allowed values are between 0.01 and 1.0)"
 msgstr ""
-"链路质量老化因子（仅适用于 lq 级别2）。调整 etx_float 和 etx_fpm 的参数，值越"
-"小意味着 ETX 值的变化越慢。（允许值介于0.01和1.0之间）"
+"链路质量老化因子（仅适用于 lq 级别 2）。调整 etx_float 和 etx_fpm 的参数，值"
+"越小意味着 ETX 值的变化越慢。（允许值介于 0.01 和 1.0 之间）"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:97
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:91
@@ -557,11 +558,11 @@ msgid ""
 "calculation<br /><b>etx_ffeth</b>: incompatible variant of etx_ff that "
 "allows ethernet links with ETX 0.1.<br />Defaults to \"etx_ff\""
 msgstr ""
-"链路质量算法（仅适用于 lq 级别2）。<br /><b>etx_float</b>：浮点数 ETX，按指数"
-"函数老化<br /><b>etx_fpm</b>：与etx_float 相同，但按整数算术<br /><b>etx_ff</"
-"b>：ETX freifunk，一种使用所有 OLSR 流量（而不仅仅是 hello）进行 ETX 计算的 "
-"etx 变体<br /><b>etx_ffeth</b>：不兼容的变体 etx_ff，允许以太网链接使用 ETX "
-"0.1。<br />默认为“etx_ff”"
+"链路质量算法（仅适用于 lq 级别 2）。<br /><b>etx_float</b>：浮点数 ETX，按指"
+"数函数老化<br /><b>etx_fpm</b>：与 etx_float 相同，但按整数运算<br /"
+"><b>etx_ff</b>：ETX freifunk，一种使用所有 OLSR 流量（而不仅仅是 hello）进行 "
+"ETX 计算的 etx 变体<br /><b>etx_ffeth</b>：不兼容的变体 etx_ff，允许以太网链"
+"接使用 ETX 0.1。<br />默认为“etx_ff”"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:83
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:77
@@ -628,7 +629,7 @@ msgid ""
 "Make sure that OLSRd is running, the \"jsoninfo\" plugin is loaded, "
 "configured on port 9090 and accepts connections from \"127.0.0.1\"."
 msgstr ""
-"确保 OLSRd 正在运行，加载了“jsoninfo”插件，在端口9090上配置接受来"
+"确保 OLSRd 正在运行，加载了“jsoninfo”插件，在端口 9090 上配置接受来"
 "自“127.0.0.1”的连接。"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/routes.htm:50
@@ -653,9 +654,9 @@ msgid ""
 ">reduce LQ to 192.168.0.1 by half: 192.168.0.1 0.5<br />reduce LQ to all "
 "nodes on this interface by 20%: default 0.8"
 msgstr ""
-"使用此处给出的因子放大路由 LQ。允许值介于0.01和1.0之间。它仅在 LQ-Level 大于0"
-"时使用。示例：<br />将到 192.168.0.1 的 LQ 减半：192.168.0.1 0.5<br />将此接"
-"口到所有节点的 LQ 减少20％：default 0.8"
+"使用此处给出的因子放大路由 LQ。允许值介于 0.01 和 1.0 之间。它仅在 LQ-Level "
+"大于 0 时使用。示例：<br />将到 192.168.0.1 的 LQ 减半：192.168.0.1 0.5<br />"
+"将此接口到所有节点的 LQ 减少 20%：默认 0.8"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:240
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdiface6.lua:71
@@ -665,9 +666,9 @@ msgid ""
 ">reduce LQ to fd91:662e:3c58::1 by half: fd91:662e:3c58::1 0.5<br />reduce "
 "LQ to all nodes on this interface by 20%: default 0.8"
 msgstr ""
-"使用此处给出的因子放大路由 LQ。允许值介于0.01和1.0之间。它仅在 LQ-Level 大于0"
-"时使用。示例：<br />将到 fd91:662e:3c58::1 的 LQ 减半：fd91:662e:3c58::1 "
-"0.5<br />将此接口到所有节点的 LQ 减少20％：default 0.8"
+"使用此处给出的因子放大路由 LQ。允许值介于 0.01 和 1.0 之间。它仅在 LQ-Level "
+"大于 0 时使用。示例：<br />将到 fd91:662e:3c58::1 的 LQ 减半："
+"fd91:662e:3c58::1 0.5<br />将此接口到所有节点的 LQ 减少 20%：默认 0.8"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:201
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:195
@@ -725,7 +726,7 @@ msgstr "OLSR"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrddisplay.lua:4
 msgid "OLSR - Display Options"
-msgstr "OLSR  - 显示选项"
+msgstr "OLSR - 显示选项"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdhna.lua:8
 msgid "OLSR - HNA-Announcements"
@@ -821,7 +822,7 @@ msgstr "插件"
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:54
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:48
 msgid "Polling rate for OLSR sockets in seconds. Default is 0.05."
-msgstr "OLSR 套接字的轮询速率，以秒为单位。默认值为0.05。"
+msgstr "OLSR 套接字的轮询速率，以秒为单位。默认值为 0.05。"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:53
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:47
@@ -869,7 +870,7 @@ msgstr "辅助 OLSR 接口"
 #: applications/luci-app-olsr/luasrc/view/status-olsr/smartgw.htm:56
 #: applications/luci-app-olsr/luasrc/view/status-olsr/smartgw.htm:108
 msgid "Selected"
-msgstr ""
+msgstr "已选择"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:133
 msgid ""
@@ -1013,8 +1014,8 @@ msgid ""
 "The port OLSR uses. This should usually stay at the IANA assigned port 698. "
 "It can have a value between 1 and 65535."
 msgstr ""
-"OLSR 使用的端口。通常应使用 IANA 分配的保留端口698。它的值可以在1到65535之"
-"间。"
+"OLSR 使用的端口。通常应使用 IANA 分配的保留端口 698。它的值可以在 1 到 65535 "
+"之间。"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:184
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:178
@@ -1025,8 +1026,8 @@ msgid ""
 "length is 64 bits. Default is \"::/0\" (no prefix)."
 msgstr ""
 "这可用于向客户端通知上行链路的外部 IPv6 前缀。这可能可使客户端更改其本地 "
-"IPv6 地址，以使用 IPv6 网关，而无需任何类型的地址转换。前缀长度最大为64位。默"
-"认为“::/0”（无前缀）。"
+"IPv6 地址，以使用 IPv6 网关，而无需任何类型的地址转换。前缀长度最大为 64 位。"
+"默认为“::/0”（无前缀）。"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:224
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:218
@@ -1100,7 +1101,7 @@ msgstr ""
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdiface.lua:60
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdiface6.lua:60
 msgid "Weight"
-msgstr "体重"
+msgstr "权重"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:236
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:230
@@ -1117,7 +1118,7 @@ msgid ""
 msgstr ""
 "当主机之间存在多个链路时，接口权重用于确定要使用的链路。通常，权重由 olsrd 根"
 "据接口的特性自动计算，但您可以在此处指定固定值。Olsrd 将选择值最低的链接。"
-"<br /><b>注意：</b>仅当 LinkQualityLevel 设置为0时才使用接口权重。"
+"<br /><b>注意：</b>仅当 LinkQualityLevel 设置为 0 时才使用接口权重。"
 "LinkQualityLevel 的任何其他值都将使用接口的 ETX 值。"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:155
@@ -1150,7 +1151,7 @@ msgstr "黄色"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/interfaces.htm:38
 msgid "down"
-msgstr ""
+msgstr "向上"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/smartgw.htm:30
 #: applications/luci-app-olsr/luasrc/view/status-olsr/smartgw.htm:134
@@ -1169,7 +1170,7 @@ msgstr "否"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/interfaces.htm:38
 msgid "up"
-msgstr ""
+msgstr "向下"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/interfaces.htm:40
 #: applications/luci-app-olsr/luasrc/view/status-olsr/smartgw.htm:29
