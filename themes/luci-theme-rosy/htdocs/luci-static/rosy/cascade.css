@@ -403,20 +403,6 @@ h4 {
     width: calc(100% - 1.5rem);
 }
 
-div>table>tbody>tr:nth-of-type(2n),
-div>.table>.tbody>.tr:nth-of-type(2n) {
-    background-color: #f9f9f9;
-}
-
-div>table>tbody>tr:nth-of-type(2n),
-div>.table>.tbody>.tr:nth-of-type(2n) {
-    background-color: #f9f9f9;
-}
-
-.cbi-section .table .tr.table-titles {
-    background-color: #eee;
-}
-
 .table .tr:first-child .td:first-child,
 .table .tr:first-child::before,
 .table .tr:first-child .th:first-child {
@@ -439,10 +425,6 @@ div>.table>.tbody>.tr:nth-of-type(2n) {
 
 .table .tr.placeholder:last-child {
     background-color: transparent;
-}
-
-.cbi-section .table .cbi-section-table-titles {
-    background-color: #e0e0e0;
 }
 
 /* fix progress bar */
@@ -776,12 +758,19 @@ td>table>tbody>tr>td,
     vertical-align: middle;
 }
 
-.cbi-rowstyle-1 {
+.table .tr.cbi-rowstyle-2,
+.table .tr:nth-child(n) {
+    background-color: #eee;
+}
+
+.table .tr.cbi-rowstyle-1,
+.table .tr:nth-child(2n) {
     background-color: #f9f9f9;
 }
 
-.cbi-rowstyle-2 {
-    background-color: #eee;
+.table .tr.table-titles,
+.table .tr.cbi-section-table-titles {
+    background-color: #ddd;
 }
 
 .cbi-section-table .cbi-section-table-titles .cbi-section-table-cell {
@@ -1486,11 +1475,6 @@ header>.container>.pull-right>* {
 
 .node-status-processes .cbi-section {
     overflow-x: scroll;
-}
-
-.node-status-iptables #iptables .table-titles,
-.node-system-opkg #packages .cbi-section-table-titles {
-    background-color: #eee;
 }
 
 /* fix status realtime traffic and wireless */

@@ -305,6 +305,6 @@
         });
     });
 
-    $('.lang_enNetwork #cbi-samba-sambashare .table').wrap('<div class="table-container"></div>');
+    $('#iptables').prev().css('margin-top', '10px');
 
 })(jQuery);
