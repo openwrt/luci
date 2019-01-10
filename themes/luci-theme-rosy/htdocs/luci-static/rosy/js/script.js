@@ -81,6 +81,17 @@
     /**
      * menu click
      */
+    if ($('.nav').length > 0 && $(window).width() > 992) {
+        var oScroll = new MyScrollBar({
+            selId: 'navBox',
+            time: 100,
+            bgColor: 'transprent',
+            barColor: '#839dd67a',
+            enterColor: '#839dd6cc',
+            enterShow: false
+        });
+    }
+
     $(".main > .main-left .nav > .slide > .menu").click(function () {
         var ul = $(this).next(".slide-menu");
         var menu = $(this);
@@ -94,6 +105,14 @@
                 ul.removeClass("active");
             });
         }
+        if ($('.nav').length > 0 && $(window).width() > 992) {
+            oScroll.setSize(200);
+        }
+        setInterval(function(){
+            if($('.nav').height() < $('.navbar-container').height()){
+                    $('.nav').css('transform', 'translate(0px, 0px)');
+            }
+        }, 300);
         return false;
     });
 
