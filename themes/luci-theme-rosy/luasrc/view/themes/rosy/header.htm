@@ -123,7 +123,7 @@
 	local function render_topmenu()
 		local childs = disp.node_childs(cattree)
 		if #childs > 0 then
-			write('<ul class="nav">')
+			write('<ul class="nav scroll">')
 
 			for i, r in ipairs(childs) do
 				local nnode = cattree.nodes[r]
@@ -231,6 +231,7 @@
 	<% end -%>
 	<script src="<%=resource%>/cbi.js"></script>
 	<script src="<%=resource%>/xhr.js"></script>
+	<script src="<%=media%>/js/ScrollY.js"></script>
 </head>
 
 <body class="lang_<%=luci.i18n.context.lang%> <%- if node then %><%= striptags( node.title ) %><%- end %> <% if luci.dispatcher.context.authsession then %>logged-in<% end %>">
@@ -264,7 +265,7 @@
 			<div class="nav-container">
 				<a class="brand" href="#">
 					<%=boardinfo.hostname or "?"%></a>
-				<div class="navbar-container">
+				<div class="navbar-container" id="navBox">
 					<% render_topmenu() %>
 				</div>
 			</div>
