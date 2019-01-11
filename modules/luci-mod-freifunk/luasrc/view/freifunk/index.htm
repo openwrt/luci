@@ -9,18 +9,10 @@
 local uci = require "luci.model.uci".cursor()
 local tpl = require "luci.template"
 local fs = require "nixio.fs"
-local ff = {}
-local ff = uci:get_all("freifunk")
 
-if not ff or not ff.community.name then
-	community = "Freifunk"
-	DefaultText = ""
-	nickname = "No Nickname set"
-else
-	community = ff.community.name
-	DefaultText = ff.community.DefaultText
-	nickname = ff.contact.nickname
-end
+local community = uci:get("freifunk", "community", "name") or "Freifunk"
+local DefaultText = uci:get("freifunk", "community", "DefaultText") or ""
+local nickname = uci:get("freifunk", "contact", "nickname") or "No Nickname set"
 
 local co = "profile_" .. community
 --local community = uci:get_first(co, "community", "name") or "Freifunk"
