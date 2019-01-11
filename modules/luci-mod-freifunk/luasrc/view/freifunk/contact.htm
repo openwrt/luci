@@ -9,22 +9,15 @@
 
 <% 
 local uci = require "luci.model.uci".cursor()
-local contact = uci:get_all("freifunk", "contact")
-local nickname, name, mail, phone, location, note
-local lon = uci:get_first("system", "system", "longitude")
-local lat = uci:get_first("system", "system", "latitude")
-
-if not contact then
-	nickname, name, homepage, mail, phone, location, note = ""
-else
-	nickname = contact.nickname or ""
-	name = contact.name or ""
-	homepage = contact.homepage or {}
-	mail = contact.mail or ""
-	phone = contact.phone or ""
-	location = uci:get_first("system", "system", "location") or contact.location
-	note = contact.note or ""
-end
+local nickname = uci:get("freifunk", "contact", "nickname") or ""
+local name = uci:get("freifunk", "contact", "name") or ""
+local homepage = uci:get("freifunk", "contact", "homepage") or {}
+local mail = uci:get("freifunk", "contact", "mail") or ""
+local phone = uci:get("freifunk", "contact", "phone") or ""
+local location = uci:get_first("system", "system", "locaton") or uci:get("freifunk", "contact", "location") or ""
+local note = uci:get("freifunk", "contact", "note") or ""
+local lon = uci:get_first("system", "system", "longitude") or ""
+local lat = uci:get_first("system", "system", "latitude") or ""
 %>
 
 <h2 name="content"><%:Contact%></h2>
