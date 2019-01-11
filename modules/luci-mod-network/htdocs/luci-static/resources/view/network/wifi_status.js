@@ -39,7 +39,7 @@ requestAnimationFrame(function() {
 
 			L.itemlist(info, [
 				_('Mode'),       iw.mode,
-				_('SSID'),       '%h'.format(iw.ssid || '?'),
+				_('SSID'),       iw.ssid || '?',
 				_('BSSID'),      is_assoc ? iw.bssid : null,
 				_('Encryption'), is_assoc ? iw.encryption || _('None') : null,
 				_('Channel'),    is_assoc ? '%d (%.3f %s)'.format(iw.channel, iw.frequency || 0, _('GHz')) : null,
