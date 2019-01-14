@@ -1,4 +1,4 @@
--- Copyright 2017-2018 Dirk Brenken (dev@brenken.org)
+-- Copyright 2017-2019 Dirk Brenken (dev@brenken.org)
 -- This is free software, licensed under the Apache License, Version 2.0
 
 local fs   = require("nixio.fs")
@@ -221,10 +221,5 @@ e29 = e:option(Value, "adb_repchunksize", translate("Report Chunk Size"),
 e29.datatype = "range(1,10)"
 e29.default = 1
 e29.optional = true
-
-e30 = e:option(Flag, "adb_forcesrt", translate("Force Overall Sort"),
-	translate("Enable memory intense overall sort / duplicate removal on low memory devices (&lt; 64 MB free RAM)"))
-e30.optional = true
-e30.default = nil
 
 return m

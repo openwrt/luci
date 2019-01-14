@@ -1,5 +1,5 @@
 <%#
-Copyright 2017-2018 Dirk Brenken (dev@brenken.org)
+Copyright 2017-2019 Dirk Brenken (dev@brenken.org)
 This is free software, licensed under the Apache License, Version 2.0
 -%>
 
@@ -84,10 +84,10 @@ This is free software, licensed under the Apache License, Version 2.0
 		s += '<div class="th left"><%:Domain%></div>';
 		s += '<div class="th left"><%:Answer%></div>';
 		s += '<div class="th left"><%:Action%></div></div>';
-		var btn;
+		var btn1;
 		var record;
 		var title_arr = ["<%:Date%>", "<%:Time%>", "<%:Client%>", "<%:Domain%>", "<%:Answer%>", "<%:Action%>"];
-		var array = text.split("\n", 50);
+		var array = text.split("\n");
 		for (var i=0;i<array.length;i++)
 		{
 			record = array[i].split("\t");
@@ -99,14 +99,18 @@ This is free software, licensed under the Apache License, Version 2.0
 					s += '<div class="td left" data-title="' + title_arr[j] + '">' + record[j] + '</div>';
 					if (record[4] === "NX")
 					{
-						btn = '<div class="td left" data-title="' + title_arr[5] + '"><input type="button" class="cbi-button cbi-button-edit" name="add_whitelist,' + record[3] + '" value="<%:Whitelist%>" onclick="btn_action(this)" /></div>';
+						btn1 = '<div class="td left" data-title="' + title_arr[5] + '"><input type="button" class="cbi-button cbi-button-edit" name="add_whitelist,' + record[3] + '" value="<%:Whitelist%>" onclick="btn_action(this)" /></div>';
+					}
+					else if (record[4] === "OK")
+					{
+						btn1 = '<div class="td left" data-title="' + title_arr[5] + '"><input type="button" class="cbi-button cbi-button-remove" name="add_blacklist,' + record[3] + '" value="<%:Blacklist%>" onclick="btn_action(this)" /></div>';
 					}
 					else
 					{
-						btn = '<div class="td left" data-title="' + title_arr[5] + '"><input type="button" class="cbi-button cbi-button-remove" name="add_blacklist,' + record[3] + '" value="<%:Blacklist%>" onclick="btn_action(this)" /></div>';
+						btn1 = '-'
 					}
 				}
-				s += btn + '</div>'
+				s += btn1 + '</div>'
 			}
 		}
 		document.getElementById("value_6").innerHTML = s;
@@ -118,27 +122,96 @@ This is free software, licensed under the Apache License, Version 2.0
 
 		if (action[0] === "do_report")
 		{
-			var btn         = document.getElementById("btn");
-			var btn_running = document.getElementById("btn_running");
+			var btn1         = document.getElementById("btn1");
+			var btn1_running = document.getElementById("btn1_running");
 
-			btn.disabled = true;
-			running(btn_running, 1);
-			action[1] = "-"
+			btn1.disabled = true;
+			running(btn1_running, 1);
+
+			document.getElementById("filter_search").value = '';
+			document.getElementById("filter_count").selectedIndex = 1;
+
+			XHR.get('<%=luci.dispatcher.build_url("admin", "services", "adblock")%>/action/' + action[0], null,
+			function(x)
+			{
+				if (!x)
+				{
+					return;
+				}
+				XHR.get('<%=luci.dispatcher.build_url("admin", "services", "adblock", "report_json")%>', null,
+				function(x, json_info)
+				{
+					if (!x || !json_info || !json_info.data)
+					{
+						running(btn1_running, 0);
+						btn1.disabled = false;
+						return;
+					}
+					report_json(json_info);
+				});
+				XHR.get('<%=luci.dispatcher.build_url("admin", "services", "adblock", "report_text")%>', null,
+				function(x)
+				{
+					if (!x || !x.responseText)
+					{
+						return;
+					}
+					report_text(x.responseText);
+					running(btn1_running, 0);
+					btn1.disabled = false;
+				});
+			});
 		}
-
-		new XHR.get('<%=luci.dispatcher.build_url("admin", "services", "adblock")%>/action/' + action[0] + "/" + action[1], null,
-		function(x)
+		else if (action[0] === "do_filter")
 		{
-			if (!x)
+			var btn2         = document.getElementById("btn2");
+			var btn2_running = document.getElementById("btn2_running");
+			var search       = document.getElementById("filter_search").value.replace(/[^\x00-\x7F]|[\s!@#$%^&*()+=\[\]{};'"\\|,<>\/?]/g,'') || "\"+\"";
+			var count        = document.getElementById("filter_count").value;
+
+			btn2.disabled = true;
+			running(btn2_running, 1);
+			if (search != "\"+\"")
 			{
-				return;
+				document.getElementById("filter_search").value = search;
 			}
-			if (action[0] === "do_report")
+
+			XHR.get('<%=luci.dispatcher.build_url("admin", "services", "adblock")%>/action/' + action[0] + "/" + "-" + "/" + search + "/" + count + "/" + "true" + "/" + "false", null,
+			function(x)
 			{
-				running(btn_running, 0);
-				btn.disabled = false;
-			}
-		});
+				if (!x)
+				{
+					return;
+				}
+				XHR.get('<%=luci.dispatcher.build_url("admin", "services", "adblock", "report_text")%>', null,
+				function(x)
+				{
+					if (!x || !x.responseText)
+					{
+						return;
+					}
+					report_text(x.responseText);
+					running(btn2_running, 0);
+					btn2.disabled = false;
+				});
+			});
+		}
+		else if (action[0] === "add_blacklist" || action[0] === "add_whitelist")
+		{
+			XHR.get('<%=luci.dispatcher.build_url("admin", "services", "adblock")%>/action/' + action[0] + "/" + action[1], null,
+			function(x)
+			{
+				if (!x)
+				{
+					return;
+				}
+				btn3 = document.getElementsByName(value.name);
+				for (var i=0; i<btn3.length; i++)
+				{
+					btn3[i].disabled = true;
+				}
+			});
+		}
 	}
 
 	function running(element, state)
@@ -159,36 +232,14 @@ This is free software, licensed under the Apache License, Version 2.0
 	{
 		if (!x || !json_info || !json_info.data)
 		{
-			running(btn_running, 0);
-			btn.disabled = false;
-			return;
-		}
-		report_json(json_info);
-	});
-
-	XHR.poll(-1, '<%=luci.dispatcher.build_url("admin", "services", "adblock", "report_json")%>', null,
-	function(x, json_info)
-	{
-		if (!x || !json_info || !json_info.data)
-		{
-			running(btn_running, 0);
-			btn.disabled = false;
+			running(btn1_running, 0);
+			btn1.disabled = false;
 			return;
 		}
 		report_json(json_info);
 	});
 
 	XHR.get('<%=luci.dispatcher.build_url("admin", "services", "adblock", "report_text")%>', null,
-	function(x)
-	{
-		if (!x || !x.responseText)
-		{
-			return;
-		}
-		report_text(x.responseText);
-	});
-
-	XHR.poll(-1, '<%=luci.dispatcher.build_url("admin", "services", "adblock", "report_text")%>', null,
 	function(x)
 	{
 		if (!x || !x.responseText)
@@ -227,8 +278,8 @@ This is free software, licensed under the Apache License, Version 2.0
 	</div>
 	<br />
 	<div id="button">
-		<input type="button" class="cbi-button cbi-button-action important" id="btn" name="do_report" value="<%:Refresh Report%>" onclick="btn_action(this)" />
-		<span id="btn_running" class="btn_running"></span>
+		<input type="button" class="cbi-button cbi-button-action important" id="btn1" name="do_report" value="<%:Refresh Report%>" onclick="btn_action(this)" />
+		<span id="btn1_running" class="btn1_running"></span>
 	</div>
 </div>
 <br />
@@ -236,8 +287,23 @@ This is free software, licensed under the Apache License, Version 2.0
 	<h3><%:Top 10 Reporting%></h3>
 	<div class="table" id="value_5"></div>
 </div>
-<br />
+<hr />
 <div class="cbi-section">
+	<div class="cbi-section-descr"><%:Filter the DNS Query result set for a particular domain, client or time frame.%></div>
+	<div style="float:left;">
+		<input type="text" placeholder="<%:Domain/Client/Date/Time%>" id="filter_search" name="filter_search" />
+		<select name="filter_count" id="filter_count">
+			<option value="25">25</option>
+			<option value="50" selected="selected">50</option>
+			<option value="100">100</option>
+			<option value="250">250</option>
+			<option value="500">500</option>
+		</select>
+		<input type="button" class="cbi-button cbi-button-action" id="btn2" name="do_filter" value="<%:Filter%>" onclick="btn_action(this)" />
+		<span id="btn2_running" class="btn2_running"></span>
+	</div>
+	<br />
+	<br />
 	<h3><%:Latest DNS Queries%></h3>
 	<div class="table" id="value_6"></div>
 </div>
