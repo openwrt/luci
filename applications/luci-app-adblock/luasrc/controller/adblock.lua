@@ -1,4 +1,4 @@
--- Copyright 2017-2018 Dirk Brenken (dev@brenken.org)
+-- Copyright 2017-2019 Dirk Brenken (dev@brenken.org)
 -- This is free software, licensed under the Apache License, Version 2.0
 
 module("luci.controller.adblock", package.seeall)
@@ -31,7 +31,20 @@ function index()
 	entry({"admin", "services", "adblock", "action"}, call("adb_action"), nil).leaf = true
 end
 
-function adb_action(name, domain)
+function adb_action(name, ...)
+	local domain = select(1, ...) or ""
+	local search = select(2, ...) or "+"
+	local count  = select(3, ...) or "50"
+	local filter = select(4, ...) or "false"
+	local print  = select(5, ...) or "false"
+
+	local report_params = {
+		search,
+		count,
+		filter,
+		print
+	}
+
 	if name == "do_suspend" then
 		luci.sys.call("/etc/init.d/adblock suspend >/dev/null 2>&1")
 	elseif name == "do_resume" then
@@ -45,11 +58,17 @@ function adb_action(name, domain)
 			until nixio.fs.readfile(pid_file) == ""
 		end
 	elseif name == "do_report" then
-		luci.sys.call("/etc/init.d/adblock report false >/dev/null 2>&1")
+		luci.sys.call("/etc/init.d/adblock report " ..table.concat(report_params, " ").. " >/dev/null 2>&1")
 		local rep_dir  = uci:get("adblock", "extra", "adb_repdir") or "/tmp"
 		repeat
 			nixio.nanosleep(1)
 		until not nixio.fs.access(rep_dir.. "/adb_report.raw")
+	elseif name == "do_filter" then
+		luci.sys.call("/etc/init.d/adblock report " ..table.concat(report_params, " ").. " >/dev/null 2>&1")
+		local rep_dir  = uci:get("adblock", "extra", "adb_repdir") or "/tmp"
+		repeat
+			nixio.nanosleep(1)
+		until nixio.fs.access(rep_dir.. "/adb_report.final")
 	elseif name == "add_blacklist" then
 		local file = uci:get("adblock", "blacklist", "adb_src") or "/etc/adblock/adblock.blacklist"
 		if nixio.fs.access(file) then
@@ -110,7 +129,7 @@ function report_text()
 	local content
 
 	rep_dir  = uci:get("adblock", "extra", "adb_repdir") or "/tmp"
-	rep_file = rep_dir.. "/adb_report"
+	rep_file = rep_dir.. "/adb_report.final"
 	http.prepare_content("text/plain")
 
 	if nixio.fs.access(rep_file) then
