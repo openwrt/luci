@@ -2,6 +2,11 @@
 	<% if self.title and #self.title > 0 then -%>
 		<legend><%=self.title%></legend>
 	<%- end %>
+	<% if self.error_msg and #self.error_msg > 0 then -%>
+		<div class="cbi-section-error">
+			<%=self.error_msg%>
+		</div>
+	<%- end %>
 	<% if self.description and #self.description > 0 then -%>
 		<div class="cbi-section-descr"><%=self.description%></div>
 	<%- end %>
