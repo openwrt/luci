@@ -1547,6 +1547,13 @@ end
 
 function Value.parse(self, section, novld)
 	if self.readonly then return end
+	if self.datatype == "passconf" and self.confirmoption then
+		if self:formvalue(section) ~=
+			self.confirmoption:formvalue(section)
+			then
+				return nil, _("Password confirmation doesn't match password!")
+		end
+	end
 	AbstractValue.parse(self, section, novld)
 end
 

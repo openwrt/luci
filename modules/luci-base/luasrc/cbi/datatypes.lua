@@ -464,3 +464,7 @@ end
 function unique(val)
 	return true
 end
+
+function passconf(val)
+	return val and (val ~= "")
+end

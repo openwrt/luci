@@ -4,12 +4,17 @@
 			attr("name", "password." .. cbid)
 		%> />
 	<%- end -%>
+	<%- passwordconfirm=""
+	    if self.password and self.confirmoption and self.confirmoption.cbid then
+		passwordconfirm = attr("data-confirmoption", self.confirmoption:cbid(section))
+	    end -%>
 	<input data-update="change"<%=
 		attr("id", cbid) ..
 		attr("name", cbid) ..
 		attr("type", self.password and "password" or "text") ..
 		attr("class", self.password and "cbi-input-password" or "cbi-input-text") ..
 		attr("value", self:cfgvalue(section) or self.default) ..
+		passwordconfirm ..
 		ifattr(self.password, "autocomplete", "new-password") ..
 		ifattr(self.size, "size") ..
 		ifattr(self.placeholder, "placeholder") ..

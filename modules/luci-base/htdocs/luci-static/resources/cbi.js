@@ -619,6 +619,25 @@ var CBIValidatorPrototype = {
 		hexstring: function() {
 			return this.assert(this.value.match(/^([a-f0-9][a-f0-9]|[A-F0-9][A-F0-9])+$/),
 				_('hexadecimal encoded value'));
+		},
+
+		passconf: function() {
+			var confirmoption = this.field.getAttribute('data-confirmoption');
+			if (! confirmoption) {
+				return this.assert(false, _("password confirmation."));
+			}
+			var confe = document.getElementById(confirmoption);
+			if (confe && (this.field.value != confe.value)) {
+				return this.assert(false, _("confirmation matching password."));
+			}
+			this.field.removeAttribute('data-tooltip');
+			this.field.removeAttribute('data-tooltip-style');
+			this.field.dispatchEvent(new CustomEvent('validation-success', { bubbles: true }));
+			if (confe.getAttribute('data-tooltip')) {
+				confe.focus();
+			}
+
+			return this.assert(true);
 		}
 	}
 };
