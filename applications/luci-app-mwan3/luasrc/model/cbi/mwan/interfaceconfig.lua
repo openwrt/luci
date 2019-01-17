@@ -2,14 +2,20 @@
 -- Copyright 2018 Florian Eckert <fe@dev.tdt.de>
 -- Licensed to the public under the GNU General Public License v2.
 
-dsp = require "luci.dispatcher"
+local dsp = require "luci.dispatcher"
+
+local m, mwan_interface, enabled, initial_state, family, track_ip
+local track_method, reliability, count, size, max_ttl
+local check_quality, failure_latency, failure_loss, recovery_latency
+local recovery_loss, timeout, interval, failure
+local keep_failure, recovery, down, up, flush, metric
+
 arg[1] = arg[1] or ""
 
+m = Map("mwan3", translatef("MWAN Interface Configuration - %s", arg[1]))
+m.redirect = dsp.build_url("admin", "network", "mwan", "interface")
 
-m5 = Map("mwan3", translatef("MWAN Interface Configuration - %s", arg[1]))
-	m5.redirect = dsp.build_url("admin", "network", "mwan", "interface")
-
-mwan_interface = m5:section(NamedSection, arg[1], "interface", "")
+mwan_interface = m:section(NamedSection, arg[1], "interface", "")
 mwan_interface.addremove = false
 mwan_interface.dynamic = false
 
@@ -249,4 +255,4 @@ function metric.cfgvalue(self, s)
 	end
 end
 
-return m5
+return m

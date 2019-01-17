@@ -2,14 +2,17 @@
 -- Copyright 2018 Florian Eckert <fe@dev.tdt.de>
 -- Licensed to the public under the GNU General Public License v2.
 
-dsp = require "luci.dispatcher"
+local dsp = require "luci.dispatcher"
+
+local m, mwan_rule, src_ip, src_port, dest_ip, dest_port, proto, sticky
+local timeout, ipset, policy
+
 arg[1] = arg[1] or ""
 
+m = Map("mwan3", translatef("MWAN Rule Configuration - %s", arg[1]))
+m.redirect = dsp.build_url("admin", "network", "mwan", "rule")
 
-m5 = Map("mwan3", translatef("MWAN Rule Configuration - %s", arg[1]))
-m5.redirect = dsp.build_url("admin", "network", "mwan", "rule")
-
-mwan_rule = m5:section(NamedSection, arg[1], "rule", "")
+mwan_rule = m:section(NamedSection, arg[1], "rule", "")
 mwan_rule.addremove = false
 mwan_rule.dynamic = false
 
@@ -51,7 +54,7 @@ ipset = mwan_rule:option(Value, "ipset", translate("IPset"),
 	translate("Name of IPset rule. Requires IPset rule in /etc/dnsmasq.conf (eg \"ipset=/youtube.com/youtube\")"))
 
 policy = mwan_rule:option(Value, "use_policy", translate("Policy assigned"))
-m5.uci:foreach("mwan3", "policy",
+m.uci:foreach("mwan3", "policy",
 	function(s)
 		policy:value(s['.name'], s['.name'])
 	end
@@ -60,4 +63,4 @@ policy:value("unreachable", translate("unreachable (reject)"))
 policy:value("blackhole", translate("blackhole (drop)"))
 policy:value("default", translate("default (use main routing table)"))
 
-return m5
+return m
