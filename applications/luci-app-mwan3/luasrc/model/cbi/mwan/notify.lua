@@ -4,12 +4,13 @@
 
 local fs = require "nixio.fs"
 local ut = require "luci.util"
-script = "/etc/mwan3.user"
+local script = "/etc/mwan3.user"
 
+local m, f, t
 
-m5 = SimpleForm("luci", translate("MWAN - Notification"))
+m = SimpleForm("luci", translate("MWAN - Notification"))
 
-f = m5:section(SimpleSection, nil,
+f = m:section(SimpleSection, nil,
 	translate("This section allows you to modify the content of \"/etc/mwan3.user\".<br />" ..
 	"The file is also preserved during sysupgrade.<br />" ..
 	"<br />" ..
@@ -42,4 +43,4 @@ function t.write(self, section, data)
 	return fs.writefile(script, ut.trim(data:gsub("\r\n", "\n")) .. "\n")
 end
 
-return m5
+return m

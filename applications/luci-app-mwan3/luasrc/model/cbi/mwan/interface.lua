@@ -2,9 +2,11 @@
 -- Copyright 2018 Florian Eckert <fe@dev.tdt.de>
 -- Licensed to the public under the GNU General Public License v2.
 
-dsp = require "luci.dispatcher"
-uci = require "uci"
+local dsp = require "luci.dispatcher"
+local uci = require "uci"
 
+local m, mwan_interface, enabled, track_method, reliability, interval
+local down, up, metric
 
 function interfaceWarnings(overview, count, iface_max)
 	local warnings = ""
@@ -134,10 +136,10 @@ function configCheck()
 	return overview, count, iface_max
 end
 
-m5 = Map("mwan3", translate("MWAN - Interfaces"),
+m = Map("mwan3", translate("MWAN - Interfaces"),
 	interfaceWarnings(configCheck()))
 
-mwan_interface = m5:section(TypedSection, "interface", nil,
+mwan_interface = m:section(TypedSection, "interface", nil,
 	translate("MWAN supports up to 252 physical and/or logical interfaces<br />" ..
 	"MWAN requires that all interfaces have a unique metric configured in /etc/config/network<br />" ..
 	"Names must match the interface name found in /etc/config/network<br />" ..
@@ -151,7 +153,7 @@ mwan_interface.template = "cbi/tblsection"
 mwan_interface.extedit = dsp.build_url("admin", "network", "mwan", "interface", "%s")
 function mwan_interface.create(self, section)
 	TypedSection.create(self, section)
-	m5.uci:save("mwan3")
+	m.uci:save("mwan3")
 	luci.http.redirect(dsp.build_url("admin", "network", "mwan", "interface", section))
 end
 
@@ -237,4 +239,4 @@ function metric.cfgvalue(self, s)
 	end
 end
 
-return m5
+return m

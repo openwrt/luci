@@ -2,9 +2,10 @@
 -- Copyright 2018 Florian Eckert <fe@dev.tdt.de>
 -- Licensed to the public under the GNU General Public License v2.
 
-dsp = require "luci.dispatcher"
-uci = require "uci"
+local dsp = require "luci.dispatcher"
+local uci = require "uci"
 
+local m, mwan_policy, use_member, last_resort
 
 function policyCheck()
 	local policy_error = {}
@@ -34,10 +35,10 @@ function policyError(policy_error)
 	return warnings
 end
 
-m5 = Map("mwan3", translate("MWAN - Policies"),
+m = Map("mwan3", translate("MWAN - Policies"),
 	policyError(policyCheck()))
 
-mwan_policy = m5:section(TypedSection, "policy", nil,
+mwan_policy = m:section(TypedSection, "policy", nil,
 	translate("Policies are profiles grouping one or more members controlling how MWAN distributes traffic<br />" ..
 	"Member interfaces with lower metrics are used first<br />" ..
 	"Member interfaces with the same metric will be load-balanced<br />" ..
@@ -53,7 +54,7 @@ mwan_policy.template = "cbi/tblsection"
 mwan_policy.extedit = dsp.build_url("admin", "network", "mwan", "policy", "%s")
 function mwan_policy.create(self, section)
 	TypedSection.create(self, section)
-	m5.uci:save("mwan3")
+	m.uci:save("mwan3")
 	luci.http.redirect(dsp.build_url("admin", "network", "mwan", "policy", section))
 end
 
@@ -84,4 +85,4 @@ function last_resort.cfgvalue(self, s)
 	end
 end
 
-return m5
+return m
