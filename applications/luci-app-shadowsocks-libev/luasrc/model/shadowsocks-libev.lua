@@ -154,7 +154,7 @@ function cfgvalue_overview(sdata)
 	local value = {
 		[".name"] = sname,
 		name = '%s.<var>%s</var>' % {stype, sname},
-		overview = table.concat(lines, "</br>"),
+		overview = table.concat(lines, "<br />"),
 		disabled = ucival_to_bool(sdata["disabled"]),
 	}
 	return key, value
