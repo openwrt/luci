@@ -24,7 +24,7 @@ end
 
 function src_dst_option(s, ...)
 	local o = s:taboption(...)
-	o.datatype = "or(ip4addr,cidr4)"
+	o.datatype = "or(ipaddr,cidr)"
 end
 
 s = m:section(NamedSection, "ss_rules", "ss_rules")
