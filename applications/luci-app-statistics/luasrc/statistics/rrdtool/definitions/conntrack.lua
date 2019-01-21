@@ -4,6 +4,7 @@
 module("luci.statistics.rrdtool.definitions.conntrack",package.seeall)
 
 function rrdargs( graph, plugin, plugin_instance, dtype )
+
 	return {
 		title = "%H: Conntrack entries",
 		vlabel = "Count",

@@ -37,7 +37,6 @@ function rrdargs( graph, plugin, plugin_instance )
 		}
 	}
 
-
 	--
 	-- packet diagram
 	--
@@ -119,7 +118,6 @@ function rrdargs( graph, plugin, plugin_instance )
 		}
 	}
 
-
 	--
 	-- multicast diagram
 	--
@@ -144,7 +142,6 @@ function rrdargs( graph, plugin, plugin_instance )
 		}
 	}
 
-
 	--
 	-- collision diagram
 	--
@@ -168,7 +165,6 @@ function rrdargs( graph, plugin, plugin_instance )
 			}
 		}
 	}
-
 
 	--
 	-- error diagram
@@ -205,7 +201,6 @@ function rrdargs( graph, plugin, plugin_instance )
 			}
 		}
 	}
-
 
 	return { traffic, packets, multicast, collisions, errors }
 end

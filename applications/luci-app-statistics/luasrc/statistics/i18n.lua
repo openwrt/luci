@@ -3,15 +3,14 @@
 
 module("luci.statistics.i18n", package.seeall)
 
-require("luci.util")
-require("luci.i18n")
+local util = require("luci.util")
+local i18n = require("luci.i18n")
 
 
-Instance = luci.util.class()
-
+Instance = util.class()
 
 function Instance.__init__( self, graph )
-	self.i18n  = luci.i18n
+	self.i18n  = i18n
 	self.graph = graph
 end
 

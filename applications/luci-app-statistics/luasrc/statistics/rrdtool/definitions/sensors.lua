@@ -4,6 +4,7 @@
 module("luci.statistics.rrdtool.definitions.sensors", package.seeall)
 
 function rrdargs( graph, plugin, plugin_instance )
+
 	return {
 		{
 			per_instance = true,

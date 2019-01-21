@@ -9,18 +9,18 @@ function rrdargs( graph, plugin, plugin_instance, dtype )
 	if plugin_instance == "routes" then
 
 		g[#g+1] = {
-	                -- diagram data description
+			-- diagram data description
 			title = "%H: Total amount of OLSR routes", vlabel = "n",
 			number_format = "%5.0lf", data = {
-                        	types = { "routes" },
+				types = { "routes" },
 				options = {
 					routes = {
 						color = "ff0000",
 						title = "Total number of routes"
 					}
 				}
-	                }
-        	}
+			}
+		}
 
 		g[#g+1] = {
 			title = "%H: Average route ETX", vlabel = "ETX", detail = true,
@@ -80,7 +80,7 @@ function rrdargs( graph, plugin, plugin_instance, dtype )
 				number_format = "%5.2lf", detail = true,
 				data = {
 					types = { "signal_quality" },
-	
+
 					instances = {
 						signal_quality = { instances[i], instances[i+1] },
 					},
@@ -106,7 +106,7 @@ function rrdargs( graph, plugin, plugin_instance, dtype )
 			title= "%H: Total amount of OLSR links", vlabel = "n",
 			number_format = "%5.0lf", data = {
 				instances = { "" },
-	                        types = { "links" },
+				types = { "links" },
 				options = {
 					links = {
 						color = "0000ff",
@@ -114,7 +114,7 @@ function rrdargs( graph, plugin, plugin_instance, dtype )
 					}
 				}
 			}
-	        }
+		}
 
 		g[#g+1] = {
 			title= "%H: Average signal quality", vlabel = "n",

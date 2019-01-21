@@ -3,10 +3,10 @@
 
 module("luci.statistics.rrdtool.colors", package.seeall)
 
-require("luci.util")
+local util = require("luci.util")
 
 
-Instance = luci.util.class()
+Instance = util.class()
 
 function Instance.from_string( self, s )
 	return {
