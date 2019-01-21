@@ -4,6 +4,7 @@
 module("luci.statistics.rrdtool.definitions.disk", package.seeall)
 
 function rrdargs( graph, plugin, plugin_instance, dtype )
+
 	return {
 		{
 			title = "%H: Disk I/O operations on %pi",

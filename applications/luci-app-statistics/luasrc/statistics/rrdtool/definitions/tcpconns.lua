@@ -4,6 +4,7 @@
 module("luci.statistics.rrdtool.definitions.tcpconns", package.seeall)
 
 function rrdargs( graph, plugin, plugin_instance, dtype )
+
 	return {
 		title = "%H: TCP connections to port %pi",
 		vlabel = "Connections/s",
