@@ -1,10 +1,7 @@
 -- Copyright 2015 Jo-Philipp Wich <jow@openwrt.org>
 -- Licensed to the public under the Apache License 2.0.
 
-require "luci.sys"
-
 local m, s, o
-
 
 m = Map("luci_statistics",
 	translate("OpenVPN Plugin Configuration"),
