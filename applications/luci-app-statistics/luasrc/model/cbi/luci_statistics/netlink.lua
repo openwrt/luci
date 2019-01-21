@@ -1,9 +1,9 @@
 -- Copyright 2008 Freifunk Leipzig / Jo-Philipp Wich <jow@openwrt.org>
 -- Licensed to the public under the Apache License 2.0.
 
-require("luci.sys")
+local sys = require("luci.sys")
 
-local devices = luci.sys.net.devices()
+local devices = sys.net.devices()
 
 
 m = Map("luci_statistics",

@@ -1,13 +1,12 @@
 -- Copyright 2008 Freifunk Leipzig / Jo-Philipp Wich <jow@openwrt.org>
 -- Licensed to the public under the Apache License 2.0.
 
-require("luci.sys.iptparser")
+local ip = require("luci.sys.iptparser").IptParser()
 
-ip = luci.sys.iptparser.IptParser()
-chains  = { }
-targets = { }
+local chains  = { }
+local targets = { }
 
-for i, rule in ipairs( ip:find() ) do 
+for i, rule in ipairs( ip:find() ) do
 	if rule.chain and rule.target then
 		chains[rule.chain] = true
 		targets[rule.target] = true
