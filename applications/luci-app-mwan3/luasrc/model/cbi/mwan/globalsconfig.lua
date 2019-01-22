@@ -3,7 +3,7 @@
 
 local net = require "luci.model.network".init()
 
-local s, m, mask, rtmon, rtlookup
+local s, m, mask, rtmon, rtlookup, logging, loglevel
 
 m = Map("mwan3", translate("MWAN - Globals"))
 
@@ -16,6 +16,27 @@ mask = s:option(
 	translate("Enter value in hex, starting with <code>0x</code>"))
 mask.datatype = "hex(4)"
 mask.default = "0xff00"
+
+logging = s:option(Flag,
+	"logging",
+	translate("Logging"),
+	translate("Enables global firewall logging"))
+
+loglevel = s:option(
+	ListValue,
+	"loglevel",
+	translate("Loglevel"),
+	translate("Firewall loglevel"))
+loglevel.default = "notice"
+loglevel:value("emerg", translate("Emergency"))
+loglevel:value("alert", translate("Alert"))
+loglevel:value("crit", translate("Critical"))
+loglevel:value("error", translate("Error"))
+loglevel:value("warning", translate("Warning"))
+loglevel:value("notice", translate("Notice"))
+loglevel:value("info", translate("Info"))
+loglevel:value("debug", translate("Debug"))
+loglevel:depends("logging", "1")
 
 rtmon = s:option(
 	Value,
