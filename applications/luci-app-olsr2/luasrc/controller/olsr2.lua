@@ -9,9 +9,25 @@ function index()
 	local uci = luci.model.uci.cursor_state()
 
 	local page  = node("admin", "status", "olsr2")
-	page.target = template("status-olsr2/overview")
+	page.target = alias("admin", "status", "olsr2", "overview")
 	page.title  = _("OLSR2")
 	page.subindex = true
+
+	local page  = node("admin", "status", "olsr2", "overview")
+	page.target = template("status-olsr2/overview")
+	page.title  = _("Overview")
+	page.subindex = true
+	page.order  = 1
+
+	local page  = node("admin", "status", "olsr2", "overview", "version")
+	page.target = call("action_version")
+	page.title = nil
+	page.leaf = true
+
+	local page  = node("admin", "status", "olsr2", "overview", "lan")
+	page.target = call("action_lan")
+	page.title = nil
+	page.leaf = true
 
 	local page  = node("admin", "status", "olsr2", "neighbors")
 	page.target = call("action_neigh")
@@ -19,12 +35,49 @@ function index()
 	page.subindex = true
 	page.order  = 5
 
+	local page  = node("admin", "status", "olsr2", "node")
+	page.target = call("action_node")
+	page.title  = _("Node")
+	page.subindex = true
+	page.order  = 6
+
 	if nixio.fs.access("/etc/config/freifunk","f") then
 		local page = assign({"freifunk", "olsr2"}, {"admin", "status", "olsr2"}, _("OLSR2"), 31)
 		page.setuser = false
 		page.setgroup = false
 	end
 
+end
+
+function action_version()
+	local utl = require "luci.util"
+	local http = require "luci.http"
+	local telnet_port = 2009
+	local req_json
+
+	req_json = utl.exec("(echo '/systeminfo json version /quit' | nc ::1 %d) 2>/dev/null" % telnet_port)
+	http.prepare_content("application/json")
+	http.write(req_json)
+end
+
+function action_lan()
+	local utl = require "luci.util"
+	local http = require "luci.http"
+	local telnet_port = 2009
+	local req_json
+
+	req_json = utl.exec("(echo '/olsrv2info json lan /quit' | nc ::1 %d) 2>/dev/null" % telnet_port)
+	http.prepare_content("application/json")
+	http.write(req_json)
+end
+
+function action_node()
+	local json = require "luci.json"
+	local utl = require "luci.util"
+	local telnet_port = 2009
+	local req_json
+	req_json = json.decode(utl.exec("(echo '/olsrv2info json node /quit' | nc ::1 %d) 2>/dev/null" % telnet_port))
+	luci.template.render("status-olsr2/node", {nodes=req_json})
 end
 
 function action_neigh()
@@ -36,7 +89,7 @@ function action_neigh()
 	local devices  = ntm:get_wifidevs()
 	local assoclist = {}
 	local data = {}
-	local req_neighbors
+	local req_json
 	local telnet_port = 2009
 	local resolve = 1
 
@@ -52,9 +105,9 @@ function action_neigh()
 	end
 
 
-	req_neighbors = json.decode(utl.exec("(echo '/nhdpinfo json neighbor /quit' | nc ::1 %d) 2>/dev/null" % telnet_port))
+	req_json = json.decode(utl.exec("(echo '/nhdpinfo json neighbor /quit' | nc ::1 %d) 2>/dev/null" % telnet_port))
 
-	for _, neighbors in pairs(req_neighbors) do
+	for _, neighbors in pairs(req_json) do
 		for nidx, neighbor in pairs(neighbors) do
 			if not neighbor then
 				return
