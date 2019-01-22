@@ -27,7 +27,7 @@ s = m:section( SimpleSection,
 -- ddns-scripts needs to be updated for full functionality
 if not CTRL.service_ok() then
 	local so = s:option(DummyValue, "_update_needed")
-	so.titleref = DISP.build_url("admin", "system", "packages")
+	so.titleref = DISP.build_url("admin", "system", "opkg")
 	so.rawhtml  = true
 	so.title = font_red .. bold_on ..
 		translate("Software update required") .. bold_off .. font_off
@@ -62,7 +62,7 @@ end
 -- No HTTPS support
 if not DDNS.env_info("has_ssl") then
 	local sl = s:option(DummyValue, "_no_https")
-	sl.titleref = DISP.build_url("admin", "system", "packages")
+	sl.titleref = DISP.build_url("admin", "system", "opkg")
 	sl.rawhtml  = true
 	sl.title = bold_on ..
 		translate("HTTPS not supported") .. bold_off
@@ -76,7 +76,7 @@ end
 -- No bind_network
 if not DDNS.env_info("has_bindnet") then
 	local bn = s:option(DummyValue, "_no_bind_network")
-	bn.titleref = DISP.build_url("admin", "system", "packages")
+	bn.titleref = DISP.build_url("admin", "system", "opkg")
 	bn.rawhtml  = true
 	bn.title = bold_on ..
 		translate("Binding to a specific network not supported") .. bold_off
@@ -92,7 +92,7 @@ end
 -- currently only cURL possibly without proxy support
 if not DDNS.env_info("has_proxy") then
 	local px = s:option(DummyValue, "_no_proxy")
-	px.titleref = DISP.build_url("admin", "system", "packages")
+	px.titleref = DISP.build_url("admin", "system", "opkg")
 	px.rawhtml  = true
 	px.title = bold_on ..
 		translate("cURL without Proxy Support") .. bold_off
@@ -106,7 +106,7 @@ end
 -- "Force IP Version not supported"
 if not DDNS.env_info("has_forceip") then
 	local fi = s:option(DummyValue, "_no_force_ip")
-	fi.titleref = DISP.build_url("admin", "system", "packages")
+	fi.titleref = DISP.build_url("admin", "system", "opkg")
 	fi.rawhtml  = true
 	fi.title = bold_on ..
 		translate("Force IP Version not supported") .. bold_off
@@ -126,7 +126,7 @@ end
 -- "DNS requests via TCP not supported"
 if not DDNS.env_info("has_bindhost") then
 	local dt = s:option(DummyValue, "_no_dnstcp")
-	dt.titleref = DISP.build_url("admin", "system", "packages")
+	dt.titleref = DISP.build_url("admin", "system", "opkg")
 	dt.rawhtml  = true
 	dt.title = bold_on ..
 		translate("DNS requests via TCP not supported") .. bold_off
@@ -139,7 +139,7 @@ end
 -- nslookup compiled with musl produce problems when using
 if not DDNS.env_info("has_dnsserver") then
 	local ds = s:option(DummyValue, "_no_dnsserver")
-	ds.titleref = DISP.build_url("admin", "system", "packages")
+	ds.titleref = DISP.build_url("admin", "system", "opkg")
 	ds.rawhtml  = true
 	ds.title = bold_on ..
 		translate("Using specific DNS Server not supported") .. bold_off
@@ -153,7 +153,7 @@ end
 -- certificates installed
 if DDNS.env_info("has_ssl") and not DDNS.env_info("has_cacerts") then
 	local ca = s:option(DummyValue, "_no_certs")
-	ca.titleref = DISP.build_url("admin", "system", "packages")
+	ca.titleref = DISP.build_url("admin", "system", "opkg")
 	ca.rawhtml  = true
 	ca.title = bold_on ..
 		translate("No certificates found") .. bold_off
