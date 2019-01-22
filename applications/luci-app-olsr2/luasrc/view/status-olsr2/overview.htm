@@ -1,0 +1,32 @@
+<%+header%>
+
+<div id="error" class="error"></div>
+
+<h2 name="content">OLSR2 <%:Overview%></h2>
+
+<fieldset class="cbi-section">
+	<legend><%:Network%></legend>
+	<div class="table" width="100%" cellspacing="10">
+		<div class="tr"><div class="td" width="33%"><%:Neighbors%></div>
+			<div class="td">
+				<a href="<%=REQUEST_URI%>/neighbors">
+					<span id="nr_neigh">-</span>
+				</a>
+			</div>
+		</div>
+	</div>
+</fieldset>
+
+
+<fieldset class="cbi-section">
+	<legend>OLSR2 <%:Configuration%></legend>
+	<div class="table" width="100%" cellspacing="10">
+		<div class="tr"><div class="td" width="33%"><%:Version%></div>
+			<div class="td">
+				<span id="version">-<span>
+			</div>
+		</div>
+	</div>
+</fieldset>
+
+<%+footer%>
