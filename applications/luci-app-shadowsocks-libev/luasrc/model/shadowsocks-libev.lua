@@ -96,7 +96,7 @@ function options_server(s, tab)
 	for _, m in ipairs(methods) do
 		o:value(m)
 	end
-	o = optfunc(Value, "key", translate("Key (base64 encoding)"))
+	o = optfunc(Value, "key", translate("Key (base64)"))
 	o.datatype = "base64"
 	o.password = true
 	o.size = 12
