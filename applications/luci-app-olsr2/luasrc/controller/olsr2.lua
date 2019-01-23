@@ -41,6 +41,12 @@ function index()
 	page.subindex = true
 	page.order  = 6
 
+	local page  = node("admin", "status", "olsr2", "anet")
+	page.target = call("action_anet")
+	page.title  = _("AttachedNetwork")
+	page.subindex = true
+	page.order  = 7
+
 	if nixio.fs.access("/etc/config/freifunk","f") then
 		local page = assign({"freifunk", "olsr2"}, {"admin", "status", "olsr2"}, _("OLSR2"), 31)
 		page.setuser = false
@@ -72,12 +78,17 @@ function action_lan()
 end
 
 function action_node()
-	local json = require "luci.json"
+	local http = require "luci.http"
 	local utl = require "luci.util"
 	local telnet_port = 2009
 	local req_json
-	req_json = json.decode(utl.exec("(echo '/olsrv2info json node /quit' | nc ::1 %d) 2>/dev/null" % telnet_port))
-	luci.template.render("status-olsr2/node", {nodes=req_json})
+	if luci.http.formvalue("status") == "1" then
+		req_json = utl.exec("(echo '/olsrv2info json node /quit' | nc ::1 %d) 2>/dev/null" % telnet_port)
+		http.prepare_content("application/json")
+		http.write(req_json)
+	else
+		luci.template.render("status-olsr2/node")
+	end
 end
 
 function action_neigh()
@@ -146,5 +157,19 @@ function action_neigh()
 		data = neighbors
 	end
 
-luci.template.render("status-olsr2/neighbors", {links=data})
+	luci.template.render("status-olsr2/neighbors", {links=data})
+end
+
+function action_anet()
+	local http = require "luci.http"
+	local utl = require "luci.util"
+	local telnet_port = 2009
+	local req_json
+	if luci.http.formvalue("status") == "1" then
+		req_json = utl.exec("(echo '/olsrv2info json attached_network /quit' | nc ::1 %d) 2>/dev/null" % telnet_port)
+		http.prepare_content("application/json")
+		http.write(req_json)
+	else
+		luci.template.render("status-olsr2/anet")
+	end
 end

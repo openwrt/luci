@@ -1,12 +1,3 @@
-<%
-local olsrtools = require "luci.tools.olsr2"
-if luci.http.formvalue("status") == "1" then
-	luci.http.prepare_content("application/json")
-	luci.http.write_json(nodes)
-	return
-end
-%>
-
 <%+header%>
 
 <script type="text/javascript">//<![CDATA[
@@ -47,15 +38,6 @@ end
 		<div class="tr cbi-section-table-cell">
 			<div class="th cbi-section-table-cell"><%:Node IP%></div>
 		</div>
-		<% 	local i = 1
-			for k, val in ipairs(nodes["node"]) do
-		%>
-		<div class="tr cbi-section-table-row cbi-rowstyle-<%=i%> proto-6">
-			<div class="td cbi-section-table-cell left"><a href="https://[<%=val.node%>]/cgi-bin-olsr2-neigh.html"><%=val.node%></a></div>
-		</div>
-		<% 
-			i = ((i % 2) + 1)
-		end %>
 	</div>
 <br />
 
