@@ -22,8 +22,8 @@ include $(INCLUDE_DIR)/cmake.mk
 define Package/liblucihttp
   SECTION:=libs
   CATEGORY:=Libraries
-  ABI_VERSION:=$(PKG_VERSION)
   TITLE:=LuCI HTTP utility library
+  ABI_VERSION:=0
 endef
 
 define Package/liblucihttp-lua
@@ -40,9 +40,16 @@ CMAKE_OPTIONS = \
 	-DBUILD_LUA=$(if $(CONFIG_PACKAGE_liblucihttp-lua),ON,OFF) \
 	-DBUILD_TESTS=OFF
 
+define Build/InstallDev
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(INSTALL_DIR) $(1)/usr/include
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/liblucihttp.so* $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/* $(1)/usr/include/
+endef
+
 define Package/liblucihttp/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/liblucihttp.so $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/liblucihttp.so.* $(1)/usr/lib/
 endef
 
 define Package/liblucihttp-lua/install
