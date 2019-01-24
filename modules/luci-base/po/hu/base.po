@@ -55,16 +55,16 @@ msgstr "(nincs csatalkoztatott interfész)"
 msgid "-- Additional Field --"
 msgstr "-- További mező --"
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:841
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:850
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:840
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:849
 #: modules/luci-base/luasrc/view/cbi/header.htm:5
 #: protocols/luci-proto-3g/luasrc/model/cbi/admin_network/proto_3g.lua:26
 #: protocols/luci-proto-qmi/luasrc/model/cbi/admin_network/proto_qmi.lua:36
 msgid "-- Please choose --"
 msgstr "-- Kérem válasszon --"
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:866
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:1030
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:865
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:1025
 #: modules/luci-base/luasrc/view/cbi/header.htm:6
 msgid "-- custom --"
 msgstr "-- egyéni --"
@@ -400,6 +400,10 @@ msgstr "Helyi közvetítő híd elérési címe"
 msgid "Administration"
 msgstr "Adminisztráció"
 
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:25
+msgid "Advanced"
+msgstr ""
+
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/dhcp.lua:22
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/ifaces.lua:189
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/ifaces.lua:463
@@ -415,7 +419,7 @@ msgstr "Haladó beállítások"
 msgid "Aggregate Transmit Power(ACTATP)"
 msgstr ""
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:99
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:100
 msgid "Alert"
 msgstr "Riasztás"
 
@@ -679,8 +683,8 @@ msgstr "Hitelesítés szükséges"
 #: themes/luci-theme-material/luasrc/view/themes/material/header.htm:214
 #: themes/luci-theme-material/luasrc/view/themes/material/header.htm:215
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:223
-#: themes/luci-theme-rosy/luasrc/view/themes/rosy/header.htm:246
-#: themes/luci-theme-rosy/luasrc/view/themes/rosy/header.htm:249
+#: themes/luci-theme-rosy/luasrc/view/themes/rosy/header.htm:247
+#: themes/luci-theme-rosy/luasrc/view/themes/rosy/header.htm:250
 msgid "Auto Refresh"
 msgstr "Automatikus frissítés"
 
@@ -1167,11 +1171,11 @@ msgstr "Új interfész"
 msgid "Create a bridge over multiple interfaces"
 msgstr "Híd létrehozása több interfész között"
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:98
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:99
 msgid "Critical"
 msgstr "Kritikus"
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:102
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:103
 msgid "Cron Log Level"
 msgstr "Cron naplózási szint"
 
@@ -1308,8 +1312,8 @@ msgstr "DUID"
 msgid "Data Rate"
 msgstr ""
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:93
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:104
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:94
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:105
 msgid "Debug"
 msgstr "Hibakeresés"
 
@@ -1628,7 +1632,7 @@ msgstr "Interfész szerkesztése"
 msgid "Edit this network"
 msgstr "Hálózat szerkesztése"
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:100
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:101
 msgid "Emergency"
 msgstr "Vészhelyzet"
 
@@ -1667,7 +1671,7 @@ msgstr "IPv6 egyeztetés engedélyezése a PPP linken"
 msgid "Enable Jumbo Frame passthrough"
 msgstr "Óriás keretek átengedésének engedélyezése"
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:215
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:238
 msgid "Enable NTP client"
 msgstr "NTP-kliens engedélyezése"
 
@@ -1781,7 +1785,7 @@ msgstr "Törlés..."
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/network.js:107
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/network.js:108
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/network.js:109
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:97
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:98
 msgid "Error"
 msgstr "Hiba"
 
@@ -1831,15 +1835,15 @@ msgstr ""
 msgid "External R1 Key Holder List"
 msgstr ""
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:74
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:75
 msgid "External system log server"
 msgstr "Külső rendszernapló kiszolgáló"
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:79
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:80
 msgid "External system log server port"
 msgstr "Külső rendszernapló kiszolgáló port"
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:84
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:85
 msgid "External system log server protocol"
 msgstr ""
 
@@ -2109,7 +2113,7 @@ msgstr ""
 #: themes/luci-theme-bootstrap/luasrc/view/themes/bootstrap/header.htm:198
 #: themes/luci-theme-material/luasrc/view/themes/material/header.htm:235
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:262
-#: themes/luci-theme-rosy/luasrc/view/themes/rosy/header.htm:288
+#: themes/luci-theme-rosy/luasrc/view/themes/rosy/header.htm:289
 msgid "Go to password configuration..."
 msgstr "Ugrás a jelszó beállításhoz..."
 
@@ -2194,7 +2198,7 @@ msgstr ""
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/dhcp.lua:283
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/hosts.lua:15
 #: modules/luci-mod-status/luasrc/view/admin_status/index/10-system.htm:17
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:35
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:36
 #: themes/luci-theme-freifunk-generic/luasrc/view/themes/freifunk-generic/header.htm:129
 msgid "Hostname"
 msgstr "Gépnév"
@@ -2530,7 +2534,7 @@ msgstr "Inaktivitási időtúllépés"
 msgid "Inbound:"
 msgstr "Bejövő"
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:94
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:95
 msgid "Info"
 msgstr "Információk"
 
@@ -2644,7 +2648,7 @@ msgstr ""
 #: themes/luci-theme-freifunk-generic/luasrc/view/themes/freifunk-generic/header.htm:220
 #: themes/luci-theme-material/luasrc/view/themes/material/header.htm:242
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:252
-#: themes/luci-theme-rosy/luasrc/view/themes/rosy/header.htm:295
+#: themes/luci-theme-rosy/luasrc/view/themes/rosy/header.htm:296
 msgid "JavaScript required!"
 msgstr "JavaScript szükséges!"
 
@@ -2724,7 +2728,7 @@ msgstr "LLC"
 msgid "Label"
 msgstr "Címke"
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:136
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:137
 msgid "Language"
 msgstr "Nyelv"
 
@@ -2909,7 +2913,7 @@ msgid "Local Startup"
 msgstr "Helyi indítóscript"
 
 #: modules/luci-mod-status/luasrc/view/admin_status/index/10-system.htm:25
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:31
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:32
 msgid "Local Time"
 msgstr "Helyi idő"
 
@@ -2953,7 +2957,7 @@ msgstr "Lekérdezések lokalizációja"
 msgid "Locked to channel %s used by: %s"
 msgstr ""
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:92
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:93
 msgid "Log output level"
 msgstr "Napló kimeneti szintje"
 
@@ -3254,7 +3258,7 @@ msgstr ""
 msgid "NT Domain"
 msgstr ""
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:238
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:261
 msgid "NTP server candidates"
 msgstr "Kijelölt NTP kiszolgálók"
 
@@ -3357,7 +3361,7 @@ msgstr "Nincs megadva hálózatnév"
 #: themes/luci-theme-freifunk-generic/luasrc/view/themes/freifunk-generic/header.htm:103
 #: themes/luci-theme-material/luasrc/view/themes/material/header.htm:232
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:259
-#: themes/luci-theme-rosy/luasrc/view/themes/rosy/header.htm:283
+#: themes/luci-theme-rosy/luasrc/view/themes/rosy/header.htm:284
 msgid "No password set!"
 msgstr "Nincs jelszó!"
 
@@ -3406,7 +3410,7 @@ msgstr ""
 msgid "None"
 msgstr "Nincs"
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:105
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:106
 msgid "Normal"
 msgstr "Normál"
 
@@ -3428,7 +3432,7 @@ msgstr "Nincs kapcsolódva"
 msgid "Note: interface name length"
 msgstr ""
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:95
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:96
 msgid "Notice"
 msgstr "Megjegyzés"
 
@@ -3440,7 +3444,7 @@ msgstr "Nslookup"
 msgid "Number of cached DNS entries (max is 10000, 0 is no caching)"
 msgstr ""
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:125
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:126
 msgid "Number of parallel threads used for compression"
 msgstr ""
 
@@ -3870,6 +3874,14 @@ msgstr "Adja meg a felhasználónevét és a jelszavát."
 msgid "Policy"
 msgstr "Szabály"
 
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:178
+msgid "Polling interval"
+msgstr ""
+
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:179
+msgid "Polling interval for status queries in seconds"
+msgstr ""
+
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/dropbear.lua:22
 msgid "Port"
 msgstr "Port"
@@ -3961,7 +3973,7 @@ msgstr "Az új interfész protokollja"
 msgid "Protocol support is not installed"
 msgstr "Protokoll támogatás nincs telepítve"
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:234
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:257
 msgid "Provide NTP server"
 msgstr "NTP kiszolgáló"
 
@@ -4510,7 +4522,7 @@ msgid ""
 "sense events do not invoke hotplug handlers)."
 msgstr ""
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:206
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:229
 #, fuzzy
 msgid "Set up Time Synchronization"
 msgstr "Idő szinkronizálás beállítása"
@@ -4578,7 +4590,7 @@ msgstr "Méret"
 msgid "Size of DNS query cache"
 msgstr ""
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:113
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:114
 msgid "Size of the ZRam device in megabytes"
 msgstr ""
 
@@ -4833,7 +4845,7 @@ msgstr "Rendszernapló"
 msgid "System Properties"
 msgstr "Rendszer tulajdonságok"
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:69
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:70
 msgid "System log buffer size"
 msgstr "Rendszer napló puffer méret"
 
@@ -5084,7 +5096,7 @@ msgstr ""
 "A feltöltött image fájl formátuma nem támogatott. Ügyeljen arra, hogy a "
 "platformjának megfelelő általános image formátumot válassza ki."
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:156
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:157
 msgid "Theme"
 msgstr "Megjelenés"
 
@@ -5117,7 +5129,7 @@ msgstr ""
 #: themes/luci-theme-freifunk-generic/luasrc/view/themes/freifunk-generic/header.htm:104
 #: themes/luci-theme-material/luasrc/view/themes/material/header.htm:233
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:260
-#: themes/luci-theme-rosy/luasrc/view/themes/rosy/header.htm:286
+#: themes/luci-theme-rosy/luasrc/view/themes/rosy/header.htm:287
 msgid ""
 "There is no password set on this router. Please configure a root password to "
 "protect the web interface and enable SSH."
@@ -5215,12 +5227,12 @@ msgstr ""
 msgid "This section contains no values yet"
 msgstr "Ez a szakasz még nem tartalmaz értékeket"
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:200
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:211
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:223
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:234
 msgid "Time Synchronization"
 msgstr "Idő szinkronizálás"
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:205
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:228
 msgid "Time Synchronization is not configured yet."
 msgstr "Idő szinkronizálás még nincs beállítva."
 
@@ -5228,7 +5240,7 @@ msgstr "Idő szinkronizálás még nincs beállítva."
 msgid "Time interval for rekeying GTK"
 msgstr ""
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:44
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:45
 msgid "Timezone"
 msgstr "Időzóna"
 
@@ -5714,8 +5726,8 @@ msgstr ""
 msgid "Waiting for device..."
 msgstr ""
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:96
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:106
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:97
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:107
 msgid "Warning"
 msgstr "Figyelmeztetés"
 
@@ -5810,7 +5822,7 @@ msgstr "Vezetéknélküli hálózat engedélyezve"
 msgid "Write received DNS requests to syslog"
 msgstr "A kapott DNS kéréseket írja a rendszernaplóba"
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:88
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:89
 msgid "Write system log to file"
 msgstr ""
 
@@ -5833,7 +5845,7 @@ msgstr ""
 #: themes/luci-theme-freifunk-generic/luasrc/view/themes/freifunk-generic/header.htm:221
 #: themes/luci-theme-material/luasrc/view/themes/material/header.htm:243
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:253
-#: themes/luci-theme-rosy/luasrc/view/themes/rosy/header.htm:298
+#: themes/luci-theme-rosy/luasrc/view/themes/rosy/header.htm:299
 msgid ""
 "You must enable JavaScript in your browser or LuCI will not work properly."
 msgstr ""
@@ -5847,19 +5859,19 @@ msgid ""
 "or Safari."
 msgstr ""
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:118
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:119
 msgid "ZRam Compression Algorithm"
 msgstr ""
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:125
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:126
 msgid "ZRam Compression Streams"
 msgstr ""
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:25
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:26
 msgid "ZRam Settings"
 msgstr ""
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:113
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:114
 msgid "ZRam Size"
 msgstr ""
 
@@ -6065,7 +6077,7 @@ msgstr ""
 #: themes/luci-theme-freifunk-generic/luasrc/view/themes/freifunk-generic/header.htm:133
 #: themes/luci-theme-material/luasrc/view/themes/material/header.htm:215
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:225
-#: themes/luci-theme-rosy/luasrc/view/themes/rosy/header.htm:250
+#: themes/luci-theme-rosy/luasrc/view/themes/rosy/header.htm:251
 msgid "off"
 msgstr "ki"
 
@@ -6073,7 +6085,7 @@ msgstr "ki"
 #: themes/luci-theme-freifunk-generic/luasrc/view/themes/freifunk-generic/header.htm:132
 #: themes/luci-theme-material/luasrc/view/themes/material/header.htm:214
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:224
-#: themes/luci-theme-rosy/luasrc/view/themes/rosy/header.htm:247
+#: themes/luci-theme-rosy/luasrc/view/themes/rosy/header.htm:248
 msgid "on"
 msgstr "be"
 

@@ -57,16 +57,16 @@ msgstr "(インターフェースが接続されていません)"
 msgid "-- Additional Field --"
 msgstr "-- 追加項目 --"
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:841
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:850
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:840
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:849
 #: modules/luci-base/luasrc/view/cbi/header.htm:5
 #: protocols/luci-proto-3g/luasrc/model/cbi/admin_network/proto_3g.lua:26
 #: protocols/luci-proto-qmi/luasrc/model/cbi/admin_network/proto_qmi.lua:36
 msgid "-- Please choose --"
 msgstr "-- 選択してください --"
 
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:866
-#: modules/luci-base/htdocs/luci-static/resources/cbi.js:1030
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:865
+#: modules/luci-base/htdocs/luci-static/resources/cbi.js:1025
 #: modules/luci-base/luasrc/view/cbi/header.htm:6
 msgid "-- custom --"
 msgstr "-- 手動設定 --"
@@ -403,6 +403,10 @@ msgstr "ローカル リレーブリッジにアクセスするためのIPアド
 msgid "Administration"
 msgstr "管理画面"
 
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:25
+msgid "Advanced"
+msgstr ""
+
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/dhcp.lua:22
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/ifaces.lua:189
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/ifaces.lua:463
@@ -418,7 +422,7 @@ msgstr "詳細設定"
 msgid "Aggregate Transmit Power(ACTATP)"
 msgstr ""
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:99
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:100
 msgid "Alert"
 msgstr "警告"
 
@@ -682,8 +686,8 @@ msgstr "ログイン認証"
 #: themes/luci-theme-material/luasrc/view/themes/material/header.htm:214
 #: themes/luci-theme-material/luasrc/view/themes/material/header.htm:215
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:223
-#: themes/luci-theme-rosy/luasrc/view/themes/rosy/header.htm:246
-#: themes/luci-theme-rosy/luasrc/view/themes/rosy/header.htm:249
+#: themes/luci-theme-rosy/luasrc/view/themes/rosy/header.htm:247
+#: themes/luci-theme-rosy/luasrc/view/themes/rosy/header.htm:250
 msgid "Auto Refresh"
 msgstr "自動更新"
 
@@ -1181,11 +1185,11 @@ msgstr "インターフェースの作成"
 msgid "Create a bridge over multiple interfaces"
 msgstr "複数のインタフェースを指定してブリッジを作成します"
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:98
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:99
 msgid "Critical"
 msgstr "重大"
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:102
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:103
 msgid "Cron Log Level"
 msgstr "Cronのログ出力レベル"
 
@@ -1324,8 +1328,8 @@ msgstr "DUID"
 msgid "Data Rate"
 msgstr ""
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:93
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:104
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:94
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:105
 msgid "Debug"
 msgstr "デバッグ"
 
@@ -1643,7 +1647,7 @@ msgstr "インターフェースを編集します"
 msgid "Edit this network"
 msgstr "ネットワークを編集"
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:100
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:101
 msgid "Emergency"
 msgstr "緊急"
 
@@ -1684,7 +1688,7 @@ msgstr "PPPリンクのIPv6 ネゴシエーションを有効にする"
 msgid "Enable Jumbo Frame passthrough"
 msgstr "ジャンボフレーム パススルーを有効にする"
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:215
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:238
 msgid "Enable NTP client"
 msgstr "NTPクライアント機能を有効にする"
 
@@ -1800,7 +1804,7 @@ msgstr "消去中..."
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/network.js:107
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/network.js:108
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/network.js:109
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:97
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:98
 msgid "Error"
 msgstr "エラー"
 
@@ -1851,15 +1855,15 @@ msgstr ""
 msgid "External R1 Key Holder List"
 msgstr ""
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:74
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:75
 msgid "External system log server"
 msgstr "外部システムログ サーバー"
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:79
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:80
 msgid "External system log server port"
 msgstr "外部システムログ・サーバー ポート"
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:84
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:85
 msgid "External system log server protocol"
 msgstr "外部システムログ・サーバー プロトコル"
 
@@ -2132,7 +2136,7 @@ msgstr "グローバル ネットワークオプション"
 #: themes/luci-theme-bootstrap/luasrc/view/themes/bootstrap/header.htm:198
 #: themes/luci-theme-material/luasrc/view/themes/material/header.htm:235
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:262
-#: themes/luci-theme-rosy/luasrc/view/themes/rosy/header.htm:288
+#: themes/luci-theme-rosy/luasrc/view/themes/rosy/header.htm:289
 msgid "Go to password configuration..."
 msgstr "パスワード設定へ移動..."
 
@@ -2217,7 +2221,7 @@ msgstr ""
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/dhcp.lua:283
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/hosts.lua:15
 #: modules/luci-mod-status/luasrc/view/admin_status/index/10-system.htm:17
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:35
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:36
 #: themes/luci-theme-freifunk-generic/luasrc/view/themes/freifunk-generic/header.htm:129
 msgid "Hostname"
 msgstr "ホスト名"
@@ -2554,7 +2558,7 @@ msgstr "未使用時タイムアウト"
 msgid "Inbound:"
 msgstr "受信:"
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:94
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:95
 msgid "Info"
 msgstr "情報"
 
@@ -2667,7 +2671,7 @@ msgstr ""
 #: themes/luci-theme-freifunk-generic/luasrc/view/themes/freifunk-generic/header.htm:220
 #: themes/luci-theme-material/luasrc/view/themes/material/header.htm:242
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:252
-#: themes/luci-theme-rosy/luasrc/view/themes/rosy/header.htm:295
+#: themes/luci-theme-rosy/luasrc/view/themes/rosy/header.htm:296
 msgid "JavaScript required!"
 msgstr "JavaScriptを有効にしてください!"
 
@@ -2747,7 +2751,7 @@ msgstr "LLC"
 msgid "Label"
 msgstr "ラベル"
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:136
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:137
 msgid "Language"
 msgstr "言語"
 
@@ -2934,7 +2938,7 @@ msgid "Local Startup"
 msgstr "ローカル スタートアップ"
 
 #: modules/luci-mod-status/luasrc/view/admin_status/index/10-system.htm:25
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:31
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:32
 msgid "Local Time"
 msgstr "時刻"
 
@@ -2976,7 +2980,7 @@ msgstr "ローカライズクエリ"
 msgid "Locked to channel %s used by: %s"
 msgstr "チャネル %s にロックされています。次で使用されています: %s"
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:92
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:93
 msgid "Log output level"
 msgstr "ログ出力レベル"
 
@@ -3281,7 +3285,7 @@ msgstr "NDP-プロキシ"
 msgid "NT Domain"
 msgstr "NT ドメイン"
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:238
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:261
 msgid "NTP server candidates"
 msgstr "NTPサーバー候補"
 
@@ -3384,7 +3388,7 @@ msgstr "ネットワーク名が設定されていません"
 #: themes/luci-theme-freifunk-generic/luasrc/view/themes/freifunk-generic/header.htm:103
 #: themes/luci-theme-material/luasrc/view/themes/material/header.htm:232
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:259
-#: themes/luci-theme-rosy/luasrc/view/themes/rosy/header.htm:283
+#: themes/luci-theme-rosy/luasrc/view/themes/rosy/header.htm:284
 msgid "No password set!"
 msgstr "パスワードが設定されていません!"
 
@@ -3433,7 +3437,7 @@ msgstr "非ワイルドカード"
 msgid "None"
 msgstr "なし"
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:105
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:106
 msgid "Normal"
 msgstr "標準"
 
@@ -3455,7 +3459,7 @@ msgstr "未接続"
 msgid "Note: interface name length"
 msgstr "注意: インターフェース名の長さ"
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:95
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:96
 msgid "Notice"
 msgstr "注意"
 
@@ -3469,7 +3473,7 @@ msgstr ""
 "キャッシュされる DNS エントリーの数です。（最大 10000 件。 0の場合はキャッ"
 "シュしません）"
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:125
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:126
 msgid "Number of parallel threads used for compression"
 msgstr "圧縮に使用される、並列スレッド数です。"
 
@@ -3904,6 +3908,14 @@ msgstr "ユーザー名とパスワードを入力してください。"
 msgid "Policy"
 msgstr "ポリシー"
 
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:178
+msgid "Polling interval"
+msgstr ""
+
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:179
+msgid "Polling interval for status queries in seconds"
+msgstr ""
+
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/dropbear.lua:22
 msgid "Port"
 msgstr "ポート"
@@ -3995,7 +4007,7 @@ msgstr "新しいインターフェースのプロトコル"
 msgid "Protocol support is not installed"
 msgstr "プロトコル サポートがインストールされていません"
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:234
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:257
 msgid "Provide NTP server"
 msgstr "NTPサーバー機能を有効にする"
 
@@ -4558,7 +4570,7 @@ msgid ""
 "sense events do not invoke hotplug handlers)."
 msgstr ""
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:206
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:229
 msgid "Set up Time Synchronization"
 msgstr "時刻同期設定"
 
@@ -4625,7 +4637,7 @@ msgstr "サイズ"
 msgid "Size of DNS query cache"
 msgstr "DNS クエリ キャッシュのサイズ"
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:113
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:114
 msgid "Size of the ZRam device in megabytes"
 msgstr "ZRam デバイスのサイズ (MB) です。"
 
@@ -4878,7 +4890,7 @@ msgstr "システムログ"
 msgid "System Properties"
 msgstr "システム プロパティ"
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:69
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:70
 msgid "System log buffer size"
 msgstr "システムログ バッファサイズ"
 
@@ -5132,7 +5144,7 @@ msgstr ""
 "マットではありません。このプラットフォームに適合したイメージファイルかどう"
 "か、確認してください。"
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:156
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:157
 msgid "Theme"
 msgstr "テーマ"
 
@@ -5165,7 +5177,7 @@ msgstr ""
 #: themes/luci-theme-freifunk-generic/luasrc/view/themes/freifunk-generic/header.htm:104
 #: themes/luci-theme-material/luasrc/view/themes/material/header.htm:233
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:260
-#: themes/luci-theme-rosy/luasrc/view/themes/rosy/header.htm:286
+#: themes/luci-theme-rosy/luasrc/view/themes/rosy/header.htm:287
 msgid ""
 "There is no password set on this router. Please configure a root password to "
 "protect the web interface and enable SSH."
@@ -5264,12 +5276,12 @@ msgstr "このページでは、現在アクティブなネットワーク接続
 msgid "This section contains no values yet"
 msgstr "このセクションは未設定です。"
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:200
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:211
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:223
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:234
 msgid "Time Synchronization"
 msgstr "時刻設定"
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:205
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:228
 msgid "Time Synchronization is not configured yet."
 msgstr "時刻同期機能はまだ設定されていません。"
 
@@ -5277,7 +5289,7 @@ msgstr "時刻同期機能はまだ設定されていません。"
 msgid "Time interval for rekeying GTK"
 msgstr "Group Temporal Key (GTK) 再生成間隔"
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:44
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:45
 msgid "Timezone"
 msgstr "タイムゾーン"
 
@@ -5764,8 +5776,8 @@ msgstr "設定を適用中です... %d 秒"
 msgid "Waiting for device..."
 msgstr "デバイスを起動中です..."
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:96
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:106
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:97
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:107
 msgid "Warning"
 msgstr "警告"
 
@@ -5860,7 +5872,7 @@ msgstr "無線LAN機能は有効になっています"
 msgid "Write received DNS requests to syslog"
 msgstr "受信したDNSリクエストをsyslogへ記録します"
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:88
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:89
 msgid "Write system log to file"
 msgstr "システムログをファイルに書き込む"
 
@@ -5883,7 +5895,7 @@ msgstr ""
 #: themes/luci-theme-freifunk-generic/luasrc/view/themes/freifunk-generic/header.htm:221
 #: themes/luci-theme-material/luasrc/view/themes/material/header.htm:243
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:253
-#: themes/luci-theme-rosy/luasrc/view/themes/rosy/header.htm:298
+#: themes/luci-theme-rosy/luasrc/view/themes/rosy/header.htm:299
 msgid ""
 "You must enable JavaScript in your browser or LuCI will not work properly."
 msgstr "JavaScriptを有効にしない場合、LuCIは正しく動作しません。"
@@ -5898,19 +5910,19 @@ msgstr ""
 "バージョン 7以上にアップグレードするか、FirefoxやOpera、Safariなど別のブラウ"
 "ザーを使用してください。"
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:118
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:119
 msgid "ZRam Compression Algorithm"
 msgstr "ZRam 圧縮アルゴリズム"
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:125
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:126
 msgid "ZRam Compression Streams"
 msgstr "ZRam 圧縮ストリーム"
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:25
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:26
 msgid "ZRam Settings"
 msgstr "ZRam 設定"
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:113
+#: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:114
 msgid "ZRam Size"
 msgstr "ZRam サイズ"
 
@@ -6116,7 +6128,7 @@ msgstr ""
 #: themes/luci-theme-freifunk-generic/luasrc/view/themes/freifunk-generic/header.htm:133
 #: themes/luci-theme-material/luasrc/view/themes/material/header.htm:215
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:225
-#: themes/luci-theme-rosy/luasrc/view/themes/rosy/header.htm:250
+#: themes/luci-theme-rosy/luasrc/view/themes/rosy/header.htm:251
 msgid "off"
 msgstr "オフ"
 
@@ -6124,7 +6136,7 @@ msgstr "オフ"
 #: themes/luci-theme-freifunk-generic/luasrc/view/themes/freifunk-generic/header.htm:132
 #: themes/luci-theme-material/luasrc/view/themes/material/header.htm:214
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:224
-#: themes/luci-theme-rosy/luasrc/view/themes/rosy/header.htm:247
+#: themes/luci-theme-rosy/luasrc/view/themes/rosy/header.htm:248
 msgid "on"
 msgstr "オン"
 

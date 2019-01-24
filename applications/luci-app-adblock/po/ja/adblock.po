@@ -70,7 +70,7 @@ msgstr "バックアップ モード"
 msgid "Blacklist"
 msgstr "ブラックリスト"
 
-#: applications/luci-app-adblock/luasrc/view/adblock/report.htm:223
+#: applications/luci-app-adblock/luasrc/view/adblock/report.htm:274
 msgid "Blocked DNS Queries"
 msgstr "ブロックされた DNS クエリ"
 
@@ -175,6 +175,10 @@ msgstr ""
 msgid "Domain"
 msgstr "ドメイン"
 
+#: applications/luci-app-adblock/luasrc/view/adblock/report.htm:294
+msgid "Domain/Client/Date/Time"
+msgstr ""
+
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:35
 msgid "Download Utility"
 msgstr "ダウンロード ユーティリティ"
@@ -215,14 +219,6 @@ msgstr "ブロックリスト バックアップの有効化"
 msgid "Enable DNS Query Report"
 msgstr "DNS クエリ レポートの有効化"
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:226
-msgid ""
-"Enable memory intense overall sort / duplicate removal on low memory devices "
-"(&lt; 64 MB free RAM)"
-msgstr ""
-"メモリー容量の少ないデバイス（RAM 空き領域 64MB 未満）において、一時ファイル"
-"内の全体的なソート及び重複の除去を有効にします。"
-
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:98
 msgid "Enable verbose debug logging in case of any processing error."
 msgstr ""
@@ -232,13 +228,23 @@ msgstr ""
 msgid "Enabled"
 msgstr "有効"
 
-#: applications/luci-app-adblock/luasrc/view/adblock/report.htm:211
+#: applications/luci-app-adblock/luasrc/view/adblock/report.htm:262
 msgid "End Date"
 msgstr "終了日"
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:94
 msgid "Extra Options"
 msgstr "拡張オプション"
+
+#: applications/luci-app-adblock/luasrc/view/adblock/report.htm:302
+msgid "Filter"
+msgstr ""
+
+#: applications/luci-app-adblock/luasrc/view/adblock/report.htm:292
+msgid ""
+"Filter the DNS Query result set for a particular domain, client or time "
+"frame."
+msgstr ""
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:183
 msgid "Flush DNS Cache"
@@ -268,10 +274,6 @@ msgstr ""
 msgid "Force Local DNS"
 msgstr "ローカル DNS の強制"
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:225
-msgid "Force Overall Sort"
-msgstr "全体ソートの強制"
-
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:173
 msgid "Full path to the whitelist file."
 msgstr "ホワイトリスト ファイルへのフルパスです。"
@@ -294,7 +296,7 @@ msgstr "入力ファイルが見つかりません。設定を確認してくだ
 msgid "Last Run"
 msgstr "最終実行"
 
-#: applications/luci-app-adblock/luasrc/view/adblock/report.htm:241
+#: applications/luci-app-adblock/luasrc/view/adblock/report.htm:307
 msgid "Latest DNS Queries"
 msgstr "最新の DNS クエリ"
 
@@ -318,7 +320,7 @@ msgid "List of supported and fully pre-configured download utilities."
 msgstr "サポートされ、かつ設定済のダウンロード ユーティリティの一覧です。"
 
 #: applications/luci-app-adblock/luasrc/view/adblock/query.htm:21
-#: applications/luci-app-adblock/luasrc/view/adblock/report.htm:148
+#: applications/luci-app-adblock/luasrc/view/adblock/report.htm:221
 #: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:90
 msgid "Loading"
 msgstr "読込中"
@@ -419,7 +421,7 @@ msgstr "リフレッシュ"
 msgid "Refresh Blocklist Sources"
 msgstr "ブロックリスト提供元のリフレッシュ"
 
-#: applications/luci-app-adblock/luasrc/view/adblock/report.htm:230
+#: applications/luci-app-adblock/luasrc/view/adblock/report.htm:281
 msgid "Refresh Report"
 msgstr "レポートをリフレッシュ"
 
@@ -507,7 +509,7 @@ msgstr ""
 "tcpdump により使用される、レポートを行うポートのスペースで区切られたリストで"
 "す。（規定値: '53'）"
 
-#: applications/luci-app-adblock/luasrc/view/adblock/report.htm:205
+#: applications/luci-app-adblock/luasrc/view/adblock/report.htm:256
 msgid "Start Date"
 msgstr "開始日"
 
@@ -608,11 +610,11 @@ msgstr ""
 "デフォルトのパスを上書きするには、下記拡張セクションの 'DNS ディレクトリ' オ"
 "プションを使用します。"
 
-#: applications/luci-app-adblock/luasrc/view/adblock/report.htm:236
+#: applications/luci-app-adblock/luasrc/view/adblock/report.htm:287
 msgid "Top 10 Reporting"
 msgstr "上位 10 レポート"
 
-#: applications/luci-app-adblock/luasrc/view/adblock/report.htm:217
+#: applications/luci-app-adblock/luasrc/view/adblock/report.htm:268
 msgid "Total DNS Queries"
 msgstr "総 DNS クエリ"
 
@@ -654,3 +656,13 @@ msgid ""
 "value to 150000."
 msgstr ""
 "例: Adblock のアップデート毎にメールを受け取るには、150000 に設定します。"
+
+#~ msgid ""
+#~ "Enable memory intense overall sort / duplicate removal on low memory "
+#~ "devices (&lt; 64 MB free RAM)"
+#~ msgstr ""
+#~ "メモリー容量の少ないデバイス（RAM 空き領域 64MB 未満）において、一時ファイ"
+#~ "ル内の全体的なソート及び重複の除去を有効にします。"
+
+#~ msgid "Force Overall Sort"
+#~ msgstr "全体ソートの強制"
