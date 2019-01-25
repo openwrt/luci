@@ -1,14 +1,8 @@
-function $(s) {
-       return document.getElementById(s.substring(1));
-}
+function $(s) { return document.getElementById(s.substring(1)); }
 
-function show(s) {
-       $(s).style.display = 'block';
-}
+function show(s) { $(s).style.display = 'block'; }
 
-function hide(s) {
-       $(s).style.display = 'none';
-}
+function hide(s) { $(s).style.display = 'none'; }
 
 function set_server() {
 	hide("#error_box");
@@ -38,8 +32,7 @@ function edit_server() {
 	button_set.value = "Save";
 	button_set.name = "button_set";
 	button_set.id = "button_set";
-	button_set.className = 'cbi-button cbi-button-edit';
-	button_set.style = 'background-image: url("/luci-static/resources/cbi/save.gif");'
+	button_set.className = 'cbi-button cbi-button-save';
 	button_set.onclick = set_server
 	$("#server").parentElement.appendChild(button_set);
 }
@@ -61,7 +54,7 @@ function server_request(request_dict, path, callback) {
 	request.setRequestHeader("Content-type", "application/json");
 	request.send(JSON.stringify(request_dict));
 	request.onerror = function(e) {
-		error_box("upgrade server down")
+		set_status("danger", "upgrade server down")
 		show("#server_div");
 	}
 	request.addEventListener('load', function(event) {
@@ -128,7 +121,7 @@ function ubus_call(command, argument, params, variable) {
 					}
 				}
 			} else {
-				error_box("<b>Ubus call failed:</b><br />Request: " + request_json + "<br />Response: " + JSON.stringify(response))
+				set_status("danger", "<b>Ubus call failed:</b><br />Request: " + request_json + "<br />Response: " + JSON.stringify(response))
 			}
 			ubus_closed++;
 		}
@@ -136,22 +129,14 @@ function ubus_call(command, argument, params, variable) {
 	request.send(request_json);
 }
 
-function info_box(info_output, loading) {
-	// Shows notification if upgrade is available
-	// If loading is true then an "processing" animation is added
-	show("#info_box");
+function set_status(type, message, loading) {
+	$("#status_box").className = "alert-message " + type;
 	var loading_image = '';
 	if(loading) {
-		loading_image = '<img src="/luci-static/resources/icons/loading.gif" alt="Loading" style="vertical-align:middle">';
+		loading_image = '<img src="/luci-static/resources/icons/loading.gif" alt="Loading" style="vertical-align:middle"> ';
 	}
-	$("#info_box").innerHTML = loading_image + info_output;
-}
-
-function error_box(error_output) {
-	// Shows erros in red box
-	show("#error_box");
-	$("#error_box").innerHTML = error_output;
-	hide("#info_box");
+	$("#status_box").innerHTML = loading_image + message;
+	show("#status_box")
 }
 
 function upgrade_check() {
@@ -159,10 +144,11 @@ function upgrade_check() {
 	// If data.upgrade_packages is set to true search for new package versions as well
 	hide("#error_box");
 	hide("#server_div");
-	info_box("Searching for upgrades", true);
+	set_status("info", "Searching for upgrades", true);
 	var request_dict = {}
 	request_dict.version = data.release.version;
-	request_dict.packages = data.packages;
+	request_dict.revision= data.release.revision;
+	request_dict.installed = data.packages;
 	request_dict.upgrade_packages = data.upgrade_packages
 	server_request(request_dict, "api/upgrade-check", upgrade_check_callback)
 }
@@ -184,7 +170,7 @@ function upgrade_check_callback(request_text) {
 		}
 	}
 	data.packages = request_json.packages
-	info_box(info_output)
+	set_status("success", info_output)
 
 	if(data.advanced_mode == 1) {
 		show("#edit_button");
@@ -235,7 +221,7 @@ function upgrade_request_callback(request) {
 	if(data.advanced_mode == 1) {
 		info_output += '<br /><a target="_blank" href="' + data.sysupgrade_url + '.log">Build log</a>'
 	}
-	info_box(info_output);
+	set_status("info", info_output);
 
 	show("#keep_container");
 	var upgrade_button = $("#upgrade_button")
@@ -247,7 +233,7 @@ function upgrade_request_callback(request) {
 
 function flash_image() {
 	// Flash image via rpc-sys upgrade_start
-	info_box("Flashing firmware. Don't unpower device", true)
+	set_status("warning", "Flashing firmware. Don't unpower device", true)
 	ubus_call("rpc-sys", "upgrade_start", { "keep": $("#keep").checked }, 'message');
 	ping_max = 3600; // in seconds
 	setTimeout(ping_ubus, 10000)
@@ -261,11 +247,11 @@ function ping_ubus() {
 		var request = new XMLHttpRequest();
 		request.open("GET", ubus_url, true);
 		request.addEventListener('error', function(event) {
-			info_box("Rebooting device", true);
-			setTimeout(ping_ubus, 1000)
+			set_status("warning", "Rebooting device", true);
+			setTimeout(ping_ubus, 5000)
 		});
 		request.addEventListener('load', function(event) {
-			info_box("Success! Please reload web interface");
+			set_status("success", "Success! Please reload web interface");
 			$("#upgrade_button").value = "Reload page";
 			show("#upgrade_button");
 			$("#upgrade_button").disabled = false;
@@ -273,7 +259,7 @@ function ping_ubus() {
 		});
 		request.send();
 	} else {
-		error_box("Web interface could not reconnect to your device. Please reload web interface or check device manually")
+		set_status("danger", "Web interface could not reconnect to your device. Please reload web interface or check device manually")
 	}
 }
 
@@ -293,7 +279,7 @@ function upload_image(blob) {
 	});
 
 	request.addEventListener('error', function(event) {
-		info_box("Upload of firmware failed, please retry by reloading web interface")
+		set_status("info", "Upload of firmware failed, please retry by reloading web interface")
 	});
 
 	request.open('POST', origin + '/cgi-bin/cgi-upload');
@@ -315,7 +301,7 @@ function download_image() {
 			upload_image(blob)
 		}
 	};
-	info_box("Downloading firmware", true);
+	set_status("info", "Downloading firmware", true);
 	download_request.send();
 }
 
@@ -329,7 +315,7 @@ function server_request(request_dict, path, callback) {
 	request.setRequestHeader("Content-type", "application/json");
 	request.send(JSON.stringify(request_dict));
 	request.onerror = function(e) {
-		error_box("Upgrade server down or could not connect")
+		set_status("danger", "Upgrade server down or could not connect")
 		show("#server_div");
 	}
 	request.addEventListener('load', function(event) {
@@ -342,40 +328,40 @@ function server_request(request_dict, path, callback) {
 			if(imagebuilder === "queue") {
 				// in queue
 				var queue = request.getResponseHeader("X-Build-Queue-Position");
-				info_box("In build queue position " + queue, true)
+				set_status("info", "In build queue position " + queue, true)
 				console.log("queued");
 			} else if(imagebuilder === "initialize") {
-				info_box("Setting up ImageBuilder", true)
+				set_status("info", "Setting up ImageBuilder", true)
 				console.log("Setting up imagebuilder");
 			} else if(imagebuilder === "building") {
-				info_box("Building image", true);
+				set_status("info", "Building image", true);
 				console.log("building");
 			} else {
 				// fallback if for some reasons the headers are missing e.g. browser blocks access
-				info_box("Processing request", true);
+				set_status("info", "Processing request", true);
 				console.log(imagebuilder)
 			}
 			setTimeout(function() { server_request(request_dict, path, callback) }, 5000)
 
 		} else if (request.status === 204) {
 			// no upgrades available
-			info_box("No upgrades available")
+			set_status("success", "No upgrades available")
 
 		} else if (request.status === 400) {
 			// bad request
 			request_json = JSON.parse(request_text)
-			error_box(request_json.error)
+			set_status("danger", request_json.error)
 
 		} else if (request.status === 412) {
 			// this is a bit generic
-			error_box("Unsupported device, release, target, subtraget or board")
+			set_status("danger", "Unsupported device, release, target, subtraget or board")
 
 		} else if (request.status === 413) {
-		error_box("No firmware created due to image size. Try again with less packages selected.")
+		set_status("danger", "No firmware created due to image size. Try again with less packages selected.")
 
 		} else if (request.status === 422) {
 			var package_missing = request.getResponseHeader("X-Unknown-Package");
-			error_box("Unknown package in request: <b>" + package_missing + "</b>")
+			set_status("danger", "Unknown package in request: <b>" + package_missing + "</b>")
 		} else if (request.status === 500) {
 			request_json = JSON.parse(request_text)
 
@@ -384,20 +370,19 @@ function server_request(request_dict, path, callback) {
 			if(request_json.log != undefined) {
 				data.log_url = request_json.log
 			}
-			error_box(error_box_content)
+			set_status("danger", error_box_content)
 
 		} else if (request.status === 501) {
-			error_box("No sysupgrade file produced, may not supported by model.")
+			set_status("danger", "No sysupgrade file produced, may not supported by model.")
 
 		} else if (request.status === 502) {
 			// python part offline
-			error_box("Server down for maintenance")
+			set_status("danger", "Server down for maintenance")
 			setTimeout(function() { server_request(request_dict, path, callback) }, 30000)
 		} else if (request.status === 503) {
-			error_box("Server overloaded")
+			set_status("danger", "Server overloaded")
 			setTimeout(function() { server_request(request_dict, path, callback) }, 30000)
 		}
 	});
 }
 document.onload = setup()
-
