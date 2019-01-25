@@ -488,6 +488,10 @@
 			throw e;
 		},
 
+		bind: function(fn, self /*, ... */) {
+			return Function.prototype.bind.apply(fn, this.varargs(arguments, 2, self));
+		},
+
 		/* Class require */
 		require: function(name, from) {
 			var L = this, url = null, from = from || [];
