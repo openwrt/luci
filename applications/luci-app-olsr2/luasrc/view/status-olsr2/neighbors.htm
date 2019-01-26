@@ -107,37 +107,6 @@ end
 				<div class="th cbi-section-table-cell">Willingness</div>
 				<div class="th cbi-section-table-cell">SNR</div>
 			</div>
-
-		<% 	local i = 1
-			for k, link in ipairs(links) do
-
-			willingness_color = olsrtools.willingness_color(link.domain_mpr_willingness)
-			metric_in_color = olsrtools.metric_color(link.domain_metric_in_raw)
-			metric_out_color = olsrtools.metric_color(link.domain_metric_out_raw)
-			snr_color = olsrtools.snr_color(link.snr)
-
-			if link.snr == 0 then
-				link.snr = '?'
-			end
-		%>
-
-		<div class="tr cbi-section-table-row cbi-rowstyle-<%=i%> proto-<%=link.proto%>">
-			<% if link.proto == "6" then %>
-			<div class="td cbi-section-table-cell left"><a href="https://[<%=link.remoteIP%>]/cgi-bin-olsr2-neigh.html"><%=link.neighbor_originator%></a></div>
-			<% else %>
-			<div class="td cbi-section-table-cell left"><a href="https://<%=link.remoteIP%>/cgi-bin-olsr2-neigh.html"><%=link.neighbor_originator%></a></div>
-			<% end %>
-			<div class="td cbi-section-table-cell left"><a href="https://<%=link.hostname%>/cgi-bin-olsr2-neigh.html"><%=link.hostname%></a></div>
-			<div class="td cbi-section-table-cell left"><%=link.interface%></div>
-			<div class="td cbi-section-table-cell left"><%=link.localIP%></div>
-			<div class="td cbi-section-table-cell left" style="background-color:<%=metric_in_color%>" title="Metric: <%=link.domain_metric_in_raw%>"><%=link.domain_metric_in%></div>
-			<div class="td cbi-section-table-cell left" style="background-color:<%=metric_out_color%>" title="Metric: <%=link.domain_metric_out_raw%>"><%=link.domain_metric_out%></div>
-			<div class="td cbi-section-table-cell left" style="background-color:<%=willingness_color%>"><%=link.domain_mpr_willingness%></div>
-			<div class="td cbi-section-table-cell left" style="background-color:<%=snr_color%>" title="Signal: <%=link.signal%> Noise: <%=link.noise%>"><%=link.snr%></div>
-		</div>
-		<% 
-			i = ((i % 2) + 1)
-		end %>
 	</div>
 <br />
 

@@ -92,7 +92,7 @@ function action_node()
 end
 
 function action_neigh()
-	local json = require "luci.json"
+	local jsonc = require "luci.jsonc"
 	local utl = require "luci.util"
 	local ipc = require "luci.ip"
 	local uci = require "luci.model.uci".cursor()
@@ -116,7 +116,7 @@ function action_neigh()
 	end
 
 
-	req_json = json.decode(utl.exec("(echo '/nhdpinfo json neighbor /quit' | nc ::1 %d) 2>/dev/null" % telnet_port))
+	req_json = jsonc.parse(utl.exec("(echo '/nhdpinfo json neighbor /quit' | nc ::1 %d) 2>/dev/null" % telnet_port))
 
 	for _, neighbors in pairs(req_json) do
 		for nidx, neighbor in pairs(neighbors) do
@@ -131,16 +131,13 @@ function action_neigh()
 			utl.exec("ping6 -q -c1 %s" % rt.gw:string().."%"..rt.dev)
 			ipc.neighbors({ dest = rt.gw:string() }, function(ipn)
 				neighbors[nidx].mac = ipn.mac
-				neighbors[nidx].signal = 0
-				neighbors[nidx].noise = 0
-				neighbors[nidx].snr = 0
 				for _, val in ipairs(assoclist) do
 					if val.network == neighbors[nidx].interface and val.list then
 						local assocmac, assot
 						for assocmac, assot in pairs(val.list) do
 							if ipn.mac == luci.ip.new(assocmac) then
-								neighbors[nidx].signal = tonumber(assot.signal)
-								neighbors[nidx].noise = tonumber(assot.noise)
+								neighbors[nidx].signal = tonumber(assot.signal) or 0
+								neighbors[nidx].noise = tonumber(assot.noise) or 0
 								neighbors[nidx].snr = (neighbors[nidx].noise*-1) - (neighbors[nidx].signal*-1)
 							end
 						end
@@ -156,8 +153,12 @@ function action_neigh()
 		end
 		data = neighbors
 	end
-
-	luci.template.render("status-olsr2/neighbors", {links=data})
+	--if luci.http.formvalue("status") == "1" then
+	--	http.prepare_content("application/json")
+	--	http.write(jsonc.stringify(data))
+	--else
+		luci.template.render("status-olsr2/neighbors", {links=data})
+	--end
 end
 
 function action_anet()

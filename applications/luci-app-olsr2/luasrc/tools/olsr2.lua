@@ -5,7 +5,7 @@ module("luci.tools.olsr2", package.seeall)
 
 function metric_color(metric)
 	local color = "#bb3333"
-	if metric == 0 then
+	if not metric or metric == 0 then
 		color = "#bb3333"
 	elseif metric < 4 then
 		color = "#00cc00"
@@ -19,7 +19,7 @@ end
 
 function willingness_color(willingness)
 	local color = "#bb3333"
-	if willingness == 0 then
+	if not willingness or willingness == 0 then
 		color = "#bb3333"
 	elseif willingness < 5 then
 		color = "#00cc00"
@@ -33,7 +33,7 @@ end
 
 function snr_color(snr)
 	local color = "#bb3333"
-	if snr == 0 then
+	if not snr or snr == 0 then
 		color = "#bb3333"
 	elseif snr > 30 then
 		color = "#00cc00"
