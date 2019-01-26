@@ -1,7 +1,7 @@
 <%
 local uci  = require "luci.model.uci".cursor()
 local http_port = uci:get("radicale2", "server", "host")
-local usessl = uci:get("radicale2", "server", "ssl")
+local usessl = uci:get_bool("radicale2", "server", "ssl")
 if type(http_port) == "table" then
         http_port = http_port[1]
 end

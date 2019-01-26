@@ -135,33 +135,19 @@ function encpass(self, section)
 	return encvalue and encvalue.encrypted_password
 end
 
-pass.parse = function(self, section, novld)
-	local encvalue
-	if self:cfgvalue(section) then
-		if not plainpass:cfgvalue(section) then
-			return Value.parse(self, section)
-		else
-			encvalue = encpass(self, section)
-			if encvalue then
-				self.formvalue = function(self, section)
-					return encvalue
-				end
-				return Value.parse(self, section, novld)
-			else
-				self.formvalue = self.cfgvalue
-				return Value.parse(self, section, novld)
-			end
-		end
+pass.cfgvalue = function(self, section)
+	if not plainpass:formvalue(section) then
+		return Value.cfgvalue(self, section)
 	else
-		encvalue = encpass(self, section)
-		if encvalue then
-			self.formvalue = function(self, section)
-				return encvalue
-			end
-			return Value.parse(self, section, novld)
-		else
-			return nil
-		end
+		return Value.formvalue(self, section)
+	end
+end
+
+pass.formvalue = function(self, section)
+	if not plainpass:formvalue(section) then
+		return Value.formvalue(self, section)
+	else
+		return encpass(self, section) or Value.formvalue(self, section)
 	end
 end
 
