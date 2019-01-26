@@ -135,13 +135,13 @@ function action_neigh()
 				neighbors[nidx].noise = 0
 				neighbors[nidx].snr = 0
 				for _, val in ipairs(assoclist) do
-					if val.network == interface and val.list then
+					if val.network == neighbors[nidx].interface and val.list then
 						local assocmac, assot
 						for assocmac, assot in pairs(val.list) do
-							if ipn.mac == luci.ip.checkmac(assocmac) then
+							if ipn.mac == luci.ip.new(assocmac) then
 								neighbors[nidx].signal = tonumber(assot.signal)
 								neighbors[nidx].noise = tonumber(assot.noise)
-								neighbors[nidx].snr = (noise*-1) - (signal*-1)
+								neighbors[nidx].snr = (neighbors[nidx].noise*-1) - (neighbors[nidx].signal*-1)
 							end
 						end
 					end
