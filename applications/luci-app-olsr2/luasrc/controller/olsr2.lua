@@ -13,7 +13,7 @@ function index()
 		cbi("olsrd2"), "OLSR2"
 	)
 	page.leaf = true
-	--page.subindex = true
+	page.subindex = true
 
 	local page  = node("admin", "status", "olsr2")
 	page.target = alias("admin", "status", "olsr2", "overview")
