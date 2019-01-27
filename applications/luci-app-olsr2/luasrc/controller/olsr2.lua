@@ -92,6 +92,7 @@ function action_node()
 end
 
 function action_neigh()
+	local http = require "luci.http"
 	local jsonc = require "luci.jsonc"
 	local utl = require "luci.util"
 	local ipc = require "luci.ip"
@@ -104,61 +105,61 @@ function action_neigh()
 	local telnet_port = 2009
 	local resolve = 1
 
-	for _, dev in ipairs(devices) do
-		for _, net in ipairs(dev:get_wifinets()) do
-				local radio = net:get_device()
-				assoclist[#assoclist+1] = {}
-				assoclist[#assoclist]['ifname'] = net:ifname()
-				assoclist[#assoclist]['network'] = net:network()[1]
-				assoclist[#assoclist]['device'] = radio and radio:name() or nil
-				assoclist[#assoclist]['list'] = net:assoclist()
-		end
-	end
-
-
-	req_json = jsonc.parse(utl.exec("(echo '/nhdpinfo json neighbor /quit' | nc ::1 %d) 2>/dev/null" % telnet_port))
-
-	for _, neighbors in pairs(req_json) do
-		for nidx, neighbor in pairs(neighbors) do
-			if not neighbor then
-				return
+	if luci.http.formvalue("status") == "1" then
+		for _, dev in ipairs(devices) do
+			for _, net in ipairs(dev:get_wifinets()) do
+					local radio = net:get_device()
+					assoclist[#assoclist+1] = {}
+					assoclist[#assoclist]['ifname'] = net:ifname()
+					assoclist[#assoclist]['network'] = net:network()[1]
+					assoclist[#assoclist]['device'] = radio and radio:name() or nil
+					assoclist[#assoclist]['list'] = net:assoclist()
 			end
-			neighbors[nidx].proto = 6
-			local rt = ipc.route(neighbor["neighbor_originator"])
-			local localIP=rt.src:string()
-			neighbors[nidx].localIP=localIP
-			neighbors[nidx].interface = ntm:get_status_by_address(localIP) or "?"
-			utl.exec("ping6 -q -c1 %s" % rt.gw:string().."%"..rt.dev)
-			ipc.neighbors({ dest = rt.gw:string() }, function(ipn)
-				neighbors[nidx].mac = ipn.mac
-				for _, val in ipairs(assoclist) do
-					if val.network == neighbors[nidx].interface and val.list then
-						local assocmac, assot
-						for assocmac, assot in pairs(val.list) do
-							if ipn.mac == luci.ip.new(assocmac) then
-								neighbors[nidx].signal = tonumber(assot.signal) or 0
-								neighbors[nidx].noise = tonumber(assot.noise) or 0
-								neighbors[nidx].snr = (neighbors[nidx].noise*-1) - (neighbors[nidx].signal*-1)
+		end
+	
+	
+		req_json = jsonc.parse(utl.exec("(echo '/nhdpinfo json neighbor /quit' | nc ::1 %d) 2>/dev/null" % telnet_port))
+	
+		for _, neighbors in pairs(req_json) do
+			for nidx, neighbor in pairs(neighbors) do
+				if not neighbor then
+					return
+				end
+				neighbors[nidx].proto = 6
+				local rt = ipc.route(neighbor["neighbor_originator"])
+				local localIP=rt.src:string()
+				neighbors[nidx].localIP=localIP
+				neighbors[nidx].interface = ntm:get_status_by_address(localIP) or "?"
+				utl.exec("ping6 -q -c1 %s" % rt.gw:string().."%"..rt.dev)
+				ipc.neighbors({ dest = rt.gw:string() }, function(ipn)
+					neighbors[nidx].mac = ipn.mac
+					for _, val in ipairs(assoclist) do
+						if val.network == neighbors[nidx].interface and val.list then
+							local assocmac, assot
+							for assocmac, assot in pairs(val.list) do
+								if ipn.mac == luci.ip.new(assocmac) then
+									neighbors[nidx].signal = tonumber(assot.signal) or 0
+									neighbors[nidx].noise = tonumber(assot.noise) or 0
+									neighbors[nidx].snr = (neighbors[nidx].noise*-1) - (neighbors[nidx].signal*-1)
+								end
 							end
 						end
 					end
-				end
-			end)
-			if resolve == "1" then
-				local hostname = nixio.getnameinfo(neighbor["neighbor_originator"])
-				if hostname then
-					neighbors[nidx].hostname = hostname
+				end)
+				if resolve == "1" then
+					local hostname = nixio.getnameinfo(neighbor["neighbor_originator"])
+					if hostname then
+						neighbors[nidx].hostname = hostname
+					end
 				end
 			end
+			data = neighbors
 		end
-		data = neighbors
+		http.prepare_content("application/json")
+		http.write(jsonc.stringify(data))
+	else
+		luci.template.render("status-olsr2/neighbors")
 	end
-	--if luci.http.formvalue("status") == "1" then
-	--	http.prepare_content("application/json")
-	--	http.write(jsonc.stringify(data))
-	--else
-		luci.template.render("status-olsr2/neighbors", {links=data})
-	--end
 end
 
 function action_anet()
