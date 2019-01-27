@@ -8,6 +8,13 @@ function index()
 	require("luci.model.uci")
 	local uci = luci.model.uci.cursor_state()
 
+	local page = entry(
+		{"admin", "services", "olsrd2"},
+		cbi("olsrd2"), "OLSR2"
+	)
+	page.leaf = true
+	--page.subindex = true
+
 	local page  = node("admin", "status", "olsr2")
 	page.target = alias("admin", "status", "olsr2", "overview")
 	page.title  = _("OLSR2")
