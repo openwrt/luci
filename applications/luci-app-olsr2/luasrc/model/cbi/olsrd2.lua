@@ -5,18 +5,41 @@
 require("luci.tools.webadmin")
 local utl = require "luci.util"
 local nwm = require "luci.model.network".init()
-local net, iface, arg_if
+local net, iface, arg_if, arg_interface, arg_global, arg_log, arg_olsrv2
+local arg_mesh, arg_lan_import
 local networks = nwm:get_networks()
 
 m = Map("olsrd2", translate("OLSR2 Daemon"),
 	translate("olsrd2 implements the IETF <a href='http://tools.ietf.org/html/rfc6130'>RFC 6130: Neighborhood Discovery Protocol (NHDP)</a> and <a href='http://tools.ietf.org/html/rfc7181'>RFC 7181: Optimized Link State Routing Protocol v2.</a>"))
 
-if arg[1] and m.uci:get("olsrd2", arg[1]) == "interface" then
-	arg_if = arg[1]
+if arg[1] then
+	if arg[1] == "global" then
+		arg_global=true
+	end
+	if arg[1] == "log" then
+		arg_log=true
+	end
+	if arg[1] == "olsrv2" then
+		arg_olsrv2=true
+	end
+	if arg[1] == "domain" then
+		arg_domain=true
+	end
+	if arg[1] == "mesh" then
+		arg_mesh=true
+	end
+	if arg[1] == "lan_import" then
+		arg_lan_import=true
+	end
+	if arg[1] == "interface" then
+		arg_interface=true
+		if arg[2] and m.uci:get("olsrd2", arg[2]) == "interface" then
+			arg_if = arg[2]
+		end
+	end
 end
 
-if not arg_if then
-
+if arg_global then
 	s = m:section(TypedSection, "global", translate("global settings"))
 	s.anonymous = true
 	s.addremove = true
@@ -32,7 +55,8 @@ if not arg_if then
 	svc.optional = true
 	svc.placeholder = "/var/lock/olsrd2"
 	svc.datatype = "string"
-	
+end
+if arg_log then
 	s = m:section(TypedSection, "log", translate("log settings"))
 	s.anonymous = true
 	s.addremove = true
@@ -40,7 +64,8 @@ if not arg_if then
 	svc.optional = true
 	local svc = s:option(Flag, "stderr", "stderr")
 	svc.optional = true
-	
+end
+if arg_olsrv2 then
 	s = m:section(TypedSection, "olsrv2", translate("olsrv2 settings"))
 	s.anonymous = true
 	s.addremove = true
@@ -63,14 +88,15 @@ if not arg_if then
 	local svc = s:option(DynamicList, "routable", translate("routable defines the ACL which declares an IP address routable. Other IP addresses will not be included in TC messages."), "ip6prefix, ip4prefix, default_accept, default_reject")
 	svc.datatype = "or(ip6prefix, negm(ip6prefix), ip4prefix, negm(ip4prefix), 'default_accept', 'default_reject')"
 	svc.optional = true
-	local svc = s:option(DynamicList, "lan", translate("lan defines the locally attached network prefixes (similar to HNAs in OLSR v1). A LAN entry is a IP address/prefix, followed (optionally) by up to three key=value pairs defining the metric cost, hopcount distance and domain of the LAN ( <metric=...> <dist=...> <domain=...> )."), "ip6prefix, ip4prefix, default_accept")
+	local svc = s:option(DynamicList, "lan", translate("lan defines the locally attached network prefixes (similar to HNAs in OLSR v1). A LAN entry is a IP address/prefix, followed (optionally) by up to three key=value pairs defining the metric cost, hopcount distance and domain of the LAN ( <metric=...> <dist=...> <domain=...> )."), "ip6prefix, ip4prefix, src=ip6prefix")
 	svc.datatype = "string"
 	--svc.datatype = "or(ip6prefix, ip4prefix, 'src=')"
 	svc.optional = true
 	local svc = s:option(DynamicList, "originator", translate("originator defines the ACL which declares a valid originator IP address for the router."), "ip6prefix, ip4prefix, default_accept, default_reject")
 	svc.datatype = "or(ip6prefix, negm(ip6prefix), ip4prefix, negm(ip4prefix), 'default_accept', 'default_reject')"
 	svc.optional = true
-	
+end
+if arg_domain then
 	s = m:section(TypedSection, "domain", translate("domain settings"))
 	s.anonymous = true
 	s.addremove = true
@@ -88,7 +114,8 @@ if not arg_if then
 	svc.datatype    = "range(0,254)"
 	local svc = s:option(Flag, "srcip_routes", translate("srcip_routes defines if the router sets the originator address as the source-ip entry into the local routing entries."))
 	svc.optional = true
-	
+end
+if arg_mesh then
 	s = m:section(TypedSection, "mesh", translate("mesh settings"))
 	s.anonymous = true
 	s.addremove = true
@@ -104,7 +131,8 @@ if not arg_if then
 	svc.optional    = true
 	svc.placeholder = 1.0
 	svc.datatype    = "and(min(0.1), ufloat)"
-	
+end
+if arg_lan_import then
 	s = m:section(TypedSection, "lan_import", translate("LAN import settings"))
 	s.anonymous = true
 	s.addremove = true
@@ -116,14 +144,17 @@ if not arg_if then
 	svc.datatype    = "range(1,255)"
 	local svc = s:option(Value, "protocol", translate("IP protocol"), "1-255")
 	svc.datatype    = "range(1,255)"
+end
 
+if not arg_if and arg_interface then
 	ifs = m:section(TypedSection, "interface", translate("interface settings"))
 	ifs.anonymous = true
 	ifs.addremove = true
-	ifs.extedit   = luci.dispatcher.build_url("admin/services/olsrd2/%s")
+	ifs.extedit   = luci.dispatcher.build_url("admin/services/olsrd2/interface/%s")
 	ifs.template  = "cbi/tblsection"
 	ifs:tab("general", translate("General Settings"))
-else
+end
+if arg_if and arg_interface then
 	ifs = m:section(NamedSection, arg_if, "interface", translate("interface"))
 	ifs.anonymous = true
 	ifs.addremove = true
@@ -133,24 +164,26 @@ else
 	ifs:tab("link",   translate("Link Config Plugin"))
 end
 
-local ign = ifs:taboption("general",Flag, "ignore", translate("Enable"))
-ign.enabled  = "0"
-ign.disabled = "1"
-ign.rmempty = false
-function ign.cfgvalue(self, section)
-	return Flag.cfgvalue(self, section) or "0"
-end
-local svc = ifs:taboption("general", Value, "ifname", translate("Network"),
-translate("The interface OLSR2 should serve."))
-for _, net in ipairs(networks) do
-	if (not net:is_virtual()) then
-		svc:value(net:name())
+if arg_interface then
+	local ign = ifs:taboption("general",Flag, "ignore", translate("Enable"))
+	ign.enabled  = "0"
+	ign.disabled = "1"
+	ign.rmempty = false
+	function ign.cfgvalue(self, section)
+		return Flag.cfgvalue(self, section) or "0"
 	end
+	local svc = ifs:taboption("general", Value, "ifname", translate("Network"),
+	translate("The interface OLSR2 should serve."))
+	for _, net in ipairs(networks) do
+		if (not net:is_virtual()) then
+			svc:value(net:name())
+		end
+	end
+	svc.widget   = "select"
+	svc.nocreate = true
 end
-svc.widget   = "select"
-svc.nocreate = true
 
-if arg_if then
+if arg_interface and arg_if then
 	local svc = ifs:taboption("oonf", DynamicList, "acl", translate("acl defines the IP addresses that are allowed to use the RFC5444 socket."), "ip6prefix, ip4prefix, default_accept, default_reject")
 	svc.datatype = "or(ip6prefix, negm(ip6prefix), ip4prefix, negm(ip4prefix), 'default_accept', 'default_reject')"
 	svc.optional = true

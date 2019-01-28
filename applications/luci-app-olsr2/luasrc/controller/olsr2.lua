@@ -10,10 +10,46 @@ function index()
 
 	local page = entry(
 		{"admin", "services", "olsrd2"},
-		cbi("olsrd2"), "OLSR2"
+		cbi("olsrd2"), "OLSR2", 30
 	)
 	page.leaf = true
-	page.subindex = true
+
+	local page = entry(
+		{"admin", "services", "olsrd2","global"},
+		cbi("olsrd2","global","global"), "Global", 10
+	)
+	page.leaf = true
+
+	local page = entry(
+		{"admin", "services", "olsrd2","log"},
+		cbi("olsrd2"), "Log", 20
+	)
+	page.leaf = true
+	local page = entry(
+		{"admin", "services", "olsrd2","olsrv2"},
+		cbi("olsrd2"), "olsrv2", 30
+	)
+	page.leaf = true
+	local page = entry(
+		{"admin", "services", "olsrd2","domain"},
+		cbi("olsrd2"), "domain", 40
+	)
+	page.leaf = true
+	local page = entry(
+		{"admin", "services", "olsrd2","mesh"},
+		cbi("olsrd2"), "mesh", 50
+	)
+	page.leaf = true
+	local page = entry(
+		{"admin", "services", "olsrd2","lan_import"},
+		cbi("olsrd2"), "lan_import", 60
+	)
+	page.leaf = true
+	local page = entry(
+		{"admin", "services", "olsrd2","interface"},
+		cbi("olsrd2"), "Interface", 70
+	)
+	page.leaf = true
 
 	local page  = node("admin", "status", "olsr2")
 	page.target = alias("admin", "status", "olsr2", "overview")
