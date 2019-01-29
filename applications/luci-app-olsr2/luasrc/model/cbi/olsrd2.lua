@@ -40,51 +40,68 @@ if arg[1] then
 end
 
 if arg_global then
-	s = m:section(TypedSection, "global", translate("global settings"))
+	s = m:section(TypedSection, "global", translate("It controls the basic behavior of the OONF core."))
 	s.anonymous = true
 	s.addremove = true
-	local svc = s:option(Flag, "failfast", "failfast")
+	local svc = s:option(Value, "failfast", translate("failfast is another boolean setting which can activate an error during startup if a requested plugin does not load or an unknown configuration variable is set."), "bool")
 	svc.optional = true
-	local svc = s:option(Value, "pidfile", "pidfile")
+	svc.rmempty = false
+	svc.datatype = "bool"
+	local svc = s:option(Value, "pidfile", translate("pidfile is used together with the fork option to store the pid of the background process in a file."),"Filename")
 	svc.rmempty = false
 	svc.optional = true
 	svc.placeholder = "/var/run/olsrd2.pid"
 	svc.datatype = "string"
-	local svc = s:option(Value, "lockfile", "lockfile")
+	local svc = s:option(Value, "lockfile", translate("lockfile creates a file on disk and keeps a lock on it as long as the OONF application is running to prevent the application from running multiple times at once."),"Filename")
 	svc.rmempty = false
 	svc.optional = true
 	svc.placeholder = "/var/lock/olsrd2"
 	svc.datatype = "string"
 end
 if arg_log then
-	s = m:section(TypedSection, "log", translate("log settings"))
+	s = m:section(TypedSection, "log", translate("OONF Logging"))
 	s.anonymous = true
 	s.addremove = true
-	local svc = s:option(Flag, "syslog", "syslog")
+	local svc = s:option(Value, "syslog", translate("syslog are boolean options that activate or deactivate the syslog Logging Target."), "bool")
 	svc.optional = true
-	local svc = s:option(Flag, "stderr", "stderr")
+	svc.datatype = "bool"
+	local svc = s:option(Value, "stderr", translate("stderr are boolean options that activate or deactivate the stderr Logging Target."), "bool")
 	svc.optional = true
+	svc.datatype = "bool"
+	local svc = s:option(Value, "file", translate("file asks for a filename for logging output"),"Filename")
+	svc.rmempty = false
+	svc.optional = true
+	svc.placeholder = "/tmp/olsrd2.log"
+	svc.datatype = "string"
+	local svc = s:option(Value, "debug", translate("debug ask for a list of Logging Sources that will be logged by the OONF Core Logging Targets."))
+	svc.rmempty = false
+	svc.optional = true
+	svc.datatype = "string"
+	local svc = s:option(Value, "info", translate("info ask for a list of Logging Sources that will be logged by the OONF Core Logging Targets."))
+	svc.rmempty = false
+	svc.optional = true
+	svc.datatype = "string"
 end
 if arg_olsrv2 then
-	s = m:section(TypedSection, "olsrv2", translate("olsrv2 settings"))
+	s = m:section(TypedSection, "olsrv2", translate("the OLSRv2 implementation including the OLSRv2 API for other plugins."))
 	s.anonymous = true
 	s.addremove = true
 	local svc = s:option(Value, "tc_interval", translate("defines the time between two TC messages."), "s")
-	svc.optional    = true
+	svc.optional = true
 	svc.placeholder = 5.0
-	svc.datatype    = "ufloat"
+	svc.datatype = "ufloat"
 	local svc = s:option(Value, "tc_validity", translate("tc_validity defines the validity time of the TC messages."), "s")
-	svc.optional    = true
+	svc.optional = true
 	svc.placeholder = 300.0
-	svc.datatype    = "ufloat"
+	svc.datatype = "ufloat"
 	local svc = s:option(Value, "forward_hold_time", translate("forward_hold_time defines the time until the router will forget an entry in its forwarding duplicate database."), "s")
-	svc.optional    = true
+	svc.optional = true
 	svc.placeholder = 300.0
-	svc.datatype    = "ufloat"
+	svc.datatype = "ufloat"
 	local svc = s:option(Value, "processing_hold_time", translate("processing_hold_time defines the time until the router will forget an entry in its processing duplicate database."), "s")
-	svc.optional    = true
+	svc.optional = true
 	svc.placeholder = 300.0
-	svc.datatype    = "ufloat"
+	svc.datatype = "ufloat"
 	local svc = s:option(DynamicList, "routable", translate("routable defines the ACL which declares an IP address routable. Other IP addresses will not be included in TC messages."), "ip6prefix, ip4prefix, default_accept, default_reject")
 	svc.datatype = "or(negm(ip6addr), negm(ip4addr), 'default_accept', 'default_reject')"
 	svc.optional = true
@@ -97,76 +114,77 @@ if arg_olsrv2 then
 	svc.optional = true
 end
 if arg_domain then
-	s = m:section(TypedSection, "domain", translate("domain settings"))
+	s = m:section(TypedSection, "domain", translate("domain configuration section"))
 	s.anonymous = true
 	s.addremove = true
 	local svc = s:option(Value, "table", translate("table defines the routing table for the local routing entries."), "0-254")
-	svc.optional    = true
-	svc.placeholder = 254
-	svc.datatype    = "range(0,254)"
-	local svc = s:option(Value, "protocol", translate("protocol defines the protocol number for the local routing entries."), "0-254")
-	svc.optional    = true
-	svc.placeholder = 100
-	svc.datatype    = "range(0,254)"
-	local svc = s:option(Value, "distance", translate("distance defines the 'metric' (hopcount) of the local routing entries."), "0-254")
-	svc.optional    = true
-	svc.placeholder = 2
-	svc.datatype    = "range(0,254)"
-	local svc = s:option(Flag, "srcip_routes", translate("srcip_routes defines if the router sets the originator address as the source-ip entry into the local routing entries."))
 	svc.optional = true
+	svc.placeholder = 254
+	svc.datatype = "range(0,254)"
+	local svc = s:option(Value, "protocol", translate("protocol defines the protocol number for the local routing entries."), "0-254")
+	svc.optional = true
+	svc.placeholder = 100
+	svc.datatype = "range(0,254)"
+	local svc = s:option(Value, "distance", translate("distance defines the 'metric' (hopcount) of the local routing entries."), "0-254")
+	svc.optional = true
+	svc.placeholder = 2
+	svc.datatype = "range(0,254)"
+	local svc = s:option(Value, "srcip_routes", translate("srcip_routes defines if the router sets the originator address as the source-ip entry into the local routing entries."), "bool")
+	svc.optional = true
+	svc.datatype = "bool"
 end
 if arg_mesh then
-	s = m:section(TypedSection, "mesh", translate("mesh settings"))
+	s = m:section(TypedSection, "mesh", translate("mesh configuration section"))
 	s.anonymous = true
 	s.addremove = true
 	local svc = s:option(Value, "port", translate("port defines the UDP port number of the RFC5444 socket."), "1-65535")
-	svc.optional    = true
+	svc.optional = true
 	svc.placeholder = 269
-	svc.datatype    = "range(1,65535)"
+	svc.datatype = "range(1,65535)"
 	local svc = s:option(Value, "ip_proto", translate("ip_proto defines the IP protocol number that can be used for RFC5444 communication."), "1-255")
-	svc.optional    = true
+	svc.optional = true
 	svc.placeholder = 138
-	svc.datatype    = "range(1,255)"
+	svc.datatype = "range(1,255)"
 	local svc = s:option(Value, "aggregation_interval", translate("aggregation_interval defines the time the local RFC5444 implementation will keep messages to aggregate them before creating a new RFC5444 packet to forward them."), ">0.1 s")
-	svc.optional    = true
+	svc.optional = true
 	svc.placeholder = 1.0
-	svc.datatype    = "and(min(0.1), ufloat)"
+	svc.datatype = "and(min(0.1), ufloat)"
 end
 if arg_lan_import then
-	s = m:section(TypedSection, "lan_import", translate("LAN import settings"))
+	s = m:section(TypedSection, "lan_import", translate("Automatic import of routing tables as locally attached networks."))
 	s.anonymous = true
 	s.addremove = true
 	local svc = s:option(Value, "name", translate("Name"), "Text")
-	svc.datatype    = "string"
+	svc.datatype = "string"
 	local svc = s:option(Value, "interface", translate("Interface"), "Name Interface")
-	svc.datatype    = "string"
+	svc.datatype = "string"
 	local svc = s:option(Value, "table", translate("IP Table"), "1-255")
-	svc.datatype    = "range(1,255)"
+	svc.datatype = "range(1,255)"
 	local svc = s:option(Value, "protocol", translate("IP protocol"), "1-255")
-	svc.datatype    = "range(1,255)"
+	svc.datatype = "range(1,255)"
 end
 
 if not arg_if and arg_interface then
-	ifs = m:section(TypedSection, "interface", translate("interface settings"))
+	ifs = m:section(TypedSection, "interface", translate("interface configuration section"))
 	ifs.anonymous = true
 	ifs.addremove = true
-	ifs.extedit   = luci.dispatcher.build_url("admin/services/olsrd2/interface/%s")
-	ifs.template  = "cbi/tblsection"
+	ifs.extedit = luci.dispatcher.build_url("admin/services/olsrd2/interface/%s")
+	ifs.template = "cbi/tblsection"
 	ifs:tab("general", translate("General Settings"))
 end
 if arg_if and arg_interface then
-	ifs = m:section(NamedSection, arg_if, "interface", translate("interface"))
+	ifs = m:section(NamedSection, arg_if, "interface", translate(" interface configuration section"))
 	ifs.anonymous = true
 	ifs.addremove = true
 	ifs:tab("general", translate("General Settings"))
-	ifs:tab("oonf",   translate("OONF RFC5444 Plugin"))
-	ifs:tab("nhdp",   translate("NHDP Plugin"))
-	ifs:tab("link",   translate("Link Config Plugin"))
+	ifs:tab("oonf", translate("OONF RFC5444 Plugin"))
+	ifs:tab("nhdp", translate("NHDP Plugin"))
+	ifs:tab("link", translate("Link Config Plugin"))
 end
 
 if arg_interface then
 	local ign = ifs:taboption("general",Flag, "ignore", translate("Enable"))
-	ign.enabled  = "0"
+	ign.enabled = "0"
 	ign.disabled = "1"
 	ign.rmempty = false
 	function ign.cfgvalue(self, section)
@@ -179,7 +197,7 @@ if arg_interface then
 			svc:value(net:name())
 		end
 	end
-	svc.widget   = "select"
+	svc.widget = "select"
 	svc.nocreate = true
 end
 
@@ -199,18 +217,20 @@ if arg_interface and arg_if then
 	svc.placeholder = "ff02::6d"
 	svc.optional = true
 	local svc = ifs:taboption("oonf", Value, "dscp", translate("dscp defines the DSCP value set for each outgoing RFC5444 packet. The value must be between 0 and 252 without fractional digits. The value should be a multiple of 4."), "0-255")
-	svc.optional    = true
-	svc.placeholder = 192
-	svc.datatype    = "range(0,255)"
-	local svc = ifs:taboption("oonf", Flag, "rawip", translate("rawip defines if the interface should put RFC5444 packets directly into IP headers (skipping the UDP header)."))
 	svc.optional = true
+	svc.placeholder = 192
+	svc.datatype = "range(0,255)"
+	local svc = ifs:taboption("oonf", Value, "rawip", translate("rawip defines if the interface should put RFC5444 packets directly into IP headers (skipping the UDP header)."), "bool")
+	svc.optional = true
+	svc.rmempty = true
+	svc.datatype = "bool"
 	local svc = ifs:taboption("nhdp", DynamicList, "ifaddr_filter", translate("ifaddr_filter defines the IP addresses that are allowed to NHDP interface addresses."), "ip6prefix, ip4prefix, default_accept, default_reject")
 	svc.datatype = "or(negm(ip6addr), negm(ip4addr), 'default_accept', 'default_reject')"
 	svc.optional = true
 	local svc = ifs:taboption("nhdp", Value, "hello_validity", translate("hello_validity defines the time the local HELLO messages will be valid for the neighbors."), ">0.1 s")
-	svc.optional    = true
+	svc.optional = true
 	svc.placeholder = 20.0
-	svc.datatype    = "and(min(0.1), ufloat)"
+	svc.datatype = "and(min(0.1), ufloat)"
 	local svc = ifs:taboption("nhdp", Value, "hello_interval", translate("hello_interval defines the time between two HELLO messages on the interface."), ">0.1 s")
 	svc.optional = true
 	svc.placeholder = 2.0
