@@ -86,16 +86,14 @@ if arg_olsrv2 then
 	svc.placeholder = 300.0
 	svc.datatype    = "ufloat"
 	local svc = s:option(DynamicList, "routable", translate("routable defines the ACL which declares an IP address routable. Other IP addresses will not be included in TC messages."), "ip6prefix, ip4prefix, default_accept, default_reject")
-	svc.datatype = "string"
-	--svc.datatype = "or(ip6prefix, negm(ip6prefix), ip4prefix, negm(ip4prefix), 'default_accept', 'default_reject')"
+	svc.datatype = "or(negm(ip6addr), negm(ip4addr), 'default_accept', 'default_reject')"
 	svc.optional = true
 	local svc = s:option(DynamicList, "lan", translate("lan defines the locally attached network prefixes (similar to HNAs in OLSR v1). A LAN entry is a IP address/prefix, followed (optionally) by up to three key=value pairs defining the metric cost, hopcount distance and domain of the LAN ( <metric=...> <dist=...> <domain=...> )."), "ip6prefix, ip4prefix, src=ip6prefix")
 	svc.datatype = "string"
-	--svc.datatype = "or(ip6prefix, ip4prefix, 'src=')"
+	--svc.datatype = "or(ip6addr, ip4addr, 'src='"
 	svc.optional = true
 	local svc = s:option(DynamicList, "originator", translate("originator defines the ACL which declares a valid originator IP address for the router."), "ip6prefix, ip4prefix, default_accept, default_reject")
-	svc.datatype = "string"
-	--svc.datatype = "or(ip6prefix, negm(ip6prefix), ip4prefix, negm(ip4prefix), 'default_accept', 'default_reject')"
+	svc.datatype = "or(negm(ip6addr), negm(ip4addr), 'default_accept', 'default_reject')"
 	svc.optional = true
 end
 if arg_domain then
@@ -187,18 +185,16 @@ end
 
 if arg_interface and arg_if then
 	local svc = ifs:taboption("oonf", DynamicList, "acl", translate("acl defines the IP addresses that are allowed to use the RFC5444 socket."), "ip6prefix, ip4prefix, default_accept, default_reject")
-	svc.datatype = "string"
-	--svc.datatype = "or(ip6prefix, negm(ip6prefix), ip4prefix, negm(ip4prefix), 'default_accept', 'default_reject')"
+	svc.datatype = "or(negm(ip6addr), negm(ip4addr), 'default_accept', 'default_reject')"
 	svc.optional = true
 	local svc = ifs:taboption("oonf", DynamicList, "bindto", translate("bindto defines the IP addresses which the RFC5444 socket will be bound to."), "ip6prefix, ip4prefix, default_accept, default_reject")
-	svc.datatype = "string"
-	--svc.datatype = "or(ip6prefix, negm(ip6prefix), ip4prefix, negm(ip4prefix), 'default_accept', 'default_reject')"
+	svc.datatype = "or(negm(ip6addr), negm(ip4addr), 'default_accept', 'default_reject')"
 	svc.optional = true
 	local svc = ifs:taboption("oonf", Value, "multicast_v4", translate("multicast_v4 defines the IPv4 multicast address used for RFC5444 packets."), "ip4addr")
 	svc.datatype = "ip4addr"
 	svc.placeholder = "224.0.0.109"
 	svc.optional = true
-	local svc = ifs:taboption("oonf", Value, "multicast_v6", translate("multicast_v6 defines the IPv4 multicast address used for RFC5444 packets."), "ip4addr")
+	local svc = ifs:taboption("oonf", Value, "multicast_v6", translate("multicast_v6 defines the IPv6 multicast address used for RFC5444 packets."), "ip6addr")
 	svc.datatype = "ip6addr"
 	svc.placeholder = "ff02::6d"
 	svc.optional = true
@@ -209,8 +205,7 @@ if arg_interface and arg_if then
 	local svc = ifs:taboption("oonf", Flag, "rawip", translate("rawip defines if the interface should put RFC5444 packets directly into IP headers (skipping the UDP header)."))
 	svc.optional = true
 	local svc = ifs:taboption("nhdp", DynamicList, "ifaddr_filter", translate("ifaddr_filter defines the IP addresses that are allowed to NHDP interface addresses."), "ip6prefix, ip4prefix, default_accept, default_reject")
-	svc.datatype = "string"
-	--svc.datatype = "or(ip6prefix, negm(ip6prefix), ip4prefix, negm(ip4prefix), 'default_accept', 'default_reject')"
+	svc.datatype = "or(negm(ip6addr), negm(ip4addr), 'default_accept', 'default_reject')"
 	svc.optional = true
 	local svc = ifs:taboption("nhdp", Value, "hello_validity", translate("hello_validity defines the time the local HELLO messages will be valid for the neighbors."), ">0.1 s")
 	svc.optional    = true
