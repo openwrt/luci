@@ -70,7 +70,7 @@ L.poll(5, L.url('admin/network/wireless_status', networks.join(',')), null,
 				}, [ E('img', { src: icon }), ' %d%%'.format(p) ]));
 
 				L.itemlist(info, [
-					_('SSID'),       '%h'.format(iw.ssid || '?'),
+					_('SSID'),       iw.ssid || '?',
 					_('Mode'),       iw.mode,
 					_('BSSID'),      iw.is_assoc ? iw.bssid : null,
 					_('Encryption'), iw.is_assoc ? iw.encryption || _('None') : null,
