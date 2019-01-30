@@ -692,6 +692,8 @@ h5 {
 
 .cbi-section,
 .cbi-section-error,
+#iptables,
+.Firewall form,
 #cbi-network > .cbi-section-node,
 #cbi-wireless > .cbi-section-node,
 #cbi-wireless > #wifi_assoclist_table,
@@ -2281,16 +2283,12 @@ input[name="nslookup"] {
 
 /* firewall */
 #iptables {
-	font-family: inherit;
-	font-weight: normal;
-	font-style: normal;
-	line-height: 1;
-	min-width: inherit;
-	margin: 0 0 2rem 0;
-	padding: 2rem;
-	border: 0;
-	border-radius: 0;
-	background-color: #fff;
+	margin: 0;
+}
+
+.Firewall form {
+	padding: 0;
+	box-shadow: none;
 }
 
 #cbi-firewall-redirect table *,
@@ -2623,7 +2621,6 @@ input[name="nslookup"] {
 
 	.tr.placeholder > .td,
 	#cbi-firewall .tr > .td,
-	#iptables .tr:nth-child(2) > .td,
 	#cbi-network .tr:nth-child(2) > .td,
 	.cbi-section #wifi_assoclist_table .tr > .td {
 		border-top: 0;
@@ -2717,17 +2714,9 @@ input[name="nslookup"] {
 	}
 
 	.Firewall form {
-		font-family: inherit;
-		font-weight: normal;
-		font-style: normal;
-		line-height: normal;
 		position: static !important;
-		min-width: inherit;
 		margin: 0 0 2rem 0;
 		padding: 2rem;
-		border: 0;
-		border-radius: 0;
-		background-color: #fff;
 		box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .16), 0 0 2px 0 rgba(0, 0, 0, .12);
 	}
 
