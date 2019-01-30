@@ -40,24 +40,6 @@
 	url("fonts/font.svg") format("svg");
 }
 
-::-webkit-scrollbar {
-	width: 10px;
-	height: 10px;
-	background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-	background: #9e9e9e;
-}
-
-::-webkit-scrollbar-thumb:hover {
-	background: #757575;
-}
-
-::-webkit-scrollbar-thumb:active {
-	background: #424242;
-}
-
 .table {
 	position: relative;
 	display: table;
@@ -270,7 +252,6 @@ code {
 	font-size-adjust: .35;
 	padding: 1px 3px;
 	color: #101010;
-	border: thin solid #999;
 	border-radius: 2px;
 	background: #ddd;
 }
@@ -550,18 +531,29 @@ header > .fill > .container > .status > * {
 }
 
 .main > .main-left > .nav > .slide > .menu::before {
-	font-weight: 900;
 	position: absolute;
+	top: 30%;
 	right: 17px;
-	content: "\2228";
-	transform: scale(1.3, .75);
+	width: 1rem;
+	height: 1rem;
+	content: "";
+	background-image: url(data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IiB2aWV3Qm94PSIwIDAgMTAwMCAxMDAwIiBlbmFibGUtYmFja2dyb3VuZD0ibmV3IDAgMCAxMDAwIDEwMDAiIHhtbDpzcGFjZT0icHJlc2VydmUiPjxnPjxwYXRoIGQ9Ik01MDAsNjI1LjJMNzUuMywyNTVMMTAsMzE0LjlMNTAwLDc0NWw0OTAtNDMwLjFMOTI0LjcsMjU1TDUwMCw2MjUuMnoiLz48L2c+PC9zdmc+);
+	background-repeat: no-repeat;
 }
 
 .main > .main-left > .nav > .slide > .menu.active::before {
-	content: "\2227";
+	transform: rotate(-180deg);
 }
 
-.main > .main-left[style$="overflow: hidden;"] > .nav > .slide > .menu::before {
+body[class*="node-"] > .main > .main-left > .nav > .slide > .menu::before {
+	transition: transform .1s ease-in-out;
+}
+
+body[class*="node-"] > .main > .main-left > .nav > .slide > .menu.active::before {
+	transition: transform .2s ease-in-out;
+}
+
+.main > .main-left[style*="overflow: hidden"] > .nav > .slide > .menu::before {
 	display: none;
 }
 
@@ -1779,10 +1771,12 @@ td > .ifacebadge,
 
 #syslog {
 	font-size: small;
+	overflow-y: hidden;
 	width: 100%;
 	min-height: 15rem;
 	margin-bottom: 20px;
 	padding: 1rem;
+	padding-bottom: 2.5rem;
 	resize: none;
 	color: #eee;
 	border: 0;
@@ -2920,6 +2914,26 @@ input[name="nslookup"] {
 	.hide-sm,
 	.hide-xs:not([data-title="MAC-Address"]) {
 		display: none;
+	}
+}
+
+@media screen and (min-width: 600px) {
+	::-webkit-scrollbar {
+		width: 10px;
+		height: 10px;
+		background: transparent;
+	}
+
+	::-webkit-scrollbar-thumb {
+		background: #9e9e9e;
+	}
+
+	::-webkit-scrollbar-thumb:hover {
+		background: #757575;
+	}
+
+	::-webkit-scrollbar-thumb:active {
+		background: #424242;
 	}
 }
 
