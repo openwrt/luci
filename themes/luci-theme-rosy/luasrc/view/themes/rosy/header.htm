@@ -1,4 +1,4 @@
-<%#                                   
+<%#
     Rosy is a theme for LuCI. It is based on luci-theme-bootstrap
     luci-theme-rosy
         Copyright 2018 Rosy Song <rosysong@rosinson.com>
@@ -192,6 +192,26 @@
 			end
 		end
 	end
+
+	local function auth_level()
+		local childs = disp.node_childs(cattree)                               
+                if #childs > 0 then
+                        for i, r in ipairs(childs) do                                                                     
+                                local nnode = cattree.nodes[r]                  
+                                local grandchildren = disp.node_childs(nnode)          
+                                                     
+                                if #grandchildren > 0 then
+					-- If this value is returned, the current interface is the logged-in data output interface
+					return "auth"
+				else
+					-- If this value is returned, it indicates that the current interface is a data output interface that does not require login.
+					return "noauth"
+                                end                                       
+                        end                                     
+                end
+		-- If this value is returned, the current interface is the login interface
+		return "login"
+        end
 -%>
 <!DOCTYPE html>
 <html lang="<%=luci.i18n.context.lang%>">
@@ -234,33 +254,33 @@
 	<script src="<%=media%>/js/ScrollY.js"></script>
 </head>
 
-<body class="lang_<%=luci.i18n.context.lang%> <%- if node then %><%= striptags( node.title ) %><%- end %> <% if luci.dispatcher.context.authsession then %>logged-in<% end %>">
+<body class="lang_<%=luci.i18n.context.lang%> <%- if node then %><%= striptags( node.title ) %><%- end %> <%- if auth_level() == "auth" then %> logged-in<%- end %> <%- if auth_level() == "noauth" then %> login-info<%- end %> <%- if auth_level() == "login" then %> login<%- end %>">
 	<header>
-		<div class="fill">
-			<div class="container">
-				<span class="showSide"></span>
-				<a class="brand" href="#"><%=boardinfo.hostname or "?"%></a>
-				<div class="btn-con pull-right">
-					<% render_changes() %>
-					<span id="xhr_poll_status" style="display:none" onclick="XHR.running() ? XHR.halt() : XHR.run()">
-						<span class="label success" id="xhr_poll_status_on"><span class="mobile-hide">
-								<%:Auto Refresh%></span>
-							<%:on%></span>
-						<span class="label" id="xhr_poll_status_off" style="display:none"><span class="mobile-hide">
-								<%:Auto Refresh%></span>
-							<%:off%></span>
-					</span>
-					<% render_logout() %>
-				</div>
+		<div class="container">
+			<span class="showSide"></span>
+			<a class="brand PC-hide" href="#"><%=boardinfo.hostname or "?"%></a>
+			<div class="btn-con pull-right">
+				<% render_changes() %>
+				<span id="xhr_poll_status" style="display:none" onclick="XHR.running() ? XHR.halt() : XHR.run()">
+					<span class="label success" id="xhr_poll_status_on"><span class="mobile-hide">
+							<%:Auto Refresh%></span>
+						<%:on%></span>
+					<span class="label" id="xhr_poll_status_off" style="display:none"><span class="mobile-hide">
+							<%:Auto Refresh%></span>
+						<%:off%></span>
+				</span>
+				<% render_logout() %>
 			</div>
 		</div>
 	</header>
+	<div style="" class="loading">
+		<span>                                                                                                                                                 
+                	<div class="loading-img">                                                                           
+                        	<img src="<%=media%>/loading.svg">                                                          
+                        </div>Loading...                                                                    
+                </span>
+	</div>
 	<div class="main">
-		<div style="" class="loading"><span>
-				<div class="loading-img">
-					<img src="<%=media%>/loading.svg">
-				</div>Loading...
-			</span></div>
 		<div class="main-left">
 			<div class="nav-container">
 				<a class="brand" href="#">
