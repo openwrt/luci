@@ -55,6 +55,7 @@ timeout.datatype = "range(1, 1000000)"
 
 ipset = mwan_rule:option(Value, "ipset", translate("IPset"),
 	translate("Name of IPset rule. Requires IPset rule in /etc/dnsmasq.conf (eg \"ipset=/youtube.com/youtube\")"))
+ipset:value("", translate("-- Please choose --"))
 for _, z in ipairs(ipsets) do
 	ipset:value(z)
 end
