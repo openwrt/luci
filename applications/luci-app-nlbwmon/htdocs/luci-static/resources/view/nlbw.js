@@ -226,16 +226,16 @@ function renderPeriods()
 	var sel = document.getElementById('nlbw.period');
 
 	for (var e, i = trafficPeriods.length - 1; e = trafficPeriods[i]; i--) {
-		var d1 = new Date(e);
+		var d1 = new Date(e + 'T00:00:00Z');
 		var d2, pd;
 
 		if (i) {
 			d2 = new Date(trafficPeriods[i - 1]);
 			d2.setDate(d2.getDate() - 1);
-			pd = '%04d-%02d-%02d'.format(d1.getFullYear(), d1.getMonth() + 1, d1.getDate());
+			pd = e;
 		}
 		else {
-			d2 = new Date();
+			d2 = new Date((new Date()).getTime() + (d1.getTimezoneOffset() * 60000)); // Current time in UTC since the variable d1 is in UTC time
 			pd = '';
 		}
 
@@ -243,8 +243,8 @@ function renderPeriods()
 		    opt.setAttribute('data-duration', (d2.getTime() - d1.getTime()) / 1000);
 		    opt.value = pd;
 		    opt.text = '%04d-%02d-%02d - %04d-%02d-%02d'.format(
-				d1.getFullYear(), d1.getMonth() + 1, d1.getDate(),
-				d2.getFullYear(), d2.getMonth() + 1, d2.getDate());
+				d1.getUTCFullYear(), d1.getUTCMonth() + 1, d1.getUTCDate(),
+				d2.getUTCFullYear(), d2.getUTCMonth() + 1, d2.getUTCDate());
 
 		sel.appendChild(opt);
 	}
