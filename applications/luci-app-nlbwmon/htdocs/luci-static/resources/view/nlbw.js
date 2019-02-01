@@ -235,12 +235,12 @@ function renderPeriods()
 			pd = e;
 		}
 		else {
-			d2 = new Date((new Date()).getTime() + (d1.getTimezoneOffset() * 60000)); // Current time in UTC since the variable d1 is in UTC time
+			d2 = new Date();
 			pd = '';
 		}
 
 		var opt = document.createElement('option');
-		    opt.setAttribute('data-duration', (d2.getTime() - d1.getTime()) / 1000);
+		    opt.setAttribute('data-duration', (d2.getTime() + (d2.getTimezoneOffset() * 60000) - d1.getTime()) / 1000); // Add timezone offset (d1 is UTC, d2 is local)
 		    opt.value = pd;
 		    opt.text = '%04d-%02d-%02d - %04d-%02d-%02d'.format(
 				d1.getUTCFullYear(), d1.getUTCMonth() + 1, d1.getUTCDate(),
