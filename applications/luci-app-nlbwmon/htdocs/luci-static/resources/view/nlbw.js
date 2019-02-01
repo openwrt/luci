@@ -226,13 +226,15 @@ function renderPeriods()
 	var sel = document.getElementById('nlbw.period');
 
 	for (var e, i = trafficPeriods.length - 1; e = trafficPeriods[i]; i--) {
-		var d1 = new Date(e);
-		var d2, pd;
+		var ymd1 = e.split(/-/);
+		var d1 = new Date(+ymd1[0], +ymd1[1] - 1, +ymd1[2]);
+		var ymd2, d2, pd;
 
 		if (i) {
-			d2 = new Date(trafficPeriods[i - 1]);
+			ymd2 = trafficPeriods[i - 1].split(/-/);
+			d2 = new Date(+ymd2[0], +ymd2[1] - 1, +ymd2[2]);
 			d2.setDate(d2.getDate() - 1);
-			pd = '%04d-%02d-%02d'.format(d1.getFullYear(), d1.getMonth() + 1, d1.getDate());
+			pd = e;
 		}
 		else {
 			d2 = new Date();
