@@ -226,7 +226,8 @@ function renderPeriods()
 	var sel = document.getElementById('nlbw.period');
 
 	for (var e, i = trafficPeriods.length - 1; e = trafficPeriods[i]; i--) {
-		var d1 = new Date(e + 'T00:00:00Z');
+		var ymd = e.split(/-/);
+		var d1 = new Date(+ymd[0], +ymd[1] - 1, +ymd[2]);
 		var d2, pd;
 
 		if (i) {
@@ -240,11 +241,11 @@ function renderPeriods()
 		}
 
 		var opt = document.createElement('option');
-		    opt.setAttribute('data-duration', (d2.getTime() + (d2.getTimezoneOffset() * 60000) - d1.getTime()) / 1000); // Add timezone offset (d1 is UTC, d2 is local)
+		    opt.setAttribute('data-duration', (d2.getTime() - d1.getTime()) / 1000);
 		    opt.value = pd;
 		    opt.text = '%04d-%02d-%02d - %04d-%02d-%02d'.format(
-				d1.getUTCFullYear(), d1.getUTCMonth() + 1, d1.getUTCDate(),
-				d2.getUTCFullYear(), d2.getUTCMonth() + 1, d2.getUTCDate());
+				d1.getFullYear(), d1.getMonth() + 1, d1.getDate(),
+				d2.getFullYear(), d2.getMonth() + 1, d2.getDate());
 
 		sel.appendChild(opt);
 	}
