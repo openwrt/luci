@@ -1,4 +1,4 @@
--- Copyright 2017 Dirk Brenken (dev@brenken.org)
+-- Copyright 2017-2019 Dirk Brenken (dev@brenken.org)
 -- This is free software, licensed under the Apache License, Version 2.0
 
 module("luci.controller.dnscrypt-proxy", package.seeall)
@@ -27,12 +27,10 @@ function view_reslist()
 end
 
 function logread()
-	local logfile
-
-	if nixio.fs.access("/var/log/messages") then
-		logfile = util.trim(util.exec("cat /var/log/messages | grep 'dnscrypt-proxy'"))
-	else
-		logfile = util.trim(util.exec("logread -e 'dnscrypt-proxy'"))
+	local logfile = util.trim(util.exec("logread -e 'dnscrypt-proxy' 2>/dev/null")) or ""
+	
+	if logfile == "" then
+		logfile = "No DNSCrypt-Proxy related logs yet!"
 	end
 	templ.render("dnscrypt-proxy/logread", {title = i18n.translate("DNSCrypt-Proxy Logfile"), content = logfile})
 end
