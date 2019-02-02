@@ -146,7 +146,7 @@ function action_neigh()
 	local data = {}
 	local req_json
 	local telnet_port = 2009
-	local resolve = 1
+	local resolve = uci:get("luci_olsr2", "general", "resolve")
 
 	if luci.http.formvalue("status") == "1" then
 		for _, dev in ipairs(devices) do
