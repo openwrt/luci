@@ -51,13 +51,7 @@ function status_update()
 end
 
 function log_view()
-	local content
-
-	if nixio.fs.access("/var/log/messages") then
-		content = util.trim(util.exec("grep -F 'banIP-' /var/log/messages"))
-	else
-		content = util.trim(util.exec("logread -e 'banIP-' 2>/dev/null"))
-	end
+	local content = util.trim(util.exec("logread -e 'banIP-' 2>/dev/null")) or ""
 
 	if content == "" then
 		content = "No banIP related logs yet!"
