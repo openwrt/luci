@@ -1,4 +1,4 @@
--- Copyright 2017-2018 Dirk Brenken (dev@brenken.org)
+-- Copyright 2017-2019 Dirk Brenken (dev@brenken.org)
 -- This is free software, licensed under the Apache License, Version 2.0
 
 module("luci.controller.travelmate", package.seeall)
@@ -56,14 +56,8 @@ function status_update()
 end
 
 function logread()
-	local content
+	local content = util.trim(util.exec("logread -e 'travelmate-'")) or ""
 
-	if nixio.fs.access("/var/log/messages") then
-		content = util.trim(util.exec("grep -F 'travelmate-' /var/log/messages"))
-	else
-		content = util.trim(util.exec("logread -e 'travelmate-'"))
-	end
-	
 	if content == "" then
 		content = "No travelmate related logs yet!"
 	end
