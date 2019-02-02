@@ -16,7 +16,9 @@ function index()
 	end
 	entry({"admin", "services", "adblock"}, firstchild(), _("Adblock"), 30).dependent = false
 	entry({"admin", "services", "adblock", "tab_from_cbi"}, cbi("adblock/overview_tab", {hideresetbtn=true, hidesavebtn=true}), _("Overview"), 10).leaf = true
-	entry({"admin", "services", "adblock", "report"}, template("adblock/report"), _("DNS Query Report"), 20).leaf = true
+	if nixio.fs.access("/usr/sbin/tcpdump") then
+		entry({"admin", "services", "adblock", "report"}, template("adblock/report"), _("DNS Query Report"), 20).leaf = true
+	end
 	entry({"admin", "services", "adblock", "log"}, template("adblock/logread"), _("Logfile"), 30).leaf = true
 	entry({"admin", "services", "adblock", "advanced"}, firstchild(), _("Advanced"), 100)
 	entry({"admin", "services", "adblock", "advanced", "blacklist"}, form("adblock/blacklist_tab"), _("Edit Blacklist"), 110).leaf = true
@@ -143,14 +145,8 @@ function report_text()
 end
 
 function logread()
-	local content
+	local content = util.trim(util.exec("logread -e 'adblock-'")) or ""
 
-	if nixio.fs.access("/var/log/messages") then
-		content = util.trim(util.exec("grep -F 'adblock-' /var/log/messages"))
-	else
-		content = util.trim(util.exec("logread -e 'adblock-'"))
-	end
-	
 	if content == "" then
 		content = "No adblock related logs yet!"
 	end
