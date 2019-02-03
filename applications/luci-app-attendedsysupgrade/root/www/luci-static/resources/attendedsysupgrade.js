@@ -5,7 +5,7 @@ function show(s) { $(s).style.display = 'block'; }
 function hide(s) { $(s).style.display = 'none'; }
 
 function set_server() {
-	hide("#error_box");
+	hide("#status_box");
 	data.url = $("#server").value;
 	ubus_call("uci", "set", { "config": "attendedsysupgrade", "section": "server", values: { "url": data.url } })
 	ubus_call("uci", "commit", { "config": "attendedsysupgrade" })
@@ -142,12 +142,12 @@ function set_status(type, message, loading) {
 function upgrade_check() {
 	// Asks server for new firmware
 	// If data.upgrade_packages is set to true search for new package versions as well
-	hide("#error_box");
+	hide("#status_box");
 	hide("#server_div");
 	set_status("info", "Searching for upgrades", true);
 	var request_dict = {}
 	request_dict.version = data.release.version;
-	request_dict.revision= data.release.revision;
+	request_dict.revision = data.release.revision;
 	request_dict.installed = data.packages;
 	request_dict.upgrade_packages = data.upgrade_packages
 	server_request(request_dict, "api/upgrade-check", upgrade_check_callback)
@@ -215,12 +215,10 @@ function upgrade_request_callback(request) {
 	data.sysupgrade_url = request_json.sysupgrade;
 
 	var filename_split = data.sysupgrade_url.split("/")
-	data.filename = filename_split[filename_split.length - 1]
+	var filename = filename_split[filename_split.length - 1]
 
-	var info_output = 'Firmware created: <a href="' + data.sysupgrade_url + '"><b>' + data.filename + '</b></a>'
-	if(data.advanced_mode == 1) {
-		info_output += '<br /><a target="_blank" href="' + data.sysupgrade_url + '.log">Build log</a>'
-	}
+	var info_output = 'Firmware created: <a href="' + data.url + data.sysupgrade_url + '"><b>' + filename + '</b></a>'
+	info_output += ' <a target="_blank" href="'  + data.url + request_json.log + '">Build log</a>'
 	set_status("info", info_output);
 
 	show("#keep_container");
@@ -374,7 +372,6 @@ function server_request(request_dict, path, callback) {
 
 		} else if (request.status === 501) {
 			set_status("danger", "No sysupgrade file produced, may not supported by model.")
-
 		} else if (request.status === 502) {
 			// python part offline
 			set_status("danger", "Server down for maintenance")
