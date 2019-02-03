@@ -130,7 +130,6 @@ function action_neigh(json)
 	local devices  = ntm:get_wifidevs()
 	local sys = require "luci.sys"
 	local assoclist = {}
-	--local neightbl = require "neightbl"
 	local ntm = require "luci.model.network"
 	local ipc = require "luci.ip"
 	local nxo = require "nixio"
