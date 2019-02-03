@@ -543,6 +543,9 @@ var CBIValidatorPrototype = {
 		neg: function() {
 			return this.apply('or', this.value.replace(/^[ \t]*![ \t]*/, ''), arguments);
 		},
+		negm: function() {
+			return this.apply('or', this.value.replace(/^[ \t]*-[ \t]*/, ''), arguments);
+		},
 
 		list: function(subvalidator, subargs) {
 			this.field.setAttribute('data-is-list', 'true');

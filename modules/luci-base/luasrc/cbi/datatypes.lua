@@ -49,6 +49,9 @@ end
 function neg(v, ...)
 	return _M['or'](v:gsub("^%s*!%s*", ""), ...)
 end
+function negm(v, ...)
+	return _M['or'](v:gsub("^%s*-%s*", ""), ...)
+end
 
 function list(v, subvalidator, subargs)
 	if type(subvalidator) ~= "function" then
