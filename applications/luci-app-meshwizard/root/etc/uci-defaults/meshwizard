@@ -1,8 +1,0 @@
-#!/bin/sh
-uci batch <<EOF
-set ucitrack.meshwizard="meshwizard"
-set ucitrack.meshwizard.exec="/usr/bin/meshwizard/wizard.sh"
-commit ucitrack
-EOF
-
-rm -f /tmp/luci-indexcache
