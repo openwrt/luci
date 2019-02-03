@@ -1,0 +1,51 @@
+<%+header%>
+
+<script type="text/javascript">//<![CDATA[
+
+	XHR.poll(10 , '<%=REQUEST_URI%>', { status: 1 }, 
+		function(x, anet)
+		{
+		var nt = document.getElementById('olsr2_anet_table');
+			if (nt)
+			{
+				var s = '<div class="tr cbi-section-table-cell">' +
+				'<div class="th cbi-section-table-cell"><%:Node IP%></div>' +
+				'<div class="th cbi-section-table-cell"><%:attached network prefix%></div>' +
+				'<div class="th cbi-section-table-cell"><%:attached network source%></div>' +
+				'</div>';
+
+				for (var idx = 0; idx < anet["attached_network"].length; idx++)
+				{
+					var node = anet["attached_network"][idx];
+					s += String.format(
+						'<div class="tr cbi-section-table-row cbi-rowstyle-'+(1 + (idx % 2))+' proto-6">' +
+						'<div class="td cbi-section-table-cell left"><a href="https://[%s]/cgi-bin-olsr2-neigh.html">%s</a></div>' +
+						'<div class="td cbi-section-table-cell left">%s</div>' +
+						'<div class="td cbi-section-table-cell left">%s</div>' +
+						'</div>',
+						node.node,node.node,node.attached_net,node.attached_net_src
+					);
+				}
+				nt.innerHTML = s;
+			}
+		}
+	);
+//]]></script>
+
+
+<h2 name="content"><%:OLSR2 network prefixes%></h2>
+
+<fieldset class="cbi-section">
+	<legend><%:list of locally attached network prefixes of other mesh nodes%></legend>
+
+	<div class="table cbi-section-table" id="olsr2_anet_table">
+		<div class="tr cbi-section-table-cell">
+			<div class="th cbi-section-table-cell"><%:Node IP%></div>
+			<div class="th cbi-section-table-cell"><%:attached network prefix%></div>
+			<div class="th cbi-section-table-cell"><%:attached network source%></div>
+		</div>
+	</div>
+<br />
+
+</fieldset>
+<%+footer%>

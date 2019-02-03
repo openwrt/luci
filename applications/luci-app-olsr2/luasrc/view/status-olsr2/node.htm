@@ -1,0 +1,45 @@
+<%+header%>
+
+<script type="text/javascript">//<![CDATA[
+
+	XHR.poll(10 , '<%=REQUEST_URI%>', { status: 1 }, 
+		function(x, nodes)
+		{
+		var nt = document.getElementById('olsr2_node_table');
+			if (nt)
+			{
+				var s = '<div class="tr cbi-section-table-cell">' +
+				'<div class="th cbi-section-table-cell"><%:Node IP%></div>' +
+				'</div>';
+
+				for (var idx = 0; idx < nodes["node"].length; idx++)
+				{
+					var node = nodes["node"][idx];
+					s += String.format(
+						'<div class="tr cbi-section-table-row cbi-rowstyle-'+(1 + (idx % 2))+' proto-6">' +
+						'<div class="td cbi-section-table-cell left"><a href="https://[%s]/cgi-bin-olsr2-neigh.html">%s</a></div>' +
+						'</div>',
+						node.node,node.node
+					);
+				}
+				nt.innerHTML = s;
+			}
+		}
+	);
+//]]></script>
+
+
+<h2 name="content"><%:OLSR2 mesh nodes%></h2>
+
+<fieldset class="cbi-section">
+	<legend><%:list of known mesh nodes%></legend>
+
+	<div class="table cbi-section-table" id="olsr2_node_table">
+		<div class="tr cbi-section-table-cell">
+			<div class="th cbi-section-table-cell"><%:Node IP%></div>
+		</div>
+	</div>
+<br />
+
+</fieldset>
+<%+footer%>

@@ -1,0 +1,104 @@
+<%
+function write_conf(conf, file)
+	local fs = require "nixio.fs"
+	if fs.access(conf) then
+		luci.http.header("Content-Disposition", "attachment; filename="..file)
+		luci.http.prepare_content("text/plain")
+		luci.http.write(fs.readfile(conf))
+	end
+end
+
+conf = luci.http.formvalue()
+if conf.openwrt then
+	write_conf("/etc/config/olsrd2", "olsrd2")
+	return false
+end
+%>
+
+<%+header%>
+
+<script type="text/javascript">//<![CDATA[
+
+	XHR.poll(60, '<%=REQUEST_URI%>/version', { },
+			function(x, info)
+			{
+		var e;
+
+		if (! info) {
+			document.getElementById('error').innerHTML = '<%:Could not get any data. Make sure the jsoninfo plugin is installed and allows connections from localhost.%>';
+			return
+		}
+		document.getElementById('error').innerHTML = '';
+
+		if (e = document.getElementById('version'))
+			var version;
+			var commit;
+			if (info.version[0].version_text != undefined) {
+				version = info.version[0].version_text
+				commit = info.version[0].version_commit
+			} else {
+				version = 'unknown'
+				commit = 'unknown'
+			}		
+			e.innerHTML = version + '<br />' + commit;
+		}
+	);
+	XHR.poll(60, '<%=REQUEST_URI%>/lan', { },
+			function(x, info)
+			{
+		var e;
+
+		if (! info) {
+			document.getElementById('error').innerHTML = '<%:Could not get any data. Make sure the jsoninfo plugin is installed and allows connections from localhost.%>';
+			return
+		}
+		document.getElementById('error').innerHTML = '';
+
+		if (e = document.getElementById('lan'))
+			var lines = '<br />';
+			for (var i = 0; i < info.lan.length; i++) {
+				var lan;
+				var lan_src;
+				if (info.lan[i].lan != undefined) {
+					lan = info.lan[i].lan
+					lan_src = info.lan[i].lan_src
+					lines = lines + lan + ' -- ' + lan_src + '<br />'
+				}
+			}
+			e.innerHTML = lines;
+		}
+	);
+//]]></script>
+
+
+<div id="error" class="error"></div>
+
+<h2 name="content">OLSR2 <%:Overview%></h2>
+
+<fieldset class="cbi-section">
+	<legend>OLSR2 locally attachet network prefixes</legend>
+	<div class="table" width="100%" cellspacing="10">
+		<div class="tr"><div class="td" width="33%">IP prefix of LAN / SRC net for prefix</div>
+			<div class="td">
+				<span id="lan">-<span>
+			</div>
+		</div>
+	</div>
+</fieldset>
+<fieldset class="cbi-section">
+	<legend>OLSR2 <%:Configuration%></legend>
+	<div class="table" width="100%" cellspacing="10">
+		<div class="tr"><div class="td" width="33%"><%:Version%></div>
+			<div class="td">
+				<span id="version">-<span>
+			</div>
+		</div>
+		<div class="tr"><div class="td" width="33%"><%:Download Config%></div>
+			<div class="td">
+				<a href="<%=REQUEST_URI%>?openwrt">OpenWrt</a>,
+			</div>
+		</div>
+	</div>
+</fieldset>
+
+<%+footer%>

@@ -1,0 +1,142 @@
+<%+header%>
+
+<script type="text/javascript">//<![CDATA[
+
+	XHR.poll(10 , '<%=REQUEST_URI%>', { status: 1 }, 
+		function(x, info)
+		{
+		function metric_color(metric) {
+			color = "#bb3333";
+			if (metric==null) {
+				color = "#bb3333";
+			} else if (metric == 0) {
+				color = "#bb3333";
+			} else if (metric < 4) {
+				color = "#00cc00";
+			} else if (metric < 10) {
+				color = "#ffcb05";
+			} else if (metric < 100) {
+				color = "#ff6600";
+			}
+			return color
+		}
+		function willingness_color(willingness) {
+			color = "#bb3333";
+			if (willingness==null) {
+				color = "#bb3333";
+			} else if (willingness == 0) {
+				color = "#bb3333";
+			} else if (willingness < 5) {
+				color = "#00cc00";
+			} else if (willingness < 10) {
+				color = "#ffcb05";
+			} else if (willingness < 15) {
+				color = "#ff6600";
+			}
+			return color
+		}
+		function snr_color(snr) {
+			color = "#bb3333";
+			if (snr==null) {
+				color = "#bb3333";
+			} else if (snr == 0) {
+				color = "#bb3333";
+			} else if (snr > 30) {
+				color = "#00cc00";
+			} else if (snr > 20) {
+				color = "#ffcb05";
+			} else if (snr > 5) {
+				color = "#ff6600";
+			}
+			return color
+		}
+		var nt = document.getElementById('olsr2_neigh_table');
+			if (nt)
+			{
+				var s = '<div class="tr cbi-section-table-cell">' +
+				'<div class="th cbi-section-table-cell"><%:Neighbour IP%></div>' +
+				'<div class="th cbi-section-table-cell"><%:Hostname%></div>' +
+				'<div class="th cbi-section-table-cell"><%:Interface%></div>' +
+				'<div class="th cbi-section-table-cell"><%:Local interface IP%></div>' +
+				'<div class="th cbi-section-table-cell">Metric in</div>' +
+				'<div class="th cbi-section-table-cell">Metric out</div>' +
+				'<div class="th cbi-section-table-cell">Willingness</div>' +
+				'<div class="th cbi-section-table-cell">SNR</div>' +
+				'</div>';
+
+				for (var idx = 0; idx < info.length; idx++)
+				{
+					var neigh = info[idx];
+
+					if (neigh.proto == '6') {
+						s += String.format(
+							'<div class="tr cbi-section-table-row cbi-rowstyle-'+(1 + (idx % 2))+' proto-%s">' +
+							'<div class="td cbi-section-table-cell left"><a href="https://[%s]/cgi-bin-olsr2-neigh.html">%s</a></div>',
+							neigh.proto, neigh.neighbor_originator, neigh.neighbor_originator
+						);
+					} else {
+						s += String.format(
+							'<div class="tr cbi-section-table-row cbi-rowstyle-'+(1 + (idx % 2))+' proto-%s">' +
+							'<div class="td cbi-section-table-cell left"><a href="https://%s/cgi-bin-olsr2-neigh.html">%s</a></div>',
+							neigh.proto, neigh.neighbor_originator, neigh.neighbor_originator
+						);
+					}
+					if (neigh.hostname) {
+						s += String.format(
+							'<div class="td cbi-section-table-cell left"><a href="https://%s/cgi-bin-olsr2-neigh.html">%s</a></div>',
+							neigh.hostname, neigh.hostname
+						);
+					} else {
+						s += String.format(
+							'<div class="td cbi-section-table-cell left">?</div>'
+						);
+					}
+					neigh.metric_in_color = metric_color(neigh.domain_metric_in_raw);
+					neigh.metric_out_color = metric_color(neigh.domain_metric_out_raw);
+					neigh.willingness_color = willingness_color(neigh.domain_mpr_willingness);
+					neigh.snr_color = snr_color(neigh.snr);
+					s += String.format(
+						'<div class="td cbi-section-table-cell left">%s</div>' +
+						'<div class="td cbi-section-table-cell left">%s</div>' +
+						'<div class="td cbi-section-table-cell left" style="background-color:%s" title="Metric: %s">%s</div>' +
+						'<div class="td cbi-section-table-cell left" style="background-color:%s" title="Metric: %s">%s</div>' +
+						'<div class="td cbi-section-table-cell left" style="background-color:%s">%s</div>' +
+						'<div class="td cbi-section-table-cell left" style="background-color:%s" title="Signal: %s Noise: %s">%s</div>' +
+						'</div>',
+						neigh.interface, neigh.localIP,
+						neigh.metric_in_color, neigh.domain_metric_in_raw, neigh.domain_metric_in,
+						neigh.metric_out_color, neigh.domain_metric_out_raw, neigh.domain_metric_out,
+						neigh.willingness_color, neigh.domain_mpr_willingness,
+						neigh.snr_color, neigh.signal, neigh.noise, neigh.snr || '?'
+					);
+				}
+
+				nt.innerHTML = s;
+			}
+		}
+	);
+//]]></script>
+
+
+<h2 name="content"><%:OLSR2 connections%></h2>
+
+<fieldset class="cbi-section">
+	<legend><%:Overview of currently established OLSR2 connections%></legend>
+
+	<div class="table cbi-section-table" id="olsr2_neigh_table">
+			<div class="tr cbi-section-table-cell">
+				<div class="th cbi-section-table-cell"><%:Neighbour IP%></div>
+				<div class="th cbi-section-table-cell"><%:Hostname%></div>
+				<div class="th cbi-section-table-cell"><%:Interface%></div>
+				<div class="th cbi-section-table-cell"><%:Local interface IP%></div>
+				<div class="th cbi-section-table-cell">Metric in</div>
+				<div class="th cbi-section-table-cell">Metric out</div>
+				<div class="th cbi-section-table-cell">Willingness</div>
+				<div class="th cbi-section-table-cell">SNR</div>
+			</div>
+	</div>
+<br />
+
+<%+status-olsr2/legend%>
+</fieldset>
+<%+footer%>
