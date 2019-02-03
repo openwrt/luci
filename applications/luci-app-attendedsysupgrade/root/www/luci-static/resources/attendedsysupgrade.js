@@ -5,7 +5,7 @@ function show(s) { $(s).style.display = 'block'; }
 function hide(s) { $(s).style.display = 'none'; }
 
 function set_server() {
-	hide("#error_box");
+	hide("#status_box");
 	data.url = $("#server").value;
 	ubus_call("uci", "set", { "config": "attendedsysupgrade", "section": "server", values: { "url": data.url } })
 	ubus_call("uci", "commit", { "config": "attendedsysupgrade" })
@@ -142,7 +142,7 @@ function set_status(type, message, loading) {
 function upgrade_check() {
 	// Asks server for new firmware
 	// If data.upgrade_packages is set to true search for new package versions as well
-	hide("#error_box");
+	hide("#status_box");
 	hide("#server_div");
 	set_status("info", "Searching for upgrades", true);
 	var request_dict = {}
