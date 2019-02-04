@@ -88,6 +88,10 @@ msgstr ""
 msgid "-- please select --"
 msgstr ""
 
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:381
+msgid "0 = not using RSSI threshold, 1 = do not change driver default"
+msgstr ""
+
 #: modules/luci-mod-status/luasrc/view/admin_status/load.htm:252
 msgid "1 Minute Load:"
 msgstr "1分鐘負載"
@@ -96,7 +100,7 @@ msgstr "1分鐘負載"
 msgid "15 Minute Load:"
 msgstr "15分鐘負載"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:879
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:904
 msgid "4-character hexadecimal ID"
 msgstr ""
 
@@ -108,35 +112,35 @@ msgstr ""
 msgid "5 Minute Load:"
 msgstr "5分鐘負載"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:915
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:940
 msgid "6-octet identifier as a hex string - no colons"
 msgstr ""
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:850
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:875
 msgid "802.11r Fast Transition"
 msgstr ""
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:1106
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:1131
 msgid "802.11w Association SA Query maximum timeout"
 msgstr ""
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:1115
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:1140
 msgid "802.11w Association SA Query retry timeout"
 msgstr ""
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:1088
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:1113
 msgid "802.11w Management Frame Protection"
 msgstr ""
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:1105
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:1130
 msgid "802.11w maximum timeout"
 msgstr ""
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:1114
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:1139
 msgid "802.11w retry timeout"
 msgstr ""
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:390
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:398
 msgid "<abbr title=\"Basic Service Set Identifier\">BSSID</abbr>"
 msgstr "<abbr title=\"Basic Service Set Identifier\">BSSID</abbr>"
 
@@ -154,7 +158,7 @@ msgid ""
 "order of the resolvfile"
 msgstr "將會按照指定的順序查詢<abbr title=\"Domain Name System\">DNS</abbr>"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:379
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:387
 msgid "<abbr title=\"Extended Service Set Identifier\">ESSID</abbr>"
 msgstr "<abbr title=\"Extended Service Set Identifier\">ESSID</abbr>"
 
@@ -303,7 +307,7 @@ msgid "Access Concentrator"
 msgstr "接入集線器"
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:367
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:460
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:468
 msgid "Access Point"
 msgstr "存取點 (AP)"
 
@@ -443,12 +447,12 @@ msgstr ""
 msgid "Allow <abbr title=\"Secure Shell\">SSH</abbr> password authentication"
 msgstr "允許 <abbr title=\"Secure Shell\">SSH</abbr> 密碼驗證"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:535
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:543
 msgid "Allow AP mode to disconnect STAs based on low ACK condition"
 msgstr ""
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:452
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:579
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:460
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:587
 msgid "Allow all except listed"
 msgstr "僅允許列表外"
 
@@ -456,8 +460,8 @@ msgstr "僅允許列表外"
 msgid "Allow legacy 802.11b rates"
 msgstr ""
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:451
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:578
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:459
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:586
 msgid "Allow listed only"
 msgstr "僅允許列表內"
 
@@ -577,7 +581,7 @@ msgstr ""
 msgid "Announced DNS servers"
 msgstr ""
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:1048
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:1073
 msgid "Anonymous Identity"
 msgstr ""
 
@@ -649,7 +653,7 @@ msgstr ""
 msgid "Auth Group"
 msgstr ""
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:982
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:1007
 msgid "Authentication"
 msgstr "認證"
 
@@ -671,8 +675,8 @@ msgstr "需要授權"
 #: themes/luci-theme-material/luasrc/view/themes/material/header.htm:214
 #: themes/luci-theme-material/luasrc/view/themes/material/header.htm:215
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:223
-#: themes/luci-theme-rosy/luasrc/view/themes/rosy/header.htm:247
-#: themes/luci-theme-rosy/luasrc/view/themes/rosy/header.htm:250
+#: themes/luci-theme-rosy/luasrc/view/themes/rosy/header.htm:266
+#: themes/luci-theme-rosy/luasrc/view/themes/rosy/header.htm:269
 msgid "Auto Refresh"
 msgstr "自動更新"
 
@@ -966,7 +970,7 @@ msgstr ""
 "選擇您要指定給這介面的防火牆區. 撿選<em>unspecified</em>以便從指定區域除這個"
 "介面或者填寫<em>create</em>欄以便定義附加這個介面到一個新的區域上."
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:393
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:401
 msgid ""
 "Choose the network(s) you want to attach to this wireless interface or fill "
 "out the <em>create</em> field to define a new network."
@@ -974,7 +978,7 @@ msgstr ""
 "選擇您要附加到無線網路介面的多個網路或者填寫<em>create</em> 以便定義一個新的"
 "網路."
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:604
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:612
 msgid "Cipher"
 msgstr "暗號"
 
@@ -995,7 +999,7 @@ msgid ""
 msgstr ""
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:368
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:461
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:469
 msgid "Client"
 msgstr "用戶端"
 
@@ -1053,7 +1057,7 @@ msgstr ""
 msgid "Common Configuration"
 msgstr "一般設定"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:1125
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:1150
 msgid ""
 "Complicates key reinstallation attacks on the client side by disabling "
 "retransmission of EAPOL-Key frames that are used to install keys. This "
@@ -1186,15 +1190,15 @@ msgstr ""
 "如果可以的話,自定這個設備的動作 <abbr title=\"Light Emitting Diode\">LED</"
 "abbr>s ."
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:760
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:770
 msgid "DAE-Client"
 msgstr ""
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:768
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:778
 msgid "DAE-Port"
 msgstr ""
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:776
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:786
 msgid "DAE-Secret"
 msgstr ""
 
@@ -1278,7 +1282,7 @@ msgstr ""
 msgid "DSL line mode"
 msgstr ""
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:509
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:517
 msgid "DTIM Interval"
 msgstr ""
 
@@ -1295,9 +1299,9 @@ msgstr ""
 msgid "Debug"
 msgstr "除錯"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:720
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:744
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:768
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:730
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:754
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:778
 msgid "Default %d"
 msgstr "預設 %d"
 
@@ -1350,7 +1354,7 @@ msgstr ""
 msgid "Delete this network"
 msgstr "刪除這個網路"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:509
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:517
 msgid "Delivery Traffic Indication Message Interval"
 msgstr ""
 
@@ -1421,7 +1425,7 @@ msgstr ""
 msgid "Disable Encryption"
 msgstr ""
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:520
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:528
 msgid "Disable Inactivity Polling"
 msgstr ""
 
@@ -1439,11 +1443,11 @@ msgstr ""
 msgid "Disabled"
 msgstr "關閉"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:1094
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:1119
 msgid "Disabled (default)"
 msgstr ""
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:534
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:542
 msgid "Disassociate On Low Acknowledgement"
 msgstr ""
 
@@ -1576,7 +1580,7 @@ msgstr "幫用戶端動態發配DHCP位址. 假如關閉的話,僅有有靜態�
 msgid "EA-bits length"
 msgstr ""
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:945
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:970
 msgid "EAP-Method"
 msgstr "EAP協定驗證方式"
 
@@ -1656,11 +1660,11 @@ msgstr "啟用TFTP伺服器"
 msgid "Enable VLAN functionality"
 msgstr "啟用VLAN功能"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:1139
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:1164
 msgid "Enable WPS pushbutton, requires WPA(2)-PSK"
 msgstr ""
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:1124
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:1149
 msgid "Enable key reinstallation (KRACK) countermeasures"
 msgstr ""
 
@@ -1706,7 +1710,7 @@ msgstr "啟用"
 msgid "Enables IGMP snooping on this bridge"
 msgstr ""
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:851
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:876
 msgid ""
 "Enables fast roaming among access points that belong to the same Mobility "
 "Domain"
@@ -1723,7 +1727,7 @@ msgstr "封裝模式"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wifi_status.js:44
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:76
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:593
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:601
 #: modules/luci-mod-network/luasrc/view/admin_network/wifi_join.htm:33
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:158
 msgid "Encryption"
@@ -1796,11 +1800,11 @@ msgstr "釋放位址的過期週期,最少兩分鐘 (<code>2m</code>)."
 msgid "External"
 msgstr ""
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:926
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:951
 msgid "External R0 Key Holder List"
 msgstr ""
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:935
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:960
 msgid "External R1 Key Holder List"
 msgstr ""
 
@@ -1820,15 +1824,15 @@ msgstr ""
 msgid "Extra SSH command options"
 msgstr ""
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:895
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:920
 msgid "FT over DS"
 msgstr ""
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:896
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:921
 msgid "FT over the Air"
 msgstr ""
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:893
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:918
 msgid "FT protocol"
 msgstr ""
 
@@ -1938,7 +1942,7 @@ msgstr "強制"
 msgid "Force 40MHz mode"
 msgstr ""
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:612
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:620
 msgid "Force CCMP (AES)"
 msgstr "強制CCMP (AES)加密"
 
@@ -1946,11 +1950,11 @@ msgstr "強制CCMP (AES)加密"
 msgid "Force DHCP on this network even if another server is detected."
 msgstr "在網路上即使偵測到其它伺服器也強制採用DHCP的設定"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:613
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:621
 msgid "Force TKIP"
 msgstr "強制TKIP加密"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:614
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:622
 msgid "Force TKIP and CCMP (AES)"
 msgstr "強制TKIP+CCMP (AES)加密"
 
@@ -1991,7 +1995,7 @@ msgid "Forwarding mode"
 msgstr "轉發模式"
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:254
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:586
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:594
 msgid "Fragmentation Threshold"
 msgstr "分片閥值"
 
@@ -2053,7 +2057,7 @@ msgstr "一般設置"
 msgid "Generate Config"
 msgstr ""
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:900
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:925
 msgid "Generate PMK locally"
 msgstr ""
 
@@ -2080,7 +2084,7 @@ msgstr ""
 #: themes/luci-theme-bootstrap/luasrc/view/themes/bootstrap/header.htm:198
 #: themes/luci-theme-material/luasrc/view/themes/material/header.htm:235
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:262
-#: themes/luci-theme-rosy/luasrc/view/themes/rosy/header.htm:289
+#: themes/luci-theme-rosy/luasrc/view/themes/rosy/header.htm:309
 msgid "Go to password configuration..."
 msgstr "到密碼設定頁"
 
@@ -2127,9 +2131,9 @@ msgid ""
 "the timezone."
 msgstr "在這設置基本樣貌類似像主機名稱或者時區..等"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:489
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:546
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:569
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:497
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:554
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:577
 msgid "Hide <abbr title=\"Extended Service Set Identifier\">ESSID</abbr>"
 msgstr "隱藏 <abbr title=\"Extended Service Set Identifier\">ESSID</abbr>"
 
@@ -2384,7 +2388,7 @@ msgstr "IPv6凌駕IPv4外(第6版)"
 msgid "IPv6-over-IPv4 (6to4)"
 msgstr "IPv6凌駕IPv4外(6轉4)"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:1030
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:1055
 msgid "Identity"
 msgstr "特性"
 
@@ -2548,7 +2552,7 @@ msgstr "介面預覽"
 msgid "Interface is reconnecting..."
 msgstr "介面重連"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:503
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:511
 msgid "Interface name"
 msgstr ""
 
@@ -2588,7 +2592,7 @@ msgstr "打入的是不正確的VLAN ID!僅有獨一無二的IDs被允許"
 msgid "Invalid username and/or password! Please try again."
 msgstr "不正確的用戶名稱和/或者密碼!請再試一次."
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:498
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:506
 msgid "Isolate Clients"
 msgstr ""
 
@@ -2603,7 +2607,7 @@ msgstr "它顯示您正嘗試更新不適用於這個flash記憶體的映像檔,
 #: themes/luci-theme-freifunk-generic/luasrc/view/themes/freifunk-generic/header.htm:220
 #: themes/luci-theme-material/luasrc/view/themes/material/header.htm:242
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:252
-#: themes/luci-theme-rosy/luasrc/view/themes/rosy/header.htm:296
+#: themes/luci-theme-rosy/luasrc/view/themes/rosy/header.htm:316
 msgid "JavaScript required!"
 msgstr "需要Java腳本"
 
@@ -2632,15 +2636,16 @@ msgstr "核心日誌"
 msgid "Kernel Version"
 msgstr "核心版本"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:784
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:794
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:854
 msgid "Key"
 msgstr "鑰匙"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:810
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:811
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:812
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:813
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:829
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:820
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:821
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:822
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:823
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:839
 msgid "Key #%d"
 msgstr "鑰匙  #%d"
 
@@ -2768,7 +2773,7 @@ msgid ""
 "requests to"
 msgstr "列出 <abbr title=\"Domain Name System\">DNS</abbr> 伺服器以便轉發請求"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:927
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:952
 msgid ""
 "List of R0KHs in the same Mobility Domain. <br />Format: MAC-address,NAS-"
 "Identifier,128-bit key as hex string. <br />This list is used to map R0KH-ID "
@@ -2777,7 +2782,7 @@ msgid ""
 "Association."
 msgstr ""
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:936
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:961
 msgid ""
 "List of R1KHs in the same Mobility Domain. <br />Format: MAC-address,R1KH-ID "
 "as 6 octets with colons,128-bit key as hex string. <br />This list is used "
@@ -2943,8 +2948,8 @@ msgstr ""
 msgid "MAC-Address"
 msgstr "MAC-位址"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:447
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:576
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:455
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:584
 msgid "MAC-Address Filter"
 msgstr "MAC-位址過濾"
 
@@ -2953,8 +2958,8 @@ msgstr "MAC-位址過濾"
 msgid "MAC-Filter"
 msgstr "MAC-過濾"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:454
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:580
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:462
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:588
 msgid "MAC-List"
 msgstr "MAC-清單"
 
@@ -3004,7 +3009,7 @@ msgstr ""
 msgid "Max. Attainable Data Rate (ATTNDR)"
 msgstr ""
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:529
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:537
 msgid "Maximum allowed Listen Interval"
 msgstr ""
 
@@ -3076,7 +3081,7 @@ msgstr ""
 msgid "Missing protocol extension for proto %q"
 msgstr "協定  %q 漏失的延伸協定"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:878
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:903
 msgid "Mobility Domain"
 msgstr ""
 
@@ -3113,9 +3118,9 @@ msgstr ""
 msgid "Modem init timeout"
 msgstr "數據機初始化終結時間"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:442
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:544
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:567
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:450
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:552
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:575
 msgid "Monitor"
 msgstr "監視"
 
@@ -3176,7 +3181,7 @@ msgstr "往下移"
 msgid "Move up"
 msgstr "往上移"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:867
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:892
 msgid "NAS ID"
 msgstr " 網路附存伺服器ID"
 
@@ -3229,7 +3234,7 @@ msgstr "網路遮罩"
 
 #: modules/luci-base/luasrc/controller/admin/index.lua:62
 #: modules/luci-base/luasrc/view/wifi_assoclist.htm:108
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:392
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:400
 #: modules/luci-mod-status/luasrc/view/admin_status/connections.htm:358
 #: modules/luci-mod-status/luasrc/view/admin_status/index/30-network.htm:8
 #: modules/luci-mod-status/luasrc/view/admin_status/routes.htm:73
@@ -3303,7 +3308,7 @@ msgstr "尚未指定網路名稱"
 #: themes/luci-theme-freifunk-generic/luasrc/view/themes/freifunk-generic/header.htm:103
 #: themes/luci-theme-material/luasrc/view/themes/material/header.htm:232
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:259
-#: themes/luci-theme-rosy/luasrc/view/themes/rosy/header.htm:284
+#: themes/luci-theme-rosy/luasrc/view/themes/rosy/header.htm:304
 msgid "No password set!"
 msgstr "尚未設定密碼!"
 
@@ -3466,7 +3471,7 @@ msgstr "選項已變更"
 msgid "Option removed"
 msgstr "選項已移除"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:1095
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:1120
 #: protocols/luci-proto-wireguard/luasrc/model/cbi/admin_network/proto_wireguard.lua:55
 msgid "Optional"
 msgstr ""
@@ -3573,7 +3578,7 @@ msgstr ""
 msgid "Override TTL"
 msgstr ""
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:503
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:511
 msgid "Override default interface name"
 msgstr ""
 
@@ -3635,7 +3640,7 @@ msgstr "PIN碼"
 msgid "PIN code rejected"
 msgstr ""
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:921
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:946
 msgid "PMK R1 Push"
 msgstr ""
 
@@ -3688,7 +3693,7 @@ msgid "Part of zone %q"
 msgstr "區域 %q 的部分 "
 
 #: modules/luci-base/luasrc/view/sysauth.htm:29
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:1066
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:1091
 #: modules/luci-mod-system/luasrc/view/admin_system/password.htm:14
 #: protocols/luci-proto-openconnect/luasrc/model/cbi/admin_network/proto_openconnect.lua:42
 #: protocols/luci-proto-vpnc/luasrc/model/cbi/admin_network/proto_vpnc.lua:33
@@ -3699,11 +3704,11 @@ msgstr "密碼"
 msgid "Password authentication"
 msgstr "密碼驗證"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:974
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:999
 msgid "Password of Private Key"
 msgstr "私人金鑰密碼"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:1022
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:1047
 msgid "Password of inner Private Key"
 msgstr ""
 
@@ -3715,27 +3720,27 @@ msgstr ""
 msgid "Paste or drag SSH key file…"
 msgstr ""
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:955
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:980
 msgid "Path to CA-Certificate"
 msgstr "CA-證書的路徑"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:962
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:987
 msgid "Path to Client-Certificate"
 msgstr "用戶端-證書的路徑"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:968
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:993
 msgid "Path to Private Key"
 msgstr "私人金鑰的路徑"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:1004
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:1029
 msgid "Path to inner CA-Certificate"
 msgstr ""
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:1010
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:1035
 msgid "Path to inner Client-Certificate"
 msgstr ""
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:1016
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:1041
 msgid "Path to inner Private Key"
 msgstr ""
 
@@ -3868,8 +3873,8 @@ msgstr "假若在給于多次的 LCP 呼叫失敗後終點將死, 使用0忽略�
 msgid "Prevent listening on these interfaces."
 msgstr ""
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:499
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:552
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:507
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:560
 msgid "Prevents client-to-client communication"
 msgstr "防止用戶端對用戶端的通訊"
 
@@ -3918,7 +3923,7 @@ msgstr "提供NTP伺服器"
 msgid "Provide new network"
 msgstr "提供新網路"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:441
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:449
 msgid "Pseudo Ad-Hoc (ahdemo)"
 msgstr "偽裝Ad-Hoc (ahdemo模式)"
 
@@ -3953,11 +3958,11 @@ msgid ""
 "servers"
 msgstr ""
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:907
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:932
 msgid "R0 Key Lifetime"
 msgstr ""
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:914
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:939
 msgid "R1 Key Holder"
 msgstr ""
 
@@ -3965,8 +3970,12 @@ msgstr ""
 msgid "RFC3947 NAT-T mode"
 msgstr ""
 
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:380
+msgid "RSSI threshold for joining"
+msgstr ""
+
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:255
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:587
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:595
 msgid "RTS/CTS Threshold"
 msgstr "RTS/CTS門檻"
 
@@ -3980,27 +3989,27 @@ msgstr "接收"
 msgid "RX Rate"
 msgstr "接收速率"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:744
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:754
 msgid "Radius-Accounting-Port"
 msgstr "Radius-驗証帳號-埠"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:752
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:762
 msgid "Radius-Accounting-Secret"
 msgstr "Radius-合法帳號-密碼"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:736
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:746
 msgid "Radius-Accounting-Server"
 msgstr "Radius-合法帳號-伺服器"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:720
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:730
 msgid "Radius-Authentication-Port"
 msgstr "Radius-驗証-埠"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:728
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:738
 msgid "Radius-Authentication-Secret"
 msgstr "Radius-驗証-密碼"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:712
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:722
 msgid "Radius-Authentication-Server"
 msgstr "Radius-驗証-伺服器"
 
@@ -4058,7 +4067,7 @@ msgstr "即時流量"
 msgid "Realtime Wireless"
 msgstr "即時無線網路"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:886
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:911
 msgid "Reassociation Deadline"
 msgstr ""
 
@@ -4152,7 +4161,7 @@ msgstr ""
 msgid "Request IPv6-prefix of length"
 msgstr ""
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:1096
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:1121
 msgid "Required"
 msgstr ""
 
@@ -4175,7 +4184,7 @@ msgid ""
 "routes through the tunnel."
 msgstr ""
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:1089
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:1114
 msgid ""
 "Requires the 'full' version of wpad/hostapd and support from the wifi driver "
 "<br />(as of Jan 2019: ath9k, ath10k, mwlwifi and mt76)"
@@ -4418,7 +4427,7 @@ msgid ""
 "conjunction with failure threshold"
 msgstr "傳送LCP呼叫請求在這個給予的秒數間隔內, 僅影響關聯到失敗門檻"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:551
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:559
 msgid "Separate Clients"
 msgstr "分隔用戶端"
 
@@ -4478,7 +4487,7 @@ msgstr ""
 msgid "Short GI"
 msgstr ""
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:506
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:514
 msgid "Short Preamble"
 msgstr ""
 
@@ -4666,7 +4675,7 @@ msgstr ""
 "靜態租約是用來指定固定的IP位址和表示的主機名稱給予DHCP用戶端. 它們也需要非動"
 "態介面設定值以便獲取相應租約的主機服務."
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:524
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:532
 msgid "Station inactivity limit"
 msgstr ""
 
@@ -5038,7 +5047,7 @@ msgstr "尚未指定設備, 請接上一個網路設備在這\"實體設置\"標
 #: themes/luci-theme-freifunk-generic/luasrc/view/themes/freifunk-generic/header.htm:104
 #: themes/luci-theme-material/luasrc/view/themes/material/header.htm:233
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:260
-#: themes/luci-theme-rosy/luasrc/view/themes/rosy/header.htm:287
+#: themes/luci-theme-rosy/luasrc/view/themes/rosy/header.htm:307
 msgid ""
 "There is no password set on this router. Please configure a root password to "
 "protect the web interface and enable SSH."
@@ -5134,7 +5143,7 @@ msgstr "校時同步"
 msgid "Time Synchronization is not configured yet."
 msgstr "校時同步尚未設定."
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:515
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:523
 msgid "Time interval for rekeying GTK"
 msgstr ""
 
@@ -5179,7 +5188,7 @@ msgstr "流量"
 msgid "Transfer"
 msgstr "傳輸"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:585
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:593
 msgid "Transmission Rate"
 msgstr "傳輸速率"
 
@@ -5484,11 +5493,11 @@ msgstr ""
 msgid "Used"
 msgstr "已使用"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:807
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:817
 msgid "Used Key Slot"
 msgstr "已使用的關鍵插槽"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:868
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:893
 msgid ""
 "Used for two different purposes: RADIUS NAS ID and 802.11r R0KH-ID. Not "
 "needed with normal WPA(2)-PSK."
@@ -5566,18 +5575,18 @@ msgstr "確認"
 msgid "Virtual dynamic interface"
 msgstr ""
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:460
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:461
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:543
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:566
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:468
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:469
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:551
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:574
 msgid "WDS"
 msgstr "無線分散系統WDS"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:657
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:665
 msgid "WEP Open System"
 msgstr "WEP 開放系統"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:658
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:666
 msgid "WEP Shared Key"
 msgstr "WEP 共享金鑰"
 
@@ -5585,8 +5594,8 @@ msgstr "WEP 共享金鑰"
 msgid "WEP passphrase"
 msgstr "WEP通關密碼"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:493
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:556
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:501
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:564
 msgid "WMM Mode"
 msgstr "無線多媒體機制"
 
@@ -5594,9 +5603,9 @@ msgstr "無線多媒體機制"
 msgid "WPA passphrase"
 msgstr "WPA 密碼"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:684
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:696
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:701
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:693
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:706
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:711
 msgid ""
 "WPA-Encryption requires wpa_supplicant (for client mode) or hostapd (for AP "
 "and ad-hoc mode) to be installed."
@@ -5629,7 +5638,7 @@ msgstr "警告"
 msgid "Warning: There are unsaved changes that will get lost on reboot!"
 msgstr ""
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:901
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:926
 msgid ""
 "When using a PSK, the PMK can be automatically generated. When enabled, the "
 "R0/R1 key options below are not applied. Disable this to use the R0 and R1 "
@@ -5737,7 +5746,7 @@ msgstr ""
 #: themes/luci-theme-freifunk-generic/luasrc/view/themes/freifunk-generic/header.htm:221
 #: themes/luci-theme-material/luasrc/view/themes/material/header.htm:243
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:253
-#: themes/luci-theme-rosy/luasrc/view/themes/rosy/header.htm:299
+#: themes/luci-theme-rosy/luasrc/view/themes/rosy/header.htm:319
 msgid ""
 "You must enable JavaScript in your browser or LuCI will not work properly."
 msgstr "在瀏覽器您必須啟用JavaScript否則LuCI無法正常運作."
@@ -5776,7 +5785,7 @@ msgstr "任意"
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:281
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:320
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:327
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:611
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:619
 #: protocols/luci-proto-ncm/luasrc/model/cbi/admin_network/proto_ncm.lua:37
 #: protocols/luci-proto-ppp/luasrc/model/cbi/admin_network/proto_pppoe.lua:22
 #: protocols/luci-proto-ppp/luasrc/model/cbi/admin_network/proto_pppoe.lua:29
@@ -5829,8 +5838,8 @@ msgstr "dB"
 msgid "dBm"
 msgstr "dBm"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:450
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:577
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:458
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:585
 msgid "disable"
 msgstr "關閉"
 
@@ -5934,7 +5943,7 @@ msgstr ""
 msgid "local <abbr title=\"Domain Name System\">DNS</abbr> file"
 msgstr "本地<abbr title=\"Domain Name System\">DNS</abbr> 檔案"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:907
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:932
 msgid "minutes"
 msgstr ""
 
@@ -5967,7 +5976,7 @@ msgstr ""
 #: themes/luci-theme-freifunk-generic/luasrc/view/themes/freifunk-generic/header.htm:133
 #: themes/luci-theme-material/luasrc/view/themes/material/header.htm:215
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:225
-#: themes/luci-theme-rosy/luasrc/view/themes/rosy/header.htm:251
+#: themes/luci-theme-rosy/luasrc/view/themes/rosy/header.htm:270
 msgid "off"
 msgstr "關閉"
 
@@ -5975,7 +5984,7 @@ msgstr "關閉"
 #: themes/luci-theme-freifunk-generic/luasrc/view/themes/freifunk-generic/header.htm:132
 #: themes/luci-theme-material/luasrc/view/themes/material/header.htm:214
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:224
-#: themes/luci-theme-rosy/luasrc/view/themes/rosy/header.htm:248
+#: themes/luci-theme-rosy/luasrc/view/themes/rosy/header.htm:267
 msgid "on"
 msgstr "開啟"
 
@@ -6019,8 +6028,8 @@ msgstr ""
 msgid "routed"
 msgstr "路由"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:515
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:524
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:523
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:532
 msgid "sec"
 msgstr ""
 
@@ -6045,7 +6054,7 @@ msgstr ""
 msgid "tagged"
 msgstr "標籤"
 
-#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:887
+#: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:912
 msgid "time units (TUs / 1.024 ms) [1000-65535]"
 msgstr ""
 
