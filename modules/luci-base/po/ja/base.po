@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-06-10 03:40+0200\n"
-"PO-Revision-Date: 2018-12-26 19:48+0900\n"
+"PO-Revision-Date: 2019-02-04 22:33+0900\n"
 "Last-Translator: INAGAKI Hiroshi <musashino.open@gmail.com>\n"
 "Language-Team: \n"
 "Language: ja\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 2.2\n"
+"X-Generator: Poedit 2.2.1\n"
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:133
 msgid "%.1f dB"
@@ -92,7 +92,7 @@ msgstr "-- 選択してください --"
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:381
 msgid "0 = not using RSSI threshold, 1 = do not change driver default"
-msgstr ""
+msgstr "0: RSSI しきい値を使用しない, 1: ドライバのデフォルトを使用する"
 
 #: modules/luci-mod-status/luasrc/view/admin_status/load.htm:252
 msgid "1 Minute Load:"
@@ -409,7 +409,7 @@ msgstr "管理画面"
 
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:25
 msgid "Advanced"
-msgstr ""
+msgstr "詳細設定"
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/dhcp.lua:22
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/ifaces.lua:189
@@ -1622,7 +1622,7 @@ msgstr ""
 
 #: protocols/luci-proto-ipv6/luasrc/model/cbi/admin_network/proto_map.lua:53
 msgid "EA-bits length"
-msgstr ""
+msgstr "EA ビット長"
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:970
 msgid "EAP-Method"
@@ -2492,7 +2492,7 @@ msgstr ""
 #: protocols/luci-proto-ppp/luasrc/model/cbi/admin_network/proto_pptp.lua:24
 #: protocols/luci-proto-pppossh/luasrc/model/cbi/admin_network/proto_pppossh.lua:44
 msgid "If unchecked, no default route is configured"
-msgstr "チェックされていない場合、デフォルト ルートを設定しません"
+msgstr "チェックされていない場合、デフォルト ルートは構成されません"
 
 #: modules/luci-base/luasrc/model/cbi/admin_network/proto_dhcp.lua:34
 #: protocols/luci-proto-3g/luasrc/model/cbi/admin_network/proto_3g.lua:86
@@ -3116,8 +3116,8 @@ msgid ""
 "Maximum length of the name is 15 characters including the automatic protocol/"
 "bridge prefix (br-, 6in4-, pppoe- etc.)"
 msgstr ""
-"名前の長さは、自動的に含まれるプロトコル/ブリッジ プレフィックス （br-, "
-"6in4-, pppoe- など）と合わせて最大15文字です。"
+"名前の長さは、自動的に含まれるプロトコル/ブリッジ プレフィクス （br-, 6in4-, "
+"pppoe- など）と合わせて最大15文字です。"
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/ifaces.lua:482
 msgid "Maximum number of leased addresses."
@@ -3142,7 +3142,7 @@ msgstr "メモリ使用率 (%)"
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:371
 msgid "Mesh Id"
-msgstr ""
+msgstr "メッシュ ID"
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/routes.lua:34
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/routes.lua:76
@@ -3765,11 +3765,11 @@ msgstr "PPtP"
 
 #: protocols/luci-proto-ipv6/luasrc/model/cbi/admin_network/proto_map.lua:59
 msgid "PSID offset"
-msgstr ""
+msgstr "PSID オフセット"
 
 #: protocols/luci-proto-ipv6/luasrc/model/cbi/admin_network/proto_map.lua:56
 msgid "PSID-bits length"
-msgstr ""
+msgstr "PSID ビット長"
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:123
 msgid "PTM/EFM (Packet Transfer Mode)"
@@ -3915,11 +3915,11 @@ msgstr "ポリシー"
 
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:178
 msgid "Polling interval"
-msgstr ""
+msgstr "ポーリング間隔"
 
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:179
 msgid "Polling interval for status queries in seconds"
-msgstr ""
+msgstr "ステータス クエリのポーリング間隔（秒）です。"
 
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/dropbear.lua:22
 msgid "Port"
@@ -4075,7 +4075,7 @@ msgstr "RFC3947 NAT-Tモード"
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:380
 msgid "RSSI threshold for joining"
-msgstr ""
+msgstr "ネットワーク参加の RSSI しきい値"
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:255
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:595
@@ -4177,7 +4177,7 @@ msgstr "リアルタイム・無線LAN"
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:911
 msgid "Reassociation Deadline"
-msgstr ""
+msgstr "再アソシエーション制限時間"
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/dhcp.lua:149
 msgid "Rebind protection"
@@ -5087,6 +5087,7 @@ msgid ""
 "The length of the IPv4 prefix in bits, the remainder is used in the IPv6 "
 "addresses."
 msgstr ""
+"IPv4 プレフィクスの長さ (bit) です。残りは IPv6 アドレスで使用されます。"
 
 #: protocols/luci-proto-ipv6/luasrc/model/cbi/admin_network/proto_6rd.lua:35
 #: protocols/luci-proto-ipv6/luasrc/model/cbi/admin_network/proto_map.lua:46
