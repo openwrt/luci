@@ -799,6 +799,7 @@ function cbi_init() {
 		}
 
 		cbi_dynlist_init(node, choices[2], choices[3], options);
+		node.addEventListener('cbi-dynlist-change', cbi_d_update);
 	}
 
 	nodes = document.querySelectorAll('[data-type]');
@@ -808,7 +809,11 @@ function cbi_init() {
 		                   node.getAttribute('data-type'));
 	}
 
-	document.querySelectorAll('.cbi-dropdown').forEach(cbi_dropdown_init);
+	document.querySelectorAll('.cbi-dropdown').forEach(function(node) {
+		cbi_dropdown_init(node);
+		node.addEventListener('cbi-dropdown-change', cbi_d_update);
+	});
+
 	document.querySelectorAll('[data-browser]').forEach(cbi_browser_init);
 
 	document.querySelectorAll('.cbi-tooltip:not(:empty)').forEach(function(s) {
@@ -915,22 +920,37 @@ CBIDynamicList = {
 				exists = !!item.parentNode.insertBefore(new_item, item);
 		});
 
-		cbi_d_update();
+		dl.dispatchEvent(new CustomEvent('cbi-dynlist-change', {
+			bubbles: true,
+			detail: {
+				instance: this,
+				element: dl,
+				value: value,
+				add: true
+			}
+		}));
 	},
 
 	removeItem: function(dl, item) {
+		var value = item.querySelector('input[type="hidden"]').value;
 		var sb = dl.querySelector('.cbi-dropdown');
-		if (sb) {
-			var value = item.querySelector('input[type="hidden"]').value;
-
+		if (sb)
 			sb.querySelectorAll('ul > li').forEach(function(li) {
 				if (li.getAttribute('data-value') === value)
 					li.removeAttribute('unselectable');
 			});
-		}
 
 		item.parentNode.removeChild(item);
-		cbi_d_update();
+
+		dl.dispatchEvent(new CustomEvent('cbi-dynlist-change', {
+			bubbles: true,
+			detail: {
+				instance: this,
+				element: dl,
+				value: value,
+				remove: true
+			}
+		}));
 	},
 
 	handleClick: function(ev) {
@@ -1671,8 +1691,6 @@ CBIDropdown = {
 			bubbles: true,
 			detail: detail
 		}));
-
-		cbi_d_update();
 	},
 
 	setValues: function(sb, values) {
