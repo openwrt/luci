@@ -260,7 +260,7 @@ var CBIValidatorPrototype = {
 
 	validate: function() {
 		/* element is detached */
-		if (!findParent(this.field, 'form'))
+		if (!findParent(this.field, 'body'))
 			return true;
 
 		this.field.classList.remove('cbi-input-invalid');
