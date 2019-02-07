@@ -88,6 +88,9 @@ function index()
 	page = entry({"admin", "translations"}, call("action_translations"), nil)
 	page.leaf = true
 
+	page = entry({"admin", "ubus"}, call("action_ubus"), nil)
+	page.leaf = true
+
 	-- Logout is last
 	entry({"admin", "logout"}, call("action_logout"), _("Logout"), 999)
 end
@@ -129,6 +132,115 @@ function action_translations(lang)
 	http.write_json(i18n.dump())
 end
 
+local function ubus_reply(id, data, code, errmsg)
+	local reply = { jsonrpc = "2.0", id = id }
+	if errmsg then
+		reply.error = {
+			code = code,
+			message = errmsg
+		}
+	else
+		reply.result = { code, data }
+	end
+
+	return reply
+end
+
+local ubus_types = {
+	nil,
+	"array",
+	"object",
+	"string",
+	nil, -- INT64
+	"number",
+	nil, -- INT16,
+	"boolean",
+	"double"
+}
+
+local function ubus_request(req)
+	if type(req) ~= "table" or type(req.method) ~= "string" or type(req.params) ~= "table" or
+	   #req.params < 2 or req.jsonrpc ~= "2.0" or req.id == nil then
+		return ubus_reply(req.id, nil, -32600, "Invalid request")
+
+	elseif req.method == "call" then
+		local sid, obj, fun, arg =
+			req.params[1], req.params[2], req.params[3], req.params[4] or {}
+		if type(arg) ~= "table" or arg.ubus_rpc_session ~= nil then
+			return ubus_reply(req.id, nil, -32602, "Invalid parameters")
+		end
+
+		if sid == "00000000000000000000000000000000" then
+			sid = luci.dispatcher.context.authsession
+		end
+
+		arg.ubus_rpc_session = sid
+
+		local res, code = luci.util.ubus(obj, fun, arg)
+		return ubus_reply(req.id, res, code or 0)
+
+	elseif req.method == "list" then
+		if type(params) ~= "table" or #params == 0 then
+			local objs = { luci.util.ubus() }
+			return ubus_reply(req.id, objs, 0)
+		else
+			local n, rv = nil, {}
+			for n = 1, #params do
+				if type(params[n]) ~= "string" then
+					return ubus_reply(req.id, nil, -32602, "Invalid parameters")
+				end
+
+				local sig = luci.util.ubus(params[n])
+				if sig and type(sig) == "table" then
+					rv[params[n]] = {}
+
+					local m, p
+					for m, p in pairs(sig) do
+						if type(p) == "table" then
+							rv[params[n]][m] = {}
+
+							local pn, pt
+							for pn, pt in pairs(p) do
+								rv[params[n]][m][pn] = ubus_types[pt] or "unknown"
+							end
+						end
+					end
+				end
+			end
+			return ubus_reply(req.id, rv, 0)
+		end
+	end
+
+	return ubus_reply(req.id, nil, -32601, "Method not found")
+end
+
+function action_ubus()
+	local parser = require "luci.jsonc".new()
+	luci.http.context.request:setfilehandler(function(_, s) parser:parse(s or "") end)
+	luci.http.context.request:content()
+
+	local json = parser:get()
+	if json == nil or type(json) ~= "table" then
+		luci.http.prepare_content("application/json")
+		luci.http.write_json(ubus_reply(nil, nil, -32700, "Parse error"))
+		return
+	end
+
+	local response
+	if #json == 0 then
+		response = ubus_request(json)
+	else
+		response = {}
+
+		local _, request
+		for _, request in ipairs(json) do
+			response[_] = ubus_request(request)
+		end
+	end
+
+	luci.http.prepare_content("application/json")
+	luci.http.write_json(response)
+end
 
 function lease_status()
 	local s = require "luci.tools.status"

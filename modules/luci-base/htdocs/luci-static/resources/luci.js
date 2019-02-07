@@ -433,8 +433,6 @@
 		__init__: function(env) {
 			Object.assign(this.env, env);
 
-			document.addEventListener('DOMContentLoaded', this.setupDOM.bind(this));
-
 			document.addEventListener('poll-start', function(ev) {
 				document.querySelectorAll('[id^="xhr_poll_status"]').forEach(function(e) {
 					e.style.display = (e.id == 'xhr_poll_status_off') ? 'none' : '';
@@ -445,6 +443,17 @@
 				document.querySelectorAll('[id^="xhr_poll_status"]').forEach(function(e) {
 					e.style.display = (e.id == 'xhr_poll_status_on') ? 'none' : '';
 				});
+			});
+
+			var domReady = new Promise(function(resolveFn, rejectFn) {
+				document.addEventListener('DOMContentLoaded', resolveFn);
+			});
+
+			Promise.all([
+				domReady,
+				this.require('ui')
+			]).then(this.setupDOM.bind(this)).catch(function(error) {
+				alert('LuCI class loading error:\n' + error);
 			});
 
 			originalCBIInit = window.cbi_init;
@@ -582,38 +591,32 @@
 
 		/* DOM setup */
 		setupDOM: function(ev) {
-			Promise.all([
-				L.require('ui')
-			]).then(function() {
-				Request.addInterceptor(function(res) {
-					if (res.status != 403 || res.headers.get('X-LuCI-Login-Required') != 'yes')
-						return;
+			Request.addInterceptor(function(res) {
+				if (res.status != 403 || res.headers.get('X-LuCI-Login-Required') != 'yes')
+					return;
 
-					Request.poll.stop();
+				Request.poll.stop();
 
-					L.ui.showModal(_('Session expired'), [
-						E('div', { class: 'alert-message warning' },
-							_('A new login is required since the authentication session expired.')),
-						E('div', { class: 'right' },
-							E('div', {
-								class: 'btn primary',
-								click: function() {
-									var loc = window.location;
-									window.location = loc.protocol + '//' + loc.host + loc.pathname + loc.search;
-								}
-							}, _('To login…')))
-					]);
+				L.ui.showModal(_('Session expired'), [
+					E('div', { class: 'alert-message warning' },
+						_('A new login is required since the authentication session expired.')),
+					E('div', { class: 'right' },
+						E('div', {
+							class: 'btn primary',
+							click: function() {
+								var loc = window.location;
+								window.location = loc.protocol + '//' + loc.host + loc.pathname + loc.search;
+							}
+						}, _('To login…')))
+				]);
 
-					L.error('AuthenticationError', 'Session expired');
-				});
-
-				originalCBIInit();
-				Request.poll.start();
-
-				document.dispatchEvent(new CustomEvent('luci-loaded'));
-			}).catch(function(error) {
-				alert('LuCI class loading error:\n' + error);
+				L.error('AuthenticationError', 'Session expired');
 			});
+
+			originalCBIInit();
+			Request.poll.start();
+
+			document.dispatchEvent(new CustomEvent('luci-loaded'));
 		},
 
 		env: {},
@@ -923,7 +926,87 @@
 		}),
 
 		Class: Class,
-		Request: Request
+		Request: Request,
+
+		view: Class.extend({
+			__name__: 'LuCI.View',
+
+			__init__: function() {
+				var mc = document.getElementById('maincontent');
+
+				L.dom.content(mc, E('div', { 'class': 'spinning' }, _('Loading view…')));
+
+				return Promise.resolve(this.load())
+					.then(L.bind(this.render, this))
+					.then(L.bind(function(nodes) {
+						var mc = document.getElementById('maincontent');
+
+						L.dom.content(mc, nodes);
+						L.dom.append(mc, this.addFooter());
+					}, this));
+			},
+
+			load: function() {},
+			render: function() {},
+
+			handleSave: function(ev) {
+				var tasks = [];
+
+				document.getElementById('maincontent')
+					.querySelectorAll('.cbi-map').forEach(function(map) {
+						tasks.push(L.dom.callClassMethod(map, 'save'));
+					});
+
+				return Promise.all(tasks);
+			},
+
+			handleSaveApply: function(ev) {
+				return this.handleSave(ev).then(function() {
+					L.ui.changes.apply(true);
+				});
+			},
+
+			handleReset: function(ev) {
+				var tasks = [];
+
+				document.getElementById('maincontent')
+					.querySelectorAll('.cbi-map').forEach(function(map) {
+						tasks.push(L.dom.callClassMethod(map, 'reset'));
+					});
+
+				return Promise.all(tasks);
+			},
+
+			addFooter: function() {
+				var footer = E([]),
+				    mc = document.getElementById('maincontent');
+
+				if (mc.querySelector('.cbi-map')) {
+					footer.appendChild(E('div', { 'class': 'cbi-page-actions' }, [
+						E('input', {
+							'class': 'cbi-button cbi-button-apply',
+							'type': 'button',
+							'value': _('Save & Apply'),
+							'click': L.bind(this.handleSaveApply, this)
+						}), ' ',
+						E('input', {
+							'class': 'cbi-button cbi-button-save',
+							'type': 'submit',
+							'value': _('Save'),
+							'click': L.bind(this.handleSave, this)
+						}), ' ',
+						E('input', {
+							'class': 'cbi-button cbi-button-reset',
+							'type': 'button',
+							'value': _('Reset'),
+							'click': L.bind(this.handleReset, this)
+						})
+					]));
+				}
+
+				return footer;
+			}
+		})
 	});
 
 	XHR = Class.extend({
