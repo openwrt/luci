@@ -761,6 +761,11 @@
 				if (!this.elem(node))
 					return null;
 
+				var dataNodes = node.querySelectorAll('[data-idref]');
+
+				for (var i = 0; i < dataNodes.length; i++)
+					delete this.registry[dataNodes[i].getAttribute('data-idref')];
+
 				while (node.firstChild)
 					node.removeChild(node.firstChild);
 
@@ -828,6 +833,92 @@
 				this.append(elem, data);
 
 				return elem;
+			},
+
+			registry: {},
+
+			data: function(node, key, val) {
+				var id = node.getAttribute('data-idref');
+
+				/* clear all data */
+				if (arguments.length > 1 && key == null) {
+					if (id != null) {
+						node.removeAttribute('data-idref');
+						val = this.registry[id]
+						delete this.registry[id];
+						return val;
+					}
+
+					return null;
+				}
+
+				/* clear a key */
+				else if (arguments.length > 2 && key != null && val == null) {
+					if (id != null) {
+						val = this.registry[id][key];
+						delete this.registry[id][key];
+						return val;
+					}
+
+					return null;
+				}
+
+				/* set a key */
+				else if (arguments.length > 2 && key != null && val != null) {
+					if (id == null) {
+						do { id = Math.floor(Math.random() * 0xffffffff).toString(16) }
+						while (this.registry.hasOwnProperty(id));
+
+						node.setAttribute('data-idref', id);
+						this.registry[id] = {};
+					}
+
+					return (this.registry[id][key] = val);
+				}
+
+				/* get all data */
+				else if (arguments.length == 1) {
+					if (id != null)
+						return this.registry[id];
+
+					return null;
+				}
+
+				/* get a key */
+				else if (arguments.length == 2) {
+					if (id != null)
+						return this.registry[id][key];
+				}
+
+				return null;
+			},
+
+			bindClassInstance: function(node, inst) {
+				if (!(inst instanceof Class))
+					L.error('TypeError', 'Argument must be a class instance');
+
+				return this.data(node, '_class', inst);
+			},
+
+			findClassInstance: function(node) {
+				var inst = null;
+
+				do {
+					inst = this.data(node, '_class');
+					node = node.parentNode;
+				}
+				while (!(inst instanceof Class) && node != null);
+
+				return inst;
+			},
+
+			callClassMethod: function(node, method /*, ... */) {
+				var inst = this.findClassInstance(node);
+
+				if (inst == null || typeof(inst[method]) != 'function')
+					return null;
+
+				return inst[method].apply(inst, inst.varargs(arguments, 2));
 			}
 		}),
 
