@@ -1,4 +1,5 @@
 'use strict';
+'require uci';
 
 var modalDiv = null,
     tooltipDiv = null,
@@ -1048,6 +1049,8 @@ return L.Class.extend({
 		document.addEventListener('blur', this.hideTooltip.bind(this), true);
 
 		document.addEventListener('luci-loaded', this.tabs.init.bind(this.tabs));
+		document.addEventListener('luci-loaded', this.changes.init.bind(this.changes));
+		document.addEventListener('uci-loaded', this.changes.init.bind(this.changes));
 	},
 
 	/* Modal dialog */
@@ -1313,6 +1316,343 @@ return L.Class.extend({
 					}
 
 					index++;
+				}
+			});
+		}
+	}),
+
+	/* UCI Changes */
+	changes: L.Class.singleton({
+		init: function() {
+			if (!L.env.sessionid)
+				return;
+
+			return uci.changes().then(L.bind(this.renderChangeIndicator, this));
+		},
+
+		setIndicator: function(n) {
+			var i = document.querySelector('.uci_change_indicator');
+			if (i == null) {
+				var poll = document.getElementById('xhr_poll_status');
+				i = poll.parentNode.insertBefore(E('a', {
+					'href': '#',
+					'class': 'uci_change_indicator label notice',
+					'click': L.bind(this.displayChanges, this)
+				}), poll);
+			}
+
+			if (n > 0) {
+				L.dom.content(i, [ _('Unsaved Changes'), ': ', n ]);
+				i.classList.add('flash');
+				i.style.display = '';
+			}
+			else {
+				i.classList.remove('flash');
+				i.style.display = 'none';
+			}
+		},
+
+		renderChangeIndicator: function(changes) {
+			var n_changes = 0;
+
+			for (var config in changes)
+				if (changes.hasOwnProperty(config))
+					n_changes += changes[config].length;
+
+			this.changes = changes;
+			this.setIndicator(n_changes);
+		},
+
+		changeTemplates: {
+			'add-3':      '<ins>uci add %0 <strong>%3</strong> # =%2</ins>',
+			'set-3':      '<ins>uci set %0.<strong>%2</strong>=%3</ins>',
+			'set-4':      '<var><ins>uci set %0.%2.%3=<strong>%4</strong></ins></var>',
+			'remove-2':   '<del>uci del %0.<strong>%2</strong></del>',
+			'remove-3':   '<var><del>uci del %0.%2.<strong>%3</strong></del></var>',
+			'order-3':    '<var>uci reorder %0.%2=<strong>%3</strong></var>',
+			'list-add-4': '<var><ins>uci add_list %0.%2.%3=<strong>%4</strong></ins></var>',
+			'list-del-4': '<var><del>uci del_list %0.%2.%3=<strong>%4</strong></del></var>',
+			'rename-3':   '<var>uci rename %0.%2=<strong>%3</strong></var>',
+			'rename-4':   '<var>uci rename %0.%2.%3=<strong>%4</strong></var>'
+		},
+
+		displayChanges: function() {
+			var list = E('div', { 'class': 'uci-change-list' }),
+			    dlg = L.ui.showModal(_('Configuration') + ' / ' + _('Changes'), [
+				E('div', { 'class': 'cbi-section' }, [
+					E('strong', _('Legend:')),
+					E('div', { 'class': 'uci-change-legend' }, [
+						E('div', { 'class': 'uci-change-legend-label' }, [
+							E('ins', '&#160;'), ' ', _('Section added') ]),
+						E('div', { 'class': 'uci-change-legend-label' }, [
+							E('del', '&#160;'), ' ', _('Section removed') ]),
+						E('div', { 'class': 'uci-change-legend-label' }, [
+							E('var', {}, E('ins', '&#160;')), ' ', _('Option changed') ]),
+						E('div', { 'class': 'uci-change-legend-label' }, [
+							E('var', {}, E('del', '&#160;')), ' ', _('Option removed') ])]),
+					E('br'), list,
+					E('div', { 'class': 'right' }, [
+						E('input', {
+							'type': 'button',
+							'class': 'btn',
+							'click': L.ui.hideModal,
+							'value': _('Dismiss')
+						}), ' ',
+						E('input', {
+							'type': 'button',
+							'class': 'cbi-button cbi-button-positive important',
+							'click': L.bind(this.apply, this, true),
+							'value': _('Save & Apply')
+						}), ' ',
+						E('input', {
+							'type': 'button',
+							'class': 'cbi-button cbi-button-reset',
+							'click': L.bind(this.revert, this),
+							'value': _('Revert')
+						})])])
+			]);
+
+			for (var config in this.changes) {
+				if (!this.changes.hasOwnProperty(config))
+					continue;
+
+				list.appendChild(E('h5', '# /etc/config/%s'.format(config)));
+
+				for (var i = 0, added = null; i < this.changes[config].length; i++) {
+					var chg = this.changes[config][i],
+					    tpl = this.changeTemplates['%s-%d'.format(chg[0], chg.length)];
+
+					list.appendChild(E(tpl.replace(/%([01234])/g, function(m0, m1) {
+						switch (+m1) {
+						case 0:
+							return config;
+
+						case 2:
+							if (added != null && chg[1] == added[0])
+								return '@' + added[1] + '[-1]';
+							else
+								return chg[1];
+
+						case 4:
+							return "'" + chg[3].replace(/'/g, "'\"'\"'") + "'";
+
+						default:
+							return chg[m1-1];
+						}
+					})));
+
+					if (chg[0] == 'add')
+						added = [ chg[1], chg[2] ];
+				}
+			}
+
+			list.appendChild(E('br'));
+			dlg.classList.add('uci-dialog');
+		},
+
+		displayStatus: function(type, content) {
+			if (type) {
+				var message = L.ui.showModal('', '');
+
+				message.classList.add('alert-message');
+				DOMTokenList.prototype.add.apply(message.classList, type.split(/\s+/));
+
+				if (content)
+					L.dom.content(message, content);
+
+				if (!this.was_polling) {
+					this.was_polling = L.Request.poll.active();
+					L.Request.poll.stop();
+				}
+			}
+			else {
+				L.ui.hideModal();
+
+				if (this.was_polling)
+					L.Request.poll.start();
+			}
+		},
+
+		rollback: function(checked) {
+			if (checked) {
+				this.displayStatus('warning spinning',
+					E('p', _('Failed to confirm apply within %ds, waiting for rollback…')
+						.format(L.env.apply_rollback)));
+
+				var call = function(r, data, duration) {
+					if (r.status === 204) {
+						L.ui.changes.displayStatus('warning', [
+							E('h4', _('Configuration has been rolled back!')),
+							E('p', _('The device could not be reached within %d seconds after applying the pending changes, which caused the configuration to be rolled back for safety reasons. If you believe that the configuration changes are correct nonetheless, perform an unchecked configuration apply. Alternatively, you can dismiss this warning and edit changes before attempting to apply again, or revert all pending changes to keep the currently working configuration state.').format(L.env.apply_rollback)),
+							E('div', { 'class': 'right' }, [
+								E('input', {
+									'type': 'button',
+									'class': 'btn',
+									'click': L.bind(L.ui.changes.displayStatus, L.ui.changes, false),
+									'value': _('Dismiss')
+								}), ' ',
+								E('input', {
+									'type': 'button',
+									'class': 'btn cbi-button-action important',
+									'click': L.bind(L.ui.changes.revert, L.ui.changes),
+									'value': _('Revert changes')
+								}), ' ',
+								E('input', {
+									'type': 'button',
+									'class': 'btn cbi-button-negative important',
+									'click': L.bind(L.ui.changes.apply, L.ui.changes, false),
+									'value': _('Apply unchecked')
+								})
+							])
+						]);
+
+						return;
+					}
+
+					var delay = isNaN(duration) ? 0 : Math.max(1000 - duration, 0);
+					window.setTimeout(function() {
+						L.Request.request(L.url('admin/uci/confirm'), {
+							method: 'post',
+							timeout: L.env.apply_timeout * 1000,
+							query: { sid: L.env.sessionid, token: L.env.token }
+						}).then(call);
+					}, delay);
+				};
+
+				call({ status: 0 });
+			}
+			else {
+				this.displayStatus('warning', [
+					E('h4', _('Device unreachable!')),
+					E('p', _('Could not regain access to the device after applying the configuration changes. You might need to reconnect if you modified network related settings such as the IP address or wireless security credentials.'))
+				]);
+			}
+		},
+
+		confirm: function(checked, deadline, override_token) {
+			var tt;
+			var ts = Date.now();
+
+			this.displayStatus('notice');
+
+			if (override_token)
+				this.confirm_auth = { token: override_token };
+
+			var call = function(r, data, duration) {
+				if (Date.now() >= deadline) {
+					window.clearTimeout(tt);
+					L.ui.changes.rollback(checked);
+					return;
+				}
+				else if (r && (r.status === 200 || r.status === 204)) {
+					document.dispatchEvent(new CustomEvent('uci-applied'));
+
+					L.ui.changes.setIndicator(0);
+					L.ui.changes.displayStatus('notice',
+						E('p', _('Configuration has been applied.')));
+
+					window.clearTimeout(tt);
+					window.setTimeout(function() {
+						//L.ui.changes.displayStatus(false);
+						window.location = window.location.href.split('#')[0];
+					}, L.env.apply_display * 1000);
+
+					return;
+				}
+
+				var delay = isNaN(duration) ? 0 : Math.max(1000 - duration, 0);
+				window.setTimeout(function() {
+					L.Request.request(L.url('admin/uci/confirm'), {
+						method: 'post',
+						timeout: L.env.apply_timeout * 1000,
+						query: L.ui.changes.confirm_auth
+					}).then(call);
+				}, delay);
+			};
+
+			var tick = function() {
+				var now = Date.now();
+
+				L.ui.changes.displayStatus('notice spinning',
+					E('p', _('Waiting for configuration to get applied… %ds')
+						.format(Math.max(Math.floor((deadline - Date.now()) / 1000), 0))));
+
+				if (now >= deadline)
+					return;
+
+				tt = window.setTimeout(tick, 1000 - (now - ts));
+				ts = now;
+			};
+
+			tick();
+
+			/* wait a few seconds for the settings to become effective */
+			window.setTimeout(call, Math.max(L.env.apply_holdoff * 1000 - ((ts + L.env.apply_rollback * 1000) - deadline), 1));
+		},
+
+		apply: function(checked) {
+			this.displayStatus('notice spinning',
+				E('p', _('Starting configuration apply…')));
+
+			L.Request.request(L.url('admin/uci', checked ? 'apply_rollback' : 'apply_unchecked'), {
+				method: 'post',
+				query: { sid: L.env.sessionid, token: L.env.token }
+			}).then(function(r) {
+				if (r.status === (checked ? 200 : 204)) {
+					var tok = null; try { tok = r.json(); } catch(e) {}
+					if (checked && tok !== null && typeof(tok) === 'object' && typeof(tok.token) === 'string')
+						L.ui.changes.confirm_auth = tok;
+
+					L.ui.changes.confirm(checked, Date.now() + L.env.apply_rollback * 1000);
+				}
+				else if (checked && r.status === 204) {
+					L.ui.changes.displayStatus('notice',
+						E('p', _('There are no changes to apply')));
+
+					window.setTimeout(function() {
+						L.ui.changes.displayStatus(false);
+					}, L.env.apply_display * 1000);
+				}
+				else {
+					L.ui.changes.displayStatus('warning',
+						E('p', _('Apply request failed with status <code>%h</code>%>')
+							.format(r.responseText || r.statusText || r.status)));
+
+					window.setTimeout(function() {
+						L.ui.changes.displayStatus(false);
+					}, L.env.apply_display * 1000);
+				}
+			});
+		},
+
+		revert: function() {
+			this.displayStatus('notice spinning',
+				E('p', _('Reverting configuration…')));
+
+			L.Request.request(L.url('admin/uci/revert'), {
+				method: 'post',
+				query: { sid: L.env.sessionid, token: L.env.token }
+			}).then(function(r) {
+				if (r.status === 200) {
+					document.dispatchEvent(new CustomEvent('uci-reverted'));
+
+					L.ui.changes.setIndicator(0);
+					L.ui.changes.displayStatus('notice',
+						E('p', _('Changes have been reverted.')));
+
+					window.setTimeout(function() {
+						//L.ui.changes.displayStatus(false);
+						window.location = window.location.href.split('#')[0];
+					}, L.env.apply_display * 1000);
+				}
+				else {
+					L.ui.changes.displayStatus('warning',
+						E('p', _('Revert request failed with status <code>%h</code>')
+							.format(r.statusText || r.status)));
+
+					window.setTimeout(function() {
+						L.ui.changes.displayStatus(false);
+					}, L.env.apply_display * 1000);
 				}
 			});
 		}
