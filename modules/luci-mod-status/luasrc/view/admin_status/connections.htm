@@ -165,8 +165,8 @@
 							rows.push([
 								c.layer3.toUpperCase(),
 								c.layer4.toUpperCase(),
-								src + ':' + c.sport,
-								dst + ':' + c.dport,
+								c.hasOwnProperty('sport') ? (src + ':' + c.sport) : src,
+								c.hasOwnProperty('dport') ? (dst + ':' + c.dport) : dst,
 								'%1024.2mB (%d <%:Pkts.%>)'.format(c.bytes, c.packets)
 							]);
 						}
