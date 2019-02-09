@@ -14,13 +14,13 @@ LUCI_BASENAME:=base
 LUCI_TITLE:=LuCI core libraries
 LUCI_DEPENDS:=+lua +luci-lib-nixio +luci-lib-ip +rpcd +libubus-lua +luci-lib-jsonc +liblucihttp-lua
 
-
-PKG_SOURCE:=v1.0.0.tar.gz
-PKG_SOURCE_URL:=https://github.com/jirutka/luasrcdiet/archive/
+LUASRCDIET_VERSION:=1.0.0
+PKG_SOURCE:=luasrcdiet-$(LUASRCDIET_VERSION).tar.gz
+PKG_SOURCE_URL:=https://codeload.github.com/jirutka/luasrcdiet/tar.gz/v$(LUASRCDIET_VERSION)?
 PKG_HASH:=48162e63e77d009f5848f18a5cabffbdfc867d0e5e73c6d407f6af5d6880151b
 PKG_LICENSE:=MIT
 
-HOST_BUILD_DIR:=$(BUILD_DIR_HOST)/luasrcdiet-1.0.0
+HOST_BUILD_DIR:=$(BUILD_DIR_HOST)/luasrcdiet-$(LUASRCDIET_VERSION)
 
 include $(INCLUDE_DIR)/host-build.mk
 
