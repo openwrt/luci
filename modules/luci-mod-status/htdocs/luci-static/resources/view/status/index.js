@@ -3,8 +3,8 @@ function progressbar(query, value, max, byte)
 	var pg = document.querySelector(query),
 	    vn = parseInt(value) || 0,
 	    mn = parseInt(max) || 100,
-	    fv = byte ? String.format('%.2mB ', value) : value,
-	    fm = byte ? String.format('%.2mB ', max) : max,
+	    fv = byte ? String.format('%1024.2mB', value) : value,
+	    fm = byte ? String.format('%1024.2mB', max) : max,
 	    pc = Math.floor((100 / mn) * vn);
 
 	if (pg) {
