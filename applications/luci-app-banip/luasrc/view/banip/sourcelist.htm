@@ -27,7 +27,7 @@ local anonclass  = (not self.anonymous or self.sectiontitle) and "named" or "ano
 				for i, k in ipairs(self:cfgsections()) do
 					section = k
 					local sectionname  = striptags((type(self.sectiontitle) == "function") and self:sectiontitle(section) or k)
-					local sectiontitle = ifattr(sectionname and (not self.anonymous or self.sectiontitle), "data-title", sectionname)
+					local sectiontitle = ifattr(sectionname and (not self.anonymous or self.sectiontitle), "data-title", sectionname, true)
 					isempty = false
 					scope = { valueheader = "cbi/cell_valueheader", valuefooter = "cbi/cell_valuefooter" }
 			-%>
