@@ -165,7 +165,7 @@ function parse_output(table, s)
 		else if (m[1].match(/^num /)) {
 			continue;
 		}
-		else if ((m2 = m[1].match(/^(\d+) +(\d+) +(\d+) +(.*?) +(\S+) +(\S*) +(\S+) +(\S+) +([a-f0-9:.]+\/\d+) +([a-f0-9:.]+\/\d+) +(.+)$/)) !== null) {
+		else if ((m2 = m[1].match(/^(\d+) +(\d+) +(\d+) +(.*?) +(\S+) +(\S*) +(\S+) +(\S+) +([a-f0-9:.]+(?:\/[a-f0-9:.]+)?) +([a-f0-9:.]+(?:\/[a-f0-9:.]+)?) +(.+)$/)) !== null) {
 			var num = +m2[1],
 			    pkts = +m2[2],
 			    bytes = +m2[3],
