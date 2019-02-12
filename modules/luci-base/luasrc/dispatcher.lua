@@ -328,7 +328,7 @@ function dispatch(request)
 			assert(media, "No valid theme found")
 		end
 
-		local function _ifattr(cond, key, val)
+		local function _ifattr(cond, key, val, noescape)
 			if cond then
 				local env = getfenv(3)
 				local scope = (type(env.self) == "table") and env.self
@@ -339,13 +339,16 @@ function dispatch(request)
 						val = util.serialize_json(val)
 					end
 				end
-				return string.format(
-					' %s="%s"', tostring(key),
-					util.pcdata(tostring( val
-					 or (type(env[key]) ~= "function" and env[key])
-					 or (scope and type(scope[key]) ~= "function" and scope[key])
-					 or "" ))
-				)
+
+				val = tostring(val or
+					(type(env[key]) ~= "function" and env[key]) or
+					(scope and type(scope[key]) ~= "function" and scope[key]) or "")
+
+				if noescape ~= true then
+					val = util.pcdata(val)
+				end
+
+				return string.format(' %s="%s"', tostring(key), val)
 			else
 				return ''
 			end
