@@ -1,4 +1,4 @@
--- Copyright 2017-2018 Dirk Brenken (dev@brenken.org)
+-- Copyright 2017-2019 Dirk Brenken (dev@brenken.org)
 -- This is free software, licensed under the Apache License, Version 2.0
 
 local fs       = require("nixio.fs")
@@ -17,11 +17,6 @@ m = Map("travelmate", translate("Travelmate"),
 	.. "see online documentation</a>", "https://github.com/openwrt/packages/blob/master/net/travelmate/files/README.md"))
 m:chain("network")
 m:chain("firewall")
-m.apply_on_parse = true
-
-function m.on_apply(self)
-	luci.sys.call("/etc/init.d/travelmate restart >/dev/null 2>&1")
-end
 
 -- Interface Wizard
 
