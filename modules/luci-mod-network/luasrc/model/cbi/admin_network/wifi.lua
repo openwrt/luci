@@ -678,6 +678,10 @@ if hwtype == "mac80211" or hwtype == "prism2" then
 	local has_ap_sae  = (os.execute("hostapd -vsae >/dev/null 2>/dev/null") == 0)
 	local has_sta_sae = (os.execute("wpa_supplicant -vsae >/dev/null 2>/dev/null") == 0)
 
+	-- Probe OWE support
+	local has_ap_owe  = (os.execute("hostapd -vowe >/dev/null 2>/dev/null") == 0)
+	local has_sta_owe = (os.execute("wpa_supplicant -vowe >/dev/null 2>/dev/null") == 0)
+
 	if hostapd and supplicant then
 		encr:value("psk", "WPA-PSK", {mode="ap"}, {mode="sta"}, {mode="ap-wds"}, {mode="sta-wds"}, {mode="adhoc"})
 		encr:value("psk2", "WPA2-PSK", {mode="ap"}, {mode="sta"}, {mode="ap-wds"}, {mode="sta-wds"}, {mode="adhoc"})
@@ -690,6 +694,9 @@ if hwtype == "mac80211" or hwtype == "prism2" then
 			encr:value("wpa", "WPA-EAP", {mode="ap"}, {mode="sta"}, {mode="ap-wds"}, {mode="sta-wds"})
 			encr:value("wpa2", "WPA2-EAP", {mode="ap"}, {mode="sta"}, {mode="ap-wds"}, {mode="sta-wds"})
 		end
+		if has_ap_owe and has_sta_owe then
+			encr:value("owe", "OWE", {mode="ap"}, {mode="sta"}, {mode="ap-wds"}, {mode="sta-wds"}, {mode="adhoc"})
+		end
 	elseif hostapd and not supplicant then
 		encr:value("psk", "WPA-PSK", {mode="ap"}, {mode="ap-wds"})
 		encr:value("psk2", "WPA2-PSK", {mode="ap"}, {mode="ap-wds"})
@@ -701,6 +708,9 @@ if hwtype == "mac80211" or hwtype == "prism2" then
 		if has_ap_eap then
 			encr:value("wpa", "WPA-EAP", {mode="ap"}, {mode="ap-wds"})
 			encr:value("wpa2", "WPA2-EAP", {mode="ap"}, {mode="ap-wds"})
+		end
+		if has_ap_owe then
+			encr:value("owe", "OWE", {mode="ap"}, {mode="ap-wds"})
 		end
 		encr.description = translate(
 			"WPA-Encryption requires wpa_supplicant (for client mode) or hostapd (for AP " ..
@@ -717,6 +727,9 @@ if hwtype == "mac80211" or hwtype == "prism2" then
 		if has_sta_eap then
 			encr:value("wpa", "WPA-EAP", {mode="sta"}, {mode="sta-wds"})
 			encr:value("wpa2", "WPA2-EAP", {mode="sta"}, {mode="sta-wds"})
+		end
+		if has_sta_owe then
+			encr:value("owe", "OWE", {mode="sta"}, {mode="sta-wds"})
 		end
 		encr.description = translate(
 			"WPA-Encryption requires wpa_supplicant (for client mode) or hostapd (for AP " ..
@@ -1131,10 +1144,12 @@ if hwtype == "mac80211" then
 		ieee80211w:depends({mode="ap", encryption="psk-mixed"})
 		ieee80211w:depends({mode="ap", encryption="sae"})
 		ieee80211w:depends({mode="ap", encryption="sae-mixed"})
+		ieee80211w:depends({mode="ap", encryption="owe"})
 		ieee80211w:depends({mode="ap-wds", encryption="psk2"})
 		ieee80211w:depends({mode="ap-wds", encryption="psk-mixed"})
 		ieee80211w:depends({mode="ap-wds", encryption="sae"})
 		ieee80211w:depends({mode="ap-wds", encryption="sae-mixed"})
+		ieee80211w:depends({mode="ap-wds", encryption="owe"})
 
 		max_timeout = s:taboption("encryption", Value, "ieee80211w_max_timeout",
 				translate("802.11w maximum timeout"),
