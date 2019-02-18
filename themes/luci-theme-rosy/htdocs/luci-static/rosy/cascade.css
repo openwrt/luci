@@ -180,6 +180,12 @@ body {
 
 header {
 	display: none;
+	height: 3rem;
+	z-index: 1000;
+}
+
+header .container {
+    padding: 0 0.5rem;
 }
 
 select {
@@ -904,33 +910,52 @@ form[method="post"] + form[method="post"],
 	border-radius: 20px;
 }
 
-.cbi-tabmenu > li,
 .tabs > li {
+    margin-right: .8rem;
+    padding: .5rem 4px;
+    position: relative;
+    display: inline-block;
+    text-align: center;
+}
+
+.tabs > li a {
+    color: #468EA4;
+	font-size: 14px;
+	text-decoration: none;
+	position: relative;
+	z-index: 1;
+}
+.tabs > li::after {
+    content: '';
+    background-color: #cccccc82;
+    position: absolute;
+    width: 0;
+    height: 100%;
+    bottom: 0;
+    border-radius: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.tabs > li:hover::after {
+    transition: width .35s;
+    width: calc(100% + 4px);
+}
+
+.tabs > li.active::after {
+    width: calc(100% + 4px);
+    background-color: #468ea473;
+}
+
+.cbi-tabmenu > li {
 	display: inline-block;
 	padding: .6rem 0;
 }
 
-.cbi-tabmenu > li > a,
-.tabs > li > a {
+.cbi-tabmenu > li > a {
 	padding: .5rem .8rem;
 	text-decoration: none;
 	color: #404040;
-}
-
-.tabs > li[class~="active"],
-.tabs > li:hover {
-	cursor: pointer;
-	background-color: #468ea4;
-	border-radius: 20px;
-}
-
-.tabs > li[class~="active"],
-.tabs > li:hover a {
-	color: #fff;
-}
-
-.tabs > li[class~="active"] > a {
-	color: #fff;
 }
 
 .cbi-tabmenu {
@@ -2207,16 +2232,14 @@ body.login {
 }
 
 .logged-in header {
-	padding: 0 1rem;
-	height: 4rem;
-	width: 100%;
-	position: fixed;
-	top: 0;
-	background: #fff;
-	color: #fff;
-	z-index: 1000;
-	border-bottom: 1px solid #f5f5f5;
 	display: block;
+	position: fixed;
+	top: 1rem;
+	right: 1rem;
+	border: 1px solid #ddd;
+	background-color: #fff;
+	border-radius: 20px;
+	width: calc(85% - 20px - 2rem);
 }
 
 .logged-in .main {
@@ -2228,8 +2251,8 @@ body.login {
 }
 
 .logged-in header .container .btn-con {
-	height: 4rem;
-	line-height: 4rem;
+	height: 3rem;
+	line-height: 3rem;
 }
 
 .logged-in header .container .btn-con #xhr_poll_status {
@@ -2628,8 +2651,13 @@ body.login {
 	}
 
 	.logged-in header {
-		height: 3rem;
 		z-index: 2000;
+		top: 0;
+		left: 0;
+		width: 100%;
+		border-radius: 0;
+		border: none;
+		border-bottom: 1px solid #ddd;
 	}
 
 	.showSide,
