@@ -47,8 +47,7 @@ function edit_packages() {
 // requests to the upgrade server
 function server_request(request_dict, path, callback) {
 	request_dict.distro = data.release.distribution;
-	request_dict.target = data.release.target.split("\/")[0];
-	request_dict.subtarget = data.release.target.split("\/")[1];
+	request_dict.target = data.release.target;
 	var request = new XMLHttpRequest();
 	request.open("POST", data.url + "/" + path, true);
 	request.setRequestHeader("Content-type", "application/json");
@@ -212,12 +211,10 @@ function upgrade_request() {
 function upgrade_request_callback(request) {
 	// ready to download
 	var request_json = JSON.parse(request);
-	data.sysupgrade_url = request_json.sysupgrade;
+	data.files = request_json.files;
+	data.sysupgrade = request_json.sysupgrade;
 
-	var filename_split = data.sysupgrade_url.split("/")
-	var filename = filename_split[filename_split.length - 1]
-
-	var info_output = 'Firmware created: <a href="' + data.url + data.sysupgrade_url + '"><b>' + filename + '</b></a>'
+	var info_output = 'Firmware created: <a href="' + data.url + data.files + data.sysupgrade + '"><b>' + data.sysupgrade+ '</b></a>'
 	info_output += ' <a target="_blank" href="'  + data.url + request_json.log + '">Build log</a>'
 	set_status("info", info_output);
 
@@ -245,7 +242,7 @@ function ping_ubus() {
 		var request = new XMLHttpRequest();
 		request.open("GET", ubus_url, true);
 		request.addEventListener('error', function(event) {
-			set_status("warning", "Rebooting device", true);
+			set_status("warning", "Rebooting device - please wait!", true);
 			setTimeout(ping_ubus, 5000)
 		});
 		request.addEventListener('load', function(event) {
@@ -263,6 +260,7 @@ function ping_ubus() {
 
 function upload_image(blob) {
 	// Uploads received blob data to the server using cgi-io
+	set_status("info", "Uploading firmware to device", true);
 	var request = new XMLHttpRequest();
 	var form_data  = new FormData();
 
@@ -277,7 +275,7 @@ function upload_image(blob) {
 	});
 
 	request.addEventListener('error', function(event) {
-		set_status("info", "Upload of firmware failed, please retry by reloading web interface")
+		set_status("danger", "Upload of firmware failed, please retry by reloading web interface")
 	});
 
 	request.open('POST', origin + '/cgi-bin/cgi-upload');
@@ -290,7 +288,7 @@ function download_image() {
 	hide("#keep_container");
 	hide("#upgrade_button");
 	var download_request = new XMLHttpRequest();
-	download_request.open("GET", data.sysupgrade_url);
+	download_request.open("GET", data.url + data.files + data.sysupgrade);
 	download_request.responseType = "arraybuffer";
 
 	download_request.onload = function () {
@@ -299,15 +297,14 @@ function download_image() {
 			upload_image(blob)
 		}
 	};
-	set_status("info", "Downloading firmware", true);
+	set_status("info", "Downloading firmware to web browser memory", true);
 	download_request.send();
 }
 
 function server_request(request_dict, path, callback) {
 	var request_json;
 	request_dict.distro = data.release.distribution;
-	request_dict.target = data.release.target.split("\/")[0];
-	request_dict.subtarget = data.release.target.split("\/")[1];
+	request_dict.target = data.release.target;
 	var request = new XMLHttpRequest();
 	request.open("POST", data.url + "/" + path, true);
 	request.setRequestHeader("Content-type", "application/json");
