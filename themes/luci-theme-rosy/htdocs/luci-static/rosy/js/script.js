@@ -170,22 +170,22 @@
      * Sidebar expand
      */
     var showSide = false;
-    if ($(win).height() == 992) {
-        $(".showSide").click(function () {
-            if (showSide) {
-                $(".darkMask").stop(true).fadeOut("fast");
-                $(".main-left").stop(true).fadeOut("fast");
-                $(".main-right").css("overflow-y", "visible");
-                showSide = false;
-            } else {
-                $(".darkMask").stop(true).fadeIn("fast");
-                $(".main-left").stop(true).animate({
-                    width: "100%"
-                }, "fast").fadeIn("fast");
-                $(".main-right").css("overflow-y", "hidden");
-                showSide = true;
-            }
-        });
+    $(".showSide").click(function () {
+        if (showSide) {
+            $(".darkMask").stop(true).fadeOut("fast");
+            $(".main-left").stop(true).fadeOut("fast");
+            $(".main-right").css("overflow-y", "visible");
+            showSide = false;
+        } else {
+            $(".darkMask").stop(true).fadeIn("fast");
+            $(".main-left").stop(true).animate({
+                width: "100%"
+            }, "fast").fadeIn("fast");
+            $(".main-right").css("overflow-y", "hidden");
+            showSide = true;
+        }
+    });
+    if($(win).width() <= 992){
         $(".main-left").click(function(e) {
             e.preventDefault();
             $(".main-left").stop(true).fadeOut("fast");
