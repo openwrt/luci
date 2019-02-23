@@ -202,7 +202,7 @@ function upgrade_request() {
 	hide("#keep_container");
 
 	var request_dict = {}
-	request_dict.version = data.latest_version;
+	request_dict.version = data.latest_version?data.latest_version:data.release.version;
 	request_dict.board = data.board_name
 	request_dict.model = data.model
 
