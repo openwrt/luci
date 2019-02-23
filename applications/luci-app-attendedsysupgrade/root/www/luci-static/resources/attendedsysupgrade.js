@@ -171,7 +171,11 @@ function upgrade_check_callback(request_text) {
 		}
 		have_upgrades = true;
 	}
-	data.packages = request_json.packages
+	if (request_json.packages != undefined) {
+		data.packages = request_json.packages
+	} else {
+		data.packages = Object.keys(data.packages);
+	}
 	set_status("success", have_upgrades ? info_output : "<h3>System is up to date</h3>")
 
 	if(data.advanced_mode == 1) {
