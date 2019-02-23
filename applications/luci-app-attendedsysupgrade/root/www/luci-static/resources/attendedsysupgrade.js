@@ -157,19 +157,22 @@ function upgrade_check_callback(request_text) {
 
 	// create simple output to tell user what's going to be upgrade (release/packages)
 	var info_output = ""
+	var have_upgrades = false;
 	if(request_json.version != undefined) {
 		info_output += "<h3>New firmware release available</h3>"
 		info_output += data.release.version + " to " + request_json.version
 		data.latest_version = request_json.version;
+		have_upgrades = true;
 	}
-	if(request_json.upgrades != undefined) {
+	if(request_json.upgrades != undefined && Object.keys(request_json.upgrades).length > 0) {
 		info_output += "<h3>Package upgrades available</h3>"
 		for (var upgrade in request_json.upgrades) {
 			info_output += "<b>" + upgrade + "</b>: " + request_json.upgrades[upgrade][1] + " to " + request_json.upgrades[upgrade][0] + "<br />"
 		}
+		have_upgrades = true;
 	}
 	data.packages = request_json.packages
-	set_status("success", info_output)
+	set_status("success", have_upgrades ? info_output : "<h3>System is up to date</h3>")
 
 	if(data.advanced_mode == 1) {
 		show("#edit_button");
