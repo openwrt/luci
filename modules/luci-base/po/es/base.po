@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-06-10 03:41+0200\n"
-"PO-Revision-Date: 2019-02-21 16:08-0300\n"
+"PO-Revision-Date: 2019-02-26 19:12-0300\n"
 "Last-Translator: José Vicente <josevteg@gmail.com>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
@@ -163,7 +163,7 @@ msgid ""
 "order of the resolvfile"
 msgstr ""
 "Los servidores de <abbr title=\"Domain Name System\">DNS</abbr> se consultan "
-"en el orden en que aparecen en el fichero resolv"
+"en el orden en que aparecen en el archivo resolv"
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:387
 msgid "<abbr title=\"Extended Service Set Identifier\">ESSID</abbr>"
@@ -227,7 +227,7 @@ msgid ""
 "<abbr title=\"maximal\">Max.</abbr> <abbr title=\"Dynamic Host Configuration "
 "Protocol\">DHCP</abbr> leases"
 msgstr ""
-"Máximas cesiones <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</"
+"Máximas conexiones <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</"
 "abbr>"
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/dhcp.lua:201
@@ -346,11 +346,11 @@ msgstr "Conexiones activas"
 
 #: modules/luci-base/luasrc/view/lease_status.htm:68
 msgid "Active DHCP Leases"
-msgstr "Cesiones DHCP activas"
+msgstr "Clientes DHCP activos"
 
 #: modules/luci-base/luasrc/view/lease_status.htm:83
 msgid "Active DHCPv6 Leases"
-msgstr "Cesiones DHCPv6 activas"
+msgstr "Clientes DHCPv6 activos"
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:369
 #: protocols/luci-proto-hnet/luasrc/model/cbi/admin_network/proto_hnet.lua:12
@@ -385,8 +385,8 @@ msgstr "Añadir clave"
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/dhcp.lua:109
 msgid "Add local domain suffix to names served from hosts files"
 msgstr ""
-"Añadir el sufijo de dominio local a los nombres servidos desde el fichero de "
-"máquinas"
+"Añadir el sufijo de dominio local a los nombres servidos desde el archivo de "
+"dispositivos"
 
 #: modules/luci-mod-network/luasrc/view/admin_network/iface_overview.htm:50
 msgid "Add new interface..."
@@ -394,7 +394,7 @@ msgstr "Añadir nueva interfaz..."
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/dhcp.lua:60
 msgid "Additional Hosts files"
-msgstr "Ficheros de máquinas adicionales"
+msgstr "Archivos de dispositivos adicionales"
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/dhcp.lua:116
 msgid "Additional servers file"
@@ -427,7 +427,7 @@ msgstr "Avanzado"
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/fstab/mount.lua:50
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/fstab/swap.lua:34
 msgid "Advanced Settings"
-msgstr "Ajustes avanzados"
+msgstr "Configuración avanzada"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:108
 msgid "Aggregate Transmit Power(ACTATP)"
@@ -471,8 +471,7 @@ msgstr ""
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:543
 msgid "Allow AP mode to disconnect STAs based on low ACK condition"
 msgstr ""
-"Permitir que el modo AP desconecte las estaciones por una condición de bajo "
-"ACK"
+"Permitir que el modo AP desconecte los clientes por una condición de bajo ACK"
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:460
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:587
@@ -674,7 +673,7 @@ msgstr ""
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi_overview.lua:148
 #: modules/luci-mod-status/luasrc/view/admin_status/index/60-wifi.htm:22
 msgid "Associated Stations"
-msgstr "Estaciones asociadas"
+msgstr "Clientes conectados"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:159
 msgid "Associations"
@@ -818,7 +817,7 @@ msgstr "Copia de seguridad / Grabar firmware"
 
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/backupfiles.lua:12
 msgid "Backup file list"
-msgstr "Salvar lista de ficheros"
+msgstr "Salvar lista de archivos"
 
 #: modules/luci-mod-network/luasrc/view/admin_network/diagnostics.htm:51
 msgid "Bad address specified!"
@@ -839,8 +838,8 @@ msgid ""
 "configuration files marked by opkg, essential base files and the user "
 "defined backup patterns."
 msgstr ""
-"Lista de ficheros a los que hacer copia de seguridad. Es una lista de "
-"ficheros de configuración cambiados por ficheros marcados por opkg, ficheros "
+"Lista de archivos a los que hacer copia de seguridad. Es una lista de "
+"archivos de configuración cambiados por archivos marcados por opkg, archivos "
 "esenciales base y los patrones de copia de seguridad definidos por el "
 "usuario."
 
@@ -1008,10 +1007,10 @@ msgid ""
 "fill out the <em>create</em> field to define a new zone and attach the "
 "interface to it."
 msgstr ""
-"Elija la zona del cortafuegos a la que quiere asignar esta interfaz. "
-"Seleccione <em>no especificado</em> para eliminar la interfaz de la zona "
-"asociada o rellene el campo <em>crear</em> para definir una zona nueva a la "
-"que asignarla."
+"Elija la zona del firewall a la que quiere asignar esta interfaz. Seleccione "
+"<em>no especificado</em> para eliminar la interfaz de la zona asociada o "
+"rellene el campo <em>crear</em> para definir una zona nueva a la que "
+"asignarla."
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:401
 msgid ""
@@ -1034,7 +1033,7 @@ msgid ""
 "Click \"Generate archive\" to download a tar archive of the current "
 "configuration files."
 msgstr ""
-"Pulse \"generar archivo\" para descargar un fichero tar con los ficheros de "
+"Pulse \"generar archivo\" para descargar un archivo tar con los archivos de "
 "configuración actuales."
 
 #: modules/luci-mod-system/luasrc/view/admin_system/flashops.htm:65
@@ -1201,7 +1200,7 @@ msgstr "Cubre los siguientes interfaces"
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/ifaces.lua:357
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi_add.lua:86
 msgid "Create / Assign firewall-zone"
-msgstr "Crear / Asignar zona de seguridad"
+msgstr "Crear / Asignar zona de firewall"
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/iface_add.lua:9
 msgid "Create Interface"
@@ -1224,7 +1223,7 @@ msgstr "Nivel de registro de cron"
 #: modules/luci-base/luasrc/view/cbi/network_ifacelist.htm:82
 #: modules/luci-base/luasrc/view/cbi/network_ifacelist.htm:83
 msgid "Custom Interface"
-msgstr "Interfaz propio"
+msgstr "Interfaz personalizada"
 
 #: protocols/luci-proto-ipv6/luasrc/model/cbi/admin_network/proto_dhcpv6.lua:40
 msgid "Custom delegated IPv6-prefix"
@@ -1443,7 +1442,7 @@ msgstr "Dispositivo"
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:138
 msgid "Device Configuration"
-msgstr "Ajustes del dispositivo"
+msgstr "Configuración del dispositivo"
 
 #: modules/luci-mod-system/luasrc/view/admin_system/reboot.htm:23
 msgid "Device is rebooting..."
@@ -1552,9 +1551,9 @@ msgid ""
 "Forwarder for <abbr title=\"Network Address Translation\">NAT</abbr> "
 "firewalls"
 msgstr ""
-"Dnsmasq es un programa que combina un servidor <abbr title=\"Dynamic Host "
+"dnsmasq es un programa que combina un servidor <abbr title=\"Dynamic Host "
 "Configuration Protocol\">DHCP</abbr> y un reenviador <abbr title=\"Domain "
-"Name System\">DNS</abbr> para cortafuegos <abbr title=\"Network Address "
+"Name System\">DNS</abbr> para Firewalls <abbr title=\"Network Address "
 "Translation\">NAT</abbr>"
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/dhcp.lua:113
@@ -1642,7 +1641,7 @@ msgid ""
 "having static leases will be served."
 msgstr ""
 "Reparte direcciones DHCP dinámicamente a los clientes. Si se desactiva sólo "
-"se servirá a clientes con cesiones estáticas."
+"se servirá a clientes con conexiones estáticas."
 
 #: protocols/luci-proto-ipv6/luasrc/model/cbi/admin_network/proto_map.lua:53
 msgid "EA-bits length"
@@ -1855,7 +1854,7 @@ msgstr "Excluir interfaces"
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/dhcp.lua:108
 msgid "Expand hosts"
-msgstr "Expandir nombre de máquina"
+msgstr "Expandir nombre del dispositivo"
 
 #: modules/luci-base/htdocs/luci-static/resources/cbi.js:278
 msgid "Expecting %s"
@@ -1929,7 +1928,7 @@ msgstr "Nombre del archivo de imagen de arranque mostrado a los clientes"
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/fstab.lua:199
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/fstab/mount.lua:126
 msgid "Filesystem"
-msgstr "Sistema de ficheros"
+msgstr "Sistema de archivos"
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/dhcp.lua:73
 msgid "Filter private"
@@ -1962,19 +1961,19 @@ msgstr "Terminar"
 
 #: modules/luci-mod-status/luasrc/controller/admin/status.lua:10
 msgid "Firewall"
-msgstr "Cortafuegos"
+msgstr "Firewall"
 
 #: protocols/luci-proto-wireguard/luasrc/model/cbi/admin_network/proto_wireguard.lua:77
 msgid "Firewall Mark"
-msgstr "Marca de firewall"
+msgstr "Marca de Firewall"
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/ifaces.lua:193
 msgid "Firewall Settings"
-msgstr "Configuración del cortafuegos"
+msgstr "Configuración del Firewall"
 
 #: modules/luci-mod-status/luasrc/view/admin_status/iptables.htm:44
 msgid "Firewall Status"
-msgstr "Estado del cortafuegos"
+msgstr "Estado del Firewall"
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:137
 msgid "Firmware File"
@@ -2126,7 +2125,7 @@ msgstr "Puertos del gateway"
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/fstab/swap.lua:33
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:22
 msgid "General Settings"
-msgstr "Ajustes generales"
+msgstr "Configuración general"
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/ifaces.lua:188
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/ifaces.lua:462
@@ -2215,7 +2214,8 @@ msgid ""
 "Here you can configure the basic aspects of your device like its hostname or "
 "the timezone."
 msgstr ""
-"Aspectos básicos de su dispositivo como la zona horaria o nombre de máquina."
+"Aspectos básicos de su dispositivo como la zona horaria o nombre del "
+"dispositivo."
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:497
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:554
@@ -2235,7 +2235,7 @@ msgstr "Host"
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/hosts.lua:10
 msgid "Host entries"
-msgstr "Entradas de máquina"
+msgstr "Entradas de dispositivos"
 
 #: protocols/luci-proto-relay/luasrc/model/cbi/admin_network/proto_relay.lua:48
 msgid "Host expiry timeout"
@@ -2258,16 +2258,16 @@ msgstr "Contenido de la etiqueta Host-Uniq"
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:36
 #: themes/luci-theme-freifunk-generic/luasrc/view/themes/freifunk-generic/header.htm:129
 msgid "Hostname"
-msgstr "Nombre de máquina"
+msgstr "Nombre del dispositivo"
 
 #: modules/luci-base/luasrc/model/cbi/admin_network/proto_dhcp.lua:12
 msgid "Hostname to send when requesting DHCP"
-msgstr "Nombre de máquina a enviar cuando se solicite DHCP"
+msgstr "Nombre del dispositivo a enviar cuando se solicite DHCP"
 
 #: modules/luci-mod-network/luasrc/controller/admin/network.lua:112
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/hosts.lua:8
 msgid "Hostnames"
-msgstr "Nombres de máquina"
+msgstr "Nombres de dispositivos"
 
 #: protocols/luci-proto-hnet/luasrc/model/cbi/admin_network/proto_hnet.lua:13
 msgid "Hybrid"
@@ -2315,7 +2315,7 @@ msgstr "IPv4"
 
 #: modules/luci-mod-status/luasrc/view/admin_status/iptables.htm:49
 msgid "IPv4 Firewall"
-msgstr "Cortafuegos IPv4"
+msgstr "Firewall IPv4"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:46
 msgid "IPv4 Upstream"
@@ -2395,7 +2395,7 @@ msgstr "IPv6"
 
 #: modules/luci-mod-status/luasrc/view/admin_status/iptables.htm:52
 msgid "IPv6 Firewall"
-msgstr "Cortafuegos IPv6"
+msgstr "Firewall IPv6"
 
 #: modules/luci-mod-status/luasrc/view/admin_status/routes.htm:128
 msgid "IPv6 Neighbours"
@@ -2812,7 +2812,7 @@ msgstr "Tiempo de arrendamiento"
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/dhcp.lua:41
 msgid "Leasefile"
-msgstr "Archivo de cesiones"
+msgstr "Archivo de conexiones"
 
 #: modules/luci-base/luasrc/view/lease_status.htm:74
 #: modules/luci-base/luasrc/view/lease_status.htm:89
@@ -2943,7 +2943,7 @@ msgstr "Carga"
 
 #: modules/luci-mod-status/luasrc/view/admin_status/index/10-system.htm:27
 msgid "Load Average"
-msgstr "Carga Media"
+msgstr "Carga media"
 
 #: modules/luci-mod-network/luasrc/view/admin_network/diagnostics.htm:33
 #: modules/luci-mod-system/luasrc/view/admin_system/applyreboot.htm:45
@@ -3005,7 +3005,7 @@ msgstr ""
 msgid "Local domain suffix appended to DHCP names and hosts file entries"
 msgstr ""
 "Sufijo del dominio local que se añade a los nombres DHCP y a las entradas "
-"del fichero de máquinas"
+"del archivo de dispositivos"
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/dhcp.lua:100
 msgid "Local server"
@@ -3016,8 +3016,8 @@ msgid ""
 "Localise hostname depending on the requesting subnet if multiple IPs are "
 "available"
 msgstr ""
-"Localizar nombre de máquina dependiendo de que la subred peticionaria si hay "
-"disponibles múltiples IPs"
+"Localizar nombre del dispositivo dependiendo de que la subred peticionaria "
+"si hay disponibles múltiples IPs"
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/dhcp.lua:83
 msgid "Localise queries"
@@ -3138,7 +3138,7 @@ msgstr "Máximo permitido de intervalo de escucha"
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/dhcp.lua:193
 msgid "Maximum allowed number of active DHCP leases"
-msgstr "Número máximo de cesiones DHCP activas"
+msgstr "Número máximo de clientes DHCP activas"
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/dhcp.lua:212
 msgid "Maximum allowed number of concurrent DNS queries"
@@ -3163,7 +3163,7 @@ msgstr ""
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/ifaces.lua:482
 msgid "Maximum number of leased addresses."
-msgstr "Máximas cesiones activas."
+msgstr "Máximas conexiones activas."
 
 #: modules/luci-base/luasrc/view/wifi_assoclist.htm:21
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wifi_status.js:49
@@ -3565,7 +3565,7 @@ msgstr "Retraso de activación"
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/dhcp.lua:338
 msgid "One of hostname or mac address must be specified!"
-msgstr "¡Debe especificar al menos un nombre de máquina o dirección mac!"
+msgstr "¡Debe especificar al menos un nombre de dispositivo o dirección mac!"
 
 #: modules/luci-base/luasrc/view/cbi/nullsection.htm:17
 #: modules/luci-base/luasrc/view/cbi/ucisection.htm:22
@@ -3697,7 +3697,7 @@ msgstr "Interfaz de salida"
 #: protocols/luci-proto-hnet/luasrc/model/cbi/admin_network/proto_hnet.lua:33
 #: protocols/luci-proto-ipv6/luasrc/model/cbi/admin_network/proto_dhcpv6.lua:54
 msgid "Override MAC address"
-msgstr "Anular dirección MAC"
+msgstr "Reemplazar dirección MAC"
 
 #: modules/luci-base/luasrc/model/cbi/admin_network/proto_dhcp.lua:66
 #: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:158
@@ -3711,23 +3711,23 @@ msgstr "Anular dirección MAC"
 #: protocols/luci-proto-ppp/luasrc/model/cbi/admin_network/proto_pppoe.lua:133
 #: protocols/luci-proto-ppp/luasrc/model/cbi/admin_network/proto_pptp.lua:104
 msgid "Override MTU"
-msgstr "Anular MTU"
+msgstr "Reemplazar MTU"
 
 #: protocols/luci-proto-ipip/luasrc/model/cbi/admin_network/proto_ipip.lua:30
 msgid "Override TOS"
-msgstr "Anular TOS"
+msgstr "Reemplazar TOS"
 
 #: protocols/luci-proto-ipip/luasrc/model/cbi/admin_network/proto_ipip.lua:25
 msgid "Override TTL"
-msgstr "Anular TTL"
+msgstr "Reemplazar TTL"
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:511
 msgid "Override default interface name"
-msgstr "Anular nombre de interfaz predeterminado"
+msgstr "Reemplazar nombre de interfaz predeterminado"
 
 #: protocols/luci-proto-relay/luasrc/model/cbi/admin_network/proto_relay.lua:41
 msgid "Override the gateway in DHCP responses"
-msgstr "Anular la puerta de enlace en las respuestas DHCP"
+msgstr "Reemplazar puerta de enlace en las respuestas DHCP"
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/ifaces.lua:507
 msgid ""
@@ -3921,7 +3921,7 @@ msgstr "Perfecto reenvío secreto"
 
 #: modules/luci-mod-system/luasrc/view/admin_system/reboot.htm:19
 msgid "Perform reboot"
-msgstr "Realizar reinicio"
+msgstr "Reiniciar"
 
 #: modules/luci-mod-system/luasrc/view/admin_system/flashops.htm:40
 msgid "Perform reset"
@@ -3965,11 +3965,11 @@ msgstr "Política"
 
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:178
 msgid "Polling interval"
-msgstr "Intervalo de votación"
+msgstr "Intervalo de autorefrezco"
 
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:179
 msgid "Polling interval for status queries in seconds"
-msgstr "Intervalo de sondeo para consultas de estado en segundos"
+msgstr "Intervalo de autorefrezco para consultas de estado en segundos"
 
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/dropbear.lua:22
 msgid "Port"
@@ -4396,7 +4396,7 @@ msgstr "Reiniciar"
 
 #: modules/luci-mod-status/luasrc/view/admin_status/iptables.htm:63
 msgid "Restart Firewall"
-msgstr "Reinicicar cortafuegos"
+msgstr "Reiniciar Firewall"
 
 #: modules/luci-mod-network/luasrc/view/admin_network/wifi_overview.htm:14
 msgid "Restart radio interface"
@@ -4484,11 +4484,11 @@ msgstr "Regla"
 
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/fstab/mount.lua:155
 msgid "Run a filesystem check before mounting the device"
-msgstr "Comprobar el sistema de ficheros antes de montar el dispositivo"
+msgstr "Comprobar el sistema de archivos antes de montar el dispositivo"
 
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/fstab/mount.lua:154
 msgid "Run filesystem check"
-msgstr "Comprobar el sistema de ficheros"
+msgstr "Comprobar el sistema de archivos"
 
 #: modules/luci-mod-system/luasrc/view/admin_system/upgrade.htm:29
 msgid "SHA256"
@@ -4671,7 +4671,7 @@ msgstr "Preámbulo corto"
 
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/backupfiles.lua:18
 msgid "Show current backup file list"
-msgstr "Mostrar lista de ficheros a salvar"
+msgstr "Mostrar lista de archivos a salvar"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:99
 msgid "Show empty chains"
@@ -4844,7 +4844,7 @@ msgstr "Rutas estáticas IPv6"
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/dhcp.lua:269
 msgid "Static Leases"
-msgstr "Cesiones estáticas"
+msgstr "Dorecciones estáticas"
 
 #: modules/luci-mod-network/luasrc/controller/admin/network.lua:118
 msgid "Static Routes"
@@ -4860,7 +4860,7 @@ msgid ""
 "to DHCP clients. They are also required for non-dynamic interface "
 "configurations where only hosts with a corresponding lease are served."
 msgstr ""
-"Las cesiones estáticas se usan para asignar direcciones IP fijas y nombres "
+"Las conexiones estáticas se usan para asignar direcciones IP fijas y nombres "
 "simbólicos de máquina a clientes DHCP. También son necesarias para "
 "configuraciones de interfaz no dinámica en las que a cada máquina siempre se "
 "le quiere servir la misma dirección IP."
@@ -5125,7 +5125,7 @@ msgid ""
 "compare them with the original file to ensure data integrity.<br /> Click "
 "\"Proceed\" below to start the flash procedure."
 msgstr ""
-"Imagen recibida. Verifique que la comprobación y tamaño del fichero recibido "
+"Imagen recibida. Verifique que la comprobación y tamaño del archivo recibido "
 "coinciden con los del original.<br />Pulse \"Proceder\" para empezar el "
 "grabado."
 
@@ -5241,7 +5241,7 @@ msgstr "Tema"
 #: modules/luci-base/luasrc/view/lease_status.htm:29
 #: modules/luci-base/luasrc/view/lease_status.htm:61
 msgid "There are no active leases."
-msgstr "Sin cesiones activas."
+msgstr "Sin conexiones activas."
 
 #: modules/luci-base/luasrc/view/cbi/apply_widget.htm:135
 msgid "There are no changes to apply."
@@ -5295,8 +5295,8 @@ msgid ""
 "include during sysupgrade. Modified files in /etc/config/ and certain other "
 "configurations are automatically preserved."
 msgstr ""
-"Lista de patrones shell con los ficheros y directorios que se deben incluir "
-"en un sysupgrade. Los ficheros modificados en /etc/config/ y ciertas otras "
+"Lista de patrones shell con los archivos y directorios que se deben incluir "
+"en un sysupgrade. Los archivos modificados en /etc/config/ y ciertas otras "
 "configuraciones se guardarán automáticamente."
 
 #: protocols/luci-proto-ipv6/luasrc/model/cbi/admin_network/proto_6in4.lua:74
@@ -5396,9 +5396,9 @@ msgid ""
 "archive here. To reset the firmware to its initial state, click \"Perform "
 "reset\" (only possible with squashfs images)."
 msgstr ""
-"Para restaurar los ficheros de configuración, debe subir primero una copia "
+"Para restaurar los archivos de configuración, debe subir primero una copia "
 "de seguridad. Para reiniciar el firmware a su estado inicial pulse "
-"\"Reiniciar\" (sólo posible con imágenes squashfs)."
+"\"Realizar restablecimiento\" (sólo posible con imágenes squashfs)."
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/network.lua:112
 msgid "Tone"
@@ -5608,7 +5608,7 @@ msgstr "Usar <code>/etc/ethers</code>"
 
 #: protocols/luci-proto-relay/luasrc/model/cbi/admin_network/proto_relay.lua:40
 msgid "Use DHCP gateway"
-msgstr "Usar pasarela DHCP"
+msgstr "Usar puerta de enlace DHCP"
 
 #: modules/luci-base/luasrc/model/cbi/admin_network/proto_dhcp.lua:33
 #: protocols/luci-proto-3g/luasrc/model/cbi/admin_network/proto_3g.lua:85
@@ -5722,10 +5722,10 @@ msgid ""
 "the requesting host. The optional <em>Lease time</em> can be used to set non-"
 "standard host-specific lease time, e.g. 12h, 3d or infinite."
 msgstr ""
-"Pulse el botón <em>Añadir</em> para insertar una nueva cesión. <em>Dirección "
-"MAC</em> identificará la máquina, <em>dirección IPv4</em> especificará la "
-"dirección fija a usar y <em>Nombre de máquina</em> se asignará como nombre "
-"simbólico."
+"Pulse el botón <em>Añadir</em> para insertar una nueva dirección. "
+"<em>Dirección MAC</em> identificará la máquina, <em>Dirección IPv4</em> "
+"especificará la dirección fija a usar y <em>Nombre del dispositivo</em> se "
+"asignará como nombre identificativo."
 
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/fstab.lua:111
 msgid "Used"
@@ -5958,11 +5958,11 @@ msgstr "Reiniciando red WiFi..."
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:126
 msgid "Wireless network is disabled"
-msgstr "Red WiFi desconectada"
+msgstr "Red WiFi deshabilitada"
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:130
 msgid "Wireless network is enabled"
-msgstr "Red WiFi conectada"
+msgstr "Red WiFi habilitada"
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/dhcp.lua:138
 msgid "Write received DNS requests to syslog"
@@ -6017,7 +6017,7 @@ msgstr "Streams de compresión ZRam"
 
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:26
 msgid "ZRam Settings"
-msgstr "Ajustes ZRam"
+msgstr "Configuración de ZRam"
 
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/system.lua:114
 msgid "ZRam Size"
@@ -6090,7 +6090,7 @@ msgstr "dBm"
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:458
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:585
 msgid "disable"
-msgstr "desabilitar"
+msgstr "deshabilitar"
 
 #: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:119
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/ifaces.lua:524
@@ -6110,8 +6110,8 @@ msgid ""
 "file where given <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</"
 "abbr>-leases will be stored"
 msgstr ""
-"archivo en el que se guardarán las direcciones <abbr title=\"Dynamic Host "
-"Configuration Protocol\">DHCP</abbr> cedidas"
+"Archivo en el que se guardarán las direcciones <abbr title=\"Dynamic Host "
+"Configuration Protocol\">DHCP</abbr> asignadas"
 
 #: modules/luci-base/luasrc/view/cbi/firewall_zonelist.htm:61
 msgid "forward"
@@ -6182,7 +6182,7 @@ msgstr "kbit/s"
 
 #: modules/luci-base/htdocs/luci-static/resources/cbi.js:459
 msgid "key between 8 and 63 characters"
-msgstr "Clave entre 8 y 63 caracteres"
+msgstr "clave entre 8 y 63 caracteres"
 
 #: modules/luci-base/htdocs/luci-static/resources/cbi.js:471
 msgid "key with either 5 or 13 characters"
