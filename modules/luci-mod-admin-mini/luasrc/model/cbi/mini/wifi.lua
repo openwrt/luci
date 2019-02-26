@@ -169,6 +169,7 @@ s.addremove = false
 s:option(Value, "ssid", translate("Network Name (<abbr title=\"Extended Service Set Identifier\">ESSID</abbr>)"))
 
 bssid = s:option(Value, "bssid", translate("<abbr title=\"Basic Service Set Identifier\">BSSID</abbr>"))
+bssid.datatype = "macaddr"
 
 local devs = {}
 luci.model.uci.cursor():foreach("wireless", "wifi-device",
