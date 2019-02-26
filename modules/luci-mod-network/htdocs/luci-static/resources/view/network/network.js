@@ -1,7 +1,7 @@
 function iface_reconnect(id) {
 	L.halt();
 	L.dom.content(document.getElementById(id + '-ifc-description'), E('em', _('Interface is reconnecting...')));
-	L.post(L.url('admin/network/iface_reconnect', id), L.run);
+	L.post(L.url('admin/network/iface_reconnect', id), null，L.run);
 }
 
 function iface_delete(ev) {
