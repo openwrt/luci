@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-06-10 03:41+0200\n"
-"PO-Revision-Date: 2019-02-26 19:12-0300\n"
+"PO-Revision-Date: 2019-02-27 20:45-0300\n"
 "Last-Translator: José Vicente <josevteg@gmail.com>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
@@ -55,7 +55,7 @@ msgstr "(sin interfaces conectados)"
 
 #: modules/luci-base/luasrc/view/cbi/ucisection.htm:48
 msgid "-- Additional Field --"
-msgstr "-- Campo Adicional --"
+msgstr "-- Campo adicional --"
 
 #: modules/luci-base/htdocs/luci-static/resources/cbi.js:840
 #: modules/luci-base/htdocs/luci-static/resources/cbi.js:849
@@ -122,7 +122,7 @@ msgstr "Identificador de 6 octetos como una cadena hexadecimal, sin dos puntos"
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:875
 msgid "802.11r Fast Transition"
-msgstr "Transición rápida 802.11r"
+msgstr "Habilitar 802.11r (FT)"
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:1131
 msgid "802.11w Association SA Query maximum timeout"
@@ -167,9 +167,7 @@ msgstr ""
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:387
 msgid "<abbr title=\"Extended Service Set Identifier\">ESSID</abbr>"
-msgstr ""
-"<abbr title=\"Identificador de conjunto de servicios extendidos\">ESSID</"
-"abbr>"
+msgstr "<abbr title=\"Extended Service Set Identifier\">ESSID</abbr>"
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/dhcp.lua:306
 #: modules/luci-mod-status/luasrc/view/admin_status/routes.htm:45
@@ -489,11 +487,12 @@ msgstr "Permitir a los pertenecientes en la lista"
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/dhcp.lua:156
 msgid "Allow localhost"
-msgstr "Permitir a la propia máquina"
+msgstr "Permitir dispositivo local"
 
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/dropbear.lua:47
 msgid "Allow remote hosts to connect to local SSH forwarded ports"
-msgstr "Permitir a máquinas remotas conectar a puestos SSH locales traspasados"
+msgstr ""
+"Permitir a dispositivos remotos conectar a puestos SSH locales reenviados"
 
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/dropbear.lua:38
 msgid "Allow root logins with password"
@@ -694,7 +693,7 @@ msgstr "Tipo de autenticación"
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/dhcp.lua:30
 msgid "Authoritative"
-msgstr "Autorizado"
+msgstr "Autorizar"
 
 #: modules/luci-base/luasrc/view/sysauth.htm:17
 msgid "Authorization Required"
@@ -887,11 +886,11 @@ msgstr "Activar en el arranque"
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi_overview.lua:35
 msgid "Broadcom 802.11%s Wireless Controller"
-msgstr "Controlador inalámbrico 802.11%s Broadcom"
+msgstr "Controlador WiFi 802.11%s Broadcom"
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi_overview.lua:45
 msgid "Broadcom BCM%04x 802.11 Wireless Controller"
-msgstr "Controlador inalámbrico 802.11 BCM%04x"
+msgstr "Controlador WiFi 802.11 BCM%04x"
 
 #: modules/luci-mod-status/luasrc/view/admin_status/index/20-memory.htm:18
 msgid "Buffered"
@@ -952,7 +951,7 @@ msgstr "Cambios aplicados."
 
 #: modules/luci-base/luasrc/view/cbi/apply_widget.htm:156
 msgid "Changes have been reverted."
-msgstr "Los cambios han sido revertidos."
+msgstr "Se eliminaron los cambios."
 
 #: modules/luci-mod-system/luasrc/view/admin_system/password.htm:9
 msgid "Changes the administrator password for accessing the device"
@@ -985,7 +984,7 @@ msgstr "Comprobar"
 
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/fstab.lua:65
 msgid "Check filesystems before mount"
-msgstr "Compruebe los sistemas de archivos antes de montar"
+msgstr "Comprobar los sistemas de archivos antes de montar"
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi_add.lua:47
 msgid "Check this option to delete the existing networks from this radio."
@@ -1017,8 +1016,8 @@ msgid ""
 "Choose the network(s) you want to attach to this wireless interface or fill "
 "out the <em>create</em> field to define a new network."
 msgstr ""
-"Elija la red o redes a las que quiere unir esta interfaz inalámbrica o vacíe "
-"el campo <em>crear</em> para definir una red nueva."
+"Elija la red o redes a las que quiere unir esta interfaz WiFi o vacíe el "
+"campo <em>crear</em> para definir una red nueva."
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:612
 msgid "Cipher"
@@ -1177,7 +1176,7 @@ msgstr ""
 "No se pudo recuperar el acceso al dispositivo después de aplicar los cambios "
 "de configuración. Es posible que deba volver a conectarse si modificó la "
 "configuración relacionada con la red, como la dirección IP o las "
-"credenciales de seguridad inalámbrica."
+"credenciales de seguridad WiFi."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wifi_status.js:50
 msgid "Country"
@@ -1576,7 +1575,7 @@ msgstr "¿Realmente quieres eliminar la siguiente clave SSH?"
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/dhcp.lua:25
 msgid "Domain required"
-msgstr "Dominio requerido"
+msgstr "Requerir dominio"
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/dhcp.lua:163
 msgid "Domain whitelist"
@@ -1868,7 +1867,7 @@ msgstr "Expira"
 msgid ""
 "Expiry time of leased addresses, minimum is 2 minutes (<code>2m</code>)."
 msgstr ""
-"Tiempo de finalización de direcciones cedidas, con mínimo de dos minutos "
+"Tiempo de finalización de direcciones dadas, con mínimo de dos minutos "
 "(<code>2m</code>)."
 
 #: protocols/luci-proto-hnet/luasrc/model/cbi/admin_network/proto_hnet.lua:8
@@ -2149,7 +2148,7 @@ msgstr "Generar archivo"
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi_overview.lua:63
 msgid "Generic 802.11%s Wireless Controller"
-msgstr "Controlador inalámbrico 802.11%s genérico"
+msgstr "Controlador WiFi 802.11%s genérico"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js:26
 msgid "Given password confirmation did not match, password not changed!"
@@ -2239,13 +2238,11 @@ msgstr "Entradas de dispositivos"
 
 #: protocols/luci-proto-relay/luasrc/model/cbi/admin_network/proto_relay.lua:48
 msgid "Host expiry timeout"
-msgstr "Espera para caducidad de máquinas"
+msgstr "Tiempo de espera de expiración del dispositivo"
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/routes.lua:21
 msgid "Host-<abbr title=\"Internet Protocol Address\">IP</abbr> or Network"
-msgstr ""
-"Dirección <abbr title=\"Internet Protocol Address\">IP</abbr> de máquina o "
-"red"
+msgstr "Dirección <abbr title=\"Internet Protocol Address\">IP</abbr> o red"
 
 #: protocols/luci-proto-ppp/luasrc/model/cbi/admin_network/proto_pppoe.lua:118
 msgid "Host-Uniq tag content"
@@ -2565,7 +2562,7 @@ msgstr "Ignorar interfaz"
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/dhcp.lua:46
 msgid "Ignore resolve file"
-msgstr "Ignorar el archivoresolv"
+msgstr "Ignorar el archivo resolve"
 
 #: modules/luci-mod-system/luasrc/view/admin_system/flashops.htm:124
 msgid "Image"
@@ -2718,7 +2715,7 @@ msgstr "Unirse a Red"
 
 #: modules/luci-mod-network/luasrc/view/admin_network/wifi_join.htm:22
 msgid "Join Network: Wireless Scan"
-msgstr "Unirse a una red: Exploración inalámbrica"
+msgstr "Unirse a una red: Exploración WiFi"
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi_add.lua:19
 msgid "Joining Network: %q"
@@ -2917,7 +2914,7 @@ msgstr "Lista de dominios a los que se permiten respuestas RFC1918"
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/dhcp.lua:130
 msgid "List of hosts that supply bogus NX domain results"
-msgstr "Lista de máquinas que proporcionan resultados de dominio NX falsos"
+msgstr "Lista de dispositivos que proporcionan resultados de dominio NX falsos"
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/dhcp.lua:258
 msgid "Listen Interfaces"
@@ -3053,7 +3050,7 @@ msgstr "Pérdida de segundos de señal (LOSS)"
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/ifaces.lua:476
 msgid "Lowest leased address as offset from the network address."
-msgstr "Dirección cedida más baja como diferencia de la dirección de red."
+msgstr "Dirección dada más baja como diferencia de la dirección de red."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/iface_status.js:15
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/network.js:35
@@ -4023,7 +4020,7 @@ msgstr "Evita escuchar en estas interfaces."
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:507
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:560
 msgid "Prevents client-to-client communication"
-msgstr "Impide la comunicación cliente a cliente"
+msgstr "Impide la comunicación entre clientes"
 
 #: protocols/luci-proto-wireguard/luasrc/model/cbi/admin_network/proto_wireguard.lua:18
 msgid "Private Key"
@@ -4197,7 +4194,7 @@ msgid ""
 "Really delete this wireless network? The deletion cannot be undone! You "
 "might lose access to this device if you are connected via this network."
 msgstr ""
-"¿Realmente quiere eliminar esta red inalámbrica? La eliminación no se puede "
+"¿Realmente quiere eliminar esta red WiFi? La eliminación no se puede "
 "deshacer! Es posible que pierda el acceso a este dispositivo si está "
 "conectado a través de esta red."
 
@@ -4227,7 +4224,7 @@ msgstr "Tráfico en tiempo real"
 
 #: modules/luci-mod-status/luasrc/view/admin_status/wireless.htm:316
 msgid "Realtime Wireless"
-msgstr "Red inalámbrica en tiempo real"
+msgstr "Red WiFi en tiempo real"
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:911
 msgid "Reassociation Deadline"
@@ -4313,7 +4310,7 @@ msgstr "Reemplazar entrada"
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi_add.lua:46
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi_add.lua:51
 msgid "Replace wireless configuration"
-msgstr "Cambiar la configuración inalámbrica"
+msgstr "Cambiar la configuración WiFi"
 
 #: protocols/luci-proto-ipv6/luasrc/model/cbi/admin_network/proto_dhcpv6.lua:8
 msgid "Request IPv6-address"
@@ -4475,8 +4472,8 @@ msgid ""
 "Routes specify over which interface and gateway a certain host or network "
 "can be reached."
 msgstr ""
-"Las rutas especifican sobre qué interfaz y pasarela se puede llegar a una "
-"cierta máquina o red."
+"Las rutas especifican sobre qué interfaz y puerta de enlace se puede llegar "
+"a un cierto dispositivo o red."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:240
 msgid "Rule"
@@ -4622,7 +4619,7 @@ msgstr "Tipo de servicio"
 
 #: modules/luci-base/luasrc/controller/admin/index.lua:55
 msgid "Services"
-msgstr "Servicios"
+msgstr "Aplicaciones"
 
 #: modules/luci-base/htdocs/luci-static/resources/xhr.js:37
 msgid "Session expired"
@@ -4777,16 +4774,16 @@ msgid ""
 "Specifies the maximum amount of failed ARP requests until hosts are presumed "
 "to be dead"
 msgstr ""
-"Especifica la cantidad de peticiones ARP fallidas hasta suponer muerta una "
-"máquina"
+"Especifica la cantidad de peticiones ARP fallidas hasta suponer muerto un "
+"dispositivo"
 
 #: protocols/luci-proto-relay/luasrc/model/cbi/admin_network/proto_relay.lua:49
 msgid ""
 "Specifies the maximum amount of seconds after which hosts are presumed to be "
 "dead"
 msgstr ""
-"Especifica la cantidad de segundos a transcurrir hasta suponer muerta una "
-"máquina"
+"Especifica la cantidad de segundos a transcurrir hasta suponer muerto un "
+"dispositivo"
 
 #: protocols/luci-proto-ipip/luasrc/model/cbi/admin_network/proto_ipip.lua:30
 msgid "Specify a TOS (Type of Service)."
@@ -4828,7 +4825,7 @@ msgstr "Iniciando aplicar configuración..."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wifi_join.js:105
 msgid "Starting wireless scan..."
-msgstr "Iniciando escaneo inalámbrico..."
+msgstr "Iniciando escaneo de WiFi..."
 
 #: modules/luci-mod-system/luasrc/controller/admin/system.lua:23
 msgid "Startup"
@@ -4844,7 +4841,7 @@ msgstr "Rutas estáticas IPv6"
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/dhcp.lua:269
 msgid "Static Leases"
-msgstr "Dorecciones estáticas"
+msgstr "Direcciones estáticas"
 
 #: modules/luci-mod-network/luasrc/controller/admin/network.lua:118
 msgid "Static Routes"
@@ -4861,9 +4858,9 @@ msgid ""
 "configurations where only hosts with a corresponding lease are served."
 msgstr ""
 "Las conexiones estáticas se usan para asignar direcciones IP fijas y nombres "
-"simbólicos de máquina a clientes DHCP. También son necesarias para "
-"configuraciones de interfaz no dinámica en las que a cada máquina siempre se "
-"le quiere servir la misma dirección IP."
+"simbólicos de dispositivos a clientes DHCP. También son necesarias para "
+"configuraciones de interfaz no dinámica en las que a cada dispositivo "
+"siempre se le quiere servir la misma dirección IP."
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:532
 msgid "Station inactivity limit"
@@ -5030,10 +5027,10 @@ msgid ""
 msgstr ""
 "La sección de <em>Configuración del dispositivo</em> ocupa la configuración "
 "física del hardware de radio como el canal, la potencia de transmisión o la "
-"selección de antena que se comparte entre todas las redes inalámbricas "
-"definidas (si el hardware de radio es capaz de ser multi-SSID). "
-"Configuración por red como encriptado o modo de operación se agrupan en "
-"<em>Configuración de la interfaz</em>."
+"selección de antena que se comparte entre todas las redes WiFi definidas (si "
+"el hardware de radio es capaz de ser multi-SSID). Configuración por red como "
+"encriptado o modo de operación se agrupan en <em>Configuración de la "
+"interfaz</em>."
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi_overview.lua:79
 msgid ""
@@ -5041,7 +5038,7 @@ msgid ""
 "component for working wireless configuration!"
 msgstr ""
 "El paquete <em>libiwinfo-lua</em> no está instalado. ¡Debe instalarlo para "
-"poder configurar la conectividad inalámbrica!"
+"poder configurar la conectividad WiFi!"
 
 #: protocols/luci-proto-ipv6/luasrc/model/cbi/admin_network/proto_6in4.lua:66
 msgid ""
@@ -5723,7 +5720,7 @@ msgid ""
 "standard host-specific lease time, e.g. 12h, 3d or infinite."
 msgstr ""
 "Pulse el botón <em>Añadir</em> para insertar una nueva dirección. "
-"<em>Dirección MAC</em> identificará la máquina, <em>Dirección IPv4</em> "
+"<em>Dirección MAC</em> identificará el dispositivo, <em>Dirección IPv4</em> "
 "especificará la dirección fija a usar y <em>Nombre del dispositivo</em> se "
 "asignará como nombre identificativo."
 
@@ -6090,7 +6087,7 @@ msgstr "dBm"
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:458
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:585
 msgid "disable"
-msgstr "deshabilitar"
+msgstr "Deshabilitar"
 
 #: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:119
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/ifaces.lua:524
