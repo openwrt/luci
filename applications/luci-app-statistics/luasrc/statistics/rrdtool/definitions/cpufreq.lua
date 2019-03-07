@@ -2,6 +2,10 @@
 
 module("luci.statistics.rrdtool.definitions.cpufreq",package.seeall)
 
+function item()
+	return luci.i18n.translate("CPU Frequency")
+end
+
 function rrdargs( graph, plugin, plugin_instance, dtype )
 
 	return {

@@ -3,6 +3,10 @@
 
 module("luci.statistics.rrdtool.definitions.df", package.seeall)
 
+function item()
+	return luci.i18n.translate("Disk Space Usage")
+end
+
 function rrdargs( graph, plugin, plugin_instance, dtype )
 
 	local df_complex = {

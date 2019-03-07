@@ -11,6 +11,10 @@ You may obtain a copy of the License at
 
 module("luci.statistics.rrdtool.definitions.uptime", package.seeall)
 
+function item()
+	return luci.i18n.translate("Uptime")
+end
+
 function rrdargs( graph, plugin, plugin_instance, dtype )
 
 	return {

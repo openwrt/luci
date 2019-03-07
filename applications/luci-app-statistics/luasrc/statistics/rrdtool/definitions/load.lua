@@ -3,6 +3,10 @@
 
 module("luci.statistics.rrdtool.definitions.load", package.seeall)
 
+function item()
+	return luci.i18n.translate("System Load")
+end
+
 function rrdargs( graph, plugin, plugin_instance, dtype )
 
 	return {

@@ -3,6 +3,10 @@
 
 module("luci.statistics.rrdtool.definitions.apcups",package.seeall)
 
+function item()
+	return luci.i18n.translate("APC UPS")
+end
+
 function rrdargs( graph, plugin, plugin_instance )
 
 	local lu = require("luci.util")

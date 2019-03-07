@@ -3,6 +3,10 @@
 
 module("luci.statistics.rrdtool.definitions.openvpn", package.seeall)
 
+function item()
+	return luci.i18n.translate("OpenVPN")
+end
+
 function rrdargs( graph, plugin, plugin_instance )
 	local inst = plugin_instance:gsub("^openvpn%.(.+)%.status$", "%1")
 
