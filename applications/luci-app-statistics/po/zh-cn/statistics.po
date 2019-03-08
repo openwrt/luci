@@ -17,6 +17,7 @@ msgstr ""
 "Language-Team:  <debian-l10n-chinese@lists.debian.org>\n"
 
 #: applications/luci-app-statistics/luasrc/controller/luci_statistics/luci_statistics.lua:26
+#: applications/luci-app-statistics/luasrc/statistics/rrdtool/definitions/apcups.lua:7
 msgid "APC UPS"
 msgstr "APC UPS"
 
@@ -62,6 +63,7 @@ msgid "CPU Context Switches Plugin Configuration"
 msgstr "CPU 上下文切换插件配置"
 
 #: applications/luci-app-statistics/luasrc/controller/luci_statistics/luci_statistics.lua:30
+#: applications/luci-app-statistics/luasrc/statistics/rrdtool/definitions/cpufreq.lua:6
 msgid "CPU Frequency"
 msgstr "CPU 频率"
 
@@ -119,6 +121,7 @@ msgstr ""
 "以更改 Collectd 守护进程常规设置。"
 
 #: applications/luci-app-statistics/luasrc/controller/luci_statistics/luci_statistics.lua:27
+#: applications/luci-app-statistics/luasrc/statistics/rrdtool/definitions/conntrack.lua:7
 msgid "Conntrack"
 msgstr "Conntrack"
 
@@ -127,6 +130,7 @@ msgid "Conntrack Plugin Configuration"
 msgstr "Conntrack 插件配置"
 
 #: applications/luci-app-statistics/luasrc/controller/luci_statistics/luci_statistics.lua:28
+#: applications/luci-app-statistics/luasrc/statistics/rrdtool/definitions/contextswitch.lua:6
 msgid "Context Switches"
 msgstr "上下文切换"
 
@@ -135,6 +139,7 @@ msgid "DF Plugin Configuration"
 msgstr "DF 插件配置"
 
 #: applications/luci-app-statistics/luasrc/controller/luci_statistics/luci_statistics.lua:35
+#: applications/luci-app-statistics/luasrc/statistics/rrdtool/definitions/dns.lua:7
 msgid "DNS"
 msgstr "DNS"
 
@@ -167,10 +172,12 @@ msgid "Disk Plugin Configuration"
 msgstr "磁盘插件配置"
 
 #: applications/luci-app-statistics/luasrc/controller/luci_statistics/luci_statistics.lua:33
+#: applications/luci-app-statistics/luasrc/statistics/rrdtool/definitions/df.lua:7
 msgid "Disk Space Usage"
 msgstr "磁盘空间使用情况"
 
 #: applications/luci-app-statistics/luasrc/controller/luci_statistics/luci_statistics.lua:34
+#: applications/luci-app-statistics/luasrc/statistics/rrdtool/definitions/disk.lua:7
 msgid "Disk Usage"
 msgstr "磁盘使用情况"
 
@@ -201,8 +208,8 @@ msgstr "启用"
 #: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/apcups.lua:14
 #: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/conntrack.lua:10
 #: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/contextswitch.lua:11
-#: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/cpu.lua:12
 #: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/cpufreq.lua:11
+#: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/cpu.lua:12
 #: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/csv.lua:15
 #: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/curl.lua:8
 #: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/df.lua:15
@@ -235,6 +242,7 @@ msgid "Enable this plugin"
 msgstr "启用该插件"
 
 #: applications/luci-app-statistics/luasrc/controller/luci_statistics/luci_statistics.lua:37
+#: applications/luci-app-statistics/luasrc/statistics/rrdtool/definitions/entropy.lua:7
 msgid "Entropy"
 msgstr "熵"
 
@@ -255,6 +263,7 @@ msgid "Filter class monitoring"
 msgstr "Filter 类监测"
 
 #: applications/luci-app-statistics/luasrc/controller/luci_statistics/luci_statistics.lua:40
+#: applications/luci-app-statistics/luasrc/statistics/rrdtool/definitions/iptables.lua:7
 msgid "Firewall"
 msgstr "防火墙"
 
@@ -343,10 +352,12 @@ msgid "Interface Plugin Configuration"
 msgstr "接口插件配置"
 
 #: applications/luci-app-statistics/luasrc/controller/luci_statistics/luci_statistics.lua:39
+#: applications/luci-app-statistics/luasrc/statistics/rrdtool/definitions/interface.lua:7
 msgid "Interfaces"
 msgstr "接口"
 
 #: applications/luci-app-statistics/luasrc/controller/luci_statistics/luci_statistics.lua:41
+#: applications/luci-app-statistics/luasrc/statistics/rrdtool/definitions/irq.lua:7
 msgid "Interrupts"
 msgstr "中断"
 
@@ -389,6 +400,7 @@ msgid "Maximum allowed connections"
 msgstr "最大允许连接数"
 
 #: applications/luci-app-statistics/luasrc/controller/luci_statistics/luci_statistics.lua:44
+#: applications/luci-app-statistics/luasrc/statistics/rrdtool/definitions/memory.lua:15
 msgid "Memory"
 msgstr "内存"
 
@@ -474,6 +486,7 @@ msgid "Name of the rule"
 msgstr "规则名"
 
 #: applications/luci-app-statistics/luasrc/controller/luci_statistics/luci_statistics.lua:45
+#: applications/luci-app-statistics/luasrc/statistics/rrdtool/definitions/netlink.lua:7
 msgid "Netlink"
 msgstr "Netlink"
 
@@ -510,6 +523,7 @@ msgid "Number of threads for data collection"
 msgstr "收集程序使用线程数"
 
 #: applications/luci-app-statistics/luasrc/controller/luci_statistics/luci_statistics.lua:48
+#: applications/luci-app-statistics/luasrc/statistics/rrdtool/definitions/olsrd.lua:7
 msgid "OLSRd"
 msgstr "OLSRd"
 
@@ -522,6 +536,7 @@ msgid "Only create average RRAs"
 msgstr "仅创建平均 RRAs"
 
 #: applications/luci-app-statistics/luasrc/controller/luci_statistics/luci_statistics.lua:49
+#: applications/luci-app-statistics/luasrc/statistics/rrdtool/definitions/openvpn.lua:7
 msgid "OpenVPN"
 msgstr "OpenVPN"
 
@@ -546,6 +561,7 @@ msgid "Output plugins"
 msgstr "Output 插件"
 
 #: applications/luci-app-statistics/luasrc/controller/luci_statistics/luci_statistics.lua:50
+#: applications/luci-app-statistics/luasrc/statistics/rrdtool/definitions/ping.lua:7
 msgid "Ping"
 msgstr "Ping"
 
@@ -562,6 +578,7 @@ msgid "Port for apcupsd communication"
 msgstr "apcupsd 通信端口"
 
 #: applications/luci-app-statistics/luasrc/controller/luci_statistics/luci_statistics.lua:51
+#: applications/luci-app-statistics/luasrc/statistics/rrdtool/definitions/processes.lua:7
 msgid "Processes"
 msgstr "进程"
 
@@ -574,6 +591,7 @@ msgid "Processes to monitor separated by space"
 msgstr "监控的进程，用空格隔开"
 
 #: applications/luci-app-statistics/luasrc/controller/luci_statistics/luci_statistics.lua:29
+#: applications/luci-app-statistics/luasrc/statistics/rrdtool/definitions/cpu.lua:7
 msgid "Processor"
 msgstr "处理器"
 
@@ -625,6 +643,7 @@ msgid "Sensor list"
 msgstr "传感器列表"
 
 #: applications/luci-app-statistics/luasrc/controller/luci_statistics/luci_statistics.lua:53
+#: applications/luci-app-statistics/luasrc/statistics/rrdtool/definitions/sensors.lua:7
 msgid "Sensors"
 msgstr "传感器"
 
@@ -681,6 +700,7 @@ msgid "Specifies what information to collect about the global topology."
 msgstr "收集指定拓扑相关信息。"
 
 #: applications/luci-app-statistics/luasrc/controller/luci_statistics/luci_statistics.lua:54
+#: applications/luci-app-statistics/luasrc/statistics/rrdtool/definitions/splash_leases.lua:7
 msgid "Splash Leases"
 msgstr "Splash Leases"
 
@@ -711,10 +731,12 @@ msgid "Stored timespans"
 msgstr "存储时间跨度"
 
 #: applications/luci-app-statistics/luasrc/controller/luci_statistics/luci_statistics.lua:43
+#: applications/luci-app-statistics/luasrc/statistics/rrdtool/definitions/load.lua:7
 msgid "System Load"
 msgstr "系统负载"
 
 #: applications/luci-app-statistics/luasrc/controller/luci_statistics/luci_statistics.lua:55
+#: applications/luci-app-statistics/luasrc/statistics/rrdtool/definitions/tcpconns.lua:7
 msgid "TCP Connections"
 msgstr "TCP 连接数"
 
@@ -931,6 +953,7 @@ msgid "The uptime plugin collects statistics about the uptime of the system."
 msgstr "运行时间插件收集系统启动时间的统计信息。"
 
 #: applications/luci-app-statistics/luasrc/controller/luci_statistics/luci_statistics.lua:56
+#: applications/luci-app-statistics/luasrc/statistics/rrdtool/definitions/thermal.lua:6
 msgid "Thermal"
 msgstr "温感"
 
@@ -963,6 +986,7 @@ msgstr "尝试解析主机全域名"
 
 #: applications/luci-app-statistics/luasrc/controller/luci_statistics/luci_statistics.lua:47
 #: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/nut.lua:12
+#: applications/luci-app-statistics/luasrc/statistics/rrdtool/definitions/nut.lua:6
 msgid "UPS"
 msgstr "UPS"
 
@@ -987,6 +1011,7 @@ msgid "Unixsock Plugin Configuration"
 msgstr "Unixsock 插件配置"
 
 #: applications/luci-app-statistics/luasrc/controller/luci_statistics/luci_statistics.lua:58
+#: applications/luci-app-statistics/luasrc/statistics/rrdtool/definitions/uptime.lua:15
 msgid "Uptime"
 msgstr "运行时间"
 
@@ -1012,6 +1037,7 @@ msgid "Verbose monitoring"
 msgstr "详细监测"
 
 #: applications/luci-app-statistics/luasrc/controller/luci_statistics/luci_statistics.lua:42
+#: applications/luci-app-statistics/luasrc/statistics/rrdtool/definitions/iwinfo.lua:7
 msgid "Wireless"
 msgstr "无线"
 
@@ -1025,6 +1051,7 @@ msgid ""
 msgstr "您可以安装更多的 collectd-mod-* 插件以获得更多的统计数据。"
 
 #: applications/luci-app-statistics/luasrc/controller/luci_statistics/luci_statistics.lua:32
+#: applications/luci-app-statistics/luasrc/statistics/rrdtool/definitions/curl.lua:7
 msgid "cUrl"
 msgstr "cUrl"
 
