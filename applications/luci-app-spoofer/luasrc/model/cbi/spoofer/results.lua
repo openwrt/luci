@@ -85,27 +85,17 @@ o = s:option(SpooferMultiValue, "clientip", header("client address",
 o = s:option(SpooferMultiValue, "ASN", header("ASN",
     "Autonomous System Number"))
 
-o = s:option(SpooferResultValue, "privaddr", header("egress<br />private",
-    "result of sending spoofed private addresses"))
+o = s:option(SpooferResultValue, "privaddr", header("outbound<br />private",
+    "result of client sending packets to server with spoofed private addresses"))
 
-o = s:option(SpooferResultValue, "routable", header("egress<br />routable",
-    "result of sending spoofed routable addresses"))
+o = s:option(SpooferResultValue, "routable", header("outbound<br />routable",
+    "result of client sending packets to server with spoofed routable addresses"))
 
-o = s:option(SpooferResultValue, "inprivaddr", header("ingress<br />private",
-    "result of receiving spoofed private addresses"))
+o = s:option(SpooferResultValue, "inprivaddr", header("inbound<br />private",
+    "result of server sending packets to client with spoofed private addresses"))
 
-o = s:option(SpooferResultValue, "ininternal", header("ingress<br />internal",
-    "result of receiving spoofed internal addresses"))
-
-o = s:option(DummyValue, "log", header("log",
-    "prober log file (technical)"))
-o.template = "spoofer/dvalue"
-o.value = function(self, section)
-    local log = self.map:get(section, self.option)
-    if not log or not nixio.fs.access(log, "r") then return nil end
-    self.rawhtml = true
-    return '<a href="spoofer/log/' .. section .. '">log</a>'
-end
+o = s:option(SpooferResultValue, "ininternal", header("inbound<br />internal",
+    "result of server sending packets to client with spoofed internal (same subnet as client) addresses"))
 
 o = s:option(DummyValue, "report", header("report",
     "summary report at website"))
@@ -115,6 +105,16 @@ o.value = function(self, section)
     if not url then return nil end
     self.rawhtml = true
     return '<a href="' .. self.map:get(section, "report") .. '">report</a>'
+end
+
+o = s:option(DummyValue, "log", header("log",
+    "prober log file (technical)"))
+o.template = "spoofer/dvalue"
+o.value = function(self, section)
+    local log = self.map:get(section, self.option)
+    if not log or not nixio.fs.access(log, "r") then return nil end
+    self.rawhtml = true
+    return '<a href="spoofer/log/' .. section .. '">log</a>'
 end
 
 return m
