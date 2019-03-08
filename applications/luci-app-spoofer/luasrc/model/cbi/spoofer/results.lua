@@ -114,7 +114,7 @@ o.value = function(self, section)
     local log = self.map:get(section, self.option)
     if not log or not nixio.fs.access(log, "r") then return nil end
     self.rawhtml = true
-    return '<a href="spoofer/log/' .. section .. '">log</a>'
+    return '<a href="' .. luci.dispatcher.build_url("admin", "services", "spoofer", "log", section) .. '">log</a>'
 end
 
 return m

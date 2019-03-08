@@ -1,4 +1,4 @@
-module("luci.controller.spoofer.spoofer", package.seeall)
+module("luci.controller.spoofer", package.seeall)
 
 local uci = require "luci.model.uci"
 
@@ -6,9 +6,7 @@ function index()
     entry({"admin", "services", "spoofer"}, firstchild(), "Spoofer", 19.16)
     entry({"admin", "services", "spoofer", "results"}, cbi("spoofer/results"), "Spoofer Results", 1)
     entry({"admin", "services", "spoofer", "settings"}, cbi("spoofer/settings"), "Spoofer Settings", 2)
-    e = entry({"admin", "services", "spoofer", "spoofer", "log"}, call("action_spooferlog"), "Spoofer Log")
-    e.dependent = false
-    e.leaf = true
+    entry({"admin", "services", "spoofer", "log"}, call("action_spooferlog")).leaf = true
 end
 
 function action_spooferlog(section)
