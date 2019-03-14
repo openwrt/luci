@@ -1159,6 +1159,61 @@ function cbi_row_swap(elem, up, store)
 	return false;
 }
 
+function getValue (ofNode, dataName) {
+	var value;
+	for (var i = 0; i < ofNode.children.length; ++i) {
+		var child = ofNode.children[i];
+		if (child.tagName === 'INPUT') {
+			if (child.name.endsWith(dataName)) {
+				value = child.value;
+			} 
+		} else {
+			value = getValue (child, dataName)
+		}
+		if (value) break;
+	}
+	return value;
+}
+
+function cbi_sort_table (elm, col, dir, store) {
+
+	var tb = elm.parentNode;
+	while (tb && !tb.classList.contains('cbi-section-table')) {
+		tb = tb.parentNode;
+	}
+
+	// Collect rows
+	var rows = [];
+	
+	for (var i = 1; i < tb.children.length; ++i) {
+		var node = tb.children[i];		
+		var clm = node.children[col];
+		rows.push({node: node, value: getValue(clm, '.' + clm.getAttribute('data-name'))});
+	}
+
+	rows.sort((a, b) => {
+		return a.value.toLowerCase().localeCompare(b.value.toLowerCase()) * dir;
+	});
+	var ids = [];
+	var n = 0;
+	rows.forEach((row) => {
+		row.node.parentNode.insertBefore(row.node, null);
+		if (/-([^-]+)$/.test(row.node.id)) {
+			ids.push(RegExp.$1);
+		}
+		row.node.classList.remove('cbi-rowstyle-1');
+		row.node.classList.remove('cbi-rowstyle-2');
+		row.node.classList.add((n++ % 2) ? 'cbi-rowstyle-2' : 'cbi-rowstyle-1');
+	});
+	
+	var input = document.getElementById(store);
+	if (input) {
+		input.value = ids.join(' ');
+	}
+	
+	return false;
+}
+
 function cbi_tag_last(container)
 {
 	var last;

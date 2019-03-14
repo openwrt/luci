@@ -1223,7 +1223,12 @@ function TypedSection.parse(self, novld)
 		end
 	end
 
-	if self.sortable then
+	local i, k, colsortable = false
+	for i, k in ipairs(self.children) do
+		colsortable = colsortable or k.sortable
+	end
+
+	if self.sortable or colsortable then
 		local stval = RESORT_PREFIX .. self.config .. "." .. self.sectiontype
 		local order = self.map:formvalue(stval)
 		if order and #order > 0 then

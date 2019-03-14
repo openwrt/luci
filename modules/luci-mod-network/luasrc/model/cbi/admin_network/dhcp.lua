@@ -283,6 +283,7 @@ s.template = "cbi/tblsection"
 name = s:option(Value, "name", translate("Hostname"))
 name.datatype = "hostname('strict')"
 name.rmempty  = true
+name.sortable = true
 
 function name.write(self, section, value)
 	Value.write(self, section, value)
@@ -297,6 +298,7 @@ end
 mac = s:option(Value, "mac", translate("<abbr title=\"Media Access Control\">MAC</abbr>-Address"))
 mac.datatype = "list(unique(macaddr))"
 mac.rmempty  = true
+mac.sortable = true
 
 function mac.cfgvalue(self, section)
 	local val = Value.cfgvalue(self, section)
@@ -305,6 +307,7 @@ end
 
 ip = s:option(Value, "ip", translate("<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Address"))
 ip.datatype = "or(ip4addr,'ignore')"
+ip.sortable = true
 
 time = s:option(Value, "leasetime", translate("Lease time"))
 time.rmempty = true
@@ -321,6 +324,7 @@ if fp then
 	end
 	fp:close()
 end
+duid.sortable = true
 
 hostid = s:option(Value, "hostid", translate("<abbr title=\"Internet Protocol Version 6\">IPv6</abbr>-Suffix (hex)"))
 

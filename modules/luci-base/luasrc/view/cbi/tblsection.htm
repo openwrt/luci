@@ -54,6 +54,12 @@ function render_titles()
 			%><div class="th cbi-section-table-cell"<%=
 				width(k) .. attr('data-type', k.typename) %>><%
 
+				%>
+		<table>
+		  <tr>
+		    <td rowspan="2">
+				<%
+
 			if k.titleref then
 				%><a title="<%=self.titledesc or translate('Go to relevant configuration page')%>" class="cbi-title-ref" href="<%=k.titleref%>"><%
 			end
@@ -64,7 +70,28 @@ function render_titles()
 				%></a><%
 			end
 
-			%></div><%
+			%>
+    </td>
+    <td>
+		<% if k.sortable then %>
+			<img class="cbi-button" src="/luci-static/resources/cbi/up.gif" title="Sort Asc" onclick="cbi_sort_table(this, <%=i-1%>, 1,'cbi.sts.<%=self.config%>.<%=self.sectiontype%>')"></img>
+		<% else %>
+			&nbsp;
+		<% end %>
+    </td>
+  </tr>
+  <tr>
+    <td>
+		<% if k.sortable then %>
+			<img class="cbi-button" src="/luci-static/resources/cbi/down.gif" title="Sort Desc" onclick="cbi_sort_table(this, <%=i-1%>, -1,'cbi.sts.<%=self.config%>.<%=self.sectiontype%>')"></img>
+		<% else %>
+			&nbsp;
+		<% end %>
+    </td>
+  </tr>
+</table>
+			</div>
+		<%
 		end
 	end
 
@@ -112,7 +139,12 @@ end
 	<% if self.title and #self.title > 0 then -%>
 		<h3><%=self.title%></h3>
 	<%- end %>
-	<%- if self.sortable then -%>
+	<%-
+		local i, k, colsortable = false
+		for i, k in ipairs(self.children) do
+			colsortable = colsortable or k.sortable
+		end
+	if self.sortable or colsortable then -%>
 		<input type="hidden" id="cbi.sts.<%=self.config%>.<%=self.sectiontype%>" name="cbi.sts.<%=self.config%>.<%=self.sectiontype%>" value="" />
 	<%- end -%>
 	<div class="cbi-section-descr"><%=self.description%></div>
