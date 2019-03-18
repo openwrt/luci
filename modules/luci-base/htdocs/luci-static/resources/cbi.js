@@ -1164,53 +1164,78 @@ function getValue (ofNode, dataName) {
 	for (var i = 0; i < ofNode.children.length; ++i) {
 		var child = ofNode.children[i];
 		if (child.tagName === 'INPUT') {
-			if (child.name.endsWith(dataName)) {
-				value = child.value;
-			} 
+			if (child.name.indexOf(dataName, child.name.length - dataName.length) !== -1)
+				value = child.value;			
 		} else {
-			value = getValue (child, dataName)
+			value = getValue(child, dataName);
 		}
 		if (value) break;
 	}
 	return value;
 }
 
-function cbi_sort_table (elm, col, dir, store) {
+function arraySort (list, cmp) {
+	var frm = list;
+	var to = [];
+	for (var blocksize = 1; blocksize < list.length; blocksize *= 2) {
+		var toOfs = 0;
+		for (var idx = 0; idx < list.length; idx += (2 * blocksize)) {
+			var a = idx;
+			var ae = Math.min(list.length, a + blocksize) - 1;
+			var b = idx + blocksize;
+			var be = Math.min(list.length, b + blocksize) - 1;
+			while (true) {
+				if (a > ae && b > be)
+					break;
+				else if (b > be)
+					to[toOfs++] = frm[a++];
+				else if (a > ae)
+					to[toOfs++] = frm[b++];
+				else if (cmp(frm[a], frm[b]) < 0)
+					to[toOfs++] = frm[a++];
+				else
+					to[toOfs++] = frm[b++];
+			}
+		}
+		var tmp = frm;
+		frm = to;
+		to = tmp;
+	}
+	return frm;
+}
 
+function cbi_sort_table (elm, col, dir, store) {
 	var tb = elm.parentNode;
 	while (tb && !tb.classList.contains('cbi-section-table')) {
 		tb = tb.parentNode;
 	}
 
-	// Collect rows
 	var rows = [];
-	
+
 	for (var i = 1; i < tb.children.length; ++i) {
-		var node = tb.children[i];		
+		var node = tb.children[i];
 		var clm = node.children[col];
-		rows.push({node: node, value: getValue(clm, '.' + clm.getAttribute('data-name'))});
+		rows[i - 1] = {node: node, value: getValue(clm, '.' + clm.getAttribute('data-name'))};
 	}
 
-	rows.sort((a, b) => {
+	arraySort(rows, function (a, b) {
 		return a.value.toLowerCase().localeCompare(b.value.toLowerCase()) * dir;
 	});
 	var ids = [];
 	var n = 0;
-	rows.forEach((row) => {
-		row.node.parentNode.insertBefore(row.node, null);
-		if (/-([^-]+)$/.test(row.node.id)) {
+	for (var i = 1; i < rows.length; ++i) {
+		rows[i].node.parentNode.insertBefore(rows[i].node, null);
+		if (/-([^-]+)$/.test(rows[i].node.id))
 			ids.push(RegExp.$1);
-		}
-		row.node.classList.remove('cbi-rowstyle-1');
-		row.node.classList.remove('cbi-rowstyle-2');
-		row.node.classList.add((n++ % 2) ? 'cbi-rowstyle-2' : 'cbi-rowstyle-1');
-	});
-	
-	var input = document.getElementById(store);
-	if (input) {
-		input.value = ids.join(' ');
+		rows[i].node.classList.remove('cbi-rowstyle-1');
+		rows[i].node.classList.remove('cbi-rowstyle-2');
+		rows[i].node.classList.add((n++ % 2) ? 'cbi-rowstyle-2' : 'cbi-rowstyle-1');
 	}
 	
+	var input = document.getElementById(store);
+	if (input) 
+		input.value = ids.join(' ');
+
 	return false;
 }
 

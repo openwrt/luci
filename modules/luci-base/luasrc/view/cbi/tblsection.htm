@@ -51,14 +51,8 @@ function render_titles()
 	local i, k
 	for i, k in ipairs(self.children) do
 		if not k.optional then
-			%><div class="th cbi-section-table-cell"<%=
-				width(k) .. attr('data-type', k.typename) %>><%
+			%><div class="th cbi-section-table-cell"><%
 
-				%>
-		<table>
-		  <tr>
-		    <td rowspan="2">
-				<%
 
 			if k.titleref then
 				%><a title="<%=self.titledesc or translate('Go to relevant configuration page')%>" class="cbi-title-ref" href="<%=k.titleref%>"><%
@@ -70,28 +64,14 @@ function render_titles()
 				%></a><%
 			end
 
-			%>
-    </td>
-    <td>
-		<% if k.sortable then %>
-			<img class="cbi-button" src="/luci-static/resources/cbi/up.gif" title="Sort Asc" onclick="cbi_sort_table(this, <%=i-1%>, 1,'cbi.sts.<%=self.config%>.<%=self.sectiontype%>')"></img>
-		<% else %>
-			&nbsp;
-		<% end %>
-    </td>
-  </tr>
-  <tr>
-    <td>
-		<% if k.sortable then %>
-			<img class="cbi-button" src="/luci-static/resources/cbi/down.gif" title="Sort Desc" onclick="cbi_sort_table(this, <%=i-1%>, -1,'cbi.sts.<%=self.config%>.<%=self.sectiontype%>')"></img>
-		<% else %>
-			&nbsp;
-		<% end %>
-    </td>
-  </tr>
-</table>
-			</div>
-		<%
+			if k.sortable then 
+				%>
+				<img class="cbi-button-sort-asc" src="/luci-static/resources/cbi/up.gif" title="Sort Asc" onclick="cbi_sort_table(this, <%=i-1%>, 1,'cbi.sts.<%=self.config%>.<%=self.sectiontype%>')"></img>
+				<img class="cbi-button-sort-dsc" src="/luci-static/resources/cbi/down.gif" title="Sort Desc" onclick="cbi_sort_table(this, <%=i-1%>, -1,'cbi.sts.<%=self.config%>.<%=self.sectiontype%>')"></img>
+				<% 
+			end 
+			
+			%></div><%
 		end
 	end
 
@@ -140,10 +120,10 @@ end
 		<h3><%=self.title%></h3>
 	<%- end %>
 	<%-
-		local i, k, colsortable = false
-		for i, k in ipairs(self.children) do
-			colsortable = colsortable or k.sortable
-		end
+	local i, k, colsortable = false
+	for i, k in ipairs(self.children) do
+		colsortable = colsortable or k.sortable
+	end
 	if self.sortable or colsortable then -%>
 		<input type="hidden" id="cbi.sts.<%=self.config%>.<%=self.sectiontype%>" name="cbi.sts.<%=self.config%>.<%=self.sectiontype%>" value="" />
 	<%- end -%>
