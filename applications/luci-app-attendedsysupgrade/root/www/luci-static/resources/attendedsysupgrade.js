@@ -157,11 +157,14 @@ function ubus_call(command, argument, params, variable) {
     request.send(request_json);
 }
 
-function set_status(type, message, loading) {
+function set_status(type, message, loading, show_log) {
     $("#status_box").className = "alert-message " + type;
     var loading_image = '';
     if (loading) {
         loading_image = '<img src="/luci-static/resources/icons/loading.gif" alt="Loading" style="vertical-align:middle"> ';
+    }
+    if (show_log && data.log) {
+        message += ' <p><a target="_blank" href="' + data.url + data.log + '">Build log</a></p>'
     }
     $("#status_box").innerHTML = loading_image + message;
     show("#status_box")
@@ -238,13 +241,13 @@ function upgrade_request() {
 
 function upgrade_request_callback(request) {
     // ready to download
-    var request_json = JSON.parse(request);
-    data.files = request_json.files;
-    data.sysupgrade = request_json.sysupgrade;
+    var request_json = JSON.parse(request)
+    data.files = request_json.files
+    data.sysupgrade = request_json.sysupgrade
+    data.log = request_json.log
 
-    var info_output = 'Firmware created: <a href="' + data.url + data.files + data.sysupgrade + '"><b>' + data.sysupgrade + '</b></a>'
-    info_output += ' <a target="_blank" href="' + data.url + request_json.log + '">Build log</a>'
-    set_status("info", info_output);
+    var info_output = '<h3>Firmware created</h3><p>Created file: <a href="' + data.url + data.files + data.sysupgrade + '">' + data.sysupgrade + '</p></a>'
+    set_status("success", info_output, false, true);
 
     show("#keep_container");
     var upgrade_button = $("#upgrade_button")
@@ -378,6 +381,12 @@ function server_request(path, callback) {
             request_json = JSON.parse(request_text)
             set_status("danger", request_json.error)
 
+        } else if (request.status === 409) {
+            // bad request
+            request_json = JSON.parse(request_text)
+            data.log = request_json.log
+            set_status("danger", "Incompatible package selection. See build log for details", false, true)
+
         } else if (request.status === 412) {
             // this is a bit generic
             set_status("danger", "Unsupported device, release, target, subtraget or board")
@@ -394,9 +403,9 @@ function server_request(path, callback) {
             var error_box_content = "<b>Internal server error</b><br />"
             error_box_content += request_json.error
             if (request_json.log != undefined) {
-                data.log_url = request_json.log
+                data.log = request_json.log
             }
-            set_status("danger", error_box_content)
+            set_status("danger", error_box_content, false, true)
 
         } else if (request.status === 501) {
             set_status("danger", "No sysupgrade file produced, may not supported by model.")
