@@ -157,26 +157,6 @@ h6 {
 	color: inherit;
 }
 
-html {
-	-webkit-text-size-adjust: 100%;
-	-ms-text-size-adjust: 100%;
-	height: 100%;
-}
-
-body {
-	font-size: .8rem;
-	background-color: #eee;
-	height: auto;
-}
-
-html,
-body {
-	font-family: "Microsoft Yahei", "WenQuanYi Micro Hei", "sans-serif", "Helvetica Neue", "Helvetica",
-		"Hiragino Sans GB";
-	margin: 0;
-	padding: 0;
-	background-color: #EBF1F6;
-}
 
 header {
 	display: none;
@@ -593,11 +573,6 @@ footer > a {
 }
 
 /* Main interface right 右主界面 */
-.main-right {
-	width: 84%;
-	height: 100%;
-}
-
 .main-right .container .alert,
 .main-right .container .alert-message {
 	margin-top: 1rem;
@@ -2036,9 +2011,9 @@ input[name="nslookup"] {
 }
 
 /* fix Main Login 登录界面*/
-body.login {
-	background: #fff url(./loginBG.png) no-repeat center center;
-	height: 100%;
+.login .main-right {
+	background: url(./loginBG.png) no-repeat center center / cover;
+	text-align: center;
 }
 
 .login header {
@@ -2054,12 +2029,6 @@ body.login {
 	display: none;
 }
 
-.login > .main > .main-right {
-	width: 100%;
-	text-align: center;
-	background-color: transparent;
-}
-
 .login .brand {
 	display: block;
 	color: #fff;
@@ -2073,6 +2042,7 @@ body.login {
 
 .login > .main #maincontent {
 	margin-top: 5rem;
+	padding-bottom: 20px;
 	display: inline-block;
 	background-color: transparent;
 	width: 39%;
@@ -2162,32 +2132,28 @@ body.login {
     position: relative;
 }
 
-.login > .main .cbi-value-last > .cbi-value-field > div {
-	content: '';
+.login > .main .cbi-value-last .cbi-value-field > div {
     height: 24px;
     width: 24px;
+    display: inline-block;
+    background: url(./op-eye.png) no-repeat center center / cover;
     position: absolute;
-    top: 9px;
+    top: 8px;
     right: 12px;
-    background: no-repeat center center / cover;
 }
 
-.login > .main .cbi-value-last > .cbi-value-field .eye {
-	background-image: url(./op-eye.png);
-}
-
-.login > .main .cbi-value-last > .cbi-value-field .op-eye {
+.login > .main .cbi-value-last .cbi-value-field.op-eye > div {
     background-image: url(./cl-eye.png);
 }
 
-.login > .main .cbi-input-text {
+.login > .main .cbi-value .cbi-input-text {
+	margin: 0 0 16px;
+	padding-left: 36px;
 	width: 100%;
-	height: 42px;
-	background: #fff no-repeat 12px center;
+    height: 42px;
+    border: 1px solid #556270;
 	border-radius: 20px;
-	padding-left: 42px;
-	font-size: 18px;
-	border: none;
+	background: #fff no-repeat 11px center / 19px;
 }
 
 .login > .main .cbi-value .cbi-input-text {
@@ -2214,6 +2180,10 @@ body.login {
     color: #fff;
     border: 1px solid #9a4569;
     background-color: #9a4569;
+}
+
+.login footer {
+	padding: 0;
 }
 
 @media screen and (min-height: 585px) {
@@ -2275,6 +2245,8 @@ body.login {
 
 .logged-in .main-right {
 	float: right;
+	width: 84%;
+    	height: 100%;
 }
 
 .logged-in .main-right .container {
@@ -2580,6 +2552,9 @@ body.login {
 }
 
 @media screen and (max-width: 1400px) {
+	.logged-in header {
+		width: calc(100% - 230px - 2rem);
+	}
 	.logged-in .main-right {
 		width: calc(100% - 230px);
 	}
@@ -2637,27 +2612,16 @@ body.login {
 }
 
 @media screen and (max-width: 992px) {
+	.login .main-right {
+		background: #354057;
+	}
+	
 	.login > .main #maincontent {
-		margin-top: 2rem;
 		width: 90%;
 	}
 
-	.login-info .main {
-		width: 100%;
-	}
-
-	.login > .main .container {
-		width: 100%;
-	}
-
 	.logged-in header {
-		z-index: 2000;
-		top: 0;
-		left: 0;
-		width: 100%;
-		border-radius: 0;
-		border: none;
-		border-bottom: 1px solid #ddd;
+		width: calc(100% - 2rem);
 	}
 
 	.showSide,
@@ -2670,16 +2634,15 @@ body.login {
 		display: none;
 		z-index: 1000;
 		position: fixed;
-		top: 3rem;
+		top: 0;
 		bottom: 0;
 		left: 0;
 		right: 0;
 		border-radius: 0;
 		background-color: rgba(0, 0, 0, .3);
-		height: calc(100% - 3rem);
 	}
 
-	.main-left .nav-container {
+	.logged-in .main-left .nav-container {
 		top: 0;
 		left: 0;
 		width: 50%;
@@ -2688,16 +2651,12 @@ body.login {
 		height: 100%;
 	}
 
-	.main-left .nav-container .navbar-container {
+	.logged-in .main-left .nav-container .navbar-container {
 		overflow-y: scroll;
 	}
 
 	.logged-in .main-right {
 		width: 100%;
-	}
-
-	body.login {
-		background: #354057;
 	}
 
 	[data-page^="command-cfg"] header .container > .brand {
@@ -2885,31 +2844,31 @@ body.login {
 
 	/* The scroll bar of the navigation bar is compatible with each browser. */
 	/* Google */
-	.main-left .navbar-container::-webkit-scrollbar {
+	.logged-in .main-left .navbar-container::-webkit-scrollbar {
 		width: 6px;
 		background: transparent;
 	}
 
-	.main-left .navbar-container::-webkit-scrollbar-button {
+	.logged-in .main-left .navbar-container::-webkit-scrollbar-button {
 		display: none;
 	}
 
-	.main-left .navbar-container::-webkit-scrollbar-thumb {
+	.logged-in .main-left .navbar-container::-webkit-scrollbar-thumb {
 		background-color: #ffffff61;
 		border-radius: 10px;
 	}
 
-	.main-left .navbar-container::-webkit-scrollbar-thumb {
+	.logged-in .main-left .navbar-container::-webkit-scrollbar-thumb {
 		background-color: #839dd67a;
 		border-radius: 10px;
 	}
 
-	.main-left .navbar-container:hover::-webkit-scrollbar-thumb {
+	.logged-in .main-left .navbar-container:hover::-webkit-scrollbar-thumb {
 		background-color: #839dd67a;
 	}
 
 	/* IE */
-	.main-left .navbar-container {
+	.logged-in .main-left .navbar-container {
 		scrollbar-track-color: transparent;
 		scrollbar-face-color: #839dd67a;
 		scrollbar-arrow-color: transparent;
@@ -2920,7 +2879,7 @@ body.login {
 		scrollbar-base-color: transparent;
 	}
 
-	.main-left .navbar-container:hover {
+	.logged-in .main-left .navbar-container:hover {
 		scrollbar-face-color: #839dd67a;
 	}
 }
