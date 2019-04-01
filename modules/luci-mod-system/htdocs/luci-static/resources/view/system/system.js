@@ -1,0 +1,285 @@
+'use strict';
+'require uci';
+'require rpc';
+'require form';
+
+return L.view.extend({
+	callInitList: rpc.declare({
+		object: 'luci',
+		method: 'initList',
+		params: [ 'name' ],
+		expect: { result: {} },
+		filter: function(res) {
+			for (var k in res)
+				return +res[k].enabled;
+			return null;
+		}
+	}),
+
+	callInitAction: rpc.declare({
+		object: 'luci',
+		method: 'initCall',
+		params: [ 'name', 'action' ],
+		expect: { result: false }
+	}),
+
+	callLocaltime: rpc.declare({
+		object: 'luci',
+		method: 'localtime',
+		expect: { localtime: 0 }
+	}),
+
+	callTimezone: rpc.declare({
+		object: 'luci',
+		method: 'timezone',
+		expect: { result: {} }
+	}),
+
+	CBILocalTime: form.DummyValue.extend({
+		renderWidget: function(section_id, option_id, cfgvalue) {
+			return E([], [
+				E('span', { 'id': 'localtime' },
+					new Date(cfgvalue * 1000).toLocaleString()),
+				' ',
+				E('button', {
+					'class': 'cbi-button cbi-button-apply',
+					'click': L.bind(function(ev) {
+						ev.target.blur();
+						ev.target.classList.add('spinning');
+						ev.target.disabled = true;
+						this.callLocaltime(Math.floor(Date.now() / 1000)).then(function() {
+							ev.target.classList.remove('spinning');
+							ev.target.disabled = false;
+						});
+					}, this)
+				}, _('Sync with browser')),
+				' ',
+				this.ntpd_support ? E('button', {
+					'class': 'cbi-button cbi-button-apply',
+					'click': L.bind(function(ev) {
+						ev.target.blur();
+						ev.target.classList.add('spinning');
+						ev.target.disabled = true;
+						this.callLocaltime(Math.floor(Date.now() / 1000)).then(function() {
+							ev.target.classList.remove('spinning');
+							ev.target.disabled = false;
+						});
+					}, this)
+				}, _('Sync with NTP-Server')) : ''
+			]);
+		},
+	}),
+
+	load: function() {
+		rpc.batch();
+		this.callInitList('sysntpd');
+		this.callInitList('zram');
+		this.callTimezone();
+		this.callLocaltime();
+		uci.load('luci');
+		uci.load('system');
+		return rpc.flush();
+	},
+
+	render: function(rpc_replies) {
+		var ntpd_support = rpc_replies[0],
+		    zram_support = rpc_replies[1],
+		    timezones = rpc_replies[2],
+		    localtime = rpc_replies[3],
+		    view = this,
+		    ntp_setup, ntp_enabled, m, s, o;
+
+		m = new form.Map('system',
+			_('System'),
+			_('Here you can configure the basic aspects of your device like its hostname or the timezone.'));
+
+		m.chain('luci');
+		m.tabbed = true;
+
+		s = m.section(form.TypedSection, 'system', _('System Properties'));
+		s.anonymous = true;
+		s.addremove = false;
+
+		s.tab('general', _('General Settings'));
+		s.tab('logging', _('Logging'));
+		s.tab('timesync', _('Time Synchronization'));
+		s.tab('language', _('Language and Style'));
+
+		/*
+		 * System Properties
+		 */
+
+		o = s.taboption('general', this.CBILocalTime, '_systime', _('Local Time'));
+		o.cfgvalue = function() { return localtime };
+		o.ntpd_support = ntpd_support;
+
+		o = s.taboption('general', form.Value, 'hostname', _('Hostname'));
+		o.datatype = 'hostname';
+
+		o = s.taboption('general', form.ListValue, 'zonename', _('Timezone'));
+		o.value('UTC');
+
+		var zones = Object.keys(timezones || {}).sort();
+		for (var i = 0; i < zones.length; i++)
+			o.value(zones[i]);
+
+		o.write = function(section_id, formvalue) {
+			var tz = timezones[formvalue] ? timezones[formvalue].tzstring : null;
+			uci.set('system', section_id, 'zonename', formvalue);
+			uci.set('system', section_id, 'timezone', tz);
+		};
+
+		/*
+		 * Logging
+		 */
+
+		o = s.taboption('logging', form.Value, 'log_size', _('System log buffer size'), "kiB")
+		o.optional    = true
+		o.placeholder = 16
+		o.datatype    = 'uinteger'
+
+		o = s.taboption('logging', form.Value, 'log_ip', _('External system log server'))
+		o.optional    = true
+		o.placeholder = '0.0.0.0'
+		o.datatype    = 'ip4addr'
+
+		o = s.taboption('logging', form.Value, 'log_port', _('External system log server port'))
+		o.optional    = true
+		o.placeholder = 514
+		o.datatype    = 'port'
+
+		o = s.taboption('logging', form.ListValue, 'log_proto', _('External system log server protocol'))
+		o.value('udp', 'UDP')
+		o.value('tcp', 'TCP')
+
+		o = s.taboption('logging', form.Value, 'log_file', _('Write system log to file'))
+		o.optional    = true
+		o.placeholder = '/tmp/system.log'
+
+		o = s.taboption('logging', form.ListValue, 'conloglevel', _('Log output level'))
+		o.value(8, _('Debug'))
+		o.value(7, _('Info'))
+		o.value(6, _('Notice'))
+		o.value(5, _('Warning'))
+		o.value(4, _('Error'))
+		o.value(3, _('Critical'))
+		o.value(2, _('Alert'))
+		o.value(1, _('Emergency'))
+
+		o = s.taboption('logging', form.ListValue, 'cronloglevel', _('Cron Log Level'))
+		o.default = 8
+		o.value(5, _('Debug'))
+		o.value(8, _('Normal'))
+		o.value(9, _('Warning'))
+
+		/*
+		 * Zram Properties
+		 */
+
+		if (zram_support != null) {
+			s.tab('zram', _('ZRam Settings'));
+
+			o = s.taboption('zram', form.Value, 'zram_size_mb', _('ZRam Size'), _('Size of the ZRam device in megabytes'));
+			o.optional    = true;
+			o.placeholder = 16;
+			o.datatype    = 'uinteger';
+
+			o = s.taboption('zram', form.ListValue, 'zram_comp_algo', _('ZRam Compression Algorithm'));
+			o.optional    = true;
+			o.placeholder = 'lzo';
+			o.value('lzo', 'lzo');
+			o.value('lz4', 'lz4');
+			o.value('deflate', 'deflate');
+
+			o = s.taboption('zram', form.Value, 'zram_comp_streams', _('ZRam Compression Streams'), _('Number of parallel threads used for compression'));
+			o.optional    = true;
+			o.placeholder = 1;
+			o.datatype    = 'uinteger';
+		}
+
+		/*
+		 * Language & Style
+		 */
+
+		o = s.taboption('language', form.ListValue, '_lang', _('Language'))
+		o.uciconfig = 'luci';
+		o.ucisection = 'main';
+		o.ucioption = 'lang';
+		o.value('auto');
+
+		var k = Object.keys(uci.get('luci', 'languages') || {}).sort();
+		for (var i = 0; i < k.length; i++)
+			if (k[i].charAt(0) != '.')
+				o.value(k[i], uci.get('luci', 'languages', k[i]));
+
+		o = s.taboption('language', form.ListValue, '_mediaurlbase', _('Design'))
+		o.uciconfig = 'luci';
+		o.ucisection = 'main';
+		o.ucioption = 'mediaurlbase';
+
+		var k = Object.keys(uci.get('luci', 'themes') || {}).sort();
+		for (var i = 0; i < k.length; i++)
+			if (k[i].charAt(0) != '.')
+				o.value(uci.get('luci', 'themes', k[i]), k[i]);
+
+		/*
+		 * NTP
+		 */
+
+		if (ntpd_support != null) {
+			var default_servers = [
+				'0.openwrt.pool.ntp.org', '1.openwrt.pool.ntp.org',
+				'2.openwrt.pool.ntp.org', '3.openwrt.pool.ntp.org'
+			];
+
+			o = s.taboption('timesync', form.Flag, 'enabled', _('Enable NTP client'));
+			o.rmempty = false;
+			o.ucisection = 'ntp';
+			o.default = o.disabled;
+			o.write = function(section_id, value) {
+				ntpd_support = +value;
+
+				if (ntpd_support && !uci.get('system', 'ntp')) {
+					uci.add('system', 'timeserver', 'ntp');
+					uci.set('system', 'ntp', 'server', default_servers);
+				}
+
+				if (!ntpd_support)
+					uci.set('system', 'ntp', 'enabled', 0);
+				else
+					uci.unset('system', 'ntp', 'enabled');
+
+				return view.callInitAction('sysntpd', 'enable');
+			};
+			o.load = function(section_id) {
+				return (ntpd_support == 1 &&
+				        uci.get('system', 'ntp') != null &&
+				        uci.get('system', 'ntp', 'enabled') != 0) ? '1' : '0';
+			};
+
+			o = s.taboption('timesync', form.Flag, 'enable_server', _('Provide NTP server'));
+			o.ucisection = 'ntp';
+			o.depends('enabled', '1');
+
+			o = s.taboption('timesync', form.DynamicList, 'server', _('NTP server candidates'));
+			o.datatype = 'host(0)';
+			o.ucisection = 'ntp';
+			o.depends('enabled', '1');
+			o.remove = function() {}; // retain server list even if disabled
+			o.load = function(section_id) {
+				return uci.get('system', 'ntp')
+					? uci.get('system', 'ntp', 'server')
+					: default_servers;
+			};
+		}
+
+		window.setInterval(L.bind(function() {
+			this.callLocaltime().then(function(t) {
+				var lt = document.getElementById('localtime');
+				if (lt) lt.innerHTML = new Date(t * 1000).toLocaleString();
+			});
+		}, this), 5000);
+
+		return m.render();
+	}
+});
