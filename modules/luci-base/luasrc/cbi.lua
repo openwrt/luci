@@ -1347,6 +1347,18 @@ function AbstractValue.deplist2json(self, section, deplist)
 	return util.serialize_json(deps)
 end
 
+-- Serialize choices
+function AbstractValue.choices(self)
+	if type(self.keylist) == "table" and #self.keylist > 0 then
+		local i, k, v = nil, nil, {}
+		for i, k in ipairs(self.keylist) do
+			v[k] = self.vallist[i] or k
+		end
+		return v
+	end
+	return nil
+end
+
 -- Generates the unique CBID
 function AbstractValue.cbid(self, section)
 	return "cbid."..self.map.config.."."..section.."."..self.option
