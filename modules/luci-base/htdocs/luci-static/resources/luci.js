@@ -582,19 +582,19 @@
 					for (var i = 0; ptr && i < parts.length - 1; i++)
 						ptr = ptr[parts[i]];
 
-					if (!ptr)
-						L.error('DependencyError',
-							'Parent "%s" for class "%s" is missing',
-							parts.slice(0, i).join('.'), name);
+					if (ptr)
+						ptr[parts[i]] = instance;
 
-					classes[name] = ptr[parts[i]] = instance;
+					classes[name] = instance;
 
 					return instance;
 				});
 			};
 
 			/* Request class file */
-			classes[name] = Request.get(url, { cache: true }).then(compileClass);
+			classes[name] = Request.get(url, { cache: true })
+				.then(compileClass)
+				.catch(L.error);
 
 			return classes[name];
 		},
@@ -942,18 +942,18 @@
 			__name__: 'LuCI.View',
 
 			__init__: function() {
-				var mc = document.getElementById('maincontent');
+				var vp = document.getElementById('view');
 
-				L.dom.content(mc, E('div', { 'class': 'spinning' }, _('Loading view…')));
+				L.dom.content(vp, E('div', { 'class': 'spinning' }, _('Loading view…')));
 
 				return Promise.resolve(this.load())
 					.then(L.bind(this.render, this))
 					.then(L.bind(function(nodes) {
-						var mc = document.getElementById('maincontent');
+						var vp = document.getElementById('view');
 
-						L.dom.content(mc, nodes);
-						L.dom.append(mc, this.addFooter());
-					}, this));
+						L.dom.content(vp, nodes);
+						L.dom.append(vp, this.addFooter());
+					}, this)).catch(L.error);
 			},
 
 			load: function() {},

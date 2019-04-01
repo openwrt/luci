@@ -857,6 +857,15 @@ function template(name)
 end
 
 
+local _view = function(self, ...)
+	require "luci.template".render("view", { view = self.view })
+end
+
+function view(name)
+	return {type = "view", view = name, target = _view}
+end
+
+
 local function _cbi(self, ...)
 	local cbi = require "luci.cbi"
 	local tpl = require "luci.template"
