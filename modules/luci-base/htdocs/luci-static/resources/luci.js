@@ -488,11 +488,21 @@
 			}
 
 			/* Append shortened & beautified stacktrace to message */
-			e.message += '\n' + stack.join('\n')
+			var trace = stack.join('\n')
 				.replace(/(.*?)@(.+):(\d+):(\d+)/g, '  at $1 ($2:$3:$4)');
+
+			if (e.message.indexOf(trace) == -1)
+				e.message += '\n' + trace;
 
 			if (window.console && console.debug)
 				console.debug(e);
+
+			if (this.ui)
+				this.ui.showModal(_('Runtime error'),
+					E('pre', { 'class': 'alert-message error' }, e));
+			else
+				L.dom.content(document.querySelector('#maincontent'),
+					E('pre', { 'class': 'alert-message error' }, e));
 
 			throw e;
 		},
@@ -610,7 +620,7 @@
 						}, _('To login…')))
 				]);
 
-				L.error('AuthenticationError', 'Session expired');
+				throw 'Session expired';
 			});
 
 			originalCBIInit();
