@@ -260,11 +260,11 @@ var CBIValidatorPrototype = {
 
 	validate: function() {
 		/* element is detached */
-		if (!findParent(this.field, 'body'))
+		if (!findParent(this.field, 'body') && !findParent(this.field, '[data-field]'))
 			return true;
 
 		this.field.classList.remove('cbi-input-invalid');
-		this.value = matchesElem(this.field, 'select') ? this.field.options[this.field.selectedIndex].value : this.field.value;
+		this.value = (this.field.value != null) ? this.field.value : '';
 		this.error = null;
 
 		var valid;
@@ -274,18 +274,28 @@ var CBIValidatorPrototype = {
 		else
 			valid = this.vstack[0].apply(this, this.vstack[1]);
 
-		if (!valid) {
+		if (valid !== true) {
 			this.field.setAttribute('data-tooltip', _('Expecting %s').format(this.error));
 			this.field.setAttribute('data-tooltip-style', 'error');
 			this.field.dispatchEvent(new CustomEvent('validation-failure', { bubbles: true }));
-		}
-		else {
-			this.field.removeAttribute('data-tooltip');
-			this.field.removeAttribute('data-tooltip-style');
-			this.field.dispatchEvent(new CustomEvent('validation-success', { bubbles: true }));
+			return false;
 		}
 
-		return valid;
+		if (typeof(this.vfunc) == 'function')
+			valid = this.vfunc(this.value);
+
+		if (valid !== true) {
+			this.assert(false, valid);
+			this.field.setAttribute('data-tooltip', valid);
+			this.field.setAttribute('data-tooltip-style', 'error');
+			this.field.dispatchEvent(new CustomEvent('validation-failure', { bubbles: true }));
+			return false;
+		}
+
+		this.field.removeAttribute('data-tooltip');
+		this.field.removeAttribute('data-tooltip-style');
+		this.field.dispatchEvent(new CustomEvent('validation-success', { bubbles: true }));
+		return true;
 	},
 
 	types: {
@@ -600,10 +610,14 @@ var CBIValidatorPrototype = {
 				if (sibling === option)
 					return;
 
-				var input = sibling.querySelector('[data-type]'),
-				    values = input ? (input.getAttribute('data-is-list') ? input.value.match(/[^ \t]+/g) : [ input.value ]) : null;
+				var values = L.dom.callClassMethod(sibling.querySelector('[data-idref]'), 'getValue');
 
-				if (values !== null && values.indexOf(ctx.value) !== -1)
+				if (!Array.isArray(values) && sibling.querySelector('[data-is-list]'))
+					values = String(values || '').match(/[^ \t]+/g) || [];
+				else if (!Array.isArray(values))
+					values = (values != null) ? [ values ] : [];
+
+				if (values.indexOf(ctx.value) != -1)
 					unique = false;
 			});
 
@@ -619,14 +633,19 @@ var CBIValidatorPrototype = {
 		hexstring: function() {
 			return this.assert(this.value.match(/^([a-f0-9][a-f0-9]|[A-F0-9][A-F0-9])+$/),
 				_('hexadecimal encoded value'));
+		},
+
+		string: function() {
+			return true;
 		}
 	}
 };
 
-function CBIValidator(field, type, optional)
+function CBIValidator(field, type, optional, vfunc)
 {
 	this.field = field;
 	this.optional = optional;
+	this.vfunc = vfunc;
 	this.vstack = this.compile(type);
 }
 
@@ -848,6 +867,15 @@ function cbi_init() {
 
 		i.addEventListener('mouseover', handler);
 		i.addEventListener('mouseout', handler);
+	});
+
+	document.querySelectorAll('[data-ui-widget]').forEach(function(node) {
+		var args = JSON.parse(node.getAttribute('data-ui-widget') || '[]'),
+		    widget = new (Function.prototype.bind.apply(L.ui[args[0]], args)),
+		    markup = widget.render();
+
+		markup.addEventListener('widget-change', cbi_d_update);
+		node.parentNode.replaceChild(markup, node);
 	});
 
 	cbi_d_update();
