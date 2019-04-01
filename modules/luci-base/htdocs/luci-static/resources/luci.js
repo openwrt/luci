@@ -431,6 +431,14 @@
 	LuCI = Class.extend({
 		__name__: 'LuCI',
 		__init__: function(env) {
+
+			document.querySelectorAll('script[src$="/luci.js"]').forEach(function(s) {
+				env.base_url = s.getAttribute('src').replace(/\/luci\.js$/, '');
+			});
+
+			if (env.base_url == null)
+				this.error('InternalError', 'Cannot find url of luci.js');
+
 			Object.assign(this.env, env);
 
 			document.addEventListener('poll-start', function(ev) {
@@ -453,9 +461,7 @@
 				domReady,
 				this.require('ui'),
 				this.require('form')
-			]).then(this.setupDOM.bind(this)).catch(function(error) {
-				alert('LuCI class loading error:\n' + error);
-			});
+			]).then(this.setupDOM.bind(this)).catch(this.error);
 
 			originalCBIInit = window.cbi_init;
 			window.cbi_init = function() {};
@@ -527,15 +533,7 @@
 				return classes[name];
 			}
 
-			document.querySelectorAll('script[src$="/luci.js"]').forEach(function(s) {
-				url = '%s/%s.js'.format(
-					s.getAttribute('src').replace(/\/luci\.js$/, ''),
-					name.replace(/\./g, '/'));
-			});
-
-			if (url == null)
-				L.error('InternalError', 'Cannot find url of luci.js');
-
+			url = '%s/%s.js'.format(L.env.base_url, name.replace(/\./g, '/'));
 			from = [ name ].concat(from);
 
 			var compileClass = function(res) {
