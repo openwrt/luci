@@ -451,7 +451,8 @@
 
 			Promise.all([
 				domReady,
-				this.require('ui')
+				this.require('ui'),
+				this.require('form')
 			]).then(this.setupDOM.bind(this)).catch(function(error) {
 				alert('LuCI class loading error:\n' + error);
 			});
