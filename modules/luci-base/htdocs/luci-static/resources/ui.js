@@ -19,7 +19,18 @@ var UIElement = L.Class.extend({
 	},
 
 	isValid: function() {
-		return true;
+		return (this.validState !== false);
+	},
+
+	triggerValidation: function() {
+		if (typeof(this.vfunc) != 'function')
+			return false;
+
+		var wasValid = this.isValid();
+
+		this.vfunc();
+
+		return (wasValid != this.isValid());
 	},
 
 	registerEvents: function(targetNode, synevent, events) {
@@ -32,11 +43,292 @@ var UIElement = L.Class.extend({
 	},
 
 	setUpdateEvents: function(targetNode /*, ... */) {
-		this.registerEvents(targetNode, 'widget-update', this.varargs(arguments, 1));
+		var datatype = this.options.datatype,
+		    optional = this.options.hasOwnProperty('optional') ? this.options.optional : true,
+		    validate = this.options.validate,
+		    events = this.varargs(arguments, 1);
+
+		this.registerEvents(targetNode, 'widget-update', events);
+
+		if (!datatype && !validate)
+			return;
+
+		this.vfunc = L.ui.addValidator.apply(L.ui, [
+			targetNode, datatype || 'string',
+			optional, validate
+		].concat(events));
+
+		this.node.addEventListener('validation-success', L.bind(function(ev) {
+			this.validState = true;
+		}, this));
+
+		this.node.addEventListener('validation-failure', L.bind(function(ev) {
+			this.validState = false;
+		}, this));
 	},
 
 	setChangeEvents: function(targetNode /*, ... */) {
 		this.registerEvents(targetNode, 'widget-change', this.varargs(arguments, 1));
+	}
+});
+
+var UITextfield = UIElement.extend({
+	__init__: function(value, options) {
+		this.value = value;
+		this.options = Object.assign({
+			optional: true,
+			password: false
+		}, options);
+	},
+
+	render: function() {
+		var frameEl = E('div', { 'id': this.options.id });
+
+		if (this.options.password) {
+			frameEl.classList.add('nowrap');
+			frameEl.appendChild(E('input', {
+				'type': 'password',
+				'style': 'position:absolute; left:-100000px',
+				'aria-hidden': true,
+				'tabindex': -1,
+				'name': this.options.name ? 'password.%s'.format(this.options.name) : null
+			}));
+		}
+
+		frameEl.appendChild(E('input', {
+			'name': this.options.name,
+			'type': this.options.password ? 'password' : 'text',
+			'class': this.options.password ? 'cbi-input-password' : 'cbi-input-text',
+			'readonly': this.options.readonly ? '' : null,
+			'maxlength': this.options.maxlength,
+			'placeholder': this.options.placeholder,
+			'value': this.value,
+		}));
+
+		if (this.options.password)
+			frameEl.appendChild(E('button', {
+				'class': 'cbi-button cbi-button-neutral',
+				'title': _('Reveal/hide password'),
+				'aria-label': _('Reveal/hide password'),
+				'click': function(ev) {
+					var e = this.previousElementSibling;
+					e.type = (e.type === 'password') ? 'text' : 'password';
+					ev.preventDefault();
+				}
+			}, '∗'));
+
+		return this.bind(frameEl);
+	},
+
+	bind: function(frameEl) {
+		var inputEl = frameEl.childNodes[+!!this.options.password];
+
+		this.node = frameEl;
+
+		this.setUpdateEvents(inputEl, 'keyup', 'blur');
+		this.setChangeEvents(inputEl, 'change');
+
+		L.dom.bindClassInstance(frameEl, this);
+
+		return frameEl;
+	},
+
+	getValue: function() {
+		var inputEl = this.node.childNodes[+!!this.options.password];
+		return inputEl.value;
+	},
+
+	setValue: function(value) {
+		var inputEl = this.node.childNodes[+!!this.options.password];
+		inputEl.value = value;
+	}
+});
+
+var UICheckbox = UIElement.extend({
+	__init__: function(value, options) {
+		this.value = value;
+		this.options = Object.assign({
+			value_enabled: '1',
+			value_disabled: '0'
+		}, options);
+	},
+
+	render: function() {
+		var frameEl = E('div', {
+			'id': this.options.id,
+			'class': 'cbi-checkbox'
+		});
+
+		if (this.options.hiddenname)
+			frameEl.appendChild(E('input', {
+				'type': 'hidden',
+				'name': this.options.hiddenname,
+				'value': 1
+			}));
+
+		frameEl.appendChild(E('input', {
+			'name': this.options.name,
+			'type': 'checkbox',
+			'value': this.options.value_enabled,
+			'checked': (this.value == this.options.value_enabled) ? '' : null
+		}));
+
+		return this.bind(frameEl);
+	},
+
+	bind: function(frameEl) {
+		this.node = frameEl;
+
+		this.setUpdateEvents(frameEl.lastElementChild, 'click', 'blur');
+		this.setChangeEvents(frameEl.lastElementChild, 'change');
+
+		L.dom.bindClassInstance(frameEl, this);
+
+		return frameEl;
+	},
+
+	isChecked: function() {
+		return this.node.lastElementChild.checked;
+	},
+
+	getValue: function() {
+		return this.isChecked()
+			? this.options.value_enabled
+			: this.options.value_disabled;
+	},
+
+	setValue: function(value) {
+		this.node.lastElementChild.checked = (value == this.options.value_enabled);
+	}
+});
+
+var UISelect = UIElement.extend({
+	__init__: function(value, choices, options) {
+		if (typeof(choices) != 'object')
+			choices = {};
+
+		if (!Array.isArray(value))
+			value = (value != null && value != '') ? [ value ] : [];
+
+		if (!options.multi && value.length > 1)
+			value.length = 1;
+
+		this.values = value;
+		this.choices = choices;
+		this.options = Object.assign({
+			multi: false,
+			widget: 'select',
+			orientation: 'horizontal'
+		}, options);
+	},
+
+	render: function() {
+		var frameEl,
+		    keys = Object.keys(this.choices);
+
+		if (this.options.sort === true)
+			keys.sort();
+		else if (Array.isArray(this.options.sort))
+			keys = this.options.sort;
+
+		if (this.options.widget == 'select') {
+			frameEl = E('select', {
+				'id': this.options.id,
+				'name': this.options.name,
+				'size': this.options.size,
+				'class': 'cbi-input-select',
+				'multiple': this.options.multi ? '' : null
+			});
+
+			if (this.options.optional)
+				frameEl.appendChild(E('option', {
+					'value': '',
+					'selected': (this.values.length == 0 || this.values[0] == '') ? '' : null
+				}, this.choices[''] || this.options.placeholder || _('-- Please choose --')));
+
+			for (var i = 0; i < keys.length; i++) {
+				if (keys[i] == null || keys[i] == '')
+					continue;
+
+				frameEl.appendChild(E('option', {
+					'value': keys[i],
+					'selected': (this.values.indexOf(keys[i]) > -1) ? '' : null
+				}, this.choices[keys[i]] || keys[i]));
+			}
+		}
+		else {
+			frameEl = E('div', {
+				'id': this.options.id
+			});
+
+			var brEl = (this.options.orientation === 'horizontal') ? document.createTextNode(' ') : E('br');
+
+			for (var i = 0; i < keys.length; i++) {
+				frameEl.appendChild(E('label', {}, [
+					E('input', {
+						'name': this.options.id || this.options.name,
+						'type': this.options.multi ? 'checkbox' : 'radio',
+						'class': this.options.multi ? 'cbi-input-checkbox' : 'cbi-input-radio',
+						'value': keys[i],
+						'checked': (this.values.indexOf(keys[i]) > -1) ? '' : null
+					}),
+					this.choices[keys[i]] || keys[i]
+				]));
+
+				if (i + 1 == this.options.size)
+					frameEl.appendChild(brEl);
+			}
+		}
+
+		return this.bind(frameEl);
+	},
+
+	bind: function(frameEl) {
+		this.node = frameEl;
+
+		if (this.options.widget == 'select') {
+			this.setUpdateEvents(frameEl, 'change', 'click', 'blur');
+			this.setChangeEvents(frameEl, 'change');
+		}
+		else {
+			var radioEls = frameEl.querySelectorAll('input[type="radio"]');
+			for (var i = 0; i < radioEls.length; i++) {
+				this.setUpdateEvents(radioEls[i], 'change', 'click', 'blur');
+				this.setChangeEvents(radioEls[i], 'change', 'click', 'blur');
+			}
+		}
+
+		L.dom.bindClassInstance(frameEl, this);
+
+		return frameEl;
+	},
+
+	getValue: function() {
+		if (this.options.widget == 'select')
+			return this.node.value;
+
+		var radioEls = frameEl.querySelectorAll('input[type="radio"]');
+		for (var i = 0; i < radioEls.length; i++)
+			if (radioEls[i].checked)
+				return radioEls[i].value;
+
+		return null;
+	},
+
+	setValue: function(value) {
+		if (this.options.widget == 'select') {
+			if (value == null)
+				value = '';
+
+			for (var i = 0; i < this.node.options.length; i++)
+				this.node.options[i].selected = (this.node.options[i].value == value);
+
+			return;
+		}
+
+		var radioEls = frameEl.querySelectorAll('input[type="radio"]');
+		for (var i = 0; i < radioEls.length; i++)
+			radioEls[i].checked = (radioEls[i].value == value);
 	}
 });
 
@@ -46,7 +338,7 @@ var UIDropdown = UIElement.extend({
 			choices = {};
 
 		if (!Array.isArray(value))
-			this.values = (value != null) ? [ value ] : [];
+			this.values = (value != null && value != '') ? [ value ] : [];
 		else
 			this.values = value;
 
@@ -95,14 +387,21 @@ var UIDropdown = UIElement.extend({
 			var createEl = E('input', {
 				'type': 'text',
 				'class': 'create-item-input',
+				'readonly': this.options.readonly ? '' : null,
+				'maxlength': this.options.maxlength,
 				'placeholder': this.options.custom_placeholder || this.options.placeholder
 			});
 
 			if (this.options.datatype)
-				L.ui.addValidator(createEl, this.options.datatype, true, 'blur', 'keyup');
+				L.ui.addValidator(createEl, this.options.datatype,
+				                  true, null, 'blur', 'keyup');
 
 			sb.lastElementChild.appendChild(E('li', { 'data-value': '-' }, createEl));
 		}
+
+		if (this.options.create_markup)
+			sb.appendChild(E('script', { type: 'item-template' },
+				this.options.create_markup));
 
 		return this.bind(sb);
 	},
@@ -751,7 +1050,7 @@ var UIDropdown = UIElement.extend({
 	setValue: function(values) {
 		if (this.options.multi) {
 			if (!Array.isArray(values))
-				values = (values != null) ? [ values ] : [];
+				values = (values != null && values != '') ? [ values ] : [];
 
 			var v = {};
 
@@ -791,9 +1090,9 @@ var UICombobox = UIDropdown.extend({
 		this.super('__init__', [ value, choices, Object.assign({
 			select_placeholder: _('-- Please choose --'),
 			custom_placeholder: _('-- custom --'),
-			dropdown_items: 5
+			dropdown_items: 5,
+			sort: true
 		}, options, {
-			sort: true,
 			multi: false,
 			create: true,
 			optional: true
@@ -804,7 +1103,7 @@ var UICombobox = UIDropdown.extend({
 var UIDynamicList = UIElement.extend({
 	__init__: function(values, choices, options) {
 		if (!Array.isArray(values))
-			values = (values != null) ? [ values ] : [];
+			values = (values != null && values != '') ? [ values ] : [];
 
 		if (typeof(choices) != 'object')
 			choices = null;
@@ -837,7 +1136,9 @@ var UIDynamicList = UIElement.extend({
 			dl.lastElementChild.appendChild(inputEl);
 			dl.lastElementChild.appendChild(E('div', { 'class': 'cbi-button cbi-button-add' }, '+'));
 
-			L.ui.addValidator(inputEl, this.options.datatype, true, 'blue', 'keyup');
+			if (this.options.datatype)
+				L.ui.addValidator(inputEl, this.options.datatype,
+				                  true, null, 'blur', 'keyup');
 		}
 
 		for (var i = 0; i < this.values.length; i++)
@@ -1012,7 +1313,7 @@ var UIDynamicList = UIElement.extend({
 
 	setValue: function(values) {
 		if (!Array.isArray(values))
-			values = (values != null) ? [ values ] : [];
+			values = (values != null && values != '') ? [ values ] : [];
 
 		var items = this.node.querySelectorAll('.item');
 
@@ -1023,6 +1324,41 @@ var UIDynamicList = UIElement.extend({
 		for (var i = 0; i < values.length; i++)
 			this.addItem(this.node, values[i],
 				this.choices ? this.choices[values[i]] : null);
+	}
+});
+
+var UIHiddenfield = UIElement.extend({
+	__init__: function(value, options) {
+		this.value = value;
+		this.options = Object.assign({
+
+		}, options);
+	},
+
+	render: function() {
+		var hiddenEl = E('input', {
+			'id': this.options.id,
+			'type': 'hidden',
+			'value': this.value
+		});
+
+		return this.bind(hiddenEl);
+	},
+
+	bind: function(hiddenEl) {
+		this.node = hiddenEl;
+
+		L.dom.bindClassInstance(hiddenEl, this);
+
+		return hiddenEl;
+	},
+
+	getValue: function() {
+		return this.node.value;
+	},
+
+	setValue: function(value) {
+		this.node.value = value;
 	}
 });
 
@@ -1658,7 +1994,7 @@ return L.Class.extend({
 		}
 	}),
 
-	addValidator: function(field, type, optional /*, ... */) {
+	addValidator: function(field, type, optional, vfunc /*, ... */) {
 		if (type == null)
 			return;
 
@@ -1667,19 +2003,25 @@ return L.Class.extend({
 			events.push('blur', 'keyup');
 
 		try {
-			var cbiValidator = new CBIValidator(field, type, optional),
+			var cbiValidator = new CBIValidator(field, type, optional, vfunc),
 			    validatorFn = cbiValidator.validate.bind(cbiValidator);
 
 			for (var i = 0; i < events.length; i++)
 				field.addEventListener(events[i], validatorFn);
 
 			validatorFn();
+
+			return validatorFn;
 		}
 		catch (e) { }
 	},
 
 	/* Widgets */
+	Textfield: UITextfield,
+	Checkbox: UICheckbox,
+	Select: UISelect,
 	Dropdown: UIDropdown,
 	DynamicList: UIDynamicList,
-	Combobox: UICombobox
+	Combobox: UICombobox,
+	Hiddenfield: UIHiddenfield
 });
