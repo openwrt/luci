@@ -7,7 +7,7 @@ module("luci.controller.admin.system", package.seeall)
 function index()
 	local fs = require "nixio.fs"
 
-	entry({"admin", "system", "system"}, cbi("admin_system/system"), _("System"), 1)
+	entry({"admin", "system", "system"}, view("system/system"), _("System"), 1)
 	entry({"admin", "system", "clock_status"}, post_on({ set = true }, "action_clock_status"))
 	entry({"admin", "system", "ntp_restart"}, call("action_ntp_restart"), nil).leaf = true
 
@@ -32,7 +32,7 @@ function index()
 
 	local nodes, number = fs.glob("/sys/class/leds/*")
 	if number > 0 then
-		entry({"admin", "system", "leds"}, cbi("admin_system/leds"), _("<abbr title=\"Light Emitting Diode\">LED</abbr> Configuration"), 60)
+		entry({"admin", "system", "leds"}, view("system/leds"), _("<abbr title=\"Light Emitting Diode\">LED</abbr> Configuration"), 60)
 	end
 
 	entry({"admin", "system", "flashops"}, call("action_flashops"), _("Backup / Flash Firmware"), 70)
