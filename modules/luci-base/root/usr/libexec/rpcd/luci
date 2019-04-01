@@ -1,0 +1,243 @@
+#!/usr/bin/env lua
+
+local json = require "luci.jsonc"
+local fs   = require "nixio.fs"
+
+local function readfile(path)
+	local s = fs.readfile(path)
+	return s and (s:gsub("^%s+", ""):gsub("%s+$", ""))
+end
+
+local methods = {
+	initList = {
+		args = { name = "name" },
+		call = function(args)
+			local sys = require "luci.sys"
+			local _, name, scripts = nil, nil, {}
+			for _, name in ipairs(args.name and { args.name } or sys.init.names()) do
+				local index = sys.init.index(name)
+				if index then
+					scripts[name] = { index = index, enabled = sys.init.enabled(name) }
+				else
+					return { error = "No such init script" }
+				end
+			end
+			return { result = scripts }
+		end
+	},
+
+	initCall = {
+		args = { name = "name", action = "action" },
+		call = function(args)
+			local sys = require "luci.sys"
+			if type(sys.init[args.action]) ~= "function" then
+				return { error = "Invalid action" }
+			end
+			return { result = sys.init[args.action](args.name) }
+		end
+	},
+
+	localtime = {
+		call = function(args)
+			return { localtime = os.time() }
+		end
+	},
+
+	timezone = {
+		args = { zonename = "UTC" },
+		call = function(args)
+			local util  = require "luci.util"
+			local zones = require "luci.sys.zoneinfo"
+
+			local tz = readfile("/etc/TZ")
+			local res = util.ubus("uci", "get", {
+				config = "system",
+				section = "@system[0]",
+				option = "zonename"
+			})
+
+			local result = {}
+			local _, zone
+			for _, zone in ipairs(zones.TZ) do
+				result[zone[1]] = {
+					tzstring = zone[2],
+					active = (res and res.value == zone[1]) and true or nil
+				}
+			end
+			return { result = result }
+		end
+	},
+
+	leds = {
+		call = function()
+			local iter   = fs.dir("/sys/class/leds")
+			local result = { }
+
+			if iter then
+				local led
+				for led in iter do
+					local m, s
+
+					result[led] = { triggers = {} }
+
+					s = readfile("/sys/class/leds/"..led.."/trigger")
+					for s in (s or ""):gmatch("%S+") do
+						m = s:match("^%[(.+)%]$")
+						result[led].triggers[#result[led].triggers+1] = m or s
+						result[led].active_trigger = m or result[led].active_trigger
+					end
+
+					s = readfile("/sys/class/leds/"..led.."/brightness")
+					if s then
+						result[led].brightness = tonumber(s)
+					end
+
+					s = readfile("/sys/class/leds/"..led.."/max_brightness")
+					if s then
+						result[led].max_brightness = tonumber(s)
+					end
+				end
+			end
+
+			return result
+		end
+	},
+
+	usb = {
+		call = function()
+			local fs     = require "nixio.fs"
+			local iter   = fs.glob("/sys/bus/usb/devices/[0-9]*/manufacturer")
+			local result = { }
+
+			if iter then
+				result.devices = {}
+
+				local p
+				for p in iter do
+					local id = p:match("%d+-%d+")
+
+					result.devices[#result.devices+1] = {
+						id      = id,
+						vid     = readfile("/sys/bus/usb/devices/"..id.."/idVendor"),
+						pid     = readfile("/sys/bus/usb/devices/"..id.."/idProduct"),
+						vendor  = readfile("/sys/bus/usb/devices/"..id.."/manufacturer"),
+						product = readfile("/sys/bus/usb/devices/"..id.."/product"),
+						speed   = tonumber((readfile("/sys/bus/usb/devices/"..id.."/product")))
+					}
+				end
+			end
+
+			iter = fs.glob("/sys/bus/usb/devices/*/usb[0-9]*-port[0-9]*")
+
+			if iter then
+				result.ports = {}
+
+				local p
+				for p in iter do
+					local bus, port = p:match("usb(%d+)-port(%d+)")
+
+					result.ports[#result.ports+1] = {
+						hub  = tonumber(bus),
+						port = tonumber(port)
+					}
+				end
+			end
+
+			return result
+		end
+	},
+
+	ifaddrs = {
+		call = function()
+			return { result = nixio.getifaddrs() }
+		end
+	},
+
+	host_hints = {
+		call = function()
+			local sys = require "luci.sys"
+			return sys.net.host_hints()
+		end
+	},
+
+	duid_hints = {
+		call = function()
+			local fp = io.open('/var/hosts/odhcpd')
+			local result = { }
+			if fp then
+				for line in fp:lines() do
+					local dev, duid, name = string.match(line, '# (%S+)%s+(%S+)%s+%d+%s+(%S+)')
+					if dev and duid and name then
+						result[duid] = {
+							name = (name ~= "-") and name or nil,
+							device = dev
+						}
+					end
+				end
+				fp:close()
+			end
+			return result
+		end
+	}
+}
+
+local function parseInput()
+	local parse = json.new()
+	local done, err
+
+	while true do
+		local chunk = io.read(4096)
+		if not chunk then
+			break
+		elseif not done and not err then
+			done, err = parse:parse(chunk)
+		end
+	end
+
+	if not done then
+		print(json.stringify({ error = err or "Incomplete input" }))
+		os.exit(1)
+	end
+
+	return parse:get()
+end
+
+local function validateArgs(func, uargs)
+	local method = methods[func]
+	if not method then
+		print(json.stringify({ error = "Method not found" }))
+		os.exit(1)
+	end
+
+	if type(uargs) ~= "table" then
+		print(json.stringify({ error = "Invalid arguments" }))
+		os.exit(1)
+	end
+
+	uargs.ubus_rpc_session = nil
+
+	local k, v
+	local margs = method.args or {}
+	for k, v in pairs(uargs) do
+		if margs[k] == nil or
+		   (v ~= nil and type(v) ~= type(margs[k]))
+		then
+			print(json.stringify({ error = "Invalid arguments" }))
+			os.exit(1)
+		end
+	end
+
+	return method
+end
+
+if arg[1] == "list" then
+	local _, method, rv = nil, nil, {}
+	for _, method in pairs(methods) do rv[_] = method.args or {} end
+	print((json.stringify(rv):gsub(":%[%]", ":{}")))
+elseif arg[1] == "call" then
+	local args = parseInput()
+	local method = validateArgs(arg[2], args)
+	local result, code = method.call(args)
+	print(json.stringify(result))
+	os.exit(code or 0)
+end
