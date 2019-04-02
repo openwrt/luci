@@ -432,8 +432,9 @@
 		__name__: 'LuCI',
 		__init__: function(env) {
 
-			document.querySelectorAll('script[src$="/luci.js"]').forEach(function(s) {
-				env.base_url = s.getAttribute('src').replace(/\/luci\.js$/, '');
+			document.querySelectorAll('script[src*="/luci.js"]').forEach(function(s) {
+				if (env.base_url == null || env.base_url == '')
+					env.base_url = s.getAttribute('src').replace(/\/luci\.js(?:\?v=[^?]+)?$/, '');
 			});
 
 			if (env.base_url == null)
@@ -542,15 +543,41 @@
 						'HTTP error %d while loading class file "%s"', res.status, url);
 
 				var source = res.text(),
-				    reqmatch = /(?:^|\n)[ \t]*(?:["']require[ \t]+(\S+)(?:[ \t]+as[ \t]+([a-zA-Z_]\S*))?["']);/g,
+				    requirematch = /^require[ \t]+(\S+)(?:[ \t]+as[ \t]+([a-zA-Z_]\S*))?$/,
+				    strictmatch = /^use[ \t]+strict$/,
 				    depends = [],
 				    args = '';
 
 				/* find require statements in source */
-				for (var m = reqmatch.exec(source); m; m = reqmatch.exec(source)) {
-					var dep = m[1], as = m[2] || dep.replace(/[^a-zA-Z0-9_]/g, '_');
-					depends.push(L.require(dep, from));
-					args += ', ' + as;
+				for (var i = 0, off = -1, quote = -1, esc = false; i < source.length; i++) {
+					var chr = source.charCodeAt(i);
+
+					if (esc) {
+						esc = false;
+					}
+					else if (chr == 92) {
+						esc = true;
+					}
+					else if (chr == quote) {
+						var s = source.substring(off, i),
+						    m = requirematch.exec(s);
+
+						if (m) {
+							var dep = m[1], as = m[2] || dep.replace(/[^a-zA-Z0-9_]/g, '_');
+							depends.push(L.require(dep, from));
+							args += ', ' + as;
+						}
+						else if (!strictmatch.exec(s)) {
+							break;
+						}
+
+						off = -1;
+						quote = -1;
+					}
+					else if (quote == -1 && (chr == 34 || chr == 39)) {
+						off = i + 1;
+						quote = chr;
+					}
 				}
 
 				/* load dependencies and instantiate class */
