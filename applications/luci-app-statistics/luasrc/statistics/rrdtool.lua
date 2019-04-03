@@ -62,7 +62,7 @@ function Graph._mkpath( self, plugin, plugin_instance, dtype, dtype_instance )
 end
 
 function Graph.mkrrdpath( self, ... )
-	return string.format( "%s/%s.rrd", self.opts.rrdpath, self:_mkpath( ... ) )
+	return string.format( "%s/%s.rrd", self.opts.rrdpath, string.gsub(self:_mkpath( ... ), ":", "\\:") )
 end
 
 function Graph.mkpngpath( self, ... )
