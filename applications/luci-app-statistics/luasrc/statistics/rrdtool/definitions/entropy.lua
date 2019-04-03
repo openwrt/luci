@@ -3,6 +3,10 @@
 
 module("luci.statistics.rrdtool.definitions.entropy", package.seeall)
 
+function item()
+	return luci.i18n.translate("Entropy")
+end
+
 function rrdargs( graph, plugin, plugin_instance, dtype )
 
 	return {

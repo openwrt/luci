@@ -3,6 +3,10 @@
 
 module("luci.statistics.rrdtool.definitions.processes", package.seeall)
 
+function item()
+	return luci.i18n.translate("Processes")
+end
+
 function rrdargs( graph, plugin, plugin_instance, dtype )
 
 	if  plugin_instance == "" then

@@ -3,6 +3,10 @@
 
 module("luci.statistics.rrdtool.definitions.irq", package.seeall)
 
+function item()
+	return luci.i18n.translate("Interrupts")
+end
+
 function rrdargs( graph, plugin, plugin_instance, dtype )
 
 	return {

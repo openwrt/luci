@@ -2,6 +2,10 @@
 
 module("luci.statistics.rrdtool.definitions.nut",package.seeall)
 
+function item()
+	return luci.i18n.translate("UPS")
+end
+
 function rrdargs( graph, plugin, plugin_instance, dtype )
 
 	local voltages = {

@@ -3,6 +3,10 @@
 
 module("luci.statistics.rrdtool.definitions.disk", package.seeall)
 
+function item()
+	return luci.i18n.translate("Disk Usage")
+end
+
 function rrdargs( graph, plugin, plugin_instance, dtype )
 
 	return {

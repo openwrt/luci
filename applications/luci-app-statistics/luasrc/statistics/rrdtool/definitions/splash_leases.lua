@@ -3,6 +3,10 @@
 
 module("luci.statistics.rrdtool.definitions.splash_leases", package.seeall)
 
+function item()
+	return luci.i18n.translate("Splash Leases")
+end
+
 function rrdargs( graph, plugin, plugin_instance, dtype )
 
 	return {

@@ -115,11 +115,15 @@ function index()
 		-- get plugin instances
 		local instances = tree:plugin_instances( plugin )
 
-		-- plugin menu entry
-		entry(
-			{ "admin", "statistics", "graph", plugin },
-			call("statistics_render"), labels[plugin], idx
-		).query = { timespan = span , host = host }
+		-- load plugin menu entry from the description
+		local plugin_name = "luci.statistics.rrdtool.definitions." .. plugin
+		local stat, def = pcall( require, plugin_name )
+		if stat and def and type(def.item) == "function" then
+			entry(
+				{ "admin", "statistics", "graph", plugin },
+				call("statistics_render"), def.item(), idx
+			).query = { timespan = span , host = host }
+		end
 
 		-- if more then one instance is found then generate submenu
 		if #instances > 1 then

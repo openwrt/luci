@@ -3,6 +3,10 @@
 
 module("luci.statistics.rrdtool.definitions.netlink", package.seeall)
 
+function item()
+	return luci.i18n.translate("Netlink")
+end
+
 function rrdargs( graph, plugin, plugin_instance )
 
 	--

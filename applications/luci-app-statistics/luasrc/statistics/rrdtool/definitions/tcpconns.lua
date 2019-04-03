@@ -3,6 +3,10 @@
 
 module("luci.statistics.rrdtool.definitions.tcpconns", package.seeall)
 
+function item()
+	return luci.i18n.translate("TCP Connections")
+end
+
 function rrdargs( graph, plugin, plugin_instance, dtype )
 
 	return {
