@@ -3,82 +3,84 @@
 'require rpc';
 'require form';
 
+var callInitList, callInitAction, callLocaltime, callTimezone, CBILocalTime;
+
+callInitList = rpc.declare({
+	object: 'luci',
+	method: 'initList',
+	params: [ 'name' ],
+	expect: { result: {} },
+	filter: function(res) {
+		for (var k in res)
+			return +res[k].enabled;
+		return null;
+	}
+});
+
+callInitAction = rpc.declare({
+	object: 'luci',
+	method: 'initCall',
+	params: [ 'name', 'action' ],
+	expect: { result: false }
+});
+
+callLocaltime = rpc.declare({
+	object: 'luci',
+	method: 'localtime',
+	expect: { localtime: 0 }
+});
+
+callTimezone = rpc.declare({
+	object: 'luci',
+	method: 'timezone',
+	expect: { result: {} }
+});
+
+CBILocalTime = form.DummyValue.extend({
+	renderWidget: function(section_id, option_id, cfgvalue) {
+		return E([], [
+			E('span', { 'id': 'localtime' },
+				new Date(cfgvalue * 1000).toLocaleString()),
+			' ',
+			E('button', {
+				'class': 'cbi-button cbi-button-apply',
+				'click': function() {
+					this.blur();
+					this.classList.add('spinning');
+					this.disabled = true;
+					callLocaltime(Math.floor(Date.now() / 1000)).then(L.bind(function() {
+						this.classList.remove('spinning');
+						this.disabled = false;
+					}, this));
+				}
+			}, _('Sync with browser')),
+			' ',
+			this.ntpd_support ? E('button', {
+				'class': 'cbi-button cbi-button-apply',
+				'click': function() {
+					this.blur();
+					this.classList.add('spinning');
+					this.disabled = true;
+					callInitAction('sysntpd', 'restart').then(L.bind(function() {
+						this.classList.remove('spinning');
+						this.disabled = false;
+					}, this));
+				}
+			}, _('Sync with NTP-Server')) : ''
+		]);
+	},
+});
+
 return L.view.extend({
-	callInitList: rpc.declare({
-		object: 'luci',
-		method: 'initList',
-		params: [ 'name' ],
-		expect: { result: {} },
-		filter: function(res) {
-			for (var k in res)
-				return +res[k].enabled;
-			return null;
-		}
-	}),
-
-	callInitAction: rpc.declare({
-		object: 'luci',
-		method: 'initCall',
-		params: [ 'name', 'action' ],
-		expect: { result: false }
-	}),
-
-	callLocaltime: rpc.declare({
-		object: 'luci',
-		method: 'localtime',
-		expect: { localtime: 0 }
-	}),
-
-	callTimezone: rpc.declare({
-		object: 'luci',
-		method: 'timezone',
-		expect: { result: {} }
-	}),
-
-	CBILocalTime: form.DummyValue.extend({
-		renderWidget: function(section_id, option_id, cfgvalue) {
-			return E([], [
-				E('span', { 'id': 'localtime' },
-					new Date(cfgvalue * 1000).toLocaleString()),
-				' ',
-				E('button', {
-					'class': 'cbi-button cbi-button-apply',
-					'click': L.bind(function(ev) {
-						ev.target.blur();
-						ev.target.classList.add('spinning');
-						ev.target.disabled = true;
-						this.callLocaltime(Math.floor(Date.now() / 1000)).then(function() {
-							ev.target.classList.remove('spinning');
-							ev.target.disabled = false;
-						});
-					}, this)
-				}, _('Sync with browser')),
-				' ',
-				this.ntpd_support ? E('button', {
-					'class': 'cbi-button cbi-button-apply',
-					'click': L.bind(function(ev) {
-						ev.target.blur();
-						ev.target.classList.add('spinning');
-						ev.target.disabled = true;
-						this.callLocaltime(Math.floor(Date.now() / 1000)).then(function() {
-							ev.target.classList.remove('spinning');
-							ev.target.disabled = false;
-						});
-					}, this)
-				}, _('Sync with NTP-Server')) : ''
-			]);
-		},
-	}),
-
 	load: function() {
-		rpc.batch();
-		this.callInitList('sysntpd');
-		this.callInitList('zram');
-		this.callTimezone();
-		this.callLocaltime();
-		uci.load('luci');
-		uci.load('system');
-		return rpc.flush();
+		return Promise.all([
+			callInitList('sysntpd'),
+			callInitList('zram'),
+			callTimezone(),
+			callLocaltime(),
+			uci.load('luci'),
+			uci.load('system')
+		]);
 	},
 
 	render: function(rpc_replies) {
@@ -86,7 +88,6 @@ return L.view.extend({
 		    zram_support = rpc_replies[1],
 		    timezones = rpc_replies[2],
 		    localtime = rpc_replies[3],
-		    view = this,
 		    ntp_setup, ntp_enabled, m, s, o;
 
 		m = new form.Map('system',
@@ -109,7 +110,7 @@ return L.view.extend({
 		 * System Properties
 		 */
 
-		o = s.taboption('general', this.CBILocalTime, '_systime', _('Local Time'));
+		o = s.taboption('general', CBILocalTime, '_systime', _('Local Time'));
 		o.cfgvalue = function() { return localtime };
 		o.ntpd_support = ntpd_support;
 
@@ -249,7 +250,7 @@ return L.view.extend({
 				else
 					uci.unset('system', 'ntp', 'enabled');
 
-				return view.callInitAction('sysntpd', 'enable');
+				return callInitAction('sysntpd', 'enable');
 			};
 			o.load = function(section_id) {
 				return (ntpd_support == 1 &&
@@ -273,13 +274,14 @@ return L.view.extend({
 			};
 		}
 
-		window.setInterval(L.bind(function() {
-			this.callLocaltime().then(function(t) {
-				var lt = document.getElementById('localtime');
-				if (lt) lt.innerHTML = new Date(t * 1000).toLocaleString();
+		return m.render().then(function(mapEl) {
+			L.Poll.add(function() {
+				return callLocaltime().then(function(t) {
+					mapEl.querySelector('#localtime').innerHTML = new Date(t * 1000).toLocaleString();
+				});
 			});
-		}, this), 5000);
 
-		return m.render();
+			return mapEl;
+		});
 	}
 });
