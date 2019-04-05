@@ -178,6 +178,24 @@ local methods = {
 			end
 			return result
 		end
+	},
+
+	leases = {
+		args = { family = 0 },
+		call = function(args)
+			local s = require "luci.tools.status"
+
+			if args.family == 4 then
+				return { dhcp_leases = s.dhcp_leases() }
+			elseif args.family == 6 then
+				return { dhcp6_leases = s.dhcp6_leases() }
+			else
+				return {
+					dhcp_leases = s.dhcp_leases(),
+					dhcp6_leases = s.dhcp6_leases()
+				}
+			end
+		end
 	}
 }
 
