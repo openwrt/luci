@@ -3,42 +3,44 @@
 'require rpc';
 'require form';
 
+var callInitAction, callLeds, callUSB, callNetdevs;
+
+callInitAction = rpc.declare({
+	object: 'luci',
+	method: 'initCall',
+	params: [ 'name', 'action' ],
+	expect: { result: false }
+});
+
+callLeds = rpc.declare({
+	object: 'luci',
+	method: 'leds'
+});
+
+callUSB = rpc.declare({
+	object: 'luci',
+	method: 'usb'
+});
+
+callNetdevs = rpc.declare({
+	object: 'luci',
+	method: 'ifaddrs',
+	expect: { result: [] },
+	filter: function(res) {
+		var devs = {};
+		for (var i = 0; i < res.length; i++)
+			devs[res[i].name] = true;
+		return Object.keys(devs).sort();
+	}
+});
+
 return L.view.extend({
-	callInitAction: rpc.declare({
-		object: 'luci',
-		method: 'initCall',
-		params: [ 'name', 'action' ],
-		expect: { result: false }
-	}),
-
-	callLeds: rpc.declare({
-		object: 'luci',
-		method: 'leds'
-	}),
-
-	callUSB: rpc.declare({
-		object: 'luci',
-		method: 'usb'
-	}),
-
-	callNetdevs: rpc.declare({
-		object: 'luci',
-		method: 'ifaddrs',
-		expect: { result: [] },
-		filter: function(res) {
-			var devs = {};
-			for (var i = 0; i < res.length; i++)
-				devs[res[i].name] = true;
-			return Object.keys(devs).sort();
-		}
-	}),
-
 	load: function() {
-		rpc.batch();
-		this.callLeds();
-		this.callUSB();
-		this.callNetdevs();
-		return rpc.flush();
+		return Promise.all([
+			callLeds(),
+			callUSB(),
+			callNetdevs()
+		]);
 	},
 
 	render: function(results) {
