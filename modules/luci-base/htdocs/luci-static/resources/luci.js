@@ -331,97 +331,127 @@
 			return (this.interceptors.length < oldlen);
 		},
 
-		poll: Class.singleton({
-			__name__: 'LuCI.Request.Poll',
-
-			queue: [],
-
+		poll: {
 			add: function(interval, url, options, callback) {
 				if (isNaN(interval) || interval <= 0)
 					throw new TypeError('Invalid poll interval');
 
-				var e = {
-					interval: interval,
-					url: url,
-					options: options,
-					callback: callback
-				};
+				var ival = interval >>> 0,
+				    opts = Object.assign({}, options, { timeout: ival * 1000 - 5 });
 
-				this.queue.push(e);
-				return e;
+				return Poll.add(function() {
+					return Request.request(url, options).then(function(res) {
+						if (!Poll.active())
+							return;
+
+						try {
+							callback(res, res.json(), res.duration);
+						}
+						catch (err) {
+							callback(res, null, res.duration);
+						}
+					});
+				}, ival);
 			},
 
-			remove: function(entry) {
-				var oldlen = this.queue.length, i = oldlen;
+			remove: function(entry) { return Poll.remove(entry) },
+			start: function() { return Poll.start() },
+			stop: function() { return Poll.stop() },
+			active: function() { return Poll.active() }
+		}
+	});
 
-				while (i--)
-					if (this.queue[i] === entry) {
-						delete this.queue[i].running;
-						this.queue.splice(i, 1);
-					}
+	var Poll = Class.singleton({
+		__name__: 'LuCI.Poll',
 
-				if (!this.queue.length)
-					this.stop();
+		queue: [],
 
-				return (this.queue.length < oldlen);
-			},
+		add: function(fn, interval) {
+			if (interval == null || interval <= 0)
+				interval = window.L ? window.L.env.pollinterval : null;
 
-			start: function() {
-				if (!this.queue.length || this.active())
+			if (isNaN(interval) || typeof(fn) != 'function')
+				throw new TypeError('Invalid argument to LuCI.Poll.add()');
+
+			for (var i = 0; i < this.queue.length; i++)
+				if (this.queue[i].fn === fn)
 					return false;
 
+			var e = {
+				r: true,
+				i: interval >>> 0,
+				fn: fn
+			};
+
+			this.queue.push(e);
+
+			if (this.tick != null && !this.active())
+				this.start();
+
+			return true;
+		},
+
+		remove: function(entry) {
+			if (typeof(fn) != 'function')
+				throw new TypeError('Invalid argument to LuCI.Poll.remove()');
+
+			var len = this.queue.length;
+
+			for (var i = len; i > 0; i--)
+				if (this.queue[i-1].fn === fn)
+					this.queue.splice(i-1, 1);
+
+			if (!this.queue.length && this.stop())
 				this.tick = 0;
+
+			return (this.queue.length != len);
+		},
+
+		start: function() {
+			if (this.active())
+				return false;
+
+			this.tick = 0;
+
+			if (this.queue.length) {
 				this.timer = window.setInterval(this.step, 1000);
 				this.step();
 				document.dispatchEvent(new CustomEvent('poll-start'));
-				return true;
-			},
-
-			stop: function() {
-				if (!this.active())
-					return false;
-
-				document.dispatchEvent(new CustomEvent('poll-stop'));
-				window.clearInterval(this.timer);
-				delete this.timer;
-				delete this.tick;
-				return true;
-			},
-
-			step: function() {
-				Request.poll.queue.forEach(function(e) {
-					if ((Request.poll.tick % e.interval) != 0)
-						return;
-
-					if (e.running)
-						return;
-
-					var opts = Object.assign({}, e.options,
-						{ timeout: e.interval * 1000 - 5 });
-
-					e.running = true;
-					Request.request(e.url, opts)
-						.then(function(res) {
-							if (!e.running || !Request.poll.active())
-								return;
-
-							try {
-								e.callback(res, res.json(), res.duration);
-							}
-							catch (err) {
-								e.callback(res, null, res.duration);
-							}
-						})
-						.finally(function() { delete e.running });
-				});
-
-				Request.poll.tick = (Request.poll.tick + 1) % Math.pow(2, 32);
-			},
-
-			active: function() {
-				return (this.timer != null);
 			}
-		})
+
+			return true;
+		},
+
+		stop: function() {
+			if (!this.active())
+				return false;
+
+			document.dispatchEvent(new CustomEvent('poll-stop'));
+			window.clearInterval(this.timer);
+			delete this.timer;
+			delete this.tick;
+			return true;
+		},
+
+		step: function() {
+			for (var i = 0, e = null; (e = Poll.queue[i]) != null; i++) {
+				if ((Poll.tick % e.i) != 0)
+					continue;
+
+				if (!e.r)
+					continue;
+
+				e.r = false;
+
+				Promise.resolve(e.fn()).finally((function() { this.r = true }).bind(e));
+			}
+
+			Poll.tick = (Poll.tick + 1) % Math.pow(2, 32);
+		},
+
+		active: function() {
+			return (this.timer != null);
+		}
 	});
 
 
@@ -635,7 +665,7 @@
 				if (res.status != 403 || res.headers.get('X-LuCI-Login-Required') != 'yes')
 					return;
 
-				Request.poll.stop();
+				Poll.stop();
 
 				L.ui.showModal(_('Session expired'), [
 					E('div', { class: 'alert-message warning' },
@@ -654,7 +684,8 @@
 			});
 
 			originalCBIInit();
-			Request.poll.start();
+
+			Poll.start();
 
 			document.dispatchEvent(new CustomEvent('luci-loaded'));
 		},
@@ -722,9 +753,9 @@
 					});
 		},
 
-		stop: function(entry) { return Request.poll.remove(entry) },
-		halt: function() { return Request.poll.stop() },
-		run: function() { return Request.poll.start() },
+		stop: function(entry) { return Poll.remove(entry) },
+		halt: function() { return Poll.stop() },
+		run: function() { return Poll.start() },
 
 		/* DOM manipulation */
 		dom: Class.singleton({
@@ -965,6 +996,7 @@
 			}
 		}),
 
+		Poll: Poll,
 		Class: Class,
 		Request: Request,
 
