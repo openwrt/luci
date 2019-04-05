@@ -103,7 +103,7 @@ function index()
 
 		if nixio.fs.access("/etc/config/dhcp") then
 			page = node("admin", "network", "dhcp")
-			page.target = cbi("admin_network/dhcp")
+			page.target = view("network/dhcp")
 			page.title  = _("DHCP and DNS")
 			page.order  = 30
 
