@@ -3,7 +3,8 @@
 var rpcRequestRegistry = {},
     rpcRequestBatch = null,
     rpcRequestID = 1,
-    rpcSessionID = L.env.sessionid || '00000000000000000000000000000000';
+    rpcSessionID = L.env.sessionid || '00000000000000000000000000000000',
+    rpcBaseURL = L.url('admin/ubus');
 
 return L.Class.extend({
 	call: function(req, cbFn) {
@@ -25,7 +26,7 @@ return L.Class.extend({
 			q += '/%s.%s'.format(req.params[1], req.params[2]);
 		}
 
-		return L.Request.post(L.url('admin/ubus') + q, req, {
+		return L.Request.post(rpcBaseURL + q, req, {
 			timeout: (L.env.rpctimeout || 5) * 1000,
 			credentials: true
 		}).then(cb);
@@ -190,7 +191,19 @@ return L.Class.extend({
 		}, this, this, options);
 	},
 
+	getSessionID: function() {
+		return rpcSessionID;
+	},
+
 	setSessionID: function(sid) {
 		rpcSessionID = sid;
+	},
+
+	getBaseURL: function() {
+		return rpcBaseURL;
+	},
+
+	setBaseURL: function(url) {
+		rpcBaseURL = url;
 	}
 });
