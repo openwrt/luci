@@ -161,33 +161,121 @@
 
 	var Response = Class.extend({
 		__name__: 'LuCI.XHR.Response',
-		__init__: function(xhr, url, duration) {
+		__init__: function(xhr, url, duration, headers, content) {
 			this.ok = (xhr.status >= 200 && xhr.status <= 299);
 			this.status = xhr.status;
 			this.statusText = xhr.statusText;
-			this.responseText = xhr.responseText;
-			this.headers = new Headers(xhr);
+			this.headers = (headers != null) ? headers : new Headers(xhr);
 			this.duration = duration;
 			this.url = url;
 			this.xhr = xhr;
+
+			if (content != null && typeof(content) == 'object') {
+				this.responseJSON = content;
+				this.responseText = null;
+			}
+			else if (content != null) {
+				this.responseJSON = null;
+				this.responseText = String(content);
+			}
+			else {
+				this.responseJSON = null;
+				this.responseText = xhr.responseText;
+			}
+		},
+
+		clone: function(content) {
+			var copy = new Response(this.xhr, this.url, this.duration, this.headers, content);
+
+			copy.ok = this.ok;
+			copy.status = this.status;
+			copy.statusText = this.statusText;
+
+			return copy;
 		},
 
 		json: function() {
-			return JSON.parse(this.responseText);
+			if (this.responseJSON == null)
+				this.responseJSON = JSON.parse(this.responseText);
+
+			return this.responseJSON;
 		},
 
 		text: function() {
+			if (this.responseText == null && this.responseJSON != null)
+				this.responseText = JSON.stringify(this.responseJSON);
+
 			return this.responseText;
 		}
 	});
+
+
+	var requestQueue = [],
+	    rpcBaseURL = null;
+
+	function isQueueableRequest(opt) {
+		if (!classes.rpc)
+			return false;
+
+		if (opt.method != 'POST' || typeof(opt.content) != 'object')
+			return false;
+
+		if (opt.nobatch === true)
+			return false;
+
+		if (rpcBaseURL == null)
+			rpcBaseURL = Request.expandURL(classes.rpc.getBaseURL());
+
+		return (rpcBaseURL != null && opt.url.indexOf(rpcBaseURL) == 0);
+	}
+
+	function flushRequestQueue() {
+		if (!requestQueue.length)
+			return;
+
+		var reqopt = Object.assign({}, requestQueue[0][0], { content: [], nobatch: true }),
+		    batch = [];
+
+		for (var i = 0; i < requestQueue.length; i++) {
+			batch[i] = requestQueue[i];
+			reqopt.content[i] = batch[i][0].content;
+		}
+
+		requestQueue.length = 0;
+
+		Request.request(rpcBaseURL, reqopt).then(function(reply) {
+			var json = null, req = null;
+
+			try { json = reply.json() }
+			catch(e) { }
+
+			while ((req = batch.shift()) != null)
+				if (Array.isArray(json) && json.length)
+					req[2].call(reqopt, reply.clone(json.shift()));
+				else
+					req[1].call(reqopt, new Error('No related RPC reply'));
+		}).catch(function(error) {
+			var req = null;
+
+			while ((req = batch.shift()) != null)
+				req[1].call(reqopt, error);
+		});
+	}
 
 	var Request = Class.singleton({
 		__name__: 'LuCI.Request',
 
 		interceptors: [],
 
+		expandURL: function(url) {
+			if (!/^(?:[^/]+:)?\/\//.test(url))
+				url = location.protocol + '//' + location.host + url;
+
+			return url;
+		},
+
 		request: function(target, options) {
-			var state = { xhr: new XMLHttpRequest(), url: target, start: Date.now() },
+			var state = { xhr: new XMLHttpRequest(), url: this.expandURL(target), start: Date.now() },
 			    opt = Object.assign({}, options, state),
 			    content = null,
 			    contenttype = null,
@@ -231,8 +319,11 @@
 				if (!opt.cache)
 					opt.url += ((/\?/).test(opt.url) ? '&' : '?') + (new Date()).getTime();
 
-				if (!/^(?:[^/]+:)?\/\//.test(opt.url))
-					opt.url = location.protocol + '//' + location.host + opt.url;
+				if (isQueueableRequest(opt)) {
+					requestQueue.push([opt, rejectFn, resolveFn]);
+					requestAnimationFrame(flushRequestQueue);
+					return;
+				}
 
 				if ('username' in opt && 'password' in opt)
 					opt.xhr.open(opt.method, opt.url, true, opt.username, opt.password);
