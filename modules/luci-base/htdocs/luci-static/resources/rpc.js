@@ -1,15 +1,12 @@
 'use strict';
 
-var rpcRequestRegistry = {},
-    rpcRequestBatch = null,
-    rpcRequestID = 1,
+var rpcRequestID = 1,
     rpcSessionID = L.env.sessionid || '00000000000000000000000000000000',
     rpcBaseURL = L.url('admin/ubus');
 
 return L.Class.extend({
-	call: function(req, cbFn) {
-		var cb = cbFn.bind(this, req),
-		    q = '';
+	call: function(req, cb) {
+		var q = '';
 
 		if (Array.isArray(req)) {
 			if (req.length == 0)
@@ -42,9 +39,8 @@ return L.Class.extend({
 		req.resolve(list);
 	},
 
-	handleCallReply: function(reqs, res) {
+	handleCallReply: function(req, res) {
 		var type = Object.prototype.toString,
-		    data = [],
 		    msg = null;
 
 		if (!res.ok)
@@ -53,64 +49,41 @@ return L.Class.extend({
 
 		msg = res.json();
 
-		if (!Array.isArray(reqs)) {
-			msg = [ msg ];
-			reqs = [ reqs ];
+		/* fetch response attribute and verify returned type */
+		var ret = undefined;
+
+		/* verify message frame */
+		if (typeof(msg) == 'object' && msg.jsonrpc == '2.0') {
+			if (typeof(msg.error) == 'object' && msg.error.code && msg.error.message)
+				req.reject(new Error('RPC call failed with error %d: %s'
+					.format(msg.error.code, msg.error.message || '?')));
+			else if (Array.isArray(msg.result) && msg.result[0] == 0)
+				ret = (msg.result.length > 1) ? msg.result[1] : msg.result[0];
+		}
+		else {
+			req.reject(new Error('Invalid message frame received'));
 		}
 
-		for (var i = 0; i < msg.length; i++) {
-			/* fetch related request info */
-			var req = rpcRequestRegistry[reqs[i].id];
-			if (typeof(req) != 'object')
-				throw 'No related request for JSON response';
+		if (req.expect) {
+			for (var key in req.expect) {
+				if (ret != null && key != '')
+					ret = ret[key];
 
-			/* fetch response attribute and verify returned type */
-			var ret = undefined;
+				if (ret == null || type.call(ret) != type.call(req.expect[key]))
+					ret = req.expect[key];
 
-			/* verify message frame */
-			if (typeof(msg[i]) == 'object' && msg[i].jsonrpc == '2.0') {
-				if (typeof(msg[i].error) == 'object' && msg[i].error.code && msg[i].error.message)
-					req.reject(new Error('RPC call failed with error %d: %s'
-						.format(msg[i].error.code, msg[i].error.message || '?')));
-				else if (Array.isArray(msg[i].result) && msg[i].result[0] == 0)
-					ret = (msg[i].result.length > 1) ? msg[i].result[1] : msg[i].result[0];
+				break;
 			}
-			else {
-				req.reject(new Error('Invalid message frame received'));
-			}
-
-			if (req.expect) {
-				for (var key in req.expect) {
-					if (ret != null && key != '')
-						ret = ret[key];
-
-					if (ret == null || type.call(ret) != type.call(req.expect[key]))
-						ret = req.expect[key];
-
-					break;
-				}
-			}
-
-			/* apply filter */
-			if (typeof(req.filter) == 'function') {
-				req.priv[0] = ret;
-				req.priv[1] = req.params;
-				ret = req.filter.apply(this, req.priv);
-			}
-
-			req.resolve(ret);
-
-			/* store response data */
-			if (typeof(req.index) == 'number')
-				data[req.index] = ret;
-			else
-				data = ret;
-
-			/* delete request object */
-			delete rpcRequestRegistry[reqs[i].id];
 		}
 
-		return Promise.resolve(data);
+		/* apply filter */
+		if (typeof(req.filter) == 'function') {
+			req.priv[0] = ret;
+			req.priv[1] = req.params;
+			ret = req.filter.apply(this, req.priv);
+		}
+
+		req.resolve(ret);
 	},
 
 	list: function() {
@@ -122,22 +95,6 @@ return L.Class.extend({
 		};
 
 		return this.call(msg, this.handleListReply);
-	},
-
-	batch: function() {
-		if (!Array.isArray(rpcRequestBatch))
-			rpcRequestBatch = [ ];
-	},
-
-	flush: function() {
-		if (!Array.isArray(rpcRequestBatch))
-			return Promise.resolve([]);
-
-		var req = rpcRequestBatch;
-		rpcRequestBatch = null;
-
-		/* call rpc */
-		return this.call(req, this.handleCallReply);
 	},
 
 	declare: function(options) {
@@ -157,7 +114,7 @@ return L.Class.extend({
 					priv.push(args[p_off]);
 
 				/* store request info */
-				var req = rpcRequestRegistry[rpcRequestID] = {
+				var req = {
 					expect:  options.expect,
 					filter:  options.filter,
 					resolve: resolveFn,
@@ -179,14 +136,8 @@ return L.Class.extend({
 					]
 				};
 
-				/* when a batch is in progress then store index in request data
-				 * and push message object onto the stack */
-				if (Array.isArray(rpcRequestBatch))
-					req.index = rpcRequestBatch.push(msg) - 1;
-
 				/* call rpc */
-				else
-					rpc.call(msg, rpc.handleCallReply);
+				rpc.call(msg, rpc.handleCallReply.bind(rpc, req));
 			});
 		}, this, this, options);
 	},
