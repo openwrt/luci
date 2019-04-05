@@ -1,4 +1,6 @@
 (function(window, document, undefined) {
+	'use strict';
+
 	/* Object.assign polyfill for IE */
 	if (typeof Object.assign !== 'function') {
 		Object.defineProperty(Object, 'assign', {
@@ -136,7 +138,7 @@
 	 * HTTP Request helper
 	 */
 
-	Headers = Class.extend({
+	var Headers = Class.extend({
 		__name__: 'LuCI.XHR.Headers',
 		__init__: function(xhr) {
 			var hdrs = this.headers = {};
@@ -157,7 +159,7 @@
 		}
 	});
 
-	Response = Class.extend({
+	var Response = Class.extend({
 		__name__: 'LuCI.XHR.Response',
 		__init__: function(xhr, url, duration) {
 			this.ok = (xhr.status >= 200 && xhr.status <= 299);
@@ -179,7 +181,7 @@
 		}
 	});
 
-	Request = Class.singleton({
+	var Request = Class.singleton({
 		__name__: 'LuCI.Request',
 
 		interceptors: [],
@@ -428,7 +430,7 @@
 	    originalCBIInit = null,
 	    classes = {};
 
-	LuCI = Class.extend({
+	var LuCI = Class.extend({
 		__name__: 'LuCI',
 		__init__: function(env) {
 
@@ -582,6 +584,8 @@
 
 				/* load dependencies and instantiate class */
 				return Promise.all(depends).then(function(instances) {
+					var _factory, _class;
+
 					try {
 						_factory = eval(
 							'(function(window, document, L%s) { %s })\n\n//# sourceURL=%s\n'
@@ -1045,7 +1049,7 @@
 		})
 	});
 
-	XHR = Class.extend({
+	var XHR = Class.extend({
 		__name__: 'LuCI.XHR',
 		__init__: function() {
 			if (window.console && console.debug)
