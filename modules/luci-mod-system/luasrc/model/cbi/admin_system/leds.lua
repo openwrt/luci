@@ -185,4 +185,22 @@ end
 port_mask = s:option(Value, "port_mask", translate ("Switch Port Mask"))
 port_mask:depends("trigger", "switch0")
 
+-- Load application triggers
+local ledtriggers = string.format("%s/%s", util.libpath(), "model/cbi/admin_system/ledtriggers")
+if nixio.fs.access(ledtriggers) then
+	local net = require "luci.model.network".init()
+	local interface = s:option(ListValue, "ifc", translate("Network interface"))
+	for _, net in ipairs(net:get_networks()) do
+		if net:name() ~= "loopback" then
+			interface:value(net:name())
+		end
+	end
+	for file in fs.dir(ledtriggers) do
+		if file:match("led_") then
+			local form, ferr = loadfile(string.format("%s/%s", ledtriggers, file))
+			setfenv(form, getfenv(1))(m, s, trigger, interface)
+		end
+	end
+end
+
 return m
