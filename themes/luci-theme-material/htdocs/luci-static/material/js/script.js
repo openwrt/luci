@@ -131,24 +131,6 @@
     $(".cbi-button-up").val("");
     $(".cbi-button-down").val("");
 
-
-    /**
-     * hook other "A Label" and add hash to it.
-     */
-    $("#maincontent > .container").find("a").each(function () {
-        var that = $(this);
-        var onclick = that.attr("onclick");
-        if (onclick == undefined || onclick == "") {
-            that.click(function () {
-                var href = that.attr("href");
-                if (href.indexOf("#") == -1) {
-                    $(".main > .loading").fadeIn("fast");
-                    return true;
-                }
-            });
-        }
-    });
-
     /**
      * Sidebar expand
      */
