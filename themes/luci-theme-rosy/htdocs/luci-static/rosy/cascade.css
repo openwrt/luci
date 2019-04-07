@@ -165,7 +165,7 @@ header {
 }
 
 header .container {
-    padding: 0 0.5rem;
+	padding: 0 0.5rem;
 }
 
 select {
@@ -588,7 +588,7 @@ footer > a {
 .main-right .container .alert-message h4 {
 	margin-top: 1rem;
 	background: url(./no-pwd.png) no-repeat left 1px / 28px;
-    padding: 7px 0 0 32px;
+	padding: 7px 0 0 32px;
 }
 
 .main-right .container .alert-message .btn {
@@ -782,7 +782,7 @@ form[method="post"] + form[method="post"],
 .cbi-button[name="zero"],
 .cbi-button[name="restart"],
 .cbi-button[onclick="hide_empty(this)"] {
-    border: 1px solid;
+	border: 1px solid;
 }
 
 /* dark blue */
@@ -813,10 +813,10 @@ form[method="post"] + form[method="post"],
 .cbi-button[value="Submit"],
 .cbi-button[value$="Apply"],
 .cbi-button[onclick="addKey(event)"] {
-    font-weight: normal;
-    color: #fff;
-    border: 1px solid #468ea4;
-    background-color: #468ea4;
+	font-weight: normal;
+	color: #fff;
+	border: 1px solid #468ea4;
+	background-color: #468ea4;
 }
 
 /* red */
@@ -830,10 +830,10 @@ form[method="post"] + form[method="post"],
 .cbi-button[onclick="reboot(this)"],
 .cbi-button-neutral[value="Restart"] {
 	padding: 5px .8rem;
-    font-weight: 100;
-    color: #f24b7c;
-    background-color: transparent;
-    border: 1px solid #f24b7c;
+	font-weight: 100;
+	color: #f24b7c;
+	background-color: transparent;
+	border: 1px solid #f24b7c;
 }
 
 /* yellow */
@@ -856,10 +856,10 @@ form[method="post"] + form[method="post"],
 .cbi-button[name="backup"],
 .cbi-button[value="Upload"],
 .cbi-button[value="Save mtdblock"] {
-    font-weight: normal;
-    color: #468ea4;
-    border: thin solid #468ea4;
-    background-color: transparent;
+	font-weight: normal;
+	color: #468ea4;
+	border: thin solid #468ea4;
+	background-color: transparent;
 }
 
 .cbi-page-actions .cbi-button-link:first-child {
@@ -886,40 +886,40 @@ form[method="post"] + form[method="post"],
 }
 
 .tabs > li {
-    margin-right: .8rem;
-    padding: .5rem 4px;
-    position: relative;
-    display: inline-block;
-    text-align: center;
+	margin-right: .8rem;
+	padding: 6px 10px;
+	position: relative;
+	display: inline-block;
+	text-align: center;
 }
 
 .tabs > li a {
-    color: #468EA4;
+	color: #468EA4;
 	font-size: 14px;
 	text-decoration: none;
 	position: relative;
 	z-index: 1;
 }
 .tabs > li::after {
-    content: '';
-    background-color: #cccccc82;
-    position: absolute;
-    width: 0;
-    height: 100%;
-    bottom: 0;
-    border-radius: 20px;
-    left: 50%;
-    transform: translateX(-50%);
+	content: '';
+	background-color: #cccccc82;
+	position: absolute;
+	width: 0;
+	height: 100%;
+	bottom: 0;
+	border-radius: 20px;
+	left: 50%;
+	transform: translateX(-50%);
 }
 
 .tabs > li:hover::after {
-    transition: width .35s;
-    width: calc(100% + 4px);
+	transition: width .35s;
+	width: calc(100% + 4px);
 }
 
 .tabs > li.active::after {
-    width: calc(100% + 4px);
-    background-color: #468ea473;
+	width: calc(100% + 4px);
+	background-color: #468ea473;
 }
 
 .cbi-tabmenu > li {
@@ -1164,17 +1164,17 @@ form[method="post"] + form[method="post"],
 }
 
 .cbi-dynlist > .item::after {
-    position: absolute;
-    right: -2em;
-    bottom: 0;
-    display: inline-flex;
-    min-height: 17px;
-    padding: 0 6px;
-    content: "\00D7";
-    pointer-events: auto;
-    color: #f24b7c;
-    border: thin solid #f24b7c;
-    background-color: transparent;
+	position: absolute;
+	right: -2em;
+	bottom: 0;
+	display: inline-flex;
+	min-height: 17px;
+	padding: 0 6px;
+	content: "\00D7";
+	pointer-events: auto;
+	color: #f24b7c;
+	border: thin solid #f24b7c;
+	background-color: transparent;
 }
 
 .cbi-dynlist > .item > span {
@@ -1453,6 +1453,11 @@ form[method="post"] + form[method="post"],
 body.modal-overlay-active {
 	overflow: hidden;
 	height: 100vh;
+}
+
+#modal_overlay .alert-message.warning {
+	background-color:  #fff !important;
+	margin-bottom: 10px;
 }
 
 body.modal-overlay-active #modal_overlay {
@@ -2066,9 +2071,9 @@ input[name="nslookup"] {
 
 .login .alert-message > h4 {
 	padding: 7px 0 0 32px;
-    font-size: 18px;
-    background: url(./no-pwd.png) no-repeat left 0 / 28px;
-    display: inline-block;
+	font-size: 18px;
+	background: url(./no-pwd.png) no-repeat left 0 / 28px;
+	display: inline-block;
 }
 
 .login .alert-message > p {
@@ -2128,30 +2133,30 @@ input[name="nslookup"] {
 }
 
 .login > .main .cbi-value > .cbi-value-field {
-    display: block;
-    position: relative;
+	display: block;
+	position: relative;
 }
 
 .login > .main .cbi-value-last .cbi-value-field > div {
-    height: 24px;
-    width: 24px;
-    display: inline-block;
-    background: url(./op-eye.png) no-repeat center center / cover;
-    position: absolute;
-    top: 8px;
-    right: 12px;
+	height: 24px;
+	width: 24px;
+	display: inline-block;
+	background: url(./op-eye.png) no-repeat center center / cover;
+	position: absolute;
+	top: 8px;
+	right: 12px;
 }
 
 .login > .main .cbi-value-last .cbi-value-field.op-eye > div {
-    background-image: url(./cl-eye.png);
+	background-image: url(./cl-eye.png);
 }
 
 .login > .main .cbi-value .cbi-input-text {
 	margin: 0 0 16px;
 	padding-left: 36px;
 	width: 100%;
-    height: 42px;
-    border: 1px solid #556270;
+	height: 42px;
+	border: 1px solid #556270;
 	border-radius: 20px;
 	background: #fff no-repeat 11px center / 19px;
 }
@@ -2172,14 +2177,14 @@ input[name="nslookup"] {
 
 .login .cbi-page-actions .cbi-button-apply,
 .login .cbi-button-apply {
-    border: 1px solid #f24b7c;
-    background-color: #f24b7c;
+	border: 1px solid #f24b7c;
+	background-color: #f24b7c;
 }
 
 .login .cbi-button[value="Reset"] {
-    color: #fff;
-    border: 1px solid #9a4569;
-    background-color: #9a4569;
+	color: #fff;
+	border: 1px solid #9a4569;
+	background-color: #9a4569;
 }
 
 .login footer {
@@ -2246,11 +2251,47 @@ input[name="nslookup"] {
 .logged-in .main-right {
 	float: right;
 	width: 84%;
-    	height: 100%;
+	height: 100%;
 }
 
 .logged-in .main-right .container {
 	margin: 5rem 1rem 1rem;
+}
+
+/* rosy file server */
+.login-info.node-main-login{
+	background-color: #ebf1f6;
+}
+
+.login-info.node-main-login header .container,
+.login-info.node-main-login .main {
+	width: 1170px;
+}
+
+.login-info.node-main-login .main {
+	padding: 0 15px;
+}
+
+.login-info.node-main-login header {
+	display: block;
+}
+
+.login-info.node-main-login header .container {
+	margin: 1rem auto 0;
+	height: 3rem;
+	background-color: #fff;
+	border: 1px solid #ddd;
+	border-radius: 50px;
+	line-height: 44px;
+}
+
+.login-info.node-main-login .label.logout {
+	background-color: #f24b7c;
+}
+
+.login-info.node-main-login .label.logout a {
+	color: #fff;
+	text-decoration: none;
 }
 
 /* node main login */
@@ -2435,9 +2476,12 @@ input[name="nslookup"] {
 	flex-basis: 12%;
 }
 
-#cbi-firewall-zone .table,
-#cbi-network-switch_vlan .table {
+#cbi-firewall-zone .table {
 	display: table;
+}
+
+#cbi-network-switch_vlan #vlan_table {
+	overflow-x: auto;
 }
 
 #cbi-firewall-zone .td.cbi-section-actions {
@@ -2592,10 +2636,6 @@ input[name="nslookup"] {
 		font-size: .7rem;
 	}
 
-	#modal_overlay {
-		top: 3.5rem;
-	}
-
 	[data-page="admin-network-firewall-forwards"] .table:not(.cbi-section-table) {
 		display: block;
 	}
@@ -2612,10 +2652,17 @@ input[name="nslookup"] {
 }
 
 @media screen and (max-width: 992px) {
+	.login-info.node-main-login header .container,
+	.login-info.node-main-login .main {
+		width: 970px;
+	}
+}
+
+@media screen and (max-width: 992px) {
 	.login .main-right {
 		background: #354057;
 	}
-	
+
 	.login > .main #maincontent {
 		width: 90%;
 	}
@@ -2672,6 +2719,10 @@ input[name="nslookup"] {
 		display: inline-block;
 		cursor: pointer;
 		width: 30px;
+	}
+
+	.login-info.node-main-login header .showSide {
+		display: none;
 	}
 
 	.showSide::before {
@@ -2882,6 +2933,22 @@ input[name="nslookup"] {
 	.logged-in .main-left .navbar-container:hover {
 		scrollbar-face-color: #839dd67a;
 	}
+
+	.login-info.node-main-login header .container,
+	.login-info.node-main-login .main {
+		width: 750px;
+	}
+}
+
+@media screen and (max-width: 768px) {
+	.login-info.node-main-login header {
+		padding: 0 15px;
+	}
+
+	.login-info.node-main-login header .container,
+	.login-info.node-main-login .main {
+		width: 100%;
+	}
 }
 
 @media screen and (max-width: 600px) {
@@ -2898,10 +2965,6 @@ input[name="nslookup"] {
 	.cbi-section {
 		margin: 1rem 0 0 0;
 		padding: 1rem;
-	}
-
-	.tabs {
-		margin: 0 -1rem;
 	}
 
 	.main-left .nav-container {
