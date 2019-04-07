@@ -2268,6 +2268,10 @@ input[name="nslookup"] {
 	width: 1170px;
 }
 
+.login-info.node-main-login .main {
+	padding: 0 15px;
+}
+
 .login-info.node-main-login header {
 	display: block;
 }
@@ -2632,10 +2636,6 @@ input[name="nslookup"] {
 		font-size: .7rem;
 	}
 
-	#modal_overlay {
-		top: 3.5rem;
-	}
-
 	[data-page="admin-network-firewall-forwards"] .table:not(.cbi-section-table) {
 		display: block;
 	}
@@ -2653,7 +2653,7 @@ input[name="nslookup"] {
 
 @media screen and (max-width: 992px) {
 	.login-info.node-main-login header .container,
-	.login-info.node-main-login .main .container {
+	.login-info.node-main-login .main {
 		width: 970px;
 	}
 }
@@ -2719,6 +2719,10 @@ input[name="nslookup"] {
 		display: inline-block;
 		cursor: pointer;
 		width: 30px;
+	}
+
+	.login-info.node-main-login header .showSide {
+		display: none;
 	}
 
 	.showSide::before {
@@ -2931,14 +2935,18 @@ input[name="nslookup"] {
 	}
 
 	.login-info.node-main-login header .container,
-	.login-info.node-main-login .main .container {
+	.login-info.node-main-login .main {
 		width: 750px;
 	}
 }
 
 @media screen and (max-width: 768px) {
+	.login-info.node-main-login header {
+		padding: 0 15px;
+	}
+
 	.login-info.node-main-login header .container,
-	.login-info.node-main-login .main .container {
+	.login-info.node-main-login .main {
 		width: 100%;
 	}
 }
@@ -2957,10 +2965,6 @@ input[name="nslookup"] {
 	.cbi-section {
 		margin: 1rem 0 0 0;
 		padding: 1rem;
-	}
-
-	.tabs {
-		margin: 0 -1rem;
 	}
 
 	.main-left .nav-container {
