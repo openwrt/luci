@@ -21,7 +21,7 @@ function index()
 	page.index    = false
 
 	page          = node("httpfs")
-	page.title    = _("File-server")
+	page.title    = _("Rosy File Server")
 	page.target   = alias("httpfs", "rosy-file-server")
 	page.order    = 5
 	page.setuser  = "root"
