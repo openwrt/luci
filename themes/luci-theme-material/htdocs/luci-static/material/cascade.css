@@ -15,6 +15,9 @@
  *	MUI:
  *		https://github.com/muicss/mui
  *
+ *	Menu and loading spinner icons from IcoMoon:
+ *		https://icomoon.io
+ *
  *	Pure CSS ripple effect:
  *		https://github.com/mladenplavsic/css-ripple-effect
  *
@@ -25,20 +28,6 @@
  *	Include custom css
  */
 @import url("custom.css");
-
-/*
- *	Font generate by Icomoon<icomoon.io>
- */
-@font-face {
-	font-family: "icomoon";
-	font-weight: normal;
-	font-style: normal;
-	src: url("fonts/font.eot");
-	src: url("fonts/font.eot") format("embedded-opentype"),
-	url("fonts/font.ttf") format("truetype"),
-	url("fonts/font.woff") format("woff"),
-	url("fonts/font.svg") format("svg");
-}
 
 .table {
 	position: relative;
@@ -143,20 +132,6 @@
 	flex: 10 10 300px !important;
 }
 
-.cbi-button-up,
-.cbi-button-down,
-.cbi-value-helpicon,
-.showSide {
-	font-family: "icomoon" !important;
-	font-weight: normal;
-	font-style: normal;
-	font-variant: normal;
-	line-height: 1;
-	text-transform: none;
-	-webkit-font-smoothing: antialiased;
-	speak: none;
-}
-
 * {
 	box-sizing: border-box;
 	margin: 0;
@@ -229,12 +204,12 @@ input,
 select,
 .cbi-dropdown {
 	width: inherit;
+	cursor: default;
 }
 
 select:not([multiple="multiple"]):focus,
 input:not(.cbi-button):focus,
-.cbi-dropdown:focus,
-.cbi-dynlist > .item:focus {
+.cbi-dropdown:focus {
 	border-color: #09c;
 	border-color: var(--main-color);
 }
@@ -298,6 +273,12 @@ footer > a {
 	color: #aaa;
 }
 
+small {
+	font-size: 90%;
+	line-height: 1.42857143;
+	white-space: normal;
+}
+
 .main {
 	position: relative;
 	top: 4rem;
@@ -320,7 +301,7 @@ footer > a {
 
 .main > .loading > span {
 	font-family: monospace;
-	font-size: 2.0rem;
+	font-size: 2rem;
 	font-size-adjust: .35;
 	position: relative;
 	top: 12.5%;
@@ -329,17 +310,16 @@ footer > a {
 	color: #888;
 }
 
-.main > .loading > span > .loading-img:before {
-	content: "\e603";
-}
-
 .main > .loading > span > .loading-img {
-	font-family: "icomoon" !important;
-	font-size: 1.0rem;
-	font-size-adjust: .6;
+	position: relative;
+	top: .1rem;
+	left: .05rem;
 	display: inline-block;
+	width: 1.25rem;
+	height: 1.25rem;
 	margin-right: 1rem;
 	animation: anim-rotate 2s infinite linear;
+	background: url(./icons/spinner.svg) no-repeat center;
 }
 
 @keyframes anim-rotate {
@@ -406,6 +386,9 @@ header {
 header > .fill > .container {
 	margin-top: .5rem;
 	padding: .5rem 1rem 0 1rem;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
 	user-select: none;
 }
 
@@ -508,12 +491,17 @@ header > .fill > .container > .status > * {
 .main > .main-left > .nav > li {
 	padding: .5rem 1rem;
 	cursor: pointer;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
 }
 
-.main > .main-left > .nav > li:nth-last-child(1) {
-	font-size: 1.2rem;
-	margin-top: 1rem;
-	margin-bottom: 1rem;
+.main > .main-left > .nav > li:last-child {
+	display: flex;
+	align-items: center;
+	margin: 2rem 0 1rem 0;
+	padding: 0 0 0 2rem;
 }
 
 .main > .main-left > .nav > li a {
@@ -530,15 +518,26 @@ header > .fill > .container > .status > * {
 	display: none;
 }
 
+.main > .main-left > .nav > .slide > .menu,
+.main > .main-left > .nav > li > [data-title="Logout"] {
+	font-size: 1.15rem;
+	font-weight: 500;
+	display: flex;
+	align-items: center;
+	width: 100%;
+	padding: .5rem 1rem;
+	text-decoration: none;
+	color: #202124;
+	color: var(--main-menu-color);
+}
+
 .main > .main-left > .nav > .slide > .menu::before {
 	position: absolute;
-	top: 30%;
 	right: 17px;
-	width: 1rem;
-	height: 1rem;
+	width: 16px;
+	height: 16px;
 	content: "";
-	background-image: url(data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IiB2aWV3Qm94PSIwIDAgMTAwMCAxMDAwIiBlbmFibGUtYmFja2dyb3VuZD0ibmV3IDAgMCAxMDAwIDEwMDAiIHhtbDpzcGFjZT0icHJlc2VydmUiPjxnPjxwYXRoIGQ9Ik01MDAsNjI1LjJMNzUuMywyNTVMMTAsMzE0LjlMNTAwLDc0NWw0OTAtNDMwLjFMOTI0LjcsMjU1TDUwMCw2MjUuMnoiLz48L2c+PC9zdmc+);
-	background-repeat: no-repeat;
+	background: url(./icons/arrow.svg) no-repeat;
 }
 
 .main > .main-left > .nav > .slide > .menu.active::before {
@@ -557,13 +556,12 @@ body[class*="node-"] > .main > .main-left > .nav > .slide > .menu.active::before
 	display: none;
 }
 
-.main > .main-left > .nav > .slide > .menu {
-	font-size: 1.15rem;
-	font-weight: 500;
-	display: block;
-	padding: .5rem 1rem;
-	text-decoration: none;
-	color: var(--menu-color);
+.main > .main-left > .nav > li:last-child::before {
+	position: absolute;
+	left: 14px;
+	width: 24px;
+	height: 24px;
+	content: url(./icons/logout.svg);
 }
 
 .main > .main-left > .nav > li:hover,
@@ -605,21 +603,22 @@ body[class*="node-"] > .main > .main-left > .nav > .slide > .menu.active::before
 }
 
 .main > .main-left > .nav > .slide > .slide-menu > .active:hover {
-	cursor: hand;
 	background-color: #09c;
 	background-color: var(--main-color);
 }
 
 /* ripple effect */
 .main > .main-left > .nav > .slide > .menu,
-.main > .main-left > .nav > .slide > .slide-menu > li {
+.main > .main-left > .nav > .slide > .slide-menu > li,
+.main > .main-left > .nav > li:last-child {
 	position: relative;
 	overflow: hidden;
 	transform: translate3d(0, 0, 0);
 }
 
-.main > .main-left > .nav > .slide > .menu:after,
-.main > .main-left > .nav > .slide > .slide-menu > li:after {
+.main > .main-left > .nav > .slide > .menu::after,
+.main > .main-left > .nav > .slide > .slide-menu > li::after,
+.main > .main-left > .nav > li:last-child::after {
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -636,8 +635,9 @@ body[class*="node-"] > .main > .main-left > .nav > .slide > .menu.active::before
 	background-position: 50%;
 }
 
-.main > .main-left > .nav > .slide > .menu:active:after,
-.main > .main-left > .nav > .slide > .slide-menu > li:active:after {
+.main > .main-left > .nav > .slide > .menu:active::after,
+.main > .main-left > .nav > .slide > .slide-menu > li:active::after,
+.main > .main-left > .nav > li:last-child:active::after {
 	transition: 0s;
 	transform: scale(0, 0);
 	opacity: .2;
@@ -645,10 +645,6 @@ body[class*="node-"] > .main > .main-left > .nav > .slide > .menu.active::before
 
 #maincontent > .container {
 	margin: 0 2rem 1rem 2rem;
-}
-
-.Processes #maincontent > .container {
-	margin-right: 0;
 }
 
 ul {
@@ -710,6 +706,14 @@ h5 {
 	border-radius: 0;
 	background-color: #fff;
 	box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .16), 0 0 2px 0 rgba(0, 0, 0, .12);
+}
+
+.cbi-map-descr,
+.cbi-section-descr {
+	font-size: small;
+	line-height: 1.42857143;
+	padding: .5rem;
+	color: #999;
 }
 
 .cbi-map-descr + fieldset {
@@ -789,8 +793,6 @@ tr > th,
 	border-top: thin solid #ddd;
 }
 
-tr:first-child > td
-.tr:first-child > .td,
 #cbi-wireless .td,
 #cbi-network .tr:first-child > .td,
 .table[width="100%"] > .tr:first-child > .td,
@@ -798,6 +800,10 @@ tr:first-child > td
 .tr.table-titles > .th,
 .tr.cbi-section-table-titles > .th {
 	border-top: 0 !important;
+}
+
+.table[width="100%"] > .tr:first-child > .td {
+	margin: auto 0;
 }
 
 .cbi-section-table-row {
@@ -810,10 +816,10 @@ tr:first-child > td
 	margin-bottom: 0;
 }
 
+.cbi-section-table-row > .cbi-value-field .cbi-dropdown,
 .cbi-section-table-row > .cbi-value-field .cbi-input-select,
 .cbi-section-table-row > .cbi-value-field .cbi-input-text,
-.cbi-section-table-row > .cbi-value-field .cbi-input-password,
-.cbi-section-table-row > .cbi-value-field .cbi-dropdown {
+.cbi-section-table-row > .cbi-value-field .cbi-input-password {
 	width: 100%;
 }
 
@@ -833,20 +839,11 @@ div > .table > .tr:nth-of-type(2n) {
 
 /* fix multiple table */
 table table,
-.table .table {
-	border: 0;
-}
-
+.table .table,
 .cbi-value-field table,
-.cbi-value-field .table {
-	border: 0;
-}
-
+.cbi-value-field .table,
 td > table > tbody > tr > td,
-.td > .table > .tbody > .tr > .td {
-	border: 0;
-}
-
+.td > .table > .tbody > .tr > .td,
 .cbi-value-field > table > tbody > tr > td,
 .cbi-value-field > .table > .tbody > .tr > .td {
 	border: 0;
@@ -881,11 +878,25 @@ td > table > tbody > tr > td,
 	touch-action: manipulation;
 }
 
+.cbi-button-up,
+.cbi-button-down {
+	font-size: 1.2rem;
+	display: inline-block;
+	min-width: 0;
+	padding: .2rem .3rem;
+	color: transparent !important;
+	background: url(./icons/arrow.svg) no-repeat center;
+	background-size: 12px 20px;
+}
+
+.cbi-button-up {
+	transform: scaleY(-1);
+}
+
 .cbi-button:not(select) {
 	-webkit-appearance: none !important;
 }
 
-form[method="post"] + form[method="post"],
 .cbi-button + .cbi-button {
 	margin-left: .6rem;
 }
@@ -909,13 +920,25 @@ form[method="post"] + form[method="post"],
 .btn:hover,
 .btn:focus,
 .cbi-button:hover,
-.cbi-button:focus {
+.cbi-button:focus,
+.item:hover::after,
+.item:focus::after {
 	box-shadow: 0 0 2px rgba(0, 0, 0, .12), 0 2px 2px rgba(0, 0, 0, .2);
 }
 
 .btn:active,
-.cbi-button:active {
+.cbi-button:active,
+.item:active::after {
 	box-shadow: 0 10px 20px rgba(0, 0, 0, .19), 0 6px 6px rgba(0, 0, 0, .23);
+}
+
+.cbi-button-up:hover,
+.cbi-button-up:focus {
+	box-shadow: 0 0 2px rgba(0, 0, 0, .12), 0 -2px 2px rgba(0, 0, 0, .2);
+}
+
+.cbi-button-up:active {
+	box-shadow: 0 -10px 20px rgba(0, 0, 0, .19), 0 -6px 6px rgba(0, 0, 0, .23);
 }
 
 .btn:disabled,
@@ -968,6 +991,7 @@ form[method="post"] + form[method="post"],
 .cbi-button-reload,
 .cbi-button-action,
 .cbi-button[value="Submit"],
+.cbi-button[value="Upload"],
 .cbi-button[value$="Apply"],
 .cbi-button[onclick="addKey(event)"] {
 	font-weight: normal;
@@ -1010,7 +1034,7 @@ form[method="post"] + form[method="post"],
 .cbi-button-success,
 .cbi-button-download,
 .cbi-button[name="backup"],
-.cbi-button[value="Upload"],
+.cbi-button[value="Download"],
 .cbi-button[value="Save mtdblock"] {
 	font-weight: normal;
 	color: #fff;
@@ -1028,50 +1052,49 @@ form[method="post"] + form[method="post"],
 
 .cbi-value-field .cbi-button-add {
 	font-weight: bold;
+	margin: 9px 0 4px 3px;
 	padding: 1px 6px;
 }
 
-.cbi-value-field .cbi-button-neutral {
-	padding: 1px 8px;
-}
-
-/* table */
 .tabs {
 	margin: 0 -2rem;
 	padding-left: .5rem;
 	background-color: #fff;
 }
 
-.cbi-tabmenu > li,
-.tabs > li {
+.tabs > li,
+.cbi-tabmenu > li {
 	display: inline-block;
-	padding: .6rem 0;
+	padding: .55rem 0;
+	cursor: pointer;
 }
 
-.cbi-tabmenu > li > a,
-.tabs > li > a {
-	padding: .5rem .8rem;
-	text-decoration: none;
-	color: #404040;
+.tabs > li {
+	padding-bottom: .4rem;
+	border-bottom: .2rem solid transparent;
 }
 
 .tabs > li[class~="active"],
 .tabs > li:hover {
-	margin-bottom: -.18751rem;
+	border-bottom-color: #09c;
+	border-bottom-color: var(--main-color);
+}
+
+.tabs > li:hover {
 	cursor: pointer;
-	color: #09c;
-	color: var(--main-color);
-	border-bottom: #09c;
-	border-bottom: .2rem solid var(--main-color);
+	border-bottom-color: #c9c9c9;
+}
+
+.tabs > li > a,
+.cbi-tabmenu > li > a {
+	padding: .6rem .9rem;
+	text-decoration: none;
+	color: #404040;
 }
 
 .tabs > li[class~="active"] > a {
 	color: #09c;
 	color: var(--main-color);
-}
-
-.tabs > li:hover {
-	border-bottom: .18751rem solid #c9c9c9;
 }
 
 .cbi-tabmenu {
@@ -1097,15 +1120,15 @@ form[method="post"] + form[method="post"],
 }
 
 [data-tab-title] {
+	overflow: hidden;
 	height: 0;
 	opacity: 0;
-	overflow: hidden;
 }
 
 [data-tab-active="true"] {
-	opacity: 1;
-	height: auto;
 	overflow: visible;
+	height: auto;
+	opacity: 1;
 	transition: opacity .25s ease-in;
 }
 
@@ -1131,9 +1154,51 @@ form[method="post"] + form[method="post"],
 	display: table-cell;
 }
 
+.cbi-value-description {
+	font-size: small;
+	padding-top: .4rem;
+	opacity: .5;
+}
+
+.cbi-value-title {
+	display: table-cell;
+	float: left;
+	width: 23rem;
+	padding-top: .35rem;
+	padding-right: 2rem;
+	text-align: right;
+	word-wrap: break-word;
+}
+
+.cbi-value {
+	display: inline-block;
+	width: 100%;
+	padding: .35rem 1rem .2rem 1rem;
+}
+
+.cbi-value ul {
+	line-height: 1.25;
+}
+
+.cbi-value-field .cbi-dropdown,
+.cbi-value-field .cbi-input-select,
+.cbi-value input[type="text"],
+.cbi-value input[type="password"] {
+	min-width: 25rem;
+}
+
+#cbi-firewall-zone .cbi-input-select,
+#cbi-network-switch_vlan .cbi-input-select {
+	min-width: 11rem;
+}
+
+#cbi-network-switch_vlan .cbi-input-text {
+	max-width: 3rem;
+}
+
 .cbi-input-invalid {
 	color: #f00;
-	border-color: #f00;
+	border-bottom-color: #f00;
 }
 
 .cbi-section-error {
@@ -1153,40 +1218,6 @@ form[method="post"] + form[method="post"],
 .cbi-section-error ul li {
 	font-weight: bold;
 	color: #f00;
-}
-
-.cbi-value-helpicon > img {
-	display: none;
-}
-
-.cbi-value-helpicon:before {
-	content: "\f059";
-}
-
-.cbi-value-description {
-	font-size: small;
-	padding: .5rem 0 0 0;
-	opacity: .5;
-}
-
-.cbi-value-title {
-	display: table-cell;
-	float: left;
-	width: 23rem;
-	padding-top: .4rem;
-	padding-right: 2rem;
-	text-align: right;
-	word-wrap: break-word;
-}
-
-.cbi-value {
-	display: inline-block;
-	width: 100%;
-	padding: .3rem 1rem;
-}
-
-.cbi-value ul {
-	line-height: 1.25;
 }
 
 .td[data-title]::before {
@@ -1226,7 +1257,7 @@ form[method="post"] + form[method="post"],
 
 .cbi-rowstyle-2 .cbi-button-up,
 .cbi-rowstyle-2 .cbi-button-down,
-.cbi-rowstyle-2:first-child {
+body:not(.Interfaces) .cbi-rowstyle-2:first-child {
 	background-color: #fff !important;
 }
 
@@ -1253,30 +1284,23 @@ form[method="post"] + form[method="post"],
 	margin: 0;
 }
 
-/* desc */
-.cbi-section-descr,
-.cbi-map-descr {
-	font-size: small;
-	line-height: 1.42857143;
-	padding: .5rem;
-	color: #999;
-}
-
+/* lists */
 .cbi-dynlist {
 	line-height: 1.3;
 	flex-direction: column;
 	min-height: 30px;
+	cursor: text;
 }
 
 .cbi-dynlist > .item {
 	position: relative;
-	max-width: 24.9rem;
-	margin: 0 2em 4px 0;
-	padding: 2px 4px;
-	cursor: default;
+	max-width: 25rem;
+	margin-right: 2em;
+	padding: .5em .25em .25em 0;
 	pointer-events: none;
 	color: #666;
 	border-bottom: 2px solid rgba(0, 0, 0, .26);
+	outline: 0;
 }
 
 .cbi-dynlist[name="sshkeys"] > .item {
@@ -1303,13 +1327,36 @@ form[method="post"] + form[method="post"],
 	word-break: break-word;
 }
 
+.cbi-dynlist > .add-item {
+	display: inline-flex;
+	align-items: center;
+	width: 100%;
+	min-width: 16rem;
+}
+
+.cbi-dynlist > .add-item:not([ondrop]) > input {
+	overflow: hidden;
+	width: 100%;
+	min-width: 15rem;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+.cbi-dynlist > .add-item[ondrop] > input {
+	min-width: 13rem;
+}
+
 .cbi-dynlist,
 .cbi-dropdown {
 	position: relative;
 	display: inline-flex;
-	height: auto;
 	padding: 0;
-	cursor: default;
+}
+
+.cbi-dropdown[placeholder*="select"] {
+	max-width: 25rem;
+	height: auto;
+	margin-top: -3px;
 }
 
 .cbi-dropdown > ul {
@@ -1320,6 +1367,7 @@ form[method="post"] + form[method="post"],
 	margin: 0 !important;
 	padding: 0;
 	list-style: none;
+	outline: 0;
 }
 
 .cbi-dropdown > ul.preview {
@@ -1341,7 +1389,9 @@ form[method="post"] + form[method="post"],
 	flex-shrink: 0;
 	justify-content: center;
 	padding: 0 .25em;
+	cursor: default;
 	text-align: center;
+	outline: 0;
 }
 
 .cbi-dropdown > .more,
@@ -1400,10 +1450,6 @@ form[method="post"] + form[method="post"],
 
 .cbi-dropdown > ul > li input[type="text"] {
 	height: 20px;
-}
-
-.cbi-dropdown[open] {
-	position: relative;
 }
 
 .cbi-dropdown[open] > ul.dropdown {
@@ -1483,6 +1529,43 @@ form[method="post"] + form[method="post"],
 	width: auto;
 }
 
+/* progressbar */
+.cbi-progressbar {
+	position: relative;
+	min-width: 170px;
+	height: 20px;
+	margin: 6px 0;
+	border: thin solid #999;
+	background: #eee;
+}
+
+.cbi-progressbar > div {
+	width: 0;
+	height: 100%;
+	transition: width .25s ease-in;
+	background: #5bc0de;
+	background: var(--bar-bg);
+}
+
+.cbi-progressbar::after {
+	font-family: monospace;
+	font-size: 1.3em;
+	font-weight: bold;
+	font-size-adjust: .38;
+	line-height: normal;
+	position: absolute;
+	top: 2px;
+	right: 0;
+	bottom: 2px;
+	left: 0;
+	overflow: hidden;
+	content: attr(title);
+	text-align: center;
+	white-space: pre;
+	text-overflow: ellipsis;
+	text-shadow: 0 0 2px #eee;
+}
+
 #modal_overlay {
 	position: fixed;
 	z-index: 900;
@@ -1525,6 +1608,7 @@ form[method="post"] + form[method="post"],
 	overflow: auto;
 	margin-bottom: .5em;
 	padding: 8.5px;
+	cursor: auto;
 	white-space: pre-wrap;
 	color: #eee;
 	outline: 0;
@@ -1593,7 +1677,7 @@ body.modal-overlay-active #modal_overlay {
 	bottom: 0;
 	left: .2em;
 	width: 32px;
-	content: " ";
+	content: "";
 	background: url(../resources/icons/loading.gif) no-repeat center;
 	background-size: 16px;
 }
@@ -1639,60 +1723,6 @@ body.modal-overlay-active #modal_overlay {
 
 .cbi-page-actions > form[method="post"] {
 	display: inline-block;
-}
-
-/* input */
-.cbi-value input[type="password"],
-.cbi-value input[type="text"] {
-	min-width: 15rem;
-}
-
-/* select */
-.cbi-value-field .cbi-dropdown,
-.cbi-value-field .cbi-input-select {
-	min-width: 15rem;
-}
-
-.cbi-value-field .cbi-input-invalid {
-	color: #f00;
-	border-bottom-color: #f00;
-}
-
-/* progressbar */
-.cbi-progressbar {
-	position: relative;
-	min-width: 170px;
-	height: 20px;
-	margin: 4px 0;
-	border: thin solid #999;
-	background: #eee;
-}
-
-.cbi-progressbar > div {
-	width: 0;
-	height: 100%;
-	transition: width .25s ease-in;
-	background: #5bc0de;
-	background: var(--bar-bg);
-}
-
-.cbi-progressbar::after {
-	font-family: monospace;
-	font-size: 1.3em;
-	font-weight: bold;
-	font-size-adjust: .38;
-	line-height: normal;
-	position: absolute;
-	top: 2px;
-	right: 0;
-	bottom: 2px;
-	left: 0;
-	overflow: hidden;
-	content: attr(title);
-	text-align: center;
-	white-space: pre;
-	text-overflow: ellipsis;
-	text-shadow: 0 0 2px #eee;
 }
 
 .th[data-type="button"],
@@ -1773,12 +1803,11 @@ td > .ifacebadge,
 
 #syslog {
 	font-size: small;
+	line-height: 1.25;
 	overflow-y: hidden;
 	width: 100%;
 	min-height: 15rem;
-	margin-bottom: 20px;
 	padding: 1rem;
-	padding-bottom: 2.5rem;
 	resize: none;
 	color: #eee;
 	border: 0;
@@ -1929,7 +1958,7 @@ td > .ifacebadge,
 
 .cbi-value-field .cbi-input-checkbox,
 .cbi-value-field .cbi-input-radio {
-	margin-top: .15rem;
+	margin-top: .1rem;
 }
 
 .cbi-value-field > ul > li {
@@ -1969,20 +1998,6 @@ td.cbi-value-field var,
 .td.cbi-value-field var {
 	font-style: italic;
 	color: #0069d6;
-}
-
-small {
-	font-size: 90%;
-	line-height: 1.42857143;
-	white-space: normal;
-}
-
-.cbi-button-up,
-.cbi-button-down {
-	font-size: 1.2rem;
-	display: inline-block;
-	min-width: 0;
-	padding: .2rem .3rem;
 }
 
 .cbi-optionals {
@@ -2060,8 +2075,6 @@ span[data-tooltip] .label {
 	text-decoration: none;
 	text-transform: uppercase;
 	color: #fff !important;
-	-webkit-border-radius: 3px;
-	-moz-border-radius: 3px;
 	border-radius: 3px;
 	background-color: #bfbfbf;
 	text-shadow: none;
@@ -2092,11 +2105,13 @@ label > input[type="radio"] {
 
 /* diagnostics */
 #diag-rc-output > pre,
-#command-rc-output > pre {
+#command-rc-output > pre,
+[data-page="admin-services-wol"] .notice code {
 	font-size: 1.2rem;
 	font-size-adjust: .35;
 	line-height: normal;
 	display: block;
+	overflow-y: hidden;
 	width: 100%;
 	padding: 8.5px;
 	white-space: pre;
@@ -2151,7 +2166,7 @@ input[name="nslookup"] {
 	box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .16), 0 0 2px 0 rgba(0, 0, 0, .12);
 }
 
-.node-main-login > .main form > div:nth-last-child(1) {
+.node-main-login > .main form > div:last-child {
 	float: right;
 }
 
@@ -2164,6 +2179,7 @@ input[name="nslookup"] {
 }
 
 .node-main-login > .main .cbi-input-text {
+	width: 100% !important;
 	min-width: 15rem;
 }
 
@@ -2179,18 +2195,10 @@ input[name="nslookup"] {
 	}
 }
 
-/* fix status overview */
-.node-status-overview > .main fieldset:nth-child(4) .td:nth-child(2) {
-	white-space: normal;
-}
-
-/* fix status processes */
+/* fix status */
+.node-status-overview > .main fieldset:nth-child(4) .td:nth-child(2),
 .node-status-processes > .main .table .tr .td:nth-child(3) {
 	white-space: normal;
-}
-
-.node-admin-status form {
-	margin: 2rem 2rem 0 0;
 }
 
 /* fix system reboot */
@@ -2205,11 +2213,11 @@ input[name="nslookup"] {
 }
 
 /* samba */
-#cbi-samba .cbi-value-last .cbi-value-field {
+#cbi-samba [data-tab="template"] .cbi-value-field {
 	display: block;
 }
 
-#cbi-samba .cbi-value-last .cbi-value-title {
+#cbi-samba [data-tab="template"] .cbi-value-title {
 	width: auto;
 	padding-bottom: .6rem;
 }
@@ -2287,6 +2295,7 @@ input[name="nslookup"] {
 }
 
 .Firewall form {
+	margin: 2rem 2rem 0 0;
 	padding: 0;
 	box-shadow: none;
 }
@@ -2319,7 +2328,8 @@ input[name="nslookup"] {
 	display: block;
 }
 
-#cbi-firewall-zone .td.cbi-section-actions {
+#cbi-firewall-zone .td,
+#cbi-network-switch_vlan .td {
 	width: 100%;
 }
 
@@ -2341,6 +2351,7 @@ input[name="nslookup"] {
 /* custom commands */
 .commandbox {
 	width: 24% !important;
+	margin: 10px 0 0 10px !important;
 	padding: .5rem 1rem;
 	border-bottom: thin solid #ccc;
 	background: #eee;
@@ -2361,14 +2372,18 @@ input[name="nslookup"] {
 
 .commandbox code {
 	position: absolute;
-	overflow-x: hidden;
-	overflow-y: auto;
+	overflow: hidden;
 	max-width: 60%;
-	max-height: 55px;
-	margin-top: -3px;
 	margin-left: 4px;
 	padding: 2px 3px;
+	white-space: nowrap;
 	text-overflow: ellipsis;
+}
+
+.commandbox code:hover {
+	overflow-y: auto;
+	max-height: 50px;
+	white-space: normal;
 }
 
 .commandbox p:first-of-type {
@@ -2381,7 +2396,7 @@ input[name="nslookup"] {
 
 [data-page^="admin-system-commands"] .panel-title,
 [data-page^="command-cfg"] .mobile-hide,
-[data-page^="command-cfg"] header > .fill > .container > #logo {
+[data-page^="command-cfg"] .showSide {
 	display: none;
 }
 
@@ -2393,12 +2408,28 @@ input[name="nslookup"] {
 	max-width: 40%;
 	margin: 0;
 	animation: anim-fade-in 1.5s forwards;
+	word-break: break-word;
 	opacity: 0;
 }
 
 @keyframes anim-fade-in {
 	100% {
 		opacity: 1;
+	}
+}
+
+/* IE hacks */
+@media all and (-ms-high-contrast: none) {
+	.main > .main-left > .nav > .slide > .menu::before {
+		top: 30.25%;
+	}
+
+	.main > .main-left > .nav > li:last-child::before {
+		top: 20%;
+	}
+
+	.showSide::before {
+		top: -12px;
 	}
 }
 
@@ -2415,10 +2446,6 @@ input[name="nslookup"] {
 		width: calc(100% - 13rem);
 	}
 
-	.cbi-dynlist > .item {
-		max-width: 21.9rem;
-	}
-
 	.btn:not(button),
 	.cbi-button {
 		font-size: .8rem;
@@ -2429,14 +2456,25 @@ input[name="nslookup"] {
 		padding: .2rem .6rem;
 	}
 
+	fieldset,
+	.cbi-section {
+		padding: 1rem;
+	}
+
 	.cbi-value-title {
 		width: 15rem;
 		padding-right: .6rem;
 	}
 
-	fieldset,
-	.cbi-section {
-		padding: 1rem;
+	.cbi-value-field .cbi-dropdown,
+	.cbi-value-field .cbi-input-select,
+	.cbi-value input[type="text"],
+	.cbi-value input[type="password"] {
+		min-width: 22rem;
+	}
+
+	#cbi-firewall-zone .cbi-input-select {
+		min-width: 9rem;
 	}
 
 	.cbi-input-textarea {
@@ -2445,10 +2483,6 @@ input[name="nslookup"] {
 
 	.node-admin-status > .main fieldset li > a {
 		padding: .3rem .6rem;
-	}
-
-	#cbi-firewall-zone > .table {
-		display: block;
 	}
 }
 
@@ -2477,12 +2511,8 @@ input[name="nslookup"] {
 		width: calc(100% - 13rem);
 	}
 
-	.cbi-dynlist > .item {
-		max-width: 19.9rem;
-	}
-
-	.cbi-tabmenu > li > a,
-	.tabs > li > a {
+	.tabs > li > a,
+	.cbi-tabmenu > li > a {
 		padding: .2rem .5rem;
 	}
 
@@ -2500,9 +2530,21 @@ input[name="nslookup"] {
 		width: 100%;
 	}
 
+	.cbi-value-field .cbi-dropdown,
+	.cbi-value-field .cbi-input-select,
+	.cbi-value input[type="text"],
+	.cbi-value input[type="password"] {
+		min-width: 19rem;
+	}
+
+	#cbi-firewall-zone .cbi-input-select {
+		min-width: 4rem;
+	}
+
 	.main > .main-left > .nav > li,
 	.main > .main-left > .nav > li a,
-	.main > .main-left > .nav > .slide > .menu {
+	.main > .main-left > .nav > .slide > .menu,
+	.main > .main-left > .nav > li > [data-title="Logout"] {
 		font-size: .9rem;
 	}
 
@@ -2520,7 +2562,8 @@ input[name="nslookup"] {
 
 	[data-page="admin-network-firewall-forwards"] .table:not(.cbi-section-table),
 	[data-page="admin-network-firewall-rules"] .table:not(.cbi-section-table),
-	[data-page="admin-network-hosts"] .table {
+	[data-page="admin-network-hosts"] .table,
+	[data-page="admin-network-routes"] .table {
 		overflow-y: visible;
 	}
 
@@ -2538,14 +2581,13 @@ input[name="nslookup"] {
 		position: relative;
 	}
 
-	[data-page^="command-cfg"] header > .fill > .container > .brand {
-		display: block;
-		margin-top: -1.75rem;
-	}
-
 	html,
 	.main {
 		overflow-y: visible;
+	}
+
+	.main > .loading > span {
+		top: 25%;
 	}
 
 	.main-left {
@@ -2558,29 +2600,30 @@ input[name="nslookup"] {
 		width: 100%;
 	}
 
-	.cbi-dynlist > .item {
-		max-width: 14.9rem;
-	}
-
 	.showSide {
-		display: inline-block;
-		overflow: visible;
-		margin-right: .5rem;
-		padding: .1rem;
+		position: relative;
+		top: .18rem;
+		display: inline-flex;
+		align-items: center;
+		width: 1.6rem;
+		height: 1.6rem;
+		margin-right: .7rem;
 		cursor: pointer;
-		border-radius: 50%;
 	}
 
-	.showSide:before {
-		font-size: 1.7rem;
-		content: "\e20e";
+	.showSide::before {
+		position: absolute;
+		left: 1px;
+		width: 24px;
+		height: 24px;
+		content: "";
+		background: url(./icons/menu.svg) no-repeat center;
 	}
 
 	body:not(.logged-in) .showSide {
 		visibility: hidden;
 		width: 0;
 		margin: 0;
-		padding: 0;
 	}
 
 	.node-main-login > .main .cbi-value-title {
@@ -2588,17 +2631,36 @@ input[name="nslookup"] {
 	}
 
 	.cbi-value-title {
-		width: 9rem;
+		width: 12rem;
 		padding-right: 1rem;
 	}
 
+	.cbi-value-field .cbi-dropdown,
+	.cbi-value-field .cbi-input-select,
+	.cbi-value input[type="text"] {
+		width: 16rem;
+		min-width: 16rem;
+	}
+
+	.cbi-value input[type="password"],
+	.cbi-value input[name^="pw"],
+	.cbi-value input[data-update="change"]:nth-child(2) {
+		width: 13rem !important;
+		min-width: 13rem;
+	}
+
 	#diag-rc-output > pre,
-	#command-rc-output > pre {
+	#command-rc-output > pre,
+	[data-page="admin-services-wol"] .notice code {
 		font-size: 1rem;
 	}
 
 	.table {
 		display: block;
+	}
+
+	.Interfaces .table {
+		overflow-x: hidden;
 	}
 
 	#packages.table {
@@ -2733,6 +2795,7 @@ input[name="nslookup"] {
 
 	.commandbox {
 		width: 100% !important;
+		margin-left: 0 !important;
 	}
 }
 
@@ -2749,7 +2812,6 @@ input[name="nslookup"] {
 	fieldset,
 	.cbi-section {
 		margin: 1rem 0 0 0;
-		padding: 1rem;
 	}
 
 	.tabs {
@@ -2760,7 +2822,8 @@ input[name="nslookup"] {
 		margin: 0 1rem 1.5rem 1rem;
 	}
 
-	.main > .main-left > .nav > .slide > .menu {
+	.main > .main-left > .nav > .slide > .menu,
+	.main > .main-left > .nav > li > [data-title="Logout"] {
 		font-size: 1.2rem;
 	}
 
@@ -2770,15 +2833,17 @@ input[name="nslookup"] {
 
 	.cbi-value-title {
 		display: block;
-		width: 100%;
 		min-width: 0 !important;
-		margin-top: 1rem;
-		margin-bottom: .5rem;
+		margin: .5rem 0;
 		text-align: left;
 	}
 
+	.cbi-value-title,
+	.cbi-value-description,
 	.cbi-value-field,
-	.cbi-value-description {
+	.cbi-value-field .cbi-dropdown,
+	.cbi-value-field .cbi-input-select,
+	.cbi-value input[type="text"] {
 		width: 100%;
 	}
 
@@ -2786,13 +2851,8 @@ input[name="nslookup"] {
 		display: inline-block;
 	}
 
-	.cbi-tabmenu > li,
-	.tabs > li {
-		padding: .6rem 0;
-	}
-
-	.cbi-tabmenu > li > a,
-	.tabs > li > a {
+	.tabs > li > a,
+	.cbi-tabmenu > li > a {
 		font-size: .9rem;
 		padding: .2rem .3rem;
 	}
@@ -2814,7 +2874,7 @@ input[name="nslookup"] {
 		padding: 0;
 	}
 
-	.node-main-login > .main form > div:nth-last-child(1) {
+	.node-main-login > .main form > div:last-child {
 		margin-top: 2rem;
 	}
 
@@ -2832,9 +2892,11 @@ input[name="nslookup"] {
 		margin-top: -8px;
 	}
 
+	#syslog,
 	#diag-rc-output > pre,
-	#command-rc-output > pre {
-		font-size: .8rem;
+	#command-rc-output > pre,
+	[data-page="admin-services-wol"] .notice code {
+		font-size: .8rem !important;
 	}
 
 	h2 {
@@ -2896,8 +2958,19 @@ input[name="nslookup"] {
 		font-size: .62rem;
 	}
 
-	#cbi-wireless .td {
+	#cbi-wireless > #wifi_assoclist_table .td {
 		overflow: hidden;
+	}
+
+	#cbi-wireless > .cbi-section-node .td,
+	.Interfaces .td.cbi-section-actions {
+		text-align: center !important;
+	}
+
+	[data-page="admin-status-processes"] .td[data-title="Hang Up"]::before,
+	[data-page="admin-status-processes"] .td[data-title="Terminate"]::before,
+	[data-page="admin-status-processes"] .td[data-title="Kill"]::before {
+		display: none;
 	}
 
 	.hide-sm,
@@ -2910,6 +2983,10 @@ input[name="nslookup"] {
 	::-webkit-scrollbar {
 		width: 10px;
 		height: 10px;
+	}
+
+	::-webkit-scrollbar,
+	::-webkit-scrollbar-corner {
 		background: transparent;
 	}
 
@@ -2923,54 +3000,5 @@ input[name="nslookup"] {
 
 	::-webkit-scrollbar-thumb:active {
 		background: #424242;
-	}
-}
-
-@media screen and (min-width: 1152px) {
-	.cbi-value input[type="password"],
-	.cbi-value input[type="text"] {
-		min-width: 20rem;
-	}
-
-	.cbi-value-field .cbi-input-select {
-		width: 20rem;
-	}
-
-	.cbi-value-field .cbi-dropdown {
-		min-width: 20rem;
-	}
-
-	.cbi-section-node .tr {
-		overflow: hidden;
-	}
-}
-
-@media screen and (min-width: 1366px) {
-	.cbi-value input[type="password"],
-	.cbi-value input[type="text"] {
-		min-width: 22rem;
-	}
-
-	.cbi-value-field .cbi-input-select {
-		width: 22rem;
-	}
-
-	.cbi-value-field .cbi-dropdown {
-		min-width: 22rem;
-	}
-}
-
-@media screen and (min-width: 1600px) {
-	.cbi-value input[type="password"],
-	.cbi-value input[type="text"] {
-		min-width: 25rem;
-	}
-
-	.cbi-value-field .cbi-input-select {
-		width: 25rem;
-	}
-
-	.cbi-value-field .cbi-dropdown {
-		min-width: 25rem;
 	}
 }
