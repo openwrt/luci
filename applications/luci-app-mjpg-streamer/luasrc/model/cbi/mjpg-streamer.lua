@@ -219,5 +219,6 @@ exceed=s:taboption(this_tab, Value, "exceed", translate("Exceed"), translate("Al
 
 command=s:taboption(this_tab, Value, "command", translate("Command to run"), translate("Execute command after saving picture. Mjpg-streamer parse the filename as first parameter to your script."))
 
+link=s:taboption(this_tab, Value, "link", translate("Link newest picture to fixed file name"), translate("Link the last picture in ringbuffer to fixed named file provided."))
 
 return m
