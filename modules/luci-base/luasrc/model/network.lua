@@ -1160,13 +1160,7 @@ function protocol.is_dynamic(self)
 end
 
 function protocol.is_auto(self)
-	local auto = self:_get("auto")
-
-	if auto == "0" then
-		return false
-	else
-		return true
-	end
+	return (self:_get("auto") ~= "0")
 end
 
 function protocol.is_alias(self)
