@@ -276,6 +276,6 @@
 
     });
 
-    $('#cbi-network-switch_vlan .table').wrap('#vlan_table');
+    $('#cbi-network-switch_vlan .table').wrap('<div id="vlan_table"></div>');
     
 })(window, jQuery);
