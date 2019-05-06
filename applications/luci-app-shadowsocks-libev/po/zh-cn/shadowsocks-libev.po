@@ -6,7 +6,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: applications/luci-app-shadowsocks-libev/luasrc/model/shadowsocks-libev.lua:170
+#: applications/luci-app-shadowsocks-libev/luasrc/model/shadowsocks-libev.lua:172
 msgid "<hidden>"
 msgstr "<已隐藏>"
 
@@ -56,7 +56,9 @@ msgstr "对于源地址不在列表中的报文的默认行为"
 msgid ""
 "Definition of remote shadowsocks servers. Disable any of them will also "
 "disable instances referring to it."
-msgstr "在此页面设定访问远端shadowsocks服务器的参数。请注意，禁用远端服务器会同时停止与之关联的shadowsocks-libev组件"
+msgstr ""
+"在此页面设定访问远端shadowsocks服务器的参数。请注意，禁用远端服务器会同时停止"
+"与之关联的shadowsocks-libev组件"
 
 #: applications/luci-app-shadowsocks-libev/luasrc/model/cbi/shadowsocks-libev/rules.lua:33
 msgid "Destination Settings"
@@ -92,15 +94,15 @@ msgstr "转发"
 msgid "Dst ip/net forward file"
 msgstr "转发（文件）"
 
-#: applications/luci-app-shadowsocks-libev/luasrc/model/shadowsocks-libev.lua:126
+#: applications/luci-app-shadowsocks-libev/luasrc/model/shadowsocks-libev.lua:128
 msgid "Enable SO_REUSEPORT"
 msgstr "启用SO_REUSEPORT"
 
-#: applications/luci-app-shadowsocks-libev/luasrc/model/shadowsocks-libev.lua:124
+#: applications/luci-app-shadowsocks-libev/luasrc/model/shadowsocks-libev.lua:126
 msgid "Enable TCP Fast Open"
 msgstr "启用TCP Fast Open"
 
-#: applications/luci-app-shadowsocks-libev/luasrc/model/shadowsocks-libev.lua:125
+#: applications/luci-app-shadowsocks-libev/luasrc/model/shadowsocks-libev.lua:127
 msgid "Enable TCP_NODELAY"
 msgstr "启用TCP_NODELAY"
 
@@ -148,7 +150,7 @@ msgstr "对于源地址在列表中的报文，通过ss-redir转发"
 msgid "General Settings"
 msgstr "常规设置"
 
-#: applications/luci-app-shadowsocks-libev/luasrc/model/shadowsocks-libev.lua:123
+#: applications/luci-app-shadowsocks-libev/luasrc/model/shadowsocks-libev.lua:125
 msgid "IPv6 First"
 msgstr "IPv6优先"
 
@@ -156,7 +158,7 @@ msgstr "IPv6优先"
 msgid "Ingress interfaces"
 msgstr "入口网卡"
 
-#: applications/luci-app-shadowsocks-libev/luasrc/model/shadowsocks-libev.lua:197
+#: applications/luci-app-shadowsocks-libev/luasrc/model/shadowsocks-libev.lua:199
 msgid "Install package %q"
 msgstr "安装%q"
 
@@ -169,11 +171,14 @@ msgid ""
 "Instances of shadowsocks-libev components, e.g. ss-local, ss-redir, ss-"
 "tunnel, ss-server, etc. To enable an instance it is required to enable both "
 "the instance itself and the remote server it refers to."
-msgstr "此页面展示本地运行的shadowsocks-libev各组件实例，如ss-local、ss-redir、ss-tunnel、ss-server等。请注意，实际启用一个实例要求实例本身及所关联的远端服务器都是启用状态。"
+msgstr ""
+"此页面展示本地运行的shadowsocks-libev各组件实例，如ss-local、ss-redir、ss-"
+"tunnel、ss-server等。请注意，实际启用一个实例要求实例本身及所关联的远端服务器"
+"都是启用状态。"
 
 #: applications/luci-app-shadowsocks-libev/luasrc/model/shadowsocks-libev.lua:99
-msgid "Key (base64 encoding)"
-msgstr "密钥（base64编码）"
+msgid "Key (base64)"
+msgstr "密钥（base64）"
 
 #: applications/luci-app-shadowsocks-libev/luasrc/controller/shadowsocks-libev.lua:13
 #: applications/luci-app-shadowsocks-libev/luasrc/model/cbi/shadowsocks-libev/instances.lua:10
@@ -217,7 +222,11 @@ msgid ""
 "<em>Src ip/net checkdst</em> and if none matches <em>Src default</em> will "
 "give the default action to be taken. If the prior check results in action "
 "<em>checkdst</em>, packets will continue to have their dst addresses checked."
-msgstr "在此页面，您可以配置指定报文是否通过ss-redir转发。启用后，规则会先将报文的源地址与相应的地址集进行匹配，依次决定是否“绕过（<em>bypass</em>）”、“转发（<em>forward</em>）”，或“继续匹配目的地址（<em>checkdst</em>）”；若未在集合中找到匹配，则执行指定的默认动作。继续匹配目的地址时同理。"
+msgstr ""
+"在此页面，您可以配置指定报文是否通过ss-redir转发。启用后，规则会先将报文的源"
+"地址与相应的地址集进行匹配，依次决定是否“绕过（<em>bypass</em>）”、“转发"
+"（<em>forward</em>）”，或“继续匹配目的地址（<em>checkdst</em>）”；若未在集合"
+"中找到匹配，则执行指定的默认动作。继续匹配目的地址时同理。"
 
 #: applications/luci-app-shadowsocks-libev/luasrc/model/cbi/shadowsocks-libev/rules.lua:51
 msgid "Only apply rules on packets from these network interfaces"
@@ -227,7 +236,7 @@ msgstr "仅对来自指定网卡的报文应用规则"
 msgid "Overview"
 msgstr "概览"
 
-#: applications/luci-app-shadowsocks-libev/luasrc/model/shadowsocks-libev.lua:196
+#: applications/luci-app-shadowsocks-libev/luasrc/model/shadowsocks-libev.lua:198
 msgid "Package is not installed"
 msgstr "依赖包未安装"
 
@@ -239,7 +248,15 @@ msgstr "给iptables的额外参数。请小心使用"
 msgid "Password"
 msgstr "密码"
 
-#: applications/luci-app-shadowsocks-libev/luasrc/model/shadowsocks-libev.lua:123
+#: applications/luci-app-shadowsocks-libev/luasrc/model/shadowsocks-libev.lua:120
+msgid "Plugin"
+msgstr "启用插件"
+
+#: applications/luci-app-shadowsocks-libev/luasrc/model/shadowsocks-libev.lua:121
+msgid "Plugin Options"
+msgstr "插件选项"
+
+#: applications/luci-app-shadowsocks-libev/luasrc/model/shadowsocks-libev.lua:125
 msgid "Prefer IPv6 addresses when resolving names"
 msgstr "名字解析时优先取用IPv6地址"
 
@@ -257,7 +274,7 @@ msgstr "远端服务器"
 msgid "Remote server"
 msgstr "服务器"
 
-#: applications/luci-app-shadowsocks-libev/luasrc/model/shadowsocks-libev.lua:120
+#: applications/luci-app-shadowsocks-libev/luasrc/model/shadowsocks-libev.lua:122
 msgid "Run as"
 msgstr "运行时用户"
 
@@ -313,7 +330,7 @@ msgstr "超时时间（秒）"
 msgid "Tunnel address"
 msgstr "隧道对端地址"
 
-#: applications/luci-app-shadowsocks-libev/luasrc/model/shadowsocks-libev.lua:122
+#: applications/luci-app-shadowsocks-libev/luasrc/model/shadowsocks-libev.lua:124
 msgid "Verbose"
 msgstr "记录详细日志"
 
