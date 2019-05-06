@@ -117,6 +117,8 @@ function options_common(s, tab)
 	o.datatype = "uinteger"
 	o = s:taboption(tab, Value, "timeout", translate("Timeout (sec)"))
 	o.datatype = "uinteger"
+	s:taboption(tab, Value, "plugin", translate("Plugin"))
+	s:taboption(tab, Value, "plugin_opts", translate("Plugin Options"))
 	s:taboption(tab, Value, "user", translate("Run as"))
 
 	s:taboption(tab, Flag, "verbose", translate("Verbose"))
@@ -228,6 +230,8 @@ names_options_common = {
 	"mode",
 	"mtu",
 	"timeout",
+	"plugin",
+	"plugin_opts",
 	"user",
 }
 
