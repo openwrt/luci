@@ -42,6 +42,8 @@ local update_interfaces = function(old_ifname, new_ifname)
 	end
 end
 
+local vlan_already_created
+
 m.uci:foreach("network", "switch",
 	function(x)
 		local sid         = x['.name']
@@ -200,8 +202,29 @@ m.uci:foreach("network", "switch",
 
 		-- When creating a new vlan, preset it with the highest found vid + 1.
 		s.create = function(self, section, origin)
-			-- Filter by switch
-			if m:get(origin, "device") ~= switch_name then
+			-- VLAN has already been created for another switch
+			if vlan_already_created then
+				return
+
+			-- VLAN add button was pressed in an empty VLAN section so only
+			-- accept the create event if our switch is without existing VLANs
+			elseif origin == "" then
+				local is_empty_switch = true
+
+				m.uci:foreach("network", "switch_vlan",
+					function(s)
+						if s.device == switch_name then
+							is_empty_switch = false
+							return false
+						end
+					end)
+
+				if not is_empty_switch then
+					return
+				end
+
+			-- VLAN was created for another switch
+			elseif m:get(origin, "device") ~= switch_name then
 				return
 			end
 
@@ -226,6 +249,8 @@ m.uci:foreach("network", "switch",
 			if has_vlan4k then
 				m:set(sid, has_vlan4k, max_id + 1)
 			end
+
+			vlan_already_created = true
 
 			return sid
 		end
