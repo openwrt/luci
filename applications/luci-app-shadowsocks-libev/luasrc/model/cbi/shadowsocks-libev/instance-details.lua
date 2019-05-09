@@ -27,7 +27,7 @@ ss.option_install_package(s, "general")
 ss.options_common(s, "advanced")
 
 if stype == "ss_server" then
-	ss.options_server(s, "general")
+	ss.options_server(s, {tab="general"})
 	o = s:taboption("general", Value, "bind_address",
 		translate("Bind address"),
 		translate("The address ss-server will initiate connection from"))

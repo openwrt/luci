@@ -19,13 +19,18 @@ if sname then
 	end
 	s = m:section(NamedSection, sname, "server")
 	m.title = m.title .. ' - ' .. sname
+	opts = {}
 else
 	s = m:section(TypedSection, "server")
 	s.template = 'cbi/tblsection'
 	s.addremove = true
+	s.extedit = function(self, section)
+		return 'servers/' .. section
+	end
+	opts = {row=true}
 end
 
 s:option(Flag, "disabled", translate("Disable"))
-ss.options_server(s)
+ss.options_server(s, opts)
 
 return m
