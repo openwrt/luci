@@ -29,7 +29,7 @@ msgstr "Añadir enlace"
 msgid "Add Wireless Uplink Configuration"
 msgstr "Añadir configuración de enlace inalámbrico"
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:106
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:113
 msgid ""
 "Additional trigger delay in seconds before travelmate processing begins."
 msgstr ""
@@ -52,6 +52,12 @@ msgstr "Autenticación"
 msgid "Automatic"
 msgstr "Automático"
 
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:107
+msgid ""
+"Automatically resets the 'Faulty Stations' list after n minutes. Default is "
+"'0' which means no expiry."
+msgstr ""
+
 #: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/wifi_add.lua:44
 #: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/wifi_edit.lua:27
 #: applications/luci-app-travelmate/luasrc/view/travelmate/stations.htm:111
@@ -64,11 +70,11 @@ msgstr "BSSID"
 msgid "Back to overview"
 msgstr "Volver a la visión general"
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:63
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:58
 msgid "Captive Portal Detection"
 msgstr "Detección de portal cautivo"
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:64
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:59
 msgid ""
 "Check the internet availability, log captive portal redirections and keep "
 "the uplink connection 'alive'."
@@ -91,15 +97,15 @@ msgstr ""
 "Configuración del paquete travelmate para habilitar la funcionalidad de "
 "enrutador de viaje."
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:111
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:118
 msgid "Connection Limit"
 msgstr "Límite de conexión"
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:30
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:25
 msgid "Create Uplink interface"
 msgstr "Crear interfaz de enlace"
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:31
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:26
 msgid ""
 "Create a new wireless wan uplink interface, configure it to use dhcp and"
 msgstr ""
@@ -154,11 +160,11 @@ msgstr "Editar la configuración del enlace inalámbrico"
 msgid "Edit this Uplink"
 msgstr "Editar este enlace"
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:59
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:54
 msgid "Enable Travelmate"
 msgstr "Habilitar Travelmate"
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:97
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:98
 msgid "Enable Verbose Debug Logging"
 msgstr "Habilitar registro de depuración detallado"
 
@@ -173,7 +179,7 @@ msgstr "Habilitar registro de depuración detallado"
 msgid "Encryption"
 msgstr "Encriptación"
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:94
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:95
 msgid "Extra Options"
 msgstr "Opciones extra"
 
@@ -218,7 +224,7 @@ msgstr "Forzar TKIP"
 msgid "Force TKIP and CCMP (AES)"
 msgstr "Forzar TKIP and CCMP (AES)"
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:124
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:131
 msgid ""
 "How long should travelmate wait for a successful wlan uplink connection."
 msgstr ""
@@ -241,11 +247,11 @@ msgstr "Ignorar BSSID"
 msgid "Input file not found, please check your configuration."
 msgstr "Archivo de entrada no encontrado, por favor revise su configuración."
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:123
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:130
 msgid "Interface Timeout"
 msgstr "Tiempo de espera de la interfaz"
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:29
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:24
 msgid "Interface Wizard"
 msgstr "Asistente de interfaz"
 
@@ -253,11 +259,15 @@ msgstr "Asistente de interfaz"
 msgid "Last Run"
 msgstr "Último inicio"
 
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:106
+msgid "List Auto Expiry"
+msgstr ""
+
 #: applications/luci-app-travelmate/luasrc/view/travelmate/runtime.htm:59
 msgid "Loading"
 msgstr "Cargando"
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:118
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:125
 msgid ""
 "Minimum signal quality threshold as percent for conditional uplink (dis-) "
 "connections."
@@ -273,26 +283,30 @@ msgstr "Mover abajo"
 msgid "Move up"
 msgstr "Mover arriba"
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:74
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:75
 msgid "Name of the used uplink interface."
 msgstr "Nombre de la interfaz de enlace utilizada."
+
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:63
+msgid "Net Error Check"
+msgstr ""
 
 #: applications/luci-app-travelmate/luasrc/view/travelmate/wifi_scan.htm:25
 msgid "Open"
 msgstr "Abrir"
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:95
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:96
 msgid ""
 "Options for further tweaking in case the defaults are not suitable for you."
 msgstr ""
 "Opciones para ajustes adicionales en caso de que los valores predeterminados "
 "no sean adecuados para usted."
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:129
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:136
 msgid "Overall Timeout"
 msgstr "Tiempo de espera total"
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:130
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:137
 msgid "Overall retry timeout in seconds."
 msgstr "Tiempo de espera de reintento global en segundos."
 
@@ -330,11 +344,11 @@ msgstr "Ruta al certificado del cliente"
 msgid "Path to Private Key"
 msgstr "Ruta a la clave privada"
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:68
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:69
 msgid "ProActive Uplink Switch"
 msgstr "Interruptor de enlace proactivo"
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:69
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:70
 msgid ""
 "Proactively scan and switch to a higher prioritized uplink, despite of an "
 "already existing connection."
@@ -353,7 +367,7 @@ msgstr ""
 "enlaces existentes o escanear uno nuevo. El enlace utilizado actualmente se "
 "enfatiza en azul, las estaciones defectuosas en rojo."
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:101
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:102
 msgid "Radio Selection / Order"
 msgstr "Selección de Radio / Orden"
 
@@ -370,7 +384,7 @@ msgstr "Reiniciar"
 msgid "Restart Travelmate"
 msgstr "Reiniciar Travelmate"
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:102
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:103
 msgid ""
 "Restrict travelmate to a single radio (e.g. 'radio1') or change the overall "
 "scanning order (e.g. 'radio1 radio2 radio0')."
@@ -378,7 +392,7 @@ msgstr ""
 "Restringir Travelmate a una sola radio (por ejemplo, 'radio1') o cambie el "
 "orden de exploración general (por ejemplo, 'radio1 radio2 radio0')."
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:112
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:119
 msgid "Retry limit to connect to an uplink."
 msgstr "Vuelva a intentar el límite para conectarse a un enlace ."
 
@@ -413,7 +427,7 @@ msgstr "Escanear"
 msgid "Show/Hide QR-Codes"
 msgstr "Mostrar/Ocultar códigos QR"
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:117
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:124
 msgid "Signal Quality Threshold"
 msgstr "Umbral de calidad de señal"
 
@@ -473,7 +487,7 @@ msgstr ""
 "Este formulario le permite modificar el contenido del archivo de "
 "configuración inalámbrica principal (/etc/config/wireless)."
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:33
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:28
 msgid "This step has only to be done once."
 msgstr "Este paso solo debe hacerse una vez."
 
@@ -490,7 +504,11 @@ msgstr "Estado de Travelmate (Calidad)"
 msgid "Travelmate Version"
 msgstr "Versión de Travelmate"
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:105
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:64
+msgid "Treat missing internet availability as an error."
+msgstr ""
+
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:112
 msgid "Trigger Delay"
 msgstr "Retraso de disparo"
 
@@ -503,7 +521,7 @@ msgstr "Desconocido"
 msgid "Up"
 msgstr "Arriba"
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:73
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:74
 msgid "Uplink / Trigger interface"
 msgstr "Interfaz de enlace / disparador"
 
@@ -555,7 +573,7 @@ msgstr "Escanear red WiFi"
 msgid "Wireless Stations"
 msgstr "Estaciones WiFi"
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:32
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:27
 msgid "add it to the wan zone of the firewall."
 msgstr "añadir a la zona wan del firewall"
 

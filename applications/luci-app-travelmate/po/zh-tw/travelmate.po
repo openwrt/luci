@@ -32,7 +32,7 @@ msgstr "新增上行連線"
 msgid "Add Wireless Uplink Configuration"
 msgstr "新增無線上行連線配置"
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:106
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:113
 msgid ""
 "Additional trigger delay in seconds before travelmate processing begins."
 msgstr "在 travelmate 處理開始前的額外觸發延遲（秒）。"
@@ -53,6 +53,12 @@ msgstr "認證"
 msgid "Automatic"
 msgstr "自動"
 
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:107
+msgid ""
+"Automatically resets the 'Faulty Stations' list after n minutes. Default is "
+"'0' which means no expiry."
+msgstr ""
+
 #: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/wifi_add.lua:44
 #: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/wifi_edit.lua:27
 #: applications/luci-app-travelmate/luasrc/view/travelmate/stations.htm:111
@@ -65,11 +71,11 @@ msgstr "BSSID"
 msgid "Back to overview"
 msgstr "返回概述"
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:63
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:58
 msgid "Captive Portal Detection"
 msgstr "強制門戶檢測"
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:64
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:59
 msgid ""
 "Check the internet availability, log captive portal redirections and keep "
 "the uplink connection 'alive'."
@@ -89,15 +95,15 @@ msgid ""
 "functionality."
 msgstr "配置 travelmate 包，以啟用旅行路由器功能。"
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:111
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:118
 msgid "Connection Limit"
 msgstr "連線限制"
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:30
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:25
 msgid "Create Uplink interface"
 msgstr "建立上行連線介面"
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:31
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:26
 msgid ""
 "Create a new wireless wan uplink interface, configure it to use dhcp and"
 msgstr "建立一個新的無線 wan 上行介面，將其配置為使用 dhcp 及"
@@ -151,11 +157,11 @@ msgstr "編輯無線上行連線配置"
 msgid "Edit this Uplink"
 msgstr "編輯此上行連線"
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:59
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:54
 msgid "Enable Travelmate"
 msgstr "啟用 travelmate"
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:97
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:98
 msgid "Enable Verbose Debug Logging"
 msgstr "啟用詳細除錯日誌"
 
@@ -170,7 +176,7 @@ msgstr "啟用詳細除錯日誌"
 msgid "Encryption"
 msgstr "加密"
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:94
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:95
 msgid "Extra Options"
 msgstr "額外選項"
 
@@ -213,7 +219,7 @@ msgstr "強制 TKIP"
 msgid "Force TKIP and CCMP (AES)"
 msgstr "強制 TKIP 和 CCMP（AES）"
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:124
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:131
 msgid ""
 "How long should travelmate wait for a successful wlan uplink connection."
 msgstr "travelmate 等待 wlan 上行連線成功最長時間。"
@@ -234,11 +240,11 @@ msgstr "忽略 BSSID"
 msgid "Input file not found, please check your configuration."
 msgstr "未找到輸入檔案，請檢查您的配置。"
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:123
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:130
 msgid "Interface Timeout"
 msgstr "介面超時"
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:29
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:24
 msgid "Interface Wizard"
 msgstr "介面嚮導"
 
@@ -246,11 +252,15 @@ msgstr "介面嚮導"
 msgid "Last Run"
 msgstr "上次執行"
 
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:106
+msgid "List Auto Expiry"
+msgstr ""
+
 #: applications/luci-app-travelmate/luasrc/view/travelmate/runtime.htm:59
 msgid "Loading"
 msgstr "載入中"
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:118
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:125
 msgid ""
 "Minimum signal quality threshold as percent for conditional uplink (dis-) "
 "connections."
@@ -264,24 +274,28 @@ msgstr "下移"
 msgid "Move up"
 msgstr "上移"
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:74
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:75
 msgid "Name of the used uplink interface."
 msgstr "要使用的上行連線介面名稱。"
+
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:63
+msgid "Net Error Check"
+msgstr ""
 
 #: applications/luci-app-travelmate/luasrc/view/travelmate/wifi_scan.htm:25
 msgid "Open"
 msgstr "開"
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:95
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:96
 msgid ""
 "Options for further tweaking in case the defaults are not suitable for you."
 msgstr "如果預設值不適合您，可以選擇進一步調整。"
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:129
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:136
 msgid "Overall Timeout"
 msgstr "總體超時"
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:130
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:137
 msgid "Overall retry timeout in seconds."
 msgstr "總體重試超時（秒）。"
 
@@ -319,11 +333,11 @@ msgstr "客戶證書路徑"
 msgid "Path to Private Key"
 msgstr "私鑰路徑"
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:68
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:69
 msgid "ProActive Uplink Switch"
 msgstr "ProActive 上行鏈路切換器"
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:69
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:70
 msgid ""
 "Proactively scan and switch to a higher prioritized uplink, despite of an "
 "already existing connection."
@@ -338,7 +352,7 @@ msgstr ""
 "此處顯示 travelmate 介面（%s）所有已配置上行連線的概述。您可以編輯、刪除或重"
 "新排序現有連線，或掃描新上行連線。當前使用的上行連線以藍色突出顯示。"
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:101
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:102
 msgid "Radio Selection / Order"
 msgstr "無線電選擇/順序"
 
@@ -355,7 +369,7 @@ msgstr "重啟"
 msgid "Restart Travelmate"
 msgstr "重啟 Travelmate"
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:102
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:103
 msgid ""
 "Restrict travelmate to a single radio (e.g. 'radio1') or change the overall "
 "scanning order (e.g. 'radio1 radio2 radio0')."
@@ -363,7 +377,7 @@ msgstr ""
 "將 travelmate 限制在單個無線電上（例如“radio1”），或改變整個掃描順序（例"
 "如“radio1 radio2 radio0”）。"
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:112
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:119
 msgid "Retry limit to connect to an uplink."
 msgstr "連線到上行連線的重試限制。"
 
@@ -398,7 +412,7 @@ msgstr "掃描"
 msgid "Show/Hide QR-Codes"
 msgstr "顯示/隱藏 QR 碼"
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:117
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:124
 msgid "Signal Quality Threshold"
 msgstr "訊號質量閾值"
 
@@ -447,7 +461,7 @@ msgid ""
 "configuration file (/etc/config/wireless)."
 msgstr "此表單允許您修改主無線配置檔案（/etc/config/wireless）的內容。"
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:33
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:28
 msgid "This step has only to be done once."
 msgstr "此步驟只需執行一次。"
 
@@ -464,7 +478,11 @@ msgstr "Travelmate 狀態（質量）"
 msgid "Travelmate Version"
 msgstr "Travelmate 版本"
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:105
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:64
+msgid "Treat missing internet availability as an error."
+msgstr ""
+
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:112
 msgid "Trigger Delay"
 msgstr "觸發延遲"
 
@@ -477,7 +495,7 @@ msgstr "未知"
 msgid "Up"
 msgstr "上"
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:73
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:74
 msgid "Uplink / Trigger interface"
 msgstr "上行 / 觸發介面"
 
@@ -529,7 +547,7 @@ msgstr "無線掃描"
 msgid "Wireless Stations"
 msgstr "無線站點"
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:32
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:27
 msgid "add it to the wan zone of the firewall."
 msgstr "將其新增到防火牆的 wan 區域。"
 
