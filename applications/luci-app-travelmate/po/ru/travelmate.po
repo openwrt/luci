@@ -32,7 +32,7 @@ msgstr "Подключение к сети"
 msgid "Add Wireless Uplink Configuration"
 msgstr "Добавить настройку внешней беспроводной сети"
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:106
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:113
 msgid ""
 "Additional trigger delay in seconds before travelmate processing begins."
 msgstr "Дополнительная задержка в секундах до запуска TravelMate."
@@ -53,6 +53,12 @@ msgstr "Аутентификация"
 msgid "Automatic"
 msgstr "Автоматически"
 
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:107
+msgid ""
+"Automatically resets the 'Faulty Stations' list after n minutes. Default is "
+"'0' which means no expiry."
+msgstr ""
+
 #: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/wifi_add.lua:44
 #: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/wifi_edit.lua:27
 #: applications/luci-app-travelmate/luasrc/view/travelmate/stations.htm:111
@@ -65,11 +71,11 @@ msgstr "BSSID"
 msgid "Back to overview"
 msgstr "Назад в меню"
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:63
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:58
 msgid "Captive Portal Detection"
 msgstr ""
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:64
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:59
 msgid ""
 "Check the internet availability, log captive portal redirections and keep "
 "the uplink connection 'alive'."
@@ -88,15 +94,15 @@ msgid ""
 "functionality."
 msgstr "Настройка утилиты TravelMate - помощника путешественника. "
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:111
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:118
 msgid "Connection Limit"
 msgstr "Ограничение соединений"
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:30
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:25
 msgid "Create Uplink interface"
 msgstr ""
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:31
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:26
 msgid ""
 "Create a new wireless wan uplink interface, configure it to use dhcp and"
 msgstr ""
@@ -152,11 +158,11 @@ msgstr "Редактировать настройки беспроводной �
 msgid "Edit this Uplink"
 msgstr "Редактировать настройки сети"
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:59
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:54
 msgid "Enable Travelmate"
 msgstr "Включить Travelmate"
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:97
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:98
 msgid "Enable Verbose Debug Logging"
 msgstr "Включить подробное ведение журнала отладки"
 
@@ -171,7 +177,7 @@ msgstr "Включить подробное ведение журнала отл
 msgid "Encryption"
 msgstr "Шифрование"
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:94
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:95
 msgid "Extra Options"
 msgstr "Дополнительные настройки"
 
@@ -216,7 +222,7 @@ msgstr "Назначить TKIP"
 msgid "Force TKIP and CCMP (AES)"
 msgstr "Назначить TKIP и CCMP (AES)"
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:124
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:131
 msgid ""
 "How long should travelmate wait for a successful wlan uplink connection."
 msgstr ""
@@ -237,11 +243,11 @@ msgstr "Игнорировать BSSID"
 msgid "Input file not found, please check your configuration."
 msgstr "Config файл не найден, настройте config файл."
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:123
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:130
 msgid "Interface Timeout"
 msgstr "Временная задержка интерфейса"
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:29
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:24
 msgid "Interface Wizard"
 msgstr "Помощник настройки интерфейса"
 
@@ -249,11 +255,15 @@ msgstr "Помощник настройки интерфейса"
 msgid "Last Run"
 msgstr ""
 
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:106
+msgid "List Auto Expiry"
+msgstr ""
+
 #: applications/luci-app-travelmate/luasrc/view/travelmate/runtime.htm:59
 msgid "Loading"
 msgstr ""
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:118
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:125
 msgid ""
 "Minimum signal quality threshold as percent for conditional uplink (dis-) "
 "connections."
@@ -267,26 +277,30 @@ msgstr "Переместить вниз"
 msgid "Move up"
 msgstr "Переместить вверх"
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:74
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:75
 msgid "Name of the used uplink interface."
 msgstr "Имя используемого интерфейса внешней сети."
+
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:63
+msgid "Net Error Check"
+msgstr ""
 
 #: applications/luci-app-travelmate/luasrc/view/travelmate/wifi_scan.htm:25
 msgid "Open"
 msgstr "Открыть"
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:95
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:96
 msgid ""
 "Options for further tweaking in case the defaults are not suitable for you."
 msgstr ""
 "Возможные варианты детальной настройки, если значения по умолчанию не "
 "подходят для вас."
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:129
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:136
 msgid "Overall Timeout"
 msgstr "Общее время ожидания"
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:130
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:137
 msgid "Overall retry timeout in seconds."
 msgstr ""
 
@@ -324,11 +338,11 @@ msgstr "Путь к Client-Сертификату"
 msgid "Path to Private Key"
 msgstr "Путь к Приватному ключу"
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:68
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:69
 msgid "ProActive Uplink Switch"
 msgstr ""
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:69
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:70
 msgid ""
 "Proactively scan and switch to a higher prioritized uplink, despite of an "
 "already existing connection."
@@ -345,7 +359,7 @@ msgstr ""
 "существующий список внешних сетей или выполнять их поиск. Используемое "
 "сетевое соединение выделено синим цветом."
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:101
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:102
 msgid "Radio Selection / Order"
 msgstr ""
 
@@ -362,13 +376,13 @@ msgstr ""
 msgid "Restart Travelmate"
 msgstr ""
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:102
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:103
 msgid ""
 "Restrict travelmate to a single radio (e.g. 'radio1') or change the overall "
 "scanning order (e.g. 'radio1 radio2 radio0')."
 msgstr ""
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:112
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:119
 msgid "Retry limit to connect to an uplink."
 msgstr ""
 
@@ -403,7 +417,7 @@ msgstr "Поиск"
 msgid "Show/Hide QR-Codes"
 msgstr ""
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:117
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:124
 msgid "Signal Quality Threshold"
 msgstr ""
 
@@ -462,7 +476,7 @@ msgstr ""
 "Страница настройки беспроводных соединений, изменение содержимого config "
 "файла wireless настройки беспроводных сетей (/etc/config/wireless)."
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:33
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:28
 msgid "This step has only to be done once."
 msgstr ""
 
@@ -479,7 +493,11 @@ msgstr ""
 msgid "Travelmate Version"
 msgstr "Версия TravelMate"
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:105
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:64
+msgid "Treat missing internet availability as an error."
+msgstr ""
+
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:112
 msgid "Trigger Delay"
 msgstr ""
 
@@ -492,7 +510,7 @@ msgstr "Неизвестно"
 msgid "Up"
 msgstr ""
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:73
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:74
 msgid "Uplink / Trigger interface"
 msgstr "Включить интерфейс<br />внешней сети"
 
@@ -544,7 +562,7 @@ msgstr "Найденные точки доступа Wi-Fi"
 msgid "Wireless Stations"
 msgstr "Клиенты беспроводной сети"
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:32
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:27
 msgid "add it to the wan zone of the firewall."
 msgstr ""
 
