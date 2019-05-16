@@ -125,9 +125,9 @@ e5:depends("ban_backup", 1)
 e5.rmempty = true
 
 e6 = e:option(Value, "ban_maxqueue", translate("Max. Download Queue"),
-	translate("Size of the download queue to handle downloads &amp; IPset processing in parallel (default '8'). ")
-	.. translate("For further performance improvements you can raise this value, e.g. '16' or '32' should be safe."))
-e6.default = 8
+	translate("Size of the download queue to handle downloads &amp; IPset processing in parallel (default '4'). ")
+	.. translate("For further performance improvements you can raise this value, e.g. '8' or '16' should be safe."))
+e6.default = 4
 e6.datatype = "range(1,32)"
 e6.rmempty = false
 
