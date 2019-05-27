@@ -178,9 +178,7 @@ local function session_retrieve(sid, allowed_users)
 
 	if type(sdat) == "table" and
 	   type(sdat.values) == "table" and
-	   type(sdat.values.token) == "string" and
-	   (not allowed_users or
-	    util.contains(allowed_users, sdat.values.username))
+	   type(sdat.values.token) == "string"
 	then
 		uci:set_session_id(sid)
 		return sid, sdat.values
@@ -190,7 +188,7 @@ local function session_retrieve(sid, allowed_users)
 end
 
 local function session_setup(user, pass, allowed_users)
-	if util.contains(allowed_users, user) then
+	if user ~= nil and user ~= '' then
 		local login = util.ubus("session", "login", {
 			username = user,
 			password = pass,
