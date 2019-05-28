@@ -591,7 +591,7 @@
 			window.cbi_init = function() {};
 		},
 
-		error: function(type, fmt /*, ...*/) {
+		raise: function(type, fmt /*, ...*/) {
 			var e = null,
 			    msg = fmt ? String.prototype.format.apply(fmt, this.varargs(arguments, 2)) : null,
 			    stack = null;
@@ -606,36 +606,44 @@
 			else {
 				e = new (window[type || 'Error'] || Error)(msg || 'Unspecified error');
 				e.name = type || 'Error';
-
-				try { throw new Error('stacktrace') }
-				catch (e2) { stack = (e2.stack || '').split(/\n/) }
-
-				/* IE puts the exception message into the first line */
-				if (stack[0] == 'Error: stacktrace')
-					stack.shift();
-
-				/* Pop L.error() invocation from stack */
-				stack.shift();
 			}
-
-			/* Append shortened & beautified stacktrace to message */
-			var trace = stack.join('\n')
-				.replace(/(.*?)@(.+):(\d+):(\d+)/g, '  at $1 ($2:$3:$4)');
-
-			if (e.message.indexOf(trace) == -1)
-				e.message += '\n' + trace;
 
 			if (window.console && console.debug)
 				console.debug(e);
 
-			if (this.ui)
-				this.ui.showModal(_('Runtime error'),
-					E('pre', { 'class': 'alert-message error' }, e));
-			else
-				L.dom.content(document.querySelector('#maincontent'),
-					E('pre', { 'class': 'alert-message error' }, e));
-
 			throw e;
+		},
+
+		error: function(type, fmt /*, ...*/) {
+			try {
+				L.raise.apply(L, Array.prototype.slice.call(arguments));
+			}
+			catch (e) {
+				var stack = (e.stack || '').split(/\n/).map(function(frame) {
+					frame = frame.replace(/(.*?)@(.+):(\d+):(\d+)/g, 'at $1 ($2:$3:$4)').trim();
+					return frame ? '  ' + frame : '';
+				});
+
+				if (!/^  at /.test(stack[0]))
+					stack.shift();
+
+				if (/\braise /.test(stack[0]))
+					stack.shift();
+
+				if (/\berror /.test(stack[0]))
+					stack.shift();
+
+				stack = stack.length ? '\n' + stack.join('\n') : '';
+
+				if (L.ui)
+					L.ui.showModal(e.name || _('Runtime error'),
+						E('pre', { 'class': 'alert-message error' }, e.message + stack));
+				else
+					L.dom.content(document.querySelector('#maincontent'),
+						E('pre', { 'class': 'alert-message error' }, e + stack));
+
+				throw e;
+			}
 		},
 
 		bind: function(fn, self /*, ... */) {
