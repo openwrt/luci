@@ -1543,7 +1543,7 @@ var CBIMultiValue = CBIDynamicList.extend({
 			optional: this.optional || this.rmempty,
 			select_placeholder: this.placeholder,
 			display_items: this.display_size || this.size || 3,
-			dropdown_items: this.dropdown_size || this.size || 5,
+			dropdown_items: this.dropdown_size || this.size || -1,
 			validate: L.bind(this.validate, this, section_id)
 		});
 
