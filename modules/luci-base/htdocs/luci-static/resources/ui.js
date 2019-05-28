@@ -350,7 +350,7 @@ var UIDropdown = UIElement.extend({
 			select_placeholder: _('-- Please choose --'),
 			custom_placeholder: _('-- custom --'),
 			display_items:      3,
-			dropdown_items:     5,
+			dropdown_items:     -1,
 			create:             false,
 			create_query:       '.create-item-input',
 			create_template:    'script[type="item-template"]'
@@ -577,11 +577,32 @@ var UIDropdown = UIElement.extend({
 			ul.style.top = ul.style.bottom = '';
 
 			window.requestAnimationFrame(function() {
-				var height = items * li[Math.max(0, li.length - 2)].offsetHeight;
+				var itemHeight = li[Math.max(0, li.length - 2)].getBoundingClientRect().height,
+				    fullHeight = 0,
+				    spaceAbove = rect.top,
+				    spaceBelow = window.innerHeight - rect.height - rect.top;
+
+				for (var i = 0; i < (items == -1 ? li.length : items); i++)
+					fullHeight += li[i].getBoundingClientRect().height;
+
+				if (fullHeight <= spaceBelow) {
+					ul.style.top = rect.height + 'px';
+					ul.style.maxHeight = spaceBelow + 'px';
+				}
+				else if (fullHeight <= spaceAbove) {
+					ul.style.bottom = rect.height + 'px';
+					ul.style.maxHeight = spaceAbove + 'px';
+				}
+				else if (spaceBelow >= spaceAbove) {
+					ul.style.top = rect.height + 'px';
+					ul.style.maxHeight = (spaceBelow - (spaceBelow % itemHeight)) + 'px';
+				}
+				else {
+					ul.style.bottom = rect.height + 'px';
+					ul.style.maxHeight = (spaceAbove - (spaceAbove % itemHeight)) + 'px';
+				}
 
 				ul.scrollTop = sel ? Math.max(sel.offsetTop - sel.offsetHeight, 0) : 0;
-				ul.style[((rect.top + rect.height + height) > window.innerHeight) ? 'bottom' : 'top'] = rect.height + 'px';
-				ul.style.maxHeight = height + 'px';
 			});
 		}
 
@@ -898,6 +919,8 @@ var UIDropdown = UIElement.extend({
 				this.toggleItem(sb, li);
 			else if (li && li.parentNode.classList.contains('preview'))
 				this.closeDropdown(sb);
+			else if (matchesElem(ev.target, 'span.open, span.more'))
+				this.closeDropdown(sb);
 		}
 
 		ev.preventDefault();
@@ -1090,7 +1113,7 @@ var UICombobox = UIDropdown.extend({
 		this.super('__init__', [ value, choices, Object.assign({
 			select_placeholder: _('-- Please choose --'),
 			custom_placeholder: _('-- custom --'),
-			dropdown_items: 5,
+			dropdown_items: -1,
 			sort: true
 		}, options, {
 			multi: false,
