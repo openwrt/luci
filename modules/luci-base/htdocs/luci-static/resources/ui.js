@@ -1,5 +1,6 @@
 'use strict';
 'require uci';
+'require validation';
 
 var modalDiv = null,
     tooltipDiv = null,
@@ -2026,7 +2027,7 @@ return L.Class.extend({
 			events.push('blur', 'keyup');
 
 		try {
-			var cbiValidator = new CBIValidator(field, type, optional, vfunc),
+			var cbiValidator = L.validation.create(field, type, optional, vfunc),
 			    validatorFn = cbiValidator.validate.bind(cbiValidator);
 
 			for (var i = 0; i < events.length; i++)
