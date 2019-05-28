@@ -658,7 +658,7 @@
 			if (classes[name] != null) {
 				/* Circular dependency */
 				if (from.indexOf(name) != -1)
-					L.error('DependencyError',
+					L.raise('DependencyError',
 						'Circular dependency: class "%s" depends on "%s"',
 						name, from.join('" which depends on "'));
 
@@ -670,7 +670,7 @@
 
 			var compileClass = function(res) {
 				if (!res.ok)
-					L.error('NetworkError',
+					L.raise('NetworkError',
 						'HTTP error %d while loading class file "%s"', res.status, url);
 
 				var source = res.text(),
@@ -721,7 +721,7 @@
 								.format(args, source, res.url));
 					}
 					catch (error) {
-						L.error('SyntaxError', '%s\n  in %s:%s',
+						L.raise('SyntaxError', '%s\n  in %s:%s',
 							error.message, res.url, error.lineNumber || '?');
 					}
 
@@ -751,9 +751,7 @@
 			};
 
 			/* Request class file */
-			classes[name] = Request.get(url, { cache: true })
-				.then(compileClass)
-				.catch(L.error);
+			classes[name] = Request.get(url, { cache: true }).then(compileClass);
 
 			return classes[name];
 		},
