@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use Text::Balanced qw(extract_bracketed extract_delimited extract_tagged);
+use Text::Balanced qw(extract_tagged gen_delimited_pat);
 use POSIX;
 
 POSIX::setlocale(POSIX::LC_ALL, "C");
@@ -15,10 +15,10 @@ my %stringtable;
 sub dec_lua_str
 {
 	my $s = shift;
-	$s =~ s/[\s\n]+/ /g;
 	$s =~ s/\\n/\n/g;
 	$s =~ s/\\t/\t/g;
-	$s =~ s/\\(.)/$1/g;
+	$s =~ s/\\(.)/$1/sg;
+	$s =~ s/[\s\n]+/ /g;
 	$s =~ s/^ //;
 	$s =~ s/ $//;
 	return $s;
@@ -35,7 +35,6 @@ sub dec_tpl_str
 	return $s;
 }
 
-
 if( open F, "find @ARGV -type f '(' -name '*.htm' -o -name '*.lua' -o -name '*.js' ')' | sort |" )
 {
 	while( defined( my $file = readline F ) )
@@ -48,63 +47,76 @@ if( open F, "find @ARGV -type f '(' -name '*.htm' -o -name '*.lua' -o -name '*.j
 			my $raw = <S>;
 			close S;
 
-
 			my $text = $raw;
 			my $line = 1;
 
-			while( $text =~ s/ ^ (.*?) (?:translate|translatef|i18n|_) ([\n\s]*) \( /(/sgx )
+			while ($text =~ s/ ^ (.*?) (?:translate|translatef|i18n|_) ([\n\s]*) \( //sgx)
 			{
 				my ($prefix, $suffix) = ($1, $2);
-
-				( my $code, $text ) = extract_bracketed($text, q{('")});
+				my $code;
+				my $res = "";
+				my $sub = "";
 
 				$line += () = $prefix =~ /\n/g;
 
 				my $position = "$file:$line";
 
 				$line += () = $suffix =~ /\n/g;
-				$line += () = $code   =~ /\n/g;
 
-				$code =~ s/\\\n/ /g;
-				$code =~ s/^\([\n\s]*//;
-				$code =~ s/[\n\s]*\)$//;
-
-				my $res = "";
-				my $sub = "";
-
-				if( $code =~ /^['"]/ )
+				while (defined $sub)
 				{
-					while( defined $sub )
-					{
-						( $sub, $code ) = extract_delimited($code, q{'"}, q{\s*(?:\.\.\s*)?});
+					undef $sub;
 
-						if( defined $sub && length($sub) > 2 )
-						{
-							$res .= substr $sub, 1, length($sub) - 2;
+					if ($text =~ /^ ([\n\s]*(?:\.\.[\n\s]*)?) (\[=*\[) /sx)
+					{
+						my $ws = $1;
+						my $stag = quotemeta $2;
+						(my $etag = $stag) =~ y/[/]/;
+
+						($sub, $text) = extract_tagged($text, $stag, $etag, q{\s*(?:\.\.\s*)?});
+
+						$line += () = $ws =~ /\n/g;
+
+						if (defined($sub) && length($sub)) {
+							$line += () = $sub =~ /\n/g;
+
+							$sub =~ s/^$stag//;
+							$sub =~ s/$etag$//;
+							$res .= $sub;
 						}
-						else
+					}
+					elsif ($text =~ /^ ([\n\s]*(?:\.\.[\n\s]*)?) (['"]) /sx)
+					{
+						my $ws = $1;
+						my $quote = $2;
+						my $re = gen_delimited_pat($quote, '\\');
+
+						if ($text =~ m/\G\s*(?:\.\.\s*)?($re)/gcs)
 						{
-							undef $sub;
+							$sub = $1;
+							$text = substr $text, pos $text;
+						}
+
+						$line += () = $ws =~ /\n/g;
+
+						if (defined($sub) && length($sub)) {
+							$line += () = $sub =~ /\n/g;
+
+							$sub =~ s/^$quote//;
+							$sub =~ s/$quote$//;
+							$res .= $sub;
 						}
 					}
 				}
-				elsif( $code =~ /^(\[=*\[)/ )
+
+				if (defined($res))
 				{
-					my $stag = quotemeta $1;
-					my $etag = $stag;
-					   $etag =~ s/\[/]/g;
+					$res = dec_lua_str($res);
 
-					( $res ) = extract_tagged($code, $stag, $etag);
-
-					$res =~ s/^$stag//;
-					$res =~ s/$etag$//;
-				}
-
-				$res = dec_lua_str($res);
-
-				if ($res) {
-					$stringtable{$res} ||= [ ];
-					push @{$stringtable{$res}}, $position;
+					if ($res) {
+						$stringtable{$res} ||= [ ];
+						push @{$stringtable{$res}}, $position;
+					}
 				}
 			}
 
