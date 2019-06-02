@@ -189,6 +189,24 @@ local function _nethints(what, callback)
 			end
 		end
 	)
+	
+	cur:foreach("dhcp", "odhcpd",
+		function(s)
+			if type(s.leasefile) == "string" and fs.access(s.leasefile) then
+				for e in io.lines(s.leasefile) do
+					duid, iaid, name, _, ip = e:match("^# %S+ (%S+) (%S+) (%S+) (-?%d+) %S+ %S+ ([0-9a-f:.]+)/[0-9]+")
+					mac = net.duid_to_mac(duid)
+					if mac then
+						if ip and iaid == "ipv4" then
+							_add(what, mac, ip, nil, name ~= "*" and name)
+						elseif ip then
+							_add(what, mac, nil, ip, name ~= "*" and name)
+						end
+					end
+				end
+			end
+		end
+	)
 
 	cur:foreach("dhcp", "host",
 		function(s)
