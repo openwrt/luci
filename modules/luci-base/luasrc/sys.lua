@@ -137,7 +137,7 @@ end
 net = {}
 
 local function _nethints(what, callback)
-	local _, k, e, mac, ip, name
+	local _, k, e, mac, ip, name, duid, iaid
 	local cur = uci.cursor()
 	local ifn = { }
 	local hosts = { }
@@ -386,6 +386,26 @@ function net.devices()
 	return devs
 end
 
+function net.duid_to_mac(duid)
+	local b1, b2, b3, b4, b5, b6
+
+	if type(duid) == "string" then
+		-- DUID-LLT / Ethernet
+		if #duid == 28 then
+			b1, b2, b3, b4, b5, b6 = duid:match("^00010001(%x%x)(%x%x)(%x%x)(%x%x)(%x%x)(%x%x)%x%x%x%x%x%x%x%x$")
+
+		-- DUID-LL / Ethernet
+		elseif #duid == 20 then
+			b1, b2, b3, b4, b5, b6 = duid:match("^00030001(%x%x)(%x%x)(%x%x)(%x%x)(%x%x)(%x%x)$")
+
+		-- DUID-LL / Ethernet (Without Header)
+		elseif #duid == 12 then
+			b1, b2, b3, b4, b5, b6 = duid:match("^(%x%x)(%x%x)(%x%x)(%x%x)(%x%x)(%x%x)$")
+		end
+	end
+
+	return b1 and luci.ip.checkmac(table.concat({ b1, b2, b3, b4, b5, b6 }, ":"))
+end
 
 process = {}
 

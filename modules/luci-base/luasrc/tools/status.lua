@@ -6,21 +6,6 @@ module("luci.tools.status", package.seeall)
 local uci = require "luci.model.uci".cursor()
 local ipc = require "luci.ip"
 
-local function duid_to_mac(duid)
-	local b1, b2, b3, b4, b5, b6
-
-	-- DUID-LLT / Ethernet
-	if type(duid) == "string" and #duid == 28 then
-		b1, b2, b3, b4, b5, b6 = duid:match("^00010001(%x%x)(%x%x)(%x%x)(%x%x)(%x%x)(%x%x)%x%x%x%x%x%x%x%x$")
-
-	-- DUID-LL / Ethernet
-	elseif type(duid) == "string" and #duid == 20 then
-		b1, b2, b3, b4, b5, b6 = duid:match("^00030001(%x%x)(%x%x)(%x%x)(%x%x)(%x%x)(%x%x)$")
-	end
-
-	return b1 and ipc.checkmac(table.concat({ b1, b2, b3, b4, b5, b6 }, ":"))
-end
-
 local function dhcp_leases_common(family)
 	local rv = { }
 	local nfs = require "nixio.fs"
@@ -93,7 +78,7 @@ local function dhcp_leases_common(family)
 				elseif ip and iaid == "ipv4" and family == 4 then
 					rv[#rv+1] = {
 						expires  = (expire >= 0) and os.difftime(expire, os.time()),
-						macaddr  = ipc.checkmac(duid:gsub("^(%x%x)(%x%x)(%x%x)(%x%x)(%x%x)(%x%x)$", "%1:%2:%3:%4:%5:%6")) or "00:00:00:00:00:00",
+						macaddr  = sys.net.duid_to_mac(duid) or "00:00:00:00:00:00",
 						ipaddr   = ip,
 						hostname = (name ~= "-") and name
 					}
