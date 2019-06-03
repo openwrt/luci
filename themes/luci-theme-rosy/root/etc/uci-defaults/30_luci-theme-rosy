@@ -1,7 +1,11 @@
 #!/bin/sh
-uci batch <<-EOF
-	set luci.themes.Rosy=/luci-static/rosy
-	set luci.main.mediaurlbase=/luci-static/rosy
-	commit luci
-EOF
+
+if [ "$PKG_UPGRADE" != 1 ]; then
+	uci batch <<-EOF
+		set luci.themes.Rosy=/luci-static/rosy
+		set luci.main.mediaurlbase=/luci-static/rosy
+		commit luci
+	EOF
+fi
+
 exit 0
