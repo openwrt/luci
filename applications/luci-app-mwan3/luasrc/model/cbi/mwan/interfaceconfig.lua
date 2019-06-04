@@ -234,13 +234,12 @@ up:value("8")
 up:value("9")
 up:value("10")
 
-flush = mwan_interface:option(ListValue, "flush_conntrack", translate("Flush conntrack table"),
+flush = mwan_interface:option(StaticList, "flush_conntrack", translate("Flush conntrack table"),
 	translate("Flush global firewall conntrack table on interface events"))
-flush.default = "never"
-flush:value("ifup", translate("ifup"))
-flush:value("ifdown", translate("ifdown"))
-flush:value("never", translate("never"))
-flush:value("always", translate("always"))
+flush:value("ifup", translate("ifup (netifd)"))
+flush:value("ifdown", translate("ifdown (netifd)"))
+flush:value("connected", translate("connected (mwan3)"))
+flush:value("disconnected", translate("disconnected (mwan3)"))
 
 metric = mwan_interface:option(DummyValue, "metric", translate("Metric"),
 	translate("This displays the metric assigned to this interface in /etc/config/network"))
