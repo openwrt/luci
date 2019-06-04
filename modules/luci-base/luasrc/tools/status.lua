@@ -92,7 +92,7 @@ local function dhcp_leases_common(family)
 		local _, lease
 		local hosts = sys.net.host_hints()
 		for _, lease in ipairs(rv) do
-			local mac = duid_to_mac(lease.duid)
+			local mac = sys.net.duid_to_mac(lease.duid)
 			local host = mac and hosts[mac]
 			if host then
 				if not lease.name then
