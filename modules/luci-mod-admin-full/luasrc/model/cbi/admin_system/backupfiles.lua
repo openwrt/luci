@@ -20,7 +20,8 @@ if luci.http.formvalue("display") ~= "list" then
 	l.inputstyle = "apply"
 
 	c = f:option(TextValue, "_custom")
-	c.rmempty = false
+	c.forcewrite = true
+	c.rmempty = true
 	c.cols = 70
 	c.rows = 30
 
@@ -28,9 +29,15 @@ if luci.http.formvalue("display") ~= "list" then
 		return nixio.fs.readfile("/etc/sysupgrade.conf")
 	end
 
-	c.write = function(self, section, value)
-		value = value:gsub("\r\n?", "\n")
-		return nixio.fs.writefile("/etc/sysupgrade.conf", value)
+	m.handle = function(self, state, data)
+		if state == FORM_VALID then
+			if data._custom then
+				nixio.fs.writefile("/etc/sysupgrade.conf", data._custom:gsub("\r\n", "\n"))
+			else
+				nixio.fs.writefile("/etc/sysupgrade.conf", "")
+			end
+		end
+		return true
 	end
 else
 	m.submit = false
