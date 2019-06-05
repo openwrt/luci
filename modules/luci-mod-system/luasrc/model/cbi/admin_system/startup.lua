@@ -78,6 +78,7 @@ f = SimpleForm("rc", translate("Local Startup"),
 	translate("This is the content of /etc/rc.local. Insert your own commands here (in front of 'exit 0') to execute them at the end of the boot process."))
 
 t = f:field(TextValue, "rcs")
+t.forcewrite = true
 t.rmempty = true
 t.rows = 20
 
@@ -89,6 +90,8 @@ function f.handle(self, state, data)
 	if state == FORM_VALID then
 		if data.rcs then
 			fs.writefile("/etc/rc.local", data.rcs:gsub("\r\n", "\n"))
+		else
+			fs.writefile("/etc/rc.local", "")
 		end
 	end
 	return true
