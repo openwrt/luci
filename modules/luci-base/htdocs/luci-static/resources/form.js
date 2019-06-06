@@ -120,7 +120,10 @@ var CBIMap = CBINode.extend({
 			.then(uci.save.bind(uci))
 			.then(this.load.bind(this))
 			.then(this.renderContents.bind(this))
-			.catch(function() { alert('Cannot save due to invalid values') });
+			.catch(function(e) {
+				alert('Cannot save due to invalid values')
+				return Promise.reject();
+			});
 	},
 
 	reset: function() {
@@ -1049,13 +1052,14 @@ var CBITableSection = CBITypedSection.extend({
 	},
 
 	handleModalCancel: function(modalMap, ev) {
-		L.ui.hideModal();
+		return Promise.resolve(L.ui.hideModal());
 	},
 
 	handleModalSave: function(modalMap, ev) {
-		modalMap.save()
+		return modalMap.save()
 			.then(L.bind(this.map.reset, this.map))
-			.then(L.ui.hideModal);
+			.then(L.ui.hideModal)
+			.catch(function() {});
 	},
 
 	renderMoreOptionsModal: function(section_id, ev) {
@@ -1139,8 +1143,8 @@ var CBIGridSection = CBITableSection.extend({
 	},
 
 	handleModalSave: function(/* ... */) {
-		this.super('handleModalSave', arguments);
-		this.addedSection = null;
+		return this.super('handleModalSave', arguments)
+			.then(L.bind(function() { this.addedSection = null }, this));
 	},
 
 	handleModalCancel: function(/* ... */) {
@@ -1151,7 +1155,7 @@ var CBIGridSection = CBITableSection.extend({
 			this.addedSection = null;
 		}
 
-		this.super('handleModalCancel', arguments);
+		return this.super('handleModalCancel', arguments);
 	},
 
 	renderUCISection: function(section_id) {
