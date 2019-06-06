@@ -1084,7 +1084,7 @@ var CBITableSection = CBITypedSection.extend({
 		for (var i = 0; i < this.children.length; i++) {
 			var o1 = this.children[i];
 
-			if (o1.disabled || o1.modalonly === false)
+			if (o1.modalonly === false)
 				continue;
 
 			var o2 = s.option(o1.constructor, o1.option, o1.title, o1.description);
