@@ -161,7 +161,7 @@ local ubus_types = {
 local function ubus_request(req)
 	if type(req) ~= "table" or type(req.method) ~= "string" or type(req.params) ~= "table" or
 	   #req.params < 2 or req.jsonrpc ~= "2.0" or req.id == nil then
-		return ubus_reply(req.id, nil, -32600, "Invalid request")
+		return ubus_reply(nil, nil, -32600, "Invalid request")
 
 	elseif req.method == "call" then
 		local sid, obj, fun, arg =
@@ -216,7 +216,16 @@ end
 
 function action_ubus()
 	local parser = require "luci.jsonc".new()
-	luci.http.context.request:setfilehandler(function(_, s) parser:parse(s or "") end)
+
+	luci.http.context.request:setfilehandler(function(_, s)
+		if not s then
+			return nil
+		end
+
+		local ok, err = parser:parse(s)
+		return (not err or nil)
+	end)
+
 	luci.http.context.request:content()
 
 	local json = parser:get()
