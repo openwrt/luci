@@ -477,8 +477,8 @@ var UIDropdown = UIElement.extend({
 		else
 			sb.removeAttribute('empty');
 
-		more.innerHTML = (ndisplay == this.options.display_items)
-			? (this.options.select_placeholder || this.options.placeholder) : '···';
+		L.dom.content(more, (ndisplay == this.options.display_items)
+			? (this.options.select_placeholder || this.options.placeholder) : '···');
 
 
 		sb.addEventListener('click', this.handleClick.bind(this));
@@ -715,8 +715,8 @@ var UIDropdown = UIElement.extend({
 			else
 				sb.removeAttribute('empty');
 
-			more.innerHTML = (ndisplay === this.options.display_items)
-				? (this.options.select_placeholder || this.options.placeholder) : '···';
+			L.dom.content(more, (ndisplay === this.options.display_items)
+				? (this.options.select_placeholder || this.options.placeholder) : '···');
 		}
 		else {
 			var sel = li.parentNode.querySelector('[selected]');
