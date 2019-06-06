@@ -116,6 +116,8 @@ var CBIMap = CBINode.extend({
 	},
 
 	save: function() {
+		this.checkDepends();
+
 		return this.parse()
 			.then(uci.save.bind(uci))
 			.then(this.load.bind(this))
