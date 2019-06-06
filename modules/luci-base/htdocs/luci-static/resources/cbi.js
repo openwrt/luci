@@ -566,7 +566,7 @@ String.prototype.format = function()
 
 				switch(pType) {
 					case 'b':
-						subst = (+param || 0).toString(2);
+						subst = (~~param || 0).toString(2);
 						break;
 
 					case 'c':
@@ -574,7 +574,7 @@ String.prototype.format = function()
 						break;
 
 					case 'd':
-						subst = ~~(+param || 0);
+						subst = (~~param || 0);
 						break;
 
 					case 'u':
@@ -588,7 +588,7 @@ String.prototype.format = function()
 						break;
 
 					case 'o':
-						subst = (+param || 0).toString(8);
+						subst = (~~param || 0).toString(8);
 						break;
 
 					case 's':
@@ -596,11 +596,11 @@ String.prototype.format = function()
 						break;
 
 					case 'x':
-						subst = ('' + (+param || 0).toString(16)).toLowerCase();
+						subst = ('' + (~~param || 0).toString(16)).toLowerCase();
 						break;
 
 					case 'X':
-						subst = ('' + (+param || 0).toString(16)).toUpperCase();
+						subst = ('' + (~~param || 0).toString(16)).toUpperCase();
 						break;
 
 					case 'h':
