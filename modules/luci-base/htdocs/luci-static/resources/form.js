@@ -1441,6 +1441,7 @@ var CBIDynamicList = CBIValue.extend({
 			sort: this.keylist,
 			optional: this.optional || this.rmempty,
 			datatype: this.datatype,
+			placeholder: this.placeholder,
 			validate: L.bind(this.validate, this, section_id)
 		});
 
