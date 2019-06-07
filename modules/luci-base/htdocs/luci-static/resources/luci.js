@@ -393,11 +393,6 @@
 					.then(resolveFn.bind(this, response))
 					.catch(rejectFn.bind(this));
 			}
-
-			try {
-				xhr.abort();
-			}
-			catch(e) {}
 		},
 
 		get: function(url, options) {
