@@ -1,0 +1,66 @@
+<%#
+ Copyright 2010 Jo-Philipp Wich <jo@mein.io>
+ Licensed to the public under the Apache License 2.0.
+-%>
+
+<% export("uci_changelog", function(changes) -%>
+<div class="cbi-section">
+	<strong><%:Legend:%></strong>
+	<div class="uci-change-legend">
+		<div class="uci-change-legend-label"><ins>&#160;</ins> <%:Section added%></div>
+		<div class="uci-change-legend-label"><del>&#160;</del> <%:Section removed%></div>
+		<div class="uci-change-legend-label"><var><ins>&#160;</ins></var> <%:Option changed%></div>
+		<div class="uci-change-legend-label"><var><del>&#160;</del></var> <%:Option removed%></div>
+		<br style="clear:both" />
+	</div>
+	<br />
+
+	<div class="uci-change-list"><%
+		local util = luci.util
+		local tpl = {
+			["add-3"] = "<ins>uci add %0 <strong>%3</strong> # =%2</ins>",
+			["set-3"] = "<ins>uci set %0.<strong>%2</strong>=%3</ins>",
+			["set-4"] = "<var><ins>uci set %0.%2.%3=<strong>%4</strong></ins></var>",
+			["remove-2"] = "<del>uci del %0.<strong>%2</strong></del>",
+			["remove-3"] = "<var><del>uci del %0.%2.<strong>%3</strong></del></var>",
+			["order-3"] = "<var>uci reorder %0.%2=<strong>%3</strong></var>",
+			["list-add-4"] = "<var><ins>uci add_list %0.%2.%3=<strong>%4</strong></ins></var>",
+			["list-del-4"] = "<var><del>uci del_list %0.%2.%3=<strong>%4</strong></del></var>",
+			["rename-3"] = "<var>uci rename %0.%2=<strong>%3</strong></var>",
+			["rename-4"] = "<var>uci rename %0.%2.%3=<strong>%4</strong></var>"
+		}
+
+		local conf, deltas
+		for conf, deltas in util.kspairs(changes) do
+			write("<h3># /etc/config/%s</h3>" % conf)
+
+			local _, delta, added
+			for _, delta in pairs(deltas) do
+				local t = tpl["%s-%d" %{ delta[1], #delta }]
+
+				write(t:gsub("%%(%d)", function(n)
+					if n == "0" then
+						return conf
+					elseif n == "2" then
+						if added and delta[2] == added[1] then
+							return "@%s[-1]" % added[2]
+						else
+							return delta[2]
+						end
+					elseif n == "4" then
+						return util.shellquote(delta[4])
+					else
+						return delta[tonumber(n)]
+					end
+				end))
+
+				if delta[1] == "add" then
+					added = { delta[2], delta[3] }
+				end
+			end
+
+			write("<br />")
+		end
+	%></div>
+</div>
+<%- end) %>

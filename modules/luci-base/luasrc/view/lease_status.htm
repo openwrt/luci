@@ -1,0 +1,102 @@
+<script type="text/javascript">//<![CDATA[
+	XHR.poll(-1, '<%=url('admin/dhcplease_status')%>', null,
+		function(x, st)
+		{
+			var tb = document.getElementById('lease_status_table');
+			if (st && st[0] && tb)
+			{
+				var rows = [];
+
+				for (var i = 0; i < st[0].length; i++)
+				{
+					var timestr;
+
+					if (st[0][i].expires === false)
+						timestr = '<em><%:unlimited%></em>';
+					else if (st[0][i].expires <= 0)
+						timestr = '<em><%:expired%></em>';
+					else
+						timestr = String.format('%t', st[0][i].expires);
+
+					rows.push([
+						st[0][i].hostname || '?',
+						st[0][i].ipaddr,
+						st[0][i].macaddr,
+						timestr
+					]);
+				}
+
+				cbi_update_table(tb, rows, '<em><%:There are no active leases.%></em>');
+			}
+
+			var tb6 = document.getElementById('lease6_status_table');
+			if (st && st[1] && tb6)
+			{
+				tb6.parentNode.style.display = 'block';
+
+				var rows = [];
+
+				for (var i = 0; i < st[1].length; i++)
+				{
+					var timestr;
+
+					if (st[1][i].expires === false)
+						timestr = '<em><%:unlimited%></em>';
+					else if (st[1][i].expires <= 0)
+						timestr = '<em><%:expired%></em>';
+					else
+						timestr = String.format('%t', st[1][i].expires);
+
+					var name = st[1][i].hostname,
+					    hint = st[1][i].host_hint;
+
+					rows.push([
+						hint ? '%h (%h)'.format(name || '?', hint) : (name || '?'),
+						st[1][i].ip6addr,
+						st[1][i].duid,
+						timestr
+					]);
+				}
+
+				cbi_update_table(tb6, rows, '<em><%:There are no active leases.%></em>');
+			}
+		}
+	);
+//]]></script>
+
+<div class="cbi-section">
+	<h3><%:Active DHCP Leases%></h3>
+	<div class="table" id="lease_status_table">
+		<div class="tr table-titles">
+			<div class="th"><%:Hostname%></div>
+			<div class="th"><%:IPv4-Address%></div>
+			<div class="th"><%:MAC-Address%></div>
+			<div class="th"><%:Leasetime remaining%></div>
+		</div>
+		<div class="tr placeholder">
+			<div class="td"><em><%:Collecting data...%></em></div>
+		</div>
+	</div>
+</div>
+
+<%
+	local fs = require "nixio.fs"
+	local has_ipv6 = fs.access("/proc/net/ipv6_route")
+
+	if has_ipv6 then
+-%>
+	<div class="cbi-section" style="display:none">
+		<h3><%:Active DHCPv6 Leases%></h3>
+		<div class="table" id="lease6_status_table">
+			<div class="tr table-titles">
+				<div class="th"><%:Host%></div>
+				<div class="th"><%:IPv6-Address%></div>
+				<div class="th"><%:DUID%></div>
+				<div class="th"><%:Leasetime remaining%></div>
+			</div>
+			<div class="tr placeholder">
+				<div class="td"><em><%:Collecting data...%></em></div>
+			</div>
+		</div>
+	</div>
+<% end -%>

@@ -1,0 +1,54 @@
+<%+cbi/valueheader%>
+
+<%-
+	local selected = { }
+
+	if self.multiple then
+		local val
+		for val in luci.util.imatch(self:cfgvalue(section)) do
+			selected[val] = true
+		end
+	else
+		selected[self:cfgvalue(section)] = true
+	end
+
+	if not next(selected) and self.default then
+		selected[self.default] = true
+	end
+-%>
+
+<div class="cbi-dropdown"<%=
+	attr("name", cbid) ..
+	attr("display-items", self.display or self.size or 3) ..
+	attr("dropdown-items", self.dropdown or self.display or self.size or 5) ..
+	attr("placeholder", self.placeholder or translate("-- please select --")) ..
+	ifattr(self.multiple, "multiple", "multiple") ..
+	ifattr(self.optional or self.rmempty, "optional", "optional")
+%>>
+	<ul>
+		<% local i, key; for i, key in pairs(self.keylist) do %>
+			<li<%=
+				attr("data-index", i) ..
+				attr("data-depends", self:deplist2json(section, self.deplist[i])) ..
+				attr("data-value", key) ..
+				ifattr(selected[key], "selected", "selected")
+			%>>
+				<%=pcdata(self.vallist[i])%>
+			</li>
+		<% end %>
+		<% if self.custom then %>
+			<li>
+				<input type="password" style="display:none" />
+				<input class="create-item-input" type="text"<%=
+					attr("placeholder", self.custom ~= true and
+						self.custom or
+						(self.multiple and
+							translate("Enter custom values") or
+							translate("Enter custom value")))
+				%> />
+			</li>
+		<% end %>
+	</ul>
+</div>
+
+<%+cbi/valuefooter%>

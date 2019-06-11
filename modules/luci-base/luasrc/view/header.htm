@@ -1,0 +1,24 @@
+<%#
+ Copyright 2008 Steven Barth <steven@midlink.org>
+ Copyright 2008 Jo-Philipp Wich <jow@openwrt.org>
+ Licensed to the public under the Apache License 2.0.
+-%>
+
+<%
+	if not luci.dispatcher.context.template_header_sent then
+		include("themes/" .. theme .. "/header")
+		luci.dispatcher.context.template_header_sent = true
+	end
+%>
+
+<script type="text/javascript" src="<%=resource%>/luci.js"></script>
+<script type="text/javascript">
+	L = new LuCI(<%= luci.http.write_json({
+		token       = token,
+		resource    = resource,
+		scriptname  = luci.http.getenv("SCRIPT_NAME"),
+		pathinfo    = luci.http.getenv("PATH_INFO"),
+		requestpath = luci.dispatcher.context.requestpath,
+		pollinterval    = luci.config.main.pollinterval or 5
+	}) %>);
+</script>

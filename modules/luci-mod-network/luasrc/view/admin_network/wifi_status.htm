@@ -1,0 +1,14 @@
+<%+cbi/valueheader%>
+
+<span class="ifacebadge large"<%=attr("data-wifi-status", self.ifname)%>>
+	<small>
+		<img src="<%=resource%>/icons/signal-none.png" title="<%:Not associated%>" />&#160;
+	</small>
+	<span>
+		<em class="spinning"><%:Collecting data...%></em>
+	</span>
+</span>
+
+<script type="text/javascript" src="<%=resource%>/view/network/wifi_status.js"></script>
+
+<%+cbi/valuefooter%>

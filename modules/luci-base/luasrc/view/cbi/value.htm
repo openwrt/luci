@@ -1,0 +1,26 @@
+<%+cbi/valueheader%>
+	<%- if self.password then -%>
+		<input type="password" style="position:absolute; left:-1000px" aria-hidden="true" tabindex="-1"<%=
+			attr("name", "password." .. cbid)
+		%> />
+	<%- end -%>
+	<input data-update="change"<%=
+		attr("id", cbid) ..
+		attr("name", cbid) ..
+		attr("type", self.password and "password" or "text") ..
+		attr("class", self.password and "cbi-input-password" or "cbi-input-text") ..
+		attr("value", self:cfgvalue(section) or self.default) ..
+		ifattr(self.password, "autocomplete", "new-password") ..
+		ifattr(self.size, "size") ..
+		ifattr(self.placeholder, "placeholder") ..
+		ifattr(self.readonly, "readonly") ..
+		ifattr(self.maxlength, "maxlength") ..
+		ifattr(self.datatype, "data-type", self.datatype) ..
+		ifattr(self.datatype, "data-optional", self.optional or self.rmempty) ..
+		ifattr(self.combobox_manual, "data-manual", self.combobox_manual) ..
+		ifattr(#self.keylist > 0, "data-choices", { self.keylist, self.vallist })
+	%> />
+	<%- if self.password then -%>
+		<button class="cbi-button cbi-button-neutral" title="<%:Reveal/hide password%>" aria-label="<%:Reveal/hide password%>" onclick="var e = this.previousElementSibling; e.type = (e.type === 'password') ? 'text' : 'password'; event.preventDefault()">∗</button>
+	<% end %>
+<%+cbi/valuefooter%>

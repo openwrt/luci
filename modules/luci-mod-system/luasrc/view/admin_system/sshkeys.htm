@@ -1,0 +1,46 @@
+<%+header%>
+
+<style type="text/css">
+	.cbi-dynlist {
+		max-width: 100%;
+	}
+
+	.cbi-dynlist .item > small {
+		display: block;
+		direction: rtl;
+		overflow: hidden;
+		text-align: left;
+	}
+
+	.cbi-dynlist .item > small > code {
+		direction: ltr;
+		white-space: nowrap;
+		unicode-bidi: bidi-override;
+	}
+
+	@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+		.cbi-dynlist .item > small { direction: ltr }
+	}
+</style>
+
+<div class="cbi-map">
+	<h2><%:SSH-Keys%></h2>
+
+	<div class="cbi-section-descr">
+		<%_Public keys allow for the passwordless SSH logins with a higher security compared to the use of plain passwords. In order to upload a new key to the device, paste an OpenSSH compatible public key line or drag a <code>.pub</code> file into the input field.%>
+	</div>
+
+	<div class="cbi-section-node">
+		<div class="cbi-dynlist" name="sshkeys">
+			<p class="spinning"><%:Loading SSH keys…%></p>
+			<div class="add-item" ondragover="dragKey(event)" ondrop="dropKey(event)">
+				<input class="cbi-input-text" type="text" placeholder="<%:Paste or drag SSH key file…%>" onkeydown="if (event.keyCode === 13) addKey(event)" />
+				<button class="cbi-button" onclick="addKey(event)"><%:Add key%></button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="application/javascript" src="<%=resource%>/view/system/sshkeys.js"></script>
+
+<%+footer%>

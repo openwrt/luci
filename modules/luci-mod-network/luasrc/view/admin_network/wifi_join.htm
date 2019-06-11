@@ -1,0 +1,59 @@
+<%#
+ Copyright 2009-2015 Jo-Philipp Wich <jow@openwrt.org>
+ Licensed to the public under the Apache License 2.0.
+-%>
+
+<%-
+
+	local sys = require "luci.sys"
+	local utl = require "luci.util"
+
+	local dev = luci.http.formvalue("device")
+	local iw = luci.sys.wifi.getiwinfo(dev)
+
+	if not iw then
+		luci.http.redirect(luci.dispatcher.build_url("admin/network/wireless"))
+		return
+	end
+-%>
+
+<%+header%>
+
+<h2 name="content"><%:Join Network: Wireless Scan%></h2>
+
+<div class="cbi-map">
+	<div class="cbi-section">
+		<div class="table"<%=attr("data-wifi-scan", dev) .. attr("data-wifi-type", iw.type)%>>
+			<div class="tr table-titles">
+				<div class="th col-2 middle center"><%:Signal%></div>
+				<div class="th col-4 middle left"><%:SSID%></div>
+				<div class="th col-2 middle center hide-xs"><%:Channel%></div>
+				<div class="th col-2 middle left hide-xs"><%:Mode%></div>
+				<div class="th col-3 middle left hide-xs"><%:BSSID%></div>
+				<div class="th col-3 middle left"><%:Encryption%></div>
+				<div class="th cbi-section-actions">&#160;</div>
+			</div>
+
+			<div class="tr placeholder">
+				<div class="td">
+					<img src="<%=resource%>/icons/loading.gif" class="middle" />
+					<em><%:Collecting data...%></em>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="cbi-page-actions right">
+	<form class="inline" action="<%=url("admin/network/wireless")%>" method="get">
+		<input class="cbi-button cbi-button-neutral" type="submit" value="<%:Back to overview%>" />
+	</form>
+	<form class="inline" action="<%=url('admin/network/wireless_join')%>" method="post">
+		<input type="hidden" name="token" value="<%=token%>" />
+		<input type="hidden" name="device" value="<%=utl.pcdata(dev)%>" />
+		<input type="button" class="cbi-button cbi-button-action" value="<%:Repeat scan%>" onclick="flush()" />
+	</form>
+</div>
+
+<script type="text/javascript" src="<%=resource%>/view/network/wifi_join.js"></script>
+
+<%+footer%>

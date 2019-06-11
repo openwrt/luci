@@ -1,0 +1,90 @@
+<%-
+	local fw = require "luci.model.firewall".init()
+	local izl = { }
+	local ezl = { }
+	local _, z
+	for _, z in ipairs(fw:get_zones()) do
+		if z:name() ~= "wan" then
+			izl[#izl+1] = z
+		end
+		if z:name() ~= "lan" then
+			ezl[#ezl+1] = z
+		end
+	end
+
+	local keys, vals = { }, { }
+	luci.sys.net.ipv4_hints(function(ip, name)
+		keys[#keys+1] = ip
+		vals[#vals+1] = '%s (%s)' %{ ip, name }
+	end)
+-%>
+
+<h4><%:New port forward%></h4>
+<div class="table">
+	<div class="tr table-titles">
+		<div class="th"><%:Name%></div>
+		<div class="th"><%:Protocol%></div>
+		<div class="th"><%:External zone%></div>
+		<div class="th"><%:External port%></div>
+		<div class="th"><%:Internal zone%></div>
+		<div class="th"><%:Internal IP address%></div>
+		<div class="th"><%:Internal port%></div>
+		<div class="th"></div>
+	</div>
+	<div class="tr">
+		<div class="td">
+			<input type="text" class="cbi-input-text" id="_newfwd.name" name="_newfwd.name" placeholder="<%:New port forward%>" />
+		</div>
+		<div class="td">
+			<select class="cbi-input-select" id="_newfwd.proto" name="_newfwd.proto">
+				<option value="tcp udp">TCP+UDP</option>
+				<option value="tcp">TCP</option>
+				<option value="udp">UDP</option>
+				<option value="other"><%:Other...%></option>
+			</select>
+		</div>
+		<div class="td">
+			<select class="cbi-input-select" id="_newfwd.extzone" name="_newfwd.extzone">
+				<% for _, z in ipairs(ezl) do -%><option value="<%=z:name()%>"><%=z:name()%></option><%- end %>
+			</select>
+		</div>
+		<div class="td">
+			<input type="text" class="cbi-input-text" id="_newfwd.extport" name="_newfwd.extport" data-type="portrange" data-optional="true" />
+		</div>
+		<div class="td">
+			<select class="cbi-input-select" id="_newfwd.intzone" name="_newfwd.intzone">
+				<% for _, z in ipairs(izl) do -%><option value="<%=z:name()%>"><%=z:name()%></option><%- end %>
+			</select>
+		</div>
+		<div class="td">
+			<input type="text" class="cbi-input-text" id="_newfwd.intaddr" name="_newfwd.intaddr" data-type="host" data-optional="true"<%=
+				ifattr(#keys > 0, "data-choices", {keys, vals})
+			%>/>
+		</div>
+		<div class="td">
+			<input type="text" class="cbi-input-text" id="_newfwd.intport" name="_newfwd.intport" data-type="portrange" data-optional="true" />
+		</div>
+		<div class="td bottom">
+			<input type="submit" class="cbi-button cbi-button-add" name="cbi.cts.<%=self.config%>.<%=self.sectiontype%>.<%=section%>" value="<%:Add%>" />
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">//<![CDATA[
+	document.getElementById('_newfwd.extport').addEventListener('blur',
+		function() {
+			var n = document.getElementById('_newfwd.name');
+			var p = document.getElementById('_newfwd.proto');
+			var i = document.getElementById('_newfwd.intport');
+
+			if (!this.className.match(/invalid/))
+			{
+				if (!i.value) i.value = this.value;
+
+				if (!n.value)
+				{
+					n.value = 'Forward' + this.value;
+				}
+			}
+		});
+//]]></script>

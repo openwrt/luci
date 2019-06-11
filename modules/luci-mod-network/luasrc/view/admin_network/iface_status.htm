@@ -1,0 +1,12 @@
+<%+cbi/valueheader%>
+
+<span class="ifacebadge large"<%=attr("data-iface-status", self.network)%>>
+	<img src="<%=resource%>/icons/ethernet_disabled.png" />
+	<span>
+		<em class="spinning"><%:Collecting data...%></em>
+	</span>
+</span>
+
+<script type="text/javascript" src="<%=resource%>/view/network/iface_status.js"></script>
+
+<%+cbi/valuefooter%>

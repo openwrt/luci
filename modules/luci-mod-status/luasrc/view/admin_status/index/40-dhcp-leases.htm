@@ -1,0 +1,14 @@
+<%#
+ Copyright 2008 Steven Barth <steven@midlink.org>
+ Copyright 2008-2018 Jo-Philipp Wich <jo@mein.io>
+ Licensed to the public under the Apache License 2.0.
+-%>
+
+<%
+	local fs = require "nixio.fs"
+	local has_dhcp = fs.access("/etc/config/dhcp")
+
+	if has_dhcp then
+		include("lease_status")
+	end
+%>

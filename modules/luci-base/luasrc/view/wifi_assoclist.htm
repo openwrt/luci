@@ -1,0 +1,120 @@
+<%
+	local supports_deauth = {}
+
+	local _, v
+	for _, v in ipairs(luci.util.ubus()) do
+		local iface = v:match("^hostapd%.(.+)$")
+		if iface then
+			local funcs = luci.util.ubus(v)
+			if type(funcs) == "table" and funcs.del_client then
+				supports_deauth[iface] = true
+			end
+		end
+	end
+%>
+
+<script type="text/javascript">//<![CDATA[
+	var supports_deauth = <%= luci.http.write_json(supports_deauth) %>;
+
+	function wifirate(bss, rx) {
+		var p = rx ? 'rx_' : 'tx_',
+		    s = '%.1f <%:Mbit/s%>, %d<%:MHz%>'
+					.format(bss[p+'rate'] / 1000, bss[p+'mhz']),
+		    ht = bss[p+'ht'], vht = bss[p+'vht'],
+			mhz = bss[p+'mhz'], nss = bss[p+'nss'],
+			mcs = bss[p+'mcs'], sgi = bss[p+'short_gi'];
+
+		if (ht || vht) {
+			if (vht) s += ', VHT-MCS %d'.format(mcs);
+			if (nss) s += ', VHT-NSS %d'.format(nss);
+			if (ht)  s += ', MCS %s'.format(mcs);
+			if (sgi) s += ', <%:Short GI%>';
+		}
+
+		return s;
+	}
+
+	function handleDeauth(ev) {
+		(new XHR()).post('<%=url('admin/wireless_deauth')%>', {
+			token: '<%=token%>',
+			iface: ev.target.getAttribute('data-iface'),
+			bssid: ev.target.getAttribute('data-bssid')
+		}, function() {
+			ev.target.disabled = true;
+		});
+	}
+
+	XHR.poll(-1, '<%=url('admin/wireless_assoclist')%>', null,
+		function(x, st)
+		{
+			var tb = document.getElementById('wifi_assoclist_table');
+			if (st && tb)
+			{
+				var rows = [];
+
+				st.forEach(function(bss) {
+					var icon;
+					var q = (-1 * (bss.noise - bss.signal)) / 5;
+					if (q < 1)
+						icon = "<%=resource%>/icons/signal-0.png";
+					else if (q < 2)
+						icon = "<%=resource%>/icons/signal-0-25.png";
+					else if (q < 3)
+						icon = "<%=resource%>/icons/signal-25-50.png";
+					else if (q < 4)
+						icon = "<%=resource%>/icons/signal-50-75.png";
+					else
+						icon = "<%=resource%>/icons/signal-75-100.png";
+
+					rows.push([
+						'<span class="ifacebadge" title="%q"><img src="<%=resource%>/icons/wifi.png" /> <a href="%s">%h</a><small>&#160;(%h)</small></span>'.format(
+							bss.radio,
+							bss.link,
+							bss.name,
+							bss.ifname),
+						bss.bssid,
+						bss.host_hint ? '%h (%h)'.format(bss.host_name || '?', bss.host_hint) : (bss.host_name || '?'),
+						'<span class="ifacebadge" title="<%:Signal%>: %d <%:dBm%> / <%:Noise%>: %d <%:dBm%> / <%:SNR%>: %d"><img src="%s" /> %d / %d <%:dBm%></span>'.format(
+							bss.signal,
+							bss.noise,
+							bss.signal - bss.noise,
+							icon,
+							bss.signal,
+							bss.noise),
+						E('span', {}, [
+							E('span', wifirate(bss, true)),
+							E('br'),
+							E('span', wifirate(bss, false))
+						]),
+						supports_deauth[bss.ifname] ? E('input', {
+							type: 'button',
+							class: 'cbi-button cbi-button-remove',
+							value: '<%:Disconnect%>',
+							'data-bssid': bss.bssid,
+							'data-iface': bss.ifname,
+							click: handleDeauth
+						}) : '-'
+					]);
+				});
+
+				cbi_update_table(tb, rows, '<em><%:No information available%></em>');
+			}
+		}
+	);
+//]]></script>
+
+<div class="table" id="wifi_assoclist_table">
+	<div class="tr table-titles">
+		<div class="th nowrap"><%:Network%></div>
+		<div class="th hide-xs"><%:MAC-Address%></div>
+		<div class="th nowrap"><%:Host%></div>
+		<div class="th nowrap"><%:Signal%> / <%:Noise%></div>
+		<div class="th nowrap"><%:RX Rate%> / <%:TX Rate%></div>
+		<% if next(supports_deauth) then %>
+			<div class="th right"><%:Disconnect%></div>
+		<% end %>
+	</div>
+	<div class="tr placeholder">
+		<div class="td"><em><%:Collecting data...%></em></div>
+	</div>
+</div>

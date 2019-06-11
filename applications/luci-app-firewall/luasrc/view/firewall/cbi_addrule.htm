@@ -1,0 +1,89 @@
+<%
+	local fw = require "luci.model.firewall".init()
+	local zones = fw:get_zones()
+%>
+
+<% if #zones > 0 then %>
+	<h4><%:Open ports on router%></h4>
+	<div class="table">
+		<div class="tr cbi-section-table-titles">
+			<div class="th"><%:Name%></div>
+			<div class="th"><%:Protocol%></div>
+			<div class="th"><%:External port%></div>
+			<div class="th"></div>
+		</div>
+		<div class="tr">
+			<div class="td">
+				<input type="text" class="cbi-input-text" id="_newopen.name" name="_newopen.name" placeholder="<%:New input rule%>" />
+			</div>
+			<div class="td">
+				<select class="cbi-input-select" id="_newopen.proto" name="_newopen.proto">
+					<option value="tcp udp">TCP+UDP</option>
+					<option value="tcp">TCP</option>
+					<option value="udp">UDP</option>
+					<option value="other"><%:Other...%></option>
+				</select>
+			</div>
+			<div class="td">
+				<input type="text" class="cbi-input-text" id="_newopen.extport" name="_newopen.extport" />
+			</div>
+			<div class="td bottom">
+				<input type="submit" class="cbi-button cbi-button-add" name="_newopen.submit" value="<%:Add%>" />
+			</div>
+		</div>
+	</div>
+<% end %>
+<% if #zones > 1 then %>
+	<h4><%:New forward rule%></h4>
+	<div class="table">
+		<div class="tr cbi-section-table-titles">
+			<div class="th"><%:Name%></div>
+			<div class="th"><%:Source zone%></div>
+			<div class="th"><%:Destination zone%></div>
+			<div class="th"></div>
+		</div>
+		<div class="tr">
+			<div class="td">
+				<input type="text" class="cbi-input-text" id="_newfwd.name" name="_newfwd.name" placeholder="<%:New forward rule%>" />
+			</div>
+			<div class="td">
+				<select class="cbi-input-text" id="_newfwd.src" name="_newfwd.src">
+					<% local k, v; for k, v in ipairs(fw:get_zones()) do -%>
+						<option<%=ifattr(v:name() == "wan", "selected", "selected")%> value="<%=v:name()%>"><%=v:name()%></option>
+					<%- end %>
+				</select>
+			</div>
+			<div class="td">
+				<select class="cbi-input-text" id="_newfwd.dest" name="_newfwd.dest">
+					<% local k, v; for k, v in ipairs(fw:get_zones()) do -%>
+						<option<%=ifattr(v:name() == "lan", "selected", "selected")%> value="<%=v:name()%>"><%=v:name()%></option>
+					<%- end %>
+				</select>
+			</div>
+			<div class="td bottom">
+				<input type="submit" class="cbi-button cbi-button-link" name="_newfwd.submit" value="<%:Add and edit...%>" />
+			</div>
+		</div>
+	</div>
+<% else %>
+	<input type="submit" class="cbi-button cbi-button-add" name="cbi.cts.<%=self.config%>.<%=self.sectiontype%>.<%=section%>" value="<%:Add%>" />
+<% end %>
+
+<% if #zones > 0 then %>
+	<script type="text/javascript">//<![CDATA[
+		cbi_validate_field('_newopen.extport', true, 'list(neg(portrange))');
+		document.getElementById('_newopen.extport').addEventListener('blur',
+			function() {
+				var n = document.getElementById('_newopen.name');
+				var p = document.getElementById('_newopen.proto');
+
+				if (!this.className.match(/invalid/))
+				{
+					if (!n.value && this.value)
+					{
+						n.value = 'Open' + this.value;
+					}
+				}
+			});
+	//]]></script>
+<% end %>

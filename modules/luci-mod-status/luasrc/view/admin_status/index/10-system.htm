@@ -1,0 +1,29 @@
+<%#
+ Copyright 2008 Steven Barth <steven@midlink.org>
+ Copyright 2008-2018 Jo-Philipp Wich <jo@mein.io>
+ Licensed to the public under the Apache License 2.0.
+-%>
+
+<%
+	local boardinfo = luci.util.ubus("system", "board") or { }
+	local unameinfo = nixio.uname() or { }
+	local ver = require "luci.version"
+%>
+
+<div class="cbi-section">
+	<h3><%:System%></h3>
+
+	<div class="table" width="100%">
+		<div class="tr"><div class="td left" width="33%"><%:Hostname%></div><div class="td left"><%=luci.sys.hostname() or "?"%></div></div>
+		<div class="tr"><div class="td left" width="33%"><%:Model%></div><div class="td left"><%=pcdata(boardinfo.model or "?")%></div></div>
+		<div class="tr"><div class="td left" width="33%"><%:Architecture%></div><div class="td left"><%=pcdata(boardinfo.system or "?")%></div></div>
+		<div class="tr"><div class="td left" width="33%"><%:Firmware Version%></div><div class="td left">
+			<%=pcdata(ver.distname)%> <%=pcdata(ver.distversion)%> /
+			<%=pcdata(ver.luciname)%> (<%=pcdata(ver.luciversion)%>)
+		</div></div>
+		<div class="tr"><div class="td left" width="33%"><%:Kernel Version%></div><div class="td left"><%=unameinfo.release or "?"%></div></div>
+		<div class="tr"><div class="td left" width="33%"><%:Local Time%></div><div class="td left" id="localtime">-</div></div>
+		<div class="tr"><div class="td left" width="33%"><%:Uptime%></div><div class="td left" id="uptime">-</div></div>
+		<div class="tr"><div class="td left" width="33%"><%:Load Average%></div><div class="td left" id="loadavg">-</div></div>
+	</div>
+</div>

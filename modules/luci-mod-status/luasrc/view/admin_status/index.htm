@@ -1,0 +1,149 @@
+<%#
+ Copyright 2008 Steven Barth <steven@midlink.org>
+ Copyright 2008-2018 Jo-Philipp Wich <jo@mein.io>
+ Licensed to the public under the Apache License 2.0.
+-%>
+
+<%
+	local fs = require "nixio.fs"
+	local ipc = require "luci.ip"
+	local util = require "luci.util"
+	local stat = require "luci.tools.status"
+	local ver = require "luci.version"
+
+	if luci.http.formvalue("status") == "1" then
+
+		local sysinfo = luci.util.ubus("system", "info") or { }
+
+		local meminfo = sysinfo.memory or {
+			total = 0,
+			free = 0,
+			buffered = 0,
+			shared = 0
+		}
+
+		local swapinfo = sysinfo.swap or {
+			total = 0,
+			free = 0
+		}
+
+		local has_dsl = fs.access("/etc/init.d/dsl_control")
+
+		local ntm = require "luci.model.network".init()
+		local wan_nets = ntm:get_wan_networks()
+		local wan6_nets = ntm:get_wan6_networks()
+
+		local conn_count = tonumber(
+			fs.readfile("/proc/sys/net/netfilter/nf_conntrack_count") or "") or 0
+
+		local conn_max = tonumber(luci.sys.exec(
+			"sysctl -n -e net.nf_conntrack_max net.ipv4.netfilter.ip_conntrack_max"
+		):match("%d+")) or 4096
+
+		local rv = {
+			uptime     = sysinfo.uptime or 0,
+			localtime  = os.date(),
+			loadavg    = sysinfo.load or { 0, 0, 0 },
+			memory     = meminfo,
+			swap       = swapinfo,
+			connmax    = conn_max,
+			conncount  = conn_count,
+			wifinets   = stat.wifi_networks()
+		}
+
+		if #wan_nets > 0 then
+			local k, v
+
+			rv.wan = { }
+
+			for k, v in pairs(wan_nets) do
+				local dev = v:get_interface()
+				local link = dev and ipc.link(dev:name())
+
+				local wan_info = {
+					ipaddr  = v:ipaddr(),
+					gwaddr  = v:gwaddr(),
+					netmask = v:netmask(),
+					dns     = v:dnsaddrs(),
+					expires = v:expires(),
+					uptime  = v:uptime(),
+					proto   = v:proto(),
+					i18n    = v:get_i18n(),
+					ifname  = v:ifname(),
+					link    = v:adminlink(),
+					mac     = dev and dev:mac(),
+					type    = dev and dev:type(),
+					name    = dev and dev:get_i18n(),
+					ether   = link and link.type == 1
+				}
+
+				rv.wan[#rv.wan+1] = wan_info
+			end
+		end
+
+		if #wan6_nets > 0 then
+			local k, v
+
+			rv.wan6 = { }
+
+			for k, v in pairs(wan6_nets) do
+				local dev = v:get_interface()
+				local link = dev and ipc.link(dev:name())
+				local wan6_info = {
+					ip6addr   = v:ip6addr(),
+					gw6addr   = v:gw6addr(),
+					dns       = v:dns6addrs(),
+					ip6prefix = v:ip6prefix(),
+					uptime    = v:uptime(),
+					proto     = v:proto(),
+					i18n      = v:get_i18n(),
+					ifname    = v:ifname(),
+					link      = v:adminlink(),
+					mac       = dev and dev:mac(),
+					type      = dev and dev:type(),
+					name      = dev and dev:get_i18n(),
+					ether     = link and link.type == 1
+				}
+
+				rv.wan6[#rv.wan6+1] = wan6_info
+			end
+		end
+
+		if has_dsl then
+			local dsl_stat = luci.sys.exec("/etc/init.d/dsl_control lucistat")
+			local dsl_func = loadstring(dsl_stat)
+			if dsl_func then
+				rv.dsl = dsl_func()
+			end
+		end
+
+		luci.http.prepare_content("application/json")
+		luci.http.write_json(rv)
+
+		return
+	end
+-%>
+
+<%+header%>
+
+<h2 name="content"><%:Status%></h2>
+
+<%-
+	local incdir = util.libpath() .. "/view/admin_status/index/"
+	if fs.access(incdir) then
+		local _, inc
+		local includes = {}
+		for inc in fs.dir(incdir) do
+			if inc:match("%.htm$") then
+				includes[#includes + 1] = inc:gsub("%.htm$", "")
+			end
+		end
+		for _, inc in luci.util.vspairs(includes) do
+			include("admin_status/index/" .. inc)
+		end
+	end
+-%>
+
+<script type="text/javascript" src="<%=resource%>/view/status/index.js"></script>
+
+<%+footer%>

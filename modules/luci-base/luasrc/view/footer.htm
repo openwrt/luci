@@ -1,0 +1,30 @@
+<%#
+ Copyright 2008 Steven Barth <steven@midlink.org>
+ Copyright 2008 Jo-Philipp Wich <jow@openwrt.org>
+ Licensed to the public under the Apache License 2.0.
+-%>
+
+<%
+	local is_rollback_pending, rollback_time_remaining, rollback_session, rollback_token = luci.model.uci:rollback_pending()
+
+	if is_rollback_pending or trigger_apply or trigger_revert then
+		include("cbi/apply_widget")
+		cbi_apply_widget(redirect, rollback_token)
+%>
+	<div class="alert-message" id="cbi_apply_status" style="display:none"></div>
+	<script type="text/javascript">
+		document.addEventListener("DOMContentLoaded", function() {
+			<% if trigger_apply then -%>
+				uci_apply(true);
+			<%- elseif trigger_revert then -%>
+				uci_revert();
+			<%- else -%>
+				uci_confirm(true, Date.now() + <%=rollback_time_remaining%> * 1000);
+			<%- end %>
+		});
+	</script>
+<%
+	end
+
+	include("themes/" .. theme .. "/footer")
+%>

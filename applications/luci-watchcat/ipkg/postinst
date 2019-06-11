@@ -1,7 +1,0 @@
-#!/bin/sh
-me="watchcat"
-[ -n "${IPKG_INSTROOT}" ] || {
-	( . /etc/uci-defaults/luci-$me ) && rm -f /etc/uci-defaults/luci-$me
-	/etc/init.d/$me enabled || /etc/init.d/$me enable
-	exit 0
-}

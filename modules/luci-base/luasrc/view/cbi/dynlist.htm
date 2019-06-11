@@ -1,0 +1,13 @@
+<%+cbi/valueheader%>
+<div<%=
+	attr("data-prefix", cbid) ..
+	attr("data-browser-path", self.default_path) ..
+	attr("data-dynlist", luci.util.serialize_json({
+		self.keylist, self.vallist,
+		self.datatype, self.optional or self.rmempty
+	})) ..
+	attr("data-values", luci.util.serialize_json(self:cfgvalue(section))) ..
+	ifattr(self.size, "data-size", self.size) ..
+	ifattr(self.placeholder, "data-placeholder", self.placeholder)
+%>></div>
+<%+cbi/valuefooter%>

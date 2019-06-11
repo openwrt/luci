@@ -1,0 +1,62 @@
+<%#
+ Copyright 2008 Steven Barth <steven@midlink.org>
+ Copyright 2008-2015 Jo-Philipp Wich <jow@openwrt.org>
+ Licensed to the public under the Apache License 2.0.
+-%>
+
+<%+header%>
+
+<h2 name="content"><%:Reboot%></h2>
+
+<p><%:Reboots the operating system of your device%></p>
+
+<%- local c = require("luci.model.uci").cursor():changes(); if c and next(c) then -%>
+	<p class="alert-message warning"><%:Warning: There are unsaved changes that will get lost on reboot!%></p>
+<%- end -%>
+
+<hr />
+
+<input class="cbi-button cbi-button-action important" type="button" value="<%:Perform reboot%>" onclick="reboot(this)" />
+
+<p class="alert-message notice reboot-message" style="display:none">
+	<img src="<%=resource%>/icons/loading.gif" alt="<%:Loading%>" style="vertical-align:middle" />
+	<span><%:Device is rebooting...%></span>
+</p>
+
+<script type="text/javascript">//<![CDATA[
+	var tries = 0,
+	    message = document.querySelector('p.reboot-message'),
+	    label = message.querySelector('span');
+
+	function ok() {
+		window.location = '<%=url("admin")%>';
+	}
+
+	function check() {
+		window.setTimeout(ping, 5000);
+	}
+
+	function ping() {
+		var img = document.createElement('img');
+
+		img.onload = ok;
+		img.onerror = check;
+		img.src = '<%=resource%>/icons/loading.gif?' + Math.random();
+
+		if (tries++ >= 30) {
+			message.classList.remove('notice');
+			message.classList.add('warning');
+			label.innerHTML = '<%:Device unreachable! Still waiting for device...%>';
+		}
+	}
+
+	function reboot(button) {
+		button.style.display = 'none';
+		message.style.display = '';
+		label.innerHTML = '<%:Waiting for device...%>';
+
+		(new XHR()).post('<%=url("admin/system/reboot/call")%>', { token: '<%=token%>' }, check);
+	}
+//]]></script>
+
+<%+footer%>
