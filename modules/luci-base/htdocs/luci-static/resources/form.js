@@ -1126,7 +1126,7 @@ var CBITableSection = CBITypedSection.extend({
 						'value': _('Save')
 					})
 				])
-			]);
+			], 'cbi-modal');
 		}, this)).catch(L.error);
 	}
 });
