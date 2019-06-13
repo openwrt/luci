@@ -1414,10 +1414,13 @@ return L.Class.extend({
 	},
 
 	/* Modal dialog */
-	showModal: function(title, children) {
+	showModal: function(title, children /* , ... */) {
 		var dlg = modalDiv.firstElementChild;
 
 		dlg.setAttribute('class', 'modal');
+
+		for (var i = 2; i < arguments.length; i++)
+			dlg.classList.add(arguments[i]);
 
 		L.dom.content(dlg, L.dom.create('h4', {}, title));
 		L.dom.append(dlg, children);
