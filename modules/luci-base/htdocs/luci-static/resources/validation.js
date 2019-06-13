@@ -56,7 +56,7 @@ var Validator = L.Class.extend({
 			valid = this.vstack[0].apply(this, this.vstack[1]);
 
 		if (valid !== true) {
-			this.field.setAttribute('data-tooltip', _('Expecting %s').format(this.error));
+			this.field.setAttribute('data-tooltip', _('Expecting: %s').format(this.error));
 			this.field.setAttribute('data-tooltip-style', 'error');
 			this.field.dispatchEvent(new CustomEvent('validation-failure', { bubbles: true }));
 			return false;
@@ -453,7 +453,9 @@ var ValidatorFactory = L.Class.extend({
 				}
 			}
 
-			return this.assert(false, _('one of:\n - %s'.format(errors.join('\n - '))));
+			var t = _('One of the following: %s');
+
+			return this.assert(false, t.format('\n - ' + errors.join('\n - ')));
 		},
 
 		and: function() {
@@ -472,7 +474,12 @@ var ValidatorFactory = L.Class.extend({
 		},
 
 		neg: function() {
-			return this.apply('or', this.value.replace(/^[ \t]*![ \t]*/, ''), arguments);
+			this.value = this.value.replace(/^[ \t]*![ \t]*/, '');
+
+			if (arguments[0].apply(this, arguments[1]))
+				return this.assert(true);
+
+			return this.assert(false, _('Potential negation of: %s').format(this.error));
 		},
 
 		list: function(subvalidator, subargs) {
