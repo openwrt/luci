@@ -11,6 +11,8 @@ return L.Class.extend({
 			deletes: { },
 			reorder: { }
 		};
+
+		this.loaded = {};
 	},
 
 	callLoad: rpc.declare({
@@ -68,6 +70,24 @@ return L.Class.extend({
 		return sid;
 	},
 
+	resolveSID: function(conf, sid) {
+		if (typeof(sid) != 'string')
+			return sid;
+
+		var m = /^@([a-zA-Z0-9_-]+)\[(-?[0-9]+)\]$/.exec(sid);
+
+		if (m) {
+			var type = m[1],
+			    pos = +m[2],
+			    sections = this.sections(conf, type),
+			    section = sections[pos >= 0 ? pos : sections.length + pos];
+
+			return section ? section['.name'] : null;
+		}
+
+		return sid;
+	},
+
 	reorderSections: function() {
 		var v = this.state.values,
 		    n = this.state.creates,
@@ -109,9 +129,15 @@ return L.Class.extend({
 		return Promise.all(tasks);
 	},
 
+	loadPackage: function(packageName) {
+		if (this.loaded[packageName] == null)
+			return (this.loaded[packageName] = this.callLoad(packageName));
+
+		return Promise.resolve(this.loaded[packageName]);
+	},
+
 	load: function(packages) {
 		var self = this,
-		    seen = { },
 		    pkgs = [ ],
 		    tasks = [];
 
@@ -119,17 +145,17 @@ return L.Class.extend({
 			packages = [ packages ];
 
 		for (var i = 0; i < packages.length; i++)
-			if (!seen[packages[i]] && !self.state.values[packages[i]]) {
+			if (!self.state.values[packages[i]]) {
 				pkgs.push(packages[i]);
-				seen[packages[i]] = true;
-				tasks.push(self.callLoad(packages[i]));
+				tasks.push(self.loadPackage(packages[i]));
 			}
 
 		return Promise.all(tasks).then(function(responses) {
 			for (var i = 0; i < responses.length; i++)
 				self.state.values[pkgs[i]] = responses[i];
 
-			document.dispatchEvent(new CustomEvent('uci-loaded'));
+			if (responses.length)
+				document.dispatchEvent(new CustomEvent('uci-loaded'));
 
 			return pkgs;
 		});
@@ -144,6 +170,8 @@ return L.Class.extend({
 			delete this.state.creates[packages[i]];
 			delete this.state.changes[packages[i]];
 			delete this.state.deletes[packages[i]];
+
+			delete this.loaded[packages[i]];
 		}
 	},
 
@@ -225,22 +253,24 @@ return L.Class.extend({
 		    c = this.state.changes,
 		    d = this.state.deletes;
 
-		if (typeof(sid) == 'undefined')
-			return undefined;
+		sid = this.resolveSID(conf, sid);
+
+		if (sid == null)
+			return null;
 
 		/* requested option in a just created section */
 		if (n[conf] && n[conf][sid]) {
 			if (!n[conf])
 				return undefined;
 
-			if (typeof(opt) == 'undefined')
+			if (opt == null)
 				return n[conf][sid];
 
 			return n[conf][sid][opt];
 		}
 
 		/* requested an option value */
-		if (typeof(opt) != 'undefined') {
+		if (opt != null) {
 			/* check whether option was deleted */
 			if (d[conf] && d[conf][sid]) {
 				if (d[conf][sid] === true)
@@ -252,7 +282,7 @@ return L.Class.extend({
 			}
 
 			/* check whether option was changed */
-			if (c[conf] && c[conf][sid] && typeof(c[conf][sid][opt]) != 'undefined')
+			if (c[conf] && c[conf][sid] && c[conf][sid][opt] != null)
 				return c[conf][sid][opt];
 
 			/* return base value */
@@ -274,6 +304,8 @@ return L.Class.extend({
 		    n = this.state.creates,
 		    c = this.state.changes,
 		    d = this.state.deletes;
+
+		sid = this.resolveSID(conf, sid);
 
 		if (sid == null || opt == null || opt.charAt(0) == '.')
 			return;
@@ -355,6 +387,9 @@ return L.Class.extend({
 	move: function(conf, sid1, sid2, after) {
 		var sa = this.sections(conf),
 		    s1 = null, s2 = null;
+
+		sid1 = this.resolveSID(conf, sid1);
+		sid2 = this.resolveSID(conf, sid2);
 
 		for (var i = 0; i < sa.length; i++) {
 			if (sa[i]['.name'] != sid1)
