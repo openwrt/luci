@@ -135,8 +135,9 @@ function display(pattern)
 
 		if (currentDisplayMode === 'updates') {
 			var avail = packages.available.pkgs[name];
-			if (!avail || compareVersion(avail.version, pkg.version) <= 0)
+			if (!avail || !packages.installed.pkgs[name].installed || compareVersion(avail.version, pkg.version) <= 0) {
 				continue;
+			}
 
 			ver = '%s » %s'.format(
 				truncateVersion(pkg.version || '-'),
@@ -149,23 +150,26 @@ function display(pattern)
 			}, _('Upgrade…'));
 		}
 		else if (currentDisplayMode === 'installed') {
+			if (!packages.installed.pkgs[name].installed) {
+				continue;
+			}
 			ver = truncateVersion(pkg.version || '-');
 			btn = E('div', {
 				'class': 'btn cbi-button-negative',
 				'data-package': name,
 				'click': handleRemove
-			}, _('Remove'));
+			}, _('Remove…'));
 		}
 		else {
 			ver = truncateVersion(pkg.version || '-');
 
-			if (!packages.installed.pkgs[name])
+			if (!packages.installed.pkgs[name] || !packages.installed.pkgs[name].installed)
 				btn = E('div', {
 					'class': 'btn cbi-button-action',
 					'data-package': name,
 					'click': handleInstall
 				}, _('Install…'));
-			else if (packages.installed.pkgs[name].version != pkg.version)
+			else if (packages.installed.pkgs[name].version != pkg.version && packages.installed.pkgs[name].installed)
 				btn = E('div', {
 					'class': 'btn cbi-button-positive',
 					'data-package': name,
@@ -578,10 +582,15 @@ function handleInstall(ev)
 		]),
 		desc || '',
 		errs || inst || '',
-		E('div', { 'class': 'right' }, [
-			E('div', {
-				'class': 'btn',
-				'click': L.hideModal
+		E('div', { 'style': 'display:flex; justify-content:space-between; flex-wrap:wrap' }, [
+			E('label', {}, [
+				E('input', { type: 'checkbox', name: 'forceoverwrite' }),
+				_('Overwrite files from other package(s)')
+			]),
+			E('div', { 'style': 'flex-grow:1', 'class': 'right' }, [
+				E('div', {
+					'class': 'btn',
+					'click': L.hideModal
 			}, _('Cancel')),
 			' ',
 			E('div', {
@@ -590,6 +599,7 @@ function handleInstall(ev)
 				'class': 'btn cbi-button-action',
 				'click': handleOpkg
 			}, _('Install'))
+			])
 		])
 	]);
 }
@@ -734,6 +744,7 @@ function handleOpkg(ev)
 	var cmd = ev.target.getAttribute('data-command'),
 	    pkg = ev.target.getAttribute('data-package'),
 	    rem = document.querySelector('input[name="autoremove"]'),
+	    frc = document.querySelector('input[name="forceoverwrite"]'),
 	    url = 'admin/system/opkg/exec/' + encodeURIComponent(cmd);
 
 	var dlg = L.showModal(_('Executing package manager'), [
@@ -741,7 +752,7 @@ function handleOpkg(ev)
 			_('Waiting for the <em>opkg %h</em> command to complete…').format(cmd))
 	]);
 
-	L.post(url, { package: pkg, autoremove: rem ? rem.checked : false }, function(xhr, res) {
+	L.post(url, { package: pkg, autoremove: rem ? rem.checked : false, forceoverwrite: frc ? frc.checked : false }, function(xhr, res) {
 		dlg.removeChild(dlg.lastChild);
 
 		if (res.stdout)
