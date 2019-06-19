@@ -589,6 +589,10 @@ function handleInstall(ev)
 		desc || '',
 		errs || inst || '',
 		E('div', { 'class': 'right' }, [
+			E('label', { 'class': 'cbi-checkbox', 'style': 'float:left; padding-top:.5em' }, [
+				E('input', { 'type': 'checkbox', 'name': 'overwrite' }), ' ',
+				_('Overwrite files from other package(s)')
+			]),
 			E('div', {
 				'class': 'btn',
 				'click': L.hideModal
@@ -744,6 +748,7 @@ function handleOpkg(ev)
 	var cmd = ev.target.getAttribute('data-command'),
 	    pkg = ev.target.getAttribute('data-package'),
 	    rem = document.querySelector('input[name="autoremove"]'),
+	    owr = document.querySelector('input[name="overwrite"]'),
 	    url = 'admin/system/opkg/exec/' + encodeURIComponent(cmd);
 
 	var dlg = L.showModal(_('Executing package manager'), [
@@ -751,7 +756,7 @@ function handleOpkg(ev)
 			_('Waiting for the <em>opkg %h</em> command to complete…').format(cmd))
 	]);
 
-	L.post(url, { package: pkg, autoremove: rem ? rem.checked : false }, function(xhr, res) {
+	L.post(url, { package: pkg, autoremove: rem ? rem.checked : false, overwrite: owr ? owr.checked : false }, function(xhr, res) {
 		dlg.removeChild(dlg.lastChild);
 
 		if (res.stdout)

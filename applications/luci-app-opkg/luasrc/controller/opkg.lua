@@ -26,11 +26,15 @@ end
 
 function action_exec(command, package)
 	local sys = require "luci.sys"
-	local cmd = { "/bin/opkg", "--force-removal-of-dependent-packages", "--force-overwrite" }
+	local cmd = { "/bin/opkg", "--force-removal-of-dependent-packages" }
 	local pkg = luci.http.formvalue("package")
 
 	if luci.http.formvalue("autoremove") == "true" then
 		cmd[#cmd + 1] = "--autoremove"
+	end
+
+	if luci.http.formvalue("overwrite") == "true" then
+		cmd[#cmd + 1] = "--force-overwrite"
 	end
 
 	cmd[#cmd + 1] = command
