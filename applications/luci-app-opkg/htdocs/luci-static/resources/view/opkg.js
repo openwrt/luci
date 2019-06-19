@@ -733,7 +733,7 @@ function handleRemove(ev)
 					'data-package': name,
 					'class': 'btn cbi-button-negative',
 					'click': handleOpkg
-				}, _('Remove'))
+				}, _('Remove…'))
 			])
 		])
 	]);
