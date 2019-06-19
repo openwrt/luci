@@ -134,7 +134,12 @@ function display(pattern)
 		var btn, ver;
 
 		if (currentDisplayMode === 'updates') {
-			var avail = packages.available.pkgs[name];
+			var avail = packages.available.pkgs[name],
+			    inst  = packages.installed.pkgs[name];
+
+			if (!inst || !inst.installed)
+				continue;
+
 			if (!avail || compareVersion(avail.version, pkg.version) <= 0)
 				continue;
 
@@ -149,6 +154,9 @@ function display(pattern)
 			}, _('Upgrade…'));
 		}
 		else if (currentDisplayMode === 'installed') {
+			if (!pkg.installed)
+				continue;
+
 			ver = truncateVersion(pkg.version || '-');
 			btn = E('div', {
 				'class': 'btn cbi-button-negative',
@@ -157,15 +165,17 @@ function display(pattern)
 			}, _('Remove'));
 		}
 		else {
+			var inst = packages.installed.pkgs[name];
+
 			ver = truncateVersion(pkg.version || '-');
 
-			if (!packages.installed.pkgs[name])
+			if (!inst || !inst.installed)
 				btn = E('div', {
 					'class': 'btn cbi-button-action',
 					'data-package': name,
 					'click': handleInstall
 				}, _('Install…'));
-			else if (packages.installed.pkgs[name].version != pkg.version)
+			else if (inst.installed && inst.version != pkg.version)
 				btn = E('div', {
 					'class': 'btn cbi-button-positive',
 					'data-package': name,
