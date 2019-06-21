@@ -20,6 +20,14 @@ hosts = s:option( Value, "Hosts", translate("Monitor hosts"), translate ("Add mu
 hosts.default = "127.0.0.1"
 hosts:depends( "enable", 1 )
 
+-- collectd_ping.adressfamily (AddressFamily)
+addressfamily = s:option( ListValue, "AddressFamily", translate("Address family") )
+addressfamily.default = "any"
+addressfamily:value( "any" )
+addressfamily:value( "ipv4" )
+addressfamily:value( "ipv6" )
+addressfamily:depends( "enable", 1 )
+
 -- collectd_ping.ttl (TTL)
 ttl = s:option( Value, "TTL", translate("TTL for ping packets") )
 ttl.isinteger = true
