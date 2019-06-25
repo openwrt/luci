@@ -162,7 +162,7 @@ function display(pattern)
 				'class': 'btn cbi-button-negative',
 				'data-package': name,
 				'click': handleRemove
-			}, _('Remove'));
+			}, _('Remove…'));
 		}
 		else {
 			var inst = packages.installed.pkgs[name];
@@ -737,7 +737,7 @@ function handleRemove(ev)
 					'data-package': name,
 					'class': 'btn cbi-button-negative',
 					'click': handleOpkg
-				}, _('Remove…'))
+				}, _('Remove'))
 			])
 		])
 	]);
