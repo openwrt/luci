@@ -4,7 +4,7 @@
 local map, section, net = ...
 
 local device, apn, service, pincode, username, password, dialnumber
-local ipv6, maxwait, defaultroute, metric, peerdns, dns,
+local ipv6, delay, defaultroute, metric, peerdns, dns,
       keepalive_failure, keepalive_interval, demand
 
 
@@ -58,12 +58,12 @@ if luci.model.network:has_ipv6() then
 end
 
 
-maxwait = section:taboption("advanced", Value, "maxwait",
+delay = section:taboption("advanced", Value, "delay",
 	translate("Modem init timeout"),
 	translate("Maximum amount of seconds to wait for the modem to become ready"))
 
-maxwait.placeholder = "20"
-maxwait.datatype    = "min(1)"
+delay.placeholder = "10"
+delay.datatype    = "min(1)"
 
 
 defaultroute = section:taboption("advanced", Flag, "defaultroute",
