@@ -4,7 +4,7 @@
 local map, section, net = ...
 
 local device, apn, pincode, username, password
-local auth, ipv6
+local auth, ipv6, delay
 
 
 device = section:taboption("general", Value, "device", translate("Modem device"))
@@ -43,3 +43,9 @@ if luci.model.network:has_ipv6() then
     ipv6 = section:taboption("advanced", Flag, "ipv6", translate("Enable IPv6 negotiation"))
     ipv6.default = ipv6.disabled
 end
+
+delay = section:taboption("advanced", Value, "delay",
+	translate("Modem init timeout"),
+	translate("Maximum amount of seconds to wait for the modem to become ready"))
+delay.placeholder = "10"
+delay.datatype    = "min(1)"
