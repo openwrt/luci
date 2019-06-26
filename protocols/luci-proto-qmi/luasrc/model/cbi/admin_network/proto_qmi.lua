@@ -26,18 +26,26 @@ apn = section:taboption("general", Value, "apn", translate("APN"))
 pincode = section:taboption("general", Value, "pincode", translate("PIN"))
 
 
-username = section:taboption("general", Value, "username", translate("PAP/CHAP username"))
-
-
-password = section:taboption("general", Value, "password", translate("PAP/CHAP password"))
-password.password = true
-
 auth = section:taboption("general", Value, "auth", translate("Authentication Type"))
-auth:value("", translate("-- Please choose --"))
 auth:value("both", "PAP/CHAP (both)")
 auth:value("pap", "PAP")
 auth:value("chap", "CHAP")
 auth:value("none", "NONE")
+auth.default = "none"
+
+
+username = section:taboption("general", Value, "username", translate("PAP/CHAP username"))
+username:depends("auth", "pap")
+username:depends("auth", "chap")
+username:depends("auth", "both")
+
+
+password = section:taboption("general", Value, "password", translate("PAP/CHAP password"))
+password:depends("auth", "pap")
+password:depends("auth", "chap")
+password:depends("auth", "both")
+password.password = true
+
 
 if luci.model.network:has_ipv6() then
     ipv6 = section:taboption("advanced", Flag, "ipv6", translate("Enable IPv6 negotiation"))
