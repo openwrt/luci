@@ -12,7 +12,7 @@ You may obtain a copy of the License at
 
 local map, section, net = ...
 
-local device, apn, service, pincode, username, password
+local device, apn, service, pincode, username, password, dialnum
 local ipv6, delay, defaultroute, metric, peerdns, dns
 
 
@@ -55,6 +55,10 @@ username = section:taboption("general", Value, "username", translate("PAP/CHAP u
 
 password = section:taboption("general", Value, "password", translate("PAP/CHAP password"))
 password.password = true
+
+
+dialnum = section:taboption("general", Value, "dialnum", translate("Dial number"))
+dialnum.placeholder = "*99#"
 
 
 if luci.model.network:has_ipv6() then
