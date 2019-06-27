@@ -4,7 +4,7 @@
 local map, section, net = ...
 
 local device, apn, pincode, username, password
-local auth, ipv6, delay
+local auth, ipv6, delay, mtu
 
 
 device = section:taboption("general", Value, "device", translate("Modem device"))
@@ -57,3 +57,7 @@ delay = section:taboption("advanced", Value, "delay",
 	translate("Maximum amount of seconds to wait for the modem to become ready"))
 delay.placeholder = "10"
 delay.datatype    = "min(1)"
+
+mtu = section:taboption("advanced", Value, "mtu", translate("Override MTU"))
+mtu.placeholder = "1500"
+mtu.datatype    = "max(9200)"
