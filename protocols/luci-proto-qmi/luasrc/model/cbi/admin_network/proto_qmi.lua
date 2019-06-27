@@ -4,7 +4,7 @@
 local map, section, net = ...
 
 local device, apn, pincode, username, password
-local auth, ipv6
+local auth, ipv6, delay
 
 
 device = section:taboption("general", Value, "device", translate("Modem device"))
@@ -26,20 +26,34 @@ apn = section:taboption("general", Value, "apn", translate("APN"))
 pincode = section:taboption("general", Value, "pincode", translate("PIN"))
 
 
-username = section:taboption("general", Value, "username", translate("PAP/CHAP username"))
-
-
-password = section:taboption("general", Value, "password", translate("PAP/CHAP password"))
-password.password = true
-
 auth = section:taboption("general", Value, "auth", translate("Authentication Type"))
-auth:value("", translate("-- Please choose --"))
 auth:value("both", "PAP/CHAP (both)")
 auth:value("pap", "PAP")
 auth:value("chap", "CHAP")
 auth:value("none", "NONE")
+auth.default = "none"
+
+
+username = section:taboption("general", Value, "username", translate("PAP/CHAP username"))
+username:depends("auth", "pap")
+username:depends("auth", "chap")
+username:depends("auth", "both")
+
+
+password = section:taboption("general", Value, "password", translate("PAP/CHAP password"))
+password:depends("auth", "pap")
+password:depends("auth", "chap")
+password:depends("auth", "both")
+password.password = true
+
 
 if luci.model.network:has_ipv6() then
     ipv6 = section:taboption("advanced", Flag, "ipv6", translate("Enable IPv6 negotiation"))
     ipv6.default = ipv6.disabled
 end
+
+delay = section:taboption("advanced", Value, "delay",
+	translate("Modem init timeout"),
+	translate("Maximum amount of seconds to wait for the modem to become ready"))
+delay.placeholder = "10"
+delay.datatype    = "min(1)"
