@@ -443,11 +443,11 @@ function process.list()
 
 	for line in ps do
 		local pid, ppid, user, stat, vsz, mem, cpu, cmd = line:match(
-			"^ *(%d+) +(%d+) +(%S.-%S) +([RSDZTW][W ][<N ]) +(%d+) +(%d+%%) +(%d+%%) +(.+)"
+			"^ *(%d+) +(%d+) +(%S.-%S) +([RSDZTW][<NW ][<N ]) +(%d+) +(%d+%%) +(%d+%%) +(.+)"
 		)
 
 		local idx = tonumber(pid)
-		if idx then
+		if idx and not cmd:match("top %-bn1") then
 			data[idx] = {
 				['PID']     = pid,
 				['PPID']    = ppid,
