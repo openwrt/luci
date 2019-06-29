@@ -26,7 +26,7 @@ pwd.password = false
 
 function pwd.write(self, section, value)
 	local pass
-	if string.match(value, "^\$%d\$.*") then
+	if string.match(value, "^%$%d%$.*") then
 		pass = value
 	else
 		local t = tonumber(nixio.getpid()*os.time())
