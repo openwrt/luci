@@ -207,9 +207,8 @@ end
 -- handling.  It may actually be a property of the getopt function
 -- rather than the shell proper.
 function shellstartsqescape(value)
-   res, _ = string.gsub(value, "^\-", "\\-")
-   res, _ = string.gsub(res, "^-", "\-")
-   return shellsqescape(value)
+   res, _ = string.gsub(value, "^%-", "\\-")
+   return shellsqescape(res)
 end
 
 -- containing the resulting substrings. The optional max parameter specifies

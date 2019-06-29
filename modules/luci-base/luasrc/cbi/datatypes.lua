@@ -418,7 +418,7 @@ function maxlength(val, max)
 end
 
 function phonedigit(val)
-	return (val:match("^[0-9\*#!%.]+$") ~= nil)
+	return (val:match("^[0-9%*#!%.]+$") ~= nil)
 end
 
 function timehhmmss(val)
