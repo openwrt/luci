@@ -139,4 +139,10 @@ e8.default = 60
 e8.datatype = "range(30,300)"
 e8.rmempty = false
 
+e10 = e:option(Value, "trm_scanbuffer", translate("Scan Buffer Size"),
+  translate("Buffer size in bytes to prepare nearby scan results."))
+e10.default = 1024
+e10.datatype = "range(512,4096)"
+e10.optional = true
+
 return m
