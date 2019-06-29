@@ -1,4 +1,4 @@
--- Copyright 2017-2018 Dirk Brenken (dev@brenken.org)
+-- Copyright 2017-2019 Dirk Brenken (dev@brenken.org)
 -- This is free software, licensed under the Apache License, Version 2.0
 
 local fs   = require("nixio.fs")
@@ -29,8 +29,8 @@ if s ~= nil then
 	bssid.default = s.bssid or ""
 
 	s.cipher = "auto"
-	if string.match(s.encryption, '\+') and not string.match(s.encryption, '^wep') then
-		s.pos = string.find(s.encryption, '\+')
+	if string.match(s.encryption, '%+') and not string.match(s.encryption, '^wep') then
+		s.pos = string.find(s.encryption, '%+')
 		s.cipher = string.sub(s.encryption, s.pos + 1)
 		s.encryption = string.sub(s.encryption, 0, s.pos - 1)
 	end
