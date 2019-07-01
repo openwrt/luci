@@ -55,11 +55,11 @@ for t in triggers:gmatch("[%w-]+") do
 	elseif t == "heartbeat" then
 		trigger:value(t, translatef("Heartbeat interval (%s)", t))
 	elseif t == "nand-disk" then
-		trigger:value(t, translatef("Flashmemory write access (%s)", t))
+		trigger:value(t, translatef("Flash memory activity (%s)", t))
 	elseif t == "mtd" then
-		trigger:value(t, translatef("Flashmemory write access (%s)", t))
+		trigger:value(t, translatef("Flash memory activity (%s)", t))
 	elseif t:match("mmc[0-9]") then
-		trigger:value(t, translatef("Flashmemory write access (%s)", t))
+		trigger:value(t, translatef("Flash memory activity (%s)", t))
 	elseif t:match("switch[0-9]") then
 		trigger:value(t, translatef("Switchport activity (%s)", t))
 	elseif t:match("phy[0-9]rx") then
