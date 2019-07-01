@@ -173,10 +173,12 @@ msgstr "Aktiviert"
 msgid ""
 "Enables firewall rule logging (global mwan3 logging must also be enabled)"
 msgstr ""
+"Aktiviert die Protokollierung von Firewall-Regeln (globale "
+"Firewall-Protokollierung muss ebenfalls aktiviert sein)."
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/globalsconfig.lua:23
 msgid "Enables global firewall logging"
-msgstr ""
+msgstr "Aktiviert die globale Firewall-Protokollierung"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/globalsconfig.lua:16
 msgid "Enter value in hex, starting with <code>0x</code>"
@@ -200,7 +202,7 @@ msgstr "Fehler-Intervall"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/globalsconfig.lua:29
 msgid "Firewall loglevel"
-msgstr ""
+msgstr "Firewall-Protokollierungsstufe"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/globalsconfig.lua:15
 msgid "Firewall mask"
@@ -325,7 +327,7 @@ msgstr ""
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/globalsconfig.lua:28
 msgid "Loglevel"
-msgstr ""
+msgstr "Protokollierungsstufe"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/globalsconfig.lua:8
 msgid "MWAN - Globals"
@@ -672,11 +674,11 @@ msgstr ""
 
 #: applications/luci-app-mwan3/luasrc/view/mwan/status_diagnostics.htm:69
 msgid "Task"
-msgstr ""
+msgstr "Aufgabe"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interface.lua:15
 msgid "There are currently %d of %d supported interfaces configured"
-msgstr ""
+msgstr "Es sind derzeit %d von %d unterstützten Schnittstellen konfiguriert"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interfaceconfig.lua:245
 msgid ""
@@ -732,7 +734,7 @@ msgstr ""
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interfaceconfig.lua:36
 msgid "Tracking hostname or IP address"
-msgstr "Tracking des Hostnamen oder der IP-Addresse"
+msgstr "Name oder IP-Adresse des Tracking Hosts"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interfaceconfig.lua:40
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interface.lua:170
@@ -771,34 +773,46 @@ msgstr "Schaue in der Datei /etc/protocols für Protokollbeschreibung mach"
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interface.lua:19
 msgid "WARNING: %d interfaces are configured exceeding the maximum of %d!"
 msgstr ""
+"WARNUNG: %d Schnittstellen sind konfiguriert. Damit wird das Maximum von %d "
+"überschritten!"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interface.lua:26
 msgid "WARNING: Interface %s are not found in /etc/config/network"
 msgstr ""
+"WARNUNG: Die Schnittstelle %s wurde in /etc/config/network nicht gefunden!"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interface.lua:45
 msgid "WARNING: Interface %s has a duplicate metric %s configured"
 msgstr ""
+"WARNUNG: Die Schnittstelle %s hat eine doppelte Metrik %s konfiguriert!"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interface.lua:38
 msgid ""
 "WARNING: Interface %s has a higher reliability requirement than tracking "
 "hosts (%d)"
 msgstr ""
+"WARNUNG: Die Tracking-Sicherheit der Schnittstelle %s ist höher als die "
+"Anzahl der Tracking Hosts (%d)."
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interface.lua:32
 msgid "WARNING: Interface %s has no default route in the main routing table"
 msgstr ""
+"WARNUNG: Die Schnittstelle %s hat keine Standardroute in der "
+"Hauptroutinentabelle."
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/policy.lua:30
 msgid "WARNING: Policy %s has exceeding the maximum name of 15 characters"
 msgstr ""
+"WARNUNG: Die Regel %s hat die maximale Namenslänge von 15 Zeichen "
+"überschritten."
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/rule.lua:34
 msgid ""
 "WARNING: Rule %s have a port configured with no or improper protocol "
 "specified!"
 msgstr ""
+"WARNUNG: Die Regel %s hat einen Port, der mit keinem oder einem falschen "
+"Protokoll konfiguriert ist!"
 
 #: applications/luci-app-mwan3/luasrc/view/mwan/status_diagnostics.htm:37
 msgid "Waiting for command to complete..."
