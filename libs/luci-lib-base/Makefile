@@ -6,8 +6,8 @@
 
 include $(TOPDIR)/rules.mk
 
-LUCI_TITLE:=HTTP(S) client library
-LUCI_DEPENDS:=+luci-lib-base +luci-lib-nixio +luci-lib-httpprotoutils
+LUCI_TITLE:=basic libraries for luci
+LUCI_DEPENDS:=+lua +luci-lib-nixio +luci-lib-ip +luci-lib-jsonc +liblucihttp-lua
 
 include ../../luci.mk
 
