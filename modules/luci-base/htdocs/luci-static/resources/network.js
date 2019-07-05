@@ -1539,7 +1539,7 @@ Protocol = L.Class.extend({
 			if (ifnames[i].charAt(0) == '@')
 				continue;
 
-			var m = ifnames[i].match(/^([:/]+)/);
+			var m = ifnames[i].match(/^([^:/]+)/);
 			if (m != null)
 				rv.push(L.network.instantiateDevice(m[1], this));
 		}
