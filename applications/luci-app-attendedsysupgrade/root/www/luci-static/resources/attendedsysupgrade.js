@@ -2,6 +2,7 @@ function $(s) {
     return document.getElementById(s.substring(1));
 }
 
+
 function show(s) {
     $(s).style.display = 'block';
 }
