@@ -659,3 +659,11 @@ end
 function init.stop(name)
 	return (init_action("stop", name) == 0)
 end
+
+function init.restart(name)
+	return (init_action("restart", name) == 0)
+end
+
+function init.reload(name)
+	return (init_action("reload", name) == 0)
+end
