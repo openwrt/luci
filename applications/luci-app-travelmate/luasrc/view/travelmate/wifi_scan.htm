@@ -6,6 +6,7 @@ This is free software, licensed under the Apache License, Version 2.0
 <%-
 	local sys = require("luci.sys")
 	local utl = require("luci.util")
+	local xml = require("luci.xml")
 	local dev = luci.http.formvalue("device")
 	local ifn = utl.trim(sys.exec("/bin/ubus -S call network.wireless status 2>/dev/null | jsonfilter -l1 -e '@." .. dev .. ".interfaces[@.config.mode=\"sta\"].ifname' 2>/dev/null"))
 	local iw
@@ -47,10 +48,10 @@ This is free software, licensed under the Apache License, Version 2.0
 			<%- for i, net in ipairs(iw.scanlist or { }) do -%>
 			<div class="tr cbi-section-table-row cbi-rowstyle-1">
 				<div class="td left" style="text-align: left !important">
-					<%=net.ssid and utl.pcdata(net.ssid) or "<em>%s</em>" % translate("hidden")%>
+					<%=net.ssid and xml.pcdata(net.ssid) or "<em>%s</em>" % translate("hidden")%>
 				</div>
 				<div class="td left" style="text-align: left !important">
-					<%=net.bssid and utl.pcdata(net.bssid)%>
+					<%=net.bssid and xml.pcdata(net.bssid)%>
 				</div>
 				<div class="td left" style="text-align: left !important">
 					<%=net.encryption.description%>
@@ -61,9 +62,9 @@ This is free software, licensed under the Apache License, Version 2.0
 				<div class="td cbi-section-actions">
 					<form class="inline" action="<%=luci.dispatcher.build_url('admin/services/travelmate/wifiadd')%>" method="post">
 						<input type="hidden" name="token" value="<%=token%>"/>
-						<input type="hidden" name="device" value="<%=utl.pcdata(dev)%>"/>
-						<input type="hidden" name="ssid" value="<%=utl.pcdata(net.ssid)%>"/>
-						<input type="hidden" name="bssid" value="<%=utl.pcdata(net.bssid)%>"/>
+						<input type="hidden" name="device" value="<%=xml.pcdata(dev)%>"/>
+						<input type="hidden" name="ssid" value="<%=xml.pcdata(net.ssid)%>"/>
+						<input type="hidden" name="bssid" value="<%=xml.pcdata(net.bssid)%>"/>
 						<input type="hidden" name="description" value="<%=net.encryption.description%>"/>
 						<input type="hidden" name="wep" value="<%=net.encryption.wep and 1 or 0%>"/>
 						<%- if net.encryption.wpa then -%>
@@ -85,7 +86,7 @@ This is free software, licensed under the Apache License, Version 2.0
 		</form>
 		<form class="inline" action="<%=luci.dispatcher.build_url('admin/services/travelmate/wifiscan')%>" method="post">
 			<input type="hidden" name="token" value="<%=token%>"/>
-			<input type="hidden" name="device" value="<%=utl.pcdata(dev)%>"/>
+			<input type="hidden" name="device" value="<%=xml.pcdata(dev)%>"/>
 			<input class="cbi-button cbi-input-find" type="submit" value="<%:Repeat scan%>"/>
 		</form>
 	</div>

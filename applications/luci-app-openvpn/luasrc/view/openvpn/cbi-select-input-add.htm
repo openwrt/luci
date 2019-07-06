@@ -84,7 +84,7 @@
 				<select id="instance_template" name="cbi.cts.<%=self.config%>.<%=self.sectiontype%>.select">
 					<option value="" selected="selected" disabled="disabled"><%:Select template ...%></option>
 					<%- for k, v in luci.util.kspairs(self.add_select_options) do %>
-						<option value="<%=k%>"><%=luci.util.pcdata(v)%></option>
+						<option value="<%=k%>"><%=luci.xml.pcdata(v)%></option>
 					<% end -%>
 				</select>
 			</div>
