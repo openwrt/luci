@@ -125,6 +125,10 @@
 	<li><strong>luci.util</strong></li>
 	
 	<li>
+		<a href="../modules/luci.xml.html">luci.xml</a>
+	</li>
+
+	<li>
 		<a href="../modules/nixio.html">nixio</a>
 	</li>
 
@@ -342,10 +346,11 @@ value or 0 if the unit is unknown.</td>
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#pcdata">pcdata</a>&nbsp;(value)</td>
+	<td class="name" nowrap><a href="luci.xml.html#pcdata">pcdata</a>&nbsp;(value)</td>
 	<td class="summary">
  
-Create valid XML PCDATA from given string.</td>
+Create valid XML PCDATA from given string.
+This is a wrapper for <a href="luci.xml.html#pcdata">luci.xml.pcdata()</a>.</td>
 	</tr>
 
 	<tr>
@@ -409,10 +414,11 @@ Strips unnecessary lua bytecode from given string.</td>
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#striptags">striptags</a>&nbsp;(value)</td>
+	<td class="name" nowrap><a href="luci.xml.html#striptags">striptags</a>&nbsp;(value)</td>
 	<td class="summary">
  
-Strip HTML tags from given string.</td>
+Strip HTML tags from given string.
+This is a wrapper for <a href="luci.xml.html#striptags">luci.xml.striptags()</a>.</td>
 	</tr>
 
 	<tr>
@@ -1178,38 +1184,6 @@ Number containing the canonical value
 
 
 
-<dt><a name="pcdata"></a><strong>pcdata</strong>&nbsp;(value)</dt>
-<dd>
-
- 
-Create valid XML PCDATA from given string. 
-
-
-
-<h3>Parameters</h3>
-<ul>
-	
-	<li>
-	  value: String value containing the data to escape
-	</li>
-	
-</ul>
-
-
-
-
-
-
-<h3>Return value:</h3>
-String value containing the escaped data
-
-
-
-</dd>
-
-
-
-
 <dt><a name="perror"></a><strong>perror</strong>&nbsp;(obj)</dt>
 <dd>
 
@@ -1516,38 +1490,6 @@ Original version by Peter Cawley (http://lua-users.org/lists/lua-l/2008-02/msg01
 
 <h3>Return value:</h3>
 String value containing the stripped lua byte code
-
-
-
-</dd>
-
-
-
-
-<dt><a name="striptags"></a><strong>striptags</strong>&nbsp;(value)</dt>
-<dd>
-
- 
-Strip HTML tags from given string. 
-
-
-
-<h3>Parameters</h3>
-<ul>
-	
-	<li>
-	  value: String containing the HTML text
-	</li>
-	
-</ul>
-
-
-
-
-
-
-<h3>Return value:</h3>
-String with HTML tags stripped of
 
 
 

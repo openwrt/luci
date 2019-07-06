@@ -123,19 +123,19 @@
 	</li>
 
 	<li>
-		<a href="../modules/luci.util.html">luci.util</a>
+		<a href="../modules/luci.util.html">luci.sys.wifi</a>
 	</li>
 
-	<li>
-		<a href="../modules/luci.xml.html">luci.xml</a>
-	</li>
-
+	<li><strong>luci.xml</strong></li>
+	
 	<li>
 		<a href="../modules/nixio.html">nixio</a>
 	</li>
 
-	<li><strong>nixio.CHANGELOG</strong></li>
-	
+	<li>
+		<a href="../modules/nixio.CHANGELOG.html">nixio.CHANGELOG</a>
+	</li>
+
 	<li>
 		<a href="../modules/nixio.CryptoHash.html">nixio.CryptoHash</a>
 	</li>
@@ -196,11 +196,9 @@
 
 <div id="content">
 
-<h1>Class <code>nixio.CHANGELOG</code></h1>
+<h1>Class <code>luci.xml</code></h1>
 
-<p>
- Changes and improvements.</p>
-
+<p></p>
 
 
 
@@ -208,72 +206,105 @@
 
 
 
-
-
-<h2>Tables</h2>
-<table class="table_list">
+<h2>Functions</h2>
+<table class="function_list">
 
 	<tr>
-	<td class="name" nowrap><a href="#0.2">0.2</a></td>
+	<td class="name" nowrap><a href="#pcdata">pcdata</a>&nbsp;(value)</td>
 	<td class="summary">
- Initial Release.</td>
+ 
+Create valid XML PCDATA from given string.</td>
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#0.3">0.3</a></td>
+	<td class="name" nowrap><a href="#striptags">striptags</a>&nbsp;(value)</td>
 	<td class="summary">
- Service Release.</td>
+ 
+Strip HTML tags from given string.</td>
 	</tr>
 
 </table>
 
 
 
+
+
+
 <br/>
 <br/>
 
 
+<h2><a name="functions"></a>Functions</h2>
+<dl class="function">
 
 
-<h2><a name="tables"></a>Tables</h2>
-<dl class="table">
 
-<dt><a name="0.2"></a><strong>0.2</strong></dt>
+<dt><a name="pcdata"></a><strong>pcdata</strong>&nbsp;(value)</dt>
 <dd>
- Initial Release. 
- <ul> 
- <li>Initial Release</li>   
- </ul>
+
+ 
+Create valid XML PCDATA from given string. 
+
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  value: String value containing the data to escape
+	</li>
+	
+</ul>
+
+
+
+
+
+
+<h3>Return value:</h3>
+String value containing the escaped data
 
 
 
 </dd>
 
 
-<dt><a name="0.3"></a><strong>0.3</strong></dt>
+
+
+<dt><a name="striptags"></a><strong>striptags</strong>&nbsp;(value)</dt>
 <dd>
- Service Release. 
- <ul> 
- <li>Added getifaddrs() function.</li> 
- <li>Added getsockopt(), setsockopt(), getsockname() and getpeername() 
- directly to TLS-socket objects unifying the socket interface.</li> 
- <li>Added support for CyaSSL as cryptographical backend.</li> 
- <li>Added support for x509 certificates in DER format.</li> 
- <li>Added support for splice() in UnifiedIO.copyz().</li> 
- <li>Added interface to inject chunks into UnifiedIO.linesource() buffer.</li> 
- <li>Changed TLS behaviour to explicitly separate servers and clients.</li> 
- <li>Fixed usage of signed datatype breaking Base64 decoding.</li> 
- <li>Fixed namespace clashes for nixio.fs.</li> 
- <li>Fixed splice() support for some exotic C libraries.</li> 
- <li>Reconfigure axTLS cryptographical provider and mark it as obsolete.</li> 
- </ul>
+
+ 
+Strip HTML tags from given string. 
+
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  value: String containing the HTML text
+	</li>
+	
+</ul>
+
+
+
+
+
+
+<h3>Return value:</h3>
+String with HTML tags stripped of
 
 
 
 </dd>
+
 
 
 </dl>
+
+
 
 
 

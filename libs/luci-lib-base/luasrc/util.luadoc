@@ -70,10 +70,13 @@ Recursively dumps a table to stdout, useful for testing and debugging.
 ---[[
 Create valid XML PCDATA from given string.
 
+This is just a compatibility wrapper for luci.xml.padata()
+
 @class				function
 @name				pcdata
 @param value		String value containing the data to escape
 @return				String value containing the escaped data
+@see				luci.xml.pcdata
 ]]
 
 ---[[
@@ -100,10 +103,13 @@ URL-encode given string.
 ---[[
 Strip HTML tags from given string.
 
+This is just a compatibility wrapper for luci.xml.striptags()
+
 @class				function
 @name				striptags
 @param value		String containing the HTML text
 @return				String with HTML tags stripped of
+@see				luci.xml.striptags
 ]]
 
 ---[[

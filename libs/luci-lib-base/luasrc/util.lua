@@ -159,8 +159,12 @@ end
 -- String and data manipulation routines
 --
 
+-- compatibility wrapper for xml.pcdata
 function pcdata(value)
-	return value and tparser.pcdata(tostring(value))
+	local xml = require "luci.xml"
+
+	perror("luci.util.pcdata() has been replaced by luci.xml.pcdata() - Please update your code.")
+	return xml.pcdata(value)
 end
 
 function urlencode(value)
@@ -182,8 +186,12 @@ function urldecode(value, decode_plus)
 	return nil
 end
 
+-- compatibility wrapper for xml.striptags
 function striptags(value)
-	return value and tparser.striptags(tostring(value))
+	local xml = require "luci.xml"
+
+	perror("luci.util.striptags() has been replaced by luci.xml.striptags() - Please update your code.")
+	return xml.striptags(value)
 end
 
 function shellquote(value)
@@ -343,8 +351,6 @@ function parse_units(ustr)
 end
 
 -- also register functions above in the central string class for convenience
-string.pcdata      = pcdata
-string.striptags   = striptags
 string.split       = split
 string.trim        = trim
 string.cmatch      = cmatch
