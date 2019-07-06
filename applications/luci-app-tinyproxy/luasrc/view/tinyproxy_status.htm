@@ -35,8 +35,8 @@ if luci.http.formvalue("frame") == "1" then
 	if not data then
 		luci.http.write(translate("Failed to retrieve statistics from url:"))
 		luci.http.write(" http://%s:%s" %{
-			luci.util.pcdata(addr),
-			luci.util.pcdata(port)
+			luci.xml.pcdata(addr),
+			luci.xml.pcdata(port)
 		})
 	end
 
