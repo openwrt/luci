@@ -1059,6 +1059,7 @@ var CBITableSection = CBITypedSection.extend({
 
 	handleModalSave: function(modalMap, ev) {
 		return modalMap.save()
+			.then(L.bind(this.map.load, this.map))
 			.then(L.bind(this.map.reset, this.map))
 			.then(L.ui.hideModal)
 			.catch(function() {});
