@@ -90,7 +90,7 @@ var _cache = {},
 function getWifiState() {
 	if (_cache.wifi == null)
 		return callNetworkWirelessStatus().then(function(state) {
-			if (!isObject(state))
+			if (!L.isObject(state))
 				throw !1;
 			return (_cache.wifi = state);
 		}).catch(function() {
@@ -116,7 +116,7 @@ function getInterfaceState() {
 function getDeviceState() {
 	if (_cache.devicedump == null)
 		return callNetworkDeviceStatus().then(function(state) {
-			if (!isObject(state))
+			if (!L.isObject(state))
 				throw !1;
 			return (_cache.devicedump = state);
 		}).catch(function() {
@@ -142,7 +142,7 @@ function getIfaddrState() {
 function getNetdevState() {
 	if (_cache.devices == null)
 		return callLuciNetdevs().then(function(state) {
-			if (!isObject(state))
+			if (!L.isObject(state))
 				throw !1;
 			return (_cache.devices = state);
 		}).catch(function() {
@@ -155,7 +155,7 @@ function getNetdevState() {
 function getBoardState() {
 	if (_cache.board == null)
 		return callLuciBoardjson().then(function(state) {
-			if (!isObject(state))
+			if (!L.isObject(state))
 				throw !1;
 			return (_cache.board = state);
 		}).catch(function() {
@@ -222,7 +222,7 @@ function getWifiIwinfoByIfname(ifname, forcePhyOnly) {
 		    devstate = info[1],
 		    phyonly = forcePhyOnly || !devstate[ifname] || (devstate[ifname].type != 1);
 
-		if (isObject(iwinfo)) {
+		if (L.isObject(iwinfo)) {
 			if (phyonly) {
 				delete iwinfo.bitrate;
 				delete iwinfo.quality;
@@ -266,7 +266,7 @@ function getWifiSidByIfname(ifname) {
 
 	var res = getWifiStateByIfname(ifname);
 
-	if (res != null && isObject(res[2]) && typeof(res[2].section) == 'string')
+	if (res != null && L.isObject(res[2]) && typeof(res[2].section) == 'string')
 		return res[2].section;
 
 	return null;
@@ -330,10 +330,6 @@ function isIgnoredIfname(ifname) {
 	return false;
 }
 
-function isObject(val) {
-	return (val != null && typeof(val) == 'object')
-}
-
 function appendValue(config, section, option, value) {
 	var values = uci.get(config, section, option),
 	    isArray = Array.isArray(values),
@@ -373,21 +369,6 @@ function removeValue(config, section, option, value) {
 		uci.unset(config, section, option);
 
 	return rv;
-}
-
-function toArray(val) {
-	if (val == null)
-		return [];
-
-	if (Array.isArray(val))
-		return val;
-
-	var s = String(val).trim();
-
-	if (s == '')
-		return [];
-
-	return s.split(/\s+/);
 }
 
 function prefixToMask(bits, v6) {
@@ -499,7 +480,7 @@ function initNetworkState() {
 				}
 			}
 
-			if (isObject(board.switch)) {
+			if (L.isObject(board.switch)) {
 				for (var switchname in board.switch) {
 					var layout = board.switch[switchname],
 					    netdevs = {},
@@ -508,7 +489,7 @@ function initNetworkState() {
 					    pnum = null,
 					    role = null;
 
-					if (isObject(layout) && Array.isArray(layout.ports)) {
+					if (L.isObject(layout) && Array.isArray(layout.ports)) {
 						for (var i = 0, port; (port = layout.ports[i]) != null; i++) {
 							if (typeof(port) == 'object' && typeof(port.num) == 'number' &&
 								(typeof(port.role) == 'string' || typeof(port.device) == 'string')) {
@@ -653,7 +634,7 @@ Network = L.Class.extend({
 				var sid = uci.add('network', 'interface', name);
 
 				if (sid != null) {
-					if (isObject(options))
+					if (L.isObject(options))
 						for (var key in options)
 							if (options.hasOwnProperty(key))
 								uci.set('network', sid, key, options[key]);
@@ -662,7 +643,7 @@ Network = L.Class.extend({
 				}
 			}
 			else if (existingNetwork != null && existingNetwork.isEmpty()) {
-				if (isObject(options))
+				if (L.isObject(options))
 					for (var key in options)
 						if (options.hasOwnProperty(key))
 							existingNetwork.set(key, options[key]);
@@ -742,7 +723,7 @@ Network = L.Class.extend({
 				});
 
 				uci.sections('wireless', 'wifi-iface', function(s) {
-					var networks = toArray(s.network).filter(function(network) { return network != name });
+					var networks = L.toArray(s.network).filter(function(network) { return network != name });
 
 					if (networks.length > 0)
 						uci.set('wireless', s['.name'], 'network', networks.join(' '));
@@ -797,7 +778,7 @@ Network = L.Class.extend({
 			});
 
 			uci.sections('wireless', 'wifi-iface', function(s) {
-				var networks = toArray(s.network).map(function(network) { return (network == oldName ? newName : network) });
+				var networks = L.toArray(s.network).map(function(network) { return (network == oldName ? newName : network) });
 
 				if (networks.length > 0)
 					uci.set('wireless', s['.name'], 'network', networks.join(' '));
@@ -832,7 +813,7 @@ Network = L.Class.extend({
 			/* find simple devices */
 			var uciInterfaces = uci.sections('network', 'interface');
 			for (var i = 0; i < uciInterfaces.length; i++) {
-				var ifnames = toArray(uciInterfaces[i].ifname);
+				var ifnames = L.toArray(uciInterfaces[i].ifname);
 
 				for (var j = 0; j < ifnames.length; j++) {
 					if (ifnames[j].charAt(0) == '@')
@@ -955,7 +936,7 @@ Network = L.Class.extend({
 			var rv = [];
 
 			for (var i = 0; i < deviceNames.length; i++)
-				if (isObject(iwinfos[i]))
+				if (L.isObject(iwinfos[i]))
 					rv.push(this.instantiateWifiDevice(deviceNames[i], iwinfos[i]));
 
 			rv.sort(function(a, b) { return a.getName() < b.getName() });
@@ -1248,7 +1229,7 @@ Protocol = L.Class.extend({
 	getZoneName: function() {
 		var d = this._ubus('data');
 
-		if (isObject(d) && typeof(d.zone) == 'string')
+		if (L.isObject(d) && typeof(d.zone) == 'string')
 			return d.zone;
 
 		return null;
@@ -1339,12 +1320,12 @@ Protocol = L.Class.extend({
 	getIP6Addr: function() {
 		var addrs = this._ubus('ipv6-address');
 
-		if (Array.isArray(addrs) && isObject(addrs[0]))
+		if (Array.isArray(addrs) && L.isObject(addrs[0]))
 			return '%s/%d'.format(addrs[0].address, addrs[0].mask);
 
 		addrs = this._ubus('ipv6-prefix-assignment');
 
-		if (Array.isArray(addrs) && isObject(addrs[0]) && isObject(addrs[0]['local-address']))
+		if (Array.isArray(addrs) && L.isObject(addrs[0]) && L.isObject(addrs[0]['local-address']))
 			return '%s/%d'.format(addrs[0]['local-address'].address, addrs[0]['local-address'].mask);
 
 		return null;
@@ -1356,14 +1337,14 @@ Protocol = L.Class.extend({
 
 		if (Array.isArray(addrs))
 			for (var i = 0; i < addrs.length; i++)
-				if (isObject(addrs[i]))
+				if (L.isObject(addrs[i]))
 					rv.push('%s/%d'.format(addrs[i].address, addrs[i].mask));
 
 		addrs = this._ubus('ipv6-prefix-assignment');
 
 		if (Array.isArray(addrs))
 			for (var i = 0; i < addrs.length; i++)
-				if (isObject(addrs[i]) && isObject(addrs[i]['local-address']))
+				if (L.isObject(addrs[i]) && L.isObject(addrs[i]['local-address']))
 					rv.push('%s/%d'.format(addrs[i]['local-address'].address, addrs[i]['local-address'].mask));
 
 		return rv;
@@ -1384,7 +1365,7 @@ Protocol = L.Class.extend({
 	getIP6Prefix: function() {
 		var prefixes = this._ubus('ipv6-prefix');
 
-		if (Array.isArray(prefixes) && isObject(prefixes[0]))
+		if (Array.isArray(prefixes) && L.isObject(prefixes[0]))
 			return '%s/%d'.format(prefixes[0].address, prefixes[0].mask);
 
 		return null;
@@ -1396,7 +1377,7 @@ Protocol = L.Class.extend({
 
 		if (Array.isArray(errors)) {
 			for (var i = 0; i < errors.length; i++) {
-				if (!isObject(errors[i]) || typeof(errors[i].code) != 'string')
+				if (!L.isObject(errors[i]) || typeof(errors[i].code) != 'string')
 					continue;
 
 				rv = rv || [];
@@ -1432,7 +1413,7 @@ Protocol = L.Class.extend({
 	},
 
 	isAlias: function() {
-		var ifnames = toArray(uci.get('network', this.sid, 'ifname')),
+		var ifnames = L.toArray(uci.get('network', this.sid, 'ifname')),
 		    parent = null;
 
 		for (var i = 0; i < ifnames.length; i++)
@@ -1514,7 +1495,7 @@ Protocol = L.Class.extend({
 			if (ifname != null)
 				return L.network.instantiateDevice(ifname, this);
 
-			var ifnames = toArray(uci.get('network', this.sid, 'ifname'));
+			var ifnames = L.toArray(uci.get('network', this.sid, 'ifname'));
 
 			for (var i = 0; i < ifnames.length; i++) {
 				var m = ifnames[i].match(/^([^:/]+)/);
@@ -1533,7 +1514,7 @@ Protocol = L.Class.extend({
 		if (!this.isBridge() && !(this.isVirtual() && !this.isFloating()))
 			return null;
 
-		var ifnames = toArray(uci.get('network', this.sid, 'ifname'));
+		var ifnames = L.toArray(uci.get('network', this.sid, 'ifname'));
 
 		for (var i = 0; i < ifnames.length; i++) {
 			if (ifnames[i].charAt(0) == '@')
@@ -1550,7 +1531,7 @@ Protocol = L.Class.extend({
 			if (typeof(uciWifiIfaces[i].device) != 'string')
 				continue;
 
-			var networks = toArray(uciWifiIfaces[i].network);
+			var networks = L.toArray(uciWifiIfaces[i].network);
 
 			for (var j = 0; j < networks.length; j++) {
 				if (networks[j] != this.sid)
@@ -1578,7 +1559,7 @@ Protocol = L.Class.extend({
 		else if (this.isBridge() && 'br-%s'.format(this.sid) == ifname)
 			return true;
 
-		var ifnames = toArray(uci.get('network', this.sid, 'ifname'));
+		var ifnames = L.toArray(uci.get('network', this.sid, 'ifname'));
 
 		for (var i = 0; i < ifnames.length; i++) {
 			var m = ifnames[i].match(/^([^:/]+)/);
@@ -1589,7 +1570,7 @@ Protocol = L.Class.extend({
 		var wif = getWifiSidByIfname(ifname);
 
 		if (wif != null) {
-			var networks = toArray(uci.get('wireless', wif, 'network'));
+			var networks = L.toArray(uci.get('wireless', wif, 'network'));
 
 			for (var i = 0; i < networks.length; i++)
 				if (networks[i] == this.sid)
@@ -1814,7 +1795,7 @@ WifiDevice = L.Class.extend({
 	},
 
 	getHWModes: function() {
-		if (isObject(this.iwinfo.hwmodelist))
+		if (L.isObject(this.iwinfo.hwmodelist))
 			for (var k in this.iwinfo.hwmodelist)
 				return this.iwinfo.hwmodelist;
 
@@ -1840,7 +1821,7 @@ WifiDevice = L.Class.extend({
 	},
 
 	isUp: function() {
-		if (isObject(_cache.wifi[this.sid]))
+		if (L.isObject(_cache.wifi[this.sid]))
 			return (_cache.wifi[this.sid].up == true);
 
 		return false;
@@ -1869,7 +1850,7 @@ WifiDevice = L.Class.extend({
 	},
 
 	addWifiNetwork: function(options) {
-		if (!isObject(options))
+		if (!L.isObject(options))
 			options = {};
 
 		options.device = this.sid;
@@ -1916,7 +1897,7 @@ WifiNetwork = L.Class.extend({
 		var v = this._ubusdata;
 
 		for (var i = 0; i < arguments.length; i++)
-			if (isObject(v))
+			if (L.isObject(v))
 				v = v[arguments[i]];
 			else
 				return null;
@@ -1945,7 +1926,7 @@ WifiNetwork = L.Class.extend({
 	},
 
 	getNetworkNames: function() {
-		return toArray(this.ubus('net', 'config', 'network') || this.get('network'));
+		return L.toArray(this.ubus('net', 'config', 'network') || this.get('network'));
 	},
 
 	getID: function() {
@@ -2020,7 +2001,7 @@ WifiNetwork = L.Class.extend({
 	getActiveEncryption: function() {
 		var encryption = this.iwinfo.encryption;
 
-		return (isObject(encryption) ? encryption.description || '-' : '-');
+		return (L.isObject(encryption) ? encryption.description || '-' : '-');
 	},
 
 	getAssocList: function() {

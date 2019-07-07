@@ -1430,12 +1430,7 @@ var CBIDynamicList = CBIValue.extend({
 	renderWidget: function(section_id, option_index, cfgvalue) {
 		var value = (cfgvalue != null) ? cfgvalue : this.default,
 		    choices = this.transformChoices(),
-		    items = null;
-
-		if (Array.isArray(value))
-			items = value;
-		else if (value != null)
-			items = String(value).trim().split(/\s+/);
+		    items = L.toArray(value);
 
 		var widget = new ui.DynamicList(items, choices, {
 			id: this.cbid(section_id),
@@ -1541,10 +1536,7 @@ var CBIMultiValue = CBIDynamicList.extend({
 		var value = (cfgvalue != null) ? cfgvalue : this.default,
 		    choices = this.transformChoices();
 
-		if (!Array.isArray(value))
-			value = String(value).split(/\s+/);
-
-		var widget = new ui.Dropdown(value, choices, {
+		var widget = new ui.Dropdown(L.toArray(value), choices, {
 			id: this.cbid(section_id),
 			sort: this.keylist,
 			multiple: true,

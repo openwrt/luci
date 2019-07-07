@@ -64,22 +64,6 @@ var protocols = [
 	'rohc', 142, 'ROHC',
 ];
 
-function toArray(x) {
-	if (x == null)
-		return [];
-	else if (Array.isArray(x))
-		return x.map(String);
-	else if (typeof(x) == 'object')
-		return [ x ];
-
-	var s = String(x).trim();
-
-	if (s == '')
-		return [];
-
-	return s.split(/\s+/);
-}
-
 function lookupProto(x) {
 	if (x == null || x == '')
 		return null;
@@ -104,7 +88,7 @@ return L.Class.extend({
 	},
 
 	fmt_mac: function(x) {
-		var rv = E([]), l = toArray(x);
+		var rv = E([]), l = L.toArray(x);
 
 		if (l.length == 0)
 			return null;
@@ -123,7 +107,7 @@ return L.Class.extend({
 	},
 
 	fmt_port: function(x, d) {
-		var rv = E([]), l = toArray(x);
+		var rv = E([]), l = L.toArray(x);
 
 		if (l.length == 0) {
 			if (d) {
@@ -159,7 +143,7 @@ return L.Class.extend({
 	},
 
 	fmt_ip: function(x, d) {
-		var rv = E([]), l = toArray(x);
+		var rv = E([]), l = L.toArray(x);
 
 		if (l.length == 0) {
 			if (d) {
@@ -205,7 +189,7 @@ return L.Class.extend({
 	},
 
 	fmt_icmp_type: function(x) {
-		var rv = E([]), l = toArray(x);
+		var rv = E([]), l = L.toArray(x);
 
 		if (l.length == 0)
 			return null;
@@ -228,7 +212,7 @@ return L.Class.extend({
 	},
 
 	fmt_proto: function(x, icmp_types) {
-		var rv = E([]), l = toArray(x);
+		var rv = E([]), l = L.toArray(x);
 
 		if (l.length == 0)
 			return null;
