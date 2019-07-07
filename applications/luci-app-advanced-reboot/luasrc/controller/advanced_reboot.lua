@@ -7,6 +7,7 @@ devices = {
   -- deviceName, boardName, partition1, partition2, offset, envVar1, envVar1Value1, envVar1Value2, envVar2, envVar2Value1, envVar2Value2
   {"Linksys EA3500", "linksys-audi", "mtd3", "mtd5", 32, "boot_part", 1, 2, "bootcmd", "run nandboot", "run altnandboot"},
   {"Linksys E4200v2/EA4500", "linksys-viper", "mtd3", "mtd5", 32, "boot_part", 1, 2, "bootcmd", "run nandboot", "run altnandboot"},
+  {"Linksys EA6350v3", "linksys-ea6350v3", "mtd10", "mtd12", 192, "boot_part", 1, 2},
   {"Linksys EA8500", "ea8500", "mtd13", "mtd15", 32, "boot_part", 1, 2},
 --  {"Linksys EA9500", "linksys-panamera", "mtd3", "mtd6", 28, "boot_part", 1, 2},
   {"Linksys WRT1200AC", "linksys-caiman", "mtd4", "mtd6", 32, "boot_part", 1, 2, "bootcmd", "run nandboot", "run altnandboot"},
@@ -34,11 +35,11 @@ for i=1, #devices do
     boot_envvar2_partition_one = devices[i][10] or nil
     boot_envvar2_partition_two = devices[i][11] or nil
     if partition_one_mtd and partition_skip then
-      partition_one_label = luci.util.trim(luci.sys.exec("dd if=/dev/" .. partition_one_mtd .. " bs=1 skip=" .. partition_skip .. " count=25" .. "  2>/dev/null"))
+      partition_one_label = luci.util.trim(luci.sys.exec("dd if=/dev/" .. partition_one_mtd .. " bs=1 skip=" .. partition_skip .. " count=128" .. "  2>/dev/null"))
       n, partition_one_version = string.match(partition_one_label, '(Linux)-([%d|.]+)')
     end
     if partition_two_mtd and partition_skip then
-      partition_two_label = luci.util.trim(luci.sys.exec("dd if=/dev/" .. partition_two_mtd .. " bs=1 skip=" .. partition_skip .. " count=25" .. "  2>/dev/null"))
+      partition_two_label = luci.util.trim(luci.sys.exec("dd if=/dev/" .. partition_two_mtd .. " bs=1 skip=" .. partition_skip .. " count=128" .. "  2>/dev/null"))
       n, partition_two_version = string.match(partition_two_label, '(Linux)-([%d|.]+)')
     end
     if partition_one_label and string.find(partition_one_label, "LEDE") then partition_one_os = "LEDE" end
@@ -63,7 +64,7 @@ for i=1, #devices do
     if device_name and device_name == "ZyXEL NBG6817" then
       if not zyxelFlagPartition then zyxelFlagPartition = luci.util.trim(luci.sys.exec("source /lib/functions.sh; find_mtd_part 0:DUAL_FLAG")) end
       if not zyxelFlagPartition then
-        errorMessage = errorMessage .. luci.i18n.translate("Unable to find Dual Boot Flag Partition." .. " ")
+        errorMessage = errorMessage or "" .. luci.i18n.translate("Unable to find Dual Boot Flag Partition." .. " ")
         luci.util.perror(luci.i18n.translate("Unable to find Dual Boot Flag Partition."))
       else
         current_partition = tonumber(luci.sys.exec("dd if=" .. zyxelFlagPartition .. " bs=1 count=1 2>/dev/null | hexdump -n 1 -e '1/1 \"%d\"'"))
@@ -121,7 +122,7 @@ function action_altreboot()
           newEnvSetting = curEnvSetting == boot_envvar1_partition_one and boot_envvar1_partition_two or boot_envvar1_partition_one
           errorCode = luci.sys.call("/usr/sbin/fw_setenv " .. boot_envvar1 .. " " .. newEnvSetting)
             if errorCode ~= 0 then
-              errorMessage = errorMessage .. luci.i18n.translate("Unable to set firmware environment variable") .. ": " .. boot_envvar1 .. " " .. luci.i18n.translate("to") .. " " .. newEnvSetting .. ". "
+              errorMessage = errorMessage or "" .. luci.i18n.translate("Unable to set firmware environment variable") .. ": " .. boot_envvar1 .. " " .. luci.i18n.translate("to") .. " " .. newEnvSetting .. ". "
               luci.util.perror(luci.i18n.translate("Unable to set firmware environment variable") .. ": " .. boot_envvar1 .. " " .. luci.i18n.translate("to") .. " " .. newEnvSetting .. ".")
             end
         end
@@ -129,13 +130,13 @@ function action_altreboot()
       if boot_envvar2 then
         curEnvSetting = luci.util.trim(luci.sys.exec("/usr/sbin/fw_printenv -n " .. boot_envvar2))
         if not curEnvSetting then
-          errorMessage = errorMessage .. luci.i18n.translate("Unable to obtain firmware environment variable") .. ": " .. boot_envvar2 .. ". "
+          errorMessage = errorMessage or "" .. luci.i18n.translate("Unable to obtain firmware environment variable") .. ": " .. boot_envvar2 .. ". "
           luci.util.perror(luci.i18n.translate("Unable to obtain firmware environment variable") .. ": " .. boot_envvar2 .. ".")
         else
           newEnvSetting = curEnvSetting == boot_envvar2_partition_one and boot_envvar2_partition_two or boot_envvar2_partition_one
           errorCode = luci.sys.call("/usr/sbin/fw_setenv " .. boot_envvar2 .. " '" .. newEnvSetting .. "'")
           if errorCode ~= 0 then
-            errorMessage = errorMessage .. luci.i18n.translate("Unable to set firmware environment variable") .. ": " .. boot_envvar2 .. " " .. luci.i18n.translate("to") .. " " .. newEnvSetting .. ". "
+            errorMessage = errorMessage or "" .. luci.i18n.translate("Unable to set firmware environment variable") .. ": " .. boot_envvar2 .. " " .. luci.i18n.translate("to") .. " " .. newEnvSetting .. ". "
             luci.util.perror(luci.i18n.translate("Unable to set firmware environment variable") .. ": " .. boot_envvar2 .. " " .. luci.i18n.translate("to") .. " " .. newEnvSetting .. ".")
           end
         end
@@ -151,7 +152,7 @@ function action_altreboot()
         if zyxelNewBootFlag then
           errorCode = luci.sys.call("printf \"" .. zyxelNewBootFlag .. "\" >" .. zyxelFlagPartition )
           if errorCode ~= 0 then
-            errorMessage = errorMessage .. luci.i18n.translate("Unable to set Dual Boot Flag Partition entry for partition") .. ": " .. zyxelFlagPartition .. ". "
+            errorMessage = errorMessage or "" .. luci.i18n.translate("Unable to set Dual Boot Flag Partition entry for partition") .. ": " .. zyxelFlagPartition .. ". "
             luci.util.perror(luci.i18n.translate("Unable to set Dual Boot Flag Partition entry for partition") .. ": " .. zyxelFlagPartition .. ".")
           end
         end
