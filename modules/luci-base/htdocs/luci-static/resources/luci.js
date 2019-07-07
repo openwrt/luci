@@ -811,6 +811,56 @@
 		},
 
 
+		/* Data helpers */
+		isObject: function(val) {
+			return (val != null && typeof(val) == 'object');
+		},
+
+		sortedKeys: function(obj, key, sortmode) {
+			if (obj == null || typeof(obj) != 'object')
+				return [];
+
+			return Object.keys(obj).map(function(e) {
+				var v = (key != null) ? obj[e][key] : e;
+
+				switch (sortmode) {
+				case 'addr':
+					v = (v != null) ? v.replace(/(?:^|[.:])([0-9a-fA-F]{1,4})/g,
+						function(m0, m1) { return ('000' + m1.toLowerCase()).substr(-4) }) : null;
+					break;
+
+				case 'num':
+					v = (v != null) ? +v : null;
+					break;
+				}
+
+				return [ e, v ];
+			}).filter(function(e) {
+				return (e[1] != null);
+			}).sort(function(a, b) {
+				return (a[1] > b[1]);
+			}).map(function(e) {
+				return e[0];
+			});
+		},
+
+		toArray: function(val) {
+			if (val == null)
+				return [];
+			else if (Array.isArray(val))
+				return val;
+			else if (typeof(val) == 'object')
+				return [ val ];
+
+			var s = String(val).trim();
+
+			if (s == '')
+				return [];
+
+			return s.split(/\s+/);
+		},
+
+
 		/* HTTP resource fetching */
 		get: function(url, args, cb) {
 			return this.poll(null, url, args, cb, false);
