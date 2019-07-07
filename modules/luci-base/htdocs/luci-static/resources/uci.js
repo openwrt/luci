@@ -433,6 +433,7 @@ return L.Class.extend({
 		    n = this.state.creates,
 		    c = this.state.changes,
 		    d = this.state.deletes,
+		    r = this.state.reorder,
 		    self = this,
 		    snew = [ ],
 		    pkgs = { },
@@ -479,6 +480,10 @@ return L.Class.extend({
 
 				pkgs[conf] = true;
 			}
+
+		if (r)
+			for (var conf in r)
+				pkgs[conf] = true;
 
 		return Promise.all(tasks).then(function(responses) {
 			/*
