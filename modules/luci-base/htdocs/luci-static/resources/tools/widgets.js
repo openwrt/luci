@@ -4,22 +4,6 @@
 'require network';
 'require firewall';
 
-function toArray(x) {
-	if (x == null)
-		return [];
-	else if (Array.isArray(x))
-		return x.map(String);
-	else if (typeof(x) == 'object')
-		return [ x ];
-
-	var s = String(x).trim();
-
-	if (s == '')
-		return [];
-
-	return s.split(/\s+/);
-}
-
 var CBIZoneSelect = form.ListValue.extend({
 	__name__: 'CBI.ZoneSelect',
 
@@ -45,7 +29,7 @@ var CBIZoneSelect = form.ListValue.extend({
 	},
 
 	renderWidget: function(section_id, option_index, cfgvalue) {
-		var values = toArray((cfgvalue != null) ? cfgvalue : this.default),
+		var values = L.toArray((cfgvalue != null) ? cfgvalue : this.default),
 		    choices = {};
 
 		if (this.allowlocal) {
@@ -94,7 +78,7 @@ var CBIZoneSelect = form.ListValue.extend({
 					'class': 'ifacebadge' + (network.getName() == this.network ? ' ifacebadge-active' : '')
 				}, network.getName() + ': ');
 
-				var devices = network.isBridge() ? network.getDevices() : toArray(network.getDevice());
+				var devices = network.isBridge() ? network.getDevices() : L.toArray(network.getDevice());
 
 				for (var k = 0; k < devices.length; k++) {
 					span.appendChild(E('img', {
@@ -168,7 +152,7 @@ var CBIZoneForwards = form.DummyValue.extend({
 				'class': 'ifacebadge' + (network.getName() == this.network ? ' ifacebadge-active' : '')
 			}, network.getName() + ': ');
 
-			var devices = network.isBridge() ? network.getDevices() : toArray(network.getDevice());
+			var devices = network.isBridge() ? network.getDevices() : L.toArray(network.getDevice());
 
 			for (var k = 0; k < devices.length && devices[k]; k++) {
 				span.appendChild(E('img', {
@@ -243,7 +227,7 @@ var CBINetworkSelect = form.ListValue.extend({
 
 	renderIfaceBadge: function(network) {
 		var span = E('span', { 'class': 'ifacebadge' }, network.getName() + ': '),
-		    devices = network.isBridge() ? network.getDevices() : toArray(network.getDevice());
+		    devices = network.isBridge() ? network.getDevices() : L.toArray(network.getDevice());
 
 		for (var j = 0; j < devices.length && devices[j]; j++) {
 			span.appendChild(E('img', {
@@ -261,7 +245,7 @@ var CBINetworkSelect = form.ListValue.extend({
 	},
 
 	renderWidget: function(section_id, option_index, cfgvalue) {
-		var values = toArray((cfgvalue != null) ? cfgvalue : this.default),
+		var values = L.toArray((cfgvalue != null) ? cfgvalue : this.default),
 		    choices = {},
 		    checked = {};
 
@@ -312,7 +296,7 @@ var CBINetworkSelect = form.ListValue.extend({
 
 	textvalue: function(section_id) {
 		var cfgvalue = this.cfgvalue(section_id),
-		    values = toArray((cfgvalue != null) ? cfgvalue : this.default),
+		    values = L.toArray((cfgvalue != null) ? cfgvalue : this.default),
 		    rv = E([]);
 
 		for (var i = 0; i < (this.networks || []).length; i++) {

@@ -6,34 +6,6 @@
 'require tools.firewall as fwtool';
 'require tools.widgets as widgets';
 
-function skeys(obj, key, mode) {
-	if (obj == null || typeof(obj) != 'object')
-		return [];
-
-	return Object.keys(obj).map(function(e) {
-		var v = (key != null) ? obj[e][key] : e;
-
-		switch (mode) {
-		case 'addr':
-			v = (v != null) ? v.replace(/(?:^|[.:])([0-9a-fA-F]{1,4})/g,
-				function(m0, m1) { return ('000' + m1.toLowerCase()).substr(-4) }) : null;
-			break;
-
-		case 'num':
-			v = (v != null) ? +v : null;
-			break;
-		}
-
-		return [ e, v ];
-	}).filter(function(e) {
-		return (e[1] != null);
-	}).sort(function(a, b) {
-		return (a[1] > b[1]);
-	}).map(function(e) {
-		return e[0];
-	});
-}
-
 function fmt(fmt /*, ...*/) {
 	var repl = [], wrap = false;
 
@@ -276,7 +248,7 @@ return L.view.extend({
 		o.modalonly = true;
 		o.datatype = 'list(macaddr)';
 		o.placeholder = _('any');
-		skeys(hosts).forEach(function(mac) {
+		L.sortedKeys(hosts).forEach(function(mac) {
 			o.value(mac, '%s (%s)'.format(
 				mac,
 				hosts[mac].name || hosts[mac].ipv4 || hosts[mac].ipv6 || '?'
@@ -287,7 +259,7 @@ return L.view.extend({
 		o.modalonly = true;
 		o.datatype = 'list(neg(ipmask))';
 		o.placeholder = _('any');
-		skeys(hosts, 'ipv4', 'addr').forEach(function(mac) {
+		L.sortedKeys(hosts, 'ipv4', 'addr').forEach(function(mac) {
 			o.value(hosts[mac].ipv4, '%s (%s)'.format(
 				hosts[mac].ipv4,
 				hosts[mac].name || mac
@@ -324,7 +296,7 @@ return L.view.extend({
 		o.modalonly = true;
 		o.datatype = 'list(neg(ipmask))';
 		o.placeholder = _('any');
-		skeys(hosts, 'ipv4', 'addr').forEach(function(mac) {
+		L.sortedKeys(hosts, 'ipv4', 'addr').forEach(function(mac) {
 			o.value(hosts[mac].ipv4, '%s (%s)'.format(
 				hosts[mac].ipv4,
 				hosts[mac].name || mac

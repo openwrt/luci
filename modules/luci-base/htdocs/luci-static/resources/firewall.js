@@ -8,21 +8,6 @@ function initFirewallState() {
 	return uci.load('firewall');
 }
 
-function toArray(val) {
-	if (val == null)
-		return [];
-
-	if (Array.isArray(val))
-		return val;
-
-	var s = String(val).trim();
-
-	if (s == '')
-		return [];
-
-	return s.split(/\s+/);
-}
-
 function parseEnum(s, values) {
 	if (s == null)
 		return null;
@@ -155,7 +140,7 @@ Firewall = L.Class.extend({
 			var sections = uci.sections('firewall', 'zone');
 
 			for (var i = 0; i < sections.length; i++)
-				if (toArray(sections[i].network || sections[i].name).indexOf(network) != -1)
+				if (L.toArray(sections[i].network || sections[i].name).indexOf(network) != -1)
 					return new Zone(sections[i]['.name']);
 
 			return null;
@@ -217,7 +202,7 @@ Firewall = L.Class.extend({
 				if (sections[i].name != oldName)
 					continue;
 
-				if (toArray(sections[i].network).length == 0)
+				if (L.toArray(sections[i].network).length == 0)
 					uci.set('firewall', sections[i]['.name'], 'network', oldName);
 
 				uci.set('firewall', sections[i]['.name'], 'name', newName);
@@ -383,7 +368,7 @@ Zone = AbstractFirewallItem.extend({
 	},
 
 	getNetworks: function() {
-		return toArray(this.get('network') || this.get('name'));
+		return L.toArray(this.get('network') || this.get('name'));
 	},
 
 	clearNetworks: function() {
