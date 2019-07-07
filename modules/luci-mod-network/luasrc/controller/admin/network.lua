@@ -108,7 +108,7 @@ function index()
 			page.order  = 30
 
 			page = node("admin", "network", "hosts")
-			page.target = cbi("admin_network/hosts")
+			page.target = view("network/hosts")
 			page.title  = _("Hostnames")
 			page.order  = 40
 		end
