@@ -1,6 +1,14 @@
 <%+cbi/valueheader%>
+<%
+	local util = require "luci.util"
+	local values = {}
+	local value
+	for value in util.imatch(self:cfgvalue(section) or self.default) do
+		values[#values+1] = value
+	end
+%>
 <div<%=attr("data-ui-widget", luci.util.serialize_json({
-	"Select", self:cfgvalue(section) or self.default, self:choices(), {
+	"Select", values, self:choices(), {
 		id = cbid,
 		name = cbid,
 		size = self.size,
