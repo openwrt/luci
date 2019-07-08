@@ -579,7 +579,9 @@
 			Promise.all([
 				domReady,
 				this.require('ui'),
-				this.require('form')
+				this.require('rpc'),
+				this.require('form'),
+				Request.get('/ubus/').catch(function() { return { status: 0 } })
 			]).then(this.setupDOM.bind(this)).catch(this.error);
 
 			originalCBIInit = window.cbi_init;
@@ -752,7 +754,16 @@
 		},
 
 		/* DOM setup */
-		setupDOM: function(ev) {
+		setupDOM: function(res) {
+			var domEv = res[0],
+			    uiClass = res[1],
+			    rpcClass = res[2],
+			    formClass = res[3],
+			    ubusReply = res[4];
+
+			if (ubusReply.status == 400)
+				rpcClass.setBaseURL('/ubus/');
+
 			Request.addInterceptor(function(res) {
 				if (res.status != 403 || res.headers.get('X-LuCI-Login-Required') != 'yes')
 					return;
