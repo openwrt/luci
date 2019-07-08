@@ -13,7 +13,7 @@
 		"read": {
 			"ubus": {
 				"iwinfo": [ "info" ],
-				"luci": [ "boardjson", "duid_hints", "host_hints", "ifaddrs", "initList", "leases", "leds", "netdevs", "offload_support", "usb" ],
+				"luci": [ "boardjson", "duid_hints", "host_hints", "ifaddrs", "initList", "getLocaltime", "leases", "leds", "netdevs", "offload_support", "usb" ],
 				"network.device": [ "status" ],
 				"network.interface": [ "dump" ],
 				"network.wireless": [ "status" ],
@@ -23,7 +23,7 @@
 		},
 		"write": {
 			"ubus": {
-				"luci": [ "initCall", "localtime", "timezone" ],
+				"luci": [ "initCall", "setLocaltime", "timezone" ],
 				"uci": [ "add", "apply", "confirm", "delete", "order", "set" ]
 			},
 			"uci": [ "*" ]
