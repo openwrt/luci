@@ -7,5 +7,26 @@
 		"write": {
 			"uci": [ "*" ]
 		}
+	},
+	"luci-access": {
+		"description": "Grant access to basic LuCI procedures",
+		"read": {
+			"ubus": {
+				"iwinfo": [ "info" ],
+				"luci": [ "boardjson", "duid_hints", "host_hints", "ifaddrs", "initList", "leases", "leds", "netdevs", "offload_support", "usb" ],
+				"network.device": [ "status" ],
+				"network.interface": [ "dump" ],
+				"network.wireless": [ "status" ],
+				"uci": [ "changes", "get" ]
+			},
+			"uci": [ "*" ]
+		},
+		"write": {
+			"ubus": {
+				"luci": [ "initCall", "localtime", "timezone" ],
+				"uci": [ "add", "apply", "confirm", "delete", "order", "set" ]
+			},
+			"uci": [ "*" ]
+		}
 	}
 }
