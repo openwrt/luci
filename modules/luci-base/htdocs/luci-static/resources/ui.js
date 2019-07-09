@@ -97,6 +97,7 @@ var UITextfield = UIElement.extend({
 		}
 
 		frameEl.appendChild(E('input', {
+			'id': this.options.id ? 'widget.' + this.options.id : null,
 			'name': this.options.name,
 			'type': this.options.password ? 'password' : 'text',
 			'class': this.options.password ? 'cbi-input-password' : 'cbi-input-text',
@@ -168,6 +169,7 @@ var UICheckbox = UIElement.extend({
 			}));
 
 		frameEl.appendChild(E('input', {
+			'id': this.options.id ? 'widget.' + this.options.id : null,
 			'name': this.options.name,
 			'type': 'checkbox',
 			'value': this.options.value_enabled,
@@ -224,7 +226,7 @@ var UISelect = UIElement.extend({
 	},
 
 	render: function() {
-		var frameEl,
+		var frameEl = E('div', { 'id': this.options.id }),
 		    keys = Object.keys(this.choices);
 
 		if (this.options.sort === true)
@@ -233,16 +235,16 @@ var UISelect = UIElement.extend({
 			keys = this.options.sort;
 
 		if (this.options.widget == 'select') {
-			frameEl = E('select', {
-				'id': this.options.id,
+			frameEl.appendChild(E('select', {
+				'id': this.options.id ? 'widget.' + this.options.id : null,
 				'name': this.options.name,
 				'size': this.options.size,
 				'class': 'cbi-input-select',
 				'multiple': this.options.multi ? '' : null
-			});
+			}));
 
 			if (this.options.optional)
-				frameEl.appendChild(E('option', {
+				frameEl.lastChild.appendChild(E('option', {
 					'value': '',
 					'selected': (this.values.length == 0 || this.values[0] == '') ? '' : null
 				}, this.choices[''] || this.options.placeholder || _('-- Please choose --')));
@@ -251,22 +253,19 @@ var UISelect = UIElement.extend({
 				if (keys[i] == null || keys[i] == '')
 					continue;
 
-				frameEl.appendChild(E('option', {
+				frameEl.lastChild.appendChild(E('option', {
 					'value': keys[i],
 					'selected': (this.values.indexOf(keys[i]) > -1) ? '' : null
 				}, this.choices[keys[i]] || keys[i]));
 			}
 		}
 		else {
-			frameEl = E('div', {
-				'id': this.options.id
-			});
-
 			var brEl = (this.options.orientation === 'horizontal') ? document.createTextNode(' ') : E('br');
 
 			for (var i = 0; i < keys.length; i++) {
 				frameEl.appendChild(E('label', {}, [
 					E('input', {
+						'id': this.options.id ? 'widget.' + this.options.id : null,
 						'name': this.options.id || this.options.name,
 						'type': this.options.multi ? 'checkbox' : 'radio',
 						'class': this.options.multi ? 'cbi-input-checkbox' : 'cbi-input-radio',
@@ -1152,6 +1151,7 @@ var UIDynamicList = UIElement.extend({
 		}
 		else {
 			var inputEl = E('input', {
+				'id': this.options.id ? 'widget.' + this.options.id : null,
 				'type': 'text',
 				'class': 'cbi-input-text',
 				'placeholder': this.options.placeholder
