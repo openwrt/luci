@@ -83,7 +83,7 @@ var UITextfield = UIElement.extend({
 	},
 
 	render: function() {
-		var frameEl = E('div', { 'id': this.options.id });
+		var frameEl = E('div');
 
 		if (this.options.password) {
 			frameEl.classList.add('nowrap');
@@ -97,6 +97,7 @@ var UITextfield = UIElement.extend({
 		}
 
 		frameEl.appendChild(E('input', {
+			'id': this.options.id,
 			'name': this.options.name,
 			'type': this.options.password ? 'password' : 'text',
 			'class': this.options.password ? 'cbi-input-password' : 'cbi-input-text',
@@ -156,7 +157,6 @@ var UICheckbox = UIElement.extend({
 
 	render: function() {
 		var frameEl = E('div', {
-			'id': this.options.id,
 			'class': 'cbi-checkbox'
 		});
 
@@ -168,6 +168,7 @@ var UICheckbox = UIElement.extend({
 			}));
 
 		frameEl.appendChild(E('input', {
+			'id': this.options.id,
 			'name': this.options.name,
 			'type': 'checkbox',
 			'value': this.options.value_enabled,
