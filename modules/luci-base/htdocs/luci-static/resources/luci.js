@@ -210,8 +210,7 @@
 	});
 
 
-	var requestQueue = [],
-	    rpcBaseURL = null;
+	var requestQueue = [];
 
 	function isQueueableRequest(opt) {
 		if (!classes.rpc)
@@ -223,8 +222,7 @@
 		if (opt.nobatch === true)
 			return false;
 
-		if (rpcBaseURL == null)
-			rpcBaseURL = Request.expandURL(classes.rpc.getBaseURL());
+		var rpcBaseURL = Request.expandURL(classes.rpc.getBaseURL());
 
 		return (rpcBaseURL != null && opt.url.indexOf(rpcBaseURL) == 0);
 	}
@@ -544,6 +542,7 @@
 	var dummyElem = null,
 	    domParser = null,
 	    originalCBIInit = null,
+	    rpcBaseURL = null,
 	    classes = {};
 
 	var LuCI = Class.extend({
@@ -581,7 +580,7 @@
 				this.require('ui'),
 				this.require('rpc'),
 				this.require('form'),
-				Request.get('/ubus/').catch(function() { return { status: 0 } })
+				this.probeRPCBaseURL()
 			]).then(this.setupDOM.bind(this)).catch(this.error);
 
 			originalCBIInit = window.cbi_init;
@@ -754,15 +753,40 @@
 		},
 
 		/* DOM setup */
+		probeRPCBaseURL: function() {
+			if (rpcBaseURL == null) {
+				try {
+					rpcBaseURL = window.sessionStorage.getItem('rpcBaseURL');
+				}
+				catch (e) { }
+			}
+
+			if (rpcBaseURL == null) {
+				rpcBaseURL = Request.get('/ubus/').then(function(res) {
+					return (rpcBaseURL = (res.status == 400) ? '/ubus/' : this.url('admin/ubus'));
+				}, function() {
+					return (rpcBaseURL = L.url('admin/ubus'));
+				}).then(function(url) {
+					try {
+						window.sessionStorage.setItem('rpcBaseURL', url);
+					}
+					catch (e) { }
+
+					return url;
+				});
+			}
+
+			return Promise.resolve(rpcBaseURL);
+		},
+
 		setupDOM: function(res) {
 			var domEv = res[0],
 			    uiClass = res[1],
 			    rpcClass = res[2],
 			    formClass = res[3],
-			    ubusReply = res[4];
+			    rpcBaseURL = res[4];
 
-			if (ubusReply.status == 400)
-				rpcClass.setBaseURL('/ubus/');
+			rpcClass.setBaseURL(rpcBaseURL);
 
 			Request.addInterceptor(function(res) {
 				if (res.status != 403 || res.headers.get('X-LuCI-Login-Required') != 'yes')
