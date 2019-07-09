@@ -1361,7 +1361,7 @@ var CBIValue = CBIAbstractValue.extend({
 			if (typeof(this.title) === 'string' && this.title !== '') {
 				optionEl.appendChild(E('label', {
 					'class': 'cbi-value-title',
-					'for': 'cbid.%s.%s.%s'.format(config_name, section_id, this.option)
+					'for': 'widget.cbid.%s.%s.%s'.format(config_name, section_id, this.option)
 				},
 				this.titleref ? E('a', {
 					'class': 'cbi-title-ref',
