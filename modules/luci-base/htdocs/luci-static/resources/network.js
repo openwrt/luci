@@ -966,7 +966,7 @@ Network = L.Class.extend({
 					radiostate = res[1];
 					netstate   = res[2];
 					sid        = netstate.section;
-					netid      = getWifiNetidBySid(sid);
+					netid      = L.toArray(getWifiNetidBySid(sid))[0];
 				}
 				else {
 					res = getWifiStateBySid(netname);
@@ -976,7 +976,7 @@ Network = L.Class.extend({
 						radiostate = res[1];
 						netstate   = res[2];
 						sid        = netname;
-						netid      = getWifiNetidBySid(sid);
+						netid      = L.toArray(getWifiNetidBySid(sid))[0];
 					}
 					else {
 						res = getWifiNetidBySid(netname);
@@ -1015,9 +1015,9 @@ Network = L.Class.extend({
 					uci.set('wireless', sid, key, options[key]);
 
 			var radioname = existingDevice['.name'],
-			    netid = getWifiNetidBySid(sid);
+			    netid = getWifiNetidBySid(sid) || [];
 
-			return this.instantiateWifiNetwork(sid, radioname, _cache.wifi[radioname], netid, null, { ifname: netid });
+			return this.instantiateWifiNetwork(sid, radioname, _cache.wifi[radioname], netid[0], null, { ifname: netid });
 		}, this));
 	},
 
@@ -1469,7 +1469,7 @@ Protocol = L.Class.extend({
 
 			ifname = getWifiNetidByNetname(this.sid);
 
-			return (ifname != null ? L.network.instantiateDevice(ifname, this) : null);
+			return (ifname != null ? L.network.instantiateDevice(ifname[0], this) : null);
 		}
 	},
 
@@ -1552,9 +1552,9 @@ Device = L.Class.extend({
 
 		if (wif != null) {
 			var res = getWifiStateBySid(wif) || [],
-			    netid = getWifiNetidBySid(wif);
+			    netid = getWifiNetidBySid(wif) || [];
 
-			this.wif    = new WifiNetwork(wif, res[0], res[1], netid, res[2], { ifname: ifname });
+			this.wif    = new WifiNetwork(wif, res[0], res[1], netid[0], res[2], { ifname: ifname });
 			this.ifname = this.wif.getIfname();
 		}
 
@@ -1588,7 +1588,7 @@ Device = L.Class.extend({
 	},
 
 	getType: function() {
-		if (this.ifname.charAt(0) == '@')
+		if (this.ifname != null && this.ifname.charAt(0) == '@')
 			return 'alias';
 		else if (this.wif != null || isWifiIfname(this.ifname))
 			return 'wifi';
