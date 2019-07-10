@@ -88,7 +88,7 @@ XHR = function()
 		{
 			if (xhr.readyState == 4) {
 				var json = null;
-				if (xhr.getResponseHeader("Content-Type") == "application/json") {
+				if (/^application\/json\b/.test(xhr.getResponseHeader("Content-Type"))) {
 					try { json = JSON.parse(xhr.responseText); }
 					catch(e) { json = null; }
 				}
