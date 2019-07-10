@@ -61,9 +61,8 @@
 				local link = dev and ipc.link(dev:name())
 
 				local wan_info = {
-					ipaddr  = v:ipaddr(),
+					ipaddrs = v:ipaddrs(),
 					gwaddr  = v:gwaddr(),
-					netmask = v:netmask(),
 					dns     = v:dnsaddrs(),
 					expires = v:expires(),
 					uptime  = v:uptime(),
@@ -90,7 +89,7 @@
 				local dev = v:get_interface()
 				local link = dev and ipc.link(dev:name())
 				local wan6_info = {
-					ip6addr   = v:ip6addr(),
+					ip6addrs  = v:ip6addrs(),
 					gw6addr   = v:gw6addr(),
 					dns       = v:dns6addrs(),
 					ip6prefix = v:ip6prefix(),
