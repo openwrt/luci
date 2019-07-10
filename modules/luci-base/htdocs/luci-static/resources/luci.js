@@ -762,10 +762,12 @@
 			}
 
 			if (rpcBaseURL == null) {
+				var rpcFallbackURL = this.url('admin/ubus');
+
 				rpcBaseURL = Request.get('/ubus/').then(function(res) {
-					return (rpcBaseURL = (res.status == 400) ? '/ubus/' : this.url('admin/ubus'));
+					return (rpcBaseURL = (res.status == 400) ? '/ubus/' : rpcFallbackURL);
 				}, function() {
-					return (rpcBaseURL = L.url('admin/ubus'));
+					return (rpcBaseURL = rpcFallbackURL);
 				}).then(function(url) {
 					try {
 						window.sessionStorage.setItem('rpcBaseURL', url);
