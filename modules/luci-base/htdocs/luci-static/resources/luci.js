@@ -329,7 +329,9 @@
 					opt.xhr.open(opt.method, opt.url, true);
 
 				opt.xhr.responseType = 'text';
-				opt.xhr.overrideMimeType('application/octet-stream');
+
+				if ('overrideMimeType' in opt.xhr)
+					opt.xhr.overrideMimeType('application/octet-stream');
 
 				if ('timeout' in opt)
 					opt.xhr.timeout = +opt.timeout;
