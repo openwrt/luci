@@ -305,7 +305,7 @@ var UISelect = UIElement.extend({
 
 	getValue: function() {
 		if (this.options.widget == 'select')
-			return this.node.value;
+			return this.node.firstChild.value;
 
 		var radioEls = frameEl.querySelectorAll('input[type="radio"]');
 		for (var i = 0; i < radioEls.length; i++)
