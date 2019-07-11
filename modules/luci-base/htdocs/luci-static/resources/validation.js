@@ -510,11 +510,11 @@ var ValidatorFactory = L.Class.extend({
 				    day   = +RegExp.$3,
 				    days_in_month = [ 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 ];
 
-				function is_leap_year(year) {
+				var is_leap_year = function(year) {
 					return ((!(year % 4) && (year % 100)) || !(year % 400));
 				}
 
-				function get_days_in_month(month, year) {
+				var get_days_in_month = function(month, year) {
 					return (month === 2 && is_leap_year(year)) ? 29 : days_in_month[month - 1];
 				}
 
