@@ -23,6 +23,20 @@
 		});
 	}
 
+	/* Promise.finally polyfill */
+	if (typeof Promise.prototype.finally !== 'function') {
+		Promise.prototype.finally = function(fn) {
+			var onFinally = function(cb) {
+				return Promise.resolve(fn.call(this)).then(cb);
+			};
+
+			return this.then(
+				function(result) { return onFinally.call(this, function() { return result }) },
+				function(reason) { return onFinally.call(this, function() { return Promise.reject(reason) }) }
+			);
+		};
+	}
+
 	/*
 	 * Class declaration and inheritance helper
 	 */
