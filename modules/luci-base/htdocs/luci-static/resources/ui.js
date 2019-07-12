@@ -320,8 +320,8 @@ var UISelect = UIElement.extend({
 			if (value == null)
 				value = '';
 
-			for (var i = 0; i < this.node.options.length; i++)
-				this.node.options[i].selected = (this.node.options[i].value == value);
+			for (var i = 0; i < this.node.firstChild.options.length; i++)
+				this.node.firstChild.options[i].selected = (this.node.firstChild.options[i].value == value);
 
 			return;
 		}
