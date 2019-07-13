@@ -3,11 +3,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Project-Id-Version: LuCI: firewall\n"
 "POT-Creation-Date: 2013-09-05 16:02+0200\n"
-"PO-Revision-Date: 2018-09-06 09:29+0300\n"
+"PO-Revision-Date: 2019-07-13 23:05+0300\n"
 "Language-Team: http://cyber-place.ru\n"
 "MIME-Version: 1.0\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.8.7.1\n"
+"X-Generator: Poedit 2.2\n"
 "Last-Translator: Anton Kikin <a.kikin@tano-systems.com>\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n"
 "%100<10 || n%100>=20) ? 1 : 2);\n"
@@ -95,7 +95,7 @@ msgstr "Любой"
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:331
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:344
 msgid "Any day"
-msgstr ""
+msgstr "Любой день"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:122
 msgid "Covered networks"
@@ -405,7 +405,7 @@ msgstr "Имя"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:169
 msgid "Network"
-msgstr ""
+msgstr "Сеть"
 
 #: applications/luci-app-firewall/luasrc/view/firewall/cbi_addsnat.htm:28
 msgid "New SNAT rule"
@@ -600,7 +600,7 @@ msgstr "Дата начала (год-мес-день)"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:348
 msgid "Start Time (hh.mm.ss)"
-msgstr ""
+msgstr "Время начала (чч.мм.сс)"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:360
 msgid "Stop Date (yyyy-mm-dd)"
@@ -608,7 +608,7 @@ msgstr "Дата окончания (год-мес-день)"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:352
 msgid "Stop Time (hh.mm.ss)"
-msgstr ""
+msgstr "Время окончания (чч.мм.сс)"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:332
 msgid "Sunday"
@@ -659,7 +659,7 @@ msgstr "Четверг"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:136
 msgid "Time Restrictions"
-msgstr ""
+msgstr "Временные ограничения"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:364
 msgid "Time in UTC"
@@ -720,7 +720,7 @@ msgstr "Правило без имени"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:86
 msgid "Unnamed zone"
-msgstr ""
+msgstr "Зона без имени"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:71
 msgid "Via %s"
@@ -848,104 +848,3 @@ msgstr "тип"
 #: applications/luci-app-firewall/luasrc/tools/firewall.lua:130
 msgid "types"
 msgstr "типы"
-
-#~ msgid "(Unnamed Entry)"
-#~ msgstr "(Запись без имени)"
-
-#~ msgid "(Unnamed Rule)"
-#~ msgstr "(Правило без имени)"
-
-#~ msgid "(Unnamed SNAT)"
-#~ msgstr "(SNAT без имени)"
-
-#~ msgid "Destination IP address"
-#~ msgstr "IP-адрес назначения"
-
-#~ msgid "IPv6"
-#~ msgstr "IPv6"
-
-#~ msgid "Inter-Zone Forwarding"
-#~ msgstr "Перенаправление между зонами"
-
-#~ msgid "Match forwarded traffic to the given destination port or port range."
-#~ msgstr ""
-#~ "Перенаправлять соответствующий трафик на указанный порт или диапазон "
-#~ "портов."
-
-#~ msgid ""
-#~ "Match incoming traffic originating from the given source port or port "
-#~ "range on the client host."
-#~ msgstr ""
-#~ "Выбирать входящий трафик, исходящий из порта или диапазона портов "
-#~ "клиентского хоста."
-
-#~ msgid "Rewrite matched traffic to the given address."
-#~ msgstr "Перенаправлять соответствующий трафик к указанному адресу."
-
-#~ msgid ""
-#~ "Rewrite matched traffic to the given source port. May be left empty to "
-#~ "only rewrite the IP address."
-#~ msgstr ""
-#~ "Перенаправлять соответствующий трафик к указанному порту источника. Может "
-#~ "быть пустым в случае, если необходимо перенаправить только IP-адрес."
-
-#~ msgid "Rewrite to source %s"
-#~ msgstr "Перенаправлять к источнику %s"
-
-#~ msgid "Rewrite to source %s, %s"
-#~ msgstr "Перенаправлять к источнику %s, %s"
-
-#~ msgid "SNAT IP address"
-#~ msgstr "IP-адрес SNAT"
-
-#~ msgid "SNAT port"
-#~ msgstr "Порт SNAT"
-
-#~ msgid "Source NAT"
-#~ msgstr "NAT источника"
-
-#~ msgid ""
-#~ "Source NAT is a specific form of masquerading which allows fine grained "
-#~ "control over the source IP used for outgoing traffic, for example to map "
-#~ "multiple WAN addresses to internal subnets."
-#~ msgstr ""
-#~ "SNAT - это особая форма маскарадинга (masquerading), позволяющая "
-#~ "осуществлять детальный контроль над IP-адресом источника для исходящего "
-#~ "трафика, например, перенаправление нескольких WAN-адресов во внутреннюю "
-#~ "подсеть."
-
-#~ msgid "Start Time (hh:mm:ss)"
-#~ msgstr "Время начала (чч:мм:сс)"
-
-#~ msgid "Stop Time (hh:mm:ss)"
-#~ msgstr "Время окончания (чч:мм:сс)"
-
-#~ msgid ""
-#~ "This page allows you to change advanced properties of the port forwarding "
-#~ "entry. In most cases there is no need to modify those settings."
-#~ msgstr ""
-#~ "На этой странице можно изменить расширенные настройки перенаправления "
-#~ "портов.В большинстве случаев нет необходимости изменять эти параметры."
-
-#~ msgid ""
-#~ "This page allows you to change advanced properties of the traffic rule "
-#~ "entry, such as matched source and destination hosts."
-#~ msgstr ""
-#~ "На этой странице можно изменить расширенные настройки правил для трафика."
-#~ "В большинстве случаев нет необходимости изменять эти параметры."
-
-#~ msgid "Unnamed SNAT"
-#~ msgstr "SNAT без имени"
-
-#~ msgid ""
-#~ "You may specify multiple by selecting \"-- custom --\" and then entering "
-#~ "protocols separated by space."
-#~ msgstr ""
-#~ "Вы можете указать несколько, выбрав '-- пользовательский --' и перечислив "
-#~ "через пробел названия протоколов."
-
-#~ msgid "Zone %q"
-#~ msgstr "Зона %q"
-
-#~ msgid "traffic"
-#~ msgstr "трафик"
