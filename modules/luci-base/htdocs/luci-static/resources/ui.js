@@ -1978,7 +1978,7 @@ return L.Class.extend({
 				}
 				else {
 					L.ui.changes.displayStatus('warning',
-						E('p', _('Apply request failed with status <code>%h</code>%>')
+						E('p', _('Apply request failed with status <code>%h</code>')
 							.format(r.responseText || r.statusText || r.status)));
 
 					window.setTimeout(function() {
