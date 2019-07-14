@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LuCI: base\n"
 "POT-Creation-Date: 2010-05-09 01:01+0300\n"
-"PO-Revision-Date: 2019-06-05 21:31+0300\n"
+"PO-Revision-Date: 2019-07-13 23:01+0300\n"
 "Last-Translator: Anton Kikin <a.kikin@tano-systems.com>\n"
 "Language-Team: http://cyber-place.ru\n"
 "Language: ru\n"
@@ -670,7 +670,7 @@ msgstr "Ошибка <code>%h</code> запроса на применение"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:1867
 msgid "Apply unchecked"
-msgstr ""
+msgstr "Применить без проверки"
 
 #: modules/luci-mod-status/luasrc/view/admin_status/index/10-system.htm:19
 msgid "Architecture"
@@ -1450,7 +1450,7 @@ msgstr "Описание"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:224
 msgid "Design"
-msgstr ""
+msgstr "Тема оформления"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:62
 #: modules/luci-mod-status/luasrc/view/admin_status/connections.htm:392
@@ -1646,7 +1646,7 @@ msgstr "SNR offset внутренней сети"
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:914
 msgid "Drag to reorder"
-msgstr ""
+msgstr "Перетащите, чтобы изменить порядок"
 
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/dropbear.lua:9
 msgid "Dropbear Instance"
@@ -1900,7 +1900,7 @@ msgstr "Расширять имена узлов"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:59
 msgid "Expecting: %s"
-msgstr ""
+msgstr "Ожидается: %s"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:71
 msgid "Expires"
@@ -2991,7 +2991,7 @@ msgstr "Загрузка SSH ключей..."
 #: modules/luci-base/htdocs/luci-static/resources/luci.js:1204
 #: modules/luci-base/luasrc/view/view.htm:4
 msgid "Loading view…"
-msgstr ""
+msgstr "Загрузка страницы..."
 
 #: modules/luci-base/htdocs/luci-static/resources/network.js:10
 #: modules/luci-base/luasrc/model/network.lua:30
@@ -3309,7 +3309,7 @@ msgstr "Слишком мало символов"
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:802
 msgid "More…"
-msgstr ""
+msgstr "Больше..."
 
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/fstab/mount.lua:45
 msgid "Mount Entry"
@@ -3621,7 +3621,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:95
 msgid "On-Link route"
-msgstr ""
+msgstr "On-link маршрут"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:78
 msgid "On-State Delay"
@@ -3633,7 +3633,7 @@ msgstr "Должен быть указан либо MAC-адрес, либо и�
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:456
 msgid "One of the following: %s"
-msgstr ""
+msgstr "Одно из: %s"
 
 #: modules/luci-base/luasrc/view/cbi/nullsection.htm:17
 #: modules/luci-base/luasrc/view/cbi/ucisection.htm:22
@@ -4052,7 +4052,7 @@ msgstr "Состояние порта:"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:482
 msgid "Potential negation of: %s"
-msgstr ""
+msgstr "Потенциальное отрицание: %s"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:137
 msgid "Power Management Mode"
@@ -4528,7 +4528,7 @@ msgstr "Маршрут разрешенный для IP адресов"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:72
 msgid "Route table"
-msgstr ""
+msgstr "Таблица маршрутизации"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:59
 msgid "Route type"
@@ -4571,7 +4571,7 @@ msgstr "Проверить"
 
 #: modules/luci-base/htdocs/luci-static/resources/luci.js:651
 msgid "Runtime error"
-msgstr ""
+msgstr "Ошибка исполнения"
 
 #: modules/luci-mod-system/luasrc/view/admin_system/upgrade.htm:29
 msgid "SHA256"
@@ -4844,7 +4844,7 @@ msgstr "Источник"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:83
 msgid "Source Address"
-msgstr ""
+msgstr "Адрес источника"
 
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/fstab/mount.lua:103
 msgid "Specifies the directory the device is attached to"
@@ -5168,6 +5168,12 @@ msgid ""
 "or revert all pending changes to keep the currently working configuration "
 "state."
 msgstr ""
+"Устройство недоступно в течение %d секунд после применения изменений. Это "
+"привело к откату конфигурации из соображений безопасности. Если вы считаете, "
+"что конфигурация верна, выполните настройку без проверки. Кроме того, вы "
+"можете отклонить это предупреждение и отредактировать изменения перед "
+"попыткой применить конфигурацию снова или откатить все изменения, чтобы "
+"сохранить рабочее состояние конфигурации."
 
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/fstab/mount.lua:87
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/fstab/swap.lua:41
@@ -5299,7 +5305,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:403
 msgid "There are no active leases"
-msgstr ""
+msgstr "Нет активных арендованных адресов"
 
 #: modules/luci-base/luasrc/view/lease_status.htm:29
 #: modules/luci-base/luasrc/view/lease_status.htm:61
@@ -5308,7 +5314,7 @@ msgstr "Нет активных арендованных адресов."
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:1973
 msgid "There are no changes to apply"
-msgstr ""
+msgstr "Нет изменений для применения"
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/ifaces.lua:204
 msgid ""
@@ -5339,6 +5345,9 @@ msgid ""
 "'server=1.2.3.4' for domain-specific or full upstream <abbr title=\"Domain "
 "Name System\">DNS</abbr> servers."
 msgstr ""
+"Этот файл может содержать такие строки, как <code>server=/domain/1.2.3.4</"
+"code> или <code>server=1.2.3.4</code> для каждого отдельного домена или "
+"общий <abbr title=\\\"англ. Domain Name System\\\">DNS</abbr> сервер."
 
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/backupfiles.lua:16
 msgid ""
@@ -5921,7 +5930,7 @@ msgstr "Ожидание завершения выполнения команд�
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:1940
 msgid "Waiting for configuration to get applied… %ds"
-msgstr ""
+msgstr "Ожидание применения конфигурации... %d сек"
 
 #: modules/luci-mod-system/luasrc/view/admin_system/reboot.htm:56
 msgid "Waiting for device..."
@@ -6082,7 +6091,7 @@ msgstr "авто"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:84
 msgid "automatic"
-msgstr ""
+msgstr "автоматически"
 
 #: modules/luci-mod-network/luasrc/view/admin_network/switch_status.htm:45
 msgid "baseT"
@@ -6250,7 +6259,7 @@ msgstr "не пустое значение"
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:1195
 msgid "none"
-msgstr ""
+msgstr "нет"
 
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/fstab.lua:166
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/fstab.lua:176
@@ -6537,133 +6546,3 @@ msgstr "да"
 #: modules/luci-base/luasrc/view/cbi/delegator.htm:20
 msgid "« Back"
 msgstr "« Назад"
-
-#~ msgid "Advanced"
-#~ msgstr "Дополнительные"
-
-#~ msgid "Always off (%s)"
-#~ msgstr "Всегда выключен (%s)"
-
-#~ msgid "Always on (%s)"
-#~ msgstr "Всегда включен (%s)"
-
-#~ msgid "Apply anyway"
-#~ msgstr "Применить без проверки"
-
-#~ msgid "Back"
-#~ msgstr "Назад"
-
-#~ msgid "Custom flash interval (%s)"
-#~ msgstr "Произвольный интервал мигания (%s)"
-
-#~ msgid "Expecting %s"
-#~ msgstr "Ожидаемое значение %s"
-
-#~ msgid "Heartbeat interval (%s)"
-#~ msgstr "Интервал heartbeat (%s)"
-
-#~ msgid "KiB"
-#~ msgstr "КиБ"
-
-#~ msgid "Netmask"
-#~ msgstr "Маска сети"
-
-#~ msgid "Network device activity (%s)"
-#~ msgstr "Активность сетевого устройства (%s)"
-
-#~ msgid "Polling interval"
-#~ msgstr "Интервал автообновления"
-
-#~ msgid "Polling interval for status queries in seconds"
-#~ msgstr "Интервал автоматического обновления состояния страниц в секундах"
-
-#~ msgid "Set up Time Synchronization"
-#~ msgstr "Настройка синхронизации времени"
-
-#~ msgid "Switchport activity (%s)"
-#~ msgstr "Активность порта коммутатора (%s)"
-
-#~ msgid "Synchronizing..."
-#~ msgstr "Синхронизация..."
-
-#~ msgid ""
-#~ "The device could not be reached within %d seconds after applying the "
-#~ "pending changes, which caused the configuration to be rolled back for "
-#~ "safety reasons. If you believe that the configuration changes are correct "
-#~ "nonetheless, proceed by applying anyway. Alternatively, you can dismiss "
-#~ "this warning and edit changes before attempting to apply again, or revert "
-#~ "all pending changes to keep the currently working configuration state."
-#~ msgstr ""
-#~ "Устройство недоступно в течение %d секунд после применения изменений. Это "
-#~ "привело к откату конфигурации из соображений безопасности. Если вы "
-#~ "считаете, что конфигурация верна, выполните настройку без проверки. Кроме "
-#~ "того, вы можете отклонить это предупреждение и отредактировать изменения "
-#~ "перед попыткой применить конфигурацию снова или откатить все изменения, "
-#~ "чтобы сохранить рабочее состояние конфигурации."
-
-#~ msgid "The following changes have been reverted"
-#~ msgstr "Следующие настройки были отвергнуты"
-
-#~ msgid "Theme"
-#~ msgstr "Тема"
-
-#~ msgid "There are no changes to apply."
-#~ msgstr "Нет изменений для применения."
-
-#~ msgid "There are no pending changes to revert!"
-#~ msgstr "Нет изменений, которые можно отменить!"
-
-#~ msgid "There are no pending changes!"
-#~ msgstr "Нет изменений, которые можно применить!"
-
-#~ msgid ""
-#~ "This file may contain lines like 'server=/domain/1.2.3.4' or "
-#~ "'server=1.2.3.4' fordomain-specific or full upstream <abbr title=\"Domain "
-#~ "Name System\">DNS</abbr> servers."
-#~ msgstr ""
-#~ "Этот файл может содержать такие строки, как 'server=/domain/1.2.3.4' или "
-#~ "'server=1.2.3.4' fordomain-specific или полный список внешней сети <abbr "
-#~ "title=\"Domain Name System\">DNS</abbr> servers."
-
-#~ msgid "Time Synchronization is not configured yet."
-#~ msgstr "Синхронизация времени ещё не настроена."
-
-#~ msgid "Waiting for configuration to be applied… %ds"
-#~ msgstr "Ожидание применения конфигурации... %d сек"
-
-#~ msgid "Wi-Fi activity (%s)"
-#~ msgstr "Активность Wi-Fi (%s)"
-
-#~ msgid "Wi-Fi client association (%s)"
-#~ msgstr "Ассоциация Wi-Fi клиента (%s)"
-
-#~ msgid "Wi-Fi data reception (%s)"
-#~ msgstr "Приём данных Wi-Fi (%s)"
-
-#~ msgid "Wi-Fi data transmission (%s)"
-#~ msgstr "Передача данных Wi-Fi (%s)"
-
-#~ msgid "Wi-Fi on (%s)"
-#~ msgstr "Wi-Fi включен (%s)"
-
-#~ msgid "Flashmemory write access (%s)"
-#~ msgstr "Запись во флешпамять (%s)"
-
-#~ msgid ""
-#~ "one of:\n"
-#~ " - %s"
-#~ msgstr ""
-#~ "одно из:\n"
-#~ "- %s"
-
-#~ msgid ""
-#~ "Your Internet Explorer is too old to display this page correctly. Please "
-#~ "upgrade it to at least version 7 or use another browser like Firefox, "
-#~ "Opera or Safari."
-#~ msgstr ""
-#~ "Ваш Internet Explorer слишком стар, чтобы отобразить эту страницу "
-#~ "правильно. Обновите его до версии 7 или используйте другой браузер, "
-#~ "например Firefox, Opera или Safari."
-
-#~ msgid "kB"
-#~ msgstr "кБ"
