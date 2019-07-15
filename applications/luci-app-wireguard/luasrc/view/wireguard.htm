@@ -4,19 +4,22 @@
 -%>
 
 <%
-	local uci = uci.cursor()
 	local data = { }
 	local last_device = ""
-	local enc = { }
+	local qr_pubkey = { }
 
-	local function wg_clean(value)
-		if value and value == "(none)" then
-			value = ""
+	local function qr_clean(qr_type, value)
+		if not value or value == "" or value == "(none)" then
+			return ""
 		end
-		return value
+		if qr_type == "privkey" then
+			return "PrivateKey = " ..value
+		elseif qr_type == "pubkey" then
+			return "PublicKey = " ..value
+		end
 	end
 
-	local wg_dump = io.popen("wg show all dump")
+	local wg_dump = io.popen("wg show all dump 2>/dev/null")
 	if wg_dump then
 		local line
 		for line in wg_dump:lines() do
@@ -30,17 +33,7 @@
 					fwmark		= line[5],
 					peers		= { }
 				}
-				local s = uci:get_list("network", line[1], "addresses")
-				local address = ""
-				local key, value
-				for key, value in pairs(s) do
-					if address ~= "" then
-						address = address.. ", " ..value
-					else
-						address = value
-					end
-				end
-				enc[line[1]] = "[Interface]\nPrivateKey = " ..wg_clean(line[2]).. "\nAddress = " ..address
+				qr_pubkey[line[1]] = qr_clean("pubkey", line[3])
 			else
 				local peer = {
 					public_key		= line[2],
@@ -60,7 +53,6 @@
 					end
 				end
 				table.insert(data[line[1]].peers, peer)
-				enc[line[1]] = enc[line[1]].. "\n\n[Peer]\nEndpoint = " ..wg_clean(line[4]).. "\nPublicKey = " ..wg_clean(line[2]).. "\nAllowedIPs = " ..wg_clean(line[5])
 			end
 		end
 	end
@@ -199,17 +191,28 @@ for ikey, iface in pairs(data) do
 		<input class="cbi-button cbi-button-apply" type="button" name="qrcode_<%=ikey%>" value="<%:Show/Hide QR-Code%>" onclick="toggle_qrcode(this)" />
 	</div>
 <%-
-	local qrcode
+	local qr_enc
+	local qr_code
+	local qr_privkey
 	if fs.access("/usr/bin/qrencode") then
-		if enc[ikey]:sub(26, 26) ~= "\n" then
-			qrcode = luci.sys.exec("/usr/bin/qrencode --inline --8bit --type=SVG --output=- '" ..enc[ikey].. "'")
+		qr_privkey = qr_clean("privkey", luci.sys.exec("wg genkey 2>/dev/null"))
+		if qr_pubkey[ikey] and qr_privkey then
+			qr_enc = "[Interface]\n" ..qr_privkey.. "\n[Peer]\n" ..qr_pubkey[ikey].. "\nAllowedIPs = 0.0.0.0/0, ::/0"
+			qr_code = luci.sys.exec("/usr/bin/qrencode --inline --8bit --type=SVG --output=- '" ..qr_enc.. "' 2>/dev/null")
+		else
+			qr_code = "<em>The QR-Code could not be generated, the wg interface setup is incomplete!</em>"
 		end
 	else
-		qrcode = "<em>For QR-Code support please install package 'qrencode'!</em>"
+		qr_code = "<em>For QR-Code support please install the package 'qrencode'!</em>"
 	end
 -%>
-	<div class="cbi-value-title">
-		<span class="cbi-value" style="display: none" id="qrcode_<%=ikey%>"><%=qrcode%></span>
+	<div class="cbi-section-node">
+		<span class="cbi-value" style="display: none" id="qrcode_<%=ikey%>">
+			<%:The QR-Code works per wg interface, it will be refreshed with every manual page reload and transfers the following information:%><br />
+			&#8226;&#160;<%:[Interface] A random, on the fly generated 'PrivateKey', the key will not be saved on the router%><br />
+			&#8226;&#160;<%:[Peer] The 'PublicKey' of that wg interface and the 'AllowedIPs' with the default of '0.0.0.0/0, ::/0' to allow sending traffic to any IPv4 and IPv6 address%><br />
+			<hr /><%=qr_code%><br />
+		</span>
 	</div>
 	<div class="cbi-section-node">
 		<div class="table cbi-section-table">
