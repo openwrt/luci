@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LuCI: base\n"
 "POT-Creation-Date: 2010-05-09 01:01+0300\n"
-"PO-Revision-Date: 2019-07-13 23:01+0300\n"
+"PO-Revision-Date: 2019-07-15 15:36+0300\n"
 "Last-Translator: Anton Kikin <a.kikin@tano-systems.com>\n"
 "Language-Team: http://cyber-place.ru\n"
 "Language: ru\n"
@@ -1606,7 +1606,7 @@ msgstr "Не перенаправлять обратные DNS-запросы д
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:173
 msgid "Do you really want to delete the following SSH key?"
-msgstr "Вы действительно хотите удалить следующий SSH-ключ?"
+msgstr "Вы действительно хотите удалить следующий SSH ключ?"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:73
 msgid "Domain required"
@@ -1849,11 +1849,11 @@ msgstr "Шифрование"
 
 #: protocols/luci-proto-wireguard/luasrc/model/cbi/admin_network/proto_wireguard.lua:155
 msgid "Endpoint Host"
-msgstr "Конечная точка Хоста"
+msgstr "Конечный узел"
 
 #: protocols/luci-proto-wireguard/luasrc/model/cbi/admin_network/proto_wireguard.lua:165
 msgid "Endpoint Port"
-msgstr "Конечная точка Порта"
+msgstr "Порт конечного узла"
 
 #: modules/luci-base/luasrc/view/cbi/dropdown.htm:16
 msgid "Enter custom value"
@@ -3700,7 +3700,7 @@ msgid ""
 "symmetric-key cryptography for post-quantum resistance."
 msgstr ""
 "Необязательно. Base64-шифрованный общий ключ. Добавляет дополнительный слой "
-"криптографии с симметричным ключом для пост-квантового сопротивления."
+"криптографии с симметричным ключом для постквантовой устойчивости."
 
 #: protocols/luci-proto-wireguard/luasrc/model/cbi/admin_network/proto_wireguard.lua:148
 msgid "Optional. Create routes for Allowed IPs for this peer."
@@ -3716,11 +3716,11 @@ msgid ""
 "Optional. Host of peer. Names are resolved prior to bringing up the "
 "interface."
 msgstr ""
-"Необязательно. Запрашивающий хост. Имена разрешаются до появления интерфейса."
+"Необязательно. Имя хоста пира. Имена разрешаются до появления интерфейса."
 
 #: protocols/luci-proto-wireguard/luasrc/model/cbi/admin_network/proto_wireguard.lua:67
 msgid "Optional. Maximum Transmission Unit of tunnel interface."
-msgstr "Необязательно. Максимальная единица передачи туннельного интерфейса."
+msgstr "Необязательно. MTU туннельного интерфейса."
 
 #: protocols/luci-proto-wireguard/luasrc/model/cbi/admin_network/proto_wireguard.lua:166
 msgid "Optional. Port of peer."
@@ -4400,7 +4400,7 @@ msgstr "Запрос IPv6 префикс длины"
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:1141
 msgid "Required"
-msgstr "Требовать"
+msgstr "Обязательно"
 
 #: modules/luci-base/luasrc/model/cbi/admin_network/proto_dhcp.lua:20
 msgid "Required for certain ISPs, e.g. Charter with DOCSIS 3"
@@ -4409,11 +4409,11 @@ msgstr ""
 
 #: protocols/luci-proto-wireguard/luasrc/model/cbi/admin_network/proto_wireguard.lua:19
 msgid "Required. Base64-encoded private key for this interface."
-msgstr "Требовать Приватный ключ в кодировке Base64 для этого интерфейса."
+msgstr "Обязательно. Приватный ключ в кодировке Base64 для этого интерфейса."
 
 #: protocols/luci-proto-wireguard/luasrc/model/cbi/admin_network/proto_wireguard.lua:113
 msgid "Required. Base64-encoded public key of peer."
-msgstr "Требовать Публичный ключ узла в кодировке Base64."
+msgstr "Обязательно. Публичный ключ узла в кодировке Base64."
 
 #: protocols/luci-proto-wireguard/luasrc/model/cbi/admin_network/proto_wireguard.lua:136
 msgid ""
@@ -4421,9 +4421,9 @@ msgid ""
 "the tunnel. Usually the peer's tunnel IP addresses and the networks the peer "
 "routes through the tunnel."
 msgstr ""
-"Требовать IP-адреса и префиксы, которые разрешено использовать этому "
-"одноранговому узлу внутри туннеля. Обычно туннельные IP-адреса однорангового "
-"узла и сети одноранговых маршрутов через туннель."
+"Обязательно. IP-адреса и префиксы, которые разрешено использовать этому "
+"пиру внутри туннеля. Обычно IP-адреса и сети пира маршрутизируются "
+"через туннель."
 
 #: modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua:1134
 msgid ""
@@ -4524,7 +4524,7 @@ msgstr "Подготовка корневой директории"
 
 #: protocols/luci-proto-wireguard/luasrc/model/cbi/admin_network/proto_wireguard.lua:147
 msgid "Route Allowed IPs"
-msgstr "Маршрут разрешенный для IP адресов"
+msgstr "Маршрутизировать разрешенные IP-адреса"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:72
 msgid "Route table"
@@ -4601,7 +4601,7 @@ msgstr "SSH логин"
 #: modules/luci-mod-system/luasrc/controller/admin/system.lua:20
 #: modules/luci-mod-system/luasrc/view/admin_system/sshkeys.htm:27
 msgid "SSH-Keys"
-msgstr "SSH-ключи"
+msgstr "SSH ключи"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wifi_status.js:42
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:73
@@ -5347,7 +5347,7 @@ msgid ""
 msgstr ""
 "Этот файл может содержать такие строки, как <code>server=/domain/1.2.3.4</"
 "code> или <code>server=1.2.3.4</code> для каждого отдельного домена или "
-"общий <abbr title=\\\"англ. Domain Name System\\\">DNS</abbr> сервер."
+"общий <abbr title=\"англ. Domain Name System\">DNS</abbr> сервер."
 
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/backupfiles.lua:16
 msgid ""
