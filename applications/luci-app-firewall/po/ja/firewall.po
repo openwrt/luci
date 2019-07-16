@@ -3,14 +3,14 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-03-30 17:00+0200\n"
-"PO-Revision-Date: 2018-06-30 23:19+0900\n"
+"PO-Revision-Date: 2019-07-16 13:20+0900\n"
 "Last-Translator: INAGAKI Hiroshi <musashino.open@gmail.com>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 2.0.7\n"
+"X-Generator: Poedit 2.2.3\n"
 "Language-Team: \n"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:134
@@ -94,7 +94,7 @@ msgstr "全て"
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:331
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:344
 msgid "Any day"
-msgstr ""
+msgstr "全日"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:122
 msgid "Covered networks"
@@ -404,7 +404,7 @@ msgstr "名前"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:169
 msgid "Network"
-msgstr ""
+msgstr "ネットワーク"
 
 #: applications/luci-app-firewall/luasrc/view/firewall/cbi_addsnat.htm:28
 msgid "New SNAT rule"
@@ -628,7 +628,7 @@ msgstr "開始日 (yyyy-mm-dd)"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:348
 msgid "Start Time (hh.mm.ss)"
-msgstr ""
+msgstr "開始時刻 (hh.mm.ss)"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:360
 msgid "Stop Date (yyyy-mm-dd)"
@@ -636,7 +636,7 @@ msgstr "停止日 (yyyy-mm-dd)"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:352
 msgid "Stop Time (hh.mm.ss)"
-msgstr ""
+msgstr "停止時刻 (hh.mm.ss)"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:332
 msgid "Sunday"
@@ -687,7 +687,7 @@ msgstr "木曜日"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:136
 msgid "Time Restrictions"
-msgstr ""
+msgstr "時間制限"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:364
 msgid "Time in UTC"
@@ -748,7 +748,7 @@ msgstr "名称未設定のルール"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:86
 msgid "Unnamed zone"
-msgstr ""
+msgstr "名称未設定のゾーン"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:71
 msgid "Via %s"
@@ -876,104 +876,3 @@ msgstr "タイプ"
 #: applications/luci-app-firewall/luasrc/tools/firewall.lua:130
 msgid "types"
 msgstr "タイプ"
-
-#~ msgid "(Unnamed Entry)"
-#~ msgstr "(名前設定の無いエントリー)"
-
-#~ msgid "(Unnamed Rule)"
-#~ msgstr "(名前設定の無いルール)"
-
-#~ msgid "(Unnamed SNAT)"
-#~ msgstr "(名前設定の無いSNAT)"
-
-#~ msgid "Destination IP address"
-#~ msgstr "宛先IPアドレス"
-
-#~ msgid "IPv6"
-#~ msgstr "IPv6"
-
-#~ msgid "Inter-Zone Forwarding"
-#~ msgstr "内部ゾーン転送"
-
-#~ msgid "Match forwarded traffic to the given destination port or port range."
-#~ msgstr ""
-#~ "設定された宛先ポート(またはポート範囲)に一致した転送トラフィックが対象にな"
-#~ "ります"
-
-#~ msgid ""
-#~ "Match incoming traffic originating from the given source port or port "
-#~ "range on the client host."
-#~ msgstr ""
-#~ "設定されたクライアントホストの送信元ポート(またはポート範囲)からの受信トラ"
-#~ "フィックと一致したトラフィックが対象になります。"
-
-#~ msgid "Rewrite matched traffic to the given address."
-#~ msgstr ""
-#~ "ルールに一致したトラフィックの送信元アドレスを設定した値にリライトします。"
-
-#~ msgid ""
-#~ "Rewrite matched traffic to the given source port. May be left empty to "
-#~ "only rewrite the IP address."
-#~ msgstr ""
-#~ "ルールに一致したトラフィックの送信元ポートを設定した値にリライトします。空"
-#~ "欄にした場合、IPアドレスのみを書き直します。"
-
-#~ msgid "Rewrite to source %s"
-#~ msgstr "送信元 %s にリライト"
-
-#~ msgid "Rewrite to source %s, %s"
-#~ msgstr "送信元 %s, %s にリライト"
-
-#~ msgid "SNAT IP address"
-#~ msgstr "SNAT IPアドレス"
-
-#~ msgid "SNAT port"
-#~ msgstr "SNAT ポート"
-
-#~ msgid "Source NAT"
-#~ msgstr "送信元NAT"
-
-#~ msgid ""
-#~ "Source NAT is a specific form of masquerading which allows fine grained "
-#~ "control over the source IP used for outgoing traffic, for example to map "
-#~ "multiple WAN addresses to internal subnets."
-#~ msgstr ""
-#~ "送信元NAT設定は、複数のWANアドレスを内部のサブネットにマッピングするよう"
-#~ "な、出力トラフィックに対する送信元IPアドレスのきめ細かい制御を行うマスカ"
-#~ "レードの設定フォームです。"
-
-#~ msgid "Start Time (hh:mm:ss)"
-#~ msgstr "開始時刻 (hh:mm:ss)"
-
-#~ msgid "Stop Time (hh:mm:ss)"
-#~ msgstr "停止時刻 (hh:mm:ss)"
-
-#~ msgid ""
-#~ "This page allows you to change advanced properties of the port forwarding "
-#~ "entry. In most cases there is no need to modify those settings."
-#~ msgstr ""
-#~ "このページでは、各転送ルールの詳細設定を行うことができます。ただし、ほとん"
-#~ "どのケースは、これらの設定を変更する必要はありません。"
-
-#~ msgid ""
-#~ "This page allows you to change advanced properties of the traffic rule "
-#~ "entry, such as matched source and destination hosts."
-#~ msgstr ""
-#~ "このページでは、各トラフィックルールの送信元・宛先ホストの設定などの詳細設"
-#~ "定を行うことができます。"
-
-#~ msgid "Unnamed SNAT"
-#~ msgstr "名称未設定の SNAT"
-
-#~ msgid ""
-#~ "You may specify multiple by selecting \"-- custom --\" and then entering "
-#~ "protocols separated by space."
-#~ msgstr ""
-#~ "\"-- 手動設定 --\"を選択し、プロトコルをスペースで区切って入力することで複"
-#~ "数のプロトコルを指定することができます。"
-
-#~ msgid "Zone %q"
-#~ msgstr "ゾーン %q"
-
-#~ msgid "traffic"
-#~ msgstr "トラフィック"
