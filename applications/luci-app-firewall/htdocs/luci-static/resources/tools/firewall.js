@@ -211,6 +211,15 @@ return L.Class.extend({
 		return rv;
 	},
 
+	fmt_family: function(family) {
+		if (family == 'ipv4')
+			return _('IPv4');
+		else if (family == 'ipv6')
+			return _('IPv6');
+		else
+			return _('IPv4 and IPv6');
+	},
+
 	fmt_proto: function(x, icmp_types) {
 		var rv = E([]), l = L.toArray(x);
 
