@@ -42,7 +42,8 @@ function fmt(fmt /*, ...*/) {
 }
 
 function forward_proto_txt(s) {
-	return fmt('%s-%s', _('IPv4'),
+	return fmt('%s-%s',
+		fwtool.fmt_family(uci.get('firewall', s, 'family')),
 		fwtool.fmt_proto(uci.get('firewall', s, 'proto'),
 		                 uci.get('firewall', s, 'icmp_type')) || 'TCP+UDP');
 }
