@@ -213,13 +213,13 @@ var UISelect = UIElement.extend({
 		if (!Array.isArray(value))
 			value = (value != null && value != '') ? [ value ] : [];
 
-		if (!options.multi && value.length > 1)
+		if (!options.multiple && value.length > 1)
 			value.length = 1;
 
 		this.values = value;
 		this.choices = choices;
 		this.options = Object.assign({
-			multi: false,
+			multiple: false,
 			widget: 'select',
 			orientation: 'horizontal'
 		}, options);
@@ -240,7 +240,7 @@ var UISelect = UIElement.extend({
 				'name': this.options.name,
 				'size': this.options.size,
 				'class': 'cbi-input-select',
-				'multiple': this.options.multi ? '' : null
+				'multiple': this.options.multiple ? '' : null
 			}));
 
 			if (this.options.optional)
@@ -267,8 +267,8 @@ var UISelect = UIElement.extend({
 					E('input', {
 						'id': this.options.id ? 'widget.' + this.options.id : null,
 						'name': this.options.id || this.options.name,
-						'type': this.options.multi ? 'checkbox' : 'radio',
-						'class': this.options.multi ? 'cbi-input-checkbox' : 'cbi-input-radio',
+						'type': this.options.multiple ? 'checkbox' : 'radio',
+						'class': this.options.multiple ? 'cbi-input-checkbox' : 'cbi-input-radio',
 						'value': keys[i],
 						'checked': (this.values.indexOf(keys[i]) > -1) ? '' : null
 					}),
@@ -345,7 +345,7 @@ var UIDropdown = UIElement.extend({
 		this.choices = choices;
 		this.options = Object.assign({
 			sort:               true,
-			multi:              Array.isArray(value),
+			multiple:           Array.isArray(value),
 			optional:           true,
 			select_placeholder: _('-- Please choose --'),
 			custom_placeholder: _('-- custom --'),
@@ -361,7 +361,7 @@ var UIDropdown = UIElement.extend({
 		var sb = E('div', {
 			'id': this.options.id,
 			'class': 'cbi-dropdown',
-			'multiple': this.options.multi ? '' : null,
+			'multiple': this.options.multiple ? '' : null,
 			'optional': this.options.optional ? '' : null,
 		}, E('ul'));
 
@@ -409,7 +409,7 @@ var UIDropdown = UIElement.extend({
 	bind: function(sb) {
 		var o = this.options;
 
-		o.multi = sb.hasAttribute('multiple');
+		o.multiple = sb.hasAttribute('multiple');
 		o.optional = sb.hasAttribute('optional');
 		o.placeholder = sb.getAttribute('placeholder') || o.placeholder;
 		o.display_items = parseInt(sb.getAttribute('display-items') || o.display_items);
@@ -425,7 +425,7 @@ var UIDropdown = UIElement.extend({
 		    ndisplay = this.options.display_items,
 		    n = 0;
 
-		if (this.options.multi) {
+		if (this.options.multiple) {
 			var items = ul.querySelectorAll('li');
 
 			for (var i = 0; i < items.length; i++) {
@@ -657,7 +657,7 @@ var UIDropdown = UIElement.extend({
 		if (li.hasAttribute('unselectable'))
 			return;
 
-		if (this.options.multi) {
+		if (this.options.multiple) {
 			var cbox = li.querySelector('input[type="checkbox"]'),
 			    items = li.parentNode.querySelectorAll('li'),
 			    label = sb.querySelector('ul.preview'),
@@ -780,7 +780,7 @@ var UIDropdown = UIElement.extend({
 			element: sb
 		};
 
-		if (this.options.multi)
+		if (this.options.multiple)
 			detail.values = values;
 		else
 			detail.value = values.length ? values[0] : null;
@@ -800,12 +800,12 @@ var UIDropdown = UIElement.extend({
 			for (var value in values) {
 				this.createItems(sb, value);
 
-				if (!this.options.multi)
+				if (!this.options.multiple)
 					break;
 			}
 		}
 
-		if (this.options.multi) {
+		if (this.options.multiple) {
 			var lis = ul.querySelectorAll('li[data-value]');
 			for (var i = 0; i < lis.length; i++) {
 				var value = lis[i].getAttribute('data-value');
@@ -857,7 +857,7 @@ var UIDropdown = UIElement.extend({
 		    val = (value || '').trim(),
 		    ul = sb.querySelector('ul');
 
-		if (!sbox.options.multi)
+		if (!sbox.options.multiple)
 			val = val.length ? [ val ] : [];
 		else
 			val = val.length ? val.split(/\s+/) : [];
@@ -881,7 +881,7 @@ var UIDropdown = UIElement.extend({
 
 				new_item = E(markup.replace(/{{value}}/g, item));
 
-				if (sbox.options.multi) {
+				if (sbox.options.multiple) {
 					sbox.transformItem(sb, new_item);
 				}
 				else {
@@ -1071,7 +1071,7 @@ var UIDropdown = UIElement.extend({
 	},
 
 	setValue: function(values) {
-		if (this.options.multi) {
+		if (this.options.multiple) {
 			if (!Array.isArray(values))
 				values = (values != null && values != '') ? [ values ] : [];
 
@@ -1104,7 +1104,7 @@ var UIDropdown = UIElement.extend({
 		for (var i = 0; i < h.length; i++)
 			v.push(h[i].value);
 
-		return this.options.multi ? v : v[0];
+		return this.options.multiple ? v : v[0];
 	}
 });
 
@@ -1116,7 +1116,7 @@ var UICombobox = UIDropdown.extend({
 			dropdown_items: -1,
 			sort: true
 		}, options, {
-			multi: false,
+			multiple: false,
 			create: true,
 			optional: true
 		}) ]);
@@ -1134,7 +1134,7 @@ var UIDynamicList = UIElement.extend({
 		this.values = values;
 		this.choices = choices;
 		this.options = Object.assign({}, options, {
-			multi: false,
+			multiple: false,
 			optional: true
 		});
 	},
