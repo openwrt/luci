@@ -117,7 +117,7 @@ return L.view.extend({
 		o.editable = true;
 
 		o = s.taboption('general', form.Flag, 'mtu_fix', _('MSS clamping'));
-		o.modalonly = true;
+		o.editable = true;
 
 		o = s.taboption('general', widgets.NetworkSelect, 'network', _('Covered networks'));
 		o.modalonly = true;
