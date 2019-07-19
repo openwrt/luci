@@ -1,6 +1,6 @@
 <%+cbi/valueheader%>
 <div<%=attr("data-ui-widget", luci.util.serialize_json({
-	"Dropdown", self:cfgvalue(section), self:choices(), {
+	"Dropdown", self:cfgvalue(section) or self.default, self:choices(), {
 		id = cbid,
 		name = cbid,
 		sort = self.keylist,

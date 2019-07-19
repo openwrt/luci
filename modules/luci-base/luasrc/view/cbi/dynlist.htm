@@ -1,6 +1,6 @@
 <%+cbi/valueheader%>
 <div<%=attr("data-ui-widget", luci.util.serialize_json({
-	"DynamicList", self:cfgvalue(section), self:choices(), {
+	"DynamicList", self:cfgvalue(section) or self.default, self:choices(), {
 		name = cbid,
 		size = self.size,
 		sort = self.keylist,
