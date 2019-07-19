@@ -113,6 +113,7 @@ function scan() {
 		var count = 0;
 
 		poll = L.poll(3, L.url('admin/network/wireless_scan_results', dev), null, function(s, results) {
+
 			if (Array.isArray(results)) {
 				var bss = [];
 
@@ -143,8 +144,12 @@ function scan() {
 					]);
 				});
 
-				cbi_update_table(tbl, bss, E('em', { class: 'spinning' }, _('No scan results available yet...')));
+				cbi_update_table(tbl, bss, E('em' {}, _('No networks in range')));
 			}
+			else {
+				cbi_update_table(tbl, [], E('em', { class: 'spinning' }, _('No scan results available yet...')));
+			}
+
 
 			if (count++ >= 3) {
 				count = 0;
