@@ -144,6 +144,27 @@ return L.view.extend({
 			return uci.get('firewall', section_id, 'name') || _('Unnamed rule');
 		};
 
+		s.handleAdd = function(ev) {
+			var config_name = this.uciconfig || this.map.config,
+			    section_id = uci.add(config_name, this.sectiontype),
+			    opt1, opt2;
+
+			for (var i = 0; i < this.children.length; i++)
+				if (this.children[i].option == 'src')
+					opt1 = this.children[i];
+				else if (this.children[i].option == 'dest')
+					opt2 = this.children[i];
+
+			opt1.default = 'wan';
+			opt2.default = 'lan';
+
+			this.addedSection = section_id;
+			this.renderMoreOptionsModal(section_id);
+
+			delete opt1.default;
+			delete opt2.default;
+		};
+
 		o = s.taboption('general', form.Value, 'name', _('Name'));
 		o.placeholder = _('Unnamed rule');
 		o.modalonly = true;
@@ -243,7 +264,6 @@ return L.view.extend({
 		o.nocreate = true;
 		o.allowany = true;
 		o.allowlocal = 'src';
-		o.default = 'wan';
 
 		o = s.taboption('advanced', form.Value, 'src_mac', _('Source MAC address'));
 		o.modalonly = true;
@@ -276,22 +296,11 @@ return L.view.extend({
 		o.depends('proto', 'tcp udp');
 		o.depends('proto', 'tcpudp');
 
-		o = s.taboption('general', widgets.ZoneSelect, 'dest_local', _('Output zone'));
-		o.modalonly = true;
-		o.nocreate = true;
-		o.allowany = true;
-		o.alias = 'dest';
-		o.default = 'wan';
-		o.depends('src', '');
-
-		o = s.taboption('general', widgets.ZoneSelect, 'dest_remote', _('Destination zone'));
+		o = s.taboption('general', widgets.ZoneSelect, 'dest', _('Destination zone'));
 		o.modalonly = true;
 		o.nocreate = true;
 		o.allowany = true;
 		o.allowlocal = true;
-		o.alias = 'dest';
-		o.default = 'lan';
-		o.depends({'src': '', '!reverse': true});
 
 		o = s.taboption('general', form.Value, 'dest_ip', _('Destination address'));
 		o.modalonly = true;
@@ -366,9 +375,6 @@ return L.view.extend({
 		o.modalonly = true;
 		o.default = o.disabled;
 
-		return m.render().catch(function(e) {
-			console.debug('render fail')
-		});
-
+		return m.render();
 	}
 });
