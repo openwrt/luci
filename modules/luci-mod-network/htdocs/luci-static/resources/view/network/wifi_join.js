@@ -144,7 +144,7 @@ function scan() {
 					]);
 				});
 
-				cbi_update_table(tbl, bss, E('em' {}, _('No networks in range')));
+				cbi_update_table(tbl, bss, E('em', {}, _('No networks in range')));
 			}
 			else {
 				cbi_update_table(tbl, [], E('em', { class: 'spinning' }, _('No scan results available yet...')));
