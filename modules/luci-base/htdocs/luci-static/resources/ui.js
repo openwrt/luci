@@ -879,7 +879,7 @@ var UIDropdown = UIElement.extend({
 				else
 					markup = '<li data-value="{{value}}">{{value}}</li>';
 
-				new_item = E(markup.replace(/{{value}}/g, item));
+				new_item = E(markup.replace(/{{value}}/g, '%h'.format(item)));
 
 				if (sbox.options.multiple) {
 					sbox.transformItem(sb, new_item);
