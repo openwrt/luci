@@ -150,11 +150,14 @@ var CBIZoneSelect = form.ListValue.extend({
 				}
 				else {
 					var anyval = node.querySelector('[data-value="*"]'),
-					    emptyval = node.querySelector('[data-value=""]') || anyval.cloneNode(true);
+					    emptyval = node.querySelector('[data-value=""]');
 
-					emptyval.removeAttribute('display');
-					emptyval.removeAttribute('selected');
-					emptyval.setAttribute('data-value', '');
+					if (emptyval == null) {
+						emptyval = anyval.cloneNode(true);
+						emptyval.removeAttribute('display');
+						emptyval.removeAttribute('selected');
+						emptyval.setAttribute('data-value', '');
+					}
 
 					L.dom.content(emptyval.querySelector('span'), [
 						E('strong', _('Device')), ' (%s)'.format(_('input'))
@@ -171,8 +174,9 @@ var CBIZoneSelect = form.ListValue.extend({
 		}
 		else if (this.option == 'dest') {
 			for (var i = 0; i < this.section.children.length; i++) {
-				if (this.section.children[i].option == 'src') {
-					if (!this.section.children[i].cfgvalue(section_id)) {
+				var opt = this.section.children[i];
+				if (opt.option == 'src') {
+					if (!opt.cfgvalue(section_id) && !opt.default) {
 						var emptyval = elem.querySelector('[data-value=""]');
 
 						if (emptyval != null)
