@@ -375,6 +375,14 @@ Zone = AbstractFirewallItem.extend({
 		this.set('network', ' ');
 	},
 
+	getDevices: function() {
+		return L.toArray(this.get('device'));
+	},
+
+	getSubnets: function() {
+		return L.toArray(this.get('subnet'));
+	},
+
 	getForwardingsBy: function(what) {
 		var sections = uci.sections('firewall', 'forwarding'),
 		    forwards = [];
