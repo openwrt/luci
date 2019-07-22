@@ -1797,7 +1797,7 @@ return L.Class.extend({
 								return chg[1];
 
 						case 4:
-							return "'" + chg[3].replace(/'/g, "'\"'\"'") + "'";
+							return "'%h'".format(chg[3].replace(/'/g, "'\"'\"'"));
 
 						default:
 							return chg[m1-1];
