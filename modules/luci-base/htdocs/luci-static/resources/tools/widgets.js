@@ -30,7 +30,21 @@ var CBIZoneSelect = form.ListValue.extend({
 
 	renderWidget: function(section_id, option_index, cfgvalue) {
 		var values = L.toArray((cfgvalue != null) ? cfgvalue : this.default),
+		    isOutputOnly = false,
 		    choices = {};
+
+		if (this.option == 'dest') {
+			for (var i = 0; i < this.section.children.length; i++) {
+				var opt = this.section.children[i];
+				if (opt.option == 'src') {
+					var val = opt.cfgvalue(section_id) || opt.default;
+					isOutputOnly = (val == null || val == '');
+					break;
+				}
+			}
+
+			this.title = isOutputOnly ? _('Output zone') :  _('Destination zone');
+		}
 
 		if (this.allowlocal) {
 			choices[''] = E('span', {
@@ -55,7 +69,7 @@ var CBIZoneSelect = form.ListValue.extend({
 				'style': 'background-color:' + firewall.getColorForName(null)
 			}, [
 				E('strong', _('Any zone')),
-				(this.allowany && this.allowlocal && this.option != 'src') ? ' (%s)'.format(_('forward')) : ''
+				(this.allowany && this.allowlocal && !isOutputOnly) ? ' (%s)'.format(_('forward')) : ''
 			]);
 		}
 
@@ -172,18 +186,9 @@ var CBIZoneSelect = form.ListValue.extend({
 
 			}, this));
 		}
-		else if (this.option == 'dest') {
-			for (var i = 0; i < this.section.children.length; i++) {
-				var opt = this.section.children[i];
-				if (opt.option == 'src') {
-					if (!opt.cfgvalue(section_id) && !opt.default) {
-						var emptyval = elem.querySelector('[data-value=""]');
-
-						if (emptyval != null)
-							emptyval.parentNode.removeChild(emptyval);
-					}
-				}
-			}
+		else if (isOutputOnly) {
+			var emptyval = elem.querySelector('[data-value=""]');
+			emptyval.parentNode.removeChild(emptyval);
 		}
 
 		return elem;
