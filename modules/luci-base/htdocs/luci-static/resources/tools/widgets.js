@@ -199,10 +199,16 @@ var CBIZoneForwards = form.DummyValue.extend({
 	__name__: 'CBI.ZoneForwards',
 
 	load: function(section_id) {
-		return Promise.all([ firewall.getDefaults(), firewall.getZones(), network.getNetworks() ]).then(L.bind(function(dzn) {
-			this.defaults = dzn[0];
-			this.zones = dzn[1];
-			this.networks = dzn[2];
+		return Promise.all([
+			firewall.getDefaults(),
+			firewall.getZones(),
+			network.getNetworks(),
+			network.getDevices()
+		]).then(L.bind(function(dznd) {
+			this.defaults = dznd[0];
+			this.zones = dznd[1];
+			this.networks = dznd[2];
+			this.devices = dznd[3];
 
 			return this.super('load', section_id);
 		}, this));
@@ -211,6 +217,8 @@ var CBIZoneForwards = form.DummyValue.extend({
 	renderZone: function(zone) {
 		var name = zone.getName(),
 		    networks = zone.getNetworks(),
+		    devices = zone.getDevices(),
+		    subnets = zone.getSubnets(),
 		    ifaces = [];
 
 		for (var j = 0; j < networks.length; j++) {
@@ -223,20 +231,38 @@ var CBIZoneForwards = form.DummyValue.extend({
 				'class': 'ifacebadge' + (network.getName() == this.network ? ' ifacebadge-active' : '')
 			}, network.getName() + ': ');
 
-			var devices = network.isBridge() ? network.getDevices() : L.toArray(network.getDevice());
+			var subdevs = network.isBridge() ? network.getDevices() : L.toArray(network.getDevice());
 
-			for (var k = 0; k < devices.length && devices[k]; k++) {
+			for (var k = 0; k < subdevs.length && subdevs[k]; k++) {
 				span.appendChild(E('img', {
-					'title': devices[k].getI18n(),
-					'src': L.resource('icons/%s%s.png'.format(devices[k].getType(), devices[k].isUp() ? '' : '_disabled'))
+					'title': subdevs[k].getI18n(),
+					'src': L.resource('icons/%s%s.png'.format(subdevs[k].getType(), subdevs[k].isUp() ? '' : '_disabled'))
 				}));
 			}
 
-			if (!devices.length)
+			if (!subdevs.length)
 				span.appendChild(E('em', _('(empty)')));
 
 			ifaces.push(span);
 		}
+
+		for (var i = 0; i < devices.length; i++) {
+			var device = this.devices.filter(function(dev) { return dev.getName() == devices[i] })[0],
+			    title = device ? device.getI18n() : _('Absent Interface'),
+			    type = device ? device.getType() : 'ethernet',
+			    up = device ? device.isUp() : false;
+
+			ifaces.push(E('span', { 'class': 'ifacebadge' }, [
+				E('img', {
+					'title': title,
+					'src': L.resource('icons/%s%s.png'.format(type, up ? '' : '_disabled'))
+				}),
+				device ? device.getName() : devices[i]
+			]));
+		}
+
+		if (subnets.length > 0)
+			ifaces.push(E('span', { 'class': 'ifacebadge' }, [ '{ %s }'.format(subnets.join('; ')) ]));
 
 		if (!ifaces.length)
 			ifaces.push(E('span', { 'class': 'ifacebadge' }, E('em', _('(empty)'))));
