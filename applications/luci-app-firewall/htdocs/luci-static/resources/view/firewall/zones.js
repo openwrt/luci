@@ -13,12 +13,23 @@ return L.view.extend({
 		expect: { offload_support: false }
 	}),
 
+	callConntrackHelpers: rpc.declare({
+		object: 'luci',
+		method: 'conntrack_helpers',
+		expect: { helpers: [] }
+	}),
+
 	load: function() {
-		return this.callOffloadSupport();
+		return Promise.all([
+			this.callOffloadSupport(),
+			this.callConntrackHelpers()
+		]);
 	},
 
-	render: function(hasOffloading) {
-		var m, s, o, inp, out;
+	render: function(data) {
+		var hasOffloading = data[0],
+		    ctHelpers = data[1],
+		    m, s, o, inp, out;
 
 		m = new form.Map('firewall', _('Firewall - Zone Settings'),
 			_('The firewall creates zones over your network interfaces to control network traffic flow.'));
@@ -71,6 +82,8 @@ return L.view.extend({
 
 		s.tab('general', _('General Settings'));
 		s.tab('advanced', _('Advanced Settings'));
+		s.tab('conntrack', _('Conntrack Settings'));
+		s.tab('extra', _('Extra iptables arguments'));
 
 		o = s.taboption('general', form.DummyValue, '_generalinfo');
 		o.rawhtml = true;
@@ -145,6 +158,9 @@ return L.view.extend({
 						zone_networks[0].addNetwork(zone_networks[i].getName());
 			});
 		};
+		o.remove = function(section_id) {
+			return uci.set('firewall', section_id, 'network', ' ');
+		};
 
 		o = s.taboption('advanced', form.DummyValue, '_advancedinfo');
 		o.rawhtml = true;
@@ -155,6 +171,15 @@ return L.view.extend({
 			return _('The options below control the forwarding policies between this zone (%s) and other zones. <em>Destination zones</em> cover forwarded traffic <strong>originating from %q</strong>. <em>Source zones</em> match forwarded traffic from other zones <strong>targeted at %q</strong>. The forwarding rule is <em>unidirectional</em>, e.g. a forward from lan to wan does <em>not</em> imply a permission to forward from wan to lan as well.')
 				.format(name);
 		};
+
+		o = s.taboption('advanced', widgets.DeviceSelect, 'device', _('Covered devices'), _('Use this option to classify zone traffic by raw, non-<em>uci</em> managed network devices.'));
+		o.modalonly = true;
+		o.multiple = true;
+
+		o = s.taboption('advanced', form.DynamicList, 'subnet', _('Covered subnets'), _('Use this option to classify zone traffic by source or destination subnet instead of networks or devices.'));
+		o.datatype = 'neg(cidr)';
+		o.modalonly = true;
+		o.multiple = true;
 
 		o = s.taboption('advanced', form.ListValue, 'family', _('Restrict to address family'));
 		o.value('', _('IPv4 and IPv6'));
@@ -176,8 +201,21 @@ return L.view.extend({
 		o.placeholder = '0.0.0.0/0';
 		o.modalonly = true;
 
-		o = s.taboption('advanced', form.Flag, 'conntrack', _('Force connection tracking'));
+		o = s.taboption('conntrack', form.Flag, 'conntrack', _('Force connection tracking'), _('Prevent the installation of <em>NOTRACK</em> rules which would bypass connection tracking.'));
 		o.modalonly = true;
+
+		o = s.taboption('conntrack', form.Flag, 'masq_allow_invalid', _('Allow "invalid" traffic'), _('Do not install extra rules to reject forwarded traffic with conntrack state <em>invalid</em>. This may be required for complex asymmetric route setups.'));
+		o.modalonly = true;
+
+		o = s.taboption('conntrack', form.Flag, 'auto_helper', _('Automatic helper assignment'), _('Automatically assign conntrack helpers based on traffic protocol and port'));
+		o.default = o.enabled;
+		o.modalonly = true;
+
+		o = s.taboption('conntrack', form.MultiValue, 'helper', _('Conntrack helpers'), _('Explicitly choses allowed connection tracking helpers for zone traffic'));
+		o.depends('auto_helper', '0');
+		o.modalonly = true;
+		for (var i = 0; i < ctHelpers.length; i++)
+			o.value(ctHelpers[i].name, '<span class="hide-close">%s (%s)</span><span class="hide-open">%s</span>'.format(ctHelpers[i].description, ctHelpers[i].name.toUpperCase(), ctHelpers[i].name.toUpperCase()));
 
 		o = s.taboption('advanced', form.Flag, 'log', _('Enable logging on this zone'));
 		o.modalonly = true;
@@ -186,6 +224,33 @@ return L.view.extend({
 		o.depends('log', '1');
 		o.placeholder = '10/minute';
 		o.modalonly = true;
+
+		o = s.taboption('extra', form.DummyValue, '_extrainfo');
+		o.rawhtml = true;
+		o.modalonly = true;
+		o.cfgvalue = function(section_id) {
+			return _('Passing raw iptables arguments to source and destination traffic classification rules allows to match packets based on other criteria than interfaces or subnets. These options should be used with extreme care as invalid values could render the firewall ruleset broken, completely exposing all services.');
+		};
+
+		o = s.taboption('extra', form.Value, 'extra_src', _('Extra source arguments'), _('Additional raw <em>iptables</em> arguments to classify zone source traffic, e.g. <code>-p tcp --sport 443</code> to only match inbound HTTPS traffic.'));
+		o.modalonly = true;
+		o.cfgvalue = function(section_id) {
+			return uci.get('firewall', section_id, 'extra_src') || uci.get('firewall', section_id, 'extra');
+		};
+		o.write = function(section_id, value) {
+			uci.unset('firewall', section_id, 'extra');
+			uci.set('firewall', section_id, 'extra_src', value);
+		};
+
+		o = s.taboption('extra', form.Value, 'extra_dest', _('Extra destination arguments'), _('Additional raw <em>iptables</em> arguments to classify zone destination traffic, e.g. <code>-p tcp --dport 443</code> to only match outbound HTTPS traffic.'));
+		o.modalonly = true;
+		o.cfgvalue = function(section_id) {
+			return uci.get('firewall', section_id, 'extra_dest') || uci.get('firewall', section_id, 'extra_src') || uci.get('firewall', section_id, 'extra');
+		};
+		o.write = function(section_id, value) {
+			uci.unset('firewall', section_id, 'extra');
+			uci.set('firewall', section_id, 'extra_dest', value);
+		};
 
 		o = s.taboption('general', form.DummyValue, '_forwardinfo');
 		o.rawhtml = true;
