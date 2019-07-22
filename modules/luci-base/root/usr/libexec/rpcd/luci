@@ -320,64 +320,6 @@ local methods = {
 
 			return { helpers = rv }
 		end
-	},
-
-	getMenuItems = {
-		call = function(args)
-			local util = require "luci.util"
-			local http = require "luci.http"
-			local disp = require "luci.dispatcher"
-
-			local x = coroutine.create(function()
-				util.coxpcall(function()
-					http.context.request = http.Request({
-						PATH_INFO = "/",
-						QUERY_STRING = "",
-						REQUEST_METHOD = "GET",
-						REQUEST_URI = "/",
-						BUILD_MENU = "1"
-					}, function() end, function() end)
-
-					disp.context.request = {}
-					disp.dispatch(disp.context.request)
-
-					coroutine.yield(-1, disp.node())
-				end, error)
-			end)
-
-			local root = nil
-
-			while coroutine.status(x) ~= "dead" do
-				local res, id, data1, data2 = coroutine.resume(x, r)
-				if id == -1 then
-					root = data1
-				elseif id == 6 then
-					data1:close()
-				end
-			end
-
-			local function recurse(prefix, node)
-				local childs = disp.node_childs(node)
-				if #childs > 0 then
-					local i, c
-					for i, c in ipairs(childs) do
-						local cnode = node.nodes[c]
-						local n = { name = c, title = cnode.title, query = cnode.query }
-
-						if prefix.children then
-							prefix.children[#prefix.children+1] = n
-						else
-							prefix.children = { n }
-						end
-
-						recurse(n, cnode)
-					end
-				end
-				return prefix
-			end
-
-			return root and recurse({}, root) or {}
-		end
 	}
 }
 
