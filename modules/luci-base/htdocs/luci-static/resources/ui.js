@@ -287,8 +287,8 @@ var UISelect = UIElement.extend({
 		this.node = frameEl;
 
 		if (this.options.widget == 'select') {
-			this.setUpdateEvents(frameEl, 'change', 'click', 'blur');
-			this.setChangeEvents(frameEl, 'change');
+			this.setUpdateEvents(frameEl.firstChild, 'change', 'click', 'blur');
+			this.setChangeEvents(frameEl.firstChild, 'change');
 		}
 		else {
 			var radioEls = frameEl.querySelectorAll('input[type="radio"]');
