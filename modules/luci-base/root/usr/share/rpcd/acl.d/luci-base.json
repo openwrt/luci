@@ -13,7 +13,7 @@
 		"read": {
 			"ubus": {
 				"iwinfo": [ "info" ],
-				"luci": [ "boardjson", "duid_hints", "host_hints", "ifaddrs", "initList", "getLocaltime", "leases", "leds", "netdevs", "offload_support", "usb" ],
+				"luci": [ "boardjson", "duid_hints", "host_hints", "ifaddrs", "initList", "getLocaltime", "leases", "leds", "netdevs", "usb" ],
 				"network.device": [ "status" ],
 				"network.interface": [ "dump" ],
 				"network.wireless": [ "status" ],
@@ -27,6 +27,18 @@
 				"uci": [ "add", "apply", "confirm", "delete", "order", "set" ]
 			},
 			"uci": [ "*" ]
+		}
+	},
+	"luci-app-firewall": {
+		"description": "Grant access to firewall procedures",
+		"read": {
+			"ubus": {
+				"luci": [ "conntrack_helpers", "offload_support" ]
+			},
+			"uci": [ "firewall" ]
+		},
+		"write": {
+			"uci": [ "firewall" ]
 		}
 	}
 }
