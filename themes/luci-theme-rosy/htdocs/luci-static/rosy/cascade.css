@@ -1121,7 +1121,7 @@ form[method="post"] + form[method="post"],
 }
 
 .td.cbi-section-actions > * {
-	display: inline-flex;
+	display: block;
 }
 
 .td.cbi-section-actions > * > *,
@@ -1533,9 +1533,6 @@ body.modal-overlay-active #modal_overlay {
 
 /* select */
 .cbi-value-field .cbi-dropdown,
-.cbi-value-field .cbi-input-select {
-	min-width: 15rem;
-}
 
 .cbi-value-field .cbi-input-invalid {
 	color: #f00;
@@ -1935,11 +1932,6 @@ span[data-tooltip] .label {
 		rgba(255, 255, 255, .5) 5px,
 		rgba(255, 255, 255, .5) 10px
 	);
-}
-
-.zone-forwards {
-	display: flex;
-	min-width: 10rem;
 }
 
 .zone-forwards > * {
@@ -2479,6 +2471,7 @@ input[name="nslookup"] {
 
 #cbi-firewall-zone .table {
 	display: table;
+	table-layout: fixed;
 }
 
 #cbi-network-switch_vlan #vlan_table {
@@ -2589,10 +2582,6 @@ input[name="nslookup"] {
 
 	.node-admin-status > .main fieldset li > a {
 		padding: .3rem .6rem;
-	}
-
-	#cbi-firewall-zone > .table {
-		display: block;
 	}
 }
 
@@ -3119,10 +3108,6 @@ input[name="nslookup"] {
 		min-width: 20rem;
 	}
 
-	.cbi-value-field .cbi-input-select {
-		width: 20rem;
-	}
-
 	.cbi-value-field .cbi-dropdown {
 		min-width: 20rem;
 	}
@@ -3138,10 +3123,6 @@ input[name="nslookup"] {
 		min-width: 22rem;
 	}
 
-	.cbi-value-field .cbi-input-select {
-		width: 22rem;
-	}
-
 	.cbi-value-field .cbi-dropdown {
 		min-width: 22rem;
 	}
@@ -3151,10 +3132,6 @@ input[name="nslookup"] {
 	.cbi-value input[type="password"],
 	.cbi-value input[type="text"] {
 		min-width: 25rem;
-	}
-
-	.cbi-value-field .cbi-input-select {
-		width: 25rem;
 	}
 
 	.cbi-value-field .cbi-dropdown {
