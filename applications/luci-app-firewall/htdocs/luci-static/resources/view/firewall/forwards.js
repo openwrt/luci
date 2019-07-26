@@ -107,6 +107,16 @@ return L.view.extend({
 			return uci.get('firewall', section_id, 'name') || _('Unnamed forward');
 		};
 
+		s.handleAdd = function(ev) {
+			var config_name = this.uciconfig || this.map.config,
+			    section_id = uci.add(config_name, this.sectiontype);
+
+			uci.set(config_name, section_id, 'target', 'DNAT');
+
+			this.addedSection = section_id;
+			this.renderMoreOptionsModal(section_id);
+		};
+
 		o = s.taboption('general', form.Value, 'name', _('Name'));
 		o.placeholder = _('Unnamed forward');
 		o.modalonly = true;
