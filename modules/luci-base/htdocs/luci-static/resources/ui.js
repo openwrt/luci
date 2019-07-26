@@ -1929,7 +1929,7 @@ return L.Class.extend({
 						method: 'post',
 						timeout: L.env.apply_timeout * 1000,
 						query: L.ui.changes.confirm_auth
-					}).then(call);
+					}).then(call, call);
 				}, delay);
 			};
 
