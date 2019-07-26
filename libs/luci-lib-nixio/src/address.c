@@ -288,9 +288,9 @@ static int nixio_getnameinfo(lua_State *L) {
 	const char *family = luaL_optstring(L, 2, NULL);
 
 #ifdef __linux__
-	const struct itimerval t = { {timeout * 1000 * 1000, 0} , {0, 0} };
 	struct sigaction sa_new, sa_old;
 	int timeout = luaL_optnumber(L, 3, 0);
+	const struct itimerval t = { {timeout * 1000 * 1000, 0} , {0, 0} };
 	if (timeout > 0 && timeout < 1000)
 	{
 		sa_new.sa_handler = nixio__handle_alarm;
