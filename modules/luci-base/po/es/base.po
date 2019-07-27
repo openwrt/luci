@@ -41,10 +41,10 @@ msgstr "(ventana de %d minutos, intervalo de %d segundos)"
 msgid "(%s available)"
 msgstr "(%s disponible)"
 
-#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:91
-#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:97
-#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:165
-#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:171
+#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:105
+#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:111
+#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:244
+#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:268
 #: modules/luci-base/luasrc/view/cbi/firewall_zoneforwards.htm:38
 #: modules/luci-base/luasrc/view/cbi/firewall_zoneforwards.htm:41
 #: modules/luci-base/luasrc/view/cbi/firewall_zonelist.htm:88
@@ -52,7 +52,7 @@ msgstr "(%s disponible)"
 msgid "(empty)"
 msgstr "(Vacío)"
 
-#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:240
+#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:337
 #: modules/luci-base/luasrc/view/cbi/network_netinfo.htm:23
 #: modules/luci-base/luasrc/view/cbi/network_netlist.htm:58
 msgid "(no interfaces attached)"
@@ -64,7 +64,7 @@ msgstr "-- Campo adicional --"
 
 #: modules/luci-base/htdocs/luci-static/resources/cbi.js:258
 #: modules/luci-base/htdocs/luci-static/resources/form.js:1401
-#: modules/luci-base/htdocs/luci-static/resources/form.js:1532
+#: modules/luci-base/htdocs/luci-static/resources/form.js:1533
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:250
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:350
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:1114
@@ -320,6 +320,12 @@ msgstr "Número de dispositivo ATM"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:136
 msgid "ATU-C System Vendor ID"
 msgstr "ID del proveedor del sistema ATU-C"
+
+#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:251
+#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:495
+#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:499
+msgid "Absent Interface"
+msgstr ""
 
 #: protocols/luci-proto-ppp/luasrc/model/cbi/admin_network/proto_pppoe.lua:19
 msgid "Access Concentrator"
@@ -655,7 +661,9 @@ msgstr "Antena 2"
 msgid "Antenna Configuration"
 msgstr "Configuración de la antena"
 
-#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:57
+#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:71
+#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:160
+#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:181
 #: modules/luci-base/luasrc/view/cbi/firewall_zonelist.htm:60
 msgid "Any zone"
 msgstr "Cualquier zona"
@@ -1236,6 +1244,8 @@ msgstr "Crítico"
 msgid "Cron Log Level"
 msgstr "Nivel de registro de cron"
 
+#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:519
+#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:521
 #: modules/luci-base/luasrc/view/cbi/network_ifacelist.htm:51
 #: modules/luci-base/luasrc/view/cbi/network_ifacelist.htm:53
 #: modules/luci-base/luasrc/view/cbi/network_ifacelist.htm:82
@@ -1450,13 +1460,19 @@ msgstr "Diseño"
 msgid "Destination"
 msgstr "Destino"
 
-#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:40
+#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:46
+#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:151
+msgid "Destination zone"
+msgstr ""
+
+#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:54
+#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:177
 #: modules/luci-base/luasrc/view/cbi/firewall_zonelist.htm:43
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/iface_status.js:13
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/network.js:33
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:52
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:85
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:84
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:86
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/fstab.lua:154
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/fstab.lua:253
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/fstab/mount.lua:86
@@ -2898,7 +2914,7 @@ msgstr "Estado de línea"
 msgid "Line Uptime"
 msgstr "Tiempo de actividad de línea"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:99
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:101
 msgid "Link On"
 msgstr "Enlace activado"
 
@@ -3445,7 +3461,7 @@ msgstr "Red sin interfaces."
 msgid "Next »"
 msgstr "Siguiente »"
 
-#: modules/luci-base/htdocs/luci-static/resources/form.js:1506
+#: modules/luci-base/htdocs/luci-static/resources/form.js:1507
 #: protocols/luci-proto-vpnc/luasrc/model/cbi/admin_network/proto_vpnc.lua:84
 msgid "No"
 msgstr "No"
@@ -3600,7 +3616,7 @@ msgstr "Contraseña confusa"
 msgid "Obtain IPv6-Address"
 msgstr "Obtener dirección IPv6"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:81
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:83
 msgid "Off-State Delay"
 msgstr "Retraso de desconexión"
 
@@ -3623,7 +3639,7 @@ msgstr ""
 msgid "On-Link route"
 msgstr "Ruta en enlace"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:78
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:80
 msgid "On-State Delay"
 msgstr "Retraso de activación"
 
@@ -3759,6 +3775,11 @@ msgstr "Saliente:"
 #: protocols/luci-proto-vpnc/luasrc/model/cbi/admin_network/proto_vpnc.lua:26
 msgid "Output Interface"
 msgstr "Interfaz de salida"
+
+#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:46
+#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:151
+msgid "Output zone"
+msgstr ""
 
 #: modules/luci-base/luasrc/model/cbi/admin_network/proto_dhcp.lua:63
 #: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:155
@@ -4325,7 +4346,7 @@ msgstr "Reiniciando..."
 msgid "Reboots the operating system of your device"
 msgstr "Reiniciar el sistema operativo de su dispositivo"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:101
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:103
 msgid "Receive"
 msgstr "Recibir"
 
@@ -5013,7 +5034,7 @@ msgstr ""
 "El Switch %q tiene una topología desconocida: la configuración de VLAN puede "
 "no ser precisa."
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:140
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:146
 msgid "Switch Port Mask"
 msgstr "Máscara de puerto de Switch"
 
@@ -5497,7 +5518,7 @@ msgstr "Transferencia"
 msgid "Transmission Rate"
 msgstr "Tasa de transmisión"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:100
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:102
 msgid "Transmit"
 msgstr "Transmitir"
 
@@ -5516,7 +5537,7 @@ msgstr "Antena transmisora"
 msgid "Trigger"
 msgstr "Disparador"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:96
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:98
 msgid "Trigger Mode"
 msgstr "Modo de disparador"
 
@@ -5557,11 +5578,11 @@ msgstr "Sólo UMTS"
 msgid "UMTS/GPRS/EV-DO"
 msgstr "UMTS/GPRS/EV-DO"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:103
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:106
 msgid "USB Device"
 msgstr "Dispositivo USB"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:117
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:122
 msgid "USB Ports"
 msgstr "Puertos USB"
 
@@ -6033,7 +6054,7 @@ msgstr "Escribe las peticiones de DNS recibidas en el registro del sistema"
 msgid "Write system log to file"
 msgstr "Escribe el registro del sistema al archivo"
 
-#: modules/luci-base/htdocs/luci-static/resources/form.js:1506
+#: modules/luci-base/htdocs/luci-static/resources/form.js:1507
 #: protocols/luci-proto-vpnc/luasrc/model/cbi/admin_network/proto_vpnc.lua:85
 msgid "Yes"
 msgstr "Si"
@@ -6105,8 +6126,8 @@ msgstr "baseT"
 msgid "bridged"
 msgstr "Puenteado"
 
-#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:118
-#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:289
+#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:132
+#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:386
 #: modules/luci-base/luasrc/view/cbi/firewall_zonelist.htm:35
 #: modules/luci-base/luasrc/view/cbi/firewall_zonelist.htm:99
 #: modules/luci-base/luasrc/view/cbi/network_netlist.htm:31
@@ -6171,7 +6192,8 @@ msgstr ""
 "Archivo en el que se guardarán las direcciones <abbr title=\"Dynamic Host "
 "Configuration Protocol\">DHCP</abbr> asignadas"
 
-#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:58
+#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:72
+#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:181
 #: modules/luci-base/luasrc/view/cbi/firewall_zonelist.htm:61
 msgid "forward"
 msgstr "Reenviar"
@@ -6202,7 +6224,8 @@ msgstr "Modo híbrido"
 msgid "if target is a network"
 msgstr "Si el destino es una red"
 
-#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:42
+#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:56
+#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:177
 #: modules/luci-base/luasrc/view/cbi/firewall_zonelist.htm:46
 msgid "input"
 msgstr "Entrada"
@@ -6290,7 +6313,7 @@ msgstr "Encendido"
 msgid "open"
 msgstr "Abierto"
 
-#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:42
+#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:56
 #: modules/luci-base/luasrc/view/cbi/firewall_zonelist.htm:46
 msgid "output"
 msgstr "Salida"
@@ -6367,11 +6390,13 @@ msgid "unlimited"
 msgstr "Ilimitado"
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:1401
-#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:49
-#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:110
-#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:258
-#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:281
-#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:316
+#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:63
+#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:124
+#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:355
+#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:378
+#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:413
+#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:446
+#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:512
 #: modules/luci-base/luasrc/view/cbi/firewall_zonelist.htm:53
 #: modules/luci-base/luasrc/view/cbi/network_netlist.htm:38
 msgid "unspecified"

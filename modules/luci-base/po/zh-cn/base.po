@@ -41,10 +41,10 @@ msgstr "（最近 %d 分钟信息，每 %d 秒刷新）"
 msgid "(%s available)"
 msgstr "（%s 可用）"
 
-#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:91
-#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:97
-#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:165
-#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:171
+#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:105
+#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:111
+#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:244
+#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:268
 #: modules/luci-base/luasrc/view/cbi/firewall_zoneforwards.htm:38
 #: modules/luci-base/luasrc/view/cbi/firewall_zoneforwards.htm:41
 #: modules/luci-base/luasrc/view/cbi/firewall_zonelist.htm:88
@@ -52,7 +52,7 @@ msgstr "（%s 可用）"
 msgid "(empty)"
 msgstr "（空）"
 
-#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:240
+#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:337
 #: modules/luci-base/luasrc/view/cbi/network_netinfo.htm:23
 #: modules/luci-base/luasrc/view/cbi/network_netlist.htm:58
 msgid "(no interfaces attached)"
@@ -64,7 +64,7 @@ msgstr "-- 更多选项 --"
 
 #: modules/luci-base/htdocs/luci-static/resources/cbi.js:258
 #: modules/luci-base/htdocs/luci-static/resources/form.js:1401
-#: modules/luci-base/htdocs/luci-static/resources/form.js:1532
+#: modules/luci-base/htdocs/luci-static/resources/form.js:1533
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:250
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:350
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:1114
@@ -314,6 +314,12 @@ msgstr "ATM 设备号码"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:136
 msgid "ATU-C System Vendor ID"
 msgstr "ATU-C 系统供应商 ID"
+
+#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:251
+#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:495
+#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:499
+msgid "Absent Interface"
+msgstr ""
 
 #: protocols/luci-proto-ppp/luasrc/model/cbi/admin_network/proto_pppoe.lua:19
 msgid "Access Concentrator"
@@ -636,7 +642,9 @@ msgstr "天线 2"
 msgid "Antenna Configuration"
 msgstr "天线配置"
 
-#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:57
+#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:71
+#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:160
+#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:181
 #: modules/luci-base/luasrc/view/cbi/firewall_zonelist.htm:60
 msgid "Any zone"
 msgstr "任意区域"
@@ -1192,6 +1200,8 @@ msgstr "致命错误"
 msgid "Cron Log Level"
 msgstr "Cron 日志级别"
 
+#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:519
+#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:521
 #: modules/luci-base/luasrc/view/cbi/network_ifacelist.htm:51
 #: modules/luci-base/luasrc/view/cbi/network_ifacelist.htm:53
 #: modules/luci-base/luasrc/view/cbi/network_ifacelist.htm:82
@@ -1402,13 +1412,19 @@ msgstr "主题"
 msgid "Destination"
 msgstr "目标地址"
 
-#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:40
+#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:46
+#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:151
+msgid "Destination zone"
+msgstr ""
+
+#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:54
+#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:177
 #: modules/luci-base/luasrc/view/cbi/firewall_zonelist.htm:43
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/iface_status.js:13
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/network.js:33
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:52
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:85
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:84
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:86
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/fstab.lua:154
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/fstab.lua:253
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/fstab/mount.lua:86
@@ -2814,7 +2830,7 @@ msgstr "线路状态"
 msgid "Line Uptime"
 msgstr "线路运行时间"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:99
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:101
 msgid "Link On"
 msgstr "活动链接"
 
@@ -3346,7 +3362,7 @@ msgstr "无接口的网络。"
 msgid "Next »"
 msgstr "前进 »"
 
-#: modules/luci-base/htdocs/luci-static/resources/form.js:1506
+#: modules/luci-base/htdocs/luci-static/resources/form.js:1507
 #: protocols/luci-proto-vpnc/luasrc/model/cbi/admin_network/proto_vpnc.lua:84
 msgid "No"
 msgstr "无"
@@ -3499,7 +3515,7 @@ msgstr "混淆密码"
 msgid "Obtain IPv6-Address"
 msgstr "获取 IPv6 地址"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:81
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:83
 msgid "Off-State Delay"
 msgstr "关闭时间"
 
@@ -3521,7 +3537,7 @@ msgstr ""
 msgid "On-Link route"
 msgstr ""
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:78
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:80
 msgid "On-State Delay"
 msgstr "通电时间"
 
@@ -3650,6 +3666,11 @@ msgstr "出站："
 #: protocols/luci-proto-vpnc/luasrc/model/cbi/admin_network/proto_vpnc.lua:26
 msgid "Output Interface"
 msgstr "网络出口"
+
+#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:46
+#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:151
+msgid "Output zone"
+msgstr ""
 
 #: modules/luci-base/luasrc/model/cbi/admin_network/proto_dhcp.lua:63
 #: modules/luci-base/luasrc/model/cbi/admin_network/proto_static.lua:155
@@ -4201,7 +4222,7 @@ msgstr "正在重启…"
 msgid "Reboots the operating system of your device"
 msgstr "重启您设备上的系统"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:101
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:103
 msgid "Receive"
 msgstr "接收"
 
@@ -4866,7 +4887,7 @@ msgid ""
 "Switch %q has an unknown topology - the VLAN settings might not be accurate."
 msgstr "交换机 %q 具有未知的拓扑结构，VLAN 设置可能不正确。"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:140
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:146
 msgid "Switch Port Mask"
 msgstr "交换机端口掩码"
 
@@ -5295,7 +5316,7 @@ msgstr "传输"
 msgid "Transmission Rate"
 msgstr "传送速率"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:100
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:102
 msgid "Transmit"
 msgstr "传送"
 
@@ -5314,7 +5335,7 @@ msgstr "传送天线"
 msgid "Trigger"
 msgstr "触发器"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:96
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:98
 msgid "Trigger Mode"
 msgstr "触发模式"
 
@@ -5355,11 +5376,11 @@ msgstr "仅 UMTS（WCDMA）"
 msgid "UMTS/GPRS/EV-DO"
 msgstr "UMTS/GPRS/EV-DO"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:103
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:106
 msgid "USB Device"
 msgstr "USB 设备"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:117
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:122
 msgid "USB Ports"
 msgstr "USB 接口"
 
@@ -5828,7 +5849,7 @@ msgstr "将收到的 DNS 请求写入系统日志"
 msgid "Write system log to file"
 msgstr "将系统日志写入文件"
 
-#: modules/luci-base/htdocs/luci-static/resources/form.js:1506
+#: modules/luci-base/htdocs/luci-static/resources/form.js:1507
 #: protocols/luci-proto-vpnc/luasrc/model/cbi/admin_network/proto_vpnc.lua:85
 msgid "Yes"
 msgstr "是"
@@ -5897,8 +5918,8 @@ msgstr "baseT"
 msgid "bridged"
 msgstr "桥接的"
 
-#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:118
-#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:289
+#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:132
+#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:386
 #: modules/luci-base/luasrc/view/cbi/firewall_zonelist.htm:35
 #: modules/luci-base/luasrc/view/cbi/firewall_zonelist.htm:99
 #: modules/luci-base/luasrc/view/cbi/network_netlist.htm:31
@@ -5963,7 +5984,8 @@ msgstr ""
 "用于存放已分配的 <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</"
 "abbr> 租约的文件"
 
-#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:58
+#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:72
+#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:181
 #: modules/luci-base/luasrc/view/cbi/firewall_zonelist.htm:61
 msgid "forward"
 msgstr "转发"
@@ -5994,7 +6016,8 @@ msgstr "混合模式"
 msgid "if target is a network"
 msgstr "如果对象是一个网络"
 
-#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:42
+#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:56
+#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:177
 #: modules/luci-base/luasrc/view/cbi/firewall_zonelist.htm:46
 msgid "input"
 msgstr "输入"
@@ -6082,7 +6105,7 @@ msgstr "开"
 msgid "open"
 msgstr "开放式"
 
-#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:42
+#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:56
 #: modules/luci-base/luasrc/view/cbi/firewall_zonelist.htm:46
 msgid "output"
 msgstr "输出"
@@ -6159,11 +6182,13 @@ msgid "unlimited"
 msgstr "无限制"
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:1401
-#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:49
-#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:110
-#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:258
-#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:281
-#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:316
+#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:63
+#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:124
+#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:355
+#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:378
+#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:413
+#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:446
+#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:512
 #: modules/luci-base/luasrc/view/cbi/firewall_zonelist.htm:53
 #: modules/luci-base/luasrc/view/cbi/network_netlist.htm:38
 msgid "unspecified"
