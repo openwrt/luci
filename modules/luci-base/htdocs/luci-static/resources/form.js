@@ -1460,7 +1460,7 @@ var CBIListValue = CBIValue.extend({
 			id: this.cbid(section_id),
 			size: this.size,
 			sort: this.keylist,
-			optional: this.rmempty || this.optional,
+			optional: this.optional,
 			placeholder: this.placeholder,
 			validate: L.bind(this.validate, this, section_id)
 		});
