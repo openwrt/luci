@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-03-30 17:00+0200\n"
-"PO-Revision-Date: 2019-07-16 13:20+0900\n"
+"PO-Revision-Date: 2019-07-27 22:29+0900\n"
 "Last-Translator: INAGAKI Hiroshi <musashino.open@gmail.com>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
@@ -79,12 +79,18 @@ msgid ""
 "traffic, e.g. <code>-p tcp --dport 443</code> to only match outbound HTTPS "
 "traffic."
 msgstr ""
+"ゾーンの送信先へのトラフィックを区分するために付加する、生の <em>iptables</"
+"em> 引数です。（例: HTTPS 送信トラフィックのみにマッチさせる <code>-p tcp --"
+"dport 443</code>）"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:235
 msgid ""
 "Additional raw <em>iptables</em> arguments to classify zone source traffic, "
 "e.g. <code>-p tcp --sport 443</code> to only match inbound HTTPS traffic."
 msgstr ""
+"ゾーンを送信元とするトラフィックを区分するために付加する、生の <em>iptables</"
+"em> 引数です。（例: HTTPS 受信トラフィックのみにマッチさせる <code>-p tcp --"
+"sport 443</code>）"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:100
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:136
@@ -94,7 +100,7 @@ msgstr "詳細設定"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:207
 msgid "Allow \"invalid\" traffic"
-msgstr ""
+msgstr "\"invalid\" トラフィックの許可"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:304
 msgid "Allow forward from <em>source zones</em>:"
@@ -115,24 +121,26 @@ msgstr "全日"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:210
 msgid "Automatic helper assignment"
-msgstr ""
+msgstr "自動ヘルパー割り当て"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:210
 msgid ""
 "Automatically assign conntrack helpers based on traffic protocol and port"
 msgstr ""
+"トラフィックのプロトコルとポートに基づいて、 conntrack ヘルパーを自動的に割り"
+"当てます。"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:85
 msgid "Conntrack Settings"
-msgstr ""
+msgstr "Conntrack 設定"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:214
 msgid "Conntrack helpers"
-msgstr ""
+msgstr "Conntrack ヘルパー"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:175
 msgid "Covered devices"
-msgstr ""
+msgstr "カバーされるデバイス"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:135
 msgid "Covered networks"
@@ -140,7 +148,7 @@ msgstr "対象ネットワーク"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:179
 msgid "Covered subnets"
-msgstr ""
+msgstr "カバーされるサブネット"
 
 #: applications/luci-app-firewall/luasrc/controller/firewall.lua:19
 msgid "Custom Rules"
@@ -195,6 +203,9 @@ msgid ""
 "Do not install extra rules to reject forwarded traffic with conntrack state "
 "<em>invalid</em>. This may be required for complex asymmetric route setups."
 msgstr ""
+"conntrack ステートが <em>invalid</em> である転送されたトラフィックを拒否する"
+"追加ルールをインストールしません。これは、複雑で非対称なルートのセットアップ"
+"に必要となることがあります。"
 
 #: applications/luci-app-firewall/luasrc/view/firewall/cbi_addsnat.htm:45
 #: applications/luci-app-firewall/luasrc/view/firewall/cbi_addsnat.htm:50
@@ -244,7 +255,7 @@ msgstr "実験的な機能です。 QoS/SQM との完全な互換性はありま
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:214
 msgid "Explicitly choses allowed connection tracking helpers for zone traffic"
-msgstr ""
+msgstr "ゾーン トラフィックのコネクション追跡ヘルパーを明示的に選択します。"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:209
 msgid "External IP address"
@@ -263,19 +274,19 @@ msgstr "外部ゾーン"
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:266
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:333
 msgid "Extra arguments"
-msgstr "追加設定"
+msgstr "追加の引数"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:245
 msgid "Extra destination arguments"
-msgstr ""
+msgstr "追加の送信先引数"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:86
 msgid "Extra iptables arguments"
-msgstr ""
+msgstr "追加の iptables 引数"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:235
 msgid "Extra source arguments"
-msgstr ""
+msgstr "追加の送信元引数"
 
 #: applications/luci-app-firewall/luasrc/controller/firewall.lua:6
 msgid "Firewall"
@@ -385,7 +396,7 @@ msgstr "IPv4のみ"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:218
 msgid "IPv6"
-msgstr ""
+msgstr "IPv6"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:202
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:187
@@ -547,6 +558,11 @@ msgid ""
 "invalid values could render the firewall ruleset broken, completely exposing "
 "all services."
 msgstr ""
+"送信元と送信先のトラフィックの区分ルールを、インターフェースやサブネット以外"
+"の基準に基づいてマッチすることができるように、生の iptables 引数を渡します。"
+"これらのオプションは、無効な値がファイアウォール ルールセットの破壊を引き起こ"
+"し、全サービスを外部に晒す恐れがあることに、特段の注意を払い使用されなければ"
+"なりません。"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:94
 #: applications/luci-app-firewall/luasrc/controller/firewall.lua:12
@@ -567,6 +583,8 @@ msgid ""
 "Prevent the installation of <em>NOTRACK</em> rules which would bypass "
 "connection tracking."
 msgstr ""
+"コネクション追跡をバイパスさせる <em>NOTRACK</em> ルールのインストールを防ぎ"
+"ます。"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:153
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:204
@@ -646,36 +664,6 @@ msgstr "ルーティング/NAT のための、ソフトウェアベースのオ�
 msgid "Software flow offloading"
 msgstr "ソフトウェア フローオフロード"
 
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-# Generated from applications/luci-fw/luasrc/model/cbi/luci_fw/rrule.lua      #
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-#
-# msgid "Traffic Redirection"
-# msgstr ""
-#
-# msgid ""
-# "Traffic redirection allows you to change the destination address of "
-# "forwarded packets."
-# msgstr ""
-#
-# msgid "Overview"
-# msgstr ""
-#
-# msgid "Name"
-# msgstr ""
-#
-# msgid "Source zone"
-# msgstr ""
-#
-# msgid "Source MAC-address"
-# msgstr ""
-#
-# msgid "Source port"
-# msgstr ""
-#
-# msgid "Protocol"
-# msgstr ""
-#
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:185
 msgid "Source IP address"
 msgstr "送信元IPアドレス"
@@ -834,12 +822,16 @@ msgid ""
 "Use this option to classify zone traffic by raw, non-<em>uci</em> managed "
 "network devices."
 msgstr ""
+"生の、または非 <em>uci</em> 管理下にあるデバイスによるゾーン トラフィックの区"
+"分にこのオプションを使用します。"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:179
 msgid ""
 "Use this option to classify zone traffic by source or destination subnet "
 "instead of networks or devices."
 msgstr ""
+"ネットワークまたはデバイスに代わり、アクセス元またはアクセス先サブネットによ"
+"るゾーン トラフィックの区分にこのオプションを使用します。"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:72
 msgid "Via %s"
@@ -967,6 +959,3 @@ msgstr "タイプ"
 #: applications/luci-app-firewall/luasrc/tools/firewall.lua:130
 msgid "types"
 msgstr "タイプ"
-
-#~ msgid "Output zone"
-#~ msgstr "出力ゾーン"
