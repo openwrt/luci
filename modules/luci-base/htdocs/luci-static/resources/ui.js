@@ -223,6 +223,9 @@ var UISelect = UIElement.extend({
 			widget: 'select',
 			orientation: 'horizontal'
 		}, options);
+
+		if (this.choices.hasOwnProperty(''))
+			this.options.optional = true;
 	},
 
 	render: function() {
@@ -243,7 +246,7 @@ var UISelect = UIElement.extend({
 				'multiple': this.options.multiple ? '' : null
 			}));
 
-			if (this.options.optional || this.choices.hasOwnProperty(''))
+			if (this.options.optional)
 				frameEl.lastChild.appendChild(E('option', {
 					'value': '',
 					'selected': (this.values.length == 0 || this.values[0] == '') ? '' : null
