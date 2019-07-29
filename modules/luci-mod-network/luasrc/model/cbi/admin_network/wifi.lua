@@ -1151,6 +1151,18 @@ if hwtype == "mac80211" then
 		ieee80211w:depends({mode="ap-wds", encryption="sae"})
 		ieee80211w:depends({mode="ap-wds", encryption="sae-mixed"})
 		ieee80211w:depends({mode="ap-wds", encryption="owe"})
+		ieee80211w:depends({mode="sta", encryption="wpa2"})
+		ieee80211w:depends({mode="sta-wds", encryption="wpa2"})
+		ieee80211w:depends({mode="sta", encryption="psk2"})
+		ieee80211w:depends({mode="sta", encryption="psk-mixed"})
+		ieee80211w:depends({mode="sta", encryption="sae"})
+		ieee80211w:depends({mode="sta", encryption="sae-mixed"})
+		ieee80211w:depends({mode="sta", encryption="owe"})
+		ieee80211w:depends({mode="sta-wds", encryption="psk2"})
+		ieee80211w:depends({mode="sta-wds", encryption="psk-mixed"})
+		ieee80211w:depends({mode="sta-wds", encryption="sae"})
+		ieee80211w:depends({mode="sta-wds", encryption="sae-mixed"})
+		ieee80211w:depends({mode="sta-wds", encryption="owe"})
 
 		max_timeout = s:taboption("encryption", Value, "ieee80211w_max_timeout",
 				translate("802.11w maximum timeout"),
