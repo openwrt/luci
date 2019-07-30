@@ -1327,10 +1327,15 @@ var UIDynamicList = UIElement.extend({
 
 	getValue: function() {
 		var items = this.node.querySelectorAll('.item > input[type="hidden"]'),
+		    input = this.node.querySelector('.add-item > input[type="text"]'),
 		    v = [];
 
 		for (var i = 0; i < items.length; i++)
 			v.push(items[i].value);
+
+		if (input && input.value != null && input.value.match(/\S/) &&
+		    v.filter(function(s) { return s == input.value }).length == 0)
+			v.push(input.value);
 
 		return v;
 	},
