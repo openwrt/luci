@@ -1334,6 +1334,7 @@ var UIDynamicList = UIElement.extend({
 			v.push(items[i].value);
 
 		if (input && input.value != null && input.value.match(/\S/) &&
+		    input.classList.contains('cbi-input-invalid') == false &&
 		    v.filter(function(s) { return s == input.value }).length == 0)
 			v.push(input.value);
 
