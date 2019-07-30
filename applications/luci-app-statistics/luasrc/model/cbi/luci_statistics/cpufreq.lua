@@ -11,4 +11,10 @@ s = m:section( NamedSection, "collectd_cpufreq", "luci_statistics" )
 enable = s:option( Flag, "enable", translate("Enable this plugin") )
 enable.default = 0
 
+-- collectd_cpufreq.extraitems
+extraitems = s:option( Flag, "ExtraItems", translate("Extra items"), translate("More details about frequency usage and transitions"))
+extraitems.default = "0"
+extraitems.optional = true
+extraitems:depends( "enable", 1 )
+
 return m
