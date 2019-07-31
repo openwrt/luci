@@ -1188,6 +1188,14 @@
 					return null;
 
 				return inst[method].apply(inst, inst.varargs(arguments, 2));
+			},
+
+			isEmpty: function(node) {
+				for (var child = node.firstElementChild; child != null; child = child.nextElementSibling)
+					if (!child.classList.contains('hidden'))
+						return false;
+
+				return true;
 			}
 		}),
 
