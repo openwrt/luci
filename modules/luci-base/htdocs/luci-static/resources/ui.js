@@ -1589,8 +1589,14 @@ return L.Class.extend({
 			if (selected === null) {
 				selected = this.getActiveTabId(groupId);
 
-				if (selected < 0 || selected >= panes.length)
-					selected = 0;
+				if (selected < 0 || selected >= panes.length || L.dom.isEmpty(panes[selected])) {
+					for (var i = 0; i < panes.length; i++) {
+						if (!L.dom.isEmpty(panes[i])) {
+							selected = i;
+							break;
+						}
+					}
+				}
 
 				menu.childNodes[selected].classList.add('cbi-tab');
 				menu.childNodes[selected].classList.remove('cbi-tab-disabled');
@@ -1630,13 +1636,13 @@ return L.Class.extend({
 			return true;
 		},
 
-		updateTabs: function(ev) {
-			document.querySelectorAll('[data-tab-title]').forEach(function(pane) {
+		updateTabs: function(ev, root) {
+			(root || document).querySelectorAll('[data-tab-title]').forEach(function(pane) {
 				var menu = pane.parentNode.previousElementSibling,
 				    tab = menu.querySelector('[data-tab="%s"]'.format(pane.getAttribute('data-tab'))),
 				    n_errors = pane.querySelectorAll('.cbi-input-invalid').length;
 
-				if (!pane.firstElementChild) {
+				if (L.dom.isEmpty(pane)) {
 					tab.style.display = 'none';
 					tab.classList.remove('flash');
 				}
