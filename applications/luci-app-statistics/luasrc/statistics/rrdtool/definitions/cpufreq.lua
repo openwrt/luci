@@ -42,12 +42,13 @@ function rrdargs( graph, plugin, plugin_instance, dtype )
 	local percentage = {
 		title = "%H: Frequency distribution - core %pi",
 		alt_autoscale = true,
-		vlabel = "Frequency (Hz)",
+		vlabel = "Percent",
 		number_format = "%5.2lf%%",
+		ordercolor = true,
 		data = {
 			types = { "percent" },
 			options = {
-				percent = { title = "Frequency %di" },
+				percent = { title = "%di Hz", negweight = true },
 			}
 		}
 	}
