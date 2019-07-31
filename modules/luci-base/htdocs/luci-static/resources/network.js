@@ -594,6 +594,9 @@ function deviceSort(a, b) {
 var Network, Protocol, Device, WifiDevice, WifiNetwork;
 
 Network = L.Class.extend({
+	prefixToMask: prefixToMask,
+	maskToPrefix: maskToPrefix,
+
 	flushCache: function() {
 		return Promise.resolve(_state).then(function() {
 			_flush = true;
