@@ -1598,7 +1598,8 @@ Device = L.Class.extend({
 	},
 
 	getMAC: function() {
-		return this._ubus('macaddr');
+		var mac = this._ubus('macaddr');
+		return mac ? mac.toUpperCase() : null;
 	},
 
 	getIPAddrs: function() {
