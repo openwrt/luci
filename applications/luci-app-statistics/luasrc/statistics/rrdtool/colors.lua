@@ -25,6 +25,22 @@ function Instance.to_string( self, c )
 	)
 end
 
+function Instance.defined( self, i )
+	local t = {
+		{230, 25, 75},
+		{245, 130, 48},
+		{255, 225, 25},
+		{60, 180, 75},
+		{70, 240, 240},
+		{0, 130, 200},
+		{0, 0, 128},
+		{170, 110, 40}
+	}
+	return string.format(
+		"%02x%02x%02x",
+		t[(i-1) % #t + 1][1], t[(i-1) % #t +1][2], t[(i-1) % #t + 1][3] )
+end
+
 function Instance.random( self )
 	local r   = math.random(255)
 	local g   = math.random(255)
