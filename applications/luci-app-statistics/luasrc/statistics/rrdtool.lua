@@ -407,7 +407,9 @@ function Graph._generic( self, opts, plugin, plugin_instance, dtype, index )
 					transform_rpn = dopts.transform_rpn or "0,+",
 					noarea   = dopts.noarea  or false,
 					title    = dopts.title   or nil,
-					weight   = dopts.weight  or nil,
+					weight   = dopts.weight or
+						   (dopts.negweight and -tonumber(dinst)) or
+						   (dopts.posweight and tonumber(dinst)) or nil,
 					ds       = dsource,
 					type     = dtype,
 					instance = dinst,
@@ -486,6 +488,13 @@ function Graph._generic( self, opts, plugin, plugin_instance, dtype, index )
 			local y = b.weight or b.index or 0
 			return x < y
 		end)
+
+		-- define colors in order
+		if opts.ordercolor then
+		    for i, source in ipairs(_sources) do
+			source.color = self.colors:defined(i)
+		    end
+		end
 
 		-- create DEF statements for each instance
 		for i, source in ipairs(_sources) do
