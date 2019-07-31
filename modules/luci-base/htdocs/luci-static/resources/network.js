@@ -561,10 +561,14 @@ function initNetworkState() {
 }
 
 function ifnameOf(obj) {
-	if (obj instanceof Interface)
-		return obj.name();
-	else if (obj instanceof Protocol)
-		return obj.ifname();
+	if (obj instanceof Protocol)
+		return obj.getIfname();
+	else if (obj instanceof Device)
+		return obj.getName();
+	else if (obj instanceof WifiDevice)
+		return obj.getName();
+	else if (obj instanceof WifiNetwork)
+		return obj.getIfname();
 	else if (typeof(obj) == 'string')
 		return obj.replace(/:.+$/, '');
 
@@ -1151,6 +1155,10 @@ Network = L.Class.extend({
 
 	instantiateWifiNetwork: function(sid, radioname, radiostate, netid, netstate, iwinfo) {
 		return new WifiNetwork(sid, radioname, radiostate, netid, netstate, iwinfo);
+	},
+
+	getIfnameOf: function(obj) {
+		return ifnameOf(obj);
 	}
 });
 
