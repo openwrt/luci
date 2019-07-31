@@ -517,6 +517,15 @@ function initNetworkState() {
 
 				s.bridges[devname] = b;
 			}
+
+			if (s.interfaces.hasOwnProperty(devname)) {
+				Object.assign(s.interfaces[devname], {
+					macaddr: dev.mac,
+					type:    dev.type,
+					mtu:     dev.mtu,
+					qlen:    dev.qlen
+				});
+			}
 		}
 
 		if (L.isObject(board.switch)) {
@@ -1546,6 +1555,11 @@ Protocol = L.Class.extend({
 		}
 	},
 
+	getL2Device: function() {
+		var ifname = this._ubus('device');
+		return (ifname != null ? L.network.instantiateDevice(ifname, this) : null);
+	},
+
 	getDevices: function() {
 		var rv = [];
 
@@ -1647,8 +1661,15 @@ Device = L.Class.extend({
 	},
 
 	getMAC: function() {
-		var mac = this._ubus('macaddr');
+		var mac = (this.dev != null ? this.dev.macaddr : null);
+		if (mac == null)
+			mac = this._ubus('macaddr');
+
 		return mac ? mac.toUpperCase() : null;
+	},
+
+	getMTU: function() {
+		return this.dev ? this.dev.mtu : null;
 	},
 
 	getIPAddrs: function() {
