@@ -1067,6 +1067,10 @@ var CBITableSection = CBITypedSection.extend({
 			.catch(function() {});
 	},
 
+	addModalOptions: function(modalSection, section_id, ev) {
+
+	},
+
 	renderMoreOptionsModal: function(section_id, ev) {
 		var parent = this.map,
 		    title = parent.title,
@@ -1111,7 +1115,7 @@ var CBITableSection = CBITypedSection.extend({
 		}
 
 		//ev.target.classList.add('spinning');
-		m.render().then(L.bind(function(nodes) {
+		Promise.resolve(this.addModalOptions(s, section_id, ev)).then(L.bind(m.render, m)).then(L.bind(function(nodes) {
 			//ev.target.classList.remove('spinning');
 			L.ui.showModal(title, [
 				nodes,
