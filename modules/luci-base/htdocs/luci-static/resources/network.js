@@ -83,6 +83,12 @@ var callNetworkDeviceStatus = rpc.declare({
 	expect: { '': {} }
 });
 
+var callGetProtoHandlers = rpc.declare({
+	object: 'network',
+	method: 'get_proto_handlers',
+	expect: { '': {} }
+});
+
 var _cache = {},
     _flush = true,
     _state = null,
@@ -164,6 +170,29 @@ function getBoardState(flush) {
 		});
 
 	return Promise.resolve(_cache.board);
+}
+
+function getProtocolHandlers(flush) {
+	if (_cache.protocols == null || flush)
+		return callGetProtoHandlers().then(function(protos) {
+			if (!L.isObject(protos))
+				throw !1;
+
+			_cache.protocols = protos;
+
+			return Promise.all(Object.keys(protos).map(function(p) {
+				return Promise.resolve(L.require('protocol.%s'.format(p))).catch(function(err) {
+					if (L.isObject(err) && err.name != 'NetworkError')
+						L.error(err);
+				});
+			})).then(function() {
+				return _cache.protocols;
+			});
+		}).catch(function() {
+			return (_cache.protocols = {});
+		});
+
+	return Promise.resolve(_cache.protocols);
 }
 
 function getWifiStateBySid(sid) {
@@ -606,7 +635,7 @@ Network = L.Class.extend({
 	getProtocol: function(protoname, netname) {
 		var v = _protocols[protoname];
 		if (v != null)
-			return v(netname || '__dummy__');
+			return new v(netname || '__dummy__');
 
 		return null;
 	},
@@ -615,18 +644,35 @@ Network = L.Class.extend({
 		var rv = [];
 
 		for (var protoname in _protocols)
-			rv.push(_protocols[protoname]('__dummy__'));
+			rv.push(new _protocols[protoname]('__dummy__'));
 
 		return rv;
 	},
 
 	registerProtocol: function(protoname, methods) {
-		var proto = Protocol.extend(Object.assign({}, methods, {
+		var spec = L.isObject(_cache.protocols) ? _cache.protocols[protoname] : null;
+		var proto = Protocol.extend(Object.assign({
+			getI18n: function() {
+				return protoname;
+			},
+
+			isFloating: function() {
+				return false;
+			},
+
+			isVirtual: function() {
+				return (L.isObject(spec) && spec.no_device == true);
+			},
+
+			renderFormOptions: function(section) {
+
+			}
+		}, methods, {
 			__init__: function(name) {
 				this.sid = name;
 			},
 
-			proto: function() {
+			getProtocol: function() {
 				return protoname;
 			}
 		}));
@@ -1202,7 +1248,7 @@ Protocol = L.Class.extend({
 		if (this.isFloating())
 			ifname = this._ubus('l3_device');
 		else
-			ifname = this._ubus('device');
+			ifname = this._ubus('device') || this._ubus('l3_device');
 
 		if (ifname != null)
 			return ifname;
@@ -1212,7 +1258,7 @@ Protocol = L.Class.extend({
 	},
 
 	getProtocol: function() {
-		return 'none';
+		return null;
 	},
 
 	getI18n: function() {
