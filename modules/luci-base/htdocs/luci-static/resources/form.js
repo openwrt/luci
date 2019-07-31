@@ -196,6 +196,8 @@ var CBIMap = CBINode.extend({
 
 		if (changed && (n || 0) < 10)
 			this.checkDepends(ev, (n || 10) + 1);
+
+		ui.tabs.updateTabs(ev, this.root);
 	}
 });
 
