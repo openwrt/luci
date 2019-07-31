@@ -84,11 +84,12 @@ var callNetworkDeviceStatus = rpc.declare({
 });
 
 var _cache = {},
+    _flush = true,
     _state = null,
     _protocols = {};
 
-function getWifiState() {
-	if (_cache.wifi == null)
+function getWifiState(flush) {
+	if (_cache.wifi == null || flush)
 		return callNetworkWirelessStatus().then(function(state) {
 			if (!L.isObject(state))
 				throw !1;
@@ -100,8 +101,8 @@ function getWifiState() {
 	return Promise.resolve(_cache.wifi);
 }
 
-function getInterfaceState() {
-	if (_cache.interfacedump == null)
+function getInterfaceState(flush) {
+	if (_cache.interfacedump == null || flush)
 		return callNetworkInterfaceStatus().then(function(state) {
 			if (!Array.isArray(state))
 				throw !1;
@@ -113,8 +114,8 @@ function getInterfaceState() {
 	return Promise.resolve(_cache.interfacedump);
 }
 
-function getDeviceState() {
-	if (_cache.devicedump == null)
+function getDeviceState(flush) {
+	if (_cache.devicedump == null || flush)
 		return callNetworkDeviceStatus().then(function(state) {
 			if (!L.isObject(state))
 				throw !1;
@@ -126,8 +127,8 @@ function getDeviceState() {
 	return Promise.resolve(_cache.devicedump);
 }
 
-function getIfaddrState() {
-	if (_cache.ifaddrs == null)
+function getIfaddrState(flush) {
+	if (_cache.ifaddrs == null || flush)
 		return callLuciIfaddrs().then(function(addrs) {
 			if (!Array.isArray(addrs))
 				throw !1;
@@ -139,8 +140,8 @@ function getIfaddrState() {
 	return Promise.resolve(_cache.ifaddrs);
 }
 
-function getNetdevState() {
-	if (_cache.devices == null)
+function getNetdevState(flush) {
+	if (_cache.devices == null || flush)
 		return callLuciNetdevs().then(function(state) {
 			if (!L.isObject(state))
 				throw !1;
@@ -152,8 +153,8 @@ function getNetdevState() {
 	return Promise.resolve(_cache.devices);
 }
 
-function getBoardState() {
-	if (_cache.board == null)
+function getBoardState(flush) {
+	if (_cache.board == null || flush)
 		return callLuciBoardjson().then(function(state) {
 			if (!L.isObject(state))
 				throw !1;
@@ -414,140 +415,149 @@ function maskToPrefix(mask, v6) {
 }
 
 function initNetworkState() {
-	if (_state == null)
-		return (_state = Promise.all([
-			getInterfaceState(), getDeviceState(), getBoardState(),
-			getWifiState(), getIfaddrState(), getNetdevState(),
-			uci.load('network'), uci.load('wireless'), uci.load('luci')
-		]).finally(function() {
-			var ifaddrs = _cache.ifaddrs,
-			    devices = _cache.devices,
-			    board = _cache.board,
-			    s = { isTunnel: {}, isBridge: {}, isSwitch: {}, isWifi: {}, interfaces: {}, bridges: {}, switches: {} };
+	var flush = _flush;
 
-			for (var i = 0, a; (a = ifaddrs[i]) != null; i++) {
-				var name = a.name.replace(/:.+$/, '');
+	_flush = false;
 
-				if (isVirtualIfname(name))
-					s.isTunnel[name] = true;
+	if (_state != null && !flush)
+		return Promise.resolve(_state);
 
-				if (s.isTunnel[name] || !(isIgnoredIfname(name) || isVirtualIfname(name))) {
-					s.interfaces[name] = s.interfaces[name] || {
-						idx:      a.ifindex || i,
-						name:     name,
-						rawname:  a.name,
-						flags:    [],
-						ipaddrs:  [],
-						ip6addrs: []
-					};
+	if (_cache.pendingInit != null)
+		return Promise.resolve(_cache.pendingInit);
 
-					if (a.family == 'packet') {
-						s.interfaces[name].flags   = a.flags;
-						s.interfaces[name].stats   = a.data;
-						s.interfaces[name].macaddr = a.addr;
-					}
-					else if (a.family == 'inet') {
-						s.interfaces[name].ipaddrs.push(a.addr + '/' + a.netmask);
-					}
-					else if (a.family == 'inet6') {
-						s.interfaces[name].ip6addrs.push(a.addr + '/' + a.netmask);
-					}
+	return (_cache.pendingInit = Promise.all([
+		getInterfaceState(flush), getDeviceState(flush), getBoardState(flush),
+		getWifiState(flush), getIfaddrState(flush), getNetdevState(flush), getProtocolHandlers(flush),
+		uci.load('network'), uci.load('wireless'), uci.load('luci')
+	]).finally(function() {
+		var ifaddrs = _cache.ifaddrs,
+		    devices = _cache.devices,
+		    board = _cache.board,
+		    s = { isTunnel: {}, isBridge: {}, isSwitch: {}, isWifi: {}, interfaces: {}, bridges: {}, switches: {} };
+
+		for (var i = 0, a; (a = ifaddrs[i]) != null; i++) {
+			var name = a.name.replace(/:.+$/, '');
+
+			if (isVirtualIfname(name))
+				s.isTunnel[name] = true;
+
+			if (s.isTunnel[name] || !(isIgnoredIfname(name) || isVirtualIfname(name))) {
+				s.interfaces[name] = s.interfaces[name] || {
+					idx:      a.ifindex || i,
+					name:     name,
+					rawname:  a.name,
+					flags:    [],
+					ipaddrs:  [],
+					ip6addrs: []
+				};
+
+				if (a.family == 'packet') {
+					s.interfaces[name].flags   = a.flags;
+					s.interfaces[name].stats   = a.data;
+					s.interfaces[name].macaddr = a.addr;
+				}
+				else if (a.family == 'inet') {
+					s.interfaces[name].ipaddrs.push(a.addr + '/' + a.netmask);
+				}
+				else if (a.family == 'inet6') {
+					s.interfaces[name].ip6addrs.push(a.addr + '/' + a.netmask);
 				}
 			}
+		}
 
-			for (var devname in devices) {
-				var dev = devices[devname];
+		for (var devname in devices) {
+			var dev = devices[devname];
 
-				if (dev.bridge) {
-					var b = {
-						name:    devname,
-						id:      dev.id,
-						stp:     dev.stp,
-						ifnames: []
-					};
+			if (dev.bridge) {
+				var b = {
+					name:    devname,
+					id:      dev.id,
+					stp:     dev.stp,
+					ifnames: []
+				};
 
-					for (var i = 0; dev.ports && i < dev.ports.length; i++) {
-						var subdev = s.interfaces[dev.ports[i]];
+				for (var i = 0; dev.ports && i < dev.ports.length; i++) {
+					var subdev = s.interfaces[dev.ports[i]];
 
-						if (subdev == null)
-							continue;
+					if (subdev == null)
+						continue;
 
-						b.ifnames.push(subdev);
-						subdev.bridge = b;
-					}
-
-					s.bridges[devname] = b;
+					b.ifnames.push(subdev);
+					subdev.bridge = b;
 				}
+
+				s.bridges[devname] = b;
 			}
+		}
 
-			if (L.isObject(board.switch)) {
-				for (var switchname in board.switch) {
-					var layout = board.switch[switchname],
-					    netdevs = {},
-					    nports = {},
-					    ports = [],
-					    pnum = null,
-					    role = null;
+		if (L.isObject(board.switch)) {
+			for (var switchname in board.switch) {
+				var layout = board.switch[switchname],
+				    netdevs = {},
+				    nports = {},
+				    ports = [],
+				    pnum = null,
+				    role = null;
 
-					if (L.isObject(layout) && Array.isArray(layout.ports)) {
-						for (var i = 0, port; (port = layout.ports[i]) != null; i++) {
-							if (typeof(port) == 'object' && typeof(port.num) == 'number' &&
-								(typeof(port.role) == 'string' || typeof(port.device) == 'string')) {
-								var spec = {
-									num:   port.num,
-									role:  port.role || 'cpu',
-									index: (port.index != null) ? port.index : port.num
-								};
+				if (L.isObject(layout) && Array.isArray(layout.ports)) {
+					for (var i = 0, port; (port = layout.ports[i]) != null; i++) {
+						if (typeof(port) == 'object' && typeof(port.num) == 'number' &&
+							(typeof(port.role) == 'string' || typeof(port.device) == 'string')) {
+							var spec = {
+								num:   port.num,
+								role:  port.role || 'cpu',
+								index: (port.index != null) ? port.index : port.num
+							};
 
-								if (port.device != null) {
-									spec.device = port.device;
-									spec.tagged = spec.need_tag;
-									netdevs[port.num] = port.device;
-								}
-
-								ports.push(spec);
-
-								if (port.role != null)
-									nports[port.role] = (nports[port.role] || 0) + 1;
-							}
-						}
-
-						ports.sort(function(a, b) {
-							if (a.role != b.role)
-								return (a.role < b.role) ? -1 : 1;
-
-							return (a.index - b.index);
-						});
-
-						for (var i = 0, port; (port = ports[i]) != null; i++) {
-							if (port.role != role) {
-								role = port.role;
-								pnum = 1;
+							if (port.device != null) {
+								spec.device = port.device;
+								spec.tagged = spec.need_tag;
+								netdevs[port.num] = port.device;
 							}
 
-							if (role == 'cpu')
-								port.label = 'CPU (%s)'.format(port.device);
-							else if (nports[role] > 1)
-								port.label = '%s %d'.format(role.toUpperCase(), pnum++);
-							else
-								port.label = role.toUpperCase();
+							ports.push(spec);
 
-							delete port.role;
-							delete port.index;
+							if (port.role != null)
+								nports[port.role] = (nports[port.role] || 0) + 1;
+						}
+					}
+
+					ports.sort(function(a, b) {
+						if (a.role != b.role)
+							return (a.role < b.role) ? -1 : 1;
+
+						return (a.index - b.index);
+					});
+
+					for (var i = 0, port; (port = ports[i]) != null; i++) {
+						if (port.role != role) {
+							role = port.role;
+							pnum = 1;
 						}
 
-						s.switches[switchname] = {
-							ports: ports,
-							netdevs: netdevs
-						};
+						if (role == 'cpu')
+							port.label = 'CPU (%s)'.format(port.device);
+						else if (nports[role] > 1)
+							port.label = '%s %d'.format(role.toUpperCase(), pnum++);
+						else
+							port.label = role.toUpperCase();
+
+						delete port.role;
+						delete port.index;
 					}
+
+					s.switches[switchname] = {
+						ports: ports,
+						netdevs: netdevs
+					};
 				}
 			}
+		}
 
-			return (_state = s);
-		}));
+		delete _cache.pendingInit;
 
-	return Promise.resolve(_state);
+		return (_state = s);
+	}));
 }
 
 function ifnameOf(obj) {
@@ -580,6 +590,12 @@ function deviceSort(a, b) {
 var Network, Protocol, Device, WifiDevice, WifiNetwork;
 
 Network = L.Class.extend({
+	flushCache: function() {
+		return Promise.resolve(_state).then(function() {
+			_flush = true;
+		});
+	},
+
 	getProtocol: function(protoname, netname) {
 		var v = _protocols[protoname];
 		if (v != null)
