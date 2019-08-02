@@ -700,9 +700,13 @@ local knownParams = {
 				"EXP-RC4-MD5"
 			},
 			translate("TLS cipher") },
-		{ Value,
+		{ DynamicList,
 			"tls_ciphersuites",
-			"TLS_AES_256_GCM_SHA384:TLS_AES_128_GCM_SHA256:TLS_CHACHA20_POLY1305_SHA256",
+			{
+				"TLS_AES_256_GCM_SHA384",
+				"TLS_AES_128_GCM_SHA256",
+				"TLS_CHACHA20_POLY1305_SHA256"
+			},
 			translate("TLS 1.3 or newer cipher") },
 		{ Value,
 			"tls_timeout",
