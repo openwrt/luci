@@ -5,11 +5,11 @@
 module("luci.controller.openvpn", package.seeall)
 
 function index()
-	entry( {"admin", "services", "openvpn"}, cbi("openvpn"), _("OpenVPN") )
-	entry( {"admin", "services", "openvpn", "basic"},    cbi("openvpn-basic"),    nil ).leaf = true
-	entry( {"admin", "services", "openvpn", "advanced"}, cbi("openvpn-advanced"), nil ).leaf = true
-	entry( {"admin", "services", "openvpn", "file"},     form("openvpn-file"),    nil ).leaf = true
-	entry( {"admin", "services", "openvpn", "upload"},   call("ovpn_upload"))
+	entry( {"admin", "vpn", "openvpn"}, cbi("openvpn"), _("OpenVPN") )
+	entry( {"admin", "vpn", "openvpn", "basic"},    cbi("openvpn-basic"),    nil ).leaf = true
+	entry( {"admin", "vpn", "openvpn", "advanced"}, cbi("openvpn-advanced"), nil ).leaf = true
+	entry( {"admin", "vpn", "openvpn", "file"},     form("openvpn-file"),    nil ).leaf = true
+	entry( {"admin", "vpn", "openvpn", "upload"},   call("ovpn_upload"))
 end
 
 function ovpn_upload()
@@ -50,5 +50,5 @@ function ovpn_upload()
 			end
 		end
 	end
-	http.redirect(luci.dispatcher.build_url('admin/services/openvpn'))
+	http.redirect(luci.dispatcher.build_url('admin/vpn/openvpn'))
 end
