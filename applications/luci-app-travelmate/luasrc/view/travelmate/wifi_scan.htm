@@ -52,16 +52,16 @@ This is free software, licensed under the Apache License, Version 2.0
 			</div>
 			<%- for i, net in ipairs(iw.scanlist or { }) do -%>
 			<div class="tr cbi-section-table-row cbi-rowstyle-1">
-				<div class="td left">
+				<div class="td left" style="text-align: left !important">
 					<%=net.ssid and utl.pcdata(net.ssid) or "<em>%s</em>" % translate("hidden")%>
 				</div>
-				<div class="td left">
+				<div class="td left" style="text-align: left !important">
 					<%=net.bssid and utl.pcdata(net.bssid)%>
 				</div>
-				<div class="td left">
+				<div class="td left" style="text-align: left !important">
 					<%=format_wifi_encryption(net.encryption)%>
 				</div>
-				<div class="td left">
+				<div class="td left" style="text-align: left !important">
 					<%=percent_wifi_signal(net)%> %
 				</div>
 				<div class="td cbi-section-actions">
