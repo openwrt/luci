@@ -51,6 +51,13 @@ function index()
 	toplevel_page(page, "admin/system/system", alias("admin", "system", "system"))
 
 	-- Only used if applications add items
+	page = node("admin", "vpn")
+	page.title = _("VPN")
+	page.order = 30
+	page.index = true
+	toplevel_page(page, false, false)
+
+	-- Only used if applications add items
 	page = node("admin", "services")
 	page.title = _("Services")
 	page.order = 40
