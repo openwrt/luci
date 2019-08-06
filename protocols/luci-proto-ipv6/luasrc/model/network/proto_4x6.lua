@@ -49,7 +49,7 @@ for _, p in ipairs({"dslite", "map", "464xlat"}) do
 		return nil
 	end
 
-	function proto.contains_interface(self, ifname)
+	function proto.contains_interface(self, ifc)
 		return (netmod:ifnameof(ifc) == self:ifname())
 	end
 end

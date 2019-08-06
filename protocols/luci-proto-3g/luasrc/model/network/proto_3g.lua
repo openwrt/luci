@@ -38,7 +38,7 @@ function proto.get_interfaces(self)
 	return nil
 end
 
-function proto.contains_interface(self, ifname)
+function proto.contains_interface(self, ifc)
 	if self:is_floating() then
 		return (netmod:ifnameof(ifc) == self:ifname())
 	else
