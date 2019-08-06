@@ -1,7 +1,7 @@
 <script type="text/javascript">//<![CDATA[
 
 	function ocserv_disconnect(idx) {
-		(new XHR()).post('<%=url('admin/services/ocserv/disconnect')%>/' + idx, { token: '<%=token%>' },
+		(new XHR()).post('<%=url('admin/vpn/ocserv/disconnect')%>/' + idx, { token: '<%=token%>' },
 			function(x)
 			{
 				var tb = document.getElementById('ocserv_status_table');
@@ -11,7 +11,7 @@
 		);
 	}
 
-	XHR.poll(-1, '<%=url('admin/services/ocserv/status')%>', null,
+	XHR.poll(-1, '<%=url('admin/vpn/ocserv/status')%>', null,
 		function(x, st)
 		{
 			var tb = document.getElementById('ocserv_status_table');
