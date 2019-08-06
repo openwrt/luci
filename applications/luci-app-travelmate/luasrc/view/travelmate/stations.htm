@@ -34,7 +34,7 @@ This is free software, licensed under the Apache License, Version 2.0
 					if (view)
 					{
 						view.setAttribute("name", "station_nok");
-						view.setAttribute("style", "color: #a22; font-weight: bold");
+						view.setAttribute("style", "text-align: left !important; color: #a22; font-weight: bold");
 					}
 				}
 			}
@@ -59,7 +59,7 @@ This is free software, licensed under the Apache License, Version 2.0
 				view   = document.getElementById(search);
 				if (view)
 				{
-					view.setAttribute("style", "color: #37c; font-weight: bold");
+					view.setAttribute("style", "text-align: left !important; color: #37c; font-weight: bold");
 				}
 			}
 		}
@@ -122,10 +122,10 @@ This is free software, licensed under the Apache License, Version 2.0
 						local encr    = s.encryption or "-"
 			-%>
 			<div class="tr cbi-section-table-row cbi-rowstyle-1" name="station_ok" id="1_<%=device%>/<%=ssid%>/<%=bssid%>">
-				<div class="td left" name="station_ok" id="2_<%=device%>/<%=ssid%>/<%=bssid%>"><%=device%></div>
-				<div class="td left" name="station_ok" id="3_<%=device%>/<%=ssid%>/<%=bssid%>"><%=ssid%></div>
-				<div class="td left" name="station_ok" id="4_<%=device%>/<%=ssid%>/<%=bssid%>"><%=bssid%></div>
-				<div class="td left" name="station_ok" id="5_<%=device%>/<%=ssid%>/<%=bssid%>"><%=encr%></div>
+				<div class="td left" style="text-align: left !important" name="station_ok" id="2_<%=device%>/<%=ssid%>/<%=bssid%>"><%=device%></div>
+				<div class="td left" style="text-align: left !important" name="station_ok" id="3_<%=device%>/<%=ssid%>/<%=bssid%>"><%=ssid%></div>
+				<div class="td left" style="text-align: left !important" name="station_ok" id="4_<%=device%>/<%=ssid%>/<%=bssid%>"><%=bssid%></div>
+				<div class="td left" style="text-align: left !important" name="station_ok" id="5_<%=device%>/<%=ssid%>/<%=bssid%>"><%=encr%></div>
 				<div class="td middle cbi-section-actions">
 					<div>
 						<input class="cbi-button cbi-button-up" type="button" value="<%:Up%>" onclick="location.href='<%=luci.dispatcher.build_url('admin/services/travelmate/wifiorder')%>?cfg=<%=section%>&amp;dir=up'" alt="<%:Move up%>" title="<%:Move up%>" />
