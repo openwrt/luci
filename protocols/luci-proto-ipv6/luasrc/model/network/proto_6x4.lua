@@ -42,7 +42,7 @@ for _, p in ipairs({"6in4", "6to4", "6rd"}) do
 		return nil
 	end
 
-	function proto.contains_interface(self, ifname)
+	function proto.contains_interface(self, ifc)
 		return (netmod:ifnameof(ifc) == self:ifname())
 	end
 
