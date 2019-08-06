@@ -131,6 +131,16 @@ e6.default = 4
 e6.datatype = "range(1,32)"
 e6.rmempty = false
 
+e7 = e:option(Flag, "ban_autoblacklist", translate("Local Save Blacklist Addons"),
+  translate("Blacklist auto addons are stored temporary in the IPSet and saved permanently in the local blacklist. Disable this option to prevent the local save."))
+e7.default = e7.enabled
+e7.rmempty = true
+
+e8 = e:option(Flag, "ban_autowhitelist", translate("Local Save Whitelist Addons"),
+  translate("Whitelist auto addons are stored temporary in the IPSet and saved permanently in the local whitelist. Disable this option to prevent the local save."))
+e8.default = e8.enabled
+e8.rmempty = true
+
 -- Optional Extra Options
 
 e20 = e:option(Value, "ban_triggerdelay", translate("Trigger Delay"),
