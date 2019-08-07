@@ -1,9 +1,11 @@
 -- Copyright 2017-2019 Dirk Brenken (dev@brenken.org)
 -- This is free software, licensed under the Apache License, Version 2.0
 
-local fs   = require("nixio.fs")
-local uci  = require("luci.model.uci").cursor()
-local http = require("luci.http")
+local fs      = require("nixio.fs")
+local uci     = require("luci.model.uci").cursor()
+local http    = require("luci.http")
+local util    = require("luci.util")
+local scripts = util.split(util.trim(util.exec("ls /etc/travelmate/*.login 2>/dev/null")), "\n", nil, true) or {}
 
 m = SimpleForm("edit", translate("Edit Wireless Uplink Configuration"))
 m.submit = translate("Save")
@@ -19,6 +21,7 @@ m.hidden = {
 }
 
 local s = uci:get_all("wireless", m.hidden.cfg)
+
 if s ~= nil then
 	wssid = m:field(Value, "ssid", translate("SSID"))
 	wssid.datatype = "rangelength(1,32)"
@@ -126,6 +129,17 @@ if s ~= nil then
 		wkey.password = true
 		wkey.default = s.key or s.password
 	end
+
+	local login_section = (s.ssid or "") .. (s.bssid or "")
+	login_section = login_section.lower(login_section:gsub("[^%w_]", "_"))
+	local cmd = uci:get("travelmate", login_section, "command")
+	cmd_list = m:field(ListValue, "cmdlist", translate("Auto Login Script"),
+		translate("External script reference which will be called for automated captive portal logins."))
+	cmd_list:value("none")
+	for _, z in ipairs(scripts) do
+		cmd_list:value(z)
+	end
+	cmd_list.default = cmd or "none"
 else
 	m.on_cancel()
 end
@@ -159,6 +173,16 @@ function wssid.write(self, section, value)
 			uci:set("wireless", m.hidden.cfg, "priv_key", privkey:formvalue(section) or "")
 			uci:set("wireless", m.hidden.cfg, "priv_key_pwd", privkeypwd:formvalue(section) or "")
 		end
+	end
+	local login_section = (wssid:formvalue(section) or "") .. (bssid:formvalue(section) or "")
+	login_section = login_section.lower(login_section:gsub("[^%w_]", "_"))
+	if not uci:get("travelmate", login_section) and cmd_list:formvalue(section) ~= "none" then
+		uci:set("travelmate", login_section, "login")
+	end
+	if uci:get("travelmate", login_section) then
+		uci:set("travelmate", login_section, "command", cmd_list:formvalue(section))
+		uci:save("travelmate")
+		uci:commit("travelmate")
 	end
 	uci:save("wireless")
 	uci:commit("wireless")

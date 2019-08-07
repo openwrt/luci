@@ -1,9 +1,11 @@
--- Copyright 2017-2018 Dirk Brenken (dev@brenken.org)
+-- Copyright 2017-2019 Dirk Brenken (dev@brenken.org)
 -- This is free software, licensed under the Apache License, Version 2.0
 
 local fs       = require("nixio.fs")
 local uci      = require("luci.model.uci").cursor()
 local http     = require("luci.http")
+local util     = require("luci.util")
+local scripts  = util.split(util.trim(util.exec("ls /etc/travelmate/*.login 2>/dev/null")), "\n", nil, true) or {}
 local trmiface = uci:get("travelmate", "global", "trm_iface") or "trm_wwan"
 local encr_psk = {"psk", "psk2", "psk-mixed"}
 local encr_wpa = {"wpa", "wpa2", "wpa-mixed"}
@@ -135,6 +137,17 @@ elseif (tonumber(m.hidden.wpa_version) or 0) > 0 then
 	end
 end
 
+local login_section = (m.hidden.ssid or "") .. (m.hidden.bssid or "")
+login_section = login_section.lower(login_section:gsub("[^%w_]", "_"))
+local cmd = uci:get("travelmate", login_section, "command")
+cmd_list = m:field(ListValue, "cmdlist", translate("Auto Login Script"),
+	translate("External script reference which will be called for automated captive portal logins."))
+cmd_list:value("none")
+for _, z in ipairs(scripts) do
+	cmd_list:value(z)
+end
+cmd_list.default = cmd or "none"
+
 function wssid.write(self, section, value)
 	newsection = uci:section("wireless", "wifi-iface", nil, {
 		mode     = "sta",
@@ -173,6 +186,16 @@ function wssid.write(self, section, value)
 		end
 	else
 		uci:set("wireless", newsection, "encryption", "none")
+	end
+	local login_section = (wssid:formvalue(section) or "") .. (bssid:formvalue(section) or "")
+	login_section = login_section.lower(login_section:gsub("[^%w_]", "_"))
+	if not uci:get("travelmate", login_section) and cmd_list:formvalue(section) ~= "none" then
+		uci:set("travelmate", login_section, "login")
+	end
+	if uci:get("travelmate", login_section) then
+		uci:set("travelmate", login_section, "command", cmd_list:formvalue(section))
+		uci:save("travelmate")
+		uci:commit("travelmate")
 	end
 	uci:save("wireless")
 	uci:commit("wireless")
