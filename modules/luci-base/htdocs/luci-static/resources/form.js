@@ -172,13 +172,13 @@ var CBIMap = CBINode.extend({
 		}, this));
 	},
 
-	lookupOption: function(name, section_id) {
+	lookupOption: function(name, section_id, config_name) {
 		var id, elem, sid, inst;
 
 		if (name.indexOf('.') > -1)
 			id = 'cbid.%s'.format(name);
 		else
-			id = 'cbid.%s.%s.%s'.format(this.config, section_id, name);
+			id = 'cbid.%s.%s.%s'.format(config_name || this.config, section_id, name);
 
 		elem = this.findElement('data-field', id);
 		sid  = elem ? id.split(/\./)[2] : null;
@@ -437,7 +437,11 @@ var CBIAbstractValue = CBINode.extend({
 						else if (k.indexOf('.') !== -1)
 							dep['cbid.%s'.format(k)] = list[i][k];
 						else
-							dep['cbid.%s.%s.%s'.format(this.config, this.ucisection || section_id, k)] = list[i][k];
+							dep['cbid.%s.%s.%s'.format(
+								this.uciconfig || this.section.uciconfig || this.map.config,
+								this.ucisection || section_id,
+								k
+							)] = list[i][k];
 					}
 				}
 
@@ -484,7 +488,8 @@ var CBIAbstractValue = CBINode.extend({
 					istat = false;
 				}
 				else {
-					var res = this.map.lookupOption(dep, section_id),
+					var conf = this.uciconfig || this.section.uciconfig || this.map.config,
+					    res = this.map.lookupOption(dep, section_id, conf),
 					    val = res ? res[0].formvalue(res[1]) : null;
 
 					istat = (istat && isEqual(val, this.deps[i][dep]));
@@ -502,7 +507,9 @@ var CBIAbstractValue = CBINode.extend({
 		if (section_id == null)
 			L.error('TypeError', 'Section ID required');
 
-		return 'cbid.%s.%s.%s'.format(this.map.config, section_id, this.option);
+		return 'cbid.%s.%s.%s'.format(
+			this.uciconfig || this.section.uciconfig || this.map.config,
+			section_id, this.option);
 	},
 
 	load: function(section_id) {
@@ -510,7 +517,7 @@ var CBIAbstractValue = CBINode.extend({
 			L.error('TypeError', 'Section ID required');
 
 		return uci.get(
-			this.uciconfig || this.map.config,
+			this.uciconfig || this.section.uciconfig || this.map.config,
 			this.ucisection || section_id,
 			this.ucioption || this.option);
 	},
@@ -598,7 +605,7 @@ var CBIAbstractValue = CBINode.extend({
 
 	write: function(section_id, formvalue) {
 		return uci.set(
-			this.uciconfig || this.map.config,
+			this.uciconfig || this.section.uciconfig || this.map.config,
 			this.ucisection || section_id,
 			this.ucioption || this.option,
 			formvalue);
@@ -606,7 +613,7 @@ var CBIAbstractValue = CBINode.extend({
 
 	remove: function(section_id) {
 		return uci.unset(
-			this.uciconfig || this.map.config,
+			this.uciconfig || this.section.uciconfig || this.map.config,
 			this.ucisection || section_id,
 			this.ucioption || this.option);
 	}
@@ -1334,7 +1341,7 @@ var CBIValue = CBIAbstractValue.extend({
 	},
 
 	renderFrame: function(section_id, in_table, option_index, nodes) {
-		var config_name = this.uciconfig || this.map.config,
+		var config_name = this.uciconfig || this.section.uciconfig || this.map.config,
 		    depend_list = this.transformDepList(section_id),
 		    optionEl;
 
