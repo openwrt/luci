@@ -1585,28 +1585,29 @@ var CBIButtonValue = CBIValue.extend({
 	__name__: 'CBI.ButtonValue',
 
 	renderWidget: function(section_id, option_index, cfgvalue) {
-		var value = (cfgvalue != null) ? cfgvalue : this.default;
+		var value = (cfgvalue != null) ? cfgvalue : this.default,
+		    hiddenEl = new ui.Hiddenfield(value, { id: this.cbid(section_id) }),
+		    outputEl = E('div');
 
 		if (value !== false)
-			return E([
-				E('input', {
-					'type': 'hidden',
-					'id': this.cbid(section_id)
-				}),
+			L.dom.content(outputEl, [
 				E('input', {
 					'class': 'cbi-button cbi-button-%s'.format(this.inputstyle || 'button'),
-					'type': 'submit',
-					//'id': this.cbid(section_id),
-					//'name': this.cbid(section_id),
+					'type': 'button',
 					'value': this.inputtitle || this.title,
-					'click': L.bind(function(ev) {
+					'click': L.bind(this.onclick || function(ev) {
 						ev.target.previousElementSibling.value = ev.target.value;
 						this.map.save();
 					}, this)
 				})
 			]);
 		else
-			return document.createTextNode(' - ');
+			L.dom.content(outputEl, ' - ');
+
+		return E([
+			outputEl,
+			hiddenEl.render()
+		]);
 	}
 });
 
