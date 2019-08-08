@@ -57,6 +57,23 @@ var CBINode = Class.extend({
 
 		var x = E('div', {}, s);
 		return x.textContent || x.innerText || '';
+	},
+
+	titleFn: function(attr /*, ... */) {
+		var s = null;
+
+		if (typeof(this[attr]) == 'function')
+			s = this[attr].apply(this, this.varargs(arguments, 1));
+		else if (typeof(this[attr]) == 'string')
+			s = (arguments.length > 1) ? ''.format.apply(this[attr], this.varargs(arguments, 1)) : this[attr];
+
+		if (s != null)
+			s = this.stripTags(String(s)).trim();
+
+		if (s == null || s == '')
+			return null;
+
+		return s;
 	}
 });
 
@@ -647,7 +664,8 @@ var CBITypedSection = CBIAbstractSection.extend({
 			return E([]);
 
 		var createEl = E('div', { 'class': 'cbi-section-create' }),
-		    config_name = this.uciconfig || this.map.config;
+		    config_name = this.uciconfig || this.map.config,
+		    btn_title = this.titleFn('addbtntitle');
 
 		if (extra_class != null)
 			createEl.classList.add(extra_class);
@@ -656,8 +674,8 @@ var CBITypedSection = CBIAbstractSection.extend({
 			createEl.appendChild(E('input', {
 				'type': 'submit',
 				'class': 'cbi-button cbi-button-add',
-				'value': this.addbtntitle || _('Add'),
-				'title': this.addbtntitle || _('Add'),
+				'value': btn_title || _('Add'),
+				'title': btn_title || _('Add'),
 				'click': L.bind(this.handleAdd, this)
 			}));
 		}
@@ -672,8 +690,8 @@ var CBITypedSection = CBIAbstractSection.extend({
 				E('input', {
 					'class': 'cbi-button cbi-button-add',
 					'type': 'submit',
-					'value': this.addbtntitle || _('Add'),
-					'title': this.addbtntitle || _('Add'),
+					'value': btn_title || _('Add'),
+					'title': btn_title || _('Add'),
 					'click': L.bind(function(ev) {
 						if (nameEl.classList.contains('cbi-input-invalid'))
 							return;
@@ -783,8 +801,7 @@ var CBITableSection = CBITypedSection.extend({
 		tableEl.appendChild(this.renderHeaderRows(max_cols));
 
 		for (var i = 0; i < nodes.length; i++) {
-			var sectionname = this.stripTags((typeof(this.sectiontitle) == 'function')
-				? String(this.sectiontitle(cfgsections[i]) || '') : cfgsections[i]).trim();
+			var sectionname = this.titleFn('sectiontitle', cfgsections[i]);
 
 			var trEl = E('div', {
 				'id': 'cbi-%s-%s'.format(config_name, cfgsections[i]),
@@ -961,11 +978,13 @@ var CBITableSection = CBITypedSection.extend({
 		}
 
 		if (this.addremove) {
+			var btn_title = this.titleFn('removebtntitle', section_id);
+
 			L.dom.append(tdEl.lastElementChild,
 				E('input', {
 					'type': 'submit',
-					'value': this.removebtntitle || _('Delete'),
-					'title': this.removebtntitle || _('Delete'),
+					'value': btn_title || _('Delete'),
+					'title': btn_title || _('Delete'),
 					'class': 'cbi-button cbi-button-remove',
 					'click': L.bind(function(sid, ev) {
 						uci.remove(config_name, sid);
@@ -1084,18 +1103,16 @@ var CBITableSection = CBITypedSection.extend({
 		    name = null,
 		    m = new CBIMap(this.map.config, null, null),
 		    s = m.section(CBINamedSection, section_id, this.sectiontype);
-		    s.tabs = this.tabs;
-		    s.tab_names = this.tab_names;
 
-		if (typeof(this.modaltitle) == 'function')
-			title = this.stripTags(String(this.modaltitle(section_id) || '')), name = null;
-		else if (typeof(this.sectiontitle) == 'function')
-			name = this.stripTags(String(this.sectiontitle(section_id) || ''));
+		s.tabs = this.tabs;
+		s.tab_names = this.tab_names;
+
+		if ((name = this.titleFn('modaltitle', section_id)) != null)
+			title = name;
+		else if ((name = this.titleFn('sectiontitle', section_id)) != null)
+			title = '%s - %s'.format(parent.title, name);
 		else if (!this.anonymous)
-			name = section_id;
-
-		if (name)
-			title += ' - ' + name;
+			title = '%s - %s'.format(parent.title, section_id);
 
 		for (var i = 0; i < this.children.length; i++) {
 			var o1 = this.children[i];
@@ -1594,14 +1611,15 @@ var CBIButtonValue = CBIValue.extend({
 	renderWidget: function(section_id, option_index, cfgvalue) {
 		var value = (cfgvalue != null) ? cfgvalue : this.default,
 		    hiddenEl = new ui.Hiddenfield(value, { id: this.cbid(section_id) }),
-		    outputEl = E('div');
+		    outputEl = E('div'),
+		    btn_title = this.titleFn('inputtitle', section_id) || this.titleFn('title', section_id);
 
 		if (value !== false)
 			L.dom.content(outputEl, [
 				E('input', {
 					'class': 'cbi-button cbi-button-%s'.format(this.inputstyle || 'button'),
 					'type': 'button',
-					'value': this.inputtitle || this.title,
+					'value': btn_title,
 					'click': L.bind(this.onclick || function(ev) {
 						ev.target.previousElementSibling.value = ev.target.value;
 						this.map.save();
