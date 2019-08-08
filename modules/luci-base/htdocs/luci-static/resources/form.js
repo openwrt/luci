@@ -707,6 +707,13 @@ var CBITypedSection = CBIAbstractSection.extend({
 		return createEl;
 	},
 
+	renderSectionPlaceholder: function() {
+		return E([
+			E('em', _('This section contains no values yet')),
+			E('br'), E('br')
+		]);
+	},
+
 	renderContents: function(cfgsections, nodes) {
 		var section_id = null,
 		    config_name = this.uciconfig || this.map.config,
@@ -749,10 +756,7 @@ var CBITypedSection = CBIAbstractSection.extend({
 		}
 
 		if (nodes.length == 0)
-			L.dom.append(sectionEl, [
-				E('em', _('This section contains no values yet')),
-				E('br'), E('br')
-			]);
+			sectionEl.appendChild(this.renderSectionPlaceholder());
 
 		sectionEl.appendChild(this.renderSectionAdd());
 
