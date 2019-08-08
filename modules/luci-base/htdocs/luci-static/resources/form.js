@@ -649,8 +649,8 @@ var CBITypedSection = CBIAbstractSection.extend({
 			createEl.appendChild(E('input', {
 				'type': 'submit',
 				'class': 'cbi-button cbi-button-add',
-				'value': _('Add'),
-				'title': _('Add'),
+				'value': this.addbtntitle || _('Add'),
+				'title': this.addbtntitle || _('Add'),
 				'click': L.bind(this.handleAdd, this)
 			}));
 		}
@@ -665,8 +665,8 @@ var CBITypedSection = CBIAbstractSection.extend({
 				E('input', {
 					'class': 'cbi-button cbi-button-add',
 					'type': 'submit',
-					'value': _('Add'),
-					'title': _('Add'),
+					'value': this.addbtntitle || _('Add'),
+					'title': this.addbtntitle || _('Add'),
 					'click': L.bind(function(ev) {
 						if (nameEl.classList.contains('cbi-input-invalid'))
 							return;
@@ -957,8 +957,8 @@ var CBITableSection = CBITypedSection.extend({
 			L.dom.append(tdEl.lastElementChild,
 				E('input', {
 					'type': 'submit',
-					'value': _('Delete'),
-					'title': _('Delete'),
+					'value': this.removebtntitle || _('Delete'),
+					'title': this.removebtntitle || _('Delete'),
 					'class': 'cbi-button cbi-button-remove',
 					'click': L.bind(function(sid, ev) {
 						uci.remove(config_name, sid);
@@ -1080,7 +1080,9 @@ var CBITableSection = CBITypedSection.extend({
 		    s.tabs = this.tabs;
 		    s.tab_names = this.tab_names;
 
-		if (typeof(this.sectiontitle) == 'function')
+		if (typeof(this.modaltitle) == 'function')
+			title = this.stripTags(String(this.modaltitle(section_id) || '')), name = null;
+		else if (typeof(this.sectiontitle) == 'function')
 			name = this.stripTags(String(this.sectiontitle(section_id) || ''));
 		else if (!this.anonymous)
 			name = section_id;
