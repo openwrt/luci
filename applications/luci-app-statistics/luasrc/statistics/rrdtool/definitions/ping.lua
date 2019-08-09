@@ -27,7 +27,7 @@ function rrdargs( graph, plugin, plugin_instance, dtype )
 		  data = {
 			types   = { "ping_droprate" },
 			options = { ping_droprate = {
-				noarea = true, overlay = true, title = "%di" } }
+				noarea = true, overlay = true, title = "%di", transform_rpn = "100,*" } }
 		} }
 	}
 end
