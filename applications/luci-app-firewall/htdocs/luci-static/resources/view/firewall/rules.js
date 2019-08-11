@@ -247,6 +247,8 @@ return L.view.extend({
 		o.value('echo-request');
 		o.value('router-advertisement');
 		o.value('router-solicitation');
+		o.value('neighbour-advertisement');
+		o.value('neighbour-solicitation');
 		o.value('time-exceeded');
 		o.value('ttl-zero-during-transit');
 		o.value('ttl-zero-during-reassembly');
