@@ -185,6 +185,11 @@ var CBIMap = CBINode.extend({
 
 			this.checkDepends();
 
+			var tabGroups = mapEl.querySelectorAll('.cbi-section-node-tabbed');
+
+			for (var i = 0; i < tabGroups.length; i++)
+				ui.tabs.initTabGroup(tabGroups[i].childNodes);
+
 			return mapEl;
 		}, this));
 	},
@@ -748,11 +753,9 @@ var CBITypedSection = CBIAbstractSection.extend({
 			sectionEl.appendChild(E('div', {
 				'id': 'cbi-%s-%s'.format(config_name, cfgsections[i]),
 				'class': this.tabs
-					? 'cbi-section-node cbi-section-node-tabbed' : 'cbi-section-node'
+					? 'cbi-section-node cbi-section-node-tabbed' : 'cbi-section-node',
+				'data-section-id': cfgsections[i]
 			}, nodes[i]));
-
-			if (this.tabs)
-				ui.tabs.initTabGroup(sectionEl.lastChild.childNodes);
 		}
 
 		if (nodes.length == 0)
@@ -819,7 +822,8 @@ var CBITableSection = CBITypedSection.extend({
 				'dragleave': this.sortable ? L.bind(this.handleDragLeave, this) : null,
 				'dragend': this.sortable ? L.bind(this.handleDragEnd, this) : null,
 				'drop': this.sortable ? L.bind(this.handleDrop, this) : null,
-				'data-title': (sectionname && (!this.anonymous || this.sectiontitle)) ? sectionname : null
+				'data-title': (sectionname && (!this.anonymous || this.sectiontitle)) ? sectionname : null,
+				'data-section-id': cfgsections[i]
 			});
 
 			if (this.extedit || this.rowcolors)
@@ -1312,11 +1316,9 @@ var CBINamedSection = CBIAbstractSection.extend({
 			sectionEl.appendChild(E('div', {
 				'id': 'cbi-%s-%s'.format(config_name, section_id),
 				'class': this.tabs
-					? 'cbi-section-node cbi-section-node-tabbed' : 'cbi-section-node'
+					? 'cbi-section-node cbi-section-node-tabbed' : 'cbi-section-node',
+				'data-section-id': section_id
 			}, nodes));
-
-			if (this.tabs)
-				ui.tabs.initTabGroup(sectionEl.lastChild.childNodes);
 		}
 		else if (this.addremove) {
 			sectionEl.appendChild(
