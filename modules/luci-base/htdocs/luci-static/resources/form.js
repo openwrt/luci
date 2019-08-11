@@ -1677,7 +1677,7 @@ var CBISectionValue = CBIValue.extend({
 
 	checkDepends: function(section_id) {
 		this.subsection.checkDepends();
-		return this.super('checkDepends');
+		return CBIValue.prototype.checkDepends.apply(this, [ section_id ]);
 	},
 
 	write: function() {},
