@@ -132,10 +132,11 @@ var CBIMap = CBINode.extend({
 		return Promise.all(tasks);
 	},
 
-	save: function() {
+	save: function(cb) {
 		this.checkDepends();
 
 		return this.parse()
+			.then(cb)
 			.then(uci.save.bind(uci))
 			.then(this.load.bind(this))
 			.then(this.renderContents.bind(this))
