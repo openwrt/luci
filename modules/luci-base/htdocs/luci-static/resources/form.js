@@ -173,7 +173,10 @@ var CBIMap = CBINode.extend({
 			if (this.description != null && this.description != '')
 				mapEl.appendChild(E('div', { 'class': 'cbi-map-descr' }, this.description));
 
-			L.dom.append(mapEl, nodes);
+			if (this.tabbed)
+				L.dom.append(mapEl, E('div', { 'class': 'cbi-map-tabbed' }, nodes));
+			else
+				L.dom.append(mapEl, nodes);
 
 			if (!initialRender) {
 				mapEl.classList.remove('flash');
@@ -185,7 +188,7 @@ var CBIMap = CBINode.extend({
 
 			this.checkDepends();
 
-			var tabGroups = mapEl.querySelectorAll('.cbi-section-node-tabbed');
+			var tabGroups = mapEl.querySelectorAll('.cbi-map-tabbed, .cbi-section-node-tabbed');
 
 			for (var i = 0; i < tabGroups.length; i++)
 				ui.tabs.initTabGroup(tabGroups[i].childNodes);
@@ -724,7 +727,9 @@ var CBITypedSection = CBIAbstractSection.extend({
 		    config_name = this.uciconfig || this.map.config,
 		    sectionEl = E('div', {
 				'id': 'cbi-%s-%s'.format(config_name, this.sectiontype),
-				'class': 'cbi-section'
+				'class': 'cbi-section',
+				'data-tab': this.map.tabbed ? this.sectiontype : null,
+				'data-tab-title': this.map.tabbed ? this.title || this.sectiontype : null
 			});
 
 		if (this.title != null && this.title != '')
@@ -793,7 +798,9 @@ var CBITableSection = CBITypedSection.extend({
 		    has_more = max_cols < this.children.length,
 		    sectionEl = E('div', {
 				'id': 'cbi-%s-%s'.format(config_name, this.sectiontype),
-				'class': 'cbi-section cbi-tblsection'
+				'class': 'cbi-section cbi-tblsection',
+				'data-tab': this.map.tabbed ? this.sectiontype : null,
+				'data-tab-title': this.map.tabbed ? this.title || this.sectiontype : null
 			}),
 			tableEl = E('div', {
 				'class': 'table cbi-section-table'
@@ -1292,7 +1299,9 @@ var CBINamedSection = CBIAbstractSection.extend({
 		    config_name = this.uciconfig || this.map.config,
 		    sectionEl = E('div', {
 				'id': ucidata ? null : 'cbi-%s-%s'.format(config_name, section_id),
-				'class': 'cbi-section'
+				'class': 'cbi-section',
+				'data-tab': this.map.tabbed ? this.sectiontype : null,
+				'data-tab-title': this.map.tabbed ? this.title || this.sectiontype : null
 			});
 
 		if (typeof(this.title) === 'string' && this.title !== '')
