@@ -559,6 +559,7 @@
 	    domParser = null,
 	    originalCBIInit = null,
 	    rpcBaseURL = null,
+	    sysFeatures = null,
 	    classes = {};
 
 	var LuCI = Class.extend({
@@ -797,6 +798,43 @@
 			return Promise.resolve(rpcBaseURL);
 		},
 
+		probeSystemFeatures: function() {
+			if (sysFeatures == null) {
+				try {
+					sysFeatures = JSON.parse(window.sessionStorage.getItem('sysFeatures'));
+				}
+				catch (e) {}
+			}
+
+			if (!this.isObject(sysFeatures)) {
+				sysFeatures = classes.rpc.declare({
+					object: 'luci',
+					method: 'getFeatures',
+					expect: { '': {} }
+				})().then(function(features) {
+					try {
+						window.sessionStorage.setItem('sysFeatures', JSON.stringify(features));
+					}
+					catch (e) {}
+
+					sysFeatures = features;
+
+					return features;
+				});
+			}
+
+			return Promise.resolve(sysFeatures);
+		},
+
+		hasSystemFeature: function() {
+			var ft = sysFeatures[arguments[0]];
+
+			if (arguments.length == 2)
+				return this.isObject(ft) ? ft[arguments[1]] : null;
+
+			return (ft != null && ft != false);
+		},
+
 		setupDOM: function(res) {
 			var domEv = res[0],
 			    uiClass = res[1],
@@ -828,10 +866,12 @@
 				throw 'Session expired';
 			});
 
+			return this.probeSystemFeatures().finally(this.initDOM);
+		},
+
+		initDOM: function() {
 			originalCBIInit();
-
 			Poll.start();
-
 			document.dispatchEvent(new CustomEvent('luci-loaded'));
 		},
 

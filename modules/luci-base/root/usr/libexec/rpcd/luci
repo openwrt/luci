@@ -320,6 +320,92 @@ local methods = {
 
 			return { helpers = rv }
 		end
+	},
+
+	getFeatures = {
+		call = function()
+			local fs = require "nixio.fs"
+			local rv = {}
+			local ok, fd
+
+			rv.firewall      = fs.access("/sbin/fw3")
+			rv.opkg          = fs.access("/bin/opkg")
+			rv.offloading    = fs.access("/sys/module/xt_FLOWOFFLOAD/refcnt")
+			rv.br2684ctl     = fs.access("/usr/sbin/br2684ctl")
+			rv.swconfig      = fs.access("/sbin/swconfig")
+			rv.odhcpd        = fs.access("/usr/sbin/odhcpd")
+
+			local wifi_features = { "eap", "11n", "11ac", "11r", "11w", "acs", "sae", "owe", "suiteb192" }
+
+			if fs.access("/usr/sbin/hostapd") then
+				rv.hostapd = {}
+
+				local _, feature
+				for _, feature in ipairs(wifi_features) do
+					rv.hostapd[feature] =
+						(os.execute(string.format("/usr/sbin/hostapd -v%s >/dev/null 2>/dev/null", feature)) == 0)
+				end
+			end
+
+			if fs.access("/usr/sbin/wpa_supplicant") then
+				rv.wpasupplicant = {}
+
+				local _, feature
+				for _, feature in ipairs(wifi_features) do
+					rv.wpasupplicant[feature] =
+						(os.execute(string.format("/usr/sbin/wpa_supplicant -v%s >/dev/null 2>/dev/null", feature)) == 0)
+				end
+			end
+
+			ok, fd = pcall(io.popen, "dnsmasq --version 2>/dev/null")
+			if ok then
+				rv.dnsmasq = {}
+
+				while true do
+					local line = fd:read("*l")
+					if not line then
+						break
+					end
+
+					local opts = line:match("^Compile time options: (.+)$")
+					if opts then
+						local opt
+						for opt in opts:gmatch("%S+") do
+							local no = opt:match("^no%-(%S+)$")
+							rv.dnsmasq[string.lower(no or opt)] = not no
+						end
+						break
+					end
+				end
+
+				fd:close()
+			end
+
+			ok, fd = pcall(io.popen, "ipset --help 2>/dev/null")
+			if ok then
+				rv.ipset = {}
+
+				local sets = false
+
+				while true do
+					local line = fd:read("*l")
+					if not line then
+						break
+					elseif line:match("^Supported set types:") then
+						sets = true
+					elseif sets then
+						local set, ver = line:match("^%s+(%S+)%s+(%d+)")
+						if set and not rv.ipset[set] then
+							rv.ipset[set] = tonumber(ver)
+						end
+					end
+				end
+
+				fd:close()
+			end
+
+			return rv
+		end
 	}
 }
 
