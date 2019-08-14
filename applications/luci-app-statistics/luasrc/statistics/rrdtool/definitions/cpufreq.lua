@@ -48,12 +48,12 @@ function rrdargs( graph, plugin, plugin_instance, dtype )
 		data = {
 			types = { "percent" },
 			options = {
-				percent = { title = "%di Hz", negweight = true },
+				percent = { title = "%di kHz", negweight = true },
 			}
 		}
 	}
 
-	return { cpufreq, transitions, percentage }
+	return { cpufreq, percentage, transitions }
     else
 	return { cpufreq }
     end
