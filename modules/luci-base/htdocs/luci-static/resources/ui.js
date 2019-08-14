@@ -2081,6 +2081,29 @@ return L.Class.extend({
 		catch (e) { }
 	},
 
+	createHandlerFn: function(ctx, fn /*, ... */) {
+		if (typeof(fn) == 'string')
+			fn = ctx[fn];
+
+		if (typeof(fn) != 'function')
+			return null;
+
+		return Function.prototype.bind.apply(function() {
+			var t = arguments[arguments.length - 1].target;
+
+			t.classList.add('spinning');
+			t.disabled = true;
+
+			if (t.blur)
+				t.blur();
+
+			Promise.resolve(fn.apply(ctx, arguments)).then(function() {
+				t.classList.remove('spinning');
+				t.disabled = false;
+			});
+		}, this.varargs(arguments, 2, ctx));
+	},
+
 	/* Widgets */
 	Textfield: UITextfield,
 	Checkbox: UICheckbox,
