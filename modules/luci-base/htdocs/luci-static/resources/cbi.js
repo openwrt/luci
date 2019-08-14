@@ -1018,7 +1018,8 @@ function cbi_dynlist_init(dl, datatype, optional, choices)
 		'class': 'cbi-input-text',
 		'placeholder': dl.getAttribute('data-placeholder'),
 		'data-type': datatype,
-		'data-optional': true
+		'data-optional': true,
+		'data-dynlist-add': true
 	})));
 
 	if (choices)
@@ -1045,6 +1046,11 @@ cbi_dynlist_init.prototype = CBIDynamicList;
 
 function cbi_validate_form(form, errmsg)
 {
+	var dynadd = form.querySelectorAll('input[data-dynlist-add="true"]');
+	for (var i = 0; i < dynadd.length; i++)
+		if (dynadd[i].value != '')
+			dynadd[i].nextElementSibling.click();
+
 	/* if triggered by a section removal or addition, don't validate */
 	if (form.cbi_state == 'add-section' || form.cbi_state == 'del-section')
 		return true;
