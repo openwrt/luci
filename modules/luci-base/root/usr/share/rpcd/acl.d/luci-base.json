@@ -1,4 +1,13 @@
 {
+	"unauthenticated": {
+		"description": "Allow system feature probing",
+		"read": {
+			"ubus": {
+				"luci": [ "getFeatures" ]
+			}
+		}
+	},
+
 	"uci-access": {
 		"description": "Grant uci write access to all configurations",
 		"read": {
