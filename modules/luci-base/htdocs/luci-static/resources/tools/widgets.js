@@ -420,8 +420,12 @@ var CBIDeviceSelect = form.ListValue.extend({
 	__name__: 'CBI.DeviceSelect',
 
 	load: function(section_id) {
-		return network.getDevices().then(L.bind(function(devices) {
-			this.devices = devices;
+		return Promise.all([
+			network.getDevices(),
+			this.noaliases ? null : network.getNetworks()
+		]).then(L.bind(function(data) {
+			this.devices = data[0];
+			this.networks = data[1];
 
 			return this.super('load', section_id);
 		}, this));
@@ -481,6 +485,35 @@ var CBIDeviceSelect = form.ListValue.extend({
 
 			choices[name] = item;
 			order.push(name);
+		}
+
+		if (this.networks != null) {
+			for (var i = 0; i < this.networks.length; i++) {
+				var net = this.networks[i],
+				    device = network.instantiateDevice('@%s'.format(net.getName()), net),
+				    name = device.getName();
+
+				if (name == '@loopback' || name == this.exclude || !this.filter(section_id, name))
+					continue;
+
+				if (this.noinactive && net.isUp() == false)
+					continue;
+
+				var item = E([
+					E('img', {
+						'title': device.getI18n(),
+						'src': L.resource('icons/alias%s.png'.format(net.isUp() ? '' : '_disabled'))
+					}),
+					E('span', { 'class': 'hide-open' }, [ name ]),
+					E('span', { 'class': 'hide-close'}, [ device.getI18n() ])
+				]);
+
+				if (checked[name])
+					values.push(name);
+
+				choices[name] = item;
+				order.push(name);
+			}
 		}
 
 		if (!this.nocreate) {
