@@ -9,7 +9,7 @@ local function readfile(path)
 end
 
 local methods = {
-	initList = {
+	getInitList = {
 		args = { name = "name" },
 		call = function(args)
 			local sys = require "luci.sys"
@@ -22,11 +22,11 @@ local methods = {
 					return { error = "No such init script" }
 				end
 			end
-			return { result = scripts }
+			return scripts
 		end
 	},
 
-	initCall = {
+	setInitAction = {
 		args = { name = "name", action = "action" },
 		call = function(args)
 			local sys = require "luci.sys"
@@ -39,7 +39,7 @@ local methods = {
 
 	getLocaltime = {
 		call = function(args)
-			return { localtime = os.time() }
+			return { result = os.time() }
 		end
 	},
 
@@ -52,11 +52,11 @@ local methods = {
 				sys.call("date -s '%04d-%02d-%02d %02d:%02d:%02d' >/dev/null" %{ date.year, date.month, date.day, date.hour, date.min, date.sec })
 				sys.call("/etc/init.d/sysfixtime restart >/dev/null")
 			end
-			return { localtime = args.localtime }
+			return { result = args.localtime }
 		end
 	},
 
-	timezone = {
+	getTimezones = {
 		call = function(args)
 			local util  = require "luci.util"
 			local zones = require "luci.sys.zoneinfo"
@@ -76,11 +76,11 @@ local methods = {
 					active = (res and res.value == zone[1]) and true or nil
 				}
 			end
-			return { result = result }
+			return result
 		end
 	},
 
-	leds = {
+	getLEDs = {
 		call = function()
 			local iter   = fs.dir("/sys/class/leds")
 			local result = { }
@@ -115,7 +115,7 @@ local methods = {
 		end
 	},
 
-	usb = {
+	getUSBDevices = {
 		call = function()
 			local fs     = require "nixio.fs"
 			local iter   = fs.glob("/sys/bus/usb/devices/[0-9]*/manufacturer")
@@ -126,7 +126,7 @@ local methods = {
 
 				local p
 				for p in iter do
-					local id = p:match("%d+-%d+")
+					local id = p:match("/([^/]+)/manufacturer$")
 
 					result.devices[#result.devices+1] = {
 						id      = id,
@@ -139,18 +139,19 @@ local methods = {
 				end
 			end
 
-			iter = fs.glob("/sys/bus/usb/devices/*/usb[0-9]*-port[0-9]*")
+			iter = fs.glob("/sys/bus/usb/devices/*/*-port[0-9]*")
 
 			if iter then
 				result.ports = {}
 
 				local p
 				for p in iter do
-					local bus, port = p:match("usb(%d+)-port(%d+)")
+					local port = p:match("([^/]+)$")
+					local link = fs.readlink(p.."/device")
 
 					result.ports[#result.ports+1] = {
-						hub  = tonumber(bus),
-						port = tonumber(port)
+						port   = port,
+						device = link and fs.basename(link)
 					}
 				end
 			end
@@ -159,20 +160,20 @@ local methods = {
 		end
 	},
 
-	ifaddrs = {
+	getIfaddrs = {
 		call = function()
 			return { result = nixio.getifaddrs() }
 		end
 	},
 
-	host_hints = {
+	getHostHints = {
 		call = function()
 			local sys = require "luci.sys"
 			return sys.net.host_hints()
 		end
 	},
 
-	duid_hints = {
+	getDUIDHints = {
 		call = function()
 			local fp = io.open('/var/hosts/odhcpd')
 			local result = { }
@@ -192,7 +193,7 @@ local methods = {
 		end
 	},
 
-	leases = {
+	getDHCPLeases = {
 		args = { family = 0 },
 		call = function(args)
 			local s = require "luci.tools.status"
@@ -210,7 +211,7 @@ local methods = {
 		end
 	},
 
-	netdevs = {
+	getNetworkDevices = {
 		call = function(args)
 			local dir = fs.dir("/sys/class/net")
 			local result = { }
@@ -273,45 +274,50 @@ local methods = {
 		end
 	},
 
-	boardjson = {
+	getBoardJSON = {
 		call = function(args)
 			local jsc = require "luci.jsonc"
 			return jsc.parse(fs.readfile("/etc/board.json") or "")
 		end
 	},
 
-	conntrack_helpers = {
+	getConntrackHelpers = {
 		call = function()
-			local fd = io.open("/usr/share/fw3/helpers.conf", "r")
+			local ok, fd = pcall(io.open, "/usr/share/fw3/helpers.conf", "r")
 			local rv = {}
 
-			local line, entry
-			while true do
-				line = fd:read("*l")
-				if not line then
-					break
+			if ok then
+				local entry
+
+				while true do
+					local line = fd:read("*l")
+					if not line then
+						break
+					end
+
+					if line:match("^%s*config%s") then
+						if entry then
+							rv[#rv+1] = entry
+						end
+						entry = {}
+					else
+						local opt, val = line:match("^%s*option%s+(%S+)%s+(%S.*)$")
+						if opt and val then
+							opt = opt:gsub("^'(.+)'$", "%1"):gsub('^"(.+)"$', "%1")
+							val = val:gsub("^'(.+)'$", "%1"):gsub('^"(.+)"$', "%1")
+							entry[opt] = val
+						end
+					end
 				end
 
-				if line:match("^%s*config%s") then
-					if entry then
-						rv[#rv+1] = entry
-					end
-					entry = {}
-				else
-					local opt, val = line:match("^%s*option%s+(%S+)%s+(%S.*)$")
-					if opt and val then
-						opt = opt:gsub("^'(.+)'$", "%1"):gsub('^"(.+)"$', "%1")
-						val = val:gsub("^'(.+)'$", "%1"):gsub('^"(.+)"$', "%1")
-						entry[opt] = val
-					end
+				if entry then
+					rv[#rv+1] = entry
 				end
+
+				fd:close()
 			end
 
-			if entry then
-				rv[#rv+1] = entry
-			end
-
-			return { helpers = rv }
+			return { result = rv }
 		end
 	},
 

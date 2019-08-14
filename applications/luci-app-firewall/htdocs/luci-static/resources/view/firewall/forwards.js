@@ -75,7 +75,8 @@ function forward_via_txt(s) {
 return L.view.extend({
 	callHostHints: rpc.declare({
 		object: 'luci',
-		method: 'host_hints'
+		method: 'getHostHints',
+		expect: { '': {} }
 	}),
 
 	load: function() {

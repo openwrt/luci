@@ -22,7 +22,7 @@
 		"read": {
 			"ubus": {
 				"iwinfo": [ "info" ],
-				"luci": [ "boardjson", "duid_hints", "host_hints", "ifaddrs", "initList", "getLocaltime", "leases", "leds", "netdevs", "usb" ],
+				"luci": [ "getBoardJSON", "getDUIDHints", "getHostHints", "getIfaddrs", "getInitList", "getLocaltime", "getTimezones", "getDHCPLeases", "getLEDs", "getNetworkDevices", "getUSBDevices" ],
 				"network.device": [ "status" ],
 				"network.interface": [ "dump" ],
 				"network.wireless": [ "status" ],
@@ -33,7 +33,7 @@
 		},
 		"write": {
 			"ubus": {
-				"luci": [ "initCall", "setLocaltime", "timezone" ],
+				"luci": [ "setInitAction", "setLocaltime" ],
 				"uci": [ "add", "apply", "confirm", "delete", "order", "set" ]
 			},
 			"uci": [ "*" ]
@@ -43,7 +43,7 @@
 		"description": "Grant access to firewall procedures",
 		"read": {
 			"ubus": {
-				"luci": [ "conntrack_helpers" ]
+				"luci": [ "getConntrackHelpers" ]
 			},
 			"uci": [ "firewall" ]
 		},

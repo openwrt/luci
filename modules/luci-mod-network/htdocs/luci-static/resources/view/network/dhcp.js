@@ -7,17 +7,19 @@ var callHostHints, callDUIDHints, callDHCPLeases, CBILeaseStatus;
 
 callHostHints = rpc.declare({
 	object: 'luci',
-	method: 'host_hints'
+	method: 'getHostHints',
+	expect: { '': {} }
 });
 
 callDUIDHints = rpc.declare({
 	object: 'luci',
-	method: 'duid_hints'
+	method: 'getDUIDHints',
+	expect: { '': {} }
 });
 
 callDHCPLeases = rpc.declare({
 	object: 'luci',
-	method: 'leases',
+	method: 'getDHCPLeases',
 	params: [ 'family' ],
 	expect: { dhcp_leases: [] }
 });
@@ -57,7 +59,6 @@ return L.view.extend({
 		    m, s, o, ss, so;
 
 		m = new form.Map('dhcp', _('DHCP and DNS'), _('Dnsmasq is a combined <abbr title="Dynamic Host Configuration Protocol">DHCP</abbr>-Server and <abbr title="Domain Name System">DNS</abbr>-Forwarder for <abbr title="Network Address Translation">NAT</abbr> firewalls'));
-		m.tabbed = true;
 
 		s = m.section(form.TypedSection, 'dnsmasq', _('Server Settings'));
 		s.anonymous = true;

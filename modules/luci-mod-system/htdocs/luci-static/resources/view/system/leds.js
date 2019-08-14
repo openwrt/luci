@@ -3,28 +3,23 @@
 'require rpc';
 'require form';
 
-var callInitAction, callLeds, callUSB, callNetdevs;
-
-callInitAction = rpc.declare({
-	object: 'luci',
-	method: 'initCall',
-	params: [ 'name', 'action' ],
-	expect: { result: false }
-});
+var callLeds, callUSB, callNetdevs;
 
 callLeds = rpc.declare({
 	object: 'luci',
-	method: 'leds'
+	method: 'getLEDs',
+	expect: { '': {} }
 });
 
 callUSB = rpc.declare({
 	object: 'luci',
-	method: 'usb'
+	method: 'getUSBDevices',
+	expect: { '': {} }
 });
 
 callNetdevs = rpc.declare({
 	object: 'luci',
-	method: 'ifaddrs',
+	method: 'getIfaddrs',
 	expect: { result: [] },
 	filter: function(res) {
 		var devs = {};
@@ -130,16 +125,23 @@ return L.view.extend({
 					value = String(value || '').split(/\s+/);
 
 				for (var i = 0; i < value.length; i++)
-					if (value[i].match(/^usb(\d+)-port(\d+)$/))
-						ports.push(value[i]);
-					else if (value[i].match(/^(\d+)-(\d+)$/))
+					if (value[i].match(/^(\d+)-(\d+)$/))
 						ports.push('usb%d-port%d'.format(Regexp.$1, Regexp.$2));
+					else
+						ports.push(value[i]);
 
 				return ports;
 			};
 			usb.ports.forEach(function(usbport) {
-				o.value('usb%d-port%d'.format(usbport.hub, usbport.port),
-				        'Hub %d, Port %d'.format(usbport.hub, usbport.port));
+				var dev = (usbport.device && Array.isArray(usb.devices))
+					? usb.devices.filter(function(d) { return d.id == usbport.device })[0] : null;
+
+				var label = _('Port %s').format(usbport.port);
+
+				if (dev)
+					label += ' (%s - %s)'.format(dev.vendor || '?', dev.product || '?');
+
+				o.value(usbport.port, label);
 			});
 		}
 

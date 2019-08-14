@@ -15,12 +15,14 @@ return L.view.extend({
 
 	load: function() {
 		return Promise.all([
-			this.callConntrackHelpers()
+			this.callConntrackHelpers(),
+			firewall.getDefaults()
 		]);
 	},
 
 	render: function(data) {
 		var ctHelpers = data[0],
+		    fwDefaults = data[1],
 		    m, s, o, inp, out;
 
 		m = new form.Map('firewall', _('Firewall - Zone Settings'),
@@ -117,6 +119,10 @@ return L.view.extend({
 			p[i].value('ACCEPT', _('accept'));
 			p[i].editable = true;
 		}
+
+		p[0].default = fwDefaults.getInput();
+		p[1].default = fwDefaults.getOutput();
+		p[2].default = fwDefaults.getForward();
 
 		o = s.taboption('general', form.Flag, 'masq', _('Masquerading'));
 		o.editable = true;
