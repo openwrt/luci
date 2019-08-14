@@ -280,13 +280,6 @@ local methods = {
 		end
 	},
 
-	offload_support = {
-		call = function()
-			local fs = require "nixio.fs"
-			return { offload_support = not not fs.access("/sys/module/xt_FLOWOFFLOAD/refcnt") }
-		end
-	},
-
 	conntrack_helpers = {
 		call = function()
 			local fd = io.open("/usr/share/fw3/helpers.conf", "r")
