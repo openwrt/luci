@@ -8,9 +8,9 @@ var callInitList, callInitAction, callTimezone,
 
 callInitList = rpc.declare({
 	object: 'luci',
-	method: 'initList',
+	method: 'getInitList',
 	params: [ 'name' ],
-	expect: { result: {} },
+	expect: { '': {} },
 	filter: function(res) {
 		for (var k in res)
 			return +res[k].enabled;
@@ -20,7 +20,7 @@ callInitList = rpc.declare({
 
 callInitAction = rpc.declare({
 	object: 'luci',
-	method: 'initCall',
+	method: 'setInitAction',
 	params: [ 'name', 'action' ],
 	expect: { result: false }
 });
@@ -28,20 +28,20 @@ callInitAction = rpc.declare({
 callGetLocaltime = rpc.declare({
 	object: 'luci',
 	method: 'getLocaltime',
-	expect: { localtime: 0 }
+	expect: { result: 0 }
 });
 
 callSetLocaltime = rpc.declare({
 	object: 'luci',
 	method: 'setLocaltime',
 	params: [ 'localtime' ],
-	expect: { localtime: 0 }
+	expect: { result: 0 }
 });
 
 callTimezone = rpc.declare({
 	object: 'luci',
-	method: 'timezone',
-	expect: { result: {} }
+	method: 'getTimezones',
+	expect: { '': {} }
 });
 
 CBILocalTime = form.DummyValue.extend({
@@ -103,7 +103,6 @@ return L.view.extend({
 			_('Here you can configure the basic aspects of your device like its hostname or the timezone.'));
 
 		m.chain('luci');
-		m.tabbed = true;
 
 		s = m.section(form.TypedSection, 'system', _('System Properties'));
 		s.anonymous = true;

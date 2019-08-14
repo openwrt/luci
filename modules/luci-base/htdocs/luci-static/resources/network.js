@@ -51,18 +51,19 @@ var callNetworkWirelessStatus = rpc.declare({
 
 var callLuciNetdevs = rpc.declare({
 	object: 'luci',
-	method: 'netdevs'
+	method: 'getNetworkDevices',
+	expect: { '': {} }
 });
 
 var callLuciIfaddrs = rpc.declare({
 	object: 'luci',
-	method: 'ifaddrs',
+	method: 'getIfaddrs',
 	expect: { result: [] }
 });
 
 var callLuciBoardjson = rpc.declare({
 	object: 'luci',
-	method: 'boardjson'
+	method: 'getBoardJSON'
 });
 
 var callIwinfoInfo = rpc.declare({
