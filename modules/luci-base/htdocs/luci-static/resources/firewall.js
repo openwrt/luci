@@ -99,7 +99,7 @@ Firewall = L.Class.extend({
 			if (name == null || !/^[a-zA-Z0-9_]+$/.test(name))
 				return null;
 
-			if (this.getZone(name) != null)
+			if (lookupZone(name) != null)
 				return null;
 
 			var d = new Defaults(),
