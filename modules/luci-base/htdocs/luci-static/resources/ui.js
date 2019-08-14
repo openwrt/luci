@@ -1199,7 +1199,7 @@ var UIDynamicList = UIElement.extend({
 					'name': this.options.name,
 					'value': value })]);
 
-		dl.querySelectorAll('.item, .add-item').forEach(function(item) {
+		dl.querySelectorAll('.item').forEach(function(item) {
 			if (exists)
 				return;
 
@@ -1210,9 +1210,12 @@ var UIDynamicList = UIElement.extend({
 
 			if (hidden && hidden.value === value)
 				exists = true;
-			else if (!hidden || hidden.value >= value)
-				exists = !!item.parentNode.insertBefore(new_item, item);
 		});
+
+		if (!exists) {
+			var ai = dl.querySelector('.add-item');
+			ai.parentNode.insertBefore(new_item, ai);
+		}
 
 		dl.dispatchEvent(new CustomEvent('cbi-dynlist-change', {
 			bubbles: true,
