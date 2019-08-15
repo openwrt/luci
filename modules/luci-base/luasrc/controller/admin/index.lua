@@ -96,6 +96,7 @@ function index()
 	page.leaf = true
 
 	page = entry({"admin", "ubus"}, call("action_ubus"), nil)
+	page.sysauth = false
 	page.leaf = true
 
 	-- Logout is last
@@ -165,6 +166,17 @@ local ubus_types = {
 	"double"
 }
 
+local function ubus_access(sid, obj, fun)
+	local res, code = luci.util.ubus("session", "access", {
+		ubus_rpc_session = sid,
+		scope            = "ubus",
+		object           = obj,
+		["function"]     = fun
+	})
+
+	return (type(res) == "table" and res.access == true)
+end
+
 local function ubus_request(req)
 	if type(req) ~= "table" or type(req.method) ~= "string" or type(req.params) ~= "table" or
 	   #req.params < 2 or req.jsonrpc ~= "2.0" or req.id == nil then
@@ -177,8 +189,12 @@ local function ubus_request(req)
 			return ubus_reply(req.id, nil, -32602, "Invalid parameters")
 		end
 
-		if sid == "00000000000000000000000000000000" then
+		if sid == "00000000000000000000000000000000" and luci.dispatcher.context.authsession then
 			sid = luci.dispatcher.context.authsession
+		end
+
+		if not ubus_access(sid, obj, fun) then
+			return ubus_reply(req.id, nil, -32002, "Access denied")
 		end
 
 		arg.ubus_rpc_session = sid
