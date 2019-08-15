@@ -333,6 +333,8 @@ local methods = {
 			rv.br2684ctl     = fs.access("/usr/sbin/br2684ctl")
 			rv.swconfig      = fs.access("/sbin/swconfig")
 			rv.odhcpd        = fs.access("/usr/sbin/odhcpd")
+			rv.zram          = fs.access("/sys/class/zram-control")
+			rv.sysntpd       = fs.readlink("/usr/sbin/ntpd") and true
 
 			local wifi_features = { "eap", "11n", "11ac", "11r", "11w", "acs", "sae", "owe", "suiteb192" }
 
