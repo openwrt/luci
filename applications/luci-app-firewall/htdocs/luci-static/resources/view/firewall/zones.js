@@ -9,8 +9,8 @@
 return L.view.extend({
 	callConntrackHelpers: rpc.declare({
 		object: 'luci',
-		method: 'conntrack_helpers',
-		expect: { helpers: [] }
+		method: 'getConntrackHelpers',
+		expect: { result: [] }
 	}),
 
 	load: function() {
