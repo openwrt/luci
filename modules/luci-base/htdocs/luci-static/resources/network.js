@@ -678,7 +678,7 @@ Network = L.Class.extend({
 	registerErrorCode: function(code, message) {
 		if (typeof(code) == 'string' &&
 		    typeof(message) == 'string' &&
-		    proto_errors.hasOwnProperty(code)) {
+		    !proto_errors.hasOwnProperty(code)) {
 			proto_errors[code] = message;
 			return true;
 		}
