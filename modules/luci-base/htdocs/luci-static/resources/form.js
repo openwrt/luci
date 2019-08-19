@@ -1600,6 +1600,29 @@ var CBIMultiValue = CBIDynamicList.extend({
 	},
 });
 
+var CBITextValue = CBIValue.extend({
+	__name__: 'CBI.TextValue',
+
+	value: null,
+
+	renderWidget: function(section_id, option_index, cfgvalue) {
+		var value = (cfgvalue != null) ? cfgvalue : this.default;
+
+		var widget = new ui.Textarea(value, {
+			id: this.cbid(section_id),
+			optional: this.optional || this.rmempty,
+			placeholder: this.placeholder,
+			monospace: this.monospace,
+			cols: this.cols,
+			rows: this.rows,
+			wrap: this.wrap,
+			validate: L.bind(this.validate, this, section_id)
+		});
+
+		return widget.render();
+	}
+});
+
 var CBIDummyValue = CBIValue.extend({
 	__name__: 'CBI.DummyValue',
 
@@ -1713,6 +1736,7 @@ return L.Class.extend({
 	ListValue: CBIListValue,
 	Flag: CBIFlagValue,
 	MultiValue: CBIMultiValue,
+	TextValue: CBITextValue,
 	DummyValue: CBIDummyValue,
 	Button: CBIButtonValue,
 	HiddenValue: CBIHiddenValue,
