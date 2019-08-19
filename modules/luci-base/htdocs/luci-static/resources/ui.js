@@ -146,6 +146,61 @@ var UITextfield = UIElement.extend({
 	}
 });
 
+var UITextarea = UIElement.extend({
+	__init__: function(value, options) {
+		this.value = value;
+		this.options = Object.assign({
+			optional: true,
+			wrap: false,
+			cols: null,
+			rows: null
+		}, options);
+	},
+
+	render: function() {
+		var frameEl = E('div', { 'id': this.options.id }),
+		    value = (this.value != null) ? String(this.value) : '';
+
+		frameEl.appendChild(E('textarea', {
+			'id': this.options.id ? 'widget.' + this.options.id : null,
+			'name': this.options.name,
+			'class': 'cbi-input-textarea',
+			'readonly': this.options.readonly ? '' : null,
+			'placeholder': this.options.placeholder,
+			'style': !this.options.cols ? 'width:100%' : null,
+			'cols': this.options.cols,
+			'rows': this.options.rows,
+			'wrap': this.options.wrap ? '' : null
+		}, [ value ]));
+
+		if (this.options.monospace)
+			frameEl.firstElementChild.style.fontFamily = 'monospace';
+
+		return this.bind(frameEl);
+	},
+
+	bind: function(frameEl) {
+		var inputEl = frameEl.firstElementChild;
+
+		this.node = frameEl;
+
+		this.setUpdateEvents(inputEl, 'keyup', 'blur');
+		this.setChangeEvents(inputEl, 'change');
+
+		L.dom.bindClassInstance(frameEl, this);
+
+		return frameEl;
+	},
+
+	getValue: function() {
+		return this.node.firstElementChild.value;
+	},
+
+	setValue: function(value) {
+		this.node.firstElementChild.value = value;
+	}
+});
+
 var UICheckbox = UIElement.extend({
 	__init__: function(value, options) {
 		this.value = value;
@@ -2106,6 +2161,7 @@ return L.Class.extend({
 
 	/* Widgets */
 	Textfield: UITextfield,
+	Textarea: UITextarea,
 	Checkbox: UICheckbox,
 	Select: UISelect,
 	Dropdown: UIDropdown,
