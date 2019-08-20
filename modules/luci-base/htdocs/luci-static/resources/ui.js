@@ -2156,7 +2156,7 @@ return L.Class.extend({
 			if (t.blur)
 				t.blur();
 
-			Promise.resolve(fn.apply(ctx, arguments)).then(function() {
+			Promise.resolve(fn.apply(ctx, arguments)).finally(function() {
 				t.classList.remove('spinning');
 				t.disabled = false;
 			});
