@@ -76,29 +76,18 @@ function index()
 		end
 
 
-		page = entry({"admin", "network", "iface_add"}, form("admin_network/iface_add"), nil)
-		page.leaf = true
-
 		page = entry({"admin", "network", "iface_status"}, call("iface_status"), nil)
 		page.leaf = true
 
 		page = entry({"admin", "network", "iface_reconnect"}, post("iface_reconnect"), nil)
 		page.leaf = true
 
-		page = entry({"admin", "network", "network"}, arcombine(cbi("admin_network/network"), cbi("admin_network/ifaces")), _("Interfaces"), 10)
+		page = entry({"admin", "network", "iface_down"}, post("iface_down"), nil)
+		page.leaf = true
+
+		page = entry({"admin", "network", "network"}, view("network/interfaces"), _("Interfaces"), 10)
 		page.leaf   = true
 		page.subindex = true
-
-		if page.inreq then
-			uci:foreach("network", "interface",
-				function (section)
-					local ifc = section[".name"]
-					if ifc ~= "loopback" then
-						entry({"admin", "network", "network", ifc},
-						true, ifc:upper())
-					end
-				end)
-		end
 
 
 		if nixio.fs.access("/etc/config/dhcp") then
@@ -262,6 +251,62 @@ function iface_reconnect(iface)
 		luci.sys.call("env -i /sbin/ifup %s >/dev/null 2>/dev/null"
 			% luci.util.shellquote(iface))
 		luci.http.status(200, "Reconnected")
+		return
+	end
+
+	luci.http.status(404, "No such interface")
+end
+
+local function addr2dev(addr, src)
+	local ip = require "luci.ip"
+	local route = ip.route(addr, src)
+	if not src and route and route.src then
+		route = ip.route(addr, route.src:string())
+	end
+	return route and route.dev
+end
+
+function iface_down(iface, force)
+	local netmd = require "luci.model.network".init()
+	local peer = luci.http.getenv("REMOTE_ADDR")
+	local serv = luci.http.getenv("SERVER_ADDR")
+
+	if force ~= "force" and serv and peer then
+		local dev = addr2dev(peer, serv)
+		if dev then
+			local nets = netmd:get_networks()
+			local outnet = nil
+			local _, net, ai
+
+			for _, net in ipairs(nets) do
+				if net:contains_interface(dev) then
+					outnet = net
+					break
+				end
+			end
+
+			if outnet:name() == iface then
+				luci.http.status(409, "Is inbound interface")
+				return
+			end
+
+			local peeraddr = outnet:get("peeraddr")
+			for _, ai in ipairs(peeraddr and nixio.getaddrinfo(peeraddr) or {}) do
+				local peerdev = addr2dev(ai.address)
+				for _, net in ipairs(peerdev and nets or {}) do
+					if net:contains_interface(peerdev) and net:name() == iface then
+						luci.http.status(409, "Is inbound interface")
+						return
+					end
+				end
+			end
+		end
+	end
+
+	if netmd:get_network(iface) then
+		luci.sys.call("env -i /sbin/ifdown %s >/dev/null 2>/dev/null"
+			% luci.util.shellquote(iface))
+		luci.http.status(200, "Shut down")
 		return
 	end
 
