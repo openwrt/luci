@@ -1230,9 +1230,9 @@
 				return inst[method].apply(inst, inst.varargs(arguments, 2));
 			},
 
-			isEmpty: function(node) {
+			isEmpty: function(node, ignoreFn) {
 				for (var child = node.firstElementChild; child != null; child = child.nextElementSibling)
-					if (!child.classList.contains('hidden'))
+					if (!child.classList.contains('hidden') && (!ignoreFn || !ignoreFn(child)))
 						return false;
 
 				return true;
