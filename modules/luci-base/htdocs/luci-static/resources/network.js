@@ -160,6 +160,10 @@ function getProtocolHandlers(cache) {
 		if (!L.isObject(protos))
 			throw !1;
 
+		/* Hack: emulate relayd protocol */
+		if (!protos.hasOwnProperty('relay'))
+			Object.assign(protos, { relay: { no_device: true } });
+
 		Object.assign(_protospecs, protos);
 
 		return Promise.all(Object.keys(protos).map(function(p) {
@@ -1187,7 +1191,10 @@ Network = L.Class.extend({
 		return new protoClass(name);
 	},
 
-	instantiateDevice: function(name, network) {
+	instantiateDevice: function(name, network, extend) {
+		if (extend != null)
+			return new (Device.extend(extend))(name, network);
+
 		return new Device(name, network);
 	},
 
