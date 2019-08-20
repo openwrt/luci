@@ -1628,7 +1628,7 @@ return L.Class.extend({
 				    active = pane.getAttribute('data-tab-active') === 'true';
 
 				menu.appendChild(E('li', {
-					'style': L.dom.isEmpty(pane) ? 'display:none' : null,
+					'style': this.isEmptyPane(pane) ? 'display:none' : null,
 					'class': active ? 'cbi-tab' : 'cbi-tab-disabled',
 					'data-tab': name
 				}, E('a', {
@@ -1645,9 +1645,9 @@ return L.Class.extend({
 			if (selected === null) {
 				selected = this.getActiveTabId(panes[0]);
 
-				if (selected < 0 || selected >= panes.length || L.dom.isEmpty(panes[selected])) {
+				if (selected < 0 || selected >= panes.length || this.isEmptyPane(panes[selected])) {
 					for (var i = 0; i < panes.length; i++) {
-						if (!L.dom.isEmpty(panes[i])) {
+						if (!this.isEmptyPane(panes[i])) {
 							selected = i;
 							break;
 						}
@@ -1660,6 +1660,10 @@ return L.Class.extend({
 
 				this.setActiveTabId(panes[selected], selected);
 			}
+		},
+
+		isEmptyPane: function(pane) {
+			return L.dom.isEmpty(pane, function(n) { return n.classList.contains('cbi-tab-descr') });
 		},
 
 		getPathForPane: function(pane) {
@@ -1712,7 +1716,7 @@ return L.Class.extend({
 		},
 
 		updateTabs: function(ev, root) {
-			(root || document).querySelectorAll('[data-tab-title]').forEach(function(pane) {
+			(root || document).querySelectorAll('[data-tab-title]').forEach(L.bind(function(pane) {
 				var menu = pane.parentNode.previousElementSibling,
 				    tab = menu ? menu.querySelector('[data-tab="%s"]'.format(pane.getAttribute('data-tab'))) : null,
 				    n_errors = pane.querySelectorAll('.cbi-input-invalid').length;
@@ -1720,7 +1724,7 @@ return L.Class.extend({
 				if (!menu || !tab)
 					return;
 
-				if (L.dom.isEmpty(pane)) {
+				if (this.isEmptyPane(pane)) {
 					tab.style.display = 'none';
 					tab.classList.remove('flash');
 				}
@@ -1738,7 +1742,7 @@ return L.Class.extend({
 					tab.removeAttribute('data-errors');
 					tab.removeAttribute('data-tooltip');
 				}
-			});
+			}, this));
 		},
 
 		switchTab: function(ev) {
