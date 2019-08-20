@@ -1660,6 +1660,8 @@ return L.Class.extend({
 
 				this.setActiveTabId(panes[selected], selected);
 			}
+
+			this.updateTabs(group);
 		},
 
 		isEmptyPane: function(pane) {
