@@ -132,18 +132,19 @@ var CBIMap = CBINode.extend({
 		return Promise.all(tasks);
 	},
 
-	save: function(cb) {
+	save: function(cb, silent) {
 		this.checkDepends();
 
 		return this.parse()
 			.then(cb)
 			.then(uci.save.bind(uci))
 			.then(this.load.bind(this))
-			.then(this.renderContents.bind(this))
 			.catch(function(e) {
-				alert('Cannot save due to invalid values')
+				if (!silent)
+					alert('Cannot save due to invalid values');
+
 				return Promise.reject();
-			});
+			}).finally(this.renderContents.bind(this));
 	},
 
 	reset: function() {
@@ -658,14 +659,14 @@ var CBITypedSection = CBIAbstractSection.extend({
 		var config_name = this.uciconfig || this.map.config;
 
 		uci.add(config_name, this.sectiontype, name);
-		this.map.save();
+		return this.map.save(null, true);
 	},
 
 	handleRemove: function(section_id, ev) {
 		var config_name = this.uciconfig || this.map.config;
 
 		uci.remove(config_name, section_id);
-		this.map.save();
+		return this.map.save(null, true);
 	},
 
 	renderSectionAdd: function(extra_class) {
@@ -680,13 +681,11 @@ var CBITypedSection = CBIAbstractSection.extend({
 			createEl.classList.add(extra_class);
 
 		if (this.anonymous) {
-			createEl.appendChild(E('input', {
-				'type': 'submit',
+			createEl.appendChild(E('button', {
 				'class': 'cbi-button cbi-button-add',
-				'value': btn_title || _('Add'),
 				'title': btn_title || _('Add'),
-				'click': L.bind(this.handleAdd, this)
-			}));
+				'click': L.ui.createHandlerFn(this, 'handleAdd')
+			}, btn_title || _('Add')));
 		}
 		else {
 			var nameEl = E('input', {
@@ -701,12 +700,12 @@ var CBITypedSection = CBIAbstractSection.extend({
 					'type': 'submit',
 					'value': btn_title || _('Add'),
 					'title': btn_title || _('Add'),
-					'click': L.bind(function(ev) {
+					'click': L.ui.createHandlerFn(this, function(ev) {
 						if (nameEl.classList.contains('cbi-input-invalid'))
 							return;
 
-						this.handleAdd(ev, nameEl.value);
-					}, this)
+						return this.handleAdd(ev, nameEl.value);
+					})
 				})
 			]);
 
@@ -743,14 +742,12 @@ var CBITypedSection = CBIAbstractSection.extend({
 			if (this.addremove) {
 				sectionEl.appendChild(
 					E('div', { 'class': 'cbi-section-remove right' },
-						E('input', {
-							'type': 'submit',
+						E('button', {
 							'class': 'cbi-button',
 							'name': 'cbi.rts.%s.%s'.format(config_name, cfgsections[i]),
-							'value': _('Delete'),
 							'data-section-id': cfgsections[i],
-							'click': L.bind(this.handleRemove, this, cfgsections[i])
-						})));
+							'click': L.ui.createHandlerFn(this, 'handleRemove', cfgsections[i])
+						}, _('Delete'))));
 			}
 
 			if (!this.anonymous)
@@ -1004,7 +1001,7 @@ var CBITableSection = CBITypedSection.extend({
 					'class': 'cbi-button cbi-button-remove',
 					'click': L.bind(function(sid, ev) {
 						uci.remove(config_name, sid);
-						this.map.save();
+						this.map.save(null, true);
 					}, this, section_id)
 				})
 			);
@@ -1283,7 +1280,7 @@ var CBINamedSection = CBIAbstractSection.extend({
 		    config_name = this.uciconfig || this.map.config;
 
 		uci.add(config_name, this.sectiontype, section_id);
-		this.map.save();
+		return this.map.save(null, true);
 	},
 
 	handleRemove: function(ev) {
@@ -1291,7 +1288,7 @@ var CBINamedSection = CBIAbstractSection.extend({
 		    config_name = this.uciconfig || this.map.config;
 
 		uci.remove(config_name, section_id);
-		this.map.save();
+		return this.map.save(null, true);
 	},
 
 	renderContents: function(data) {
@@ -1315,12 +1312,10 @@ var CBINamedSection = CBIAbstractSection.extend({
 			if (this.addremove) {
 				sectionEl.appendChild(
 					E('div', { 'class': 'cbi-section-remove right' },
-						E('input', {
-							'type': 'submit',
+						E('button', {
 							'class': 'cbi-button',
-							'value': _('Delete'),
-							'click': L.bind(this.handleRemove, this)
-						})));
+							'click': L.ui.createHandlerFn(this, 'handleRemove')
+						}, _('Delete'))));
 			}
 
 			sectionEl.appendChild(E('div', {
@@ -1332,12 +1327,10 @@ var CBINamedSection = CBIAbstractSection.extend({
 		}
 		else if (this.addremove) {
 			sectionEl.appendChild(
-				E('input', {
-					'type': 'submit',
+				E('button', {
 					'class': 'cbi-button cbi-button-add',
-					'value': _('Add'),
-					'click': L.bind(this.handleAdd, this)
-				}));
+					'click': L.ui.createHandlerFn(this, 'handleAdd')
+				}, _('Add')));
 		}
 
 		L.dom.bindClassInstance(sectionEl, this);
