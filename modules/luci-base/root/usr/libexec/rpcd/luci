@@ -335,6 +335,7 @@ local methods = {
 			rv.odhcpd        = fs.access("/usr/sbin/odhcpd")
 			rv.zram          = fs.access("/sys/class/zram-control")
 			rv.sysntpd       = fs.readlink("/usr/sbin/ntpd") and true
+			rv.ipv6          = fs.access("/proc/net/ipv6_route")
 
 			local wifi_features = { "eap", "11n", "11ac", "11r", "11w", "acs", "sae", "owe", "suiteb192" }
 
@@ -406,6 +407,51 @@ local methods = {
 			end
 
 			return rv
+		end
+	},
+
+	getHostname = {
+		call = function()
+			local fs = require "nixio.fs"
+			local hostname, code, err = fs.readfile("/proc/sys/kernel/hostname")
+			if err then
+				return { error = err }, 1
+			end
+			return { result = hostname:gsub("\n$", "") }
+		end
+	},
+
+	getTTYDevices = {
+		args = { with_cdc = false, with_tts = true },
+		call = function(args)
+			local fs = require "nixio.fs"
+			local iter = fs.glob("/dev/tty[A-Z]*")
+			local rv = {}
+			if iter then
+				local node
+				for node in iter do
+					rv[#rv+1] = node
+				end
+			end
+			if args.with_tts then
+				iter = fs.glob("/dev/tts/*")
+				if iter then
+					local node
+					for node in iter do
+						rv[#rv+1] = node
+					end
+				end
+			end
+			if args.with_cdc then
+				iter = fs.glob("/dev/cdc-wdm*")
+				if iter then
+					local node
+					for node in iter do
+						rv[#rv+1] = node
+					end
+				end
+			end
+			return { result = rv }
 		end
 	}
 }
