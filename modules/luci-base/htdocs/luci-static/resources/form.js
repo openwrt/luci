@@ -1153,24 +1153,18 @@ var CBITableSection = CBITypedSection.extend({
 			}
 		}
 
-		//ev.target.classList.add('spinning');
 		Promise.resolve(this.addModalOptions(s, section_id, ev)).then(L.bind(m.render, m)).then(L.bind(function(nodes) {
-			//ev.target.classList.remove('spinning');
 			L.ui.showModal(title, [
 				nodes,
 				E('div', { 'class': 'right' }, [
-					E('input', {
-						'type': 'button',
+					E('button', {
 						'class': 'btn',
-						'click': L.bind(this.handleModalCancel, this, m),
-						'value': _('Dismiss')
-					}), ' ',
-					E('input', {
-						'type': 'button',
+						'click': L.ui.createHandlerFn(this, 'handleModalCancel', m)
+					}, _('Dismiss')), ' ',
+					E('button', {
 						'class': 'cbi-button cbi-button-positive important',
-						'click': L.bind(this.handleModalSave, this, m),
-						'value': _('Save')
-					})
+						'click': L.ui.createHandlerFn(this, 'handleModalSave', m)
+					}, _('Save'))
 				])
 			], 'cbi-modal');
 		}, this)).catch(L.error);
