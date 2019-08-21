@@ -24,7 +24,7 @@ msgstr "Prefijos ASN"
 msgid "ASN/Country"
 msgstr "ASN/País"
 
-#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:137
+#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:147
 msgid "Additional trigger delay in seconds before banIP processing begins."
 msgstr ""
 "Demora adicional del disparador en segundos antes de que comience el "
@@ -45,6 +45,13 @@ msgstr "Directorio de copia de seguridad"
 #: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:122
 msgid "Backup Mode"
 msgstr "Modo de copia de seguridad"
+
+#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:135
+msgid ""
+"Blacklist auto addons are stored temporary in the IPSet and saved "
+"permanently in the local blacklist. Disable this option to prevent the local "
+"save."
+msgstr ""
 
 #: applications/luci-app-banip/luasrc/view/banip/ipsetview.htm:45
 msgid "Check the current available IPSets."
@@ -74,11 +81,11 @@ msgstr ""
 msgid "DNS Chain"
 msgstr "Cadena de DNS"
 
-#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:172
+#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:182
 msgid "DST Target IPv4"
 msgstr "Objetivo DST IPv4"
 
-#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:204
+#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:214
 msgid "DST Target IPv6"
 msgstr "Objetivo DST IPv6"
 
@@ -102,7 +109,7 @@ msgstr ""
 "No actualice automáticamente las listas de bloqueo durante el inicio, use "
 "sus copias de seguridad en su lugar."
 
-#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:142
+#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:152
 msgid "Download Options"
 msgstr "Opciones de descarga"
 
@@ -199,19 +206,19 @@ msgstr ""
 msgid "Interface Selection"
 msgstr "Selección de interfaz"
 
-#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:161
+#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:171
 msgid "LAN Forward Chain IPv4"
 msgstr "Cadena de reenvío LAN IPv4"
 
-#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:193
+#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:203
 msgid "LAN Forward Chain IPv6"
 msgstr "Cadena de reenvío LAN IPv6"
 
-#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:156
+#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:166
 msgid "LAN Input Chain IPv4"
 msgstr "Cadena de entrada LAN IPv4"
 
-#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:188
+#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:198
 msgid "LAN Input Chain IPv6"
 msgstr "Cadena de entrada LAN IPv6"
 
@@ -237,6 +244,14 @@ msgstr "Cargando"
 #: applications/luci-app-banip/luasrc/view/banip/ripeview.htm:58
 msgid "Loading ..."
 msgstr "CArgando..."
+
+#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:134
+msgid "Local Save Blacklist Addons"
+msgstr ""
+
+#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:139
+msgid "Local Save Whitelist Addons"
+msgstr ""
 
 #: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:104
 msgid "Low Priority Service"
@@ -298,11 +313,11 @@ msgstr "Recargar IPSets"
 msgid "Runtime Information"
 msgstr "Información de tiempo de ejecución"
 
-#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:166
+#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:176
 msgid "SRC Target IPv4"
 msgstr "Objetivo SRC IPv4"
 
-#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:198
+#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:208
 msgid "SRC Target IPv6"
 msgstr "Objetivo SRC IPv6"
 
@@ -340,7 +355,7 @@ msgstr ""
 "Tamaño de la cola de descarga para manejar descargas &amp; Procesamiento de "
 "IPset en paralelo (predeterminado es '4')."
 
-#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:143
+#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:153
 msgid ""
 "Special options for the selected download utility, e.g. '--timeout=20 --no-"
 "check-certificate -O'."
@@ -469,7 +484,7 @@ msgstr ""
 "Este formulario le permite modificar el contenido del archivo de "
 "configuración de banIP principal (/etc/config/banip)."
 
-#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:136
+#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:146
 msgid "Trigger Delay"
 msgstr "Retardo de disparo"
 
@@ -481,21 +496,28 @@ msgstr "Registro de depuración detallado"
 msgid "View Logfile"
 msgstr "Ver archivo de registro"
 
-#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:151
+#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:161
 msgid "WAN Forward Chain IPv4"
 msgstr "Cadena de reenvío WAN IPv4"
 
-#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:183
+#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:193
 msgid "WAN Forward Chain IPv6"
 msgstr "Cadena de reenvío WAN IPv6"
 
-#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:146
+#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:156
 msgid "WAN Input Chain IPv4"
 msgstr "Cadena de entrada WAN IPv4"
 
-#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:178
+#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:188
 msgid "WAN Input Chain IPv6"
 msgstr "Cadena de entrada WAN IPv6"
+
+#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:140
+msgid ""
+"Whitelist auto addons are stored temporary in the IPSet and saved "
+"permanently in the local whitelist. Disable this option to prevent the local "
+"save."
+msgstr ""
 
 #: applications/luci-app-banip/luasrc/view/banip/ripeview.htm:93
 msgid "Whois Information"

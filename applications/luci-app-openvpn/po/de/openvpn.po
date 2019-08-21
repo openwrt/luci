@@ -13,8 +13,8 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.0.6\n"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:798
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:801
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:822
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:825
 msgid "%s"
 msgstr "%s"
 
@@ -38,7 +38,7 @@ msgstr "Netzwerkrouten nach Verbindungsaufbau einrichten"
 msgid "Add template based configuration"
 msgstr "Hinzufügen einer vorlagenbasierten Konfiguration"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:722
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:746
 msgid "Additional authentication over TLS"
 msgstr "Erweiterte Authentifikation über TLS"
 
@@ -51,7 +51,7 @@ msgstr "Netzwerkverkehr zwischen Teilnehmern zulassen"
 msgid "Allow multiple clients with same certificate"
 msgstr "Mehrere Teilnehmer mit selbem Zertifikat erlauben"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:714
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:738
 msgid "Allow only one session"
 msgstr "Nur eine einzige Verbindung zulassen"
 
@@ -106,7 +106,7 @@ msgstr "Prozess-Priorität anpassen"
 msgid "Change to directory before initialization"
 msgstr "<em>Vor</em> der Initialisierung in Verzeichnis wechseln"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:750
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:774
 msgid "Check peer certificate against a CRL"
 msgstr "Teilnehmerzertifikat mit Sperrliste abgleichen"
 
@@ -191,13 +191,14 @@ msgstr "Schnittstellenkonfiguration nicht durchführen"
 msgid "Don't add routes automatically"
 msgstr "Netzwerkrouten nicht automatisch einrichten"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:734
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:758
 msgid "Don't cache --askpass or --auth-user-pass passwords"
 msgstr "Authentifikationsdaten nicht zwischenspeichern"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:244
 msgid "Don't drop incoming tun packets with same destination as host"
-msgstr "Eingehende Tun-Pakete mit dem gleichen Ziel wie der Host nicht verwerfen"
+msgstr ""
+"Eingehende Tun-Pakete mit dem gleichen Ziel wie der Host nicht verwerfen"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:386
 msgid "Don't inherit global push options"
@@ -269,9 +270,11 @@ msgstr "Administratorschnittstelle aktivieren"
 msgid "Enabled"
 msgstr "Einschalten"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:726
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:750
 msgid "Encrypt and authenticate all control channel packets with the key"
-msgstr "Verschlüsseln und authentifizieren aller Kontrollkanalpakete mit dem Schlüssel"
+msgstr ""
+"Verschlüsseln und authentifizieren aller Kontrollkanalpakete mit dem "
+"Schlüssel"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:622
 msgid "Encryption cipher for packets"
@@ -301,11 +304,11 @@ msgstr ""
 "Wird im Servermodus ausgeführt, wann immer eine IPv4-Adresse/Route oder MAC-"
 "Adresse zur internen Routingtabelle von OpenVPN hinzugefügt wird"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:718
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:742
 msgid "Exit on TLS negotiation failure"
 msgstr "Terminieren nach fehlgeschlagenem Schlüsselaustausch"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:730
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:754
 msgid "Get PEM password from controlling tty before we daemonize"
 msgstr "PEM-Passwort von Konsole abfragen"
 
@@ -351,7 +354,7 @@ msgstr "IP-Adresse der Gegenstelle bei Neustarts beibehalten"
 msgid "Keep tun/tap device open on restart"
 msgstr "TUN/TAP Schnittelle bei Neustarts offen halten"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:710
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:734
 msgid "Key transition window"
 msgstr "Maximaler Zeitraum für Schlüsselwechsel"
 
@@ -393,7 +396,7 @@ msgstr "Anzahl der Zeilen im Protokoll-Zwischenspeicher"
 msgid "OVPN configuration file upload"
 msgstr "OVPN-Konfigurationsdatei hochladen"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:738
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:762
 msgid "Only accept connections from given X509 name"
 msgstr "Nur Verbindungen vom angegebenem X.509 Name zulassen"
 
@@ -505,15 +508,15 @@ msgstr "Entfernter Rechnername oder IP-Adresse"
 msgid "Remote ping timeout"
 msgstr "Ping-Timeout für Gegenstellen"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:694
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:718
 msgid "Renegotiate data chan. key after bytes"
 msgstr "Schlüssel nach maximale Verkehrsmenge neu aushandeln"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:698
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:722
 msgid "Renegotiate data chan. key after packets"
 msgstr "Schlüssel nach maximaler Anzahl von Paketen neu aushandeln"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:702
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:726
 msgid "Renegotiate data chan. key after seconds"
 msgstr "Schlüssel nach maximaler Verbindungsdauer neu aushandeln"
 
@@ -521,11 +524,11 @@ msgstr "Schlüssel nach maximaler Verbindungsdauer neu aushandeln"
 msgid "Replay protection sliding window size"
 msgstr "Fenstergröße für \"Replay\"-Schutz"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:742
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:766
 msgid "Require explicit designation on certificate"
 msgstr "Verwendungszweck von Zertifikaten überprüfen"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:746
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:770
 msgid "Require explicit key usage on certificate"
 msgstr "Zertifikat explizit auf einfachen Verwendungszweck prüfen"
 
@@ -533,11 +536,11 @@ msgstr "Zertifikat explizit auf einfachen Verwendungszweck prüfen"
 msgid "Restart after remote ping timeout"
 msgstr "Neu Starten nach Ping-Timeout an Gegenstellen"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:770
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:794
 msgid "Restrict the allowed ciphers to be negotiated"
 msgstr "Einschränkung der zulässigen zu verhandelnden Verschlüsselungen"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:690
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:714
 msgid "Retransmit timeout on TLS control channel"
 msgstr "TLS Timeout"
 
@@ -721,11 +724,11 @@ msgstr "Lokaler TCP oder UDP Port"
 msgid "TCP/UDP port # for remote (default=1194)"
 msgstr "TCP oder UDP Port der Gegenstelle"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:686
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:710
 msgid "TLS 1.3 or newer cipher"
 msgstr "TLS 1.3 (oder neuer) Verschlüsselungsalgorithmus"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:682
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:702
 msgid "TLS cipher"
 msgstr "TLS Verschlüsselungsalgorithmus"
 
@@ -754,16 +757,16 @@ msgstr ""
 "Die OVPN-Konfigurationsdatei (%s) konnte nicht gefunden werden, bitte "
 "überprüfen Sie Ihre Konfiguration."
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:758
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:782
 msgid "The highest supported TLS version"
 msgstr "Die höchste unterstützte TLS-Version"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:762
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:786
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-basic.lua:73
 msgid "The key direction for 'tls-auth' and 'secret' options"
 msgstr "Schlüssel-Richtung für die Optionen 'tls-auth' und 'secret'"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:754
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:778
 msgid "The lowest supported TLS version"
 msgstr "Die niedrigste unterstützte TLS-Version"
 
@@ -775,11 +778,11 @@ msgstr ""
 "Die Größe der OVPN-Konfigurationsdatei (%s) ist zu groß für die Online-"
 "Bearbeitung in der LuCI (&ge; 100KB)."
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:766
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:790
 msgid "This completely disables cipher negotiation"
 msgstr "Vollständig Deaktivierung der Chiffren-Verhandlung"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:706
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:730
 msgid "Timeframe for key exchange"
 msgstr "Maximaler Zeitraum für Schlüsselaustausch"
 
