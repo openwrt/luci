@@ -1635,6 +1635,9 @@ var CBIDummyValue = CBIValue.extend({
 			hiddenEl.render()
 		]);
 	},
+
+	remove: function() {},
+	write: function() {}
 });
 
 var CBIButtonValue = CBIValue.extend({
