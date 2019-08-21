@@ -172,6 +172,7 @@ return L.view.extend({
 
 		o = s.taboption('advanced', widgets.DeviceSelect, 'device', _('Covered devices'), _('Use this option to classify zone traffic by raw, non-<em>uci</em> managed network devices.'));
 		o.modalonly = true;
+		o.noaliases = true;
 		o.multiple = true;
 
 		o = s.taboption('advanced', form.DynamicList, 'subnet', _('Covered subnets'), _('Use this option to classify zone traffic by source or destination subnet instead of networks or devices.'));
