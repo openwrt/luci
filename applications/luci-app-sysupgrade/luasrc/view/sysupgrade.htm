@@ -1,0 +1,51 @@
+<%
+
+if pcall(dofile, "/etc/openwrt_release") and _G.DISTRIB_RELEASE then
+	version = _G.DISTRIB_RELEASE
+else
+    version = "SNAPSHOT"
+end
+
+%>
+<%+header%>
+<h2 name="content"><%:Sysupgrade%></h2>
+<p>Check if a new version of OpenWrt is available for your device and apply the update accordingly.</p>
+<br />
+<div style="display: none" id="error" class="alert-message error"></div>
+<div style="display: none" id="info" class="alert-message info"></div>
+<div style="display: none" id="success" class="alert-message success"></div>
+<div id="device-info"></div>
+<br />
+<div id="download" style="display: none">
+    <br />
+    <label class="cbi-value-title" for="keep">
+        <b>Keep current configuration/settings (requires a compatible firmware):</b>
+        <input name="keep" id="keep" checked="checked" type="checkbox">
+    </label>
+    <br />
+    <label class="cbi-value-title" for="packages">
+        <b>Retain all the packages (uses <a href="https://github.com/aparcar/attendedsysupgrade-server" target="_blank">Attended Sysupgrade Server</a>):</b>
+        <input name="packages" id="packages" checked="checked" type="checkbox" onchange="toggleRetainPackageWarning()">
+    </label>
+    <div style="display: none" id="packages-warning" class="alert-message warning">
+        You chose to not retain packages. This means any package installed by you will be lost after the upgrade like a hard-reset.
+    </div>
+    <br />
+    <br />
+    <input class="cbi-button cbi-button-action important" type="button" value="<%:Download and Update%>" onclick="downloadAndApplyImage()" />
+    <br />
+    <br />
+</div>
+<input class="cbi-button cbi-button-action" type="button" value="<%:Check for Updates%>" onclick="checkForUpdates()" />
+
+
+
+<script type="text/javascript">
+    var openwrtServer = 'https://aparcar.stephen304.com/download/json-demo/openwrt/';
+    var origin = document.location.href.replace(location.pathname, '');
+	var ubusURL = origin + '/ubus/';
+    var ubusRpcSession = '<%=luci.dispatcher.context.authsession%>';
+    var version = '<%=version%>';
+</script>
+<script type="text/javascript" src="<%=resource%>/sysupgrade.js"></script>
+<%+footer%>
