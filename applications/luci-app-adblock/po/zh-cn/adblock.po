@@ -15,11 +15,7 @@ msgstr ""
 "X-Generator: Gtranslator 3.30.1\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:154
-msgid "'Jail' Blocklist Creation"
-msgstr "“Jail”拦截列表创建"
-
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:70
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:78
 msgid ""
 "<b>Caution:</b> To prevent OOM exceptions on low memory devices with less "
 "than 64 MB free RAM, please only select a few of them!"
@@ -37,15 +33,15 @@ msgstr "动作"
 msgid "Adblock"
 msgstr "Adblock"
 
-#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:141
+#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:145
 msgid "Adblock Status"
 msgstr "Adblock 状态"
 
-#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:147
+#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:151
 msgid "Adblock Version"
 msgstr "Adblock 版本"
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:179
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:182
 msgid "Additional trigger delay in seconds before adblock processing begins."
 msgstr "触发 Adblock 开始处理前的额外延迟（秒）。"
 
@@ -58,21 +54,22 @@ msgstr "高级"
 msgid "Answer"
 msgstr "回答"
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:88
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:96
 msgid "Archive Categories"
 msgstr "存档类别"
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:116
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:146
+#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:175
 msgid "Backup Directory"
 msgstr "备份目录"
-
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:123
-msgid "Backup Mode"
-msgstr "备份模式"
 
 #: applications/luci-app-adblock/luasrc/view/adblock/report.htm:106
 msgid "Blacklist"
 msgstr "黑名单"
+
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:169
+msgid "Blacklist File"
+msgstr ""
 
 #: applications/luci-app-adblock/luasrc/view/adblock/report.htm:274
 msgid "Blocked DNS Queries"
@@ -83,7 +80,7 @@ msgstr "已拦截的 DNS 请求"
 msgid "Blocked Domain"
 msgstr "已拦截的域名"
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:69
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:77
 msgid "Blocklist Sources"
 msgstr "拦截列表来源"
 
@@ -91,15 +88,7 @@ msgstr "拦截列表来源"
 msgid "Blocklist not found!"
 msgstr "拦截列表未找到！"
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:155
-msgid ""
-"Builds an additional 'Jail' list (/tmp/adb_list.jail) to block access to all "
-"domains except those listed in the whitelist file."
-msgstr ""
-"构建一个额外的“Jail”列表（/tmp/adb_list.jail），除白名单文件中列出的域名外，"
-"阻止访问其他所有的域名。"
-
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:48
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:56
 msgid ""
 "Choose 'none' to disable automatic startups, 'timed' to use a classic "
 "timeout (default 30 sec.) or select another trigger interface."
@@ -130,39 +119,49 @@ msgstr "Adblock 配置工具，通过 DNS 来拦截广告和阻止域名。"
 msgid "Count"
 msgstr "计数"
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:113
-msgid ""
-"Create compressed blocklist backups, they will be used in case of download "
-"errors or during startup in backup mode."
-msgstr "创建压缩的拦截列表备份，它们将在下载错误或备份模式启动期间使用。"
-
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:24
-#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:159
 msgid "DNS Backend (DNS Directory)"
 msgstr "DNS 后端（DNS 目录）"
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:167
+#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:163
+msgid "DNS Backend, DNS Directory"
+msgstr ""
+
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:34
+msgid "DNS Blocking Variant"
+msgstr ""
+
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:164
 msgid "DNS Directory"
 msgstr "DNS 目录"
 
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:127
+msgid "DNS File Reset"
+msgstr ""
+
 #: applications/luci-app-adblock/luasrc/controller/adblock.lua:20
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:134
 msgid "DNS Query Report"
 msgstr "DNS 查询报告"
+
+#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:169
+msgid "DNS Variant, DNS File Reset"
+msgstr ""
 
 #: applications/luci-app-adblock/luasrc/view/adblock/report.htm:81
 #: applications/luci-app-adblock/luasrc/view/adblock/report.htm:89
 msgid "Date"
 msgstr "日期"
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:86
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:94
 msgid "Description"
 msgstr "描述"
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:124
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:36
 msgid ""
-"Do not automatically update blocklists during startup, use blocklist backups "
-"instead."
-msgstr "启动期间不要自动更新 blocklists，改用 blocklists 的备份。"
+"Dnsmasq also supports 'null' block variants, which may provide better "
+"response times."
+msgstr ""
 
 #: applications/luci-app-adblock/luasrc/view/adblock/report.htm:28
 #: applications/luci-app-adblock/luasrc/view/adblock/report.htm:71
@@ -175,13 +174,37 @@ msgstr "域名"
 msgid "Domain/Client/Date/Time"
 msgstr ""
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:35
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:43
 msgid "Download Utility"
 msgstr "下载工具"
 
-#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:153
+#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:157
 msgid "Download Utility (SSL Library)"
 msgstr "下载实用程序（SSL 库）"
+
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:152
+msgid "E-Mail Notification"
+msgstr ""
+
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:243
+msgid "E-Mail Notification Count"
+msgstr ""
+
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:238
+msgid "E-Mail Profile"
+msgstr ""
+
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:157
+msgid "E-Mail Receiver Address"
+msgstr ""
+
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:228
+msgid "E-Mail Sender Address"
+msgstr ""
+
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:233
+msgid "E-Mail Topic"
+msgstr ""
 
 #: applications/luci-app-adblock/luasrc/controller/adblock.lua:24
 msgid "Edit Blacklist"
@@ -195,31 +218,15 @@ msgstr "编辑设置"
 msgid "Edit Whitelist"
 msgstr "编辑白名单"
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:147
-msgid "Email Notification"
-msgstr "Email 提醒"
-
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:160
-msgid "Email Notification Count"
-msgstr "Email 提醒计数"
-
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:20
 msgid "Enable Adblock"
 msgstr "启用 Adblock"
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:112
-msgid "Enable Blocklist Backup"
-msgstr "启用 Blocklist 备份"
-
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:135
-msgid "Enable DNS Query Report"
-msgstr "启用 DNS 查询报告"
-
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:98
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:106
 msgid "Enable verbose debug logging in case of any processing error."
 msgstr "在出现任何处理错误的情况下启用详细调试日志记录。"
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:73
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:81
 msgid "Enabled"
 msgstr "已启用"
 
@@ -227,7 +234,7 @@ msgstr "已启用"
 msgid "End Date"
 msgstr "结束日期"
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:94
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:102
 msgid "Extra Options"
 msgstr "额外选项"
 
@@ -241,11 +248,11 @@ msgid ""
 "frame."
 msgstr ""
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:183
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:186
 msgid "Flush DNS Cache"
 msgstr "清空 DNS 缓存"
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:184
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:187
 msgid "Flush DNS Cache after adblock processing."
 msgstr "在 adblock 进程启动后清空 DNS 缓存。"
 
@@ -255,21 +262,25 @@ msgid ""
 "documentation</a>"
 msgstr "进一步信息<a href=\"%s\" target=\"_blank\">请访问在线文档</a>"
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:130
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:122
 msgid ""
 "For further performance improvements you can raise this value, e.g. '8' or "
 "'16' should be safe."
 msgstr "为了进一步提高性能，您可以提高此值，例如：8 或 16 应该是安全的。"
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:108
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:116
 msgid "Force Local DNS"
 msgstr "强制本地 DNS"
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:173
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:170
+msgid "Full path to the blacklist file."
+msgstr ""
+
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:176
 msgid "Full path to the whitelist file."
 msgstr "白名单文件的全路径。"
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:136
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:135
 msgid ""
 "Gather dns related network traffic via tcpdump to provide a DNS Query Report "
 "on demand."
@@ -281,7 +292,7 @@ msgstr "通过 tcpdump 收集 dns 有关的网络流量，以按需提供 DNS �
 msgid "Input file not found, please check your configuration."
 msgstr "输入文件未找到，请检查您的配置。"
 
-#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:171
+#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:187
 msgid "Last Run"
 msgstr "最后运行"
 
@@ -289,7 +300,7 @@ msgstr "最后运行"
 msgid "Latest DNS Queries"
 msgstr "最新的 DNS 查询"
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:47
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:55
 msgid ""
 "List of available network interfaces. Usually the startup will be triggered "
 "by the 'wan' interface."
@@ -300,13 +311,19 @@ msgid ""
 "List of supported DNS backends with their default list export directory."
 msgstr "支持的 DNS 后端列表及其默认列表导出目录。"
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:36
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:35
+msgid ""
+"List of supported DNS blocking variants. By default 'nxdomain' will be used "
+"for all DNS backends."
+msgstr ""
+
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:44
 msgid "List of supported and fully pre-configured download utilities."
 msgstr "支持和完全预配置的下载工具列表。"
 
 #: applications/luci-app-adblock/luasrc/view/adblock/query.htm:21
 #: applications/luci-app-adblock/luasrc/view/adblock/report.htm:221
-#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:90
+#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:92
 msgid "Loading"
 msgstr "加载中"
 
@@ -314,11 +331,15 @@ msgstr "加载中"
 msgid "Logfile"
 msgstr "日志文件"
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:101
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:109
 msgid "Low Priority Service"
 msgstr "低优先级服务"
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:128
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:239
+msgid "Mail profile used in 'msmtp' for adblock notification E-Mails."
+msgstr ""
+
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:120
 msgid "Max. Download Queue"
 msgstr "最大下载队列"
 
@@ -327,16 +348,16 @@ msgstr "最大下载队列"
 msgid "Name / IP-Address"
 msgstr "名称 / IP 地址"
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:82
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:90
 msgid "No"
 msgstr "否"
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:95
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:103
 msgid ""
 "Options for further tweaking in case the defaults are not suitable for you."
 msgstr "在默认设置并不适合您时的额外选项。"
 
-#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:165
+#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:181
 msgid "Overall Domains"
 msgstr "域名总览"
 
@@ -359,11 +380,11 @@ msgstr ""
 msgid "Please edit this file directly in a terminal session."
 msgstr "请在终端会话中直接编辑此文件。"
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:149
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:154
 msgid "Please note: this needs manual 'msmtp' package installation and setup."
 msgstr "请注意：这需要手动安装和设置“msmtp”软件包。"
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:137
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:136
 msgid "Please note: this needs manual 'tcpdump-mini' package installation."
 msgstr "请注意：这需要手动安装和设置“tcpdump-mini”软件包。"
 
@@ -375,30 +396,30 @@ msgstr "查询"
 msgid "Query domains"
 msgstr "查询域"
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:161
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:244
 msgid ""
-"Raise the minimum email notification count, to get emails if the overall "
-"count is less or equal to the given limit (default 0),"
+"Raise the minimum notification count, to get E-Mails if the overall count is "
+"less or equal to the given limit (default 0),"
 msgstr ""
-"如果总数小于或等于给定限制（默认为 0），请提高最小电子邮件通知数，以获取电子"
-"邮件。"
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:109
-msgid ""
-"Redirect all DNS queries from 'lan' zone to the local resolver, apply to udp "
-"and tcp protocol on ports 53, 853 and 5353."
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:158
+msgid "Receiver address for adblock notification E-Mails."
 msgstr ""
-"将所有 DNS 查询从“lan”区域重定向到本地解析器，适用于端口53、853和5353上的 "
-"udp 和 tcp 协议。"
+
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:117
+msgid ""
+"Redirect all DNS queries from 'lan' zone to the local resolver, applies to "
+"udp and tcp protocol on ports 53, 853 and 5353."
+msgstr ""
 
 #: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:22
 #: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:33
 #: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:44
-#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:103
+#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:105
 msgid "Refresh"
 msgstr "刷新"
 
-#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:186
+#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:202
 msgid "Refresh Blocklist Sources"
 msgstr "刷新拦截列表源"
 
@@ -406,49 +427,55 @@ msgstr "刷新拦截列表源"
 msgid "Refresh Report"
 msgstr "刷新报告"
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:211
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:214
 msgid "Report Chunk Count"
 msgstr "报告区块计数"
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:218
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:221
 msgid "Report Chunk Size"
 msgstr "报告区块大小"
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:140
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:139
 msgid "Report Directory"
 msgstr "报告目录"
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:188
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:191
 msgid "Report Interface"
 msgstr "报告接口"
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:205
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:208
 msgid "Report Listen Port(s)"
 msgstr ""
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:212
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:215
 msgid "Report chunk count used by tcpdump (default '5')."
 msgstr "tcpdump 将使用的报告区块计数（默认为“5”）。"
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:219
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:222
 msgid "Report chunk size used by tcpdump in MB (default '1')."
 msgstr "tcpdump 将使用的报告区块大小（MB）（默认为“1”）。"
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:189
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:192
 msgid ""
 "Reporting interface used by tcpdump, set to 'any' for multiple interfaces "
 "(default 'br-lan')."
+msgstr ""
+
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:128
+msgid ""
+"Resets the final DNS blockfile 'adb_list.overall' after loading through the "
+"DNS backend."
 msgstr ""
 
 #: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:31
 msgid "Resume"
 msgstr "恢复"
 
-#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:139
+#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:143
 msgid "Runtime Information"
 msgstr "运行信息"
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:76
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:84
 msgid "SSL req."
 msgstr "SSL 要求"
 
@@ -458,25 +485,29 @@ msgstr "SSL 要求"
 msgid "Save"
 msgstr "保存"
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:148
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:153
 msgid ""
-"Send notification emails in case of a processing error or if domain count is "
-"&le; 0."
-msgstr "如果发生错误或域计数 &le; 0，发送通知电子邮件。"
+"Send notification E-Mails in case of a processing error or if domain count "
+"is &le; 0."
+msgstr ""
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:102
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:229
+msgid "Sender address for adblock notification E-Mails."
+msgstr ""
+
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:110
 msgid ""
 "Set the nice level to 'low priority' and the adblock background processing "
 "will take fewer resources from the system."
 msgstr "设置 nice 级别为“低优先级”，adblock 后台进程将从系统中获取更少的资源。"
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:129
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:121
 msgid ""
 "Size of the download queue to handle downloads &amp; list processing in "
-"parallel (default '8')."
-msgstr "处理下载队列的大小及并行处理列表（默认为“8”）。"
+"parallel (default '4')."
+msgstr ""
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:206
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:209
 msgid ""
 "Space separated list of reporting port(s) used by tcpdump (default: '53')."
 msgstr ""
@@ -485,34 +516,33 @@ msgstr ""
 msgid "Start Date"
 msgstr "开始日期"
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:46
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:54
 msgid "Startup Trigger"
 msgstr "启动触发器"
 
 #: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:20
 #: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:42
-#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:101
+#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:103
 msgid "Suspend"
 msgstr "暂停"
 
-#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:178
+#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:194
 msgid "Suspend / Resume Adblock"
 msgstr "暂停/恢复 Adblock"
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:117
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:147
 msgid ""
-"Target directory for adblock backups. Please use only a non-volatile disk, e."
-"g. an external usb stick."
-msgstr "adblock 备份的目标目录。请仅使用非易失性磁盘，例如：一个外置 U 盘。"
-
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:141
-msgid ""
-"Target directory for dns related report files. Please use preferably a non-"
-"volatile disk, e.g. an external usb stick."
+"Target directory for adblock source backups. Default is '/tmp', please use "
+"preferably a non-volatile disk if available."
 msgstr ""
-"dns 相关报告文件的目标目录。请优先使用非易失性磁盘，例如：一个外置 U 盘。"
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:168
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:140
+msgid ""
+"Target directory for dns related report files. Default is '/tmp', please use "
+"preferably a non-volatile disk if available."
+msgstr ""
+
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:165
 msgid "Target directory for the generated blocklist 'adb_list.overall'."
 msgstr "生成拦截列表“adb_list.overall”的目标目录。"
 
@@ -526,11 +556,11 @@ msgstr "文件过大，无法使用 LuCI 的在线编辑（&ge; 100 KB）。"
 msgid "The syslog output, pre-filtered for adblock related messages only."
 msgstr "系统日志输出，仅针对 adblock 相关的消息进行了预筛选。"
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:103
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:190
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:207
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:213
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:220
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:111
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:193
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:210
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:216
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:223
 msgid "This change requires a manual service stop/re-start to take effect."
 msgstr "此更改需要手动停止/重启服务才能生效。"
 
@@ -556,6 +586,12 @@ msgid ""
 "for whitelisting."
 msgstr "此表单允许您查询某些域的活动块列表，例如用于列出白名单。"
 
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:129
+msgid ""
+"This option saves an enormous amount of storage space, but starts a small "
+"ubus/adblock monitor in the background."
+msgstr ""
+
 #: applications/luci-app-adblock/luasrc/view/adblock/report.htm:82
 #: applications/luci-app-adblock/luasrc/view/adblock/report.htm:89
 msgid "Time"
@@ -571,15 +607,19 @@ msgstr "要覆盖默认路径，请使用下面额外部分中的“DNS 目录�
 msgid "Top 10 Reporting"
 msgstr "前十报告"
 
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:234
+msgid "Topic for adblock notification E-Mails."
+msgstr ""
+
 #: applications/luci-app-adblock/luasrc/view/adblock/report.htm:268
 msgid "Total DNS Queries"
 msgstr "DNS 查询总数"
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:178
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:181
 msgid "Trigger Delay"
 msgstr "触发延迟"
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:97
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:105
 msgid "Verbose Debug Logging"
 msgstr "详细的调试记录"
 
@@ -591,25 +631,99 @@ msgstr "正在等待命令完成…"
 msgid "Whitelist"
 msgstr "白名单"
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:172
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:175
 msgid "Whitelist File"
 msgstr "白名单文件"
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:80
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:88
 msgid "Yes"
 msgstr "是"
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:156
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:245
 msgid ""
-"You can use this restrictive blocklist e.g. for guest wifi or kidsafe "
-"configurations."
-msgstr "您可以使用此限制性拦截列表，例如访客 wifi 或家长模式。"
+"e.g. to receive an E-Mail notification with every adblock run set this value "
+"to 200000."
+msgstr ""
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:162
-msgid ""
-"e.g. to receive an email notification with every adblock update set this "
-"value to 150000."
-msgstr "例如：要接收每个 adblock 更新的电子邮件通知时将此值设置为 150000。"
+#~ msgid "'Jail' Blocklist Creation"
+#~ msgstr "“Jail”拦截列表创建"
+
+#~ msgid "Backup Mode"
+#~ msgstr "备份模式"
+
+#~ msgid ""
+#~ "Builds an additional 'Jail' list (/tmp/adb_list.jail) to block access to "
+#~ "all domains except those listed in the whitelist file."
+#~ msgstr ""
+#~ "构建一个额外的“Jail”列表（/tmp/adb_list.jail），除白名单文件中列出的域名"
+#~ "外，阻止访问其他所有的域名。"
+
+#~ msgid ""
+#~ "Create compressed blocklist backups, they will be used in case of "
+#~ "download errors or during startup in backup mode."
+#~ msgstr "创建压缩的拦截列表备份，它们将在下载错误或备份模式启动期间使用。"
+
+#~ msgid ""
+#~ "Do not automatically update blocklists during startup, use blocklist "
+#~ "backups instead."
+#~ msgstr "启动期间不要自动更新 blocklists，改用 blocklists 的备份。"
+
+#~ msgid "Email Notification"
+#~ msgstr "Email 提醒"
+
+#~ msgid "Email Notification Count"
+#~ msgstr "Email 提醒计数"
+
+#~ msgid "Enable Blocklist Backup"
+#~ msgstr "启用 Blocklist 备份"
+
+#~ msgid "Enable DNS Query Report"
+#~ msgstr "启用 DNS 查询报告"
+
+#~ msgid ""
+#~ "Raise the minimum email notification count, to get emails if the overall "
+#~ "count is less or equal to the given limit (default 0),"
+#~ msgstr ""
+#~ "如果总数小于或等于给定限制（默认为 0），请提高最小电子邮件通知数，以获取电"
+#~ "子邮件。"
+
+#~ msgid ""
+#~ "Redirect all DNS queries from 'lan' zone to the local resolver, apply to "
+#~ "udp and tcp protocol on ports 53, 853 and 5353."
+#~ msgstr ""
+#~ "将所有 DNS 查询从“lan”区域重定向到本地解析器，适用于端口53、853和5353上的 "
+#~ "udp 和 tcp 协议。"
+
+#~ msgid ""
+#~ "Send notification emails in case of a processing error or if domain count "
+#~ "is &le; 0."
+#~ msgstr "如果发生错误或域计数 &le; 0，发送通知电子邮件。"
+
+#~ msgid ""
+#~ "Size of the download queue to handle downloads &amp; list processing in "
+#~ "parallel (default '8')."
+#~ msgstr "处理下载队列的大小及并行处理列表（默认为“8”）。"
+
+#~ msgid ""
+#~ "Target directory for adblock backups. Please use only a non-volatile "
+#~ "disk, e.g. an external usb stick."
+#~ msgstr "adblock 备份的目标目录。请仅使用非易失性磁盘，例如：一个外置 U 盘。"
+
+#~ msgid ""
+#~ "Target directory for dns related report files. Please use preferably a "
+#~ "non-volatile disk, e.g. an external usb stick."
+#~ msgstr ""
+#~ "dns 相关报告文件的目标目录。请优先使用非易失性磁盘，例如：一个外置 U 盘。"
+
+#~ msgid ""
+#~ "You can use this restrictive blocklist e.g. for guest wifi or kidsafe "
+#~ "configurations."
+#~ msgstr "您可以使用此限制性拦截列表，例如访客 wifi 或家长模式。"
+
+#~ msgid ""
+#~ "e.g. to receive an email notification with every adblock update set this "
+#~ "value to 150000."
+#~ msgstr "例如：要接收每个 adblock 更新的电子邮件通知时将此值设置为 150000。"
 
 #~ msgid ""
 #~ "Enable memory intense overall sort / duplicate removal on low memory "
