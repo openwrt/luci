@@ -29,21 +29,38 @@ function format_signal(bss) {
 }
 
 function format_encryption(bss) {
-	var enc = bss.encryption || { }
+	var enc = bss.encryption || {};
+	var wpa_label;
 
 	if (enc.wep === true)
 		return 'WEP';
-	else if (enc.wpa > 0)
+	else if (enc.wpa > 0) {
+		switch (enc.wpa) {
+			case 6:
+				wpa_label = _('mixed WPA2/WPA3');
+				break;
+			case 4:
+				wpa_label = _('WPA3');
+				break;
+			case 3:
+				wpa_label = _('mixed WPA/WPA2');
+				break;
+			case 2:
+				wpa_label = _('WPA2');
+				break;
+			default:
+				wpa_label = _('WPA');
+		}
+
 		return E('abbr', {
 			title: 'Pairwise: %h / Group: %h'.format(
 				enc.pair_ciphers.join(', '),
 				enc.group_ciphers.join(', '))
-			},
-			'%h - %h'.format(
-				(enc.wpa === 3) ? _('mixed WPA/WPA2') : (enc.wpa === 2 ? 'WPA2' : 'WPA'),
-				enc.auth_suites.join(', ')));
-	else
-		return E('em', enc.enabled ? _('unknown') : _('open'));
+		},
+		'%h - %h'.format(wpa_label, enc.auth_suites.join(', ')));
+	}
+
+	return E('em', enc.enabled ? _('unknown') : _('open'));
 }
 
 function format_actions(dev, type, bss) {
