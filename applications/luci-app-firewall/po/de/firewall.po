@@ -290,7 +290,7 @@ msgstr "Firewall - Portweiterleitungen"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:128
 msgid "Firewall - Traffic Rules"
-msgstr "Firewall - Verkehrsregeln"
+msgstr "Firewall - Traffic-Regeln"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:28
 msgid "Firewall - Zone Settings"
@@ -394,7 +394,7 @@ msgstr "nur IPv6"
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:39
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:111
 msgid "Input"
-msgstr "Eingang"
+msgstr "Eingehend"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:239
 #: applications/luci-app-firewall/luasrc/view/firewall/cbi_addforward.htm:30
@@ -480,11 +480,11 @@ msgstr "Neue SNAT-Regel"
 #: applications/luci-app-firewall/luasrc/view/firewall/cbi_addrule.htm:37
 #: applications/luci-app-firewall/luasrc/view/firewall/cbi_addrule.htm:47
 msgid "New forward rule"
-msgstr "Neuer Weiterleitungsregel"
+msgstr "Neue Weiterleitungsregel"
 
 #: applications/luci-app-firewall/luasrc/view/firewall/cbi_addrule.htm:17
 msgid "New input rule"
-msgstr "Neue Eingangsregel"
+msgstr "Neue eingehende Regel"
 
 #: applications/luci-app-firewall/luasrc/view/firewall/cbi_addforward.htm:22
 #: applications/luci-app-firewall/luasrc/view/firewall/cbi_addforward.htm:36
@@ -497,21 +497,21 @@ msgstr "Neues SNAT"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:211
 msgid "Only match incoming traffic directed at the given IP address."
-msgstr "Selektiere nur Verkehr der an die angegebene IP-Adresse gerichtet ist."
+msgstr "Selektiere nur Traffic der an die angegebene IP-Adresse gerichtet ist."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:174
 msgid "Only match incoming traffic from these MACs."
-msgstr "Selektiere nur Verkehr von den angegebenen MAC-Adressen."
+msgstr "Selektiere nur Traffic von den angegebenen MAC-Adressen."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:187
 msgid "Only match incoming traffic from this IP or range."
-msgstr "Selektiere nur Verkehr vom angebenem Quell-IP-Adressbereich."
+msgstr "Selektiere nur Traffic vom angebenem Quell-IP-Adressbereich."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:200
 msgid ""
 "Only match incoming traffic originating from the given source port or port "
 "range on the client host"
-msgstr "Selektiere nur Verkehr von den angegebenen Quell-Ports auf dem Client."
+msgstr "Selektiere nur Traffic von den angegebenen Quell-Ports auf dem Client."
 
 #: applications/luci-app-firewall/luasrc/view/firewall/cbi_addrule.htm:7
 msgid "Open ports on router"
@@ -525,7 +525,7 @@ msgstr "Anderes..."
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:40
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:112
 msgid "Output"
-msgstr "Ausgang"
+msgstr "Ausgehend"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:268
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:337
@@ -692,7 +692,7 @@ msgid ""
 "traffic flow."
 msgstr ""
 "Die Firewall erstellt Netzwerkzonen über bestimmte Netzwerkschnittstellen um "
-"den Netzverkehr zu trennen."
+"den Netzwerk-Traffic zu trennen."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:169
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:257
@@ -704,10 +704,10 @@ msgid ""
 "rule is <em>unidirectional</em>, e.g. a forward from lan to wan does "
 "<em>not</em> imply a permission to forward from wan to lan as well."
 msgstr ""
-"Die untenstehenen Optionen regeln die Verfahreinsweisen für Verkehr zwischen "
+"Die untenstehenen Optionen regeln die Verfahreinsweisen für Traffic zwischen "
 "dieser Zone (%s) und anderen Zonen. <em>Ziel-Zonen</em> decken "
-"weitergeleiteten Verkehr <strong>von %q</strong> ab. <em>Quell-Zonen</em> "
-"treffen auf weitergeleiteten Verkehr aus anderen Zonen zu, welcher "
+"weitergeleiteten Traffic <strong>von %q</strong> ab. <em>Quell-Zonen</em> "
+"treffen auf weitergeleiteten Traffic aus anderen Zonen zu, welcher "
 "<strong>an %q gerichtet</strong> ist. Die Weiterleitung gilt nur in eine "
 "Richtung, d.h. eine erlaubte Weiterleitung von LAN nach WAN impliziert "
 "<em>nicht</em> zusätzlich die Erlaubnis, auch von WAN nach LAN "
@@ -724,8 +724,8 @@ msgid ""
 msgstr ""
 "Diese Sektion definiert allgemeine Eigenschaften der %q Zone. Die "
 "<em>Eingang</em> und <em>Ausgang</em> Optionen regeln die Verfahrensweise "
-"für Verkehr der in diese Zone eintritt oder diese verlässt. "
-"<em>Weitergeleitet</em> trifft auf Verkehr zwischen verschiedenen "
+"für Traffic der in diese Zone eintritt oder diese verlässt. "
+"<em>Weitergeleitet</em> trifft auf Traffic zwischen verschiedenen "
 "Schnittstellen innerhalb dieser Zone zu. <em>Abgedeckte Netzwerke</em> "
 "definieren die Zugehörigkeit von Schnittstellen zu dieser Zone."
 
@@ -768,7 +768,7 @@ msgstr "Zu Quell-Port"
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:131
 #: applications/luci-app-firewall/luasrc/controller/firewall.lua:15
 msgid "Traffic Rules"
-msgstr "Verkehrsregeln"
+msgstr "Traffic-Regeln"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:129
 msgid ""
@@ -776,8 +776,8 @@ msgid ""
 "for example to reject traffic between certain hosts or to open WAN ports on "
 "the router."
 msgstr ""
-"Verkehrsregeln bestimmen den Fluss der Pakete zwischen verschiedenen Zonen, "
-"zum Beispiel um Verkehr zwischen bestimmten Rechnern zu unterbinden oder um "
+"Traffic-Regeln bestimmen den Fluss der Pakete zwischen verschiedenen Zonen, "
+"zum Beispiel um Traffic zwischen bestimmten Rechnern zu unterbinden oder um "
 "WAN-Ports auf dem Router zu öffnen."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:347
@@ -835,7 +835,7 @@ msgid "Zones"
 msgstr "Zonen"
 
 # Die richtige Übersetzung von ACCEPT im Firewallkontext ist nicht "Annehmen" sondern "Zulassen". Man kann ja keinen
-# ausgehenden Verkehr annehmen. 
+# ausgehenden Traffic annehmen. 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:332
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:47
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:119
