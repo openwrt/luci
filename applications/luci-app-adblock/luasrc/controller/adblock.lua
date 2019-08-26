@@ -53,12 +53,6 @@ function adb_action(name, ...)
 		luci.sys.call("/etc/init.d/adblock resume >/dev/null 2>&1")
 	elseif name == "do_refresh" then
 		luci.sys.call("/etc/init.d/adblock reload >/dev/null 2>&1")
-		local pid_file = "/var/run/adblock.pid"
-		if nixio.fs.access(pid_file) then
-			repeat
-				nixio.nanosleep(1)
-			until nixio.fs.readfile(pid_file) == ""
-		end
 	elseif name == "do_report" then
 		luci.sys.call("/etc/init.d/adblock report " ..table.concat(report_params, " ").. " >/dev/null 2>&1")
 		local rep_dir  = uci:get("adblock", "extra", "adb_repdir") or "/tmp"
@@ -88,6 +82,14 @@ function adb_action(name, ...)
 			then
 				nixio.fs.writefile(file, whitelist.. domain.. "\n")
 			end
+		end
+	end
+	if name == "do_suspend" or name == "do_resume" or name == "do_refresh" then
+		local pid_file = "/var/run/adblock.pid"
+		if nixio.fs.access(pid_file) then
+			repeat
+				nixio.nanosleep(1)
+			until nixio.fs.readfile(pid_file) == ""
 		end
 	end
 	luci.http.prepare_content("text/plain")	
