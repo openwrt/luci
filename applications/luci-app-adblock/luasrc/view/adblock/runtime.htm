@@ -6,6 +6,12 @@ This is free software, licensed under the Apache License, Version 2.0
 <%+adblock/adblock_css%>
 <script type="text/javascript">
 //<![CDATA[
+	function format(number)
+	{
+		var string = number.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+		return string;
+	}
+
 	function status_update(json)
 	{
 		var btn1         = document.getElementById("btn1");
@@ -52,7 +58,7 @@ This is free software, licensed under the Apache License, Version 2.0
 		document.getElementById("value_4").innerHTML = json.data.dns_backend || "-";
 		document.getElementById("value_5").innerHTML = json.data.dns_variant || "-";
 		document.getElementById("value_6").innerHTML = json.data.backup_dir || "-";
-		document.getElementById("value_7").innerHTML = json.data.overall_domains || "-";
+		document.getElementById("value_7").innerHTML = format(json.data.overall_domains) || "-";
 		document.getElementById("value_8").innerHTML = json.data.last_rundate || "-";
 	}
 
