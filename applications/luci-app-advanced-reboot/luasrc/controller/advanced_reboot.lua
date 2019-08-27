@@ -88,10 +88,11 @@ end
 
 function action_reboot()
   local uci = require "luci.model.uci".cursor()
+  local ip  = uci:get("network", "lan", "ipaddr")
   luci.template.render("admin_system/applyreboot", {
         title = luci.i18n.translate("Rebooting..."),
         msg   = luci.i18n.translate("The system is rebooting now.<br /> DO NOT POWER OFF THE DEVICE!<br /> Wait a few minutes before you try to reconnect. It might be necessary to renew the address of your computer to reach the device again, depending on your settings."),
-        addr  = luci.ip.new(uci:get("network", "lan", "ipaddr")) or "192.168.1.1"
+        addr  = luci.ip.new(type(ip) == "string" and ip or "192.168.1.1") or "192.168.1.1"
       })
   luci.sys.reboot()
 end
