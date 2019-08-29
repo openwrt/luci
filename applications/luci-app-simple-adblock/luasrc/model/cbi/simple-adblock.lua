@@ -181,7 +181,7 @@ dns = s:taboption("advanced", ListValue, "dns", translate("DNS Service"), transl
   .. [[<a href="]] .. readmeURL .. [[#dns-resolution-option" target="_blank">]]
   .. translate("README") .. [[</a>]] .. " " .. translate("for details."))
 dns:value("dnsmasq.addnhosts", translate("DNSMASQ Additional Hosts"))
-dns:value("dnsmasq.config", translate("DNSMASQ Config"))
+dns:value("dnsmasq.conf", translate("DNSMASQ Config"))
 dns:value("dnsmasq.servers", translate("DNSMASQ Servers File"))
 dns:value("unbound.adb_list", translate("Unbound AdBlock List"))
 dns.default = "dnsmasq.servers"
