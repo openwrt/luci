@@ -131,7 +131,7 @@ if s ~= nil then
 	end
 
 	local login_section = (s.ssid or "") .. (s.bssid or "")
-	login_section = login_section.lower(login_section:gsub("[^%w_]", "_"))
+	login_section = login_section:gsub("[^%w_]", "_")
 	local cmd = uci:get("travelmate", login_section, "command")
 	cmd_list = m:field(ListValue, "cmdlist", translate("Auto Login Script"),
 		translate("External script reference which will be called for automated captive portal logins."))
@@ -175,7 +175,7 @@ function wssid.write(self, section, value)
 		end
 	end
 	local login_section = (wssid:formvalue(section) or "") .. (bssid:formvalue(section) or "")
-	login_section = login_section.lower(login_section:gsub("[^%w_]", "_"))
+	login_section = login_section:gsub("[^%w_]", "_")
 	if not uci:get("travelmate", login_section) and cmd_list:formvalue(section) ~= "none" then
 		uci:set("travelmate", login_section, "login")
 	end
