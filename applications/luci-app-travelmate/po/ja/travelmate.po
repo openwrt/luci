@@ -21,6 +21,10 @@ msgstr "AP の場所:"
 msgid "Action"
 msgstr "アクション"
 
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:74
+msgid "Add Open Uplinks"
+msgstr ""
+
 #: applications/luci-app-travelmate/luasrc/view/travelmate/wifi_scan.htm:80
 msgid "Add Uplink"
 msgstr "アップリンクの追加"
@@ -29,7 +33,7 @@ msgstr "アップリンクの追加"
 msgid "Add Wireless Uplink Configuration"
 msgstr "無線アップリンク追加の設定"
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:113
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:118
 msgid ""
 "Additional trigger delay in seconds before travelmate processing begins."
 msgstr "Travelmate の処理が開始されるまでの、追加の遅延時間（秒）です。"
@@ -55,7 +59,13 @@ msgstr ""
 msgid "Automatic"
 msgstr "自動"
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:107
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:75
+msgid ""
+"Automatically add open uplinks like hotel captive portals to your wireless "
+"config."
+msgstr ""
+
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:112
 msgid ""
 "Automatically resets the 'Faulty Stations' list after n minutes. Default is "
 "'0' which means no expiry."
@@ -75,7 +85,7 @@ msgstr "BSSID"
 msgid "Back to overview"
 msgstr "概要へ戻る"
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:143
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:148
 msgid "Buffer size in bytes to prepare nearby scan results."
 msgstr "スキャン結果を準備するためのバッファー サイズ (byte) です。"
 
@@ -105,7 +115,7 @@ msgid ""
 msgstr ""
 "トラベル ルーター機能を有効化するための、 Travelmate パッケージの設定です。"
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:118
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:123
 msgid "Connection Limit"
 msgstr "接続制限"
 
@@ -173,7 +183,7 @@ msgstr "このアップリンクを編集"
 msgid "Enable Travelmate"
 msgstr "Travelmate の有効化"
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:98
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:103
 msgid "Enable Verbose Debug Logging"
 msgstr "詳細なデバッグ ログの有効化"
 
@@ -195,7 +205,7 @@ msgid ""
 "logins."
 msgstr ""
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:95
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:100
 msgid "Extra Options"
 msgstr "拡張オプション"
 
@@ -240,7 +250,7 @@ msgstr "TKIP"
 msgid "Force TKIP and CCMP (AES)"
 msgstr "TKIP と CCMP (AES)"
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:131
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:136
 msgid ""
 "How long should travelmate wait for a successful wlan uplink connection."
 msgstr "Travelmate が無線アップリンクへの接続成功を待つ時間です。"
@@ -261,7 +271,7 @@ msgstr "BSSID の無視"
 msgid "Input file not found, please check your configuration."
 msgstr "入力ファイルが見つかりません。設定を確認してください。"
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:130
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:135
 msgid "Interface Timeout"
 msgstr "インターフェース タイムアウト"
 
@@ -273,7 +283,7 @@ msgstr "インターフェース ウィザード"
 msgid "Last Run"
 msgstr "最終実行"
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:106
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:111
 msgid "List Auto Expiry"
 msgstr "リストの自動期限切れ"
 
@@ -281,7 +291,7 @@ msgstr "リストの自動期限切れ"
 msgid "Loading"
 msgstr "読み込み中"
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:125
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:130
 msgid ""
 "Minimum signal quality threshold as percent for conditional uplink (dis-) "
 "connections."
@@ -297,7 +307,7 @@ msgstr "下へ"
 msgid "Move up"
 msgstr "上へ"
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:75
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:80
 msgid "Name of the used uplink interface."
 msgstr "使用されるアップリンク インターフェースの名前です。"
 
@@ -309,16 +319,16 @@ msgstr "ネット エラーチェック"
 msgid "Open"
 msgstr "オープン"
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:96
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:101
 msgid ""
 "Options for further tweaking in case the defaults are not suitable for you."
 msgstr "デフォルトの設定が適切でない場合、さらに設定するためのオプションです。"
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:136
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:141
 msgid "Overall Timeout"
 msgstr "実行間隔"
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:137
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:142
 msgid "Overall retry timeout in seconds."
 msgstr "全体的な再試行タイムアウト（秒）です。"
 
@@ -379,7 +389,7 @@ msgstr ""
 "クを追加することができます。現在使用されているアップリンクは青色で、問題のあ"
 "るステーションは赤色で強調されます。"
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:102
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:107
 msgid "Radio Selection / Order"
 msgstr "無線の選択 / 順番"
 
@@ -396,7 +406,7 @@ msgstr "再起動"
 msgid "Restart Travelmate"
 msgstr "Travelmate の再起動"
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:103
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:108
 msgid ""
 "Restrict travelmate to a single radio (e.g. 'radio1') or change the overall "
 "scanning order (e.g. 'radio1 radio2 radio0')."
@@ -404,7 +414,7 @@ msgstr ""
 "Travelmate を単一の無線（例: 'radio1'）のみに制限したり、全体的なスキャンの順"
 "番を変更します（例: 'radio1 radio2 radio0'）。"
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:119
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:124
 msgid "Retry limit to connect to an uplink."
 msgstr "アップリンクへの接続を試行する回数です。"
 
@@ -435,7 +445,7 @@ msgstr "保存"
 msgid "Scan"
 msgstr "スキャン:"
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:142
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:147
 msgid "Scan Buffer Size"
 msgstr "スキャンバッファー サイズ"
 
@@ -443,7 +453,7 @@ msgstr "スキャンバッファー サイズ"
 msgid "Show/Hide QR-Codes"
 msgstr "QR コードを表示/非表示"
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:124
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:129
 msgid "Signal Quality Threshold"
 msgstr "シグナル品質閾値"
 
@@ -525,7 +535,7 @@ msgstr "Travelmate バージョン"
 msgid "Treat missing internet availability as an error."
 msgstr "インターネット可用性が無い場合をエラーとして扱います。"
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:112
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:117
 msgid "Trigger Delay"
 msgstr "トリガ遅延"
 
@@ -538,7 +548,7 @@ msgstr "不明"
 msgid "Up"
 msgstr "上へ"
 
-#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:74
+#: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:79
 msgid "Uplink / Trigger interface"
 msgstr "アップリンク / トリガー インターフェース"
 
