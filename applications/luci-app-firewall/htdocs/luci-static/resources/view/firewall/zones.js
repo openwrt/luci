@@ -84,7 +84,9 @@ return L.view.extend({
 		o.modalonly = true;
 		o.cfgvalue = function(section_id) {
 			var name = uci.get('firewall', section_id, 'name');
-
+			if (name == null) {
+				name = "this new zone"			
+			};
 			return _('This section defines common properties of %q. The <em>input</em> and <em>output</em> options set the default policies for traffic entering and leaving this zone while the <em>forward</em> option describes the policy for forwarded traffic between different networks within the zone. <em>Covered networks</em> specifies which available networks are members of this zone.')
 				.replace(/%s/g, name).replace(/%q/g, '"' + name + '"');
 		};
@@ -165,7 +167,9 @@ return L.view.extend({
 		o.modalonly = true;
 		o.cfgvalue = function(section_id) {
 			var name = uci.get('firewall', section_id, 'name');
-
+			if (name == null) {
+				name = "this new zone"			
+			};
 			return _('The options below control the forwarding policies between this zone (%s) and other zones. <em>Destination zones</em> cover forwarded traffic <strong>originating from %q</strong>. <em>Source zones</em> match forwarded traffic from other zones <strong>targeted at %q</strong>. The forwarding rule is <em>unidirectional</em>, e.g. a forward from lan to wan does <em>not</em> imply a permission to forward from wan to lan as well.')
 				.format(name);
 		};
@@ -254,8 +258,11 @@ return L.view.extend({
 		o.rawhtml = true;
 		o.modalonly = true;
 		o.cfgvalue = function(section_id) {
+			if (name == null) {
+				name = "this new zone"			
+			};
 			return _('The options below control the forwarding policies between this zone (%s) and other zones. <em>Destination zones</em> cover forwarded traffic <strong>originating from %q</strong>. <em>Source zones</em> match forwarded traffic from other zones <strong>targeted at %q</strong>. The forwarding rule is <em>unidirectional</em>, e.g. a forward from lan to wan does <em>not</em> imply a permission to forward from wan to lan as well.')
-				.format(uci.get('firewall', section_id, 'name'));
+				.format(name);
 		};
 
 		out = o = s.taboption('general', widgets.ZoneSelect, 'out', _('Allow forward to <em>destination zones</em>:'));
