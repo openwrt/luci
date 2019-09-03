@@ -1673,6 +1673,32 @@ var CBIHiddenValue = CBIValue.extend({
 	}
 });
 
+var CBIFileUpload = CBIValue.extend({
+	__name__: 'CBI.FileSelect',
+
+	__init__: function(/* ... */) {
+		this.super('__init__', arguments);
+
+		this.show_hidden = false;
+		this.enable_upload = true;
+		this.enable_remove = true;
+		this.root_directory = '/etc/luci-uploads';
+	},
+
+	renderWidget: function(section_id, option_index, cfgvalue) {
+		var browserEl = new ui.FileUpload((cfgvalue != null) ? cfgvalue : this.default, {
+			id: this.cbid(section_id),
+			name: this.cbid(section_id),
+			show_hidden: this.show_hidden,
+			enable_upload: this.enable_upload,
+			enable_remove: this.enable_remove,
+			root_directory: this.root_directory
+		});
+
+		return browserEl.render();
+	}
+});
+
 var CBISectionValue = CBIValue.extend({
 	__name__: 'CBI.ContainerValue',
 	__init__: function(map, section, option, cbiClass /*, ... */) {
@@ -1726,5 +1752,6 @@ return L.Class.extend({
 	DummyValue: CBIDummyValue,
 	Button: CBIButtonValue,
 	HiddenValue: CBIHiddenValue,
+	FileUpload: CBIFileUpload,
 	SectionValue: CBISectionValue
 });

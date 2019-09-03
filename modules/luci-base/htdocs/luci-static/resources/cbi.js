@@ -298,8 +298,6 @@ function cbi_init() {
 		                   node.getAttribute('data-type'));
 	}
 
-	document.querySelectorAll('[data-browser]').forEach(cbi_browser_init);
-
 	document.querySelectorAll('.cbi-tooltip:not(:empty)').forEach(function(s) {
 		s.parentNode.classList.add('cbi-tooltip-container');
 	});
@@ -328,29 +326,6 @@ function cbi_init() {
 	});
 
 	cbi_d_update();
-}
-
-function cbi_filebrowser(id, defpath) {
-	var field   = L.dom.elem(id) ? id : document.getElementById(id);
-	var browser = window.open(
-		cbi_strings.path.browser + (field.value || defpath || '') + '?field=' + field.id,
-		"luci_filebrowser", "width=300,height=400,left=100,top=200,scrollbars=yes"
-	);
-
-	browser.focus();
-}
-
-function cbi_browser_init(field)
-{
-	field.parentNode.insertBefore(
-		E('img', {
-			'src': L.resource('cbi/folder.gif'),
-			'class': 'cbi-image-button',
-			'click': function(ev) {
-				cbi_filebrowser(field, field.getAttribute('data-browser'));
-				ev.preventDefault();
-			}
-		}), field.nextSibling);
 }
 
 function cbi_validate_form(form, errmsg)

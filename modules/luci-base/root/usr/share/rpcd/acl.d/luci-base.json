@@ -20,7 +20,12 @@
 	"luci-access": {
 		"description": "Grant access to basic LuCI procedures",
 		"read": {
+			"file": {
+				"/": [ "list" ],
+				"/*": [ "list" ]
+			},
 			"ubus": {
+				"file": [ "list", "stat" ],
 				"iwinfo": [ "assoclist" ],
 				"luci": [ "getBoardJSON", "getDUIDHints", "getHostHints", "getIfaddrs", "getInitList", "getLocaltime", "getTimezones", "getDHCPLeases", "getLEDs", "getNetworkDevices", "getUSBDevices", "getHostname", "getTTYDevices", "getWirelessDevices" ],
 				"network.device": [ "status" ],
@@ -32,7 +37,12 @@
 			"uci": [ "*" ]
 		},
 		"write": {
+			"cgi-io": [ "upload", "/etc/luci-uploads/*" ],
+			"file": {
+				"/etc/luci-uploads/*": [ "write" ]
+			},
 			"ubus": {
+				"file": [ "remove" ],
 				"iwinfo": [ "scan" ],
 				"luci": [ "setInitAction", "setLocaltime" ],
 				"uci": [ "add", "apply", "confirm", "delete", "order", "set" ]
