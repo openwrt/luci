@@ -985,7 +985,7 @@ var CBITableSection = CBITypedSection.extend({
 					'value': more_label,
 					'title': more_label,
 					'class': 'cbi-button cbi-button-edit',
-					'click': L.bind(this.renderMoreOptionsModal, this, section_id)
+					'click': L.ui.createHandlerFn(this, 'renderMoreOptionsModal', section_id)
 				})
 			);
 		}
@@ -994,16 +994,14 @@ var CBITableSection = CBITypedSection.extend({
 			var btn_title = this.titleFn('removebtntitle', section_id);
 
 			L.dom.append(tdEl.lastElementChild,
-				E('input', {
-					'type': 'submit',
-					'value': btn_title || _('Delete'),
+				E('button', {
 					'title': btn_title || _('Delete'),
 					'class': 'cbi-button cbi-button-remove',
-					'click': L.bind(function(sid, ev) {
+					'click': L.ui.createHandlerFn(this, function(sid, ev) {
 						uci.remove(config_name, sid);
-						this.map.save(null, true);
-					}, this, section_id)
-				})
+						return this.map.save(null, true);
+					}, section_id)
+				}, [ btn_title || _('Delete') ])
 			);
 		}
 
@@ -1153,7 +1151,7 @@ var CBITableSection = CBITypedSection.extend({
 			}
 		}
 
-		Promise.resolve(this.addModalOptions(s, section_id, ev)).then(L.bind(m.render, m)).then(L.bind(function(nodes) {
+		return Promise.resolve(this.addModalOptions(s, section_id, ev)).then(L.bind(m.render, m)).then(L.bind(function(nodes) {
 			L.ui.showModal(title, [
 				nodes,
 				E('div', { 'class': 'right' }, [
@@ -1645,15 +1643,13 @@ var CBIButtonValue = CBIValue.extend({
 
 		if (value !== false)
 			L.dom.content(outputEl, [
-				E('input', {
+				E('button', {
 					'class': 'cbi-button cbi-button-%s'.format(this.inputstyle || 'button'),
-					'type': 'button',
-					'value': btn_title,
-					'click': L.bind(this.onclick || function(ev) {
+					'click': L.ui.createHandlerFn(this, this.onclick || function(ev) {
 						ev.target.previousElementSibling.value = ev.target.value;
-						this.map.save();
-					}, this)
-				})
+						return this.map.save();
+					})
+				}, [ btn_title ])
 			]);
 		else
 			L.dom.content(outputEl, ' - ');
