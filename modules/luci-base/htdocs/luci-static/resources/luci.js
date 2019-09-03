@@ -360,8 +360,13 @@
 						break;
 
 					case 'object':
-						content = JSON.stringify(opt.content);
-						contenttype = 'application/json';
+						if (!(opt.content instanceof FormData)) {
+							content = JSON.stringify(opt.content);
+							contenttype = 'application/json';
+						}
+						else {
+							content = opt.content;
+						}
 						break;
 
 					default:
