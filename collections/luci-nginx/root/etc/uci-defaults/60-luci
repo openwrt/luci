@@ -1,0 +1,16 @@
+#!/bin/sh
+
+if [ -n "$(pgrep uhttpd)" ]; then
+	/etc/init.d/uhttpd stop
+	/etc/init.d/uhttpd disable
+fi
+if [ -n "$(pgrep nginx)" ]; then
+	/etc/init.d/nginx restart
+else
+	/etc/init.d/nginx start
+fi
+if [ -n "$(pgrep luci)" ]; then
+	/etc/init.d/luci restart
+else
+	/etc/init.d/luci start
+fi
