@@ -321,8 +321,10 @@ function cbi_init() {
 		    widget = new (Function.prototype.bind.apply(L.ui[args[0]], args)),
 		    markup = widget.render();
 
-		markup.addEventListener('widget-change', cbi_d_update);
-		node.parentNode.replaceChild(markup, node);
+		Promise.resolve(markup).then(function(markup) {
+			markup.addEventListener('widget-change', cbi_d_update);
+			node.parentNode.replaceChild(markup, node);
+		});
 	});
 
 	cbi_d_update();
