@@ -274,6 +274,66 @@ local methods = {
 		end
 	},
 
+	getWirelessDevices = {
+		call = function(args)
+			local ubus = require "ubus".connect()
+			if not ubus then
+				return { error = "Unable to establish ubus connection" }
+			end
+
+			local status = ubus:call("network.wireless", "status", {})
+			if type(status) == "table" then
+				local radioname, radiodata
+				for radioname, radiodata in pairs(status) do
+					if type(radiodata) == "table" then
+						radiodata.iwinfo = ubus:call("iwinfo", "info", { device = radioname }) or {}
+						radiodata.iwinfo.bitrate     = nil
+						radiodata.iwinfo.bssid       = nil
+						radiodata.iwinfo.encryption  = nil
+						radiodata.iwinfo.mode        = nil
+						radiodata.iwinfo.quality     = nil
+						radiodata.iwinfo.quality_max = nil
+						radiodata.iwinfo.ssid        = nil
+
+						local iwdata = nil
+
+						if type(radiodata.interfaces) == "table" then
+							local _, interfacedata
+							for _, interfacedata in ipairs(radiodata.interfaces) do
+								if type(interfacedata) == "table" and
+								   type(interfacedata.ifname) == "string"
+								then
+									local iwinfo = ubus:call("iwinfo", "info", { device = interfacedata.ifname })
+
+									iwdata = iwdata or iwinfo
+									interfacedata.iwinfo = iwinfo or {}
+								end
+							end
+						end
+
+						radiodata.iwinfo = {}
+
+						local _, k, v
+						for k, v in pairs(iwdata or ubus:call("iwinfo", "info", { device = radioname }) or {}) do
+							if k ~= "bitrate" and k ~= "bssid" and k ~= "encryption" and
+							   k ~= "mode" and k ~= "quality" and k ~= "quality_max" and
+							   k ~= "ssid"
+							then
+								if type(v) == "table" then
+									radiodata.iwinfo[k] = json.parse(json.stringify(v))
+								else
+									radiodata.iwinfo[k] = v
+								end
+							end
+						end
+					end
+				end
+			end
+
+			return status
+		end
+	},
+
 	getBoardJSON = {
 		call = function(args)
 			local jsc = require "luci.jsonc"
