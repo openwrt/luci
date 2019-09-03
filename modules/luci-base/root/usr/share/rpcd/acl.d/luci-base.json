@@ -21,8 +21,8 @@
 		"description": "Grant access to basic LuCI procedures",
 		"read": {
 			"ubus": {
-				"iwinfo": [ "info" ],
-				"luci": [ "getBoardJSON", "getDUIDHints", "getHostHints", "getIfaddrs", "getInitList", "getLocaltime", "getTimezones", "getDHCPLeases", "getLEDs", "getNetworkDevices", "getUSBDevices", "getHostname", "getTTYDevices" ],
+				"iwinfo": [ "assoclist" ],
+				"luci": [ "getBoardJSON", "getDUIDHints", "getHostHints", "getIfaddrs", "getInitList", "getLocaltime", "getTimezones", "getDHCPLeases", "getLEDs", "getNetworkDevices", "getUSBDevices", "getHostname", "getTTYDevices", "getWirelessDevices" ],
 				"network.device": [ "status" ],
 				"network.interface": [ "dump" ],
 				"network.wireless": [ "status" ],
@@ -33,6 +33,7 @@
 		},
 		"write": {
 			"ubus": {
+				"iwinfo": [ "scan" ],
 				"luci": [ "setInitAction", "setLocaltime" ],
 				"uci": [ "add", "apply", "confirm", "delete", "order", "set" ]
 			},
