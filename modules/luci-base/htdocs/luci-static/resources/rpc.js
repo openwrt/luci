@@ -44,8 +44,8 @@ return L.Class.extend({
 		    msg = null;
 
 		if (!res.ok)
-			L.error('RPCError', 'RPC call failed with HTTP error %d: %s',
-				res.status, res.statusText || '?');
+			L.error('RPCError', 'RPC call to %s/%s failed with HTTP error %d: %s',
+				req.object, req.method, res.status, res.statusText || '?');
 
 		msg = res.json();
 
@@ -55,9 +55,9 @@ return L.Class.extend({
 		/* verify message frame */
 		if (typeof(msg) == 'object' && msg.jsonrpc == '2.0') {
 			if (typeof(msg.error) == 'object' && msg.error.code && msg.error.message)
-				req.reject(new Error('RPC call failed with error %d: %s'
-					.format(msg.error.code, msg.error.message || '?')));
-			else if (Array.isArray(msg.result) && msg.result[0] == 0)
+				req.reject(new Error('RPC call to %s/%s failed with error %d: %s'
+					.format(req.object, req.method, msg.error.code, msg.error.message || '?')));
+			else if (Array.isArray(msg.result))
 				ret = (msg.result.length > 1) ? msg.result[1] : msg.result[0];
 		}
 		else {
@@ -120,7 +120,9 @@ return L.Class.extend({
 					resolve: resolveFn,
 					reject:  rejectFn,
 					params:  params,
-					priv:    priv
+					priv:    priv,
+					object:  options.object,
+					method:  options.method
 				};
 
 				/* build message object */
@@ -156,5 +158,22 @@ return L.Class.extend({
 
 	setBaseURL: function(url) {
 		rpcBaseURL = url;
+	},
+
+	getStatusText: function(statusCode) {
+		switch (statusCode) {
+		case 0: return _('Command OK');
+		case 1: return _('Invalid command');
+		case 2: return _('Invalid argument');
+		case 3: return _('Method not found');
+		case 4: return _('Resource not found');
+		case 5: return _('No data received');
+		case 6: return _('Permission denied');
+		case 7: return _('Request timeout');
+		case 8: return _('Not supported');
+		case 9: return _('Unspecified error');
+		case 10: return _('Connection lost');
+		default: return _('Unknown error code');
+		}
 	}
 });
