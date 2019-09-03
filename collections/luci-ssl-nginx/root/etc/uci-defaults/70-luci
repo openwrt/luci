@@ -1,0 +1,37 @@
+#!/bin/sh
+
+if [ -n "$(pgrep uhttpd)" ]; then
+	/etc/init.d/uhttpd stop
+	/etc/init.d/uhttpd disable
+fi
+if [ -n "$(pgrep nginx)" ]; then
+	/etc/init.d/nginx restart
+else
+	/etc/init.d/nginx start
+fi
+if [ -n "$(pgrep luci)" ]; then
+	/etc/init.d/luci restart
+else
+	/etc/init.d/luci start
+fi
+if [ ! -f "/etc/nginx/nginx.key" ]; then
+	
+	NGINX_KEY=/etc/nginx/nginx.key
+	NGINX_CER=/etc/nginx/nginx.cer
+	OPENSSL_BIN=/usr/bin/openssl
+	PX5G_BIN=/usr/sbin/px5g
+	
+	# Prefer px5g for certificate generation (existence evaluated last)
+	GENKEY_CMD=""
+	UNIQUEID=$(dd if=/dev/urandom bs=1 count=4 | hexdump -e '1/1 "%02x"')
+	[ -x "$OPENSSL_BIN" ] && GENKEY_CMD="$OPENSSL_BIN req -x509 -nodes"
+	[ -x "$PX5G_BIN" ] && GENKEY_CMD="$PX5G_BIN selfsigned"
+	[ -n "$GENKEY_CMD" ] && {
+		$GENKEY_CMD \
+			-days 730 -newkey rsa:2048 -keyout "${NGINX_KEY}.new" -out "${NGINX_CER}.new" \
+			-subj /C="ZZ"/ST="Somewhere"/L="Unknown"/O="OpenWrt""$UNIQUEID"/CN="OpenWrt"
+		sync
+		mv "${NGINX_KEY}.new" "${NGINX_KEY}"
+		mv "${NGINX_CER}.new" "${NGINX_CER}"
+	}
+fi 
