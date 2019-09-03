@@ -378,6 +378,9 @@
 								contenttype = opt.headers[header];
 						}
 
+				if ('progress' in opt && 'upload' in opt.xhr)
+					opt.xhr.upload.addEventListener('progress', opt.progress);
+
 				if (contenttype != null)
 					opt.xhr.setRequestHeader('Content-Type', contenttype);
 
