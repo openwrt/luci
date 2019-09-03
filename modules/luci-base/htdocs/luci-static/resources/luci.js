@@ -491,7 +491,7 @@
 			return true;
 		},
 
-		remove: function(entry) {
+		remove: function(fn) {
 			if (typeof(fn) != 'function')
 				throw new TypeError('Invalid argument to LuCI.Poll.remove()');
 
