@@ -566,7 +566,7 @@ String.prototype.format = function()
 
 				switch(pType) {
 					case 'b':
-						subst = (~~param || 0).toString(2);
+						subst = Math.floor(+param || 0).toString(2);
 						break;
 
 					case 'c':
@@ -574,11 +574,12 @@ String.prototype.format = function()
 						break;
 
 					case 'd':
-						subst = (~~param || 0);
+						subst = Math.floor(+param || 0).toFixed(0);
 						break;
 
 					case 'u':
-						subst = ~~Math.abs(+param || 0);
+						var n = +param || 0;
+						subst = Math.floor((n < 0) ? 0x100000000 + n : n).toFixed(0);
 						break;
 
 					case 'f':
@@ -588,7 +589,7 @@ String.prototype.format = function()
 						break;
 
 					case 'o':
-						subst = (~~param || 0).toString(8);
+						subst = Math.floor(+param || 0).toString(8);
 						break;
 
 					case 's':
@@ -596,11 +597,11 @@ String.prototype.format = function()
 						break;
 
 					case 'x':
-						subst = ('' + (~~param || 0).toString(16)).toLowerCase();
+						subst = Math.floor(+param || 0).toString(16).toLowerCase();
 						break;
 
 					case 'X':
-						subst = ('' + (~~param || 0).toString(16)).toUpperCase();
+						subst = Math.floor(+param || 0).toString(16).toUpperCase();
 						break;
 
 					case 'h':
