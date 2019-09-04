@@ -99,6 +99,12 @@ var callGetProtoHandlers = rpc.declare({
 	expect: { '': {} }
 });
 
+var callGetHostHints = rpc.declare({
+	object: 'luci',
+	method: 'getHostHints',
+	expect: { '': {} }
+});
+
 var _init = null,
     _state = null,
     _protocols = {},
@@ -183,6 +189,16 @@ function getProtocolHandlers(cache) {
 		})).then(function() {
 			return protos;
 		});
+	}).catch(function() {
+		return {};
+	});
+}
+
+function getHostHints(cache) {
+	return callGetHostHints().then(function(hosts) {
+		if (!L.isObject(hosts))
+			throw !1;
+		return hosts;
 	}).catch(function() {
 		return {};
 	});
@@ -413,14 +429,15 @@ function initNetworkState(refresh) {
 	if (_state == null || refresh) {
 		_init = _init || Promise.all([
 			getInterfaceState(), getDeviceState(), getBoardState(),
-			getIfaddrState(), getNetdevState(), getWifidevState(), getProtocolHandlers(),
+			getIfaddrState(), getNetdevState(), getWifidevState(),
+			getHostHints(), getProtocolHandlers(),
 			uci.load('network'), uci.load('wireless'), uci.load('luci')
 		]).then(function(data) {
 			var board = data[2], ifaddrs = data[3], devices = data[4];
 			var s = {
 				isTunnel: {}, isBridge: {}, isSwitch: {}, isWifi: {},
 				ifaces: data[0], devices: data[1], radios: data[5],
-				netdevs: {}, bridges: {}, switches: {}
+				hosts: data[6], netdevs: {}, bridges: {}, switches: {}
 			};
 
 			for (var i = 0, a; (a = ifaddrs[i]) != null; i++) {
@@ -674,7 +691,7 @@ function enumerateNetworks() {
 }
 
 
-var Network, Protocol, Device, WifiDevice, WifiNetwork;
+var Hosts, Network, Protocol, Device, WifiDevice, WifiNetwork;
 
 Network = L.Class.extend({
 	prefixToMask: prefixToMask,
@@ -1238,6 +1255,58 @@ Network = L.Class.extend({
 		return initNetworkState().then(function() {
 			return _state.hasDSLModem ? _state.hasDSLModem.type : null;
 		});
+	},
+
+	getHostHints: function() {
+		return initNetworkState().then(function() {
+			return new Hosts(_state.hosts);
+		});
+	}
+});
+
+Hosts = L.Class.extend({
+	__init__: function(hosts) {
+		this.hosts = hosts;
+	},
+
+	getHostnameByMACAddr: function(mac) {
+		return this.hosts[mac] ? this.hosts[mac].name : null;
+	},
+
+	getIPAddrByMACAddr: function(mac) {
+		return this.hosts[mac] ? this.hosts[mac].ipv4 : null;
+	},
+
+	getIP6AddrByMACAddr: function(mac) {
+		return this.hosts[mac] ? this.hosts[mac].ipv6 : null;
+	},
+
+	getHostnameByIPAddr: function(ipaddr) {
+		for (var mac in this.hosts)
+			if (this.hosts[mac].ipv4 == ipaddr && this.hosts[mac].name != null)
+				return this.hosts[mac].name;
+		return null;
+	},
+
+	getMACAddrByIPAddr: function(ipaddr) {
+		for (var mac in this.hosts)
+			if (this.hosts[mac].ipv4 == ipaddr)
+				return mac;
+		return null;
+	},
+
+	getHostnameByIP6Addr: function(ip6addr) {
+		for (var mac in this.hosts)
+			if (this.hosts[mac].ipv6 == ip6addr && this.hosts[mac].name != null)
+				return this.hosts[mac].name;
+		return null;
+	},
+
+	getMACAddrByIP6Addr: function(ip6addr) {
+		for (var mac in this.hosts)
+			if (this.hosts[mac].ipv6 == ip6addr)
+				return mac;
+		return null;
 	}
 });
 
