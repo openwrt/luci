@@ -30,22 +30,23 @@ function format_signal(bss) {
 
 function format_encryption(bss) {
 	var enc = bss.encryption || {};
+	var WPA = 1, WPA2 = 2, WPA3 = 4;
 	var wpa_label;
 
 	if (enc.wep === true)
 		return 'WEP';
 	else if (enc.wpa > 0) {
 		switch (enc.wpa) {
-			case 6:
+			case WPA2|WPA3:
 				wpa_label = _('mixed WPA2/WPA3');
 				break;
-			case 4:
+			case WPA3:
 				wpa_label = _('WPA3');
 				break;
-			case 3:
+			case WPA|WPA2:
 				wpa_label = _('mixed WPA/WPA2');
 				break;
-			case 2:
+			case WPA2:
 				wpa_label = _('WPA2');
 				break;
 			default:
