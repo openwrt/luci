@@ -1178,8 +1178,8 @@ var CBIGridSection = CBITableSection.extend({
 		var config_name = this.uciconfig || this.map.config,
 		    section_id = uci.add(config_name, this.sectiontype);
 
-	    this.addedSection = section_id;
-		this.renderMoreOptionsModal(section_id);
+		this.addedSection = section_id;
+		return this.renderMoreOptionsModal(section_id);
 	},
 
 	handleModalSave: function(/* ... */) {
