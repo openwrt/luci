@@ -517,7 +517,7 @@ var CBIAbstractValue = CBINode.extend({
 				else {
 					var conf = this.uciconfig || this.section.uciconfig || this.map.config,
 					    res = this.map.lookupOption(dep, section_id, conf),
-					    val = res ? res[0].formvalue(res[1]) : null;
+					    val = (res && res[0].isActive(res[1])) ? res[0].formvalue(res[1]) : null;
 
 					istat = (istat && isEqual(val, this.deps[i][dep]));
 				}
