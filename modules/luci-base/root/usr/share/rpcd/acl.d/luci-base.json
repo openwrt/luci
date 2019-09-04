@@ -26,11 +26,10 @@
 			},
 			"ubus": {
 				"file": [ "list", "stat" ],
-				"iwinfo": [ "assoclist" ],
+				"iwinfo": [ "assoclist", "freqlist", "txpowerlist", "countrylist" ],
 				"luci": [ "getBoardJSON", "getDUIDHints", "getHostHints", "getIfaddrs", "getInitList", "getLocaltime", "getTimezones", "getDHCPLeases", "getLEDs", "getNetworkDevices", "getUSBDevices", "getHostname", "getTTYDevices", "getWirelessDevices" ],
 				"network.device": [ "status" ],
 				"network.interface": [ "dump" ],
-				"network.wireless": [ "status" ],
 				"network": [ "get_proto_handlers" ],
 				"uci": [ "changes", "get" ]
 			},
@@ -45,7 +44,7 @@
 				"file": [ "remove" ],
 				"iwinfo": [ "scan" ],
 				"luci": [ "setInitAction", "setLocaltime" ],
-				"uci": [ "add", "apply", "confirm", "delete", "order", "set" ]
+				"uci": [ "add", "apply", "confirm", "delete", "order", "set", "rename" ]
 			},
 			"uci": [ "*" ]
 		}
