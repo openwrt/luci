@@ -183,12 +183,29 @@ e23 = e:option(Value, "adb_triggerdelay", translate("Trigger Delay"),
 e23.datatype = "range(1,60)"
 e23.optional = true
 
-e24 = e:option(Flag, "adb_dnsflush", translate("Flush DNS Cache"),
-	translate("Flush DNS Cache after adblock processing."))
+e24 = e:option(Value, "adb_maxtld", translate("TLD Compression Threshold"),
+	translate("Disable the toplevel domain compression, if the number of blocked domains is greater than this threshold."))
+e24.datatype = "min(0)"
+e24.default = 100000
 e24.optional = true
-e24.default = nil
 
-e25 = e:option(ListValue, "adb_repiface", translate("Report Interface"),
+e25 = e:option(Value, "adb_portlist", translate("Local FW/DNS Ports"),
+	translate("Space separated list of firewall ports which should be redirected locally."))
+e25.default = "53 853 5353"
+e25.optional = true
+
+e26 = e:option(Flag, "adb_dnsinotify", translate("DNS Inotify"),
+	translate("Disable adblock triggered restarts and the 'DNS File Reset' for dns backends with autoload features."))
+e26.default = nil
+e26.enabled = "true"
+e26.optional = true
+
+e27 = e:option(Flag, "adb_dnsflush", translate("Flush DNS Cache"),
+	translate("Flush DNS Cache after adblock processing."))
+e27.default = nil
+e27.optional = true
+
+e28 = e:option(ListValue, "adb_repiface", translate("Report Interface"),
 	translate("Reporting interface used by tcpdump, set to 'any' for multiple interfaces (default 'br-lan'). ")
 	..translate("This change requires a manual service stop/re-start to take effect."))
 if dump then
@@ -197,54 +214,54 @@ if dump then
 		if v.interface ~= "loopback" then
 			local device = v.device
 			if device then
-				e25:value(device)
+				e28:value(device)
 			end
 		end
 	end
 end
-e25:value("any")
-e25.optional = true
-
-e26 = e:option(Value, "adb_replisten", translate("Report Listen Port(s)"),
-	translate("Space separated list of reporting port(s) used by tcpdump (default: '53'). ")
-	..translate("This change requires a manual service stop/re-start to take effect."))
-e26.default = 53
-e26.optional = true
-
-e27 = e:option(Value, "adb_repchunkcnt", translate("Report Chunk Count"),
-	translate("Report chunk count used by tcpdump (default '5'). ")
-	..translate("This change requires a manual service stop/re-start to take effect."))
-e27.datatype = "range(1,10)"
-e27.default = 5
-e27.optional = true
-
-e28 = e:option(Value, "adb_repchunksize", translate("Report Chunk Size"),
-	translate("Report chunk size used by tcpdump in MB (default '1'). ")
-	..translate("This change requires a manual service stop/re-start to take effect."))
-e28.datatype = "range(1,10)"
-e28.default = 1
+e28:value("any")
 e28.optional = true
 
-e29 = e:option(Value, "adb_msender", translate("E-Mail Sender Address"),
-	translate("Sender address for adblock notification E-Mails."))
-e29.default = "no-reply@adblock"
+e29 = e:option(Value, "adb_replisten", translate("Report Listen Port(s)"),
+	translate("Space separated list of reporting port(s) used by tcpdump (default: '53'). ")
+	..translate("This change requires a manual service stop/re-start to take effect."))
+e29.default = 53
 e29.optional = true
 
-e30 = e:option(Value, "adb_mtopic", translate("E-Mail Topic"),
-	translate("Topic for adblock notification E-Mails."))
-e30.default = "adblock notification"
+e30 = e:option(Value, "adb_repchunkcnt", translate("Report Chunk Count"),
+	translate("Report chunk count used by tcpdump (default '5'). ")
+	..translate("This change requires a manual service stop/re-start to take effect."))
+e30.datatype = "range(1,10)"
+e30.default = 5
 e30.optional = true
 
-e31 = e:option(Value, "adb_mprofile", translate("E-Mail Profile"),
-	translate("Mail profile used in 'msmtp' for adblock notification E-Mails."))
-e31.default = "adb_notify"
+e31 = e:option(Value, "adb_repchunksize", translate("Report Chunk Size"),
+	translate("Report chunk size used by tcpdump in MB (default '1'). ")
+	..translate("This change requires a manual service stop/re-start to take effect."))
+e31.datatype = "range(1,10)"
+e31.default = 1
 e31.optional = true
 
-e32 = e:option(Value, "adb_mcnt", translate("E-Mail Notification Count"),
+e32 = e:option(Value, "adb_msender", translate("E-Mail Sender Address"),
+	translate("Sender address for adblock notification E-Mails."))
+e32.default = "no-reply@adblock"
+e32.optional = true
+
+e33 = e:option(Value, "adb_mtopic", translate("E-Mail Topic"),
+	translate("Topic for adblock notification E-Mails."))
+e33.default = "adblock notification"
+e33.optional = true
+
+e34 = e:option(Value, "adb_mprofile", translate("E-Mail Profile"),
+	translate("Mail profile used in 'msmtp' for adblock notification E-Mails."))
+e34.default = "adb_notify"
+e34.optional = true
+
+e35 = e:option(Value, "adb_mcnt", translate("E-Mail Notification Count"),
 	translate("Raise the minimum notification count, to get E-Mails if the overall count is less or equal to the given limit (default 0), ")
 	.. translate("e.g. to receive an E-Mail notification with every adblock run set this value to 200000."))
-e32.default = 0
-e32.datatype = "min(0)"
-e32.optional = true
+e35.default = 0
+e35.datatype = "min(0)"
+e35.optional = true
 
 return m
