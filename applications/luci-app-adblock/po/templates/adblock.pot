@@ -17,11 +17,11 @@ msgstr ""
 msgid "Adblock"
 msgstr ""
 
-#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:145
+#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:151
 msgid "Adblock Status"
 msgstr ""
 
-#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:151
+#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:157
 msgid "Adblock Version"
 msgstr ""
 
@@ -43,7 +43,7 @@ msgid "Archive Categories"
 msgstr ""
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:146
-#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:175
+#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:181
 msgid "Backup Directory"
 msgstr ""
 
@@ -105,7 +105,7 @@ msgstr ""
 msgid "DNS Backend (DNS Directory)"
 msgstr ""
 
-#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:163
+#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:169
 msgid "DNS Backend, DNS Directory"
 msgstr ""
 
@@ -121,12 +121,16 @@ msgstr ""
 msgid "DNS File Reset"
 msgstr ""
 
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:197
+msgid "DNS Inotify"
+msgstr ""
+
 #: applications/luci-app-adblock/luasrc/controller/adblock.lua:20
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:134
 msgid "DNS Query Report"
 msgstr ""
 
-#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:169
+#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:175
 msgid "DNS Variant, DNS File Reset"
 msgstr ""
 
@@ -137,6 +141,18 @@ msgstr ""
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:94
 msgid "Description"
+msgstr ""
+
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:198
+msgid ""
+"Disable adblock triggered restarts and the 'DNS File Reset' for dns backends "
+"with autoload features."
+msgstr ""
+
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:187
+msgid ""
+"Disable the toplevel domain compression, if the number of blocked domains is "
+"greater than this threshold."
 msgstr ""
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:36
@@ -160,7 +176,7 @@ msgstr ""
 msgid "Download Utility"
 msgstr ""
 
-#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:157
+#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:163
 msgid "Download Utility (SSL Library)"
 msgstr ""
 
@@ -168,11 +184,11 @@ msgstr ""
 msgid "E-Mail Notification"
 msgstr ""
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:243
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:260
 msgid "E-Mail Notification Count"
 msgstr ""
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:238
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:255
 msgid "E-Mail Profile"
 msgstr ""
 
@@ -180,11 +196,11 @@ msgstr ""
 msgid "E-Mail Receiver Address"
 msgstr ""
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:228
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:245
 msgid "E-Mail Sender Address"
 msgstr ""
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:233
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:250
 msgid "E-Mail Topic"
 msgstr ""
 
@@ -230,11 +246,11 @@ msgid ""
 "frame."
 msgstr ""
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:186
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:203
 msgid "Flush DNS Cache"
 msgstr ""
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:187
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:204
 msgid "Flush DNS Cache after adblock processing."
 msgstr ""
 
@@ -274,7 +290,7 @@ msgstr ""
 msgid "Input file not found, please check your configuration."
 msgstr ""
 
-#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:187
+#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:193
 msgid "Last Run"
 msgstr ""
 
@@ -305,8 +321,12 @@ msgstr ""
 
 #: applications/luci-app-adblock/luasrc/view/adblock/query.htm:21
 #: applications/luci-app-adblock/luasrc/view/adblock/report.htm:221
-#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:92
+#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:98
 msgid "Loading"
+msgstr ""
+
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:192
+msgid "Local FW/DNS Ports"
 msgstr ""
 
 #: applications/luci-app-adblock/luasrc/controller/adblock.lua:22
@@ -317,7 +337,7 @@ msgstr ""
 msgid "Low Priority Service"
 msgstr ""
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:239
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:256
 msgid "Mail profile used in 'msmtp' for adblock notification E-Mails."
 msgstr ""
 
@@ -339,7 +359,7 @@ msgid ""
 "Options for further tweaking in case the defaults are not suitable for you."
 msgstr ""
 
-#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:181
+#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:187
 msgid "Overall Domains"
 msgstr ""
 
@@ -376,7 +396,7 @@ msgstr ""
 msgid "Query domains"
 msgstr ""
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:244
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:261
 msgid ""
 "Raise the minimum notification count, to get E-Mails if the overall count is "
 "less or equal to the given limit (default 0),"
@@ -392,14 +412,14 @@ msgid ""
 "udp and tcp protocol on ports 53, 853 and 5353."
 msgstr ""
 
-#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:22
-#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:33
-#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:44
-#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:105
+#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:28
+#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:39
+#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:50
+#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:111
 msgid "Refresh"
 msgstr ""
 
-#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:202
+#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:208
 msgid "Refresh Blocklist Sources"
 msgstr ""
 
@@ -407,11 +427,11 @@ msgstr ""
 msgid "Refresh Report"
 msgstr ""
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:214
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:231
 msgid "Report Chunk Count"
 msgstr ""
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:221
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:238
 msgid "Report Chunk Size"
 msgstr ""
 
@@ -419,23 +439,23 @@ msgstr ""
 msgid "Report Directory"
 msgstr ""
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:191
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:208
 msgid "Report Interface"
 msgstr ""
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:208
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:225
 msgid "Report Listen Port(s)"
 msgstr ""
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:215
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:232
 msgid "Report chunk count used by tcpdump (default '5')."
 msgstr ""
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:222
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:239
 msgid "Report chunk size used by tcpdump in MB (default '1')."
 msgstr ""
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:192
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:209
 msgid ""
 "Reporting interface used by tcpdump, set to 'any' for multiple interfaces "
 "(default 'br-lan')."
@@ -447,11 +467,11 @@ msgid ""
 "DNS backend."
 msgstr ""
 
-#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:31
+#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:37
 msgid "Resume"
 msgstr ""
 
-#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:143
+#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:149
 msgid "Runtime Information"
 msgstr ""
 
@@ -471,7 +491,7 @@ msgid ""
 "is &le; 0."
 msgstr ""
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:229
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:246
 msgid "Sender address for adblock notification E-Mails."
 msgstr ""
 
@@ -487,7 +507,12 @@ msgid ""
 "parallel (default '4')."
 msgstr ""
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:209
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:193
+msgid ""
+"Space separated list of firewall ports which should be redirected locally."
+msgstr ""
+
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:226
 msgid ""
 "Space separated list of reporting port(s) used by tcpdump (default: '53')."
 msgstr ""
@@ -500,14 +525,18 @@ msgstr ""
 msgid "Startup Trigger"
 msgstr ""
 
-#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:20
-#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:42
-#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:103
+#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:26
+#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:48
+#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:109
 msgid "Suspend"
 msgstr ""
 
-#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:194
+#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:200
 msgid "Suspend / Resume Adblock"
+msgstr ""
+
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:186
+msgid "TLD Compression Threshold"
 msgstr ""
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:147
@@ -537,10 +566,10 @@ msgid "The syslog output, pre-filtered for adblock related messages only."
 msgstr ""
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:111
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:193
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:210
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:216
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:223
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:227
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:233
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:240
 msgid "This change requires a manual service stop/re-start to take effect."
 msgstr ""
 
@@ -587,7 +616,7 @@ msgstr ""
 msgid "Top 10 Reporting"
 msgstr ""
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:234
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:251
 msgid "Topic for adblock notification E-Mails."
 msgstr ""
 
@@ -619,7 +648,7 @@ msgstr ""
 msgid "Yes"
 msgstr ""
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:245
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:262
 msgid ""
 "e.g. to receive an E-Mail notification with every adblock run set this value "
 "to 200000."

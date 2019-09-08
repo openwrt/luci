@@ -29,11 +29,11 @@ msgstr "アクション"
 msgid "Adblock"
 msgstr "Adblock"
 
-#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:145
+#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:151
 msgid "Adblock Status"
 msgstr "Adblock ステータス"
 
-#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:151
+#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:157
 msgid "Adblock Version"
 msgstr "Adblock バージョン"
 
@@ -55,7 +55,7 @@ msgid "Archive Categories"
 msgstr "アーカイブ カテゴリ"
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:146
-#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:175
+#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:181
 msgid "Backup Directory"
 msgstr "バックアップ先 ディレクトリ"
 
@@ -122,7 +122,7 @@ msgstr "カウント"
 msgid "DNS Backend (DNS Directory)"
 msgstr "DNS バックエンド（DNS ディレクトリ）"
 
-#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:163
+#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:169
 msgid "DNS Backend, DNS Directory"
 msgstr "DNS バックエンド, DNS ディレクトリ"
 
@@ -138,12 +138,16 @@ msgstr "DNS ディレクトリ"
 msgid "DNS File Reset"
 msgstr "DNS ファイル リセット"
 
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:197
+msgid "DNS Inotify"
+msgstr ""
+
 #: applications/luci-app-adblock/luasrc/controller/adblock.lua:20
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:134
 msgid "DNS Query Report"
 msgstr "DNS クエリ レポート"
 
-#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:169
+#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:175
 msgid "DNS Variant, DNS File Reset"
 msgstr "DNS 種別, DNS ファイル リセット"
 
@@ -155,6 +159,18 @@ msgstr "日付"
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:94
 msgid "Description"
 msgstr "説明"
+
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:198
+msgid ""
+"Disable adblock triggered restarts and the 'DNS File Reset' for dns backends "
+"with autoload features."
+msgstr ""
+
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:187
+msgid ""
+"Disable the toplevel domain compression, if the number of blocked domains is "
+"greater than this threshold."
+msgstr ""
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:36
 msgid ""
@@ -178,7 +194,7 @@ msgstr "ドメイン / クライアント / 日付 / 時刻"
 msgid "Download Utility"
 msgstr "ダウンロード ユーティリティ"
 
-#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:157
+#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:163
 msgid "Download Utility (SSL Library)"
 msgstr "ダウンロード ユーティリティ（SSL ライブラリ）"
 
@@ -186,11 +202,11 @@ msgstr "ダウンロード ユーティリティ（SSL ライブラリ）"
 msgid "E-Mail Notification"
 msgstr "Eメール通知"
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:243
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:260
 msgid "E-Mail Notification Count"
 msgstr "Eメール通知カウント"
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:238
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:255
 msgid "E-Mail Profile"
 msgstr "Eメール プロファイル"
 
@@ -198,11 +214,11 @@ msgstr "Eメール プロファイル"
 msgid "E-Mail Receiver Address"
 msgstr "Eメール受信アドレス"
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:228
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:245
 msgid "E-Mail Sender Address"
 msgstr "Eメール送信アドレス"
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:233
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:250
 msgid "E-Mail Topic"
 msgstr "Eメール題名"
 
@@ -251,11 +267,11 @@ msgstr ""
 "DNS クエリの結果セットを、指定したドメインやクライアント、日時によってフィル"
 "タします。"
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:186
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:203
 msgid "Flush DNS Cache"
 msgstr "DNS キャッシュのクリア"
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:187
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:204
 msgid "Flush DNS Cache after adblock processing."
 msgstr "Adblock 処理の後に DNS キャッシュをクリアします。"
 
@@ -301,7 +317,7 @@ msgstr ""
 msgid "Input file not found, please check your configuration."
 msgstr "入力ファイルが見つかりません。設定を確認してください。"
 
-#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:187
+#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:193
 msgid "Last Run"
 msgstr "最終実行"
 
@@ -338,9 +354,13 @@ msgstr "サポートされ、かつ設定済のダウンロード ユーティ�
 
 #: applications/luci-app-adblock/luasrc/view/adblock/query.htm:21
 #: applications/luci-app-adblock/luasrc/view/adblock/report.htm:221
-#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:92
+#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:98
 msgid "Loading"
 msgstr "読込中"
+
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:192
+msgid "Local FW/DNS Ports"
+msgstr ""
 
 #: applications/luci-app-adblock/luasrc/controller/adblock.lua:22
 msgid "Logfile"
@@ -350,7 +370,7 @@ msgstr "ログファイル"
 msgid "Low Priority Service"
 msgstr "低優先度サービス"
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:239
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:256
 msgid "Mail profile used in 'msmtp' for adblock notification E-Mails."
 msgstr ""
 "adblock 通知メールのために 'msmtp' で使用される、メール プロファイルです。"
@@ -373,7 +393,7 @@ msgid ""
 "Options for further tweaking in case the defaults are not suitable for you."
 msgstr "デフォルト設定が適切でない場合、追加で設定するためのオプションです。"
 
-#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:181
+#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:187
 msgid "Overall Domains"
 msgstr "全体のドメイン"
 
@@ -416,7 +436,7 @@ msgstr "検索"
 msgid "Query domains"
 msgstr "ドメインの検索"
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:244
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:261
 msgid ""
 "Raise the minimum notification count, to get E-Mails if the overall count is "
 "less or equal to the given limit (default 0),"
@@ -436,14 +456,14 @@ msgstr ""
 "'lan' ゾーンからの全 DNS クエリをローカル リゾルバにリダイレクトします。これ"
 "は、53, 853, 5353 の各ポートにおける UDP, TCP プロトコルに適用されます。"
 
-#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:22
-#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:33
-#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:44
-#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:105
+#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:28
+#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:39
+#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:50
+#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:111
 msgid "Refresh"
 msgstr "リフレッシュ"
 
-#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:202
+#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:208
 msgid "Refresh Blocklist Sources"
 msgstr "ブロックリスト提供元のリフレッシュ"
 
@@ -451,11 +471,11 @@ msgstr "ブロックリスト提供元のリフレッシュ"
 msgid "Refresh Report"
 msgstr "レポートをリフレッシュ"
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:214
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:231
 msgid "Report Chunk Count"
 msgstr "レポート チャンクカウント"
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:221
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:238
 msgid "Report Chunk Size"
 msgstr "レポート チャンクサイズ"
 
@@ -463,23 +483,23 @@ msgstr "レポート チャンクサイズ"
 msgid "Report Directory"
 msgstr "レポート ディレクトリ"
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:191
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:208
 msgid "Report Interface"
 msgstr "レポート インターフェース"
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:208
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:225
 msgid "Report Listen Port(s)"
 msgstr "レポート待ち受けポート"
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:215
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:232
 msgid "Report chunk count used by tcpdump (default '5')."
 msgstr "tcpdump により使用される、レポートチャンク数です。（規定値: '5'）"
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:222
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:239
 msgid "Report chunk size used by tcpdump in MB (default '1')."
 msgstr "tcpdump により使用される、レポート チャンクサイズです。（規定値: '1'）"
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:192
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:209
 msgid ""
 "Reporting interface used by tcpdump, set to 'any' for multiple interfaces "
 "(default 'br-lan')."
@@ -495,11 +515,11 @@ msgstr ""
 "最終的な DNS ブロックファイル 'adb_list.overall' を、DNS バックエンドを通して"
 "読み込み後にリセットします。"
 
-#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:31
+#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:37
 msgid "Resume"
 msgstr "再開"
 
-#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:143
+#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:149
 msgid "Runtime Information"
 msgstr "ランタイム情報"
 
@@ -520,7 +540,7 @@ msgid ""
 msgstr ""
 "処理エラーまたはドメイン カウントが 0 以下の場合、通知メールを送信します。"
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:229
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:246
 msgid "Sender address for adblock notification E-Mails."
 msgstr "adblock 通知メールの送信アドレスです。"
 
@@ -540,7 +560,12 @@ msgstr ""
 "ダウンロードの制御とリストの処理を同時並行的に行う、ダウンロードキューのサイ"
 "ズです。（規定値: '4'）"
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:209
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:193
+msgid ""
+"Space separated list of firewall ports which should be redirected locally."
+msgstr ""
+
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:226
 msgid ""
 "Space separated list of reporting port(s) used by tcpdump (default: '53')."
 msgstr ""
@@ -555,15 +580,19 @@ msgstr "開始日"
 msgid "Startup Trigger"
 msgstr "スタートアップ トリガ"
 
-#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:20
-#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:42
-#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:103
+#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:26
+#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:48
+#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:109
 msgid "Suspend"
 msgstr "一時停止"
 
-#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:194
+#: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:200
 msgid "Suspend / Resume Adblock"
 msgstr "Adblock の一時停止 / 再開"
+
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:186
+msgid "TLD Compression Threshold"
+msgstr ""
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:147
 msgid ""
@@ -598,10 +627,10 @@ msgid "The syslog output, pre-filtered for adblock related messages only."
 msgstr "Adblock に関連するメッセージのみが抽出された、システムログ出力です。"
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:111
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:193
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:210
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:216
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:223
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:227
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:233
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:240
 msgid "This change requires a manual service stop/re-start to take effect."
 msgstr "この変更の反映には、手動でのサービスの停止 / 再起動が必要です。"
 
@@ -660,7 +689,7 @@ msgstr ""
 msgid "Top 10 Reporting"
 msgstr "上位 10 レポート"
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:234
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:251
 msgid "Topic for adblock notification E-Mails."
 msgstr "adblock 通知メールの題名です。"
 
@@ -692,7 +721,7 @@ msgstr "ホワイトリスト ファイル"
 msgid "Yes"
 msgstr "はい"
 
-#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:245
+#: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:262
 msgid ""
 "e.g. to receive an E-Mail notification with every adblock run set this value "
 "to 200000."
