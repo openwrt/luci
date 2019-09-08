@@ -400,7 +400,7 @@ local methods = {
 			local wifi_features = { "eap", "11n", "11ac", "11r", "11w", "acs", "sae", "owe", "suiteb192" }
 
 			if fs.access("/usr/sbin/hostapd") then
-				rv.hostapd = {}
+				rv.hostapd = { cli = fs.access("/usr/sbin/hostapd_cli") }
 
 				local _, feature
 				for _, feature in ipairs(wifi_features) do
@@ -410,7 +410,7 @@ local methods = {
 			end
 
 			if fs.access("/usr/sbin/wpa_supplicant") then
-				rv.wpasupplicant = {}
+				rv.wpasupplicant = { cli = fs.access("/usr/sbin/wpa_cli") }
 
 				local _, feature
 				for _, feature in ipairs(wifi_features) do
