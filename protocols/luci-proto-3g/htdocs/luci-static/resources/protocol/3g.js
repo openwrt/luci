@@ -4,11 +4,18 @@
 'require form';
 'require network';
 
-var callTTYDevices = rpc.declare({
-	object: 'luci',
-	method: 'getTTYDevices',
-	params: [ 'with_cdc', 'with_tts' ],
-	expect: { result: [] }
+var callFileList = rpc.declare({
+	object: 'file',
+	method: 'list',
+	params: [ 'path' ],
+	expect: { entries: [] },
+	filter: function(list, params) {
+		var rv = [];
+		for (var i = 0; i < list.length; i++)
+			if (list[i].name.match(/^tty[A-Z]/) || list[i].name.match(/^cdc-wdm/) || list[i].name.match(/^[0-9]+$/))
+				rv.push(params.path + list[i].name);
+		return rv.sort();
+	}
 });
 
 network.registerPatternVirtual(/^3g-.+$/);
@@ -66,11 +73,13 @@ return network.registerProtocol('3g', {
 		o = s.taboption('general', form.Value, 'device', _('Modem device'));
 		o.rmempty = false;
 		o.load = function(section_id) {
-			return callTTYDevices(false, true).then(L.bind(function(devices) {
-				if (Array.isArray(devices))
-					for (var i = 0; i < devices.length; i++)
-						this.value(devices[i]);
-
+			return callFileList('/dev/').then(L.bind(function(devices) {
+				for (var i = 0; i < devices.length; i++)
+					this.value(devices[i]);
+				return callFileList('/dev/tts/');
+			}, this)).then(L.bind(function(devices) {
+				for (var i = 0; i < devices.length; i++)
+					this.value(devices[i]);
 				return form.Value.prototype.load.apply(this, [section_id]);
 			}, this));
 		};
