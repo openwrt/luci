@@ -468,17 +468,6 @@ local methods = {
 
 			return rv
 		end
-	},
-
-	getHostname = {
-		call = function()
-			local fs = require "nixio.fs"
-			local hostname, code, err = fs.readfile("/proc/sys/kernel/hostname")
-			if err then
-				return { error = err }, 1
-			end
-			return { result = hostname:gsub("\n$", "") }
-		end
 	}
 }
 

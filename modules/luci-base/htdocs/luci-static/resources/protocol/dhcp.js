@@ -3,10 +3,12 @@
 'require form';
 'require network';
 
-var callHostname = rpc.declare({
-	object: 'luci',
-	method: 'getHostname',
-	expect: { result: '' }
+var callFileRead = rpc.declare({
+	object: 'file',
+	method: 'read',
+	params: [ 'path' ],
+	expect: { data: '' },
+	filter: function(value) { return value.trim() }
 });
 
 return network.registerProtocol('dhcp', {
@@ -20,7 +22,7 @@ return network.registerProtocol('dhcp', {
 		o = s.taboption('general', form.Value, 'hostname', _('Hostname to send when requesting DHCP'));
 		o.datatype    = 'hostname';
 		o.load = function(section_id) {
-			return callHostname().then(L.bind(function(hostname) {
+			return callFileRead('/proc/sys/kernel/hostname').then(L.bind(function(hostname) {
 				this.placeholder = hostname;
 				return form.Value.prototype.load.apply(this, [section_id]);
 			}, this));
