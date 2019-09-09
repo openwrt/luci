@@ -1306,24 +1306,18 @@
 
 				if (mc.querySelector('.cbi-map')) {
 					footer.appendChild(E('div', { 'class': 'cbi-page-actions' }, [
-						E('input', {
+						E('button', {
 							'class': 'cbi-button cbi-button-apply',
-							'type': 'button',
-							'value': _('Save & Apply'),
-							'click': L.bind(this.handleSaveApply, this)
-						}), ' ',
-						E('input', {
+							'click': L.ui.createHandlerFn(this, 'handleSaveApply')
+						}, _('Save & Apply')), ' ',
+						E('button', {
 							'class': 'cbi-button cbi-button-save',
-							'type': 'submit',
-							'value': _('Save'),
-							'click': L.bind(this.handleSave, this)
-						}), ' ',
-						E('input', {
+							'click': L.ui.createHandlerFn(this, 'handleSave')
+						}, _('Save')), ' ',
+						E('button', {
 							'class': 'cbi-button cbi-button-reset',
-							'type': 'button',
-							'value': _('Reset'),
-							'click': L.bind(this.handleReset, this)
-						})
+							'click': L.ui.createHandlerFn(this, 'handleReset')
+						}, _('Reset'))
 					]));
 				}
 
