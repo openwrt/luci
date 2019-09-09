@@ -1115,6 +1115,8 @@ var CBITableSection = CBITypedSection.extend({
 		    m = new CBIMap(this.map.config, null, null),
 		    s = m.section(CBINamedSection, section_id, this.sectiontype);
 
+		m.parent = parent;
+
 		s.tabs = this.tabs;
 		s.tab_names = this.tab_names;
 
