@@ -30,7 +30,9 @@ function index()
 end
 
 function ban_action(name)
-	if name == "do_reload" then
+	if name == "do_refresh" then
+		luci.sys.call("/etc/init.d/banip refresh >/dev/null 2>&1")
+	elseif name == "do_reload" then
 		luci.sys.call("/etc/init.d/banip reload >/dev/null 2>&1")
 	end
 	luci.http.prepare_content("text/plain")
