@@ -736,7 +736,9 @@ function cbi_d_update() {
 }
 
 function cbi_init() {
-	var nodes;
+	var dropdowns = document.querySelectorAll('.cbi-dropdown'),
+	    browsers = document.querySelectorAll('[data-browser]'),
+	    nodes;
 
 	nodes = document.querySelectorAll('[data-strings]');
 
@@ -808,8 +810,8 @@ function cbi_init() {
 		                   node.getAttribute('data-type'));
 	}
 
-	document.querySelectorAll('.cbi-dropdown').forEach(cbi_dropdown_init);
-	document.querySelectorAll('[data-browser]').forEach(cbi_browser_init);
+	dropdowns.forEach(cbi_dropdown_init);
+	browsers.querySelectorAll('[data-browser]').forEach(cbi_browser_init);
 
 	document.querySelectorAll('.cbi-tooltip:not(:empty)').forEach(function(s) {
 		s.parentNode.classList.add('cbi-tooltip-container');
