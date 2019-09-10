@@ -48,7 +48,7 @@
 							return delta[2]
 						end
 					elseif n == "4" then
-						return util.shellquote(delta[4])
+						return pcdata(util.shellquote(delta[4]))
 					else
 						return delta[tonumber(n)]
 					end
