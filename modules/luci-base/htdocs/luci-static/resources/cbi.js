@@ -736,9 +736,7 @@ function cbi_d_update() {
 }
 
 function cbi_init() {
-	var dropdowns = document.querySelectorAll('.cbi-dropdown'),
-	    browsers = document.querySelectorAll('[data-browser]'),
-	    nodes;
+	var dropdowns, browsers, nodes;
 
 	nodes = document.querySelectorAll('[data-strings]');
 
@@ -787,6 +785,9 @@ function cbi_init() {
 		                  node.getAttribute('data-manual'));
 	}
 
+	dropdowns = document.querySelectorAll('.cbi-dropdown');
+	browsers = document.querySelectorAll('[data-browser]');
+
 	nodes = document.querySelectorAll('[data-dynlist]');
 
 	for (var i = 0, node; (node = nodes[i]) !== undefined; i++) {
@@ -811,7 +812,7 @@ function cbi_init() {
 	}
 
 	dropdowns.forEach(cbi_dropdown_init);
-	browsers.querySelectorAll('[data-browser]').forEach(cbi_browser_init);
+	browsers.forEach(cbi_browser_init);
 
 	document.querySelectorAll('.cbi-tooltip:not(:empty)').forEach(function(s) {
 		s.parentNode.classList.add('cbi-tooltip-container');
