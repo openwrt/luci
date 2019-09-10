@@ -305,7 +305,7 @@ if not net:is_floating() then
 		if alias then
 			old_ifs[1] = '@' .. alias
 		else
-			for _, i in ipairs(net:get_interfaces() or { net:get_interface() }) do
+			for _, i in ipairs(net:get_interfaces(true) or { net:get_interface() }) do
 				old_ifs[#old_ifs+1] = i:name()
 			end
 		end

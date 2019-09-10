@@ -1238,8 +1238,8 @@ function protocol.get_interface(self)
 	end
 end
 
-function protocol.get_interfaces(self)
-	if self:is_bridge() or (self:is_virtual() and not self:is_floating()) then
+function protocol.get_interfaces(self, ignore_bridge_state)
+	if ignore_bridge_state or self:is_bridge() or (self:is_virtual() and not self:is_floating()) then
 		local ifaces = { }
 
 		local ifn
