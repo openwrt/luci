@@ -419,6 +419,12 @@ var ValidatorFactory = L.Class.extend({
 			return this.assert(this.factory.parseDecimal(this.value) <= +max, _('value smaller or equal to %f').format(max));
 		},
 
+		length: function(len) {
+			var val = '' + this.value;
+			return this.assert(val.length == +len,
+				_('value with %d characters').format(len));
+		},
+
 		rangelength: function(min, max) {
 			var val = '' + this.value;
 			return this.assert((val.length >= +min) && (val.length <= +max),
