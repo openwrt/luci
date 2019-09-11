@@ -1967,6 +1967,43 @@ return L.Class.extend({
 		tooltipDiv.dispatchEvent(new CustomEvent('tooltip-close', { bubbles: true }));
 	},
 
+	addNotification: function(title, children /*, ... */) {
+		var mc = document.querySelector('#maincontent') || document.body;
+		var msg = E('div', {
+			'class': 'alert-message fade-in',
+			'style': 'display:flex',
+			'transitionend': function(ev) {
+				var node = ev.currentTarget;
+				if (node.parentNode && node.classList.contains('fade-out'))
+					node.parentNode.removeChild(node);
+			}
+		}, [
+			E('div', { 'style': 'flex:10' }),
+			E('div', { 'style': 'flex:1; display:flex' }, [
+				E('button', {
+					'class': 'btn',
+					'style': 'margin-left:auto; margin-top:auto',
+					'click': function(ev) {
+						L.dom.parent(ev.target, '.alert-message').classList.add('fade-out');
+					},
+
+				}, _('Dismiss'))
+			])
+		]);
+
+		if (title != null)
+			L.dom.append(msg.firstElementChild, E('h4', {}, title));
+
+		L.dom.append(msg.firstElementChild, children);
+
+		for (var i = 2; i < arguments.length; i++)
+			msg.classList.add(arguments[i]);
+
+		mc.insertBefore(msg, mc.firstElementChild);
+
+		return msg;
+	},
+
 	/* Widget helper */
 	itemlist: function(node, items, separators) {
 		var children = [];
