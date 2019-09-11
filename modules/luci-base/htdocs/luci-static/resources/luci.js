@@ -850,6 +850,25 @@
 			return (ft != null && ft != false);
 		},
 
+		notifySessionExpiry: function() {
+			Poll.stop();
+
+			L.ui.showModal(_('Session expired'), [
+				E('div', { class: 'alert-message warning' },
+					_('A new login is required since the authentication session expired.')),
+				E('div', { class: 'right' },
+					E('div', {
+						class: 'btn primary',
+						click: function() {
+							var loc = window.location;
+							window.location = loc.protocol + '//' + loc.host + loc.pathname + loc.search;
+						}
+					}, _('To login…')))
+			]);
+
+			L.raise('SessionError', 'Login session is expired');
+		},
+
 		setupDOM: function(res) {
 			var domEv = res[0],
 			    uiClass = res[1],
@@ -859,26 +878,31 @@
 
 			rpcClass.setBaseURL(rpcBaseURL);
 
-			Request.addInterceptor(function(res) {
-				if (res.status != 403 || res.headers.get('X-LuCI-Login-Required') != 'yes')
+			rpcClass.addInterceptor(function(msg, req) {
+				if (!L.isObject(msg) || !L.isObject(msg.error) || msg.error.code != -32002)
 					return;
 
-				Poll.stop();
+				if (!L.isObject(req) || (req.object == 'session' && req.method == 'access'))
+					return;
 
-				L.ui.showModal(_('Session expired'), [
-					E('div', { class: 'alert-message warning' },
-						_('A new login is required since the authentication session expired.')),
-					E('div', { class: 'right' },
-						E('div', {
-							class: 'btn primary',
-							click: function() {
-								var loc = window.location;
-								window.location = loc.protocol + '//' + loc.host + loc.pathname + loc.search;
-							}
-						}, _('To login…')))
-				]);
+				return rpcClass.declare({
+					'object': 'session',
+					'method': 'access',
+					'params': [ 'scope', 'object', 'function' ],
+					'expect': { access: true }
+				})('uci', 'luci', 'read').catch(L.notifySessionExpiry);
+			});
 
-				throw 'Session expired';
+			Request.addInterceptor(function(res) {
+				var isDenied = false;
+
+				if (res.status == 403 && res.headers.get('X-LuCI-Login-Required') == 'yes')
+					isDenied = true;
+
+				if (!isDenied)
+					return;
+
+				L.notifySessionExpiry();
 			});
 
 			return this.probeSystemFeatures().finally(this.initDOM);
