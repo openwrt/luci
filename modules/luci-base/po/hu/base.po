@@ -183,6 +183,7 @@ msgstr "<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-cím"
 msgid "<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Gateway"
 msgstr "<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-útválasztó"
 
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:555
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:35
 msgid "<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Netmask"
 msgstr "<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Netmask"
@@ -240,10 +241,6 @@ msgstr ""
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:252
 msgid "<abbr title=\"maximal\">Max.</abbr> concurrent queries"
 msgstr "<abbr title=\"maximal\">Max.</abbr> párhuzamos lekérdezés"
-
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:555
-msgid "<abbr title='Internet Protocol Version 4'>IPv4</abbr>-Netmask"
-msgstr ""
 
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/crontab.lua:10
 msgid ""
@@ -997,20 +994,18 @@ msgstr "Ellenőrző összeg"
 msgid "Choose mtdblock"
 msgstr ""
 
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:443
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1801
 msgid ""
 "Choose the firewall zone you want to assign to this interface. Select "
 "<em>unspecified</em> to remove the interface from the associated zone or "
-"fill out the create field to define a new zone and attach the interface to "
-"it."
+"fill out the <em>create</em> field to define a new zone and attach the "
+"interface to it."
 msgstr ""
-
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:443
-msgid ""
-"Choose the firewall zone you want to assign to this interface. Select "
-"unspecified to remove the interface from the associated zone or fill out the "
-"create field to define a new zone and attach the interface to it."
-msgstr ""
+"Válassza ki a tűzfal zónát amit hozzá akar rendelni ehhez az interfészhez. "
+"Válassza a <em>nincs megadva</em> elemet az interfésznek a hozzárendelt "
+"zónából történő eltávolításához, vagy töltse ki az <em>új</em> mezőt új zóna "
+"megadásához és csatlakoztassa az interfészt ahhoz."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:833
 msgid ""
@@ -1377,9 +1372,11 @@ msgstr "Adja meg a hálózat nevét."
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:571
 msgid ""
 "Define additional DHCP options, for example "
-"'<code>6,192.168.2.1,192.168.2.2</code>' which advertises different DNS "
+"\"<code>6,192.168.2.1,192.168.2.2</code>\" which advertises different DNS "
 "servers to clients."
 msgstr ""
+"Adjon meg további DHCP opciókat, például \"<code>6,192.168.2.1,192.168.2.2</"
+"code>\", mely különböző DNS kiszolgálókat hirdet az ügyfelek részére."
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:750
 #: modules/luci-base/htdocs/luci-static/resources/form.js:998
@@ -1498,9 +1495,11 @@ msgstr "Letiltás"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:531
 msgid ""
-"Disable <abbr title='Dynamic Host Configuration Protocol'>DHCP</abbr> for "
+"Disable <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr> for "
 "this interface."
 msgstr ""
+"<abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr> tiltása ezen "
+"az interfészen."
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:93
 msgid "Disable Encryption"
@@ -1663,8 +1662,9 @@ msgid "Dual-Stack Lite (RFC6333)"
 msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:547
-msgid "Dynamic <abbr title='Dynamic Host Configuration Protocol'>DHCP</abbr>"
+msgid "Dynamic <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr>"
 msgstr ""
+"Dinamikus <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr>"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6in4.js:60
 msgid "Dynamic tunnel"
@@ -5400,7 +5400,7 @@ msgstr ""
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6in4.js:81
 msgid ""
-"This is either the 'Update Key' configured for the tunnel or the account "
+"This is either the \"Update Key\" configured for the tunnel or the account "
 "password if no update key has been configured"
 msgstr ""
 
@@ -6617,17 +6617,6 @@ msgstr "« Vissza"
 #~ msgid "Broadcom BCM%04x 802.11 Wireless Controller"
 #~ msgstr "Broadcom BCM%04x 802.11 vezeték-nélküli vezérlő"
 
-#~ msgid ""
-#~ "Choose the firewall zone you want to assign to this interface. Select "
-#~ "<em>unspecified</em> to remove the interface from the associated zone or "
-#~ "fill out the <em>create</em> field to define a new zone and attach the "
-#~ "interface to it."
-#~ msgstr ""
-#~ "Válassza ki a tűzfal zónát amit hozzá akar rendelni ehhez az "
-#~ "interfészhez. Válassza a <em>nincs megadva</em> elemet az interfésznek a "
-#~ "hozzárendelt zónából történő eltávolításához, vagy töltse ki az <em>új</"
-#~ "em> mezőt új zóna megadásához és csatlakoztassa az interfészt ahhoz."
-
 #~ msgid "Common Configuration"
 #~ msgstr "Álatános beállítás"
 
@@ -6649,29 +6638,8 @@ msgstr "« Vissza"
 #~ msgid "Create a bridge over multiple interfaces"
 #~ msgstr "Híd létrehozása több interfész között"
 
-#~ msgid ""
-#~ "Define additional DHCP options, for example "
-#~ "\"<code>6,192.168.2.1,192.168.2.2</code>\" which advertises different DNS "
-#~ "servers to clients."
-#~ msgstr ""
-#~ "Adjon meg további DHCP opciókat, például "
-#~ "\"<code>6,192.168.2.1,192.168.2.2</code>\", mely különböző DNS "
-#~ "kiszolgálókat hirdet az ügyfelek részére."
-
-#~ msgid ""
-#~ "Disable <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr> "
-#~ "for this interface."
-#~ msgstr ""
-#~ "<abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr> tiltása "
-#~ "ezen az interfészen."
-
 #~ msgid "Diversity"
 #~ msgstr "Diverzitás"
-
-#~ msgid ""
-#~ "Dynamic <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr>"
-#~ msgstr ""
-#~ "Dinamikus <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr>"
 
 #~ msgid "Edit this interface"
 #~ msgstr "Interfész szerkesztése"

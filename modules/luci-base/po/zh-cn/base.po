@@ -185,6 +185,7 @@ msgstr "<abbr title=\"Internet Protocol Version 4\">IPv4</abbr> 地址"
 msgid "<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Gateway"
 msgstr "<abbr title=\"Internet Protocol Version 4\">IPv4</abbr> 网关"
 
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:555
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:35
 msgid "<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Netmask"
 msgstr "<abbr title=\"Internet Protocol Version 4\">IPv4</abbr> 子网掩码"
@@ -241,10 +242,6 @@ msgstr ""
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:252
 msgid "<abbr title=\"maximal\">Max.</abbr> concurrent queries"
 msgstr "最大并发查询数"
-
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:555
-msgid "<abbr title='Internet Protocol Version 4'>IPv4</abbr>-Netmask"
-msgstr ""
 
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/crontab.lua:10
 msgid ""
@@ -988,20 +985,16 @@ msgstr "校验值"
 msgid "Choose mtdblock"
 msgstr "选择 mtdblock"
 
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:443
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1801
 msgid ""
 "Choose the firewall zone you want to assign to this interface. Select "
 "<em>unspecified</em> to remove the interface from the associated zone or "
-"fill out the create field to define a new zone and attach the interface to "
-"it."
+"fill out the <em>create</em> field to define a new zone and attach the "
+"interface to it."
 msgstr ""
-
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:443
-msgid ""
-"Choose the firewall zone you want to assign to this interface. Select "
-"unspecified to remove the interface from the associated zone or fill out the "
-"create field to define a new zone and attach the interface to it."
-msgstr ""
+"为此接口分配所属的防火墙区域，选择“不指定”可将该接口移出已关联的区域，或者填"
+"写“创建”栏来创建一个新的区域，并将当前接口与之建立关联。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:833
 msgid ""
@@ -1367,9 +1360,11 @@ msgstr "为网络定义名称。"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:571
 msgid ""
 "Define additional DHCP options, for example "
-"'<code>6,192.168.2.1,192.168.2.2</code>' which advertises different DNS "
+"\"<code>6,192.168.2.1,192.168.2.2</code>\" which advertises different DNS "
 "servers to clients."
 msgstr ""
+"设置 DHCP 的附加选项，例如设定 \"<code>6,192.168.2.1,192.168.2.2</code>\" 表"
+"示通告不同的 DNS 服务器给客户端。"
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:750
 #: modules/luci-base/htdocs/luci-static/resources/form.js:998
@@ -1488,9 +1483,11 @@ msgstr "禁用"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:531
 msgid ""
-"Disable <abbr title='Dynamic Host Configuration Protocol'>DHCP</abbr> for "
+"Disable <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr> for "
 "this interface."
 msgstr ""
+"不在此接口提供 <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</"
+"abbr> 服务。"
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:93
 msgid "Disable Encryption"
@@ -1648,8 +1645,8 @@ msgid "Dual-Stack Lite (RFC6333)"
 msgstr "轻型双栈（RFC6333）"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:547
-msgid "Dynamic <abbr title='Dynamic Host Configuration Protocol'>DHCP</abbr>"
-msgstr ""
+msgid "Dynamic <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr>"
+msgstr "动态 <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr>"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6in4.js:60
 msgid "Dynamic tunnel"
@@ -5348,9 +5345,9 @@ msgstr ""
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6in4.js:81
 msgid ""
-"This is either the 'Update Key' configured for the tunnel or the account "
+"This is either the \"Update Key\" configured for the tunnel or the account "
 "password if no update key has been configured"
-msgstr ""
+msgstr "如果更新密钥没有设置的话，隧道的“更新密钥”或者账户密码必须填写。"
 
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/startup.lua:82
 msgid ""
@@ -6558,15 +6555,6 @@ msgstr "« 后退"
 #~ "adjusted to %d."
 #~ msgstr "信道 %d 在 %s 监管区域内不可用并已自动调整到 %d。"
 
-#~ msgid ""
-#~ "Choose the firewall zone you want to assign to this interface. Select "
-#~ "<em>unspecified</em> to remove the interface from the associated zone or "
-#~ "fill out the <em>create</em> field to define a new zone and attach the "
-#~ "interface to it."
-#~ msgstr ""
-#~ "为此接口分配所属的防火墙区域，选择“不指定”可将该接口移出已关联的区域，或者"
-#~ "填写“创建”栏来创建一个新的区域，并将当前接口与之建立关联。"
-
 #~ msgid "Common Configuration"
 #~ msgstr "一般配置"
 
@@ -6588,28 +6576,8 @@ msgstr "« 后退"
 #~ msgid "Create a bridge over multiple interfaces"
 #~ msgstr "在多个接口上创建桥接"
 
-#~ msgid ""
-#~ "Define additional DHCP options, for example "
-#~ "\"<code>6,192.168.2.1,192.168.2.2</code>\" which advertises different DNS "
-#~ "servers to clients."
-#~ msgstr ""
-#~ "设置 DHCP 的附加选项，例如设定 \"<code>6,192.168.2.1,192.168.2.2</code>\" "
-#~ "表示通告不同的 DNS 服务器给客户端。"
-
-#~ msgid ""
-#~ "Disable <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr> "
-#~ "for this interface."
-#~ msgstr ""
-#~ "不在此接口提供 <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</"
-#~ "abbr> 服务。"
-
 #~ msgid "Diversity"
 #~ msgstr "差异"
-
-#~ msgid ""
-#~ "Dynamic <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr>"
-#~ msgstr ""
-#~ "动态 <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr>"
 
 #~ msgid "Edit this interface"
 #~ msgstr "编辑此接口"
@@ -6745,11 +6713,6 @@ msgstr "« 后退"
 #~ "There is no device assigned yet, please attach a network device in the "
 #~ "\"Physical Settings\" tab"
 #~ msgstr "尚未分配设备，请在“物理设置”选项卡中选择网络设备"
-
-#~ msgid ""
-#~ "This is either the \"Update Key\" configured for the tunnel or the "
-#~ "account password if no update key has been configured"
-#~ msgstr "如果更新密钥没有设置的话，隧道的“更新密钥”或者账户密码必须填写。"
 
 #~ msgid "Transmission Rate"
 #~ msgstr "传送速率"

@@ -78,7 +78,7 @@ return network.registerProtocol('6in4', {
 			return true;
 		};
 
-		o = s.taboption('general', form.Value, 'password', _('HE.net password'), _('This is either the \'Update Key\' configured for the tunnel or the account password if no update key has been configured'));
+		o = s.taboption('general', form.Value, 'password', _('HE.net password'), _('This is either the "Update Key" configured for the tunnel or the account password if no update key has been configured'));
 		o.password = true;
 		o.depends('_update', '1');
 

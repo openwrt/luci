@@ -183,6 +183,7 @@ msgstr "<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-주소"
 msgid "<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Gateway"
 msgstr ""
 
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:555
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:35
 msgid "<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Netmask"
 msgstr ""
@@ -238,10 +239,6 @@ msgstr ""
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:252
 msgid "<abbr title=\"maximal\">Max.</abbr> concurrent queries"
 msgstr "<abbr title=\"maximal\">최대</abbr> 동시 처리 query 수"
-
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:555
-msgid "<abbr title='Internet Protocol Version 4'>IPv4</abbr>-Netmask"
-msgstr ""
 
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/crontab.lua:10
 msgid ""
@@ -984,20 +981,18 @@ msgstr ""
 msgid "Choose mtdblock"
 msgstr ""
 
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:443
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1801
 msgid ""
 "Choose the firewall zone you want to assign to this interface. Select "
 "<em>unspecified</em> to remove the interface from the associated zone or "
-"fill out the create field to define a new zone and attach the interface to "
-"it."
+"fill out the <em>create</em> field to define a new zone and attach the "
+"interface to it."
 msgstr ""
-
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:443
-msgid ""
-"Choose the firewall zone you want to assign to this interface. Select "
-"unspecified to remove the interface from the associated zone or fill out the "
-"create field to define a new zone and attach the interface to it."
-msgstr ""
+"이 인터페이스에 할당하고자 하는 firewall zone 을 선택하세요. 연결된 zone 으로"
+"부터 인터페이스를 제거하고 싶다면 <em>unspecified</em> 를 선택하세요.  새로"
+"운 zone 을 정의하고 인터페이스 연결을 원한다면 <em>create</em> 항목을 입력하"
+"세요."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:833
 msgid ""
@@ -1361,9 +1356,12 @@ msgstr ""
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:571
 msgid ""
 "Define additional DHCP options, for example "
-"'<code>6,192.168.2.1,192.168.2.2</code>' which advertises different DNS "
+"\"<code>6,192.168.2.1,192.168.2.2</code>\" which advertises different DNS "
 "servers to clients."
 msgstr ""
+"추가적인 DHCP 옵션을 정의합니다. 예를 들어 "
+"\"<code>6,192.168.2.1,192.168.2.2</code>\" 는 client 에게 다른 DNS 서버를 세"
+"팅하도록 권고할 수 있습니다."
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:750
 #: modules/luci-base/htdocs/luci-static/resources/form.js:998
@@ -1482,9 +1480,11 @@ msgstr "비활성화"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:531
 msgid ""
-"Disable <abbr title='Dynamic Host Configuration Protocol'>DHCP</abbr> for "
+"Disable <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr> for "
 "this interface."
 msgstr ""
+"이 인터페이스에 대해 <abbr title=\"Dynamic Host Configuration Protocol"
+"\">DHCP</abbr> 기능을 비활성합니다."
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:93
 msgid "Disable Encryption"
@@ -1641,7 +1641,7 @@ msgid "Dual-Stack Lite (RFC6333)"
 msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:547
-msgid "Dynamic <abbr title='Dynamic Host Configuration Protocol'>DHCP</abbr>"
+msgid "Dynamic <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr>"
 msgstr ""
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6in4.js:60
@@ -5311,7 +5311,7 @@ msgstr ""
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6in4.js:81
 msgid ""
-"This is either the 'Update Key' configured for the tunnel or the account "
+"This is either the \"Update Key\" configured for the tunnel or the account "
 "password if no update key has been configured"
 msgstr ""
 
@@ -6495,38 +6495,11 @@ msgstr ""
 msgid "« Back"
 msgstr ""
 
-#~ msgid ""
-#~ "Choose the firewall zone you want to assign to this interface. Select "
-#~ "<em>unspecified</em> to remove the interface from the associated zone or "
-#~ "fill out the <em>create</em> field to define a new zone and attach the "
-#~ "interface to it."
-#~ msgstr ""
-#~ "이 인터페이스에 할당하고자 하는 firewall zone 을 선택하세요. 연결된 zone "
-#~ "으로부터 인터페이스를 제거하고 싶다면 <em>unspecified</em> 를 선택하세"
-#~ "요.  새로운 zone 을 정의하고 인터페이스 연결을 원한다면 <em>create</em> 항"
-#~ "목을 입력하세요."
-
 #~ msgid "Common Configuration"
 #~ msgstr "공통 설정"
 
 #~ msgid "Connect"
 #~ msgstr "연결"
-
-#~ msgid ""
-#~ "Define additional DHCP options, for example "
-#~ "\"<code>6,192.168.2.1,192.168.2.2</code>\" which advertises different DNS "
-#~ "servers to clients."
-#~ msgstr ""
-#~ "추가적인 DHCP 옵션을 정의합니다. 예를 들어 "
-#~ "\"<code>6,192.168.2.1,192.168.2.2</code>\" 는 client 에게 다른 DNS 서버를 "
-#~ "세팅하도록 권고할 수 있습니다."
-
-#~ msgid ""
-#~ "Disable <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr> "
-#~ "for this interface."
-#~ msgstr ""
-#~ "이 인터페이스에 대해 <abbr title=\"Dynamic Host Configuration Protocol"
-#~ "\">DHCP</abbr> 기능을 비활성합니다."
 
 #~ msgid "Edit this interface"
 #~ msgstr "이 인터페이스를 수정합니다"

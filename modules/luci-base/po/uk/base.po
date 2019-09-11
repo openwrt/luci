@@ -191,6 +191,7 @@ msgstr "<abbr title=\"Інтернет-протокол версії 4\">IPv4</a
 msgid "<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Gateway"
 msgstr "<abbr title=\"Інтернет-протокол версії 4\">IPv4</abbr>-шлюз"
 
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:555
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:35
 msgid "<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Netmask"
 msgstr "<abbr title=\"Інтернет-протокол версії 4\">IPv4</abbr>-маска"
@@ -252,10 +253,6 @@ msgstr ""
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:252
 msgid "<abbr title=\"maximal\">Max.</abbr> concurrent queries"
 msgstr "<abbr title=\"Максимум\">Макс.</abbr> одночасних запитів"
-
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:555
-msgid "<abbr title='Internet Protocol Version 4'>IPv4</abbr>-Netmask"
-msgstr ""
 
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/crontab.lua:10
 msgid ""
@@ -1031,20 +1028,18 @@ msgstr "Контрольна сума"
 msgid "Choose mtdblock"
 msgstr "Виберіть mtdblock"
 
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:443
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1801
 msgid ""
 "Choose the firewall zone you want to assign to this interface. Select "
 "<em>unspecified</em> to remove the interface from the associated zone or "
-"fill out the create field to define a new zone and attach the interface to "
-"it."
+"fill out the <em>create</em> field to define a new zone and attach the "
+"interface to it."
 msgstr ""
-
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:443
-msgid ""
-"Choose the firewall zone you want to assign to this interface. Select "
-"unspecified to remove the interface from the associated zone or fill out the "
-"create field to define a new zone and attach the interface to it."
-msgstr ""
+"Оберіть зону брандмауера, яку ви хочете призначити на цей інтерфейс. "
+"Виберіть <em>не визначено</em>, щоб видалити інтерфейс з відповідних зон, "
+"або заповніть поле <em>створити</em>, щоб визначити нову зону і прикріпити "
+"до неї інтерфейс."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:833
 msgid ""
@@ -1425,9 +1420,12 @@ msgstr "Визначення імені для цієї мережі."
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:571
 msgid ""
 "Define additional DHCP options, for example "
-"'<code>6,192.168.2.1,192.168.2.2</code>' which advertises different DNS "
+"\"<code>6,192.168.2.1,192.168.2.2</code>\" which advertises different DNS "
 "servers to clients."
 msgstr ""
+"Визначення додаткових опцій DHCP, наприклад "
+"\"<code>6,192.168.2.1,192.168.2.2</code>\", щоб оголошувати різні DNS-"
+"сервери для клієнтів."
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:750
 #: modules/luci-base/htdocs/luci-static/resources/form.js:998
@@ -1546,9 +1544,11 @@ msgstr "Вимкнути"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:531
 msgid ""
-"Disable <abbr title='Dynamic Host Configuration Protocol'>DHCP</abbr> for "
+"Disable <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr> for "
 "this interface."
 msgstr ""
+"Вимкнути <abbr title=\"Dynamic Host Configuration Protocol — протокол "
+"динамічної конфігурації вузла\">DHCP</abbr> для цього інтерфейсу."
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:93
 msgid "Disable Encryption"
@@ -1714,8 +1714,10 @@ msgid "Dual-Stack Lite (RFC6333)"
 msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:547
-msgid "Dynamic <abbr title='Dynamic Host Configuration Protocol'>DHCP</abbr>"
+msgid "Dynamic <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr>"
 msgstr ""
+"Динамічний <abbr title=\"Dynamic Host Configuration Protocol — протокол "
+"динамічної конфігурації вузла\">DHCP</abbr>"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6in4.js:60
 msgid "Dynamic tunnel"
@@ -5546,9 +5548,11 @@ msgstr ""
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6in4.js:81
 msgid ""
-"This is either the 'Update Key' configured for the tunnel or the account "
+"This is either the \"Update Key\" configured for the tunnel or the account "
 "password if no update key has been configured"
 msgstr ""
+"Це або \"Update Key\", сконфігурований для тунелю, або пароль облікового "
+"запису, якщо ключ оновлення не налаштовано"
 
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/startup.lua:82
 msgid ""
@@ -6780,17 +6784,6 @@ msgstr "« Назад"
 #~ "Канал %d не доступний у %s регуляторному домені й був автоматично "
 #~ "скоригований на %d."
 
-#~ msgid ""
-#~ "Choose the firewall zone you want to assign to this interface. Select "
-#~ "<em>unspecified</em> to remove the interface from the associated zone or "
-#~ "fill out the <em>create</em> field to define a new zone and attach the "
-#~ "interface to it."
-#~ msgstr ""
-#~ "Оберіть зону брандмауера, яку ви хочете призначити на цей інтерфейс. "
-#~ "Виберіть <em>не визначено</em>, щоб видалити інтерфейс з відповідних зон, "
-#~ "або заповніть поле <em>створити</em>, щоб визначити нову зону і "
-#~ "прикріпити до неї інтерфейс."
-
 #~ msgid "Common Configuration"
 #~ msgstr "Загальна конфігурація"
 
@@ -6812,30 +6805,8 @@ msgstr "« Назад"
 #~ msgid "Create a bridge over multiple interfaces"
 #~ msgstr "Створити міст через кілька інтерфейсів"
 
-#~ msgid ""
-#~ "Define additional DHCP options, for example "
-#~ "\"<code>6,192.168.2.1,192.168.2.2</code>\" which advertises different DNS "
-#~ "servers to clients."
-#~ msgstr ""
-#~ "Визначення додаткових опцій DHCP, наприклад "
-#~ "\"<code>6,192.168.2.1,192.168.2.2</code>\", щоб оголошувати різні DNS-"
-#~ "сервери для клієнтів."
-
-#~ msgid ""
-#~ "Disable <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr> "
-#~ "for this interface."
-#~ msgstr ""
-#~ "Вимкнути <abbr title=\"Dynamic Host Configuration Protocol — протокол "
-#~ "динамічної конфігурації вузла\">DHCP</abbr> для цього інтерфейсу."
-
 #~ msgid "Diversity"
 #~ msgstr "Різновидність"
-
-#~ msgid ""
-#~ "Dynamic <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr>"
-#~ msgstr ""
-#~ "Динамічний <abbr title=\"Dynamic Host Configuration Protocol — протокол "
-#~ "динамічної конфігурації вузла\">DHCP</abbr>"
 
 #~ msgid "Edit this interface"
 #~ msgstr "Редагувати цей інтерфейс"
@@ -6987,13 +6958,6 @@ msgstr "« Назад"
 #~ msgstr ""
 #~ "Немає жодного призначеного пристрою. Призначте мережевий пристрій у "
 #~ "вкладці \"Фізичні параметри\"."
-
-#~ msgid ""
-#~ "This is either the \"Update Key\" configured for the tunnel or the "
-#~ "account password if no update key has been configured"
-#~ msgstr ""
-#~ "Це або \"Update Key\", сконфігурований для тунелю, або пароль облікового "
-#~ "запису, якщо ключ оновлення не налаштовано"
 
 #~ msgid "Transmission Rate"
 #~ msgstr "Швидкість передавання"

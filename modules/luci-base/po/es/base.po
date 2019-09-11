@@ -188,6 +188,7 @@ msgid "<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Gateway"
 msgstr ""
 "Puerta de enlace <abbr title=\"Internet Protocol Version 4\">IPv4</abbr>"
 
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:555
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:35
 msgid "<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Netmask"
 msgstr "Máscara de red <abbr title=\"Internet Protocol Version 4\">IPv4</abbr>"
@@ -245,10 +246,6 @@ msgstr ""
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:252
 msgid "<abbr title=\"maximal\">Max.</abbr> concurrent queries"
 msgstr "<abbr title=\"maximal\">Máx.</abbr> consultas simultáneas"
-
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:555
-msgid "<abbr title='Internet Protocol Version 4'>IPv4</abbr>-Netmask"
-msgstr ""
 
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/crontab.lua:10
 msgid ""
@@ -1020,20 +1017,18 @@ msgstr "Comprobación"
 msgid "Choose mtdblock"
 msgstr "Elegir mtdblock"
 
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:443
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1801
 msgid ""
 "Choose the firewall zone you want to assign to this interface. Select "
 "<em>unspecified</em> to remove the interface from the associated zone or "
-"fill out the create field to define a new zone and attach the interface to "
-"it."
+"fill out the <em>create</em> field to define a new zone and attach the "
+"interface to it."
 msgstr ""
-
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:443
-msgid ""
-"Choose the firewall zone you want to assign to this interface. Select "
-"unspecified to remove the interface from the associated zone or fill out the "
-"create field to define a new zone and attach the interface to it."
-msgstr ""
+"Elija la zona del firewall a la que quiere asignar esta interfaz. Seleccione "
+"<em>no especificado</em> para remover la interfaz de la zona asociada o "
+"rellene el campo <em>crear</em> para definir una zona nueva a la que "
+"asignarla."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:833
 msgid ""
@@ -1412,9 +1407,12 @@ msgstr "Definir un nombre para esta red."
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:571
 msgid ""
 "Define additional DHCP options, for example "
-"'<code>6,192.168.2.1,192.168.2.2</code>' which advertises different DNS "
+"\"<code>6,192.168.2.1,192.168.2.2</code>\" which advertises different DNS "
 "servers to clients."
 msgstr ""
+"Define opciones adicionales de DHCP, por ejemplo "
+"\"<code>6,192.168.2.1,192.168.2.2</code>\" que publica diferentes servidores "
+"DNS a los clientes."
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:750
 #: modules/luci-base/htdocs/luci-static/resources/form.js:998
@@ -1533,9 +1531,11 @@ msgstr "Deshabilitar"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:531
 msgid ""
-"Disable <abbr title='Dynamic Host Configuration Protocol'>DHCP</abbr> for "
+"Disable <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr> for "
 "this interface."
 msgstr ""
+"Deshabilitar <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr> "
+"para esta interfaz."
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:93
 msgid "Disable Encryption"
@@ -1697,8 +1697,9 @@ msgid "Dual-Stack Lite (RFC6333)"
 msgstr "Dual-Stack Lite (RFC6333)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:547
-msgid "Dynamic <abbr title='Dynamic Host Configuration Protocol'>DHCP</abbr>"
+msgid "Dynamic <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr>"
 msgstr ""
+"<abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr> dinámico"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6in4.js:60
 msgid "Dynamic tunnel"
@@ -5522,9 +5523,12 @@ msgstr ""
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6in4.js:81
 msgid ""
-"This is either the 'Update Key' configured for the tunnel or the account "
+"This is either the \"Update Key\" configured for the tunnel or the account "
 "password if no update key has been configured"
 msgstr ""
+"Esta es la \"clave de actualización\" configurada para el túnel o la "
+"contraseña de la cuenta si no se ha configurado ninguna clave de "
+"actualización"
 
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/startup.lua:82
 msgid ""
@@ -6749,17 +6753,6 @@ msgstr "« Volver"
 #~ "El canal %d no está disponible en el dominio regulatorio %s y se ha "
 #~ "ajustado automáticamente a %d."
 
-#~ msgid ""
-#~ "Choose the firewall zone you want to assign to this interface. Select "
-#~ "<em>unspecified</em> to remove the interface from the associated zone or "
-#~ "fill out the <em>create</em> field to define a new zone and attach the "
-#~ "interface to it."
-#~ msgstr ""
-#~ "Elija la zona del firewall a la que quiere asignar esta interfaz. "
-#~ "Seleccione <em>no especificado</em> para remover la interfaz de la zona "
-#~ "asociada o rellene el campo <em>crear</em> para definir una zona nueva a "
-#~ "la que asignarla."
-
 #~ msgid "Common Configuration"
 #~ msgstr "Configuración común"
 
@@ -6781,29 +6774,8 @@ msgstr "« Volver"
 #~ msgid "Create a bridge over multiple interfaces"
 #~ msgstr "Crear un puente sobre múltiples interfaces"
 
-#~ msgid ""
-#~ "Define additional DHCP options, for example "
-#~ "\"<code>6,192.168.2.1,192.168.2.2</code>\" which advertises different DNS "
-#~ "servers to clients."
-#~ msgstr ""
-#~ "Define opciones adicionales de DHCP, por ejemplo "
-#~ "\"<code>6,192.168.2.1,192.168.2.2</code>\" que publica diferentes "
-#~ "servidores DNS a los clientes."
-
-#~ msgid ""
-#~ "Disable <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr> "
-#~ "for this interface."
-#~ msgstr ""
-#~ "Deshabilitar <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</"
-#~ "abbr> para esta interfaz."
-
 #~ msgid "Diversity"
 #~ msgstr "Diversidad"
-
-#~ msgid ""
-#~ "Dynamic <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr>"
-#~ msgstr ""
-#~ "<abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr> dinámico"
 
 #~ msgid "Edit this interface"
 #~ msgstr "Editar esta interfaz"
@@ -6955,14 +6927,6 @@ msgstr "« Volver"
 #~ msgstr ""
 #~ "No hay dispositivo asignado aún. Por favor, enlace un dispositivo de red "
 #~ "en la pestaña \"Configuración física\""
-
-#~ msgid ""
-#~ "This is either the \"Update Key\" configured for the tunnel or the "
-#~ "account password if no update key has been configured"
-#~ msgstr ""
-#~ "Esta es la \"clave de actualización\" configurada para el túnel o la "
-#~ "contraseña de la cuenta si no se ha configurado ninguna clave de "
-#~ "actualización"
 
 #~ msgid "Transmission Rate"
 #~ msgstr "Tasa de transmisión"

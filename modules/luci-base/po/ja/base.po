@@ -185,6 +185,7 @@ msgstr "<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-アドレス"
 msgid "<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Gateway"
 msgstr "<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-ゲートウェイ"
 
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:555
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:35
 msgid "<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Netmask"
 msgstr "<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-ネットマスク"
@@ -243,10 +244,6 @@ msgstr ""
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:252
 msgid "<abbr title=\"maximal\">Max.</abbr> concurrent queries"
 msgstr "<abbr title=\"maximal\">最大</abbr> 並列処理クエリ"
-
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:555
-msgid "<abbr title='Internet Protocol Version 4'>IPv4</abbr>-Netmask"
-msgstr ""
 
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/crontab.lua:10
 msgid ""
@@ -1004,20 +1001,18 @@ msgstr "チェックサム"
 msgid "Choose mtdblock"
 msgstr "mtdblock を選択"
 
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:443
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1801
 msgid ""
 "Choose the firewall zone you want to assign to this interface. Select "
 "<em>unspecified</em> to remove the interface from the associated zone or "
-"fill out the create field to define a new zone and attach the interface to "
-"it."
+"fill out the <em>create</em> field to define a new zone and attach the "
+"interface to it."
 msgstr ""
-
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:443
-msgid ""
-"Choose the firewall zone you want to assign to this interface. Select "
-"unspecified to remove the interface from the associated zone or fill out the "
-"create field to define a new zone and attach the interface to it."
-msgstr ""
+"このインターフェースに設定するファイウォール ゾーンを選択してください。<em>設"
+"定しない</em>を選択すると、設定済みのゾーンを削除します。また、<em>作成</em>"
+"フィールドにゾーン名を入力すると、新しくゾーンを作成し、このインターフェース"
+"に設定します。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:833
 msgid ""
@@ -1394,9 +1389,11 @@ msgstr "ネットワーク名を設定してください。"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:571
 msgid ""
 "Define additional DHCP options, for example "
-"'<code>6,192.168.2.1,192.168.2.2</code>' which advertises different DNS "
+"\"<code>6,192.168.2.1,192.168.2.2</code>\" which advertises different DNS "
 "servers to clients."
 msgstr ""
+"追加のDHCPオプションを設定します。（例：\"<code>6,192.168.2.1,192.168.2.2</"
+"code>\" と設定することで、クライアントに指定のDNSサーバーを通知します。）"
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:750
 #: modules/luci-base/htdocs/luci-static/resources/form.js:998
@@ -1515,9 +1512,11 @@ msgstr "無効"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:531
 msgid ""
-"Disable <abbr title='Dynamic Host Configuration Protocol'>DHCP</abbr> for "
+"Disable <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr> for "
 "this interface."
 msgstr ""
+"このインターフェースでは<abbr title=\"Dynamic Host Configuration Protocol"
+"\">DHCP</abbr>機能を使用しません。"
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:93
 msgid "Disable Encryption"
@@ -1679,8 +1678,8 @@ msgid "Dual-Stack Lite (RFC6333)"
 msgstr "Dual-Stack Lite (RFC6333)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:547
-msgid "Dynamic <abbr title='Dynamic Host Configuration Protocol'>DHCP</abbr>"
-msgstr ""
+msgid "Dynamic <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr>"
+msgstr "動的 <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr>"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6in4.js:60
 msgid "Dynamic tunnel"
@@ -5461,7 +5460,7 @@ msgstr ""
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6in4.js:81
 msgid ""
-"This is either the 'Update Key' configured for the tunnel or the account "
+"This is either the \"Update Key\" configured for the tunnel or the account "
 "password if no update key has been configured"
 msgstr ""
 
@@ -6686,17 +6685,6 @@ msgstr "« 戻る"
 #~ "チャンネル %d は、 %s 領域内では規制により利用できません。%d へ自動調整さ"
 #~ "れました。"
 
-#~ msgid ""
-#~ "Choose the firewall zone you want to assign to this interface. Select "
-#~ "<em>unspecified</em> to remove the interface from the associated zone or "
-#~ "fill out the <em>create</em> field to define a new zone and attach the "
-#~ "interface to it."
-#~ msgstr ""
-#~ "このインターフェースに設定するファイウォール ゾーンを選択してください。"
-#~ "<em>設定しない</em>を選択すると、設定済みのゾーンを削除します。また、<em>"
-#~ "作成</em>フィールドにゾーン名を入力すると、新しくゾーンを作成し、このイン"
-#~ "ターフェースに設定します。"
-
 #~ msgid "Common Configuration"
 #~ msgstr "一般設定"
 
@@ -6718,29 +6706,8 @@ msgstr "« 戻る"
 #~ msgid "Create a bridge over multiple interfaces"
 #~ msgstr "複数のインタフェースを指定してブリッジを作成します"
 
-#~ msgid ""
-#~ "Define additional DHCP options, for example "
-#~ "\"<code>6,192.168.2.1,192.168.2.2</code>\" which advertises different DNS "
-#~ "servers to clients."
-#~ msgstr ""
-#~ "追加のDHCPオプションを設定します。（例："
-#~ "\"<code>6,192.168.2.1,192.168.2.2</code>\" と設定することで、クライアント"
-#~ "に指定のDNSサーバーを通知します。）"
-
-#~ msgid ""
-#~ "Disable <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr> "
-#~ "for this interface."
-#~ msgstr ""
-#~ "このインターフェースでは<abbr title=\"Dynamic Host Configuration Protocol"
-#~ "\">DHCP</abbr>機能を使用しません。"
-
 #~ msgid "Diversity"
 #~ msgstr "ダイバシティ"
-
-#~ msgid ""
-#~ "Dynamic <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr>"
-#~ msgstr ""
-#~ "動的 <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr>"
 
 #~ msgid "Edit this interface"
 #~ msgstr "インターフェースを編集します"

@@ -440,7 +440,7 @@ return L.view.extend({
 				};
 
 				if (L.hasSystemFeature('firewall')) {
-					o = s.taboption('firewall', widgets.ZoneSelect, '_zone', _('Create / Assign firewall-zone'), _('Choose the firewall zone you want to assign to this interface. Select unspecified to remove the interface from the associated zone or fill out the create field to define a new zone and attach the interface to it.'));
+					o = s.taboption('firewall', widgets.ZoneSelect, '_zone', _('Create / Assign firewall-zone'), _('Choose the firewall zone you want to assign to this interface. Select <em>unspecified</em> to remove the interface from the associated zone or fill out the <em>create</em> field to define a new zone and attach the interface to it.'));
 					o.network = ifc.getName();
 					o.optional = true;
 
@@ -528,7 +528,7 @@ return L.view.extend({
 						]);
 					};
 
-					ss.taboption('general', form.Flag, 'ignore', _('Ignore interface'), _('Disable <abbr title=\'Dynamic Host Configuration Protocol\'>DHCP</abbr> for this interface.'));
+					ss.taboption('general', form.Flag, 'ignore', _('Ignore interface'), _('Disable <abbr title="Dynamic Host Configuration Protocol">DHCP</abbr> for this interface.'));
 
 					so = ss.taboption('general', form.Value, 'start', _('Start'), _('Lowest leased address as offset from the network address.'));
 					so.optional = true;
@@ -544,7 +544,7 @@ return L.view.extend({
 					so.optional = true;
 					so.default = '12h';
 
-					so = ss.taboption('advanced', form.Flag, 'dynamicdhcp', _('Dynamic <abbr title=\'Dynamic Host Configuration Protocol\'>DHCP</abbr>'), _('Dynamically allocate DHCP addresses for clients. If disabled, only clients having static leases will be served.'));
+					so = ss.taboption('advanced', form.Flag, 'dynamicdhcp', _('Dynamic <abbr title="Dynamic Host Configuration Protocol">DHCP</abbr>'), _('Dynamically allocate DHCP addresses for clients. If disabled, only clients having static leases will be served.'));
 					so.default = so.enabled;
 
 					ss.taboption('advanced', form.Flag, 'force', _('Force'), _('Force DHCP on this network even if another server is detected.'));
@@ -552,7 +552,7 @@ return L.view.extend({
 					// XXX: is this actually useful?
 					//ss.taboption('advanced', form.Value, 'name', _('Name'), _('Define a name for this network.'));
 
-					so = ss.taboption('advanced', form.Value, 'netmask', _('<abbr title=\'Internet Protocol Version 4\'>IPv4</abbr>-Netmask'), _('Override the netmask sent to clients. Normally it is calculated from the subnet that is served.'));
+					so = ss.taboption('advanced', form.Value, 'netmask', _('<abbr title="Internet Protocol Version 4">IPv4</abbr>-Netmask'), _('Override the netmask sent to clients. Normally it is calculated from the subnet that is served.'));
 					so.optional = true;
 					so.datatype = 'ip4addr';
 
@@ -568,7 +568,7 @@ return L.view.extend({
 						return form.Value.prototype.validate.apply(this, [ section_id, value ]);
 					};
 
-					ss.taboption('advanced', form.DynamicList, 'dhcp_option', _('DHCP-Options'), _('Define additional DHCP options, for example \'<code>6,192.168.2.1,192.168.2.2</code>\' which advertises different DNS servers to clients.'));
+					ss.taboption('advanced', form.DynamicList, 'dhcp_option', _('DHCP-Options'), _('Define additional DHCP options, for example "<code>6,192.168.2.1,192.168.2.2</code>" which advertises different DNS servers to clients.'));
 
 					for (var i = 0; i < ss.children.length; i++)
 						if (ss.children[i].option != 'ignore')

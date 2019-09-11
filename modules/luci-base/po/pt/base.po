@@ -189,6 +189,7 @@ msgstr "Endereço <abbr title=\"Protocolo de Internet Versão 4\">IPv4</abbr>"
 msgid "<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Gateway"
 msgstr "Gateway <abbr title=\"Protocolo de Internet Versão 4\">IPv4</abbr>"
 
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:555
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:35
 msgid "<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Netmask"
 msgstr ""
@@ -247,10 +248,6 @@ msgstr ""
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:252
 msgid "<abbr title=\"maximal\">Max.</abbr> concurrent queries"
 msgstr "<abbr title=\"máximo\">Max.</abbr> consultas concorrentes"
-
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:555
-msgid "<abbr title='Internet Protocol Version 4'>IPv4</abbr>-Netmask"
-msgstr ""
 
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/crontab.lua:10
 msgid ""
@@ -1001,20 +998,18 @@ msgstr "Checksum"
 msgid "Choose mtdblock"
 msgstr ""
 
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:443
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1801
 msgid ""
 "Choose the firewall zone you want to assign to this interface. Select "
 "<em>unspecified</em> to remove the interface from the associated zone or "
-"fill out the create field to define a new zone and attach the interface to "
-"it."
+"fill out the <em>create</em> field to define a new zone and attach the "
+"interface to it."
 msgstr ""
-
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:443
-msgid ""
-"Choose the firewall zone you want to assign to this interface. Select "
-"unspecified to remove the interface from the associated zone or fill out the "
-"create field to define a new zone and attach the interface to it."
-msgstr ""
+"Escolha a zona de firewall que pretende associar a esta interface. Escolha "
+"<em>não especificado</em> para remover a interface da zona associada ou "
+"coloque em branco o campo <em>criar</em> para definir a nova zona e ligar-"
+"lhe a interface."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:833
 msgid ""
@@ -1380,9 +1375,12 @@ msgstr "Definir um nome para esta rede."
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:571
 msgid ""
 "Define additional DHCP options, for example "
-"'<code>6,192.168.2.1,192.168.2.2</code>' which advertises different DNS "
+"\"<code>6,192.168.2.1,192.168.2.2</code>\" which advertises different DNS "
 "servers to clients."
 msgstr ""
+"Definir opções adicionais de DHCP, por exemplo "
+"\"<code>6,192.168.2.1,192.168.2.2</code>\" informa os clientes de diferentes "
+"servidores DNS."
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:750
 #: modules/luci-base/htdocs/luci-static/resources/form.js:998
@@ -1501,9 +1499,11 @@ msgstr "Desativar"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:531
 msgid ""
-"Disable <abbr title='Dynamic Host Configuration Protocol'>DHCP</abbr> for "
+"Disable <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr> for "
 "this interface."
 msgstr ""
+"Desativar <abbr title=\"Protocolo Configuração Dinâmica de Hosts\">DHCP</"
+"abbr> para esta interface."
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:93
 msgid "Disable Encryption"
@@ -1666,8 +1666,10 @@ msgid "Dual-Stack Lite (RFC6333)"
 msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:547
-msgid "Dynamic <abbr title='Dynamic Host Configuration Protocol'>DHCP</abbr>"
+msgid "Dynamic <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr>"
 msgstr ""
+"<abbr title=\"Protocolo de Configuração Dinâmica de Hosts\">DHCP</abbr> "
+"Dinâmico"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6in4.js:60
 msgid "Dynamic tunnel"
@@ -5378,7 +5380,7 @@ msgstr ""
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6in4.js:81
 msgid ""
-"This is either the 'Update Key' configured for the tunnel or the account "
+"This is either the \"Update Key\" configured for the tunnel or the account "
 "password if no update key has been configured"
 msgstr ""
 
@@ -6584,17 +6586,6 @@ msgstr "« Voltar"
 #~ msgid "Broadcom BCM%04x 802.11 Wireless Controller"
 #~ msgstr "Controlador Wireless Broadcom BCM%04x 802.11"
 
-#~ msgid ""
-#~ "Choose the firewall zone you want to assign to this interface. Select "
-#~ "<em>unspecified</em> to remove the interface from the associated zone or "
-#~ "fill out the <em>create</em> field to define a new zone and attach the "
-#~ "interface to it."
-#~ msgstr ""
-#~ "Escolha a zona de firewall que pretende associar a esta interface. "
-#~ "Escolha <em>não especificado</em> para remover a interface da zona "
-#~ "associada ou coloque em branco o campo <em>criar</em> para definir a nova "
-#~ "zona e ligar-lhe a interface."
-
 #~ msgid "Common Configuration"
 #~ msgstr "Configuração comum"
 
@@ -6616,30 +6607,8 @@ msgstr "« Voltar"
 #~ msgid "Create a bridge over multiple interfaces"
 #~ msgstr "Criar uma bridge entre múltiplas interfaces "
 
-#~ msgid ""
-#~ "Define additional DHCP options, for example "
-#~ "\"<code>6,192.168.2.1,192.168.2.2</code>\" which advertises different DNS "
-#~ "servers to clients."
-#~ msgstr ""
-#~ "Definir opções adicionais de DHCP, por exemplo "
-#~ "\"<code>6,192.168.2.1,192.168.2.2</code>\" informa os clientes de "
-#~ "diferentes servidores DNS."
-
-#~ msgid ""
-#~ "Disable <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr> "
-#~ "for this interface."
-#~ msgstr ""
-#~ "Desativar <abbr title=\"Protocolo Configuração Dinâmica de Hosts\">DHCP</"
-#~ "abbr> para esta interface."
-
 #~ msgid "Diversity"
 #~ msgstr "Diversidade"
-
-#~ msgid ""
-#~ "Dynamic <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr>"
-#~ msgstr ""
-#~ "<abbr title=\"Protocolo de Configuração Dinâmica de Hosts\">DHCP</abbr> "
-#~ "Dinâmico"
 
 #~ msgid "Edit this interface"
 #~ msgstr "Editar esta interface"
