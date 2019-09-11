@@ -1709,7 +1709,7 @@ button.btn::-moz-focus-inner, input[type=submit].btn::-moz-focus-inner {
 
 .alert-message {
 	position: relative;
-	padding: 7px 15px;
+	padding: .25em .5em;
 	margin-bottom: 18px;
 	color: #404040;
 	background: linear-gradient(to bottom, #fceec1, #eedc94) repeat-x;
@@ -1727,30 +1727,22 @@ button.btn::-moz-focus-inner, input[type=submit].btn::-moz-focus-inner {
 	*margin-top: 0;
 }
 
-.alert-message a {
-	font-weight: bold;
-	color: #404040;
-}
-
-.alert-message.danger p a,
-.alert-message.error p a,
-.alert-message.success p a,
-.alert-message.info p a {
-	color: #fff;
-}
-
-.alert-message h5 {
-	line-height: 18px;
-}
-
+.alert-message h4,
+.alert-message h5,
+.alert-message pre,
+.alert-message ul,
+.alert-message li,
 .alert-message p {
-	margin-bottom: 0;
+	color: inherit;
+	border: none;
+	line-height: inherit;
+	background: transparent;
+	padding: 0;
+	margin: .25em 0;
 }
 
-.alert-message div {
-	margin-top: 5px;
-	margin-bottom: 2px;
-	line-height: 28px;
+.alert-message button {
+	margin: .25em 0;
 }
 
 .label {
@@ -2338,4 +2330,22 @@ html body.apply-overlay-active {
 
 .cbi-filebrowser .upload > div > input {
 	width: 100%;
+}
+
+@keyframes fade-in {
+	0% { opacity: 0; }
+	100% { opacity: 1; }
+}
+
+@keyframes fade-out {
+	0% { opacity: 1; }
+	100% { opacity: 0; }
+}
+
+.fade-in {
+	animation: fade-in .4s ease;
+}
+
+.fade-out {
+	animation: fade-out .4s ease;
 }
