@@ -478,7 +478,7 @@ var CBIDeviceSelect = form.ListValue.extend({
 			var networks = device.getNetworks();
 
 			if (networks.length > 0)
-				L.dom.append(item.lastChild, [ ' (', networks.join(', '), ')' ]);
+				L.dom.append(item.lastChild, [ ' (', networks.map(function(n) { return n.getName() }).join(', '), ')' ]);
 
 			if (checked[name])
 				values.push(name);
