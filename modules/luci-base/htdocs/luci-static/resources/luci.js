@@ -619,15 +619,34 @@
 
 			if (type instanceof Error) {
 				e = type;
-				stack = (e.stack || '').split(/\n/);
 
 				if (msg)
 					e.message = msg + ': ' + e.message;
 			}
 			else {
+				try { throw new Error('stacktrace') }
+				catch (e2) { stack = (e2.stack || '').split(/\n/) }
+
 				e = new (window[type || 'Error'] || Error)(msg || 'Unspecified error');
 				e.name = type || 'Error';
 			}
+
+			stack = (stack || []).map(function(frame) {
+				frame = frame.replace(/(.*?)@(.+):(\d+):(\d+)/g, 'at $1 ($2:$3:$4)').trim();
+				return frame ? '  ' + frame : '';
+			});
+
+			if (!/^  at /.test(stack[0]))
+				stack.shift();
+
+			if (/\braise /.test(stack[0]))
+				stack.shift();
+
+			if (/\berror /.test(stack[0]))
+				stack.shift();
+
+			if (stack.length)
+				e.message += '\n' + stack.join('\n');
 
 			if (window.console && console.debug)
 				console.debug(e);
@@ -640,28 +659,16 @@
 				L.raise.apply(L, Array.prototype.slice.call(arguments));
 			}
 			catch (e) {
-				var stack = (e.stack || '').split(/\n/).map(function(frame) {
-					frame = frame.replace(/(.*?)@(.+):(\d+):(\d+)/g, 'at $1 ($2:$3:$4)').trim();
-					return frame ? '  ' + frame : '';
-				});
+				if (!e.reported) {
+					if (L.ui)
+						L.ui.addNotification(e.name || _('Runtime error'),
+							E('pre', {}, e.message), 'danger');
+					else
+						L.dom.content(document.querySelector('#maincontent'),
+							E('pre', { 'class': 'alert-message error' }, e.message));
 
-				if (!/^  at /.test(stack[0]))
-					stack.shift();
-
-				if (/\braise /.test(stack[0]))
-					stack.shift();
-
-				if (/\berror /.test(stack[0]))
-					stack.shift();
-
-				stack = stack.length ? '\n' + stack.join('\n') : '';
-
-				if (L.ui)
-					L.ui.showModal(e.name || _('Runtime error'),
-						E('pre', { 'class': 'alert-message error' }, e.message + stack));
-				else
-					L.dom.content(document.querySelector('#maincontent'),
-						E('pre', { 'class': 'alert-message error' }, e + stack));
+					e.reported = true;
+				}
 
 				throw e;
 			}
