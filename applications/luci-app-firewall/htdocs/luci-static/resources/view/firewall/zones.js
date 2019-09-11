@@ -92,11 +92,14 @@ return L.view.extend({
 		o = s.taboption('general', form.Value, 'name', _('Name'));
 		o.placeholder = _('Unnamed zone');
 		o.modalonly = true;
+		o.rmempty = false;
 		o.datatype = 'and(uciname,maxlength(11))';
 		o.write = function(section_id, formvalue) {
 			var cfgvalue = this.cfgvalue(section_id);
 
-			if (cfgvalue != formvalue)
+			if (cfgvalue == null || cfgvalue == '')
+				return uci.set('firewall', section_id, 'name', formvalue);
+			else if (cfgvalue != formvalue)
 				return firewall.renameZone(cfgvalue, formvalue);
 		};
 
@@ -269,7 +272,7 @@ return L.view.extend({
 		o.cfgvalue = function(section_id) {
 			var out = (this.option == 'out'),
 			    zone = this.lookupZone(uci.get('firewall', section_id, 'name')),
-			    fwds = zone.getForwardingsBy(out ? 'src' : 'dest'),
+			    fwds = zone ? zone.getForwardingsBy(out ? 'src' : 'dest') : [],
 			    value = [];
 
 			for (var i = 0; i < fwds.length; i++)
@@ -280,7 +283,7 @@ return L.view.extend({
 		o.write = o.remove = function(section_id, formvalue) {
 			var out = (this.option == 'out'),
 			    zone = this.lookupZone(uci.get('firewall', section_id, 'name')),
-			    fwds = zone.getForwardingsBy(out ? 'src' : 'dest');
+			    fwds = zone ? zone.getForwardingsBy(out ? 'src' : 'dest') : [];
 
 			if (formvalue == null)
 				formvalue = [];
