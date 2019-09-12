@@ -468,6 +468,113 @@ local methods = {
 
 			return rv
 		end
+	},
+
+	getSwconfigFeatures = {
+		args = { switch = "switch0" },
+		call = function(args)
+			local util = require "luci.util"
+
+			-- Parse some common switch properties from swconfig help output.
+			local swc, err = io.popen("swconfig dev %s help 2>/dev/null" % util.shellquote(args.switch))
+			if swc then
+				local is_port_attr = false
+				local is_vlan_attr = false
+				local rv = {}
+
+				while true do
+					local line = swc:read("*l")
+					if not line then break end
+
+					if line:match("^%s+%-%-vlan") then
+						is_vlan_attr = true
+
+					elseif line:match("^%s+%-%-port") then
+						is_vlan_attr = false
+						is_port_attr = true
+
+					elseif line:match("cpu @") then
+						rv.switch_title = line:match("^switch%d: %w+%((.-)%)")
+						rv.num_vlans    = tonumber(line:match("vlans: (%d+)")) or 16
+						rv.min_vid      = 1
+
+					elseif line:match(": pvid") or line:match(": tag") or line:match(": vid") then
+						if is_vlan_attr then rv.vid_option = line:match(": (%w+)") end
+
+					elseif line:match(": enable_vlan4k") then
+						rv.vlan4k_option = "enable_vlan4k"
+
+					elseif line:match(": enable_vlan") then
+						rv.vlan_option = "enable_vlan"
+
+					elseif line:match(": enable_learning") then
+						rv.learning_option = "enable_learning"
+
+					elseif line:match(": enable_mirror_rx") then
+						rv.mirror_option = "enable_mirror_rx"
+
+					elseif line:match(": max_length") then
+						rv.jumbo_option = "max_length"
+					end
+				end
+
+				swc:close()
+
+				if not next(rv) then
+					return { error = "No such switch" }
+				end
+
+				return rv
+			else
+				return { error = err }
+			end
+		end
+	},
+
+	getSwconfigPortState = {
+		args = { switch = "switch0" },
+		call = function(args)
+			local util = require "luci.util"
+
+			local swc, err = io.popen("swconfig dev %s show 2>/dev/null" % util.shellquote(args.switch))
+			if swc then
+				local ports = { }
+
+				while true do
+					local line = swc:read("*l")
+					if not line then break end
+
+					local port, up = line:match("port:(%d+) link:(%w+)")
+					if port then
+						local speed  = line:match(" speed:(%d+)")
+						local duplex = line:match(" (%w+)-duplex")
+						local txflow = line:match(" (txflow)")
+						local rxflow = line:match(" (rxflow)")
+						local auto   = line:match(" (auto)")
+
+						ports[#ports+1] = {
+							port   = tonumber(port) or 0,
+							speed  = tonumber(speed) or 0,
+							link   = (up == "up"),
+							duplex = (duplex == "full"),
+							rxflow = (not not rxflow),
+							txflow = (not not txflow),
+							auto   = (not not auto)
+						}
+					end
+				end
+
+				swc:close()
+
+				if not next(ports) then
+					return { error = "No such switch" }
+				end
+
+				return { result = ports }
+			else
+				return { error = err }
+			end
+		end
 	}
 }
 
