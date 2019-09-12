@@ -189,7 +189,7 @@ local function _nethints(what, callback)
 			end
 		end
 	)
-	
+
 	cur:foreach("dhcp", "odhcpd",
 		function(s)
 			if type(s.leasefile) == "string" and fs.access(s.leasefile) then
@@ -645,7 +645,7 @@ function init.enabled(name)
 end
 
 function init.enable(name)
-	return (init_action("enable", name) == 1)
+	return (init_action("enable", name) == 0)
 end
 
 function init.disable(name)
