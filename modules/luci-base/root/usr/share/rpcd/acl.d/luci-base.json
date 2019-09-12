@@ -23,6 +23,7 @@
 			"file": {
 				"/": [ "list" ],
 				"/*": [ "list" ],
+				"/etc/rc.local": [ "read" ],
 				"/proc/sys/kernel/hostname": [ "read" ]
 			},
 			"ubus": {
@@ -39,10 +40,11 @@
 		"write": {
 			"cgi-io": [ "upload", "/etc/luci-uploads/*" ],
 			"file": {
-				"/etc/luci-uploads/*": [ "write" ]
+				"/etc/luci-uploads/*": [ "write" ],
+				"/etc/rc.local": [ "write" ]
 			},
 			"ubus": {
-				"file": [ "remove" ],
+				"file": [ "write", "remove" ],
 				"iwinfo": [ "scan" ],
 				"luci": [ "setInitAction", "setLocaltime" ],
 				"uci": [ "add", "apply", "confirm", "delete", "order", "set", "rename" ]
