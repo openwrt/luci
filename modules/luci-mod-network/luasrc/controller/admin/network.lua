@@ -18,13 +18,7 @@ function index()
 			end)
 
 		if has_switch then
-			page  = node("admin", "network", "vlan")
-			page.target = cbi("admin_network/vlan")
-			page.title  = _("Switch")
-			page.order  = 20
-
-			page = entry({"admin", "network", "switch_status"}, call("switch_status"), nil)
-			page.leaf = true
+			entry({"admin", "network", "switch"}, view("network/switch"), _("Switch"), 20)
 		end
 
 
@@ -269,13 +263,6 @@ function wifi_reconnect(radio)
 	else
 		luci.http.status(500, "Error")
 	end
-end
-
-function switch_status(switches)
-	local s = require "luci.tools.status"
-
-	luci.http.prepare_content("application/json")
-	luci.http.write_json(s.switch_status(switches))
 end
 
 function diag_command(cmd, addr)
