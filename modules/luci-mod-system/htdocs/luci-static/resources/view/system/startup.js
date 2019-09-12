@@ -37,15 +37,12 @@ return L.view.extend({
 
 	handleAction: function(name, action, ev) {
 		return this.callInitAction(name, action).then(function(success) {
-			if (success != true) {
-				L.ui.addNotification(null, E('p', _('Failed to execute "/etc/init.d/%s %s" action').format(name, action)));
-				return Promise.reject(false);
-			}
+			if (success != true)
+				throw _('Command failed');
 
 			return true;
-		}).catch(function() {
-			L.ui.addNotification(null, E('p', _('Connection failure while executing "/etc/init.d/%s %s" action').format(name, action)));
-			return Promise.reject(false);
+		}).catch(function(e) {
+			L.ui.addNotification(null, E('p', _('Failed to execute "/etc/init.d/%s %s" action: %s').format(name, action, e)));
 		});
 	},
 
@@ -59,12 +56,16 @@ return L.view.extend({
 	},
 
 	handleSave: function(ev) {
-		var value = document.querySelector('textarea').value || '';
+		var value = (document.querySelector('textarea').value || '').trim().replace(/\r\n/g, '\n') + '\n';
 
-		return this.callFileWrite('/etc/rc.local', value.replace(/\r\n/g, '\n')).then(function() {
+		return this.callFileWrite('/etc/rc.local', value).then(function(rc) {
+			if (rc != 0)
+				throw rpc.getStatusText(rc);
+
+			document.querySelector('textarea').value = value;
 			L.ui.addNotification(null, E('p', _('Contents have been saved.')), 'info');
-		}, function() {
-			L.ui.addNotification(null, E('p', _('Unable to save contents.')));
+		}).catch(function(e) {
+			L.ui.addNotification(null, E('p', _('Unable to save contents: %s').format(e)));
 		});
 	},
 
@@ -115,24 +116,27 @@ return L.view.extend({
 
 		cbi_update_table(table, rows);
 
-		var view = E('div', {}, E('div', {}, [
-			E('div', { 'data-tab': 'init', 'data-tab-title': _('Initscripts') }, [
-				E('p', {}, _('You can enable or disable installed init scripts here. Changes will applied after a device reboot.<br /><strong>Warning: If you disable essential init scripts like "network", your device might become inaccessible!</strong>')),
-				table
-			]),
-			E('div', { 'data-tab': 'rc', 'data-tab-title': _('Local Startup') }, [
-				E('p', {}, _('This is the content of /etc/rc.local. Insert your own commands here (in front of \'exit 0\') to execute them at the end of the boot process.')),
-				E('p', {}, E('textarea', { 'style': 'width:100%', 'rows': 20 }, rcLocal != null ? rcLocal : '')),
-				E('div', { 'class': 'right' }, [
-					E('button', {
-						'class': 'btn cbi-button-positive important',
-						'click': L.ui.createHandlerFn(this, 'handleSave')
-					}, _('Save'))
+		var view = E('div', {}, [
+			E('h2', _('Startup')),
+			E('div', {}, [
+				E('div', { 'data-tab': 'init', 'data-tab-title': _('Initscripts') }, [
+					E('p', {}, _('You can enable or disable installed init scripts here. Changes will applied after a device reboot.<br /><strong>Warning: If you disable essential init scripts like "network", your device might become inaccessible!</strong>')),
+					table
+				]),
+				E('div', { 'data-tab': 'rc', 'data-tab-title': _('Local Startup') }, [
+					E('p', {}, _('This is the content of /etc/rc.local. Insert your own commands here (in front of \'exit 0\') to execute them at the end of the boot process.')),
+					E('p', {}, E('textarea', { 'style': 'width:100%', 'rows': 20 }, rcLocal != null ? rcLocal : '')),
+					E('div', { 'class': 'right' }, [
+						E('button', {
+							'class': 'btn cbi-button-positive important',
+							'click': L.ui.createHandlerFn(this, 'handleSave')
+						}, _('Save'))
+					])
 				])
 			])
-		]));
+		]);
 
-		L.ui.tabs.initTabGroup(view.firstElementChild.childNodes);
+		L.ui.tabs.initTabGroup(view.lastElementChild.childNodes);
 
 		return view;
 	}
