@@ -52,7 +52,7 @@ var CBINode = Class.extend({
 	},
 
 	stripTags: function(s) {
-		if (!s.match(/[<>]/))
+		if (typeof(s) == 'string' && !s.match(/[<>]/))
 			return s;
 
 		var x = E('div', {}, s);
