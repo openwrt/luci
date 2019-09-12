@@ -14,34 +14,28 @@ return L.Class.extend({
 				return Promise.resolve([]);
 
 			for (var i = 0; i < req.length; i++)
-				q += '%s%s.%s'.format(
-					q ? ';' : '/',
-					req[i].params[1],
-					req[i].params[2]
-				);
+				if (req[i].params)
+					q += '%s%s.%s'.format(
+						q ? ';' : '/',
+						req[i].params[1],
+						req[i].params[2]
+					);
 		}
-		else {
+		else if (req.params) {
 			q += '/%s.%s'.format(req.params[1], req.params[2]);
 		}
 
 		return L.Request.post(rpcBaseURL + q, req, {
 			timeout: (L.env.rpctimeout || 5) * 1000,
 			credentials: true
-		}).then(cb);
-	},
-
-	handleListReply: function(req, msg) {
-		var list = msg.result;
-
-		/* verify message frame */
-		if (typeof(msg) != 'object' || msg.jsonrpc != '2.0' || !msg.id || !Array.isArray(list))
-			list = [ ];
-
-		req.resolve(list);
+		}).then(cb, cb);
 	},
 
 	parseCallReply: function(req, res) {
 		var msg = null;
+
+		if (res instanceof Error)
+			return req.reject(res);
 
 		try {
 			if (!res.ok)
@@ -82,7 +76,10 @@ return L.Class.extend({
 			return req.reject(e);
 		}
 
-		if (Array.isArray(msg.result)) {
+		if (!req.object && !req.method) {
+			ret = msg.result;
+		}
+		else if (Array.isArray(msg.result)) {
 			ret = (msg.result.length > 1) ? msg.result[1] : msg.result[0];
 		}
 
@@ -116,7 +113,16 @@ return L.Class.extend({
 			params:  arguments.length ? this.varargs(arguments) : undefined
 		};
 
-		return this.call(msg, this.handleListReply);
+		return new Promise(L.bind(function(resolveFn, rejectFn) {
+			/* store request info */
+			var req = {
+				resolve: resolveFn,
+				reject:  rejectFn
+			};
+
+			/* call rpc */
+			this.call(msg, this.parseCallReply.bind(this, req));
+		}, this));
 	},
 
 	declare: function(options) {
