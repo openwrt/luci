@@ -23,6 +23,7 @@
 			"file": {
 				"/": [ "list" ],
 				"/*": [ "list" ],
+				"/etc/crontabs/root": [ "read" ],
 				"/etc/rc.local": [ "read" ],
 				"/proc/sys/kernel/hostname": [ "read" ]
 			},
@@ -40,6 +41,7 @@
 		"write": {
 			"cgi-io": [ "upload", "/etc/luci-uploads/*" ],
 			"file": {
+				"/etc/crontabs/root": [ "write" ],
 				"/etc/luci-uploads/*": [ "write" ],
 				"/etc/rc.local": [ "write" ]
 			},
