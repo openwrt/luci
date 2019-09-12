@@ -2,8 +2,9 @@
 'require uci';
 'require rpc';
 'require form';
+'require tools.widgets as widgets';
 
-var callLeds, callUSB, callNetdevs;
+var callLeds, callUSB;
 
 callLeds = rpc.declare({
 	object: 'luci',
@@ -17,31 +18,17 @@ callUSB = rpc.declare({
 	expect: { '': {} }
 });
 
-callNetdevs = rpc.declare({
-	object: 'luci',
-	method: 'getIfaddrs',
-	expect: { result: [] },
-	filter: function(res) {
-		var devs = {};
-		for (var i = 0; i < res.length; i++)
-			devs[res[i].name] = true;
-		return Object.keys(devs).sort();
-	}
-});
-
 return L.view.extend({
 	load: function() {
 		return Promise.all([
 			callLeds(),
-			callUSB(),
-			callNetdevs()
+			callUSB()
 		]);
 	},
 
 	render: function(results) {
 		var leds = results[0],
 		    usb = results[1],
-		    netdevs = results[2],
 		    triggers = {},
 		    trigger, m, s, o;
 
@@ -53,9 +40,11 @@ return L.view.extend({
 			_('<abbr title="Light Emitting Diode">LED</abbr> Configuration'),
 			_('Customizes the behaviour of the device <abbr title="Light Emitting Diode">LED</abbr>s if possible.'));
 
-		s = m.section(form.TypedSection, 'led', '');
+		s = m.section(form.GridSection, 'led', '');
 		s.anonymous = true;
 		s.addremove = true;
+		s.sortable = true;
+		s.addbtntitle = _('Add LED action');
 
 		s.option(form.Value, 'name', _('Name'));
 
@@ -66,32 +55,35 @@ return L.view.extend({
 		o.rmempty = false;
 
 		trigger = s.option(form.ListValue, 'trigger', _('Trigger'));
-		Object.keys(triggers).sort().forEach(function(t) { trigger.value(t, t.replace(/-/g, '')) });
 		if (usb.devices && usb.devices.length)
-			trigger.value('usbdev');
+			triggers['usbdev'] = true;
 		if (usb.ports && usb.ports.length)
-			trigger.value('usbport');
+			triggers['usbport'] = true;
+		Object.keys(triggers).sort().forEach(function(t) { trigger.value(t, t.replace(/-/g, '')) });
 
 		o = s.option(form.Value, 'delayon', _('On-State Delay'));
+		o.modalonly = true;
 		o.depends('trigger', 'timer');
 
 		o = s.option(form.Value, 'delayoff', _('Off-State Delay'));
+		o.modalonly = true;
 		o.depends('trigger', 'timer');
 
-		o = s.option(form.ListValue, '_net_dev', _('Device'));
+		o = s.option(widgets.DeviceSelect, '_net_dev', _('Device'));
 		o.rmempty = true;
 		o.ucioption = 'dev';
+		o.modalonly = true;
+		o.noaliases = true;
 		o.depends('trigger', 'netdev');
 		o.remove = function(section_id) {
 			var t = trigger.formvalue(section_id);
 			if (t != 'netdev' && t != 'usbdev')
 				uci.unset('system', section_id, 'dev');
 		};
-		o.value('');
-		netdevs.sort().forEach(function(dev) { o.value(dev) });
 
 		o = s.option(form.MultiValue, 'mode', _('Trigger Mode'));
 		o.rmempty = true;
+		o.modalonly = true;
 		o.depends('trigger', 'netdev');
 		o.value('link', _('Link On'));
 		o.value('tx', _('Transmit'));
@@ -102,6 +94,7 @@ return L.view.extend({
 			o.depends('trigger', 'usbdev');
 			o.rmempty = true;
 			o.ucioption = 'dev';
+			o.modalonly = true;
 			o.remove = function(section_id) {
 				var t = trigger.formvalue(section_id);
 				if (t != 'netdev' && t != 'usbdev')
@@ -117,6 +110,7 @@ return L.view.extend({
 			o = s.option(form.MultiValue, 'port', _('USB Ports'));
 			o.depends('trigger', 'usbport');
 			o.rmempty = true;
+			o.modalonly = true;
 			o.cfgvalue = function(section_id) {
 				var ports = [],
 				    value = uci.get('system', section_id, 'port');
@@ -146,6 +140,7 @@ return L.view.extend({
 		}
 
 		o = s.option(form.Value, 'port_mask', _('Switch Port Mask'));
+		o.modalonly = true;
 		o.depends('trigger', 'switch0');
 		o.depends('trigger', 'switch1');
 
