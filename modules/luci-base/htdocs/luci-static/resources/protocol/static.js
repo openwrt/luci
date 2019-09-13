@@ -187,8 +187,17 @@ return network.registerProtocol('static', {
 		o.datatype = 'max(64)';
 
 		o = s.taboption('general', form.Value, 'ip6hint', _('IPv6 assignment hint'), _('Assign prefix parts using this hexadecimal subprefix ID for this interface.'));
+		o.placeholder = '0';
+		o.validate = function(section_id, value) {
+			var n = parseInt(value, 16);
+
+			if (!/^(0x)?[0-9a-fA-F]+$/.test(value) || isNaN(n) || n >= 0xffffffff)
+				return _('Expecting an hexadecimal assignment hint');
+
+			return true;
+		};
 		for (var i = 33; i <= 64; i++)
-			o.depends('ip6assign', i);
+			o.depends('ip6assign', String(i));
 
 		o = s.taboption('general', form.DynamicList, 'ip6addr', _('IPv6 address'));
 		o.datatype = 'ip6addr';
