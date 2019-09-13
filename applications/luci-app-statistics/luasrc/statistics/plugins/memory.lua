@@ -1,7 +1,7 @@
 return {
-	legend = { 
+	legend = {
 		{ },
-		{ },
+		{ "ValuesPercentage", "ValuesAbsolute" },
 		{ }
 	},
 	label = _("Memory"),
