@@ -1307,6 +1307,18 @@ Hosts = L.Class.extend({
 			if (this.hosts[mac].ipv6 == ip6addr)
 				return mac;
 		return null;
+	},
+
+	getMACHints: function(preferIp6) {
+		var rv = [];
+		for (var mac in this.hosts) {
+			var hint = this.hosts[mac].name ||
+				this.hosts[mac][preferIp6 ? 'ipv6' : 'ipv4'] ||
+				this.hosts[mac][preferIp6 ? 'ipv4' : 'ipv6'];
+
+			rv.push([mac, hint]);
+		}
+		return rv.sort(function(a, b) { return a[0] > b[0] });
 	}
 });
 
