@@ -186,7 +186,7 @@
 	<div class="fill">
 		<div class="container">
 			<span class="showSide"></span>
-			<a id="logo" href="<%=url("admin/status/overview")%>"><img src="<%=media%>/brand.png" alt="OpenWrt"></a>
+			<a id="logo" href="<% if luci.dispatcher.context.authsession then %><%=url('admin/status/overview')%><% else %>#<% end %>"><img src="<%=media%>/brand.png" alt="OpenWrt"></a>
 			<a class="brand" href="#"><%=boardinfo.hostname or "?"%></a>
 			<div class="status">
 				<span id="xhr_poll_status" style="display:none" onclick="XHR.running() ? XHR.halt() : XHR.run()">
