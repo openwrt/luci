@@ -48,5 +48,23 @@ function rrdargs( graph, plugin, plugin_instance, dtype )
 		}
 	}
 
-	return { ping, droprate }
+	local stddev = {
+		title = "%H: ICMP Standard Deviation",
+		vlabel = "ms",
+		number_format = "%5.1lf ms",
+		data = {
+			types   = {
+				"ping_stddev"
+			},
+			options = {
+				ping_stddev = {
+					noarea = true,
+					overlay = true,
+					title = "%di"
+				}
+			}
+		}
+	}
+
+	return { ping, droprate, stddev }
 end
