@@ -802,6 +802,8 @@ function cbi_init() {
 		}
 
 		cbi_dynlist_init(node, choices[2], choices[3], options);
+
+		node.querySelectorAll('.cbi-dropdown').forEach(cbi_dropdown_init);
 	}
 
 	nodes = document.querySelectorAll('[data-type]');
@@ -1954,6 +1956,9 @@ function cbi_dropdown_init(sb) {
 	if (!(this instanceof cbi_dropdown_init))
 		return new cbi_dropdown_init(sb);
 
+	if (sb.classList.contains('initialized'))
+		return;
+
 	this.multi = sb.hasAttribute('multiple');
 	this.optional = sb.hasAttribute('optional');
 	this.placeholder = sb.getAttribute('placeholder') || '---';
@@ -2049,6 +2054,8 @@ function cbi_dropdown_init(sb) {
 		li.setAttribute('unselectable', '');
 		li.addEventListener('click', this.handleCreateClick.bind(this));
 	}
+
+	sb.classList.add('initialized');
 }
 
 cbi_dropdown_init.prototype = CBIDropdown;
