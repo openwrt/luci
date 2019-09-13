@@ -25,7 +25,7 @@ else
 	if not name or #name == 0 then
 		name = translate("(Unnamed Entry)")
 	end
-	m.title = "%s - %s" %{ translate("Firewall - Port Forwards"), name }
+	m.title = "%s - %s" %{ translate("Firewall - Port Forwards"), luci.util.pcdata(name) }
 end
 
 s = m:section(NamedSection, arg[1], "redirect", "")

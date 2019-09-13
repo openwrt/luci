@@ -39,7 +39,7 @@ elseif rule_type == "redirect" then
 		name = "SNAT %s" % name
 	end
 
-	m.title = "%s - %s" %{ translate("Firewall - Traffic Rules"), name }
+	m.title = "%s - %s" %{ translate("Firewall - Traffic Rules"), luci.util.pcdata(name) }
 
 	s = m:section(NamedSection, arg[1], "redirect", "")
 	s.anonymous = true
