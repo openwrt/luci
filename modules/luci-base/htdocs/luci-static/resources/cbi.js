@@ -1207,6 +1207,11 @@ function cbi_submit(elem, name, value, action)
 		form.appendChild(hidden);
 	}
 
+	var dynadd = form.querySelectorAll('input[data-dynlist-add="true"]');
+	for (var i = 0; i < dynadd.length; i++)
+		if (dynadd[i].value != '')
+			dynadd[i].nextElementSibling.click();
+
 	form.submit();
 	return true;
 }
