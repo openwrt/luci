@@ -893,7 +893,15 @@ return L.view.extend({
 					o.datatype = 'macaddr';
 					o.depends('macfilter', 'allow');
 					o.depends('macfilter', 'deny');
-					//nt.mac_hints(function(mac, name) ml:value(mac, '%s (%s)' %{ mac, name }) end);
+					o.load = function(section_id) {
+						return network.getHostHints().then(L.bind(function(hints) {
+							hints.getMACHints().map(L.bind(function(hint) {
+								this.value(hint[0], hint[1] ? '%s (%s)'.format(hint[0], hint[1]) : hint[0]);
+							}, this));
+
+							return form.DynamicList.prototype.load.apply(this, [section_id]);
+						}, this));
+					};
 
 					mode.value('ap-wds', '%s (%s)'.format(_('Access Point'), _('WDS')));
 					mode.value('sta-wds', '%s (%s)'.format(_('Client'), _('WDS')));
