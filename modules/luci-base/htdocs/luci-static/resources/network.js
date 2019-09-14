@@ -175,6 +175,10 @@ function getProtocolHandlers(cache) {
 		if (!L.isObject(protos))
 			throw !1;
 
+		/* Register "none" protocol */
+		if (!protos.hasOwnProperty('none'))
+			Object.assign(protos, { none: { no_device: false } });
+
 		/* Hack: emulate relayd protocol */
 		if (!protos.hasOwnProperty('relay'))
 			Object.assign(protos, { relay: { no_device: true } });
