@@ -314,18 +314,20 @@ function cbi_init() {
 		i.addEventListener('mouseout', handler);
 	});
 
+	var tasks = [];
+
 	document.querySelectorAll('[data-ui-widget]').forEach(function(node) {
 		var args = JSON.parse(node.getAttribute('data-ui-widget') || '[]'),
 		    widget = new (Function.prototype.bind.apply(L.ui[args[0]], args)),
 		    markup = widget.render();
 
-		Promise.resolve(markup).then(function(markup) {
+		tasks.push(Promise.resolve(markup).then(function(markup) {
 			markup.addEventListener('widget-change', cbi_d_update);
 			node.parentNode.replaceChild(markup, node);
-		});
+		}));
 	});
 
-	cbi_d_update();
+	Promise.all(tasks).then(cbi_d_update);
 }
 
 function cbi_validate_form(form, errmsg)
