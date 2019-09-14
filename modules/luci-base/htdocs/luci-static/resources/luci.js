@@ -575,8 +575,13 @@
 		__init__: function(env) {
 
 			document.querySelectorAll('script[src*="/luci.js"]').forEach(function(s) {
-				if (env.base_url == null || env.base_url == '')
-					env.base_url = s.getAttribute('src').replace(/\/luci\.js(?:\?v=[^?]+)?$/, '');
+				if (env.base_url == null || env.base_url == '') {
+					var m = (s.getAttribute('src') || '').match(/^(.*)\/luci\.js(?:\?v=([^?]+))?$/);
+					if (m) {
+						env.base_url = m[1];
+						env.resource_version = m[2];
+					}
+				}
 			});
 
 			if (env.base_url == null)
@@ -693,7 +698,7 @@
 				return classes[name];
 			}
 
-			url = '%s/%s.js'.format(L.env.base_url, name.replace(/\./g, '/'));
+			url = '%s/%s.js%s'.format(L.env.base_url, name.replace(/\./g, '/'), (L.env.resource_version ? '?v=' + L.env.resource_version : ''));
 			from = [ name ].concat(from);
 
 			var compileClass = function(res) {
