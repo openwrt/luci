@@ -1,4 +1,7 @@
-SSHPubkeyDecoder.prototype = {
+'use strict';
+'require rpc';
+
+var SSHPubkeyDecoder = L.Class.singleton({
 	lengthDecode: function(s, off)
 	{
 		var l = (s.charCodeAt(off++) << 24) |
@@ -85,19 +88,29 @@ SSHPubkeyDecoder.prototype = {
 			return null;
 		}
 	}
-};
+});
 
-function SSHPubkeyDecoder() {}
+var callFileRead = rpc.declare({
+	object: 'file',
+	method: 'read',
+	params: [ 'path' ],
+	expect: { data: '' }
+});
+
+var callFileWrite = rpc.declare({
+	object: 'file',
+	method: 'write',
+	params: [ 'path', 'data' ]
+});
 
 function renderKeys(keys) {
-	var list = document.querySelector('.cbi-dynlist[name="sshkeys"]'),
-	    decoder = new SSHPubkeyDecoder();
+	var list = document.querySelector('.cbi-dynlist[name="sshkeys"]');
 
 	while (!matchesElem(list.firstElementChild, '.add-item'))
 		list.removeChild(list.firstElementChild);
 
 	keys.forEach(function(key) {
-		var pubkey = decoder.decode(key);
+		var pubkey = SSHPubkeyDecoder.decode(key);
 		if (pubkey)
 			list.insertBefore(E('div', {
 				class: 'item',
@@ -117,19 +130,16 @@ function renderKeys(keys) {
 }
 
 function saveKeys(keys) {
-	L.showModal(_('Add key'), E('div', { class: 'spinning' }, _('Saving keys…')));
-	L.post('admin/system/admin/sshkeys/json', { keys: JSON.stringify(keys) }, function(xhr, keys) {
-		renderKeys(keys);
-		L.hideModal();
-	});
+	return callFileWrite('/etc/dropbear/authorized_keys', keys.join('\n') + '\n')
+		.then(renderKeys.bind(this, keys))
+		.then(L.ui.hideModal);
 }
 
 function addKey(ev) {
-	var decoder = new SSHPubkeyDecoder(),
-	    list = findParent(ev.target, '.cbi-dynlist'),
+	var list = findParent(ev.target, '.cbi-dynlist'),
 	    input = list.querySelector('input[type="text"]'),
 	    key = input.value.trim(),
-	    pubkey = decoder.decode(key),
+	    pubkey = SSHPubkeyDecoder.decode(key),
 	    keys = [];
 
 	if (!key.length)
@@ -140,21 +150,26 @@ function addKey(ev) {
 	});
 
 	if (keys.indexOf(key) !== -1) {
-		L.showModal(_('Add key'), [
+		L.ui.showModal(_('Add key'), [
 			E('div', { class: 'alert-message warning' }, _('The given SSH public key has already been added.')),
 			E('div', { class: 'right' }, E('div', { class: 'btn', click: L.hideModal }, _('Close')))
 		]);
 	}
 	else if (!pubkey) {
-		L.showModal(_('Add key'), [
+		L.ui.showModal(_('Add key'), [
 			E('div', { class: 'alert-message warning' }, _('The given SSH public key is invalid. Please supply proper public RSA or ECDSA keys.')),
 			E('div', { class: 'right' }, E('div', { class: 'btn', click: L.hideModal }, _('Close')))
 		]);
 	}
 	else {
 		keys.push(key);
-		saveKeys(keys);
 		input.value = '';
+
+		return saveKeys(keys).then(function() {
+			var added = list.querySelector('[data-key="%s"]'.format(key));
+			if (added)
+				added.classList.add('flash');
+		});
 	}
 }
 
@@ -175,7 +190,7 @@ function removeKey(ev) {
 		E('div', { class: 'right' }, [
 			E('div', { class: 'btn', click: L.hideModal }, _('Cancel')),
 			' ',
-			E('div', { class: 'btn danger', click: function(ev) { saveKeys(keys) } }, _('Delete key')),
+			E('div', { class: 'btn danger', click: L.ui.createHandlerFn(this, saveKeys, keys) }, _('Delete key')),
 		])
 	]);
 }
@@ -205,11 +220,67 @@ function dropKey(ev) {
 	ev.preventDefault();
 }
 
-window.addEventListener('dragover', function(ev) { ev.preventDefault() });
-window.addEventListener('drop', function(ev) { ev.preventDefault() });
+function handleWindowDragDropIgnore(ev) {
+	ev.preventDefault()
+}
 
-requestAnimationFrame(function() {
-	L.get('admin/system/admin/sshkeys/json', null, function(xhr, keys) {
-		renderKeys(keys);
-	});
+return L.view.extend({
+	load: function() {
+		return callFileRead('/etc/dropbear/authorized_keys').then(function(data) {
+			return (data || '').split(/\n/).map(function(line) {
+				return line.trim();
+			}).filter(function(line) {
+				return line.match(/^ssh-/) != null;
+			});
+		});
+	},
+
+	render: function(keys) {
+		var list = E('div', { 'class': 'cbi-dynlist', 'dragover': dragKey, 'drop': dropKey }, [
+			E('div', { 'class': 'add-item' }, [
+				E('input', {
+					'class': 'cbi-input-text',
+					'type': 'text',
+					'placeholder': _('Paste or drag SSH key file…') ,
+					'keydown': function(ev) { if (ev.keyCode === 13) addKey(ev) }
+				}),
+				E('button', {
+					'class': 'cbi-button',
+					'click': L.ui.createHandlerFn(this, addKey)
+				}, _('Add key'))
+			])
+		]);
+
+		keys.forEach(L.bind(function(key) {
+			var pubkey = SSHPubkeyDecoder.decode(key);
+			if (pubkey)
+				list.insertBefore(E('div', {
+					class: 'item',
+					click: L.ui.createHandlerFn(this, removeKey),
+					'data-key': key
+				}, [
+					E('strong', pubkey.comment || _('Unnamed key')), E('br'),
+					E('small', [
+						'%s, %s'.format(pubkey.type, pubkey.curve || _('%d Bit').format(pubkey.bits)),
+						E('br'), E('code', pubkey.fprint)
+					])
+				]), list.lastElementChild);
+		}, this));
+
+		if (list.firstElementChild === list.lastElementChild)
+			list.insertBefore(E('p', _('No public keys present yet.')), list.lastElementChild);
+
+		window.addEventListener('dragover', handleWindowDragDropIgnore);
+		window.addEventListener('drop', handleWindowDragDropIgnore);
+
+		return E('div', {}, [
+			E('h2', _('SSH-Keys')),
+			E('div', { 'class': 'cbi-section-descr' }, _('Public keys allow for the passwordless SSH logins with a higher security compared to the use of plain passwords. In order to upload a new key to the device, paste an OpenSSH compatible public key line or drag a <code>.pub</code> file into the input field.')),
+			E('div', { 'class': 'cbi-section-node' }, list)
+		]);
+	},
+
+	handleSaveApply: null,
+	handleSave: null,
+	handleReset: null
 });

@@ -24,6 +24,7 @@
 				"/": [ "list" ],
 				"/*": [ "list" ],
 				"/etc/crontabs/root": [ "read" ],
+				"/etc/dropbear/authorized_keys": [ "read" ],
 				"/etc/rc.local": [ "read" ],
 				"/proc/sys/kernel/hostname": [ "read" ]
 			},
@@ -42,6 +43,7 @@
 			"cgi-io": [ "upload", "/etc/luci-uploads/*" ],
 			"file": {
 				"/etc/crontabs/root": [ "write" ],
+				"/etc/dropbear/authorized_keys": [ "write" ],
 				"/etc/luci-uploads/*": [ "write" ],
 				"/etc/rc.local": [ "write" ]
 			},

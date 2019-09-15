@@ -17,8 +17,7 @@ function index()
 
 	if fs.access("/etc/config/dropbear") then
 		entry({"admin", "system", "admin", "dropbear"}, cbi("admin_system/dropbear"), _("SSH Access"), 2)
-		entry({"admin", "system", "admin", "sshkeys"}, template("admin_system/sshkeys"), _("SSH-Keys"), 3)
-		entry({"admin", "system", "admin", "sshkeys", "json"}, post_on({ keys = true }, "action_sshkeys"))
+		entry({"admin", "system", "admin", "sshkeys"}, view("system/sshkeys"), _("SSH-Keys"), 3)
 	end
 
 	entry({"admin", "system", "startup"}, view("system/startup"), _("Startup"), 45)
@@ -291,56 +290,6 @@ function action_password()
 
 	luci.http.prepare_content("application/json")
 	luci.http.write_json({ code = luci.sys.user.setpasswd("root", password) })
-end
-
-function action_sshkeys()
-	local keys = luci.http.formvalue("keys")
-	if keys then
-		keys = luci.jsonc.parse(keys)
-		if not keys or type(keys) ~= "table" then
-			luci.http.status(400, "Bad Request")
-			return
-		end
-
-		local fd, err = io.open("/etc/dropbear/authorized_keys", "w")
-		if not fd then
-			luci.http.status(503, err)
-			return
-		end
-
-		local _, k
-		for _, k in ipairs(keys) do
-			if type(k) == "string" and k:match("^%w+%-") then
-				fd:write(k)
-				fd:write("\n")
-			end
-		end
-
-		fd:close()
-	end
-
-	local fd, err = io.open("/etc/dropbear/authorized_keys", "r")
-	if not fd then
-		luci.http.status(503, err)
-		return
-	end
-
-	local rv = {}
-	while true do
-		local ln = fd:read("*l")
-		if not ln then
-			break
-		elseif ln:match("^[%w%-]+%s+[A-Za-z0-9+/=]+$") or
-		       ln:match("^[%w%-]+%s+[A-Za-z0-9+/=]+%s")
-		then
-			rv[#rv+1] = ln
-		end
-	end
-
-	fd:close()
-
-	luci.http.prepare_content("application/json")
-	luci.http.write_json(rv)
 end
 
 function action_reboot()
