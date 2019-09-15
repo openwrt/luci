@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-06-10 03:40+0200\n"
-"PO-Revision-Date: 2019-09-12 16:48+0900\n"
+"PO-Revision-Date: 2019-09-15 20:03+0900\n"
 "Last-Translator: INAGAKI Hiroshi <musashino.open@gmail.com>\n"
 "Language-Team: \n"
 "Language: ja\n"
@@ -400,11 +400,11 @@ msgstr "IPv6 アドレスを追加…"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:47
 msgid "Add LED action"
-msgstr ""
+msgstr "LED の動作を追加"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:215
 msgid "Add VLAN"
-msgstr ""
+msgstr "VLAN を追加"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:120
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:143
@@ -426,7 +426,7 @@ msgstr "インターフェースの新規作成..."
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:96
 msgid "Add peer"
-msgstr ""
+msgstr "ピアを追加"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:105
 msgid "Additional Hosts files"
@@ -686,6 +686,8 @@ msgstr "アーキテクチャ"
 msgid ""
 "Assign a part of given length of every public IPv6-prefix to this interface"
 msgstr ""
+"パブリック IPv6 プレフィクスのうち、指定されたプレフィクス長をこのインター"
+"フェースに割り当てます。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/network.js:127
 msgid "Assign interfaces..."
@@ -696,6 +698,8 @@ msgstr "インターフェースの割当て..."
 msgid ""
 "Assign prefix parts using this hexadecimal subprefix ID for this interface."
 msgstr ""
+"このサブ プレフィクス ID（16進数）を使用するプレフィクス領域を、このインター"
+"フェースに割り当てます。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1947
 #: modules/luci-mod-status/luasrc/view/admin_status/index/60-wifi.htm:22
@@ -1112,7 +1116,7 @@ msgstr "コマンド OK"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/startup.js:41
 msgid "Command failed"
-msgstr ""
+msgstr "コマンド失敗"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:64
 msgid "Comment"
@@ -1185,7 +1189,7 @@ msgstr "ネットワーク接続"
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/crontab.js:30
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/startup.js:66
 msgid "Contents have been saved."
-msgstr ""
+msgstr "内容が保存されました。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:618
 msgid "Continue"
@@ -1939,7 +1943,7 @@ msgstr "拡張ホスト設定"
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/static.js:195
 msgid "Expecting an hexadecimal assignment hint"
-msgstr ""
+msgstr "期待される値: 16進数の割り当てヒント"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:59
 msgid "Expecting: %s"
@@ -2002,7 +2006,7 @@ msgstr "%d 秒以内の適用を確認できませんでした。ロールバッ
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/startup.js:45
 msgid "Failed to execute \"/etc/init.d/%s %s\" action: %s"
-msgstr ""
+msgstr "\"/etc/init.d/%s %s\" の実行に失敗しました: %s"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:1556
 msgid "File"
@@ -2508,7 +2512,7 @@ msgstr "IPv6 アドレス"
 #: modules/luci-base/htdocs/luci-static/resources/protocol/static.js:189
 #: protocols/luci-proto-hnet/htdocs/luci-static/resources/protocol/hnet.js:31
 msgid "IPv6 assignment hint"
-msgstr ""
+msgstr "IPv6 割り当てヒント"
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/static.js:184
 #: protocols/luci-proto-hnet/htdocs/luci-static/resources/protocol/hnet.js:27
@@ -3777,6 +3781,10 @@ msgid ""
 "server, use the suffix (like '::1') to form the IPv6 address ('a:b:c:d::1') "
 "for the interface."
 msgstr ""
+"IPv6 プレフィクス（例: 'a:b:c:d::'）を委任サーバーから受信する際、インター"
+"フェースの IPv6 アドレス ('a:b:c:d::1') を形成するために使用されるサフィック"
+"ス（例: '::1'）を指定します。（オプション）　使用できる値: 'eui64', "
+"'random', または '::1' や '::1:2' のような固定値"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:114
 msgid ""
@@ -5709,7 +5717,7 @@ msgstr "ピアのホスト名を解決できません"
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/crontab.js:33
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/startup.js:68
 msgid "Unable to save contents: %s"
-msgstr ""
+msgstr "内容を保存できません: %s"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:132
 msgid "Unavailable Seconds (UAS)"
@@ -6690,9 +6698,3 @@ msgstr "はい"
 #: modules/luci-base/luasrc/view/cbi/delegator.htm:20
 msgid "« Back"
 msgstr "« 戻る"
-
-#~ msgid "Switch %q (%s)"
-#~ msgstr "スイッチ %q (%s)"
-
-#~ msgid "VLANs on %q (%s)"
-#~ msgstr "%q上のVLAN (%s)"
