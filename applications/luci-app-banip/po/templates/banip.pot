@@ -9,11 +9,11 @@ msgstr ""
 msgid "ASN Prefixes"
 msgstr ""
 
-#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:91
+#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:76
 msgid "ASN/Country"
 msgstr ""
 
-#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:147
+#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:129
 msgid "Additional trigger delay in seconds before banIP processing begins."
 msgstr ""
 
@@ -25,15 +25,12 @@ msgstr ""
 msgid "Automatic WAN Interface Detection"
 msgstr ""
 
-#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:115
+#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:96
+#: applications/luci-app-banip/luasrc/view/banip/runtime.htm:138
 msgid "Backup Directory"
 msgstr ""
 
-#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:122
-msgid "Backup Mode"
-msgstr ""
-
-#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:135
+#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:117
 msgid ""
 "Blacklist auto addons are stored temporary in the IPSet and saved "
 "permanently in the local blacklist. Disable this option to prevent the local "
@@ -53,25 +50,19 @@ msgstr ""
 msgid "Country Resources"
 msgstr ""
 
-#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:112
-msgid ""
-"Create compressed blocklist backups, they will be used in case of download "
-"errors or during startup in 'backup mode'."
-msgstr ""
-
 #: applications/luci-app-banip/luasrc/view/banip/ripeview.htm:94
 msgid "DNS Chain"
 msgstr ""
 
-#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:182
+#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:171
 msgid "DST Target IPv4"
 msgstr ""
 
-#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:214
+#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:203
 msgid "DST Target IPv6"
 msgstr ""
 
-#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:89
+#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:74
 msgid "Description"
 msgstr ""
 
@@ -81,13 +72,7 @@ msgid ""
 "manually."
 msgstr ""
 
-#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:123
-msgid ""
-"Do not automatically update blocklists during startup, use their backups "
-"instead."
-msgstr ""
-
-#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:152
+#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:141
 msgid "Download Options"
 msgstr ""
 
@@ -95,7 +80,7 @@ msgstr ""
 msgid "Download Utility"
 msgstr ""
 
-#: applications/luci-app-banip/luasrc/view/banip/runtime.htm:105
+#: applications/luci-app-banip/luasrc/view/banip/runtime.htm:126
 msgid "Download Utility (SSL Library)"
 msgstr ""
 
@@ -111,15 +96,11 @@ msgstr ""
 msgid "Edit Whitelist"
 msgstr ""
 
-#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:111
-msgid "Enable Blocklist Backup"
-msgstr ""
-
 #: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:20
 msgid "Enable banIP"
 msgstr ""
 
-#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:101
+#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:86
 msgid "Enable verbose debug logging in case of any processing error."
 msgstr ""
 
@@ -127,7 +108,7 @@ msgstr ""
 msgid "Enter IP/CIDR/ASN/ISO"
 msgstr ""
 
-#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:97
+#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:82
 msgid "Extra Options"
 msgstr ""
 
@@ -137,7 +118,7 @@ msgid ""
 "documentation</a>"
 msgstr ""
 
-#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:129
+#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:104
 msgid ""
 "For further performance improvements you can raise this value, e.g. '8' or "
 "'16' should be safe."
@@ -151,16 +132,16 @@ msgstr ""
 msgid "IANA Information"
 msgstr ""
 
-#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:60
-msgid "IP Blocklist Sources"
-msgstr ""
-
 #: applications/luci-app-banip/luasrc/view/banip/ripeview.htm:91
 msgid "IP/ASN Mapping"
 msgstr ""
 
-#: applications/luci-app-banip/luasrc/view/banip/runtime.htm:111
+#: applications/luci-app-banip/luasrc/view/banip/runtime.htm:132
 msgid "IPSet Information"
+msgstr ""
+
+#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:58
+msgid "IPSet Sources"
 msgstr ""
 
 #: applications/luci-app-banip/luasrc/controller/banip.lua:18
@@ -177,23 +158,23 @@ msgstr ""
 msgid "Interface Selection"
 msgstr ""
 
-#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:171
+#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:160
 msgid "LAN Forward Chain IPv4"
 msgstr ""
 
-#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:203
+#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:192
 msgid "LAN Forward Chain IPv6"
 msgstr ""
 
-#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:166
+#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:155
 msgid "LAN Input Chain IPv4"
 msgstr ""
 
-#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:198
+#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:187
 msgid "LAN Input Chain IPv6"
 msgstr ""
 
-#: applications/luci-app-banip/luasrc/view/banip/runtime.htm:117
+#: applications/luci-app-banip/luasrc/view/banip/runtime.htm:144
 msgid "Last Run"
 msgstr ""
 
@@ -206,7 +187,7 @@ msgstr ""
 msgid "Load"
 msgstr ""
 
-#: applications/luci-app-banip/luasrc/view/banip/runtime.htm:60
+#: applications/luci-app-banip/luasrc/view/banip/runtime.htm:81
 msgid "Loading"
 msgstr ""
 
@@ -215,24 +196,20 @@ msgstr ""
 msgid "Loading ..."
 msgstr ""
 
-#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:134
+#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:116
 msgid "Local Save Blacklist Addons"
 msgstr ""
 
-#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:139
+#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:121
 msgid "Local Save Whitelist Addons"
 msgstr ""
 
-#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:104
+#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:89
 msgid "Low Priority Service"
 msgstr ""
 
-#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:127
+#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:102
 msgid "Max. Download Queue"
-msgstr ""
-
-#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:70
-msgid "No"
 msgstr ""
 
 #: applications/luci-app-banip/luasrc/view/banip/ipsetview.htm:34
@@ -240,7 +217,7 @@ msgstr ""
 msgid "No response!"
 msgstr ""
 
-#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:98
+#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:83
 msgid ""
 "Options for further tweaking in case the defaults are not suitable for you."
 msgstr ""
@@ -266,33 +243,42 @@ msgstr ""
 msgid "RIPE-Lookup"
 msgstr ""
 
-#: applications/luci-app-banip/luasrc/view/banip/runtime.htm:16
-#: applications/luci-app-banip/luasrc/view/banip/runtime.htm:126
+#: applications/luci-app-banip/luasrc/view/banip/runtime.htm:18
+#: applications/luci-app-banip/luasrc/view/banip/runtime.htm:153
+msgid "Refresh"
+msgstr ""
+
+#: applications/luci-app-banip/luasrc/view/banip/runtime.htm:151
+msgid "Refresh IPSets"
+msgstr ""
+
+#: applications/luci-app-banip/luasrc/view/banip/runtime.htm:21
+#: applications/luci-app-banip/luasrc/view/banip/runtime.htm:160
 msgid "Reload"
 msgstr ""
 
-#: applications/luci-app-banip/luasrc/view/banip/runtime.htm:124
-msgid "Reload IPSets"
+#: applications/luci-app-banip/luasrc/view/banip/runtime.htm:158
+msgid "Reload IPSet Sources"
 msgstr ""
 
-#: applications/luci-app-banip/luasrc/view/banip/runtime.htm:91
+#: applications/luci-app-banip/luasrc/view/banip/runtime.htm:112
 msgid "Runtime Information"
 msgstr ""
 
-#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:176
+#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:165
 msgid "SRC Target IPv4"
 msgstr ""
 
-#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:208
+#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:197
 msgid "SRC Target IPv6"
 msgstr ""
 
-#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:82
+#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:67
 msgid "SRC/DST"
 msgstr ""
 
-#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:63
-msgid "SSL req."
+#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:109
+msgid "SSH Daemon"
 msgstr ""
 
 #: applications/luci-app-banip/luasrc/model/cbi/banip/blacklist_tab.lua:27
@@ -301,7 +287,15 @@ msgstr ""
 msgid "Save"
 msgstr ""
 
-#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:105
+#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:110
+msgid "Select the SSH daemon for logfile parsing, to detect break-in events."
+msgstr ""
+
+#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:135
+msgid "Select the used start type during boot."
+msgstr ""
+
+#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:90
 msgid ""
 "Set the nice level to 'low priority' and banIP background processing will "
 "take less resources from the system."
@@ -311,22 +305,26 @@ msgstr ""
 msgid "Show only set member with packet counter &gt; 0"
 msgstr ""
 
-#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:128
+#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:103
 msgid ""
 "Size of the download queue to handle downloads &amp; IPset processing in "
 "parallel (default '4')."
 msgstr ""
 
-#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:153
+#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:142
 msgid ""
 "Special options for the selected download utility, e.g. '--timeout=20 --no-"
 "check-certificate -O'."
 msgstr ""
 
-#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:116
+#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:134
+msgid "Start Type"
+msgstr ""
+
+#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:97
 msgid ""
-"Target directory for banIP backups. Please use preferably a non-volatile "
-"disk, e.g. an external usb stick."
+"Target directory for banIP backups. Default is '/tmp', please use preferably "
+"a non-volatile disk if available."
 msgstr ""
 
 #: applications/luci-app-banip/luasrc/view/banip/ripeview.htm:77
@@ -346,7 +344,7 @@ msgstr ""
 msgid "The syslog output, pre-filtered for banIP related messages only."
 msgstr ""
 
-#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:106
+#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:91
 msgid "This change requires a manual service stop/re-start to take effect."
 msgstr ""
 
@@ -410,11 +408,11 @@ msgid ""
 "file (/etc/config/banip)."
 msgstr ""
 
-#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:146
+#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:128
 msgid "Trigger Delay"
 msgstr ""
 
-#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:100
+#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:85
 msgid "Verbose Debug Logging"
 msgstr ""
 
@@ -422,23 +420,23 @@ msgstr ""
 msgid "View Logfile"
 msgstr ""
 
-#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:161
+#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:150
 msgid "WAN Forward Chain IPv4"
 msgstr ""
 
-#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:193
+#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:182
 msgid "WAN Forward Chain IPv6"
 msgstr ""
 
-#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:156
+#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:145
 msgid "WAN Input Chain IPv4"
 msgstr ""
 
-#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:188
+#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:177
 msgid "WAN Input Chain IPv6"
 msgstr ""
 
-#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:140
+#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:122
 msgid ""
 "Whitelist auto addons are stored temporary in the IPSet and saved "
 "permanently in the local whitelist. Disable this option to prevent the local "
@@ -449,31 +447,23 @@ msgstr ""
 msgid "Whois Information"
 msgstr ""
 
-#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:68
-msgid "Yes"
-msgstr ""
-
 #: applications/luci-app-banip/luasrc/controller/banip.lua:16
 #: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:10
 msgid "banIP"
 msgstr ""
 
-#: applications/luci-app-banip/luasrc/view/banip/runtime.htm:93
+#: applications/luci-app-banip/luasrc/view/banip/runtime.htm:114
 msgid "banIP Status"
 msgstr ""
 
-#: applications/luci-app-banip/luasrc/view/banip/runtime.htm:99
+#: applications/luci-app-banip/luasrc/view/banip/runtime.htm:120
 msgid "banIP Version"
 msgstr ""
 
-#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:76
+#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:61
 msgid "enable IPv4"
 msgstr ""
 
-#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:79
+#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:64
 msgid "enable IPv6"
-msgstr ""
-
-#: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:73
-msgid "n/a"
 msgstr ""
