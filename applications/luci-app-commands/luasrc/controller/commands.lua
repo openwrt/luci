@@ -144,7 +144,7 @@ local function parse_cmdline(cmdid, args)
 		end
 
 		for i, v in ipairs(argv) do
-			if v:match("[^%w%.%-i/]") then
+			if v:match("[^%w%.%-i/|]") then
 				argv[i] = '"%s"' % v:gsub('"', '\\"')
 			end
 		end
