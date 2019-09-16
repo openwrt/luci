@@ -12,8 +12,7 @@ function index()
 	entry({"admin", "system", "ntp_restart"}, call("action_ntp_restart"), nil).leaf = true
 
 	entry({"admin", "system", "admin"}, firstchild(), _("Administration"), 2)
-	entry({"admin", "system", "admin", "password"}, template("admin_system/password"), _("Router Password"), 1)
-	entry({"admin", "system", "admin", "password", "json"}, post("action_password"))
+	entry({"admin", "system", "admin", "password"}, view("system/password"), _("Router Password"), 1)
 
 	if fs.access("/etc/config/dropbear") then
 		entry({"admin", "system", "admin", "dropbear"}, cbi("admin_system/dropbear"), _("SSH Access"), 2)
@@ -279,17 +278,6 @@ function action_reset()
 	end
 
 	http.redirect(luci.dispatcher.build_url('admin/system/flashops'))
-end
-
-function action_password()
-	local password = luci.http.formvalue("password")
-	if not password then
-		luci.http.status(400, "Bad Request")
-		return
-	end
-
-	luci.http.prepare_content("application/json")
-	luci.http.write_json({ code = luci.sys.user.setpasswd("root", password) })
 end
 
 function action_reboot()
