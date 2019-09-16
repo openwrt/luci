@@ -396,6 +396,7 @@ local methods = {
 			rv.zram          = fs.access("/sys/class/zram-control")
 			rv.sysntpd       = fs.readlink("/usr/sbin/ntpd") and true
 			rv.ipv6          = fs.access("/proc/net/ipv6_route")
+			rv.dropbear      = fs.access("/usr/sbin/dropbear")
 
 			local wifi_features = { "eap", "11n", "11ac", "11r", "11w", "acs", "sae", "owe", "suiteb192" }
 
@@ -574,6 +575,20 @@ local methods = {
 			else
 				return { error = err }
 			end
+		end
+	},
+
+	setPassword = {
+		args = { username = "root", password = "password" },
+		call = function(args)
+			local util = require "luci.util"
+			return {
+				result = (os.execute("(echo %s; sleep 1; echo %s) | passwd %s >/dev/null 2>&1" %{
+					luci.util.shellquote(args.password),
+					luci.util.shellquote(args.password),
+					luci.util.shellquote(args.username)
+				}) == 0)
+			}
 		end
 	}
 }
