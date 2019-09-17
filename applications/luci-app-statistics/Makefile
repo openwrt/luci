@@ -8,13 +8,20 @@ include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=LuCI Statistics Application
 LUCI_DEPENDS:= \
-	+luci-compat +luci-lib-iptparser \
-	+collectd +rrdtool1 +collectd-mod-rrdtool +collectd-mod-iwinfo \
-	+collectd-mod-cpu +collectd-mod-memory \
-	+collectd-mod-interface +collectd-mod-load +collectd-mod-network
+	+luci-compat \
+	+luci-lib-iptparser \
+	+rrdtool1 \
+	+collectd \
+	+collectd-mod-rrdtool \
+	+collectd-mod-iwinfo \
+	+collectd-mod-cpu \
+	+collectd-mod-memory \
+	+collectd-mod-interface \
+	+collectd-mod-load \
+	+collectd-mod-network
 
 define Package/luci-app-statistics/conffiles
-/etc/config/luci_statistics
+/etc/config/luci_collectd
 endef
 
 include ../../luci.mk
