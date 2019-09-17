@@ -1337,23 +1337,22 @@
 			},
 
 			addFooter: function() {
-				var footer = E([]),
-				    mc = document.getElementById('maincontent');
+				var footer = E([]);
 
-				if (mc.querySelector('.cbi-map')) {
+				if (this.handleSaveApply || this.handleSave || this.handleReset) {
 					footer.appendChild(E('div', { 'class': 'cbi-page-actions' }, [
-						E('button', {
+						this.handleSaveApply ? E('button', {
 							'class': 'cbi-button cbi-button-apply',
 							'click': L.ui.createHandlerFn(this, 'handleSaveApply')
-						}, _('Save & Apply')), ' ',
-						E('button', {
+						}, _('Save & Apply')) : '', ' ',
+						this.handleSave ? E('button', {
 							'class': 'cbi-button cbi-button-save',
 							'click': L.ui.createHandlerFn(this, 'handleSave')
-						}, _('Save')), ' ',
-						E('button', {
+						}, _('Save')) : '', ' ',
+						this.handleReset ? E('button', {
 							'class': 'cbi-button cbi-button-reset',
 							'click': L.ui.createHandlerFn(this, 'handleReset')
-						}, _('Reset'))
+						}, _('Reset')) : ''
 					]));
 				}
 
