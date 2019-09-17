@@ -8,9 +8,5 @@ uci -q batch <<-EOF >/dev/null
 	commit ucitrack
 EOF
 
-# symlink for busybox httpd
-[ -x /usr/sbin/httpd ] && [ ! -h /www/rrdimg ] && \
-	ln -s /tmp/rrdimg /www/rrdimg
-
 rm -f /tmp/luci-indexcache
 exit 0
