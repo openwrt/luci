@@ -15,7 +15,7 @@ function index()
 	entry({"admin", "system", "admin", "password"}, view("system/password"), _("Router Password"), 1)
 
 	if fs.access("/etc/config/dropbear") then
-		entry({"admin", "system", "admin", "dropbear"}, cbi("admin_system/dropbear"), _("SSH Access"), 2)
+		entry({"admin", "system", "admin", "dropbear"}, view("system/dropbear"), _("SSH Access"), 2)
 		entry({"admin", "system", "admin", "sshkeys"}, view("system/sshkeys"), _("SSH-Keys"), 3)
 	end
 
