@@ -1,0 +1,33 @@
+#!/bin/sh /etc/rc.common
+
+START=79
+USE_PROCD=1
+
+service_triggers()
+{
+	procd_add_reload_trigger "luci_collectd"
+}
+
+start_service() {
+	local Include
+
+	config_load collectd
+	config_get Include globals Include "/tmp/collectd.d"
+
+	mkdir -p "${Include}"
+
+	# Generate luci-collectd iptables plugin config
+	rm -rf "${Include}/luci-iptables.conf"
+	[ -f "/usr/share/collectd/plugin/iptables.json" ] && {
+		/usr/bin/luci-collectd > "${Include}/luci-iptables.conf"
+	}
+}
+
+reload_service() {
+	restart "$@"
+}
+
+restart() {
+	start
+	/etc/init.d/collectd restart
+}
