@@ -1,0 +1,57 @@
+#!/usr/bin/lua
+-- Copyright 2019 Florian Eckert <fe@dev.tdt.de>
+-- Licensed to the public under the Apache License 2.0.
+
+local uci = require("luci.model.uci").cursor()
+local ipt = require("luci.sys.iptparser").IptParser()
+
+function config_iptables(s)
+	local str = ""
+	local search = { }
+
+	local options = {
+		"table",
+		"chain",
+		"target",
+		"protocol",
+		"source",
+		"destination",
+		"inputif",
+		"outputif",
+		"options"
+	}
+
+	for i, k in ipairs(options) do
+		search[k] = s[k]
+	end
+
+	for i, rule in ipairs(ipt:find(search)) do
+		name = s["name"]:gsub( "%s+", "_" )
+		if i > 1 then
+			name = name .. "_(" .. i .. ")"
+		end
+		str = string.format("\tChain %s %s %d \"%s\"",
+			rule.table,
+			rule.chain,
+			rule.index,
+			name
+		)
+	end
+
+	if #str > 0 then
+		print(str)
+	end
+end
+
+function main(argv)
+	local enable = uci:get_bool("luci_collectd", "iptables", "enable") or false
+
+	if enable then
+		print("LoadPlugin iptables")
+		print("<Plugin iptables>")
+		uci:foreach("luci_collectd", "iptables_match", config_iptables)
+		print("</Plugin>")
+	end
+end
+
+main(arg)
