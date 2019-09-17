@@ -1,7 +1,7 @@
 -- Copyright 2008 Freifunk Leipzig / Jo-Philipp Wich <jow@openwrt.org>
 -- Licensed to the public under the Apache License 2.0.
 
-m = Map("luci_statistics",
+m = Map("collectd",
 	translate("Exec Plugin Configuration"),
 	translate(
 		"The exec plugin starts external commands to read values " ..
@@ -10,7 +10,7 @@ m = Map("luci_statistics",
 	))
 
 -- collectd_exec config section
-s = m:section( NamedSection, "collectd_exec", "luci_statistics" )
+s = m:section( NamedSection, "exec", "plugin" )
 
 -- collectd_exec.enable
 enable = s:option( Flag, "enable", translate("Enable this plugin") )
@@ -18,7 +18,7 @@ enable.default = 0
 
 
 -- collectd_exec_input config section (Exec directives)
-exec = m:section( TypedSection, "collectd_exec_input",
+exec = m:section( TypedSection, "exec_input",
 	translate("Add command for reading values"),
 	translate(
 		"Here you can define external commands which will be " ..

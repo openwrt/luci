@@ -1,7 +1,7 @@
 -- Copyright 2008 Freifunk Leipzig / Jo-Philipp Wich <jow@openwrt.org>
 -- Licensed to the public under the Apache License 2.0.
 
-m = Map("luci_statistics",
+m = Map("collectd",
 	translate("Ping Plugin Configuration"),
 	translate(
 		"The ping plugin will send icmp echo replies to selected " ..
@@ -9,7 +9,7 @@ m = Map("luci_statistics",
 	))
 
 -- collectd_ping config section
-s = m:section( NamedSection, "collectd_ping", "luci_statistics" )
+s = m:section( NamedSection, "ping", "plugin" )
 
 -- collectd_ping.enable
 enable = s:option( Flag, "enable", translate("Enable this plugin") )

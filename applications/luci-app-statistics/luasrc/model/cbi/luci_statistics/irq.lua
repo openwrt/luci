@@ -1,7 +1,7 @@
 -- Copyright 2008 Freifunk Leipzig / Jo-Philipp Wich <jow@openwrt.org>
 -- Licensed to the public under the Apache License 2.0.
 
-m = Map("luci_statistics",
+m = Map("collectd",
 	translate("IRQ Plugin Configuration"),
 	translate(
 		"The irq plugin will monitor the rate of issues per second for " ..
@@ -10,7 +10,7 @@ m = Map("luci_statistics",
 	))
 
 -- collectd_irq config section
-s = m:section( NamedSection, "collectd_irq", "luci_statistics" )
+s = m:section( NamedSection, "irq", "plugin" )
 
 -- collectd_irq.enable
 enable = s:option( Flag, "enable", translate("Enable this plugin") )

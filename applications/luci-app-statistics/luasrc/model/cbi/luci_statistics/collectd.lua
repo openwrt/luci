@@ -4,7 +4,7 @@
 local sys = require("luci.sys")
 
 
-m = Map("luci_statistics",
+m = Map("collectd",
 	translate("Collectd Settings"),
 	translate(
 		"Collectd is a small daemon for collecting data from " ..
@@ -13,7 +13,7 @@ m = Map("luci_statistics",
 	))
 
 -- general config section
-s = m:section( NamedSection, "collectd", "luci_statistics" )
+s = m:section( NamedSection, "globals", "globals" )
 
 -- general.hostname (Hostname)
 hostname = s:option( Value, "Hostname", translate("Hostname") )

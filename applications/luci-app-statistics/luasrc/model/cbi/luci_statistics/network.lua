@@ -1,7 +1,7 @@
 -- Copyright 2008 Freifunk Leipzig / Jo-Philipp Wich <jow@openwrt.org>
 -- Licensed to the public under the Apache License 2.0.
 
-m = Map("luci_statistics",
+m = Map("collectd",
 	translate("Network Plugin Configuration"),
 	translate(
 		"The network plugin provides network based communication between " ..
@@ -12,7 +12,7 @@ m = Map("luci_statistics",
 	))
 
 -- collectd_network config section
-s = m:section( NamedSection, "collectd_network", "luci_statistics" )
+s = m:section( NamedSection, "network", "plugin" )
 
 -- collectd_network.enable
 enable = s:option( Flag, "enable", translate("Enable this plugin") )
@@ -20,7 +20,7 @@ enable.default = 0
 
 
 -- collectd_network_listen config section (Listen)
-listen = m:section( TypedSection, "collectd_network_listen",
+listen = m:section( TypedSection, "network_listen",
 	translate("Listener interfaces"),
 	translate(
 		"This section defines on which interfaces collectd will wait " ..
@@ -41,7 +41,7 @@ listen_port.optional  = true
 
 
 -- collectd_network_server config section (Server)
-server = m:section( TypedSection, "collectd_network_server",
+server = m:section( TypedSection, "network_server",
 	translate("server interfaces"),
 	translate(
 		"This section defines to which servers the locally collected " ..

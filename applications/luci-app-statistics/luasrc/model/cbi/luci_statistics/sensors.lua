@@ -60,11 +60,11 @@ local sensor_types = {
 }
 
 
-m = Map("luci_statistics",
+m = Map("collectd",
 	translate("Sensors Plugin Configuration"),
 	translate("The sensors plugin uses the Linux Sensors framework to gather environmental statistics."))
 
-s = m:section( NamedSection, "collectd_sensors", "luci_statistics" )
+s = m:section( NamedSection, "sensors", "plugin" )
 
 
 o = s:option( Flag, "enable", translate("Enable this plugin") )

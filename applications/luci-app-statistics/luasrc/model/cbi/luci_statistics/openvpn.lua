@@ -3,11 +3,11 @@
 
 local m, s, o
 
-m = Map("luci_statistics",
+m = Map("collectd",
 	translate("OpenVPN Plugin Configuration"),
 	translate("The OpenVPN plugin gathers information about the current vpn connection status."))
 
-s = m:section( NamedSection, "collectd_openvpn", "luci_statistics" )
+s = m:section( NamedSection, "openvpn", "plugin" )
 
 
 o = s:option( Flag, "enable", translate("Enable this plugin") )

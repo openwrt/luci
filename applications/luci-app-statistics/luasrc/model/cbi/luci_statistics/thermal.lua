@@ -1,6 +1,6 @@
 -- Licensed to the public under the Apache License 2.0.
 
-m = Map("luci_statistics",
+m = Map("collectd",
 	translate("Thermal Plugin Configuration"),
 	translate("The thermal plugin will monitor temperature of the system. " ..
 		"Data is typically read from /sys/class/thermal/*/temp " ..
@@ -8,7 +8,7 @@ m = Map("luci_statistics",
 	)
 
 -- collectd_thermal config section
-s = m:section( NamedSection, "collectd_thermal", "luci_statistics" )
+s = m:section( NamedSection, "thermal", "plugin" )
 
 -- collectd_thermal.enable
 enable = s:option( Flag, "enable", translate("Enable this plugin") )

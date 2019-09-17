@@ -1,7 +1,7 @@
 -- Copyright 2008 Freifunk Leipzig / Jo-Philipp Wich <jow@openwrt.org>
 -- Licensed to the public under the Apache License 2.0.
 
-m = Map("luci_statistics",
+m = Map("collectd",
 	translate("RRDTool Plugin Configuration"),
 	translate(
 		"The rrdtool plugin stores the collected data in rrd database " ..
@@ -12,7 +12,7 @@ m = Map("luci_statistics",
 	))
 
 -- collectd_rrdtool config section
-s = m:section( NamedSection, "collectd_rrdtool", "luci_statistics" )
+s = m:section( NamedSection, "rrdtool", "plugin" )
 
 -- collectd_rrdtool.enable
 enable = s:option( Flag, "enable", translate("Enable this plugin") )

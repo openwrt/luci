@@ -1,7 +1,7 @@
 -- Copyright 2008 Freifunk Leipzig / Jo-Philipp Wich <jow@openwrt.org>
 -- Licensed to the public under the Apache License 2.0.
 
-m = Map("luci_statistics",
+m = Map("collectd",
 	translate("E-Mail Plugin Configuration"),
 	translate(
 		"The email plugin creates a unix socket which can be used " ..
@@ -12,7 +12,7 @@ m = Map("luci_statistics",
 	))
 
 -- collectd_email config section
-s = m:section( NamedSection, "collectd_email", "luci_statistics" )
+s = m:section( NamedSection, "email", "plugin" )
 
 -- collectd_email.enable
 enable = s:option( Flag, "enable", translate("Enable this plugin") )

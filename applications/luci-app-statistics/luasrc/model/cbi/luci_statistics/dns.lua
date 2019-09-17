@@ -4,7 +4,7 @@
 local sys = require("luci.sys")
 
 
-m = Map("luci_statistics",
+m = Map("collectd",
 	translate("DNS Plugin Configuration"),
 	translate(
 		"The dns plugin collects detailed statistics about dns " ..
@@ -12,7 +12,7 @@ m = Map("luci_statistics",
 	))
 
 -- collectd_dns config section
-s = m:section( NamedSection, "collectd_dns", "luci_statistics" )
+s = m:section( NamedSection, "dns", "plugin" )
 
 -- collectd_dns.enable
 enable = s:option( Flag, "enable", translate("Enable this plugin") )

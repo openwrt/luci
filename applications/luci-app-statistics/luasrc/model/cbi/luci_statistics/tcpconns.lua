@@ -1,7 +1,7 @@
 -- Copyright 2008 Freifunk Leipzig / Jo-Philipp Wich <jow@openwrt.org>
 -- Licensed to the public under the Apache License 2.0.
 
-m = Map("luci_statistics",
+m = Map("collectd",
 	translate("TCPConns Plugin Configuration"),
 	translate(
 		"The tcpconns plugin collects information about open tcp " ..
@@ -9,7 +9,7 @@ m = Map("luci_statistics",
 	))
 
 -- collectd_tcpconns config section
-s = m:section( NamedSection, "collectd_tcpconns", "luci_statistics" )
+s = m:section( NamedSection, "tcpconns", "plugin" )
 
 -- collectd_tcpconns.enable
 enable = s:option( Flag, "enable", translate("Enable this plugin") )

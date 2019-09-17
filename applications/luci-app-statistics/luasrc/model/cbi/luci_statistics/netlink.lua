@@ -6,7 +6,7 @@ local sys = require("luci.sys")
 local devices = sys.net.devices()
 
 
-m = Map("luci_statistics",
+m = Map("collectd",
 	translate("Netlink Plugin Configuration"),
 	translate(
 		"The netlink plugin collects extended information like " ..
@@ -14,7 +14,7 @@ m = Map("luci_statistics",
 	))
 
 -- collectd_netlink config section
-s = m:section( NamedSection, "collectd_netlink", "luci_statistics" )
+s = m:section( NamedSection, "netlink", "plugin" )
 
 -- collectd_netlink.enable
 enable = s:option( Flag, "enable", translate("Enable this plugin") )

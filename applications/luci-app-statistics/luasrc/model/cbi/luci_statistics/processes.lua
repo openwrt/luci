@@ -1,7 +1,7 @@
 -- Copyright 2008 Freifunk Leipzig / Jo-Philipp Wich <jow@openwrt.org>
 -- Licensed to the public under the Apache License 2.0.
 
-m = Map("luci_statistics",
+m = Map("collectd",
 	translate("Processes Plugin Configuration"),
 	translate(
 		"The processes plugin collects information like cpu time, " ..
@@ -9,7 +9,7 @@ m = Map("luci_statistics",
 	))
 
 -- collectd_processes config section
-s = m:section( NamedSection, "collectd_processes", "luci_statistics" )
+s = m:section( NamedSection, "processes", "plugin" )
 
 -- collectd_processes.enable
 enable = s:option( Flag, "enable", translate("Enable this plugin") )

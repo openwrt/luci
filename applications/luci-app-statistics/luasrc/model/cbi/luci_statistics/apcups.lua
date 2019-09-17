@@ -1,14 +1,14 @@
 -- Copyright 2015 Jo-Philipp Wich <jow@openwrt.org>
 -- Licensed to the public under the Apache License 2.0.
 
-m = Map("luci_statistics",
+m = Map("collectd",
 	translate("APCUPS Plugin Configuration"),
 	translate(
 		"The APCUPS plugin collects statistics about the APC UPS."
 	))
 
 -- collectd_apcups config section
-s = m:section( NamedSection, "collectd_apcups", "luci_statistics" )
+s = m:section( NamedSection, "apcups", "plugin" )
 
 -- collectd_apcups.enable
 enable = s:option( Flag, "enable", translate("Enable this plugin") )

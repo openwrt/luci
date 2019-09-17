@@ -1,7 +1,7 @@
 -- Copyright 2008 Freifunk Leipzig / Jo-Philipp Wich <jow@openwrt.org>
 -- Licensed to the public under the Apache License 2.0.
 
-m = Map("luci_statistics",
+m = Map("collectd",
 	translate("CSV Plugin Configuration"),
 	translate(
 		"The csv plugin stores collected data in csv file format " ..
@@ -9,7 +9,7 @@ m = Map("luci_statistics",
 	))
 
 -- collectd_csv config section
-s = m:section( NamedSection, "collectd_csv", "luci_statistics" )
+s = m:section( NamedSection, "csv", "plugin" )
 
 -- collectd_csv.enable
 enable = s:option( Flag, "enable", translate("Enable this plugin") )

@@ -1,11 +1,11 @@
 -- Copyright 2011 Manuel Munz <freifunk at somakoma dot de>
 -- Licensed to the public under the Apache License 2.0.
 
-m = Map("luci_statistics",
+m = Map("collectd",
 	translate("OLSRd Plugin Configuration"),
 	translate("The OLSRd plugin reads information about meshed networks from the txtinfo plugin of OLSRd."))
 
-s = m:section(NamedSection, "collectd_olsrd", "luci_statistics" )
+s = m:section(NamedSection, "olsrd", "plugin" )
 
 enable = s:option(Flag, "enable", translate("Enable this plugin"))
 enable.default = 0

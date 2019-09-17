@@ -3,11 +3,11 @@
 
 local m, s, o
 
-m = Map("luci_statistics",
+m = Map("collectd",
 	translate("Wireless iwinfo Plugin Configuration"),
 	translate("The iwinfo plugin collects statistics about wireless signal strength, noise and quality."))
 
-s = m:section(NamedSection, "collectd_iwinfo", "luci_statistics")
+s = m:section(NamedSection, "iwinfo", "plugin" )
 
 o = s:option(Flag, "enable", translate("Enable this plugin"))
 o.default = 0
