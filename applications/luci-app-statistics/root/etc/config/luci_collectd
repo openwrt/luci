@@ -1,0 +1,19 @@
+
+#config plugin 'iptables'
+#	option enable '1'
+
+#config iptables_match
+#	option table 'nat'
+#	option chain 'luci_fw_postrouting'
+#	option target 'MASQUERADE'
+#	option source '192.168.1.0/24'
+#	option outputif 'br-ff'
+#	option name 'LAN-Clients traffic'
+
+#config iptables_match
+#	option chain 'luci_fw_postrouting'
+#	option table 'nat'
+#	option target 'MASQUERADE'
+#	option source '10.61.230.0/24'
+#	option outputif 'br-ff'
+#	option name 'WLAN-Clients traffic'
