@@ -1344,15 +1344,15 @@
 						this.handleSaveApply ? E('button', {
 							'class': 'cbi-button cbi-button-apply',
 							'click': L.ui.createHandlerFn(this, 'handleSaveApply')
-						}, _('Save & Apply')) : '', ' ',
+						}, [ _('Save & Apply') ]) : '', ' ',
 						this.handleSave ? E('button', {
 							'class': 'cbi-button cbi-button-save',
 							'click': L.ui.createHandlerFn(this, 'handleSave')
-						}, _('Save')) : '', ' ',
+						}, [ _('Save') ]) : '', ' ',
 						this.handleReset ? E('button', {
 							'class': 'cbi-button cbi-button-reset',
 							'click': L.ui.createHandlerFn(this, 'handleReset')
-						}, _('Reset')) : ''
+						}, [ _('Reset') ]) : ''
 					]));
 				}
 

@@ -863,7 +863,7 @@ var CBITypedSection = CBIAbstractSection.extend({
 				'class': 'cbi-button cbi-button-add',
 				'title': btn_title || _('Add'),
 				'click': L.ui.createHandlerFn(this, 'handleAdd')
-			}, btn_title || _('Add')));
+			}, [ btn_title || _('Add') ]));
 		}
 		else {
 			var nameEl = E('input', {
@@ -925,7 +925,7 @@ var CBITypedSection = CBIAbstractSection.extend({
 							'name': 'cbi.rts.%s.%s'.format(config_name, cfgsections[i]),
 							'data-section-id': cfgsections[i],
 							'click': L.ui.createHandlerFn(this, 'handleRemove', cfgsections[i])
-						}, _('Delete'))));
+						}, [ _('Delete') ])));
 			}
 
 			if (!this.anonymous)
@@ -1146,25 +1146,21 @@ var CBITableSection = CBITypedSection.extend({
 				}, this, section_id);
 
 			L.dom.append(tdEl.lastElementChild,
-				E('input', {
-					'type': 'button',
-					'value': _('Edit'),
+				E('button', {
 					'title': _('Edit'),
 					'class': 'cbi-button cbi-button-edit',
 					'click': evFn
-				})
+				}, [ _('Edit') ])
 			);
 		}
 
 		if (more_label) {
 			L.dom.append(tdEl.lastElementChild,
-				E('input', {
-					'type': 'button',
-					'value': more_label,
+				E('button', {
 					'title': more_label,
 					'class': 'cbi-button cbi-button-edit',
 					'click': L.ui.createHandlerFn(this, 'renderMoreOptionsModal', section_id)
-				})
+				}, [ more_label ])
 			);
 		}
 
@@ -1338,11 +1334,11 @@ var CBITableSection = CBITypedSection.extend({
 					E('button', {
 						'class': 'btn',
 						'click': L.ui.createHandlerFn(this, 'handleModalCancel', m)
-					}, _('Dismiss')), ' ',
+					}, [ _('Dismiss') ]), ' ',
 					E('button', {
 						'class': 'cbi-button cbi-button-positive important',
 						'click': L.ui.createHandlerFn(this, 'handleModalSave', m)
-					}, _('Save'))
+					}, [ _('Save') ])
 				])
 			], 'cbi-modal');
 		}, this)).catch(L.error);
@@ -1487,7 +1483,7 @@ var CBINamedSection = CBIAbstractSection.extend({
 						E('button', {
 							'class': 'cbi-button',
 							'click': L.ui.createHandlerFn(this, 'handleRemove')
-						}, _('Delete'))));
+						}, [ _('Delete') ])));
 			}
 
 			sectionEl.appendChild(E('div', {
@@ -1502,7 +1498,7 @@ var CBINamedSection = CBIAbstractSection.extend({
 				E('button', {
 					'class': 'cbi-button cbi-button-add',
 					'click': L.ui.createHandlerFn(this, 'handleAdd')
-				}, _('Add')));
+				}, [ _('Add') ]));
 		}
 
 		L.dom.bindClassInstance(sectionEl, this);

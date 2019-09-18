@@ -1508,7 +1508,7 @@ var UIFileUpload = UIElement.extend({
 			else if (this.value != null)
 				label = [ this.iconForType('file'), ' %s (%s)'.format(this.truncatePath(this.value), _('File not accessible')) ];
 			else
-				label = _('Select file…');
+				label = [ _('Select file…') ];
 
 			return this.bind(E('div', { 'id': this.options.id }, [
 				E('button', {
@@ -1689,13 +1689,13 @@ var UIFileUpload = UIElement.extend({
 						ev.preventDefault();
 						ev.target.previousElementSibling.click();
 					}
-				}, _('Browse…')),
+				}, [ _('Browse…') ]),
 				E('div', {}, E('input', { 'type': 'text', 'placeholder': _('Filename') })),
 				E('button', {
 					'class': 'btn cbi-button-save',
 					'click': L.ui.createHandlerFn(this, 'handleUpload', path, list),
 					'disabled': true
-				}, _('Upload file'))
+				}, [ _('Upload file') ])
 			])
 		]);
 	},
@@ -1746,11 +1746,11 @@ var UIFileUpload = UIElement.extend({
 					selected ? E('button', {
 						'class': 'btn',
 						'click': L.ui.createHandlerFn(this, 'handleReset')
-					}, _('Deselect')) : '',
+					}, [ _('Deselect') ]) : '',
 					this.options.enable_remove ? E('button', {
 						'class': 'btn cbi-button-negative',
 						'click': L.ui.createHandlerFn(this, 'handleDelete', entrypath, list[i])
-					}, _('Delete')) : ''
+					}, [ _('Delete') ]) : ''
 				])
 			]));
 		}
@@ -1979,7 +1979,7 @@ return L.Class.extend({
 			}
 		}, [
 			E('div', { 'style': 'flex:10' }),
-			E('div', { 'style': 'flex:1; display:flex' }, [
+			E('div', { 'style': 'flex:1 1 auto; display:flex' }, [
 				E('button', {
 					'class': 'btn',
 					'style': 'margin-left:auto; margin-top:auto',
@@ -1987,7 +1987,7 @@ return L.Class.extend({
 						L.dom.parent(ev.target, '.alert-message').classList.add('fade-out');
 					},
 
-				}, _('Dismiss'))
+				}, [ _('Dismiss') ])
 			])
 		]);
 
@@ -2303,24 +2303,18 @@ return L.Class.extend({
 							E('var', {}, E('del', '&#160;')), ' ', _('Option removed') ])]),
 					E('br'), list,
 					E('div', { 'class': 'right' }, [
-						E('input', {
-							'type': 'button',
+						E('button', {
 							'class': 'btn',
-							'click': L.ui.hideModal,
-							'value': _('Dismiss')
-						}), ' ',
-						E('input', {
-							'type': 'button',
+							'click': L.ui.hideModal
+						}, [ _('Dismiss') ]), ' ',
+						E('button', {
 							'class': 'cbi-button cbi-button-positive important',
-							'click': L.bind(this.apply, this, true),
-							'value': _('Save & Apply')
-						}), ' ',
-						E('input', {
-							'type': 'button',
+							'click': L.bind(this.apply, this, true)
+						}, [ _('Save & Apply') ]), ' ',
+						E('button', {
 							'class': 'cbi-button cbi-button-reset',
-							'click': L.bind(this.revert, this),
-							'value': _('Revert')
-						})])])
+							'click': L.bind(this.revert, this)
+						}, [ _('Revert') ])])])
 			]);
 
 			for (var config in this.changes) {
@@ -2396,24 +2390,18 @@ return L.Class.extend({
 							E('h4', _('Configuration has been rolled back!')),
 							E('p', _('The device could not be reached within %d seconds after applying the pending changes, which caused the configuration to be rolled back for safety reasons. If you believe that the configuration changes are correct nonetheless, perform an unchecked configuration apply. Alternatively, you can dismiss this warning and edit changes before attempting to apply again, or revert all pending changes to keep the currently working configuration state.').format(L.env.apply_rollback)),
 							E('div', { 'class': 'right' }, [
-								E('input', {
-									'type': 'button',
+								E('button', {
 									'class': 'btn',
-									'click': L.bind(L.ui.changes.displayStatus, L.ui.changes, false),
-									'value': _('Dismiss')
-								}), ' ',
-								E('input', {
-									'type': 'button',
+									'click': L.bind(L.ui.changes.displayStatus, L.ui.changes, false)
+								}, [ _('Dismiss') ]), ' ',
+								E('button', {
 									'class': 'btn cbi-button-action important',
-									'click': L.bind(L.ui.changes.revert, L.ui.changes),
-									'value': _('Revert changes')
-								}), ' ',
-								E('input', {
-									'type': 'button',
+									'click': L.bind(L.ui.changes.revert, L.ui.changes)
+								}, [ _('Revert changes') ]), ' ',
+								E('button', {
 									'class': 'btn cbi-button-negative important',
-									'click': L.bind(L.ui.changes.apply, L.ui.changes, false),
-									'value': _('Apply unchecked')
-								})
+									'click': L.bind(L.ui.changes.apply, L.ui.changes, false)
+								}, [ _('Apply unchecked') ])
 							])
 						]);
 
