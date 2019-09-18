@@ -463,7 +463,9 @@ function initNetworkState(refresh) {
 					if (a.family == 'packet') {
 						s.netdevs[name].flags   = a.flags;
 						s.netdevs[name].stats   = a.data;
-						s.netdevs[name].macaddr = a.addr;
+
+						if (a.addr != null && a.addr != '00:00:00:00:00:00' && a.addr.length == 17)
+							s.netdevs[name].macaddr = a.addr;
 					}
 					else if (a.family == 'inet') {
 						s.netdevs[name].ipaddrs.push(a.addr + '/' + a.netmask);
