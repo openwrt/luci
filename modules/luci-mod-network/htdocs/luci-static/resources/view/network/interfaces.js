@@ -65,7 +65,7 @@ function render_status(node, ifc, with_device) {
 	    ipaddrs = changecount ? [] : ifc.getIPAddrs(),
 	    ip6addrs = changecount ? [] : ifc.getIP6Addrs(),
 	    errors = ifc.getErrors(),
-	    maindev = ifc.getDevice(),
+	    maindev = ifc.getL3Device() || ifc.getDevice(),
 	    macaddr = maindev ? maindev.getMAC() : null;
 
 	return L.itemlist(node, [
