@@ -1,3 +1,9 @@
+<%
+	local fs = require "nixio.fs"
+	local has_ipv6 = fs.access("/proc/net/ipv6_route")
+	local has_oui = fs.access("/usr/share/luci/ouidb.json")
+-%>
+
 <script type="text/javascript">//<![CDATA[
 	XHR.poll(-1, '<%=url('admin/dhcplease_status')%>', null,
 		function(x, st)
@@ -17,13 +23,22 @@
 						timestr = '<em><%:expired%></em>';
 					else
 						timestr = String.format('%t', st[0][i].expires);
-
+					<% if has_oui then -%>
+					rows.push([
+						st[0][i].hostname || '?',
+						st[0][i].ipaddr,
+						st[0][i].macaddr,
+						st[0][i].company,
+						timestr
+					]);
+					<% else -%>
 					rows.push([
 						st[0][i].hostname || '?',
 						st[0][i].ipaddr,
 						st[0][i].macaddr,
 						timestr
 					]);
+					<% end -%>
 				}
 
 				cbi_update_table(tb, rows, '<em><%:There are no active leases.%></em>');
@@ -71,6 +86,9 @@
 			<div class="th"><%:Hostname%></div>
 			<div class="th"><%:IPv4-Address%></div>
 			<div class="th"><%:MAC-Address%></div>
+			<% if has_oui then -%>
+			<div class="th"><%:Company%></div>
+			<% end -%>
 			<div class="th"><%:Leasetime remaining%></div>
 		</div>
 		<div class="tr placeholder">
@@ -79,12 +97,7 @@
 	</div>
 </div>
 
-<%
-	local fs = require "nixio.fs"
-	local has_ipv6 = fs.access("/proc/net/ipv6_route")
-
-	if has_ipv6 then
--%>
+<% if has_ipv6 then -%>
 	<div class="cbi-section" style="display:none">
 		<h3><%:Active DHCPv6 Leases%></h3>
 		<div class="table" id="lease6_status_table">
