@@ -47,33 +47,27 @@ callTimezone = rpc.declare({
 CBILocalTime = form.DummyValue.extend({
 	renderWidget: function(section_id, option_id, cfgvalue) {
 		return E([], [
-			E('span', { 'id': 'localtime' },
-				new Date(cfgvalue * 1000).toLocaleString()),
+			E('span', {}, [
+				E('input', {
+					'id': 'localtime',
+					'type': 'text',
+					'readonly': true,
+					'value': new Date(cfgvalue * 1000).toLocaleString()
+				})
+			]),
 			' ',
 			E('button', {
 				'class': 'cbi-button cbi-button-apply',
-				'click': function() {
-					this.blur();
-					this.classList.add('spinning');
-					this.disabled = true;
-					callSetLocaltime(Math.floor(Date.now() / 1000)).then(L.bind(function() {
-						this.classList.remove('spinning');
-						this.disabled = false;
-					}, this));
-				}
+				'click': L.ui.createHandlerFn(this, function() {
+					return callSetLocaltime(Math.floor(Date.now() / 1000));
+				})
 			}, _('Sync with browser')),
 			' ',
 			this.ntpd_support ? E('button', {
 				'class': 'cbi-button cbi-button-apply',
-				'click': function() {
-					this.blur();
-					this.classList.add('spinning');
-					this.disabled = true;
-					callInitAction('sysntpd', 'restart').then(L.bind(function() {
-						this.classList.remove('spinning');
-						this.disabled = false;
-					}, this));
-				}
+				'click': L.ui.createHandlerFn(this, function() {
+					return callInitAction('sysntpd', 'restart');
+				})
 			}, _('Sync with NTP-Server')) : ''
 		]);
 	},
@@ -83,7 +77,6 @@ return L.view.extend({
 	load: function() {
 		return Promise.all([
 			callInitList('sysntpd'),
-			callInitList('zram'),
 			callTimezone(),
 			callGetLocaltime(),
 			uci.load('luci'),
@@ -92,11 +85,10 @@ return L.view.extend({
 	},
 
 	render: function(rpc_replies) {
-		var ntpd_support = rpc_replies[0],
-		    zram_support = rpc_replies[1],
-		    timezones = rpc_replies[2],
-		    localtime = rpc_replies[3],
-		    ntp_setup, ntp_enabled, m, s, o;
+		var ntpd_enabled = rpc_replies[0],
+		    timezones = rpc_replies[1],
+		    localtime = rpc_replies[2],
+		    m, s, o;
 
 		m = new form.Map('system',
 			_('System'),
@@ -119,7 +111,7 @@ return L.view.extend({
 
 		o = s.taboption('general', CBILocalTime, '_systime', _('Local Time'));
 		o.cfgvalue = function() { return localtime };
-		o.ntpd_support = ntpd_support;
+		o.ntpd_support = ntpd_enabled;
 
 		o = s.taboption('general', form.Value, 'hostname', _('Hostname'));
 		o.datatype = 'hostname';
@@ -184,7 +176,7 @@ return L.view.extend({
 		 * Zram Properties
 		 */
 
-		if (zram_support != null) {
+		if (L.hasSystemFeature('zram')) {
 			s.tab('zram', _('ZRam Settings'));
 
 			o = s.taboption('zram', form.Value, 'zram_size_mb', _('ZRam Size'), _('Size of the ZRam device in megabytes'));
@@ -234,7 +226,7 @@ return L.view.extend({
 		 * NTP
 		 */
 
-		if (ntpd_support != null) {
+		if (L.hasSystemFeature('sysntpd')) {
 			var default_servers = [
 				'0.openwrt.pool.ntp.org', '1.openwrt.pool.ntp.org',
 				'2.openwrt.pool.ntp.org', '3.openwrt.pool.ntp.org'
@@ -245,14 +237,14 @@ return L.view.extend({
 			o.ucisection = 'ntp';
 			o.default = o.disabled;
 			o.write = function(section_id, value) {
-				ntpd_support = +value;
+				ntpd_enabled = +value;
 
-				if (ntpd_support && !uci.get('system', 'ntp')) {
+				if (ntpd_enabled && !uci.get('system', 'ntp')) {
 					uci.add('system', 'timeserver', 'ntp');
 					uci.set('system', 'ntp', 'server', default_servers);
 				}
 
-				if (!ntpd_support)
+				if (!ntpd_enabled)
 					uci.set('system', 'ntp', 'enabled', 0);
 				else
 					uci.unset('system', 'ntp', 'enabled');
@@ -260,7 +252,7 @@ return L.view.extend({
 				return callInitAction('sysntpd', 'enable');
 			};
 			o.load = function(section_id) {
-				return (ntpd_support == 1 &&
+				return (ntpd_enabled == 1 &&
 				        uci.get('system', 'ntp') != null &&
 				        uci.get('system', 'ntp', 'enabled') != 0) ? '1' : '0';
 			};
@@ -284,7 +276,7 @@ return L.view.extend({
 		return m.render().then(function(mapEl) {
 			L.Poll.add(function() {
 				return callGetLocaltime().then(function(t) {
-					mapEl.querySelector('#localtime').innerHTML = new Date(t * 1000).toLocaleString();
+					mapEl.querySelector('#localtime').value = new Date(t * 1000).toLocaleString();
 				});
 			});
 
