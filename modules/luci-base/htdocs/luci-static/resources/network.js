@@ -1756,10 +1756,16 @@ Device = L.Class.extend({
 		this.network = network;
 	},
 
-	_ubus: function(field) {
-		var dump = _state.devices[this.ifname] || {};
+	_devstate: function(/* ... */) {
+		var rv = this.dev;
 
-		return (field != null ? dump[field] : dump);
+		for (var i = 0; i < arguments.length; i++)
+			if (L.isObject(rv))
+				rv = rv[arguments[i]];
+			else
+				return null;
+
+		return rv;
 	},
 
 	getName: function() {
@@ -1767,24 +1773,21 @@ Device = L.Class.extend({
 	},
 
 	getMAC: function() {
-		var mac = (this.dev != null ? this.dev.macaddr : null);
-		if (mac == null)
-			mac = this._ubus('macaddr');
-
+		var mac = this._devstate('macaddr');
 		return mac ? mac.toUpperCase() : null;
 	},
 
 	getMTU: function() {
-		return this.dev ? this.dev.mtu : null;
+		return this._devstate('mtu');
 	},
 
 	getIPAddrs: function() {
-		var addrs = (this.dev != null ? this.dev.ipaddrs : null);
+		var addrs = this._devstate('ipaddrs');
 		return (Array.isArray(addrs) ? addrs : []);
 	},
 
 	getIP6Addrs: function() {
-		var addrs = (this.dev != null ? this.dev.ip6addrs : null);
+		var addrs = this._devstate('ip6addrs');
 		return (Array.isArray(addrs) ? addrs : []);
 	},
 
@@ -1874,7 +1877,7 @@ Device = L.Class.extend({
 	},
 
 	isUp: function() {
-		var up = this._ubus('up');
+		var up = this._devstate('flags', 'up');
 
 		if (up == null)
 			up = (this.getType() == 'alias');
@@ -1887,26 +1890,26 @@ Device = L.Class.extend({
 	},
 
 	isBridgePort: function() {
-		return (this.dev != null && this.dev.bridge != null);
+		return (this._devstate('bridge') != null);
 	},
 
 	getTXBytes: function() {
-		var stat = this._ubus('statistics');
+		var stat = this._devstate('stats');
 		return (stat != null ? stat.tx_bytes || 0 : 0);
 	},
 
 	getRXBytes: function() {
-		var stat = this._ubus('statistics');
+		var stat = this._devstate('stats');
 		return (stat != null ? stat.rx_bytes || 0 : 0);
 	},
 
 	getTXPackets: function() {
-		var stat = this._ubus('statistics');
+		var stat = this._devstate('stats');
 		return (stat != null ? stat.tx_packets || 0 : 0);
 	},
 
 	getRXPackets: function() {
-		var stat = this._ubus('statistics');
+		var stat = this._devstate('stats');
 		return (stat != null ? stat.rx_packets || 0 : 0);
 	},
 
