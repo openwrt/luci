@@ -1862,13 +1862,18 @@ var CBIFileUpload = CBIValue.extend({
 	},
 
 	renderWidget: function(section_id, option_index, cfgvalue) {
+		var loadValueFn = this.loadValue;
 		var browserEl = new ui.FileUpload((cfgvalue != null) ? cfgvalue : this.default, {
 			id: this.cbid(section_id),
 			name: this.cbid(section_id),
 			show_hidden: this.show_hidden,
 			enable_upload: this.enable_upload,
 			enable_remove: this.enable_remove,
-			root_directory: this.root_directory
+			root_directory: this.root_directory,
+	                loadValue: function(value) {
+		                return (loadValueFn) ? loadValueFn(section_id, value) : value;
+			},
+			writeValue: this.writeValue
 		});
 
 		return browserEl.render();

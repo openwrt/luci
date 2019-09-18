@@ -1456,7 +1456,7 @@ var UIHiddenfield = UIElement.extend({
 
 var UIFileUpload = UIElement.extend({
 	__init__: function(value, options) {
-		this.value = value;
+		this.value = options.loadValue(value);
 		this.options = Object.assign({
 			show_hidden: false,
 			enable_upload: true,
@@ -1797,6 +1797,7 @@ var UIFileUpload = UIElement.extend({
 	},
 
 	handleReset: function(ev) {
+		this.options.loadValue();
 		var button = this.node.firstElementChild,
 		    hidden = this.node.lastElementChild;
 
@@ -1807,6 +1808,7 @@ var UIFileUpload = UIElement.extend({
 	},
 
 	handleSelect: function(path, fileStat, ev) {
+		this.options.loadValue(path);
 		var browser = L.dom.parent(ev.target, '.cbi-filebrowser'),
 		    ul = browser.querySelector('ul');
 
@@ -1857,7 +1859,7 @@ var UIFileUpload = UIElement.extend({
 	},
 
 	getValue: function() {
-		return this.node.lastElementChild.value;
+		return (this.options.writeValue) ? this.options.writeValue(this.node.lastElementChild.value) : this.node.lastElementChild.value;
 	},
 
 	setValue: function(value) {
