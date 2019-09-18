@@ -104,6 +104,22 @@ local function dhcp_leases_common(family)
 		end
 	end
 
+	-- Load company name from OUI database
+	if family == 4 then
+		local ouidb_file = "/usr/share/luci/ouidb.json"
+		if nixio.fs.access(ouidb_file) then
+			local json  = require("luci.jsonc")
+			ouidb = json.parse(nixio.fs.readfile(ouidb_file) or "")
+			for _, lease in ipairs(rv) do
+				tuble = {}
+				for str in lease["macaddr"]:gmatch("([^:]+)") do
+					table.insert(tuble, str)
+				end
+				lease.company = ouidb[string.format("%s%s%s", tuble[1], tuble[2], tuble[3])]
+			end
+		end
+	end
+
 	return rv
 end
 
