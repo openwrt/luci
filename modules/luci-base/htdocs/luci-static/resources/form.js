@@ -1822,7 +1822,7 @@ var CBIButtonValue = CBIValue.extend({
 				E('button', {
 					'class': 'cbi-button cbi-button-%s'.format(this.inputstyle || 'button'),
 					'click': L.ui.createHandlerFn(this, this.onclick || function(ev) {
-						ev.target.previousElementSibling.value = ev.target.value;
+						ev.currentTarget.parentNode.nextElementSibling.value = value;
 						return this.map.save();
 					})
 				}, [ btn_title ])
