@@ -55,7 +55,7 @@ return L.view.extend({
 		}, this, name, !isEnabled, ev.currentTarget.parentNode));
 	},
 
-	handleSave: function(ev) {
+	handleRcLocalSave: function(ev) {
 		var value = (document.querySelector('textarea').value || '').trim().replace(/\r\n/g, '\n') + '\n';
 
 		return this.callFileWrite('/etc/rc.local', value).then(function(rc) {
@@ -126,10 +126,10 @@ return L.view.extend({
 				E('div', { 'data-tab': 'rc', 'data-tab-title': _('Local Startup') }, [
 					E('p', {}, _('This is the content of /etc/rc.local. Insert your own commands here (in front of \'exit 0\') to execute them at the end of the boot process.')),
 					E('p', {}, E('textarea', { 'style': 'width:100%', 'rows': 20 }, rcLocal != null ? rcLocal : '')),
-					E('div', { 'class': 'right' }, [
+					E('div', { 'class': 'cbi-page-actions' }, [
 						E('button', {
-							'class': 'btn cbi-button-positive important',
-							'click': L.ui.createHandlerFn(this, 'handleSave')
+							'class': 'btn cbi-button-save',
+							'click': L.ui.createHandlerFn(this, 'handleRcLocalSave')
 						}, _('Save'))
 					])
 				])
@@ -139,5 +139,9 @@ return L.view.extend({
 		L.ui.tabs.initTabGroup(view.lastElementChild.childNodes);
 
 		return view;
-	}
+	},
+
+	handleSaveApply: null,
+	handleSave: null,
+	handleReset: null
 });

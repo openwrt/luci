@@ -40,13 +40,10 @@ return L.view.extend({
 			E('p', {},
 				_('This is the system crontab in which scheduled tasks can be defined.') +
 				_('<br/>Note: you need to manually restart the cron service if the crontab file was empty before editing.')),
-			E('p', {}, E('textarea', { 'style': 'width:100%', 'rows': 10 }, crontab != null ? crontab : '')),
-			E('div', { 'class': 'right' }, [
-				E('button', {
-					'class': 'btn cbi-button-positive important',
-					'click': L.ui.createHandlerFn(this, 'handleSave')
-				}, _('Save'))
-			])
+			E('p', {}, E('textarea', { 'style': 'width:100%', 'rows': 10 }, crontab != null ? crontab : ''))
 		]);
-	}
+	},
+
+	handleSaveApply: null,
+	handleReset: null
 });
