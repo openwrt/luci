@@ -2,6 +2,8 @@
 'require form';
 'require network';
 
+var root_directory = '/etc/wireguard';
+
 function validateBase64(section_id, value) {
 	if (value.length == 0)
 		return true;
@@ -10,6 +12,14 @@ function validateBase64(section_id, value) {
 		return _('Invalid Base64 key string');
 
 	return true;
+}
+
+function prependRootDirectory(value) {
+	return (value) ? root_directory + '/' + value : value;
+}
+
+function stripRootDirectory(value) {
+	return value.split(root_directory + '/')[1];
 }
 
 return network.registerProtocol('wireguard', {
@@ -46,10 +56,25 @@ return network.registerProtocol('wireguard', {
 
 		// -- general ---------------------------------------------------------------------
 
-		o = s.taboption('general', form.Value, 'private_key', _('Private Key'), _('Required. Base64-encoded private key for this interface.'));
+		var private_key_file;
+		o = s.taboption('general', form.FileUpload, 'private_key_file', _('Private Key file'), _('Required either this or below. Private key file for this interface.'));
+		o.root_directory = root_directory;
+		o.enable_upload = false;
+		o.enable_remove = false;
+		o.writeValue = stripRootDirectory;
+		o.loadValue = function(section_id, value) {
+			private_key_file = value;
+			return prependRootDirectory(value);
+		}
+
+		o = s.taboption('general', form.Value, 'private_key', _('Private Key'), _('Required either this or above. Base64-encoded private key for this interface.'));
 		o.password = true;
-		o.validate = validateBase64;
-		o.rmempty = false;
+		o.validate = function(section_id, value) {
+			if (private_key_file && !value) return true;
+			else if (private_key_file && value || !value) return _('Either select private key file or enter private key');
+			return validateBase64(section_id, value);
+		}
+		o.rmempty = true;
 
 		o = s.taboption('general', form.Value, 'listen_port', _('Listen Port'), _('Optional. UDP port used for outgoing and incoming packets.'));
 		o.datatype = 'port';
@@ -114,9 +139,24 @@ return network.registerProtocol('wireguard', {
 		o.validate = validateBase64;
 		o.rmempty = false;
 
-		o = ss.option(form.Value, 'preshared_key', _('Preshared Key'), _('Optional. Base64-encoded preshared key. Adds in an additional layer of symmetric-key cryptography for post-quantum resistance.'));
+		var preshared_key_files = {},
+		    comment = ' Adds in an additional layer of symmetric-key cryptography for post-quantum resistance.';
+		o = ss.option(form.FileUpload, 'preshared_key_file', _('Preshared Key file'), _('Optional either this or below. Preshared key file.' + comment));
+		o.root_directory = root_directory;
+		o.enable_upload = false;
+		o.enable_remove = false;
+		o.writeValue = stripRootDirectory;
+		o.loadValue = function(section_id, value) {
+			preshared_key_files[section_id] = value;
+			return prependRootDirectory(value);
+		};
+
+		o = ss.option(form.Value, 'preshared_key', _('Preshared Key'), _('Optional either this or above. Base64-encoded preshared key.' + comment));
 		o.password = true;
-		o.validate = validateBase64;
+		o.validate = function(section_id, value) {
+			if (preshared_key_files[section_id] && value) return _('Either select preshared key file or enter preshared key');
+			return validateBase64(section_id, value);
+		};
 		o.optional = true;
 
 		o = ss.option(form.DynamicList, 'allowed_ips', _('Allowed IPs'), _("Required. IP addresses and prefixes that this peer is allowed to use inside the tunnel. Usually the peer's tunnel IP addresses and the networks the peer routes through the tunnel."));
