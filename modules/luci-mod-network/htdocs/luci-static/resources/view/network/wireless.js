@@ -1045,9 +1045,9 @@ return L.view.extend({
 				};
 
 
-				encr.value('none', _('No Encryption'));
-				encr.value('wep-open',   _('WEP Open System'));
-				encr.value('wep-shared', _('WEP Shared Key'));
+				encr.value('none', _('No Encryption (Warning: Insecure!)'));
+				encr.value('wep-open',   _('WEP Open System (Warning: Insecure!)'));
+				encr.value('wep-shared', _('WEP Shared Key (Warning: Insecure!)'));
 
 				if (hwtype == 'mac80211') {
 					var has_supplicant = L.hasSystemFeature('wpasupplicant'),
