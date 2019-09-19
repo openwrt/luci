@@ -87,7 +87,7 @@ function render_network_status(radioNet) {
 	var mode = radioNet.getActiveMode(),
 	    bssid = radioNet.getActiveBSSID(),
 	    channel = radioNet.getChannel(),
-	    disabled = (radioNet.get('disabled') == '1'),
+	    disabled = (radioNet.get('disabled') == '1' || uci.get('wireless', radioNet.getWifiDeviceName(), 'disabled') == '1'),
 	    is_assoc = (bssid && bssid != '00:00:00:00:00:00' && channel && mode != 'Unknown' && !disabled),
 	    changecount = count_changes(radioNet.getName()),
 	    status_text = null;
@@ -704,7 +704,8 @@ return L.view.extend({
 				];
 			}
 			else {
-				var isDisabled = (inst.get('disabled') == '1');
+				var isDisabled = (inst.get('disabled') == '1' ||
+					uci.get('wireless', inst.getWifiDeviceName(), 'disabled') == '1');
 
 				btns = [
 					E('button', {
