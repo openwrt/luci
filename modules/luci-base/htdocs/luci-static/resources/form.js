@@ -393,6 +393,39 @@ var CBIMap = CBINode.extend({
 			this.checkDepends(ev, (n || 10) + 1);
 
 		ui.tabs.updateTabs(ev, this.root);
+	},
+
+	isDependencySatisfied: function(depends, config_name, section_id) {
+		var def = false;
+
+		if (!Array.isArray(depends) || !depends.length)
+			return true;
+
+		for (var i = 0; i < depends.length; i++) {
+			var istat = true,
+			    reverse = false;
+
+			for (var dep in depends[i]) {
+				if (dep == '!reverse') {
+					reverse = true;
+				}
+				else if (dep == '!default') {
+					def = true;
+					istat = false;
+				}
+				else {
+					var res = this.lookupOption(dep, section_id, config_name),
+					    val = (res && res[0].isActive(res[1])) ? res[0].formvalue(res[1]) : null;
+
+					istat = (istat && isEqual(val, depends[i][dep]));
+				}
+			}
+
+			if (istat ^ reverse)
+				return true;
+		}
+
+		return def;
 	}
 });
 
@@ -675,37 +708,41 @@ var CBIAbstractValue = CBINode.extend({
 	},
 
 	checkDepends: function(section_id) {
-		var def = false;
+		var config_name = this.uciconfig || this.section.uciconfig || this.map.config,
+		    active = this.map.isDependencySatisfied(this.deps, config_name, section_id);
 
-		if (!Array.isArray(this.deps) || !this.deps.length)
-			return true;
+		if (active)
+			this.updateDefaultValue(section_id);
 
-		for (var i = 0; i < this.deps.length; i++) {
-			var istat = true,
-			    reverse = false;
+		return active;
+	},
 
-			for (var dep in this.deps[i]) {
-				if (dep == '!reverse') {
-					reverse = true;
-				}
-				else if (dep == '!default') {
-					def = true;
-					istat = false;
-				}
-				else {
-					var conf = this.uciconfig || this.section.uciconfig || this.map.config,
-					    res = this.map.lookupOption(dep, section_id, conf),
-					    val = (res && res[0].isActive(res[1])) ? res[0].formvalue(res[1]) : null;
+	updateDefaultValue: function(section_id) {
+		if (!L.isObject(this.defaults))
+			return;
 
-					istat = (istat && isEqual(val, this.deps[i][dep]));
-				}
+		var config_name = this.uciconfig || this.section.uciconfig || this.map.config,
+		    default_defval = null, satisified_defval = null;
+
+		for (var value in this.defaults) {
+			if (!this.defaults[value] || this.defaults[value].length == 0) {
+				default_defval = value;
+				continue;
 			}
-
-			if (istat ^ reverse)
-				return true;
+			else if (this.map.isDependencySatisfied(this.defaults[value], config_name, section_id)) {
+				satisified_defval = value;
+				break;
+			}
 		}
 
-		return def;
+		if (satisified_defval == null)
+			satisified_defval = default_defval;
+
+		var node = this.map.findElement('id', this.cbid(section_id));
+		if (node && node.getAttribute('data-changed') != 'true' && satisified_defval != null)
+			L.dom.callClassMethod(node, 'setValue', satisified_defval);
+
+		this.default = satisified_defval;
 	},
 
 	cbid: function(section_id) {
