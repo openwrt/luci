@@ -1515,8 +1515,7 @@ return L.view.extend({
 						// ieee802.11w options
 						if (L.hasSystemFeature('hostapd', '11w')) {
 							o = ss.taboption('encryption', form.ListValue, 'ieee80211w', _('802.11w Management Frame Protection'), _("Requires the 'full' version of wpad/hostapd and support from the wifi driver <br />(as of Jan 2019: ath9k, ath10k, mwlwifi and mt76)"));
-							o.default = '';
-							o.value('', _('Disabled (default)'));
+							o.value('', _('Disabled'));
 							o.value('1', _('Optional'));
 							o.value('2', _('Required'));
 							o.depends({ mode: 'ap', encryption: 'wpa2' });
@@ -1543,6 +1542,11 @@ return L.view.extend({
 							o.depends({ mode: 'sta-wds', encryption: 'sae' });
 							o.depends({ mode: 'sta-wds', encryption: 'sae-mixed' });
 							o.depends({ mode: 'sta-wds', encryption: 'owe' });
+							o.defaults = {
+								'2': [{ encryption: 'sae' }],
+								'1': [{ encryption: 'sae-mixed'}],
+								'':  []
+							};
 
 							o = ss.taboption('encryption', form.Value, 'ieee80211w_max_timeout', _('802.11w maximum timeout'), _('802.11w Association SA Query maximum timeout'));
 							o.depends('ieee80211w', '1');
