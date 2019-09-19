@@ -70,6 +70,11 @@ var UIElement = L.Class.extend({
 	},
 
 	setChangeEvents: function(targetNode /*, ... */) {
+		var tag_changed = L.bind(function(ev) { this.setAttribute('data-changed', true) }, this.node);
+
+		for (var i = 1; i < arguments.length; i++)
+			targetNode.addEventListener(arguments[i], tag_changed);
+
 		this.registerEvents(targetNode, 'widget-change', this.varargs(arguments, 1));
 	}
 });
