@@ -722,6 +722,7 @@ var CBIAbstractValue = CBINode.extend({
 			return;
 
 		var config_name = this.uciconfig || this.section.uciconfig || this.map.config,
+		    cfgvalue = L.toArray(this.cfgvalue(section_id))[0],
 		    default_defval = null, satisified_defval = null;
 
 		for (var value in this.defaults) {
@@ -739,7 +740,7 @@ var CBIAbstractValue = CBINode.extend({
 			satisified_defval = default_defval;
 
 		var node = this.map.findElement('id', this.cbid(section_id));
-		if (node && node.getAttribute('data-changed') != 'true' && satisified_defval != null)
+		if (node && node.getAttribute('data-changed') != 'true' && satisified_defval != null && cfgvalue == null)
 			L.dom.callClassMethod(node, 'setValue', satisified_defval);
 
 		this.default = satisified_defval;
