@@ -1046,9 +1046,7 @@ return L.view.extend({
 				};
 
 
-				encr.value('none', _('No Encryption'));
-				encr.value('wep-open',   _('WEP Open System'));
-				encr.value('wep-shared', _('WEP Shared Key'));
+				var crypto_modes = [];
 
 				if (hwtype == 'mac80211') {
 					var has_supplicant = L.hasSystemFeature('wpasupplicant'),
@@ -1068,26 +1066,26 @@ return L.view.extend({
 
 
 					if (has_hostapd || has_supplicant) {
-						encr.value('psk', 'WPA-PSK');
-						encr.value('psk2', 'WPA2-PSK');
-						encr.value('psk-mixed', 'WPA-PSK/WPA2-PSK Mixed Mode');
+						crypto_modes.push(['psk2',      'WPA2-PSK',                    33]);
+						crypto_modes.push(['psk-mixed', 'WPA-PSK/WPA2-PSK Mixed Mode', 22]);
+						crypto_modes.push(['psk',       'WPA-PSK',                     21]);
 					}
 					else {
 						encr.description = _('WPA-Encryption requires wpa_supplicant (for client mode) or hostapd (for AP and ad-hoc mode) to be installed.');
 					}
 
 					if (has_ap_sae || has_sta_sae) {
-						encr.value('sae', 'WPA3-SAE');
-						encr.value('sae-mixed', 'WPA2-PSK/WPA3-SAE Mixed Mode');
+						crypto_modes.push(['sae',       'WPA3-SAE',                     31]);
+						crypto_modes.push(['sae-mixed', 'WPA2-PSK/WPA3-SAE Mixed Mode', 30]);
 					}
 
 					if (has_ap_eap || has_sta_eap) {
-						encr.value('wpa', 'WPA-EAP');
-						encr.value('wpa2', 'WPA2-EAP');
+						crypto_modes.push(['wpa2', 'WPA2-EAP', 32]);
+						crypto_modes.push(['wpa',  'WPA-EAP',  20]);
 					}
 
 					if (has_ap_owe || has_sta_owe) {
-						encr.value('owe', 'OWE');
+						crypto_modes.push(['owe', 'OWE', 1]);
 					}
 
 					encr.crypto_support = {
@@ -1154,9 +1152,23 @@ return L.view.extend({
 					};
 				}
 				else if (hwtype == 'broadcom') {
-					encr.value('psk', 'WPA-PSK');
-					encr.value('psk2', 'WPA2-PSK');
-					encr.value('psk+psk2', 'WPA-PSK/WPA2-PSK Mixed Mode');
+					crypto_modes.push(['psk2',     'WPA2-PSK',                    33]);
+					crypto_modes.push(['psk+psk2', 'WPA-PSK/WPA2-PSK Mixed Mode', 22]);
+					crypto_modes.push(['psk',      'WPA-PSK',                     21]);
+				}
+
+				crypto_modes.push(['wep-open',   _('WEP Open System'), 11]);
+				crypto_modes.push(['wep-shared', _('WEP Shared Key'),  10]);
+				crypto_modes.push(['none',       _('No Encryption'),   0]);
+
+				crypto_modes.sort(function(a, b) { return b[2] - a[2] });
+
+				for (var i = 0; i < crypto_modes.length; i++) {
+					var security_level = (crypto_modes[i][2] >= 30) ? _('strong security')
+						: (crypto_modes[i][2] >= 20) ? _('medium security')
+							: (crypto_modes[i][2] >= 10) ? _('weak security') : _('open network');
+
+					encr.value(crypto_modes[i][0], '%s (%s)'.format(crypto_modes[i][1], security_level));
 				}
 
 
