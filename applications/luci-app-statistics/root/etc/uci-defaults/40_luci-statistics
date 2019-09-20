@@ -2,9 +2,9 @@
 
 # register commit handler
 uci -q batch <<-EOF >/dev/null
-	delete ucitrack.@luci_statistics[-1]
-	add ucitrack luci_statistics
-	set ucitrack.@luci_statistics[-1].init=luci_statistics
+	delete ucitrack.@luci_collectd[-1]
+	add ucitrack luci_collectd
+	set ucitrack.@luci_collectd[-1].init=luci_collectd
 	commit ucitrack
 EOF
 
