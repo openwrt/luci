@@ -1265,7 +1265,7 @@ return L.view.extend({
 
 				o.cfgvalue = function(section_id) {
 					var slot = +uci.get('wireless', section_id, 'key');
-					return (slot >= 1 && slot <= 4) ? slot : 1;
+					return String((slot >= 1 && slot <= 4) ? slot : 1);
 				};
 
 				o.write = function(section_id, value) {
