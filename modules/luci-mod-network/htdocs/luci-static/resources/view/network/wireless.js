@@ -1252,6 +1252,9 @@ return L.view.extend({
 				o.write = function(section_id, value) {
 					uci.set('wireless', section_id, 'key', value);
 					uci.unset('wireless', section_id, 'key1');
+					uci.unset('wireless', section_id, 'key2');
+					uci.unset('wireless', section_id, 'key3');
+					uci.unset('wireless', section_id, 'key4');
 				};
 
 
@@ -1265,7 +1268,7 @@ return L.view.extend({
 
 				o.cfgvalue = function(section_id) {
 					var slot = +uci.get('wireless', section_id, 'key');
-					return String((slot >= 1 && slot <= 4) ? slot : 1);
+					return (slot >= 1 && slot <= 4) ? String(slot) : '';
 				};
 
 				o.write = function(section_id, value) {
