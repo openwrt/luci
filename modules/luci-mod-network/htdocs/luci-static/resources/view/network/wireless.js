@@ -1545,7 +1545,7 @@ return L.view.extend({
 							o.depends({ mode: 'sta-wds', encryption: 'owe' });
 							o.defaults = {
 								'2': [{ encryption: 'sae' }],
-								'1': [{ encryption: 'sae-mixed'}],
+								'1': [{ encryption: 'sae-mixed'}, { encryption: 'owe' }],
 								'':  []
 							};
 
