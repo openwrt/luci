@@ -399,17 +399,21 @@
 		},
 
 		handleReadyStateChange: function(resolveFn, rejectFn, ev) {
-			var xhr = this.xhr;
+			var xhr = this.xhr,
+			    duration = Date.now() - this.start;
 
 			if (xhr.readyState !== 4)
 				return;
 
 			if (xhr.status === 0 && xhr.statusText === '') {
-				rejectFn.call(this, new Error('XHR request aborted by browser'));
+				if (duration >= this.timeout)
+					rejectFn.call(this, new Error('XHR request timed out'));
+				else
+					rejectFn.call(this, new Error('XHR request aborted by browser'));
 			}
 			else {
 				var response = new Response(
-					xhr, xhr.responseURL || this.url, Date.now() - this.start);
+					xhr, xhr.responseURL || this.url, duration);
 
 				Promise.all(Request.interceptors.map(function(fn) { return fn(response) }))
 					.then(resolveFn.bind(this, response))
