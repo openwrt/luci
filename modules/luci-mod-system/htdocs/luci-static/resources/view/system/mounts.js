@@ -161,6 +161,9 @@ return L.view.extend({
 			btrfs: results[6]
 		};
 
+		if (!uci.sections('fstab', 'global').length)
+			uci.add('fstab', 'global');
+
 		m = new form.Map('fstab', _('Mount Points'));
 
 		s = m.section(form.TypedSection, 'global', _('Global Settings'));
