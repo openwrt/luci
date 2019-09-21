@@ -823,9 +823,14 @@
 		},
 
 		probeSystemFeatures: function() {
+			var sessionid = classes.rpc.getSessionID();
+
 			if (sysFeatures == null) {
 				try {
-					sysFeatures = JSON.parse(window.sessionStorage.getItem('sysFeatures'));
+					var data = JSON.parse(window.sessionStorage.getItem('sysFeatures'));
+
+					if (this.isObject(data) && this.isObject(data[sessionid]))
+						sysFeatures = data[sessionid];
 				}
 				catch (e) {}
 			}
@@ -837,7 +842,10 @@
 					expect: { '': {} }
 				})().then(function(features) {
 					try {
-						window.sessionStorage.setItem('sysFeatures', JSON.stringify(features));
+						var data = {};
+						    data[sessionid] = features;
+
+						window.sessionStorage.setItem('sysFeatures', JSON.stringify(data));
 					}
 					catch (e) {}
 
