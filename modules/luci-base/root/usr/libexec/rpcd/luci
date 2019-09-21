@@ -590,6 +590,101 @@ local methods = {
 				}) == 0)
 			}
 		end
+	},
+
+	getBlockDevices = {
+		call = function()
+			local fs = require "nixio.fs"
+
+			local block = io.popen("/sbin/block info", "r")
+			if block then
+				local rv = {}
+
+				while true do
+					local ln = block:read("*l")
+					if not ln then
+						break
+					end
+
+					local dev = ln:match("^/dev/(.-):")
+					if dev then
+						local s = tonumber((fs.readfile("/sys/class/block/" .. dev .."/size")))
+						local e = {
+							dev = "/dev/" .. dev,
+							size = s and s * 512
+						}
+
+						local key, val = { }
+						for key, val in ln:gmatch([[(%w+)="(.-)"]]) do
+							e[key:lower()] = val
+						end
+
+						rv[dev] = e
+					end
+				end
+
+				block:close()
+
+				return rv
+			else
+				return { error = "Unable to execute block utility" }
+			end
+		end
+	},
+
+	setBlockDetect = {
+		call = function()
+			return { result = (os.execute("/sbin/block detect > /etc/config/fstab") == 0) }
+		end
+	},
+
+	getMountPoints = {
+		call = function()
+			local fs = require "nixio.fs"
+
+			local fd, err = io.open("/proc/mounts", "r")
+			if fd then
+				local rv = {}
+
+				while true do
+					local ln = fd:read("*l")
+					if not ln then
+						break
+					end
+
+					local device, mount, fstype, options, freq, pass = ln:match("^(%S*) (%S*) (%S*) (%S*) (%d+) (%d+)$")
+					if device and mount then
+						device = device:gsub("\\(%d+)", function(n) return string.char(tonumber(n, 8)) end)
+						mount = mount:gsub("\\(%d+)", function(n) return string.char(tonumber(n, 8)) end)
+
+						local stat = fs.statvfs(mount)
+						if stat and stat.blocks > 0 then
+							rv[#rv+1] = {
+								device = device,
+								mount  = mount,
+								size   = stat.bsize * stat.blocks,
+								avail  = stat.bsize * stat.bavail,
+								free   = stat.bsize * stat.bfree
+							}
+						end
+					end
+				end
+
+				fd:close()
+
+				return { result = rv }
+			else
+				return { error = err }
+			end
+		end
+	},
+
+	setUmount = {
+		args = { path = "/mnt" },
+		call = function(args)
+			local util = require "luci.util"
+			return { result = (os.execute(string.format("/bin/umount %s", util.shellquote(args.path))) == 0) }
+		end
 	}
 }
 
