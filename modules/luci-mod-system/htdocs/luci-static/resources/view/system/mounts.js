@@ -137,7 +137,8 @@ return L.view.extend({
 			callFileStat('/usr/sbin/e2fsck'),
 			callFileStat('/usr/sbin/fsck.f2fs'),
 			callFileStat('/usr/sbin/dosfsck'),
-			callFileStat('/usr/bin/btrfsck')
+			callFileStat('/usr/bin/btrfsck'),
+			uci.load('fstab')
 		]);
 	},
 
