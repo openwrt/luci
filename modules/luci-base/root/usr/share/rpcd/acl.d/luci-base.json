@@ -25,13 +25,15 @@
 				"/*": [ "list" ],
 				"/etc/crontabs/root": [ "read" ],
 				"/etc/dropbear/authorized_keys": [ "read" ],
+				"/etc/filesystems": [ "read" ],
 				"/etc/rc.local": [ "read" ],
+				"/proc/filesystems": [ "read" ],
 				"/proc/sys/kernel/hostname": [ "read" ]
 			},
 			"ubus": {
 				"file": [ "list", "read", "stat" ],
 				"iwinfo": [ "assoclist", "freqlist", "txpowerlist", "countrylist" ],
-				"luci": [ "getBoardJSON", "getDUIDHints", "getHostHints", "getIfaddrs", "getInitList", "getLocaltime", "getTimezones", "getDHCPLeases", "getLEDs", "getNetworkDevices", "getUSBDevices", "getWirelessDevices", "getSwconfigFeatures", "getSwconfigPortState" ],
+				"luci": [ "getBoardJSON", "getDUIDHints", "getHostHints", "getIfaddrs", "getInitList", "getLocaltime", "getTimezones", "getDHCPLeases", "getLEDs", "getNetworkDevices", "getUSBDevices", "getWirelessDevices", "getSwconfigFeatures", "getSwconfigPortState", "getBlockDevices", "getMountPoints" ],
 				"network.device": [ "status" ],
 				"network.interface": [ "dump" ],
 				"network": [ "get_proto_handlers" ],
@@ -45,12 +47,13 @@
 				"/etc/crontabs/root": [ "write" ],
 				"/etc/dropbear/authorized_keys": [ "write" ],
 				"/etc/luci-uploads/*": [ "write" ],
-				"/etc/rc.local": [ "write" ]
+				"/etc/rc.local": [ "write" ],
+				"/sbin/block": [ "exec" ]
 			},
 			"ubus": {
-				"file": [ "write", "remove" ],
+				"file": [ "write", "remove", "exec" ],
 				"iwinfo": [ "scan" ],
-				"luci": [ "setInitAction", "setLocaltime", "setPassword" ],
+				"luci": [ "setInitAction", "setLocaltime", "setPassword", "setBlockDetect", "setUmount" ],
 				"uci": [ "add", "apply", "confirm", "delete", "order", "set", "rename" ]
 			},
 			"uci": [ "*" ]
