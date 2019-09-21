@@ -78,6 +78,7 @@ var callIwinfoScan = rpc.declare({
 	object: 'iwinfo',
 	method: 'scan',
 	params: [ 'device' ],
+	nobatch: true,
 	expect: { results: [] }
 });
 
