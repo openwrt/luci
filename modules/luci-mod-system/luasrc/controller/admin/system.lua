@@ -8,8 +8,6 @@ function index()
 	local fs = require "nixio.fs"
 
 	entry({"admin", "system", "system"}, view("system/system"), _("System"), 1)
-	entry({"admin", "system", "clock_status"}, post_on({ set = true }, "action_clock_status"))
-	entry({"admin", "system", "ntp_restart"}, call("action_ntp_restart"), nil).leaf = true
 
 	entry({"admin", "system", "admin"}, firstchild(), _("Administration"), 2)
 	entry({"admin", "system", "admin", "password"}, view("system/password"), _("Router Password"), 1)
@@ -43,30 +41,6 @@ function index()
 
 	entry({"admin", "system", "reboot"}, template("admin_system/reboot"), _("Reboot"), 90)
 	entry({"admin", "system", "reboot", "call"}, post("action_reboot"))
-end
-
-function action_clock_status()
-	local set = tonumber(luci.http.formvalue("set"))
-	if set ~= nil and set > 0 then
-		local date = os.date("*t", set)
-		if date then
-			luci.sys.call("date -s '%04d-%02d-%02d %02d:%02d:%02d'" %{
-				date.year, date.month, date.day, date.hour, date.min, date.sec
-			})
-			luci.sys.call("/etc/init.d/sysfixtime restart")
-		end
-	end
-
-	luci.http.prepare_content("application/json")
-	luci.http.write_json({ timestring = os.date("%c") })
-end
-
-function action_ntp_restart()
-	if nixio.fs.access("/etc/init.d/sysntpd") then
-		os.execute("/etc/init.d/sysntpd restart")
-	end
-	luci.http.prepare_content("text/plain")
-	luci.http.write("0")
 end
 
 local function image_supported(image)
