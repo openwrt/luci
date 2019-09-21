@@ -6,7 +6,7 @@ var rpcRequestID = 1,
     rpcInterceptorFns = [];
 
 return L.Class.extend({
-	call: function(req, cb) {
+	call: function(req, cb, nobatch) {
 		var q = '';
 
 		if (Array.isArray(req)) {
@@ -26,7 +26,8 @@ return L.Class.extend({
 		}
 
 		return L.Request.post(rpcBaseURL + q, req, {
-			timeout: (L.env.rpctimeout || 5) * 1000,
+			timeout: (L.env.rpctimeout || 20) * 1000,
+			nobatch: nobatch,
 			credentials: true
 		}).then(cb, cb);
 	},
@@ -167,7 +168,7 @@ return L.Class.extend({
 				};
 
 				/* call rpc */
-				rpc.call(msg, rpc.parseCallReply.bind(rpc, req));
+				rpc.call(msg, rpc.parseCallReply.bind(rpc, req), options.nobatch);
 			});
 		}, this, this, options);
 	},
