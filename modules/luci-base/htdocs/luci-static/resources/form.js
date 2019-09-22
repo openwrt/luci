@@ -1075,6 +1075,8 @@ var CBITableSection = CBITypedSection.extend({
 	renderHeaderRows: function(max_cols) {
 		var has_titles = false,
 		    has_descriptions = false,
+		    max_cols = isNaN(this.max_cols) ? this.children.length : this.max_cols,
+		    has_more = max_cols < this.children.length,
 		    anon_class = (!this.anonymous || this.sectiontitle) ? 'named' : 'anonymous',
 		    trEls = E([]);
 
@@ -1439,7 +1441,7 @@ var CBIGridSection = CBITableSection.extend({
 
 		return E('div', {
 			'class': 'td cbi-value-field',
-			'data-title': (title != '') ? title : opt.option,
+			'data-title': (title != '') ? title : null,
 			'data-description': (descr != '') ? descr : null,
 			'data-name': opt.option,
 			'data-type': opt.typename || opt.__name__
@@ -1578,9 +1580,10 @@ var CBIValue = CBIAbstractValue.extend({
 		    optionEl;
 
 		if (in_table) {
+			var title = this.stripTags(this.title).trim();
 			optionEl = E('div', {
 				'class': 'td cbi-value-field',
-				'data-title': this.stripTags(this.title).trim(),
+				'data-title': (title != '') ? title : null,
 				'data-description': this.stripTags(this.description).trim(),
 				'data-name': this.option,
 				'data-type': this.typename || (this.template ? this.template.replace(/^.+\//, '') : null) || this.__name__
