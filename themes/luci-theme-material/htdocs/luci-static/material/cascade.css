@@ -214,6 +214,7 @@ input:not(.cbi-button):focus,
 	border-color: var(--main-color);
 }
 
+.cbi-dropdown,
 select[multiple="multiple"] {
 	height: auto;
 }
@@ -709,6 +710,10 @@ h5 {
 .cbi-section .cbi-section {
 	padding: 0;
 	box-shadow: none;
+}
+
+.cbi-modal .cbi-tabmenu {
+	margin-left: 0;
 }
 
 .cbi-map-descr,
@@ -1615,6 +1620,7 @@ body:not(.Interfaces) .cbi-rowstyle-2:first-child {
 	line-height: normal;
 	flex-basis: 100%;
 	margin-bottom: .5em;
+	max-width: 100%;
 }
 
 .modal > pre,
@@ -2845,7 +2851,7 @@ input[name="nslookup"] {
 	}
 
 	#maincontent > .container {
-		margin: 0 1rem 1.5rem 1rem;
+		margin: 0 .5rem 1.5rem .5rem;
 	}
 
 	.main > .main-left > .nav > .slide > .menu,
@@ -3002,6 +3008,22 @@ input[name="nslookup"] {
 	.hide-sm,
 	.hide-xs:not([data-title="MAC-Address"]) {
 		display: none;
+	}
+
+	.cbi-modal {
+		padding: .5rem;
+	}
+
+	.cbi-modal .cbi-value {
+		padding: 0 0 .25rem 0;
+	}
+
+	.cbi-modal [data-tab-title] {
+		padding: 0 .25rem !important;
+	}
+
+	[data-tab-title] {
+		padding: 0 .5rem !important;
 	}
 }
 
