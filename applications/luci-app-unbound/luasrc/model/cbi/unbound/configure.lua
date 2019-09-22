@@ -17,6 +17,8 @@ local ht = require "luci.http"
 local ds = require "luci.dispatcher"
 local ucl = luci.model.uci.cursor()
 local valman = ucl:get_first("unbound", "unbound", "manual_conf")
+local dhcplk = ucl:get_first("unbound", "unbound", "dhcp_link")
+local lstrig = ucl:get_first("dhcp", "odhcpd", "leasetrigger")
 
 m1 = Map("unbound")
 s1 = m1:section(TypedSection, "unbound", translate("Recursive DNS"),
@@ -28,6 +30,12 @@ s1 = m1:section(TypedSection, "unbound", translate("Recursive DNS"),
 
 s1.addremove = false
 s1.anonymous = true
+
+if (valman == "0") and (dhcplk == "odhcpd") and (lstrig ~= "/usr/lib/unbound/odhcpd.sh") then
+    m1.message = translatef( "Note: local DNS is configured to look at odhpcd, "
+    .. "but odhpcd UCI lease trigger is incorrectly set: ")
+    .. "dhcp.odhcpd.leasetrigger='" .. lstrig .. "'"
+end
 
 --LuCI, Unbound, or Not
 s1:tab("basic", translate("Basic"))
