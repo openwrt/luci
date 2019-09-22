@@ -689,6 +689,7 @@ h5 {
 #cbi-network > .cbi-section-node,
 #cbi-wireless > .cbi-section-node,
 #cbi-wireless > #wifi_assoclist_table,
+[data-tab-title],
 [data-page^="admin-system-admin"]:not(.node-main-login) .cbi-map:not(#cbi-dropbear),
 [data-page="admin-system-opkg"] #maincontent > .container {
 	font-family: inherit;
@@ -702,6 +703,12 @@ h5 {
 	border-radius: 0;
 	background-color: #fff;
 	box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .16), 0 0 2px 0 rgba(0, 0, 0, .12);
+}
+
+.cbi-modal .cbi-section,
+.cbi-section .cbi-section {
+	padding: 0;
+	box-shadow: none;
 }
 
 .cbi-map-descr,
@@ -739,6 +746,15 @@ fieldset > fieldset,
 	padding-bottom: 1rem;
 	color: #404040;
 	border-bottom: thin solid #eee;
+}
+
+.cbi-section > h3:first-child,
+.cbi-section > h4:first-child,
+.cbi-section > p:first-child,
+[data-tab-title] > h3:first-child,
+[data-tab-title] > h4:first-child,
+[data-tab-title] > p:first-child {
+	padding-top: 1rem;
 }
 
 table {
@@ -1119,6 +1135,8 @@ td > table > tbody > tr > td,
 	overflow: hidden;
 	height: 0;
 	opacity: 0;
+	margin: 0;
+	padding: 0rem 1rem !important;
 }
 
 [data-tab-active="true"] {
@@ -1126,6 +1144,7 @@ td > table > tbody > tr > td,
 	height: auto;
 	opacity: 1;
 	transition: opacity .25s ease-in;
+	margin: inherit !important;
 }
 
 .cbi-section[id] .cbi-section-remove:nth-of-type(4n+3),
@@ -1595,6 +1614,7 @@ body:not(.Interfaces) .cbi-rowstyle-2:first-child {
 .modal > * {
 	line-height: normal;
 	flex-basis: 100%;
+	margin-bottom: .5em;
 }
 
 .modal > pre,
@@ -1649,6 +1669,11 @@ body:not(.Interfaces) .cbi-rowstyle-2:first-child {
 
 .modal .spinning {
 	margin-bottom: 2em;
+}
+
+.modal.cbi-modal {
+	max-width: 90%;
+	max-height: none;
 }
 
 body.modal-overlay-active {
