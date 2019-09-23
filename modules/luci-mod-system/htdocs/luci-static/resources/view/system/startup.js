@@ -125,7 +125,7 @@ return L.view.extend({
 				]),
 				E('div', { 'data-tab': 'rc', 'data-tab-title': _('Local Startup') }, [
 					E('p', {}, _('This is the content of /etc/rc.local. Insert your own commands here (in front of \'exit 0\') to execute them at the end of the boot process.')),
-					E('p', {}, E('textarea', { 'style': 'width:100%', 'rows': 20 }, rcLocal != null ? rcLocal : '')),
+					E('p', {}, E('textarea', { 'style': 'width:100%', 'rows': 20 }, [ (rcLocal != null ? rcLocal : '') ]),
 					E('div', { 'class': 'cbi-page-actions' }, [
 						E('button', {
 							'class': 'btn cbi-button-save',

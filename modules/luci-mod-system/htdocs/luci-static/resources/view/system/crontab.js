@@ -40,7 +40,7 @@ return L.view.extend({
 			E('p', {},
 				_('This is the system crontab in which scheduled tasks can be defined.') +
 				_('<br/>Note: you need to manually restart the cron service if the crontab file was empty before editing.')),
-			E('p', {}, E('textarea', { 'style': 'width:100%', 'rows': 10 }, crontab != null ? crontab : ''))
+			E('p', {}, E('textarea', { 'style': 'width:100%', 'rows': 10 }, [ crontab != null ? crontab : '' ]))
 		]);
 	},
 
