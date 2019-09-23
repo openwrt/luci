@@ -1769,14 +1769,14 @@ return L.view.extend({
 					uci.set('wireless', section_id, 'key1', passval);
 				}
 
-				var zonePromise = zoneval
-					? firewall.getZone(zoneval).then(function(zone) { return zone || firewall.addZone(zoneval) })
-					: Promise.resolve();
+				return network.addNetwork(nameval, { proto: 'dhcp' }).then(function(net) {
+					firewall.deleteNetwork(net.getName());
 
-				return zonePromise.then(function(zone) {
-					return network.addNetwork(nameval, { proto: 'dhcp' }).then(function(net) {
-						firewall.deleteNetwork(net.getName());
+					var zonePromise = zoneval
+						? firewall.getZone(zoneval).then(function(zone) { return zone || firewall.addZone(zoneval) })
+						: Promise.resolve();
 
+					return zonePromise.then(function(zone) {
 						if (zone)
 							zone.addNetwork(net.getName());
 					});
