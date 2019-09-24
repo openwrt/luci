@@ -822,7 +822,9 @@ Network = L.Class.extend({
 	},
 
 	deleteNetwork: function(name) {
-		return Promise.all([ L.require('firewall').catch(function() { return null }), initNetworkState() ]).then(function() {
+		var requireFirewall = Promise.resolve(L.require('firewall')).catch(function() {});
+
+		return Promise.all([ requireFirewall, initNetworkState() ]).then(function() {
 			var uciInterface = uci.get('network', name);
 
 			if (uciInterface != null && uciInterface['.type'] == 'interface') {
