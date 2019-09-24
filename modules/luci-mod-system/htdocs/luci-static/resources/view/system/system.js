@@ -261,7 +261,7 @@ return L.view.extend({
 			o.ucisection = 'ntp';
 			o.depends('enabled', '1');
 
-			o = s.taboption('timesync', form.Flag, 'use_dhcp', _('Use NTP servers offered by DHCP'));
+			o = s.taboption('timesync', form.Flag, 'use_dhcp', _('Use DHCP advertised servers'));
 			o.ucisection = 'ntp';
 			o.default = o.enabled;
 			o.depends('enabled', '1');
