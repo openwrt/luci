@@ -15,13 +15,18 @@ local dispatcher = require "luci.dispatcher"
 local enabledFlag = uci:get(packageName, "config", "enabled")
 local command, outputFile, outputCache, outputGzip
 local targetDNS = uci:get(packageName, "config", "dns")
+local checkDnsmasq = sys.call("which dnsmasq >/dev/null 2>&1") == 0 and true
+local checkUnbound = sys.call("which unbound >/dev/null 2>&1") == 0 and true
+local checkDnsmasqIpset = sys.call("dnsmasq -v 2>/dev/null | grep -q 'no-ipset' || ! dnsmasq -v 2>/dev/null | grep -q -w 'ipset'") ~= 0
+   and sys.call("ipset help hash:net >/dev/null 2>&1") and true
 
 if not targetDNS or targetDNS == "" then
 	targetDNS = "dnsmasq.servers"
 end
 
 if targetDNS ~= "dnsmasq.addnhosts" and targetDNS ~= "dnsmasq.conf" and 
-	 targetDNS ~= "dnsmasq.servers" and targetDNS ~= "unbound.adb_list" then
+	 targetDNS ~= "dnsmasq.ipset" and targetDNS ~= "dnsmasq.servers" and 
+	 targetDNS ~= "unbound.adb_list" then
 	targetDNS = "dnsmasq.servers"
 end
 
@@ -177,13 +182,34 @@ end
 
 s:tab("advanced", translate("Advanced Configuration"))
 
-dns = s:taboption("advanced", ListValue, "dns", translate("DNS Service"), translate("Pick the DNS resolution option to create the adblock list for, see the") .. " "
-  .. [[<a href="]] .. readmeURL .. [[#dns-resolution-option" target="_blank">]]
-  .. translate("README") .. [[</a>]] .. " " .. translate("for details."))
-dns:value("dnsmasq.addnhosts", translate("DNSMASQ Additional Hosts"))
-dns:value("dnsmasq.conf", translate("DNSMASQ Config"))
-dns:value("dnsmasq.servers", translate("DNSMASQ Servers File"))
-dns:value("unbound.adb_list", translate("Unbound AdBlock List"))
+local dns_descr = translate("Pick the DNS resolution option to create the adblock list for, see the") .. " "
+		.. [[<a href="]] .. readmeURL .. [[#dns-resolution-option" target="_blank">]]
+		.. translate("README") .. [[</a>]] .. " " .. translate("for details.")
+
+if not checkDnsmasq then
+	dns_descr = dns_descr .. "</br>" .. translate("Please note that") .. " <i>dnsmasq.addnhosts</i> " .. translate("is not supported on this system.")
+	dns_descr = dns_descr .. "</br>" .. translate("Please note that") .. " <i>dnsmasq.conf</i> " .. translate("is not supported on this system.")
+	dns_descr = dns_descr .. "</br>" .. translate("Please note that") .. " <i>dnsmasq.ipset</i> " .. translate("is not supported on this system.")
+	dns_descr = dns_descr .. "</br>" .. translate("Please note that") .. " <i>dnsmasq.servers</i> " .. translate("is not supported on this system.")
+elseif not checkDnsmasqIpset then 
+	dns_descr = dns_descr .. "</br>" .. translate("Please note that") .. " <i>dnsmasq.ipset</i> " .. translate("is not supported on this system.")
+end
+if not checkUnbound then 
+	dns_descr = dns_descr .. "</br>" .. translate("Please note that") .. " <i>unbound.adb_list</i> " .. translate("is not supported on this system.")
+end
+
+dns = s:taboption("advanced", ListValue, "dns", translate("DNS Service"), dns_descr)
+if checkDnsmasq then
+	dns:value("dnsmasq.addnhosts", translate("DNSMASQ Additional Hosts"))
+	dns:value("dnsmasq.conf", translate("DNSMASQ Config"))
+	if checkDnsmasqIpset then
+		dns:value("dnsmasq.ipset", translate("DNSMASQ IP Set"))
+	end
+	dns:value("dnsmasq.servers", translate("DNSMASQ Servers File"))
+end
+if checkUnbound then
+	dns:value("unbound.adb_list", translate("Unbound AdBlock List"))
+end
 dns.default = "dnsmasq.servers"
 
 ipv6 = s:taboption("advanced", ListValue, "ipv6_enabled", translate("IPv6 Support"), translate("Add IPv6 entries to block-list."))
@@ -209,11 +235,6 @@ o8 = s:taboption("advanced", ListValue, "parallel_downloads", translate("Simulta
 o8:value("0", translate("Do not use simultaneous processing"))
 o8:value("1", translate("Use simultaneous processing"))
 o8.default = 1
-
-o9 = s:taboption("advanced", ListValue, "allow_non_ascii", translate("Allow Non-ASCII characters in DNSMASQ file"), translate("Only enable if your version of DNSMASQ supports the use of Non-ASCII characters, otherwise DNSMASQ will fail to start."))
-o9:value("0", translate("Do not allow Non-ASCII"))
-o9:value("1", translate("Allow Non-ASCII"))
-o9.default = "0"
 
 o10 = s:taboption("advanced", ListValue, "compressed_cache", translate("Store compressed cache file on router"), translate("Attempt to create a compressed cache of block-list in the persistent memory."))
 o10:value("0", translate("Do not store compressed cache"))
