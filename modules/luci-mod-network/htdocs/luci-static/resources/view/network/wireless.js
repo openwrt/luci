@@ -1592,13 +1592,15 @@ return L.view.extend({
 						o.depends({ mode: 'ap-wds', encryption: 'sae-mixed' });
 
 						if (L.hasSystemFeature('hostapd', 'cli') && L.hasSystemFeature('wpasupplicant')) {
-							o = ss.taboption('encryption', form.Flag, 'wps_pushbutton', _('Enable WPS pushbutton, requires WPA(2)-PSK'))
+							o = ss.taboption('encryption', form.Flag, 'wps_pushbutton', _('Enable WPS pushbutton, requires WPA(2)-PSK/WPA3-SAE'))
 							o.enabled = '1';
 							o.disabled = '0';
 							o.default = o.disabled;
 							o.depends('encryption', 'psk');
 							o.depends('encryption', 'psk2');
 							o.depends('encryption', 'psk-mixed');
+							o.depends('encryption', 'sae');
+							o.depends('encryption', 'sae-mixed');
 						}
 					}
 				}
