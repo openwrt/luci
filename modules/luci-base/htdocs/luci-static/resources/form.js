@@ -1211,10 +1211,7 @@ var CBITableSection = CBITypedSection.extend({
 				E('button', {
 					'title': btn_title || _('Delete'),
 					'class': 'cbi-button cbi-button-remove',
-					'click': L.ui.createHandlerFn(this, function(sid, ev) {
-						this.map.data.remove(config_name, sid);
-						return this.map.save(null, true);
-					}, section_id)
+					'click': L.ui.createHandlerFn(this, 'handleRemove', section_id)
 				}, [ btn_title || _('Delete') ])
 			);
 		}
