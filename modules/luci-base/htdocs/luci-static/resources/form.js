@@ -944,8 +944,8 @@ var CBITypedSection = CBIAbstractSection.extend({
 		    sectionEl = E('div', {
 				'id': 'cbi-%s-%s'.format(config_name, this.sectiontype),
 				'class': 'cbi-section',
-				'data-tab': this.map.tabbed ? this.sectiontype : null,
-				'data-tab-title': this.map.tabbed ? this.title || this.sectiontype : null
+				'data-tab': (this.map.tabbed && !this.parentoption) ? this.sectiontype : null,
+				'data-tab-title': (this.map.tabbed && !this.parentoption) ? this.title || this.sectiontype : null
 			});
 
 		if (this.title != null && this.title != '')
@@ -1013,8 +1013,8 @@ var CBITableSection = CBITypedSection.extend({
 		    sectionEl = E('div', {
 				'id': 'cbi-%s-%s'.format(config_name, this.sectiontype),
 				'class': 'cbi-section cbi-tblsection',
-				'data-tab': this.map.tabbed ? this.sectiontype : null,
-				'data-tab-title': this.map.tabbed ? this.title || this.sectiontype : null
+				'data-tab': (this.map.tabbed && !this.parentoption) ? this.sectiontype : null,
+				'data-tab-title': (this.map.tabbed && !this.parentoption) ? this.title || this.sectiontype : null
 			}),
 			tableEl = E('div', {
 				'class': 'table cbi-section-table'
@@ -1503,8 +1503,8 @@ var CBINamedSection = CBIAbstractSection.extend({
 		    sectionEl = E('div', {
 				'id': ucidata ? null : 'cbi-%s-%s'.format(config_name, section_id),
 				'class': 'cbi-section',
-				'data-tab': this.map.tabbed ? this.sectiontype : null,
-				'data-tab-title': this.map.tabbed ? this.title || this.sectiontype : null
+				'data-tab': (this.map.tabbed && !this.parentoption) ? this.sectiontype : null,
+				'data-tab-title': (this.map.tabbed && !this.parentoption) ? this.title || this.sectiontype : null
 			});
 
 		if (typeof(this.title) === 'string' && this.title !== '')
@@ -1922,6 +1922,7 @@ var CBISectionValue = CBIValue.extend({
 			throw 'Sub section must be a descendent of CBIAbstractSection';
 
 		this.subsection = cbiClass.instantiate(this.varargs(arguments, 4, this.map));
+		this.subsection.parentoption = this;
 	},
 
 	load: function(section_id) {
