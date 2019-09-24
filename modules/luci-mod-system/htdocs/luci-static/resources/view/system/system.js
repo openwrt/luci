@@ -261,6 +261,11 @@ return L.view.extend({
 			o.ucisection = 'ntp';
 			o.depends('enabled', '1');
 
+			o = s.taboption('timesync', form.Flag, 'use_dhcp', _('Use NTP servers offered by DHCP'));
+			o.ucisection = 'ntp';
+			o.default = o.enabled;
+			o.depends('enabled', '1');
+
 			o = s.taboption('timesync', form.DynamicList, 'server', _('NTP server candidates'));
 			o.datatype = 'host(0)';
 			o.ucisection = 'ntp';
