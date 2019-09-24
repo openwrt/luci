@@ -1793,7 +1793,7 @@ return L.view.extend({
 			    s2 = m2.section(form.NamedSection, '_new_'),
 			    enc = L.isObject(bss.encryption) ? bss.encryption : null,
 			    is_wep = (enc && Array.isArray(enc.wep)),
-			    is_psk = (enc && Array.isArray(enc.wpa) && Array.isArray(enc.authentication) && enc.authentication[0] == 'psk'),
+			    is_psk = (enc && Array.isArray(enc.wpa) && L.toArray(enc.authentication).filter(function(a) { return a == 'psk' || a == 'sae' })),
 			    replace, passphrase, name, zone;
 
 			s2.render = function() {
