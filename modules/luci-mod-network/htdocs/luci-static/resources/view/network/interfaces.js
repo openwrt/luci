@@ -591,6 +591,10 @@ return L.view.extend({
 					so.value('relay', _('relay mode'));
 					so.value('hybrid', _('hybrid mode'));
 
+					so = ss.taboption('ipv6', form.Flag , 'master', _('Master'), _('Set this interface as master for the dhcpv6 relay.'));
+					so.depends('dhcpv6', 'relay');
+					so.depends('dhcpv6', 'hybrid');
+
 					so = ss.taboption('ipv6', form.ListValue, 'ra_management', _('DHCPv6-Mode'), _('Default is stateless + stateful'));
 					so.value('0', _('stateless'));
 					so.value('1', _('stateless + stateful'));
