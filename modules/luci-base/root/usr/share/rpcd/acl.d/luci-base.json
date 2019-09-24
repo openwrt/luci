@@ -20,15 +20,22 @@
 	"luci-access": {
 		"description": "Grant access to basic LuCI procedures",
 		"read": {
+			"cgi-io": [ "backup", "download" ],
 			"file": {
 				"/": [ "list" ],
 				"/*": [ "list" ],
+				"/dev/mtdblock*": [ "read" ],
 				"/etc/crontabs/root": [ "read" ],
 				"/etc/dropbear/authorized_keys": [ "read" ],
 				"/etc/filesystems": [ "read" ],
 				"/etc/rc.local": [ "read" ],
+				"/etc/sysupgrade.conf": [ "read" ],
 				"/proc/filesystems": [ "read" ],
-				"/proc/sys/kernel/hostname": [ "read" ]
+				"/proc/mtd": [ "read" ],
+				"/proc/partitions": [ "read" ],
+				"/proc/sys/kernel/hostname": [ "read" ],
+				"/sys/devices/virtual/mtd/*/name": [ "read" ],
+				"/sys/devices/virtual/ubi/*/name": [ "read" ]
 			},
 			"ubus": {
 				"file": [ "list", "read", "stat" ],
@@ -42,13 +49,20 @@
 			"uci": [ "*" ]
 		},
 		"write": {
-			"cgi-io": [ "upload", "/etc/luci-uploads/*" ],
+			"cgi-io": [ "upload" ],
 			"file": {
 				"/etc/crontabs/root": [ "write" ],
 				"/etc/dropbear/authorized_keys": [ "write" ],
 				"/etc/luci-uploads/*": [ "write" ],
 				"/etc/rc.local": [ "write" ],
-				"/sbin/block": [ "exec" ]
+				"/etc/sysupgrade.conf": [ "write" ],
+				"/sbin/block": [ "exec" ],
+				"/sbin/firstboot": [ "exec" ],
+				"/sbin/reboot": [ "exec" ],
+				"/sbin/sysupgrade": [ "exec" ],
+				"/bin/tar": [ "exec" ],
+				"/tmp/backup.tar.gz": [ "write" ],
+				"/tmp/firmware.bin": [ "write" ]
 			},
 			"ubus": {
 				"file": [ "write", "remove", "exec" ],
