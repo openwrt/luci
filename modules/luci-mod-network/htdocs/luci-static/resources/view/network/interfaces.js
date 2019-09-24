@@ -740,6 +740,12 @@ return L.view.extend({
 			}, this));
 		};
 
+		s.handleRemove = function(section_id, ev) {
+			return network.deleteNetwork(section_id).then(L.bind(function(section_id, ev) {
+				return form.GridSection.prototype.handleRemove.apply(this, [section_id, ev]);
+			}, this, section_id, ev));
+		};
+
 		o = s.option(form.DummyValue, '_ifacebox');
 		o.modalonly = false;
 		o.textvalue = function(section_id) {
