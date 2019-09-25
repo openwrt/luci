@@ -2,7 +2,7 @@
 'require form';
 'require rpc';
 
-var callFileStat, callFileRead, callFileWrite, callFileExec, callFileRemove;
+var callFileStat, callFileRead, callFileWrite, callFileExec, callFileRemove, callSystemValidateFirmwareImage;
 
 callFileStat = rpc.declare({
 	object: 'file',
@@ -36,6 +36,13 @@ callFileRemove = rpc.declare({
 	object: 'file',
 	method: 'remove',
 	params: [ 'path' ]
+});
+
+callSystemValidateFirmwareImage = rpc.declare({
+	object: 'system',
+	method: 'validate_firmware_image',
+	params: [ 'path' ],
+	expect: { '': { valid: false, forcable: true } }
 });
 
 function pingDevice(proto, ipaddr) {
@@ -345,13 +352,17 @@ return L.view.extend({
 					E('span', { 'class': 'spinning' }, _('Verifying the uploaded image file.'))
 				]);
 
+				return callSystemValidateFirmwareImage('/tmp/firmware.bin')
+					.then(function(res) { return [ reply, res ]; });
+			}, this, ev.target))
+			.then(L.bind(function(btn, reply) {
 				return callFileExec('/sbin/sysupgrade', [ '--test', '/tmp/firmware.bin' ])
-					.then(function(res) { return [ reply, res ] });
+					.then(function(res) { reply.push(res); return reply; });
 			}, this, ev.target))
 			.then(L.bind(function(btn, res) {
 				var keep = document.querySelector('[data-name="keep"] input[type="checkbox"]'),
 				    force = E('input', { type: 'checkbox' }),
-				    is_invalid = (res[1].code != 0),
+				    is_valid = res[1].valid,
 				    is_too_big = (storage_size > 0 && res[0].size > storage_size),
 				    body = [];
 
@@ -363,7 +374,7 @@ return L.view.extend({
 					E('li', {}, keep.checked ? _('Configuration files will be kept') : _('Caution: Configuration files will be erased'))
 				]));
 
-				if (is_invalid || is_too_big)
+				if (!is_valid || is_too_big)
 					body.push(E('hr'));
 
 				if (is_too_big)
@@ -371,15 +382,15 @@ return L.view.extend({
 						_('It appears that you are trying to flash an image that does not fit into the flash memory, please verify the image file!')
 					]));
 
-				if (is_invalid)
+				if (!is_valid)
 					body.push(E('p', { 'class': 'alert-message' }, [
-						res[1].stderr ? res[1].stderr : '',
-						res[1].stderr ? E('br') : '',
-						res[1].stderr ? E('br') : '',
+						res[2].stderr ? res[2].stderr : '',
+						res[2].stderr ? E('br') : '',
+						res[2].stderr ? E('br') : '',
 						_('The uploaded image file does not contain a supported format. Make sure that you choose the generic image format for your platform.')
 					]));
 
-				if (is_invalid || is_too_big)
+				if (!is_valid || is_too_big)
 					body.push(E('p', {}, E('label', { 'class': 'btn alert-message danger' }, [
 						force, ' ', _('Force upgrade'),
 						E('br'), E('br'),
@@ -389,7 +400,7 @@ return L.view.extend({
 				var cntbtn = E('button', {
 					'class': 'btn cbi-button-action important',
 					'click': L.ui.createHandlerFn(this, 'handleSysupgradeConfirm', btn, keep.checked, force.checked),
-					'disabled': (is_invalid || is_too_big) ? true : null
+					'disabled': (!is_valid || is_too_big) ? true : null
 				}, [ _('Continue') ]);
 
 				body.push(E('div', { 'class': 'right' }, [
