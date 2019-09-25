@@ -239,7 +239,7 @@ return L.view.extend({
 		form.parentNode.removeChild(form);
 	},
 
-	handleReset: function(ev) {
+	handleFirstboot: function(ev) {
 		if (!confirm(_('Do you really want to erase all settings?')))
 			return;
 
@@ -499,7 +499,7 @@ return L.view.extend({
 			o = ss.option(form.Button, 'reset', _('Reset to defaults'));
 			o.inputstyle = 'negative important';
 			o.inputtitle = _('Perform reset');
-			o.onclick = this.handleReset;
+			o.onclick = this.handleFirstboot;
 		}
 
 		o = ss.option(form.Button, 'restore', _('Restore backup'), _('Custom files (certificates, scripts) may remain on the system. To prevent this, perform a factory-reset first.'));
