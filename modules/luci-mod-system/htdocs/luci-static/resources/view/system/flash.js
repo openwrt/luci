@@ -161,24 +161,26 @@ function findStorageSize(procmtd, procpart) {
 	var kernsize = 0, rootsize = 0, wholesize = 0;
 
 	procmtd.split(/\n/).forEach(function(ln) {
-		var match = ln.match(/^mtd\d+: ([0-9a-f]+) [0-9a-f]+ "(.+)"$/);
+		var match = ln.match(/^mtd\d+: ([0-9a-f]+) [0-9a-f]+ "(.+)"$/),
+		    size = match ? parseInt(match[1], 16) : 0;
 
 		switch (match ? match[2] : '') {
 		case 'linux':
 		case 'firmware':
-			wholesize = parseInt(match[1], 16);
+			if (size > wholesize)
+				wholesize = size;
 			break;
 
 		case 'kernel':
 		case 'kernel0':
-			kernsize = parseInt(match[1], 16);
+			kernsize = size;
 			break;
 
 		case 'rootfs':
 		case 'rootfs0':
 		case 'ubi':
 		case 'ubi0':
-			rootsize = parseInt(match[1], 16);
+			rootsize = size;
 			break;
 		}
 	});
