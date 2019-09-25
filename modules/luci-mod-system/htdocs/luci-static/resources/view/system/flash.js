@@ -363,6 +363,7 @@ return L.view.extend({
 				var keep = document.querySelector('[data-name="keep"] input[type="checkbox"]'),
 				    force = E('input', { type: 'checkbox' }),
 				    is_valid = res[1].valid,
+				    is_forceable = res[1].forceable,
 				    is_too_big = (storage_size > 0 && res[0].size > storage_size),
 				    body = [];
 
@@ -390,7 +391,7 @@ return L.view.extend({
 						_('The uploaded image file does not contain a supported format. Make sure that you choose the generic image format for your platform.')
 					]));
 
-				if (!is_valid || is_too_big)
+				if ((!is_valid || is_too_big) && is_forceable)
 					body.push(E('p', {}, E('label', { 'class': 'btn alert-message danger' }, [
 						force, ' ', _('Force upgrade'),
 						E('br'), E('br'),
