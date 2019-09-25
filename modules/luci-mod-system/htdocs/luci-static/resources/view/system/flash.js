@@ -143,17 +143,13 @@ var mapdata = { actions: {}, config: {} };
 
 return L.view.extend({
 	load: function() {
-		var max_ubi = 2, max_ubi_vol = 4;
 		var tasks = [
 			L.resolveDefault(fs.stat('/lib/upgrade/platform.sh'), {}),
 			fs.trimmed('/proc/sys/kernel/hostname'),
 			fs.trimmed('/proc/mtd'),
-			fs.trimmed('/proc/partitions')
+			fs.trimmed('/proc/partitions'),
+			fs.trimmed('/proc/mounts')
 		];
-
-		for (var i = 0; i < max_ubi; i++)
-			for (var j = 0; j < max_ubi_vol; j++)
-				tasks.push(fs.trimmed('/sys/devices/virtual/ubi/ubi%d/ubi%d_%d/name'.format(i, i, j)));
 
 		return Promise.all(tasks);
 	},
@@ -428,7 +424,8 @@ return L.view.extend({
 		    hostname = rpc_replies[1],
 		    procmtd = rpc_replies[2],
 		    procpart = rpc_replies[3],
-		    has_rootfs_data = (procmtd.match(/"rootfs_data"/) != null) || rpc_replies.slice(4).filter(function(n) { return n == 'rootfs_data' })[0],
+		    procmounts = rpc_replies[4],
+		    has_rootfs_data = (procmtd.match(/"rootfs_data"/) != null) || (procmounts.match("overlayfs:\/overlay \/ ") != null),
 		    storage_size = findStorageSize(procmtd, procpart),
 		    m, s, o, ss;
 
