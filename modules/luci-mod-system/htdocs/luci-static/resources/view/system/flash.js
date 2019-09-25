@@ -360,10 +360,11 @@ return L.view.extend({
 					.then(function(res) { reply.push(res); return reply; });
 			}, this, ev.target))
 			.then(L.bind(function(btn, res) {
-				var keep = document.querySelector('[data-name="keep"] input[type="checkbox"]'),
+				var keep = E('input', { type: 'checkbox' }),
 				    force = E('input', { type: 'checkbox' }),
 				    is_valid = res[1].valid,
 				    is_forceable = res[1].forceable,
+				    allow_backup = res[1].allow_backup,
 				    is_too_big = (storage_size > 0 && res[0].size > storage_size),
 				    body = [];
 
@@ -371,8 +372,7 @@ return L.view.extend({
 				body.push(E('ul', {}, [
 					res[0].size ? E('li', {}, '%s: %1024.2mB'.format(_('Size'), res[0].size)) : '',
 					res[0].checksum ? E('li', {}, '%s: %s'.format(_('MD5'), res[0].checksum)) : '',
-					res[0].sha256sum ? E('li', {}, '%s: %s'.format(_('SHA256'), res[0].sha256sum)) : '',
-					E('li', {}, keep.checked ? _('Configuration files will be kept') : _('Caution: Configuration files will be erased'))
+					res[0].sha256sum ? E('li', {}, '%s: %s'.format(_('SHA256'), res[0].sha256sum)) : ''
 				]));
 
 				if (!is_valid || is_too_big)
@@ -390,6 +390,18 @@ return L.view.extend({
 						res[2].stderr ? E('br') : '',
 						_('The uploaded image file does not contain a supported format. Make sure that you choose the generic image format for your platform.')
 					]));
+
+				if (!allow_backup)
+					body.push(E('p', { 'class': 'alert-message' }, [
+						_('The uploaded firmware does not allow keeping current configuration.')
+					]));
+				if (allow_backup)
+					keep.checked = true;
+				else
+					keep.disabled = true;
+				body.push(E('p', {}, E('label', { 'class': 'btn' }, [
+					keep, ' ', _('Keep settings and retain the current configuration')
+				])));
 
 				if ((!is_valid || is_too_big) && is_forceable)
 					body.push(E('p', {}, E('label', { 'class': 'btn alert-message danger' }, [
@@ -540,15 +552,12 @@ return L.view.extend({
 
 		o = s.option(form.SectionValue, 'actions', form.NamedSection, 'actions', 'actions', _('Flash new firmware image'),
 			has_sysupgrade
-				? _('Upload a sysupgrade-compatible image here to replace the running firmware. Check "Keep settings" to retain the current configuration (requires a compatible firmware image).')
+				? _('Upload a sysupgrade-compatible image here to replace the running firmware.')
 				: _('Sorry, there is no sysupgrade support present; a new firmware image must be flashed manually. Please refer to the wiki for device specific install instructions.'));
 
 		ss = o.subsection;
 
 		if (has_sysupgrade) {
-			o = ss.option(form.Flag, 'keep', _('Keep settings'));
-			o.default = o.enabled;
-
 			o = ss.option(form.Button, 'sysupgrade', _('Image'));
 			o.inputstyle = 'action important';
 			o.inputtitle = _('Flash image...');
