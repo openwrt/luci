@@ -63,9 +63,13 @@ rramax.rmempty  = true
 rramax:depends( "RRASingle", 0 )
 
 -- collectd_rrdtool.rratimespans (RRATimespan)
-rratimespans = s:option( Value, "RRATimespans",
+rratimespans = s:option( DynamicList, "RRATimespan",
 	translate("Stored timespans"), translate("seconds; multiple separated by space") )
-rratimespans.default  = "600 86400 604800 2678400 31622400"
+rratimespans:value("3600", "One hour")
+rratimespans:value("86400", "One day")
+rratimespans:value("604800", "One week")
+rratimespans:value("2678400", "One month")
+rratimespans:value("31622400", "One year")
 rratimespans.rmempty  = true
 rratimespans.optional = true
 rratimespans:depends( "enable", 1 )
