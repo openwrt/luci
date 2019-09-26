@@ -7,7 +7,6 @@ local util = require("luci.util")
 local sys  = require("luci.sys")
 local fs   = require("nixio.fs")
 local uci  = require("luci.model.uci").cursor()
-local sections = uci:get_all("luci_statistics")
 
 
 Instance = util.class()
@@ -17,13 +16,9 @@ function Instance.__init__( self, host )
 	self._libdir  = "/usr/lib/collectd"
 	self._rrddir  = "/tmp/rrd"
 
-	if sections and sections.collectd then
-		self._host    = host or sections.collectd.Hostname or sys.hostname()
-		self._libdir  = sections.collectd.PluginDir        or "/usr/lib/collectd"
-	end
-	if sections and sections.collectd_rrdtool then
-		self._rrddir  = sections.collectd_rrdtool.DataDir  or "/tmp/rrd"
-	end
+	self._host    = host or uci:get("collectd", "globals", "hostname") or sys.hostname()
+	self._libdir  = uci:get("collectd", "globals", "PluginDir") or "/usr/lib/collectd"
+	self._rrddir  = uci:get("collectd", "rrdtool", "DataDir") or "/tmp/rrd"
 
 	self._libdir  = self._libdir:gsub("/$","")
 	self._rrddir  = self._rrddir:gsub("/$","")
