@@ -121,11 +121,11 @@ function statistics_render()
 	local req   = luci.dispatcher.context.request
 	local path  = luci.dispatcher.context.path
 	local uci   = luci.model.uci.cursor()
-	local spans = luci.util.split( uci:get( "luci_statistics", "collectd_rrdtool", "RRATimespans" ), "%s+", nil, true )
-	local span  = vars.timespan or uci:get( "luci_statistics", "rrdtool", "default_timespan" ) or spans[1]
-	local host  = vars.host     or uci:get( "luci_statistics", "collectd", "Hostname" ) or luci.sys.hostname()
+	local spans = uci:get( "collectd", "rrdtool", "RRATimespan" )
+	local span  = vars.timespan or uci:get( "luci_collectd", "globals", "default_timespan" ) or spans[1]
+	local host  = vars.host     or uci:get( "collectd", "globals", "Hostname" ) or luci.sys.hostname()
 	local opts = { host = vars.host }
-	local graph = luci.statistics.rrdtool.Graph( luci.util.parse_units( span ), opts )
+	local graph = luci.statistics.rrdtool.Graph( span, opts )
 	local hosts = graph.tree:host_instances()
 
 	local is_index = false
