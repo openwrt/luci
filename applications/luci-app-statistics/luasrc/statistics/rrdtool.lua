@@ -18,17 +18,18 @@ function Graph.__init__( self, timespan, opts )
 
 	opts = opts or { }
 
-	local sections = uci:get_all( "luci_statistics" )
-
 	-- options
-	opts.timespan  = timespan       or sections.rrdtool.default_timespan or 900
-	opts.rrasingle = opts.rrasingle or ( sections.collectd_rrdtool.RRASingle == "1" )
-	opts.rramax    = opts.rramax    or ( sections.collectd_rrdtool.RRAMax == "1" )
-	opts.host      = opts.host      or sections.collectd.Hostname        or sys.hostname()
-	opts.width     = opts.width     or sections.rrdtool.image_width      or 400
-	opts.height    = opts.height    or sections.rrdtool.image_height     or 100
-	opts.rrdpath   = opts.rrdpath   or sections.collectd_rrdtool.DataDir or "/tmp/rrd"
-	opts.imgpath   = opts.imgpath   or sections.rrdtool.image_path       or "/tmp/rrdimg"
+	opts.timespan  = timespan       or uci:get("luci_collectd", "globals", "default_timespan") or 3600
+	opts.width     = opts.width     or uci:get("luci_collectd", "globals", "image_width") or 400
+	opts.height    = opts.height    or uci:get("luci_collectd", "globals", "image_height") or 100
+	opts.imgpath   = opts.imgpath   or uci:get("luci_collectd", "globals", "image_path") or "/tmp/rrdimg"
+
+	opts.host      = opts.host      or uci:get("collectd", "globals", "hostname") or sys.hostname()
+	opts.rrdpath   = opts.rrdpath   or uci:get("collectd", "globals", "DataDir") or "/tmp/rrd"
+
+	opts.rrasingle = opts.rrasingle or uci:get_bool("collectd", "rrdtool", "RRASingle") or false
+	opts.rramax    = opts.rramax    or uci:get_bool("collectd", "rrdtool", "RRAMax") or false
+
 	opts.rrdpath   = opts.rrdpath:gsub("/$","")
 	opts.imgpath   = opts.imgpath:gsub("/$","")
 
