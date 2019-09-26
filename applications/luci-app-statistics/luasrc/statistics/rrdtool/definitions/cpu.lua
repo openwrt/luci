@@ -4,7 +4,7 @@
 module("luci.statistics.rrdtool.definitions.cpu",package.seeall)
 
 local uci = require("luci.model.uci").cursor()
-local reportbystate = uci:get("luci_statistics", "collectd_cpu", "ReportByState") or "0"
+local reportbystate = uci:get("collectd", "cpu", "ReportByState") or "0"
 
 function item()
 	return luci.i18n.translate("Processor")

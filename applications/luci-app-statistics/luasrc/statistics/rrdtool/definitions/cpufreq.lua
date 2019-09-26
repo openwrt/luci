@@ -3,7 +3,7 @@
 module("luci.statistics.rrdtool.definitions.cpufreq",package.seeall)
 
 local uci = require("luci.model.uci").cursor()
-local extraitems = uci:get("luci_statistics", "collectd_cpufreq", "ExtraItems") or nil
+local extraitems = uci:get("collectd", "cpufreq", "ExtraItems") or nil
 
 function item()
 	return luci.i18n.translate("CPU Frequency")
