@@ -104,7 +104,7 @@ var callFileWrite = rpc.declare({
 });
 
 function renderKeys(keys) {
-	var list = document.querySelector('.cbi-dynlist[name="sshkeys"]');
+	var list = document.querySelector('.cbi-dynlist');
 
 	while (!matchesElem(list.firstElementChild, '.add-item'))
 		list.removeChild(list.firstElementChild);
