@@ -270,11 +270,8 @@ return L.view.extend({
 			o.datatype = 'host(0)';
 			o.ucisection = 'ntp';
 			o.depends('enabled', '1');
-			o.remove = function() {}; // retain server list even if disabled
 			o.load = function(section_id) {
-				return uci.get('system', 'ntp')
-					? uci.get('system', 'ntp', 'server')
-					: default_servers;
+				return uci.get('system', 'ntp', 'server');
 			};
 		}
 
