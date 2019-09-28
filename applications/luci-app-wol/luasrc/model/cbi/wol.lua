@@ -43,7 +43,7 @@ if has_ewk then
 end
 
 
-host = s:option(Value, "mac", translate("Host to wake up"),
+host = s:option(ListValue, "mac", translate("Host to wake up"),
 	translate("Choose the host to wake up or enter a custom MAC address to use"))
 
 sys.net.mac_hints(function(mac, name)
