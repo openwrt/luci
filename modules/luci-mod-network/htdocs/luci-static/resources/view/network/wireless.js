@@ -89,6 +89,7 @@ function render_network_status(radioNet) {
 	    channel = radioNet.getChannel(),
 	    disabled = (radioNet.get('disabled') == '1' || uci.get('wireless', radioNet.getWifiDeviceName(), 'disabled') == '1'),
 	    is_assoc = (bssid && bssid != '00:00:00:00:00:00' && channel && mode != 'Unknown' && !disabled),
+	    is_mesh = (radioNet.getMode() == 'mesh'),
 	    changecount = count_changes(radioNet.getName()),
 	    status_text = null;
 
@@ -101,7 +102,7 @@ function render_network_status(radioNet) {
 		status_text = E('em', disabled ? _('Wireless is disabled') : _('Wireless is not associated'));
 
 	return L.itemlist(E('div'), [
-		_('SSID'),       radioNet.getSSID() || '?',
+		is_mesh ? _('Mesh ID') : _('SSID'), (is_mesh ? radioNet.getMeshID() : radioNet.getSSID()) || '?',
 		_('Mode'),       mode,
 		_('BSSID'),      (!changecount && is_assoc) ? bssid : null,
 		_('Encryption'), (!changecount && is_assoc) ? radioNet.getActiveEncryption() || _('None') : null,
