@@ -2121,7 +2121,17 @@ WifiNetwork = L.Class.extend({
 	},
 
 	getSSID: function() {
+		if (this.getMode() == 'mesh')
+			return null;
+
 		return this.ubus('net', 'config', 'ssid') || this.get('ssid');
+	},
+
+	getMeshID: function() {
+		if (this.getMode() != 'mesh')
+			return null;
+
+		return this.ubus('net', 'config', 'mesh_id') || this.get('mesh_id');
 	},
 
 	getBSSID: function() {
