@@ -75,8 +75,8 @@ prov.write = function(self, section, value)
   if n == 0 then
     uci:delete("dhcp", "@dnsmasq[0]", "server")
   end
-  uci_del_list("dhcp", "@dnsmasq[0]", "server", tostring(la_val) .. ":" .. tostring(lp_val))
-  uci_add_list("dhcp", "@dnsmasq[0]", "server", tostring(la_val) .. ":" .. tostring(lp_val))
+  uci_del_list("dhcp", "@dnsmasq[0]", "server", tostring(la_val) .. "#" .. tostring(lp_val))
+  uci_add_list("dhcp", "@dnsmasq[0]", "server", tostring(la_val) .. "#" .. tostring(lp_val))
   uci:save("dhcp")
 end
 
