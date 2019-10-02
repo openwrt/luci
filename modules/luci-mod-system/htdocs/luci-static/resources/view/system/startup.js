@@ -1,5 +1,6 @@
 'use strict';
 'require rpc';
+'require fs';
 
 return L.view.extend({
 	callInitList: rpc.declare({
@@ -15,22 +16,9 @@ return L.view.extend({
 		expect: { result: false }
 	}),
 
-	callFileRead: rpc.declare({
-		object: 'file',
-		method: 'read',
-		params: [ 'path' ],
-		expect: { data: '' }
-	}),
-
-	callFileWrite: rpc.declare({
-		object: 'file',
-		method: 'write',
-		params: [ 'path', 'data' ]
-	}),
-
 	load: function() {
 		return Promise.all([
-			this.callFileRead('/etc/rc.local'),
+			L.resolveDefault(fs.read('/etc/rc.local'), ''),
 			this.callInitList()
 		]);
 	},
@@ -58,14 +46,11 @@ return L.view.extend({
 	handleRcLocalSave: function(ev) {
 		var value = (document.querySelector('textarea').value || '').trim().replace(/\r\n/g, '\n') + '\n';
 
-		return this.callFileWrite('/etc/rc.local', value).then(function(rc) {
-			if (rc != 0)
-				throw rpc.getStatusText(rc);
-
+		return fs.write('/etc/rc.local', value).then(function() {
 			document.querySelector('textarea').value = value;
 			L.ui.addNotification(null, E('p', _('Contents have been saved.')), 'info');
 		}).catch(function(e) {
-			L.ui.addNotification(null, E('p', _('Unable to save contents: %s').format(e)));
+			L.ui.addNotification(null, E('p', _('Unable to save contents: %s').format(e.message)));
 		});
 	},
 
