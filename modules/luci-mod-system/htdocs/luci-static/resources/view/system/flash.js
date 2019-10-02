@@ -215,16 +215,13 @@ var mapdata = { actions: {}, config: {} };
 
 return L.view.extend({
 	load: function() {
-		var max_mtd = 10, max_ubi = 2, max_ubi_vol = 4;
+		var max_ubi = 2, max_ubi_vol = 4;
 		var tasks = [
 			callFileStat('/lib/upgrade/platform.sh'),
 			callFileRead('/proc/sys/kernel/hostname'),
 			callFileRead('/proc/mtd'),
 			callFileRead('/proc/partitions')
 		];
-
-		for (var i = 0; i < max_mtd; i++)
-			tasks.push(callFileRead('/sys/devices/virtual/mtd/mtd%d/name'.format(i)));
 
 		for (var i = 0; i < max_ubi; i++)
 			for (var j = 0; j < max_ubi_vol; j++)
@@ -497,7 +494,7 @@ return L.view.extend({
 		    hostname = rpc_replies[1],
 		    procmtd = rpc_replies[2],
 		    procpart = rpc_replies[3],
-		    has_rootfs_data = rpc_replies.slice(4).filter(function(n) { return n == 'rootfs_data' })[0],
+		    has_rootfs_data = (procmtd.match(/"rootfs_data"/) != null) || rpc_replies.slice(4).filter(function(n) { return n == 'rootfs_data' })[0],
 		    storage_size = findStorageSize(procmtd, procpart),
 		    m, s, o, ss;
 
