@@ -1,44 +1,9 @@
 'use strict';
 'require form';
 'require rpc';
+'require fs';
 
-var callFileStat, callFileRead, callFileWrite, callFileExec, callFileRemove, callSystemValidateFirmwareImage;
-
-callFileStat = rpc.declare({
-	object: 'file',
-	method: 'stat',
-	params: [ 'path' ],
-	expect: { '': {} }
-});
-
-callFileRead = rpc.declare({
-	object: 'file',
-	method: 'read',
-	params: [ 'path' ],
-	expect: { data: '' },
-	filter: function(s) { return (s || '').trim() }
-});
-
-callFileWrite = rpc.declare({
-	object: 'file',
-	method: 'write',
-	params: [ 'path', 'data' ]
-});
-
-callFileExec = rpc.declare({
-	object: 'file',
-	method: 'exec',
-	params: [ 'command', 'params' ],
-	expect: { '': { code: -1 } }
-});
-
-callFileRemove = rpc.declare({
-	object: 'file',
-	method: 'remove',
-	params: [ 'path' ]
-});
-
-callSystemValidateFirmwareImage = rpc.declare({
+var callSystemValidateFirmwareImage = rpc.declare({
 	object: 'system',
 	method: 'validate_firmware_image',
 	params: [ 'path' ],
@@ -217,15 +182,15 @@ return L.view.extend({
 	load: function() {
 		var max_ubi = 2, max_ubi_vol = 4;
 		var tasks = [
-			callFileStat('/lib/upgrade/platform.sh'),
-			callFileRead('/proc/sys/kernel/hostname'),
-			callFileRead('/proc/mtd'),
-			callFileRead('/proc/partitions')
+			L.resolveDefault(fs.stat('/lib/upgrade/platform.sh'), {}),
+			fs.trimmed('/proc/sys/kernel/hostname'),
+			fs.trimmed('/proc/mtd'),
+			fs.trimmed('/proc/partitions')
 		];
 
 		for (var i = 0; i < max_ubi; i++)
 			for (var j = 0; j < max_ubi_vol; j++)
-				tasks.push(callFileRead('/sys/devices/virtual/ubi/ubi%d/ubi%d_%d/name'.format(i, i, j)));
+				tasks.push(fs.trimmed('/sys/devices/virtual/ubi/ubi%d/ubi%d_%d/name'.format(i, i, j)));
 
 		return Promise.all(tasks);
 	},
@@ -247,7 +212,7 @@ return L.view.extend({
 		if (!confirm(_('Do you really want to erase all settings?')))
 			return;
 
-		return callFileExec('/sbin/firstboot', [ '-r', '-y' ]).then(function(res) {
+		return fs.exec('/sbin/firstboot', [ '-r', '-y' ]).then(function(res) {
 			if (res.code != 0)
 				return L.ui.addNotification(null, E('p', _('The firstboot command failed with code %d').format(res.code)));
 
@@ -256,19 +221,19 @@ return L.view.extend({
 			]);
 
 			awaitReconnect('192.168.1.1', 'openwrt.lan');
-		});
+		}).catch(function(e) { L.ui.addNotification(null, E('p', e.message)) });
 	},
 
 	handleRestore: function(ev) {
 		return fileUpload(ev.target, '/tmp/backup.tar.gz')
 			.then(L.bind(function(btn, res) {
 				btn.firstChild.data = _('Checking archive…');
-				return callFileExec('/bin/tar', [ '-tzf', '/tmp/backup.tar.gz' ]);
+				return fs.exec('/bin/tar', [ '-tzf', '/tmp/backup.tar.gz' ]);
 			}, this, ev.target))
 			.then(L.bind(function(btn, res) {
 				if (res.code != 0) {
 					L.ui.addNotification(null, E('p', _('The uploaded backup archive is not readable')));
-					return callFileRemove('/tmp/backup.tar.gz');
+					return fs.remove('/tmp/backup.tar.gz');
 				}
 
 				L.ui.showModal(_('Apply backup?'), [
@@ -278,7 +243,7 @@ return L.view.extend({
 						E('button', {
 							'class': 'btn',
 							'click': L.ui.createHandlerFn(this, function(ev) {
-								return callFileRemove('/tmp/backup.tar.gz').finally(L.ui.hideModal);
+								return fs.remove('/tmp/backup.tar.gz').finally(L.ui.hideModal);
 							})
 						}, [ _('Cancel') ]), ' ',
 						E('button', {
@@ -288,13 +253,14 @@ return L.view.extend({
 					])
 				]);
 			}, this, ev.target))
+			.catch(function(e) { L.ui.addNotification(null, E('p', e.message)) })
 			.finally(L.bind(function(btn, input) {
 				btn.firstChild.data = _('Upload archive...');
 			}, this, ev.target));
 	},
 
 	handleRestoreConfirm: function(btn, ev) {
-		return callFileExec('/sbin/sysupgrade', [ '--restore-backup', '/tmp/backup.tar.gz' ])
+		return fs.exec('/sbin/sysupgrade', [ '--restore-backup', '/tmp/backup.tar.gz' ])
 			.then(L.bind(function(btn, res) {
 				if (res.code != 0) {
 					L.ui.addNotification(null, [
@@ -305,7 +271,7 @@ return L.view.extend({
 				}
 
 				btn.firstChild.data = _('Rebooting…');
-				return callFileExec('/sbin/reboot');
+				return fs.exec('/sbin/reboot');
 			}, this, ev.target))
 			.then(L.bind(function(res) {
 				if (res.code != 0) {
@@ -319,7 +285,8 @@ return L.view.extend({
 
 				awaitReconnect(window.location.host, '192.168.1.1', 'openwrt.lan');
 			}, this))
-			.catch(function() { btn.firstChild.data = _('Upload archive...') });
+			.catch(function(e) { L.ui.addNotification(null, E('p', e.message)) })
+			.finally(function() { btn.firstChild.data = _('Upload archive...') });
 	},
 
 	handleBlock: function(hostname, ev) {
@@ -353,7 +320,7 @@ return L.view.extend({
 					.then(function(res) { return [ reply, res ]; });
 			}, this, ev.target))
 			.then(L.bind(function(btn, reply) {
-				return callFileExec('/sbin/sysupgrade', [ '--test', '/tmp/firmware.bin' ])
+				return fs.exec('/sbin/sysupgrade', [ '--test', '/tmp/firmware.bin' ])
 					.then(function(res) { reply.push(res); return reply; });
 			}, this, ev.target))
 			.then(L.bind(function(btn, res) {
@@ -371,6 +338,10 @@ return L.view.extend({
 					res[0].checksum ? E('li', {}, '%s: %s'.format(_('MD5'), res[0].checksum)) : '',
 					res[0].sha256sum ? E('li', {}, '%s: %s'.format(_('SHA256'), res[0].sha256sum)) : ''
 				]));
+
+				body.push(E('p', {}, E('label', { 'class': 'btn' }, [
+					keep, ' ', _('Keep settings and retain the current configuration')
+				])));
 
 				if (!is_valid || is_too_big)
 					body.push(E('hr'));
@@ -392,13 +363,12 @@ return L.view.extend({
 					body.push(E('p', { 'class': 'alert-message' }, [
 						_('The uploaded firmware does not allow keeping current configuration.')
 					]));
+
 				if (allow_backup)
 					keep.checked = true;
 				else
 					keep.disabled = true;
-				body.push(E('p', {}, E('label', { 'class': 'btn' }, [
-					keep, ' ', _('Keep settings and retain the current configuration')
-				])));
+
 
 				if ((!is_valid || is_too_big) && is_forceable)
 					body.push(E('p', {}, E('label', { 'class': 'btn alert-message danger' }, [
@@ -417,7 +387,7 @@ return L.view.extend({
 					E('button', {
 						'class': 'btn',
 						'click': L.ui.createHandlerFn(this, function(ev) {
-							return callFileRemove('/tmp/firmware.bin').finally(L.ui.hideModal);
+							return fs.remove('/tmp/firmware.bin').finally(L.ui.hideModal);
 						})
 					}, [ _('Cancel') ]), ' ', cntbtn
 				]));
@@ -428,6 +398,7 @@ return L.view.extend({
 
 				L.ui.showModal(_('Flash image?'), body);
 			}, this, ev.target))
+			.catch(function(e) { L.ui.addNotification(null, E('p', e.message)) })
 			.finally(L.bind(function(btn) {
 				btn.firstChild.data = _('Flash image...');
 			}, this, ev.target));
@@ -451,13 +422,13 @@ return L.view.extend({
 		opts.push('/tmp/firmware.bin');
 
 		/* Currently the sysupgrade rpc call will not return, hence no promise handling */
-		callFileExec('/sbin/sysupgrade', opts);
+		fs.exec('/sbin/sysupgrade', opts);
 
 		awaitReconnect(window.location.host, '192.168.1.1', 'openwrt.lan');
 	},
 
 	handleBackupList: function(ev) {
-		return callFileExec('/sbin/sysupgrade', [ '--list-backup' ]).then(function(res) {
+		return fs.exec('/sbin/sysupgrade', [ '--list-backup' ]).then(function(res) {
 			if (res.code != 0) {
 				L.ui.addNotification(null, [
 					E('p', _('The sysupgrade command failed with code %d').format(res.code)),
@@ -481,7 +452,7 @@ return L.view.extend({
 
 	handleBackupSave: function(m, ev) {
 		return m.save(function() {
-			return callFileWrite('/etc/sysupgrade.conf', mapdata.config.editlist.trim().replace(/\r\n/g, '\n') + '\n');
+			return fs.write('/etc/sysupgrade.conf', mapdata.config.editlist.trim().replace(/\r\n/g, '\n') + '\n');
 		}).then(function() {
 			L.ui.addNotification(null, E('p', _('Contents have been saved.')), 'info');
 		}).catch(function(e) {
@@ -586,7 +557,7 @@ return L.view.extend({
 		o.forcewrite = true;
 		o.rows = 30;
 		o.load = function(section_id) {
-			return callFileRead('/etc/sysupgrade.conf');
+			return fs.read('/etc/sysupgrade.conf', '');
 		};
 
 
