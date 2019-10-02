@@ -30,7 +30,11 @@ function en.write()
 		sys.init.enable(packageName)
 		sys.init.start(packageName)
 	end
-	http.redirect(dispatcher.build_url("admin/services/" .. packageName))
+	if dispatcher.lookup("admin/vpn") then
+		http.redirect(dispatcher.build_url("admin/vpn/" .. packageName))
+	else
+		http.redirect(dispatcher.build_url("admin/services/" .. packageName))
+	end
 end
 
 s = m:section(NamedSection, "config", "vpnbypass", translate("VPN Bypass Rules"))
