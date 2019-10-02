@@ -2,6 +2,7 @@
 'require rpc';
 'require uci';
 'require validation';
+'require fs';
 
 var modalDiv = null,
     tooltipDiv = null,
@@ -1470,26 +1471,6 @@ var UIFileUpload = UIElement.extend({
 		}, options);
 	},
 
-	callFileStat: rpc.declare({
-		'object': 'file',
-		'method': 'stat',
-		'params': [ 'path' ],
-		'expect': { '': {} }
-	}),
-
-	callFileList: rpc.declare({
-		'object': 'file',
-		'method': 'list',
-		'params': [ 'path' ],
-		'expect': { 'entries': [] }
-	}),
-
-	callFileRemove: rpc.declare({
-		'object': 'file',
-		'method': 'remove',
-		'params': [ 'path' ]
-	}),
-
 	bind: function(browserEl) {
 		this.node = browserEl;
 
@@ -1502,7 +1483,7 @@ var UIFileUpload = UIElement.extend({
 	},
 
 	render: function() {
-		return Promise.resolve(this.value != null ? this.callFileStat(this.value) : null).then(L.bind(function(stat) {
+		return L.resolveDefault(this.value != null ? fs.stat(this.value) : null).then(L.bind(function(stat) {
 			var label;
 
 			if (L.isObject(stat) && stat.type != 'directory')
@@ -1647,15 +1628,11 @@ var UIFileUpload = UIElement.extend({
 				hidden.value = '';
 			}
 
-			return this.callFileRemove(path).then(L.bind(function(parent, ev, rc) {
-				if (rc == 0)
-					return this.handleSelect(parent, null, ev);
-				else if (rc == 6)
-					alert(_('Delete permission denied'));
-				else
-					alert(_('Delete request failed: %d %s').format(rc, rpc.getStatusText(rc)));
-
-			}, this, parent, ev));
+			return fs.remove(path).then(L.bind(function(parent, ev) {
+				return this.handleSelect(parent, null, ev);
+			}, this, parent, ev)).catch(function(err) {
+				alert(_('Delete request failed: %s').format(err.message));
+			});
 		}
 	},
 
@@ -1817,7 +1794,7 @@ var UIFileUpload = UIElement.extend({
 
 		if (fileStat == null) {
 			L.dom.content(ul, E('em', { 'class': 'spinning' }, _('Loading directory contents…')));
-			this.callFileList(path).then(L.bind(this.renderListing, this, browser, path));
+			L.resolveDefault(fs.list(path), []).then(L.bind(this.renderListing, this, browser, path));
 		}
 		else {
 			var button = this.node.firstElementChild,
@@ -1849,7 +1826,7 @@ var UIFileUpload = UIElement.extend({
 
 		ev.preventDefault();
 
-		return this.callFileList(path).then(L.bind(function(button, browser, path, list) {
+		return L.resolveDefault(fs.list(path), []).then(L.bind(function(button, browser, path, list) {
 			document.querySelectorAll('.cbi-filebrowser.open').forEach(function(browserEl) {
 				L.dom.findClassInstance(browserEl).handleCancel(ev);
 			});
