@@ -1,5 +1,5 @@
 'use strict';
-'require rpc';
+'require fs';
 
 var SSHPubkeyDecoder = L.Class.singleton({
 	lengthDecode: function(s, off)
@@ -90,19 +90,6 @@ var SSHPubkeyDecoder = L.Class.singleton({
 	}
 });
 
-var callFileRead = rpc.declare({
-	object: 'file',
-	method: 'read',
-	params: [ 'path' ],
-	expect: { data: '' }
-});
-
-var callFileWrite = rpc.declare({
-	object: 'file',
-	method: 'write',
-	params: [ 'path', 'data' ]
-});
-
 function renderKeys(keys) {
 	var list = document.querySelector('.cbi-dynlist');
 
@@ -130,9 +117,10 @@ function renderKeys(keys) {
 }
 
 function saveKeys(keys) {
-	return callFileWrite('/etc/dropbear/authorized_keys', keys.join('\n') + '\n')
+	return fs.write('/etc/dropbear/authorized_keys', keys.join('\n') + '\n')
 		.then(renderKeys.bind(this, keys))
-		.then(L.ui.hideModal);
+		.catch(function(e) { L.ui.addNotification(null, E('p', e.message)) })
+		.finally(L.ui.hideModal);
 }
 
 function addKey(ev) {
@@ -226,10 +214,8 @@ function handleWindowDragDropIgnore(ev) {
 
 return L.view.extend({
 	load: function() {
-		return callFileRead('/etc/dropbear/authorized_keys').then(function(data) {
-			return (data || '').split(/\n/).map(function(line) {
-				return line.trim();
-			}).filter(function(line) {
+		return fs.lines('/etc/dropbear/authorized_keys').then(function(lines) {
+			return lines.filter(function(line) {
 				return line.match(/^ssh-/) != null;
 			});
 		});
