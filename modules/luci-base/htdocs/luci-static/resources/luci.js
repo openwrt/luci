@@ -1852,6 +1852,27 @@
 			return s.split(/\s+/);
 		},
 
+		/**
+		 * Returns a promise resolving with either the given value or or with
+		 * the given default in case the input value is a rejecting promise.
+		 *
+		 * @instance
+		 * @memberof LuCI
+		 *
+		 * @param {*} value
+		 * The value to resolve the promise with.
+		 *
+		 * @param {*} defvalue
+		 * The default value to resolve the promise with in case the given
+		 * input value is a rejecting promise.
+		 *
+		 * @returns {Promise<*>}
+		 * Returns a new promise resolving either to the given input value or
+		 * to the given default value on error.
+		 */
+		resolveDefault: function(value, defvalue) {
+			return Promise.resolve(value).catch(function() { return defvalue });
+		},
 
 		/**
 		 * The request callback function is invoked whenever an HTTP
