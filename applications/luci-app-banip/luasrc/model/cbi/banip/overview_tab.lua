@@ -25,8 +25,8 @@ o2 = s:option(Flag, "ban_automatic", translate("Automatic WAN Interface Detectio
 o2.default = o2.enabled
 o2.rmempty = false
 
-o3 = s:option(MultiValue, "ban_iface", translate("Interface Selection"),
-	translate("Disable the automatic WAN detection and select your preferred interface(s) manually."))
+o3 = s:option(MultiValue, "ban_iface", translate("Manual WAN Interface Selection"),
+	translate("Select your preferred interface(s) manually."))
 if dump then
 	local i, v
 	for i, v in ipairs(dump.interface) do
@@ -36,18 +36,16 @@ if dump then
 		end
 	end
 end
+o3:depends("ban_automatic", 0)
 o3.widget = "checkbox"
-o3.rmempty = false
+o3.rmempty = true
 
-o4 = s:option(ListValue, "ban_fetchutil", translate("Download Utility"),
-	translate("List of supported and fully pre-configured download utilities."))
-o4:value("uclient-fetch")
-o4:value("wget")
-o4:value("curl")
-o4:value("aria2c")
-o4.default = "uclient-fetch"
+o4 = s:option(Flag, "ban_realtime", translate("SSH/LuCI RT Monitor"),
+	translate("Starts a small log/banIP monitor in the background to block SSH/LuCI brute force attacks in realtime."))
+o4.enabled = "true"
+o4.default = o4.disabled
 o4.rmempty = false
-	
+
 -- Runtime Information
 
 ds = s:option(DummyValue, "_dummy")
@@ -125,22 +123,30 @@ e7.rmempty = true
 
 -- Optional Extra Options
 
-e20 = e:option(Value, "ban_triggerdelay", translate("Trigger Delay"),
-	translate("Additional trigger delay in seconds before banIP processing begins."))
-e20.default = 2
-e20.datatype = "range(1,60)"
+e20 = e:option(ListValue, "ban_fetchutil", translate("Download Utility"),
+	translate("Select your preferred download utility."))
+e20:value("uclient-fetch")
+e20:value("wget")
+e20:value("curl")
+e20:value("aria2c")
 e20.optional = true
 
-e21 = e:option(ListValue, "ban_starttype", translate("Start Type"),
-	translate("Select the used start type during boot."))
-e21:value("start")
-e21:value("reload")
-e21.default = "start"
+e21 = e:option(Value, "ban_fetchparm", translate("Download Options"),
+	translate("Special options for the selected download utility, e.g. '--timeout=20 -O'."))
 e21.optional = true
 
-e22 = e:option(Value, "ban_fetchparm", translate("Download Options"),
-	translate("Special options for the selected download utility, e.g. '--timeout=20 --no-check-certificate -O'."))
+e22 = e:option(Value, "ban_triggerdelay", translate("Trigger Delay"),
+	translate("Additional trigger delay in seconds before banIP processing begins."))
+e22.default = 2
+e22.datatype = "range(1,60)"
 e22.optional = true
+
+e23 = e:option(ListValue, "ban_starttype", translate("Start Type"),
+	translate("Select the used start type during boot."))
+e23:value("start")
+e23:value("reload")
+e23.default = "start"
+e23.optional = true
 
 e30 = e:option(Value, "ban_wan_input_chain", translate("WAN Input Chain IPv4"))
 e30.default = "input_wan_rule"
