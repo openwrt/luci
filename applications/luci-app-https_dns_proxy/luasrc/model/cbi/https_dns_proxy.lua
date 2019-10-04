@@ -75,8 +75,8 @@ prov.write = function(self, section, value)
   if n == 0 then
     uci:delete("dhcp", "@dnsmasq[0]", "server")
   end
-  uci_del_list("dhcp", "@dnsmasq[0]", "server", tostring(la_val) .. ":" .. tostring(lp_val))
-  uci_add_list("dhcp", "@dnsmasq[0]", "server", tostring(la_val) .. ":" .. tostring(lp_val))
+  uci_del_list("dhcp", "@dnsmasq[0]", "server", tostring(la_val) .. "#" .. tostring(lp_val))
+  uci_add_list("dhcp", "@dnsmasq[0]", "server", tostring(la_val) .. "#" .. tostring(lp_val))
   uci:save("dhcp")
 end
 
@@ -97,7 +97,7 @@ lp.write = function(self, section, value)
 end
 
 sa = s3:option(Value, "subnet_addr", translate("Subnet address"))
-sa.datatype = "ip4prefix"
+sa.datatype = "cidr"
 sa.rmempty  = true
 
 ps = s3:option(Value, "proxy_server", translate("Proxy server"))
