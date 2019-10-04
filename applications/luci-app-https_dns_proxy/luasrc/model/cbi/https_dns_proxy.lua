@@ -97,7 +97,7 @@ lp.write = function(self, section, value)
 end
 
 sa = s3:option(Value, "subnet_addr", translate("Subnet address"))
-sa.datatype = "ip4prefix"
+sa.datatype = "cidr"
 sa.rmempty  = true
 
 ps = s3:option(Value, "proxy_server", translate("Proxy server"))
