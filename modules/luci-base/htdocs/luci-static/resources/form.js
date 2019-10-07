@@ -834,7 +834,7 @@ var CBIAbstractValue = CBINode.extend({
 				return Promise.resolve(this.write(section_id, fval));
 		}
 		else {
-			if (this.rmempty || this.optional) {
+			if (!active || this.rmempty || this.optional) {
 				return Promise.resolve(this.remove(section_id));
 			}
 			else if (!isEqual(cval, fval)) {
