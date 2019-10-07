@@ -89,7 +89,7 @@ end
 function action_reboot()
   local uci = require "luci.model.uci".cursor()
   local ip  = uci:get("network", "lan", "ipaddr")
-  luci.template.render("admin_system/applyreboot", {
+  luci.template.render("advanced_reboot/applyreboot", {
         title = luci.i18n.translate("Rebooting..."),
         msg   = luci.i18n.translate("The system is rebooting now.<br /> DO NOT POWER OFF THE DEVICE!<br /> Wait a few minutes before you try to reconnect. It might be necessary to renew the address of your computer to reach the device again, depending on your settings."),
         addr  = luci.ip.new(type(ip) == "string" and ip or "192.168.1.1") or "192.168.1.1"
@@ -161,7 +161,7 @@ function action_altreboot()
       end
     end
     if not errorMessage then
-      luci.template.render("admin_system/applyreboot", {
+      luci.template.render("advanced_reboot/applyreboot", {
             title = luci.i18n.translate("Rebooting..."),
             msg   = luci.i18n.translate("The system is rebooting to an alternative partition now.<br /> DO NOT POWER OFF THE DEVICE!<br /> Wait a few minutes before you try to reconnect. It might be necessary to renew the address of your computer to reach the device again, depending on your settings."),
             addr  = luci.ip.new(uci:get("network", "lan", "ipaddr")) or "192.168.1.1"
@@ -195,7 +195,7 @@ function action_poweroff()
       luci.template.render("advanced_reboot/advanced_reboot",{})
     end
   elseif step == 2 then
-    luci.template.render("admin_system/applyreboot", {
+    luci.template.render("advanced_reboot/applyreboot", {
           title = luci.i18n.translate("Shutting down..."),
           msg   = luci.i18n.translate("The system is shutting down now.<br /> DO NOT POWER OFF THE DEVICE!<br /> It might be necessary to renew the address of your computer to reach the device again, depending on your settings."),
           addr  = luci.ip.new(uci:get("network", "lan", "ipaddr")) or "192.168.1.1"
