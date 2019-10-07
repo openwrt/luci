@@ -31,10 +31,5 @@ function index()
 
 	entry({"admin", "system", "flash"}, view("system/flash"), _("Backup / Flash Firmware"), 70)
 
-	entry({"admin", "system", "reboot"}, template("admin_system/reboot"), _("Reboot"), 90)
-	entry({"admin", "system", "reboot", "call"}, post("action_reboot"))
-end
-
-function action_reboot()
-	luci.sys.reboot()
+	entry({"admin", "system", "reboot"}, view("system/reboot"), _("Reboot"), 90)
 end
