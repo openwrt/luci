@@ -10,43 +10,6 @@ var callSystemValidateFirmwareImage = rpc.declare({
 	expect: { '': { valid: false, forcable: true } }
 });
 
-function pingDevice(proto, ipaddr) {
-	var target = '%s://%s%s?%s'.format(proto || 'http', ipaddr || window.location.host, L.resource('icons/loading.gif'), Math.random());
-
-	return new Promise(function(resolveFn, rejectFn) {
-		var img = new Image();
-
-		img.onload = resolveFn;
-		img.onerror = rejectFn;
-
-		window.setTimeout(rejectFn, 1000);
-
-		img.src = target;
-	});
-}
-
-function awaitReconnect(/* ... */) {
-	var ipaddrs = arguments.length ? arguments : [ window.location.host ];
-
-	window.setTimeout(function() {
-		L.Poll.add(function() {
-			var tasks = [], reachable = false;
-
-			for (var i = 0; i < 2; i++)
-				for (var j = 0; j < ipaddrs.length; j++)
-					tasks.push(pingDevice(i ? 'https' : 'http', ipaddrs[j])
-						.then(function(ev) { reachable = ev.target.src.replace(/^(https?:\/\/[^\/]+).*$/, '$1/') }, function() {}));
-
-			return Promise.all(tasks).then(function() {
-				if (reachable) {
-					L.Poll.stop();
-					window.location = reachable;
-				}
-			});
-		})
-	}, 5000);
-}
-
 function fileUpload(node, path) {
 	return new Promise(function(resolveFn, rejectFn) {
 		L.ui.showModal(_('Uploading file…'), [
@@ -220,7 +183,7 @@ return L.view.extend({
 				E('p', { 'class': 'spinning' }, _('The system is erasing the configuration partition now and will reboot itself when finished.'))
 			]);
 
-			awaitReconnect('192.168.1.1', 'openwrt.lan');
+			L.ui.awaitReconnect('192.168.1.1', 'openwrt.lan');
 		}).catch(function(e) { L.ui.addNotification(null, E('p', e.message)) });
 	},
 
@@ -283,7 +246,7 @@ return L.view.extend({
 					E('p', { 'class': 'spinning' }, _('The system is rebooting now. If the restored configuration changed the current LAN IP address, you might need to reconnect manually.'))
 				]);
 
-				awaitReconnect(window.location.host, '192.168.1.1', 'openwrt.lan');
+				L.ui.awaitReconnect(window.location.host, '192.168.1.1', 'openwrt.lan');
 			}, this))
 			.catch(function(e) { L.ui.addNotification(null, E('p', e.message)) })
 			.finally(function() { btn.firstChild.data = _('Upload archive...') });
@@ -424,7 +387,7 @@ return L.view.extend({
 		/* Currently the sysupgrade rpc call will not return, hence no promise handling */
 		fs.exec('/sbin/sysupgrade', opts);
 
-		awaitReconnect(window.location.host, '192.168.1.1', 'openwrt.lan');
+		L.ui.awaitReconnect(window.location.host, '192.168.1.1', 'openwrt.lan');
 	},
 
 	handleBackupList: function(ev) {
