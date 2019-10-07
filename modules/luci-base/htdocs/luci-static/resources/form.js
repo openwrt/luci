@@ -1031,6 +1031,9 @@ var CBITableSection = CBITypedSection.extend({
 		for (var i = 0; i < nodes.length; i++) {
 			var sectionname = this.titleFn('sectiontitle', cfgsections[i]);
 
+			if (sectionname == null)
+				sectionname = cfgsections[i];
+
 			var trEl = E('div', {
 				'id': 'cbi-%s-%s'.format(config_name, cfgsections[i]),
 				'class': 'tr cbi-section-table-row',
