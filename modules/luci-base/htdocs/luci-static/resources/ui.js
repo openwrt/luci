@@ -2214,6 +2214,44 @@ return L.Class.extend({
 		}
 	}),
 
+	/* Reconnect handling */
+	pingDevice: function(proto, ipaddr) {
+		var target = '%s://%s%s?%s'.format(proto || 'http', ipaddr || window.location.host, L.resource('icons/loading.gif'), Math.random());
+
+		return new Promise(function(resolveFn, rejectFn) {
+			var img = new Image();
+
+			img.onload = resolveFn;
+			img.onerror = rejectFn;
+
+			window.setTimeout(rejectFn, 1000);
+
+			img.src = target;
+		});
+	},
+
+	awaitReconnect: function(/* ... */) {
+		var ipaddrs = arguments.length ? arguments : [ window.location.host ];
+
+		window.setTimeout(L.bind(function() {
+			L.Poll.add(L.bind(function() {
+				var tasks = [], reachable = false;
+
+				for (var i = 0; i < 2; i++)
+					for (var j = 0; j < ipaddrs.length; j++)
+						tasks.push(this.pingDevice(i ? 'https' : 'http', ipaddrs[j])
+							.then(function(ev) { reachable = ev.target.src.replace(/^(https?:\/\/[^\/]+).*$/, '$1/') }, function() {}));
+
+				return Promise.all(tasks).then(function() {
+					if (reachable) {
+						L.Poll.stop();
+						window.location = reachable;
+					}
+				});
+			}, this));
+		}, this), 5000);
+	},
+
 	/* UCI Changes */
 	changes: L.Class.singleton({
 		init: function() {
