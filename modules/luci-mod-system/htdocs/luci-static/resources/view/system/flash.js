@@ -342,7 +342,7 @@ return L.view.extend({
 
 				var cntbtn = E('button', {
 					'class': 'btn cbi-button-action important',
-					'click': L.ui.createHandlerFn(this, 'handleSysupgradeConfirm', btn, keep.checked, force.checked),
+					'click': L.ui.createHandlerFn(this, 'handleSysupgradeConfirm', btn, keep, force),
 					'disabled': (!is_valid || is_too_big) ? true : null
 				}, [ _('Continue') ]);
 
@@ -376,10 +376,10 @@ return L.view.extend({
 
 		var opts = [];
 
-		if (!keep)
+		if (!keep.checked)
 			opts.push('-n');
 
-		if (force)
+		if (force.checked)
 			opts.push('--force');
 
 		opts.push('/tmp/firmware.bin');
