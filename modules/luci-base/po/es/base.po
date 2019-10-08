@@ -3,14 +3,14 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-06-10 03:41+0200\n"
-"PO-Revision-Date: 2019-09-25 12:05-0300\n"
+"PO-Revision-Date: 2019-10-08 15:34-0300\n"
 "Last-Translator: Franco Castillo <castillofrancodamian@gmail.com>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.2.3\n"
+"X-Generator: Poedit 2.2.4\n"
 "Language-Team: \n"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:867
@@ -1437,7 +1437,7 @@ msgstr "Eliminar clave"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:1634
 msgid "Delete request failed: %s"
-msgstr ""
+msgstr "Error al eliminar la solicitud: %s"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:724
 msgid "Delete this network"
@@ -2089,7 +2089,7 @@ msgstr "Grabar imagen..."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:362
 msgid "Flash image?"
-msgstr "¿Instalar imagen en flash?"
+msgstr "¿Grabar imagen en flash?"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:484
 msgid "Flash new firmware image"
@@ -2858,7 +2858,7 @@ msgstr "Conectarse a: %q"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:306
 msgid "Keep settings and retain the current configuration"
-msgstr ""
+msgstr "Mantener los ajustes y conservar la configuración actual"
 
 #: modules/luci-mod-status/luasrc/controller/admin/status.lua:16
 #: modules/luci-mod-status/luasrc/view/admin_status/dmesg.htm:8
@@ -3329,7 +3329,7 @@ msgstr "Malla"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:105
 msgid "Mesh ID"
-msgstr ""
+msgstr "ID de malla"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:807
 msgid "Mesh Id"
@@ -4809,7 +4809,7 @@ msgid ""
 "fails. Use only if you are sure that the firmware is correct and meant for "
 "your device!"
 msgstr ""
-"Seleccione \"Forzar actualización\" para flashear la imagen incluso si falla "
+"Seleccione \"Forzar actualización\" para grabar la imagen incluso si falla "
 "la verificación del formato de la imagen. ¡Úselo solo si está seguro de que "
 "el firmware es correcto y está diseñado para su dispositivo!"
 
@@ -5342,7 +5342,7 @@ msgid ""
 "compare them with the original file to ensure data integrity. <br /> Click "
 "\"Proceed\" below to start the flash procedure."
 msgstr ""
-"Se ha instalado la imagen en flash. A continuación se muestra la suma de "
+"Se ha subido la imagen a grabar. A continuación se muestra la suma de "
 "comprobación y el tamaño del archivo, compárelos con el archivo original "
 "para garantizar la integridad de los datos. <br /> Haga clic en \"Continuar"
 "\" a continuación para iniciar el procedimiento de instalación."
@@ -5481,7 +5481,7 @@ msgstr "El archivo de copia de seguridad cargado no es legible"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:327
 msgid "The uploaded firmware does not allow keeping current configuration."
-msgstr ""
+msgstr "El firmware cargado no permite mantener la configuración actual."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:322
 msgid ""
@@ -5787,7 +5787,7 @@ msgstr "Segundos no disponibles (UAS)"
 
 #: modules/luci-base/htdocs/luci-static/resources/fs.js:100
 msgid "Unexpected reply data format"
-msgstr ""
+msgstr "Formato de datos de respuesta inesperado"
 
 #: modules/luci-base/htdocs/luci-static/resources/network.js:1984
 #: modules/luci-base/luasrc/model/network.lua:970
@@ -5854,6 +5854,8 @@ msgstr "Subir"
 msgid ""
 "Upload a sysupgrade-compatible image here to replace the running firmware."
 msgstr ""
+"Cargue aquí una imagen compatible con sysupgrade para reemplazar el firmware "
+"en ejecución."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:221
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:252
@@ -5902,7 +5904,7 @@ msgstr "Usar <code>/etc/ethers</code>"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:264
 msgid "Use DHCP advertised servers"
-msgstr ""
+msgstr "Usar servidores anunciados de DHCP"
 
 #: protocols/luci-proto-relay/htdocs/luci-static/resources/protocol/relay.js:167
 msgid "Use DHCP gateway"
@@ -6033,6 +6035,8 @@ msgid ""
 "Used for two different purposes: RADIUS NAS ID and 802.11r R0KH-ID. Not "
 "needed with normal WPA(2)-PSK."
 msgstr ""
+"Se utiliza para dos propósitos diferentes: RADIUS NAS ID y 802.11r R0KH-ID. "
+"No es necesario con WPA(2)-PSK normal."
 
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:110
 msgid "User certificate (PEM encoded)"
@@ -6115,11 +6119,11 @@ msgstr "WDS"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1161
 msgid "WEP Open System"
-msgstr "sistema abierto WEP"
+msgstr "WEP (sistema abierto)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1162
 msgid "WEP Shared Key"
-msgstr "clave compartida WEP"
+msgstr "WEP (clave compartida)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1831
 msgid "WEP passphrase"
@@ -6266,7 +6270,7 @@ msgstr ""
 "Puede habilitar o deshabilitar los scripts de inicio instalados aquí. Los "
 "cambios se aplicarán después de que se reinicie el dispositivo.<br /> "
 "<strong>Advertencia: Si deshabilitas los scripts de inicio esenciales como "
-"\"red\", ¡Tu dispositivo podría volverse inaccesible!</strong>"
+"\"network\", ¡Tu dispositivo podría volverse inaccesible!</strong>"
 
 #: themes/luci-theme-bootstrap/luasrc/view/themes/bootstrap/header.htm:184
 #: themes/luci-theme-material/luasrc/view/themes/material/header.htm:222
