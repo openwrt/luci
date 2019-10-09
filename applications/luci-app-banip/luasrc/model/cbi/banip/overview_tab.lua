@@ -30,9 +30,9 @@ o3 = s:option(MultiValue, "ban_iface", translate("Manual WAN Interface Selection
 if dump then
 	local i, v
 	for i, v in ipairs(dump.interface) do
-		if v.interface ~= "loopback" and v.interface ~= "lan" then
+		if v.interface ~= "loopback" then
 			local device = v.l3_device or v.device or "-"
-			o3:value(v.interface, v.interface.. " (" ..device.. ")")
+			o3:value(v.interface, " " .. v.interface .. " (" .. device .. ") ")
 		end
 	end
 end
