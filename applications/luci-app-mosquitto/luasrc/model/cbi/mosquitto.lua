@@ -116,9 +116,9 @@ o = s:option(ListValue, "tls_version", "TLS Version",
     "Depends on your openssl version, empty to support all")
 o.optional = true
 o:value("", "Default")
-o:value("tlsv1")
 o:value("tlsv1.1")
 o:value("tlsv1.2")
+o:value("tlsv1.3")
 
 OptionalFlag(s, "require_certificate", "Require clients to present a certificate")
 OptionalFlag(s, "use_identity_as_username", "use_identity_as_username")
