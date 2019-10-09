@@ -141,8 +141,7 @@ end
 for p in nixio.fs.glob("/sys/bus/usb/devices/*/*-port[0-9]*") do
 	local port = p:match("/sys/bus/usb/devices/.*/(.*-port%d+)$")
 	if port then
-		usbport:value("%s" %{ port },
-		              "%s %s" %{ port, nixio.fs.stat("%s/device" %{p}) ~= nil and "(device attached)" or ""})
+		usbport:value(port, "%s %s" %{ port, nixio.fs.stat("%s/device" %{p}) ~= nil and "(device attached)" or ""})
 	end
 end
 
