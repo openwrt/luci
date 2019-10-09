@@ -121,7 +121,7 @@ usbport.size = 1
 function usbport.valuelist(self, section)
 	local port, ports = nil, {}
 	for port in util.imatch(m.uci:get("system", section, "port")) do
-			ports[#ports+1] = port
+		ports[#ports+1] = port
 	end
 	return ports
 end
