@@ -132,7 +132,11 @@ function httpdispatch(request, prefix)
 	--context._disable_memtrace()
 end
 
-local function require_post_security(target)
+local function require_post_security(target, args)
+	if type(target) == "table" and target.type == "arcombine" and type(target.targets) == "table" then
+		return require_post_security((type(args) == "table" and #args > 0) and target.targets[2] or target.targets[1], args)
+	end
+
 	if type(target) == "table" then
 		if type(target.post) == "table" then
 			local param_name, required_val, request_val
@@ -455,7 +459,7 @@ function dispatch(request)
 		return
 	end
 
-	if c and require_post_security(c.target) then
+	if c and require_post_security(c.target, args) then
 		if not test_post_security(c) then
 			return
 		end
