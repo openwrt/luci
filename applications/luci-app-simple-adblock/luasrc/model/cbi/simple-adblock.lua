@@ -187,15 +187,15 @@ local dns_descr = translate("Pick the DNS resolution option to create the adbloc
 		.. translate("README") .. [[</a>]] .. " " .. translate("for details.")
 
 if not checkDnsmasq then
-	dns_descr = dns_descr .. "</br>" .. translate("Please note that") .. " <i>dnsmasq.addnhosts</i> " .. translate("is not supported on this system.")
-	dns_descr = dns_descr .. "</br>" .. translate("Please note that") .. " <i>dnsmasq.conf</i> " .. translate("is not supported on this system.")
-	dns_descr = dns_descr .. "</br>" .. translate("Please note that") .. " <i>dnsmasq.ipset</i> " .. translate("is not supported on this system.")
-	dns_descr = dns_descr .. "</br>" .. translate("Please note that") .. " <i>dnsmasq.servers</i> " .. translate("is not supported on this system.")
+	dns_descr = dns_descr .. "<br />" .. translate("Please note that") .. " <i>dnsmasq.addnhosts</i> " .. translate("is not supported on this system.")
+	dns_descr = dns_descr .. "<br />" .. translate("Please note that") .. " <i>dnsmasq.conf</i> " .. translate("is not supported on this system.")
+	dns_descr = dns_descr .. "<br />" .. translate("Please note that") .. " <i>dnsmasq.ipset</i> " .. translate("is not supported on this system.")
+	dns_descr = dns_descr .. "<br />" .. translate("Please note that") .. " <i>dnsmasq.servers</i> " .. translate("is not supported on this system.")
 elseif not checkDnsmasqIpset then 
-	dns_descr = dns_descr .. "</br>" .. translate("Please note that") .. " <i>dnsmasq.ipset</i> " .. translate("is not supported on this system.")
+	dns_descr = dns_descr .. "<br />" .. translate("Please note that") .. " <i>dnsmasq.ipset</i> " .. translate("is not supported on this system.")
 end
 if not checkUnbound then 
-	dns_descr = dns_descr .. "</br>" .. translate("Please note that") .. " <i>unbound.adb_list</i> " .. translate("is not supported on this system.")
+	dns_descr = dns_descr .. "<br />" .. translate("Please note that") .. " <i>unbound.adb_list</i> " .. translate("is not supported on this system.")
 end
 
 dns = s:taboption("advanced", ListValue, "dns", translate("DNS Service"), dns_descr)
