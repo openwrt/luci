@@ -68,10 +68,10 @@ return network.registerProtocol('modemmanager', {
 		s.taboption('general', form.Value, 'pincode', _('PIN'));
 
 		o = s.taboption('general', form.ListValue, 'auth', _('Authentication Type'));
-		o.value('both', 'PAP/CHAP (both)');
+		o.value('both', _('PAP/CHAP (both)'));
 		o.value('pap', 'PAP');
 		o.value('chap', 'CHAP');
-		o.value('none', 'NONE');
+		o.value('none', _('None'));
 		o.default = 'none';
 
 		o = s.taboption('general', form.Value, 'username', _('PAP/CHAP username'));
@@ -86,9 +86,9 @@ return network.registerProtocol('modemmanager', {
 		o.password = true;
 
 		o = s.taboption('general', form.ListValue, 'iptype', _('IP Type'));
-		o.value('ipv4v6', 'IPv4 IPv6 (both - defaults to IPv4)')
-		o.value('ipv4', 'IPv4 only');
-		o.value('ipv6', 'IPv6 only');
+		o.value('ipv4v6', _('IPv4/IPv6 (both - defaults to IPv4)'))
+		o.value('ipv4', _('IPv4 only'));
+		o.value('ipv6', _('IPv6 only'));
 		o.default = 'ipv4v6';
 
 		o = s.taboption('advanced', form.Value, 'mtu', _('Override MTU'));
