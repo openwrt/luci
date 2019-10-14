@@ -21,8 +21,6 @@ local basicParams = {
 
 	{ Value,"keepalive","10 60", translate("Helper directive to simplify the expression of --ping and --ping-restart in server mode configurations") },
 
-	{ ListValue,"proto",{ "udp", "tcp-client", "tcp-server" }, translate("Use protocol") },
-
 	{ Flag,"client",0, translate("Configure client mode") },
 	{ Flag,"client_to_client",0, translate("Allow client-to-client traffic") },
 	{ DynamicList,"remote","vpnserver.example.org", translate("Remote host name or ip address") },
@@ -36,6 +34,20 @@ local basicParams = {
 	{ FileUpload,"key","/etc/easy-rsa/keys/some-client.key", translate("Local private key") },
 }
 
+local has_ipv6 = fs.access("/proc/net/ipv6_route")
+if has_ipv6 then
+	table.insert( basicParams, { ListValue,
+		"proto",
+		{ "udp", "tcp-client", "tcp-server", "udp6", "tcp6-client", "tcp6-server" },
+		translate("Use protocol")
+	})
+else
+	table.insert( basicParams, { ListValue,
+		"proto",
+		{ "udp", "tcp-client", "tcp-server" },
+		translate("Use protocol")
+	})
+end
 
 local m = Map("openvpn")
 local p = m:section( SimpleSection )
