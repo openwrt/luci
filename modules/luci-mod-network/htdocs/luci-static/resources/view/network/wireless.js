@@ -483,7 +483,7 @@ var CBIWifiCountryValue = form.Value.extend({
 	},
 
 	renderWidget: function(section_id, option_index, cfgvalue) {
-		var typeClass = this.keylist.length ? form.ListValue : form.Value;
+		var typeClass = (this.keylist && this.keylist.length) ? form.ListValue : form.Value;
 		return typeClass.prototype.renderWidget.apply(this, [section_id, option_index, cfgvalue]);
 	}
 });
