@@ -189,6 +189,9 @@ return network.registerProtocol('static', {
 		o = s.taboption('general', form.Value, 'ip6hint', _('IPv6 assignment hint'), _('Assign prefix parts using this hexadecimal subprefix ID for this interface.'));
 		o.placeholder = '0';
 		o.validate = function(section_id, value) {
+			if (value == null || value == '')
+				return true;
+
 			var n = parseInt(value, 16);
 
 			if (!/^(0x)?[0-9a-fA-F]+$/.test(value) || isNaN(n) || n >= 0xffffffff)
