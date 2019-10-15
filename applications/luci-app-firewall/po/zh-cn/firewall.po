@@ -1,14 +1,18 @@
 #
 # Yangfl <mmyangfl@gmail.com>, 2017, 2018.
+# Zheng Qian <sotux82@gmail.com>, 2019.
 #
 msgid ""
 msgstr ""
+"Project-Id-Version: \n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Last-Translator: Yangfl <mmyangfl@gmail.com>\n"
+"Last-Translator: Zheng Qian <sotux82@gmail.com>\n"
 "Language-Team:  <debian-l10n-chinese@lists.debian.org>\n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"PO-Revision-Date: 2018-08-08 08:28+0800\n"
+"PO-Revision-Date: 2019-10-15 17:39+0800\n"
 "X-Generator: Gtranslator 2.91.7\n"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:146
@@ -64,12 +68,16 @@ msgid ""
 "traffic, e.g. <code>-p tcp --dport 443</code> to only match outbound HTTPS "
 "traffic."
 msgstr ""
+"附加 <em>iptables</em> 参数对区域出流量分类。如：<code>-p tcp --dport 443</"
+"code> 仅匹配出站 HTTPS 流量"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:239
 msgid ""
 "Additional raw <em>iptables</em> arguments to classify zone source traffic, "
 "e.g. <code>-p tcp --sport 443</code> to only match inbound HTTPS traffic."
 msgstr ""
+"附加 <em>iptables</em> 参数对区域入流量分类。如：<code>-p tcp --sport 443</"
+"code> 仅匹配入站 HTTPS 流量"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:101
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:137
@@ -79,11 +87,11 @@ msgstr "高级设置"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:211
 msgid "Allow \"invalid\" traffic"
-msgstr ""
+msgstr "允许“无效”流量"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:311
 msgid "Allow forward from <em>source zones</em>:"
-msgstr "允许从<em>源区域</em>转发："
+msgstr "允许来自<em>源区域</em>的转发："
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:270
 msgid "Allow forward to <em>destination zones</em>:"
@@ -96,36 +104,36 @@ msgstr "任何"
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:344
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:357
 msgid "Any day"
-msgstr ""
+msgstr "每天"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:214
 msgid "Automatic helper assignment"
-msgstr ""
+msgstr "自动助手分配"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:214
 msgid ""
 "Automatically assign conntrack helpers based on traffic protocol and port"
-msgstr ""
+msgstr "根据流量协议和端口自动分配 conntrack 助手"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:79
 msgid "Conntrack Settings"
-msgstr ""
+msgstr "Conntrack 设置"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:218
 msgid "Conntrack helpers"
-msgstr ""
+msgstr "Conntrack 助手"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:178
 msgid "Covered devices"
-msgstr ""
+msgstr "涵盖的设备"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:137
 msgid "Covered networks"
-msgstr "覆盖网络"
+msgstr "涵盖的网络"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:183
 msgid "Covered subnets"
-msgstr ""
+msgstr "涵盖的子网"
 
 #: applications/luci-app-firewall/luasrc/controller/firewall.lua:19
 msgid "Custom Rules"
@@ -176,6 +184,8 @@ msgid ""
 "Do not install extra rules to reject forwarded traffic with conntrack state "
 "<em>invalid</em>. This may be required for complex asymmetric route setups."
 msgstr ""
+"不安装额外的规则以拒绝 conntrack 状态为<em>无效</em>的转发流量。对复杂的非对"
+"称路由这可能是必需的设置。"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:297
 #: applications/luci-app-firewall/luasrc/tools/firewall.lua:218
@@ -220,7 +230,7 @@ msgstr "实验特性。与 QoS/SQM 不完全兼容。"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:218
 msgid "Explicitly choses allowed connection tracking helpers for zone traffic"
-msgstr ""
+msgstr "为区域流量明确选择允许的连接跟踪助手"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:210
 msgid "External IP address"
@@ -237,15 +247,15 @@ msgstr "附加参数"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:249
 msgid "Extra destination arguments"
-msgstr ""
+msgstr "额外的目标参数"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:80
 msgid "Extra iptables arguments"
-msgstr ""
+msgstr "额外的 iptables 参数"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:239
 msgid "Extra source arguments"
-msgstr ""
+msgstr "额外的源参数"
 
 #: applications/luci-app-firewall/luasrc/controller/firewall.lua:6
 msgid "Firewall"
@@ -433,7 +443,7 @@ msgstr "名字"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:169
 msgid "Network"
-msgstr ""
+msgstr "网络"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:211
 msgid "Only match incoming traffic directed at the given IP address."
@@ -471,6 +481,9 @@ msgid ""
 "invalid values could render the firewall ruleset broken, completely exposing "
 "all services."
 msgstr ""
+"通过将 iptables 参数传递给源和目标流量的分类规则，可以根据接口或子网以外的其"
+"他条件来匹配数据包。使用这些选项应格外小心，因为无效值可能会破坏防火墙规则集"
+"而对外暴露所有服务。"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:95
 #: applications/luci-app-firewall/luasrc/controller/firewall.lua:12
@@ -488,7 +501,7 @@ msgstr ""
 msgid ""
 "Prevent the installation of <em>NOTRACK</em> rules which would bypass "
 "connection tracking."
-msgstr ""
+msgstr "防止安装 <em>NOTRACK</em> 规则，该规则会绕过连接跟踪。"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:154
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:205
@@ -593,7 +606,7 @@ msgstr "开始日期（yyyy-mm-dd）"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:361
 msgid "Start Time (hh.mm.ss)"
-msgstr ""
+msgstr "开始时间（hh.mm.ss）"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:373
 msgid "Stop Date (yyyy-mm-dd)"
@@ -601,7 +614,7 @@ msgstr "停止日期（yyyy-mm-dd）"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:365
 msgid "Stop Time (hh.mm.ss)"
-msgstr ""
+msgstr "停止时间（hh.mm.ss）"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:345
 msgid "Sunday"
@@ -623,10 +636,10 @@ msgid ""
 "rule is <em>unidirectional</em>, e.g. a forward from lan to wan does "
 "<em>not</em> imply a permission to forward from wan to lan as well."
 msgstr ""
-"以下选项可以控制区域（%s）和其它区域间的转发规则。<em>目标区域</em>接收"
-"<strong>源自 %q</strong> 的转发流量。<em>源区域</em>匹配从<strong>目标为 %q</"
-"strong> 的区域的需转发流量。转发规则的作用是<em>单向</em>的，例如：一条允许"
-"从 lan 到 wan 的转发规则并不隐含有允许相反方向从 wan 到 lan 的流量转发。"
+"以下选项控制此区域（%s）和其它区域间的转发策略。<em>目标区域</em>接收<strong>"
+"源自 %q</strong> 的转发流量。<em>源区域</em>匹配的转发流量来自<strong>目标为 "
+"%q</strong> 的其它区域。转发规则的作用是<em>单向</em>的，例如：转发从 lan 到 "
+"wan 的流量并不意味着允许反向转发从 wan 到 lan 的流量。"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:89
 msgid ""
@@ -636,9 +649,9 @@ msgid ""
 "forwarded traffic between different networks within the zone. <em>Covered "
 "networks</em> specifies which available networks are members of this zone."
 msgstr ""
-"本节定义 %q 的通用属性，<em>入站数据</em>和<em>出站数据</em>选项用于设置此区"
+"本节定义 %q 的通用属性。<em>入站数据</em>和<em>出站数据</em>选项用于设置此区"
 "域入站和出站流量的默认策略，<em>转发</em>选项描述该区域内不同网络之间的流量转"
-"发策略。<em>覆盖网络</em>指定从属于这个区域的网络。"
+"发策略。<em>涵盖的网络</em>指定从属于这个区域的网络。"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:349
 msgid "Thursday"
@@ -646,7 +659,7 @@ msgstr "星期四"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:138
 msgid "Time Restrictions"
-msgstr ""
+msgstr "时间限制"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:377
 msgid "Time in UTC"
@@ -698,19 +711,19 @@ msgstr "未命名规则"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:94
 msgid "Unnamed zone"
-msgstr ""
+msgstr "未命名区域"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:178
 msgid ""
 "Use this option to classify zone traffic by raw, non-<em>uci</em> managed "
 "network devices."
-msgstr ""
+msgstr "此选项可对原始的、非 <em>uci</em> 托管的网络设备进行区域流量分类。"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:183
 msgid ""
 "Use this option to classify zone traffic by source or destination subnet "
 "instead of networks or devices."
-msgstr ""
+msgstr "此选项可对源或目标子网而非网络或设备进行区域流量分类。"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:72
 msgid "Via %s"
@@ -833,7 +846,7 @@ msgstr "秒"
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:173
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:265
 msgid "this new zone"
-msgstr ""
+msgstr "此新区域"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:197
 #: applications/luci-app-firewall/luasrc/tools/firewall.lua:121
