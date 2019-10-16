@@ -1,5 +1,7 @@
 # OpenWrt luci feed
 
+[![Translation status](https://hosted.weblate.org/widgets/openwrt/-/luci/svg-badge.svg)](https://hosted.weblate.org/engage/openwrt/?utm_source=widget)
+
 ## Description
 
 This is the OpenWrt "luci"-feed containing LuCI - OpenWrt Configuration Interface.
