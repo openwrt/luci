@@ -43,6 +43,9 @@ function validateCert(priv, section_id, value) {
 	    start = false,
 	    i;
 
+	if (value === null || value === '')
+		return true;
+
 	for (i = 0; i < lines.length; i++) {
 		if (lines[i].match(beg))
 			start = true;
