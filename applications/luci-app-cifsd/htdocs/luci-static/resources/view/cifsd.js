@@ -31,8 +31,8 @@ return L.view.extend({
 		o.placeholder = 'Cifsd on OpenWrt';
 
 		o = s.taboption('template', form.TextValue, '_tmpl',
-			_('Edit the template that is used for generating the samba configuration.'),
-			_("This is the content of the file '/etc/cifs/smb.conf.template' from which your samba configuration will be generated. \
+			_('Edit the template that is used for generating the cifsd configuration.'),
+			_("This is the content of the file '/etc/cifs/smb.conf.template' from which your cifsd configuration will be generated. \
 			Values enclosed by pipe symbols ('|') should not be changed. They get their values from the 'General Settings' tab."));
 		o.rows = 20;
 		o.cfgvalue = function(section_id) {
