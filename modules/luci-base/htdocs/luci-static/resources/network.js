@@ -438,14 +438,19 @@ function initNetworkState(refresh) {
 			getHostHints(), getProtocolHandlers(),
 			uci.load('network'), uci.load('wireless'), uci.load('luci')
 		]).then(function(data) {
-			var board = data[2], ifaddrs = data[3], devices = data[4];
+			var netifd_ifaces = data[0],
+			    netifd_devs   = data[1],
+			    board_json    = data[2],
+			    luci_ifaddrs  = data[3],
+			    luci_devs     = data[4];
+
 			var s = {
 				isTunnel: {}, isBridge: {}, isSwitch: {}, isWifi: {},
-				ifaces: data[0], devices: data[1], radios: data[5],
-				hosts: data[6], netdevs: {}, bridges: {}, switches: {}
+				ifaces: netifd_ifaces, radios: data[5], hosts: data[6],
+				netdevs: {}, bridges: {}, switches: {}
 			};
 
-			for (var i = 0, a; (a = ifaddrs[i]) != null; i++) {
+			for (var i = 0, a; (a = luci_ifaddrs[i]) != null; i++) {
 				var name = a.name.replace(/:.+$/, '');
 
 				if (isVirtualIfname(name))
@@ -477,8 +482,21 @@ function initNetworkState(refresh) {
 				}
 			}
 
-			for (var devname in devices) {
-				var dev = devices[devname];
+			/* override getifaddr() stats with netifd device status stats as
+			   the former are limited to 32bit counters only */
+			for (var devname in netifd_devs) {
+				if (!s.netdevs.hasOwnProperty(devname))
+					continue;
+
+				if (!L.isObject(netifd_devs[devname]))
+					continue;
+
+				s.netdevs[devname].stats = Object.assign({},
+					s.netdevs[devname].stats, netifd_devs[devname].statistics);
+			}
+
+			for (var devname in luci_devs) {
+				var dev = luci_devs[devname];
 
 				if (dev.bridge) {
 					var b = {
@@ -512,9 +530,9 @@ function initNetworkState(refresh) {
 				}
 			}
 
-			if (L.isObject(board.switch)) {
-				for (var switchname in board.switch) {
-					var layout = board.switch[switchname],
+			if (L.isObject(board_json.switch)) {
+				for (var switchname in board_json.switch) {
+					var layout = board_json.switch[switchname],
 					    netdevs = {},
 					    nports = {},
 					    ports = [],
@@ -576,8 +594,8 @@ function initNetworkState(refresh) {
 				}
 			}
 
-			if (L.isObject(board.dsl) && L.isObject(board.dsl.modem)) {
-				s.hasDSLModem = board.dsl.modem;
+			if (L.isObject(board_json.dsl) && L.isObject(board_json.dsl.modem)) {
+				s.hasDSLModem = board_json.dsl.modem;
 			}
 
 			_init = null;
