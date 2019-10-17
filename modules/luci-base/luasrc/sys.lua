@@ -553,6 +553,60 @@ function wifi.getiwinfo(ifname)
 	return { ifname = ifname }
 end
 
+function wifi.checkkey()
+	local default_key = uci:get("system", "@system[0]", "default_key")
+	if not default_key then
+		return
+	end
+
+	ntm.init()
+	local rt = ""
+	local cachecfg = {}
+	local handle = io.popen("date -r /etc/config/wireless +%s 2>/dev/null")
+	local configtime = "0"..handle:read("*a"):sub(0,-2)
+	handle:close()
+	handle = io.open("/tmp/luci-wireless-cachecfg", "r")
+	if handle then
+		cachecfg = luci.util.restore_data(handle:read("*all"))
+		handle:close()
+		if cachecfg.configtime >= configtime then
+			return cachecfg.ssids
+		end
+	end
+
+	for _, dev in ipairs(ntm:get_wifidevs()) do
+		for _, net in ipairs(dev:get_wifinets()) do
+			local wiface = {
+				ssid	= net:active_ssid(),
+				device	= dev:name(),
+				key	= net:get("key")
+			}
+
+			if wiface.key == default_key then
+				rt = rt .. ("%s (%s), "):format(wiface.ssid, wiface.device)
+			end
+		end
+	end
+
+	if rt ~= "" then
+		cachecfg.ssids 		= rt:sub(0,-3)
+		cachecfg.checktime 	= os.time()
+		cachecfg.configtime 	= configtime
+		handle = io.open("/tmp/luci-wireless-cachecfg", "w")
+		if handle then
+			handle:write(luci.util.serialize_data(cachecfg))
+			handle:close()
+		end
+		return rt:sub(0,-3)
+	else
+		local c = uci:changes("system");
+		uci:set("system","@system[0]","default_key","")
+		if c and not next(c) then
+			uci:save("system")
+			uci:commit("system")
+		end
+	end
+end
 
 init = {}
 init.dir = "/etc/init.d/"

@@ -17,6 +17,9 @@
 
 	-- send as HTML5
 	http.prepare_content("text/html")
+
+	-- Check ssids with default password
+	local unsecurewifikey = sys.wifi.checkkey()
 -%>
 <!DOCTYPE html>
 <html lang="<%=luci.i18n.context.lang%>">
@@ -63,6 +66,18 @@
 					<p><%:There is no password set on this router. Please configure a root password to protect the web interface and enable SSH.%></p>
 					<% if disp.lookup("admin/system/admin") then %>
 					  <div class="right"><a class="btn" href="<%=url("admin/system/admin")%>"><%:Go to password configuration...%></a></div>
+					<% end %>
+				</div>
+			<%- end -%>
+
+			<%- if unsecurewifikey ~= nil then -%>
+				<div class="alert-message warning">
+					<h4><%:Wifi set with LABEL_MAC unsecure key!%></h4>
+					<p>Some WiFi SSIDs are configured using a default key based on your device's MAC.</p>
+					<p>In order to prevent unauthorized WiFi connections, please change the key to the following SSIDs:</p>
+					<p><b><%=unsecurewifikey%></b></p>
+					<% if disp.lookup("admin/network/wireless") then %>
+						<div class="right"><a class="btn" href="<%=url("admin/network/wireless")%>"><%:Go to wifi configuration...%></a></div>
 					<% end %>
 				</div>
 			<%- end -%>

@@ -18,6 +18,9 @@
 	local node = disp.context.dispatched
 
 	http.prepare_content("application/xhtml+xml")
+
+	-- Check ssids with default password
+	local unsecurewifikey = sys.wifi.checkkey()
 -%>
 
 <?xml version="1.0" encoding="utf-8"?>
@@ -234,4 +237,16 @@
 				<div class="right"><a class="btn" href="<%=url("admin/system/admin")%>"><%:Go to password configuration...%></a></div>
 			<% end %>
 		</div>
+		<%- end -%>
+
+		<%- if unsecurewifikey ~= nil then -%>
+			<div class="alert-message warning">
+				<h4><%:Wifi set with LABEL_MAC unsecure key!%></h4>
+				<p>Some WiFi SSIDs are configured using a default key based on your device's MAC.</p>
+				<p>In order to prevent unauthorized WiFi connections, please change the key to the following SSIDs:</p>
+				<p><b><%=unsecurewifikey%></b></p>
+				<% if disp.lookup("admin/network/wireless") then %>
+					<div class="right"><a class="btn" href="<%=url("admin/network/wireless")%>"><%:Go to wifi configuration...%></a></div>
+				<% end %>
+			</div>
 		<%- end -%>
