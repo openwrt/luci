@@ -44,13 +44,13 @@ var iface_patterns_wireless = [
 
 var iface_patterns_virtual = [ ];
 
-var callLuciNetdevs = rpc.declare({
+var callLuciNetworkDevices = rpc.declare({
 	object: 'luci',
 	method: 'getNetworkDevices',
 	expect: { '': {} }
 });
 
-var callLuciWifidevs = rpc.declare({
+var callLuciWirelessDevices = rpc.declare({
 	object: 'luci',
 	method: 'getWirelessDevices',
 	expect: { '': {} }
@@ -62,9 +62,15 @@ var callLuciIfaddrs = rpc.declare({
 	expect: { result: [] }
 });
 
-var callLuciBoardjson = rpc.declare({
+var callLuciBoardJSON = rpc.declare({
 	object: 'luci',
 	method: 'getBoardJSON'
+});
+
+var callLuciHostHints = rpc.declare({
+	object: 'luci',
+	method: 'getHostHints',
+	expect: { '': {} }
 });
 
 var callIwinfoAssoclist = rpc.declare({
@@ -82,7 +88,7 @@ var callIwinfoScan = rpc.declare({
 	expect: { results: [] }
 });
 
-var callNetworkInterfaceStatus = rpc.declare({
+var callNetworkInterfaceDump = rpc.declare({
 	object: 'network.interface',
 	method: 'dump',
 	expect: { 'interface': [] }
@@ -94,15 +100,9 @@ var callNetworkDeviceStatus = rpc.declare({
 	expect: { '': {} }
 });
 
-var callGetProtoHandlers = rpc.declare({
+var callNetworkProtoHandlers = rpc.declare({
 	object: 'network',
 	method: 'get_proto_handlers',
-	expect: { '': {} }
-});
-
-var callGetHostHints = rpc.declare({
-	object: 'luci',
-	method: 'getHostHints',
 	expect: { '': {} }
 });
 
@@ -111,71 +111,8 @@ var _init = null,
     _protocols = {},
     _protospecs = {};
 
-function getInterfaceState(cache) {
-	return callNetworkInterfaceStatus().then(function(state) {
-		if (!Array.isArray(state))
-			throw !1;
-		return state;
-	}).catch(function() {
-		return [];
-	});
-}
-
-function getDeviceState(cache) {
-	return callNetworkDeviceStatus().then(function(state) {
-		if (!L.isObject(state))
-			throw !1;
-		return state;
-	}).catch(function() {
-		return {};
-	});
-}
-
-function getIfaddrState(cache) {
-	return callLuciIfaddrs().then(function(addrs) {
-		if (!Array.isArray(addrs))
-			throw !1;
-		return addrs;
-	}).catch(function() {
-		return [];
-	});
-}
-
-function getNetdevState(cache) {
-	return callLuciNetdevs().then(function(state) {
-		if (!L.isObject(state))
-			throw !1;
-		return state;
-	}).catch(function() {
-		return {};
-	});
-}
-
-function getWifidevState(cache) {
-	return callLuciWifidevs().then(function(state) {
-		if (!L.isObject(state))
-			throw !1;
-		return state;
-	}).catch(function() {
-		return {};
-	});
-}
-
-function getBoardState(cache) {
-	return callLuciBoardjson().then(function(state) {
-		if (!L.isObject(state))
-			throw !1;
-		return state;
-	}).catch(function() {
-		return {};
-	});
-}
-
 function getProtocolHandlers(cache) {
-	return callGetProtoHandlers().then(function(protos) {
-		if (!L.isObject(protos))
-			throw !1;
-
+	return callNetworkProtoHandlers().then(function(protos) {
 		/* Register "none" protocol */
 		if (!protos.hasOwnProperty('none'))
 			Object.assign(protos, { none: { no_device: false } });
@@ -194,16 +131,6 @@ function getProtocolHandlers(cache) {
 		})).then(function() {
 			return protos;
 		});
-	}).catch(function() {
-		return {};
-	});
-}
-
-function getHostHints(cache) {
-	return callGetHostHints().then(function(hosts) {
-		if (!L.isObject(hosts))
-			throw !1;
-		return hosts;
 	}).catch(function() {
 		return {};
 	});
@@ -433,10 +360,15 @@ function maskToPrefix(mask, v6) {
 function initNetworkState(refresh) {
 	if (_state == null || refresh) {
 		_init = _init || Promise.all([
-			getInterfaceState(), getDeviceState(), getBoardState(),
-			getIfaddrState(), getNetdevState(), getWifidevState(),
-			getHostHints(), getProtocolHandlers(),
-			uci.load('network'), uci.load('wireless'), uci.load('luci')
+			L.resolveDefault(callNetworkInterfaceDump(), []),
+			L.resolveDefault(callNetworkDeviceStatus(), {}),
+			L.resolveDefault(callLuciBoardJSON(), {}),
+			L.resolveDefault(callLuciIfaddrs(), []),
+			L.resolveDefault(callLuciNetworkDevices(), {}),
+			L.resolveDefault(callLuciWirelessDevices(), {}),
+			L.resolveDefault(callLuciHostHints(), {}),
+			getProtocolHandlers(),
+			uci.load(['network', 'wireless', 'luci'])
 		]).then(function(data) {
 			var netifd_ifaces = data[0],
 			    netifd_devs   = data[1],
