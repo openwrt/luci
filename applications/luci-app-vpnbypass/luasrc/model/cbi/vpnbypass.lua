@@ -8,6 +8,7 @@ local uci = require "luci.model.uci".cursor()
 local sys = require "luci.sys"
 local http = require "luci.http"
 local dispatcher = require "luci.dispatcher"
+local util = require "luci.util"
 en = h:option(Button, "__toggle")
 if enabledFlag ~= "1" then
 	en.title      = translate("Service is disabled/stopped")
@@ -31,9 +32,9 @@ function en.write()
 		sys.init.start(packageName)
 	end
 	if dispatcher.lookup("admin/vpn") then
-		http.redirect(dispatcher.build_url("admin/vpn/" .. packageName))
+		http.redirect(dispatcher.build_url("admin", "vpn", packageName))
 	else
-		http.redirect(dispatcher.build_url("admin/services/" .. packageName))
+		http.redirect(dispatcher.build_url("admin", "services", packageName))
 	end
 end
 
@@ -76,7 +77,7 @@ di = s4:option(DynamicList, "ipset", translate("Domains to Bypass"),
 		.. [[<a href="]] .. readmeURL .. [[#bypass-domains-formatsyntax" target="_blank">]]
     .. translate("README") .. [[</a> ]] .. translate("for syntax"))
 function d.on_after_commit(map)
-    sys.init.restart("dnsmasq")
+	util.exec("/etc/init.d/dnsmasq restart >/dev/null 2>&1")
 end
 
 return m, d
