@@ -30,7 +30,7 @@ return L.view.extend({
 		var leds = results[0],
 		    usb = results[1],
 		    triggers = {},
-		    trigger, m, s, o;
+		    m, s, o;
 
 		for (var k in leds)
 			for (var i = 0; i < leds[k].triggers.length; i++)
@@ -54,12 +54,12 @@ return L.view.extend({
 		o = s.option(form.Flag, 'default', _('Default state'));
 		o.rmempty = false;
 
-		trigger = s.option(form.ListValue, 'trigger', _('Trigger'));
+		o = s.option(form.ListValue, 'trigger', _('Trigger'));
 		if (usb.devices && usb.devices.length)
 			triggers['usbdev'] = true;
 		if (usb.ports && usb.ports.length)
 			triggers['usbport'] = true;
-		Object.keys(triggers).sort().forEach(function(t) { trigger.value(t, t.replace(/-/g, '')) });
+		Object.keys(triggers).sort().forEach(function(t) { o.value(t, t.replace(/-/g, '')) });
 
 		o = s.option(form.Value, 'delayon', _('On-State Delay'));
 		o.modalonly = true;
@@ -76,8 +76,10 @@ return L.view.extend({
 		o.noaliases = true;
 		o.depends('trigger', 'netdev');
 		o.remove = function(section_id) {
-			var t = trigger.formvalue(section_id);
-			if (t != 'netdev' && t != 'usbdev')
+			var topt = this.map.lookupOption('trigger', section_id),
+			    tval = topt ? topt[0].formvalue(section_id) : null;
+
+			if (tval != 'netdev' && tval != 'usbdev')
 				uci.unset('system', section_id, 'dev');
 		};
 
@@ -96,8 +98,10 @@ return L.view.extend({
 			o.ucioption = 'dev';
 			o.modalonly = true;
 			o.remove = function(section_id) {
-				var t = trigger.formvalue(section_id);
-				if (t != 'netdev' && t != 'usbdev')
+				var topt = this.map.lookupOption('trigger', section_id),
+				    tval = topt ? topt[0].formvalue(section_id) : null;
+
+				if (tval != 'netdev' && tval != 'usbdev')
 					uci.unset('system', section_id, 'dev');
 			}
 			o.value('');
