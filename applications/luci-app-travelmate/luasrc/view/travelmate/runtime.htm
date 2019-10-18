@@ -1,5 +1,5 @@
 <%#
-Copyright 2017-2018 Dirk Brenken (dev@brenken.org)
+Copyright 2017-2019 Dirk Brenken (dev@brenken.org)
 This is free software, licensed under the Apache License, Version 2.0
 -%>
 
@@ -28,6 +28,9 @@ This is free software, licensed under the Apache License, Version 2.0
 			input = json.data.faulty_stations;
 			view.innerHTML = input || "-";
 			view = document.getElementById("value_6");
+			input = json.data.wpa_capabilities;
+			view.innerHTML = input || "-";
+			view = document.getElementById("value_7");
 			input = json.data.last_rundate;
 			view.innerHTML = input || "-";
 	}
@@ -128,9 +131,15 @@ This is free software, licensed under the Apache License, Version 2.0
 	</div>
 </div>
 <div class="cbi-value" id="status_6">
-	<label class="cbi-value-title" for="status_6"><%:Last Run%></label>
+	<label class="cbi-value-title" for="status_6"><%:WPA Capabilities%></label>
 	<div class="cbi-value-field">
 		<span class="runtime" id="value_6">-</span>
+	</div>
+</div>
+<div class="cbi-value" id="status_7">
+	<label class="cbi-value-title" for="status_7"><%:Last Run%></label>
+	<div class="cbi-value-field">
+		<span class="runtime" id="value_7">-</span>
 	</div>
 </div>
 <hr />

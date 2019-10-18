@@ -1,29 +1,16 @@
 <%#
-Copyright 2017-2018 Dirk Brenken (dev@brenken.org)
+Copyright 2017-2019 Dirk Brenken (dev@brenken.org)
 This is free software, licensed under the Apache License, Version 2.0
 -%>
 
 <%-
-	local sys   = require("luci.sys")
-	local utl   = require("luci.util")
-	local dev   = luci.http.formvalue("device")
-	local iw    = luci.sys.wifi.getiwinfo(dev)
-	local label = {translate("WPA"), translate("WPA2"), translate("WPA/WPA2")}
+	local sys = require("luci.sys")
+	local utl = require("luci.util")
+	local dev = luci.http.formvalue("device")
+	local iw  = luci.sys.wifi.getiwinfo(dev)
 
 	if not iw then
 		luci.http.redirect(luci.dispatcher.build_url("admin/services/travelmate/stations"))
-	end
-
-	function format_wifi_encryption(info)
-		if info.wep == true then
-			return translate("WEP")
-		elseif info.wpa > 0 then
-			return "%s (%s/%s)" %{label[info.wpa] or translate("Unknown"), table.concat(info.auth_suites), table.concat(info.group_ciphers)}
-		elseif info.enabled then
-			return translate("Unknown")
-		else
-			return translate("Open")
-		end
 	end
 
 	function percent_wifi_signal(info)
@@ -59,7 +46,7 @@ This is free software, licensed under the Apache License, Version 2.0
 					<%=net.bssid and utl.pcdata(net.bssid)%>
 				</div>
 				<div class="td left" style="text-align: left !important">
-					<%=format_wifi_encryption(net.encryption)%>
+					<%=net.encryption.description%>
 				</div>
 				<div class="td left" style="text-align: left !important">
 					<%=percent_wifi_signal(net)%> %
@@ -70,6 +57,7 @@ This is free software, licensed under the Apache License, Version 2.0
 						<input type="hidden" name="device" value="<%=utl.pcdata(dev)%>"/>
 						<input type="hidden" name="ssid" value="<%=utl.pcdata(net.ssid)%>"/>
 						<input type="hidden" name="bssid" value="<%=utl.pcdata(net.bssid)%>"/>
+						<input type="hidden" name="description" value="<%=net.encryption.description%>"/>
 						<input type="hidden" name="wep" value="<%=net.encryption.wep and 1 or 0%>"/>
 						<%- if net.encryption.wpa then -%>
 							<input type="hidden" name="wpa_version" value="<%=net.encryption.wpa%>"/>
