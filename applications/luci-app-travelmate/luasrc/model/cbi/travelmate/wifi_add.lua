@@ -155,7 +155,7 @@ elseif m.hidden.wpa_version > 0 then
 	end
 end
 
-local login_section = (m.hidden.ssid or "") .. (m.hidden.bssid or "")
+local login_section = (m.hidden.device or "") .. "_" .. (m.hidden.ssid or "") .. "_" .. (m.hidden.bssid or "")
 login_section = login_section:gsub("[^%w_]", "_")
 local cmd = uci:get("travelmate", login_section, "command")
 local cmd_args_default = uci:get("travelmate", login_section, "command_args")
@@ -172,7 +172,7 @@ cmd_list.default = cmd or "none"
 cmd_args.default = cmd_args_default
 
 function wssid.write(self, section, value)
-	newsection = uci:section("wireless", "wifi-iface", "trm_" .. login_section, {
+	newsection = uci:section("wireless", "wifi-iface", login_section, {
 		mode     = "sta",
 		network  = trmiface,
 		device   = m.hidden.device,
@@ -181,7 +181,7 @@ function wssid.write(self, section, value)
 		disabled = "1"
 	})
 
-	if encr:formvalue(section) then
+	if encr then
 		if string.find(encr:formvalue(section), '^wep') then
 			uci:set("wireless", newsection, "encryption", encr:formvalue(section))
 			uci:set("wireless", newsection, "key", wkey:formvalue(section) or "")
@@ -197,7 +197,7 @@ function wssid.write(self, section, value)
 		elseif encr:formvalue(section) ~= "owe" then
 			uci:set("wireless", newsection, "key", wkey:formvalue(section) or "")
 		end
-		if ciph:formvalue(section) and ciph:formvalue(section) ~= "auto" then
+		if ciph and ciph:formvalue(section) ~= "auto" then
 			uci:set("wireless", newsection, "encryption", encr:formvalue(section) .. "+" .. ciph:formvalue(section))
 		else
 			uci:set("wireless", newsection, "encryption", encr:formvalue(section))
@@ -206,8 +206,6 @@ function wssid.write(self, section, value)
 		uci:set("wireless", newsection, "encryption", "none")
 	end
 
-	local login_section = (wssid:formvalue(section) or "") .. (bssid:formvalue(section) or "")
-	login_section = login_section:gsub("[^%w_]", "_")
 	if not uci:get("travelmate", login_section) and cmd_list:formvalue(section) ~= "none" then
 		uci:set("travelmate", login_section, "login")
 	end
