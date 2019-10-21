@@ -117,7 +117,7 @@ function renderKeys(keys) {
 }
 
 function saveKeys(keys) {
-	return fs.write('/etc/dropbear/authorized_keys', keys.join('\n') + '\n')
+	return fs.write('/etc/dropbear/authorized_keys', keys.join('\n') + '\n', 384 /* 0600 */)
 		.then(renderKeys.bind(this, keys))
 		.catch(function(e) { L.ui.addNotification(null, E('p', e.message)) })
 		.finally(L.ui.hideModal);
