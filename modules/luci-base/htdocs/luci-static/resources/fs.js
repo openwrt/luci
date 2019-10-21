@@ -50,7 +50,7 @@ callFileRead = rpc.declare({
 callFileWrite = rpc.declare({
 	object: 'file',
 	method: 'write',
-	params: [ 'path', 'data' ]
+	params: [ 'path', 'data', 'mode' ]
 });
 
 callFileRemove = rpc.declare({
@@ -177,13 +177,17 @@ var FileSystem = L.Class.extend(/** @lends LuCI.fs.prototype */ {
 	 * The file data to write. If it is null, it will be set to an empty
 	 * string.
 	 *
+	 * @param {number} [mode]
+	 * The permissions to use on file creation. Default is 420 (0644).
+	 *
 	 * @returns {Promise<number>}
 	 * Returns a promise resolving to `0` or rejecting with an error stating
 	 * the failure reason.
 	 */
-	write: function(path, data) {
+	write: function(path, data, mode) {
 		data = (data != null) ? String(data) : '';
-		return callFileWrite(path, data).then(handleRpcReply.bind(this, { '': 0 }));
+		mode = (mode != null) ? mode : 420; // 0644
+		return callFileWrite(path, data, mode).then(handleRpcReply.bind(this, { '': 0 }));
 	},
 
 	/**
