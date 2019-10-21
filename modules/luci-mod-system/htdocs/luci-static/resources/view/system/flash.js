@@ -517,7 +517,7 @@ return L.view.extend({
 		o.forcewrite = true;
 		o.rows = 30;
 		o.load = function(section_id) {
-			return fs.read('/etc/sysupgrade.conf', '');
+			return L.resolveDefault(fs.read('/etc/sysupgrade.conf'), '');
 		};
 
 
