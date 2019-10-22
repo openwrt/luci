@@ -141,30 +141,30 @@ if s ~= nil then
 			wkey.default = s.key
 		end
 	end
-
-	local login_section = (s.ssid or "") .. (s.bssid or "")
-	login_section = login_section:gsub("[^%w_]", "_")
-	local cmd = uci:get("travelmate", login_section, "command")
-	local cmd_args_default = uci:get("travelmate", login_section, "command_args")
-	cmd_list = m:field(ListValue, "cmdlist", translate("Auto Login Script"),
-		translate("External script reference which will be called for automated captive portal logins."))
-	cmd_args = m:field(Value, "cmdargs", translate("Optional Arguments"),
-		translate("Space separated list of additional arguments passed to the Auto Login Script, i.e. username and password"))
-	for _, z in ipairs(scripts) do
-		cmd_list:value(z)
-		cmd_args:depends("cmdlist", z)
-	end
-	cmd_list:value("none")
-	cmd_list.default = cmd or "none"
-	cmd_args.default = cmd_args_default
 else
 	m.on_cancel()
 end
 
+local login_section = (s.device or "") .. "_" .. (s.ssid or "") .. "_" .. (s.bssid or "")
+login_section = login_section:gsub("[^%w_]", "_")
+local cmd = uci:get("travelmate", login_section, "command")
+local cmd_args_default = uci:get("travelmate", login_section, "command_args")
+cmd_list = m:field(ListValue, "cmdlist", translate("Auto Login Script"),
+	translate("External script reference which will be called for automated captive portal logins."))
+cmd_args = m:field(Value, "cmdargs", translate("Optional Arguments"),
+	translate("Space separated list of additional arguments passed to the Auto Login Script, i.e. username and password"))
+for _, z in ipairs(scripts) do
+	cmd_list:value(z)
+	cmd_args:depends("cmdlist", z)
+end
+cmd_list:value("none")
+cmd_list.default = cmd or "none"
+cmd_args.default = cmd_args_default
+
 function wssid.write(self, section, value)
 	uci:set("wireless", m.hidden.cfg, "ssid", wssid:formvalue(section))
 	uci:set("wireless", m.hidden.cfg, "bssid", bssid:formvalue(section))
-	if encr:formvalue(section) then
+	if encr then
 		if string.find(encr:formvalue(section), '^wep') then
 			uci:set("wireless", m.hidden.cfg, "encryption", encr:formvalue(section))
 			uci:set("wireless", m.hidden.cfg, "key", wkey:formvalue(section) or "")
@@ -181,14 +181,13 @@ function wssid.write(self, section, value)
 		if encr:formvalue(section) ~= "owe" then
 			uci:set("wireless", m.hidden.cfg, "key", wkey:formvalue(section) or "")
 		end
-		if ciph:formvalue(section) and ciph:formvalue(section) ~= "auto" then
+		if ciph and ciph:formvalue(section) ~= "auto" then
 			uci:set("wireless", m.hidden.cfg, "encryption", encr:formvalue(section) .. "+" .. ciph:formvalue(section))
 		else
 			uci:set("wireless", m.hidden.cfg, "encryption", encr:formvalue(section))
 		end
 	end
-	local login_section = (wssid:formvalue(section) or "") .. (bssid:formvalue(section) or "")
-	login_section = login_section:gsub("[^%w_]", "_")
+
 	if not uci:get("travelmate", login_section) and cmd_list:formvalue(section) ~= "none" then
 		uci:set("travelmate", login_section, "login")
 	end

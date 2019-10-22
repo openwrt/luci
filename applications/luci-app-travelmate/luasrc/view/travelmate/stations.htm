@@ -1,5 +1,5 @@
 <%#
-Copyright 2017-2018 Dirk Brenken (dev@brenken.org)
+Copyright 2017-2019 Dirk Brenken (dev@brenken.org)
 This is free software, licensed under the Apache License, Version 2.0
 -%>
 
@@ -100,7 +100,7 @@ This is free software, licensed under the Apache License, Version 2.0
 
 <div class="cbi-map">
 	<div class="cbi-map-descr">
-		<%=translatef("Provides an overview of all configured uplinks for the travelmate interface (%s). You can edit, delete or re-order existing uplinks or scan for a new one. The currently used uplink is emphasized in blue, faulty stations in red.", trmiface)%>
+		<%=translatef("Provides an overview of all configured uplinks for the travelmate interface (%s). You can edit, remove or re-order/prioritize existing uplinks or scan for new ones. The currently used uplink is emphasized in blue, faulty stations in red.", trmiface)%>
 	</div>
 
 	<div class="cbi-section">
@@ -131,7 +131,7 @@ This is free software, licensed under the Apache License, Version 2.0
 						<input class="cbi-button cbi-button-up" type="button" value="<%:Up%>" onclick="location.href='<%=luci.dispatcher.build_url('admin/services/travelmate/wifiorder')%>?cfg=<%=section%>&amp;dir=up'" alt="<%:Move up%>" title="<%:Move up%>" />
 						<input class="cbi-button cbi-button-down" type="button" value="<%:Down%>" onclick="location.href='<%=luci.dispatcher.build_url('admin/services/travelmate/wifiorder')%>?cfg=<%=section%>&amp;dir=down'" alt="<%:Move down%>" title="<%:Move down%>" />
 						<input class="cbi-button cbi-button-edit" type="button" value="<%:Edit%>" onclick="location.href='<%=luci.dispatcher.build_url('admin/services/travelmate/wifiedit')%>?cfg=<%=section%>'" title="<%:Edit this Uplink%>" />
-						<input class="cbi-button cbi-button-remove" type="button" value="<%:Delete%>" onclick="location.href='<%=luci.dispatcher.build_url('admin/services/travelmate/wifidelete')%>?cfg=<%=section%>'" title="<%:Delete this Uplink%>" />
+						<input class="cbi-button cbi-button-remove" type="button" value="<%:Remove%>" onclick="location.href='<%=luci.dispatcher.build_url('admin/services/travelmate/wifidelete')%>?cfg=<%=section%>'" title="<%:Remove this Uplink%>" />
 					</div>
 				</div>
 			</div>
