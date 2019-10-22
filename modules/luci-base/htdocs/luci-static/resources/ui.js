@@ -2021,6 +2021,9 @@ return L.Class.extend({
 			document.querySelectorAll('[data-tab]').forEach(function(tab) {
 				var parent = tab.parentNode;
 
+				if (L.dom.matches(tab, 'li') && L.dom.matches(parent, 'ul.cbi-tabmenu'))
+					return;
+
 				if (!parent.hasAttribute('data-tab-group'))
 					parent.setAttribute('data-tab-group', groups.length);
 
@@ -2053,6 +2056,9 @@ return L.Class.extend({
 			    groupId = +group.getAttribute('data-tab-group'),
 			    selected = null;
 
+			if (group.getAttribute('data-initialized') === 'true')
+				return;
+
 			for (var i = 0, pane; pane = panes[i]; i++) {
 				var name = pane.getAttribute('data-tab'),
 				    title = pane.getAttribute('data-tab-title'),
@@ -2072,6 +2078,7 @@ return L.Class.extend({
 			}
 
 			group.parentNode.insertBefore(menu, group);
+			group.setAttribute('data-initialized', true);
 
 			if (selected === null) {
 				selected = this.getActiveTabId(panes[0]);
