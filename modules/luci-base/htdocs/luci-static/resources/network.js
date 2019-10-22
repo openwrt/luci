@@ -2159,6 +2159,27 @@ Protocol = L.Class.extend(/** @lends LuCI.Network.Protocol.prototype */ {
 	},
 
 	/**
+	 * Query the gateway (nexthop) of the IPv6 default route associated with
+	 * this logical interface.
+	 *
+	 * @returns {string}
+	 * Returns a string containing the IPv6 nexthop address of the associated
+	 * default route or `null` if no default route was found.
+	 */
+	getGateway6Addr: function() {
+		var routes = this._ubus('route');
+
+		if (Array.isArray(routes))
+			for (var i = 0; i < routes.length; i++)
+				if (typeof(routes[i]) == 'object' &&
+				    routes[i].target == '::' &&
+				    routes[i].mask == 0)
+				    return routes[i].nexthop;
+
+		return null;
+	},
+
+	/**
 	 * Query the IPv6 DNS servers associated with the logical interface.
 	 *
 	 * @returns {string[]}
