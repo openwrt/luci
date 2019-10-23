@@ -68,7 +68,7 @@ return network.registerProtocol('qmi', {
 		s.taboption('general', form.Value, 'pincode', _('PIN'));
 
 		o = s.taboption('general', form.ListValue, 'auth', _('Authentication Type'));
-		o.value('both', 'PAP/CHAP (both)');
+		o.value('both', 'PAP/CHAP');
 		o.value('pap', 'PAP');
 		o.value('chap', 'CHAP');
 		o.value('none', 'NONE');
