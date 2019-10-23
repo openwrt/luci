@@ -781,6 +781,38 @@ function handleOpkg(ev)
 	});
 }
 
+function handleUpload(ev)
+{
+	var path = '/tmp/upload.ipk';
+	return L.ui.showModalUpload(path)
+	.then(L.bind(function(btn, res) {
+		L.showModal(_('Manually install package'), [
+			E('p', {}, _('Installing packages from untrusted sources is a potential security risk! Really attempt to install <em>%h</em>?').format(res.name)),
+			E('ul', {}, [
+				res.size ? E('li', {}, '%s: %1024.2mB'.format(_('Size'), res.size)) : '',
+				res.checksum ? E('li', {}, '%s: %s'.format(_('MD5'), res.checksum)) : '',
+				res.sha256sum ? E('li', {}, '%s: %s'.format(_('SHA256'), res.sha256sum)) : ''
+			]),
+			E('div', { 'class': 'right' }, [
+				E('div', {
+					'click': L.hideModal,
+					'class': 'btn cbi-button-neutral'
+				}, _('Cancel')), ' ',
+				E('div', {
+					'class': 'btn cbi-button-action',
+					'data-command': 'install',
+					'data-package': path,
+					'click': handleOpkg
+				}, _('Install'))
+			])
+		]);
+	}, this, ev.target))
+	.catch(function(e) { L.ui.addNotification(null, E('p', e.message)) })
+	.finally(L.bind(function(btn) {
+		btn.firstChild.data = _('Upload Package…');
+	}, this, ev.target));
+}
+
 function updateLists()
 {
 	cbi_update_table('#packages', [],
