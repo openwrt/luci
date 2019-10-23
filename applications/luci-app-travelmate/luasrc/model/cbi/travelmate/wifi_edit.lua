@@ -48,6 +48,8 @@ if s ~= nil then
 
 			wkey = m:field(Value, "key", translate("Passphrase"))
 			wkey.datatype = "wepkey"
+			wkey.password = true
+			wkey.default = s.key
 		elseif string.match(s.encryption, '^wpa') then
 			encr = m:field(ListValue, "encryption", translate("Encryption"))
 			encr:value("wpa", "WPA Enterprise")
