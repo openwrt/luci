@@ -68,7 +68,7 @@ return network.registerProtocol('qmi', {
 		s.taboption('general', form.Value, 'pincode', _('PIN'));
 
 		o = s.taboption('general', form.ListValue, 'auth', _('Authentication Type'));
-		o.value('both', 'PAP/CHAP (both)');
+		o.value('both', 'PAP/CHAP');
 		o.value('pap', 'PAP');
 		o.value('chap', 'CHAP');
 		o.value('none', 'NONE');
@@ -97,5 +97,11 @@ return network.registerProtocol('qmi', {
 		o = s.taboption('advanced', form.Value, 'mtu', _('Override MTU'));
 		o.placeholder = dev ? (dev.getMTU() || '1500') : '1500';
 		o.datatype    = 'max(9200)';
+		
+		o = s.taboption('general', form.ListValue, 'pdptype', _('PDP Type'));
+		o.value('ipv4v6', 'IPv4/IPv6');
+		o.value('ipv4', 'IPv4');
+		o.value('ipv6', 'IPv6');
+		o.default = 'ipv4v6';
 	}
 });
