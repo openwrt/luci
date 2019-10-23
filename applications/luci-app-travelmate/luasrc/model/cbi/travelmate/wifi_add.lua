@@ -172,6 +172,8 @@ cmd_list.default = cmd or "none"
 cmd_args.default = cmd_args_default
 
 function wssid.write(self, section, value)
+	login_section = (m.hidden.device or "") .. "_" .. (wssid:formvalue(section) or "") .. "_" .. (bssid:formvalue(section) or "")
+	login_section = login_section:gsub("[^%w_]", "_")
 	newsection = uci:section("wireless", "wifi-iface", login_section, {
 		mode     = "sta",
 		network  = trmiface,
