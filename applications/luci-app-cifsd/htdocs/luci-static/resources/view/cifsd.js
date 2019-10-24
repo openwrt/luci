@@ -62,7 +62,7 @@ return L.view.extend({
 		o = s.option(form.Flag, 'read_only', _('Read-only'));
 		o.enabled = 'yes';
 		o.disabled = 'no';
-		o.default = 'yes';
+		o.default = 'no';
 
 		s.option(form.Flag, 'force_root', _('Force Root'));
 
