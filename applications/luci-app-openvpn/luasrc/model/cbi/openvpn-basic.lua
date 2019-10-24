@@ -34,7 +34,7 @@ local basicParams = {
 	{ FileUpload,"key","/etc/easy-rsa/keys/some-client.key", translate("Local private key") },
 }
 
-local has_ipv6 = fs.access("/proc/net/ipv6_route")
+local has_ipv6 = nixio.fs.access("/proc/net/ipv6_route")
 if has_ipv6 then
 	table.insert( basicParams, { ListValue,
 		"proto",
