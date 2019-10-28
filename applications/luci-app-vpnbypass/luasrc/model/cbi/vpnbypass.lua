@@ -1,45 +1,32 @@
 local readmeURL = "https://github.com/openwrt/packages/blob/master/net/vpnbypass/files/README.md"
+local uci = require "luci.model.uci".cursor()
+local sys = require "luci.sys"
+local util = require "luci.util"
+local packageName = "vpnbypass"
 
 m = Map("vpnbypass", translate("VPN Bypass Settings"))
 
-h = m:section(NamedSection, "config", "vpnbypass", translate("Service Status"))
-local packageName = "vpnbypass"
-local uci = require "luci.model.uci".cursor()
-local sys = require "luci.sys"
-local http = require "luci.http"
-local dispatcher = require "luci.dispatcher"
-local util = require "luci.util"
-en = h:option(Button, "__toggle")
-if enabledFlag ~= "1" then
-	en.title      = translate("Service is disabled/stopped")
-	en.inputtitle = translate("Enable/Start")
-	en.inputstyle = "apply important"
-else
-	en.title      = translate("Service is enabled/started")
-	en.inputtitle = translate("Stop/Disable")
-	en.inputstyle = "reset important"
+local tmpfsVersion = tostring(util.trim(sys.exec("opkg list-installed " .. packageName .. " | awk '{print $3}'")))
+if not tmpfsVersion or tmpfsVersion == "" then
+  tmpfsStatusCode = -1
+  tmpfsVersion = ""
+  tmpfsStatus = packageName .. " " .. translate("is not installed or not found")
+else  
+  tmpfsVersion = " [" .. packageName .. " " .. tmpfsVersion .. "]"
 end
-function en.write()
-	enabledFlag = enabledFlag == "1" and "0" or "1"
-	uci:set(packageName, "config", "enabled", enabledFlag)
-	uci:save(packageName)
-	uci:commit(packageName)
-	if enabledFlag == "0" then
-		sys.init.stop(packageName)
-		sys.init.disable(packageName)
-	else
-		sys.init.enable(packageName)
-		sys.init.start(packageName)
-	end
-	if dispatcher.lookup("admin/vpn") then
-		http.redirect(dispatcher.build_url("admin", "vpn", packageName))
-	else
-		http.redirect(dispatcher.build_url("admin", "services", packageName))
-	end
+local tmpfsStatus = "Stopped"
+if sys.call("iptables -t mangle -L | grep -q VPNBYPASS") == 0 then
+	tmpfsStatus = "Running"
 end
+
+h = m:section(NamedSection, "config", packageName, translate("Service Status") .. tmpfsVersion)
+ss = h:option(DummyValue, "_dummy", translate("Service Status"))
+ss.template = packageName .. "/status"
+ss.value = tmpfsStatus
+buttons = h:option(DummyValue, "_dummy")
+buttons.template = packageName .. "/buttons"
 
 s = m:section(NamedSection, "config", "vpnbypass", translate("VPN Bypass Rules"))
-
 -- Local Ports
 p1 = s:option(DynamicList, "localport", translate("Local Ports to Bypass"), translate("Local ports to trigger VPN Bypass"))
 p1.datatype    = "portrange"
