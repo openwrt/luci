@@ -148,6 +148,11 @@ return L.view.extend({
 		o.depends('trigger', 'switch0');
 		o.depends('trigger', 'switch1');
 
+		o = s.option(form.Value, 'speed_mask', _('Switch Speed Mask'));
+		o.modalonly = true;
+		o.depends('trigger', 'switch0');
+		o.depends('trigger', 'switch1');
+
 		return m.render();
 	}
 });
