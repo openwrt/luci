@@ -4,8 +4,6 @@ local sys = require "luci.sys"
 local util = require "luci.util"
 local packageName = "vpnbypass"
 
-m = Map("vpnbypass", translate("VPN Bypass Settings"))
-
 local tmpfsVersion = tostring(util.trim(sys.exec("opkg list-installed " .. packageName .. " | awk '{print $3}'")))
 if not tmpfsVersion or tmpfsVersion == "" then
   tmpfsStatusCode = -1
@@ -18,6 +16,8 @@ local tmpfsStatus = "Stopped"
 if sys.call("iptables -t mangle -L | grep -q VPNBYPASS") == 0 then
 	tmpfsStatus = "Running"
 end
+
+m = Map("vpnbypass", translate("VPN Bypass Settings"))
 
 h = m:section(NamedSection, "config", packageName, translate("Service Status") .. tmpfsVersion)
 ss = h:option(DummyValue, "_dummy", translate("Service Status"))

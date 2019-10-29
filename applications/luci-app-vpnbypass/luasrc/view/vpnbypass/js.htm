@@ -1,3 +1,4 @@
+<%- if luci.dispatcher.lookup("admin/vpn") then node = "vpn" else node = "services" end -%>
 
 <script type="text/javascript">
 //<![CDATA[
@@ -32,7 +33,7 @@
 	btn_enable.disabled = true;
 	btn_disable.disabled = true;
   spinner(btn_spinner, 1);
-	xhr.get('<%=luci.dispatcher.build_url("admin", "services", "vpnbypass", "action")%>/' + action.name, null,
+	xhr.get('<%=luci.dispatcher.build_url("admin", node, "vpnbypass", "action")%>/' + action.name, null,
 		function (x) {
 			if (!x) {
 				return;
