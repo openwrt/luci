@@ -114,7 +114,7 @@ e2.enabled = "10"
 e2.rmempty = false
 
 e3 = e:option(Flag, "adb_forcedns", translate("Force Local DNS"),
-	translate("Redirect all DNS queries from 'lan' zone to the local resolver, applies to udp and tcp protocol on ports 53, 853 and 5353."))
+	translate("Redirect all DNS queries from 'lan' zone to the local resolver, applies to UDP and TCP protocol on port 53, 853 and 5353."))
 e3.rmempty = false
 
 e4 = e:option(Value, "adb_maxqueue", translate("Max. Download Queue"),
@@ -132,7 +132,7 @@ e5.enabled = "true"
 e5.rmempty = false
 
 e6 = e:option(Flag, "adb_report", translate("DNS Query Report"),
-	translate("Gather dns related network traffic via tcpdump to provide a DNS Query Report on demand. ")
+	translate("Gather DNS related network traffic via tcpdump to provide a DNS Query Report on demand. ")
 	..translate("Please note: this needs manual 'tcpdump-mini' package installation."))
 e6.rmempty = false
 
@@ -150,12 +150,12 @@ e8.default = "/tmp"
 e8.rmempty = true
 
 e9 = e:option(Flag, "adb_mail", translate("E-Mail Notification"),
-	translate("Send notification E-Mails in case of a processing error or if domain count is &le; 0. ")
+	translate("Send notification e-mails in case of a processing error or if domain count is &le; 0. ")
 	.. translate("Please note: this needs manual 'msmtp' package installation and setup."))
 e9.rmempty = true
 
 e10 = e:option(Value, "adb_mreceiver", translate("E-Mail Receiver Address"),
-	translate("Receiver address for adblock notification E-Mails."))
+	translate("Receiver address for adblock notification e-mails."))
 e10:depends("adb_mail", 1)
 e10.rmempty = true
 
@@ -195,13 +195,13 @@ e25.default = "53 853 5353"
 e25.optional = true
 
 e26 = e:option(Flag, "adb_dnsinotify", translate("DNS Inotify"),
-	translate("Disable adblock triggered restarts and the 'DNS File Reset' for dns backends with autoload features."))
+	translate("Disable adblock triggered restarts and the 'DNS File Reset' for DNS backends with autoload features."))
 e26.default = nil
 e26.enabled = "true"
 e26.optional = true
 
 e27 = e:option(Flag, "adb_dnsflush", translate("Flush DNS Cache"),
-	translate("Flush DNS Cache after adblock processing."))
+	translate("Flush DNS cache after adblock processing."))
 e27.default = nil
 e27.optional = true
 
@@ -242,24 +242,24 @@ e31.datatype = "range(1,10)"
 e31.default = 1
 e31.optional = true
 
-e32 = e:option(Value, "adb_msender", translate("E-Mail Sender Address"),
-	translate("Sender address for adblock notification E-Mails."))
+e32 = e:option(Value, "adb_msender", translate("E-mail Sender Address"),
+	translate("Sender address for adblock notification e-mails."))
 e32.default = "no-reply@adblock"
 e32.optional = true
 
-e33 = e:option(Value, "adb_mtopic", translate("E-Mail Topic"),
-	translate("Topic for adblock notification E-Mails."))
+e33 = e:option(Value, "adb_mtopic", translate("E-mail Topic"),
+	translate("Topic for adblock notification e-mails."))
 e33.default = "adblock notification"
 e33.optional = true
 
-e34 = e:option(Value, "adb_mprofile", translate("E-Mail Profile"),
-	translate("Mail profile used in 'msmtp' for adblock notification E-Mails."))
+e34 = e:option(Value, "adb_mprofile", translate("E-mail Profile"),
+	translate("Mail profile used in 'msmtp' for adblock notification e-mails."))
 e34.default = "adb_notify"
 e34.optional = true
 
-e35 = e:option(Value, "adb_mcnt", translate("E-Mail Notification Count"),
-	translate("Raise the minimum notification count, to get E-Mails if the overall count is less or equal to the given limit (default 0), ")
-	.. translate("e.g. to receive an E-Mail notification with every adblock run set this value to 200000."))
+e35 = e:option(Value, "adb_mcnt", translate("E-mail Notification Count"),
+	translate("Raise the minimum notification count, to get e-mails if the overall count is less or equal to the given limit (default 0), ")
+	.. translate("e.g. to receive an e-mail notification with every adblock run set this value to 200000."))
 e35.default = 0
 e35.datatype = "min(0)"
 e35.optional = true
