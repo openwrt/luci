@@ -12,7 +12,7 @@ LUCI_TYPE:=mod
 LUCI_BASENAME:=base
 
 LUCI_TITLE:=LuCI core libraries
-LUCI_DEPENDS:=+lua +luci-lib-nixio +luci-lib-ip +rpcd +libubus-lua +luci-lib-jsonc +liblucihttp-lua +rpcd-mod-file +cgi-io
+LUCI_DEPENDS:=+lua +luci-lib-nixio +luci-lib-ip +rpcd +libubus-lua +luci-lib-jsonc +liblucihttp-lua +rpcd-mod-file +rpcd-mod-luci +cgi-io
 
 
 PKG_SOURCE:=v1.0.0.tar.gz
