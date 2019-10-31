@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2019-10-29 18:46+0000\n"
+"PO-Revision-Date: 2019-10-30 03:22+0000\n"
 "Last-Translator: ssantos <ssantos@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsadblock/de/>\n"
@@ -62,7 +62,7 @@ msgstr "Backupverzeichnis"
 
 #: applications/luci-app-adblock/luasrc/view/adblock/report.htm:106
 msgid "Blacklist"
-msgstr "Blacklist"
+msgstr "Negativliste"
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:169
 msgid "Blacklist File"
@@ -229,7 +229,7 @@ msgstr "E-Mail-Thema"
 
 #: applications/luci-app-adblock/luasrc/controller/adblock.lua:24
 msgid "Edit Blacklist"
-msgstr "Blacklist bearbeiten"
+msgstr "Negativliste bearbeiten"
 
 #: applications/luci-app-adblock/luasrc/controller/adblock.lua:26
 msgid "Edit Configuration"
@@ -273,27 +273,31 @@ msgstr ""
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:203
 msgid "Flush DNS Cache"
-msgstr ""
+msgstr "DNS-Cache leeren"
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:204
 msgid "Flush DNS Cache after adblock processing."
-msgstr ""
+msgstr "Leeren des DNS-Caches nach der Adblockverarbeitung."
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:12
 msgid ""
 "For further information <a href=\"%s\" target=\"_blank\">check the online "
 "documentation</a>"
 msgstr ""
+"Für weitere Informationen <a href=\"%s\" target=\"_blank\">lesen Sie die "
+"Online-Dokumentation</a>"
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:122
 msgid ""
 "For further performance improvements you can raise this value, e.g. '8' or "
 "'16' should be safe."
 msgstr ""
+"Für weitere Leistungssteigerungen können Sie diesen Wert erhöhen, z.B. \"8\" "
+"oder \"16\" sollte sicher sein."
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:116
 msgid "Force Local DNS"
-msgstr ""
+msgstr "Lokales DNS erzwingen"
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:170
 msgid "Full path to the blacklist file."
@@ -301,7 +305,7 @@ msgstr ""
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:176
 msgid "Full path to the whitelist file."
-msgstr ""
+msgstr "Vollständiger Pfad zur Datei der Positivliste."
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:135
 msgid ""
@@ -313,11 +317,11 @@ msgstr ""
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/configuration_tab.lua:9
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/whitelist_tab.lua:10
 msgid "Input file not found, please check your configuration."
-msgstr ""
+msgstr "Eingabedatei nicht gefunden, bitte überprüfen Sie Ihre Konfiguration."
 
 #: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:193
 msgid "Last Run"
-msgstr ""
+msgstr "Letzter Lauf"
 
 #: applications/luci-app-adblock/luasrc/view/adblock/report.htm:307
 msgid "Latest DNS Queries"
@@ -328,11 +332,15 @@ msgid ""
 "List of available network interfaces. Usually the startup will be triggered "
 "by the 'wan' interface."
 msgstr ""
+"Liste der verfügbaren Netzwerkschnittstellen. Normalerweise wird der Start "
+"durch die 'wan'-Schnittstelle ausgelöst."
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:25
 msgid ""
 "List of supported DNS backends with their default list export directory."
 msgstr ""
+"Liste der unterstützten DNS-Backends mit dem Standardexportverzeichnis der "
+"Liste."
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:35
 msgid ""
@@ -343,6 +351,8 @@ msgstr ""
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:44
 msgid "List of supported and fully pre-configured download utilities."
 msgstr ""
+"Liste der unterstützten und vollständig vorkonfigurierten Download-"
+"Hilfsprogramme."
 
 #: applications/luci-app-adblock/luasrc/view/adblock/query.htm:21
 #: applications/luci-app-adblock/luasrc/view/adblock/report.htm:221
@@ -360,7 +370,7 @@ msgstr ""
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:109
 msgid "Low Priority Service"
-msgstr ""
+msgstr "Dienst mit niedriger Priorität"
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:256
 msgid "Mail profile used in 'msmtp' for adblock notification E-Mails."
@@ -368,7 +378,7 @@ msgstr ""
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:120
 msgid "Max. Download Queue"
-msgstr ""
+msgstr "Max. Download-Warteschlange"
 
 #: applications/luci-app-adblock/luasrc/view/adblock/report.htm:26
 #: applications/luci-app-adblock/luasrc/view/adblock/report.htm:69
@@ -383,10 +393,12 @@ msgstr "Nein"
 msgid ""
 "Options for further tweaking in case the defaults are not suitable for you."
 msgstr ""
+"Optionen für weitere Optimierungen, falls die Standardeinstellungen nicht "
+"für Sie geeignet sind."
 
 #: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:187
 msgid "Overall Domains"
-msgstr ""
+msgstr "Gesamtdomänen"
 
 #: applications/luci-app-adblock/luasrc/controller/adblock.lua:18
 msgid "Overview"
@@ -398,6 +410,8 @@ msgid ""
 "Please add only one domain per line. Comments introduced with '#' are "
 "allowed - ip addresses, wildcards and regex are not."
 msgstr ""
+"Bitte fügen Sie nur eine Domain pro Zeile hinzu. Kommentare, die mit '#' "
+"eingegeben werden, sind erlaubt - IP-Adressen, Wildcards und regex nicht."
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/blacklist_tab.lua:19
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/configuration_tab.lua:18
@@ -415,11 +429,11 @@ msgstr ""
 
 #: applications/luci-app-adblock/luasrc/view/adblock/query.htm:52
 msgid "Query"
-msgstr ""
+msgstr "Abfrage"
 
 #: applications/luci-app-adblock/luasrc/controller/adblock.lua:27
 msgid "Query domains"
-msgstr ""
+msgstr "Domainabfrage"
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:261
 msgid ""
@@ -442,11 +456,11 @@ msgstr ""
 #: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:50
 #: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:111
 msgid "Refresh"
-msgstr ""
+msgstr "Aktualisieren"
 
 #: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:208
 msgid "Refresh Blocklist Sources"
-msgstr ""
+msgstr "Aktualisieren der Blocklistenquellen"
 
 #: applications/luci-app-adblock/luasrc/view/adblock/report.htm:281
 msgid "Refresh Report"
@@ -494,15 +508,15 @@ msgstr ""
 
 #: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:37
 msgid "Resume"
-msgstr ""
+msgstr "Wiederaufnehmen"
 
 #: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:149
 msgid "Runtime Information"
-msgstr ""
+msgstr "Laufzeitinformationen"
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:84
 msgid "SSL req."
-msgstr ""
+msgstr "SSL-Anf."
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/blacklist_tab.lua:27
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/configuration_tab.lua:26
@@ -525,12 +539,16 @@ msgid ""
 "Set the nice level to 'low priority' and the adblock background processing "
 "will take fewer resources from the system."
 msgstr ""
+"Stellen Sie den nice-level auf 'niedrige Priorität' und die Adblock-"
+"Hintergrundverarbeitung wird weniger Ressourcen vom System benötigen."
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:121
 msgid ""
 "Size of the download queue to handle downloads &amp; list processing in "
 "parallel (default '4')."
 msgstr ""
+"Größe der Download-Warteschlange für die parallele Verarbeitung von "
+"Downloads und Listen (Standard'4')."
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:193
 msgid ""
@@ -548,17 +566,17 @@ msgstr ""
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:54
 msgid "Startup Trigger"
-msgstr ""
+msgstr "Startup-Trigger"
 
 #: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:26
 #: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:48
 #: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:109
 msgid "Suspend"
-msgstr ""
+msgstr "Aussetzen"
 
 #: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:200
 msgid "Suspend / Resume Adblock"
-msgstr ""
+msgstr "Adblock Aussetzen /  Wiederaufnehmen"
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:186
 msgid "TLD Compression Threshold"
@@ -578,17 +596,19 @@ msgstr ""
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:165
 msgid "Target directory for the generated blocklist 'adb_list.overall'."
-msgstr ""
+msgstr "Zielverzeichnis für die generierte Blockliste 'adb_list.overall'."
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/blacklist_tab.lua:18
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/configuration_tab.lua:17
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/whitelist_tab.lua:18
 msgid "The file size is too large for online editing in LuCI (&ge; 100 KB)."
 msgstr ""
+"Die Größe der Datei ist für die Onlinebearbeitung in LuCI zu groß (&ge; 100 "
+"KB)."
 
 #: applications/luci-app-adblock/luasrc/view/adblock/logread.htm:31
 msgid "The syslog output, pre-filtered for adblock related messages only."
-msgstr ""
+msgstr "Die Syslog-Ausgabe, vorgefiltert nur für adblockbezogene Nachrichten."
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:111
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:210
@@ -597,28 +617,37 @@ msgstr ""
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:240
 msgid "This change requires a manual service stop/re-start to take effect."
 msgstr ""
+"Diese Änderung erfordert ein manueller Stop/Neustart des Diensts zum Wirksam "
+"werden."
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/blacklist_tab.lua:31
 msgid ""
 "This form allows you to modify the content of the adblock blacklist (%s)."
 msgstr ""
+"Mit diesem Formular können Sie den Inhalt der Adblock-Blacklist (%s) ändern."
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/whitelist_tab.lua:31
 msgid ""
 "This form allows you to modify the content of the adblock whitelist (%s)."
 msgstr ""
+"Mit diesem Formular können Sie den Inhalt der Adblock-Positivliste (%s) "
+"ändern."
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/configuration_tab.lua:30
 msgid ""
 "This form allows you to modify the content of the main adblock configuration "
 "file (/etc/config/adblock)."
 msgstr ""
+"Dieses Formular ermöglicht es Ihnen, den Inhalt der Hauptkonfigurationsdatei "
+"von Adblock (/etc/config/adblock) zu ändern."
 
 #: applications/luci-app-adblock/luasrc/view/adblock/query.htm:49
 msgid ""
 "This form allows you to query active block lists for certain domains, e.g. "
 "for whitelisting."
 msgstr ""
+"Mit diesem Formular können Sie aktive Blocklisten für bestimmte Domänen "
+"abfragen, z.B. zum positiv listen."
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:129
 msgid ""
@@ -636,6 +665,8 @@ msgid ""
 "To overwrite the default path use the 'DNS Directory' option in the extra "
 "section below."
 msgstr ""
+"Um den Standardpfad zu überschreiben, verwenden Sie die Option 'DNS "
+"Directory' im zusätzlichen Abschnitt unten."
 
 #: applications/luci-app-adblock/luasrc/view/adblock/report.htm:287
 msgid "Top 10 Reporting"
@@ -651,11 +682,11 @@ msgstr ""
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:181
 msgid "Trigger Delay"
-msgstr ""
+msgstr "Auslöseverzögerung"
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:105
 msgid "Verbose Debug Logging"
-msgstr ""
+msgstr "Ausführliche Debug-Protokollierung"
 
 #: applications/luci-app-adblock/luasrc/view/adblock/query.htm:22
 msgid "Waiting for command to complete..."
@@ -663,11 +694,11 @@ msgstr "Der Befehl wird ausgeführt..."
 
 #: applications/luci-app-adblock/luasrc/view/adblock/report.htm:102
 msgid "Whitelist"
-msgstr "Whitelist"
+msgstr "Positivliste"
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:175
 msgid "Whitelist File"
-msgstr ""
+msgstr "Positivlistendatei"
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:88
 msgid "Yes"
