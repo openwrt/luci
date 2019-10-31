@@ -5,36 +5,15 @@
 module("luci.controller.admin.network", package.seeall)
 
 function index()
-	local uci = require("luci.model.uci").cursor()
 	local page
 
 --	if page.inreq then
-		local has_switch = false
+		page = entry({"admin", "network", "switch"}, view("network/switch"), _("Switch"), 20)
+		page.uci_depends = { network = { ["@switch[0]"] = "switch" } }
 
-		uci:foreach("network", "switch",
-			function(s)
-				has_switch = true
-				return false
-			end)
-
-		if has_switch then
-			entry({"admin", "network", "switch"}, view("network/switch"), _("Switch"), 20)
-		end
-
-
-		local has_wifi = false
-
-		uci:foreach("wireless", "wifi-device",
-			function(s)
-				has_wifi = true
-				return false
-			end)
-
-		if has_wifi then
-			page = entry({"admin", "network", "wireless"}, view("network/wireless"), _('Wireless'), 15)
-			page.leaf = true
-		end
-
+		page = entry({"admin", "network", "wireless"}, view("network/wireless"), _('Wireless'), 15)
+		page.uci_depends = { wireless = { ["@wifi-device[0]"] = "wifi-device" } }
+		page.leaf = true
 
 		page = entry({"admin", "network", "iface_down"}, post("iface_down"), nil)
 		page.leaf = true
@@ -43,18 +22,17 @@ function index()
 		page.leaf   = true
 		page.subindex = true
 
+		page = node("admin", "network", "dhcp")
+		page.uci_depends = { dhcp = true }
+		page.target = view("network/dhcp")
+		page.title  = _("DHCP and DNS")
+		page.order  = 30
 
-		if nixio.fs.access("/etc/config/dhcp") then
-			page = node("admin", "network", "dhcp")
-			page.target = view("network/dhcp")
-			page.title  = _("DHCP and DNS")
-			page.order  = 30
-
-			page = node("admin", "network", "hosts")
-			page.target = view("network/hosts")
-			page.title  = _("Hostnames")
-			page.order  = 40
-		end
+		page = node("admin", "network", "hosts")
+		page.uci_depends = { dhcp = true }
+		page.target = view("network/hosts")
+		page.title  = _("Hostnames")
+		page.order  = 40
 
 		page  = node("admin", "network", "routes")
 		page.target = view("network/routes")
