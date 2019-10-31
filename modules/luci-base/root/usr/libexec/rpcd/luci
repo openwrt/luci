@@ -186,69 +186,6 @@ local methods = {
 		end
 	},
 
-	getNetworkDevices = {
-		call = function(args)
-			local dir = fs.dir("/sys/class/net")
-			local result = { }
-			if dir then
-				local dev
-				for dev in dir do
-					if not result[dev] then
-						result[dev] = { name = dev }
-					end
-
-					if fs.access("/sys/class/net/"..dev.."/master") then
-						local brname = fs.basename(fs.readlink("/sys/class/net/"..dev.."/master"))
-						if not result[brname] then
-							result[brname] = { name = brname }
-						end
-
-						if not result[brname].ports then
-							result[brname].ports = { }
-						end
-
-						result[brname].ports[#result[brname].ports+1] = dev
-					elseif fs.access("/sys/class/net/"..dev.."/bridge") then
-						if not result[dev].ports then
-							result[dev].ports = { }
-						end
-
-						result[dev].id = readfile("/sys/class/net/"..dev.."/bridge/bridge_id")
-						result[dev].stp = (readfile("/sys/class/net/"..dev.."/bridge/stp_state") ~= "0")
-						result[dev].bridge = true
-					end
-
-					local opr = readfile("/sys/class/net/"..dev.."/operstate")
-
-					result[dev].up = (opr == "up" or opr == "unknown")
-					result[dev].type = tonumber(readfile("/sys/class/net/"..dev.."/type"))
-					result[dev].name = dev
-
-					local mtu = tonumber(readfile("/sys/class/net/"..dev.."/mtu"))
-					if mtu and mtu > 0 then
-						result[dev].mtu = mtu
-					end
-
-					local qlen = tonumber(readfile("/sys/class/net/"..dev.."/tx_queue_len"))
-					if qlen and qlen > 0 then
-						result[dev].qlen = qlen
-					end
-
-					local master = fs.readlink("/sys/class/net/"..dev.."/master")
-					if master then
-						result[dev].master = fs.basename(master)
-					end
-
-					local mac = readfile("/sys/class/net/"..dev.."/address")
-					if mac and #mac == 17 then
-						result[dev].mac = mac
-					end
-				end
-			end
-			return result
-		end
-	},
-
 	getConntrackHelpers = {
 		call = function()
 			local ok, fd = pcall(io.open, "/usr/share/fw3/helpers.conf", "r")

@@ -45,7 +45,7 @@ var iface_patterns_wireless = [
 var iface_patterns_virtual = [ ];
 
 var callLuciNetworkDevices = rpc.declare({
-	object: 'luci',
+	object: 'luci-rpc',
 	method: 'getNetworkDevices',
 	expect: { '': {} }
 });
