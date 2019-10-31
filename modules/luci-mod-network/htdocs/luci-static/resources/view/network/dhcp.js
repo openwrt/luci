@@ -18,7 +18,7 @@ callDUIDHints = rpc.declare({
 });
 
 callDHCPLeases = rpc.declare({
-	object: 'luci',
+	object: 'luci-rpc',
 	method: 'getDHCPLeases',
 	params: [ 'family' ],
 	expect: { dhcp_leases: [] }
