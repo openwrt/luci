@@ -63,7 +63,7 @@ var callLuciIfaddrs = rpc.declare({
 });
 
 var callLuciBoardJSON = rpc.declare({
-	object: 'luci',
+	object: 'luci-rpc',
 	method: 'getBoardJSON'
 });
 

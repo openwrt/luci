@@ -334,13 +334,6 @@ local methods = {
 		end
 	},
 
-	getBoardJSON = {
-		call = function(args)
-			local jsc = require "luci.jsonc"
-			return jsc.parse(fs.readfile("/etc/board.json") or "")
-		end
-	},
-
 	getConntrackHelpers = {
 		call = function()
 			local ok, fd = pcall(io.open, "/usr/share/fw3/helpers.conf", "r")
