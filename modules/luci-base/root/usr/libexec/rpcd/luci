@@ -516,14 +516,6 @@ local methods = {
 				return { error = err }
 			end
 		end
-	},
-
-	setUmount = {
-		args = { path = "/mnt" },
-		call = function(args)
-			local util = require "luci.util"
-			return { result = (os.execute(string.format("/bin/umount %s", util.shellquote(args.path))) == 0) }
-		end
 	}
 }
 

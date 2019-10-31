@@ -63,13 +63,14 @@
 				"/sbin/reboot": [ "exec" ],
 				"/sbin/sysupgrade": [ "exec" ],
 				"/bin/tar": [ "exec" ],
+				"/bin/umount": [ "exec" ],
 				"/tmp/backup.tar.gz": [ "write" ],
 				"/tmp/firmware.bin": [ "write" ]
 			},
 			"ubus": {
 				"file": [ "write", "remove", "exec" ],
 				"iwinfo": [ "scan" ],
-				"luci": [ "setInitAction", "setLocaltime", "setPassword", "setBlockDetect", "setUmount" ],
+				"luci": [ "setInitAction", "setLocaltime", "setPassword", "setBlockDetect" ],
 				"uci": [ "add", "apply", "confirm", "delete", "order", "set", "rename" ]
 			},
 			"uci": [ "*" ]
