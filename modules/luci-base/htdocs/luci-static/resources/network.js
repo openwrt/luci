@@ -68,7 +68,7 @@ var callLuciBoardJSON = rpc.declare({
 });
 
 var callLuciHostHints = rpc.declare({
-	object: 'luci',
+	object: 'luci-rpc',
 	method: 'getHostHints',
 	expect: { '': {} }
 });

@@ -166,13 +166,6 @@ local methods = {
 		end
 	},
 
-	getHostHints = {
-		call = function()
-			local sys = require "luci.sys"
-			return sys.net.host_hints()
-		end
-	},
-
 	getDUIDHints = {
 		call = function()
 			local fp = io.open('/var/hosts/odhcpd')
