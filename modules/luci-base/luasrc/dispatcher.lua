@@ -62,9 +62,73 @@ function _ordered_children(node)
 	return children
 end
 
+local function dependencies_satisfied(node)
+	if type(node.file_depends) == "table" then
+		for _, file in ipairs(node.file_depends) do
+			local ftype = fs.stat(file, "type")
+			if ftype == "dir" then
+				local empty = true
+				for e in (fs.dir(file) or function() end) do
+					empty = false
+				end
+				if empty then
+					return false
+				end
+			elseif ftype == nil then
+				return false
+			end
+		end
+	end
+
+	if type(node.uci_depends) == "table" then
+		for config, expect_sections in pairs(node.uci_depends) do
+			if type(expect_sections) == "table" then
+				for section, expect_options in pairs(expect_sections) do
+					if type(expect_options) == "table" then
+						for option, expect_value in pairs(expect_options) do
+							local val = uci:get(config, section, option)
+							if expect_value == true and val == nil then
+								return false
+							elseif type(expect_value) == "string" then
+								if type(val) == "table" then
+									local found = false
+									for _, subval in ipairs(val) do
+										if subval == expect_value then
+											found = true
+										end
+									end
+									if not found then
+										return false
+									end
+								elseif val ~= expect_value then
+									return false
+								end
+							end
+						end
+					else
+						local val = uci:get(config, section)
+						if expect_options == true and val == nil then
+							return false
+						elseif type(expect_options) == "string" and val ~= expect_options then
+							return false
+						end
+					end
+				end
+			elseif expect_sections == true then
+				if not uci:get_first(config) then
+					return false
+				end
+			end
+		end
+	end
+
+	return true
+end
+
 function node_visible(node)
    if node then
 	  return not (
+		 (not dependencies_satisfied(node)) or
 		 (not node.title or #node.title == 0) or
 		 (not node.target or node.hidden == true) or
 		 (type(node.target) == "table" and node.target.type == "firstchild" and
