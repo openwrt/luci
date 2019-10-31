@@ -36,9 +36,6 @@ function index()
 		end
 
 
-		page = entry({"admin", "network", "iface_reconnect"}, post("iface_reconnect"), nil)
-		page.leaf = true
-
 		page = entry({"admin", "network", "iface_down"}, post("iface_down"), nil)
 		page.leaf = true
 
@@ -84,19 +81,6 @@ function index()
 		page = entry({"admin", "network", "diag_traceroute6"}, post("diag_traceroute6"), nil)
 		page.leaf = true
 --	end
-end
-
-function iface_reconnect(iface)
-	local netmd = require "luci.model.network".init()
-	local net = netmd:get_network(iface)
-	if net then
-		luci.sys.call("env -i /sbin/ifup %s >/dev/null 2>/dev/null"
-			% luci.util.shellquote(iface))
-		luci.http.status(200, "Reconnected")
-		return
-	end
-
-	luci.http.status(404, "No such interface")
 end
 
 local function addr2dev(addr, src)

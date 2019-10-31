@@ -1,4 +1,5 @@
 'use strict';
+'require fs';
 'require uci';
 'require form';
 'require network';
@@ -934,11 +935,9 @@ return L.view.extend({
 
 					if (dsc.getAttribute('reconnect') == '') {
 						dsc.setAttribute('reconnect', '1');
-						tasks.push(L.Request.post(
-							L.url('admin/network/iface_reconnect', section_ids[i]),
-							'token=' + L.env.token,
-							{ headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
-						).catch(function() {}));
+						tasks.push(fs.exec('/sbin/ifup', [section_ids[i]]).catch(function(e) {
+							L.ui.addNotification(null, E('p', e.message));
+						}));
 					}
 					else if (dsc.getAttribute('disconnect') == '' || dsc.getAttribute('disconnect') == 'force') {
 						var force = dsc.getAttribute('disconnect');
