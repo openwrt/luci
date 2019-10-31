@@ -1,4 +1,5 @@
 'use strict';
+'require fs';
 'require rpc';
 'require uci';
 'require form';
@@ -1908,11 +1909,9 @@ return L.view.extend({
 
 					if (dsc.getAttribute('restart') == '') {
 						dsc.setAttribute('restart', '1');
-						tasks.push(L.Request.post(
-							L.url('admin/network/wireless_reconnect', section_ids[i]),
-							'token=' + L.env.token,
-							{ headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
-						).catch(function() {}));
+						tasks.push(fs.exec('/sbin/wifi', ['up', section_ids[i]]).catch(function(e) {
+							L.ui.addNotification(null, E('p', e.message));
+						}));
 					}
 					else if (dsc.getAttribute('restart') == '1') {
 						dsc.removeAttribute('restart');

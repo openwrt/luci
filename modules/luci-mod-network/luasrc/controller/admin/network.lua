@@ -31,9 +31,6 @@ function index()
 			end)
 
 		if has_wifi then
-			page = entry({"admin", "network", "wireless_reconnect"}, post("wifi_reconnect"), nil)
-			page.leaf = true
-
 			page = entry({"admin", "network", "wireless"}, view("network/wireless"), _('Wireless'), 15)
 			page.leaf = true
 		end
@@ -156,16 +153,6 @@ function iface_down(iface, force)
 	end
 
 	luci.http.status(404, "No such interface")
-end
-
-function wifi_reconnect(radio)
-	local rc = luci.sys.call("env -i /sbin/wifi up %s >/dev/null" % luci.util.shellquote(radio))
-
-	if rc == 0 then
-		luci.http.status(200, "Reconnected")
-	else
-		luci.http.status(500, "Error")
-	end
 end
 
 function diag_command(cmd, addr)
