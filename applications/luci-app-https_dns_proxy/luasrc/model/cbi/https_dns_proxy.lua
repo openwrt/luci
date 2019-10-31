@@ -1,5 +1,14 @@
+local sys = require "luci.sys"
+local util = require "luci.util"
+local ip = require "luci.ip"
+local fs = require "nixio.fs"
+local jsonc = require "luci.jsonc"
+local http = require "luci.http"
+local nutil = require "nixio.util"
+local dispatcher = require "luci.dispatcher"
 local uci = require("luci.model.uci").cursor()
-local dispatcher = require("luci.dispatcher")
+
+local packageName = "https_dns_proxy"
 
 function uci_del_list(conf, sect, opt, value)
   local lval = uci:get(conf, sect, opt)
@@ -39,8 +48,97 @@ function uci_add_list(conf, sect, opt, value)
   uci:set(conf, sect, opt, lval)
 end
 
-m = Map("https_dns_proxy", translate("HTTPS DNS Proxy Settings"))
-m.template="cbi/map"
+function get_provider_name(value)
+  if value:match("dns\.adguard") then
+    return translate("AdGuard (Standard)")
+  elseif value:match("family\.adguard") then
+    return translate("AdGuard (Family Protection)")
+  elseif value:match("cleanbrowsing\.org/doh/security") then
+    return translate("CleanBrowsing (Security Filter)")
+  elseif value:match("cleanbrowsing\.org/doh/family") then
+    return translate("CleanBrowsing (Family Filter)")
+  elseif value:match("cleanbrowsing\.org/doh/adult") then
+    return translate("CleanBrowsing (Adult Filter)")
+  elseif value:match("cloudflare") then
+    return translate("Cloudflare")
+  elseif value:match("gesellschaft\.ch") then
+    return translate("Digitale Gesellschaft (ch)")
+  elseif value:match("dns\.sb") then
+    return translate("DNS.SB")
+  elseif value:match("google") then
+    return translate("Google")
+  elseif value:match("odvr\.nic\.cz") then
+    return translate("ODVR (nic.cz)")
+  elseif value:match("dns\.quad9") then
+    return translate("Quad 9 (Recommended)")
+  elseif value:match("dns9\.quad9") then
+    return translate("Quad 9 (Secured)")
+  elseif value:match("dns10\.quad9") then
+    return translate("Quad 9 (Unsecured)")
+  elseif value:match("dns11\.quad9") then
+    return translate("Quad 9 (Secured with ECS Support)")
+  else
+    return translate("Uknown Provider")
+  end
+end
+
+local tmpfsStatus, tmpfsStatusCode
+local ubusStatus = util.ubus("service", "list", { name = packageName })
+local tmpfsVersion = tostring(util.trim(sys.exec("opkg list-installed " .. packageName .. " | awk '{print $3}'")))
+
+if not tmpfsVersion or tmpfsVersion == "" then
+  tmpfsStatusCode = -1
+  tmpfsVersion = ""
+  tmpfsStatus = packageName .. " " .. translate("is not installed or not found")
+else  
+  tmpfsVersion = " [" .. packageName .. " " .. tmpfsVersion .. "]"
+  if not ubusStatus or not ubusStatus[packageName] then
+    tmpfsStatusCode = 0
+    tmpfsStatus = translate("Stopped")
+  else
+    tmpfsStatusCode, tmpfsStatus = 1, ""
+    for n = 1,1000 do
+      if ubusStatus and ubusStatus[packageName] and 
+         ubusStatus[packageName]["instances"] and 
+         ubusStatus[packageName]["instances"]["instance" .. n] and 
+         ubusStatus[packageName]["instances"]["instance" .. n]["running"] then
+        local value, k, v, url, url_flag, la, la_flag, lp, lp_flag
+        for k, v in pairs(ubusStatus[packageName]["instances"]["instance" .. n]["command"]) do
+          if la_flag then la, la_flag = v, false end
+          if lp_flag then lp, lp_flag = v, false end
+          if url_flag then url, url_flag = v, false end
+          if v == "-a" then la_flag = true end
+          if v == "-p" then lp_flag = true end
+          if v == "-r" then url_flag = true end
+        end
+        la = la or "127.0.0.1"
+        lp = lp or n + 5053
+        tmpfsStatus = tmpfsStatus .. translate("Running") .. ": " .. get_provider_name(url) .. " " .. translate("DoH") .. " " .. translate("at") .. " " .. la .. "#" .. lp .. "\n"
+      else
+        break
+      end
+    end
+  end
+end
+
+m = Map("https_dns_proxy", translate("DNS over HTTPS Proxy Settings"))
+
+h = m:section(TypedSection, "_dummy", translate("Service Status") .. tmpfsVersion)
+h.template = "cbi/nullsection"
+ss = h:option(DummyValue, "_dummy", translate("Service Status"))
+if tmpfsStatusCode == -1 then
+	ss.template = packageName .. "/status"
+  ss.value = tmpfsStatus
+else
+    if tmpfsStatusCode == 0 then
+      ss.template = packageName .. "/status"
+    else
+      ss.template = packageName .. "/status-textarea"
+    end
+  ss.value = tmpfsStatus
+  buttons = h:option(DummyValue, "_dummy")
+  buttons.template = packageName .. "/buttons"
+end
 
 s3 = m:section(TypedSection, "https_dns_proxy", translate("Instances"), translate("When you add/remove any instances below, they will be used to override the 'DNS forwardings' section of ")
 		.. [[ <a href="]] .. dispatcher.build_url("admin/network/dhcp") .. [[">]]
@@ -133,12 +231,6 @@ prov.write = function(self, section, value)
     uci:set("https_dns_proxy", section, "url_prefix", "https://dns11.quad9.net:5053/dns-query?")
   end
   uci:save("https_dns_proxy")
-  if n == 0 then
-    uci:delete("dhcp", "@dnsmasq[0]", "server")
-  end
-  uci_del_list("dhcp", "@dnsmasq[0]", "server", tostring(la_val) .. "#" .. tostring(lp_val))
-  uci_add_list("dhcp", "@dnsmasq[0]", "server", tostring(la_val) .. "#" .. tostring(lp_val))
-  uci:save("dhcp")
 end
 
 la = s3:option(Value, "listen_addr", translate("Listen address"))
