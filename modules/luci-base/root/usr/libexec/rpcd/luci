@@ -160,12 +160,6 @@ local methods = {
 		end
 	},
 
-	getIfaddrs = {
-		call = function()
-			return { result = nixio.getifaddrs() }
-		end
-	},
-
 	getDUIDHints = {
 		call = function()
 			local fp = io.open('/var/hosts/odhcpd')

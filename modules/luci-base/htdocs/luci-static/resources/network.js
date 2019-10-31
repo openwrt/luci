@@ -56,12 +56,6 @@ var callLuciWirelessDevices = rpc.declare({
 	expect: { '': {} }
 });
 
-var callLuciIfaddrs = rpc.declare({
-	object: 'luci',
-	method: 'getIfaddrs',
-	expect: { result: [] }
-});
-
 var callLuciBoardJSON = rpc.declare({
 	object: 'luci-rpc',
 	method: 'getBoardJSON'
@@ -92,12 +86,6 @@ var callNetworkInterfaceDump = rpc.declare({
 	object: 'network.interface',
 	method: 'dump',
 	expect: { 'interface': [] }
-});
-
-var callNetworkDeviceStatus = rpc.declare({
-	object: 'network.device',
-	method: 'status',
-	expect: { '': {} }
 });
 
 var callNetworkProtoHandlers = rpc.declare({
@@ -361,9 +349,7 @@ function initNetworkState(refresh) {
 	if (_state == null || refresh) {
 		_init = _init || Promise.all([
 			L.resolveDefault(callNetworkInterfaceDump(), []),
-			L.resolveDefault(callNetworkDeviceStatus(), {}),
 			L.resolveDefault(callLuciBoardJSON(), {}),
-			L.resolveDefault(callLuciIfaddrs(), []),
 			L.resolveDefault(callLuciNetworkDevices(), {}),
 			L.resolveDefault(callLuciWirelessDevices(), {}),
 			L.resolveDefault(callLuciHostHints(), {}),
@@ -371,95 +357,72 @@ function initNetworkState(refresh) {
 			uci.load(['network', 'wireless', 'luci'])
 		]).then(function(data) {
 			var netifd_ifaces = data[0],
-			    netifd_devs   = data[1],
-			    board_json    = data[2],
-			    luci_ifaddrs  = data[3],
-			    luci_devs     = data[4];
+			    board_json    = data[1],
+			    luci_devs     = data[2];
 
 			var s = {
 				isTunnel: {}, isBridge: {}, isSwitch: {}, isWifi: {},
-				ifaces: netifd_ifaces, radios: data[5], hosts: data[6],
+				ifaces: netifd_ifaces, radios: data[3], hosts: data[4],
 				netdevs: {}, bridges: {}, switches: {}
 			};
 
-			for (var i = 0, a; (a = luci_ifaddrs[i]) != null; i++) {
-				var name = a.name.replace(/:.+$/, '');
+			for (var name in luci_devs) {
+				var dev = luci_devs[name];
 
 				if (isVirtualIfname(name))
 					s.isTunnel[name] = true;
 
-				if (s.isTunnel[name] || !(isIgnoredIfname(name) || isVirtualIfname(name))) {
-					s.netdevs[name] = s.netdevs[name] || {
-						idx:      a.ifindex || i,
-						name:     name,
-						rawname:  a.name,
-						flags:    [],
-						ipaddrs:  [],
-						ip6addrs: []
-					};
-
-					if (a.family == 'packet') {
-						s.netdevs[name].flags   = a.flags;
-						s.netdevs[name].stats   = a.data;
-
-						if (a.addr != null && a.addr != '00:00:00:00:00:00' && a.addr.length == 17)
-							s.netdevs[name].macaddr = a.addr;
-					}
-					else if (a.family == 'inet') {
-						s.netdevs[name].ipaddrs.push(a.addr + '/' + a.netmask);
-					}
-					else if (a.family == 'inet6') {
-						s.netdevs[name].ip6addrs.push(a.addr + '/' + a.netmask);
-					}
-				}
-			}
-
-			/* override getifaddr() stats with netifd device status stats as
-			   the former are limited to 32bit counters only */
-			for (var devname in netifd_devs) {
-				if (!s.netdevs.hasOwnProperty(devname))
+				if (!s.isTunnel[name] && isIgnoredIfname(name))
 					continue;
 
-				if (!L.isObject(netifd_devs[devname]))
-					continue;
+				s.netdevs[name] = s.netdevs[name] || {
+					idx:      dev.ifindex,
+					name:     name,
+					rawname:  name,
+					flags:    dev.flags,
+					stats:    dev.stats,
+					macaddr:  dev.mac,
+					type:     dev.type,
+					mtu:      dev.mtu,
+					qlen:     dev.qlen,
+					ipaddrs:  [],
+					ip6addrs: []
+				};
 
-				s.netdevs[devname].stats = Object.assign({},
-					s.netdevs[devname].stats, netifd_devs[devname].statistics);
+				if (Array.isArray(dev.ipaddrs))
+					for (var i = 0; i < dev.ipaddrs.length; i++)
+						s.netdevs[name].ipaddrs.push(dev.ipaddrs[i].address + '/' + dev.ipaddrs[i].netmask);
+
+				if (Array.isArray(dev.ip6addrs))
+					for (var i = 0; i < dev.ip6addrs.length; i++)
+						s.netdevs[name].ip6addrs.push(dev.ip6addrs[i].address + '/' + dev.ip6addrs[i].netmask);
 			}
 
-			for (var devname in luci_devs) {
-				var dev = luci_devs[devname];
+			for (var name in luci_devs) {
+				var dev = luci_devs[name];
 
-				if (dev.bridge) {
-					var b = {
-						name:    devname,
-						id:      dev.id,
-						stp:     dev.stp,
-						ifnames: []
-					};
+				if (!dev.bridge)
+					continue;
 
-					for (var i = 0; dev.ports && i < dev.ports.length; i++) {
-						var subdev = s.netdevs[dev.ports[i]];
+				var b = {
+					name:    name,
+					id:      dev.id,
+					stp:     dev.stp,
+					ifnames: []
+				};
 
-						if (subdev == null)
-							continue;
+				for (var i = 0; dev.ports && i < dev.ports.length; i++) {
+					var subdev = s.netdevs[dev.ports[i]];
 
-						b.ifnames.push(subdev);
-						subdev.bridge = b;
-					}
+					if (subdev == null)
+						continue;
 
-					s.bridges[devname] = b;
-					s.isBridge[devname] = true;
+					b.ifnames.push(subdev);
+					subdev.bridge = b;
 				}
 
-				if (s.netdevs.hasOwnProperty(devname)) {
-					Object.assign(s.netdevs[devname], {
-						macaddr: dev.mac,
-						type:    dev.type,
-						mtu:     dev.mtu,
-						qlen:    dev.qlen
-					});
-				}
+				s.bridges[name] = b;
+				s.isBridge[name] = true;
 			}
 
 			if (L.isObject(board_json.switch)) {
