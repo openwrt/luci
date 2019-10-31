@@ -51,7 +51,7 @@ var callLuciNetworkDevices = rpc.declare({
 });
 
 var callLuciWirelessDevices = rpc.declare({
-	object: 'luci',
+	object: 'luci-rpc',
 	method: 'getWirelessDevices',
 	expect: { '': {} }
 });
