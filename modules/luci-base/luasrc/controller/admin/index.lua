@@ -71,27 +71,6 @@ function index()
 	page.index = true
 	toplevel_page(page, false, false)
 
-	if nixio.fs.access("/etc/config/dhcp") then
-		page = entry({"admin", "dhcplease_status"}, call("lease_status"), nil)
-		page.leaf = true
-	end
-
-	local has_wifi = false
-
-	uci:foreach("wireless", "wifi-device",
-		function(s)
-			has_wifi = true
-			return false
-		end)
-
-	if has_wifi then
-		page = entry({"admin", "wireless_assoclist"}, call("wifi_assoclist"), nil)
-		page.leaf = true
-
-		page = entry({"admin", "wireless_deauth"}, post("wifi_deauth"), nil)
-		page.leaf = true
-	end
-
 	page = entry({"admin", "translations"}, call("action_translations"), nil)
 	page.leaf = true
 
@@ -281,37 +260,4 @@ function action_ubus()
 
 	luci.http.prepare_content("application/json")
 	luci.http.write_json(response)
-end
-
-function lease_status()
-	local s = require "luci.tools.status"
-
-	luci.http.prepare_content("application/json")
-	luci.http.write('[')
-	luci.http.write_json(s.dhcp_leases())
-	luci.http.write(',')
-	luci.http.write_json(s.dhcp6_leases())
-	luci.http.write(']')
-end
-
-function wifi_assoclist()
-	local s = require "luci.tools.status"
-
-	luci.http.prepare_content("application/json")
-	luci.http.write_json(s.wifi_assoclist())
-end
-
-function wifi_deauth()
-	local iface = luci.http.formvalue("iface")
-	local bssid = luci.http.formvalue("bssid")
-
-	if iface and bssid then
-		luci.util.ubus("hostapd.%s" % iface, "del_client", {
-			addr = bssid,
-			deauth = true,
-			reason = 5,
-			ban_time = 60000
-		})
-	end
-	luci.http.status(200, "OK")
 end

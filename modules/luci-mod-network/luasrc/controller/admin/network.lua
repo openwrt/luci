@@ -31,9 +31,6 @@ function index()
 			end)
 
 		if has_wifi then
-			page = entry({"admin", "network", "wireless_status"}, call("wifi_status"), nil)
-			page.leaf = true
-
 			page = entry({"admin", "network", "wireless_reconnect"}, post("wifi_reconnect"), nil)
 			page.leaf = true
 
@@ -41,9 +38,6 @@ function index()
 			page.leaf = true
 		end
 
-
-		page = entry({"admin", "network", "iface_status"}, call("iface_status"), nil)
-		page.leaf = true
 
 		page = entry({"admin", "network", "iface_reconnect"}, post("iface_reconnect"), nil)
 		page.leaf = true
@@ -93,77 +87,6 @@ function index()
 		page = entry({"admin", "network", "diag_traceroute6"}, post("diag_traceroute6"), nil)
 		page.leaf = true
 --	end
-end
-
-function iface_status(ifaces)
-	local netm = require "luci.model.network".init()
-	local rv   = { }
-
-	local iface
-	for iface in ifaces:gmatch("[%w%.%-_]+") do
-		local net = netm:get_network(iface)
-		local device = net and net:get_interface()
-		if device then
-			local data = {
-				id         = iface,
-				desc       = net:get_i18n(),
-				proto      = net:proto(),
-				uptime     = net:uptime(),
-				gwaddr     = net:gwaddr(),
-				ipaddrs    = net:ipaddrs(),
-				ip6addrs   = net:ip6addrs(),
-				dnsaddrs   = net:dnsaddrs(),
-				ip6prefix  = net:ip6prefix(),
-				errors     = net:errors(),
-				name       = device:shortname(),
-				type       = device:type(),
-				typename   = device:get_type_i18n(),
-				ifname     = device:name(),
-				macaddr    = device:mac(),
-				is_up      = net:is_up() and device:is_up(),
-				is_alias   = net:is_alias(),
-				is_dynamic = net:is_dynamic(),
-				is_auto    = net:is_auto(),
-				rx_bytes   = device:rx_bytes(),
-				tx_bytes   = device:tx_bytes(),
-				rx_packets = device:rx_packets(),
-				tx_packets = device:tx_packets(),
-
-				subdevices = { }
-			}
-
-			for _, device in ipairs(net:get_interfaces() or {}) do
-				data.subdevices[#data.subdevices+1] = {
-					name       = device:shortname(),
-					type       = device:type(),
-					typename   = device:get_type_i18n(),
-					ifname     = device:name(),
-					macaddr    = device:mac(),
-					is_up      = device:is_up(),
-					rx_bytes   = device:rx_bytes(),
-					tx_bytes   = device:tx_bytes(),
-					rx_packets = device:rx_packets(),
-					tx_packets = device:tx_packets(),
-				}
-			end
-
-			rv[#rv+1] = data
-		else
-			rv[#rv+1] = {
-				id   = iface,
-				name = iface,
-				type = "ethernet"
-			}
-		end
-	end
-
-	if #rv > 0 then
-		luci.http.prepare_content("application/json")
-		luci.http.write_json(rv)
-		return
-	end
-
-	luci.http.status(404, "No such device")
 end
 
 function iface_reconnect(iface)
@@ -233,26 +156,6 @@ function iface_down(iface, force)
 	end
 
 	luci.http.status(404, "No such interface")
-end
-
-function wifi_status(devs)
-	local s    = require "luci.tools.status"
-	local rv   = { }
-
-	if type(devs) == "string" then
-		local dev
-		for dev in devs:gmatch("[%w%.%-]+") do
-			rv[#rv+1] = s.wifi_network(dev)
-		end
-	end
-
-	if #rv > 0 then
-		luci.http.prepare_content("application/json")
-		luci.http.write_json(rv)
-		return
-	end
-
-	luci.http.status(404, "No such device")
 end
 
 function wifi_reconnect(radio)
