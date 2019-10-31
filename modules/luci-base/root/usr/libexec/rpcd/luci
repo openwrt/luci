@@ -524,12 +524,6 @@ local methods = {
 			local util = require "luci.util"
 			return { result = (os.execute(string.format("/bin/umount %s", util.shellquote(args.path))) == 0) }
 		end
-	},
-
-	setReboot = {
-		call = function()
-			return { result = (os.execute("/sbin/reboot >/dev/null 2>&1") == 0) }
-		end
 	}
 }
 

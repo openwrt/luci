@@ -2,13 +2,6 @@
 'require fs';
 'require ui';
 'require uci';
-'require rpc';
-
-var callReboot = rpc.declare({
-	object: 'luci',
-	method: 'setReboot',
-	expect: { result: false }
-});
 
 return L.view.extend({
 	load: function() {
@@ -37,7 +30,12 @@ return L.view.extend({
 	},
 
 	handleReboot: function(ev) {
-		return callReboot().then(function() {
+		return fs.exec('/sbin/reboot').then(function(res) {
+			if (res.code != 0) {
+				L.ui.addNotification(null, E('p', _('The reboot command failed with code %d').format(res.code)));
+				L.raise('Error', 'Reboot failed');
+			}
+
 			L.ui.showModal(_('Rebooting…'), [
 				E('p', { 'class': 'spinning' }, _('Waiting for device...'))
 			]);
@@ -50,7 +48,8 @@ return L.view.extend({
 			}, 150000);
 
 			L.ui.awaitReconnect();
-		});
+		})
+		.catch(function(e) { L.ui.addNotification(null, E('p', e.message)) });
 	},
 
 	handleSaveApply: null,
