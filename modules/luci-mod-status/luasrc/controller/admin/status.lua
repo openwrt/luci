@@ -5,6 +5,8 @@
 module("luci.controller.admin.status", package.seeall)
 
 function index()
+	local page
+
 	entry({"admin", "status", "overview"}, template("admin_status/index"), _("Overview"), 1)
 
 	entry({"admin", "status", "iptables"}, template("admin_status/iptables"), _("Firewall"), 2).leaf = true
@@ -24,10 +26,13 @@ function index()
 	entry({"admin", "status", "realtime", "bandwidth"}, template("admin_status/bandwidth"), _("Traffic"), 2).leaf = true
 	entry({"admin", "status", "realtime", "bandwidth_status"}, call("action_bandwidth")).leaf = true
 
-	if nixio.fs.access("/etc/config/wireless") then
-		entry({"admin", "status", "realtime", "wireless"}, template("admin_status/wireless"), _("Wireless"), 3).leaf = true
-		entry({"admin", "status", "realtime", "wireless_status"}, call("action_wireless")).leaf = true
-	end
+	page = entry({"admin", "status", "realtime", "wireless"}, template("admin_status/wireless"), _("Wireless"), 3)
+	page.uci_depends = { wireless = true }
+	page.leaf = true
+
+	page = entry({"admin", "status", "realtime", "wireless_status"}, call("action_wireless"))
+	page.uci_depends = { wireless = true }
+	page.leaf = true
 
 	entry({"admin", "status", "realtime", "connections"}, template("admin_status/connections"), _("Connections"), 4).leaf = true
 	entry({"admin", "status", "realtime", "connections_status"}, call("action_connections")).leaf = true
