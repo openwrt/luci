@@ -299,7 +299,10 @@ return L.view.extend({
 		/* Currently the sysupgrade rpc call will not return, hence no promise handling */
 		fs.exec('/sbin/sysupgrade', opts);
 
-		L.ui.awaitReconnect(window.location.host, '192.168.1.1', 'openwrt.lan');
+		if (keep.checked)
+			L.ui.awaitReconnect(window.location.host);
+		else
+			L.ui.awaitReconnect('192.168.1.1', 'openwrt.lan');
 	},
 
 	handleBackupList: function(ev) {
