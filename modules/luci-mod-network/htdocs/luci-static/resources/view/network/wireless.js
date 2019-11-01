@@ -743,7 +743,8 @@ return L.view.extend({
 				ss.tab('general', _('General Setup'));
 				ss.tab('advanced', _('Advanced Settings'));
 
-				var isDisabled = (radioNet.get('disabled') == '1');
+				var isDisabled = (radioNet.get('disabled') == '1' ||
+					uci.get('wireless', radioNet.getWifiDeviceName(), 'disabled') == 1);
 
 				o = ss.taboption('general', form.DummyValue, '_wifistat_modal', _('Status'));
 				o.cfgvalue = L.bind(function(radioNet) {
@@ -1734,15 +1735,23 @@ return L.view.extend({
 			var section_id = null;
 
 			return this.map.save(function() {
-				if (replopt.formvalue('_new_') == '1') {
-					var sections = uci.sections('wireless', 'wifi-iface');
+				var wifi_sections = uci.sections('wireless', 'wifi-iface');
 
-					for (var i = 0; i < sections.length; i++)
-						if (sections[i].device == radioDev.getName())
-							uci.remove('wireless', sections[i]['.name']);
+				if (replopt.formvalue('_new_') == '1') {
+					for (var i = 0; i < wifi_sections.length; i++)
+						if (wifi_sections[i].device == radioDev.getName())
+							uci.remove('wireless', wifi_sections[i]['.name']);
 				}
 
-				section_id = next_free_sid(uci.sections('wifi-iface').length);
+				if (uci.get('wireless', radioDev.getName(), 'disabled') == '1') {
+					for (var i = 0; i < wifi_sections.length; i++)
+						if (wifi_sections[i].device == radioDev.getName())
+							uci.set('wireless', wifi_sections[i]['.name'], 'disabled', '1');
+
+					uci.unset('wireless', radioDev.getName(), 'disabled');
+				}
+
+				section_id = next_free_sid(wifi_sections.length);
 
 				uci.add('wireless', 'wifi-iface', section_id);
 				uci.set('wireless', section_id, 'device', radioDev.getName());
