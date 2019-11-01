@@ -89,16 +89,14 @@ return L.view.extend({
 		if (!confirm(_('Do you really want to erase all settings?')))
 			return;
 
-		return fs.exec('/sbin/firstboot', [ '-r', '-y' ]).then(function(res) {
-			if (res.code != 0)
-				return L.ui.addNotification(null, E('p', _('The firstboot command failed with code %d').format(res.code)));
+		L.ui.showModal(_('Erasing...'), [
+			E('p', { 'class': 'spinning' }, _('The system is erasing the configuration partition now and will reboot itself when finished.'))
+		]);
 
-			L.ui.showModal(_('Erasing...'), [
-				E('p', { 'class': 'spinning' }, _('The system is erasing the configuration partition now and will reboot itself when finished.'))
-			]);
+		/* Currently the sysupgrade rpc call will not return, hence no promise handling */
+		fs.exec('/sbin/firstboot', [ '-r', '-y' ]);
 
-			L.ui.awaitReconnect('192.168.1.1', 'openwrt.lan');
-		}).catch(function(e) { L.ui.addNotification(null, E('p', e.message)) });
+		L.ui.awaitReconnect('192.168.1.1', 'openwrt.lan');
 	},
 
 	handleRestore: function(ev) {
