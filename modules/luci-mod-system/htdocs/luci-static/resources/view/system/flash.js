@@ -10,88 +10,6 @@ var callSystemValidateFirmwareImage = rpc.declare({
 	expect: { '': { valid: false, forcable: true } }
 });
 
-function fileUpload(node, path) {
-	return new Promise(function(resolveFn, rejectFn) {
-		L.ui.showModal(_('Uploading file…'), [
-			E('p', _('Please select the file to upload.')),
-			E('div', { 'style': 'display:flex' }, [
-				E('div', { 'class': 'left', 'style': 'flex:1' }, [
-					E('input', {
-						type: 'file',
-						style: 'display:none',
-						change: function(ev) {
-							L.dom.parent(ev.target, '.modal').querySelector('.cbi-button-action.important').disabled = false;
-						}
-					}),
-					E('button', {
-						'class': 'btn',
-						'click': function(ev) {
-							ev.target.previousElementSibling.click();
-						}
-					}, [ _('Browse…') ])
-				]),
-				E('div', { 'class': 'right', 'style': 'flex:1' }, [
-					E('button', {
-						'class': 'btn',
-						'click': function() {
-							L.ui.hideModal();
-							rejectFn(new Error('Upload has been cancelled'));
-						}
-					}, [ _('Cancel') ]),
-					' ',
-					E('button', {
-						'class': 'btn cbi-button-action important',
-						'disabled': true,
-						'click': function(ev) {
-							var input = L.dom.parent(ev.target, '.modal').querySelector('input[type="file"]');
-
-							if (!input.files[0])
-								return;
-
-							var progress = E('div', { 'class': 'cbi-progressbar', 'title': '0%' }, E('div', { 'style': 'width:0' }));
-
-							L.ui.showModal(_('Uploading file…'), [ progress ]);
-
-							var data = new FormData();
-
-							data.append('sessionid', rpc.getSessionID());
-							data.append('filename', path);
-							data.append('filedata', input.files[0]);
-
-							L.Request.post('/cgi-bin/cgi-upload', data, {
-								timeout: 0,
-								progress: function(pev) {
-									var percent = (pev.loaded / pev.total) * 100;
-
-									node.data = '%.2f%%'.format(percent);
-
-									progress.setAttribute('title', '%.2f%%'.format(percent));
-									progress.firstElementChild.style.width = '%.2f%%'.format(percent);
-								}
-							}).then(function(res) {
-								var reply = res.json();
-
-								L.ui.hideModal();
-
-								if (L.isObject(reply) && reply.failure) {
-									L.ui.addNotification(null, E('p', _('Upload request failed: %s').format(reply.message)));
-									rejectFn(new Error(reply.failure));
-								}
-								else {
-									resolveFn(reply);
-								}
-							}, function(err) {
-								L.ui.hideModal();
-								rejectFn(err);
-							});
-						}
-					}, [ _('Upload') ])
-				])
-			])
-		]);
-	});
-}
-
 function findStorageSize(procmtd, procpart) {
 	var kernsize = 0, rootsize = 0, wholesize = 0;
 
@@ -184,7 +102,7 @@ return L.view.extend({
 	},
 
 	handleRestore: function(ev) {
-		return fileUpload(ev.target, '/tmp/backup.tar.gz')
+		return L.ui.uploadFile('/tmp/backup.tar.gz', ev.target)
 			.then(L.bind(function(btn, res) {
 				btn.firstChild.data = _('Checking archive…');
 				return fs.exec('/bin/tar', [ '-tzf', '/tmp/backup.tar.gz' ]);
@@ -267,7 +185,7 @@ return L.view.extend({
 	},
 
 	handleSysupgrade: function(storage_size, ev) {
-		return fileUpload(ev.target.firstChild, '/tmp/firmware.bin')
+		return L.ui.uploadFile('/tmp/firmware.bin', ev.target.firstChild)
 			.then(L.bind(function(btn, reply) {
 				btn.firstChild.data = _('Checking image…');
 
