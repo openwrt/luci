@@ -13,6 +13,7 @@ PKG_MAINTAINER:=Jo-Philipp Wich <jo@mein.io>
 PKG_LICENSE:=Apache-2.0
 
 PKG_BUILD_PARALLEL:=1
+PKG_BUILD_DEPENDS:=iwinfo
 
 include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/cmake.mk
@@ -33,11 +34,11 @@ define Package/rpcd-mod-luci
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE:=Rapid reverse DNS rpcd module
-  DEPENDS:=+rpcd +libubox +libubus +libiwinfo
+  DEPENDS:=+rpcd +libubox +libubus +libnl-tiny
 endef
 
 define Package/rpcd-mod-luci/description
- Provides rapid mass reverse DNS lookup functionality.
+ Provides LuCI backend ubus RPC operations.
 endef
 
 define Package/rpcd-mod-luci/install
