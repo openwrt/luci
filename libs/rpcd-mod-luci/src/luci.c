@@ -359,7 +359,7 @@ find_leasefile(struct uci_context *uci, const char *section)
 		ptr.option = "leasefile";
 		ptr.o = NULL;
 
-		if (uci_lookup_ptr(uci, &ptr, NULL, true))
+		if (uci_lookup_ptr(uci, &ptr, NULL, true) || ptr.o == NULL)
 			continue;
 
 		if (ptr.o->type != UCI_TYPE_STRING)
@@ -1254,7 +1254,7 @@ rpc_luci_get_host_hints_uci(struct reply_context *rctx)
 		ptr.option = "ip";
 		ptr.o = NULL;
 
-		if (uci_lookup_ptr(uci, &ptr, NULL, true))
+		if (uci_lookup_ptr(uci, &ptr, NULL, true) || ptr.o == NULL)
 			continue;
 
 		if (ptr.o->type != UCI_TYPE_STRING)
@@ -1266,7 +1266,7 @@ rpc_luci_get_host_hints_uci(struct reply_context *rctx)
 		ptr.option = "name";
 		ptr.o = NULL;
 
-		if (!uci_lookup_ptr(uci, &ptr, NULL, true) &&
+		if (!uci_lookup_ptr(uci, &ptr, NULL, true) && ptr.o != NULL &&
 		    ptr.o->type == UCI_TYPE_STRING)
 		    n = ptr.o->v.string;
 		else
@@ -1275,7 +1275,7 @@ rpc_luci_get_host_hints_uci(struct reply_context *rctx)
 		ptr.option = "mac";
 		ptr.o = NULL;
 
-		if (uci_lookup_ptr(uci, &ptr, NULL, true))
+		if (uci_lookup_ptr(uci, &ptr, NULL, true) || ptr.o == NULL)
 			continue;
 
 		if (ptr.o->type == UCI_TYPE_STRING) {
