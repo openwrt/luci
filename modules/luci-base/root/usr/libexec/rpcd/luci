@@ -516,6 +516,72 @@ local methods = {
 				return { error = err }
 			end
 		end
+	},
+
+	getRealtimeStats = {
+		args = { mode = "interface", device = "eth0" },
+		call = function(args)
+			local util = require "luci.util"
+
+			local flags
+			if args.mode == "interface" then
+				flags = "-i %s" % util.shellquote(args.device)
+			elseif args.mode == "wireless" then
+				flags = "-r %s" % util.shellquote(args.device)
+			elseif args.mode == "conntrack" then
+				flags = "-c"
+			elseif args.mode == "load" then
+				flags = "-l"
+			else
+				return { error = "Invalid mode" }
+			end
+
+			local fd, err = io.popen("luci-bwc %s" % flags, "r")
+			if fd then
+				local parse = json.new()
+				local done
+
+				parse:parse("[")
+
+				while true do
+					local ln = fd:read("*l")
+					if not ln then
+						break
+					end
+
+					done, err = parse:parse((ln:gsub("%d+", "%1.0")))
+
+					if done then
+						err = "Unexpected JSON data"
+					end
+
+					if err then
+						break
+					end
+				end
+
+				fd:close()
+
+				done, err = parse:parse("]")
+
+				if err then
+					return { error = err }
+				elseif not done then
+					return { error = "Incomplete JSON data" }
+				else
+					return { result = parse:get() }
+				end
+			else
+				return { error = err }
+			end
+		end
+	},
+
+	getConntrackList = {
+		call = function()
+			local sys = require "luci.sys"
+			return { result = sys.net.conntrack() }
+		end
 	}
 }
 
