@@ -435,9 +435,6 @@ lease_next(void)
 
 			ea = ether_aton(p);
 
-			if (!ea)
-				continue;
-
 			p = strtok(NULL, " \t\n");
 
 			if (p && inet_pton(AF_INET6, p, &e.addr.in6))
@@ -445,6 +442,9 @@ lease_next(void)
 			else if (p && inet_pton(AF_INET, p, &e.addr.in))
 				e.af = AF_INET;
 			else
+				continue;
+
+			if (!ea && e.af != AF_INET6)
 				continue;
 
 			e.hostname = strtok(NULL, " \t\n");
@@ -459,7 +459,11 @@ lease_next(void)
 			if (!strcmp(e.duid, "*"))
 				e.duid = NULL;
 
-			e.mac = *ea;
+			if (!ea && e.duid)
+				ea = duid2ea(e.duid);
+
+			if (ea)
+				e.mac = *ea;
 
 			return &e;
 		}
