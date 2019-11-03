@@ -18,7 +18,6 @@ msgid "%s in %s"
 msgstr "%s (%s)"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:242
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:154
 msgid "%s%s with %s"
 msgstr "%s%s ,%s"
 
@@ -27,12 +26,10 @@ msgid "%s, %s in %s"
 msgstr "%s, %s (%s)"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:275
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:195
 msgid "<var>%d</var> pkts. per <var>%s</var>"
 msgstr "<var>%d</var> パケット / <var>%s</var>"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:271
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:192
 msgid "<var>%d</var> pkts. per <var>%s</var>, burst <var>%d</var> pkts."
 msgstr ""
 "<var>%d</var> パケット / <var>%s</var>, バースト <var>%d</var> パケット"
@@ -42,17 +39,14 @@ msgid "<var>%s</var> and limit to %s"
 msgstr "<var>%s</var>, %s を上限に設定"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:293
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:214
 msgid "Accept forward"
 msgstr "転送を許可"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:303
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:224
 msgid "Accept input"
 msgstr "入力を許可"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:283
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:204
 msgid "Accept output"
 msgstr "出力を許可"
 
@@ -126,6 +120,10 @@ msgstr "Conntrack 設定"
 msgid "Conntrack helpers"
 msgstr "Conntrack ヘルパー"
 
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/custom.js:15
+msgid "Contents have been saved."
+msgstr ""
+
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:178
 msgid "Covered devices"
 msgstr "カバーされるデバイス"
@@ -138,11 +136,11 @@ msgstr "対象ネットワーク"
 msgid "Covered subnets"
 msgstr "カバーされるサブネット"
 
-#: applications/luci-app-firewall/luasrc/controller/firewall.lua:19
+#: applications/luci-app-firewall/luasrc/controller/firewall.lua:18
 msgid "Custom Rules"
 msgstr "手動設定ルール"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/custom.lua:8
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/custom.js:25
 msgid ""
 "Custom rules allow you to execute arbitrary iptables commands which are not "
 "otherwise covered by the firewall framework. The commands are executed after "
@@ -165,22 +163,15 @@ msgstr "宛先ポート"
 msgid "Destination zone"
 msgstr "宛先ゾーン"
 
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:242
-msgid "Disable"
-msgstr "無効"
-
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:299
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:220
 msgid "Discard forward"
 msgstr "転送を破棄"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:309
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:230
 msgid "Discard input"
 msgstr "入力を破棄"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:289
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:210
 msgid "Discard output"
 msgstr "出力を破棄"
 
@@ -194,17 +185,14 @@ msgstr ""
 "に必要となることがあります。"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:297
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:218
 msgid "Do not track forward"
 msgstr "転送を追跡しない"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:307
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:228
 msgid "Do not track input"
 msgstr "入力を追跡しない"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:287
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:208
 msgid "Do not track output"
 msgstr "出力を追跡しない"
 
@@ -214,7 +202,6 @@ msgstr "無効なパケットを遮断する"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:149
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:189
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:246
 msgid "Enable"
 msgstr "有効"
 
@@ -267,7 +254,7 @@ msgstr "追加の送信元引数"
 msgid "Firewall"
 msgstr "ファイアウォール"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/custom.lua:7
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/custom.js:24
 msgid "Firewall - Custom Rules"
 msgstr "ファイアウォール - 手動設定ルール"
 
@@ -340,17 +327,14 @@ msgid "Hardware flow offloading"
 msgstr "ハードウェア フローオフロード"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:157
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:75
 msgid "IP"
 msgstr "IP"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:167
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:83
 msgid "IP range"
 msgstr "IP の範囲"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:175
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:100
 msgid "IPs"
 msgstr "IP"
 
@@ -400,12 +384,10 @@ msgid "Limit log messages"
 msgstr "ログメッセージを制限"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:96
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:31
 msgid "MAC"
 msgstr "MAC"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:104
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:40
 msgid "MACs"
 msgstr "MAC"
 
@@ -539,17 +521,14 @@ msgid "Redirect matched incoming traffic to the specified internal host"
 msgstr "ルールに一致した受信トラフィックを、設定された内部ホストへ転送します"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:295
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:216
 msgid "Refuse forward"
 msgstr "転送を拒否"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:305
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:226
 msgid "Refuse input"
 msgstr "入力を拒否"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:285
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:206
 msgid "Refuse output"
 msgstr "出力を拒否"
 
@@ -557,10 +536,6 @@ msgstr "出力を拒否"
 msgid "Requires hardware NAT support. Implemented at least for mt7621"
 msgstr ""
 "ハードウェア NAT サポートが必要です。 mt7621 のみにおいて実装されています。"
-
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/custom.lua:29
-msgid "Restart Firewall"
-msgstr "ファイアウォールの再起動"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:201
 msgid "Restrict Masquerading to given destination subnets"
@@ -578,14 +553,6 @@ msgstr "アドレスファミリの制限"
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:53
 msgid "Routing/NAT Offloading"
 msgstr "ルーティング/NAT オフロード"
-
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:245
-msgid "Rule is disabled"
-msgstr "ルールは無効です"
-
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:241
-msgid "Rule is enabled"
-msgstr "ルールは有効です"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:351
 msgid "Saturday"
@@ -728,6 +695,10 @@ msgstr ""
 msgid "Tuesday"
 msgstr "火曜日"
 
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/custom.js:18
+msgid "Unable to save contents: %s"
+msgstr ""
+
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:108
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:122
 msgid "Unnamed forward"
@@ -818,12 +789,10 @@ msgstr "全てのルーターIP"
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:182
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:52
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:138
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:110
 msgid "any zone"
 msgstr "全てのゾーン"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:267
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:189
 msgid "day"
 msgstr "日"
 
@@ -838,29 +807,23 @@ msgid "drop"
 msgstr "破棄"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:265
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:187
 msgid "hour"
 msgstr "時間"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:263
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:185
 msgid "minute"
 msgstr "分"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:86
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:20
 msgid "not"
 msgstr ""
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:121
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:50
 msgid "port"
 msgstr "ポート"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:131
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:140
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:55
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:65
 msgid "ports"
 msgstr "ポート"
 
@@ -871,7 +834,6 @@ msgid "reject"
 msgstr "拒否"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:261
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:183
 msgid "second"
 msgstr "秒"
 
@@ -882,14 +844,24 @@ msgid "this new zone"
 msgstr ""
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:197
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:121
 msgid "type"
 msgstr "タイプ"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:209
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:130
 msgid "types"
 msgstr "タイプ"
+
+#~ msgid "Disable"
+#~ msgstr "無効"
+
+#~ msgid "Restart Firewall"
+#~ msgstr "ファイアウォールの再起動"
+
+#~ msgid "Rule is disabled"
+#~ msgstr "ルールは無効です"
+
+#~ msgid "Rule is enabled"
+#~ msgstr "ルールは有効です"
 
 #~ msgid "Add"
 #~ msgstr "追加"

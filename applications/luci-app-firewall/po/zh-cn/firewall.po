@@ -21,7 +21,6 @@ msgid "%s in %s"
 msgstr "%s 位于 %s"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:242
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:154
 msgid "%s%s with %s"
 msgstr "%s%s 和 %s"
 
@@ -30,12 +29,10 @@ msgid "%s, %s in %s"
 msgstr "%s, %s 位于 %s"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:275
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:195
 msgid "<var>%d</var> pkts. per <var>%s</var>"
 msgstr "<var>%d</var> 数据包/<var>%s</var>"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:271
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:192
 msgid "<var>%d</var> pkts. per <var>%s</var>, burst <var>%d</var> pkts."
 msgstr "<var>%d</var> 数据包/<var>%s</var>，突发 <var>%d</var> 数据包。"
 
@@ -44,17 +41,14 @@ msgid "<var>%s</var> and limit to %s"
 msgstr "<var>%s</var> 并限制到 %s"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:293
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:214
 msgid "Accept forward"
 msgstr "接受转发"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:303
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:224
 msgid "Accept input"
 msgstr "接受入站"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:283
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:204
 msgid "Accept output"
 msgstr "接受出站"
 
@@ -69,16 +63,16 @@ msgid ""
 "traffic, e.g. <code>-p tcp --dport 443</code> to only match outbound HTTPS "
 "traffic."
 msgstr ""
-"附加 <em>iptables</em> 参数对区域出流量分类。如：<code>-p tcp --dport 443</code> 仅匹配出站 "
-"HTTPS 流量。"
+"附加 <em>iptables</em> 参数对区域出流量分类。如：<code>-p tcp --dport 443</"
+"code> 仅匹配出站 HTTPS 流量。"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:239
 msgid ""
 "Additional raw <em>iptables</em> arguments to classify zone source traffic, "
 "e.g. <code>-p tcp --sport 443</code> to only match inbound HTTPS traffic."
 msgstr ""
-"附加 <em>iptables</em> 参数对区域入流量分类。如：<code>-p tcp --sport 443</code> 仅匹配入站 "
-"HTTPS 流量。"
+"附加 <em>iptables</em> 参数对区域入流量分类。如：<code>-p tcp --sport 443</"
+"code> 仅匹配入站 HTTPS 流量。"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:101
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:137
@@ -124,6 +118,10 @@ msgstr "Conntrack 设置"
 msgid "Conntrack helpers"
 msgstr "Conntrack 助手"
 
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/custom.js:15
+msgid "Contents have been saved."
+msgstr ""
+
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:178
 msgid "Covered devices"
 msgstr "涵盖的设备"
@@ -136,11 +134,11 @@ msgstr "涵盖的网络"
 msgid "Covered subnets"
 msgstr "涵盖的子网"
 
-#: applications/luci-app-firewall/luasrc/controller/firewall.lua:19
+#: applications/luci-app-firewall/luasrc/controller/firewall.lua:18
 msgid "Custom Rules"
 msgstr "自定义规则"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/custom.lua:8
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/custom.js:25
 msgid ""
 "Custom rules allow you to execute arbitrary iptables commands which are not "
 "otherwise covered by the firewall framework. The commands are executed after "
@@ -161,22 +159,15 @@ msgstr "目标端口"
 msgid "Destination zone"
 msgstr "目标区域"
 
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:242
-msgid "Disable"
-msgstr "禁用"
-
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:299
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:220
 msgid "Discard forward"
 msgstr "丢弃转发"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:309
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:230
 msgid "Discard input"
 msgstr "丢弃入站"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:289
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:210
 msgid "Discard output"
 msgstr "丢弃出站"
 
@@ -189,17 +180,14 @@ msgstr ""
 "称路由这可能是必需的设置。"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:297
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:218
 msgid "Do not track forward"
 msgstr "不跟踪转发"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:307
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:228
 msgid "Do not track input"
 msgstr "不跟踪入站"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:287
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:208
 msgid "Do not track output"
 msgstr "不跟踪出站"
 
@@ -209,7 +197,6 @@ msgstr "丢弃无效数据包"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:149
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:189
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:246
 msgid "Enable"
 msgstr "启用"
 
@@ -262,7 +249,7 @@ msgstr "额外的源参数"
 msgid "Firewall"
 msgstr "防火墙"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/custom.lua:7
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/custom.js:24
 msgid "Firewall - Custom Rules"
 msgstr "防火墙 - 自定义规则"
 
@@ -335,17 +322,14 @@ msgid "Hardware flow offloading"
 msgstr "硬件流量分载"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:157
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:75
 msgid "IP"
 msgstr "IP"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:167
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:83
 msgid "IP range"
 msgstr "IP 范围"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:175
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:100
 msgid "IPs"
 msgstr "IP"
 
@@ -395,12 +379,10 @@ msgid "Limit log messages"
 msgstr "限制日志信息"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:96
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:31
 msgid "MAC"
 msgstr "MAC"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:104
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:40
 msgid "MACs"
 msgstr "MAC"
 
@@ -519,27 +501,20 @@ msgid "Redirect matched incoming traffic to the specified internal host"
 msgstr "重定向匹配的入站流量到指定的内部主机"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:295
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:216
 msgid "Refuse forward"
 msgstr "拒绝转发"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:305
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:226
 msgid "Refuse input"
 msgstr "拒绝入站"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:285
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:206
 msgid "Refuse output"
 msgstr "拒绝出站"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:66
 msgid "Requires hardware NAT support. Implemented at least for mt7621"
 msgstr "需要硬件 NAT 支持。目前 mt7621 已实现"
-
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/custom.lua:29
-msgid "Restart Firewall"
-msgstr "重启防火墙"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:201
 msgid "Restrict Masquerading to given destination subnets"
@@ -557,14 +532,6 @@ msgstr "限制地址"
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:53
 msgid "Routing/NAT Offloading"
 msgstr "Routing/NAT 分载"
-
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:245
-msgid "Rule is disabled"
-msgstr "规则已禁用"
-
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:241
-msgid "Rule is enabled"
-msgstr "规则已启用"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:351
 msgid "Saturday"
@@ -637,10 +604,10 @@ msgid ""
 "rule is <em>unidirectional</em>, e.g. a forward from lan to wan does "
 "<em>not</em> imply a permission to forward from wan to lan as well."
 msgstr ""
-"以下选项控制此区域（%s）和其它区域间的转发策略。<em>目标区域</em>接收<strong>源自 %q</strong> "
-"的转发流量。<em>源区域</em>匹配的转发流量来自<strong>目标为 %q</strong> "
-"的其它区域。转发规则的作用是<em>单向</em>的，例如：转发从 lan 到 wan 的流量并<em>不</em>意味着允许反向转发从 wan 到 "
-"lan 的流量。"
+"以下选项控制此区域（%s）和其它区域间的转发策略。<em>目标区域</em>接收<strong>"
+"源自 %q</strong> 的转发流量。<em>源区域</em>匹配的转发流量来自<strong>目标为 "
+"%q</strong> 的其它区域。转发规则的作用是<em>单向</em>的，例如：转发从 lan 到 "
+"wan 的流量并<em>不</em>意味着允许反向转发从 wan 到 lan 的流量。"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:89
 msgid ""
@@ -699,6 +666,10 @@ msgstr ""
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:347
 msgid "Tuesday"
 msgstr "星期二"
+
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/custom.js:18
+msgid "Unable to save contents: %s"
+msgstr ""
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:108
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:122
@@ -786,12 +757,10 @@ msgstr "所有路由 IP"
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:182
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:52
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:138
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:110
 msgid "any zone"
 msgstr "所有区域"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:267
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:189
 msgid "day"
 msgstr "日"
 
@@ -806,29 +775,23 @@ msgid "drop"
 msgstr "丢弃"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:265
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:187
 msgid "hour"
 msgstr "小时"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:263
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:185
 msgid "minute"
 msgstr "分钟"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:86
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:20
 msgid "not"
 msgstr "非"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:121
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:50
 msgid "port"
 msgstr "端口"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:131
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:140
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:55
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:65
 msgid "ports"
 msgstr "端口"
 
@@ -839,7 +802,6 @@ msgid "reject"
 msgstr "拒绝"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:261
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:183
 msgid "second"
 msgstr "秒"
 
@@ -850,14 +812,24 @@ msgid "this new zone"
 msgstr "此新区域"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:197
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:121
 msgid "type"
 msgstr "类型"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:209
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:130
 msgid "types"
 msgstr "类型"
+
+#~ msgid "Disable"
+#~ msgstr "禁用"
+
+#~ msgid "Restart Firewall"
+#~ msgstr "重启防火墙"
+
+#~ msgid "Rule is disabled"
+#~ msgstr "规则已禁用"
+
+#~ msgid "Rule is enabled"
+#~ msgstr "规则已启用"
 
 #~ msgid "Add"
 #~ msgstr "添加"
