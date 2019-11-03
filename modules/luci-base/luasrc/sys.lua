@@ -7,7 +7,6 @@ local table  = require "table"
 local nixio  = require "nixio"
 local fs     = require "nixio.fs"
 local uci    = require "luci.model.uci"
-local ntm    = require "luci.model.network"
 
 local luci  = {}
 luci.util   = require "luci.util"
@@ -24,69 +23,6 @@ function call(...)
 end
 
 exec = luci.util.exec
-
-function mounts()
-	local data = {}
-	local k = {"fs", "blocks", "used", "available", "percent", "mountpoint"}
-	local ps = luci.util.execi("df")
-
-	if not ps then
-		return
-	else
-		ps()
-	end
-
-	for line in ps do
-		local row = {}
-
-		local j = 1
-		for value in line:gmatch("[^%s]+") do
-			row[k[j]] = value
-			j = j + 1
-		end
-
-		if row[k[1]] then
-
-			-- this is a rather ugly workaround to cope with wrapped lines in
-			-- the df output:
-			--
-			--	/dev/scsi/host0/bus0/target0/lun0/part3
-			--                   114382024  93566472  15005244  86% /mnt/usb
-			--
-
-			if not row[k[2]] then
-				j = 2
-				line = ps()
-				for value in line:gmatch("[^%s]+") do
-					row[k[j]] = value
-					j = j + 1
-				end
-			end
-
-			table.insert(data, row)
-		end
-	end
-
-	return data
-end
-
-function mtds()
-	local data = {}
-
-	if fs.access("/proc/mtd") then
-		for l in io.lines("/proc/mtd") do
-			local d, s, e, n = l:match('^([^%s]+)%s+([^%s]+)%s+([^%s]+)%s+"([^%s]+)"')
-			if s and n then
-				local d = {}
-				d.size = tonumber(s, 16)
-				d.name = n
-				table.insert(data, d)
-			end
-		end
-	end
-
-	return data
-end
 
 -- containing the whole environment is returned otherwise this function returns
 -- the corresponding string value for the given name or nil if no such variable
@@ -189,7 +125,7 @@ local function _nethints(what, callback)
 			end
 		end
 	)
-	
+
 	cur:foreach("dhcp", "odhcpd",
 		function(s)
 			if type(s.leasefile) == "string" and fs.access(s.leasefile) then
@@ -600,6 +536,8 @@ end
 wifi = {}
 
 function wifi.getiwinfo(ifname)
+	local ntm = require "luci.model.network"
+
 	ntm.init()
 
 	local wnet = ntm:get_wifinet(ifname)
@@ -645,7 +583,7 @@ function init.enabled(name)
 end
 
 function init.enable(name)
-	return (init_action("enable", name) == 1)
+	return (init_action("enable", name) == 0)
 end
 
 function init.disable(name)
@@ -658,4 +596,12 @@ end
 
 function init.stop(name)
 	return (init_action("stop", name) == 0)
+end
+
+function init.restart(name)
+	return (init_action("restart", name) == 0)
+end
+
+function init.reload(name)
+	return (init_action("reload", name) == 0)
 end

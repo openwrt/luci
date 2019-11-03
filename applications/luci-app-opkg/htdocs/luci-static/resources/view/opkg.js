@@ -162,7 +162,7 @@ function display(pattern)
 				'class': 'btn cbi-button-negative',
 				'data-package': name,
 				'click': handleRemove
-			}, _('Remove'));
+			}, _('Remove…'));
 		}
 		else {
 			var inst = packages.installed.pkgs[name];
@@ -589,6 +589,10 @@ function handleInstall(ev)
 		desc || '',
 		errs || inst || '',
 		E('div', { 'class': 'right' }, [
+			E('label', { 'class': 'cbi-checkbox', 'style': 'float:left; padding-top:.5em' }, [
+				E('input', { 'type': 'checkbox', 'name': 'overwrite' }), ' ',
+				_('Overwrite files from other package(s)')
+			]),
 			E('div', {
 				'class': 'btn',
 				'click': L.hideModal
@@ -741,39 +745,81 @@ function handleRemove(ev)
 
 function handleOpkg(ev)
 {
-	var cmd = ev.target.getAttribute('data-command'),
-	    pkg = ev.target.getAttribute('data-package'),
-	    rem = document.querySelector('input[name="autoremove"]'),
-	    url = 'admin/system/opkg/exec/' + encodeURIComponent(cmd);
+	return new Promise(function(resolveFn, rejectFn) {
+		var cmd = ev.target.getAttribute('data-command'),
+		    pkg = ev.target.getAttribute('data-package'),
+		    rem = document.querySelector('input[name="autoremove"]'),
+		    owr = document.querySelector('input[name="overwrite"]'),
+		    url = 'admin/system/opkg/exec/' + encodeURIComponent(cmd);
 
-	var dlg = L.showModal(_('Executing package manager'), [
-		E('p', { 'class': 'spinning' },
-			_('Waiting for the <em>opkg %h</em> command to complete…').format(cmd))
-	]);
+		var dlg = L.showModal(_('Executing package manager'), [
+			E('p', { 'class': 'spinning' },
+				_('Waiting for the <em>opkg %h</em> command to complete…').format(cmd))
+		]);
 
-	L.post(url, { package: pkg, autoremove: rem ? rem.checked : false }, function(xhr, res) {
-		dlg.removeChild(dlg.lastChild);
+		L.post(url, { package: pkg, autoremove: rem ? rem.checked : false, overwrite: owr ? owr.checked : false }, function(xhr, res) {
+			dlg.removeChild(dlg.lastChild);
 
-		if (res.stdout)
-			dlg.appendChild(E('pre', [ res.stdout ]));
+			if (res.stdout)
+				dlg.appendChild(E('pre', [ res.stdout ]));
 
-		if (res.stderr) {
-			dlg.appendChild(E('h5', _('Errors')));
-			dlg.appendChild(E('pre', { 'class': 'errors' }, [ res.stderr ]));
-		}
+			if (res.stderr) {
+				dlg.appendChild(E('h5', _('Errors')));
+				dlg.appendChild(E('pre', { 'class': 'errors' }, [ res.stderr ]));
+			}
 
-		if (res.code !== 0)
-			dlg.appendChild(E('p', _('The <em>opkg %h</em> command failed with code <code>%d</code>.').format(cmd, (res.code & 0xff) || -1)));
+			if (res.code !== 0)
+				dlg.appendChild(E('p', _('The <em>opkg %h</em> command failed with code <code>%d</code>.').format(cmd, (res.code & 0xff) || -1)));
 
-		dlg.appendChild(E('div', { 'class': 'right' },
-			E('div', {
-				'class': 'btn',
-				'click': function() {
-					L.hideModal();
-					updateLists();
-				}
-			}, _('Dismiss'))));
+			dlg.appendChild(E('div', { 'class': 'right' },
+				E('div', {
+					'class': 'btn',
+					'click': L.bind(function(res) {
+						L.hideModal();
+						updateLists();
+
+						if (res.code !== 0)
+							rejectFn(new Error(res.stderr || 'opkg error %d'.format(res.code)));
+						else
+							resolveFn(res);
+					}, this, res)
+				}, _('Dismiss'))));
+		});
 	});
+}
+
+function handleUpload(ev)
+{
+	var path = '/tmp/upload.ipk';
+	return L.ui.uploadFile(path).then(L.bind(function(btn, res) {
+		L.showModal(_('Manually install package'), [
+			E('p', {}, _('Installing packages from untrusted sources is a potential security risk! Really attempt to install <em>%h</em>?').format(res.name)),
+			E('ul', {}, [
+				res.size ? E('li', {}, '%s: %1024.2mB'.format(_('Size'), res.size)) : '',
+				res.checksum ? E('li', {}, '%s: %s'.format(_('MD5'), res.checksum)) : '',
+				res.sha256sum ? E('li', {}, '%s: %s'.format(_('SHA256'), res.sha256sum)) : ''
+			]),
+			E('div', { 'class': 'right' }, [
+				E('div', {
+					'click': function(ev) {
+						L.hideModal();
+						L.fs.remove(path);
+					},
+					'class': 'btn cbi-button-neutral'
+				}, _('Cancel')), ' ',
+				E('div', {
+					'class': 'btn cbi-button-action',
+					'data-command': 'install',
+					'data-package': path,
+					'click': function(ev) {
+						handleOpkg(ev).finally(function() {
+							L.fs.remove(path)
+						});
+					}
+				}, _('Install'))
+			])
+		]);
+	}, this, ev.target));
 }
 
 function updateLists()

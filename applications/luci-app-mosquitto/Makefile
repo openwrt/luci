@@ -1,7 +1,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=Mosquitto LuCI interface
-LUCI_DEPENDS:=+luci-mod-admin-full mosquitto
+LUCI_DEPENDS:=+luci-compat +luci-mod-admin-full mosquitto
 LUCI_PKGARCH:=all
 LUCI_DESCRIPTION:=Provides a webadmin for most basic mosquitto parameters.
 

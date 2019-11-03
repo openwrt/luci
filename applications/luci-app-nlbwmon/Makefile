@@ -1,7 +1,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=Netlink based bandwidth accounting
-LUCI_DEPENDS:=+nlbwmon
+LUCI_DEPENDS:=+luci-compat +nlbwmon
 
 include ../../luci.mk
 

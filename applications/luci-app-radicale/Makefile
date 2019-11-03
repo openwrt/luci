@@ -21,7 +21,7 @@ PKG_MAINTAINER:=
 
 # LuCI specific settings
 LUCI_TITLE:=LuCI Support for Radicale CardDAV/CalDAV
-LUCI_DEPENDS:=+luci-lib-ipkg +luci-mod-admin-full
+LUCI_DEPENDS:=+luci-compat +luci-lib-ipkg +luci-mod-admin-full
 LUCI_PKGARCH:=all
 
 define Package/$(PKG_NAME)/config

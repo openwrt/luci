@@ -19,6 +19,8 @@ $Id$
 require("luci.model.uci")
 require("luci.sys.iptparser")
 require("luci.util")
+require("luci.i18n")
+require("nixio.fs")
 
 local ipt = luci.sys.iptparser.IptParser()
 local uci = luci.model.uci.cursor()
@@ -270,206 +272,37 @@ end
 
 
 plugins = {
-	apcups = {
-		{ "Host", "Port" },
-		{ },
-		{ }
-	},
-
 	collectd = {
 		{ "BaseDir", "Include", "PIDFile", "PluginDir", "TypesDB", "Interval", "ReadThreads", "Hostname" },
 		{ },
 		{ }
 	},
-
-	conntrack = {
-		{ },
-		{ },
-		{ }
-	},
-
-	cpu	= {
-		{ },
-		{ },
-		{ }
-	},
-
-	cpufreq	= {
-		{ },
-		{ },
-		{ }
-	},
-
-        contextswitch = {
-                { },
-                { },
-                { }
-        },
-
-	csv	= {
-		{ "DataDir" },
-		{ "StoreRates" },
-		{ }
-	},
-
-	curl = config_curl,
-
-	df	= {
-		{ },
-		{ "IgnoreSelected" },
-		{ "Devices", "MountPoints", "FSTypes" }
-	},
-
-	disk	= {
-		{ },
-		{ "IgnoreSelected" },
-		{ "Disks" }
-	},
-
-	dns	= {
-		{ },
-		{ },
-		{ "Interfaces", "IgnoreSources" }
-	},
-
-	email	= {
-		{ "SocketFile", "SocketGroup", "SocketPerms", "MaxConns" },
-		{ },
-		{ }
-	},
-
-	entropy = {
-		{ },
-		{ },
-		{ }
-	},
-
-	exec	= config_exec,
-
-	interface = {
-		{ },
-		{ "IgnoreSelected" },
-		{ "Interfaces" }
-	},
-
-	iptables = config_iptables,
-
-	irq	= {
-		{ },
-		{ "IgnoreSelected" },
-		{ "Irqs" }
-	},
-
-	iwinfo = {
-		{ },
-		{ "IgnoreSelected" },
-		{ "Interfaces" }
-	},
-
-	load	= {
-		{ },
-		{ },
-		{ }
-	},
-
 	logfile	= {
 		{ "LogLevel", "File" },
 		{ "Timestamp" },
 		{ }
 	},
-
-	memory = { 
-		{ },
-		{ },
-		{ }
-	},
-
-	netlink	= {
-		{ },
-		{ "IgnoreSelected" },
-		{ "Interfaces", "VerboseInterfaces", "QDiscs", "Classes", "Filters" }
-	},
-
-	network	= config_network,
-
-	nut = {
-		{ },
-		{ },
-		{ "UPS" }
-	},
-
-	olsrd = {
-		{ "Host", "Port", "CollectLinks","CollectRoutes","CollectTopology"},
-		{ },
-		{ }
-	},
-
-	openvpn = {
-		{ },
-		{ "CollectIndividualUsers", "CollectUserCount", "CollectCompression", "ImprovedNamingSchema" },
-		{ "StatusFile" }
-	},
-
-	ping	= {
-		{ "TTL", "Interval" },
-		{ },
-		{ "Hosts" }
-	},
-
-	processes = {
-		{ },
-		{ },
-		{ "Processes" }
-	},
-
-	rrdtool	= {
-		{ "DataDir", "StepSize", "HeartBeat", "RRARows", "XFF", "CacheFlush", "CacheTimeout" },
-		{ "RRASingle" },
-		{ "RRATimespans" }
-	},
-
-	sensors = {
-		{ },
-		{ "IgnoreSelected" },
-		{ "Sensor" }
-	},
-
-        splash_leases = {
-          { },
-          { },
-          { }
-        },
-
-	tcpconns = {
-		{ },
-		{ "ListeningPorts" },
-		{ "LocalPorts", "RemotePorts" }
-	},
-
-	thermal	= {
-		{ },
-		{ "IgnoreSelected" },
-		{ "Device" }
-	},
-
-	unixsock = {
-		{ "SocketFile", "SocketGroup", "SocketPerms" },
-		{ },
-		{ }
-	},
-
-	uptime = {
-		{ },
-		{ },
-		{ }
-	},
-
-	wireless = {
-		{ },
-		{ },
-		{ }
-	},
 }
+
+local plugin_dir = "/usr/lib/lua/luci/statistics/plugins/"
+for filename in nixio.fs.dir(plugin_dir) do
+	local plugin_fun = loadfile(plugin_dir .. filename)
+	setfenv(plugin_fun, { _ = luci.i18n.translate })
+	local plugin = plugin_fun()
+	local name = filename:gsub("%.lua", "")
+	if (name == "exec") then
+		plugins[name] = config_exec
+	elseif (name == "iptables") then
+		plugins[name] = config_iptables
+	elseif (name == "curl") then
+		plugins[name] = config_curl
+	elseif (name == "network") then
+		plugins[name] = config_network
+	else
+		plugins[name] = plugin.legend
+	end
+end
+
 
 preprocess = {
 	RRATimespans = function(val)

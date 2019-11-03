@@ -10,24 +10,24 @@ function index()
 
 	local page
 
-	page = entry({"admin", "services", "ocserv"}, alias("admin", "services", "ocserv", "main"),
+	page = entry({"admin", "vpn", "ocserv"}, alias("admin", "vpn", "ocserv", "main"),
 		_("OpenConnect VPN"))
 	page.dependent = true
 	
-	page = entry({"admin", "services", "ocserv", "main"},
+	page = entry({"admin", "vpn", "ocserv", "main"},
 		cbi("ocserv/main"),
 		_("Server Settings"), 200)
 	page.dependent = true
 
-	page = entry({"admin", "services", "ocserv", "users"},
+	page = entry({"admin", "vpn", "ocserv", "users"},
 		cbi("ocserv/users"),
 		_("User Settings"), 300)
 	page.dependent = true
 
-	entry({"admin", "services", "ocserv", "status"},
+	entry({"admin", "vpn", "ocserv", "status"},
 		call("ocserv_status")).leaf = true
 
-	entry({"admin", "services", "ocserv", "disconnect"},
+	entry({"admin", "vpn", "ocserv", "disconnect"},
 		post("ocserv_disconnect")).leaf = true
 
 end

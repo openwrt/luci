@@ -125,25 +125,6 @@
 			end
 		end
 	end
-
-	local function render_changes()
-		if tree.nodes[category] and tree.nodes[category].ucidata then
-			local ucic = 0
-			local i, j
-			for i, j in pairs(require("luci.model.uci").cursor():changes()) do
-				ucic = ucic + #j
-			end
-
-			if ucic > 0 then
-				write('<div id="savemenu" class="uci_change_indicator"><a class="warning" href="%s?redir=%s">%s: %d</a></div>' %{
-					url(category, 'uci/changes'),
-					http.urlencode(http.formvalue('redir') or table.concat(disp.context.request, "/")),
-					translate('Unsaved Changes'),
-					ucic
-				})
-			end
-		end
-	end
 -%>
 
 <?xml version="1.0" encoding="utf-8"?>
@@ -233,8 +214,6 @@
 		<% end %>
 	</ul>
 <% end %>
-
-<% render_changes() %>
 
 <div class="clear"></div>
 </div>

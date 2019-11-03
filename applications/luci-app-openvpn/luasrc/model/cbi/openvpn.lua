@@ -18,9 +18,9 @@ local cfg = s:option(DummyValue, "config")
 function cfg.cfgvalue(self, section)
 	local file_cfg = self.map:get(section, "config")
 	if file_cfg then
-		s.extedit = luci.dispatcher.build_url("admin", "services", "openvpn", "file", "%s")
+		s.extedit = luci.dispatcher.build_url("admin", "vpn", "openvpn", "file", "%s")
 	else
-		s.extedit = luci.dispatcher.build_url("admin", "services", "openvpn", "basic", "%s")
+		s.extedit = luci.dispatcher.build_url("admin", "vpn", "openvpn", "basic", "%s")
 	end
 end
 
@@ -117,7 +117,7 @@ end
 local updown = s:option( Button, "_updown", translate("Start/Stop") )
 updown._state = false
 updown.redirect = luci.dispatcher.build_url(
-	"admin", "services", "openvpn"
+	"admin", "vpn", "openvpn"
 )
 function updown.cbid(self, section)
 	local pid = s.getPID(section)

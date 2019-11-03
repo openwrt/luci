@@ -8,7 +8,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=E2Guardian LuCI Interface
-LUCI_DEPENDS:=+luci-mod-admin-full +e2guardian
+LUCI_DEPENDS:=+luci-compat +luci-mod-admin-full +e2guardian
 
 PKG_MAINTAINER:=Marko Ratkaj <marko.ratkaj@sartura.hr>
 PKG_LICENSE:=Apache-2.0

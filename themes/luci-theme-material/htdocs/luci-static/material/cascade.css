@@ -214,6 +214,7 @@ input:not(.cbi-button):focus,
 	border-color: var(--main-color);
 }
 
+.cbi-dropdown,
 select[multiple="multiple"] {
 	height: auto;
 }
@@ -399,10 +400,6 @@ header > .fill > .container > #logo {
 header > .fill > .container > #logo > img {
 	width: calc(0% + 10rem);
 	margin-top: -.1rem;
-}
-
-body:not(.logged-in) > header > .fill > .container > #logo {
-	display: none;
 }
 
 header > .fill > .container > .brand {
@@ -693,6 +690,7 @@ h5 {
 #cbi-network > .cbi-section-node,
 #cbi-wireless > .cbi-section-node,
 #cbi-wireless > #wifi_assoclist_table,
+[data-tab-title],
 [data-page^="admin-system-admin"]:not(.node-main-login) .cbi-map:not(#cbi-dropbear),
 [data-page="admin-system-opkg"] #maincontent > .container {
 	font-family: inherit;
@@ -706,6 +704,16 @@ h5 {
 	border-radius: 0;
 	background-color: #fff;
 	box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .16), 0 0 2px 0 rgba(0, 0, 0, .12);
+}
+
+.cbi-modal .cbi-section,
+.cbi-section .cbi-section {
+	padding: 0;
+	box-shadow: none;
+}
+
+.cbi-modal .cbi-tabmenu {
+	margin-left: 0;
 }
 
 .cbi-map-descr,
@@ -743,6 +751,15 @@ fieldset > fieldset,
 	padding-bottom: 1rem;
 	color: #404040;
 	border-bottom: thin solid #eee;
+}
+
+.cbi-section > h3:first-child,
+.cbi-section > h4:first-child,
+.cbi-section > p:first-child,
+[data-tab-title] > h3:first-child,
+[data-tab-title] > h4:first-child,
+[data-tab-title] > p:first-child {
+	padding-top: 1rem;
 }
 
 table {
@@ -1123,6 +1140,8 @@ td > table > tbody > tr > td,
 	overflow: hidden;
 	height: 0;
 	opacity: 0;
+	margin: 0;
+	padding: 0rem 1rem !important;
 }
 
 [data-tab-active="true"] {
@@ -1130,6 +1149,7 @@ td > table > tbody > tr > td,
 	height: auto;
 	opacity: 1;
 	transition: opacity .25s ease-in;
+	margin: inherit !important;
 }
 
 .cbi-section[id] .cbi-section-remove:nth-of-type(4n+3),
@@ -1599,6 +1619,8 @@ body:not(.Interfaces) .cbi-rowstyle-2:first-child {
 .modal > * {
 	line-height: normal;
 	flex-basis: 100%;
+	margin-bottom: .5em;
+	max-width: 100%;
 }
 
 .modal > pre,
@@ -1653,6 +1675,11 @@ body:not(.Interfaces) .cbi-rowstyle-2:first-child {
 
 .modal .spinning {
 	margin-bottom: 2em;
+}
+
+.modal.cbi-modal {
+	max-width: 90%;
+	max-height: none;
 }
 
 body.modal-overlay-active {
@@ -2824,7 +2851,7 @@ input[name="nslookup"] {
 	}
 
 	#maincontent > .container {
-		margin: 0 1rem 1.5rem 1rem;
+		margin: 0 .5rem 1.5rem .5rem;
 	}
 
 	.main > .main-left > .nav > .slide > .menu,
@@ -2981,6 +3008,22 @@ input[name="nslookup"] {
 	.hide-sm,
 	.hide-xs:not([data-title="MAC-Address"]) {
 		display: none;
+	}
+
+	.cbi-modal {
+		padding: .5rem;
+	}
+
+	.cbi-modal .cbi-value {
+		padding: 0 0 .25rem 0;
+	}
+
+	.cbi-modal [data-tab-title] {
+		padding: 0 .25rem !important;
+	}
+
+	[data-tab-title] {
+		padding: 0 .5rem !important;
 	}
 }
 

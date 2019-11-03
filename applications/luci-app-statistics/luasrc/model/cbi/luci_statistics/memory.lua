@@ -10,4 +10,20 @@ s = m:section( NamedSection, "collectd_memory", "luci_statistics" )
 enable = s:option( Flag, "enable", translate("Enable this plugin") )
 enable.default = 0
 
+-- collectd_memory.valuesabsolute (ValuesAbsolute)
+valuesabsolute = s:option( Flag, "ValuesAbsolute",
+	translate("Absolute values"),
+	translate("When set to true, we request absolute values"))
+valuesabsolute.default = 1
+valuesabsolute.optional = false
+valuesabsolute:depends( "enable", 1 )
+
+-- collectd_memory.valuespercentage (ValuesPercentage)
+valuespercentage = s:option( Flag, "ValuesPercentage",
+	translate("Percent values"),
+	translate("When set to true, we request percentage values"))
+valuespercentage.default = 0
+valuespercentage.optional = false
+valuespercentage:depends( "enable", 1 )
+
 return m

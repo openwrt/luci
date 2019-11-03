@@ -47,10 +47,6 @@ local basicParams = {
 		"keepalive",
 		"10 60",
 		translate("Helper directive to simplify the expression of --ping and --ping-restart in server mode configurations") },
-	{ ListValue,
-		"proto",
-		{ "udp", "tcp-client", "tcp-server" },
-		translate("Use protocol") },
 	{ Flag,
 		"client",
 		0,
@@ -93,9 +89,23 @@ local basicParams = {
 		translate("Local private key") },
 }
 
+local has_ipv6 = fs.access("/proc/net/ipv6_route")
+if has_ipv6 then
+	table.insert( basicParams, { ListValue,
+		"proto",
+		{ "udp", "tcp-client", "tcp-server", "udp6", "tcp6-client", "tcp6-server" },
+		translate("Use protocol")
+	})
+else
+	table.insert( basicParams, { ListValue,
+		"proto",
+		{ "udp", "tcp-client", "tcp-server" },
+		translate("Use protocol")
+	})
+end
 
 local m = Map("openvpn")
-m.redirect = luci.dispatcher.build_url("admin", "services", "openvpn")
+m.redirect = luci.dispatcher.build_url("admin", "vpn", "openvpn")
 m.apply_on_parse = true
 
 local p = m:section( SimpleSection )

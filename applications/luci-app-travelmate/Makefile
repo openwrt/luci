@@ -5,7 +5,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=LuCI support for Travelmate
-LUCI_DEPENDS:=+travelmate +luci-lib-jsonc
+LUCI_DEPENDS:=+luci-compat +travelmate +luci-lib-jsonc
 LUCI_PKGARCH:=all
 
 include ../../luci.mk

@@ -11,94 +11,123 @@ msgstr ""
 "PO-Revision-Date: 2018-08-08 08:28+0800\n"
 "X-Generator: Gtranslator 2.91.7\n"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/forwards.lua:127
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:146
 msgid "%s in %s"
 msgstr "%s 位於 %s"
 
+#: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:242
 #: applications/luci-app-firewall/luasrc/tools/firewall.lua:154
 msgid "%s%s with %s"
 msgstr "%s%s 和 %s"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/forwards.lua:125
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:144
 msgid "%s, %s in %s"
 msgstr "%s, %s 位於 %s"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/forward-details.lua:26
-msgid "(Unnamed Entry)"
-msgstr "（未命名條目）"
-
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rule-details.lua:169
-msgid "(Unnamed Rule)"
-msgstr "（未命名規則）"
-
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rule-details.lua:37
-msgid "(Unnamed SNAT)"
-msgstr "（未命名 SNAT）"
-
+#: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:275
 #: applications/luci-app-firewall/luasrc/tools/firewall.lua:195
 msgid "<var>%d</var> pkts. per <var>%s</var>"
 msgstr "<var>%d</var> 資料包/<var>%s</var>"
 
+#: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:271
 #: applications/luci-app-firewall/luasrc/tools/firewall.lua:192
 msgid "<var>%d</var> pkts. per <var>%s</var>, burst <var>%d</var> pkts."
 msgstr "<var>%d</var> 資料包/<var>%s</var>，突發 <var>%d</var> 資料包。"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rules.lua:180
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:107
 msgid "<var>%s</var> and limit to %s"
 msgstr "<var>%s</var> 並限制到 %s"
 
+#: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:293
 #: applications/luci-app-firewall/luasrc/tools/firewall.lua:214
 msgid "Accept forward"
 msgstr "接受轉發"
 
+#: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:303
 #: applications/luci-app-firewall/luasrc/tools/firewall.lua:224
 msgid "Accept input"
 msgstr "接受入站"
 
+#: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:283
 #: applications/luci-app-firewall/luasrc/tools/firewall.lua:204
 msgid "Accept output"
 msgstr "接受出站"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rule-details.lua:322
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rules.lua:172
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rules.lua:257
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:183
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:328
 msgid "Action"
 msgstr "動作"
 
-#: applications/luci-app-firewall/luasrc/view/firewall/cbi_addforward.htm:68
-#: applications/luci-app-firewall/luasrc/view/firewall/cbi_addrule.htm:31
-#: applications/luci-app-firewall/luasrc/view/firewall/cbi_addrule.htm:69
-#: applications/luci-app-firewall/luasrc/view/firewall/cbi_addsnat.htm:58
-msgid "Add"
-msgstr "新增"
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:249
+msgid ""
+"Additional raw <em>iptables</em> arguments to classify zone destination "
+"traffic, e.g. <code>-p tcp --dport 443</code> to only match outbound HTTPS "
+"traffic."
+msgstr ""
 
-#: applications/luci-app-firewall/luasrc/view/firewall/cbi_addrule.htm:64
-#: applications/luci-app-firewall/luasrc/view/firewall/cbi_addsnat.htm:53
-msgid "Add and edit..."
-msgstr "新增並編輯…"
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:239
+msgid ""
+"Additional raw <em>iptables</em> arguments to classify zone source traffic, "
+"e.g. <code>-p tcp --sport 443</code> to only match inbound HTTPS traffic."
+msgstr ""
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/zone-details.lua:57
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:101
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:137
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:78
 msgid "Advanced Settings"
 msgstr "高階設定"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/zone-details.lua:178
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:211
+msgid "Allow \"invalid\" traffic"
+msgstr ""
+
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:311
 msgid "Allow forward from <em>source zones</em>:"
 msgstr "允許從<em>源區域</em>轉發："
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/zone-details.lua:170
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:270
 msgid "Allow forward to <em>destination zones</em>:"
 msgstr "允許轉發到<em>目標區域</em>："
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rule-details.lua:191
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rules.lua:89
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:208
 msgid "Any"
 msgstr "任何"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/zone-details.lua:88
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:344
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:357
+msgid "Any day"
+msgstr ""
+
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:214
+msgid "Automatic helper assignment"
+msgstr ""
+
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:214
+msgid ""
+"Automatically assign conntrack helpers based on traffic protocol and port"
+msgstr ""
+
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:79
+msgid "Conntrack Settings"
+msgstr ""
+
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:218
+msgid "Conntrack helpers"
+msgstr ""
+
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:178
+msgid "Covered devices"
+msgstr ""
+
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:137
 msgid "Covered networks"
 msgstr "覆蓋網路"
 
-#: applications/luci-app-firewall/luasrc/controller/firewall.lua:22
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:183
+msgid "Covered subnets"
+msgstr ""
+
+#: applications/luci-app-firewall/luasrc/controller/firewall.lua:19
 msgid "Custom Rules"
 msgstr "自訂規則"
 
@@ -111,23 +140,15 @@ msgstr ""
 "自訂規則允許您執行不屬於防火牆框架的任意 iptables 指令。每次重啟防火牆時，在"
 "預設的規則執行後這些指令將立即執行。"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rule-details.lua:108
-msgid "Destination IP address"
-msgstr "目標 IP 位址"
-
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rule-details.lua:304
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:308
 msgid "Destination address"
 msgstr "目標位址"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rule-details.lua:117
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rule-details.lua:313
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:319
 msgid "Destination port"
 msgstr "目標埠"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rule-details.lua:102
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rule-details.lua:295
-#: applications/luci-app-firewall/luasrc/view/firewall/cbi_addrule.htm:42
-#: applications/luci-app-firewall/luasrc/view/firewall/cbi_addsnat.htm:21
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:302
 msgid "Destination zone"
 msgstr "目標區域"
 
@@ -135,82 +156,96 @@ msgstr "目標區域"
 msgid "Disable"
 msgstr "禁用"
 
+#: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:299
 #: applications/luci-app-firewall/luasrc/tools/firewall.lua:220
 msgid "Discard forward"
 msgstr "丟棄轉發"
 
+#: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:309
 #: applications/luci-app-firewall/luasrc/tools/firewall.lua:230
 msgid "Discard input"
 msgstr "丟棄入站"
 
+#: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:289
 #: applications/luci-app-firewall/luasrc/tools/firewall.lua:210
 msgid "Discard output"
 msgstr "丟棄出站"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rule-details.lua:151
-#: applications/luci-app-firewall/luasrc/view/firewall/cbi_addsnat.htm:45
-#: applications/luci-app-firewall/luasrc/view/firewall/cbi_addsnat.htm:50
-msgid "Do not rewrite"
-msgstr "不重寫"
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:211
+msgid ""
+"Do not install extra rules to reject forwarded traffic with conntrack state "
+"<em>invalid</em>. This may be required for complex asymmetric route setups."
+msgstr ""
 
+#: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:297
 #: applications/luci-app-firewall/luasrc/tools/firewall.lua:218
 msgid "Do not track forward"
 msgstr "不跟蹤轉發"
 
+#: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:307
 #: applications/luci-app-firewall/luasrc/tools/firewall.lua:228
 msgid "Do not track input"
 msgstr "不跟蹤入站"
 
+#: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:287
 #: applications/luci-app-firewall/luasrc/tools/firewall.lua:208
 msgid "Do not track output"
 msgstr "不跟蹤出站"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/zones.lua:22
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:36
 msgid "Drop invalid packets"
 msgstr "丟棄無效資料包"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/forwards.lua:131
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rules.lua:186
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rules.lua:270
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:149
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:189
 #: applications/luci-app-firewall/luasrc/tools/firewall.lua:246
 msgid "Enable"
 msgstr "啟用"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/forward-details.lua:149
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:262
 msgid "Enable NAT Loopback"
 msgstr "啟用 NAT 環回"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/zones.lua:20
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:35
 msgid "Enable SYN-flood protection"
 msgstr "啟用 SYN-flood 防禦"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/zone-details.lua:144
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:224
 msgid "Enable logging on this zone"
 msgstr "啟用此區域的日誌記錄"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/zones.lua:43
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:54
 msgid "Experimental feature. Not fully compatible with QoS/SQM."
 msgstr "實驗特性。與 QoS/SQM 不完全相容。"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/forward-details.lua:98
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:218
+msgid "Explicitly choses allowed connection tracking helpers for zone traffic"
+msgstr ""
+
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:210
 msgid "External IP address"
 msgstr "外部 IP 位址"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/forward-details.lua:111
-#: applications/luci-app-firewall/luasrc/view/firewall/cbi_addforward.htm:28
-#: applications/luci-app-firewall/luasrc/view/firewall/cbi_addrule.htm:12
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:223
 msgid "External port"
 msgstr "外部埠"
 
-#: applications/luci-app-firewall/luasrc/view/firewall/cbi_addforward.htm:27
-msgid "External zone"
-msgstr "外部區域"
-
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/forward-details.lua:158
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rule-details.lua:159
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rule-details.lua:331
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:267
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:336
 msgid "Extra arguments"
 msgstr "附加引數"
+
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:249
+msgid "Extra destination arguments"
+msgstr ""
+
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:80
+msgid "Extra iptables arguments"
+msgstr ""
+
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:239
+msgid "Extra source arguments"
+msgstr ""
 
 #: applications/luci-app-firewall/luasrc/controller/firewall.lua:6
 msgid "Firewall"
@@ -220,314 +255,270 @@ msgstr "防火牆"
 msgid "Firewall - Custom Rules"
 msgstr "防火牆 - 自訂規則"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/forward-details.lua:13
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/forward-details.lua:28
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/forwards.lua:8
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:92
 msgid "Firewall - Port Forwards"
 msgstr "防火牆 - 埠轉發"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rule-details.lua:12
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rule-details.lua:42
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rule-details.lua:172
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rules.lua:9
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:128
 msgid "Firewall - Traffic Rules"
 msgstr "防火牆 - 通訊規則"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/zone-details.lua:15
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/zone-details.lua:28
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/zones.lua:11
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:28
 msgid "Firewall - Zone Settings"
 msgstr "防火牆 - 區域設定"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/zone-details.lua:141
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:208
 msgid "Force connection tracking"
 msgstr "強制連線追蹤"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/zone-details.lua:76
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/zones.lua:27
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/zones.lua:92
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:41
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:117
 msgid "Forward"
 msgstr "轉發"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/forwards.lua:116
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:135
 msgid "Forward to"
 msgstr "轉發到"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rule-details.lua:343
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:350
 msgid "Friday"
 msgstr "星期五"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/forwards.lua:90
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rules.lua:106
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:62
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:64
 msgid "From %s in %s"
 msgstr "來自 %s 位於 %s"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/forwards.lua:88
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rules.lua:104
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:60
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:62
 msgid "From %s in %s with source %s"
 msgstr "來自 %s 位於 %s 源於 %s"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/forwards.lua:86
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rules.lua:102
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:58
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:60
 msgid "From %s in %s with source %s and %s"
 msgstr "來自 %s 位於 %s 源埠 %s 源 MAC %s"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rules.lua:117
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:75
 msgid "From %s on <var>this device</var>"
 msgstr "來自 %s 位於<var>本裝置</var>"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rules.lua:115
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:73
 msgid "From %s on <var>this device</var> with source %s"
 msgstr "來自 %s 位於<var>本裝置</var>源於 %s"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rules.lua:113
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:71
 msgid "From %s on <var>this device</var> with source %s and %s"
 msgstr "來自 %s 位於<var>本裝置</var>源埠 %s 源 MAC %s"
 
-#: applications/luci-app-firewall/luasrc/controller/firewall.lua:10
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/zone-details.lua:56
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/zones.lua:16
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:100
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:136
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:31
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:77
+#: applications/luci-app-firewall/luasrc/controller/firewall.lua:9
 msgid "General Settings"
 msgstr "基本設定"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/zones.lua:51
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:65
 msgid "Hardware flow offloading"
 msgstr "硬體流量分載"
 
+#: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:157
 #: applications/luci-app-firewall/luasrc/tools/firewall.lua:75
 msgid "IP"
 msgstr "IP"
 
+#: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:167
 #: applications/luci-app-firewall/luasrc/tools/firewall.lua:83
 msgid "IP range"
 msgstr "IP 範圍"
 
+#: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:175
 #: applications/luci-app-firewall/luasrc/tools/firewall.lua:100
 msgid "IPs"
 msgstr "IP"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/forwards.lua:73
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rules.lua:85
+#: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:216
 msgid "IPv4"
 msgstr "IPv4"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rule-details.lua:185
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/zone-details.lua:118
+#: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:220
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:201
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:189
 msgid "IPv4 and IPv6"
 msgstr "IPv4 和 IPv6"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rule-details.lua:186
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/zone-details.lua:119
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:202
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:190
 msgid "IPv4 only"
 msgstr "僅 IPv4"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rules.lua:87
+#: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:218
 msgid "IPv6"
 msgstr "IPv6"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rule-details.lua:187
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/zone-details.lua:120
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:203
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:191
 msgid "IPv6 only"
 msgstr "僅 IPv6"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/zone-details.lua:74
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/zones.lua:25
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/zones.lua:90
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:39
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:115
 msgid "Input"
 msgstr "入站資料"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/zone-details.lua:157
-msgid "Inter-Zone Forwarding"
-msgstr "埠觸發"
-
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/forward-details.lua:127
-#: applications/luci-app-firewall/luasrc/view/firewall/cbi_addforward.htm:30
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:239
 msgid "Internal IP address"
 msgstr "內部 IP 位址"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/forward-details.lua:138
-#: applications/luci-app-firewall/luasrc/view/firewall/cbi_addforward.htm:31
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:251
 msgid "Internal port"
 msgstr "內部埠"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/forward-details.lua:121
-#: applications/luci-app-firewall/luasrc/view/firewall/cbi_addforward.htm:29
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:233
 msgid "Internal zone"
 msgstr "內部區域"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/zone-details.lua:150
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:227
 msgid "Limit log messages"
 msgstr "限制日誌資訊"
 
+#: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:96
 #: applications/luci-app-firewall/luasrc/tools/firewall.lua:31
 msgid "MAC"
 msgstr "MAC"
 
+#: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:104
 #: applications/luci-app-firewall/luasrc/tools/firewall.lua:40
 msgid "MACs"
 msgstr "MAC"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/zone-details.lua:86
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/zones.lua:102
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:134
 msgid "MSS clamping"
 msgstr "MSS 鉗制"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/zone-details.lua:85
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/zones.lua:101
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:131
 msgid "Masquerading"
 msgstr "IP 動態偽裝"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/forwards.lua:105
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rules.lua:162
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rules.lua:247
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:125
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:173
 msgid "Match"
 msgstr "匹配規則"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rule-details.lua:206
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:218
 msgid "Match ICMP type"
 msgstr "匹配 ICMP 型別"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rule-details.lua:118
-msgid "Match forwarded traffic to the given destination port or port range."
-msgstr "匹配指定目標埠或目標埠範圍的轉發流量。"
-
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/forward-details.lua:112
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:224
 msgid ""
 "Match incoming traffic directed at the given destination port or port range "
 "on this host"
 msgstr "匹配指向此主機上指定目標埠或目標埠範圍的入站流量。"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rule-details.lua:91
-msgid ""
-"Match incoming traffic originating from the given source port or port range "
-"on the client host."
-msgstr "匹配來自客戶端主機上指定源埠或源埠範圍的入站流量。"
-
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rule-details.lua:339
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:346
 msgid "Monday"
 msgstr "星期一"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rule-details.lua:346
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:353
 msgid "Month Days"
 msgstr "日期"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/forward-details.lua:36
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rule-details.lua:50
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rule-details.lua:180
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/zone-details.lua:60
-#: applications/luci-app-firewall/luasrc/view/firewall/cbi_addforward.htm:25
-#: applications/luci-app-firewall/luasrc/view/firewall/cbi_addrule.htm:10
-#: applications/luci-app-firewall/luasrc/view/firewall/cbi_addrule.htm:40
-#: applications/luci-app-firewall/luasrc/view/firewall/cbi_addsnat.htm:19
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:121
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:169
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:195
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:93
 msgid "Name"
 msgstr "名字"
 
-#: applications/luci-app-firewall/luasrc/view/firewall/cbi_addsnat.htm:28
-msgid "New SNAT rule"
-msgstr "新建 SNAT 規則"
+#: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:169
+msgid "Network"
+msgstr ""
 
-#: applications/luci-app-firewall/luasrc/view/firewall/cbi_addrule.htm:37
-#: applications/luci-app-firewall/luasrc/view/firewall/cbi_addrule.htm:47
-msgid "New forward rule"
-msgstr "新建轉發規則"
-
-#: applications/luci-app-firewall/luasrc/view/firewall/cbi_addrule.htm:17
-msgid "New input rule"
-msgstr "新建進入規則"
-
-#: applications/luci-app-firewall/luasrc/view/firewall/cbi_addforward.htm:22
-#: applications/luci-app-firewall/luasrc/view/firewall/cbi_addforward.htm:36
-msgid "New port forward"
-msgstr "新建埠轉發"
-
-#: applications/luci-app-firewall/luasrc/view/firewall/cbi_addsnat.htm:16
-msgid "New source NAT"
-msgstr "新建 Source NAT"
-
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/forward-details.lua:99
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:211
 msgid "Only match incoming traffic directed at the given IP address."
 msgstr "僅匹配指定目的 IP 位址的入站流量。"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/forward-details.lua:63
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:174
 msgid "Only match incoming traffic from these MACs."
 msgstr "僅匹配來自這些 MAC 的入站流量。"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/forward-details.lua:75
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:187
 msgid "Only match incoming traffic from this IP or range."
 msgstr "僅匹配來自此 IP 或 IP 範圍的入站流量。"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/forward-details.lua:87
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:200
 msgid ""
 "Only match incoming traffic originating from the given source port or port "
 "range on the client host"
 msgstr "僅匹配源自客戶端主機上給定源埠或源埠範圍的入站流量。"
 
-#: applications/luci-app-firewall/luasrc/view/firewall/cbi_addrule.htm:7
-msgid "Open ports on router"
-msgstr "開啟路由器埠"
-
-#: applications/luci-app-firewall/luasrc/view/firewall/cbi_addforward.htm:43
-#: applications/luci-app-firewall/luasrc/view/firewall/cbi_addrule.htm:24
-msgid "Other..."
-msgstr "其它..."
-
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/zone-details.lua:75
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/zones.lua:26
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/zones.lua:91
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:40
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:116
 msgid "Output"
 msgstr "出站資料"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rule-details.lua:288
-msgid "Output zone"
-msgstr "出站區域"
-
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/forward-details.lua:159
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rule-details.lua:160
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rule-details.lua:332
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:268
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:337
 msgid "Passes additional arguments to iptables. Use with care!"
 msgstr "傳遞到 iptables 的額外引數。小心使用！"
 
-#: applications/luci-app-firewall/luasrc/controller/firewall.lua:14
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/forwards.lua:17
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:236
+msgid ""
+"Passing raw iptables arguments to source and destination traffic "
+"classification rules allows to match packets based on other criteria than "
+"interfaces or subnets. These options should be used with extreme care as "
+"invalid values could render the firewall ruleset broken, completely exposing "
+"all services."
+msgstr ""
+
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:95
+#: applications/luci-app-firewall/luasrc/controller/firewall.lua:12
 msgid "Port Forwards"
 msgstr "埠轉發"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/forwards.lua:9
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:93
 msgid ""
 "Port forwarding allows remote computers on the Internet to connect to a "
 "specific computer or service within the private LAN."
 msgstr "埠轉發允許 Internet 上的遠端計算機連線到內部網路中的特定計算機或服務。"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/forward-details.lua:39
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rule-details.lua:54
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rule-details.lua:190
-#: applications/luci-app-firewall/luasrc/view/firewall/cbi_addforward.htm:26
-#: applications/luci-app-firewall/luasrc/view/firewall/cbi_addrule.htm:11
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:208
+msgid ""
+"Prevent the installation of <em>NOTRACK</em> rules which would bypass "
+"connection tracking."
+msgstr ""
+
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:154
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:205
 msgid "Protocol"
 msgstr "協議"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/forward-details.lua:139
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:252
 msgid ""
 "Redirect matched incoming traffic to the given port on the internal host"
 msgstr "重定向匹配的入站流量到內部主機的埠"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/forward-details.lua:128
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:240
 msgid "Redirect matched incoming traffic to the specified internal host"
 msgstr "重定向匹配的入站流量到指定的內部主機"
 
+#: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:295
 #: applications/luci-app-firewall/luasrc/tools/firewall.lua:216
 msgid "Refuse forward"
 msgstr "拒絕轉發"
 
+#: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:305
 #: applications/luci-app-firewall/luasrc/tools/firewall.lua:226
 msgid "Refuse input"
 msgstr "拒絕入站"
 
+#: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:285
 #: applications/luci-app-firewall/luasrc/tools/firewall.lua:206
 msgid "Refuse output"
 msgstr "拒絕出站"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/zones.lua:52
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:66
 msgid "Requires hardware NAT support. Implemented at least for mt7621"
 msgstr "需要硬體 NAT 支援。目前 mt7621 已實現"
 
@@ -535,38 +526,20 @@ msgstr "需要硬體 NAT 支援。目前 mt7621 已實現"
 msgid "Restart Firewall"
 msgstr "重啟防火牆"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/zone-details.lua:132
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:201
 msgid "Restrict Masquerading to given destination subnets"
 msgstr "要限制 IP 動態偽裝的目標子網"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/zone-details.lua:123
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:194
 msgid "Restrict Masquerading to given source subnets"
 msgstr "要限制 IP 動態偽裝的源子網"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rule-details.lua:183
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/zone-details.lua:115
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:198
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:188
 msgid "Restrict to address family"
 msgstr "限制位址"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rule-details.lua:132
-msgid "Rewrite matched traffic to the given address."
-msgstr "將匹配流量的源位址改寫成指定位址。"
-
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rule-details.lua:147
-msgid ""
-"Rewrite matched traffic to the given source port. May be left empty to only "
-"rewrite the IP address."
-msgstr "將匹配流量的源埠改寫成指定埠。留空只改寫 IP 位址。"
-
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rules.lua:266
-msgid "Rewrite to source %s"
-msgstr "源位址改寫成 %s"
-
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rules.lua:264
-msgid "Rewrite to source %s, %s"
-msgstr "源位址改寫成 %s, %s"
-
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/zones.lua:42
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:53
 msgid "Routing/NAT Offloading"
 msgstr "Routing/NAT 分載"
 
@@ -578,94 +551,69 @@ msgstr "規則已禁用"
 msgid "Rule is enabled"
 msgstr "規則已啟用"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rule-details.lua:131
-msgid "SNAT IP address"
-msgstr "SNAT IP 位址"
-
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rule-details.lua:146
-msgid "SNAT port"
-msgstr "SNAT 埠"
-
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rule-details.lua:344
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:351
 msgid "Saturday"
 msgstr "星期六"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/zones.lua:47
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:61
 msgid "Software based offloading for routing/NAT"
 msgstr "基於軟體的 Routing/NAT 分載"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/zones.lua:46
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:60
 msgid "Software flow offloading"
 msgstr "軟體流量分載"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/forward-details.lua:74
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rule-details.lua:79
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:186
 msgid "Source IP address"
 msgstr "源 IP 位址"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/forward-details.lua:62
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rule-details.lua:261
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:173
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:271
 msgid "Source MAC address"
 msgstr "源 MAC 位址"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rules.lua:194
-msgid "Source NAT"
-msgstr "Source NAT"
-
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rules.lua:195
-msgid ""
-"Source NAT is a specific form of masquerading which allows fine grained "
-"control over the source IP used for outgoing traffic, for example to map "
-"multiple WAN addresses to internal subnets."
-msgstr ""
-"Source NAT 是一種特殊形式的封包偽裝，它允許精細的控制傳出流量的源 IP，例如："
-"將多個 WAN 位址對映到內部子網。"
-
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rule-details.lua:270
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:282
 msgid "Source address"
 msgstr "源位址"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/forward-details.lua:86
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rule-details.lua:90
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rule-details.lua:279
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:199
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:293
 msgid "Source port"
 msgstr "源埠"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/forward-details.lua:54
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rule-details.lua:73
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rule-details.lua:254
-#: applications/luci-app-firewall/luasrc/view/firewall/cbi_addrule.htm:41
-#: applications/luci-app-firewall/luasrc/view/firewall/cbi_addsnat.htm:20
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:167
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:265
 msgid "Source zone"
 msgstr "源區域"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rule-details.lua:357
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:369
 msgid "Start Date (yyyy-mm-dd)"
 msgstr "開始日期（yyyy-mm-dd）"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rule-details.lua:353
-msgid "Start Time (hh:mm:ss)"
-msgstr "開始時間（hh:mm:ss）"
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:361
+msgid "Start Time (hh.mm.ss)"
+msgstr ""
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rule-details.lua:359
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:373
 msgid "Stop Date (yyyy-mm-dd)"
 msgstr "停止日期（yyyy-mm-dd）"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rule-details.lua:355
-msgid "Stop Time (hh:mm:ss)"
-msgstr "停止時間（hh:mm:ss）"
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:365
+msgid "Stop Time (hh.mm.ss)"
+msgstr ""
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rule-details.lua:338
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:345
 msgid "Sunday"
 msgstr "星期日"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/zones.lua:12
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:29
 msgid ""
 "The firewall creates zones over your network interfaces to control network "
 "traffic flow."
 msgstr "防火牆通過在網路介面上建立區域來控制網路流量。"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/zone-details.lua:158
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:174
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:266
 msgid ""
 "The options below control the forwarding policies between this zone (%s) and "
 "other zones. <em>Destination zones</em> cover forwarded traffic "
@@ -679,19 +627,7 @@ msgstr ""
 "strong> 的區域的需轉發流量。轉發規則的作用是<em>單向</em>的，例如：一條允許"
 "從 lan 到 wan 的轉發規則並不隱含有允許相反方向從 wan 到 lan 的流量轉發。"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/forward-details.lua:14
-msgid ""
-"This page allows you to change advanced properties of the port forwarding "
-"entry. In most cases there is no need to modify those settings."
-msgstr "本頁面可以更改埠轉發的高階設定。大多數情況下，不需要更改這些設定。"
-
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rule-details.lua:13
-msgid ""
-"This page allows you to change advanced properties of the traffic rule "
-"entry, such as matched source and destination hosts."
-msgstr "本頁面可以更改通訊規則的高階設定，比如：需匹配的源主機和目標主機。"
-
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/zone-details.lua:36
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:89
 msgid ""
 "This section defines common properties of %q. The <em>input</em> and "
 "<em>output</em> options set the default policies for traffic entering and "
@@ -703,46 +639,40 @@ msgstr ""
 "域入站和出站流量的預設策略，<em>轉發</em>選項描述該區域內不同網路之間的流量轉"
 "發策略。<em>覆蓋網路</em>指定從屬於這個區域的網路。"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rule-details.lua:342
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:349
 msgid "Thursday"
 msgstr "星期四"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rule-details.lua:362
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:138
+msgid "Time Restrictions"
+msgstr ""
+
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:377
 msgid "Time in UTC"
 msgstr "UTC 時間"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rules.lua:141
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:96
 msgid "To %s at %s on <var>this device</var>"
 msgstr "到 %s 在 %s 位於<var>本裝置</var>"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rules.lua:132
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rules.lua:157
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:89
 msgid "To %s in %s"
 msgstr "到 %s 位於 %s"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rules.lua:143
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:98
 msgid "To %s on <var>this device</var>"
 msgstr "到 %s 位於<var>本裝置</var>"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rules.lua:130
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rules.lua:155
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:87
 msgid "To %s, %s in %s"
 msgstr "到 %s, %s 位於 %s"
 
-#: applications/luci-app-firewall/luasrc/view/firewall/cbi_addsnat.htm:22
-msgid "To source IP"
-msgstr "到源 IP"
-
-#: applications/luci-app-firewall/luasrc/view/firewall/cbi_addsnat.htm:23
-msgid "To source port"
-msgstr "到源埠"
-
-#: applications/luci-app-firewall/luasrc/controller/firewall.lua:18
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rules.lua:18
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:131
+#: applications/luci-app-firewall/luasrc/controller/firewall.lua:15
 msgid "Traffic Rules"
 msgstr "通訊規則"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rules.lua:10
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:129
 msgid ""
 "Traffic rules define policies for packets traveling between different zones, "
 "for example to reject traffic between certain hosts or to open WAN ports on "
@@ -751,156 +681,291 @@ msgstr ""
 "通訊規則定義了不同區域間的資料包傳輸策略，例如：拒絕一些主機之間的通訊，開放"
 "路由器 WAN 上的埠。"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rule-details.lua:340
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:347
 msgid "Tuesday"
 msgstr "星期二"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rules.lua:244
-msgid "Unnamed SNAT"
-msgstr "未命名 SNAT"
-
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/forwards.lua:67
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:108
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:122
 msgid "Unnamed forward"
 msgstr "未命名轉發"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rules.lua:76
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:145
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:170
 msgid "Unnamed rule"
 msgstr "未命名規則"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/forwards.lua:101
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:94
+msgid "Unnamed zone"
+msgstr ""
+
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:178
+msgid ""
+"Use this option to classify zone traffic by raw, non-<em>uci</em> managed "
+"network devices."
+msgstr ""
+
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:183
+msgid ""
+"Use this option to classify zone traffic by source or destination subnet "
+"instead of networks or devices."
+msgstr ""
+
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:72
 msgid "Via %s"
 msgstr "通過 %s"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/forwards.lua:99
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:70
 msgid "Via %s at %s"
 msgstr "通過 %s 在 %s"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rule-details.lua:341
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:348
 msgid "Wednesday"
 msgstr "星期三"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rule-details.lua:335
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:340
 msgid "Week Days"
 msgstr "星期"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rule-details.lua:55
-msgid ""
-"You may specify multiple by selecting \"-- custom --\" and then entering "
-"protocols separated by space."
-msgstr "您也可以選擇“--自訂--”來定義多個協議，在多個協議間需加空格。"
-
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/zone-details.lua:29
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/zone-details.lua:35
-msgid "Zone %q"
-msgstr "區域 %q"
-
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/zones.lua:83
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:107
 msgid "Zone ⇒ Forwardings"
 msgstr "區域 ⇒ 轉發"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/zones.lua:59
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:72
 msgid "Zones"
 msgstr "區域"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rule-details.lua:325
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/zone-details.lua:82
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/zones.lua:33
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/zones.lua:98
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:332
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:47
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:123
 msgid "accept"
 msgstr "接受"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/forward-details.lua:66
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/forward-details.lua:78
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/forward-details.lua:90
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/forward-details.lua:108
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/forward-details.lua:141
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rule-details.lua:82
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rule-details.lua:95
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rule-details.lua:122
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rule-details.lua:263
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rule-details.lua:272
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rule-details.lua:281
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rule-details.lua:306
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rule-details.lua:315
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:178
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:191
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:204
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:215
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:255
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:223
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:274
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:285
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:296
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:311
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:322
 msgid "any"
 msgstr "所有"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/forwards.lua:81
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/forwards.lua:120
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rules.lua:100
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rules.lua:128
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rules.lua:150
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:53
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:139
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:58
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:85
 msgid "any host"
 msgstr "所有主機"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/forwards.lua:95
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rules.lua:111
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rules.lua:138
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:66
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:69
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:94
 msgid "any router IP"
 msgstr "所有路由 IP"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/forwards.lua:80
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/forwards.lua:119
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rules.lua:149
+#: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:182
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:52
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:138
 #: applications/luci-app-firewall/luasrc/tools/firewall.lua:110
 msgid "any zone"
 msgstr "所有區域"
 
+#: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:267
 #: applications/luci-app-firewall/luasrc/tools/firewall.lua:189
 msgid "day"
 msgstr "日"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rule-details.lua:327
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:334
 msgid "don't track"
 msgstr "不跟蹤"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rule-details.lua:324
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/zone-details.lua:81
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/zones.lua:32
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/zones.lua:97
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:331
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:46
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:122
 msgid "drop"
 msgstr "丟棄"
 
+#: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:265
 #: applications/luci-app-firewall/luasrc/tools/firewall.lua:187
 msgid "hour"
 msgstr "小時"
 
+#: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:263
 #: applications/luci-app-firewall/luasrc/tools/firewall.lua:185
 msgid "minute"
 msgstr "分鐘"
 
+#: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:86
 #: applications/luci-app-firewall/luasrc/tools/firewall.lua:20
 msgid "not"
 msgstr "非"
 
+#: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:121
 #: applications/luci-app-firewall/luasrc/tools/firewall.lua:50
 msgid "port"
 msgstr "埠"
 
+#: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:131
+#: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:140
 #: applications/luci-app-firewall/luasrc/tools/firewall.lua:55
 #: applications/luci-app-firewall/luasrc/tools/firewall.lua:65
 msgid "ports"
 msgstr "埠"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rule-details.lua:326
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/zone-details.lua:80
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/zones.lua:31
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/zones.lua:96
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:333
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:45
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:121
 msgid "reject"
 msgstr "拒絕"
 
+#: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:261
 #: applications/luci-app-firewall/luasrc/tools/firewall.lua:183
 msgid "second"
 msgstr "秒"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/rules.lua:82
-msgid "traffic"
-msgstr "通訊"
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:88
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:173
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:265
+msgid "this new zone"
+msgstr ""
 
+#: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:197
 #: applications/luci-app-firewall/luasrc/tools/firewall.lua:121
 msgid "type"
 msgstr "型別"
 
+#: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:209
 #: applications/luci-app-firewall/luasrc/tools/firewall.lua:130
 msgid "types"
 msgstr "型別"
+
+#~ msgid "Add"
+#~ msgstr "新增"
+
+#~ msgid "Add and edit..."
+#~ msgstr "新增並編輯…"
+
+#~ msgid "Do not rewrite"
+#~ msgstr "不重寫"
+
+#~ msgid "External zone"
+#~ msgstr "外部區域"
+
+#~ msgid "New SNAT rule"
+#~ msgstr "新建 SNAT 規則"
+
+#~ msgid "New forward rule"
+#~ msgstr "新建轉發規則"
+
+#~ msgid "New input rule"
+#~ msgstr "新建進入規則"
+
+#~ msgid "New port forward"
+#~ msgstr "新建埠轉發"
+
+#~ msgid "New source NAT"
+#~ msgstr "新建 Source NAT"
+
+#~ msgid "Open ports on router"
+#~ msgstr "開啟路由器埠"
+
+#~ msgid "Other..."
+#~ msgstr "其它..."
+
+#~ msgid "To source IP"
+#~ msgstr "到源 IP"
+
+#~ msgid "To source port"
+#~ msgstr "到源埠"
+
+#~ msgid "Output zone"
+#~ msgstr "出站區域"
+
+#~ msgid "(Unnamed Entry)"
+#~ msgstr "（未命名條目）"
+
+#~ msgid "(Unnamed Rule)"
+#~ msgstr "（未命名規則）"
+
+#~ msgid "(Unnamed SNAT)"
+#~ msgstr "（未命名 SNAT）"
+
+#~ msgid "Destination IP address"
+#~ msgstr "目標 IP 位址"
+
+#~ msgid "Inter-Zone Forwarding"
+#~ msgstr "埠觸發"
+
+#~ msgid "Match forwarded traffic to the given destination port or port range."
+#~ msgstr "匹配指定目標埠或目標埠範圍的轉發流量。"
+
+#~ msgid ""
+#~ "Match incoming traffic originating from the given source port or port "
+#~ "range on the client host."
+#~ msgstr "匹配來自客戶端主機上指定源埠或源埠範圍的入站流量。"
+
+#~ msgid "Rewrite matched traffic to the given address."
+#~ msgstr "將匹配流量的源位址改寫成指定位址。"
+
+#~ msgid ""
+#~ "Rewrite matched traffic to the given source port. May be left empty to "
+#~ "only rewrite the IP address."
+#~ msgstr "將匹配流量的源埠改寫成指定埠。留空只改寫 IP 位址。"
+
+#~ msgid "Rewrite to source %s"
+#~ msgstr "源位址改寫成 %s"
+
+#~ msgid "Rewrite to source %s, %s"
+#~ msgstr "源位址改寫成 %s, %s"
+
+#~ msgid "SNAT IP address"
+#~ msgstr "SNAT IP 位址"
+
+#~ msgid "SNAT port"
+#~ msgstr "SNAT 埠"
+
+#~ msgid "Source NAT"
+#~ msgstr "Source NAT"
+
+#~ msgid ""
+#~ "Source NAT is a specific form of masquerading which allows fine grained "
+#~ "control over the source IP used for outgoing traffic, for example to map "
+#~ "multiple WAN addresses to internal subnets."
+#~ msgstr ""
+#~ "Source NAT 是一種特殊形式的封包偽裝，它允許精細的控制傳出流量的源 IP，例"
+#~ "如：將多個 WAN 位址對映到內部子網。"
+
+#~ msgid "Start Time (hh:mm:ss)"
+#~ msgstr "開始時間（hh:mm:ss）"
+
+#~ msgid "Stop Time (hh:mm:ss)"
+#~ msgstr "停止時間（hh:mm:ss）"
+
+#~ msgid ""
+#~ "This page allows you to change advanced properties of the port forwarding "
+#~ "entry. In most cases there is no need to modify those settings."
+#~ msgstr "本頁面可以更改埠轉發的高階設定。大多數情況下，不需要更改這些設定。"
+
+#~ msgid ""
+#~ "This page allows you to change advanced properties of the traffic rule "
+#~ "entry, such as matched source and destination hosts."
+#~ msgstr "本頁面可以更改通訊規則的高階設定，比如：需匹配的源主機和目標主機。"
+
+#~ msgid "Unnamed SNAT"
+#~ msgstr "未命名 SNAT"
+
+#~ msgid ""
+#~ "You may specify multiple by selecting \"-- custom --\" and then entering "
+#~ "protocols separated by space."
+#~ msgstr "您也可以選擇“--自訂--”來定義多個協議，在多個協議間需加空格。"
+
+#~ msgid "Zone %q"
+#~ msgstr "區域 %q"
+
+#~ msgid "traffic"
+#~ msgstr "通訊"

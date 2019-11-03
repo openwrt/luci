@@ -107,7 +107,7 @@ e1 = e:option(Flag, "adb_debug", translate("Verbose Debug Logging"),
 e1.rmempty = false
 
 e2 = e:option(Flag, "adb_nice", translate("Low Priority Service"),
-	translate("Set the nice level to 'low priority' and the adblock background processing will take less resources from the system. ")
+	translate("Set the nice level to 'low priority' and the adblock background processing will take fewer resources from the system. ")
 	..translate("This change requires a manual service stop/re-start to take effect."))
 e2.disabled = "0"
 e2.enabled = "10"

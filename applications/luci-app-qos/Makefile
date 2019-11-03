@@ -7,7 +7,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=Quality of Service configuration module
-LUCI_DEPENDS:=+qos-scripts
+LUCI_DEPENDS:=+luci-compat +qos-scripts
 
 PKG_LICENSE:=Apache-2.0
 

@@ -7,7 +7,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=LuCI Support for shadowsocks-libev
-LUCI_DEPENDS:=
+LUCI_DEPENDS:=+luci-compat
 
 PKG_LICENSE:=Apache-2.0
 
