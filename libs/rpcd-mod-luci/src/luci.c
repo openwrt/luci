@@ -83,6 +83,8 @@ invoke_data_cb(struct ubus_request *req, int type, struct blob_attr *msg)
 
 	if (ictx->cb != NULL)
 		ictx->cb(req, type, msg);
+
+	ictx->cb = NULL;
 }
 
 static void
@@ -90,6 +92,9 @@ invoke_done_cb(struct ubus_request *req, int ret)
 {
 	struct invoke_context *ictx =
 		container_of(req, struct invoke_context, request);
+
+	if (ictx->cb != NULL)
+		ictx->cb(req, -1, NULL);
 
 	uloop_timeout_cancel(&ictx->timeout);
 	free(ictx);
