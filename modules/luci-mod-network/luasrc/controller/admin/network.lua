@@ -15,9 +15,6 @@ function index()
 		page.uci_depends = { wireless = { ["@wifi-device[0]"] = "wifi-device" } }
 		page.leaf = true
 
-		page = entry({"admin", "network", "iface_down"}, post("iface_down"), nil)
-		page.leaf = true
-
 		page = entry({"admin", "network", "remote_addr"}, call("remote_addr"), nil)
 		page.leaf = true
 
@@ -71,53 +68,6 @@ local function addr2dev(addr, src)
 		route = ip.route(addr, route.src:string())
 	end
 	return route and route.dev
-end
-
-function iface_down(iface, force)
-	local netmd = require "luci.model.network".init()
-	local peer = luci.http.getenv("REMOTE_ADDR")
-	local serv = luci.http.getenv("SERVER_ADDR")
-
-	if force ~= "force" and serv and peer then
-		local dev = addr2dev(peer, serv)
-		if dev then
-			local nets = netmd:get_networks()
-			local outnet = nil
-			local _, net, ai
-
-			for _, net in ipairs(nets) do
-				if net:contains_interface(dev) then
-					outnet = net
-					break
-				end
-			end
-
-			if outnet:name() == iface then
-				luci.http.status(409, "Is inbound interface")
-				return
-			end
-
-			local peeraddr = outnet:get("peeraddr")
-			for _, ai in ipairs(peeraddr and nixio.getaddrinfo(peeraddr) or {}) do
-				local peerdev = addr2dev(ai.address)
-				for _, net in ipairs(peerdev and nets or {}) do
-					if net:contains_interface(peerdev) and net:name() == iface then
-						luci.http.status(409, "Is inbound interface")
-						return
-					end
-				end
-			end
-		end
-	end
-
-	if netmd:get_network(iface) then
-		luci.sys.call("env -i /sbin/ifdown %s >/dev/null 2>/dev/null"
-			% luci.util.shellquote(iface))
-		luci.http.status(200, "Shut down")
-		return
-	end
-
-	luci.http.status(404, "No such interface")
 end
 
 function remote_addr()
