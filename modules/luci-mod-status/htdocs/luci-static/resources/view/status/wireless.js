@@ -1,4 +1,5 @@
 'use strict';
+'require ui';
 'require rpc';
 'require network';
 
@@ -326,7 +327,7 @@ return L.view.extend({
 			});
 		}
 
-		L.ui.tabs.initTabGroup(v.firstElementChild.childNodes);
+		ui.tabs.initTabGroup(v.firstElementChild.childNodes);
 
 		this.pollData();
 

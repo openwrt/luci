@@ -1,4 +1,5 @@
 'use strict';
+'require ui';
 'require rpc';
 'require uci';
 'require form';
@@ -55,7 +56,7 @@ function update_interfaces(old_ifname, new_ifname) {
 		if (changed) {
 			uci.set('network', interfaces[i]['.name'], 'ifname', new_ifnames.join(' '));
 
-			L.ui.addNotification(null, E('p', _('Interface %q device auto-migrated from %q to %q.')
+			ui.addNotification(null, E('p', _('Interface %q device auto-migrated from %q to %q.')
 				.replace(/%q/g, '"%s"').format(interfaces[i]['.name'], old_ifname, new_ifname)));
 		}
 	}
@@ -143,7 +144,7 @@ return L.view.extend({
 			    topology        = topologies[switch_name];
 
 			if (!topology) {
-				L.ui.addNotification(null, _('Switch %q has an unknown topology - the VLAN settings might not be accurate.').replace(/%q/, switch_name));
+				ui.addNotification(null, _('Switch %q has an unknown topology - the VLAN settings might not be accurate.').replace(/%q/, switch_name));
 
 				topology = {
 					features: {},

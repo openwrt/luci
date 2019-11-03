@@ -1,5 +1,6 @@
 'use strict';
 'require fs';
+'require ui';
 
 return L.view.extend({
 	load: function() {
@@ -11,9 +12,9 @@ return L.view.extend({
 
 		return fs.write('/etc/crontabs/root', value).then(function(rc) {
 			document.querySelector('textarea').value = value;
-			L.ui.addNotification(null, E('p', _('Contents have been saved.')), 'info');
+			ui.addNotification(null, E('p', _('Contents have been saved.')), 'info');
 		}).catch(function(e) {
-			L.ui.addNotification(null, E('p', _('Unable to save contents: %s').format(e.message)));
+			ui.addNotification(null, E('p', _('Unable to save contents: %s').format(e.message)));
 		});
 	},
 

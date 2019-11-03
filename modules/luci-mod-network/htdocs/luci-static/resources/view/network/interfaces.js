@@ -1,5 +1,6 @@
 'use strict';
 'require fs';
+'require ui';
 'require uci';
 'require form';
 'require network';
@@ -7,7 +8,7 @@
 'require tools.widgets as widgets';
 
 function count_changes(section_id) {
-	var changes = L.ui.changes.changes, n = 0;
+	var changes = ui.changes.changes, n = 0;
 
 	if (!L.isObject(changes))
 		return n;
@@ -100,7 +101,7 @@ function render_status(node, ifc, with_device) {
 		_('Error'),    errors ? errors[4] : null,
 		null, changecount ? E('a', {
 			href: '#',
-			click: L.bind(L.ui.changes.displayChanges, L.ui.changes)
+			click: L.bind(ui.changes.displayChanges, ui.changes)
 		}, _('Interface has %d pending changes').format(changecount)) : null
 	]);
 }
@@ -166,7 +167,7 @@ function iface_updown(up, id, ev, force) {
 			    Array.isArray(info.inbound_interfaces) &&
 			    info.inbound_interfaces.filter(function(i) { return i == id })[0]) {
 
-				L.ui.showModal(_('Confirm disconnect'), [
+				ui.showModal(_('Confirm disconnect'), [
 					E('p', _('You appear to be currently connected to the device via the "%h" interface. Do you really want to shut down the interface?').format(id)),
 					E('div', { 'class': 'right' }, [
 						E('button', {
@@ -176,7 +177,7 @@ function iface_updown(up, id, ev, force) {
 								btns[1].disabled = false;
 								btns[0].disabled = false;
 
-								L.ui.hideModal();
+								ui.hideModal();
 							}
 						}, _('Cancel')),
 						' ',
@@ -186,7 +187,7 @@ function iface_updown(up, id, ev, force) {
 								dsc.setAttribute('disconnect', '');
 								L.dom.content(dsc, E('em', _('Interface is shutting down...')));
 
-								L.ui.hideModal();
+								ui.hideModal();
 							}
 						}, _('Disconnect'))
 					])
@@ -557,7 +558,7 @@ return L.view.extend({
 							E('button', {
 								'class': 'cbi-button cbi-button-add',
 								'title': _('Setup DHCP Server'),
-								'click': L.ui.createHandlerFn(this, function(section_id, ev) {
+								'click': ui.createHandlerFn(this, function(section_id, ev) {
 									this.map.save(function() {
 										uci.add('dhcp', 'dhcp', section_id);
 										uci.set('dhcp', section_id, 'interface', section_id);
@@ -748,16 +749,16 @@ return L.view.extend({
 			}
 
 			m2.render().then(L.bind(function(nodes) {
-				L.ui.showModal(_('Add new interface...'), [
+				ui.showModal(_('Add new interface...'), [
 					nodes,
 					E('div', { 'class': 'right' }, [
 						E('button', {
 							'class': 'btn',
-							'click': L.ui.hideModal
+							'click': ui.hideModal
 						}, _('Cancel')), ' ',
 						E('button', {
 							'class': 'cbi-button cbi-button-positive important',
-							'click': L.ui.createHandlerFn(this, function(ev) {
+							'click': ui.createHandlerFn(this, function(ev) {
 								var nameval = name.isValid('_new_') ? name.formvalue('_new_') : null,
 								    protoval = proto.isValid('_new_') ? proto.formvalue('_new_') : null;
 
@@ -977,13 +978,13 @@ return L.view.extend({
 					if (dsc.getAttribute('reconnect') == '') {
 						dsc.setAttribute('reconnect', '1');
 						tasks.push(fs.exec('/sbin/ifup', [section_ids[i]]).catch(function(e) {
-							L.ui.addNotification(null, E('p', e.message));
+							ui.addNotification(null, E('p', e.message));
 						}));
 					}
 					else if (dsc.getAttribute('disconnect') == '') {
 						dsc.setAttribute('disconnect', '1');
 						tasks.push(fs.exec('/sbin/ifdown', [section_ids[i]]).catch(function(e) {
-							L.ui.addNotification(null, E('p', e.message));
+							ui.addNotification(null, E('p', e.message));
 						}));
 					}
 					else if (dsc.getAttribute('reconnect') == '1') {

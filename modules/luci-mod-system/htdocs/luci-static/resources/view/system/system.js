@@ -1,4 +1,5 @@
 'use strict';
+'require ui';
 'require uci';
 'require rpc';
 'require form';
@@ -58,14 +59,14 @@ CBILocalTime = form.DummyValue.extend({
 			' ',
 			E('button', {
 				'class': 'cbi-button cbi-button-apply',
-				'click': L.ui.createHandlerFn(this, function() {
+				'click': ui.createHandlerFn(this, function() {
 					return callSetLocaltime(Math.floor(Date.now() / 1000));
 				})
 			}, _('Sync with browser')),
 			' ',
 			this.ntpd_support ? E('button', {
 				'class': 'cbi-button cbi-button-apply',
-				'click': L.ui.createHandlerFn(this, function() {
+				'click': ui.createHandlerFn(this, function() {
 					return callInitAction('sysntpd', 'restart');
 				})
 			}, _('Sync with NTP-Server')) : ''

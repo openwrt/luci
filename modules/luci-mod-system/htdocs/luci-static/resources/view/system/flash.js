@@ -2,6 +2,7 @@
 'require form';
 'require rpc';
 'require fs';
+'require ui';
 
 var callSystemValidateFirmwareImage = rpc.declare({
 	object: 'system',
@@ -89,46 +90,46 @@ return L.view.extend({
 		if (!confirm(_('Do you really want to erase all settings?')))
 			return;
 
-		L.ui.showModal(_('Erasing...'), [
+		ui.showModal(_('Erasing...'), [
 			E('p', { 'class': 'spinning' }, _('The system is erasing the configuration partition now and will reboot itself when finished.'))
 		]);
 
 		/* Currently the sysupgrade rpc call will not return, hence no promise handling */
 		fs.exec('/sbin/firstboot', [ '-r', '-y' ]);
 
-		L.ui.awaitReconnect('192.168.1.1', 'openwrt.lan');
+		ui.awaitReconnect('192.168.1.1', 'openwrt.lan');
 	},
 
 	handleRestore: function(ev) {
-		return L.ui.uploadFile('/tmp/backup.tar.gz', ev.target)
+		return ui.uploadFile('/tmp/backup.tar.gz', ev.target)
 			.then(L.bind(function(btn, res) {
 				btn.firstChild.data = _('Checking archive…');
 				return fs.exec('/bin/tar', [ '-tzf', '/tmp/backup.tar.gz' ]);
 			}, this, ev.target))
 			.then(L.bind(function(btn, res) {
 				if (res.code != 0) {
-					L.ui.addNotification(null, E('p', _('The uploaded backup archive is not readable')));
+					ui.addNotification(null, E('p', _('The uploaded backup archive is not readable')));
 					return fs.remove('/tmp/backup.tar.gz');
 				}
 
-				L.ui.showModal(_('Apply backup?'), [
+				ui.showModal(_('Apply backup?'), [
 					E('p', _('The uploaded backup archive appears to be valid and contains the files listed below. Press "Continue" to restore the backup and reboot, or "Cancel" to abort the operation.')),
 					E('pre', {}, [ res.stdout ]),
 					E('div', { 'class': 'right' }, [
 						E('button', {
 							'class': 'btn',
-							'click': L.ui.createHandlerFn(this, function(ev) {
-								return fs.remove('/tmp/backup.tar.gz').finally(L.ui.hideModal);
+							'click': ui.createHandlerFn(this, function(ev) {
+								return fs.remove('/tmp/backup.tar.gz').finally(ui.hideModal);
 							})
 						}, [ _('Cancel') ]), ' ',
 						E('button', {
 							'class': 'btn cbi-button-action important',
-							'click': L.ui.createHandlerFn(this, 'handleRestoreConfirm', btn)
+							'click': ui.createHandlerFn(this, 'handleRestoreConfirm', btn)
 						}, [ _('Continue') ])
 					])
 				]);
 			}, this, ev.target))
-			.catch(function(e) { L.ui.addNotification(null, E('p', e.message)) })
+			.catch(function(e) { ui.addNotification(null, E('p', e.message)) })
 			.finally(L.bind(function(btn, input) {
 				btn.firstChild.data = _('Upload archive...');
 			}, this, ev.target));
@@ -138,7 +139,7 @@ return L.view.extend({
 		return fs.exec('/sbin/sysupgrade', [ '--restore-backup', '/tmp/backup.tar.gz' ])
 			.then(L.bind(function(btn, res) {
 				if (res.code != 0) {
-					L.ui.addNotification(null, [
+					ui.addNotification(null, [
 						E('p', _('The restore command failed with code %d').format(res.code)),
 						res.stderr ? E('pre', {}, [ res.stderr ]) : ''
 					]);
@@ -150,17 +151,17 @@ return L.view.extend({
 			}, this, ev.target))
 			.then(L.bind(function(res) {
 				if (res.code != 0) {
-					L.ui.addNotification(null, E('p', _('The reboot command failed with code %d').format(res.code)));
+					ui.addNotification(null, E('p', _('The reboot command failed with code %d').format(res.code)));
 					L.raise('Error', 'Reboot failed');
 				}
 
-				L.ui.showModal(_('Rebooting…'), [
+				ui.showModal(_('Rebooting…'), [
 					E('p', { 'class': 'spinning' }, _('The system is rebooting now. If the restored configuration changed the current LAN IP address, you might need to reconnect manually.'))
 				]);
 
-				L.ui.awaitReconnect(window.location.host, '192.168.1.1', 'openwrt.lan');
+				ui.awaitReconnect(window.location.host, '192.168.1.1', 'openwrt.lan');
 			}, this))
-			.catch(function(e) { L.ui.addNotification(null, E('p', e.message)) })
+			.catch(function(e) { ui.addNotification(null, E('p', e.message)) })
 			.finally(function() { btn.firstChild.data = _('Upload archive...') });
 	},
 
@@ -183,11 +184,11 @@ return L.view.extend({
 	},
 
 	handleSysupgrade: function(storage_size, ev) {
-		return L.ui.uploadFile('/tmp/firmware.bin', ev.target.firstChild)
+		return ui.uploadFile('/tmp/firmware.bin', ev.target.firstChild)
 			.then(L.bind(function(btn, reply) {
 				btn.firstChild.data = _('Checking image…');
 
-				L.ui.showModal(_('Checking image…'), [
+				ui.showModal(_('Checking image…'), [
 					E('span', { 'class': 'spinning' }, _('Verifying the uploaded image file.'))
 				]);
 
@@ -254,15 +255,15 @@ return L.view.extend({
 
 				var cntbtn = E('button', {
 					'class': 'btn cbi-button-action important',
-					'click': L.ui.createHandlerFn(this, 'handleSysupgradeConfirm', btn, keep, force),
+					'click': ui.createHandlerFn(this, 'handleSysupgradeConfirm', btn, keep, force),
 					'disabled': (!is_valid || is_too_big) ? true : null
 				}, [ _('Continue') ]);
 
 				body.push(E('div', { 'class': 'right' }, [
 					E('button', {
 						'class': 'btn',
-						'click': L.ui.createHandlerFn(this, function(ev) {
-							return fs.remove('/tmp/firmware.bin').finally(L.ui.hideModal);
+						'click': ui.createHandlerFn(this, function(ev) {
+							return fs.remove('/tmp/firmware.bin').finally(ui.hideModal);
 						})
 					}, [ _('Cancel') ]), ' ', cntbtn
 				]));
@@ -271,9 +272,9 @@ return L.view.extend({
 					cntbtn.disabled = !ev.target.checked;
 				});
 
-				L.ui.showModal(_('Flash image?'), body);
+				ui.showModal(_('Flash image?'), body);
 			}, this, ev.target))
-			.catch(function(e) { L.ui.addNotification(null, E('p', e.message)) })
+			.catch(function(e) { ui.addNotification(null, E('p', e.message)) })
 			.finally(L.bind(function(btn) {
 				btn.firstChild.data = _('Flash image...');
 			}, this, ev.target));
@@ -282,7 +283,7 @@ return L.view.extend({
 	handleSysupgradeConfirm: function(btn, keep, force, ev) {
 		btn.firstChild.data = _('Flashing…');
 
-		L.ui.showModal(_('Flashing…'), [
+		ui.showModal(_('Flashing…'), [
 			E('p', { 'class': 'spinning' }, _('The system is flashing now.<br /> DO NOT POWER OFF THE DEVICE!<br /> Wait a few minutes before you try to reconnect. It might be necessary to renew the address of your computer to reach the device again, depending on your settings.'))
 		]);
 
@@ -300,28 +301,28 @@ return L.view.extend({
 		fs.exec('/sbin/sysupgrade', opts);
 
 		if (keep.checked)
-			L.ui.awaitReconnect(window.location.host);
+			ui.awaitReconnect(window.location.host);
 		else
-			L.ui.awaitReconnect('192.168.1.1', 'openwrt.lan');
+			ui.awaitReconnect('192.168.1.1', 'openwrt.lan');
 	},
 
 	handleBackupList: function(ev) {
 		return fs.exec('/sbin/sysupgrade', [ '--list-backup' ]).then(function(res) {
 			if (res.code != 0) {
-				L.ui.addNotification(null, [
+				ui.addNotification(null, [
 					E('p', _('The sysupgrade command failed with code %d').format(res.code)),
 					res.stderr ? E('pre', {}, [ res.stderr ]) : ''
 				]);
 				L.raise('Error', 'Sysupgrade failed');
 			}
 
-			L.ui.showModal(_('Backup file list'), [
+			ui.showModal(_('Backup file list'), [
 				E('p', _('Below is the determined list of files to backup. It consists of changed configuration files marked by opkg, essential base files and the user defined backup patterns.')),
 				E('ul', {}, (res.stdout || '').trim().split(/\n/).map(function(ln) { return E('li', {}, ln) })),
 				E('div', { 'class': 'right' }, [
 					E('button', {
 						'class': 'btn',
-						'click': L.ui.hideModal
+						'click': ui.hideModal
 					}, [ _('Dismiss') ])
 				])
 			], 'cbi-modal');
@@ -332,9 +333,9 @@ return L.view.extend({
 		return m.save(function() {
 			return fs.write('/etc/sysupgrade.conf', mapdata.config.editlist.trim().replace(/\r\n/g, '\n') + '\n');
 		}).then(function() {
-			L.ui.addNotification(null, E('p', _('Contents have been saved.')), 'info');
+			ui.addNotification(null, E('p', _('Contents have been saved.')), 'info');
 		}).catch(function(e) {
-			L.ui.addNotification(null, E('p', _('Unable to save contents: %s').format(e)));
+			ui.addNotification(null, E('p', _('Unable to save contents: %s').format(e)));
 		});
 	},
 
@@ -419,7 +420,7 @@ return L.view.extend({
 					node.appendChild(E('div', { 'class': 'cbi-page-actions' }, [
 						E('button', {
 							'class': 'cbi-button cbi-button-save',
-							'click': L.ui.createHandlerFn(view, 'handleBackupSave', this.map)
+							'click': ui.createHandlerFn(view, 'handleBackupSave', this.map)
 						}, [ _('Save') ])
 					]));
 

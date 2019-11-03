@@ -1,4 +1,5 @@
 'use strict';
+'require ui';
 'require form';
 'require rpc';
 
@@ -71,15 +72,15 @@ return L.view.extend({
 				return;
 
 			if (formData.password.pw1 != formData.password.pw2) {
-				L.ui.addNotification(null, E('p', _('Given password confirmation did not match, password not changed!')), 'danger');
+				ui.addNotification(null, E('p', _('Given password confirmation did not match, password not changed!')), 'danger');
 				return;
 			}
 
 			return callSetPassword('root', formData.password.pw1).then(function(success) {
 				if (success)
-					L.ui.addNotification(null, E('p', _('The system password has been successfully changed.')), 'info');
+					ui.addNotification(null, E('p', _('The system password has been successfully changed.')), 'info');
 				else
-					L.ui.addNotification(null, E('p', _('Failed to change the system password.')), 'danger');
+					ui.addNotification(null, E('p', _('Failed to change the system password.')), 'danger');
 
 				formData.password.pw1 = null;
 				formData.password.pw2 = null;
