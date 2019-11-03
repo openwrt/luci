@@ -7,7 +7,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=LuCI Support for Transmission
-LUCI_DEPENDS:=+luci-lib-ipkg
+LUCI_DEPENDS:=+luci-compat +luci-lib-ipkg
 
 include ../../luci.mk
 

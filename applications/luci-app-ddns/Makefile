@@ -23,7 +23,7 @@ PKG_MAINTAINER:=Ansuel Smith <ansuelsmth@gmail.com>
 
 # LuCI specific settings
 LUCI_TITLE:=LuCI Support for Dynamic DNS Client (ddns-scripts)
-LUCI_DEPENDS:=+luci-lib-ipkg +luci-mod-admin-full +ddns-scripts
+LUCI_DEPENDS:=+luci-compat +luci-lib-ipkg +luci-mod-admin-full +ddns-scripts
 # LUCI_PKGARCH:=all
 
 define Package/$(PKG_NAME)/config

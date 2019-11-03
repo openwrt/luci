@@ -7,7 +7,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=LuCI Support for Shairplay
-LUCI_DEPENDS:=+shairplay
+LUCI_DEPENDS:=+luci-compat +shairplay
 
 include ../../luci.mk
 
