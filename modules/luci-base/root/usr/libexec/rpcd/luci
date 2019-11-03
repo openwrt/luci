@@ -582,6 +582,17 @@ local methods = {
 			local sys = require "luci.sys"
 			return { result = sys.net.conntrack() }
 		end
+	},
+
+	getProcessList = {
+		call = function()
+			local sys = require "luci.sys"
+			local res = {}
+			for _, v in pairs(sys.process.list()) do
+				res[#res + 1] = v
+			end
+			return { result = res }
+		end
 	}
 }
 
