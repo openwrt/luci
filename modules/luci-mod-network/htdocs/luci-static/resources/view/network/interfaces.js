@@ -158,9 +158,50 @@ function iface_updown(up, id, ev, force) {
 	btns[0].disabled = true;
 	btns[1].disabled = true;
 
-	dsc.setAttribute(up ? 'reconnect' : 'disconnect', force ? 'force' : '');
-	L.dom.content(dsc, E('em',
-		up ? _('Interface is reconnecting...') : _('Interface is shutting down...')));
+	if (!up) {
+		L.Request.get(L.url('admin/network/remote_addr')).then(function(res) {
+			var info = res.json();
+
+			if (L.isObject(info) &&
+			    Array.isArray(info.inbound_interfaces) &&
+			    info.inbound_interfaces.filter(function(i) { return i == id })[0]) {
+
+				L.ui.showModal(_('Confirm disconnect'), [
+					E('p', _('You appear to be currently connected to the device via the "%h" interface. Do you really want to shut down the interface?').format(id)),
+					E('div', { 'class': 'right' }, [
+						E('button', {
+							'class': 'cbi-button cbi-button-neutral',
+							'click': function(ev) {
+								btns[1].classList.remove('spinning');
+								btns[1].disabled = false;
+								btns[0].disabled = false;
+
+								L.ui.hideModal();
+							}
+						}, _('Cancel')),
+						' ',
+						E('button', {
+							'class': 'cbi-button cbi-button-negative important',
+							'click': function(ev) {
+								dsc.setAttribute('disconnect', '');
+								L.dom.content(dsc, E('em', _('Interface is shutting down...')));
+
+								L.ui.hideModal();
+							}
+						}, _('Disconnect'))
+					])
+				]);
+			}
+			else {
+				dsc.setAttribute('disconnect', '');
+				L.dom.content(dsc, E('em', _('Interface is shutting down...')));
+			}
+		});
+	}
+	else {
+		dsc.setAttribute(up ? 'reconnect' : 'disconnect', force ? 'force' : '');
+		L.dom.content(dsc, E('em', up ? _('Interface is reconnecting...') : _('Interface is shutting down...')));
+	}
 }
 
 function get_netmask(s, use_cfgvalue) {
@@ -939,34 +980,11 @@ return L.view.extend({
 							L.ui.addNotification(null, E('p', e.message));
 						}));
 					}
-					else if (dsc.getAttribute('disconnect') == '' || dsc.getAttribute('disconnect') == 'force') {
-						var force = dsc.getAttribute('disconnect');
+					else if (dsc.getAttribute('disconnect') == '') {
 						dsc.setAttribute('disconnect', '1');
-						tasks.push(L.Request.post(
-							L.url('admin/network/iface_down', section_ids[i], force),
-							'token=' + L.env.token,
-							{ headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
-						).then(L.bind(function(ifname, res) {
-							if (res.status == 409) {
-								L.ui.showModal(_('Confirm disconnect'), [
-									E('p', _('You appear to be currently connected to the device via the "%h" interface. Do you really want to shut down the interface?').format(ifname)),
-									E('div', { 'class': 'right' }, [
-										E('button', {
-											'class': 'cbi-button cbi-button-neutral',
-											'click': L.ui.hideModal
-										}, _('Cancel')),
-										' ',
-										E('button', {
-											'class': 'cbi-button cbi-button-negative important',
-											'click': function(ev) {
-												iface_updown(false, ifname, ev, true);
-												L.ui.hideModal();
-											}
-										}, _('Disconnect'))
-									])
-								]);
-							}
-						}, this, section_ids[i]), function() {}));
+						tasks.push(fs.exec('/sbin/ifdown', [section_ids[i]]).catch(function(e) {
+							L.ui.addNotification(null, E('p', e.message));
+						}));
 					}
 					else if (dsc.getAttribute('reconnect') == '1') {
 						dsc.removeAttribute('reconnect');
