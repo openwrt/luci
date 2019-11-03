@@ -142,7 +142,7 @@ return L.view.extend({
 		o = s.taboption('logging', form.Value, 'log_ip', _('External system log server'))
 		o.optional    = true
 		o.placeholder = '0.0.0.0'
-		o.datatype    = 'ipaddr'
+		o.datatype    = 'host'
 
 		o = s.taboption('logging', form.Value, 'log_port', _('External system log server port'))
 		o.optional    = true
