@@ -73,7 +73,7 @@ o.datatype    = "uinteger"
 o = s:taboption("logging", Value, "log_ip", translate("External system log server"))
 o.optional    = true
 o.placeholder = "0.0.0.0"
-o.datatype    = "ip4addr"
+o.datatype    = "host"
 
 o = s:taboption("logging", Value, "log_port", translate("External system log server port"))
 o.optional    = true
