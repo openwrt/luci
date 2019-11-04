@@ -1,6 +1,6 @@
 # OpenWrt luci feed
 
-[![Translation status](https://hosted.weblate.org/widgets/openwrt/-/luci/svg-badge.svg)](https://hosted.weblate.org/engage/openwrt/?utm_source=widget)
+[![Translation status](https://hosted.weblate.org/widgets/openwrt/-/svg-badge.svg)](https://hosted.weblate.org/engage/openwrt/?utm_source=widget)
 
 ## Description
 
@@ -34,3 +34,7 @@ See [LICENSE](LICENSE) file.
 ## Package Guidelines
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) file.
+
+## Translation status
+
+[![Translation status](https://hosted.weblate.org/widgets/openwrt/-/multi-auto.svg)](https://hosted.weblate.org/engage/openwrt/?utm_source=widget)
