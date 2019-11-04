@@ -43,9 +43,10 @@
 			"ubus": {
 				"file": [ "list", "read", "stat" ],
 				"iwinfo": [ "assoclist", "freqlist", "txpowerlist", "countrylist" ],
-				"luci": [ "getDUIDHints", "getInitList", "getLocaltime", "getTimezones", "getLEDs", "getUSBDevices", "getSwconfigFeatures", "getSwconfigPortState", "getBlockDevices", "getMountPoints" ],
+				"luci": [ "getConntrackList", "getDUIDHints", "getInitList", "getLocaltime", "getProcessList", "getRealtimeStats", "getTimezones", "getLEDs", "getUSBDevices", "getSwconfigFeatures", "getSwconfigPortState", "getBlockDevices", "getMountPoints" ],
 				"luci-rpc": [ "getBoardJSON", "getDHCPLeases", "getDSLStatus", "getHostHints", "getNetworkDevices", "getWirelessDevices" ],
 				"network.interface": [ "dump" ],
+				"network.rrdns": [ "lookup" ],
 				"network": [ "get_proto_handlers" ],
 				"system": [ "board", "info", "validate_firmware_image" ],
 				"uci": [ "changes", "get" ]
@@ -62,10 +63,12 @@
 				"/etc/sysupgrade.conf": [ "write" ],
 				"/sbin/block": [ "exec" ],
 				"/sbin/firstboot": [ "exec" ],
+				"/sbin/ifdown": [ "exec" ],
 				"/sbin/ifup": [ "exec" ],
 				"/sbin/reboot": [ "exec" ],
 				"/sbin/sysupgrade": [ "exec" ],
 				"/sbin/wifi": [ "exec" ],
+				"/bin/kill": [ "exec" ],
 				"/bin/tar": [ "exec" ],
 				"/bin/umount": [ "exec" ],
 				"/tmp/backup.tar.gz": [ "write" ],
@@ -85,12 +88,19 @@
 	"luci-app-firewall": {
 		"description": "Grant access to firewall procedures",
 		"read": {
+			"file": {
+				"/etc/firewall.user": [ "read" ]
+			},
 			"ubus": {
 				"luci": [ "getConntrackHelpers" ]
 			},
 			"uci": [ "firewall" ]
 		},
 		"write": {
+			"file": {
+				"/etc/firewall.user": [ "write" ],
+				"/etc/init.d/firewall": [ "exec" ]
+			},
 			"uci": [ "firewall" ]
 		}
 	}

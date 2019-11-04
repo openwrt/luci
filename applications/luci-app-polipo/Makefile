@@ -7,7 +7,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=LuCI Support for the Polipo Proxy
-LUCI_DEPENDS:=+polipo
+LUCI_DEPENDS:=+luci-compat +polipo
 
 include ../../luci.mk
 

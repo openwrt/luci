@@ -83,6 +83,8 @@ invoke_data_cb(struct ubus_request *req, int type, struct blob_attr *msg)
 
 	if (ictx->cb != NULL)
 		ictx->cb(req, type, msg);
+
+	ictx->cb = NULL;
 }
 
 static void
@@ -90,6 +92,9 @@ invoke_done_cb(struct ubus_request *req, int ret)
 {
 	struct invoke_context *ictx =
 		container_of(req, struct invoke_context, request);
+
+	if (ictx->cb != NULL)
+		ictx->cb(req, -1, NULL);
 
 	uloop_timeout_cancel(&ictx->timeout);
 	free(ictx);
@@ -435,9 +440,6 @@ lease_next(void)
 
 			ea = ether_aton(p);
 
-			if (!ea)
-				continue;
-
 			p = strtok(NULL, " \t\n");
 
 			if (p && inet_pton(AF_INET6, p, &e.addr.in6))
@@ -445,6 +447,9 @@ lease_next(void)
 			else if (p && inet_pton(AF_INET, p, &e.addr.in))
 				e.af = AF_INET;
 			else
+				continue;
+
+			if (!ea && e.af != AF_INET6)
 				continue;
 
 			e.hostname = strtok(NULL, " \t\n");
@@ -459,7 +464,11 @@ lease_next(void)
 			if (!strcmp(e.duid, "*"))
 				e.duid = NULL;
 
-			e.mac = *ea;
+			if (!ea && e.duid)
+				ea = duid2ea(e.duid);
+
+			if (ea)
+				e.mac = *ea;
 
 			return &e;
 		}

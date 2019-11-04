@@ -7,7 +7,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=LuCI Support for Coova Chilli
-LUCI_DEPENDS:=@BROKEN
+LUCI_DEPENDS:=+luci-compat @BROKEN
 
 include ../../luci.mk
 

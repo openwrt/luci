@@ -1,5 +1,6 @@
 'use strict';
 'require fs';
+'require ui';
 'require rpc';
 'require uci';
 'require form';
@@ -8,7 +9,7 @@
 'require tools.widgets as widgets';
 
 function count_changes(section_id) {
-	var changes = L.ui.changes.changes, n = 0;
+	var changes = ui.changes.changes, n = 0;
 
 	if (!L.isObject(changes))
 		return n;
@@ -97,7 +98,7 @@ function render_network_status(radioNet) {
 	if (changecount)
 		status_text = E('a', {
 			href: '#',
-			click: L.bind(L.ui.changes.displayChanges, L.ui.changes)
+			click: L.bind(ui.changes.displayChanges, ui.changes)
 		}, _('Interface has %d pending changes').format(changecount));
 	else if (!is_assoc)
 		status_text = E('em', disabled ? _('Wireless is disabled') : _('Wireless is not associated'));
@@ -196,7 +197,7 @@ function network_updown(id, map, ev) {
 	}
 
 	return map.save().then(function() {
-		L.ui.changes.apply()
+		ui.changes.apply()
 	});
 }
 
@@ -605,18 +606,18 @@ return L.view.extend({
 		}
 
 		return Promise.all(tasks)
-			.then(L.bind(L.ui.changes.init, L.ui.changes))
-			.then(L.bind(L.ui.changes.apply, L.ui.changes));
+			.then(L.bind(ui.changes.init, ui.changes))
+			.then(L.bind(ui.changes.apply, ui.changes));
 	},
 
 	renderMigration: function() {
-		L.ui.showModal(_('Wireless configuration migration'), [
+		ui.showModal(_('Wireless configuration migration'), [
 			E('p', _('The existing wireless configuration needs to be changed for LuCI to function properly.')),
 			E('p', _('Upon pressing "Continue", anonymous "wifi-iface" sections will be assigned with a name in the form <em>wifinet#</em> and the network will be restarted to apply the updated configuration.')),
 			E('div', { 'class': 'right' },
 				E('button', {
 					'class': 'btn cbi-button-action important',
-					'click': L.ui.createHandlerFn(this, 'handleMigration')
+					'click': ui.createHandlerFn(this, 'handleMigration')
 				}, _('Continue')))
 		]);
 	},
@@ -691,17 +692,17 @@ return L.view.extend({
 					E('button', {
 						'class': 'cbi-button cbi-button-neutral',
 						'title': _('Restart radio interface'),
-						'click': L.ui.createHandlerFn(this, radio_restart, section_id)
+						'click': ui.createHandlerFn(this, radio_restart, section_id)
 					}, _('Restart')),
 					E('button', {
 						'class': 'cbi-button cbi-button-action important',
 						'title': _('Find and join network'),
-						'click': L.ui.createHandlerFn(this, 'handleScan', inst)
+						'click': ui.createHandlerFn(this, 'handleScan', inst)
 					}, _('Scan')),
 					E('button', {
 						'class': 'cbi-button cbi-button-add',
 						'title': _('Provide new network'),
-						'click': L.ui.createHandlerFn(this, 'handleAdd', inst)
+						'click': ui.createHandlerFn(this, 'handleAdd', inst)
 					}, _('Add'))
 				];
 			}
@@ -713,17 +714,17 @@ return L.view.extend({
 					E('button', {
 						'class': 'cbi-button cbi-button-neutral enable-disable',
 						'title': isDisabled ? _('Enable this network') : _('Disable this network'),
-						'click': L.ui.createHandlerFn(this, network_updown, section_id, this.map)
+						'click': ui.createHandlerFn(this, network_updown, section_id, this.map)
 					}, isDisabled ? _('Enable') : _('Disable')),
 					E('button', {
 						'class': 'cbi-button cbi-button-action important',
 						'title': _('Edit this network'),
-						'click': L.ui.createHandlerFn(this, 'renderMoreOptionsModal', section_id)
+						'click': ui.createHandlerFn(this, 'renderMoreOptionsModal', section_id)
 					}, _('Edit')),
 					E('button', {
 						'class': 'cbi-button cbi-button-negative remove',
 						'title': _('Delete this network'),
-						'click': L.ui.createHandlerFn(this, 'handleRemove', section_id)
+						'click': ui.createHandlerFn(this, 'handleRemove', section_id)
 					}, _('Remove'))
 				];
 			}
@@ -755,7 +756,7 @@ return L.view.extend({
 				o = ss.taboption('general', form.Button, '_toggle', isDisabled ? _('Wireless network is disabled') : _('Wireless network is enabled'));
 				o.inputstyle = isDisabled ? 'apply' : 'reset';
 				o.inputtitle = isDisabled ? _('Enable') : _('Disable');
-				o.onclick = L.ui.createHandlerFn(s, network_updown, s.section, s.map);
+				o.onclick = ui.createHandlerFn(s, network_updown, s.section, s.map);
 
 				o = ss.taboption('general', CBIWifiFrequencyValue, '_freq', '<br />' + _('Operating frequency'));
 				o.ucisection = s.section;
@@ -1630,7 +1631,7 @@ return L.view.extend({
 
 			cbi_update_table(table, [], E('em', { class: 'spinning' }, _('Starting wireless scan...')));
 
-			var md = L.ui.showModal(_('Join Network: Wireless Scan'), [
+			var md = ui.showModal(_('Join Network: Wireless Scan'), [
 				table,
 				E('div', { 'class': 'right' },
 					E('button', {
@@ -1710,7 +1711,7 @@ return L.view.extend({
 				md.style.maxHeight = '';
 			}
 
-			L.ui.hideModal();
+			ui.hideModal();
 			L.Poll.remove(this.pollFn);
 
 			this.pollFn = null;
@@ -1848,16 +1849,16 @@ return L.view.extend({
 			zone.default = 'wan';
 
 			return m2.render().then(L.bind(function(nodes) {
-				L.ui.showModal(_('Joining Network: %q').replace(/%q/, '"%h"'.format(bss.ssid)), [
+				ui.showModal(_('Joining Network: %q').replace(/%q/, '"%h"'.format(bss.ssid)), [
 					nodes,
 					E('div', { 'class': 'right' }, [
 						E('button', {
 							'class': 'btn',
-							'click': L.ui.hideModal
+							'click': ui.hideModal
 						}, _('Cancel')), ' ',
 						E('button', {
 							'class': 'cbi-button cbi-button-positive important',
-							'click': L.ui.createHandlerFn(this, 'handleJoinConfirm', radioDev, bss, m2)
+							'click': ui.createHandlerFn(this, 'handleJoinConfirm', radioDev, bss, m2)
 						}, _('Submit'))
 					])
 				], 'cbi-modal').querySelector('[id="%s"] input[class][type]'.format((passphrase || name).cbid('_new_'))).focus();
@@ -1919,7 +1920,7 @@ return L.view.extend({
 					if (dsc.getAttribute('restart') == '') {
 						dsc.setAttribute('restart', '1');
 						tasks.push(fs.exec('/sbin/wifi', ['up', section_ids[i]]).catch(function(e) {
-							L.ui.addNotification(null, E('p', e.message));
+							ui.addNotification(null, E('p', e.message));
 						}));
 					}
 					else if (dsc.getAttribute('restart') == '1') {

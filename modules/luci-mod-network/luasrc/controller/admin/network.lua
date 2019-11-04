@@ -15,7 +15,7 @@ function index()
 		page.uci_depends = { wireless = { ["@wifi-device[0]"] = "wifi-device" } }
 		page.leaf = true
 
-		page = entry({"admin", "network", "iface_down"}, post("iface_down"), nil)
+		page = entry({"admin", "network", "remote_addr"}, call("remote_addr"), nil)
 		page.leaf = true
 
 		page = entry({"admin", "network", "network"}, view("network/interfaces"), _("Interfaces"), 10)
@@ -70,51 +70,58 @@ local function addr2dev(addr, src)
 	return route and route.dev
 end
 
-function iface_down(iface, force)
-	local netmd = require "luci.model.network".init()
-	local peer = luci.http.getenv("REMOTE_ADDR")
-	local serv = luci.http.getenv("SERVER_ADDR")
+function remote_addr()
+	local uci    = require "luci.model.uci"
+	local peer   = luci.http.getenv("REMOTE_ADDR")
+	local serv   = luci.http.getenv("SERVER_ADDR")
+	local device = addr2dev(peer, serv)
+	local ifaces = luci.util.ubus("network.interface", "dump")
+	local indevs = {}
+	local inifs  = {}
 
-	if force ~= "force" and serv and peer then
-		local dev = addr2dev(peer, serv)
-		if dev then
-			local nets = netmd:get_networks()
-			local outnet = nil
-			local _, net, ai
+	local result = {
+		remote_addr        = peer,
+		server_addr        = serv,
+		inbound_devices    = {},
+		inbound_interfaces = {}
+	}
 
-			for _, net in ipairs(nets) do
-				if net:contains_interface(dev) then
-					outnet = net
-					break
+	if type(ifaces) == "table" and type(ifaces.interface) == "table" then
+		for _, iface in ipairs(ifaces.interface) do
+			if type(iface) == "table" then
+				if iface.device == device or iface.l3_device == device then
+					inifs[iface.interface] = true
+					indevs[device] = true
 				end
-			end
 
-			if outnet:name() == iface then
-				luci.http.status(409, "Is inbound interface")
-				return
-			end
-
-			local peeraddr = outnet:get("peeraddr")
-			for _, ai in ipairs(peeraddr and nixio.getaddrinfo(peeraddr) or {}) do
-				local peerdev = addr2dev(ai.address)
-				for _, net in ipairs(peerdev and nets or {}) do
-					if net:contains_interface(peerdev) and net:name() == iface then
-						luci.http.status(409, "Is inbound interface")
-						return
+				local peeraddr = uci:get("network", iface.interface, "peeraddr")
+				for _, ai in ipairs(peeraddr and nixio.getaddrinfo(peeraddr) or {}) do
+					local peerdev = addr2dev(ai.address)
+					if peerdev then
+						for _, iface in ipairs(ifaces.interface) do
+							if type(iface) == "table" and
+							   (iface.device == peerdev or iface.l3_device == peerdev)
+							then
+								inifs[iface.interface] = true
+								indevs[peerdev] = true
+							end
+						end
 					end
 				end
 			end
 		end
 	end
 
-	if netmd:get_network(iface) then
-		luci.sys.call("env -i /sbin/ifdown %s >/dev/null 2>/dev/null"
-			% luci.util.shellquote(iface))
-		luci.http.status(200, "Shut down")
-		return
+	for k in pairs(inifs) do
+		result.inbound_interfaces[#result.inbound_interfaces + 1] = k
 	end
 
-	luci.http.status(404, "No such interface")
+	for k in pairs(indevs) do
+		result.inbound_devices[#result.inbound_devices + 1] = k
+	end
+
+	luci.http.prepare_content("application/json")
+	luci.http.write_json(result)
 end
 
 function diag_command(cmd, addr)

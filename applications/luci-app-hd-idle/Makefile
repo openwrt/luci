@@ -7,7 +7,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=Hard Disk Idle Spin-Down module
-LUCI_DEPENDS:=+hd-idle
+LUCI_DEPENDS:=+luci-compat +hd-idle
 
 include ../../luci.mk
 

@@ -1,6 +1,7 @@
 'use strict';
 'require rpc';
 'require fs';
+'require ui';
 
 return L.view.extend({
 	callInitList: rpc.declare({
@@ -30,7 +31,7 @@ return L.view.extend({
 
 			return true;
 		}).catch(function(e) {
-			L.ui.addNotification(null, E('p', _('Failed to execute "/etc/init.d/%s %s" action: %s').format(name, action, e)));
+			ui.addNotification(null, E('p', _('Failed to execute "/etc/init.d/%s %s" action: %s').format(name, action, e)));
 		});
 	},
 
@@ -48,16 +49,16 @@ return L.view.extend({
 
 		return fs.write('/etc/rc.local', value).then(function() {
 			document.querySelector('textarea').value = value;
-			L.ui.addNotification(null, E('p', _('Contents have been saved.')), 'info');
+			ui.addNotification(null, E('p', _('Contents have been saved.')), 'info');
 		}).catch(function(e) {
-			L.ui.addNotification(null, E('p', _('Unable to save contents: %s').format(e.message)));
+			ui.addNotification(null, E('p', _('Unable to save contents: %s').format(e.message)));
 		});
 	},
 
 	renderEnableDisable: function(init) {
 		return E('button', {
 			class: 'btn cbi-button-%s'.format(init.enabled ? 'positive' : 'negative'),
-			click: L.ui.createHandlerFn(this, 'handleEnableDisable', init.name, init.enabled)
+			click: ui.createHandlerFn(this, 'handleEnableDisable', init.name, init.enabled)
 		}, init.enabled ? _('Enabled') : _('Disabled'));
 	},
 
@@ -93,9 +94,9 @@ return L.view.extend({
 				'%02d'.format(list[i].index),
 				list[i].name,
 				this.renderEnableDisable(list[i]),
-				E('button', { 'class': 'btn cbi-button-action', 'click': L.ui.createHandlerFn(this, 'handleAction', list[i].name, 'start') }, _('Start')),
-				E('button', { 'class': 'btn cbi-button-action', 'click': L.ui.createHandlerFn(this, 'handleAction', list[i].name, 'restart') }, _('Restart')),
-				E('button', { 'class': 'btn cbi-button-action', 'click': L.ui.createHandlerFn(this, 'handleAction', list[i].name, 'stop') }, _('Stop'))
+				E('button', { 'class': 'btn cbi-button-action', 'click': ui.createHandlerFn(this, 'handleAction', list[i].name, 'start') }, _('Start')),
+				E('button', { 'class': 'btn cbi-button-action', 'click': ui.createHandlerFn(this, 'handleAction', list[i].name, 'restart') }, _('Restart')),
+				E('button', { 'class': 'btn cbi-button-action', 'click': ui.createHandlerFn(this, 'handleAction', list[i].name, 'stop') }, _('Stop'))
 			]);
 		}
 
@@ -114,14 +115,14 @@ return L.view.extend({
 					E('div', { 'class': 'cbi-page-actions' }, [
 						E('button', {
 							'class': 'btn cbi-button-save',
-							'click': L.ui.createHandlerFn(this, 'handleRcLocalSave')
+							'click': ui.createHandlerFn(this, 'handleRcLocalSave')
 						}, _('Save'))
 					])
 				])
 			])
 		]);
 
-		L.ui.tabs.initTabGroup(view.lastElementChild.childNodes);
+		ui.tabs.initTabGroup(view.lastElementChild.childNodes);
 
 		return view;
 	},

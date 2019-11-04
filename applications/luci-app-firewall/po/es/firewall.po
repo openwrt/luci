@@ -19,7 +19,6 @@ msgid "%s in %s"
 msgstr "%s en %s"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:242
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:154
 msgid "%s%s with %s"
 msgstr "%s%s con %s"
 
@@ -28,12 +27,10 @@ msgid "%s, %s in %s"
 msgstr "%s, %s en %s"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:275
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:195
 msgid "<var>%d</var> pkts. per <var>%s</var>"
 msgstr "<var>%d</var> paquetes por <var>%s</var>"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:271
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:192
 msgid "<var>%d</var> pkts. per <var>%s</var>, burst <var>%d</var> pkts."
 msgstr ""
 "<var>%d</var> paquetes por <var>%s</var>, máximo <var>%d</var> paquetes."
@@ -43,17 +40,14 @@ msgid "<var>%s</var> and limit to %s"
 msgstr "<var>%s</var> y limitar a %s"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:293
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:214
 msgid "Accept forward"
 msgstr "Aceptar reenvío"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:303
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:224
 msgid "Accept input"
 msgstr "Aceptar entrada"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:283
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:204
 msgid "Accept output"
 msgstr "Aceptar salida"
 
@@ -127,6 +121,10 @@ msgstr "Configuraciones de Conntrack"
 msgid "Conntrack helpers"
 msgstr "Ayudantes de Conntrack"
 
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/custom.js:15
+msgid "Contents have been saved."
+msgstr ""
+
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:178
 msgid "Covered devices"
 msgstr "Interfaces cubiertas"
@@ -139,11 +137,11 @@ msgstr "Redes cubiertas"
 msgid "Covered subnets"
 msgstr "Subredes cubiertas"
 
-#: applications/luci-app-firewall/luasrc/controller/firewall.lua:19
+#: applications/luci-app-firewall/luasrc/controller/firewall.lua:18
 msgid "Custom Rules"
 msgstr "Reglas personalizadas"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/custom.lua:8
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/custom.js:25
 msgid ""
 "Custom rules allow you to execute arbitrary iptables commands which are not "
 "otherwise covered by the firewall framework. The commands are executed after "
@@ -166,22 +164,15 @@ msgstr "Puerto de destino"
 msgid "Destination zone"
 msgstr "Zona de destino"
 
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:242
-msgid "Disable"
-msgstr "Desactivar"
-
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:299
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:220
 msgid "Discard forward"
 msgstr "Descartar reenvío"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:309
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:230
 msgid "Discard input"
 msgstr "Descartar entrada"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:289
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:210
 msgid "Discard output"
 msgstr "Descartar salida"
 
@@ -195,17 +186,14 @@ msgstr ""
 "configuraciones complejas de rutas asimétricas."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:297
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:218
 msgid "Do not track forward"
 msgstr "No seguir reenvío"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:307
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:228
 msgid "Do not track input"
 msgstr "No seguir entrada"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:287
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:208
 msgid "Do not track output"
 msgstr "No seguir salida"
 
@@ -215,7 +203,6 @@ msgstr "Descartar paquetes inválidos"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:149
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:189
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:246
 msgid "Enable"
 msgstr "Activar"
 
@@ -270,7 +257,7 @@ msgstr "Argumentos fuente adicionales"
 msgid "Firewall"
 msgstr "Firewall"
 
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/custom.lua:7
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/custom.js:24
 msgid "Firewall - Custom Rules"
 msgstr "Firewall - Reglas personalizadas"
 
@@ -343,17 +330,14 @@ msgid "Hardware flow offloading"
 msgstr "Descarga de flujo por hardware"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:157
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:75
 msgid "IP"
 msgstr "IP"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:167
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:83
 msgid "IP range"
 msgstr "Rango de IP"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:175
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:100
 msgid "IPs"
 msgstr "IP"
 
@@ -403,12 +387,10 @@ msgid "Limit log messages"
 msgstr "Limitar registro de mensajes"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:96
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:31
 msgid "MAC"
 msgstr "MAC"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:104
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:40
 msgid "MACs"
 msgstr "MAC"
 
@@ -540,17 +522,14 @@ msgstr ""
 "Redirigir el tráfico de entrada que coincida al host interno especificado"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:295
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:216
 msgid "Refuse forward"
 msgstr "Rechazar reenvío"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:305
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:226
 msgid "Refuse input"
 msgstr "Rechazar entrada"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:285
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:206
 msgid "Refuse output"
 msgstr "Rechazar salida"
 
@@ -558,10 +537,6 @@ msgstr "Rechazar salida"
 msgid "Requires hardware NAT support. Implemented at least for mt7621"
 msgstr ""
 "Requiere soporte de NAT por hardware. Implementado al menos para mt7621"
-
-#: applications/luci-app-firewall/luasrc/model/cbi/firewall/custom.lua:29
-msgid "Restart Firewall"
-msgstr "Reiniciar Firewall"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:201
 msgid "Restrict Masquerading to given destination subnets"
@@ -579,14 +554,6 @@ msgstr "Restringir a la familia de direcciones"
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:53
 msgid "Routing/NAT Offloading"
 msgstr "Enrutamiento/NAT Offloading"
-
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:245
-msgid "Rule is disabled"
-msgstr "Regla desactivada"
-
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:241
-msgid "Rule is enabled"
-msgstr "Regla activada"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:351
 msgid "Saturday"
@@ -731,6 +698,10 @@ msgstr ""
 msgid "Tuesday"
 msgstr "Martes"
 
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/custom.js:18
+msgid "Unable to save contents: %s"
+msgstr ""
+
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:108
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:122
 msgid "Unnamed forward"
@@ -821,12 +792,10 @@ msgstr "cualquier router IP"
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:182
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:52
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:138
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:110
 msgid "any zone"
 msgstr "cualquier zona"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:267
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:189
 msgid "day"
 msgstr "Día"
 
@@ -841,29 +810,23 @@ msgid "drop"
 msgstr "Descartar"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:265
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:187
 msgid "hour"
 msgstr "Hora"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:263
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:185
 msgid "minute"
 msgstr "Minuto"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:86
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:20
 msgid "not"
 msgstr "No"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:121
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:50
 msgid "port"
 msgstr "puerto"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:131
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:140
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:55
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:65
 msgid "ports"
 msgstr "puertos"
 
@@ -874,7 +837,6 @@ msgid "reject"
 msgstr "Rechazar"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:261
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:183
 msgid "second"
 msgstr "segundo"
 
@@ -885,14 +847,24 @@ msgid "this new zone"
 msgstr "Esta nueva zona"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:197
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:121
 msgid "type"
 msgstr "Tipo"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:209
-#: applications/luci-app-firewall/luasrc/tools/firewall.lua:130
 msgid "types"
 msgstr "Tipos"
+
+#~ msgid "Disable"
+#~ msgstr "Desactivar"
+
+#~ msgid "Restart Firewall"
+#~ msgstr "Reiniciar Firewall"
+
+#~ msgid "Rule is disabled"
+#~ msgstr "Regla desactivada"
+
+#~ msgid "Rule is enabled"
+#~ msgstr "Regla activada"
 
 #~ msgid "Add"
 #~ msgstr "Añadir"

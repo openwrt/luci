@@ -1,5 +1,6 @@
 'use strict';
 'require fs';
+'require ui';
 'require uci';
 'require rpc';
 'require form';
@@ -79,7 +80,7 @@ return L.view.extend({
 		return fs.exec('/sbin/block', ['mount'])
 			.then(function(res) {
 				if (res.code != 0)
-					L.ui.addNotification(null, E('p', _('The <em>block mount</em> command failed with code %d').format(res.code)));
+					ui.addNotification(null, E('p', _('The <em>block mount</em> command failed with code %d').format(res.code)));
 			})
 			.then(L.bind(uci.unload, uci, 'fstab'))
 			.then(L.bind(m.render, m));
@@ -89,7 +90,7 @@ return L.view.extend({
 		return fs.exec('/bin/umount', [path])
 			.then(L.bind(uci.unload, uci, 'fstab'))
 			.then(L.bind(m.render, m))
-			.catch(function(e) { L.ui.addNotification(null, E('p', e.message)) });
+			.catch(function(e) { ui.addNotification(null, E('p', e.message)) });
 	},
 
 	load: function() {
@@ -210,7 +211,7 @@ return L.view.extend({
 					'%.2f%% (%1024.2mB)'.format(100 / this.mounts[i].size * used, used),
 					umount ? E('button', {
 						'class': 'btn cbi-button-remove',
-						'click': L.ui.createHandlerFn(view, 'handleUmount', m, this.mounts[i].mount)
+						'click': ui.createHandlerFn(view, 'handleUmount', m, this.mounts[i].mount)
 					}, [ _('Unmount') ]) : '-'
 				]);
 			}

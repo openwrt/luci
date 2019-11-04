@@ -1390,9 +1390,9 @@ var CBIGridSection = CBITableSection.extend({
 		CBIAbstractSection.prototype.tab.call(this, name, title, description);
 	},
 
-	handleAdd: function(ev) {
+	handleAdd: function(ev, name) {
 		var config_name = this.uciconfig || this.map.config,
-		    section_id = this.map.data.add(config_name, this.sectiontype);
+		    section_id = this.map.data.add(config_name, this.sectiontype, name);
 
 		this.addedSection = section_id;
 		return this.renderMoreOptionsModal(section_id);

@@ -1,5 +1,6 @@
 'use strict';
 'require fs';
+'require ui';
 
 var SSHPubkeyDecoder = L.Class.singleton({
 	lengthDecode: function(s, off)
@@ -119,8 +120,8 @@ function renderKeys(keys) {
 function saveKeys(keys) {
 	return fs.write('/etc/dropbear/authorized_keys', keys.join('\n') + '\n', 384 /* 0600 */)
 		.then(renderKeys.bind(this, keys))
-		.catch(function(e) { L.ui.addNotification(null, E('p', e.message)) })
-		.finally(L.ui.hideModal);
+		.catch(function(e) { ui.addNotification(null, E('p', e.message)) })
+		.finally(ui.hideModal);
 }
 
 function addKey(ev) {
@@ -138,13 +139,13 @@ function addKey(ev) {
 	});
 
 	if (keys.indexOf(key) !== -1) {
-		L.ui.showModal(_('Add key'), [
+		ui.showModal(_('Add key'), [
 			E('div', { class: 'alert-message warning' }, _('The given SSH public key has already been added.')),
 			E('div', { class: 'right' }, E('div', { class: 'btn', click: L.hideModal }, _('Close')))
 		]);
 	}
 	else if (!pubkey) {
-		L.ui.showModal(_('Add key'), [
+		ui.showModal(_('Add key'), [
 			E('div', { class: 'alert-message warning' }, _('The given SSH public key is invalid. Please supply proper public RSA or ECDSA keys.')),
 			E('div', { class: 'right' }, E('div', { class: 'btn', click: L.hideModal }, _('Close')))
 		]);
@@ -178,7 +179,7 @@ function removeKey(ev) {
 		E('div', { class: 'right' }, [
 			E('div', { class: 'btn', click: L.hideModal }, _('Cancel')),
 			' ',
-			E('div', { class: 'btn danger', click: L.ui.createHandlerFn(this, saveKeys, keys) }, _('Delete key')),
+			E('div', { class: 'btn danger', click: ui.createHandlerFn(this, saveKeys, keys) }, _('Delete key')),
 		])
 	]);
 }
@@ -232,7 +233,7 @@ return L.view.extend({
 				}),
 				E('button', {
 					'class': 'cbi-button',
-					'click': L.ui.createHandlerFn(this, addKey)
+					'click': ui.createHandlerFn(this, addKey)
 				}, _('Add key'))
 			])
 		]);
@@ -242,7 +243,7 @@ return L.view.extend({
 			if (pubkey)
 				list.insertBefore(E('div', {
 					class: 'item',
-					click: L.ui.createHandlerFn(this, removeKey),
+					click: ui.createHandlerFn(this, removeKey),
 					'data-key': key
 				}, [
 					E('strong', pubkey.comment || _('Unnamed key')), E('br'),

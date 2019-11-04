@@ -15,6 +15,5 @@ function index()
 		view("firewall/rules"), _("Traffic Rules"), 30)
 
 	entry({"admin", "network", "firewall", "custom"},
-		form("firewall/custom"),
-		_("Custom Rules"), 40).leaf = true
+		view("firewall/custom"), _("Custom Rules"), 40).leaf = true
 end

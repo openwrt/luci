@@ -3,10 +3,9 @@
 'require network';
 
 function renderbox(radio) {
-	var net0 = radio.networks[0],
-	    chan = net0 ? net0.getChannel() : null,
-	    freq = net0 ? net0.getFrequency() : null,
-	    rate = net0 ? net0.getBitRate() : null,
+	var chan = null,
+	    freq = null,
+	    rate = null,
 	    badges = [];
 
 	for (var i = 0; i < radio.networks.length; i++) {
@@ -42,6 +41,10 @@ function renderbox(radio) {
 		badge.lastElementChild.style.textOverflow = 'ellipsis';
 
 		badges.push(badge);
+
+		chan = (chan != null) ? chan : net.getChannel();
+		freq = (freq != null) ? freq : net.getFrequency();
+		rate = (rate != null) ? rate : net.getBitRate();
 	}
 
 	return E('div', { class: 'ifacebox' }, [
