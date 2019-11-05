@@ -43,19 +43,15 @@
 	</li>
 
 	<li>
-		<a href="../modules/luci.http.protocol.html">luci.http.protocol</a>
+		<a href="../modules/luci.http.conditionals.html">luci.http.conditionals</a>
 	</li>
 
-	<li>
-		<a href="../modules/luci.http.protocol.conditionals.html">luci.http.protocol.conditionals</a>
-	</li>
-
-	<li>
-		<a href="../modules/luci.http.protocol.date.html">luci.http.protocol.date</a>
-	</li>
-
-	<li><strong>luci.http.protocol.mime</strong></li>
+	<li><strong>luci.http.date</strong></li>
 	
+	<li>
+		<a href="../modules/luci.http.mime.html">luci.http.mime</a>
+	</li>
+
 	<li>
 		<a href="../modules/luci.i18n.html">luci.i18n</a>
 	</li>
@@ -196,7 +192,7 @@
 
 <div id="content">
 
-<h1>Class <code>luci.http.protocol.mime</code></h1>
+<h1>Class <code>luci.http.date</code></h1>
 
 <p></p>
 
@@ -210,21 +206,31 @@
 <table class="function_list">
 
 	<tr>
-	<td class="name" nowrap><a href="#to_ext">to_ext</a>&nbsp;(mimetype)</td>
+	<td class="name" nowrap><a href="#compare">compare</a>&nbsp;(d1, d2)</td>
 	<td class="summary">
  
-Return corresponding extension for a given mime type or nil if the 
- 
-given mime-type is unknown.</td>
+Compare two dates which can either be unix epoch times or HTTP date strings.</td>
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#to_mime">to_mime</a>&nbsp;(filename)</td>
+	<td class="name" nowrap><a href="#to_http">to_http</a>&nbsp;(time)</td>
 	<td class="summary">
  
-Extract extension from a filename and return corresponding mime-type or 
+Convert the given unix epoch time to valid HTTP date string.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#to_unix">to_unix</a>&nbsp;(data)</td>
+	<td class="summary">
  
-"application/octet-stream" if the extension is unknown.</td>
+Parse given HTTP date string and convert it to unix epoch time.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#tz_offset">tz_offset</a>&nbsp;(tz)</td>
+	<td class="summary">
+ 
+Return the time offset in seconds between the UTC and given time zone.</td>
 	</tr>
 
 </table>
@@ -243,20 +249,23 @@ Extract extension from a filename and return corresponding mime-type or
 
 
 
-<dt><a name="to_ext"></a><strong>to_ext</strong>&nbsp;(mimetype)</dt>
+<dt><a name="compare"></a><strong>compare</strong>&nbsp;(d1, d2)</dt>
 <dd>
 
  
-Return corresponding extension for a given mime type or nil if the 
- 
-given mime-type is unknown.
+Compare two dates which can either be unix epoch times or HTTP date strings. 
+
 
 
 <h3>Parameters</h3>
 <ul>
 	
 	<li>
-	  mimetype: The mimetype to retrieve the extension from
+	  d1: The first date or epoch time to compare
+	</li>
+	
+	<li>
+	  d2: The first date or epoch time to compare
 	</li>
 	
 </ul>
@@ -266,8 +275,16 @@ given mime-type is unknown.
 
 
 
-<h3>Return value:</h3>
-String with the extension or nil for unknown type
+<h3>Return values:</h3>
+<ol>
+	
+	<li>-1  -  if d1 is lower then d2
+	
+	<li>0   -  if both dates are equal
+	
+	<li>1   -  if d1 is higher then d2
+	
+</ol>
 
 
 
@@ -276,20 +293,19 @@ String with the extension or nil for unknown type
 
 
 
-<dt><a name="to_mime"></a><strong>to_mime</strong>&nbsp;(filename)</dt>
+<dt><a name="to_http"></a><strong>to_http</strong>&nbsp;(time)</dt>
 <dd>
 
  
-Extract extension from a filename and return corresponding mime-type or 
- 
-"application/octet-stream" if the extension is unknown.
+Convert the given unix epoch time to valid HTTP date string. 
+
 
 
 <h3>Parameters</h3>
 <ul>
 	
 	<li>
-	  filename: The filename for which the mime type is guessed
+	  time: Unix epoch time
 	</li>
 	
 </ul>
@@ -300,7 +316,71 @@ Extract extension from a filename and return corresponding mime-type or
 
 
 <h3>Return value:</h3>
-String containign the determined mime type
+String containing the formatted date
+
+
+
+</dd>
+
+
+
+
+<dt><a name="to_unix"></a><strong>to_unix</strong>&nbsp;(data)</dt>
+<dd>
+
+ 
+Parse given HTTP date string and convert it to unix epoch time. 
+
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  data: String containing the date
+	</li>
+	
+</ul>
+
+
+
+
+
+
+<h3>Return value:</h3>
+Unix epoch time
+
+
+
+</dd>
+
+
+
+
+<dt><a name="tz_offset"></a><strong>tz_offset</strong>&nbsp;(tz)</dt>
+<dd>
+
+ 
+Return the time offset in seconds between the UTC and given time zone. 
+
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  tz: Symbolic or numeric timezone specifier
+	</li>
+	
+</ul>
+
+
+
+
+
+
+<h3>Return value:</h3>
+Time offset to UTC in seconds
 
 
 

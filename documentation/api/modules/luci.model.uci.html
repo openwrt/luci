@@ -213,11 +213,10 @@ Add an anonymous section.</td>
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#Cursor.apply">Cursor:apply</a>&nbsp;(configlist, command)</td>
+	<td class="name" nowrap><a href="#Cursor.apply">Cursor:apply</a>&nbsp;(rollback)</td>
 	<td class="summary">
  
-Applies UCI configuration changes 
- </td>
+Applies UCI configuration changes.</td>
 	</tr>
 
 	<tr>
@@ -232,6 +231,13 @@ Get a table of saved but uncommitted changes.</td>
 	<td class="summary">
  
 Commit saved changes.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Cursor.confirm">Cursor:confirm</a>&nbsp;()</td>
+	<td class="summary">
+ 
+Confirms UCI apply process.</td>
 	</tr>
 
 	<tr>
@@ -327,6 +333,20 @@ Revert saved but uncommitted changes.</td>
 	</tr>
 
 	<tr>
+	<td class="name" nowrap><a href="#Cursor.rollback">Cursor:rollback</a>&nbsp;()</td>
+	<td class="summary">
+ 
+Cancels UCI apply process.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#Cursor.rollback_pending">Cursor:rollback_pending</a>&nbsp;()</td>
+	<td class="summary">
+ 
+Checks whether a pending rollback is scheduled.</td>
+	</tr>
+
+	<tr>
 	<td class="name" nowrap><a href="#Cursor.save">Cursor:save</a>&nbsp;(config)</td>
 	<td class="summary">
  
@@ -365,7 +385,7 @@ Set given values as list.</td>
 	<td class="name" nowrap><a href="#Cursor.set_savedir">Cursor:set_savedir</a>&nbsp;(directory)</td>
 	<td class="summary">
  
-Set the directory for uncommited changes.</td>
+Set the directory for uncommitted changes.</td>
 	</tr>
 
 	<tr>
@@ -462,11 +482,18 @@ Name of created section
 
 
 
-<dt><a name="Cursor.apply"></a><strong>Cursor:apply</strong>&nbsp;(configlist, command)</dt>
+<dt><a name="Cursor.apply"></a><strong>Cursor:apply</strong>&nbsp;(rollback)</dt>
 <dd>
 
  
-Applies UCI configuration changes 
+Applies UCI configuration changes. 
+ 
+If the rollback parameter is set to true, the apply function will invoke the 
+rollback mechanism which causes the configuration to be automatically reverted 
+if no confirm() call occurs within a certain timeout. 
+ 
+The current default timeout is 30s and can be increased using the 
+"luci.apply.timeout" uci configuration key. 
 
 
 
@@ -474,11 +501,7 @@ Applies UCI configuration changes
 <ul>
 	
 	<li>
-	  configlist: List of UCI configurations
-	</li>
-	
-	<li>
-	  command: Don't apply only return the command
+	  rollback: Enable rollback mechanism
 	</li>
 	
 </ul>
@@ -487,6 +510,9 @@ Applies UCI configuration changes
 
 
 
+
+<h3>Return value:</h3>
+Boolean whether operation succeeded
 
 
 
@@ -575,6 +601,35 @@ Boolean whether operation succeeded
 	</a>
 	
 </ul>
+
+</dd>
+
+
+
+
+<dt><a name="Cursor.confirm"></a><strong>Cursor:confirm</strong>&nbsp;()</dt>
+<dd>
+
+ 
+Confirms UCI apply process. 
+ 
+If a previous UCI apply with rollback has been invoked using apply(true), 
+this function confirms the process and cancels the pending rollback timer. 
+ 
+If no apply with rollback session is active, the function has no effect and 
+returns with a "No data" error. 
+
+
+
+
+
+
+
+
+<h3>Return value:</h3>
+Boolean whether operation succeeded
+
+
 
 </dd>
 
@@ -1059,6 +1114,71 @@ Boolean whether operation succeeded
 
 
 
+<dt><a name="Cursor.rollback"></a><strong>Cursor:rollback</strong>&nbsp;()</dt>
+<dd>
+
+ 
+Cancels UCI apply process. 
+ 
+If a previous UCI apply with rollback has been invoked using apply(true), 
+this function cancels the process and rolls back the configuration to the 
+pre-apply state. 
+ 
+If no apply with rollback session is active, the function has no effect and 
+returns with a "No data" error. 
+
+
+
+
+
+
+
+
+<h3>Return value:</h3>
+Boolean whether operation succeeded
+
+
+
+</dd>
+
+
+
+
+<dt><a name="Cursor.rollback_pending"></a><strong>Cursor:rollback_pending</strong>&nbsp;()</dt>
+<dd>
+
+ 
+Checks whether a pending rollback is scheduled. 
+ 
+If a previous UCI apply with rollback has been invoked using apply(true), 
+and has not been confirmed or rolled back yet, this function returns true 
+and the remaining time until rollback in seconds. If no rollback is pending, 
+the function returns false. On error, the function returns false and an 
+additional string describing the error. 
+
+
+
+
+
+
+
+
+<h3>Return values:</h3>
+<ol>
+	
+	<li>Boolean whether rollback is pending
+	
+	<li>Remaining time in seconds
+	
+</ol>
+
+
+
+</dd>
+
+
+
+
 <dt><a name="Cursor.save"></a><strong>Cursor:save</strong>&nbsp;(config)</dt>
 <dd>
 
@@ -1280,7 +1400,7 @@ Boolean whether operation succeeded
 <dd>
 
  
-Set the directory for uncommited changes. 
+Set the directory for uncommitted changes. 
 
 
 
@@ -1346,7 +1466,7 @@ Boolean whether operation succeeded
  
 Create a sub-state of this cursor. 
  
-The sub-state is tied to the parent curser, means it the parent unloads or 
+The sub-state is tied to the parent cursor, means it the parent unloads or 
 loads configs, the sub state will do so as well. 
 
 

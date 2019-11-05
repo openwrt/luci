@@ -256,7 +256,7 @@ Verify an ethernet MAC address.</td>
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#route">route</a>&nbsp;(address)</td>
+	<td class="name" nowrap><a href="#route">route</a>&nbsp;(address, source)</td>
 	<td class="summary">
  
 Determine the route leading to the given destination.</td>
@@ -729,7 +729,7 @@ A string representing the given MAC address.
 
 
 
-<dt><a name="route"></a><strong>route</strong>&nbsp;(address)</dt>
+<dt><a name="route"></a><strong>route</strong>&nbsp;(address, source)</dt>
 <dd>
 
  
@@ -742,6 +742,11 @@ Determine the route leading to the given destination.
 	<li>
 	  address: A <code>luci.ip.cidr</code> instance or a string containing 
 a valid IPv4 or IPv6 range as specified by <code>luci.ip.new()</code>.
+	</li>
+	
+	<li>
+	  source: A <code>luci.ip.cidr</code> instance or a string containing 
+the preferred source address for route selection (optional).
 	</li>
 	
 </ul>
@@ -879,7 +884,7 @@ Fetch all routes, optionally matching the given criteria.
 	
 	<li>
 	  filter: <p>Table containing one or more of the possible filter 
-critera described below (optional)</p><table> 
+criteria described below (optional)</p><table> 
 <tr><th>Field</th><th>Description</th></tr> 
 <tr><td><code>family</code></td><td> 
  Number describing the address family to return - <code>4</code> selects 
@@ -994,7 +999,7 @@ Fetches entries from the IPv4 ARP and IPv6 neighbour kernel table
 	
 	<li>
 	  filter: <p>Table containing one or more of the possible filter 
-critera described below (optional)</p><table> 
+criteria described below (optional)</p><table> 
 <tr><th>Field</th><th>Description</th></tr> 
 <tr><td><code>family</code></td><td> 
  Number describing the address family to return - <code>4</code> selects 

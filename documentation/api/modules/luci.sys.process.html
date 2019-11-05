@@ -209,6 +209,13 @@ LuCI system utilities / process related functions.
 <table class="function_list">
 
 	<tr>
+	<td class="name" nowrap><a href="#process.exec">exec</a>&nbsp;(commend, stdout, stderr, nowait)</td>
+	<td class="summary">
+ 
+Execute a process, optionally capturing stdio.</td>
+	</tr>
+
+	<tr>
 	<td class="name" nowrap><a href="#process.info">info</a>&nbsp;()</td>
 	<td class="summary">
  
@@ -256,6 +263,74 @@ Send a signal to a process identified by given pid.</td>
 
 <h2><a name="functions"></a>Functions</h2>
 <dl class="function">
+
+
+
+<dt><a name="process.exec"></a><strong>exec</strong>&nbsp;(commend, stdout, stderr, nowait)</dt>
+<dd>
+
+ 
+Execute a process, optionally capturing stdio. 
+ 
+Executes the process specified by the given argv vector, e.g. 
+<code>{ "/bin/sh", "-c", "echo 1" }</code> and waits for it to terminate unless a true 
+value has been passed for the "nowait" parameter. 
+ 
+When a function value is passed for the stdout or stderr arguments, the passed 
+function is repeatedly called for each chunk read from the corresponding stdio 
+stream. The read data is passed as string containing at most 4096 bytes at a 
+time. 
+ 
+When a true, non-function value is passed for the stdout or stderr arguments, 
+the data of the corresponding stdio stream is read into an internal string 
+buffer and returned as "stdout" or "stderr" field respectively in the result 
+table. 
+ 
+When a true value is passed to the nowait parameter, the function does not 
+await process termination but returns as soon as all captured stdio streams 
+have been closed or - if no streams are captured - immediately after launching 
+the process. 
+
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  commend: Table containing the argv vector to execute
+	</li>
+	
+	<li>
+	  stdout: Callback function or boolean to indicate capturing (optional)
+	</li>
+	
+	<li>
+	  stderr: Callback function or boolean to indicate capturing (optional)
+	</li>
+	
+	<li>
+	  nowait: Don't wait for process termination when true (optional)
+	</li>
+	
+</ul>
+
+
+
+
+
+
+<h3>Return value:</h3>
+Table containing at least the fields "code" which holds the exit 
+            status of the invoked process or "-1" on error and "pid", which 
+            contains the process id assigned to the spawned process. When 
+            stdout and/or stderr capturing has been requested, it additionally 
+            contains "stdout" and "stderr" fields respectively, holding the 
+            captured stdio data as string.
+
+
+
+</dd>
+
 
 
 

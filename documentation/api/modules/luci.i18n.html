@@ -206,24 +206,10 @@
 <table class="function_list">
 
 	<tr>
-	<td class="name" nowrap><a href="#clear">clear</a>&nbsp;()</td>
+	<td class="name" nowrap><a href="#dump">dump</a>&nbsp;()</td>
 	<td class="summary">
  
-Clear the translation table.</td>
-	</tr>
-
-	<tr>
-	<td class="name" nowrap><a href="#load">load</a>&nbsp;(file, lang, force)</td>
-	<td class="summary">
- 
-Load a translation and copy its data into the translation table.</td>
-	</tr>
-
-	<tr>
-	<td class="name" nowrap><a href="#loadc">loadc</a>&nbsp;(file, force)</td>
-	<td class="summary">
- 
-Load a translation file using the default translation language.</td>
+Return all currently loaded translation strings as a key-value table.</td>
 	</tr>
 
 	<tr>
@@ -231,22 +217,6 @@ Load a translation file using the default translation language.</td>
 	<td class="summary">
  
 Set the context default translation language.</td>
-	</tr>
-
-	<tr>
-	<td class="name" nowrap><a href="#string">string</a>&nbsp;(key)</td>
-	<td class="summary">
- 
-Return the translated value for a specific translation key 
- 
-and ensure that the returned value is a Lua string value.</td>
-	</tr>
-
-	<tr>
-	<td class="name" nowrap><a href="#stringf">stringf</a>&nbsp;(key, ...)</td>
-	<td class="summary">
- 
-Return the translated value for a specific translation key and use it as sprintf pattern.</td>
 	</tr>
 
 	<tr>
@@ -279,51 +249,15 @@ Return the translated value for a specific translation key and use it as sprintf
 
 
 
-<dt><a name="clear"></a><strong>clear</strong>&nbsp;()</dt>
+<dt><a name="dump"></a><strong>dump</strong>&nbsp;()</dt>
 <dd>
 
  
-Clear the translation table. 
- 
+Return all currently loaded translation strings as a key-value table. The key is the 
+hexadecimal representation of the translation key while the value is the translated 
+text content. 
 
 
-
-
-
-
-
-
-
-
-</dd>
-
-
-
-
-<dt><a name="load"></a><strong>load</strong>&nbsp;(file, lang, force)</dt>
-<dd>
-
- 
-Load a translation and copy its data into the translation table. 
-
-
-
-<h3>Parameters</h3>
-<ul>
-	
-	<li>
-	  file: Language file
-	</li>
-	
-	<li>
-	  lang: Two-letter language code
-	</li>
-	
-	<li>
-	  force: Force reload even if already loaded (optional)
-	</li>
-	
-</ul>
 
 
 
@@ -331,41 +265,7 @@ Load a translation and copy its data into the translation table.
 
 
 <h3>Return value:</h3>
-Success status
-
-
-
-</dd>
-
-
-
-
-<dt><a name="loadc"></a><strong>loadc</strong>&nbsp;(file, force)</dt>
-<dd>
-
- 
-Load a translation file using the default translation language. 
- 
-Alternatively load the translation of the fallback language.
-
-
-<h3>Parameters</h3>
-<ul>
-	
-	<li>
-	  file: Language file
-	</li>
-	
-	<li>
-	  force: Force reload even if already loaded (optional)
-	</li>
-	
-</ul>
-
-
-
-
-
+Key-value translation string table.
 
 
 
@@ -386,38 +286,7 @@ Set the context default translation language.
 <ul>
 	
 	<li>
-	  lang: Two-letter language code
-	</li>
-	
-</ul>
-
-
-
-
-
-
-
-
-</dd>
-
-
-
-
-<dt><a name="string"></a><strong>string</strong>&nbsp;(key)</dt>
-<dd>
-
- 
-Return the translated value for a specific translation key 
- 
-and ensure that the returned value is a Lua string value. 
-This is the same as calling <code>tostring(translate(...))</code>
-
-
-<h3>Parameters</h3>
-<ul>
-	
-	<li>
-	  key: Default translation text
+	  lang: An IETF/BCP 47 language tag or ISO3166 country code, e.g. "en-US" or "de"
 	</li>
 	
 </ul>
@@ -428,45 +297,7 @@ This is the same as calling <code>tostring(translate(...))</code>
 
 
 <h3>Return value:</h3>
-Translated string
-
-
-
-</dd>
-
-
-
-
-<dt><a name="stringf"></a><strong>stringf</strong>&nbsp;(key, ...)</dt>
-<dd>
-
- 
-Return the translated value for a specific translation key and use it as sprintf pattern. 
- 
-Ensure that the returned value is a Lua string value. 
-This is the same as calling <code>tostring(translatef(...))</code>
-
-
-<h3>Parameters</h3>
-<ul>
-	
-	<li>
-	  key: Default translation text
-	</li>
-	
-	<li>
-	  ...: Format parameters
-	</li>
-	
-</ul>
-
-
-
-
-
-
-<h3>Return value:</h3>
-Translated and formatted string
+The effective loaded language, e.g. "en" for "en-US" - or nil on failure
 
 
 
