@@ -6,6 +6,7 @@ local nw   = require "luci.model.network"
 local fw   = require "luci.model.firewall"
 local uci  = require "luci.model.uci".cursor()
 local http = require "luci.http"
+local util = require "luci.util"
 
 local iw = luci.sys.wifi.getiwinfo(http.formvalue("device"))
 
@@ -16,7 +17,7 @@ if not iw then
 	return
 end
 
-m = SimpleForm("network", translatef("Joining Network: %q", http.formvalue("join")))
+m = SimpleForm("network", translatef("Joining Network: %q", util.pcdata(http.formvalue("join"))))
 m.cancel = translate("Back to scan results")
 m.reset = false
 

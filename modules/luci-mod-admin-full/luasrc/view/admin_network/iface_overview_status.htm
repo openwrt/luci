@@ -83,7 +83,7 @@
 						}
 
 						s.appendChild(E('br'));
-						s.appendChild(E('small', {}, ifc.is_alias ? '<%:Alias of "%s"%>'.format(ifc.is_alias) : ifc.name));
+						s.appendChild(E('small', {}, [ ifc.is_alias ? '<%:Alias of "%s"%>'.format(ifc.is_alias) : ifc.name ]));
 					}
 
 					var d = document.getElementById(ifc.id + '-ifc-description');
