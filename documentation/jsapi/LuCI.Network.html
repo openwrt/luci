@@ -1,0 +1,6529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Class: Network</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Class: Network</h1>
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+        <h2><span class="attribs"><span class="type-signature"></span></span>
+            <span class="ancestors"><a href="LuCI.html">LuCI</a>.</span>Network</h2>
+        
+            <div class="class-description"><p>The <code>LuCI.Network</code> class combines data from multiple <code>ubus</code> apis to
+provide an abstraction of the current network configuration state.</p>
+<p>It provides methods to enumerate interfaces and devices, to query
+current configuration details and to manipulate settings.</p></div>
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="network.js.html">network.js</a>, <a href="network.js.html#line628">line 628</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    </div>
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Classes</h3>
+
+        <dl>
+            <dt><a href="LuCI.Network.Device.html">Device</a></dt>
+            <dd></dd>
+        
+            <dt><a href="LuCI.Network.Hosts.html">Hosts</a></dt>
+            <dd></dd>
+        
+            <dt><a href="LuCI.Network.Protocol.html">Protocol</a></dt>
+            <dd></dd>
+        
+            <dt><a href="LuCI.Network.WifiDevice.html">WifiDevice</a></dt>
+            <dd></dd>
+        
+            <dt><a href="LuCI.Network.WifiNetwork.html">WifiNetwork</a></dt>
+            <dd></dd>
+        </dl>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="addNetwork"><span class="type-signature"></span>addNetwork<span class="signature">(name, options<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;(null|<a href="LuCI.Network.Protocol.html">LuCI.Network.Protocol</a>)>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Adds a new network of the given name and update it with the given
+uci option values.</p>
+<p>If a network with the given name already exist but is empty, then
+this function will update its option, otherwise it will do nothing.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>The name of the network to add. Must be in the format <code>[a-zA-Z0-9_]+</code>.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object.&lt;string, (string|Array.&lt;string>)></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>An object of uci option values to set on the new network or to
+update in an existing, empty network.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="network.js.html">network.js</a>, <a href="network.js.html#line884">line 884</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>Returns a promise resolving to the <code>Protocol</code> subclass instance
+describing the added network or resolving to <code>null</code> if the name
+was invalid or if a non-empty network of the given name already
+existed.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;(null|<a href="LuCI.Network.Protocol.html">LuCI.Network.Protocol</a>)></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="addWifiNetwork"><span class="type-signature"></span>addWifiNetwork<span class="signature">(options)</span><span class="type-signature"> &rarr; {Promise.&lt;(null|<a href="LuCI.Network.WifiNetwork.html">LuCI.Network.WifiNetwork</a>)>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Adds a new wireless network to the configuration and sets its options
+to the provided values.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object.&lt;string, (string|Array.&lt;string>)></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The options to set for the newly added wireless network. This object
+must at least contain a <code>device</code> property which is set to the radio
+name the new network belongs to.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="network.js.html">network.js</a>, <a href="network.js.html#line1352">line 1352</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>Returns a promise resolving to a <code>WifiNetwork</code> instance describing
+the newly added wireless network or <code>null</code> if the given options
+were invalid or if the associated radio device could not be found.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;(null|<a href="LuCI.Network.WifiNetwork.html">LuCI.Network.WifiNetwork</a>)></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="deleteNetwork"><span class="type-signature"></span>deleteNetwork<span class="signature">(name)</span><span class="type-signature"> &rarr; {Promise.&lt;boolean>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Deletes the given network and its references from the network and
+firewall configuration.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The name of the network to delete.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="network.js.html">network.js</a>, <a href="network.js.html#line962">line 962</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>Returns a promise resolving to either <code>true</code> if the network and
+references to it were successfully deleted from the configuration or
+<code>false</code> if the given network could not be found.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;boolean></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="deleteWifiNetwork"><span class="type-signature"></span>deleteWifiNetwork<span class="signature">(netname)</span><span class="type-signature"> &rarr; {Promise.&lt;boolean>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Deletes the given wireless network from the configuration.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>netname</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The name of the network to remove. This may be either a
+network ID in the form <code>radio#.network#</code> or a Linux network device
+name like <code>wlan0</code> which is resolved to the corresponding configuration
+section through <code>ubus</code> runtime information.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="network.js.html">network.js</a>, <a href="network.js.html#line1390">line 1390</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>Returns a promise resolving to <code>true</code> if the wireless network has been
+successfully deleted from the configuration or <code>false</code> if it could not
+be found.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;boolean></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="flushCache"><span class="type-signature"></span>flushCache<span class="signature">()</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Flushes the local network state cache and fetches updated information
+from the remote <code>ubus</code> apis.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="network.js.html">network.js</a>, <a href="network.js.html#line728">line 728</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>Returns a promise resolving to the internal network state object.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;Object></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="formatWifiEncryption"><span class="type-signature"></span>formatWifiEncryption<span class="signature">(encryption)</span><span class="type-signature"> &rarr; {null|string}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Converts a given <a href="LuCI.Network.html#.WifiEncryption"><code>encryption entry</code></a>
+into a human readable string such as <code>mixed WPA/WPA2 PSK (TKIP, CCMP)</code>
+or <code>WPA3 SAE (CCMP)</code>.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>encryption</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="LuCI.Network.html#.WifiEncryption">LuCI.Network.WifiEncryption</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The wireless encryption entry to convert.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="network.js.html">network.js</a>, <a href="network.js.html#line719">line 719</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>Returns the description string for the given encryption entry or
+<code>null</code> if the given entry was invalid.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">null</span>
+|
+
+<span class="param-type">string</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="getDevice"><span class="type-signature"></span>getDevice<span class="signature">(name)</span><span class="type-signature"> &rarr; {Promise.&lt;(null|<a href="LuCI.Network.Device.html">LuCI.Network.Device</a>)>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Get a <a href="LuCI.Network.Device.html"><code>Device</code></a> instance describing the
+given network device.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The name of the network device to get, e.g. <code>eth0</code> or <code>br-lan</code>.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="network.js.html">network.js</a>, <a href="network.js.html#line1087">line 1087</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>Returns a promise resolving to the <code>Device</code> instance describing
+the network device or <code>null</code> if the given device name could not
+be found.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;(null|<a href="LuCI.Network.Device.html">LuCI.Network.Device</a>)></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="getDevices"><span class="type-signature"></span>getDevices<span class="signature">()</span><span class="type-signature"> &rarr; {Promise.&lt;Array.&lt;<a href="LuCI.Network.Device.html">LuCI.Network.Device</a>>>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Get a sorted list of all found network devices.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="network.js.html">network.js</a>, <a href="network.js.html#line1110">line 1110</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>Returns a promise resolving to a sorted array of <code>Device</code> class
+instances describing the network devices found on the system.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;Array.&lt;<a href="LuCI.Network.Device.html">LuCI.Network.Device</a>>></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="getDSLModemType"><span class="type-signature"></span>getDSLModemType<span class="signature">()</span><span class="type-signature"> &rarr; {Promise.&lt;(null|string)>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Queries the internal DSL modem type from board information.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="network.js.html">network.js</a>, <a href="network.js.html#line1594">line 1594</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>Returns a promise resolving to the type of the internal modem
+(e.g. <code>vdsl</code>) or to <code>null</code> if no internal modem is present.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;(null|string)></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="getHostHints"><span class="type-signature"></span>getHostHints<span class="signature">()</span><span class="type-signature"> &rarr; {Promise.&lt;<a href="LuCI.Network.Hosts.html">LuCI.Network.Hosts</a>>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Queries aggregated information about known hosts.</p>
+<p>This function aggregates information from various sources such as
+DHCP lease databases, ARP and IPv6 neighbour entries, wireless
+association list etc. and returns a <a href="LuCI.Network.Hosts.html"><code>Hosts</code></a>
+class instance describing the found hosts.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="network.js.html">network.js</a>, <a href="network.js.html#line1611">line 1611</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>Returns a <code>Hosts</code> instance describing host known on the system.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;<a href="LuCI.Network.Hosts.html">LuCI.Network.Hosts</a>></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="getIfnameOf"><span class="type-signature"></span>getIfnameOf<span class="signature">(obj)</span><span class="type-signature"> &rarr; {null|string}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Obtains the the network device name of the given object.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>obj</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="LuCI.Network.Protocol.html">LuCI.Network.Protocol</a></span>
+|
+
+<span class="param-type"><a href="LuCI.Network.Device.html">LuCI.Network.Device</a></span>
+|
+
+<span class="param-type"><a href="LuCI.Network.WifiDevice.html">LuCI.Network.WifiDevice</a></span>
+|
+
+<span class="param-type"><a href="LuCI.Network.WifiNetwork.html">LuCI.Network.WifiNetwork</a></span>
+|
+
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The object to get the device name from.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="network.js.html">network.js</a>, <a href="network.js.html#line1583">line 1583</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>Returns a string containing the device name or <code>null</code> if the given
+object could not be converted to a name.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">null</span>
+|
+
+<span class="param-type">string</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="getNetwork"><span class="type-signature"></span>getNetwork<span class="signature">(name)</span><span class="type-signature"> &rarr; {Promise.&lt;(null|<a href="LuCI.Network.Protocol.html">LuCI.Network.Protocol</a>)>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Get a <a href="LuCI.Network.Protocol.html"><code>Protocol</code></a> instance describing
+the network with the given name.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The logical interface name of the network get, e.g. <code>lan</code> or <code>wan</code>.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="network.js.html">network.js</a>, <a href="network.js.html#line921">line 921</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>Returns a promise resolving to a
+<a href="LuCI.Network.Protocol.html"><code>Protocol</code></a> subclass instance describing
+the network or <code>null</code> if the network did not exist.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;(null|<a href="LuCI.Network.Protocol.html">LuCI.Network.Protocol</a>)></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="getNetworks"><span class="type-signature"></span>getNetworks<span class="signature">()</span><span class="type-signature"> &rarr; {Promise.&lt;Array.&lt;<a href="LuCI.Network.Protocol.html">LuCI.Network.Protocol</a>>>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Gets an array containing all known networks.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="network.js.html">network.js</a>, <a href="network.js.html#line946">line 946</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>Returns a promise resolving to a name-sorted array of
+<a href="LuCI.Network.Protocol.html"><code>Protocol</code></a> subclass instances
+describing all known networks.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;Array.&lt;<a href="LuCI.Network.Protocol.html">LuCI.Network.Protocol</a>>></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="getProtocol"><span class="type-signature"></span>getProtocol<span class="signature">(protoname, netname<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {null|<a href="LuCI.Network.Protocol.html">LuCI.Network.Protocol</a>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Instantiates the given <a href="LuCI.Network.Protocol.html"><code>Protocol</code></a> backend,
+optionally using the given network name.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>protoname</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>The protocol backend to use, e.g. <code>static</code> or <code>dhcp</code>.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>netname</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    __dummy__
+                
+                </td>
+            
+
+            <td class="description last"><p>The network name to use for the instantiated protocol. This should be
+usually set to one of the interfaces described in /etc/config/network
+but it is allowed to omit it, e.g. to query protocol capabilities
+without the need for an existing interface.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="network.js.html">network.js</a>, <a href="network.js.html#line750">line 750</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>Returns the instantiated protocol backend class or <code>null</code> if the given
+protocol isn't known.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">null</span>
+|
+
+<span class="param-type"><a href="LuCI.Network.Protocol.html">LuCI.Network.Protocol</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="getProtocols"><span class="type-signature"></span>getProtocols<span class="signature">()</span><span class="type-signature"> &rarr; {Array.&lt;<a href="LuCI.Network.Protocol.html">LuCI.Network.Protocol</a>>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Obtains instances of all known <a href="LuCI.Network.Protocol.html"><code>Protocol</code></a>
+backend classes.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="network.js.html">network.js</a>, <a href="network.js.html#line765">line 765</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>Returns an array of protocol class instances.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Array.&lt;<a href="LuCI.Network.Protocol.html">LuCI.Network.Protocol</a>></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="getSwitchTopologies"><span class="type-signature"></span>getSwitchTopologies<span class="signature">()</span><span class="type-signature"> &rarr; {Promise.&lt;Object.&lt;string, <a href="LuCI.Network.html#.SwitchTopology">LuCI.Network.SwitchTopology</a>>>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Returns the topologies of all swconfig switches found on the system.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="network.js.html">network.js</a>, <a href="network.js.html#line1538">line 1538</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>Returns a promise resolving to an object containing the topologies
+of each switch. The object keys correspond to the name of the switches
+such as <code>switch0</code>, the values are
+<a href="LuCI.Network.html#.SwitchTopology"><code>SwitchTopology</code></a> objects describing
+the layout.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;Object.&lt;string, <a href="LuCI.Network.html#.SwitchTopology">LuCI.Network.SwitchTopology</a>>></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="getWAN6Networks"><span class="type-signature"></span>getWAN6Networks<span class="signature">()</span><span class="type-signature"> &rarr; {Promise.&lt;Array.&lt;<a href="LuCI.Network.Protocol.html">LuCI.Network.Protocol</a>>>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Get IPv6 wan networks.</p>
+<p>This function looks up all networks having a default <code>::/0</code> route
+and returns them as array.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="network.js.html">network.js</a>, <a href="network.js.html#line1493">line 1493</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>Returns a promise resolving to an array of <code>Protocol</code> subclass
+instances describing the found IPv6 default route interfaces.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;Array.&lt;<a href="LuCI.Network.Protocol.html">LuCI.Network.Protocol</a>>></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="getWANNetworks"><span class="type-signature"></span>getWANNetworks<span class="signature">()</span><span class="type-signature"> &rarr; {Promise.&lt;Array.&lt;<a href="LuCI.Network.Protocol.html">LuCI.Network.Protocol</a>>>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Get IPv4 wan networks.</p>
+<p>This function looks up all networks having a default <code>0.0.0.0/0</code> route
+and returns them as array.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="network.js.html">network.js</a>, <a href="network.js.html#line1472">line 1472</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>Returns a promise resolving to an array of <code>Protocol</code> subclass
+instances describing the found default route interfaces.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;Array.&lt;<a href="LuCI.Network.Protocol.html">LuCI.Network.Protocol</a>>></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="getWifiDevice"><span class="type-signature"></span>getWifiDevice<span class="signature">(devname)</span><span class="type-signature"> &rarr; {Promise.&lt;(null|<a href="LuCI.Network.WifiDevice.html">LuCI.Network.WifiDevice</a>)>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Get a <a href="LuCI.Network.WifiDevice.html"><code>WifiDevice</code></a> instance describing
+the given wireless radio.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>devname</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The configuration name of the wireless radio to lookup, e.g. <code>radio0</code>
+for the first mac80211 phy on the system.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="network.js.html">network.js</a>, <a href="network.js.html#line1240">line 1240</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>Returns a promise resolving to the <code>WifiDevice</code> instance describing
+the underlying radio device or <code>null</code> if the wireless radio could not
+be found.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;(null|<a href="LuCI.Network.WifiDevice.html">LuCI.Network.WifiDevice</a>)></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="getWifiDevices"><span class="type-signature"></span>getWifiDevices<span class="signature">()</span><span class="type-signature"> &rarr; {Promise.&lt;Array.&lt;<a href="LuCI.Network.WifiDevice.html">LuCI.Network.WifiDevice</a>>>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Obtain a list of all configured radio devices.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="network.js.html">network.js</a>, <a href="network.js.html#line1260">line 1260</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>Returns a promise resolving to an array of <code>WifiDevice</code> instances
+describing the wireless radios configured in the system.
+The order of the array corresponds to the order of the radios in
+the configuration.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;Array.&lt;<a href="LuCI.Network.WifiDevice.html">LuCI.Network.WifiDevice</a>>></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="getWifiNetwork"><span class="type-signature"></span>getWifiNetwork<span class="signature">(netname)</span><span class="type-signature"> &rarr; {Promise.&lt;(null|<a href="LuCI.Network.WifiNetwork.html">LuCI.Network.WifiNetwork</a>)>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Get a <a href="LuCI.Network.WifiNetwork.html"><code>WifiNetwork</code></a> instance describing
+the given wireless network.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>netname</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The name of the wireless network to lookup. This may be either an uci
+configuration section ID, a network ID in the form <code>radio#.network#</code>
+or a Linux network device name like <code>wlan0</code> which is resolved to the
+corresponding configuration section through <code>ubus</code> runtime information.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="network.js.html">network.js</a>, <a href="network.js.html#line1289">line 1289</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>Returns a promise resolving to the <code>WifiNetwork</code> instance describing
+the wireless network or <code>null</code> if the corresponding network could not
+be found.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;(null|<a href="LuCI.Network.WifiNetwork.html">LuCI.Network.WifiNetwork</a>)></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="isIgnoredDevice"><span class="type-signature"></span>isIgnoredDevice<span class="signature">(name)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Test if a given network device name is in the list of patterns for
+device names to ignore.</p>
+<p>Ignored device names are usually Linux network devices which are
+spawned implicitly by kernel modules such as <code>tunl0</code> or <code>hwsim0</code>
+and which are unsuitable for use in network configuration.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The device name to test.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="network.js.html">network.js</a>, <a href="network.js.html#line1223">line 1223</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>Returns <code>true</code> if the given name is in the ignore pattern list,
+else returns <code>false</code>.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="maskToPrefix"><span class="type-signature"></span>maskToPrefix<span class="signature">(netmask, v6<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {null|number}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Converts the given netmask to a prefix size in bits.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>netmask</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>The netmask to convert into a bit count.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>v6</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    false
+                
+                </td>
+            
+
+            <td class="description last"><p>Whether to parse the given netmask as IPv4 (<code>false</code>) or IPv6 (<code>true</code>)
+address.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="network.js.html">network.js</a>, <a href="network.js.html#line664">line 664</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>Returns the number of prefix bits contained in the netmask or <code>null</code>
+if the given netmask value was invalid.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">null</span>
+|
+
+<span class="param-type">number</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="prefixToMask"><span class="type-signature"></span>prefixToMask<span class="signature">(bits, v6<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {null|string}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Converts the given prefix size in bits to a netmask.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>bits</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>The prefix size in bits.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>v6</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    false
+                
+                </td>
+            
+
+            <td class="description last"><p>Whether to convert the bits value into an IPv4 netmask (<code>false</code>) or
+an IPv6 netmask (<code>true</code>).</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="network.js.html">network.js</a>, <a href="network.js.html#line646">line 646</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>Returns a string containing the netmask corresponding to the bit count
+or <code>null</code> when the given amount of bits exceeds the maximum possible
+value of <code>32</code> for IPv4 or <code>128</code> for IPv6.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">null</span>
+|
+
+<span class="param-type">string</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="registerErrorCode"><span class="type-signature"></span>registerErrorCode<span class="signature">(code, message)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Registers a new human readable translation string for a <code>Protocol</code>
+error code.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>code</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The <code>ubus</code> protocol error code to register a translation for, e.g.
+<code>NO_DEVICE</code>.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>message</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The message to use as translation for the given protocol error code.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="network.js.html">network.js</a>, <a href="network.js.html#line853">line 853</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>Returns <code>true</code> if the error code description has been added or <code>false</code>
+if either the arguments were invalid or if there already was a
+description for the given code.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="registerPatternVirtual"><span class="type-signature"></span>registerPatternVirtual<span class="signature">(pat)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Registers a new regular expression pattern to recognize
+virtual interfaces.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>pat</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">RegExp</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>A <code>RegExp</code> instance to match a virtual interface name
+such as <code>6in4-wan</code> or <code>tun0</code>.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="network.js.html">network.js</a>, <a href="network.js.html#line833">line 833</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="registerProtocol"><span class="type-signature"></span>registerProtocol<span class="signature">(protoname, methods)</span><span class="type-signature"> &rarr; {<a href="LuCI.Network.Protocol.html">LuCI.Network.Protocol</a>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Registers a new <a href="LuCI.Network.Protocol.html"><code>Protocol</code></a> subclass
+with the given methods and returns the resulting subclass value.</p>
+<p>This functions internally calls
+<a href="LuCI.Class.html#.extend"><code>Class.extend()</code></a> on the <code>Network.Protocol</code>
+base class.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>protoname</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The name of the new protocol to register.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>methods</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object.&lt;string, *></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The member methods and values of the new <code>Protocol</code> subclass to
+be passed to <a href="LuCI.Class.html#.extend"><code>Class.extend()</code></a>.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="network.js.html">network.js</a>, <a href="network.js.html#line792">line 792</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>Returns the new <code>Protocol</code> subclass.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="LuCI.Network.Protocol.html">LuCI.Network.Protocol</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="renameNetwork"><span class="type-signature"></span>renameNetwork<span class="signature">(oldName, newName)</span><span class="type-signature"> &rarr; {Promise.&lt;boolean>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Rename the given network and its references to a new name.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>oldName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The current name of the network.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>newName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The name to rename the network to, must be in the format
+<code>[a-z-A-Z0-9_]+</code>.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="network.js.html">network.js</a>, <a href="network.js.html#line1026">line 1026</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>Returns a promise resolving to either <code>true</code> if the network was
+successfully renamed or <code>false</code> if the new name was invalid, if
+a network with the new name already exists or if the network to
+rename could not be found.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;boolean></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+    
+
+    
+        <h3 class="subsection-title">Type Definitions</h3>
+
+        
+                
+<h4 class="name" id=".SwitchTopology">SwitchTopology</h4>
+
+
+
+
+<div class="description">
+    <p>Describes an swconfig switch topology by specifying the CPU
+connections and external port labels of a switch.</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Object.&lt;string, (Object|Array)></span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>netdevs</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object.&lt;number, string></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The <code>netdevs</code> property points to an object describing the CPU port
+connections of the switch. The numeric key of the enclosed object is
+the port number, the value contains the Linux network device name the
+port is hardwired to.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>ports</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;Object.&lt;string, (boolean|number|string)>></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The <code>ports</code> property points to an array describing the populated
+ports of the switch in the external label order. Each array item is
+an object containg the following keys:</p>
+<ul>
+<li><code>num</code> - the internal switch port number</li>
+<li><code>label</code> - the label of the port, e.g. <code>LAN 1</code> or <code>CPU (eth0)</code></li>
+<li><code>device</code> - the connected Linux network device name (CPU ports only)</li>
+<li><code>tagged</code> - a boolean indicating whether the port must be tagged to
+function (CPU ports only)</li>
+</ul></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="network.js.html">network.js</a>, <a href="network.js.html#line1504">line 1504</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+            
+                
+<h4 class="name" id=".WifiEncryption">WifiEncryption</h4>
+
+
+
+
+<div class="description">
+    <p>An encryption entry describes active wireless encryption settings
+such as the used key management protocols, active ciphers and
+protocol versions.</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Object.&lt;string, (boolean|Array.&lt;(number|string)>)></span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>enabled</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Specifies whether any kind of encryption, such as <code>WEP</code> or <code>WPA</code> is
+enabled. If set to <code>false</code>, then no encryption is active and the
+corresponding network is open.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>wep</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;string></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>When the <code>wep</code> property exists, the network uses WEP encryption.
+In this case, the property is set to an array of active WEP modes
+which might be either <code>open</code>, <code>shared</code> or both.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>wpa</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;number></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>When the <code>wpa</code> property exists, the network uses WPA security.
+In this case, the property is set to an array containing the WPA
+protocol versions used, e.g. <code>[ 1, 2 ]</code> for WPA/WPA2 mixed mode or
+<code>[ 3 ]</code> for WPA3-SAE.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>authentication</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;string></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>The <code>authentication</code> property only applies to WPA encryption and
+is defined when the <code>wpa</code> property is set as well. It points to
+an array of active authentication suites used by the network, e.g.
+<code>[ &quot;psk&quot; ]</code> for a WPA(2)-PSK network or <code>[ &quot;psk&quot;, &quot;sae&quot; ]</code> for
+mixed WPA2-PSK/WPA3-SAE encryption.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>ciphers</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;string></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>If either WEP or WPA encryption is active, then the <code>ciphers</code>
+property will be set to an array describing the active encryption
+ciphers used by the network, e.g. <code>[ &quot;tkip&quot;, &quot;ccmp&quot; ]</code> for a
+WPA/WPA2-PSK mixed network or <code>[ &quot;wep-40&quot;, &quot;wep-104&quot; ]</code> for an
+WEP network.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="network.js.html">network.js</a>, <a href="network.js.html#line666">line 666</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+            
+                
+<h4 class="name" id=".WifiPeerEntry">WifiPeerEntry</h4>
+
+
+
+
+<div class="description">
+    <p>A wireless peer entry describes the properties of a remote wireless
+peer associated with a local network.</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Object.&lt;string, (boolean|number|string|<a href="LuCI.Network.html#.WifiRateEntry">LuCI.Network.WifiRateEntry</a>)></span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>mac</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>The MAC address (BSSID).</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>signal</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>The received signal strength.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>signal_avg</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>The average signal strength if supported by the driver.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>noise</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>The current noise floor of the radio. May be <code>0</code> or absent if not
+supported by the driver.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>inactive</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>The amount of milliseconds the peer has been inactive, e.g. due
+to powersave.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>connected_time</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>The amount of milliseconds the peer is associated to this network.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>thr</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>The estimated throughput of the peer, May be <code>0</code> or absent if not
+supported by the driver.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>authorized</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Specifies whether the peer is authorized to associate to this network.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>authenticated</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Specifies whether the peer completed authentication to this network.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>preamble</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>The preamble mode used by the peer. May be <code>long</code> or <code>short</code>.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>wme</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Specifies whether the peer supports WME/WMM capabilities.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>mfp</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Specifies whether management frame protection is active.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>tdls</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Specifies whether TDLS is active.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>mesh llid</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>The mesh LLID, may be <code>0</code> or absent if not applicable or supported
+by the driver.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>mesh plid</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>The mesh PLID, may be <code>0</code> or absent if not applicable or supported
+by the driver.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>mesh plink</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>The mesh peer link state description, may be an empty string (<code>''</code>)
+or absent if not applicable or supported by the driver.</p>
+<p>The following states are known:</p>
+<ul>
+<li><code>LISTEN</code></li>
+<li><code>OPN_SNT</code></li>
+<li><code>OPN_RCVD</code></li>
+<li><code>CNF_RCVD</code></li>
+<li><code>ESTAB</code></li>
+<li><code>HOLDING</code></li>
+<li><code>BLOCKED</code></li>
+<li><code>UNKNOWN</code></li>
+</ul></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>mesh local PS</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>The local powersafe mode for the peer link, may be an empty
+string (<code>''</code>) or absent if not applicable or supported by
+the driver.</p>
+<p>The following modes are known:</p>
+<ul>
+<li><code>ACTIVE</code> (no power save)</li>
+<li><code>LIGHT SLEEP</code></li>
+<li><code>DEEP SLEEP</code></li>
+<li><code>UNKNOWN</code></li>
+</ul></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>mesh peer PS</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>The remote powersafe mode for the peer link, may be an empty
+string (<code>''</code>) or absent if not applicable or supported by
+the driver.</p>
+<p>The following modes are known:</p>
+<ul>
+<li><code>ACTIVE</code> (no power save)</li>
+<li><code>LIGHT SLEEP</code></li>
+<li><code>DEEP SLEEP</code></li>
+<li><code>UNKNOWN</code></li>
+</ul></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>mesh non-peer PS</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>The powersafe mode for all non-peer neigbours, may be an empty
+string (<code>''</code>) or absent if not applicable or supported by the driver.</p>
+<p>The following modes are known:</p>
+<ul>
+<li><code>ACTIVE</code> (no power save)</li>
+<li><code>LIGHT SLEEP</code></li>
+<li><code>DEEP SLEEP</code></li>
+<li><code>UNKNOWN</code></li>
+</ul></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>rx</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="LuCI.Network.html#.WifiRateEntry">LuCI.Network.WifiRateEntry</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Describes the receiving wireless rate from the peer.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>tx</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="LuCI.Network.html#.WifiRateEntry">LuCI.Network.WifiRateEntry</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Describes the transmitting wireless rate to the peer.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="network.js.html">network.js</a>, <a href="network.js.html#line3581">line 3581</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+            
+                
+<h4 class="name" id=".WifiRateEntry">WifiRateEntry</h4>
+
+
+
+
+<div class="description">
+    <p>A wireless rate entry describes the properties of a wireless
+transmission rate to or from a peer.</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Object.&lt;string, (boolean|number)></span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>drop_misc</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>The amount of received misc. packages that have been dropped, e.g.
+due to corruption or missing authentication. Only applicable to
+receiving rates.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>packets</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>The amount of packets that have been received or sent.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>bytes</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>The amount of bytes that have been received or sent.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>failed</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>The amount of failed tranmission attempts. Only applicable to
+transmit rates.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>retries</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>The amount of retried transmissions. Only applicable to transmit
+rates.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>is_ht</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Specifies whether this rate is an HT (IEEE 802.11n) rate.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>is_vht</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Specifies whether this rate is an VHT (IEEE 802.11ac) rate.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>mhz</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>The channel width in MHz used for the transmission.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>rate</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>The bitrate in bit/s of the transmission.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>mcs</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>The MCS index of the used transmission rate. Only applicable to
+HT or VHT rates.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>40mhz</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Specifies whether the tranmission rate used 40MHz wide channel.
+Only applicable to HT or VHT rates.</p>
+<p>Note: this option exists for backwards compatibility only and its
+use is discouraged. The <code>mhz</code> field should be used instead to
+determine the channel width.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>short_gi</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Specifies whether a short guard interval is used for the transmission.
+Only applicable to HT or VHT rates.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>nss</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Specifies the number of spatial streams used by the transmission.
+Only applicable to VHT rates.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="network.js.html">network.js</a>, <a href="network.js.html#line3691">line 3691</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+            
+                
+<h4 class="name" id=".WifiScanResult">WifiScanResult</h4>
+
+
+
+
+<div class="description">
+    <p>A wireless scan result object describes a neighbouring wireless
+network found in the vincinity.</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Object.&lt;string, (number|string|<a href="LuCI.Network.html#.WifiEncryption">LuCI.Network.WifiEncryption</a>)></span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>ssid</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The SSID / Mesh ID of the network.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>bssid</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The BSSID if the network.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>mode</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The operation mode of the network (<code>Master</code>, <code>Ad-Hoc</code>, <code>Mesh Point</code>).</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>channel</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The wireless channel of the network.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>signal</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The received signal strength of the network in dBm.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>quality</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The numeric quality level of the signal, can be used in conjunction
+with <code>quality_max</code> to calculate a quality percentage.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>quality_max</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The maximum possible quality level of the signal, can be used in
+conjunction with <code>quality</code> to calculate a quality percentage.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>encryption</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="LuCI.Network.html#.WifiEncryption">LuCI.Network.WifiEncryption</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The encryption used by the wireless network.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="network.js.html">network.js</a>, <a href="network.js.html#line3105">line 3105</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+            
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="LuCI.html">LuCI</a></li><li><a href="LuCI.Class.html">Class</a></li><li><a href="LuCI.dom.html">dom</a></li><li><a href="LuCI.fs.html">fs</a></li><li><a href="LuCI.Headers.html">Headers</a></li><li><a href="LuCI.Network.html">Network</a></li><li><a href="LuCI.Network.Device.html">Device</a></li><li><a href="LuCI.Network.Hosts.html">Hosts</a></li><li><a href="LuCI.Network.Protocol.html">Protocol</a></li><li><a href="LuCI.Network.WifiDevice.html">WifiDevice</a></li><li><a href="LuCI.Network.WifiNetwork.html">WifiNetwork</a></li><li><a href="LuCI.Poll.html">Poll</a></li><li><a href="LuCI.Request.html">Request</a></li><li><a href="LuCI.Request.poll.html">poll</a></li><li><a href="LuCI.Response.html">Response</a></li><li><a href="LuCI.rpc.html">rpc</a></li><li><a href="LuCI.uci.html">uci</a></li><li><a href="LuCI.view.html">view</a></li><li><a href="LuCI.XHR.html">XHR</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Tue Nov 05 2019 09:33:05 GMT+0100 (Central European Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

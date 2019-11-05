@@ -1,0 +1,1409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Class: Class</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Class: Class</h1>
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+        <h2><span class="attribs"><span class="type-signature"></span></span>
+            <span class="ancestors"><a href="LuCI.html">LuCI</a>.</span>Class</h2>
+        
+            <div class="class-description"><p><code>LuCI.Class</code> is the abstract base class all LuCI classes inherit from.</p>
+<p>It provides simple means to create subclasses of given classes and
+implements prototypal inheritance.</p></div>
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="luci.js.html">luci.js</a>, <a href="luci.js.html#line59">line 59</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id=".extend"><span class="type-signature">(static) </span>extend<span class="signature">(properties)</span><span class="type-signature"> &rarr; {<a href="LuCI.Class.html">LuCI.Class</a>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Extends this base class with the properties described in
+<code>properties</code> and returns a new subclassed Class instance</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>properties</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object.&lt;string, *></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>An object describing the properties to add to the new
+subclass.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="luci.js.html">luci.js</a>, <a href="luci.js.html#line87">line 87</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>Returns a new LuCI.Class sublassed from this class, extended
+by the given properties and with its prototype set to this base
+class to enable inheritance. The resulting value represents a
+class constructor and can be instantiated with <code>new</code>.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="LuCI.Class.html">LuCI.Class</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id=".instantiate"><span class="type-signature">(static) </span>instantiate<span class="signature">(params, &hellip;new_args<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {<a href="LuCI.Class.html">LuCI.Class</a>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Calls the class constructor using <code>new</code> with the given argument
+array being passed as variadic parameters to the constructor.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>params</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;*></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>An array of arbitrary values which will be passed as arguments
+to the constructor function.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>new_args</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">*</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                    &lt;repeatable><br>
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Specifies arguments to be passed to the subclass constructor
+as-is in order to instantiate the new subclass.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="luci.js.html">luci.js</a>, <a href="luci.js.html#line169">line 169</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>Returns a new LuCI.Class instance extended by the given
+properties with its prototype set to this base class to
+enable inheritance.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="LuCI.Class.html">LuCI.Class</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id=".isSubclass"><span class="type-signature">(static) </span>isSubclass<span class="signature">(classValue)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Checks whether the given class value is a subclass of this class.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>classValue</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="LuCI.Class.html">LuCI.Class</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The class object to test.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="luci.js.html">luci.js</a>, <a href="luci.js.html#line195">line 195</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>Returns <code>true</code> when the given <code>classValue</code> is a subclass of this
+class or <code>false</code> if the given value is not a valid class or not
+a subclass of this class'.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id=".singleton"><span class="type-signature">(static) </span>singleton<span class="signature">(properties, &hellip;new_args<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {<a href="LuCI.Class.html">LuCI.Class</a>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Extends this base class with the properties described in
+<code>properties</code>, instantiates the resulting subclass using
+the additional optional arguments passed to this function
+and returns the resulting subclassed Class instance.</p>
+<p>This function serves as a convenience shortcut for
+<a href="LuCI.Class.html#.extend"><code>Class.extend()</code></a> and subsequent
+<code>new</code>.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>properties</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object.&lt;string, *></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>An object describing the properties to add to the new
+subclass.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>new_args</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">*</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                    &lt;repeatable><br>
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Specifies arguments to be passed to the subclass constructor
+as-is in order to instantiate the new subclass.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="luci.js.html">luci.js</a>, <a href="luci.js.html#line145">line 145</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>Returns a new LuCI.Class instance extended by the given
+properties with its prototype set to this base class to
+enable inheritance.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="LuCI.Class.html">LuCI.Class</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="super"><span class="type-signature"></span>super<span class="signature">(key, callArgs<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {*|null}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Walks up the parent class chain and looks for a class member
+called <code>key</code> in any of the parent classes this class inherits
+from. Returns the member value of the superclass or calls the
+member as function and returns its return value when the
+optional <code>callArgs</code> array is given.</p>
+<p>This function has two signatures and is sensitive to the
+amount of arguments passed to it:</p>
+<ul>
+<li><code>super('key')</code> -
+Returns the value of <code>key</code> when found within one of the
+parent classes.</li>
+<li><code>super('key', ['arg1', 'arg2'])</code> -
+Calls the <code>key()</code> method with parameters <code>arg1</code> and <code>arg2</code>
+when found within one of the parent classes.</li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>key</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>The name of the superclass member to retrieve.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callArgs</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;*></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>An optional array of function call parameters to use. When
+this parameter is specified, the found member value is called
+as function using the values of this array as arguments.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="luci.js.html">luci.js</a>, <a href="luci.js.html#line267">line 267</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Throws:</h5>
+
+        
+
+<dl>
+    <dt>
+        <div class="param-desc">
+        <p>Throws a <code>ReferenceError</code> when <code>callArgs</code> are specified and
+the found member named by <code>key</code> is not a function value.</p>
+        </div>
+    </dt>
+    <dd></dd>
+    <dt>
+        <dl>
+            <dt>
+                Type
+            </dt>
+            <dd>
+                
+<span class="param-type">ReferenceError</span>
+
+
+            </dd>
+        </dl>
+    </dt>
+    <dd></dd>
+</dl>
+
+
+    
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>Returns the value of the found member or the return value of
+the call to the found method. Returns <code>null</code> when no member
+was found in the parent class chain or when the call to the
+superclass method returned <code>null</code>.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">*</span>
+|
+
+<span class="param-type">null</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="varargs"><span class="type-signature"></span>varargs<span class="signature">(args, offset, &hellip;extra_args<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Array.&lt;*>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Extract all values from the given argument array beginning from
+<code>offset</code> and prepend any further given optional parameters to
+the beginning of the resulting array copy.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>args</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;*></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>The array to extract the values from.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>offset</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>The offset from which to extract the values. An offset of <code>0</code>
+would copy all values till the end.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>extra_args</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">*</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                    &lt;repeatable><br>
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Extra arguments to add to prepend to the resultung array.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="luci.js.html">luci.js</a>, <a href="luci.js.html#line225">line 225</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>Returns a new array consisting of the optional extra arguments
+and the values extracted from the <code>args</code> array beginning with
+<code>offset</code>.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Array.&lt;*></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="LuCI.html">LuCI</a></li><li><a href="LuCI.Class.html">Class</a></li><li><a href="LuCI.dom.html">dom</a></li><li><a href="LuCI.fs.html">fs</a></li><li><a href="LuCI.Headers.html">Headers</a></li><li><a href="LuCI.Network.html">Network</a></li><li><a href="LuCI.Network.Device.html">Device</a></li><li><a href="LuCI.Network.Hosts.html">Hosts</a></li><li><a href="LuCI.Network.Protocol.html">Protocol</a></li><li><a href="LuCI.Network.WifiDevice.html">WifiDevice</a></li><li><a href="LuCI.Network.WifiNetwork.html">WifiNetwork</a></li><li><a href="LuCI.Poll.html">Poll</a></li><li><a href="LuCI.Request.html">Request</a></li><li><a href="LuCI.Request.poll.html">poll</a></li><li><a href="LuCI.Response.html">Response</a></li><li><a href="LuCI.rpc.html">rpc</a></li><li><a href="LuCI.uci.html">uci</a></li><li><a href="LuCI.view.html">view</a></li><li><a href="LuCI.XHR.html">XHR</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Tue Nov 05 2019 09:33:05 GMT+0100 (Central European Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
