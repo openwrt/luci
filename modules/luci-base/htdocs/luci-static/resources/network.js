@@ -1471,10 +1471,14 @@ Network = L.Class.extend(/** @lends LuCI.Network.prototype */ {
 	 */
 	getWANNetworks: function() {
 		return this.getStatusByRoute('0.0.0.0', 0).then(L.bind(function(statuses) {
-			var rv = [];
+			var rv = [], seen = {};
 
-			for (var i = 0; i < statuses.length; i++)
-				rv.push(this.instantiateNetwork(statuses[i].interface, statuses[i].proto));
+			for (var i = 0; i < statuses.length; i++) {
+				if (!seen.hasOwnProperty(statuses[i].interface)) {
+					rv.push(this.instantiateNetwork(statuses[i].interface, statuses[i].proto));
+					seen[statuses[i].interface] = true;
+				}
+			}
 
 			return rv;
 		}, this));
@@ -1492,10 +1496,14 @@ Network = L.Class.extend(/** @lends LuCI.Network.prototype */ {
 	 */
 	getWAN6Networks: function() {
 		return this.getStatusByRoute('::', 0).then(L.bind(function(statuses) {
-			var rv = [];
+			var rv = [], seen = {};
 
-			for (var i = 0; i < statuses.length; i++)
-				rv.push(this.instantiateNetwork(statuses[i].interface, statuses[i].proto));
+			for (var i = 0; i < statuses.length; i++) {
+				if (!seen.hasOwnProperty(statuses[i].interface)) {
+					rv.push(this.instantiateNetwork(statuses[i].interface, statuses[i].proto));
+					seen[statuses[i].interface] = true;
+				}
+			}
 
 			return rv;
 		}, this));
