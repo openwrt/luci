@@ -520,7 +520,7 @@ return L.view.extend({
 			btns[2].disabled = busy;
 		}
 
-		var table = document.querySelector('wifi_assoclist_table'),
+		var table = document.querySelector('#wifi_assoclist_table'),
 		    hosts = data[0],
 		    trows = [];
 
@@ -530,7 +530,16 @@ return L.view.extend({
 			    ipv4 = hosts.getIPAddrByMACAddr(bss.mac),
 			    ipv6 = hosts.getIP6AddrByMACAddr(bss.mac);
 
-			trows.push([
+			var hint;
+
+			if (name && ipv4 && ipv6)
+				hint = '%s (%s, %s)'.format(name, ipv4, ipv6);
+			else if (name && (ipv4 || ipv6))
+				hint = '%s (%s)'.format(name, ipv4 || ipv6);
+			else
+				hint = name || ipv4 || ipv6 || '?';
+
+			var row = [
 				E('span', { 'class': 'ifacebadge' }, [
 					E('img', {
 						'src': L.resource('icons/wifi%s.png').format(bss.network.isUp() ? '' : '_disabled'),
@@ -540,17 +549,39 @@ return L.view.extend({
 					E('small', '(%s)'.format(bss.network.getIfname()))
 				]),
 				bss.mac,
-				name ? '%s (%s)'.format(name, ipv4 || ipv6 || '?') : ipv4 || ipv6 || '?',
+				hint,
 				render_signal_badge(Math.min((bss.signal + 110) / 70 * 100, 100), bss.signal, bss.noise),
 				E('span', {}, [
 					E('span', format_wifirate(bss.rx)),
 					E('br'),
 					E('span', format_wifirate(bss.tx))
 				])
-			]);
+			];
+
+			if (bss.network.isClientDisconnectSupported()) {
+				if (table.firstElementChild.childNodes.length < 6)
+					table.firstElementChild.appendChild(E('div', { 'class': 'th nowrap right'}, [ _('Disconnect') ]));
+
+				row.push(E('button', {
+					'class': 'cbi-button cbi-button-remove',
+					'click': L.bind(function(net, mac, ev) {
+						L.dom.parent(ev.currentTarget, '.tr').style.opacity = 0.5;
+						ev.currentTarget.classList.add('spinning');
+						ev.currentTarget.disabled = true;
+						ev.currentTarget.blur();
+
+						net.disconnectClient(mac, true, 5, 60000);
+					}, this, bss.network, bss.mac)
+				}, [ _('Disconnect') ]));
+			}
+			else {
+				row.push('-');
+			}
+
+			trows.push(row);
 		}
 
-		cbi_update_table('#wifi_assoclist_table', trows, E('em', _('No information available')));
+		cbi_update_table(table, trows, E('em', _('No information available')));
 
 		var stat = document.querySelector('.cbi-modal [data-name="_wifistat_modal"] .ifacebadge.large');
 
@@ -1973,7 +2004,7 @@ return L.view.extend({
 				E('div', { 'class': 'tr table-titles' }, [
 					E('div', { 'class': 'th nowrap' }, _('Network')),
 					E('div', { 'class': 'th hide-xs' }, _('MAC-Address')),
-					E('div', { 'class': 'th nowrap' }, _('Host')),
+					E('div', { 'class': 'th' }, _('Host')),
 					E('div', { 'class': 'th nowrap' }, _('Signal / Noise')),
 					E('div', { 'class': 'th nowrap' }, _('RX Rate / TX Rate'))
 				])
