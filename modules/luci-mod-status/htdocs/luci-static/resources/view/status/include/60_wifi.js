@@ -153,7 +153,7 @@ return L.Class.extend({
 				E('div', { 'class': 'th' }, _('Host')),
 				E('div', { 'class': 'th nowrap' }, '%s / %s'.format(_('Signal'), _('Noise'))),
 				E('div', { 'class': 'th nowrap' }, '%s / %s'.format(_('RX Rate'), _('TX Rate'))),
-				supports_deauth ? E('div', { 'class': 'th nowrap right' }, _('Disconnect')) : null
+				supports_deauth ? E('div', { 'class': 'th nowrap right' }, _('Disconnect')) : E([])
 			])
 		]);
 
