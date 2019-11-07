@@ -363,7 +363,7 @@ function initNetworkState(refresh) {
 			var s = {
 				isTunnel: {}, isBridge: {}, isSwitch: {}, isWifi: {},
 				ifaces: netifd_ifaces, radios: data[3], hosts: data[4],
-				netdevs: {}, bridges: {}, switches: {}
+				netdevs: {}, bridges: {}, switches: {}, hostapd: {}
 			};
 
 			for (var name in luci_devs) {
@@ -495,7 +495,24 @@ function initNetworkState(refresh) {
 
 			_init = null;
 
-			return (_state = s);
+			var objects = [];
+
+			if (L.isObject(s.radios))
+				for (var radio in s.radios)
+					if (L.isObject(s.radios[radio]) && Array.isArray(s.radios[radio].interfaces))
+						for (var i = 0; i < s.radios[radio].interfaces.length; i++)
+							if (L.isObject(s.radios[radio].interfaces[i]) && s.radios[radio].interfaces[i].ifname)
+								objects.push('hostapd.%s'.format(s.radios[radio].interfaces[i].ifname));
+
+			return (objects.length ? L.resolveDefault(rpc.list.apply(rpc, objects), {}) : Promise.resolve({})).then(function(res) {
+				for (var k in res) {
+					var m = k.match(/^hostapd\.(.+)$/);
+					if (m)
+						s.hostapd[m[1]] = res[k];
+				}
+
+				return (_state = s);
+			});
 		});
 	}
 
@@ -1287,51 +1304,32 @@ Network = L.Class.extend(/** @lends LuCI.Network.prototype */ {
 	 * be found.
 	 */
 	getWifiNetwork: function(netname) {
-		var sid, res, netid, radioname, radiostate, netstate;
+		return initNetworkState()
+			.then(L.bind(this.lookupWifiNetwork, this, netname));
+	},
 
+	/**
+	 * Get an array of all {@link LuCI.Network.WifiNetwork WifiNetwork}
+	 * instances describing the wireless networks present on the system.
+	 *
+	 * @returns {Promise<Array<LuCI.Network.WifiNetwork>>}
+	 * Returns a promise resolving to an array of `WifiNetwork` instances
+	 * describing the wireless networks. The array will be empty if no networks
+	 * are found.
+	 */
+	getWifiNetworks: function() {
 		return initNetworkState().then(L.bind(function() {
-			sid = getWifiSidByNetid(netname);
+			var wifiIfaces = uci.sections('wireless', 'wifi-iface'),
+			    rv = [];
 
-			if (sid != null) {
-				res        = getWifiStateBySid(sid);
-				netid      = netname;
-				radioname  = res ? res[0] : null;
-				radiostate = res ? res[1] : null;
-				netstate   = res ? res[2] : null;
-			}
-			else {
-				res = getWifiStateByIfname(netname);
+			for (var i = 0; i < wifiIfaces.length; i++)
+				rv.push(this.lookupWifiNetwork(wifiIfaces[i]['.name']));
 
-				if (res != null) {
-					radioname  = res[0];
-					radiostate = res[1];
-					netstate   = res[2];
-					sid        = netstate.section;
-					netid      = L.toArray(getWifiNetidBySid(sid))[0];
-				}
-				else {
-					res = getWifiStateBySid(netname);
+			rv.sort(function(a, b) {
+				return (a.getID() > b.getID());
+			});
 
-					if (res != null) {
-						radioname  = res[0];
-						radiostate = res[1];
-						netstate   = res[2];
-						sid        = netname;
-						netid      = L.toArray(getWifiNetidBySid(sid))[0];
-					}
-					else {
-						res = getWifiNetidBySid(netname);
-
-						if (res != null) {
-							netid     = res[0];
-							radioname = res[1];
-							sid       = netname;
-						}
-					}
-				}
-			}
-
-			return this.instantiateWifiNetwork(sid || netname, radioname, radiostate, netid, netstate);
+			return rv;
 		}, this));
 	},
 
@@ -1574,8 +1572,58 @@ Network = L.Class.extend(/** @lends LuCI.Network.prototype */ {
 	},
 
 	/* private */
-	instantiateWifiNetwork: function(sid, radioname, radiostate, netid, netstate) {
-		return new WifiNetwork(sid, radioname, radiostate, netid, netstate);
+	instantiateWifiNetwork: function(sid, radioname, radiostate, netid, netstate, hostapd) {
+		return new WifiNetwork(sid, radioname, radiostate, netid, netstate, hostapd);
+	},
+
+	/* private */
+	lookupWifiNetwork: function(netname) {
+		var sid, res, netid, radioname, radiostate, netstate;
+
+		sid = getWifiSidByNetid(netname);
+
+		if (sid != null) {
+			res        = getWifiStateBySid(sid);
+			netid      = netname;
+			radioname  = res ? res[0] : null;
+			radiostate = res ? res[1] : null;
+			netstate   = res ? res[2] : null;
+		}
+		else {
+			res = getWifiStateByIfname(netname);
+
+			if (res != null) {
+				radioname  = res[0];
+				radiostate = res[1];
+				netstate   = res[2];
+				sid        = netstate.section;
+				netid      = L.toArray(getWifiNetidBySid(sid))[0];
+			}
+			else {
+				res = getWifiStateBySid(netname);
+
+				if (res != null) {
+					radioname  = res[0];
+					radiostate = res[1];
+					netstate   = res[2];
+					sid        = netname;
+					netid      = L.toArray(getWifiNetidBySid(sid))[0];
+				}
+				else {
+					res = getWifiNetidBySid(netname);
+
+					if (res != null) {
+						netid     = res[0];
+						radioname = res[1];
+						sid       = netname;
+					}
+				}
+			}
+		}
+
+		return this.instantiateWifiNetwork(sid || netname, radioname,
+			radiostate, netid, netstate,
+			netstate ? _state.hostapd[netstate.ifname] : null);
 	},
 
 	/**
@@ -3205,14 +3253,15 @@ WifiDevice = L.Class.extend(/** @lends LuCI.Network.WifiDevice.prototype */ {
 	 * radio device.
 	 */
 	getWifiNetworks: function() {
-		var uciWifiIfaces = uci.sections('wireless', 'wifi-iface'),
-		    tasks = [];
+		return L.network.getWifiNetworks().then(L.bind(function(networks) {
+			var rv = [];
 
-		for (var i = 0; i < uciWifiIfaces.length; i++)
-			if (uciWifiIfaces[i].device == this.sid)
-				tasks.push(L.network.getWifiNetwork(uciWifiIfaces[i]['.name']));
+			for (var i = 0; i < networks.length; i++)
+				if (networks[i].getWifiDeviceName() == this.getName())
+					rv.push(networks[i]);
 
-		return Promise.all(tasks);
+			return rv;
+		}, this));
 	},
 
 	/**
@@ -3286,13 +3335,14 @@ WifiDevice = L.Class.extend(/** @lends LuCI.Network.WifiDevice.prototype */ {
  * such networks in parallel.
  */
 WifiNetwork = L.Class.extend(/** @lends LuCI.Network.WifiNetwork.prototype */ {
-	__init__: function(sid, radioname, radiostate, netid, netstate) {
+	__init__: function(sid, radioname, radiostate, netid, netstate, hostapd) {
 		this.sid    = sid;
 		this.netid  = netid;
 		this._ubusdata = {
-			radio: radioname,
-			dev:   radiostate,
-			net:   netstate
+			hostapd: hostapd,
+			radio:   radioname,
+			dev:     radiostate,
+			net:     netstate
 		};
 	},
 
@@ -3989,6 +4039,56 @@ WifiNetwork = L.Class.extend(/** @lends LuCI.Network.WifiNetwork.prototype */ {
 	 */
 	getDevice: function() {
 		return L.network.instantiateDevice(this.getIfname());
+	},
+
+	/**
+	 * Check whether this wifi network supports deauthenticating clients.
+	 *
+	 * @returns {boolean}
+	 * Returns `true` when this wifi network instance supports forcibly
+	 * deauthenticating clients, otherwise `false`.
+	 */
+	isClientDisconnectSupported: function() {
+		return L.isObject(this.ubus('hostapd', 'del_client'));
+	},
+
+	/**
+	 * Forcibly disconnect the given client from the wireless network.
+	 *
+	 * @param {string} mac
+	 * The MAC address of the client to disconnect.
+	 *
+	 * @param {boolean} [deauth=false]
+	 * Specifies whether to deauthenticate (`true`) or disassociate (`false`)
+	 * the client.
+	 *
+	 * @param {number} [reason=1]
+	 * Specifies the IEEE 802.11 reason code to disassoc/deauth the client
+	 * with. Default is `1` which corresponds to `Unspecified reason`.
+	 *
+	 * @param {number} [ban_time=0]
+	 * Specifies the amount of milliseconds to ban the client from
+	 * reconnecting. By default, no ban time is set which allows the client
+	 * to reassociate / reauthenticate immediately.
+	 *
+	 * @returns {Promise<number>}
+	 * Returns a promise resolving to the underlying ubus call result code
+	 * which is typically `0`, even for not existing MAC addresses.
+	 * The promise might reject with an error in case invalid arguments
+	 * are passed.
+	 */
+	disconnectClient: function(mac, deauth, reason, ban_time) {
+		if (reason == null || reason == 0)
+			reason = 1;
+
+		if (ban_time == 0)
+			ban_time = null;
+
+		return rpc.declare({
+			object: 'hostapd.%s'.format(this.getIfname()),
+			method: 'del_client',
+			params: [ 'addr', 'deauth', 'reason', 'ban_time' ]
+		})(mac, deauth, reason, ban_time);
 	}
 });
 
