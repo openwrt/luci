@@ -340,6 +340,8 @@
             
                 <li data-name="LuCI.Network#getWifiNetwork"><a href="LuCI.Network.html#getWifiNetwork">getWifiNetwork</a></li>
             
+                <li data-name="LuCI.Network#getWifiNetworks"><a href="LuCI.Network.html#getWifiNetworks">getWifiNetworks</a></li>
+            
                 <li data-name="LuCI.Network#isIgnoredDevice"><a href="LuCI.Network.html#isIgnoredDevice">isIgnoredDevice</a></li>
             
                 <li data-name="LuCI.Network#maskToPrefix"><a href="LuCI.Network.html#maskToPrefix">maskToPrefix</a></li>
@@ -636,6 +638,8 @@
             
             <span class="subtitle">Methods</span>
             
+                <li data-name="LuCI.Network.WifiNetwork#disconnectClient"><a href="LuCI.Network.WifiNetwork.html#disconnectClient">disconnectClient</a></li>
+            
                 <li data-name="LuCI.Network.WifiNetwork#get"><a href="LuCI.Network.WifiNetwork.html#get">get</a></li>
             
                 <li data-name="LuCI.Network.WifiNetwork#getActiveBSSID"><a href="LuCI.Network.WifiNetwork.html#getActiveBSSID">getActiveBSSID</a></li>
@@ -699,6 +703,8 @@
                 <li data-name="LuCI.Network.WifiNetwork#getWifiDevice"><a href="LuCI.Network.WifiNetwork.html#getWifiDevice">getWifiDevice</a></li>
             
                 <li data-name="LuCI.Network.WifiNetwork#getWifiDeviceName"><a href="LuCI.Network.WifiNetwork.html#getWifiDeviceName">getWifiDeviceName</a></li>
+            
+                <li data-name="LuCI.Network.WifiNetwork#isClientDisconnectSupported"><a href="LuCI.Network.WifiNetwork.html#isClientDisconnectSupported">isClientDisconnectSupported</a></li>
             
                 <li data-name="LuCI.Network.WifiNetwork#isDisabled"><a href="LuCI.Network.WifiNetwork.html#isDisabled">isDisabled</a></li>
             
@@ -1097,7 +1103,7 @@ subclasses which describe logical UCI networks defined by <code>config interface
     
         
         <div class="tag-source">
-            network.js, line 1794
+            network.js, line 1850
         </div>
         
     </div>
@@ -1182,7 +1188,7 @@ subclasses which describe logical UCI networks defined by <code>config interface
     
         
         <div class="tag-source">
-            network.js, line 2383
+            network.js, line 2439
         </div>
         
     </div>
@@ -1343,7 +1349,7 @@ interface or if the logical interface is virtual.</td>
     
         
         <div class="tag-source">
-            network.js, line 2552
+            network.js, line 2608
         </div>
         
     </div>
@@ -1504,7 +1510,7 @@ device or <code>false</code> if not.</td>
     
         
         <div class="tag-source">
-            network.js, line 2410
+            network.js, line 2466
         </div>
         
     </div>
@@ -1665,7 +1671,7 @@ interface or if the logical interface is virtual.</td>
     
         
         <div class="tag-source">
-            network.js, line 1827
+            network.js, line 1883
         </div>
         
     </div>
@@ -1817,7 +1823,7 @@ not found.</td>
     
         
         <div class="tag-source">
-            network.js, line 2437
+            network.js, line 2493
         </div>
         
     </div>
@@ -1919,7 +1925,7 @@ expected Linux network device according to the configuration.</td>
     
         
         <div class="tag-source">
-            network.js, line 2498
+            network.js, line 2554
         </div>
         
     </div>
@@ -2026,7 +2032,7 @@ virtual and not a bridge.</td>
     
         
         <div class="tag-source">
-            network.js, line 2152
+            network.js, line 2208
         </div>
         
     </div>
@@ -2127,7 +2133,7 @@ protocol backend.</td>
     
         
         <div class="tag-source">
-            network.js, line 2064
+            network.js, line 2120
         </div>
         
     </div>
@@ -2228,7 +2234,7 @@ protocol backend.</td>
     
         
         <div class="tag-source">
-            network.js, line 2196
+            network.js, line 2252
         </div>
         
     </div>
@@ -2336,7 +2342,7 @@ error code in case no translation can be found.</p>
     
         
         <div class="tag-source">
-            network.js, line 1947
+            network.js, line 2003
         </div>
         
     </div>
@@ -2440,7 +2446,7 @@ if it isn't applicable to the associated protocol.</td>
     
         
         <div class="tag-source">
-            network.js, line 2132
+            network.js, line 2188
         </div>
         
     </div>
@@ -2542,7 +2548,7 @@ default route or <code>null</code> if no default route was found.</td>
     
         
         <div class="tag-source">
-            network.js, line 2044
+            network.js, line 2100
         </div>
         
     </div>
@@ -2644,7 +2650,7 @@ default route or <code>null</code> if no default route was found.</td>
     
         
         <div class="tag-source">
-            network.js, line 1892
+            network.js, line 1948
         </div>
         
     </div>
@@ -2746,7 +2752,7 @@ default route or <code>null</code> if no default route was found.</td>
     
         
         <div class="tag-source">
-            network.js, line 1852
+            network.js, line 1908
         </div>
         
     </div>
@@ -2850,7 +2856,7 @@ it could not be determined.</td>
     
         
         <div class="tag-source">
-            network.js, line 2083
+            network.js, line 2139
         </div>
         
     </div>
@@ -2954,7 +2960,7 @@ in CIDR notation or <code>null</code> if no IPv6 addresses were set.</td>
     
         
         <div class="tag-source">
-            network.js, line 2105
+            network.js, line 2161
         </div>
         
     </div>
@@ -3056,7 +3062,7 @@ follows the order of the addresses in <code>ubus</code> runtime information.</td
     
         
         <div class="tag-source">
-            network.js, line 2171
+            network.js, line 2227
         </div>
         
     </div>
@@ -3160,7 +3166,7 @@ handler or <code>null</code> if no prefix is present.</td>
     
         
         <div class="tag-source">
-            network.js, line 1999
+            network.js, line 2055
         </div>
         
     </div>
@@ -3264,7 +3270,7 @@ or <code>null</code> if no IPv4 addresses were set.</td>
     
         
         <div class="tag-source">
-            network.js, line 2012
+            network.js, line 2068
         </div>
         
     </div>
@@ -3366,7 +3372,7 @@ follows the order of the addresses in <code>ubus</code> runtime information.</td
     
         
         <div class="tag-source">
-            network.js, line 2470
+            network.js, line 2526
         </div>
         
     </div>
@@ -3468,7 +3474,7 @@ network device currently associated with the logical interface.</td>
     
         
         <div class="tag-source">
-            network.js, line 2483
+            network.js, line 2539
         </div>
         
     </div>
@@ -3570,7 +3576,7 @@ network device currently associated with the logical interface.</td>
     
         
         <div class="tag-source">
-            network.js, line 1967
+            network.js, line 2023
         </div>
         
     </div>
@@ -3671,7 +3677,7 @@ routes spawned by the associated logical interface.</td>
     
         
         <div class="tag-source">
-            network.js, line 1922
+            network.js, line 1978
         </div>
         
     </div>
@@ -3771,7 +3777,7 @@ routes spawned by the associated logical interface.</td>
     
         
         <div class="tag-source">
-            network.js, line 2030
+            network.js, line 2086
         </div>
         
     </div>
@@ -3875,7 +3881,7 @@ protocol handler or <code>null</code> if no IPv4 addresses were set.</td>
     
         
         <div class="tag-source">
-            network.js, line 2236
+            network.js, line 2292
         </div>
         
     </div>
@@ -3977,7 +3983,7 @@ function, e.g. <code>odhcp6c</code> for the <code>dhcpv6</code> prototocol.</td>
     
         
         <div class="tag-source">
-            network.js, line 1878
+            network.js, line 1934
         </div>
         
     </div>
@@ -4080,7 +4086,7 @@ function, e.g. <code>odhcp6c</code> for the <code>dhcpv6</code> prototocol.</td>
     
         
         <div class="tag-source">
-            network.js, line 1912
+            network.js, line 1968
         </div>
         
     </div>
@@ -4187,7 +4193,7 @@ interface or <code>null</code> if no <code>type</code> option is set.</td>
     
         
         <div class="tag-source">
-            network.js, line 1932
+            network.js, line 1988
         </div>
         
     </div>
@@ -4287,7 +4293,7 @@ interface or <code>null</code> if no <code>type</code> option is set.</td>
     
         
         <div class="tag-source">
-            network.js, line 1983
+            network.js, line 2039
         </div>
         
     </div>
@@ -4395,7 +4401,7 @@ handler didn't request a zone.</td>
     
         
         <div class="tag-source">
-            network.js, line 2324
+            network.js, line 2380
         </div>
         
     </div>
@@ -4502,7 +4508,7 @@ is an alias or <code>null</code> if it is not an alias interface.</td>
     
         
         <div class="tag-source">
-            network.js, line 2221
+            network.js, line 2277
         </div>
         
     </div>
@@ -4604,7 +4610,7 @@ or <code>false</code> when the logical interface is no bridge.</td>
     
         
         <div class="tag-source">
-            network.js, line 2309
+            network.js, line 2365
         </div>
         
     </div>
@@ -4709,7 +4715,7 @@ or not (<code>false</code>).</td>
     
         
         <div class="tag-source">
-            network.js, line 2344
+            network.js, line 2400
         </div>
         
     </div>
@@ -4810,7 +4816,7 @@ has no network devices attached.</p>
     
         
         <div class="tag-source">
-            network.js, line 2293
+            network.js, line 2349
         </div>
         
     </div>
@@ -4919,7 +4925,7 @@ or not (<code>false</code>).</td>
     
         
         <div class="tag-source">
-            network.js, line 2252
+            network.js, line 2308
         </div>
         
     </div>
@@ -5023,7 +5029,7 @@ returns <code>true</code>.</p>
     
         
         <div class="tag-source">
-            network.js, line 2366
+            network.js, line 2422
         </div>
         
     </div>
@@ -5123,7 +5129,7 @@ returns <code>true</code>.</p>
     
         
         <div class="tag-source">
-            network.js, line 2272
+            network.js, line 2328
         </div>
         
     </div>
@@ -5230,7 +5236,7 @@ dynamic interfaces (<code>true</code>) or not (<code>false</code>).</td>
     
         
         <div class="tag-source">
-            network.js, line 1841
+            network.js, line 1897
         </div>
         
     </div>
@@ -5384,7 +5390,7 @@ configuration.</p></td>
         
 
         <footer>
-            Documentation generated by <a target="_blank" href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Tue Nov 05 2019 16:31:40 GMT+0100 (Central European Standard Time)
+            Documentation generated by <a target="_blank" href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Thu Nov 07 2019 12:20:51 GMT+0100 (Central European Standard Time)
         </footer>
     </div>
 </div>

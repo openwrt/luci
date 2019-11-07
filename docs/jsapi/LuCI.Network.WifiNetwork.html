@@ -340,6 +340,8 @@
             
                 <li data-name="LuCI.Network#getWifiNetwork"><a href="LuCI.Network.html#getWifiNetwork">getWifiNetwork</a></li>
             
+                <li data-name="LuCI.Network#getWifiNetworks"><a href="LuCI.Network.html#getWifiNetworks">getWifiNetworks</a></li>
+            
                 <li data-name="LuCI.Network#isIgnoredDevice"><a href="LuCI.Network.html#isIgnoredDevice">isIgnoredDevice</a></li>
             
                 <li data-name="LuCI.Network#maskToPrefix"><a href="LuCI.Network.html#maskToPrefix">maskToPrefix</a></li>
@@ -636,6 +638,8 @@
             
             <span class="subtitle">Methods</span>
             
+                <li data-name="LuCI.Network.WifiNetwork#disconnectClient"><a href="LuCI.Network.WifiNetwork.html#disconnectClient">disconnectClient</a></li>
+            
                 <li data-name="LuCI.Network.WifiNetwork#get"><a href="LuCI.Network.WifiNetwork.html#get">get</a></li>
             
                 <li data-name="LuCI.Network.WifiNetwork#getActiveBSSID"><a href="LuCI.Network.WifiNetwork.html#getActiveBSSID">getActiveBSSID</a></li>
@@ -699,6 +703,8 @@
                 <li data-name="LuCI.Network.WifiNetwork#getWifiDevice"><a href="LuCI.Network.WifiNetwork.html#getWifiDevice">getWifiDevice</a></li>
             
                 <li data-name="LuCI.Network.WifiNetwork#getWifiDeviceName"><a href="LuCI.Network.WifiNetwork.html#getWifiDeviceName">getWifiDeviceName</a></li>
+            
+                <li data-name="LuCI.Network.WifiNetwork#isClientDisconnectSupported"><a href="LuCI.Network.WifiNetwork.html#isClientDisconnectSupported">isClientDisconnectSupported</a></li>
             
                 <li data-name="LuCI.Network.WifiNetwork#isDisabled"><a href="LuCI.Network.WifiNetwork.html#isDisabled">isDisabled</a></li>
             
@@ -1099,7 +1105,7 @@ such networks in parallel.</p></div>
     
         
         <div class="tag-source">
-            network.js, line 3280
+            network.js, line 3337
         </div>
         
     </div>
@@ -1177,6 +1183,277 @@ such networks in parallel.</p></div>
             
 <dt>
     <div class="nameContainer">
+        <h4 class="name" id="disconnectClient">
+            
+            disconnectClient<span class="signature">(mac, <span class="optional">deauth</span>, <span class="optional">reason</span>, <span class="optional">ban_time</span>)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{Promise.&lt;number>}</span>
+        </h4>
+    
+        
+        <div class="tag-source">
+            network.js, line 4080
+        </div>
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Forcibly disconnect the given client from the wireless network.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		<th>Default</th>
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>mac</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+                <td class="default">
+                
+                </td>
+            
+            
+            <td class="description last">
+                
+                    
+                    
+                        
+                    
+                
+                <p>The MAC address of the client to disconnect.</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>deauth</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+            
+            
+                <td class="default">
+                
+                    false
+                
+                </td>
+            
+            
+            <td class="description last">
+                
+                    
+                        <span class="optional">optional</span>
+                    
+                    
+                        
+                    
+                
+                <p>Specifies whether to deauthenticate (<code>true</code>) or disassociate (<code>false</code>)
+the client.</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>reason</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+            
+            
+                <td class="default">
+                
+                    1
+                
+                </td>
+            
+            
+            <td class="description last">
+                
+                    
+                        <span class="optional">optional</span>
+                    
+                    
+                        
+                    
+                
+                <p>Specifies the IEEE 802.11 reason code to disassoc/deauth the client
+with. Default is <code>1</code> which corresponds to <code>Unspecified reason</code>.</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>ban_time</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+            
+            
+                <td class="default">
+                
+                    0
+                
+                </td>
+            
+            
+            <td class="description last">
+                
+                    
+                        <span class="optional">optional</span>
+                    
+                    
+                        
+                    
+                
+                <p>Specifies the amount of milliseconds to ban the client from
+reconnecting. By default, no ban time is set which allows the client
+to reassociate / reauthenticate immediately.</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    
+        <tr>
+            
+            <td class="type">
+            
+                        Promise.&lt;number>
+                        
+                    
+            </td>
+            <td class="description last">Returns a promise resolving to the underlying ubus call result code
+which is typically <code>0</code>, even for not existing MAC addresses.
+The promise might reject with an error in case invalid arguments
+are passed.</td>
+        </tr>
+    
+    </tbody>
+</table>
+
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
         <h4 class="name" id="get">
             
             get<span class="signature">(opt)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{null|string|Array.&lt;string>}</span>
@@ -1184,7 +1461,7 @@ such networks in parallel.</p></div>
     
         
         <div class="tag-source">
-            network.js, line 3313
+            network.js, line 3371
         </div>
         
     </div>
@@ -1336,7 +1613,7 @@ not found.</td>
     
         
         <div class="tag-source">
-            network.js, line 3566
+            network.js, line 3624
         </div>
         
     </div>
@@ -1437,7 +1714,7 @@ information.</td>
     
         
         <div class="tag-source">
-            network.js, line 3577
+            network.js, line 3635
         </div>
         
     </div>
@@ -1538,7 +1815,7 @@ encryption state could not be found in <code>ubus</code> runtime information.</t
     
         
         <div class="tag-source">
-            network.js, line 3514
+            network.js, line 3572
         </div>
         
     </div>
@@ -1651,7 +1928,7 @@ state. Possible returned values are:
     
         
         <div class="tag-source">
-            network.js, line 3535
+            network.js, line 3593
         </div>
         
     </div>
@@ -1753,7 +2030,7 @@ translated string.</p>
     
         
         <div class="tag-source">
-            network.js, line 3555
+            network.js, line 3613
         </div>
         
     </div>
@@ -1854,7 +2131,7 @@ information.</td>
     
         
         <div class="tag-source">
-            network.js, line 3757
+            network.js, line 3815
         </div>
         
     </div>
@@ -1955,7 +2232,7 @@ with this network.</td>
     
         
         <div class="tag-source">
-            network.js, line 3787
+            network.js, line 3845
         </div>
         
     </div>
@@ -2061,7 +2338,7 @@ is not available.</td>
     
         
         <div class="tag-source">
-            network.js, line 3392
+            network.js, line 3450
         </div>
         
     </div>
@@ -2164,7 +2441,7 @@ is not available.</td>
     
         
         <div class="tag-source">
-            network.js, line 3803
+            network.js, line 3861
         </div>
         
     </div>
@@ -2268,7 +2545,7 @@ or <code>null</code> if it cannot be determined.</td>
     
         
         <div class="tag-source">
-            network.js, line 3836
+            network.js, line 3894
         </div>
         
     </div>
@@ -2369,7 +2646,7 @@ information or <code>00</code> if it cannot be determined.</td>
     
         
         <div class="tag-source">
-            network.js, line 3982
+            network.js, line 4040
         </div>
         
     </div>
@@ -2470,7 +2747,7 @@ device associted with this wireless network.</td>
     
         
         <div class="tag-source">
-            network.js, line 3769
+            network.js, line 3827
         </div>
         
     </div>
@@ -2575,7 +2852,7 @@ available.</td>
     
         
         <div class="tag-source">
-            network.js, line 3930
+            network.js, line 3988
         </div>
         
     </div>
@@ -2678,7 +2955,7 @@ name, depending on which information is available.</td>
     
         
         <div class="tag-source">
-            network.js, line 3417
+            network.js, line 3475
         </div>
         
     </div>
@@ -2781,7 +3058,7 @@ radio and network index numbers.</p>
     
         
         <div class="tag-source">
-            network.js, line 3439
+            network.js, line 3497
         </div>
         
     </div>
@@ -2886,7 +3163,7 @@ associated network device, e.g. when not configured or up.</td>
     
         
         <div class="tag-source">
-            network.js, line 3379
+            network.js, line 3437
         </div>
         
     </div>
@@ -2990,7 +3267,7 @@ is not in mesh mode.</td>
     
         
         <div class="tag-source">
-            network.js, line 3354
+            network.js, line 3412
         </div>
         
     </div>
@@ -3097,7 +3374,7 @@ is not in mesh mode.</td>
     
         
         <div class="tag-source">
-            network.js, line 3427
+            network.js, line 3485
         </div>
         
     </div>
@@ -3197,7 +3474,7 @@ is not in mesh mode.</td>
     
         
         <div class="tag-source">
-            network.js, line 3946
+            network.js, line 4004
         </div>
         
     </div>
@@ -3302,7 +3579,7 @@ interface.</td>
     
         
         <div class="tag-source">
-            network.js, line 3403
+            network.js, line 3461
         </div>
         
     </div>
@@ -3403,7 +3680,7 @@ attached to.</p>
     
         
         <div class="tag-source">
-            network.js, line 3957
+            network.js, line 4015
         </div>
         
     </div>
@@ -3504,7 +3781,7 @@ logical interfaces this wireless network is attached to.</td>
     
         
         <div class="tag-source">
-            network.js, line 3825
+            network.js, line 3883
         </div>
         
     </div>
@@ -3605,7 +3882,7 @@ information or <code>0</code> if it cannot be determined.</td>
     
         
         <div class="tag-source">
-            network.js, line 3915
+            network.js, line 3973
         </div>
         
     </div>
@@ -3707,7 +3984,7 @@ internal network ID, depending on which information is available.</td>
     
         
         <div class="tag-source">
-            network.js, line 3814
+            network.js, line 3872
         </div>
         
     </div>
@@ -3811,7 +4088,7 @@ information or <code>null</code> if it cannot be determined.</td>
     
         
         <div class="tag-source">
-            network.js, line 3874
+            network.js, line 3932
         </div>
         
     </div>
@@ -3914,7 +4191,7 @@ noise and signal (SNR), divided by 5.</td>
     
         
         <div class="tag-source">
-            network.js, line 3897
+            network.js, line 3955
         </div>
         
     </div>
@@ -4016,7 +4293,7 @@ by <code>ubus</code> runtime state.</td>
     
         
         <div class="tag-source">
-            network.js, line 3365
+            network.js, line 3423
         </div>
         
     </div>
@@ -4120,7 +4397,7 @@ in mesh mode.</td>
     
         
         <div class="tag-source">
-            network.js, line 3847
+            network.js, line 3905
         </div>
         
     </div>
@@ -4224,7 +4501,7 @@ in mesh mode.</td>
     
         
         <div class="tag-source">
-            network.js, line 3862
+            network.js, line 3920
         </div>
         
     </div>
@@ -4328,7 +4605,7 @@ cannot be determined.</td>
     
         
         <div class="tag-source">
-            network.js, line 3467
+            network.js, line 3525
         </div>
         
     </div>
@@ -4433,7 +4710,7 @@ found.</td>
     
         
         <div class="tag-source">
-            network.js, line 3455
+            network.js, line 3513
         </div>
         
     </div>
@@ -4530,6 +4807,107 @@ or <code>null</code> if it cannot be determined.</td>
             
 <dt>
     <div class="nameContainer">
+        <h4 class="name" id="isClientDisconnectSupported">
+            
+            isClientDisconnectSupported<span class="signature">()</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{boolean}</span>
+        </h4>
+    
+        
+        <div class="tag-source">
+            network.js, line 4051
+        </div>
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Check whether this wifi network supports deauthenticating clients.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    
+        <tr>
+            
+            <td class="type">
+            
+                        boolean
+                        
+                    
+            </td>
+            <td class="description last">Returns <code>true</code> when this wifi network instance supports forcibly
+deauthenticating clients, otherwise <code>false</code>.</td>
+        </tr>
+    
+    </tbody>
+</table>
+
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
         <h4 class="name" id="isDisabled">
             
             isDisabled<span class="signature">()</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{boolean}</span>
@@ -4537,7 +4915,7 @@ or <code>null</code> if it cannot be determined.</td>
     
         
         <div class="tag-source">
-            network.js, line 3339
+            network.js, line 3397
         </div>
         
     </div>
@@ -4639,7 +5017,7 @@ UCI configuration.</td>
     
         
         <div class="tag-source">
-            network.js, line 3488
+            network.js, line 3546
         </div>
         
     </div>
@@ -4744,7 +5122,7 @@ instance.</p>
     
         
         <div class="tag-source">
-            network.js, line 3327
+            network.js, line 3385
         </div>
         
     </div>
@@ -4898,7 +5276,7 @@ configuration.</p></td>
         
 
         <footer>
-            Documentation generated by <a target="_blank" href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Tue Nov 05 2019 16:31:40 GMT+0100 (Central European Standard Time)
+            Documentation generated by <a target="_blank" href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Thu Nov 07 2019 12:20:51 GMT+0100 (Central European Standard Time)
         </footer>
     </div>
 </div>

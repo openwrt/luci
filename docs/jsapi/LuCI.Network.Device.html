@@ -340,6 +340,8 @@
             
                 <li data-name="LuCI.Network#getWifiNetwork"><a href="LuCI.Network.html#getWifiNetwork">getWifiNetwork</a></li>
             
+                <li data-name="LuCI.Network#getWifiNetworks"><a href="LuCI.Network.html#getWifiNetworks">getWifiNetworks</a></li>
+            
                 <li data-name="LuCI.Network#isIgnoredDevice"><a href="LuCI.Network.html#isIgnoredDevice">isIgnoredDevice</a></li>
             
                 <li data-name="LuCI.Network#maskToPrefix"><a href="LuCI.Network.html#maskToPrefix">maskToPrefix</a></li>
@@ -636,6 +638,8 @@
             
             <span class="subtitle">Methods</span>
             
+                <li data-name="LuCI.Network.WifiNetwork#disconnectClient"><a href="LuCI.Network.WifiNetwork.html#disconnectClient">disconnectClient</a></li>
+            
                 <li data-name="LuCI.Network.WifiNetwork#get"><a href="LuCI.Network.WifiNetwork.html#get">get</a></li>
             
                 <li data-name="LuCI.Network.WifiNetwork#getActiveBSSID"><a href="LuCI.Network.WifiNetwork.html#getActiveBSSID">getActiveBSSID</a></li>
@@ -699,6 +703,8 @@
                 <li data-name="LuCI.Network.WifiNetwork#getWifiDevice"><a href="LuCI.Network.WifiNetwork.html#getWifiDevice">getWifiDevice</a></li>
             
                 <li data-name="LuCI.Network.WifiNetwork#getWifiDeviceName"><a href="LuCI.Network.WifiNetwork.html#getWifiDeviceName">getWifiDeviceName</a></li>
+            
+                <li data-name="LuCI.Network.WifiNetwork#isClientDisconnectSupported"><a href="LuCI.Network.WifiNetwork.html#isClientDisconnectSupported">isClientDisconnectSupported</a></li>
             
                 <li data-name="LuCI.Network.WifiNetwork#isDisabled"><a href="LuCI.Network.WifiNetwork.html#isDisabled">isDisabled</a></li>
             
@@ -1097,7 +1103,7 @@ device and allows querying device details such as packet statistics or MTU.</p><
     
         
         <div class="tag-source">
-            network.js, line 2593
+            network.js, line 2649
         </div>
         
     </div>
@@ -1182,7 +1188,7 @@ device and allows querying device details such as packet statistics or MTU.</p><
     
         
         <div class="tag-source">
-            network.js, line 2800
+            network.js, line 2856
         </div>
         
     </div>
@@ -1286,7 +1292,7 @@ device is not a Linux bridge.</td>
     
         
         <div class="tag-source">
-            network.js, line 2812
+            network.js, line 2868
         </div>
         
     </div>
@@ -1387,7 +1393,7 @@ enabled, else <code>false</code>.</td>
     
         
         <div class="tag-source">
-            network.js, line 2727
+            network.js, line 2783
         </div>
         
     </div>
@@ -1488,7 +1494,7 @@ for non-wifi devices or operation mode and ssid for wifi ones.</td>
     
         
         <div class="tag-source">
-            network.js, line 2671
+            network.js, line 2727
         </div>
         
     </div>
@@ -1588,7 +1594,7 @@ for non-wifi devices or operation mode and ssid for wifi ones.</td>
     
         
         <div class="tag-source">
-            network.js, line 2660
+            network.js, line 2716
         </div>
         
     </div>
@@ -1688,7 +1694,7 @@ for non-wifi devices or operation mode and ssid for wifi ones.</td>
     
         
         <div class="tag-source">
-            network.js, line 2639
+            network.js, line 2695
         </div>
         
     </div>
@@ -1792,7 +1798,7 @@ e.g. for non-ethernet tunnel devices.</td>
     
         
         <div class="tag-source">
-            network.js, line 2650
+            network.js, line 2706
         </div>
         
     </div>
@@ -1892,7 +1898,7 @@ e.g. for non-ethernet tunnel devices.</td>
     
         
         <div class="tag-source">
-            network.js, line 2628
+            network.js, line 2684
         </div>
         
     </div>
@@ -1992,7 +1998,7 @@ e.g. for non-ethernet tunnel devices.</td>
     
         
         <div class="tag-source">
-            network.js, line 2907
+            network.js, line 2963
         </div>
         
     </div>
@@ -2097,7 +2103,7 @@ assigned to any logical interface.</td>
     
         
         <div class="tag-source">
-            network.js, line 2918
+            network.js, line 2974
         </div>
         
     </div>
@@ -2198,7 +2204,7 @@ logical interfaces this device is assigned to.</td>
     
         
         <div class="tag-source">
-            network.js, line 2778
+            network.js, line 2834
         </div>
         
     </div>
@@ -2303,7 +2309,7 @@ a Linux bridge.</td>
     
         
         <div class="tag-source">
-            network.js, line 2872
+            network.js, line 2928
         </div>
         
     </div>
@@ -2403,7 +2409,7 @@ a Linux bridge.</td>
     
         
         <div class="tag-source">
-            network.js, line 2894
+            network.js, line 2950
         </div>
         
     </div>
@@ -2503,7 +2509,7 @@ a Linux bridge.</td>
     
         
         <div class="tag-source">
-            network.js, line 2713
+            network.js, line 2769
         </div>
         
     </div>
@@ -2604,7 +2610,7 @@ the operation mode and SSID for wifi devices.</td>
     
         
         <div class="tag-source">
-            network.js, line 2861
+            network.js, line 2917
         </div>
         
     </div>
@@ -2704,7 +2710,7 @@ the operation mode and SSID for wifi devices.</td>
     
         
         <div class="tag-source">
-            network.js, line 2883
+            network.js, line 2939
         </div>
         
     </div>
@@ -2804,7 +2810,7 @@ the operation mode and SSID for wifi devices.</td>
     
         
         <div class="tag-source">
-            network.js, line 2689
+            network.js, line 2745
         </div>
         
     </div>
@@ -2913,7 +2919,7 @@ the operation mode and SSID for wifi devices.</td>
     
         
         <div class="tag-source">
-            network.js, line 2745
+            network.js, line 2801
         </div>
         
     </div>
@@ -3014,7 +3020,7 @@ the operation mode and SSID for wifi devices.</td>
     
         
         <div class="tag-source">
-            network.js, line 2942
+            network.js, line 2998
         </div>
         
     </div>
@@ -3119,7 +3125,7 @@ is not a wireless device.</td>
     
         
         <div class="tag-source">
-            network.js, line 2840
+            network.js, line 2896
         </div>
         
     </div>
@@ -3220,7 +3226,7 @@ else <code>false</code>.</td>
     
         
         <div class="tag-source">
-            network.js, line 2851
+            network.js, line 2907
         </div>
         
     </div>
@@ -3321,7 +3327,7 @@ else <code>false</code>.</td>
     
         
         <div class="tag-source">
-            network.js, line 2824
+            network.js, line 2880
         </div>
         
     </div>
@@ -3430,7 +3436,7 @@ when it is down or absent.</td>
         
 
         <footer>
-            Documentation generated by <a target="_blank" href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Tue Nov 05 2019 16:31:40 GMT+0100 (Central European Standard Time)
+            Documentation generated by <a target="_blank" href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Thu Nov 07 2019 12:20:51 GMT+0100 (Central European Standard Time)
         </footer>
     </div>
 </div>
