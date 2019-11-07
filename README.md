@@ -23,8 +23,8 @@ To install all its package definitions, run:
 
 You can browse the generated API documentation directly on Github.
 
- - [Server side Lua APIs](http://htmlpreview.github.io/?http://raw.githubusercontent.com/openwrt/luci/master/docs/api/index.html)
- - [Client side JavaScript APIs](http://htmlpreview.github.io/?http://raw.githubusercontent.com/openwrt/luci/master/docs/jsapi/index.html)
+ - [Server side Lua APIs](http://openwrt.github.io/luci/api/index.html)
+ - [Client side JavaScript APIs](http://openwrt.github.io/luci/jsapi/index.html)
 
 ## Development
 
