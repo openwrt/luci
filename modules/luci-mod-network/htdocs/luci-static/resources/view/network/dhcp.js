@@ -126,10 +126,7 @@ return L.view.extend({
 			_('Localise queries'),
 			_('Localise hostname depending on the requesting subnet if multiple IPs are available'));
 
-		//local have_dnssec_support = luci.util.checklib('/usr/sbin/dnsmasq', 'libhogweed.so');
-		var have_dnssec_support = true;
-
-		if (have_dnssec_support) {
+		if (L.hasSystemFeature('dnsmasq', 'dnssec')) {
 			o = s.taboption('advanced', form.Flag, 'dnssec',
 				_('DNSSEC'));
 			o.optional = true;
