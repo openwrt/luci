@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2019-11-05 01:57+0000\n"
-"Last-Translator: Paul Spooren <mail@aparcar.org>\n"
+"PO-Revision-Date: 2019-11-07 08:29+0000\n"
+"Last-Translator: Kiste <christian.buschau+weblate@mailbox.org>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsadblock/de/>\n"
 "Language: de\n"
@@ -270,6 +270,8 @@ msgid ""
 "Filter the DNS Query result set for a particular domain, client or time "
 "frame."
 msgstr ""
+"DNS-Abfrageergebnis nach bestimmter Domain, bestimmtem Client oder "
+"bestimmtem Zeitrahmen filtern."
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:203
 msgid "Flush DNS Cache"
@@ -312,6 +314,8 @@ msgid ""
 "Gather dns related network traffic via tcpdump to provide a DNS Query Report "
 "on demand."
 msgstr ""
+"DNS-bezogenen Netzwerkverkehr über tcpdump sammeln, um bei Bedarf einen DNS-"
+"Abfragebbericht bereitzustellen."
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/blacklist_tab.lua:10
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/configuration_tab.lua:9
@@ -347,6 +351,8 @@ msgid ""
 "List of supported DNS blocking variants. By default 'nxdomain' will be used "
 "for all DNS backends."
 msgstr ""
+"Liste der unterstützten DNS-Blockierungsvarianten. Standardmäßig wird "
+"'nxdomain' für alle DNS-Backends verwendet."
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:44
 msgid "List of supported and fully pre-configured download utilities."
@@ -362,7 +368,7 @@ msgstr "Lade"
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:192
 msgid "Local FW/DNS Ports"
-msgstr ""
+msgstr "Lokale FW/DNS-Ports"
 
 #: applications/luci-app-adblock/luasrc/controller/adblock.lua:22
 msgid "Logfile"
@@ -375,6 +381,8 @@ msgstr "Dienst mit niedriger Priorität"
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:256
 msgid "Mail profile used in 'msmtp' for adblock notification E-Mails."
 msgstr ""
+"Mail-Profil, das in 'msmtp' für Adblock-Benachrichtigs-E-Mails verwendet "
+"wird."
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:120
 msgid "Max. Download Queue"
@@ -428,6 +436,8 @@ msgstr ""
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:136
 msgid "Please note: this needs manual 'tcpdump-mini' package installation."
 msgstr ""
+"Bitte beachten: Dies erfordert die manuelle Installation des Pakets 'tcpdump-"
+"mini'."
 
 #: applications/luci-app-adblock/luasrc/view/adblock/query.htm:52
 msgid "Query"
@@ -442,16 +452,21 @@ msgid ""
 "Raise the minimum notification count, to get E-Mails if the overall count is "
 "less or equal to the given limit (default 0),"
 msgstr ""
+"Erhöhe die minimale Anzahl der Benachrichtigungen, um E-Mails zu erhalten, "
+"wenn die Gesamtzahl kleiner oder gleich der angegebenen Grenze ist (Standard "
+"0),"
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:158
 msgid "Receiver address for adblock notification E-Mails."
-msgstr ""
+msgstr "Empfängeradresse für Adblock-Benachrichtigungs-E-Mails."
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:117
 msgid ""
 "Redirect all DNS queries from 'lan' zone to the local resolver, applies to "
 "udp and tcp protocol on ports 53, 853 and 5353."
 msgstr ""
+"Leitet alle DNS-Abfragen von der Zone 'lan' an den lokalen Resolver weiter, "
+"gilt für die Protokolle UDP und TCP auf den Ports 53, 853 und 5353."
 
 #: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:28
 #: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:39
@@ -466,7 +481,7 @@ msgstr "Aktualisieren der Blocklistenquellen"
 
 #: applications/luci-app-adblock/luasrc/view/adblock/report.htm:281
 msgid "Refresh Report"
-msgstr ""
+msgstr "Bericht aktualisieren"
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:231
 msgid "Report Chunk Count"
@@ -478,7 +493,7 @@ msgstr ""
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:139
 msgid "Report Directory"
-msgstr ""
+msgstr "Berichtsverzeichnis"
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:208
 msgid "Report Interface"
@@ -503,10 +518,13 @@ msgid ""
 msgstr ""
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:128
+#, fuzzy
 msgid ""
 "Resets the final DNS blockfile 'adb_list.overall' after loading through the "
 "DNS backend."
 msgstr ""
+"Setzt die endgültige DNS-Blockdatei 'adb_list.overall' zurück, nachdem sie "
+"über das DNS-Backend geladen wurde."
 
 #: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:37
 msgid "Resume"
@@ -531,10 +549,12 @@ msgid ""
 "Send notification E-Mails in case of a processing error or if domain count "
 "is &le; 0."
 msgstr ""
+"Sende Benachrichtigungs-E-Mails im Falle eines Verarbeitungsfehlers oder "
+"wenn die Domainanzahl &le; 0 ist."
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:246
 msgid "Sender address for adblock notification E-Mails."
-msgstr ""
+msgstr "Absenderadresse für Adblock-Benachrichtigungs-E-Mails."
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:110
 msgid ""
@@ -556,6 +576,8 @@ msgstr ""
 msgid ""
 "Space separated list of firewall ports which should be redirected locally."
 msgstr ""
+"Leerzeichengetrennte Liste der Firewall-Ports, die lokal umgeleitet werden "
+"sollen."
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:226
 msgid ""
@@ -564,7 +586,7 @@ msgstr ""
 
 #: applications/luci-app-adblock/luasrc/view/adblock/report.htm:256
 msgid "Start Date"
-msgstr ""
+msgstr "Startdatum"
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:54
 msgid "Startup Trigger"
@@ -595,6 +617,8 @@ msgid ""
 "Target directory for dns related report files. Default is '/tmp', please use "
 "preferably a non-volatile disk if available."
 msgstr ""
+"Zielverzeichnis für DNS-bezogene Berichtsdateien. Standard ist '/tmp', bitte "
+"vorzugsweise einen nichtflüchtigen Speicherort verwenden, falls vorhanden."
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:165
 msgid "Target directory for the generated blocklist 'adb_list.overall'."
@@ -656,11 +680,13 @@ msgid ""
 "This option saves an enormous amount of storage space, but starts a small "
 "ubus/adblock monitor in the background."
 msgstr ""
+"Diese Option spart enorm viel Speicherplatz, startet aber einen kleinen ubus/"
+"adblock-Monitor im Hintergrund."
 
 #: applications/luci-app-adblock/luasrc/view/adblock/report.htm:82
 #: applications/luci-app-adblock/luasrc/view/adblock/report.htm:89
 msgid "Time"
-msgstr ""
+msgstr "Zeit"
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:26
 msgid ""
@@ -672,15 +698,15 @@ msgstr ""
 
 #: applications/luci-app-adblock/luasrc/view/adblock/report.htm:287
 msgid "Top 10 Reporting"
-msgstr ""
+msgstr "Top 10 der Berichterstattung"
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:251
 msgid "Topic for adblock notification E-Mails."
-msgstr ""
+msgstr "Betreff für Adblock-Benachrichtigungs-E-Mails."
 
 #: applications/luci-app-adblock/luasrc/view/adblock/report.htm:268
 msgid "Total DNS Queries"
-msgstr ""
+msgstr "Gesamtzahl der DNS-Abfragen"
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:181
 msgid "Trigger Delay"
@@ -711,3 +737,5 @@ msgid ""
 "e.g. to receive an E-Mail notification with every adblock run set this value "
 "to 200000."
 msgstr ""
+"um z.B. eine E-Mail-Benachrichtigung mit jedem Adblock-Lauf zu erhalten, "
+"diesen Wert auf 200000 setzen."
