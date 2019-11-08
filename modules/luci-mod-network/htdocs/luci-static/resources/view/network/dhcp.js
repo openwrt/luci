@@ -12,7 +12,7 @@ callHostHints = rpc.declare({
 });
 
 callDUIDHints = rpc.declare({
-	object: 'luci',
+	object: 'luci-rpc',
 	method: 'getDUIDHints',
 	expect: { '': {} }
 });
@@ -394,7 +394,7 @@ return L.view.extend({
 		so = ss.option(form.Value, 'duid', _('<abbr title="The DHCP Unique Identifier">DUID</abbr>'));
 		so.datatype = 'and(rangelength(20,36),hexstring)';
 		Object.keys(duids).forEach(function(duid) {
-			so.value(duid, '%s (%s)'.format(duid, duids[duid].name || '?'));
+			so.value(duid, '%s (%s)'.format(duid, duids[duid].hostname || duids[duid].macaddr || duids[duid].ip6addr || '?'));
 		});
 
 		so = ss.option(form.Value, 'hostid', _('<abbr title="Internet Protocol Version 6">IPv6</abbr>-Suffix (hex)'));
