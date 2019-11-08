@@ -1996,8 +1996,6 @@ table table td,
 }
 
 .network-status-table .ifacebox-body > div {
-	display: flex;
-	flex-wrap: wrap;
 	margin: -.125em;
 }
 
@@ -2008,11 +2006,20 @@ table table td,
 
 .ifacebadge.large,
 .network-status-table .ifacebox-body .ifacebadge {
-	display: inline-flex;
+	display: flex;
 	flex: 1;
 	padding: .25em;
 	min-width: 220px;
 	margin: .125em;
+}
+
+.ifacebadge.large {
+	display: inline-flex;
+}
+
+.network-status-table .ifacebox-body .ifacebadge > span {
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
 .ifacebadge > *,
