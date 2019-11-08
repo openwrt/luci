@@ -36,9 +36,6 @@ function renderbox(radio, networks) {
 			_('Associations'), is_assoc ? (net.assoclist.length || '-') : null,
 			null, is_assoc ? null : E('em', net.isDisabled() ? _('Wireless is disabled') : _('Wireless is not associated')));
 
-		badge.lastElementChild.style.overflow = 'hidden';
-		badge.lastElementChild.style.textOverflow = 'ellipsis';
-
 		badges.push(badge);
 
 		chan = (chan != null) ? chan : net.getChannel();
