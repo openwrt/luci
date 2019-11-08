@@ -497,8 +497,7 @@ local knownParams = {
 		{ DynamicList,
 			"remote",
 			"1.2.3.4",
-			translate("Remote host name or ip address"),
-			{ client="1" } },
+			translate("Remote host name or ip address") },
 		{ Flag,
 			"remote_random",
 			0,
@@ -863,7 +862,7 @@ for _, option in ipairs(params) do
 		function o.remove(self, section)
 			local cfg_val = AbstractValue.cfgvalue(self, section)
 			local txt_val = luci.http.formvalue("cbid."..self.map.config.."."..section.."."..self.option..".textbox")
-			
+
 			if cfg_val and fs.access(cfg_val) and txt_val == "" then
 				fs.unlink(cfg_val)
 			end
