@@ -160,26 +160,6 @@ local methods = {
 		end
 	},
 
-	getDUIDHints = {
-		call = function()
-			local fp = io.open('/var/hosts/odhcpd')
-			local result = { }
-			if fp then
-				for line in fp:lines() do
-					local dev, duid, name = string.match(line, '# (%S+)%s+(%S+)%s+%d+%s+(%S+)')
-					if dev and duid and name then
-						result[duid] = {
-							name = (name ~= "-") and name or nil,
-							device = dev
-						}
-					end
-				end
-				fp:close()
-			end
-			return result
-		end
-	},
-
 	getConntrackHelpers = {
 		call = function()
 			local ok, fd = pcall(io.open, "/usr/share/fw3/helpers.conf", "r")
