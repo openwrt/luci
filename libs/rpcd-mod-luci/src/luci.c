@@ -420,6 +420,7 @@ lease_next(void)
 	static struct lease_entry e;
 	struct ether_addr *ea;
 	char *p;
+	int n;
 
 	memset(&e, 0, sizeof(e));
 
@@ -430,8 +431,14 @@ lease_next(void)
 			if (!p)
 				continue;
 
-			e.expire = strtol(p, NULL, 10);
-			e.expire = (e.expire >= 0) ? e.expire - lease_state.now : 0;
+			n = strtol(p, NULL, 10);
+
+			if (n > lease_state.now)
+				e.expire = n - lease_state.now;
+			else if (n > 0)
+				e.expire = 0;
+			else
+				e.expire = -1;
 
 			p = strtok(NULL, " \t\n");
 
@@ -504,8 +511,14 @@ lease_next(void)
 			if (!p)
 				continue;
 
-			e.expire = strtol(p, NULL, 10);
-			e.expire = (e.expire > 0) ? e.expire - lease_state.now : e.expire;
+			n = strtol(p, NULL, 10);
+
+			if (n > lease_state.now)
+				e.expire = n - lease_state.now;
+			else if (n >= 0)
+				e.expire = 0;
+			else
+				e.expire = -1;
 
 			strtok(NULL, " \t\n"); /* id */
 			strtok(NULL, " \t\n"); /* length */
@@ -1403,7 +1416,7 @@ rpc_luci_get_host_hints_ifaddrs(struct reply_context *rctx)
 
 	freeifaddrs(ifaddr);
 
-	avl_for_each_element_safe(&devices, device, avl, nextdevice) {
+	avl_remove_all_elements(&devices, device, avl, nextdevice) {
 		if (memcmp(&device->ea, &empty_ea, sizeof(empty_ea)) &&
 		    (memcmp(&device->in6, &empty_in6, sizeof(empty_in6)) ||
 		     device->in.s_addr != 0)) {
@@ -1419,7 +1432,6 @@ rpc_luci_get_host_hints_ifaddrs(struct reply_context *rctx)
 			}
 		}
 
-		avl_delete(&devices, &device->avl);
 		free(device);
 	}
 }
@@ -1524,7 +1536,7 @@ rpc_luci_get_host_hints_finish(struct reply_context *rctx)
 	struct in_addr in = {};
 	void *o;
 
-	avl_for_each_element_safe(&rctx->avl, hint, avl, nexthint) {
+	avl_remove_all_elements(&rctx->avl, hint, avl, nexthint) {
 		o = blobmsg_open_table(&rctx->blob, hint->avl.key);
 
 		if (memcmp(&hint->ip, &in, sizeof(in))) {
@@ -1541,8 +1553,6 @@ rpc_luci_get_host_hints_finish(struct reply_context *rctx)
 			blobmsg_add_string(&rctx->blob, "name", hint->hostname);
 
 		blobmsg_close_table(&rctx->blob, o);
-
-		avl_delete(&rctx->avl, &hint->avl);
 
 		if (hint->hostname)
 			free(hint->hostname);
@@ -1568,6 +1578,65 @@ rpc_luci_get_host_hints(struct ubus_context *ctx, struct ubus_object *obj,
 	rpc_luci_get_host_hints_ether(rctx);
 	rpc_luci_get_host_hints_ifaddrs(rctx);
 	rpc_luci_get_host_hints_rrdns(rctx);
+
+	return UBUS_STATUS_OK;
+}
+
+static int
+rpc_luci_get_duid_hints(struct ubus_context *ctx, struct ubus_object *obj,
+                        struct ubus_request_data *req, const char *method,
+                        struct blob_attr *msg)
+{
+	struct { struct avl_node avl; } *e, *next;
+	char s[INET6_ADDRSTRLEN], *p;
+	struct ether_addr empty = {};
+	struct lease_entry *lease;
+	struct avl_tree avl;
+	void *o;
+
+	avl_init(&avl, avl_strcmp, false, NULL);
+	blob_buf_init(&blob, 0);
+
+	lease_open();
+
+	while ((lease = lease_next()) != NULL) {
+		if (lease->af != AF_INET6 || lease->duid == NULL)
+			continue;
+
+		e = avl_find_element(&avl, lease->duid, e, avl);
+
+		if (e)
+			continue;
+
+		e = calloc_a(sizeof(*e), &p, strlen(lease->duid) + 1);
+
+		if (!e)
+			continue;
+
+		o = blobmsg_open_table(&blob, lease->duid);
+
+		inet_ntop(AF_INET6, &lease->addr.in6, s, sizeof(s));
+		blobmsg_add_string(&blob, "ip6addr", s);
+
+		if (lease->hostname)
+			blobmsg_add_string(&blob, "hostname", lease->hostname);
+
+		if (memcmp(&lease->mac, &empty, sizeof(empty)))
+			blobmsg_add_string(&blob, "macaddr", ea2str(&lease->mac));
+
+		blobmsg_close_table(&blob, o);
+
+		e->avl.key = strcpy(p, lease->duid);
+		avl_insert(&avl, &e->avl);
+	}
+
+	lease_close();
+
+	avl_remove_all_elements(&avl, e, avl, next) {
+		free(e);
+	}
+
+	ubus_send_reply(ctx, req, blob.head);
 
 	return UBUS_STATUS_OK;
 }
@@ -1658,7 +1727,6 @@ rpc_luci_get_dhcp_leases(struct ubus_context *ctx, struct ubus_object *obj,
 	struct ether_addr emptymac = {};
 	struct lease_entry *lease;
 	char s[INET6_ADDRSTRLEN];
-	struct uci_context *uci;
 	int af, family = 0;
 	void *a, *o;
 
@@ -1681,11 +1749,6 @@ rpc_luci_get_dhcp_leases(struct ubus_context *ctx, struct ubus_object *obj,
 	default:
 		return UBUS_STATUS_INVALID_ARGUMENT;
 	}
-
-	uci = uci_alloc_context();
-
-	if (!uci)
-		return UBUS_STATUS_UNKNOWN_ERROR;
 
 	blob_buf_init(&blob, 0);
 
@@ -1730,7 +1793,6 @@ rpc_luci_get_dhcp_leases(struct ubus_context *ctx, struct ubus_object *obj,
 		blobmsg_close_array(&blob, a);
 	}
 
-	uci_free_context(uci);
 	ubus_send_reply(ctx, req, blob.head);
 
 	return UBUS_STATUS_OK;
@@ -1743,6 +1805,7 @@ rpc_luci_api_init(const struct rpc_daemon_ops *o, struct ubus_context *ctx)
 		UBUS_METHOD_NOARG("getNetworkDevices", rpc_luci_get_network_devices),
 		UBUS_METHOD_NOARG("getWirelessDevices", rpc_luci_get_wireless_devices),
 		UBUS_METHOD_NOARG("getHostHints", rpc_luci_get_host_hints),
+		UBUS_METHOD_NOARG("getDUIDHints", rpc_luci_get_duid_hints),
 		UBUS_METHOD_NOARG("getBoardJSON", rpc_luci_get_board_json),
 		UBUS_METHOD_NOARG("getDSLStatus", rpc_luci_get_dsl_status),
 		UBUS_METHOD("getDHCPLeases", rpc_luci_get_dhcp_leases, rpc_get_leases_policy)
