@@ -238,5 +238,71 @@ return L.Class.extend({
 			window.open(L.url('admin/system/opkg') +
 				'?query=' + opkg_package, '_blank', 'noopener');
 		};
+	},
+	parse_uri: function(uri) {
+		var scheme = 'ss://';
+		if (uri && uri.indexOf(scheme) === 0) {
+			var atPos = uri.indexOf('@'), hashPos = uri.lastIndexOf('#'), tag;
+			if (hashPos === -1) {
+				hashPos = undefined;
+			} else {
+				tag = uri.slice(hashPos + 1);
+			}
+
+			if (atPos !== -1) { // SIP002 format https://shadowsocks.org/en/spec/SIP002-URI-Scheme.html
+				var colonPos = uri.indexOf(':', atPos + 1), slashPos = uri.indexOf('/', colonPos + 1);
+				if (colonPos === -1) return null;
+				if (slashPos === -1) slashPos = undefined;
+
+				var userinfo = atob(uri.slice(scheme.length, atPos)
+					.replace(/-/g, '+').replace(/_/g, '/')),
+					i = userinfo.indexOf(':');
+				if (i === -1) return null;
+
+				var config = {
+					server: uri.slice(atPos + 1, colonPos),
+					server_port: uri.slice(colonPos + 1, slashPos ? slashPos : hashPos),
+					password: userinfo.slice(i + 1),
+					method: userinfo.slice(0, i)
+				};
+
+				if (slashPos) {
+					var search = uri.slice(slashPos + 1, hashPos);
+					if (search[0] === '?') search = search.slice(1);
+					search.split('&').forEach(function(s) {
+						var j = s.indexOf('=');
+						if (j !== -1) {
+							var k = s.slice(0, j), v = s.slice(j + 1);
+							if (k === 'plugin') {
+								v = decodeURIComponent(v);
+								var k = v.indexOf(';');
+								if (k !== -1) {
+									config['plugin'] = v.slice(0, k);
+									config['plugin_opts'] = v.slice(k + 1);
+								}
+							}
+						}
+					});
+				}
+				return [config, tag];
+			} else { // Legacy format https://shadowsocks.org/en/config/quick-guide.html
+				var plain = atob(uri.slice(scheme.length, hashPos)),
+					firstColonPos = plain.indexOf(':'),
+					lastColonPos = plain.lastIndexOf(':'),
+					atPos = plain.lastIndexOf('@', lastColonPos);
+				if (firstColonPos === -1 ||
+					lastColonPos === -1 ||
+					atPos === -1) return null;
+
+				var config = {
+					server: plain.slice(atPos + 1, lastColonPos),
+					server_port: plain.slice(lastColonPos + 1),
+					password: plain.slice(firstColonPos + 1, atPos),
+					method: plain.slice(0, firstColonPos)
+				};
+				return [config, tag];
+			}
+		}
+		return null;
 	}
 });
