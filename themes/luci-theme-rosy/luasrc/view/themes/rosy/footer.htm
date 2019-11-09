@@ -29,8 +29,12 @@
 </div>
 </div>
 <footer>
+    <%- if disp.context.authsession then %>
     <a href="https://github.com/openwrt/luci">Powered by<%= ver.luciname %> (<%= ver.luciversion %>)</a> /
     <%= ver.distversion %>
+    <% else %>
+    <a href="https://github.com/openwrt/luci">Powered by LuCI</a>
+    <% end %>
     <% if #categories > 1 then %>
     <ul class="breadcrumb pull-right" id="modemenu">
         <% for i, r in ipairs(categories) do %>

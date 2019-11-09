@@ -9,8 +9,13 @@
 </div>
 
 <p class="luci">
-	<% local ver = require "luci.version" -%>
+	<% local ver = require "luci.version"
+	local disp = require "luci.dispatcher" -%>
+	<%- if disp.context.authsession then %>
+	Powered by LuCI
+	<% else %>
 	Powered by <%= ver.luciname %> (<%= ver.luciversion %>)
+	<% end %>
 </p>
 </body>
 </html>
