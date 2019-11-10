@@ -12,12 +12,25 @@ function index()
 end
 
 function action_list(mode)
+	local util = require "luci.util"
 	local cmd
 
 	if mode == "installed" then
 		cmd = { "/bin/cat", "/usr/lib/opkg/status" }
 	else
-		cmd = { "/bin/sh", "-c", [[find /tmp/opkg-lists/ -type f '!' -name '*.sig' | xargs -r gzip -cd]] }
+		local lists_dir = nil
+
+		local fd = io.popen([[sed -rne 's#^lists_dir \S+ (\S+)#\1#p' /etc/opkg.conf /etc/opkg/*.conf 2>/dev/null]], "r")
+		if fd then
+			lists_dir = fd:read("*l")
+			fd:close()
+		end
+
+		if not lists_dir or #lists_dir == "" then
+			lists_dir = "/tmp/opkg-lists"
+		end
+
+		cmd = { "/bin/sh", "-c", [[find %s -type f '!' -name '*.sig' | xargs -r gzip -cd]] % util.shellquote(lists_dir) }
 	end
 
 	luci.http.prepare_content("text/plain; charset=utf-8")
