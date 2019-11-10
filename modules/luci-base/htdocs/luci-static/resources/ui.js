@@ -2277,7 +2277,23 @@ return L.Class.extend({
 							type: 'file',
 							style: 'display:none',
 							change: function(ev) {
-								L.dom.parent(ev.target, '.modal').querySelector('.cbi-button-action.important').disabled = false;
+								var modal = L.dom.parent(ev.target, '.modal'),
+								    body = modal.querySelector('p'),
+								    upload = modal.querySelector('.cbi-button-action.important'),
+								    file = ev.currentTarget.files[0];
+
+								if (file == null)
+									return;
+
+								L.dom.content(body, [
+									E('ul', {}, [
+										E('li', {}, [ '%s: %s'.format(_('Name'), file.name.replace(/^.*[\\\/]/, '')) ]),
+										E('li', {}, [ '%s: %1024mB'.format(_('Size'), file.size) ])
+									])
+								]);
+
+								upload.disabled = false;
+								upload.focus();
 							}
 						}),
 						E('button', {
