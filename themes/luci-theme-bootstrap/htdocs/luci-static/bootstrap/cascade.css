@@ -448,7 +448,7 @@ label > input[type="radio"] {
 input,
 textarea,
 select,
-.cbi-dropdown,
+.cbi-dropdown:not(.btn):not(.cbi-button),
 .uneditable-input {
 	display: inline-block;
 	width: 210px;
@@ -464,7 +464,7 @@ select,
 	color: #808080;
 }
 
-.cbi-dropdown,
+.cbi-dropdown:not(.btn):not(.cbi-button),
 .cbi-dynlist {
 	min-width: 210px;
 	max-width: 400px;
@@ -561,7 +561,7 @@ textarea {
 .td > input[type=text],
 .td > input[type=password],
 .td > select,
-.td > .cbi-dropdown,
+.td > .cbi-dropdown:not(.btn):not(.cbi-button),
 .cbi-dynlist > .add-item > .cbi-dropdown {
 	width: 100%;
 }
@@ -1346,7 +1346,7 @@ body.modal-overlay-active #modal_overlay {
 	clear: both;
 }
 
-.cbi-page-actions > :not([method="post"]):not(.cbi-button-apply):not(.cbi-button-save):not(.cbi-button-reset) {
+.cbi-page-actions > :not([method="post"]):not(.cbi-button-apply):not(.cbi-button-negative):not(.cbi-button-save):not(.cbi-button-reset) {
 	float: left;
 	margin-right: .4em;
 }
@@ -1373,21 +1373,25 @@ body.modal-overlay-active #modal_overlay {
 	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
 }
 
-.cbi-page-actions .cbi-button-apply + .cbi-button-save {
+.cbi-page-actions .cbi-button-apply + .cbi-button-save,
+.cbi-page-actions .cbi-button-negative + .cbi-button-save {
 	background: linear-gradient(#fff, #fff 25%, #e6e6e6);
 	text-shadow: 0 -1px 0 rgba(255, 255, 255, 0.75);
 	color: #4a4;
 }
 
 .cbi-dropdown {
-	border: 1px solid #ccc;
-	border-radius: 3px;
-	display: inline-flex;
-	padding: 0;
+	display: inline-flex !important;
 	cursor: pointer;
 	height: auto;
-	background: linear-gradient(#fff 0%, #e9e8e6 100%);
 	position: relative;
+	padding: 0 !important;
+}
+
+.cbi-dropdown:not(.btn):not(.cbi-button) {
+	background: linear-gradient(#fff 0%, #e9e8e6 100%);
+	border: 1px solid #ccc;
+	border-radius: 3px;
 	color: #404040;
 }
 
@@ -1406,6 +1410,16 @@ body.modal-overlay-active #modal_overlay {
 	width: 100%;
 }
 
+.cbi-dropdown.btn > ul:not(.dropdown),
+.cbi-dropdown.cbi-button > ul:not(.dropdown) {
+	margin: 0 0 0 13px !important;
+}
+
+.cbi-dropdown.btn.spinning > ul:not(.dropdown),
+.cbi-dropdown.cbi-button.spinning > ul:not(.dropdown) {
+	margin: 0 !important;
+}
+
 .cbi-dropdown > ul.preview {
 	display: none;
 }
@@ -1422,8 +1436,15 @@ body.modal-overlay-active #modal_overlay {
 	padding: 0 .25em;
 }
 
+.cbi-dropdown.btn > .open,
+.cbi-dropdown.cbi-button > .open {
+	padding: 0 .5em;
+	margin-left: .5em;
+	border-left: 1px solid;
+}
+
 .cbi-dropdown > .more,
-.cbi-dropdown > ul > li[placeholder] {
+.cbi-dropdown:not(.btn):not(.cbi-button) > ul > li[placeholder] {
 	color: #777;
 	font-weight: bold;
 	text-shadow: 1px 1px 0px #fff;
@@ -1433,7 +1454,6 @@ body.modal-overlay-active #modal_overlay {
 
 .cbi-dropdown > ul > li {
 	display: none;
-	padding: .25em;
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
@@ -1441,8 +1461,14 @@ body.modal-overlay-active #modal_overlay {
 	flex-grow: 1;
 	align-items: center;
 	align-self: center;
-	color: #404040;
+	color: inherit;
+}
+
+.cbi-dropdown > ul.dropdown > li,
+.cbi-dropdown:not(.btn):not(.cbi-button) > ul > li {
 	min-height: 20px;
+	padding: .25em;
+	color: #404040;
 }
 
 .cbi-dropdown > ul > li .hide-open { display: block; display: initial; }
@@ -1501,13 +1527,13 @@ body.modal-overlay-active #modal_overlay {
 .cbi-dropdown[multiple][more] > .more,
 .cbi-dropdown[multiple][empty] > .more {
 	flex-grow: 1;
-	display: flex;
+	display: flex !important;
 }
 
 .cbi-dropdown[empty] > ul > li,
 .cbi-dropdown[optional][open] > ul.dropdown > li[placeholder],
 .cbi-dropdown[multiple][open] > ul.dropdown > li > form {
-	display: block;
+	display: block !important;
 }
 
 .cbi-dropdown[open] > ul.dropdown > li .hide-open { display: none; }
