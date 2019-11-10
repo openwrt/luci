@@ -2831,9 +2831,9 @@
 			 * returned promise runs to completion before the button
 			 * is reenabled.
 			 */
-			handleSaveApply: function(ev) {
+			handleSaveApply: function(ev, mode) {
 				return this.handleSave(ev).then(function() {
-					L.ui.changes.apply(true);
+					L.ui.changes.apply(mode == '0');
 				});
 			},
 
@@ -2905,12 +2905,20 @@
 			addFooter: function() {
 				var footer = E([]);
 
+				var saveApplyBtn = this.handleSaveApply ? new L.ui.ComboButton('0', {
+					0: [ _('Save & Apply') ],
+					1: [ _('Apply unchecked') ]
+				}, {
+					classes: {
+						0: 'cbi-button cbi-button-apply important',
+						1: 'cbi-button cbi-button-negative important'
+					},
+					click: L.ui.createHandlerFn(this, 'handleSaveApply')
+				}).render() : E([]);
+
 				if (this.handleSaveApply || this.handleSave || this.handleReset) {
 					footer.appendChild(E('div', { 'class': 'cbi-page-actions' }, [
-						this.handleSaveApply ? E('button', {
-							'class': 'cbi-button cbi-button-apply',
-							'click': L.ui.createHandlerFn(this, 'handleSaveApply')
-						}, [ _('Save & Apply') ]) : '', ' ',
+						saveApplyBtn, ' ',
 						this.handleSave ? E('button', {
 							'class': 'cbi-button cbi-button-save',
 							'click': L.ui.createHandlerFn(this, 'handleSave')
