@@ -340,13 +340,14 @@ header h3 a, header .brand {
 		padding: 0;
 	}
 
-	.cbi-page-actions .cbi-button {
+	.cbi-page-actions .cbi-button:not(.cbi-dropdown) {
 		flex: 1 1 calc(50% - 2px);
 		margin: 1px !important;
 		overflow: hidden;
 		text-overflow: ellipsis;
 	}
 
+	.cbi-page-actions .cbi-button-negative,
 	.cbi-page-actions .cbi-button-primary,
 	.cbi-page-actions .cbi-button-apply {
 		flex-basis: calc(100% - -2px);

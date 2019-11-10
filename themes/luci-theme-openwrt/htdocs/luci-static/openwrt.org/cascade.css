@@ -567,7 +567,7 @@ input[type=password] {
 select,
 input[type=text],
 input[type=password],
-.cbi-dropdown {
+.cbi-dropdown:not(.btn):not(.cbi-button) {
 	width: 20em;
 	height: 22px;
 	font-family: inherit;
@@ -692,7 +692,8 @@ img.cbi-image-button {
 	background: #a22;
 }
 
-.cbi-page-actions .cbi-button-apply + .cbi-button-save {
+.cbi-page-actions .cbi-button-apply + .cbi-button-save,
+.cbi-page-actions .cbi-button-negative + .cbi-button-save {
 	background: #fff;
 	color: #595;
 }
@@ -926,6 +927,7 @@ div.cbi-optionals {
 }
 
 .cbi-page-actions > .cbi-button-apply + .cbi-button-save,
+.cbi-page-actions > .cbi-button-negative + .cbi-button-save,
 .cbi-page-actions > .cbi-button-save + form[method="post"],
 .cbi-page-actions > form[method="post"] + form[method="post"] {
 	margin-left: 3px;
@@ -1094,11 +1096,14 @@ ul.cbi-tabmenu li.cbi-tab-disabled[data-errors]::after {
 	position: relative;
 	padding: 0;
 	color: #000;
-	min-width: 20em;
 	max-width: 100%;
 }
 
-.cbi-dropdown:hover {
+.cbi-dropdown:not(.btn):not(.cbi-button) {
+	min-width: 20em;
+}
+
+.cbi-dropdown:not(.btn):not(.cbi-button):hover {
 	background: #fff;
 }
 
@@ -1233,6 +1238,10 @@ ul.cbi-tabmenu li.cbi-tab-disabled[data-errors]::after {
 
 .cbi-dropdown[open] > ul.dropdown > li.focus {
 	background: linear-gradient(90deg, #a3c2e8 0%, #84aad9 100%);
+}
+
+.cbi-dropdown[open] > ul.dropdown > li {
+	color: #444;
 }
 
 .cbi-dropdown[open] > ul.dropdown > li:last-child {
