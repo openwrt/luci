@@ -198,7 +198,7 @@
 <h2 class="navigation"><a id="navigation" name="navigation"><%:Navigation%></a></h2>
 
 <div class="hostinfo">
-	<%=(boardinfo.hostname or "?")%> | <%=ver.distversion%> |
+	<%=(boardinfo.hostname or "?")%> | <%- if disp.context.authsession then %><%=ver.distversion%><% else %>OpenWrt<% end %> |
 	<%:Load%>: <%="%.2f" % (loadinfo[1] / 65535.0)%> <%="%.2f" % (loadinfo[2] / 65535.0)%> <%="%.2f" % (loadinfo[3] / 65535.0)%>
 	<span id="xhr_poll_status" style="display:none" onclick="XHR.running() ? XHR.halt() : XHR.run()">
 		| <%:Auto Refresh%>:
