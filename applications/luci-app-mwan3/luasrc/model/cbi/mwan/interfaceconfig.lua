@@ -9,6 +9,7 @@ local track_method, reliability, count, size, max_ttl
 local check_quality, failure_latency, failure_loss, recovery_latency
 local recovery_loss, timeout, interval, failure
 local keep_failure, recovery, down, up, flush, metric
+local httping_ssl
 
 arg[1] = arg[1] or ""
 
@@ -54,6 +55,10 @@ end
 if os.execute("which httping 1>/dev/null") == 0 then
 	track_method:value("httping")
 end
+
+httping_ssl = mwan_interface:option(Flag, "httping_ssl", translate("Enable ssl tracking"),
+	translate("Enables https tracking on ssl port 443"))
+httping_ssl:depends("track_method", "httping")
 
 reliability = mwan_interface:option(Value, "reliability", translate("Tracking reliability"),
 	translate("Acceptable values: 1-100. This many Tracking IP addresses must respond for the link to be deemed up"))
