@@ -1,0 +1,22 @@
+version: '2'
+
+services:
+
+### Docker Theme Container #######################################
+
+    theme:
+        build:
+            context: ./docker
+            dockerfile: Dockerfile
+        volumes:
+            - ${WORKSPACE_TEMP_DIR}:/tmp/
+            - ${THEME_STATIC}:/www/luci-static/bootstrap/
+            - ${THEME_TEMPLATE}:/usr/lib/lua/luci/view/themes/bootstrap/
+        ports:
+            - "${PORT}:80"
+
+### Volumes Setup ###########################################
+
+volumes:
+    theme:
+        driver: "local"    
