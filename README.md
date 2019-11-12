@@ -6,6 +6,18 @@
 
 This is the OpenWrt "luci"-feed containing LuCI - OpenWrt Configuration Interface.
 
+## Docker Composer
+It can map the subject code to the docker container, so that it can be changed automatically.
+
+Open ```.env``` and modify the parameters according to the theme you are editing. (local mapping port, temporary directory, theme file path, etc.)
+
+```
+docker-compose up -d theme
+```
+Then execute docker-compose and then access it via http://localhost:port.
+Once everything is done, you can edit the file as you normally would,git etc.
+
+
 ## Usage
 
 This feed is enabled by default. Your feeds.conf.default (or feeds.conf) should contain a line like:
