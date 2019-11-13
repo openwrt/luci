@@ -217,7 +217,7 @@ return L.view.extend({
 	load: function() {
 		return fs.lines('/etc/dropbear/authorized_keys').then(function(lines) {
 			return lines.filter(function(line) {
-				return line.match(/^ssh-/) != null;
+				return line.match(/^(ssh-rsa|ssh-dss|ssh-ed25519|ecdsa-sha2)\b/) != null;
 			});
 		});
 	},
