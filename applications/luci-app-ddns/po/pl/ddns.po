@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: luci-app-ddns 2.4.0-1\n"
 "POT-Creation-Date: 2016-01-30 11:07+0100\n"
-"PO-Revision-Date: 2019-11-07 17:59+0000\n"
-"Last-Translator: Alojzy Patatojda <vitek18@interia.pl>\n"
+"PO-Revision-Date: 2019-11-13 13:07+0000\n"
+"Last-Translator: Marcin Net <marcin.net@linux.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsddns/pl/>\n"
 "Language: pl\n"
@@ -18,10 +18,10 @@ msgstr ""
 msgid "\"../\" not allowed in path for Security Reason."
 msgstr ""
 
-#: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:294
-#: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:323
-msgid "Add new services..."
-msgstr ""
+#: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:562
+#: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:591
+msgid "-- custom --"
+msgstr "-- własne --"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:443
 msgid "Advanced Settings"
@@ -63,7 +63,12 @@ msgstr ""
 msgid "Check Interval"
 msgstr ""
 
-#: applications/luci-app-ddns/htdocs/luci-static/resources/view/status/include/70_ddns.js:26
+#: applications/luci-app-ddns/luasrc/view/ddns/system_status.htm:55
+msgid "Collecting data..."
+msgstr "Trwa zbieranie danych..."
+
+#: applications/luci-app-ddns/luasrc/model/cbi/ddns/overview.lua:102
+#: applications/luci-app-ddns/luasrc/view/ddns/system_status.htm:48
 msgid "Configuration"
 msgstr "Konfiguracja"
 
@@ -213,8 +218,12 @@ msgstr ""
 msgid "Event Network"
 msgstr ""
 
-#: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:654
-msgid "Example for IPv4"
+#: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:1295
+msgid "File"
+msgstr "Plik"
+
+#: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:469
+msgid "File not found"
 msgstr ""
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:655
@@ -303,7 +312,13 @@ msgstr ""
 msgid "IPv6-Address"
 msgstr "Adres IPv6"
 
-#: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:977
+#: applications/luci-app-ddns/luasrc/model/cbi/ddns/global.lua:114
+msgid "If both cURL and GNU Wget are installed, Wget is used by default."
+msgstr ""
+"Jeśli zainstalowano jednocześnie cURL i GNU Wget, Wget jest używany "
+"domyślnie."
+
+#: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:272
 msgid ""
 "If Wget and cURL package are installed, Wget is used for communication by "
 "default."
@@ -312,10 +327,14 @@ msgstr ""
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:450
 msgid "If this service section is disabled it could not be started."
 msgstr ""
+"Jeśli korzystasz z bezpiecznej komunikacji, powinieneś zweryfikować "
+"certyfikaty serwera!"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:284
 msgid "If using secure communication you should verify server certificates!"
 msgstr ""
+"Jeśli chcesz wysyłać aktualizacje dla IPv4 i IPv6 musisz zdefiniować dwie "
+"oddzielne konfiguracje tj. 'myddns_ipv4' i 'myddns_ipv6'"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:216
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:230
@@ -323,18 +342,18 @@ msgstr ""
 msgid ""
 "In some versions cURL/libcurl in OpenWrt is compiled without proxy support."
 msgstr ""
+"W niektórych wersjach cURL/libcurl w OpenWrt jest kompilowany bez obsługi "
+"proxy."
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:774
 msgid "Info"
 msgstr "Informacja"
 
-#: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:150
-msgid "Information"
-msgstr ""
-
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:286
 msgid "Install 'ca-certificates' package or needed certificates"
 msgstr ""
+"Zainstaluj pakiet 'ca-certificates' lub potrzebne certyfikaty ręcznie do "
+"katalogu domyślnego /etc/ssl/certs"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:609
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:662
@@ -344,6 +363,8 @@ msgstr "Interfejs"
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:822
 msgid "Interval to force updates send to DDNS Provider"
 msgstr ""
+"Częstotliwość sprawdzania zmiany IP<br />Wartości poniżej 5 min. == 300 "
+"sekund nie jest obsługiwane"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:812
 msgid "Interval unit to check for changed IP"
@@ -356,22 +377,24 @@ msgstr ""
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:926
 msgid "It is NOT recommended for casual users to change settings on this page."
 msgstr ""
+"NIE jest zalecane, aby zwykli użytkownicy zmieniali ustawienia na tej "
+"stronie."
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:411
 msgid "Last Update"
-msgstr ""
+msgstr "Ostatnia aktualizacja"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:445
 msgid "Log File Viewer"
-msgstr ""
+msgstr "Przeglądarka plików dziennika"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:957
 msgid "Log directory"
-msgstr ""
+msgstr "Katalog dzienników (logów)"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:969
 msgid "Log length"
-msgstr ""
+msgstr "Długość dziennika"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:781
 msgid "Log to file"
@@ -379,7 +402,7 @@ msgstr ""
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:768
 msgid "Log to syslog"
-msgstr ""
+msgstr "Loguj do logu systemowego (syslog)"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:394
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:458
@@ -387,10 +410,9 @@ msgstr ""
 msgid "Lookup Hostname"
 msgstr ""
 
-#: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:311
-#: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:388
-msgid "Name"
-msgstr ""
+#: applications/luci-app-ddns/luasrc/controller/ddns.lua:101
+msgid "NOT installed"
+msgstr "Nie zainstalowany"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:224
 msgid ""
@@ -448,10 +470,9 @@ msgstr ""
 msgid "Non-public and by default blocked IP's"
 msgstr ""
 
-#: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:92
-#: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:433
-msgid "Not Running"
-msgstr ""
+#: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:1284
+msgid "Notice"
+msgstr "Spostrzeżenie"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:775
 msgid "Notice"
@@ -561,10 +582,11 @@ msgstr ""
 msgid "Run once"
 msgstr ""
 
-#: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:103
-#: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:436
-msgid "Running"
-msgstr ""
+#: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:667
+#: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:717
+#: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:981
+msgid "Script"
+msgstr "Skrypt"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:610
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:672
@@ -681,9 +703,11 @@ msgstr ""
 msgid "Values below 5 minutes == 300 seconds are not supported"
 msgstr ""
 
-#: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:841
-msgid "Values lower 'Check Interval' except '0' are not supported"
-msgstr ""
+#: applications/luci-app-ddns/luasrc/controller/ddns.lua:95
+#: applications/luci-app-ddns/luasrc/controller/ddns.lua:97
+#: applications/luci-app-ddns/luasrc/controller/ddns.lua:100
+msgid "Version"
+msgstr "Wersja"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:13
 msgid "Verify"
