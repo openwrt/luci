@@ -17,6 +17,7 @@ limitations under the License.
 #define _GNU_SOURCE
 
 #include <math.h>
+#include <stdint.h>
 #include <stdbool.h>
 #include <json-c/json.h>
 
@@ -138,6 +139,7 @@ static int json_parse_chunk(lua_State *L)
 
 static void _json_to_lua(lua_State *L, struct json_object *obj)
 {
+	int64_t v;
 	int n;
 
 	switch (json_object_get_type(obj))
@@ -165,7 +167,12 @@ static void _json_to_lua(lua_State *L, struct json_object *obj)
 		break;
 
 	case json_type_int:
-		lua_pushinteger(L, json_object_get_int(obj));
+		v = json_object_get_int64(obj);
+		if (sizeof(lua_Integer) > sizeof(int32_t) ||
+		    (v >= INT32_MIN && v <= INT32_MAX))
+			lua_pushinteger(L, (lua_Integer)v);
+		else
+			lua_pushnumber(L, (lua_Number)v);
 		break;
 
 	case json_type_double:
