@@ -385,6 +385,7 @@ function initNetworkState(refresh) {
 					type:     dev.type,
 					mtu:      dev.mtu,
 					qlen:     dev.qlen,
+					wireless: dev.wireless,
 					ipaddrs:  [],
 					ip6addrs: []
 				};
@@ -1148,7 +1149,10 @@ Network = L.Class.extend(/** @lends LuCI.Network.prototype */ {
 				if (devices.hasOwnProperty(ifname))
 					continue;
 
-				if (isIgnoredIfname(ifname) || isVirtualIfname(ifname) || isWifiIfname(ifname))
+				if (isIgnoredIfname(ifname) || isWifiIfname(ifname))
+					continue;
+
+				if (_state.netdevs[ifname].wireless)
 					continue;
 
 				devices[ifname] = this.instantiateDevice(ifname);
