@@ -3,7 +3,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=Network Shares - CIFSD CIFS/SMB kernel fileserver
-LUCI_DEPENDS:=+cifsd-tools
+LUCI_DEPENDS:=+cifsd-tools @BROKEN
 
 include ../../luci.mk
 
