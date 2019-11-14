@@ -181,7 +181,7 @@ function _wifi_iface(x)
 			return true
 		end
 	end
-	return false
+	return (nfs.access("/sys/class/net/%s/phy80211" % x) == true)
 end
 
 local function _wifi_iwinfo_by_ifname(ifname, force_phy_only)
