@@ -321,16 +321,16 @@ static struct {
 } lease_state = { };
 
 struct lease_entry {
-	int af;
+	int af, n_addr;
 	char buf[512];
 	int32_t expire;
 	struct ether_addr mac;
+	char *hostname;
+	char *duid;
 	union {
 		struct in_addr in;
 		struct in6_addr in6;
-	} addr;
-	char *hostname;
-	char *duid;
+	} addr[10];
 };
 
 static char *
@@ -449,12 +449,17 @@ lease_next(void)
 
 			p = strtok(NULL, " \t\n");
 
-			if (p && inet_pton(AF_INET6, p, &e.addr.in6))
+			if (p && inet_pton(AF_INET6, p, &e.addr[0].in6)) {
 				e.af = AF_INET6;
-			else if (p && inet_pton(AF_INET, p, &e.addr.in))
+				e.n_addr = 1;
+			}
+			else if (p && inet_pton(AF_INET, p, &e.addr[0].in)) {
 				e.af = AF_INET;
-			else
+				e.n_addr = 1;
+			}
+			else {
 				continue;
+			}
 
 			if (!ea && e.af != AF_INET6)
 				continue;
@@ -523,10 +528,12 @@ lease_next(void)
 			strtok(NULL, " \t\n"); /* id */
 			strtok(NULL, " \t\n"); /* length */
 
-			p = strtok(NULL, "/ \t\n"); /* ip */
-
-			if (!p || !inet_pton(e.af, p, &e.addr.in6))
-				continue;
+			for (e.n_addr = 0, p = strtok(NULL, "/ \t\n");
+			     e.n_addr < ARRAY_SIZE(e.addr) && p != NULL;
+			     p = strtok(NULL, "/ \t\n")) {
+				if (inet_pton(e.af, p, &e.addr[e.n_addr].in6))
+					e.n_addr++;
+			}
 
 			ea = duid2ea(e.duid);
 
@@ -1340,11 +1347,11 @@ rpc_luci_get_host_hints_uci(struct reply_context *rctx)
 		if (!hint)
 			continue;
 
-		if (lease->af == AF_INET && hint->ip.s_addr == 0)
-			hint->ip = lease->addr.in;
-		else if (lease->af == AF_INET6 &&
+		if (lease->af == AF_INET && lease->n_addr && hint->ip.s_addr == 0)
+			hint->ip = lease->addr[0].in;
+		else if (lease->af == AF_INET6 && lease->n_addr &&
 		         !memcmp(&hint->ip6, &empty, sizeof(empty)))
-			hint->ip6 = lease->addr.in6;
+			hint->ip6 = lease->addr[0].in6;
 
 		if (lease->hostname && !hint->hostname)
 			hint->hostname = strdup(lease->hostname);
@@ -1592,7 +1599,8 @@ rpc_luci_get_duid_hints(struct ubus_context *ctx, struct ubus_object *obj,
 	struct ether_addr empty = {};
 	struct lease_entry *lease;
 	struct avl_tree avl;
-	void *o;
+	void *o, *a;
+	int n;
 
 	avl_init(&avl, avl_strcmp, false, NULL);
 	blob_buf_init(&blob, 0);
@@ -1615,8 +1623,17 @@ rpc_luci_get_duid_hints(struct ubus_context *ctx, struct ubus_object *obj,
 
 		o = blobmsg_open_table(&blob, lease->duid);
 
-		inet_ntop(AF_INET6, &lease->addr.in6, s, sizeof(s));
+		inet_ntop(AF_INET6, &lease->addr[0].in6, s, sizeof(s));
 		blobmsg_add_string(&blob, "ip6addr", s);
+
+		a = blobmsg_open_array(&blob, "ip6addrs");
+
+		for (n = 0; n < lease->n_addr; n++) {
+			inet_ntop(AF_INET6, &lease->addr[n].in6, s, sizeof(s));
+			blobmsg_add_string(&blob, NULL, s);
+		}
+
+		blobmsg_close_array(&blob, a);
 
 		if (lease->hostname)
 			blobmsg_add_string(&blob, "hostname", lease->hostname);
@@ -1728,7 +1745,8 @@ rpc_luci_get_dhcp_leases(struct ubus_context *ctx, struct ubus_object *obj,
 	struct lease_entry *lease;
 	char s[INET6_ADDRSTRLEN];
 	int af, family = 0;
-	void *a, *o;
+	void *a, *a2, *o;
+	int n;
 
 	blobmsg_parse(rpc_get_leases_policy, __RPC_L_MAX, tb,
 	              blob_data(msg), blob_len(msg));
@@ -1781,9 +1799,20 @@ rpc_luci_get_dhcp_leases(struct ubus_context *ctx, struct ubus_object *obj,
 			if (lease->duid)
 				blobmsg_add_string(&blob, "duid", lease->duid);
 
-			inet_ntop(lease->af, &lease->addr.in6, s, sizeof(s));
+			inet_ntop(lease->af, &lease->addr[0].in6, s, sizeof(s));
 			blobmsg_add_string(&blob, (af == AF_INET) ? "ipaddr" : "ip6addr",
 			                   s);
+
+			if (af == AF_INET6) {
+				a2 = blobmsg_open_array(&blob, "ip6addrs");
+
+				for (n = 0; n < lease->n_addr; n++) {
+					inet_ntop(lease->af, &lease->addr[n].in6, s, sizeof(s));
+					blobmsg_add_string(&blob, NULL, s);
+				}
+
+				blobmsg_close_array(&blob, a2);
+			}
 
 			blobmsg_close_table(&blob, o);
 		}
