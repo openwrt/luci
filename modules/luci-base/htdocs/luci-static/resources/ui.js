@@ -3839,7 +3839,7 @@ return L.Class.extend(/** @lends LuCI.ui.prototype */ {
 				var call = function(r, data, duration) {
 					if (r.status === 204) {
 						L.ui.changes.displayStatus('warning', [
-							E('h4', _('Configuration has been rolled back!')),
+							E('h4', _('Configuration changes have been rolled back!')),
 							E('p', _('The device could not be reached within %d seconds after applying the pending changes, which caused the configuration to be rolled back for safety reasons. If you believe that the configuration changes are correct nonetheless, perform an unchecked configuration apply. Alternatively, you can dismiss this warning and edit changes before attempting to apply again, or revert all pending changes to keep the currently working configuration state.').format(L.env.apply_rollback)),
 							E('div', { 'class': 'right' }, [
 								E('button', {
@@ -3901,7 +3901,7 @@ return L.Class.extend(/** @lends LuCI.ui.prototype */ {
 
 					L.ui.changes.setIndicator(0);
 					L.ui.changes.displayStatus('notice',
-						E('p', _('Configuration has been applied.')));
+						E('p', _('Configuration changes applied.')));
 
 					window.clearTimeout(tt);
 					window.setTimeout(function() {
@@ -3926,7 +3926,7 @@ return L.Class.extend(/** @lends LuCI.ui.prototype */ {
 				var now = Date.now();
 
 				L.ui.changes.displayStatus('notice spinning',
-					E('p', _('Waiting for configuration to get applied… %ds')
+					E('p', _('Applying configuration changes… %ds')
 						.format(Math.max(Math.floor((deadline - Date.now()) / 1000), 0))));
 
 				if (now >= deadline)
