@@ -31,24 +31,24 @@ return L.Class.extend({
 		    swap = L.isObject(systeminfo.swap) ? systeminfo.swap : {};
 
 		var fields = [
-			_('Total Available'), (mem.available) ? mem.available : (mem.total && mem.free && mem.buffered) ? mem.free + mem.buffered : null,
-			_('Free'),            (mem.total && mem.free) ? mem.free : null,
-			_('Buffered'),        (mem.total && mem.buffered) ? mem.buffered : null
+			_('Total Available'), (mem.available) ? mem.available : (mem.total && mem.free && mem.buffered) ? mem.free + mem.buffered : null, mem.total,
+			_('Free'),            (mem.total && mem.free) ? mem.free : null, mem.total,
+			_('Buffered'),        (mem.total && mem.buffered) ? mem.buffered : null, mem.total
 		];
 
 		if (mem.cached)
-			fields.push(_('Cached'), mem.cached);
+			fields.push(_('Cached'), mem.cached, mem.total);
 
 		if (swap.total > 0)
-			fields.push(_('Swap free'), swap.free);
+			fields.push(_('Swap free'), swap.free, swap.total);
 
 		var table = E('div', { 'class': 'table' });
 
-		for (var i = 0; i < fields.length; i += 2) {
+		for (var i = 0; i < fields.length; i += 3) {
 			table.appendChild(E('div', { 'class': 'tr' }, [
 				E('div', { 'class': 'td left', 'width': '33%' }, [ fields[i] ]),
 				E('div', { 'class': 'td left' }, [
-					(fields[i + 1] != null) ? progressbar(fields[i + 1], mem.total, true) : '?'
+					(fields[i + 1] != null) ? progressbar(fields[i + 1], fields[i + 2], true) : '?'
 				])
 			]));
 		}
