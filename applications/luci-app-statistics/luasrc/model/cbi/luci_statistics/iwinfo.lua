@@ -12,7 +12,7 @@ s = m:section(NamedSection, "collectd_iwinfo", "luci_statistics")
 o = s:option(Flag, "enable", translate("Enable this plugin"))
 o.default = 0
 
-o = s:option(Value, "Interfaces", translate("Monitor interfaces"),
+o = s:option(DynamicList, "Interfaces", translate("Monitor interfaces"),
 	translate("Leave unselected to automatically determine interfaces to monitor."))
 o.template = "cbi/network_ifacelist"
 o.widget   = "checkbox"
