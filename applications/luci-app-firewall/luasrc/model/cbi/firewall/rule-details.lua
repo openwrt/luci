@@ -190,7 +190,7 @@ else
 		name = translate("(Unnamed Rule)")
 	end
 
-	m.title = "%s - %s" %{ translate("Firewall - Traffic Rules"), name }
+	m.title = "%s - %s" %{ translate("Firewall - Traffic Rules"), luci.util.pcdata(name) }
 
 
 	s = m:section(NamedSection, arg[1], "rule", "")
