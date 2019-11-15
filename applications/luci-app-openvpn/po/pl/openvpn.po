@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2019-11-13 13:06+0000\n"
+"PO-Revision-Date: 2019-11-13 23:04+0000\n"
 "Last-Translator: Marcin Net <marcin.net@linux.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsopenvpn/pl/>\n"
@@ -36,7 +36,7 @@ msgstr "Dodaj trasę po nawiązaniu połączenia"
 
 #: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:92
 msgid "Add template based configuration"
-msgstr ""
+msgstr "Dodaj konfigurację opartą na szablonie"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:746
 msgid "Additional authentication over TLS"
@@ -197,8 +197,10 @@ msgid "Don't cache --askpass or --auth-user-pass passwords"
 msgstr "Nie cacheuj haseł --askpass lub --auth-user-pass"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:244
+#, fuzzy
 msgid "Don't drop incoming tun packets with same destination as host"
 msgstr ""
+"Nie porzucaj przychodzących pakietów tun tego samego przeznaczenia co host"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:386
 msgid "Don't inherit global push options"
@@ -210,7 +212,7 @@ msgstr "Nie zapisuj czasu w logu"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:240
 msgid "Don't pull routes automatically"
-msgstr ""
+msgstr "Nie ciągnij tras automatycznie"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:331
 msgid "Don't re-read key on restart"
@@ -256,7 +258,7 @@ msgstr "Włącz TLS i przyjmij rolę serwera"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:164
 msgid "Enable a compression algorithm"
-msgstr ""
+msgstr "Włącz algorytm kompresji"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:277
 msgid "Enable internal datagram fragmentation"
@@ -273,6 +275,7 @@ msgstr "Włączone"
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:750
 msgid "Encrypt and authenticate all control channel packets with the key"
 msgstr ""
+"Szyfruj i uwierzytelnij wszystkie pakiety kanału kontrolnego za pomocą klucza"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:622
 msgid "Encryption cipher for packets"
@@ -338,7 +341,7 @@ msgstr "Instancja \"%s\""
 #: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:18
 #: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:46
 msgid "Instance with that name already exists!"
-msgstr ""
+msgstr "Wystąpienie z tą nazwą już istnieje!"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:335
 msgid "Keep local IP address on restart"
@@ -392,7 +395,7 @@ msgstr "Liczba linii w pliku dziennika historii"
 
 #: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:95
 msgid "OVPN configuration file upload"
-msgstr ""
+msgstr "Przesyłanie pliku konfiguracyjnego OVPN"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:762
 msgid "Only accept connections from given X509 name"
@@ -450,11 +453,11 @@ msgstr "Proszę edytować ten plik bezpośrednio w sesji terminala."
 
 #: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:51
 msgid "Please select a valid OVPN config file to upload!"
-msgstr ""
+msgstr "Proszę wybrać prawidłowy plik konfiguracyjny OVPN do przesłania!"
 
 #: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:23
 msgid "Please select a valid VPN template!"
-msgstr ""
+msgstr "Proszę wybrać prawidłowy szablon VPN!"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:160
 msgid "Policy level over usage of external programs and scripts"
@@ -581,16 +584,15 @@ msgstr ""
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-file.lua:40
 msgid "Section to modify the OVPN config file (%s)"
-msgstr ""
+msgstr "Sekcja modyfikacji pliku konfiguracyjnego OVPN (%s)"
 
 #: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:85
 msgid "Select template ..."
-msgstr ""
+msgstr "Wybierz szablon ..."
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:495
-#, fuzzy
 msgid "Send notification to peer on disconnect"
-msgstr "Wyślij zgłoszenie o rozłączeniu do peer"
+msgstr "Wyślij powiadomienie do peera po rozłączeniu"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:35
 msgid "Set GID to group"
@@ -605,9 +607,8 @@ msgid "Set UID to user"
 msgstr "Ustaw UID dla użytkownika"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:396
-#, fuzzy
 msgid "Set aside a pool of subnets"
-msgstr "Odłożyć na bok pulę podsieci"
+msgstr "Odłóż na bok pulę podsieci"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:535
 msgid "Set extended HTTP proxy options"
@@ -623,12 +624,10 @@ msgid "Set size of real and virtual address hash tables"
 msgstr "Ustaw rozmiar rzeczywistych i wirtualnych adresów tablicy hash"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:291
-#, fuzzy
 msgid "Set the TCP/UDP receive buffer size"
-msgstr "Ustaw rozmiar buforu wysyłania TCP/UDP"
+msgstr "Ustaw rozmiar bufora odbioru TCP/UDP"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:287
-#, fuzzy
 msgid "Set the TCP/UDP send buffer size"
 msgstr "Ustaw rozmiar buforu wysyłania TCP/UDP"
 
