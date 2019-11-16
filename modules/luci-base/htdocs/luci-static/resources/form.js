@@ -1103,7 +1103,7 @@ var CBITableSection = CBITypedSection.extend({
 
 				trEl.appendChild(E('div', {
 					'class': 'th cbi-section-table-cell',
-					'data-type': opt.__name__
+					'data-widget': opt.__name__
 				}));
 
 				if (opt.width != null)
@@ -1139,7 +1139,7 @@ var CBITableSection = CBITypedSection.extend({
 
 				trEl.appendChild(E('div', {
 					'class': 'th cbi-section-table-cell',
-					'data-type': opt.__name__
+					'data-widget': opt.__name__
 				}, opt.description));
 
 				if (opt.width != null)
@@ -1444,7 +1444,7 @@ var CBIGridSection = CBITableSection.extend({
 			'data-title': (title != '') ? title : null,
 			'data-description': (descr != '') ? descr : null,
 			'data-name': opt.option,
-			'data-type': opt.typename || opt.__name__
+			'data-widget': opt.typename || opt.__name__
 		}, (value != null) ? value : E('em', _('none')));
 	},
 
@@ -1586,7 +1586,7 @@ var CBIValue = CBIAbstractValue.extend({
 				'data-title': (title != '') ? title : null,
 				'data-description': this.stripTags(this.description).trim(),
 				'data-name': this.option,
-				'data-type': this.typename || (this.template ? this.template.replace(/^.+\//, '') : null) || this.__name__
+				'data-widget': this.typename || (this.template ? this.template.replace(/^.+\//, '') : null) || this.__name__
 			}, E('div', {
 				'id': 'cbi-%s-%s-%s'.format(config_name, section_id, this.option),
 				'data-index': option_index,
@@ -1602,7 +1602,7 @@ var CBIValue = CBIAbstractValue.extend({
 				'data-depends': depend_list,
 				'data-field': this.cbid(section_id),
 				'data-name': this.option,
-				'data-type': this.typename || (this.template ? this.template.replace(/^.+\//, '') : null) || this.__name__
+				'data-widget': this.typename || (this.template ? this.template.replace(/^.+\//, '') : null) || this.__name__
 			});
 
 			if (this.last_child)
