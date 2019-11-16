@@ -22,11 +22,11 @@ Currently supported dual-partition devices include:
 - Linksys WRT32X
 - ZyXEL NBG6817
 
-If you're interested in having your device supported, please post in [OpenWrt Forum Support Thread](https://forum.openwrt.org/t/web-ui-to-reboot-to-another-partition-dual-partition-routers/3423).
+If your device is not in the list above, however it is a [dual-firmware device](https://openwrt.org/tag/dual_firmware?do=showtag&tag=dual_firmware) and you're interested in having your device supported, please post in [OpenWrt Forum Support Thread](https://forum.openwrt.org/t/web-ui-to-reboot-to-another-partition-dual-partition-routers/3423).
 
 ## Screenshot (luci-app-advanced-reboot)
 
-![screenshot](https://raw.githubusercontent.com/stangri/openwrt_packages/master/screenshots/luci-app-advanced-reboot/screenshot01.png "screenshot")
+![screenshot](https://raw.githubusercontent.com/stangri/openwrt_packages/master/screenshots/luci-app-advanced-reboot/screenshot02.png "screenshot")
 
 ## How to install
 
