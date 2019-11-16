@@ -228,11 +228,27 @@ local methods = {
 			res['has_bindnet'] = has_curl() or has_wgetssl() or false
 
 			local function has_bindhost()
-				if (sys.call( [[which host >/dev/null 2>&1]] ) == 0) then return true end
-				if (sys.call( [[which khost >/dev/null 2>&1]] ) == 0) then return true end
-				if (sys.call( [[which drill >/dev/null 2>&1]] ) == 0) then return true end
+				if cache['has_bindhost'] then return cache['has_bindhost'] end
+				local res = (sys.call( [[which host >/dev/null 2>&1]] ) == 0)
+				if res then
+					cache['has_bindhost'] = res
+					return true
+				end
+				res = (sys.call( [[which khost >/dev/null 2>&1]] ) == 0)
+				if res then
+					cache['has_bindhost'] = res
+					return true
+				end
+				res = (sys.call( [[which drill >/dev/null 2>&1]] ) == 0)
+				if res then
+					cache['has_bindhost'] = res
+					return true
+				end
+				cache['has_bindhost'] = false
 				return false
 			end
+
+			res['has_bindhost'] = cache['has_bindhost'] or has_bindhost() or false
 
 			local function has_hostip()
 				return (sys.call( [[which hostip >/dev/null 2>&1]] ) == 0)
@@ -242,7 +258,7 @@ local methods = {
 				return (sys.call( [[which nslookup >/dev/null 2>&1]] ) == 0)
 			end
 
-			res['has_dnsserver'] = has_bindhost() or has_hostip() or has_nslookup() or false
+			res['has_dnsserver'] = cache['has_bindhost'] or has_nslookup() or has_hostip() or has_bindhost() or false
 
 			local function check_certs()
 				local _, v = fs.glob("/etc/ssl/certs/*.crt")
