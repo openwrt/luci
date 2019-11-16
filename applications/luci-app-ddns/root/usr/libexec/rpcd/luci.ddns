@@ -246,7 +246,7 @@ local methods = {
 
 			local function check_certs()
 				local _, v = fs.glob("/etc/ssl/certs/*.crt")
-				if ( v == 0 ) then _, v = NXFS.glob("/etc/ssl/certs/*.pem") end
+				if ( v == 0 ) then _, v = fs.glob("/etc/ssl/certs/*.pem") end
 				return (v > 0)
 			end
 
