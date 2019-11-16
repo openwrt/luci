@@ -52,7 +52,7 @@ function render_titles()
 	for i, k in ipairs(self.children) do
 		if not k.optional then
 			%><div class="th cbi-section-table-cell"<%=
-				width(k) .. attr('data-type', k.typename) %>><%
+				width(k) .. attr('data-widget', k.typename) %>><%
 
 			if k.titleref then
 				%><a title="<%=self.titledesc or translate('Go to relevant configuration page')%>" class="cbi-title-ref" href="<%=k.titleref%>"><%
@@ -88,7 +88,7 @@ function render_descriptions()
 	for i, k in ipairs(self.children) do
 		if not k.optional then
 			%><div class="th cbi-section-table-cell"<%=
-				width(k) .. attr("data-type", k.typename) %>><%
+				width(k) .. attr("data-widget", k.typename) %>><%
 
 			write(k.description)
 
