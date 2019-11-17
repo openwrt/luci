@@ -640,7 +640,7 @@ return L.view.extend({
 
 		// ip_network
 
-		o = s.taboption('advanced', widgets.ZoneSelect, 'ip_network', _("Network"),
+		o = s.taboption('advanced', widgets.NetworkSelect, 'ip_network', _("Network"),
 		_("Defines the network to read systems IP-Address from"));
 		o.depends('ip_source','network');
 		o.modalonly = true;
@@ -659,7 +659,7 @@ return L.view.extend({
 
 		// ip_interface
 
-		o = s.taboption('advanced', widgets.ZoneSelect, 'ip_interface', _("Interface"),
+		o = s.taboption('advanced', widgets.DeviceSelect, 'ip_interface', _("Interface"),
 		_("Defines the interface to read systems IP-Address from"));
 
 		o.modalonly = true;
@@ -678,7 +678,7 @@ return L.view.extend({
 
 		// interface
 
-		o = s.taboption('advanced', widgets.ZoneSelect, 'interface', _("Event Network"),
+		o = s.taboption('advanced', widgets.DeviceSelect, 'interface', _("Event Network"),
 		_("Network on which the ddns-updater scripts will be started"));
 
 		o.modalonly = true;
