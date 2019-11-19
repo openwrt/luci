@@ -15,6 +15,11 @@ local http = require "luci.http"
 local sys = require "luci.sys"
 local dispatcher = require "luci.dispatcher"
 local uci = require "luci.model.uci".cursor()
+local packageName = "luci-app-advanced-reboot"
+
+function logger(t)
+	util.exec("logger -t " .. packageName .. " '" .. tostring(t) .. "'")
+end
 
 function is_alt_mountable(p1_mtd, p2_mtd)
 	if p1_mtd:sub(1,3) == "mtd" and
@@ -33,11 +38,13 @@ function get_partition_os_info(op_ubi)
 	if fs.access("/etc/os-release") then
 		cp_info = util.trim(util.exec('. /etc/os-release && echo "$PRETTY_NAME"'))
 	end
+	logger(i18n.translate("attempting to mount alternative partition") .. " (mtd" .. tostring(op_ubi) .. ")")
 	alt_partition_unmount(op_ubi)
 	alt_partition_mount(op_ubi)
 	if fs.access("/alt/rom/etc/os-release") then
 		ap_info = util.trim(util.exec('. /alt/rom/etc/os-release && echo "$PRETTY_NAME"'))
 	end
+	logger(i18n.translate("attempting to unmount alternative partition") .. " (mtd" .. tostring(op_ubi) .. ")")
 	alt_partition_unmount(op_ubi)
 	return cp_info, ap_info
 end
@@ -58,10 +65,12 @@ function alt_partition_mount(op_ubi)
 end
 
 function alt_partition_unmount(op_ubi)
+	local mtdCount = tonumber(util.exec("ubinfo | grep 'Present UBI devices' | grep -c ','"))
+	mtdCount = mtdCount and mtdCount + 1 or 10
 --	util.exec("[ -d /alt/firmware ] && umount /alt/firmware")
 	util.exec("[ -d /alt/overlay ] && umount /alt/overlay")
 	util.exec("[ -d /alt/rom ] && umount /alt/rom")
-	for i = 0, 10 do
+	for i = 0, mtdCount do
 		if not fs.access("/sys/devices/virtual/ubi/ubi" .. tostring(i) .. "/mtd_num") then break end
 		ubi_mtd =  tonumber(util.trim(util.exec("cat /sys/devices/virtual/ubi/ubi" .. i .. "/mtd_num")))
 		if ubi_mtd and ubi_mtd == op_ubi then
@@ -266,7 +275,6 @@ function action_altreboot()
 end
 
 function action_poweroff()
-	local uci = require "luci.model.uci".cursor()
 	if http.formvalue("cancel") then
 		http.redirect(dispatcher.build_url('admin/system/advanced_reboot'))
 		return
