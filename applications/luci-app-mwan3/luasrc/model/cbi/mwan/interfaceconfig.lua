@@ -59,6 +59,7 @@ end
 httping_ssl = mwan_interface:option(Flag, "httping_ssl", translate("Enable ssl tracking"),
 	translate("Enables https tracking on ssl port 443"))
 httping_ssl:depends("track_method", "httping")
+httping_ssl.default = httping_ssl.enabled
 
 reliability = mwan_interface:option(Value, "reliability", translate("Tracking reliability"),
 	translate("Acceptable values: 1-100. This many Tracking IP addresses must respond for the link to be deemed up"))
