@@ -3,7 +3,8 @@
 		"description": "Grant access to LuCI app cifsd",
 		"read": {
 			"file": {
-				"/etc/cifs/smb.conf.template": [ "read" ]
+				"/etc/cifs/smb.conf.template": [ "read" ],
+				"/usr/sbin/cifsd": [ "exec" ]
 			}
 		},
 		"write": {
