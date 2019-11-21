@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2019-11-17 11:07+0000\n"
-"Last-Translator: Marcin Net <marcin.net@linux.pl>\n"
+"PO-Revision-Date: 2019-11-20 17:08+0000\n"
+"Last-Translator: Michal L <michalrmsmi@wp.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsadblock/pl/>\n"
 "Language: pl\n"
@@ -16,9 +16,8 @@ msgid ""
 "<b>Caution:</b> To prevent OOM exceptions on low memory devices with less "
 "than 64 MB free RAM, please only select a few of them!"
 msgstr ""
-"<b>Uwaga:</b> Aby zapobiec wyjątkom braku pamięci (OOM) na urządzeniach o "
-"małej pamięci z mniej niż 64 MB wolnej pamięci RAM, wybierz tylko kilka z "
-"nich!"
+"<b>Uwaga:</b> Aby uniknąć błędów braku pamięci (OOM) na urządzeniach o małej "
+"pamięci, z mniej niż 64 MB wolnej pamięci RAM, wybierz tylko kilka z nich!"
 
 #: applications/luci-app-adblock/luasrc/view/adblock/report.htm:86
 #: applications/luci-app-adblock/luasrc/view/adblock/report.htm:89
@@ -92,8 +91,8 @@ msgid ""
 "Choose 'none' to disable automatic startups, 'timed' to use a classic "
 "timeout (default 30 sec.) or select another trigger interface."
 msgstr ""
-"Wybierz 'brak', aby wyłączyć automatyczne uruchamianie, 'timed', aby użyć "
-"klasycznego timeout (domyślnie 30 sek.) lub wybierz inny interfejs "
+"Wybierz 'none', aby wyłączyć automatyczne uruchamianie, 'timed', aby użyć "
+"klasycznego limitu czasu (domyślnie 30 sek.) lub wybierz inny interfejs "
 "wyzwalacza."
 
 #: applications/luci-app-adblock/luasrc/view/adblock/report.htm:83
@@ -142,7 +141,7 @@ msgstr "Resetowanie pliku DNS"
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:197
 msgid "DNS Inotify"
-msgstr "DNS Inotify"
+msgstr "Powiadomienie DNS"
 
 #: applications/luci-app-adblock/luasrc/controller/adblock.lua:20
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:134
@@ -231,15 +230,15 @@ msgstr "Temat E-maila"
 
 #: applications/luci-app-adblock/luasrc/controller/adblock.lua:24
 msgid "Edit Blacklist"
-msgstr "Edytowanie czarnej listy"
+msgstr "Edycja czarnej listy"
 
 #: applications/luci-app-adblock/luasrc/controller/adblock.lua:26
 msgid "Edit Configuration"
-msgstr "Edytowanie konfiguracji"
+msgstr "Edycja konfiguracji"
 
 #: applications/luci-app-adblock/luasrc/controller/adblock.lua:25
 msgid "Edit Whitelist"
-msgstr "Edytowanie białej listy"
+msgstr "Edycja białej listy"
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:20
 msgid "Enable Adblock"
@@ -354,7 +353,7 @@ msgstr ""
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:44
 msgid "List of supported and fully pre-configured download utilities."
-msgstr ""
+msgstr "Lista obsługiwanych i wstępnie skonfigurowanych narzędzi do pobierania."
 
 #: applications/luci-app-adblock/luasrc/view/adblock/query.htm:21
 #: applications/luci-app-adblock/luasrc/view/adblock/report.htm:221
@@ -368,7 +367,7 @@ msgstr "Lokalne porty FW/DNS"
 
 #: applications/luci-app-adblock/luasrc/controller/adblock.lua:22
 msgid "Logfile"
-msgstr "Plik dziennika"
+msgstr "Rejestr dziennika"
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:109
 msgid "Low Priority Service"
@@ -377,6 +376,8 @@ msgstr "Usługa niskopriorytetowa"
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:256
 msgid "Mail profile used in 'msmtp' for adblock notification E-Mails."
 msgstr ""
+"Profil poczty używany przez 'msmtp' do wysyłania wiadomości e-mail z "
+"powiadomieniem."
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:120
 msgid "Max. Download Queue"
@@ -424,20 +425,19 @@ msgstr "Proszę edytować ten plik bezpośrednio w sesji terminala."
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:154
 msgid "Please note: this needs manual 'msmtp' package installation and setup."
-msgstr "Uwaga: to wymaga ręcznej instalacji i konfiguracji pakietu 'msmtp'."
+msgstr "Uwaga: wymaga to ręcznej instalacji i konfiguracji pakietu 'msmtp'."
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:136
 msgid "Please note: this needs manual 'tcpdump-mini' package installation."
-msgstr "Uwaga: to wymaga ręcznej instalacji pakietu 'tcpdump-mini'."
+msgstr "Uwaga: wymaga to ręcznej instalacji pakietu 'tcpdump-mini'."
 
 #: applications/luci-app-adblock/luasrc/view/adblock/query.htm:52
 msgid "Query"
 msgstr "Zapytanie"
 
 #: applications/luci-app-adblock/luasrc/controller/adblock.lua:27
-#, fuzzy
 msgid "Query domains"
-msgstr "Sprawdzenie domeny"
+msgstr "Domeny zapytań"
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:261
 msgid ""
@@ -476,31 +476,31 @@ msgstr "Odśwież raport"
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:231
 msgid "Report Chunk Count"
-msgstr ""
+msgstr "Zgłoś liczbę fragmentów"
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:238
 msgid "Report Chunk Size"
-msgstr ""
+msgstr "Zgłoś rozmiar fragmentu"
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:139
 msgid "Report Directory"
-msgstr ""
+msgstr "Katalog raportów"
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:208
 msgid "Report Interface"
-msgstr ""
+msgstr "Interfejs raportowania"
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:225
 msgid "Report Listen Port(s)"
-msgstr ""
+msgstr "Raport nasłuchiwania portu(ów)"
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:232
 msgid "Report chunk count used by tcpdump (default '5')."
-msgstr ""
+msgstr "Zgłoś liczbę fragmentów używanych przez tcpdump (domyślnie \"5\")."
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:239
 msgid "Report chunk size used by tcpdump in MB (default '1')."
-msgstr ""
+msgstr "Zgłoś rozmiar fragmentu używanego przez tcpdump w MB (domyślnie \"1\")."
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:209
 msgid ""
@@ -515,10 +515,12 @@ msgid ""
 "Resets the final DNS blockfile 'adb_list.overall' after loading through the "
 "DNS backend."
 msgstr ""
+"Resetuje końcowy plik blokowania DNS 'adb_list.overall' po wczytaniu go "
+"przez backend DNS."
 
 #: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:37
 msgid "Resume"
-msgstr "Podsumowanie"
+msgstr "Wznów"
 
 #: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:149
 msgid "Runtime Information"
@@ -526,7 +528,7 @@ msgstr "Informacja o środowisku uruchomieniowym"
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:84
 msgid "SSL req."
-msgstr "wymagany SSL."
+msgstr "Wymóg SSL"
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/blacklist_tab.lua:27
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/configuration_tab.lua:26
@@ -551,6 +553,8 @@ msgid ""
 "Set the nice level to 'low priority' and the adblock background processing "
 "will take fewer resources from the system."
 msgstr ""
+"Ustawia niski priorytet procesu za pomocą polecenia 'nice', dzięki czemu "
+"przetwarzanie w tle zajmie mniej zasobów systemu."
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:121
 msgid ""
@@ -569,6 +573,8 @@ msgstr ""
 msgid ""
 "Space separated list of reporting port(s) used by tcpdump (default: '53')."
 msgstr ""
+"Rozdzielona spacjami lista portu(ów) używanych przez tcpdump (domyślnie: "
+"'53')."
 
 #: applications/luci-app-adblock/luasrc/view/adblock/report.htm:256
 msgid "Start Date"
@@ -582,7 +588,7 @@ msgstr "Wyzwalacz uruchomienia"
 #: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:48
 #: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:109
 msgid "Suspend"
-msgstr "Zawieszenie"
+msgstr "Zawieś"
 
 #: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:200
 msgid "Suspend / Resume Adblock"
@@ -655,8 +661,8 @@ msgid ""
 "This form allows you to query active block lists for certain domains, e.g. "
 "for whitelisting."
 msgstr ""
-"Formularz ten pozwala na przeszukanie aktywnych list blokowania dla "
-"niektórych domen, np. w celu dodania do białej listy."
+"Formularz ten pozwala na przeszukanie aktywnych list blokowania dla pewnych "
+"domen, np. w celu dodania do białej listy."
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:129
 msgid ""
