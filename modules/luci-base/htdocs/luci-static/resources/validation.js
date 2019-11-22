@@ -535,9 +535,9 @@ var ValidatorFactory = L.Class.extend({
 
 		unique: function(subvalidator, subargs) {
 			var ctx = this,
-			    option = findParent(ctx.field, '[data-type][data-name]'),
+			    option = findParent(ctx.field, '[data-widget][data-name]'),
 			    section = findParent(option, '.cbi-section'),
-			    query = '[data-type="%s"][data-name="%s"]'.format(option.getAttribute('data-type'), option.getAttribute('data-name')),
+			    query = '[data-widget="%s"][data-name="%s"]'.format(option.getAttribute('data-widget'), option.getAttribute('data-name')),
 			    unique = true;
 
 			section.querySelectorAll(query).forEach(function(sibling) {
