@@ -205,9 +205,6 @@ return L.view.extend({
 		o.placeholder = '0.0.0.0/0';
 		o.modalonly = true;
 
-		o = s.taboption('conntrack', form.Flag, 'conntrack', _('Force connection tracking'), _('Prevent the installation of <em>NOTRACK</em> rules which would bypass connection tracking.'));
-		o.modalonly = true;
-
 		o = s.taboption('conntrack', form.Flag, 'masq_allow_invalid', _('Allow "invalid" traffic'), _('Do not install extra rules to reject forwarded traffic with conntrack state <em>invalid</em>. This may be required for complex asymmetric route setups.'));
 		o.modalonly = true;
 
