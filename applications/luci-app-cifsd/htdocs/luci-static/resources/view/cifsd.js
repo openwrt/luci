@@ -8,14 +8,19 @@ return L.view.extend({
 		return Promise.all([
 			L.resolveDefault(fs.stat('/sbin/block'), null),
 			L.resolveDefault(fs.stat('/etc/config/fstab'), null),
+			L.resolveDefault(fs.exec("cifsd", ["-h"]), {}).then(function(res) { return L.toArray((res.stderr || '').match(/version : (\S+ \S+)/))[1] }),
 		]);
 	},
 	render: function(stats) {
-		var m, s, o;
+		var m, s, o, v;
+		v = '';
 
 		m = new form.Map('cifsd', _('Network Shares'));
 
-		s = m.section(form.TypedSection, 'globals');
+		if (stats[2]) {
+			v = 'Version ' + stats[2].trim();
+		}
+		s = m.section(form.TypedSection, 'globals', 'Cifsd ' + v);
 		s.anonymous = true;
 
 		s.tab('general',  _('General Settings'));
@@ -72,7 +77,7 @@ return L.view.extend({
 		o = s.option(form.Flag, 'guest_ok', _('Allow guests'));
 		o.enabled = 'yes';
 		o.disabled = 'no';
-		o.default = 'no';
+		o.default = 'yes';
 
 		o = s.option(form.Flag, 'inherit_owner', _('Inherit owner'));
 		o.enabled = 'yes';
