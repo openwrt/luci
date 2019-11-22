@@ -219,6 +219,7 @@ return view.extend({
 			o = s.taboption('advanced', form.Flag, 'dnsseccheckunsigned',
 				_('DNSSEC check unsigned'),
 				_('Requires upstream supports DNSSEC; verify unsigned domain responses really come from unsigned domains'));
+			o.default = o.enabled;
 			o.optional = true;
 		}
 
