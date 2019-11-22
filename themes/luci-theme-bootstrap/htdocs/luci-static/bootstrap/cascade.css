@@ -452,12 +452,18 @@ select,
 .uneditable-input {
 	display: inline-block;
 	width: 210px;
-	height: 30px;
 	padding: 4px;
 	font-size: 13px;
 	line-height: 18px;
 	border: 1px solid #ccc;
 	border-radius: 3px;
+}
+
+input,
+select,
+.cbi-dropdown:not(.btn):not(.cbi-button),
+.uneditable-input {
+	height: 30px;
 }
 
 .uneditable-input {
@@ -552,10 +558,6 @@ input[type=button], input[type=reset], input[type=submit] {
 select[multiple] {
 	height: inherit;
 	background-color: #fff;
-}
-
-textarea {
-	height: auto !important;
 }
 
 .td > input[type=text],
