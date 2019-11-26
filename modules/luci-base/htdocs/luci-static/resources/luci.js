@@ -67,7 +67,7 @@
 	 * It provides simple means to create subclasses of given classes and
 	 * implements prototypal inheritance.
 	 */
-	var superContext = null, Class = Object.assign(function() {}, {
+	var superContext = {}, classIndex = 0, Class = Object.assign(function() {}, {
 		/**
 		 * Extends this base class with the properties described in
 		 * `properties` and returns a new subclassed Class instance
@@ -86,8 +86,9 @@
 		 */
 		extend: function(properties) {
 			var props = {
+				__id__: { value: classIndex },
 				__base__: { value: this.prototype },
-				__name__: { value: properties.__name__ || 'anonymous' }
+				__name__: { value: properties.__name__ || 'anonymous' + classIndex++ }
 			};
 
 			var ClassConstructor = function() {
@@ -265,19 +266,28 @@
 			 * superclass method returned `null`.
 			 */
 			super: function(key, callArgs) {
-				for (superContext = Object.getPrototypeOf(superContext ||
-				                                          Object.getPrototypeOf(this));
-				     superContext && !superContext.hasOwnProperty(key);
-				     superContext = Object.getPrototypeOf(superContext)) { }
-
-				if (!superContext)
+				if (key == null)
 					return null;
 
-				var res = superContext[key];
+				var slotIdx = this.__id__ + '.' + key;
+
+				for (superContext[slotIdx] = Object.getPrototypeOf(superContext[slotIdx] ||
+				                                          Object.getPrototypeOf(this));
+				     superContext[slotIdx] && !superContext[slotIdx].hasOwnProperty(key);
+				     superContext[slotIdx] = Object.getPrototypeOf(superContext[slotIdx])) {}
+
+				if (!superContext[slotIdx]) {
+					delete superContext[slotIdx];
+					return null;
+				}
+
+				var res = superContext[slotIdx][key];
 
 				if (arguments.length > 1) {
-					if (typeof(res) != 'function')
+					if (typeof(res) != 'function') {
+						delete superContext[slotIdx];
 						throw new ReferenceError(key + ' is not a function in base class');
+					}
 
 					if (typeof(callArgs) != 'object')
 						callArgs = this.varargs(arguments, 1);
@@ -285,8 +295,7 @@
 					res = res.apply(this, callArgs);
 				}
 
-				superContext = null;
-
+				delete superContext[slotIdx];
 				return res;
 			},
 
