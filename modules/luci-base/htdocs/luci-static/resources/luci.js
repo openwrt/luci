@@ -269,33 +269,39 @@
 				if (key == null)
 					return null;
 
-				var slotIdx = this.__id__ + '.' + key;
+				var slotIdx = this.__id__ + '.' + key,
+				    symStack = superContext[slotIdx],
+				    protoCtx = null;
 
-				for (superContext[slotIdx] = Object.getPrototypeOf(superContext[slotIdx] ||
-				                                          Object.getPrototypeOf(this));
-				     superContext[slotIdx] && !superContext[slotIdx].hasOwnProperty(key);
-				     superContext[slotIdx] = Object.getPrototypeOf(superContext[slotIdx])) {}
+				for (protoCtx = Object.getPrototypeOf(symStack ? symStack[0] : Object.getPrototypeOf(this));
+				     protoCtx != null && !protoCtx.hasOwnProperty(key);
+				     protoCtx = Object.getPrototypeOf(protoCtx)) {}
 
-				if (!superContext[slotIdx]) {
-					delete superContext[slotIdx];
+				if (protoCtx == null)
 					return null;
-				}
 
-				var res = superContext[slotIdx][key];
+				var res = protoCtx[key];
 
 				if (arguments.length > 1) {
-					if (typeof(res) != 'function') {
-						delete superContext[slotIdx];
+					if (typeof(res) != 'function')
 						throw new ReferenceError(key + ' is not a function in base class');
-					}
 
 					if (typeof(callArgs) != 'object')
 						callArgs = this.varargs(arguments, 1);
 
+					if (symStack)
+						symStack.unshift(protoCtx);
+					else
+						superContext[slotIdx] = [ protoCtx ];
+
 					res = res.apply(this, callArgs);
+
+					if (symStack && symStack.length > 1)
+						symStack.shift(protoCtx);
+					else
+						delete superContext[slotIdx];
 				}
 
-				delete superContext[slotIdx];
 				return res;
 			},
 
