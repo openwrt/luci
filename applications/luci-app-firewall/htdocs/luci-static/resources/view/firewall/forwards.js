@@ -196,7 +196,7 @@ return L.view.extend({
 			));
 		});
 
-		o = s.taboption('advanced', form.Value, 'src_port', _('Source port(s)'),
+		o = s.taboption('advanced', form.Value, 'src_port', _('Source ports'),
 			_('Only match incoming traffic originating from the given source port or port range on the client host'));
 		o.modalonly = true;
 		o.rmempty = true;
@@ -220,7 +220,7 @@ return L.view.extend({
 			));
 		});
 
-		o = s.taboption('general', form.Value, 'src_dport', _('External port(s)'),
+		o = s.taboption('general', form.Value, 'src_dport', _('External ports'),
 			_('Match incoming traffic directed at the given destination port or port range on this host'));
 		o.modalonly = true;
 		o.rmempty = false;
@@ -248,7 +248,7 @@ return L.view.extend({
 			));
 		});
 
-		o = s.taboption('general', form.Value, 'dest_port', _('Internal port(s)'),
+		o = s.taboption('general', form.Value, 'dest_port', _('Internal ports'),
 			_('Redirect matched incoming traffic to the given port on the internal host'));
 		o.modalonly = true;
 		o.rmempty = true;
