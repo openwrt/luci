@@ -67,7 +67,7 @@ for user in util.execi("cat /etc/passwd | cut -d':' -f1") do
 end
 
 o = s:taboption("basic", Value, "dir", translate("Download directory"),
-	translate("The directory to store the downloaded file. eg. <code>/mnt/sda1</code>"))
+	translate("The directory to store the downloaded file. For example <code>/mnt/sda1</code>."))
 o.rmempty = false
 
 o = s:taboption("basic", Value, "config_dir", translate("Config file directory"),
@@ -239,7 +239,7 @@ o.placeholder = "60"
 
 o = s:taboption("http", Value, "lowest_speed_limit", translate("Lowest speed limit"),
 	"%s %s" % {
-		translate("Close connection if download speed is lower than or equal to this value(bytes per sec). " ..
+		translate("Close connection if download speed is lower than or equal to this value (bytes per sec). " ..
 	"0 means has no lowest speed limit."),
 		translate("You can append K or M.")
 	})
@@ -312,7 +312,7 @@ if aria2.bt then
 	o.default = "true"
 	o.rmempty = false
 
-	o = s:taboption("bt", Flag, "bt_save_metadata", translate("Sava metadata"),
+	o = s:taboption("bt", Flag, "bt_save_metadata", translate("Save metadata"),
 		translate("Save meta data as \".torrent\" file. This option has effect only when BitTorrent"
 		.. " Magnet URI is used. The file name is hex encoded info hash with suffix \".torrent\"."))
 	o.enabled = "true"
@@ -339,7 +339,7 @@ if aria2.bt then
 	o.placeholder = "6881-6999"
 
 	o = s:taboption("bt", Value, "dht_listen_port", translate("DHT Listen port"),
-		translate("Set UDP listening port used by DHT(IPv4, IPv6) and UDP tracker. Make sure that the "
+		translate("Set UDP listening port used by DHT (IPv4, IPv6) and UDP tracker. Make sure that the "
 		.. "specified ports are open for incoming UDP traffic."))
 	o:depends("enable_dht", "true")
 	o:depends("enable_dht6", "true")
@@ -426,7 +426,7 @@ o.disabled = "false"
 o.default = "false"
 
 o = s:taboption("advance", Value, "auto_save_interval", translate("Auto save interval"),
-	translate("Save a control file(*.aria2) every N seconds. If 0 is given, a control file is not"
+	translate("Save a control file (*.aria2) every N seconds. If 0 is given, a control file is not"
 	.. " saved during download."))
 o.datatype = "range(0, 600)"
 o.placeholder = "60"
@@ -446,7 +446,7 @@ o.placeholder = "16M"
 
 o = s:taboption("advance", ListValue, "file_allocation", translate("File allocation"),
 	translate("Specify file allocation method. If you are using newer file systems such as ext4"
-	.. " (with extents support), btrfs, xfs or NTFS(MinGW build only), \"falloc\" is your best choice."
+	.. " (with extents support), btrfs, xfs or NTFS (MinGW build only), \"falloc\" is your best choice."
 	.. " It allocates large(few GiB) files almost instantly, but it may not be available if your system"
 	.. " doesn't have posix_fallocate(3) function. Don't use \"falloc\" with legacy file systems such as"
 	.. " ext3 and FAT32 because it takes almost same time as \"prealloc\" and it blocks aria2 entirely"
