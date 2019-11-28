@@ -1,0 +1,1397 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Source: fs.js</title>
+    
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <script src="scripts/jquery.min.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/bootstrap.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/jaguar.css">
+    
+    
+    <script>
+    var config = {"monospaceLinks":true,"cleverLinks":true,"default":{"outputSourceFiles":true}};
+    </script>
+    
+
+    
+</head>
+<body>
+<div id="wrap" class="clearfix">
+    
+<div class="navigation">
+    <h3 class="applicationName"><a href="index.html"></a></h3>
+
+    <div class="search">
+        <input id="search" type="text" class="form-control input-sm" placeholder="Search Documentations">
+    </div>
+    <ul class="list">
+    
+        <li class="item" data-name="LuCI">
+            <span class="title">
+                <a href="LuCI.html">LuCI</a>
+                
+            </span>
+            <ul class="members itemMembers">
+            
+            <span class="subtitle">Members</span>
+            
+                <li data-name="LuCI#env"><a href="LuCI.html#env">env</a></li>
+            
+            </ul>
+            <ul class="typedefs itemMembers">
+            
+            <span class="subtitle">Typedefs</span>
+            
+                <li data-name="LuCI.requestCallbackFn"><a href="LuCI.html#.requestCallbackFn">requestCallbackFn</a></li>
+            
+            </ul>
+            <ul class="typedefs itemMembers">
+            
+            </ul>
+            <ul class="methods itemMembers">
+            
+            <span class="subtitle">Methods</span>
+            
+                <li data-name="LuCI#bind"><a href="LuCI.html#bind">bind</a></li>
+            
+                <li data-name="LuCI#error"><a href="LuCI.html#error">error</a></li>
+            
+                <li data-name="LuCI#get"><a href="LuCI.html#get">get</a></li>
+            
+                <li data-name="LuCI#halt"><a href="LuCI.html#halt">halt</a></li>
+            
+                <li data-name="LuCI#hasSystemFeature"><a href="LuCI.html#hasSystemFeature">hasSystemFeature</a></li>
+            
+                <li data-name="LuCI#isObject"><a href="LuCI.html#isObject">isObject</a></li>
+            
+                <li data-name="LuCI#location"><a href="LuCI.html#location">location</a></li>
+            
+                <li data-name="LuCI#path"><a href="LuCI.html#path">path</a></li>
+            
+                <li data-name="LuCI#poll"><a href="LuCI.html#poll">poll</a></li>
+            
+                <li data-name="LuCI#post"><a href="LuCI.html#post">post</a></li>
+            
+                <li data-name="LuCI#raise"><a href="LuCI.html#raise">raise</a></li>
+            
+                <li data-name="LuCI#require"><a href="LuCI.html#require">require</a></li>
+            
+                <li data-name="LuCI#resolveDefault"><a href="LuCI.html#resolveDefault">resolveDefault</a></li>
+            
+                <li data-name="LuCI#resource"><a href="LuCI.html#resource">resource</a></li>
+            
+                <li data-name="LuCI#run"><a href="LuCI.html#run">run</a></li>
+            
+                <li data-name="LuCI#sortedKeys"><a href="LuCI.html#sortedKeys">sortedKeys</a></li>
+            
+                <li data-name="LuCI#stop"><a href="LuCI.html#stop">stop</a></li>
+            
+                <li data-name="LuCI#toArray"><a href="LuCI.html#toArray">toArray</a></li>
+            
+                <li data-name="LuCI#url"><a href="LuCI.html#url">url</a></li>
+            
+            </ul>
+            <ul class="events itemMembers">
+            
+            </ul>
+        </li>
+    
+        <li class="item" data-name="LuCI.Class">
+            <span class="title">
+                <a href="LuCI.Class.html">LuCI.Class</a>
+                
+            </span>
+            <ul class="members itemMembers">
+            
+            </ul>
+            <ul class="typedefs itemMembers">
+            
+            </ul>
+            <ul class="typedefs itemMembers">
+            
+            </ul>
+            <ul class="methods itemMembers">
+            
+            <span class="subtitle">Methods</span>
+            
+                <li data-name="LuCI.Class.extend"><a href="LuCI.Class.html#.extend">extend</a></li>
+            
+                <li data-name="LuCI.Class.instantiate"><a href="LuCI.Class.html#.instantiate">instantiate</a></li>
+            
+                <li data-name="LuCI.Class.isSubclass"><a href="LuCI.Class.html#.isSubclass">isSubclass</a></li>
+            
+                <li data-name="LuCI.Class.singleton"><a href="LuCI.Class.html#.singleton">singleton</a></li>
+            
+                <li data-name="LuCI.Class#super"><a href="LuCI.Class.html#super">super</a></li>
+            
+                <li data-name="LuCI.Class#varargs"><a href="LuCI.Class.html#varargs">varargs</a></li>
+            
+            </ul>
+            <ul class="events itemMembers">
+            
+            </ul>
+        </li>
+    
+        <li class="item" data-name="LuCI.dom">
+            <span class="title">
+                <a href="LuCI.dom.html">LuCI.dom</a>
+                
+            </span>
+            <ul class="members itemMembers">
+            
+            </ul>
+            <ul class="typedefs itemMembers">
+            
+            <span class="subtitle">Typedefs</span>
+            
+                <li data-name="LuCI.dom~ignoreCallbackFn"><a href="LuCI.dom.html#~ignoreCallbackFn">ignoreCallbackFn</a></li>
+            
+            </ul>
+            <ul class="typedefs itemMembers">
+            
+            </ul>
+            <ul class="methods itemMembers">
+            
+            <span class="subtitle">Methods</span>
+            
+                <li data-name="LuCI.dom#append"><a href="LuCI.dom.html#append">append</a></li>
+            
+                <li data-name="LuCI.dom#attr"><a href="LuCI.dom.html#attr">attr</a></li>
+            
+                <li data-name="LuCI.dom#bindClassInstance"><a href="LuCI.dom.html#bindClassInstance">bindClassInstance</a></li>
+            
+                <li data-name="LuCI.dom#callClassMethod"><a href="LuCI.dom.html#callClassMethod">callClassMethod</a></li>
+            
+                <li data-name="LuCI.dom#content"><a href="LuCI.dom.html#content">content</a></li>
+            
+                <li data-name="LuCI.dom#create"><a href="LuCI.dom.html#create">create</a></li>
+            
+                <li data-name="LuCI.dom#data"><a href="LuCI.dom.html#data">data</a></li>
+            
+                <li data-name="LuCI.dom#elem"><a href="LuCI.dom.html#elem">elem</a></li>
+            
+                <li data-name="LuCI.dom#findClassInstance"><a href="LuCI.dom.html#findClassInstance">findClassInstance</a></li>
+            
+                <li data-name="LuCI.dom#isEmpty"><a href="LuCI.dom.html#isEmpty">isEmpty</a></li>
+            
+                <li data-name="LuCI.dom#matches"><a href="LuCI.dom.html#matches">matches</a></li>
+            
+                <li data-name="LuCI.dom#parent"><a href="LuCI.dom.html#parent">parent</a></li>
+            
+                <li data-name="LuCI.dom#parse"><a href="LuCI.dom.html#parse">parse</a></li>
+            
+            </ul>
+            <ul class="events itemMembers">
+            
+            </ul>
+        </li>
+    
+        <li class="item" data-name="LuCI.fs">
+            <span class="title">
+                <a href="LuCI.fs.html">LuCI.fs</a>
+                
+            </span>
+            <ul class="members itemMembers">
+            
+            </ul>
+            <ul class="typedefs itemMembers">
+            
+            <span class="subtitle">Typedefs</span>
+            
+                <li data-name="LuCI.fs.FileExecResult"><a href="LuCI.fs.html#.FileExecResult">FileExecResult</a></li>
+            
+                <li data-name="LuCI.fs.FileStatEntry"><a href="LuCI.fs.html#.FileStatEntry">FileStatEntry</a></li>
+            
+            </ul>
+            <ul class="typedefs itemMembers">
+            
+            </ul>
+            <ul class="methods itemMembers">
+            
+            <span class="subtitle">Methods</span>
+            
+                <li data-name="LuCI.fs#exec"><a href="LuCI.fs.html#exec">exec</a></li>
+            
+                <li data-name="LuCI.fs#lines"><a href="LuCI.fs.html#lines">lines</a></li>
+            
+                <li data-name="LuCI.fs#list"><a href="LuCI.fs.html#list">list</a></li>
+            
+                <li data-name="LuCI.fs#read"><a href="LuCI.fs.html#read">read</a></li>
+            
+                <li data-name="LuCI.fs#remove"><a href="LuCI.fs.html#remove">remove</a></li>
+            
+                <li data-name="LuCI.fs#stat"><a href="LuCI.fs.html#stat">stat</a></li>
+            
+                <li data-name="LuCI.fs#trimmed"><a href="LuCI.fs.html#trimmed">trimmed</a></li>
+            
+                <li data-name="LuCI.fs#write"><a href="LuCI.fs.html#write">write</a></li>
+            
+            </ul>
+            <ul class="events itemMembers">
+            
+            </ul>
+        </li>
+    
+        <li class="item" data-name="LuCI.Headers">
+            <span class="title">
+                <a href="LuCI.Headers.html">LuCI.Headers</a>
+                
+            </span>
+            <ul class="members itemMembers">
+            
+            </ul>
+            <ul class="typedefs itemMembers">
+            
+            </ul>
+            <ul class="typedefs itemMembers">
+            
+            </ul>
+            <ul class="methods itemMembers">
+            
+            <span class="subtitle">Methods</span>
+            
+                <li data-name="LuCI.Headers#get"><a href="LuCI.Headers.html#get">get</a></li>
+            
+                <li data-name="LuCI.Headers#has"><a href="LuCI.Headers.html#has">has</a></li>
+            
+            </ul>
+            <ul class="events itemMembers">
+            
+            </ul>
+        </li>
+    
+        <li class="item" data-name="LuCI.Network">
+            <span class="title">
+                <a href="LuCI.Network.html">LuCI.Network</a>
+                
+            </span>
+            <ul class="members itemMembers">
+            
+            </ul>
+            <ul class="typedefs itemMembers">
+            
+            <span class="subtitle">Typedefs</span>
+            
+                <li data-name="LuCI.Network.SwitchTopology"><a href="LuCI.Network.html#.SwitchTopology">SwitchTopology</a></li>
+            
+                <li data-name="LuCI.Network.WifiEncryption"><a href="LuCI.Network.html#.WifiEncryption">WifiEncryption</a></li>
+            
+                <li data-name="LuCI.Network.WifiPeerEntry"><a href="LuCI.Network.html#.WifiPeerEntry">WifiPeerEntry</a></li>
+            
+                <li data-name="LuCI.Network.WifiRateEntry"><a href="LuCI.Network.html#.WifiRateEntry">WifiRateEntry</a></li>
+            
+                <li data-name="LuCI.Network.WifiScanResult"><a href="LuCI.Network.html#.WifiScanResult">WifiScanResult</a></li>
+            
+            </ul>
+            <ul class="typedefs itemMembers">
+            
+            </ul>
+            <ul class="methods itemMembers">
+            
+            <span class="subtitle">Methods</span>
+            
+                <li data-name="LuCI.Network#addNetwork"><a href="LuCI.Network.html#addNetwork">addNetwork</a></li>
+            
+                <li data-name="LuCI.Network#addWifiNetwork"><a href="LuCI.Network.html#addWifiNetwork">addWifiNetwork</a></li>
+            
+                <li data-name="LuCI.Network#deleteNetwork"><a href="LuCI.Network.html#deleteNetwork">deleteNetwork</a></li>
+            
+                <li data-name="LuCI.Network#deleteWifiNetwork"><a href="LuCI.Network.html#deleteWifiNetwork">deleteWifiNetwork</a></li>
+            
+                <li data-name="LuCI.Network#flushCache"><a href="LuCI.Network.html#flushCache">flushCache</a></li>
+            
+                <li data-name="LuCI.Network#formatWifiEncryption"><a href="LuCI.Network.html#formatWifiEncryption">formatWifiEncryption</a></li>
+            
+                <li data-name="LuCI.Network#getDevice"><a href="LuCI.Network.html#getDevice">getDevice</a></li>
+            
+                <li data-name="LuCI.Network#getDevices"><a href="LuCI.Network.html#getDevices">getDevices</a></li>
+            
+                <li data-name="LuCI.Network#getDSLModemType"><a href="LuCI.Network.html#getDSLModemType">getDSLModemType</a></li>
+            
+                <li data-name="LuCI.Network#getHostHints"><a href="LuCI.Network.html#getHostHints">getHostHints</a></li>
+            
+                <li data-name="LuCI.Network#getIfnameOf"><a href="LuCI.Network.html#getIfnameOf">getIfnameOf</a></li>
+            
+                <li data-name="LuCI.Network#getNetwork"><a href="LuCI.Network.html#getNetwork">getNetwork</a></li>
+            
+                <li data-name="LuCI.Network#getNetworks"><a href="LuCI.Network.html#getNetworks">getNetworks</a></li>
+            
+                <li data-name="LuCI.Network#getProtocol"><a href="LuCI.Network.html#getProtocol">getProtocol</a></li>
+            
+                <li data-name="LuCI.Network#getProtocols"><a href="LuCI.Network.html#getProtocols">getProtocols</a></li>
+            
+                <li data-name="LuCI.Network#getSwitchTopologies"><a href="LuCI.Network.html#getSwitchTopologies">getSwitchTopologies</a></li>
+            
+                <li data-name="LuCI.Network#getWAN6Networks"><a href="LuCI.Network.html#getWAN6Networks">getWAN6Networks</a></li>
+            
+                <li data-name="LuCI.Network#getWANNetworks"><a href="LuCI.Network.html#getWANNetworks">getWANNetworks</a></li>
+            
+                <li data-name="LuCI.Network#getWifiDevice"><a href="LuCI.Network.html#getWifiDevice">getWifiDevice</a></li>
+            
+                <li data-name="LuCI.Network#getWifiDevices"><a href="LuCI.Network.html#getWifiDevices">getWifiDevices</a></li>
+            
+                <li data-name="LuCI.Network#getWifiNetwork"><a href="LuCI.Network.html#getWifiNetwork">getWifiNetwork</a></li>
+            
+                <li data-name="LuCI.Network#getWifiNetworks"><a href="LuCI.Network.html#getWifiNetworks">getWifiNetworks</a></li>
+            
+                <li data-name="LuCI.Network#isIgnoredDevice"><a href="LuCI.Network.html#isIgnoredDevice">isIgnoredDevice</a></li>
+            
+                <li data-name="LuCI.Network#maskToPrefix"><a href="LuCI.Network.html#maskToPrefix">maskToPrefix</a></li>
+            
+                <li data-name="LuCI.Network#prefixToMask"><a href="LuCI.Network.html#prefixToMask">prefixToMask</a></li>
+            
+                <li data-name="LuCI.Network#registerErrorCode"><a href="LuCI.Network.html#registerErrorCode">registerErrorCode</a></li>
+            
+                <li data-name="LuCI.Network#registerPatternVirtual"><a href="LuCI.Network.html#registerPatternVirtual">registerPatternVirtual</a></li>
+            
+                <li data-name="LuCI.Network#registerProtocol"><a href="LuCI.Network.html#registerProtocol">registerProtocol</a></li>
+            
+                <li data-name="LuCI.Network#renameNetwork"><a href="LuCI.Network.html#renameNetwork">renameNetwork</a></li>
+            
+            </ul>
+            <ul class="events itemMembers">
+            
+            </ul>
+        </li>
+    
+        <li class="item" data-name="LuCI.Network.Device">
+            <span class="title">
+                <a href="LuCI.Network.Device.html">LuCI.Network.Device</a>
+                
+            </span>
+            <ul class="members itemMembers">
+            
+            </ul>
+            <ul class="typedefs itemMembers">
+            
+            </ul>
+            <ul class="typedefs itemMembers">
+            
+            </ul>
+            <ul class="methods itemMembers">
+            
+            <span class="subtitle">Methods</span>
+            
+                <li data-name="LuCI.Network.Device#getBridgeID"><a href="LuCI.Network.Device.html#getBridgeID">getBridgeID</a></li>
+            
+                <li data-name="LuCI.Network.Device#getBridgeSTP"><a href="LuCI.Network.Device.html#getBridgeSTP">getBridgeSTP</a></li>
+            
+                <li data-name="LuCI.Network.Device#getI18n"><a href="LuCI.Network.Device.html#getI18n">getI18n</a></li>
+            
+                <li data-name="LuCI.Network.Device#getIP6Addrs"><a href="LuCI.Network.Device.html#getIP6Addrs">getIP6Addrs</a></li>
+            
+                <li data-name="LuCI.Network.Device#getIPAddrs"><a href="LuCI.Network.Device.html#getIPAddrs">getIPAddrs</a></li>
+            
+                <li data-name="LuCI.Network.Device#getMAC"><a href="LuCI.Network.Device.html#getMAC">getMAC</a></li>
+            
+                <li data-name="LuCI.Network.Device#getMTU"><a href="LuCI.Network.Device.html#getMTU">getMTU</a></li>
+            
+                <li data-name="LuCI.Network.Device#getName"><a href="LuCI.Network.Device.html#getName">getName</a></li>
+            
+                <li data-name="LuCI.Network.Device#getNetwork"><a href="LuCI.Network.Device.html#getNetwork">getNetwork</a></li>
+            
+                <li data-name="LuCI.Network.Device#getNetworks"><a href="LuCI.Network.Device.html#getNetworks">getNetworks</a></li>
+            
+                <li data-name="LuCI.Network.Device#getPorts"><a href="LuCI.Network.Device.html#getPorts">getPorts</a></li>
+            
+                <li data-name="LuCI.Network.Device#getRXBytes"><a href="LuCI.Network.Device.html#getRXBytes">getRXBytes</a></li>
+            
+                <li data-name="LuCI.Network.Device#getRXPackets"><a href="LuCI.Network.Device.html#getRXPackets">getRXPackets</a></li>
+            
+                <li data-name="LuCI.Network.Device#getShortName"><a href="LuCI.Network.Device.html#getShortName">getShortName</a></li>
+            
+                <li data-name="LuCI.Network.Device#getTXBytes"><a href="LuCI.Network.Device.html#getTXBytes">getTXBytes</a></li>
+            
+                <li data-name="LuCI.Network.Device#getTXPackets"><a href="LuCI.Network.Device.html#getTXPackets">getTXPackets</a></li>
+            
+                <li data-name="LuCI.Network.Device#getType"><a href="LuCI.Network.Device.html#getType">getType</a></li>
+            
+                <li data-name="LuCI.Network.Device#getTypeI18n"><a href="LuCI.Network.Device.html#getTypeI18n">getTypeI18n</a></li>
+            
+                <li data-name="LuCI.Network.Device#getWifiNetwork"><a href="LuCI.Network.Device.html#getWifiNetwork">getWifiNetwork</a></li>
+            
+                <li data-name="LuCI.Network.Device#isBridge"><a href="LuCI.Network.Device.html#isBridge">isBridge</a></li>
+            
+                <li data-name="LuCI.Network.Device#isBridgePort"><a href="LuCI.Network.Device.html#isBridgePort">isBridgePort</a></li>
+            
+                <li data-name="LuCI.Network.Device#isUp"><a href="LuCI.Network.Device.html#isUp">isUp</a></li>
+            
+            </ul>
+            <ul class="events itemMembers">
+            
+            </ul>
+        </li>
+    
+        <li class="item" data-name="LuCI.Network.Hosts">
+            <span class="title">
+                <a href="LuCI.Network.Hosts.html">LuCI.Network.Hosts</a>
+                
+            </span>
+            <ul class="members itemMembers">
+            
+            </ul>
+            <ul class="typedefs itemMembers">
+            
+            </ul>
+            <ul class="typedefs itemMembers">
+            
+            </ul>
+            <ul class="methods itemMembers">
+            
+            <span class="subtitle">Methods</span>
+            
+                <li data-name="LuCI.Network.Hosts#getHostnameByIP6Addr"><a href="LuCI.Network.Hosts.html#getHostnameByIP6Addr">getHostnameByIP6Addr</a></li>
+            
+                <li data-name="LuCI.Network.Hosts#getHostnameByIPAddr"><a href="LuCI.Network.Hosts.html#getHostnameByIPAddr">getHostnameByIPAddr</a></li>
+            
+                <li data-name="LuCI.Network.Hosts#getHostnameByMACAddr"><a href="LuCI.Network.Hosts.html#getHostnameByMACAddr">getHostnameByMACAddr</a></li>
+            
+                <li data-name="LuCI.Network.Hosts#getIP6AddrByMACAddr"><a href="LuCI.Network.Hosts.html#getIP6AddrByMACAddr">getIP6AddrByMACAddr</a></li>
+            
+                <li data-name="LuCI.Network.Hosts#getIPAddrByMACAddr"><a href="LuCI.Network.Hosts.html#getIPAddrByMACAddr">getIPAddrByMACAddr</a></li>
+            
+                <li data-name="LuCI.Network.Hosts#getMACAddrByIP6Addr"><a href="LuCI.Network.Hosts.html#getMACAddrByIP6Addr">getMACAddrByIP6Addr</a></li>
+            
+                <li data-name="LuCI.Network.Hosts#getMACAddrByIPAddr"><a href="LuCI.Network.Hosts.html#getMACAddrByIPAddr">getMACAddrByIPAddr</a></li>
+            
+                <li data-name="LuCI.Network.Hosts#getMACHints"><a href="LuCI.Network.Hosts.html#getMACHints">getMACHints</a></li>
+            
+            </ul>
+            <ul class="events itemMembers">
+            
+            </ul>
+        </li>
+    
+        <li class="item" data-name="LuCI.Network.Protocol">
+            <span class="title">
+                <a href="LuCI.Network.Protocol.html">LuCI.Network.Protocol</a>
+                
+            </span>
+            <ul class="members itemMembers">
+            
+            </ul>
+            <ul class="typedefs itemMembers">
+            
+            </ul>
+            <ul class="typedefs itemMembers">
+            
+            </ul>
+            <ul class="methods itemMembers">
+            
+            <span class="subtitle">Methods</span>
+            
+                <li data-name="LuCI.Network.Protocol#addDevice"><a href="LuCI.Network.Protocol.html#addDevice">addDevice</a></li>
+            
+                <li data-name="LuCI.Network.Protocol#containsDevice"><a href="LuCI.Network.Protocol.html#containsDevice">containsDevice</a></li>
+            
+                <li data-name="LuCI.Network.Protocol#deleteDevice"><a href="LuCI.Network.Protocol.html#deleteDevice">deleteDevice</a></li>
+            
+                <li data-name="LuCI.Network.Protocol#get"><a href="LuCI.Network.Protocol.html#get">get</a></li>
+            
+                <li data-name="LuCI.Network.Protocol#getDevice"><a href="LuCI.Network.Protocol.html#getDevice">getDevice</a></li>
+            
+                <li data-name="LuCI.Network.Protocol#getDevices"><a href="LuCI.Network.Protocol.html#getDevices">getDevices</a></li>
+            
+                <li data-name="LuCI.Network.Protocol#getDNS6Addrs"><a href="LuCI.Network.Protocol.html#getDNS6Addrs">getDNS6Addrs</a></li>
+            
+                <li data-name="LuCI.Network.Protocol#getDNSAddrs"><a href="LuCI.Network.Protocol.html#getDNSAddrs">getDNSAddrs</a></li>
+            
+                <li data-name="LuCI.Network.Protocol#getErrors"><a href="LuCI.Network.Protocol.html#getErrors">getErrors</a></li>
+            
+                <li data-name="LuCI.Network.Protocol#getExpiry"><a href="LuCI.Network.Protocol.html#getExpiry">getExpiry</a></li>
+            
+                <li data-name="LuCI.Network.Protocol#getGateway6Addr"><a href="LuCI.Network.Protocol.html#getGateway6Addr">getGateway6Addr</a></li>
+            
+                <li data-name="LuCI.Network.Protocol#getGatewayAddr"><a href="LuCI.Network.Protocol.html#getGatewayAddr">getGatewayAddr</a></li>
+            
+                <li data-name="LuCI.Network.Protocol#getI18n"><a href="LuCI.Network.Protocol.html#getI18n">getI18n</a></li>
+            
+                <li data-name="LuCI.Network.Protocol#getIfname"><a href="LuCI.Network.Protocol.html#getIfname">getIfname</a></li>
+            
+                <li data-name="LuCI.Network.Protocol#getIP6Addr"><a href="LuCI.Network.Protocol.html#getIP6Addr">getIP6Addr</a></li>
+            
+                <li data-name="LuCI.Network.Protocol#getIP6Addrs"><a href="LuCI.Network.Protocol.html#getIP6Addrs">getIP6Addrs</a></li>
+            
+                <li data-name="LuCI.Network.Protocol#getIP6Prefix"><a href="LuCI.Network.Protocol.html#getIP6Prefix">getIP6Prefix</a></li>
+            
+                <li data-name="LuCI.Network.Protocol#getIPAddr"><a href="LuCI.Network.Protocol.html#getIPAddr">getIPAddr</a></li>
+            
+                <li data-name="LuCI.Network.Protocol#getIPAddrs"><a href="LuCI.Network.Protocol.html#getIPAddrs">getIPAddrs</a></li>
+            
+                <li data-name="LuCI.Network.Protocol#getL2Device"><a href="LuCI.Network.Protocol.html#getL2Device">getL2Device</a></li>
+            
+                <li data-name="LuCI.Network.Protocol#getL3Device"><a href="LuCI.Network.Protocol.html#getL3Device">getL3Device</a></li>
+            
+                <li data-name="LuCI.Network.Protocol#getMetric"><a href="LuCI.Network.Protocol.html#getMetric">getMetric</a></li>
+            
+                <li data-name="LuCI.Network.Protocol#getName"><a href="LuCI.Network.Protocol.html#getName">getName</a></li>
+            
+                <li data-name="LuCI.Network.Protocol#getNetmask"><a href="LuCI.Network.Protocol.html#getNetmask">getNetmask</a></li>
+            
+                <li data-name="LuCI.Network.Protocol#getOpkgPackage"><a href="LuCI.Network.Protocol.html#getOpkgPackage">getOpkgPackage</a></li>
+            
+                <li data-name="LuCI.Network.Protocol#getProtocol"><a href="LuCI.Network.Protocol.html#getProtocol">getProtocol</a></li>
+            
+                <li data-name="LuCI.Network.Protocol#getType"><a href="LuCI.Network.Protocol.html#getType">getType</a></li>
+            
+                <li data-name="LuCI.Network.Protocol#getUptime"><a href="LuCI.Network.Protocol.html#getUptime">getUptime</a></li>
+            
+                <li data-name="LuCI.Network.Protocol#getZoneName"><a href="LuCI.Network.Protocol.html#getZoneName">getZoneName</a></li>
+            
+                <li data-name="LuCI.Network.Protocol#isAlias"><a href="LuCI.Network.Protocol.html#isAlias">isAlias</a></li>
+            
+                <li data-name="LuCI.Network.Protocol#isBridge"><a href="LuCI.Network.Protocol.html#isBridge">isBridge</a></li>
+            
+                <li data-name="LuCI.Network.Protocol#isDynamic"><a href="LuCI.Network.Protocol.html#isDynamic">isDynamic</a></li>
+            
+                <li data-name="LuCI.Network.Protocol#isEmpty"><a href="LuCI.Network.Protocol.html#isEmpty">isEmpty</a></li>
+            
+                <li data-name="LuCI.Network.Protocol#isFloating"><a href="LuCI.Network.Protocol.html#isFloating">isFloating</a></li>
+            
+                <li data-name="LuCI.Network.Protocol#isInstalled"><a href="LuCI.Network.Protocol.html#isInstalled">isInstalled</a></li>
+            
+                <li data-name="LuCI.Network.Protocol#isUp"><a href="LuCI.Network.Protocol.html#isUp">isUp</a></li>
+            
+                <li data-name="LuCI.Network.Protocol#isVirtual"><a href="LuCI.Network.Protocol.html#isVirtual">isVirtual</a></li>
+            
+                <li data-name="LuCI.Network.Protocol#set"><a href="LuCI.Network.Protocol.html#set">set</a></li>
+            
+            </ul>
+            <ul class="events itemMembers">
+            
+            </ul>
+        </li>
+    
+        <li class="item" data-name="LuCI.Network.WifiDevice">
+            <span class="title">
+                <a href="LuCI.Network.WifiDevice.html">LuCI.Network.WifiDevice</a>
+                
+            </span>
+            <ul class="members itemMembers">
+            
+            </ul>
+            <ul class="typedefs itemMembers">
+            
+            </ul>
+            <ul class="typedefs itemMembers">
+            
+            </ul>
+            <ul class="methods itemMembers">
+            
+            <span class="subtitle">Methods</span>
+            
+                <li data-name="LuCI.Network.WifiDevice#addWifiNetwork"><a href="LuCI.Network.WifiDevice.html#addWifiNetwork">addWifiNetwork</a></li>
+            
+                <li data-name="LuCI.Network.WifiDevice#deleteWifiNetwork"><a href="LuCI.Network.WifiDevice.html#deleteWifiNetwork">deleteWifiNetwork</a></li>
+            
+                <li data-name="LuCI.Network.WifiDevice#get"><a href="LuCI.Network.WifiDevice.html#get">get</a></li>
+            
+                <li data-name="LuCI.Network.WifiDevice#getHTModes"><a href="LuCI.Network.WifiDevice.html#getHTModes">getHTModes</a></li>
+            
+                <li data-name="LuCI.Network.WifiDevice#getHWModes"><a href="LuCI.Network.WifiDevice.html#getHWModes">getHWModes</a></li>
+            
+                <li data-name="LuCI.Network.WifiDevice#getI18n"><a href="LuCI.Network.WifiDevice.html#getI18n">getI18n</a></li>
+            
+                <li data-name="LuCI.Network.WifiDevice#getName"><a href="LuCI.Network.WifiDevice.html#getName">getName</a></li>
+            
+                <li data-name="LuCI.Network.WifiDevice#getScanList"><a href="LuCI.Network.WifiDevice.html#getScanList">getScanList</a></li>
+            
+                <li data-name="LuCI.Network.WifiDevice#getWifiNetwork"><a href="LuCI.Network.WifiDevice.html#getWifiNetwork">getWifiNetwork</a></li>
+            
+                <li data-name="LuCI.Network.WifiDevice#getWifiNetworks"><a href="LuCI.Network.WifiDevice.html#getWifiNetworks">getWifiNetworks</a></li>
+            
+                <li data-name="LuCI.Network.WifiDevice#isDisabled"><a href="LuCI.Network.WifiDevice.html#isDisabled">isDisabled</a></li>
+            
+                <li data-name="LuCI.Network.WifiDevice#isUp"><a href="LuCI.Network.WifiDevice.html#isUp">isUp</a></li>
+            
+                <li data-name="LuCI.Network.WifiDevice#set"><a href="LuCI.Network.WifiDevice.html#set">set</a></li>
+            
+            </ul>
+            <ul class="events itemMembers">
+            
+            </ul>
+        </li>
+    
+        <li class="item" data-name="LuCI.Network.WifiNetwork">
+            <span class="title">
+                <a href="LuCI.Network.WifiNetwork.html">LuCI.Network.WifiNetwork</a>
+                
+            </span>
+            <ul class="members itemMembers">
+            
+            </ul>
+            <ul class="typedefs itemMembers">
+            
+            </ul>
+            <ul class="typedefs itemMembers">
+            
+            </ul>
+            <ul class="methods itemMembers">
+            
+            <span class="subtitle">Methods</span>
+            
+                <li data-name="LuCI.Network.WifiNetwork#disconnectClient"><a href="LuCI.Network.WifiNetwork.html#disconnectClient">disconnectClient</a></li>
+            
+                <li data-name="LuCI.Network.WifiNetwork#get"><a href="LuCI.Network.WifiNetwork.html#get">get</a></li>
+            
+                <li data-name="LuCI.Network.WifiNetwork#getActiveBSSID"><a href="LuCI.Network.WifiNetwork.html#getActiveBSSID">getActiveBSSID</a></li>
+            
+                <li data-name="LuCI.Network.WifiNetwork#getActiveEncryption"><a href="LuCI.Network.WifiNetwork.html#getActiveEncryption">getActiveEncryption</a></li>
+            
+                <li data-name="LuCI.Network.WifiNetwork#getActiveMode"><a href="LuCI.Network.WifiNetwork.html#getActiveMode">getActiveMode</a></li>
+            
+                <li data-name="LuCI.Network.WifiNetwork#getActiveModeI18n"><a href="LuCI.Network.WifiNetwork.html#getActiveModeI18n">getActiveModeI18n</a></li>
+            
+                <li data-name="LuCI.Network.WifiNetwork#getActiveSSID"><a href="LuCI.Network.WifiNetwork.html#getActiveSSID">getActiveSSID</a></li>
+            
+                <li data-name="LuCI.Network.WifiNetwork#getAssocList"><a href="LuCI.Network.WifiNetwork.html#getAssocList">getAssocList</a></li>
+            
+                <li data-name="LuCI.Network.WifiNetwork#getBitRate"><a href="LuCI.Network.WifiNetwork.html#getBitRate">getBitRate</a></li>
+            
+                <li data-name="LuCI.Network.WifiNetwork#getBSSID"><a href="LuCI.Network.WifiNetwork.html#getBSSID">getBSSID</a></li>
+            
+                <li data-name="LuCI.Network.WifiNetwork#getChannel"><a href="LuCI.Network.WifiNetwork.html#getChannel">getChannel</a></li>
+            
+                <li data-name="LuCI.Network.WifiNetwork#getCountryCode"><a href="LuCI.Network.WifiNetwork.html#getCountryCode">getCountryCode</a></li>
+            
+                <li data-name="LuCI.Network.WifiNetwork#getDevice"><a href="LuCI.Network.WifiNetwork.html#getDevice">getDevice</a></li>
+            
+                <li data-name="LuCI.Network.WifiNetwork#getFrequency"><a href="LuCI.Network.WifiNetwork.html#getFrequency">getFrequency</a></li>
+            
+                <li data-name="LuCI.Network.WifiNetwork#getI18n"><a href="LuCI.Network.WifiNetwork.html#getI18n">getI18n</a></li>
+            
+                <li data-name="LuCI.Network.WifiNetwork#getID"><a href="LuCI.Network.WifiNetwork.html#getID">getID</a></li>
+            
+                <li data-name="LuCI.Network.WifiNetwork#getIfname"><a href="LuCI.Network.WifiNetwork.html#getIfname">getIfname</a></li>
+            
+                <li data-name="LuCI.Network.WifiNetwork#getMeshID"><a href="LuCI.Network.WifiNetwork.html#getMeshID">getMeshID</a></li>
+            
+                <li data-name="LuCI.Network.WifiNetwork#getMode"><a href="LuCI.Network.WifiNetwork.html#getMode">getMode</a></li>
+            
+                <li data-name="LuCI.Network.WifiNetwork#getName"><a href="LuCI.Network.WifiNetwork.html#getName">getName</a></li>
+            
+                <li data-name="LuCI.Network.WifiNetwork#getNetwork"><a href="LuCI.Network.WifiNetwork.html#getNetwork">getNetwork</a></li>
+            
+                <li data-name="LuCI.Network.WifiNetwork#getNetworkNames"><a href="LuCI.Network.WifiNetwork.html#getNetworkNames">getNetworkNames</a></li>
+            
+                <li data-name="LuCI.Network.WifiNetwork#getNetworks"><a href="LuCI.Network.WifiNetwork.html#getNetworks">getNetworks</a></li>
+            
+                <li data-name="LuCI.Network.WifiNetwork#getNoise"><a href="LuCI.Network.WifiNetwork.html#getNoise">getNoise</a></li>
+            
+                <li data-name="LuCI.Network.WifiNetwork#getShortName"><a href="LuCI.Network.WifiNetwork.html#getShortName">getShortName</a></li>
+            
+                <li data-name="LuCI.Network.WifiNetwork#getSignal"><a href="LuCI.Network.WifiNetwork.html#getSignal">getSignal</a></li>
+            
+                <li data-name="LuCI.Network.WifiNetwork#getSignalLevel"><a href="LuCI.Network.WifiNetwork.html#getSignalLevel">getSignalLevel</a></li>
+            
+                <li data-name="LuCI.Network.WifiNetwork#getSignalPercent"><a href="LuCI.Network.WifiNetwork.html#getSignalPercent">getSignalPercent</a></li>
+            
+                <li data-name="LuCI.Network.WifiNetwork#getSSID"><a href="LuCI.Network.WifiNetwork.html#getSSID">getSSID</a></li>
+            
+                <li data-name="LuCI.Network.WifiNetwork#getTXPower"><a href="LuCI.Network.WifiNetwork.html#getTXPower">getTXPower</a></li>
+            
+                <li data-name="LuCI.Network.WifiNetwork#getTXPowerOffset"><a href="LuCI.Network.WifiNetwork.html#getTXPowerOffset">getTXPowerOffset</a></li>
+            
+                <li data-name="LuCI.Network.WifiNetwork#getWifiDevice"><a href="LuCI.Network.WifiNetwork.html#getWifiDevice">getWifiDevice</a></li>
+            
+                <li data-name="LuCI.Network.WifiNetwork#getWifiDeviceName"><a href="LuCI.Network.WifiNetwork.html#getWifiDeviceName">getWifiDeviceName</a></li>
+            
+                <li data-name="LuCI.Network.WifiNetwork#isClientDisconnectSupported"><a href="LuCI.Network.WifiNetwork.html#isClientDisconnectSupported">isClientDisconnectSupported</a></li>
+            
+                <li data-name="LuCI.Network.WifiNetwork#isDisabled"><a href="LuCI.Network.WifiNetwork.html#isDisabled">isDisabled</a></li>
+            
+                <li data-name="LuCI.Network.WifiNetwork#isUp"><a href="LuCI.Network.WifiNetwork.html#isUp">isUp</a></li>
+            
+                <li data-name="LuCI.Network.WifiNetwork#set"><a href="LuCI.Network.WifiNetwork.html#set">set</a></li>
+            
+            </ul>
+            <ul class="events itemMembers">
+            
+            </ul>
+        </li>
+    
+        <li class="item" data-name="LuCI.Poll">
+            <span class="title">
+                <a href="LuCI.Poll.html">LuCI.Poll</a>
+                
+            </span>
+            <ul class="members itemMembers">
+            
+            </ul>
+            <ul class="typedefs itemMembers">
+            
+            </ul>
+            <ul class="typedefs itemMembers">
+            
+            </ul>
+            <ul class="methods itemMembers">
+            
+            <span class="subtitle">Methods</span>
+            
+                <li data-name="LuCI.Poll#active"><a href="LuCI.Poll.html#active">active</a></li>
+            
+                <li data-name="LuCI.Poll#add"><a href="LuCI.Poll.html#add">add</a></li>
+            
+                <li data-name="LuCI.Poll#remove"><a href="LuCI.Poll.html#remove">remove</a></li>
+            
+                <li data-name="LuCI.Poll#start"><a href="LuCI.Poll.html#start">start</a></li>
+            
+                <li data-name="LuCI.Poll#stop"><a href="LuCI.Poll.html#stop">stop</a></li>
+            
+            </ul>
+            <ul class="events itemMembers">
+            
+            </ul>
+        </li>
+    
+        <li class="item" data-name="LuCI.Request">
+            <span class="title">
+                <a href="LuCI.Request.html">LuCI.Request</a>
+                
+            </span>
+            <ul class="members itemMembers">
+            
+            </ul>
+            <ul class="typedefs itemMembers">
+            
+            <span class="subtitle">Typedefs</span>
+            
+                <li data-name="LuCI.Request.interceptorFn"><a href="LuCI.Request.html#.interceptorFn">interceptorFn</a></li>
+            
+                <li data-name="LuCI.Request.RequestOptions"><a href="LuCI.Request.html#.RequestOptions">RequestOptions</a></li>
+            
+            </ul>
+            <ul class="typedefs itemMembers">
+            
+            </ul>
+            <ul class="methods itemMembers">
+            
+            <span class="subtitle">Methods</span>
+            
+                <li data-name="LuCI.Request#addInterceptor"><a href="LuCI.Request.html#addInterceptor">addInterceptor</a></li>
+            
+                <li data-name="LuCI.Request#expandURL"><a href="LuCI.Request.html#expandURL">expandURL</a></li>
+            
+                <li data-name="LuCI.Request#get"><a href="LuCI.Request.html#get">get</a></li>
+            
+                <li data-name="LuCI.Request#post"><a href="LuCI.Request.html#post">post</a></li>
+            
+                <li data-name="LuCI.Request#removeInterceptor"><a href="LuCI.Request.html#removeInterceptor">removeInterceptor</a></li>
+            
+                <li data-name="LuCI.Request#request"><a href="LuCI.Request.html#request">request</a></li>
+            
+            </ul>
+            <ul class="events itemMembers">
+            
+            </ul>
+        </li>
+    
+        <li class="item" data-name="LuCI.Request.poll">
+            <span class="title">
+                <a href="LuCI.Request.poll.html">LuCI.Request.poll</a>
+                
+            </span>
+            <ul class="members itemMembers">
+            
+            </ul>
+            <ul class="typedefs itemMembers">
+            
+            <span class="subtitle">Typedefs</span>
+            
+                <li data-name="LuCI.Request.poll~callbackFn"><a href="LuCI.Request.poll.html#~callbackFn">callbackFn</a></li>
+            
+            </ul>
+            <ul class="typedefs itemMembers">
+            
+            </ul>
+            <ul class="methods itemMembers">
+            
+            <span class="subtitle">Methods</span>
+            
+                <li data-name="LuCI.Request.poll#active"><a href="LuCI.Request.poll.html#active">active</a></li>
+            
+                <li data-name="LuCI.Request.poll#add"><a href="LuCI.Request.poll.html#add">add</a></li>
+            
+                <li data-name="LuCI.Request.poll#remove"><a href="LuCI.Request.poll.html#remove">remove</a></li>
+            
+                <li data-name="LuCI.Request.poll#start"><a href="LuCI.Request.poll.html#start">start</a></li>
+            
+                <li data-name="LuCI.Request.poll#stop"><a href="LuCI.Request.poll.html#stop">stop</a></li>
+            
+            </ul>
+            <ul class="events itemMembers">
+            
+            </ul>
+        </li>
+    
+        <li class="item" data-name="LuCI.Response">
+            <span class="title">
+                <a href="LuCI.Response.html">LuCI.Response</a>
+                
+            </span>
+            <ul class="members itemMembers">
+            
+            <span class="subtitle">Members</span>
+            
+                <li data-name="LuCI.Response#duration"><a href="LuCI.Response.html#duration">duration</a></li>
+            
+                <li data-name="LuCI.Response#headers"><a href="LuCI.Response.html#headers">headers</a></li>
+            
+                <li data-name="LuCI.Response#ok"><a href="LuCI.Response.html#ok">ok</a></li>
+            
+                <li data-name="LuCI.Response#status"><a href="LuCI.Response.html#status">status</a></li>
+            
+                <li data-name="LuCI.Response#statusText"><a href="LuCI.Response.html#statusText">statusText</a></li>
+            
+                <li data-name="LuCI.Response#url"><a href="LuCI.Response.html#url">url</a></li>
+            
+            </ul>
+            <ul class="typedefs itemMembers">
+            
+            </ul>
+            <ul class="typedefs itemMembers">
+            
+            </ul>
+            <ul class="methods itemMembers">
+            
+            <span class="subtitle">Methods</span>
+            
+                <li data-name="LuCI.Response#clone"><a href="LuCI.Response.html#clone">clone</a></li>
+            
+                <li data-name="LuCI.Response#json"><a href="LuCI.Response.html#json">json</a></li>
+            
+                <li data-name="LuCI.Response#text"><a href="LuCI.Response.html#text">text</a></li>
+            
+            </ul>
+            <ul class="events itemMembers">
+            
+            </ul>
+        </li>
+    
+        <li class="item" data-name="LuCI.rpc">
+            <span class="title">
+                <a href="LuCI.rpc.html">LuCI.rpc</a>
+                
+            </span>
+            <ul class="members itemMembers">
+            
+            </ul>
+            <ul class="typedefs itemMembers">
+            
+            <span class="subtitle">Typedefs</span>
+            
+                <li data-name="LuCI.rpc.DeclareOptions"><a href="LuCI.rpc.html#.DeclareOptions">DeclareOptions</a></li>
+            
+                <li data-name="LuCI.rpc~filterFn"><a href="LuCI.rpc.html#~filterFn">filterFn</a></li>
+            
+                <li data-name="LuCI.rpc~interceptorFn"><a href="LuCI.rpc.html#~interceptorFn">interceptorFn</a></li>
+            
+                <li data-name="LuCI.rpc~invokeFn"><a href="LuCI.rpc.html#~invokeFn">invokeFn</a></li>
+            
+            </ul>
+            <ul class="typedefs itemMembers">
+            
+            </ul>
+            <ul class="methods itemMembers">
+            
+            <span class="subtitle">Methods</span>
+            
+                <li data-name="LuCI.rpc#addInterceptor"><a href="LuCI.rpc.html#addInterceptor">addInterceptor</a></li>
+            
+                <li data-name="LuCI.rpc#declare"><a href="LuCI.rpc.html#declare">declare</a></li>
+            
+                <li data-name="LuCI.rpc#getBaseURL"><a href="LuCI.rpc.html#getBaseURL">getBaseURL</a></li>
+            
+                <li data-name="LuCI.rpc#getSessionID"><a href="LuCI.rpc.html#getSessionID">getSessionID</a></li>
+            
+                <li data-name="LuCI.rpc#getStatusText"><a href="LuCI.rpc.html#getStatusText">getStatusText</a></li>
+            
+                <li data-name="LuCI.rpc#list"><a href="LuCI.rpc.html#list">list</a></li>
+            
+                <li data-name="LuCI.rpc#removeInterceptor"><a href="LuCI.rpc.html#removeInterceptor">removeInterceptor</a></li>
+            
+                <li data-name="LuCI.rpc#setBaseURL"><a href="LuCI.rpc.html#setBaseURL">setBaseURL</a></li>
+            
+                <li data-name="LuCI.rpc#setSessionID"><a href="LuCI.rpc.html#setSessionID">setSessionID</a></li>
+            
+            </ul>
+            <ul class="events itemMembers">
+            
+            </ul>
+        </li>
+    
+        <li class="item" data-name="LuCI.uci">
+            <span class="title">
+                <a href="LuCI.uci.html">LuCI.uci</a>
+                
+            </span>
+            <ul class="members itemMembers">
+            
+            </ul>
+            <ul class="typedefs itemMembers">
+            
+            <span class="subtitle">Typedefs</span>
+            
+                <li data-name="LuCI.uci.ChangeRecord"><a href="LuCI.uci.html#.ChangeRecord">ChangeRecord</a></li>
+            
+                <li data-name="LuCI.uci.SectionObject"><a href="LuCI.uci.html#.SectionObject">SectionObject</a></li>
+            
+                <li data-name="LuCI.uci~sectionsFn"><a href="LuCI.uci.html#~sectionsFn">sectionsFn</a></li>
+            
+            </ul>
+            <ul class="typedefs itemMembers">
+            
+            </ul>
+            <ul class="methods itemMembers">
+            
+            <span class="subtitle">Methods</span>
+            
+                <li data-name="LuCI.uci#add"><a href="LuCI.uci.html#add">add</a></li>
+            
+                <li data-name="LuCI.uci#apply"><a href="LuCI.uci.html#apply">apply</a></li>
+            
+                <li data-name="LuCI.uci#changes"><a href="LuCI.uci.html#changes">changes</a></li>
+            
+                <li data-name="LuCI.uci#createSID"><a href="LuCI.uci.html#createSID">createSID</a></li>
+            
+                <li data-name="LuCI.uci#get"><a href="LuCI.uci.html#get">get</a></li>
+            
+                <li data-name="LuCI.uci#get_first"><a href="LuCI.uci.html#get_first">get_first</a></li>
+            
+                <li data-name="LuCI.uci#load"><a href="LuCI.uci.html#load">load</a></li>
+            
+                <li data-name="LuCI.uci#move"><a href="LuCI.uci.html#move">move</a></li>
+            
+                <li data-name="LuCI.uci#remove"><a href="LuCI.uci.html#remove">remove</a></li>
+            
+                <li data-name="LuCI.uci#resolveSID"><a href="LuCI.uci.html#resolveSID">resolveSID</a></li>
+            
+                <li data-name="LuCI.uci#save"><a href="LuCI.uci.html#save">save</a></li>
+            
+                <li data-name="LuCI.uci#sections"><a href="LuCI.uci.html#sections">sections</a></li>
+            
+                <li data-name="LuCI.uci#set"><a href="LuCI.uci.html#set">set</a></li>
+            
+                <li data-name="LuCI.uci#set_first"><a href="LuCI.uci.html#set_first">set_first</a></li>
+            
+                <li data-name="LuCI.uci#unload"><a href="LuCI.uci.html#unload">unload</a></li>
+            
+                <li data-name="LuCI.uci#unset"><a href="LuCI.uci.html#unset">unset</a></li>
+            
+                <li data-name="LuCI.uci#unset_first"><a href="LuCI.uci.html#unset_first">unset_first</a></li>
+            
+            </ul>
+            <ul class="events itemMembers">
+            
+            </ul>
+        </li>
+    
+        <li class="item" data-name="LuCI.view">
+            <span class="title">
+                <a href="LuCI.view.html">LuCI.view</a>
+                
+            </span>
+            <ul class="members itemMembers">
+            
+            </ul>
+            <ul class="typedefs itemMembers">
+            
+            </ul>
+            <ul class="typedefs itemMembers">
+            
+            </ul>
+            <ul class="methods itemMembers">
+            
+            <span class="subtitle">Methods</span>
+            
+                <li data-name="LuCI.view#addFooter"><a href="LuCI.view.html#addFooter">addFooter</a></li>
+            
+                <li data-name="LuCI.view#handleReset"><a href="LuCI.view.html#handleReset">handleReset</a></li>
+            
+                <li data-name="LuCI.view#handleSave"><a href="LuCI.view.html#handleSave">handleSave</a></li>
+            
+                <li data-name="LuCI.view#handleSaveApply"><a href="LuCI.view.html#handleSaveApply">handleSaveApply</a></li>
+            
+                <li data-name="LuCI.view#load"><a href="LuCI.view.html#load">load</a></li>
+            
+                <li data-name="LuCI.view#render"><a href="LuCI.view.html#render">render</a></li>
+            
+            </ul>
+            <ul class="events itemMembers">
+            
+            </ul>
+        </li>
+    
+        <li class="item" data-name="LuCI.XHR">
+            <span class="title">
+                <a href="LuCI.XHR.html">LuCI.XHR</a>
+                
+            </span>
+            <ul class="members itemMembers">
+            
+            </ul>
+            <ul class="typedefs itemMembers">
+            
+            </ul>
+            <ul class="typedefs itemMembers">
+            
+            </ul>
+            <ul class="methods itemMembers">
+            
+            <span class="subtitle">Methods</span>
+            
+                <li data-name="LuCI.XHR#abort"><a href="LuCI.XHR.html#abort">abort</a></li>
+            
+                <li data-name="LuCI.XHR#busy"><a href="LuCI.XHR.html#busy">busy</a></li>
+            
+                <li data-name="LuCI.XHR#cancel"><a href="LuCI.XHR.html#cancel">cancel</a></li>
+            
+                <li data-name="LuCI.XHR#get"><a href="LuCI.XHR.html#get">get</a></li>
+            
+                <li data-name="LuCI.XHR#post"><a href="LuCI.XHR.html#post">post</a></li>
+            
+                <li data-name="LuCI.XHR#send_form"><a href="LuCI.XHR.html#send_form">send_form</a></li>
+            
+            </ul>
+            <ul class="events itemMembers">
+            
+            </ul>
+        </li>
+    
+    </ul>
+</div>
+    <div class="main">
+        <h1 class="page-title" data-filename="fs.js.html">Source: fs.js</h1>
+        
+
+
+    
+    <section>
+        <article>
+            <pre id="source-code" class="prettyprint source "><code>'use strict';
+'require rpc';
+
+/**
+ * @typedef {Object} FileStatEntry
+ * @memberof LuCI.fs
+
+ * @property {string} name - Name of the directory entry
+ * @property {string} type - Type of the entry, one of `block`, `char`, `directory`, `fifo`, `symlink`, `file`, `socket` or `unknown`
+ * @property {number} size - Size in bytes
+ * @property {number} mode - Access permissions
+ * @property {number} atime - Last access time in seconds since epoch
+ * @property {number} mtime - Last modification time in seconds since epoch
+ * @property {number} ctime - Last change time in seconds since epoch
+ * @property {number} inode - Inode number
+ * @property {number} uid - Numeric owner id
+ * @property {number} gid - Numeric group id
+ */
+
+/**
+ * @typedef {Object} FileExecResult
+ * @memberof LuCI.fs
+ *
+ * @property {number} code - The exit code of the invoked command
+ * @property {string} [stdout] - The stdout produced by the command, if any
+ * @property {string} [stderr] - The stderr produced by the command, if any
+ */
+
+var callFileList, callFileStat, callFileRead, callFileWrite, callFileRemove,
+    callFileExec, callFileMD5;
+
+callFileList = rpc.declare({
+	object: 'file',
+	method: 'list',
+	params: [ 'path' ]
+});
+
+callFileStat = rpc.declare({
+	object: 'file',
+	method: 'stat',
+	params: [ 'path' ]
+});
+
+callFileRead = rpc.declare({
+	object: 'file',
+	method: 'read',
+	params: [ 'path' ]
+});
+
+callFileWrite = rpc.declare({
+	object: 'file',
+	method: 'write',
+	params: [ 'path', 'data', 'mode' ]
+});
+
+callFileRemove = rpc.declare({
+	object: 'file',
+	method: 'remove',
+	params: [ 'path' ]
+});
+
+callFileExec = rpc.declare({
+	object: 'file',
+	method: 'exec',
+	params: [ 'command', 'params', 'env' ]
+});
+
+callFileMD5 = rpc.declare({
+	object: 'file',
+	method: 'md5',
+	params: [ 'path' ]
+});
+
+var rpcErrors = [
+	null,
+	'InvalidCommandError',
+	'InvalidArgumentError',
+	'MethodNotFoundError',
+	'NotFoundError',
+	'NoDataError',
+	'PermissionError',
+	'TimeoutError',
+	'UnsupportedError'
+];
+
+function handleRpcReply(expect, rc) {
+	if (typeof(rc) == 'number' &amp;&amp; rc != 0) {
+		var e = new Error(rpc.getStatusText(rc)); e.name = rpcErrors[rc] || 'Error';
+		throw e;
+	}
+
+	if (expect) {
+		var type = Object.prototype.toString;
+
+		for (var key in expect) {
+			if (rc != null &amp;&amp; key != '')
+				rc = rc[key];
+
+			if (rc == null || type.call(rc) != type.call(expect[key])) {
+				var e = new Error(_('Unexpected reply data format')); e.name = 'TypeError';
+				throw e;
+			}
+
+			break;
+		}
+	}
+
+	return rc;
+}
+
+/**
+ * @class fs
+ * @memberof LuCI
+ * @hideconstructor
+ * @classdesc
+ *
+ * Provides high level utilities to wrap file system related RPC calls.
+ * To import the class in views, use `'require fs'`, to import it in
+ * external JavaScript, use `L.require("fs").then(...)`.
+ */
+var FileSystem = L.Class.extend(/** @lends LuCI.fs.prototype */ {
+	/**
+	 * Obtains a listing of the specified directory.
+	 *
+	 * @param {string} path
+	 * The directory path to list.
+	 *
+	 * @returns {Promise&lt;LuCI.fs.FileStatEntry[]>}
+	 * Returns a promise resolving to an array of stat detail objects or
+	 * rejecting with an error stating the failure reason.
+	 */
+	list: function(path) {
+		return callFileList(path).then(handleRpcReply.bind(this, { entries: [] }));
+	},
+
+	/**
+	 * Return file stat information on the specified path.
+	 *
+	 * @param {string} path
+	 * The filesystem path to stat.
+	 *
+	 * @returns {Promise&lt;LuCI.fs.FileStatEntry>}
+	 * Returns a promise resolving to a stat detail object or
+	 * rejecting with an error stating the failure reason.
+	 */
+	stat: function(path) {
+		return callFileStat(path).then(handleRpcReply.bind(this, { '': {} }));
+	},
+
+	/**
+	 * Read the contents of the given file and return them.
+	 * Note: this function is unsuitable for obtaining binary data.
+	 *
+	 * @param {string} path
+	 * The file path to read.
+	 *
+	 * @returns {Promise&lt;string>}
+	 * Returns a promise resolving to a string containing the file contents or
+	 * rejecting with an error stating the failure reason.
+	 */
+	read: function(path) {
+		return callFileRead(path).then(handleRpcReply.bind(this, { data: '' }));
+	},
+
+	/**
+	 * Write the given data to the specified file path.
+	 * If the specified file path does not exist, it will be created, given
+	 * sufficient permissions.
+	 *
+	 * Note: `data` will be converted to a string using `String(data)` or to
+	 * `''` when it is `null`.
+	 *
+	 * @param {string} path
+	 * The file path to write to.
+	 *
+	 * @param {*} [data]
+	 * The file data to write. If it is null, it will be set to an empty
+	 * string.
+	 *
+	 * @param {number} [mode]
+	 * The permissions to use on file creation. Default is 420 (0644).
+	 *
+	 * @returns {Promise&lt;number>}
+	 * Returns a promise resolving to `0` or rejecting with an error stating
+	 * the failure reason.
+	 */
+	write: function(path, data, mode) {
+		data = (data != null) ? String(data) : '';
+		mode = (mode != null) ? mode : 420; // 0644
+		return callFileWrite(path, data, mode).then(handleRpcReply.bind(this, { '': 0 }));
+	},
+
+	/**
+	 * Unlink the given file.
+	 *
+	 * @param {string}
+	 * The file path to remove.
+	 *
+	 * @returns {Promise&lt;number>}
+	 * Returns a promise resolving to `0` or rejecting with an error stating
+	 * the failure reason.
+	 */
+	remove: function(path) {
+		return callFileRemove(path).then(handleRpcReply.bind(this, { '': 0 }));
+	},
+
+	/**
+	 * Execute the specified command, optionally passing params and
+	 * environment variables.
+	 *
+	 * Note: The `command` must be either the path to an executable,
+	 * or a basename without arguments in which case it will be searched
+	 * in $PATH. If specified, the values given in `params` will be passed
+	 * as arguments to the command.
+	 *
+	 * The key/value pairs in the optional `env` table are translated to
+	 * `setenv()` calls prior to running the command.
+	 *
+	 * @param {string} command
+	 * The command to invoke.
+	 *
+	 * @param {string[]} [params]
+	 * The arguments to pass to the command.
+	 *
+	 * @param {Object.&lt;string, string>} [env]
+	 * Environment variables to set.
+	 *
+	 * @returns {Promise&lt;LuCI.fs.FileExecResult>}
+	 * Returns a promise resolving to an object describing the execution
+	 * results or rejecting with an error stating the failure reason.
+	 */
+	exec: function(command, params, env) {
+		if (!Array.isArray(params))
+			params = null;
+
+		if (!L.isObject(env))
+			env = null;
+
+		return callFileExec(command, params, env).then(handleRpcReply.bind(this, { '': {} }));
+	},
+
+	/**
+	 * Read the contents of the given file, trim leading and trailing white
+	 * space and return the trimmed result. In case of errors, return an empty
+	 * string instead.
+	 *
+	 * Note: this function is useful to read single-value files in `/sys`
+	 * or `/proc`.
+	 *
+	 * This function is guaranteed to not reject its promises, on failure,
+	 * an empty string will be returned.
+	 *
+	 * @param {string} path
+	 * The file path to read.
+	 *
+	 * @returns {Promise&lt;string>}
+	 * Returns a promise resolving to the file contents or the empty string
+	 * on failure.
+	 */
+	trimmed: function(path) {
+		return L.resolveDefault(this.read(path), '').then(function(s) {
+			return s.trim();
+		});
+	},
+
+	/**
+	 * Read the contents of the given file, split it into lines, trim
+	 * leading and trailing white space of each line and return the
+	 * resulting array.
+	 *
+	 * This function is guaranteed to not reject its promises, on failure,
+	 * an empty array will be returned.
+	 *
+	 * @param {string} path
+	 * The file path to read.
+	 *
+	 * @returns {Promise&lt;string[]>}
+	 * Returns a promise resolving to an array containing the stripped lines
+	 * of the given file or `[]` on failure.
+	 */
+	lines: function(path) {
+		return L.resolveDefault(this.read(path), '').then(function(s) {
+			var lines = [];
+
+			s = s.trim();
+
+			if (s != '') {
+				var l = s.split(/\n/);
+
+				for (var i = 0; i &lt; l.length; i++)
+					lines.push(l[i].trim());
+			}
+
+			return lines;
+		});
+	}
+});
+
+return FileSystem;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+
+
+        
+
+        <footer>
+            Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Thu Nov 07 2019 12:36:05 GMT+0100 (Central European Standard Time)
+        </footer>
+    </div>
+</div>
+<script>prettyPrint();</script>
+<script src="scripts/jaguar.js"></script>
+</body>
+</html>

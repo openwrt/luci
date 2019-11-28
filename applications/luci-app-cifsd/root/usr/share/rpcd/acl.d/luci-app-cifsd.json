@@ -1,0 +1,16 @@
+{
+	"luci-app-cifsd": {
+		"description": "Grant access to LuCI app cifsd",
+		"read": {
+			"file": {
+				"/etc/cifs/smb.conf.template": [ "read" ],
+				"/usr/sbin/cifsd": [ "exec" ]
+			}
+		},
+		"write": {
+			"file": {
+				"/etc/cifs/smb.conf.template": [ "write" ]
+			}
+		}
+	}
+}

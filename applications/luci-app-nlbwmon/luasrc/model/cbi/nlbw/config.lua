@@ -72,8 +72,8 @@ interval:depends("_period", "relative")
 interval.write = period.write
 
 interval.cfgvalue = function(self, cfg)
-	local val = m:get(cfg, "database_interval")
-	return val and tonumber(val)
+	local val = tonumber(m:get(cfg, "database_interval"))
+	return val and tostring(val)
 end
 
 

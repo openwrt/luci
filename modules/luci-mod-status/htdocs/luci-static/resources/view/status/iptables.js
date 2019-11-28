@@ -194,7 +194,7 @@ function parse_output(table, s)
 				srcnet,
 				dstnet,
 				options,
-				comment
+				[ comment ]
 			]);
 
 			if (target) {

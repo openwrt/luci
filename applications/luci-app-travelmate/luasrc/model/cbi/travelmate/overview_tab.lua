@@ -71,19 +71,24 @@ o4 = s:option(Flag, "trm_proactive", translate("ProActive Uplink Switch"),
 o4.default = o4.enabled
 o4.rmempty = false
 
-o5 = s:option(ListValue, "trm_iface", translate("Uplink / Trigger interface"),
+o5 = s:option(Flag, "trm_autoadd", translate("Add Open Uplinks"),
+	translate("Automatically add open uplinks like hotel captive portals to your wireless config."))
+o5.default = o5.disabled
+o5.rmempty = false
+
+o6 = s:option(ListValue, "trm_iface", translate("Uplink / Trigger interface"),
 	translate("Name of the used uplink interface."))
 if dump then
 	local i, v
 	for i, v in ipairs(dump.interface) do
 		if v.interface ~= "loopback" and v.interface ~= "lan" then
 			local device = v.l3_device or v.device or "-"
-			o5:value(v.interface, v.interface.. " (" ..device.. ")")
+			o6:value(v.interface, v.interface.. " (" ..device.. ")")
 		end
 	end
 end
-o5.default = trmiface
-o5.rmempty = false
+o6.default = trmiface
+o6.rmempty = false
 
 -- Runtime information
 
@@ -138,5 +143,11 @@ e8 = e:option(Value, "trm_timeout", translate("Overall Timeout"),
 e8.default = 60
 e8.datatype = "range(30,300)"
 e8.rmempty = false
+
+e10 = e:option(Value, "trm_scanbuffer", translate("Scan Buffer Size"),
+  translate("Buffer size in bytes to prepare nearby scan results."))
+e10.default = 1024
+e10.datatype = "range(512,4096)"
+e10.optional = true
 
 return m

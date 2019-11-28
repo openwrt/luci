@@ -62,9 +62,73 @@ function _ordered_children(node)
 	return children
 end
 
+local function dependencies_satisfied(node)
+	if type(node.file_depends) == "table" then
+		for _, file in ipairs(node.file_depends) do
+			local ftype = fs.stat(file, "type")
+			if ftype == "dir" then
+				local empty = true
+				for e in (fs.dir(file) or function() end) do
+					empty = false
+				end
+				if empty then
+					return false
+				end
+			elseif ftype == nil then
+				return false
+			end
+		end
+	end
+
+	if type(node.uci_depends) == "table" then
+		for config, expect_sections in pairs(node.uci_depends) do
+			if type(expect_sections) == "table" then
+				for section, expect_options in pairs(expect_sections) do
+					if type(expect_options) == "table" then
+						for option, expect_value in pairs(expect_options) do
+							local val = uci:get(config, section, option)
+							if expect_value == true and val == nil then
+								return false
+							elseif type(expect_value) == "string" then
+								if type(val) == "table" then
+									local found = false
+									for _, subval in ipairs(val) do
+										if subval == expect_value then
+											found = true
+										end
+									end
+									if not found then
+										return false
+									end
+								elseif val ~= expect_value then
+									return false
+								end
+							end
+						end
+					else
+						local val = uci:get(config, section)
+						if expect_options == true and val == nil then
+							return false
+						elseif type(expect_options) == "string" and val ~= expect_options then
+							return false
+						end
+					end
+				end
+			elseif expect_sections == true then
+				if not uci:get_first(config) then
+					return false
+				end
+			end
+		end
+	end
+
+	return true
+end
+
 function node_visible(node)
    if node then
 	  return not (
+		 (not dependencies_satisfied(node)) or
 		 (not node.title or #node.title == 0) or
 		 (not node.target or node.hidden == true) or
 		 (type(node.target) == "table" and node.target.type == "firstchild" and
@@ -149,7 +213,11 @@ function httpdispatch(request, prefix)
 	--context._disable_memtrace()
 end
 
-local function require_post_security(target)
+local function require_post_security(target, args)
+	if type(target) == "table" and target.type == "arcombine" and type(target.targets) == "table" then
+		return require_post_security((type(args) == "table" and #args > 0) and target.targets[2] or target.targets[1], args)
+	end
+
 	if type(target) == "table" then
 		if type(target.post) == "table" then
 			local param_name, required_val, request_val
@@ -470,7 +538,7 @@ function dispatch(request)
 		return
 	end
 
-	if c and require_post_security(c.target) then
+	if c and require_post_security(c.target, args) then
 		if not test_post_security(c) then
 			return
 		end
@@ -854,6 +922,15 @@ end
 
 function template(name)
 	return {type = "template", view = name, target = _template}
+end
+
+
+local _view = function(self, ...)
+	require "luci.template".render("view", { view = self.view })
+end
+
+function view(name)
+	return {type = "view", view = name, target = _view}
 end
 
 

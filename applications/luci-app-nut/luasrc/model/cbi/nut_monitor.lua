@@ -190,7 +190,7 @@ o.optional = false
 
 o = s:option(Value, "hostname", translate("Hostname or address of UPS"))
 o.optional = false
-s.datetype = "host"
+s.datatype = "host"
 
 o = s:option(Value, "port", translate("Port"))
 o.optional = true
@@ -219,7 +219,7 @@ o.optional = false
 
 o = s:option(Value, "hostname", translate("Hostname or address of UPS"))
 o.optional = false
-s.datetype = "host"
+s.datatype = "host"
 
 o = s:option(Value, "port", translate("Port"))
 o.optional = true

@@ -5,7 +5,7 @@ if [ "$(uci -q get luci.diag)" != "internal" ]; then
 
 	if [ -s /etc/os-release ]; then
 		. /etc/os-release
-		host="${HOME_URL:-${BUG_URL:-$LEDE_DEVICE_MANUFACTURER_URL}}"
+		host="${HOME_URL:-${BUG_URL:-$OPENWRT_DEVICE_MANUFACTURER_URL}}"
 		host="${host#*://}"
 		host="${host%%/*}"
 	fi

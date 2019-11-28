@@ -22,52 +22,24 @@ function index()
 		s_output	= _("Output plugins"),
 		s_general	= _("General plugins"),
 		s_network	= _("Network plugins"),
-
-		apcups		= _("APC UPS"),
-		conntrack	= _("Conntrack"),
-		contextswitch	= _("Context Switches"),
-		cpu		= _("Processor"),
-		cpufreq		= _("CPU Frequency"),
-		csv		= _("CSV Output"),
-		curl		= _("cUrl"),
-		df		= _("Disk Space Usage"),
-		disk		= _("Disk Usage"),
-		dns		= _("DNS"),
-		email		= _("Email"),
-		entropy		= _("Entropy"),
-		exec		= _("Exec"),
-		interface	= _("Interfaces"),
-		iptables	= _("Firewall"),
-		irq		= _("Interrupts"),
-		iwinfo		= _("Wireless"),
-		load		= _("System Load"),
-		memory		= _("Memory"),
-		netlink		= _("Netlink"),
-		network		= _("Network"),
-		nut		= _("UPS"),
-		olsrd		= _("OLSRd"),
-		openvpn		= _("OpenVPN"),
-		ping		= _("Ping"),
-		processes	= _("Processes"),
-		rrdtool		= _("RRDTool"),
-		sensors		= _("Sensors"),
-		splash_leases	= _("Splash Leases"),
-		tcpconns	= _("TCP Connections"),
-		thermal		= _("Thermal"),
-		unixsock	= _("UnixSock"),
-		uptime		= _("Uptime")
 	}
 
 	-- our collectd menu
 	local collectd_menu = {
-		output  = { "csv", "network", "rrdtool", "unixsock" },
-		general = { "apcups", "contextswitch", "cpu", "cpufreq", "df",
-			"disk", "email", "entropy", "exec", "irq", "load", "memory",
-			"nut", "processes", "sensors", "thermal", "uptime" },
-		network = { "conntrack", "curl", "dns", "interface", "iptables",
-			"netlink", "olsrd", "openvpn", "ping",
-			"splash_leases", "tcpconns", "iwinfo" }
+		output  = { },
+		general = { },
+		network = { }
 	}
+
+	local plugin_dir = "/usr/lib/lua/luci/statistics/plugins/"
+	for filename in nixio.fs.dir(plugin_dir) do
+		local plugin_fun = loadfile(plugin_dir .. filename)
+		setfenv(plugin_fun, { _ = luci.i18n.translate })
+		local plugin = plugin_fun()
+		local name = filename:gsub("%.lua", "")
+		table.insert(collectd_menu[plugin.category], name)
+		labels[name] = plugin.label
+	end
 
 	-- create toplevel menu nodes
 	local st = entry({"admin", "statistics"}, template("admin_statistics/index"), _("Statistics"), 80)

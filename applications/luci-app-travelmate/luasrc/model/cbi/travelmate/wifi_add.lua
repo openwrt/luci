@@ -1,11 +1,13 @@
--- Copyright 2017-2018 Dirk Brenken (dev@brenken.org)
+-- Copyright 2017-2019 Dirk Brenken (dev@brenken.org)
 -- This is free software, licensed under the Apache License, Version 2.0
 
 local fs       = require("nixio.fs")
 local uci      = require("luci.model.uci").cursor()
 local http     = require("luci.http")
+local util     = require("luci.util")
+local scripts  = util.split(util.trim(util.exec("ls /etc/travelmate/*.login 2>/dev/null")), "\n", nil, true) or {}
 local trmiface = uci:get("travelmate", "global", "trm_iface") or "trm_wwan"
-local encr_psk = {"psk", "psk2", "psk-mixed"}
+local encr_psk = {"psk", "psk2", "psk-mixed", "sae", "owe", "sae-mixed"}
 local encr_wpa = {"wpa", "wpa2", "wpa-mixed"}
 
 m = SimpleForm("add", translate("Add Wireless Uplink Configuration"))
@@ -21,10 +23,17 @@ m.hidden = {
 	device      = http.formvalue("device"),
 	ssid        = http.formvalue("ssid"),
 	bssid       = http.formvalue("bssid"),
-	wep         = http.formvalue("wep"),
+	description = http.formvalue("description"),
+	wep         = tonumber(http.formvalue("wep")) or 0,
 	wpa_suites  = http.formvalue("wpa_suites"),
-	wpa_version = http.formvalue("wpa_version")
+	wpa_version = tonumber(http.formvalue("wpa_version")) or 0
 }
+
+if m.hidden.wpa_version == 4 then
+	if string.find(m.hidden.description, "OWE") then
+		m.hidden.wpa_version = 5
+	end
+end
 
 if m.hidden.ssid == "" then
 	wssid = m:field(Value, "ssid", translate("SSID (hidden)"))
@@ -47,7 +56,7 @@ bssid:depends("no_bssid", 0)
 bssid.datatype = "macaddr"
 bssid.default = m.hidden.bssid or ""
 
-if (tonumber(m.hidden.wep) or 0) == 1 then
+if m.hidden.wep == 1 then
 	encr = m:field(ListValue, "encryption", translate("Encryption"))
 	encr:value("wep", "WEP")
 	encr:value("wep+open", "WEP Open System")
@@ -58,30 +67,13 @@ if (tonumber(m.hidden.wep) or 0) == 1 then
 	wkey = m:field(Value, "key", translate("WEP-Passphrase"))
 	wkey.password = true
 	wkey.datatype = "wepkey"
-elseif (tonumber(m.hidden.wpa_version) or 0) > 0 then
-	if m.hidden.wpa_suites == "PSK" or m.hidden.wpa_suites == "PSK2" then
-		encr = m:field(ListValue, "encryption", translate("Encryption"))
-		encr:value("psk", "WPA PSK")
-		encr:value("psk-mixed", "WPA/WPA2 mixed")
-		encr:value("psk2", "WPA2 PSK")
-		encr.default = encr_psk[tonumber(m.hidden.wpa_version)] or "psk2"
-
-		ciph = m:field(ListValue, "cipher", translate("Cipher"))
-		ciph:value("auto", translate("Automatic"))
-		ciph:value("ccmp", translate("Force CCMP (AES)"))
-		ciph:value("tkip", translate("Force TKIP"))
-		ciph:value("tkip+ccmp", translate("Force TKIP and CCMP (AES)"))
-		ciph.default = "auto"
-
-		wkey = m:field(Value, "key", translate("WPA-Passphrase"))
-		wkey.password = true
-		wkey.datatype = "wpakey"
-	elseif m.hidden.wpa_suites == "802.1X" then
+elseif m.hidden.wpa_version > 0 then
+	if m.hidden.wpa_suites == "802.1X" then
 		encr = m:field(ListValue, "encryption", translate("Encryption"))
 		encr:value("wpa", "WPA Enterprise")
 		encr:value("wpa-mixed", "WPA/WPA2 Enterprise mixed")
 		encr:value("wpa2", "WPA2 Enterprise")
-		encr.default = encr_wpa[tonumber(m.hidden.wpa_version)] or "wpa2"
+		encr.default = encr_wpa[m.hidden.wpa_version] or "wpa2"
 
 		ciph = m:field(ListValue, "cipher", translate("Cipher"))
 		ciph:value("auto", translate("Automatic"))
@@ -132,11 +124,57 @@ elseif (tonumber(m.hidden.wpa_version) or 0) > 0 then
 		privkeypwd.datatype = "wpakey"
 		privkeypwd.password = true
 		privkeypwd.rmempty = true
+	else
+		encr = m:field(ListValue, "encryption", translate("Encryption"))
+		encr:value("psk", "WPA-PSK")
+		encr:value("psk2", "WPA2-PSK")
+		encr:value("psk-mixed", "WPA/WPA2 mixed")
+		encr:value("sae", "WPA3-SAE")
+		encr:value("owe", "OWE (open network)")
+		encr:value("sae-mixed", "WPA2/WPA3 mixed")
+		encr.default = encr_psk[m.hidden.wpa_version] or "psk2"
+
+		ciph = m:field(ListValue, "cipher", translate("Cipher"))
+		ciph:value("auto", translate("Automatic"))
+		ciph:value("ccmp", translate("Force CCMP (AES)"))
+		ciph:value("tkip", translate("Force TKIP"))
+		ciph:value("tkip+ccmp", translate("Force TKIP and CCMP (AES)"))
+		ciph:depends("encryption", "psk")
+		ciph:depends("encryption", "psk2")
+		ciph:depends("encryption", "psk-mixed")
+		ciph.default = "auto"
+
+		wkey = m:field(Value, "key", translate("WPA-Passphrase"))
+		wkey.password = true
+		wkey.datatype = "wpakey"
+		wkey:depends("encryption", "psk")
+		wkey:depends("encryption", "psk2")
+		wkey:depends("encryption", "psk-mixed")
+		wkey:depends("encryption", "sae")
+		wkey:depends("encryption", "sae-mixed")
 	end
 end
 
+local login_section = (m.hidden.device or "") .. "_" .. (m.hidden.ssid or "") .. "_" .. (m.hidden.bssid or "")
+login_section = login_section:gsub("[^%w_]", "_")
+local cmd = uci:get("travelmate", login_section, "command")
+local cmd_args_default = uci:get("travelmate", login_section, "command_args")
+cmd_list = m:field(ListValue, "cmdlist", translate("Auto Login Script"),
+	translate("External script reference which will be called for automated captive portal logins."))
+cmd_args = m:field(Value, "cmdargs", translate("Optional Arguments"),
+	translate("Space separated list of additional arguments passed to the Auto Login Script, i.e. username and password"))
+for _, z in ipairs(scripts) do
+	cmd_list:value(z)
+	cmd_args:depends("cmdlist", z)
+end
+cmd_list:value("none")
+cmd_list.default = cmd or "none"
+cmd_args.default = cmd_args_default
+
 function wssid.write(self, section, value)
-	newsection = uci:section("wireless", "wifi-iface", nil, {
+	login_section = (m.hidden.device or "") .. "_" .. (wssid:formvalue(section) or "") .. "_" .. (bssid:formvalue(section) or "")
+	login_section = login_section:gsub("[^%w_]", "_")
+	newsection = uci:section("wireless", "wifi-iface", login_section, {
 		mode     = "sta",
 		network  = trmiface,
 		device   = m.hidden.device,
@@ -145,23 +183,11 @@ function wssid.write(self, section, value)
 		disabled = "1"
 	})
 
-	if (tonumber(m.hidden.wep) or 0) == 1 then
-		uci:set("wireless", newsection, "encryption", encr:formvalue(section))
-		uci:set("wireless", newsection, "key", wkey:formvalue(section) or "")
-	elseif (tonumber(m.hidden.wpa_version) or 0) > 0 then
-		if m.hidden.wpa_suites == "PSK" or m.hidden.wpa_suites == "PSK2" then
-			if ciph:formvalue(section) ~= "auto" then
-				uci:set("wireless", newsection, "encryption", encr:formvalue(section) .. "+" .. ciph:formvalue(section))
-			else
-				uci:set("wireless", newsection, "encryption", encr:formvalue(section))
-			end
+	if encr then
+		if string.find(encr:formvalue(section), '^wep') then
+			uci:set("wireless", newsection, "encryption", encr:formvalue(section))
 			uci:set("wireless", newsection, "key", wkey:formvalue(section) or "")
-		elseif m.hidden.wpa_suites == "802.1X" then
-			if ciph:formvalue(section) ~= "auto" then
-				uci:set("wireless", newsection, "encryption", encr:formvalue(section) .. "+" .. ciph:formvalue(section))
-			else
-				uci:set("wireless", newsection, "encryption", encr:formvalue(section))
-			end
+		elseif string.find(encr:formvalue(section), '^wpa') then
 			uci:set("wireless", newsection, "eap_type", eaptype:formvalue(section))
 			uci:set("wireless", newsection, "auth", authentication:formvalue(section))
 			uci:set("wireless", newsection, "identity", ident:formvalue(section) or "")
@@ -170,9 +196,26 @@ function wssid.write(self, section, value)
 			uci:set("wireless", newsection, "client_cert", clientcert:formvalue(section) or "")
 			uci:set("wireless", newsection, "priv_key", privkey:formvalue(section) or "")
 			uci:set("wireless", newsection, "priv_key_pwd", privkeypwd:formvalue(section) or "")
+		elseif encr:formvalue(section) ~= "owe" then
+			uci:set("wireless", newsection, "key", wkey:formvalue(section) or "")
+		end
+		if ciph and ciph:formvalue(section) ~= "auto" then
+			uci:set("wireless", newsection, "encryption", encr:formvalue(section) .. "+" .. ciph:formvalue(section))
+		else
+			uci:set("wireless", newsection, "encryption", encr:formvalue(section))
 		end
 	else
 		uci:set("wireless", newsection, "encryption", "none")
+	end
+
+	if not uci:get("travelmate", login_section) and cmd_list:formvalue(section) ~= "none" then
+		uci:set("travelmate", login_section, "login")
+	end
+	if uci:get("travelmate", login_section) then
+		uci:set("travelmate", login_section, "command", cmd_list:formvalue(section))
+		uci:set("travelmate", login_section, "command_args", cmd_args:formvalue(section))
+		uci:save("travelmate")
+		uci:commit("travelmate")
 	end
 	uci:save("wireless")
 	uci:commit("wireless")

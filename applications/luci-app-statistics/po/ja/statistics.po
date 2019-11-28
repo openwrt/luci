@@ -3,23 +3,28 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-05-19 19:36+0200\n"
-"PO-Revision-Date: 2017-01-24 15:08+0900\n"
-"Last-Translator: INAGAKI Hiroshi <musashino.open@gmail.com>\n"
+"PO-Revision-Date: 2019-10-17 07:01+0000\n"
+"Last-Translator: Scott Anecito <scott.anecito@protonmail.com>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/openwrt/"
+"luciapplicationsstatistics/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 1.8.11\n"
-"Language-Team: \n"
+"X-Generator: Weblate 3.9\n"
 
-#: applications/luci-app-statistics/luasrc/controller/luci_statistics/luci_statistics.lua:26
+#: applications/luci-app-statistics/luasrc/statistics/plugins/apcups.lua:7
 #: applications/luci-app-statistics/luasrc/statistics/rrdtool/definitions/apcups.lua:7
 msgid "APC UPS"
 msgstr ""
 
 #: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/apcups.lua:5
 msgid "APCUPS Plugin Configuration"
+msgstr ""
+
+#: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/memory.lua:15
+msgid "Absolute values"
 msgstr ""
 
 #: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/iptables.lua:70
@@ -43,6 +48,10 @@ msgstr "スペースで区切られた複数のホストを追加します。"
 msgid "Add notification command"
 msgstr "通知コマンドの追加"
 
+#: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/ping.lua:24
+msgid "Address family"
+msgstr ""
+
 #: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/openvpn.lua:23
 msgid "Aggregate number of connected users"
 msgstr "接続ユーザー数の総計"
@@ -55,12 +64,16 @@ msgstr "ベース・ディレクトリ"
 msgid "Basic monitoring"
 msgstr "基本モニタリング"
 
+#: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/cpu.lua:18
+msgid "By setting this, CPU is not aggregate of all processors on the system"
+msgstr ""
+
 #: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/contextswitch.lua:4
 msgid "CPU Context Switches Plugin Configuration"
 msgstr ""
 
-#: applications/luci-app-statistics/luasrc/controller/luci_statistics/luci_statistics.lua:30
-#: applications/luci-app-statistics/luasrc/statistics/rrdtool/definitions/cpufreq.lua:6
+#: applications/luci-app-statistics/luasrc/statistics/plugins/cpufreq.lua:7
+#: applications/luci-app-statistics/luasrc/statistics/rrdtool/definitions/cpufreq.lua:9
 msgid "CPU Frequency"
 msgstr "CPU 周波数"
 
@@ -72,7 +85,7 @@ msgstr "CPU 周波数プラグイン設定"
 msgid "CPU Plugin Configuration"
 msgstr "CPU プラグイン設定"
 
-#: applications/luci-app-statistics/luasrc/controller/luci_statistics/luci_statistics.lua:31
+#: applications/luci-app-statistics/luasrc/statistics/plugins/csv.lua:7
 msgid "CSV Output"
 msgstr "CSV 出力"
 
@@ -117,7 +130,7 @@ msgstr ""
 "Collectd は、様々なソースから別々のプラグインを通してデータを収集する軽量デー"
 "モンです。"
 
-#: applications/luci-app-statistics/luasrc/controller/luci_statistics/luci_statistics.lua:27
+#: applications/luci-app-statistics/luasrc/statistics/plugins/conntrack.lua:7
 #: applications/luci-app-statistics/luasrc/statistics/rrdtool/definitions/conntrack.lua:7
 msgid "Conntrack"
 msgstr "Conntrack"
@@ -126,7 +139,7 @@ msgstr "Conntrack"
 msgid "Conntrack Plugin Configuration"
 msgstr "Conntrack プラグイン設定"
 
-#: applications/luci-app-statistics/luasrc/controller/luci_statistics/luci_statistics.lua:28
+#: applications/luci-app-statistics/luasrc/statistics/plugins/contextswitch.lua:7
 #: applications/luci-app-statistics/luasrc/statistics/rrdtool/definitions/contextswitch.lua:6
 msgid "Context Switches"
 msgstr ""
@@ -135,7 +148,7 @@ msgstr ""
 msgid "DF Plugin Configuration"
 msgstr "DF プラグイン設定"
 
-#: applications/luci-app-statistics/luasrc/controller/luci_statistics/luci_statistics.lua:35
+#: applications/luci-app-statistics/luasrc/statistics/plugins/dns.lua:7
 #: applications/luci-app-statistics/luasrc/statistics/rrdtool/definitions/dns.lua:7
 msgid "DNS"
 msgstr "DNS"
@@ -168,12 +181,12 @@ msgstr "サブ設定ディレクトリ"
 msgid "Disk Plugin Configuration"
 msgstr "ディスクプラグイン設定"
 
-#: applications/luci-app-statistics/luasrc/controller/luci_statistics/luci_statistics.lua:33
+#: applications/luci-app-statistics/luasrc/statistics/plugins/df.lua:7
 #: applications/luci-app-statistics/luasrc/statistics/rrdtool/definitions/df.lua:7
 msgid "Disk Space Usage"
 msgstr "ディスクスペース使用量"
 
-#: applications/luci-app-statistics/luasrc/controller/luci_statistics/luci_statistics.lua:34
+#: applications/luci-app-statistics/luasrc/statistics/plugins/disk.lua:7
 #: applications/luci-app-statistics/luasrc/statistics/rrdtool/definitions/disk.lua:7
 msgid "Disk Usage"
 msgstr "ディスクの使用"
@@ -190,7 +203,7 @@ msgstr "時間帯表示 »"
 msgid "E-Mail Plugin Configuration"
 msgstr "E-メールプラグイン設定"
 
-#: applications/luci-app-statistics/luasrc/controller/luci_statistics/luci_statistics.lua:36
+#: applications/luci-app-statistics/luasrc/statistics/plugins/email.lua:7
 msgid "Email"
 msgstr "Eメール"
 
@@ -200,13 +213,13 @@ msgstr "空の値 = 全てをモニターする"
 
 #: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/curl.lua:17
 msgid "Enable"
-msgstr ""
+msgstr "有効"
 
 #: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/apcups.lua:14
 #: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/conntrack.lua:10
 #: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/contextswitch.lua:11
-#: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/cpu.lua:12
 #: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/cpufreq.lua:11
+#: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/cpu.lua:12
 #: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/csv.lua:15
 #: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/curl.lua:8
 #: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/df.lua:15
@@ -238,7 +251,7 @@ msgstr ""
 msgid "Enable this plugin"
 msgstr "プラグイン設定を有効にする"
 
-#: applications/luci-app-statistics/luasrc/controller/luci_statistics/luci_statistics.lua:37
+#: applications/luci-app-statistics/luasrc/statistics/plugins/entropy.lua:7
 #: applications/luci-app-statistics/luasrc/statistics/rrdtool/definitions/entropy.lua:7
 msgid "Entropy"
 msgstr "エントロピー"
@@ -247,7 +260,7 @@ msgstr "エントロピー"
 msgid "Entropy Plugin Configuration"
 msgstr "エントロピー プラグイン設定"
 
-#: applications/luci-app-statistics/luasrc/controller/luci_statistics/luci_statistics.lua:38
+#: applications/luci-app-statistics/luasrc/statistics/plugins/exec.lua:2
 msgid "Exec"
 msgstr ""
 
@@ -255,11 +268,15 @@ msgstr ""
 msgid "Exec Plugin Configuration"
 msgstr "Exec プラグイン設定"
 
+#: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/cpufreq.lua:15
+msgid "Extra items"
+msgstr ""
+
 #: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/netlink.lua:68
 msgid "Filter class monitoring"
 msgstr ""
 
-#: applications/luci-app-statistics/luasrc/controller/luci_statistics/luci_statistics.lua:40
+#: applications/luci-app-statistics/luasrc/statistics/plugins/iptables.lua:2
 #: applications/luci-app-statistics/luasrc/statistics/rrdtool/definitions/iptables.lua:7
 msgid "Firewall"
 msgstr "ファイアウォール"
@@ -284,7 +301,7 @@ msgstr "一般プラグイン"
 msgid "Generate a separate graph for each logged user"
 msgstr "ログインユーザーごとの分離されたグラフを生成します。"
 
-#: applications/luci-app-statistics/luasrc/controller/luci_statistics/luci_statistics.lua:101
+#: applications/luci-app-statistics/luasrc/controller/luci_statistics/luci_statistics.lua:73
 msgid "Graphs"
 msgstr "グラフ"
 
@@ -351,17 +368,17 @@ msgstr "着信インターフェース"
 msgid "Interface Plugin Configuration"
 msgstr "インターフェース プラグイン設定"
 
-#: applications/luci-app-statistics/luasrc/controller/luci_statistics/luci_statistics.lua:39
+#: applications/luci-app-statistics/luasrc/statistics/plugins/interface.lua:7
 #: applications/luci-app-statistics/luasrc/statistics/rrdtool/definitions/interface.lua:7
 msgid "Interfaces"
 msgstr "インターフェース"
 
-#: applications/luci-app-statistics/luasrc/controller/luci_statistics/luci_statistics.lua:41
+#: applications/luci-app-statistics/luasrc/statistics/plugins/irq.lua:7
 #: applications/luci-app-statistics/luasrc/statistics/rrdtool/definitions/irq.lua:7
 msgid "Interrupts"
 msgstr "割込み"
 
-#: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/ping.lua:30
+#: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/ping.lua:38
 msgid "Interval for pings"
 msgstr "ping間隔"
 
@@ -402,8 +419,8 @@ msgstr ""
 msgid "Maximum allowed connections"
 msgstr "許可された最大接続数"
 
-#: applications/luci-app-statistics/luasrc/controller/luci_statistics/luci_statistics.lua:44
-#: applications/luci-app-statistics/luasrc/statistics/rrdtool/definitions/memory.lua:15
+#: applications/luci-app-statistics/luasrc/statistics/plugins/memory.lua:7
+#: applications/luci-app-statistics/luasrc/statistics/rrdtool/definitions/memory.lua:7
 msgid "Memory"
 msgstr "メモリー"
 
@@ -480,6 +497,10 @@ msgstr "プロセスをモニターする"
 msgid "Monitor remote ports"
 msgstr "リモートのポートをモニターする"
 
+#: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/cpufreq.lua:15
+msgid "More details about frequency usage and transitions"
+msgstr ""
+
 #: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/curl.lua:20
 msgid "Name"
 msgstr ""
@@ -488,7 +509,7 @@ msgstr ""
 msgid "Name of the rule"
 msgstr "ルール名"
 
-#: applications/luci-app-statistics/luasrc/controller/luci_statistics/luci_statistics.lua:45
+#: applications/luci-app-statistics/luasrc/statistics/plugins/netlink.lua:7
 #: applications/luci-app-statistics/luasrc/statistics/rrdtool/definitions/netlink.lua:7
 msgid "Netlink"
 msgstr "Netlink"
@@ -497,7 +518,7 @@ msgstr "Netlink"
 msgid "Netlink Plugin Configuration"
 msgstr "Netlink プラグイン設定"
 
-#: applications/luci-app-statistics/luasrc/controller/luci_statistics/luci_statistics.lua:46
+#: applications/luci-app-statistics/luasrc/statistics/plugins/network.lua:2
 msgid "Network"
 msgstr "ネットワーク"
 
@@ -526,7 +547,7 @@ msgstr ""
 msgid "Number of threads for data collection"
 msgstr "データ収集用スレッド数"
 
-#: applications/luci-app-statistics/luasrc/controller/luci_statistics/luci_statistics.lua:48
+#: applications/luci-app-statistics/luasrc/statistics/plugins/olsrd.lua:7
 #: applications/luci-app-statistics/luasrc/statistics/rrdtool/definitions/olsrd.lua:7
 msgid "OLSRd"
 msgstr "OLSRd"
@@ -539,7 +560,7 @@ msgstr "OLSRd プラグイン設定"
 msgid "Only create average RRAs"
 msgstr "平均値のRRAsのみ作成する"
 
-#: applications/luci-app-statistics/luasrc/controller/luci_statistics/luci_statistics.lua:49
+#: applications/luci-app-statistics/luasrc/statistics/plugins/openvpn.lua:7
 #: applications/luci-app-statistics/luasrc/statistics/rrdtool/definitions/openvpn.lua:7
 msgid "OpenVPN"
 msgstr "OpenVPN"
@@ -564,7 +585,11 @@ msgstr "送信インターフェース"
 msgid "Output plugins"
 msgstr "出力プラグイン"
 
-#: applications/luci-app-statistics/luasrc/controller/luci_statistics/luci_statistics.lua:50
+#: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/memory.lua:23
+msgid "Percent values"
+msgstr ""
+
+#: applications/luci-app-statistics/luasrc/statistics/plugins/ping.lua:7
 #: applications/luci-app-statistics/luasrc/statistics/rrdtool/definitions/ping.lua:7
 msgid "Ping"
 msgstr "Ping"
@@ -581,7 +606,7 @@ msgstr "ポート"
 msgid "Port for apcupsd communication"
 msgstr ""
 
-#: applications/luci-app-statistics/luasrc/controller/luci_statistics/luci_statistics.lua:51
+#: applications/luci-app-statistics/luasrc/statistics/plugins/processes.lua:7
 #: applications/luci-app-statistics/luasrc/statistics/rrdtool/definitions/processes.lua:7
 msgid "Processes"
 msgstr "プロセス"
@@ -594,8 +619,8 @@ msgstr "プロセス プラグイン設定"
 msgid "Processes to monitor separated by space"
 msgstr "スペースで区切られた、モニターするプロセスです。"
 
-#: applications/luci-app-statistics/luasrc/controller/luci_statistics/luci_statistics.lua:29
-#: applications/luci-app-statistics/luasrc/statistics/rrdtool/definitions/cpu.lua:7
+#: applications/luci-app-statistics/luasrc/statistics/plugins/cpu.lua:7
+#: applications/luci-app-statistics/luasrc/statistics/rrdtool/definitions/cpu.lua:10
 msgid "Processor"
 msgstr "プロセッサー"
 
@@ -615,13 +640,25 @@ msgstr "RRD ハートビート間隔"
 msgid "RRD step interval"
 msgstr "RRD stepインターバル"
 
-#: applications/luci-app-statistics/luasrc/controller/luci_statistics/luci_statistics.lua:52
+#: applications/luci-app-statistics/luasrc/statistics/plugins/rrdtool.lua:7
 msgid "RRDTool"
 msgstr "RRDTool"
 
 #: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/rrdtool.lua:5
 msgid "RRDTool Plugin Configuration"
 msgstr "RRDTool プラグイン設定"
+
+#: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/cpu.lua:17
+msgid "Report by CPU"
+msgstr ""
+
+#: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/cpu.lua:24
+msgid "Report by state"
+msgstr ""
+
+#: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/cpu.lua:31
+msgid "Report in percent"
+msgstr ""
 
 #: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/rrdtool.lua:74
 msgid "Rows per RRA"
@@ -634,7 +671,7 @@ msgstr "スクリプト"
 
 #: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/collectd.lua:44
 #: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/network.lua:78
-#: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/ping.lua:30
+#: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/ping.lua:38
 #: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/rrdtool.lua:35
 #: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/rrdtool.lua:44
 #: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/rrdtool.lua:91
@@ -646,7 +683,7 @@ msgstr "秒"
 msgid "Sensor list"
 msgstr "センサー一覧"
 
-#: applications/luci-app-statistics/luasrc/controller/luci_statistics/luci_statistics.lua:53
+#: applications/luci-app-statistics/luasrc/statistics/plugins/sensors.lua:7
 #: applications/luci-app-statistics/luasrc/statistics/rrdtool/definitions/sensors.lua:7
 msgid "Sensors"
 msgstr "センサー"
@@ -663,7 +700,7 @@ msgstr "サーバー ホスト"
 msgid "Server port"
 msgstr "サーバー ポート"
 
-#: applications/luci-app-statistics/luasrc/controller/luci_statistics/luci_statistics.lua:76
+#: applications/luci-app-statistics/luasrc/controller/luci_statistics/luci_statistics.lua:48
 msgid "Setup"
 msgstr "設定"
 
@@ -703,7 +740,7 @@ msgstr "ルートについて、どのような情報を収集するか設定し
 msgid "Specifies what information to collect about the global topology."
 msgstr ""
 
-#: applications/luci-app-statistics/luasrc/controller/luci_statistics/luci_statistics.lua:54
+#: applications/luci-app-statistics/luasrc/statistics/plugins/splash_leases.lua:7
 #: applications/luci-app-statistics/luasrc/statistics/rrdtool/definitions/splash_leases.lua:7
 msgid "Splash Leases"
 msgstr ""
@@ -712,7 +749,7 @@ msgstr ""
 msgid "Splash Leases Plugin Configuration"
 msgstr ""
 
-#: applications/luci-app-statistics/luasrc/controller/luci_statistics/luci_statistics.lua:73
+#: applications/luci-app-statistics/luasrc/controller/luci_statistics/luci_statistics.lua:45
 #: applications/luci-app-statistics/luasrc/view/admin_statistics/index.htm:9
 #: applications/luci-app-statistics/luasrc/view/public_statistics/graph.htm:9
 msgid "Statistics"
@@ -734,12 +771,12 @@ msgstr "データ値を絶対値の代わりにレートとして保存します
 msgid "Stored timespans"
 msgstr "保存する期間の範囲"
 
-#: applications/luci-app-statistics/luasrc/controller/luci_statistics/luci_statistics.lua:43
+#: applications/luci-app-statistics/luasrc/statistics/plugins/load.lua:7
 #: applications/luci-app-statistics/luasrc/statistics/rrdtool/definitions/load.lua:7
 msgid "System Load"
 msgstr "システム負荷"
 
-#: applications/luci-app-statistics/luasrc/controller/luci_statistics/luci_statistics.lua:55
+#: applications/luci-app-statistics/luasrc/statistics/plugins/tcpconns.lua:7
 #: applications/luci-app-statistics/luasrc/statistics/rrdtool/definitions/tcpconns.lua:7
 msgid "TCP Connections"
 msgstr "TCP 接続"
@@ -752,7 +789,7 @@ msgstr "TCP接続プラグイン設定"
 msgid "TTL for network packets"
 msgstr "ネットワークパケットのTTL"
 
-#: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/ping.lua:24
+#: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/ping.lua:32
 msgid "TTL for ping packets"
 msgstr "pingパケットのTTL"
 
@@ -986,7 +1023,7 @@ msgstr ""
 msgid "The uptime plugin collects statistics about the uptime of the system."
 msgstr "稼働時間 プラグインは、システムの稼働時間についての統計を収集します。"
 
-#: applications/luci-app-statistics/luasrc/controller/luci_statistics/luci_statistics.lua:56
+#: applications/luci-app-statistics/luasrc/statistics/plugins/thermal.lua:7
 #: applications/luci-app-statistics/luasrc/statistics/rrdtool/definitions/thermal.lua:6
 msgid "Thermal"
 msgstr "サーマル"
@@ -1023,8 +1060,8 @@ msgstr ""
 msgid "Try to lookup fully qualified hostname"
 msgstr ""
 
-#: applications/luci-app-statistics/luasrc/controller/luci_statistics/luci_statistics.lua:47
 #: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/nut.lua:12
+#: applications/luci-app-statistics/luasrc/statistics/plugins/nut.lua:7
 #: applications/luci-app-statistics/luasrc/statistics/rrdtool/definitions/nut.lua:6
 msgid "UPS"
 msgstr "UPS"
@@ -1041,7 +1078,7 @@ msgstr "ups@host 形式のNUT内のUPS名"
 msgid "URL"
 msgstr ""
 
-#: applications/luci-app-statistics/luasrc/controller/luci_statistics/luci_statistics.lua:57
+#: applications/luci-app-statistics/luasrc/statistics/plugins/unixsock.lua:7
 msgid "UnixSock"
 msgstr "UnixSock"
 
@@ -1049,7 +1086,7 @@ msgstr "UnixSock"
 msgid "Unixsock Plugin Configuration"
 msgstr "Unixsock プラグイン設定"
 
-#: applications/luci-app-statistics/luasrc/controller/luci_statistics/luci_statistics.lua:58
+#: applications/luci-app-statistics/luasrc/statistics/plugins/uptime.lua:7
 #: applications/luci-app-statistics/luasrc/statistics/rrdtool/definitions/uptime.lua:15
 msgid "Uptime"
 msgstr "稼働時間"
@@ -1075,7 +1112,20 @@ msgstr "ユーザー"
 msgid "Verbose monitoring"
 msgstr "詳細モニタリング"
 
-#: applications/luci-app-statistics/luasrc/controller/luci_statistics/luci_statistics.lua:42
+#: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/cpu.lua:25
+msgid "When set to true, reports per-state metric (system, user, idle)"
+msgstr ""
+
+#: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/memory.lua:16
+msgid "When set to true, we request absolute values"
+msgstr ""
+
+#: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/cpu.lua:32
+#: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/memory.lua:24
+msgid "When set to true, we request percentage values"
+msgstr ""
+
+#: applications/luci-app-statistics/luasrc/statistics/plugins/iwinfo.lua:7
 #: applications/luci-app-statistics/luasrc/statistics/rrdtool/definitions/iwinfo.lua:7
 msgid "Wireless"
 msgstr "無線"
@@ -1091,7 +1141,7 @@ msgstr ""
 "追加の collectd-mod-* プラグインをインストールすることで、より多くの統計を有"
 "効にできます。"
 
-#: applications/luci-app-statistics/luasrc/controller/luci_statistics/luci_statistics.lua:32
+#: applications/luci-app-statistics/luasrc/statistics/plugins/curl.lua:2
 #: applications/luci-app-statistics/luasrc/statistics/rrdtool/definitions/curl.lua:7
 msgid "cUrl"
 msgstr ""

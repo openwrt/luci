@@ -71,8 +71,8 @@ header h3 a, header .brand {
 		word-wrap: normal;
 	}
 
-	.td[data-type="button"],
-	.td[data-type="fvalue"] {
+	.td[data-widget="button"],
+	.td[data-widget="fvalue"] {
 		flex: 1 1 17%;
 		text-align: left;
 	}
@@ -145,12 +145,12 @@ header h3 a, header .brand {
 		flex-basis: 100%;
 	}
 
-	.td.cbi-value-field[data-type="dvalue"] {
+	.td.cbi-value-field[data-widget="dvalue"] {
 		flex-basis: 50%;
 	}
 
-	.td.cbi-value-field[data-type="button"],
-	.td.cbi-value-field[data-type="fvalue"] {
+	.td.cbi-value-field[data-widget="button"],
+	.td.cbi-value-field[data-widget="fvalue"] {
 		flex-basis: 25%;
 		text-align: left;
 	}
@@ -177,9 +177,11 @@ header h3 a, header .brand {
 		margin: 0;
 	}
 
-	input, textarea, select {
+	input, textarea, select,
+	.cbi-dropdown > ul > li input[type="text"] {
 		font-size: 16px !important;
 		line-height: 28px;
+		height: auto;
 	}
 
 	select, input[type="text"], input[type="password"] {
@@ -309,7 +311,7 @@ header h3 a, header .brand {
 		flex-basis: 50% !important;
 	}
 
-	[data-page="admin-status-processes"] .td[data-type="button"] {
+	[data-page="admin-status-processes"] .td[data-widget="button"] {
 		flex-basis: 33% !important;
 	}
 
@@ -318,9 +320,9 @@ header h3 a, header .brand {
 		flex-basis: 25% !important;
 	}
 
-	[data-page="admin-system-fstab"] .td[data-type="button"]::before,
-	[data-page="admin-system-startup"] .td[data-type="button"]::before,
-	[data-page="admin-status-processes"] .td[data-type="button"]::before {
+	[data-page="admin-system-fstab"] .td[data-widget="button"]::before,
+	[data-page="admin-system-startup"] .td[data-widget="button"]::before,
+	[data-page="admin-status-processes"] .td[data-widget="button"]::before {
 		display: none;
 	}
 }
@@ -338,13 +340,14 @@ header h3 a, header .brand {
 		padding: 0;
 	}
 
-	.cbi-page-actions .cbi-button {
+	.cbi-page-actions .cbi-button:not(.cbi-dropdown) {
 		flex: 1 1 calc(50% - 2px);
 		margin: 1px !important;
 		overflow: hidden;
 		text-overflow: ellipsis;
 	}
 
+	.cbi-page-actions .cbi-button-negative,
 	.cbi-page-actions .cbi-button-primary,
 	.cbi-page-actions .cbi-button-apply {
 		flex-basis: calc(100% - -2px);
@@ -355,18 +358,24 @@ header h3 a, header .brand {
 		text-overflow: ellipsis;
 	}
 
-	body[data-page="admin-network-wireless"] .td.col-2 {
+	body[data-page="admin-network-wireless"] .td[data-name="_badge"] {
 		max-width: 50px;
+		align-self: center;
 	}
 
-	body[data-page="admin-network-wireless"] .td.col-2 > .ifacebadge {
+	body[data-page="admin-network-wireless"] .td[data-name="_badge"] .ifacebadge {
 		display: flex;
 		align-items: center;
 		flex-direction: column;
 	}
 
-	body[data-page="admin-network-network"] .td.col-3 {
-		min-width: 250px;
+	body[data-page="admin-network-wireless"] .td[data-name="_stat"] {
+		flex-basis: 60%;
+	}
+
+	body[data-page="admin-network-network"] .td.cbi-section-actions::before,
+	body[data-page="admin-network-wireless"] .td.cbi-section-actions::before {
+		content: none !important;
 	}
 }
 

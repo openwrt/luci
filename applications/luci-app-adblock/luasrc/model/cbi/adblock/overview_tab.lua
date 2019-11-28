@@ -28,36 +28,44 @@ o2:value("dnsmasq", "dnsmasq (/tmp)")
 o2:value("unbound", "unbound (/var/lib/unbound)")
 o2:value("named", "named (/var/lib/bind)")
 o2:value("kresd", "kresd (/etc/kresd)")
-o2:value("dnscrypt-proxy","dnscrypt-proxy (/tmp)")
 o2.default = "dnsmasq (/tmp)"
 o2.rmempty = false
 
-o3 = s:option(ListValue, "adb_fetchutil", translate("Download Utility"),
-	translate("List of supported and fully pre-configured download utilities."))
-o3:value("uclient-fetch")
-o3:value("wget")
-o3:value("curl")
-o3:value("aria2c")
-o3:value("wget-nossl", "wget-nossl (noSSL)")
-o3:value("busybox", "wget-busybox (noSSL)")
-o3.default = "uclient-fetch"
+o3 = s:option(ListValue, "adb_dnsvariant", translate("DNS Blocking Variant"),
+	translate("List of supported DNS blocking variants. By default 'nxdomain' will be used for all DNS backends. ")
+	..translate("Dnsmasq also supports 'null' block variants, which may provide better response times."))
+o3:value("nxdomain", "nxdomain, all DNS backends")
+o3:value("null (IPv4)", "null (IPv4), dnsmasq only")
+o3:value("null (IPv4/IPv6)", "null (IPv4/IPv6), dnsmasq only")
+o3.default = "nxdomain, all DNS backends"
 o3.rmempty = false
 
-o4 = s:option(ListValue, "adb_trigger", translate("Startup Trigger"),
+o4 = s:option(ListValue, "adb_fetchutil", translate("Download Utility"),
+	translate("List of supported and fully pre-configured download utilities."))
+o4:value("uclient-fetch")
+o4:value("wget")
+o4:value("curl")
+o4:value("aria2c")
+o4:value("wget-nossl", "wget-nossl (noSSL)")
+o4:value("busybox", "wget-busybox (noSSL)")
+o4.default = "uclient-fetch"
+o4.rmempty = false
+
+o5 = s:option(ListValue, "adb_trigger", translate("Startup Trigger"),
 	translate("List of available network interfaces. Usually the startup will be triggered by the 'wan' interface. ")
 	..translate("Choose 'none' to disable automatic startups, 'timed' to use a classic timeout (default 30 sec.) or select another trigger interface."))
-o4:value("none")
-o4:value("timed")
+o5:value("none")
+o5:value("timed")
 if dump then
 	local i, v
 	for i, v in ipairs(dump.interface) do
 		if v.interface ~= "loopback" then
 			local device = v.l3_device or v.device or "-"
-			o4:value(v.interface, v.interface.. " (" ..device.. ")")
+			o5:value(v.interface, v.interface.. " (" ..device.. ")")
 		end
 	end
 end
-o4.rmempty = false
+o5.rmempty = false
 
 -- Runtime information
 
@@ -99,93 +107,105 @@ e1 = e:option(Flag, "adb_debug", translate("Verbose Debug Logging"),
 e1.rmempty = false
 
 e2 = e:option(Flag, "adb_nice", translate("Low Priority Service"),
-	translate("Set the nice level to 'low priority' and the adblock background processing will take less resources from the system. ")
+	translate("Set the nice level to 'low priority' and the adblock background processing will take fewer resources from the system. ")
 	..translate("This change requires a manual service stop/re-start to take effect."))
 e2.disabled = "0"
 e2.enabled = "10"
 e2.rmempty = false
 
 e3 = e:option(Flag, "adb_forcedns", translate("Force Local DNS"),
-	translate("Redirect all DNS queries from 'lan' zone to the local resolver, apply to udp and tcp protocol on ports 53, 853 and 5353."))
+	translate("Redirect all DNS queries from 'lan' zone to the local resolver, applies to udp and tcp protocol on ports 53, 853 and 5353."))
 e3.rmempty = false
 
-e4 = e:option(Flag, "adb_backup", translate("Enable Blocklist Backup"),
-	translate("Create compressed blocklist backups, they will be used in case of download errors or during startup in backup mode."))
+e4 = e:option(Value, "adb_maxqueue", translate("Max. Download Queue"),
+	translate("Size of the download queue to handle downloads &amp; list processing in parallel (default '4'). ")
+	..translate("For further performance improvements you can raise this value, e.g. '8' or '16' should be safe."))
+e4.default = 4
+e4.datatype = "range(1,32)"
 e4.rmempty = false
 
-e5 = e:option(Value, "adb_backupdir", translate("Backup Directory"),
-	translate("Target directory for adblock backups. Please use only a non-volatile disk, e.g. an external usb stick."))
-e5:depends("adb_backup", 1)
-e5.datatype = "directory"
-e5.default = "/mnt"
-e5.rmempty = true
+e5 = e:option(Flag, "adb_dnsfilereset", translate("DNS File Reset"),
+	translate("Resets the final DNS blockfile 'adb_list.overall' after loading through the DNS backend. ")
+	..translate("This option saves an enormous amount of storage space, but starts a small ubus/adblock monitor in the background."))
+e5.disabled = "false"
+e5.enabled = "true"
+e5.rmempty = false
 
-e6 = e:option(Flag, "adb_backup_mode", translate("Backup Mode"),
-	translate("Do not automatically update blocklists during startup, use blocklist backups instead."))
-e6:depends("adb_backup", 1)
-e6.rmempty = true
-
-e7 = e:option(Value, "adb_maxqueue", translate("Max. Download Queue"),
-	translate("Size of the download queue to handle downloads &amp; list processing in parallel (default '8'). ")
-	..translate("For further performance improvements you can raise this value, e.g. '8' or '16' should be safe."))
-e7.default = 8
-e7.datatype = "range(1,32)"
-e7.rmempty = false
-
-e8 = e:option(Flag, "adb_report", translate("Enable DNS Query Report"),
+e6 = e:option(Flag, "adb_report", translate("DNS Query Report"),
 	translate("Gather dns related network traffic via tcpdump to provide a DNS Query Report on demand. ")
 	..translate("Please note: this needs manual 'tcpdump-mini' package installation."))
-e8.rmempty = false
+e6.rmempty = false
 
-e9 = e:option(Value, "adb_repdir", translate("Report Directory"),
-	translate("Target directory for dns related report files. Please use preferably a non-volatile disk, e.g. an external usb stick."))
-e9:depends("adb_report", 1)
-e9.datatype = "directory"
-e9.default = "/tmp"
+e7 = e:option(Value, "adb_repdir", translate("Report Directory"),
+	translate("Target directory for dns related report files. Default is '/tmp', please use preferably a non-volatile disk if available."))
+e7:depends("adb_report", 1)
+e7.datatype = "directory"
+e7.default = "/tmp"
+e7.rmempty = true
+
+e8 = e:option(Value, "adb_backupdir", translate("Backup Directory"),
+	translate("Target directory for adblock source backups. Default is '/tmp', please use preferably a non-volatile disk if available."))
+e8.datatype = "directory"
+e8.default = "/tmp"
+e8.rmempty = true
+
+e9 = e:option(Flag, "adb_mail", translate("E-Mail Notification"),
+	translate("Send notification E-Mails in case of a processing error or if domain count is &le; 0. ")
+	.. translate("Please note: this needs manual 'msmtp' package installation and setup."))
 e9.rmempty = true
 
-e10 = e:option(Flag, "adb_notify", translate("Email Notification"),
-	translate("Send notification emails in case of a processing error or if domain count is &le; 0. ")
-	.. translate("Please note: this needs manual 'msmtp' package installation and setup."))
+e10 = e:option(Value, "adb_mreceiver", translate("E-Mail Receiver Address"),
+	translate("Receiver address for adblock notification E-Mails."))
+e10:depends("adb_mail", 1)
 e10.rmempty = true
 
 -- Optional Extra Options
 
-e20 = e:option(Flag, "adb_jail", translate("'Jail' Blocklist Creation"),
-	translate("Builds an additional 'Jail' list (/tmp/adb_list.jail) to block access to all domains except those listed in the whitelist file. ")
-	.. translate("You can use this restrictive blocklist e.g. for guest wifi or kidsafe configurations."))
+e20 = e:option(Value, "adb_dnsdir", translate("DNS Directory"),
+	translate("Target directory for the generated blocklist 'adb_list.overall'."))
+e20.datatype = "directory"
 e20.optional = true
-e20.default = nil
 
-e21 = e:option(Value, "adb_notifycnt", translate("Email Notification Count"),
-	translate("Raise the minimum email notification count, to get emails if the overall count is less or equal to the given limit (default 0), ")
-	.. translate("e.g. to receive an email notification with every adblock update set this value to 150000."))
-e21.default = 0
-e21.datatype = "min(0)"
+e21 = e:option(Value, "adb_blacklist", translate("Blacklist File"),
+	translate("Full path to the blacklist file."))
+e21.datatype = "file"
+e21.default = "/etc/adblock/adblock.blacklist"
 e21.optional = true
 
-e22 = e:option(Value, "adb_dnsdir", translate("DNS Directory"),
-	translate("Target directory for the generated blocklist 'adb_list.overall'."))
-e22.datatype = "directory"
+e22 = e:option(Value, "adb_whitelist", translate("Whitelist File"),
+	translate("Full path to the whitelist file."))
+e22.datatype = "file"
+e22.default = "/etc/adblock/adblock.whitelist"
 e22.optional = true
 
-e23 = e:option(Value, "adb_whitelist", translate("Whitelist File"),
-	translate("Full path to the whitelist file."))
-e23.datatype = "file"
-e23.default = "/etc/adblock/adblock.whitelist"
+e23 = e:option(Value, "adb_triggerdelay", translate("Trigger Delay"),
+	translate("Additional trigger delay in seconds before adblock processing begins."))
+e23.datatype = "range(1,60)"
 e23.optional = true
 
-e24 = e:option(Value, "adb_triggerdelay", translate("Trigger Delay"),
-	translate("Additional trigger delay in seconds before adblock processing begins."))
-e24.datatype = "range(1,60)"
+e24 = e:option(Value, "adb_maxtld", translate("TLD Compression Threshold"),
+	translate("Disable the toplevel domain compression, if the number of blocked domains is greater than this threshold."))
+e24.datatype = "min(0)"
+e24.default = 100000
 e24.optional = true
 
-e25 = e:option(Flag, "adb_dnsflush", translate("Flush DNS Cache"),
-	translate("Flush DNS Cache after adblock processing."))
+e25 = e:option(Value, "adb_portlist", translate("Local FW/DNS Ports"),
+	translate("Space separated list of firewall ports which should be redirected locally."))
+e25.default = "53 853 5353"
 e25.optional = true
-e25.default = nil
 
-e26 = e:option(ListValue, "adb_repiface", translate("Report Interface"),
+e26 = e:option(Flag, "adb_dnsinotify", translate("DNS Inotify"),
+	translate("Disable adblock triggered restarts and the 'DNS File Reset' for dns backends with autoload features."))
+e26.default = nil
+e26.enabled = "true"
+e26.optional = true
+
+e27 = e:option(Flag, "adb_dnsflush", translate("Flush DNS Cache"),
+	translate("Flush DNS Cache after adblock processing."))
+e27.default = nil
+e27.optional = true
+
+e28 = e:option(ListValue, "adb_repiface", translate("Report Interface"),
 	translate("Reporting interface used by tcpdump, set to 'any' for multiple interfaces (default 'br-lan'). ")
 	..translate("This change requires a manual service stop/re-start to take effect."))
 if dump then
@@ -194,32 +214,54 @@ if dump then
 		if v.interface ~= "loopback" then
 			local device = v.device
 			if device then
-				e26:value(device)
+				e28:value(device)
 			end
 		end
 	end
 end
-e26:value("any")
-e26.optional = true
-
-e27 = e:option(Value, "adb_replisten", translate("Report Listen Port(s)"),
-	translate("Space separated list of reporting port(s) used by tcpdump (default: '53'). ")
-	..translate("This change requires a manual service stop/re-start to take effect."))
-e27.default = 53
-e27.optional = true
-
-e28 = e:option(Value, "adb_repchunkcnt", translate("Report Chunk Count"),
-	translate("Report chunk count used by tcpdump (default '5'). ")
-	..translate("This change requires a manual service stop/re-start to take effect."))
-e28.datatype = "range(1,10)"
-e28.default = 5
+e28:value("any")
 e28.optional = true
 
-e29 = e:option(Value, "adb_repchunksize", translate("Report Chunk Size"),
+e29 = e:option(Value, "adb_replisten", translate("Report Listen Port(s)"),
+	translate("Space separated list of reporting port(s) used by tcpdump (default: '53'). ")
+	..translate("This change requires a manual service stop/re-start to take effect."))
+e29.default = 53
+e29.optional = true
+
+e30 = e:option(Value, "adb_repchunkcnt", translate("Report Chunk Count"),
+	translate("Report chunk count used by tcpdump (default '5'). ")
+	..translate("This change requires a manual service stop/re-start to take effect."))
+e30.datatype = "range(1,10)"
+e30.default = 5
+e30.optional = true
+
+e31 = e:option(Value, "adb_repchunksize", translate("Report Chunk Size"),
 	translate("Report chunk size used by tcpdump in MB (default '1'). ")
 	..translate("This change requires a manual service stop/re-start to take effect."))
-e29.datatype = "range(1,10)"
-e29.default = 1
-e29.optional = true
+e31.datatype = "range(1,10)"
+e31.default = 1
+e31.optional = true
+
+e32 = e:option(Value, "adb_msender", translate("E-Mail Sender Address"),
+	translate("Sender address for adblock notification E-Mails."))
+e32.default = "no-reply@adblock"
+e32.optional = true
+
+e33 = e:option(Value, "adb_mtopic", translate("E-Mail Topic"),
+	translate("Topic for adblock notification E-Mails."))
+e33.default = "adblock notification"
+e33.optional = true
+
+e34 = e:option(Value, "adb_mprofile", translate("E-Mail Profile"),
+	translate("Mail profile used in 'msmtp' for adblock notification E-Mails."))
+e34.default = "adb_notify"
+e34.optional = true
+
+e35 = e:option(Value, "adb_mcnt", translate("E-Mail Notification Count"),
+	translate("Raise the minimum notification count, to get E-Mails if the overall count is less or equal to the given limit (default 0), ")
+	.. translate("e.g. to receive an E-Mail notification with every adblock run set this value to 200000."))
+e35.default = 0
+e35.datatype = "min(0)"
+e35.optional = true
 
 return m

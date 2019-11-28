@@ -142,9 +142,9 @@ local knownParams = {
 			"client_connect",
 			"/usr/bin/ovpn-clientconnect",
 			translate("Run script cmd on client connection") },
-		{ Flag,
+		{ Value,
 			"client_disconnect",
-			0,
+			"/usr/bin/ovpn-clientdisconnect",
 			translate("Run script cmd on client disconnection") },
 		{ Value,
 			"learn_address",
@@ -497,8 +497,7 @@ local knownParams = {
 		{ DynamicList,
 			"remote",
 			"1.2.3.4",
-			translate("Remote host name or ip address"),
-			{ client="1" } },
+			translate("Remote host name or ip address") },
 		{ Flag,
 			"remote_random",
 			0,
@@ -676,10 +675,38 @@ local knownParams = {
 			"key_method",
 			{ 1, 2 },
 			translate("Enable TLS and assume client role") },
-		{ Value,
+		{ DynamicList,
 			"tls_cipher",
-			"DHE-RSA-AES256-SHA:DHE-DSS-AES256-SHA:AES256-SHA:EDH-RSA-DES-CBC3-SHA:EDH-DSS-DES-CBC3-SHA:DES-CBC3-SHA:DHE-RSA-AES128-SHA:DHE-DSS-AES128-SHA:AES128-SHA:RC4-SHA:RC4-MD5:EDH-RSA-DES-CBC-SHA:EDH-DSS-DES-CBC-SHA:DES-CBC-SHA:EXP-EDH-RSA-DES-CBC-SHA:EXP-EDH-DSS-DES-CBC-SHA:EXP-DES-CBC-SHA:EXP-RC2-CBC-MD5:EXP-RC4-MD5",
+			{
+				"DHE-RSA-AES256-SHA",
+				"DHE-DSS-AES256-SHA",
+				"AES256-SHA",
+				"EDH-RSA-DES-CBC3-SHA",
+				"EDH-DSS-DES-CBC3-SHA",
+				"DES-CBC3-SHA",
+				"DHE-RSA-AES128-SHA",
+				"DHE-DSS-AES128-SHA",
+				"AES128-SHA",
+				"RC4-SHA",
+				"RC4-MD5",
+				"EDH-RSA-DES-CBC-SHA",
+				"EDH-DSS-DES-CBC-SHA",
+				"DES-CBC-SHA",
+				"EXP-EDH-RSA-DES-CBC-SHA",
+				"EXP-EDH-DSS-DES-CBC-SHA",
+				"EXP-DES-CBC-SHA",
+				"EXP-RC2-CBC-MD5",
+				"EXP-RC4-MD5"
+			},
 			translate("TLS cipher") },
+		{ DynamicList,
+			"tls_ciphersuites",
+			{
+				"TLS_AES_256_GCM_SHA384",
+				"TLS_AES_128_GCM_SHA256",
+				"TLS_CHACHA20_POLY1305_SHA256"
+			},
+			translate("TLS 1.3 or newer cipher") },
 		{ Value,
 			"tls_timeout",
 			2,
@@ -772,7 +799,7 @@ local cts = { }
 local params = { }
 
 local m = Map("openvpn")
-m.redirect = luci.dispatcher.build_url("admin", "services", "openvpn")
+m.redirect = luci.dispatcher.build_url("admin", "vpn", "openvpn")
 m.apply_on_parse = true
 
 local p = m:section( SimpleSection )
@@ -835,7 +862,7 @@ for _, option in ipairs(params) do
 		function o.remove(self, section)
 			local cfg_val = AbstractValue.cfgvalue(self, section)
 			local txt_val = luci.http.formvalue("cbid."..self.map.config.."."..section.."."..self.option..".textbox")
-			
+
 			if cfg_val and fs.access(cfg_val) and txt_val == "" then
 				fs.unlink(cfg_val)
 			end

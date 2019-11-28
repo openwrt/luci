@@ -7,7 +7,6 @@ local table  = require "table"
 local nixio  = require "nixio"
 local fs     = require "nixio.fs"
 local uci    = require "luci.model.uci"
-local ntm    = require "luci.model.network"
 
 local luci  = {}
 luci.util   = require "luci.util"
@@ -24,69 +23,6 @@ function call(...)
 end
 
 exec = luci.util.exec
-
-function mounts()
-	local data = {}
-	local k = {"fs", "blocks", "used", "available", "percent", "mountpoint"}
-	local ps = luci.util.execi("df")
-
-	if not ps then
-		return
-	else
-		ps()
-	end
-
-	for line in ps do
-		local row = {}
-
-		local j = 1
-		for value in line:gmatch("[^%s]+") do
-			row[k[j]] = value
-			j = j + 1
-		end
-
-		if row[k[1]] then
-
-			-- this is a rather ugly workaround to cope with wrapped lines in
-			-- the df output:
-			--
-			--	/dev/scsi/host0/bus0/target0/lun0/part3
-			--                   114382024  93566472  15005244  86% /mnt/usb
-			--
-
-			if not row[k[2]] then
-				j = 2
-				line = ps()
-				for value in line:gmatch("[^%s]+") do
-					row[k[j]] = value
-					j = j + 1
-				end
-			end
-
-			table.insert(data, row)
-		end
-	end
-
-	return data
-end
-
-function mtds()
-	local data = {}
-
-	if fs.access("/proc/mtd") then
-		for l in io.lines("/proc/mtd") do
-			local d, s, e, n = l:match('^([^%s]+)%s+([^%s]+)%s+([^%s]+)%s+"([^%s]+)"')
-			if s and n then
-				local d = {}
-				d.size = tonumber(s, 16)
-				d.name = n
-				table.insert(data, d)
-			end
-		end
-	end
-
-	return data
-end
 
 -- containing the whole environment is returned otherwise this function returns
 -- the corresponding string value for the given name or nil if no such variable
@@ -137,7 +73,7 @@ end
 net = {}
 
 local function _nethints(what, callback)
-	local _, k, e, mac, ip, name
+	local _, k, e, mac, ip, name, duid, iaid
 	local cur = uci.cursor()
 	local ifn = { }
 	local hosts = { }
@@ -184,6 +120,24 @@ local function _nethints(what, callback)
 					mac = luci.ip.checkmac(mac)
 					if mac and ip then
 						_add(what, mac, ip, nil, name ~= "*" and name)
+					end
+				end
+			end
+		end
+	)
+
+	cur:foreach("dhcp", "odhcpd",
+		function(s)
+			if type(s.leasefile) == "string" and fs.access(s.leasefile) then
+				for e in io.lines(s.leasefile) do
+					duid, iaid, name, _, ip = e:match("^# %S+ (%S+) (%S+) (%S+) (-?%d+) %S+ %S+ ([0-9a-f:.]+)/[0-9]+")
+					mac = net.duid_to_mac(duid)
+					if mac then
+						if ip and iaid == "ipv4" then
+							_add(what, mac, ip, nil, name ~= "*" and name)
+						elseif ip then
+							_add(what, mac, nil, ip, name ~= "*" and name)
+						end
 					end
 				end
 			end
@@ -386,6 +340,26 @@ function net.devices()
 	return devs
 end
 
+function net.duid_to_mac(duid)
+	local b1, b2, b3, b4, b5, b6
+
+	if type(duid) == "string" then
+		-- DUID-LLT / Ethernet
+		if #duid == 28 then
+			b1, b2, b3, b4, b5, b6 = duid:match("^00010001(%x%x)(%x%x)(%x%x)(%x%x)(%x%x)(%x%x)%x%x%x%x%x%x%x%x$")
+
+		-- DUID-LL / Ethernet
+		elseif #duid == 20 then
+			b1, b2, b3, b4, b5, b6 = duid:match("^00030001(%x%x)(%x%x)(%x%x)(%x%x)(%x%x)(%x%x)$")
+
+		-- DUID-LL / Ethernet (Without Header)
+		elseif #duid == 12 then
+			b1, b2, b3, b4, b5, b6 = duid:match("^(%x%x)(%x%x)(%x%x)(%x%x)(%x%x)(%x%x)$")
+		end
+	end
+
+	return b1 and luci.ip.checkmac(table.concat({ b1, b2, b3, b4, b5, b6 }, ":"))
+end
 
 process = {}
 
@@ -405,11 +379,11 @@ function process.list()
 
 	for line in ps do
 		local pid, ppid, user, stat, vsz, mem, cpu, cmd = line:match(
-			"^ *(%d+) +(%d+) +(%S.-%S) +([RSDZTW][W ][<N ]) +(%d+) +(%d+%%) +(%d+%%) +(.+)"
+			"^ *(%d+) +(%d+) +(%S.-%S) +([RSDZTW][<NW ][<N ]) +(%d+) +(%d+%%) +(%d+%%) +(.+)"
 		)
 
 		local idx = tonumber(pid)
-		if idx then
+		if idx and not cmd:match("top %-bn1") then
 			data[idx] = {
 				['PID']     = pid,
 				['PPID']    = ppid,
@@ -562,6 +536,8 @@ end
 wifi = {}
 
 function wifi.getiwinfo(ifname)
+	local ntm = require "luci.model.network"
+
 	ntm.init()
 
 	local wnet = ntm:get_wifinet(ifname)
@@ -607,7 +583,7 @@ function init.enabled(name)
 end
 
 function init.enable(name)
-	return (init_action("enable", name) == 1)
+	return (init_action("enable", name) == 0)
 end
 
 function init.disable(name)
@@ -620,4 +596,12 @@ end
 
 function init.stop(name)
 	return (init_action("stop", name) == 0)
+end
+
+function init.restart(name)
+	return (init_action("restart", name) == 0)
+end
+
+function init.reload(name)
+	return (init_action("reload", name) == 0)
 end

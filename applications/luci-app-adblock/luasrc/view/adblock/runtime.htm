@@ -1,11 +1,17 @@
 <%#
-Copyright 2017-2018 Dirk Brenken (dev@brenken.org)
+Copyright 2017-2019 Dirk Brenken (dev@brenken.org)
 This is free software, licensed under the Apache License, Version 2.0
 -%>
 
 <%+adblock/adblock_css%>
 <script type="text/javascript">
 //<![CDATA[
+	function format(number)
+	{
+		var string = number.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+		return string;
+	}
+
 	function status_update(json)
 	{
 		var btn1         = document.getElementById("btn1");
@@ -50,8 +56,10 @@ This is free software, licensed under the Apache License, Version 2.0
 		document.getElementById("value_2").innerHTML = json.data.adblock_version || "-";
 		document.getElementById("value_3").innerHTML = json.data.fetch_utility || "-";
 		document.getElementById("value_4").innerHTML = json.data.dns_backend || "-";
-		document.getElementById("value_5").innerHTML = json.data.overall_domains || "-";
-		document.getElementById("value_6").innerHTML = json.data.last_rundate || "-";
+		document.getElementById("value_5").innerHTML = json.data.dns_variant || "-";
+		document.getElementById("value_6").innerHTML = json.data.backup_dir || "-";
+		document.getElementById("value_7").innerHTML = format(json.data.overall_domains) || "-";
+		document.getElementById("value_8").innerHTML = json.data.last_rundate || "-";
 	}
 
 	function btn_action(action)
@@ -110,6 +118,8 @@ This is free software, licensed under the Apache License, Version 2.0
 		document.getElementById("value_4").innerHTML = "-";
 		document.getElementById("value_5").innerHTML = "-";
 		document.getElementById("value_6").innerHTML = "-";
+		document.getElementById("value_7").innerHTML = "-";
+		document.getElementById("value_8").innerHTML = "-";
 	}
 
 	XHR.get('<%=luci.dispatcher.build_url("admin", "services", "adblock", "status_update")%>', null,
@@ -156,21 +166,33 @@ This is free software, licensed under the Apache License, Version 2.0
 	</div>
 </div>
 <div class="cbi-value" id="status_4">
-	<label class="cbi-value-title" for="status_4"><%:DNS Backend (DNS Directory)%></label>
+	<label class="cbi-value-title" for="status_4"><%:DNS Backend, DNS Directory%></label>
 	<div class="cbi-value-field">
 		<span class="runtime" id="value_4">-</span>
 	</div>
 </div>
 <div class="cbi-value" id="status_5">
-	<label class="cbi-value-title" for="status_5"><%:Overall Domains%></label>
+	<label class="cbi-value-title" for="status_5"><%:DNS Variant, DNS File Reset%></label>
 	<div class="cbi-value-field">
 		<span class="runtime" id="value_5">-</span>
 	</div>
 </div>
 <div class="cbi-value" id="status_6">
-	<label class="cbi-value-title" for="status_6"><%:Last Run%></label>
+	<label class="cbi-value-title" for="status_6"><%:Backup Directory%></label>
 	<div class="cbi-value-field">
 		<span class="runtime" id="value_6">-</span>
+	</div>
+</div>
+<div class="cbi-value" id="status_7">
+	<label class="cbi-value-title" for="status_7"><%:Overall Domains%></label>
+	<div class="cbi-value-field">
+		<span class="runtime" id="value_7">-</span>
+	</div>
+</div>
+<div class="cbi-value" id="status_8">
+	<label class="cbi-value-title" for="status_8"><%:Last Run%></label>
+	<div class="cbi-value-field">
+		<span class="runtime" id="value_8">-</span>
 	</div>
 </div>
 <hr />

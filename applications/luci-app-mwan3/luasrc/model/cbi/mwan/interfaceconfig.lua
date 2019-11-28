@@ -9,6 +9,7 @@ local track_method, reliability, count, size, max_ttl
 local check_quality, failure_latency, failure_loss, recovery_latency
 local recovery_loss, timeout, interval, failure
 local keep_failure, recovery, down, up, flush, metric
+local httping_ssl
 
 arg[1] = arg[1] or ""
 
@@ -54,6 +55,11 @@ end
 if os.execute("which httping 1>/dev/null") == 0 then
 	track_method:value("httping")
 end
+
+httping_ssl = mwan_interface:option(Flag, "httping_ssl", translate("Enable ssl tracking"),
+	translate("Enables https tracking on ssl port 443"))
+httping_ssl:depends("track_method", "httping")
+httping_ssl.default = httping_ssl.enabled
 
 reliability = mwan_interface:option(Value, "reliability", translate("Tracking reliability"),
 	translate("Acceptable values: 1-100. This many Tracking IP addresses must respond for the link to be deemed up"))
@@ -234,13 +240,12 @@ up:value("8")
 up:value("9")
 up:value("10")
 
-flush = mwan_interface:option(ListValue, "flush_conntrack", translate("Flush conntrack table"),
+flush = mwan_interface:option(StaticList, "flush_conntrack", translate("Flush conntrack table"),
 	translate("Flush global firewall conntrack table on interface events"))
-flush.default = "never"
-flush:value("ifup", translate("ifup"))
-flush:value("ifdown", translate("ifdown"))
-flush:value("never", translate("never"))
-flush:value("always", translate("always"))
+flush:value("ifup", translate("ifup (netifd)"))
+flush:value("ifdown", translate("ifdown (netifd)"))
+flush:value("connected", translate("connected (mwan3)"))
+flush:value("disconnected", translate("disconnected (mwan3)"))
 
 metric = mwan_interface:option(DummyValue, "metric", translate("Metric"),
 	translate("This displays the metric assigned to this interface in /etc/config/network"))

@@ -3,14 +3,14 @@
 
 include $(TOPDIR)/rules.mk
 
-PKG_LICENSE:=GPL-3.0+
+PKG_LICENSE:=GPL-3.0-or-later
 PKG_MAINTAINER:=Stan Grishin <stangri@melmac.net>
 
 LUCI_TITLE:=HTTPS DNS Proxy Web UI
 LUCI_DESCRIPTION:=Provides Web UI for HTTPS DNS Proxy
-LUCI_DEPENDS:=+luci-mod-admin-full +https_dns_proxy
+LUCI_DEPENDS:=+luci-compat +luci-mod-admin-full +https_dns_proxy
 LUCI_PKGARCH:=all
-PKG_RELEASE:=2
+PKG_RELEASE:=9
 
 include ../../luci.mk
 

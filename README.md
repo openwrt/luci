@@ -1,5 +1,7 @@
 # OpenWrt luci feed
 
+[![Translation status](https://hosted.weblate.org/widgets/openwrt/-/svg-badge.svg)](https://hosted.weblate.org/engage/openwrt/?utm_source=widget)
+
 ## Description
 
 This is the OpenWrt "luci"-feed containing LuCI - OpenWrt Configuration Interface.
@@ -19,7 +21,10 @@ To install all its package definitions, run:
 
 ## API Reference
 
-You can browse the generated API documentation [directly on Github](http://htmlpreview.github.io/?http://raw.githubusercontent.com/openwrt/luci/master/documentation/api/index.html).
+You can browse the generated API documentation directly on Github.
+
+ - [Server side Lua APIs](http://openwrt.github.io/luci/api/index.html)
+ - [Client side JavaScript APIs](http://openwrt.github.io/luci/jsapi/index.html)
 
 ## Development
 
@@ -32,3 +37,7 @@ See [LICENSE](LICENSE) file.
 ## Package Guidelines
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) file.
+
+## Translation status
+
+[![Translation status](https://hosted.weblate.org/widgets/openwrt/-/multi-auto.svg)](https://hosted.weblate.org/engage/openwrt/?utm_source=widget)

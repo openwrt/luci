@@ -12,4 +12,25 @@ s = m:section( NamedSection, "collectd_cpu", "luci_statistics" )
 enable = s:option( Flag, "enable", translate("Enable this plugin") )
 enable.default = 0
 
+-- collectd_cpu.reportbycpu (ReportByCpu)
+reportbycpu = s:option( Flag, "ReportByCpu",
+	translate("Report by CPU"),
+	translate("By setting this, CPU is not aggregate of all processors on the system"))
+reportbycpu.default = 1
+reportbycpu:depends( "enable", 1 )
+
+-- collectd_cpu.reportbystate (ReportByState)
+reportbystate = s:option( Flag, "ReportByState",
+	translate("Report by state"),
+	translate("When set to true, reports per-state metric (system, user, idle)"))
+reportbystate.default = 1
+reportbystate:depends( "enable", 1 )
+
+-- collectd_cpu.valuespercentage (ValuesPercentage)
+valuespercentage = s:option( Flag, "ValuesPercentage",
+	translate("Report in percent"),
+	translate("When set to true, we request percentage values"))
+valuespercentage.default = 0
+valuespercentage:depends({ enable = 1, ReportByCpu = 1, ReportByState = 1 })
+
 return m

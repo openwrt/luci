@@ -24,6 +24,7 @@
 
 #ifdef __linux__
 
+#include <sys/time.h>
 #include <signal.h>
 #include <setjmp.h>
 #include <unistd.h>
@@ -289,6 +290,7 @@ static int nixio_getnameinfo(lua_State *L) {
 #ifdef __linux__
 	struct sigaction sa_new, sa_old;
 	int timeout = luaL_optnumber(L, 3, 0);
+	const struct itimerval t = { {timeout * 1000 * 1000, 0} , {0, 0} };
 	if (timeout > 0 && timeout < 1000)
 	{
 		sa_new.sa_handler = nixio__handle_alarm;
@@ -308,7 +310,7 @@ static int nixio_getnameinfo(lua_State *L) {
 			return 3;
 		}
 
-		ualarm(timeout * 1000, 0);
+		setitimer(ITIMER_REAL, &t, NULL);
 	}
 #endif
 
@@ -339,7 +341,7 @@ static int nixio_getnameinfo(lua_State *L) {
 #ifdef __linux__
 	if (timeout > 0 && timeout < 1000)
 	{
-		ualarm(0, 0);
+		alarm(0);
 		sigaction(SIGALRM, &sa_old, NULL);
 	}
 #endif

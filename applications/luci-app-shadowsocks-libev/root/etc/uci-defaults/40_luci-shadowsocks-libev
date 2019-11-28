@@ -8,4 +8,6 @@ uci -q batch <<-EOF >/dev/null
 EOF
 
 rm -f /tmp/luci-indexcache
+mkdir -p /etc/shadowsocks-libev
+/etc/init.d/rpcd reload
 exit 0
