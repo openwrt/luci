@@ -35,7 +35,7 @@
 			end
 		end
 
-		local display_back   = (redirect)
+		local display_back   = (self.redirect)
 		local display_cancel = (self.cancel ~= false and self.on_cancel)
 		local display_skip   = (self.flow and self.flow.skip)
 		local display_submit = (self.submit ~= false)
@@ -45,7 +45,7 @@
 			%><div class="cbi-page-actions"><%
 
 			if display_back then
-				%><input class="cbi-button cbi-button-link" type="button" value="<%:Back to Overview%>" onclick="location.href='<%=pcdata(redirect)%>'" /> <%
+				%><input class="cbi-button cbi-button-link" type="button" value="<%:Back to Overview%>" onclick="location.href='<%=pcdata(self.redirect)%>'" /> <%
 			end
 
 			if display_cancel then
