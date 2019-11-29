@@ -145,7 +145,7 @@ return L.view.extend({
 
 		var m, s, o;
 
-		m = new form.Map('ddns', _('Dynamic DNS'),);
+		m = new form.Map('ddns', _('Dynamic DNS'));
 
 		var is = m.section(form.NamedSection, 'global', 'ddns', _('Information'));
 
