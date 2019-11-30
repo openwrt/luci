@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2019-11-07 08:29+0000\n"
-"Last-Translator: Kiste <christian.buschau+weblate@mailbox.org>\n"
+"PO-Revision-Date: 2019-11-26 17:11+0000\n"
+"Last-Translator: Mark Mühlbacher <cyris@gmx.at>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsbanip/de/>\n"
 "Language: de\n"
@@ -47,6 +47,9 @@ msgid ""
 "permanently in the local blacklist. Disable this option to prevent the local "
 "save."
 msgstr ""
+"Blacklist Auto Addons werden temporär im IPSet und dauerhaft in der lokalen "
+"Blacklist gespeichert. Deaktivieren Sie diese Option, um das lokale "
+"Speichern zu verhindern."
 
 #: applications/luci-app-banip/luasrc/view/banip/ipsetview.htm:45
 msgid "Check the current available IPSets."
@@ -70,11 +73,11 @@ msgstr "DNS-Kette"
 
 #: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:177
 msgid "DST Target IPv4"
-msgstr ""
+msgstr "DST-Ziel IPv4 (Destination)"
 
 #: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:209
 msgid "DST Target IPv6"
-msgstr ""
+msgstr "DST-Ziel IPv6 (Destination)"
 
 #: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:72
 msgid "Description"
@@ -170,19 +173,19 @@ msgstr "Eingabedatei nicht gefunden, bitte überprüfen Sie Ihre Konfiguration."
 
 #: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:166
 msgid "LAN Forward Chain IPv4"
-msgstr ""
+msgstr "LAN Weiterleitungs-Kette IPv4"
 
 #: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:198
 msgid "LAN Forward Chain IPv6"
-msgstr ""
+msgstr "LAN Weiterleitungs-Kette IPv6"
 
 #: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:161
 msgid "LAN Input Chain IPv4"
-msgstr ""
+msgstr "LAN Eingangs-Kette IPv4"
 
 #: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:193
 msgid "LAN Input Chain IPv6"
-msgstr ""
+msgstr "LAN Eingangs-Kette IPv6"
 
 #: applications/luci-app-banip/luasrc/view/banip/runtime.htm:144
 msgid "Last Run"
@@ -281,23 +284,24 @@ msgstr "Laufzeitinformationen"
 
 #: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:171
 msgid "SRC Target IPv4"
-msgstr ""
+msgstr "SRC-Ziel IPv4 (Source)"
 
 #: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:203
 msgid "SRC Target IPv6"
-msgstr ""
+msgstr "SRC-Ziel IPv6 (Source)"
 
 #: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:65
 msgid "SRC/DST"
-msgstr ""
+msgstr "SRC/DST (Source/Destination)"
 
 #: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:107
 msgid "SSH Daemon"
-msgstr ""
+msgstr "SSH-Dienst (Daemon)"
 
 #: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:43
+#, fuzzy
 msgid "SSH/LuCI RT Monitor"
-msgstr ""
+msgstr "SSH/LuCI RT Monitor"
 
 #: applications/luci-app-banip/luasrc/model/cbi/banip/blacklist_tab.lua:27
 #: applications/luci-app-banip/luasrc/model/cbi/banip/configuration_tab.lua:26
@@ -308,10 +312,12 @@ msgstr "Speichern"
 #: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:108
 msgid "Select the SSH daemon for logfile parsing, to detect break-in events."
 msgstr ""
+"Wählen Sie den SSH Dämon für die Logfile-Syntaxanalyse aus, um "
+"Einbruchsversuche zu erkennen."
 
 #: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:145
 msgid "Select the used start type during boot."
-msgstr ""
+msgstr "Wählen Sie den verwendeten Start-Typ während des Hochfahren aus."
 
 #: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:127
 msgid "Select your preferred download utility."
@@ -330,8 +336,9 @@ msgstr ""
 "benötigt weniger Ressourcen vom System."
 
 #: applications/luci-app-banip/luasrc/view/banip/ipsetview.htm:51
+#, fuzzy
 msgid "Show only set member with packet counter &gt; 0"
-msgstr ""
+msgstr "Nur Set-Member mit Paketzähler &gt; 0 anzeigen"
 
 #: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:101
 msgid ""
@@ -386,7 +393,7 @@ msgstr ""
 
 #: applications/luci-app-banip/luasrc/view/banip/logview.htm:31
 msgid "The syslog output, pre-filtered for banIP related messages only."
-msgstr ""
+msgstr "Die Syslog-Ausgabe, vorgefiltert mit nur BanIP-bezogene Nachrichten."
 
 #: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:89
 msgid "This change requires a manual service stop/re-start to take effect."
@@ -397,22 +404,30 @@ msgstr ""
 #: applications/luci-app-banip/luasrc/view/banip/ripeview.htm:40
 msgid "This data call gives access to various data sources maintained by IANA."
 msgstr ""
+"Dieser Datenaufruf ermöglicht den Zugriff auf verschiedene von der IANA "
+"gepflegte Datenquellen."
 
 #: applications/luci-app-banip/luasrc/view/banip/ripeview.htm:31
 msgid ""
 "This data call lists the Internet resources associated with a country, "
 "including ASNs, IPv4 ranges and IPv4/6 CIDR prefixes."
 msgstr ""
+"Dieser Datenaufruf listet die Internetressourcen auf, die einem Land "
+"zugeordnet sind, einschließlich ASNs, IPv4-Bereiche und IPv4/6 CIDR-Präfixe."
 
 #: applications/luci-app-banip/luasrc/view/banip/ripeview.htm:25
 msgid "This data call returns all announced prefixes for a given ASN."
 msgstr ""
+"Dieser Datenaufruf gibt alle angekündigten Präfixe für einen bestimmten ASN "
+"zurück."
 
 #: applications/luci-app-banip/luasrc/view/banip/ripeview.htm:19
 msgid ""
 "This data call returns geolocation information for the given IP space, or "
 "for announced IP prefixes in the case of ASNs."
 msgstr ""
+"Dieser Datenaufruf liefert Geolokalisierungsinformationen für den "
+"angegebenen IP-Bereich oder für angekündigte IP-Präfixe bei ASNs."
 
 #: applications/luci-app-banip/luasrc/view/banip/ripeview.htm:28
 msgid ""
@@ -425,18 +440,25 @@ msgid ""
 "This data call returns the recursive chain of DNS forward (A/AAAA/CNAME) and "
 "reverse (PTR) records starting form either a hostname or an IP address."
 msgstr ""
+"Dieser Datenaufruf gibt die rekursive Kette von DNS-Weiterleitung (A/AAAA/"
+"CNAME) und umgekehrten (PTR)-Einträgen zurück, die entweder mit einem "
+"Hostnamen oder einer IP-Adresse beginnen."
 
 #: applications/luci-app-banip/luasrc/view/banip/ripeview.htm:34
 msgid ""
 "This data call returns whois information from the relevant Regional Internet "
 "Registry and Routing Registry."
 msgstr ""
+"Dieser Datenaufruf gibt Whois-Informationen aus der entsprechenden "
+"regionalen Internet-Register und dem Routing-Register zurück."
 
 #: applications/luci-app-banip/luasrc/view/banip/ripeview.htm:22
 msgid ""
 "This data call shows general informations about an ASN like its announcement "
 "status and the name of its holder according to the WHOIS service."
 msgstr ""
+"Dieser Datenaufruf zeigt allgemeine Informationen über eine ASN wie ihren "
+"Ankündigungsstatus und den Namen des Inhabers gemäß dem WHOIS-Dienst."
 
 #: applications/luci-app-banip/luasrc/model/cbi/banip/blacklist_tab.lua:31
 msgid ""
@@ -474,19 +496,19 @@ msgstr "Protokolldatei anzeigen"
 
 #: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:156
 msgid "WAN Forward Chain IPv4"
-msgstr ""
+msgstr "WAN Weiterleitungs-Kette IPv4"
 
 #: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:188
 msgid "WAN Forward Chain IPv6"
-msgstr ""
+msgstr "WAN Weiterleitungs-Kette IPv6"
 
 #: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:151
 msgid "WAN Input Chain IPv4"
-msgstr ""
+msgstr "WAN-Eingangskette IPv4"
 
 #: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:183
 msgid "WAN Input Chain IPv6"
-msgstr ""
+msgstr "WAN-Eingangskette IPv6"
 
 #: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:120
 msgid ""
@@ -494,6 +516,9 @@ msgid ""
 "permanently in the local whitelist. Disable this option to prevent the local "
 "save."
 msgstr ""
+"Whitelist Auto-Addons werden temporär im IPSet gespeichert und dauerhaft in "
+"der lokalen Whitelist gespeichert. Deaktivieren Sie diese Option, um das "
+"lokale Speichern zu verhindern."
 
 #: applications/luci-app-banip/luasrc/view/banip/ripeview.htm:93
 msgid "Whois Information"

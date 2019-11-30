@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: LuCI\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-04-20 09:40+0200\n"
-"PO-Revision-Date: 2019-11-20 17:04+0000\n"
+"PO-Revision-Date: 2019-11-28 03:05+0000\n"
 "Last-Translator: Marcin Net <marcin.net@linux.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/openwrt/luci/pl/>"
 "\n"
@@ -124,7 +124,7 @@ msgstr "Identyfikator 6-oktetowy jako ciąg szesnastkowy - bez dwukropków"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1314
 msgid "802.11r Fast Transition"
-msgstr "802.11r Szybkie przejście"
+msgstr "802.11r Szybkie Przejście"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1571
 msgid "802.11w Association SA Query maximum timeout"
@@ -1139,7 +1139,7 @@ msgstr "Potwierdź rozłączenie"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js:51
 msgid "Confirmation"
-msgstr "Potwierdź"
+msgstr "Powtórz Hasło"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:41
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:50
@@ -1209,7 +1209,7 @@ msgstr "Poziom logowania Cron`a"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:450
 msgid "Current power"
-msgstr "Aktualny pobór prądu"
+msgstr "Aktualna moc nadawania"
 
 #: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:565
 #: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:567
@@ -2975,6 +2975,11 @@ msgid ""
 "from the R0KH that the STA used during the Initial Mobility Domain "
 "Association."
 msgstr ""
+"Lista R0KHs w tej samej Domenie Mobilnej. <br />Format: Adres-MAC"
+",Identyfikator-NAS,128-bitowy klucz jako ciąg szesnastkowy. <br />Tej listy "
+"używa się do mapowania R0KH-ID (Identyfikator NAS) do docelowego adresu MAC "
+"przy żądaniu klucza PMK-R1 z R0KH, którego STA używał podczas Initial "
+"Mobility Domain Association."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1385
 msgid ""
@@ -2984,6 +2989,11 @@ msgid ""
 "R0KH. This is also the list of authorized R1KHs in the MD that can request "
 "PMK-R1 keys."
 msgstr ""
+"Lista R1KHs w tej samej Domenie Mobilnej. <br />Format: Adres-MAC,R1KH-ID "
+"jako 6 oktetów z dwukropkami,128-bitowy klucz jako ciąg szesnastkowy. <br />"
+"Tej listy używa się do mapowania R1KH-ID na docelowy adres MAC podczas "
+"wysyłania klucza PMK-R1 z R0KH. Jest to również lista autoryzowanych R1KH w "
+"MD, które mogą zażądać kluczy PMK-R1."
 
 #: protocols/luci-proto-pppossh/htdocs/luci-static/resources/protocol/pppossh.js:82
 msgid "List of SSH key files for auth"
@@ -3750,6 +3760,8 @@ msgid ""
 "Optional. Base64-encoded preshared key. Adds in an additional layer of "
 "symmetric-key cryptography for post-quantum resistance."
 msgstr ""
+"Opcjonalnie. Base64-kodowany klucz współdzielony. Dodaje dodatkową warstwę "
+"symetrycznej kryptografii klucza dla uzyskania odporności po kwantowej."
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:126
 msgid "Optional. Create routes for Allowed IPs for this peer."
@@ -3760,12 +3772,11 @@ msgid "Optional. Description of peer."
 msgstr "Opcjonalny. Opis peera."
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:128
-#, fuzzy
 msgid ""
 "Optional. Host of peer. Names are resolved prior to bringing up the "
 "interface."
 msgstr ""
-"Opcjonalnie. Host of peer. Nazwy są ustalane przed wywołaniem interfejsu."
+"Opcjonalnie. Host z peerem. Nazwy są ustalane przed wywołaniem interfejsu."
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:71
 msgid "Optional. Maximum Transmission Unit of tunnel interface."
@@ -4444,6 +4455,8 @@ msgid ""
 "the tunnel. Usually the peer's tunnel IP addresses and the networks the peer "
 "routes through the tunnel."
 msgstr ""
+"Wymagane. Adresy IP i prefiksy, które ten peer może używać wewnątrz tunelu. "
+"Zazwyczaj adresy IP tunelu, są trasą dla peera przez tunel."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1099
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1100
@@ -5063,7 +5076,7 @@ msgstr "Pomiń rejestrowanie rutynowych operacji dla tych protokołów"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/20_memory.js:43
 msgid "Swap free"
-msgstr ""
+msgstr "Wolna pamięć Swap"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:136
 #: modules/luci-mod-network/luasrc/controller/admin/network.lua:11
@@ -5086,7 +5099,7 @@ msgstr "Przełącznik Maski Portu"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:151
 msgid "Switch Speed Mask"
-msgstr "Przełącznik szybkości Maski"
+msgstr "Przełącznik Maski Szybkości"
 
 #: modules/luci-base/htdocs/luci-static/resources/network.js:2760
 #: modules/luci-compat/luasrc/model/network.lua:1425
@@ -5226,6 +5239,13 @@ msgid ""
 "or revert all pending changes to keep the currently working configuration "
 "state."
 msgstr ""
+"Nie można było dotrzeć do urządzenia w ciągu %d sekund po zastosowaniu "
+"oczekujących zmian, co spowodowało wycofanie konfiguracji ze względów "
+"bezpieczeństwa. Jeśli jednak uważasz, że zmiany konfiguracji są prawidłowe, "
+"zastosuj niesprawdzoną konfigurację. W innym razie, możesz odrzucić to "
+"ostrzeżenie i edytować zmiany przed ponownym zastosowaniem lub cofnąć "
+"wszystkie oczekujące zmiany, aby zachować aktualnie działający stan "
+"konfiguracji."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:278
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:390
@@ -5341,8 +5361,7 @@ msgstr "Zgłoszony token bezpieczeństwa jest nieważny lub wygasł!"
 msgid ""
 "The system is erasing the configuration partition now and will reboot itself "
 "when finished."
-msgstr ""
-"System usuwa teraz partycję konfiguracji i zrestartuje się po zakończeniu."
+msgstr "System usuwa partycję konfiguracji i zrestartuje się po zakończeniu."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:287
 msgid ""
@@ -5437,6 +5456,9 @@ msgid ""
 "'server=1.2.3.4' for domain-specific or full upstream <abbr title=\"Domain "
 "Name System\">DNS</abbr> servers."
 msgstr ""
+"Plik ten może zawierać wiersze w postaci 'server=/domain/1.2.3.4' lub "
+"'server=1.2.3.4' dla określonych domen lub nadrzędnych serwerów <abbr title="
+"\"Domain Name System\">DNS</abbr>."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:416
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/backupfiles.lua:16
@@ -5491,6 +5513,8 @@ msgstr "To jest prosta nazwa użytkownika do logowania na konto"
 msgid ""
 "This is the prefix routed to you by the tunnel broker for use by clients"
 msgstr ""
+"To jest prefiks, kierowany do ciebie przez pośrednika tunelu do "
+"wykorzystania przez klientów"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/crontab.js:25
 msgid "This is the system crontab in which scheduled tasks can be defined."
@@ -5744,7 +5768,7 @@ msgstr "Góra"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2304
 msgid "Upload"
-msgstr "Prześlij"
+msgstr "Wysyłanie"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:403
 msgid ""
@@ -5783,6 +5807,9 @@ msgid ""
 "assigned with a name in the form <em>wifinet#</em> and the network will be "
 "restarted to apply the updated configuration."
 msgstr ""
+"Po naciśnięciu \"Kontynuuj\", anonimowe sekcje \"wifi-iface\" otrzymają "
+"nazwę w postaci <em>wifinet#</em> i sieć zostanie ponownie uruchomiona w "
+"celu zastosowania zmienionej konfiguracji."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:76
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/10_system.js:44
@@ -5982,7 +6009,7 @@ msgstr "Port serwera VPN"
 
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:103
 msgid "VPN Server's certificate SHA1 hash"
-msgstr ""
+msgstr "Hash SHA1 certyfikatu serwera VPN"
 
 #: modules/luci-compat/luasrc/model/network/proto_vpnc.lua:9
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:9
@@ -6044,7 +6071,7 @@ msgstr "Oczekiwanie na polecenie do wykonania..."
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2590
 msgid "Applying configuration changes… %ds"
-msgstr ""
+msgstr "Wprowadzanie zmian w konfiguracji… %ds"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/reboot.js:40
 msgid "Waiting for device..."
@@ -6312,7 +6339,7 @@ msgstr "pół-duplex"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:565
 msgid "hexadecimal encoded value"
-msgstr ""
+msgstr "wartość zakodowana szesnastkowo"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:624
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:630
@@ -6428,7 +6455,7 @@ msgstr "routowane"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:972
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:981
 msgid "sec"
-msgstr ""
+msgstr "sek"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:622
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:628
@@ -6437,15 +6464,15 @@ msgstr "tryb serwera"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:644
 msgid "stateful-only"
-msgstr ""
+msgstr "tylko stanowy"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:642
 msgid "stateless"
-msgstr ""
+msgstr "bezstanowy"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:643
 msgid "stateless + stateful"
-msgstr ""
+msgstr "bezstanowy + stanowy"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1171
 msgid "strong security"
@@ -6505,7 +6532,7 @@ msgstr "prawidłowy adres IP lub prefix"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:276
 msgid "valid IPv4 CIDR"
-msgstr ""
+msgstr "prawidłowy CIDR IPv4"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:249
 msgid "valid IPv4 address"
@@ -6517,7 +6544,7 @@ msgstr "prawidłowy adres IPv4 lub sieć"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:369
 msgid "valid IPv4 address:port"
-msgstr ""
+msgstr "prawidłowy adres IPv4:port"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:309
 msgid "valid IPv4 network"
