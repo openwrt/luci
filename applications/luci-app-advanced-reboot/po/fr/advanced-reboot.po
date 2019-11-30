@@ -10,11 +10,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
 "X-Generator: Weblate 3.9.1-dev\n"
 
-#: applications/luci-app-advanced-reboot/luasrc/view/advanced_reboot/advanced_reboot.htm:29
-msgid "Action"
-msgstr "Action"
-
-#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:83
+#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:185
 #: applications/luci-app-advanced-reboot/luasrc/view/advanced_reboot/advanced_reboot.htm:10
 msgid "Advanced Reboot"
 msgstr "Redémarrage avancé"
@@ -49,14 +45,14 @@ msgid "ERROR:"
 msgstr "ERREUR :"
 
 #: applications/luci-app-advanced-reboot/luasrc/view/advanced_reboot/advanced_reboot.htm:28
-msgid "Firmware/OS (Kernel)"
-msgstr "Micrologiciel/OS (Noyau)"
+msgid "Firmware"
+msgstr ""
 
 #: applications/luci-app-advanced-reboot/luasrc/view/advanced_reboot/applyreboot.htm:45
 msgid "Loading"
 msgstr "Chargement"
 
-#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:114
+#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:213
 msgid "No access to fw_printenv or fw_printenv!"
 msgstr "Pas d'accès à fw_printenv ou fw_printenv !"
 
@@ -81,6 +77,10 @@ msgstr "Éteindre l'appareil"
 msgid "Proceed"
 msgstr "Continuer"
 
+#: applications/luci-app-advanced-reboot/luasrc/view/advanced_reboot/advanced_reboot.htm:29
+msgid "Reboot"
+msgstr ""
+
 #: applications/luci-app-advanced-reboot/luasrc/view/advanced_reboot/alternative_reboot.htm:10
 msgid "Reboot Device to an Alternative Partition"
 msgstr "Redémarrer l'appareil sur une autre partition"
@@ -95,14 +95,14 @@ msgstr "Redémarrer sur une autre partition…"
 msgid "Reboot to current partition"
 msgstr "Redémarrer sur la partition courante"
 
-#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:93
-#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:165
+#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:193
+#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:264
 #: applications/luci-app-advanced-reboot/luasrc/view/advanced_reboot/applyreboot.htm:9
 #: applications/luci-app-advanced-reboot/luasrc/view/advanced_reboot/applyreboot.htm:39
 msgid "Rebooting..."
 msgstr "Redémarrage…"
 
-#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:199
+#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:297
 msgid "Shutting down..."
 msgstr "Arrêt en cours…"
 
@@ -114,19 +114,19 @@ msgstr "État"
 msgid "System"
 msgstr "Système"
 
-#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:94
+#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:194
 msgid ""
 "The system is rebooting now.<br /> DO NOT POWER OFF THE DEVICE!<br /> Wait a "
 "few minutes before you try to reconnect. It might be necessary to renew the "
 "address of your computer to reach the device again, depending on your "
 "settings."
 msgstr ""
-"Le système est en cours de redémarrage.<br />NE PAS ÉTEINDRE L'APPAREIL !<br "
-"/>Attendez quelques minutes avant d'essayer de vous reconnecter. En fonction "
-"de vos paramètres, il peut être nécessaire de renouveler l'adresse IP de "
-"votre ordinateur pour accéder à nouveau à l'appareil."
+"Le système est en cours de redémarrage.<br />NE PAS ÉTEINDRE L'APPAREIL !"
+"<br />Attendez quelques minutes avant d'essayer de vous reconnecter. En "
+"fonction de vos paramètres, il peut être nécessaire de renouveler l'adresse "
+"IP de votre ordinateur pour accéder à nouveau à l'appareil."
 
-#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:166
+#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:265
 msgid ""
 "The system is rebooting to an alternative partition now.<br /> DO NOT POWER "
 "OFF THE DEVICE!<br /> Wait a few minutes before you try to reconnect. It "
@@ -138,7 +138,7 @@ msgstr ""
 "reconnecter. En fonction de vos paramètres, il peut être nécessaire de "
 "renouveler votre adresse IP pour accéder à nouveau à votre appareil."
 
-#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:200
+#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:298
 msgid ""
 "The system is shutting down now.<br /> DO NOT POWER OFF THE DEVICE!<br /> It "
 "might be necessary to renew the address of your computer to reach the device "
@@ -148,29 +148,29 @@ msgstr ""
 "fonction de vos paramètres, il peut être nécessaire de renouveler votre "
 "adresse IP pour accéder à nouveau à votre appareil."
 
-#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:68
-#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:69
-#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:149
-#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:150
+#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:154
+#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:155
+#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:248
+#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:249
 msgid "Unable to find Dual Boot Flag Partition."
 msgstr "Impossible de trouver une partition en démarrage double."
 
-#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:121
-#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:122
-#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:135
-#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:136
+#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:220
+#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:221
+#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:234
+#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:235
 msgid "Unable to obtain firmware environment variable"
 msgstr "Impossible de récupérer la variable d'environnement du micrologiciel"
 
-#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:157
-#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:158
+#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:256
+#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:257
 msgid "Unable to set Dual Boot Flag Partition entry for partition"
 msgstr "Impossible de définir l'entrée de démarrage double de la partition"
 
-#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:127
-#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:128
-#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:141
-#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:142
+#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:226
+#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:227
+#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:240
+#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:241
 msgid "Unable to set firmware environment variable"
 msgstr "Impossible de définir la variable d'environnement du micrologiciel"
 
@@ -232,9 +232,23 @@ msgid "Warning: Unable to obtain device information!"
 msgstr ""
 "Avertissement : Impossible de récupérer les informations sur l'appareil !"
 
-#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:127
-#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:128
-#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:141
-#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:142
+#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:44
+msgid "attempting to mount alternative partition"
+msgstr ""
+
+#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:53
+msgid "attempting to unmount alternative partition"
+msgstr ""
+
+#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:226
+#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:227
+#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:240
+#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:241
 msgid "to"
 msgstr "vers"
+
+#~ msgid "Action"
+#~ msgstr "Action"
+
+#~ msgid "Firmware/OS (Kernel)"
+#~ msgstr "Micrologiciel/OS (Noyau)"
