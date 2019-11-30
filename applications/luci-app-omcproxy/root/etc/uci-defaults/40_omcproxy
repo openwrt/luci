@@ -1,0 +1,12 @@
+#!/bin/sh
+
+# needed for "Save and Apply" to restart iptvhelper
+uci -q batch <<-EOF >/dev/null
+	delete ucitrack.@omcproxy[-1]
+	add ucitrack omcproxy
+	set ucitrack.@omcproxy[-1].init="omcproxy"
+	commit ucitrack
+EOF
+
+rm -f /tmp/luci-indexcache
+exit 0
