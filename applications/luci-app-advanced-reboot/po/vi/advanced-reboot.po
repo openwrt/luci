@@ -10,11 +10,7 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Weblate 3.10-dev\n"
 
-#: applications/luci-app-advanced-reboot/luasrc/view/advanced_reboot/advanced_reboot.htm:29
-msgid "Action"
-msgstr "Hành động"
-
-#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:83
+#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:185
 #: applications/luci-app-advanced-reboot/luasrc/view/advanced_reboot/advanced_reboot.htm:10
 msgid "Advanced Reboot"
 msgstr "Khởi động nâng cao"
@@ -48,14 +44,14 @@ msgid "ERROR:"
 msgstr "Lỗi:"
 
 #: applications/luci-app-advanced-reboot/luasrc/view/advanced_reboot/advanced_reboot.htm:28
-msgid "Firmware/OS (Kernel)"
-msgstr "Bộ nạp khởi động"
+msgid "Firmware"
+msgstr ""
 
 #: applications/luci-app-advanced-reboot/luasrc/view/advanced_reboot/applyreboot.htm:45
 msgid "Loading"
 msgstr "Đang tải"
 
-#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:114
+#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:213
 msgid "No access to fw_printenv or fw_printenv!"
 msgstr "Không thể truy cập tới fw_printenv!"
 
@@ -80,6 +76,10 @@ msgstr "Tắt nguồn thiết bị"
 msgid "Proceed"
 msgstr "Tiến trình"
 
+#: applications/luci-app-advanced-reboot/luasrc/view/advanced_reboot/advanced_reboot.htm:29
+msgid "Reboot"
+msgstr ""
+
 #: applications/luci-app-advanced-reboot/luasrc/view/advanced_reboot/alternative_reboot.htm:10
 msgid "Reboot Device to an Alternative Partition"
 msgstr "Khởi động lại thiết bị vào phân vùng thay thế"
@@ -94,14 +94,14 @@ msgstr "Đang khởi động vào phân vùng thay thế..."
 msgid "Reboot to current partition"
 msgstr "Khởi động lại vào phần vùng hiện tại"
 
-#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:93
-#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:165
+#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:193
+#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:264
 #: applications/luci-app-advanced-reboot/luasrc/view/advanced_reboot/applyreboot.htm:9
 #: applications/luci-app-advanced-reboot/luasrc/view/advanced_reboot/applyreboot.htm:39
 msgid "Rebooting..."
 msgstr "Đang khởi động lại..."
 
-#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:199
+#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:297
 msgid "Shutting down..."
 msgstr "Đang tắt nguồn..."
 
@@ -113,19 +113,19 @@ msgstr "Trạng thái"
 msgid "System"
 msgstr "Hệ thống"
 
-#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:94
+#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:194
 msgid ""
 "The system is rebooting now.<br /> DO NOT POWER OFF THE DEVICE!<br /> Wait a "
 "few minutes before you try to reconnect. It might be necessary to renew the "
 "address of your computer to reach the device again, depending on your "
 "settings."
 msgstr ""
-"Hệ thống sẽ được khởi động lại ngay.<br /> VUI LÒNG KHÔNG TẮT NGUỒN THIẾT "
-"BỊ!<br /> Vui lòng chờ một vài phút trước khi thử kết nối lại. Bạn có thể "
-"cần phải cập nhật lại địa chỉ máy tính để kết nối lại với thiết bị, phụ "
-"thuộc vào cài đặt máy tính."
+"Hệ thống sẽ được khởi động lại ngay.<br /> VUI LÒNG KHÔNG TẮT NGUỒN THIẾT BỊ!"
+"<br /> Vui lòng chờ một vài phút trước khi thử kết nối lại. Bạn có thể cần "
+"phải cập nhật lại địa chỉ máy tính để kết nối lại với thiết bị, phụ thuộc "
+"vào cài đặt máy tính."
 
-#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:166
+#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:265
 msgid ""
 "The system is rebooting to an alternative partition now.<br /> DO NOT POWER "
 "OFF THE DEVICE!<br /> Wait a few minutes before you try to reconnect. It "
@@ -137,39 +137,39 @@ msgstr ""
 "nối lại. Bạn có thể cần phải cập nhật lại địa chỉ máy tính để kết nối lại "
 "với thiết bị, phụ thuộc vào cài đặt máy tính."
 
-#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:200
+#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:298
 msgid ""
 "The system is shutting down now.<br /> DO NOT POWER OFF THE DEVICE!<br /> It "
 "might be necessary to renew the address of your computer to reach the device "
 "again, depending on your settings."
 msgstr ""
-"Hệ thống sẽ được tắt nguồn ngay.<br /> VUI LÒNG KHÔNG TẮT NGUỒN THIẾT BỊ!<br "
-"/> Bạn có thể cần phải cập nhật lại địa chỉ máy tính để kết nối lại với "
+"Hệ thống sẽ được tắt nguồn ngay.<br /> VUI LÒNG KHÔNG TẮT NGUỒN THIẾT BỊ!"
+"<br /> Bạn có thể cần phải cập nhật lại địa chỉ máy tính để kết nối lại với "
 "thiết bị, phụ thuộc vào cài đặt máy tính."
 
-#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:68
-#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:69
-#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:149
-#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:150
+#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:154
+#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:155
+#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:248
+#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:249
 msgid "Unable to find Dual Boot Flag Partition."
 msgstr "Không tìm thấy phân vùng khởi động kép."
 
-#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:121
-#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:122
-#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:135
-#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:136
+#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:220
+#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:221
+#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:234
+#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:235
 msgid "Unable to obtain firmware environment variable"
 msgstr "Không thể lấy được biến bộ nạp khởi động"
 
-#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:157
-#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:158
+#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:256
+#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:257
 msgid "Unable to set Dual Boot Flag Partition entry for partition"
 msgstr "Không thể cài phân vùng khởi động kép"
 
-#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:127
-#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:128
-#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:141
-#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:142
+#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:226
+#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:227
+#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:240
+#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:241
 msgid "Unable to set firmware environment variable"
 msgstr "Không thể cài biến môi trường khởi động"
 
@@ -214,9 +214,23 @@ msgstr "Cảnh báo: Hệ thống không hỗ trợ việc tắt nguồn!"
 msgid "Warning: Unable to obtain device information!"
 msgstr "Cảnh báo: Không lấy được thông tin thiết bị!"
 
-#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:127
-#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:128
-#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:141
-#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:142
+#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:44
+msgid "attempting to mount alternative partition"
+msgstr ""
+
+#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:53
+msgid "attempting to unmount alternative partition"
+msgstr ""
+
+#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:226
+#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:227
+#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:240
+#: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:241
 msgid "to"
 msgstr "đến"
+
+#~ msgid "Action"
+#~ msgstr "Hành động"
+
+#~ msgid "Firmware/OS (Kernel)"
+#~ msgstr "Bộ nạp khởi động"
