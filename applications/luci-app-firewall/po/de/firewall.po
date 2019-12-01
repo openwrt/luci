@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-03-30 17:00+0200\n"
-"PO-Revision-Date: 2019-11-29 19:44+0000\n"
-"Last-Translator: MartB <mart.b@outlook.de>\n"
+"PO-Revision-Date: 2019-12-01 10:40+0000\n"
+"Last-Translator: Paul Spooren <mail@aparcar.org>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsfirewall/de/>\n"
 "Language: de\n"
@@ -190,11 +190,11 @@ msgstr "Weiterleitung nicht verfolgen"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:307
 msgid "Do not track input"
-msgstr ""
+msgstr "Eingang nicht verfolgen"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:287
 msgid "Do not track output"
-msgstr ""
+msgstr "Ausgang nicht verfolgen"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:36
 msgid "Drop invalid packets"
@@ -224,6 +224,7 @@ msgstr "Experimentelle Funktion. Nicht vollständig kompatibel mit QoS/SQM."
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:218
 msgid "Explicitly choses allowed connection tracking helpers for zone traffic"
 msgstr ""
+"Wählt explizit zulässige Verbindungs-Tracking-Helfer für den Zonenverkehr aus"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:210
 msgid "External IP address"
@@ -475,6 +476,12 @@ msgid ""
 "invalid values could render the firewall ruleset broken, completely exposing "
 "all services."
 msgstr ""
+"Die Übergabe von rohen iptables-Argumenten an die Klassifizierungsregeln für "
+"den Quell- und Zielverkehr ermöglicht es, Pakete abzugleichen, die auf "
+"anderen Kriterien als Schnittstellen oder Subnetzen basieren. Diese Optionen "
+"sollten mit äußerster Vorsicht verwendet werden, da ungültige Werte dazu "
+"führen können, dass der Firewall-Regelsatz außer Funktion gesetzt wird und "
+"alle Dienste vollständig offengelegt werden."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:95
 #: applications/luci-app-firewall/luasrc/controller/firewall.lua:12
@@ -494,6 +501,8 @@ msgid ""
 "Prevent the installation of <em>NOTRACK</em> rules which would bypass "
 "connection tracking."
 msgstr ""
+"Verhindere Installation von <em>NOTRACK</em> Regeln, die die "
+"Verbindungsverfolgung umgehen würden."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:154
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:205
