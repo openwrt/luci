@@ -13,123 +13,10 @@
 
 	local boardinfo = util.ubus("system", "board")
 
-	local request  = disp.context.path
-	local request2 = disp.context.request
-
-	local category = request[1]
-	local cattree  = category and disp.node(category)
-
-	local leaf = request2[#request2]
-
-	local tree = disp.node()
 	local node = disp.context.dispatched
-
-	local categories = disp.node_childs(tree)
-
-	local c = tree
-	local i, r
-
-	-- tag all nodes leading to this page
-	for i, r in ipairs(request) do
-		if c.nodes and c.nodes[r] then
-			c = c.nodes[r]
-			c._menu_selected = true
-		end
-	end
 
 	-- send as HTML5
 	http.prepare_content("text/html")
-
-	local function nodeurl(prefix, name, query)
-		local u = url(prefix, name)
-		if query then
-			u = u .. http.build_querystring(query)
-		end
-		return pcdata(u)
-	end
-
-	local function render_tabmenu(prefix, node, level)
-		if not level then
-			level = 1
-		end
-
-		local childs = disp.node_childs(node)
-		if #childs > 0 then
-			if level > 2 then
-				write('<ul class="tabs">')
-			end
-
-			local selected_node
-			local selected_name
-			local i, v
-
-			for i, v in ipairs(childs) do
-				local nnode = node.nodes[v]
-				if nnode._menu_selected then
-					selected_node = nnode
-					selected_name = v
-				end
-
-				if level > 2 then
-					write('<li class="tabmenu-item-%s %s"><a href="%s">%s</a></li>' %{
-						v, (nnode._menu_selected or (node.leaf and v == leaf)) and 'active' or '',
-						nodeurl(prefix, v, nnode.query),
-						striptags(translate(nnode.title))
-					})
-				end
-			end
-
-			if level > 2 then
-				write('</ul>')
-			end
-
-			if selected_node then
-				render_tabmenu(prefix .. "/" .. selected_name, selected_node, level + 1)
-			end
-		end
-	end
-
-	local function render_submenu(prefix, node)
-		local childs = disp.node_childs(node)
-		if #childs > 0 then
-			write('<ul class="dropdown-menu">')
-
-			for i, r in ipairs(childs) do
-				local nnode = node.nodes[r]
-				write('<li><a href="%s">%s</a></li>' %{
-					nodeurl(prefix, r, nnode.query),
-					striptags(translate(nnode.title))
-				})
-			end
-
-			write('</ul>')
-		end
-	end
-
-	local function render_topmenu()
-		local childs = disp.node_childs(cattree)
-		if #childs > 0 then
-			write('<ul class="nav">')
-
-			for i, r in ipairs(childs) do
-				local nnode = cattree.nodes[r]
-				local grandchildren = disp.node_childs(nnode)
-
-				if #grandchildren > 0 then
-					write('<li class="dropdown"><a class="menu" href="#">%s</a>' % striptags(translate(nnode.title)))
-					render_submenu(category .. "/" .. r, nnode)
-					write('</li>')
-				else
-					write('<li><a href="%s">%s</a></li>' %{
-						nodeurl(category, r, nnode.query),
-						striptags(translate(nnode.title))
-					})
-				end
-			end
-
-			write('</ul>')
-		end
-	end
 -%>
 <!DOCTYPE html>
 <html lang="<%=luci.i18n.context.lang%>">
@@ -149,6 +36,8 @@
 		<script src="<%=url('admin/translations', luci.i18n.context.lang)%><%# ?v=PKG_VERSION %>"></script>
 		<script src="<%=resource%>/cbi.js"></script>
 		<script src="<%=resource%>/xhr.js"></script>
+
+		<% include("themes/bootstrap/json-menu") %>
 	</head>
 
 	<body class="lang_<%=luci.i18n.context.lang%> <% if node then %><%= striptags( node.title ) %><%- end %>" data-page="<%= pcdata(table.concat(disp.context.requestpath, "-")) %>">
@@ -156,7 +45,7 @@
 			<div class="fill">
 				<div class="container">
 					<a class="brand" href="#"><%=boardinfo.hostname or "?"%></a>
-					<% render_topmenu() %>
+					<ul class="nav" id="topmenu" style="display:none"></ul>
 					<div class="pull-right">
 						<span id="xhr_poll_status" style="display:none" onclick="XHR.running() ? XHR.halt() : XHR.run()">
 							<span class="label success" id="xhr_poll_status_on"><%:Auto Refresh%> <%:on%></span>
@@ -185,4 +74,4 @@
 				</div>
 			</noscript>
 
-			<% if category then render_tabmenu(category, cattree) end %>
+			<div id="tabmenu" style="display:none"></div>
