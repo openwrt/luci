@@ -21,6 +21,324 @@ local index = nil
 local fi
 
 
+local function check_fs_depends(fs)
+	local fs = require "nixio.fs"
+
+	for path, kind in pairs(fs) do
+		if kind == "directory" then
+			local empty = true
+			for entry in (fs.dir(path) or function() end) do
+				empty = false
+				break
+			end
+			if empty then
+				return false
+			end
+		elseif kind == "executable" then
+			if fs.stat(path, "type") ~= "reg" or not fs.access(path, "x") then
+				return false
+			end
+		elseif kind == "file" then
+			if fs.stat(path, "type") ~= "reg" then
+				return false
+			end
+		end
+	end
+
+	return true
+end
+
+local function check_uci_depends_options(conf, s, opts)
+	local uci = require "luci.model.uci"
+
+	if type(opts) == "string" then
+		return (s[".type"] == opts)
+	elseif opts == true then
+		for option, value in pairs(s) do
+			if option:byte(1) ~= 46 then
+				return true
+			end
+		end
+	elseif type(opts) == "table" then
+		for option, value in pairs(opts) do
+			local sval = s[option]
+			if type(sval) == "table" then
+				local found = false
+				for _, v in ipairs(sval) do
+					if v == value then
+						found = true
+						break
+					end
+				end
+				if not found then
+					return false
+				end
+			elseif value == true then
+				if sval == nil then
+					return false
+				end
+			else
+				if sval ~= value then
+					return false
+				end
+			end
+		end
+	end
+
+	return true
+end
+
+local function check_uci_depends_section(conf, sect)
+	local uci = require "luci.model.uci"
+
+	for section, options in pairs(sect) do
+		local stype = section:match("^@([A-Za-z0-9_%-]+)$")
+		if stype then
+			local found = false
+			uci:foreach(conf, stype, function(s)
+				if check_uci_depends_options(conf, s, options) then
+					found = true
+					return false
+				end
+			end)
+			if not found then
+				return false
+			end
+		else
+			local s = uci:get_all(conf, section)
+			if not s or not check_uci_depends_options(conf, s, options) then
+				return false
+			end
+		end
+	end
+
+	return true
+end
+
+local function check_uci_depends(conf)
+	local uci = require "luci.model.uci"
+
+	for config, values in pairs(conf) do
+		if values == true then
+			local found = false
+			uci:foreach(config, nil, function(s)
+				found = true
+				return false
+			end)
+			if not found then
+				return false
+			end
+		elseif type(values) == "table" then
+			if not check_uci_depends_section(config, values) then
+				return false
+			end
+		end
+	end
+
+	return true
+end
+
+local function check_depends(spec)
+	if type(spec.depends) ~= "table" then
+		return true
+	end
+
+	if type(spec.depends.fs) == "table" and not check_fs_depends(spec.depends.fs) then
+		local satisfied = false
+		local alternatives = (#spec.depends.fs > 0) and spec.depends.fs or { spec.depends.fs }
+		for _, alternative in ipairs(alternatives) do
+			if check_fs_depends(alternative) then
+				satisfied = true
+				break
+			end
+		end
+		if not satisfied then
+			return false
+		end
+	end
+
+	if type(spec.depends.uci) == "table" then
+		local satisfied = false
+		local alternatives = (#spec.depends.uci > 0) and spec.depends.uci or { spec.depends.uci }
+		for _, alternative in ipairs(alternatives) do
+			if check_uci_depends(alternative) then
+				satisfied = true
+				break
+			end
+		end
+		if not satisfied then
+			return false
+		end
+	end
+
+	return true
+end
+
+local function target_to_json(target, module)
+	local action
+
+	if target.type == "call" then
+		action = {
+			["type"] = "call",
+			["module"] = module,
+			["function"] = target.name,
+			["parameters"] = target.argv
+		}
+	elseif target.type == "view" then
+		action = {
+			["type"] = "view",
+			["path"] = target.view
+		}
+	elseif target.type == "template" then
+		action = {
+			["type"] = "template",
+			["path"] = target.view
+		}
+	elseif target.type == "cbi" then
+		action = {
+			["type"] = "cbi",
+			["path"] = target.model
+		}
+	elseif target.type == "form" then
+		action = {
+			["type"] = "form",
+			["path"] = target.model
+		}
+	elseif target.type == "firstchild" then
+		action = {
+			["type"] = "firstchild"
+		}
+	elseif target.type == "firstnode" then
+		action = {
+			["type"] = "firstchild",
+			["recurse"] = true
+		}
+	elseif target.type == "arcombine" then
+		if type(target.targets) == "table" then
+			action = {
+				["type"] = "arcombine",
+				["targets"] = {
+					target_to_json(target.targets[1], module),
+					target_to_json(target.targets[2], module)
+				}
+			}
+		end
+	elseif target.type == "alias" then
+		action = {
+			["type"] = "alias",
+			["path"] = table.concat(target.req, "/")
+		}
+	elseif target.type == "rewrite" then
+		action = {
+			["type"] = "rewrite",
+			["path"] = table.concat(target.req, "/"),
+			["remove"] = target.n
+		}
+	end
+
+	if target.post and action then
+		action.post = target.post
+	end
+
+	return action
+end
+
+local function tree_to_json(node, json)
+	local fs = require "nixio.fs"
+	local util = require "luci.util"
+
+	if type(node.nodes) == "table" then
+		for subname, subnode in pairs(node.nodes) do
+			local spec = {
+				title = util.striptags(subnode.title),
+				order = subnode.order
+			}
+
+			if subnode.leaf then
+				spec.wildcard = true
+			end
+
+			if subnode.cors then
+				spec.cors = true
+			end
+
+			if subnode.setuser then
+				spec.setuser = subnode.setuser
+			end
+
+			if subnode.setgroup then
+				spec.setgroup = subnode.setgroup
+			end
+
+			if type(subnode.target) == "table" then
+				spec.action = target_to_json(subnode.target, subnode.module)
+			end
+
+			if type(subnode.file_depends) == "table" then
+				for _, v in ipairs(subnode.file_depends) do
+					spec.depends = spec.depends or {}
+					spec.depends.fs = spec.depends.fs or {}
+
+					local ft = fs.stat(v, "type")
+					if ft == "dir" then
+						spec.depends.fs[v] = "directory"
+					elseif v:match("/s?bin/") then
+						spec.depends.fs[v] = "executable"
+					else
+						spec.depends.fs[v] = "file"
+					end
+				end
+			end
+
+			if type(subnode.uci_depends) == "table" then
+				for k, v in pairs(subnode.uci_depends) do
+					spec.depends = spec.depends or {}
+					spec.depends.uci = spec.depends.uci or {}
+					spec.depends.uci[k] = v
+				end
+			end
+
+			if (subnode.sysauth_authenticator ~= nil) or
+			   (subnode.sysauth ~= nil and subnode.sysauth ~= false)
+			then
+				if subnode.sysauth_authenticator == "htmlauth" then
+					spec.auth = {
+						login = true,
+						methods = { "cookie:sysauth" }
+					}
+				elseif subname == "rpc" and subnode.module == "luci.controller.rpc" then
+					spec.auth = {
+						login = false,
+						methods = { "param:auth", "cookie:sysauth" }
+					}
+				elseif subnode.module == "luci.controller.admin.uci" then
+					spec.auth = {
+						login = false,
+						methods = { "param:sid" }
+					}
+				end
+			elseif subnode.sysauth == false then
+				spec.auth = {}
+			end
+
+			for _, v in pairs(spec) do
+				if v ~= nil then
+					if not spec.action then
+						spec.title = nil
+					end
+
+					spec.satisfied = check_depends(spec)
+					json.children = json.children or {}
+					json.children[subname] = tree_to_json(subnode, spec)
+					break
+				end
+			end
+		end
+	end
+
+	return json
+end
+
 function build_url(...)
 	local path = {...}
 	local url = { http.getenv("SCRIPT_NAME") or "" }
@@ -304,6 +622,16 @@ local function session_setup(user, pass, allowed_users)
 	end
 
 	return nil, nil
+end
+
+function menu_json()
+	local tree = context.tree or createtree()
+	return tree_to_json(tree, {
+		action = {
+			["type"] = "firstchild",
+			["recurse"] = true
+		}
+	})
 end
 
 function dispatch(request)
@@ -848,38 +1176,43 @@ function firstnode()
 	return { type = "firstnode", target = _firstnode }
 end
 
-function alias(...)
-	local req = {...}
-	return function(...)
-		for _, r in ipairs({...}) do
-			req[#req+1] = r
-		end
+function _alias(self, ...)
+	local req = { unpack(self.req) }
 
-		dispatch(req)
+	for _, r in ipairs({...}) do
+		req[#req+1] = r
 	end
+
+	dispatch(req)
+end
+
+function alias(...)
+	return { type = "alias", target = _alias, req = { ... } }
+end
+
+function _rewrite(self, ...)
+	local n = self.n
+	local req = { unpack(self.req) }
+	local dispatched = util.clone(context.dispatched)
+
+	for i=1,n do
+		table.remove(dispatched, 1)
+	end
+
+	for i, r in ipairs(req) do
+		table.insert(dispatched, i, r)
+	end
+
+	for _, r in ipairs({...}) do
+		dispatched[#dispatched+1] = r
+	end
+
+	dispatch(dispatched)
 end
 
 function rewrite(n, ...)
-	local req = {...}
-	return function(...)
-		local dispatched = util.clone(context.dispatched)
-
-		for i=1,n do
-			table.remove(dispatched, 1)
-		end
-
-		for i, r in ipairs(req) do
-			table.insert(dispatched, i, r)
-		end
-
-		for _, r in ipairs({...}) do
-			dispatched[#dispatched+1] = r
-		end
-
-		dispatch(dispatched)
-	end
+	return { type = "rewrite", target = _rewrite, n = n, req = { ... } }
 end
-
 
 local function _call(self, ...)
 	local func = getfenv()[self.name]
@@ -1092,7 +1425,7 @@ end
 
 function form(model)
 	return {
-		type = "cbi",
+		type = "form",
 		post = { ["cbi.submit"] = true },
 		model = model,
 		target = _form
