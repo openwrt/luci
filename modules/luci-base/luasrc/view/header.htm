@@ -23,6 +23,7 @@
 		scriptname     = luci.http.getenv("SCRIPT_NAME"),
 		pathinfo       = luci.http.getenv("PATH_INFO"),
 		requestpath    = luci.dispatcher.context.requestpath,
+		dispatchpath   = luci.dispatcher.context.path,
 		pollinterval   = luci.config.main.pollinterval or 5,
 		sessionid      = luci.dispatcher.context.authsession,
 		apply_rollback = math.max(applyconf and applyconf.rollback or 30, 30),
