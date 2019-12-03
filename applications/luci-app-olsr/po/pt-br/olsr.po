@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-06-10 03:41+0200\n"
-"PO-Revision-Date: 2019-12-02 16:08+0000\n"
+"PO-Revision-Date: 2019-12-03 08:24+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "openwrt/luciapplicationsolsr/pt_BR/>\n"
@@ -107,17 +107,17 @@ msgstr "Dispositivo"
 
 #: applications/luci-app-olsr/luasrc/controller/olsr.lua:75
 msgid "Display"
-msgstr "Visão"
+msgstr "Exibir"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/smartgw.htm:60
 #: applications/luci-app-olsr/luasrc/view/status-olsr/smartgw.htm:112
 msgid "Downlink"
-msgstr "Enlace inferior (downlink)"
+msgstr "Velocidade de recebimento do enlace (downlink)"
 
 # I didn't find in GUI this one
 #: applications/luci-app-olsr/luasrc/view/status-olsr/overview.htm:203
 msgid "Download Config"
-msgstr "Configuração do Recebimento de Dados "
+msgstr "Configuração do Recebimento de Dados"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/smartgw.htm:57
 #: applications/luci-app-olsr/luasrc/view/status-olsr/smartgw.htm:109
@@ -134,7 +134,7 @@ msgstr "ETX"
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdplugins6.lua:15
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdplugins.lua:15
 msgid "Enable"
-msgstr "Habilitar"
+msgstr "Ativar"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:134
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:140
@@ -621,13 +621,13 @@ msgid ""
 "calculation<br /><b>etx_ffeth</b>: incompatible variant of etx_ff that "
 "allows ethernet links with ETX 0.1.<br />Defaults to \"etx_ff\""
 msgstr ""
-"Algoritmo de qualidade do enlace (somente para <abbr title=\"Link Quality, "
-"Qualidade do Enlace\">LQ</abbr> nível 2). <br /><b>etx_float</b>: ETX ponto "
-"flutuante com o envelhecimento exponencial<br /><b>etx_fpm</b> : o mesmo que "
-"etx_float, mas com aritmética inteira<br /><b>etx_ff</b> : ETX freifunk, uma "
-"variante do etx que usa todo tráfego OLSE (ao invés de somente as saudações) "
-"para o cálculo do ETX<br /><b>etx_ffeth</b>: variação incompatível do etx_ff "
-"que permite enlaces ethernet com ETX 0.1.<br />O padrão é \"etx_ff\""
+"Algoritmo de qualidade do enlace (apenas para lq level 2).<br "
+"/><b>etx_float</b>: Ponto ETX flutuante com envelhecimento exponencial<br "
+"/><b>etx_fpm</b> : o mesmo que etx_float, mas com aritmética inteira<br "
+"/><b>etx_ff</b> : ETX freifunk, uma variante do etx que usa todo o tráfego "
+"OLSE (em vez de usar saudações 'hello') para o cálculo do ETX<br "
+"/><b>etx_ffeth</b>: variante incompatível do etx_ff que permite enlaces "
+"ethernet com ETX 0.1.<br />O Padrão é \"etx_ff\""
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:77
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:83
@@ -825,7 +825,7 @@ msgstr ""
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdplugins.lua:9
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdplugins.lua:216
 msgid "OLSR - Plugins"
-msgstr "OLSR - Plugins"
+msgstr "Plug-ins - OLSR"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:12
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:12
@@ -959,7 +959,7 @@ msgstr "Interfaces OLSR secundárias"
 #: applications/luci-app-olsr/luasrc/view/status-olsr/smartgw.htm:56
 #: applications/luci-app-olsr/luasrc/view/status-olsr/smartgw.htm:108
 msgid "Selected"
-msgstr ""
+msgstr "Selecionado"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:133
 msgid ""
@@ -1159,7 +1159,7 @@ msgstr "Não foi possível conectar ao servidor OLSR!"
 #: applications/luci-app-olsr/luasrc/view/status-olsr/smartgw.htm:59
 #: applications/luci-app-olsr/luasrc/view/status-olsr/smartgw.htm:111
 msgid "Uplink"
-msgstr "Enlace superior (uplink)"
+msgstr "Velocidade de envio do enlace (uplink)"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:160
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:166
@@ -1266,13 +1266,14 @@ msgid "Yellow"
 msgstr "Amarelo"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/interfaces.htm:38
+#, fuzzy
 msgid "down"
-msgstr ""
+msgstr "para baixo"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/smartgw.htm:30
 #: applications/luci-app-olsr/luasrc/view/status-olsr/smartgw.htm:134
 msgid "infinate"
-msgstr ""
+msgstr "infinito"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/interfaces.htm:40
 #: applications/luci-app-olsr/luasrc/view/status-olsr/smartgw.htm:29
@@ -1285,8 +1286,9 @@ msgid "no"
 msgstr "Não"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/interfaces.htm:38
+#, fuzzy
 msgid "up"
-msgstr ""
+msgstr "para cima"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/interfaces.htm:40
 #: applications/luci-app-olsr/luasrc/view/status-olsr/smartgw.htm:29
