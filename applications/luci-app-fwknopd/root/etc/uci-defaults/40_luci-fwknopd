@@ -4,11 +4,6 @@
 . /lib/functions/network.sh
 
 [ "$(uci -q get fwknopd.@access[0].KEY)" != "CHANGEME" ] && exit 0
-uci batch <<EOF
-	add ucitrack fwknopd
-	set ucitrack.@fwknopd[-1].init=fwknopd
-	commit ucitrack
-EOF
 
 uci delete fwknopd.@access[0].KEY
 uci delete fwknopd.@access[0].HMAC_KEY
