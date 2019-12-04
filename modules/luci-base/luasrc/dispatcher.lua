@@ -503,6 +503,38 @@ function error500(message)
 	return false
 end
 
+local function determine_request_language()
+	local conf = require "luci.config"
+	assert(conf.main, "/etc/config/luci seems to be corrupt, unable to find section 'main'")
+
+	local lang = conf.main.lang or "auto"
+	if lang == "auto" then
+		local aclang = http.getenv("HTTP_ACCEPT_LANGUAGE") or ""
+		for aclang in aclang:gmatch("[%w_-]+") do
+			local country, culture = aclang:match("^([a-z][a-z])[_-]([a-zA-Z][a-zA-Z])$")
+			if country and culture then
+				local cc = "%s_%s" %{ country, culture:lower() }
+				if conf.languages[cc] then
+					lang = cc
+					break
+				elseif conf.languages[country] then
+					lang = country
+					break
+				end
+			elseif conf.languages[aclang] then
+				lang = aclang
+				break
+			end
+		end
+	end
+
+	if lang == "auto" then
+		lang = i18n.default
+	end
+
+	i18n.setlanguage(lang)
+end
+
 function httpdispatch(request, prefix)
 	http.context.request = request
 
@@ -521,6 +553,8 @@ function httpdispatch(request, prefix)
 	for node in pathinfo:gmatch("[^/%z]+") do
 		r[#r+1] = node
 	end
+
+	determine_request_language()
 
 	local stat, err = util.coxpcall(function()
 		dispatch(context.request)
@@ -638,36 +672,6 @@ function dispatch(request)
 	--context._disable_memtrace = require "luci.debug".trap_memtrace("l")
 	local ctx = context
 	ctx.path = request
-
-	local conf = require "luci.config"
-	assert(conf.main,
-		"/etc/config/luci seems to be corrupt, unable to find section 'main'")
-
-	local i18n = require "luci.i18n"
-	local lang = conf.main.lang or "auto"
-	if lang == "auto" then
-		local aclang = http.getenv("HTTP_ACCEPT_LANGUAGE") or ""
-		for aclang in aclang:gmatch("[%w_-]+") do
-			local country, culture = aclang:match("^([a-z][a-z])[_-]([a-zA-Z][a-zA-Z])$")
-			if country and culture then
-				local cc = "%s_%s" %{ country, culture:lower() }
-				if conf.languages[cc] then
-					lang = cc
-					break
-				elseif conf.languages[country] then
-					lang = country
-					break
-				end
-			elseif conf.languages[aclang] then
-				lang = aclang
-				break
-			end
-		end
-	end
-	if lang == "auto" then
-		lang = i18n.default
-	end
-	i18n.setlanguage(lang)
 
 	local c = ctx.tree
 	local stat
