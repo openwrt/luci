@@ -312,7 +312,7 @@ var UISelect = UIElement.extend({
 				frameEl.lastChild.appendChild(E('option', {
 					'value': '',
 					'selected': (this.values.length == 0 || this.values[0] == '') ? '' : null
-				}, this.choices[''] || this.options.placeholder || _('-- Please choose --')));
+				}, [ this.choices[''] || this.options.placeholder || _('-- Please choose --') ]));
 
 			for (var i = 0; i < keys.length; i++) {
 				if (keys[i] == null || keys[i] == '')
@@ -321,7 +321,7 @@ var UISelect = UIElement.extend({
 				frameEl.lastChild.appendChild(E('option', {
 					'value': keys[i],
 					'selected': (this.values.indexOf(keys[i]) > -1) ? '' : null
-				}, this.choices[keys[i]] || keys[i]));
+				}, [ this.choices[keys[i]] || keys[i] ]));
 			}
 		}
 		else {
