@@ -668,6 +668,84 @@ function menu_json()
 	})
 end
 
+local function init_template_engine(ctx)
+	local tpl = require "luci.template"
+	local media = luci.config.main.mediaurlbase
+
+	if not pcall(tpl.Template, "themes/%s/header" % fs.basename(media)) then
+		media = nil
+		for name, theme in pairs(luci.config.themes) do
+			if name:sub(1,1) ~= "." and pcall(tpl.Template,
+			 "themes/%s/header" % fs.basename(theme)) then
+				media = theme
+			end
+		end
+		assert(media, "No valid theme found")
+	end
+
+	local function _ifattr(cond, key, val, noescape)
+		if cond then
+			local env = getfenv(3)
+			local scope = (type(env.self) == "table") and env.self
+			if type(val) == "table" then
+				if not next(val) then
+					return ''
+				else
+					val = util.serialize_json(val)
+				end
+			end
+
+			val = tostring(val or
+				(type(env[key]) ~= "function" and env[key]) or
+				(scope and type(scope[key]) ~= "function" and scope[key]) or "")
+
+			if noescape ~= true then
+				val = util.pcdata(val)
+			end
+
+			return string.format(' %s="%s"', tostring(key), val)
+		else
+			return ''
+		end
+	end
+
+	tpl.context.viewns = setmetatable({
+		write       = http.write;
+		include     = function(name) tpl.Template(name):render(getfenv(2)) end;
+		translate   = i18n.translate;
+		translatef  = i18n.translatef;
+		export      = function(k, v) if tpl.context.viewns[k] == nil then tpl.context.viewns[k] = v end end;
+		striptags   = util.striptags;
+		pcdata      = util.pcdata;
+		media       = media;
+		theme       = fs.basename(media);
+		resource    = luci.config.main.resourcebase;
+		ifattr      = function(...) return _ifattr(...) end;
+		attr        = function(...) return _ifattr(true, ...) end;
+		url         = build_url;
+	}, {__index=function(tbl, key)
+		if key == "controller" then
+			return build_url()
+		elseif key == "REQUEST_URI" then
+			return build_url(unpack(ctx.requestpath))
+		elseif key == "FULL_REQUEST_URI" then
+			local url = { http.getenv("SCRIPT_NAME") or "", http.getenv("PATH_INFO") }
+			local query = http.getenv("QUERY_STRING")
+			if query and #query > 0 then
+				url[#url+1] = "?"
+				url[#url+1] = query
+			end
+			return table.concat(url, "")
+		elseif key == "token" then
+			return ctx.authtoken
+		else
+			return rawget(tbl, key) or _G[key]
+		end
+	end})
+
+	return tpl
+end
+
 function dispatch(request)
 	--context._disable_memtrace = require "luci.debug".trap_memtrace("l")
 	local ctx = context
@@ -715,78 +793,7 @@ function dispatch(request)
 
 	-- Init template engine
 	if (c and c.index) or not track.notemplate then
-		local tpl = require("luci.template")
-		local media = track.mediaurlbase or luci.config.main.mediaurlbase
-		if not pcall(tpl.Template, "themes/%s/header" % fs.basename(media)) then
-			media = nil
-			for name, theme in pairs(luci.config.themes) do
-				if name:sub(1,1) ~= "." and pcall(tpl.Template,
-				 "themes/%s/header" % fs.basename(theme)) then
-					media = theme
-				end
-			end
-			assert(media, "No valid theme found")
-		end
-
-		local function _ifattr(cond, key, val, noescape)
-			if cond then
-				local env = getfenv(3)
-				local scope = (type(env.self) == "table") and env.self
-				if type(val) == "table" then
-					if not next(val) then
-						return ''
-					else
-						val = util.serialize_json(val)
-					end
-				end
-
-				val = tostring(val or
-					(type(env[key]) ~= "function" and env[key]) or
-					(scope and type(scope[key]) ~= "function" and scope[key]) or "")
-
-				if noescape ~= true then
-					val = util.pcdata(val)
-				end
-
-				return string.format(' %s="%s"', tostring(key), val)
-			else
-				return ''
-			end
-		end
-
-		tpl.context.viewns = setmetatable({
-		   write       = http.write;
-		   include     = function(name) tpl.Template(name):render(getfenv(2)) end;
-		   translate   = i18n.translate;
-		   translatef  = i18n.translatef;
-		   export      = function(k, v) if tpl.context.viewns[k] == nil then tpl.context.viewns[k] = v end end;
-		   striptags   = util.striptags;
-		   pcdata      = util.pcdata;
-		   media       = media;
-		   theme       = fs.basename(media);
-		   resource    = luci.config.main.resourcebase;
-		   ifattr      = function(...) return _ifattr(...) end;
-		   attr        = function(...) return _ifattr(true, ...) end;
-		   url         = build_url;
-		}, {__index=function(tbl, key)
-			if key == "controller" then
-				return build_url()
-			elseif key == "REQUEST_URI" then
-				return build_url(unpack(ctx.requestpath))
-			elseif key == "FULL_REQUEST_URI" then
-				local url = { http.getenv("SCRIPT_NAME") or "", http.getenv("PATH_INFO") }
-				local query = http.getenv("QUERY_STRING")
-				if query and #query > 0 then
-					url[#url+1] = "?"
-					url[#url+1] = query
-				end
-				return table.concat(url, "")
-			elseif key == "token" then
-				return ctx.authtoken
-			else
-				return rawget(tbl, key) or _G[key]
-			end
-		end})
+		init_template_engine(ctx)
 	end
 
 	track.dependent = (track.dependent ~= false)
