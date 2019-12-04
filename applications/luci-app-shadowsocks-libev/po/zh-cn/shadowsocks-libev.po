@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2019-12-03 08:27+0000\n"
-"Last-Translator: Meano Lee <meanocat@gmail.com>\n"
+"PO-Revision-Date: 2019-12-04 12:08+0000\n"
+"Last-Translator: lissom <kkjoy2617@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "openwrt/luciapplicationsshadowsocks-libev/zh_Hans/>\n"
 "Language: zh-cn\n"
@@ -65,9 +65,7 @@ msgstr "对于源地址不在列表中的报文的默认行为"
 msgid ""
 "Definition of remote shadowsocks servers. Disable any of them will also "
 "disable instances referring to it."
-msgstr ""
-"在此页面设定访问远端shadowsocks服务器的参数。请注意，禁用远端服务器会同时停止"
-"与之关联的shadowsocks-libev组件"
+msgstr "在此页面设定访问远端shadowsocks服务器的参数。请注意，禁用远端服务器会同时停止与之关联的shadowsocks-libev组件。"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:43
 msgid "Destination Settings"
@@ -130,12 +128,12 @@ msgstr "额外参数"
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:95
 msgid ""
 "File containing ip/net for the purposes as with <em>Dst ip/net bypass</em>"
-msgstr "文件列出需要绕过ss-redir转发的地址和网段"
+msgstr "包含ip/net的文件，用于 <em>Dst ip/net bypass</em>"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:99
 msgid ""
 "File containing ip/net for the purposes as with <em>Dst ip/net forward</em>"
-msgstr "文件列出需要使用ss-redir转发的地址和网段"
+msgstr "包含 ip/net 的文件用于与 <em>Dst ip/net forward</em>"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:118
 msgid "Forward recentrst"
@@ -165,13 +163,13 @@ msgstr "IPv6优先"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/servers.js:50
 msgid "Import"
-msgstr ""
+msgstr "导入"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/servers.js:21
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/servers.js:58
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/servers.js:60
 msgid "Import Links"
-msgstr ""
+msgstr "导入链接"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:62
 msgid "Ingress interfaces"
@@ -237,10 +235,10 @@ msgid ""
 "give the default action to be taken. If the prior check results in action "
 "<em>checkdst</em>, packets will continue to have their dst addresses checked."
 msgstr ""
-"在此页面，您可以配置指定报文是否通过ss-redir转发。启用后，规则会先将报文的源"
-"地址与相应的地址集进行匹配，依次决定是否“绕过（<em>bypass</em>）”、“转发"
-"（<em>forward</em>）”，或“继续匹配目的地址（<em>checkdst</em>）”；若未在集合"
-"中找到匹配，则执行指定的默认动作。继续匹配目的地址时同理。"
+"在此页面上，您可以配置如何将流量转发到ss-redir实例。如果启用，则首先将对数据包的src ip地址按以下顺序匹配， <em>Src ip/net "
+"bypass</em>, <em>Src ip/net forward</em>, <em>Src ip/net "
+"checkdst</em>如果没有匹配项，则按<em>Src default</em> 执行默认操作.如果事先启用了<em>checkdst</em>, "
+"数据包将选定地址进行转发。"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:63
 msgid "Only apply rules on packets from these network interfaces"
@@ -256,7 +254,7 @@ msgstr "依赖包未安装"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:69
 msgid "Passes additional arguments to iptables. Use with care!"
-msgstr "给iptables的额外参数。请小心使用"
+msgstr "传递到 iptables 的额外参数。小心使用！"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/shadowsocks-libev.js:151
 msgid "Password"
@@ -298,15 +296,15 @@ msgstr "运行中"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/shadowsocks-libev.js:138
 msgid "Server"
-msgstr "监听地址"
+msgstr "服务器"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/shadowsocks-libev.js:142
 msgid "Server port"
-msgstr "监听端口"
+msgstr "服务器端口"
 
 #: applications/luci-app-shadowsocks-libev/luasrc/controller/shadowsocks-libev.lua:9
 msgid "Shadowsocks-libev"
-msgstr ""
+msgstr "Shadowsocks-libev"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:42
 msgid "Source Settings"
