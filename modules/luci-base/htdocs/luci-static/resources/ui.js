@@ -1300,7 +1300,7 @@ var UIDynamicList = UIElement.extend({
 	addItem: function(dl, value, text, flash) {
 		var exists = false,
 		    new_item = E('div', { 'class': flash ? 'item flash' : 'item', 'tabindex': 0 }, [
-				E('span', {}, text || value),
+				E('span', {}, [ text || value ]),
 				E('input', {
 					'type': 'hidden',
 					'name': this.options.name,
