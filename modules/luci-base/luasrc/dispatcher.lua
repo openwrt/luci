@@ -609,14 +609,32 @@ local function find_subnode(root, prefix, recurse, descended)
 	end
 end
 
+local function merge_trees(node_a, node_b)
+	for k, v in pairs(node_b) do
+		if k == "children" then
+			node_a.children = node_a.children or {}
+
+			for name, spec in pairs(v) do
+				node_a.children[name] = merge_trees(node_a.children[name] or {}, spec)
+			end
+		else
+			node_a[k] = v
+		end
+	end
+	return node_a
+end
+
 function menu_json()
 	local tree = context.tree or createtree()
-	return tree_to_json(tree, {
+	local lua_tree = tree_to_json(tree, {
 		action = {
 			["type"] = "firstchild",
 			["recurse"] = true
 		}
 	})
+
+	local json_tree = createtree_json()
+	return merge_trees(lua_tree, json_tree)
 end
 
 local function init_template_engine(ctx)
@@ -961,13 +979,9 @@ function createindex()
 		       "' - It must correspond to the file path!")
 
 		local idx = mod.index
-		assert(type(idx) == "function",
-		       "Invalid controller file found\n" ..
-		       "The file '" .. path .. "' contains no index() function.\n" ..
-		       "Please make sure that the controller contains a valid " ..
-		       "index function and verify the spelling!")
-
-		index[modname] = idx
+		if type(idx) == "function" then
+			index[modname] = idx
+		end
 	end
 
 	if indexcache then
@@ -975,6 +989,94 @@ function createindex()
 		f:writeall(util.get_bytecode(index))
 		f:close()
 	end
+end
+
+function createtree_json()
+	local json = require "luci.jsonc"
+	local tree = {}
+
+	local schema = {
+		action = "table",
+		auth = "table",
+		cors = "boolean",
+		depends = "table",
+		order = "number",
+		setgroup = "string",
+		setuser = "string",
+		title = "string",
+		wildcard = "boolean"
+	}
+
+	local files = {}
+	local fprint = {}
+	local cachefile
+
+	for file in (fs.glob("/usr/share/luci/menu.d/*.json") or function() end) do
+		files[#files+1] = file
+
+		if indexcache then
+			local st = fs.stat(file)
+			if st then
+				fprint[#fprint+1] = '%x' % st.ino
+				fprint[#fprint+1] = '%x' % st.mtime
+				fprint[#fprint+1] = '%x' % st.size
+			end
+		end
+	end
+
+	if indexcache then
+		cachefile = "%s.%s.json" %{
+			indexcache,
+			nixio.crypt(table.concat(fprint, "|"), "$1$"):sub(5):gsub("/", ".")
+		}
+
+		local res = json.parse(fs.readfile(cachefile) or "")
+		if res then
+			return res
+		end
+
+		for file in (fs.glob("%s.*.json" % indexcache) or function() end) do
+			fs.unlink(file)
+		end
+	end
+
+	for _, file in ipairs(files) do
+		local data = json.parse(fs.readfile(file) or "")
+		if type(data) == "table" then
+			for path, spec in pairs(data) do
+				if type(spec) == "table" then
+					local node = tree
+
+					for s in path:gmatch("[^/]+") do
+						if s == "*" then
+							node.wildcard = true
+							break
+						end
+
+						node.children = node.children or {}
+						node.children[s] = node.children[s] or {}
+						node = node.children[s]
+					end
+
+					if node ~= tree then
+						for k, t in pairs(schema) do
+							if type(spec[k]) == t then
+								node[k] = spec[k]
+							end
+						end
+
+						node.satisfied = check_depends(spec)
+					end
+				end
+			end
+		end
+	end
+
+	if cachefile then
+		fs.writefile(cachefile, json.stringify(tree))
+	end
+
+	return tree
 end
 
 -- Build the index before if it does not exist yet.
