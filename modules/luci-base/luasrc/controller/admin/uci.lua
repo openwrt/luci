@@ -4,32 +4,6 @@
 
 module("luci.controller.admin.uci", package.seeall)
 
-function index()
-	local redir = luci.http.formvalue("redir", true)
-		or table.concat(luci.dispatcher.context.request, "/")
-
-	entry({"admin", "uci"}, nil, _("Configuration"))
-	entry({"admin", "uci", "revert"}, post("action_revert"), nil)
-
-	local node
-	local authen = function(checkpass, allowed_users)
-		return "root", luci.http.formvalue("sid")
-	end
-
-	node = entry({"admin", "uci", "apply_rollback"}, post("action_apply_rollback"), nil)
-	node.cors = true
-	node.sysauth_authenticator = authen
-
-	node = entry({"admin", "uci", "apply_unchecked"}, post("action_apply_unchecked"), nil)
-	node.cors = true
-	node.sysauth_authenticator = authen
-
-	node = entry({"admin", "uci", "confirm"}, call("action_confirm"), nil)
-	node.cors = true
-	node.sysauth = false
-end
-
-
 local function ubus_state_to_http(errstr)
 	local map = {
 		["Invalid command"]   = 400,
