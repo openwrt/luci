@@ -1,5 +1,6 @@
 #!/usr/bin/perl
 
+use utf8;
 use strict;
 use warnings;
 use Text::Balanced qw(extract_tagged gen_delimited_pat);
@@ -15,12 +16,49 @@ my %stringtable;
 sub dec_lua_str
 {
 	my $s = shift;
-	$s =~ s/\\n/\n/g;
-	$s =~ s/\\t/\t/g;
-	$s =~ s/\\(.)/$1/sg;
+	my %rep = (
+		'a' => "\x07",
+		'b' => "\x08",
+		'f' => "\x0c",
+		'n' => "\n",
+		'r' => "\r",
+		't' => "\t",
+		'v' => "\x76"
+	);
+
+	$s =~ s!\\(?:([0-9]{1,2})|(.))!
+		$1 ? chr(int($1)) : ($rep{$2} || $2)
+	!segx;
+
 	$s =~ s/[\s\n]+/ /g;
 	$s =~ s/^ //;
 	$s =~ s/ $//;
+
+	return $s;
+}
+
+sub dec_json_str
+{
+	my $s = shift;
+	my %rep = (
+		'"' => '"',
+		'/' => '/',
+		'b' => "\x08",
+		'f' => "\x0c",
+		'n' => "\n",
+		'r' => "\r",
+		't' => "\t",
+		'\\' => '\\'
+	);
+
+	$s =~ s!\\([\\/"bfnrt]|u([0-9a-fA-F]{4}))!
+		$2 ? chr(hex($2)) : $rep{$1}
+	!egx;
+
+	$s =~ s/[\s\n]+/ /g;
+	$s =~ s/^ //;
+	$s =~ s/ $//;
+
 	return $s;
 }
 
@@ -43,6 +81,8 @@ if( open F, "find @ARGV -type f '(' -name '*.htm' -o -name '*.lua' -o -name '*.j
 
 		if( open S, "< $file" )
 		{
+			binmode S, ':utf8';
+
 			local $/ = undef;
 			my $raw = <S>;
 			close S;
@@ -148,9 +188,84 @@ if( open F, "find @ARGV -type f '(' -name '*.htm' -o -name '*.lua' -o -name '*.j
 	close F;
 }
 
+if( open F, "find @ARGV -type f -path '*/menu.d/*.json' | sort |" )
+{
+	while( defined( my $file = readline F ) )
+	{
+		chomp $file;
+
+		if( open S, "< $file" )
+		{
+			binmode S, ':utf8';
+
+			local $/ = undef;
+			my $raw = <S>;
+			close S;
+
+			my $text = $raw;
+			my $line = 1;
+
+			while ($text =~ s/ ^ (.*?) "title" ([\n\s]*) : //sgx)
+			{
+				my ($prefix, $suffix) = ($1, $2);
+				my $code;
+				my $res = "";
+				my $sub = "";
+
+				$line += () = $prefix =~ /\n/g;
+
+				my $position = "$file:$line";
+
+				$line += () = $suffix =~ /\n/g;
+
+				while (defined $sub)
+				{
+					undef $sub;
+
+					if ($text =~ /^ ([\n\s]*) " /sx)
+					{
+						my $ws = $1;
+						my $re = gen_delimited_pat('"', '\\');
+
+						if ($text =~ m/\G\s*($re)/gcs)
+						{
+							$sub = $1;
+							$text = substr $text, pos $text;
+						}
+
+						$line += () = $ws =~ /\n/g;
+
+						if (defined($sub) && length($sub)) {
+							$line += () = $sub =~ /\n/g;
+
+							$sub =~ s/^"//;
+							$sub =~ s/"$//;
+							$res .= $sub;
+						}
+					}
+				}
+
+				if (defined($res))
+				{
+					$res = dec_json_str($res);
+
+					if ($res) {
+						$stringtable{$res} ||= [ ];
+						push @{$stringtable{$res}}, $position;
+					}
+				}
+			}
+		}
+	}
+
+	close F;
+}
+
 
 if( open C, "| msgcat -" )
 {
+	binmode C, ':utf8';
+
 	printf C "msgid \"\"\nmsgstr \"Content-Type: text/plain; charset=UTF-8\"\n\n";
 
 	foreach my $key ( sort keys %stringtable )
