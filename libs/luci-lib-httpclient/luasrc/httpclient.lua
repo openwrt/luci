@@ -105,10 +105,10 @@ function parse_url(uri)
 		rest = tmp
 	end
 
-	url.host, tmp = rest:match("^%[([0-9a-fA-F:]+)%](.*)$")
+	url.host, tmp = rest:match("^%[(.+)%](.*)$")
 	if url.host and tmp then
 		url.ip6addr = ip.IPv6(url.host)
-		if not url.ip6addr then
+		if not url.ip6addr or url.ip6addr:prefix() < 128 then
 			return nil
 		end
 		url.host = string.format("[%s]", url.ip6addr:string())
