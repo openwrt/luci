@@ -838,6 +838,23 @@ print(addr:mapped4()) -- "172.16.19.1"`
 ]]
 
 ---[[
+Derive unscoped IPv6 address of CIDR instance.
+
+Construct a copy of the given IPv6 CIDR instance and drop the associated
+address scope information.
+
+This function has no effect on IPv4 instances or MAC address instances,
+it will return nothing in this case.
+
+@class function
+@sort 19
+@name cidr.unscoped
+@return Return a new CIDR instance representing the unscoped IPv6 address.
+@usage `local addr = luci.ip.new("fe80::1234%eth0")
+print(addr:unscoped()) -- "fe80::1234"`
+]]
+
+---[[
 Derive MAC address of IPv6 link local CIDR instance.
 
 Constructs a CIDR instance representing the MAC address contained in the IPv6
@@ -848,7 +865,7 @@ instances which are not a link local address, it will return nothing in this
 case.
 
 @class function
-@sort 19
+@sort 20
 @name cidr.tomac
 @return Return a new CIDR instance representing the MAC address if this
   instance is an IPv6 link local address, else return nothing.
@@ -866,7 +883,7 @@ This function has no effect on IPv4 instances or IPv6 instances, it will return
 nothing in this case.
 
 @class function
-@sort 20
+@sort 21
 @name cidr.tolinklocal
 @return Return a new CIDR instance representing the IPv6 link local address.
 @usage `local mac = luci.ip.new("64:66:B3:47:E1:B9")
@@ -877,7 +894,7 @@ print(mac:tolinklocal()) -- "fe80::6666:b3ff:fe47:e1b9"`
 Test whether CIDR contains given range.
 
 @class function
-@sort 21
+@sort 22
 @name cidr.contains
 @param addr A `luci.ip.cidr` instance or a string convertible by
 	`luci.ip.new()` to test.
@@ -902,7 +919,7 @@ Add given amount to CIDR instance. If the result would overflow the maximum
 address space, the result is set to the highest possible address.
 
 @class function
-@sort 22
+@sort 23
 @name cidr.add
 @param amount A numeric value between 0 and 0xFFFFFFFF, a
 	`luci.ip.cidr` instance or a string convertible by
@@ -951,7 +968,7 @@ Subtract given amount from CIDR instance. If the result would under, the lowest
 possible address is returned.
 
 @class function
-@sort 23
+@sort 24
 @name cidr.sub
 @param amount A numeric value between 0 and 0xFFFFFFFF, a
 	`luci.ip.cidr` instance or a string convertible by
@@ -999,7 +1016,7 @@ print(mac)                     -- "00:00:00:00:00:00"`
 Calculate the lowest possible host address within this CIDR instance.
 
 @class function
-@sort 24
+@sort 25
 @name cidr.minhost
 @return Returns a new CIDR instance representing the lowest host address
 	within this range.
@@ -1017,7 +1034,7 @@ print(mac:minhost())   -- "00:14:22:01:00:01"`
 Calculate the highest possible host address within this CIDR instance.
 
 @class function
-@sort 25
+@sort 26
 @name cidr.maxhost
 @return Returns a new CIDR instance representing the highest host address
 	within this range.
@@ -1042,7 +1059,7 @@ It is usually not required to call this function directly as CIDR objects
 define it as __tostring function in the associated metatable.
 
 @class function
-@sort 26
+@sort 27
 @name cidr.string
 @return Returns a string representing the range or address of this CIDR instance
 ]]
