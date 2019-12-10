@@ -1,0 +1,129 @@
+{
+	"admin/status/overview": {
+		"title": "Overview",
+		"order": 1,
+		"action": {
+			"type": "template",
+			"path": "admin_status/index"
+		}
+	},
+
+	"admin/status/iptables/*": {
+		"title": "Firewall",
+		"order": 2,
+		"action": {
+			"type": "template",
+			"path": "admin_status/iptables"
+		}
+	},
+
+	"admin/status/iptables_dump/*": {
+		"action": {
+			"type": "call",
+			"module": "luci.controller.admin.status",
+			"function": "dump_iptables"
+		}
+	},
+
+	"admin/status/iptables_action/*": {
+		"action": {
+			"type": "call",
+			"module": "luci.controller.admin.status",
+			"function": "action_iptables"
+		}
+	},
+
+	"admin/status/routes": {
+		"title": "Routes",
+		"order": 3,
+		"action": {
+			"type": "template",
+			"path": "admin_status/routes"
+		}
+	},
+
+	"admin/status/syslog": {
+		"title": "System Log",
+		"order": 4,
+		"action": {
+			"type": "call",
+			"module": "luci.controller.admin.status",
+			"function": "action_syslog"
+		}
+	},
+
+	"admin/status/dmesg": {
+		"title": "Kernel Log",
+		"order": 5,
+		"action": {
+			"type": "call",
+			"module": "luci.controller.admin.status",
+			"function": "action_dmesg"
+		}
+	},
+
+	"admin/status/processes": {
+		"title": "Processes",
+		"order": 6,
+		"action": {
+			"type": "view",
+			"path": "status/processes"
+		}
+	},
+
+	"admin/status/realtime": {
+		"title": "Realtime Graphs",
+		"order": 7,
+		"action": {
+			"type": "alias",
+			"path": "admin/status/realtime/load"
+		}
+	},
+
+	"admin/status/realtime/load": {
+		"title": "Load",
+		"order": 1,
+		"action": {
+			"type": "view",
+			"path": "status/load"
+		}
+	},
+
+	"admin/status/realtime/bandwidth": {
+		"title": "Traffic",
+		"order": 2,
+		"action": {
+			"type": "view",
+			"path": "status/bandwidth"
+		}
+	},
+
+	"admin/status/realtime/wireless": {
+		"title": "Wireless",
+		"order": 3,
+		"action": {
+			"type": "view",
+			"path": "status/wireless"
+		},
+		"depends": {
+			"uci": { "wireless": { "@wifi-device": true } }
+		}
+	},
+
+	"admin/status/realtime/connections": {
+		"title": "Connections",
+		"order": 4,
+		"action": {
+			"type": "view",
+			"path": "status/connections"
+		}
+	},
+
+	"admin/status/nameinfo/*": {
+		"action": {
+			"type": "call",
+			"module": "luci.controller.admin.status",
+			"function": "action_nameinfo"
+		}
+	}
+}
