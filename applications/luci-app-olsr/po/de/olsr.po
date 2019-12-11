@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2019-11-19 16:05+0000\n"
+"PO-Revision-Date: 2019-12-09 20:03+0000\n"
 "Last-Translator: ssantos <ssantos@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsolsr/de/>\n"
@@ -131,7 +131,8 @@ msgid ""
 "parameters are ignored. Default is \"no\"."
 msgstr ""
 "SmartGateway aktivieren. Ist diese Option deaktiviert, dann werden alle "
-"folgenden SmartGateway Einstellungen ignoriert. Der Defaultwert ist \"no\"."
+"folgenden SmartGateway Einstellungen ignoriert. Die Voreinstellung ist \"no\""
+"."
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdiface6.lua:36
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdiface.lua:36
@@ -166,15 +167,15 @@ msgstr ""
 "die Metrik immer auf 2. Dies ist der bevorzugte Wert, da er dem Kernel dabei "
 "hilft, veraltete Routen zu löschen. \"correct\" verwendet den Hopcount als "
 "Metrik. \"approx\" benutzt ebenfalls den Hopcount als Metrik, updated diese "
-"aber nur, wenn sich auch der Nexthop verändert hat. Der Defaultwert ist "
-"\"flat\"."
+"aber nur, wenn sich auch der Nexthop verändert hat. Die Voreinstellung ist \""
+"flat\"."
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:106
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:112
 msgid "Fisheye mechanism for TCs (checked means on). Default is \"on\""
 msgstr ""
-"Fisheye Mechanismus für TC-Nachrichten (ausgewählt entspricht ein). Der "
-"Defaultwert ist \"ein\""
+"Fisheye Mechanismus für TC-Nachrichten (ausgewählt entspricht ein). Die "
+"Voreinstellung ist \"ein\""
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/smartgw.htm:55
 #: applications/luci-app-olsr/luasrc/view/status-olsr/smartgw.htm:107
@@ -312,7 +313,7 @@ msgid ""
 msgstr ""
 "Verwende Hysterese zur Berechnung von Links (nur verfügbar für Hopcount "
 "Metric). Hysterese erhöht die Stabilität von berechneten Routen, verzögert "
-"aber das Registrieren von Nachbarknoten. Der Standardwert ist \"ja\"."
+"aber das Registrieren von Nachbarknoten. Die Voreinstellung ist \"ja\"."
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:217
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdiface6.lua:32
@@ -347,7 +348,7 @@ msgid ""
 "interface broadcast IP."
 msgstr ""
 "IPv4 Broadcastadresse für ausgehende OLSR-Pakete. Ein häufig verwendetes "
-"Beispiel ist 255.255.255.255. Der Defaultwert ist \"0.0.0.0\". Dies "
+"Beispiel ist 255.255.255.255. Die Voreinstellung ist \"0.0.0.0\". Dies "
 "verwendet die Broadcastadresse des Interfaces."
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdiface.lua:116
@@ -361,8 +362,8 @@ msgid ""
 "IPv4 src address for outgoing OLSR packages. Default is \"0.0.0.0\", which "
 "triggers usage of the interface IP."
 msgstr ""
-"IPv4 Quell-IP für ausgehende OLSR-Nachrichten. Der Defaultwert ist "
-"\"0.0.0.0\", dann wird die IP des Interfaces verwendet."
+"IPv4 Quell-IP für ausgehende OLSR-Nachrichten. Die Voreinstellung ist \""
+"0.0.0.0\", dann wird die IP des Interfaces verwendet."
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/smartgw.htm:62
 #: applications/luci-app-olsr/luasrc/view/status-olsr/smartgw.htm:114
@@ -384,7 +385,7 @@ msgid ""
 "IPv6 multicast address. Default is \"FF02::6D\", the manet-router linklocal "
 "multicast."
 msgstr ""
-"IPv6 Multicast-Adresse. Der Defaultwert ist \"FF02::6D\", die linklocal "
+"IPv6 Multicast-Adresse. Die Voreinstellung ist \"FF02::6D\", die linklocal "
 "Multicastadresse für MANETs."
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdhna6.lua:10
@@ -412,7 +413,7 @@ msgid ""
 "of a not-linklocal interface IP."
 msgstr ""
 "IPv6 Quell-Prefix. OLSRd wählt eine IP als Quell-IP die innerhalb des "
-"angegebenen Prefix liegt. Der Defaultwert ist \"0::/0\", damit wird eine "
+"angegebenen Prefix liegt. Die Voreinstellung ist \"0::/0\", damit wird eine "
 "IPv6-Adresse des Interfaces verwendet die nicht linklocal ist."
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:178
@@ -432,17 +433,17 @@ msgstr ""
 "Wenn sich die Route zum aktuellen Gateway ändert, dann wird sein ETX-Wert "
 "zunächst mit diesem Wert multipliziert bevor er mit dem neuen ETX-Wert "
 "verglichen wird. Damit kann \"flapping\" von Routen reduziert werden. Der "
-"Wert kann zwischen 0.1 und 1.0 liegen, sollte aber nahe bei 1.0 sein.<br /"
-"><b>ACHTUNG:</b> Diese Einstellung darf nicht zusammen mit der etx_ffeth "
-"Metrik verwendet werden!<br />Der Defaultwert ist \"1.0\"."
+"Wert kann zwischen 0.1 und 1.0 liegen, sollte aber nahe bei 1.0 sein.<br "
+"/><b>ACHTUNG:</b> Diese Einstellung darf nicht zusammen mit der etx_ffeth "
+"Metrik verwendet werden!<br />Die Voreinstellung ist \"1.0\"."
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:160
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:166
 msgid ""
 "If this Node uses NAT for connections to the internet. Default is \"yes\"."
 msgstr ""
-"Benutzt dieser Knoten NAT für die Verbindung zum Internet? Der Defaultwert "
-"ist \"yes\"."
+"Benutzt dieser Knoten NAT für die Verbindung zum Internet? Die "
+"Voreinstellung ist \"yes\"."
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdiface6.lua:27
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdiface.lua:27
@@ -464,8 +465,8 @@ msgid ""
 "\"mesh\"."
 msgstr ""
 "Mit dieser Einstellung kann unnötiges Forwarden von Paketen auf geswitchten "
-"Ethernetschnittstellen unterbunden werden. Gültige Werte sind \"mesh\" und "
-"\"ether\". Der Defaultwert ist \"mesh\"."
+"Ethernetschnittstellen unterbunden werden. Gültige Werte sind \"mesh\" und \""
+"ether\". Die Voreinstellung ist \"mesh\"."
 
 #: applications/luci-app-olsr/luasrc/controller/olsr.lua:70
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:335
@@ -491,7 +492,7 @@ msgid ""
 "Default is \"2.5\"."
 msgstr ""
 "Intervall mit dem Netzwerkschnittstellen auf Änderungen in ihrer "
-"Konfiguration überprüft werden (in Sekunden). Der Defaultwert ist \"2.5\"."
+"Konfiguration überprüft werden (in Sekunden). Die Voreinstellung ist \"2.5\"."
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:262
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdiface6.lua:93
@@ -573,9 +574,9 @@ msgid ""
 "etx_float and etx_fpm, smaller values mean slower changes of ETX value. "
 "(allowed values are between 0.01 and 1.0)"
 msgstr ""
-"Der Linkqualitäts-Alterungsfaktor kann nur zusammen mit Linkqualitylevel 2 "
-"verwendet werden. Kleinere Werte bedeuten, dass ETX-Werte sich langsamer "
-"verändern. Erlaubte Werte sind 0.01 bis 1.0."
+"Link Qualitätsalterungsfaktor (nur für IQ Level 2). Tuning-Parameter für "
+"etx_float und etx_fpm, kleinere Werte bedeuten langsamere Änderungen des ETX-"
+"Wertes. (zulässige Werte liegen zwischen 0,01 und 1,0)"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:91
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:97
@@ -590,10 +591,10 @@ msgstr ""
 "Link Quality Algorithmus (nur für lq level 2).<br /><b>etx_float</b>: "
 "floating point ETX mit exponentieller Alterung<br /><b>etx_fpm</b>: Dasselbe "
 "wie etx_float, Berechnung jedoch mit Ganzzahlen<br /><b>etx_ff</b>: ETX "
-"freifunk, eine ETX Variante die allen OLSR Traffic zur ETX Berechnung nutzt "
-"(und nicht nur Hello-Nachrichten)<br /><b>etx_ffeth</b>: Inkompatible "
-"Variante von etx_ff die Ethernetlinks mit ETX 0.1 erlaubt<br />Der Default "
-"ist \"etx_ff\""
+"freifunk, eine ETX Variante die allen OLSR Traffic zur ETX Berechnung nutzt ("
+"und nicht nur Hello-Nachrichten)<br /><b>etx_ffeth</b>: Inkompatible "
+"Variante von etx_ff die Ethernetlinks mit ETX 0.1 erlaubt<br />Die "
+"Voreinstellung ist \"etx_ff\""
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:77
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:83
@@ -602,9 +603,10 @@ msgid ""
 "routing.<br /><b>0</b> = do not use link quality<br /><b>2</b> = use link "
 "quality for MPR selection and routing<br />Default is \"2\""
 msgstr ""
-"Mit dieser Option kann der Linkquality-Algorithmus gewählt werden.<br /"
-"><b>0</b> = Linkquality nicht benutzen<br /><b>2</b> = Linkquality für die "
-"Wahl von MPRs und fürs Routing benutzen.<br />Der Defaultwert ist \"2\"."
+"Linkqualitätsstufenwechsel zwischen Hopcount und kostenbasiertem (meist ETX) "
+"Routing.<br /><b>0</b> = keine Linkqualität verwenden<br /><b>2</b> = "
+"Linkqualität für MPR-Auswahl und Routing verwenden<br />Die Voreinstellung "
+"ist \"2\""
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:239
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdiface6.lua:70
@@ -686,7 +688,6 @@ msgstr ""
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:240
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdiface6.lua:71
-#, fuzzy
 msgid ""
 "Multiply routes with the factor given here. Allowed values are between 0.01 "
 "and 1.0. It is only used when LQ-Level is greater than 0. Examples:<br /"
@@ -696,7 +697,7 @@ msgstr ""
 "Multipliziere die Linkquality (LQ) für Routen mit dem hier angegebenen "
 "Faktor, der zwischen 0.01 und 1 liegen kann. Beispiele:<br />halbiere die LQ "
 "zu 192.168.0.1: 192.168.0.1 0.5<br />reduziere die LQ für alle Nodes die mit "
-"diesem Interface kommunizieren um 20%: default 0.8"
+"diesem Interface kommunizieren um 20%: Voreinstellung 0.8"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:195
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:201
@@ -776,7 +777,7 @@ msgstr "OLSR - Plugins"
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:12
 #: applications/luci-app-olsr/luasrc/view/status-olsr/error_olsr.htm:8
 msgid "OLSR Daemon"
-msgstr "OLSR Daemon"
+msgstr "OLSR-Daemon"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdiface6.lua:14
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdiface.lua:14
@@ -826,7 +827,7 @@ msgstr "Übersicht über zur Zeit bekannte Routen zu anderen OLSR-Knoten"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/interfaces.htm:19
 msgid "Overview of interfaces where OLSR is running"
-msgstr "Übersicht über Interfaces auf denen OLSRd läuft."
+msgstr "Übersicht über Interfaces auf denen OLSRd läuft"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/mid.htm:17
 msgid "Overview of known multiple interface announcements"
@@ -834,7 +835,7 @@ msgstr "Übersicht über bekannte Mehrfachschnittstellenmeldungen"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/smartgw.htm:104
 msgid "Overview of smart gateways in this network"
-msgstr "Übersicht über Smart Gateways in diesem Netzwerk."
+msgstr "Übersicht über Smart Gateways in diesem Netzwerk"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdplugins6.lua:11
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdplugins.lua:11
@@ -851,7 +852,7 @@ msgstr "Plugins"
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:48
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:54
 msgid "Polling rate for OLSR sockets in seconds. Default is 0.05."
-msgstr "Abfragerate für OLSRd-Sockets in Sekunden. Der Defaultwert ist 0.05."
+msgstr "Abfragerate für OLSRd-Sockets in Sekunden. Die Voreinstellung ist 0.05."
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:47
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:53
@@ -910,18 +911,17 @@ msgid ""
 "IP of the first interface."
 msgstr ""
 "Setzt die Haupt-IP (originator ip) für diesen Router. Diese IP wird sich "
-"NIEMALS während der Laufzeit von OLSRD verändern. Der Defaultwert ist "
+"NIEMALS während der Laufzeit von OLSRD verändern. Die Voreinstellung ist "
 "0.0.0.0. Damit wird die IP des ersten Interfaces verwendet."
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:127
-#, fuzzy
 msgid ""
 "Sets the main IP (originator ip) of the router. This IP will NEVER change "
 "during the uptime of olsrd. Default is ::, which triggers usage of the IP of "
 "the first interface."
 msgstr ""
 "Setzt die Haupt-IP (originator ip) für diesen Router. Diese IP wird sich "
-"NIEMALS während der Laufzeit von OLSRD verändern. Der Defaultwert ist "
+"NIEMALS während der Laufzeit von OLSRD verändern. Die Voreinstellung ist "
 "0.0.0.0. Damit wird die IP des ersten Interfaces verwendet."
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/common_js.htm:20
@@ -962,7 +962,7 @@ msgid ""
 msgstr ""
 "Hiermit kann man die Geschwindigkeit des Uplinks dieses Knotens ankündigen. "
 "Der erste Wert ist die Upload-, der zweite Wert die Downloadgeschwindigkeit. "
-"Der Defaultwert ist \"128 1024\"."
+"Die Voreinstellung ist \"128 1024\"."
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:170
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:176
@@ -1036,7 +1036,7 @@ msgid ""
 msgstr ""
 "Hier kann ein Bereitschaftswert angegeben werden. Bleibt dieses Feld leer, "
 "dann wird der Bereitschaftswert automatisch anhand von Akkukapazität und "
-"Stromversorgung berechnet"
+"Stromversorgung berechnet. Die Voreinstellung ist \"3\"."
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdiface6.lua:45
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdiface.lua:45
@@ -1063,7 +1063,7 @@ msgstr ""
 "Hiermit kann der externe IPv6-Präfix an Clients signalisiert werden. Dadurch "
 "können Clients ihre lokale IP-Adresse ändern, um diesen IPv6-Gateway ohne "
 "Übersetzung der IPv6-Adresse zu benutzen. Die maximale erlaubte Länge des "
-"Präfix ist 64 bit. Der Defaultwert ist \"::/0\" (kein Präfix)."
+"Präfix ist 64 bit. Die Voreinstellung ist \"::/0\" (kein Präfix)."
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:218
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdiface6.lua:33
@@ -1082,7 +1082,8 @@ msgid ""
 "Type of service value for the IP header of control traffic. Default is "
 "\"16\"."
 msgstr ""
-"TOS-Wert für den IP-Header von OLSR-Nachrichten. Der Defaultwert ist \"16\"."
+"TOS-Wert für den IP-Header von OLSR-Nachrichten. Die Voreinstellung ist \""
+"16\"."
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/error_olsr.htm:9
 msgid "Unable to connect to the OLSR daemon!"
@@ -1096,7 +1097,7 @@ msgstr "Uplink"
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:160
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:166
 msgid "Uplink uses NAT"
-msgstr "Der Uplink benutzt NAT."
+msgstr "Der Uplink benutzt NAT"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:110
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:116
@@ -1131,7 +1132,7 @@ msgid ""
 "work, please install it."
 msgstr ""
 "WARNUNG: kmod-ipip ist nicht installiert. Ohne kmod-ipip wird SmartGateway "
-"nicht funktionieren!"
+"nicht funktionieren, bitte installieren."
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:229
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdiface6.lua:60
@@ -1169,11 +1170,10 @@ msgid ""
 msgstr ""
 "Welche Art von Uplink im Mesh angekündigt wird. Ein Uplink wird automatisch "
 "anhand der lokal angekündigten HNA erkannt (0.0.0.0/0, ::ffff:0:0/96 oder "
-"2000::/3). Der Defaultwert ist \"both\" (sowohl IPv4 als auch IPv6 Uplink "
+"2000::/3). Die Voreinstellung ist \"both\" (sowohl IPv4 als auch IPv6 Uplink "
 "ankündigen sofern verfügbar)."
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:149
-#, fuzzy
 msgid ""
 "Which kind of uplink is exported to the other mesh nodes. An uplink is "
 "detected by looking for a local HNA6 ::ffff:0:0/96 or 2000::/3. Default "
@@ -1181,7 +1181,7 @@ msgid ""
 msgstr ""
 "Welche Art von Uplink im Mesh angekündigt wird. Ein Uplink wird automatisch "
 "anhand der lokal angekündigten HNA erkannt (0.0.0.0/0, ::ffff:0:0/96 oder "
-"2000::/3). Der Defaultwert ist \"both\" (sowohl IPv4 als auch IPv6 Uplink "
+"2000::/3). Die Voreinstellung ist \"both\" (sowohl IPv4 als auch IPv6 Uplink "
 "ankündigen sofern verfügbar)."
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:187
