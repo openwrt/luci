@@ -87,8 +87,6 @@ size:value("1016")
 size:value("1472")
 size:value("2040")
 size.datatype = "range(1, 65507)"
-size.rmempty = false
-size.optional = false
 
 max_ttl = mwan_interface:option(Value, "max_ttl", translate("Max TTL"))
 max_ttl.default = "60"
