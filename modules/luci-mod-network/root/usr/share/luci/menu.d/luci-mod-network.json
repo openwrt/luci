@@ -78,53 +78,8 @@
 		"title": "Diagnostics",
 		"order": 60,
 		"action": {
-			"type": "template",
-			"path": "admin_network/diagnostics"
-		}
-	},
-
-	"admin/network/diag_ping/*": {
-		"action": {
-			"post": true,
-			"type": "call",
-			"module": "luci.controller.admin.network",
-			"function": "diag_ping"
-		}
-	},
-
-	"admin/network/diag_nslookup/*": {
-		"action": {
-			"post": true,
-			"type": "call",
-			"module": "luci.controller.admin.network",
-			"function": "diag_nslookup"
-		}
-	},
-
-	"admin/network/diag_traceroute/*": {
-		"action": {
-			"post": true,
-			"type": "call",
-			"module": "luci.controller.admin.network",
-			"function": "diag_traceroute"
-		}
-	},
-
-	"admin/network/diag_ping6/*": {
-		"action": {
-			"post": true,
-			"type": "call",
-			"module": "luci.controller.admin.network",
-			"function": "diag_ping6"
-		}
-	},
-
-	"admin/network/diag_traceroute6/*": {
-		"action": {
-			"post": true,
-			"type": "call",
-			"module": "luci.controller.admin.network",
-			"function": "diag_traceroute6"
+			"type": "view",
+			"path": "network/diagnostics"
 		}
 	}
 }
