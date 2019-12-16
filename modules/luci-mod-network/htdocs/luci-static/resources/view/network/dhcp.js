@@ -76,6 +76,9 @@ function validateHostname(sid, s) {
 }
 
 function validateAddressList(sid, s) {
+	if (s == null || s == '')
+		return true;
+
 	var m = s.match(/^\/(.+)\/$/),
 	    names = m ? m[1].split(/\//) : [ s ];
 
