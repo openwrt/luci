@@ -369,6 +369,7 @@ return L.view.extend({
 		o = s.taboption('general', form.Flag, 'nonwildcard',
 			_('Non-wildcard'),
 			_('Bind dynamically to interfaces rather than wildcard address (recommended as linux default)'));
+		o.default = o.enabled;
 		o.optional = false;
 		o.rmempty = true;
 
