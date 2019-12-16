@@ -17,35 +17,14 @@ local e = s:taboption("general", Flag, "enable", translate("Enable server"))
 e.rmempty = false
 e.default = "1"
 
-local o_sha = s:taboption("general", DummyValue, "sha_hash", translate("Server's certificate SHA1 hash"),
-			  translate("That value should be communicated to the client to verify the server's certificate"))
 local o_pki = s:taboption("general", DummyValue, "pkid", translate("Server's Public Key ID"),
-			  translate("An alternative value to be communicated to the client to verify the server's certificate; this value only depends on the public key"))
+			  translate("The value to be communicated to the client to verify the server's certificate; this value only depends on the public key"))
 
-local fd = io.popen("/usr/bin/certtool -i --infile /etc/ocserv/server-cert.pem", "r")
+local fd = io.popen("/usr/bin/certtool --hash sha256 --key-id --infile /etc/ocserv/server-cert.pem", "r")
 if fd then local ln
-	local found_sha = false
-	local found_pki = false
-	local complete = 0
-	while complete < 2 do
-		local ln = fd:read("*l")
-		if not ln then
-			break
-		elseif ln:match("SHA%-?1 fingerprint:") then
-			found_sha = true
-		elseif found_sha then
-			local hash = ln:match("([a-f0-9]+)")
-			o_sha.default = hash and hash:upper()
-			complete = complete + 1
-			found_sha = false
-		elseif ln:match("Public Key I[Dd]:") then
-			found_pki = true
-		elseif found_pki then
-			local hash = ln:match("([a-f0-9]+)")
-			o_pki.default = hash and "sha1:" .. hash:upper()
-			complete = complete + 1
-			found_pki = false
-		end
+	local ln = fd:read("*l")
+	if ln then
+		o_pki.default = "sha256:" .. ln
 	end
 	fd:close()
 end
