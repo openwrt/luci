@@ -457,9 +457,9 @@ var UIDropdown = UIElement.extend({
 				'placeholder': this.options.custom_placeholder || this.options.placeholder
 			});
 
-			if (this.options.datatype)
-				L.ui.addValidator(createEl, this.options.datatype,
-				                  true, null, 'blur', 'keyup');
+			if (this.options.datatype || this.options.validate)
+				L.ui.addValidator(createEl, this.options.datatype || 'string',
+				                  true, this.options.validate, 'blur', 'keyup');
 
 			sb.lastElementChild.appendChild(E('li', { 'data-value': '-' }, createEl));
 		}
@@ -1270,9 +1270,9 @@ var UIDynamicList = UIElement.extend({
 			dl.lastElementChild.appendChild(inputEl);
 			dl.lastElementChild.appendChild(E('div', { 'class': 'cbi-button cbi-button-add' }, '+'));
 
-			if (this.options.datatype)
-				L.ui.addValidator(inputEl, this.options.datatype,
-				                  true, null, 'blur', 'keyup');
+			if (this.options.datatype || this.options.validate)
+				L.ui.addValidator(inputEl, this.options.datatype || 'string',
+				                  true, this.options.validate, 'blur', 'keyup');
 		}
 
 		for (var i = 0; i < this.values.length; i++)
