@@ -2,6 +2,7 @@
 'require rpc';
 'require uci';
 'require form';
+'require validation';
 
 var callHostHints, callDUIDHints, callDHCPLeases, CBILeaseStatus, CBILease6Status;
 
@@ -60,6 +61,64 @@ CBILease6Status = form.DummyValue.extend({
 		]);
 	}
 });
+
+function validateHostname(sid, s) {
+	if (s.length > 256)
+		return _('Expecting: %s').format(_('valid hostname'));
+
+	var labels = s.replace(/^\.+|\.$/g, '').split(/\./);
+
+	for (var i = 0; i < labels.length; i++)
+		if (!labels[i].match(/^[a-z0-9_](?:[a-z0-9-]{0,61}[a-z0-9])?$/i))
+			return _('Expecting: %s').format(_('valid hostname'));
+
+	return true;
+}
+
+function validateAddressList(sid, s) {
+	var m = s.match(/^\/(.+)\/$/),
+	    names = m ? m[1].split(/\//) : [ s ];
+
+	for (var i = 0; i < names.length; i++) {
+		var res = validateHostname(sid, names[i]);
+
+		if (res !== true)
+			return res;
+	}
+
+	return true;
+}
+
+function validateServerSpec(sid, s) {
+	if (s == null || s == '')
+		return true;
+
+	var m = s.match(/^\/(.+)\/(.*)$/);
+	if (!m)
+		return _('Expecting: %s').format(_('valid hostname'));
+
+	var res = validateAddressList(sid, m[1]);
+	if (res !== true)
+		return res;
+
+	if (m[2] == '' || m[2] == '#')
+		return true;
+
+	// ipaddr%scopeid#srvport@source@interface#srcport
+
+	m = m[2].match(/^([0-9a-f:.]+)(?:%[^#@]+)?(?:#(\d+))?(?:@([0-9a-f:.]+)(?:@[^#]+)?(?:#(\d+))?)?$/);
+
+	if (!m)
+		return _('Expecting: %s').format(_('valid IP address'));
+	else if (validation.parseIPv4(m[1]) && m[3] != null && !validation.parseIPv4(m[3]))
+		return _('Expecting: %s').format(_('valid IPv4 address'));
+	else if (validation.parseIPv6(m[1]) && m[3] != null && !validation.parseIPv6(m[3]))
+		return _('Expecting: %s').format(_('valid IPv6 address'));
+	else if ((m[2] != null && +m[2] > 65535) || (m[4] != null && +m[4] > 65535))
+		return _('Expecting: %s').format(_('valid port value'));
+
+	return true;
+}
 
 return L.view.extend({
 	load: function() {
@@ -201,6 +260,7 @@ return L.view.extend({
 
 		o.optional = true;
 		o.placeholder = '/example.org/10.1.2.3';
+		o.validate = validateServerSpec;
 
 
 		o = s.taboption('general', form.Flag, 'rebind_protection',
@@ -223,8 +283,8 @@ return L.view.extend({
 		o.optional = true;
 
 		o.depends('rebind_protection', '1');
-		o.datatype = 'host(1)';
 		o.placeholder = 'ihost.netflix.com';
+		o.validate = validateAddressList;
 
 
 		o = s.taboption('advanced', form.Value, 'port',
