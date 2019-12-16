@@ -3,7 +3,7 @@
 'require uci';
 'require form';
 
-var callHostHints, callDUIDHints, callDHCPLeases, CBILeaseStatus;
+var callHostHints, callDUIDHints, callDHCPLeases, CBILeaseStatus, CBILease6Status;
 
 callHostHints = rpc.declare({
 	object: 'luci-rpc',
@@ -20,8 +20,7 @@ callDUIDHints = rpc.declare({
 callDHCPLeases = rpc.declare({
 	object: 'luci-rpc',
 	method: 'getDHCPLeases',
-	params: [ 'family' ],
-	expect: { dhcp_leases: [] }
+	expect: { '': {} }
 });
 
 CBILeaseStatus = form.DummyValue.extend({
@@ -43,6 +42,25 @@ CBILeaseStatus = form.DummyValue.extend({
 	}
 });
 
+CBILease6Status = form.DummyValue.extend({
+	renderWidget: function(section_id, option_id, cfgvalue) {
+		return E([
+			E('h4', _('Active DHCPv6 Leases')),
+			E('div', { 'id': 'lease6_status_table', 'class': 'table' }, [
+				E('div', { 'class': 'tr table-titles' }, [
+					E('div', { 'class': 'th' }, _('Host')),
+					E('div', { 'class': 'th' }, _('IPv6-Address')),
+					E('div', { 'class': 'th' }, _('DUID')),
+					E('div', { 'class': 'th' }, _('Leasetime remaining'))
+				]),
+				E('div', { 'class': 'tr placeholder' }, [
+					E('div', { 'class': 'td' }, E('em', _('Collecting data...')))
+				])
+			])
+		]);
+	}
+});
+
 return L.view.extend({
 	load: function() {
 		return Promise.all([
@@ -52,7 +70,8 @@ return L.view.extend({
 	},
 
 	render: function(hosts_duids) {
-		var hosts = hosts_duids[0],
+		var has_dhcpv6 = L.hasSystemFeature('dnsmasq', 'dhcpv6') || L.hasSystemFeature('odhcpd'),
+		    hosts = hosts_duids[0],
 		    duids = hosts_duids[1],
 		    m, s, o, ss, so;
 
@@ -398,9 +417,15 @@ return L.view.extend({
 
 		o = s.taboption('leases', CBILeaseStatus, '__status__');
 
+		if (has_dhcpv6)
+			o = s.taboption('leases', CBILease6Status, '__status6__');
+
 		return m.render().then(function(mapEl) {
 			L.Poll.add(function() {
-				return callDHCPLeases(4).then(function(leases) {
+				return callDHCPLeases().then(function(leaseinfo) {
+					var leases = Array.isArray(leaseinfo.dhcp_leases) ? leaseinfo.dhcp_leases : [],
+					    leases6 = Array.isArray(leaseinfo.dhcp6_leases) ? leaseinfo.dhcp6_leases : [];
+
 					cbi_update_table(mapEl.querySelector('#lease_status_table'),
 						leases.map(function(lease) {
 							var exp;
@@ -420,6 +445,39 @@ return L.view.extend({
 							];
 						}),
 						E('em', _('There are no active leases')));
+
+					if (has_dhcpv6) {
+						cbi_update_table(mapEl.querySelector('#lease6_status_table'),
+							leases6.map(function(lease) {
+								var exp;
+
+								if (lease.expires === false)
+									exp = E('em', _('unlimited'));
+								else if (lease.expires <= 0)
+									exp = E('em', _('expired'));
+								else
+									exp = '%t'.format(lease.expires);
+
+								var hint = lease.macaddr ? hosts[lease.macaddr] : null,
+								    name = hint ? (hint.name || hint.ipv4 || hint.ipv6) : null,
+								    host = null;
+
+								if (name && lease.hostname && lease.hostname != name && lease.ip6addr != name)
+									host = '%s (%s)'.format(lease.hostname, name);
+								else if (lease.hostname)
+									host = lease.hostname;
+								else if (name)
+									host = name;
+
+								return [
+									host || '-',
+									lease.ip6addrs ? lease.ip6addrs.join(' ') : lease.ip6addr,
+									lease.duid,
+									exp
+								];
+							}),
+							E('em', _('There are no active leases')));
+					}
 				});
 			});
 
