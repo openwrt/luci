@@ -33,7 +33,7 @@ CBILeaseStatus = form.DummyValue.extend({
 					E('div', { 'class': 'th' }, _('Hostname')),
 					E('div', { 'class': 'th' }, _('IPv4-Address')),
 					E('div', { 'class': 'th' }, _('MAC-Address')),
-					E('div', { 'class': 'th' }, _('Leasetime remaining'))
+					E('div', { 'class': 'th' }, _('Lease time remaining'))
 				]),
 				E('div', { 'class': 'tr placeholder' }, [
 					E('div', { 'class': 'td' }, E('em', _('Collecting data...')))

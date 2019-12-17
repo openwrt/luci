@@ -5,7 +5,7 @@
 
 var proto_errors = {
 	CONNECT_FAILED:			_('Connection attempt failed'),
-	INVALID_ADDRESS:		_('IP address in invalid'),
+	INVALID_ADDRESS:		_('IP address is invalid'),
 	INVALID_GATEWAY:		_('Gateway address is invalid'),
 	INVALID_LOCAL_ADDRESS:	_('Local IP address is invalid'),
 	MISSING_ADDRESS:		_('IP address is missing'),
