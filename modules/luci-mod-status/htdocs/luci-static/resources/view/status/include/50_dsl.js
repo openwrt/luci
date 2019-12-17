@@ -24,15 +24,15 @@ function renderbox(dsl) {
 				_('Line Attenuation (LATN)'), '%.1f dB / %.1f dB'.format(dsl.line_attenuation_down, dsl.line_attenuation_up),
 				_('Signal Attenuation (SATN)'), '%.1f dB / %.1f dB'.format(dsl.signal_attenuation_down, dsl.signal_attenuation_up),
 				_('Noise Margin (SNR)'), '%.1f dB / %.1f dB'.format(dsl.noise_margin_down, dsl.noise_margin_up),
-				_('Aggregate Transmit Power(ACTATP)'), '%.1f dB / %.1f dB'.format(dsl.actatp_down, dsl.actatp_up),
+				_('Aggregate Transmit Power (ACTATP)'), '%.1f dB / %.1f dB'.format(dsl.actatp_down, dsl.actatp_up),
 				_('Forward Error Correction Seconds (FECS)'), '%d / %d'.format(dsl.errors_fecs_near, dsl.errors_fecs_far),
 				_('Errored seconds (ES)'), '%d / %d'.format(dsl.errors_es_near, dsl.errors_es_far),
 				_('Severely Errored Seconds (SES)'), '%d / %d'.format(dsl.errors_ses_near, dsl.errors_ses_far),
 				_('Loss of Signal Seconds (LOSS)'), '%d / %d'.format(dsl.errors_loss_near, dsl.errors_loss_far),
 				_('Unavailable Seconds (UAS)'), '%d / %d'.format(dsl.errors_uas_near, dsl.errors_uas_far),
 				_('Header Error Code Errors (HEC)'), '%d / %d'.format(dsl.errors_hec_near, dsl.errors_hec_far),
-				_('Non Pre-emtive CRC errors (CRC_P)'), '%d / %d'.format(dsl.errors_crc_p_near, dsl.errors_crc_p_far),
-				_('Pre-emtive CRC errors (CRCP_P)'), '%d / %d'.format(dsl.errors_crcp_p_near, dsl.errors_crcp_p_far),
+				_('Non Pre-emptive CRC errors (CRC_P)'), '%d / %d'.format(dsl.errors_crc_p_near, dsl.errors_crc_p_far),
+				_('Pre-emptive CRC errors (CRCP_P)'), '%d / %d'.format(dsl.errors_crcp_p_near, dsl.errors_crcp_p_far),
 				_('ATU-C System Vendor ID'), dsl.atuc_vendor_id,
 				_('Power Management Mode'), dsl.power_mode_s
 			])

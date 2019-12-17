@@ -25,7 +25,7 @@ IFACE_PATTERNS_WIRELESS = { "^wlan%d", "^wl%d", "^ath%d", "^%w+%.network%d" }
 
 IFACE_ERRORS = {
 	CONNECT_FAILED			= lng.translate("Connection attempt failed"),
-	INVALID_ADDRESS			= lng.translate("IP address in invalid"),
+	INVALID_ADDRESS			= lng.translate("IP address is invalid"),
 	INVALID_GATEWAY			= lng.translate("Gateway address is invalid"),
 	INVALID_LOCAL_ADDRESS	= lng.translate("Local IP address is invalid"),
 	MISSING_ADDRESS			= lng.translate("IP address is missing"),
