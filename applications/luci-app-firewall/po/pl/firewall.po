@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-03-30 17:00+0200\n"
-"PO-Revision-Date: 2019-11-19 16:05+0000\n"
+"PO-Revision-Date: 2019-12-05 17:06+0000\n"
 "Last-Translator: Marcin Net <marcin.net@linux.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsfirewall/pl/>\n"
@@ -29,16 +29,16 @@ msgstr "%s, %s w %s"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:275
 msgid "<var>%d</var> pkts. per <var>%s</var>"
-msgstr "<var>%d</var> pakiet. na <var>%s</var>"
+msgstr "<var>%d</var> pakietów na <var>%s</var>"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:271
 msgid "<var>%d</var> pkts. per <var>%s</var>, burst <var>%d</var> pkts."
 msgstr ""
-"<var>%d</var> pakiet. na <var>%s</var>, popsutych <var>%d</var> pakiet."
+"<var>%d</var> pakietów na <var>%s</var>, popsutych <var>%d</var> pakietów."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:107
 msgid "<var>%s</var> and limit to %s"
-msgstr "<var>%s</var> i ograniczone do %s"
+msgstr "<var>%s</var> i limit do %s"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:293
 msgid "Accept forward"
@@ -57,18 +57,24 @@ msgstr "Zaakceptuj wyjście"
 msgid "Action"
 msgstr "Akcja"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:249
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:246
 msgid ""
 "Additional raw <em>iptables</em> arguments to classify zone destination "
 "traffic, e.g. <code>-p tcp --dport 443</code> to only match outbound HTTPS "
 "traffic."
 msgstr ""
+"Dodatkowe surowe <em>iptables</em> argumenty do klasyfikacji ruchu w strefie "
+"docelowej, np. <code>-p tcp --dport 443</code> tylko w celu dopasowania "
+"ruchu wychodzącego HTTPS."
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:239
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:236
 msgid ""
 "Additional raw <em>iptables</em> arguments to classify zone source traffic, "
 "e.g. <code>-p tcp --sport 443</code> to only match inbound HTTPS traffic."
 msgstr ""
+"Dodatkowe surowe <em>iptables</em> argumenty do klasyfikacji ruchu w strefie "
+"docelowej, np. <code>-p tcp --sport 443</code> tylko w celu dopasowania "
+"ruchu przychodzącego HTTPS."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:101
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:137
@@ -76,15 +82,15 @@ msgstr ""
 msgid "Advanced Settings"
 msgstr "Ustawienia zaawansowane"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:211
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:208
 msgid "Allow \"invalid\" traffic"
 msgstr "Zezwój na \"nieprawidłowy\" ruch"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:311
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:308
 msgid "Allow forward from <em>source zones</em>:"
 msgstr "Zezwól na przekazywanie z <em>source zones</em>:"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:270
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:267
 msgid "Allow forward to <em>destination zones</em>:"
 msgstr "Zezwól na przekazywanie do <em>destination zones</em>:"
 
@@ -97,22 +103,24 @@ msgstr "Każdy"
 msgid "Any day"
 msgstr "Każdy dzień"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:214
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:211
 msgid "Automatic helper assignment"
 msgstr "Automatyczne przydzielanie pomocy"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:214
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:211
 msgid ""
 "Automatically assign conntrack helpers based on traffic protocol and port"
 msgstr ""
+"Automatycznie przydzielaj pomocników conntrack'a na podstawie protokołu "
+"ruchu i portu"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:79
 msgid "Conntrack Settings"
 msgstr "Ustawienia conntrack"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:218
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:215
 msgid "Conntrack helpers"
-msgstr ""
+msgstr "Pomocnicy Conntrack'a"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/custom.js:15
 msgid "Contents have been saved."
@@ -130,7 +138,7 @@ msgstr "Objęte sieci"
 msgid "Covered subnets"
 msgstr "Objęte podsieci"
 
-#: applications/luci-app-firewall/luasrc/controller/firewall.lua:18
+#: applications/luci-app-firewall/root/usr/share/luci/menu.d/luci-app-firewall.json:43
 msgid "Custom Rules"
 msgstr "Własne reguły"
 
@@ -168,11 +176,14 @@ msgstr "Odrzuć wejście"
 msgid "Discard output"
 msgstr "Odrzuć wyjście"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:211
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:208
 msgid ""
 "Do not install extra rules to reject forwarded traffic with conntrack state "
 "<em>invalid</em>. This may be required for complex asymmetric route setups."
 msgstr ""
+"Nie instaluj dodatkowych reguł odrzucania ruchu przekierowanego z conntrack "
+"state <em>invalid</em>. Może to być wymagane w przypadku skomplikowanych "
+"asymetrycznych ustawień trasy."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:297
 msgid "Do not track forward"
@@ -203,7 +214,7 @@ msgstr "Włącz NAT Loopback"
 msgid "Enable SYN-flood protection"
 msgstr "Włącz ochronę SYN-flood"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:224
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:221
 msgid "Enable logging on this zone"
 msgstr "Włącz logowanie tej strefy"
 
@@ -211,7 +222,7 @@ msgstr "Włącz logowanie tej strefy"
 msgid "Experimental feature. Not fully compatible with QoS/SQM."
 msgstr "Funkcja eksperymentalna. Nie w pełni kompatybilna z QoS/SQM."
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:218
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:215
 msgid "Explicitly choses allowed connection tracking helpers for zone traffic"
 msgstr ""
 "Dokładnie wybiera dozwolone pomoce śledzenia połączeń dla ruchu strefowego"
@@ -229,7 +240,7 @@ msgstr "Port zewnętrzny"
 msgid "Extra arguments"
 msgstr "Dodatkowe argumenty"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:249
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:246
 msgid "Extra destination arguments"
 msgstr "Dodatkowe argumenty przeznaczenia"
 
@@ -237,14 +248,14 @@ msgstr "Dodatkowe argumenty przeznaczenia"
 msgid "Extra iptables arguments"
 msgstr "Dodatkowe argumenty tablicy IP"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:239
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:236
 msgid "Extra source arguments"
 msgstr "Dodatkowe argumenty zródłowe"
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Generated from applications/luci-fw/luasrc/model/cbi/luci_fw/zones.lua      #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-#: applications/luci-app-firewall/luasrc/controller/firewall.lua:6
+#: applications/luci-app-firewall/root/usr/share/luci/menu.d/luci-app-firewall.json:3
 msgid "Firewall"
 msgstr "Zapora"
 
@@ -263,10 +274,6 @@ msgstr "Zapora - Reguły ruchu"
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:28
 msgid "Firewall - Zone Settings"
 msgstr "Zapora - Ustawienia strefy"
-
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:208
-msgid "Force connection tracking"
-msgstr "Wymuś śledzenie połączeń"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:41
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:117
@@ -298,21 +305,21 @@ msgstr "Z %s w %s ze źródłem %s i %s"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:75
 msgid "From %s on <var>this device</var>"
-msgstr ""
+msgstr "Z %s na <var>to urządzenie</var>"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:73
 msgid "From %s on <var>this device</var> with source %s"
-msgstr ""
+msgstr "Z %s na <var>to urządzenie</var> ze źródłem %s"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:71
 msgid "From %s on <var>this device</var> with source %s and %s"
-msgstr ""
+msgstr "Z %s na <var>to urządzenie</var> ze źródłem %s oraz %s"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:100
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:136
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:31
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:77
-#: applications/luci-app-firewall/luasrc/controller/firewall.lua:9
+#: applications/luci-app-firewall/root/usr/share/luci/menu.d/luci-app-firewall.json:16
 msgid "General Settings"
 msgstr "Ustawienia główne"
 
@@ -322,15 +329,15 @@ msgstr "Sprzętowy flow offloading"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:157
 msgid "IP"
-msgstr ""
+msgstr "IP"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:167
 msgid "IP range"
-msgstr ""
+msgstr "Zakres IP"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:175
 msgid "IPs"
-msgstr ""
+msgstr "IPs"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:216
 msgid "IPv4"
@@ -373,7 +380,7 @@ msgstr "Wewnętrzny port"
 msgid "Internal zone"
 msgstr "Strefa wewnętrzna"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:227
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:224
 msgid "Limit log messages"
 msgstr "Ograniczenie logowania"
 
@@ -383,7 +390,7 @@ msgstr "MAC"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:104
 msgid "MACs"
-msgstr ""
+msgstr "MACs"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:134
 msgid "MSS clamping"
@@ -416,7 +423,7 @@ msgstr "Poniedziałek"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:353
 msgid "Month Days"
-msgstr ""
+msgstr "Dni miesiąca"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:121
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:169
@@ -460,7 +467,7 @@ msgid "Passes additional arguments to iptables. Use with care!"
 msgstr ""
 "Przekazuje dodatkowe argumenty do iptables. Zachowaj szczególną ostrożność!"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:236
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:233
 msgid ""
 "Passing raw iptables arguments to source and destination traffic "
 "classification rules allows to match packets based on other criteria than "
@@ -468,9 +475,15 @@ msgid ""
 "invalid values could render the firewall ruleset broken, completely exposing "
 "all services."
 msgstr ""
+"Przekazywanie surowych argumentów iptables do reguł klasyfikacji ruchu "
+"źródłowego i docelowego pozwala na dopasowanie pakietów w oparciu o inne "
+"kryteria niż interfejsy lub podsieci. Opcje te powinny być używane ze "
+"szczególną ostrożnością, ponieważ nieprawidłowe wartości mogą spowodować "
+"złamanie zestawu reguł zapory sieciowej, całkowicie odsłaniając wszystkie "
+"usługi."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:95
-#: applications/luci-app-firewall/luasrc/controller/firewall.lua:12
+#: applications/luci-app-firewall/root/usr/share/luci/menu.d/luci-app-firewall.json:25
 msgid "Port Forwards"
 msgstr "Przekierowania portów"
 
@@ -481,12 +494,6 @@ msgid ""
 msgstr ""
 "Przekierowanie portów pozwala komputerom z internetu na połączenia z "
 "komputerami z sieci LAN."
-
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:208
-msgid ""
-"Prevent the installation of <em>NOTRACK</em> rules which would bypass "
-"connection tracking."
-msgstr ""
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:154
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:205
@@ -506,7 +513,7 @@ msgstr "Przekieruj ruch przychodzący do wskazanego hosta w sieci wewnętrznej"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:295
 msgid "Refuse forward"
-msgstr ""
+msgstr "Odmowa przekierowania"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:305
 msgid "Refuse input"
@@ -603,7 +610,7 @@ msgstr ""
 "sieciowy."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:174
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:266
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:263
 msgid ""
 "The options below control the forwarding policies between this zone (%s) and "
 "other zones. <em>Destination zones</em> cover forwarded traffic "
@@ -620,7 +627,6 @@ msgstr ""
 "do WAN <em>nie</em> implikuje pozwolenia na przekazywanie z sieci WAN do LAN."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:89
-#, fuzzy
 msgid ""
 "This section defines common properties of %q. The <em>input</em> and "
 "<em>output</em> options set the default policies for traffic entering and "
@@ -629,7 +635,7 @@ msgid ""
 "networks</em> specifies which available networks are members of this zone."
 msgstr ""
 "Ta sekcja definiuje ustawienia ogólne %q. Opcje <em>\"wejście\"</em> i <em>"
-"\"wyjście\"</em> określają domyślną politykę dla ruchu przychodzącego i "
+"\"wyjście\"</em> określające domyślną politykę dla ruchu przychodzącego i "
 "wychodzącego w tej strefie, podczas gdy <em>\"przekazywanie\"</em> opisuje "
 "politykę ruchu przekazywanego pomiędzy różnymi sieciami wewnątrz strefy. "
 "<em>Objęte sieci</em> określają dostępne sieci będące członkami tej strefy."
@@ -663,7 +669,7 @@ msgid "To %s, %s in %s"
 msgstr "Do %s, %s w %s"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:131
-#: applications/luci-app-firewall/luasrc/controller/firewall.lua:15
+#: applications/luci-app-firewall/root/usr/share/luci/menu.d/luci-app-firewall.json:34
 msgid "Traffic Rules"
 msgstr "Reguły ruchu sieciowego"
 
@@ -697,19 +703,23 @@ msgstr "Nieznana zasada"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:94
 msgid "Unnamed zone"
-msgstr ""
+msgstr "Strefa bez nazwy"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:178
 msgid ""
 "Use this option to classify zone traffic by raw, non-<em>uci</em> managed "
 "network devices."
 msgstr ""
+"Opcja ta służy do klasyfikacji ruchu strefowego według surowych, nie-"
+"<em>uci</em> obsługiwanych urządzeń sieciowych."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:183
 msgid ""
 "Use this option to classify zone traffic by source or destination subnet "
 "instead of networks or devices."
 msgstr ""
+"Opcji tej należy używać do klasyfikacji ruchu strefowego według źródła lub "
+"podsieci docelowej zamiast sieci lub urządzeń."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:72
 msgid "Via %s"
@@ -725,7 +735,7 @@ msgstr "Środa"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:340
 msgid "Week Days"
-msgstr ""
+msgstr "Dni tygodnia"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:107
 msgid "Zone ⇒ Forwardings"
@@ -776,7 +786,7 @@ msgstr "dowolna strefa"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:267
 msgid "day"
-msgstr ""
+msgstr "Dzień"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:334
 msgid "don't track"
@@ -790,24 +800,24 @@ msgstr "porzucaj"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:265
 msgid "hour"
-msgstr ""
+msgstr "godzina"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:263
 msgid "minute"
-msgstr ""
+msgstr "minuta"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:86
 msgid "not"
-msgstr ""
+msgstr "Nie"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:121
 msgid "port"
-msgstr ""
+msgstr "port"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:131
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:140
 msgid "ports"
-msgstr ""
+msgstr "porty"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:333
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:45
@@ -817,21 +827,24 @@ msgstr "odrzucaj"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:261
 msgid "second"
-msgstr ""
+msgstr "sekunda"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:88
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:173
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:265
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:262
 msgid "this new zone"
-msgstr ""
+msgstr "ta nowa strefa"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:197
 msgid "type"
-msgstr ""
+msgstr "typ"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:209
 msgid "types"
-msgstr ""
+msgstr "typy"
+
+#~ msgid "Force connection tracking"
+#~ msgstr "Wymuś śledzenie połączeń"
 
 #~ msgid "Add"
 #~ msgstr "Dodaj"

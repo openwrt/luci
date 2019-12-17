@@ -15,116 +15,9 @@
 	local loadinfo = sysinfo.load or { 0, 0, 0 }
 	local boardinfo = util.ubus("system", "board") or { }
 
-	local request  = disp.context.path
-	local request2 = disp.context.request
-
-	local category = request[1]
-	local cattree  = category and disp.node(category)
-
-	local leaf = request2[#request2]
-
-	local tree = disp.node()
 	local node = disp.context.dispatched
 
-	local categories = disp.node_childs(tree)
-
-	local c = tree
-	local i, r
-
-	-- tag all nodes leading to this page
-	for i, r in ipairs(request) do
-		if c.nodes and c.nodes[r] then
-			c = c.nodes[r]
-			c._menu_selected = true
-		end
-	end
-
 	http.prepare_content("application/xhtml+xml")
-
-	local function nodeurl(prefix, name, query)
-		local u = url(prefix, name)
-		if query then
-			u = u .. http.build_querystring(query)
-		end
-		return pcdata(u)
-	end
-
-	local function render_menu(prefix, node, level)
-		if not level then
-			level = 1
-		end
-
-		local childs = disp.node_childs(node)
-		if #childs > 0 then
-			write('<ul class="mainmenu l%d">' % level)
-
-			local i, v
-			for i, v in ipairs(childs) do
-				local nnode = node.nodes[v]
-
-				write('<li class="mainmenu-item-%s %s"><a href="%s">%s</a>' %{
-					v, (nnode._menu_selected or (node.leaf and v == leaf)) and 'selected' or '',
-					nodeurl(prefix, v, nnode.query),
-					striptags(translate(nnode.title))
-				})
-
-				if level < 2 then
-					render_menu(prefix .. "/" .. v, nnode, level + 1)
-				end
-
-				write('</li>')
-			end
-
-			write('</ul>')
-		end
-	end
-
-	local function render_tabmenu(prefix, node, level)
-		if not level then
-			level = 1
-		end
-
-		local childs = disp.node_childs(node)
-		if #childs > 0 then
-			if level > 2 then
-				if level == 3 then
-					write('<div id="tabmenu">')
-				end
-				write('<ul class="cbi-tabmenu">')
-			end
-
-			local selected_node
-			local selected_name
-			local i, v
-
-			for i, v in ipairs(childs) do
-				local nnode = node.nodes[v]
-				if nnode._menu_selected then
-					selected_node = nnode
-					selected_name = v
-				end
-
-				if level > 2 then
-					write('<li class="tabmenu-item-%s %s"><a href="%s">%s</a></li>' %{
-						v, (nnode._menu_selected or (node.leaf and v == leaf)) and 'cbi-tab' or '',
-						nodeurl(prefix, v, nnode.query),
-						striptags(translate(nnode.title))
-					})
-				end
-			end
-
-			if level > 2 then
-				write('</ul>')
-				if level == 3 then
-					write('</div>')
-				end
-			end
-
-			if selected_node then
-				render_tabmenu(prefix .. "/" .. selected_name, selected_node, level + 1)
-			end
-		end
-	end
 -%>
 
 <?xml version="1.0" encoding="utf-8"?>
@@ -145,45 +38,153 @@
 <script type="text/javascript" src="<%=resource%>/cbi.js"></script>
 <script type="text/javascript" src="<%=resource%>/xhr.js"></script>
 <script type="text/javascript">//<![CDATA[
-	document.addEventListener('DOMContentLoaded', function() {
-		var event = ('ontouchstart' in window) ? 'touchstart' : 'click';
+	(function() {
+		function get_children(node) {
+			var children = [];
 
-		document.querySelectorAll('ul.mainmenu.l1 > li > a').forEach(function(a) {
-			a.addEventListener(event, function(ev) {
-				var a = ev.target, ul1 = a.parentNode.parentNode, ul2 = a.nextElementSibling;
+			for (var k in node.children) {
+				if (!node.children.hasOwnProperty(k))
+					continue;
 
-				document.querySelectorAll('ul.mainmenu.l1 > li.active').forEach(function(li) {
-					if (li !== a.parentNode)
-						li.classList.remove('active');
-				});
+				if (!node.children[k].satisfied)
+					continue;
 
-				if (!ul2)
-					return;
+				if (!node.children[k].hasOwnProperty('title'))
+					continue;
 
-				if (ul2.parentNode.offsetLeft + ul2.offsetWidth <= ul1.offsetLeft + ul1.offsetWidth)
-					ul2.classList.add('align-left');
+				children.push(Object.assign(node.children[k], { name: k }));
+			}
 
-				ul1.classList.add('active');
-				a.parentNode.classList.add('active');
-				a.blur();
-
-				ev.preventDefault();
-				ev.stopPropagation();
+			return children.sort(function(a, b) {
+				return ((a.order || 1000) - (b.order || 1000));
 			});
-		});
+		}
 
-		document.addEventListener(event, function(ev) {
-			var t = ev.target;
+		function handle_mainmenu_expand(ev) {
+			var a = ev.target, ul1 = a.parentNode.parentNode, ul2 = a.nextElementSibling;
 
-			while (t && t.id != 'mainmenu')
-				t = t.parentNode;
-
-			if (!t)
-				document.querySelectorAll('ul.mainmenu > li.active').forEach(function(li) {
+			document.querySelectorAll('ul.mainmenu.l1 > li.active').forEach(function(li) {
+				if (li !== a.parentNode)
 					li.classList.remove('active');
-				});
+			});
+
+			if (!ul2)
+				return;
+
+			if (ul2.parentNode.offsetLeft + ul2.offsetWidth <= ul1.offsetLeft + ul1.offsetWidth)
+				ul2.classList.add('align-left');
+
+			ul1.classList.add('active');
+			a.parentNode.classList.add('active');
+			a.blur();
+
+			ev.preventDefault();
+			ev.stopPropagation();
+		}
+
+		function render_mainmenu(tree, url, level) {
+			var l = (level || 0) + 1,
+			    ul = E('ul', { 'class': 'mainmenu l%d'.format(l) }),
+			    children = get_children(tree);
+
+			if (children.length == 0 || l > 2)
+				return E([]);
+
+			for (var i = 0; i < children.length; i++) {
+				var isActive = (L.env.dispatchpath[l] == children[i].name),
+				    activeClass = 'mainmenu-item-%s%s'.format(children[i].name, isActive ? ' selected' : '');
+
+				ul.appendChild(E('li', { 'class': activeClass }, [
+					E('a', {
+						'href': L.url(url, children[i].name),
+						'click': (l == 1) ? handle_mainmenu_expand : null,
+					}, [ _(children[i].title) ]),
+					render_mainmenu(children[i], url + '/' + children[i].name, l)
+				]));
+			}
+
+			if (l == 1) {
+				var container = document.querySelector('#mainmenu');
+
+				container.appendChild(ul);
+				container.style.display = '';
+			}
+
+			return ul;
+		}
+
+		function render_modemenu(tree) {
+			var ul = document.querySelector('#modemenu'),
+			    children = get_children(tree);
+
+			for (var i = 0; i < children.length; i++) {
+				var isActive = (L.env.requestpath.length ? children[i].name == L.env.requestpath[0] : i == 0);
+
+				ul.appendChild(E('li', {}, [
+					E('a', {
+						'href': L.url(children[i].name),
+						'class': isActive ? 'active' : null
+					}, [ _(children[i].title) ])
+				]));
+
+				if (isActive)
+					render_mainmenu(children[i], children[i].name);
+			}
+
+			if (ul.children.length > 1)
+				ul.style.display = '';
+		}
+
+		function render_tabmenu(tree, url, level) {
+			var container = document.querySelector('#tabmenu'),
+			    l = (level || 0) + 1,
+			    ul = E('ul', { 'class': 'cbi-tabmenu' }),
+			    children = get_children(tree),
+			    activeNode = null;
+
+			if (children.length == 0)
+				return E([]);
+
+			for (var i = 0; i < children.length; i++) {
+				var isActive = (L.env.dispatchpath[l + 2] == children[i].name),
+				    activeClass = isActive ? ' cbi-tab' : '',
+				    className = 'tabmenu-item-%s %s'.format(children[i].name, activeClass);
+
+				ul.appendChild(E('li', { 'class': className }, [
+					E('a', { 'href': L.url(url, children[i].name) }, [ _(children[i].title) ] )
+				]));
+
+				if (isActive)
+					activeNode = children[i];
+			}
+
+			container.appendChild(ul);
+			container.style.display = '';
+
+			if (activeNode)
+				container.appendChild(render_tabmenu(activeNode, url + '/' + activeNode.name, l));
+
+			return ul;
+		}
+
+		document.addEventListener('luci-loaded', function(ev) {
+			var tree = <%= luci.http.write_json(luci.dispatcher.context.authsession and luci.dispatcher.menu_json() or {}) %>,
+			    node = tree,
+			    url = '';
+
+			render_modemenu(tree);
+
+			if (L.env.dispatchpath.length >= 3) {
+				for (var i = 0; i < 3 && node; i++) {
+					node = node.children[L.env.dispatchpath[i]];
+					url = url + (url ? '/' : '') + L.env.dispatchpath[i];
+				}
+
+				if (node)
+					render_tabmenu(node, url);
+			}
 		});
-	});
+	})();
 //]]></script>
 <title><%=striptags( (boardinfo.hostname or "?") .. ( (node and node.title) and ' - ' .. translate(node.title) or '')) %> - LuCI</title>
 </head>
@@ -207,24 +208,16 @@
 	</span>
 </div>
 
-<% if #categories > 1 then %>
-	<ul id="modemenu">
-		<% for i, r in ipairs(categories) do %>
-			<li><a<% if request[1] == r then %> class="active"<%end%> href="<%=controller%>/<%=r%>/"><%=striptags(translate(tree.nodes[r].title))%></a></li>
-		<% end %>
-	</ul>
-<% end %>
+<ul id="modemenu" style="display:none"></ul>
 
 <div class="clear"></div>
 </div>
 
 <div id="maincontainer">
-	<div id="mainmenu">
-		<% if category then render_menu(category, cattree) end %>
-	</div>
+	<div id="mainmenu" style="display:none"></div>
 
 	<div id="maincontent">
-		<% if category then render_tabmenu(category, cattree) end %>
+		<div id="tabmenu" style="display:none"></div>
 
 		<noscript>
 			<div class="alert-message warning">

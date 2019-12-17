@@ -312,7 +312,7 @@ var UISelect = UIElement.extend({
 				frameEl.lastChild.appendChild(E('option', {
 					'value': '',
 					'selected': (this.values.length == 0 || this.values[0] == '') ? '' : null
-				}, this.choices[''] || this.options.placeholder || _('-- Please choose --')));
+				}, [ this.choices[''] || this.options.placeholder || _('-- Please choose --') ]));
 
 			for (var i = 0; i < keys.length; i++) {
 				if (keys[i] == null || keys[i] == '')
@@ -321,7 +321,7 @@ var UISelect = UIElement.extend({
 				frameEl.lastChild.appendChild(E('option', {
 					'value': keys[i],
 					'selected': (this.values.indexOf(keys[i]) > -1) ? '' : null
-				}, this.choices[keys[i]] || keys[i]));
+				}, [ this.choices[keys[i]] || keys[i] ]));
 			}
 		}
 		else {
@@ -457,9 +457,9 @@ var UIDropdown = UIElement.extend({
 				'placeholder': this.options.custom_placeholder || this.options.placeholder
 			});
 
-			if (this.options.datatype)
-				L.ui.addValidator(createEl, this.options.datatype,
-				                  true, null, 'blur', 'keyup');
+			if (this.options.datatype || this.options.validate)
+				L.ui.addValidator(createEl, this.options.datatype || 'string',
+				                  true, this.options.validate, 'blur', 'keyup');
 
 			sb.lastElementChild.appendChild(E('li', { 'data-value': '-' }, createEl));
 		}
@@ -1270,9 +1270,9 @@ var UIDynamicList = UIElement.extend({
 			dl.lastElementChild.appendChild(inputEl);
 			dl.lastElementChild.appendChild(E('div', { 'class': 'cbi-button cbi-button-add' }, '+'));
 
-			if (this.options.datatype)
-				L.ui.addValidator(inputEl, this.options.datatype,
-				                  true, null, 'blur', 'keyup');
+			if (this.options.datatype || this.options.validate)
+				L.ui.addValidator(inputEl, this.options.datatype || 'string',
+				                  true, this.options.validate, 'blur', 'keyup');
 		}
 
 		for (var i = 0; i < this.values.length; i++)
@@ -1300,7 +1300,7 @@ var UIDynamicList = UIElement.extend({
 	addItem: function(dl, value, text, flash) {
 		var exists = false,
 		    new_item = E('div', { 'class': flash ? 'item flash' : 'item', 'tabindex': 0 }, [
-				E('span', {}, text || value),
+				E('span', {}, [ text || value ]),
 				E('input', {
 					'type': 'hidden',
 					'name': this.options.name,

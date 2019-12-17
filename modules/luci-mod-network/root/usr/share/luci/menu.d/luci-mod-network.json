@@ -1,0 +1,85 @@
+{
+	"admin/network/switch": {
+		"title": "Switch",
+		"order": 20,
+		"action": {
+			"type": "view",
+			"path": "network/switch"
+		},
+		"depends": {
+			"fs": { "/sbin/swconfig": "executable" },
+			"uci": { "network": { "@switch": true } }
+		}
+	},
+
+	"admin/network/wireless": {
+		"title": "Wireless",
+		"order": 15,
+		"action": {
+			"type": "view",
+			"path": "network/wireless"
+		},
+		"depends": {
+			"uci": { "wireless": { "@wifi-device": true } }
+		}
+	},
+
+	"admin/network/remote_addr/*": {
+		"action": {
+			"type": "call",
+			"module": "luci.controller.admin.network",
+			"function": "remote_addr"
+		}
+	},
+
+	"admin/network/network": {
+		"title": "Interfaces",
+		"order": 10,
+		"action": {
+			"type": "view",
+			"path": "network/interfaces"
+		}
+	},
+
+	"admin/network/dhcp": {
+		"title": "DHCP and DNS",
+		"order": 30,
+		"action": {
+			"type": "view",
+			"path": "network/dhcp"
+		},
+		"depends": {
+			"uci": { "dhcp": true }
+		}
+	},
+
+	"admin/network/hosts": {
+		"title": "Hostnames",
+		"order": 40,
+		"action": {
+			"type": "view",
+			"path": "network/hosts"
+		},
+		"depends": {
+			"uci": { "dhcp": true }
+		}
+	},
+
+	"admin/network/routes": {
+		"title": "Static Routes",
+		"order": 50,
+		"action": {
+			"type": "view",
+			"path": "network/routes"
+		}
+	},
+
+	"admin/network/diagnostics": {
+		"title": "Diagnostics",
+		"order": 60,
+		"action": {
+			"type": "view",
+			"path": "network/diagnostics"
+		}
+	}
+}

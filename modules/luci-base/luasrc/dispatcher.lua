@@ -17,9 +17,318 @@ _M.fs = fs
 -- Index table
 local index = nil
 
--- Fastindex
-local fi
+local function check_fs_depends(fs)
+	local fs = require "nixio.fs"
 
+	for path, kind in pairs(fs) do
+		if kind == "directory" then
+			local empty = true
+			for entry in (fs.dir(path) or function() end) do
+				empty = false
+				break
+			end
+			if empty then
+				return false
+			end
+		elseif kind == "executable" then
+			if fs.stat(path, "type") ~= "reg" or not fs.access(path, "x") then
+				return false
+			end
+		elseif kind == "file" then
+			if fs.stat(path, "type") ~= "reg" then
+				return false
+			end
+		end
+	end
+
+	return true
+end
+
+local function check_uci_depends_options(conf, s, opts)
+	local uci = require "luci.model.uci"
+
+	if type(opts) == "string" then
+		return (s[".type"] == opts)
+	elseif opts == true then
+		for option, value in pairs(s) do
+			if option:byte(1) ~= 46 then
+				return true
+			end
+		end
+	elseif type(opts) == "table" then
+		for option, value in pairs(opts) do
+			local sval = s[option]
+			if type(sval) == "table" then
+				local found = false
+				for _, v in ipairs(sval) do
+					if v == value then
+						found = true
+						break
+					end
+				end
+				if not found then
+					return false
+				end
+			elseif value == true then
+				if sval == nil then
+					return false
+				end
+			else
+				if sval ~= value then
+					return false
+				end
+			end
+		end
+	end
+
+	return true
+end
+
+local function check_uci_depends_section(conf, sect)
+	local uci = require "luci.model.uci"
+
+	for section, options in pairs(sect) do
+		local stype = section:match("^@([A-Za-z0-9_%-]+)$")
+		if stype then
+			local found = false
+			uci:foreach(conf, stype, function(s)
+				if check_uci_depends_options(conf, s, options) then
+					found = true
+					return false
+				end
+			end)
+			if not found then
+				return false
+			end
+		else
+			local s = uci:get_all(conf, section)
+			if not s or not check_uci_depends_options(conf, s, options) then
+				return false
+			end
+		end
+	end
+
+	return true
+end
+
+local function check_uci_depends(conf)
+	local uci = require "luci.model.uci"
+
+	for config, values in pairs(conf) do
+		if values == true then
+			local found = false
+			uci:foreach(config, nil, function(s)
+				found = true
+				return false
+			end)
+			if not found then
+				return false
+			end
+		elseif type(values) == "table" then
+			if not check_uci_depends_section(config, values) then
+				return false
+			end
+		end
+	end
+
+	return true
+end
+
+local function check_depends(spec)
+	if type(spec.depends) ~= "table" then
+		return true
+	end
+
+	if type(spec.depends.fs) == "table" and not check_fs_depends(spec.depends.fs) then
+		local satisfied = false
+		local alternatives = (#spec.depends.fs > 0) and spec.depends.fs or { spec.depends.fs }
+		for _, alternative in ipairs(alternatives) do
+			if check_fs_depends(alternative) then
+				satisfied = true
+				break
+			end
+		end
+		if not satisfied then
+			return false
+		end
+	end
+
+	if type(spec.depends.uci) == "table" then
+		local satisfied = false
+		local alternatives = (#spec.depends.uci > 0) and spec.depends.uci or { spec.depends.uci }
+		for _, alternative in ipairs(alternatives) do
+			if check_uci_depends(alternative) then
+				satisfied = true
+				break
+			end
+		end
+		if not satisfied then
+			return false
+		end
+	end
+
+	return true
+end
+
+local function target_to_json(target, module)
+	local action
+
+	if target.type == "call" then
+		action = {
+			["type"] = "call",
+			["module"] = module,
+			["function"] = target.name,
+			["parameters"] = target.argv
+		}
+	elseif target.type == "view" then
+		action = {
+			["type"] = "view",
+			["path"] = target.view
+		}
+	elseif target.type == "template" then
+		action = {
+			["type"] = "template",
+			["path"] = target.view
+		}
+	elseif target.type == "cbi" then
+		action = {
+			["type"] = "cbi",
+			["path"] = target.model
+		}
+	elseif target.type == "form" then
+		action = {
+			["type"] = "form",
+			["path"] = target.model
+		}
+	elseif target.type == "firstchild" then
+		action = {
+			["type"] = "firstchild"
+		}
+	elseif target.type == "firstnode" then
+		action = {
+			["type"] = "firstchild",
+			["recurse"] = true
+		}
+	elseif target.type == "arcombine" then
+		if type(target.targets) == "table" then
+			action = {
+				["type"] = "arcombine",
+				["targets"] = {
+					target_to_json(target.targets[1], module),
+					target_to_json(target.targets[2], module)
+				}
+			}
+		end
+	elseif target.type == "alias" then
+		action = {
+			["type"] = "alias",
+			["path"] = table.concat(target.req, "/")
+		}
+	elseif target.type == "rewrite" then
+		action = {
+			["type"] = "rewrite",
+			["path"] = table.concat(target.req, "/"),
+			["remove"] = target.n
+		}
+	end
+
+	if target.post and action then
+		action.post = target.post
+	end
+
+	return action
+end
+
+local function tree_to_json(node, json)
+	local fs = require "nixio.fs"
+	local util = require "luci.util"
+
+	if type(node.nodes) == "table" then
+		for subname, subnode in pairs(node.nodes) do
+			local spec = {
+				title = util.striptags(subnode.title),
+				order = subnode.order
+			}
+
+			if subnode.leaf then
+				spec.wildcard = true
+			end
+
+			if subnode.cors then
+				spec.cors = true
+			end
+
+			if subnode.setuser then
+				spec.setuser = subnode.setuser
+			end
+
+			if subnode.setgroup then
+				spec.setgroup = subnode.setgroup
+			end
+
+			if type(subnode.target) == "table" then
+				spec.action = target_to_json(subnode.target, subnode.module)
+			end
+
+			if type(subnode.file_depends) == "table" then
+				for _, v in ipairs(subnode.file_depends) do
+					spec.depends = spec.depends or {}
+					spec.depends.fs = spec.depends.fs or {}
+
+					local ft = fs.stat(v, "type")
+					if ft == "dir" then
+						spec.depends.fs[v] = "directory"
+					elseif v:match("/s?bin/") then
+						spec.depends.fs[v] = "executable"
+					else
+						spec.depends.fs[v] = "file"
+					end
+				end
+			end
+
+			if type(subnode.uci_depends) == "table" then
+				for k, v in pairs(subnode.uci_depends) do
+					spec.depends = spec.depends or {}
+					spec.depends.uci = spec.depends.uci or {}
+					spec.depends.uci[k] = v
+				end
+			end
+
+			if (subnode.sysauth_authenticator ~= nil) or
+			   (subnode.sysauth ~= nil and subnode.sysauth ~= false)
+			then
+				if subnode.sysauth_authenticator == "htmlauth" then
+					spec.auth = {
+						login = true,
+						methods = { "cookie:sysauth" }
+					}
+				elseif subname == "rpc" and subnode.module == "luci.controller.rpc" then
+					spec.auth = {
+						login = false,
+						methods = { "param:auth", "cookie:sysauth" }
+					}
+				elseif subnode.module == "luci.controller.admin.uci" then
+					spec.auth = {
+						login = false,
+						methods = { "param:sid" }
+					}
+				end
+			elseif subnode.sysauth == false then
+				spec.auth = {}
+			end
+
+			if not spec.action then
+				spec.title = nil
+			end
+
+			spec.satisfied = check_depends(spec)
+			json.children = json.children or {}
+			json.children[subname] = tree_to_json(subnode, spec)
+		end
+	end
+
+	return json
+end
 
 function build_url(...)
 	local path = {...}
@@ -38,117 +347,6 @@ function build_url(...)
 	end
 
 	return table.concat(url, "")
-end
-
-function _ordered_children(node)
-	local name, child, children = nil, nil, {}
-
-	for name, child in pairs(node.nodes) do
-		children[#children+1] = {
-			name  = name,
-			node  = child,
-			order = child.order or 100
-		}
-	end
-
-	table.sort(children, function(a, b)
-		if a.order == b.order then
-			return a.name < b.name
-		else
-			return a.order < b.order
-		end
-	end)
-
-	return children
-end
-
-local function dependencies_satisfied(node)
-	if type(node.file_depends) == "table" then
-		for _, file in ipairs(node.file_depends) do
-			local ftype = fs.stat(file, "type")
-			if ftype == "dir" then
-				local empty = true
-				for e in (fs.dir(file) or function() end) do
-					empty = false
-				end
-				if empty then
-					return false
-				end
-			elseif ftype == nil then
-				return false
-			end
-		end
-	end
-
-	if type(node.uci_depends) == "table" then
-		for config, expect_sections in pairs(node.uci_depends) do
-			if type(expect_sections) == "table" then
-				for section, expect_options in pairs(expect_sections) do
-					if type(expect_options) == "table" then
-						for option, expect_value in pairs(expect_options) do
-							local val = uci:get(config, section, option)
-							if expect_value == true and val == nil then
-								return false
-							elseif type(expect_value) == "string" then
-								if type(val) == "table" then
-									local found = false
-									for _, subval in ipairs(val) do
-										if subval == expect_value then
-											found = true
-										end
-									end
-									if not found then
-										return false
-									end
-								elseif val ~= expect_value then
-									return false
-								end
-							end
-						end
-					else
-						local val = uci:get(config, section)
-						if expect_options == true and val == nil then
-							return false
-						elseif type(expect_options) == "string" and val ~= expect_options then
-							return false
-						end
-					end
-				end
-			elseif expect_sections == true then
-				if not uci:get_first(config) then
-					return false
-				end
-			end
-		end
-	end
-
-	return true
-end
-
-function node_visible(node)
-   if node then
-	  return not (
-		 (not dependencies_satisfied(node)) or
-		 (not node.title or #node.title == 0) or
-		 (not node.target or node.hidden == true) or
-		 (type(node.target) == "table" and node.target.type == "firstchild" and
-		  (type(node.nodes) ~= "table" or not next(node.nodes)))
-	  )
-   end
-   return false
-end
-
-function node_childs(node)
-	local rv = { }
-	if node then
-		local _, child
-		for _, child in ipairs(_ordered_children(node)) do
-			if node_visible(child.node) then
-				rv[#rv+1] = child.name
-			end
-		end
-	end
-	return rv
 end
 
 
@@ -185,6 +383,38 @@ function error500(message)
 	return false
 end
 
+local function determine_request_language()
+	local conf = require "luci.config"
+	assert(conf.main, "/etc/config/luci seems to be corrupt, unable to find section 'main'")
+
+	local lang = conf.main.lang or "auto"
+	if lang == "auto" then
+		local aclang = http.getenv("HTTP_ACCEPT_LANGUAGE") or ""
+		for aclang in aclang:gmatch("[%w_-]+") do
+			local country, culture = aclang:match("^([a-z][a-z])[_-]([a-zA-Z][a-zA-Z])$")
+			if country and culture then
+				local cc = "%s_%s" %{ country, culture:lower() }
+				if conf.languages[cc] then
+					lang = cc
+					break
+				elseif conf.languages[country] then
+					lang = country
+					break
+				end
+			elseif conf.languages[aclang] then
+				lang = aclang
+				break
+			end
+		end
+	end
+
+	if lang == "auto" then
+		lang = i18n.default
+	end
+
+	i18n.setlanguage(lang)
+end
+
 function httpdispatch(request, prefix)
 	http.context.request = request
 
@@ -203,6 +433,8 @@ function httpdispatch(request, prefix)
 	for node in pathinfo:gmatch("[^/%z]+") do
 		r[#r+1] = node
 	end
+
+	determine_request_language()
 
 	local stat, err = util.coxpcall(function()
 		dispatch(context.request)
@@ -306,189 +538,245 @@ local function session_setup(user, pass, allowed_users)
 	return nil, nil
 end
 
+local function check_authentication(method)
+	local auth_type, auth_param = method:match("^(%w+):(.+)$")
+	local sid, sdat
+
+	if auth_type == "cookie" then
+		sid = http.getcookie(auth_param)
+	elseif auth_type == "param" then
+		sid = http.formvalue(auth_param)
+	end
+
+	return session_retrieve(sid)
+end
+
+local function get_children(node)
+	local children = {}
+
+	if not node.wildcard and type(node.children) == "table" then
+		for name, child in pairs(node.children) do
+			children[#children+1] = {
+				name  = name,
+				node  = child,
+				order = child.order or 1000
+			}
+		end
+
+		table.sort(children, function(a, b)
+			if a.order == b.order then
+				return a.name < b.name
+			else
+				return a.order < b.order
+			end
+		end)
+	end
+
+	return children
+end
+
+local function find_subnode(root, prefix, recurse, descended)
+	local children = get_children(root)
+
+	if #children > 0 and (not descended or recurse) then
+		local sub_path = { unpack(prefix) }
+
+		if recurse == false then
+			recurse = nil
+		end
+
+		for _, child in ipairs(children) do
+			sub_path[#prefix+1] = child.name
+
+			local res_path = find_subnode(child.node, sub_path, recurse, true)
+
+			if res_path then
+				return res_path
+			end
+		end
+	end
+
+	if descended then
+		if not recurse or
+		   root.action.type == "cbi" or
+		   root.action.type == "form" or
+		   root.action.type == "view" or
+		   root.action.type == "template" or
+		   root.action.type == "arcombine"
+		then
+			return prefix
+		end
+	end
+end
+
+local function merge_trees(node_a, node_b)
+	for k, v in pairs(node_b) do
+		if k == "children" then
+			node_a.children = node_a.children or {}
+
+			for name, spec in pairs(v) do
+				node_a.children[name] = merge_trees(node_a.children[name] or {}, spec)
+			end
+		else
+			node_a[k] = v
+		end
+	end
+	return node_a
+end
+
+function menu_json()
+	local tree = context.tree or createtree()
+	local lua_tree = tree_to_json(tree, {
+		action = {
+			["type"] = "firstchild",
+			["recurse"] = true
+		}
+	})
+
+	local json_tree = createtree_json()
+	return merge_trees(lua_tree, json_tree)
+end
+
+local function init_template_engine(ctx)
+	local tpl = require "luci.template"
+	local media = luci.config.main.mediaurlbase
+
+	if not pcall(tpl.Template, "themes/%s/header" % fs.basename(media)) then
+		media = nil
+		for name, theme in pairs(luci.config.themes) do
+			if name:sub(1,1) ~= "." and pcall(tpl.Template,
+			 "themes/%s/header" % fs.basename(theme)) then
+				media = theme
+			end
+		end
+		assert(media, "No valid theme found")
+	end
+
+	local function _ifattr(cond, key, val, noescape)
+		if cond then
+			local env = getfenv(3)
+			local scope = (type(env.self) == "table") and env.self
+			if type(val) == "table" then
+				if not next(val) then
+					return ''
+				else
+					val = util.serialize_json(val)
+				end
+			end
+
+			val = tostring(val or
+				(type(env[key]) ~= "function" and env[key]) or
+				(scope and type(scope[key]) ~= "function" and scope[key]) or "")
+
+			if noescape ~= true then
+				val = util.pcdata(val)
+			end
+
+			return string.format(' %s="%s"', tostring(key), val)
+		else
+			return ''
+		end
+	end
+
+	tpl.context.viewns = setmetatable({
+		write       = http.write;
+		include     = function(name) tpl.Template(name):render(getfenv(2)) end;
+		translate   = i18n.translate;
+		translatef  = i18n.translatef;
+		export      = function(k, v) if tpl.context.viewns[k] == nil then tpl.context.viewns[k] = v end end;
+		striptags   = util.striptags;
+		pcdata      = util.pcdata;
+		media       = media;
+		theme       = fs.basename(media);
+		resource    = luci.config.main.resourcebase;
+		ifattr      = function(...) return _ifattr(...) end;
+		attr        = function(...) return _ifattr(true, ...) end;
+		url         = build_url;
+	}, {__index=function(tbl, key)
+		if key == "controller" then
+			return build_url()
+		elseif key == "REQUEST_URI" then
+			return build_url(unpack(ctx.requestpath))
+		elseif key == "FULL_REQUEST_URI" then
+			local url = { http.getenv("SCRIPT_NAME") or "", http.getenv("PATH_INFO") }
+			local query = http.getenv("QUERY_STRING")
+			if query and #query > 0 then
+				url[#url+1] = "?"
+				url[#url+1] = query
+			end
+			return table.concat(url, "")
+		elseif key == "token" then
+			return ctx.authtoken
+		else
+			return rawget(tbl, key) or _G[key]
+		end
+	end})
+
+	return tpl
+end
+
 function dispatch(request)
 	--context._disable_memtrace = require "luci.debug".trap_memtrace("l")
 	local ctx = context
-	ctx.path = request
 
-	local conf = require "luci.config"
-	assert(conf.main,
-		"/etc/config/luci seems to be corrupt, unable to find section 'main'")
+	local auth, cors, suid, sgid
+	local menu = menu_json()
+	local page = menu
 
-	local i18n = require "luci.i18n"
-	local lang = conf.main.lang or "auto"
-	if lang == "auto" then
-		local aclang = http.getenv("HTTP_ACCEPT_LANGUAGE") or ""
-		for aclang in aclang:gmatch("[%w_-]+") do
-			local country, culture = aclang:match("^([a-z][a-z])[_-]([a-zA-Z][a-zA-Z])$")
-			if country and culture then
-				local cc = "%s_%s" %{ country, culture:lower() }
-				if conf.languages[cc] then
-					lang = cc
-					break
-				elseif conf.languages[country] then
-					lang = country
-					break
-				end
-			elseif conf.languages[aclang] then
-				lang = aclang
+	local requested_path_full = {}
+	local requested_path_node = {}
+	local requested_path_args = {}
+
+	for i, s in ipairs(request) do
+		if type(page.children) ~= "table" or not page.children[s] then
+			page = nil
+			break
+		end
+
+		if not page.children[s].satisfied then
+			page = nil
+			break
+		end
+
+		page = page.children[s]
+		auth = page.auth or auth
+		cors = page.cors or cors
+		suid = page.setuser or suid
+		sgid = page.setgroup or sgid
+
+		requested_path_full[i] = s
+		requested_path_node[i] = s
+
+		if page.wildcard then
+			for j = i + 1, #request do
+				requested_path_args[j - i] = request[j]
+				requested_path_full[j] = request[j]
+			end
+			break
+		end
+	end
+
+	local tpl = init_template_engine(ctx)
+
+	ctx.args = requested_path_args
+	ctx.path = requested_path_node
+	ctx.dispatched = page
+
+	ctx.requestpath = ctx.requestpath or requested_path_full
+	ctx.requestargs = ctx.requestargs or requested_path_args
+	ctx.requested = ctx.requested or page
+
+	if type(auth) == "table" and type(auth.methods) == "table" and #auth.methods > 0 then
+		local sid, sdat
+		for _, method in ipairs(auth.methods) do
+			sid, sdat = check_authentication(method)
+
+			if sid and sdat then
 				break
 			end
 		end
-	end
-	if lang == "auto" then
-		lang = i18n.default
-	end
-	i18n.setlanguage(lang)
 
-	local c = ctx.tree
-	local stat
-	if not c then
-		c = createtree()
-	end
-
-	local track = {}
-	local args = {}
-	ctx.args = args
-	ctx.requestargs = ctx.requestargs or args
-	local n
-	local preq = {}
-	local freq = {}
-
-	for i, s in ipairs(request) do
-		preq[#preq+1] = s
-		freq[#freq+1] = s
-		c = c.nodes[s]
-		n = i
-		if not c then
-			break
-		end
-
-		util.update(track, c)
-
-		if c.leaf then
-			break
-		end
-	end
-
-	if c and c.leaf then
-		for j=n+1, #request do
-			args[#args+1] = request[j]
-			freq[#freq+1] = request[j]
-		end
-	end
-
-	ctx.requestpath = ctx.requestpath or freq
-	ctx.path = preq
-
-	-- Init template engine
-	if (c and c.index) or not track.notemplate then
-		local tpl = require("luci.template")
-		local media = track.mediaurlbase or luci.config.main.mediaurlbase
-		if not pcall(tpl.Template, "themes/%s/header" % fs.basename(media)) then
-			media = nil
-			for name, theme in pairs(luci.config.themes) do
-				if name:sub(1,1) ~= "." and pcall(tpl.Template,
-				 "themes/%s/header" % fs.basename(theme)) then
-					media = theme
-				end
-			end
-			assert(media, "No valid theme found")
-		end
-
-		local function _ifattr(cond, key, val, noescape)
-			if cond then
-				local env = getfenv(3)
-				local scope = (type(env.self) == "table") and env.self
-				if type(val) == "table" then
-					if not next(val) then
-						return ''
-					else
-						val = util.serialize_json(val)
-					end
-				end
-
-				val = tostring(val or
-					(type(env[key]) ~= "function" and env[key]) or
-					(scope and type(scope[key]) ~= "function" and scope[key]) or "")
-
-				if noescape ~= true then
-					val = util.pcdata(val)
-				end
-
-				return string.format(' %s="%s"', tostring(key), val)
-			else
-				return ''
-			end
-		end
-
-		tpl.context.viewns = setmetatable({
-		   write       = http.write;
-		   include     = function(name) tpl.Template(name):render(getfenv(2)) end;
-		   translate   = i18n.translate;
-		   translatef  = i18n.translatef;
-		   export      = function(k, v) if tpl.context.viewns[k] == nil then tpl.context.viewns[k] = v end end;
-		   striptags   = util.striptags;
-		   pcdata      = util.pcdata;
-		   media       = media;
-		   theme       = fs.basename(media);
-		   resource    = luci.config.main.resourcebase;
-		   ifattr      = function(...) return _ifattr(...) end;
-		   attr        = function(...) return _ifattr(true, ...) end;
-		   url         = build_url;
-		}, {__index=function(tbl, key)
-			if key == "controller" then
-				return build_url()
-			elseif key == "REQUEST_URI" then
-				return build_url(unpack(ctx.requestpath))
-			elseif key == "FULL_REQUEST_URI" then
-				local url = { http.getenv("SCRIPT_NAME") or "", http.getenv("PATH_INFO") }
-				local query = http.getenv("QUERY_STRING")
-				if query and #query > 0 then
-					url[#url+1] = "?"
-					url[#url+1] = query
-				end
-				return table.concat(url, "")
-			elseif key == "token" then
-				return ctx.authtoken
-			else
-				return rawget(tbl, key) or _G[key]
-			end
-		end})
-	end
-
-	track.dependent = (track.dependent ~= false)
-	assert(not track.dependent or not track.auto,
-		"Access Violation\nThe page at '" .. table.concat(request, "/") .. "/' " ..
-		"has no parent node so the access to this location has been denied.\n" ..
-		"This is a software bug, please report this message at " ..
-		"https://github.com/openwrt/luci/issues"
-	)
-
-	if track.sysauth and not ctx.authsession then
-		local authen = track.sysauth_authenticator
-		local _, sid, sdat, default_user, allowed_users
-
-		if type(authen) == "string" and authen ~= "htmlauth" then
-			error500("Unsupported authenticator %q configured" % authen)
-			return
-		end
-
-		if type(track.sysauth) == "table" then
-			default_user, allowed_users = nil, track.sysauth
-		else
-			default_user, allowed_users = track.sysauth, { track.sysauth }
-		end
-
-		if type(authen) == "function" then
-			_, sid = authen(sys.user.checkpasswd, allowed_users)
-		else
-			sid = http.getcookie("sysauth")
-		end
-
-		sid, sdat = session_retrieve(sid, allowed_users)
-
-		if not (sid and sdat) and authen == "htmlauth" then
+		if not (sid and sdat) and auth.login then
 			local user = http.getenv("HTTP_AUTH_USER")
 			local pass = http.getenv("HTTP_AUTH_PASS")
 
@@ -497,27 +785,23 @@ function dispatch(request)
 				pass = http.formvalue("luci_password")
 			end
 
-			sid, sdat = session_setup(user, pass, allowed_users)
+			sid, sdat = session_setup(user, pass, { "root" })
 
 			if not sid then
-				local tmpl = require "luci.template"
-
 				context.path = {}
 
 				http.status(403, "Forbidden")
 				http.header("X-LuCI-Login-Required", "yes")
-				tmpl.render(track.sysauth_template or "sysauth", {
-					duser = default_user,
-					fuser = user
-				})
 
-				return
+				return tpl.render("sysauth", { duser = "root", fuser = user })
 			end
 
 			http.header("Set-Cookie", 'sysauth=%s; path=%s; HttpOnly%s' %{
 				sid, build_url(), http.getenv("HTTPS") == "on" and "; secure" or ""
 			})
+
 			http.redirect(build_url(unpack(ctx.requestpath)))
+			return
 		end
 
 		if not sid or not sdat then
@@ -531,81 +815,117 @@ function dispatch(request)
 		ctx.authuser = sdat.username
 	end
 
-	if track.cors and http.getenv("REQUEST_METHOD") == "OPTIONS" then
+	local action = (page and type(page.action) == "table") and page.action or {}
+
+	if action.type == "arcombine" then
+		action = (#requested_path_args > 0) and action.targets[2] or action.targets[1]
+	end
+
+	if cors and http.getenv("REQUEST_METHOD") == "OPTIONS" then
 		luci.http.status(200, "OK")
 		luci.http.header("Access-Control-Allow-Origin", http.getenv("HTTP_ORIGIN") or "*")
 		luci.http.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
 		return
 	end
 
-	if c and require_post_security(c.target, args) then
-		if not test_post_security(c) then
+	if require_post_security(action) then
+		if not test_post_security() then
 			return
 		end
 	end
 
-	if track.setgroup then
-		sys.process.setgroup(track.setgroup)
+	if sgid then
+		sys.process.setgroup(sgid)
 	end
 
-	if track.setuser then
-		sys.process.setuser(track.setuser)
+	if suid then
+		sys.process.setuser(suid)
 	end
 
-	local target = nil
-	if c then
-		if type(c.target) == "function" then
-			target = c.target
-		elseif type(c.target) == "table" then
-			target = c.target.target
-		end
-	end
+	if action.type == "view" then
+		tpl.render("view", { view = action.path })
 
-	if c and (c.index or type(target) == "function") then
-		ctx.dispatched = c
-		ctx.requested = ctx.requested or ctx.dispatched
-	end
-
-	if c and c.index then
-		local tpl = require "luci.template"
-
-		if util.copcall(tpl.render, "indexer", {}) then
-			return true
-		end
-	end
-
-	if type(target) == "function" then
-		util.copcall(function()
-			local oldenv = getfenv(target)
-			local module = require(c.module)
-			local env = setmetatable({}, {__index=
-
-			function(tbl, key)
-				return rawget(tbl, key) or module[key] or oldenv[key]
-			end})
-
-			setfenv(target, env)
-		end)
-
-		local ok, err
-		if type(c.target) == "table" then
-			ok, err = util.copcall(target, c.target, unpack(args))
-		else
-			ok, err = util.copcall(target, unpack(args))
-		end
+	elseif action.type == "call" then
+		local ok, mod = util.copcall(require, action.module)
 		if not ok then
-			error500("Failed to execute " .. (type(c.target) == "function" and "function" or c.target.type or "unknown") ..
-			         " dispatcher target for entry '/" .. table.concat(request, "/") .. "'.\n" ..
-			         "The called action terminated with an exception:\n" .. tostring(err or "(unknown)"))
+			error500(mod)
+			return
 		end
+
+		local func = mod[action["function"]]
+
+		assert(func ~= nil,
+		       'Cannot resolve function "' .. action["function"] .. '". Is it misspelled or local?')
+
+		assert(type(func) == "function",
+		       'The symbol "' .. action["function"] .. '" does not refer to a function but data ' ..
+		       'of type "' .. type(func) .. '".')
+
+		local argv = (type(action.parameters) == "table" and #action.parameters > 0) and { unpack(action.parameters) } or {}
+		for _, s in ipairs(requested_path_args) do
+			argv[#argv + 1] = s
+		end
+
+		local ok, err = util.copcall(func, unpack(argv))
+		if not ok then
+			error500(err)
+		end
+
+	elseif action.type == "firstchild" then
+		local sub_request = find_subnode(page, requested_path_full, action.recurse)
+		if sub_request then
+			dispatch(sub_request)
+		else
+			tpl.render("empty_node_placeholder", getfenv(1))
+		end
+
+	elseif action.type == "alias" then
+		local sub_request = {}
+		for name in action.path:gmatch("[^/]+") do
+			sub_request[#sub_request + 1] = name
+		end
+
+		for _, s in ipairs(requested_path_args) do
+			sub_request[#sub_request + 1] = s
+		end
+
+		dispatch(sub_request)
+
+	elseif action.type == "rewrite" then
+		local sub_request = { unpack(request) }
+		for i = 1, action.remove do
+			table.remove(sub_request, 1)
+		end
+
+		local n = 1
+		for s in action.path:gmatch("[^/]+") do
+			table.insert(sub_request, n, s)
+			n = n + 1
+		end
+
+		for _, s in ipairs(requested_path_args) do
+			sub_request[#sub_request + 1] = s
+		end
+
+		dispatch(sub_request)
+
+	elseif action.type == "template" then
+		tpl.render(action.path, getfenv(1))
+
+	elseif action.type == "cbi" then
+		_cbi({ config = action.config, model = action.path }, unpack(requested_path_args))
+
+	elseif action.type == "form" then
+		_form({ model = action.path }, unpack(requested_path_args))
+
 	else
-		local root = node()
-		if not root or not root.target then
+		local root = find_subnode(menu, {}, true)
+		if not root then
 			error404("No root node was registered, this usually happens if no module was installed.\n" ..
 			         "Install luci-mod-admin-full and retry. " ..
 			         "If the module is already installed, try removing the /tmp/luci-indexcache file.")
 		else
-			error404("No page is registered at '/" .. table.concat(request, "/") .. "'.\n" ..
+			error404("No page is registered at '/" .. table.concat(requested_path_full, "/") .. "'.\n" ..
 			         "If this url belongs to an extension, make sure it is properly installed.\n" ..
 			         "If the extension was recently installed, try removing the /tmp/luci-indexcache file.")
 		end
@@ -659,13 +979,9 @@ function createindex()
 		       "' - It must correspond to the file path!")
 
 		local idx = mod.index
-		assert(type(idx) == "function",
-		       "Invalid controller file found\n" ..
-		       "The file '" .. path .. "' contains no index() function.\n" ..
-		       "Please make sure that the controller contains a valid " ..
-		       "index function and verify the spelling!")
-
-		index[modname] = idx
+		if type(idx) == "function" then
+			index[modname] = idx
+		end
 	end
 
 	if indexcache then
@@ -673,6 +989,94 @@ function createindex()
 		f:writeall(util.get_bytecode(index))
 		f:close()
 	end
+end
+
+function createtree_json()
+	local json = require "luci.jsonc"
+	local tree = {}
+
+	local schema = {
+		action = "table",
+		auth = "table",
+		cors = "boolean",
+		depends = "table",
+		order = "number",
+		setgroup = "string",
+		setuser = "string",
+		title = "string",
+		wildcard = "boolean"
+	}
+
+	local files = {}
+	local fprint = {}
+	local cachefile
+
+	for file in (fs.glob("/usr/share/luci/menu.d/*.json") or function() end) do
+		files[#files+1] = file
+
+		if indexcache then
+			local st = fs.stat(file)
+			if st then
+				fprint[#fprint+1] = '%x' % st.ino
+				fprint[#fprint+1] = '%x' % st.mtime
+				fprint[#fprint+1] = '%x' % st.size
+			end
+		end
+	end
+
+	if indexcache then
+		cachefile = "%s.%s.json" %{
+			indexcache,
+			nixio.crypt(table.concat(fprint, "|"), "$1$"):sub(5):gsub("/", ".")
+		}
+
+		local res = json.parse(fs.readfile(cachefile) or "")
+		if res then
+			return res
+		end
+
+		for file in (fs.glob("%s.*.json" % indexcache) or function() end) do
+			fs.unlink(file)
+		end
+	end
+
+	for _, file in ipairs(files) do
+		local data = json.parse(fs.readfile(file) or "")
+		if type(data) == "table" then
+			for path, spec in pairs(data) do
+				if type(spec) == "table" then
+					local node = tree
+
+					for s in path:gmatch("[^/]+") do
+						if s == "*" then
+							node.wildcard = true
+							break
+						end
+
+						node.children = node.children or {}
+						node.children[s] = node.children[s] or {}
+						node = node.children[s]
+					end
+
+					if node ~= tree then
+						for k, t in pairs(schema) do
+							if type(spec[k]) == t then
+								node[k] = spec[k]
+							end
+						end
+
+						node.satisfied = check_depends(spec)
+					end
+				end
+			end
+		end
+	end
+
+	if cachefile then
+		fs.writefile(cachefile, json.stringify(tree))
+	end
+
+	return tree
 end
 
 -- Build the index before if it does not exist yet.
@@ -767,16 +1171,6 @@ function _create_node(path)
 
 		c = {nodes={}, auto=true, inreq=true}
 
-		local _, n
-		for _, n in ipairs(path) do
-			if context.path[_] ~= n then
-				c.inreq = false
-				break
-			end
-		end
-
-		c.inreq = c.inreq and (context.path[#path + 1] == last)
-
 		parent.nodes[last] = c
 		context.treecache[name] = c
 	end
@@ -786,119 +1180,24 @@ end
 
 -- Subdispatchers --
 
-function _find_eligible_node(root, prefix, deep, types, descend)
-	local children = _ordered_children(root)
-
-	if not root.leaf and deep ~= nil then
-		local sub_path = { unpack(prefix) }
-
-		if deep == false then
-			deep = nil
-		end
-
-		local _, child
-		for _, child in ipairs(children) do
-			sub_path[#prefix+1] = child.name
-
-			local res_path = _find_eligible_node(child.node, sub_path,
-			                                     deep, types, true)
-
-			if res_path then
-				return res_path
-			end
-		end
-	end
-
-	if descend and
-	   (not types or
-	    (type(root.target) == "table" and
-	     util.contains(types, root.target.type)))
-	then
-		return prefix
-	end
-end
-
-function _find_node(recurse, types)
-	local path = { unpack(context.path) }
-	local name = table.concat(path, ".")
-	local node = context.treecache[name]
-
-	path = _find_eligible_node(node, path, recurse, types)
-
-	if path then
-		dispatch(path)
-	else
-		require "luci.template".render("empty_node_placeholder")
-	end
-end
-
-function _firstchild()
-	return _find_node(false, nil)
-end
-
 function firstchild()
-	return { type = "firstchild", target = _firstchild }
-end
-
-function _firstnode()
-	return _find_node(true, { "cbi", "form", "template", "arcombine" })
+	return { type = "firstchild" }
 end
 
 function firstnode()
-	return { type = "firstnode", target = _firstnode }
+	return { type = "firstnode" }
 end
 
 function alias(...)
-	local req = {...}
-	return function(...)
-		for _, r in ipairs({...}) do
-			req[#req+1] = r
-		end
-
-		dispatch(req)
-	end
+	return { type = "alias", req = { ... } }
 end
 
 function rewrite(n, ...)
-	local req = {...}
-	return function(...)
-		local dispatched = util.clone(context.dispatched)
-
-		for i=1,n do
-			table.remove(dispatched, 1)
-		end
-
-		for i, r in ipairs(req) do
-			table.insert(dispatched, i, r)
-		end
-
-		for _, r in ipairs({...}) do
-			dispatched[#dispatched+1] = r
-		end
-
-		dispatch(dispatched)
-	end
-end
-
-
-local function _call(self, ...)
-	local func = getfenv()[self.name]
-	assert(func ~= nil,
-	       'Cannot resolve function "' .. self.name .. '". Is it misspelled or local?')
-
-	assert(type(func) == "function",
-	       'The symbol "' .. self.name .. '" does not refer to a function but data ' ..
-	       'of type "' .. type(func) .. '".')
-
-	if #self.argv > 0 then
-		return func(unpack(self.argv), ...)
-	else
-		return func(...)
-	end
+	return { type = "rewrite", n = n, req = { ... } }
 end
 
 function call(name, ...)
-	return {type = "call", argv = {...}, name = name, target = _call}
+	return { type = "call", argv = {...}, name = name }
 end
 
 function post_on(params, name, ...)
@@ -906,8 +1205,7 @@ function post_on(params, name, ...)
 		type = "call",
 		post = params,
 		argv = { ... },
-		name = name,
-		target = _call
+		name = name
 	}
 end
 
@@ -916,25 +1214,16 @@ function post(...)
 end
 
 
-local _template = function(self, ...)
-	require "luci.template".render(self.view)
-end
-
 function template(name)
-	return {type = "template", view = name, target = _template}
-end
-
-
-local _view = function(self, ...)
-	require "luci.template".render("view", { view = self.view })
+	return { type = "template", view = name }
 end
 
 function view(name)
-	return {type = "view", view = name, target = _view}
+	return { type = "view", view = name }
 end
 
 
-local function _cbi(self, ...)
+function _cbi(self, ...)
 	local cbi = require "luci.cbi"
 	local tpl = require "luci.template"
 	local http = require "luci.http"
@@ -1048,25 +1337,21 @@ function cbi(model, config)
 		type = "cbi",
 		post = { ["cbi.submit"] = true },
 		config = config,
-		model = model,
-		target = _cbi
+		model = model
 	}
 end
 
 
-local function _arcombine(self, ...)
-	local argv = {...}
-	local target = #argv > 0 and self.targets[2] or self.targets[1]
-	setfenv(target.target, self.env)
-	target:target(unpack(argv))
-end
-
 function arcombine(trg1, trg2)
-	return {type = "arcombine", env = getfenv(), target = _arcombine, targets = {trg1, trg2}}
+	return {
+		type = "arcombine",
+		env = getfenv(),
+		targets = {trg1, trg2}
+	}
 end
 
 
-local function _form(self, ...)
+function _form(self, ...)
 	local cbi = require "luci.cbi"
 	local tpl = require "luci.template"
 	local http = require "luci.http"
@@ -1092,10 +1377,9 @@ end
 
 function form(model)
 	return {
-		type = "cbi",
+		type = "form",
 		post = { ["cbi.submit"] = true },
-		model = model,
-		target = _form
+		model = model
 	}
 end
 

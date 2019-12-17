@@ -13,8 +13,8 @@
 	local applyconf = luci.config and luci.config.apply
 %>
 
-<script type="text/javascript" src="<%=resource%>/promis.min.js"></script>
-<script type="text/javascript" src="<%=resource%>/luci.js"></script>
+<script type="text/javascript" src="<%=resource%>/promis.min.js?v=git-19.292.31773-cc35194"></script>
+<script type="text/javascript" src="<%=resource%>/luci.js?v=git-19.292.31773-cc35206"></script>
 <script type="text/javascript">
 	L = new LuCI(<%= luci.http.write_json({
 		token          = token,
@@ -22,6 +22,7 @@
 		scriptname     = luci.http.getenv("SCRIPT_NAME"),
 		pathinfo       = luci.http.getenv("PATH_INFO"),
 		requestpath    = luci.dispatcher.context.requestpath,
+		dispatchpath   = luci.dispatcher.context.path,
 		pollinterval   = luci.config.main.pollinterval or 5,
 		sessionid      = luci.dispatcher.context.authsession,
 		apply_rollback = math.max(applyconf and applyconf.rollback or 30, 30),

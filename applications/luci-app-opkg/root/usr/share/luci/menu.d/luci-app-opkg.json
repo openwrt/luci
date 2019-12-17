@@ -1,0 +1,44 @@
+{
+	"admin/system/opkg": {
+		"title": "Software",
+		"order": 30,
+		"action": {
+			"type": "template",
+			"path": "opkg"
+		}
+	},
+
+	"admin/system/opkg/list/*": {
+		"action": {
+			"type": "call",
+			"module": "luci.controller.opkg",
+			"function": "action_list"
+		}
+	},
+
+	"admin/system/opkg/exec/*": {
+		"action": {
+			"type": "call",
+			"post": true,
+			"module": "luci.controller.opkg",
+			"function": "action_exec"
+		}
+	},
+
+	"admin/system/opkg/statvfs/*": {
+		"action": {
+			"type": "call",
+			"module": "luci.controller.opkg",
+			"function": "action_statvfs"
+		}
+	},
+
+	"admin/system/opkg/config/*": {
+		"action": {
+			"type": "call",
+			"post": { "data": true },
+			"module": "luci.controller.opkg",
+			"function": "action_config"
+		}
+	}
+}
