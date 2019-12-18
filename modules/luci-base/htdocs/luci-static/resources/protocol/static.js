@@ -195,7 +195,7 @@ return network.registerProtocol('static', {
 			var n = parseInt(value, 16);
 
 			if (!/^(0x)?[0-9a-fA-F]+$/.test(value) || isNaN(n) || n >= 0xffffffff)
-				return _('Expecting an hexadecimal assignment hint');
+				return _('Expecting a hexadecimal assignment hint');
 
 			return true;
 		};
