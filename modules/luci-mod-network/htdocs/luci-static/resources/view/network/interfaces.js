@@ -160,8 +160,8 @@ function iface_updown(up, id, ev, force) {
 	btns[1].disabled = true;
 
 	if (!up) {
-		L.Request.get(L.url('admin/network/remote_addr')).then(function(res) {
-			var info = res.json();
+		L.resolveDefault(fs.exec_direct('/usr/libexec/luci-peeraddr')).then(function(res) {
+			var info = null; try { info = JSON.parse(res); } catch(e) {}
 
 			if (L.isObject(info) &&
 			    Array.isArray(info.inbound_interfaces) &&
