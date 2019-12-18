@@ -374,11 +374,13 @@ var FileSystem = L.Class.extend(/** @lends LuCI.fs.prototype */ {
 	 * rejecting with an error stating the failure reason.
 	 */
 	exec_direct: function(command, params) {
-		var cmdstr = command;
+		var cmdstr = String(command)
+			.replace(/\\/g, '\\\\').replace(/(\s)/g, '\\$1');
 
 		if (Array.isArray(params))
 			for (var i = 0; i < params.length; i++)
-				cmdstr += ' ' + params[i];
+				cmdstr += ' ' + String(params[i])
+					.replace(/\\/g, '\\\\').replace(/(\s)/g, '\\$1');
 
 		var postdata = 'sessionid=%s&command=%s'
 			.format(encodeURIComponent(L.env.sessionid), encodeURIComponent(cmdstr));
