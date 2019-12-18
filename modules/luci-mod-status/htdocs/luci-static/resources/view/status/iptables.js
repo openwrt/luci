@@ -246,8 +246,10 @@ function parse_output(table, s)
 }
 
 table_names.forEach(function(table) {
-	L.poll(5, L.url('admin/status/iptables_dump', current_mode, table.toLowerCase()), null,
-		function (xhr) {
-			parse_output(table, xhr.responseText);
+	L.Poll.add(function() {
+		var cmd = (current_mode == 6) ? '/usr/sbin/ip6tables' : '/usr/sbin/iptables';
+		return L.fs.exec_direct(cmd, [ '--line-numbers', '-w', '-nvxL', '-t', table.toLowerCase() ]).then(function(output) {
+			parse_output(table, output);
 		});
+	}, 5);
 });
