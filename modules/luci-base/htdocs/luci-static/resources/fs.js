@@ -108,6 +108,31 @@ function handleRpcReply(expect, rc) {
 	return rc;
 }
 
+function handleCgiIoReply(res) {
+	if (!res.ok || res.status != 200) {
+		var e = new Error(res.statusText);
+		switch (res.status) {
+		case 400:
+			e.name = 'InvalidArgumentError';
+			break;
+
+		case 403:
+			e.name = 'PermissionError';
+			break;
+
+		case 404:
+			e.name = 'NotFoundError';
+			break;
+
+		default:
+			e.name = 'Error';
+		}
+		throw e;
+	}
+
+	return res.text();
+}
+
 /**
  * @class fs
  * @memberof LuCI
@@ -293,6 +318,74 @@ var FileSystem = L.Class.extend(/** @lends LuCI.fs.prototype */ {
 
 			return lines;
 		});
+	},
+
+	/**
+	 * Read the contents of the given file and return them, bypassing ubus.
+	 *
+	 * This function will read the requested file through the cgi-io
+	 * helper applet at `/cgi-bin/cgi-download` which bypasses the ubus rpc
+	 * transport. This is useful to fetch large file contents which might
+	 * exceed the ubus message size limits or which contain binary data.
+	 *
+	 * The cgi-io helper will enforce the same access permission rules as
+	 * the ubus based read call.
+	 *
+	 * @param {string} path
+	 * The file path to read.
+	 *
+	 * @returns {Promise<string>}
+	 * Returns a promise resolving to a string containing the file contents or
+	 * rejecting with an error stating the failure reason.
+	 */
+	read_direct: function(path) {
+		var postdata = 'sessionid=%s&path=%s'
+			.format(encodeURIComponent(L.env.sessionid), encodeURIComponent(path));
+
+		return L.Request.post('/cgi-bin/cgi-download', postdata, {
+			headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+		}).then(handleCgiIoReply);
+	},
+
+	/**
+	 * Execute the specified command, bypassing ubus.
+	 *
+	 * Note: The `command` must be either the path to an executable,
+	 * or a basename without arguments in which case it will be searched
+	 * in $PATH. If specified, the values given in `params` will be passed
+	 * as arguments to the command.
+	 *
+	 * This function will invoke the requested commands through the cgi-io
+	 * helper applet at `/cgi-bin/cgi-exec` which bypasses the ubus rpc
+	 * transport. This is useful to fetch large command outputs which might
+	 * exceed the ubus message size limits or which contain binary data.
+	 *
+	 * The cgi-io helper will enforce the same access permission rules as
+	 * the ubus based exec call.
+	 *
+	 * @param {string} command
+	 * The command to invoke.
+	 *
+	 * @param {string[]} [params]
+	 * The arguments to pass to the command.
+	 *
+	 * @returns {Promise<string>}
+	 * Returns a promise resolving to the gathered command stdout output or
+	 * rejecting with an error stating the failure reason.
+	 */
+	exec_direct: function(command, params) {
+		var cmdstr = command;
+
+		if (Array.isArray(params))
+			for (var i = 0; i < params.length; i++)
+				cmdstr += ' ' + params[i];
+
+		var postdata = 'sessionid=%s&command=%s'
+			.format(encodeURIComponent(L.env.sessionid), encodeURIComponent(cmdstr));
+
+		return L.Request.post('/cgi-bin/cgi-exec', postdata, {
+			headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+		}).then(handleCgiIoReply);
 	}
 });
 
