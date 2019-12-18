@@ -48,7 +48,9 @@
 				"/usr/bin/traceroute *": [ "exec" ],
 				"/usr/bin/traceroute6 *": [ "exec" ],
 				"/usr/bin/nslookup *": [ "exec" ],
-				"/usr/libexec/luci-peeraddr": [ "exec" ]
+				"/usr/libexec/luci-peeraddr": [ "exec" ],
+				"/usr/sbin/iptables --line-numbers -w -nvxL -t *": [ "exec" ],
+				"/usr/sbin/ip6tables --line-numbers -w -nvxL -t *": [ "exec" ]
 			},
 			"ubus": {
 				"file": [ "list", "read", "stat" ],
