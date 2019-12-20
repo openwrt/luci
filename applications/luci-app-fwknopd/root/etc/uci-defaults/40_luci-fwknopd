@@ -12,8 +12,8 @@ EOF
 
 uci delete fwknopd.@access[0].KEY
 uci delete fwknopd.@access[0].HMAC_KEY
-uci set fwknopd.@access[0].keytype='Base 64 key'
-uci set fwknopd.@access[0].hkeytype='Base 64 key'
+uci set fwknopd.@access[0].keytype='Base64 key'
+uci set fwknopd.@access[0].hkeytype='Base64 key'
 uci set fwknopd.@access[0].KEY_BASE64=`fwknopd --key-gen | awk '/^KEY/ {print $2;}'`
 uci set fwknopd.@access[0].HMAC_KEY_BASE64=`fwknopd --key-gen | awk '/^HMAC/ {print $2;}'`
 uci set fwknopd.@config[0].ENABLE_IPT_FORWARDING='y'
