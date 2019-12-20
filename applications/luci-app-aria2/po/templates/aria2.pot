@@ -64,8 +64,8 @@ msgstr ""
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:242
 msgid ""
-"Close connection if download speed is lower than or equal to this "
-"value(bytes per sec). 0 means has no lowest speed limit."
+"Close connection if download speed is lower than or equal to this value "
+"(bytes per sec). 0 means has no lowest speed limit."
 msgstr ""
 
 #: applications/luci-app-aria2/luasrc/view/aria2/log_template.htm:49
@@ -482,13 +482,9 @@ msgstr ""
 msgid "Run daemon as user"
 msgstr ""
 
-#: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:315
-msgid "Sava metadata"
-msgstr ""
-
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:429
 msgid ""
-"Save a control file(*.aria2) every N seconds. If 0 is given, a control file "
+"Save a control file (*.aria2) every N seconds. If 0 is given, a control file "
 "is not saved during download."
 msgstr ""
 
@@ -510,6 +506,10 @@ msgid ""
 "Save meta data as \".torrent\" file. This option has effect only when "
 "BitTorrent Magnet URI is used. The file name is hex encoded info hash with "
 "suffix \".torrent\"."
+msgstr ""
+
+#: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:315
+msgid "Save metadata"
 msgstr ""
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:434
@@ -556,7 +556,7 @@ msgstr ""
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:342
 msgid ""
-"Set UDP listening port used by DHT(IPv4, IPv6) and UDP tracker. Make sure "
+"Set UDP listening port used by DHT (IPv4, IPv6) and UDP tracker. Make sure "
 "that the specified ports are open for incoming UDP traffic."
 msgstr ""
 
@@ -612,7 +612,7 @@ msgstr ""
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:448
 msgid ""
 "Specify file allocation method. If you are using newer file systems such as "
-"ext4 (with extents support), btrfs, xfs or NTFS(MinGW build only), \"falloc"
+"ext4 (with extents support), btrfs, xfs or NTFS (MinGW build only), \"falloc"
 "\" is your best choice. It allocates large(few GiB) files almost instantly, "
 "but it may not be available if your system doesn't have posix_fallocate(3) "
 "function. Don't use \"falloc\" with legacy file systems such as ext3 and "
@@ -675,7 +675,9 @@ msgid "The directory to store the config file, session file and DHT file."
 msgstr ""
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:70
-msgid "The directory to store the downloaded file. eg. <code>/mnt/sda1</code>"
+msgid ""
+"The directory to store the downloaded file. For example <code>/mnt/sda1</"
+"code>."
 msgstr ""
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:81

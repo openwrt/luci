@@ -80,8 +80,8 @@ msgstr "Verificar o certificado"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:242
 msgid ""
-"Close connection if download speed is lower than or equal to this "
-"value (bytes per sec). 0 means has no lowest speed limit."
+"Close connection if download speed is lower than or equal to this value "
+"(bytes per sec). 0 means has no lowest speed limit."
 msgstr ""
 "Feche a conexão caso a velocidade de download seja menor ou igual a este "
 "valor (em bytes por segundo). 0 significa que não há limite mínimo de "
@@ -135,8 +135,8 @@ msgstr "Cache em Disco"
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:259
 msgid "Don't split less than 2*SIZE byte range. Possible values: 1M-1024M."
 msgstr ""
-"Não divida a gama de byte para menos de 2*TAMANHO. Valores possíveis: 1M-"
-"1024M."
+"Não divida a gama de byte para menos de 2*TAMANHO. Valores possíveis: "
+"1M-1024M."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:254
 msgid "Download a file using N connections."
@@ -323,8 +323,8 @@ msgid ""
 "List of extra settings. Format: option=value, eg. <code>netrc-path=/tmp/."
 "netrc</code>."
 msgstr ""
-"Lista de configurações extras. Formato: option=value, por exemplo <code"
-">netrc-path=/tmp/.netrc</code>."
+"Lista de configurações extras. Formato: option=value, por exemplo "
+"<code>netrc-path=/tmp/.netrc</code>."
 
 #: applications/luci-app-aria2/luasrc/view/aria2/log_template.htm:48
 msgid "Loading"
@@ -522,10 +522,6 @@ msgstr "Repetir espera"
 msgid "Run daemon as user"
 msgstr "Executar serviço como usuário"
 
-#: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:315
-msgid "Save metadata"
-msgstr "Salvar os metadados"
-
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:429
 msgid ""
 "Save a control file (*.aria2) every N seconds. If 0 is given, a control file "
@@ -563,6 +559,10 @@ msgstr ""
 "apenas quando BitTorrent Magnet URI é usado. O nome do arquivo é hexadecimal "
 "codificado com a informação do hash com o sufixo \".torrent\"."
 
+#: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:315
+msgid "Save metadata"
+msgstr "Salvar os metadados"
+
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:434
 msgid "Save session interval"
 msgstr "Salvar o intervalo da sessão"
@@ -591,8 +591,8 @@ msgid ""
 "<code>Content-Encoding: deflate</code>."
 msgstr ""
 "Enviar <code>Accept: deflate, gzip</code> requisitar o cabeçalho e inflar a "
-"resposta caso o servidor remoto responda com <code>Content-Encoding: "
-"gzip</code> ou <code>Content-Encoding: deflate</code>."
+"resposta caso o servidor remoto responda com <code>Content-Encoding: gzip</"
+"code> ou <code>Content-Encoding: deflate</code>."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:220
 msgid ""
@@ -612,8 +612,8 @@ msgid ""
 "\"6881-6999\" and \"6881-6889,6999\". Make sure that the specified ports are "
 "open for incoming TCP traffic."
 msgstr ""
-"Defina o número da porta TCP para downloads BitTorrent. Formato aceitos: \""
-"6881,6885\", \"6881-6999\" e \"6881-6889,6999\". Certifique-se de que as "
+"Defina o número da porta TCP para downloads BitTorrent. Formato aceitos: "
+"\"6881,6885\", \"6881-6999\" e \"6881-6889,6999\". Certifique-se de que as "
 "portas definidas estão abertas para o tráfego de entrada TCP."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:342
@@ -697,13 +697,13 @@ msgid ""
 "entirely until allocation finishes."
 msgstr ""
 "Especifique o método de alocação de arquivo. Se você está usando sistemas de "
-"arquivos mais novos, como ext4 (com suporte a extents), btrfs, xfs ou NTFS ("
-"somente versões compiladas com MinGW), \"falloc\" é sua melhor escolha. Ele "
+"arquivos mais novos, como ext4 (com suporte a extents), btrfs, xfs ou NTFS "
+"(somente versões compiladas com MinGW), \"falloc\" é sua melhor escolha. Ele "
 "aloca arquivos grandes (com alguns GiB) quase que instantaneamente, mas pode "
-"não estar disponível caso o seu sistema não tenha a função posix_fallocate(3)"
-". Não use \"falloc\" com sistemas de arquivos antigos como ext3 e FAT32 "
-"porque leva quase o mesmo tempo que \"prealloc\" e bloqueia aria2 "
-"completamente até que a alocação termine."
+"não estar disponível caso o seu sistema não tenha a função "
+"posix_fallocate(3). Não use \"falloc\" com sistemas de arquivos antigos como "
+"ext3 e FAT32 porque leva quase o mesmo tempo que \"prealloc\" e bloqueia "
+"aria2 completamente até que a alocação termine."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:368
 msgid ""
@@ -719,9 +719,9 @@ msgid ""
 "with this option, seeding ends when at least one of the conditions is "
 "satisfied. Specifying 0 disables seeding after download completed."
 msgstr ""
-"Especifique o tempo de semeadura em minutos. Se a opção \"Relação de "
-"sementes\" for especificada em conjunto com esta, a semeadura termina quando "
-"pelo menos uma das condições for satisfeita. Ao definir como 0 desativa a "
+"Especifique o tempo de semeadura em minutos. Se a opção \"Relação de sementes"
+"\" for especificada em conjunto com esta, a semeadura termina quando pelo "
+"menos uma das condições for satisfeita. Ao definir como 0 desativa a "
 "semeadura após a conclusão do download."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:402
@@ -781,10 +781,12 @@ msgstr ""
 "arquivo DHT."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:70
-msgid "The directory to store the downloaded file. For example <code>/mnt/sda1</code>."
+msgid ""
+"The directory to store the downloaded file. For example <code>/mnt/sda1</"
+"code>."
 msgstr ""
-"O diretório para armazenar o arquivo baixado, por exemplo, <code>/mnt/"
-"sda1</code>"
+"O diretório para armazenar o arquivo baixado, por exemplo, <code>/mnt/sda1</"
+"code>"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:81
 msgid "The file name of the log file."

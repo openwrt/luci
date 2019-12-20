@@ -75,8 +75,8 @@ msgstr "Tanúsítvány ellenőrzése"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:242
 msgid ""
-"Close connection if download speed is lower than or equal to this "
-"value (bytes per sec). 0 means has no lowest speed limit."
+"Close connection if download speed is lower than or equal to this value "
+"(bytes per sec). 0 means has no lowest speed limit."
 msgstr ""
 "Kapcsolat lezárása, ha a letöltési sebesség kisebb vagy egyenlő ezzel az "
 "értékkel (bájt/másodperc). A 0 azt jelenti, hogy nincs legalacsonyabb "
@@ -519,10 +519,6 @@ msgstr "Újrapróbálás várakozása"
 msgid "Run daemon as user"
 msgstr "Démon futtatása felhasználóként"
 
-#: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:315
-msgid "Save metadata"
-msgstr "Metaadatok mentése"
-
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:429
 msgid ""
 "Save a control file (*.aria2) every N seconds. If 0 is given, a control file "
@@ -560,6 +556,10 @@ msgstr ""
 "Metaadatok mentése „.torrent” fájlként. Ennek a beállításnak csak akkor van "
 "hatása, ha BitTorrent mágnes URI-t használnak. A fájlnév hexadecimálisan "
 "kódolt információs kivonat „.torrent” utótaggal."
+
+#: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:315
+msgid "Save metadata"
+msgstr "Metaadatok mentése"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:434
 msgid "Save session interval"
@@ -602,8 +602,8 @@ msgid ""
 msgstr ""
 "A <code>Cache-Control: no-cache</code> és <code>Pragma: no-cache</code> "
 "fejléc küldése a gyorsítótárazott tartalom elkerüléséhez. Ha le van tiltva, "
-"akkor ezek a fejlécek nem lesznek elküldve, és hozzáadhatja a „Cache-Control”"
-" fejlécet azzal az irányelvvel, amelyet használni szeretne „Header” "
+"akkor ezek a fejlécek nem lesznek elküldve, és hozzáadhatja a „Cache-"
+"Control” fejlécet azzal az irányelvvel, amelyet használni szeretne „Header” "
 "beállításként."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:336
@@ -780,8 +780,11 @@ msgid "The directory to store the config file, session file and DHT file."
 msgstr "A könyvtár a beállítófájl, a munkamenetfájl és a DHT-fájl tárolásához."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:70
-msgid "The directory to store the downloaded file. For example <code>/mnt/sda1</code>."
-msgstr "A könyvtár a letöltött fájl tárolásához. Például <code>/mnt/sda1</code>."
+msgid ""
+"The directory to store the downloaded file. For example <code>/mnt/sda1</"
+"code>."
+msgstr ""
+"A könyvtár a letöltött fájl tárolásához. Például <code>/mnt/sda1</code>."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:81
 msgid "The file name of the log file."
@@ -853,8 +856,8 @@ msgid ""
 "PKCS12 files with a blank import password can be opened!<br/>When using PEM, "
 "you have to specify the \"Private key\" as well."
 msgstr ""
-"A FÁJLBAN lévő ügyféltanúsítvány használata. A tanúsítványnak vagy PKCS12 ("
-".p12, .pfx), vagy PEM formátumban kell lennie.<br/>A PKCS12 fájloknak "
+"A FÁJLBAN lévő ügyféltanúsítvány használata. A tanúsítványnak vagy PKCS12 (."
+"p12, .pfx), vagy PEM formátumban kell lennie.<br/>A PKCS12 fájloknak "
 "tartalmazniuk kell a tanúsítványt, egy kulcsot és esetlegesen a további "
 "tanúsítványok láncát. Csak az üres importálási jelszóval rendelkező PKCS12 "
 "fájlok nyithatók meg!<br/>PEM használatakor meg kell adnia a „Személyes "

@@ -75,8 +75,8 @@ msgstr "Verificar o certificado"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:242
 msgid ""
-"Close connection if download speed is lower than or equal to this "
-"value (bytes per sec). 0 means has no lowest speed limit."
+"Close connection if download speed is lower than or equal to this value "
+"(bytes per sec). 0 means has no lowest speed limit."
 msgstr ""
 "Fechar a ligação se a velocidade de transferência for inferior ou igual a "
 "este valor (bytes por segundo). 0 significa que não tem limite de velocidade "
@@ -130,8 +130,8 @@ msgstr "Cache em disco"
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:259
 msgid "Don't split less than 2*SIZE byte range. Possible values: 1M-1024M."
 msgstr ""
-"Não dividir um intervale menos de 2*SIZE de bytes. Valores possíveis: 1M-"
-"1024M."
+"Não dividir um intervale menos de 2*SIZE de bytes. Valores possíveis: "
+"1M-1024M."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:254
 msgid "Download a file using N connections."
@@ -189,7 +189,8 @@ msgstr "Erro"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:44
 msgid "Error: Can't find aria2c in PATH, please reinstall aria2."
-msgstr "Erro: Não consigo encontrar aria2c em PATH, por favor reinstale aria2c."
+msgstr ""
+"Erro: Não consigo encontrar aria2c em PATH, por favor reinstale aria2c."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:482
 msgid "Extra Settings"
@@ -315,8 +316,8 @@ msgid ""
 "List of extra settings. Format: option=value, eg. <code>netrc-path=/tmp/."
 "netrc</code>."
 msgstr ""
-"Lista de configurações adicionais. Formato: opção=valor, por exemplo <code"
-">netrc-path=/tmp/.netrc</code>."
+"Lista de configurações adicionais. Formato: opção=valor, por exemplo "
+"<code>netrc-path=/tmp/.netrc</code>."
 
 #: applications/luci-app-aria2/luasrc/view/aria2/log_template.htm:48
 msgid "Loading"
@@ -516,10 +517,6 @@ msgstr "Esperar até repetir"
 msgid "Run daemon as user"
 msgstr "Executar serviço como utilizador"
 
-#: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:315
-msgid "Save metadata"
-msgstr "Gravar metadados"
-
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:429
 msgid ""
 "Save a control file (*.aria2) every N seconds. If 0 is given, a control file "
@@ -557,6 +554,10 @@ msgstr ""
 "quando BitTorrent Magnet URI é usado. O nome do ficheiro é codificado "
 "hexadecimal info hash com o sufixo \".torrent\"."
 
+#: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:315
+msgid "Save metadata"
+msgstr "Gravar metadados"
+
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:434
 msgid "Save session interval"
 msgstr "Gravar intervalo de sessão"
@@ -586,8 +587,8 @@ msgid ""
 "<code>Content-Encoding: deflate</code>."
 msgstr ""
 "Enviar cabeçalho de solicitação <code>Accept: deflate, gzip</code> e inflar "
-"a resposta se o servidor remoto responder com <code>Content-Encoding: "
-"gzip</code> ou <code>Content-Encoding: deflate</code>.."
+"a resposta se o servidor remoto responder com <code>Content-Encoding: gzip</"
+"code> ou <code>Content-Encoding: deflate</code>.."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:220
 msgid ""
@@ -607,8 +608,8 @@ msgid ""
 "\"6881-6999\" and \"6881-6889,6999\". Make sure that the specified ports are "
 "open for incoming TCP traffic."
 msgstr ""
-"Defina o número da porta TCP para desarregas BitTorrent. Aceitar formato: \""
-"6881.6885\", \"6881-6999\" e \"6881-6889,6999\". Certifique-se de que as "
+"Defina o número da porta TCP para desarregas BitTorrent. Aceitar formato: "
+"\"6881.6885\", \"6881-6999\" e \"6881-6889,6999\". Certifique-se de que as "
 "portas especificadas estão abertas para o tráfego TCP de entrada."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:342
@@ -714,10 +715,10 @@ msgid ""
 "with this option, seeding ends when at least one of the conditions is "
 "satisfied. Specifying 0 disables seeding after download completed."
 msgstr ""
-"Especifica o tempo de semeadura em minutos. Se a opção \"Relação de "
-"sementes\" for especificada com esta opção, semear termina quando pelo menos "
-"uma das condições for satisfeita. Especificar 0 desativa semear após a "
-"conclusão do descarregamento."
+"Especifica o tempo de semeadura em minutos. Se a opção \"Relação de sementes"
+"\" for especificada com esta opção, semear termina quando pelo menos uma das "
+"condições for satisfeita. Especificar 0 desativa semear após a conclusão do "
+"descarregamento."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:402
 msgid ""
@@ -774,7 +775,9 @@ msgstr ""
 "ficheiro DHT."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:70
-msgid "The directory to store the downloaded file. For example <code>/mnt/sda1</code>."
+msgid ""
+"The directory to store the downloaded file. For example <code>/mnt/sda1</"
+"code>."
 msgstr ""
 "O diretório para armazenar o ficheiro descarregado, por exemplo, <code>/mnt/"
 "sda1</code>"
@@ -837,8 +840,8 @@ msgstr ""
 "em formato PKCS12 (.p12, .pfx) ou PEM.<br/>Os ficheiros PKCS12 devem conter "
 "o certificado, uma chave e opcionalmente uma cadeia de certificados "
 "adicionais. Somente ficheiros PKCS12 com uma palavra-passe de importação em "
-"branco podem ser abertos!<br/>Ao usar o PEM, também tem que especificar a \""
-"chave privada RPC\"."
+"branco podem ser abertos!<br/>Ao usar o PEM, também tem que especificar a "
+"\"chave privada RPC\"."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:196
 msgid ""
@@ -852,8 +855,8 @@ msgstr ""
 "formato PKCS12 (.p12, .pfx) ou PEM.<br/>Os ficheiros PKCS12 devem conter o "
 "certificado, uma chave e opcionalmente uma cadeia de certificados "
 "adicionais. Somente ficheiros PKCS12 com uma palavra-passe de importação em "
-"branco podem ser abertos!<br/>Ao usar o PEM, também tem que especificar a \""
-"Private key\"."
+"branco podem ser abertos!<br/>Ao usar o PEM, também tem que especificar a "
+"\"Private key\"."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:150
 msgid ""
@@ -883,8 +886,8 @@ msgstr "Nome de Utilizador e Palavra-passe"
 msgid ""
 "Verify the peer using certificates specified in \"CA certificate\" option."
 msgstr ""
-"Verificar o par usando certificados especificados na opção \"Certificado AC\""
-"."
+"Verificar o par usando certificados especificados na opção \"Certificado AC"
+"\"."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:90
 msgid "Warn"

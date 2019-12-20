@@ -42,8 +42,6 @@ msgstr "(вікно – %d хв, інтервал – %d с)"
 #: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:124
 #: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:257
 #: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:281
-#: modules/luci-compat/luasrc/view/cbi/firewall_zoneforwards.htm:38
-#: modules/luci-compat/luasrc/view/cbi/firewall_zoneforwards.htm:41
 #: modules/luci-compat/luasrc/view/cbi/firewall_zonelist.htm:88
 #: modules/luci-compat/luasrc/view/cbi/firewall_zonelist.htm:91
 msgid "(empty)"
@@ -213,7 +211,6 @@ msgstr "<abbr title=\"Інтернет-протокол версії 6\">IPv6</a
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:40
 #: modules/luci-mod-system/luasrc/controller/admin/system.lua:25
-#: modules/luci-mod-system/root/usr/share/luci/menu.d/luci-mod-system.json:89
 msgid "<abbr title=\"Light Emitting Diode\">LED</abbr> Configuration"
 msgstr ""
 "Налаштування <abbr title=\"Light Emitting Diode — світлодіод\">LED</abbr>"
@@ -475,7 +472,6 @@ msgstr "Адреса для доступу до мосту локального 
 
 #: modules/luci-mod-system/luasrc/controller/admin/system.lua:10
 #: modules/luci-base/root/usr/share/luci/menu.d/luci-base.json:3
-#: modules/luci-mod-system/root/usr/share/luci/menu.d/luci-mod-system.json:12
 msgid "Administration"
 msgstr "Адміністрування"
 
@@ -855,7 +851,6 @@ msgid "Backup"
 msgstr "Резервне копіювання"
 
 #: modules/luci-mod-system/luasrc/controller/admin/system.lua:28
-#: modules/luci-mod-system/root/usr/share/luci/menu.d/luci-mod-system.json:103
 msgid "Backup / Flash Firmware"
 msgstr "Рез. копіювання / Перепрош."
 
@@ -2940,16 +2935,19 @@ msgstr "Лист"
 msgid "Lease time"
 msgstr "Час оренди"
 
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:36
+msgid "Lease time remaining"
+msgstr "Час оренди, що лишився"
+
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:166
 msgid "Leasefile"
 msgstr "Файл оренд"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:36
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:55
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:31
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:58
-msgid "Lease time remaining"
-msgstr "Час оренди, що лишився"
+msgid "Leasetime remaining"
+msgstr ""
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/464xlat.js:41
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoe.js:47
@@ -3428,7 +3426,6 @@ msgstr "Точка монтування"
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:143
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:226
 #: modules/luci-mod-system/luasrc/controller/admin/system.lua:22
-#: modules/luci-mod-system/root/usr/share/luci/menu.d/luci-mod-system.json:75
 msgid "Mount Points"
 msgstr "Точки монтування"
 
@@ -4419,7 +4416,6 @@ msgstr "Захист від переприв'язки"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/reboot.js:13
 #: modules/luci-mod-system/luasrc/controller/admin/system.lua:30
-#: modules/luci-mod-system/root/usr/share/luci/menu.d/luci-mod-system.json:112
 msgid "Reboot"
 msgstr "Перезавантаження"
 
@@ -4682,7 +4678,6 @@ msgstr "Служба оголошень маршрутизатора"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js:44
 #: modules/luci-mod-system/luasrc/controller/admin/system.lua:11
-#: modules/luci-mod-system/root/usr/share/luci/menu.d/luci-mod-system.json:20
 msgid "Router Password"
 msgstr "Пароль маршрутизатора"
 
@@ -4726,7 +4721,6 @@ msgstr "SNR"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:9
 #: modules/luci-mod-system/luasrc/controller/admin/system.lua:13
-#: modules/luci-mod-system/root/usr/share/luci/menu.d/luci-mod-system.json:29
 msgid "SSH Access"
 msgstr "SSH-доступ"
 
@@ -4744,7 +4738,6 @@ msgstr "Ім'я користувача SSH"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:264
 #: modules/luci-mod-system/luasrc/controller/admin/system.lua:16
-#: modules/luci-mod-system/root/usr/share/luci/menu.d/luci-mod-system.json:43
 msgid "SSH-Keys"
 msgstr "SSH-ключі"
 
@@ -4789,7 +4782,6 @@ msgstr "Сканувати"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/crontab.js:23
 #: modules/luci-mod-system/luasrc/controller/admin/system.lua:20
-#: modules/luci-mod-system/root/usr/share/luci/menu.d/luci-mod-system.json:66
 msgid "Scheduled Tasks"
 msgstr "Заплановані завдання"
 
@@ -5074,7 +5066,6 @@ msgstr "Розпочато сканування бездротових мере�
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/startup.js:106
 #: modules/luci-mod-system/luasrc/controller/admin/system.lua:19
-#: modules/luci-mod-system/root/usr/share/luci/menu.d/luci-mod-system.json:57
 msgid "Startup"
 msgstr "Запуск"
 
@@ -5208,7 +5199,6 @@ msgstr "Синхронізувати з браузером"
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:95
 #: modules/luci-mod-system/luasrc/controller/admin/system.lua:8
 #: modules/luci-base/root/usr/share/luci/menu.d/luci-base.json:26
-#: modules/luci-mod-system/root/usr/share/luci/menu.d/luci-mod-system.json:3
 msgid "System"
 msgstr "Система"
 

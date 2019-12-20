@@ -73,8 +73,8 @@ msgstr "检查证书"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:242
 msgid ""
-"Close connection if download speed is lower than or equal to this "
-"value (bytes per sec). 0 means has no lowest speed limit."
+"Close connection if download speed is lower than or equal to this value "
+"(bytes per sec). 0 means has no lowest speed limit."
 msgstr ""
 "如果速度小于或等于这个速度（byte/s），关闭下载下载连接。0 表示不限制下载速"
 "度。"
@@ -500,10 +500,6 @@ msgstr "重试等待"
 msgid "Run daemon as user"
 msgstr "以此用户权限运行"
 
-#: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:315
-msgid "Save metadata"
-msgstr "保存元数据"
-
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:429
 msgid ""
 "Save a control file (*.aria2) every N seconds. If 0 is given, a control file "
@@ -536,6 +532,10 @@ msgid ""
 msgstr ""
 "将元数据保存到 \".torrent\" 文件。此选项仅在下载连接为 BT 磁力链接时生效。文"
 "件名为 Hash 值，后缀为 \".torrent\"。"
+
+#: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:315
+msgid "Save metadata"
+msgstr "保存元数据"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:434
 msgid "Save session interval"
@@ -725,7 +725,9 @@ msgid "The directory to store the config file, session file and DHT file."
 msgstr "用于放置配置文件，Session 文件和 DHT 文件的目录。"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:70
-msgid "The directory to store the downloaded file. For example <code>/mnt/sda1</code>."
+msgid ""
+"The directory to store the downloaded file. For example <code>/mnt/sda1</"
+"code>."
 msgstr "用于放置下载文件的目录。例如：<code>/mnt/sda1</code>"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:81
