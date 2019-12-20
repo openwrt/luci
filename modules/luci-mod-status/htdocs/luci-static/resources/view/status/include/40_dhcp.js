@@ -28,7 +28,7 @@ return L.Class.extend({
 				E('div', { 'class': 'th' }, _('Hostname')),
 				E('div', { 'class': 'th' }, _('IPv4-Address')),
 				E('div', { 'class': 'th' }, _('MAC-Address')),
-				E('div', { 'class': 'th' }, _('Leasetime remaining'))
+				E('div', { 'class': 'th' }, _('Lease time remaining'))
 			])
 		]);
 
@@ -55,7 +55,7 @@ return L.Class.extend({
 				E('div', { 'class': 'th' }, _('Host')),
 				E('div', { 'class': 'th' }, _('IPv6-Address')),
 				E('div', { 'class': 'th' }, _('DUID')),
-				E('div', { 'class': 'th' }, _('Leasetime remaining'))
+				E('div', { 'class': 'th' }, _('Lease time remaining'))
 			])
 		]);
 

@@ -71,7 +71,7 @@ if leases then
 	end
 	ip = v:option(DummyValue, 3, translate("<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Address"))
 	mac  = v:option(DummyValue, 2, translate("<abbr title=\"Media Access Control\">MAC</abbr>-Address"))
-	ltime = v:option(DummyValue, 1, translate("Leasetime remaining"))
+	ltime = v:option(DummyValue, 1, translate("Lease time remaining"))
 	function ltime.cfgvalue(self, ...)
 		local value = DummyValue.cfgvalue(self, ...)
 		return wa.date_format(os.difftime(tonumber(value), os.time()))
