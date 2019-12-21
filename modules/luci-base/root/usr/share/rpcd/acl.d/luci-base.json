@@ -70,6 +70,7 @@
 			"file": {
 				"/etc/crontabs/root": [ "write" ],
 				"/etc/dropbear/authorized_keys": [ "write" ],
+				"/etc/init.d/firewall restart": [ "exec" ],
 				"/etc/luci-uploads/*": [ "write" ],
 				"/etc/rc.local": [ "write" ],
 				"/etc/sysupgrade.conf": [ "write" ],
@@ -85,7 +86,9 @@
 				"/bin/umount": [ "exec" ],
 				"/tmp/backup.tar.gz": [ "write" ],
 				"/tmp/firmware.bin": [ "write" ],
-				"/tmp/upload.ipk": [ "write" ]
+				"/tmp/upload.ipk": [ "write" ],
+				"/usr/sbin/iptables -Z": [ "exec" ],
+				"/usr/sbin/ip6tables -Z": [ "exec" ]
 			},
 			"ubus": {
 				"file": [ "write", "remove", "exec" ],
