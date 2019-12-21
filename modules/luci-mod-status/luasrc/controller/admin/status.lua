@@ -13,17 +13,3 @@ function action_dmesg()
 	local dmesg = luci.sys.dmesg()
 	luci.template.render("admin_status/dmesg", {dmesg=dmesg})
 end
-
-function action_iptables()
-	if luci.http.formvalue("zero") then
-		if luci.http.formvalue("family") == "6" then
-			luci.util.exec("/usr/sbin/ip6tables -Z")
-		else
-			luci.util.exec("/usr/sbin/iptables -Z")
-		end
-	elseif luci.http.formvalue("restart") then
-		luci.util.exec("/etc/init.d/firewall restart")
-	end
-
-	luci.http.redirect(luci.dispatcher.build_url("admin/status/iptables"))
-end
