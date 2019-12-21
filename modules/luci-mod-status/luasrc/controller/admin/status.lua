@@ -12,8 +12,8 @@ function index()
 	entry({"admin", "status", "iptables"}, view("status/iptables"), _("Firewall"), 2).leaf = true
 
 	entry({"admin", "status", "routes"}, template("admin_status/routes"), _("Routes"), 3)
-	entry({"admin", "status", "syslog"}, call("action_syslog"), _("System Log"), 4)
-	entry({"admin", "status", "dmesg"}, call("action_dmesg"), _("Kernel Log"), 5)
+	entry({"admin", "status", "syslog"}, view("status/syslog"), _("System Log"), 4)
+	entry({"admin", "status", "dmesg"}, view("status/dmesg"), _("Kernel Log"), 5)
 	entry({"admin", "status", "processes"}, view("status/processes"), _("Processes"), 6)
 
 	entry({"admin", "status", "realtime"}, alias("admin", "status", "realtime", "load"), _("Realtime Graphs"), 7)
@@ -24,14 +24,4 @@ function index()
 	entry({"admin", "status", "realtime", "connections"}, view("status/connections"), _("Connections"), 4)
 
 	entry({"admin", "status", "nameinfo"}, call("action_nameinfo")).leaf = true
-end
-
-function action_syslog()
-	local syslog = luci.sys.syslog()
-	luci.template.render("admin_status/syslog", {syslog=syslog})
-end
-
-function action_dmesg()
-	local dmesg = luci.sys.dmesg()
-	luci.template.render("admin_status/dmesg", {dmesg=dmesg})
 end
