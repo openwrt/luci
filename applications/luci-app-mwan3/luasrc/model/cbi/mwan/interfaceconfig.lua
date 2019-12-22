@@ -59,6 +59,7 @@ end
 httping_ssl = mwan_interface:option(Flag, "httping_ssl", translate("Enable ssl tracking"),
 	translate("Enables https tracking on ssl port 443"))
 httping_ssl:depends("track_method", "httping")
+httping_ssl.rmempty = false
 httping_ssl.default = httping_ssl.enabled
 
 reliability = mwan_interface:option(Value, "reliability", translate("Tracking reliability"),
@@ -87,8 +88,6 @@ size:value("1016")
 size:value("1472")
 size:value("2040")
 size.datatype = "range(1, 65507)"
-size.rmempty = false
-size.optional = false
 
 max_ttl = mwan_interface:option(Value, "max_ttl", translate("Max TTL"))
 max_ttl.default = "60"
