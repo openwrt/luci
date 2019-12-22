@@ -20,7 +20,7 @@ local enable_priority = uci:get("nft-qos", "default", "priority_enable")
 
 local has_ipv6 = fs.access("/proc/net/ipv6_route")
 
-m = Map("nft-qos", translate("Qos over Nftables"))
+m = Map("nft-qos", translate("QoS over Nftables"))
 
 --
 -- Taboptions
@@ -82,13 +82,13 @@ o.default = def_down or '100'
 o.datatype = "uinteger"
 o:depends("limit_type","dynamic")
 
-o = s:taboption("limit", Value, "dynamic_cidr", translate("Target Network (IPv4/MASK)"), translate("Network to be apply, e.g. 192.168.1.0/24, 10.2.0.0/16, etc"))
+o = s:taboption("limit", Value, "dynamic_cidr", translate("Target Network (IPv4/MASK)"), translate("Network to be applied, e.g. 192.168.1.0/24, 10.2.0.0/16, etc."))
 o.datatype = "cidr4"
 ipc.routes({ family = 4, type = 1 }, function(rt) o.default = rt.dest end)
 o:depends("limit_type","dynamic")
 
 if has_ipv6 then
-	o = s:taboption("limit", Value, "dynamic_cidr6", translate("Target Network6 (IPv6/MASK)"), translate("Network to be apply, e.g. AAAA::BBBB/64, CCCC::1/128, etc"))
+	o = s:taboption("limit", Value, "dynamic_cidr6", translate("Target Network6 (IPv6/MASK)"), translate("Network to be applied, e.g. AAAA::BBBB/64, CCCC::1/128, etc."))
 	o.datatype = "cidr6"
 	o:depends("limit_type","dynamic")
 end
@@ -104,7 +104,7 @@ o = s:taboption("priority", Flag, "priority_enable", translate("Enable Traffic P
 o.default = enable_priority or o.enabled
 o.rmempty = false
 
-o = s:taboption("priority", ListValue, "priority_netdev", translate("Default Network Interface"), translate("Network Interface for Traffic Shaping, e.g. br-lan, eth0.1, eth0, etc"))
+o = s:taboption("priority", ListValue, "priority_netdev", translate("Default Network Interface"), translate("Network Interface for Traffic Shaping, e.g. br-lan, eth0.1, eth0, etc."))
 o:depends("priority_enable", "1")
 wa.cbi_add_networks(o)
 
@@ -123,9 +123,9 @@ o.datatype = "hostname"
 o.default = 'undefined'
 
 if has_ipv6 then
-	o = x:option(Value, "ipaddr", translate("IP Address(V4 / V6)"))
+	o = x:option(Value, "ipaddr", translate("IP Address (v4 / v6)"))
 else
-	o = x:option(Value, "ipaddr", translate("IP Address(V4 Only)"))
+	o = x:option(Value, "ipaddr", translate("IP Address (v4 Only)"))
 end
 o.datatype = "ipaddr"
 if nixio.fs.access("/tmp/dhcp.leases") or nixio.fs.access("/var/dhcp6.leases") then
@@ -160,9 +160,9 @@ o.datatype = "hostname"
 o.default = 'undefined'
 
 if has_ipv6 then
-	o = y:option(Value, "ipaddr", translate("IP Address(V4 / V6)"))
+	o = y:option(Value, "ipaddr", translate("IP Address (v4 / v6)"))
 else
-	o = y:option(Value, "ipaddr", translate("IP Address(V4 Only)"))
+	o = y:option(Value, "ipaddr", translate("IP Address (v4 Only)"))
 end
 o.datatype = "ipaddr"
 if nixio.fs.access("/tmp/dhcp.leases") or nixio.fs.access("/var/dhcp6.leases") then
