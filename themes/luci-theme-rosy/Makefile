@@ -7,7 +7,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=Rosy Theme
-LUCI_DEPENDS:=
+LUCI_DEPENDS:=@BROKEN
 
 include ../../luci.mk
 
