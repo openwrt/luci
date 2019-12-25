@@ -29,5 +29,5 @@ module "nixio.bin"
 --- Base64 decode a given buffer.
 -- @class function
 -- @name b64decode
--- @param buffer	Base 64 Encoded data
+-- @param buffer	Base64 Encoded data
 -- @return binary data
