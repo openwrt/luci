@@ -16,6 +16,8 @@ LUCI_DEPENDS:=+lua +luci-lib-nixio +luci-lib-ip +rpcd +libubus-lua +luci-lib-jso
 
 PKG_LICENSE:=MIT
 
+HOST_BUILD_DIR:=$(BUILD_DIR_HOST)/$(PKG_NAME)
+
 include $(INCLUDE_DIR)/host-build.mk
 
 define Package/luci-base/conffiles
