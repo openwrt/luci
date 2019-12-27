@@ -60,7 +60,7 @@ end
 
 
 interval = s:taboption("general", Value, "_interval", translate("Due date"),
-	translate("Day of month to restart the accounting period. Use negative values to count towards the end of month, e.g. \"-5\" to specify the 27th of July or the 24th of Februrary."))
+	translate("Day of month to restart the accounting period. Use negative values to count towards the end of month, e.g. \"-5\" to specify the 27th of July or the 24th of February."))
 
 interval.datatype = "or(range(1,31),range(-31,-1))"
 interval.placeholder = "1"
