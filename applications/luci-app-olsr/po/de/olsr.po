@@ -687,7 +687,6 @@ msgstr ""
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:240
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdiface6.lua:71
-#, fuzzy
 msgid ""
 "Multiply routes with the factor given here. Allowed values are between 0.01 "
 "and 1.0. It is only used when LQ-Level is greater than 0. Examples:<br /"
@@ -697,7 +696,7 @@ msgstr ""
 "Multipliziere die Linkquality (LQ) für Routen mit dem hier angegebenen "
 "Faktor, der zwischen 0.01 und 1 liegen kann. Beispiele:<br />halbiere die LQ "
 "zu 192.168.0.1: 192.168.0.1 0.5<br />reduziere die LQ für alle Nodes die mit "
-"diesem Interface kommunizieren um 20%: default 0.8"
+"diesem Interface kommunizieren um 20%: Voreinstellung 0.8"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:195
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:201
@@ -915,14 +914,13 @@ msgstr ""
 "0.0.0.0. Damit wird die IP des ersten Interfaces verwendet."
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:127
-#, fuzzy
 msgid ""
 "Sets the main IP (originator ip) of the router. This IP will NEVER change "
 "during the uptime of olsrd. Default is ::, which triggers usage of the IP of "
 "the first interface."
 msgstr ""
 "Setzt die Haupt-IP (originator ip) für diesen Router. Diese IP wird sich "
-"NIEMALS während der Laufzeit von OLSRD verändern. Der Defaultwert ist "
+"NIEMALS während der Laufzeit von OLSRD verändern. Die Voreinstellung ist "
 "0.0.0.0. Damit wird die IP des ersten Interfaces verwendet."
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/common_js.htm:20
@@ -1174,7 +1172,6 @@ msgstr ""
 "ankündigen sofern verfügbar)."
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:149
-#, fuzzy
 msgid ""
 "Which kind of uplink is exported to the other mesh nodes. An uplink is "
 "detected by looking for a local HNA6 ::ffff:0:0/96 or 2000::/3. Default "
@@ -1182,7 +1179,7 @@ msgid ""
 msgstr ""
 "Welche Art von Uplink im Mesh angekündigt wird. Ein Uplink wird automatisch "
 "anhand der lokal angekündigten HNA erkannt (0.0.0.0/0, ::ffff:0:0/96 oder "
-"2000::/3). Der Defaultwert ist \"both\" (sowohl IPv4 als auch IPv6 Uplink "
+"2000::/3). Die Voreinstellung ist \"both\" (sowohl IPv4 als auch IPv6 Uplink "
 "ankündigen sofern verfügbar)."
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:187
@@ -1227,13 +1224,3 @@ msgstr ""
 #: applications/luci-app-olsr/luasrc/view/status-olsr/smartgw.htm:139
 msgid "yes"
 msgstr "ja"
-
-#~ msgid "Status"
-#~ msgstr "Status"
-
-#~ msgid ""
-#~ "Make sure that OLSRd is running, the \"txtinfo\" plugin is loaded, "
-#~ "configured on port 2006 and accepts connections from \"127.0.0.1\"."
-#~ msgstr ""
-#~ "Stellen Sie sicher das OLSRd läuft und das \"txtinfo\" Plugin auf Port "
-#~ "2006 geladen und \"127.0.0.1\" als Accept-Host gesetzt ist."

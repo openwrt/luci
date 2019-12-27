@@ -53,11 +53,11 @@ msgstr "Ogłaszana sieć"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/legend.htm:11
 msgid "Bad (ETX > 10)"
-msgstr ""
+msgstr "Słabe (ETX > 10)"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/legend.htm:20
 msgid "Bad (SNR < 5)"
-msgstr ""
+msgstr "Słabe (SNR < 5)"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdhna.lua:12
 msgid "Both values must use the dotted decimal notation."
@@ -72,12 +72,12 @@ msgstr "Adres rozgłoszeniowy (broadcast)"
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdiface.lua:90
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:265
 msgid "Can only be a valid IPv4 or IPv6 address or 'default'"
-msgstr ""
+msgstr "Może to być tylko prawidłowy adres IPv4 lub IPv6 albo \"domyślny\""
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:259
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdiface6.lua:90
 msgid "Can only be a valid IPv6 address or 'default'"
-msgstr ""
+msgstr "Może to być tylko prawidłowy adres IPv6 lub \"domyślny\""
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/overview.htm:198
 msgid "Configuration"
@@ -88,6 +88,8 @@ msgid ""
 "Could not get any data. Make sure the jsoninfo plugin is installed and "
 "allows connections from localhost."
 msgstr ""
+"Nie udało się uzyskać żadnych danych. Upewnij się, że wtyczka jsoninfo jest "
+"zainstalowana i umożliwia połączenia z lokalnym hostem."
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/interfaces.htm:24
 msgid "Device"
@@ -191,16 +193,16 @@ msgstr "Ustawienia ogólne"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/legend.htm:9
 msgid "Good (2 < ETX < 4)"
-msgstr ""
+msgstr "Dobre (2 < ETX < 4)"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/legend.htm:18
 msgid "Good (30 > SNR > 20)"
-msgstr ""
+msgstr "Dobre (30 > SNR > 20)"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/legend.htm:8
 #: applications/luci-app-olsr/luasrc/view/status-olsr/legend.htm:17
 msgid "Green"
-msgstr ""
+msgstr "Zielony"
 
 #: applications/luci-app-olsr/luasrc/controller/olsr.lua:53
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:383
@@ -254,12 +256,12 @@ msgstr "Czas poprawności Hello"
 #: applications/luci-app-olsr/luasrc/view/status-olsr/common_js.htm:12
 #: applications/luci-app-olsr/luasrc/view/status-olsr/common_js.htm:20
 msgid "Hide IPv4"
-msgstr ""
+msgstr "Ukryj IPv4"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/common_js.htm:13
 #: applications/luci-app-olsr/luasrc/view/status-olsr/common_js.htm:28
 msgid "Hide IPv6"
-msgstr ""
+msgstr "Ukryj IPv6"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdhna.lua:12
 msgid "Hna4"
@@ -409,7 +411,7 @@ msgstr ""
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:178
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:184
 msgid "IPv6-Prefix of the uplink"
-msgstr ""
+msgstr "IPv6-Prefix łącza uplink"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:196
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:202
@@ -481,6 +483,7 @@ msgstr ""
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:268
 msgid "Invalid Value for LQMult-Value. Must be between 0.01 and 1.0."
 msgstr ""
+"Nieprawidłowa wartość dla LQMult-Value. Musi być z zakresu od 0.01 do 1.0."
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:265
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdiface6.lua:96
@@ -490,6 +493,8 @@ msgid ""
 "Invalid Value for LQMult-Value. You must use a decimal number between 0.01 "
 "and 1.0 here."
 msgstr ""
+"Nieprawidłowa wartość dla LQMult-Value. Należy użyć liczby dziesiętnej od "
+"0.01 do 1.0."
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/routes.htm:98
 msgid "Known OLSR routes"
@@ -527,6 +532,8 @@ msgid ""
 "LQMult requires two values (IP address or 'default' and multiplicator) "
 "separated by space."
 msgstr ""
+"LQMult wymaga dwóch wartości (adresu IP lub 'domyślnego' i wielokrotnosci) "
+"oddzielonych spacją."
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/topology.htm:23
 msgid "Last hop"
@@ -633,9 +640,8 @@ msgstr ""
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/routes.htm:50
 #: applications/luci-app-olsr/luasrc/view/status-olsr/routes.htm:110
-#, fuzzy
 msgid "Metric"
-msgstr "Miara"
+msgstr "Metryka"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:220
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:357
@@ -708,7 +714,7 @@ msgstr "Adres sieci"
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:53
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:59
 msgid "Nic changes poll interval"
-msgstr ""
+msgstr "Zmiana interwału ankiety Nic"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/overview.htm:173
 msgid "Nodes"
@@ -720,16 +726,15 @@ msgstr "OLSR"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrddisplay.lua:4
 msgid "OLSR - Display Options"
-msgstr ""
+msgstr "OLSR - Opcje wyświetlania"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdhna.lua:8
 msgid "OLSR - HNA-Announcements"
 msgstr "OLSR - ogłoszenia HNA"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdhna6.lua:7
-#, fuzzy
 msgid "OLSR - HNA6-Announcements"
-msgstr "OLSR - ogłoszenia HNA"
+msgstr "OLSR - Komunikaty HNA6"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdplugins6.lua:9
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdplugins6.lua:216
@@ -1145,7 +1150,7 @@ msgstr ""
 #: applications/luci-app-olsr/luasrc/view/status-olsr/smartgw.htm:138
 #: applications/luci-app-olsr/luasrc/view/status-olsr/smartgw.htm:139
 msgid "no"
-msgstr ""
+msgstr "nie"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/interfaces.htm:38
 msgid "up"
@@ -1159,15 +1164,4 @@ msgstr ""
 #: applications/luci-app-olsr/luasrc/view/status-olsr/smartgw.htm:138
 #: applications/luci-app-olsr/luasrc/view/status-olsr/smartgw.htm:139
 msgid "yes"
-msgstr ""
-
-#~ msgid "Status"
-#~ msgstr "Status"
-
-#~ msgid ""
-#~ "Make sure that OLSRd is running, the \"txtinfo\" plugin is loaded, "
-#~ "configured on port 2006 and accepts connections from \"127.0.0.1\"."
-#~ msgstr ""
-#~ "Upewnij się że OLSRd jest uruchomione, \"txtinfo\" plugin jest "
-#~ "załadowany, skonfigurowany na porcie 2006 i akceptuje połączenia z "
-#~ "127.0.0.1 (localhost)"
+msgstr "tak"

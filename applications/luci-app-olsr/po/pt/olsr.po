@@ -23,9 +23,8 @@ msgid "Active OLSR nodes"
 msgstr "Nós OLSR ativos"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/hna.htm:82
-#, fuzzy
 msgid "Active host net announcements"
-msgstr "Anuncios activos de hosts"
+msgstr "Anúncios ativos de redes de hosts"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:45
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:45
@@ -56,11 +55,11 @@ msgstr "Rede anunciada"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/legend.htm:11
 msgid "Bad (ETX > 10)"
-msgstr ""
+msgstr "Ruim (ETX > 10)"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/legend.htm:20
 msgid "Bad (SNR < 5)"
-msgstr ""
+msgstr "Ruim (SNR < 5)"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdhna.lua:12
 msgid "Both values must use the dotted decimal notation."
@@ -74,11 +73,13 @@ msgstr "Endereço de broadcast"
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:265
 msgid "Can only be a valid IPv4 or IPv6 address or 'default'"
 msgstr ""
+"Somente pode ser um endereço IPv4 ou IPv6 válidos ou um endereço 'padrão'"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:259
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdiface6.lua:90
 msgid "Can only be a valid IPv6 address or 'default'"
 msgstr ""
+"Somente pode ser um endereço IPv4 ou IPv6 válidos ou um endereço 'padrão'"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/overview.htm:198
 msgid "Configuration"
@@ -89,6 +90,9 @@ msgid ""
 "Could not get any data. Make sure the jsoninfo plugin is installed and "
 "allows connections from localhost."
 msgstr ""
+"Não foi possível obter nenhuma informação. Certifique-se que a extensão "
+"jsoninfo está instalada e permite conexões a partir da sua máquina local "
+"(localhost)."
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/interfaces.htm:24
 msgid "Device"
@@ -101,7 +105,7 @@ msgstr "Mostrar"
 #: applications/luci-app-olsr/luasrc/view/status-olsr/smartgw.htm:60
 #: applications/luci-app-olsr/luasrc/view/status-olsr/smartgw.htm:112
 msgid "Downlink"
-msgstr ""
+msgstr "Downlink"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/overview.htm:203
 msgid "Download Config"
@@ -162,11 +166,20 @@ msgid ""
 "value too, but does only update the hopcount if the nexthop changes too. "
 "Default is \"flat\"."
 msgstr ""
+"A métrica FIB controla o valor da métrica dos conjuntos de equipamentos-"
+"roteadores. \"flat\" significa que o valor da métrica é sempre 2. Este é o "
+"valor preferido porque ele ajuda o roteamento do kernel do Linux limpar as "
+"rotas antigas. \"correct\" usa a contagem de saltos como valor da métrica. "
+"\"approx\" também usa a contagem de saltos como métrica, mas somente "
+"atualiza a contagem de saltos se o próximo salto também mudar. O padrão é "
+"\"flat\"."
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:106
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:112
 msgid "Fisheye mechanism for TCs (checked means on). Default is \"on\""
 msgstr ""
+"Mecanismo Fisheye para <abbr title=\"Topology Control, Controle de Topologia"
+"\">TC</abbr>s (marcado significa ligado). O padrão é \"ligado\""
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/smartgw.htm:55
 #: applications/luci-app-olsr/luasrc/view/status-olsr/smartgw.htm:107
@@ -189,16 +202,16 @@ msgstr "Configurações gerais"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/legend.htm:9
 msgid "Good (2 < ETX < 4)"
-msgstr ""
+msgstr "Bom (2 < ETX < 4)"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/legend.htm:18
 msgid "Good (30 > SNR > 20)"
-msgstr ""
+msgstr "Bom (30 > SNR > 20)"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/legend.htm:8
 #: applications/luci-app-olsr/luasrc/view/status-olsr/legend.htm:17
 msgid "Green"
-msgstr ""
+msgstr "Verde"
 
 #: applications/luci-app-olsr/luasrc/controller/olsr.lua:53
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:383
@@ -206,10 +219,14 @@ msgstr ""
 #: applications/luci-app-olsr/luasrc/view/status-olsr/overview.htm:178
 msgid "HNA"
 msgstr ""
+"<abbr title=\"Host and network association, Associação de equipamentos e "
+"redes\">HNA</abbr>"
 
 #: applications/luci-app-olsr/luasrc/controller/olsr4.lua:24
 msgid "HNA Announcements"
 msgstr ""
+"Anúncios do <abbr title=\"Host and network association, Associação de "
+"equipamentos e redes\">HNA</abbr>"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:322
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdiface6.lua:152
@@ -226,14 +243,13 @@ msgid "HNA validity time"
 msgstr "Validade de HNA"
 
 #: applications/luci-app-olsr/luasrc/controller/olsr6.lua:24
-#, fuzzy
 msgid "HNA6 Announcements"
-msgstr "OLSR - Anuncios HNA4"
+msgstr "Anúncios de HNA6"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:362
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:381
 msgid "Hello"
-msgstr ""
+msgstr "Saudação (Hello)"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:286
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdiface6.lua:116
@@ -252,26 +268,26 @@ msgstr "Validade de Hello"
 #: applications/luci-app-olsr/luasrc/view/status-olsr/common_js.htm:12
 #: applications/luci-app-olsr/luasrc/view/status-olsr/common_js.htm:20
 msgid "Hide IPv4"
-msgstr ""
+msgstr "Ocultar IPv4"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/common_js.htm:13
 #: applications/luci-app-olsr/luasrc/view/status-olsr/common_js.htm:28
 msgid "Hide IPv6"
-msgstr ""
+msgstr "Ocultar IPv6"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdhna.lua:12
 msgid "Hna4"
-msgstr ""
+msgstr "Hna4"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdhna6.lua:10
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdhna.lua:28
 msgid "Hna6"
-msgstr ""
+msgstr "Hna6"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/smartgw.htm:58
 #: applications/luci-app-olsr/luasrc/view/status-olsr/smartgw.htm:110
 msgid "Hops"
-msgstr ""
+msgstr "Saltos"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/neighbors.htm:61
 #: applications/luci-app-olsr/luasrc/view/status-olsr/neighbors.htm:127
@@ -283,12 +299,16 @@ msgid ""
 "Hosts in a OLSR routed network can announce connecitivity to external "
 "networks using HNA messages."
 msgstr ""
+"Equipamentos em uma rede roteada por OLSR podem anunciar conectividade para "
+"redes externas usando mensagens HNA."
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdhna6.lua:7
 msgid ""
 "Hosts in a OLSR routed network can announce connecitivity to external "
 "networks using HNA6 messages."
 msgstr ""
+"Equipamentos em uma rede roteada por OLSR podem anunciar conectividade para "
+"redes externas usando mensagens HNA."
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:111
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:117
@@ -297,6 +317,9 @@ msgid ""
 "robustness to the link sensing but delays neighbor registration. Defaults is "
 "\"yes\""
 msgstr ""
+"Retardo para a sensibilidade do enlace (somente para a métrica de contagem "
+"de saltos), Retardo incrementa a robustez da sensibilidade do enlace mas "
+"atrasa o registro dos vizinhos. O padrão é \"sim\""
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:217
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdiface6.lua:32
@@ -310,6 +333,8 @@ msgid ""
 "IP-version to use. If 6and4 is selected then one olsrd instance is started "
 "for each protocol."
 msgstr ""
+"Versão do IP para usar. Se 6and4 for selecionado, então uma instância é "
+"disparada para cada protocolo."
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/smartgw.htm:61
 #: applications/luci-app-olsr/luasrc/view/status-olsr/smartgw.htm:113
@@ -328,11 +353,14 @@ msgid ""
 "be 255.255.255.255. Default is \"0.0.0.0\", which triggers the usage of the "
 "interface broadcast IP."
 msgstr ""
+"Endereço IPv5 de broadcast para a saída de pacotes OLSR. Um exemplo útil "
+"seria 255.255.255.255. O padrão é \"0.0.0.0\", que indica o uso do endereço "
+"IP de broadcast da interface."
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdiface.lua:116
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:291
 msgid "IPv4 source"
-msgstr ""
+msgstr "Origem IPv4"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdiface.lua:117
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:292
@@ -340,6 +368,9 @@ msgid ""
 "IPv4 src address for outgoing OLSR packages. Default is \"0.0.0.0\", which "
 "triggers usage of the interface IP."
 msgstr ""
+"Endereço IPv4 de origem para a saída de pacotes OLSR. Um exemplo útil seria "
+"255.255.255.255. O padrão é \"0.0.0.0\", que indica o uso do endereço IP da "
+"interface."
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/smartgw.htm:62
 #: applications/luci-app-olsr/luasrc/view/status-olsr/smartgw.htm:114
@@ -361,6 +392,8 @@ msgid ""
 "IPv6 multicast address. Default is \"FF02::6D\", the manet-router linklocal "
 "multicast."
 msgstr ""
+"Endereço de multicast IPv6. O padrão é \"FF02::6D\", o multicast do enlace "
+"local do roteador MANET."
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdhna6.lua:10
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdhna.lua:28
@@ -386,11 +419,14 @@ msgid ""
 "the prefix of this parameter. Default is \"0::/0\", which triggers the usage "
 "of a not-linklocal interface IP."
 msgstr ""
+"Prefixo de origem IPv6. O OLSRd escolherá um dos IPs da interface que casam "
+"com o prefixo do parâmetro. O padrão é \"0::/0\", que faz com que seja usado "
+"um endereço IP não local da interface."
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:178
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:184
 msgid "IPv6-Prefix of the uplink"
-msgstr ""
+msgstr "Prefixo IPv6 do enlace superior (uplink)"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:196
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:202
@@ -401,12 +437,17 @@ msgid ""
 "if changed.<br /><b>WARNING:</b> This parameter should not be used together "
 "with the etx_ffeth metric!<br />Defaults to \"1.0\"."
 msgstr ""
+"Se a rota para o roteador está para ser alterada, o valor ETX deste roteador "
+"é multiplicado com o este valor antes que ele seja comparado com o novo "
+"valor. O parâmetro pode ser um valor entre 0.1 e 1.0, mas deve ser próximo a "
+"1.0 se alterado..<br /><b>CUIDADO:</b> Este parâmetro não deve ser usado em "
+"conjunto com a métrica etx_ffeth!<br />O padrão é \"1.0\"."
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:160
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:166
 msgid ""
 "If this Node uses NAT for connections to the internet. Default is \"yes\"."
-msgstr ""
+msgstr "Se este Nó usa NAT para conexões com a internet. Padrão é \"sim\"."
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdiface6.lua:27
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdiface.lua:27
@@ -454,13 +495,15 @@ msgid ""
 "Interval to poll network interfaces for configuration changes (in seconds). "
 "Default is \"2.5\"."
 msgstr ""
+"Intervalo para consultar as interfaces de rede por mudanças nas "
+"configurações (em segundos). O padrão é \"2.5\"."
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:262
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdiface6.lua:93
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdiface.lua:93
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:268
 msgid "Invalid Value for LQMult-Value. Must be between 0.01 and 1.0."
-msgstr ""
+msgstr "Valor inválido para LQMult-Value. Deve estar entre 0.01 e 1.0."
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:265
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdiface6.lua:96
@@ -470,6 +513,8 @@ msgid ""
 "Invalid Value for LQMult-Value. You must use a decimal number between 0.01 "
 "and 1.0 here."
 msgstr ""
+"Valor inválido para LQMult-Value. Você deve utilizar aqui um número decimal "
+"entre 0.01 e 1.0."
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/routes.htm:98
 msgid "Known OLSR routes"
@@ -491,9 +536,8 @@ msgstr "Algoritmo LQ"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:105
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:111
-#, fuzzy
 msgid "LQ fisheye"
-msgstr "LQ Fisheye"
+msgstr "Fisheye LQ"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:76
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:82
@@ -508,6 +552,8 @@ msgid ""
 "LQMult requires two values (IP address or 'default' and multiplicator) "
 "separated by space."
 msgstr ""
+"LQMult exige dois valores (endereço IP ou 'padrão' e multiplicador) "
+"separados por espaços."
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/topology.htm:23
 msgid "Last hop"
@@ -536,6 +582,10 @@ msgid ""
 "etx_float and etx_fpm, smaller values mean slower changes of ETX value. "
 "(allowed values are between 0.01 and 1.0)"
 msgstr ""
+"O fator de envelhecimento da qualidade do enlace (somente para <abbr title="
+"\"Link Quality, Qualidade do Enlace\">LQ</abbr> nível 2). Parâmtro de ajuste "
+"para etx_float e etx_fpm, Valores menores significam mudanças mais lentas do "
+"valor ETX. (permitido valores entre 0.01 e 1.0)"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:91
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:97
@@ -547,6 +597,13 @@ msgid ""
 "calculation<br /><b>etx_ffeth</b>: incompatible variant of etx_ff that "
 "allows ethernet links with ETX 0.1.<br />Defaults to \"etx_ff\""
 msgstr ""
+"Algoritmo de qualidade do enlace (somente para <abbr title=\"Link Quality, "
+"Qualidade do Enlace\">LQ</abbr> nível 2). <br /><b>etx_float</b>: ETX ponto "
+"flutuante com o envelhecimento exponencial<br /><b>etx_fpm</b> : o mesmo que "
+"etx_float, mas com aritmética inteira<br /><b>etx_ff</b> : ETX freifunk, uma "
+"variante do etx que usa todo tráfego OLSE (ao invés de somente as saudações) "
+"para o cálculo do ETX<br /><b>etx_ffeth</b>: variação incompatível do etx_ff "
+"que permite enlaces ethernet com ETX 0.1.<br />O padrão é \"etx_ff\""
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:77
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:83
@@ -555,21 +612,25 @@ msgid ""
 "routing.<br /><b>0</b> = do not use link quality<br /><b>2</b> = use link "
 "quality for MPR selection and routing<br />Default is \"2\""
 msgstr ""
+"O nível de qualidade do enlace escolhe entre o roteamento por contagem de "
+"saltos e o roteamento baseado em custos (na sua maioria, ETX). <br /><b>0</"
+"b> = não use a qualidade do enlace<br /><b>2</b> = use a qualidade do enlace "
+"para a seleção do MPR e roteamento<br />O padrão é \"2\""
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:239
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdiface6.lua:70
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdiface.lua:70
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:245
 msgid "LinkQuality Multiplicator"
-msgstr ""
+msgstr "Multiplicador da Qualidade do Enlace"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/overview.htm:188
 msgid "Links per node (average)"
-msgstr ""
+msgstr "Enlaces por nó (média)"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/overview.htm:183
 msgid "Links total"
-msgstr ""
+msgstr "Total de enlaces"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/neighbors.htm:63
 #: applications/luci-app-olsr/luasrc/view/status-olsr/neighbors.htm:129
@@ -581,6 +642,8 @@ msgstr "Endereço IP do interface local"
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:395
 msgid "MID"
 msgstr ""
+"<abbr title=\"Multiple interface declaration,Declaração de interface múltipla"
+"\">MID</abbr>"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:310
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdiface6.lua:140
@@ -610,6 +673,9 @@ msgid ""
 "Make sure that OLSRd is running, the \"jsoninfo\" plugin is loaded, "
 "configured on port 9090 and accepts connections from \"127.0.0.1\"."
 msgstr ""
+"Certifique-se de que a extensão \"jsoninfo\" esteja carregada e o serviço "
+"OLSRd esteja rodando e configurado na porta 9090 aceitando conexões a partir "
+"de \"127.0.0.1\"."
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/routes.htm:50
 #: applications/luci-app-olsr/luasrc/view/status-olsr/routes.htm:110
@@ -633,6 +699,10 @@ msgid ""
 ">reduce LQ to 192.168.0.1 by half: 192.168.0.1 0.5<br />reduce LQ to all "
 "nodes on this interface by 20%: default 0.8"
 msgstr ""
+"Múltiplas rotas com o fator configurado aqui. Os valores permitidos estão "
+"entre 0.01 e 1.0. Ele somente é utilizado quando o nível-LQ é maior que 0. "
+"Exemplos: <br />reduzir LQ para 192.168.0.1 pela metade: 192.168.0.1 0.5<br /"
+"> reduzir LQ para todos os nós nesta interface em 20%: padrão 0.8"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:240
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdiface6.lua:71
@@ -642,15 +712,21 @@ msgid ""
 ">reduce LQ to fd91:662e:3c58::1 by half: fd91:662e:3c58::1 0.5<br />reduce "
 "LQ to all nodes on this interface by 20%: default 0.8"
 msgstr ""
+"Múltiplas rotas com o fator configurado aqui. Os valores permitidos estão "
+"entre 0.01 e 1.0. Ele somente é utilizado quando o nível-LQ é maior que 0. "
+"Exemplos: <br />reduzir LQ para 192.168.0.1 pela metade: 192.168.0.1 0.5<br /"
+"> reduzir LQ para todos os nós nesta interface em 20%: padrão 0.8"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:195
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:201
 msgid "NAT threshold"
-msgstr ""
+msgstr "Limiar do NAT"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/topology.htm:25
 msgid "NLQ"
 msgstr ""
+"<abbr title=\"Neighbor Link Quality, Qualidade do Enlace do Vizinho\">NLQ</"
+"abbr>"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/overview.htm:168
 msgid "Neighbors"
@@ -687,7 +763,7 @@ msgstr "Endereço de rede"
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:53
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:59
 msgid "Nic changes poll interval"
-msgstr ""
+msgstr "Intervalo de consulta de mudanças na placa de rede"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/overview.htm:173
 msgid "Nodes"
@@ -695,20 +771,19 @@ msgstr "Nós"
 
 #: applications/luci-app-olsr/luasrc/controller/olsr.lua:27
 msgid "OLSR"
-msgstr ""
+msgstr "OLSR"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrddisplay.lua:4
 msgid "OLSR - Display Options"
-msgstr ""
+msgstr "OLSR - Opções de Visão"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdhna.lua:8
 msgid "OLSR - HNA-Announcements"
 msgstr "OLSR - Anuncios HNA4"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdhna6.lua:7
-#, fuzzy
 msgid "OLSR - HNA6-Announcements"
-msgstr "OLSR - Anuncios HNA4"
+msgstr "OLSR - Anúncios de HNA6"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdplugins6.lua:9
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdplugins6.lua:216
@@ -726,7 +801,7 @@ msgstr "Servidor OLSR"
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdiface6.lua:14
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdiface.lua:14
 msgid "OLSR Daemon - Interface"
-msgstr ""
+msgstr "Servidor OLSR - Interface"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/neighbors.htm:117
 msgid "OLSR connections"
@@ -747,16 +822,15 @@ msgstr "Nó OLSR"
 #: applications/luci-app-olsr/luasrc/view/status-olsr/legend.htm:10
 #: applications/luci-app-olsr/luasrc/view/status-olsr/legend.htm:19
 msgid "Orange"
-msgstr ""
+msgstr "Laranja"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/overview.htm:157
 msgid "Overview"
 msgstr "Visão Geral"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/hna.htm:87
-#, fuzzy
 msgid "Overview of currently active OLSR host net announcements"
-msgstr "Resumo de anuncios activos de hosts"
+msgstr "Visão geral dos anúncios da rede de hosts OLSR atualmente ativos"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/neighbors.htm:122
 msgid "Overview of currently established OLSR connections"
@@ -772,7 +846,7 @@ msgstr "Resumo das rotas conhecidas para outros nós OLSR"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/interfaces.htm:19
 msgid "Overview of interfaces where OLSR is running"
-msgstr ""
+msgstr "Visão geral das interfaces onde o OLSR está rodando"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/mid.htm:17
 msgid "Overview of known multiple interface announcements"
@@ -780,7 +854,7 @@ msgstr "Resumo de anuncios de nós com multiplos interfaces activos"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/smartgw.htm:104
 msgid "Overview of smart gateways in this network"
-msgstr ""
+msgstr "Visão geral dos SmartGateways na rede"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdplugins6.lua:11
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdplugins.lua:11
@@ -792,12 +866,12 @@ msgstr "Configuração de Plugin"
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdplugins6.lua:240
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdplugins.lua:240
 msgid "Plugins"
-msgstr ""
+msgstr "Plugins"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:48
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:54
 msgid "Polling rate for OLSR sockets in seconds. Default is 0.05."
-msgstr ""
+msgstr "Taxa de consulta por conexões OLSR, em segundos. Padrão é 0.05."
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:47
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:53
@@ -819,11 +893,11 @@ msgstr "Prefixo"
 #: applications/luci-app-olsr/luasrc/view/status-olsr/legend.htm:11
 #: applications/luci-app-olsr/luasrc/view/status-olsr/legend.htm:20
 msgid "Red"
-msgstr ""
+msgstr "Vermelho"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrddisplay.lua:9
 msgid "Resolve"
-msgstr ""
+msgstr "Resolver"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrddisplay.lua:10
 msgid ""
@@ -831,6 +905,10 @@ msgid ""
 "if you use public IPs and have unstable DNS-Setup then those pages will load "
 "really slow. In this case disable it here."
 msgstr ""
+"Resolve os nomes dos equipamentos na página de estado. É geralmente seguro "
+"permitir isto, mas se você usa IPs públicos e tem uma configuração DNS "
+"instável, então estas páginas podem carregar de forma extremamente lenta. "
+"Neste caso, desative isto aqui."
 
 #: applications/luci-app-olsr/luasrc/controller/olsr.lua:43
 msgid "Routes"
@@ -843,7 +921,7 @@ msgstr "Interfaces OLSR secundários"
 #: applications/luci-app-olsr/luasrc/view/status-olsr/smartgw.htm:56
 #: applications/luci-app-olsr/luasrc/view/status-olsr/smartgw.htm:108
 msgid "Selected"
-msgstr ""
+msgstr "Selecionado"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:133
 msgid ""
@@ -851,6 +929,9 @@ msgid ""
 "during the uptime of olsrd. Default is 0.0.0.0, which triggers usage of the "
 "IP of the first interface."
 msgstr ""
+"Define o IP principal (ip originador) do seu roteador. Este IP nunca muda "
+"durante o funcionamento do olsrd. O padrão é 0.0.0.0, que faz com que o "
+"endereço da primeira interface seja usado."
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:127
 msgid ""
@@ -858,32 +939,35 @@ msgid ""
 "during the uptime of olsrd. Default is ::, which triggers usage of the IP of "
 "the first interface."
 msgstr ""
+"Define o IP principal (ip originador) do seu roteador. Este IP nunca muda "
+"durante o funcionamento do olsrd. O padrão é 0.0.0.0, que faz com que o "
+"endereço da primeira interface seja usado."
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/common_js.htm:20
 msgid "Show IPv4"
-msgstr ""
+msgstr "Exibir IPv4"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/common_js.htm:28
 msgid "Show IPv6"
-msgstr ""
+msgstr "Exibir IPv6"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/legend.htm:14
 msgid "Signal Noise Ratio in dB"
-msgstr ""
+msgstr "Relação do ruído do sinal em dB"
 
 #: applications/luci-app-olsr/luasrc/controller/olsr.lua:64
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:44
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:44
 msgid "SmartGW"
-msgstr ""
+msgstr "SmartGW"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/smartgw.htm:97
 msgid "SmartGW announcements"
-msgstr ""
+msgstr "Anúncios do SmartGW"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/smartgw.htm:150
 msgid "SmartGateway is not configured on this system."
-msgstr ""
+msgstr "SmartGateway não está configurado no seu sistema."
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/interfaces.htm:28
 msgid "Source address"
@@ -895,6 +979,9 @@ msgid ""
 "Specifies the speed of the uplink in kilobits/s. First parameter is "
 "upstream, second parameter is downstream. Default is \"128 1024\"."
 msgstr ""
+"Especifica a velocidade do enlace superior (uplink) em kilobits/s. O "
+"primeiro parâmetro é a taxa de envio (upstream) e o segundo parâmetro é a "
+"taxa de recebimento (downstream). O padrão é \"128 1024\"."
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:170
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:176
@@ -907,24 +994,24 @@ msgstr "Estado"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/legend.htm:19
 msgid "Still usable (20 > SNR > 5)"
-msgstr ""
+msgstr "Ainda utilizável (20 > SNR > 5)"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/legend.htm:10
 msgid "Still usable (4 < ETX < 10)"
-msgstr ""
+msgstr "Ainda utilizável (4 > ETX > 10)"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/legend.htm:3
 msgid "Success rate of packages received from the neighbour"
-msgstr ""
+msgstr "Taxa de sucesso de pacotes recebidos de vizinhos"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/legend.htm:4
 msgid "Success rate of packages sent to the neighbour"
-msgstr ""
+msgstr "Taxa de sucesso de pacotes enviados a vizinhos"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:369
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:388
 msgid "TC"
-msgstr ""
+msgstr "<abbr title=\"Topology Control, Controle de Topologia\">TC</abbr>"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:298
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdiface6.lua:128
@@ -943,7 +1030,7 @@ msgstr "Validade de TC"
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:59
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:65
 msgid "TOS value"
-msgstr ""
+msgstr "Valor do TOS"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:13
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdiface6.lua:15
@@ -956,6 +1043,11 @@ msgid ""
 "device. Visit <a href='http://www.olsr.org'>olsrd.org</a> for help and "
 "documentation."
 msgstr ""
+"O servidor OLSR é uma implementação do protoloco de Roteamento de Estado de "
+"Enlace Otimizado. Como tal, ele permite o roteamento em malha para qualquer "
+"equipamento de rede. Ele roda sobre qualquer placa de rede sem fio que "
+"suporte o modo ad-hoc e, é claro, em qualquer aparelho ethernet. Visite <a "
+"href='http://www.olsr.org'>olsrd.org</a> para ajuda e documentação."
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:188
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:194
@@ -963,11 +1055,14 @@ msgid ""
 "The fixed willingness to use. If not set willingness will be calculated "
 "dynamically based on battery/power status. Default is \"3\"."
 msgstr ""
+"A disponibilidade fixa para ser usada. Se a disponibilidade não for "
+"definida, ela será dinamicamente calculada baseada no estado da energia/"
+"bateria, O padrão é \"3\"."
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdiface6.lua:45
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdiface.lua:45
 msgid "The interface OLSRd should serve."
-msgstr ""
+msgstr "A interface onde o OLSRd deve servir."
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:121
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:127
@@ -975,6 +1070,8 @@ msgid ""
 "The port OLSR uses. This should usually stay at the IANA assigned port 698. "
 "It can have a value between 1 and 65535."
 msgstr ""
+"A porta que o OLSR usa. Isto geralmente deve ficar na porta 698, designada "
+"pela IANA. Pode ter qualquer valor entre 1 e 65535."
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:178
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:184
@@ -984,13 +1081,17 @@ msgid ""
 "the IPv6 gateway without any kind of address translation. The maximum prefix "
 "length is 64 bits. Default is \"::/0\" (no prefix)."
 msgstr ""
+"Isto pode ser usado para sinalizar o prefixo IPv6 externo do enlace superior "
+"(uplink) para os clientes. Isto pode permitir que um cliente mude o endereço "
+"IPv6 local para usar o roteador IPv6 sem qualquer tradução de endereços. O "
+"tamanho máximo do prefixo é 64 bits. O padrão é \"::/0\" (nenhum prefixo)."
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:218
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdiface6.lua:33
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdiface.lua:33
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:224
 msgid "Timing and Validity"
-msgstr ""
+msgstr "Temporização e Validade"
 
 #: applications/luci-app-olsr/luasrc/controller/olsr.lua:48
 msgid "Topology"
@@ -1002,6 +1103,8 @@ msgid ""
 "Type of service value for the IP header of control traffic. Default is "
 "\"16\"."
 msgstr ""
+"Valor do tipo de serviço para o cabeçalho IP para controle de tráfego. O "
+"padrao é \"16\"."
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/error_olsr.htm:9
 msgid "Unable to connect to the OLSR daemon!"
@@ -1025,7 +1128,7 @@ msgstr "Usar histerese"
 #: applications/luci-app-olsr/luasrc/view/status-olsr/hna.htm:41
 #: applications/luci-app-olsr/luasrc/view/status-olsr/hna.htm:92
 msgid "Validity Time"
-msgstr ""
+msgstr "Tempo de validade"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/overview.htm:200
 msgid "Version"
@@ -1033,11 +1136,11 @@ msgstr "Versão"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/legend.htm:8
 msgid "Very good (ETX < 2)"
-msgstr ""
+msgstr "Muito bom (ETX < 2)"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/legend.htm:17
 msgid "Very good (SNR > 30)"
-msgstr ""
+msgstr "Muito bom (SNR > 30)"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/interfaces.htm:27
 msgid "WLAN"
@@ -1049,13 +1152,15 @@ msgid ""
 "Warning: kmod-ipip is not installed. Without kmod-ipip SmartGateway will not "
 "work, please install it."
 msgstr ""
+"Atenção: o kmod-ipip não está instalado. Sem o kmod-ipip, o SmartGateway não "
+"irá funcionar. Por favor, instale-o."
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:229
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdiface6.lua:60
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdiface.lua:60
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:235
 msgid "Weight"
-msgstr ""
+msgstr "Peso"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:230
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdiface6.lua:61
@@ -1070,6 +1175,14 @@ msgid ""
 "0. For any other value of LinkQualityLevel, the interface ETX value is used "
 "instead."
 msgstr ""
+"Quando múltiplos enlaces existirem entre dois equipamentos, o peso da "
+"interface é usado para determinar o enlace usado. Normalmente, o peso é "
+"automaticamente calculado pelo olsrd baseado nas características da "
+"interface, mas aqui você pode especificar um valor fixo. Olsrd escolherá "
+"enlaces com o valor mais baixo.<br /><b>Nota:</b> O peso da interface é "
+"usado somente quando o nível de qualidade do enlace está definido como 0. "
+"Para qualquer outro valor do nível de qualidade do enlace, o valor ETX da "
+"interface é usado."
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:155
 msgid ""
@@ -1077,6 +1190,10 @@ msgid ""
 "detected by looking for a local HNA of 0.0.0.0/0, ::ffff:0:0/96 or 2000::/3. "
 "Default setting is \"both\"."
 msgstr ""
+"Que tipo de enlace superior (uplink) é exportado para outros nós da rede em "
+"malha. Um enlace superior é detectado buscando por uma <abbr title=\"Host "
+"and network association, Associação de equipamentos e redes\">HNA</abbr> "
+"local de 0.0.0.0/0, ::ffff:0:0/96 ou 2000::/3. O padrão é \"ambos\"."
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:149
 msgid ""
@@ -1084,6 +1201,10 @@ msgid ""
 "detected by looking for a local HNA6 ::ffff:0:0/96 or 2000::/3. Default "
 "setting is \"both\"."
 msgstr ""
+"Que tipo de enlace superior (uplink) é exportado para outros nós da rede em "
+"malha. Um enlace superior é detectado buscando por uma <abbr title=\"Host "
+"and network association, Associação de equipamentos e redes\">HNA</abbr> "
+"local de 0.0.0.0/0, ::ffff:0:0/96 ou 2000::/3. O padrão é \"ambos\"."
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:187
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:193
@@ -1093,16 +1214,16 @@ msgstr "Disponibilidade"
 #: applications/luci-app-olsr/luasrc/view/status-olsr/legend.htm:9
 #: applications/luci-app-olsr/luasrc/view/status-olsr/legend.htm:18
 msgid "Yellow"
-msgstr ""
+msgstr "Amarelo"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/interfaces.htm:38
 msgid "down"
-msgstr ""
+msgstr "para baixo"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/smartgw.htm:30
 #: applications/luci-app-olsr/luasrc/view/status-olsr/smartgw.htm:134
 msgid "infinate"
-msgstr ""
+msgstr "infinito"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/interfaces.htm:40
 #: applications/luci-app-olsr/luasrc/view/status-olsr/smartgw.htm:29
@@ -1116,7 +1237,7 @@ msgstr "não"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/interfaces.htm:38
 msgid "up"
-msgstr ""
+msgstr "para cima"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/interfaces.htm:40
 #: applications/luci-app-olsr/luasrc/view/status-olsr/smartgw.htm:29
@@ -1127,14 +1248,3 @@ msgstr ""
 #: applications/luci-app-olsr/luasrc/view/status-olsr/smartgw.htm:139
 msgid "yes"
 msgstr "sim"
-
-#~ msgid "Status"
-#~ msgstr "Estado"
-
-#~ msgid ""
-#~ "Make sure that OLSRd is running, the \"txtinfo\" plugin is loaded, "
-#~ "configured on port 2006 and accepts connections from \"127.0.0.1\"."
-#~ msgstr ""
-#~ "Certifique-se que o processo olsrd está em execução, que o plugin "
-#~ "\"txtinfo\" está carregado e configurado para a porta 2006 e que aceita "
-#~ "ligações a partir de \"127.0.0.1\"."
