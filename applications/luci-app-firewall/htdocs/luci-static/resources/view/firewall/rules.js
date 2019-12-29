@@ -349,12 +349,18 @@ return L.view.extend({
 		o.value('Thu', _('Thursday'));
 		o.value('Fri', _('Friday'));
 		o.value('Sat', _('Saturday'));
+		o.write = function(section_id, value) {
+			return this.super('write', [ section_id, L.toArray(value).join(' ') ]);
+		};
 
 		o = s.taboption('timed', form.MultiValue, 'monthdays', _('Month Days'));
 		o.modalonly = true;
 		o.multiple = true;
 		o.display_size = 15;
 		o.placeholder = _('Any day');
+		o.write = function(section_id, value) {
+			return this.super('write', [ section_id, L.toArray(value).join(' ') ]);
+		};
 		for (var i = 1; i <= 31; i++)
 			o.value(i);
 
