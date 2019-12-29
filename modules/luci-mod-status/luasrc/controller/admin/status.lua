@@ -11,7 +11,7 @@ function index()
 
 	entry({"admin", "status", "iptables"}, view("status/iptables"), _("Firewall"), 2).leaf = true
 
-	entry({"admin", "status", "routes"}, template("admin_status/routes"), _("Routes"), 3)
+	entry({"admin", "status", "routes"}, view("status/routes"), _("Routes"), 3)
 	entry({"admin", "status", "syslog"}, view("status/syslog"), _("System Log"), 4)
 	entry({"admin", "status", "dmesg"}, view("status/dmesg"), _("Kernel Log"), 5)
 	entry({"admin", "status", "processes"}, view("status/processes"), _("Processes"), 6)
