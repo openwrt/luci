@@ -917,6 +917,33 @@ var UIDropdown = UIElement.extend({
 		}
 	},
 
+	createChoiceElement: function(sb, value, label) {
+		var tpl = sb.querySelector(this.options.create_template),
+		    markup = null;
+
+		if (tpl)
+			markup = (tpl.textContent || tpl.innerHTML || tpl.firstChild.data).replace(/^<!--|-->$/, '').trim();
+		else
+			markup = '<li data-value="{{value}}"><span data-label-placeholder="true" /></li>';
+
+		var new_item = E(markup.replace(/{{value}}/g, '%h'.format(value))),
+		    placeholder = new_item.querySelector('[data-label-placeholder]');
+
+		if (placeholder) {
+			var content = E('span', {}, label || this.choices[value] || [ value ]);
+
+			while (content.firstChild)
+				placeholder.parentNode.insertBefore(content.firstChild, placeholder);
+
+			placeholder.parentNode.removeChild(placeholder);
+		}
+
+		if (this.options.multiple)
+			this.transformItem(sb, new_item);
+
+		return new_item;
+	},
+
 	createItems: function(sb, value) {
 		var sbox = this,
 		    val = (value || '').trim(),
@@ -936,20 +963,9 @@ var UIDropdown = UIElement.extend({
 			});
 
 			if (!new_item) {
-				var markup,
-				    tpl = sb.querySelector(sbox.options.create_template);
+				new_item = sbox.createChoiceElement(sb, item);
 
-				if (tpl)
-					markup = (tpl.textContent || tpl.innerHTML || tpl.firstChild.data).replace(/^<!--|-->$/, '').trim();
-				else
-					markup = '<li data-value="{{value}}">{{value}}</li>';
-
-				new_item = E(markup.replace(/{{value}}/g, '%h'.format(item)));
-
-				if (sbox.options.multiple) {
-					sbox.transformItem(sb, new_item);
-				}
-				else {
+				if (!sbox.options.multiple) {
 					var old = ul.querySelector('li[created]');
 					if (old)
 						ul.removeChild(old);
@@ -963,6 +979,54 @@ var UIDropdown = UIElement.extend({
 			sbox.toggleItem(sb, new_item, true);
 			sbox.setFocus(sb, new_item, true);
 		});
+	},
+
+	clearChoices: function(reset_value) {
+		var ul = this.node.querySelector('ul'),
+		    lis = ul ? ul.querySelectorAll('li[data-value]') : [],
+		    len = lis.length - (this.options.create ? 1 : 0),
+		    val = reset_value ? null : this.getValue();
+
+		for (var i = 0; i < len; i++) {
+			var lival = lis[i].getAttribute('data-value');
+			if (val == null ||
+				(!this.options.multiple && val != lival) ||
+				(this.options.multiple && val.indexOf(lival) == -1))
+				ul.removeChild(lis[i]);
+		}
+
+		if (reset_value)
+			this.setValues(this.node, {});
+	},
+
+	addChoices: function(values, labels) {
+		var sb = this.node,
+		    ul = sb.querySelector('ul'),
+		    lis = ul ? ul.querySelectorAll('li[data-value]') : [];
+
+		if (!Array.isArray(values))
+			values = L.toArray(values);
+
+		if (!L.isObject(labels))
+			labels = {};
+
+		for (var i = 0; i < values.length; i++) {
+			var found = false;
+
+			for (var j = 0; j < lis.length; j++) {
+				if (lis[j].getAttribute('data-value') === values[i]) {
+					found = true;
+					break;
+				}
+			}
+
+			if (found)
+				continue;
+
+			ul.insertBefore(
+				this.createChoiceElement(sb, values[i], labels[values[i]]),
+				ul.lastElementChild);
+		}
 	},
 
 	closeAllDropdowns: function() {
