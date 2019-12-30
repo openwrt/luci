@@ -41,15 +41,15 @@ msgstr "<var>%s</var> i ograniczone do %s"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:293
 msgid "Accept forward"
-msgstr ""
+msgstr "Zaakceptuj przekierowanie"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:303
 msgid "Accept input"
-msgstr ""
+msgstr "Zaakceptuj wejście"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:283
 msgid "Accept output"
-msgstr ""
+msgstr "Zaakceptuj wyjście"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:183
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:328
@@ -62,12 +62,18 @@ msgid ""
 "traffic, e.g. <code>-p tcp --dport 443</code> to only match outbound HTTPS "
 "traffic."
 msgstr ""
+"Dodatkowe surowe <em>iptables</em> argumenty do klasyfikacji ruchu w strefie "
+"docelowej, np. <code>-p tcp --dport 443</code> tylko w celu dopasowania "
+"ruchu wychodzącego HTTPS."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:236
 msgid ""
 "Additional raw <em>iptables</em> arguments to classify zone source traffic, "
 "e.g. <code>-p tcp --sport 443</code> to only match inbound HTTPS traffic."
 msgstr ""
+"Dodatkowe surowe <em>iptables</em> argumenty do klasyfikacji ruchu w strefie "
+"docelowej, np. <code>-p tcp --sport 443</code> tylko w celu dopasowania "
+"ruchu przychodzącego HTTPS."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:101
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:137
@@ -77,7 +83,7 @@ msgstr "Ustawienia zaawansowane"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:208
 msgid "Allow \"invalid\" traffic"
-msgstr ""
+msgstr "Zezwój na \"nieprawidłowy\" ruch"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:308
 msgid "Allow forward from <em>source zones</em>:"
@@ -94,32 +100,34 @@ msgstr "Każdy"
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:344
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:357
 msgid "Any day"
-msgstr ""
+msgstr "Każdy dzień"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:211
 msgid "Automatic helper assignment"
-msgstr ""
+msgstr "Automatyczne przydzielanie pomocy"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:211
 msgid ""
 "Automatically assign conntrack helpers based on traffic protocol and port"
 msgstr ""
+"Automatycznie przydzielaj pomocników conntrack'a na podstawie protokołu "
+"ruchu i portu"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:79
 msgid "Conntrack Settings"
-msgstr ""
+msgstr "Ustawienia conntrack"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:215
 msgid "Conntrack helpers"
-msgstr ""
+msgstr "Pomocnicy Conntrack'a"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/custom.js:15
 msgid "Contents have been saved."
-msgstr ""
+msgstr "Zawartość została zapisana."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:178
 msgid "Covered devices"
-msgstr ""
+msgstr "Zakryte urządzenia"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:137
 msgid "Covered networks"
@@ -127,7 +135,7 @@ msgstr "Objęte sieci"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:183
 msgid "Covered subnets"
-msgstr ""
+msgstr "Objęte podsieci"
 
 #: applications/luci-app-firewall/luasrc/controller/firewall.lua:18
 msgid "Custom Rules"
@@ -157,33 +165,36 @@ msgstr "Strefa docelowa"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:299
 msgid "Discard forward"
-msgstr ""
+msgstr "Odrzuć przekierowanie"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:309
 msgid "Discard input"
-msgstr ""
+msgstr "Odrzuć wejście"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:289
 msgid "Discard output"
-msgstr ""
+msgstr "Odrzuć wyjście"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:208
 msgid ""
 "Do not install extra rules to reject forwarded traffic with conntrack state "
 "<em>invalid</em>. This may be required for complex asymmetric route setups."
 msgstr ""
+"Nie instaluj dodatkowych reguł odrzucania ruchu przekierowanego z conntrack "
+"state <em>invalid</em>. Może to być wymagane w przypadku skomplikowanych "
+"asymetrycznych ustawień trasy."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:297
 msgid "Do not track forward"
-msgstr ""
+msgstr "Nie śledź przekazywania"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:307
 msgid "Do not track input"
-msgstr ""
+msgstr "Nie śledź wejścia"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:287
 msgid "Do not track output"
-msgstr ""
+msgstr "Nie śledź wyjścia"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:36
 msgid "Drop invalid packets"
@@ -208,11 +219,12 @@ msgstr "Włącz logowanie na tej strefy"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:54
 msgid "Experimental feature. Not fully compatible with QoS/SQM."
-msgstr ""
+msgstr "Funkcja eksperymentalna. Nie w pełni kompatybilna z QoS/SQM."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:215
 msgid "Explicitly choses allowed connection tracking helpers for zone traffic"
 msgstr ""
+"Dokładnie wybiera dozwolone pomoce śledzenia połączeń dla ruchu strefowego"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:210
 msgid "External IP address"
@@ -229,15 +241,15 @@ msgstr "Dodatkowe argumenty"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:246
 msgid "Extra destination arguments"
-msgstr ""
+msgstr "Dodatkowe argumenty przeznaczenia"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:80
 msgid "Extra iptables arguments"
-msgstr ""
+msgstr "Dodatkowe argumenty tablicy IP"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:236
 msgid "Extra source arguments"
-msgstr ""
+msgstr "Dodatkowe argumenty zródłowe"
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Generated from applications/luci-fw/luasrc/model/cbi/luci_fw/zones.lua      #
@@ -273,7 +285,7 @@ msgstr "Przekazuj do"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:350
 msgid "Friday"
-msgstr ""
+msgstr "Piątek"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:62
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:64
@@ -292,15 +304,15 @@ msgstr "Z %s w %s ze źródłem %s i %s"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:75
 msgid "From %s on <var>this device</var>"
-msgstr ""
+msgstr "Z %s na <var>to urządzenie</var>"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:73
 msgid "From %s on <var>this device</var> with source %s"
-msgstr ""
+msgstr "Z %s na <var>to urządzenie</var> ze źródłem %s"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:71
 msgid "From %s on <var>this device</var> with source %s and %s"
-msgstr ""
+msgstr "Z %s na <var>to urządzenie</var> ze źródłem %s oraz %s"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:100
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:136
@@ -312,19 +324,19 @@ msgstr "Ustawienia ogólne"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:65
 msgid "Hardware flow offloading"
-msgstr ""
+msgstr "Sprzętowy flow offloading"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:157
 msgid "IP"
-msgstr ""
+msgstr "IP"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:167
 msgid "IP range"
-msgstr ""
+msgstr "Zakres IP"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:175
 msgid "IPs"
-msgstr ""
+msgstr "IPs"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:216
 msgid "IPv4"
@@ -373,11 +385,11 @@ msgstr "Ograniczenie logowania"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:96
 msgid "MAC"
-msgstr ""
+msgstr "MAC"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:104
 msgid "MACs"
-msgstr ""
+msgstr "MACs"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:134
 msgid "MSS clamping"
@@ -406,11 +418,11 @@ msgstr ""
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:346
 msgid "Monday"
-msgstr ""
+msgstr "Poniedziałek"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:353
 msgid "Month Days"
-msgstr ""
+msgstr "Dni miesiąca"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:121
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:169
@@ -421,7 +433,7 @@ msgstr "Nazwa"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:169
 msgid "Network"
-msgstr ""
+msgstr "Sieć"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:211
 msgid "Only match incoming traffic directed at the given IP address."
@@ -462,6 +474,12 @@ msgid ""
 "invalid values could render the firewall ruleset broken, completely exposing "
 "all services."
 msgstr ""
+"Przekazywanie surowych argumentów iptables do reguł klasyfikacji ruchu "
+"źródłowego i docelowego pozwala na dopasowanie pakietów w oparciu o inne "
+"kryteria niż interfejsy lub podsieci. Opcje te powinny być używane ze "
+"szczególną ostrożnością, ponieważ nieprawidłowe wartości mogą spowodować "
+"złamanie zestawu reguł zapory sieciowej, całkowicie odsłaniając wszystkie "
+"usługi."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:95
 #: applications/luci-app-firewall/luasrc/controller/firewall.lua:12
@@ -494,19 +512,19 @@ msgstr "Przekieruj ruch przychodzący do wskazanego hosta w sieci wewnętrznej"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:295
 msgid "Refuse forward"
-msgstr ""
+msgstr "Odmowa przekierowania"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:305
 msgid "Refuse input"
-msgstr ""
+msgstr "Odmowa wejścia"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:285
 msgid "Refuse output"
-msgstr ""
+msgstr "Odmowa wyjścia"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:66
 msgid "Requires hardware NAT support. Implemented at least for mt7621"
-msgstr ""
+msgstr "Wymaga sprzętowej obsługi NAT. Wdrożono dla co najmniej mt7621"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:201
 msgid "Restrict Masquerading to given destination subnets"
@@ -525,19 +543,19 @@ msgstr "Ogranicz do rodziny adresów"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:53
 msgid "Routing/NAT Offloading"
-msgstr ""
+msgstr "Routing/NAT Offloading"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:351
 msgid "Saturday"
-msgstr ""
+msgstr "Sobota"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:61
 msgid "Software based offloading for routing/NAT"
-msgstr ""
+msgstr "Oprogramowanie oparte na offloading dla routingu/NAT"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:60
 msgid "Software flow offloading"
-msgstr ""
+msgstr "Programowy flow offloading"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:186
 msgid "Source IP address"
@@ -564,23 +582,23 @@ msgstr "Strefa źródłowa"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:369
 msgid "Start Date (yyyy-mm-dd)"
-msgstr ""
+msgstr "Data rozpoczęcia (rrrr-mm-dd)"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:361
 msgid "Start Time (hh.mm.ss)"
-msgstr ""
+msgstr "Czas rozpoczęcia (hh.mm.ss)"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:373
 msgid "Stop Date (yyyy-mm-dd)"
-msgstr ""
+msgstr "Data zakończenia (yyyyy-mm-dd)"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:365
 msgid "Stop Time (hh.mm.ss)"
-msgstr ""
+msgstr "Czas zatrzymania (yyyyy-mm-dd)"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:345
 msgid "Sunday"
-msgstr ""
+msgstr "Niedziela"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:29
 msgid ""
@@ -608,7 +626,6 @@ msgstr ""
 "do WAN <em>nie</em> implikuje pozwolenia na przekazywanie z sieci WAN do LAN."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:89
-#, fuzzy
 msgid ""
 "This section defines common properties of %q. The <em>input</em> and "
 "<em>output</em> options set the default policies for traffic entering and "
@@ -617,22 +634,22 @@ msgid ""
 "networks</em> specifies which available networks are members of this zone."
 msgstr ""
 "Ta sekcja definiuje ustawienia ogólne %q. Opcje <em>\"wejście\"</em> i <em>"
-"\"wyjście\"</em> określają domyślną politykę dla ruchu przychodzącego i "
+"\"wyjście\"</em> określające domyślną politykę dla ruchu przychodzącego i "
 "wychodzącego w tej strefie, podczas gdy <em>\"przekazywanie\"</em> opisuje "
 "politykę ruchu przekazywanego pomiędzy różnymi sieciami wewnątrz strefy. "
 "<em>Objęte sieci</em> określają dostępne sieci będące członkami tej strefy."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:349
 msgid "Thursday"
-msgstr ""
+msgstr "Czwartek"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:138
 msgid "Time Restrictions"
-msgstr ""
+msgstr "Ograniczenia czasowe"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:377
 msgid "Time in UTC"
-msgstr ""
+msgstr "Czas w UTC"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:96
 msgid "To %s at %s on <var>this device</var>"
@@ -667,37 +684,41 @@ msgstr ""
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:347
 msgid "Tuesday"
-msgstr ""
+msgstr "Wtorek"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/custom.js:18
 msgid "Unable to save contents: %s"
-msgstr ""
+msgstr "Nie można zapisać zawartości: %s"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:108
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:122
 msgid "Unnamed forward"
-msgstr ""
+msgstr "Bez nazwy"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:145
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:170
 msgid "Unnamed rule"
-msgstr ""
+msgstr "Nieznana zasada"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:94
 msgid "Unnamed zone"
-msgstr ""
+msgstr "Strefa bez nazwy"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:178
 msgid ""
 "Use this option to classify zone traffic by raw, non-<em>uci</em> managed "
 "network devices."
 msgstr ""
+"Opcja ta służy do klasyfikacji ruchu strefowego według surowych, nie-"
+"<em>uci</em> obsługiwanych urządzeń sieciowych."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:183
 msgid ""
 "Use this option to classify zone traffic by source or destination subnet "
 "instead of networks or devices."
 msgstr ""
+"Opcji tej należy używać do klasyfikacji ruchu strefowego według źródła lub "
+"podsieci docelowej zamiast sieci lub urządzeń."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:72
 msgid "Via %s"
@@ -709,11 +730,11 @@ msgstr "Przez %s w %s"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:348
 msgid "Wednesday"
-msgstr ""
+msgstr "Środa"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:340
 msgid "Week Days"
-msgstr ""
+msgstr "Dni tygodnia"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:107
 msgid "Zone ⇒ Forwardings"
@@ -764,7 +785,7 @@ msgstr "dowolna strefa"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:267
 msgid "day"
-msgstr ""
+msgstr "Dzień"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:334
 msgid "don't track"
@@ -778,24 +799,24 @@ msgstr "porzucaj"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:265
 msgid "hour"
-msgstr ""
+msgstr "godzina"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:263
 msgid "minute"
-msgstr ""
+msgstr "minuta"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:86
 msgid "not"
-msgstr ""
+msgstr "Nie"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:121
 msgid "port"
-msgstr ""
+msgstr "port"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:131
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:140
 msgid "ports"
-msgstr ""
+msgstr "porty"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:333
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:45
@@ -805,148 +826,18 @@ msgstr "odrzucaj"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:261
 msgid "second"
-msgstr ""
+msgstr "sekunda"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:88
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:173
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:262
 msgid "this new zone"
-msgstr ""
+msgstr "ta nowa strefa"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:197
 msgid "type"
-msgstr ""
+msgstr "typ"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:209
 msgid "types"
-msgstr ""
-
-#~ msgid "Force connection tracking"
-#~ msgstr "Wymuś śledzenie połączeń"
-
-#~ msgid "Add"
-#~ msgstr "Dodaj"
-
-#~ msgid "Add and edit..."
-#~ msgstr "Dodaj i edytuj..."
-
-#~ msgid "Do not rewrite"
-#~ msgstr "Nie przepisuj"
-
-#~ msgid "External zone"
-#~ msgstr "Strefa zewnętrzna"
-
-#~ msgid "New SNAT rule"
-#~ msgstr "Nowa reguła SNAT"
-
-#~ msgid "New forward rule"
-#~ msgstr "Nowa reguła przekazywania (forward)"
-
-#~ msgid "New input rule"
-#~ msgstr "Nowa reguła wejściowa (input)"
-
-#~ msgid "New port forward"
-#~ msgstr "Nowe przekierowanie portu"
-
-#~ msgid "New source NAT"
-#~ msgstr "Nowy NAT źródłowy"
-
-#~ msgid "Open ports on router"
-#~ msgstr "Otwarte porty na routerze"
-
-#~ msgid "Other..."
-#~ msgstr "Inne..."
-
-#~ msgid "To source IP"
-#~ msgstr "Do źródłowego IP"
-
-#~ msgid "To source port"
-#~ msgstr "Do źródłowego portu"
-
-#~ msgid "(Unnamed Entry)"
-#~ msgstr "(Nienazwany wpis)"
-
-#~ msgid "(Unnamed Rule)"
-#~ msgstr "(Nienazwana reguła)"
-
-#~ msgid "(Unnamed SNAT)"
-#~ msgstr "(Nienazwany SNAT)"
-
-#~ msgid "Destination IP address"
-#~ msgstr "Docelowy adres IP"
-
-#~ msgid "Inter-Zone Forwarding"
-#~ msgstr "Przekazywanie pomiędzy strefami"
-
-#~ msgid "Match forwarded traffic to the given destination port or port range."
-#~ msgstr ""
-#~ "Dopasuj przekazywany ruch do danego docelowego portu lub zakresu portów"
-
-#~ msgid ""
-#~ "Match incoming traffic originating from the given source port or port "
-#~ "range on the client host."
-#~ msgstr ""
-#~ "Dopasuj przychodzący ruch pochodzący z danego portu źródłowego lub "
-#~ "zakresu portów na hoście klienta."
-
-# Dosłownie przetłumaczone, nie bardzo wiem czy chodzi o czynność przepisywania pakietu przez usługę czy to jakieś ogólne sformułowanie...
-#~ msgid "Rewrite matched traffic to the given address."
-#~ msgstr "Przepisz dopasowany ruch do wskazanych adresów."
-
-# Jak wyżej chodzi o przepisanie pakietu przez usługę?
-#~ msgid ""
-#~ "Rewrite matched traffic to the given source port. May be left empty to "
-#~ "only rewrite the IP address."
-#~ msgstr ""
-#~ "Przepisz dopasowany ruch do danego portu źródłowego. Można zostawić puste "
-#~ "aby przepisać tylko adres IP"
-
-#~ msgid "Rewrite to source %s"
-#~ msgstr "Przepisz do źródła %s"
-
-#~ msgid "Rewrite to source %s, %s"
-#~ msgstr "Przepisz do źródła %s, %s"
-
-#~ msgid "SNAT IP address"
-#~ msgstr "Adres IP SNAT"
-
-#~ msgid "SNAT port"
-#~ msgstr "Port SNAT"
-
-#~ msgid "Source NAT"
-#~ msgstr "NAT źródłowy"
-
-# http://www.digipedia.pl/def/doc/id/677604507/name/SNAT/
-#~ msgid ""
-#~ "Source NAT is a specific form of masquerading which allows fine grained "
-#~ "control over the source IP used for outgoing traffic, for example to map "
-#~ "multiple WAN addresses to internal subnets."
-#~ msgstr ""
-#~ "SNAT używany jest wtedy, gdy zmieniane są adresy pakietów połączenia "
-#~ "wychodzącego, czyli pakiety źródłowe. Wykonywany jest zawsze po "
-#~ "routowaniu (POSTROUTING), a więc w chwili, gdy pakiety są gotowe opuścić "
-#~ "host. IPmasquerading jest formą SNAT."
-
-#~ msgid ""
-#~ "This page allows you to change advanced properties of the port forwarding "
-#~ "entry. In most cases there is no need to modify those settings."
-#~ msgstr ""
-#~ "Ta strona pozwala zmienić zaawansowane ustawienia przekierowania portów. "
-#~ "W większości przypadków nie ma potrzeby zmieniać tych ustawień."
-
-#~ msgid ""
-#~ "This page allows you to change advanced properties of the traffic rule "
-#~ "entry, such as matched source and destination hosts."
-#~ msgstr ""
-#~ "Ta strona pozwala zmienić zaawansowane ustawienia reguły ruchu "
-#~ "sieciowego, takie jak pasujące źródło i hosty docelowe."
-
-#~ msgid ""
-#~ "You may specify multiple by selecting \"-- custom --\" and then entering "
-#~ "protocols separated by space."
-#~ msgstr ""
-#~ "Możesz określić kilka wybierając \"-- własne --\" i wpisując protokoły "
-#~ "rozdzielone spacją."
-
-#~ msgid "Zone %q"
-#~ msgstr "Strefa %q"
+msgstr "typy"

@@ -17,19 +17,19 @@ msgstr "Pokročilé nastavení"
 
 #: applications/luci-app-minidlna/luasrc/model/cbi/minidlna.lua:136
 msgid "Album art names"
-msgstr ""
+msgstr "Názvy obrázků alb"
 
 #: applications/luci-app-minidlna/luasrc/model/cbi/minidlna.lua:94
 msgid "Allow wide links"
-msgstr ""
+msgstr "Povolit široké odkazy"
 
 #: applications/luci-app-minidlna/luasrc/model/cbi/minidlna.lua:115
 msgid "Announced model number"
-msgstr ""
+msgstr "Oznámené číslo modelu"
 
 #: applications/luci-app-minidlna/luasrc/model/cbi/minidlna.lua:111
 msgid "Announced serial number"
-msgstr ""
+msgstr "Oznámené sériové číslo"
 
 #: applications/luci-app-minidlna/luasrc/model/cbi/minidlna.lua:126
 msgid "Browse directory"
@@ -88,6 +88,7 @@ msgid ""
 "Model number the miniDLNA daemon will report to clients in its XML "
 "description."
 msgstr ""
+"Modelové číslo, které miniDLNA démon bude hlásit klientům v svém XML popisu."
 
 #: applications/luci-app-minidlna/luasrc/model/cbi/minidlna.lua:127
 msgid "Music"
@@ -95,7 +96,7 @@ msgstr "Hudba"
 
 #: applications/luci-app-minidlna/luasrc/model/cbi/minidlna.lua:44
 msgid "Network interfaces to serve."
-msgstr ""
+msgstr "Síťová rozhraní k obsluze."
 
 #: applications/luci-app-minidlna/luasrc/model/cbi/minidlna.lua:106
 msgid "Notify interval"
@@ -130,39 +131,52 @@ msgid ""
 "Serial number the miniDLNA daemon will report to clients in its XML "
 "description."
 msgstr ""
+"Sériové číslo, které bude miniDLNA démon hlásit klientům ve svém XML popisu."
 
 #: applications/luci-app-minidlna/luasrc/model/cbi/minidlna.lua:73
 msgid ""
 "Set this if you want to customize the name that shows up on your clients."
 msgstr ""
+"Toto nastavte, pokud chcete přizpůsobit název, který se zobrazuje na "
+"klientech."
 
 #: applications/luci-app-minidlna/luasrc/model/cbi/minidlna.lua:78
 msgid ""
 "Set this if you would like to specify the directory where you want MiniDLNA "
 "to store its database and album art cache."
 msgstr ""
+"Nastavte tuto hodnotu, chcete-li určit adresář, do kterého má MiniDLNA "
+"ukládat svou databázi a mezipaměť obrázků alb."
 
 #: applications/luci-app-minidlna/luasrc/model/cbi/minidlna.lua:83
 msgid ""
 "Set this if you would like to specify the directory where you want MiniDLNA "
 "to store its log file."
 msgstr ""
+"Nastavte tuto hodnotu, chcete-li určit adresář, do kterého má MiniDLNA "
+"ukládat svůj soubor protokolu."
 
 #: applications/luci-app-minidlna/luasrc/model/cbi/minidlna.lua:95
 msgid ""
 "Set this to allow serving content outside the media root (via symlinks)."
 msgstr ""
+"Nastavením této možnosti povolíte poskytování obsahu mimo kořenový adresář s "
+"multimédii (prostřednictvím symbolických odkazů)."
 
 #: applications/luci-app-minidlna/luasrc/model/cbi/minidlna.lua:88
 msgid ""
 "Set this to enable inotify monitoring to automatically discover new files."
 msgstr ""
+"Nastavením této možnosti povolíte automatické objevování nových souborů "
+"pomocí funkce inotify."
 
 #: applications/luci-app-minidlna/luasrc/model/cbi/minidlna.lua:91
 msgid ""
 "Set this to enable support for streaming .jpg and .mp3 files to a TiVo "
 "supporting HMO."
 msgstr ""
+"Nastavte tuto možnost, chcete-li povolit podporu streamování souborů JPG a "
+"MP3 do TiVo s podporou Home Media Option (HMO)."
 
 #: applications/luci-app-minidlna/luasrc/model/cbi/minidlna.lua:99
 msgid ""
@@ -170,6 +184,9 @@ msgid ""
 "downscaling of very large JPEG images, which may hurt JPEG serving "
 "performance on (at least) Sony DLNA products."
 msgstr ""
+"Tuto funkci povolte, chcete-li, aby byly důsledně dodržovány standardy DLNA. "
+"To umožní serveru snížit rozlišení velkých JPEG obrázků, což ale může snížit "
+"výkon poskytování JPEG u (nejen) produktů Sony DLNA."
 
 #: applications/luci-app-minidlna/luasrc/model/cbi/minidlna.lua:133
 msgid ""
@@ -178,10 +195,14 @@ msgid ""
 "audio, 'V' for video, 'P' for images), followed by a comma, to the directory "
 "(eg. A,/mnt/media/Music). Multiple directories can be specified."
 msgstr ""
+"Nastavte adresář, který chcete skenovat. Chcete-li omezit adresář na určitý "
+"typ obsahu, můžete mu předřadit typ ('A' pro zvuk, 'V' pro video, 'P' pro "
+"obrázky), následovaný čárkou, (např. A,/mnt/media/Music). Lze zadat více "
+"adresářů."
 
 #: applications/luci-app-minidlna/luasrc/model/cbi/minidlna.lua:120
 msgid "Specify the path to the MiniSSDPd socket."
-msgstr ""
+msgstr "Zadejte cestu k soketu MiniSSDPd."
 
 #: applications/luci-app-minidlna/luasrc/model/cbi/minidlna.lua:125
 msgid "Standard container"
@@ -206,6 +227,8 @@ msgstr "Služba miniDLNA není spuštěna."
 #: applications/luci-app-minidlna/luasrc/model/cbi/minidlna.lua:137
 msgid "This is a list of file names to check for when searching for album art."
 msgstr ""
+"Toto je seznam názvů souborů, které je budou zkontrolovány při hledání "
+"obrázků alba."
 
 #: applications/luci-app-minidlna/luasrc/model/cbi/minidlna.lua:128
 msgid "Video"
