@@ -109,6 +109,38 @@ function rule_target_txt(s) {
 		return fmt('<var>%s</var>', t);
 }
 
+function update_ip_hints(map, section_id, family, hosts) {
+	var elem_src_ip = map.lookupOption('src_ip', section_id)[0].getUIElement(section_id),
+	    elem_dst_ip = map.lookupOption('dest_ip', section_id)[0].getUIElement(section_id),
+	    choice_values = [], choice_labels = {};
+
+	elem_src_ip.clearChoices();
+	elem_dst_ip.clearChoices();
+
+	if (!family || family == 'ipv4') {
+		L.sortedKeys(hosts, 'ipv4', 'addr').forEach(function(mac) {
+			var val = hosts[mac].ipv4,
+			    txt = '%s (<strong>%s</strong>)'.format(val, hosts[mac].name || mac);
+
+			choice_values.push(val);
+			choice_labels[val] = txt;
+		});
+	}
+
+	if (!family || family == 'ipv6') {
+		L.sortedKeys(hosts, 'ipv6', 'addr').forEach(function(mac) {
+			var val = hosts[mac].ipv6,
+			    txt = '%s (<strong>%s</strong>)'.format(val, hosts[mac].name || mac);
+
+			choice_values.push(val);
+			choice_labels[val] = txt;
+		});
+	}
+
+	elem_src_ip.addChoices(choice_values, choice_labels);
+	elem_dst_ip.addChoices(choice_values, choice_labels);
+}
+
 return L.view.extend({
 	callHostHints: rpc.declare({
 		object: 'luci-rpc',
@@ -201,6 +233,10 @@ return L.view.extend({
 		o.value('', _('IPv4 and IPv6'));
 		o.value('ipv4', _('IPv4 only'));
 		o.value('ipv6', _('IPv6 only'));
+		o.validate = function(section_id, value) {
+			update_ip_hints(this.map, section_id, value, hosts);
+			return true;
+		};
 
 		o = s.taboption('general', form.Value, 'proto', _('Protocol'));
 		o.modalonly = true;
@@ -283,12 +319,7 @@ return L.view.extend({
 		o.modalonly = true;
 		o.datatype = 'list(neg(ipmask))';
 		o.placeholder = _('any');
-		L.sortedKeys(hosts, 'ipv4', 'addr').forEach(function(mac) {
-			o.value(hosts[mac].ipv4, '%s (%s)'.format(
-				hosts[mac].ipv4,
-				hosts[mac].name || mac
-			));
-		});
+		o.transformChoices = function() { return {} }; /* force combobox rendering */
 
 		o = s.taboption('general', form.Value, 'src_port', _('Source port'));
 		o.modalonly = true;
@@ -309,12 +340,7 @@ return L.view.extend({
 		o.modalonly = true;
 		o.datatype = 'list(neg(ipmask))';
 		o.placeholder = _('any');
-		L.sortedKeys(hosts, 'ipv4', 'addr').forEach(function(mac) {
-			o.value(hosts[mac].ipv4, '%s (%s)'.format(
-				hosts[mac].ipv4,
-				hosts[mac].name || mac
-			));
-		});
+		o.transformChoices = function() { return {} }; /* force combobox rendering */
 
 		o = s.taboption('general', form.Value, 'dest_port', _('Destination port'));
 		o.modalonly = true;
