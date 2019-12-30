@@ -88,7 +88,7 @@ o = s:option(Value, "maxstartdelay", translate("Maximum Start Delay"), translate
 o.optional = true
 o.datatype = "uinteger"
 
-o = s:option(Value, "maxretry", translate("Maxium Retries"), translate("Maximum number of times to try starting a driver."))
+o = s:option(Value, "maxretry", translate("Maximum Retries"), translate("Maximum number of times to try starting a driver."))
 o.optional = true
 o.placeholder = 1
 o.datatype = "uinteger"
@@ -155,7 +155,7 @@ o = s:option(Value, "maxreport", translate("Max USB HID Length Reported"), trans
 o.optional = true
 o.datatype = "uinteger"
 
-o = s:option(Value, "maxstartdelay", translate("Maxium Start Delay"), translate("Time in seconds that upsdrvctl will wait for driver to finish starting"))
+o = s:option(Value, "maxstartdelay", translate("Maximum Start Delay"), translate("Time in seconds that upsdrvctl will wait for driver to finish starting"))
 o.optional = true
 o.datatype = "uinteger"
 o.placeholder = 45
