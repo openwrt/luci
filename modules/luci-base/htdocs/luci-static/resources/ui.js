@@ -2779,6 +2779,8 @@ return L.Class.extend({
 		}, this.varargs(arguments, 2, ctx));
 	},
 
+	AbstractElement: UIElement,
+
 	/* Widgets */
 	Textfield: UITextfield,
 	Textarea: UITextarea,
