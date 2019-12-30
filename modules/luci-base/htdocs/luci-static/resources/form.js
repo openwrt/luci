@@ -765,6 +765,12 @@ var CBIAbstractValue = CBINode.extend({
 			this.ucioption || this.option);
 	},
 
+	getUIElement: function(section_id) {
+		var node = this.map.findElement('id', this.cbid(section_id)),
+		    inst = node ? L.dom.findClassInstance(node) : null;
+		return (inst instanceof ui.AbstractElement) ? inst : null;
+	},
+
 	cfgvalue: function(section_id, set_value) {
 		if (section_id == null)
 			L.error('TypeError', 'Section ID required');
@@ -778,8 +784,8 @@ var CBIAbstractValue = CBINode.extend({
 	},
 
 	formvalue: function(section_id) {
-		var node = this.map.findElement('id', this.cbid(section_id));
-		return node ? L.dom.callClassMethod(node, 'getValue') : null;
+		var elem = this.getUIElement(section_id);
+		return elem ? elem.getValue() : null;
 	},
 
 	textvalue: function(section_id) {
@@ -796,8 +802,8 @@ var CBIAbstractValue = CBINode.extend({
 	},
 
 	isValid: function(section_id) {
-		var node = this.map.findElement('id', this.cbid(section_id));
-		return node ? L.dom.callClassMethod(node, 'isValid') : true;
+		var elem = this.getUIElement(section_id);
+		return elem ? elem.isValid() : true;
 	},
 
 	isActive: function(section_id) {
@@ -817,8 +823,8 @@ var CBIAbstractValue = CBINode.extend({
 	},
 
 	triggerValidation: function(section_id) {
-		var node = this.map.findElement('id', this.cbid(section_id));
-		return node ? L.dom.callClassMethod(node, 'triggerValidation') : true;
+		var elem = this.getUIElement(section_id);
+		return elem ? elem.triggerValidation() : true;
 	},
 
 	parse: function(section_id) {
@@ -1742,9 +1748,8 @@ var CBIFlagValue = CBIValue.extend({
 	},
 
 	formvalue: function(section_id) {
-		var node = this.map.findElement('id', this.cbid(section_id)),
-		    checked = node ? L.dom.callClassMethod(node, 'isChecked') : false;
-
+		var elem = this.getUIElement(section_id),
+		    checked = elem ? elem.isChecked() : false;
 		return checked ? this.enabled : this.disabled;
 	},
 
