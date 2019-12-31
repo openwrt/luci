@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2019-12-30 18:21+0000\n"
+"PO-Revision-Date: 2020-01-01 02:21+0000\n"
 "Last-Translator: Balázs Úr <balazs@urbalazs.hu>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsolsr/hu/>\n"
@@ -36,7 +36,6 @@ msgstr "Engedélyezett átjárók NAT-tal"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:141
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:147
-#, fuzzy
 msgid "Allow the selection of an outgoing ipv4 gateway with NAT"
 msgstr ""
 "Egy NAT-tal rendelkező kimenő IPv4-átjáró kiválasztásának lehetővé tétele"
@@ -156,7 +155,6 @@ msgstr "FIB mérőszám"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:66
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:72
-#, fuzzy
 msgid ""
 "FIBMetric controls the metric value of the host-routes OLSRd sets. \"flat\" "
 "means that the metric value is always 2. This is the preferred value because "
@@ -197,7 +195,7 @@ msgstr "Általános beállítások"
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:39
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:39
 msgid "General settings"
-msgstr ""
+msgstr "Általános beállítások"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/legend.htm:9
 msgid "Good (2 < ETX < 4)"
@@ -290,22 +288,20 @@ msgid "Hostname"
 msgstr "Gépnév"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdhna.lua:8
-#, fuzzy
 msgid ""
 "Hosts in a OLSR routed network can announce connecitivity to external "
 "networks using HNA messages."
 msgstr ""
-"Egy OLSR által útválasztott hálózatban lévő gépek bejelenthetik a külső "
-"hálózatokkal való kapcsolataikat HNA üzenetek használatával."
+"Egy OLSR által forgalomirányított hálózatban lévő gépek bejelenthetik a "
+"külső hálózatokkal való kapcsolataikat HNA üzenetek használatával."
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdhna6.lua:7
-#, fuzzy
 msgid ""
 "Hosts in a OLSR routed network can announce connecitivity to external "
 "networks using HNA6 messages."
 msgstr ""
-"Egy OLSR által útválasztott hálózatban lévő gépek bejelenthetik a külső "
-"hálózatokkal való kapcsolataikat HNA6 üzenetek használatával."
+"Egy OLSR által forgalomirányított hálózatban lévő gépek bejelenthetik a "
+"külső hálózatokkal való kapcsolataikat HNA6 üzenetek használatával."
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:111
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:117
@@ -365,6 +361,8 @@ msgid ""
 "IPv4 src address for outgoing OLSR packages. Default is \"0.0.0.0\", which "
 "triggers usage of the interface IP."
 msgstr ""
+"IPv4 forráscím a kimenő OLSR csomagokhoz. Alapértelmezetten „0.0.0.0”, amely "
+"a csatoló IP-jének használatát aktiválja."
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/smartgw.htm:62
 #: applications/luci-app-olsr/luasrc/view/status-olsr/smartgw.htm:114
@@ -461,11 +459,15 @@ msgstr "Csatoló"
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdiface6.lua:52
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdiface.lua:52
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:227
+#, fuzzy
 msgid ""
 "Interface Mode is used to prevent unnecessary packet forwarding on switched "
 "ethernet interfaces. valid Modes are \"mesh\" and \"ether\". Default is "
 "\"mesh\"."
 msgstr ""
+"A csatoló módját arra használják, hogy megakadályozzák a szükségtelen "
+"csomagtovábbítást a kapcsolt Ethernet csatolókon. Az érvényes módok: „mesh” "
+"és „ether”. Alapértelmezetten „mesh”."
 
 #: applications/luci-app-olsr/luasrc/controller/olsr.lua:70
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:335
@@ -598,7 +600,7 @@ msgstr ""
 "/><b>etx_ff</b>: ETX freifunk, egy ETX-változat, amely az összes OLSR "
 "forgalmat használja (csak a hellók helyett) az ETX számításánál<br "
 "/><b>etx_ffeth</b>: az etx_ff nem kompatibilis változata, amely megengedi az "
-"ETX 0.1 értékkel rendelkező ethernet kapcsolatokat.<br />Alapértelmezetten "
+"ETX 0.1 értékkel rendelkező Ethernet kapcsolatokat.<br />Alapértelmezetten "
 "„etx_ff”"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:77
@@ -900,6 +902,10 @@ msgid ""
 "if you use public IPs and have unstable DNS-Setup then those pages will load "
 "really slow. In this case disable it here."
 msgstr ""
+"Gépnevek feloldása az állapotoldalakon. Általában biztonságos ezt "
+"megengedni, de ha nyilvános IP-ket használ és nem stabil DNS-beállítása van, "
+"akkor azok az oldalak nagyon lassan fognak betöltődni. Ebben az esetben "
+"tiltsa le itt."
 
 #: applications/luci-app-olsr/luasrc/controller/olsr.lua:43
 msgid "Routes"
@@ -1034,6 +1040,12 @@ msgid ""
 "device. Visit <a href='http://www.olsr.org'>olsrd.org</a> for help and "
 "documentation."
 msgstr ""
+"Az OLSR démon az optimalizált kapcsolatállapot alapú forgalomirányítás ("
+"Optimized Link State Routing) protokoll megvalósítása. Mint olyan, lehetővé "
+"teszi a háló útválasztást bármely hálózati berendezésnél. Bármilyen Wi-Fi "
+"kártyán elfut, amely támogatja az eseti módot, és természetesen bármely "
+"Ethernet eszközön. A súgóért és a dokumentációért látogassa meg az <a "
+"href='http://www.olsr.org'>olsrd.org</a> oldalt."
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:188
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:194
@@ -1209,7 +1221,6 @@ msgstr "le"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/smartgw.htm:30
 #: applications/luci-app-olsr/luasrc/view/status-olsr/smartgw.htm:134
-#, fuzzy
 msgid "infinate"
 msgstr "végtelen"
 
