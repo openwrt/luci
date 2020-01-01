@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2019-12-15 21:23+0000\n"
-"Last-Translator: Marcin Net <marcin.net@linux.pl>\n"
+"PO-Revision-Date: 2019-12-30 18:21+0000\n"
+"Last-Translator: Jan Mrógała <janmrog@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsaria2/pl/>\n"
 "Language: pl\n"
@@ -9,7 +9,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 3.10-dev\n"
+"X-Generator: Weblate 3.10\n"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:296
 msgid "<abbr title=\"Local Peer Discovery\">LPD</abbr> enabled"
@@ -661,7 +661,7 @@ msgstr "Ustawienia"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:483
 msgid "Settings in this section will be added to config file."
-msgstr "Ustawienia w tej sekcji zostaną dodane do pliku konfiguracyjnego."
+msgstr "Ustawienia w tej sekcji będą dodane do pliku konfiguracyjnego."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:487
 msgid "Settings list"
@@ -672,6 +672,7 @@ msgid "Show URL"
 msgstr "Pokaż adres URL"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:448
+#, fuzzy
 msgid ""
 "Specify file allocation method. If you are using newer file systems such as "
 "ext4 (with extents support), btrfs, xfs or NTFS (MinGW build only), \"falloc"
@@ -681,6 +682,14 @@ msgid ""
 "FAT32 because it takes almost same time as \"prealloc\" and it blocks aria2 "
 "entirely until allocation finishes."
 msgstr ""
+"Sprecyzuj metodę alokacji plików. Jeżeli używasz nowszych systemów plików "
+"tj. ext4, brtfs, xfs lub NTFS (tylko wersja skompilowana w MinGW), \"falloc\""
+" jest najlepszą opcją. Pozwala on zaalokowanie dużych (kilka GB) plików "
+"niemal natychmiastowo, ale może nie być dostępna w twoim systemie ze względu "
+"na brak funkcji posix_fallocate(3). Nie używaj funkcji \"falloc\" w "
+"starszych systemach plików tj. ext3 lub FAT32, ponieważ zajmuje ona prawie "
+"tyle samo czasu co \"prealloc\" i w pełni blokuje aria2 do momentu "
+"zakończenia alokacji."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:368
 msgid ""
@@ -757,7 +766,7 @@ msgstr "Katalog do zapisu pobranych plików. np. <code>/mnt/sda1</code>."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:81
 msgid "The file name of the log file."
-msgstr "Nazwa pliku log."
+msgstr "Nazwa pliku log-u."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:249
 msgid "The maximum number of connections to one server for each download."
@@ -864,7 +873,7 @@ msgstr "Możesz dodać K lub M."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:457
 msgid "falloc"
-msgstr ""
+msgstr "falloc"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:455
 msgid "prealloc"

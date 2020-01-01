@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2019-12-10 23:14+0000\n"
+"PO-Revision-Date: 2019-12-28 22:27+0000\n"
 "Last-Translator: Balázs Úr <balazs@urbalazs.hu>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsocserv/hu/>\n"
@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.10-dev\n"
+"X-Generator: Weblate 3.10\n"
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:124
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/user-config.lua:80
@@ -16,23 +16,33 @@ msgid ""
 "<abbr title=\"Classless Inter-Domain Routing\">CIDR</abbr>-Notation: address/"
 "prefix"
 msgstr ""
+"<abbr title=\"Classless Inter-Domain Routing\">CIDR</abbr> jelölés: cím/"
+"előtag"
 
 #: applications/luci-app-ocserv/luasrc/view/ocserv_status.htm:48
 msgid "Active OpenConnect Users"
-msgstr ""
+msgstr "Aktív OpenConnect felhasználók"
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/users.lua:61
 msgid "Active users"
-msgstr ""
+msgstr "Aktív felhasználók"
 
-#: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:74
+#: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:23
+msgid ""
+"An alternative value to be communicated to the client to verify the server's "
+"certificate; this value only depends on the public key"
+msgstr ""
+"Az ügyféllel közlendő alternatív érték a kiszolgáló tanúsítványának "
+"ellenőrzéséhez. Ez az érték csak a nyilvános kulcstól függ"
+
+#: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:95
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/user-config.lua:64
 msgid "AnyConnect client compatibility"
-msgstr ""
+msgstr "AnyConnect ügyfél kompatibilitás"
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/users.lua:17
 msgid "Available users"
-msgstr ""
+msgstr "Elérhető felhasználók"
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:13
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/user-config.lua:13
@@ -42,7 +52,7 @@ msgstr "CA tanúsítvány"
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/users.lua:72
 #: applications/luci-app-ocserv/luasrc/view/ocserv_status.htm:57
 msgid "Cipher"
-msgstr ""
+msgstr "Titkosító"
 
 #: applications/luci-app-ocserv/luasrc/view/ocserv_status.htm:62
 msgid "Collecting data..."
@@ -51,12 +61,12 @@ msgstr "Adatok összegyűjtése…"
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:132
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/user-config.lua:111
 msgid "DNS servers"
-msgstr ""
+msgstr "DNS-kiszolgálók"
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:60
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/user-config.lua:54
 msgid "Dead peer detection time (secs)"
-msgstr ""
+msgstr "Halott partner felismerésének ideje (másodperc)"
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/users.lua:70
 #: applications/luci-app-ocserv/luasrc/view/ocserv_status.htm:55
@@ -72,11 +82,13 @@ msgstr "Sablon szerkesztése"
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/user-config.lua:85
 msgid "Edit the template that is used for generating the ocserv configuration."
 msgstr ""
+"A sablon szerkesztése, amely az ocserv beállítások előállításához lesz "
+"használva."
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:70
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/user-config.lua:60
 msgid "Enable UDP"
-msgstr ""
+msgstr "UDP engedélyezése"
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:71
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/user-config.lua:61
@@ -84,29 +96,31 @@ msgid ""
 "Enable UDP channel support; this must be enabled unless you know what you "
 "are doing"
 msgstr ""
+"Az UDP csatorna támogatásának engedélyezése. Ezt engedélyezni kell, hacsak "
+"nem tudja, hogy mit csinál"
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:66
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:67
 msgid "Enable compression"
-msgstr ""
+msgstr "Tömörítés engedélyezése"
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:106
 msgid "Enable proxy arp"
-msgstr ""
+msgstr "Proxy ARP engedélyezése"
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:16
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/user-config.lua:16
 msgid "Enable server"
-msgstr ""
+msgstr "Kiszolgáló engedélyezése"
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:75
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/user-config.lua:65
 msgid "Enable support for CISCO AnyConnect clients"
-msgstr ""
+msgstr "Támogatás engedélyezése a CISCO AnyConnect ügyfelekhez"
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/user-config.lua:44
 msgid "Firewall Zone"
-msgstr ""
+msgstr "Tűzfalzóna"
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:12
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/user-config.lua:12
@@ -121,11 +135,11 @@ msgstr "Csoport"
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/users.lua:65
 msgid "ID"
-msgstr ""
+msgstr "Azonosító"
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/users.lua:68
 msgid "IP"
-msgstr ""
+msgstr "IP"
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:138
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:149
@@ -133,17 +147,17 @@ msgstr ""
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/user-config.lua:128
 #: applications/luci-app-ocserv/luasrc/view/ocserv_status.htm:53
 msgid "IP Address"
-msgstr ""
+msgstr "IP-cím"
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:58
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/user-config.lua:52
 msgid "Max clients"
-msgstr ""
+msgstr "Legtöbb ügyfél"
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:59
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/user-config.lua:53
 msgid "Max same clients"
-msgstr ""
+msgstr "Legtöbb azonos ügyfél"
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/users.lua:22
 msgid "Name"
@@ -152,14 +166,14 @@ msgstr "Név"
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:151
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/user-config.lua:131
 msgid "Netmask (or IPv6-prefix)"
-msgstr ""
+msgstr "Hálózati maszk (vagy IPv6-előtag)"
 
 #: applications/luci-app-ocserv/luasrc/controller/ocserv.lua:14
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:7
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/user-config.lua:7
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/users.lua:7
 msgid "OpenConnect VPN"
-msgstr ""
+msgstr "OpenConnect VPN"
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/users.lua:24
 msgid "Password"
@@ -173,7 +187,7 @@ msgstr "Port"
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:62
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/user-config.lua:56
 msgid "Predictable IPs"
-msgstr ""
+msgstr "Megjósolható IP-k"
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:107
 msgid ""
@@ -183,34 +197,63 @@ msgid ""
 "network in LAN covering 192.168.1.0/24 use 192.168.1.192/26 to reserve the "
 "upper 62 addresses."
 msgstr ""
+"Címek biztosítása az ügyfeleknek egy LAN alhálózatából. Ha engedélyezve van, "
+"akkor a lenti hálózatnak a LAN alhálózatának kell lennie. Ne feledje, hogy a "
+"megadott alhálózat első címét az ocserv fogja lefoglalni, így azt nem szabad "
+"használni. Ha a 192.168.1.0/24 címet lefedő LAN-ban lévő hálózattal "
+"rendelkezik, akkor használja a 192.168.1.192/26 címet a felső 62 cím "
+"lefoglalásához."
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:143
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/user-config.lua:122
 msgid "Routing table"
-msgstr ""
+msgstr "Útválasztási táblázat"
 
 #: applications/luci-app-ocserv/luasrc/controller/ocserv.lua:19
 msgid "Server Settings"
 msgstr "Kiszolgáló beállításai"
 
+<<<<<<< HEAD
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:20
 msgid "Server's Public Key ID"
 msgstr ""
+=======
+#: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:22
+msgid "Server's Public Key ID"
+msgstr "A kiszolgáló nyilvános kulcsának azonosítója"
+
+#: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:20
+msgid "Server's certificate SHA1 hash"
+msgstr "A kiszolgáló tanúsítványának SHA1 kivonata"
+>>>>>>> weblate/master
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/users.lua:73
 #: applications/luci-app-ocserv/luasrc/view/ocserv_status.htm:58
 msgid "Status"
 msgstr "Állapot"
 
+<<<<<<< HEAD
+=======
+#: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:21
+msgid ""
+"That value should be communicated to the client to verify the server's "
+"certificate"
+msgstr ""
+"Az értéket közölni kell az ügyféllel a kiszolgáló tanúsítványának "
+"ellenőrzéséhez"
+
+>>>>>>> weblate/master
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/user-config.lua:112
 msgid "The DNS servers to be provided to clients; can be either IPv6 or IPv4"
-msgstr ""
+msgstr "Az ügyfeleknek biztosított DNS-kiszolgálók. Lehet IPv6 vagy IPv4"
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:133
 msgid ""
 "The DNS servers to be provided to clients; can be either IPv6 or IPv4. "
 "Typically you should include the address of this device"
 msgstr ""
+"Az ügyfeleknek biztosított DNS-kiszolgálók. Lehet IPv6 vagy IPv4. Jellemzően "
+"fel kell vennie ennek az eszköznek a címét"
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:111
 msgid ""
@@ -218,17 +261,22 @@ msgid ""
 "network different than the LAN addresses unless proxy ARP is enabled. Leave "
 "empty to attempt auto-configuration."
 msgstr ""
+"Az ügyfeleknek biztosított IPv4 alhálózat címe. Ennek néhány személyes "
+"hálózatnak kell lennie, amelyek különböznek a LAN címeitől, hacsak proxy ARP "
+"nincs engedélyezve. Hagyja üresen az automatikus beállítás kísérletéhez."
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:125
 msgid ""
 "The IPv6 subnet address to provide to clients; leave empty to attempt auto-"
 "configuration."
 msgstr ""
+"Az ügyfeleknek biztosított IPv6 alhálózat címe. Hagyja üresen az automatikus "
+"beállítás kísérletéhez."
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:63
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/user-config.lua:57
 msgid "The assigned IPs will be selected deterministically"
-msgstr ""
+msgstr "A hozzárendelt IP-k meghatározottan lesznek kiválasztva"
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:50
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/user-config.lua:38
@@ -237,14 +285,17 @@ msgid ""
 "username-password pair. Use PAM modules to authenticate using another server "
 "(e.g., LDAP, Radius)."
 msgstr ""
+"A hitelesítési módszer a felhasználóknál. A legegyszerűbb az egyszerű, "
+"önálló felhasználónév-jelszó páros. Használjon PAM modulokat egy másik "
+"kiszolgáló használatával történő hitelesítéshez (például LDAP, Radius)."
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/user-config.lua:45
 msgid "The firewall zone that the VPN clients will be set to"
-msgstr ""
+msgstr "A tűzfalzóna, amelyhez a VPN ügyfelek be lesznek állítva"
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:116
 msgid "The mask of the subnet above."
-msgstr ""
+msgstr "A fenti alhálózat maszkja."
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:144
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/user-config.lua:123
@@ -253,11 +304,14 @@ msgid ""
 "routes, the server will send only the appropriate. Leave empty to set a "
 "default route"
 msgstr ""
+"Az ügyfeleknek biztosított útválasztási táblázat. Keverheti az IPv4 és IPv6 "
+"útvonalakat, a kiszolgáló csak a megfelelőt fogja küldeni. Hagyja üresen egy "
+"alapértelmezett útvonal beállításához"
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:57
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/user-config.lua:51
 msgid "The same UDP and TCP ports will be used"
-msgstr ""
+msgstr "Ugyanaz az UDP és TCP port lesz használva"
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:21
 msgid ""
@@ -267,7 +321,7 @@ msgstr ""
 
 #: applications/luci-app-ocserv/luasrc/view/ocserv_status.htm:41
 msgid "There are no active users."
-msgstr ""
+msgstr "Nincsenek aktív felhasználók."
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/users.lua:71
 #: applications/luci-app-ocserv/luasrc/view/ocserv_status.htm:56
@@ -281,11 +335,11 @@ msgstr "Felhasználó"
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:49
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/user-config.lua:37
 msgid "User Authentication"
-msgstr ""
+msgstr "Felhasználó hitelesítése"
 
 #: applications/luci-app-ocserv/luasrc/controller/ocserv.lua:24
 msgid "User Settings"
-msgstr ""
+msgstr "Felhasználó beállításai"
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/users.lua:66
 msgid "Username"
@@ -295,26 +349,29 @@ msgstr "Felhasználónév"
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/user-config.lua:72
 msgid "VPN <abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Netmask"
 msgstr ""
+"VPN <abbr title=\"Internet Protocol Version 4\">IPv4</abbr> hálózati maszk"
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:110
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/user-config.lua:68
 msgid ""
 "VPN <abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Network-Address"
 msgstr ""
+"VPN <abbr title=\"Internet Protocol Version 4\">IPv4</abbr> hálózati címe"
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:124
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/user-config.lua:80
 msgid ""
 "VPN <abbr title=\"Internet Protocol Version 6\">IPv6</abbr>-Network-Address"
 msgstr ""
+"VPN <abbr title=\"Internet Protocol Version 6\">IPv6</abbr> hálózati címe"
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/users.lua:69
 msgid "VPN IP"
-msgstr ""
+msgstr "VPN IP"
 
 #: applications/luci-app-ocserv/luasrc/view/ocserv_status.htm:54
 msgid "VPN IP Address"
-msgstr ""
+msgstr "VPN IP-címe"
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:95
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/user-config.lua:100
@@ -322,3 +379,5 @@ msgid ""
 "View the CA certificate used by this server. You will need to save it as 'ca."
 "pem' and import it into the clients."
 msgstr ""
+"A kiszolgáló által használt CA-tanúsítvány megtekintése. El kell mentenie "
+"„ca.pem” néven, és importálnia kell az ügyfeleknél."
