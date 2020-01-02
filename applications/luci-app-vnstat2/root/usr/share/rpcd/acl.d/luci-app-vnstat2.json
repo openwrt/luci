@@ -1,0 +1,12 @@
+{
+	"luci-app-vnstat2": {
+		"description": "Grant access to LuCI app vnstat2",
+		"write": {
+			"file": {
+				"/usr/bin/vnstat": [ "exec" ]
+			},
+			"uci": [ "vnstat" ]
+		}
+	}
+}
+
