@@ -334,6 +334,8 @@ return L.view.extend({
 				return (value || uci.get('network', section_id, 'vlan'));
 			};
 
+			s.option(form.Value, 'description', _('Description'));
+
 			for (var j = 0; Array.isArray(topology.ports) && j < topology.ports.length; j++) {
 				var portspec = topology.ports[j],
 				    portstate = Array.isArray(topology.portstate) ? topology.portstate[portspec.num] : null;
