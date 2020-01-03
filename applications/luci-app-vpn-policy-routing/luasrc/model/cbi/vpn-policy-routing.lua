@@ -1,9 +1,4 @@
 local readmeURL = "https://github.com/openwrt/packages/tree/master/net/vpn-policy-routing/files/README.md"
--- local readmeURL = "https://github.com/stangri/openwrt_packages/tree/master/vpn-policy-routing/files/README.md"
-
--- function log(obj)
--- 	if obj ~= nil then if type(obj) == "table" then luci.util.dumptable(obj) else luci.util.perror(obj) end else luci.util.perror("Empty object") end
--- end
 
 local packageName = "vpn-policy-routing"
 local uci = require "luci.model.uci".cursor()
@@ -73,13 +68,13 @@ end
 local lanIPAddr = uci:get("network", "lan", "ipaddr")
 local lanNetmask = uci:get("network", "lan", "netmask")
 -- if multiple ip addresses on lan interface, will be return as table of CIDR notations i.e. {"10.0.0.1/24","10.0.0.2/24"}
-if (type(lanIPAddr) == "table") then                                                                                   
-				first = true                                                                                             
-				for i,line in ipairs(lanIPAddr) do                                                                  
-								lanIPAddr = lanIPAddr[i]                                                                    
-								break                                           
-				end                                                     
-				lanIPAddr = string.match(lanIPAddr,"[0-9.]+")                                                            
+if (type(lanIPAddr) == "table") then
+				first = true
+				for i,line in ipairs(lanIPAddr) do
+								lanIPAddr = lanIPAddr[i]
+								break
+				end
+				lanIPAddr = string.match(lanIPAddr,"[0-9.]+")
 end          
 if lanIPAddr and lanNetmask then
 	laPlaceholder = ip.new(lanIPAddr .. "/" .. lanNetmask )
@@ -125,7 +120,7 @@ status.template = "vpn-policy-routing/status"
 status.value = pkgStatusLabel
 if pkgStatus:match("Running") and pkgGateways and pkgGateways ~= "" then
 	gateways = h:option(DummyValue, "_dummy", translate("Service Gateways"))
-	gateways.template = packageName .. "/status-textarea"
+	gateways.template = packageName .. "/status-gateways"
 	gateways.value = pkgGateways
 end
 if pkgErrors and pkgErrors ~= "" then
