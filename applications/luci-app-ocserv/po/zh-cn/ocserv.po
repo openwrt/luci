@@ -15,7 +15,8 @@ msgstr ""
 msgid ""
 "<abbr title=\"Classless Inter-Domain Routing\">CIDR</abbr>-Notation: address/"
 "prefix"
-msgstr "<abbr title=\"Classless Inter-Domain Routing\">CIDR</abbr>–表示：地址/前缀"
+msgstr ""
+"<abbr title=\"Classless Inter-Domain Routing\">CIDR</abbr>–表示：地址/前缀"
 
 #: applications/luci-app-ocserv/luasrc/view/ocserv_status.htm:48
 msgid "Active OpenConnect Users"
@@ -25,12 +26,7 @@ msgstr "活跃的 OpenConnect 用户"
 msgid "Active users"
 msgstr "活跃用户"
 
-#: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:23
-msgid ""
-"An alternative value to be communicated to the client to verify the server's "
-"certificate; this value only depends on the public key"
-msgstr "要传送给客户端以验证服务器证书的替代值；该值仅取决于公钥"
-
+#: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:74
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/user-config.lua:64
 msgid "AnyConnect client compatibility"
 msgstr "AnyConnect 客户端兼容性"
@@ -190,8 +186,9 @@ msgid ""
 "network in LAN covering 192.168.1.0/24 use 192.168.1.192/26 to reserve the "
 "upper 62 addresses."
 msgstr ""
-"从 LAN 子网向客户端提供地址；如果启用，下面的网络必须是 LAN 的子网。请注意，指定子网的第一个地址将由 ocserv 保留，因此不应使用。"
-"如果您的 LAN 网络范围是 192.168.1.0/24，请使用 192.168.1.192/26 保留前面的 62 个地址。"
+"从 LAN 子网向客户端提供地址；如果启用，下面的网络必须是 LAN 的子网。请注意，"
+"指定子网的第一个地址将由 ocserv 保留，因此不应使用。如果您的 LAN 网络范围是 "
+"192.168.1.0/24，请使用 192.168.1.192/26 保留前面的 62 个地址。"
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:143
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/user-config.lua:122
@@ -206,20 +203,10 @@ msgstr "服务器设置"
 msgid "Server's Public Key ID"
 msgstr "服务器公钥 ID"
 
-#: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:20
-msgid "Server's certificate SHA1 hash"
-msgstr "服务器证书 SHA1 哈希"
-
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/users.lua:73
 #: applications/luci-app-ocserv/luasrc/view/ocserv_status.htm:58
 msgid "Status"
 msgstr "状态"
-
-#: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:21
-msgid ""
-"That value should be communicated to the client to verify the server's "
-"certificate"
-msgstr "该值应传达给客户端以验证服务器的证书"
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/user-config.lua:112
 msgid "The DNS servers to be provided to clients; can be either IPv6 or IPv4"
@@ -229,14 +216,18 @@ msgstr "要提供给客户端的 DNS 服务器；可以是 IPv6 或 IPv4"
 msgid ""
 "The DNS servers to be provided to clients; can be either IPv6 or IPv4. "
 "Typically you should include the address of this device"
-msgstr "要提供给客户端的 DNS 服务器；可以是 IPv6 或 IPv4。通常，您应该包括此设备的地址"
+msgstr ""
+"要提供给客户端的 DNS 服务器；可以是 IPv6 或 IPv4。通常，您应该包括此设备的地"
+"址"
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:111
 msgid ""
 "The IPv4 subnet address to provide to clients; this should be some private "
 "network different than the LAN addresses unless proxy ARP is enabled. Leave "
 "empty to attempt auto-configuration."
-msgstr "要提供给客户端的 IPv4 子网地址；除非启用代理 ARP，否则这应该是一些与 LAN 地址不同的专用网络。留空以尝试自动配置。"
+msgstr ""
+"要提供给客户端的 IPv4 子网地址；除非启用代理 ARP，否则这应该是一些与 LAN 地址"
+"不同的专用网络。留空以尝试自动配置。"
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:125
 msgid ""
@@ -256,7 +247,9 @@ msgid ""
 "The authentication method for the users. The simplest is plain with a single "
 "username-password pair. Use PAM modules to authenticate using another server "
 "(e.g., LDAP, Radius)."
-msgstr "用户的身份验证方法。最简单的是单个用户名-密码对。使用 PAM 模块使用其他服务器（例如：LDAP、Radius）进行身份验证。"
+msgstr ""
+"用户的身份验证方法。最简单的是单个用户名-密码对。使用 PAM 模块使用其他服务器"
+"（例如：LDAP、Radius）进行身份验证。"
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/user-config.lua:45
 msgid "The firewall zone that the VPN clients will be set to"
@@ -272,7 +265,9 @@ msgid ""
 "The routing table to be provided to clients; you can mix IPv4 and IPv6 "
 "routes, the server will send only the appropriate. Leave empty to set a "
 "default route"
-msgstr "提供给客户端的路由表；您可以混合使用 IPv4 和 IPv6 路由，服务器将只发送适当的路由。留空以设置默认路由"
+msgstr ""
+"提供给客户端的路由表；您可以混合使用 IPv4 和 IPv6 路由，服务器将只发送适当的"
+"路由。留空以设置默认路由"
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:57
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/user-config.lua:51
@@ -345,3 +340,16 @@ msgid ""
 "View the CA certificate used by this server. You will need to save it as 'ca."
 "pem' and import it into the clients."
 msgstr "查看该服务器使用的 CA 证书。您需要将其另存为“ca.pem”并导入客户端。"
+
+#~ msgid ""
+#~ "An alternative value to be communicated to the client to verify the "
+#~ "server's certificate; this value only depends on the public key"
+#~ msgstr "要传送给客户端以验证服务器证书的替代值；该值仅取决于公钥"
+
+#~ msgid "Server's certificate SHA1 hash"
+#~ msgstr "服务器证书 SHA1 哈希"
+
+#~ msgid ""
+#~ "That value should be communicated to the client to verify the server's "
+#~ "certificate"
+#~ msgstr "该值应传达给客户端以验证服务器的证书"
