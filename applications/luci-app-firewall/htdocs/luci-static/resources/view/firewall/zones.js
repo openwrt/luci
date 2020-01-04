@@ -137,6 +137,9 @@ return L.view.extend({
 		o = s.taboption('general', widgets.NetworkSelect, 'network', _('Covered networks'));
 		o.modalonly = true;
 		o.multiple = true;
+		o.cfgvalue = function(section_id) {
+			return uci.get('firewall', section_id, 'network') || uci.get('firewall', section_id, 'name');
+		};
 		o.write = function(section_id, formvalue) {
 			var name = uci.get('firewall', section_id, 'name'),
 			    cfgvalue = this.cfgvalue(section_id);
