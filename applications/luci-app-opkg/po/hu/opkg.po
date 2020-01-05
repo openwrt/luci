@@ -30,6 +30,11 @@ msgid ""
 "custom repository entries. The configuration in the other files may be "
 "changed but is usually not preserved by <em>sysupgrade</em>."
 msgstr ""
+"Alább található az <em>opkg</em> által használt különféle beállítófájlok "
+"listája. Használja az <em>opkg.conf</em> fájlt a globális beállításokhoz, és "
+"a <em>customfeeds.conf</em> fájlt az egyéni tárolóbejegyzésekhez. Az egyéb "
+"fájlokban lévő beállítások megváltoztathatók, de általában nem lesznek "
+"megtartva <em>rendszerfrissítéskor</em>."
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:599
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:644
@@ -37,11 +42,11 @@ msgstr ""
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:733
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:809
 msgid "Cancel"
-msgstr "Mégsem"
+msgstr "Mégse"
 
 #: applications/luci-app-opkg/luasrc/view/opkg.htm:102
 msgid "Clear"
-msgstr ""
+msgstr "Törlés"
 
 #: applications/luci-app-opkg/luasrc/view/opkg.htm:117
 msgid "Configure opkg…"
@@ -59,7 +64,7 @@ msgstr "Leírás"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:583
 msgid "Details for package <em>%h</em>"
-msgstr ""
+msgstr "A(z) <em>%h</em> csomag részletei"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:786
 msgid "Dismiss"
@@ -107,6 +112,9 @@ msgid ""
 "Installing packages from untrusted sources is a potential security risk! "
 "Really attempt to install <em>%h</em>?"
 msgstr ""
+"A megbízhatatlan forrásokból származó csomagok telepítése lehetséges "
+"biztonsági kockázattal járhat! Valóban megpróbálja telepíteni a(z) <em>%h</"
+"em> csomagot?"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:177
 msgid "Install…"
@@ -118,7 +126,7 @@ msgstr "Beállítási adatok betöltése…"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:828
 msgid "Loading package information…"
-msgstr ""
+msgstr "Csomaginformációk betöltése…"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:799
 msgid "MD5"
@@ -131,7 +139,7 @@ msgstr "Csomag kézi telepítése"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:387
 msgid "Needs upgrade"
-msgstr ""
+msgstr "Frissítés szükséges"
 
 #: applications/luci-app-opkg/luasrc/view/opkg.htm:131
 msgid "Next page"
@@ -147,7 +155,7 @@ msgstr "Nincsenek csomagok"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:254
 msgid "No packages matching \"<strong>%h</strong>\"."
-msgstr ""
+msgstr "Nincs „<strong>%h</strong>” mintára illeszkedő csomag."
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:419
 msgid "Not available"
@@ -159,7 +167,7 @@ msgstr "Nincs telepítve"
 
 #: applications/luci-app-opkg/luasrc/view/opkg.htm:108
 msgid "OK"
-msgstr "OK"
+msgstr "Rendben"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:652
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:684
@@ -169,7 +177,7 @@ msgstr "OPKG beállításai"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:594
 msgid "Overwrite files from other package(s)"
-msgstr ""
+msgstr "Fájlok felülírása más csomagokból"
 
 #: applications/luci-app-opkg/luasrc/view/opkg.htm:137
 msgid "Package name"
@@ -185,7 +193,7 @@ msgstr "Előző oldal"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:635
 msgid "Really attempt to install <em>%h</em>?"
-msgstr ""
+msgstr "Valóban megpróbálja telepíteni a(z) <em>%h</em> csomagot?"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:740
 msgid "Remove"
@@ -193,7 +201,7 @@ msgstr "Eltávolítás"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:718
 msgid "Remove package <em>%h</em>"
-msgstr ""
+msgstr "A(z) <em>%h</em> csomag eltávolítása"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:165
 msgid "Remove…"
@@ -201,21 +209,22 @@ msgstr "Eltávolítás…"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:568
 msgid "Require approx. %.1024mB size for %d package(s) to install."
-msgstr ""
+msgstr "Nagyjából %.1024mB méret szükséges %d csomag telepítéséhez."
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:394
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:412
 msgid "Require version %h %h, installed %h"
-msgstr ""
+msgstr "A(z) %h %h verziója szükséges, %h van telepítve"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:417
 msgid ""
 "Required dependency package <em>%h</em> is not available in any repository."
 msgstr ""
+"A szükséges <em>%h</em> függőségcsomag nem érhető el egyik tárolóban sem."
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:385
 msgid "Requires update to %h %h"
-msgstr ""
+msgstr "A(z) %h %h verzióra frissítést igényli"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:255
 msgid "Reset"
@@ -241,7 +250,7 @@ msgstr "Méret"
 
 #: applications/luci-app-opkg/luasrc/view/opkg.htm:139
 msgid "Size (.ipk)"
-msgstr ""
+msgstr "Méret (.ipk)"
 
 #: applications/luci-app-opkg/luasrc/controller/opkg.lua:7
 #: applications/luci-app-opkg/luasrc/view/opkg.htm:89
@@ -251,26 +260,31 @@ msgstr "Szoftver"
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:772
 msgid "The <em>opkg %h</em> command failed with code <code>%d</code>."
 msgstr ""
+"Az <em>opkg %h</em> parancs meghiúsult a következő kóddal: <code>%d</code>."
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:390
 msgid ""
 "The installed version of package <em>%h</em> is not compatible, require %s "
 "while %s is installed."
 msgstr ""
+"A(z) <em>%h</em> csomag telepített verziója nem megfelelő. %s szükséges, "
+"miközben %s van telepítve."
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:631
 msgid "The package <em>%h</em> is not available in any configured repository."
-msgstr ""
+msgstr "A(z) <em>%h</em> csomag nem érhető el egyik beállított tárolóban sem."
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:407
 msgid ""
 "The repository version of package <em>%h</em> is not compatible, require %s "
 "but only %s is available."
 msgstr ""
+"A(z) <em>%h</em> csomag tárolóban lévő verziója nem megfelelő. %s szükséges, "
+"de csak %s érhető el."
 
 #: applications/luci-app-opkg/luasrc/view/opkg.htm:101
 msgid "Type to filter…"
-msgstr ""
+msgstr "Gépeljen a szűréshez…"
 
 #: applications/luci-app-opkg/luasrc/view/opkg.htm:113
 msgid "Update lists…"
@@ -283,11 +297,11 @@ msgstr "Frissítések"
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:154
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:183
 msgid "Upgrade…"
-msgstr ""
+msgstr "Frissítés…"
 
 #: applications/luci-app-opkg/luasrc/view/opkg.htm:115
 msgid "Upload Package…"
-msgstr ""
+msgstr "Csomag feltöltése…"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:585
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:720
@@ -298,7 +312,7 @@ msgstr "Verzió"
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:396
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:414
 msgid "Version incompatible"
-msgstr ""
+msgstr "Nem megfelelő verzió"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:757
 msgid "Waiting for the <em>opkg %h</em> command to complete…"
@@ -313,9 +327,9 @@ msgstr "ismeretlen"
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:544
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:707
 msgid "~%.1024mB compressed"
-msgstr ""
+msgstr "~%.1024mB tömörítve"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:542
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:705
 msgid "~%.1024mB installed"
-msgstr ""
+msgstr "~%.1024mB telepítve"
