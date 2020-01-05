@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-06-10 03:40+0200\n"
-"PO-Revision-Date: 2019-11-13 13:05+0000\n"
-"Last-Translator: Baptiste <weblate@bitsofnetworks.org>\n"
+"PO-Revision-Date: 2020-01-03 04:11+0000\n"
+"Last-Translator: Philippe Paté <asushen@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/openwrt/luci/fr/>"
 "\n"
 "Language: fr\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 3.10-dev\n"
+"X-Generator: Weblate 3.10\n"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:910
 msgid "%.1f dB"
@@ -90,11 +90,13 @@ msgstr ""
 #: modules/luci-compat/luasrc/view/cbi/network_ifacelist.htm:44
 #: modules/luci-compat/luasrc/view/cbi/network_netlist.htm:23
 msgid "-- please select --"
-msgstr ""
+msgstr "-- Veuillez sélectionner --"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:849
 msgid "0 = not using RSSI threshold, 1 = do not change driver default"
-msgstr "0 = pas de seuil de RSSI, 1 = utiliser la valeur par défaut du pilote"
+msgstr ""
+"0 = ne pas utiliser le seuil RSSI, 1 = ne pas changer la valeur par défaut "
+"du pilote"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/load.js:228
 msgid "1 Minute Load:"
@@ -105,8 +107,9 @@ msgid "15 Minute Load:"
 msgstr "Charge sur 15 minutes :"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1372
+#, fuzzy
 msgid "4-character hexadecimal ID"
-msgstr ""
+msgstr "ID hexadécimal à 4 caractères"
 
 #: modules/luci-compat/luasrc/model/network/proto_4x6.lua:18
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/464xlat.js:11
@@ -122,24 +125,28 @@ msgid "6-octet identifier as a hex string - no colons"
 msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1345
+#, fuzzy
 msgid "802.11r Fast Transition"
-msgstr ""
+msgstr "802.11r Transition rapide"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1602
+#, fuzzy
 msgid "802.11w Association SA Query maximum timeout"
-msgstr ""
+msgstr "802.11w Association SA Délai maximum de requête"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1609
+#, fuzzy
 msgid "802.11w Association SA Query retry timeout"
-msgstr ""
+msgstr "802.11w Association SA Délai de nouvelle tentative de requête"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1568
+#, fuzzy
 msgid "802.11w Management Frame Protection"
-msgstr ""
+msgstr "802.11w gestion de la protection des trames"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1602
 msgid "802.11w maximum timeout"
-msgstr ""
+msgstr "802.11w délai maximum d'attente"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1609
 msgid "802.11w retry timeout"
@@ -1012,7 +1019,7 @@ msgid ""
 "Choose the network(s) you want to attach to this wireless interface or fill "
 "out the <em>create</em> field to define a new network."
 msgstr ""
-"Choisissez le(s) réseau(x)  que vous souhaitez attacher à cette interface "
+"Choisissez le(s) réseau(x) que vous souhaitez attacher à cette interface "
 "sans-fil ou remplissez le champ <em>créer</em> pour définir un nouveau "
 "réseau."
 
@@ -2180,7 +2187,7 @@ msgstr "Paramètres généraux"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:775
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:831
 msgid "General Setup"
-msgstr "Configuration générale"
+msgstr "Paramètres principaux"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:149
 msgid "Generate Config"
@@ -2272,7 +2279,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/hosts.js:21
 msgid "Host entries"
-msgstr "Entrées d'hôtes"
+msgstr "Entrées d\\'hôtes"
 
 #: protocols/luci-proto-relay/htdocs/luci-static/resources/protocol/relay.js:171
 msgid "Host expiry timeout"
@@ -2302,7 +2309,7 @@ msgstr "Nom d'hôte à envoyer dans une requête DHCP"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/hosts.js:19
 #: modules/luci-mod-network/root/usr/share/luci/menu.d/luci-mod-network.json:57
 msgid "Hostnames"
-msgstr "Noms d'hôtes"
+msgstr "Noms d\\'hôtes"
 
 #: protocols/luci-proto-hnet/htdocs/luci-static/resources/protocol/hnet.js:24
 msgid "Hybrid"
@@ -2600,7 +2607,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:181
 msgid "Ignore <code>/etc/hosts</code>"
-msgstr "Ignorer /etc/hosts"
+msgstr "Ignorer <code>/etc/hosts</code>"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:574
 msgid "Ignore interface"
@@ -2765,7 +2772,7 @@ msgstr ""
 
 #: modules/luci-base/luasrc/view/sysauth.htm:12
 msgid "Invalid username and/or password! Please try again."
-msgstr "Nom d'utilisateur et/ou mot de passe invalides ! Réessayez !"
+msgstr "Nom d'utilisateur et/ou mot de passe invalides ! Réessayez."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:985
 msgid "Isolate Clients"
@@ -3543,7 +3550,7 @@ msgstr ""
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:88
 msgid "No rules in this chain."
-msgstr "Aucune règle dans cette chaîne"
+msgstr "Aucune règle dans cette chaîne."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:55
 msgid "No signal"
@@ -3845,7 +3852,7 @@ msgstr "Modifier la table utilisée pour les routes internes"
 
 #: modules/luci-mod-status/root/usr/share/luci/menu.d/luci-mod-status.json:3
 msgid "Overview"
-msgstr "Vue d'ensemble"
+msgstr "Vue d\\'ensemble"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:1696
 msgid "Overwrite existing file \"%s\" ?"
@@ -4832,11 +4839,11 @@ msgstr "Passer au suivant"
 
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:195
 msgid "Skip to content"
-msgstr "Skip to content"
+msgstr "Passer au contenu"
 
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:194
 msgid "Skip to navigation"
-msgstr "Skip to navigation"
+msgstr "Passer à la navigation"
 
 #: modules/luci-base/htdocs/luci-static/resources/network.js:2820
 #: modules/luci-compat/luasrc/model/network.lua:1428
@@ -5236,7 +5243,7 @@ msgid ""
 "addresses."
 msgstr ""
 "La longueur du préfixe IPv4 en bits, le reste est utilisé dans les adresses "
-"IPv6"
+"IPv6."
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6rd.js:57
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/map.js:63
@@ -5339,8 +5346,8 @@ msgid ""
 "The uploaded image file does not contain a supported format. Make sure that "
 "you choose the generic image format for your platform."
 msgstr ""
-"The uploaded image file does not contain a supported format. Make sure that "
-"you choose the generic image format for your platform."
+"Le fichier d'image téléchargé ne contient pas de format pris en charge. "
+"Assurez-vous de choisir le format d'image générique pour votre plate-forme."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:512
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:544
@@ -5752,7 +5759,7 @@ msgstr "Temps de service"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:162
 msgid "Use <code>/etc/ethers</code>"
-msgstr "Utiliser /etc/ethers"
+msgstr "Utilisez <code>/etc/ethers</code>"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:265
 msgid "Use DHCP advertised servers"
@@ -5869,10 +5876,12 @@ msgid ""
 "the requesting host. The optional <em>Lease time</em> can be used to set non-"
 "standard host-specific lease time, e.g. 12h, 3d or infinite."
 msgstr ""
-"Utiliser le bouton <em>Ajouter</em> pour créer un nouveau bail. "
-"L'<em>adresse MAC</em> identifie l'hôte, l'<em>adresse IPv4</em> décrit "
-"l'adresse fixe à utiliser et le <em>nom d'hôte</em> sera le nom symbolique "
-"attribué à l'hôte qui fait la demande."
+"Utiliser le bouton <em>Ajouter</em> pour créer un nouveau bail. L'<em>"
+"adresse MAC</em> identifie l'hôte, l'<em>adresse IPv4</em> décrit l'adresse "
+"fixe à utiliser et le <em>nom d'hôte</em> sera le nom symbolique attribué à "
+"l'hôte qui fait la demande. La <em> Durée du bail </em> en option peut être "
+"utilisée pour définir une durée de bail spécifique à l'hôte, par ex. 12h, 3d "
+"ou infini."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:193
 msgid "Used"
@@ -6105,10 +6114,10 @@ msgid ""
 "after a device reboot.<br /><strong>Warning: If you disable essential init "
 "scripts like \"network\", your device might become inaccessible!</strong>"
 msgstr ""
-"Vous pouvez ici activer ou désactiver les scripts d'initialisation "
-"installés. Les changements seront pris en compte après un redémarrage.<br/"
-"><strong>Attention: Si vous désactivez des scripts essentiels comme \"réseau"
-"\", votre équipement pourrait ne plus être accessible&#160;!</strong>"
+"Vous pouvez activer ou désactiver les scripts d'initialisation installés "
+"ici. Les changements seront pris en compte après un redémarrage. <br "
+"/><strong>Attention : Si vous désactivez des scripts essentiels comme \""
+"réseau\", votre équipement pourrait ne plus être accessible !</strong>"
 
 #: themes/luci-theme-bootstrap/luasrc/view/themes/bootstrap/header.htm:73
 #: themes/luci-theme-material/luasrc/view/themes/material/header.htm:223
@@ -6236,7 +6245,9 @@ msgstr "expiré"
 msgid ""
 "file where given <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</"
 "abbr>-leases will be stored"
-msgstr "fichier dans lequel les baux DHCP seront stockés"
+msgstr ""
+"fichier dans lequel les baux <abbr title=\"Dynamic Host Configuration "
+"Protocol\">DHCP</abbr> seront stockés"
 
 #: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:85
 #: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:194
@@ -6286,7 +6297,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:174
 msgid "local <abbr title=\"Domain Name System\">DNS</abbr> file"
-msgstr "fichier de résolution local"
+msgstr "fichier local <abbr title = \"Domain Name System\"> DNS </abbr>"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1203
 msgid "medium security"
@@ -6310,7 +6321,7 @@ msgstr ""
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:1454
 msgid "none"
-msgstr "aucun"
+msgstr "Aucun"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:40
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:54
@@ -6610,7 +6621,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:41
 msgid "yes"
-msgstr "oui"
+msgstr "Oui"
 
 #: modules/luci-compat/luasrc/view/cbi/delegator.htm:20
 msgid "« Back"
