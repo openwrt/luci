@@ -1,0 +1,17 @@
+{
+	"luci-app-smbd": {
+		"description": "Grant access to LuCI app smbd",
+		"read": {
+			"file": {
+				"/etc/smbd/smb.conf.template": [ "read" ],
+				"/usr/sbin/usmbd": [ "exec" ],
+				"/sbin/modinfo": [ "exec" ]
+			}
+		},
+		"write": {
+			"file": {
+				"/etc/smbd/smb.conf.template": [ "write" ]
+			}
+		}
+	}
+}
