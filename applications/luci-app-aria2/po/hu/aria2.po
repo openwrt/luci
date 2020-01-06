@@ -1,8 +1,22 @@
+# Hungarian translation for LuCI.
+# Copyright (C) 2019, 2020 Free Software Foundation, Inc.
+# This file is distributed under the same license as the LuCI package.
+#
+# Balázs Úr <balazs at urbalazs dot hu>, 2019, 2020.
 msgid ""
 msgstr ""
+"Project-Id-Version: luci-app-aria2 openwrt-19.07\n"
+"Report-Msgid-Bugs-To: https://github.com/openwrt/luci/issues\n"
+"POT-Creation-Date: 2020-01-05 23:41+0000\n"
+"PO-Revision-Date: 2020-01-05 23:46+0100\n"
+"Last-Translator: Balázs Úr <balazs at urbalazs dot hu>\n"
+"Language-Team: Hungarian\n"
 "Language: hu\n"
+"MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 19.04.3\n"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:296
 msgid "<abbr title=\"Local Peer Discovery\">LPD</abbr> enabled"
@@ -72,6 +86,9 @@ msgid ""
 "Close connection if download speed is lower than or equal to this "
 "value(bytes per sec). 0 means has no lowest speed limit."
 msgstr ""
+"Kapcsolat lezárása, ha a letöltési sebesség kisebb vagy egyenlő ezzel az "
+"értékkel (bájt/másodperc). A 0 azt jelenti, hogy nincs legalacsonyabb "
+"sebességkorlát."
 
 #: applications/luci-app-aria2/luasrc/view/aria2/log_template.htm:49
 #: applications/luci-app-aria2/luasrc/view/aria2/settings_header.htm:29
@@ -274,7 +291,7 @@ msgstr ""
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:88
 msgid "Info"
-msgstr "Információk"
+msgstr "Információ"
 
 #: applications/luci-app-aria2/luasrc/view/aria2/settings_header.htm:33
 msgid "Installed web interface:"
@@ -512,13 +529,15 @@ msgstr "Démon futtatása felhasználóként"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:315
 msgid "Sava metadata"
-msgstr ""
+msgstr "Metaadatok mentése"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:429
 msgid ""
 "Save a control file(*.aria2) every N seconds. If 0 is given, a control file "
 "is not saved during download."
 msgstr ""
+"Vezérlőfájl (*.aria2) mentése N másodpercenként. Ha 0 van megadva, akkor a "
+"vezérlőfájl nem lesz elmentve a letöltés során."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:461
 msgid ""
@@ -610,6 +629,9 @@ msgid ""
 "Set UDP listening port used by DHT(IPv4, IPv6) and UDP tracker. Make sure "
 "that the specified ports are open for incoming UDP traffic."
 msgstr ""
+"A DHT (IPv4, IPv6) és az UDP követő által használt UDP figyelési port "
+"beállítása. Győződjön meg arról, hogy a megadott portok nyitva vannak-e a "
+"bejövő UDP forgalomhoz."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:477
 msgid ""
@@ -683,6 +705,14 @@ msgid ""
 "FAT32 because it takes almost same time as \"prealloc\" and it blocks aria2 "
 "entirely until allocation finishes."
 msgstr ""
+"Fájllefoglalási módszer meghatározása. Ha újabb fájlrendszereket használ, "
+"mint például ext4 (kiterjesztések támogatásával), btrfs, xfs vagy NTFS (csak "
+"MinGW összeállítás), akkor a „falloc” a legjobb választás. A nagy (néhány "
+"GiB méretű) fájlokat szinte azonnal lefoglalja, de esetleg nem érhető el, ha "
+"a rendszerének nincs posix_fallocate(3) függvénye. Ne használja a „falloc” "
+"lehetőséget örökölt fájlrendszerekkel, mint például ext3 és FAT32, mert "
+"nagyjából ugyanannyi ideig tart mint a „prealloc”, és teljesen blokkolja az "
+"aria2 programot, amíg a lefoglalás be nem feleződik."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:368
 msgid ""
@@ -760,6 +790,7 @@ msgstr "A könyvtár a beállítófájl, a munkamenetfájl és a DHT-fájl táro
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:70
 msgid "The directory to store the downloaded file. eg. <code>/mnt/sda1</code>"
 msgstr ""
+"A könyvtár a letöltött fájl tárolásához. Például <code>/mnt/sda1</code>"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:81
 msgid "The file name of the log file."
