@@ -27,7 +27,7 @@ if luci.http.formvalue("status") == "1" then
 			proto = gw.IPv4 and '4' or '6',
 			originator = gw.originator,
 			selected = gw.selected and luci.i18n.translate('yes') or luci.i18n.translate('no'),
-			cost = gw.cost > 0 and string.format("%.3f", gw.cost) or luci.i18n.translate('infinate'),
+			cost = gw.cost > 0 and string.format("%.3f", gw.cost) or luci.i18n.translate('infinite'),
 			hops = gw.hops,
 			uplink = gw.uplink,
 			downlink = gw.downlink,
@@ -131,7 +131,7 @@ XHR.poll(10, '<%=REQUEST_URI%>', { status: 1 },
 				<% end %>
 
 				<div class="td cbi-section-table-cell left"><%=gw.selected and luci.i18n.translate('yes') or luci.i18n.translate('no')%></div>
-				<div class="td cbi-section-table-cell left"><%=gw.cost > 0 and string.format("%.3f", gw.cost) or luci.i18n.translate('infinate')%></div>
+				<div class="td cbi-section-table-cell left"><%=gw.cost > 0 and string.format("%.3f", gw.cost) or luci.i18n.translate('infinite')%></div>
 				<div class="td cbi-section-table-cell left"><%=gw.hops%></div>
 				<div class="td cbi-section-table-cell left"><%=gw.uplink%></div>
 				<div class="td cbi-section-table-cell left"><%=gw.downlink%></div>

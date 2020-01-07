@@ -4,7 +4,7 @@
 
 local uci = require "luci.model.uci".cursor()
 
-mh = Map("olsrd6", translate("OLSR - HNA6-Announcements"), translate("Hosts in a OLSR routed network can announce connecitivity " ..
+mh = Map("olsrd6", translate("OLSR - HNA6-Announcements"), translate("Hosts in an OLSR routed network can announce connectivity " ..
 	"to external networks using HNA6 messages."))
 
 	hna6 = mh:section(TypedSection, "Hna6", translate("Hna6"), translate("IPv6 network must be given in full notation, " ..

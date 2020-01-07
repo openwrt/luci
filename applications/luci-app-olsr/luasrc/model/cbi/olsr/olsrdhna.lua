@@ -5,7 +5,7 @@
 local uci = require "luci.model.uci".cursor()
 local ipv =  uci:get_first("olsrd", "olsrd", "IpVersion", "4")
 
-mh = Map("olsrd", translate("OLSR - HNA-Announcements"), translate("Hosts in a OLSR routed network can announce connecitivity " ..
+mh = Map("olsrd", translate("OLSR - HNA-Announcements"), translate("Hosts in an OLSR routed network can announce connectivity " ..
 	"to external networks using HNA messages."))
 
 if ipv == "6and4" or ipv == "4" then

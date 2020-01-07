@@ -71,9 +71,9 @@ tos.placeholder = "16"
 fib = s:taboption("general", ListValue, "FIBMetric", translate("FIB metric"),
 	translate ("FIBMetric controls the metric value of the host-routes OLSRd sets. "..
 	"\"flat\" means that the metric value is always 2. This is the preferred value "..
-	"because it helps the linux kernel routing to clean up older routes. "..
+	"because it helps the Linux kernel routing to clean up older routes. "..
 	"\"correct\" uses the hopcount as the metric value. "..
-	"\"approx\" use the hopcount as the metric value too, but does only update the hopcount if the nexthop changes too. "..
+	"\"approx\" uses the hopcount as the metric value too, but does only update the hopcount if the nexthop changes too. "..
 	"Default is \"flat\"."))
 fib:value("flat")
 fib:value("correct")
@@ -144,7 +144,7 @@ sgw.enabled="yes"
 sgw.disabled="no"
 sgw.rmempty = true
 
-sgwnat = s:taboption("smartgw", Flag, "SmartGatewayAllowNAT", translate("Allow gateways with NAT"), translate("Allow the selection of an outgoing ipv4 gateway with NAT"))
+sgwnat = s:taboption("smartgw", Flag, "SmartGatewayAllowNAT", translate("Allow gateways with NAT"), translate("Allow the selection of an outgoing IPv4 gateway with NAT"))
 sgwnat:depends("SmartGateway", "yes")
 sgwnat.default="yes"
 sgwnat.enabled="yes"
