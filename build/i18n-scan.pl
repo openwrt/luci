@@ -272,7 +272,7 @@ if( open C, "| msgcat -" )
 	{
 		if( length $key )
 		{
-			my @positions = @{$stringtable{$key}};
+			my @positions = sort @{$stringtable{$key}};
 
 			$key =~ s/\\/\\\\/g;
 			$key =~ s/\n/\\n/g;
