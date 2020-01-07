@@ -157,7 +157,11 @@ if( open C, "| msgcat -" )
 	{
 		if( length $key )
 		{
-			my @positions = @{$stringtable{$key}};
+			my @positions =
+				map { join ':', @$_ }
+				sort { ($a->[0] cmp $b->[0]) || ($a->[1] <=> $b->[1]) }
+				map { [ /^(.+):(\d+)$/ ] }
+				@{$stringtable{$key}};
 
 			$key =~ s/\\/\\\\/g;
 			$key =~ s/\n/\\n/g;
