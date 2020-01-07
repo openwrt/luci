@@ -305,7 +305,7 @@ local function tree_to_json(node, json)
 				elseif subname == "rpc" and subnode.module == "luci.controller.rpc" then
 					spec.auth = {
 						login = false,
-						methods = { "param:auth", "cookie:sysauth" }
+						methods = { "query:auth", "cookie:sysauth" }
 					}
 				elseif subnode.module == "luci.controller.admin.uci" then
 					spec.auth = {
@@ -546,6 +546,8 @@ local function check_authentication(method)
 		sid = http.getcookie(auth_param)
 	elseif auth_type == "param" then
 		sid = http.formvalue(auth_param)
+	elseif auth_type == "query" then
+		sid = http.formvalue(auth_param, true)
 	end
 
 	return session_retrieve(sid)
