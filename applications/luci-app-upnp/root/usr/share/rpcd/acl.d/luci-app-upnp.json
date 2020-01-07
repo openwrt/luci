@@ -1,0 +1,17 @@
+{
+	"luci-app-ddns": {
+		"description": "Grant access to upnp procedures",
+		"read": {
+			"ubus": {
+				"luci.upnp": [ "get_status" ],
+				"luci": [ "setInitAction" ]
+			}
+		},
+		"write": {
+			"ubus": {
+				"luci.upnp": [ "delete_rule" ]
+			},
+			"uci": [ "upnpd" ]
+		}
+	}
+}
