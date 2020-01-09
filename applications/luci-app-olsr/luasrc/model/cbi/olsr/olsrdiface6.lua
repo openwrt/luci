@@ -49,8 +49,8 @@ network.widget   = "radio"
 network.nocreate = true
 
 mode = i:taboption("general", ListValue, "Mode", translate("Mode"),
-	translate("Interface Mode is used to prevent unnecessary packet forwarding on switched ethernet interfaces. "..
-	"valid Modes are \"mesh\" and \"ether\". Default is \"mesh\"."))
+	translate("Interface mode is used to prevent unnecessary packet forwarding on switched ethernet interfaces. "..
+	"Valid modes are \"mesh\" and \"ether\". Default is \"mesh\"."))
 mode:value("mesh")
 mode:value("ether")
 mode.optional = true
