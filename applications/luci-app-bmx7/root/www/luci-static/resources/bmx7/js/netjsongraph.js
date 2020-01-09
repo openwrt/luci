@@ -170,7 +170,7 @@
              */
             redraw: function() {
                 panner.attr("transform",
-                    "translate(" + d3.event.translate + ") " +
+                    "trans"+"late(" + d3.event.translate + ") " +
                     "scale(" + d3.event.scale + ")"
                 );
             },
@@ -507,7 +507,7 @@
                     });
 
                     labels.attr("transform", function(d) {
-                        return "translate(" + d.x + "," + d.y + ")";
+                        return "trans"+"late(" + d.x + "," + d.y + ")";
                     });
                 })
                 .on("end", function(){
