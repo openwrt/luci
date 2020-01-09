@@ -715,7 +715,7 @@ end
 
 -- Access_Control_Allow_Origin -------------------------------------------------
 local heo	= hea:option( DynamicList, "Access_Control_Allow_Origin" )
-heo.title	= translate("Access-Control-Allow-Origin")
+heo.title	= "Access-Control-Allow-Origin"
 heo.description	= nil
 function heo.parse(self, section, novld)
 	CTRL.value_parse(self, section, novld)
@@ -723,7 +723,7 @@ end
 
 -- Access_Control_Allow_Methods ------------------------------------------------
 local hem	= hea:option( DynamicList, "Access_Control_Allow_Methods" )
-hem.title	= translate("Access-Control-Allow-Methods")
+hem.title	= "Access-Control-Allow-Methods"
 hem.description	= nil
 function hem.parse(self, section, novld)
 	CTRL.value_parse(self, section, novld)
@@ -731,7 +731,7 @@ end
 
 -- Access_Control_Allow_Headers ------------------------------------------------
 local heh	= hea:option( DynamicList, "Access_Control_Allow_Headers" )
-heh.title	= translate("Access-Control-Allow-Headers")
+heh.title	= "Access-Control-Allow-Headers"
 heh.description	= nil
 function heh.parse(self, section, novld)
 	CTRL.value_parse(self, section, novld)
@@ -739,7 +739,7 @@ end
 
 -- Access_Control_Expose_Headers -----------------------------------------------
 local hee	= hea:option( DynamicList, "Access_Control_Expose_Headers" )
-hee.title	= translate("Access-Control-Expose-Headers")
+hee.title	= "Access-Control-Expose-Headers"
 hee.description	= nil
 function hee.parse(self, section, novld)
 	CTRL.value_parse(self, section, novld)
