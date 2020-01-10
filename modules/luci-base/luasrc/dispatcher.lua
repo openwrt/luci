@@ -623,6 +623,14 @@ local function merge_trees(node_a, node_b)
 			node_a[k] = v
 		end
 	end
+
+	if type(node_a.action) == "table" and
+	   node_a.action.type == "firstchild" and
+	   node_a.children == nil
+	then
+		node_a.satisfied = false
+	end
+
 	return node_a
 end
 
