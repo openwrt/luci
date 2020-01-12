@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2020-01-11 18:23+0000\n"
+"PO-Revision-Date: 2020-01-12 19:22+0000\n"
 "Last-Translator: Marcin Net <marcin.net@linux.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsmwan3/pl/>\n"
@@ -241,15 +241,15 @@ msgstr "Globalne"
 
 #: applications/luci-app-mwan3/luasrc/view/mwan/status_diagnostics.htm:76
 msgid "Hotplug ifdown"
-msgstr ""
+msgstr "Przełącznik, jeśli odłączono"
 
 #: applications/luci-app-mwan3/luasrc/view/mwan/status_diagnostics.htm:75
 msgid "Hotplug ifup"
-msgstr ""
+msgstr "Przełącznik, jeśli podłączono"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/globalsconfig.lua:45
 msgid "How often should rtmon update the interface routing table"
-msgstr ""
+msgstr "Jak często rtmon powinien aktualizować tabelę routingu interfejsu"
 
 #: applications/luci-app-mwan3/luasrc/view/mwan/status_detail.htm:29
 #: applications/luci-app-mwan3/luasrc/view/mwan/status_diagnostics.htm:56
@@ -321,7 +321,7 @@ msgstr "Zachowanie odstępu czasu między awariami pingów podczas stanu awarii"
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/policy.lua:75
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/policyconfig.lua:25
 msgid "Last resort"
-msgstr ""
+msgstr "Ostatnia wizyta"
 
 #: applications/luci-app-mwan3/luasrc/controller/mwan3.lua:19
 #: applications/luci-app-mwan3/luasrc/controller/mwan3.lua:41
@@ -354,7 +354,7 @@ msgstr "MWAN - Interfejsy"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/member.lua:9
 msgid "MWAN - Members"
-msgstr "MWAN - Członkowie"
+msgstr "MWAN - Użytkownicy"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/notify.lua:11
 msgid "MWAN - Notification"
@@ -378,7 +378,7 @@ msgstr "Interfejsy MWAN"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/memberconfig.lua:11
 msgid "MWAN Member Configuration - %s"
-msgstr "Konfiguracja członków MWAN - %s"
+msgstr "Konfiguracja użytkowników MWAN - %s"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/policyconfig.lua:11
 msgid "MWAN Policy Configuration - %s"
@@ -409,6 +409,12 @@ msgid ""
 ">Interfaces may not share the same name as configured members, policies or "
 "rules"
 msgstr ""
+"MWAN obsługuje do 252 fizycznych i/lub logicznych interfejsów<br />MWAN "
+"wymaga, aby wszystkie interfejsy miały unikalną metrykę skonfigurowaną w /"
+"etc/config/network<br />Nazwy muszą odpowiadać nazwie interfejsu znajdującej "
+"się w /etc/config/network<br />Nazwy mogą zawierać znaki A-Z, a-z, 0-9, _ i "
+"nie mogą zawierać spacji<br />Interfejsy nie mogą mieć tej samej nazwy co "
+"skonfigurowane elementy, zasady lub reguły"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interfaceconfig.lua:92
 msgid "Max TTL"
@@ -428,6 +434,8 @@ msgid ""
 "May be entered as a single or multiple port(s) (eg \"22\" or \"80,443\") or "
 "as a portrange (eg \"1024:2048\") without quotes"
 msgstr ""
+"Może być wprowadzony jako pojedynczy lub wielokrotny port (np. \"22\" lub \""
+"80,443\") lub jako portrange (np. \"1024:2048\") bez cudzysłowów"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/member.lua:17
 msgid "Member"
@@ -447,6 +455,9 @@ msgid ""
 ">Names may contain characters A-Z, a-z, 0-9, _ and no spaces<br />Members "
 "may not share the same name as configured interfaces, policies or rules"
 msgstr ""
+"Użytkownicy dołączają metrykę i wagę do interfejsu MWAN<br />Nazwy mogą "
+"zawierać znaki A-Z, a-z, 0-9, _ i nie mogą zawierać spacji<br />Członkowie "
+"nie mogą mieć tej samej nazwy co skonfigurowane interfejsy, zasady lub reguły"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/policy.lua:61
 msgid "Members assigned"
@@ -469,13 +480,15 @@ msgstr "Minimalna strata pakietów [%]"
 
 #: applications/luci-app-mwan3/luasrc/controller/mwan3.lua:190
 msgid "Missing both IP rules for interface %s"
-msgstr ""
+msgstr "Brak obu zasad IP dotyczących interfejsu %s"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/ruleconfig.lua:57
 msgid ""
 "Name of IPset rule. Requires IPset rule in /etc/dnsmasq.conf (eg \"ipset=/"
 "youtube.com/youtube\")"
 msgstr ""
+"Nazwa reguły IPset. Wymaga reguły IPset w /etc/dnsmasq.conf (np. \""
+"ipset=/youtube.com/youtube\")"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interface.lua:166
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/ruleconfig.lua:50
@@ -492,7 +505,7 @@ msgstr "Nie znaleziono bramy domyślnej dla interfejsu %s."
 
 #: applications/luci-app-mwan3/luasrc/controller/mwan3.lua:168
 msgid "No tracking Hosts for interface %s defined."
-msgstr ""
+msgstr "Nie zdefiniowano hostów śledzących dla interfejsu %s"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/globalsconfig.lua:36
 msgid "Notice"
@@ -639,13 +652,12 @@ msgid "Source port"
 msgstr "Port źródłowy"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/ruleconfig.lua:46
-#, fuzzy
 msgid "Sticky"
 msgstr "Przyklejony"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/ruleconfig.lua:52
 msgid "Sticky timeout"
-msgstr "Przyklejony limit czasu"
+msgstr "Limit czasu przyklejenia"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/ruleconfig.lua:23
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/ruleconfig.lua:30
@@ -658,7 +670,7 @@ msgstr "Zadanie"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interface.lua:15
 msgid "There are currently %d of %d supported interfaces configured"
-msgstr ""
+msgstr "Obecnie są skonfigurowane %d z %d obsługiwanych interfejsów"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interfaceconfig.lua:250
 msgid ""
@@ -712,6 +724,8 @@ msgid ""
 "Traffic from the same source IP address that previously matched this rule "
 "within the sticky timeout period will use the same WAN interface"
 msgstr ""
+"Ruch z tego samego źródłowego adresu IP, który wcześniej był zgodny z tą "
+"regułą w ramach limitu czasu, będzie wykorzystywał ten sam interfejs WAN"
 
 #: applications/luci-app-mwan3/luasrc/view/mwan/status_detail.htm:13
 #: applications/luci-app-mwan3/luasrc/view/mwan/status_diagnostics.htm:13
@@ -726,39 +740,46 @@ msgstr "Interwał aktualizacji"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/ruleconfig.lua:37
 msgid "View the content of /etc/protocols for protocol description"
-msgstr ""
+msgstr "Zobacz zawartość/etc/protocols dla opisu protokołu"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interface.lua:19
 msgid "WARNING: %d interfaces are configured exceeding the maximum of %d!"
 msgstr ""
+"OSTRZEŻENIE: interfejsy %d są skonfigurowane z przekroczeniem maksymalnej "
+"wartości %d!"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interface.lua:26
 msgid "WARNING: Interface %s are not found in /etc/config/network"
-msgstr ""
+msgstr "OSTRZEŻENIE: Interfejs %s nie znajduje się w /etc/config/network"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interface.lua:45
 msgid "WARNING: Interface %s has a duplicate metric %s configured"
-msgstr ""
+msgstr "OSTRZEŻENIE: Interfejs %s ma skonfigurowany duplikat metryczny %s"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interface.lua:38
 msgid ""
 "WARNING: Interface %s has a higher reliability requirement than tracking "
 "hosts (%d)"
 msgstr ""
+"OSTRZEŻENIE: Interfejs %s ma wyższy wymóg niezawodności niż hosty śledzące "
+"(%d)"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interface.lua:32
 msgid "WARNING: Interface %s has no default route in the main routing table"
 msgstr ""
+"OSTRZEŻENIE: Interfejs %s nie ma domyślnej trasy w głównej tabeli routingu"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/policy.lua:30
 msgid "WARNING: Policy %s has exceeding the maximum name of 15 characters"
-msgstr ""
+msgstr "OSTRZEŻENIE: Polityka %s przekracza maksymalną nazwę 15 znaków"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/rule.lua:34
 msgid ""
 "WARNING: Rule %s have a port configured with no or improper protocol "
 "specified!"
 msgstr ""
+"OSTRZEŻENIE: Reguła %s ma skonfigurowany port bez określonego lub "
+"niewłaściwego protokołu!"
 
 #: applications/luci-app-mwan3/luasrc/view/mwan/status_diagnostics.htm:37
 msgid "Waiting for command to complete..."
@@ -777,6 +798,8 @@ msgstr "Rozmiar"
 msgid ""
 "When all policy members are offline use this behavior for matched traffic"
 msgstr ""
+"Kiedy wszyscy użytkownicy polityki są w trybie offline używają tego "
+"zachowania dla dopasowanego ruchu"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interface.lua:164
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/ruleconfig.lua:49
@@ -787,7 +810,7 @@ msgstr "Tak"
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/policyconfig.lua:29
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/ruleconfig.lua:73
 msgid "blackhole (drop)"
-msgstr ""
+msgstr "czarna dziura (porzuć)"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interfaceconfig.lua:246
 msgid "connected (mwan3)"
@@ -815,4 +838,4 @@ msgstr ""
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/policyconfig.lua:28
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/ruleconfig.lua:72
 msgid "unreachable (reject)"
-msgstr ""
+msgstr "nieosiągalny (odrzucanie)"

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2020-01-11 18:23+0000\n"
+"PO-Revision-Date: 2020-01-12 19:21+0000\n"
 "Last-Translator: Marcin Net <marcin.net@linux.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsolsr/pl/>\n"
@@ -291,13 +291,12 @@ msgstr ""
 "wiadomości HNA."
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdhna6.lua:7
-#, fuzzy
 msgid ""
 "Hosts in an OLSR routed network can announce connectivity to external "
 "networks using HNA6 messages."
 msgstr ""
 "Hosty w sieci OLSR mogą ogłaszać połączenia z zewnętrznymi sieciami poprzez "
-"wiadomości HNA."
+"wiadomości HNA6."
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:117
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:111
@@ -306,6 +305,9 @@ msgid ""
 "robustness to the link sensing but delays neighbor registration. Defaults is "
 "\"yes\""
 msgstr ""
+"Histereza do wykrywania ogniw (tylko dla metryki licznika hopcount). "
+"Histereza dodaje solidności wykrywaniu linków, ale opóźnia rejestrację "
+"sąsiadów. Domyślnie jest \"tak\""
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:223
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:217
@@ -639,6 +641,9 @@ msgid ""
 "Make sure that OLSRd is running, the \"jsoninfo\" plugin is loaded, "
 "configured on port 9090 and accepts connections from \"127.0.0.1\"."
 msgstr ""
+"Upewnij się, że OLSRd jest uruchomiony, wtyczka \"jsoninfo\" jest "
+"załadowana, skonfigurowana na porcie 9090 i przyjmuje połączenia od \""
+"127.0.0.1\"."
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/routes.htm:50
 #: applications/luci-app-olsr/luasrc/view/status-olsr/routes.htm:110
@@ -825,6 +830,8 @@ msgstr "Pluginy"
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:48
 msgid "Polling rate for OLSR sockets in seconds. Default is 0.05."
 msgstr ""
+"Szybkość transmisji danych dla gniazd OLSR w sekundach. Domyślnie jest to "
+"0.05."
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:53
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:47
@@ -888,15 +895,15 @@ msgstr ""
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/common_js.htm:20
 msgid "Show IPv4"
-msgstr ""
+msgstr "Pokaż IPv4"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/common_js.htm:28
 msgid "Show IPv6"
-msgstr ""
+msgstr "Pokaż IPv6"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/legend.htm:14
 msgid "Signal Noise Ratio in dB"
-msgstr ""
+msgstr "Współczynnik szumu sygnału w dB"
 
 #: applications/luci-app-olsr/luasrc/controller/olsr.lua:64
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:44
@@ -1156,7 +1163,7 @@ msgstr "nie"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/interfaces.htm:38
 msgid "up"
-msgstr ""
+msgstr "w górę"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/interfaces.htm:40
 #: applications/luci-app-olsr/luasrc/view/status-olsr/smartgw.htm:29
