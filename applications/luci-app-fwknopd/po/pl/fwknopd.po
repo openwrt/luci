@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2020-01-11 18:23+0000\n"
+"PO-Revision-Date: 2020-01-12 19:21+0000\n"
 "Last-Translator: Marcin Net <marcin.net@linux.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsfwknopd/pl/>\n"
@@ -37,6 +37,11 @@ msgid ""
 "to honor any proto/port request specified in the SPA data (unless of it "
 "matches any “RESTRICT_PORTS” entries). Multiple entries are comma-separated."
 msgstr ""
+"Zdefiniuj zestaw portów i protokołów (tcp lub udp), które zostaną otwarte, "
+"jeśli pojawi się prawidłowa sekwencja Knock. Jeśli ten wpis nie jest "
+"ustawiony, fwknopd będzie starał się honorować każde żądanie proto/port "
+"określone w danych o SPA (chyba, że pasuje ono do któregokolwiek z wpisów \""
+"RESTRICT_PORTS\"). Wielokrotne wpisy są oddzielone przecinkami."
 
 #: applications/luci-app-fwknopd/luasrc/model/cbi/fwknopd.lua:36
 msgid ""
@@ -45,6 +50,10 @@ msgid ""
 "“FW_ACCESS_TIMEOUT” is not set then the default timeout of 30 seconds will "
 "automatically be set."
 msgstr ""
+"Zdefiniuj czas dostępu, który zostanie udzielony przez fwknopd po "
+"prawidłowej sekwencji knock ze źródłowego adresu IP. Jeśli \""
+"FW_ACCESS_TIMEOUT\" nie jest ustawiony, to domyślny czas 30 sekund zostanie "
+"ustawiony automatycznie."
 
 #: applications/luci-app-fwknopd/luasrc/model/cbi/fwknopd.lua:18
 #: applications/luci-app-fwknopd/luasrc/model/cbi/fwknopd.lua:20
@@ -79,6 +88,11 @@ msgid ""
 "resolve the external address (if the client behind a NAT) or the client must "
 "know the external IP and set it via the -a argument."
 msgstr ""
+"Wymuś, aby wszystkie pakiety SPA zawierały rzeczywisty adres IP w ramach "
+"zaszyfrowanych danych. To uniemożliwia użycie argumentu -s z linii poleceń "
+"klienta fwknop, więc albo -R musi być użyty do automatycznego rozwiązania "
+"adresu zewnętrznego (jeśli klient znajduje się za NAT) albo klient musi znać "
+"zewnętrzny IP i ustawić go za pomocą argumentu -a."
 
 #: applications/luci-app-fwknopd/luasrc/model/cbi/fwknopd.lua:46
 msgid ""
@@ -115,7 +129,7 @@ msgstr ""
 
 #: applications/luci-app-fwknopd/luasrc/model/cbi/fwknopd.lua:10
 msgid "access.conf stanzas"
-msgstr ""
+msgstr "sekcje access.conf"
 
 #: applications/luci-app-fwknopd/luasrc/model/cbi/fwknopd.lua:44
 msgid "fwknopd.conf config options"
