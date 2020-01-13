@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2020-01-12 19:21+0000\n"
+"PO-Revision-Date: 2020-01-13 14:26+0000\n"
 "Last-Translator: Marcin Net <marcin.net@linux.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsolsr/pl/>\n"
@@ -424,6 +424,11 @@ msgid ""
 "if changed.<br /><b>WARNING:</b> This parameter should not be used together "
 "with the etx_ffeth metric!<br />Defaults to \"1.0\"."
 msgstr ""
+"Jeśli trasa do aktualnej bramy ma zostać zmieniona, to wartość ETX tej bramy "
+"jest mnożona z tą wartością zanim zostanie porównana z nową. Parametr może "
+"mieć wartość od 0.1 do 1.0, ale powinien być zbliżony do 1.0, jeśli został "
+"zmieniony.<br /><b>OSTRZEŻENIE:</b>Parametr ten nie powinien być używany "
+"razem z metryką etx_ffeth!<br />Domyślnie do \"1.0\"."
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:166
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:160
@@ -567,6 +572,10 @@ msgid ""
 "etx_float and etx_fpm, smaller values mean slower changes of ETX value. "
 "(allowed values are between 0.01 and 1.0)"
 msgstr ""
+"Współczynnik starzenia się jakości łącza (tylko dla lq poziom 2). Parametr "
+"strojenia dla etx_float i etx_fpm, mniejsze wartości oznaczają wolniejsze "
+"zmiany wartości ETX. (dopuszczalne wartości zawierają się w przedziale od "
+"0,01 do 1,0)"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:97
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:91
@@ -578,6 +587,13 @@ msgid ""
 "calculation<br /><b>etx_ffeth</b>: incompatible variant of etx_ff that "
 "allows ethernet links with ETX 0.1.<br />Defaults to \"etx_ff\""
 msgstr ""
+"Algorytm jakości łącza (tylko dla lq poziomu 2).<br /><b>etx_float</b>: "
+"zmienny punkt ETX z wykładniczym starzeniem się<br /><b>etx_fpm</b> : tak "
+"samo jak etx_float, ale z arytmetyką liczb całkowitych<br /><b>etx_ff</b> : "
+"ETX freifunk, wariant etx, który wykorzystuje cały ruch OLSR (zamiast tylko "
+"hellos) do obliczeń ETX<br /><b>etx_ffeth</b>: niekompatybilny wariant "
+"etx_ff, który pozwala na połączenia ethernetowe z ETX 0.1.<br />Domyślnie do "
+"\"etx_ff\""
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:83
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:77
@@ -586,6 +602,9 @@ msgid ""
 "routing.<br /><b>0</b> = do not use link quality<br /><b>2</b> = use link "
 "quality for MPR selection and routing<br />Default is \"2\""
 msgstr ""
+"Przełączanie poziomu jakości łącza między hopcount i cost-based (głównie ETX)"
+" routing.<br /><b>0</b> = nie używaj jakości łącza<br /><b>2</b> = używaj "
+"jakości łącza do wyboru MPR i routingu<br />Domyślnie \"2\""
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:245
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:239
@@ -780,7 +799,7 @@ msgstr "Węzeł OLSR"
 #: applications/luci-app-olsr/luasrc/view/status-olsr/legend.htm:10
 #: applications/luci-app-olsr/luasrc/view/status-olsr/legend.htm:19
 msgid "Orange"
-msgstr ""
+msgstr "Pomarańczowy"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/overview.htm:157
 msgid "Overview"
@@ -836,7 +855,7 @@ msgstr ""
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:53
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:47
 msgid "Pollrate"
-msgstr ""
+msgstr "Wskaźnik głosowania"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:126
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:120
@@ -853,7 +872,7 @@ msgstr "Prefiks"
 #: applications/luci-app-olsr/luasrc/view/status-olsr/legend.htm:11
 #: applications/luci-app-olsr/luasrc/view/status-olsr/legend.htm:20
 msgid "Red"
-msgstr ""
+msgstr "Czerwony"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrddisplay.lua:9
 msgid "Resolve"
