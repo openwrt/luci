@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2020-01-13 14:27+0000\n"
+"PO-Revision-Date: 2020-01-15 19:13+0000\n"
 "Last-Translator: Marcin Net <marcin.net@linux.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsshadowsocks-libev/pl/>\n"
@@ -9,7 +9,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 3.10.1\n"
+"X-Generator: Weblate 3.11-dev\n"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/instances.js:43
 msgid "-- instance type --"
@@ -29,11 +29,11 @@ msgstr "Zwiąż adres"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:87
 msgid "Bypass ss-redir for packets with dst address in this list"
-msgstr "Bypass ss-redir dla pakietów z adresem dst na tej liście"
+msgstr "Pomiń ss-redir dla pakietów z adresem dst na tej liście"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:73
 msgid "Bypass ss-redir for packets with src address in this list"
-msgstr "Bypass s-redir dla pakietów z adresem src na tej liście"
+msgstr "Pomiń ss-redir dla pakietów z adresem src na tej liście"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/servers.js:27
 msgid "Cancel"
@@ -95,11 +95,11 @@ msgstr "Domyślny Dst"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:86
 msgid "Dst ip/net bypass"
-msgstr "Dst ip/net bypass"
+msgstr "Obejście dst ip/net"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:94
 msgid "Dst ip/net bypass file"
-msgstr "Plik Dst ip/net bypass"
+msgstr "Plik obejściowy dst ip/net"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:89
 msgid "Dst ip/net forward"
@@ -147,7 +147,7 @@ msgstr ""
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:118
 msgid "Forward recentrst"
-msgstr ""
+msgstr "Przekaż ponownie"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:119
 msgid ""
@@ -180,7 +180,7 @@ msgstr "Importuj"
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/servers.js:58
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/servers.js:60
 msgid "Import Links"
-msgstr ""
+msgstr "Importuj linki"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:62
 msgid "Ingress interfaces"
@@ -200,27 +200,30 @@ msgid ""
 "tunnel, ss-server, etc. To enable an instance it is required to enable both "
 "the instance itself and the remote server it refers to."
 msgstr ""
+"Instancje składników shadowsocks-libev, np. ss-local, ss-redir, ss-tunnel, "
+"ss-server itp. Aby włączyć instancję, należy włączyć zarówno samą instancję, "
+"jak i zdalny serwer, do którego się ona odnosi."
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/shadowsocks-libev.js:155
 msgid "Key (base64)"
-msgstr ""
+msgstr "Klucz (base64)"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/instances.js:24
 #: applications/luci-app-shadowsocks-libev/luasrc/controller/shadowsocks-libev.lua:13
 msgid "Local Instances"
-msgstr ""
+msgstr "Lokalne wystąpienia"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/shadowsocks-libev.js:113
 msgid "Local address"
-msgstr ""
+msgstr "Adres lokalny"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/shadowsocks-libev.js:117
 msgid "Local port"
-msgstr ""
+msgstr "Port lokalny"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:58
 msgid "Local-out default"
-msgstr ""
+msgstr "Domyślne wyjście lokalne"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/shadowsocks-libev.js:171
 msgid "MTU"
@@ -228,11 +231,11 @@ msgstr "MTU"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/shadowsocks-libev.js:146
 msgid "Method"
-msgstr ""
+msgstr "Metoda"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/shadowsocks-libev.js:166
 msgid "Mode of operation"
-msgstr ""
+msgstr "Tryb pracy"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:31
 msgid ""
@@ -243,10 +246,17 @@ msgid ""
 "give the default action to be taken. If the prior check results in action "
 "<em>checkdst</em>, packets will continue to have their dst addresses checked."
 msgstr ""
+"Na tej stronie można skonfigurować sposób przekazywania ruchu do instancji "
+"ss-redir. Jeśli opcja ta jest włączona, pakiety będą miały najpierw "
+"zaznaczone adresy src ip w odniesieniu do <em>Src ip/net bypass</em>, <em>"
+"Src ip/net forward</em>, <em>Src ip/net checkdst</em>, a jeśli żaden z nich "
+"nie pasuje do <em>Src domyślnie</em> dadzą domyślną akcję, która zostanie "
+"podjęta. Jeśli sprawdzanie wstępne zakończy się akcją <em>checkdst</em>, "
+"pakiety będą nadal miały swoje adresy dst sprawdzone."
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:63
 msgid "Only apply rules on packets from these network interfaces"
-msgstr ""
+msgstr "Stosuj reguły tylko do pakietów z tych interfejsów sieciowych"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/instances.js:104
 msgid "Overview"
@@ -254,7 +264,7 @@ msgstr "Przegląd"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/shadowsocks-libev.js:234
 msgid "Package is not installed"
-msgstr ""
+msgstr "Pakiet nie jest zainstalowany"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:69
 msgid "Passes additional arguments to iptables. Use with care!"
@@ -267,20 +277,20 @@ msgstr "Hasło"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/shadowsocks-libev.js:161
 msgid "Plugin"
-msgstr ""
+msgstr "Wtyczka"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/shadowsocks-libev.js:163
 msgid "Plugin Options"
-msgstr ""
+msgstr "Opcje wtyczek"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/shadowsocks-libev.js:178
 msgid "Prefer IPv6 addresses when resolving names"
-msgstr ""
+msgstr "Preferuj adresy IPv6 podczas rozwiązywania nazw"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:30
 #: applications/luci-app-shadowsocks-libev/luasrc/controller/shadowsocks-libev.lua:21
 msgid "Redir Rules"
-msgstr ""
+msgstr "Zasady Redir"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/servers.js:13
 #: applications/luci-app-shadowsocks-libev/luasrc/controller/shadowsocks-libev.lua:17
@@ -309,7 +319,7 @@ msgstr "Port serwera"
 
 #: applications/luci-app-shadowsocks-libev/luasrc/controller/shadowsocks-libev.lua:9
 msgid "Shadowsocks-libev"
-msgstr ""
+msgstr "Shadowsocks-libev"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:42
 msgid "Source Settings"
@@ -321,11 +331,11 @@ msgstr "Domyślnie src"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:72
 msgid "Src ip/net bypass"
-msgstr ""
+msgstr "Obejście ip/sieci Src"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:78
 msgid "Src ip/net checkdst"
-msgstr ""
+msgstr "Src ip/net checkdst"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:75
 msgid "Src ip/net forward"
@@ -349,12 +359,12 @@ msgstr "Adres tunelu"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/shadowsocks-libev.js:177
 msgid "Verbose"
-msgstr ""
+msgstr "Pełne"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:51
 msgid "ss-redir for TCP"
-msgstr ""
+msgstr "s-redir dla TCP"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:54
 msgid "ss-redir for UDP"
-msgstr ""
+msgstr "s-redir dla UDP"
