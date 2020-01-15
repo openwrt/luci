@@ -584,6 +584,7 @@ var CBIAbstractSection = CBINode.extend({
 
 				if (isActive != isSatisified) {
 					o.setActive(sid, !isActive);
+					isActive = !isActive;
 					changed = true;
 				}
 
