@@ -342,7 +342,7 @@ var FileSystem = L.Class.extend(/** @lends LuCI.fs.prototype */ {
 		var postdata = 'sessionid=%s&path=%s'
 			.format(encodeURIComponent(L.env.sessionid), encodeURIComponent(path));
 
-		return L.Request.post('/cgi-bin/cgi-download', postdata, {
+		return L.Request.post(L.env.cgi_base + '/cgi-download', postdata, {
 			headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
 		}).then(handleCgiIoReply);
 	},
@@ -385,7 +385,7 @@ var FileSystem = L.Class.extend(/** @lends LuCI.fs.prototype */ {
 		var postdata = 'sessionid=%s&command=%s'
 			.format(encodeURIComponent(L.env.sessionid), encodeURIComponent(cmdstr));
 
-		return L.Request.post('/cgi-bin/cgi-exec', postdata, {
+		return L.Request.post(L.env.cgi_base + '/cgi-exec', postdata, {
 			headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
 		}).then(handleCgiIoReply);
 	}
