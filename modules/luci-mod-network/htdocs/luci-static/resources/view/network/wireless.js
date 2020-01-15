@@ -1434,6 +1434,30 @@ return L.view.extend({
 					o.depends({ mode: 'sta-wds', encryption: 'wpa' });
 					o.depends({ mode: 'sta-wds', encryption: 'wpa2' });
 
+					o = ss.taboption('encryption', form.Value, 'subject_match', _('Certificate constraint (Subject)'), _("Certificate constraint substring - e.g. /CN=wifi.mycompany.com<br />See `logread -f` during handshake for actual values"));
+					o.depends({ mode: 'sta', encryption: 'wpa' });
+					o.depends({ mode: 'sta', encryption: 'wpa2' });
+					o.depends({ mode: 'sta-wds', encryption: 'wpa' });
+					o.depends({ mode: 'sta-wds', encryption: 'wpa2' });
+
+					o = ss.taboption('encryption', form.DynamicList, 'altsubject_match', _('Certificate constraint (SAN)'), _("Certificate constraint(s) via Subject Alternate Name values<br />(supported attributes: EMAIL, DNS, URI) - e.g. DNS:wifi.mycompany.com"));
+					o.depends({ mode: 'sta', encryption: 'wpa' });
+					o.depends({ mode: 'sta', encryption: 'wpa2' });
+					o.depends({ mode: 'sta-wds', encryption: 'wpa' });
+					o.depends({ mode: 'sta-wds', encryption: 'wpa2' });
+
+					o = ss.taboption('encryption', form.DynamicList, 'domain_match', _('Certificate constraint (Domain)'), _("Certificate constraint(s) against DNS SAN values (if available)<br />or Subject CN (exact match)"));
+					o.depends({ mode: 'sta', encryption: 'wpa' });
+					o.depends({ mode: 'sta', encryption: 'wpa2' });
+					o.depends({ mode: 'sta-wds', encryption: 'wpa' });
+					o.depends({ mode: 'sta-wds', encryption: 'wpa2' });
+
+					o = ss.taboption('encryption', form.DynamicList, 'domain_suffix_match', _('Certificate constraint (Wildcard)'), _("Certificate constraint(s) against DNS SAN values (if available)<br />or Subject CN (suffix match)"));
+					o.depends({ mode: 'sta', encryption: 'wpa' });
+					o.depends({ mode: 'sta', encryption: 'wpa2' });
+					o.depends({ mode: 'sta-wds', encryption: 'wpa' });
+					o.depends({ mode: 'sta-wds', encryption: 'wpa2' });
+
 					o = ss.taboption('encryption', form.FileUpload, 'client_cert', _('Path to Client-Certificate'));
 					o.depends({ mode: 'sta', eap_type: 'tls', encryption: 'wpa' });
 					o.depends({ mode: 'sta', eap_type: 'tls', encryption: 'wpa2' });
@@ -1486,6 +1510,30 @@ return L.view.extend({
 					};
 
 					o = ss.taboption('encryption', form.FileUpload, 'ca_cert2', _('Path to inner CA-Certificate'));
+					o.depends({ mode: 'sta', auth: 'EAP-TLS', encryption: 'wpa' });
+					o.depends({ mode: 'sta', auth: 'EAP-TLS', encryption: 'wpa2' });
+					o.depends({ mode: 'sta-wds', auth: 'EAP-TLS', encryption: 'wpa' });
+					o.depends({ mode: 'sta-wds', auth: 'EAP-TLS', encryption: 'wpa2' });
+
+					o = ss.taboption('encryption', form.Value, 'subject_match2', _('Inner certificate constraint (Subject)'), _("Certificate constraint substring - e.g. /CN=wifi.mycompany.com<br />See `logread -f` during handshake for actual values"));
+					o.depends({ mode: 'sta', auth: 'EAP-TLS', encryption: 'wpa' });
+					o.depends({ mode: 'sta', auth: 'EAP-TLS', encryption: 'wpa2' });
+					o.depends({ mode: 'sta-wds', auth: 'EAP-TLS', encryption: 'wpa' });
+					o.depends({ mode: 'sta-wds', auth: 'EAP-TLS', encryption: 'wpa2' });
+
+					o = ss.taboption('encryption', form.DynamicList, 'altsubject_match2', _('Inner certificate constraint (SAN)'), _("Certificate constraint(s) via Subject Alternate Name values<br />(supported attributes: EMAIL, DNS, URI) - e.g. DNS:wifi.mycompany.com"));
+					o.depends({ mode: 'sta', auth: 'EAP-TLS', encryption: 'wpa' });
+					o.depends({ mode: 'sta', auth: 'EAP-TLS', encryption: 'wpa2' });
+					o.depends({ mode: 'sta-wds', auth: 'EAP-TLS', encryption: 'wpa' });
+					o.depends({ mode: 'sta-wds', auth: 'EAP-TLS', encryption: 'wpa2' });
+
+					o = ss.taboption('encryption', form.DynamicList, 'domain_match2', _('Inner certificate constraint (Domain)'), _("Certificate constraint(s) against DNS SAN values (if available)<br />or Subject CN (exact match)"));
+					o.depends({ mode: 'sta', auth: 'EAP-TLS', encryption: 'wpa' });
+					o.depends({ mode: 'sta', auth: 'EAP-TLS', encryption: 'wpa2' });
+					o.depends({ mode: 'sta-wds', auth: 'EAP-TLS', encryption: 'wpa' });
+					o.depends({ mode: 'sta-wds', auth: 'EAP-TLS', encryption: 'wpa2' });
+
+					o = ss.taboption('encryption', form.DynamicList, 'domain_suffix_match2', _('Inner certificate constraint (Wildcard)'), _("Certificate constraint(s) against DNS SAN values (if available)<br />or Subject CN (suffix match)"));
 					o.depends({ mode: 'sta', auth: 'EAP-TLS', encryption: 'wpa' });
 					o.depends({ mode: 'sta', auth: 'EAP-TLS', encryption: 'wpa2' });
 					o.depends({ mode: 'sta-wds', auth: 'EAP-TLS', encryption: 'wpa' });
