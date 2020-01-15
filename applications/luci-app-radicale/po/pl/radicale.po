@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2020-01-13 14:26+0000\n"
+"PO-Revision-Date: 2020-01-15 02:10+0000\n"
 "Last-Translator: Marcin Net <marcin.net@linux.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsradicale/pl/>\n"
@@ -9,7 +9,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 3.10.1\n"
+"X-Generator: Weblate 3.11-dev\n"
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:268
 msgid ""
@@ -113,6 +113,10 @@ msgid ""
 "resources (e.g. fonts, JavaScript, etc.) on a web page to be requested from "
 "another domain outside the domain from which the resource originated."
 msgstr ""
+"Współdzielenie zasobów pochodzących z różnych źródeł (CORS) to mechanizm, "
+"który pozwala na żądanie o ograniczone zasoby (np. Czcionki, JavaScript itp.)"
+" Na stronie internetowej z innej domeny spoza domeny, z której pochodzi "
+"zasób."
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:491
 msgid "Custom"
@@ -209,26 +213,29 @@ msgid ""
 "For example, for the 'user' key, '.+' means 'authenticated user' and '.*' "
 "means 'anybody' (including anonymous users)."
 msgstr ""
+"Na przykład w przypadku klucza 'użytkownika', '.+' oznacza "
+"'uwierzytelnionego użytkownika', a '.*' oznacza 'każdego' (w tym "
+"użytkowników anonimowych)."
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:435
 msgid "Full access for Owner only"
-msgstr ""
+msgstr "Pełny dostęp tylko dla właściciela"
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:434
 msgid "Full access for authenticated Users"
-msgstr ""
+msgstr "Pełny dostęp dla uwierzytelnionych użytkowników"
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:433
 msgid "Full access for everybody (including anonymous)"
-msgstr ""
+msgstr "Pełny dostęp dla wszystkich (w tym anonimowych)"
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:285
 msgid "Full path and file name of certificate"
-msgstr ""
+msgstr "Pełna ścieżka i nazwa pliku certyfikatu"
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:310
 msgid "Full path and file name of private key"
-msgstr ""
+msgstr "Pełna ścieżka i nazwa pliku klucza prywatnego"
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:549
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:571
@@ -238,27 +245,27 @@ msgstr "Informacja"
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:83
 msgid "Keep in mind to use the correct hashing algorithm !"
-msgstr ""
+msgstr "Należy pamiętać o zastosowaniu właściwego algorytmu hashing!"
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:97
 msgid "Leading or ending slashes are trimmed from collection's path."
-msgstr ""
+msgstr "Początkowe lub kończące ukośniki są usuwane ze ścieżki collection's."
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:653
 msgid "Log-backup Count"
-msgstr ""
+msgstr "Licznik kopii zapasowych dziennika"
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:77
 msgid "Log-file Viewer"
-msgstr ""
+msgstr "Przeglądarka plików dziennika"
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:610
 msgid "Log-file directory"
-msgstr ""
+msgstr "Katalog plików dziennika"
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:630
 msgid "Log-file size"
-msgstr ""
+msgstr "Rozmiar pliku dziennika"
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:533
 msgid "Logging"
@@ -266,15 +273,15 @@ msgstr "Logowanie"
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:235
 msgid "Logon message"
-msgstr ""
+msgstr "Komunikat logowania"
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:631
 msgid "Maximum size of each rotation log-file."
-msgstr ""
+msgstr "Maksymalny rozmiar każdego rotacyjnego pliku dziennika."
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:236
 msgid "Message displayed in the client when a password is needed."
-msgstr ""
+msgstr "Wiadomość wyświetlana w kliencie, gdy potrzebne jest hasło."
 
 #: applications/luci-app-radicale/luasrc/controller/radicale.lua:46
 msgid "NOT installed"
@@ -286,30 +293,35 @@ msgstr "Brak"
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:654
 msgid "Number of backup files of log to create."
-msgstr ""
+msgstr "Liczba plików kopii zapasowych dziennika do utworzenia."
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:335
 msgid "OPTIONAL: See python's ssl module for available ciphers"
 msgstr ""
+"OPCJONALNE: Aby zapoznać się z dostępnymi szyframi, zobacz moduł ssl pytona"
 
 #: applications/luci-app-radicale/luasrc/view/radicale/tabmap_nsections.htm:50
 msgid "One or more missing/invalid fields on tab"
-msgstr ""
+msgstr "Jedno lub więcej brakujących/nieważnych pól na zakładce"
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:436
 msgid "Owner allow write, authenticated users allow read"
 msgstr ""
+"Właściciel zezwala na pisanie, uwierzytelnieni użytkownicy zezwalają na "
+"odczyt"
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:303
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:328
 msgid "Path/File required !"
-msgstr ""
+msgstr "Ścieżka/plik wymagane !"
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:81
 msgid ""
 "Place here the 'user:password' pairs for your users which should have access "
 "to Radicale."
 msgstr ""
+"Umieść tutaj pary 'user:password' dla swoich użytkowników, którzy powinni "
+"mieć dostęp do Radicale."
 
 #: applications/luci-app-radicale/luasrc/controller/radicale.lua:67
 msgid "Please install current version !"
@@ -317,40 +329,40 @@ msgstr "Zainstaluj aktualną wersję!"
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:78
 msgid "Please press [Reload] button below to reread the file."
-msgstr ""
+msgstr "Wciśnij przycisk [Przeładuj] poniżej, aby ponownie odczytać plik."
 
 #: applications/luci-app-radicale/luasrc/controller/radicale.lua:78
 msgid "Please update to current version !"
-msgstr ""
+msgstr "Prosimy o aktualizację do aktualnej wersji!"
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:225
 msgid "Port numbers below 1024 (Privileged ports) are not supported"
-msgstr ""
+msgstr "Numery portów poniżej 1024 (porty uprzywilejowane) nie są obsługiwane"
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:309
 msgid "Private key file"
-msgstr ""
+msgstr "Plik klucza prywatnego"
 
 #: applications/luci-app-radicale/luasrc/controller/radicale.lua:19
 msgid "Radicale CalDAV/CardDAV Server"
-msgstr ""
+msgstr "Radicale CalDAV/CardDAV Server"
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:459
 msgid "Radicale uses '/etc/radicale/rights' as regexp-based file."
-msgstr ""
+msgstr "Radicale używa '/etc/radicale/rights' jako pliku opartego na RegExp."
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:404
 msgid "Radicale uses '/etc/radicale/users' as htpasswd file."
-msgstr ""
+msgstr "Radicale używa '/etc/radicale/users' jako pliku htpasswd."
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:402
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:457
 msgid "Read only!"
-msgstr ""
+msgstr "Tylko do odczytu!"
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:455
 msgid "RegExp file"
-msgstr ""
+msgstr "Plik RegExp"
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:56
 msgid "Reload"
@@ -358,7 +370,7 @@ msgstr "Przeładuj"
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:688
 msgid "Response Encoding"
-msgstr ""
+msgstr "Kodowanie odpowiedzi"
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:86
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:418
@@ -367,11 +379,11 @@ msgstr "Prawa"
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:437
 msgid "Rights are based on a regexp-based file"
-msgstr ""
+msgstr "Prawa oparte są na pliku opartym na RegExp"
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:429
 msgid "Rights backend"
-msgstr ""
+msgstr "Backend praw"
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:392
 msgid "SHA-1"
@@ -388,7 +400,7 @@ msgstr "Zapisz"
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:95
 msgid "Section names are only used for naming the rule."
-msgstr ""
+msgstr "Nazwy sekcji są używane tylko do nazwania reguły."
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:211
 msgid "Server"
@@ -398,6 +410,8 @@ msgstr "Serwer"
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:656
 msgid "Setting this parameter to '0' will disable rotation of log-file."
 msgstr ""
+"Ustawienie tego parametru na ' 0 ' spowoduje wyłączenie rotacji pliku "
+"dziennika."
 
 #: applications/luci-app-radicale/luasrc/controller/radicale.lua:62
 msgid "Software package '%s' is not installed."
@@ -422,19 +436,19 @@ msgstr "Start / Stop"
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:156
 msgid "Start/Stop Radicale server"
-msgstr ""
+msgstr "Uruchom / Zatrzymaj serwer Radicale"
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:473
 msgid "Storage"
-msgstr ""
+msgstr "Magazyn"
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:697
 msgid "Storage Encoding"
-msgstr ""
+msgstr "Kodowanie pamięci"
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:484
 msgid "Storage backend"
-msgstr ""
+msgstr "Backend do przechowywania"
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:566
 msgid "Syslog Log level"
@@ -449,21 +463,25 @@ msgid ""
 "The Radicale Project is a complete CalDAV (calendar) and CardDAV (contact) "
 "server solution."
 msgstr ""
+"Projekt Radicale to kompletne rozwiązanie serwerowe CalDAV (kalendarz) i "
+"CardDAV (kontakt)."
 
 #: applications/luci-app-radicale/luasrc/controller/radicale.lua:34
 msgid ""
 "They can be viewed and edited by calendar and contact clients on mobile "
 "phones or computers."
 msgstr ""
+"Można je przeglądać i edytować za pomocą kalendarza oraz kontaktować się z "
+"klientami na telefonach komórkowych lub komputerach."
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:408
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:463
 msgid "To edit the file follow this link!"
-msgstr ""
+msgstr "Aby edytować plik, skorzystaj z tego linku!"
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:615
 msgid "To view latest log file follow this link!"
-msgstr ""
+msgstr "Aby wyświetlić najnowszy plik dziennika, kliknij ten link!"
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:201
 msgid "Value is not a number"
@@ -472,7 +490,7 @@ msgstr "Wartość nie jest liczbą"
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:644
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:667
 msgid "Value is not an Integer >= 0 !"
-msgstr ""
+msgstr "Wartość nie jest liczbą całkowitą >= 0 !"
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:203
 msgid "Value not between 0 and 300"
@@ -481,7 +499,7 @@ msgstr "Wartość nie mieszcząca się w przedziale od 0 do 300"
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:647
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:670
 msgid "Value required ! Integer >= 0 !"
-msgstr ""
+msgstr "Wartość wymagana! Integer >= 0 !"
 
 #: applications/luci-app-radicale/luasrc/controller/radicale.lua:40
 #: applications/luci-app-radicale/luasrc/controller/radicale.lua:42
@@ -497,6 +515,8 @@ msgstr "Informacja o wersji"
 msgid ""
 "WARNING: Only 'File-system' is documented and tested by Radicale development"
 msgstr ""
+"OSTRZEŻENIE: Tylko \"System plików\" jest dokumentowany i testowany przez "
+"Radicale Development"
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:550
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:572
@@ -509,16 +529,19 @@ msgid ""
 "You can also get groups from the user regex in the collection with {0}, {1}, "
 "etc."
 msgstr ""
+"Można również uzyskać grupy z regex użytkownika w kolekcji z {0}, {1}, itd."
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:89
 msgid ""
 "You can use Python's ConfigParser interpolation values %(login)s and "
 "%(path)s."
 msgstr ""
+"Możesz użyć wartości interpolacji %(login)s i %(ścieżka)s w Pythonie "
+"ConfigParser."
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:390
 msgid "crypt"
-msgstr ""
+msgstr "Krypta"
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:364
 msgid "custom"
@@ -536,7 +559,7 @@ msgstr "zainstalowany"
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:623
 msgid "no valid path given!"
-msgstr ""
+msgstr "nie podano prawidłowej ścieżki!"
 
 #: applications/luci-app-radicale/luasrc/controller/radicale.lua:43
 msgid "or higher"
@@ -544,7 +567,7 @@ msgstr "lub wyżej"
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:391
 msgid "plain"
-msgstr ""
+msgstr "zwykły"
 
 #: applications/luci-app-radicale/luasrc/controller/radicale.lua:41
 #: applications/luci-app-radicale/luasrc/controller/radicale.lua:64
@@ -554,7 +577,7 @@ msgstr "wymagany"
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:393
 msgid "salted SHA-1"
-msgstr ""
+msgstr "solone SHA-1"
 
 #~ msgid "Access-Control-Allow-Headers"
 #~ msgstr "Access-Control-Allow-Headers"
