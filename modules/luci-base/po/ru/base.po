@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LuCI: base\n"
 "POT-Creation-Date: 2010-05-09 01:01+0300\n"
-"PO-Revision-Date: 2020-01-14 15:21+0000\n"
-"Last-Translator: Max Smolik <makcum15@gmail.com>\n"
+"PO-Revision-Date: 2020-01-16 20:37+0000\n"
+"Last-Translator: Anton Kikin <a.a.kikin@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/openwrt/luci/ru/>"
 "\n"
 "Language: ru\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<="
 "4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 3.11-dev\n"
+"X-Generator: Weblate 3.10.2-dev\n"
 "Project-Info: Это технический перевод, не дословный. Главное-удобный русский "
 "интерфейс, все проверялось в графическом режиме, совместим с другими apps\n"
 
@@ -967,19 +967,19 @@ msgstr "Категория"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1464
 msgid "Certificate constraint (Domain)"
-msgstr ""
+msgstr "Ограничение сертификата (Domain)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1458
 msgid "Certificate constraint (SAN)"
-msgstr ""
+msgstr "Ограничение сертификата (SAN)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1452
 msgid "Certificate constraint (Subject)"
-msgstr ""
+msgstr "Ограничение сертификата (Subject)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1470
 msgid "Certificate constraint (Wildcard)"
-msgstr ""
+msgstr "Ограничение сертификата (Wildcard)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1452
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1548
@@ -987,6 +987,9 @@ msgid ""
 "Certificate constraint substring - e.g. /CN=wifi.mycompany.com<br />See "
 "`logread -f` during handshake for actual values"
 msgstr ""
+"Подстрока ограничения сертификата (например, /CN=wifi.mycompany.com).<br />"
+"См. вывод `logread -f` при рукопожатии (handshake) для получения актуальных "
+"значений"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1464
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1560
@@ -994,6 +997,8 @@ msgid ""
 "Certificate constraint(s) against DNS SAN values (if available)<br />or "
 "Subject CN (exact match)"
 msgstr ""
+"Ограничение(я) сертификата по значениям DNS SAN (если доступно)<br />или "
+"Subject CN (точное совпадение)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1470
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1566
@@ -1001,6 +1006,8 @@ msgid ""
 "Certificate constraint(s) against DNS SAN values (if available)<br />or "
 "Subject CN (suffix match)"
 msgstr ""
+"Ограничение(я) сертификата по значениям DNS SAN (если доступно)<br />или "
+"Subject CN (совпадение суффикса)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1458
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1554
@@ -1008,6 +1015,8 @@ msgid ""
 "Certificate constraint(s) via Subject Alternate Name values<br />(supported "
 "attributes: EMAIL, DNS, URI) - e.g. DNS:wifi.mycompany.com"
 msgstr ""
+"Ограничение(я) сертификата по значениям SAN (Subject Alternate Names),<br />"
+"например, DNS:wifi.mycompany.com (поддерживаемые атрибуты EMAIL, DNS, URI)"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:51
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:54
@@ -2744,19 +2753,19 @@ msgstr "Скрипты инициализации"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1560
 msgid "Inner certificate constraint (Domain)"
-msgstr ""
+msgstr "Внутреннее ограничение сертификата (Domain)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1554
 msgid "Inner certificate constraint (SAN)"
-msgstr ""
+msgstr "Внутреннее ограничение сертификата (SAN)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1548
 msgid "Inner certificate constraint (Subject)"
-msgstr ""
+msgstr "Внутреннее ограничение сертификата (Subject)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1566
 msgid "Inner certificate constraint (Wildcard)"
-msgstr ""
+msgstr "Внутреннее ограничение сертификата (Wildcard)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:263
 msgid "Install protocol extensions..."
@@ -5631,6 +5640,7 @@ msgstr "Страница содержит работающие процессы 
 msgid ""
 "This option cannot be used because the ca-bundle package is not installed."
 msgstr ""
+"Эта опция не может быть использована, так как пакет ca-bundle не установлен."
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:943
 #: modules/luci-base/htdocs/luci-static/resources/form.js:1074
@@ -6044,11 +6054,12 @@ msgstr "Использовать таблицу маршрутизации"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1431
 msgid "Use system certificates"
-msgstr ""
+msgstr "Использовать системные сертификаты"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1527
 msgid "Use system certificates for inner-tunnel"
 msgstr ""
+"Использовать системные сертификаты для внутреннего туннеля (inner-tunnel)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:389
 msgid ""
@@ -6144,6 +6155,8 @@ msgid ""
 "Validate server certificate using built-in system CA bundle,<br />requires "
 "the \"ca-bundle\" package"
 msgstr ""
+"Проверять сертификат сервера с помощью встроенного системного центра "
+"сертификации<br />(требуется пакет «ca-bundle»)"
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:73
 msgid "Vendor"
