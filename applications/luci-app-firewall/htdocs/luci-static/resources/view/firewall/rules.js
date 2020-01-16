@@ -409,69 +409,9 @@ return L.view.extend({
 			return this.super('write', [section_id, (value == 'MARK_SET' || value == 'MARK_XOR') ? 'MARK' : value]);
 		};
 
-		o = s.taboption('general', form.Value, 'set_mark', _('Set mark'), _('Set the given mark value on established connections. Format is value[/mask]. If a mask is specified then only those bits set in the mask are modified.'));
-		o.modalonly = true;
-		o.rmempty = false;
-		o.depends('target', 'MARK_SET');
-		o.validate = function(section_id, value) {
-			var m = String(value).match(/^(0x[0-9a-f]{1,8}|[0-9]{1,10})(?:\/(0x[0-9a-f]{1,8}|[0-9]{1,10}))?$/i);
-
-			if (!m || +m[1] > 0xffffffff || (m[2] != null && +m[2] > 0xffffffff))
-				return _('Expecting: %s').format(_('valid firewall mark'));
-
-			return true;
-		};
-
-		o = s.taboption('general', form.Value, 'set_xmark', _('XOR mark'), _('Apply a bitwise XOR of the given value and the existing mark value on established connections. Format is value[/mask]. If a mask is specified then those bits set in the mask are zeroed out.'));
-		o.modalonly = true;
-		o.rmempty = false;
-		o.depends('target', 'MARK_XOR');
-		o.validate = function(section_id, value) {
-			var m = String(value).match(/^(0x[0-9a-f]{1,8}|[0-9]{1,10})(?:\/(0x[0-9a-f]{1,8}|[0-9]{1,10}))?$/i);
-
-			if (!m || +m[1] > 0xffffffff || (m[2] != null && +m[2] > 0xffffffff))
-				return _('Expecting: %s').format(_('valid firewall mark'));
-
-			return true;
-		};
-
-		o = s.taboption('general', form.Value, 'set_dhcp', _('DSCP mark'), _('Apply the given DSCP class or value to established connections.'));
-		o.modalonly = true;
-		o.rmempty = false;
-		o.depends('target', 'DSCP');
-		o.value('CS0');
-		o.value('CS1');
-		o.value('CS2');
-		o.value('CS3');
-		o.value('CS4');
-		o.value('CS5');
-		o.value('CS6');
-		o.value('CS7');
-		o.value('BE');
-		o.value('AF11');
-		o.value('AF12');
-		o.value('AF13');
-		o.value('AF21');
-		o.value('AF22');
-		o.value('AF23');
-		o.value('AF31');
-		o.value('AF32');
-		o.value('AF33');
-		o.value('AF41');
-		o.value('AF42');
-		o.value('AF43');
-		o.value('EF');
-		o.validate = function(section_id, value) {
-			if (value == '')
-				return _('DSCP mark required');
-
-			var m = String(value).match(/^(?:CS[0-7]|BE|AF[1234][123]|EF|(0x[0-9a-f]{1,2}|[0-9]{1,2}))$/);
-
-			if (!m || (m[1] != null && +m[1] > 0x3f))
-				return _('Invalid DSCP mark');
-
-			return true;
-		};
+		fwtool.addMarkOption(s, 1);
+		fwtool.addMarkOption(s, 2);
+		fwtool.addDSCPOption(s, true);
 
 		o = s.taboption('general', form.ListValue, 'set_helper', _('Tracking helper'), _('Assign the specified connection tracking helper to matched traffic.'));
 		o.modalonly = true;
@@ -498,98 +438,10 @@ return L.view.extend({
 			return _('Unknown or not installed conntrack helper "%s"').format(value);
 		};
 
-		o = s.taboption('advanced', form.Value, 'mark', _('Match mark'),
-			_('Matches a specific firewall mark or a range of different marks.'));
-		o.modalonly = true;
-		o.rmempty = true;
-		o.validate = function(section_id, value) {
-			if (value == '')
-				return true;
-
-			var m = String(value).match(/^(?:!\s*)?(0x[0-9a-f]{1,8}|[0-9]{1,10})(?:\/(0x[0-9a-f]{1,8}|[0-9]{1,10}))?$/i);
-
-			if (!m || +m[1] > 0xffffffff || (m[2] != null && +m[2] > 0xffffffff))
-				return _('Expecting: %s').format(_('valid firewall mark'));
-
-			return true;
-		};
-
-		o = s.taboption('advanced', form.Value, 'dscp', _('Match DSCP'),
-			_('Matches traffic carrying the specified DSCP marking.'));
-		o.modalonly = true;
-		o.rmempty = true;
-		o.placeholder = _('any');
-		o.value('CS0');
-		o.value('CS1');
-		o.value('CS2');
-		o.value('CS3');
-		o.value('CS4');
-		o.value('CS5');
-		o.value('CS6');
-		o.value('CS7');
-		o.value('BE');
-		o.value('AF11');
-		o.value('AF12');
-		o.value('AF13');
-		o.value('AF21');
-		o.value('AF22');
-		o.value('AF23');
-		o.value('AF31');
-		o.value('AF32');
-		o.value('AF33');
-		o.value('AF41');
-		o.value('AF42');
-		o.value('AF43');
-		o.value('EF');
-		o.validate = function(section_id, value) {
-			if (value == '')
-				return true;
-
-			value = String(value).replace(/^!\s*/, '');
-
-			var m = value.match(/^(?:CS[0-7]|BE|AF[1234][123]|EF|(0x[0-9a-f]{1,2}|[0-9]{1,2}))$/);
-
-			if (!m || +m[1] > 0xffffffff || (m[2] != null && +m[2] > 0xffffffff))
-				return _('Invalid DSCP mark');
-
-			return true;
-		};
-
-		o = s.taboption('advanced', form.Value, 'limit', _('Limit matching'),
-			_('Limits traffic matching to the specified rate.'));
-		o.modalonly = true;
-		o.rmempty = true;
-		o.placeholder = _('unlimited');
-		o.value('10/second');
-		o.value('60/minute');
-		o.value('3/hour');
-		o.value('500/day');
-		o.validate = function(section_id, value) {
-			if (value == '')
-				return true;
-
-			var m = String(value).toLowerCase().match(/^(?:0x[0-9a-f]{1,8}|[0-9]{1,10})\/([a-z]+)$/),
-			    u = ['second', 'minute', 'hour', 'day'],
-			    i = 0;
-
-			if (m)
-				for (i = 0; i < u.length; i++)
-					if (u[i].indexOf(m[1]) == 0)
-						break;
-
-			if (!m || i >= u.length)
-				return _('Invalid limit value');
-
-			return true;
-		};
-
-		o = s.taboption('advanced', form.Value, 'limit_burst', _('Limit burst'),
-			_('Maximum initial number of packets to match: this number gets recharged by one every time the limit specified above is not reached, up to this number.'));
-		o.modalonly = true;
-		o.rmempty = true;
-		o.placeholder = '5';
-		o.datatype = 'uinteger';
-		o.depends({ limit: null, '!reverse': true });
+		fwtool.addMarkOption(s, false);
+		fwtool.addDSCPOption(s, false);
+		fwtool.addLimitOption(s);
+		fwtool.addLimitBurstOption(s);
 
 		o = s.taboption('advanced', form.Value, 'extra', _('Extra arguments'),
 			_('Passes additional arguments to iptables. Use with care!'));

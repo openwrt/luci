@@ -308,5 +308,139 @@ return L.Class.extend({
 			else /* if (x == 'DROP') */
 				return _('Discard input');
 		}
+	},
+
+	addDSCPOption: function(s, is_target) {
+		var o = s.taboption(is_target ? 'general' : 'advanced', form.Value, is_target ? 'set_dscp' : 'dscp',
+			is_target ? _('DSCP mark') : _('Match DSCP'),
+			is_target ? _('Apply the given DSCP class or value to established connections.') : _('Matches traffic carrying the specified DSCP marking.'));
+
+		o.modalonly = true;
+		o.rmempty = !is_target;
+		o.placeholder = _('any');
+
+		if (is_target)
+			o.depends('target', 'DSCP');
+
+		o.value('CS0');
+		o.value('CS1');
+		o.value('CS2');
+		o.value('CS3');
+		o.value('CS4');
+		o.value('CS5');
+		o.value('CS6');
+		o.value('CS7');
+		o.value('BE');
+		o.value('AF11');
+		o.value('AF12');
+		o.value('AF13');
+		o.value('AF21');
+		o.value('AF22');
+		o.value('AF23');
+		o.value('AF31');
+		o.value('AF32');
+		o.value('AF33');
+		o.value('AF41');
+		o.value('AF42');
+		o.value('AF43');
+		o.value('EF');
+		o.validate = function(section_id, value) {
+			if (value == '')
+				return is_target ? _('DSCP mark required') : true;
+
+			if (!is_target)
+				value = String(value).replace(/^!\s*/, '');
+
+			var m = value.match(/^(?:CS[0-7]|BE|AF[1234][123]|EF|(0x[0-9a-f]{1,2}|[0-9]{1,2}))$/);
+
+			if (!m || (m[1] != null && +m[1] > 0x3f))
+				return _('Invalid DSCP mark');
+
+			return true;
+		};
+
+		return o;
+	},
+
+	addMarkOption: function(s, is_target) {
+		var o = s.taboption(is_target ? 'general' : 'advanced', form.Value,
+			(is_target > 1) ? 'set_xmark' : (is_target ? 'set_mark' : 'mark'),
+			(is_target > 1) ? _('XOR mark') : (is_target ? _('Set mark') : _('Match mark')),
+			(is_target > 1) ? _('Apply a bitwise XOR of the given value and the existing mark value on established connections. Format is value[/mask]. If a mask is specified then those bits set in the mask are zeroed out.') :
+				(is_target ? _('Set the given mark value on established connections. Format is value[/mask]. If a mask is specified then only those bits set in the mask are modified.') :
+						_('Matches a specific firewall mark or a range of different marks.')));
+
+		o.modalonly = true;
+		o.rmempty = true;
+
+		if (is_target > 1)
+			o.depends('target', 'MARK_XOR');
+		else if (is_target)
+			o.depends('target', 'MARK_SET');
+
+		o.validate = function(section_id, value) {
+			if (value == '')
+				return is_target ? _('Valid firewall mark required') : true;
+
+			if (!is_target)
+				value = String(value).replace(/^!\s*/, '');
+
+			var m = value.match(/^(0x[0-9a-f]{1,8}|[0-9]{1,10})(?:\/(0x[0-9a-f]{1,8}|[0-9]{1,10}))?$/i);
+
+			if (!m || +m[1] > 0xffffffff || (m[2] != null && +m[2] > 0xffffffff))
+				return _('Expecting: %s').format(_('valid firewall mark'));
+
+			return true;
+		};
+
+		return o;
+	},
+
+	addLimitOption: function(s) {
+		var o = s.taboption('advanced', form.Value, 'limit',
+			_('Limit matching'),
+			_('Limits traffic matching to the specified rate.'));
+
+		o.modalonly = true;
+		o.rmempty = true;
+		o.placeholder = _('unlimited');
+		o.value('10/second');
+		o.value('60/minute');
+		o.value('3/hour');
+		o.value('500/day');
+		o.validate = function(section_id, value) {
+			if (value == '')
+				return true;
+
+			var m = String(value).toLowerCase().match(/^(?:0x[0-9a-f]{1,8}|[0-9]{1,10})\/([a-z]+)$/),
+			    u = ['second', 'minute', 'hour', 'day'],
+			    i = 0;
+
+			if (m)
+				for (i = 0; i < u.length; i++)
+					if (u[i].indexOf(m[1]) == 0)
+						break;
+
+			if (!m || i >= u.length)
+				return _('Invalid limit value');
+
+			return true;
+		};
+
+		return o;
+	},
+
+	addLimitBurstOption: function(s) {
+		var o = s.taboption('advanced', form.Value, 'limit_burst',
+			_('Limit burst'),
+			_('Maximum initial number of packets to match: this number gets recharged by one every time the limit specified above is not reached, up to this number.'));
+
+		o.modalonly = true;
+		o.rmempty = true;
+		o.placeholder = '5';
+		o.datatype = 'uinteger';
+		o.depends({ limit: null, '!reverse': true });
+
+		return o;
 	}
 });
