@@ -1702,7 +1702,7 @@ var UIFileUpload = UIElement.extend({
 		data.append('filename', path + '/' + filename);
 		data.append('filedata', fileinput.files[0]);
 
-		return L.Request.post('/cgi-bin/cgi-upload', data, {
+		return L.Request.post(L.env.cgi_base + '/cgi-upload', data, {
 			progress: L.bind(function(btn, ev) {
 				btn.firstChild.data = '%.2f%%'.format((ev.loaded / ev.total) * 100);
 			}, this, ev.target)
@@ -2397,7 +2397,7 @@ return L.Class.extend({
 
 								var filename = input.files[0].name;
 
-								L.Request.post('/cgi-bin/cgi-upload', data, {
+								L.Request.post(L.env.cgi_base + '/cgi-upload', data, {
 									timeout: 0,
 									progress: function(pev) {
 										var percent = (pev.loaded / pev.total) * 100;

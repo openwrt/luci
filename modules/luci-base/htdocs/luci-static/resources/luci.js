@@ -1192,6 +1192,8 @@
 			if (env.base_url == null)
 				this.error('InternalError', 'Cannot find url of luci.js');
 
+			env.cgi_base = env.scriptname.replace(/\/[^\/]+$/, '');
+
 			Object.assign(this.env, env);
 
 			document.addEventListener('poll-start', function(ev) {
