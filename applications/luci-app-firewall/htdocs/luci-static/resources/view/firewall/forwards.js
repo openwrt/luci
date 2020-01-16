@@ -299,6 +299,22 @@ return L.view.extend({
 			return _('Unknown or not installed conntrack helper "%s"').format(value);
 		};
 
+		o = s.taboption('advanced', form.Value, 'mark', _('Match mark'),
+			_('Matches a specific firewall mark or a range of different marks.'));
+		o.modalonly = true;
+		o.rmempty = true;
+		o.validate = function(section_id, value) {
+			if (value == '')
+				return true;
+
+			var m = String(value).match(/^(?:!\s*)?(0x[0-9a-f]{1,8}|[0-9]{1,10})(?:\/(0x[0-9a-f]{1,8}|[0-9]{1,10}))?$/i);
+
+			if (!m || +m[1] > 0xffffffff || (m[2] != null && +m[2] > 0xffffffff))
+				return _('Expecting: %s').format(_('valid firewall mark'));
+
+			return true;
+		};
+
 		o = s.taboption('advanced', form.Value, 'extra', _('Extra arguments'),
 			_('Passes additional arguments to iptables. Use with care!'));
 		o.modalonly = true;
