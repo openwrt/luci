@@ -216,6 +216,7 @@ local methods = {
 			rv.sysntpd       = fs.readlink("/usr/sbin/ntpd") and true
 			rv.ipv6          = fs.access("/proc/net/ipv6_route")
 			rv.dropbear      = fs.access("/usr/sbin/dropbear")
+			rv.cabundle      = fs.access("/etc/ssl/certs/ca-certificates.crt")
 
 			local wifi_features = { "eap", "11n", "11ac", "11r", "11w", "acs", "sae", "owe", "suiteb192" }
 
