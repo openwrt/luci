@@ -393,6 +393,52 @@ return L.view.extend({
 		o.value('REJECT', _('reject'));
 		o.value('NOTRACK', _("don't track"));
 		o.value('HELPER', _('assign conntrack helper'));
+		o.value('MARK_SET', _('apply firewall mark'));
+		o.value('MARK_XOR', _('XOR firewall mark'));
+		o.cfgvalue = function(section_id) {
+			var t = uci.get('firewall', section_id, 'target'),
+			    m = uci.get('firewall', section_id, 'set_mark');
+
+			if (t == 'MARK')
+				return m ? 'MARK_SET' : 'MARK_XOR';
+
+			return t;
+		};
+		o.write = function(section_id, value) {
+			return this.super('write', [section_id, (value == 'MARK_SET' || value == 'MARK_XOR') ? 'MARK' : value]);
+		};
+
+		o = s.taboption('general', form.Value, 'set_mark', _('Set mark'), _('Set the given mark value on established connections. Format is value[/mask]. If a mask is specified then only those bits set in the mask are modified.'));
+		o.modalonly = true;
+		o.rmempty = false;
+		o.depends('target', 'MARK_SET');
+		o.validate = function(section_id, value) {
+			if (value == '')
+				return true;
+
+			var m = String(value).match(/^(0x[0-9a-f]{1,8}|[0-9]{1,10})(?:\/(0x[0-9a-f]{1,8}|[0-9]{1,10}))?$/i);
+
+			if (!m || +m[1] > 0xffffffff || (m[2] != null && +m[2] > 0xffffffff))
+				return _('Expecting: %s').format(_('valid firewall mark'));
+
+			return true;
+		};
+
+		o = s.taboption('general', form.Value, 'set_xmark', _('XOR mark'), _('Apply a bitwise XOR of the given value and the existing mark value on established connections. Format is value[/mask]. If a mask is specified then those bits set in the mask are zeroed out.'));
+		o.modalonly = true;
+		o.rmempty = false;
+		o.depends('target', 'MARK_XOR');
+		o.validate = function(section_id, value) {
+			if (value == '')
+				return true;
+
+			var m = String(value).match(/^(0x[0-9a-f]{1,8}|[0-9]{1,10})(?:\/(0x[0-9a-f]{1,8}|[0-9]{1,10}))?$/i);
+
+			if (!m || +m[1] > 0xffffffff || (m[2] != null && +m[2] > 0xffffffff))
+				return _('Expecting: %s').format(_('valid firewall mark'));
+
+			return true;
+		};
 
 		o = s.taboption('general', form.ListValue, 'set_helper', _('Tracking helper'), _('Assign the specified connection tracking helper to matched traffic.'));
 		o.modalonly = true;
@@ -417,6 +463,22 @@ return L.view.extend({
 					return true;
 
 			return _('Unknown or not installed conntrack helper "%s"').format(value);
+		};
+
+		o = s.taboption('advanced', form.Value, 'mark', _('Match mark'),
+			_('Matches a specific firewall mark or a range of different marks.'));
+		o.modalonly = true;
+		o.rmempty = true;
+		o.validate = function(section_id, value) {
+			if (value == '')
+				return true;
+
+			var m = String(value).match(/^(?:!\s*)?(0x[0-9a-f]{1,8}|[0-9]{1,10})(?:\/(0x[0-9a-f]{1,8}|[0-9]{1,10}))?$/i);
+
+			if (!m || +m[1] > 0xffffffff || (m[2] != null && +m[2] > 0xffffffff))
+				return _('Expecting: %s').format(_('valid firewall mark'));
+
+			return true;
 		};
 
 		o = s.taboption('advanced', form.Value, 'extra', _('Extra arguments'),
