@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-06-10 03:41+0200\n"
-"PO-Revision-Date: 2020-01-10 12:22+0000\n"
+"PO-Revision-Date: 2020-01-16 19:12+0000\n"
 "Last-Translator: Franco Castillo <castillofrancodamian@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/openwrt/luci/es/>"
 "\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.10.1\n"
+"X-Generator: Weblate 3.10.2-dev\n"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:910
 msgid "%.1f dB"
@@ -963,19 +963,19 @@ msgstr "Categoría"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1464
 msgid "Certificate constraint (Domain)"
-msgstr ""
+msgstr "Restricción de certificado (Dominio)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1458
 msgid "Certificate constraint (SAN)"
-msgstr ""
+msgstr "Restricción de certificado (SAN)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1452
 msgid "Certificate constraint (Subject)"
-msgstr ""
+msgstr "Restricción de certificado (Asunto)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1470
 msgid "Certificate constraint (Wildcard)"
-msgstr ""
+msgstr "Restricción de certificado (Comodín)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1452
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1548
@@ -983,6 +983,9 @@ msgid ""
 "Certificate constraint substring - e.g. /CN=wifi.mycompany.com<br />See "
 "`logread -f` during handshake for actual values"
 msgstr ""
+"Subcadena de restricción de certificado, p. Ej. /CN=wifi.mycompany.com<br/>"
+"Consulte `logread -f` durante el protocolo de enlace para conocer los "
+"valores reales"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1464
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1560
@@ -990,6 +993,8 @@ msgid ""
 "Certificate constraint(s) against DNS SAN values (if available)<br />or "
 "Subject CN (exact match)"
 msgstr ""
+"Restricción(es) de certificado contra valores DNS SAN (si están disponibles)<"
+"br />o Asunto CN (coincidencia exacta)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1470
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1566
@@ -997,6 +1002,8 @@ msgid ""
 "Certificate constraint(s) against DNS SAN values (if available)<br />or "
 "Subject CN (suffix match)"
 msgstr ""
+"Restricción(es) de certificado contra valores DNS SAN (si están disponibles)<"
+"br />o Asunto CN (coincidencia de sufijo)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1458
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1554
@@ -1004,6 +1011,9 @@ msgid ""
 "Certificate constraint(s) via Subject Alternate Name values<br />(supported "
 "attributes: EMAIL, DNS, URI) - e.g. DNS:wifi.mycompany.com"
 msgstr ""
+"Restricción(es) de certificado a través de valores de Nombre alternativo de "
+"sujeto<br />(atributos admitidos: EMAIL, DNS, URI) - p. DNS: "
+"wifi.miempresa.com"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:51
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:54
@@ -2745,19 +2755,19 @@ msgstr "Scripts de inicio"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1560
 msgid "Inner certificate constraint (Domain)"
-msgstr ""
+msgstr "Restricción de certificado interno (Dominio)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1554
 msgid "Inner certificate constraint (SAN)"
-msgstr ""
+msgstr "Restricción de certificado interno (SAN)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1548
 msgid "Inner certificate constraint (Subject)"
-msgstr ""
+msgstr "Restricción de certificado interno (Asunto)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1566
 msgid "Inner certificate constraint (Wildcard)"
-msgstr ""
+msgstr "Restricción de certificado interno (Comodín)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:263
 msgid "Install protocol extensions..."
@@ -5642,6 +5652,7 @@ msgstr "Procesos del sistema que se están ejecutando actualmente y su estado."
 msgid ""
 "This option cannot be used because the ca-bundle package is not installed."
 msgstr ""
+"Esta opción no se puede usar porque el paquete ca-bundle no está instalado."
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:943
 #: modules/luci-base/htdocs/luci-static/resources/form.js:1074
@@ -6056,11 +6067,11 @@ msgstr "Usar tabla de rutas"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1431
 msgid "Use system certificates"
-msgstr ""
+msgstr "Usar certificados del sistema"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1527
 msgid "Use system certificates for inner-tunnel"
-msgstr ""
+msgstr "Usar certificados del sistema para túnel interno"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:389
 msgid ""
@@ -6154,6 +6165,8 @@ msgid ""
 "Validate server certificate using built-in system CA bundle,<br />requires "
 "the \"ca-bundle\" package"
 msgstr ""
+"Valide el certificado del servidor utilizando el paquete CA integrado del "
+"sistema,<br />requiere el paquete \"ca-bundle\""
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:73
 msgid "Vendor"
@@ -6641,7 +6654,7 @@ msgstr "Ilimitado"
 #: modules/luci-compat/luasrc/view/cbi/firewall_zonelist.htm:53
 #: modules/luci-compat/luasrc/view/cbi/network_netlist.htm:38
 msgid "unspecified"
-msgstr "No especificado"
+msgstr "sin especificar"
 
 #: modules/luci-compat/luasrc/view/cbi/network_netlist.htm:71
 msgid "unspecified -or- create:"
