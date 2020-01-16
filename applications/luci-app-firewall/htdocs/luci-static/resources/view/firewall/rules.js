@@ -223,9 +223,34 @@ return L.view.extend({
 		o.default = o.enabled;
 		o.editable = true;
 
-		//ft.opt_enabled(s, Button);
-		//ft.opt_name(s, Value, _('Name'));
 
+		o = s.taboption('advanced', form.ListValue, 'direction', _('Match device'));
+		o.modalonly = true;
+		o.value('', _('unspecified'));
+		o.value('in', _('Inbound device'));
+		o.value('out', _('Outbound device'));
+		o.cfgvalue = function(section_id) {
+			var val = uci.get('firewall', section_id, 'direction');
+			switch (val) {
+				case 'in':
+				case 'ingress':
+					return 'in';
+
+				case 'out':
+				case 'egress':
+					return 'out';
+			}
+
+			return null;
+		};
+
+		o = s.taboption('advanced', widgets.DeviceSelect, 'device', _('Device name'),
+			_('Specifies whether to tie this traffic rule to a specific inbound or outbound network device.'));
+		o.modalonly = true;
+		o.noaliases = true;
+		o.rmempty = false;
+		o.depends('direction', 'in');
+		o.depends('direction', 'out');
 
 		o = s.taboption('advanced', form.ListValue, 'family', _('Restrict to address family'));
 		o.modalonly = true;
