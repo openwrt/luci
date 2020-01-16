@@ -209,9 +209,9 @@ psk_key.validate = validate_psk_key
 b_tls_version = s:option(ListValue, "tls_version", _("TLS Version"),
     _("The remote broker must support the same version of TLS for the connection to succeed."))
 b_tls_version:value("", "Default")
-b_tls_version:value("tlsv1")
 b_tls_version:value("tlsv1.1")
 b_tls_version:value("tlsv1.2")
+b_tls_version:value("tlsv1.3")
 b_tls_version.optional = true
 
 o = s:option(Value, "cafile", _("Path to CA file"))
