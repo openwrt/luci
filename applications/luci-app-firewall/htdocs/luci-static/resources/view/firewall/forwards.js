@@ -79,14 +79,22 @@ return L.view.extend({
 		expect: { '': {} }
 	}),
 
+	callConntrackHelpers: rpc.declare({
+		object: 'luci',
+		method: 'getConntrackHelpers',
+		expect: { result: [] }
+	}),
+
 	load: function() {
 		return Promise.all([
-			this.callHostHints()
+			this.callHostHints(),
+			this.callConntrackHelpers()
 		]);
 	},
 
 	render: function(data) {
 		var hosts = data[0],
+		    ctHelpers = data[1],
 		    m, s, o;
 
 		m = new form.Map('firewall', _('Firewall - Port Forwards'),
@@ -263,6 +271,33 @@ return L.view.extend({
 		o.modalonly = true;
 		o.rmempty = true;
 		o.default = o.enabled;
+
+		o = s.taboption('advanced', form.ListValue, 'reflection_src', _('Loopback source IP'), _('Specifies whether to use the external or the internal IP address for reflected traffic.'));
+		o.modalonly = true;
+		o.depends('reflection', '1');
+		o.value('internal', _('Use internal IP address'));
+		o.value('external', _('Use external IP address'));
+		o.write = function(section_id, value) {
+			uci.set('firewall', section_id, 'reflection_src', (value != 'internal') ? value : null);
+		};
+
+		o = s.taboption('advanced', form.Value, 'helper', _('Match helper'), _('Match traffic using the specified connection tracking helper.'));
+		o.modalonly = true;
+		o.placeholder = _('any');
+		for (var i = 0; i < ctHelpers.length; i++)
+			o.value(ctHelpers[i].name, '%s (%s)'.format(ctHelpers[i].description, ctHelpers[i].name.toUpperCase()));
+		o.validate = function(section_id, value) {
+			if (value == '' || value == null)
+				return true;
+
+			value = value.replace(/^!\s*/, '');
+
+			for (var i = 0; i < ctHelpers.length; i++)
+				if (value == ctHelpers[i].name)
+					return true;
+
+			return _('Unknown or not installed conntrack helper "%s"').format(value);
+		};
 
 		o = s.taboption('advanced', form.Value, 'extra', _('Extra arguments'),
 			_('Passes additional arguments to iptables. Use with care!'));
