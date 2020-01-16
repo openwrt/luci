@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-03-30 17:00+0200\n"
-"PO-Revision-Date: 2020-01-14 15:22+0000\n"
+"PO-Revision-Date: 2020-01-16 14:31+0000\n"
 "Last-Translator: Marcin Net <marcin.net@linux.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsfirewall/pl/>\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 3.11-dev\n"
+"X-Generator: Weblate 3.10.2-dev\n"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:146
 msgid "%s in %s"
@@ -42,11 +42,11 @@ msgstr "<var>%s</var> i limit do %s"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:279
 msgid "A rewrite IP must be specified!"
-msgstr ""
+msgstr "Należy podać adres IP do ponownego zapisu!"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:266
 msgid "ACCEPT - Disable address rewriting"
-msgstr ""
+msgstr "AKCEPTUJ - Wyłącz przepisywanie adresów"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:293
 msgid "Accept forward"
@@ -243,7 +243,7 @@ msgstr "Włącz logowanie tej strefy"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:326
 msgid "Expecting: %s"
-msgstr ""
+msgstr "Zaleca się użyć: %s"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:54
 msgid "Experimental feature. Not fully compatible with QoS/SQM."
@@ -293,7 +293,7 @@ msgstr "Zapora sieciowa - Reguły własne"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:153
 msgid "Firewall - NAT Rules"
-msgstr ""
+msgstr "Zapora sieciowa - zasady NAT"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:92
 msgid "Firewall - Port Forwards"
@@ -350,7 +350,7 @@ msgstr "Z %s na <var>to urządzenie</var> ze źródłem %s oraz %s"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:92
 msgid "From %{ipaddr?:any host} %{port?with source %{port}}"
-msgstr ""
+msgstr "Z %{ipaddr?:any host} %{port?with source %{port}}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:100
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:168
@@ -412,7 +412,7 @@ msgstr "Wewnętrzny adres IP"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:251
 msgid "Internal port"
-msgstr "Wewnętrzny port"
+msgstr "Port wewnętrzny"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:233
 msgid "Internal zone"
@@ -432,7 +432,7 @@ msgstr "MACs"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:265
 msgid "MASQUERADE - Automatically rewrite to outbound interface IP"
-msgstr ""
+msgstr "MASQUERADE - Automatyczne przepisywanie na interfejs wyjściowy IP"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:134
 msgid "MSS clamping"
@@ -453,6 +453,8 @@ msgid ""
 "Match %{protocol?%{family} %{protocol} traffic:any %{family} traffic} %{mark?"
 "with firewall mark %{mark}}"
 msgstr ""
+"Dopasuj %{protocol?%{family} %{protocol} traffic:any %{family} traffic} %{"
+"mark?with firewall mark %{mark}}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:254
 msgid "Match ICMP type"
@@ -460,21 +462,24 @@ msgstr "Dopasuj typ ICMP"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:238
 msgid "Match forwarded traffic directed at the given IP address."
-msgstr ""
+msgstr "Dopasuj przesyłany ruch skierowany na podany adres IP."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:251
 msgid ""
 "Match forwarded traffic directed at the given destination port or port range."
 msgstr ""
+"Dopasuj przesyłany ruch skierowany na dany port docelowy lub zakres portów."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:214
 msgid "Match forwarded traffic from this IP or range."
-msgstr ""
+msgstr "Dopasuj przesyłany ruch z tego adresu IP lub zakresu."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:227
 msgid ""
 "Match forwarded traffic originating from the given source port or port range."
 msgstr ""
+"Dopasuj przesyłany ruch pochodzący z danego portu źródłowego lub zakresu "
+"portów."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:224
 msgid ""
@@ -486,15 +491,17 @@ msgstr ""
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:315
 msgid "Match mark"
-msgstr ""
+msgstr "Znak dopasowania"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:316
 msgid "Matches a specific firewall mark or a range of different marks."
-msgstr ""
+msgstr "Odpowiada konkretnemu znakowi zapory lub zakresowi różnych znaków."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:310
 msgid "Matches forwarded traffic using the specified outbound network device."
 msgstr ""
+"Dopasowuje przesyłany ruch przy użyciu określonego wychodzącego urządzenia "
+"sieciowego."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:372
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:342
@@ -509,13 +516,15 @@ msgstr "Dni miesiąca"
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:156
 #: applications/luci-app-firewall/root/usr/share/luci/menu.d/luci-app-firewall.json:43
 msgid "NAT Rules"
-msgstr ""
+msgstr "Zasady NAT"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:154
 msgid ""
 "NAT rules allow fine grained control over the source IP to use for outbound "
 "or forwarded traffic."
 msgstr ""
+"Reguły NAT umożliwiają precyzyjną kontrolę źródłowego adresu IP w celu "
+"użycia ruchu wychodzącego lub przekazywanego."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:121
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:201
@@ -551,11 +560,11 @@ msgstr ""
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:309
 msgid "Outbound device"
-msgstr ""
+msgstr "Urządzenie wychodzące"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:206
 msgid "Outbound zone"
-msgstr ""
+msgstr "Strefa wychodząca"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:40
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:116
@@ -587,7 +596,7 @@ msgstr ""
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:95
 #: applications/luci-app-firewall/root/usr/share/luci/menu.d/luci-app-firewall.json:25
 msgid "Port Forwards"
-msgstr "Przekazane porty"
+msgstr "Przekazywanie portów"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:93
 msgid ""
@@ -647,31 +656,32 @@ msgstr "Ogranicz do rodziny adresów"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:268
 msgid "Rewrite IP address"
-msgstr ""
+msgstr "Przepisz adres IP"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:269
 msgid "Rewrite matched traffic to the specified source IP address."
-msgstr ""
+msgstr "Przepisz dopasowany ruch do określonego źródłowego adresu IP."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:299
 msgid "Rewrite matched traffic to the specified source port or port range."
 msgstr ""
+"Przepisz dopasowany ruch do określonego portu źródłowego lub zakresu portów."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:298
 msgid "Rewrite port"
-msgstr ""
+msgstr "Przepisz port"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:183
 msgid "Rewrite to"
-msgstr ""
+msgstr "Przepisz do"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:115
 msgid "Rewrite to %{ipaddr?%{port?%{ipaddr}, %{port}:%{ipaddr}}:%{port}}"
-msgstr ""
+msgstr "Przepisz do %{ipaddr?%{port?%{ipaddr}, %{port}:%{ipaddr}}:%{port}}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:121
 msgid "Rewrite to outbound device IP"
-msgstr ""
+msgstr "Przepisz do adresu IP urządzenia wychodzącego"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:53
 msgid "Routing/NAT Offloading"
@@ -679,7 +689,7 @@ msgstr "Routing/NAT Offloading"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:264
 msgid "SNAT - Rewrite to specific source IP or port"
-msgstr ""
+msgstr "SNAT - Przepisz do określonego źródłowego adresu IP lub portu"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:377
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:347
@@ -819,6 +829,8 @@ msgid ""
 "To %{ipaddr?:any destination} %{port?at %{port}} %{zone?via zone %{zone}} "
 "%{device?egress device %{device}}"
 msgstr ""
+"Do %{ipaddr?:any destination} %{port?at %{port}} %{zone?via zone %{zone}} %{"
+"device?egress device %{device}}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:163
 #: applications/luci-app-firewall/root/usr/share/luci/menu.d/luci-app-firewall.json:34
@@ -847,7 +859,7 @@ msgstr "Nie można zapisać zawartości: %s"
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:166
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:170
 msgid "Unnamed NAT"
-msgstr ""
+msgstr "Nienazwany NAT"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:108
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:122
@@ -955,7 +967,7 @@ msgstr "Dzień"
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:272
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:302
 msgid "do not rewrite"
-msgstr ""
+msgstr "Nie przepisuj"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:360
 msgid "don't track"
@@ -1014,7 +1026,7 @@ msgstr "typy"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:326
 msgid "valid firewall mark"
-msgstr ""
+msgstr "prawidłowy znak zapory sieciowej"
 
 #~ msgid "Force connection tracking"
 #~ msgstr "Wymuś śledzenie połączeń"
