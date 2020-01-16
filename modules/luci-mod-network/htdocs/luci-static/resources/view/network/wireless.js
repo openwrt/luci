@@ -1428,11 +1428,26 @@ return L.view.extend({
 					o.depends({ mode: 'sta-wds', encryption: 'wpa' });
 					o.depends({ mode: 'sta-wds', encryption: 'wpa2' });
 
-					o = ss.taboption('encryption', form.FileUpload, 'ca_cert', _('Path to CA-Certificate'));
+					o = ss.taboption('encryption', form.Flag, 'ca_cert_usesystem', _('Use system certificates'), _("Validate server certificate using built-in system CA bundle,<br />requires the \"ca-bundle\" package"))
+					o.enabled = '1';
+					o.disabled = '0';
+					o.default = o.disabled;
 					o.depends({ mode: 'sta', encryption: 'wpa' });
 					o.depends({ mode: 'sta', encryption: 'wpa2' });
 					o.depends({ mode: 'sta-wds', encryption: 'wpa' });
 					o.depends({ mode: 'sta-wds', encryption: 'wpa2' });
+					o.validate = function(section_id, value) {
+						if (value == '1' && !L.hasSystemFeature('cabundle')) {
+							return _("This option cannot be used because the ca-bundle package is not installed.");
+						}
+						return true;
+					};
+
+					o = ss.taboption('encryption', form.FileUpload, 'ca_cert', _('Path to CA-Certificate'));
+					o.depends({ mode: 'sta', encryption: 'wpa', ca_cert_usesystem: '0' });
+					o.depends({ mode: 'sta', encryption: 'wpa2', ca_cert_usesystem: '0' });
+					o.depends({ mode: 'sta-wds', encryption: 'wpa', ca_cert_usesystem: '0' });
+					o.depends({ mode: 'sta-wds', encryption: 'wpa2', ca_cert_usesystem: '0' });
 
 					o = ss.taboption('encryption', form.Value, 'subject_match', _('Certificate constraint (Subject)'), _("Certificate constraint substring - e.g. /CN=wifi.mycompany.com<br />See `logread -f` during handshake for actual values"));
 					o.depends({ mode: 'sta', encryption: 'wpa' });
@@ -1509,11 +1524,26 @@ return L.view.extend({
 						return true;
 					};
 
-					o = ss.taboption('encryption', form.FileUpload, 'ca_cert2', _('Path to inner CA-Certificate'));
+					o = ss.taboption('encryption', form.Flag, 'ca_cert2_usesystem', _('Use system certificates for inner-tunnel'), _("Validate server certificate using built-in system CA bundle,<br />requires the \"ca-bundle\" package"))
+					o.enabled = '1';
+					o.disabled = '0';
+					o.default = o.disabled;
 					o.depends({ mode: 'sta', auth: 'EAP-TLS', encryption: 'wpa' });
 					o.depends({ mode: 'sta', auth: 'EAP-TLS', encryption: 'wpa2' });
 					o.depends({ mode: 'sta-wds', auth: 'EAP-TLS', encryption: 'wpa' });
 					o.depends({ mode: 'sta-wds', auth: 'EAP-TLS', encryption: 'wpa2' });
+					o.validate = function(section_id, value) {
+						if (value == '1' && !L.hasSystemFeature('cabundle')) {
+							return _("This option cannot be used because the ca-bundle package is not installed.");
+						}
+						return true;
+					};
+
+					o = ss.taboption('encryption', form.FileUpload, 'ca_cert2', _('Path to inner CA-Certificate'));
+					o.depends({ mode: 'sta', auth: 'EAP-TLS', encryption: 'wpa', ca_cert2_usesystem: '0' });
+					o.depends({ mode: 'sta', auth: 'EAP-TLS', encryption: 'wpa2', ca_cert2_usesystem: '0' });
+					o.depends({ mode: 'sta-wds', auth: 'EAP-TLS', encryption: 'wpa', ca_cert2_usesystem: '0' });
+					o.depends({ mode: 'sta-wds', auth: 'EAP-TLS', encryption: 'wpa2', ca_cert2_usesystem: '0' });
 
 					o = ss.taboption('encryption', form.Value, 'subject_match2', _('Inner certificate constraint (Subject)'), _("Certificate constraint substring - e.g. /CN=wifi.mycompany.com<br />See `logread -f` during handshake for actual values"));
 					o.depends({ mode: 'sta', auth: 'EAP-TLS', encryption: 'wpa' });
