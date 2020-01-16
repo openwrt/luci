@@ -95,7 +95,7 @@ function sfh(s) {
 }
 
 function _(s) {
-	return (window.TR && TR[sfh(s)]) || s;
+	return (window.TR && TR[sfh(String(s).trim().replace(/[ \t\n]+/g, ' '))]) || s;
 }
 
 
