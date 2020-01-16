@@ -2536,8 +2536,8 @@
 			if (rpcBaseURL == null) {
 				var rpcFallbackURL = this.url('admin/ubus');
 
-				rpcBaseURL = Request.get('/ubus/').then(function(res) {
-					return (rpcBaseURL = (res.status == 400) ? '/ubus/' : rpcFallbackURL);
+				rpcBaseURL = Request.get(this.env.ubuspath).then(function(res) {
+					return (rpcBaseURL = (res.status == 400) ? L.env.ubuspath : rpcFallbackURL);
 				}, function() {
 					return (rpcBaseURL = rpcFallbackURL);
 				}).then(function(url) {
