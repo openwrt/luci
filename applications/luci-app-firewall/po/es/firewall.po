@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-03-30 17:00+0200\n"
-"PO-Revision-Date: 2020-01-16 19:12+0000\n"
+"PO-Revision-Date: 2020-01-17 07:27+0000\n"
 "Last-Translator: Franco Castillo <castillofrancodamian@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsfirewall/es/>\n"
@@ -121,10 +121,13 @@ msgid ""
 "established connections. Format is value[/mask]. If a mask is specified then "
 "those bits set in the mask are zeroed out."
 msgstr ""
+"Aplique un XOR bit a bit del valor dado y el valor de marca existente en las "
+"conexiones establecidas. El formato es el valor [/ máscara]. Si se "
+"especifica una máscara, esos bits establecidos en la máscara se ponen a cero."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:316
 msgid "Apply the given DSCP class or value to established connections."
-msgstr ""
+msgstr "Aplique la clase o valor DSCP dado a las conexiones establecidas."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:416
 msgid "Assign the specified connection tracking helper to matched traffic."
@@ -184,15 +187,15 @@ msgstr ""
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:398
 msgid "DSCP classification"
-msgstr ""
+msgstr "Clasificación DSCP"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:315
 msgid "DSCP mark"
-msgstr ""
+msgstr "Marca DSCP"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:349
 msgid "DSCP mark required"
-msgstr ""
+msgstr "Marca DSCP requerida"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:238
 msgid "Destination IP address"
@@ -455,15 +458,15 @@ msgstr "Zona interna"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:357
 msgid "Invalid DSCP mark"
-msgstr ""
+msgstr "Marca DSCP inválida"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:425
 msgid "Invalid limit value"
-msgstr ""
+msgstr "Valor límite no válido"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:435
 msgid "Limit burst"
-msgstr ""
+msgstr "Límite de ráfaga"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:227
 msgid "Limit log messages"
@@ -471,11 +474,11 @@ msgstr "Limitar registro de mensajes"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:401
 msgid "Limit matching"
-msgstr ""
+msgstr "Limitar coincidencia"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:402
 msgid "Limits traffic matching to the specified rate."
-msgstr ""
+msgstr "Limita el tráfico que coincide con la velocidad especificada."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:275
 msgid "Loopback source IP"
@@ -517,7 +520,7 @@ msgstr ""
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:315
 msgid "Match DSCP"
-msgstr ""
+msgstr "Coincidir DSCP"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:288
 msgid "Match ICMP type"
@@ -587,13 +590,16 @@ msgstr ""
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:316
 msgid "Matches traffic carrying the specified DSCP marking."
-msgstr ""
+msgstr "Coincide con el tráfico que lleva la marca DSCP especificada."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:436
 msgid ""
 "Maximum initial number of packets to match: this number gets recharged by "
 "one every time the limit specified above is not reached, up to this number."
 msgstr ""
+"Número inicial máximo de paquetes que deben coincidir: este número se "
+"recarga en uno cada vez que no se alcanza el límite especificado "
+"anteriormente, hasta este número."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:456
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:331
@@ -792,13 +798,16 @@ msgstr "Sábado"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:368
 msgid "Set mark"
-msgstr ""
+msgstr "Establecer marca"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:370
 msgid ""
 "Set the given mark value on established connections. Format is value[/mask]. "
 "If a mask is specified then only those bits set in the mask are modified."
 msgstr ""
+"Establezca el valor de marca dado en las conexiones establecidas. El formato "
+"es el valor [/máscara]. Si se especifica una máscara, sólo se modifican los "
+"bits establecidos en la máscara."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:61
 msgid "Software based offloading for routing/NAT"
@@ -1032,7 +1041,7 @@ msgstr ""
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:383
 msgid "Valid firewall mark required"
-msgstr ""
+msgstr "Se requiere una marca de firewall válida"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:72
 msgid "Via %s"
@@ -1054,11 +1063,11 @@ msgstr "Días de la semana"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:397
 msgid "XOR firewall mark"
-msgstr ""
+msgstr "Marca de firewall XOR"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:368
 msgid "XOR mark"
-msgstr ""
+msgstr "Marca XOR"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:107
 msgid "Zone ⇒ Forwardings"
@@ -1117,7 +1126,7 @@ msgstr "cualquier zona"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:396
 msgid "apply firewall mark"
-msgstr ""
+msgstr "aplicar marca de firewall"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:395
 msgid "assign conntrack helper"
@@ -1189,7 +1198,7 @@ msgstr "Tipos"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:406
 msgid "unlimited"
-msgstr ""
+msgstr "ilimitado"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:238
 msgid "unspecified"
