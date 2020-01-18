@@ -182,7 +182,7 @@ function wssid.write(self, section, value)
 		elseif encr:formvalue(section) ~= "owe" then
 			uci:set("wireless", m.hidden.cfg, "key", wkey:formvalue(section) or "")
 		end
-		if ciph and ciph:formvalue(section) ~= "auto" then
+		if ciph and ciph:formvalue(section) and ciph:formvalue(section) ~= "auto" then
 			uci:set("wireless", m.hidden.cfg, "encryption", encr:formvalue(section) .. "+" .. ciph:formvalue(section))
 		else
 			uci:set("wireless", m.hidden.cfg, "encryption", encr:formvalue(section))
