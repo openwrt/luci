@@ -497,7 +497,7 @@ local knownParams = {
 		{ DynamicList,
 			"remote",
 			"1.2.3.4",
-			translate("Remote host name or ip address") },
+			translate("Remote host name or IP address") },
 		{ Flag,
 			"remote_random",
 			0,
