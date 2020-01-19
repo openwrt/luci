@@ -152,11 +152,19 @@ return L.view.extend({
 	load: function() {
 		return Promise.all([
 			this.callHostHints(),
-			this.callConntrackHelpers()
+			this.callConntrackHelpers(),
+			uci.load('firewall')
 		]);
 	},
 
 	render: function(data) {
+		if (fwtool.checkLegacySNAT())
+			return fwtool.renderMigration();
+		else
+			return this.renderRules(data);
+	},
+
+	renderRules: function(data) {
 		var hosts = data[0],
 		    ctHelpers = data[1],
 		    m, s, o;

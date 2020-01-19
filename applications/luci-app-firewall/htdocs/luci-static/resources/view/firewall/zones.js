@@ -4,6 +4,7 @@
 'require form';
 'require network';
 'require firewall';
+'require tools.firewall as fwtool';
 'require tools.widgets as widgets';
 
 return L.view.extend({
@@ -21,6 +22,13 @@ return L.view.extend({
 	},
 
 	render: function(data) {
+		if (fwtool.checkLegacySNAT())
+			return fwtool.renderMigration();
+		else
+			return this.renderZones(data);
+	},
+
+	renderZones: function(data) {
 		var ctHelpers = data[0],
 		    fwDefaults = data[1],
 		    m, s, o, inp, out;
