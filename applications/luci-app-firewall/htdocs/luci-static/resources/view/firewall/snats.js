@@ -106,11 +106,19 @@ return L.view.extend({
 	load: function() {
 		return Promise.all([
 			this.callHostHints(),
-			this.callNetworkDevices()
+			this.callNetworkDevices(),
+			uci.load('firewall')
 		]);
 	},
 
 	render: function(data) {
+		if (fwtool.checkLegacySNAT())
+			return fwtool.renderMigration();
+		else
+			return this.renderNats(data);
+	},
+
+	renderNats: function(data) {
 		var hosts = data[0],
 		    devs = data[1],
 		    m, s, o;

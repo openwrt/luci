@@ -590,5 +590,64 @@ return L.Class.extend({
 
 			return widget.render();
 		}
-	})
+	}),
+
+	checkLegacySNAT: function() {
+		var redirects = uci.sections('firewall', 'redirect');
+
+		for (var i = 0; i < redirects.length; i++)
+			if ((redirects[i]['target'] || '').toLowerCase() == 'snat')
+				return true;
+
+		return false;
+	},
+
+	handleMigration: function(ev) {
+		var redirects = uci.sections('firewall', 'redirect'),
+		    tasks = [];
+
+		var mapping = {
+			dest: 'src',
+			reflection: null,
+			reflection_src: null,
+			src_dip: 'snat_ip',
+			src_dport: 'snat_port',
+			src: null
+		};
+
+		for (var i = 0; i < redirects.length; i++) {
+			if ((redirects[i]['target'] || '').toLowerCase() != 'snat')
+				continue;
+
+			var sid = uci.add('firewall', 'nat');
+
+			for (var opt in redirects[i]) {
+				if (opt.charAt(0) == '.')
+					continue;
+
+				if (mapping[opt] === null)
+					continue;
+
+				uci.set('firewall', sid, mapping[opt] || opt, redirects[i][opt]);
+			}
+
+			uci.remove('firewall', redirects[i]['.name']);
+		}
+
+		return uci.save()
+			.then(L.bind(ui.changes.init, ui.changes))
+			.then(L.bind(ui.changes.apply, ui.changes));
+	},
+
+	renderMigration: function() {
+		ui.showModal(_('Firewall configuration migration'), [
+			E('p', _('The existing firewall configuration needs to be changed for LuCI to function properly.')),
+			E('p', _('Upon pressing "Continue", "redirect" sections with target "SNAT" will be converted to "nat" sections and the firewall will be restarted to apply the updated configuration.')),
+			E('div', { 'class': 'right' },
+				E('button', {
+					'class': 'btn cbi-button-action important',
+					'click': ui.createHandlerFn(this, 'handleMigration')
+				}, _('Continue')))
+		]);
+	},
 });
