@@ -2092,6 +2092,21 @@ div.cbi-value var,
 	color: #0069d6;
 }
 
+div.cbi-value var[data-tooltip],
+.td.cbi-value-field var[data-tooltip],
+div.cbi-value var.cbi-tooltip-container,
+.td.cbi-value-field var.cbi-tooltip-container {
+	cursor: help;
+	border-bottom: 1px dotted #0069d6;
+}
+
+div.cbi-value var.cbi-tooltip-container,
+.td.cbi-value-field var.cbi-tooltip-container .cbi-tooltip {
+	font-style: normal;
+	white-space: normal;
+	color: #444;
+}
+
 #modal_overlay > .modal.uci-dialog,
 #modal_overlay > .modal.cbi-modal {
 	max-width: 900px;
