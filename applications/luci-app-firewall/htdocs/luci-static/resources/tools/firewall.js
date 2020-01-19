@@ -36,10 +36,12 @@ var protocols = [
 	'esp', 50, 'IPSEC-ESP',
 	'ah', 51, 'IPSEC-AH',
 	'skip', 57, 'SKIP',
+	'icmpv6', 58, 'IPv6-ICMP',
 	'ipv6-icmp', 58, 'IPv6-ICMP',
 	'ipv6-nonxt', 59, 'IPv6-NoNxt',
 	'ipv6-opts', 60, 'IPv6-Opts',
-	'rspf', 73, 'RSPF', 'CPHB',
+	'rspf', 73, 'RSPF',
+	'rspf', 73, 'CPHB',
 	'vmtp', 81, 'VMTP',
 	'eigrp', 88, 'EIGRP',
 	'ospf', 89, 'OSPFIGP',
@@ -54,6 +56,8 @@ var protocols = [
 	'isis', 124, 'ISIS',
 	'sctp', 132, 'SCTP',
 	'fc', 133, 'FC',
+	'mh', 135, 'Mobility-Header',
+	'ipv6-mh', 135, 'Mobility-Header',
 	'mobility-header', 135, 'Mobility-Header',
 	'udplite', 136, 'UDPLite',
 	'mpls-in-ip', 137, 'MPLS-in-IP',
@@ -72,243 +76,184 @@ function lookupProto(x) {
 
 	for (var i = 0; i < protocols.length; i += 3)
 		if (s == protocols[i] || s == protocols[i+1])
-			return [ protocols[i+1], protocols[i+2] ];
+			return [ protocols[i+1], protocols[i+2], protocols[i] ];
 
-	return [ -1, x ];
+	return [ -1, x, x ];
 }
 
-
 return L.Class.extend({
-	fmt_neg: function(x) {
-		var rv = E([]),
-		    v = (typeof(x) == 'string') ? x.replace(/^ *! */, '') : '';
+	fmt: function(fmtstr, args, values) {
+		var repl = [],
+		    wrap = false,
+		    tokens = [];
 
-		L.dom.append(rv, (v != '' && v != x) ? [ _('not') + ' ', v ] : [ '', x ]);
-		return rv;
-	},
-
-	fmt_mac: function(x) {
-		var rv = E([]), l = L.toArray(x);
-
-		if (l.length == 0)
-			return null;
-
-		L.dom.append(rv, [ _('MAC') + ' ' ]);
-
-		for (var i = 0; i < l.length; i++) {
-			var n = this.fmt_neg(l[i]);
-			L.dom.append(rv, (i > 0) ? [ ', ', n ] : n);
+		if (values == null) {
+			values = [];
+			wrap = true;
 		}
 
-		if (rv.childNodes.length > 2)
-			rv.firstChild.data = _('MACs') + ' ';
+		var get = function(args, key) {
+			var names = key.trim().split(/\./),
+			    obj = args,
+			    ctx = obj;
 
-		return rv;
-	},
+			for (var i = 0; i < names.length; i++) {
+				if (!L.isObject(obj))
+					return null;
 
-	fmt_port: function(x, d) {
-		var rv = E([]), l = L.toArray(x);
-
-		if (l.length == 0) {
-			if (d) {
-				L.dom.append(rv, E('var', {}, d));
-				return rv;
+				ctx = obj;
+				obj = obj[names[i]];
 			}
 
-			return null;
-		}
+			if (typeof(obj) == 'function')
+				return obj.call(ctx);
 
-		L.dom.append(rv, [ _('port') + ' ' ]);
+			return obj;
+		};
 
-		for (var i = 0; i < l.length; i++) {
-			var n = this.fmt_neg(l[i]),
-			    m = n.lastChild.data.match(/^(\d+)\D+(\d+)$/);
+		var isset = function(val) {
+			if (L.isObject(val) && !L.dom.elem(val)) {
+				for (var k in val)
+					if (val.hasOwnProperty(k))
+						return true;
 
-			if (i > 0)
-				L.dom.append(rv, [ ', ' ]);
-
-			if (m) {
-				rv.firstChild.data = _('ports') + ' ';
-				L.dom.append(rv, E('var', [ n.firstChild, m[1], '-', m[2] ]));
+				return false;
+			}
+			else if (Array.isArray(val)) {
+				return (val.length > 0);
 			}
 			else {
-				L.dom.append(rv, E('var', {}, n));
+				return (val !== null && val !== undefined && val !== '' && val !== false);
+			}
+		};
+
+		var parse = function(tokens, text) {
+			if (L.dom.elem(text)) {
+				tokens.push('<span data-fmt-placeholder="%d"></span>'.format(values.length));
+				values.push(text);
+			}
+			else {
+				tokens.push(String(text).replace(/\\(.)/g, '$1'));
+			}
+		};
+
+		for (var i = 0, last = 0; i <= fmtstr.length; i++) {
+			if (fmtstr.charAt(i) == '%' && fmtstr.charAt(i + 1) == '{') {
+				if (i > last)
+					parse(tokens, fmtstr.substring(last, i));
+
+				var j = i + 1,  nest = 0;
+
+				var subexpr = [];
+
+				for (var off = j + 1, esc = false; j <= fmtstr.length; j++) {
+					var ch = fmtstr.charAt(j);
+
+					if (esc) {
+						esc = false;
+					}
+					else if (ch == '\\') {
+						esc = true;
+					}
+					else if (ch == '{') {
+						nest++;
+					}
+					else if (ch == '}') {
+						if (--nest == 0) {
+							subexpr.push(fmtstr.substring(off, j));
+							break;
+						}
+					}
+					else if (ch == '?' || ch == ':' || ch == '#') {
+						if (nest == 1) {
+							subexpr.push(fmtstr.substring(off, j));
+							subexpr.push(ch);
+							off = j + 1;
+						}
+					}
+				}
+
+				var varname  = subexpr[0].trim(),
+				    op1      = (subexpr[1] != null) ? subexpr[1] : '?',
+				    if_set   = (subexpr[2] != null && subexpr[2] != '') ? subexpr[2] : '%{' + varname + '}',
+				    op2      = (subexpr[3] != null) ? subexpr[3] : ':',
+				    if_unset = (subexpr[4] != null) ? subexpr[4] : '';
+
+				/* Invalid expression */
+				if (nest != 0 || subexpr.length > 5 || varname == '') {
+					return fmtstr;
+				}
+
+				/* enumeration */
+				else if (op1 == '#' && subexpr.length == 3) {
+					var items = L.toArray(get(args, varname));
+
+					for (var k = 0; k < items.length; k++) {
+						tokens.push.apply(tokens, this.fmt(if_set, Object.assign({}, args, {
+							first: k == 0,
+							next:  k > 0,
+							last:  (k + 1) == items.length,
+							item:  items[k]
+						}), values));
+					}
+				}
+
+				/* ternary expression */
+				else if (op1 == '?' && op2 == ':' && (subexpr.length == 1 || subexpr.length == 3 || subexpr.length == 5)) {
+					var val = get(args, varname);
+
+					if (subexpr.length == 1)
+						parse(tokens, isset(val) ? val : '');
+					else if (isset(val))
+						tokens.push.apply(tokens, this.fmt(if_set, args, values));
+					else
+						tokens.push.apply(tokens, this.fmt(if_unset, args, values));
+				}
+
+				/* unrecognized command */
+				else {
+					return fmtstr;
+				}
+
+				last = j + 1;
+				i = j;
+			}
+			else if (i >= fmtstr.length) {
+				if (i > last)
+					parse(tokens, fmtstr.substring(last, i));
 			}
 		}
 
-		if (rv.childNodes.length > 2)
-			rv.firstChild.data = _('ports') + ' ';
+		if (wrap) {
+			var node = E('span', {}, tokens.join('')),
+			    repl = node.querySelectorAll('span[data-fmt-placeholder]');
 
-		return rv;
-	},
+			for (var i = 0; i < repl.length; i++)
+				repl[i].parentNode.replaceChild(values[repl[i].getAttribute('data-fmt-placeholder')], repl[i]);
 
-	fmt_ip: function(x, d) {
-		var rv = E([]), l = L.toArray(x);
-
-		if (l.length == 0) {
-			if (d) {
-				L.dom.append(rv, E('var', {}, d));
-				return rv;
-			}
-
-			return null;
-		}
-
-		L.dom.append(rv, [ _('IP') + ' ' ]);
-
-		for (var i = 0; i < l.length; i++) {
-			var n = this.fmt_neg(l[i]),
-			    m = n.lastChild.data.match(/^(\S+)\/(\d+\.\S+)$/);
-
-			if (i > 0)
-				L.dom.append(rv, [ ', ' ]);
-
-			if (m)
-				rv.firstChild.data = _('IP range') + ' ';
-			else if (n.lastChild.data.match(/^[a-zA-Z0-9_]+$/))
-				rv.firstChild.data = _('Network') + ' ';
-
-			L.dom.append(rv, E('var', {}, n));
-		}
-
-		if (rv.childNodes.length > 2)
-			rv.firstChild.data = _('IPs') + ' ';
-
-		return rv;
-	},
-
-	fmt_zone: function(x, d) {
-		if (x == '*')
-			return E('var', _('any zone'));
-		else if (x != null && x != '')
-			return E('var', {}, [ x ]);
-		else if (d != null && d != '')
-			return E('var', {}, d);
-		else
-			return null;
-	},
-
-	fmt_icmp_type: function(x) {
-		var rv = E([]), l = L.toArray(x);
-
-		if (l.length == 0)
-			return null;
-
-		L.dom.append(rv, [ _('type') + ' ' ]);
-
-		for (var i = 0; i < l.length; i++) {
-			var n = this.fmt_neg(l[i]);
-
-			if (i > 0)
-				L.dom.append(rv, [ ', ' ]);
-
-			L.dom.append(rv, E('var', {}, n));
-		}
-
-		if (rv.childNodes.length > 2)
-			rv.firstChild.data = _('types') + ' ';
-
-		return rv;
-	},
-
-	fmt_family: function(family) {
-		if (family == 'ipv4')
-			return _('IPv4');
-		else if (family == 'ipv6')
-			return _('IPv6');
-		else
-			return _('IPv4 and IPv6');
-	},
-
-	fmt_proto: function(x, icmp_types) {
-		var rv = E([]), l = L.toArray(x);
-
-		if (l.length == 0)
-			return null;
-
-		var t = this.fmt_icmp_type(icmp_types);
-
-		for (var i = 0; i < l.length; i++) {
-			var n = this.fmt_neg(l[i]),
-			    p = lookupProto(n.lastChild.data);
-
-			if (n.lastChild.data == 'all')
-				continue;
-
-			if (i > 0)
-				L.dom.append(rv, [ ', ' ]);
-
-			if (t && (p[0] == 1 || p[0] == 58))
-				L.dom.append(rv, [ _('%s%s with %s').format(n.firstChild.data, p[1], ''), t ]);
-			else
-				L.dom.append(rv, [ n.firstChild.data, p[1] ]);
-		}
-
-		return rv;
-	},
-
-	fmt_limit: function(limit, burst) {
-		if (limit == null || limit == '')
-			return null;
-
-		var m = String(limit).match(/^(\d+)\/(\w+)$/),
-		    u = m[2] || 'second',
-		    l = +(m[1] || limit),
-		    b = +burst;
-
-		if (!isNaN(l)) {
-			if (u.match(/^s/))
-				u = _('second');
-			else if (u.match(/^m/))
-				u = _('minute');
-			else if (u.match(/^h/))
-				u = _('hour');
-			else if (u.match(/^d/))
-				u = _('day');
-
-			if (!isNaN(b) && b > 0)
-				return E('<span>' +
-					_('<var>%d</var> pkts. per <var>%s</var>, burst <var>%d</var> pkts.').format(l, u, b) +
-				'</span>');
-			else
-				return E('<span>' +
-					_('<var>%d</var> pkts. per <var>%s</var>').format(l, u) +
-				'</span>');
-		}
-	},
-
-	fmt_target: function(x, src, dest) {
-		if (src == null || src == '') {
-			if (x == 'ACCEPT')
-				return _('Accept output');
-			else if (x == 'REJECT')
-				return _('Refuse output');
-			else if (x == 'NOTRACK')
-				return _('Do not track output');
-			else /* if (x == 'DROP') */
-				return _('Discard output');
-		}
-		else if (dest != null && dest != '') {
-			if (x == 'ACCEPT')
-				return _('Accept forward');
-			else if (x == 'REJECT')
-				return _('Refuse forward');
-			else if (x == 'NOTRACK')
-				return _('Do not track forward');
-			else /* if (x == 'DROP') */
-				return _('Discard forward');
+			return node;
 		}
 		else {
-			if (x == 'ACCEPT')
-				return _('Accept input');
-			else if (x == 'REJECT' )
-				return _('Refuse input');
-			else if (x == 'NOTRACK')
-				return _('Do not track input');
-			else /* if (x == 'DROP') */
-				return _('Discard input');
+			return tokens;
 		}
 	},
+
+	map_invert: function(v, fn) {
+		return L.toArray(v).map(function(v) {
+			v = String(v);
+
+			if (fn != null && typeof(v[fn]) == 'function')
+				v = v[fn].call(v);
+
+			return {
+				ival: v,
+				inv: v.charAt(0) == '!',
+				val: v.replace(/^!\s*/, '')
+			};
+		});
+	},
+
+	lookupProto: lookupProto,
 
 	addDSCPOption: function(s, is_target) {
 		var o = s.taboption(is_target ? 'general' : 'advanced', form.Value, is_target ? 'set_dscp' : 'dscp',
@@ -442,5 +387,208 @@ return L.Class.extend({
 		o.depends({ limit: null, '!reverse': true });
 
 		return o;
-	}
+	},
+
+	transformHostHints: function(family, hosts) {
+		var choice_values = [], choice_labels = {};
+
+		if (!family || family == 'ipv4') {
+			L.sortedKeys(hosts, 'ipv4', 'addr').forEach(function(mac) {
+				var val = hosts[mac].ipv4,
+				    txt = hosts[mac].name || mac;
+
+				choice_values.push(val);
+				choice_labels[val] = E([], [ val, ' (', E('strong', {}, [txt]), ')' ]);
+			});
+		}
+
+		if (!family || family == 'ipv6') {
+			L.sortedKeys(hosts, 'ipv6', 'addr').forEach(function(mac) {
+				var val = hosts[mac].ipv6,
+				    txt = hosts[mac].name || mac;
+
+				choice_values.push(val);
+				choice_labels[val] = E([], [ val, ' (', E('strong', {}, [txt]), ')' ]);
+			});
+		}
+
+		return [choice_values, choice_labels];
+	},
+
+	updateHostHints: function(map, section_id, option, family, hosts) {
+		var opt = map.lookupOption(option, section_id)[0].getUIElement(section_id),
+		    choices = this.transformHostHints(family, hosts);
+
+		opt.clearChoices();
+		opt.addChoices(choices[0], choices[1]);
+	},
+
+	addIPOption: function(s, tab, name, label, description, family, hosts, multiple) {
+		var o = s.taboption(tab, multiple ? form.DynamicList : form.Value, name, label, description);
+
+		o.modalonly = true;
+		o.datatype = 'list(neg(ipmask))';
+		o.placeholder = multiple ? _('-- add IP --') : _('any');
+
+		if (family != null) {
+			var choices = this.transformHostHints(family, hosts);
+
+			for (var i = 0; i < choices[0].length; i++)
+				o.value(choices[0][i], choices[1][choices[0][i]]);
+		}
+
+		/* force combobox rendering */
+		o.transformChoices = function() {
+			return this.super('transformChoices', []) || {};
+		};
+
+		return o;
+	},
+
+	addLocalIPOption: function(s, tab, name, label, description, devices) {
+		var o = s.taboption(tab, form.Value, name, label, description);
+
+		o.modalonly = true;
+		o.datatype = 'ip4addr("nomask")';
+		o.placeholder = _('any');
+
+		L.sortedKeys(devices, 'name').forEach(function(dev) {
+			var ip4addrs = devices[dev].ipaddrs;
+
+			if (!L.isObject(devices[dev].flags) || !Array.isArray(ip4addrs) || devices[dev].flags.loopback)
+				return;
+
+			for (var i = 0; i < ip4addrs.length; i++) {
+				if (!L.isObject(ip4addrs[i]) || !ip4addrs[i].address)
+					continue;
+
+				o.value(ip4addrs[i].address, E([], [
+					ip4addrs[i].address, ' (', E('strong', {}, [dev]), ')'
+				]));
+			}
+		});
+
+		return o;
+	},
+
+	addMACOption: function(s, tab, name, label, description, hosts) {
+		var o = s.taboption(tab, form.DynamicList, name, label, description);
+
+		o.modalonly = true;
+		o.datatype = 'list(macaddr)';
+		o.placeholder = _('-- add MAC --');
+
+		L.sortedKeys(hosts).forEach(function(mac) {
+			o.value(mac, E([], [ mac, ' (', E('strong', {}, [
+				hosts[mac].name || hosts[mac].ipv4 || hosts[mac].ipv6 || '?'
+			]), ')' ]));
+		});
+
+		return o;
+	},
+
+	CBIProtocolSelect: form.MultiValue.extend({
+		__name__: 'CBI.ProtocolSelect',
+
+		addChoice: function(value, label) {
+			if (!Array.isArray(this.keylist) || this.keylist.indexOf(value) == -1)
+				this.value(value, label);
+		},
+
+		load: function(section_id) {
+			var cfgvalue = L.toArray(this.super('load', [section_id]) || this.default).sort();
+
+			['all', 'tcp', 'udp', 'icmp'].concat(cfgvalue).forEach(L.bind(function(value) {
+				switch (value) {
+				case 'all':
+				case 'any':
+				case '*':
+					this.addChoice('all', _('Any'));
+					break;
+
+				case 'tcpudp':
+					this.addChoice('tcp', 'TCP');
+					this.addChoice('udp', 'UDP');
+					break;
+
+				default:
+					var m = value.match(/^(0x[0-9a-f]{1,2}|[0-9]{1,3})$/),
+					    p = lookupProto(m ? +m[1] : value);
+
+					this.addChoice(p[2], p[1]);
+					break;
+				}
+			}, this));
+
+			return cfgvalue;
+		},
+
+		renderWidget: function(section_id, option_index, cfgvalue) {
+			var value = (cfgvalue != null) ? cfgvalue : this.default,
+			    choices = this.transformChoices();
+
+			var widget = new ui.Dropdown(L.toArray(value), choices, {
+				id: this.cbid(section_id),
+				sort: this.keylist,
+				multiple: true,
+				optional: false,
+				display_items: 10,
+				dropdown_items: -1,
+				create: true,
+				validate: function(value) {
+					var v = L.toArray(value);
+
+					for (var i = 0; i < v.length; i++) {
+						if (v[i] == 'all')
+							continue;
+
+						var m = v[i].match(/^(0x[0-9a-f]{1,2}|[0-9]{1,3})$/);
+
+						if (m ? (+m[1] > 255) : (lookupProto(v[i])[0] == -1))
+							return _('Unrecognized protocol');
+					}
+
+					return true;
+				}
+			});
+
+			widget.createChoiceElement = function(sb, value) {
+				var m = value.match(/^(0x[0-9a-f]{1,2}|[0-9]{1,3})$/),
+				    p = lookupProto(lookupProto(m ? +m[1] : value)[0]);
+
+				return ui.Dropdown.prototype.createChoiceElement.call(this, sb, p[2], p[1]);
+			};
+
+			widget.createItems = function(sb, value) {
+				var values = L.toArray(value).map(function(value) {
+					var m = value.match(/^(0x[0-9a-f]{1,2}|[0-9]{1,3})$/),
+					    p = lookupProto(m ? +m[1] : value);
+
+					return (p[0] > -1) ? p[2] : value;
+				});
+
+				return ui.Dropdown.prototype.createItems.call(this, sb, values.join(' '));
+			};
+
+			widget.toggleItem = function(sb, li) {
+				var value = li.getAttribute('data-value'),
+				    toggleFn = ui.Dropdown.prototype.toggleItem;
+
+				toggleFn.call(this, sb, li);
+
+				if (value == 'all') {
+					var items = li.parentNode.querySelectorAll('li[data-value]');
+
+					for (var j = 0; j < items.length; j++)
+						if (items[j] !== li)
+							toggleFn.call(this, sb, items[j], false);
+				}
+				else {
+					toggleFn.call(this, sb, li.parentNode.querySelector('li[data-value="all"]'), false);
+				}
+			};
+
+			return widget.render();
+		}
+	})
 });

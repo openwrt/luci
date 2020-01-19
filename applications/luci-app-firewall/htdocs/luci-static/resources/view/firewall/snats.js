@@ -3,126 +3,90 @@
 'require rpc';
 'require uci';
 'require form';
+'require firewall as fwmodel';
 'require tools.firewall as fwtool';
 'require tools.widgets as widgets';
 
-function fmt(fmtstr, args) {
-	var repl = [], wrap = false;
-	var tokens = [];
+function rule_proto_txt(s) {
+	var proto = L.toArray(uci.get('firewall', s, 'proto')).filter(function(p) {
+		return (p != '*' && p != 'any' && p != 'all');
+	}).map(function(p) {
+		var pr = fwtool.lookupProto(p);
+		return {
+			num:  pr[0],
+			name: pr[1]
+		};
+	});
 
-	for (var i = 0, last = 0; i <= fmtstr.length; i++) {
-		if (fmtstr.charAt(i) == '%' && fmtstr.charAt(i + 1) == '{') {
-			if (i > last)
-				tokens.push(fmtstr.substring(last, i));
+	m = String(uci.get('firewall', s, 'mark')).match(/^(!\s*)?(0x[0-9a-f]{1,8}|[0-9]{1,10})(?:\/(0x[0-9a-f]{1,8}|[0-9]{1,10}))?$/i);
+	var f = m ? {
+		val:  m[0].toUpperCase().replace(/X/g, 'x'),
+		inv:  m[1],
+		num:  '0x%02X'.format(+m[2]),
+		mask: m[3] ? '0x%02X'.format(+m[3]) : null
+	} : null;
 
-			var j = i + 1,  nest = 0;
-
-			var subexpr = [];
-
-			for (var off = j + 1, esc = false; j <= fmtstr.length; j++) {
-				if (esc) {
-					esc = false;
-				}
-				else if (fmtstr.charAt(j) == '\\') {
-					esc = true;
-				}
-				else if (fmtstr.charAt(j) == '{') {
-					nest++;
-				}
-				else if (fmtstr.charAt(j) == '}') {
-					if (--nest == 0) {
-						subexpr.push(fmtstr.substring(off, j));
-						break;
-					}
-				}
-				else if (fmtstr.charAt(j) == '?' || fmtstr.charAt(j) == ':') {
-					if (nest == 1) {
-						subexpr.push(fmtstr.substring(off, j));
-						subexpr.push(fmtstr.charAt(j));
-						off = j + 1;
-					}
-				}
-			}
-
-			var varname  = subexpr[0].trim(),
-			    op1      = (subexpr[1] != null) ? subexpr[1] : '?',
-			    if_set   = (subexpr[2] != null && subexpr[2] != '') ? subexpr[2] : '%{' + varname + '}',
-			    op2      = (subexpr[3] != null) ? subexpr[3] : ':',
-			    if_unset = (subexpr[4] != null) ? subexpr[4] : '';
-
-			/* Invalid expression */
-			if (nest != 0 || subexpr.length > 5 || varname == '' || op1 != '?' || op2 != ':')
-				return fmtstr;
-
-			if (subexpr.length == 1)
-				tokens.push(args[varname] != null ? args[varname] : '');
-			else if (args[varname] != null)
-				tokens.push(fmt(if_set.replace(/\\(.)/g, '$1'), args));
-			else
-				tokens.push(fmt(if_unset.replace(/\\(.)/g, '$1'), args));
-
-			last = j + 1;
-			i = last;
-		}
-		else if (i >= fmtstr.length) {
-			if (i > last)
-				tokens.push(fmtstr.substring(last, i));
-		}
-	}
-
-	for (var i = 0; i < tokens.length; i++)
-		if (typeof(tokens[i]) == 'object')
-			return E('span', {}, tokens);
-
-	return tokens.join('');
-}
-
-function snat_proto_txt(s) {
-	var m = uci.get('firewall', s, 'mark'),
-	    p = uci.get('firewall', s, 'proto');
-
-	return fmt(_('Match %{protocol?%{family} %{protocol} traffic:any %{family} traffic} %{mark?with firewall mark %{mark}} %{limit?limited to %{limit}}'), {
-		protocol: (p && p != 'all' && p != 'any' && p != '*') ? fwtool.fmt_proto(uci.get('firewall', s, 'proto')) : null,
-		family:   fwtool.fmt_family('ipv4'),
-		mark:     m ? E('var', {}, fwtool.fmt_neg(m)) : null,
-		limit:  fwtool.fmt_limit(uci.get('firewall', s, 'limit'), uci.get('firewall', s, 'limit_burst'))
+	return fwtool.fmt(_('Forwarded IPv4%{proto?, protocol %{proto#%{next?, }<var>%{item.name}</var>}}%{mark?, mark <var%{mark.inv? data-tooltip="Match fwmarks except %{mark.num}%{mark.mask? with mask %{mark.mask}}.":%{mark.mask? data-tooltip="Mask fwmark value with %{mark.mask} before compare."}}>%{mark.val}</var>}'), {
+		proto: proto,
+		mark:  f
 	});
 }
 
-function snat_src_txt(s) {
-	return fmt(_('From %{ipaddr?:any host} %{port?with source %{port}}'), {
-		ipaddr: fwtool.fmt_ip(uci.get('firewall', s, 'src_ip')),
-		port:   fwtool.fmt_port(uci.get('firewall', s, 'src_port'))
+function rule_src_txt(s, hosts) {
+	var z = uci.get('firewall', s, 'src');
+
+	return fwtool.fmt(_('From %{src}%{src_device?, interface <var>%{src_device}</var>}%{src_ip?, IP %{src_ip#%{next?, }<var%{item.inv? data-tooltip="Match IP addresses except %{item.val}."}>%{item.ival}</var>}}%{src_port?, port %{src_port#%{next?, }<var%{item.inv? data-tooltip="Match ports except %{item.val}."}>%{item.ival}</var>}}'), {
+		src: E('span', { 'class': 'zonebadge', 'style': 'background-color:' + fwmodel.getColorForName(null) }, [E('em', _('any zone'))]),
+		src_ip: fwtool.map_invert(uci.get('firewall', s, 'src_ip'), 'toLowerCase'),
+		src_port: fwtool.map_invert(uci.get('firewall', s, 'src_port'))
 	});
 }
 
-function snat_dest_txt(s) {
-	var z = uci.get('firewall', s, 'src'),
-	    d = uci.get('firewall', s, 'device');
+function rule_dest_txt(s) {
+	var z = uci.get('firewall', s, 'src');
 
-	return fmt(_('To %{ipaddr?:any destination} %{port?at %{port}} %{zone?via zone %{zone}} %{device?egress device %{device}}'), {
-		port:   fwtool.fmt_port(uci.get('firewall', s, 'dest_port')),
-		ipaddr: fwtool.fmt_ip(uci.get('firewall', s, 'dest_ip')),
-		zone:   (z != '*') ? fwtool.fmt_zone(z) : null,
-		device: d ? E('var', {}, [d]) : null
+	return fwtool.fmt(_('To %{dest}%{dest_device?, via interface <var>%{dest_device}</var>}%{dest_ip?, IP %{dest_ip#%{next?, }<var%{item.inv? data-tooltip="Match IP addresses except %{item.val}."}>%{item.ival}</var>}}%{dest_port?, port %{dest_port#%{next?, }<var%{item.inv? data-tooltip="Match ports except %{item.val}."}>%{item.ival}</var>}}'), {
+		dest: E('span', { 'class': 'zonebadge', 'style': 'background-color:' + fwmodel.getColorForName((z && z != '*') ? z : null) }, [(z == '*') ? E('em', _('any zone')) : (z || E('em', _('this device')))]),
+		dest_ip: fwtool.map_invert(uci.get('firewall', s, 'dest_ip'), 'toLowerCase'),
+		dest_port: fwtool.map_invert(uci.get('firewall', s, 'dest_port')),
+		dest_device: uci.get('firewall', s, 'device')
 	});
 }
 
-function snat_rewrite_txt(s) {
+function rule_limit_txt(s) {
+	var m = String(uci.get('firewall', s, 'limit')).match(/^(\d+)\/([smhd])\w*$/i),
+	    l = m ? {
+			num:   +m[1],
+			unit:  ({ s: _('second'), m: _('minute'), h: _('hour'), d: _('day') })[m[2]],
+			burst: uci.get('firewall', s, 'limit_burst')
+		} : null;
+
+	if (!l)
+		return '';
+
+	return fwtool.fmt(_('Limit matching to <var>%{limit.num}</var> packets per <var>%{limit.unit}</var>%{limit.burst? burst <var>%{limit.burst}</var>}'), { limit: l });
+}
+
+function rule_target_txt(s) {
 	var t = uci.get('firewall', s, 'target'),
-	    l = fwtool.fmt_limit(uci.get('firewall', s, 'limit'), uci.get('firewall', s, 'limit_burst'));
+	    s = {
+	    	target:    t,
+	    	snat_ip:   uci.get('firewall', s, 'snat_ip'),
+	    	snat_port: uci.get('firewall', s, 'snat_port')
+	    };
 
-	if (t == 'SNAT') {
-		return fmt(_('Rewrite to %{ipaddr?%{port?%{ipaddr}, %{port}:%{ipaddr}}:%{port}}'), {
-			ipaddr: fwtool.fmt_ip(uci.get('firewall', s, 'snat_ip')),
-			port:   fwtool.fmt_port(uci.get('firewall', s, 'snat_port'))
-		});
-	}
-	else if (t == 'MASQUERADE') {
-		return _('Rewrite to outbound device IP');
-	}
-	else if (t == 'ACCEPT') {
-		return _('Do not rewrite');
+	switch (t) {
+	case 'SNAT':
+		return fwtool.fmt(_('<var data-tooltip="SNAT">Statically rewrite</var> to source %{snat_ip?IP <var>%{snat_ip}</var>} %{snat_port?port <var>%{snat_port}</var>}'), s);
+
+	case 'MASQUERADE':
+		return fwtool.fmt(_('<var data-tooltip="MASQUERADE">Automatically rewrite</var> source IP'));
+
+	case 'ACCEPT':
+		return fwtool.fmt(_('<var data-tooltip="ACCEPT">Prevent source rewrite</var>'));
+
+	default:
+		return t;
 	}
 }
 
@@ -175,16 +139,17 @@ return L.view.extend({
 		o.modalonly = false;
 		o.textvalue = function(s) {
 			return E('small', [
-				snat_proto_txt(s), E('br'),
-				snat_src_txt(s), E('br'),
-				snat_dest_txt(s)
+				rule_proto_txt(s), E('br'),
+				rule_src_txt(s, hosts), E('br'),
+				rule_dest_txt(s), E('br'),
+				rule_limit_txt(s)
 			]);
 		};
 
-		o = s.option(form.ListValue, '_dest', _('Rewrite to'));
+		o = s.option(form.ListValue, '_target', _('Action'));
 		o.modalonly = false;
 		o.textvalue = function(s) {
-			return snat_rewrite_txt(s);
+			return rule_target_txt(s);
 		};
 
 		o = s.option(form.Flag, 'enabled', _('Enable'));
@@ -192,17 +157,9 @@ return L.view.extend({
 		o.default = o.enabled;
 		o.editable = true;
 
-		o = s.taboption('general', form.Value, 'proto', _('Protocol'));
+		o = s.taboption('general', fwtool.CBIProtocolSelect, 'proto', _('Protocol'));
 		o.modalonly = true;
 		o.default = 'all';
-		o.value('all', _('Any'));
-		o.value('tcp udp', 'TCP+UDP');
-		o.value('tcp', 'TCP');
-		o.value('udp', 'UDP');
-		o.cfgvalue = function(/* ... */) {
-			var v = this.super('cfgvalue', arguments);
-			return (v == 'tcpudp') ? 'tcp udp' : v;
-		};
 
 		o = s.taboption('general', widgets.ZoneSelect, 'src', _('Outbound zone'));
 		o.modalonly = true;
@@ -211,18 +168,10 @@ return L.view.extend({
 		o.allowany = true;
 		o.default = 'lan';
 
-		o = s.taboption('general', form.Value, 'src_ip', _('Source IP address'),
-			_('Match forwarded traffic from this IP or range.'));
-		o.modalonly = true;
+		o = fwtool.addIPOption(s, 'general', 'src_ip', _('Source address'),
+			_('Match forwarded traffic from this IP or range.'), 'ipv4', hosts);
 		o.rmempty = true;
 		o.datatype = 'neg(ipmask4)';
-		o.placeholder = E('em', _('any'));
-		L.sortedKeys(hosts, 'ipv4', 'addr').forEach(function(mac) {
-			o.value(hosts[mac].ipv4, '%s (%s)'.format(
-				hosts[mac].ipv4,
-				hosts[mac].name || mac
-			));
-		});
 
 		o = s.taboption('general', form.Value, 'src_port', _('Source port'),
 			_('Match forwarded traffic originating from the given source port or port range.'));
@@ -230,23 +179,13 @@ return L.view.extend({
 		o.rmempty = true;
 		o.datatype = 'neg(portrange)';
 		o.placeholder = _('any');
-		o.depends('proto', 'tcp');
-		o.depends('proto', 'udp');
-		o.depends('proto', 'tcp udp');
-		o.depends('proto', 'tcpudp');
+		o.depends({ proto: 'tcp', '!contains': true });
+		o.depends({ proto: 'udp', '!contains': true });
 
-		o = s.taboption('general', form.Value, 'dest_ip', _('Destination IP address'),
-			_('Match forwarded traffic directed at the given IP address.'));
-		o.modalonly = true;
+		o = fwtool.addIPOption(s, 'general', 'dest_ip', _('Destination address'),
+			_('Match forwarded traffic directed at the given IP address.'), 'ipv4', hosts);
 		o.rmempty = true;
 		o.datatype = 'neg(ipmask4)';
-		o.placeholder = E('em', _('any'));
-		L.sortedKeys(hosts, 'ipv4', 'addr').forEach(function(mac) {
-			o.value(hosts[mac].ipv4, '%s (%s)'.format(
-				hosts[mac].ipv4,
-				hosts[mac].name || mac
-			));
-		});
 
 		o = s.taboption('general', form.Value, 'dest_port', _('Destination port'),
 			_('Match forwarded traffic directed at the given destination port or port range.'));
@@ -254,10 +193,8 @@ return L.view.extend({
 		o.rmempty = true;
 		o.placeholder = _('any');
 		o.datatype = 'neg(portrange)';
-		o.depends('proto', 'tcp');
-		o.depends('proto', 'udp');
-		o.depends('proto', 'tcp udp');
-		o.depends('proto', 'tcpudp');
+		o.depends({ proto: 'tcp', '!contains': true });
+		o.depends({ proto: 'udp', '!contains': true });
 
 		o = s.taboption('general', form.ListValue, 'target', _('Action'));
 		o.modalonly = true;
@@ -266,35 +203,20 @@ return L.view.extend({
 		o.value('MASQUERADE', _('MASQUERADE - Automatically rewrite to outbound interface IP'));
 		o.value('ACCEPT', _('ACCEPT - Disable address rewriting'));
 
-		o = s.taboption('general', form.Value, 'snat_ip', _('Rewrite IP address'),
-			_('Rewrite matched traffic to the specified source IP address.'));
-		o.modalonly = true;
-		o.rmempty = true;
-		o.placeholder = _('do not rewrite');
-		o.datatype = 'ip4addr("nomask")';
+		o = fwtool.addLocalIPOption(s, 'general', 'snat_ip', _('Rewrite IP address'),
+			_('Rewrite matched traffic to the specified source IP address.'), devs);
+		o.placeholder = null;
+		o.depends('target', 'SNAT');
 		o.validate = function(section_id, value) {
 			var port = this.map.lookupOption('snat_port', section_id),
+			    a = this.formvalue(section_id),
 			    p = port ? port[0].formvalue(section_id) : null;
 
-			if ((value == null || value == '') && (p == null || p == ''))
+			if ((a == null || a == '') && (p == null || p == ''))
 				return _('A rewrite IP must be specified!');
 
 			return true;
 		};
-		o.depends('target', 'SNAT');
-		L.sortedKeys(devs, 'name').forEach(function(dev) {
-			var ip4addrs = devs[dev].ipaddrs;
-
-			if (!L.isObject(devs[dev].flags) || !Array.isArray(ip4addrs) || devs[dev].flags.loopback)
-				return;
-
-			for (var i = 0; i < ip4addrs.length; i++) {
-				if (!L.isObject(ip4addrs[i]) || !ip4addrs[i].address)
-					continue;
-
-				o.value(ip4addrs[i].address, '%s (%s)'.format(ip4addrs[i].address, dev));
-			}
-		});
 
 		o = s.taboption('general', form.Value, 'snat_port', _('Rewrite port'),
 			_('Rewrite matched traffic to the specified source port or port range.'));
@@ -302,10 +224,8 @@ return L.view.extend({
 		o.rmempty = true;
 		o.placeholder = _('do not rewrite');
 		o.datatype = 'portrange';
-		o.depends({ target: 'SNAT', proto: 'tcp' });
-		o.depends({ target: 'SNAT', proto: 'udp' });
-		o.depends({ target: 'SNAT', proto: 'tcp udp' });
-		o.depends({ target: 'SNAT', proto: 'tcpudp' });
+		o.depends({ proto: 'tcp', '!contains': true });
+		o.depends({ proto: 'udp', '!contains': true });
 
 		o = s.taboption('advanced', widgets.DeviceSelect, 'device', _('Outbound device'),
 			_('Matches forwarded traffic using the specified outbound network device.'));
