@@ -1572,7 +1572,7 @@ var CBIValue = CBIAbstractValue.extend({
 		this.keylist.push(String(key));
 
 		this.vallist = this.vallist || [];
-		this.vallist.push(String(val != null ? val : key));
+		this.vallist.push(L.dom.elem(val) ? val : String(val != null ? val : key));
 	},
 
 	render: function(option_index, section_id, in_table) {
