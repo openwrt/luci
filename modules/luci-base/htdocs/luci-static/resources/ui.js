@@ -1555,6 +1555,16 @@ var UIDynamicList = UIElement.extend({
 		for (var i = 0; i < values.length; i++)
 			this.addItem(this.node, values[i],
 				this.choices ? this.choices[values[i]] : null);
+	},
+
+	addChoices: function(values, labels) {
+		var dl = this.node.lastElementChild.firstElementChild;
+		L.dom.callClassMethod(dl, 'addChoices', values, labels);
+	},
+
+	clearChoices: function() {
+		var dl = this.node.lastElementChild.firstElementChild;
+		L.dom.callClassMethod(dl, 'clearChoices');
 	}
 });
 
