@@ -1326,7 +1326,11 @@ var UIDynamicList = UIElement.extend({
 		}, E('div', { 'class': 'add-item' }));
 
 		if (this.choices) {
+			if (this.options.placeholder != null)
+				this.options.select_placeholder = this.options.placeholder;
+
 			var cbox = new UICombobox(null, this.choices, this.options);
+
 			dl.lastElementChild.appendChild(cbox.render());
 		}
 		else {
