@@ -128,6 +128,8 @@ for _, option in ipairs(basicParams) do
 		o.value = option[3]
 	elseif option[1] == FileUpload then
 
+		o.initial_directory = "/etc/openvpn"
+
 		function o.cfgvalue(self, section)
 			local cfg_val = AbstractValue.cfgvalue(self, section)
 
