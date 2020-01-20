@@ -29,7 +29,7 @@ function rule_proto_txt(s, ctHelpers) {
 	} : null;
 
 	m = String(uci.get('firewall', s, 'mark')).match(/^(!\s*)?(0x[0-9a-f]{1,8}|[0-9]{1,10})(?:\/(0x[0-9a-f]{1,8}|[0-9]{1,10}))?$/i);
-	var f = m ? {
+	var w = m ? {
 		val:  m[0].toUpperCase().replace(/X/g, 'x'),
 		inv:  m[1],
 		num:  '0x%02X'.format(+m[2]),
@@ -51,7 +51,7 @@ function rule_proto_txt(s, ctHelpers) {
 		dest: uci.get('firewall', s, 'dest'),
 		proto: proto,
 		helper: h,
-		mark:   f,
+		mark:   w,
 		dscp:   d
 	});
 }
