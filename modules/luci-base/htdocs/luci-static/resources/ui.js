@@ -1919,6 +1919,8 @@ var UIFileUpload = UIElement.extend({
 		button.style.display = '';
 
 		this.node.dispatchEvent(new CustomEvent('cbi-fileupload-cancel', {}));
+
+		ev.preventDefault();
 	},
 
 	handleReset: function(ev) {
@@ -1962,9 +1964,9 @@ var UIFileUpload = UIElement.extend({
 	handleFileBrowser: function(ev) {
 		var button = ev.target,
 		    browser = button.nextElementSibling,
-		    path = this.stat ? this.stat.path.replace(/\/[^\/]+$/, '') : this.options.root_directory;
+		    path = this.stat ? this.stat.path.replace(/\/[^\/]+$/, '') : (this.options.initial_directory || this.options.root_directory);
 
-		if (this.options.root_directory.indexOf(path) != 0)
+		if (path.indexOf(this.options.root_directory) != 0)
 			path = this.options.root_directory;
 
 		ev.preventDefault();
