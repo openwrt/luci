@@ -1,5 +1,5 @@
 %.o: %.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(FPIC) -c -o $@ $<
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(FPIC) -Wall -c -o $@ $<
 
 clean:
 	rm -f luci-bwc *.o

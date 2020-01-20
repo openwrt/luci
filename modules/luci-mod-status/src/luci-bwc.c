@@ -29,9 +29,11 @@
 #include <unistd.h>
 #include <signal.h>
 #include <endian.h>
+#include <dirent.h>
 
 #include <sys/stat.h>
 #include <sys/mman.h>
+#include <sys/types.h>
 #include <arpa/inet.h>
 
 #include <dlfcn.h>
@@ -48,11 +50,6 @@
 #define DB_RD_FILE	DB_PATH "/radio/%s"
 #define DB_CN_FILE	DB_PATH "/connections"
 #define DB_LD_FILE	DB_PATH "/load"
-
-#define IF_SCAN_PATTERN \
-	" %[^ :]:%" SCNu64 " %" SCNu64 \
-	" %*u %*u %*u %*u %*u %*u" \
-	" %" SCNu64 " %" SCNu64
 
 #define LD_SCAN_PATTERN \
 	"%f %f %f"
@@ -415,6 +412,7 @@ static int update_ldstat(uint16_t load1, uint16_t load5, uint16_t load15)
 
 static int run_daemon(void)
 {
+	DIR *dir;
 	FILE *info;
 	uint64_t rxb, txb, rxp, txp;
 	uint32_t udp, tcp, other;
@@ -422,14 +420,26 @@ static int run_daemon(void)
 	uint8_t rssi, noise;
 	float lf1, lf5, lf15;
 	char line[1024];
-	char ifname[16];
+	char path[64];
+	char buf[32];
 	int i;
 	void *iw;
 	struct sigaction sa;
+	struct dirent *e;
 
 	struct stat s;
 	const char *ipc = stat("/proc/net/nf_conntrack", &s)
 		? "/proc/net/ip_conntrack" : "/proc/net/nf_conntrack";
+
+	const struct {
+		const char *file;
+		uint64_t *value;
+	} sysfs_stats[] = {
+		{ "rx_packets", &rxp },
+		{ "tx_packets", &txp },
+		{ "rx_bytes",   &rxb },
+		{ "tx_bytes",   &txb }
+	};
 
 	switch (fork())
 	{
@@ -476,41 +486,39 @@ static int run_daemon(void)
 		memset(progname, 0, prognamelen);
 		snprintf(progname, prognamelen, "luci-bwc %d", countdown);
 
-		if ((info = fopen("/proc/net/dev", "r")) != NULL)
+		dir = opendir("/sys/class/net");
+
+		if (dir)
 		{
-			while (fgets(line, sizeof(line), info))
+			while ((e = readdir(dir)) != NULL)
 			{
-				if (strchr(line, '|'))
+				if (iw && iw_update(iw, e->d_name, &rate, &rssi, &noise))
+					update_radiostat(e->d_name, rate, rssi, noise);
+
+				if (!strcmp(e->d_name, "lo"))
 					continue;
 
-				if (sscanf(line, IF_SCAN_PATTERN, ifname, &rxb, &rxp, &txb, &txp))
+				for (i = 0; i < sizeof(sysfs_stats)/sizeof(sysfs_stats[0]); i++)
 				{
-					if (strncmp(ifname, "lo", sizeof(ifname)))
-						update_ifstat(ifname, rxb, rxp, txb, txp);
+					*sysfs_stats[i].value = 0;
+
+					snprintf(path, sizeof(path), "/sys/class/net/%s/statistics/%s",
+						e->d_name, sysfs_stats[i].file);
+
+					if ((info = fopen(path, "r")) != NULL)
+					{
+						memset(buf, 0, sizeof(buf));
+						fread(buf, 1, sizeof(buf) - 1, info);
+						fclose(info);
+
+						*sysfs_stats[i].value = (uint64_t)strtoull(buf, NULL, 10);
+					}
 				}
+
+				update_ifstat(e->d_name, rxb, rxp, txb, txp);
 			}
 
-			fclose(info);
-		}
-
-		if (iw)
-		{
-			for (i = 0; i < 5; i++)
-			{
-#define iw_checkif(pattern) \
-				do {                                                      \
-					snprintf(ifname, sizeof(ifname), pattern, i);         \
-					if (iw_update(iw, ifname, &rate, &rssi, &noise))  \
-					{                                                     \
-						update_radiostat(ifname, rate, rssi, noise);      \
-						continue;                                         \
-					}                                                     \
-				} while(0)
-
-				iw_checkif("wlan%d");
-				iw_checkif("ath%d");
-				iw_checkif("wl%d");
-			}
+			closedir(dir);
 		}
 
 		if ((info = fopen(ipc, "r")) != NULL)
@@ -528,11 +536,11 @@ static int run_daemon(void)
 				|| (strstr(line, "src=::1 ") && strstr(line, "dst=::1 ")))
 					continue;
 
-				if (sscanf(line, "%*s %*d %s", ifname) || sscanf(line, "%s %*d", ifname))
+				if (sscanf(line, "%*s %*d %s", buf) || sscanf(line, "%s %*d", buf))
 				{
-					if (!strcmp(ifname, "tcp"))
+					if (!strcmp(buf, "tcp"))
 						tcp++;
-					else if (!strcmp(ifname, "udp"))
+					else if (!strcmp(buf, "udp"))
 						udp++;
 					else
 						other++;
