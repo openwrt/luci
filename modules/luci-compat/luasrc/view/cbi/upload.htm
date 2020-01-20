@@ -7,7 +7,8 @@
 		show_hidden = self.show_hidden,
 		enable_remove = self.enable_remove,
 		enable_upload = self.enable_upload,
-		root_directory = "/" --self.root_directory
+		root_directory = self.root_directory or "/",
+		initial_directory = self.initial_directory
 	}
 }))%>></div>
 
