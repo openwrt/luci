@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-03-30 17:00+0200\n"
-"PO-Revision-Date: 2020-01-21 13:31+0000\n"
+"PO-Revision-Date: 2020-01-21 17:16+0000\n"
 "Last-Translator: Franco Castillo <castillofrancodamian@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsfirewall/es/>\n"
@@ -15,7 +15,6 @@ msgstr ""
 "X-Generator: Weblate 3.11-dev\n"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:47
-#, fuzzy
 msgid ""
 "%{src?%{dest?Forwarded:Incoming}:Outgoing} %{ipv6?%{ipv4?<var>IPv4</var> and "
 "<var>IPv6</var>:<var>IPv6</var>}:<var>IPv4</var>}%{proto?, protocol %{proto#"
@@ -31,20 +30,20 @@ msgid ""
 "&quot;\">%{helper.val}</var>:<var data-tooltip=\"%{helper.name}\">%{helper."
 "val}</var>}}"
 msgstr ""
-"%{src?%{dest?Reenviado:Entrante}:Saliente} %{ipv6?%{ipv4?<var>IPv4</var> and "
+"%{src?%{dest?Reenvío:Entrante}:Saliente} %{ipv6?%{ipv4?<var>IPv4</var> and "
 "<var>IPv6</var>:<var>IPv6</var>}:<var>IPv4</var>}%{proto?, protocolo "
 "%{proto#%{next?, }%{item.types?<var class=\"cbi-tooltip-container\""
-">%{item.name}<span class=\"cbi-tooltip\">ICMP con tipos %{ítem.tipos#%{"
-"siguiente?, }<var>%{item}</var>}</lapso></var>:<var>%{ítem.nombre}</var>}}}%{"
-"marca?, marca <var%{marca.inv? data-tooltip=\"Hacer coincidir fwmarks "
-"excepto %{marca.num}%{marca.máscara? con máscara %{marca.máscara}}.\":%{"
-"marca.máscara? data-tooltip=\"Enmascarar el valor de fwmark con "
-"%{marca.máscara} antes de comparar.\"}}>%{marca.val}</var>}%{dscp?, DSCP "
-"%{dscp.inv?<var data-tooltip=\"Igualar las clasificaciones DSCP excepto "
-"%{dscp.num?:%{dscp.nombre}}\">%{dscp.val}</var>:<var>%{dscp.val}</var>}}%{"
-"ayudante?, ayudante %{ayudante.inv?<var data-tooltip=\"Iguala a cualquier "
-"ayudante excepto &quot;%{ayudante.nombre}&quot;\">%{ayudante.val}</var>:<var "
-"data-tooltip=\"%{ayudante.nombre}\">%{ayudante.val}</var>}}"
+">%{item.name}<span class=\"cbi-tooltip\">ICMP con tipos %{item.types#%{"
+"next?, }<var>%{item}</var>}</span></var>:<var>%{item.name}</var>}}}%{mark?, "
+"marca <var%{mark.inv? data-tooltip=\"Hacer coincidir fwmarks excepto "
+"%{mark.num}%{mark.mask? con máscara %{mark.mask}}.\":%{mark.mask? data-"
+"tooltip=\"Enmascarar el valor de fwmark con %{mark.mask} antes de comparar.\""
+"}}>%{mark.val}</var>}%{dscp?, DSCP %{dscp.inv?<var data-tooltip=\"Igualar "
+"las clasificaciones DSCP excepto %{dscp.num?:%{dscp.name}}\""
+">%{dscp.val}</var>:<var>%{dscp.val}</var>}}%{helper?, ayudante %{helper.inv?<"
+"var data-tooltip=\"Iguala a cualquier ayudante excepto "
+"&quot;%{helper.name}&quot;\">%{helper.val}</var>:<var data-tooltip=\""
+"%{helper.name}\">%{helper.val}</var>}}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:431
 msgid "-- add IP --"
@@ -55,37 +54,32 @@ msgid "-- add MAC --"
 msgstr "-- Añadir MAC"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:117
-#, fuzzy
 msgid ""
 "<var data-tooltip=\"ACCEPT\">Accept</var> %{src?%{dest?forward:input}:output}"
 msgstr ""
 "<var data-tooltip=\"ACCEPT\">Aceptar</var> "
-"%{src?%{dest?reenviar:entrada}:salida}"
+"%{src?%{dest?reenvío:entrada}:salida}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:86
-#, fuzzy
 msgid "<var data-tooltip=\"ACCEPT\">Prevent source rewrite</var>"
 msgstr "<var data-tooltip=\"ACCEPT\">Prevenir la reescritura de la fuente</var>"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:80
-#, fuzzy
 msgid ""
 "<var data-tooltip=\"DNAT\">Forward</var> to %{dest}%{dest_ip? IP <var>"
 "%{dest_ip}</var>}%{dest_port? port <var>%{dest_port}</var>}"
 msgstr ""
-"<var data-tooltip=\"DNAT\">Reenviar</var> to %{dest}%{dest_ip? IP "
+"<var data-tooltip=\"DNAT\">Reenviar</var> a %{dest}%{dest_ip? IP "
 "<var>%{dest_ip}</var>}%{dest_port? puerto <var>%{dest_port}</var>}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:114
-#, fuzzy
 msgid ""
 "<var data-tooltip=\"DROP\">Drop</var> %{src?%{dest?forward:input}:output}"
 msgstr ""
-"<var data-tooltip=\"DROP\">Soltar</var> "
-"%{src?%{dest?reenviar:entrada}:salida}"
+"<var data-tooltip=\"DROP\">Descartar</var> "
+"%{src?%{dest?reenvío:entrada}:salida}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:132
-#, fuzzy
 msgid ""
 "<var data-tooltip=\"DSCP\">Assign DSCP</var> classification <var>%{set_dscp}"
 "</var>"
@@ -94,54 +88,48 @@ msgstr ""
 "<var>%{set_dscp}</var>"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:126
-#, fuzzy
 msgid ""
 "<var data-tooltip=\"HELPER\">Assign conntrack</var> helper <var"
 "%{helper_name? data-tooltip=\"%{helper_name}\"}>%{set_helper}</var>"
 msgstr ""
-"<var data-tooltip=\"AYUDANTE\">Asignar conntrack</var> helper <var%{"
-"nombre_del_ayudante? data-tooltip=\"%{nombre_del_ayudante}\""
-"}>%{establecer_ayudante}</var>"
+"<var data-tooltip=\"HELPER\">Asignar conntrack</var> ayudante <var%{"
+"helper_name? data-tooltip=\"%{helper_name}\"}>%{set_helper}</var>"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:129
-#, fuzzy
 msgid ""
 "<var data-tooltip=\"MARK\">%{set_mark?Assign:XOR}</var> firewall mark <var>"
 "%{set_mark?:%{set_xmark}}</var>"
 msgstr ""
-"<var data-tooltip=\"MARCA\">%{establecer_marca?Asignar:XOR}</var> marca de "
-"firewall <var>%{establecer_marca?:%{establecer_xmark}}</var>"
+"<var data-tooltip=\"MARK\">%{set_mark?Asignar:XOR}</var> marca de firewall "
+"<var>%{set_mark?:%{set_xmark}}</var>"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:83
-#, fuzzy
 msgid "<var data-tooltip=\"MASQUERADE\">Automatically rewrite</var> source IP"
 msgstr ""
-"<var data-tooltip=\"MASCARADA\">Reescribir automáticamente</var> origen IP"
+"<var data-tooltip=\"MASQUERADE\">Reescribir automáticamente</var> IP de "
+"origen"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:123
-#, fuzzy
 msgid ""
 "<var data-tooltip=\"NOTRACK\">Do not track</var> %{src?%{dest?forward:input}:"
 "output}"
 msgstr ""
-"<var data-tooltip=\"NO SEGUIR\">No rastrear</var> "
-"%{src?%{dest?reenviar:entrada}:salida}"
+"<var data-tooltip=\"NOTRACK\">No seguir</var> "
+"%{src?%{dest?reenvío:entrada}:salida}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:120
-#, fuzzy
 msgid ""
 "<var data-tooltip=\"REJECT\">Reject</var> %{src?%{dest?forward:input}:output}"
 msgstr ""
-"<var data-tooltip=\"RECHAZAR\">Rechazar</var> "
-"%{src?%{dest?reenviar:entrada}:salida}"
+"<var data-tooltip=\"REJECT\">Rechazar</var> "
+"%{src?%{dest?reenvío:entrada}:salida}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:80
-#, fuzzy
 msgid ""
 "<var data-tooltip=\"SNAT\">Statically rewrite</var> to source %{snat_ip?IP "
 "<var>%{snat_ip}</var>} %{snat_port?port <var>%{snat_port}</var>}"
 msgstr ""
-"<var data-tooltip=\"SNAT\">Reescribir estáticamente</var> al origen %{"
+"<var data-tooltip=\"SNAT\">Reescribir estáticamente</var> a origen %{"
 "snat_ip?IP <var>%{snat_ip}</var>} %{snat_port?puerto <var>%{snat_port}</var>}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:224
@@ -418,18 +406,17 @@ msgid "Forward"
 msgstr "Reenviar"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:29
-#, fuzzy
 msgid ""
 "Forwarded IPv4%{proto?, protocol %{proto#%{next?, }<var>%{item.name}</"
 "var>}}%{mark?, mark <var%{mark.inv? data-tooltip=\"Match fwmarks except "
 "%{mark.num}%{mark.mask? with mask %{mark.mask}}.\":%{mark.mask? data-tooltip="
 "\"Mask fwmark value with %{mark.mask} before compare.\"}}>%{mark.val}</var>}"
 msgstr ""
-"IPv4 reenviado%{proto?, protocolo %{proto#%{siguiente?, "
-"}<var>%{ítem.nombre}</var>}}%{marcak?, marca <var%{marca.inv? data-tooltip=\""
-"Hacer coincidir fwmarks excepto %{marca.num}%{marca.máscara? con máscara "
-"%{marca.máscara}}.\":%{marca.máscara? data-tooltip=\"Enmascarar el valor de "
-"fwmark con %{marca.máscara} antes de comparar.\"}}>%{marca.val}</var>}"
+"Reenviar IPv4%{proto?, protocolo %{proto#%{next?, "
+"}<var>%{item.name}</var>}}%{mark?, marca <var%{mark.inv? data-tooltip=\""
+"Hacer coincidir fwmarks excepto %{mark.num}%{mark.mask? con máscara "
+"%{mark.mask}}.\":%{mark.mask? data-tooltip=\"Enmascarar el valor de fwmark "
+"con %{mark.mask} antes de comparar.\"}}>%{mark.val}</var>}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:435
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:263
@@ -437,7 +424,6 @@ msgid "Friday"
 msgstr "Viernes"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:38
-#, fuzzy
 msgid ""
 "From %{src}%{src_device?, interface <var>%{src_device}</var>}%{src_ip?, IP "
 "%{src_ip#%{next?, }<var%{item.inv? data-tooltip=\"Match IP addresses except "
@@ -445,14 +431,13 @@ msgid ""
 "<var%{item.inv? data-tooltip=\"Match ports except %{item.val}.\"}>%{item."
 "ival}</var>}}"
 msgstr ""
-"Desde %{src}%{src_dispositivo?, interfaz <var>%{src_dispositivo}</var>}%{"
-"src_ip?, IP %{src_ip#%{next?, }<var%{item.inv? data-tooltip=\"Hacer "
-"coincidir las direcciones IP excepto %{ítem.val}.\"}>%{ítem.ival}</var>}}%{"
-"src_puerto?, puerto %{src_puerto#%{siguiente?, }<var%{ítem.inv? data-tooltip="
-"\"Igualar puertos excepto %{item.val}.\"}>%{item.ival}</var>}}"
+"Desde %{src}%{src_device?, interfaz <var>%{src_device}</var>}%{src_ip?, IP "
+"%{src_ip#%{next?, }<var%{item.inv? data-tooltip=\"Hacer coincidir las "
+"direcciones IP excepto %{item.val}.\"}>%{item.ival}</var>}}%{src_port?, "
+"puerto %{src_port#%{next?, }<var%{item.inv? data-tooltip=\"Igualar puertos "
+"excepto %{item.val}.\"}>%{item.ival}</var>}}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:63
-#, fuzzy
 msgid ""
 "From %{src}%{src_device?, interface <var>%{src_device}</var>}%{src_ip?, IP "
 "%{src_ip#%{next?, }<var%{item.inv? data-tooltip=\"Match IP addresses except "
@@ -463,15 +448,14 @@ msgid ""
 "name}}.\":%{item.hint.name? data-tooltip=\"%{item.hint.name}\"}}>%{item.ival}"
 "</var>}}"
 msgstr ""
-"Desde %{src}%{src_dispositivo?, interfaz <var>%{src_dispositivo}</var>}%{"
-"src_ip?, IP %{src_ip#%{siguiente?, }<var%{ítem.inv? data-tooltip=\"Hacer "
-"coincidir las direcciones IP excepto %{ítem.val}.\"}>%{ítem.ival}</var>}}%{"
-"src_puerto?, puerto %{src_puerto#%{siguiente?, }<var%{ítem.inv? data-tooltip="
-"\"Igualar puertos excepto %{ítem.val}.\"}>%{ítem.ival}</var>}}%{src_mac?, "
-"MAC %{src_mac#%{siguiente?, }<var%{ítem.inv? data-tooltip=\"Igualar puertos "
-"excepto %{ítem.val}%{ítem.insinuación.nombre? a.k.a. "
-"%{ítem.insinuación.nombre}}.\":%{ítem.insinuación.nombre? data-tooltip=\""
-"%{ítem.insinuación.nombre}\"}}>%{ítem.ival}</var>}}"
+"Desde %{src}%{src_device?, interfaz <var>%{src_device}</var>}%{src_ip?, IP "
+"%{src_ip#%{next?, }<var%{item.inv? data-tooltip=\"Hacer coincidir las "
+"direcciones IP excepto %{item.val}.\"}>%{item.ival}</var>}}%{src_port?, "
+"puerto %{src_port#%{next?, }<var%{item.inv? data-tooltip=\"Igualar puertos "
+"excepto %{item.val}.\"}>%{item.ival}</var>}}%{src_mac?, MAC %{src_mac#%{"
+"next?, }<var%{item.inv? data-tooltip=\"Hacer coincidir MAC excepto "
+"%{item.val}%{item.hint.name? a.k.a. %{item.hint.name}}.\":%{item.hint.name? "
+"data-tooltip=\"%{item.hint.name}\"}}>%{item.ival}</var>}}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:47
 #, fuzzy
