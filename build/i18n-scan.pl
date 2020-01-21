@@ -1,292 +1,247 @@
 #!/usr/bin/perl
 
-use utf8;
 use strict;
 use warnings;
-use Text::Balanced qw(extract_tagged gen_delimited_pat);
+use IPC::Open2;
 use POSIX;
 
-POSIX::setlocale(POSIX::LC_ALL, "C");
+$ENV{'LC_ALL'} = 'C';
+POSIX::setlocale(POSIX::LC_ALL, 'C');
 
 @ARGV >= 1 || die "Usage: $0 <source directory>\n";
 
 
-my %stringtable;
+my %keywords = (
+	'.js' => [ '_:1', '_:1,2c', 'N_:2,3', 'N_:2,3,4c' ],
+	'.lua' => [ '_:1', '_:1,2c', 'translate:1', 'translate:1,2c', 'translatef:1', 'N_:2,3', 'N_:2,3,4c', 'ntranslate:2,3', 'ntranslate:2,3,4c' ],
+	'.htm' => [ '_:1', '_:1,2c', 'translate:1', 'translate:1,2c', 'translatef:1', 'N_:2,3', 'N_:2,3,4c', 'ntranslate:2,3', 'ntranslate:2,3,4c' ],
+	'.json' => [ '_:1', '_:1,2c' ]
+);
 
-sub dec_lua_str
-{
+sub xgettext($@) {
+	my $path = shift;
+	my @keywords = @_;
+	my ($ext) = $path =~ m!(\.\w+)$!;
+	my @cmd = qw(xgettext --from-code=UTF-8 --no-wrap);
+
+	if ($ext eq '.htm' || $ext eq '.lua') {
+		push @cmd, '--language=Lua';
+	}
+	elsif ($ext eq '.js' || $ext eq '.json') {
+		push @cmd, '--language=JavaScript';
+	}
+
+	push @cmd, map { "--keyword=$_" } (@{$keywords{$ext}}, @keywords);
+	push @cmd, '-o', '-';
+
+	return @cmd;
+}
+
+sub whitespace_collapse($) {
 	my $s = shift;
-	my %rep = (
-		'a' => "\x07",
-		'b' => "\x08",
-		'f' => "\x0c",
-		'n' => "\n",
-		'r' => "\r",
-		't' => "\t",
-		'v' => "\x76"
-	);
+	my %r = ('n' => ' ', 't' => ' ');
 
-	$s =~ s!\\(?:([0-9]{1,2})|(.))!
-		$1 ? chr(int($1)) : ($rep{$2} || $2)
-	!segx;
-
-	$s =~ s/[\s\n]+/ /g;
+	# Translate \t and \n to plain spaces, leave all other escape
+	# sequences alone. Finally replace all consecutive spaces by
+	# single ones and trim leading and trailing space.
+	$s =~ s/\\(.)/$r{$1} || "\\$1"/eg;
+	$s =~ s/ {2,}/ /g;
 	$s =~ s/^ //;
 	$s =~ s/ $//;
 
 	return $s;
 }
 
-sub dec_json_str
-{
-	my $s = shift;
-	my %rep = (
-		'"' => '"',
-		'/' => '/',
-		'b' => "\x08",
-		'f' => "\x0c",
-		'n' => "\n",
-		'r' => "\r",
-		't' => "\t",
-		'\\' => '\\'
-	);
+sub postprocess_pot($$) {
+	my ($path, $source) = @_;
+	my (@res, $msgid);
+	my $skip = 1;
 
-	$s =~ s!\\([\\/"bfnrt]|u([0-9a-fA-F]{4}))!
-		$2 ? chr(hex($2)) : $rep{$1}
-	!egx;
+	$source =~ s/^#: (.+?)\n/join("\n", map { "#: $path:$_" } $1 =~ m!:(\d+)!g) . "\n"/emg;
 
-	$s =~ s/[\s\n]+/ /g;
-	$s =~ s/^ //;
-	$s =~ s/ $//;
+	my @lines = split /\n/, $source;
 
-	return $s;
+	# Remove all header lines up to the first location comment
+	while (@lines > 0 && $lines[0] !~ m!^#: !) {
+		shift @lines;
+	}
+
+	while (@lines > 0) {
+		my $line = shift @lines;
+
+		# Concat multiline msgids and collapse whitespaces
+		if ($line =~ m!^(msg\w+) "(.*)"$!) {
+			my $kw = $1;
+			my $kv = $2;
+
+			while (@lines > 0 && $lines[0] =~ m!^"(.*)"$!) {
+				$kv .= ' '. $1;
+				shift @lines;
+			}
+
+			$kv = whitespace_collapse($kv);
+
+			# Filter invalid empty msgids by popping all lines in @res
+			# leading to this point and skip all subsequent lines in
+			# @lines belonging to this faulty id.
+			if ($kw ne 'msgstr' && $kv eq '') {
+				while (@res > 0 && $res[-1] !~ m!^$!) {
+					pop @res;
+				}
+
+				while (@lines > 0 && $lines[0] =~ m!^(?:msg\w+ )?"(.*)"$!) {
+					shift @lines;
+				}
+
+				next;
+			}
+
+			push @res, sprintf '%s "%s"', $kw, $kv;
+		}
+
+		# Ignore any flags added by xgettext
+		elsif ($line =~ m!^#, !) {
+			next;
+		}
+
+		# Pass through other lines unmodified
+		else {
+			push @res, $line;
+		}
+	}
+
+	return @res ? join("\n", '', @res, '') : '';
 }
 
-sub dec_tpl_str
-{
-	my $s = shift;
-	$s =~ s/-$//;
-	$s =~ s/[\s\n]+/ /g;
-	$s =~ s/^ //;
-	$s =~ s/ $//;
-	$s =~ s/\\/\\\\/g;
-	return $s;
+sub uniq(@) {
+	my %h = map { $_, 1 } @_;
+	return sort keys %h;
 }
 
-if( open F, "find @ARGV -type f '(' -name '*.htm' -o -name '*.lua' -o -name '*.js' ')' | sort |" )
+sub preprocess_htm($$) {
+	my ($path, $source) = @_;
+	my $sub = {
+		'=' => '(%s)',
+		'_' => 'translate([==[%s]==])',
+		':' => 'translate([==[%s]==])',
+		'+' => 'include([==[%s]==)',
+		'#' => '--[==[%s]==]',
+		''  => '%s'
+	};
+
+	# Translate the .htm source into a valid Lua source using bracket quotes
+	# to avoid the need for complex escaping.
+	$source =~ s|<%-?([=_:+#]?)(.*?)-?%>|sprintf "]==]; $sub->{$1}; [==[", $2|sge;
+
+	# Discover expressions like "lng.translate(...)" or "luci.i18n.translate(...)"
+	# and return them as extra keyword so that xgettext recognizes such expressions
+	# as translate(...) calls.
+	my @extra_function_keywords =
+		map { ("$_:1", "$_:1,2c") }
+		uniq($source =~ m!((?:\w+\.)+translatef?)[ \t\n]*\(!g);
+
+	return ("[==[$source]==]", @extra_function_keywords);
+}
+
+sub preprocess_lua($$) {
+	my ($path, $source) = @_;
+
+	# Discover expressions like "lng.translate(...)" or "luci.i18n.translate(...)"
+	# and return them as extra keyword so that xgettext recognizes such expressions
+	# as translate(...) calls.
+	my @extra_function_keywords =
+		map { ("$_:1", "$_:1,2c") }
+		uniq($source =~ m!((?:\w+\.)+translatef?)[ \t\n]*\(!g);
+
+	return ($source, @extra_function_keywords);
+}
+
+sub preprocess_json($$) {
+	my ($path, $source) = @_;
+	my ($file) = $path =~ m!([^/]+)$!;
+
+	$source =~ s/("(?:title)")\s*:\s*("(?:[^"\\]|\\.)*")/$1: _($2)/sg;
+
+	return ($source);
+}
+
+
+my ($msguniq_in, $msguniq_out);
+my $msguniq_pid = open2($msguniq_out, $msguniq_in, 'msguniq', '-s');
+
+print $msguniq_in "msgid \"\"\nmsgstr \"Content-Type: text/plain; charset=UTF-8\"\n";
+
+if (open F, "find @ARGV -type f '(' -name '*.htm' -o -name '*.lua' -o -name '*.js' -o -path '*/menu.d/*.json' ')' |")
 {
-	while( defined( my $file = readline F ) )
+	while (defined( my $file = readline F))
 	{
 		chomp $file;
 
-		if( open S, "< $file" )
+		if (open S, '<', $file)
 		{
-			binmode S, ':utf8';
-
 			local $/ = undef;
-			my $raw = <S>;
-			close S;
+			my $source = <S>;
+			my @extra_function_keywords;
 
-			my $text = $raw;
-			my $line = 1;
-
-			while ($text =~ s/ ^ (.*?) (?:translate|translatef|i18n|_) ([\n\s]*) \( //sgx)
+			if ($file =~ m!\.htm$!)
 			{
-				my ($prefix, $suffix) = ($1, $2);
-				my $code;
-				my $res = "";
-				my $sub = "";
-
-				$line += () = $prefix =~ /\n/g;
-
-				my $position = "$file:$line";
-
-				$line += () = $suffix =~ /\n/g;
-
-				while (defined $sub)
-				{
-					undef $sub;
-
-					if ($text =~ /^ ([\n\s]*(?:\.\.[\n\s]*)?) (\[=*\[) /sx)
-					{
-						my $ws = $1;
-						my $stag = quotemeta $2;
-						(my $etag = $stag) =~ y/[/]/;
-
-						($sub, $text) = extract_tagged($text, $stag, $etag, q{\s*(?:\.\.\s*)?});
-
-						$line += () = $ws =~ /\n/g;
-
-						if (defined($sub) && length($sub)) {
-							$line += () = $sub =~ /\n/g;
-
-							$sub =~ s/^$stag//;
-							$sub =~ s/$etag$//;
-							$res .= $sub;
-						}
-					}
-					elsif ($text =~ /^ ([\n\s]*(?:\.\.[\n\s]*)?) (['"]) /sx)
-					{
-						my $ws = $1;
-						my $quote = $2;
-						my $re = gen_delimited_pat($quote, '\\');
-
-						if ($text =~ m/\G\s*(?:\.\.\s*)?($re)/gcs)
-						{
-							$sub = $1;
-							$text = substr $text, pos $text;
-						}
-
-						$line += () = $ws =~ /\n/g;
-
-						if (defined($sub) && length($sub)) {
-							$line += () = $sub =~ /\n/g;
-
-							$sub =~ s/^$quote//;
-							$sub =~ s/$quote$//;
-							$res .= $sub;
-						}
-					}
-				}
-
-				if (defined($res))
-				{
-					$res = dec_lua_str($res);
-
-					if ($res) {
-						$stringtable{$res} ||= [ ];
-						push @{$stringtable{$res}}, $position;
-					}
-				}
+				($source, @extra_function_keywords) = preprocess_htm($file, $source);
+			}
+			elsif ($file =~ m!\.lua$!)
+			{
+				($source, @extra_function_keywords) = preprocess_lua($file, $source);
+			}
+			elsif ($file =~ m!\.json$!)
+			{
+				($source, @extra_function_keywords) = preprocess_json($file, $source);
 			}
 
+			my ($xgettext_in, $xgettext_out);
+			my $pid = open2($xgettext_out, $xgettext_in, xgettext($file, @extra_function_keywords), '-');
 
-			$text = $raw;
-			$line = 1;
+			print $xgettext_in $source;
+			close $xgettext_in;
 
-			while( $text =~ s/ ^ (.*?) <% -? [:_] /<%/sgx )
-			{
-				$line += () = $1 =~ /\n/g;
+			my $pot = readline $xgettext_out;
+			close $xgettext_out;
 
-				( my $code, $text ) = extract_tagged($text, '<%', '%>');
+			waitpid $pid, 0;
 
-				if( defined $code )
-				{
-					my $position = "$file:$line";
-
-					$line += () = $code =~ /\n/g;
-
-					$code = dec_tpl_str(substr $code, 2, length($code) - 4);
-
-					$stringtable{$code} ||= [];
-					push @{$stringtable{$code}}, $position;
-				}
-			}
+			print $msguniq_in postprocess_pot($file, $pot);
 		}
 	}
 
 	close F;
 }
 
-if( open F, "find @ARGV -type f -path '*/menu.d/*.json' | sort |" )
-{
-	while( defined( my $file = readline F ) )
-	{
-		chomp $file;
+close $msguniq_in;
 
-		if( open S, "< $file" )
-		{
-			binmode S, ':utf8';
+my @pot = <$msguniq_out>;
 
-			local $/ = undef;
-			my $raw = <S>;
-			close S;
+close $msguniq_out;
+waitpid $msguniq_pid, 0;
 
-			my $text = $raw;
-			my $line = 1;
+while (@pot > 0) {
+	my $line = shift @pot;
 
-			while ($text =~ s/ ^ (.*?) "title" ([\n\s]*) : //sgx)
-			{
-				my ($prefix, $suffix) = ($1, $2);
-				my $code;
-				my $res = "";
-				my $sub = "";
+	# Reorder the location comments in a detemrinistic way to
+	# reduce SCM noise when frequently updating templates.
+	if ($line =~ m!^#: !) {
+		my @locs = ($line);
 
-				$line += () = $prefix =~ /\n/g;
-
-				my $position = "$file:$line";
-
-				$line += () = $suffix =~ /\n/g;
-
-				while (defined $sub)
-				{
-					undef $sub;
-
-					if ($text =~ /^ ([\n\s]*) " /sx)
-					{
-						my $ws = $1;
-						my $re = gen_delimited_pat('"', '\\');
-
-						if ($text =~ m/\G\s*($re)/gcs)
-						{
-							$sub = $1;
-							$text = substr $text, pos $text;
-						}
-
-						$line += () = $ws =~ /\n/g;
-
-						if (defined($sub) && length($sub)) {
-							$line += () = $sub =~ /\n/g;
-
-							$sub =~ s/^"//;
-							$sub =~ s/"$//;
-							$res .= $sub;
-						}
-					}
-				}
-
-				if (defined($res))
-				{
-					$res = dec_json_str($res);
-
-					if ($res) {
-						$stringtable{$res} ||= [ ];
-						push @{$stringtable{$res}}, $position;
-					}
-				}
-			}
+		while (@pot > 0 && $pot[0] =~ m!^#: !) {
+			push @locs, shift @pot;
 		}
+
+		print
+			map { join(':', @$_) . "\n" }
+			sort { ($a->[0] cmp $b->[0]) || ($a->[1] <=> $b->[1]) }
+			map { [ /^(.+):(\d+)$/ ] }
+			@locs
+		;
+
+		next;
 	}
 
-	close F;
-}
-
-
-if( open C, "| msgcat -" )
-{
-	binmode C, ':utf8';
-
-	printf C "msgid \"\"\nmsgstr \"Content-Type: text/plain; charset=UTF-8\"\n\n";
-
-	foreach my $key ( sort keys %stringtable )
-	{
-		if( length $key )
-		{
-			my @positions =
-				map { join ':', @$_ }
-				sort { ($a->[0] cmp $b->[0]) || ($a->[1] <=> $b->[1]) }
-				map { [ /^(.+):(\d+)$/ ] }
-				@{$stringtable{$key}};
-
-			$key =~ s/\\/\\\\/g;
-			$key =~ s/\n/\\n/g;
-			$key =~ s/\t/\\t/g;
-			$key =~ s/"/\\"/g;
-
-			printf C "#: %s\nmsgid \"%s\"\nmsgstr \"\"\n\n",
-				join(' ', @positions), $key;
-		}
-	}
-
-	close C;
+	print $line;
 }
