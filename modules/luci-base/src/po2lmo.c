@@ -116,19 +116,30 @@ static void print_index(void *array, int n, FILE *out)
 	}
 }
 
+enum fieldtype {
+	UNSPEC        = 0,
+	MSG_CTXT      = 1,
+	MSG_ID        = 2,
+	MSG_ID_PLURAL = 3,
+	MSG_STR       = 4
+};
+
 int main(int argc, char *argv[])
 {
 	char line[4096];
 	char key[4096];
 	char val[4096];
 	char tmp[4096];
-	int state  = 0;
 	int offset = 0;
 	int length = 0;
 	int n_entries = 0;
 	void *array = NULL;
 	lmo_entry_t *entry = NULL;
 	uint32_t key_id, val_id;
+	enum fieldtype type = UNSPEC, prev_type = UNSPEC;
+	int plural_num = -1, prev_plural_num = -1;
+	char *ctxt = NULL, *id = NULL, *p;
+	int eof, esc;
 
 	FILE *in;
 	FILE *out;
@@ -136,108 +147,154 @@ int main(int argc, char *argv[])
 	if( (argc != 3) || ((in = fopen(argv[1], "r")) == NULL) || ((out = fopen(argv[2], "w")) == NULL) )
 		usage(argv[0]);
 
-	memset(line, 0, sizeof(key));
-	memset(key, 0, sizeof(val));
-	memset(val, 0, sizeof(val));
+	while (1) {
+		line[0] = 0;
+		eof = !fgets(line, sizeof(line), in);
 
-	while( (NULL != fgets(line, sizeof(line), in)) || (state >= 2 && feof(in)) )
-	{
-		if( state == 0 && strstr(line, "msgid \"") == line )
-		{
-			switch(extract_string(line, key, sizeof(key)))
-			{
-				case -1:
-					die("Syntax error in msgid");
-				case 0:
-					state = 1;
-					break;
-				default:
-					state = 2;
-			}
+		if (!strncmp(line, "msgctxt \"", 9)) {
+			free(ctxt);
+			type = MSG_CTXT;
+			ctxt = NULL;
 		}
-		else if( state == 1 || state == 2 )
-		{
-			if( strstr(line, "msgstr \"") == line || state == 2 )
-			{
-				switch(extract_string(line, val, sizeof(val)))
-				{
-					case -1:
-						state = 4;
-						break;
-					default:
-						state = 3;
-				}
+		else if (!strncmp(line, "msgid \"", 7)) {
+			if (prev_type != MSG_CTXT) {
+				free(ctxt);
+				ctxt = NULL;
 			}
+
+			free(id);
+			type = MSG_ID;
+			id = NULL;
+		}
+		else if (!strncmp(line, "msgid_plural \"", 14)) {
+			type = MSG_ID_PLURAL;
+		}
+		else if (!strncmp(line, "msgstr \"", 8) || !strncmp(line, "msgstr[", 7)) {
+			type = MSG_STR;
+
+			if (line[6] == '[')
+				plural_num = strtoul(line + 7, NULL, 10);
 			else
-			{
-				switch(extract_string(line, tmp, sizeof(tmp)))
-				{
-					case -1:
-						state = 2;
-						break;
-					default:
-						strcat(key, tmp);
+				plural_num = -1;
+		}
+
+		if (type != prev_type || plural_num != prev_plural_num || eof) {
+			switch (prev_type) {
+			case MSG_CTXT:
+				ctxt = strdup(val);
+				break;
+
+			case MSG_ID:
+				id = strdup(val);
+				break;
+
+			case MSG_STR:
+				if (id && id[0] && val[0]) {
+					if (ctxt && ctxt[0] && prev_plural_num > -1)
+						snprintf(key, sizeof(key), "%s\1%s\2%d", ctxt, id, prev_plural_num);
+					else if (ctxt && ctxt[0])
+						snprintf(key, sizeof(key), "%s\1%s", ctxt, id);
+					else if (prev_plural_num > -1)
+						snprintf(key, sizeof(key), "%s\2%d", id, prev_plural_num);
+					else
+						snprintf(key, sizeof(key), "%s", id);
+
+					key_id = sfh_hash(key, strlen(key));
+					val_id = sfh_hash(val, strlen(val));
+
+					if (key_id != val_id) {
+						n_entries++;
+						array = realloc(array, n_entries * sizeof(lmo_entry_t));
+						entry = (lmo_entry_t *)array + n_entries - 1;
+
+						if (!array)
+							die("Out of memory");
+
+						entry->key_id = key_id;
+						entry->val_id = prev_plural_num + 1;
+						entry->offset = offset;
+						entry->length = strlen(val);
+
+						length = strlen(val) + ((4 - (strlen(val) % 4)) % 4);
+
+						print(val, length, 1, out);
+						offset += length;
+					}
 				}
-			}
-		}
-		else if( state == 3 )
-		{
-			switch(extract_string(line, tmp, sizeof(tmp)))
-			{
-				case -1:
-					state = 4;
-					break;
-				default:
-					strcat(val, tmp);
-			}
-		}
+				else if (id && id[0] == 0) {
+					for (id = val, p = val; *p; p++) {
+						if (esc) {
+							if (*p == 'n') {
+								p[-1] = 0;
 
-		if( state == 4 )
-		{
-			if( strlen(key) > 0 && strlen(val) > 0 )
-			{
-				key_id = sfh_hash(key, strlen(key));
-				val_id = sfh_hash(val, strlen(val));
+								if (!strncasecmp(id, "Plural-Forms: ", 14)) {
+									id += 14;
 
-				if( key_id != val_id )
-				{
-					n_entries++;
-					array = realloc(array, n_entries * sizeof(lmo_entry_t));
-					entry = (lmo_entry_t *)array + n_entries - 1;
+									n_entries++;
+									array = realloc(array, n_entries * sizeof(lmo_entry_t));
+									entry = (lmo_entry_t *)array + n_entries - 1;
 
-					if (!array)
-						die("Out of memory");
+									if (!array)
+										die("Out of memory");
 
-					entry->key_id = key_id;
-					entry->val_id = val_id;
-					entry->offset = offset;
-					entry->length = strlen(val);
+									entry->key_id = 0;
+									entry->val_id = 0;
+									entry->offset = offset;
+									entry->length = strlen(id);
 
-					length = strlen(val) + ((4 - (strlen(val) % 4)) % 4);
+									length = strlen(id) + ((4 - (strlen(id) % 4)) % 4);
 
-					print(val, length, 1, out);
-					offset += length;
+									print(id, length, 1, out);
+									offset += length;
+								}
+							}
+
+							id = p + 1;
+							esc = 0;
+						}
+						else if (*p == '\\') {
+							esc = 1;
+						}
+					}
+
+					id = NULL;
 				}
+
+				break;
+
+			default:
+				break;
 			}
 
-			state = 0;
-			memset(key, 0, sizeof(key));
-			memset(val, 0, sizeof(val));
+			val[0] = 0;
+			prev_type = type;
+			prev_plural_num = plural_num;
 		}
 
-		memset(line, 0, sizeof(line));
+		if (eof)
+			break;
+
+		if (prev_type != UNSPEC) {
+			switch (extract_string(line, tmp, sizeof(tmp))) {
+			case -1:
+				type = UNSPEC;
+				plural_num = -1;
+				break;
+
+			default:
+				strcat(val, tmp);
+			}
+		}
 	}
 
 	print_index(array, n_entries, out);
 
-	if( offset > 0 )
-	{
+	if (offset > 0) {
 		print_uint32(offset, out);
 		fsync(fileno(out));
 		fclose(out);
 	}
-	else
-	{
+	else {
 		fclose(out);
 		unlink(argv[2]);
 	}
