@@ -94,8 +94,24 @@ function sfh(s) {
 	return (0x100000000 + hash).toString(16).substr(1);
 }
 
-function _(s) {
-	return (window.TR && TR[sfh(String(s).trim().replace(/[ \t\n]+/g, ' '))]) || s;
+var plural_function = null;
+
+function trimws(s) {
+	return String(s).trim().replace(/[ \t\n]+/g, ' ');
+}
+
+function _(s, c) {
+	return (window.TR && TR[sfh(trimws(s))]) || s;
+}
+
+function N_(n, s, p, c) {
+	if (plural_function == null && window.TR)
+		plural_function = new Function('n', (TR['00000000'] || 'plural=(n != 1);') + 'return +plural');
+
+	var i = plural_function ? plural_function(n) : (n != 1),
+	    k = (c != null ? trimws(c) + '\u0001' : '') + trimws(s) + '\u0002' + i.toString();
+
+	return (window.TR && TR[sfh(k)]) || (i ? p : s);
 }
 
 
