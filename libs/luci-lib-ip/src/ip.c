@@ -216,6 +216,9 @@ static bool parse_cidr(const char *dest, cidr_t *pp)
 		if (pp->scope == 0)
 			return false;
 	}
+	else {
+		pp->scope = 0;
+	}
 
 	if (p)
 	{
@@ -327,18 +330,21 @@ static void L_setaddr(struct lua_State *L, const char *name,
 		p->family = AF_INET;
 		p->bits = (bits < 0) ? AF_BITS(AF_INET) : bits;
 		p->addr.v4 = *(struct in_addr *)addr;
+		p->scope = 0;
 	}
 	else if (family == AF_INET6)
 	{
 		p->family = AF_INET6;
 		p->bits = (bits < 0) ? AF_BITS(AF_INET6) : bits;
 		p->addr.v6 = *(struct in6_addr *)addr;
+		p->scope = 0;
 	}
 	else
 	{
 		p->family = AF_PACKET;
 		p->bits = (bits < 0) ? AF_BITS(AF_PACKET) : bits;
 		p->addr.mac = *(struct ether_addr *)addr;
+		p->scope = 0;
 	}
 
 	luaL_getmetatable(L, LUCI_IP_CIDR);
