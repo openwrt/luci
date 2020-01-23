@@ -44,7 +44,11 @@ msgid ""
 msgstr ""
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/tunnel_routing.js:13
-msgid "Allow tunneling non-Yggdrasil traffic over Yggdrasil. This effectively"
+msgid ""
+"Allow tunneling non-Yggdrasil traffic over Yggdrasil. This effectively "
+"allows you to use Yggdrasil to route to, or to bridge other networks, "
+"similar to a VPN tunnel. Tunnelling works between any two nodes and does not "
+"require them to be directly peered."
 msgstr ""
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/session_firewall.js:20
@@ -56,7 +60,12 @@ msgid "Blacklisted public keys"
 msgstr ""
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:22
-msgid "By default, nodeinfo contains some defaults including the platform,"
+msgid ""
+"By default, nodeinfo contains some defaults including the platform, "
+"architecture and Yggdrasil version. These can help when surveying the "
+"network and diagnosing network routing problems. Enabling nodeinfo privacy "
+"prevents this, so that only items specified in \"NodeInfo\" are sent back if "
+"specified."
 msgstr ""
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:21
@@ -106,7 +115,9 @@ msgid "IPv4 subnets belonging to remote nodes, mapped to the node's public"
 msgstr ""
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/tunnel_routing.js:26
-msgid "IPv4 subnets belonging to this node's end of the tunnels. Only traffic"
+msgid ""
+"IPv4 subnets belonging to this node's end of the tunnels. Only traffic from "
+"these ranges will be tunnelled."
 msgstr ""
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/tunnel_routing.js:39
@@ -127,7 +138,9 @@ msgid "IPv6 subnets belonging to remote nodes, mapped to the node's public"
 msgstr ""
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/tunnel_routing.js:40
-msgid "IPv6 subnets belonging to this node's end of the tunnels. Only traffic"
+msgid ""
+"IPv6 subnets belonging to this node's end of the tunnels. Only traffic from "
+"these ranges (or the Yggdrasil node's IPv6 address/subnet) will be tunnelled."
 msgstr ""
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/session_firewall.js:14
@@ -162,9 +175,20 @@ msgstr "Пароль (ключ)"
 msgid "Link-local TCP port"
 msgstr ""
 
-#: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/peers.js:11
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/peers.js:20
-msgid "List of connection strings for outbound peer connections in URI format,"
+msgid ""
+"List of connection strings for outbound peer connections in URI format, "
+"arranged by source interface, e.g. { \"eth0\": [ tcp://a.b.c.d:e ] }. Note "
+"that SOCKS peerings will NOT be affected by this option and should go in the "
+"\"Peers\" section instead."
+msgstr ""
+
+#: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/peers.js:11
+msgid ""
+"List of connection strings for outbound peer connections in URI format, e.g. "
+"tcp://a.b.c.d:e or socks://a.b.c.d:e/f.g.h.i:j. These connections will obey "
+"the operating system routing table, therefore you should use this section "
+"when you may connect via different interfaces."
 msgstr ""
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:50
@@ -172,7 +196,12 @@ msgid "Listen addresses"
 msgstr ""
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:51
-msgid "Listen addresses for incoming connections. You will need to add"
+msgid ""
+"Listen addresses for incoming connections. You will need to add listeners in "
+"order to accept incoming peerings from non-local nodes. Multicast peer "
+"discovery will work regardless of any listeners set here. Each listener "
+"should be specified in URI format as above, e.g. tcp://0.0.0.0:0 or tcp://"
+"[::]:0 to listen on all interfaces."
 msgstr ""
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:37
@@ -204,7 +233,10 @@ msgid "NodeInfo"
 msgstr ""
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:29
-msgid "Optional node info. This must be a { \"key\": \"value\", ... } map"
+msgid ""
+"Optional node info. This must be a { \"key\": \"value\", ... } map or set as "
+"null. This is entirely optional but, if set, is visible to the whole network "
+"on request."
 msgstr ""
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/peers.js:10
@@ -223,7 +255,10 @@ msgid "Public key"
 msgstr ""
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:42
-msgid "Regular expressions for which interfaces multicast peer discovery"
+msgid ""
+"Regular expressions for which interfaces multicast peer discovery should be "
+"enabled on. If none specified, multicast peer discovery is disabled. The "
+"default value is .* which uses all interfaces."
 msgstr ""
 
 #: applications/luci-app-yggdrasil/luasrc/controller/yggdrasil.lua:14
@@ -262,7 +297,12 @@ msgid "Subnet"
 msgstr ""
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:15
-msgid "The port number to be used for the link-local TCP listeners for the"
+msgid ""
+"The port number to be used for the link-local TCP listeners for the "
+"configured MulticastInterfaces. This option does not affect "
+"listenersspecified in the Listen option. Unless you plan to firewall link-"
+"localtraffic, it is best to leave this as the default value of 0. This "
+"option cannot currently be changed by reloading config during runtime."
 msgstr ""
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/tunnel_routing.js:10

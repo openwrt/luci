@@ -46,16 +46,26 @@ msgid "Binding to a specific network not supported"
 msgstr "不支援繫結到一個指定的網路"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:250
-msgid "BusyBox's nslookup and Wget do not support to specify"
+msgid ""
+"BusyBox's nslookup and Wget do not support to specify the IP version to use "
+"for communication with DDNS Provider!"
 msgstr ""
+"與 DDNS 供應商通訊時，BusyBox 的 nslookup 和 Wget 不支援設定特定的 IP 協議版"
+"本。"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:261
-msgid "BusyBox's nslookup and hostip do not support to specify to use TCP"
+msgid ""
+"BusyBox's nslookup and hostip do not support to specify to use TCP instead "
+"of default UDP when requesting DNS server!"
 msgstr ""
+"向 DNS 伺服器查詢時，BusyBox 的 nslookup 和 hostip 不支援使用 TCP 而不是預設"
+"的 UDP！"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:272
-msgid "BusyBox's nslookup in the current compiled version"
-msgstr ""
+msgid ""
+"BusyBox's nslookup in the current compiled version does not handle given DNS "
+"Servers correctly!"
+msgstr "當前編譯版本中 BusyBox 的 nslookup 在處理給定的 DNS 伺服器不正確！"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:329
 msgid "Cancel"
@@ -120,6 +130,10 @@ msgstr ""
 msgid "DDNS Service provider"
 msgstr "DDNS 服務提供商"
 
+#: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:182
+msgid "DDns"
+msgstr ""
+
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:427
 msgid "DDns Service"
 msgstr ""
@@ -137,7 +151,7 @@ msgid "Date format"
 msgstr "日期格式"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:653
-msgid "Defines the Web page to read systems IP-Address from"
+msgid "Defines the Web page to read systems IP-Address from<br>"
 msgstr ""
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:663
@@ -216,11 +230,11 @@ msgid "Event Network"
 msgstr "事件網路"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:654
-msgid "Example for IPv4"
+msgid "Example for IPv4: http://checkip.dyndns.com"
 msgstr ""
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:655
-msgid "Example for IPv6"
+msgid "Example for IPv6: http://checkipv6.dyndns.com"
 msgstr ""
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:787
@@ -312,8 +326,12 @@ msgid ""
 msgstr ""
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:450
-msgid "If this service section is disabled it could not be started."
+msgid ""
+"If this service section is disabled it could not be started.<br />Neither "
+"from LuCI interface nor from console"
 msgstr ""
+"如果服務配置被禁用，那麼它將不能被啟動。<br />無論是通過 LuCI 頁面或者是通過"
+"終端。"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:284
 msgid "If using secure communication you should verify server certificates!"
@@ -335,8 +353,11 @@ msgid "Information"
 msgstr ""
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:286
-msgid "Install 'ca-certificates' package or needed certificates"
+msgid ""
+"Install 'ca-certificates' package or needed certificates by hand into /etc/"
+"ssl/certs default directory"
 msgstr ""
+"手動將“ca-certificates”包或需要的證書安裝到 /etc/ssl/certs 的預設目錄中"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:609
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:662
@@ -344,7 +365,9 @@ msgid "Interface"
 msgstr "介面"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:822
-msgid "Interval to force updates send to DDNS Provider"
+msgid ""
+"Interval to force updates send to DDNS Provider<br />Setting this parameter "
+"to 0 will force the script to only run once"
 msgstr ""
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:812
@@ -658,8 +681,12 @@ msgid "Unknown"
 msgstr ""
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:526
-msgid "Update URL to be used for updating your DDNS Provider."
+msgid ""
+"Update URL to be used for updating your DDNS Provider.<br />Follow "
+"instructions you will find on their WEB page."
 msgstr ""
+"DDNS 提供商用於更新 DDNS 的 URL。<br />跟隨教程，您可以在它們的網站上找到這"
+"個 URL。"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:582
 msgid "Use HTTP Secure"
@@ -710,8 +737,11 @@ msgstr "把日誌寫入系統日誌。無論是否啟用這項，錯誤資訊總
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:275
 msgid ""
-"You should install 'bind-host' or 'knot-host' or 'drill' or 'hostip' package,"
+"You should install 'bind-host' or 'knot-host' or 'drill' or 'hostip' "
+"package, if you need to specify a DNS server to detect your registered IP."
 msgstr ""
+"如果您需要指定 DNS 伺服器來檢測您註冊的 IP，您應該安裝“bind-host”或“knot-"
+"host”或“drill”或“hostip”軟體包。"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:264
 msgid ""
@@ -807,25 +837,6 @@ msgstr "使用 HTTPS 但不檢查伺服器證書（不安全）"
 #~ msgid ""
 #~ "Below is a list of configured DDNS configurations and their current state."
 #~ msgstr "以下是當前已經配置好的 DDNS 設定項列表以及它們的當前狀態。"
-
-#~ msgid ""
-#~ "BusyBox's nslookup and Wget do not support to specify the IP version to "
-#~ "use for communication with DDNS Provider!"
-#~ msgstr ""
-#~ "與 DDNS 供應商通訊時，BusyBox 的 nslookup 和 Wget 不支援設定特定的 IP 協議"
-#~ "版本。"
-
-#~ msgid ""
-#~ "BusyBox's nslookup and hostip do not support to specify to use TCP "
-#~ "instead of default UDP when requesting DNS server!"
-#~ msgstr ""
-#~ "向 DNS 伺服器查詢時，BusyBox 的 nslookup 和 hostip 不支援使用 TCP 而不是預"
-#~ "設的 UDP！"
-
-#~ msgid ""
-#~ "BusyBox's nslookup in the current compiled version does not handle given "
-#~ "DNS Servers correctly!"
-#~ msgstr "當前編譯版本中 BusyBox 的 nslookup 在處理給定的 DNS 伺服器不正確！"
 
 #~ msgid "Casual users should not change this setting"
 #~ msgstr "普通使用者不應該改變這個設定"
@@ -936,24 +947,11 @@ msgstr "使用 HTTPS 但不檢查伺服器證書（不安全）"
 #~ msgstr "如果 cURL 和 GNU Wget 同時被安裝，那麼 Wget 將會被優先使用。"
 
 #~ msgid ""
-#~ "If this service section is disabled it could not be started.<br />Neither "
-#~ "from LuCI interface nor from console"
-#~ msgstr ""
-#~ "如果服務配置被禁用，那麼它將不能被啟動。<br />無論是通過 LuCI 頁面或者是通"
-#~ "過終端。"
-
-#~ msgid ""
 #~ "If you want to send updates for IPv4 and IPv6 you need to define two "
 #~ "separate Configurations i.e. 'myddns_ipv4' and 'myddns_ipv6'"
 #~ msgstr ""
 #~ "如果您需要同時更新 IPv4 和 IPv6 位址，您需要單獨新增兩個配置項（例"
 #~ "如'myddns_ipv4'和'myddns_ipv6'）"
-
-#~ msgid ""
-#~ "Install 'ca-certificates' package or needed certificates by hand into /"
-#~ "etc/ssl/certs default directory"
-#~ msgstr ""
-#~ "手動將“ca-certificates”包或需要的證書安裝到 /etc/ssl/certs 的預設目錄中"
 
 #~ msgid ""
 #~ "Interval to check for changed IP<br />Values below 5 minutes == 300 "
@@ -1030,13 +1028,6 @@ msgstr "使用 HTTPS 但不檢查伺服器證書（不安全）"
 #~ msgid "Unknown error"
 #~ msgstr "未知錯誤"
 
-#~ msgid ""
-#~ "Update URL to be used for updating your DDNS Provider.<br />Follow "
-#~ "instructions you will find on their WEB page."
-#~ msgstr ""
-#~ "DDNS 提供商用於更新 DDNS 的 URL。<br />跟隨教程，您可以在它們的網站上找到"
-#~ "這個 URL。"
-
 #~ msgid "Version"
 #~ msgstr "版本"
 
@@ -1045,13 +1036,6 @@ msgstr "使用 HTTPS 但不檢查伺服器證書（不安全）"
 
 #~ msgid "Waiting for changes to be applied..."
 #~ msgstr "正在應用更改…"
-
-#~ msgid ""
-#~ "You should install 'bind-host' or 'knot-host' or 'drill' or 'hostip' "
-#~ "package, if you need to specify a DNS server to detect your registered IP."
-#~ msgstr ""
-#~ "如果您需要指定 DNS 伺服器來檢測您註冊的 IP，您應該安裝“bind-host”或“knot-"
-#~ "host”或“drill”或“hostip”軟體包。"
 
 #~ msgid ""
 #~ "can not detect local IP. Please select a different Source combination"
