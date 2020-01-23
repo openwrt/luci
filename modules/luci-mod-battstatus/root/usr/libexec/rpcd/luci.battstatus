@@ -1,0 +1,39 @@
+#!/bin/sh
+
+. /usr/share/libubox/jshn.sh
+
+case "$1" in
+	list)
+		printf '{ "getBatteryStatus": {} }'
+	;;
+	call)
+		case "$2" in
+			getBatteryStatus)
+				json_init
+
+				eval $(/bin/ubus call system board 2>/dev/null | /usr/bin/jsonfilter -e 'MODEL=@.model')
+				json_add_object "$MODEL"
+
+				if [ -f /usr/sbin/i2cset ] && [ -f /usr/sbin/i2cget ]; then
+					json_add_boolean valid 1
+					if [ $(i2cset -y 0 0x0a 0x0a 0x01 && i2cget -y 0 0x0a 0x0a) = 0x40 ]; then
+						json_add_boolean charging 1
+					else
+						json_add_boolean charging 0
+					fi
+					json_add_int percentage $(i2cset -y 0 0x0a 0x0a 0x10 && i2cget -y 0 0x0a 0x0a | xargs printf %d)
+				else
+					json_add_boolean valid 0
+					if [ ! -f /usr/sbin/i2cset ]; then
+						json_add_string message "Need i2cset"
+					else
+						json_add_string message "Need i2cget"
+					fi
+				fi
+
+				json_close_object
+				json_dump
+			;;
+		esac
+	;;
+esac
