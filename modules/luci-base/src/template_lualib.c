@@ -148,12 +148,37 @@ static int template_L_get_translations(lua_State *L) {
 }
 
 static int template_L_translate(lua_State *L) {
-	size_t len;
+	size_t len, ctxlen = 0;
 	char *tr;
 	int trlen;
 	const char *key = luaL_checklstring(L, 1, &len);
+	const char *ctx = luaL_optlstring(L, 2, NULL, &ctxlen);
 
-	switch (lmo_translate(key, len, &tr, &trlen))
+	switch (lmo_translate_ctxt(key, len, ctx, ctxlen, &tr, &trlen))
+	{
+		case 0:
+			lua_pushlstring(L, tr, trlen);
+			return 1;
+
+		case -1:
+			return 0;
+	}
+
+	lua_pushnil(L);
+	lua_pushstring(L, "no catalog loaded");
+	return 2;
+}
+
+static int template_L_ntranslate(lua_State *L) {
+	size_t slen, plen, ctxlen = 0;
+	char *tr;
+	int trlen;
+	int n = luaL_checkinteger(L, 1);
+	const char *skey = luaL_checklstring(L, 2, &slen);
+	const char *pkey = luaL_checklstring(L, 3, &plen);
+	const char *ctx = luaL_optlstring(L, 4, NULL, &ctxlen);
+
+	switch (lmo_translate_plural_ctxt(n, skey, slen, pkey, plen, ctx, ctxlen, &tr, &trlen))
 	{
 		case 0:
 			lua_pushlstring(L, tr, trlen);
@@ -188,6 +213,7 @@ static const luaL_reg R[] = {
 	{ "change_catalog",		template_L_change_catalog },
 	{ "get_translations",		template_L_get_translations },
 	{ "translate",			template_L_translate },
+	{ "ntranslate",			template_L_ntranslate },
 	{ "hash",				template_L_hash },
 	{ NULL,					NULL }
 };
