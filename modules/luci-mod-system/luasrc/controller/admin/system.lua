@@ -22,7 +22,7 @@ function index()
 	entry({"admin", "system", "mounts"}, view("system/mounts"), _("Mount Points"), 50)
 		.file_depends = { "/sbin/block" }
 
-	entry({"admin", "system", "leds"}, view("system/leds"), _("<abbr title=\"Light Emitting Diode\">LED</abbr> Configuration"), 60)
+	entry({"admin", "system", "leds"}, view("system/leds"), _("LED Configuration"), 60)
 		.file_depends = { "/sys/class/leds" }
 
 	entry({"admin", "system", "flash"}, view("system/flash"), _("Backup / Flash Firmware"), 70)
