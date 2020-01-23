@@ -474,10 +474,26 @@ void luastr_escape(struct template_buffer *out, const char *s, unsigned int l,
 void luastr_translate(struct template_buffer *out, const char *s, unsigned int l,
 					  int escape_xml)
 {
+	int trlen, idlen = l, ctxtlen = 0, esc = 0;
+	const char *p, *msgid = s, *msgctxt = NULL;
 	char *tr;
-	int trlen;
 
-	if (!lmo_translate(s, l, &tr, &trlen))
+	for (p = s; p < s + l; p++) {
+		if (esc) {
+			esc = 0;
+		}
+		else if (*p == '\\') {
+			esc = 1;
+		}
+		else if (*p == '|') {
+			idlen = p - s;
+			msgctxt = p + 1;
+			ctxtlen = s + l - msgctxt;
+			break;
+		}
+	}
+
+	if (!lmo_translate_ctxt(msgid, idlen, msgctxt, ctxtlen, &tr, &trlen))
 		luastr_escape(out, tr, trlen, escape_xml);
 	else
 		luastr_escape(out, s, l, escape_xml);
