@@ -124,14 +124,24 @@ sub preprocess_htm($$) {
 		'=' => '(%s)',
 		'_' => 'translate([==[%s]==])',
 		':' => 'translate([==[%s]==])',
-		'+' => 'include([==[%s]==)',
+		'+' => 'include([==[%s]==])',
 		'#' => '--[==[%s]==]',
 		''  => '%s'
 	};
 
 	# Translate the .htm source into a valid Lua source using bracket quotes
 	# to avoid the need for complex escaping.
-	$source =~ s|<%-?([=_:+#]?)(.*?)-?%>|sprintf "]==]; $sub->{$1}; [==[", $2|sge;
+	$source =~ s!<%-?([=_:+#]?)(.*?)-?%>!
+		my $t = $1;
+		my $s = $2;
+
+		# Split translation expressions on first non-escaped pipe.
+		if ($t eq ':' || $t eq '_') {
+			$s =~ s/^((?:[^\|\\]|\\.)*)\|(.*)$/$1]==],[==[$2/;
+		}
+
+		sprintf "]==]; $sub->{$t}; [==[", $s
+	!sge;
 
 	# Discover expressions like "lng.translate(...)" or "luci.i18n.translate(...)"
 	# and return them as extra keyword so that xgettext recognizes such expressions

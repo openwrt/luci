@@ -76,7 +76,8 @@ typedef struct lmo_catalog lmo_catalog_t;
 typedef void (*lmo_iterate_cb_t)(uint32_t, const char *, int, void *);
 
 uint32_t sfh_hash(const char *data, int len);
-uint32_t lmo_canon_hash(const char *data, int len);
+uint32_t lmo_canon_hash(const char *data, int len,
+                        const char *ctx, int ctxlen, int plural);
 
 lmo_archive_t * lmo_open(const char *file);
 void lmo_close(lmo_archive_t *ar);
@@ -88,6 +89,15 @@ extern lmo_catalog_t *_lmo_active_catalog;
 int lmo_load_catalog(const char *lang, const char *dir);
 int lmo_change_catalog(const char *lang);
 int lmo_translate(const char *key, int keylen, char **out, int *outlen);
+int lmo_translate_ctxt(const char *key, int keylen,
+                       const char *ctx, int ctxlen, char **out, int *outlen);
+int lmo_translate_plural(int n, const char *skey, int skeylen,
+                                const char *pkey, int pkeylen,
+                                char **out, int *outlen);
+int lmo_translate_plural_ctxt(int n, const char *skey, int skeylen,
+                                     const char *pkey, int pkeylen,
+                                     const char *ctx, int ctxlen,
+                                     char **out, int *outlen);
 void lmo_iterate(lmo_iterate_cb_t cb, void *priv);
 void lmo_close_catalog(const char *lang);
 
