@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: luci-app-ddns 2.4.0-1\n"
 "POT-Creation-Date: 2016-01-30 11:07+0100\n"
-"PO-Revision-Date: 2020-01-19 06:04+0000\n"
+"PO-Revision-Date: 2020-01-24 16:09+0000\n"
 "Last-Translator: Marcin Net <marcin.net@linux.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsddns/pl/>\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 3.10.2\n"
+"X-Generator: Weblate 3.11-dev\n"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:964
 msgid "\"../\" not allowed in path for Security Reason."
@@ -48,18 +48,24 @@ msgid ""
 "BusyBox's nslookup and Wget do not support to specify the IP version to use "
 "for communication with DDNS Provider!"
 msgstr ""
+"BusyBox nslookup i Wget nie obsługują określenia wersji IP, która ma być "
+"używana do komunikacji z dostawcą DDNS!"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:261
 msgid ""
 "BusyBox's nslookup and hostip do not support to specify to use TCP instead "
 "of default UDP when requesting DNS server!"
 msgstr ""
+"Nslookup i hostip BusyBox nie obsługują określania, czy podczas żądania "
+"serwera DNS należy używać TCP zamiast domyślnego UDP!"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:272
 msgid ""
 "BusyBox's nslookup in the current compiled version does not handle given DNS "
 "Servers correctly!"
 msgstr ""
+"Nslookup BusyBox w bieżącej skompilowanej wersji nie obsługuje poprawnie "
+"podanych serwerów DNS!"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:329
 msgid "Cancel"
@@ -132,7 +138,7 @@ msgstr "Dostawca usług DDNS"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:182
 msgid "DDns"
-msgstr ""
+msgstr "DDns"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:427
 msgid "DDns Service"
@@ -152,7 +158,7 @@ msgstr "Format daty"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:653
 msgid "Defines the Web page to read systems IP-Address from<br>"
-msgstr ""
+msgstr "Definiuje stronę internetową do odczytu adresu IP systemu z <br>"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:663
 msgid "Defines the interface to read systems IP-Address from"
@@ -234,11 +240,11 @@ msgstr "Zdarzenia sieciowe"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:654
 msgid "Example for IPv4: http://checkip.dyndns.com"
-msgstr ""
+msgstr "Np. dla IPv4: http://checkip.dyndns.com"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:655
 msgid "Example for IPv6: http://checkipv6.dyndns.com"
-msgstr ""
+msgstr "Np. dla IPv6: http://checkipv6.dyndns.com"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:787
 msgid "File"
@@ -339,6 +345,8 @@ msgid ""
 "If this service section is disabled it could not be started.<br />Neither "
 "from LuCI interface nor from console"
 msgstr ""
+"Jeśli ta sekcja usługi jest wyłączona, nie można jej uruchomić. <br /> Ani z "
+"interfejsu LuCI, ani z konsoli"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:284
 msgid "If using secure communication you should verify server certificates!"
@@ -366,6 +374,8 @@ msgid ""
 "Install 'ca-certificates' package or needed certificates by hand into /etc/"
 "ssl/certs default directory"
 msgstr ""
+"Zainstaluj pakiet 'ca-certificates' lub potrzebne certyfikaty ręcznie w "
+"domyślnym katalogu /etc/ssl/certs"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:609
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:662
@@ -377,6 +387,8 @@ msgid ""
 "Interval to force updates send to DDNS Provider<br />Setting this parameter "
 "to 0 will force the script to only run once"
 msgstr ""
+"Interwał wymuszający wysyłanie aktualizacji do dostawcy DDNS <br /> "
+"Ustawienie tego parametru na 0 wymusi uruchomienie skryptu tylko raz"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:812
 msgid "Interval unit to check for changed IP"
@@ -707,6 +719,9 @@ msgid ""
 "Update URL to be used for updating your DDNS Provider.<br />Follow "
 "instructions you will find on their WEB page."
 msgstr ""
+"Zaktualizuj adres URL, który będzie używany do aktualizacji dostawcy DDNS. <"
+"br /> Postępuj zgodnie z instrukcjami, które znajdziesz na ich stronie "
+"internetowej."
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:582
 msgid "Use HTTP Secure"
@@ -764,6 +779,9 @@ msgid ""
 "You should install 'bind-host' or 'knot-host' or 'drill' or 'hostip' "
 "package, if you need to specify a DNS server to detect your registered IP."
 msgstr ""
+"Powinieneś zainstalować pakiet 'bind-host' lub 'knot-host' lub 'drill' lub "
+"'hostip', jeśli musisz określić serwer DNS w celu wykrycia zarejestrowanego "
+"adresu IP."
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:264
 msgid ""
