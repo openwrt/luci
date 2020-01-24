@@ -6,12 +6,13 @@ local fs = require("nixio.fs")
 local knownParams = {
 	--
 	--Widget
-	--	Name
+	--	ID
+	--	Display name
 	--	Default(s)
 	--	Description
 	--	Option(s)
 
-	{ "Service", {
+	{ "service", translate("Service"), {
 	-- initialisation and daemon options
 		{ ListValue,
 			"verb",
@@ -164,7 +165,7 @@ local knownParams = {
 			translate("Enable a compression algorithm") },
 	} },
 
-	{ "Networking", {
+	{ "networking", translate("Networking"), {
 	-- socket config
 		{ ListValue,
 			"mode",
@@ -364,7 +365,7 @@ local knownParams = {
 			{dev_type="tun" } },
 	} },
 
-	{ "VPN", {
+	{ "vpn", translate("VPN"), {
 		{ Value,
 			"server",
 			"10.200.200.0 255.255.255.0",
@@ -560,7 +561,7 @@ local knownParams = {
 			translate("Specify whether the client is required to supply a valid certificate") },
 	} },
 
-	{ "Cryptography", {
+	{ "cryptography", translate("Cryptography"), {
 		{ FileUpload,
 			"secret",
 			"/etc/openvpn/secret.key",
@@ -797,6 +798,7 @@ local knownParams = {
 
 local cts = { }
 local params = { }
+local title = ""
 
 local m = Map("openvpn")
 m.redirect = luci.dispatcher.build_url("admin", "vpn", "openvpn")
@@ -806,22 +808,23 @@ local p = m:section( SimpleSection )
 p.template = "openvpn/pageswitch"
 p.mode     = "advanced"
 p.instance = arg[1]
-p.category = arg[2] or "Service"
+p.category = arg[2] or knownParams[1][1]
 
 for _, c in ipairs(knownParams) do
-	cts[#cts+1] = c[1]
-	if c[1] == p.category then params = c[2] end
+	cts[#cts+1] = { id = c[1], title = c[2] }
+	if c[1] == p.category then
+		title = c[2]
+		params = c[3]
+	end
 end
 
 p.categories = cts
 
 
 local s = m:section(
-	NamedSection, arg[1], "openvpn",
-	translate("%s" % arg[2])
+	NamedSection, arg[1], "openvpn", title
 )
 
-s.title     = translate("%s" % arg[2])
 s.addremove = false
 s.anonymous = true
 
