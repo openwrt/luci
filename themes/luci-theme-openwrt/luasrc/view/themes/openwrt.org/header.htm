@@ -168,7 +168,7 @@
 		}
 
 		document.addEventListener('luci-loaded', function(ev) {
-			var tree = <%= luci.http.write_json(luci.dispatcher.context.authsession and luci.dispatcher.menu_json() or {}) %>,
+			var tree = <%= luci.http.write_json(luci.dispatcher.menu_json() or {}) %>,
 			    node = tree,
 			    url = '';
 
