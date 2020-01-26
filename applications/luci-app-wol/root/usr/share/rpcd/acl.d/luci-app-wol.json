@@ -1,0 +1,16 @@
+{
+	"luci-app-wol": {
+		"description": "Grant access to wake-on-lan executables",
+		"read": {
+			"ubus": {
+				"luci-rpc": [ "getHostHints" ]
+			}
+		},
+		"write": {
+			"file": {
+				"/usr/bin/etherwake": [ "exec" ],
+				"/usr/bin/wol": [ "exec" ]
+			}
+		}
+	}
+}
