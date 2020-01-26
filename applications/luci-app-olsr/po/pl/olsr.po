@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2020-01-15 19:13+0000\n"
+"PO-Revision-Date: 2020-01-26 21:49+0000\n"
 "Last-Translator: Marcin Net <marcin.net@linux.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsolsr/pl/>\n"
@@ -164,6 +164,12 @@ msgid ""
 "value too, but does only update the hopcount if the nexthop changes too. "
 "Default is \"flat\"."
 msgstr ""
+"FIBMetric kontroluje wartość metryczną zestawów OLSRd tras hosta. \"płaska\" "
+"oznacza, że wartość metryczna jest zawsze 2. Jest to preferowana wartość, "
+"ponieważ pomaga trasowaniu jądra Linuksa, aby oczyścić starsze trasy. \""
+"poprawne\" używa hopcount jako wartość metryki. \"approx\" używa hopcount "
+"jako wartość metryki zbyt, ale tylko zaktualizować hopcount jeśli nexthop "
+"zmiany zbyt. Domyślnie jest \"płaska\"."
 
 # skorzystałem z niemieckiego tłumaczenia
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:112
@@ -508,7 +514,7 @@ msgstr ""
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/routes.htm:98
 msgid "Known OLSR routes"
-msgstr "Znane ścieżki OLSR"
+msgstr "Znane trasy OLSR"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/topology.htm:24
 msgid "LQ"
@@ -685,6 +691,11 @@ msgid ""
 ">reduce LQ to 192.168.0.1 by half: 192.168.0.1 0.5<br />reduce LQ to all "
 "nodes on this interface by 20%: default 0.8"
 msgstr ""
+"Pomnóż trasy przez podany tutaj współczynnik. Dozwolone wartości mieszczą "
+"się w zakresie od 0.01 do 1.0. Jest używany tylko wtedy, gdy poziom LQ jest "
+"większy niż 0. Przykłady: <br/> zmniejsz LQ do 192.168.0.1 o połowę: "
+"192.168.0.1 0,5 <br/> zmniejsz LQ do wszystkich węzłów tego interfejsu o 20%:"
+" domyślnie 0.8"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:240
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdiface6.lua:71
@@ -694,6 +705,11 @@ msgid ""
 ">reduce LQ to fd91:662e:3c58::1 by half: fd91:662e:3c58::1 0.5<br />reduce "
 "LQ to all nodes on this interface by 20%: default 0.8"
 msgstr ""
+"Pomnóż trasy przez podany tutaj współczynnik. Dozwolone wartości mieszczą "
+"się w zakresie od 0.01 do 1.0. Jest używany tylko wtedy, gdy poziom LQ jest "
+"większy niż 0. Przykłady: <br/> zmniejsz LQ do fd91:662e:3c58::1 o połowę: "
+"fd91:662e:3c58::1 0.5 <br/> zmniejsz LQ do wszystkich węzły na tym "
+"interfejsie o 20%: domyślnie 0.8"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:201
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:195
@@ -890,7 +906,7 @@ msgstr ""
 
 #: applications/luci-app-olsr/luasrc/controller/olsr.lua:43
 msgid "Routes"
-msgstr "Ścieżki routingu"
+msgstr "Trasy"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/mid.htm:21
 msgid "Secondary OLSR interfaces"
@@ -957,6 +973,8 @@ msgid ""
 "Specifies the speed of the uplink in kilobits/s. First parameter is "
 "upstream, second parameter is downstream. Default is \"128 1024\"."
 msgstr ""
+"Określa prędkość łącza zwrotnego w kilobitach/s. Pierwszy parametr jest "
+"powyżej, drugi parametr jest poniżej. Domyślna wartość to \"128 1024\"."
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:176
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:170
@@ -976,14 +994,12 @@ msgid "Still usable (4 < ETX < 10)"
 msgstr "Nadal użyteczny (4 < ETX < 10)"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/legend.htm:3
-#, fuzzy
 msgid "Success rate of packages received from the neighbour"
-msgstr "Wartość poprawnie otrzymanych od sąsiada pakietów"
+msgstr "Wskaźnik powodzenia pakietów otrzymanych od sąsiada"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/legend.htm:4
-#, fuzzy
 msgid "Success rate of packages sent to the neighbour"
-msgstr "Wartość poprawnie wysłanych pakietów do sąsiada"
+msgstr "Wskaźnik powodzenia pakietów wysłanych do sąsiada"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:388
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:369
@@ -1020,6 +1036,11 @@ msgid ""
 "device. Visit <a href='http://www.olsr.org'>olsrd.org</a> for help and "
 "documentation."
 msgstr ""
+"Demon OLSR jest implementacją protokołu Optimized Link State Routing. Jako "
+"taki umożliwia trasowanie mesh dla dowolnego sprzętu sieciowego. Działa na "
+"każdej karcie WiFi obsługującej tryb ad-hoc i oczywiście na dowolnym "
+"urządzeniu ethernet. Odwiedź <a href='http://www.olsr.org'> olsrd.org </a>, "
+"aby uzyskać pomoc i dokumentację."
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:194
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:188
@@ -1027,6 +1048,9 @@ msgid ""
 "The fixed willingness to use. If not set willingness will be calculated "
 "dynamically based on battery/power status. Default is \"3\"."
 msgstr ""
+"Stała gotowość do użycia. Jeśli nie zostanie ustawiona gotowość, będzie ona "
+"obliczana dynamicznie na podstawie stanu akumulatora/mocy. Domyślnie jest to "
+"\"3\"."
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdiface.lua:45
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdiface6.lua:45
@@ -1050,13 +1074,18 @@ msgid ""
 "the IPv6 gateway without any kind of address translation. The maximum prefix "
 "length is 64 bits. Default is \"::/0\" (no prefix)."
 msgstr ""
+"Może on być wykorzystany do sygnalizowania klientom zewnętrznego prefiksu "
+"IPv6 łącza uplink. Może to umożliwić klientowi zmianę jego lokalnego adresu "
+"IPv6, aby mógł korzystać z bramki IPv6 bez jakiejkolwiek translacji adresów. "
+"Maksymalna długość prefiksu wynosi 64 bity. Domyślnie jest to \"::/0\" (bez "
+"prefiksu)."
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:224
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:218
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdiface.lua:33
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdiface6.lua:33
 msgid "Timing and Validity"
-msgstr ""
+msgstr "Czas trwania i ważność"
 
 #: applications/luci-app-olsr/luasrc/controller/olsr.lua:48
 msgid "Topology"
@@ -1068,6 +1097,8 @@ msgid ""
 "Type of service value for the IP header of control traffic. Default is "
 "\"16\"."
 msgstr ""
+"Typ wartości usługi dla nagłówka IP ruchu sterującego. Domyślnie jest to \""
+"16\"."
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/error_olsr.htm:9
 msgid "Unable to connect to the OLSR daemon!"
@@ -1091,7 +1122,7 @@ msgstr "Używaj histerezy"
 #: applications/luci-app-olsr/luasrc/view/status-olsr/hna.htm:41
 #: applications/luci-app-olsr/luasrc/view/status-olsr/hna.htm:92
 msgid "Validity Time"
-msgstr ""
+msgstr "Czas ważności"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/overview.htm:200
 msgid "Version"
@@ -1099,11 +1130,11 @@ msgstr "Wersja"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/legend.htm:8
 msgid "Very good (ETX < 2)"
-msgstr ""
+msgstr "Bardzo dobry (ETX < 2)"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/legend.htm:17
 msgid "Very good (SNR > 30)"
-msgstr ""
+msgstr "Bardzo dobry (SNR > 30)"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/interfaces.htm:27
 msgid "WLAN"
@@ -1152,6 +1183,9 @@ msgid ""
 "detected by looking for a local HNA of 0.0.0.0/0, ::ffff:0:0/96 or 2000::/3. "
 "Default setting is \"both\"."
 msgstr ""
+"Jaki rodzaj łącza uplink jest eksportowany do innych węzłów mesh. Łącze "
+"uplink jest wykrywane przez szukanie lokalnego HNA 0.0.0.0/0, ::ffff:0:0/96 "
+"lub 2000::/3. Ustawieniem domyślnym jest \"oba\"."
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:149
 msgid ""
@@ -1159,6 +1193,9 @@ msgid ""
 "detected by looking for a local HNA6 ::ffff:0:0/96 or 2000::/3. Default "
 "setting is \"both\"."
 msgstr ""
+"Który rodzaj łącza jest eksportowany do innych węzłów mesh. Uplink jest "
+"wykrywany przez szukanie lokalnego HNA6 ::ffff:0:0/96 lub 2000::/3. "
+"Domyślnym ustawieniem jest \"oba\"."
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:193
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:187
@@ -1168,16 +1205,16 @@ msgstr "Gotowość"
 #: applications/luci-app-olsr/luasrc/view/status-olsr/legend.htm:9
 #: applications/luci-app-olsr/luasrc/view/status-olsr/legend.htm:18
 msgid "Yellow"
-msgstr ""
+msgstr "Żółty"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/interfaces.htm:38
 msgid "down"
-msgstr ""
+msgstr "Dół"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/smartgw.htm:30
 #: applications/luci-app-olsr/luasrc/view/status-olsr/smartgw.htm:134
 msgid "infinite"
-msgstr ""
+msgstr "nieskończony"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/interfaces.htm:40
 #: applications/luci-app-olsr/luasrc/view/status-olsr/smartgw.htm:29

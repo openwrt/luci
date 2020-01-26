@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2020-01-26 12:41+0000\n"
+"PO-Revision-Date: 2020-01-26 21:49+0000\n"
 "Last-Translator: Marcin Net <marcin.net@linux.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsocserv/pl/>\n"
@@ -17,6 +17,8 @@ msgid ""
 "<abbr title=\"Classless Inter-Domain Routing\">CIDR</abbr>-Notation: address/"
 "prefix"
 msgstr ""
+"<abbr title=\"Classless Inter-Domain Routing\">CIDR</abbr>-Notacja: adres/"
+"prefiks"
 
 #: applications/luci-app-ocserv/luasrc/view/ocserv_status.htm:48
 msgid "Active OpenConnect Users"
@@ -57,7 +59,7 @@ msgstr "Serwery DNS"
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:60
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/user-config.lua:54
 msgid "Dead peer detection time (secs)"
-msgstr ""
+msgstr "Czas wykrywania \"Dead peer\" (w sekundach)"
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/users.lua:70
 #: applications/luci-app-ocserv/luasrc/view/ocserv_status.htm:55
@@ -184,11 +186,16 @@ msgid ""
 "network in LAN covering 192.168.1.0/24 use 192.168.1.192/26 to reserve the "
 "upper 62 addresses."
 msgstr ""
+"Podaj adresy klientów z podsieci LAN; jeśli jest włączona, poniższa sieć "
+"musi być podsiecią LAN. Należy pamiętać, że pierwszy adres określonej "
+"podsieci będzie zarezerwowany przez ocserv, więc nie powinien być używany. "
+"Jeśli masz sieć w sieci LAN obejmującą 192.168.1.0/24, użyj 192.168.1.192/"
+"26, aby zarezerwować górne 62 adresy."
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:143
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/user-config.lua:122
 msgid "Routing table"
-msgstr "Tabela routingu"
+msgstr "Tabela trasowania"
 
 #: applications/luci-app-ocserv/luasrc/controller/ocserv.lua:19
 msgid "Server Settings"
@@ -245,6 +252,9 @@ msgid ""
 "username-password pair. Use PAM modules to authenticate using another server "
 "(e.g., LDAP, Radius)."
 msgstr ""
+"Metoda uwierzytelnienia dla użytkowników. Najprostsze jest rozwiązanie z "
+"jedną parą loginu i hasła. Użyj modułów PAM do uwierzytelnienia przy użyciu "
+"innego serwera (np. LDAP, Radius)."
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/user-config.lua:45
 msgid "The firewall zone that the VPN clients will be set to"
@@ -261,7 +271,7 @@ msgid ""
 "routes, the server will send only the appropriate. Leave empty to set a "
 "default route"
 msgstr ""
-"Tabela routingu, która ma być dostarczona klientom; możesz mieszać trasy "
+"Tabela trasowania, która ma być dostarczona klientom; możesz mieszać trasy "
 "IPv4 i IPv6, serwer wyśle tylko odpowiednie. Pozostaw puste, aby ustawić "
 "domyślną trasę"
 
@@ -307,19 +317,19 @@ msgstr "Nazwa użytkownika"
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:115
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/user-config.lua:72
 msgid "VPN <abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Netmask"
-msgstr ""
+msgstr "VPN <abbr title=\"Protokół internetowy v4\">IPv4</abbr>-Maska sieciowa"
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:110
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/user-config.lua:68
 msgid ""
 "VPN <abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Network-Address"
-msgstr ""
+msgstr "VPN <abbr title=\"Protokół internetowy v4\">IPv4</abbr>-Sieć-Adres"
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:124
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/user-config.lua:80
 msgid ""
 "VPN <abbr title=\"Internet Protocol Version 6\">IPv6</abbr>-Network-Address"
-msgstr ""
+msgstr "VPN <abbr title=\"Protokół internetowy v6\">IPv6</abbr>-Sieć-Adres"
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/users.lua:69
 msgid "VPN IP"
