@@ -104,7 +104,7 @@ return L.view.extend({
 
 			return fs.exec(bin, args).then(function(res) {
 				ui.showModal(_('Waking host'), [
-					E('p', [ res.stdout ]),
+					res.stderr ? E('p', [ res.stdout ]) : '',
 					res.stderr ? E('pre', [ res.stderr ]) : '',
 					E('div', { 'class': 'right' }, [
 						E('button', {
