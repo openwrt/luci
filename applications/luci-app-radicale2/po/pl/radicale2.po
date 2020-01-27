@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: luci-app-radicale 2\n"
-"PO-Revision-Date: 2020-01-19 06:04+0000\n"
+"PO-Revision-Date: 2020-01-26 21:52+0000\n"
 "Last-Translator: Marcin Net <marcin.net@linux.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsradicale2/pl/>\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 3.10.2\n"
+"X-Generator: Weblate 3.11-dev\n"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/auth.lua:8
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/logging.lua:4
@@ -153,26 +153,31 @@ msgid ""
 "plaintext in a field that will appear on this page if python3-passlib is "
 "installed."
 msgstr ""
+"Wygeneruj to pole za pomocą generatora plików uwierzytelniania w stylu "
+"Apache htpasswd (dla wybranego przez ciebie formatu skrótu) lub zainstaluj "
+"python3-passlib, aby umożliwić tworzenie skrótu przez wprowadzenie tekstu "
+"jawnego w polu, które pojawi się na tej stronie jeśli jest zainstalowany "
+"python3-passlib."
 
 #: applications/luci-app-radicale2/luasrc/view/cbi/raduigo.htm:24
 msgid "Go to Radicale 2.x Web UI"
-msgstr ""
+msgstr "Przejdź do Radicale 2.x Web UI"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/server.lua:14
 msgid "Go to Radicale v2 Web UI"
-msgstr ""
+msgstr "Przejdź do Radicale v2 Web UI"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/server.lua:109
 msgid "HTTP(S) Basic Authentication Realm"
-msgstr ""
+msgstr "Podstawowa sfera uwierzytelniania HTTP(S)"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/server.lua:124
 msgid "HTTP(S) Headers"
-msgstr ""
+msgstr "Nagłówki HTTP(S)"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/server.lua:32
 msgid "HTTP(S) Listeners (address:port)"
-msgstr ""
+msgstr "Nasłuch HTTP(S (adres:port)"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/server.lua:128
 msgid "Header: X-Access-Control-Allow-Origin"
@@ -184,7 +189,7 @@ msgstr "Nagłówki"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/storage.lua:44
 msgid "Hook"
-msgstr ""
+msgstr "Zaczep"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/auth.lua:110
 msgid ""
@@ -193,15 +198,19 @@ msgid ""
 "the existing hash (you can also put your own hash value for the type of hash "
 "listed above)."
 msgstr ""
+"Jeśli „Hasło w postaci zwykłego tekstu” jest wypełnione i pasuje do „"
+"Potwierdź hasło w postaci zwykłego tekstu”, to pole staje się skrótem tego "
+"hasła, w przeciwnym razie to pole pozostaje istniejącym skrótem (możesz "
+"również wpisać własną wartość skrótu dla typu skrótu wymienionego powyżej)."
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/logging.lua:30
 msgid "Include full environment in logs"
-msgstr ""
+msgstr "Uwzględnij pełne środowisko w dziennikach"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/auth.lua:46
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/auth.lua:48
 msgid "Insecure hashes"
-msgstr ""
+msgstr "Niezabezpieczone hashes"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/server.lua:102
 msgid "Install package python3-openssl to support SSL connections"
@@ -210,11 +219,14 @@ msgstr "Zainstaluj pakiet python3-openssl, aby obsługiwać połączenia SSL"
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/auth.lua:46
 msgid "Install python3-passlib and python3-bcrypt to enable a secure hash"
 msgstr ""
+"Zainstaluj python3-passlib i python3-bcrypt, aby włączyć bezpieczny hash"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/logging.lua:12
 msgid ""
 "Log configuration file (no file means default procd which ends up in syslog"
 msgstr ""
+"Plik konfiguracyjny dziennika (brak pliku oznacza domyślny procd, który "
+"kończy się w dzienniku systemowym)"
 
 #: applications/luci-app-radicale2/luasrc/controller/radicale2.lua:28
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/logging.lua:6
@@ -223,15 +235,15 @@ msgstr "Logowanie"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/logging.lua:12
 msgid "Logging File"
-msgstr ""
+msgstr "Plik dziennika"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/server.lua:105
 msgid "Lookup reverse DNS for clients for logging"
-msgstr ""
+msgstr "Wyszukaj zwrotny DNS dla klientów do logowania"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/logging.lua:34
 msgid "Mask Passwords"
-msgstr ""
+msgstr "Hasła maskowe"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/server.lua:36
 msgid "Max Connections"
@@ -239,15 +251,15 @@ msgstr "Maksymalna liczba połączeń"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/server.lua:42
 msgid "Max Content Length"
-msgstr ""
+msgstr "Maksymalna długość zawartości"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/storage.lua:31
 msgid "Max Sync Token Age"
-msgstr ""
+msgstr "Maksymalny wiek tokenu synchronizacji"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/server.lua:36
 msgid "Maximum number of simultaneous connections"
-msgstr ""
+msgstr "Maksymalna liczba jednoczesnych połączeń"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/server.lua:42
 msgid "Maximum size of request body (bytes)"
@@ -255,33 +267,35 @@ msgstr "Maksymalny rozmiar treści żądania (bajty)"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/storage.lua:15
 msgid "Multiple files on filesystem"
-msgstr ""
+msgstr "Wiele plików w systemie plików"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/auth.lua:17
 msgid "No authentication"
-msgstr ""
+msgstr "Brak autoryzacji"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/auth.lua:98
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/auth.lua:105
 msgid "Password and confirmation do not match"
-msgstr ""
+msgstr "Hasło i potwierdzenie nie są zgodne"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/auth.lua:29
 msgid "Password encryption method"
-msgstr ""
+msgstr "Metoda szyfrowania hasła"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/auth.lua:32
 msgid "Plaintext"
-msgstr ""
+msgstr "Zwykły tekst"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/auth.lua:76
 msgid "Plaintext Password"
-msgstr ""
+msgstr "Hasło w postaci zwykłego tekstu"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/storage.lua:25
 msgid ""
 "Prevent other instances or processes from modifying collections while in use"
 msgstr ""
+"Zapobiegaj modyfikowaniu kolekcji przez inne wystąpienia lub procesy podczas "
+"ich używania"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/server.lua:66
 msgid "Private Key"
@@ -289,23 +303,23 @@ msgstr "Klucz prywatny"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/auth.lua:18
 msgid "REMOTE_USER from web server"
-msgstr ""
+msgstr "REMOTE_USER z serwera WWW"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/auth.lua:172
 msgid "RO: All, RW: All"
-msgstr ""
+msgstr "RO: All, RW: All"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/auth.lua:170
 msgid "RO: Authenticated Users, RW: Owner"
-msgstr ""
+msgstr "RO: Użytkownicy uwierzytelnieni, RW: Właściciel"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/auth.lua:169
 msgid "RO: None, RW: Authenticated Users"
-msgstr ""
+msgstr "RO: Brak, RW: Użytkownicy uwierzytelnieni"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/auth.lua:168
 msgid "RO: None, RW: Owner"
-msgstr ""
+msgstr "RO: Brak, RW: Właściciel"
 
 #: applications/luci-app-radicale2/luasrc/controller/radicale2.lua:13
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/auth.lua:7
@@ -317,7 +331,7 @@ msgstr "Radicale 2.x"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/server.lua:10
 msgid "Radicale v2 Web UI"
-msgstr ""
+msgstr "Radicale v2 Web UI"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/server.lua:109
 msgid "Realm"
@@ -325,7 +339,7 @@ msgstr "Realm"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/logging.lua:34
 msgid "Redact passwords in logs"
-msgstr ""
+msgstr "Redaguj hasła w dziennikach"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/server.lua:84
 msgid "Remove configuration for certificate, key, and CA"
@@ -333,19 +347,19 @@ msgstr "Usuń konfigurację dla certyfikatu, klucza oraz CA"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/logging.lua:16
 msgid "Remove configuration for logging"
-msgstr ""
+msgstr "Usuń konfigurację do logowania"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/auth.lua:181
 msgid "Remove configuration for rights file"
-msgstr ""
+msgstr "Usuwanie konfiguracji pliku praw"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/server.lua:136
 msgid "Request"
-msgstr ""
+msgstr "Żądanie"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/auth.lua:57
 msgid "Required time between a failed authentication attempt and trying again"
-msgstr ""
+msgstr "Wymagany czas między nieudaną próbą uwierzytelnienia a ponowną próbą"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/auth.lua:57
 msgid "Retry Delay"
@@ -381,19 +395,19 @@ msgstr "SSL niedostępny"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/server.lua:74
 msgid "See python3-openssl documentation for available ciphers"
-msgstr ""
+msgstr "Zobacz dokumentację python3-openssl dla dostępnych szyfrów"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/server.lua:78
 msgid "See python3-openssl documentation for available protocols"
-msgstr ""
+msgstr "Zobacz dokumentację python3-openssl dla dostępnych protokołów"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/auth.lua:48
 msgid "Select bcrypt above to enable a secure hash"
-msgstr ""
+msgstr "Wybierz bcrypt powyżej, aby włączyć bezpieczny hash"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/logging.lua:26
 msgid "Send debug information to logs"
-msgstr ""
+msgstr "Wyślij informacje debugowania do dzienników"
 
 #: applications/luci-app-radicale2/luasrc/controller/radicale2.lua:16
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/server.lua:18
@@ -402,7 +416,7 @@ msgstr "Ustawienia serwera"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/server.lua:47
 msgid "Socket timeout (seconds)"
-msgstr ""
+msgstr "Limit czasu gniazda (sekundy)"
 
 #: applications/luci-app-radicale2/luasrc/controller/radicale2.lua:24
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/server.lua:140
@@ -412,11 +426,11 @@ msgstr "Magazyn"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/storage.lua:13
 msgid "Storage Type"
-msgstr ""
+msgstr "Typ magazynu"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/logging.lua:17
 msgid "This permanently deletes configuration for logging"
-msgstr ""
+msgstr "Spowoduje to trwałe usunięcie konfiguracji rejestrowania"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/server.lua:85
 msgid "This permanently deletes the cert, key, and configuration to use same."
@@ -425,6 +439,8 @@ msgstr "To trwale usuwa certyfikat, klucz i konfigurację, by użyć tego samego
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/auth.lua:182
 msgid "This permanently deletes the rights file and configuration to use same."
 msgstr ""
+"Spowoduje to trwałe usunięcie pliku praw i konfiguracji do korzystania z "
+"nich."
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/server.lua:47
 msgid "Timeout"
@@ -432,11 +448,11 @@ msgstr "Limit czasu"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/storage.lua:25
 msgid "Use File Locks"
-msgstr ""
+msgstr "Użyj blokady plików"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/server.lua:78
 msgid "Use Protocol"
-msgstr ""
+msgstr "Użyj protokołu"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/auth.lua:66
 msgid "User"
@@ -444,7 +460,7 @@ msgstr "Użytkownik"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/auth.lua:162
 msgid "User-based ACL Settings"
-msgstr ""
+msgstr "Ustawienia ACL w oparciu o użytkownika"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/auth.lua:70
 msgid "Username"
@@ -452,23 +468,23 @@ msgstr "Nazwa użytkownika"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/auth.lua:66
 msgid "Users and Passwords"
-msgstr ""
+msgstr "Użytkownicy i hasła"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/server.lua:113
 msgid "Web UI"
-msgstr ""
+msgstr "Web UI"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/server.lua:117
 msgid "Web UI Type"
-msgstr ""
+msgstr "Typ Web UI"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/auth.lua:19
 msgid "X-Remote-User from web server"
-msgstr ""
+msgstr "X-Remote-User z serwera WWW"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/auth.lua:39
 msgid "bcrypt"
-msgstr ""
+msgstr "bcrypt"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/auth.lua:35
 msgid "crypt"
@@ -476,11 +492,11 @@ msgstr "Krypta"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/auth.lua:16
 msgid "htpasswd file (manually populated)"
-msgstr ""
+msgstr "plik htpasswd (ręcznie wypełniany)"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/auth.lua:23
 msgid "htpasswd-formatted file filename"
-msgstr ""
+msgstr "Plik w formacie htpasswd"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/auth.lua:37
 msgid "md5"
