@@ -66,7 +66,7 @@ function render_port_status(node, portstate) {
 	if (!node)
 		return null;
 
-	if (!portstate.link)
+	if (!portstate || !portstate.link)
 		L.dom.content(node, [
 			E('img', { src: L.resource('icons/port_down.png') }),
 			E('br'),
@@ -146,7 +146,7 @@ return L.view.extend({
 			if (!topology) {
 				ui.addNotification(null, _('Switch %q has an unknown topology - the VLAN settings might not be accurate.').replace(/%q/, switch_name));
 
-				topology = {
+				topologies[switch_name] = topology = {
 					features: {},
 					netdevs: {
 						5: 'eth0'
