@@ -18,6 +18,7 @@
 <script type="text/javascript">
 	L = new LuCI(<%= luci.http.write_json({
 		token          = token,
+		media          = media,
 		resource       = resource,
 		scriptname     = luci.http.getenv("SCRIPT_NAME"),
 		pathinfo       = luci.http.getenv("PATH_INFO"),

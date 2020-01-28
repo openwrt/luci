@@ -1749,6 +1749,28 @@
 		},
 
 		/**
+		 * Construct an URL path relative to the media resource path of the
+		 * LuCI ui (usually `/luci-static/$theme_name`).
+		 *
+		 * The resulting URL is guaranteed to only contain the characters
+		 * `a-z`, `A-Z`, `0-9`, `_`, `.`, `%`, `,`, `;`, and `-` as well
+		 * as `/` for the path separator.
+		 *
+		 * @instance
+		 * @memberof LuCI
+		 *
+		 * @param {string[]} [parts]
+		 * An array of parts to join into an URL path. Parts may contain
+		 * slashes and any of the other characters mentioned above.
+		 *
+		 * @return {string}
+		 * Returns the resulting URL path.
+		 */
+		media: function() {
+			return this.path(this.env.media, arguments);
+		},
+
+		/**
 		 * Return the complete URL path to the current view.
 		 *
 		 * @instance
