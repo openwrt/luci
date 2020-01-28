@@ -363,25 +363,62 @@ local methods = {
 
 				while true do
 					local line = swc:read("*l")
-					if not line then break end
+					if not line or (line:match("^VLAN %d+:") and #ports > 0) then
+						break
+					end
 
-					local port, up = line:match("port:(%d+) link:(%w+)")
-					if port then
-						local speed  = line:match(" speed:(%d+)")
-						local duplex = line:match(" (%w+)-duplex")
-						local txflow = line:match(" (txflow)")
-						local rxflow = line:match(" (rxflow)")
-						local auto   = line:match(" (auto)")
-
-						ports[#ports+1] = {
-							port   = tonumber(port) or 0,
-							speed  = tonumber(speed) or 0,
-							link   = (up == "up"),
-							duplex = (duplex == "full"),
-							rxflow = (not not rxflow),
-							txflow = (not not txflow),
-							auto   = (not not auto)
+					local pnum = line:match("^Port (%d+):")
+					if pnum then
+						port = {
+							port = tonumber(pnum),
+							duplex = false,
+							speed = 0,
+							link = false,
+							auto = false,
+							rxflow = false,
+							txflow = false
 						}
+
+						ports[#ports+1] = port
+					end
+
+					if port then
+						local m
+
+						if line:match("full[%- ]duplex") then
+							port.duplex = true
+						end
+
+						m = line:match(" speed:(%d+)")
+						if m then
+							port.speed = tonumber(m)
+						end
+
+						m = line:match("(%d+) Mbps")
+						if m and port.speed == 0 then
+							port.speed = tonumber(m)
+						end
+
+						m = line:match("link: (%d+)")
+						if m and port.speed == 0 then
+							port.speed = tonumber(m)
+						end
+
+						if line:match("link: ?up") or line:match("status: ?up") then
+							port.link = true
+						end
+
+						if line:match("auto%-negotiate") or line:match("link:.-auto") then
+							port.auto = true
+						end
+
+						if line:match("link:.-rxflow") then
+							port.rxflow = true
+						end
+
+						if line:match("link:.-txflow") then
+							port.txflow = true
+						end
 					end
 				end
 
