@@ -28,9 +28,9 @@ LUCI_LANG.ja=日本語 (Japanese)
 LUCI_LANG.ko=한국어 (Korean)
 LUCI_LANG.mr=Marāṭhī (Marathi)
 LUCI_LANG.ms=Bahasa Melayu (Malay)
-LUCI_LANG.no=Norsk (Norwegian)
+LUCI_LANG.nb_NO=Norsk (Norwegian)
 LUCI_LANG.pl=Polski (Polish)
-LUCI_LANG.pt-br=Português do Brasil (Brazialian Portuguese)
+LUCI_LANG.pt_BR=Português do Brasil (Brazialian Portuguese)
 LUCI_LANG.pt=Português (Portuguese)
 LUCI_LANG.ro=Română (Romanian)
 LUCI_LANG.ru=Русский (Russian)
@@ -39,8 +39,8 @@ LUCI_LANG.sv=Svenska (Swedish)
 LUCI_LANG.tr=Türkçe (Turkish)
 LUCI_LANG.uk=Українська (Ukrainian)
 LUCI_LANG.vi=Tiếng Việt (Vietnamese)
-LUCI_LANG.zh-cn=中文 (Chinese)
-LUCI_LANG.zh-tw=臺灣華語 (Taiwanese)
+LUCI_LANG.zh_Hans=中文 (Chinese)
+LUCI_LANG.zh_Hant=臺灣華語 (Taiwanese)
 
 # Submenu titles
 LUCI_MENU.col=1. Collections
@@ -49,6 +49,12 @@ LUCI_MENU.app=3. Applications
 LUCI_MENU.theme=4. Themes
 LUCI_MENU.proto=5. Protocols
 LUCI_MENU.lib=6. Libraries
+
+# Language aliases
+LUCI_LC_ALIAS.nb_NO=no
+LUCI_LC_ALIAS.pt_BR=pt-br
+LUCI_LC_ALIAS.zh_Hans=zh-cn
+LUCI_LC_ALIAS.zh_Hant=zh-tw
 
 
 PKG_NAME?=$(LUCI_NAME)
@@ -228,27 +234,29 @@ endif
 
 LUCI_BUILD_PACKAGES := $(PKG_NAME)
 
+# 1: LuCI language code
+# 2: BCP 47 language tag
 define LuciTranslation
   define Package/luci-i18n-$(LUCI_BASENAME)-$(1)
     SECTION:=luci
     CATEGORY:=LuCI
     TITLE:=$(PKG_NAME) - $(1) translation
     HIDDEN:=1
-    DEFAULT:=LUCI_LANG_$(1)||(ALL&&m)
+    DEFAULT:=LUCI_LANG_$(2)||(ALL&&m)
     DEPENDS:=$(PKG_NAME)
     PKGARCH:=all
   endef
 
   define Package/luci-i18n-$(LUCI_BASENAME)-$(1)/description
-    Translation for $(PKG_NAME) - $(LUCI_LANG.$(1))
+    Translation for $(PKG_NAME) - $(LUCI_LANG.$(2))
   endef
 
   define Package/luci-i18n-$(LUCI_BASENAME)-$(1)/install
 	$$(INSTALL_DIR) $$(1)/etc/uci-defaults
-	echo "uci set luci.languages.$(subst -,_,$(1))='$(LUCI_LANG.$(1))'; uci commit luci" \
+	echo "uci set luci.languages.$(subst -,_,$(1))='$(LUCI_LANG.$(2))'; uci commit luci" \
 		> $$(1)/etc/uci-defaults/luci-i18n-$(LUCI_BASENAME)-$(1)
 	$$(INSTALL_DIR) $$(1)$(LUCI_LIBRARYDIR)/i18n
-	$(foreach po,$(wildcard ${CURDIR}/po/$(1)/*.po), \
+	$(foreach po,$(wildcard ${CURDIR}/po/$(2)/*.po), \
 		po2lmo $(po) \
 			$$(1)$(LUCI_LIBRARYDIR)/i18n/$(basename $(notdir $(po))).$(1).lmo;)
   endef
@@ -264,5 +272,5 @@ define LuciTranslation
 
 endef
 
-$(foreach lang,$(LUCI_LANGUAGES),$(eval $(call LuciTranslation,$(lang))))
+$(foreach lang,$(LUCI_LANGUAGES),$(eval $(call LuciTranslation,$(firstword $(LUCI_LC_ALIAS.$(lang)) $(lang)),$(lang))))
 $(foreach pkg,$(LUCI_BUILD_PACKAGES),$(eval $(call BuildPackage,$(pkg))))
