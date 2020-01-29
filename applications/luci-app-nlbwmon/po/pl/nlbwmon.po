@@ -1,8 +1,15 @@
 msgid ""
 msgstr ""
+"PO-Revision-Date: 2020-01-28 03:40+0000\n"
+"Last-Translator: Marcin Net <marcin.net@linux.pl>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/openwrt/"
+"luciapplicationsnlbwmon/pl/>\n"
 "Language: pl\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 3.11-dev\n"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw.js:661
 msgid "%d IPv4-only hosts"
@@ -14,7 +21,7 @@ msgstr "%d hosty tylko z IPv6"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw.js:675
 msgid "%d dual-stack hosts"
-msgstr "%d dwuprotokołowe hosty"
+msgstr "%d hosty dualstack"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw.js:71
 msgid "%s and %s"
@@ -26,15 +33,15 @@ msgstr "%s, %s i %s"
 
 #: applications/luci-app-nlbwmon/luasrc/model/cbi/nlbw/config.lua:68
 msgid "-1 - Restart every last day of month"
-msgstr "-1 - Restart każdego ostatniego dnia miesiąca"
+msgstr "-1- Restart ostatniego dnia miesiąca"
 
 #: applications/luci-app-nlbwmon/luasrc/model/cbi/nlbw/config.lua:69
 msgid "-7 - Restart a week before end of month"
-msgstr "-7 - Restart tydzień przed końcem miesiąca"
+msgstr "-7- Restart tydzień przed końcem miesiąca"
 
 #: applications/luci-app-nlbwmon/luasrc/model/cbi/nlbw/config.lua:67
 msgid "1 - Restart every 1st of month"
-msgstr "1 - Restart każdego pierwszego dnia miesiąca"
+msgstr "-1- Restart pierwszego dnia miesiąca"
 
 #: applications/luci-app-nlbwmon/luasrc/model/cbi/nlbw/config.lua:183
 msgid "10m - frequent commits at the expense of flash wear"
@@ -42,11 +49,11 @@ msgstr "10m - częsty zapis kosztem zużycia pamięci flash"
 
 #: applications/luci-app-nlbwmon/luasrc/model/cbi/nlbw/config.lua:182
 msgid "12h - compromise between risk of data loss and flash wear"
-msgstr "12h - kompromis między ryzykiem utraty danych a zużyciem pamięci flash"
+msgstr "12h - kompromis między utratą danych a zużyciem pamięci flash"
 
 #: applications/luci-app-nlbwmon/luasrc/model/cbi/nlbw/config.lua:181
 msgid "24h - least flash wear at the expense of data loss risk"
-msgstr "24h - najmniejsze zużycie pamięci flash, kosztem ryzyka utraty danych"
+msgstr "24h - najmniejsze zużycie pamięci flash, kosztem utraty danych"
 
 #: applications/luci-app-nlbwmon/luasrc/model/cbi/nlbw/config.lua:191
 msgid "30s - refresh twice per minute for reasonably current stats"
@@ -56,8 +63,7 @@ msgstr ""
 #: applications/luci-app-nlbwmon/luasrc/model/cbi/nlbw/config.lua:192
 msgid "5m - rarely refresh to avoid frequently clearing conntrack counters"
 msgstr ""
-"5m - sporadycznie odświeżenie w celu uniknięcia częstego czyszczenia "
-"licznika conntrack"
+"5m - rzadkie odświeżanie aby unikać częstego czyszczenia licznika conntrack"
 
 #: applications/luci-app-nlbwmon/luasrc/model/cbi/nlbw/config.lua:184
 msgid "60s - commit minutely, useful for non-flash storage"
@@ -194,7 +200,7 @@ msgstr "Połączenia"
 
 #: applications/luci-app-nlbwmon/luasrc/view/nlbw/display.htm:31
 msgid "Connections / Host"
-msgstr "Połączenia / host"
+msgstr "Połączenia/host"
 
 #: applications/luci-app-nlbwmon/luasrc/model/cbi/nlbw/config.lua:195
 msgid "Database directory"
@@ -249,7 +255,7 @@ msgstr "Pobieranie (Pakiety)"
 
 #: applications/luci-app-nlbwmon/luasrc/view/nlbw/display.htm:65
 msgid "Download / Application"
-msgstr "Pobieranie / Aplikacja"
+msgstr "Pobieranie/Aplikacja"
 
 #: applications/luci-app-nlbwmon/luasrc/view/nlbw/backup.htm:25
 msgid "Download Database Backup"
@@ -257,7 +263,7 @@ msgstr "Pobierz kopię zapasową bazy danych"
 
 #: applications/luci-app-nlbwmon/luasrc/view/nlbw/display.htm:108
 msgid "Dualstack enabled hosts"
-msgstr "dwuprotokołowe włączone hosty"
+msgstr "Hosty z włączoną funkcją dualstack"
 
 #: applications/luci-app-nlbwmon/luasrc/model/cbi/nlbw/config.lua:62
 msgid "Due date"
@@ -265,7 +271,7 @@ msgstr "Termin ważności"
 
 #: applications/luci-app-nlbwmon/luasrc/view/nlbw/display.htm:139
 msgid "Export"
-msgstr "Eksport"
+msgstr "Eksportuj"
 
 #: applications/luci-app-nlbwmon/luasrc/view/nlbw/display.htm:125
 msgid "Family"
@@ -370,16 +376,16 @@ msgstr ""
 
 #: applications/luci-app-nlbwmon/luasrc/view/nlbw/display.htm:13
 msgid "Netlink Bandwidth Monitor"
-msgstr "Monitor przepustowości łącza internetowego"
+msgstr "Monitor wykorzystania łącza internetowego"
 
 #: applications/luci-app-nlbwmon/luasrc/view/nlbw/backup.htm:9
 msgid "Netlink Bandwidth Monitor - Backup / Restore"
 msgstr ""
-"Monitor przepustowości łącza internetowego - Kopia zapasowa / Przywracanie"
+"Monitor wykorzystania łącza internetowego - Kopia zapasowa/Przywracanie"
 
 #: applications/luci-app-nlbwmon/luasrc/model/cbi/nlbw/config.lua:12
 msgid "Netlink Bandwidth Monitor - Configuration"
-msgstr "Monitor przepustowości łącza internetowego - Konfiguracja"
+msgstr "Monitor wykorzystania łącza internetowego - Konfiguracja"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw.js:475
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw.js:533
@@ -458,11 +464,11 @@ msgid ""
 "The Netlink Bandwidth Monitor (nlbwmon) is a lightweight, efficient traffic "
 "accounting program keeping track of bandwidth usage per host and protocol."
 msgstr ""
-"Monitor łącza internetowego (nlbwmon) jest lekkim, wydajnym programem do "
-"księgowania ruchu, śledzącym wykorzystanie przepustowości hostów i "
-"protokołów."
+"Monitor wykorzystania łącza internetowego (nlbwmon) jest lekkim, wydajnym "
+"programem do księgowania ruchu, śledzącym wykorzystanie przepustowości "
+"hostów i protokołów."
 
-#: applications/luci-app-nlbwmon/luasrc/controller/nlbw.lua:215
+#: applications/luci-app-nlbwmon/luasrc/controller/nlbw.lua:216
 msgid "The following database files have been restored: %s"
 msgstr "Przywrócono następujące pliki bazy danych: %s"
 
@@ -476,7 +482,7 @@ msgstr ""
 
 #: applications/luci-app-nlbwmon/luasrc/view/nlbw/display.htm:26
 msgid "Traffic / Host"
-msgstr "Ruch sieciowy / Host"
+msgstr "Ruch sieciowy/Host"
 
 #: applications/luci-app-nlbwmon/luasrc/view/nlbw/display.htm:23
 msgid "Traffic Distribution"
@@ -492,7 +498,7 @@ msgstr "Wysyłanie (Pakiety)"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw.js:289
 msgid "Upload"
-msgstr "Wysyłanie"
+msgstr "Wyślij"
 
 #: applications/luci-app-nlbwmon/luasrc/view/nlbw/display.htm:51
 #: applications/luci-app-nlbwmon/luasrc/view/nlbw/display.htm:89
@@ -508,7 +514,7 @@ msgstr "Wysyłanie (Pakiety)"
 
 #: applications/luci-app-nlbwmon/luasrc/view/nlbw/display.htm:70
 msgid "Upload / Application"
-msgstr "Wysyłanie / Aplikacja"
+msgstr "Wysyłanie/Aplikacja"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw.js:295
 msgid "Vendor: <big id=\"bubble-vendor\">Example Corp.</big>"

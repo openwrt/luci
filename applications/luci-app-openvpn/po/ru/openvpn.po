@@ -1,17 +1,18 @@
 msgid ""
 msgstr ""
-"Content-Type: text/plain; charset=UTF-8\n"
 "Project-Id-Version: LuCI: openvpn\n"
 "POT-Creation-Date: 2013-09-06 10:01+0200\n"
-"PO-Revision-Date: 2019-01-15 07:16+0300\n"
-"Language-Team: http://cyber-place.ru\n"
-"MIME-Version: 1.0\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.8.7.1\n"
-"Last-Translator: Anton Kikin <a.kikin@tano-systems.com>\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"PO-Revision-Date: 2020-01-25 05:04+0000\n"
+"Last-Translator: Anton Kikin <a.a.kikin@gmail.com>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/openwrt/"
+"luciapplicationsopenvpn/ru/>\n"
 "Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 3.11-dev\n"
 "Project-Info: Это технический перевод, не дословный. Главное-удобный русский "
 "интерфейс, все проверялось в графическом режиме, совместим с другими apps\n"
 
@@ -155,10 +156,6 @@ msgstr "Подключиться к удалённому хосту исполь
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:514
 msgid "Connection retry interval"
 msgstr "Интервал между попытками подключения"
-
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:47
-msgid "Daemonize after initialization"
-msgstr "Запустить в режиме демона после инициализации"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:232
 msgid "Delay n seconds after connection"
@@ -344,10 +341,6 @@ msgstr ""
 msgid "Exit on TLS negotiation failure"
 msgstr "Выйти при ошибке согласования использования протокола TLS"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:753
-msgid "Get PEM password from controlling tty before we daemonize"
-msgstr "Получить PEM пароль от управления tty, прежде чем включить демон"
-
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:572
 msgid "HMAC authentication for packets"
 msgstr "Аутентификация с помощью HMAC ключа для пакетов"
@@ -374,7 +367,7 @@ msgstr "Пытаться подключиться снова при ошибке
 
 #: applications/luci-app-openvpn/luasrc/view/openvpn/pageswitch.htm:12
 msgid "Instance \"%s\""
-msgstr "Экземпляр \"%s\""
+msgstr "Экземпляр «%s»"
 
 #: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:18
 #: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:46
@@ -458,10 +451,6 @@ msgstr "Экземпляры OpenVPN"
 msgid "Optimize TUN/TAP/UDP writes"
 msgstr "Оптимизация записей ввода/вывода TUN/TAP/UDP (экспериментальная опция)"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:51
-msgid "Output to syslog and do not daemonize"
-msgstr "Записывать события в системный журнал и не переходить в режим демона"
-
 #: applications/luci-app-openvpn/luasrc/view/openvpn/pageswitch.htm:11
 msgid "Overview"
 msgstr "Обзор"
@@ -493,8 +482,7 @@ msgstr "Выполнять пинг-запрос каждые n секунд, и
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-file.lua:28
 msgid "Please edit this file directly in a terminal session."
-msgstr ""
-"Пожалуйста отредактируйте данный файл напрямую через терминальную сессию"
+msgstr "Редактируйте данный файл только в терминале."
 
 #: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:51
 msgid "Please select a valid OVPN config file to upload!"
@@ -617,10 +605,6 @@ msgstr ""
 msgid "Route subnet to client"
 msgstr "Маршрутизировать подсеть клиенту"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:59
-msgid "Run as an inetd or xinetd server"
-msgstr "Запуск от имени сервера 'inetd' или 'xinetd'"
-
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:144
 msgid "Run script cmd on client connection"
 msgstr "Запустить скрипт командной строки при подключении клиента"
@@ -656,17 +640,9 @@ msgstr "Выберите шаблон..."
 msgid "Send notification to peer on disconnect"
 msgstr "Отправить уведомление на узел при отключении"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:35
-msgid "Set GID to group"
-msgstr "Задайте GID группы"
-
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:265
 msgid "Set TCP/UDP MTU"
 msgstr "Задайте MTU для TCP/UDP"
-
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:31
-msgid "Set UID to user"
-msgstr "Задайте UID пользователя"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:396
 msgid "Set aside a pool of subnets"
@@ -796,7 +772,7 @@ msgstr "Номер удалённого TCP/UDP порта (1194 по умолч
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:709
 msgid "TLS 1.3 or newer cipher"
-msgstr ""
+msgstr "Шифр TLS 1.3 или выше"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:701
 msgid "TLS cipher"
@@ -889,10 +865,6 @@ msgstr "Использовать имя пользователя в качест
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:63
 msgid "Write log to file"
 msgstr "Записывать события в файл"
-
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:75
-msgid "Write process ID to file"
-msgstr "Записать ID процесса в файл"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:95
 msgid "Write status to file every n seconds"

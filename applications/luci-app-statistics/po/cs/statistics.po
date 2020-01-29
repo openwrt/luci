@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2019-10-16 21:07+0000\n"
-"Last-Translator: Josef Schlehofer <pepe@bloodkings.eu>\n"
+"PO-Revision-Date: 2019-12-21 21:42+0000\n"
+"Last-Translator: Jiri Tersel <jiri.tersel@seznam.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsstatistics/cs/>\n"
 "Language: cs\n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 3.9\n"
+"X-Generator: Weblate 3.10\n"
 
 #: applications/luci-app-statistics/luasrc/statistics/plugins/apcups.lua:7
 #: applications/luci-app-statistics/luasrc/statistics/rrdtool/definitions/apcups.lua:7
@@ -63,8 +63,9 @@ msgid "Basic monitoring"
 msgstr "Základní sledování"
 
 #: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/cpu.lua:18
+#, fuzzy
 msgid "By setting this, CPU is not aggregate of all processors on the system"
-msgstr ""
+msgstr "Tímto nastavením nebude CPU souhrnem všech procesorů v systému"
 
 #: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/contextswitch.lua:4
 msgid "CPU Context Switches Plugin Configuration"
@@ -119,7 +120,7 @@ msgstr "CollectTopology"
 msgid "Collectd Settings"
 msgstr "Nastavení Collectd"
 
-#: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/collectd.lua:9
+#: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/collectd.lua:10
 msgid ""
 "Collectd is a small daemon for collecting data from various sources through "
 "different plugins. On this page you can change general settings for the "
@@ -285,8 +286,9 @@ msgid "Flush cache after"
 msgstr "Vyprázdnit cache po"
 
 #: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/network.lua:71
+#, fuzzy
 msgid "Forwarding between listen and server addresses"
-msgstr ""
+msgstr "Přesměrování mezi naslouchajícími a serverovými adresami"
 
 #: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/openvpn.lua:29
 msgid "Gather compression statistics"
@@ -309,7 +311,7 @@ msgstr "Grafy"
 msgid "Group"
 msgstr "Skupina"
 
-#: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/exec.lua:23
+#: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/exec.lua:24
 msgid ""
 "Here you can define external commands which will be started by collectd in "
 "order to read certain values. The values will be read from stdout."
@@ -318,7 +320,7 @@ msgstr ""
 "daemonem collectd. Ze standardního výstupu příkazů vezme collectd potřebné "
 "hodnoty."
 
-#: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/exec.lua:51
+#: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/exec.lua:52
 msgid ""
 "Here you can define external commands which will be started by collectd when "
 "certain threshold values have been reached. The values leading to invocation "
@@ -328,7 +330,7 @@ msgstr ""
 "při dosažení určitých mezních hodnot. Hodnoty vedoucí ke spuštění budou "
 "předány volanému programu na standardní vstup."
 
-#: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/iptables.lua:35
+#: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/iptables.lua:36
 msgid ""
 "Here you can define various criteria by which the monitored iptables rules "
 "are selected."
@@ -373,7 +375,7 @@ msgstr "Nastavení Interface pluginu"
 #: applications/luci-app-statistics/luasrc/statistics/plugins/interface.lua:7
 #: applications/luci-app-statistics/luasrc/statistics/rrdtool/definitions/interface.lua:7
 msgid "Interfaces"
-msgstr "Rozhraní"
+msgstr "Síťová rozhraní"
 
 #: applications/luci-app-statistics/luasrc/statistics/plugins/irq.lua:7
 #: applications/luci-app-statistics/luasrc/statistics/rrdtool/definitions/irq.lua:7
@@ -795,7 +797,7 @@ msgstr "TTL pro pakety pingu"
 msgid "Table"
 msgstr "Tabulka"
 
-#: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/apcups.lua:6
+#: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/apcups.lua:7
 msgid "The APCUPS plugin collects statistics about the APC UPS."
 msgstr "Modul APCUPS shromažďuje statistické údaje o UPS zařízeních firmy APC."
 
@@ -825,7 +827,7 @@ msgstr "Plugin Conntrack shromažďuje statistiky o počtu sledovaných spojení
 msgid "The cpu plugin collects basic statistics about the processor usage."
 msgstr "Plugin CPU shromažďuje základní statistiky o vytížení procesoru."
 
-#: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/csv.lua:6
+#: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/csv.lua:7
 msgid ""
 "The csv plugin stores collected data in csv file format for further "
 "processing by external programs."
@@ -833,7 +835,7 @@ msgstr ""
 "Plugin CSV ukládá shromážděná data ve formátu CSV. Data mohou být později "
 "zpracována externími programy."
 
-#: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/df.lua:6
+#: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/df.lua:7
 msgid ""
 "The df plugin collects statistics about the disk space usage on different "
 "devices, mount points or filesystem types."
@@ -841,7 +843,7 @@ msgstr ""
 "Plugin DF shromažďuje statistiky o využití diskového prostoru na různých "
 "zařízeních, přípojných bodech nebo typech souborových systémů."
 
-#: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/disk.lua:6
+#: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/disk.lua:7
 msgid ""
 "The disk plugin collects detailed usage statistics for selected partitions "
 "or whole disks."
@@ -849,7 +851,7 @@ msgstr ""
 "Plugin Disk shromažďuje podrobné statistiky o využívání vybraného oddílu "
 "nebo celého disku."
 
-#: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/dns.lua:9
+#: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/dns.lua:10
 msgid ""
 "The dns plugin collects detailed statistics about dns related traffic on "
 "selected interfaces."
@@ -857,7 +859,7 @@ msgstr ""
 "Plugin DNS shromažďuje podrobné statistky o provozu, vztahující se k DNS, na "
 "vybraných rozhraních."
 
-#: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/email.lua:6
+#: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/email.lua:7
 msgid ""
 "The email plugin creates a unix socket which can be used to transmit email-"
 "statistics to a running collectd daemon. This plugin is primarily intended "
@@ -873,7 +875,7 @@ msgstr ""
 msgid "The entropy plugin collects statistics about the available entropy."
 msgstr "Modul entropie shromažďuje statistiku o dostupné entropii."
 
-#: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/exec.lua:6
+#: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/exec.lua:7
 msgid ""
 "The exec plugin starts external commands to read values from or to notify "
 "external processes when certain threshold values have been reached."
@@ -881,13 +883,13 @@ msgstr ""
 "Modul exec spouští externí příkazy pro čtení hodnot z externích procesů nebo "
 "pro jejich oznamování při dosažení určitých mezních hodnot."
 
-#: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/interface.lua:9
+#: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/interface.lua:10
 msgid ""
 "The interface plugin collects traffic statistics on selected interfaces."
 msgstr ""
 "Plugin Interface shromažďuje statistiky o provozu na vybraných rozhraních."
 
-#: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/iptables.lua:19
+#: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/iptables.lua:20
 msgid ""
 "The iptables plugin will monitor selected firewall rules and collect "
 "information about processed bytes and packets per rule."
@@ -895,7 +897,7 @@ msgstr ""
 "Plugin Iptables monitoruje vybraná pravidla firewallu a shromažďuje "
 "informace o zpracovaných bajtech a paketech pro každé pravidlo."
 
-#: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/irq.lua:6
+#: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/irq.lua:7
 msgid ""
 "The irq plugin will monitor the rate of issues per second for each selected "
 "interrupt. If no interrupt is selected then all interrupts are monitored."
@@ -911,7 +913,7 @@ msgstr ""
 "Plugin Iwinfo shromažďuje statistiky o síle, šumu a kvalitě bezdrátového "
 "signálu."
 
-#: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/load.lua:6
+#: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/load.lua:7
 msgid "The load plugin collects statistics about the general system load."
 msgstr "Plugin Load shromažďuje statistiky o obecné zátěži systému."
 
@@ -919,7 +921,7 @@ msgstr "Plugin Load shromažďuje statistiky o obecné zátěži systému."
 msgid "The memory plugin collects statistics about the memory usage."
 msgstr "Plugin Memory shromažďuje statistiky o využití paměti."
 
-#: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/netlink.lua:11
+#: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/netlink.lua:12
 msgid ""
 "The netlink plugin collects extended information like qdisc-, class- and "
 "filter-statistics for selected interfaces."
@@ -927,7 +929,7 @@ msgstr ""
 "Plugin Netlink shromažďuje rozšířené informace jako statistiky qdisk, class "
 "a filtru pro vybraná rozhraní."
 
-#: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/network.lua:6
+#: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/network.lua:7
 msgid ""
 "The network plugin provides network based communication between different "
 "collectd instances. Collectd can operate both in client and server mode. In "
@@ -939,7 +941,7 @@ msgstr ""
 "klienta jsou lokálně shromažďovaná data odeslána instanci serveru, jako "
 "server naopak collectd přijímá data z ostatních hostitelů."
 
-#: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/ping.lua:6
+#: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/ping.lua:7
 msgid ""
 "The ping plugin will send icmp echo replies to selected hosts and measure "
 "the roundtrip time for each host."
@@ -947,7 +949,7 @@ msgstr ""
 "Plugin Ping bude odesílat ICMP echo odpovědi vybraným hostům a měřit "
 "zpáteční čas pro každého hosta."
 
-#: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/processes.lua:6
+#: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/processes.lua:7
 msgid ""
 "The processes plugin collects information like cpu time, page faults and "
 "memory usage of selected processes."
@@ -955,7 +957,7 @@ msgstr ""
 "Plugin Processes shromažďuje informace o procesorovém času, výpadcích "
 "stránky a využití paměti vybranými programy."
 
-#: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/rrdtool.lua:6
+#: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/rrdtool.lua:7
 msgid ""
 "The rrdtool plugin stores the collected data in rrd database files, the "
 "foundation of the diagrams.<br /><br /><strong>Warning: Setting the wrong "
@@ -991,7 +993,7 @@ msgstr ""
 "sběru dat a <a href=\"http://oss.oetiker.ch/rrdtool/\">RRDtool</a> pro "
 "vykreslování diagramů."
 
-#: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/tcpconns.lua:6
+#: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/tcpconns.lua:7
 msgid ""
 "The tcpconns plugin collects information about open tcp connections on "
 "selected ports."
@@ -1009,7 +1011,7 @@ msgstr ""
 "class/thermal/*/temp ('*' označuje zařízení, které se má číst, např. "
 "thermal_zone1)"
 
-#: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/unixsock.lua:6
+#: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/unixsock.lua:7
 msgid ""
 "The unixsock plugin creates a unix socket which can be used to read "
 "collected data from a running collectd instance."
@@ -1038,7 +1040,7 @@ msgstr "Tento modul shromažďuje statistiku přepnutí kontextu procesoru."
 msgid "This plugin collects statistics about the processor frequency scaling."
 msgstr "Tento modul shromažďuje statistiku o škálování frekvence procesoru."
 
-#: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/network.lua:25
+#: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/network.lua:26
 msgid ""
 "This section defines on which interfaces collectd will wait for incoming "
 "connections."
@@ -1046,7 +1048,7 @@ msgstr ""
 "Tato sekce určuje, na kterých rozhraních bude collectd čekat na příchozí "
 "spojení."
 
-#: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/network.lua:46
+#: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/network.lua:47
 msgid ""
 "This section defines to which servers the locally collected data is sent to."
 msgstr "Tato sekce určuje, na které servery budou odeslána shromážděná data."
@@ -1125,7 +1127,7 @@ msgstr "Je-li nastaveno na 'povoleno', zaznamenávají se percentuální hodnoty
 #: applications/luci-app-statistics/luasrc/statistics/plugins/iwinfo.lua:7
 #: applications/luci-app-statistics/luasrc/statistics/rrdtool/definitions/iwinfo.lua:7
 msgid "Wireless"
-msgstr "Wireless"
+msgstr "Bezdrátová síť"
 
 #: applications/luci-app-statistics/luasrc/model/cbi/luci_statistics/iwinfo.lua:7
 msgid "Wireless iwinfo Plugin Configuration"
