@@ -187,7 +187,7 @@ return L.view.extend({
 
 			o = s.taboption('zram', form.ListValue, 'zram_comp_algo', _('ZRam Compression Algorithm'));
 			o.optional    = true;
-			o.placeholder = 'lzo';
+			o.default     = 'lzo';
 			o.value('lzo', 'lzo');
 			o.value('lz4', 'lz4');
 			o.value('deflate', 'deflate');
