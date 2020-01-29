@@ -806,7 +806,7 @@ function dispatch(request)
 				return tpl.render("sysauth", { duser = "root", fuser = user })
 			end
 
-			http.header("Set-Cookie", 'sysauth=%s; path=%s; HttpOnly%s' %{
+			http.header("Set-Cookie", 'sysauth=%s; path=%s; SameSite=Strict; HttpOnly%s' %{
 				sid, build_url(), http.getenv("HTTPS") == "on" and "; secure" or ""
 			})
 
