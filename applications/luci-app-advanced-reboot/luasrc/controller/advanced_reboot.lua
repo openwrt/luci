@@ -183,7 +183,7 @@ function action_reboot()
 	ltemplate.render("advanced_reboot/applyreboot", {
 				title = i18n.translate("Rebooting..."),
 				msg   = i18n.translate("The system is rebooting now.<br /> DO NOT POWER OFF THE DEVICE!<br /> Wait a few minutes before you try to reconnect. It might be necessary to renew the address of your computer to reach the device again, depending on your settings."),
-				addr  = ip.new(type(ip) == "string" and ip or "192.168.1.1") or "192.168.1.1"
+				addr  = ip.new(util.imatch(ip)() or "192.168.1.1")
 			})
 	sys.reboot()
 end
@@ -255,7 +255,7 @@ function action_altreboot()
 			ltemplate.render("advanced_reboot/applyreboot", {
 						title = i18n.translate("Rebooting..."),
 						msg   = i18n.translate("The system is rebooting to an alternative partition now.<br /> DO NOT POWER OFF THE DEVICE!<br /> Wait a few minutes before you try to reconnect. It might be necessary to renew the address of your computer to reach the device again, depending on your settings."),
-						addr  = ip.new(uci:get("network", "lan", "ipaddr")) or "192.168.1.1"
+						addr  = ip.new(util.imatch(uci:get("network", "lan", "ipaddr"))() or "192.168.1.1")
 					})
 			sys.reboot()
 		else
@@ -288,7 +288,7 @@ function action_poweroff()
 		ltemplate.render("advanced_reboot/applyreboot", {
 					title = i18n.translate("Shutting down..."),
 					msg   = i18n.translate("The system is shutting down now.<br /> DO NOT POWER OFF THE DEVICE!<br /> It might be necessary to renew the address of your computer to reach the device again, depending on your settings."),
-					addr  = ip.new(uci:get("network", "lan", "ipaddr")) or "192.168.1.1"
+					addr  = ip.new(util.imatch(uci:get("network", "lan", "ipaddr"))() or "192.168.1.1")
 				})
 		sys.call("/sbin/poweroff")
 	end
