@@ -130,7 +130,16 @@ function handleCgiIoReply(res) {
 		throw e;
 	}
 
-	return res.text();
+	switch (this.type) {
+	case 'blob':
+		return res.blob();
+
+	case 'json':
+		return res.json();
+
+	default:
+		return res.text();
+	}
 }
 
 /**
@@ -334,17 +343,24 @@ var FileSystem = L.Class.extend(/** @lends LuCI.fs.prototype */ {
 	 * @param {string} path
 	 * The file path to read.
 	 *
-	 * @returns {Promise<string>}
-	 * Returns a promise resolving to a string containing the file contents or
-	 * rejecting with an error stating the failure reason.
+	 * @param {string} [type=text]
+	 * The expected type of read file contents. Valid values are `text` to
+	 * interpret the contents as string, `json` to parse the contents as JSON
+	 * or `blob` to return the contents as Blob instance.
+	 *
+	 * @returns {Promise<*>}
+	 * Returns a promise resolving with the file contents interpreted according
+	 * to the specified type or rejecting with an error stating the failure
+	 * reason.
 	 */
-	read_direct: function(path) {
+	read_direct: function(path, type) {
 		var postdata = 'sessionid=%s&path=%s'
 			.format(encodeURIComponent(L.env.sessionid), encodeURIComponent(path));
 
 		return L.Request.post(L.env.cgi_base + '/cgi-download', postdata, {
-			headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-		}).then(handleCgiIoReply);
+			headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+			responseType: (type == 'blob') ? 'blob' : 'text'
+		}).then(handleCgiIoReply.bind({ type: type }));
 	},
 
 	/**
@@ -369,11 +385,17 @@ var FileSystem = L.Class.extend(/** @lends LuCI.fs.prototype */ {
 	 * @param {string[]} [params]
 	 * The arguments to pass to the command.
 	 *
-	 * @returns {Promise<string>}
-	 * Returns a promise resolving to the gathered command stdout output or
-	 * rejecting with an error stating the failure reason.
+	 * @param {string} [type=text]
+	 * The expected output type of the invoked program. Valid values are
+	 * `text` to interpret the output as string, `json` to parse the output
+	 * as JSON or `blob` to return the output as Blob instance.
+	 *
+	 * @returns {Promise<*>}
+	 * Returns a promise resolving with the command stdout output interpreted
+	 * according to the specified type or rejecting with an error stating the
+	 * failure reason.
 	 */
-	exec_direct: function(command, params) {
+	exec_direct: function(command, params, type) {
 		var cmdstr = String(command)
 			.replace(/\\/g, '\\\\').replace(/(\s)/g, '\\$1');
 
@@ -386,8 +408,9 @@ var FileSystem = L.Class.extend(/** @lends LuCI.fs.prototype */ {
 			.format(encodeURIComponent(L.env.sessionid), encodeURIComponent(cmdstr));
 
 		return L.Request.post(L.env.cgi_base + '/cgi-exec', postdata, {
-			headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-		}).then(handleCgiIoReply);
+			headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+			responseType: (type == 'blob') ? 'blob' : 'text'
+		}).then(handleCgiIoReply.bind({ type: type }));
 	}
 });
 
