@@ -1,6 +1,13 @@
 {
 	"luci-app-vnstat2": {
 		"description": "Grant access to LuCI app vnstat2",
+		"read": {
+			"cgi-io": [ "exec" ],
+			"file": {
+				"/usr/bin/vnstat --json f 1": [ "exec" ],
+				"/usr/bin/vnstati -[5dhmsty] -i * -o -": [ "exec" ]
+			}
+		},
 		"write": {
 			"file": {
 				"/usr/bin/vnstat": [ "exec" ]
