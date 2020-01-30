@@ -183,7 +183,7 @@ function action_reboot()
 	ltemplate.render("advanced_reboot/applyreboot", {
 				title = i18n.translate("Rebooting..."),
 				msg   = i18n.translate("The system is rebooting now.<br /> DO NOT POWER OFF THE DEVICE!<br /> Wait a few minutes before you try to reconnect. It might be necessary to renew the address of your computer to reach the device again, depending on your settings."),
-				addr  = ip.new(util.imatch(ip)() or "192.168.1.1")
+				addr  = ip.new(util.imatch(uci:get("network", "lan", "ipaddr"))() or "192.168.1.1")
 			})
 	sys.reboot()
 end
