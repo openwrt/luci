@@ -449,17 +449,32 @@
 			/* privates */
 			this.xhr = xhr;
 
-			if (content != null && typeof(content) == 'object') {
+			if (content instanceof Blob) {
+				this.responseBlob = content;
+				this.responseJSON = null;
+				this.responseText = null;
+			}
+			else if (content != null && typeof(content) == 'object') {
+				this.responseBlob = null;
 				this.responseJSON = content;
 				this.responseText = null;
 			}
 			else if (content != null) {
+				this.responseBlob = null;
 				this.responseJSON = null;
 				this.responseText = String(content);
 			}
 			else {
 				this.responseJSON = null;
-				this.responseText = xhr.responseText;
+
+				if (xhr.responseType == 'blob') {
+					this.responseBlob = xhr.response;
+					this.responseText = null;
+				}
+				else {
+					this.responseBlob = null;
+					this.responseText = xhr.responseText;
+				}
 			}
 		},
 
@@ -518,6 +533,18 @@
 				this.responseText = JSON.stringify(this.responseJSON);
 
 			return this.responseText;
+		},
+
+		/**
+		 * Access the response content as blob.
+		 *
+		 * @instance
+		 * @memberof LuCI.Response
+		 * @returns {Blob}
+		 * The response content as blob.
+		 */
+		blob: function() {
+			return this.responseBlob;
 		}
 	});
 
@@ -631,6 +658,11 @@
 		 * @property {boolean} [credentials=false]
 		 * Whether to include credentials such as cookies in the request.
 		 *
+		 * @property {string} [responseType=text]
+		 * Overrides the request response type. Valid values or `text` to
+		 * interpret the response as UTF-8 string or `blob` to handle the
+		 * response as binary `Blob` data.
+		 *
 		 * @property {*} [content]
 		 * Specifies the HTTP message body to send along with the request.
 		 * If the value is a function, it is invoked and the return value
@@ -716,7 +748,7 @@
 				else
 					opt.xhr.open(opt.method, opt.url, true);
 
-				opt.xhr.responseType = 'text';
+				opt.xhr.responseType = opt.responseType || 'text';
 
 				if ('overrideMimeType' in opt.xhr)
 					opt.xhr.overrideMimeType('application/octet-stream');
