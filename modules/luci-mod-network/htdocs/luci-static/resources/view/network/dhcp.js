@@ -174,7 +174,7 @@ return L.view.extend({
 			_('local <abbr title="Domain Name System">DNS</abbr> file'));
 
 		o.depends('noresolv', '0');
-		o.placeholder = '/tmp/resolv.conf.auto';
+		o.placeholder = '/tmp/resolv.conf.d/resolv.conf.auto';
 		o.optional = true;
 
 
