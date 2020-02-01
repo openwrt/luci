@@ -6,6 +6,8 @@ local util      = require("luci.util")
 local uci       = require("luci.model.uci").cursor()
 local cfg_file  = uci:get("openvpn", arg[1], "config")
 local auth_file = cfg_file:match("(.+)%..+").. ".auth"
+local down_file = cfg_file:match("(.+)%..+").. ".down"
+local up_file   = cfg_file:match("(.+)%..+").. ".up"
 
 local m = Map("openvpn")
 
@@ -76,6 +78,48 @@ function file.remove(self, section, value)
 end
 
 function s.handle(self, state, data2)
+	return true
+end
+
+s = f:section(SimpleSection, nil, translatef("Section to add an optional 'up' file which typically add routes to the tunnel by script (%s)", up_file))
+file = s:option(TextValue, "data3")
+file.datatype = "string"
+file.rows = 20
+
+function file.cfgvalue()
+        return fs.readfile(up_file) or ""
+end
+
+function file.write(self, section, data3)
+        return fs.writefile(up_file, util.trim(data3:gsub("\r\n", "\n")) .. "\n")
+end
+
+function file.remove(self, section, value)
+        return fs.writefile(up_file, "")
+end
+
+function s.handle(self, state, data3)
+	return true
+end
+
+s = f:section(SimpleSection, nil, translatef("Section to add an optional 'down' file which typically removes routes to the tunnel by script (%s)", down_file))
+file = s:option(TextValue, "data4")
+file.datatype = "string"
+file.rows = 20
+
+function file.cfgvalue()
+	return fs.readfile(down_file) or ""
+end
+
+function file.write(self, section, data4)
+	return fs.writefile(down_file, util.trim(data4:gsub("\r\n", "\n")) .. "\n")
+end
+
+function file.remove(self, section, value)
+	return fs.writefile(down_file, "")
+end
+
+function s.handle(self, state, data4)
 	return true
 end
 

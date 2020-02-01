@@ -90,11 +90,19 @@ end
 function s.remove(self, name)
 	local cfg_file  = "/etc/openvpn/" ..name.. ".ovpn"
 	local auth_file = "/etc/openvpn/" ..name.. ".auth"
+	local down_file = "/etc/openvpn/" ..name.. ".down"
+	local up_file   = "/etc/openvpn/" ..name.. ".up"
 	if fs.access(cfg_file) then
 		fs.unlink(cfg_file)
 	end
 	if fs.access(auth_file) then
 		fs.unlink(auth_file)
+	end
+	if fs.access(down_file) then
+		fs.unlink(down_file)
+	end
+	if fs.access(up_file) then
+		fs.unlink(up_file)
 	end
 	uci:delete("openvpn", name)
 	uci:save("openvpn")
