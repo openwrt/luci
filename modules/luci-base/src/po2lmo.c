@@ -32,8 +32,14 @@ static void usage(const char *name)
 
 static void print(const void *ptr, size_t size, size_t nmemb, FILE *stream)
 {
-	if( fwrite(ptr, size, nmemb, stream) == 0 )
-		die("Failed to write stdout");
+	int i;
+
+	if (fwrite(ptr, size, nmemb, stream) == 0)
+		die("Failed to write");
+
+	for (i = 0; i <	((4 - (size % 4)) % 4); i++)
+		if (fputc(0, stream))
+			die("Failed to write");
 }
 
 static int extract_string(const char *src, char *dest, int len)
@@ -41,6 +47,9 @@ static int extract_string(const char *src, char *dest, int len)
 	int pos = 0;
 	int esc = 0;
 	int off = -1;
+
+	if (*src == '#')
+		return -1;
 
 	for( pos = 0; (pos < strlen(src)) && (pos < len); pos++ )
 	{
@@ -124,27 +133,123 @@ enum fieldtype {
 	MSG_STR       = 4
 };
 
+struct msg {
+	int plural_num;
+	char *ctxt;
+	char *id;
+	char *id_plural;
+	char *val[10];
+	size_t len;
+	char **cur;
+};
+
+static void *array = NULL;
+static int n_entries = 0;
+static size_t offset = 0;
+
+static void print_msg(struct msg *msg, FILE *out)
+{
+	char key[4096], *field, *p;
+	uint32_t key_id, val_id;
+	lmo_entry_t *entry;
+	size_t len;
+	int esc, i;
+
+	if (msg->id && msg->val[0]) {
+		for (i = 0; i <= msg->plural_num; i++) {
+			if (!msg->val[i])
+				continue;
+
+			if (msg->ctxt && msg->id_plural)
+				snprintf(key, sizeof(key), "%s\1%s\2%d", msg->ctxt, msg->id, i);
+			else if (msg->ctxt)
+				snprintf(key, sizeof(key), "%s\1%s", msg->ctxt, msg->id);
+			else if (msg->id_plural)
+				snprintf(key, sizeof(key), "%s\2%d", msg->id, i);
+			else
+				snprintf(key, sizeof(key), "%s", msg->id);
+
+			key_id = sfh_hash(key, strlen(key));
+			val_id = sfh_hash(msg->val[i], strlen(msg->val[i]));
+
+			if (key_id != val_id) {
+				n_entries++;
+				array = realloc(array, n_entries * sizeof(lmo_entry_t));
+
+				if (!array)
+					die("Out of memory");
+
+				entry = (lmo_entry_t *)array + n_entries - 1;
+				entry->key_id = key_id;
+				entry->val_id = msg->plural_num + 1;
+				entry->offset = offset;
+				entry->length = strlen(msg->val[i]);
+
+				len = entry->length + ((4 - (entry->length % 4)) % 4);
+
+				print(msg->val[i], entry->length, 1, out);
+				offset += len;
+			}
+		}
+	}
+	else if (msg->val[0]) {
+		for (field = msg->val[0], p = field, esc = 0; *p; p++) {
+			if (esc) {
+				if (*p == 'n') {
+					p[-1] = 0;
+
+					if (!strncasecmp(field, "Plural-Forms: ", 14)) {
+						field += 14;
+
+						n_entries++;
+						array = realloc(array, n_entries * sizeof(lmo_entry_t));
+
+						if (!array)
+							die("Out of memory");
+
+						entry = (lmo_entry_t *)array + n_entries - 1;
+						entry->key_id = 0;
+						entry->val_id = 0;
+						entry->offset = offset;
+						entry->length = strlen(field);
+
+						len = entry->length + ((4 - (entry->length % 4)) % 4);
+
+						print(field, entry->length, 1, out);
+						offset += len;
+						break;
+					}
+
+					field = p + 1;
+				}
+
+				esc = 0;
+			}
+			else if (*p == '\\') {
+				esc = 1;
+			}
+		}
+	}
+
+	free(msg->ctxt);
+	free(msg->id);
+	free(msg->id_plural);
+
+	for (i = 0; i < sizeof(msg->val) / sizeof(msg->val[0]); i++)
+		free(msg->val[i]);
+
+	memset(msg, 0, sizeof(*msg));
+}
+
 int main(int argc, char *argv[])
 {
-	char line[4096];
-	char key[4096];
-	char val[4096];
-	char tmp[4096];
-	int offset = 0;
-	int length = 0;
-	int n_entries = 0;
-	void *array = NULL;
-	lmo_entry_t *entry = NULL;
-	uint32_t key_id, val_id;
-	enum fieldtype type = UNSPEC, prev_type = UNSPEC;
-	int plural_num = -1, prev_plural_num = -1;
-	char *ctxt = NULL, *id = NULL, *p;
-	int eof, esc;
+	struct msg msg = { .plural_num = -1 };
+	char line[4096], tmp[4096];
+	FILE *in, *out;
+	ssize_t len;
+	int eof;
 
-	FILE *in;
-	FILE *out;
-
-	if( (argc != 3) || ((in = fopen(argv[1], "r")) == NULL) || ((out = fopen(argv[2], "w")) == NULL) )
+	if ((argc != 3) || ((in = fopen(argv[1], "r")) == NULL) || ((out = fopen(argv[2], "w")) == NULL))
 		usage(argv[0]);
 
 	while (1) {
@@ -152,137 +257,60 @@ int main(int argc, char *argv[])
 		eof = !fgets(line, sizeof(line), in);
 
 		if (!strncmp(line, "msgctxt \"", 9)) {
-			free(ctxt);
-			type = MSG_CTXT;
-			ctxt = NULL;
-		}
-		else if (!strncmp(line, "msgid \"", 7)) {
-			if (prev_type != MSG_CTXT) {
-				free(ctxt);
-				ctxt = NULL;
-			}
+			if (msg.id || msg.val[0])
+				print_msg(&msg, out);
+			else
+				free(msg.ctxt);
 
-			free(id);
-			type = MSG_ID;
-			id = NULL;
+			msg.ctxt = NULL;
+			msg.cur = &msg.ctxt;
+			msg.len = 0;
+		}
+		else if (eof || !strncmp(line, "msgid \"", 7)) {
+			if (msg.id || msg.val[0])
+				print_msg(&msg, out);
+			else
+				free(msg.id);
+
+			msg.id = NULL;
+			msg.cur = &msg.id;
+			msg.len = 0;
 		}
 		else if (!strncmp(line, "msgid_plural \"", 14)) {
-			type = MSG_ID_PLURAL;
+			free(msg.id_plural);
+			msg.id_plural = NULL;
+			msg.cur = &msg.id_plural;
+			msg.len = 0;
 		}
 		else if (!strncmp(line, "msgstr \"", 8) || !strncmp(line, "msgstr[", 7)) {
-			type = MSG_STR;
-
 			if (line[6] == '[')
-				plural_num = strtoul(line + 7, NULL, 10);
+				msg.plural_num = strtoul(line + 7, NULL, 10);
 			else
-				plural_num = -1;
-		}
+				msg.plural_num = 0;
 
-		if (type != prev_type || plural_num != prev_plural_num || eof) {
-			switch (prev_type) {
-			case MSG_CTXT:
-				ctxt = strdup(val);
-				break;
+			if (msg.plural_num >= 10)
+				die("Too many plural forms");
 
-			case MSG_ID:
-				id = strdup(val);
-				break;
-
-			case MSG_STR:
-				if (id && id[0] && val[0]) {
-					if (ctxt && ctxt[0] && prev_plural_num > -1)
-						snprintf(key, sizeof(key), "%s\1%s\2%d", ctxt, id, prev_plural_num);
-					else if (ctxt && ctxt[0])
-						snprintf(key, sizeof(key), "%s\1%s", ctxt, id);
-					else if (prev_plural_num > -1)
-						snprintf(key, sizeof(key), "%s\2%d", id, prev_plural_num);
-					else
-						snprintf(key, sizeof(key), "%s", id);
-
-					key_id = sfh_hash(key, strlen(key));
-					val_id = sfh_hash(val, strlen(val));
-
-					if (key_id != val_id) {
-						n_entries++;
-						array = realloc(array, n_entries * sizeof(lmo_entry_t));
-						entry = (lmo_entry_t *)array + n_entries - 1;
-
-						if (!array)
-							die("Out of memory");
-
-						entry->key_id = key_id;
-						entry->val_id = prev_plural_num + 1;
-						entry->offset = offset;
-						entry->length = strlen(val);
-
-						length = strlen(val) + ((4 - (strlen(val) % 4)) % 4);
-
-						print(val, length, 1, out);
-						offset += length;
-					}
-				}
-				else if (id && id[0] == 0) {
-					for (id = val, p = val; *p; p++) {
-						if (esc) {
-							if (*p == 'n') {
-								p[-1] = 0;
-
-								if (!strncasecmp(id, "Plural-Forms: ", 14)) {
-									id += 14;
-
-									n_entries++;
-									array = realloc(array, n_entries * sizeof(lmo_entry_t));
-									entry = (lmo_entry_t *)array + n_entries - 1;
-
-									if (!array)
-										die("Out of memory");
-
-									entry->key_id = 0;
-									entry->val_id = 0;
-									entry->offset = offset;
-									entry->length = strlen(id);
-
-									length = strlen(id) + ((4 - (strlen(id) % 4)) % 4);
-
-									print(id, length, 1, out);
-									offset += length;
-								}
-							}
-
-							id = p + 1;
-							esc = 0;
-						}
-						else if (*p == '\\') {
-							esc = 1;
-						}
-					}
-
-					id = NULL;
-				}
-
-				break;
-
-			default:
-				break;
-			}
-
-			val[0] = 0;
-			prev_type = type;
-			prev_plural_num = plural_num;
+			free(msg.val[msg.plural_num]);
+			msg.val[msg.plural_num] = NULL;
+			msg.cur = &msg.val[msg.plural_num];
+			msg.len = 0;
 		}
 
 		if (eof)
 			break;
 
-		if (prev_type != UNSPEC) {
-			switch (extract_string(line, tmp, sizeof(tmp))) {
-			case -1:
-				type = UNSPEC;
-				plural_num = -1;
-				break;
+		if (msg.cur) {
+			len = extract_string(line, tmp, sizeof(tmp));
 
-			default:
-				strcat(val, tmp);
+			if (len > 0) {
+				*msg.cur = realloc(*msg.cur, msg.len + len + 1);
+
+				if (!*msg.cur)
+					die("Out of memory");
+
+				memcpy(*msg.cur + msg.len, tmp, len + 1);
+				msg.len += len;
 			}
 		}
 	}
