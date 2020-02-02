@@ -1,14 +1,14 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2019-12-16 23:27+0000\n"
-"Last-Translator: Jiri Tersel <jiri.tersel@seznam.cz>\n"
+"PO-Revision-Date: 2020-02-02 09:02+0000\n"
+"Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsttyd/cs/>\n"
 "Language: cs\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 3.10-dev\n"
+"X-Generator: Weblate 3.11-dev\n"
 
 #: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:55
 msgid "Accept only one client and exit on disconnection"
@@ -44,7 +44,7 @@ msgstr "Příkaz"
 
 #: applications/luci-app-ttyd/luasrc/controller/ttyd.lua:12
 msgid "Config"
-msgstr "Konfigurace"
+msgstr "Nastavení"
 
 #: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:27
 msgid "Credential"
@@ -56,7 +56,7 @@ msgstr "Přihlašovací údaje pro zakladní ověřování"
 
 #: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:57
 msgid "Custom index.html path"
-msgstr "Vlastní cesta k index.html"
+msgstr "Uživatelsky určený popis umístění index.html"
 
 #: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:72
 msgid "Debug"
@@ -76,19 +76,19 @@ msgstr "Povolit"
 
 #: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:59
 msgid "Enable IPv6 support"
-msgstr "Povolit podporu IPv6"
+msgstr "Zapnout podporu pro IPv6"
 
 #: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:61
 msgid "Enable SSL"
-msgstr "Povolit SSL"
+msgstr "Šifrovat spojení (TLS)"
 
 #: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:33
 msgid "Group ID"
-msgstr "ID skupiny"
+msgstr "Identif. skupiny"
 
 #: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:33
 msgid "Group id to run with"
-msgstr "ID skupiny pro spuštění"
+msgstr "Identif. skupiny, pod kterou spouštět"
 
 #: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:59
 msgid "IPv6"
@@ -104,19 +104,19 @@ msgstr "Rozhraní"
 
 #: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:51
 msgid "Max clients"
-msgstr "Max klientů"
+msgstr "Nejvýše klientů"
 
 #: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:51
 msgid "Maximum clients to support (default: 0, no limit)"
-msgstr "Maximální počet podporovaných klientů (výchozí: 0, bez omezení)"
+msgstr "Nejvyšší umožněný počet podporovaných klientů (výchozí: 0, bez omezení)"
 
 #: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:23
 msgid ""
 "Network interface to bind (eg: eth0), or UNIX domain socket path (eg: /var/"
 "run/ttyd.sock)"
 msgstr ""
-"Síťové rozhraní k navázání (např.: eth0), nebo cesta k UNIX socketu (např.: /"
-"var/run/ttyd.sock)"
+"Síťové rozhraní, na které navázat (např.: eth0), nebo popis umístění UNIX "
+"socketu (např.: /var/run/ttyd.sock)"
 
 #: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:55
 msgid "Once"
@@ -128,15 +128,17 @@ msgstr "Port"
 
 #: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:19
 msgid "Port to listen (default: 7681, use `0` for random port)"
-msgstr "Port pro naslouchání (výchozí: 7681, použijte '0' pro náhodný port)"
+msgstr ""
+"Port na kterém očekávat spojení (výchozí: 7681, pro náhodný port zadejte "
+"nulu „0“)"
 
 #: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/term.js:12
 msgid ""
 "Random ttyd port (port=0) is not supported.<br>Change to a fixed port and "
 "try again."
 msgstr ""
-"Náhodný port ttyd (port = 0) není podporován.<br/>Změňte na pevný port a "
-"zkuste znovu."
+"Náhodný port ttyd (port = 0) není podporován.<br/>Změňte na pevně daný port "
+"a zkuste znovu."
 
 #: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:41
 msgid "Read-only"
@@ -149,11 +151,12 @@ msgstr "SSL"
 #: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:69
 msgid "SSL CA file path for client certificate verification"
 msgstr ""
-"Cesta k souboru certifikační autority SSL pro ověření klientského certifikátu"
+"Popis umístění souboru s certifikátem SSL cert. autority pro ověření "
+"klientského certifikátu"
 
 #: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:69
 msgid "SSL ca"
-msgstr "SSL CA"
+msgstr "SSL cert. autorita"
 
 #: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:63
 msgid "SSL cert"
@@ -161,7 +164,7 @@ msgstr "SSL certifikát"
 
 #: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:63
 msgid "SSL certificate file path"
-msgstr "Cesta k SSL certifikátu"
+msgstr "Popis umístění SSL certifikátu"
 
 #: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:66
 msgid "SSL key"
@@ -169,7 +172,7 @@ msgstr "SSL klíč"
 
 #: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:66
 msgid "SSL key file path"
-msgstr "Cesta k SSL klíči"
+msgstr "Popis umístění SSL klíče"
 
 #: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:43
 msgid "Send option to client"
@@ -201,11 +204,11 @@ msgstr "Ohlašovaný typ terminálu (výchozí: xterm-256color)"
 
 #: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:30
 msgid "User ID"
-msgstr "ID uživatele"
+msgstr "Identif. uživatele"
 
 #: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:30
 msgid "User id to run with"
-msgstr "ID uživatele, pod kterým spustit"
+msgstr "Identif. uživatele, pod kterým spustit"
 
 #: applications/luci-app-ttyd/luasrc/controller/ttyd.lua:10
 msgid "ttyd"
