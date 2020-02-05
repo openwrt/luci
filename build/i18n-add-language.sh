@@ -3,7 +3,7 @@
 LANG=$1
 
 case "$LANG" in
-	[a-z][a-z]|[a-z][a-z]-[a-z][a-z]) : ;;
+	[a-z][a-z]|[a-z][a-z][_-][A-Za-z][A-Za-z]*) : ;;
 	*)
 		echo "Usage: $0 <ISO_CODE>\n" >&2
 		exit 1
