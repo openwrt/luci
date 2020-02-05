@@ -1,0 +1,31 @@
+{
+	"admin/services/polipo": {
+		"title": "Polipo",
+		"action": {
+			"type": "alias",
+			"path": "admin/services/polipo/config"
+		},
+		"depends": {
+			"uci": { "polipo": true }
+		}
+	},
+
+	"admin/services/polipo/status": {
+		"title": "Status",
+		"order": 1,
+		"action": {
+			"type": "template",
+			"path": "polipo_status"
+		}
+	},
+
+	"admin/services/polipo/config": {
+		"title": "Configuration",
+		"order": 2,
+		"action": {
+			"type": "cbi",
+			"path": "polipo",
+			"post": { "cbi.submit": true }
+		}
+	}
+}

@@ -1,0 +1,14 @@
+{
+	"admin/system/ntpc": {
+		"title": "Time Synchronisation",
+		"order": 50,
+		"action": {
+			"type": "cbi",
+			"path": "ntpc/ntpc",
+			"post": { "cbi.submit": true }
+		},
+		"depends": {
+			"uci": { "ntpclient": true }
+		}
+	}
+}

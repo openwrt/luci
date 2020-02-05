@@ -1,0 +1,30 @@
+{
+	"admin/services/nextdns": {
+		"title": "NextDNS",
+		"order": 60,
+		"action": {
+			"type": "firstchild"
+		},
+		"depends": {
+			"uci": { "nextdns": true }
+		}
+	},
+
+	"admin/services/nextdns/overview": {
+		"title": "Overview",
+		"order": 1,
+		"action": {
+			"type": "view",
+			"path": "nextdns/overview"
+		}
+	},
+
+	"admin/services/nextdns/log": {
+		"title": "Configuration",
+		"order": 2,
+		"action": {
+			"type": "view",
+			"path": "nextdns/logread"
+		}
+	}
+}

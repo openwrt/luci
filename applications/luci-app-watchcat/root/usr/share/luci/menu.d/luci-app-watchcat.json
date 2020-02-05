@@ -1,0 +1,14 @@
+{
+	"admin/services/watchcat": {
+		"title": "Watchcat",
+		"order": 90,
+		"action": {
+			"type": "cbi",
+			"path": "watchcat/watchcat",
+			"post": { "cbi.submit": true }
+		},
+		"depends": {
+			"uci": { "system": true }
+		}
+	}
+}

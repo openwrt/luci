@@ -1,0 +1,14 @@
+{
+	"admin/services/hd_idle": {
+		"title": "HDD Idle",
+		"order": 60,
+		"action": {
+			"type": "cbi",
+			"path": "hd_idle",
+			"post": { "cbi.submit": true }
+		},
+		"depends": {
+			"uci": { "hd_idle": true }
+		}
+	}
+}

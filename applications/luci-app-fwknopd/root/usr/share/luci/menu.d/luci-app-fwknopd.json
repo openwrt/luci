@@ -1,0 +1,13 @@
+{
+	"admin/services/fwknopd": {
+		"title": "Firewall Knock Daemon",
+		"action": {
+			"type": "cbi",
+			"path": "fwknopd",
+			"post": { "cbi.submit": true }
+		},
+		"depends": {
+			"uci": { "fwknopd": true }
+		}
+	}
+}
