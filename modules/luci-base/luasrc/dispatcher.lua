@@ -139,7 +139,7 @@ local function check_depends(spec)
 		return true
 	end
 
-	if type(spec.depends.fs) == "table" and not check_fs_depends(spec.depends.fs) then
+	if type(spec.depends.fs) == "table" then
 		local satisfied = false
 		local alternatives = (#spec.depends.fs > 0) and spec.depends.fs or { spec.depends.fs }
 		for _, alternative in ipairs(alternatives) do
