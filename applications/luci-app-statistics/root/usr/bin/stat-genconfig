@@ -20,6 +20,7 @@ require("luci.model.uci")
 require("luci.sys.iptparser")
 require("luci.util")
 require("luci.i18n")
+require("luci.jsonc")
 require("nixio.fs")
 
 local ipt = luci.sys.iptparser.IptParser()
@@ -284,11 +285,8 @@ plugins = {
 	},
 }
 
-local plugin_dir = "/usr/lib/lua/luci/statistics/plugins/"
+local plugin_dir = "/usr/share/luci/statistics/plugins/"
 for filename in nixio.fs.dir(plugin_dir) do
-	local plugin_fun = loadfile(plugin_dir .. filename)
-	setfenv(plugin_fun, { _ = luci.i18n.translate })
-	local plugin = plugin_fun()
 	local name = filename:gsub("%.lua", "")
 	if (name == "exec") then
 		plugins[name] = config_exec
@@ -299,7 +297,10 @@ for filename in nixio.fs.dir(plugin_dir) do
 	elseif (name == "network") then
 		plugins[name] = config_network
 	else
-		plugins[name] = plugin.legend
+		local plugin_def = luci.jsonc.parse(nixio.fs.readfile(plugin_dir .. filename))
+		if type(plugin_def) == "table" then
+			plugins[name] = plugin_def.legend
+		end
 	end
 end
 

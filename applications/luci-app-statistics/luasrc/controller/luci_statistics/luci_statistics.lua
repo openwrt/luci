@@ -9,6 +9,7 @@ function index()
 	require("nixio.fs")
 	require("luci.util")
 	require("luci.statistics.datatree")
+	require("luci.jsonc")
 
 	-- override entry(): check for existence <plugin>.so where <plugin> is derived from the called path
 	function _entry( path, ... )
@@ -31,14 +32,14 @@ function index()
 		network = { }
 	}
 
-	local plugin_dir = "/usr/lib/lua/luci/statistics/plugins/"
+	local plugin_dir = "/usr/share/luci/statistics/plugins/"
 	for filename in nixio.fs.dir(plugin_dir) do
-		local plugin_fun = loadfile(plugin_dir .. filename)
-		setfenv(plugin_fun, { _ = luci.i18n.translate })
-		local plugin = plugin_fun()
-		local name = filename:gsub("%.lua", "")
-		table.insert(collectd_menu[plugin.category], name)
-		labels[name] = plugin.label
+		local plugin_def = luci.jsonc.parse(nixio.fs.readfile(plugin_dir .. filename))
+		if type(plugin_def) == "table" then
+			local name = filename:gsub("%.json", "")
+			table.insert(collectd_menu[plugin_def.category], name)
+			labels[name] = plugin_def.title
+		end
 	end
 
 	-- create toplevel menu nodes
