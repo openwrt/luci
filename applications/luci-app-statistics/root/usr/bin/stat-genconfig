@@ -287,7 +287,7 @@ plugins = {
 
 local plugin_dir = "/usr/share/luci/statistics/plugins/"
 for filename in nixio.fs.dir(plugin_dir) do
-	local name = filename:gsub("%.lua", "")
+	local name = filename:gsub("%.json", "")
 	if (name == "exec") then
 		plugins[name] = config_exec
 	elseif (name == "iptables") then
