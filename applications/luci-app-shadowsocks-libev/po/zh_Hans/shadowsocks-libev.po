@@ -65,7 +65,9 @@ msgstr "对于源地址不在列表中的报文的默认行为"
 msgid ""
 "Definition of remote shadowsocks servers. Disable any of them will also "
 "disable instances referring to it."
-msgstr "在此页面设定访问远端shadowsocks服务器的参数。请注意，禁用远端服务器会同时停止与之关联的shadowsocks-libev组件。"
+msgstr ""
+"在此页面设定访问远端shadowsocks服务器的参数。请注意，禁用远端服务器会同时停止"
+"与之关联的shadowsocks-libev组件。"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:43
 msgid "Destination Settings"
@@ -198,7 +200,7 @@ msgid "Key (base64)"
 msgstr "密钥（base64）"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/instances.js:24
-#: applications/luci-app-shadowsocks-libev/luasrc/controller/shadowsocks-libev.lua:13
+#: applications/luci-app-shadowsocks-libev/root/usr/share/luci/menu.d/luci-app-shadowsocks-libev.json:11
 msgid "Local Instances"
 msgstr "本地实例"
 
@@ -235,10 +237,11 @@ msgid ""
 "give the default action to be taken. If the prior check results in action "
 "<em>checkdst</em>, packets will continue to have their dst addresses checked."
 msgstr ""
-"在此页面上，您可以配置如何将流量转发到ss-redir实例。如果启用，则首先将对数据包的src ip地址按以下顺序匹配， <em>Src ip/net "
-"bypass</em>, <em>Src ip/net forward</em>, <em>Src ip/net "
-"checkdst</em>如果没有匹配项，则按<em>Src default</em> 执行默认操作.如果事先启用了<em>checkdst</em>, "
-"数据包将选定地址进行转发。"
+"在此页面上，您可以配置如何将流量转发到ss-redir实例。如果启用，则首先将对数据"
+"包的src ip地址按以下顺序匹配， <em>Src ip/net bypass</em>, <em>Src ip/net "
+"forward</em>, <em>Src ip/net checkdst</em>如果没有匹配项，则按<em>Src "
+"default</em> 执行默认操作.如果事先启用了<em>checkdst</em>, 数据包将选定地址进"
+"行转发。"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:63
 msgid "Only apply rules on packets from these network interfaces"
@@ -273,12 +276,12 @@ msgid "Prefer IPv6 addresses when resolving names"
 msgstr "名字解析时优先取用IPv6地址"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:30
-#: applications/luci-app-shadowsocks-libev/luasrc/controller/shadowsocks-libev.lua:21
+#: applications/luci-app-shadowsocks-libev/root/usr/share/luci/menu.d/luci-app-shadowsocks-libev.json:29
 msgid "Redir Rules"
 msgstr "转发规则"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/servers.js:13
-#: applications/luci-app-shadowsocks-libev/luasrc/controller/shadowsocks-libev.lua:17
+#: applications/luci-app-shadowsocks-libev/root/usr/share/luci/menu.d/luci-app-shadowsocks-libev.json:20
 msgid "Remote Servers"
 msgstr "远端服务器"
 
@@ -302,7 +305,7 @@ msgstr "服务器"
 msgid "Server port"
 msgstr "服务器端口"
 
-#: applications/luci-app-shadowsocks-libev/luasrc/controller/shadowsocks-libev.lua:9
+#: applications/luci-app-shadowsocks-libev/root/usr/share/luci/menu.d/luci-app-shadowsocks-libev.json:3
 msgid "Shadowsocks-libev"
 msgstr "Shadowsocks-libev"
 
