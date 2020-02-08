@@ -1,0 +1,12 @@
+{
+	"luci-proto-modemmanager": {
+		"description": "Grant access to mmcli",
+		"read": {
+			"cgi-io": [ "exec" ],
+			"file": {
+				"/usr/bin/mmcli -L": [ "exec" ],
+				"/usr/bin/mmcli -m [0-9]": [ "exec" ]
+			}
+		}
+	}
+}
