@@ -69,7 +69,7 @@ return L.view.extend({
 
 		var m, s, o;
 
-		m = new form.Map('upnpd', _('Universal Plug & Play'),
+		m = new form.Map('upnpd', [_('Universal Plug & Play')],
 			_('UPnP allows clients in the local network to automatically configure the router.'));
 
 		s = m.section(form.GridSection, '_active_rules');
