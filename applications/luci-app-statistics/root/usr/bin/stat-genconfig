@@ -17,13 +17,11 @@ $Id$
 
 
 require("luci.model.uci")
-require("luci.sys.iptparser")
 require("luci.util")
 require("luci.i18n")
 require("luci.jsonc")
 require("nixio.fs")
 
-local ipt = luci.sys.iptparser.IptParser()
 local uci = luci.model.uci.cursor()
 local sections = uci:get_all( "luci_statistics" )
 
@@ -138,29 +136,25 @@ end
 function config_iptables( c )
 	local str = ""
 
-	for s in pairs(sections) do
-		if sections[s][".type"] == "collectd_iptables_match" then
+	for id, s in pairs(sections) do
+		if s[".type"] == "collectd_iptables_match" or s[".type"] == "collectd_iptables_match6" then
+			local tname = s.table and tostring(s.table)
+			local chain = s.chain and tostring(s.chain)
 
-			search = { }
+			if tname and tname:match("^%S+$") and chain and chain:match("^%S+$") then
+				local line = { #s[".type"] > 23 and "\tChain6" or "\tChain", tname, chain }
+				local rule = s.rule and tostring(s.rule)
 
-			for i, k in ipairs( {
-				"table", "chain", "target", "protocol", "source", "destination",
-				"inputif", "outputif", "options"
-			} ) do
-				v = sections[s][k]
+				if rule and rule:match("^%S+$") then
+					line[#line+1] = rule
 
-				if type(v) == "string" then
-					if k == "options" then v = luci.util.split( v, "%s+", nil, true ) end
-					search[k] = v
+					local name = s.name and tostring(s.name)
+					if name and name:match("^%S+$") then
+						line[#line+1] = name
+					end
 				end
-			end
 
-			for i, rule in ipairs( ipt:find( search ) ) do
-
-				name = sections[s].name:gsub( "%s+", "_" )
-				if i > 1 then name = name .. "_(" .. i .. ")" end
-
-				str = str .. "\tChain " .. rule.table .. " " .. rule.chain .. " " .. rule.index .. ' "' .. name .. "\"\n"
+				str = str .. table.concat(line, " ") .. "\n"
 			end
 		end
 	end

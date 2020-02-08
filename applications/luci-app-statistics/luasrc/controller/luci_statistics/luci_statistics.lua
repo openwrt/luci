@@ -9,66 +9,12 @@ function index()
 	require("nixio.fs")
 	require("luci.util")
 	require("luci.statistics.datatree")
-	require("luci.jsonc")
-
-	-- override entry(): check for existence <plugin>.so where <plugin> is derived from the called path
-	function _entry( path, ... )
-		local file = path[5] or path[4]
-		if nixio.fs.access( "/usr/lib/collectd/" .. file .. ".so" ) then
-			entry( path, ... )
-		end
-	end
-
-	local labels = {
-		s_output	= _("Output plugins"),
-		s_general	= _("General plugins"),
-		s_network	= _("Network plugins"),
-	}
-
-	-- our collectd menu
-	local collectd_menu = {
-		output  = { },
-		general = { },
-		network = { }
-	}
-
-	local plugin_dir = "/usr/share/luci/statistics/plugins/"
-	for filename in nixio.fs.dir(plugin_dir) do
-		local plugin_def = luci.jsonc.parse(nixio.fs.readfile(plugin_dir .. filename))
-		if type(plugin_def) == "table" then
-			local name = filename:gsub("%.json", "")
-			table.insert(collectd_menu[plugin_def.category], name)
-			labels[name] = plugin_def.title
-		end
-	end
 
 	-- create toplevel menu nodes
 	local st = entry({"admin", "statistics"}, template("admin_statistics/index"), _("Statistics"), 80)
 	st.index = true
 
-	entry({"admin", "statistics", "collectd"}, cbi("luci_statistics/collectd"), _("Setup"), 20).subindex = true
-
-
-	-- populate collectd plugin menu
-	local index = 1
-	for section, plugins in luci.util.kspairs( collectd_menu ) do
-		local e = entry(
-			{ "admin", "statistics", "collectd", section },
-			firstchild(), labels["s_"..section], index * 10
-		)
-
-		e.index = true
-
-		for j, plugin in luci.util.vspairs( plugins ) do
-			_entry(
-				{ "admin", "statistics", "collectd", section, plugin },
-				cbi("luci_statistics/" .. plugin ),
-				labels[plugin] or plugin, j * 10
-			)
-		end
-
-		index = index + 1
-	end
+	entry({"admin", "statistics", "collectd"}, view("statistics/collectd"), _("Setup"), 20).subindex = true
 
 	-- output views
 	local page = entry( { "admin", "statistics", "graph" }, template("admin_statistics/index"), _("Graphs"), 10)
