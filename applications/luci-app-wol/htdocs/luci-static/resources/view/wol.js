@@ -1,4 +1,5 @@
 'use strict';
+'require uci';
 'require fs';
 'require ui';
 'require rpc';
@@ -18,7 +19,8 @@ return L.view.extend({
 		return Promise.all([
 			L.resolveDefault(fs.stat('/usr/bin/etherwake')),
 			L.resolveDefault(fs.stat('/usr/bin/wol')),
-			this.callHostHints()
+			this.callHostHints(),
+			uci.load('etherwake')
 		]);
 	},
 
@@ -48,6 +50,7 @@ return L.view.extend({
 			o = s.option(widgets.DeviceSelect, 'iface', _('Network interface to use'),
 				_('Specifies the interface the WoL packet is sent on'));
 
+			o.default = uci.get('etherwake', 'setup', 'interface');
 			o.rmempty = false;
 			o.noaliases = true;
 			o.noinactive = true;
