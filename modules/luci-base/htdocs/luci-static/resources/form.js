@@ -1893,7 +1893,7 @@ var CBIButtonValue = CBIValue.extend({
 					'click': L.ui.createHandlerFn(this, this.onclick || function(ev) {
 						ev.currentTarget.parentNode.nextElementSibling.value = value;
 						return this.map.save();
-					})
+					}, section_id)
 				}, [ btn_title ])
 			]);
 		else
