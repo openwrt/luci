@@ -1283,14 +1283,14 @@ rpc_luci_get_host_hints_uci(struct reply_context *rctx)
 		ptr.option = "ip";
 		ptr.o = NULL;
 
-		if (uci_lookup_ptr(uci, &ptr, NULL, true) || ptr.o == NULL)
-			continue;
+		if (!uci_lookup_ptr(uci, &ptr, NULL, true) && ptr.o != NULL &&
+			ptr.o->type != UCI_TYPE_STRING)
+			n = ptr.o->v.string;
+		else
+			n = NULL;
 
-		if (ptr.o->type != UCI_TYPE_STRING)
-			continue;
-
-		if (inet_pton(AF_INET, ptr.o->v.string, &in) != 1)
-			continue;
+		if (!n || inet_pton(AF_INET, n, &in) != 1)
+			in.s_addr = 0;
 
 		ptr.option = "name";
 		ptr.o = NULL;
@@ -1316,7 +1316,7 @@ rpc_luci_get_host_hints_uci(struct reply_context *rctx)
 				if (!hint)
 					continue;
 
-				if (hint->ip.s_addr == 0)
+				if (hint->ip.s_addr == 0 && in.s_addr != 0)
 					hint->ip = in;
 
 				if (n && !hint->hostname)
@@ -1330,7 +1330,7 @@ rpc_luci_get_host_hints_uci(struct reply_context *rctx)
 				if (!hint)
 					continue;
 
-				if (hint->ip.s_addr == 0)
+				if (hint->ip.s_addr == 0 && in.s_addr != 0)
 					hint->ip = in;
 
 				if (n && !hint->hostname)
