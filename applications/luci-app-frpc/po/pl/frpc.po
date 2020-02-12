@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2020-02-09 15:51+0000\n"
+"PO-Revision-Date: 2020-02-12 11:01+0000\n"
 "Last-Translator: Marcin Net <marcin.net@linux.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsfrpc/pl/>\n"
@@ -247,6 +247,9 @@ msgid ""
 "OS environments pass to frp for config file template, see <a href=\"https://"
 "github.com/fatedier/frp#configuration-file-template\">frp README</a>"
 msgstr ""
+"Środowiska systemu operacyjnego przechodzą do frp w celu uzyskania szablonu "
+"pliku konfiguracyjnego, patrz <a href=\"https://github.com/fatedier/frp"
+"#configuration-file-template\"> frp README </a>"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:32
 msgid "Protocol"
@@ -258,6 +261,9 @@ msgid ""
 "Valid values are \"tcp\", \"kcp\", and \"websocket\".<br>By default, this "
 "value is \"tcp\"."
 msgstr ""
+"Protokół określa protokół używany podczas interakcji z serwerem. Prawidłowe "
+"wartości to \"tcp\", \"kcp\" i \"websocket\". <br> Domyślnie ta wartość to \""
+"tcp\"."
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:137
 msgid "Proxy Settings"
@@ -274,6 +280,8 @@ msgid ""
 "\"udp\", \"http\", \"https\", \"stcp\", and \"xtcp\".<br>By default, this "
 "value is \"tcp\"."
 msgstr ""
+"ProxyType określa typ tego proxy. Prawidłowe wartości to \"tcp\", \"udp\", \""
+"http\", \"https\", \"stcp\" i \"xtcp\". <br> Domyślnie ta wartość to \"tcp\"."
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:47
 msgid "Remote port"
@@ -355,6 +363,10 @@ msgid ""
 "must have TCP multiplexing enabled as well.<br>By default, this value is "
 "true."
 msgstr ""
+"TcpMux przełącza multipleksowanie strumienia TCP. Pozwala to wielu żądaniom "
+"klienta na współużytkowanie jednego połączenia TCP. Jeśli ta wartość jest "
+"prawdą, serwer musi również mieć włączone multipleksowanie TCP. <br> "
+"Domyślnie ta wartość to true."
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:23
 msgid "Token"
@@ -366,12 +378,17 @@ msgid ""
 "the server. The server must have a matching token for authorization to "
 "succeed. <br>By default, this value is \"\"."
 msgstr ""
+"Token określa token autoryzacji używany do tworzenia kluczy, które mają "
+"zostać wysłane na serwer. Serwer musi mieć pasujący token, aby autoryzacja "
+"zakończyła się powodzeniem. <br> Domyślnie ta wartość to \"\"."
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:41
 msgid ""
 "UseCompression controls whether or not communication with the server will be "
 "compressed.<br>By default, this value is false."
 msgstr ""
+"UseCompression kontroluje, czy komunikacja z serwerem będzie kompresowana. "
+"<br> Domyślnie ta wartość to false."
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:40
 msgid ""
@@ -379,6 +396,9 @@ msgid ""
 "encrypted. Encryption is done using the tokens supplied in the server and "
 "client configuration.<br>By default, this value is false."
 msgstr ""
+"UseEncryption kontroluje, czy komunikacja z serwerem będzie szyfrowana. "
+"Szyfrowanie odbywa się przy użyciu tokenów dostarczonych w konfiguracji "
+"serwera i klienta. <br> Domyślnie ta wartość to false."
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:30
 msgid "User"
@@ -390,11 +410,15 @@ msgid ""
 "clients. If this value is not \"\", proxy names will automatically be "
 "changed to \"{user}.{proxy_name}\".<br>By default, this value is \"\"."
 msgstr ""
+"Użytkownik określa prefiks dla nazw proxy, aby odróżnić je od innych "
+"klientów. Jeśli ta wartość nie jest \"\", nazwy proxy zostaną automatycznie "
+"zmienione na \"{użytkownik}. {Nazwa_ proxy}}. <br> <br> Domyślnie ta wartość "
+"to \"\"."
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:120
 #: applications/luci-app-frpc/root/usr/share/luci/menu.d/luci-app-frpc.json:3
 msgid "frp Client"
-msgstr ""
+msgstr "Klient frp"
 
 #~ msgid "Headers"
 #~ msgstr "Nagłówki"
