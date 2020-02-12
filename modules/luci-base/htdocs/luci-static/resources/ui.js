@@ -3293,6 +3293,10 @@ return L.Class.extend(/** @lends LuCI.ui.prototype */ {
 				this.setActiveTabId(panes[selected], selected);
 			}
 
+			panes[selected].dispatchEvent(new CustomEvent('cbi-tab-active', {
+				detail: { tab: panes[selected].getAttribute('data-tab') }
+			}));
+
 			this.updateTabs(group);
 		},
 
@@ -3420,6 +3424,7 @@ return L.Class.extend(/** @lends LuCI.ui.prototype */ {
 				if (L.dom.matches(pane, '[data-tab]')) {
 					if (pane.getAttribute('data-tab') === name) {
 						pane.setAttribute('data-tab-active', 'true');
+						pane.dispatchEvent(new CustomEvent('cbi-tab-active', { detail: { tab: name } }));
 						L.ui.tabs.setActiveTabId(pane, index);
 					}
 					else {
