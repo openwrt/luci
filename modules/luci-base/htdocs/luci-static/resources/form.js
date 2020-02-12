@@ -1894,7 +1894,10 @@ var CBIButtonValue = CBIValue.extend({
 			L.dom.content(outputEl, [
 				E('button', {
 					'class': 'cbi-button cbi-button-%s'.format(this.inputstyle || 'button'),
-					'click': L.ui.createHandlerFn(this, this.onclick || function(ev) {
+					'click': L.ui.createHandlerFn(this, function(section_id, ev) {
+						if (this.onclick)
+							return this.onclick(ev, section_id);
+
 						ev.currentTarget.parentNode.nextElementSibling.value = value;
 						return this.map.save();
 					}, section_id)
