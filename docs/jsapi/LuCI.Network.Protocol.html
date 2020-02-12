@@ -74,6 +74,8 @@
             
                 <li data-name="LuCI#location"><a href="LuCI.html#location">location</a></li>
             
+                <li data-name="LuCI#media"><a href="LuCI.html#media">media</a></li>
+            
                 <li data-name="LuCI#path"><a href="LuCI.html#path">path</a></li>
             
                 <li data-name="LuCI#poll"><a href="LuCI.html#poll">poll</a></li>
@@ -220,11 +222,15 @@
             
                 <li data-name="LuCI.fs#exec"><a href="LuCI.fs.html#exec">exec</a></li>
             
+                <li data-name="LuCI.fs#exec_direct"><a href="LuCI.fs.html#exec_direct">exec_direct</a></li>
+            
                 <li data-name="LuCI.fs#lines"><a href="LuCI.fs.html#lines">lines</a></li>
             
                 <li data-name="LuCI.fs#list"><a href="LuCI.fs.html#list">list</a></li>
             
                 <li data-name="LuCI.fs#read"><a href="LuCI.fs.html#read">read</a></li>
+            
+                <li data-name="LuCI.fs#read_direct"><a href="LuCI.fs.html#read_direct">read_direct</a></li>
             
                 <li data-name="LuCI.fs#remove"><a href="LuCI.fs.html#remove">remove</a></li>
             
@@ -864,6 +870,8 @@
             
             <span class="subtitle">Methods</span>
             
+                <li data-name="LuCI.Response#blob"><a href="LuCI.Response.html#blob">blob</a></li>
+            
                 <li data-name="LuCI.Response#clone"><a href="LuCI.Response.html#clone">clone</a></li>
             
                 <li data-name="LuCI.Response#json"><a href="LuCI.Response.html#json">json</a></li>
@@ -1103,7 +1111,7 @@ subclasses which describe logical UCI networks defined by <code>config interface
     
         
         <div class="tag-source">
-            <a href="network.js.html">network.js</a>, <a href="network.js.html#line1850">line 1850</a>
+            <a href="network.js.html">network.js</a>, <a href="network.js.html#line1854">line 1854</a>
         </div>
         
     </div>
@@ -1188,7 +1196,7 @@ subclasses which describe logical UCI networks defined by <code>config interface
     
         
         <div class="tag-source">
-            <a href="network.js.html">network.js</a>, <a href="network.js.html#line2439">line 2439</a>
+            <a href="network.js.html">network.js</a>, <a href="network.js.html#line2443">line 2443</a>
         </div>
         
     </div>
@@ -1349,7 +1357,7 @@ interface or if the logical interface is virtual.</td>
     
         
         <div class="tag-source">
-            <a href="network.js.html">network.js</a>, <a href="network.js.html#line2608">line 2608</a>
+            <a href="network.js.html">network.js</a>, <a href="network.js.html#line2612">line 2612</a>
         </div>
         
     </div>
@@ -1510,7 +1518,7 @@ device or <code>false</code> if not.</td>
     
         
         <div class="tag-source">
-            <a href="network.js.html">network.js</a>, <a href="network.js.html#line2466">line 2466</a>
+            <a href="network.js.html">network.js</a>, <a href="network.js.html#line2470">line 2470</a>
         </div>
         
     </div>
@@ -1671,7 +1679,7 @@ interface or if the logical interface is virtual.</td>
     
         
         <div class="tag-source">
-            <a href="network.js.html">network.js</a>, <a href="network.js.html#line1883">line 1883</a>
+            <a href="network.js.html">network.js</a>, <a href="network.js.html#line1887">line 1887</a>
         </div>
         
     </div>
@@ -1823,7 +1831,7 @@ not found.</td>
     
         
         <div class="tag-source">
-            <a href="network.js.html">network.js</a>, <a href="network.js.html#line2493">line 2493</a>
+            <a href="network.js.html">network.js</a>, <a href="network.js.html#line2497">line 2497</a>
         </div>
         
     </div>
@@ -1925,7 +1933,7 @@ expected Linux network device according to the configuration.</td>
     
         
         <div class="tag-source">
-            <a href="network.js.html">network.js</a>, <a href="network.js.html#line2554">line 2554</a>
+            <a href="network.js.html">network.js</a>, <a href="network.js.html#line2558">line 2558</a>
         </div>
         
     </div>
@@ -2032,7 +2040,7 @@ virtual and not a bridge.</td>
     
         
         <div class="tag-source">
-            <a href="network.js.html">network.js</a>, <a href="network.js.html#line2208">line 2208</a>
+            <a href="network.js.html">network.js</a>, <a href="network.js.html#line2212">line 2212</a>
         </div>
         
     </div>
@@ -2133,7 +2141,7 @@ protocol backend.</td>
     
         
         <div class="tag-source">
-            <a href="network.js.html">network.js</a>, <a href="network.js.html#line2120">line 2120</a>
+            <a href="network.js.html">network.js</a>, <a href="network.js.html#line2124">line 2124</a>
         </div>
         
     </div>
@@ -2234,7 +2242,7 @@ protocol backend.</td>
     
         
         <div class="tag-source">
-            <a href="network.js.html">network.js</a>, <a href="network.js.html#line2252">line 2252</a>
+            <a href="network.js.html">network.js</a>, <a href="network.js.html#line2256">line 2256</a>
         </div>
         
     </div>
@@ -2342,7 +2350,7 @@ error code in case no translation can be found.</p>
     
         
         <div class="tag-source">
-            <a href="network.js.html">network.js</a>, <a href="network.js.html#line2003">line 2003</a>
+            <a href="network.js.html">network.js</a>, <a href="network.js.html#line2007">line 2007</a>
         </div>
         
     </div>
@@ -2446,7 +2454,7 @@ if it isn't applicable to the associated protocol.</td>
     
         
         <div class="tag-source">
-            <a href="network.js.html">network.js</a>, <a href="network.js.html#line2188">line 2188</a>
+            <a href="network.js.html">network.js</a>, <a href="network.js.html#line2192">line 2192</a>
         </div>
         
     </div>
@@ -2548,7 +2556,7 @@ default route or <code>null</code> if no default route was found.</td>
     
         
         <div class="tag-source">
-            <a href="network.js.html">network.js</a>, <a href="network.js.html#line2100">line 2100</a>
+            <a href="network.js.html">network.js</a>, <a href="network.js.html#line2104">line 2104</a>
         </div>
         
     </div>
@@ -2650,7 +2658,7 @@ default route or <code>null</code> if no default route was found.</td>
     
         
         <div class="tag-source">
-            <a href="network.js.html">network.js</a>, <a href="network.js.html#line1948">line 1948</a>
+            <a href="network.js.html">network.js</a>, <a href="network.js.html#line1952">line 1952</a>
         </div>
         
     </div>
@@ -2752,7 +2760,7 @@ default route or <code>null</code> if no default route was found.</td>
     
         
         <div class="tag-source">
-            <a href="network.js.html">network.js</a>, <a href="network.js.html#line1908">line 1908</a>
+            <a href="network.js.html">network.js</a>, <a href="network.js.html#line1912">line 1912</a>
         </div>
         
     </div>
@@ -2856,7 +2864,7 @@ it could not be determined.</td>
     
         
         <div class="tag-source">
-            <a href="network.js.html">network.js</a>, <a href="network.js.html#line2139">line 2139</a>
+            <a href="network.js.html">network.js</a>, <a href="network.js.html#line2143">line 2143</a>
         </div>
         
     </div>
@@ -2960,7 +2968,7 @@ in CIDR notation or <code>null</code> if no IPv6 addresses were set.</td>
     
         
         <div class="tag-source">
-            <a href="network.js.html">network.js</a>, <a href="network.js.html#line2161">line 2161</a>
+            <a href="network.js.html">network.js</a>, <a href="network.js.html#line2165">line 2165</a>
         </div>
         
     </div>
@@ -3062,7 +3070,7 @@ follows the order of the addresses in <code>ubus</code> runtime information.</td
     
         
         <div class="tag-source">
-            <a href="network.js.html">network.js</a>, <a href="network.js.html#line2227">line 2227</a>
+            <a href="network.js.html">network.js</a>, <a href="network.js.html#line2231">line 2231</a>
         </div>
         
     </div>
@@ -3166,7 +3174,7 @@ handler or <code>null</code> if no prefix is present.</td>
     
         
         <div class="tag-source">
-            <a href="network.js.html">network.js</a>, <a href="network.js.html#line2055">line 2055</a>
+            <a href="network.js.html">network.js</a>, <a href="network.js.html#line2059">line 2059</a>
         </div>
         
     </div>
@@ -3270,7 +3278,7 @@ or <code>null</code> if no IPv4 addresses were set.</td>
     
         
         <div class="tag-source">
-            <a href="network.js.html">network.js</a>, <a href="network.js.html#line2068">line 2068</a>
+            <a href="network.js.html">network.js</a>, <a href="network.js.html#line2072">line 2072</a>
         </div>
         
     </div>
@@ -3372,7 +3380,7 @@ follows the order of the addresses in <code>ubus</code> runtime information.</td
     
         
         <div class="tag-source">
-            <a href="network.js.html">network.js</a>, <a href="network.js.html#line2526">line 2526</a>
+            <a href="network.js.html">network.js</a>, <a href="network.js.html#line2530">line 2530</a>
         </div>
         
     </div>
@@ -3474,7 +3482,7 @@ network device currently associated with the logical interface.</td>
     
         
         <div class="tag-source">
-            <a href="network.js.html">network.js</a>, <a href="network.js.html#line2539">line 2539</a>
+            <a href="network.js.html">network.js</a>, <a href="network.js.html#line2543">line 2543</a>
         </div>
         
     </div>
@@ -3576,7 +3584,7 @@ network device currently associated with the logical interface.</td>
     
         
         <div class="tag-source">
-            <a href="network.js.html">network.js</a>, <a href="network.js.html#line2023">line 2023</a>
+            <a href="network.js.html">network.js</a>, <a href="network.js.html#line2027">line 2027</a>
         </div>
         
     </div>
@@ -3677,7 +3685,7 @@ routes spawned by the associated logical interface.</td>
     
         
         <div class="tag-source">
-            <a href="network.js.html">network.js</a>, <a href="network.js.html#line1978">line 1978</a>
+            <a href="network.js.html">network.js</a>, <a href="network.js.html#line1982">line 1982</a>
         </div>
         
     </div>
@@ -3777,7 +3785,7 @@ routes spawned by the associated logical interface.</td>
     
         
         <div class="tag-source">
-            <a href="network.js.html">network.js</a>, <a href="network.js.html#line2086">line 2086</a>
+            <a href="network.js.html">network.js</a>, <a href="network.js.html#line2090">line 2090</a>
         </div>
         
     </div>
@@ -3881,7 +3889,7 @@ protocol handler or <code>null</code> if no IPv4 addresses were set.</td>
     
         
         <div class="tag-source">
-            <a href="network.js.html">network.js</a>, <a href="network.js.html#line2292">line 2292</a>
+            <a href="network.js.html">network.js</a>, <a href="network.js.html#line2296">line 2296</a>
         </div>
         
     </div>
@@ -3983,7 +3991,7 @@ function, e.g. <code>odhcp6c</code> for the <code>dhcpv6</code> prototocol.</td>
     
         
         <div class="tag-source">
-            <a href="network.js.html">network.js</a>, <a href="network.js.html#line1934">line 1934</a>
+            <a href="network.js.html">network.js</a>, <a href="network.js.html#line1938">line 1938</a>
         </div>
         
     </div>
@@ -4086,7 +4094,7 @@ function, e.g. <code>odhcp6c</code> for the <code>dhcpv6</code> prototocol.</td>
     
         
         <div class="tag-source">
-            <a href="network.js.html">network.js</a>, <a href="network.js.html#line1968">line 1968</a>
+            <a href="network.js.html">network.js</a>, <a href="network.js.html#line1972">line 1972</a>
         </div>
         
     </div>
@@ -4193,7 +4201,7 @@ interface or <code>null</code> if no <code>type</code> option is set.</td>
     
         
         <div class="tag-source">
-            <a href="network.js.html">network.js</a>, <a href="network.js.html#line1988">line 1988</a>
+            <a href="network.js.html">network.js</a>, <a href="network.js.html#line1992">line 1992</a>
         </div>
         
     </div>
@@ -4293,7 +4301,7 @@ interface or <code>null</code> if no <code>type</code> option is set.</td>
     
         
         <div class="tag-source">
-            <a href="network.js.html">network.js</a>, <a href="network.js.html#line2039">line 2039</a>
+            <a href="network.js.html">network.js</a>, <a href="network.js.html#line2043">line 2043</a>
         </div>
         
     </div>
@@ -4401,7 +4409,7 @@ handler didn't request a zone.</td>
     
         
         <div class="tag-source">
-            <a href="network.js.html">network.js</a>, <a href="network.js.html#line2380">line 2380</a>
+            <a href="network.js.html">network.js</a>, <a href="network.js.html#line2384">line 2384</a>
         </div>
         
     </div>
@@ -4508,7 +4516,7 @@ is an alias or <code>null</code> if it is not an alias interface.</td>
     
         
         <div class="tag-source">
-            <a href="network.js.html">network.js</a>, <a href="network.js.html#line2277">line 2277</a>
+            <a href="network.js.html">network.js</a>, <a href="network.js.html#line2281">line 2281</a>
         </div>
         
     </div>
@@ -4610,7 +4618,7 @@ or <code>false</code> when the logical interface is no bridge.</td>
     
         
         <div class="tag-source">
-            <a href="network.js.html">network.js</a>, <a href="network.js.html#line2365">line 2365</a>
+            <a href="network.js.html">network.js</a>, <a href="network.js.html#line2369">line 2369</a>
         </div>
         
     </div>
@@ -4715,7 +4723,7 @@ or not (<code>false</code>).</td>
     
         
         <div class="tag-source">
-            <a href="network.js.html">network.js</a>, <a href="network.js.html#line2400">line 2400</a>
+            <a href="network.js.html">network.js</a>, <a href="network.js.html#line2404">line 2404</a>
         </div>
         
     </div>
@@ -4816,7 +4824,7 @@ has no network devices attached.</p>
     
         
         <div class="tag-source">
-            <a href="network.js.html">network.js</a>, <a href="network.js.html#line2349">line 2349</a>
+            <a href="network.js.html">network.js</a>, <a href="network.js.html#line2353">line 2353</a>
         </div>
         
     </div>
@@ -4925,7 +4933,7 @@ or not (<code>false</code>).</td>
     
         
         <div class="tag-source">
-            <a href="network.js.html">network.js</a>, <a href="network.js.html#line2308">line 2308</a>
+            <a href="network.js.html">network.js</a>, <a href="network.js.html#line2312">line 2312</a>
         </div>
         
     </div>
@@ -5029,7 +5037,7 @@ returns <code>true</code>.</p>
     
         
         <div class="tag-source">
-            <a href="network.js.html">network.js</a>, <a href="network.js.html#line2422">line 2422</a>
+            <a href="network.js.html">network.js</a>, <a href="network.js.html#line2426">line 2426</a>
         </div>
         
     </div>
@@ -5129,7 +5137,7 @@ returns <code>true</code>.</p>
     
         
         <div class="tag-source">
-            <a href="network.js.html">network.js</a>, <a href="network.js.html#line2328">line 2328</a>
+            <a href="network.js.html">network.js</a>, <a href="network.js.html#line2332">line 2332</a>
         </div>
         
     </div>
@@ -5236,7 +5244,7 @@ dynamic interfaces (<code>true</code>) or not (<code>false</code>).</td>
     
         
         <div class="tag-source">
-            <a href="network.js.html">network.js</a>, <a href="network.js.html#line1897">line 1897</a>
+            <a href="network.js.html">network.js</a>, <a href="network.js.html#line1901">line 1901</a>
         </div>
         
     </div>
@@ -5390,7 +5398,7 @@ configuration.</p></td>
         
 
         <footer>
-            Documentation generated by <a target="_blank" href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Thu Nov 07 2019 12:36:06 GMT+0100 (Central European Standard Time)
+            Documentation generated by <a target="_blank" href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Wed Feb 12 2020 11:56:59 GMT+0100 (Central European Standard Time)
         </footer>
     </div>
 </div>

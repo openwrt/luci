@@ -74,6 +74,8 @@
             
                 <li data-name="LuCI#location"><a href="LuCI.html#location">location</a></li>
             
+                <li data-name="LuCI#media"><a href="LuCI.html#media">media</a></li>
+            
                 <li data-name="LuCI#path"><a href="LuCI.html#path">path</a></li>
             
                 <li data-name="LuCI#poll"><a href="LuCI.html#poll">poll</a></li>
@@ -220,11 +222,15 @@
             
                 <li data-name="LuCI.fs#exec"><a href="LuCI.fs.html#exec">exec</a></li>
             
+                <li data-name="LuCI.fs#exec_direct"><a href="LuCI.fs.html#exec_direct">exec_direct</a></li>
+            
                 <li data-name="LuCI.fs#lines"><a href="LuCI.fs.html#lines">lines</a></li>
             
                 <li data-name="LuCI.fs#list"><a href="LuCI.fs.html#list">list</a></li>
             
                 <li data-name="LuCI.fs#read"><a href="LuCI.fs.html#read">read</a></li>
+            
+                <li data-name="LuCI.fs#read_direct"><a href="LuCI.fs.html#read_direct">read_direct</a></li>
             
                 <li data-name="LuCI.fs#remove"><a href="LuCI.fs.html#remove">remove</a></li>
             
@@ -864,6 +870,8 @@
             
             <span class="subtitle">Methods</span>
             
+                <li data-name="LuCI.Response#blob"><a href="LuCI.Response.html#blob">blob</a></li>
+            
                 <li data-name="LuCI.Response#clone"><a href="LuCI.Response.html#clone">clone</a></li>
             
                 <li data-name="LuCI.Response#json"><a href="LuCI.Response.html#json">json</a></li>
@@ -1104,7 +1112,7 @@ external JavaScript, use <code>L.require(&quot;fs&quot;).then(...)</code>.</p></
     
         
         <div class="tag-source">
-            <a href="fs.js.html">fs.js</a>, <a href="fs.js.html#line111">line 111</a>
+            <a href="fs.js.html">fs.js</a>, <a href="fs.js.html#line145">line 145</a>
         </div>
         
     </div>
@@ -1189,7 +1197,7 @@ external JavaScript, use <code>L.require(&quot;fs&quot;).then(...)</code>.</p></
     
         
         <div class="tag-source">
-            <a href="fs.js.html">fs.js</a>, <a href="fs.js.html#line232">line 232</a>
+            <a href="fs.js.html">fs.js</a>, <a href="fs.js.html#line266">line 266</a>
         </div>
         
     </div>
@@ -1400,6 +1408,284 @@ results or rejecting with an error stating the failure reason.</td>
             
 <dt>
     <div class="nameContainer">
+        <h4 class="name" id="exec_direct">
+            
+            exec_direct<span class="signature">(command, <span class="optional">params</span>, <span class="optional">type</span>, <span class="optional">latin1</span>)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{Promise.&lt;*>}</span>
+        </h4>
+    
+        
+        <div class="tag-source">
+            <a href="fs.js.html">fs.js</a>, <a href="fs.js.html#line403">line 403</a>
+        </div>
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Execute the specified command, bypassing ubus.</p>
+<p>Note: The <code>command</code> must be either the path to an executable,
+or a basename without arguments in which case it will be searched
+in $PATH. If specified, the values given in <code>params</code> will be passed
+as arguments to the command.</p>
+<p>This function will invoke the requested commands through the cgi-io
+helper applet at <code>/cgi-bin/cgi-exec</code> which bypasses the ubus rpc
+transport. This is useful to fetch large command outputs which might
+exceed the ubus message size limits or which contain binary data.</p>
+<p>The cgi-io helper will enforce the same access permission rules as
+the ubus based exec call.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		<th>Default</th>
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>command</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+                <td class="default">
+                
+                </td>
+            
+            
+            <td class="description last">
+                
+                    
+                    
+                        
+                    
+                
+                <p>The command to invoke.</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>params</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;string></span>
+
+
+            
+            </td>
+            
+            
+                <td class="default">
+                
+                </td>
+            
+            
+            <td class="description last">
+                
+                    
+                        <span class="optional">optional</span>
+                    
+                    
+                        
+                    
+                
+                <p>The arguments to pass to the command.</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>type</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+                <td class="default">
+                
+                    text
+                
+                </td>
+            
+            
+            <td class="description last">
+                
+                    
+                        <span class="optional">optional</span>
+                    
+                    
+                        
+                    
+                
+                <p>The expected output type of the invoked program. Valid values are
+<code>text</code> to interpret the output as string, <code>json</code> to parse the output
+as JSON or <code>blob</code> to return the output as Blob instance.</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>latin1</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+            
+            
+                <td class="default">
+                
+                    false
+                
+                </td>
+            
+            
+            <td class="description last">
+                
+                    
+                        <span class="optional">optional</span>
+                    
+                    
+                        
+                    
+                
+                <p>Whether to encode the command line as Latin1 instead of UTF-8. This
+is usually not needed but can be useful for programs that cannot
+handle UTF-8 input.</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    
+        <tr>
+            
+            <td class="type">
+            
+                        Promise.&lt;*>
+                        
+                    
+            </td>
+            <td class="description last">Returns a promise resolving with the command stdout output interpreted
+according to the specified type or rejecting with an error stating the
+failure reason.</td>
+        </tr>
+    
+    </tbody>
+</table>
+
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
         <h4 class="name" id="lines">
             
             lines<span class="signature">(path)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{Promise.&lt;Array.&lt;string>>}</span>
@@ -1407,7 +1693,7 @@ results or rejecting with an error stating the failure reason.</td>
     
         
         <div class="tag-source">
-            <a href="fs.js.html">fs.js</a>, <a href="fs.js.html#line281">line 281</a>
+            <a href="fs.js.html">fs.js</a>, <a href="fs.js.html#line315">line 315</a>
         </div>
         
     </div>
@@ -1557,7 +1843,7 @@ of the given file or <code>[]</code> on failure.</td>
     
         
         <div class="tag-source">
-            <a href="fs.js.html">fs.js</a>, <a href="fs.js.html#line132">line 132</a>
+            <a href="fs.js.html">fs.js</a>, <a href="fs.js.html#line166">line 166</a>
         </div>
         
     </div>
@@ -1703,7 +1989,7 @@ rejecting with an error stating the failure reason.</td>
     
         
         <div class="tag-source">
-            <a href="fs.js.html">fs.js</a>, <a href="fs.js.html#line161">line 161</a>
+            <a href="fs.js.html">fs.js</a>, <a href="fs.js.html#line195">line 195</a>
         </div>
         
     </div>
@@ -1843,6 +2129,208 @@ rejecting with an error stating the failure reason.</td>
             
 <dt>
     <div class="nameContainer">
+        <h4 class="name" id="read_direct">
+            
+            read_direct<span class="signature">(path, <span class="optional">type</span>)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{Promise.&lt;*>}</span>
+        </h4>
+    
+        
+        <div class="tag-source">
+            <a href="fs.js.html">fs.js</a>, <a href="fs.js.html#line356">line 356</a>
+        </div>
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Read the contents of the given file and return them, bypassing ubus.</p>
+<p>This function will read the requested file through the cgi-io
+helper applet at <code>/cgi-bin/cgi-download</code> which bypasses the ubus rpc
+transport. This is useful to fetch large file contents which might
+exceed the ubus message size limits or which contain binary data.</p>
+<p>The cgi-io helper will enforce the same access permission rules as
+the ubus based read call.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		<th>Default</th>
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>path</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+                <td class="default">
+                
+                </td>
+            
+            
+            <td class="description last">
+                
+                    
+                    
+                        
+                    
+                
+                <p>The file path to read.</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>type</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+                <td class="default">
+                
+                    text
+                
+                </td>
+            
+            
+            <td class="description last">
+                
+                    
+                        <span class="optional">optional</span>
+                    
+                    
+                        
+                    
+                
+                <p>The expected type of read file contents. Valid values are <code>text</code> to
+interpret the contents as string, <code>json</code> to parse the contents as JSON
+or <code>blob</code> to return the contents as Blob instance.</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    
+        <tr>
+            
+            <td class="type">
+            
+                        Promise.&lt;*>
+                        
+                    
+            </td>
+            <td class="description last">Returns a promise resolving with the file contents interpreted according
+to the specified type or rejecting with an error stating the failure
+reason.</td>
+        </tr>
+    
+    </tbody>
+</table>
+
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
         <h4 class="name" id="remove">
             
             remove<span class="signature">(The)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{Promise.&lt;number>}</span>
@@ -1850,7 +2338,7 @@ rejecting with an error stating the failure reason.</td>
     
         
         <div class="tag-source">
-            <a href="fs.js.html">fs.js</a>, <a href="fs.js.html#line203">line 203</a>
+            <a href="fs.js.html">fs.js</a>, <a href="fs.js.html#line237">line 237</a>
         </div>
         
     </div>
@@ -1996,7 +2484,7 @@ the failure reason.</td>
     
         
         <div class="tag-source">
-            <a href="fs.js.html">fs.js</a>, <a href="fs.js.html#line146">line 146</a>
+            <a href="fs.js.html">fs.js</a>, <a href="fs.js.html#line180">line 180</a>
         </div>
         
     </div>
@@ -2142,7 +2630,7 @@ rejecting with an error stating the failure reason.</td>
     
         
         <div class="tag-source">
-            <a href="fs.js.html">fs.js</a>, <a href="fs.js.html#line260">line 260</a>
+            <a href="fs.js.html">fs.js</a>, <a href="fs.js.html#line294">line 294</a>
         </div>
         
     </div>
@@ -2294,7 +2782,7 @@ on failure.</td>
     
         
         <div class="tag-source">
-            <a href="fs.js.html">fs.js</a>, <a href="fs.js.html#line187">line 187</a>
+            <a href="fs.js.html">fs.js</a>, <a href="fs.js.html#line221">line 221</a>
         </div>
         
     </div>
@@ -2983,7 +3471,7 @@ the failure reason.</td>
         
 
         <footer>
-            Documentation generated by <a target="_blank" href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Thu Nov 07 2019 12:36:06 GMT+0100 (Central European Standard Time)
+            Documentation generated by <a target="_blank" href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Wed Feb 12 2020 11:56:59 GMT+0100 (Central European Standard Time)
         </footer>
     </div>
 </div>

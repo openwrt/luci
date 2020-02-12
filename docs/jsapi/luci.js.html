@@ -74,6 +74,8 @@
             
                 <li data-name="LuCI#location"><a href="LuCI.html#location">location</a></li>
             
+                <li data-name="LuCI#media"><a href="LuCI.html#media">media</a></li>
+            
                 <li data-name="LuCI#path"><a href="LuCI.html#path">path</a></li>
             
                 <li data-name="LuCI#poll"><a href="LuCI.html#poll">poll</a></li>
@@ -220,11 +222,15 @@
             
                 <li data-name="LuCI.fs#exec"><a href="LuCI.fs.html#exec">exec</a></li>
             
+                <li data-name="LuCI.fs#exec_direct"><a href="LuCI.fs.html#exec_direct">exec_direct</a></li>
+            
                 <li data-name="LuCI.fs#lines"><a href="LuCI.fs.html#lines">lines</a></li>
             
                 <li data-name="LuCI.fs#list"><a href="LuCI.fs.html#list">list</a></li>
             
                 <li data-name="LuCI.fs#read"><a href="LuCI.fs.html#read">read</a></li>
+            
+                <li data-name="LuCI.fs#read_direct"><a href="LuCI.fs.html#read_direct">read_direct</a></li>
             
                 <li data-name="LuCI.fs#remove"><a href="LuCI.fs.html#remove">remove</a></li>
             
@@ -864,6 +870,8 @@
             
             <span class="subtitle">Methods</span>
             
+                <li data-name="LuCI.Response#blob"><a href="LuCI.Response.html#blob">blob</a></li>
+            
                 <li data-name="LuCI.Response#clone"><a href="LuCI.Response.html#clone">clone</a></li>
             
                 <li data-name="LuCI.Response#json"><a href="LuCI.Response.html#json">json</a></li>
@@ -1145,7 +1153,7 @@
 	 * It provides simple means to create subclasses of given classes and
 	 * implements prototypal inheritance.
 	 */
-	var superContext = null, Class = Object.assign(function() {}, {
+	var superContext = {}, classIndex = 0, Class = Object.assign(function() {}, {
 		/**
 		 * Extends this base class with the properties described in
 		 * `properties` and returns a new subclassed Class instance
@@ -1164,8 +1172,9 @@
 		 */
 		extend: function(properties) {
 			var props = {
+				__id__: { value: classIndex },
 				__base__: { value: this.prototype },
-				__name__: { value: properties.__name__ || 'anonymous' }
+				__name__: { value: properties.__name__ || 'anonymous' + classIndex++ }
 			};
 
 			var ClassConstructor = function() {
@@ -1343,15 +1352,21 @@
 			 * superclass method returned `null`.
 			 */
 			super: function(key, callArgs) {
-				for (superContext = Object.getPrototypeOf(superContext ||
-				                                          Object.getPrototypeOf(this));
-				     superContext &amp;&amp; !superContext.hasOwnProperty(key);
-				     superContext = Object.getPrototypeOf(superContext)) { }
-
-				if (!superContext)
+				if (key == null)
 					return null;
 
-				var res = superContext[key];
+				var slotIdx = this.__id__ + '.' + key,
+				    symStack = superContext[slotIdx],
+				    protoCtx = null;
+
+				for (protoCtx = Object.getPrototypeOf(symStack ? symStack[0] : Object.getPrototypeOf(this));
+				     protoCtx != null &amp;&amp; !protoCtx.hasOwnProperty(key);
+				     protoCtx = Object.getPrototypeOf(protoCtx)) {}
+
+				if (protoCtx == null)
+					return null;
+
+				var res = protoCtx[key];
 
 				if (arguments.length > 1) {
 					if (typeof(res) != 'function')
@@ -1360,10 +1375,18 @@
 					if (typeof(callArgs) != 'object')
 						callArgs = this.varargs(arguments, 1);
 
-					res = res.apply(this, callArgs);
-				}
+					if (symStack)
+						symStack.unshift(protoCtx);
+					else
+						superContext[slotIdx] = [ protoCtx ];
 
-				superContext = null;
+					res = res.apply(this, callArgs);
+
+					if (symStack &amp;&amp; symStack.length > 1)
+						symStack.shift(protoCtx);
+					else
+						delete superContext[slotIdx];
+				}
 
 				return res;
 			},
@@ -1512,17 +1535,32 @@
 			/* privates */
 			this.xhr = xhr;
 
-			if (content != null &amp;&amp; typeof(content) == 'object') {
+			if (content instanceof Blob) {
+				this.responseBlob = content;
+				this.responseJSON = null;
+				this.responseText = null;
+			}
+			else if (content != null &amp;&amp; typeof(content) == 'object') {
+				this.responseBlob = null;
 				this.responseJSON = content;
 				this.responseText = null;
 			}
 			else if (content != null) {
+				this.responseBlob = null;
 				this.responseJSON = null;
 				this.responseText = String(content);
 			}
 			else {
 				this.responseJSON = null;
-				this.responseText = xhr.responseText;
+
+				if (xhr.responseType == 'blob') {
+					this.responseBlob = xhr.response;
+					this.responseText = null;
+				}
+				else {
+					this.responseBlob = null;
+					this.responseText = xhr.responseText;
+				}
 			}
 		},
 
@@ -1581,6 +1619,18 @@
 				this.responseText = JSON.stringify(this.responseJSON);
 
 			return this.responseText;
+		},
+
+		/**
+		 * Access the response content as blob.
+		 *
+		 * @instance
+		 * @memberof LuCI.Response
+		 * @returns {Blob}
+		 * The response content as blob.
+		 */
+		blob: function() {
+			return this.responseBlob;
 		}
 	});
 
@@ -1694,6 +1744,11 @@
 		 * @property {boolean} [credentials=false]
 		 * Whether to include credentials such as cookies in the request.
 		 *
+		 * @property {string} [responseType=text]
+		 * Overrides the request response type. Valid values or `text` to
+		 * interpret the response as UTF-8 string or `blob` to handle the
+		 * response as binary `Blob` data.
+		 *
 		 * @property {*} [content]
 		 * Specifies the HTTP message body to send along with the request.
 		 * If the value is a function, it is invoked and the return value
@@ -1779,7 +1834,7 @@
 				else
 					opt.xhr.open(opt.method, opt.url, true);
 
-				opt.xhr.responseType = 'text';
+				opt.xhr.responseType = opt.responseType || 'text';
 
 				if ('overrideMimeType' in opt.xhr)
 					opt.xhr.overrideMimeType('application/octet-stream');
@@ -2255,6 +2310,8 @@
 			if (env.base_url == null)
 				this.error('InternalError', 'Cannot find url of luci.js');
 
+			env.cgi_base = env.scriptname.replace(/\/[^\/]+$/, '');
+
 			Object.assign(this.env, env);
 
 			document.addEventListener('poll-start', function(ev) {
@@ -2571,8 +2628,8 @@
 			if (rpcBaseURL == null) {
 				var rpcFallbackURL = this.url('admin/ubus');
 
-				rpcBaseURL = Request.get('/ubus/').then(function(res) {
-					return (rpcBaseURL = (res.status == 400) ? '/ubus/' : rpcFallbackURL);
+				rpcBaseURL = Request.get(this.env.ubuspath).then(function(res) {
+					return (rpcBaseURL = (res.status == 400) ? L.env.ubuspath : rpcFallbackURL);
 				}, function() {
 					return (rpcBaseURL = rpcFallbackURL);
 				}).then(function(url) {
@@ -2809,6 +2866,28 @@
 		 */
 		resource: function() {
 			return this.path(this.env.resource, arguments);
+		},
+
+		/**
+		 * Construct an URL path relative to the media resource path of the
+		 * LuCI ui (usually `/luci-static/$theme_name`).
+		 *
+		 * The resulting URL is guaranteed to only contain the characters
+		 * `a-z`, `A-Z`, `0-9`, `_`, `.`, `%`, `,`, `;`, and `-` as well
+		 * as `/` for the path separator.
+		 *
+		 * @instance
+		 * @memberof LuCI
+		 *
+		 * @param {string[]} [parts]
+		 * An array of parts to join into an URL path. Parts may contain
+		 * slashes and any of the other characters mentioned above.
+		 *
+		 * @return {string}
+		 * Returns the resulting URL path.
+		 */
+		media: function() {
+			return this.path(this.env.media, arguments);
 		},
 
 		/**
@@ -3909,9 +3988,9 @@
 			 * returned promise runs to completion before the button
 			 * is reenabled.
 			 */
-			handleSaveApply: function(ev) {
+			handleSaveApply: function(ev, mode) {
 				return this.handleSave(ev).then(function() {
-					L.ui.changes.apply(true);
+					L.ui.changes.apply(mode == '0');
 				});
 			},
 
@@ -3983,12 +4062,20 @@
 			addFooter: function() {
 				var footer = E([]);
 
+				var saveApplyBtn = this.handleSaveApply ? new L.ui.ComboButton('0', {
+					0: [ _('Save &amp; Apply') ],
+					1: [ _('Apply unchecked') ]
+				}, {
+					classes: {
+						0: 'cbi-button cbi-button-apply important',
+						1: 'cbi-button cbi-button-negative important'
+					},
+					click: L.ui.createHandlerFn(this, 'handleSaveApply')
+				}).render() : E([]);
+
 				if (this.handleSaveApply || this.handleSave || this.handleReset) {
 					footer.appendChild(E('div', { 'class': 'cbi-page-actions' }, [
-						this.handleSaveApply ? E('button', {
-							'class': 'cbi-button cbi-button-apply',
-							'click': L.ui.createHandlerFn(this, 'handleSaveApply')
-						}, [ _('Save &amp; Apply') ]) : '', ' ',
+						saveApplyBtn, ' ',
 						this.handleSave ? E('button', {
 							'class': 'cbi-button cbi-button-save',
 							'click': L.ui.createHandlerFn(this, 'handleSave')
@@ -4162,7 +4249,7 @@
         
 
         <footer>
-            Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Thu Nov 07 2019 12:36:05 GMT+0100 (Central European Standard Time)
+            Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Wed Feb 12 2020 11:56:59 GMT+0100 (Central European Standard Time)
         </footer>
     </div>
 </div>

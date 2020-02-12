@@ -74,6 +74,8 @@
             
                 <li data-name="LuCI#location"><a href="LuCI.html#location">location</a></li>
             
+                <li data-name="LuCI#media"><a href="LuCI.html#media">media</a></li>
+            
                 <li data-name="LuCI#path"><a href="LuCI.html#path">path</a></li>
             
                 <li data-name="LuCI#poll"><a href="LuCI.html#poll">poll</a></li>
@@ -220,11 +222,15 @@
             
                 <li data-name="LuCI.fs#exec"><a href="LuCI.fs.html#exec">exec</a></li>
             
+                <li data-name="LuCI.fs#exec_direct"><a href="LuCI.fs.html#exec_direct">exec_direct</a></li>
+            
                 <li data-name="LuCI.fs#lines"><a href="LuCI.fs.html#lines">lines</a></li>
             
                 <li data-name="LuCI.fs#list"><a href="LuCI.fs.html#list">list</a></li>
             
                 <li data-name="LuCI.fs#read"><a href="LuCI.fs.html#read">read</a></li>
+            
+                <li data-name="LuCI.fs#read_direct"><a href="LuCI.fs.html#read_direct">read_direct</a></li>
             
                 <li data-name="LuCI.fs#remove"><a href="LuCI.fs.html#remove">remove</a></li>
             
@@ -864,6 +870,8 @@
             
             <span class="subtitle">Methods</span>
             
+                <li data-name="LuCI.Response#blob"><a href="LuCI.Response.html#blob">blob</a></li>
+            
                 <li data-name="LuCI.Response#clone"><a href="LuCI.Response.html#clone">clone</a></li>
             
                 <li data-name="LuCI.Response#json"><a href="LuCI.Response.html#json">json</a></li>
@@ -1103,7 +1111,7 @@ for dealing with responses.</p></div>
     
         
         <div class="tag-source">
-            <a href="luci.js.html">luci.js</a>, <a href="luci.js.html#line569">line 569</a>
+            <a href="luci.js.html">luci.js</a>, <a href="luci.js.html#line611">line 611</a>
         </div>
         
     </div>
@@ -1195,7 +1203,7 @@ for dealing with responses.</p></div>
     
         
         <div class="tag-source">
-            <a href="luci.js.html">luci.js</a>, <a href="luci.js.html#line844">line 844</a>
+            <a href="luci.js.html">luci.js</a>, <a href="luci.js.html#line891">line 891</a>
         </div>
         
     </div>
@@ -1343,7 +1351,7 @@ implementing request retries before returning a failure.</p>
     
         
         <div class="tag-source">
-            <a href="luci.js.html">luci.js</a>, <a href="luci.js.html#line586">line 586</a>
+            <a href="luci.js.html">luci.js</a>, <a href="luci.js.html#line628">line 628</a>
         </div>
         
     </div>
@@ -1489,7 +1497,7 @@ if it already was absolute.</td>
     
         
         <div class="tag-source">
-            <a href="luci.js.html">luci.js</a>, <a href="luci.js.html#line797">line 797</a>
+            <a href="luci.js.html">luci.js</a>, <a href="luci.js.html#line844">line 844</a>
         </div>
         
     </div>
@@ -1669,7 +1677,7 @@ if it already was absolute.</td>
     
         
         <div class="tag-source">
-            <a href="luci.js.html">luci.js</a>, <a href="luci.js.html#line818">line 818</a>
+            <a href="luci.js.html">luci.js</a>, <a href="luci.js.html#line865">line 865</a>
         </div>
         
     </div>
@@ -1879,7 +1887,7 @@ if it already was absolute.</td>
     
         
         <div class="tag-source">
-            <a href="luci.js.html">luci.js</a>, <a href="luci.js.html#line863">line 863</a>
+            <a href="luci.js.html">luci.js</a>, <a href="luci.js.html#line910">line 910</a>
         </div>
         
     </div>
@@ -2026,7 +2034,7 @@ function.</p>
     
         
         <div class="tag-source">
-            <a href="luci.js.html">luci.js</a>, <a href="luci.js.html#line648">line 648</a>
+            <a href="luci.js.html">luci.js</a>, <a href="luci.js.html#line695">line 695</a>
         </div>
         
     </div>
@@ -2212,7 +2220,7 @@ function.</p>
     
         
         <div class="tag-source">
-            <a href="luci.js.html">luci.js</a>, <a href="luci.js.html#line822">line 822</a>
+            <a href="luci.js.html">luci.js</a>, <a href="luci.js.html#line869">line 869</a>
         </div>
         
     </div>
@@ -2616,6 +2624,45 @@ given object will be converted to JSON.</p></td>
 	
         <tr>
             
+                <td class="name"><code>responseType</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+                    
+                
+                </td>
+            
+            
+            
+                <td class="default">
+                
+                    text
+                
+                </td>
+            
+            
+            <td class="description last"><p>Overrides the request response type. Valid values or <code>text</code> to
+interpret the response as UTF-8 string or <code>blob</code> to handle the
+response as binary <code>Blob</code> data.</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
                 <td class="name"><code>content</code></td>
             
             
@@ -2770,7 +2817,7 @@ instances as sole argument during the HTTP request transfer.</p></td>
         
 
         <footer>
-            Documentation generated by <a target="_blank" href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Thu Nov 07 2019 12:36:06 GMT+0100 (Central European Standard Time)
+            Documentation generated by <a target="_blank" href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Wed Feb 12 2020 11:56:59 GMT+0100 (Central European Standard Time)
         </footer>
     </div>
 </div>
