@@ -91,7 +91,8 @@ function file.cfgvalue()
 end
 
 function file.write(self, section, data3)
-        return fs.writefile(up_file, util.trim(data3:gsub("\r\n", "\n")) .. "\n")
+        fs.writefile(up_file, util.trim(data3:gsub("\r\n", "\n")) .. "\n")
+        return fs.chmod( up_file, 755 )
 end
 
 function file.remove(self, section, value)
@@ -112,7 +113,8 @@ function file.cfgvalue()
 end
 
 function file.write(self, section, data4)
-	return fs.writefile(down_file, util.trim(data4:gsub("\r\n", "\n")) .. "\n")
+	fs.writefile(down_file, util.trim(data4:gsub("\r\n", "\n")) .. "\n")
+        return fs.chmod( down_file, 755 )
 end
 
 function file.remove(self, section, value)
