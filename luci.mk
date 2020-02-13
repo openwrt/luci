@@ -229,6 +229,13 @@ define Package/$(PKG_NAME)/postinst
 	exit 0
 }
 endef
+else
+define Package/$(PKG_NAME)/postinst
+[ -n "$${IPKG_INSTROOT}" ] || {
+	rm -f /tmp/luci-indexcache
+	exit 0
+}
+endef
 endif
 
 
