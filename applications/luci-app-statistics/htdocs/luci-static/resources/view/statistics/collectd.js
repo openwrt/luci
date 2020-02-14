@@ -32,7 +32,7 @@ return L.view.extend({
 	},
 
 	render: function(plugins) {
-		var m, s, o;
+		var m, s, o, enabled;
 
 		for (var i = 0; i < plugins.length; i++)
 			plugins[plugins[i].name] = plugins[i];
@@ -104,9 +104,19 @@ return L.view.extend({
 				return plugin ? plugin.spec.title : name
 			};
 
-			o = s.option(form.Flag, 'enable', _('Enabled'));
-			o.editable = true;
-			o.modalonly = false;
+			enabled = s.option(form.Flag, 'enable', _('Enabled'));
+			enabled.editable = true;
+			enabled.modalonly = false;
+			enabled.renderWidget = function(section_id, option_index, cfgvalue) {
+				var widget = form.Flag.prototype.renderWidget.apply(this, [section_id, option_index, cfgvalue]);
+
+				widget.querySelector('input[type="checkbox"]').addEventListener('click', L.bind(function(section_id, plugin, ev) {
+					if (ev.target.checked && plugin && plugin.form.addFormOptions)
+						this.section.renderMoreOptionsModal(section_id);
+				}, this, section_id, plugins[section_id.replace(/^collectd_/, '')]));
+
+				return widget;
+			};
 
 			o = s.option(form.DummyValue, '_dummy', _('Status'));
 			o.width = '50%';
@@ -140,6 +150,15 @@ return L.view.extend({
 				s.description = plugin.form.description;
 
 				plugin.form.addFormOptions(s);
+
+				var opt = s.children.filter(function(o) { return o.option == 'enable' })[0];
+				if (opt)
+					opt.cfgvalue = function(section_id, set_value) {
+						if (arguments.length == 2)
+							return form.Flag.prototype.cfgvalue.apply(this, [section_id, enabled.formvalue(section_id)]);
+						else
+							return form.Flag.prototype.cfgvalue.apply(this, [section_id]);
+					};
 			};
 
 			s.renderRowActions = function(section_id) {
