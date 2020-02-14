@@ -2520,6 +2520,9 @@
 			 * be found.
 			 */
 			data: function(node, key, val) {
+				if (!node || !node.getAttribute)
+					return null;
+
 				var id = node.getAttribute('data-idref');
 
 				/* clear all data */
