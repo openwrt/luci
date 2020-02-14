@@ -302,7 +302,7 @@ end
 preprocess = {
 	RRATimespans = function(val)
 		local rv = { }
-		for time in val:gmatch("[^%s]+") do
+		for time in luci.util.imatch(val) do
 			table.insert( rv, luci.util.parse_units(time) )
 		end
 		return table.concat(rv, " ")
