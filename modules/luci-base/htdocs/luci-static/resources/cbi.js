@@ -101,7 +101,8 @@ function trimws(s) {
 }
 
 function _(s, c) {
-	return (window.TR && TR[sfh(trimws(s))]) || s;
+	var k = (c != null ? trimws(c) + '\u0001' : '') + trimws(s);
+	return (window.TR && TR[sfh(k)]) || s;
 }
 
 function N_(n, s, p, c) {
