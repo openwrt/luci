@@ -1,15 +1,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2019-12-21 21:42+0000\n"
-"Last-Translator: Jiri Tersel <jiri.tersel@seznam.cz>\n"
+"PO-Revision-Date: 2020-02-04 05:00+0000\n"
+"Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/openwrt/luci/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 3.10\n"
+"X-Generator: Weblate 3.11-dev\n"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:910
 msgid "%.1f dB"
@@ -22,7 +22,7 @@ msgstr "%d bitů"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2323
 msgid "%d invalid field(s)"
-msgstr "%d neplatné/á pole"
+msgstr "%d neplatných kolonek"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:32
 msgid "%s is untagged in multiple VLANs!"
@@ -49,7 +49,7 @@ msgstr "(prázdný)"
 #: modules/luci-compat/luasrc/view/cbi/network_netinfo.htm:23
 #: modules/luci-compat/luasrc/view/cbi/network_netlist.htm:58
 msgid "(no interfaces attached)"
-msgstr "(bez rozhraní připojení)"
+msgstr "(nepřipojeno žádné rozhraní)"
 
 #: modules/luci-compat/luasrc/view/cbi/ucisection.htm:48
 msgid "-- Additional Field --"
@@ -64,7 +64,7 @@ msgstr "-- Doplňující pole --"
 #: modules/luci-compat/luasrc/view/cbi/header.htm:5
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:88
 msgid "-- Please choose --"
-msgstr "-- Prosím vyberte --"
+msgstr "-- Vyberte --"
 
 #: modules/luci-base/htdocs/luci-static/resources/cbi.js:259
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:416
@@ -87,7 +87,7 @@ msgstr "-- párovat dle UUID --"
 #: modules/luci-compat/luasrc/view/cbi/network_ifacelist.htm:44
 #: modules/luci-compat/luasrc/view/cbi/network_netlist.htm:23
 msgid "-- please select --"
-msgstr "-- prosím vyberte --"
+msgstr "-- vyberte --"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:849
 msgid "0 = not using RSSI threshold, 1 = do not change driver default"
@@ -95,15 +95,15 @@ msgstr "0 = nepoužít práh RSSI, 1 = neměnit výchozí nastavení ovladače"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/load.js:228
 msgid "1 Minute Load:"
-msgstr "Zatížení za 1 minutu:"
+msgstr "Vytížení za 1 minutu:"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/load.js:248
 msgid "15 Minute Load:"
-msgstr "Zatížení za 15 minut:"
+msgstr "Vytížení za 15 minut:"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1372
 msgid "4-character hexadecimal ID"
-msgstr "4znakové šestnáctkové ID"
+msgstr "čtyřznakový šestnáctkový identifikátor"
 
 #: modules/luci-compat/luasrc/model/network/proto_4x6.lua:18
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/464xlat.js:11
@@ -112,7 +112,7 @@ msgstr "464XLAT (CLAT)"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/load.js:238
 msgid "5 Minute Load:"
-msgstr "Zatížení za 5 minut:"
+msgstr "Vytížení za 5 minut:"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1401
 msgid "6-octet identifier as a hex string - no colons"
@@ -140,7 +140,7 @@ msgstr "Maximální časový limit 802.11w"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1609
 msgid "802.11w retry timeout"
-msgstr "Časový limit opakování 802.11w"
+msgstr "801.11w časový limit opětovného pokusu"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:866
 msgid "<abbr title=\"Basic Service Set Identifier\">BSSID</abbr>"
@@ -160,7 +160,7 @@ msgid ""
 "order of the resolvfile"
 msgstr ""
 "<abbr title=\"Domain Name System\">DNS</abbr> servery budou dotazovány podle "
-"pořadí resolvfile"
+"pořadí v souboru resolv.conf"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:855
 msgid "<abbr title=\"Extended Service Set Identifier\">ESSID</abbr>"
@@ -169,28 +169,28 @@ msgstr "<abbr title=\"Extended Service Set Identifier\">ESSID</abbr>"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:451
 #: modules/luci-mod-status/luasrc/view/admin_status/routes.htm:45
 msgid "<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Address"
-msgstr "<abbr title=\"Internet Protokol Verze 4\">IPv4</abbr>-Adresa"
+msgstr "<abbr title=\"Internet Protokol Verze 4\">IPv4</abbr>-adresa"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:41
 #: modules/luci-mod-status/luasrc/view/admin_status/routes.htm:75
 msgid "<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Gateway"
-msgstr "<abbr title=\"Internet Protocol Verze 4\">IPv4</abbr>-Brána"
+msgstr "<abbr title=\"Internet Protocol Verze 4\">IPv4</abbr>-brána"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:598
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:35
 msgid "<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Netmask"
-msgstr "<abbr title=\"Internet Protokol Verze 4\">IPv4</abbr>-Maska sítě"
+msgstr "<abbr title=\"Internet Protokol Verze 4\">IPv4</abbr>-maska sítě"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:30
 msgid ""
 "<abbr title=\"Internet Protocol Version 6\">IPv6</abbr>-Address or Network "
 "(CIDR)"
 msgstr ""
-"<abbr title=\"Internet Protokol Verze 6\">IPv6</abbr>-Adresa nebo Síť (CIDR)"
+"<abbr title=\"Internet Protokol Verze 6\">IPv6</abbr>-adresa nebo aíť (CIDR)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:41
 msgid "<abbr title=\"Internet Protocol Version 6\">IPv6</abbr>-Gateway"
-msgstr "<abbr title=\"Internet Protokol Verze 6\">IPv6</abbr>-Brána"
+msgstr "<abbr title=\"Internet Protokol Verze 6\">IPv6</abbr>-brána"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:480
 msgid "<abbr title=\"Internet Protocol Version 6\">IPv6</abbr>-Suffix (hex)"
@@ -200,16 +200,16 @@ msgstr ""
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:40
 msgid "<abbr title=\"Light Emitting Diode\">LED</abbr> Configuration"
-msgstr "<abbr title=\"Light Emitting Diode\">LED</abbr> Konfigurace"
+msgstr "Nastavení <abbr title=\"Light Emitting Diode\">LED</abbr>"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:51
 msgid "<abbr title=\"Light Emitting Diode\">LED</abbr> Name"
-msgstr "<abbr title=\"Light Emitting Diode\">LED</abbr> Název"
+msgstr "Název pro <abbr title=\"Light Emitting Diode\">LED</abbr> kontrolku"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:407
 #: modules/luci-mod-status/luasrc/view/admin_status/routes.htm:46
 msgid "<abbr title=\"Media Access Control\">MAC</abbr>-Address"
-msgstr "<abbr title=\"Media Access Control\">MAC</abbr>-Adresa"
+msgstr "<abbr title=\"Media Access Control\">MAC</abbr>-adresa"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:474
 msgid "<abbr title=\"The DHCP Unique Identifier\">DUID</abbr>"
@@ -220,20 +220,20 @@ msgid ""
 "<abbr title=\"maximal\">Max.</abbr> <abbr title=\"Dynamic Host Configuration "
 "Protocol\">DHCP</abbr> leases"
 msgstr ""
-"<abbr title=\"Maximální\">Nejvyšší</abbr>počet <abbr title=\"Dynamic Host "
-"Configuration Protocol\">DHCP</abbr> výpůjček"
+"Nejvyšší počet <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</"
+"abbr> zápůjček"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:320
 msgid ""
 "<abbr title=\"maximal\">Max.</abbr> <abbr title=\"Extension Mechanisms for "
 "Domain Name System\">EDNS0</abbr> packet size"
 msgstr ""
-"<abbr title=\"Maximální\">Největší</abbr>povolená velikost <abbr title="
-"\"Extension Mechanisms for Domain Name System\">EDNS0</abbr> packetů"
+"Největší povolená velikost <abbr title=\"Extension Mechanisms for Domain "
+"Name System\">EDNS0</abbr> paketů"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:329
 msgid "<abbr title=\"maximal\">Max.</abbr> concurrent queries"
-msgstr "<abbr title=\"Maximální\">Nejvyšší</abbr>počet souběžných dotazů"
+msgstr "Nejvyšší počet souběžných dotazů"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/crontab.js:26
 msgid ""
@@ -245,11 +245,12 @@ msgstr ""
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:1729
 msgid "A directory with the same name already exists."
-msgstr "Adresář se stejným názvem již existuje."
+msgstr "Složka se stejným názvem už existuje."
 
 #: modules/luci-base/htdocs/luci-static/resources/luci.js:1604
 msgid "A new login is required since the authentication session expired."
-msgstr "Je nutné se znovu přihlásit, protože vypršela platnost relace."
+msgstr ""
+"Je třeba se znovu přihlásit, protože platnost relace přihlášení skončila."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:890
 msgid "A43C + J43 + A43"
@@ -387,15 +388,15 @@ msgstr "Přidat ATM most"
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/static.js:92
 msgid "Add IPv4 address…"
-msgstr "Přidat adresu IPv4…"
+msgstr "Přidat IPv4 adresu…"
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/static.js:207
 msgid "Add IPv6 address…"
-msgstr "Přidat adresu IPv6…"
+msgstr "Přidat IPv6 adresu…"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:47
 msgid "Add LED action"
-msgstr "Přidat LED akci"
+msgstr "Přidat akci LED kontrolky"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:216
 msgid "Add VLAN"
@@ -463,7 +464,7 @@ msgstr "Správa"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:834
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:239
 msgid "Advanced Settings"
-msgstr "Pokročilé nastavení"
+msgstr "Pokročilá nastavení"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:27
 msgid "Aggregate Transmit Power(ACTATP)"
@@ -477,11 +478,11 @@ msgstr "Upozornění"
 #: modules/luci-compat/luasrc/model/network.lua:1416
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:56
 msgid "Alias Interface"
-msgstr "Alias rozhraní"
+msgstr "Alternativní název rozhraní"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:140
 msgid "Alias of \"%s\""
-msgstr "Alias \"%s\""
+msgstr "Alternativní název „%s“"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:246
 msgid "All Servers"
@@ -499,7 +500,7 @@ msgstr "Postupné přidělování adres IP"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:24
 msgid "Allow <abbr title=\"Secure Shell\">SSH</abbr> password authentication"
-msgstr "Povolit <abbr title=\"Secure Shell\">SSH</abbr> autentizaci heslem"
+msgstr "Umožnit v <abbr title=\"Secure Shell\">SSH</abbr> ověřování heslem"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1022
 msgid "Allow AP mode to disconnect STAs based on low ACK condition"
@@ -544,7 +545,7 @@ msgstr "Povolit upstream odpovědi na 127.0.0.0/8 rozsah, např. pro RBL služby
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:122
 msgid "Allowed IPs"
-msgstr "Povolené adresy IP"
+msgstr "IP adresy, ze kterých umožnit přístup"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:649
 msgid "Always announce default router"
@@ -663,7 +664,7 @@ msgstr "Provádění požadavku selhalo se stavem <code>%h</code>"
 #: modules/luci-base/htdocs/luci-static/resources/luci.js:2947
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2679
 msgid "Apply unchecked"
-msgstr "Přesto aplikovat"
+msgstr "Použít nezkontrolované"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/10_system.js:55
 msgid "Architecture"
@@ -692,7 +693,7 @@ msgstr "Připojení klienti"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:36
 msgid "Associations"
-msgstr ""
+msgstr "Přiřazení"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:153
 msgid "Attempt to enable configured mount points for attached devices"
@@ -707,11 +708,11 @@ msgstr "Autorizační skupina"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1456
 msgid "Authentication"
-msgstr "Autentizace"
+msgstr "Ověřování se"
 
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:70
 msgid "Authentication Type"
-msgstr "Typ autentizace"
+msgstr "Typ ověřování se"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:157
 msgid "Authoritative"
@@ -719,7 +720,7 @@ msgstr "Autoritativní"
 
 #: modules/luci-base/luasrc/view/sysauth.htm:17
 msgid "Authorization Required"
-msgstr "Vyžadována autorizace"
+msgstr "Vyžadováno ověření se"
 
 #: themes/luci-theme-bootstrap/luasrc/view/themes/bootstrap/header.htm:162
 #: themes/luci-theme-bootstrap/luasrc/view/themes/bootstrap/header.htm:163
@@ -750,7 +751,7 @@ msgstr "Automatický Homenet (HNCP)"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:173
 msgid "Automatically check filesystem for errors before mounting"
-msgstr "Automaticky kontrolovat chyby systému souborů před jeho připojením"
+msgstr "Před připojením automaticky zkontrolovat souborový systém na chyby"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:169
 msgid "Automatically mount filesystems on hotplug"
@@ -810,11 +811,11 @@ msgstr "BSSID"
 #: modules/luci-compat/luasrc/view/cbi/footer.htm:14
 #: modules/luci-compat/luasrc/view/cbi/simpleform.htm:48
 msgid "Back to Overview"
-msgstr "Zpět k přehledu"
+msgstr "Zpět na přehled"
 
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/backupfiles.lua:48
 msgid "Back to configuration"
-msgstr "Zpět ke konfiguraci"
+msgstr "Zpět na nastavení"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:358
 msgid "Backup"
@@ -902,20 +903,21 @@ msgstr "Procházet…"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/20_memory.js:36
 msgid "Buffered"
-msgstr "Bufferováno"
+msgstr "Ve vyrovnávací paměti"
 
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:137
 msgid "CA certificate; if empty it will be saved after the first connection."
 msgstr ""
-"CA certifikát. Pokud je prázdný, bude uložen certifikát po prvním spojení."
+"Certifikát cert. autority; pokud je prázdné, bude uloženo po prvním "
+"připojení."
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/464xlat.js:7
 msgid "CLAT configuration failed"
-msgstr "Nastavení CLAT selhalo"
+msgstr "Nastavení CLAT se nezdařilo"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/processes.js:71
 msgid "CPU usage (%)"
-msgstr "Vytížení CPU (%)"
+msgstr "Vytížení procesoru (%)"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/20_memory.js:40
 msgid "Cached"
@@ -925,7 +927,7 @@ msgstr "Mezipaměť"
 #: modules/luci-compat/luasrc/model/network/proto_qmi.lua:53
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:21
 msgid "Call failed"
-msgstr "Volání selhalo"
+msgstr "Volání se nezdařilo"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:1909
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2413
@@ -938,7 +940,7 @@ msgstr "Volání selhalo"
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:268
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:180
 msgid "Cancel"
-msgstr "Zrušit"
+msgstr "Storno"
 
 #: protocols/luci-proto-hnet/htdocs/luci-static/resources/protocol/hnet.js:17
 msgid "Category"
@@ -956,7 +958,7 @@ msgstr "Změny"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2815
 msgid "Changes have been reverted."
-msgstr "Změny byly vráceny zpět."
+msgstr "Změny byly vzaty zpět."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js:44
 msgid "Changes the administrator password for accessing the device"
@@ -992,7 +994,7 @@ msgstr "Kontroluji obraz…"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:387
 msgid "Choose mtdblock"
-msgstr "Vyberte mtdblock"
+msgstr "Zvolte mtdblock"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:486
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1879
@@ -1021,7 +1023,7 @@ msgstr "Šifra"
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:91
 msgid "Cisco UDP encapsulation"
-msgstr "Zapouzdření UDP společnosti Cisco"
+msgstr "Cisco UDP zapouzdření"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:358
 msgid ""
@@ -1047,7 +1049,7 @@ msgstr "Klient"
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:49
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:47
 msgid "Client ID to send when requesting DHCP"
-msgstr "Klientské ID odesílané při vyžádání DHCP"
+msgstr "Identifikátor klienta, odesílaný v DHCP požadavku"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:144
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:150
@@ -1069,7 +1071,7 @@ msgstr ""
 
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/backupfiles.lua:49
 msgid "Close list..."
-msgstr "Zavřít seznam..."
+msgstr "Zavřít seznam…"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:39
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:58
@@ -1078,7 +1080,7 @@ msgstr "Zavřít seznam..."
 #: modules/luci-mod-status/luasrc/view/admin_status/iptables.htm:68
 #: themes/luci-theme-material/luasrc/view/themes/material/header.htm:201
 msgid "Collecting data..."
-msgstr "Probíhá sběr dat..."
+msgstr "Shromažďování údajů…"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/processes.js:70
 msgid "Command"
@@ -1090,7 +1092,7 @@ msgstr "Příkaz OK"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/startup.js:30
 msgid "Command failed"
-msgstr "Příkaz selhal"
+msgstr "Vykonání příkazu se nezdařilo"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:64
 msgid "Comment"
@@ -1118,7 +1120,7 @@ msgstr "Nastavení"
 #: modules/luci-compat/luasrc/model/network/proto_ncm.lua:63
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:21
 msgid "Configuration failed"
-msgstr "Nastavení selhalo"
+msgstr "Nastavení se nezdařilo"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2726
 msgid "Configuration has been applied."
@@ -1134,7 +1136,7 @@ msgstr "Potvrdit odpojení"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js:51
 msgid "Confirmation"
-msgstr "Ověření"
+msgstr "Potvrzení"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:41
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:50
@@ -1144,7 +1146,7 @@ msgstr "Připojeno"
 #: modules/luci-base/htdocs/luci-static/resources/network.js:7
 #: modules/luci-compat/luasrc/model/network.lua:27
 msgid "Connection attempt failed"
-msgstr "Pokus o připojení selhal"
+msgstr "Pokus o připojení se nezdařil"
 
 #: modules/luci-base/htdocs/luci-static/resources/rpc.js:403
 msgid "Connection lost"
@@ -1187,7 +1189,7 @@ msgstr "Kód země"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:486
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1879
 msgid "Create / Assign firewall-zone"
-msgstr "Vytvořit / přiřadit zónu firewallu"
+msgstr "Vytvořit / přiřadit zónu brány firewall"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:782
 msgid "Create interface"
@@ -1203,7 +1205,7 @@ msgstr "Úroveň protokolování Cronu"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:450
 msgid "Current power"
-msgstr "Aktuální výkon"
+msgstr "Stávající výkon"
 
 #: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:565
 #: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:567
@@ -1321,7 +1323,7 @@ msgstr "Stav DSL"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:901
 msgid "DSL line mode"
-msgstr "Režim linky DSL"
+msgstr "Režim DSL linky"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:998
 msgid "DTIM Interval"
@@ -1413,7 +1415,7 @@ msgstr "Popis"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:1874
 msgid "Deselect"
-msgstr "Odznačit"
+msgstr "Zrušit označení"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:216
 msgid "Design"
@@ -1458,7 +1460,7 @@ msgstr "Zařízení se restartuje…"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2700
 msgid "Device unreachable!"
-msgstr "Zařízení není dostupné!"
+msgstr "Zařízení nedostupné!"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/reboot.js:46
 msgid "Device unreachable! Still waiting for device..."
@@ -1506,7 +1508,7 @@ msgstr "Zakázat dotazování na nečinnost"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:747
 msgid "Disable this network"
-msgstr "Zakázat tuto síť"
+msgstr "Vypnout tuto síť"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1569
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/startup.js:62
@@ -1539,7 +1541,7 @@ msgstr "Odpojit"
 #: modules/luci-compat/luasrc/model/network/proto_ncm.lua:64
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:22
 msgid "Disconnection attempt failed"
-msgstr "Odpojení selhalo"
+msgstr "Pokud o odpojení se nezdařil"
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:1406
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2117
@@ -1572,7 +1574,8 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:235
 msgid "Do not cache negative replies, e.g. for not existing domains"
-msgstr "Necachovat negativní odpovědi (např. pro neexistující domény)"
+msgstr ""
+"Neukládat negativní odpovědi do mezipaměti (např. pro neexistující domény)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:203
 msgid "Do not forward requests that cannot be answered by public name servers"
@@ -1586,7 +1589,7 @@ msgstr "Nepřeposílat reverzní dotazy na místní sítě"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:1763
 msgid "Do you really want to delete \"%s\" ?"
-msgstr "Opravdu chcete smazat \"%s\"?"
+msgstr "Opravdu chcete „%s“ smazat?"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:177
 msgid "Do you really want to delete the following SSH key?"
@@ -1598,7 +1601,7 @@ msgstr "Opravdu chcete smazat veškeré nastavení?"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:1761
 msgid "Do you really want to recursively delete the directory \"%s\" ?"
-msgstr "Opravdu chcete rekurzivně smazat adresář \"%s\"?"
+msgstr "Opravdu chcete smazat složku „%s“ a tím i vše, co obsahuje?"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:153
 msgid "Domain required"
@@ -1630,7 +1633,7 @@ msgstr "Stáhnout zálohu"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:394
 msgid "Download mtdblock"
-msgstr "Stáhnout mtdblock"
+msgstr "Stáhnout si mtdblock"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:906
 msgid "Downstream SNR offset"
@@ -1638,7 +1641,7 @@ msgstr "Downstream SNR offset"
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:1203
 msgid "Drag to reorder"
-msgstr "Přetažením změníte pořadí"
+msgstr "Pořadí změníte přetažením"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:11
 msgid "Dropbear Instance"
@@ -1766,11 +1769,11 @@ msgstr "Povolit Single DES"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:344
 msgid "Enable TFTP server"
-msgstr "Povolit TFTP server"
+msgstr "Zapnout TFTP server"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:181
 msgid "Enable VLAN functionality"
-msgstr "Povolit funkcionalitu VLAN"
+msgstr "Zapnout funkci VLAN"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1630
 msgid "Enable WPS pushbutton, requires WPA(2)-PSK/WPA3-SAE"
@@ -1778,7 +1781,7 @@ msgstr "Povolit tlačítko WPS, vyžaduje WPA(2)-PSK / WPA3-SAE"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1617
 msgid "Enable key reinstallation (KRACK) countermeasures"
-msgstr "Povolit opatření proti reinstalaci klíče (KRACK)"
+msgstr "Zapnout opatření proti reinstalaci klíče (KRACK)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:184
 msgid "Enable learning and aging"
@@ -1786,11 +1789,11 @@ msgstr "Povolit ARP učení a stárnutí"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:195
 msgid "Enable mirroring of incoming packets"
-msgstr "Povolit zrcadlení příchozích paketů"
+msgstr "Zapnout zrcadlení příchozích paketů"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:196
 msgid "Enable mirroring of outgoing packets"
-msgstr "Povolit zrcadlení odchozích paketů"
+msgstr "Zapnout zrcadlení odchozích paketů"
 
 #: protocols/luci-proto-ipip/htdocs/luci-static/resources/protocol/ipip.js:67
 msgid "Enable the DF (Don't Fragment) flag of the encapsulating packets."
@@ -1798,7 +1801,7 @@ msgstr "Povolit příznak DF (Nefragmentovat) zapouzdřujících paketů."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:747
 msgid "Enable this network"
-msgstr "Povolit tuto síť"
+msgstr "Zapnout tuto síť"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/startup.js:74
 msgid "Enable/Disable"
@@ -1808,7 +1811,7 @@ msgstr "Povolit/Zakázat"
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:350
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/startup.js:62
 msgid "Enabled"
-msgstr "Povoleno"
+msgstr "Zapnuto"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:457
 msgid "Enables IGMP snooping on this bridge"
@@ -1828,12 +1831,12 @@ msgstr "Na tomto síťovém mostě povolit Spanning Tree Protocol"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dslite.js:59
 msgid "Encapsulation limit"
-msgstr "Enkapsulační limit"
+msgstr "Limit zapouzdření"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:896
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:954
 msgid "Encapsulation mode"
-msgstr "Režim zapouzdření"
+msgstr "Režim zapouzdřování"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:110
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:132
@@ -1853,15 +1856,15 @@ msgstr "Port koncového bodu"
 
 #: modules/luci-compat/luasrc/view/cbi/dropdown.htm:16
 msgid "Enter custom value"
-msgstr "Zadejte vlastní hodnotu"
+msgstr "Zadejte uživatelsky určenou hodnotu"
 
 #: modules/luci-compat/luasrc/view/cbi/dropdown.htm:16
 msgid "Enter custom values"
-msgstr "Zadejte vlastní hodnoty"
+msgstr "Zadejte uživatelsky určené hodnoty"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:93
 msgid "Erasing..."
-msgstr "Odstraňování..."
+msgstr "Odstraňování…"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:97
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:98
@@ -1874,7 +1877,7 @@ msgstr "Chyba"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:29
 msgid "Errored seconds (ES)"
-msgstr "Chybové sekundy (ES)"
+msgstr "Sekund s chybami (ES)"
 
 #: modules/luci-base/htdocs/luci-static/resources/network.js:2826
 #: modules/luci-compat/luasrc/model/network.lua:1432
@@ -1888,7 +1891,7 @@ msgstr "Ethernetový switch"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:382
 msgid "Exclude interfaces"
-msgstr "Vyloučit rozhraní"
+msgstr "Vynechat rozhraní"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:230
 msgid "Expand hosts"
@@ -1911,7 +1914,7 @@ msgstr "Očekáváno: %s"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:49
 msgid "Expires"
-msgstr "Vyprší"
+msgstr "Platnost skončí"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:586
 #, fuzzy
@@ -1922,7 +1925,7 @@ msgstr ""
 
 #: protocols/luci-proto-hnet/htdocs/luci-static/resources/protocol/hnet.js:19
 msgid "External"
-msgstr "Externí"
+msgstr "Vnější"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1412
 msgid "External R0 Key Holder List"
@@ -1942,23 +1945,23 @@ msgstr "Port externího protokolovacího serveru"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:152
 msgid "External system log server protocol"
-msgstr "Protokol externího systém logujícího serveru"
+msgstr "Protokol externího serveru pro ukládání záznamu událostí v systému"
 
 #: protocols/luci-proto-pppossh/htdocs/luci-static/resources/protocol/pppossh.js:79
 msgid "Extra SSH command options"
-msgstr "Další volby příkazu SSH"
+msgstr "Další volby příkazového řádku pro SSH"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1386
 msgid "FT over DS"
-msgstr "FT over DS"
+msgstr "FT přes DS"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1387
 msgid "FT over the Air"
-msgstr "FT over the Air"
+msgstr "FT vzduchem"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1384
 msgid "FT protocol"
-msgstr "Fast Transition protokol"
+msgstr "FT protokol"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js:83
 msgid "Failed to change the system password."
@@ -1973,7 +1976,7 @@ msgstr ""
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/startup.js:34
 msgid "Failed to execute \"/etc/init.d/%s %s\" action: %s"
-msgstr "Nepodařilo se vykonat \"/etc/init.d/%s %s\" akce: %s"
+msgstr "Nepodařilo se vykonat „/etc/init.d/%s %s“ akce: %s"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:1685
 msgid "File"
@@ -2007,7 +2010,7 @@ msgstr "Filtrovat nepotřebné"
 #: modules/luci-compat/luasrc/model/network/proto_ncm.lua:65
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:23
 msgid "Finalizing failed"
-msgstr "Dokončování selhalo"
+msgstr "Dokončení se nezdařilo"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:149
 msgid ""
@@ -2019,7 +2022,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:730
 msgid "Find and join network"
-msgstr "Vyhledat a připojit síť"
+msgstr "Vyhledat a připojit se k síti"
 
 #: modules/luci-compat/luasrc/view/cbi/delegator.htm:9
 msgid "Finish"
@@ -2027,27 +2030,27 @@ msgstr "Dokončit"
 
 #: modules/luci-mod-status/luasrc/controller/admin/status.lua:12
 msgid "Firewall"
-msgstr "Firewall"
+msgstr "Brána firewall"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:76
 msgid "Firewall Mark"
-msgstr "Značka paketu (fwmark)"
+msgstr "Označkování brány firewall"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:321
 msgid "Firewall Settings"
-msgstr "Nastavení firewallu"
+msgstr "Nastavení brány firewall"
 
 #: modules/luci-mod-status/luasrc/view/admin_status/iptables.htm:44
 msgid "Firewall Status"
-msgstr "Stav firewallu"
+msgstr "Stav brány firewall"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:913
 msgid "Firmware File"
-msgstr "Soubor firmwaru"
+msgstr "Soubor s firmware"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/10_system.js:56
 msgid "Firmware Version"
-msgstr "Verze firmwaru"
+msgstr "Verze firmware"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:303
 msgid "Fixed source port for outbound DNS queries"
@@ -2089,7 +2092,7 @@ msgstr "Vynutit CCMP (AES)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:593
 msgid "Force DHCP on this network even if another server is detected."
-msgstr "Na této síti vynutit DHCP i v případě detekování jiného serveru."
+msgstr "Na této síti vynutit DHCP i v případě zjištění jiného serveru."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1067
 msgid "Force TKIP"
@@ -2174,7 +2177,7 @@ msgstr "Porty brány"
 #: modules/luci-base/htdocs/luci-static/resources/network.js:9
 #: modules/luci-compat/luasrc/model/network.lua:29
 msgid "Gateway address is invalid"
-msgstr "Adresa brány je neplatná"
+msgstr "Adresa brány není platná"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:146
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:318
@@ -2998,7 +3001,7 @@ msgstr "Naslouchající rozhraní"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:54
 msgid "Listen Port"
-msgstr "Naslouchající port"
+msgstr "Port na kterém očekávat spojení"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:16
 msgid "Listen only on the given interface or, if unspecified, on all"

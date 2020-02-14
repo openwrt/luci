@@ -1,29 +1,28 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2019-12-16 23:26+0000\n"
-"Last-Translator: Jiri Tersel <jiri.tersel@seznam.cz>\n"
+"PO-Revision-Date: 2020-02-02 09:02+0000\n"
+"Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsbcp38/cs/>\n"
 "Language: cs\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 3.10-dev\n"
+"X-Generator: Weblate 3.11-dev\n"
 
 #: applications/luci-app-bcp38/luasrc/model/cbi/bcp38.lua:61
 msgid "Allowed IP ranges"
 msgstr "Povolené IP rozsahy"
 
 #: applications/luci-app-bcp38/luasrc/model/cbi/bcp38.lua:34
-#, fuzzy
 msgid ""
 "Attempt to automatically detect if the upstream IP will be blocked by the "
 "configuration, and add an exception if it will. If this does not work "
 "correctly, you can add exceptions manually below."
 msgstr ""
-"Zkusit automaticky zjistit, zda je upstream IP adresa blokována konfigurací. "
-"Pokud ano, bude přidána výjimka. Jestliže tato možnost nefunguje správně, "
-"můžete přidat níže výjimky ručně."
+"Pokusit se automaticky zjistit, zda bude upstream IP adresa nastavením "
+"blokována. Pokud ano, bude přidána výjimka. Pokud toto nezafunguje správně, "
+"můžete níže přidat výjimky ručně."
 
 #: applications/luci-app-bcp38/luasrc/model/cbi/bcp38.lua:33
 msgid "Auto-detect upstream IP"
@@ -67,14 +66,14 @@ msgstr ""
 "rozpoznání nefunguje."
 
 #: applications/luci-app-bcp38/luasrc/model/cbi/bcp38.lua:21
-#, fuzzy
 msgid ""
 "This function blocks packets with private address destinations from going "
 "out onto the internet as per <a href=\"http://tools.ietf.org/html/"
 "bcp38\">BCP 38</a>. For IPv6, only source specific default routes are "
 "installed, so no BCP38 firewall routes are needed."
 msgstr ""
-"Tato funkce blokuje odchozí pakety se soukromými cílovými adresami do "
-"internetu podle <a href=\"http://tools.ietf.org/html/bcp38\">BCP 38</a>. V "
-"případě protokolu IPv6 jsou instalovány pouze zdrojově specifické výchozí "
-"trasy, takže nejsou třeba BCP38 trasy firewallu."
+"Tato funkce blokuje odchozí pakety se cílovými adresami, spadajícími do "
+"neveřejných rozsahů, směřující do Internetu (v souladu s <a href=\"http://"
+"tools.ietf.org/html/bcp38\">BCP 38</a>. V případě protokolu IPv6 jsou "
+"instalovány pouze zdrojově specifické výchozí trasy, takže na bráně firewall "
+"nejsou BCP38 trasy zapotřebí."

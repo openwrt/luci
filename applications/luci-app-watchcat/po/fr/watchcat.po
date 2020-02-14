@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2020-01-11 18:23+0000\n"
-"Last-Translator: Franco Castillo <castillofrancodamian@gmail.com>\n"
+"PO-Revision-Date: 2020-02-09 15:50+0000\n"
+"Last-Translator: Bob Weetabix <weetabixlalol@grr.la>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationswatchcat/fr/>\n"
 "Language: fr\n"
@@ -10,11 +10,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 3.10.1\n"
+"X-Generator: Weblate 3.11-dev\n"
 
 #: applications/luci-app-watchcat/luasrc/model/cbi/watchcat/watchcat.lua:21
 msgid "Forced reboot delay"
-msgstr ""
+msgstr "Délai pour le reboot forcé"
 
 #: applications/luci-app-watchcat/luasrc/model/cbi/watchcat/watchcat.lua:40
 msgid "Host address to ping"
@@ -25,6 +25,9 @@ msgid ""
 "How often to check internet connection. Default unit is seconds, you can you "
 "use the suffix 'm' for minutes, 'h' for hours or 'd' for days"
 msgstr ""
+"La fréquence de vérification de la connexion Internet. L'unité par défaut "
+"est la seconde, vous pouvez utiliser le suffixe \"m\" pour les minutes, \"h"
+"\" pour les heures ou \"d\" pour les jours"
 
 #: applications/luci-app-watchcat/luasrc/model/cbi/watchcat/watchcat.lua:31
 msgid ""
@@ -33,6 +36,11 @@ msgid ""
 "engaged.Default unit is seconds, you can use the suffix 'm' for minutes, 'h' "
 "for hours or 'd' for days"
 msgstr ""
+"En mode périodique, définit la période de redémarrage. En mode internet, "
+"définit la plus longue période de temps sans accès à internet avant qu'un "
+"redémarrage soit engagé. L'unité par défaut est la seconde, vous pouvez "
+"utiliser le suffixe \"m\" pour les minutes, \"h\" pour les heures ou \"d\" "
+"pour les jours"
 
 #: applications/luci-app-watchcat/luasrc/model/cbi/watchcat/watchcat.lua:15
 msgid "Operating mode"
@@ -44,7 +52,7 @@ msgstr "Période"
 
 #: applications/luci-app-watchcat/luasrc/model/cbi/watchcat/watchcat.lua:39
 msgid "Ping host"
-msgstr ""
+msgstr "Hôte destinataire du ping"
 
 #: applications/luci-app-watchcat/luasrc/model/cbi/watchcat/watchcat.lua:46
 msgid "Ping period"
@@ -69,3 +77,7 @@ msgid ""
 "a non zero value here will trigger a delayed hard reboot if the soft reboot "
 "fails. Enter a number of seconds to enable, use 0 to disable"
 msgstr ""
+"Lors du redémarrage du système, le watchcat déclenche un soft reboot. "
+"L'entrée d'une valeur non nulle ici déclenchera un hard reboot retardé si le "
+"soft reboot échoue. Entrez un nombre de secondes pour activer, utilisez 0 "
+"pour désactiver"
