@@ -8,7 +8,8 @@ return L.view.extend({
 	load: function() {
 		return Promise.all([
 			fs.list('/usr/lib/collectd'),
-			fs.list('/usr/share/luci/statistics/plugins')
+			fs.list('/usr/share/luci/statistics/plugins'),
+			uci.load('luci_statistics')
 		]).then(function(data) {
 			var installed = data[0],
 			    plugins = data[1],
@@ -17,6 +18,9 @@ return L.view.extend({
 			for (var i = 0; i < plugins.length; i++) {
 				tasks.push(fs.read_direct('/usr/share/luci/statistics/plugins/' + plugins[i].name, 'json').then(L.bind(function(name, spec) {
 					return L.resolveDefault(L.require('view.statistics.plugins.' + name)).then(function(form) {
+						if (!uci.get('luci_statistics', 'collectd_' + name))
+							uci.add('luci_statistics', 'statistics', 'collectd_' + name);
+
 						return {
 							name: name,
 							spec: spec,
