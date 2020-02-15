@@ -15,7 +15,4 @@ uci -q get mwan3.globals >/dev/null || {
 	uci commit mwan3
 }
 
-# remove LuCI cache
-rm -rf /tmp/luci-indexcache /tmp/luci-modulecache
-
 exit 0
