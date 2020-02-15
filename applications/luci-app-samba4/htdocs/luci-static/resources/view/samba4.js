@@ -43,6 +43,9 @@ return L.view.extend({
 
 		o = s.taboption('general', form.Flag, 'macos', _('Enable macOS compatible shares'),
 			_('Enables Apple\'s AAPL extension globally and adds macOS compatibility options to all shares.'));
+			
+		o = s.taboption('general', form.Flag, 'allow_legacy_protocols', _('Allow legacy (insecure) protocols/authentication.'),
+			_('Allow legacy smb(v1)/Lanman connections, needed for older devices without smb(v2.1/3) support.'));
 
 		if (stats[2].type === 'file') {
 			s.taboption('general', form.Flag, 'disable_netbios', _('Disable Netbios')) 
