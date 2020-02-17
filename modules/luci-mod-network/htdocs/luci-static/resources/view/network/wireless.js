@@ -30,7 +30,7 @@ function render_radio_badge(radioDev) {
 }
 
 function render_signal_badge(signalPercent, signalValue, noiseValue, wrap) {
-	var icon, title;
+	var icon, title, value;
 
 	if (signalPercent < 0)
 		icon = L.resource('icons/signal-none.png');
@@ -45,18 +45,24 @@ function render_signal_badge(signalPercent, signalValue, noiseValue, wrap) {
 	else
 		icon = L.resource('icons/signal-75-100.png');
 
-	if (signalValue != null && signalValue != 0) {
-		title = '%s %d %s'.format(_('Signal'), signalValue, _('dBm'));
-
-		if (noiseValue != null && noiseValue != 0)
-			title += ' / %s: %d %s'.format(_('Noise'), noiseValue, _('dBm'));
+	if (signalValue != null && signalValue != 0 && noiseValue != null && noiseValue != 0) {
+		value = '%d / %d %s'.format(signalValue, noiseValue, _('dBm'));
+		title = '%s: %d %s / %s: %d %s / %s %d'.format(
+			_('Signal'), signalValue, _('dBm'),
+			_('Noise'), noiseValue, _('dBm'),
+			_('SNR'), signalValue - noiseValue);
+	}
+	else if (signalValue != null && signalValue != 0) {
+		value = '%d %s'.format(signalValue, _('dBm'));
+		title = '%s: %d %s'.format(_('Signal'), signalValue, _('dBm'));
 	}
 	else {
+		value = E('em', {}, E('small', {}, [ _('disabled') ]));
 		title = _('No signal');
 	}
 
 	return E('div', { 'class': wrap ? 'center' : 'ifacebadge', 'title': title },
-		[ E('img', { 'src': icon }), wrap ? E('br') : ' ', '%d%%'.format(Math.max(signalPercent, 0)) ]);
+		[ E('img', { 'src': icon }), wrap ? E('br') : ' ', value ]);
 }
 
 function render_network_badge(radioNet) {
