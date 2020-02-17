@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LuCI: adblock\n"
 "POT-Creation-Date: 2017-10-22 13:00+0300\n"
-"PO-Revision-Date: 2020-02-12 11:01+0000\n"
-"Last-Translator: Alex Ky <esthomolupus@gmail.com>\n"
+"PO-Revision-Date: 2020-02-17 11:52+0000\n"
+"Last-Translator: MiR V <mirrorvol@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsadblock/ru/>\n"
 "Language: ru\n"
@@ -31,9 +31,8 @@ msgstr "Действие"
 
 #: applications/luci-app-adblock/luasrc/controller/adblock.lua:17
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:10
-#, fuzzy
 msgid "Adblock"
-msgstr "Adblock"
+msgstr "Adblock Блокировщик рекламы"
 
 #: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:151
 msgid "Adblock Status"
@@ -458,7 +457,6 @@ msgstr ""
 "общее количество меньше или равно заданному пределу (по умолчанию 0),"
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:158
-#, fuzzy
 msgid "Receiver address for adblock notification e-mails."
 msgstr "Адрес получателя для уведомлений по электронной почте."
 
@@ -503,7 +501,7 @@ msgstr "Отчет интерфейса"
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:225
 msgid "Report Listen Port(s)"
-msgstr ""
+msgstr "Порт(ы) для прослушивания отчета(ов)"
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:232
 msgid "Report chunk count used by tcpdump (default '5')."
@@ -520,12 +518,16 @@ msgid ""
 "Reporting interface used by tcpdump, set to 'any' for multiple interfaces "
 "(default 'br-lan')."
 msgstr ""
+"Интерфейс отчетов, используемый tcpdump, установлен в 'any' для нескольких "
+"интерфейсов (по умолчанию 'br-lan')."
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:128
 msgid ""
 "Resets the final DNS blockfile 'adb_list.overall' after loading through the "
 "DNS backend."
 msgstr ""
+"Сбрасывает последний блок-файл DNS 'adb_list.overall' после нагрузки через "
+"DNS сервер."
 
 #: applications/luci-app-adblock/luasrc/view/adblock/runtime.htm:37
 msgid "Resume"
@@ -546,13 +548,12 @@ msgid "Save"
 msgstr "Сохранить"
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:153
-#, fuzzy
 msgid ""
 "Send notification e-mails in case of a processing error or if domain count "
 "is &le; 0."
 msgstr ""
 "Отправлять уведомления на почту в случае ошибки обработки или если число "
-"доменов &le; 0."
+"доменов \"&le;\" равно 0."
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:246
 msgid "Sender address for adblock notification e-mails."
@@ -613,12 +614,16 @@ msgid ""
 "Target directory for adblock source backups. Default is '/tmp', please use "
 "preferably a non-volatile disk if available."
 msgstr ""
+"Место размещения резервного списка блокировок. По умолчанию '/tmp', по "
+"возможности необходимо использовать энергонезависимый диск."
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:140
 msgid ""
 "Target directory for dns related report files. Default is '/tmp', please use "
 "preferably a non-volatile disk if available."
 msgstr ""
+"Целевой каталог для файлов отчетов, связанных с dns.. По умолчанию '/tmp', "
+"по возможности необходимо использовать энергонезависимый диск."
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:165
 msgid "Target directory for the generated blocklist 'adb_list.overall'."
@@ -635,6 +640,8 @@ msgstr ""
 #: applications/luci-app-adblock/luasrc/view/adblock/logread.htm:31
 msgid "The syslog output, pre-filtered for adblock related messages only."
 msgstr ""
+"Вывод системного журнала, предварительно отфильтрованный только для "
+"сообщений, связанных с adblock."
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:111
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:210
@@ -643,16 +650,18 @@ msgstr ""
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:240
 msgid "This change requires a manual service stop/re-start to take effect."
 msgstr ""
+"Это изменение требует ручной остановки и повторного запуска, чтобы вступить "
+"в силу."
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/blacklist_tab.lua:31
 msgid ""
 "This form allows you to modify the content of the adblock blacklist (%s)."
-msgstr ""
+msgstr "Эта форма позволяет изменять содержимое черного списка adblock (%s)."
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/whitelist_tab.lua:31
 msgid ""
 "This form allows you to modify the content of the adblock whitelist (%s)."
-msgstr ""
+msgstr "Эта форма позволяет изменять содержимое белого списка adblock (%s)."
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/configuration_tab.lua:30
 msgid ""
@@ -675,6 +684,8 @@ msgid ""
 "This option saves an enormous amount of storage space, but starts a small "
 "ubus/adblock monitor in the background."
 msgstr ""
+"Эта опция экономит огромное количество места для хранения, но запускает "
+"небольшой мониторинг ubus/adblock в фоновом режиме."
 
 #: applications/luci-app-adblock/luasrc/view/adblock/report.htm:82
 #: applications/luci-app-adblock/luasrc/view/adblock/report.htm:89
@@ -691,15 +702,15 @@ msgstr ""
 
 #: applications/luci-app-adblock/luasrc/view/adblock/report.htm:287
 msgid "Top 10 Reporting"
-msgstr ""
+msgstr "Топ-10 Отчетов"
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:251
 msgid "Topic for adblock notification e-mails."
-msgstr ""
+msgstr "Тема для уведомлений adblock по электронной почте."
 
 #: applications/luci-app-adblock/luasrc/view/adblock/report.htm:268
 msgid "Total DNS Queries"
-msgstr ""
+msgstr "Всего запросов DNS"
 
 #: applications/luci-app-adblock/luasrc/model/cbi/adblock/overview_tab.lua:181
 msgid "Trigger Delay"
@@ -730,6 +741,8 @@ msgid ""
 "e.g. to receive an e-mail notification with every adblock run set this value "
 "to 200000."
 msgstr ""
+"например, чтобы получать уведомления по электронной почте при каждом запуске "
+"adblock, установите это значение равным 200000."
 
 #~ msgid "'Jail' Blocklist Creation"
 #~ msgstr "Создание Черного<br />списка 'Jail'"
