@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-03-30 17:00+0200\n"
-"PO-Revision-Date: 2020-01-15 02:10+0000\n"
-"Last-Translator: Scott Anecito <scott.anecito@linux.com>\n"
+"PO-Revision-Date: 2020-02-18 11:31+0000\n"
+"Last-Translator: INAGAKI Hiroshi <musashino.open@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsfirewall/ja/>\n"
 "Language: ja\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 3.11-dev\n"
+"X-Generator: Weblate 3.11\n"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:47
 msgid ""
@@ -33,16 +33,16 @@ msgstr ""
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:431
 msgid "-- add IP --"
-msgstr ""
+msgstr "-- IP を追加 --"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:479
 msgid "-- add MAC --"
-msgstr ""
+msgstr "-- MAC を追加 --"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:117
 msgid ""
 "<var data-tooltip=\"ACCEPT\">Accept</var> %{src?%{dest?forward:input}:output}"
-msgstr ""
+msgstr "%{src?%{dest?転送:受信}:送信} を <var data-tooltip=\"ACCEPT\">許可</var>"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:86
 msgid "<var data-tooltip=\"ACCEPT\">Prevent source rewrite</var>"
@@ -53,11 +53,13 @@ msgid ""
 "<var data-tooltip=\"DNAT\">Forward</var> to %{dest}%{dest_ip? IP <var>"
 "%{dest_ip}</var>}%{dest_port? port <var>%{dest_port}</var>}"
 msgstr ""
+"%{dest}%{dest_ip? IP <var>%{dest_ip}</var>}%{dest_port? port "
+"<var>%{dest_port}</var>} へ<var data-tooltip=\"DNAT\">転送</var>"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:114
 msgid ""
 "<var data-tooltip=\"DROP\">Drop</var> %{src?%{dest?forward:input}:output}"
-msgstr ""
+msgstr "%{src?%{dest?転送:受信}:送信} を <var data-tooltip=\"DROP\">破棄</var>"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:132
 msgid ""
@@ -79,18 +81,18 @@ msgstr ""
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:83
 msgid "<var data-tooltip=\"MASQUERADE\">Automatically rewrite</var> source IP"
-msgstr ""
+msgstr "アクセス元 IP を <var data-tooltip=\"MASQUERADE\">自動的に書き換え</var>"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:123
 msgid ""
 "<var data-tooltip=\"NOTRACK\">Do not track</var> %{src?%{dest?forward:input}:"
 "output}"
-msgstr ""
+msgstr "%{src?%{dest?転送:受信}:送信} を<var data-tooltip=\"NOTRACK\">追跡しない</var>"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:120
 msgid ""
 "<var data-tooltip=\"REJECT\">Reject</var> %{src?%{dest?forward:input}:output}"
-msgstr ""
+msgstr "%{src?%{dest?転送:受信}:送信} を<var data-tooltip=\"REJECT\">拒否</var>"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:80
 msgid ""
@@ -100,11 +102,11 @@ msgstr ""
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:224
 msgid "A rewrite IP must be specified!"
-msgstr ""
+msgstr "書き換え先 IP の指定が必要です！"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:212
 msgid "ACCEPT - Disable address rewriting"
-msgstr ""
+msgstr "ACCEPT - アドレス書き換えを無効化"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:172
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:228
@@ -112,7 +114,7 @@ msgstr ""
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:157
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:207
 msgid "Action"
-msgstr "動作"
+msgstr "アクション"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:257
 msgid ""
