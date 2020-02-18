@@ -193,7 +193,8 @@ local function target_to_json(target, module)
 	elseif target.type == "cbi" then
 		action = {
 			["type"] = "cbi",
-			["path"] = target.model
+			["path"] = target.model,
+			["config"] = target.config
 		}
 	elseif target.type == "form" then
 		action = {
