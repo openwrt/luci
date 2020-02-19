@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: luci-app-ddns 2.4.0-1\n"
 "POT-Creation-Date: 2016-01-30 11:07+0100\n"
-"PO-Revision-Date: 2020-02-18 11:31+0000\n"
-"Last-Translator: SunSpring <yearnsun@gmail.com>\n"
+"PO-Revision-Date: 2020-02-19 20:00+0000\n"
+"Last-Translator: xiazhang <xz@xia.plus>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "openwrt/luciapplicationsddns/zh_Hans/>\n"
 "Language: zh_Hans\n"
@@ -18,7 +18,7 @@ msgstr ""
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:964
 msgid "\"../\" not allowed in path for Security Reason."
-msgstr "为了系统安全禁止使用路径 \"../\" 。"
+msgstr "基于安全原因路径中不允许含有 \"../\" 。"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:294
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:323
@@ -49,23 +49,19 @@ msgstr "不支持绑定到一个指定的网络"
 msgid ""
 "BusyBox's nslookup and Wget do not support to specify the IP version to use "
 "for communication with DDNS Provider!"
-msgstr ""
-"与 DDNS 供应商通讯时，BusyBox 的 nslookup 和 Wget 不支持设置特定的 IP 协议版"
-"本。"
+msgstr "BusyBox 的 nslookup 和 wget 不支持指定 IP 协议版本与 DDNS 供应商通讯！"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:261
 msgid ""
 "BusyBox's nslookup and hostip do not support to specify to use TCP instead "
 "of default UDP when requesting DNS server!"
-msgstr ""
-"向 DNS 服务器查询时，BusyBox 的 nslookup 和 hostip 不支持使用 TCP 而不是默认"
-"的 UDP！"
+msgstr "向 DNS 服务器查询时，BusyBox 的 nslookup 和 hostip 不支持使用 TCP ，而是使用默认的 UDP！"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:272
 msgid ""
 "BusyBox's nslookup in the current compiled version does not handle given DNS "
 "Servers correctly!"
-msgstr "当前编译版本中 BusyBox 的 nslookup 在处理给定的 DNS 服务器不正确！"
+msgstr "当前编译版本中的 BusyBox 的 nslook 不能正确处理给定的 DNS 服务器！"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:329
 msgid "Cancel"
@@ -210,7 +206,7 @@ msgstr "启用安全连接与 DDNS 提供商联系"
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:406
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:450
 msgid "Enabled"
-msgstr "启用"
+msgstr "已启用"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:777
 msgid "Error"
@@ -329,9 +325,7 @@ msgstr "如果 Wget 和 cURL 包都安装了，默认会用 Wget 来通信。"
 msgid ""
 "If this service section is disabled it could not be started.<br />Neither "
 "from LuCI interface nor from console"
-msgstr ""
-"如果服务配置被禁用，那么它将不能被启动。<br />无论是通过 LuCI 页面或者是通过"
-"终端。"
+msgstr "如果服务配置被禁用，那么它将不能被启动。<br />无论是通过 LuCI 页面还是通过终端。"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:284
 msgid "If using secure communication you should verify server certificates!"
@@ -368,7 +362,7 @@ msgstr "接口"
 msgid ""
 "Interval to force updates send to DDNS Provider<br />Setting this parameter "
 "to 0 will force the script to only run once"
-msgstr ""
+msgstr "向 DDNS 提供商发送记录更新请求的时间间隔<br />将此参数设置为 0 则脚本仅运行一次"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:812
 msgid "Interval unit to check for changed IP"
