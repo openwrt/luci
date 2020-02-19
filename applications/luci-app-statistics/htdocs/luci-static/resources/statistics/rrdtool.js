@@ -568,7 +568,7 @@ return L.Class.extend({
 						noarea: dopts.noarea || false,
 						title: dopts.title || null,
 						weight: dopts.weight || (dopts.negweight ? -+data_instances[j] : null) || (dopts.posweight ? +data_instances[j] : null) || null,
-						ds: data_sources[j],
+						ds: data_sources[k],
 						type: data_types[i],
 						instance: data_instances[j],
 						index: _sources.length + 1,
