@@ -852,7 +852,7 @@ return L.view.extend({
 		o.default  = "minutes"
 		o.value("minutes", _("minutes"));
 		o.value("hours", _("hours"));
-		o.value("hours", _("days"));
+		o.value("days", _("days"));
 
 		// retry_count
 
