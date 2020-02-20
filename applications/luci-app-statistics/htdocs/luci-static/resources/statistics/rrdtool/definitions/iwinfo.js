@@ -15,7 +15,7 @@ return L.Class.extend({
 			vlabel: "dBm",
 			number_format: "%5.1lf dBm",
 			data: {
-				types: [ "signal_power", "signal_noise" ],
+				types: [ "signal_noise", "signal_power" ],
 				options: {
 					signal_power: {
 						title  : "Signal",
