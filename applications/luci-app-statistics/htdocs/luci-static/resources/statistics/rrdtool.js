@@ -369,7 +369,7 @@ return L.Class.extend({
 			/* is first source in stack or overlay source: source_stk = source_nnl */
 			if (prev == null || source.overlay) {
 				/* create cdef statement for cumulative stack (no NaNs) and also
-                   for display (preserving NaN where no points should be displayed) */
+				   for display (preserving NaN where no points should be displayed) */
 				if (gopts.rrasingle || !gopts.rramax)
 					_args.push(
 						'CDEF:%s_stk=%s_nnl'.format(source.sname, source.sname),
@@ -634,7 +634,7 @@ return L.Class.extend({
 				var x = a.weight || a.index || 0,
 				    y = b.weight || b.index || 0;
 
-				return +x < +y;
+				return +x - +y;
 			});
 
 			/* define colors in order */
