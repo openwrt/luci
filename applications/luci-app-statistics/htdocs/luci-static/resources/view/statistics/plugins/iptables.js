@@ -33,7 +33,7 @@ return L.Class.extend({
 							table = m[1];
 							count = {};
 						}
-						else if ((m = lines[i].match(/^-A (.+?) (-.+)$/)) != null) {
+						else if ((m = lines[i].match(/^-A (.+?) ([!-].+)$/)) != null) {
 							count[m[1]] = (count[m[1]] || 0) + 1;
 
 							iptables[table] = iptables[table] || {};
