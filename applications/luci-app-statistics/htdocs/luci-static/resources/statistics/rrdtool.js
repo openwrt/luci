@@ -335,6 +335,10 @@ return L.Class.extend({
 		    _longest_name = 0,
 		    _has_totals = false;
 
+		/* use the plugin+instance+type as seed for the prng to ensure the
+		   same pseudo-random color sequence for each render */
+		random.seed(sfh([plugin, plugin_instance || '', dtype || ''].join('.')));
+
 		function __def(source) {
 			var inst = source.sname,
 			    rrd  = source.rrd.replace(/[\\:]/g, '\\$&'),
