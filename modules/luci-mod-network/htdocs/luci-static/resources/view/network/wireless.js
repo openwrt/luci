@@ -1824,6 +1824,9 @@ return L.view.extend({
 					uci.set('wireless', section_id, 'key', '1');
 					uci.set('wireless', section_id, 'key1', passval);
 				}
+				else {
+					uci.set('wireless', section_id, 'encryption', 'none');
+				}
 
 				return network.addNetwork(nameval, { proto: 'dhcp' }).then(function(net) {
 					firewall.deleteNetwork(net.getName());
