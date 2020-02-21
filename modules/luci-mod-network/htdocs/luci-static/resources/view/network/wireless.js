@@ -1666,27 +1666,37 @@ return L.view.extend({
 				])
 			]);
 
+			var stop = E('button', {
+				'class': 'btn',
+				'click': L.bind(this.handleScanStartStop, this),
+				'style': 'display:none',
+				'data-state': 'stop'
+			}, _('Stop refresh'));
+
 			cbi_update_table(table, [], E('em', { class: 'spinning' }, _('Starting wireless scan...')));
 
 			var md = ui.showModal(_('Join Network: Wireless Scan'), [
 				table,
-				E('div', { 'class': 'right' },
+				E('div', { 'class': 'right' }, [
+					stop,
+					' ',
 					E('button', {
 						'class': 'btn',
 						'click': L.bind(this.handleScanAbort, this)
-					}, _('Dismiss')))
+					}, _('Dismiss'))
+				])
 			]);
 
 			md.style.maxWidth = '90%';
 			md.style.maxHeight = 'none';
 
-			this.pollFn = L.bind(this.handleScanRefresh, this, radioDev, {}, table);
+			this.pollFn = L.bind(this.handleScanRefresh, this, radioDev, {}, table, stop);
 
 			L.Poll.add(this.pollFn);
 			L.Poll.start();
 		};
 
-		s.handleScanRefresh = function(radioDev, scanCache, table) {
+		s.handleScanRefresh = function(radioDev, scanCache, table, stop) {
 			return radioDev.getScanList().then(L.bind(function(results) {
 				var rows = [];
 
@@ -1738,7 +1748,28 @@ return L.view.extend({
 				}
 
 				cbi_update_table(table, rows);
+
+				stop.disabled = false;
+				stop.style.display = '';
+				stop.classList.remove('spinning');
 			}, this));
+		};
+
+		s.handleScanStartStop = function(ev) {
+			var btn = ev.currentTarget;
+
+			if (btn.getAttribute('data-state') == 'stop') {
+				L.Poll.remove(this.pollFn);
+				btn.firstChild.data = _('Start refresh');
+				btn.setAttribute('data-state', 'start');
+			}
+			else {
+				L.Poll.add(this.pollFn);
+				btn.firstChild.data = _('Stop refresh');
+				btn.setAttribute('data-state', 'stop');
+				btn.classList.add('spinning');
+				btn.disabled = true;
+			}
 		};
 
 		s.handleScanAbort = function(ev) {
