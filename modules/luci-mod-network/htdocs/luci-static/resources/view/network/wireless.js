@@ -1733,7 +1733,7 @@ return L.view.extend({
 
 					rows.push([
 						E('span', { 'style': s }, render_signal_badge(q, res.signal, res.noise)),
-						E('span', { 'style': s }, '%h'.format(res.ssid)),
+						E('span', { 'style': s }, (res.ssid != null) ? '%h'.format(res.ssid) : E('em', _('hidden'))),
 						E('span', { 'style': s }, '%d'.format(res.channel)),
 						E('span', { 'style': s }, '%h'.format(res.mode)),
 						E('span', { 'style': s }, '%h'.format(res.bssid)),
@@ -1788,10 +1788,12 @@ return L.view.extend({
 		s.handleJoinConfirm = function(radioDev, bss, form, ev) {
 			var nameopt = L.toArray(form.lookupOption('name', '_new_'))[0],
 			    passopt = L.toArray(form.lookupOption('password', '_new_'))[0],
+			    bssidopt = L.toArray(form.lookupOption('bssid', '_new_'))[0],
 			    zoneopt = L.toArray(form.lookupOption('zone', '_new_'))[0],
 			    replopt = L.toArray(form.lookupOption('replace', '_new_'))[0],
 			    nameval = (nameopt && nameopt.isValid('_new_')) ? nameopt.formvalue('_new_') : null,
 			    passval = (passopt && passopt.isValid('_new_')) ? passopt.formvalue('_new_') : null,
+			    bssidval = (bssidopt && bssidopt.isValid('_new_')) ? bssidopt.formvalue('_new_') : null,
 			    zoneval = zoneopt ? zoneopt.formvalue('_new_') : null,
 			    enc = L.isObject(bss.encryption) ? bss.encryption : null,
 			    is_wep = (enc && Array.isArray(enc.wep)),
@@ -1827,10 +1829,15 @@ return L.view.extend({
 				uci.set('wireless', section_id, 'mode', (bss.mode == 'Ad-Hoc') ? 'adhoc' : 'sta');
 				uci.set('wireless', section_id, 'network', nameval);
 
-				if (bss.ssid != null)
+				if (bss.ssid != null) {
 					uci.set('wireless', section_id, 'ssid', bss.ssid);
-				else if (bss.bssid != null)
+
+					if (bssidval == '1')
+						uci.set('wireless', section_id, 'bssid', bss.bssid);
+				}
+				else if (bss.bssid != null) {
 					uci.set('wireless', section_id, 'bssid', bss.bssid);
+				}
 
 				if (is_sae) {
 					uci.set('wireless', section_id, 'encryption', 'sae');
@@ -1884,7 +1891,7 @@ return L.view.extend({
 			    enc = L.isObject(bss.encryption) ? bss.encryption : null,
 			    is_wep = (enc && Array.isArray(enc.wep)),
 			    is_psk = (enc && Array.isArray(enc.wpa) && L.toArray(enc.authentication).filter(function(a) { return a == 'psk' || a == 'sae' })),
-			    replace, passphrase, name, zone;
+			    replace, passphrase, name, bssid, zone;
 
 			s2.render = function() {
 				return Promise.all([
@@ -1914,6 +1921,11 @@ return L.view.extend({
 				passphrase.datatype = is_wep ? 'wepkey' : 'wpakey';
 				passphrase.password = true;
 				passphrase.rmempty = false;
+			}
+
+			if (bss.ssid != null) {
+				bssid = s2.option(form.Flag, 'bssid', _('Lock to BSSID'), _('Instead of joining any network with a matching SSID, only connect to the BSSID <code>%h</code>.').format(bss.bssid));
+				bssid.default = '0';
 			}
 
 			zone = s2.option(widgets.ZoneSelect, 'zone', _('Create / Assign firewall-zone'), _('Choose the firewall zone you want to assign to this interface. Select <em>unspecified</em> to remove the interface from the associated zone or fill out the <em>create</em> field to define a new zone and attach the interface to it.'));
