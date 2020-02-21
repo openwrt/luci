@@ -1971,6 +1971,15 @@ return L.view.extend({
 			    is_psk = (enc && Array.isArray(enc.wpa) && L.toArray(enc.authentication).filter(function(a) { return a == 'psk' || a == 'sae' })),
 			    replace, passphrase, name, bssid, zone;
 
+			var nameUsed = function(name) {
+				var s = uci.get('network', name);
+				if (s != null && s['.type'] != 'interface')
+					return true;
+
+				var net = (s != null) ? network.instantiateNetwork(name) : null;
+				return (net != null && !net.isEmpty());
+			};
+
 			s2.render = function() {
 				return Promise.all([
 					{},
@@ -1985,13 +1994,13 @@ return L.view.extend({
 			name.default = 'wwan';
 			name.rmempty = false;
 			name.validate = function(section_id, value) {
-				if (uci.get('network', value))
+				if (nameUsed(value))
 					return _('The network name is already used');
 
 				return true;
 			};
 
-			for (var i = 2; uci.get('network', name.default); i++)
+			for (var i = 2; nameUsed(name.default); i++)
 				name.default = 'wwan%d'.format(i);
 
 			if (is_wep || is_psk) {
