@@ -95,7 +95,7 @@ return L.Class.extend({
 		var devs = L.toArray(section.Devices),
 		    mounts = L.toArray(section.MountPoints),
 		    fstypes = L.toArray(section.FSTypes),
-		    count = devs.length + mounts.length + count.length,
+		    count = devs.length + mounts.length + fstypes.length,
 		    invert = section.IgnoreSelected == '1';
 
 		if (count == 0)
