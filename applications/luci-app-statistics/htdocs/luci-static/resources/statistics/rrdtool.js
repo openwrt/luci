@@ -259,7 +259,17 @@ return L.Class.extend({
 	},
 
 	pluginInstances: function(hostInstance, pluginName) {
-		return Object.keys((rrdtree[hostInstance] || {})[pluginName] || {}).sort();
+		return Object.keys((rrdtree[hostInstance] || {})[pluginName] || {}).sort(function(a, b) {
+			var x = a.match(/^(\d+)\b/),
+			    y = b.match(/^(\d+)\b/);
+
+			if (!x != !y)
+				return !x - !y;
+			else if (x && y && x[0] != y[0])
+				return +x[0] - +y[0];
+			else
+				return a > b;
+		});
 	},
 
 	dataTypes: function(hostInstance, pluginName, pluginInstance) {
@@ -277,6 +287,21 @@ return L.Class.extend({
 
 	hasDefinition: function(pluginName) {
 		return (graphdefs[pluginName] != null);
+	},
+
+	hasInstanceDetails: function(hostInstance, pluginName, pluginInstance) {
+		var def = graphdefs[pluginName];
+
+		if (!def || typeof(def.rrdargs) != 'function')
+			return false;
+
+		var optlist = this._forcelol(def.rrdargs(this, hostInstance, pluginName, pluginInstance, null, false));
+
+		for (var i = 0; i < optlist.length; i++)
+			if (optlist[i].detail)
+				return true;
+
+		return false;
 	},
 
 	_mkpath: function(host, plugin, plugin_instance, dtype, data_instance) {
@@ -304,7 +329,7 @@ return L.Class.extend({
 		return L.isObject(list[0]) ? list : [ list ];
 	},
 
-	_rrdtool: function(def, rrd, timespan, width, height) {
+	_rrdtool: function(def, rrd, timespan, width, height, cache) {
 		var cmdline = [
 			'graph', '-', '-a', 'PNG',
 			'-s', 'NOW-%s'.format(timespan || this.opts.timespan),
@@ -320,6 +345,15 @@ return L.Class.extend({
 				opt = opt.replace(/\{file\}/g, rrd);
 
 			cmdline.push(opt);
+		}
+
+		if (L.isObject(cache)) {
+			var key = sfh(cmdline.join('\0'));
+
+			if (!cache.hasOwnProperty(key))
+				cache[key] = fs.exec_direct('/usr/bin/rrdtool', cmdline, 'blob', true);
+
+			return cache[key];
 		}
 
 		return fs.exec_direct('/usr/bin/rrdtool', cmdline, 'blob', true);
@@ -682,7 +716,7 @@ return L.Class.extend({
 		return defs;
 	},
 
-	render: function(plugin, plugin_instance, is_index, hostname, timespan, width, height) {
+	render: function(plugin, plugin_instance, is_index, hostname, timespan, width, height, cache) {
 		var pngs = [];
 
 		/* check for a whole graph handler */
@@ -705,7 +739,7 @@ return L.Class.extend({
 					/* render all diagrams */
 					for (var j = 0; j < diagrams.length; j++) {
 						/* exec */
-						_images[i][j] = this._rrdtool(diagrams[j], null, timespan, width, height);
+						_images[i][j] = this._rrdtool(diagrams[j], null, timespan, width, height, cache);
 					}
 				}
 			}

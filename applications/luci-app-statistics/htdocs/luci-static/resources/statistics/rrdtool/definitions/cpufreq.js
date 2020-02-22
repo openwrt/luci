@@ -22,6 +22,7 @@ return L.Class.extend({
 
 	    if (uci.get("luci_statistics", "collectd_cpufreq", "ExtraItems")) {
 			var transitions = {
+				detail: true,
 				title: "%H: Frequency transitions - core %pi",
 				alt_autoscale: true,
 				vlabel: "Transitions",
@@ -35,6 +36,7 @@ return L.Class.extend({
 			};
 
 			var percentage = {
+				detail: true,
 				title: "%H: Frequency distribution - core %pi",
 				alt_autoscale: true,
 				vlabel: "Percent",

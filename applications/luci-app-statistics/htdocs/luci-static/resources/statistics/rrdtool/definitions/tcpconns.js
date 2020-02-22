@@ -21,6 +21,11 @@ return L.Class.extend({
 					options: {
 						load__ESTABLISHED: { title: "%di", noarea: true }
 					}
+				},
+				options: {
+					tcp_connections__value: {
+						title: '%di'
+					}
 				}
 			}
 		};

@@ -14,8 +14,11 @@ return L.view.extend({
 
 	updatePluginTab: function(host, span, time, ev) {
 		var container = ev.target,
+		    width = Math.max(200, container.offsetWidth - 100),
 		    plugin = ev.detail.tab,
-		    plugin_instances = rrdtool.pluginInstances(host.value, plugin);
+		    render_instances = [],
+		    plugin_instances = rrdtool.pluginInstances(host.value, plugin),
+		    cache = {};
 
 		activePlugin = plugin;
 
@@ -25,20 +28,41 @@ return L.view.extend({
 			])
 		]);
 
-		Promise.all(plugin_instances.map(function(instance) {
-			return rrdtool.render(plugin, instance, false, host.value, span.value, Math.max(200, container.offsetWidth - 100));
+		for (var i = 0; i < plugin_instances.length; i++)
+			if (rrdtool.hasInstanceDetails(host.value, plugin, plugin_instances[i]))
+				render_instances.push(plugin_instances[i]);
+
+		if (render_instances.length == 0 || render_instances.length > 1)
+			render_instances.unshift('-');
+
+		Promise.all(render_instances.map(function(instance) {
+			if (instance == '-') {
+				var tasks = [];
+
+				for (var i = 0; i < plugin_instances.length; i++)
+					tasks.push(rrdtool.render(plugin, plugin_instances[i], true, host.value, span.value, width, null, cache));
+
+				return Promise.all(tasks).then(function(blobs) {
+					return Array.prototype.concat.apply([], blobs);
+				});
+			}
+			else {
+				return rrdtool.render(plugin, instance, false, host.value, span.value, width, null, cache);
+			}
 		})).then(function(blobs) {
 			var multiple = blobs.length > 1;
 
 			L.dom.content(container, E('div', {}, blobs.map(function(blobs, i) {
-				var plugin_instance = plugin_instances[i];
+				var plugin_instance = i ? plugin_instances[i-1] : plugin_instances.join('|'),
+				    title = '%s: %s'.format(rrdtool.pluginTitle(plugin), i ? plugin_instance : _('Overview'));
 
 				return E('div', {
 					'class': 'center',
 					'data-tab': multiple ? i : null,
-					'data-tab-title': multiple ? '%s: %s'.format(rrdtool.pluginTitle(plugin), plugin_instances[i]) : null,
+					'data-tab-title': multiple ? title : null,
 					'data-plugin': plugin,
-					'data-plugin-instance': plugin_instances[i],
+					'data-plugin-instance': plugin_instance,
+					'data-is-index': i ? null : true,
 					'cbi-tab-active': function(ev) { activeInstance = ev.target.getAttribute('data-plugin-instance') }
 				}, blobs.map(function(blob) {
 					return E('img', {
@@ -50,7 +74,7 @@ return L.view.extend({
 			if (multiple)
 				ui.tabs.initTabGroup(container.lastElementChild.childNodes);
 			else
-				activeInstance = plugin_instances[0];
+				activeInstance = plugin_instances.join('|');
 		});
 	},
 
@@ -87,9 +111,15 @@ return L.view.extend({
 	},
 
 	refreshGraphs: function(host, span, time, container) {
-		var div = document.querySelector('[data-plugin="%s"][data-plugin-instance="%s"]'.format(activePlugin, activeInstance || ''));
+		var div = document.querySelector('[data-plugin="%s"][data-plugin-instance="%s"]'.format(activePlugin, activeInstance || '')),
+		    width = Math.max(200, container.offsetWidth - 100),
+		    render_instances = activeInstance.split(/\|/);
 
-		return rrdtool.render(activePlugin, activeInstance || '', false, host.value, span.value, Math.max(200, container.offsetWidth - 100)).then(function(blobs) {
+		return Promise.all(render_instances.map(function(render_instance) {
+			return rrdtool.render(activePlugin, render_instance || '', div.hasAttribute('data-is-index'), host.value, span.value, width);
+		})).then(function(blobs) {
+			return Array.prototype.concat.apply([], blobs);
+		}).then(function(blobs) {
 			return Promise.all(blobs.map(function(blob) {
 				return new Promise(function(resolveFn, rejectFn) {
 					var img = E('img', { 'src': URL.createObjectURL(new Blob([blob], { type: 'image/png' })) });
