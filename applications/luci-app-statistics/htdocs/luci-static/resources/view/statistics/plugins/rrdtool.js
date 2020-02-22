@@ -9,44 +9,33 @@ return L.Class.extend({
 		var o;
 
 		o = s.option(form.Flag, 'enable', _('Enable this plugin'));
-		o.default = '0';
 
 		o = s.option(form.Value, 'DataDir', _('Storage directory'),
 			_('Note: as pages are rendered by user \'nobody\', the *.rrd files, the storage directory and all its parent directories need to be world readable.'));
-		o.default = '/tmp';
-		o.optional = true;
-		o.rmempty = true;
+		o.default = '/tmp/rrd';
 		o.depends('enable', '1');
 
-		o = s.option(form.Value, 'StepSize', _('RRD step interval'),
-			_('Seconds'));
-		o.default = '30';
-		o.optional = true;
-		o.rmempty = true;
+		o = s.option(form.Value, 'StepSize', _('RRD step interval'), _('Seconds'));
+		o.placeholder = '30';
+		o.datatype = 'uinteger';
 		o.depends('enable', '1');
 
-		o = s.option(form.Value, 'HeartBeat', _('RRD heart beat interval'),
-			_('Seconds'));
-		o.default = '60';
-		o.optional = true;
-		o.rmempty = true;
+		o = s.option(form.Value, 'HeartBeat', _('RRD heart beat interval'), _('Seconds'));
+		o.placeholder = '60';
+		o.datatype = 'uinteger';
 		o.depends('enable', '1');
 
-		o = s.option(form.Flag, 'RRASingle', _('Only create average RRAs'),
-			_('reduces rrd size'));
-		o.default = 'true';
+		o = s.option(form.Flag, 'RRASingle', _('Only create average RRAs'), _('reduces rrd size'));
+		o.default = '1';
+		o.rmempty = false;
 		o.depends('enable', '1');
 
 		o = s.option(form.Flag, 'RRAMax', _('Show max values instead of averages'),
 			_('Max values for a period can be used instead of averages when not using \'only average RRAs\''));
-		o.default = 'false';
-		o.rmempty = true;
 		o.depends('RRASingle', '0');
 
 		o = s.option(form.DynamicList, 'RRATimespans', _('Stored timespans'));
 		o.default = '10min 1day 1week 1month 1year';
-		o.optional = true;
-		o.rmempty = true;
 		o.depends('enable', '1');
 		o.validate = function(section_id, value) {
 			if (value == '')
@@ -59,30 +48,46 @@ return L.Class.extend({
 		};
 
 		o = s.option(form.Value, 'RRARows', _('Rows per RRA'));
-		o.default = '100';
-		o.optional = true;
-		o.rmempty = true;
+		o.placeholder = '1200';
+		o.datatype = 'min(1)';
 		o.depends('enable', '1');
 
 		o = s.option(form.Value, 'XFF', _('RRD XFiles Factor'));
-		o.default = '0.1';
-		o.optional = true;
-		o.rmempty = true;
+		o.placeholder = '0.1';
 		o.depends('enable', '1');
+		o.validate = function(section_id, value) {
+			if (value == '')
+				return true;
 
-		o = s.option(form.Value, 'CacheTimeout', _('Cache collected data for'),
-			_('Seconds'));
-		o.default = '100';
-		o.optional = true;
-		o.rmempty = true;
-		o.depends('enable', '1');
+			if (value.match(/^[0-9]+(?:\.[0-9]+)?$/) && +value >= 0 && +value < 1)
+				return true;
 
-		o = s.option(form.Value, 'CacheFlush', _('Flush cache after'),
-			_('Seconds'));
-		o.default = '100';
-		o.optional = true;
-		o.rmempty = true;
+			return _('Expecting decimal value lower than one');
+		};
+
+		o = s.option(form.Value, 'CacheTimeout', _('Cache collected data for'), _('Seconds'));
 		o.depends('enable', '1');
+		o.datatype = 'uinteger';
+		o.placeholder = '0';
+		o.validate = function(section_id, value) {
+			var flushinp = this.map.findElement('id', 'widget.cbid.luci_statistics.collectd_rrdtool.CacheFlush');
+
+			if (value != '' && !isNaN(value) && +value > 0) {
+				flushinp.placeholder = 10 * +value;
+				flushinp.disabled = false;
+			}
+			else {
+				flushinp.value = '';
+				flushinp.placeholder = '0';
+				flushinp.disabled = true;
+			}
+
+			return true;
+		};
+
+		o = s.option(form.Value, 'CacheFlush', _('Flush cache after'), _('Seconds'));
+		o.depends('enable', '1');
+		o.datatype = 'uinteger';
 	},
 
 	configSummary: function(section) {

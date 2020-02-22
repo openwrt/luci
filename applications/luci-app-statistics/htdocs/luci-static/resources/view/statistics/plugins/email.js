@@ -10,7 +10,6 @@ return L.Class.extend({
 		var o;
 
 		o = s.option(form.Flag, 'enable', _('Enable this plugin'));
-		o.default = '0';
 
 		o = s.option(form.Value, 'SocketFile', _('Socket file'));
 		o.default = '/var/run/collect-email.sock';
@@ -19,13 +18,11 @@ return L.Class.extend({
 		o = s.option(widgets.GroupSelect, 'SocketGroup', _('Socket group'));
 		o.default = 'nogroup';
 		o.optional = true;
-		o.rmempty = true;
 		o.depends('enable', '1');
 
 		o = s.option(form.Value, 'SocketPerms', _('Socket permissions'));
 		o.default = '0770';
 		o.optional = true;
-		o.rmempty = true;
 		o.depends('enable', '1');
 		o.validate = function(section_id, v) {
 			if (v == '')
@@ -41,7 +38,6 @@ return L.Class.extend({
 		o.datatype = 'range(1,16384)';
 		o.default = '5';
 		o.optional = true;
-		o.rmempty = true;
 		o.depends('enable', '1');
 	},
 

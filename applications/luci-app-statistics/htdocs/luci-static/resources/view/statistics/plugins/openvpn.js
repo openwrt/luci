@@ -10,30 +10,20 @@ return L.Class.extend({
 		var o;
 
 		o = s.option(form.Flag, 'enable', _('Enable this plugin'));
-		o.default = '0';
 
 		o = s.option(form.Flag, 'CollectIndividualUsers', _('Generate a separate graph for each logged user'));
-		o.default = '0';
-		o.rmempty = true;
 		o.depends('enable', '1');
 
 		o = s.option(form.Flag, 'CollectUserCount', _('Aggregate number of connected users'));
-		o.default = '0';
-		o.rmempty = true;
 		o.depends('enable', '1');
 
 		o = s.option(form.Flag, 'CollectCompression', _('Gather compression statistics'));
-		o.default = '0';
-		o.rmempty = true;
 		o.depends('enable', '1');
 
 		o = s.option(form.Flag, 'ImprovedNamingSchema', _('Use improved naming schema'));
-		o.default = '0';
-		o.rmempty = true;
 		o.depends('enable', '1');
 
 		o = s.option(form.DynamicList, 'StatusFile', _('OpenVPN status files'));
-		o.rmempty = true;
 		o.depends('enable', '1');
 		o.load = function(section_id) {
 			return L.resolveDefault(fs.list('/var/run'), []).then(L.bind(function(entries) {

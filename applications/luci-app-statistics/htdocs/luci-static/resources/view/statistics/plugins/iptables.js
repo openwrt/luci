@@ -11,7 +11,6 @@ return L.Class.extend({
 		var o, ss;
 
 		o = s.option(form.Flag, 'enable', _('Enable this plugin'));
-		o.default = '0';
 
 		for (var family = 4; family <= 6; family += 2) {
 			var suffix = (family == 4 ? '' : '6');
@@ -85,7 +84,6 @@ return L.Class.extend({
 			o = ss.option(form.Value, 'table', _('Table'));
 			o.default = 'filter';
 			o.optional = true;
-			o.rmempty = true;
 			o.transformChoices = function() { return this.super('transformChoices', []) || {} };
 			o.validate = function(section_id, table) {
 				var chain_opt = this.section.children.filter(function(o) { return o.option == 'chain' })[0],
@@ -99,7 +97,6 @@ return L.Class.extend({
 
 			o = ss.option(form.Value, 'chain', _('Chain'));
 			o.optional = true;
-			o.rmempty = true;
 			o.transformChoices = function() { return this.super('transformChoices', []) || {} };
 			o.validate = function(section_id, chain) {
 				var table_opt = this.section.children.filter(function(o) { return o.option == 'table' })[0],
@@ -138,7 +135,6 @@ return L.Class.extend({
 
 			o = ss.option(form.Value, 'rule', _('Comment / Rule Number'));
 			o.optional = true;
-			o.rmempty = true;
 			o.transformChoices = function() { return this.super('transformChoices', []) || {} };
 			o.load = function(section_id) {
 				var table = uci.get('luci_statistics', section_id, 'table'),

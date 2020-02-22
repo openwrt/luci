@@ -9,7 +9,6 @@ return L.Class.extend({
 		var o;
 
 		o = s.option(form.Flag, 'enable', _('Enable this plugin'));
-		o.default = '0';
 
 		o = s.option(form.DynamicList, 'Hosts', _('Monitor hosts'));
 		o.default = '127.0.0.1';

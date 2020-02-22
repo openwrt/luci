@@ -10,7 +10,6 @@ return L.Class.extend({
 		var o;
 
 		o = s.option(form.Flag, 'enable', _('Enable this plugin'));
-		o.default = '0';
 
 		o = s.option(form.DynamicList, 'Irqs', _('Monitor interrupts'));
 		o.optional = true;
@@ -41,8 +40,6 @@ return L.Class.extend({
 		};
 
 		o = s.option(form.Flag, 'IgnoreSelected', _('Monitor all except specified'));
-		o.default = '0';
-		o.optional = 'true';
 		o.depends('enable', '1');
 	},
 

@@ -10,7 +10,6 @@ return L.Class.extend({
 		var o;
 
 		o = s.option(form.Flag, 'enable', _('Enable this plugin'));
-		o.default = '0';
 
 		o = s.option(form.DynamicList, 'Device', _('Monitor device(s) / thermal zone(s)'), _('Empty value = monitor all'));
 		o.load = function(section_id) {

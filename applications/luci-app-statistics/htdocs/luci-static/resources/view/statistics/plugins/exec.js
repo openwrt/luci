@@ -10,7 +10,6 @@ return L.Class.extend({
 		var o, ss;
 
 		o = s.option(form.Flag, 'enable', _('Enable this plugin'));
-		o.default = '0';
 
 		o = s.option(form.SectionValue, '__input', form.TableSection, 'collectd_exec_input');
 		o.title = _('Add command for reading values');
@@ -27,12 +26,10 @@ return L.Class.extend({
 		o = ss.option(widgets.UserSelect, 'cmduser', _('User'));
 		o.default = 'nobody';
 		o.optional = true;
-		o.rmempty = true;
 
 		o = ss.option(widgets.GroupSelect, 'cmdgroup', _('Group'));
 		o.default = 'nogroup';
 		o.optional = true;
-		o.rmempty = true;
 
 		o = s.option(form.SectionValue, '__notify', form.TableSection, 'collectd_exec_notify');
 		o.title = _('Add notification command');
@@ -49,12 +46,10 @@ return L.Class.extend({
 		o = ss.option(widgets.UserSelect, 'cmduser', _('User'));
 		o.default = 'nobody';
 		o.optional = true;
-		o.rmempty = true;
 
 		o = ss.option(widgets.GroupSelect, 'cmdgroup', _('Group'));
 		o.default = 'nogroup';
 		o.optional = true;
-		o.rmempty = true;
 	},
 
 	configSummary: function(section) {

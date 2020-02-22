@@ -183,9 +183,11 @@ function config_network( c )
 				end
 		end
 
-	return str .. _string( c["TimeToLive"], "TimeToLive" )
-		   .. _string( c["CacheFlush"], "CacheFlush" )
-		   .. _bool(   c["Forward"],    "Forward"    )
+	return str ..
+		_string(c["MaxPacketSize"], "MaxPacketSize") ..
+		_string(c["TimeToLive"], "TimeToLive") ..
+		_bool(c["Forward"], "Forward") ..
+		_bool(c["ReportStats"], "ReportStats")
 end
 
 

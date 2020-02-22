@@ -9,10 +9,8 @@ return L.Class.extend({
 		var o;
 
 		o = s.option(form.Flag, 'enable', _('Enable this plugin'));
-		o.default = '0';
 
 		o = s.option(form.Value, 'UPS', _('UPS'), _('UPS name in NUT ups@host format'));
-		o.rmempty = true;
 	},
 
 	configSummary: function(section) {

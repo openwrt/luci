@@ -18,7 +18,6 @@ return L.Class.extend({
 		var o;
 
 		o = s.option(form.Flag, 'enable', _('Enable this plugin'));
-		o.default = '0';
 
 		o = s.option(form.DynamicList, 'Sensor', _('Sensor list'));
 		o.rmempty = true;
@@ -45,8 +44,6 @@ return L.Class.extend({
 		};
 
 		o = s.option(form.Flag, 'IgnoreSelected', _('Monitor all except specified'));
-		o.default = '0';
-		o.rmempty = true;
 		o.depends('enable', '1');
 	},
 

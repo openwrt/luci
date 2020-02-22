@@ -10,11 +10,9 @@ return L.Class.extend({
 		var o;
 
 		o = s.option(form.Flag, 'enable', _('Enable this plugin'));
-		o.default = '0';
 
 		o = s.option(form.DynamicList, 'Disks', _('Monitor disks and partitions'),
 			_('When none selected, all disks will be monitored.'));
-		o.rmempty = true;
 		o.depends('enable', '1');
 		o.load = function(section_id) {
 			return fs.trimmed('/proc/partitions').then(L.bind(function(str) {
@@ -31,7 +29,6 @@ return L.Class.extend({
 		};
 
 		o = s.option(form.Flag, 'IgnoreSelected', _('Monitor all except specified'));
-		o.default = '0';
 		o.depends('enable', '1');
 	},
 

@@ -12,21 +12,19 @@ return L.Class.extend({
 		o.default = '0';
 
 		o = s.option(form.Value, 'TimeToLive', _('TTL for network packets'));
-		o.default = '128';
-		o.datatype = 'range(0, 255)';
-		o.optional = true;
+		o.placeholder = '1';
+		o.datatype = 'range(1, 255)';
 		o.depends('enable', '1');
 
-		o = s.option(form.Flag, 'Forward', _('Forwarding between listen and server addresses'));
-		o.default = '0';
-		o.optional = true;
+		o = s.option(form.Value, 'MaxPacketSize', _('Maximum packet size'), _('Set the maximum size for datagrams sent over the network'));
+		o.placeholder = '1452';
+		o.datatype = 'range(1024, 65535)';
 		o.depends('enable', '1');
 
-		o = s.option(form.Value, 'CacheFlush', _('Cache flush interval'),
-			_('Seconds'));
-		o.default = '86400';
-		o.datatype = 'uinteger';
-		o.optional = true;
+		o = s.option(form.Flag, 'Forward', _('Enable forwarding'), _('Forwarding between listen and server addresses'));
+		o.depends('enable', '1');
+
+		o = s.option(form.Flag, 'ReportStats', _('Enable statistics'), _('Create statistics about the network plugin itself'));
 		o.depends('enable', '1');
 
 		o = s.option(form.SectionValue, '__listeners', form.TableSection, 'collectd_network_listen');

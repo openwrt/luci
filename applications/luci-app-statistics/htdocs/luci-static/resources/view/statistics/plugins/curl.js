@@ -8,7 +8,6 @@ return L.Class.extend({
 		var o, ss;
 
 		o = s.option(form.Flag, 'enable', _('Enable this plugin'));
-		o.default = '0';
 
 		o = s.option(form.SectionValue, '__pages', form.TableSection, 'collectd_curl_page');
 		o.title = _('Fetch pages');
@@ -20,6 +19,7 @@ return L.Class.extend({
 
 		o = ss.option(form.Flag, 'enable', _('Enable'));
 		o.default = '1';
+		o.rmempty = false;
 
 		o = ss.option(form.Value, 'name', _('Name'));
 

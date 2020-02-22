@@ -9,7 +9,6 @@ return L.Class.extend({
 		var o;
 
 		o = s.option(form.Flag, 'enable', _('Enable this plugin'));
-		o.default = '0';
 
 		o = s.option(form.DynamicList, 'Processes', _('Monitor processes'));
 		o.default = 'uhttpd dropbear dnsmasq';

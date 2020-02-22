@@ -38,7 +38,6 @@ return L.Class.extend({
 		o.depends('enable', '1');
 
 		o = s.option(form.Flag, 'IgnoreSelected', _('Monitor all except specified'));
-		o.default = '0';
 		o.depends('enable', '1');
 	},
 

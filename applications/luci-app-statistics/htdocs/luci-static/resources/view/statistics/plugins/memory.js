@@ -9,18 +9,12 @@ return L.Class.extend({
 		var o;
 
 		o = s.option(form.Flag, 'enable', _('Enable this plugin'));
-		o.default = '0';
 
-		o = s.option(form.Flag, 'ValuesAbsolute', _('Absolute values'),
-			_('When set to true, we request absolute values'));
+		o = s.option(form.Flag, 'ValuesAbsolute', _('Absolute values'), _('When set to true, we request absolute values'));
 		o.default = '1';
-		o.optional = false;
 		o.depends('enable', '1');
 
-		o = s.option(form.Flag, 'ValuesPercentage', _('Percent values'),
-			_('When set to true, we request percentage values'));
-		o.default = '0';
-		o.optional = false;
+		o = s.option(form.Flag, 'ValuesPercentage', _('Percent values'), _('When set to true, we request percentage values'));
 		o.depends('enable', '1');
 	},
 

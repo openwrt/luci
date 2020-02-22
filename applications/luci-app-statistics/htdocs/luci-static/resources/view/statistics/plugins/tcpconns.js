@@ -9,18 +9,20 @@ return L.Class.extend({
 		var o;
 
 		o = s.option(form.Flag, 'enable', _('Enable this plugin'));
-		o.default = '0';
 
 		o = s.option(form.Flag, 'ListeningPorts', _('Monitor all local listen ports'));
-		o.default = '1';
 		o.depends('enable', '1');
+		o.rmempty = false;
+		o.default = '1';
 
-		o = s.option(form.Value, 'LocalPorts', _('Monitor local ports'));
+		o = s.option(form.DynamicList, 'LocalPorts', _('Monitor local ports'));
 		o.optional = true;
+		o.datatype = 'port';
 		o.depends({ enable: '1', ListeningPorts: '0' });
 
-		o = s.option(form.Value, 'RemotePorts', _('Monitor remote ports'));
+		o = s.option(form.DynamicList, 'RemotePorts', _('Monitor remote ports'));
 		o.optional = true;
+		o.datatype = 'port';
 		o.depends({ enable: '1', ListeningPorts: '0' });
 	},
 

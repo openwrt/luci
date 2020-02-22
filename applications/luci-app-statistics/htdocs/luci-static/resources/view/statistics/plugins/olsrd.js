@@ -9,16 +9,13 @@ return L.Class.extend({
 		var o;
 
 		o = s.option(form.Flag, 'enable', _('Enable this plugin'));
-		o.default = '0';
 
 		o = s.option(form.Value, 'Host', _('Host'),
 			_('IP or hostname where to get the txtinfo output from'));
 		o.datatype = 'host';
-		o.rmempty = true;
 
 		o = s.option(form.Value, 'Port', _('Port'));
 		o.datatype = 'port';
-		o.rmempty = true;
 
 		o = s.option(form.ListValue, 'CollectLinks', _('CollectLinks'),
 			_('Specifies what information to collect about links.'));

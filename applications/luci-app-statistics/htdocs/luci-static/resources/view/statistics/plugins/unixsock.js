@@ -10,7 +10,6 @@ return L.Class.extend({
 		var o;
 
 		o = s.option(form.Flag, 'enable', _('Enable this plugin'));
-		o.default = '0';
 
 		o = s.option(form.Value, 'SocketFile', _('Socket path'));
 		o.default = '/var/run/collect-query.socket';
