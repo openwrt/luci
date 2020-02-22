@@ -220,7 +220,7 @@ return L.view.extend({
 			    a = this.formvalue(section_id),
 			    p = port ? port[0].formvalue(section_id) : null;
 
-			if ((a == null || a == '') && (p == null || p == ''))
+			if ((a == null || a == '') && (p == null || p == '') && value == '')
 				return _('A rewrite IP must be specified!');
 
 			return true;
