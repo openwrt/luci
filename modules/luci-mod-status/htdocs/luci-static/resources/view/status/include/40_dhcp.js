@@ -9,7 +9,7 @@ var callLuciDHCPLeases = rpc.declare({
 });
 
 return L.Class.extend({
-	title: _('Active DHCP Leases'),
+	title: '',
 
 	load: function() {
 		return Promise.all([
@@ -18,7 +18,7 @@ return L.Class.extend({
 		]);
 	},
 
-	render: function(data) {
+	renderLeases: function(data) {
 		var leases = Array.isArray(data[0].dhcp_leases) ? data[0].dhcp_leases : [],
 		    leases6 = Array.isArray(data[0].dhcp6_leases) ? data[0].dhcp6_leases : [],
 		    machints = data[1].getMACHints(false);
@@ -88,9 +88,17 @@ return L.Class.extend({
 		}), E('em', _('There are no active leases')));
 
 		return E([
+			E('h3', _('Active DHCP Leases')),
 			table,
 			E('h3', _('Active DHCPv6 Leases')),
 			table6
 		]);
+	},
+
+	render: function(data) {
+		if (L.hasSystemFeature('dnsmasq') || L.hasSystemFeature('odhcpd'))
+			return this.renderLeases(data);
+
+		return E([]);
 	}
 });
