@@ -82,7 +82,7 @@ return L.view.extend({
 			var container = E('div');
 
 			rv.appendChild(E('div', { 'class': 'cbi-section', 'style': 'display:none' }, [
-				E('h3', title),
+				title != '' ? E('h3', title) : '',
 				container
 			]));
 
