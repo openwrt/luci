@@ -662,7 +662,7 @@ function handleConfig(ev)
 			body.push(E('h5', {}, '%h'.format(file)));
 			body.push(E('textarea', {
 				'name': file,
-				'rows': Math.max(Math.min(conf[file].match(/\n/g).length, 10), 3)
+				'rows': Math.max(Math.min(L.toArray(conf[file].match(/\n/g)).length, 10), 3)
 			}, '%h'.format(conf[file])));
 		});
 
