@@ -1,0 +1,27 @@
+{
+	"luci-app-opkg": {
+		"description": "Grant access to opkg management",
+		"read": {
+			"cgi-io": [ "exec" ],
+			"file": {
+				"/usr/libexec/opkg-list installed": [ "exec" ],
+				"/usr/libexec/opkg-list available": [ "exec" ],
+				"/etc/opkg.conf": [ "read" ],
+				"/etc/opkg/*.conf": [ "read" ]
+			},
+			"ubus": {
+				"luci": [ "getMountPoints" ]
+			}
+		},
+		"write": {
+			"file": {
+				"/bin/opkg * install *": [ "exec" ],
+				"/bin/opkg * remove *": [ "exec" ],
+				"/bin/opkg * update": [ "exec" ],
+				"/etc/opkg.conf": [ "write" ],
+				"/etc/opkg/*.conf": [ "write" ],
+				"/tmp/upload.ipk": [ "write" ]
+			}
+		}
+	}
+}
