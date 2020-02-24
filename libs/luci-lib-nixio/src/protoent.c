@@ -91,7 +91,7 @@ static int nixio_getproto(lua_State *L) {
 }
 
 /* module table */
-static const luaL_reg R[] = {
+static const luaL_Reg R[] = {
     {"getprotobyname",		nixio_getprotobyname},
     {"getprotobynumber",	nixio_getprotobynumber},
     {"getproto",			nixio_getproto},

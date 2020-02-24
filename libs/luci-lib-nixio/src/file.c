@@ -379,7 +379,7 @@ static int nixio_file__tostring(lua_State *L) {
 }
 
 /* method table */
-static const luaL_reg M[] = {
+static const luaL_Reg M[] = {
 	{"write",		nixio_file_write},
 	{"read",		nixio_file_read},
 	{"tell",		nixio_file_tell},
@@ -394,7 +394,7 @@ static const luaL_reg M[] = {
 };
 
 /* module table */
-static const luaL_reg R[] = {
+static const luaL_Reg R[] = {
 	{"dup",			nixio_dup},
 	{"open",		nixio_open},
 	{"open_flags",	nixio_open_flags},

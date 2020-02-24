@@ -154,14 +154,14 @@ static int nixio_crypto_hash__tostring(lua_State *L) {
 
 
 /* module table */
-static const luaL_reg R[] = {
+static const luaL_Reg R[] = {
 	{"hash",		nixio_crypto_hash},
 	{"hmac",		nixio_crypto_hmac},
 	{NULL,			NULL}
 };
 
 /* hash table */
-static const luaL_reg M[] = {
+static const luaL_Reg M[] = {
 	{"update",		nixio_crypto_hash_update},
 	{"final",		nixio_crypto_hash_final},
 	{"__gc",		nixio_crypto_hash__gc},
