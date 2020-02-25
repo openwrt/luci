@@ -484,7 +484,7 @@ s = m:section(NamedSection, "main", "aria2", translate("Extra Settings"),
 s.addremove = false
 s.anonymous = true
 
-o = s:option(DynamicList, "extra_setting", translate("Settings list"),
+o = s:option(DynamicList, "extra_settings", translate("Settings list"),
 	translate("List of extra settings. Format: option=value, eg. <code>netrc-path=/tmp/.netrc</code>."))
 o.placeholder = "option=value"
 
