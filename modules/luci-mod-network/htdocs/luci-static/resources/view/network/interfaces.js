@@ -760,24 +760,35 @@ return L.view.extend({
 							'class': 'cbi-button cbi-button-positive important',
 							'click': ui.createHandlerFn(this, function(ev) {
 								var nameval = name.isValid('_new_') ? name.formvalue('_new_') : null,
-								    protoval = proto.isValid('_new_') ? proto.formvalue('_new_') : null;
+								    protoval = proto.isValid('_new_') ? proto.formvalue('_new_') : null,
+								    protoclass = protoval ? network.getProtocol(protoval) : null;
 
 								if (nameval == null || protoval == null || nameval == '' || protoval == '')
 									return;
 
-								return m.save(function() {
-									var section_id = uci.add('network', 'interface', nameval);
-
-									uci.set('network', section_id, 'proto', protoval);
-
-									if (ifname_single.isActive('_new_')) {
-										uci.set('network', section_id, 'ifname', ifname_single.formvalue('_new_'));
+								return protoclass.isCreateable(nameval).then(function(checkval) {
+									if (checkval != null) {
+										ui.addNotification(null,
+												E('p', _('New interface for "%s" can not be created: %s').format(protoclass.getI18n(), checkval)));
+										ui.hideModal();
+										return;
 									}
-									else if (ifname_multi.isActive('_new_')) {
-										uci.set('network', section_id, 'type', 'bridge');
-										uci.set('network', section_id, 'ifname', L.toArray(ifname_multi.formvalue('_new_')).join(' '));
-									}
-								}).then(L.bind(m.children[0].renderMoreOptionsModal, m.children[0], nameval));
+
+									return m.save(function() {
+										var section_id = uci.add('network', 'interface', nameval);
+
+										uci.set('network', section_id, 'proto', protoval);
+
+										if (ifname_single.isActive('_new_')) {
+											uci.set('network', section_id, 'ifname', ifname_single.formvalue('_new_'));
+										}
+										else if (ifname_multi.isActive('_new_')) {
+											uci.set('network', section_id, 'type', 'bridge');
+											uci.set('network', section_id, 'ifname', L.toArray(ifname_multi.formvalue('_new_')).join(' '));
+										}
+									}).then(L.bind(m.children[0].renderMoreOptionsModal, m.children[0], nameval));
+
+								});
 							})
 						}, _('Create interface'))
 					])
