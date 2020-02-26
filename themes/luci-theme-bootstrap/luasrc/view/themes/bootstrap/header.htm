@@ -19,13 +19,13 @@
 	http.prepare_content("text/html")
 -%>
 <!DOCTYPE html>
-<html lang="<%=luci.i18n.context.lang%>">
+<html lang="<%=luci.i18n.context.lang%>" class="h-100">
 	<head>
 		<meta charset="utf-8">
 		<title><%=striptags( (boardinfo.hostname or "?") .. ( (node and node.title) and ' - ' .. translate(node.title) or '')) %> - LuCI</title>
 		<meta name="viewport" content="initial-scale=1.0">
 		<link rel="stylesheet" href="<%=media%>/cascade.css">
-		<link rel="stylesheet" media="only screen and (max-device-width: 854px)" href="<%=media%>/mobile.css" type="text/css" />
+		<!--link rel="stylesheet" href="http://127.0.0.1:8000/dist/css/bootstrap.css"-->
 		<link rel="shortcut icon" href="<%=media%>/favicon.png">
 		<% if node and node.css then %>
 			<link rel="stylesheet" href="<%=resource%>/<%=node.css%>">
@@ -40,38 +40,32 @@
 		<% include("themes/bootstrap/json-menu") %>
 	</head>
 
-	<body class="lang_<%=luci.i18n.context.lang%> <% if node then %><%= striptags( node.title ) %><%- end %>" data-page="<%= pcdata(table.concat(disp.context.requestpath, "-")) %>">
-		<header>
-			<div class="fill">
-				<div class="container">
-					<a class="brand" href="#"><%=boardinfo.hostname or "?"%></a>
-					<ul class="nav" id="topmenu" style="display:none"></ul>
-					<div class="pull-right">
-						<span id="xhr_poll_status" style="display:none" onclick="XHR.running() ? XHR.halt() : XHR.run()">
-							<span class="label success" id="xhr_poll_status_on"><%:Auto Refresh%> <%:on%></span>
-							<span class="label" id="xhr_poll_status_off" style="display:none"><%:Auto Refresh%> <%:off%></span>
-						</span>
-					</div>
-				</div>
+	<body class="bg-light d-flex flex-column h-100 lang_<%=luci.i18n.context.lang%> <% if node then %><%= striptags( node.title ) %><%- end %>" data-page="<%= pcdata(table.concat(disp.context.requestpath, "-")) %>">
+		<header class="navbar navbar-expand navbar-dark bg-dark fixed-top">
+			<a class="navbar-brand mr-2 d-none d-md-block" href="#"><%=boardinfo.hostname or "?"%></a>
+			<ul class="navbar-nav flex-row flex-wrap" id="topmenu" style="display:none"></ul>
+			<div class="ml-auto text-nowrap">
+				<button class="btn btn-success badge ml-1" id="xhr_poll_status" style="display:none" onclick="XHR.running() ? XHR.halt() : XHR.run()">
+					<span id="xhr_poll_status_on"><%:Auto Refresh%> <%:on%></span>
+					<span id="xhr_poll_status_off" style="display:none"><%:Auto Refresh%> <%:off%></span>
+				</button>
 			</div>
 		</header>
-
-		<div id="maincontent" class="container">
+		<div id="tabmenu" class="bg-white shadow-sm" style="display:none"></div>
+		<div id="maincontent" class="container-lg">
 			<%- if luci.sys.process.info("uid") == 0 and luci.sys.user.getuser("root") and not luci.sys.user.getpasswd("root") then -%>
-				<div class="alert-message warning">
+				<div class="alert-message warning shadow-sm">
 					<h4><%:No password set!%></h4>
 					<p><%:There is no password set on this router. Please configure a root password to protect the web interface and enable SSH.%></p>
 					<% if disp.lookup("admin/system/admin") then %>
-					  <div class="right"><a class="btn" href="<%=url("admin/system/admin")%>"><%:Go to password configuration...%></a></div>
+					  <a class="btn btn-secondary btn-sm ml-auto" href="<%=url("admin/system/admin")%>"><%:Go to password configuration...%></a>
 					<% end %>
 				</div>
 			<%- end -%>
 
 			<noscript>
-				<div class="alert-message warning">
+				<div class="alert-message warning shadow-sm">
 					<h4><%:JavaScript required!%></h4>
 					<p><%:You must enable JavaScript in your browser or LuCI will not work properly.%></p>
 				</div>
 			</noscript>
-
-			<div id="tabmenu" style="display:none"></div>

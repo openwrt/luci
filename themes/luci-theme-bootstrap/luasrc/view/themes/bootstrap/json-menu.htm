@@ -23,50 +23,65 @@
 
 		function render_tabmenu(tree, url, level) {
 			var container = document.querySelector('#tabmenu'),
-			    ul = E('ul', { 'class': 'tabs' }),
+			    nav = E('div', { 'class': 'nav' }),
 			    children = get_children(tree),
 			    activeNode = null;
 
 			for (var i = 0; i < children.length; i++) {
 				var isActive = (L.env.dispatchpath[3 + (level || 0)] == children[i].name),
-				    activeClass = isActive ? ' active' : '',
-				    className = 'tabmenu-item-%s %s'.format(children[i].name, activeClass);
+				    activeClass = isActive ? 'active' : '';
 
-				ul.appendChild(E('li', { 'class': className }, [
-					E('a', { 'href': L.url(url, children[i].name) }, [ _(children[i].title) ] )]));
+				nav.appendChild(E('a', { 'class': 'nav-link %s'.format(activeClass), 'href': L.url(url, children[i].name) }, [ _(children[i].title) ] ));
 
 				if (isActive)
 					activeNode = children[i];
 			}
 
-			if (ul.children.length == 0)
+			if (nav.children.length == 0)
 				return E([]);
 
-			container.appendChild(ul);
+			container.appendChild(nav);
 			container.style.display = '';
 
-			if (activeNode)
-				render_tabmenu(activeNode, url + '/' + activeNode.name, (level || 0) + 1);
+			//if (activeNode)
+			//	render_tabmenu(activeNode, url + '/' + activeNode.name, (level || 0) + 1);
 
-			return ul;
+			return nav;
 		}
 
-		function render_mainmenu(tree, url, level) {
-			var ul = level ? E('ul', { 'class': 'dropdown-menu' }) : document.querySelector('#topmenu'),
-			    children = get_children(tree);
+		function render_mainmenu_dropdown(tree, url) {
+			var div = E('div', { 'class': 'dropdown-menu' }),
+				children = get_children(tree);
 
-			if (children.length == 0 || level > 1)
+			if (children.length == 0)
 				return E([]);
 
 			for (var i = 0; i < children.length; i++) {
-				var submenu = render_mainmenu(children[i], url + '/' + children[i].name, (level || 0) + 1),
-				    subclass = (!level && submenu.firstElementChild) ? 'dropdown' : null,
-				    linkclass = (!level && submenu.firstElementChild) ? 'menu' : null,
-				    linkurl = submenu.firstElementChild ? '#' : L.url(url, children[i].name);
+				div.appendChild(E('a',
+					{ 'class': 'dropdown-item', 'href': L.url(url, children[i].name) },
+					[ _(children[i].title) ]
+				));
+			}
+
+			return div;
+		}
+
+		function render_mainmenu(tree, url) {
+			var ul = document.querySelector('#topmenu'),
+			    children = get_children(tree);
+
+			if (children.length == 0)
+				return E([]);
+
+			for (var i = 0; i < children.length; i++) {
+				var dropdown = render_mainmenu_dropdown(children[i], url + '/' + children[i].name),
+				    subclass = 'nav-item' + (dropdown.firstElementChild ? ' dropdown' : ''),
+				    linkclass = 'nav-link' + (dropdown.firstElementChild ? ' dropdown-toggle' : ''),
+				    linkurl = dropdown.firstElementChild ? '#' : L.url(url, children[i].name);
 
 				var li = E('li', { 'class': subclass }, [
 					E('a', { 'class': linkclass, 'href': linkurl }, [ _(children[i].title) ]),
-					submenu
+					dropdown
 				]);
 
 				ul.appendChild(li);

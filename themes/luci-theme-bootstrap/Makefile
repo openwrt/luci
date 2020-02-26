@@ -6,7 +6,7 @@
 
 include $(TOPDIR)/rules.mk
 
-LUCI_TITLE:=Bootstrap Theme (default)
+LUCI_TITLE:=Bootstrap4 Theme
 LUCI_DEPENDS:=
 
 PKG_LICENSE:=Apache-2.0
