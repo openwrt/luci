@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LuCI: base\n"
 "POT-Creation-Date: 2010-05-09 01:01+0300\n"
-"PO-Revision-Date: 2020-02-25 23:10+0000\n"
+"PO-Revision-Date: 2020-02-27 00:01+0000\n"
 "Last-Translator: Anton Kikin <a.a.kikin@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/openwrt/luci/ru/>"
 "\n"
@@ -2150,7 +2150,7 @@ msgstr "Прошивка…"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:593
 msgid "Force"
-msgstr "Назначить"
+msgstr "Принудительно (Force)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:823
 msgid "Force 40MHz mode"
@@ -2162,7 +2162,7 @@ msgstr "Назначить CCMP (AES)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:593
 msgid "Force DHCP on this network even if another server is detected."
-msgstr "Назначить DHCP в этой сети, даже если найден другой сервер."
+msgstr "Запускать DHCP в этой сети, даже если в ней найден другой DHCP сервер."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1073
 msgid "Force TKIP"
@@ -2174,7 +2174,7 @@ msgstr "Назначить TKIP и CCMP (AES)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:848
 msgid "Force link"
-msgstr "Активировать соединение"
+msgstr "Принудительное подключение (Force link)"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:251
 msgid "Force upgrade"
@@ -4920,7 +4920,9 @@ msgid ""
 "Set interface properties regardless of the link carrier (If set, carrier "
 "sense events do not invoke hotplug handlers)."
 msgstr ""
-"Автоматически активировать соединение, при подключении в разъем кабеля."
+"Устанавливать параметры (свойства) интерфейса независимо от реального "
+"состояния подключения. Если опция включена, события подключения/отключения "
+"кабеля для данного интерфейса не будут вызывать hotplug обработчики)."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:637
 msgid "Set this interface as master for the dhcpv6 relay."
