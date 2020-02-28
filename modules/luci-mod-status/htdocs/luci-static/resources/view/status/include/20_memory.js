@@ -32,7 +32,7 @@ return L.Class.extend({
 
 		var fields = [
 			_('Total Available'), (mem.available) ? mem.available : (mem.total && mem.free && mem.buffered) ? mem.free + mem.buffered : null, mem.total,
-			_('Free'),            (mem.total && mem.free) ? mem.free : null, mem.total,
+			_('Used'),            (mem.total && mem.free) ? (mem.total - mem.free) : null, mem.total,
 			_('Buffered'),        (mem.total && mem.buffered) ? mem.buffered : null, mem.total
 		];
 
