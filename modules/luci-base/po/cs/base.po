@@ -196,11 +196,11 @@ msgstr ""
 "<abbr title=\"Internetový Protokol Verze 6\">IPv6</abbr>-Suffix "
 "(šestnáctkový)"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:40
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:57
 msgid "<abbr title=\"Light Emitting Diode\">LED</abbr> Configuration"
 msgstr "Nastavení <abbr title=\"Light Emitting Diode\">LED</abbr>"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:51
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:68
 msgid "<abbr title=\"Light Emitting Diode\">LED</abbr> Name"
 msgstr "Název pro <abbr title=\"Light Emitting Diode\">LED</abbr> kontrolku"
 
@@ -354,12 +354,12 @@ msgid "Active Connections"
 msgstr "Aktivní spojení"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:30
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:12
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:91
 msgid "Active DHCP Leases"
 msgstr "Aktivní propůjčené DHCP adresy (leases)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:49
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:92
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:93
 msgid "Active DHCPv6 Leases"
 msgstr "Aktivní propůjčené DHCPv6 adresy (leases)"
 
@@ -396,7 +396,7 @@ msgstr "Přidat IPv4 adresu…"
 msgid "Add IPv6 address…"
 msgstr "Přidat IPv6 adresu…"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:47
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:64
 msgid "Add LED action"
 msgstr "Přidat akci LED kontrolky"
 
@@ -1276,7 +1276,7 @@ msgstr ""
 "Vlastní soubory (certifikáty, skripty) mohou v systému zůstat. Chcete-li "
 "tomu předejít, nejprve obnovte tovární nastavení."
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:41
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:58
 msgid ""
 "Customizes the behaviour of the device <abbr title=\"Light Emitting Diode"
 "\">LED</abbr>s if possible."
@@ -1416,7 +1416,7 @@ msgstr "Výchozí brána"
 msgid "Default is stateless + stateful"
 msgstr "Výchozí hodnota je bezstavový + stavový"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:54
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/default-on.js:10
 msgid "Default state"
 msgstr "Výchozí stav"
 
@@ -1486,7 +1486,7 @@ msgstr "Cílová zóna"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:40
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:75
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:54
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:80
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/netdev.js:11
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:245
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:278
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:354
@@ -3030,7 +3030,7 @@ msgstr "Stav linky"
 msgid "Line Uptime"
 msgstr "Line Uptime"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:98
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/netdev.js:22
 msgid "Link On"
 msgstr "Odkaz na"
 
@@ -3545,7 +3545,7 @@ msgstr "Kandidáti NTP serveru"
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2395
 #: modules/luci-compat/luasrc/view/cbi/tblsection.htm:27
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:705
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:49
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:66
 msgid "Name"
 msgstr "Název"
 
@@ -3760,15 +3760,15 @@ msgstr "Obfuskované heslo"
 msgid "Obtain IPv6-Address"
 msgstr "Získat IPv6 adresu"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:62
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/default-on.js:17
 msgid "Off"
 msgstr "Vypnuto"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:76
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/timer.js:14
 msgid "Off-State Delay"
 msgstr "Vypnutí prodlevy"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:62
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/default-on.js:17
 msgid "On"
 msgstr "Zapnuto"
 
@@ -3776,7 +3776,7 @@ msgstr "Zapnuto"
 msgid "On-Link route"
 msgstr "Link-local trasa"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:72
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/timer.js:10
 msgid "On-State Delay"
 msgstr "Zapnutí prodlevy"
 
@@ -4234,10 +4234,6 @@ msgstr "Politika"
 msgid "Port"
 msgstr "Port"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:145
-msgid "Port %s"
-msgstr "Port %s"
-
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:275
 msgid "Port status:"
 msgstr "Stav portu:"
@@ -4468,7 +4464,7 @@ msgstr "Probíhá restartování…"
 msgid "Reboots the operating system of your device"
 msgstr "Restartuje operační systém vašeho zařízení"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:100
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/netdev.js:24
 msgid "Receive"
 msgstr "Přijmout"
 
@@ -5204,16 +5200,6 @@ msgid ""
 msgstr ""
 "Přepínač %q má neznámou topologii - nastavení sítě VLAN nemusí být přesné."
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:154
-#, fuzzy
-msgid "Switch Port Mask"
-msgstr "Maska portu přepínače"
-
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:159
-#, fuzzy
-msgid "Switch Speed Mask"
-msgstr "Maska rychlosti přepínače"
-
 #: modules/luci-base/htdocs/luci-static/resources/network.js:2820
 #: modules/luci-compat/luasrc/model/network.lua:1426
 msgid "Switch VLAN"
@@ -5710,15 +5696,15 @@ msgstr "Provoz"
 msgid "Transfer"
 msgstr "Přenos"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:99
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/netdev.js:23
 msgid "Transmit"
 msgstr "Přenos"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:65
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:73
 msgid "Trigger"
 msgstr "Spouštění"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:94
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/netdev.js:18
 msgid "Trigger Mode"
 msgstr "Trigger mód"
 
@@ -5759,14 +5745,6 @@ msgstr "Pouze UMTS"
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:43
 msgid "UMTS/GPRS/EV-DO"
 msgstr "UMTS/GPRS/EV-DO"
-
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:103
-msgid "USB Device"
-msgstr "USB zařízení"
-
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:122
-msgid "USB Ports"
-msgstr "USB porty"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:252
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:358
@@ -6433,6 +6411,10 @@ msgstr "vytvoří most přes vybraná rozhraní"
 msgid "dBm"
 msgstr "dBm"
 
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/default-on.js:5
+msgid "default-on (kernel)"
+msgstr ""
+
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:930
 msgid "disable"
 msgstr "zakázat"
@@ -6479,6 +6461,10 @@ msgstr "plný-duplex"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:81
 msgid "half-duplex"
 msgstr "poloviční-duplex"
+
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/heartbeat.js:4
+msgid "heartbeat (kernel)"
+msgstr ""
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:565
 msgid "hexadecimal encoded value"
@@ -6528,6 +6514,10 @@ msgstr "střední zabezpečení"
 msgid "minutes"
 msgstr "minuty/minut"
 
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/netdev.js:6
+msgid "netdev (kernel)"
+msgstr ""
+
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:41
 msgid "no"
 msgstr "ne"
@@ -6543,6 +6533,10 @@ msgstr "neprázdná hodnota"
 #: modules/luci-base/htdocs/luci-static/resources/form.js:1477
 msgid "none"
 msgstr "žádný"
+
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/none.js:4
+msgid "none (kernel)"
+msgstr ""
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:40
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:54
@@ -6631,6 +6625,10 @@ msgstr "označený"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1384
 msgid "time units (TUs / 1.024 ms) [1000-65535]"
 msgstr "časové jednotky (ČJ / 1024 ms) [1000–65535]"
+
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/timer.js:5
+msgid "timer (kernel)"
+msgstr ""
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:555
 msgid "unique value"
@@ -6847,6 +6845,23 @@ msgstr "ano"
 #: modules/luci-compat/luasrc/view/cbi/delegator.htm:20
 msgid "« Back"
 msgstr "« Zpět"
+
+#~ msgid "Port %s"
+#~ msgstr "Port %s"
+
+#, fuzzy
+#~ msgid "Switch Port Mask"
+#~ msgstr "Maska portu přepínače"
+
+#, fuzzy
+#~ msgid "Switch Speed Mask"
+#~ msgstr "Maska rychlosti přepínače"
+
+#~ msgid "USB Device"
+#~ msgstr "USB zařízení"
+
+#~ msgid "USB Ports"
+#~ msgstr "USB porty"
 
 #~ msgid "Define a name for this network."
 #~ msgstr "Jméno sítě."

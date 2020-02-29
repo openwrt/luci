@@ -207,12 +207,12 @@ msgstr "<abbr title=\"Інтернет-протокол версії 6\">IPv6</a
 msgid "<abbr title=\"Internet Protocol Version 6\">IPv6</abbr>-Suffix (hex)"
 msgstr "<abbr title=\"Інтернет-протокол версії 6\">IPv6</abbr>-суфікс (hex)"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:40
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:57
 msgid "<abbr title=\"Light Emitting Diode\">LED</abbr> Configuration"
 msgstr ""
 "Конфігурація <abbr title=\"Light Emitting Diode — світлодіод\">LED</abbr>"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:51
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:68
 msgid "<abbr title=\"Light Emitting Diode\">LED</abbr> Name"
 msgstr "Назва <abbr title=\"Light Emitting Diode — світлодіод\">LED</abbr>"
 
@@ -372,12 +372,12 @@ msgid "Active Connections"
 msgstr "Активні підключення"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:30
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:12
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:91
 msgid "Active DHCP Leases"
 msgstr "Активні оренди DHCP"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:49
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:92
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:93
 msgid "Active DHCPv6 Leases"
 msgstr "Активні оренди DHCPv6"
 
@@ -414,7 +414,7 @@ msgstr "Додати адресу IPv4…"
 msgid "Add IPv6 address…"
 msgstr "Додати адресу IPv6…"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:47
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:64
 msgid "Add LED action"
 msgstr "Додати дію LED"
 
@@ -1307,7 +1307,7 @@ msgstr ""
 "запобігти цьому, спочатку виконайте відновлення мікропрограми до її "
 "початкового стану."
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:41
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:58
 msgid ""
 "Customizes the behaviour of the device <abbr title=\"Light Emitting Diode"
 "\">LED</abbr>s if possible."
@@ -1449,7 +1449,7 @@ msgstr "Типовий шлюз"
 msgid "Default is stateless + stateful"
 msgstr "Типовим є БЕЗ та ЗІ збереженням стану"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:54
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/default-on.js:10
 msgid "Default state"
 msgstr "Типовий стан"
 
@@ -1520,7 +1520,7 @@ msgstr "Зона призначення"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:40
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:75
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:54
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:80
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/netdev.js:11
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:245
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:278
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:354
@@ -3074,7 +3074,7 @@ msgstr "Стан лінії"
 msgid "Line Uptime"
 msgstr "Час безперервної роботи лінії"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:98
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/netdev.js:22
 msgid "Link On"
 msgstr "Зв'язок встановлено"
 
@@ -3593,7 +3593,7 @@ msgstr "Сервери NTP – кандидати для синхронізац�
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2395
 #: modules/luci-compat/luasrc/view/cbi/tblsection.htm:27
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:705
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:49
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:66
 msgid "Name"
 msgstr "Назва"
 
@@ -3807,15 +3807,15 @@ msgstr "Обфусований пароль"
 msgid "Obtain IPv6-Address"
 msgstr "Отримати IPv6-адресу"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:62
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/default-on.js:17
 msgid "Off"
 msgstr "Вимк."
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:76
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/timer.js:14
 msgid "Off-State Delay"
 msgstr "Затримка Off-State"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:62
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/default-on.js:17
 msgid "On"
 msgstr "Увімк."
 
@@ -3823,7 +3823,7 @@ msgstr "Увімк."
 msgid "On-Link route"
 msgstr "Маршрут On-Link"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:72
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/timer.js:10
 msgid "On-State Delay"
 msgstr "Затримка On-State"
 
@@ -4285,10 +4285,6 @@ msgstr "Політика"
 msgid "Port"
 msgstr "Порт"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:145
-msgid "Port %s"
-msgstr "Порт %s"
-
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:275
 msgid "Port status:"
 msgstr "Стан порту:"
@@ -4520,7 +4516,7 @@ msgstr "Перезавантаження…"
 msgid "Reboots the operating system of your device"
 msgstr "Перезавантажити операційну систему вашого пристрою"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:100
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/netdev.js:24
 msgid "Receive"
 msgstr "Приймання"
 
@@ -5261,14 +5257,6 @@ msgstr ""
 "Комутатор %q має невідому топологію – параметри VLAN можуть бути "
 "неправильними."
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:154
-msgid "Switch Port Mask"
-msgstr "Маска портів комутатора"
-
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:159
-msgid "Switch Speed Mask"
-msgstr "Маска швидкості комутатора"
-
 #: modules/luci-base/htdocs/luci-static/resources/network.js:2820
 #: modules/luci-compat/luasrc/model/network.lua:1426
 msgid "Switch VLAN"
@@ -5767,15 +5755,15 @@ msgstr "Трафік"
 msgid "Transfer"
 msgstr "Передано"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:99
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/netdev.js:23
 msgid "Transmit"
 msgstr "Передавання"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:65
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:73
 msgid "Trigger"
 msgstr "Тригер"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:94
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/netdev.js:18
 msgid "Trigger Mode"
 msgstr "Режим запуску"
 
@@ -5816,14 +5804,6 @@ msgstr "Тільки UMTS"
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:43
 msgid "UMTS/GPRS/EV-DO"
 msgstr "UMTS/GPRS/EV-DO"
-
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:103
-msgid "USB Device"
-msgstr "USB-пристрій"
-
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:122
-msgid "USB Ports"
-msgstr "USB-порт"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:252
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:358
@@ -6497,6 +6477,10 @@ msgstr "Створює мережевий міст через зазначені
 msgid "dBm"
 msgstr "дБм"
 
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/default-on.js:5
+msgid "default-on (kernel)"
+msgstr ""
+
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:930
 msgid "disable"
 msgstr "вимкнено"
@@ -6543,6 +6527,10 @@ msgstr "повний дуплекс"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:81
 msgid "half-duplex"
 msgstr "напівдуплекс"
+
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/heartbeat.js:4
+msgid "heartbeat (kernel)"
+msgstr ""
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:565
 msgid "hexadecimal encoded value"
@@ -6594,6 +6582,10 @@ msgstr "середній рівень безпеки"
 msgid "minutes"
 msgstr "хв."
 
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/netdev.js:6
+msgid "netdev (kernel)"
+msgstr ""
+
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:41
 msgid "no"
 msgstr "ні"
@@ -6609,6 +6601,10 @@ msgstr "непусте значення"
 #: modules/luci-base/htdocs/luci-static/resources/form.js:1477
 msgid "none"
 msgstr "нічого"
+
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/none.js:4
+msgid "none (kernel)"
+msgstr ""
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:40
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:54
@@ -6697,6 +6693,10 @@ msgstr "позначено"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1384
 msgid "time units (TUs / 1.024 ms) [1000-65535]"
 msgstr "одиниці часу (TUs / 1.024 ms) [1000-65535]"
+
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/timer.js:5
+msgid "timer (kernel)"
+msgstr ""
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:555
 msgid "unique value"
@@ -6913,6 +6913,21 @@ msgstr "так"
 #: modules/luci-compat/luasrc/view/cbi/delegator.htm:20
 msgid "« Back"
 msgstr "« Назад"
+
+#~ msgid "Port %s"
+#~ msgstr "Порт %s"
+
+#~ msgid "Switch Port Mask"
+#~ msgstr "Маска портів комутатора"
+
+#~ msgid "Switch Speed Mask"
+#~ msgstr "Маска швидкості комутатора"
+
+#~ msgid "USB Device"
+#~ msgstr "USB-пристрій"
+
+#~ msgid "USB Ports"
+#~ msgstr "USB-порт"
 
 #~ msgid "Define a name for this network."
 #~ msgstr "Визначте назву для цієї мережі."
