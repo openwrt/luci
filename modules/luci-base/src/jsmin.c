@@ -1,7 +1,7 @@
 /* jsmin.c
-   2011-09-30
+   2019-10-30
 
-Copyright (c) 2002 Douglas Crockford  (www.crockford.com)
+Copyright (C) 2002 Douglas Crockford  (www.crockford.com)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in
@@ -27,21 +27,34 @@ SOFTWARE.
 #include <stdlib.h>
 #include <stdio.h>
 
-static int   theA;
-static int   theB;
-static int   theLookahead = EOF;
+static int the_a;
+static int the_b;
+static int look_ahead = EOF;
+static int the_x = EOF;
+static int the_y = EOF;
 
 
-/* isAlphanum -- return true if the character is a letter, digit, underscore,
+static void error(char* string) {
+    fputs("JSMIN Error: ", stderr);
+    fputs(string, stderr);
+    fputc('\n', stderr);
+    exit(1);
+}
+
+/* is_alphanum -- return true if the character is a letter, digit, underscore,
         dollar sign, or non-ASCII character.
 */
 
-static int
-isAlphanum(int c)
-{
-    return ((c >= 'a' && c <= 'z') || (c >= '0' && c <= '9') ||
-        (c >= 'A' && c <= 'Z') || c == '_' || c == '$' || c == '\\' ||
-        c > 126);
+static int is_alphanum(int codeunit) {
+    return (
+        (codeunit >= 'a' && codeunit <= 'z')
+        || (codeunit >= '0' && codeunit <= '9')
+        || (codeunit >= 'A' && codeunit <= 'Z')
+        || codeunit == '_'
+        || codeunit == '$'
+        || codeunit == '\\'
+        || codeunit > 126
+    );
 }
 
 
@@ -50,32 +63,28 @@ isAlphanum(int c)
         linefeed.
 */
 
-static int
-get()
-{
-    int c = theLookahead;
-    theLookahead = EOF;
-    if (c == EOF) {
-        c = getc(stdin);
+static int get() {
+    int codeunit = look_ahead;
+    look_ahead = EOF;
+    if (codeunit == EOF) {
+        codeunit = getc(stdin);
     }
-    if (c >= ' ' || c == '\n' || c == EOF) {
-        return c;
+    if (codeunit >= ' ' || codeunit == '\n' || codeunit == EOF) {
+        return codeunit;
     }
-    if (c == '\r') {
+    if (codeunit == '\r') {
         return '\n';
     }
     return ' ';
 }
 
 
-/* peek -- get the next character without getting it.
+/* peek -- get the next character without advancing.
 */
 
-static int
-peek()
-{
-    theLookahead = get();
-    return theLookahead;
+static int peek() {
+    look_ahead = get();
+    return look_ahead;
 }
 
 
@@ -83,39 +92,38 @@ peek()
         if a '/' is followed by a '/' or '*'.
 */
 
-static int
-next()
-{
-    int c = get();
-    if  (c == '/') {
+static int next() {
+    int codeunit = get();
+    if  (codeunit == '/') {
         switch (peek()) {
         case '/':
             for (;;) {
-                c = get();
-                if (c <= '\n') {
-                    return c;
+                codeunit = get();
+                if (codeunit <= '\n') {
+                    break;
                 }
             }
+            break;
         case '*':
             get();
-            for (;;) {
+            while (codeunit != ' ') {
                 switch (get()) {
                 case '*':
                     if (peek() == '/') {
                         get();
-                        return ' ';
+                        codeunit = ' ';
                     }
                     break;
                 case EOF:
-                    fprintf(stderr, "Error: JSMIN Unterminated comment.\n");
-                    exit(1);
+                    error("Unterminated comment.");
                 }
             }
-        default:
-            return c;
+            break;
         }
     }
-    return c;
+    the_y = the_x;
+    the_x = codeunit;
+    return codeunit;
 }
 
 
@@ -123,77 +131,92 @@ next()
         1   Output A. Copy B to A. Get the next B.
         2   Copy B to A. Get the next B. (Delete A).
         3   Get the next B. (Delete B).
-   action treats a string as a single character. Wow!
-   action recognizes a regular expression if it is preceded by ( or , or =.
+   action treats a string as a single character.
+   action recognizes a regular expression if it is preceded by the likes of
+   '(' or ',' or '='.
 */
 
-static void
-action(int d)
-{
-    switch (d) {
+static void action(int determined) {
+    switch (determined) {
     case 1:
-        putc(theA, stdout);
+        putc(the_a, stdout);
+        if (
+            (the_y == '\n' || the_y == ' ')
+            && (the_a == '+' || the_a == '-' || the_a == '*' || the_a == '/')
+            && (the_b == '+' || the_b == '-' || the_b == '*' || the_b == '/')
+        ) {
+            putc(the_y, stdout);
+        }
     case 2:
-        theA = theB;
-        if (theA == '\'' || theA == '"' || theA == '`') {
+        the_a = the_b;
+        if (the_a == '\'' || the_a == '"' || the_a == '`') {
             for (;;) {
-                putc(theA, stdout);
-                theA = get();
-                if (theA == theB) {
+                putc(the_a, stdout);
+                the_a = get();
+                if (the_a == the_b) {
                     break;
                 }
-                if (theA == '\\') {
-                    putc(theA, stdout);
-                    theA = get();
+                if (the_a == '\\') {
+                    putc(the_a, stdout);
+                    the_a = get();
                 }
-                if (theA == EOF) {
-                    fprintf(stderr, "Error: JSMIN unterminated string literal.");
-                    exit(1);
+                if (the_a == EOF) {
+                    error("Unterminated string literal.");
                 }
             }
         }
     case 3:
-        theB = next();
-        if (theB == '/' && (theA == '(' || theA == ',' || theA == '=' ||
-                            theA == ':' || theA == '[' || theA == '!' ||
-                            theA == '&' || theA == '|' || theA == '?' ||
-                            theA == '{' || theA == '}' || theA == ';' ||
-                            theA == '\n')) {
-            putc(theA, stdout);
-            putc(theB, stdout);
+        the_b = next();
+        if (the_b == '/' && (
+            the_a == '(' || the_a == ',' || the_a == '=' || the_a == ':'
+            || the_a == '[' || the_a == '!' || the_a == '&' || the_a == '|'
+            || the_a == '?' || the_a == '+' || the_a == '-' || the_a == '~'
+            || the_a == '*' || the_a == '/' || the_a == '{' || the_a == '}'
+            || the_a == ';'
+        )) {
+            putc(the_a, stdout);
+            if (the_a == '/' || the_a == '*') {
+                putc(' ', stdout);
+            }
+            putc(the_b, stdout);
             for (;;) {
-                theA = get();
-                if (theA == '[') {
+                the_a = get();
+                if (the_a == '[') {
                     for (;;) {
-                        putc(theA, stdout);
-                        theA = get();
-                        if (theA == ']') {
+                        putc(the_a, stdout);
+                        the_a = get();
+                        if (the_a == ']') {
                             break;
                         }
-                        if (theA == '\\') {
-                            putc(theA, stdout);
-                            theA = get();
+                        if (the_a == '\\') {
+                            putc(the_a, stdout);
+                            the_a = get();
                         }
-                        if (theA == EOF) {
-                            fprintf(stderr,
-                                "Error: JSMIN unterminated set in Regular Expression literal.\n");
-                            exit(1);
+                        if (the_a == EOF) {
+                            error(
+                                "Unterminated set in Regular Expression literal."
+                            );
                         }
                     }
-                } else if (theA == '/') {
+                } else if (the_a == '/') {
+                    switch (peek()) {
+                    case '/':
+                    case '*':
+                        error(
+                            "Unterminated set in Regular Expression literal."
+                        );
+                    }
                     break;
-                } else if (theA =='\\') {
-                    putc(theA, stdout);
-                    theA = get();
+                } else if (the_a =='\\') {
+                    putc(the_a, stdout);
+                    the_a = get();
                 }
-                if (theA == EOF) {
-                    fprintf(stderr,
-                        "Error: JSMIN unterminated Regular Expression literal.\n");
-                    exit(1);
+                if (the_a == EOF) {
+                    error("Unterminated Regular Expression literal.");
                 }
-                putc(theA, stdout);
+                putc(the_a, stdout);
             }
-            theB = next();
+            the_b = next();
         }
     }
 }
@@ -205,51 +228,56 @@ action(int d)
         Most spaces and linefeeds will be removed.
 */
 
-static void
-jsmin()
-{
-    theA = '\n';
+static void jsmin() {
+    if (peek() == 0xEF) {
+        get();
+        get();
+        get();
+    }
+    the_a = '\n';
     action(3);
-    while (theA != EOF) {
-        switch (theA) {
+    while (the_a != EOF) {
+        switch (the_a) {
         case ' ':
-            if (isAlphanum(theB)) {
-                action(1);
-            } else {
-                action(2);
-            }
+            action(
+                is_alphanum(the_b)
+                ? 1
+                : 2
+            );
             break;
         case '\n':
-            switch (theB) {
+            switch (the_b) {
             case '{':
             case '[':
             case '(':
             case '+':
             case '-':
+            case '!':
+            case '~':
                 action(1);
                 break;
             case ' ':
                 action(3);
                 break;
             default:
-                if (isAlphanum(theB)) {
-                    action(1);
-                } else {
-                    action(2);
-                }
+                action(
+                    is_alphanum(the_b)
+                    ? 1
+                    : 2
+                );
             }
             break;
         default:
-            switch (theB) {
+            switch (the_b) {
             case ' ':
-                if (isAlphanum(theA)) {
-                    action(1);
-                    break;
-                }
-                action(3);
+                action(
+                    is_alphanum(the_a)
+                    ? 1
+                    : 3
+                );
                 break;
             case '\n':
-                switch (theA) {
+                switch (the_a) {
                 case '}':
                 case ']':
                 case ')':
@@ -261,11 +289,11 @@ jsmin()
                     action(1);
                     break;
                 default:
-                    if (isAlphanum(theA)) {
-                        action(1);
-                    } else {
-                        action(3);
-                    }
+                    action(
+                        is_alphanum(the_a)
+                        ? 1
+                        : 3
+                    );
                 }
                 break;
             default:
@@ -280,9 +308,8 @@ jsmin()
 /* main -- Output any command line arguments as comments
         and then minify the input.
 */
-extern int
-main(int argc, char* argv[])
-{
+
+extern int main(int argc, char* argv[]) {
     int i;
     for (i = 1; i < argc; i += 1) {
         fprintf(stdout, "// %s\n", argv[i]);
