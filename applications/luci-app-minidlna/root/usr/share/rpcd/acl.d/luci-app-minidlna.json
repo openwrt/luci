@@ -1,0 +1,19 @@
+{
+	"luci-app-minidlna": {
+		"description": "Grant access to minidlna status and configuration",
+		"read": {
+			"cgi-io": [ "exec" ],
+			"file": {
+				"/usr/bin/wget -q http://127.0.0.1:[0-9]*/ -O -": [ "exec" ]
+			},
+			"uci": [
+				"minidlna"
+			]
+		},
+		"write": {
+			"uci": [
+				"minidlna"
+			]
+		}
+	}
+}

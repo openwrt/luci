@@ -7,7 +7,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=LuCI Support for miniDLNA
-LUCI_DEPENDS:=+luci-compat +minidlna
+LUCI_DEPENDS:=+minidlna
 
 include ../../luci.mk
 
