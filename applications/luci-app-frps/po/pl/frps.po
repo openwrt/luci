@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2020-02-17 11:53+0000\n"
+"PO-Revision-Date: 2020-03-01 19:53+0000\n"
 "Last-Translator: Marcin Net <marcin.net@linux.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsfrps/pl/>\n"
@@ -9,7 +9,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 3.11-dev\n"
+"X-Generator: Weblate 4.0-dev\n"
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:13
 msgid "Additional configs"
@@ -83,6 +83,9 @@ msgid ""
 "is 0, the server will not listen for UDP connections.<br>By default, this "
 "value is 0"
 msgstr ""
+"BindUdpPort określa port UDP, na którym nasłuchuje serwer. Jeśli ta wartość "
+"wynosi 0, serwer nie będzie nasłuchiwał połączeń UDP. <br> Domyślnie ta "
+"wartość wynosi 0"
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:100
 msgid "Common settings"
@@ -102,6 +105,9 @@ msgid ""
 "value is \"\", a default page will be displayed.<br>By default, this value "
 "is \"\"."
 msgstr ""
+"Custom404Page określa ścieżkę do niestandardowej strony 404 do wyświetlenia. "
+"Jeśli ta wartość to \"\", zostanie wyświetlona strona domyślna. <br> "
+"Domyślnie ta wartość to \"\"."
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:25
 msgid "Dashboard address"
@@ -185,7 +191,7 @@ msgstr "Limit czasu pulsu"
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:20
 msgid "KCP bind port"
-msgstr ""
+msgstr "Port wiązania KCP"
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:30
 msgid "Log file"
@@ -213,6 +219,9 @@ msgid ""
 "be used if LogWay is set appropriately.<br>By default, this value is "
 "\"console\"."
 msgstr ""
+"LogFile określa plik, w którym będą zapisywane dzienniki. Ta wartość będzie "
+"używana tylko wtedy, gdy LogWay zostanie odpowiednio ustawiony. <br> "
+"Domyślnie ta wartość to \"konsola\"."
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:31
 msgid ""
@@ -228,10 +237,13 @@ msgid ""
 "before deletion. This is only used if LogWay == \"file\".<br>By default, "
 "this value is 0."
 msgstr ""
+"LogMaxDays określa maksymalną liczbę dni przechowywania informacji dziennika "
+"przed usunięciem. Jest używany tylko wtedy, gdy LogWay == \"plik\". <br> "
+"Domyślnie ta wartość wynosi 0."
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:39
 msgid "Max ports per client"
-msgstr ""
+msgstr "Maksymalna liczba portów na klienta"
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:39
 msgid ""
@@ -239,6 +251,9 @@ msgid ""
 "proxy to. If this value is 0, no limit will be applied.<br>By default, this "
 "value is 0."
 msgstr ""
+"MaxPortsPerClient określa maksymalną liczbę portów, do których pojedynczy "
+"klient może się podłączyć. Jeśli ta wartość wynosi 0, nie zostanie "
+"zastosowany żaden limit. <br> Domyślnie ta wartość wynosi 0."
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:12
 msgid ""
@@ -251,13 +266,15 @@ msgstr ""
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:21
 msgid "Proxy bind address"
-msgstr ""
+msgstr "Adres powiązania proxy"
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:21
 msgid ""
 "ProxyBindAddr specifies the address that the proxy binds to. This value may "
 "be the same as BindAddr.<br>By default, this value is \"0.0.0.0\"."
 msgstr ""
+"ProxyBindAddr określa adres, z którym łączy się serwer proxy. Ta wartość "
+"może być taka sama jak BindAddr. <br> Domyślnie ta wartość to \"0.0.0.0\"."
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:11
 msgid "Respawn when crashed"
@@ -274,7 +291,7 @@ msgstr "Uruchom daemona jako użytkownik"
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:101
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:105
 msgid "Startup settings"
-msgstr ""
+msgstr "Ustawienia startowe"
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:35
 msgid ""
