@@ -182,7 +182,7 @@ return L.view.extend({
 			}, [ host ])
 		}));
 
-		var spanSel = E('select', { 'style': 'max-width:170px', 'data-name': 'timespan' }, L.toArray(uci.get('luci_statistics', 'collectd_rrdtool', 'RRATimespans')).map(function(span) {
+		var spanSel = E('select', { 'style': 'max-width:170px', 'data-name': 'timespan' }, L.toArray(uci.get('luci_statistics', 'collectd_rrdtool', 'RRATimespan')).map(function(span) {
 			return E('option', {
 				'selected': (rrdtool.opts.timespan == span) ? 'selected' : null
 			}, [ span ])

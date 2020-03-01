@@ -34,7 +34,7 @@ return L.Class.extend({
 			_('Max values for a period can be used instead of averages when not using \'only average RRAs\''));
 		o.depends('RRASingle', '0');
 
-		o = s.option(form.DynamicList, 'RRATimespans', _('Stored timespans'));
+		o = s.option(form.DynamicList, 'RRATimespan', _('Stored timespans'));
 		o.default = '10min 1day 1week 1month 1year';
 		o.depends('enable', '1');
 		o.validate = function(section_id, value) {
