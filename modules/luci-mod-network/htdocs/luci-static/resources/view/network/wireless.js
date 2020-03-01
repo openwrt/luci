@@ -56,9 +56,13 @@ function render_signal_badge(signalPercent, signalValue, noiseValue, wrap) {
 		value = '%d %s'.format(signalValue, _('dBm'));
 		title = '%s: %d %s'.format(_('Signal'), signalValue, _('dBm'));
 	}
+	else if (signalPercent > -1) {
+		value = '\xa0---\xa0';
+		title = _('No signal');
+	}
 	else {
 		value = E('em', {}, E('small', {}, [ _('disabled') ]));
-		title = _('No signal');
+		title = _('Interface is disabled');
 	}
 
 	return E('div', { 'class': wrap ? 'center' : 'ifacebadge', 'title': title },
