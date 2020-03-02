@@ -362,13 +362,13 @@ Zone = AbstractFirewallItem.extend({
 		if (newNetworks.length > 0)
 			this.set('network', newNetworks.join(' '));
 		else
-			this.set('network', ' ');
+			this.set('network', null);
 
 		return (newNetworks.length < oldNetworks.length);
 	},
 
 	getNetworks: function() {
-		return L.toArray(this.get('network') || this.get('name'));
+		return L.toArray(this.get('network'));
 	},
 
 	clearNetworks: function() {
