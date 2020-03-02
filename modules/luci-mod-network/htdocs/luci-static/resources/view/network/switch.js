@@ -361,7 +361,7 @@ return L.view.extend({
 			}
 
 			port_opts.sort(function(a, b) {
-				return a.option < b.option;
+				return a.option > b.option;
 			});
 		}
 
