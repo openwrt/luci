@@ -146,7 +146,7 @@ return L.view.extend({
 		o.modalonly = true;
 		o.multiple = true;
 		o.cfgvalue = function(section_id) {
-			return uci.get('firewall', section_id, 'network') || uci.get('firewall', section_id, 'name');
+			return uci.get('firewall', section_id, 'network');
 		};
 		o.write = function(section_id, formvalue) {
 			var name = uci.get('firewall', section_id, 'name'),
@@ -170,9 +170,6 @@ return L.view.extend({
 					for (var i = 1; i < zone_networks.length; i++)
 						zone_networks[0].addNetwork(zone_networks[i].getName());
 			});
-		};
-		o.remove = function(section_id) {
-			return uci.set('firewall', section_id, 'network', ' ');
 		};
 
 		o = s.taboption('advanced', form.DummyValue, '_advancedinfo');
