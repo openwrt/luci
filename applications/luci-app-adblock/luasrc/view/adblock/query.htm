@@ -43,7 +43,7 @@ This is free software, licensed under the Apache License, Version 2.0
 //]]>
 </script>
 
-<form method="post" action="<%=REQUEST_URI%>">
+<form method="post" action="<%=REQUEST_URI%>" onsubmit="update_status(this.input); return false;">
 	<div class="cbi-map">
 		<div class="cbi-section">
 			<div class="cbi-section-descr"><%:This form allows you to query active block lists for certain domains, e.g. for whitelisting.%></div>
