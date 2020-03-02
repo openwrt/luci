@@ -783,7 +783,7 @@ static bool rpc_luci_get_iwinfo(struct blob_buf *buf, const char *devname,
 	int nret;
 
 	if (!iw_backend || !iw_close || !iw_modenames) {
-		iwlib = dlopen("libiwinfo.so", RTLD_LOCAL);
+		iwlib = dlopen("libiwinfo.so", RTLD_LAZY | RTLD_LOCAL);
 
 		if (!iwlib)
 			return false;
