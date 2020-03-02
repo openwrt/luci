@@ -6,7 +6,7 @@ return L.Class.extend({
 	title: _('Conntrack'),
 
 	rrdargs: function(graph, host, plugin, plugin_instance, dtype) {
-		return {
+		var entries = {
 			title: "%H: Conntrack entries",
 			vlabel: "Count",
 			number_format: "%5.0lf",
@@ -26,5 +26,26 @@ return L.Class.extend({
 				}
 			}
 		};
+
+		var percent = {
+			title: "%H: Conntrack usage",
+			vlabel: "Percent",
+			number_format: "%5.1lf%%",
+			y_min: "0",
+			alt_autoscale_max: true,
+			data: {
+				instances: {
+					percent: [ "used" ]
+				},
+				options: {
+					percent_used: {
+						color: "00ff00",
+						title: "Used"
+					}
+				}
+			}
+		};
+
+		return [ entries, percent ];
 	}
 });
