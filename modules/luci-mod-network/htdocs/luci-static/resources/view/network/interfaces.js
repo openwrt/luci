@@ -408,7 +408,7 @@ return L.view.extend({
 				o.modalonly = true;
 				o.default = o.enabled;
 
-				type = s.taboption('physical', form.Flag, 'type', _('Bridge interfaces'), _('creates a bridge over specified interface(s)'));
+				type = s.taboption('physical', form.Flag, 'type', _('Bridge interfaces'), _('Creates a bridge over specified interface(s)'));
 				type.modalonly = true;
 				type.disabled = '';
 				type.enabled = 'bridge';
@@ -722,7 +722,7 @@ return L.view.extend({
 			proto = s2.option(form.ListValue, 'proto', _('Protocol'));
 			proto.validate = name.validate;
 
-			bridge = s2.option(form.Flag, 'type', _('Bridge interfaces'), _('creates a bridge over specified interface(s)'));
+			bridge = s2.option(form.Flag, 'type', _('Bridge interfaces'), _('Creates a bridge over specified interface(s)'));
 			bridge.modalonly = true;
 			bridge.disabled = '';
 			bridge.enabled = 'bridge';
