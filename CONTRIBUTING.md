@@ -11,7 +11,7 @@ Regardless of whether you send a patch or open a pull request, please try to fol
     (E.g.: "luci-mod-admin-full: fix wifi channel selection on multiple STA networks")
 * Shortly explain the changes made and - if applicable - the reasoning behind them
 * Commit message of each commit should include a Signed-off-by line
-    (See <https://openwrt.org/docs/guide-developer/submittingpatches-tomerge#sign_your_work>)
+    (See <https://openwrt.org/submitting-patches#sign_your_work>)
 
 In case you like to send patches by mail, please use the [LuCI mailinglist](https://lists.subsignal.org/mailman/listinfo/luci)
 or the [OpenWrt Development List](https://lists.openwrt.org/cgi-bin/mailman/listinfo/openwrt-devel).
@@ -59,4 +59,3 @@ Pull requests are the easiest way to contribute changes to git repos at Github. 
 * Please ONLY cherry-pick or commit security and bug-fixes to these branches.
 * Do NOT add new packages and do NOT do major upgrades of packages here.
 * If you are unsure if your change is suitable, please use a pull request.
-
