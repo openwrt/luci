@@ -1021,6 +1021,8 @@ Network = L.Class.extend(/** @lends LuCI.Network.prototype */ {
 						return L.firewall.deleteNetwork(name).then(function() { return true });
 
 					return true;
+				}).catch(function() {
+					return false;
 				});
 			}
 
@@ -2657,7 +2659,8 @@ Protocol = L.Class.extend(/** @lends LuCI.Network.Protocol.prototype */ {
 	 * @returns {*|Promise<*>}
 	 * This function may return a promise which is awaited before the rest of
 	 * the configuration is removed. Any non-promise return value and any
-	 * resolved promise value is ignored.
+	 * resolved promise value is ignored. If the returned promise is rejected,
+	 * the interface removal will be aborted.
 	 */
 	deleteConfiguration: function() {}
 });
