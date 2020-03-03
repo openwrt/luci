@@ -1,4 +1,5 @@
 'use strict';
+'require uci';
 'require form';
 'require network';
 
@@ -136,5 +137,11 @@ return network.registerProtocol('wireguard', {
 		o = ss.option(form.Value, 'persistent_keepalive', _('Persistent Keep Alive'), _('Optional. Seconds between keep alive messages. Default is 0 (disabled). Recommended value if this device is behind a NAT is 25.'));
 		o.datatype = 'range(0,65535)';
 		o.placeholder = '0';
+	},
+
+	deleteConfiguration: function() {
+		uci.sections('network', 'wireguard_%s'.format(this.sid), function(s) {
+			uci.remove('network', s['.name']);
+		});
 	}
 });
