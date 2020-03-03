@@ -872,7 +872,7 @@ function handleOpkg(ev)
 				_('Waiting for the <em>opkg %h</em> command to complete…').format(cmd))
 		]);
 
-		var argv = [ '--force-removal-of-dependent-packages' ];
+		var argv = [ cmd, '--force-removal-of-dependent-packages' ];
 
 		if (rem && rem.checked)
 			argv.push('--autoremove');
@@ -880,12 +880,10 @@ function handleOpkg(ev)
 		if (owr && owr.checked)
 			argv.push('--force-overwrite');
 
-		argv.push(cmd);
-
 		if (pkg != null)
 			argv.push(pkg);
 
-		fs.exec('/bin/opkg', argv).then(function(res) {
+		fs.exec_direct('/usr/libexec/opkg-call', argv, 'json').then(function(res) {
 			dlg.removeChild(dlg.lastChild);
 
 			if (res.stdout)
@@ -957,8 +955,8 @@ function downloadLists()
 {
 	return Promise.all([
 		callMountPoints(),
-		fs.exec_direct('/usr/libexec/opkg-list', [ 'available' ]),
-		fs.exec_direct('/usr/libexec/opkg-list', [ 'installed' ])
+		fs.exec_direct('/usr/libexec/opkg-call', [ 'list-available' ]),
+		fs.exec_direct('/usr/libexec/opkg-call', [ 'list-installed' ])
 	]);
 }
 
