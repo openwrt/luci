@@ -978,47 +978,50 @@ Network = L.Class.extend(/** @lends LuCI.Network.prototype */ {
 	 * `false` if the given network could not be found.
 	 */
 	deleteNetwork: function(name) {
-		var requireFirewall = Promise.resolve(L.require('firewall')).catch(function() {});
+		var requireFirewall = Promise.resolve(L.require('firewall')).catch(function() {}),
+		    network = this.instantiateNetwork(name);
 
 		return Promise.all([ requireFirewall, initNetworkState() ]).then(function() {
 			var uciInterface = uci.get('network', name);
 
 			if (uciInterface != null && uciInterface['.type'] == 'interface') {
-				uci.remove('network', name);
+				return Promise.resolve(network ? network.deleteConfiguration() : null).then(function() {
+					uci.remove('network', name);
 
-				uci.sections('luci', 'ifstate', function(s) {
-					if (s.interface == name)
-						uci.remove('luci', s['.name']);
+					uci.sections('luci', 'ifstate', function(s) {
+						if (s.interface == name)
+							uci.remove('luci', s['.name']);
+					});
+
+					uci.sections('network', 'alias', function(s) {
+						if (s.interface == name)
+							uci.remove('network', s['.name']);
+					});
+
+					uci.sections('network', 'route', function(s) {
+						if (s.interface == name)
+							uci.remove('network', s['.name']);
+					});
+
+					uci.sections('network', 'route6', function(s) {
+						if (s.interface == name)
+							uci.remove('network', s['.name']);
+					});
+
+					uci.sections('wireless', 'wifi-iface', function(s) {
+						var networks = L.toArray(s.network).filter(function(network) { return network != name });
+
+						if (networks.length > 0)
+							uci.set('wireless', s['.name'], 'network', networks.join(' '));
+						else
+							uci.unset('wireless', s['.name'], 'network');
+					});
+
+					if (L.firewall)
+						return L.firewall.deleteNetwork(name).then(function() { return true });
+
+					return true;
 				});
-
-				uci.sections('network', 'alias', function(s) {
-					if (s.interface == name)
-						uci.remove('network', s['.name']);
-				});
-
-				uci.sections('network', 'route', function(s) {
-					if (s.interface == name)
-						uci.remove('network', s['.name']);
-				});
-
-				uci.sections('network', 'route6', function(s) {
-					if (s.interface == name)
-						uci.remove('network', s['.name']);
-				});
-
-				uci.sections('wireless', 'wifi-iface', function(s) {
-					var networks = L.toArray(s.network).filter(function(network) { return network != name });
-
-					if (networks.length > 0)
-						uci.set('wireless', s['.name'], 'network', networks.join(' '));
-					else
-						uci.unset('wireless', s['.name'], 'network');
-				});
-
-				if (L.firewall)
-					return L.firewall.deleteNetwork(name).then(function() { return true });
-
-				return true;
 			}
 
 			return false;
@@ -2638,7 +2641,25 @@ Protocol = L.Class.extend(/** @lends LuCI.Network.Protocol.prototype */ {
 		}
 
 		return false;
-	}
+	},
+
+	/**
+	 * Cleanup related configuration entries.
+	 *
+	 * This function will be invoked if an interface is about to be removed
+	 * from the configuration and is responsible for performing any required
+	 * cleanup tasks, such as unsetting uci entries in related configurations.
+	 *
+	 * It should be overwritten by protocol specific subclasses.
+	 *
+	 * @abstract
+	 *
+	 * @returns {*|Promise<*>}
+	 * This function may return a promise which is awaited before the rest of
+	 * the configuration is removed. Any non-promise return value and any
+	 * resolved promise value is ignored.
+	 */
+	deleteConfiguration: function() {}
 });
 
 /**
