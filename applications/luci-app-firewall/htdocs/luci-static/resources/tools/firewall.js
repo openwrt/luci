@@ -69,7 +69,7 @@ var protocols = [
 ];
 
 function lookupProto(x) {
-	if (x == null || x == '')
+	if (x == null || x === '')
 		return null;
 
 	var s = String(x).toLowerCase();
