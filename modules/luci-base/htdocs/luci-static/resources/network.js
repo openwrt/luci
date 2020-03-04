@@ -2303,6 +2303,23 @@ Protocol = L.Class.extend(/** @lends LuCI.Network.Protocol.prototype */ {
 	},
 
 	/**
+	 * Check function for the protocol handler if a new interface is createable.
+	 *
+	 * This function should be overwritten by protocol specific subclasses.
+	 *
+	 * @abstract
+	 *
+	 * @param {string} ifname
+	 * The name of the interface to be created.
+	 *
+	 * @returns {Promise<null|error message>}
+	 * Returns `null` if new interface is createable, else returns (error) message.
+	 */
+	isCreateable: function(ifname) {
+		return Promise.resolve(null);
+	},
+
+	/**
 	 * Checks whether the protocol functionality is installed.
 	 *
 	 * This function exists for compatibility with old code, it always
