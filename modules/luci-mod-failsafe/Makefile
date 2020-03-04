@@ -7,7 +7,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=LuCI Fail-Safe - Fail-Safe sysupgrade module
-LUCI_DEPENDS:=+luci-base
+LUCI_DEPENDS:=+luci-base +luci-compat
 
 include ../../luci.mk
 
