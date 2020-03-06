@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2020-03-01 19:53+0000\n"
+"PO-Revision-Date: 2020-03-05 21:35+0000\n"
 "Last-Translator: Marcin Net <marcin.net@linux.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsfrps/pl/>\n"
@@ -301,10 +301,14 @@ msgid ""
 "\", the resulting URL would be \"test.frps.com\".<br>By default, this value "
 "is \"\"."
 msgstr ""
+"SubDomainHost określa domenę, która zostanie dołączona do subdomen żądanych "
+"przez klienta podczas korzystania z proxy Vhost. Na przykład jeśli ta "
+"wartość jest ustawiona na \"frps.com\", a klient zażąda poddomeny \"test\", "
+"wynikowy adres URL to \"test.frps.com\". <br> Domyślnie ta wartość to \"\"."
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:35
 msgid "Subdomain host"
-msgstr ""
+msgstr "Host subdomeny"
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:36
 msgid "TCP mux"
@@ -315,6 +319,9 @@ msgid ""
 "TcpMux toggles TCP stream multiplexing. This allows multiple requests from a "
 "client to share a single TCP connection.<br>By default, this value is true."
 msgstr ""
+"TcpMux przełącza multipleksowanie strumienia TCP. Pozwala to na "
+"współdzielenie wielu żądań od klienta na jedno połączenie TCP.<br> Domyślnie "
+"wartość ta jest true."
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:34
 msgid "Token"
@@ -326,22 +333,25 @@ msgid ""
 "from clients. Clients must have a matching token to be authorized to use the "
 "server.<br>By default, this value is \"\"."
 msgstr ""
+"Token określa token autoryzacji używany do uwierzytelniania kluczy "
+"otrzymanych od klientów. Klienci muszą mieć pasujący token, aby móc "
+"korzystać z serwera. Domyślnie ta wartość to \"\"."
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:19
 msgid "UDP bind port"
-msgstr ""
+msgstr "Port wiązania UDP"
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:22
 msgid "Vhost HTTP port"
-msgstr ""
+msgstr "Port Vhost HTTP"
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:24
 msgid "Vhost HTTP timeout"
-msgstr ""
+msgstr "Limit czasu Vhost HTTP"
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:23
 msgid "Vhost HTTPS port"
-msgstr ""
+msgstr "Port Vhost HTTPS"
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:22
 msgid ""
@@ -349,12 +359,17 @@ msgid ""
 "requests. If this value is 0, the server will not listen for HTTP requests."
 "<br>By default, this value is 0."
 msgstr ""
+"VhostHttpPort określa port, który serwer nasłuchuje na żądania HTTP Vhost. "
+"Jeśli ta wartość wynosi 0, serwer nie będzie nasłuchiwał żądań HTTP. <br> "
+"Domyślnie ta wartość wynosi 0."
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:24
 msgid ""
 "VhostHttpTimeout specifies the response header timeout for the Vhost HTTP "
 "server, in seconds.<br>By default, this value is 60."
 msgstr ""
+"Limit czasu VhostHttp określa limit czasu nagłówka odpowiedzi dla serwera "
+"HTTP Vhost w sekundach. <br> Domyślnie ta wartość wynosi 60."
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:23
 msgid ""
@@ -362,11 +377,14 @@ msgid ""
 "requests. If this value is 0, the server will not listen for HTTPS requests."
 "<br>By default, this value is 0."
 msgstr ""
+"Port VhostHttps określa port, który serwer nasłuchuje dla żądań Vhost HTTPS. "
+"Jeśli ta wartość wynosi 0, serwer nie będzie nasłuchiwał żądań HTTPS. <br> "
+"Domyślnie ta wartość wynosi 0."
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:95
 #: applications/luci-app-frps/root/usr/share/luci/menu.d/luci-app-frps.json:3
 msgid "frp Server"
-msgstr ""
+msgstr "Serwer frp"
 
 #~ msgid "AllowPorts"
 #~ msgstr "Dozwolone porty"
