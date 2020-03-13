@@ -25,7 +25,7 @@
 		requestpath    = luci.dispatcher.context.requestpath,
 		dispatchpath   = luci.dispatcher.context.path,
 		pollinterval   = luci.config.main.pollinterval or 5,
-		ubuspath       = luci.config.main.ubuspath or '/ubus',
+		ubuspath       = luci.config.main.ubuspath or '/ubus/',
 		sessionid      = luci.dispatcher.context.authsession,
 		apply_rollback = math.max(applyconf and applyconf.rollback or 30, 30),
 		apply_holdoff  = math.max(applyconf and applyconf.holdoff or 4, 1),
