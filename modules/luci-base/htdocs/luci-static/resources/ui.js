@@ -2276,7 +2276,8 @@ return L.Class.extend({
 
 			try {
 				var val = JSON.parse(window.sessionStorage.getItem('tab'));
-				if (val.page === page && L.isObject(val.paths))
+
+				if (val && val.page === page && L.isObject(val.paths))
 					return val;
 			}
 			catch(e) {}
