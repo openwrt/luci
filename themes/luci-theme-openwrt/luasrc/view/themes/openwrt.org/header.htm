@@ -187,7 +187,7 @@
 //]]></script>
 <title><%=striptags( (boardinfo.hostname or "?") .. ( (node and node.title) and ' - ' .. translate(node.title) or '')) %> - LuCI</title>
 </head>
-<body class="lang_<%=luci.i18n.context.lang%>" data-page="<%= table.concat(disp.context.requestpath, "-") %>">
+<body class="lang_<%=luci.i18n.context.lang%>" data-page="<%= pcdata(table.concat(disp.context.requestpath, "-")) %>">
 
 <p class="skiplink">
 <span id="skiplink1"><a href="#navigation"><%:Skip to navigation%></a></span>
