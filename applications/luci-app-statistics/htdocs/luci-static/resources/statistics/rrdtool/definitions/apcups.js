@@ -15,10 +15,10 @@ return L.Class.extend({
 		 */
 
 		var ups_types = graph.dataTypes(host, plugin, plugin_instance),
-		    ups_inst = [];
+		    ups_inst = {};
 
 		for (var i = 0; i < ups_types.length; i++)
-			ups_inst.push(graph.dataInstances(host, plugin, plugin_instance, ups_types[i]));
+			ups_inst[ups_types[i]] = graph.dataInstances(host, plugin, plugin_instance, ups_types[i]);
 
 		/* Check if hash table or array is empty or nil-filled */
 		function empty(t) {
@@ -37,9 +37,9 @@ return L.Class.extend({
 
 			if (L.isObject(def_inst)) {
 				for (var k in def_inst) {
-					if (ups_types.find(function(t) { return t == k }).length) {
+					if (ups_types.filter(function(t) { return t == k }).length) {
 						for (var i = def_inst[k].length - 1; i >= 0; i--)
-							if (!ups_inst[k].find(function(n) { return n == def_inst[k][i] }).length)
+							if (!ups_inst[k].filter(function(n) { return n == def_inst[k][i] }).length)
 								def_inst[k].splice(i, 1);
 
 						if (def_inst[k].length == 0)
