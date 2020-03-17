@@ -2,6 +2,7 @@
 'require ui';
 'require uci';
 'require rpc';
+'require fs';
 'require form';
 
 var callInitList, callInitAction, callTimezone,
@@ -80,6 +81,15 @@ return L.view.extend({
 			callInitList('sysntpd'),
 			callTimezone(),
 			callGetLocaltime(),
+			L.resolveDefault(fs.list('/www' + L.resource('view/status/include')), []).then(function(entries) {
+				return Promise.all(entries.filter(function(e) {
+					return (e.type == 'file' && e.name.match(/\.js$/));
+				}).map(function(e) {
+					return 'view.status.include.' + e.name.replace(/\.js$/, '');
+				}).sort().map(function(n) {
+					return L.require(n);
+				}));
+			}),
 			uci.load('luci'),
 			uci.load('system')
 		]);
@@ -89,6 +99,7 @@ return L.view.extend({
 		var ntpd_enabled = rpc_replies[0],
 		    timezones = rpc_replies[1],
 		    localtime = rpc_replies[2],
+		    includes = rpc_replies[3],
 		    m, s, o;
 
 		m = new form.Map('system',
@@ -223,6 +234,48 @@ return L.view.extend({
 			if (k[i].charAt(0) != '.')
 				o.value(uci.get('luci', 'themes', k[i]), k[i]);
 
+		o = s.taboption('language', form.SectionValue, 'index', form.GridSection, 'index', '');
+
+		var ss = o.subsection;
+		ss.uciconfig = 'luci';
+		ss.ucisection = 'index';
+		ss.anonymous = true;
+		ss.renderRowActions = function() { return E([])};
+		ss.renderHeaderRows = function(section_id) {
+			return this.super('renderHeaderRows', [ NaN, false ]);
+		};
+
+		var index_tbl = [];
+
+		ss.cfgsections = function() {
+			var rv = [];
+
+			for (var i = 0; i < includes.length; i++) {
+				if (includes[i].index_id) {
+					index_tbl[includes[i].index_id] = 
+					  includes[i].title.length > 0 ? includes[i].title : includes[i].index_id
+					rv.push(includes[i].index_id)
+				}
+			}
+
+			return rv;
+		};
+
+		var so = ss.option(form.Value, 'name', _('Index Page'));
+		so.cfgvalue = function(section_id) {
+			return index_tbl[section_id]
+		};
+
+		so = ss.option(form.Flag, 'display', _('Display'));
+		so.editable = true;
+		so.default = "1";
+
+		so.write = function(section_id, value) {
+			if (! uci.get('luci', section_id))
+				uci.add('luci','index',section_id)
+			return uci.set('luci', section_id, 'display', value);
+		}
+
 		/*
 		 * NTP
 		 */
@@ -276,7 +329,8 @@ return L.view.extend({
 			};
 		}
 
-		return m.render().then(function(mapEl) {
+		return m.render()
+		.then(function(mapEl) {
 			L.Poll.add(function() {
 				return callGetLocaltime().then(function(t) {
 					mapEl.querySelector('#localtime').value = new Date(t * 1000).toLocaleString();

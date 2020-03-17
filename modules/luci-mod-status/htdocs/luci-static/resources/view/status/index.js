@@ -1,5 +1,6 @@
 'use strict';
 'require fs';
+'require uci';
 'require network';
 
 function invokeIncludesLoad(includes) {
@@ -15,16 +16,23 @@ function invokeIncludesLoad(includes) {
 		}
 	}
 
+	console.log(includes, tasks)
+
 	return has_load ? Promise.all(tasks) : Promise.resolve(null);
 }
 
 function startPolling(includes, containers) {
 	var step = function() {
 		return network.flushCache().then(function() {
-			return invokeIncludesLoad(includes);
-		}).then(function(results) {
+			return invokeIncludesLoad(includes)
+			;
+		})
+		.then(
+			function(results) {
 			for (var i = 0; i < includes.length; i++) {
 				var content = null;
+
+				console.log(includes)
 
 				if (typeof(includes[i].render) == 'function')
 					content = includes[i].render(results ? results[i] : null);
@@ -54,21 +62,105 @@ function startPolling(includes, containers) {
 
 return L.view.extend({
 	load: function() {
-		return L.resolveDefault(fs.list('/www' + L.resource('view/status/include')), []).then(function(entries) {
-			return Promise.all(entries.filter(function(e) {
-				return (e.type == 'file' && e.name.match(/\.js$/));
-			}).map(function(e) {
-				return 'view.status.include.' + e.name.replace(/\.js$/, '');
-			}).sort().map(function(n) {
-				return L.require(n);
-			}));
-		});
-	},
+		// return Promise.all([
+		// 	L.resolveDefault(fs.list('/www' + L.resource('view/status/include')), []),
+		// 	uci.load('luci')
+		// ]).then(function(data) {
 
-	render: function(includes) {
-		var rv = E([]), containers = [];
+		// 	var entries = data[0],
+		// 	    display_tbl = [];
+
+		// 	uci.sections('luci', 'index').map( function (v) {
+		// 		display_tbl[v['.name']] = v.display
+		// 	});
+
+		// 	return Promise.all(entries.filter(function(e) {
+		// 		console.log(e);
+		// 		return (e.type == 'file' &&
+		// 				e.name.match(/\.js$/) &&
+		// 				display_tbl[e.name]);
+		// 	}).map(function(e) {
+		// 		return 'view.status.include.' + e.name.replace(/\.js$/, '');
+		// 	}).sort().map(function(n) {
+		// 		return L.require(n);
+		// 	}));
+		// });
+		// return Promise.all([
+		// 		L.resolveDefault(fs.list('/www' + L.resource('view/status/include')), []),
+		// 		uci.load('luci')
+		// 	]).then(function(data) {
+		// 		var entries = data[0];
+		// 			// display_tbl = [];
+
+		// 		// uci.sections('luci', 'index').map( function (v) {
+		// 		// 	display_tbl[v['.name']] = v.display
+		// 		// });
+
+		// 		// if (display_tbl[includes[i].index_id] == 0) {
+		// 			// 	includes.splice(i, 1);
+		// 			// 	i--;
+		// 			// 	continue;
+		// 			// }
+
+		// 	return Promise.all(entries.filter(function(e) {
+		// 		return (e.type == 'file' && e.name.match(/\.js$/));
+		// 	}).map(function(e) {
+		// 		return 'view.status.include.' + e.name.replace(/\.js$/, '');
+		// 	}).sort().map(function(n) {
+
+		// 		var obj = L.require(n),
+		// 				  display_tbl = [];
+
+		// 		uci.sections('luci', 'index').map( function (v) {
+		// 			display_tbl[v['.name']] = v.display
+		// 		});
+
+
+		// 		// console.log(display_tbl )
+
+		// 		if ( display_tbl[obj.index_id] ) {
+		// 			console.log('NO')
+		// 			return;
+		// 		}
+		// 		// console.log(n)
+		// 		return obj;
+		// 	}));
+		// });
+		return Promise.all([
+			L.resolveDefault(fs.list('/www' + L.resource('view/status/include')), []).then(function(entries) {
+				return Promise.all(entries.filter(function(e) {
+					return (e.type == 'file' && e.name.match(/\.js$/));
+				}).map(function(e) {
+					return 'view.status.include.' + e.name.replace(/\.js$/, '');
+				}).sort().map(function(n) {
+					return L.require(n);
+				}));
+			}),
+			uci.load('luci')])
+	},
+	
+	render: function(data) {
+
+		var includes = data[0] || [];
+
+		// console.log(includes)
+
+		var rv = E([]),
+			containers = [],
+			display_tbl = [];
+
+		uci.sections('luci', 'index').map( function (v) {
+			display_tbl[v['.name']] = v.display
+		});
 
 		for (var i = 0; i < includes.length; i++) {
+
+			if (display_tbl[includes[i].index_id] == 0) {
+				includes.splice(i, 1);
+				i--;
+				continue;
+			}
+
 			var title = null;
 
 			if (includes[i].title != null)
@@ -88,6 +180,14 @@ return L.view.extend({
 
 			containers.push(container);
 		}
+
+		// includes.map(function(n) {
+		// 	console.log(n)
+		// 	L.require(n);
+		// })
+		// var o = [includes[0]]
+
+		// console.log(o, containers)
 
 		return startPolling(includes, containers).then(function() {
 			return rv;
