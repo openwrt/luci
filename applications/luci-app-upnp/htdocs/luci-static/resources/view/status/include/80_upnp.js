@@ -28,6 +28,8 @@ handleDelRule = function(num, ev) {
 return L.Class.extend({
 	title: _('Active UPnP Redirects'),
 
+	index_id: 'upnp',
+
 	load: function() {
 		return Promise.all([
 			callUpnpGetStatus(),

@@ -43,6 +43,8 @@ function renderbox(dsl) {
 return L.Class.extend({
 	title: _('DSL'),
 
+	index_id: 'dsl',
+
 	load: function() {
 		return L.resolveDefault(callLuciDSLStatus(), {});
 	},

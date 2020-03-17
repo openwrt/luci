@@ -5,6 +5,8 @@
 return L.Class.extend({
 	title: _('Dynamic DNS'),
 
+	index_id:' ddns',
+
 	callDDnsGetServicesStatus: rpc.declare({
 		object: 'luci.ddns',
 		method: 'get_services_status',

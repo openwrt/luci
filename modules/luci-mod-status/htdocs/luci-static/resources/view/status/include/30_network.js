@@ -61,6 +61,8 @@ function renderbox(ifc, ipv6) {
 return L.Class.extend({
 	title: _('Network'),
 
+	index_id: 'network',
+
 	load: function() {
 		return Promise.all([
 			fs.trimmed('/proc/sys/net/netfilter/nf_conntrack_count'),

@@ -11,6 +11,8 @@ var callLuciDHCPLeases = rpc.declare({
 return L.Class.extend({
 	title: '',
 
+	index_id: 'dhcp',
+
 	load: function() {
 		return Promise.all([
 			L.resolveDefault(callLuciDHCPLeases(), {}),

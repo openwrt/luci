@@ -22,6 +22,8 @@ function progressbar(value, max, byte) {
 return L.Class.extend({
 	title: _('Memory'),
 
+	index_id: 'memory',
+
 	load: function() {
 		return L.resolveDefault(callSystemInfo(), {});
 	},

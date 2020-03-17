@@ -5,6 +5,8 @@
 return L.Class.extend({
 	title: _('miniDLNA Status'),
 
+	index_id: 'minidlna',
+
 	load: function() {
 		return uci.load('minidlna').then(function() {
 			var port = +uci.get_first('minidlna', 'minidlna', 'port');

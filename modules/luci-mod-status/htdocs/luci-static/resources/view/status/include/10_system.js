@@ -15,6 +15,8 @@ var callSystemInfo = rpc.declare({
 return L.Class.extend({
 	title: _('System'),
 
+	index_id: 'system',
+
 	load: function() {
 		return Promise.all([
 			L.resolveDefault(callSystemBoard(), {}),

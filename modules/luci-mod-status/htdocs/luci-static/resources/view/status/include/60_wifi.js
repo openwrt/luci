@@ -76,6 +76,8 @@ function wifirate(rt) {
 return L.Class.extend({
 	title: _('Wireless'),
 
+	index_id: 'wireless',
+
 	handleDelClient: function(wifinet, mac, ev) {
 		L.dom.parent(ev.currentTarget, '.tr').style.opacity = 0.5;
 		ev.currentTarget.classList.add('spinning');
