@@ -8,7 +8,6 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=rpcd-mod-rad2-enc
 PKG_VERSION:=20190109
-PKG_MAINTAINER:=Daniel Dickinson <cshored@thecshore.com>
 
 PKG_LICENSE:=Apache-2.0
 
