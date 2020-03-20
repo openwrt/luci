@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2020-02-25 23:11+0000\n"
-"Last-Translator: Palandre Maxime <maxime.palandre@hotmail.fr>\n"
+"PO-Revision-Date: 2020-03-20 17:55+0000\n"
+"Last-Translator: Hydci <giogio59@live.fr>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsaria2/fr/>\n"
 "Language: fr\n"
@@ -130,6 +130,7 @@ msgstr "Cache du disque"
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:259
 msgid "Don't split less than 2*SIZE byte range. Possible values: 1M-1024M."
 msgstr ""
+"Ne divisez pas moins de 2*plage d'octets SIZE. Valeurs possibles: 1M-1024M."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:254
 msgid "Download a file using N connections."
@@ -514,7 +515,7 @@ msgstr "Attente avant nouvel essai"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:61
 msgid "Run daemon as user"
-msgstr "Lancer le \"daemon\" comme \"utilisateur\""
+msgstr "Exécuter le démon en tant qu'utilisateur"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:429
 msgid ""
@@ -540,6 +541,9 @@ msgid ""
 "Save error/unfinished downloads to session file every N seconds. If 0 is "
 "given, file will be saved only when aria2 exits."
 msgstr ""
+"Enregistrer les erreurs/téléchargements inachevés dans le fichier de session "
+"toutes les N secondes. Si 0 est donné, le fichier ne sera enregistré qu'à la "
+"sortie de aria2."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:316
 msgid ""
@@ -547,6 +551,9 @@ msgid ""
 "BitTorrent Magnet URI is used. The file name is hex encoded info hash with "
 "suffix \".torrent\"."
 msgstr ""
+"Enregistrez les métadonnées dans un fichier \".torrent\". Cette option n'a "
+"d'effet que lorsque BitTorrent Magnet URI est utilisé. Le nom du fichier est "
+"un hachage d'informations au format hexadécimal avec le suffixe \".torrent\"."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:315
 msgid "Save metadata"
@@ -559,6 +566,8 @@ msgstr "Intervalle d'enregistrement de la session"
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:330
 msgid "Seed previously downloaded files without verifying piece hashes."
 msgstr ""
+"Graine des fichiers téléchargés précédemment sans vérifier les hachages de "
+"pièces."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:401
 msgid "Seed ratio"
@@ -578,6 +587,9 @@ msgid ""
 "if remote server responds with <code>Content-Encoding: gzip</code> or "
 "<code>Content-Encoding: deflate</code>."
 msgstr ""
+"Envoyer <code>Accepter: deflate, gzip</code> demande l'en-tête et gonfle la "
+"réponse si le serveur distant répond avec <code>Content-Encoding: gzip</code>"
+" ou <code>Content-Encoding: deflate</code>."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:220
 msgid ""
@@ -586,6 +598,10 @@ msgid ""
 "you can add Cache-Control header with a directive you like using \"Header\" "
 "option."
 msgstr ""
+"Envoyer <code>Cache-Control: no-cache</code> et <code>Pragma: no-cache</code>"
+" en-tête pour éviter le contenu mis en cache. Si désactivé, ces en-têtes ne "
+"sont pas envoyés et vous pouvez ajouter un en-tête Cache-Control avec une "
+"directive que vous aimez en utilisant l'option \"En-tête\"."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:336
 msgid ""
@@ -593,12 +609,18 @@ msgid ""
 "\"6881-6999\" and \"6881-6889,6999\". Make sure that the specified ports are "
 "open for incoming TCP traffic."
 msgstr ""
+"Définissez le numéro de port TCP pour les téléchargements BitTorrent. "
+"Acceptez le format: \"6881,6885\", \"6881-6999\" et \"6881-6889,6999\". "
+"Assurez-vous que les ports spécifiés sont ouverts pour le trafic TCP entrant."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:342
 msgid ""
 "Set UDP listening port used by DHT (IPv4, IPv6) and UDP tracker. Make sure "
 "that the specified ports are open for incoming UDP traffic."
 msgstr ""
+"Définissez le port d'écoute UDP utilisé par DHT (IPv4, IPv6) et le tracker "
+"UDP. Assurez-vous que les ports spécifiés sont ouverts pour le trafic UDP "
+"entrant."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:477
 msgid ""
@@ -671,12 +693,23 @@ msgid ""
 "FAT32 because it takes almost same time as \"prealloc\" and it blocks aria2 "
 "entirely until allocation finishes."
 msgstr ""
+"Spécifiez la méthode d'allocation des fichiers. Si vous utilisez des "
+"systèmes de fichiers plus récents tels que ext4 (avec prise en charge des "
+"extensions), btrfs, xfs ou NTFS (build MinGW uniquement), \"falloc\" est "
+"votre meilleur choix. Il alloue des fichiers volumineux (quelques Gio) "
+"presque instantanément, mais il peut ne pas être disponible si votre système "
+"n'a pas la fonction posix_fallocate(3). N'utilisez pas \"falloc\" avec les "
+"systèmes de fichiers hérités tels que ext3 et FAT32 car cela prend presque "
+"le même temps que \"prealloc\" et il bloque entièrement aria2 jusqu'à la fin "
+"de l'allocation."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:368
 msgid ""
 "Specify maximum number of files to open in multi-file BitTorrent download "
 "globally."
 msgstr ""
+"Spécifiez le nombre maximal de fichiers à ouvrir dans le téléchargement "
+"BitTorrent multi-fichiers à l'échelle mondiale."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:409
 msgid ""
@@ -684,6 +717,10 @@ msgid ""
 "with this option, seeding ends when at least one of the conditions is "
 "satisfied. Specifying 0 disables seeding after download completed."
 msgstr ""
+"Spécifiez le temps de semis en minutes. Si l'option \"Ratio d'amorçage\" est "
+"spécifiée avec cette option, l'amorçage se termine lorsqu'au moins une des "
+"conditions est remplie. La spécification de 0 désactive l'amorçage une fois "
+"le téléchargement terminé."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:402
 msgid ""
@@ -691,6 +728,10 @@ msgid ""
 "RATIO. You are strongly encouraged to specify equals or more than 1.0 here. "
 "Specify 0.0 if you intend to do seeding regardless of share ratio."
 msgstr ""
+"Spécifiez le ratio de partage. Semence terminée torrents jusqu'à ce que le "
+"ratio de partage atteigne RATIO. Vous êtes fortement encouragé à spécifier "
+"égal ou supérieur à 1.0 ici. Indiquez 0.0 si vous envisagez d'effectuer un "
+"amorçage quel que soit le taux de partage."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:373
 msgid "Specify the maximum number of peers per torrent, 0 means unlimited."
@@ -740,8 +781,8 @@ msgid ""
 "The directory to store the downloaded file. For example <code>/mnt/sda1</"
 "code>."
 msgstr ""
-"Répertoire dans lequel télécharger le fichier télécharger. Par ex. <code>/"
-"mnt/sda1</code>"
+"Le répertoire pour stocker le fichier téléchargé. Par exemple <code>/mnt/"
+"sda1</code>."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:81
 msgid "The file name of the log file."
@@ -765,7 +806,7 @@ msgstr "Délai d'attente"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:117
 msgid "Token"
-msgstr "Jeton"
+msgstr "Token"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:349
 msgid "True"
@@ -796,6 +837,12 @@ msgid ""
 "PKCS12 files with a blank import password can be opened!<br/>When using PEM, "
 "you have to specify the \"RPC private key\" as well."
 msgstr ""
+"Utilisez le certificat dans le FICHIER pour le serveur RPC. Le certificat "
+"doit être au format PKCS12 (.p12, .pfx) ou au format PEM.<br/>Les fichiers "
+"PKCS12 doivent contenir le certificat, une clé et éventuellement une chaîne "
+"de certificats supplémentaires. Seuls les fichiers PKCS12 avec un mot de "
+"passe d'importation vide peuvent être ouverts!<br/>Lorsque vous utilisez "
+"PEM, vous devez également spécifier la \"clé privée RPC\"."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:196
 msgid ""
@@ -805,6 +852,12 @@ msgid ""
 "PKCS12 files with a blank import password can be opened!<br/>When using PEM, "
 "you have to specify the \"Private key\" as well."
 msgstr ""
+"Utilisez le certificat client dans FILE. Le certificat doit être au format "
+"PKCS12 (.p12, .pfx) ou au format PEM.<br/>Les fichiers PKCS12 doivent "
+"contenir le certificat, une clé et éventuellement une chaîne de certificats "
+"supplémentaires. Seuls les fichiers PKCS12 avec un mot de passe "
+"d'importation vide peuvent être ouverts!<br/>Lorsque vous utilisez PEM, vous "
+"devez également spécifier la \"clé privée\"."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:150
 msgid ""
@@ -853,12 +906,12 @@ msgstr "Vous pouvez ajouter K ou M."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:457
 msgid "falloc"
-msgstr ""
+msgstr "falloc"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:455
 msgid "prealloc"
-msgstr ""
+msgstr "prealloc"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:456
 msgid "trunc"
-msgstr ""
+msgstr "trunc"
