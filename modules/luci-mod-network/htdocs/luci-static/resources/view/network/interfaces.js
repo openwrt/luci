@@ -874,6 +874,9 @@ return L.view.extend({
 		o = s.option(form.Value, 'ula_prefix', _('IPv6 ULA-Prefix'));
 		o.datatype = 'cidr6';
 
+		o = s.option(form.Flag, 'packet_steering', _('Packet Steering'), _('Enable packet steering across all CPUs. May help or hinder network speed.'));
+		o.optional = true;
+
 
 		if (dslModemType != null) {
 			s = m.section(form.TypedSection, 'dsl', _('DSL'));
