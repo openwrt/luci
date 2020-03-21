@@ -1,6 +1,13 @@
 <%
 	if not self.embedded then
-		%><form method="post" enctype="multipart/form-data" action="<%=REQUEST_URI%>">
+		%><form method="post" enctype="multipart/form-data" action="<%=REQUEST_URI%>"<%=
+			attr("data-strings", luci.util.serialize_json({
+				label = {
+					choose = translate('-- Please choose --'),
+					custom = translate('-- custom --')
+				}
+			}))
+		%>>
 			<input type="hidden" name="token" value="<%=token%>" />
 			<input type="hidden" name="cbi.submit" value="1" /><%
 	end
@@ -35,7 +42,7 @@
 			end
 		end
 
-		local display_back   = (redirect)
+		local display_back   = (self.redirect)
 		local display_cancel = (self.cancel ~= false and self.on_cancel)
 		local display_skip   = (self.flow and self.flow.skip)
 		local display_submit = (self.submit ~= false)
@@ -45,7 +52,7 @@
 			%><div class="cbi-page-actions"><%
 
 			if display_back then
-				%><input class="cbi-button cbi-button-link" type="button" value="<%:Back to Overview%>" onclick="location.href='<%=pcdata(redirect)%>'" /> <%
+				%><input class="cbi-button cbi-button-link" type="button" value="<%:Back to Overview%>" onclick="location.href='<%=pcdata(self.redirect)%>'" /> <%
 			end
 
 			if display_cancel then
