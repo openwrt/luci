@@ -200,24 +200,30 @@ return L.view.extend({
 		var view = E([], [
 			E('h2', {}, [ _('Statistics') ]),
 			E('div', {}, [
-				E('div', {}, [
-					hostSel,
-					E('button', {
-						'class': 'cbi-button cbi-button-apply',
-						'click': ui.createHandlerFn(this, 'updateGraphs', hostSel, spanSel, timeSel, graphDiv, )
-					}, [ _('Display Host »') ]),
+				E('p', { 'class': 'controls' }, [
+					E('span', { 'class': 'nowrap' }, [
+						hostSel,
+						E('button', {
+							'class': 'cbi-button cbi-button-apply',
+							'click': ui.createHandlerFn(this, 'updateGraphs', hostSel, spanSel, timeSel, graphDiv, )
+						}, [ _('Display Host »') ]),
+					]),
 					' ',
-					spanSel,
-					E('button', {
-						'class': 'cbi-button cbi-button-apply',
-						'click': ui.createHandlerFn(this, 'updateGraphs', hostSel, spanSel, timeSel, graphDiv)
-					}, [ _('Display timespan »') ]),
+					E('span', { 'class': 'nowrap' }, [
+						spanSel,
+						E('button', {
+							'class': 'cbi-button cbi-button-apply',
+							'click': ui.createHandlerFn(this, 'updateGraphs', hostSel, spanSel, timeSel, graphDiv)
+						}, [ _('Display timespan »') ]),
+					]),
 					' ',
-					timeSel,
-					E('button', {
-						'class': 'cbi-button cbi-button-apply',
-						'click': ui.createHandlerFn(this, 'togglePolling', hostSel, spanSel, timeSel, graphDiv)
-					}, [ _('Apply interval »') ])
+					E('span', { 'class': 'nowrap' }, [
+						timeSel,
+						E('button', {
+							'class': 'cbi-button cbi-button-apply',
+							'click': ui.createHandlerFn(this, 'togglePolling', hostSel, spanSel, timeSel, graphDiv)
+						}, [ _('Apply interval »') ])
+					])
 				]),
 				E('hr'),
 				graphDiv
