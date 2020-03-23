@@ -38,7 +38,7 @@ return L.view.extend({
 				proc.COMMAND,
 				proc['%CPU'],
 				proc['%MEM'],
-				E('div', { 'class': 'nowrap' }, [
+				E('div', {}, [
 					E('button', {
 						'class': 'btn cbi-button-action',
 						'click': ui.createHandlerFn(this, 'handleSignal', 1, proc.PID)
@@ -70,7 +70,7 @@ return L.view.extend({
 					E('div', { 'class': 'th' }, _('Command')),
 					E('div', { 'class': 'th' }, _('CPU usage (%)')),
 					E('div', { 'class': 'th' }, _('Memory usage (%)')),
-					E('div', { 'class': 'th center' }, _('Actions'))
+					E('div', { 'class': 'th center nowrap cbi-section-actions' })
 				])
 			])
 		]);
