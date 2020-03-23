@@ -2984,14 +2984,14 @@
 					1: [ _('Apply unchecked') ]
 				}, {
 					classes: {
-						0: 'cbi-button cbi-button-apply important',
-						1: 'cbi-button cbi-button-negative important'
+						0: 'btn cbi-button cbi-button-apply important',
+						1: 'btn cbi-button cbi-button-negative important'
 					},
 					click: L.ui.createHandlerFn(this, 'handleSaveApply')
 				}).render() : E([]);
 
 				if (this.handleSaveApply || this.handleSave || this.handleReset) {
-					footer.appendChild(E('div', { 'class': 'cbi-page-actions' }, [
+					footer.appendChild(E('div', { 'class': 'cbi-page-actions control-group' }, [
 						saveApplyBtn, ' ',
 						this.handleSave ? E('button', {
 							'class': 'cbi-button cbi-button-save',
