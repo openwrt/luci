@@ -395,7 +395,7 @@ return L.view.extend({
 		ss.anonymous = true;
 
 		so = ss.option(form.Value, 'name', _('Hostname'));
-		so.datatype = 'hostname("strict")';
+		so.validate = validateHostname;
 		so.rmempty  = true;
 		so.write = function(section, value) {
 			uci.set('dhcp', section, 'name', value);
