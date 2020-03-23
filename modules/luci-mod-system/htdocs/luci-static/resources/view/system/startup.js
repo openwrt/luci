@@ -36,12 +36,12 @@ return L.view.extend({
 	},
 
 	handleEnableDisable: function(name, isEnabled, ev) {
-		return this.handleAction(name, isEnabled ? 'disable' : 'enable', ev).then(L.bind(function(name, isEnabled, cell) {
-			L.dom.content(cell, this.renderEnableDisable({
+		return this.handleAction(name, isEnabled ? 'disable' : 'enable', ev).then(L.bind(function(name, isEnabled, btn) {
+			btn.parentNode.replaceChild(this.renderEnableDisable({
 				name: name,
 				enabled: isEnabled
-			}));
-		}, this, name, !isEnabled, ev.currentTarget.parentNode));
+			}), btn);
+		}, this, name, !isEnabled, ev.currentTarget));
 	},
 
 	handleRcLocalSave: function(ev) {
@@ -71,10 +71,7 @@ return L.view.extend({
 			E('div', { 'class': 'tr table-titles' }, [
 				E('div', { 'class': 'th' }, _('Start priority')),
 				E('div', { 'class': 'th' }, _('Initscript')),
-				E('div', { 'class': 'th' }, _('Enable/Disable')),
-				E('div', { 'class': 'th' }, _('Start')),
-				E('div', { 'class': 'th' }, _('Restart')),
-				E('div', { 'class': 'th' }, _('Stop'))
+				E('div', { 'class': 'th nowrap cbi-section-actions' })
 			])
 		]);
 
@@ -93,10 +90,12 @@ return L.view.extend({
 			rows.push([
 				'%02d'.format(list[i].index),
 				list[i].name,
-				this.renderEnableDisable(list[i]),
-				E('button', { 'class': 'btn cbi-button-action', 'click': ui.createHandlerFn(this, 'handleAction', list[i].name, 'start') }, _('Start')),
-				E('button', { 'class': 'btn cbi-button-action', 'click': ui.createHandlerFn(this, 'handleAction', list[i].name, 'restart') }, _('Restart')),
-				E('button', { 'class': 'btn cbi-button-action', 'click': ui.createHandlerFn(this, 'handleAction', list[i].name, 'stop') }, _('Stop'))
+				E('div', [
+					this.renderEnableDisable(list[i]),
+					E('button', { 'class': 'btn cbi-button-action', 'click': ui.createHandlerFn(this, 'handleAction', list[i].name, 'start') }, _('Start')),
+					E('button', { 'class': 'btn cbi-button-action', 'click': ui.createHandlerFn(this, 'handleAction', list[i].name, 'restart') }, _('Restart')),
+					E('button', { 'class': 'btn cbi-button-action', 'click': ui.createHandlerFn(this, 'handleAction', list[i].name, 'stop') }, _('Stop'))
+				])
 			]);
 		}
 
