@@ -538,6 +538,7 @@ var UICheckbox = UIElement.extend(/** @lends LuCI.ui.Checkbox.prototype */ {
 
 	/** @override */
 	render: function() {
+		var id = 'cb%08x'.format(Math.random() * 0xffffffff);
 		var frameEl = E('div', {
 			'id': this.options.id,
 			'class': 'cbi-checkbox'
@@ -551,12 +552,14 @@ var UICheckbox = UIElement.extend(/** @lends LuCI.ui.Checkbox.prototype */ {
 			}));
 
 		frameEl.appendChild(E('input', {
-			'id': this.options.id ? 'widget.' + this.options.id : null,
+			'id': id,
 			'name': this.options.name,
 			'type': 'checkbox',
 			'value': this.options.value_enabled,
 			'checked': (this.value == this.options.value_enabled) ? '' : null
 		}));
+
+		frameEl.appendChild(E('label', { 'for': id }));
 
 		return this.bind(frameEl);
 	},
@@ -565,8 +568,8 @@ var UICheckbox = UIElement.extend(/** @lends LuCI.ui.Checkbox.prototype */ {
 	bind: function(frameEl) {
 		this.node = frameEl;
 
-		this.setUpdateEvents(frameEl.lastElementChild, 'click', 'blur');
-		this.setChangeEvents(frameEl.lastElementChild, 'change');
+		this.setUpdateEvents(frameEl.lastElementChild.previousElementSibling, 'click', 'blur');
+		this.setChangeEvents(frameEl.lastElementChild.previousElementSibling, 'change');
 
 		dom.bindClassInstance(frameEl, this);
 
@@ -582,7 +585,7 @@ var UICheckbox = UIElement.extend(/** @lends LuCI.ui.Checkbox.prototype */ {
 	 * Returns `true` when the checkbox is currently checked, otherwise `false`.
 	 */
 	isChecked: function() {
-		return this.node.lastElementChild.checked;
+		return this.node.lastElementChild.previousElementSibling.checked;
 	},
 
 	/** @override */
@@ -594,7 +597,7 @@ var UICheckbox = UIElement.extend(/** @lends LuCI.ui.Checkbox.prototype */ {
 
 	/** @override */
 	setValue: function(value) {
-		this.node.lastElementChild.checked = (value == this.options.value_enabled);
+		this.node.lastElementChild.previousElementSibling.checked = (value == this.options.value_enabled);
 	}
 });
 
@@ -2107,7 +2110,7 @@ var UIDynamicList = UIElement.extend(/** @lends LuCI.ui.DynamicList.prototype */
 			});
 
 			dl.lastElementChild.appendChild(inputEl);
-			dl.lastElementChild.appendChild(E('div', { 'class': 'cbi-button cbi-button-add' }, '+'));
+			dl.lastElementChild.appendChild(E('div', { 'class': 'btn cbi-button cbi-button-add' }, '+'));
 
 			if (this.options.datatype || this.options.validate)
 				UI.prototype.addValidator(inputEl, this.options.datatype || 'string',
@@ -3689,10 +3692,12 @@ var UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 				dom.content(i, [ _('Unsaved Changes'), ': ', n ]);
 				i.classList.add('flash');
 				i.style.display = '';
+				document.dispatchEvent(new CustomEvent('uci-new-changes'));
 			}
 			else {
 				i.classList.remove('flash');
 				i.style.display = 'none';
+				document.dispatchEvent(new CustomEvent('uci-clear-changes'));
 			}
 		},
 
@@ -4142,7 +4147,7 @@ var UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 		var arg_offset = arguments.length - 2;
 
 		return Function.prototype.bind.apply(function() {
-			var t = arguments[arg_offset].target;
+			var t = arguments[arg_offset].currentTarget;
 
 			t.classList.add('spinning');
 			t.disabled = true;
