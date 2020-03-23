@@ -79,8 +79,8 @@ return L.view.extend({
 							}, {
 								'click': ui.createHandlerFn(this, 'handlePing'),
 								'classes': {
-									'ping': 'cbi-button cbi-button-action',
-									'ping6': 'cbi-button cbi-button-action'
+									'ping': 'btn cbi-button cbi-button-action',
+									'ping6': 'btn cbi-button cbi-button-action'
 								}
 							}).render() : E('button', {
 								'class': 'cbi-button cbi-button-action',
@@ -102,8 +102,8 @@ return L.view.extend({
 							}, {
 								'click': ui.createHandlerFn(this, 'handleTraceroute'),
 								'classes': {
-									'traceroute': 'cbi-button cbi-button-action',
-									'traceroute6': 'cbi-button cbi-button-action'
+									'traceroute': 'btn cbi-button cbi-button-action',
+									'traceroute6': 'btn cbi-button cbi-button-action'
 								}
 							}).render() : E('button', {
 								'class': 'cbi-button cbi-button-action',
