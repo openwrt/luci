@@ -50,28 +50,28 @@ callTimezone = rpc.declare({
 CBILocalTime = form.DummyValue.extend({
 	renderWidget: function(section_id, option_id, cfgvalue) {
 		return E([], [
-			E('span', {}, [
-				E('input', {
-					'id': 'localtime',
-					'type': 'text',
-					'readonly': true,
-					'value': new Date(cfgvalue * 1000).toLocaleString()
-				})
-			]),
-			' ',
-			E('button', {
-				'class': 'cbi-button cbi-button-apply',
-				'click': ui.createHandlerFn(this, function() {
-					return callSetLocaltime(Math.floor(Date.now() / 1000));
-				})
-			}, _('Sync with browser')),
-			' ',
-			this.ntpd_support ? E('button', {
-				'class': 'cbi-button cbi-button-apply',
-				'click': ui.createHandlerFn(this, function() {
-					return callInitAction('sysntpd', 'restart');
-				})
-			}, _('Sync with NTP-Server')) : ''
+			E('input', {
+				'id': 'localtime',
+				'type': 'text',
+				'readonly': true,
+				'value': new Date(cfgvalue * 1000).toLocaleString()
+			}),
+			E('br'),
+			E('span', { 'class': 'control-group' }, [
+				E('button', {
+					'class': 'cbi-button cbi-button-apply',
+					'click': ui.createHandlerFn(this, function() {
+						return callSetLocaltime(Math.floor(Date.now() / 1000));
+					})
+				}, _('Sync with browser')),
+				' ',
+				this.ntpd_support ? E('button', {
+					'class': 'cbi-button cbi-button-apply',
+					'click': ui.createHandlerFn(this, function() {
+						return callInitAction('sysntpd', 'restart');
+					})
+				}, _('Sync with NTP-Server')) : ''
+			])
 		]);
 	},
 });
