@@ -1201,7 +1201,7 @@ var CBITableSection = CBITypedSection.extend({
 			L.dom.append(tdEl.lastElementChild, [
 				E('div', {
 					'title': _('Drag to reorder'),
-					'class': 'cbi-button drag-handle center',
+					'class': 'btn cbi-button drag-handle center',
 					'style': 'cursor:move'
 				}, '☰')
 			]);
