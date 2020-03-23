@@ -65,8 +65,18 @@ function render_signal_badge(signalPercent, signalValue, noiseValue, wrap) {
 		title = _('Interface is disabled');
 	}
 
-	return E('div', { 'class': wrap ? 'center' : 'ifacebadge', 'title': title },
-		[ E('img', { 'src': icon }), wrap ? E('br') : ' ', value ]);
+	return E('div', {
+		'class': wrap ? 'center' : 'ifacebadge',
+		'title': title,
+		'data-signal': signalValue,
+		'data-noise': noiseValue
+	}, [
+		E('img', { 'src': icon }),
+		E('span', {}, [
+			wrap ? E('br') : ' ',
+			value
+		])
+	]);
 }
 
 function render_network_badge(radioNet) {
@@ -568,20 +578,26 @@ return L.view.extend({
 			var hint;
 
 			if (name && ipv4 && ipv6)
-				hint = '%s (%s, %s)'.format(name, ipv4, ipv6);
+				hint = '%s <span class="hide-xs">(%s, %s)</span>'.format(name, ipv4, ipv6);
 			else if (name && (ipv4 || ipv6))
-				hint = '%s (%s)'.format(name, ipv4 || ipv6);
+				hint = '%s <span class="hide-xs">(%s)</span>'.format(name, ipv4 || ipv6);
 			else
 				hint = name || ipv4 || ipv6 || '?';
 
 			var row = [
-				E('span', { 'class': 'ifacebadge' }, [
+				E('span', {
+					'class': 'ifacebadge',
+					'data-ifname': bss.network.getIfname(),
+					'data-ssid': bss.network.getSSID()
+				}, [
 					E('img', {
 						'src': L.resource('icons/wifi%s.png').format(bss.network.isUp() ? '' : '_disabled'),
 						'title': bss.radio.getI18n()
 					}),
-					' %s '.format(bss.network.getShortName()),
-					E('small', '(%s)'.format(bss.network.getIfname()))
+					E('span', [
+						' %s '.format(bss.network.getShortName()),
+						E('small', '(%s)'.format(bss.network.getIfname()))
+					])
 				]),
 				bss.mac,
 				hint,
@@ -1976,7 +1992,7 @@ return L.view.extend({
 					.then(L.bind(this.poll_status, this, nodes));
 			}, this), 5);
 
-			var table = E('div', { 'class': 'table', 'id': 'wifi_assoclist_table' }, [
+			var table = E('div', { 'class': 'table assoclist', 'id': 'wifi_assoclist_table' }, [
 				E('div', { 'class': 'tr table-titles' }, [
 					E('div', { 'class': 'th nowrap' }, _('Network')),
 					E('div', { 'class': 'th hide-xs' }, _('MAC-Address')),
