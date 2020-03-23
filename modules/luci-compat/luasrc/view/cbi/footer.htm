@@ -8,26 +8,26 @@
 	if pageaction and
 	   (display_back or display_skip or display_apply or display_save or display_reset)
 	then
-		%><div class="cbi-page-actions"><%
+		%><div class="cbi-page-actions control-group"><%
 
 		if display_back then
-			%><input class="cbi-button cbi-button-link" type="button" value="<%:Back to Overview%>" onclick="location.href='<%=pcdata(redirect)%>'" /> <%
+			%><input class="btn cbi-button cbi-button-link" type="button" value="<%:Back to Overview%>" onclick="location.href='<%=pcdata(redirect)%>'" /> <%
 		end
 
 		if display_skip then
-			%><input class="cbi-button cbi-button-skip" type="button" value="<%:Skip%>" onclick="cbi_submit(this, 'cbi.skip')" /> <%
+			%><input class="btn cbi-button cbi-button-skip" type="button" value="<%:Skip%>" onclick="cbi_submit(this, 'cbi.skip')" /> <%
 		end
 
 		if display_apply then
-			%><input class="cbi-button cbi-button-apply" type="button" value="<%:Save & Apply%>" onclick="cbi_submit(this, 'cbi.apply')" /> <%
+			%><input class="btn cbi-button cbi-button-apply" type="button" value="<%:Save & Apply%>" onclick="cbi_submit(this, 'cbi.apply')" /> <%
 		end
 
 		if display_save then
-			%><input class="cbi-button cbi-button-save" type="submit" value="<%:Save%>" /> <%
+			%><input class="btn cbi-button cbi-button-save" type="submit" value="<%:Save%>" /> <%
 		end
 
 		if display_reset then
-			%><input class="cbi-button cbi-button-reset" type="button" value="<%:Reset%>" onclick="location.href='<%=REQUEST_URI%>'" /> <%
+			%><input class="btn cbi-button cbi-button-reset" type="button" value="<%:Reset%>" onclick="location.href='<%=REQUEST_URI%>'" /> <%
 		end
 
 		%></div><%
