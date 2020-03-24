@@ -1642,7 +1642,16 @@ var CBIValue = CBIAbstractValue.extend({
 			if (typeof(this.title) === 'string' && this.title !== '') {
 				optionEl.appendChild(E('label', {
 					'class': 'cbi-value-title',
-					'for': 'widget.cbid.%s.%s.%s'.format(config_name, section_id, this.option)
+					'for': 'widget.cbid.%s.%s.%s'.format(config_name, section_id, this.option),
+					'click': function(ev) {
+						var node = ev.currentTarget,
+						    elem = node.nextElementSibling.querySelector('#' + node.getAttribute('for')) || node.nextElementSibling.querySelector('[data-widget-id="' + node.getAttribute('for') + '"]');
+
+						if (elem) {
+							elem.click();
+							elem.focus();
+						}
+					}
 				},
 				this.titleref ? E('a', {
 					'class': 'cbi-title-ref',
