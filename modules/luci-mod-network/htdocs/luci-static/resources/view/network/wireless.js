@@ -46,7 +46,7 @@ function render_signal_badge(signalPercent, signalValue, noiseValue, wrap) {
 		icon = L.resource('icons/signal-75-100.png');
 
 	if (signalValue != null && signalValue != 0 && noiseValue != null && noiseValue != 0) {
-		value = '%d / %d %s'.format(signalValue, noiseValue, _('dBm'));
+		value = '%d/%d\xa0%s'.format(signalValue, noiseValue, _('dBm'));
 		title = '%s: %d %s / %s: %d %s / %s %d'.format(
 			_('Signal'), signalValue, _('dBm'),
 			_('Noise'), noiseValue, _('dBm'),
@@ -165,13 +165,16 @@ function render_modal_status(node, radioNet) {
 }
 
 function format_wifirate(rate) {
-	var s = '%.1f Mbit/s, %dMHz'.format(rate.rate / 1000, rate.mhz);
+	var s = '%.1f\xa0%s, %d\xa0%s'.format(rate.rate / 1000, _('Mbit/s'), rate.mhz, _('MHz')),
+	    ht = rate.ht, vht = rate.vht,
+	    mhz = rate.mhz, nss = rate.nss,
+	    mcs = rate.mcs, sgi = rate.short_gi;
 
-	if (rate.ht || rate.vht) {
-		if (rate.vht)      s += ', VHT-MCS %d'.format(rate.mcs);
-		if (rate.nss)      s += ', VHT-NSS %d'.format(rate.nss);
-		if (rate.ht)       s += ', MCS %s'.format(rate.mcs);
-		if (rate.short_gi) s += ', Short GI';
+	if (ht || vht) {
+		if (vht) s += ', VHT-MCS\xa0%d'.format(mcs);
+		if (nss) s += ', VHT-NSS\xa0%d'.format(nss);
+		if (ht)  s += ', MCS\xa0%s'.format(mcs);
+		if (sgi) s += ', ' + _('Short GI').replace(/ /g, '\xa0');
 	}
 
 	return s;
@@ -611,7 +614,7 @@ return L.view.extend({
 
 			if (bss.network.isClientDisconnectSupported()) {
 				if (table.firstElementChild.childNodes.length < 6)
-					table.firstElementChild.appendChild(E('div', { 'class': 'th nowrap right'}, [ _('Disconnect') ]));
+					table.firstElementChild.appendChild(E('div', { 'class': 'th cbi-section-actions'}));
 
 				row.push(E('button', {
 					'class': 'cbi-button cbi-button-remove',
@@ -1997,8 +2000,8 @@ return L.view.extend({
 					E('div', { 'class': 'th nowrap' }, _('Network')),
 					E('div', { 'class': 'th hide-xs' }, _('MAC-Address')),
 					E('div', { 'class': 'th' }, _('Host')),
-					E('div', { 'class': 'th nowrap' }, _('Signal / Noise')),
-					E('div', { 'class': 'th nowrap' }, _('RX Rate / TX Rate'))
+					E('div', { 'class': 'th' }, _('Signal / Noise')),
+					E('div', { 'class': 'th' }, _('RX Rate / TX Rate'))
 				])
 			]);
 

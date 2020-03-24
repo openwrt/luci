@@ -58,16 +58,16 @@ function renderbox(radio, networks) {
 }
 
 function wifirate(rt) {
-	var s = '%.1f %s, %d%s'.format(rt.rate / 1000, _('Mbit/s'), rt.mhz, _('MHz')),
+	var s = '%.1f\xa0%s, %d\xa0%s'.format(rt.rate / 1000, _('Mbit/s'), rt.mhz, _('MHz')),
 	    ht = rt.ht, vht = rt.vht,
 		mhz = rt.mhz, nss = rt.nss,
 		mcs = rt.mcs, sgi = rt.short_gi;
 
 	if (ht || vht) {
-		if (vht) s += ', VHT-MCS %d'.format(mcs);
-		if (nss) s += ', VHT-NSS %d'.format(nss);
-		if (ht)  s += ', MCS %s'.format(mcs);
-		if (sgi) s += ', ' + _('Short GI');
+		if (vht) s += ', VHT-MCS\xa0%d'.format(mcs);
+		if (nss) s += ', VHT-NSS\xa0%d'.format(nss);
+		if (ht)  s += ', MCS\xa0%s'.format(mcs);
+		if (sgi) s += ', ' + _('Short GI').replace(/ /g, '\xa0');
 	}
 
 	return s;
@@ -124,8 +124,8 @@ return L.Class.extend({
 				E('div', { 'class': 'th nowrap' }, _('Network')),
 				E('div', { 'class': 'th hide-xs' }, _('MAC-Address')),
 				E('div', { 'class': 'th' }, _('Host')),
-				E('div', { 'class': 'th nowrap' }, '%s / %s'.format(_('Signal'), _('Noise'))),
-				E('div', { 'class': 'th nowrap' }, '%s / %s'.format(_('RX Rate'), _('TX Rate')))
+				E('div', { 'class': 'th' }, '%s / %s'.format(_('Signal'), _('Noise'))),
+				E('div', { 'class': 'th' }, '%s / %s'.format(_('RX Rate'), _('TX Rate')))
 			])
 		]);
 
@@ -154,14 +154,14 @@ return L.Class.extend({
 				var sig_title, sig_value;
 
 				if (bss.noise) {
-					sig_value = '%d / %d %s'.format(bss.signal, bss.noise, _('dBm'));
+					sig_value = '%d/%d\xa0%s'.format(bss.signal, bss.noise, _('dBm'));
 					sig_title = '%s: %d %s / %s: %d %s / %s %d'.format(
 						_('Signal'), bss.signal, _('dBm'),
 						_('Noise'), bss.noise, _('dBm'),
 						_('SNR'), bss.signal - bss.noise);
 				}
 				else {
-					sig_value = '%d %s'.format(bss.signal, _('dBm'));
+					sig_value = '%d\xa0%s'.format(bss.signal, _('dBm'));
 					sig_title = '%s: %d %s'.format(_('Signal'), bss.signal, _('dBm'));
 				}
 
@@ -195,7 +195,7 @@ return L.Class.extend({
 
 				if (networks[i].isClientDisconnectSupported()) {
 					if (assoclist.firstElementChild.childNodes.length < 6)
-						assoclist.firstElementChild.appendChild(E('div', { 'class': 'th nowrap right' }, [ _('Disconnect') ]));
+						assoclist.firstElementChild.appendChild(E('div', { 'class': 'th cbi-section-actions' }));
 
 					row.push(E('button', {
 						'class': 'cbi-button cbi-button-remove',
