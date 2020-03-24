@@ -134,7 +134,8 @@ body {
 	font-weight: normal;
 	line-height: 18px;
 	color: #404040;
-	padding: 58px 5px 5px 5px;
+	padding: 18px 5px 5px 5px;
+	margin-top: 40px;
 }
 
 .container {
@@ -757,7 +758,6 @@ textarea[readonly] {
  * Repeatable UI elements outside the base styles provided from the scaffolding
  * ---------------------------------------------------------------------------- */
 header {
-	height: 40px;
 	position: fixed;
 	top: 0;
 	left: 0;
@@ -2400,4 +2400,25 @@ html body.apply-overlay-active {
 
 .fade-out {
 	animation: fade-out .4s ease;
+}
+
+.assoclist .ifacebadge {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	white-space: normal;
+	text-align: center;
+}
+
+.assoclist .ifacebadge > img {
+	margin: .2em;
+}
+
+.assoclist .td:nth-of-type(3),
+.assoclist .td:nth-of-type(5) {
+	width: 25%;
+}
+
+.assoclist .td:nth-of-type(6) button {
+	word-break: normal;
 }
