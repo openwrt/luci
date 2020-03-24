@@ -236,7 +236,8 @@ var UICheckbox = UIElement.extend({
 			'name': this.options.name,
 			'type': 'checkbox',
 			'value': this.options.value_enabled,
-			'checked': (this.value == this.options.value_enabled) ? '' : null
+			'checked': (this.value == this.options.value_enabled) ? '' : null,
+			'data-widget-id': this.options.id ? 'widget.' + this.options.id : null
 		}));
 
 		frameEl.appendChild(E('label', { 'for': id }));
