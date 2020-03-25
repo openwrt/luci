@@ -1152,8 +1152,6 @@ var UIDropdown = UIElement.extend(/** @lends LuCI.ui.Dropdown.prototype */ {
 		if ('ontouchstart' in window) {
 			var vpWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0),
 			    vpHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0),
-			    scrollFrom = window.pageYOffset,
-			    scrollTo = scrollFrom + rect.top - vpHeight * 0.5,
 			    start = null;
 
 			ul.style.top = sb.offsetHeight + 'px';
@@ -1161,6 +1159,31 @@ var UIDropdown = UIElement.extend(/** @lends LuCI.ui.Dropdown.prototype */ {
 			ul.style.right = (rect.right - vpWidth) + 'px';
 			ul.style.maxHeight = (vpHeight * 0.5) + 'px';
 			ul.style.WebkitOverflowScrolling = 'touch';
+
+			function getScrollParent(element) {
+				var parent = element,
+				    style = getComputedStyle(element),
+				    excludeStaticParent = (style.position === 'absolute');
+
+				if (style.position === 'fixed')
+					return document.body;
+
+				while ((parent = parent.parentElement) != null) {
+					style = getComputedStyle(parent);
+
+					if (excludeStaticParent && style.position === 'static')
+						continue;
+
+					if (/(auto|scroll)/.test(style.overflow + style.overflowY + style.overflowX))
+						return parent;
+				}
+
+				return document.body;
+			}
+
+			var scrollParent = getScrollParent(sb),
+			    scrollFrom = scrollParent.scrollTop,
+			    scrollTo = scrollFrom + rect.top - vpHeight * 0.5;
 
 			var scrollStep = function(timestamp) {
 				if (!start) {
@@ -1170,11 +1193,11 @@ var UIDropdown = UIElement.extend(/** @lends LuCI.ui.Dropdown.prototype */ {
 
 				var duration = Math.max(timestamp - start, 1);
 				if (duration < 100) {
-					document.body.scrollTop = scrollFrom + (scrollTo - scrollFrom) * (duration / 100);
+					scrollParent.scrollTop = scrollFrom + (scrollTo - scrollFrom) * (duration / 100);
 					window.requestAnimationFrame(scrollStep);
 				}
 				else {
-					document.body.scrollTop = scrollTo;
+					scrollParent.scrollTop = scrollTo;
 				}
 			};
 
