@@ -3,7 +3,7 @@
 //<![CDATA[
 	function vpn_add()
 	{
-		var vpn_name     = div_add.querySelector("#instance_name1").value.replace(/[^\x00-\x7F]|[\s!@#$%^&*()\-+=\[\]{};':"\\|,<>\/?]/g,'');
+		var vpn_name     = div_add.querySelector("#instance_name1").value.replace(/[^\x00-\x7F]|[\s\.!@#$%^&*()\-+=\[\]{};':"\\|,<>\/?]/g,'');
 		var vpn_template = div_add.querySelector("#instance_template").value;
 		var form         = document.getElementsByName('cbi')[0];
 
@@ -31,7 +31,7 @@
 
 	function vpn_upload()
 	{
-		var vpn_name = div_upload.querySelector("#instance_name2").value.replace(/[^\x00-\x7F]|[\s!@#$%^&*()\-+=\[\]{};':"\\|,<>\/?]/g,'');
+		var vpn_name = div_upload.querySelector("#instance_name2").value.replace(/[^\x00-\x7F]|[\s\.!@#$%^&*()\-+=\[\]{};':"\\|,<>\/?]/g,'');
 		var vpn_file = document.getElementById("ovpn_file").value;
 		var form     = document.getElementsByName('cbi')[0];
 
