@@ -82,6 +82,12 @@ return L.view.extend({
 		s.anonymous = true;
 		s.sortable  = true;
 
+		s.handleRemove = function(section_id, ev) {
+			return firewall.deleteZone(section_id).then(L.bind(function() {
+				return this.super('handleRemove', [section_id, ev]);
+			}, this));
+		};
+
 		s.tab('general', _('General Settings'));
 		s.tab('advanced', _('Advanced Settings'));
 		s.tab('conntrack', _('Conntrack Settings'));
