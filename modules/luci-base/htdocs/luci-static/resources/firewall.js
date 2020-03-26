@@ -154,8 +154,8 @@ Firewall = L.Class.extend({
 
 			if (section != null && section['.type'] == 'zone') {
 				found = true;
-				name = zone.name;
-				uci.remove('firewall', zone['.name']);
+				name = section.name;
+				uci.remove('firewall', section['.name']);
 			}
 			else if (name != null) {
 				var sections = uci.sections('firewall', 'zone');
