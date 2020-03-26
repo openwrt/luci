@@ -233,6 +233,31 @@ function next_free_sid(offset) {
 	return sid;
 }
 
+function add_dependency_permutations(o, deps) {
+	var res = null;
+
+	for (var key in deps) {
+		if (!deps.hasOwnProperty(key) || !Array.isArray(deps[key]))
+			continue;
+
+		var list = deps[key],
+		    tmp = [];
+
+		for (var j = 0; j < list.length; j++) {
+			for (var k = 0; k < (res ? res.length : 1); k++) {
+				var item = (res ? Object.assign({}, res[k]) : {});
+				item[key] = list[j];
+				tmp.push(item);
+			}
+		}
+
+		res = tmp;
+	}
+
+	for (var i = 0; i < (res ? res.length : 0); i++)
+		o.depends(res[i]);
+}
+
 var CBIWifiFrequencyValue = form.Value.extend({
 	callFrequencyList: rpc.declare({
 		object: 'iwinfo',
@@ -1075,7 +1100,7 @@ return L.view.extend({
 					var e = this.section.children.filter(function(o) { return o.option == 'encryption' })[0].formvalue(section_id),
 					    co = this.section.children.filter(function(o) { return o.option == 'cipher' })[0], c = co.formvalue(section_id);
 
-					if (value == 'wpa' || value == 'wpa2')
+					if (value == 'wpa' || value == 'wpa2' || value == 'wpa3' || value == 'wpa3-mixed')
 						uci.unset('wireless', section_id, 'key');
 
 					if (co.isActive(section_id) && e && (c == 'tkip' || c == 'ccmp' || c == 'tkip+ccmp'))
@@ -1087,6 +1112,8 @@ return L.view.extend({
 				o = ss.taboption('encryption', form.ListValue, 'cipher', _('Cipher'));
 				o.depends('encryption', 'wpa');
 				o.depends('encryption', 'wpa2');
+				o.depends('encryption', 'wpa3');
+				o.depends('encryption', 'wpa3-mixed');
 				o.depends('encryption', 'psk');
 				o.depends('encryption', 'psk2');
 				o.depends('encryption', 'wpa-mixed');
@@ -1128,9 +1155,13 @@ return L.view.extend({
 					var has_ap_owe = L.hasSystemFeature('hostapd', 'owe'),
 					    has_sta_owe = L.hasSystemFeature('wpasupplicant', 'owe');
 
+					// Probe Suite-B support
+					var has_ap_eap192 = L.hasSystemFeature('hostapd', 'suiteb192'),
+					    has_sta_eap192 = L.hasSystemFeature('wpasupplicant', 'suiteb192');
+
 
 					if (has_hostapd || has_supplicant) {
-						crypto_modes.push(['psk2',      'WPA2-PSK',                    33]);
+						crypto_modes.push(['psk2',      'WPA2-PSK',                    35]);
 						crypto_modes.push(['psk-mixed', 'WPA-PSK/WPA2-PSK Mixed Mode', 22]);
 						crypto_modes.push(['psk',       'WPA-PSK',                     21]);
 					}
@@ -1144,7 +1175,12 @@ return L.view.extend({
 					}
 
 					if (has_ap_eap || has_sta_eap) {
-						crypto_modes.push(['wpa2', 'WPA2-EAP', 32]);
+						if (has_ap_eap192 || has_sta_eap192) {
+							crypto_modes.push(['wpa3', 'WPA3-EAP', 33]);
+							crypto_modes.push(['wpa3-mixed', 'WPA2-EAP/WPA3-EAP Mixed Mode', 32]);
+						}
+
+						crypto_modes.push(['wpa2', 'WPA2-EAP', 34]);
 						crypto_modes.push(['wpa',  'WPA-EAP',  20]);
 					}
 
@@ -1163,6 +1199,8 @@ return L.view.extend({
 							'sae-mixed': has_ap_sae || _('Requires hostapd with SAE support'),
 							'wpa': has_ap_eap || _('Requires hostapd with EAP support'),
 							'wpa2': has_ap_eap || _('Requires hostapd with EAP support'),
+							'wpa3': has_ap_eap192 || _('Requires hostapd with EAP Suite-B support'),
+							'wpa3-mixed': has_ap_eap192 || _('Requires hostapd with EAP Suite-B support'),
 							'owe': has_ap_owe || _('Requires hostapd with OWE support')
 						},
 						'sta': {
@@ -1175,6 +1213,8 @@ return L.view.extend({
 							'sae-mixed': has_sta_sae || _('Requires wpa-supplicant with SAE support'),
 							'wpa': has_sta_eap || _('Requires wpa-supplicant with EAP support'),
 							'wpa2': has_sta_eap || _('Requires wpa-supplicant with EAP support'),
+							'wpa3': has_sta_eap192 || _('Requires wpa-supplicant with EAP Suite-B support'),
+							'wpa3-mixed': has_sta_eap192 || _('Requires wpa-supplicant with EAP Suite-B support'),
 							'owe': has_sta_owe || _('Requires wpa-supplicant with OWE support')
 						},
 						'adhoc': {
@@ -1237,74 +1277,47 @@ return L.view.extend({
 
 
 				o = ss.taboption('encryption', form.Value, 'auth_server', _('Radius-Authentication-Server'));
-				o.depends({ mode: 'ap', encryption: 'wpa' });
-				o.depends({ mode: 'ap', encryption: 'wpa2' });
-				o.depends({ mode: 'ap-wds', encryption: 'wpa' });
-				o.depends({ mode: 'ap-wds', encryption: 'wpa2' });
+				add_dependency_permutations(o, { mode: ['ap', 'ap-wds'], encryption: ['wpa', 'wpa2', 'wpa3', 'wpa3-mixed'] });
 				o.rmempty = true;
 				o.datatype = 'host(0)';
 
 				o = ss.taboption('encryption', form.Value, 'auth_port', _('Radius-Authentication-Port'), _('Default %d').format(1812));
-				o.depends({ mode: 'ap', encryption: 'wpa' });
-				o.depends({ mode: 'ap', encryption: 'wpa2' });
-				o.depends({ mode: 'ap-wds', encryption: 'wpa' });
-				o.depends({ mode: 'ap-wds', encryption: 'wpa2' });
+				add_dependency_permutations(o, { mode: ['ap', 'ap-wds'], encryption: ['wpa', 'wpa2', 'wpa3', 'wpa3-mixed'] });
 				o.rmempty = true;
 				o.datatype = 'port';
 
 				o = ss.taboption('encryption', form.Value, 'auth_secret', _('Radius-Authentication-Secret'));
-				o.depends({ mode: 'ap', encryption: 'wpa' });
-				o.depends({ mode: 'ap', encryption: 'wpa2' });
-				o.depends({ mode: 'ap-wds', encryption: 'wpa' });
-				o.depends({ mode: 'ap-wds', encryption: 'wpa2' });
+				add_dependency_permutations(o, { mode: ['ap', 'ap-wds'], encryption: ['wpa', 'wpa2', 'wpa3', 'wpa3-mixed'] });
 				o.rmempty = true;
 				o.password = true;
 
 				o = ss.taboption('encryption', form.Value, 'acct_server', _('Radius-Accounting-Server'));
-				o.depends({ mode: 'ap', encryption: 'wpa' });
-				o.depends({ mode: 'ap', encryption: 'wpa2' });
-				o.depends({ mode: 'ap-wds', encryption: 'wpa' });
-				o.depends({ mode: 'ap-wds', encryption: 'wpa2' });
+				add_dependency_permutations(o, { mode: ['ap', 'ap-wds'], encryption: ['wpa', 'wpa2', 'wpa3', 'wpa3-mixed'] });
 				o.rmempty = true;
 				o.datatype = 'host(0)';
 
 				o = ss.taboption('encryption', form.Value, 'acct_port', _('Radius-Accounting-Port'), _('Default %d').format(1813));
-				o.depends({ mode: 'ap', encryption: 'wpa' });
-				o.depends({ mode: 'ap', encryption: 'wpa2' });
-				o.depends({ mode: 'ap-wds', encryption: 'wpa' });
-				o.depends({ mode: 'ap-wds', encryption: 'wpa2' });
+				add_dependency_permutations(o, { mode: ['ap', 'ap-wds'], encryption: ['wpa', 'wpa2', 'wpa3', 'wpa3-mixed'] });
 				o.rmempty = true;
 				o.datatype = 'port';
 
 				o = ss.taboption('encryption', form.Value, 'acct_secret', _('Radius-Accounting-Secret'));
-				o.depends({ mode: 'ap', encryption: 'wpa' });
-				o.depends({ mode: 'ap', encryption: 'wpa2' });
-				o.depends({ mode: 'ap-wds', encryption: 'wpa' });
-				o.depends({ mode: 'ap-wds', encryption: 'wpa2' });
+				add_dependency_permutations(o, { mode: ['ap', 'ap-wds'], encryption: ['wpa', 'wpa2', 'wpa3', 'wpa3-mixed'] });
 				o.rmempty = true;
 				o.password = true;
 
 				o = ss.taboption('encryption', form.Value, 'dae_client', _('DAE-Client'));
-				o.depends({ mode: 'ap', encryption: 'wpa' });
-				o.depends({ mode: 'ap', encryption: 'wpa2' });
-				o.depends({ mode: 'ap-wds', encryption: 'wpa' });
-				o.depends({ mode: 'ap-wds', encryption: 'wpa2' });
+				add_dependency_permutations(o, { mode: ['ap', 'ap-wds'], encryption: ['wpa', 'wpa2', 'wpa3', 'wpa3-mixed'] });
 				o.rmempty = true;
 				o.datatype = 'host(0)';
 
 				o = ss.taboption('encryption', form.Value, 'dae_port', _('DAE-Port'), _('Default %d').format(3799));
-				o.depends({ mode: 'ap', encryption: 'wpa' });
-				o.depends({ mode: 'ap', encryption: 'wpa2' });
-				o.depends({ mode: 'ap-wds', encryption: 'wpa' });
-				o.depends({ mode: 'ap-wds', encryption: 'wpa2' });
+				add_dependency_permutations(o, { mode: ['ap', 'ap-wds'], encryption: ['wpa', 'wpa2', 'wpa3', 'wpa3-mixed'] });
 				o.rmempty = true;
 				o.datatype = 'port';
 
 				o = ss.taboption('encryption', form.Value, 'dae_secret', _('DAE-Secret'));
-				o.depends({ mode: 'ap', encryption: 'wpa' });
-				o.depends({ mode: 'ap', encryption: 'wpa2' });
-				o.depends({ mode: 'ap-wds', encryption: 'wpa' });
-				o.depends({ mode: 'ap-wds', encryption: 'wpa2' });
+				add_dependency_permutations(o, { mode: ['ap', 'ap-wds'], encryption: ['wpa', 'wpa2', 'wpa3', 'wpa3-mixed'] });
 				o.rmempty = true;
 				o.password = true;
 
@@ -1372,29 +1385,13 @@ return L.view.extend({
 					var has_80211r = L.hasSystemFeature('hostapd', '11r') || L.hasSystemFeature('hostapd', 'eap');
 
 					o = ss.taboption('encryption', form.Flag, 'ieee80211r', _('802.11r Fast Transition'), _('Enables fast roaming among access points that belong to the same Mobility Domain'));
-					o.depends({ mode: 'ap', encryption: 'wpa' });
-					o.depends({ mode: 'ap', encryption: 'wpa2' });
-					o.depends({ mode: 'ap-wds', encryption: 'wpa' });
-					o.depends({ mode: 'ap-wds', encryption: 'wpa2' });
-					if (has_80211r) {
-						o.depends({ mode: 'ap', encryption: 'psk' });
-						o.depends({ mode: 'ap', encryption: 'psk2' });
-						o.depends({ mode: 'ap', encryption: 'psk-mixed' });
-						o.depends({ mode: 'ap', encryption: 'sae' });
-						o.depends({ mode: 'ap', encryption: 'sae-mixed' });
-						o.depends({ mode: 'ap-wds', encryption: 'psk' });
-						o.depends({ mode: 'ap-wds', encryption: 'psk2' });
-						o.depends({ mode: 'ap-wds', encryption: 'psk-mixed' });
-						o.depends({ mode: 'ap-wds', encryption: 'sae' });
-						o.depends({ mode: 'ap-wds', encryption: 'sae-mixed' });
-					}
+					add_dependency_permutations(o, { mode: ['ap', 'ap-wds'], encryption: ['wpa', 'wpa2', 'wpa3', 'wpa3-mixed'] });
+					if (has_80211r)
+						add_dependency_permutations(o, { mode: ['ap', 'ap-wds'], encryption: ['psk', 'psk2', 'psk-mixed', 'sae', 'sae-mixed'] });
 					o.rmempty = true;
 
 					o = ss.taboption('encryption', form.Value, 'nasid', _('NAS ID'), _('Used for two different purposes: RADIUS NAS ID and 802.11r R0KH-ID. Not needed with normal WPA(2)-PSK.'));
-					o.depends({ mode: 'ap', encryption: 'wpa' });
-					o.depends({ mode: 'ap', encryption: 'wpa2' });
-					o.depends({ mode: 'ap-wds', encryption: 'wpa' });
-					o.depends({ mode: 'ap-wds', encryption: 'wpa2' });
+					add_dependency_permutations(o, { mode: ['ap', 'ap-wds'], encryption: ['wpa', 'wpa2', 'wpa3', 'wpa3-mixed'] });
 					o.depends({ ieee80211r: '1' });
 					o.rmempty = true;
 
@@ -1452,19 +1449,13 @@ return L.view.extend({
 					o.value('ttls', 'TTLS');
 					o.value('peap', 'PEAP');
 					o.value('fast', 'FAST');
-					o.depends({ mode: 'sta', encryption: 'wpa' });
-					o.depends({ mode: 'sta', encryption: 'wpa2' });
-					o.depends({ mode: 'sta-wds', encryption: 'wpa' });
-					o.depends({ mode: 'sta-wds', encryption: 'wpa2' });
+					add_dependency_permutations(o, { mode: ['sta', 'sta-wds'], encryption: ['wpa', 'wpa2', 'wpa3', 'wpa3-mixed'] });
 
 					o = ss.taboption('encryption', form.Flag, 'ca_cert_usesystem', _('Use system certificates'), _("Validate server certificate using built-in system CA bundle,<br />requires the \"ca-bundle\" package"));
 					o.enabled = '1';
 					o.disabled = '0';
 					o.default = o.disabled;
-					o.depends({ mode: 'sta', encryption: 'wpa' });
-					o.depends({ mode: 'sta', encryption: 'wpa2' });
-					o.depends({ mode: 'sta-wds', encryption: 'wpa' });
-					o.depends({ mode: 'sta-wds', encryption: 'wpa2' });
+					add_dependency_permutations(o, { mode: ['sta', 'sta-wds'], encryption: ['wpa', 'wpa2', 'wpa3', 'wpa3-mixed'] });
 					o.validate = function(section_id, value) {
 						if (value == '1' && !L.hasSystemFeature('cabundle')) {
 							return _("This option cannot be used because the ca-bundle package is not installed.");
@@ -1473,52 +1464,28 @@ return L.view.extend({
 					};
 
 					o = ss.taboption('encryption', form.FileUpload, 'ca_cert', _('Path to CA-Certificate'));
-					o.depends({ mode: 'sta', encryption: 'wpa', ca_cert_usesystem: '0' });
-					o.depends({ mode: 'sta', encryption: 'wpa2', ca_cert_usesystem: '0' });
-					o.depends({ mode: 'sta-wds', encryption: 'wpa', ca_cert_usesystem: '0' });
-					o.depends({ mode: 'sta-wds', encryption: 'wpa2', ca_cert_usesystem: '0' });
+					add_dependency_permutations(o, { mode: ['sta', 'sta-wds'], encryption: ['wpa', 'wpa2', 'wpa3', 'wpa3-mixed'], ca_cert_usesystem: ['0'] });
 
 					o = ss.taboption('encryption', form.Value, 'subject_match', _('Certificate constraint (Subject)'), _("Certificate constraint substring - e.g. /CN=wifi.mycompany.com<br />See `logread -f` during handshake for actual values"));
-					o.depends({ mode: 'sta', encryption: 'wpa' });
-					o.depends({ mode: 'sta', encryption: 'wpa2' });
-					o.depends({ mode: 'sta-wds', encryption: 'wpa' });
-					o.depends({ mode: 'sta-wds', encryption: 'wpa2' });
+					add_dependency_permutations(o, { mode: ['sta', 'sta-wds'], encryption: ['wpa', 'wpa2', 'wpa3', 'wpa3-mixed'] });
 
 					o = ss.taboption('encryption', form.DynamicList, 'altsubject_match', _('Certificate constraint (SAN)'), _("Certificate constraint(s) via Subject Alternate Name values<br />(supported attributes: EMAIL, DNS, URI) - e.g. DNS:wifi.mycompany.com"));
-					o.depends({ mode: 'sta', encryption: 'wpa' });
-					o.depends({ mode: 'sta', encryption: 'wpa2' });
-					o.depends({ mode: 'sta-wds', encryption: 'wpa' });
-					o.depends({ mode: 'sta-wds', encryption: 'wpa2' });
+					add_dependency_permutations(o, { mode: ['sta', 'sta-wds'], encryption: ['wpa', 'wpa2', 'wpa3', 'wpa3-mixed'] });
 
 					o = ss.taboption('encryption', form.DynamicList, 'domain_match', _('Certificate constraint (Domain)'), _("Certificate constraint(s) against DNS SAN values (if available)<br />or Subject CN (exact match)"));
-					o.depends({ mode: 'sta', encryption: 'wpa' });
-					o.depends({ mode: 'sta', encryption: 'wpa2' });
-					o.depends({ mode: 'sta-wds', encryption: 'wpa' });
-					o.depends({ mode: 'sta-wds', encryption: 'wpa2' });
+					add_dependency_permutations(o, { mode: ['sta', 'sta-wds'], encryption: ['wpa', 'wpa2', 'wpa3', 'wpa3-mixed'] });
 
 					o = ss.taboption('encryption', form.DynamicList, 'domain_suffix_match', _('Certificate constraint (Wildcard)'), _("Certificate constraint(s) against DNS SAN values (if available)<br />or Subject CN (suffix match)"));
-					o.depends({ mode: 'sta', encryption: 'wpa' });
-					o.depends({ mode: 'sta', encryption: 'wpa2' });
-					o.depends({ mode: 'sta-wds', encryption: 'wpa' });
-					o.depends({ mode: 'sta-wds', encryption: 'wpa2' });
+					add_dependency_permutations(o, { mode: ['sta', 'sta-wds'], encryption: ['wpa', 'wpa2', 'wpa3', 'wpa3-mixed'] });
 
 					o = ss.taboption('encryption', form.FileUpload, 'client_cert', _('Path to Client-Certificate'));
-					o.depends({ mode: 'sta', eap_type: 'tls', encryption: 'wpa' });
-					o.depends({ mode: 'sta', eap_type: 'tls', encryption: 'wpa2' });
-					o.depends({ mode: 'sta-wds', eap_type: 'tls', encryption: 'wpa' });
-					o.depends({ mode: 'sta-wds', eap_type: 'tls', encryption: 'wpa2' });
+					add_dependency_permutations(o, { mode: ['sta', 'sta-wds'], encryption: ['wpa', 'wpa2', 'wpa3', 'wpa3-mixed'], eap_type: ['tls'] });
 
 					o = ss.taboption('encryption', form.FileUpload, 'priv_key', _('Path to Private Key'));
-					o.depends({ mode: 'sta', eap_type: 'tls', encryption: 'wpa2' });
-					o.depends({ mode: 'sta', eap_type: 'tls', encryption: 'wpa' });
-					o.depends({ mode: 'sta-wds', eap_type: 'tls', encryption: 'wpa2' });
-					o.depends({ mode: 'sta-wds', eap_type: 'tls', encryption: 'wpa' });
+					add_dependency_permutations(o, { mode: ['sta', 'sta-wds'], encryption: ['wpa', 'wpa2', 'wpa3', 'wpa3-mixed'], eap_type: ['tls'] });
 
 					o = ss.taboption('encryption', form.Value, 'priv_key_pwd', _('Password of Private Key'));
-					o.depends({ mode: 'sta', eap_type: 'tls', encryption: 'wpa2' });
-					o.depends({ mode: 'sta', eap_type: 'tls', encryption: 'wpa' });
-					o.depends({ mode: 'sta-wds', eap_type: 'tls', encryption: 'wpa2' });
-					o.depends({ mode: 'sta-wds', eap_type: 'tls', encryption: 'wpa' });
+					add_dependency_permutations(o, { mode: ['sta', 'sta-wds'], encryption: ['wpa', 'wpa2', 'wpa3', 'wpa3-mixed'], eap_type: ['tls'] });
 					o.password = true;
 
 					o = ss.taboption('encryption', form.ListValue, 'auth', _('Authentication'));
@@ -1526,22 +1493,11 @@ return L.view.extend({
 					o.value('CHAP', 'CHAP');
 					o.value('MSCHAP', 'MSCHAP');
 					o.value('MSCHAPV2', 'MSCHAPv2');
-					o.value('EAP-GTC');
-					o.value('EAP-MD5');
-					o.value('EAP-MSCHAPV2');
-					o.value('EAP-TLS');
-					o.depends({ mode: 'sta', eap_type: 'fast', encryption: 'wpa2' });
-					o.depends({ mode: 'sta', eap_type: 'fast', encryption: 'wpa' });
-					o.depends({ mode: 'sta', eap_type: 'peap', encryption: 'wpa2' });
-					o.depends({ mode: 'sta', eap_type: 'peap', encryption: 'wpa' });
-					o.depends({ mode: 'sta', eap_type: 'ttls', encryption: 'wpa2' });
-					o.depends({ mode: 'sta', eap_type: 'ttls', encryption: 'wpa' });
-					o.depends({ mode: 'sta-wds', eap_type: 'fast', encryption: 'wpa2' });
-					o.depends({ mode: 'sta-wds', eap_type: 'fast', encryption: 'wpa' });
-					o.depends({ mode: 'sta-wds', eap_type: 'peap', encryption: 'wpa2' });
-					o.depends({ mode: 'sta-wds', eap_type: 'peap', encryption: 'wpa' });
-					o.depends({ mode: 'sta-wds', eap_type: 'ttls', encryption: 'wpa2' });
-					o.depends({ mode: 'sta-wds', eap_type: 'ttls', encryption: 'wpa' });
+					o.value('EAP-GTC', 'EAP-GTC');
+					o.value('EAP-MD5', 'EAP-MD5');
+					o.value('EAP-MSCHAPV2', 'EAP-MSCHAPv2');
+					o.value('EAP-TLS', 'EAP-TLS');
+					add_dependency_permutations(o, { mode: ['sta', 'sta-wds'], encryption: ['wpa', 'wpa2', 'wpa3', 'wpa3-mixed'], eap_type: ['fast', 'peap', 'ttls'] });
 
 					o.validate = function(section_id, value) {
 						var eo = this.section.children.filter(function(o) { return o.option == 'eap_type' })[0],
@@ -1557,10 +1513,7 @@ return L.view.extend({
 					o.enabled = '1';
 					o.disabled = '0';
 					o.default = o.disabled;
-					o.depends({ mode: 'sta', auth: 'EAP-TLS', encryption: 'wpa' });
-					o.depends({ mode: 'sta', auth: 'EAP-TLS', encryption: 'wpa2' });
-					o.depends({ mode: 'sta-wds', auth: 'EAP-TLS', encryption: 'wpa' });
-					o.depends({ mode: 'sta-wds', auth: 'EAP-TLS', encryption: 'wpa2' });
+					add_dependency_permutations(o, { mode: ['sta', 'sta-wds'], encryption: ['wpa', 'wpa2', 'wpa3', 'wpa3-mixed'], auth: ['EAP-TLS'] });
 					o.validate = function(section_id, value) {
 						if (value == '1' && !L.hasSystemFeature('cabundle')) {
 							return _("This option cannot be used because the ca-bundle package is not installed.");
@@ -1569,103 +1522,38 @@ return L.view.extend({
 					};
 
 					o = ss.taboption('encryption', form.FileUpload, 'ca_cert2', _('Path to inner CA-Certificate'));
-					o.depends({ mode: 'sta', auth: 'EAP-TLS', encryption: 'wpa', ca_cert2_usesystem: '0' });
-					o.depends({ mode: 'sta', auth: 'EAP-TLS', encryption: 'wpa2', ca_cert2_usesystem: '0' });
-					o.depends({ mode: 'sta-wds', auth: 'EAP-TLS', encryption: 'wpa', ca_cert2_usesystem: '0' });
-					o.depends({ mode: 'sta-wds', auth: 'EAP-TLS', encryption: 'wpa2', ca_cert2_usesystem: '0' });
+					add_dependency_permutations(o, { mode: ['sta', 'sta-wds'], encryption: ['wpa', 'wpa2', 'wpa3', 'wpa3-mixed'], auth: ['EAP-TLS'], ca_cert2_usesystem: ['0'] });
 
 					o = ss.taboption('encryption', form.Value, 'subject_match2', _('Inner certificate constraint (Subject)'), _("Certificate constraint substring - e.g. /CN=wifi.mycompany.com<br />See `logread -f` during handshake for actual values"));
-					o.depends({ mode: 'sta', auth: 'EAP-TLS', encryption: 'wpa' });
-					o.depends({ mode: 'sta', auth: 'EAP-TLS', encryption: 'wpa2' });
-					o.depends({ mode: 'sta-wds', auth: 'EAP-TLS', encryption: 'wpa' });
-					o.depends({ mode: 'sta-wds', auth: 'EAP-TLS', encryption: 'wpa2' });
+					add_dependency_permutations(o, { mode: ['sta', 'sta-wds'], encryption: ['wpa', 'wpa2', 'wpa3', 'wpa3-mixed'], auth: ['EAP-TLS'] });
 
 					o = ss.taboption('encryption', form.DynamicList, 'altsubject_match2', _('Inner certificate constraint (SAN)'), _("Certificate constraint(s) via Subject Alternate Name values<br />(supported attributes: EMAIL, DNS, URI) - e.g. DNS:wifi.mycompany.com"));
-					o.depends({ mode: 'sta', auth: 'EAP-TLS', encryption: 'wpa' });
-					o.depends({ mode: 'sta', auth: 'EAP-TLS', encryption: 'wpa2' });
-					o.depends({ mode: 'sta-wds', auth: 'EAP-TLS', encryption: 'wpa' });
-					o.depends({ mode: 'sta-wds', auth: 'EAP-TLS', encryption: 'wpa2' });
+					add_dependency_permutations(o, { mode: ['sta', 'sta-wds'], encryption: ['wpa', 'wpa2', 'wpa3', 'wpa3-mixed'], auth: ['EAP-TLS'] });
 
 					o = ss.taboption('encryption', form.DynamicList, 'domain_match2', _('Inner certificate constraint (Domain)'), _("Certificate constraint(s) against DNS SAN values (if available)<br />or Subject CN (exact match)"));
-					o.depends({ mode: 'sta', auth: 'EAP-TLS', encryption: 'wpa' });
-					o.depends({ mode: 'sta', auth: 'EAP-TLS', encryption: 'wpa2' });
-					o.depends({ mode: 'sta-wds', auth: 'EAP-TLS', encryption: 'wpa' });
-					o.depends({ mode: 'sta-wds', auth: 'EAP-TLS', encryption: 'wpa2' });
+					add_dependency_permutations(o, { mode: ['sta', 'sta-wds'], encryption: ['wpa', 'wpa2', 'wpa3', 'wpa3-mixed'], auth: ['EAP-TLS'] });
 
 					o = ss.taboption('encryption', form.DynamicList, 'domain_suffix_match2', _('Inner certificate constraint (Wildcard)'), _("Certificate constraint(s) against DNS SAN values (if available)<br />or Subject CN (suffix match)"));
-					o.depends({ mode: 'sta', auth: 'EAP-TLS', encryption: 'wpa' });
-					o.depends({ mode: 'sta', auth: 'EAP-TLS', encryption: 'wpa2' });
-					o.depends({ mode: 'sta-wds', auth: 'EAP-TLS', encryption: 'wpa' });
-					o.depends({ mode: 'sta-wds', auth: 'EAP-TLS', encryption: 'wpa2' });
+					add_dependency_permutations(o, { mode: ['sta', 'sta-wds'], encryption: ['wpa', 'wpa2', 'wpa3', 'wpa3-mixed'], auth: ['EAP-TLS'] });
 
 					o = ss.taboption('encryption', form.FileUpload, 'client_cert2', _('Path to inner Client-Certificate'));
-					o.depends({ mode: 'sta', auth: 'EAP-TLS', encryption: 'wpa' });
-					o.depends({ mode: 'sta', auth: 'EAP-TLS', encryption: 'wpa2' });
-					o.depends({ mode: 'sta-wds', auth: 'EAP-TLS', encryption: 'wpa' });
-					o.depends({ mode: 'sta-wds', auth: 'EAP-TLS', encryption: 'wpa2' });
+					add_dependency_permutations(o, { mode: ['sta', 'sta-wds'], encryption: ['wpa', 'wpa2', 'wpa3', 'wpa3-mixed'], auth: ['EAP-TLS'] });
 
 					o = ss.taboption('encryption', form.FileUpload, 'priv_key2', _('Path to inner Private Key'));
-					o.depends({ mode: 'sta', auth: 'EAP-TLS', encryption: 'wpa' });
-					o.depends({ mode: 'sta', auth: 'EAP-TLS', encryption: 'wpa2' });
-					o.depends({ mode: 'sta-wds', auth: 'EAP-TLS', encryption: 'wpa' });
-					o.depends({ mode: 'sta-wds', auth: 'EAP-TLS', encryption: 'wpa2' });
+					add_dependency_permutations(o, { mode: ['sta', 'sta-wds'], encryption: ['wpa', 'wpa2', 'wpa3', 'wpa3-mixed'], auth: ['EAP-TLS'] });
 
 					o = ss.taboption('encryption', form.Value, 'priv_key2_pwd', _('Password of inner Private Key'));
-					o.depends({ mode: 'sta', auth: 'EAP-TLS', encryption: 'wpa' });
-					o.depends({ mode: 'sta', auth: 'EAP-TLS', encryption: 'wpa2' });
-					o.depends({ mode: 'sta-wds', auth: 'EAP-TLS', encryption: 'wpa' });
-					o.depends({ mode: 'sta-wds', auth: 'EAP-TLS', encryption: 'wpa2' });
+					add_dependency_permutations(o, { mode: ['sta', 'sta-wds'], encryption: ['wpa', 'wpa2', 'wpa3', 'wpa3-mixed'], auth: ['EAP-TLS'] });
 					o.password = true;
 
 					o = ss.taboption('encryption', form.Value, 'identity', _('Identity'));
-					o.depends({ mode: 'sta', eap_type: 'fast', encryption: 'wpa2' });
-					o.depends({ mode: 'sta', eap_type: 'fast', encryption: 'wpa' });
-					o.depends({ mode: 'sta', eap_type: 'peap', encryption: 'wpa2' });
-					o.depends({ mode: 'sta', eap_type: 'peap', encryption: 'wpa' });
-					o.depends({ mode: 'sta', eap_type: 'ttls', encryption: 'wpa2' });
-					o.depends({ mode: 'sta', eap_type: 'ttls', encryption: 'wpa' });
-					o.depends({ mode: 'sta-wds', eap_type: 'fast', encryption: 'wpa2' });
-					o.depends({ mode: 'sta-wds', eap_type: 'fast', encryption: 'wpa' });
-					o.depends({ mode: 'sta-wds', eap_type: 'peap', encryption: 'wpa2' });
-					o.depends({ mode: 'sta-wds', eap_type: 'peap', encryption: 'wpa' });
-					o.depends({ mode: 'sta-wds', eap_type: 'ttls', encryption: 'wpa2' });
-					o.depends({ mode: 'sta-wds', eap_type: 'ttls', encryption: 'wpa' });
-					o.depends({ mode: 'sta', eap_type: 'tls', encryption: 'wpa2' });
-					o.depends({ mode: 'sta', eap_type: 'tls', encryption: 'wpa' });
-					o.depends({ mode: 'sta-wds', eap_type: 'tls', encryption: 'wpa2' });
-					o.depends({ mode: 'sta-wds', eap_type: 'tls', encryption: 'wpa' });
+					add_dependency_permutations(o, { mode: ['sta', 'sta-wds'], encryption: ['wpa', 'wpa2', 'wpa3', 'wpa3-mixed'], eap_type: ['fast', 'peap', 'tls', 'ttls'] });
 
 					o = ss.taboption('encryption', form.Value, 'anonymous_identity', _('Anonymous Identity'));
-					o.depends({ mode: 'sta', eap_type: 'fast', encryption: 'wpa2' });
-					o.depends({ mode: 'sta', eap_type: 'fast', encryption: 'wpa' });
-					o.depends({ mode: 'sta', eap_type: 'peap', encryption: 'wpa2' });
-					o.depends({ mode: 'sta', eap_type: 'peap', encryption: 'wpa' });
-					o.depends({ mode: 'sta', eap_type: 'ttls', encryption: 'wpa2' });
-					o.depends({ mode: 'sta', eap_type: 'ttls', encryption: 'wpa' });
-					o.depends({ mode: 'sta-wds', eap_type: 'fast', encryption: 'wpa2' });
-					o.depends({ mode: 'sta-wds', eap_type: 'fast', encryption: 'wpa' });
-					o.depends({ mode: 'sta-wds', eap_type: 'peap', encryption: 'wpa2' });
-					o.depends({ mode: 'sta-wds', eap_type: 'peap', encryption: 'wpa' });
-					o.depends({ mode: 'sta-wds', eap_type: 'ttls', encryption: 'wpa2' });
-					o.depends({ mode: 'sta-wds', eap_type: 'ttls', encryption: 'wpa' });
-					o.depends({ mode: 'sta', eap_type: 'tls', encryption: 'wpa2' });
-					o.depends({ mode: 'sta', eap_type: 'tls', encryption: 'wpa' });
-					o.depends({ mode: 'sta-wds', eap_type: 'tls', encryption: 'wpa2' });
-					o.depends({ mode: 'sta-wds', eap_type: 'tls', encryption: 'wpa' });
+					add_dependency_permutations(o, { mode: ['sta', 'sta-wds'], encryption: ['wpa', 'wpa2', 'wpa3', 'wpa3-mixed'], eap_type: ['fast', 'peap', 'tls', 'ttls'] });
 
 					o = ss.taboption('encryption', form.Value, 'password', _('Password'));
-					o.depends({ mode: 'sta', eap_type: 'fast', encryption: 'wpa2' });
-					o.depends({ mode: 'sta', eap_type: 'fast', encryption: 'wpa' });
-					o.depends({ mode: 'sta', eap_type: 'peap', encryption: 'wpa2' });
-					o.depends({ mode: 'sta', eap_type: 'peap', encryption: 'wpa' });
-					o.depends({ mode: 'sta', eap_type: 'ttls', encryption: 'wpa2' });
-					o.depends({ mode: 'sta', eap_type: 'ttls', encryption: 'wpa' });
-					o.depends({ mode: 'sta-wds', eap_type: 'fast', encryption: 'wpa2' });
-					o.depends({ mode: 'sta-wds', eap_type: 'fast', encryption: 'wpa' });
-					o.depends({ mode: 'sta-wds', eap_type: 'peap', encryption: 'wpa2' });
-					o.depends({ mode: 'sta-wds', eap_type: 'peap', encryption: 'wpa' });
-					o.depends({ mode: 'sta-wds', eap_type: 'ttls', encryption: 'wpa2' });
-					o.depends({ mode: 'sta-wds', eap_type: 'ttls', encryption: 'wpa' });
+					add_dependency_permutations(o, { mode: ['sta', 'sta-wds'], encryption: ['wpa', 'wpa2', 'wpa3', 'wpa3-mixed'], eap_type: ['fast', 'peap', 'ttls'] });
 					o.password = true;
 
 
@@ -1676,32 +1564,10 @@ return L.view.extend({
 							o.value('', _('Disabled'));
 							o.value('1', _('Optional'));
 							o.value('2', _('Required'));
-							o.depends({ mode: 'ap', encryption: 'wpa2' });
-							o.depends({ mode: 'ap-wds', encryption: 'wpa2' });
-							o.depends({ mode: 'ap', encryption: 'psk2' });
-							o.depends({ mode: 'ap', encryption: 'psk-mixed' });
-							o.depends({ mode: 'ap', encryption: 'sae' });
-							o.depends({ mode: 'ap', encryption: 'sae-mixed' });
-							o.depends({ mode: 'ap', encryption: 'owe' });
-							o.depends({ mode: 'ap-wds', encryption: 'psk2' });
-							o.depends({ mode: 'ap-wds', encryption: 'psk-mixed' });
-							o.depends({ mode: 'ap-wds', encryption: 'sae' });
-							o.depends({ mode: 'ap-wds', encryption: 'sae-mixed' });
-							o.depends({ mode: 'ap-wds', encryption: 'owe' });
-							o.depends({ mode: 'sta', encryption: 'wpa2' });
-							o.depends({ mode: 'sta-wds', encryption: 'wpa2' });
-							o.depends({ mode: 'sta', encryption: 'psk2' });
-							o.depends({ mode: 'sta', encryption: 'psk-mixed' });
-							o.depends({ mode: 'sta', encryption: 'sae' });
-							o.depends({ mode: 'sta', encryption: 'sae-mixed' });
-							o.depends({ mode: 'sta', encryption: 'owe' });
-							o.depends({ mode: 'sta-wds', encryption: 'psk2' });
-							o.depends({ mode: 'sta-wds', encryption: 'psk-mixed' });
-							o.depends({ mode: 'sta-wds', encryption: 'sae' });
-							o.depends({ mode: 'sta-wds', encryption: 'sae-mixed' });
-							o.depends({ mode: 'sta-wds', encryption: 'owe' });
+							add_dependency_permutations(o, { mode: ['ap', 'ap-wds', 'sta', 'sta-wds'], encryption: ['owe', 'psk2', 'psk-mixed', 'sae', 'sae-mixed', 'wpa2', 'wpa3', 'wpa3-mixed'] });
+
 							o.defaults = {
-								'2': [{ encryption: 'sae' }, { encryption: 'owe' }],
+								'2': [{ encryption: 'sae' }, { encryption: 'owe' }, { encryption: 'wpa3' }, { encryption: 'wpa3-mixed' }],
 								'1': [{ encryption: 'sae-mixed'}],
 								'':  []
 							};
@@ -1722,16 +1588,7 @@ return L.view.extend({
 						};
 
 						o = ss.taboption('encryption', form.Flag, 'wpa_disable_eapol_key_retries', _('Enable key reinstallation (KRACK) countermeasures'), _('Complicates key reinstallation attacks on the client side by disabling retransmission of EAPOL-Key frames that are used to install keys. This workaround might cause interoperability issues and reduced robustness of key negotiation especially in environments with heavy traffic load.'));
-						o.depends({ mode: 'ap', encryption: 'wpa2' });
-						o.depends({ mode: 'ap', encryption: 'psk2' });
-						o.depends({ mode: 'ap', encryption: 'psk-mixed' });
-						o.depends({ mode: 'ap', encryption: 'sae' });
-						o.depends({ mode: 'ap', encryption: 'sae-mixed' });
-						o.depends({ mode: 'ap-wds', encryption: 'wpa2' });
-						o.depends({ mode: 'ap-wds', encryption: 'psk2' });
-						o.depends({ mode: 'ap-wds', encryption: 'psk-mixed' });
-						o.depends({ mode: 'ap-wds', encryption: 'sae' });
-						o.depends({ mode: 'ap-wds', encryption: 'sae-mixed' });
+						add_dependency_permutations(o, { mode: ['ap', 'ap-wds'], encryption: ['psk2', 'psk-mixed', 'sae', 'sae-mixed', 'wpa2', 'wpa3', 'wpa3-mixed'] });
 
 						if (L.hasSystemFeature('hostapd', 'cli') && L.hasSystemFeature('wpasupplicant')) {
 							o = ss.taboption('encryption', form.Flag, 'wps_pushbutton', _('Enable WPS pushbutton, requires WPA(2)-PSK/WPA3-SAE'))
