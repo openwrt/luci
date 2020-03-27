@@ -98,6 +98,13 @@
 				ul.style.display = '';
 		}
 
+		function adjust_body_margin(ev) {
+			var body = document.querySelector('body'),
+			    head = document.querySelector('header');
+
+			body.style.marginTop = head.offsetHeight + 'px';
+		}
+
 		document.addEventListener('luci-loaded', function(ev) {
 			var tree = <%= luci.http.write_json(luci.dispatcher.menu_json() or {}) %>,
 			    node = tree,
@@ -114,6 +121,14 @@
 				if (node)
 					render_tabmenu(node, url);
 			}
+
+			document.addEventListener('poll-start', adjust_body_margin);
+			document.addEventListener('poll-stop', adjust_body_margin);
+			document.addEventListener('uci-new-changes', adjust_body_margin);
+			document.addEventListener('uci-clear-changes', adjust_body_margin);
+			window.addEventListener('resize', adjust_body_margin);
+
+			adjust_body_margin(ev);
 		});
 	})();
 </script>
