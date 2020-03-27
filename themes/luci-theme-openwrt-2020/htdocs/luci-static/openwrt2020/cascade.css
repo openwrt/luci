@@ -218,6 +218,8 @@ body.modal-overlay-active #modal_overlay {
 	box-shadow: 0 0 3px 1px var(--main-bright-color);
 	padding: .5em;
 	border-radius: .25em;
+	display: flex;
+	flex-direction: column;
 }
 
 .modal > h4:first-child {
@@ -282,6 +284,7 @@ body.modal-overlay-active #modal_overlay {
 	vertical-align: middle;
 }
 
+.td input:not([type]),
 .td input[type="text"],
 .td input[type="password"],
 .td select,
@@ -555,8 +558,12 @@ h6 { font-size: 110%; }
 
 .cbi-section > legend:first-child { font-size: 140%; }
 
-p, ul {
+p, ul, textarea {
 	margin: 0 0 1em 0;
+}
+
+p > textarea:last-child {
+	margin: 0;
 }
 
 var {
@@ -920,6 +927,7 @@ button[disabled], button.disabled, .btn[disabled], .btn.disabled {
 	cursor: pointer;
 }
 
+input:not([type]),
 input[type="text"],
 input[type="password"],
 select,
@@ -933,6 +941,7 @@ select,
 	border-radius: .25em;
 }
 
+input:not([type]):focus,
 input[type="text"]:focus,
 input[type="password"]:focus,
 select:focus,
@@ -941,6 +950,7 @@ select:focus,
 	border-color: var(--main-dark-color);
 }
 
+input:not([type]) + .btn, input:not([type]) + button,
 input[type="text"] + .btn, input[type="text"] + button,
 input[type="password"] + .btn, input[type="password"] + button {
 	margin: 0 0 2px -1px;
@@ -952,6 +962,7 @@ input[type="password"] + .btn, input[type="password"] + button {
 	margin-left: .25em;
 }
 
+.control-group > input:not([type]) + .btn, .control-group > input:not([type]) + button,
 .control-group > input[type="text"] + .btn, .control-group > input[type="text"] + button,
 .control-group > input[type="password"] + .btn, .control-group > input[type="password"] + button {
 	margin: .125em .125em calc(.125em + 2px) calc(-.125em - .25em) !important;
@@ -999,6 +1010,7 @@ textarea {
 }
 
 .control-group > select,
+.control-group > input:not([type]),
 .control-group > input[type="text"] {
 	flex: 10;
 }
@@ -1715,6 +1727,7 @@ ul.errors {
 		margin: 5% auto;
 	}
 
+	input:not([type]),
 	input[type="text"],
 	input[type="password"],
 	select,
