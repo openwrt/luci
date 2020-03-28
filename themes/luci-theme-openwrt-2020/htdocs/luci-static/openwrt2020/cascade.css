@@ -58,7 +58,11 @@ body {
  */
 
 #menubar {
-	background: var(--main-bright-color) url(logo.svg) 10px center/50px 50px no-repeat;
+	background-color: var(--main-bright-color);
+	background-image: url("logo.svg");
+	background-position: 10px center;
+	background-size: 50px 50px;
+	background-repeat: no-repeat;
 	padding: 0 1em 0 70px;
 	min-height: 70px;
 	display: flex;
@@ -1436,14 +1440,16 @@ div[id$=".editlist"] {
 
 .spinning::before {
 	position: absolute;
-	display: flex;
+	display: block;
 	align-items: center;
 	top: 0;
 	bottom: 0;
 	left: .4em;
 	width: 1.3em;
+	height: 1.3em;
 	animation: spin 1s linear infinite;
-	content: url("/luci-static/openwrt2020/spinner.svg");
+	content: url("spinner.svg");
+	margin: auto;
 }
 
 button.spinning, .btn.spinning {
@@ -1454,6 +1460,7 @@ button.spinning::before, .btn.spinning::before {
 	filter: invert(1);
 	left: .2em;
 	width: 1.2em;
+	height: 1.2em;
 }
 
 #view > div.spinning:first-child {
