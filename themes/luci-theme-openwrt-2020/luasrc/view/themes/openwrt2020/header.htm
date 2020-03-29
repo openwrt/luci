@@ -25,7 +25,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="stylesheet" type="text/css" media="screen" href="<%=media%>/cascade.css" />
 <link rel="icon" href="<%=media%>/favicon.png" type="image/svg+xml" />
-<script type="text/javascript" src="<%=url('admin/translations', luci.i18n.context.lang)%>"></script>
+<script type="text/javascript" src="<%=url('admin/translations', luci.i18n.context.lang)%><%# ?v=PKG_VERSION %>"></script>
 <script type="text/javascript" src="<%=resource%>/cbi.js"></script>
 <script type="text/javascript">//<![CDATA[
 	(function() {
@@ -104,25 +104,25 @@
 		}
 
 		function render_modemenu(tree) {
-			var ul = document.querySelector('#modemenu'),
+			var menu = document.querySelector('#modemenu'),
 			    children = get_children(tree);
 
 			for (var i = 0; i < children.length; i++) {
 				var isActive = (L.env.requestpath.length ? children[i].name == L.env.requestpath[0] : i == 0);
 
-				ul.appendChild(E('li', {}, [
-					E('a', {
-						'href': L.url(children[i].name),
-						'class': isActive ? 'active' : null
-					}, [ _(children[i].title) ])
+				if (i > 0)
+					menu.appendChild(E([], ['\u00a0|\u00a0']));
+
+				menu.appendChild(E('div', { 'class': isActive ? 'active' : null }, [
+					E('a', { 'href': L.url(children[i].name) }, [ _(children[i].title) ])
 				]));
 
 				if (isActive)
 					render_mainmenu(children[i], children[i].name);
 			}
 
-			if (ul.children.length > 1)
-				ul.style.display = '';
+			if (menu.children.length > 1)
+				menu.style.display = '';
 		}
 
 		function render_tabmenu(tree, url, level) {
@@ -212,10 +212,9 @@
 			<span id="xhr_poll_status_off" style="display:none"><%:Paused%></span>
 		</span>
 	</span>
-
-	<ul id="modemenu" style="display:none"></ul>
-
 </div>
+
+<div id="modemenu" style="display:none"></div>
 
 <div id="maincontainer">
 	<div id="mainmenu" style="display:none">

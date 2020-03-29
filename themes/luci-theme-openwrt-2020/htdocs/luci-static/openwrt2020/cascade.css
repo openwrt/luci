@@ -123,6 +123,26 @@ body {
 	display: none;
 }
 
+#modemenu {
+	background: var(--main-bright-color);
+	padding: .5rem 1rem;
+	display: flex;
+	align-items: center;
+	color: var(--secondary-bright-color);
+	box-shadow: inset 0 0 1px var(--main-dark-color);
+	font-size: 1rem;
+	flex-wrap: wrap;
+}
+
+#modemenu > * {
+	margin: .125rem;
+}
+
+#modemenu > .active {
+	font-weight: bold;
+	border-bottom: 2px solid var(--secondary-bright-color);
+}
+
 #maincontainer {
 	flex-direction: row;
 	display: inline-flex;
@@ -216,8 +236,9 @@ body.modal-overlay-active #modal_overlay {
 }
 
 #modal_overlay > .modal {
-	max-width: 80%;
-	margin: 10% auto 25% auto;
+	max-width: 1300px;
+	width: 80%;
+	margin: 10% auto 5rem auto;
 	background: var(--secondary-bright-color);
 	box-shadow: 0 0 3px 1px var(--main-bright-color);
 	padding: .5em;
@@ -776,6 +797,7 @@ ul > li {
 	white-space: nowrap;
 	opacity: 1;
 	height: 1.8em;
+	max-height: none;
 }
 
 .cbi-tabmenu > li > a {
@@ -788,15 +810,17 @@ ul > li {
 }
 
 [data-tab] {
-	display: none;
 	opacity: 0;
+	max-height: 0;
 	transition: opacity .25s ease-in-out;
+	overflow: hidden;
 }
 
 [data-tab-active="true"] {
 	opacity: 1;
 	height: auto;
-	display: block;
+	max-height: none;
+	overflow: visible;
 }
 
 .alert-message:not(.modal) {
@@ -1555,6 +1579,10 @@ ul.errors {
 		display: none;
 	}
 
+	#modemenu {
+		padding: .125em .25em;
+	}
+
 	#mainmenu {
 		overflow-x: hidden;
 		overflow-y: auto;
@@ -1643,6 +1671,17 @@ ul.errors {
 		align-items: center;
 	}
 
+	.td[data-title]::after {
+		content: "";
+		width: 2em;
+		position: absolute;
+		left: calc(40% - 2em);
+		top: 0;
+		bottom: 0;
+		display: block;
+		background: linear-gradient(90deg, rgba(255, 255, 255, 0), var(--secondary-bright-color) 90%);
+	}
+
 	[data-page="admin-status-overview"] .cbi-section:nth-of-type(1) .td:first-of-type,
 	[data-page="admin-status-overview"] .cbi-section:nth-of-type(2) .td:first-of-type {
 		font-weight: bold;
@@ -1659,7 +1698,8 @@ ul.errors {
 		line-height: 2.2rem;
 	}
 
-	[data-page="admin-network-firewall-zones"] .td[data-name="_info"]::before {
+	[data-page="admin-network-firewall-zones"] .td[data-name="_info"]::before,
+	[data-page="admin-network-firewall-zones"] .td[data-name="_info"]::after {
 		display: none;
 	}
 
@@ -1722,7 +1762,8 @@ ul.errors {
 
 	.assoclist .td:nth-of-type(6) { flex: 1; text-align: right !important; }
 	.assoclist .td[data-title] { padding: .2em 0; }
-	.assoclist .td[data-title]::before { display: none; }
+	.assoclist .td[data-title]::before,
+	.assoclist .td[data-title]::after { display: none; }
 
 	.leases6 .td:nth-of-type(3) { word-wrap: break-word; }
 
@@ -1730,7 +1771,7 @@ ul.errors {
 	.td.cbi-section-actions > div > * { flex: 1; }
 
 	body.modal-overlay-active #modal_overlay > .modal {
-		max-width: 95%;
+		width: 95%;
 		margin: 5% auto;
 	}
 
