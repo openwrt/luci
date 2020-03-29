@@ -1,7 +1,3 @@
 #!/bin/sh
-uci -q batch <<-EOF >/dev/null
-	delete ucitrack.@simple-adblock[-1]
-	commit ucitrack
-EOF
-
+rm -rf /var/luci-modulecache/; rm -f /var/luci-indexcache;
 exit 0
