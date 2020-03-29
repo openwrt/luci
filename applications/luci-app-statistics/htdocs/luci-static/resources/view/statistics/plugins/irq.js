@@ -36,6 +36,8 @@ return L.Class.extend({
 
 					this.value(m[1], '%s (%s)'.format(m[1], desc || '-'));
 				}
+
+				return this.super('load', [section_id]);
 			}, this));
 		};
 
