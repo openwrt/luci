@@ -3,14 +3,14 @@
 
 include $(TOPDIR)/rules.mk
 
-PKG_LICENSE:=GPL-3.0+
+PKG_LICENSE:=GPL-3.0-or-later
 PKG_MAINTAINER:=Stan Grishin <stangri@melmac.net>
 
 LUCI_TITLE:=Simple Adblock Web UI
 LUCI_DESCRIPTION:=Provides Web UI for simple-adblock service.
-LUCI_DEPENDS:=+luci-mod-admin-full +simple-adblock
+LUCI_DEPENDS:=+luci-compat +luci-mod-admin-full +simple-adblock
 LUCI_PKGARCH:=all
-PKG_RELEASE:=38
+PKG_RELEASE:=42
 
 include ../../luci.mk
 

@@ -10,6 +10,7 @@ local util = require "luci.util"
 local sys = require "luci.sys"
 local jsonc = require "luci.jsonc"
 local fs = require "nixio.fs"
+local nutil = require "nixio.util"
 local http = require "luci.http"
 local dispatcher = require "luci.dispatcher"
 local enabledFlag = uci:get(packageName, "config", "enabled")
@@ -48,18 +49,13 @@ elseif targetDNS == "unbound.adb_list" then
 	outputGzip="/etc/" .. packageName .. ".unbound.gz"
 end
 
-m = Map("simple-adblock", translate("Simple AdBlock Settings"))
-m.apply_on_parse = true
-m.on_after_apply = function(self)
- 	sys.call("/etc/init.d/simple-adblock restart")
-end
-
 local tmpfs
 if fs.access("/var/run/" .. packageName .. ".json") then
 	tmpfs = jsonc.parse(util.trim(sys.exec("cat /var/run/" .. packageName .. ".json")))
 end
 
-local tmpfsVersion, tmpfsStatus, tmpfsMessage, tmpfsError, tmpfsStats = "", "Stopped"
+local tmpfsVersion, tmpfsStatus = "", "Stopped"
+local tmpfsMessage, tmpfsError, tmpfsStats
 if tmpfs and tmpfs['data'] then
 	if tmpfs['data']['status'] and tmpfs['data']['status'] ~= "" then
 		tmpfsStatus = tmpfs['data']['status']
@@ -74,43 +70,88 @@ if tmpfs and tmpfs['data'] then
 		tmpfsStats = tmpfs['data']['stats']
 	end
 	if tmpfs['data']['version'] and tmpfs['data']['version'] ~= "" then
-		tmpfsVersion = " (" .. packageName .. " " .. tmpfs['data']['version'] .. ")"
+		tmpfsVersion = packageName .. " " .. tmpfs['data']['version']
+	else 
+		tmpfsVersion = packageName
 	end
 end
 
-h = m:section(NamedSection, "config", "simple-adblock", translate("Service Status") .. tmpfsVersion)
+local statusTable = {}
+local errorTable = {}
+statusTable["statusNoInstall"] = packageName .. translate("is not installed or not found")
+statusTable["statusStopped"] = translate("Stopped")
+statusTable["statusStarting"] = translate("Starting")
+statusTable["statusRestarting"] = translate("Restarting")
+statusTable["statusForceReloading"] = translate("Force Reloading")
+statusTable["statusDownloading"] = translate("Downloading")
+statusTable["statusError"] = translate("Error")
+statusTable["statusWarning"] = translate("Warning")
+statusTable["statusFail"] = translate("Fail")
+statusTable["statusSuccess"] = translate("Success")
+errorTable["errorOutputFileCreate"] = translate("failed to create") .. " '" .. outputFile .. "' " .. translate("file")
+errorTable["errorFailDNSReload"] = translate("failed to restart/reload DNS resolver")
+errorTable["errorSharedMemory"] = translate("failed to access shared memory")
+errorTable["errorSorting"] = translate("failed to sort data file")
+errorTable["errorOptimization"] = translate("failed to optimize data file")
+errorTable["errorWhitelistProcessing"] = translate("failed to process whitelist")
+errorTable["errorDataFileFormatting"] = translate("failed to format data file")
+errorTable["errorMovingDataFile"] = translate("failed to move temporary data file to") .. " '" .. outputFile .. "'"
+errorTable["errorCreatingCompressedCache"] = translate("failed to create compressed cache")
+errorTable["errorRemovingTempFiles"] = translate("failed to remove temporary files")
+errorTable["errorRestoreCompressedCache"] = translate("failed to unpack compressed cache")
+errorTable["errorRestoreCache"] = translate("failed to move") .. " '" .. outputCache .. "' " .. translate("to") .. " '" .. outputFile .. "'"
+errorTable["errorOhSnap"] = translate("failed to create blocklist or restart DNS resolver")
+errorTable["errorStopping"] = translate("failed to stop") .. " " .. packageName
+errorTable["errorDNSReload"] = translate("failed to reload/restart DNS resolver")
+errorTable["errorDownloadingList"] = translate("failed to download")
+errorTable["errorParsingList"] = translate("failed to parse")
 
-if tmpfsStatus and tmpfsStatus:match("ing") then
+m = Map("simple-adblock", translate("Simple AdBlock Settings"))
+m.apply_on_parse = true
+m.on_after_apply = function(self)
+ 	sys.call("/etc/init.d/simple-adblock restart")
+end
+
+h = m:section(NamedSection, "config", "simple-adblock", translate("Service Status") .. " [" .. tmpfsVersion .. "]")
+
+if tmpfsStatus == "statusStarting" or
+	 tmpfsStatus == "statusRestarting" or
+	 tmpfsStatus == "statusForceReloading" or
+	 tmpfsStatus == "statusDownloading" then
 	ss = h:option(DummyValue, "_dummy", translate("Service Status"))
 	ss.template = "simple-adblock/status"
-	ss.value = tmpfsStatus .. '...'
+	ss.value = statusTable[tmpfsStatus] .. '...'
 	if tmpfsMessage then
 		sm = h:option(DummyValue, "_dummy", translate("Task"))
 		sm.template = "simple-adblock/status"
 		sm.value = tmpfsMessage
 	end
 else
-	en = h:option(Button, "__toggle")
-	if enabledFlag ~= "1" or tmpfsStatus:match("Stopped") then
-		en.title      = translate("Service is disabled/stopped")
-		en.inputtitle = translate("Enable/Start")
-		en.inputstyle = "apply important"
+	if tmpfsStatus == "statusStopped" then
+		ss = h:option(DummyValue, "_dummy", translate("Service Status"))
+		ss.template = "simple-adblock/status"
+		ss.value = statusTable[tmpfsStatus]
 		if fs.access(outputCache) then
 			sm = h:option(DummyValue, "_dummy", translate("Info"))
 			sm.template = "simple-adblock/status"
-			sm.value = "Cache file containing " .. util.trim(sys.exec("wc -l < " .. outputCache)) .. " domains found."
+			sm.value = translate("Cache file containing") .. " " .. util.trim(sys.exec("wc -l < " .. outputCache)) .. " " .. translate("domains found") .. "."
 		elseif fs.access(outputGzip) then
 			sm = h:option(DummyValue, "_dummy", translate("Info"))
 			sm.template = "simple-adblock/status"
-			sm.value = "Compressed cache file found."
+			sm.value = translate("Compressed cache file found") .. "."
 		end
 	else
-		en.title      = translate("Service is enabled/started")
-		en.inputtitle = translate("Stop/Disable")
-		en.inputstyle = "reset important"
 		ss = h:option(DummyValue, "_dummy", translate("Service Status"))
 		ss.template = "simple-adblock/status"
-		ss.value = tmpfsStatus
+		if tmpfsStatus == "statusSuccess" then
+--			ss.value = tmpfsStats
+			ss.value = tmpfsVersion .. " " .. translate("is blocking") .. 
+				" " .. util.trim(sys.exec("wc -l < " .. outputFile)) .. 
+				" " .. translate("domains") .. " (" .. translate("with") .. 
+				" " .. targetDNS .. ")."
+		else
+			ss.value = statusTable[tmpfsStatus]
+		end
 		if tmpfsMessage then
 			ms = h:option(DummyValue, "_dummy", translate("Message"))
 			ms.template = "simple-adblock/status"
@@ -118,42 +159,28 @@ else
 		end
 		if tmpfsError then
 			es = h:option(DummyValue, "_dummy", translate("Collected Errors"))
-			es.template = "simple-adblock/status"
-			es.value = tmpfsError
-			reload = h:option(Button, "__reload")
-			reload.title      = translate("Service started with error")
-			reload.inputtitle = translate("Reload")
-			reload.inputstyle = "apply important"
-			function reload.write()
-				sys.exec("/etc/init.d/simple-adblock reload")
-				http.redirect(dispatcher.build_url("admin/services/" .. packageName))
+			es.template = "simple-adblock/error"
+			es.value = ""
+			local err, e, url
+			for err in tmpfsError:gmatch("[%p%w]+") do
+				if err:match("=") then
+					e,url = err:match("(.+)=(.+)")
+					es.value = es.value .. translate("Error") .. ": " .. errorTable[e] .. " " .. url .. ".\n"
+				else
+					es.value = es.value .. translate("Error") .. ": " .. errorTable[err] .. ".\n"
+				end
 			end
 		end
 	end
-	function en.write()
-		if tmpfsStatus and tmpfsStatus:match("Stopped") then
-			enabledFlag = "1"
-		else
-			enabledFlag = enabledFlag == "1" and "0" or "1"
-		end
-		uci:set(packageName, "config", "enabled", enabledFlag)
-		uci:save(packageName)
-		uci:commit(packageName)
-		if enabledFlag == "0" then
-			luci.sys.init.stop(packageName)
-		else
-			luci.sys.init.enable(packageName)
-			luci.sys.init.start(packageName)
-		end
-		luci.http.redirect(luci.dispatcher.build_url("admin/services/" .. packageName))
-	end
+	buttons = h:option(DummyValue, "_dummy")
+	buttons.template = "simple-adblock/buttons"
 end
 
 s = m:section(NamedSection, "config", "simple-adblock", translate("Configuration"))
 -- General options
 s:tab("basic", translate("Basic Configuration"))
 
-o2 = s:taboption("basic", ListValue, "verbosity", translate("Output Verbosity Setting"),translate("Controls system log and console output verbosity."))
+o2 = s:taboption("basic", ListValue, "verbosity", translate("Output Verbosity Setting"), translate("Controls system log and console output verbosity."))
 o2:value("0", translate("Suppress output"))
 o2:value("1", translate("Some output"))
 o2:value("2", translate("Verbose output"))
@@ -166,12 +193,12 @@ o3.default = 1
 
 local sysfs_path = "/sys/class/leds/"
 local leds = {}
-if nixio.fs.access(sysfs_path) then
-	leds = nixio.util.consume((nixio.fs.dir(sysfs_path)))
+if fs.access(sysfs_path) then
+	leds = nutil.consume((fs.dir(sysfs_path)))
 end
 if #leds ~= 0 then
 	o4 = s:taboption("basic", Value, "led", translate("LED to indicate status"), translate("Pick the LED not already used in")
-		.. [[ <a href="]] .. luci.dispatcher.build_url("admin/system/leds") .. [[">]]
+		.. [[ <a href="]] .. dispatcher.build_url("admin", "system", "leds") .. [[">]]
 		.. translate("System LED Configuration") .. [[</a>]] .. ".")
 	o4.rmempty = false
 	o4:value("", translate("none"))
