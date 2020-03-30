@@ -201,10 +201,12 @@
 <div class="hostinfo">
 	<%=(boardinfo.hostname or "?")%> | <%=ver.distversion%> |
 	<%:Load%>: <%="%.2f" % (loadinfo[1] / 65535.0)%> <%="%.2f" % (loadinfo[2] / 65535.0)%> <%="%.2f" % (loadinfo[3] / 65535.0)%>
+</div>
+
+<div id="indicators">
 	<span id="xhr_poll_status" style="display:none" onclick="XHR.running() ? XHR.halt() : XHR.run()">
-		| <%:Auto Refresh%>:
-		<span id="xhr_poll_status_on"><%:on%></span>
-		<span id="xhr_poll_status_off" style="display:none"><%:off%></span>
+		<span id="xhr_poll_status_on"><%:Auto Refresh%>: <%:on%></span>
+		<span id="xhr_poll_status_off" style="display:none"><%:Auto Refresh%>: <%:off%></span>
 	</span>
 </div>
 
