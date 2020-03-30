@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-08-16 06:59+0200\n"
-"PO-Revision-Date: 2020-01-14 15:21+0000\n"
-"Last-Translator: Franco Castillo <castillofrancodamian@gmail.com>\n"
+"PO-Revision-Date: 2020-03-28 17:46+0000\n"
+"Last-Translator: Thien An Dang Thanh <thienandangthanh@gmail.com>\n"
 "Language-Team: Vietnamese <https://hosted.weblate.org/projects/openwrt/luci/"
 "vi/>\n"
 "Language: vi\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 3.11-dev\n"
+"X-Generator: Weblate 4.0-dev\n"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:910
 msgid "%.1f dB"
@@ -20,8 +20,9 @@ msgstr ""
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:110
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:251
+#, fuzzy
 msgid "%d Bit"
-msgstr ""
+msgstr "%d bit"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2327
 msgid "%d invalid field(s)"
@@ -29,7 +30,7 @@ msgstr "%d trường không hợp lệ"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:32
 msgid "%s is untagged in multiple VLANs!"
-msgstr "%s đang không gắn với nhiều VLANs"
+msgstr "%s không được kết nối với nhiều VLANs!"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/bandwidth.js:290
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:400
@@ -67,7 +68,7 @@ msgstr "---Mục bổ sung---"
 #: modules/luci-compat/luasrc/view/cbi/header.htm:5
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:88
 msgid "-- Please choose --"
-msgstr "--Hãy chọn--"
+msgstr "-- Hãy chọn --"
 
 #: modules/luci-base/htdocs/luci-static/resources/cbi.js:276
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:416
@@ -79,12 +80,12 @@ msgstr "--tùy chỉnh--"
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:268
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:377
 msgid "-- match by label --"
-msgstr ""
+msgstr "-- giống với nhãn --"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:254
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:360
 msgid "-- match by uuid --"
-msgstr ""
+msgstr "-- giống với UUID --"
 
 #: modules/luci-compat/luasrc/view/cbi/firewall_zonelist.htm:27
 #: modules/luci-compat/luasrc/view/cbi/network_ifacelist.htm:44
@@ -94,7 +95,7 @@ msgstr "-- xin hãy chọn --"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:859
 msgid "0 = not using RSSI threshold, 1 = do not change driver default"
-msgstr "0 = không sử dụng lấy ngưỡng RSSI, 1 = không thay đổi driver mặc định"
+msgstr "0 = không dùng ngưỡng RSSI, 1 = không thay đổi driver mặc định"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/load.js:228
 msgid "1 Minute Load:"
@@ -110,8 +111,9 @@ msgstr "4 ký tự ID thập lục phân"
 
 #: modules/luci-compat/luasrc/model/network/proto_4x6.lua:18
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/464xlat.js:11
+#, fuzzy
 msgid "464XLAT (CLAT)"
-msgstr ""
+msgstr "464XLAT (CLAT)"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/load.js:238
 msgid "5 Minute Load:"
@@ -135,7 +137,7 @@ msgstr "thời gian chờ thử lại truy vấn SA chuẩn 802.11w"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1656
 msgid "802.11w Management Frame Protection"
-msgstr ""
+msgstr "Bảo vệ khung quản lý (MFP) 802.11w"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1690
 msgid "802.11w maximum timeout"
@@ -155,19 +157,21 @@ msgstr "<abbr title=\"Hệ thống phân giải tên miền\">DNS</abbr> query p
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:295
 msgid "<abbr title=\"Domain Name System\">DNS</abbr> server port"
-msgstr "abbr title=\"Hệ thống phân giải tiên miền\">DNS</abbr> server port"
+msgstr ""
+"<abbr title=\"Hệ thống phân giải tên miền (Domain Name System)\">DNS</abbr> "
+"server port"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:245
 msgid ""
 "<abbr title=\"Domain Name System\">DNS</abbr> servers will be queried in the "
 "order of the resolvfile"
 msgstr ""
-"<abbr title=\"Hệ thống phân giải tiên miền\">DNS</abbr> máy chủ sẽ được truy "
+"<abbr title=\"Hệ thống phân giải tên miền\">DNS</abbr> máy chủ sẽ được truy "
 "vấn theo thứ tự của resolvfile"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:865
 msgid "<abbr title=\"Extended Service Set Identifier\">ESSID</abbr>"
-msgstr "<abbr title=\"Mở rộng dịch vụ đặt Identifier\">ESSID</abbr>"
+msgstr "<abbr title=\"Tên mạng WiFi (ESSID)\">ESSID</abbr>"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:453
 msgid "<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Address"
@@ -6781,15 +6785,15 @@ msgstr "Giá trị nhỏ hơn hoặc bằng %f"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:425
 msgid "value with %d characters"
-msgstr ""
+msgstr "giá trị với %d ký tự"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:436
 msgid "value with at least %d characters"
-msgstr ""
+msgstr "giá trị với ít nhất %d ký tự"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:441
 msgid "value with at most %d characters"
-msgstr ""
+msgstr "giá trị với tối đa %d ký tự"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1214
 msgid "weak security"
