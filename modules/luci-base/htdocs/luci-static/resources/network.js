@@ -2312,7 +2312,7 @@ Protocol = L.Class.extend(/** @lends LuCI.Network.Protocol.prototype */ {
 	 * @param {string} ifname
 	 * The name of the interface to be created.
 	 *
-	 * @returns {Promise<null|error message>}
+	 * @returns {Promise<null|string>}
 	 * Returns `null` if new interface is createable, else returns (error) message.
 	 */
 	isCreateable: function(ifname) {
