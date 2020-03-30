@@ -1774,7 +1774,8 @@ button.btn::-moz-focus-inner, input[type=submit].btn::-moz-focus-inner {
 	margin: .25em 0;
 }
 
-.label {
+.label,
+header [data-indicator] {
 	padding: 1px 3px 2px;
 	font-size: 9.75px;
 	font-weight: bold;
@@ -1784,6 +1785,10 @@ button.btn::-moz-focus-inner, input[type=submit].btn::-moz-focus-inner {
 	background-color: #bfbfbf;
 	border-radius: 3px;
 	text-shadow: none;
+}
+
+header [data-indicator][data-clickable] {
+	cursor: pointer;
 }
 
 a.label:link,
@@ -1807,7 +1812,8 @@ a.label:hover {
 	background-color: #46a546;
 }
 
-.label.notice {
+.label.notice,
+header [data-indicator][data-style="active"] {
 	background-color: #62cffc;
 }
 
