@@ -443,7 +443,8 @@ header > .fill > .container > .status > * {
 	background-color: #5cb85c !important;
 }
 
-.notice {
+.notice,
+[data-indicator]:not([data-style="inactive"]) {
 	background-color: #5bc0de !important;
 }
 
@@ -2091,7 +2092,8 @@ span[data-tooltip] .label {
 	flex-direction: column;
 }
 
-.label {
+.label,
+[data-indicator] {
 	font-size: .8rem;
 	font-weight: bold;
 	padding: .3rem .8rem;
@@ -2480,7 +2482,8 @@ input[name="nslookup"] {
 		padding: .3rem .6rem;
 	}
 
-	.label {
+	.label,
+	[data-indicator] {
 		padding: .2rem .6rem;
 	}
 

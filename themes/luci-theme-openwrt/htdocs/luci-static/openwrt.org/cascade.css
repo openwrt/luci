@@ -328,25 +328,43 @@ div.hostinfo {
 	float: right;
 }
 
-#xhr_poll_status {
-	cursor: pointer;
-}
-
-#xhr_poll_status #xhr_poll_status_off {
-	font-weight: bold;
-	color: #FF0000;
-}
-
-#xhr_poll_status #xhr_poll_status_on {
-	font-weight: bold;
-	color: #00FF00;
-}
-
 #menubar {
 	position: relative;
 	width: 100%;
 	background: #000000;
 	color: #ffffff;
+	display: flex;
+	flex-wrap: wrap;
+}
+
+#menubar .hostinfo,
+#indicators,
+#modemenu {
+	flex: 1 1 450px;
+	display: flex;
+	align-items: center;
+}
+
+#indicators {
+	justify-content: flex-end;
+	flex-wrap: wrap;
+	margin-right: 1em;
+}
+
+#indicators > *,
+#indicators > #xhr_poll_status > * {
+	flex: 0 0 auto;
+	display: inline-flex;
+}
+
+#modemenu {
+	flex: 1 1 auto;
+	padding: 0;
+	margin: 0;
+}
+
+#modemenu > * {
+	padding: .5em;
 }
 
 #menubar .warning {
@@ -354,16 +372,36 @@ div.hostinfo {
 	background-color: #557788;
 }
 
+#indicators > #xhr_poll_status,
+#indicators > [data-clickable="true"] {
+	cursor: pointer;
+}
+
+#indicators > :not([id="xhr_poll_status"]),
+#indicators > #xhr_poll_status > * {
+	text-transform: uppercase;
+	background: #90c0e0 !important;
+	color: #000 !important;
+	font-size: 11px;
+	padding: .125em .5em;
+	margin: .125em;
+	border-radius: .6em;
+}
+
+#indicators > [data-style="inactive"],
+#indicators > * > #xhr_poll_status_off {
+	border: 1px solid #90c0e0;
+	background: #000 !important;
+	color: #90c0e0 !important;
+	padding: calc(.125em - 1px) calc(.5em - 1px);
+}
+
 html #menubar a:link,
 html #menubar a:visited {
-	position: relative;
-	display: block;
-	padding: 0.5em;
 	background: #000000;
 	color: #ffffff;
 	text-decoration: none;
 }
-
 
 html #menubar a:link:hover,
 html #menubar a:visited:hover,

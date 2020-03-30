@@ -206,7 +206,7 @@
 
 	<span class="hostname"><%=(boardinfo.hostname or "?")%></span>
 	<span class="distversion"><%=ver.distversion%></span>
-	<span class="indicators">
+	<span id="indicators">
 		<span id="xhr_poll_status" style="display:none" onclick="XHR.running() ? XHR.halt() : XHR.run()">
 			<span id="xhr_poll_status_on" style="display:none"><%:Refreshing%></span>
 			<span id="xhr_poll_status_off" style="display:none"><%:Paused%></span>

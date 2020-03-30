@@ -89,12 +89,12 @@ body {
 	flex: 3;
 }
 
-#menubar .indicators {
+#indicators {
 	flex: 1 1 25%;
 	text-align: right;
 }
 
-#menubar .indicators > * {
+#indicators > * {
 	background: var(--secondary-bright-color);
 	color: var(--main-bright-color);
 	display: inline-block;
@@ -107,15 +107,19 @@ body {
 	white-space: nowrap;
 }
 
-#menubar .indicators > * > #xhr_poll_status_off {
+#indicators > [data-style="inactive"],
+#indicators > * > #xhr_poll_status_off {
 	background: var(--main-bright-color);
 	color: var(--secondary-bright-color);
+	border: 2px solid var(--secondary-bright-color);
+	line-height: calc(1.5em - 4px);
+	padding: 0 calc(.5em - 2px);
+}
+
+#indicators > * > #xhr_poll_status_off {
 	border-radius: 1em;
 	margin: 0 -.5em;
 	display: block;
-	padding: 0 .5em;
-	border: 2px solid var(--secondary-bright-color);
-	line-height: calc(1.5em - 4px);
 }
 
 #menubar h2,
