@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Class: Poll</title>
+    <title>Class: Combobox</title>
     
     
     <script src="scripts/prettify/prettify.js"></script>
@@ -1685,7 +1685,7 @@
     </ul>
 </div>
     <div class="main">
-        <h1 class="page-title" data-filename="LuCI.Poll.html">Class: Poll</h1>
+        <h1 class="page-title" data-filename="LuCI.ui.Combobox.html">Class: Combobox</h1>
         
 
 
@@ -1694,14 +1694,22 @@
     
 <header>
     <h2>
-        <span class="ancestors"><a href="LuCI.html">LuCI</a>.</span>
+        <span class="ancestors"><a href="LuCI.html">LuCI</a><a href="LuCI.ui.html">.ui</a>.</span>
     
-    Poll
+    Combobox
     </h2>
     
-        <div class="class-description"><p>The <code>Poll</code> class allows registering and unregistering poll actions,
-as well as starting, stopping and querying the state of the polling
-loop.</p></div>
+        <div class="class-description"><p>The <code>Combobox</code> class implements a rich, stylable dropdown menu which allows
+to enter custom values. Historically, comboboxes used to be a dedicated
+widget type in LuCI but nowadays they are direct aliases of dropdown widgets
+with a set of enforced default properties for easier instantiation.</p>
+<p>UI widget instances are usually not supposed to be created by view code
+directly, instead they're implicitely created by <code>LuCI.form</code> when
+instantiating CBI forms.</p>
+<p>This class is automatically instantiated as part of <code>LuCI.ui</code>. To use it
+in views, use <code>'require ui'</code> and refer to <code>ui.Combobox</code>. To import it in
+external JavaScript, use <code>L.require(&quot;ui&quot;).then(...)</code> and access the
+<code>Combobox</code> property of the class instance value.</p></div>
     
 </header>  
 
@@ -1713,14 +1721,14 @@ loop.</p></div>
         
 <dt>
     <div class="nameContainer">
-        <h4 class="name" id="Poll">
+        <h4 class="name" id="Combobox">
             
-            new LuCI.Poll<span class="signature">()</span>
+            new LuCI.ui.Combobox<span class="signature">(<span class="optional">value</span>, choices, <span class="optional">options</span>)</span>
         </h4>
     
         
         <div class="tag-source">
-            <a href="luci.js.html">luci.js</a>, <a href="luci.js.html#line1046">line 1046</a>
+            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line1856">line 1856</a>
         </div>
         
     </div>
@@ -1730,11 +1738,146 @@ loop.</p></div>
 <dd>
     
     
+    <div class="description">
+        <p>Instantiate a rich dropdown choice widget allowing custom values.</p>
+    </div>
+    
 
     
     
     
     
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		<th>Default</th>
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>value</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+|
+
+<span class="param-type">Array.&lt;string></span>
+
+
+            
+            </td>
+            
+            
+                <td class="default">
+                
+                    null
+                
+                </td>
+            
+            
+            <td class="description last">
+                
+                    
+                        <span class="optional">optional</span>
+                    
+                    
+                        
+                    
+                
+                <p>The initial input value(s).</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>choices</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Object.&lt;string, *></span>
+
+
+            
+            </td>
+            
+            
+                <td class="default">
+                
+                </td>
+            
+            
+            <td class="description last">
+                
+                    
+                    
+                        
+                    
+                
+                <p>Object containing the selectable choices of the widget. The object keys
+serve as values for the different choices while the values are used as
+choice labels.</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type"><a href="LuCI.ui.Combobox.html#.InitOptions">LuCI.ui.Combobox.InitOptions</a></span>
+
+
+            
+            </td>
+            
+            
+                <td class="default">
+                
+                </td>
+            
+            
+            <td class="description last">
+                
+                    
+                        <span class="optional">optional</span>
+                    
+                    
+                        
+                    
+                
+                <p>Object describing the widget specific options to initialize the dropdown.</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
     
     
     
@@ -1779,6 +1922,12 @@ loop.</p></div>
     
     </div>
     
+    
+        <h3 class="subsection-title">Extends</h3>
+        
+        <ul>
+            <li><a href="LuCI.ui.Dropdown.html">LuCI.ui.Dropdown</a></li>
+        </ul>
     
     
     
@@ -1797,15 +1946,17 @@ loop.</p></div>
         <dl>
             
 <dt>
-    <div class="nameContainer">
-        <h4 class="name" id="active">
+    <div class="nameContainer inherited">
+        <h4 class="name" id="addChoices">
             
-            active<span class="signature">()</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{boolean}</span>
+                <span class="inherited"><a href="LuCI.ui.Dropdown.html#addChoices">inherited</a></span>
+            
+            addChoices<span class="signature">(values, labels)</span>
         </h4>
     
         
         <div class="tag-source">
-            <a href="luci.js.html">luci.js</a>, <a href="luci.js.html#line1197">line 1197</a>
+            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line1602">line 1602</a>
         </div>
         
     </div>
@@ -1816,110 +1967,9 @@ loop.</p></div>
     
     
     <div class="description">
-        <p>Test whether the polling loop is running.</p>
-    </div>
-    
-
-    
-    
-    
-    
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Type</th>
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-    <tbody>
-    
-        <tr>
-            
-            <td class="type">
-            
-                        boolean
-                        
-                    
-            </td>
-            <td class="description last"><ul>
-<li>Returns <code>true</code> if polling is active, else <code>false</code>.</li>
-</ul></td>
-        </tr>
-    
-    </tbody>
-</table>
-
-    
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <div class="nameContainer">
-        <h4 class="name" id="add">
-            
-            add<span class="signature">(fn, interval)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{boolean}</span>
-        </h4>
-    
-        
-        <div class="tag-source">
-            <a href="luci.js.html">luci.js</a>, <a href="luci.js.html#line1070">line 1070</a>
-        </div>
-        
-    </div>
-
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>Add a new operation to the polling loop. If the polling loop is not
-already started at this point, it will be implicitely started.</p>
+        <p>Add new choices to the dropdown menu.</p>
+<p>This function adds further choices to an existing dropdown menu,
+ignoring choice values which are already present.</p>
     </div>
     
 
@@ -1950,13 +2000,13 @@ already started at this point, it will be implicitely started.</p>
 	
         <tr>
             
-                <td class="name"><code>fn</code></td>
+                <td class="name"><code>values</code></td>
             
             
             <td class="type">
             
                 
-<span class="param-type">function</span>
+<span class="param-type">Array.&lt;string></span>
 
 
             
@@ -1966,20 +2016,20 @@ already started at this point, it will be implicitely started.</p>
             
             <td class="description last">
                 
-                <p>The function to invoke on each poll interval.</p></td>
+                <p>The choice values to add to the dropdown widget.</p></td>
         </tr>
 	
 	
 	
         <tr>
             
-                <td class="name"><code>interval</code></td>
+                <td class="name"><code>labels</code></td>
             
             
             <td class="type">
             
                 
-<span class="param-type">number</span>
+<span class="param-type">Object.&lt;string, *></span>
 
 
             
@@ -1989,7 +2039,10 @@ already started at this point, it will be implicitely started.</p>
             
             <td class="description last">
                 
-                <p>The poll interval in seconds.</p></td>
+                <p>The choice label values to use when adding dropdown choices. If no
+label is found for a particular choice value, the value itself is used
+as label text. Choice labels may be any valid value accepted by
+<a href="LuCI.dom.html#content"><code>LuCI.dom#content</code></a>.</p></td>
         </tr>
 	
 	
@@ -2030,64 +2083,7 @@ already started at this point, it will be implicitely started.</p>
     
     
     
-    <h5>Throws:</h5>
     
-            
-
-<dl>
-    <dt>
-        <div class="param-desc">
-        <p>Throws <code>TypeError</code> when an invalid interval was passed.</p>
-        </div>
-    </dt>
-    <dt>
-        <dl>
-            <dt>
-                Type
-            </dt>
-            <dd>
-                
-<span class="param-type">TypeError</span>
-
-
-            </dd>
-        </dl>
-    </dt>
-</dl>
-
-
-        
-    
-    
-    <h5>Returns:</h5>
-    
-
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Type</th>
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-    <tbody>
-    
-        <tr>
-            
-            <td class="type">
-            
-                        boolean
-                        
-                    
-            </td>
-            <td class="description last">Returns <code>true</code> if the function has been added or <code>false</code> if it
-already is registered.</td>
-        </tr>
-    
-    </tbody>
-</table>
-
     
     
     
@@ -2096,15 +2092,17 @@ already is registered.</td>
         
             
 <dt>
-    <div class="nameContainer">
-        <h4 class="name" id="remove">
+    <div class="nameContainer inherited">
+        <h4 class="name" id="clearChoices">
             
-            remove<span class="signature">(fn)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{boolean}</span>
+                <span class="inherited"><a href="LuCI.ui.Dropdown.html#clearChoices">inherited</a></span>
+            
+            clearChoices<span class="signature">(<span class="optional">reset_value</span>)</span>
         </h4>
     
         
         <div class="tag-source">
-            <a href="luci.js.html">luci.js</a>, <a href="luci.js.html#line1111">line 1111</a>
+            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line1567">line 1567</a>
         </div>
         
     </div>
@@ -2115,8 +2113,10 @@ already is registered.</td>
     
     
     <div class="description">
-        <p>Remove an operation from the polling loop. If no further operatons
-are registered, the polling loop is implicitely stopped.</p>
+        <p>Remove all existing choices from the dropdown menu.</p>
+<p>This function removes all preexisting dropdown choices from the widget,
+keeping only choices currently being selected unless <code>reset_values</code> is
+given, in which case all choices and deselected and removed.</p>
     </div>
     
 
@@ -2137,6 +2137,8 @@ are registered, the polling loop is implicitely stopped.</p>
 		<th>Type</th>
 		
 		
+		<th>Default</th>
+		
 		
 		<th class="last">Description</th>
 	</tr>
@@ -2147,23 +2149,37 @@ are registered, the polling loop is implicitely stopped.</p>
 	
         <tr>
             
-                <td class="name"><code>fn</code></td>
+                <td class="name"><code>reset_value</code></td>
             
             
             <td class="type">
             
                 
-<span class="param-type">function</span>
+<span class="param-type">boolean</span>
 
 
             
             </td>
             
             
+                <td class="default">
+                
+                    false
+                
+                </td>
+            
             
             <td class="description last">
                 
-                <p>The function to remove.</p></td>
+                    
+                        <span class="optional">optional</span>
+                    
+                    
+                        
+                    
+                
+                <p>If set to <code>true</code>, deselect and remove selected choices as well instead
+of keeping them.</p></td>
         </tr>
 	
 	
@@ -2204,64 +2220,355 @@ are registered, the polling loop is implicitely stopped.</p>
     
     
     
-    <h5>Throws:</h5>
     
-            
+    
+    
+    
+</dd>
 
-<dl>
-    <dt>
-        <div class="param-desc">
-        <p>Throws <code>TypeError</code> when the given argument isn't a function.</p>
+        
+            
+<dt>
+    <div class="nameContainer inherited">
+        <h4 class="name" id="closeAllDropdowns">
+            
+                <span class="inherited"><a href="LuCI.ui.Dropdown.html#closeAllDropdowns">inherited</a></span>
+            
+            closeAllDropdowns<span class="signature">()</span>
+        </h4>
+    
+        
+        <div class="tag-source">
+            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line1635">line 1635</a>
         </div>
-    </dt>
-    <dt>
-        <dl>
-            <dt>
-                Type
-            </dt>
-            <dd>
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Close all open dropdown widgets in the current document.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer inherited">
+        <h4 class="name" id="isValid">
+            
+                <span class="inherited"><a href="LuCI.ui.AbstractElement.html#isValid">inherited</a></span>
+            
+            isValid<span class="signature">()</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{boolean}</span>
+        </h4>
+    
+        
+        <div class="tag-source">
+            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line103">line 103</a>
+        </div>
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Check whether the current input value is valid.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    
+        <tr>
+            
+            <td class="type">
+            
+                        boolean
+                        
+                    
+            </td>
+            <td class="description last">Returns <code>true</code> if the current input value is valid or <code>false</code> if it does
+not meet the validation constraints.</td>
+        </tr>
+    
+    </tbody>
+</table>
+
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer inherited">
+        <h4 class="name" id="registerEvents">
+            
+                <span class="inherited"><a href="LuCI.ui.AbstractElement.html#registerEvents">inherited</a></span>
+            
+            registerEvents<span class="signature">(targetNode, synevent, events)</span>
+        </h4>
+    
+        
+        <div class="tag-source">
+            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line152">line 152</a>
+        </div>
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Dispatch a custom (synthetic) event in response to received events.</p>
+<p>Sets up event handlers on the given target DOM node for the given event
+names that dispatch a custom event of the given type to the widget root
+DOM node.</p>
+<p>The primary purpose of this function is to set up a series of custom
+uniform standard events such as <code>widget-update</code>, <code>validation-success</code>,
+<code>validation-failure</code> etc. which are triggered by various different
+widget specific native DOM events.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>targetNode</code></td>
+            
+            
+            <td class="type">
+            
                 
-<span class="param-type">TypeError</span>
+<span class="param-type">Node</span>
 
 
-            </dd>
-        </dl>
-    </dt>
-</dl>
-
-
-        
-    
-    
-    <h5>Returns:</h5>
-    
-
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Type</th>
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-    <tbody>
-    
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                <p>Specifies the DOM node on which the native event listeners should be
+registered.</p></td>
+        </tr>
+	
+	
+	
         <tr>
+            
+                <td class="name"><code>synevent</code></td>
+            
             
             <td class="type">
             
-                        boolean
-                        
-                    
-            </td>
-            <td class="description last">Returns <code>true</code> if the function has been removed or <code>false</code> if it
-wasn't found.</td>
-        </tr>
-    
-    </tbody>
-</table>
+                
+<span class="param-type">string</span>
 
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                <p>The name of the custom event to dispatch to the widget root DOM node.</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>events</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;string></span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                <p>The native DOM events for which event handlers should be registered.</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
     
     
     
@@ -2270,15 +2577,17 @@ wasn't found.</td>
         
             
 <dt>
-    <div class="nameContainer">
-        <h4 class="name" id="start">
+    <div class="nameContainer inherited">
+        <h4 class="name" id="setChangeEvents">
             
-            start<span class="signature">()</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{boolean}</span>
+                <span class="inherited"><a href="LuCI.ui.AbstractElement.html#setChangeEvents">inherited</a></span>
+            
+            setChangeEvents<span class="signature">(targetNode, events)</span>
         </h4>
     
         
         <div class="tag-source">
-            <a href="luci.js.html">luci.js</a>, <a href="luci.js.html#line1137">line 1137</a>
+            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line220">line 220</a>
         </div>
         
     </div>
@@ -2289,8 +2598,326 @@ wasn't found.</td>
     
     
     <div class="description">
-        <p>(Re)start the polling loop. Dispatches a custom <code>poll-start</code> event
-to the <code>document</code> object upon successful start.</p>
+        <p>Setup listeners for native DOM events that may change the widget value.</p>
+<p>Sets up event handlers on the given target DOM node for the given event
+names which may cause the input value to change completely, such as
+<code>change</code> events in a select menu. In contrast to update events, such
+change events will not trigger input value validation but they may cause
+field dependencies to get re-evaluated and will mark the input widget
+as dirty.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>targetNode</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Node</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                    
+                    
+                        
+                    
+                
+                <p>Specifies the DOM node on which the event listeners should be registered.</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>events</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                    
+                    
+                        
+                    
+                        <span class="repeatable">repeatable</span>
+                    
+                
+                <p>The DOM events for which event handlers should be registered.</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer inherited">
+        <h4 class="name" id="setUpdateEvents">
+            
+                <span class="inherited"><a href="LuCI.ui.AbstractElement.html#setUpdateEvents">inherited</a></span>
+            
+            setUpdateEvents<span class="signature">(targetNode, events)</span>
+        </h4>
+    
+        
+        <div class="tag-source">
+            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line177">line 177</a>
+        </div>
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Setup listeners for native DOM events that may update the widget value.</p>
+<p>Sets up event handlers on the given target DOM node for the given event
+names which may cause the input value to update, such as <code>keyup</code> or
+<code>onclick</code> events. In contrast to change events, such update events will
+trigger input value validation.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>targetNode</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Node</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                    
+                    
+                        
+                    
+                
+                <p>Specifies the DOM node on which the event listeners should be registered.</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>events</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                    
+                    
+                        
+                    
+                        <span class="repeatable">repeatable</span>
+                    
+                
+                <p>The DOM events for which event handlers should be registered.</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer inherited">
+        <h4 class="name" id="triggerValidation">
+            
+                <span class="inherited"><a href="LuCI.ui.AbstractElement.html#triggerValidation">inherited</a></span>
+            
+            triggerValidation<span class="signature">()</span>
+        </h4>
+    
+        
+        <div class="tag-source">
+            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line117">line 117</a>
+        </div>
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Force validation of the current input value.</p>
+<p>Usually input validation is automatically triggered by various DOM events
+bound to the input widget. In some cases it is required though to manually
+trigger validation runs, e.g. when programmatically altering values.</p>
     </div>
     
 
@@ -2335,75 +2962,156 @@ to the <code>document</code> object upon successful start.</p>
     
     
     
-    <h5>Returns:</h5>
-    
-
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Type</th>
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-    <tbody>
-    
-        <tr>
-            
-            <td class="type">
-            
-                        boolean
-                        
-                    
-            </td>
-            <td class="description last">Returns <code>true</code> if polling has been started (or if no functions
-where registered) or <code>false</code> when the polling loop already runs.</td>
-        </tr>
-    
-    </tbody>
-</table>
-
-    
     
     
 </dd>
 
+        </dl>
+    
+    
+    
+        <h3 class="subsection-title">Type Definitions</h3>
         
-            
+        <dl>
+                
 <dt>
     <div class="nameContainer">
-        <h4 class="name" id="stop">
-            
-            stop<span class="signature">()</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{boolean}</span>
-        </h4>
-    
-        
-        <div class="tag-source">
-            <a href="luci.js.html">luci.js</a>, <a href="luci.js.html#line1162">line 1162</a>
-        </div>
-        
+        <h4 class="name" id=".InitOptions">LuCI.ui.Combobox.InitOptions<span class="type-signature type luci.ui.dropdown.initoptions"><a href="LuCI.ui.Dropdown.html#.InitOptions">LuCI.ui.Dropdown.InitOptions</a></span> </h4>
     </div>
-
+    
     
 </dt>
 <dd>
     
-    
     <div class="description">
-        <p>Stop the polling loop. Dispatches a custom <code>poll-stop</code> event
-to the <code>document</code> object upon successful stop.</p>
+        <p>Comboboxes support the same properties as
+<a href="LuCI.ui.Dropdown.html#.InitOptions"><code>Dropdown.InitOptions</code></a> but enforce
+specific values for the following properties:</p>
     </div>
-    
-
-    
-    
-    
-    
     
     
     
 <dl class="details">
+    
+        
+        <h5 class="subsection-title">Properties:</h5>
+        
+        <dl>
+
+<table class="props">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		<th>Default</th>
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>multiple</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+                <td class="default">
+                
+                    false
+                
+                </td>
+            
+            
+            <td class="description last"><p>Since Comboboxes never allow selecting multiple values, this property
+is forcibly set to <code>false</code>.</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>create</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+                <td class="default">
+                
+                    true
+                
+                </td>
+            
+            
+            <td class="description last"><p>Since Comboboxes always allow custom choice values, this property is
+forcibly set to <code>true</code>.</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>optional</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+                <td class="default">
+                
+                    true
+                
+                </td>
+            
+            
+            <td class="description last"><p>Since Comboboxes are always optional, this property is forcibly set to
+<code>true</code>.</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table></dl>
+        
     
         
     
@@ -2429,51 +3137,9 @@ to the <code>document</code> object upon successful stop.</p>
 
     
     
-
-    
-
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Type</th>
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-    <tbody>
-    
-        <tr>
-            
-            <td class="type">
-            
-                        boolean
-                        
-                    
-            </td>
-            <td class="description last">Returns <code>true</code> if polling has been stopped or <code>false</code> if it din't
-run to begin with.</td>
-        </tr>
-    
-    </tbody>
-</table>
-
-    
-    
-    
 </dd>
 
-        </dl>
-    
-    
+            </dl>
     
     
     

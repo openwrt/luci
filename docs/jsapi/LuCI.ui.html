@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Class: Poll</title>
+    <title>Class: ui</title>
     
     
     <script src="scripts/prettify/prettify.js"></script>
@@ -1685,7 +1685,7 @@
     </ul>
 </div>
     <div class="main">
-        <h1 class="page-title" data-filename="LuCI.Poll.html">Class: Poll</h1>
+        <h1 class="page-title" data-filename="LuCI.ui.html">Class: ui</h1>
         
 
 
@@ -1696,12 +1696,12 @@
     <h2>
         <span class="ancestors"><a href="LuCI.html">LuCI</a>.</span>
     
-    Poll
+    ui
     </h2>
     
-        <div class="class-description"><p>The <code>Poll</code> class allows registering and unregistering poll actions,
-as well as starting, stopping and querying the state of the polling
-loop.</p></div>
+        <div class="class-description"><p>Provides high level UI helper functionality.
+To import the class in views, use <code>'require ui'</code>, to import it in
+external JavaScript, use <code>L.require(&quot;ui&quot;).then(...)</code>.</p></div>
     
 </header>  
 
@@ -1713,14 +1713,14 @@ loop.</p></div>
         
 <dt>
     <div class="nameContainer">
-        <h4 class="name" id="Poll">
+        <h4 class="name" id="ui">
             
-            new LuCI.Poll<span class="signature">()</span>
+            new LuCI.ui<span class="signature">()</span>
         </h4>
     
         
         <div class="tag-source">
-            <a href="luci.js.html">luci.js</a>, <a href="luci.js.html#line1046">line 1046</a>
+            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line2925">line 2925</a>
         </div>
         
     </div>
@@ -1785,6 +1785,49 @@ loop.</p></div>
     
     
     
+    
+        <h3 class="subsection-title">Classes</h3>
+        
+        <dl>
+            <dt><a href="LuCI.ui.AbstractElement.html">AbstractElement</a></dt>
+            <dd></dd>
+        
+            <dt><a href="LuCI.ui.changes.html">changes</a></dt>
+            <dd></dd>
+        
+            <dt><a href="LuCI.ui.Checkbox.html">Checkbox</a></dt>
+            <dd></dd>
+        
+            <dt><a href="LuCI.ui.Combobox.html">Combobox</a></dt>
+            <dd></dd>
+        
+            <dt><a href="LuCI.ui.ComboButton.html">ComboButton</a></dt>
+            <dd></dd>
+        
+            <dt><a href="LuCI.ui.Dropdown.html">Dropdown</a></dt>
+            <dd></dd>
+        
+            <dt><a href="LuCI.ui.DynamicList.html">DynamicList</a></dt>
+            <dd></dd>
+        
+            <dt><a href="LuCI.ui.FileUpload.html">FileUpload</a></dt>
+            <dd></dd>
+        
+            <dt><a href="LuCI.ui.Hiddenfield.html">Hiddenfield</a></dt>
+            <dd></dd>
+        
+            <dt><a href="LuCI.ui.Select.html">Select</a></dt>
+            <dd></dd>
+        
+            <dt><a href="LuCI.ui.tabs.html">tabs</a></dt>
+            <dd></dd>
+        
+            <dt><a href="LuCI.ui.Textarea.html">Textarea</a></dt>
+            <dd></dd>
+        
+            <dt><a href="LuCI.ui.Textfield.html">Textfield</a></dt>
+            <dd></dd>
+        </dl>
     
     
     
@@ -1798,14 +1841,14 @@ loop.</p></div>
             
 <dt>
     <div class="nameContainer">
-        <h4 class="name" id="active">
+        <h4 class="name" id="addNotification">
             
-            active<span class="signature">()</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{boolean}</span>
+            addNotification<span class="signature">(<span class="optional">title</span>, contents, <span class="optional">classes</span>)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{Node}</span>
         </h4>
     
         
         <div class="tag-source">
-            <a href="luci.js.html">luci.js</a>, <a href="luci.js.html#line1197">line 1197</a>
+            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line3105">line 3105</a>
         </div>
         
     </div>
@@ -1816,7 +1859,13 @@ loop.</p></div>
     
     
     <div class="description">
-        <p>Test whether the polling loop is running.</p>
+        <p>Add a notification banner at the top of the current view.</p>
+<p>A notification banner is an alert message usually displayed at the
+top of the current view, spanning the entire availibe width.
+Notification banners will stay in place until dismissed by the user.
+Multiple banners may be shown at the same time.</p>
+<p>Additional CSS class names may be passed to influence the appearence of
+the banner. Valid values for the classes depend on the underlying theme.</p>
     </div>
     
 
@@ -1824,6 +1873,954 @@ loop.</p></div>
     
     
     
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>title</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                    
+                        <span class="optional">optional</span>
+                    
+                    
+                        
+                    
+                
+                <p>The title of the notification banner. If <code>null</code>, no title element
+will be rendered.</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>contents</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">*</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                    
+                    
+                        
+                    
+                
+                <p>The contents to add to the notification banner. This should be a DOM
+node or a document fragment in most cases. The value is passed as-is
+to the <code>L.dom.content()</code> function - refer to its documentation for
+applicable values.</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>classes</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                    
+                        <span class="optional">optional</span>
+                    
+                    
+                        
+                    
+                        <span class="repeatable">repeatable</span>
+                    
+                
+                <p>A number of extra CSS class names which are set on the notification
+banner element.</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li>LuCI.dom.content</li>
+        </ul>
+    </dd>
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    
+        <tr>
+            
+            <td class="type">
+            
+                        Node
+                        
+                    
+            </td>
+            <td class="description last">Returns a DOM Node representing the notification banner element.</td>
+        </tr>
+    
+    </tbody>
+</table>
+
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="addValidator">
+            
+            addValidator<span class="signature">(field, type, <span class="optional">optional</span>, <span class="optional">vfunc</span>, <span class="optional">events</span>)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{function}</span>
+        </h4>
+    
+        
+        <div class="tag-source">
+            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line4191">line 4191</a>
+        </div>
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Add validation constraints to an input element.</p>
+<p>Compile the given type expression and optional validator function into
+a validation function and bind it to the specified input element events.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		<th>Default</th>
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>field</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Node</span>
+
+
+            
+            </td>
+            
+            
+                <td class="default">
+                
+                </td>
+            
+            
+            <td class="description last">
+                
+                    
+                    
+                        
+                    
+                
+                <p>The DOM input element node to bind the validation constraints to.</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>type</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+                <td class="default">
+                
+                </td>
+            
+            
+            <td class="description last">
+                
+                    
+                    
+                        
+                    
+                
+                <p>The datatype specification to describe validation constraints.
+Refer to the <code>LuCI.validation</code> class documentation for details.</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>optional</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+            
+            
+                <td class="default">
+                
+                    false
+                
+                </td>
+            
+            
+            <td class="description last">
+                
+                    
+                        <span class="optional">optional</span>
+                    
+                    
+                        
+                    
+                
+                <p>Specifies whether empty values are allowed (<code>true</code>) or not (<code>false</code>).
+If an input element is not marked optional it must not be empty,
+otherwise it will be marked as invalid.</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>vfunc</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+            
+            
+                <td class="default">
+                
+                </td>
+            
+            
+            <td class="description last">
+                
+                    
+                        <span class="optional">optional</span>
+                    
+                    
+                        
+                    
+                
+                <p>Specifies a custom validation function which is invoked after the
+other validation constraints are applied. The validation must return
+<code>true</code> to accept the passed value. Any other return type is converted
+to a string and treated as validation error message.</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>events</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+                <td class="default">
+                
+                    blur, keyup
+                
+                </td>
+            
+            
+            <td class="description last">
+                
+                    
+                        <span class="optional">optional</span>
+                    
+                    
+                        
+                    
+                        <span class="repeatable">repeatable</span>
+                    
+                
+                <p>The list of events to bind. Each received event will trigger a field
+validation. If omitted, the <code>keyup</code> and <code>blur</code> events are bound by
+default.</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li>LuCI.validation</li>
+        </ul>
+    </dd>
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    
+        <tr>
+            
+            <td class="type">
+            
+                        function
+                        
+                    
+            </td>
+            <td class="description last">Returns the compiled validator function which can be used to manually
+trigger field validation or to bind it to further events.</td>
+        </tr>
+    
+    </tbody>
+</table>
+
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="awaitReconnect">
+            
+            awaitReconnect<span class="signature">(<span class="optional">hosts</span>)</span>
+        </h4>
+    
+        
+        <div class="tag-source">
+            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line3725">line 3725</a>
+        </div>
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Wait for device to come back online and reconnect to it.</p>
+<p>Poll each given hostname or IP address and navigate to it as soon as
+one of the addresses becomes reachable.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		<th>Default</th>
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>hosts</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+                <td class="default">
+                
+                    [window.location.host]
+                
+                </td>
+            
+            
+            <td class="description last">
+                
+                    
+                        <span class="optional">optional</span>
+                    
+                    
+                        
+                    
+                        <span class="repeatable">repeatable</span>
+                    
+                
+                <p>The list of IP addresses and host names to check for reachability.
+If omitted, the current value of <code>window.location.host</code> is used by
+default.</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="createHandlerFn">
+            
+            createHandlerFn<span class="signature">(ctx, fn, extra_args)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{function|null}</span>
+        </h4>
+    
+        
+        <div class="tag-source">
+            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line4242">line 4242</a>
+        </div>
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Create a pre-bound event handler function.</p>
+<p>Generate and bind a function suitable for use in event handlers. The
+generated function automatically disables the event source element
+and adds an active indication to it by adding appropriate CSS classes.</p>
+<p>It will also await any promises returned by the wrapped function and
+re-enable the source element after the promises ran to completion.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>ctx</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">*</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                    
+                    
+                        
+                    
+                
+                <p>The <code>this</code> context to use for the wrapped function.</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>fn</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+|
+
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                    
+                    
+                        
+                    
+                
+                <p>Specifies the function to wrap. In case of a function value, the
+function is used as-is. If a string is specified instead, it is looked
+up in <code>ctx</code> to obtain the function to wrap. In both cases the bound
+function will be invoked with <code>ctx</code> as <code>this</code> context</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>extra_args</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">*</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                    
+                    
+                        
+                    
+                        <span class="repeatable">repeatable</span>
+                    
+                
+                <p>Any further parameter as passed as-is to the bound event handler
+function in the same order as passed to <code>createHandlerFn()</code>.</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    
+        <tr>
+            
+            <td class="type">
+            
+                        function
+                         | 
+                    
+                        null
+                        
+                    
+            </td>
+            <td class="description last">Returns the pre-bound handler function which is suitable to be passed
+to <code>addEventListener()</code>. Returns <code>null</code> if the given <code>fn</code> argument is
+a string which could not be found in <code>ctx</code> or if <code>ctx[fn]</code> is not a
+valid function value.</td>
+        </tr>
+    
+    </tbody>
+</table>
+
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="hideIndicator">
+            
+            hideIndicator<span class="signature">(id)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{boolean}</span>
+        </h4>
+    
+        
+        <div class="tag-source">
+            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line3214">line 3214</a>
+        </div>
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Remove an header area indicator.</p>
+<p>This function removes the given indicator label from the header indicator
+area. When the given indicator is not found, this function does nothing.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                <p>The ID of the indicator to remove.</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
     
     
     
@@ -1883,9 +2880,8 @@ loop.</p></div>
                         
                     
             </td>
-            <td class="description last"><ul>
-<li>Returns <code>true</code> if polling is active, else <code>false</code>.</li>
-</ul></td>
+            <td class="description last">Returns <code>true</code> when the indicator has been removed or <code>false</code> when the
+requested indicator was not found.</td>
         </tr>
     
     </tbody>
@@ -1900,14 +2896,14 @@ loop.</p></div>
             
 <dt>
     <div class="nameContainer">
-        <h4 class="name" id="add">
+        <h4 class="name" id="hideModal">
             
-            add<span class="signature">(fn, interval)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{boolean}</span>
+            hideModal<span class="signature">()</span>
         </h4>
     
         
         <div class="tag-source">
-            <a href="luci.js.html">luci.js</a>, <a href="luci.js.html#line1070">line 1070</a>
+            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line3016">line 3016</a>
         </div>
         
     </div>
@@ -1918,8 +2914,805 @@ loop.</p></div>
     
     
     <div class="description">
-        <p>Add a new operation to the polling loop. If the polling loop is not
-already started at this point, it will be implicitely started.</p>
+        <p>Close the open modal overlay dialog.</p>
+<p>This function will close an open modal dialog and restore the normal view
+behaviour. It has no effect if no modal dialog is currently open.</p>
+<p>Note that this function is stand-alone, it does not rely on <code>this</code> and
+will not invoke other class functions so it suitable to be used as event
+handler as-is without the need to bind it first.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="itemlist">
+            
+            itemlist<span class="signature">(node, items, <span class="optional">separators</span>)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{Node}</span>
+        </h4>
+    
+        
+        <div class="tag-source">
+            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line3257">line 3257</a>
+        </div>
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Formats a series of label/value pairs into list-like markup.</p>
+<p>This function transforms a flat array of alternating label and value
+elements into a list-like markup, using the values in <code>separators</code> as
+separators and appends the resulting nodes to the given parent DOM node.</p>
+<p>Each label is suffixed with <code>:</code> and wrapped into a <code>&lt;strong&gt;</code> tag, the
+<code>&lt;strong&gt;</code> element and the value corresponding to the label are
+subsequently wrapped into a <code>&lt;span class=&quot;nowrap&quot;&gt;</code> element.</p>
+<p>The resulting <code>&lt;span&gt;</code> element tuples are joined by the given separators
+to form the final markup which is appened to the given parent DOM node.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		<th>Default</th>
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>node</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Node</span>
+
+
+            
+            </td>
+            
+            
+                <td class="default">
+                
+                </td>
+            
+            
+            <td class="description last">
+                
+                    
+                    
+                        
+                    
+                
+                <p>The parent DOM node to append the markup to. Any previous child elements
+will be removed.</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>items</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;*></span>
+
+
+            
+            </td>
+            
+            
+                <td class="default">
+                
+                </td>
+            
+            
+            <td class="description last">
+                
+                    
+                    
+                        
+                    
+                
+                <p>An alternating array of labels and values. The label values will be
+converted to plain strings, the values are used as-is and may be of
+any type accepted by <code>LuCI.dom.content()</code>.</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>separators</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">*</span>
+|
+
+<span class="param-type">Array.&lt;*></span>
+
+
+            
+            </td>
+            
+            
+                <td class="default">
+                
+                    [E('br')]
+                
+                </td>
+            
+            
+            <td class="description last">
+                
+                    
+                        <span class="optional">optional</span>
+                    
+                    
+                        
+                    
+                
+                <p>A single value or an array of separator values to separate each
+label/value pair with. The function will cycle through the separators
+when joining the pairs. If omitted, the default separator is a sole HTML
+<code>&lt;br&gt;</code> element. Separator values are used as-is and may be of any type
+accepted by <code>LuCI.dom.content()</code>.</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    
+        <tr>
+            
+            <td class="type">
+            
+                        Node
+                        
+                    
+            </td>
+            <td class="description last">Returns the parent DOM node the formatted markup has been added to.</td>
+        </tr>
+    
+    </tbody>
+</table>
+
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="pingDevice">
+            
+            pingDevice<span class="signature">(<span class="optional">proto</span>, <span class="optional">host</span>)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{Promise.&lt;Event>}</span>
+        </h4>
+    
+        
+        <div class="tag-source">
+            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line3699">line 3699</a>
+        </div>
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Perform a device connectivity test.</p>
+<p>Attempt to fetch a well known ressource from the remote device via HTTP
+in order to test connectivity. This function is mainly useful to wait
+for the router to come back online after a reboot or reconfiguration.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		<th>Default</th>
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>proto</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+                <td class="default">
+                
+                    http
+                
+                </td>
+            
+            
+            <td class="description last">
+                
+                    
+                        <span class="optional">optional</span>
+                    
+                    
+                        
+                    
+                
+                <p>The protocol to use for fetching the resource. May be either <code>http</code>
+(the default) or <code>https</code>.</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>host</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+                <td class="default">
+                
+                    window.location.host
+                
+                </td>
+            
+            
+            <td class="description last">
+                
+                    
+                        <span class="optional">optional</span>
+                    
+                    
+                        
+                    
+                
+                <p>Override the host address to probe. By default the current host as seen
+in the address bar is probed.</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    
+        <tr>
+            
+            <td class="type">
+            
+                        Promise.&lt;Event>
+                        
+                    
+            </td>
+            <td class="description last">Returns a promise resolving to a <code>load</code> event in case the device is
+reachable or rejecting with an <code>error</code> event in case it is not reachable
+or rejecting with <code>null</code> when the connectivity check timed out.</td>
+        </tr>
+    
+    </tbody>
+</table>
+
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="showIndicator">
+            
+            showIndicator<span class="signature">(id, label, <span class="optional">handler</span>, <span class="optional">style</span>)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{boolean}</span>
+        </h4>
+    
+        
+        <div class="tag-source">
+            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line3177">line 3177</a>
+        </div>
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Display or update an header area indicator.</p>
+<p>An indicator is a small label displayed in the header area of the screen
+providing few amounts of status information such as item counts or state
+toggle indicators.</p>
+<p>Multiple indicators may be shown at the same time and indicator labels
+may be made clickable to display extended information or to initiate
+further actions.</p>
+<p>Indicators can either use a default <code>active</code> or a less accented <code>inactive</code>
+style which is useful for indicators representing state toggles.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		<th>Default</th>
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+                <td class="default">
+                
+                </td>
+            
+            
+            <td class="description last">
+                
+                    
+                    
+                        
+                    
+                
+                <p>The ID of the indicator. If an indicator with the given ID already exists,
+it is updated with the given label and style.</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>label</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+                <td class="default">
+                
+                </td>
+            
+            
+            <td class="description last">
+                
+                    
+                    
+                        
+                    
+                
+                <p>The text to display in the indicator label.</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>handler</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+            
+            
+                <td class="default">
+                
+                </td>
+            
+            
+            <td class="description last">
+                
+                    
+                        <span class="optional">optional</span>
+                    
+                    
+                        
+                    
+                
+                <p>A handler function to invoke when the indicator label is clicked/touched
+by the user. If omitted, the indicator is not clickable/touchable.</p>
+<p>Note that this parameter only applies to new indicators, when updating
+existing labels it is ignored.</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>style</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+                <td class="default">
+                
+                    active
+                
+                </td>
+            
+            
+            <td class="description last">
+                
+                    
+                        <span class="optional">optional</span>
+                    
+                    
+                        
+                    
+                
+                <p>The indicator style to use. May be either <code>active</code> or <code>inactive</code>.</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    
+        <tr>
+            
+            <td class="type">
+            
+                        boolean
+                        
+                    
+            </td>
+            <td class="description last">Returns <code>true</code> when the indicator has been updated or <code>false</code> when no
+changes were made.</td>
+        </tr>
+    
+    </tbody>
+</table>
+
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="showModal">
+            
+            showModal<span class="signature">(<span class="optional">title</span>, contents, <span class="optional">classes</span>)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{Node}</span>
+        </h4>
+    
+        
+        <div class="tag-source">
+            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line2990">line 2990</a>
+        </div>
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Display a modal overlay dialog with the specified contents.</p>
+<p>The modal overlay dialog covers the current view preventing interaction
+with the underlying view contents. Only one modal dialog instance can
+be opened. Invoking showModal() while a modal dialog is already open will
+replace the open dialog with a new one having the specified contents.</p>
+<p>Additional CSS class names may be passed to influence the appearence of
+the dialog. Valid values for the classes depend on the underlying theme.</p>
     </div>
     
 
@@ -1950,13 +3743,13 @@ already started at this point, it will be implicitely started.</p>
 	
         <tr>
             
-                <td class="name"><code>fn</code></td>
+                <td class="name"><code>title</code></td>
             
             
             <td class="type">
             
                 
-<span class="param-type">function</span>
+<span class="param-type">string</span>
 
 
             
@@ -1966,14 +3759,417 @@ already started at this point, it will be implicitely started.</p>
             
             <td class="description last">
                 
-                <p>The function to invoke on each poll interval.</p></td>
+                    
+                        <span class="optional">optional</span>
+                    
+                    
+                        
+                    
+                
+                <p>The title of the dialog. If <code>null</code>, no title element will be rendered.</p></td>
         </tr>
 	
 	
 	
         <tr>
             
-                <td class="name"><code>interval</code></td>
+                <td class="name"><code>contents</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">*</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                    
+                    
+                        
+                    
+                
+                <p>The contents to add to the modal dialog. This should be a DOM node or
+a document fragment in most cases. The value is passed as-is to the
+<code>L.dom.content()</code> function - refer to its documentation for applicable
+values.</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>classes</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                    
+                        <span class="optional">optional</span>
+                    
+                    
+                        
+                    
+                        <span class="repeatable">repeatable</span>
+                    
+                
+                <p>A number of extra CSS class names which are set on the modal dialog
+element.</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li>LuCI.dom.content</li>
+        </ul>
+    </dd>
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    
+        <tr>
+            
+            <td class="type">
+            
+                        Node
+                        
+                    
+            </td>
+            <td class="description last">Returns a DOM Node representing the modal dialog element.</td>
+        </tr>
+    
+    </tbody>
+</table>
+
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="uploadFile">
+            
+            uploadFile<span class="signature">(path, <span class="optional">progessStatusNode</span>)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{Promise.&lt;<a href="LuCI.ui.html#.FileUploadReply">LuCI.ui.FileUploadReply</a>>}</span>
+        </h4>
+    
+        
+        <div class="tag-source">
+            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line3577">line 3577</a>
+        </div>
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Display a modal file upload prompt.</p>
+<p>This function opens a modal dialog prompting the user to select and
+upload a file to a predefined remote destination path.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>path</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                    
+                    
+                        
+                    
+                
+                <p>The remote file path to upload the local file to.</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>progessStatusNode</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Node</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                    
+                        <span class="optional">optional</span>
+                    
+                    
+                        
+                    
+                
+                <p>An optional DOM text node whose content text is set to the progress
+percentage value during file upload.</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    
+        <tr>
+            
+            <td class="type">
+            
+                        Promise.&lt;<a href="LuCI.ui.html#.FileUploadReply">LuCI.ui.FileUploadReply</a>>
+                        
+                    
+            </td>
+            <td class="description last">Returns a promise resolving to a file upload status object on success
+or rejecting with an error in case the upload failed or has been
+cancelled by the user.</td>
+        </tr>
+    
+    </tbody>
+</table>
+
+    
+    
+    
+</dd>
+
+        </dl>
+    
+    
+    
+        <h3 class="subsection-title">Type Definitions</h3>
+        
+        <dl>
+                
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id=".FileUploadReply">LuCI.ui.FileUploadReply<span class="type-signature type object">Object</span> </h4>
+    </div>
+    
+    
+</dt>
+<dd>
+    
+    
+    
+<dl class="details">
+    
+        
+        <h5 class="subsection-title">Properties:</h5>
+        
+        <dl>
+
+<table class="props">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"><p>Name of the uploaded file without directory components</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>size</code></td>
             
             
             <td class="type">
@@ -1987,18 +4183,61 @@ already started at this point, it will be implicitely started.</p>
             
             
             
-            <td class="description last">
+            
+            
+            <td class="description last"><p>Size of the uploaded file in bytes</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>checksum</code></td>
+            
+            
+            <td class="type">
+            
                 
-                <p>The poll interval in seconds.</p></td>
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"><p>The MD5 checksum of the received file data</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>sha256sum</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"><p>The SHA256 checksum of the received file data</p></td>
         </tr>
 	
 	
 	</tbody>
-</table>
-    
-    
-    
-<dl class="details">
+</table></dl>
+        
     
         
     
@@ -2022,458 +4261,11 @@ already started at this point, it will be implicitely started.</p>
     
 </dl>
 
-    
-    
-
-    
-
-    
-    
-    
-    <h5>Throws:</h5>
-    
-            
-
-<dl>
-    <dt>
-        <div class="param-desc">
-        <p>Throws <code>TypeError</code> when an invalid interval was passed.</p>
-        </div>
-    </dt>
-    <dt>
-        <dl>
-            <dt>
-                Type
-            </dt>
-            <dd>
-                
-<span class="param-type">TypeError</span>
-
-
-            </dd>
-        </dl>
-    </dt>
-</dl>
-
-
-        
-    
-    
-    <h5>Returns:</h5>
-    
-
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Type</th>
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-    <tbody>
-    
-        <tr>
-            
-            <td class="type">
-            
-                        boolean
-                        
-                    
-            </td>
-            <td class="description last">Returns <code>true</code> if the function has been added or <code>false</code> if it
-already is registered.</td>
-        </tr>
-    
-    </tbody>
-</table>
-
-    
     
     
 </dd>
 
-        
-            
-<dt>
-    <div class="nameContainer">
-        <h4 class="name" id="remove">
-            
-            remove<span class="signature">(fn)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{boolean}</span>
-        </h4>
-    
-        
-        <div class="tag-source">
-            <a href="luci.js.html">luci.js</a>, <a href="luci.js.html#line1111">line 1111</a>
-        </div>
-        
-    </div>
-
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>Remove an operation from the polling loop. If no further operatons
-are registered, the polling loop is implicitely stopped.</p>
-    </div>
-    
-
-    
-    
-    
-    
-    
-        
-
-<table class="params">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>fn</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">function</span>
-
-
-            
-            </td>
-            
-            
-            
-            <td class="description last">
-                
-                <p>The function to remove.</p></td>
-        </tr>
-	
-	
-	</tbody>
-</table>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    <h5>Throws:</h5>
-    
-            
-
-<dl>
-    <dt>
-        <div class="param-desc">
-        <p>Throws <code>TypeError</code> when the given argument isn't a function.</p>
-        </div>
-    </dt>
-    <dt>
-        <dl>
-            <dt>
-                Type
-            </dt>
-            <dd>
-                
-<span class="param-type">TypeError</span>
-
-
-            </dd>
-        </dl>
-    </dt>
-</dl>
-
-
-        
-    
-    
-    <h5>Returns:</h5>
-    
-
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Type</th>
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-    <tbody>
-    
-        <tr>
-            
-            <td class="type">
-            
-                        boolean
-                        
-                    
-            </td>
-            <td class="description last">Returns <code>true</code> if the function has been removed or <code>false</code> if it
-wasn't found.</td>
-        </tr>
-    
-    </tbody>
-</table>
-
-    
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <div class="nameContainer">
-        <h4 class="name" id="start">
-            
-            start<span class="signature">()</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{boolean}</span>
-        </h4>
-    
-        
-        <div class="tag-source">
-            <a href="luci.js.html">luci.js</a>, <a href="luci.js.html#line1137">line 1137</a>
-        </div>
-        
-    </div>
-
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>(Re)start the polling loop. Dispatches a custom <code>poll-start</code> event
-to the <code>document</code> object upon successful start.</p>
-    </div>
-    
-
-    
-    
-    
-    
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Type</th>
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-    <tbody>
-    
-        <tr>
-            
-            <td class="type">
-            
-                        boolean
-                        
-                    
-            </td>
-            <td class="description last">Returns <code>true</code> if polling has been started (or if no functions
-where registered) or <code>false</code> when the polling loop already runs.</td>
-        </tr>
-    
-    </tbody>
-</table>
-
-    
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <div class="nameContainer">
-        <h4 class="name" id="stop">
-            
-            stop<span class="signature">()</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{boolean}</span>
-        </h4>
-    
-        
-        <div class="tag-source">
-            <a href="luci.js.html">luci.js</a>, <a href="luci.js.html#line1162">line 1162</a>
-        </div>
-        
-    </div>
-
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>Stop the polling loop. Dispatches a custom <code>poll-stop</code> event
-to the <code>document</code> object upon successful stop.</p>
-    </div>
-    
-
-    
-    
-    
-    
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Type</th>
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-    <tbody>
-    
-        <tr>
-            
-            <td class="type">
-            
-                        boolean
-                        
-                    
-            </td>
-            <td class="description last">Returns <code>true</code> if polling has been stopped or <code>false</code> if it din't
-run to begin with.</td>
-        </tr>
-    
-    </tbody>
-</table>
-
-    
-    
-    
-</dd>
-
-        </dl>
-    
-    
+            </dl>
     
     
     
