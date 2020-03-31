@@ -3144,6 +3144,88 @@ var UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 	},
 
 	/**
+	 * Display or update an header area indicator.
+	 *
+	 * An indicator is a small label displayed in the header area of the screen
+	 * providing few amounts of status information such as item counts or state
+	 * toggle indicators.
+	 *
+	 * Multiple indicators may be shown at the same time and indicator labels
+	 * may be made clickable to display extended information or to initiate
+	 * further actions.
+	 *
+	 * Indicators can either use a default `active` or a less accented `inactive`
+	 * style which is useful for indicators representing state toggles.
+	 *
+	 * @param {string} id
+	 * The ID of the indicator. If an indicator with the given ID already exists,
+	 * it is updated with the given label and style.
+	 *
+	 * @param {string} label
+	 * The text to display in the indicator label.
+	 *
+	 * @param {function} [handler]
+	 * A handler function to invoke when the indicator label is clicked/touched
+	 * by the user. If omitted, the indicator is not clickable/touchable.
+	 *
+	 * Note that this parameter only applies to new indicators, when updating
+	 * existing labels it is ignored.
+	 *
+	 * @param {string} [style=active]
+	 * The indicator style to use. May be either `active` or `inactive`.
+	 *
+	 * @returns {boolean}
+	 * Returns `true` when the indicator has been updated or `false` when no
+	 * changes were made.
+	 */
+	showIndicator: function(id, label, handler, style) {
+		if (indicatorDiv == null) {
+			indicatorDiv = document.body.querySelector('#indicators');
+
+			if (indicatorDiv == null)
+				return false;
+		}
+
+		var handlerFn = (typeof(handler) == 'function') ? handler : null,
+		    indicatorElem = indicatorDiv.querySelector('span[data-indicator="%s"]'.format(id)) ||
+			indicatorDiv.appendChild(E('span', {
+				'data-indicator': id,
+				'data-clickable': handlerFn ? true : null,
+				'click': handlerFn
+			}, ['']));
+
+		if (label == indicatorElem.firstChild.data && style == indicatorElem.getAttribute('data-style'))
+			return false;
+
+		indicatorElem.firstChild.data = label;
+		indicatorElem.setAttribute('data-style', (style == 'inactive') ? 'inactive' : 'active');
+		return true;
+	},
+
+	/**
+	 * Remove an header area indicator.
+	 *
+	 * This function removes the given indicator label from the header indicator
+	 * area. When the given indicator is not found, this function does nothing.
+	 *
+	 * @param {string} id
+	 * The ID of the indicator to remove.
+	 *
+	 * @returns {boolean}
+	 * Returns `true` when the indicator has been removed or `false` when the
+	 * requested indicator was not found.
+	 */
+	hideIndicator: function(id) {
+		var indicatorElem = indicatorDiv ? indicatorDiv.querySelector('span[data-indicator="%s"]'.format(id)) : null;
+
+		if (indicatorElem == null)
+			return false;
+
+		indicatorDiv.removeChild(indicatorElem);
+		return true;
+	},
+
+	/**
 	 * Formats a series of label/value pairs into list-like markup.
 	 *
 	 * This function transforms a flat array of alternating label and value
