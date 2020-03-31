@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2020-03-30 18:25+0000\n"
-"Last-Translator: Holger Heins <h.p.heins@gmx.de>\n"
+"PO-Revision-Date: 2020-03-31 18:12+0000\n"
+"Last-Translator: Dr.-Ing. Patrick Siegl <patrick@siegl.it>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsstatistics/de/>\n"
 "Language: de\n"
@@ -678,7 +678,7 @@ msgstr "Überwachung aller thermischen Zonen außer %s"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:34
 msgid "Monitoring local listen ports"
-msgstr ""
+msgstr "Überwachung von lokal geschalteter Ports"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/openvpn.js:41
 msgid "Monitoring one OpenVPN instance"
@@ -887,15 +887,15 @@ msgstr "RRDTool Plugin Konfiguration"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/cpu.js:13
 msgid "Report by CPU"
-msgstr ""
+msgstr "Berichte je CPU"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/cpu.js:19
 msgid "Report by state"
-msgstr ""
+msgstr "Berichte je Prozesszustand"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/cpu.js:25
 msgid "Report in percent"
-msgstr ""
+msgstr "Berichte in Prozent"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:50
 msgid "Rows per RRA"
@@ -1100,7 +1100,7 @@ msgstr ""
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/iptables.js:152
 msgid "The comment to match must not contain spaces"
-msgstr ""
+msgstr "Der zu vergleichende Kommentar darf keine Leerzeichen beinhalten"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/conntrack.js:6
 msgid ""
@@ -1173,7 +1173,7 @@ msgstr ""
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/iptables.js:79
 msgid "The instance name must not contain spaces"
-msgstr ""
+msgstr "Der Instanzname darf keine Leerzeichen beinhalten"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/interface.js:7
 msgid ""
@@ -1295,6 +1295,9 @@ msgid ""
 "read from /sys/class/thermal/*/temp ( '*' denotes the thermal device to be "
 "read, e.g. thermal_zone1 )"
 msgstr ""
+"Das Thermik Plugin überwacht die Temperatur des Systems. Daten werden "
+"typischer Weiße von /sys/class/thermal/*/temp gelesen ( '*' beschreibt das "
+"zu lesende, thermische Gerät, wie z.B. thermal_zone1 )"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/unixsock.js:7
 msgid ""
@@ -1306,7 +1309,7 @@ msgstr ""
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/uptime.js:6
 msgid "The uptime plugin collects statistics about the uptime of the system."
-msgstr ""
+msgstr "Das Laufzeit Plugin sammelt Statistiken über die Laufzeit des Systems."
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/graphs.js:167
 msgid "There is no RRD data available yet to render graphs."
@@ -1415,6 +1418,8 @@ msgstr "Sofern nichts ausgwählt, werden alle Schnittstellen überwacht."
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/cpu.js:20
 msgid "When set to true, reports per-state metric (system, user, idle)"
 msgstr ""
+"Sofern auf 'true' gesetzt, wird je Prozesszustand berichtet (System, User, "
+"Idle)"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/memory.js:13
 #, fuzzy
@@ -1444,6 +1449,8 @@ msgid ""
 "You need to configure <em>collectd</em> to gather data into <em>.rrd</em> "
 "files."
 msgstr ""
+"<em>collectd</em> muss konfiguriert sein, um Daten in <em>.rrd</em>-Dateien "
+"zu sammeln."
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/curl.js:30
 msgid "cURL plugin enabled"
@@ -1489,8 +1496,8 @@ msgstr[1] "%d Einhängepunkte"
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:38
 msgid "one remote port"
 msgid_plural "%d remote ports"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "ein ferner Port"
+msgstr[1] "%d ferne Ports"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:28
 msgid "reduces rrd size"
