@@ -11,8 +11,8 @@
 async function handleAction(ev) {
 	if (ev === 'timer') {
 		L.ui.showModal(_('Refresh Timer'), [
-			E('p', {}, _('To keep your adblock lists up-to-date, you should setup an automatic update job for these lists.')),
-			E('div', { 'class': 'left' }, [
+			E('p', _('To keep your adblock lists up-to-date, you should setup an automatic update job for these lists.')),
+			E('div', { 'class': 'left', 'style': 'display:flex; flex-direction:column' }, [
 				E('h5', _('Existing job(s)')),
 				E('textarea', {
 					'id': 'cronView',
@@ -22,8 +22,8 @@ async function handleAction(ev) {
 					'rows': 5
 				})
 			]),
-			E('div', { 'class': 'left' }, [
-				E('label', { 'class': 'cbi-input-select', 'style': 'float:left; padding-top:.5em' }, [
+			E('div', { 'class': 'left', 'style': 'display:flex; flex-direction:column' }, [
+				E('label', { 'class': 'cbi-input-select', 'style': 'padding-top:.5em' }, [
 				E('h5', _('Set/Replace a new adblock job')),
 				E('select', { 'class': 'cbi-input-select', 'id': 'timerA' }, [
 					E('option', { 'value': 'start' }, 'Start'),
@@ -33,18 +33,18 @@ async function handleAction(ev) {
 				'\xa0\xa0\xa0',
 				_('Adblock action')
 				]),
-				E('label', { 'class': 'cbi-input-text', 'style': 'float:left; padding-top:.5em' }, [
+				E('label', { 'class': 'cbi-input-text', 'style': 'padding-top:.5em' }, [
 				E('input', { 'class': 'cbi-input-text', 'id': 'timerH', 'maxlength': '2' }, [
 				]),
 				'\xa0\xa0\xa0',
 				_('The hours portition (req., range: 0-23)')
 				]),
-				E('label', { 'class': 'cbi-input-text', 'style': 'float:left; padding-top:.5em' }, [
+				E('label', { 'class': 'cbi-input-text', 'style': 'padding-top:.5em' }, [
 				E('input', { 'class': 'cbi-input-text', 'id': 'timerM', 'maxlength': '2' }),
 				'\xa0\xa0\xa0',
 				_('The minutes portion (opt., range: 0-59)')
 				]),
-				E('label', { 'class': 'cbi-input-text', 'style': 'float:left; padding-top:.5em' }, [
+				E('label', { 'class': 'cbi-input-text', 'style': 'padding-top:.5em' }, [
 				E('input', { 'class': 'cbi-input-text', 'id': 'timerD', 'maxlength': '13' }),
 				'\xa0\xa0\xa0',
 				_('The day of the week (opt., values: 1-7 possibly sep. by , or -)')
