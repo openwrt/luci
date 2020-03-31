@@ -8,9 +8,9 @@
 function handleAction(ev) {
 	if (ev.target && ev.target.getAttribute('name') === 'blacklist') {
 		L.ui.showModal(_('Add Blacklist Domain'), [
-			E('p', {}, _('Add this (sub-)domain to your local blacklist.')),
-			E('div', { 'class': 'left' }, [
-				E('label', { 'class': 'cbi-input-text', 'style': 'float:left; padding-top:.5em' }, [
+			E('p', _('Add this (sub-)domain to your local blacklist.')),
+			E('div', { 'class': 'left', 'style': 'display:flex; flex-direction:column' }, [
+				E('label', { 'class': 'cbi-input-text', 'style': 'padding-top:.5em' }, [
 					E('input', { 'class': 'cbi-input-text', 'style': 'width:300px', 'id': 'blacklist', 'value': ev.target.getAttribute('value') }, [])
 				])
 			]),
@@ -43,9 +43,9 @@ function handleAction(ev) {
 
 	if (ev.target && ev.target.getAttribute('name') === 'whitelist') {
 		L.ui.showModal(_('Add Whitelist Domain'), [
-			E('p', {}, _('Add this (sub-)domain to your local whitelist.')),
-			E('div', { 'class': 'left' }, [
-				E('label', { 'class': 'cbi-input-text', 'style': 'float:left; padding-top:.5em' }, [
+			E('p', _('Add this (sub-)domain to your local whitelist.')),
+			E('div', { 'class': 'left', 'style': 'display:flex; flex-direction:column' }, [
+				E('label', { 'class': 'cbi-input-text', 'style': 'padding-top:.5em' }, [
 					E('input', { 'class': 'cbi-input-text', 'style': 'width:300px', 'id': 'whitelist', 'value': ev.target.getAttribute('value') }, [])
 				])
 			]),
@@ -78,9 +78,9 @@ function handleAction(ev) {
 
 	if (ev === 'query') {
 		L.ui.showModal(_('Blocklist Query'), [
-			E('p', {}, _('Query active blocklists and backups for a specific domain.')),
-			E('div', { 'class': 'left' }, [
-				E('label', { 'style': 'float:left; padding-top:.5em', 'id': 'run' }, [
+			E('p', _('Query active blocklists and backups for a specific domain.')),
+			E('div', { 'class': 'left', 'style': 'display:flex; flex-direction:column' }, [
+				E('label', { 'style': 'padding-top:.5em', 'id': 'run' }, [
 					E('input', { 
 						'class': 'cbi-input-text',
 						'placeholder': 'google.com',
@@ -89,7 +89,8 @@ function handleAction(ev) {
 					})
 				])
 			]),
-			E('div', { 'class': 'left' }, [
+			E('div', { 'class': 'left', 'style': 'display:flex; flex-direction:column' }, [
+				'\xa0',
 				E('h5', _('Result')),
 				E('textarea', {
 					'id': 'result',
@@ -134,18 +135,20 @@ function handleAction(ev) {
 
 	if (ev === 'refresh') {
 		L.ui.showModal(_('Refresh DNS Report'), [
-			E('div', { 'class': 'left' }, [
-				E('select', { 'class': 'cbi-input-select', 'id': 'count' }, [
-					E('option', { 'value': '50' }, '50'),
-					E('option', { 'value': '100' }, '100'),
-					E('option', { 'value': '150' }, '150'),
-					E('option', { 'value': '250' }, '250'),
-					E('option', { 'value': '500' }, '500')
-				]),
-				'\xa0\xa0\xa0',
-				_('max. result set size')
+			E('div', { 'class': 'left', 'style': 'display:flex; flex-direction:column' }, [
+				E('label', { 'class': 'cbi-input-select', 'style': 'padding-top:.5em' }, [
+					E('select', { 'class': 'cbi-input-select', 'id': 'count' }, [
+						E('option', { 'value': '50' }, '50'),
+						E('option', { 'value': '100' }, '100'),
+						E('option', { 'value': '150' }, '150'),
+						E('option', { 'value': '250' }, '250'),
+						E('option', { 'value': '500' }, '500')
+					]),
+					'\xa0\xa0\xa0',
+					_('max. result set size')
+				])
 			]),
-			E('label', { 'class': 'cbi-input-text', 'style': 'float:left; padding-top:.5em' }, [
+			E('label', { 'class': 'cbi-input-text', 'style': 'padding-top:.5em' }, [
 				E('input', { 'class': 'cbi-input-text', 'id': 'search' }, [
 			]),
 			'\xa0\xa0\xa0',
@@ -161,7 +164,7 @@ function handleAction(ev) {
 					'class': 'btn cbi-button-action',
 					'id': 'refresh',
 					'click': ui.createHandlerFn(this, async function(ev) {
-						var count = document.getElementById('count').value
+						var count = document.getElementById('count').value;
 						var search = document.getElementById('search').value.trim().replace(/[^a-z0-9\.\-]/g,'') || '+';
 						L.resolveDefault(fs.exec_direct('/etc/init.d/adblock', ['report', search, count, 'true', 'json']),'');
 						var running = 1;
