@@ -399,7 +399,7 @@ var UISelect = UIElement.extend({
 
 var UIDropdown = UIElement.extend({
 	__init__: function(value, choices, options) {
-		if (typeof(choices) != 'object')
+		if (!L.isObject(choices))
 			choices = {};
 
 		if (!Array.isArray(value))
