@@ -6,6 +6,6 @@ return L.Class.extend({
 	description: _('The splash leases plugin uses libuci to collect statistics about splash leases.'),
 
 	configSummary: function(section) {
-		return _('Monitoring spash leases');
+		return _('Monitoring splash leases');
 	}
 });
