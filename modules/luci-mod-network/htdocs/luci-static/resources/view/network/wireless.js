@@ -53,7 +53,7 @@ function render_signal_badge(signalPercent, signalValue, noiseValue, wrap) {
 			_('SNR'), signalValue - noiseValue);
 	}
 	else if (signalValue != null && signalValue != 0) {
-		value = '%d %s'.format(signalValue, _('dBm'));
+		value = '%d\xa0%s'.format(signalValue, _('dBm'));
 		title = '%s: %d %s'.format(_('Signal'), signalValue, _('dBm'));
 	}
 	else if (signalPercent > -1) {
