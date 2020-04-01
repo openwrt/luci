@@ -45,7 +45,7 @@ s.template = "cbi/tblsection"
 s:option(Value, "name", translate("Name"))
 pth = s:option(Value, "path", translate("Path"))
 if nixio.fs.access("/etc/config/fstab") then
-        pth.titleref = luci.dispatcher.build_url("admin", "system", "fstab")
+        pth.titleref = luci.dispatcher.build_url("admin", "system", "mounts")
 end
 
 s:option(Value, "users", translate("Allowed users")).rmempty = true
