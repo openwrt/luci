@@ -1,6 +1,7 @@
 'use strict';
+'require baseclass';
 
-var Validator = L.Class.extend({
+var Validator = baseclass.extend({
 	__name__: 'Validation',
 
 	__init__: function(field, type, optional, vfunc, validatorFactory) {
@@ -81,7 +82,7 @@ var Validator = L.Class.extend({
 
 });
 
-var ValidatorFactory = L.Class.extend({
+var ValidatorFactory = baseclass.extend({
 	__name__: 'ValidatorFactory',
 
 	create: function(field, type, optional, vfunc) {
