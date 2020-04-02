@@ -32,18 +32,18 @@ msgid ""
 "val}</var>}}"
 msgstr ""
 "%{src?%{dest?Forwarded:Incoming}:Outgoing} %{ipv6?%{ipv4?<var>IPv4</var> i "
-"<var>IPv6</var>:<var>IPv6</var>}:<var>IPv4</var>}%{proto?, protocol "
-"%{proto#%{next?, }%{item.types?<var class=\"cbi-tooltip-container\""
-">%{item.name}<span class=\"cbi-tooltip\">ICMP z odmianami %{item.types#%{"
-"next?, }<var>%{item}</var>}</span></var>:<var>%{item.name}</var>}}}%{mark?, "
-"mark <var%{mark.inv? data-tooltip=\"Match fwmarks except %{mark.num}%{"
-"mark.mask? with mask %{mark.mask}}.\":%{mark.mask? data-tooltip=\"Mask "
-"fwmark value with %{mark.mask} before compare.\"}}>%{mark.val}</var>}%{"
-"dscp?, DSCP %{dscp.inv?<var data-tooltip=\"Match DSCP classifications except "
-"%{dscp.num?:%{dscp.name}}\">%{dscp.val}</var>:<var>%{dscp.val}</var>}}%{"
-"helper?, helper %{helper.inv?<var data-tooltip=\"Match any helper except "
-"&quot;%{helper.name}&quot;\">%{helper.val}</var>:<var data-tooltip=\""
-"%{helper.name}\">%{helper.val}</var>}}"
+"<var>IPv6</var>:<var>IPv6</var>}:<var>IPv4</var>}%{proto?, protocol %{proto#"
+"%{next?, }%{item.types?<var class=\"cbi-tooltip-container\">%{item.name}"
+"<span class=\"cbi-tooltip\">ICMP z odmianami %{item.types#%{next?, }<var>"
+"%{item}</var>}</span></var>:<var>%{item.name}</var>}}}%{mark?, mark <var"
+"%{mark.inv? data-tooltip=\"Match fwmarks except %{mark.num}%{mark.mask? with "
+"mask %{mark.mask}}.\":%{mark.mask? data-tooltip=\"Mask fwmark value with "
+"%{mark.mask} before compare.\"}}>%{mark.val}</var>}%{dscp?, DSCP %{dscp.inv?"
+"<var data-tooltip=\"Match DSCP classifications except %{dscp.num?:%{dscp."
+"name}}\">%{dscp.val}</var>:<var>%{dscp.val}</var>}}%{helper?, helper "
+"%{helper.inv?<var data-tooltip=\"Match any helper except &quot;%{helper.name}"
+"&quot;\">%{helper.val}</var>:<var data-tooltip=\"%{helper.name}\">%{helper."
+"val}</var>}}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:431
 msgid "-- add IP --"
@@ -57,8 +57,8 @@ msgstr "-- dodaj MAC --"
 msgid ""
 "<var data-tooltip=\"ACCEPT\">Accept</var> %{src?%{dest?forward:input}:output}"
 msgstr ""
-"<var data-tooltip=\"ACCEPT\">Akceptuj</var> "
-"%{src?%{dest?forward:input}:output}"
+"<var data-tooltip=\"ACCEPT\">Akceptuj</var> %{src?%{dest?forward:input}:"
+"output}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:86
 msgid "<var data-tooltip=\"ACCEPT\">Prevent source rewrite</var>"
@@ -69,8 +69,8 @@ msgid ""
 "<var data-tooltip=\"DNAT\">Forward</var> to %{dest}%{dest_ip? IP <var>"
 "%{dest_ip}</var>}%{dest_port? port <var>%{dest_port}</var>}"
 msgstr ""
-"<var data-tooltip=\"DNAT\">Przekazuj</var> do %{dest}%{dest_ip? IP "
-"<var>%{dest_ip}</var>}%{dest_port? port <var>%{dest_port}</var>}"
+"<var data-tooltip=\"DNAT\">Przekazuj</var> do %{dest}%{dest_ip? IP <var>"
+"%{dest_ip}</var>}%{dest_port? port <var>%{dest_port}</var>}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:114
 msgid ""
@@ -83,16 +83,16 @@ msgid ""
 "<var data-tooltip=\"DSCP\">Assign DSCP</var> classification <var>%{set_dscp}"
 "</var>"
 msgstr ""
-"<var data-tooltip=\"DSCP\">Przydziel DSCP</var> klasyfikacja "
-"<var>%{set_dscp}</var>"
+"<var data-tooltip=\"DSCP\">Przydziel DSCP</var> klasyfikacja <var>%{set_dscp}"
+"</var>"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:126
 msgid ""
 "<var data-tooltip=\"HELPER\">Assign conntrack</var> helper <var"
 "%{helper_name? data-tooltip=\"%{helper_name}\"}>%{set_helper}</var>"
 msgstr ""
-"<var data-tooltip=\"HELPER\">Przydziel conntrack</var> pomoc <var%{"
-"helper_name? data-tooltip=\"%{helper_name}\"}>%{set_helper}</var>"
+"<var data-tooltip=\"HELPER\">Przydziel conntrack</var> pomoc <var"
+"%{helper_name? data-tooltip=\"%{helper_name}\"}>%{set_helper}</var>"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:129
 msgid ""
@@ -113,23 +113,23 @@ msgid ""
 "<var data-tooltip=\"NOTRACK\">Do not track</var> %{src?%{dest?forward:input}:"
 "output}"
 msgstr ""
-"<var data-tooltip=\"NOTRACK\">Nie śledź</var> "
-"%{src?%{dest?forward:input}:output}"
+"<var data-tooltip=\"NOTRACK\">Nie śledź</var> %{src?%{dest?forward:input}:"
+"output}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:120
 msgid ""
 "<var data-tooltip=\"REJECT\">Reject</var> %{src?%{dest?forward:input}:output}"
 msgstr ""
-"<var data-tooltip=\"REJECT\">Odrzucaj</var> "
-"%{src?%{dest?forward:input}:output}"
+"<var data-tooltip=\"REJECT\">Odrzucaj</var> %{src?%{dest?forward:input}:"
+"output}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:80
 msgid ""
 "<var data-tooltip=\"SNAT\">Statically rewrite</var> to source %{snat_ip?IP "
 "<var>%{snat_ip}</var>} %{snat_port?port <var>%{snat_port}</var>}"
 msgstr ""
-"<var data-tooltip=\"SNAT\">Statystycznie przepisz</var> do źródła %{"
-"snat_ip?IP <var>%{snat_ip}</var>} %{snat_port?port <var>%{snat_port}</var>}"
+"<var data-tooltip=\"SNAT\">Statystycznie przepisz</var> do źródła %{snat_ip?"
+"IP <var>%{snat_ip}</var>} %{snat_port?port <var>%{snat_port}</var>}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:224
 msgid "A rewrite IP must be specified!"
@@ -147,7 +147,7 @@ msgstr "AKCEPTUJ - Wyłącz przepisywanie adresów"
 msgid "Action"
 msgstr "Akcja"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:257
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:260
 msgid ""
 "Additional raw <em>iptables</em> arguments to classify zone destination "
 "traffic, e.g. <code>-p tcp --dport 443</code> to only match outbound HTTPS "
@@ -157,7 +157,7 @@ msgstr ""
 "docelowej, np. <code>-p tcp --dport 443</code> tylko w celu dopasowania "
 "ruchu wychodzącego HTTPS."
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:247
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:250
 msgid ""
 "Additional raw <em>iptables</em> arguments to classify zone source traffic, "
 "e.g. <code>-p tcp --sport 443</code> to only match inbound HTTPS traffic."
@@ -169,19 +169,19 @@ msgstr ""
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:137
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:181
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:135
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:86
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:92
 msgid "Advanced Settings"
 msgstr "Ustawienia zaawansowane"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:219
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:222
 msgid "Allow \"invalid\" traffic"
 msgstr "Zezwól na \"nieprawidłowy\" ruch"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:319
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:322
 msgid "Allow forward from <em>source zones</em>:"
 msgstr "Zezwól na przekazywanie z <em>strefy źródłowej</em>:"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:278
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:281
 msgid "Allow forward to <em>destination zones</em>:"
 msgstr "Zezwól na przekazywanie do <em>strefy docelowej</em>:"
 
@@ -215,22 +215,22 @@ msgid "Assign the specified connection tracking helper to matched traffic."
 msgstr ""
 "Przypisz określonego pomocnika śledzenia połączeń do dopasowanego ruchu."
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:222
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:225
 msgid "Automatic helper assignment"
 msgstr "Automatyczne przydzielanie pomocy"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:222
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:225
 msgid ""
 "Automatically assign conntrack helpers based on traffic protocol and port"
 msgstr ""
 "Automatycznie przydzielaj pomocników conntrack'a na podstawie protokołu "
 "ruchu i portu"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:87
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:93
 msgid "Conntrack Settings"
 msgstr "Ustawienia conntrack"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:226
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:229
 msgid "Conntrack helpers"
 msgstr "Pomocnicy conntrack"
 
@@ -242,15 +242,15 @@ msgstr "Zawartość została zapisana."
 msgid "Continue"
 msgstr "Kontynuuj"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:189
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:192
 msgid "Covered devices"
 msgstr "Objęte urządzenia"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:145
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:151
 msgid "Covered networks"
 msgstr "Objęte sieci"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:194
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:197
 msgid "Covered subnets"
 msgstr "Objęte podsieci"
 
@@ -298,7 +298,7 @@ msgstr "Strefa docelowa"
 msgid "Device name"
 msgstr "Nazwa urządzenia"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:219
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:222
 msgid ""
 "Do not install extra rules to reject forwarded traffic with conntrack state "
 "<em>invalid</em>. This may be required for complex asymmetric route setups."
@@ -325,7 +325,7 @@ msgstr "Włącz NAT Loopback"
 msgid "Enable SYN-flood protection"
 msgstr "Włącz ochronę SYN-flood"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:232
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:235
 msgid "Enable logging on this zone"
 msgstr "Włącz logowanie tej strefy"
 
@@ -337,7 +337,7 @@ msgstr "Zaleca się użyć: %s"
 msgid "Experimental feature. Not fully compatible with QoS/SQM."
 msgstr "Funkcja eksperymentalna. Nie w pełni kompatybilna z QoS/SQM."
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:226
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:229
 msgid "Explicitly choses allowed connection tracking helpers for zone traffic"
 msgstr ""
 "Dokładnie wybiera dozwolone pomoce śledzenia połączeń dla ruchu strefowego"
@@ -356,15 +356,15 @@ msgstr "Port zewnętrzny"
 msgid "Extra arguments"
 msgstr "Dodatkowe argumenty"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:257
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:260
 msgid "Extra destination arguments"
 msgstr "Dodatkowe argumenty przeznaczenia"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:88
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:94
 msgid "Extra iptables arguments"
 msgstr "Dodatkowe argumenty tablicy IP"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:247
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:250
 msgid "Extra source arguments"
 msgstr "Dodatkowe argumenty zródłowe"
 
@@ -400,7 +400,7 @@ msgid "Firewall configuration migration"
 msgstr "Migracja konfiguracji zapory sieciowej"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:49
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:125
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:131
 msgid "Forward"
 msgstr "Przekazuj"
 
@@ -411,11 +411,10 @@ msgid ""
 "%{mark.num}%{mark.mask? with mask %{mark.mask}}.\":%{mark.mask? data-tooltip="
 "\"Mask fwmark value with %{mark.mask} before compare.\"}}>%{mark.val}</var>}"
 msgstr ""
-"Przekazywanie IPv4 %{proto?, protocol %{proto#%{next?, "
-"}<var>%{item.name}</var>}}%{mark?, mark <var%{mark.inv? data-tooltip=\"Match "
-"fwmarks except %{mark.num}%{mark.mask? with mask %{mark.mask}}.\":%{"
-"mark.mask? data-tooltip=\"Mask fwmark value with %{mark.mask} before compare."
-"\"}}>%{mark.val}</var>}"
+"Przekazywanie IPv4 %{proto?, protocol %{proto#%{next?, }<var>%{item.name}</"
+"var>}}%{mark?, mark <var%{mark.inv? data-tooltip=\"Match fwmarks except "
+"%{mark.num}%{mark.mask? with mask %{mark.mask}}.\":%{mark.mask? data-tooltip="
+"\"Mask fwmark value with %{mark.mask} before compare.\"}}>%{mark.val}</var>}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:435
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:263
@@ -432,9 +431,9 @@ msgid ""
 msgstr ""
 "Z %{src}%{src_device?, interface <var>%{src_device}</var>}%{src_ip?, IP "
 "%{src_ip#%{next?, }<var%{item.inv? data-tooltip=\"Match IP addresses except "
-"%{item.val}.\"}>%{item.ival}</var>}}%{src_port?, port %{src_port#%{next?, "
-"}<var%{item.inv? data-tooltip=\"Match ports except %{item.val}.\""
-"}>%{item.ival}</var>}}"
+"%{item.val}.\"}>%{item.ival}</var>}}%{src_port?, port %{src_port#%{next?, }"
+"<var%{item.inv? data-tooltip=\"Match ports except %{item.val}.\"}>%{item."
+"ival}</var>}}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:63
 msgid ""
@@ -449,12 +448,12 @@ msgid ""
 msgstr ""
 "Z %{src}%{src_device?, interface <var>%{src_device}</var>}%{src_ip?, IP "
 "%{src_ip#%{next?, }<var%{item.inv? data-tooltip=\"Match IP addresses except "
-"%{item.val}.\"}>%{item.ival}</var>}}%{src_port?, port %{src_port#%{next?, "
-"}<var%{item.inv? data-tooltip=\"Match ports except %{item.val}.\""
-"}>%{item.ival}</var>}}%{src_mac?, MAC %{src_mac#%{next?, }<var%{item.inv? "
-"data-tooltip=\"Match MACs except %{item.val}%{item.hint.name? a.k.a. "
-"%{item.hint.name}}.\":%{item.hint.name? data-tooltip=\"%{item.hint.name}\""
-"}}>%{item.ival}</var>}}"
+"%{item.val}.\"}>%{item.ival}</var>}}%{src_port?, port %{src_port#%{next?, }"
+"<var%{item.inv? data-tooltip=\"Match ports except %{item.val}.\"}>%{item."
+"ival}</var>}}%{src_mac?, MAC %{src_mac#%{next?, }<var%{item.inv? data-"
+"tooltip=\"Match MACs except %{item.val}%{item.hint.name? a.k.a. %{item.hint."
+"name}}.\":%{item.hint.name? data-tooltip=\"%{item.hint.name}\"}}>%{item.ival}"
+"</var>}}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:47
 msgid ""
@@ -466,19 +465,19 @@ msgid ""
 "k.a. %{item.hint.name}}.\":%{item.hint.name? data-tooltip=\"%{item.hint."
 "name}\"}}>%{item.ival}</var>}}"
 msgstr ""
-"Z %{src}%{src_ip?, IP %{src_ip#%{next?, }<var%{item.inv? data-tooltip=\""
-"Match IP addresses except %{item.val}.\"}>%{item.ival}</var>}}%{src_port?, "
+"Z %{src}%{src_ip?, IP %{src_ip#%{next?, }<var%{item.inv? data-tooltip="
+"\"Match IP addresses except %{item.val}.\"}>%{item.ival}</var>}}%{src_port?, "
 "port %{src_port#%{next?, }<var%{item.inv? data-tooltip=\"Match ports except "
-"%{item.val}.\"}>%{item.ival}</var>}}%{src_mac?, MAC %{src_mac#%{next?, "
-"}<var%{item.inv? data-tooltip=\"Match MACs except %{item.val}%{"
-"item.hint.name? a.k.a. %{item.hint.name}}.\":%{item.hint.name? data-tooltip="
-"\"%{item.hint.name}\"}}>%{item.ival}</var>}}"
+"%{item.val}.\"}>%{item.ival}</var>}}%{src_mac?, MAC %{src_mac#%{next?, }<var"
+"%{item.inv? data-tooltip=\"Match MACs except %{item.val}%{item.hint.name? a."
+"k.a. %{item.hint.name}}.\":%{item.hint.name? data-tooltip=\"%{item.hint."
+"name}\"}}>%{item.ival}</var>}}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:136
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:180
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:134
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:39
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:85
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:91
 #: applications/luci-app-firewall/root/usr/share/luci/menu.d/luci-app-firewall.json:16
 msgid "General Settings"
 msgstr "Ustawienia główne"
@@ -488,17 +487,17 @@ msgid "Hardware flow offloading"
 msgstr "Sprzętowy flow offloading"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:271
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:200
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:203
 msgid "IPv4 and IPv6"
 msgstr "IPv4 i IPv6"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:272
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:201
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:204
 msgid "IPv4 only"
 msgstr "Tylko IPv4"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:273
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:202
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:205
 msgid "IPv6 only"
 msgstr "Tylko IPv6"
 
@@ -518,19 +517,18 @@ msgid ""
 "except &quot;%{helper.name}&quot;\">%{helper.val}</var>:<var data-tooltip="
 "\"%{helper.name}\">%{helper.val}</var>}}"
 msgstr ""
-"Przychodzące IPv4%{proto?, protocol %{proto#%{next?, }%{item.types?<var class"
-"=\"cbi-tooltip-container\">%{item.name}<span class=\"cbi-tooltip\">ICMP with "
-"types %{item.types#%{next?, "
-"}<var>%{item}</var>}</span></var>:<var>%{item.name}</var>}}}%{mark?, mark "
-"<var%{mark.inv? data-tooltip=\"Match fwmarks except %{mark.num}%{mark.mask? "
-"with mask %{mark.mask}}.\":%{mark.mask? data-tooltip=\"Mask fwmark value "
-"with %{mark.mask} before compare.\"}}>%{mark.val}</var>}%{helper?, helper "
-"%{helper.inv?<var data-tooltip=\"Match any helper except "
-"&quot;%{helper.name}&quot;\">%{helper.val}</var>:<var data-tooltip=\""
-"%{helper.name}\">%{helper.val}</var>}}"
+"Przychodzące IPv4%{proto?, protocol %{proto#%{next?, }%{item.types?<var "
+"class=\"cbi-tooltip-container\">%{item.name}<span class=\"cbi-tooltip\">ICMP "
+"with types %{item.types#%{next?, }<var>%{item}</var>}</span></var>:<var>"
+"%{item.name}</var>}}}%{mark?, mark <var%{mark.inv? data-tooltip=\"Match "
+"fwmarks except %{mark.num}%{mark.mask? with mask %{mark.mask}}.\":%{mark."
+"mask? data-tooltip=\"Mask fwmark value with %{mark.mask} before compare.\"}}>"
+"%{mark.val}</var>}%{helper?, helper %{helper.inv?<var data-tooltip=\"Match "
+"any helper except &quot;%{helper.name}&quot;\">%{helper.val}</var>:<var data-"
+"tooltip=\"%{helper.name}\">%{helper.val}</var>}}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:47
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:123
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:129
 msgid "Input"
 msgstr "Ruch przychodzący"
 
@@ -558,7 +556,7 @@ msgstr "Nieprawidłowa wartość graniczna"
 msgid "Limit burst"
 msgstr "Naruszenie limitu"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:235
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:238
 msgid "Limit log messages"
 msgstr "Ograniczenie logowania"
 
@@ -573,8 +571,8 @@ msgid ""
 "Limit matching to <var>%{limit.num}</var> packets per <var>%{limit.unit}</"
 "var>%{limit.burst? burst <var>%{limit.burst}</var>}"
 msgstr ""
-"Dopasowanie limitu do <var>%{limit.num}</var> pakiety na "
-"<var>%{limit.unit}</var>%{limit.burst? burst <var>%{limit.burst}</var>}"
+"Dopasowanie limitu do <var>%{limit.num}</var> pakiety na <var>%{limit.unit}</"
+"var>%{limit.burst? burst <var>%{limit.burst}</var>}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:347
 msgid "Limits traffic matching to the specified rate."
@@ -588,11 +586,11 @@ msgstr "Źródło pętli zwrotnej IP"
 msgid "MASQUERADE - Automatically rewrite to outbound interface IP"
 msgstr "MASQUERADE - Automatyczne przepisywanie na interfejs wyjściowy IP"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:142
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:148
 msgid "MSS clamping"
 msgstr "Dostosuj MSS"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:139
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:145
 msgid "Masquerading"
 msgstr "Maskarada"
 
@@ -706,7 +704,7 @@ msgstr ""
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:157
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:213
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:142
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:101
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:107
 msgid "Name"
 msgstr "Nazwa"
 
@@ -740,7 +738,7 @@ msgid "Outbound zone"
 msgstr "Strefa wychodząca"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:48
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:124
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:130
 msgid "Output"
 msgstr "Ruch wychodzący"
 
@@ -751,7 +749,7 @@ msgid "Passes additional arguments to iptables. Use with care!"
 msgstr ""
 "Przekazuje dodatkowe argumenty do iptables. Zachowaj szczególną ostrożność!"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:244
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:247
 msgid ""
 "Passing raw iptables arguments to source and destination traffic "
 "classification rules allows to match packets based on other criteria than "
@@ -800,18 +798,18 @@ msgstr "Przekieruj ruch przychodzący do wskazanego hosta w sieci wewnętrznej"
 msgid "Requires hardware NAT support. Implemented at least for mt7621"
 msgstr "Wymaga sprzętowej obsługi NAT. Wdrożono dla co najmniej mt7621"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:212
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:215
 msgid "Restrict Masquerading to given destination subnets"
 msgstr "Ogranicz maskaradę do wskazanych podsieci docelowych"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:205
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:208
 msgid "Restrict Masquerading to given source subnets"
 msgstr "Ogranicz maskaradę do wskazanych podsieci źródłowych"
 
 # Wstawiłem rodzinę gdyż gdzieś wcześniej było tak opisane ale klasa pasuje mi tu bardziej.
 # Obsy - niestety ale "rodzina". W gui dotyczy to wyboru IPv4/IPv6, więc "rodzina" a nie klasa.
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:268
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:199
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:202
 msgid "Restrict to address family"
 msgstr "Ogranicz do rodziny adresów"
 
@@ -948,8 +946,8 @@ msgstr ""
 "Zapora tworzy strefy z twoich interfejsów sieciowych, aby kontrolować ruch "
 "sieciowy."
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:185
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:274
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:188
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:277
 msgid ""
 "The options below control the forwarding policies between this zone (%s) and "
 "other zones. <em>Destination zones</em> cover forwarded traffic "
@@ -965,7 +963,7 @@ msgstr ""
 "przekazywania jest <em>jednokierunkowa</em>, np. przekazywanie z sieci LAN "
 "do WAN <em>nie</em> implikuje pozwolenia na przekazywanie z sieci WAN do LAN."
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:97
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:103
 msgid ""
 "This section defines common properties of %q. The <em>input</em> and "
 "<em>output</em> options set the default policies for traffic entering and "
@@ -1004,9 +1002,9 @@ msgid ""
 msgstr ""
 "Do %{dest}%{dest_device?, interface <var>%{dest_device}</var>}%{dest_ip?, IP "
 "%{dest_ip#%{next?, }<var%{item.inv? data-tooltip=\"Match IP addresses except "
-"%{item.val}.\"}>%{item.ival}</var>}}%{dest_port?, port %{dest_port#%{next?, "
-"}<var%{item.inv? data-tooltip=\"Match ports except %{item.val}.\""
-"}>%{item.ival}</var>}}"
+"%{item.val}.\"}>%{item.ival}</var>}}%{dest_port?, port %{dest_port#%{next?, }"
+"<var%{item.inv? data-tooltip=\"Match ports except %{item.val}.\"}>%{item."
+"ival}</var>}}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:48
 msgid ""
@@ -1016,9 +1014,9 @@ msgid ""
 "%{dest_port#%{next?, }<var%{item.inv? data-tooltip=\"Match ports except "
 "%{item.val}.\"}>%{item.ival}</var>}}"
 msgstr ""
-"Do %{dest}%{dest_device?, via interface <var>%{dest_device}</var>}%{"
-"dest_ip?, IP %{dest_ip#%{next?, }<var%{item.inv? data-tooltip=\"Match IP "
-"addresses except %{item.val}.\"}>%{item.ival}</var>}}%{dest_port?, port "
+"Do %{dest}%{dest_device?, via interface <var>%{dest_device}</"
+"var>}%{dest_ip?, IP %{dest_ip#%{next?, }<var%{item.inv? data-tooltip=\"Match "
+"IP addresses except %{item.val}.\"}>%{item.ival}</var>}}%{dest_port?, port "
 "%{dest_port#%{next?, }<var%{item.inv? data-tooltip=\"Match ports except "
 "%{item.val}.\"}>%{item.ival}</var>}}"
 
@@ -1029,10 +1027,10 @@ msgid ""
 "var>}}%{dest_port?, port %{dest_port#%{next?, }<var%{item.inv? data-tooltip="
 "\"Match ports except %{item.val}.\"}>%{item.ival}</var>}}"
 msgstr ""
-"Do %{dest}%{dest_ip?, IP %{dest_ip#%{next?, }<var%{item.inv? data-tooltip=\""
-"Match IP addresses except %{item.val}.\"}>%{item.ival}</var>}}%{dest_port?, "
-"port %{dest_port#%{next?, }<var%{item.inv? data-tooltip=\"Match ports except "
-"%{item.val}.\"}>%{item.ival}</var>}}"
+"Do %{dest}%{dest_ip?, IP %{dest_ip#%{next?, }<var%{item.inv? data-tooltip="
+"\"Match IP addresses except %{item.val}.\"}>%{item.ival}</"
+"var>}}%{dest_port?, port %{dest_port#%{next?, }<var%{item.inv? data-tooltip="
+"\"Match ports except %{item.val}.\"}>%{item.ival}</var>}}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:391
 msgid "Tracking helper"
@@ -1082,7 +1080,7 @@ msgstr "Przekazywanie bez nazwy"
 msgid "Unnamed rule"
 msgstr "Nieznana zasada"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:102
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:108
 msgid "Unnamed zone"
 msgstr "Strefa bez nazwy"
 
@@ -1096,8 +1094,8 @@ msgid ""
 "be converted to \"nat\" sections and the firewall will be restarted to apply "
 "the updated configuration."
 msgstr ""
-"Po naciśnięciu przycisku „Kontynuuj” sekcje przekierowujące z docelowym \""
-"SNAT\" zostaną przekonwertowane na sekcje \"nat\", a zapora sieciowa "
+"Po naciśnięciu przycisku „Kontynuuj” sekcje przekierowujące z docelowym "
+"\"SNAT\" zostaną przekonwertowane na sekcje \"nat\", a zapora sieciowa "
 "zostanie ponownie uruchomiona w celu zastosowania zaktualizowanej "
 "konfiguracji."
 
@@ -1109,7 +1107,7 @@ msgstr "Użyj zewnętrznego adresu IP"
 msgid "Use internal IP address"
 msgstr "Użyj wewnętrznego adresu IP"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:189
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:192
 msgid ""
 "Use this option to classify zone traffic by raw, non-<em>uci</em> managed "
 "network devices."
@@ -1117,7 +1115,7 @@ msgstr ""
 "Opcja ta służy do klasyfikacji ruchu strefowego według surowych, nie-"
 "<em>uci</em> obsługiwanych urządzeń sieciowych."
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:194
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:197
 msgid ""
 "Use this option to classify zone traffic by source or destination subnet "
 "instead of networks or devices."
@@ -1147,7 +1145,7 @@ msgstr "Znacznik zapory XOR"
 msgid "XOR mark"
 msgstr "Znacznik XOR"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:115
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:121
 msgid "Zone ⇒ Forwardings"
 msgstr "Strefa ⇒ Przekazywanie"
 
@@ -1157,7 +1155,7 @@ msgstr "Strefy"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:367
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:55
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:131
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:137
 msgid "accept"
 msgstr "akceptuj"
 
@@ -1210,7 +1208,7 @@ msgstr "nie śledź"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:366
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:54
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:130
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:136
 msgid "drop"
 msgstr "porzuć"
 
@@ -1228,7 +1226,7 @@ msgstr "minuta"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:368
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:53
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:129
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:135
 msgid "reject"
 msgstr "odrzucaj"
 
@@ -1247,9 +1245,9 @@ msgstr "sekunda"
 msgid "this device"
 msgstr "to urządzenie"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:96
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:184
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:273
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:102
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:187
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:276
 msgid "this new zone"
 msgstr "ta nowa strefa"
 
