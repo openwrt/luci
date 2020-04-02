@@ -19,7 +19,7 @@ h = s:taboption("general", Flag, "homes", translate("Share home-directories"),
 h.rmempty = false
 
 tmpl = s:taboption("template", Value, "_tmpl",
-	translate("Edit the template that is used for generating the samba configuration."), 
+	translate("Edit the template that is used for generating the samba configuration."),
 	translate("This is the content of the file '/etc/samba/smb.conf.template' from which your samba configuration will be generated. " ..
 		"Values enclosed by pipe symbols ('|') should not be changed. They get their values from the 'General Settings' tab."))
 
@@ -45,7 +45,7 @@ s.template = "cbi/tblsection"
 s:option(Value, "name", translate("Name"))
 pth = s:option(Value, "path", translate("Path"))
 if nixio.fs.access("/etc/config/fstab") then
-        pth.titleref = luci.dispatcher.build_url("admin", "system", "fstab")
+        pth.titleref = luci.dispatcher.build_url("admin", "system", "mounts")
 end
 
 s:option(Value, "users", translate("Allowed users")).rmempty = true
