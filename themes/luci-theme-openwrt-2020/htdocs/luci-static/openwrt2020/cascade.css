@@ -921,8 +921,18 @@ button[disabled], button.disabled, .btn[disabled], .btn.disabled {
 	background: var(--danger-color);
 }
 
+.cbi-checkbox {
+	position: relative;
+}
+
 .cbi-checkbox input[type="checkbox"] {
-	display: none;
+	position: absolute;
+	z-index: 10;
+	-webkit-appearence: button;
+	height: 1.3em;
+	width: 1.3em;
+	opacity: 0;
+	cursor: pointer;
 }
 
 .cbi-checkbox input[type="checkbox"] + label {
@@ -944,7 +954,6 @@ button[disabled], button.disabled, .btn[disabled], .btn.disabled {
 	position: absolute;
 	left: 0;
 	top: 0;
-	cursor: pointer;
 }
 
 .cbi-checkbox input[type="checkbox"]:checked + label::after {
@@ -958,6 +967,14 @@ button[disabled], button.disabled, .btn[disabled], .btn.disabled {
 	height: .6em;
 	border-radius: .15em;
 	cursor: pointer;
+}
+
+.cbi-checkbox input.cbi-input-invalid[type="checkbox"] + label::before {
+	box-shadow: 0 0 2px var(--danger-color);
+}
+
+.cbi-checkbox input.cbi-input-invalid[type="checkbox"]:checked + label::after {
+	background: var(--danger-color);
 }
 
 input:not([type]),
