@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2020-03-05 08:06+0000\n"
-"Last-Translator: Tobias Strobel <me@strobeltobias.de>\n"
+"PO-Revision-Date: 2020-04-01 19:11+0000\n"
+"Last-Translator: CE4 <chregger@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsaria2/de/>\n"
 "Language: de\n"
@@ -28,7 +28,7 @@ msgstr "Alle Proxy"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:228
 msgid "Append HEADERs to HTTP request header."
-msgstr "HEADERs an den HTTP-Anfrage-Header anhängen."
+msgstr "HEADER zu den HTTP-Anfrage-Header anhängen."
 
 #: applications/luci-app-aria2/luasrc/controller/aria2.lua:18
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:35
@@ -59,7 +59,7 @@ msgstr "BitTorrent-Optionen"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:335
 msgid "BitTorrent listen port"
-msgstr "BitTorrent Port"
+msgstr "BitTorrent Listen-Port"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:189
 msgid "CA certificate"
@@ -109,7 +109,7 @@ msgstr "Inhalt der Sitzungsdatei: <code>%s</code>"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:341
 msgid "DHT Listen port"
-msgstr "DHT Port"
+msgstr "DHT-Listen-Port"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:87
 msgid "Debug"
@@ -130,8 +130,8 @@ msgstr "Festplatten-Cache"
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:259
 msgid "Don't split less than 2*SIZE byte range. Possible values: 1M-1024M."
 msgstr ""
-"Splitten Sie den Wert nicht kleiner als 2mal der Größe des Bytebereichs. "
-"Mögliche Werte: 1M-1024M."
+"Splitte nicht wenn die Byte-Range kleiner als 2*SIZE beträgt. Mögliche Werte:"
+" 1M-1024M."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:254
 msgid "Download a file using N connections."
@@ -311,7 +311,7 @@ msgstr "Leer lassen für Standard-Benutzer."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:415
 msgid "List of additional BitTorrent tracker's announce URI."
-msgstr "Liste der zusätzlichen BitTorrent-Tracker angekündigter URI."
+msgstr "Liste von Announce-URIs zusätzlicher BitTorrent-Tracker."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:488
 msgid ""
@@ -513,11 +513,11 @@ msgstr "Peer-Geschwindigkeitsbegrenzung anfordern"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:266
 msgid "Retry wait"
-msgstr ""
+msgstr "Wartezeit vor Wiederholung"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:61
 msgid "Run daemon as user"
-msgstr "Daemon als Benutzer ausführen"
+msgstr "Daemon als Gruppe ausführen"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:429
 msgid ""
@@ -543,6 +543,8 @@ msgid ""
 "Save error/unfinished downloads to session file every N seconds. If 0 is "
 "given, file will be saved only when aria2 exits."
 msgstr ""
+"Alle N Sekunden Fehler/unbeendete Downloads in der Sitzungsdatei speichern. "
+"Wenn 0 angegeben wird, wird die Datei nur beim Beenden von aria2 gespeichert."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:316
 msgid ""
@@ -550,6 +552,9 @@ msgid ""
 "BitTorrent Magnet URI is used. The file name is hex encoded info hash with "
 "suffix \".torrent\"."
 msgstr ""
+"Speichere Metadaten als \".torrent\"-Datei. Diese Option wirkt sich nur aus, "
+"wenn eine BitTorrent Magnet-URI verwendet wird. Der Dateiname ist ein "
+"hexadezimal kodierter Info-Hash mit der Endung \".torrent\"."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:315
 msgid "Save metadata"
@@ -557,23 +562,25 @@ msgstr "Speichere Metadaten"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:434
 msgid "Save session interval"
-msgstr ""
+msgstr "Session-Speicherintervall"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:330
 msgid "Seed previously downloaded files without verifying piece hashes."
 msgstr ""
+"Seeden von zuvor heruntergeladenen Dateien, ohne die Teilhashes zu "
+"überprüfen."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:401
 msgid "Seed ratio"
-msgstr ""
+msgstr "Seed-Verhältnis"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:408
 msgid "Seed time"
-msgstr ""
+msgstr "Seed-Zeit"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:329
 msgid "Seed unverified"
-msgstr ""
+msgstr "Seed unverifiziert"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:211
 msgid ""
@@ -581,6 +588,9 @@ msgid ""
 "if remote server responds with <code>Content-Encoding: gzip</code> or "
 "<code>Content-Encoding: deflate</code>."
 msgstr ""
+"Sende <code>Accept: deflate, gzip</code>-Anfrage-Header und dekomprimiere "
+"die erhaltene Serverantwort, wenn der Server mit <code>Content-Encoding: "
+"gzip</code> oder <code>Content-Encoding: deflate</code> antwortet."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:220
 msgid ""
@@ -589,6 +599,11 @@ msgid ""
 "you can add Cache-Control header with a directive you like using \"Header\" "
 "option."
 msgstr ""
+"Sende <code>Cache-Control: no-cache</code> und <code>Pragma: no-cache</code> "
+"Header, um zwischengespeicherte Inhalte zu vermeiden. Wenn sie deaktiviert "
+"sind, werden diese Header nicht gesendet, und Sie können mit der Option \""
+"Header\" einen Cache-Control-Header mit einer beliebigen Direktive "
+"hinzufügen."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:336
 msgid ""
@@ -596,30 +611,44 @@ msgid ""
 "\"6881-6999\" and \"6881-6889,6999\". Make sure that the specified ports are "
 "open for incoming TCP traffic."
 msgstr ""
+"Setzen der TCP-Portnummer für BitTorrent-Downloads. Formate die akzeptiert "
+"werden: \"6881,6885\", \"6881-6999\" und \"6881-6889,6999\". Überprüfen sie, "
+"dass die angegebenen Ports für den eingehenden TCP-Traffic geöffnet sind."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:342
 msgid ""
 "Set UDP listening port used by DHT (IPv4, IPv6) and UDP tracker. Make sure "
 "that the specified ports are open for incoming UDP traffic."
 msgstr ""
+"Setzen des UDP-Listen-Ports, der von DHT (IPv4, IPv6) und dem UDP-Tracker "
+"verwendet wird. Überprüfen Sie, dass die angegebenen Ports für eingehenden "
+"UDP-Traffic erreichbar sind."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:477
 msgid ""
 "Set max download speed per each download in bytes/sec. 0 means unrestricted."
 msgstr ""
+"Legt die maximale Download-Geschwindigkeit pro Download fest in Bytes/Sek. 0 "
+"bedeutet uneingeschränkt."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:470
 msgid "Set max overall download speed in bytes/sec. 0 means unrestricted."
 msgstr ""
+"Legt die maximale Gesamt-Download-Geschwindigkeit fest in Bytes/Sek. 0 "
+"bedeutet uneingeschränkt."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:355
 msgid "Set max overall upload speed in bytes/sec. 0 means unrestricted."
 msgstr ""
+"Legt die maximale Gesamt-Upload-Geschwindigkeit fest in Bytes/Sek. 0 "
+"bedeutet uneingeschränkt."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:362
 msgid ""
 "Set max upload speed per each torrent in bytes/sec. 0 means unrestricted."
 msgstr ""
+"Legt die maximale Upload-Geschwindigkeit pro Torrent fest in Bytes/Sek. 0 "
+"bedeutet uneingeschränkt."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:231
 msgid ""
@@ -627,14 +656,17 @@ msgid ""
 "server. After the connection is established, this option makes no effect and "
 "\"Timeout\" option is used instead."
 msgstr ""
+"Legt den Verbindungs-Timeout in Sekunden fest für den Verbindungsaufbau zu "
+"HTTP/FTP/Proxy-Servern. Nachdem die Verbindung hergestellt wurde, hat dieser "
+"Wert keinen Effekt mehr und der \"Timeout\"-Wert wird stattdessen verwendet."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:267
 msgid "Set the seconds to wait between retries."
-msgstr ""
+msgstr "Sekunden, die zwischen Wiederholungsversuchen gewartet wird."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:272
 msgid "Set user agent for HTTP(S) downloads."
-msgstr ""
+msgstr "Setze User-Agent für HTTP(S)-Downloads."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:35
 msgid "Settings"
@@ -643,14 +675,15 @@ msgstr "Einstellungen"
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:483
 msgid "Settings in this section will be added to config file."
 msgstr ""
+"Einstellungen in diesem Abschnitt werden der Konfigurationsdatei hinzugefügt."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:487
 msgid "Settings list"
-msgstr ""
+msgstr "Liste der Einstellungen"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:161
 msgid "Show URL"
-msgstr ""
+msgstr "URL anzeigen"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:448
 msgid ""
@@ -662,12 +695,22 @@ msgid ""
 "FAT32 because it takes almost same time as \"prealloc\" and it blocks aria2 "
 "entirely until allocation finishes."
 msgstr ""
+"Geben Sie die File-Allocation-Methode an. Für neuere Dateisysteme wie ext4 ("
+"mit Unterstützung von Extents), btrfs, xfs oder NTFS (nur MinGW-Build) ist \""
+"falloc\" die beste Wahl. Diese ordnet (wenige GiB) große Dateien fast sofort "
+"zu, ist aber möglicherweise nicht verfügbar, wenn das System nicht über die "
+"posix_fallocate(3)-Funktion verfügt. Die \"falloc\"-Methode sollte nicht mit "
+"älteren Dateisystemen wie ext3 und FAT32 verwendet werden, da es fast "
+"dieselbe Zeit wie \"prealloc\" benötigt und aria2 vollständig blockiert, bis "
+"die Zuweisung abgeschlossen ist."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:368
 msgid ""
 "Specify maximum number of files to open in multi-file BitTorrent download "
 "globally."
 msgstr ""
+"Geben Sie die maximale Anzahl von Dateien an, die beim BitTorrent-Download "
+"mit mehreren Dateien global geöffnet werden sollen."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:409
 msgid ""
@@ -675,6 +718,10 @@ msgid ""
 "with this option, seeding ends when at least one of the conditions is "
 "satisfied. Specifying 0 disables seeding after download completed."
 msgstr ""
+"Geben Sie die Seed-Zeit in Minuten an. Wenn die Option \"Seed ratio\" "
+"zusammen mit dieser Option angegeben wird, wird der Seed beendet, wenn "
+"mindestens eine der Bedingungen erfüllt ist. Die Angabe von 0 deaktiviert "
+"das Seeding nach Abschluss des Downloads."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:402
 msgid ""
@@ -682,10 +729,16 @@ msgid ""
 "RATIO. You are strongly encouraged to specify equals or more than 1.0 here. "
 "Specify 0.0 if you intend to do seeding regardless of share ratio."
 msgstr ""
+"Geben Sie das Share-Verhältnis an. Seeden der Torrents, bis das Share-"
+"Verhältnis das RATIO erreicht. Es wird dringend empfohlen, hier Gleichheit "
+"oder mehr als 1,0 anzugeben. Geben Sie 0,0 an, wenn Sie beabsichtigen, "
+"unabhängig vom Share-Verhältnis zu seeden."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:373
 msgid "Specify the maximum number of peers per torrent, 0 means unlimited."
 msgstr ""
+"Geben Sie die maximale Anzahl von Peers pro Torrent an, 0 bedeutet "
+"unbegrenzt."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:394
 msgid ""
@@ -694,42 +747,52 @@ msgid ""
 "than 20 bytes are specified, random byte data are added to make its length "
 "20 bytes."
 msgstr ""
+"Geben Sie das Präfix der Peer-ID an. Die Peer-ID in BitTorrent ist 20 Byte "
+"lang. Wenn mehr als 20 Byte angegeben werden, werden nur die ersten 20 Byte "
+"verwendet. Wenn weniger als 20 Byte angegeben werden, werden zufällige Byte-"
+"Daten hinzugefügt, um die Länge auf 20 Byte zu erhöhen."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:388
 msgid ""
 "Stop BitTorrent download if download speed is 0 in consecutive N seconds. If "
 "0 is given, this feature is disabled."
 msgstr ""
+"Stoppt den BitTorrent-Download, wenn die Download-Geschwindigkeit während N "
+"Sekunden 0 bleibt. Wenn 0 angegeben wird, ist diese Funktion deaktiviert."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:387
 msgid "Stop timeout"
-msgstr ""
+msgstr "Stopp-Timeout"
 
 #: applications/luci-app-aria2/luasrc/view/aria2/settings_header.htm:48
 msgid "The Aria2 service is not running."
-msgstr ""
+msgstr "Der Aria2-Dienst läuft nicht."
 
 #: applications/luci-app-aria2/luasrc/view/aria2/settings_header.htm:47
 msgid "The Aria2 service is running."
-msgstr ""
+msgstr "Der Aria2-Dienst läuft."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:74
 msgid "The directory to store the config file, session file and DHT file."
 msgstr ""
+"Das Verzeichnis zum Speichern von Konfigurations-, Sitzungs- und und DHT-"
+"Dateien."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:70
 msgid ""
 "The directory to store the downloaded file. For example <code>/mnt/sda1</"
 "code>."
 msgstr ""
+"Das Verzeichnis zum Speichern der heruntergeladenen Datei. Zum Beispiel "
+"<code>/mnt/sda1</code>."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:81
 msgid "The file name of the log file."
-msgstr ""
+msgstr "Der Dateiname der Protokolldatei."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:249
 msgid "The maximum number of connections to one server for each download."
-msgstr ""
+msgstr "Die maximale Anzahl von Verbindungen zu einem Server je Download."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:281
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:291
@@ -737,14 +800,15 @@ msgstr ""
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:308
 msgid "This option will be ignored if a private flag is set in a torrent."
 msgstr ""
+"Diese Option wird ignoriert, wenn ein Torrent das Private-Flag gesetzt hat."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:236
 msgid "Timeout"
-msgstr ""
+msgstr "Timeout"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:117
 msgid "Token"
-msgstr ""
+msgstr "Token"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:349
 msgid "True"
@@ -752,17 +816,20 @@ msgstr "Wahr"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:156
 msgid "Use WebSocket"
-msgstr ""
+msgstr "Benutze WebSocket"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:170
 msgid "Use a proxy server for all protocols."
-msgstr ""
+msgstr "Benutze einen Proxy-Server für alle Protokolle."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:190
 msgid ""
 "Use the certificate authorities in FILE to verify the peers. The certificate "
 "file must be in PEM format and can contain multiple CA certificates."
 msgstr ""
+"Benutze die Zertifizierungsstellen in FILE, um die Peers zu überprüfen. Die "
+"Zertifikatsdatei muss im PEM-Format vorliegen und kann mehrere CA-"
+"Zertifikate enthalten."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:141
 msgid ""
@@ -772,6 +839,12 @@ msgid ""
 "PKCS12 files with a blank import password can be opened!<br/>When using PEM, "
 "you have to specify the \"RPC private key\" as well."
 msgstr ""
+"Benutze das Zertifikat im FILE for RPC Server. Das Zertifikat muss entweder "
+"in PKCS12 (.p12, .pfx) oder im PEM-Format vorliegen.<br/>PKCS12-Dateien "
+"müssen das Zertifikat, einen Schlüssel und optional eine Kette von "
+"zusätzlichen Zertifikaten enthalten. Es können nur PKCS12-Dateien mit einem "
+"leeren Importpasswort geöffnet werden!<br/>Bei der Verwendung von PEM müssen "
+"Sie auch den \"RPC Private Key\" angeben."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:196
 msgid ""
@@ -781,22 +854,33 @@ msgid ""
 "PKCS12 files with a blank import password can be opened!<br/>When using PEM, "
 "you have to specify the \"Private key\" as well."
 msgstr ""
+"Benutze das Client-Zertifikat im FILE. Das Zertifikat muss entweder in "
+"PKCS12 (.p12, .pfx) oder im PEM-Format vorliegen.<br/>PKCS12-Dateien müssen "
+"das Zertifikat, einen Schlüssel und optional eine Kette von zusätzlichen "
+"Zertifikaten enthalten. Es können nur PKCS12-Dateien mit einem leeren "
+"Importkennwort geöffnet werden!<br/>Bei Verwendung von PEM müssen Sie auch "
+"den \"Privaten Schlüssel\" angeben."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:150
 msgid ""
 "Use the private key in FILE for RPC server. The private key must be "
 "decrypted and in PEM format."
 msgstr ""
+"Benutze den privaten Schlüssel in FILE for RPC Server. Der private Schlüssel "
+"muss entschlüsselt im PEM-Format vorliegen."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:204
 msgid ""
 "Use the private key in FILE. The private key must be decrypted and in PEM "
 "format. The behavior when encrypted one is given is undefined."
 msgstr ""
+"Benutze den privaten Schlüssel in FILE. Der private Schlüssel muss "
+"unverschlüsselt im PEM-Format vorliegen. Das Verhalten, wenn ein "
+"verschlüsselter Schlüssel angegeben wird, ist undefiniert."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:271
 msgid "User agent"
-msgstr ""
+msgstr "User-Agent"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:116
 msgid "Username & Password"
@@ -806,10 +890,12 @@ msgstr "Benutzername & Passwort"
 msgid ""
 "Verify the peer using certificates specified in \"CA certificate\" option."
 msgstr ""
+"Überprüfe den Peer unter Verwendung der in der Option \"CA-Zertifikat\" "
+"angegebenen Zertifikate."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:90
 msgid "Warn"
-msgstr ""
+msgstr "Achtung"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:244
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:356
@@ -819,16 +905,16 @@ msgstr ""
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:471
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:478
 msgid "You can append K or M."
-msgstr ""
+msgstr "Sie können K oder M anhängen."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:457
 msgid "falloc"
-msgstr ""
+msgstr "falloc"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:455
 msgid "prealloc"
-msgstr ""
+msgstr "prealloc"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:456
 msgid "trunc"
-msgstr ""
+msgstr "trunc"
