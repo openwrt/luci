@@ -1,4 +1,6 @@
 'use strict';
+'require baseclass';
+'require request';
 
 var rpcRequestID = 1,
     rpcSessionID = L.env.sessionid || '00000000000000000000000000000000',
@@ -14,7 +16,7 @@ var rpcRequestID = 1,
  * The `LuCI.rpc` class provides high level ubus JSON-RPC abstractions
  * and means for listing and invoking remove RPC methods.
  */
-return L.Class.extend(/** @lends LuCI.rpc.prototype */ {
+return baseclass.extend(/** @lends LuCI.rpc.prototype */ {
 	/* privates */
 	call: function(req, cb, nobatch) {
 		var q = '';
@@ -35,7 +37,7 @@ return L.Class.extend(/** @lends LuCI.rpc.prototype */ {
 			q += '/%s.%s'.format(req.params[1], req.params[2]);
 		}
 
-		return L.Request.post(rpcBaseURL + q, req, {
+		return request.post(rpcBaseURL + q, req, {
 			timeout: (L.env.rpctimeout || 20) * 1000,
 			nobatch: nobatch,
 			credentials: true

@@ -57,12 +57,12 @@
 	};
 
 	/**
-	 * @class Class
+	 * @class baseclass
 	 * @hideconstructor
 	 * @memberof LuCI
 	 * @classdesc
 	 *
-	 * `LuCI.Class` is the abstract base class all LuCI classes inherit from.
+	 * `LuCI.baseclass` is the abstract base class all LuCI classes inherit from.
 	 *
 	 * It provides simple means to create subclasses of given classes and
 	 * implements prototypal inheritance.
@@ -72,14 +72,14 @@
 		 * Extends this base class with the properties described in
 		 * `properties` and returns a new subclassed Class instance
 		 *
-		 * @memberof LuCI.Class
+		 * @memberof LuCI.baseclass
 		 *
 		 * @param {Object<string, *>} properties
 		 * An object describing the properties to add to the new
 		 * subclass.
 		 *
-		 * @returns {LuCI.Class}
-		 * Returns a new LuCI.Class sublassed from this class, extended
+		 * @returns {LuCI.baseclass}
+		 * Returns a new LuCI.baseclass sublassed from this class, extended
 		 * by the given properties and with its prototype set to this base
 		 * class to enable inheritance. The resulting value represents a
 		 * class constructor and can be instantiated with `new`.
@@ -125,10 +125,10 @@
 		 * and returns the resulting subclassed Class instance.
 		 *
 		 * This function serves as a convenience shortcut for
-		 * {@link LuCI.Class.extend Class.extend()} and subsequent
+		 * {@link LuCI.baseclass.extend Class.extend()} and subsequent
 		 * `new`.
 		 *
-		 * @memberof LuCI.Class
+		 * @memberof LuCI.baseclass
 		 *
 		 * @param {Object<string, *>} properties
 		 * An object describing the properties to add to the new
@@ -138,8 +138,8 @@
 		 * Specifies arguments to be passed to the subclass constructor
 		 * as-is in order to instantiate the new subclass.
 		 *
-		 * @returns {LuCI.Class}
-		 * Returns a new LuCI.Class instance extended by the given
+		 * @returns {LuCI.baseclass}
+		 * Returns a new LuCI.baseclass instance extended by the given
 		 * properties with its prototype set to this base class to
 		 * enable inheritance.
 		 */
@@ -152,7 +152,7 @@
 		 * Calls the class constructor using `new` with the given argument
 		 * array being passed as variadic parameters to the constructor.
 		 *
-		 * @memberof LuCI.Class
+		 * @memberof LuCI.baseclass
 		 *
 		 * @param {Array<*>} params
 		 * An array of arbitrary values which will be passed as arguments
@@ -162,8 +162,8 @@
 		 * Specifies arguments to be passed to the subclass constructor
 		 * as-is in order to instantiate the new subclass.
 		 *
-		 * @returns {LuCI.Class}
-		 * Returns a new LuCI.Class instance extended by the given
+		 * @returns {LuCI.baseclass}
+		 * Returns a new LuCI.baseclass instance extended by the given
 		 * properties with its prototype set to this base class to
 		 * enable inheritance.
 		 */
@@ -183,9 +183,9 @@
 		/**
 		 * Checks whether the given class value is a subclass of this class.
 		 *
-		 * @memberof LuCI.Class
+		 * @memberof LuCI.baseclass
 		 *
-		 * @param {LuCI.Class} classValue
+		 * @param {LuCI.baseclass} classValue
 		 * The class object to test.
 		 *
 		 * @returns {boolean}
@@ -205,7 +205,7 @@
 			 * `offset` and prepend any further given optional parameters to
 			 * the beginning of the resulting array copy.
 			 *
-			 * @memberof LuCI.Class
+			 * @memberof LuCI.baseclass
 			 * @instance
 			 *
 			 * @param {Array<*>} args
@@ -244,7 +244,7 @@
 			 *    Calls the `key()` method with parameters `arg1` and `arg2`
 			 *    when found within one of the parent classes.
 			 *
-			 * @memberof LuCI.Class
+			 * @memberof LuCI.baseclass
 			 * @instance
 			 *
 			 * @param {string} key
@@ -328,7 +328,7 @@
 
 
 	/**
-	 * @class
+	 * @class headers
 	 * @memberof LuCI
 	 * @hideconstructor
 	 * @classdesc
@@ -336,8 +336,8 @@
 	 * The `Headers` class is an internal utility class exposed in HTTP
 	 * response objects using the `response.headers` property.
 	 */
-	var Headers = Class.extend(/** @lends LuCI.Headers.prototype */ {
-		__name__: 'LuCI.XHR.Headers',
+	var Headers = Class.extend(/** @lends LuCI.headers.prototype */ {
+		__name__: 'LuCI.headers',
 		__init__: function(xhr) {
 			var hdrs = this.headers = {};
 			xhr.getAllResponseHeaders().split(/\r\n/).forEach(function(line) {
@@ -352,7 +352,7 @@
 		 * Note: Header-Names are case-insensitive.
 		 *
 		 * @instance
-		 * @memberof LuCI.Headers
+		 * @memberof LuCI.headers
 		 * @param {string} name
 		 * The header name to check
 		 *
@@ -368,7 +368,7 @@
 		 * Note: Header-Names are case-insensitive.
 		 *
 		 * @instance
-		 * @memberof LuCI.Headers
+		 * @memberof LuCI.headers
 		 * @param {string} name
 		 * The header name to read
 		 *
@@ -382,7 +382,7 @@
 	});
 
 	/**
-	 * @class
+	 * @class response
 	 * @memberof LuCI
 	 * @hideconstructor
 	 * @classdesc
@@ -390,12 +390,12 @@
 	 * The `Response` class is an internal utility class representing HTTP responses.
 	 */
 	var Response = Class.extend({
-		__name__: 'LuCI.XHR.Response',
+		__name__: 'LuCI.response',
 		__init__: function(xhr, url, duration, headers, content) {
 			/**
 			 * Describes whether the response is successful (status codes `200..299`) or not
 			 * @instance
-			 * @memberof LuCI.Response
+			 * @memberof LuCI.response
 			 * @name ok
 			 * @type {boolean}
 			 */
@@ -404,7 +404,7 @@
 			/**
 			 * The numeric HTTP status code of the response
 			 * @instance
-			 * @memberof LuCI.Response
+			 * @memberof LuCI.response
 			 * @name status
 			 * @type {number}
 			 */
@@ -413,7 +413,7 @@
 			/**
 			 * The HTTP status description message of the response
 			 * @instance
-			 * @memberof LuCI.Response
+			 * @memberof LuCI.response
 			 * @name statusText
 			 * @type {string}
 			 */
@@ -422,16 +422,16 @@
 			/**
 			 * The HTTP headers of the response
 			 * @instance
-			 * @memberof LuCI.Response
+			 * @memberof LuCI.response
 			 * @name headers
-			 * @type {LuCI.Headers}
+			 * @type {LuCI.headers}
 			 */
 			this.headers = (headers != null) ? headers : new Headers(xhr);
 
 			/**
 			 * The total duration of the HTTP request in milliseconds
 			 * @instance
-			 * @memberof LuCI.Response
+			 * @memberof LuCI.response
 			 * @name duration
 			 * @type {number}
 			 */
@@ -440,7 +440,7 @@
 			/**
 			 * The final URL of the request, i.e. after following redirects.
 			 * @instance
-			 * @memberof LuCI.Response
+			 * @memberof LuCI.response
 			 * @name url
 			 * @type {string}
 			 */
@@ -483,13 +483,13 @@
 		 * of the cloned instance.
 		 *
 		 * @instance
-		 * @memberof LuCI.Response
+		 * @memberof LuCI.response
 		 * @param {*} [content]
 		 * Override the content of the cloned response. Object values will be
 		 * treated as JSON response data, all other types will be converted
 		 * using `String()` and treated as response text.
 		 *
-		 * @returns {LuCI.Response}
+		 * @returns {LuCI.response}
 		 * The cloned `Response` instance.
 		 */
 		clone: function(content) {
@@ -506,7 +506,7 @@
 		 * Access the response content as JSON data.
 		 *
 		 * @instance
-		 * @memberof LuCI.Response
+		 * @memberof LuCI.response
 		 * @throws {SyntaxError}
 		 * Throws `SyntaxError` if the content isn't valid JSON.
 		 *
@@ -524,7 +524,7 @@
 		 * Access the response content as string.
 		 *
 		 * @instance
-		 * @memberof LuCI.Response
+		 * @memberof LuCI.response
 		 * @returns {string}
 		 * The response content.
 		 */
@@ -539,7 +539,7 @@
 		 * Access the response content as blob.
 		 *
 		 * @instance
-		 * @memberof LuCI.Response
+		 * @memberof LuCI.response
 		 * @returns {Blob}
 		 * The response content as blob.
 		 */
@@ -600,7 +600,7 @@
 	}
 
 	/**
-	 * @class
+	 * @class request
 	 * @memberof LuCI
 	 * @hideconstructor
 	 * @classdesc
@@ -608,8 +608,8 @@
 	 * The `Request` class allows initiating HTTP requests and provides utilities
 	 * for dealing with responses.
 	 */
-	var Request = Class.singleton(/** @lends LuCI.Request.prototype */ {
-		__name__: 'LuCI.Request',
+	var Request = Class.singleton(/** @lends LuCI.request.prototype */ {
+		__name__: 'LuCI.request',
 
 		interceptors: [],
 
@@ -617,7 +617,7 @@
 		 * Turn the given relative URL into an absolute URL if necessary.
 		 *
 		 * @instance
-		 * @memberof LuCI.Request
+		 * @memberof LuCI.request
 		 * @param {string} url
 		 * The URL to convert.
 		 *
@@ -634,7 +634,7 @@
 
 		/**
 		 * @typedef {Object} RequestOptions
-		 * @memberof LuCI.Request
+		 * @memberof LuCI.request
 		 *
 		 * @property {string} [method=GET]
 		 * The HTTP method to use, e.g. `GET` or `POST`.
@@ -682,14 +682,14 @@
 		 * Initiate an HTTP request to the given target.
 		 *
 		 * @instance
-		 * @memberof LuCI.Request
+		 * @memberof LuCI.request
 		 * @param {string} target
 		 * The URL to request.
 		 *
-		 * @param {LuCI.Request.RequestOptions} [options]
+		 * @param {LuCI.request.RequestOptions} [options]
 		 * Additional options to configure the request.
 		 *
-		 * @returns {Promise<LuCI.Response>}
+		 * @returns {Promise<LuCI.response>}
 		 * The resulting HTTP response.
 		 */
 		request: function(target, options) {
@@ -831,14 +831,14 @@
 		 * Initiate an HTTP GET request to the given target.
 		 *
 		 * @instance
-		 * @memberof LuCI.Request
+		 * @memberof LuCI.request
 		 * @param {string} target
 		 * The URL to request.
 		 *
-		 * @param {LuCI.Request.RequestOptions} [options]
+		 * @param {LuCI.request.RequestOptions} [options]
 		 * Additional options to configure the request.
 		 *
-		 * @returns {Promise<LuCI.Response>}
+		 * @returns {Promise<LuCI.response>}
 		 * The resulting HTTP response.
 		 */
 		get: function(url, options) {
@@ -849,17 +849,17 @@
 		 * Initiate an HTTP POST request to the given target.
 		 *
 		 * @instance
-		 * @memberof LuCI.Request
+		 * @memberof LuCI.request
 		 * @param {string} target
 		 * The URL to request.
 		 *
 		 * @param {*} [data]
-		 * The request data to send, see {@link LuCI.Request.RequestOptions} for details.
+		 * The request data to send, see {@link LuCI.request.RequestOptions} for details.
 		 *
-		 * @param {LuCI.Request.RequestOptions} [options]
+		 * @param {LuCI.request.RequestOptions} [options]
 		 * Additional options to configure the request.
 		 *
-		 * @returns {Promise<LuCI.Response>}
+		 * @returns {Promise<LuCI.response>}
 		 * The resulting HTTP response.
 		 */
 		post: function(url, data, options) {
@@ -869,8 +869,8 @@
 		/**
 		 * Interceptor functions are invoked whenever an HTTP reply is received, in the order
 		 * these functions have been registered.
-		 * @callback LuCI.Request.interceptorFn
-		 * @param {LuCI.Response} res
+		 * @callback LuCI.request.interceptorFn
+		 * @param {LuCI.response} res
 		 * The HTTP response object
 		 */
 
@@ -881,11 +881,11 @@
 		 * implementing request retries before returning a failure.
 		 *
 		 * @instance
-		 * @memberof LuCI.Request
-		 * @param {LuCI.Request.interceptorFn} interceptorFn
+		 * @memberof LuCI.request
+		 * @param {LuCI.request.interceptorFn} interceptorFn
 		 * The interceptor function to register.
 		 *
-		 * @returns {LuCI.Request.interceptorFn}
+		 * @returns {LuCI.request.interceptorFn}
 		 * The registered function.
 		 */
 		addInterceptor: function(interceptorFn) {
@@ -900,8 +900,8 @@
 		 * function.
 		 *
 		 * @instance
-		 * @memberof LuCI.Request
-		 * @param {LuCI.Request.interceptorFn} interceptorFn
+		 * @memberof LuCI.request
+		 * @param {LuCI.request.interceptorFn} interceptorFn
 		 * The interceptor function to remove.
 		 *
 		 * @returns {boolean}
@@ -917,12 +917,12 @@
 
 		/**
 		 * @class
-		 * @memberof LuCI.Request
+		 * @memberof LuCI.request
 		 * @hideconstructor
 		 * @classdesc
 		 *
 		 * The `Request.poll` class provides some convience wrappers around
-		 * {@link LuCI.Poll} mainly to simplify registering repeating HTTP
+		 * {@link LuCI.poll} mainly to simplify registering repeating HTTP
 		 * request calls as polling functions.
 		 */
 		poll: {
@@ -931,8 +931,8 @@
 			 * polled request is received or when the polled request timed
 			 * out.
 			 *
-			 * @callback LuCI.Request.poll~callbackFn
-			 * @param {LuCI.Response} res
+			 * @callback LuCI.request.poll~callbackFn
+			 * @param {LuCI.response} res
 			 * The HTTP response object.
 			 *
 			 * @param {*} data
@@ -948,18 +948,18 @@
 			 * to invoke whenever a response for the request is received.
 			 *
 			 * @instance
-			 * @memberof LuCI.Request.poll
+			 * @memberof LuCI.request.poll
 			 * @param {number} interval
 			 * The poll interval in seconds.
 			 *
 			 * @param {string} url
 			 * The URL to request on each poll.
 			 *
-			 * @param {LuCI.Request.RequestOptions} [options]
+			 * @param {LuCI.request.RequestOptions} [options]
 			 * Additional options to configure the request.
 			 *
-			 * @param {LuCI.Request.poll~callbackFn} [callback]
-			 * {@link LuCI.Request.poll~callbackFn Callback} function to
+			 * @param {LuCI.request.poll~callbackFn} [callback]
+			 * {@link LuCI.request.poll~callbackFn Callback} function to
 			 * invoke for each HTTP reply.
 			 *
 			 * @throws {TypeError}
@@ -995,12 +995,12 @@
 			/**
 			 * Remove a polling request that has been previously added using `add()`.
 			 * This function is essentially a wrapper around
-			 * {@link LuCI.Poll.remove LuCI.Poll.remove()}.
+			 * {@link LuCI.poll.remove LuCI.poll.remove()}.
 			 *
 			 * @instance
-			 * @memberof LuCI.Request.poll
+			 * @memberof LuCI.request.poll
 			 * @param {function} entry
-			 * The poll function returned by {@link LuCI.Request.poll#add add()}.
+			 * The poll function returned by {@link LuCI.request.poll#add add()}.
 			 *
 			 * @returns {boolean}
 			 * Returns `true` if any function has been removed, else `false`.
@@ -1008,33 +1008,33 @@
 			remove: function(entry) { return Poll.remove(entry) },
 
 			/**
-			  * Alias for {@link LuCI.Poll.start LuCI.Poll.start()}.
+			  * Alias for {@link LuCI.poll.start LuCI.poll.start()}.
 			  *
 			  * @instance
-			  * @memberof LuCI.Request.poll
+			  * @memberof LuCI.request.poll
 			  */
 			start: function() { return Poll.start() },
 
 			/**
-			  * Alias for {@link LuCI.Poll.stop LuCI.Poll.stop()}.
+			  * Alias for {@link LuCI.poll.stop LuCI.poll.stop()}.
 			  *
 			  * @instance
-			  * @memberof LuCI.Request.poll
+			  * @memberof LuCI.request.poll
 			  */
 			stop: function() { return Poll.stop() },
 
 			/**
-			  * Alias for {@link LuCI.Poll.active LuCI.Poll.active()}.
+			  * Alias for {@link LuCI.poll.active LuCI.poll.active()}.
 			  *
 			  * @instance
-			  * @memberof LuCI.Request.poll
+			  * @memberof LuCI.request.poll
 			  */
 			active: function() { return Poll.active() }
 		}
 	});
 
 	/**
-	 * @class
+	 * @class poll
 	 * @memberof LuCI
 	 * @hideconstructor
 	 * @classdesc
@@ -1043,8 +1043,8 @@
 	 * as well as starting, stopping and querying the state of the polling
 	 * loop.
 	 */
-	var Poll = Class.singleton(/** @lends LuCI.Poll.prototype */ {
-		__name__: 'LuCI.Poll',
+	var Poll = Class.singleton(/** @lends LuCI.poll.prototype */ {
+		__name__: 'LuCI.poll',
 
 		queue: [],
 
@@ -1053,7 +1053,7 @@
 		 * already started at this point, it will be implicitely started.
 		 *
 		 * @instance
-		 * @memberof LuCI.Poll
+		 * @memberof LuCI.poll
 		 * @param {function} fn
 		 * The function to invoke on each poll interval.
 		 *
@@ -1072,7 +1072,7 @@
 				interval = window.L ? window.L.env.pollinterval : null;
 
 			if (isNaN(interval) || typeof(fn) != 'function')
-				throw new TypeError('Invalid argument to LuCI.Poll.add()');
+				throw new TypeError('Invalid argument to LuCI.poll.add()');
 
 			for (var i = 0; i < this.queue.length; i++)
 				if (this.queue[i].fn === fn)
@@ -1097,7 +1097,7 @@
 		 * are registered, the polling loop is implicitely stopped.
 		 *
 		 * @instance
-		 * @memberof LuCI.Poll
+		 * @memberof LuCI.poll
 		 * @param {function} fn
 		 * The function to remove.
 		 *
@@ -1110,7 +1110,7 @@
 		 */
 		remove: function(fn) {
 			if (typeof(fn) != 'function')
-				throw new TypeError('Invalid argument to LuCI.Poll.remove()');
+				throw new TypeError('Invalid argument to LuCI.poll.remove()');
 
 			var len = this.queue.length;
 
@@ -1129,7 +1129,7 @@
 		 * to the `document` object upon successful start.
 		 *
 		 * @instance
-		 * @memberof LuCI.Poll
+		 * @memberof LuCI.poll
 		 * @returns {boolean}
 		 * Returns `true` if polling has been started (or if no functions
 		 * where registered) or `false` when the polling loop already runs.
@@ -1154,7 +1154,7 @@
 		 * to the `document` object upon successful stop.
 		 *
 		 * @instance
-		 * @memberof LuCI.Poll
+		 * @memberof LuCI.poll
 		 * @returns {boolean}
 		 * Returns `true` if polling has been stopped or `false` if it din't
 		 * run to begin with.
@@ -1191,11 +1191,894 @@
 		 * Test whether the polling loop is running.
 		 *
 		 * @instance
-		 * @memberof LuCI.Poll
+		 * @memberof LuCI.poll
 		 * @returns {boolean} - Returns `true` if polling is active, else `false`.
 		 */
 		active: function() {
 			return (this.timer != null);
+		}
+	});
+
+	/**
+	 * @class dom
+	 * @memberof LuCI
+	 * @hideconstructor
+	 * @classdesc
+	 *
+	 * The `dom` class provides convenience method for creating and
+	 * manipulating DOM elements.
+	 *
+	 * To import the class in views, use `'require dom'`, to import it in
+	 * external JavaScript, use `L.require("dom").then(...)`.
+	 */
+	var DOM = Class.singleton(/* @lends LuCI.dom.prototype */ {
+		__name__: 'LuCI.dom',
+
+		/**
+		 * Tests whether the given argument is a valid DOM `Node`.
+		 *
+		 * @instance
+		 * @memberof LuCI.dom
+		 * @param {*} e
+		 * The value to test.
+		 *
+		 * @returns {boolean}
+		 * Returns `true` if the value is a DOM `Node`, else `false`.
+		 */
+		elem: function(e) {
+			return (e != null && typeof(e) == 'object' && 'nodeType' in e);
+		},
+
+		/**
+		 * Parses a given string as HTML and returns the first child node.
+		 *
+		 * @instance
+		 * @memberof LuCI.dom
+		 * @param {string} s
+		 * A string containing an HTML fragment to parse. Note that only
+		 * the first result of the resulting structure is returned, so an
+		 * input value of `<div>foo</div> <div>bar</div>` will only return
+		 * the first `div` element node.
+		 *
+		 * @returns {Node}
+		 * Returns the first DOM `Node` extracted from the HTML fragment or
+		 * `null` on parsing failures or if no element could be found.
+		 */
+		parse: function(s) {
+			var elem;
+
+			try {
+				domParser = domParser || new DOMParser();
+				elem = domParser.parseFromString(s, 'text/html').body.firstChild;
+			}
+			catch(e) {}
+
+			if (!elem) {
+				try {
+					dummyElem = dummyElem || document.createElement('div');
+					dummyElem.innerHTML = s;
+					elem = dummyElem.firstChild;
+				}
+				catch (e) {}
+			}
+
+			return elem || null;
+		},
+
+		/**
+		 * Tests whether a given `Node` matches the given query selector.
+		 *
+		 * This function is a convenience wrapper around the standard
+		 * `Node.matches("selector")` function with the added benefit that
+		 * the `node` argument may be a non-`Node` value, in which case
+		 * this function simply returns `false`.
+		 *
+		 * @instance
+		 * @memberof LuCI.dom
+		 * @param {*} node
+		 * The `Node` argument to test the selector against.
+		 *
+		 * @param {string} [selector]
+		 * The query selector expression to test against the given node.
+		 *
+		 * @returns {boolean}
+		 * Returns `true` if the given node matches the specified selector
+		 * or `false` when the node argument is no valid DOM `Node` or the
+		 * selector didn't match.
+		 */
+		matches: function(node, selector) {
+			var m = this.elem(node) ? node.matches || node.msMatchesSelector : null;
+			return m ? m.call(node, selector) : false;
+		},
+
+		/**
+		 * Returns the closest parent node that matches the given query
+		 * selector expression.
+		 *
+		 * This function is a convenience wrapper around the standard
+		 * `Node.closest("selector")` function with the added benefit that
+		 * the `node` argument may be a non-`Node` value, in which case
+		 * this function simply returns `null`.
+		 *
+		 * @instance
+		 * @memberof LuCI.dom
+		 * @param {*} node
+		 * The `Node` argument to find the closest parent for.
+		 *
+		 * @param {string} [selector]
+		 * The query selector expression to test against each parent.
+		 *
+		 * @returns {Node|null}
+		 * Returns the closest parent node matching the selector or
+		 * `null` when the node argument is no valid DOM `Node` or the
+		 * selector didn't match any parent.
+		 */
+		parent: function(node, selector) {
+			if (this.elem(node) && node.closest)
+				return node.closest(selector);
+
+			while (this.elem(node))
+				if (this.matches(node, selector))
+					return node;
+				else
+					node = node.parentNode;
+
+			return null;
+		},
+
+		/**
+		 * Appends the given children data to the given node.
+		 *
+		 * @instance
+		 * @memberof LuCI.dom
+		 * @param {*} node
+		 * The `Node` argument to append the children to.
+		 *
+		 * @param {*} [children]
+		 * The childrens to append to the given node.
+		 *
+		 * When `children` is an array, then each item of the array
+		 * will be either appended as child element or text node,
+		 * depending on whether the item is a DOM `Node` instance or
+		 * some other non-`null` value. Non-`Node`, non-`null` values
+		 * will be converted to strings first before being passed as
+		 * argument to `createTextNode()`.
+		 *
+		 * When `children` is a function, it will be invoked with
+		 * the passed `node` argument as sole parameter and the `append`
+		 * function will be invoked again, with the given `node` argument
+		 * as first and the return value of the `children` function as
+		 * second parameter.
+		 *
+		 * When `children` is is a DOM `Node` instance, it will be
+		 * appended to the given `node`.
+		 *
+		 * When `children` is any other non-`null` value, it will be
+		 * converted to a string and appened to the `innerHTML` property
+		 * of the given `node`.
+		 *
+		 * @returns {Node|null}
+		 * Returns the last children `Node` appended to the node or `null`
+		 * if either the `node` argument was no valid DOM `node` or if the
+		 * `children` was `null` or didn't result in further DOM nodes.
+		 */
+		append: function(node, children) {
+			if (!this.elem(node))
+				return null;
+
+			if (Array.isArray(children)) {
+				for (var i = 0; i < children.length; i++)
+					if (this.elem(children[i]))
+						node.appendChild(children[i]);
+					else if (children !== null && children !== undefined)
+						node.appendChild(document.createTextNode('' + children[i]));
+
+				return node.lastChild;
+			}
+			else if (typeof(children) === 'function') {
+				return this.append(node, children(node));
+			}
+			else if (this.elem(children)) {
+				return node.appendChild(children);
+			}
+			else if (children !== null && children !== undefined) {
+				node.innerHTML = '' + children;
+				return node.lastChild;
+			}
+
+			return null;
+		},
+
+		/**
+		 * Replaces the content of the given node with the given children.
+		 *
+		 * This function first removes any children of the given DOM
+		 * `Node` and then adds the given given children following the
+		 * rules outlined below.
+		 *
+		 * @instance
+		 * @memberof LuCI.dom
+		 * @param {*} node
+		 * The `Node` argument to replace the children of.
+		 *
+		 * @param {*} [children]
+		 * The childrens to replace into the given node.
+		 *
+		 * When `children` is an array, then each item of the array
+		 * will be either appended as child element or text node,
+		 * depending on whether the item is a DOM `Node` instance or
+		 * some other non-`null` value. Non-`Node`, non-`null` values
+		 * will be converted to strings first before being passed as
+		 * argument to `createTextNode()`.
+		 *
+		 * When `children` is a function, it will be invoked with
+		 * the passed `node` argument as sole parameter and the `append`
+		 * function will be invoked again, with the given `node` argument
+		 * as first and the return value of the `children` function as
+		 * second parameter.
+		 *
+		 * When `children` is is a DOM `Node` instance, it will be
+		 * appended to the given `node`.
+		 *
+		 * When `children` is any other non-`null` value, it will be
+		 * converted to a string and appened to the `innerHTML` property
+		 * of the given `node`.
+		 *
+		 * @returns {Node|null}
+		 * Returns the last children `Node` appended to the node or `null`
+		 * if either the `node` argument was no valid DOM `node` or if the
+		 * `children` was `null` or didn't result in further DOM nodes.
+		 */
+		content: function(node, children) {
+			if (!this.elem(node))
+				return null;
+
+			var dataNodes = node.querySelectorAll('[data-idref]');
+
+			for (var i = 0; i < dataNodes.length; i++)
+				delete this.registry[dataNodes[i].getAttribute('data-idref')];
+
+			while (node.firstChild)
+				node.removeChild(node.firstChild);
+
+			return this.append(node, children);
+		},
+
+		/**
+		 * Sets attributes or registers event listeners on element nodes.
+		 *
+		 * @instance
+		 * @memberof LuCI.dom
+		 * @param {*} node
+		 * The `Node` argument to set the attributes or add the event
+		 * listeners for. When the given `node` value is not a valid
+		 * DOM `Node`, the function returns and does nothing.
+		 *
+		 * @param {string|Object<string, *>} key
+		 * Specifies either the attribute or event handler name to use,
+		 * or an object containing multiple key, value pairs which are
+		 * each added to the node as either attribute or event handler,
+		 * depending on the respective value.
+		 *
+		 * @param {*} [val]
+		 * Specifies the attribute value or event handler function to add.
+		 * If the `key` parameter is an `Object`, this parameter will be
+		 * ignored.
+		 *
+		 * When `val` is of type function, it will be registered as event
+		 * handler on the given `node` with the `key` parameter being the
+		 * event name.
+		 *
+		 * When `val` is of type object, it will be serialized as JSON and
+		 * added as attribute to the given `node`, using the given `key`
+		 * as attribute name.
+		 *
+		 * When `val` is of any other type, it will be added as attribute
+		 * to the given `node` as-is, with the underlying `setAttribute()`
+		 * call implicitely turning it into a string.
+		 */
+		attr: function(node, key, val) {
+			if (!this.elem(node))
+				return null;
+
+			var attr = null;
+
+			if (typeof(key) === 'object' && key !== null)
+				attr = key;
+			else if (typeof(key) === 'string')
+				attr = {}, attr[key] = val;
+
+			for (key in attr) {
+				if (!attr.hasOwnProperty(key) || attr[key] == null)
+					continue;
+
+				switch (typeof(attr[key])) {
+				case 'function':
+					node.addEventListener(key, attr[key]);
+					break;
+
+				case 'object':
+					node.setAttribute(key, JSON.stringify(attr[key]));
+					break;
+
+				default:
+					node.setAttribute(key, attr[key]);
+				}
+			}
+		},
+
+		/**
+		 * Creates a new DOM `Node` from the given `html`, `attr` and
+		 * `data` parameters.
+		 *
+		 * This function has multiple signatures, it can be either invoked
+		 * in the form `create(html[, attr[, data]])` or in the form
+		 * `create(html[, data])`. The used variant is determined from the
+		 * type of the second argument.
+		 *
+		 * @instance
+		 * @memberof LuCI.dom
+		 * @param {*} html
+		 * Describes the node to create.
+		 *
+		 * When the value of `html` is of type array, a `DocumentFragment`
+		 * node is created and each item of the array is first converted
+		 * to a DOM `Node` by passing it through `create()` and then added
+		 * as child to the fragment.
+		 *
+		 * When the value of `html` is a DOM `Node` instance, no new
+		 * element will be created but the node will be used as-is.
+		 *
+		 * When the value of `html` is a string starting with `<`, it will
+		 * be passed to `dom.parse()` and the resulting value is used.
+		 *
+		 * When the value of `html` is any other string, it will be passed
+		 * to `document.createElement()` for creating a new DOM `Node` of
+		 * the given name.
+		 *
+		 * @param {Object<string, *>} [attr]
+		 * Specifies an Object of key, value pairs to set as attributes
+		 * or event handlers on the created node. Refer to
+		 * {@link LuCI.dom#attr dom.attr()} for details.
+		 *
+		 * @param {*} [data]
+		 * Specifies children to append to the newly created element.
+		 * Refer to {@link LuCI.dom#append dom.append()} for details.
+		 *
+		 * @throws {InvalidCharacterError}
+		 * Throws an `InvalidCharacterError` when the given `html`
+		 * argument contained malformed markup (such as not escaped
+		 * `&` characters in XHTML mode) or when the given node name
+		 * in `html` contains characters which are not legal in DOM
+		 * element names, such as spaces.
+		 *
+		 * @returns {Node}
+		 * Returns the newly created `Node`.
+		 */
+		create: function() {
+			var html = arguments[0],
+			    attr = arguments[1],
+			    data = arguments[2],
+			    elem;
+
+			if (!(attr instanceof Object) || Array.isArray(attr))
+				data = attr, attr = null;
+
+			if (Array.isArray(html)) {
+				elem = document.createDocumentFragment();
+				for (var i = 0; i < html.length; i++)
+					elem.appendChild(this.create(html[i]));
+			}
+			else if (this.elem(html)) {
+				elem = html;
+			}
+			else if (html.charCodeAt(0) === 60) {
+				elem = this.parse(html);
+			}
+			else {
+				elem = document.createElement(html);
+			}
+
+			if (!elem)
+				return null;
+
+			this.attr(elem, attr);
+			this.append(elem, data);
+
+			return elem;
+		},
+
+		registry: {},
+
+		/**
+		 * Attaches or detaches arbitrary data to and from a DOM `Node`.
+		 *
+		 * This function is useful to attach non-string values or runtime
+		 * data that is not serializable to DOM nodes. To decouple data
+		 * from the DOM, values are not added directly to nodes, but
+		 * inserted into a registry instead which is then referenced by a
+		 * string key stored as `data-idref` attribute in the node.
+		 *
+		 * This function has multiple signatures and is sensitive to the
+		 * number of arguments passed to it.
+		 *
+		 *  - `dom.data(node)` -
+		 *     Fetches all data associated with the given node.
+		 *  - `dom.data(node, key)` -
+		 *     Fetches a specific key associated with the given node.
+		 *  - `dom.data(node, key, val)` -
+		 *     Sets a specific key to the given value associated with the
+		 *     given node.
+		 *  - `dom.data(node, null)` -
+		 *     Clears any data associated with the node.
+		 *  - `dom.data(node, key, null)` -
+		 *     Clears the given key associated with the node.
+		 *
+		 * @instance
+		 * @memberof LuCI.dom
+		 * @param {Node} node
+		 * The DOM `Node` instance to set or retrieve the data for.
+		 *
+		 * @param {string|null} [key]
+		 * This is either a string specifying the key to retrieve, or
+		 * `null` to unset the entire node data.
+		 *
+		 * @param {*|null} [val]
+		 * This is either a non-`null` value to set for a given key or
+		 * `null` to remove the given `key` from the specified node.
+		 *
+		 * @returns {*}
+		 * Returns the get or set value, or `null` when no value could
+		 * be found.
+		 */
+		data: function(node, key, val) {
+			if (!node || !node.getAttribute)
+				return null;
+
+			var id = node.getAttribute('data-idref');
+
+			/* clear all data */
+			if (arguments.length > 1 && key == null) {
+				if (id != null) {
+					node.removeAttribute('data-idref');
+					val = this.registry[id]
+					delete this.registry[id];
+					return val;
+				}
+
+				return null;
+			}
+
+			/* clear a key */
+			else if (arguments.length > 2 && key != null && val == null) {
+				if (id != null) {
+					val = this.registry[id][key];
+					delete this.registry[id][key];
+					return val;
+				}
+
+				return null;
+			}
+
+			/* set a key */
+			else if (arguments.length > 2 && key != null && val != null) {
+				if (id == null) {
+					do { id = Math.floor(Math.random() * 0xffffffff).toString(16) }
+					while (this.registry.hasOwnProperty(id));
+
+					node.setAttribute('data-idref', id);
+					this.registry[id] = {};
+				}
+
+				return (this.registry[id][key] = val);
+			}
+
+			/* get all data */
+			else if (arguments.length == 1) {
+				if (id != null)
+					return this.registry[id];
+
+				return null;
+			}
+
+			/* get a key */
+			else if (arguments.length == 2) {
+				if (id != null)
+					return this.registry[id][key];
+			}
+
+			return null;
+		},
+
+		/**
+		 * Binds the given class instance ot the specified DOM `Node`.
+		 *
+		 * This function uses the `dom.data()` facility to attach the
+		 * passed instance of a Class to a node. This is needed for
+		 * complex widget elements or similar where the corresponding
+		 * class instance responsible for the element must be retrieved
+		 * from DOM nodes obtained by `querySelector()` or similar means.
+		 *
+		 * @instance
+		 * @memberof LuCI.dom
+		 * @param {Node} node
+		 * The DOM `Node` instance to bind the class to.
+		 *
+		 * @param {Class} inst
+		 * The Class instance to bind to the node.
+		 *
+		 * @throws {TypeError}
+		 * Throws a `TypeError` when the given instance argument isn't
+		 * a valid Class instance.
+		 *
+		 * @returns {Class}
+		 * Returns the bound class instance.
+		 */
+		bindClassInstance: function(node, inst) {
+			if (!(inst instanceof Class))
+				L.error('TypeError', 'Argument must be a class instance');
+
+			return this.data(node, '_class', inst);
+		},
+
+		/**
+		 * Finds a bound class instance on the given node itself or the
+		 * first bound instance on its closest parent node.
+		 *
+		 * @instance
+		 * @memberof LuCI.dom
+		 * @param {Node} node
+		 * The DOM `Node` instance to start from.
+		 *
+		 * @returns {Class|null}
+		 * Returns the founds class instance if any or `null` if no bound
+		 * class could be found on the node itself or any of its parents.
+		 */
+		findClassInstance: function(node) {
+			var inst = null;
+
+			do {
+				inst = this.data(node, '_class');
+				node = node.parentNode;
+			}
+			while (!(inst instanceof Class) && node != null);
+
+			return inst;
+		},
+
+		/**
+		 * Finds a bound class instance on the given node itself or the
+		 * first bound instance on its closest parent node and invokes
+		 * the specified method name on the found class instance.
+		 *
+		 * @instance
+		 * @memberof LuCI.dom
+		 * @param {Node} node
+		 * The DOM `Node` instance to start from.
+		 *
+		 * @param {string} method
+		 * The name of the method to invoke on the found class instance.
+		 *
+		 * @param {...*} params
+		 * Additional arguments to pass to the invoked method as-is.
+		 *
+		 * @returns {*|null}
+		 * Returns the return value of the invoked method if a class
+		 * instance and method has been found. Returns `null` if either
+		 * no bound class instance could be found, or if the found
+		 * instance didn't have the requested `method`.
+		 */
+		callClassMethod: function(node, method /*, ... */) {
+			var inst = this.findClassInstance(node);
+
+			if (inst == null || typeof(inst[method]) != 'function')
+				return null;
+
+			return inst[method].apply(inst, inst.varargs(arguments, 2));
+		},
+
+		/**
+		 * The ignore callback function is invoked by `isEmpty()` for each
+		 * child node to decide whether to ignore a child node or not.
+		 *
+		 * When this function returns `false`, the node passed to it is
+		 * ignored, else not.
+		 *
+		 * @callback LuCI.dom~ignoreCallbackFn
+		 * @param {Node} node
+		 * The child node to test.
+		 *
+		 * @returns {boolean}
+		 * Boolean indicating whether to ignore the node or not.
+		 */
+
+		/**
+		 * Tests whether a given DOM `Node` instance is empty or appears
+		 * empty.
+		 *
+		 * Any element child nodes which have the CSS class `hidden` set
+		 * or for which the optionally passed `ignoreFn` callback function
+		 * returns `false` are ignored.
+		 *
+		 * @instance
+		 * @memberof LuCI.dom
+		 * @param {Node} node
+		 * The DOM `Node` instance to test.
+		 *
+		 * @param {LuCI.dom~ignoreCallbackFn} [ignoreFn]
+		 * Specifies an optional function which is invoked for each child
+		 * node to decide whether the child node should be ignored or not.
+		 *
+		 * @returns {boolean}
+		 * Returns `true` if the node does not have any children or if
+		 * any children node either has a `hidden` CSS class or a `false`
+		 * result when testing it using the given `ignoreFn`.
+		 */
+		isEmpty: function(node, ignoreFn) {
+			for (var child = node.firstElementChild; child != null; child = child.nextElementSibling)
+				if (!child.classList.contains('hidden') && (!ignoreFn || !ignoreFn(child)))
+					return false;
+
+			return true;
+		}
+	});
+
+	/**
+	 * @class view
+	 * @memberof LuCI
+	 * @hideconstructor
+	 * @classdesc
+	 *
+	 * The `view` class forms the basis of views and provides a standard
+	 * set of methods to inherit from.
+	 */
+	var View = Class.extend(/* @lends LuCI.view.prototype */ {
+		__name__: 'LuCI.view',
+
+		__init__: function() {
+			var vp = document.getElementById('view');
+
+			DOM.content(vp, E('div', { 'class': 'spinning' }, _('Loading view…')));
+
+			return Promise.resolve(this.load())
+				.then(L.bind(this.render, this))
+				.then(L.bind(function(nodes) {
+					var vp = document.getElementById('view');
+
+					DOM.content(vp, nodes);
+					DOM.append(vp, this.addFooter());
+				}, this)).catch(L.error);
+		},
+
+		/**
+		 * The load function is invoked before the view is rendered.
+		 *
+		 * The invocation of this function is wrapped by
+		 * `Promise.resolve()` so it may return Promises if needed.
+		 *
+		 * The return value of the function (or the resolved values
+		 * of the promise returned by it) will be passed as first
+		 * argument to `render()`.
+		 *
+		 * This function is supposed to be overwritten by subclasses,
+		 * the default implementation does nothing.
+		 *
+		 * @instance
+		 * @abstract
+		 * @memberof LuCI.view
+		 *
+		 * @returns {*|Promise<*>}
+		 * May return any value or a Promise resolving to any value.
+		 */
+		load: function() {},
+
+		/**
+		 * The render function is invoked after the
+		 * {@link LuCI.view#load load()} function and responsible
+		 * for setting up the view contents. It must return a DOM
+		 * `Node` or `DocumentFragment` holding the contents to
+		 * insert into the view area.
+		 *
+		 * The invocation of this function is wrapped by
+		 * `Promise.resolve()` so it may return Promises if needed.
+		 *
+		 * The return value of the function (or the resolved values
+		 * of the promise returned by it) will be inserted into the
+		 * main content area using
+		 * {@link LuCI.dom#append dom.append()}.
+		 *
+		 * This function is supposed to be overwritten by subclasses,
+		 * the default implementation does nothing.
+		 *
+		 * @instance
+		 * @abstract
+		 * @memberof LuCI.view
+		 * @param {*|null} load_results
+		 * This function will receive the return value of the
+		 * {@link LuCI.view#load view.load()} function as first
+		 * argument.
+		 *
+		 * @returns {Node|Promise<Node>}
+		 * Should return a DOM `Node` value or a `Promise` resolving
+		 * to a `Node` value.
+		 */
+		render: function() {},
+
+		/**
+		 * The handleSave function is invoked when the user clicks
+		 * the `Save` button in the page action footer.
+		 *
+		 * The default implementation should be sufficient for most
+		 * views using {@link form#Map form.Map()} based forms - it
+		 * will iterate all forms present in the view and invoke
+		 * the {@link form#Map#save Map.save()} method on each form.
+		 *
+		 * Views not using `Map` instances or requiring other special
+		 * logic should overwrite `handleSave()` with a custom
+		 * implementation.
+		 *
+		 * To disable the `Save` page footer button, views extending
+		 * this base class should overwrite the `handleSave` function
+		 * with `null`.
+		 *
+		 * The invocation of this function is wrapped by
+		 * `Promise.resolve()` so it may return Promises if needed.
+		 *
+		 * @instance
+		 * @memberof LuCI.view
+		 * @param {Event} ev
+		 * The DOM event that triggered the function.
+		 *
+		 * @returns {*|Promise<*>}
+		 * Any return values of this function are discarded, but
+		 * passed through `Promise.resolve()` to ensure that any
+		 * returned promise runs to completion before the button
+		 * is reenabled.
+		 */
+		handleSave: function(ev) {
+			var tasks = [];
+
+			document.getElementById('maincontent')
+				.querySelectorAll('.cbi-map').forEach(function(map) {
+					tasks.push(DOM.callClassMethod(map, 'save'));
+				});
+
+			return Promise.all(tasks);
+		},
+
+		/**
+		 * The handleSaveApply function is invoked when the user clicks
+		 * the `Save & Apply` button in the page action footer.
+		 *
+		 * The default implementation should be sufficient for most
+		 * views using {@link form#Map form.Map()} based forms - it
+		 * will first invoke
+		 * {@link LuCI.view.handleSave view.handleSave()} and then
+		 * call {@link ui#changes#apply ui.changes.apply()} to start the
+		 * modal config apply and page reload flow.
+		 *
+		 * Views not using `Map` instances or requiring other special
+		 * logic should overwrite `handleSaveApply()` with a custom
+		 * implementation.
+		 *
+		 * To disable the `Save & Apply` page footer button, views
+		 * extending this base class should overwrite the
+		 * `handleSaveApply` function with `null`.
+		 *
+		 * The invocation of this function is wrapped by
+		 * `Promise.resolve()` so it may return Promises if needed.
+		 *
+		 * @instance
+		 * @memberof LuCI.view
+		 * @param {Event} ev
+		 * The DOM event that triggered the function.
+		 *
+		 * @returns {*|Promise<*>}
+		 * Any return values of this function are discarded, but
+		 * passed through `Promise.resolve()` to ensure that any
+		 * returned promise runs to completion before the button
+		 * is reenabled.
+		 */
+		handleSaveApply: function(ev, mode) {
+			return this.handleSave(ev).then(function() {
+				L.ui.changes.apply(mode == '0');
+			});
+		},
+
+		/**
+		 * The handleReset function is invoked when the user clicks
+		 * the `Reset` button in the page action footer.
+		 *
+		 * The default implementation should be sufficient for most
+		 * views using {@link form#Map form.Map()} based forms - it
+		 * will iterate all forms present in the view and invoke
+		 * the {@link form#Map#save Map.reset()} method on each form.
+		 *
+		 * Views not using `Map` instances or requiring other special
+		 * logic should overwrite `handleReset()` with a custom
+		 * implementation.
+		 *
+		 * To disable the `Reset` page footer button, views extending
+		 * this base class should overwrite the `handleReset` function
+		 * with `null`.
+		 *
+		 * The invocation of this function is wrapped by
+		 * `Promise.resolve()` so it may return Promises if needed.
+		 *
+		 * @instance
+		 * @memberof LuCI.view
+		 * @param {Event} ev
+		 * The DOM event that triggered the function.
+		 *
+		 * @returns {*|Promise<*>}
+		 * Any return values of this function are discarded, but
+		 * passed through `Promise.resolve()` to ensure that any
+		 * returned promise runs to completion before the button
+		 * is reenabled.
+		 */
+		handleReset: function(ev) {
+			var tasks = [];
+
+			document.getElementById('maincontent')
+				.querySelectorAll('.cbi-map').forEach(function(map) {
+					tasks.push(DOM.callClassMethod(map, 'reset'));
+				});
+
+			return Promise.all(tasks);
+		},
+
+		/**
+		 * Renders a standard page action footer if any of the
+		 * `handleSave()`, `handleSaveApply()` or `handleReset()`
+		 * functions are defined.
+		 *
+		 * The default implementation should be sufficient for most
+		 * views - it will render a standard page footer with action
+		 * buttons labeled `Save`, `Save & Apply` and `Reset`
+		 * triggering the `handleSave()`, `handleSaveApply()` and
+		 * `handleReset()` functions respectively.
+		 *
+		 * When any of these `handle*()` functions is overwritten
+		 * with `null` by a view extending this class, the
+		 * corresponding button will not be rendered.
+		 *
+		 * @instance
+		 * @memberof LuCI.view
+		 * @returns {DocumentFragment}
+		 * Returns a `DocumentFragment` containing the footer bar
+		 * with buttons for each corresponding `handle*()` action
+		 * or an empty `DocumentFragment` if all three `handle*()`
+		 * methods are overwritten with `null`.
+		 */
+		addFooter: function() {
+			var footer = E([]);
+
+			var saveApplyBtn = this.handleSaveApply ? new L.ui.ComboButton('0', {
+				0: [ _('Save & Apply') ],
+				1: [ _('Apply unchecked') ]
+			}, {
+				classes: {
+					0: 'btn cbi-button cbi-button-apply important',
+					1: 'btn cbi-button cbi-button-negative important'
+				},
+				click: L.ui.createHandlerFn(this, 'handleSaveApply')
+			}).render() : E([]);
+
+			if (this.handleSaveApply || this.handleSave || this.handleReset) {
+				footer.appendChild(E('div', { 'class': 'cbi-page-actions control-group' }, [
+					saveApplyBtn, ' ',
+					this.handleSave ? E('button', {
+						'class': 'cbi-button cbi-button-save',
+						'click': L.ui.createHandlerFn(this, 'handleSave')
+					}, [ _('Save') ]) : '', ' ',
+					this.handleReset ? E('button', {
+						'class': 'cbi-button cbi-button-reset',
+						'click': L.ui.createHandlerFn(this, 'handleReset')
+					}, [ _('Reset') ]) : ''
+				]));
+			}
+
+			return footer;
 		}
 	});
 
@@ -1204,8 +2087,16 @@
 	    domParser = null,
 	    originalCBIInit = null,
 	    rpcBaseURL = null,
-	    sysFeatures = null,
-	    classes = {};
+	    sysFeatures = null;
+
+	/* "preload" builtin classes to make the available via require */
+	var classes = {
+		baseclass: Class,
+		dom: DOM,
+		poll: Poll,
+		request: Request,
+		view: View
+	};
 
 	var LuCI = Class.extend(/** @lends LuCI.prototype */ {
 		__name__: 'LuCI',
@@ -1356,7 +2247,7 @@
 						L.ui.addNotification(e.name || _('Runtime error'),
 							E('pre', {}, e.message), 'danger');
 					else
-						L.dom.content(document.querySelector('#maincontent'),
+						DOM.content(document.querySelector('#maincontent'),
 							E('pre', { 'class': 'alert-message error' }, e.message));
 
 					e.reported = true;
@@ -1410,7 +2301,7 @@
 		 * circular dependencies.
 		 *
 		 * @throws {NetworkError}
-		 * Throws `NetworkError` when the underlying {@link LuCI.Request}
+		 * Throws `NetworkError` when the underlying {@link LuCI.request}
 		 * call failed.
 		 *
 		 * @throws {SyntaxError}
@@ -1422,7 +2313,7 @@
 		 * interpreted, but when invoking its code did not yield a valid
 		 * class instance.
 		 *
-		 * @returns {Promise<LuCI#Class>}
+		 * @returns {Promise<LuCI.baseclass>}
 		 * Returns the instantiated class.
 		 */
 		require: function(name, from) {
@@ -1968,7 +2859,7 @@
 		/**
 		 * Issues a GET request to the given url and invokes the specified
 		 * callback function. The function is a wrapper around
-		 * {@link LuCI.Request#request Request.request()}.
+		 * {@link LuCI.request#request Request.request()}.
 		 *
 		 * @deprecated
 		 * @instance
@@ -1993,7 +2884,7 @@
 		/**
 		 * Issues a POST request to the given url and invokes the specified
 		 * callback function. The function is a wrapper around
-		 * {@link LuCI.Request#request Request.request()}. The request is
+		 * {@link LuCI.request#request Request.request()}. The request is
 		 * sent using `application/x-www-form-urlencoded` encoding and will
 		 * contain a field `token` with the current value of `LuCI.env.token`
 		 * by default.
@@ -2021,7 +2912,7 @@
 		/**
 		 * Register a polling HTTP request that invokes the specified
 		 * callback function. The function is a wrapper around
-		 * {@link LuCI.Request.poll#add Request.poll.add()}.
+		 * {@link LuCI.request.poll#add Request.poll.add()}.
 		 *
 		 * @deprecated
 		 * @instance
@@ -2052,8 +2943,8 @@
 		 *
 		 * @return {function}
 		 * Returns the internally created function that has been passed to
-		 * {@link LuCI.Request.poll#add Request.poll.add()}. This value can
-		 * be passed to {@link LuCI.Poll.remove Poll.remove()} to remove the
+		 * {@link LuCI.request.poll#add Request.poll.add()}. This value can
+		 * be passed to {@link LuCI.poll.remove Poll.remove()} to remove the
 		 * polling request.
 		 */
 		poll: function(interval, url, args, cb, post) {
@@ -2082,7 +2973,7 @@
 		},
 
 		/**
-		 * Deprecated wrapper around {@link LuCI.Poll.remove Poll.remove()}.
+		 * Deprecated wrapper around {@link LuCI.poll.remove Poll.remove()}.
 		 *
 		 * @deprecated
 		 * @instance
@@ -2098,7 +2989,7 @@
 		stop: function(entry) { return Poll.remove(entry) },
 
 		/**
-		 * Deprecated wrapper around {@link LuCI.Poll.stop Poll.stop()}.
+		 * Deprecated wrapper around {@link LuCI.poll.stop Poll.stop()}.
 		 *
 		 * @deprecated
 		 * @instance
@@ -2111,7 +3002,7 @@
 		halt: function() { return Poll.stop() },
 
 		/**
-		 * Deprecated wrapper around {@link LuCI.Poll.start Poll.start()}.
+		 * Deprecated wrapper around {@link LuCI.poll.start Poll.start()}.
 		 *
 		 * @deprecated
 		 * @instance
@@ -2123,907 +3014,72 @@
 		 */
 		run: function() { return Poll.start() },
 
+		/**
+		 * Legacy `L.dom` class alias. New view code should use `'require dom';`
+		 * to request the `LuCI.dom` class.
+		 *
+		 * @instance
+		 * @memberof LuCI
+		 * @deprecated
+		 */
+		dom: DOM,
 
 		/**
-		 * @class
-		 * @memberof LuCI
-		 * @hideconstructor
-		 * @classdesc
+		 * Legacy `L.view` class alias. New view code should use `'require view';`
+		 * to request the `LuCI.view` class.
 		 *
-		 * The `dom` class provides convenience method for creating and
-		 * manipulating DOM elements.
+		 * @instance
+		 * @memberof LuCI
+		 * @deprecated
 		 */
-		dom: Class.singleton(/* @lends LuCI.dom.prototype */ {
-			__name__: 'LuCI.DOM',
+		view: View,
 
-			/**
-			 * Tests whether the given argument is a valid DOM `Node`.
-			 *
-			 * @instance
-			 * @memberof LuCI.dom
-			 * @param {*} e
-			 * The value to test.
-			 *
-			 * @returns {boolean}
-			 * Returns `true` if the value is a DOM `Node`, else `false`.
-			 */
-			elem: function(e) {
-				return (e != null && typeof(e) == 'object' && 'nodeType' in e);
-			},
-
-			/**
-			 * Parses a given string as HTML and returns the first child node.
-			 *
-			 * @instance
-			 * @memberof LuCI.dom
-			 * @param {string} s
-			 * A string containing an HTML fragment to parse. Note that only
-			 * the first result of the resulting structure is returned, so an
-			 * input value of `<div>foo</div> <div>bar</div>` will only return
-			 * the first `div` element node.
-			 *
-			 * @returns {Node}
-			 * Returns the first DOM `Node` extracted from the HTML fragment or
-			 * `null` on parsing failures or if no element could be found.
-			 */
-			parse: function(s) {
-				var elem;
-
-				try {
-					domParser = domParser || new DOMParser();
-					elem = domParser.parseFromString(s, 'text/html').body.firstChild;
-				}
-				catch(e) {}
-
-				if (!elem) {
-					try {
-						dummyElem = dummyElem || document.createElement('div');
-						dummyElem.innerHTML = s;
-						elem = dummyElem.firstChild;
-					}
-					catch (e) {}
-				}
-
-				return elem || null;
-			},
-
-			/**
-			 * Tests whether a given `Node` matches the given query selector.
-			 *
-			 * This function is a convenience wrapper around the standard
-			 * `Node.matches("selector")` function with the added benefit that
-			 * the `node` argument may be a non-`Node` value, in which case
-			 * this function simply returns `false`.
-			 *
-			 * @instance
-			 * @memberof LuCI.dom
-			 * @param {*} node
-			 * The `Node` argument to test the selector against.
-			 *
-			 * @param {string} [selector]
-			 * The query selector expression to test against the given node.
-			 *
-			 * @returns {boolean}
-			 * Returns `true` if the given node matches the specified selector
-			 * or `false` when the node argument is no valid DOM `Node` or the
-			 * selector didn't match.
-			 */
-			matches: function(node, selector) {
-				var m = this.elem(node) ? node.matches || node.msMatchesSelector : null;
-				return m ? m.call(node, selector) : false;
-			},
-
-			/**
-			 * Returns the closest parent node that matches the given query
-			 * selector expression.
-			 *
-			 * This function is a convenience wrapper around the standard
-			 * `Node.closest("selector")` function with the added benefit that
-			 * the `node` argument may be a non-`Node` value, in which case
-			 * this function simply returns `null`.
-			 *
-			 * @instance
-			 * @memberof LuCI.dom
-			 * @param {*} node
-			 * The `Node` argument to find the closest parent for.
-			 *
-			 * @param {string} [selector]
-			 * The query selector expression to test against each parent.
-			 *
-			 * @returns {Node|null}
-			 * Returns the closest parent node matching the selector or
-			 * `null` when the node argument is no valid DOM `Node` or the
-			 * selector didn't match any parent.
-			 */
-			parent: function(node, selector) {
-				if (this.elem(node) && node.closest)
-					return node.closest(selector);
-
-				while (this.elem(node))
-					if (this.matches(node, selector))
-						return node;
-					else
-						node = node.parentNode;
-
-				return null;
-			},
-
-			/**
-			 * Appends the given children data to the given node.
-			 *
-			 * @instance
-			 * @memberof LuCI.dom
-			 * @param {*} node
-			 * The `Node` argument to append the children to.
-			 *
-			 * @param {*} [children]
-			 * The childrens to append to the given node.
-			 *
-			 * When `children` is an array, then each item of the array
-			 * will be either appended as child element or text node,
-			 * depending on whether the item is a DOM `Node` instance or
-			 * some other non-`null` value. Non-`Node`, non-`null` values
-			 * will be converted to strings first before being passed as
-			 * argument to `createTextNode()`.
-			 *
-			 * When `children` is a function, it will be invoked with
-			 * the passed `node` argument as sole parameter and the `append`
-			 * function will be invoked again, with the given `node` argument
-			 * as first and the return value of the `children` function as
-			 * second parameter.
-			 *
-			 * When `children` is is a DOM `Node` instance, it will be
-			 * appended to the given `node`.
-			 *
-			 * When `children` is any other non-`null` value, it will be
-			 * converted to a string and appened to the `innerHTML` property
-			 * of the given `node`.
-			 *
-			 * @returns {Node|null}
-			 * Returns the last children `Node` appended to the node or `null`
-			 * if either the `node` argument was no valid DOM `node` or if the
-			 * `children` was `null` or didn't result in further DOM nodes.
-			 */
-			append: function(node, children) {
-				if (!this.elem(node))
-					return null;
-
-				if (Array.isArray(children)) {
-					for (var i = 0; i < children.length; i++)
-						if (this.elem(children[i]))
-							node.appendChild(children[i]);
-						else if (children !== null && children !== undefined)
-							node.appendChild(document.createTextNode('' + children[i]));
-
-					return node.lastChild;
-				}
-				else if (typeof(children) === 'function') {
-					return this.append(node, children(node));
-				}
-				else if (this.elem(children)) {
-					return node.appendChild(children);
-				}
-				else if (children !== null && children !== undefined) {
-					node.innerHTML = '' + children;
-					return node.lastChild;
-				}
-
-				return null;
-			},
-
-			/**
-			 * Replaces the content of the given node with the given children.
-			 *
-			 * This function first removes any children of the given DOM
-			 * `Node` and then adds the given given children following the
-			 * rules outlined below.
-			 *
-			 * @instance
-			 * @memberof LuCI.dom
-			 * @param {*} node
-			 * The `Node` argument to replace the children of.
-			 *
-			 * @param {*} [children]
-			 * The childrens to replace into the given node.
-			 *
-			 * When `children` is an array, then each item of the array
-			 * will be either appended as child element or text node,
-			 * depending on whether the item is a DOM `Node` instance or
-			 * some other non-`null` value. Non-`Node`, non-`null` values
-			 * will be converted to strings first before being passed as
-			 * argument to `createTextNode()`.
-			 *
-			 * When `children` is a function, it will be invoked with
-			 * the passed `node` argument as sole parameter and the `append`
-			 * function will be invoked again, with the given `node` argument
-			 * as first and the return value of the `children` function as
-			 * second parameter.
-			 *
-			 * When `children` is is a DOM `Node` instance, it will be
-			 * appended to the given `node`.
-			 *
-			 * When `children` is any other non-`null` value, it will be
-			 * converted to a string and appened to the `innerHTML` property
-			 * of the given `node`.
-			 *
-			 * @returns {Node|null}
-			 * Returns the last children `Node` appended to the node or `null`
-			 * if either the `node` argument was no valid DOM `node` or if the
-			 * `children` was `null` or didn't result in further DOM nodes.
-			 */
-			content: function(node, children) {
-				if (!this.elem(node))
-					return null;
-
-				var dataNodes = node.querySelectorAll('[data-idref]');
-
-				for (var i = 0; i < dataNodes.length; i++)
-					delete this.registry[dataNodes[i].getAttribute('data-idref')];
-
-				while (node.firstChild)
-					node.removeChild(node.firstChild);
-
-				return this.append(node, children);
-			},
-
-			/**
-			 * Sets attributes or registers event listeners on element nodes.
-			 *
-			 * @instance
-			 * @memberof LuCI.dom
-			 * @param {*} node
-			 * The `Node` argument to set the attributes or add the event
-			 * listeners for. When the given `node` value is not a valid
-			 * DOM `Node`, the function returns and does nothing.
-			 *
-			 * @param {string|Object<string, *>} key
-			 * Specifies either the attribute or event handler name to use,
-			 * or an object containing multiple key, value pairs which are
-			 * each added to the node as either attribute or event handler,
-			 * depending on the respective value.
-			 *
-			 * @param {*} [val]
-			 * Specifies the attribute value or event handler function to add.
-			 * If the `key` parameter is an `Object`, this parameter will be
-			 * ignored.
-			 *
-			 * When `val` is of type function, it will be registered as event
-			 * handler on the given `node` with the `key` parameter being the
-			 * event name.
-			 *
-			 * When `val` is of type object, it will be serialized as JSON and
-			 * added as attribute to the given `node`, using the given `key`
-			 * as attribute name.
-			 *
-			 * When `val` is of any other type, it will be added as attribute
-			 * to the given `node` as-is, with the underlying `setAttribute()`
-			 * call implicitely turning it into a string.
-			 */
-			attr: function(node, key, val) {
-				if (!this.elem(node))
-					return null;
-
-				var attr = null;
-
-				if (typeof(key) === 'object' && key !== null)
-					attr = key;
-				else if (typeof(key) === 'string')
-					attr = {}, attr[key] = val;
-
-				for (key in attr) {
-					if (!attr.hasOwnProperty(key) || attr[key] == null)
-						continue;
-
-					switch (typeof(attr[key])) {
-					case 'function':
-						node.addEventListener(key, attr[key]);
-						break;
-
-					case 'object':
-						node.setAttribute(key, JSON.stringify(attr[key]));
-						break;
-
-					default:
-						node.setAttribute(key, attr[key]);
-					}
-				}
-			},
-
-			/**
-			 * Creates a new DOM `Node` from the given `html`, `attr` and
-			 * `data` parameters.
-			 *
-			 * This function has multiple signatures, it can be either invoked
-			 * in the form `create(html[, attr[, data]])` or in the form
-			 * `create(html[, data])`. The used variant is determined from the
-			 * type of the second argument.
-			 *
-			 * @instance
-			 * @memberof LuCI.dom
-			 * @param {*} html
-			 * Describes the node to create.
-			 *
-			 * When the value of `html` is of type array, a `DocumentFragment`
-			 * node is created and each item of the array is first converted
-			 * to a DOM `Node` by passing it through `create()` and then added
-			 * as child to the fragment.
-			 *
-			 * When the value of `html` is a DOM `Node` instance, no new
-			 * element will be created but the node will be used as-is.
-			 *
-			 * When the value of `html` is a string starting with `<`, it will
-			 * be passed to `dom.parse()` and the resulting value is used.
-			 *
-			 * When the value of `html` is any other string, it will be passed
-			 * to `document.createElement()` for creating a new DOM `Node` of
-			 * the given name.
-			 *
-			 * @param {Object<string, *>} [attr]
-			 * Specifies an Object of key, value pairs to set as attributes
-			 * or event handlers on the created node. Refer to
-			 * {@link LuCI.dom#attr dom.attr()} for details.
-			 *
-			 * @param {*} [data]
-			 * Specifies children to append to the newly created element.
-			 * Refer to {@link LuCI.dom#append dom.append()} for details.
-			 *
-			 * @throws {InvalidCharacterError}
-			 * Throws an `InvalidCharacterError` when the given `html`
-			 * argument contained malformed markup (such as not escaped
-			 * `&` characters in XHTML mode) or when the given node name
-			 * in `html` contains characters which are not legal in DOM
-			 * element names, such as spaces.
-			 *
-			 * @returns {Node}
-			 * Returns the newly created `Node`.
-			 */
-			create: function() {
-				var html = arguments[0],
-				    attr = arguments[1],
-				    data = arguments[2],
-				    elem;
-
-				if (!(attr instanceof Object) || Array.isArray(attr))
-					data = attr, attr = null;
-
-				if (Array.isArray(html)) {
-					elem = document.createDocumentFragment();
-					for (var i = 0; i < html.length; i++)
-						elem.appendChild(this.create(html[i]));
-				}
-				else if (this.elem(html)) {
-					elem = html;
-				}
-				else if (html.charCodeAt(0) === 60) {
-					elem = this.parse(html);
-				}
-				else {
-					elem = document.createElement(html);
-				}
-
-				if (!elem)
-					return null;
-
-				this.attr(elem, attr);
-				this.append(elem, data);
-
-				return elem;
-			},
-
-			registry: {},
-
-			/**
-			 * Attaches or detaches arbitrary data to and from a DOM `Node`.
-			 *
-			 * This function is useful to attach non-string values or runtime
-			 * data that is not serializable to DOM nodes. To decouple data
-			 * from the DOM, values are not added directly to nodes, but
-			 * inserted into a registry instead which is then referenced by a
-			 * string key stored as `data-idref` attribute in the node.
-			 *
-			 * This function has multiple signatures and is sensitive to the
-			 * number of arguments passed to it.
-			 *
-			 *  - `dom.data(node)` -
-			 *     Fetches all data associated with the given node.
-			 *  - `dom.data(node, key)` -
-			 *     Fetches a specific key associated with the given node.
-			 *  - `dom.data(node, key, val)` -
-			 *     Sets a specific key to the given value associated with the
-			 *     given node.
-			 *  - `dom.data(node, null)` -
-			 *     Clears any data associated with the node.
-			 *  - `dom.data(node, key, null)` -
-			 *     Clears the given key associated with the node.
-			 *
-			 * @instance
-			 * @memberof LuCI.dom
-			 * @param {Node} node
-			 * The DOM `Node` instance to set or retrieve the data for.
-			 *
-			 * @param {string|null} [key]
-			 * This is either a string specifying the key to retrieve, or
-			 * `null` to unset the entire node data.
-			 *
-			 * @param {*|null} [val]
-			 * This is either a non-`null` value to set for a given key or
-			 * `null` to remove the given `key` from the specified node.
-			 *
-			 * @returns {*}
-			 * Returns the get or set value, or `null` when no value could
-			 * be found.
-			 */
-			data: function(node, key, val) {
-				if (!node || !node.getAttribute)
-					return null;
-
-				var id = node.getAttribute('data-idref');
-
-				/* clear all data */
-				if (arguments.length > 1 && key == null) {
-					if (id != null) {
-						node.removeAttribute('data-idref');
-						val = this.registry[id]
-						delete this.registry[id];
-						return val;
-					}
-
-					return null;
-				}
-
-				/* clear a key */
-				else if (arguments.length > 2 && key != null && val == null) {
-					if (id != null) {
-						val = this.registry[id][key];
-						delete this.registry[id][key];
-						return val;
-					}
-
-					return null;
-				}
-
-				/* set a key */
-				else if (arguments.length > 2 && key != null && val != null) {
-					if (id == null) {
-						do { id = Math.floor(Math.random() * 0xffffffff).toString(16) }
-						while (this.registry.hasOwnProperty(id));
-
-						node.setAttribute('data-idref', id);
-						this.registry[id] = {};
-					}
-
-					return (this.registry[id][key] = val);
-				}
-
-				/* get all data */
-				else if (arguments.length == 1) {
-					if (id != null)
-						return this.registry[id];
-
-					return null;
-				}
-
-				/* get a key */
-				else if (arguments.length == 2) {
-					if (id != null)
-						return this.registry[id][key];
-				}
-
-				return null;
-			},
-
-			/**
-			 * Binds the given class instance ot the specified DOM `Node`.
-			 *
-			 * This function uses the `dom.data()` facility to attach the
-			 * passed instance of a Class to a node. This is needed for
-			 * complex widget elements or similar where the corresponding
-			 * class instance responsible for the element must be retrieved
-			 * from DOM nodes obtained by `querySelector()` or similar means.
-			 *
-			 * @instance
-			 * @memberof LuCI.dom
-			 * @param {Node} node
-			 * The DOM `Node` instance to bind the class to.
-			 *
-			 * @param {Class} inst
-			 * The Class instance to bind to the node.
-			 *
-			 * @throws {TypeError}
-			 * Throws a `TypeError` when the given instance argument isn't
-			 * a valid Class instance.
-			 *
-			 * @returns {Class}
-			 * Returns the bound class instance.
-			 */
-			bindClassInstance: function(node, inst) {
-				if (!(inst instanceof Class))
-					L.error('TypeError', 'Argument must be a class instance');
-
-				return this.data(node, '_class', inst);
-			},
-
-			/**
-			 * Finds a bound class instance on the given node itself or the
-			 * first bound instance on its closest parent node.
-			 *
-			 * @instance
-			 * @memberof LuCI.dom
-			 * @param {Node} node
-			 * The DOM `Node` instance to start from.
-			 *
-			 * @returns {Class|null}
-			 * Returns the founds class instance if any or `null` if no bound
-			 * class could be found on the node itself or any of its parents.
-			 */
-			findClassInstance: function(node) {
-				var inst = null;
-
-				do {
-					inst = this.data(node, '_class');
-					node = node.parentNode;
-				}
-				while (!(inst instanceof Class) && node != null);
-
-				return inst;
-			},
-
-			/**
-			 * Finds a bound class instance on the given node itself or the
-			 * first bound instance on its closest parent node and invokes
-			 * the specified method name on the found class instance.
-			 *
-			 * @instance
-			 * @memberof LuCI.dom
-			 * @param {Node} node
-			 * The DOM `Node` instance to start from.
-			 *
-			 * @param {string} method
-			 * The name of the method to invoke on the found class instance.
-			 *
-			 * @param {...*} params
-			 * Additional arguments to pass to the invoked method as-is.
-			 *
-			 * @returns {*|null}
-			 * Returns the return value of the invoked method if a class
-			 * instance and method has been found. Returns `null` if either
-			 * no bound class instance could be found, or if the found
-			 * instance didn't have the requested `method`.
-			 */
-			callClassMethod: function(node, method /*, ... */) {
-				var inst = this.findClassInstance(node);
-
-				if (inst == null || typeof(inst[method]) != 'function')
-					return null;
-
-				return inst[method].apply(inst, inst.varargs(arguments, 2));
-			},
-
-			/**
-			 * The ignore callback function is invoked by `isEmpty()` for each
-			 * child node to decide whether to ignore a child node or not.
-			 *
-			 * When this function returns `false`, the node passed to it is
-			 * ignored, else not.
-			 *
-			 * @callback LuCI.dom~ignoreCallbackFn
-			 * @param {Node} node
-			 * The child node to test.
-			 *
-			 * @returns {boolean}
-			 * Boolean indicating whether to ignore the node or not.
-			 */
-
-			/**
-			 * Tests whether a given DOM `Node` instance is empty or appears
-			 * empty.
-			 *
-			 * Any element child nodes which have the CSS class `hidden` set
-			 * or for which the optionally passed `ignoreFn` callback function
-			 * returns `false` are ignored.
-			 *
-			 * @instance
-			 * @memberof LuCI.dom
-			 * @param {Node} node
-			 * The DOM `Node` instance to test.
-			 *
-			 * @param {LuCI.dom~ignoreCallbackFn} [ignoreFn]
-			 * Specifies an optional function which is invoked for each child
-			 * node to decide whether the child node should be ignored or not.
-			 *
-			 * @returns {boolean}
-			 * Returns `true` if the node does not have any children or if
-			 * any children node either has a `hidden` CSS class or a `false`
-			 * result when testing it using the given `ignoreFn`.
-			 */
-			isEmpty: function(node, ignoreFn) {
-				for (var child = node.firstElementChild; child != null; child = child.nextElementSibling)
-					if (!child.classList.contains('hidden') && (!ignoreFn || !ignoreFn(child)))
-						return false;
-
-				return true;
-			}
-		}),
-
+		/**
+		 * Legacy `L.Poll` class alias. New view code should use `'require poll';`
+		 * to request the `LuCI.poll` class.
+		 *
+		 * @instance
+		 * @memberof LuCI
+		 * @deprecated
+		 */
 		Poll: Poll,
-		Class: Class,
+
+		/**
+		 * Legacy `L.Request` class alias. New view code should use `'require request';`
+		 * to request the `LuCI.request` class.
+		 *
+		 * @instance
+		 * @memberof LuCI
+		 * @deprecated
+		 */
 		Request: Request,
 
 		/**
-		 * @class
-		 * @memberof LuCI
-		 * @hideconstructor
-		 * @classdesc
+		 * Legacy `L.Class` class alias. New view code should use `'require baseclass';`
+		 * to request the `LuCI.baseclass` class.
 		 *
-		 * The `view` class forms the basis of views and provides a standard
-		 * set of methods to inherit from.
+		 * @instance
+		 * @memberof LuCI
+		 * @deprecated
 		 */
-		view: Class.extend(/* @lends LuCI.view.prototype */ {
-			__name__: 'LuCI.View',
-
-			__init__: function() {
-				var vp = document.getElementById('view');
-
-				L.dom.content(vp, E('div', { 'class': 'spinning' }, _('Loading view…')));
-
-				return Promise.resolve(this.load())
-					.then(L.bind(this.render, this))
-					.then(L.bind(function(nodes) {
-						var vp = document.getElementById('view');
-
-						L.dom.content(vp, nodes);
-						L.dom.append(vp, this.addFooter());
-					}, this)).catch(L.error);
-			},
-
-			/**
-			 * The load function is invoked before the view is rendered.
-			 *
-			 * The invocation of this function is wrapped by
-			 * `Promise.resolve()` so it may return Promises if needed.
-			 *
-			 * The return value of the function (or the resolved values
-			 * of the promise returned by it) will be passed as first
-			 * argument to `render()`.
-			 *
-			 * This function is supposed to be overwritten by subclasses,
-			 * the default implementation does nothing.
-			 *
-			 * @instance
-			 * @abstract
-			 * @memberof LuCI.view
-			 *
-			 * @returns {*|Promise<*>}
-			 * May return any value or a Promise resolving to any value.
-			 */
-			load: function() {},
-
-			/**
-			 * The render function is invoked after the
-			 * {@link LuCI.view#load load()} function and responsible
-			 * for setting up the view contents. It must return a DOM
-			 * `Node` or `DocumentFragment` holding the contents to
-			 * insert into the view area.
-			 *
-			 * The invocation of this function is wrapped by
-			 * `Promise.resolve()` so it may return Promises if needed.
-			 *
-			 * The return value of the function (or the resolved values
-			 * of the promise returned by it) will be inserted into the
-			 * main content area using
-			 * {@link LuCI.dom#append dom.append()}.
-			 *
-			 * This function is supposed to be overwritten by subclasses,
-			 * the default implementation does nothing.
-			 *
-			 * @instance
-			 * @abstract
-			 * @memberof LuCI.view
-			 * @param {*|null} load_results
-			 * This function will receive the return value of the
-			 * {@link LuCI.view#load view.load()} function as first
-			 * argument.
-			 *
-			 * @returns {Node|Promise<Node>}
-			 * Should return a DOM `Node` value or a `Promise` resolving
-			 * to a `Node` value.
-			 */
-			render: function() {},
-
-			/**
-			 * The handleSave function is invoked when the user clicks
-			 * the `Save` button in the page action footer.
-			 *
-			 * The default implementation should be sufficient for most
-			 * views using {@link form#Map form.Map()} based forms - it
-			 * will iterate all forms present in the view and invoke
-			 * the {@link form#Map#save Map.save()} method on each form.
-			 *
-			 * Views not using `Map` instances or requiring other special
-			 * logic should overwrite `handleSave()` with a custom
-			 * implementation.
-			 *
-			 * To disable the `Save` page footer button, views extending
-			 * this base class should overwrite the `handleSave` function
-			 * with `null`.
-			 *
-			 * The invocation of this function is wrapped by
-			 * `Promise.resolve()` so it may return Promises if needed.
-			 *
-			 * @instance
-			 * @memberof LuCI.view
-			 * @param {Event} ev
-			 * The DOM event that triggered the function.
-			 *
-			 * @returns {*|Promise<*>}
-			 * Any return values of this function are discarded, but
-			 * passed through `Promise.resolve()` to ensure that any
-			 * returned promise runs to completion before the button
-			 * is reenabled.
-			 */
-			handleSave: function(ev) {
-				var tasks = [];
-
-				document.getElementById('maincontent')
-					.querySelectorAll('.cbi-map').forEach(function(map) {
-						tasks.push(L.dom.callClassMethod(map, 'save'));
-					});
-
-				return Promise.all(tasks);
-			},
-
-			/**
-			 * The handleSaveApply function is invoked when the user clicks
-			 * the `Save & Apply` button in the page action footer.
-			 *
-			 * The default implementation should be sufficient for most
-			 * views using {@link form#Map form.Map()} based forms - it
-			 * will first invoke
-			 * {@link LuCI.view.handleSave view.handleSave()} and then
-			 * call {@link ui#changes#apply ui.changes.apply()} to start the
-			 * modal config apply and page reload flow.
-			 *
-			 * Views not using `Map` instances or requiring other special
-			 * logic should overwrite `handleSaveApply()` with a custom
-			 * implementation.
-			 *
-			 * To disable the `Save & Apply` page footer button, views
-			 * extending this base class should overwrite the
-			 * `handleSaveApply` function with `null`.
-			 *
-			 * The invocation of this function is wrapped by
-			 * `Promise.resolve()` so it may return Promises if needed.
-			 *
-			 * @instance
-			 * @memberof LuCI.view
-			 * @param {Event} ev
-			 * The DOM event that triggered the function.
-			 *
-			 * @returns {*|Promise<*>}
-			 * Any return values of this function are discarded, but
-			 * passed through `Promise.resolve()` to ensure that any
-			 * returned promise runs to completion before the button
-			 * is reenabled.
-			 */
-			handleSaveApply: function(ev, mode) {
-				return this.handleSave(ev).then(function() {
-					L.ui.changes.apply(mode == '0');
-				});
-			},
-
-			/**
-			 * The handleReset function is invoked when the user clicks
-			 * the `Reset` button in the page action footer.
-			 *
-			 * The default implementation should be sufficient for most
-			 * views using {@link form#Map form.Map()} based forms - it
-			 * will iterate all forms present in the view and invoke
-			 * the {@link form#Map#save Map.reset()} method on each form.
-			 *
-			 * Views not using `Map` instances or requiring other special
-			 * logic should overwrite `handleReset()` with a custom
-			 * implementation.
-			 *
-			 * To disable the `Reset` page footer button, views extending
-			 * this base class should overwrite the `handleReset` function
-			 * with `null`.
-			 *
-			 * The invocation of this function is wrapped by
-			 * `Promise.resolve()` so it may return Promises if needed.
-			 *
-			 * @instance
-			 * @memberof LuCI.view
-			 * @param {Event} ev
-			 * The DOM event that triggered the function.
-			 *
-			 * @returns {*|Promise<*>}
-			 * Any return values of this function are discarded, but
-			 * passed through `Promise.resolve()` to ensure that any
-			 * returned promise runs to completion before the button
-			 * is reenabled.
-			 */
-			handleReset: function(ev) {
-				var tasks = [];
-
-				document.getElementById('maincontent')
-					.querySelectorAll('.cbi-map').forEach(function(map) {
-						tasks.push(L.dom.callClassMethod(map, 'reset'));
-					});
-
-				return Promise.all(tasks);
-			},
-
-			/**
-			 * Renders a standard page action footer if any of the
-			 * `handleSave()`, `handleSaveApply()` or `handleReset()`
-			 * functions are defined.
-			 *
-			 * The default implementation should be sufficient for most
-			 * views - it will render a standard page footer with action
-			 * buttons labeled `Save`, `Save & Apply` and `Reset`
-			 * triggering the `handleSave()`, `handleSaveApply()` and
-			 * `handleReset()` functions respectively.
-			 *
-			 * When any of these `handle*()` functions is overwritten
-			 * with `null` by a view extending this class, the
-			 * corresponding button will not be rendered.
-			 *
-			 * @instance
-			 * @memberof LuCI.view
-			 * @returns {DocumentFragment}
-			 * Returns a `DocumentFragment` containing the footer bar
-			 * with buttons for each corresponding `handle*()` action
-			 * or an empty `DocumentFragment` if all three `handle*()`
-			 * methods are overwritten with `null`.
-			 */
-			addFooter: function() {
-				var footer = E([]);
-
-				var saveApplyBtn = this.handleSaveApply ? new L.ui.ComboButton('0', {
-					0: [ _('Save & Apply') ],
-					1: [ _('Apply unchecked') ]
-				}, {
-					classes: {
-						0: 'btn cbi-button cbi-button-apply important',
-						1: 'btn cbi-button cbi-button-negative important'
-					},
-					click: L.ui.createHandlerFn(this, 'handleSaveApply')
-				}).render() : E([]);
-
-				if (this.handleSaveApply || this.handleSave || this.handleReset) {
-					footer.appendChild(E('div', { 'class': 'cbi-page-actions control-group' }, [
-						saveApplyBtn, ' ',
-						this.handleSave ? E('button', {
-							'class': 'cbi-button cbi-button-save',
-							'click': L.ui.createHandlerFn(this, 'handleSave')
-						}, [ _('Save') ]) : '', ' ',
-						this.handleReset ? E('button', {
-							'class': 'cbi-button cbi-button-reset',
-							'click': L.ui.createHandlerFn(this, 'handleReset')
-						}, [ _('Reset') ]) : ''
-					]));
-				}
-
-				return footer;
-			}
-		})
+		Class: Class
 	});
 
 	/**
-	 * @class
+	 * @class xhr
 	 * @memberof LuCI
 	 * @deprecated
 	 * @classdesc
 	 *
-	 * The `LuCI.XHR` class is a legacy compatibility shim for the
+	 * The `LuCI.xhr` class is a legacy compatibility shim for the
 	 * functionality formerly provided by `xhr.js`. It is registered as global
 	 * `window.XHR` symbol for compatibility with legacy code.
 	 *
-	 * New code should use {@link LuCI.Request} instead to implement HTTP
+	 * New code should use {@link LuCI.request} instead to implement HTTP
 	 * request handling.
 	 */
-	var XHR = Class.extend(/** @lends LuCI.XHR.prototype */ {
-		__name__: 'LuCI.XHR',
+	var XHR = Class.extend(/** @lends LuCI.xhr.prototype */ {
+		__name__: 'LuCI.xhr',
 		__init__: function() {
 			if (window.console && console.debug)
 				console.debug('Direct use XHR() is deprecated, please use L.Request instead');
@@ -3041,7 +3097,7 @@
 		 *
 		 * @instance
 		 * @deprecated
-		 * @memberof LuCI.XHR
+		 * @memberof LuCI.xhr
 		 *
 		 * @param {string} url
 		 * The URL to request
@@ -3068,7 +3124,7 @@
 		 *
 		 * @instance
 		 * @deprecated
-		 * @memberof LuCI.XHR
+		 * @memberof LuCI.xhr
 		 *
 		 * @param {string} url
 		 * The URL to request
@@ -3099,7 +3155,7 @@
 		 *
 		 * @instance
 		 * @deprecated
-		 * @memberof LuCI.XHR
+		 * @memberof LuCI.xhr
 		 */
 		cancel: function() { delete this.active },
 
@@ -3108,7 +3164,7 @@
 		 *
 		 * @instance
 		 * @deprecated
-		 * @memberof LuCI.XHR
+		 * @memberof LuCI.xhr
 		 *
 		 * @returns {boolean}
 		 * Returns `true` if the request is still running or `false` if it
@@ -3123,7 +3179,7 @@
 		 *
 		 * @instance
 		 * @deprecated
-		 * @memberof LuCI.XHR
+		 * @memberof LuCI.xhr
 		 */
 		abort: function() {},
 
@@ -3134,7 +3190,7 @@
 		 *
 		 * @instance
 		 * @deprecated
-		 * @memberof LuCI.XHR
+		 * @memberof LuCI.xhr
 		 *
 		 * @throws {InternalError}
 		 * Throws an `InternalError` with the message `Not implemented`

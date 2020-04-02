@@ -1,10 +1,12 @@
 'use strict';
 'require ui';
 'require uci';
+'require dom';
+'require baseclass';
 
 var scope = this;
 
-var CBIJSONConfig = Class.extend({
+var CBIJSONConfig = baseclass.extend({
 	__init__: function(data) {
 		data = Object.assign({}, data);
 
@@ -171,7 +173,7 @@ var CBIJSONConfig = Class.extend({
 	}
 });
 
-var CBINode = Class.extend({
+var CBINode = baseclass.extend({
 	__init__: function(title, description) {
 		this.title = title || '';
 		this.description = description || '';
@@ -330,12 +332,12 @@ var CBIMap = CBINode.extend({
 			'cbi-dependency-check': L.bind(this.checkDepends, this)
 		}));
 
-		L.dom.bindClassInstance(mapEl, this);
+		dom.bindClassInstance(mapEl, this);
 
 		return this.renderChildren(null).then(L.bind(function(nodes) {
 			var initialRender = !mapEl.firstChild;
 
-			L.dom.content(mapEl, null);
+			dom.content(mapEl, null);
 
 			if (this.title != null && this.title != '')
 				mapEl.appendChild(E('h2', { 'name': 'content' }, this.title));
@@ -344,9 +346,9 @@ var CBIMap = CBINode.extend({
 				mapEl.appendChild(E('div', { 'class': 'cbi-map-descr' }, this.description));
 
 			if (this.tabbed)
-				L.dom.append(mapEl, E('div', { 'class': 'cbi-map-tabbed' }, nodes));
+				dom.append(mapEl, E('div', { 'class': 'cbi-map-tabbed' }, nodes));
 			else
-				L.dom.append(mapEl, nodes);
+				dom.append(mapEl, nodes);
 
 			if (!initialRender) {
 				mapEl.classList.remove('flash');
@@ -377,7 +379,7 @@ var CBIMap = CBINode.extend({
 
 		elem = this.findElement('data-field', id);
 		sid  = elem ? id.split(/\./)[2] : null;
-		inst = elem ? L.dom.findClassInstance(elem) : null;
+		inst = elem ? dom.findClassInstance(elem) : null;
 
 		return (inst instanceof CBIAbstractValue) ? [ inst, sid ] : null;
 	},
@@ -764,7 +766,7 @@ var CBIAbstractValue = CBINode.extend({
 
 		var node = this.map.findElement('id', this.cbid(section_id));
 		if (node && node.getAttribute('data-changed') != 'true' && satisified_defval != null && cfgvalue == null)
-			L.dom.callClassMethod(node, 'setValue', satisified_defval);
+			dom.callClassMethod(node, 'setValue', satisified_defval);
 
 		this.default = satisified_defval;
 	},
@@ -790,7 +792,7 @@ var CBIAbstractValue = CBINode.extend({
 
 	getUIElement: function(section_id) {
 		var node = this.map.findElement('id', this.cbid(section_id)),
-		    inst = node ? L.dom.findClassInstance(node) : null;
+		    inst = node ? dom.findClassInstance(node) : null;
 		return (inst instanceof ui.AbstractElement) ? inst : null;
 	},
 
@@ -929,7 +931,7 @@ var CBITypedSection = CBIAbstractSection.extend({
 			createEl.appendChild(E('button', {
 				'class': 'cbi-button cbi-button-add',
 				'title': btn_title || _('Add'),
-				'click': L.ui.createHandlerFn(this, 'handleAdd')
+				'click': ui.createHandlerFn(this, 'handleAdd')
 			}, [ btn_title || _('Add') ]));
 		}
 		else {
@@ -938,14 +940,14 @@ var CBITypedSection = CBIAbstractSection.extend({
 				'class': 'cbi-section-create-name'
 			});
 
-			L.dom.append(createEl, [
+			dom.append(createEl, [
 				E('div', {}, nameEl),
 				E('input', {
 					'class': 'cbi-button cbi-button-add',
 					'type': 'submit',
 					'value': btn_title || _('Add'),
 					'title': btn_title || _('Add'),
-					'click': L.ui.createHandlerFn(this, function(ev) {
+					'click': ui.createHandlerFn(this, function(ev) {
 						if (nameEl.classList.contains('cbi-input-invalid'))
 							return;
 
@@ -991,7 +993,7 @@ var CBITypedSection = CBIAbstractSection.extend({
 							'class': 'cbi-button',
 							'name': 'cbi.rts.%s.%s'.format(config_name, cfgsections[i]),
 							'data-section-id': cfgsections[i],
-							'click': L.ui.createHandlerFn(this, 'handleRemove', cfgsections[i])
+							'click': ui.createHandlerFn(this, 'handleRemove', cfgsections[i])
 						}, [ _('Delete') ])));
 			}
 
@@ -1011,7 +1013,7 @@ var CBITypedSection = CBIAbstractSection.extend({
 
 		sectionEl.appendChild(this.renderSectionAdd());
 
-		L.dom.bindClassInstance(sectionEl, this);
+		dom.bindClassInstance(sectionEl, this);
 
 		return sectionEl;
 	},
@@ -1099,7 +1101,7 @@ var CBITableSection = CBITypedSection.extend({
 
 		sectionEl.appendChild(this.renderSectionAdd('cbi-tblsection-create'));
 
-		L.dom.bindClassInstance(sectionEl, this);
+		dom.bindClassInstance(sectionEl, this);
 
 		return sectionEl;
 	},
@@ -1146,7 +1148,7 @@ var CBITableSection = CBITypedSection.extend({
 						'title': this.titledesc || _('Go to relevant configuration page')
 					}, opt.title));
 				else
-					L.dom.content(trEl.lastElementChild, opt.title);
+					dom.content(trEl.lastElementChild, opt.title);
 			}
 
 			if (this.sortable || this.extedit || this.addremove || has_more || has_action)
@@ -1198,7 +1200,7 @@ var CBITableSection = CBITypedSection.extend({
 		}, E('div'));
 
 		if (this.sortable) {
-			L.dom.append(tdEl.lastElementChild, [
+			dom.append(tdEl.lastElementChild, [
 				E('div', {
 					'title': _('Drag to reorder'),
 					'class': 'btn cbi-button drag-handle center',
@@ -1217,7 +1219,7 @@ var CBITableSection = CBITypedSection.extend({
 					location.href = this.extedit.format(sid);
 				}, this, section_id);
 
-			L.dom.append(tdEl.lastElementChild,
+			dom.append(tdEl.lastElementChild,
 				E('button', {
 					'title': _('Edit'),
 					'class': 'cbi-button cbi-button-edit',
@@ -1227,11 +1229,11 @@ var CBITableSection = CBITypedSection.extend({
 		}
 
 		if (more_label) {
-			L.dom.append(tdEl.lastElementChild,
+			dom.append(tdEl.lastElementChild,
 				E('button', {
 					'title': more_label,
 					'class': 'cbi-button cbi-button-edit',
-					'click': L.ui.createHandlerFn(this, 'renderMoreOptionsModal', section_id)
+					'click': ui.createHandlerFn(this, 'renderMoreOptionsModal', section_id)
 				}, [ more_label ])
 			);
 		}
@@ -1239,11 +1241,11 @@ var CBITableSection = CBITypedSection.extend({
 		if (this.addremove) {
 			var btn_title = this.titleFn('removebtntitle', section_id);
 
-			L.dom.append(tdEl.lastElementChild,
+			dom.append(tdEl.lastElementChild,
 				E('button', {
 					'title': btn_title || _('Delete'),
 					'class': 'cbi-button cbi-button-remove',
-					'click': L.ui.createHandlerFn(this, 'handleRemove', section_id)
+					'click': ui.createHandlerFn(this, 'handleRemove', section_id)
 				}, [ btn_title || _('Delete') ])
 			);
 		}
@@ -1262,7 +1264,7 @@ var CBITableSection = CBITypedSection.extend({
 			return false;
 		}
 
-		scope.dragState.node = L.dom.parent(scope.dragState.node, '.tr');
+		scope.dragState.node = dom.parent(scope.dragState.node, '.tr');
 		ev.dataTransfer.setData('text', 'drag');
 		ev.target.style.opacity = 0.4;
 	},
@@ -1336,14 +1338,14 @@ var CBITableSection = CBITypedSection.extend({
 	},
 
 	handleModalCancel: function(modalMap, ev) {
-		return Promise.resolve(L.ui.hideModal());
+		return Promise.resolve(ui.hideModal());
 	},
 
 	handleModalSave: function(modalMap, ev) {
 		return modalMap.save()
 			.then(L.bind(this.map.load, this.map))
 			.then(L.bind(this.map.reset, this.map))
-			.then(L.ui.hideModal)
+			.then(ui.hideModal)
 			.catch(function() {});
 	},
 
@@ -1397,16 +1399,16 @@ var CBITableSection = CBITypedSection.extend({
 		}
 
 		return Promise.resolve(this.addModalOptions(s, section_id, ev)).then(L.bind(m.render, m)).then(L.bind(function(nodes) {
-			L.ui.showModal(title, [
+			ui.showModal(title, [
 				nodes,
 				E('div', { 'class': 'right' }, [
 					E('button', {
 						'class': 'btn',
-						'click': L.ui.createHandlerFn(this, 'handleModalCancel', m)
+						'click': ui.createHandlerFn(this, 'handleModalCancel', m)
 					}, [ _('Dismiss') ]), ' ',
 					E('button', {
 						'class': 'cbi-button cbi-button-positive important',
-						'click': L.ui.createHandlerFn(this, 'handleModalSave', m)
+						'click': ui.createHandlerFn(this, 'handleModalSave', m)
 					}, [ _('Save') ])
 				])
 			], 'cbi-modal');
@@ -1555,7 +1557,7 @@ var CBINamedSection = CBIAbstractSection.extend({
 					E('div', { 'class': 'cbi-section-remove right' },
 						E('button', {
 							'class': 'cbi-button',
-							'click': L.ui.createHandlerFn(this, 'handleRemove')
+							'click': ui.createHandlerFn(this, 'handleRemove')
 						}, [ _('Delete') ])));
 			}
 
@@ -1570,11 +1572,11 @@ var CBINamedSection = CBIAbstractSection.extend({
 			sectionEl.appendChild(
 				E('button', {
 					'class': 'cbi-button cbi-button-add',
-					'click': L.ui.createHandlerFn(this, 'handleAdd')
+					'click': ui.createHandlerFn(this, 'handleAdd')
 				}, [ _('Add') ]));
 		}
 
-		L.dom.bindClassInstance(sectionEl, this);
+		dom.bindClassInstance(sectionEl, this);
 
 		return sectionEl;
 	},
@@ -1598,7 +1600,7 @@ var CBIValue = CBIAbstractValue.extend({
 		this.keylist.push(String(key));
 
 		this.vallist = this.vallist || [];
-		this.vallist.push(L.dom.elem(val) ? val : String(val != null ? val : key));
+		this.vallist.push(dom.elem(val) ? val : String(val != null ? val : key));
 	},
 
 	render: function(option_index, section_id, in_table) {
@@ -1669,7 +1671,7 @@ var CBIValue = CBIAbstractValue.extend({
 			(optionEl.lastChild || optionEl).appendChild(nodes);
 
 		if (!in_table && typeof(this.description) === 'string' && this.description !== '')
-			L.dom.append(optionEl.lastChild || optionEl,
+			dom.append(optionEl.lastChild || optionEl,
 				E('div', { 'class': 'cbi-value-description' }, this.description));
 
 		if (depend_list && depend_list.length)
@@ -1678,7 +1680,7 @@ var CBIValue = CBIAbstractValue.extend({
 		optionEl.addEventListener('widget-change',
 			L.bind(this.map.checkDepends, this.map));
 
-		L.dom.bindClassInstance(optionEl, this);
+		dom.bindClassInstance(optionEl, this);
 
 		return optionEl;
 	},
@@ -1877,7 +1879,7 @@ var CBIDummyValue = CBIValue.extend({
 		if (this.href)
 			outputEl.appendChild(E('a', { 'href': this.href }));
 
-		L.dom.append(outputEl.lastChild || outputEl,
+		dom.append(outputEl.lastChild || outputEl,
 			this.rawhtml ? value : [ value ]);
 
 		return E([
@@ -1900,10 +1902,10 @@ var CBIButtonValue = CBIValue.extend({
 		    btn_title = this.titleFn('inputtitle', section_id) || this.titleFn('title', section_id);
 
 		if (value !== false)
-			L.dom.content(outputEl, [
+			dom.content(outputEl, [
 				E('button', {
 					'class': 'cbi-button cbi-button-%s'.format(this.inputstyle || 'button'),
-					'click': L.ui.createHandlerFn(this, function(section_id, ev) {
+					'click': ui.createHandlerFn(this, function(section_id, ev) {
 						if (this.onclick)
 							return this.onclick(ev, section_id);
 
@@ -1913,7 +1915,7 @@ var CBIButtonValue = CBIValue.extend({
 				}, [ btn_title ])
 			]);
 		else
-			L.dom.content(outputEl, ' - ');
+			dom.content(outputEl, ' - ');
 
 		return E([
 			outputEl,
@@ -1995,7 +1997,7 @@ var CBISectionValue = CBIValue.extend({
 	formvalue: function() { return null }
 });
 
-return L.Class.extend({
+return baseclass.extend({
 	Map: CBIMap,
 	JSONMap: CBIJSONMap,
 	AbstractSection: CBIAbstractSection,

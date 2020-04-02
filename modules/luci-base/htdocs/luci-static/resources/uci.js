@@ -1,5 +1,6 @@
 'use strict';
 'require rpc';
+'require baseclass';
 
 /**
  * @class uci
@@ -12,7 +13,7 @@
  * manipulation layer on top to allow for synchroneous operations on
  * UCI configuration data.
  */
-return L.Class.extend(/** @lends LuCI.uci.prototype */ {
+return baseclass.extend(/** @lends LuCI.uci.prototype */ {
 	__init__: function() {
 		this.state = {
 			newidx:  0,

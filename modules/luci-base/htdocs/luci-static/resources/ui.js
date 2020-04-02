@@ -1,7 +1,11 @@
 'use strict';
+'require validation';
+'require baseclass';
+'require request';
+'require poll';
+'require dom';
 'require rpc';
 'require uci';
-'require validation';
 'require fs';
 
 var modalDiv = null,
@@ -29,7 +33,7 @@ var modalDiv = null,
  * it in external JavaScript, use `L.require("ui").then(...)` and access the
  * `AbstractElement` property of the class instance value.
  */
-var UIElement = L.Class.extend(/** @lends LuCI.ui.AbstractElement.prototype */ {
+var UIElement = baseclass.extend(/** @lends LuCI.ui.AbstractElement.prototype */ {
 	/**
 	 * @typedef {Object} InitOptions
 	 * @memberof LuCI.ui.AbstractElement
@@ -48,7 +52,7 @@ var UIElement = L.Class.extend(/** @lends LuCI.ui.AbstractElement.prototype */ {
 	 * @property {string} [datatype=string]
 	 * An expression describing the input data validation constraints.
 	 * It defaults to `string` which will allow any value.
-	 * See{@link LuCI.validation} for details on the expression format.
+	 * See {@link LuCI.validation} for details on the expression format.
 	 *
 	 * @property {function} [validator]
 	 * Specifies a custom validator function which is invoked after the
@@ -69,7 +73,7 @@ var UIElement = L.Class.extend(/** @lends LuCI.ui.AbstractElement.prototype */ {
 	 * an array of strings or `null` for unset values.
 	 */
 	getValue: function() {
-		if (L.dom.matches(this.node, 'select') || L.dom.matches(this.node, 'input'))
+		if (dom.matches(this.node, 'select') || dom.matches(this.node, 'input'))
 			return this.node.value;
 
 		return null;
@@ -87,7 +91,7 @@ var UIElement = L.Class.extend(/** @lends LuCI.ui.AbstractElement.prototype */ {
 	 * or `null` values.
 	 */
 	setValue: function(value) {
-		if (L.dom.matches(this.node, 'select') || L.dom.matches(this.node, 'input'))
+		if (dom.matches(this.node, 'select') || dom.matches(this.node, 'input'))
 			this.node.value = value;
 	},
 
@@ -185,7 +189,7 @@ var UIElement = L.Class.extend(/** @lends LuCI.ui.AbstractElement.prototype */ {
 		if (!datatype && !validate)
 			return;
 
-		this.vfunc = L.ui.addValidator.apply(L.ui, [
+		this.vfunc = UI.prototype.addValidator.apply(UI.prototype, [
 			targetNode, datatype || 'string',
 			optional, validate
 		].concat(events));
@@ -347,7 +351,7 @@ var UITextfield = UIElement.extend(/** @lends LuCI.ui.Textfield.prototype */ {
 		this.setUpdateEvents(inputEl, 'keyup', 'blur');
 		this.setChangeEvents(inputEl, 'change');
 
-		L.dom.bindClassInstance(frameEl, this);
+		dom.bindClassInstance(frameEl, this);
 
 		return frameEl;
 	},
@@ -463,7 +467,7 @@ var UITextarea = UIElement.extend(/** @lends LuCI.ui.Textarea.prototype */ {
 		this.setUpdateEvents(inputEl, 'keyup', 'blur');
 		this.setChangeEvents(inputEl, 'change');
 
-		L.dom.bindClassInstance(frameEl, this);
+		dom.bindClassInstance(frameEl, this);
 
 		return frameEl;
 	},
@@ -568,7 +572,7 @@ var UICheckbox = UIElement.extend(/** @lends LuCI.ui.Checkbox.prototype */ {
 		this.setUpdateEvents(frameEl.lastElementChild.previousElementSibling, 'click', 'blur');
 		this.setChangeEvents(frameEl.lastElementChild.previousElementSibling, 'change');
 
-		L.dom.bindClassInstance(frameEl, this);
+		dom.bindClassInstance(frameEl, this);
 
 		return frameEl;
 	},
@@ -763,7 +767,7 @@ var UISelect = UIElement.extend(/** @lends LuCI.ui.Select.prototype */ {
 			}
 		}
 
-		L.dom.bindClassInstance(frameEl, this);
+		dom.bindClassInstance(frameEl, this);
 
 		return frameEl;
 	},
@@ -929,7 +933,7 @@ var UIDropdown = UIElement.extend(/** @lends LuCI.ui.Dropdown.prototype */ {
 	 * expression. Only applicable when `create` is `true`.
 	 */
 	__init__: function(value, choices, options) {
-		if (!L.isObject(choices))
+		if (typeof(choices) != 'object')
 			choices = {};
 
 		if (!Array.isArray(value))
@@ -976,7 +980,7 @@ var UIDropdown = UIElement.extend(/** @lends LuCI.ui.Dropdown.prototype */ {
 		for (var i = 0; i < keys.length; i++) {
 			var label = this.choices[keys[i]];
 
-			if (L.dom.elem(label))
+			if (dom.elem(label))
 				label = label.cloneNode(true);
 
 			sb.lastElementChild.appendChild(E('li', {
@@ -995,8 +999,8 @@ var UIDropdown = UIElement.extend(/** @lends LuCI.ui.Dropdown.prototype */ {
 			});
 
 			if (this.options.datatype || this.options.validate)
-				L.ui.addValidator(createEl, this.options.datatype || 'string',
-				                  true, this.options.validate, 'blur', 'keyup');
+				UI.prototype.addValidator(createEl, this.options.datatype || 'string',
+				                          true, this.options.validate, 'blur', 'keyup');
 
 			sb.lastElementChild.appendChild(E('li', { 'data-value': '-' }, createEl));
 		}
@@ -1079,7 +1083,7 @@ var UIDropdown = UIElement.extend(/** @lends LuCI.ui.Dropdown.prototype */ {
 		else
 			sb.removeAttribute('empty');
 
-		L.dom.content(more, (ndisplay == this.options.display_items)
+		dom.content(more, (ndisplay == this.options.display_items)
 			? (this.options.select_placeholder || this.options.placeholder) : '···');
 
 
@@ -1118,7 +1122,7 @@ var UIDropdown = UIElement.extend(/** @lends LuCI.ui.Dropdown.prototype */ {
 		this.setUpdateEvents(sb, 'cbi-dropdown-open', 'cbi-dropdown-close');
 		this.setChangeEvents(sb, 'cbi-dropdown-change', 'cbi-dropdown-close');
 
-		L.dom.bindClassInstance(sb, this);
+		dom.bindClassInstance(sb, this);
 
 		return sb;
 	},
@@ -1343,7 +1347,7 @@ var UIDropdown = UIElement.extend(/** @lends LuCI.ui.Dropdown.prototype */ {
 			else
 				sb.removeAttribute('empty');
 
-			L.dom.content(more, (ndisplay === this.options.display_items)
+			dom.content(more, (ndisplay === this.options.display_items)
 				? (this.options.select_placeholder || this.options.placeholder) : '···');
 		}
 		else {
@@ -2017,7 +2021,7 @@ var UIComboButton = UIDropdown.extend(/** @lends LuCI.ui.ComboButton.prototype *
 		var sb = ev.currentTarget,
 		    t = ev.target;
 
-		if (sb.hasAttribute('open') || L.dom.matches(t, '.cbi-dropdown > span.open'))
+		if (sb.hasAttribute('open') || dom.matches(t, '.cbi-dropdown > span.open'))
 			return UIDropdown.prototype.handleClick.apply(this, arguments);
 
 		if (this.options.click)
@@ -2133,14 +2137,14 @@ var UIDynamicList = UIElement.extend(/** @lends LuCI.ui.DynamicList.prototype */
 			dl.lastElementChild.appendChild(E('div', { 'class': 'btn cbi-button cbi-button-add' }, '+'));
 
 			if (this.options.datatype || this.options.validate)
-				L.ui.addValidator(inputEl, this.options.datatype || 'string',
-				                  true, this.options.validate, 'blur', 'keyup');
+				UI.prototype.addValidator(inputEl, this.options.datatype || 'string',
+				                          true, this.options.validate, 'blur', 'keyup');
 		}
 
 		for (var i = 0; i < this.values.length; i++) {
 			var label = this.choices ? this.choices[this.values[i]] : null;
 
-			if (L.dom.elem(label))
+			if (dom.elem(label))
 				label = label.cloneNode(true);
 
 			this.addItem(dl, this.values[i], label);
@@ -2160,7 +2164,7 @@ var UIDynamicList = UIElement.extend(/** @lends LuCI.ui.DynamicList.prototype */
 		this.setUpdateEvents(dl, 'cbi-dynlist-change');
 		this.setChangeEvents(dl, 'cbi-dynlist-change');
 
-		L.dom.bindClassInstance(dl, this);
+		dom.bindClassInstance(dl, this);
 
 		return dl;
 	},
@@ -2372,7 +2376,7 @@ var UIDynamicList = UIElement.extend(/** @lends LuCI.ui.DynamicList.prototype */
 	 */
 	addChoices: function(values, labels) {
 		var dl = this.node.lastElementChild.firstElementChild;
-		L.dom.callClassMethod(dl, 'addChoices', values, labels);
+		dom.callClassMethod(dl, 'addChoices', values, labels);
 	},
 
 	/**
@@ -2385,7 +2389,7 @@ var UIDynamicList = UIElement.extend(/** @lends LuCI.ui.DynamicList.prototype */
 	 */
 	clearChoices: function() {
 		var dl = this.node.lastElementChild.firstElementChild;
-		L.dom.callClassMethod(dl, 'clearChoices');
+		dom.callClassMethod(dl, 'clearChoices');
 	}
 });
 
@@ -2439,7 +2443,7 @@ var UIHiddenfield = UIElement.extend(/** @lends LuCI.ui.Hiddenfield.prototype */
 	bind: function(hiddenEl) {
 		this.node = hiddenEl;
 
-		L.dom.bindClassInstance(hiddenEl, this);
+		dom.bindClassInstance(hiddenEl, this);
 
 		return hiddenEl;
 	},
@@ -2535,7 +2539,7 @@ var UIFileUpload = UIElement.extend(/** @lends LuCI.ui.FileUpload.prototype */ {
 		this.setUpdateEvents(browserEl, 'cbi-fileupload-select', 'cbi-fileupload-cancel');
 		this.setChangeEvents(browserEl, 'cbi-fileupload-select', 'cbi-fileupload-cancel');
 
-		L.dom.bindClassInstance(browserEl, this);
+		dom.bindClassInstance(browserEl, this);
 
 		return browserEl;
 	},
@@ -2558,7 +2562,7 @@ var UIFileUpload = UIElement.extend(/** @lends LuCI.ui.FileUpload.prototype */ {
 			return this.bind(E('div', { 'id': this.options.id }, [
 				E('button', {
 					'class': 'btn',
-					'click': L.ui.createHandlerFn(this, 'handleFileBrowser')
+					'click': UI.prototype.createHandlerFn(this, 'handleFileBrowser')
 				}, label),
 				E('div', {
 					'class': 'cbi-filebrowser'
@@ -2657,7 +2661,7 @@ var UIFileUpload = UIElement.extend(/** @lends LuCI.ui.FileUpload.prototype */ {
 		data.append('filename', path + '/' + filename);
 		data.append('filedata', fileinput.files[0]);
 
-		return L.Request.post(L.env.cgi_base + '/cgi-upload', data, {
+		return request.post(L.env.cgi_base + '/cgi-upload', data, {
 			progress: L.bind(function(btn, ev) {
 				btn.firstChild.data = '%.2f%%'.format((ev.loaded / ev.total) * 100);
 			}, this, ev.target)
@@ -2689,7 +2693,7 @@ var UIFileUpload = UIElement.extend(/** @lends LuCI.ui.FileUpload.prototype */ {
 			    hidden = this.node.lastElementChild;
 
 			if (path == hidden.value) {
-				L.dom.content(button, _('Select file…'));
+				dom.content(button, _('Select file…'));
 				hidden.value = '';
 			}
 
@@ -2741,7 +2745,7 @@ var UIFileUpload = UIElement.extend(/** @lends LuCI.ui.FileUpload.prototype */ {
 				E('div', {}, E('input', { 'type': 'text', 'placeholder': _('Filename') })),
 				E('button', {
 					'class': 'btn cbi-button-save',
-					'click': L.ui.createHandlerFn(this, 'handleUpload', path, list),
+					'click': UI.prototype.createHandlerFn(this, 'handleUpload', path, list),
 					'disabled': true
 				}, [ _('Upload file') ])
 			])
@@ -2778,7 +2782,7 @@ var UIFileUpload = UIElement.extend(/** @lends LuCI.ui.FileUpload.prototype */ {
 					E('a', {
 						'href': '#',
 						'style': selected ? 'font-weight:bold' : null,
-						'click': L.ui.createHandlerFn(this, 'handleSelect',
+						'click': UI.prototype.createHandlerFn(this, 'handleSelect',
 							entrypath, list[i].type != 'directory' ? list[i] : null)
 					}, '%h'.format(list[i].name))
 				]),
@@ -2794,11 +2798,11 @@ var UIFileUpload = UIElement.extend(/** @lends LuCI.ui.FileUpload.prototype */ {
 				E('div', [
 					selected ? E('button', {
 						'class': 'btn',
-						'click': L.ui.createHandlerFn(this, 'handleReset')
+						'click': UI.prototype.createHandlerFn(this, 'handleReset')
 					}, [ _('Deselect') ]) : '',
 					this.options.enable_remove ? E('button', {
 						'class': 'btn cbi-button-negative',
-						'click': L.ui.createHandlerFn(this, 'handleDelete', entrypath, list[i])
+						'click': UI.prototype.createHandlerFn(this, 'handleDelete', entrypath, list[i])
 					}, [ _('Delete') ]) : ''
 				])
 			]));
@@ -2812,16 +2816,16 @@ var UIFileUpload = UIElement.extend(/** @lends LuCI.ui.FileUpload.prototype */ {
 
 		for (var i = 0; i < dirs.length; i++) {
 			cur = cur ? cur + '/' + dirs[i] : dirs[i];
-			L.dom.append(breadcrumb, [
+			dom.append(breadcrumb, [
 				i ? ' » ' : '',
 				E('a', {
 					'href': '#',
-					'click': L.ui.createHandlerFn(this, 'handleSelect', cur || '/', null)
+					'click': UI.prototype.createHandlerFn(this, 'handleSelect', cur || '/', null)
 				}, dirs[i] != '' ? '%h'.format(dirs[i]) : E('em', '(root)')),
 			]);
 		}
 
-		L.dom.content(container, [
+		dom.content(container, [
 			breadcrumb,
 			rows,
 			E('div', { 'class': 'right' }, [
@@ -2829,7 +2833,7 @@ var UIFileUpload = UIElement.extend(/** @lends LuCI.ui.FileUpload.prototype */ {
 				E('a', {
 					'href': '#',
 					'class': 'btn',
-					'click': L.ui.createHandlerFn(this, 'handleCancel')
+					'click': UI.prototype.createHandlerFn(this, 'handleCancel')
 				}, _('Cancel'))
 			]),
 		]);
@@ -2854,18 +2858,18 @@ var UIFileUpload = UIElement.extend(/** @lends LuCI.ui.FileUpload.prototype */ {
 		    hidden = this.node.lastElementChild;
 
 		hidden.value = '';
-		L.dom.content(button, _('Select file…'));
+		dom.content(button, _('Select file…'));
 
 		this.handleCancel(ev);
 	},
 
 	/** @private */
 	handleSelect: function(path, fileStat, ev) {
-		var browser = L.dom.parent(ev.target, '.cbi-filebrowser'),
+		var browser = dom.parent(ev.target, '.cbi-filebrowser'),
 		    ul = browser.querySelector('ul');
 
 		if (fileStat == null) {
-			L.dom.content(ul, E('em', { 'class': 'spinning' }, _('Loading directory contents…')));
+			dom.content(ul, E('em', { 'class': 'spinning' }, _('Loading directory contents…')));
 			L.resolveDefault(fs.list(path), []).then(L.bind(this.renderListing, this, browser, path));
 		}
 		else {
@@ -2874,7 +2878,7 @@ var UIFileUpload = UIElement.extend(/** @lends LuCI.ui.FileUpload.prototype */ {
 
 			path = this.canonicalizePath(path);
 
-			L.dom.content(button, [
+			dom.content(button, [
 				this.iconForType(fileStat.type),
 				' %s (%1000mB)'.format(this.truncatePath(path), fileStat.size)
 			]);
@@ -2901,7 +2905,7 @@ var UIFileUpload = UIElement.extend(/** @lends LuCI.ui.FileUpload.prototype */ {
 
 		return L.resolveDefault(fs.list(path), []).then(L.bind(function(button, browser, path, list) {
 			document.querySelectorAll('.cbi-filebrowser.open').forEach(function(browserEl) {
-				L.dom.findClassInstance(browserEl).handleCancel(ev);
+				dom.findClassInstance(browserEl).handleCancel(ev);
 			});
 
 			button.style.display = 'none';
@@ -2932,14 +2936,14 @@ var UIFileUpload = UIElement.extend(/** @lends LuCI.ui.FileUpload.prototype */ {
  * To import the class in views, use `'require ui'`, to import it in
  * external JavaScript, use `L.require("ui").then(...)`.
  */
-return L.Class.extend(/** @lends LuCI.ui.prototype */ {
+var UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 	__init__: function() {
 		modalDiv = document.body.appendChild(
-			L.dom.create('div', { id: 'modal_overlay' },
-				L.dom.create('div', { class: 'modal', role: 'dialog', 'aria-modal': true })));
+			dom.create('div', { id: 'modal_overlay' },
+				dom.create('div', { class: 'modal', role: 'dialog', 'aria-modal': true })));
 
 		tooltipDiv = document.body.appendChild(
-			L.dom.create('div', { class: 'cbi-tooltip' }));
+			dom.create('div', { class: 'cbi-tooltip' }));
 
 		/* setup old aliases */
 		L.showModal = this.showModal;
@@ -2977,7 +2981,7 @@ return L.Class.extend(/** @lends LuCI.ui.prototype */ {
 	 * @param {*} contents
 	 * The contents to add to the modal dialog. This should be a DOM node or
 	 * a document fragment in most cases. The value is passed as-is to the
-	 * `L.dom.content()` function - refer to its documentation for applicable
+	 * `dom.content()` function - refer to its documentation for applicable
 	 * values.
 	 *
 	 * @param {...string} [classes]
@@ -2995,8 +2999,8 @@ return L.Class.extend(/** @lends LuCI.ui.prototype */ {
 		for (var i = 2; i < arguments.length; i++)
 			dlg.classList.add(arguments[i]);
 
-		L.dom.content(dlg, L.dom.create('h4', {}, title));
-		L.dom.append(dlg, children);
+		dom.content(dlg, dom.create('h4', {}, title));
+		dom.append(dlg, children);
 
 		document.body.classList.add('modal-overlay-active');
 
@@ -3092,7 +3096,7 @@ return L.Class.extend(/** @lends LuCI.ui.prototype */ {
 	 * @param {*} contents
 	 * The contents to add to the notification banner. This should be a DOM
 	 * node or a document fragment in most cases. The value is passed as-is
-	 * to the `L.dom.content()` function - refer to its documentation for
+	 * to the `dom.content()` function - refer to its documentation for
 	 * applicable values.
 	 *
 	 * @param {...string} [classes]
@@ -3119,7 +3123,7 @@ return L.Class.extend(/** @lends LuCI.ui.prototype */ {
 					'class': 'btn',
 					'style': 'margin-left:auto; margin-top:auto',
 					'click': function(ev) {
-						L.dom.parent(ev.target, '.alert-message').classList.add('fade-out');
+						dom.parent(ev.target, '.alert-message').classList.add('fade-out');
 					},
 
 				}, [ _('Dismiss') ])
@@ -3127,9 +3131,9 @@ return L.Class.extend(/** @lends LuCI.ui.prototype */ {
 		]);
 
 		if (title != null)
-			L.dom.append(msg.firstElementChild, E('h4', {}, title));
+			dom.append(msg.firstElementChild, E('h4', {}, title));
 
-		L.dom.append(msg.firstElementChild, children);
+		dom.append(msg.firstElementChild, children);
 
 		for (var i = 2; i < arguments.length; i++)
 			msg.classList.add(arguments[i]);
@@ -3271,11 +3275,11 @@ return L.Class.extend(/** @lends LuCI.ui.prototype */ {
 				]));
 
 				if ((i+2) < items.length)
-					children.push(L.dom.elem(sep) ? sep.cloneNode(true) : sep);
+					children.push(dom.elem(sep) ? sep.cloneNode(true) : sep);
 			}
 		}
 
-		L.dom.content(node, children);
+		dom.content(node, children);
 
 		return node;
 	},
@@ -3295,7 +3299,7 @@ return L.Class.extend(/** @lends LuCI.ui.prototype */ {
 	 * external JavaScript, use `L.require("ui").then(...)` and access the
 	 * `tabs` property of the class instance value.
 	 */
-	tabs: L.Class.singleton(/* @lends LuCI.ui.tabs.prototype */ {
+	tabs: baseclass.singleton(/* @lends LuCI.ui.tabs.prototype */ {
 		/** @private */
 		init: function() {
 			var groups = [], prevGroup = null, currGroup = null;
@@ -3303,7 +3307,7 @@ return L.Class.extend(/** @lends LuCI.ui.prototype */ {
 			document.querySelectorAll('[data-tab]').forEach(function(tab) {
 				var parent = tab.parentNode;
 
-				if (L.dom.matches(tab, 'li') && L.dom.matches(parent, 'ul.cbi-tabmenu'))
+				if (dom.matches(tab, 'li') && dom.matches(parent, 'ul.cbi-tabmenu'))
 					return;
 
 				if (!parent.hasAttribute('data-tab-group'))
@@ -3421,7 +3425,7 @@ return L.Class.extend(/** @lends LuCI.ui.prototype */ {
 		 * Returns `true` if the pane is empty, else `false`.
 		 */
 		isEmptyPane: function(pane) {
-			return L.dom.isEmpty(pane, function(n) { return n.classList.contains('cbi-tab-descr') });
+			return dom.isEmpty(pane, function(n) { return n.classList.contains('cbi-tab-descr') });
 		},
 
 		/** @private */
@@ -3530,11 +3534,11 @@ return L.Class.extend(/** @lends LuCI.ui.prototype */ {
 			});
 
 			group.childNodes.forEach(function(pane) {
-				if (L.dom.matches(pane, '[data-tab]')) {
+				if (dom.matches(pane, '[data-tab]')) {
 					if (pane.getAttribute('data-tab') === name) {
 						pane.setAttribute('data-tab-active', 'true');
 						pane.dispatchEvent(new CustomEvent('cbi-tab-active', { detail: { tab: name } }));
-						L.ui.tabs.setActiveTabId(pane, index);
+						UI.prototype.tabs.setActiveTabId(pane, index);
 					}
 					else {
 						pane.setAttribute('data-tab-active', 'false');
@@ -3576,7 +3580,7 @@ return L.Class.extend(/** @lends LuCI.ui.prototype */ {
 	 */
 	uploadFile: function(path, progressStatusNode) {
 		return new Promise(function(resolveFn, rejectFn) {
-			L.ui.showModal(_('Uploading file…'), [
+			UI.prototype.showModal(_('Uploading file…'), [
 				E('p', _('Please select the file to upload.')),
 				E('div', { 'style': 'display:flex' }, [
 					E('div', { 'class': 'left', 'style': 'flex:1' }, [
@@ -3584,7 +3588,7 @@ return L.Class.extend(/** @lends LuCI.ui.prototype */ {
 							type: 'file',
 							style: 'display:none',
 							change: function(ev) {
-								var modal = L.dom.parent(ev.target, '.modal'),
+								var modal = dom.parent(ev.target, '.modal'),
 								    body = modal.querySelector('p'),
 								    upload = modal.querySelector('.cbi-button-action.important'),
 								    file = ev.currentTarget.files[0];
@@ -3592,7 +3596,7 @@ return L.Class.extend(/** @lends LuCI.ui.prototype */ {
 								if (file == null)
 									return;
 
-								L.dom.content(body, [
+								dom.content(body, [
 									E('ul', {}, [
 										E('li', {}, [ '%s: %s'.format(_('Name'), file.name.replace(/^.*[\\\/]/, '')) ]),
 										E('li', {}, [ '%s: %1024mB'.format(_('Size'), file.size) ])
@@ -3614,7 +3618,7 @@ return L.Class.extend(/** @lends LuCI.ui.prototype */ {
 						E('button', {
 							'class': 'btn',
 							'click': function() {
-								L.ui.hideModal();
+								UI.prototype.hideModal();
 								rejectFn(new Error('Upload has been cancelled'));
 							}
 						}, [ _('Cancel') ]),
@@ -3623,14 +3627,14 @@ return L.Class.extend(/** @lends LuCI.ui.prototype */ {
 							'class': 'btn cbi-button-action important',
 							'disabled': true,
 							'click': function(ev) {
-								var input = L.dom.parent(ev.target, '.modal').querySelector('input[type="file"]');
+								var input = dom.parent(ev.target, '.modal').querySelector('input[type="file"]');
 
 								if (!input.files[0])
 									return;
 
 								var progress = E('div', { 'class': 'cbi-progressbar', 'title': '0%' }, E('div', { 'style': 'width:0' }));
 
-								L.ui.showModal(_('Uploading file…'), [ progress ]);
+								UI.prototype.showModal(_('Uploading file…'), [ progress ]);
 
 								var data = new FormData();
 
@@ -3640,7 +3644,7 @@ return L.Class.extend(/** @lends LuCI.ui.prototype */ {
 
 								var filename = input.files[0].name;
 
-								L.Request.post(L.env.cgi_base + '/cgi-upload', data, {
+								request.post(L.env.cgi_base + '/cgi-upload', data, {
 									timeout: 0,
 									progress: function(pev) {
 										var percent = (pev.loaded / pev.total) * 100;
@@ -3654,10 +3658,10 @@ return L.Class.extend(/** @lends LuCI.ui.prototype */ {
 								}).then(function(res) {
 									var reply = res.json();
 
-									L.ui.hideModal();
+									UI.prototype.hideModal();
 
 									if (L.isObject(reply) && reply.failure) {
-										L.ui.addNotification(null, E('p', _('Upload request failed: %s').format(reply.message)));
+										UI.prototype.addNotification(null, E('p', _('Upload request failed: %s').format(reply.message)));
 										rejectFn(new Error(reply.failure));
 									}
 									else {
@@ -3665,7 +3669,7 @@ return L.Class.extend(/** @lends LuCI.ui.prototype */ {
 										resolveFn(reply);
 									}
 								}, function(err) {
-									L.ui.hideModal();
+									UI.prototype.hideModal();
 									rejectFn(err);
 								});
 							}
@@ -3726,7 +3730,7 @@ return L.Class.extend(/** @lends LuCI.ui.prototype */ {
 		var ipaddrs = arguments.length ? arguments : [ window.location.host ];
 
 		window.setTimeout(L.bind(function() {
-			L.Poll.add(L.bind(function() {
+			poll.add(L.bind(function() {
 				var tasks = [], reachable = false;
 
 				for (var i = 0; i < 2; i++)
@@ -3736,7 +3740,7 @@ return L.Class.extend(/** @lends LuCI.ui.prototype */ {
 
 				return Promise.all(tasks).then(function() {
 					if (reachable) {
-						L.Poll.stop();
+						poll.stop();
 						window.location = reachable;
 					}
 				});
@@ -3758,7 +3762,7 @@ return L.Class.extend(/** @lends LuCI.ui.prototype */ {
 	 * external JavaScript, use `L.require("ui").then(...)` and access the
 	 * `changes` property of the class instance value.
 	 */
-	changes: L.Class.singleton(/* @lends LuCI.ui.changes.prototype */ {
+	changes: baseclass.singleton(/* @lends LuCI.ui.changes.prototype */ {
 		init: function() {
 			if (!L.env.sessionid)
 				return;
@@ -3791,7 +3795,7 @@ return L.Class.extend(/** @lends LuCI.ui.prototype */ {
 			}
 
 			if (n > 0) {
-				L.dom.content(i, [ _('Unsaved Changes'), ': ', n ]);
+				dom.content(i, [ _('Unsaved Changes'), ': ', n ]);
 				i.classList.add('flash');
 				i.style.display = '';
 				document.dispatchEvent(new CustomEvent('uci-new-changes'));
@@ -3850,7 +3854,7 @@ return L.Class.extend(/** @lends LuCI.ui.prototype */ {
 		 */
 		displayChanges: function() {
 			var list = E('div', { 'class': 'uci-change-list' }),
-			    dlg = L.ui.showModal(_('Configuration') + ' / ' + _('Changes'), [
+			    dlg = UI.prototype.showModal(_('Configuration') + ' / ' + _('Changes'), [
 				E('div', { 'class': 'cbi-section' }, [
 					E('strong', _('Legend:')),
 					E('div', { 'class': 'uci-change-legend' }, [
@@ -3866,7 +3870,7 @@ return L.Class.extend(/** @lends LuCI.ui.prototype */ {
 					E('div', { 'class': 'right' }, [
 						E('button', {
 							'class': 'btn',
-							'click': L.ui.hideModal
+							'click': UI.prototype.hideModal
 						}, [ _('Dismiss') ]), ' ',
 						E('button', {
 							'class': 'cbi-button cbi-button-positive important',
@@ -3919,24 +3923,24 @@ return L.Class.extend(/** @lends LuCI.ui.prototype */ {
 		/** @private */
 		displayStatus: function(type, content) {
 			if (type) {
-				var message = L.ui.showModal('', '');
+				var message = UI.prototype.showModal('', '');
 
 				message.classList.add('alert-message');
 				DOMTokenList.prototype.add.apply(message.classList, type.split(/\s+/));
 
 				if (content)
-					L.dom.content(message, content);
+					dom.content(message, content);
 
 				if (!this.was_polling) {
-					this.was_polling = L.Request.poll.active();
-					L.Request.poll.stop();
+					this.was_polling = request.poll.active();
+					request.poll.stop();
 				}
 			}
 			else {
-				L.ui.hideModal();
+				UI.prototype.hideModal();
 
 				if (this.was_polling)
-					L.Request.poll.start();
+					request.poll.start();
 			}
 		},
 
@@ -3949,21 +3953,21 @@ return L.Class.extend(/** @lends LuCI.ui.prototype */ {
 
 				var call = function(r, data, duration) {
 					if (r.status === 204) {
-						L.ui.changes.displayStatus('warning', [
+						UI.prototype.changes.displayStatus('warning', [
 							E('h4', _('Configuration changes have been rolled back!')),
 							E('p', _('The device could not be reached within %d seconds after applying the pending changes, which caused the configuration to be rolled back for safety reasons. If you believe that the configuration changes are correct nonetheless, perform an unchecked configuration apply. Alternatively, you can dismiss this warning and edit changes before attempting to apply again, or revert all pending changes to keep the currently working configuration state.').format(L.env.apply_rollback)),
 							E('div', { 'class': 'right' }, [
 								E('button', {
 									'class': 'btn',
-									'click': L.bind(L.ui.changes.displayStatus, L.ui.changes, false)
+									'click': L.bind(UI.prototype.changes.displayStatus, UI.prototype.changes, false)
 								}, [ _('Dismiss') ]), ' ',
 								E('button', {
 									'class': 'btn cbi-button-action important',
-									'click': L.bind(L.ui.changes.revert, L.ui.changes)
+									'click': L.bind(UI.prototype.changes.revert, UI.prototype.changes)
 								}, [ _('Revert changes') ]), ' ',
 								E('button', {
 									'class': 'btn cbi-button-negative important',
-									'click': L.bind(L.ui.changes.apply, L.ui.changes, false)
+									'click': L.bind(UI.prototype.changes.apply, UI.prototype.changes, false)
 								}, [ _('Apply unchecked') ])
 							])
 						]);
@@ -3973,7 +3977,7 @@ return L.Class.extend(/** @lends LuCI.ui.prototype */ {
 
 					var delay = isNaN(duration) ? 0 : Math.max(1000 - duration, 0);
 					window.setTimeout(function() {
-						L.Request.request(L.url('admin/uci/confirm'), {
+						request.request(L.url('admin/uci/confirm'), {
 							method: 'post',
 							timeout: L.env.apply_timeout * 1000,
 							query: { sid: L.env.sessionid, token: L.env.token }
@@ -4004,19 +4008,19 @@ return L.Class.extend(/** @lends LuCI.ui.prototype */ {
 			var call = function(r, data, duration) {
 				if (Date.now() >= deadline) {
 					window.clearTimeout(tt);
-					L.ui.changes.rollback(checked);
+					UI.prototype.changes.rollback(checked);
 					return;
 				}
 				else if (r && (r.status === 200 || r.status === 204)) {
 					document.dispatchEvent(new CustomEvent('uci-applied'));
 
-					L.ui.changes.setIndicator(0);
-					L.ui.changes.displayStatus('notice',
+					UI.prototype.changes.setIndicator(0);
+					UI.prototype.changes.displayStatus('notice',
 						E('p', _('Configuration changes applied.')));
 
 					window.clearTimeout(tt);
 					window.setTimeout(function() {
-						//L.ui.changes.displayStatus(false);
+						//UI.prototype.changes.displayStatus(false);
 						window.location = window.location.href.split('#')[0];
 					}, L.env.apply_display * 1000);
 
@@ -4025,10 +4029,10 @@ return L.Class.extend(/** @lends LuCI.ui.prototype */ {
 
 				var delay = isNaN(duration) ? 0 : Math.max(1000 - duration, 0);
 				window.setTimeout(function() {
-					L.Request.request(L.url('admin/uci/confirm'), {
+					request.request(L.url('admin/uci/confirm'), {
 						method: 'post',
 						timeout: L.env.apply_timeout * 1000,
-						query: L.ui.changes.confirm_auth
+						query: UI.prototype.changes.confirm_auth
 					}).then(call, call);
 				}, delay);
 			};
@@ -4036,7 +4040,7 @@ return L.Class.extend(/** @lends LuCI.ui.prototype */ {
 			var tick = function() {
 				var now = Date.now();
 
-				L.ui.changes.displayStatus('notice spinning',
+				UI.prototype.changes.displayStatus('notice spinning',
 					E('p', _('Applying configuration changes… %ds')
 						.format(Math.max(Math.floor((deadline - Date.now()) / 1000), 0))));
 
@@ -4077,32 +4081,32 @@ return L.Class.extend(/** @lends LuCI.ui.prototype */ {
 			this.displayStatus('notice spinning',
 				E('p', _('Starting configuration apply…')));
 
-			L.Request.request(L.url('admin/uci', checked ? 'apply_rollback' : 'apply_unchecked'), {
+			request.request(L.url('admin/uci', checked ? 'apply_rollback' : 'apply_unchecked'), {
 				method: 'post',
 				query: { sid: L.env.sessionid, token: L.env.token }
 			}).then(function(r) {
 				if (r.status === (checked ? 200 : 204)) {
 					var tok = null; try { tok = r.json(); } catch(e) {}
 					if (checked && tok !== null && typeof(tok) === 'object' && typeof(tok.token) === 'string')
-						L.ui.changes.confirm_auth = tok;
+						UI.prototype.changes.confirm_auth = tok;
 
-					L.ui.changes.confirm(checked, Date.now() + L.env.apply_rollback * 1000);
+					UI.prototype.changes.confirm(checked, Date.now() + L.env.apply_rollback * 1000);
 				}
 				else if (checked && r.status === 204) {
-					L.ui.changes.displayStatus('notice',
+					UI.prototype.changes.displayStatus('notice',
 						E('p', _('There are no changes to apply')));
 
 					window.setTimeout(function() {
-						L.ui.changes.displayStatus(false);
+						UI.prototype.changes.displayStatus(false);
 					}, L.env.apply_display * 1000);
 				}
 				else {
-					L.ui.changes.displayStatus('warning',
+					UI.prototype.changes.displayStatus('warning',
 						E('p', _('Apply request failed with status <code>%h</code>')
 							.format(r.responseText || r.statusText || r.status)));
 
 					window.setTimeout(function() {
-						L.ui.changes.displayStatus(false);
+						UI.prototype.changes.displayStatus(false);
 					}, L.env.apply_display * 1000);
 				}
 			});
@@ -4124,29 +4128,29 @@ return L.Class.extend(/** @lends LuCI.ui.prototype */ {
 			this.displayStatus('notice spinning',
 				E('p', _('Reverting configuration…')));
 
-			L.Request.request(L.url('admin/uci/revert'), {
+			request.request(L.url('admin/uci/revert'), {
 				method: 'post',
 				query: { sid: L.env.sessionid, token: L.env.token }
 			}).then(function(r) {
 				if (r.status === 200) {
 					document.dispatchEvent(new CustomEvent('uci-reverted'));
 
-					L.ui.changes.setIndicator(0);
-					L.ui.changes.displayStatus('notice',
+					UI.prototype.changes.setIndicator(0);
+					UI.prototype.changes.displayStatus('notice',
 						E('p', _('Changes have been reverted.')));
 
 					window.setTimeout(function() {
-						//L.ui.changes.displayStatus(false);
+						//UI.prototype.changes.displayStatus(false);
 						window.location = window.location.href.split('#')[0];
 					}, L.env.apply_display * 1000);
 				}
 				else {
-					L.ui.changes.displayStatus('warning',
+					UI.prototype.changes.displayStatus('warning',
 						E('p', _('Revert request failed with status <code>%h</code>')
 							.format(r.statusText || r.status)));
 
 					window.setTimeout(function() {
-						L.ui.changes.displayStatus(false);
+						UI.prototype.changes.displayStatus(false);
 					}, L.env.apply_display * 1000);
 				}
 			});
@@ -4197,7 +4201,7 @@ return L.Class.extend(/** @lends LuCI.ui.prototype */ {
 			events.push('blur', 'keyup');
 
 		try {
-			var cbiValidator = L.validation.create(field, type, optional, vfunc),
+			var cbiValidator = validation.create(field, type, optional, vfunc),
 			    validatorFn = cbiValidator.validate.bind(cbiValidator);
 
 			for (var i = 0; i < events.length; i++)
@@ -4278,3 +4282,5 @@ return L.Class.extend(/** @lends LuCI.ui.prototype */ {
 	Hiddenfield: UIHiddenfield,
 	FileUpload: UIFileUpload
 });
+
+return UI;
