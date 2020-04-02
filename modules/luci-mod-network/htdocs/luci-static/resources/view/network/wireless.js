@@ -29,7 +29,7 @@ function render_radio_badge(radioDev) {
 	]);
 }
 
-function render_signal_badge(signalPercent, signalValue, noiseValue, wrap) {
+function render_signal_badge(signalPercent, signalValue, noiseValue, wrap, mode) {
 	var icon, title, value;
 
 	if (signalPercent < 0)
@@ -45,20 +45,42 @@ function render_signal_badge(signalPercent, signalValue, noiseValue, wrap) {
 	else
 		icon = L.resource('icons/signal-75-100.png');
 
-	if (signalValue != null && signalValue != 0 && noiseValue != null && noiseValue != 0) {
-		value = '%d/%d\xa0%s'.format(signalValue, noiseValue, _('dBm'));
-		title = '%s: %d %s / %s: %d %s / %s %d'.format(
-			_('Signal'), signalValue, _('dBm'),
-			_('Noise'), noiseValue, _('dBm'),
-			_('SNR'), signalValue - noiseValue);
-	}
-	else if (signalValue != null && signalValue != 0) {
-		value = '%d\xa0%s'.format(signalValue, _('dBm'));
-		title = '%s: %d %s'.format(_('Signal'), signalValue, _('dBm'));
+	if (signalValue != null && signalValue != 0) {
+		if (noiseValue != null && noiseValue != 0) {
+			value = '%d/%d\xa0%s'.format(signalValue, noiseValue, _('dBm'));
+			title = '%s: %d %s / %s: %d %s / %s %d'.format(
+				_('Signal'), signalValue, _('dBm'),
+				_('Noise'), noiseValue, _('dBm'),
+				_('SNR'), signalValue - noiseValue);
+		}
+		else {
+			value = '%d\xa0%s'.format(signalValue, _('dBm'));
+			title = '%s: %d %s'.format(_('Signal'), signalValue, _('dBm'));
+		}
 	}
 	else if (signalPercent > -1) {
-		value = '\xa0---\xa0';
-		title = _('No signal');
+		switch (mode) {
+			case 'ap':
+				title = _('No client associated');
+				break;
+
+			case 'sta':
+			case 'adhoc':
+			case 'mesh':
+				title = _('Not associated');
+				break;
+
+			default:
+				title = _('No RX signal');
+		}
+
+		if (noiseValue != null && noiseValue != 0) {
+			value = '---/%d\x0a%s'.format(noiseValue, _('dBm'));
+			title = '%s / %s: %d %s'.format(title, _('Noise'), noiseValue, _('dBm'));
+		}
+		else {
+			value = '---\xa0%s'.format(_('dBm'));
+		}
 	}
 	else {
 		value = E('em', {}, E('small', {}, [ _('disabled') ]));
@@ -80,7 +102,9 @@ function render_signal_badge(signalPercent, signalValue, noiseValue, wrap) {
 }
 
 function render_network_badge(radioNet) {
-	return render_signal_badge(radioNet.isUp() ? radioNet.getSignalPercent() : -1,  radioNet.getSignal(), radioNet.getNoise());
+	return render_signal_badge(
+		radioNet.isUp() ? radioNet.getSignalPercent() : -1,
+		radioNet.getSignal(), radioNet.getNoise(), false, radioNet.getMode());
 }
 
 function render_radio_status(radioDev, wifiNets) {
@@ -143,7 +167,9 @@ function render_modal_status(node, radioNet) {
 	if (node == null)
 		node = E('span', { 'class': 'ifacebadge large', 'data-network': radioNet.getName() }, [ E('small'), E('span') ]);
 
-	L.dom.content(node.firstElementChild, render_signal_badge(disabled ? -1 : radioNet.getSignalPercent(), radioNet.getSignal(), noise, true));
+	L.dom.content(node.firstElementChild, render_signal_badge(
+		disabled ? -1 : radioNet.getSignalPercent(),
+		radioNet.getSignal(), noise, true, radioNet.getMode()));
 
 	L.itemlist(node.lastElementChild, [
 		_('Mode'),       mode,
