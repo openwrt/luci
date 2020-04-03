@@ -49,13 +49,12 @@ elseif targetDNS == "unbound.adb_list" then
 	outputGzip="/etc/" .. packageName .. ".unbound.gz"
 end
 
-local tmpfs
+local tmpfs, tmpfsMessage, tmpfsError, tmpfsStats
+local tmpfsVersion, tmpfsStatus = "", "Stopped"
 if fs.access("/var/run/" .. packageName .. ".json") then
 	tmpfs = jsonc.parse(util.trim(sys.exec("cat /var/run/" .. packageName .. ".json")))
 end
 
-local tmpfsVersion, tmpfsStatus = "", "Stopped"
-local tmpfsMessage, tmpfsError, tmpfsStats
 if tmpfs and tmpfs['data'] then
 	if tmpfs['data']['status'] and tmpfs['data']['status'] ~= "" then
 		tmpfsStatus = tmpfs['data']['status']
@@ -109,7 +108,7 @@ errorTable["errorParsingList"] = translate("failed to parse")
 m = Map("simple-adblock", translate("Simple AdBlock Settings"))
 m.apply_on_parse = true
 m.on_after_apply = function(self)
- 	sys.call("/etc/init.d/simple-adblock restart")
+	sys.call("/etc/init.d/simple-adblock restart")
 end
 
 h = m:section(NamedSection, "config", "simple-adblock", translate("Service Status") .. " [" .. tmpfsVersion .. "]")
@@ -144,7 +143,6 @@ else
 		ss = h:option(DummyValue, "_dummy", translate("Service Status"))
 		ss.template = "simple-adblock/status"
 		if tmpfsStatus == "statusSuccess" then
---			ss.value = tmpfsStats
 			ss.value = tmpfsVersion .. " " .. translate("is blocking") .. 
 				" " .. util.trim(sys.exec("wc -l < " .. outputFile)) .. 
 				" " .. translate("domains") .. " (" .. translate("with") .. 
@@ -172,8 +170,10 @@ else
 			end
 		end
 	end
-	buttons = h:option(DummyValue, "_dummy")
-	buttons.template = "simple-adblock/buttons"
+	if tmpfsVersion ~= "" then
+		buttons = h:option(DummyValue, "_dummy")
+		buttons.template = packageName .. "/buttons"
+	end
 end
 
 s = m:section(NamedSection, "config", "simple-adblock", translate("Configuration"))
