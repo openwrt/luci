@@ -4,27 +4,42 @@ local sys = require "luci.sys"
 local util = require "luci.util"
 local packageName = "vpnbypass"
 
-local tmpfsVersion = tostring(util.trim(sys.exec("opkg list-installed " .. packageName .. " | awk '{print $3}'")))
-if not tmpfsVersion or tmpfsVersion == "" then
-	tmpfsStatusCode = -1
-	tmpfsVersion = ""
-	tmpfsStatus = packageName .. " " .. translate("is not installed or not found")
+local packageVersion, statusText = nil, nil 
+packageVersion = tostring(util.trim(sys.exec("opkg list-installed " .. packageName .. " | awk '{print $3}'")))
+if not packageVersion or packageVersion == "" then
+	packageVersion = ""
+	statusText = packageName .. " " .. translate("is not installed or not found")
 else  
-	tmpfsVersion = " [" .. packageName .. " " .. tmpfsVersion .. "]"
+	packageVersion = " [" .. packageName .. " " .. packageVersion .. "]"
 end
-local tmpfsStatus = "Stopped"
-if sys.call("iptables -t mangle -L | grep -q VPNBYPASS") == 0 then
-	tmpfsStatus = "Running"
+
+local serviceRunning, serviceEnabled = false, false
+if uci:get(packageName, "config", "enabled") == "1" then
+	serviceEnabled = true
+end
+if sys.call("iptables -t mangle -L | grep -q " .. packageName:upper()) == 0 then
+	serviceRunning = true
+end
+
+if serviceRunning then
+	statusText = translate("Running")
+else
+	statusText = translate("Stopped")
+	if not serviceEnabled then
+		statusText = statusText .. " (" .. translate("disabled") .. ")"
+	end
 end
 
 m = Map("vpnbypass", translate("VPN Bypass Settings"))
 
-h = m:section(NamedSection, "config", packageName, translate("Service Status") .. tmpfsVersion)
+h = m:section(NamedSection, "config", packageName, translate("Service Status") .. packageVersion)
 ss = h:option(DummyValue, "_dummy", translate("Service Status"))
 ss.template = packageName .. "/status"
-ss.value = tmpfsStatus
-buttons = h:option(DummyValue, "_dummy")
-buttons.template = packageName .. "/buttons"
+ss.value = statusText
+if packageVersion ~= "" then
+	buttons = h:option(DummyValue, "_dummy")
+	buttons.template = packageName .. "/buttons"
+end
 
 s = m:section(NamedSection, "config", "vpnbypass", translate("VPN Bypass Rules"))
 -- Local Ports
