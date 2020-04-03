@@ -35,6 +35,9 @@ else
 	if not ubusStatus or not ubusStatus[packageName] then
 		tmpfsStatusCode = 0
 		tmpfsStatus = translate("Stopped")
+		if not luci.sys.init.enabled(packageName) then
+			tmpfsStatus = tmpfsStatus .. " (" .. translate("disabled") .. ")"
+		end
 	else
 		tmpfsStatusCode, tmpfsStatus = 1, ""
 		for n = 1,1000 do
