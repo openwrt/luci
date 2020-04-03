@@ -4157,6 +4157,38 @@ var UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 		}, this.varargs(arguments, 2, ctx));
 	},
 
+	/**
+	 * Load specified view class path and set it up.
+	 *
+	 * Transforms the given view path into a class name, requires it
+	 * using [LuCI.require()]{@link LuCI#require} and asserts that the
+	 * resulting class instance is a descendant of
+	 * [LuCI.view]{@link LuCI.view}.
+	 *
+	 * By instantiating the view class, its corresponding contents are
+	 * rendered and included into the view area. Any runtime errors are
+	 * catched and rendered using [LuCI.error()]{@link LuCI#error}.
+	 *
+	 * @param {string} path
+	 * The view path to render.
+	 *
+	 * @returns {Promise<LuCI.view>}
+	 * Returns a promise resolving to the loaded view instance.
+	 */
+	instantiateView: function(path) {
+		var className = 'view.%s'.format(path.replace(/\//g, '.'));
+
+		return L.require(className).then(function(view) {
+			if (!(view instanceof View))
+				throw new TypeError('Loaded class %s is not a descendant of View'.format(className));
+
+			return view;
+		}).catch(function(err) {
+			dom.content(document.querySelector('#view'), null);
+			L.error(err);
+		});
+	},
+
 	AbstractElement: UIElement,
 
 	/* Widgets */
