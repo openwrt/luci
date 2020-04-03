@@ -1,4 +1,7 @@
 'use strict';
+'require view';
+'require dom';
+'require poll';
 'require ui';
 'require rpc';
 'require uci';
@@ -67,13 +70,13 @@ function render_port_status(node, portstate) {
 		return null;
 
 	if (!portstate || !portstate.link)
-		L.dom.content(node, [
+		dom.content(node, [
 			E('img', { src: L.resource('icons/port_down.png') }),
 			E('br'),
 			_('no link')
 		]);
 	else
-		L.dom.content(node, [
+		dom.content(node, [
 			E('img', { src: L.resource('icons/port_up.png') }),
 			E('br'),
 			'%d'.format(portstate.speed) + _('baseT'),
@@ -112,7 +115,7 @@ var callSwconfigPortState = rpc.declare({
 	expect: { result: [] }
 });
 
-return L.view.extend({
+return view.extend({
 	load: function() {
 		return network.getSwitchTopologies().then(function(topologies) {
 			var tasks = [];
@@ -365,7 +368,7 @@ return L.view.extend({
 			});
 		}
 
-		L.Poll.add(L.bind(update_port_status, m, topologies));
+		poll.add(L.bind(update_port_status, m, topologies));
 
 		return m.render();
 	}

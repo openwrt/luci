@@ -1,4 +1,5 @@
 'use strict';
+'require view';
 'require uci';
 'require rpc';
 'require form';
@@ -10,7 +11,7 @@ var callLeds = rpc.declare({
 	expect: { '': {} }
 });
 
-return L.view.extend({
+return view.extend({
 	load: function() {
 		return Promise.all([
 			callLeds(),

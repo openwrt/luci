@@ -9,8 +9,9 @@ You may obtain a copy of the License at
 */
 
 'use strict';
+'require baseclass';
 
-return L.Class.extend({
+return baseclass.extend({
 	title: _('Uptime'),
 
 	rrdargs: function(graph, host, plugin, plugin_instance, dtype) {

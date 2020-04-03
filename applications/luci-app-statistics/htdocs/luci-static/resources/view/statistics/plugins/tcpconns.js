@@ -1,7 +1,8 @@
 'use strict';
+'require baseclass';
 'require form';
 
-return L.Class.extend({
+return baseclass.extend({
 	title: _('TCPConns Plugin Configuration'),
 	description: _('The tcpconns plugin collects information about open tcp connections on selected ports.'),
 

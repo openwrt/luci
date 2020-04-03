@@ -1,4 +1,7 @@
 'use strict';
+'require view';
+'require dom';
+'require poll';
 'require uci';
 'require rpc';
 'require form';
@@ -26,14 +29,14 @@ callUpnpDeleteRule = rpc.declare({
 });
 
 handleDelRule = function(num, ev) {
-	L.dom.parent(ev.currentTarget, '.tr').style.opacity = 0.5;
+	dom.parent(ev.currentTarget, '.tr').style.opacity = 0.5;
 	ev.currentTarget.classList.add('spinning');
 	ev.currentTarget.disabled = true;
 	ev.currentTarget.blur();
 	callUpnpDeleteRule(num);
 };
 
-return L.view.extend({
+return view.extend({
 	load: function() {
 		return Promise.all([
 			callUpnpGetStatus(),
@@ -190,7 +193,7 @@ return L.view.extend({
 		o.value('deny')
 
 		return m.render().then(L.bind(function(m, nodes) {
-			L.Poll.add(L.bind(function() {
+			poll.add(L.bind(function() {
 				return Promise.all([
 					callUpnpGetStatus()
 				]).then(L.bind(this.poll_status, this, nodes));

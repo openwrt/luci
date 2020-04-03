@@ -1,9 +1,10 @@
 'use strict';
+'require baseclass';
 'require fs';
 'require uci';
 'require form';
 
-return L.Class.extend({
+return baseclass.extend({
 	title: _('Iptables Plugin Configuration'),
 	description: _('The iptables plugin will monitor selected firewall rules and collect information about processed bytes and packets per rule.'),
 

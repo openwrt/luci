@@ -1,7 +1,8 @@
 'use strict';
+'require baseclass';
 'require form';
 
-return L.Class.extend({
+return baseclass.extend({
 	title: _('CPU Plugin Configuration'),
 	description: _('The cpu plugin collects basic statistics about the processor usage.'),
 

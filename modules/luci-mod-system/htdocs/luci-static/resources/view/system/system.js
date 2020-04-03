@@ -1,4 +1,6 @@
 'use strict';
+'require view';
+'require poll';
 'require ui';
 'require uci';
 'require rpc';
@@ -74,7 +76,7 @@ CBILocalTime = form.DummyValue.extend({
 	},
 });
 
-return L.view.extend({
+return view.extend({
 	load: function() {
 		return Promise.all([
 			callInitList('sysntpd'),
@@ -277,7 +279,7 @@ return L.view.extend({
 		}
 
 		return m.render().then(function(mapEl) {
-			L.Poll.add(function() {
+			poll.add(function() {
 				return callGetLocaltime().then(function(t) {
 					mapEl.querySelector('#localtime').value = new Date(t * 1000).toLocaleString();
 				});

@@ -1,4 +1,5 @@
 'use strict';
+'require baseclass';
 'require rpc';
 'require uci';
 'require form';
@@ -9,7 +10,7 @@ var callUSB = rpc.declare({
 	expect: { 'ports': [] }
 });
 
-return L.Class.extend({
+return baseclass.extend({
 	trigger: _('usbport (kernel)'),
 	kernel: true,
 	addFormOptions(s){

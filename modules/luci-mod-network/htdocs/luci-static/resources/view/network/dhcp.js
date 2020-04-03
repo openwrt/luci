@@ -1,4 +1,7 @@
 'use strict';
+'require view';
+'require dom';
+'require poll';
 'require rpc';
 'require uci';
 'require form';
@@ -123,7 +126,7 @@ function validateServerSpec(sid, s) {
 	return true;
 }
 
-return L.view.extend({
+return view.extend({
 	load: function() {
 		return Promise.all([
 			callHostHints(),
@@ -440,7 +443,7 @@ return L.view.extend({
 
 				var node = ipopt.map.findElement('id', ipopt.cbid(section_id));
 				if (node)
-					L.dom.callClassMethod(node, 'setValue', hosts[mac].ipv4);
+					dom.callClassMethod(node, 'setValue', hosts[mac].ipv4);
 			}, this, ipopt, section_id));
 
 			return node;
@@ -487,7 +490,7 @@ return L.view.extend({
 			o = s.taboption('leases', CBILease6Status, '__status6__');
 
 		return m.render().then(function(mapEl) {
-			L.Poll.add(function() {
+			poll.add(function() {
 				return callDHCPLeases().then(function(leaseinfo) {
 					var leases = Array.isArray(leaseinfo.dhcp_leases) ? leaseinfo.dhcp_leases : [],
 					    leases6 = Array.isArray(leaseinfo.dhcp6_leases) ? leaseinfo.dhcp6_leases : [];

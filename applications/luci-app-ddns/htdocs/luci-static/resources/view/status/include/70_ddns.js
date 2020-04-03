@@ -1,8 +1,9 @@
 'use strict';
+'require baseclass';
 'require rpc';
 'require uci';
 
-return L.Class.extend({
+return baseclass.extend({
 	title: _('Dynamic DNS'),
 
 	callDDnsGetServicesStatus: rpc.declare({

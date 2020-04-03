@@ -1,7 +1,8 @@
 'use strict';
+'require view';
 'require uci';
 
-return L.view.extend({
+return view.extend({
 	load: function() {
 		return uci.load('ttyd');
 	},

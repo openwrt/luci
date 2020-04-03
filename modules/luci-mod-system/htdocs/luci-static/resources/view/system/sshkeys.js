@@ -1,4 +1,5 @@
 'use strict';
+'require view';
 'require fs';
 'require ui';
 
@@ -213,7 +214,7 @@ function handleWindowDragDropIgnore(ev) {
 	ev.preventDefault()
 }
 
-return L.view.extend({
+return view.extend({
 	load: function() {
 		return fs.lines('/etc/dropbear/authorized_keys').then(function(lines) {
 			return lines.filter(function(line) {

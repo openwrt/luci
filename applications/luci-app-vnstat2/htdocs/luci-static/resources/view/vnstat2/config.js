@@ -1,13 +1,14 @@
 // This is free software, licensed under the Apache License, Version 2.0
 
 'use strict';
+'require view';
 'require fs';
 'require ui';
 'require uci';
 'require form';
 'require tools.widgets as widgets';
 
-return L.view.extend({
+return view.extend({
 	handleDeleteModal: function(m, iface, ev) {
 		L.showModal(_('Delete interface <em>%h</em>').format(iface), [
 			E('p', _('The interface will be removed from the database permanently. This cannot be undone.')),

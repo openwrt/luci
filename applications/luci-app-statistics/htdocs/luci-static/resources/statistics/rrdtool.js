@@ -1,4 +1,5 @@
 'use strict';
+'require baseclass';
 'require fs';
 'require uci';
 'require tools.prng as random';
@@ -133,7 +134,7 @@ var colors = L.Class.singleton({
 var rrdtree = {},
     graphdefs = {};
 
-return L.Class.extend({
+return baseclass.extend({
 	__init__: function() {
 		this.opts = {};
 	},

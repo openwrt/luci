@@ -1,8 +1,9 @@
 'use strict';
+'require baseclass';
 'require form';
 'require tools.widgets as widgets';
 
-return L.Class.extend({
+return baseclass.extend({
 	title: _('DNS Plugin Configuration'),
 	description: _('The dns plugin collects detailed statistics about dns related traffic on selected interfaces.'),
 

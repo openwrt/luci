@@ -1,4 +1,5 @@
 'use strict';
+'require view';
 'require fs';
 'require ui';
 'require rpc';
@@ -995,7 +996,7 @@ function handleKeyUp(ev) {
 	}, 250);
 }
 
-return L.view.extend({
+return view.extend({
 	load: function() {
 		return downloadLists();
 	},

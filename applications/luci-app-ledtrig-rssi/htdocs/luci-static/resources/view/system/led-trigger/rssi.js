@@ -1,8 +1,9 @@
 'use strict';
+'require baseclass';
 'require form';
 'require tools.widgets as widgets';
 
-return L.Class.extend({
+return baseclass.extend({
 	trigger: _('rssi (service)'),
 	kernel: false,
 	addFormOptions(s){

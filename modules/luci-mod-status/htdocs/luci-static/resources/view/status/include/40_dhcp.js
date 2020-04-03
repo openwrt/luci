@@ -1,4 +1,5 @@
 'use strict';
+'require baseclass';
 'require rpc';
 'require network';
 
@@ -8,7 +9,7 @@ var callLuciDHCPLeases = rpc.declare({
 	expect: { '': {} }
 });
 
-return L.Class.extend({
+return baseclass.extend({
 	title: '',
 
 	load: function() {

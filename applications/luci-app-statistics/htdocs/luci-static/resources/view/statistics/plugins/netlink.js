@@ -1,8 +1,9 @@
 'use strict';
+'require baseclass';
 'require form';
 'require tools.widgets as widgets';
 
-return L.Class.extend({
+return baseclass.extend({
 	title: _('Netlink Plugin Configuration'),
 	description: _('The netlink plugin collects extended information like qdisc-, class- and filter-statistics for selected interfaces.'),
 

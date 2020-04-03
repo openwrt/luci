@@ -1,4 +1,6 @@
 'use strict';
+'require view';
+'require poll';
 'require form';
 'require uci';
 'require fs';
@@ -16,7 +18,7 @@ var callServiceList = rpc.declare({
 	expect: { '': {} }
 });
 
-return L.view.extend({
+return view.extend({
 	render: function(stats) {
 		var m, s, o;
 
@@ -137,7 +139,7 @@ return L.view.extend({
 		}
 
 		return m.render().finally(function() {
-			L.Poll.add(function() {
+			poll.add(function() {
 				return L.resolveDefault(callServiceList(conf), {})
 				.then(function(res) {
 					var instances = null;

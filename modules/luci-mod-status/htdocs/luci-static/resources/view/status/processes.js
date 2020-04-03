@@ -1,4 +1,5 @@
 'use strict';
+'require view';
 'require fs';
 'require ui';
 'require rpc';
@@ -9,7 +10,7 @@ var callLuciProcessList = rpc.declare({
 	expect: { result: [] }
 });
 
-return L.view.extend({
+return view.extend({
 	load: function() {
 		return callLuciProcessList();
 	},

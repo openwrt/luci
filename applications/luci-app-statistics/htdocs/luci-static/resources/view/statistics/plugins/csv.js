@@ -1,7 +1,8 @@
 'use strict';
+'require baseclass';
 'require form';
 
-return L.Class.extend({
+return baseclass.extend({
 	title: _('CSV Plugin Configuration'),
 	description: _('The csv plugin stores collected data in csv file format for further processing by external programs.'),
 

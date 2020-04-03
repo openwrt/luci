@@ -1,7 +1,8 @@
 'use strict';
+'require baseclass';
 'require form';
 
-return L.Class.extend({
+return baseclass.extend({
 	title: _('Ping Plugin Configuration'),
 	description: _('The ping plugin will send icmp echo replies to selected hosts and measure the roundtrip time for each host.'),
 

@@ -1,8 +1,9 @@
 'use strict';
+'require baseclass';
 'require fs';
 'require form';
 
-return L.Class.extend({
+return baseclass.extend({
 	title: _('IRQ Plugin Configuration'),
 	description: _('The irq plugin will monitor the rate of issues per second for each selected interrupt. If no interrupt is selected then all interrupts are monitored.'),
 

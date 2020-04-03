@@ -1,8 +1,9 @@
 'use strict';
+'require baseclass';
 'require fs';
 'require form';
 
-return L.Class.extend({
+return baseclass.extend({
 	title: _('Thermal Plugin Configuration'),
 	description: _('The thermal plugin will monitor temperature of the system. Data is typically read from /sys/class/thermal/*/temp ( \'*\' denotes the thermal device to be read, e.g. thermal_zone1 )'),
 

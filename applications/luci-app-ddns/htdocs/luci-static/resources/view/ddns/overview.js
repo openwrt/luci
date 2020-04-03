@@ -1,4 +1,7 @@
 'use strict';
+'require view';
+'require dom';
+'require poll';
 'require uci';
 'require rpc';
 'require fs';
@@ -41,7 +44,7 @@ callDDnsGetStatus = rpc.declare({
 	expect: {  }
 });
 
-return L.view.extend({
+return view.extend({
 
 	callDDnsGetEnv: rpc.declare({
 		object: 'luci.ddns',
@@ -64,7 +67,7 @@ return L.view.extend({
 
 		ddns_toggle.innerHTML = status['_enabled'] ? _('Stop DDNS') : _('Start DDNS')
 
-		L.dom.content(ddns_enabled, function() {
+		dom.content(ddns_enabled, function() {
 			return E([], [
 				E('div', {}, status['_enabled'] ? _('DDNS Autostart enabled') : [
 					_('DDNS Autostart disabled'),
@@ -374,7 +377,7 @@ return L.view.extend({
 					(resolved[section_id].pid && cfg_enabled == '1'))
 				stop_opt['disabled'] = 'disabled';
 
-			L.dom.content(tdEl.lastChild, [
+			dom.content(tdEl.lastChild, [
 				E('button', stop_opt, _('Stop')),
 				E('button', reload_opt, _('Reload')),
 				tdEl.lastChild.childNodes[0],
@@ -982,7 +985,7 @@ return L.view.extend({
 		}
 
 		return m.render().then(L.bind(function(m, nodes) {
-			L.Poll.add(L.bind(function() {
+			poll.add(L.bind(function() {
 				return Promise.all([
 					this.callDDnsGetServicesStatus(),
 					callDDnsGetStatus()

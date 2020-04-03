@@ -1,7 +1,8 @@
 'use strict';
+'require baseclass';
 'require form';
 
-return L.Class.extend({
+return baseclass.extend({
 	title: _('cUrl Plugin Configuration'),
 
 	addFormOptions: function(s) {

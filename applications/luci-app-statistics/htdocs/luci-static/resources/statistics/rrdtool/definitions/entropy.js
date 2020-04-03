@@ -4,8 +4,9 @@
  */
 
 'use strict';
+'require baseclass';
 
-return L.Class.extend({
+return baseclass.extend({
 	title: _('Entropy'),
 
 	rrdargs: function(graph, host, plugin, plugin_instance, dtype) {

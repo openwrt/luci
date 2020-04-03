@@ -1,8 +1,9 @@
 'use strict';
+'require baseclass';
 'require form';
 'require tools.widgets as widgets';
 
-return L.Class.extend({
+return baseclass.extend({
 	title: _('Interface Plugin Configuration'),
 	description: _('The interface plugin collects traffic statistics on selected interfaces.'),
 

@@ -1,7 +1,8 @@
 'use strict';
+'require baseclass';
 'require form';
 
-return L.Class.extend({
+return baseclass.extend({
 	title: _('APCUPS Plugin Configuration'),
 	description: _('The APCUPS plugin collects statistics about the APC UPS.'),
 

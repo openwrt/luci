@@ -1,7 +1,8 @@
 'use strict';
+'require baseclass';
 'require form';
 
-return L.Class.extend({
+return baseclass.extend({
 	title: _('OLSRd Plugin Configuration'),
 	description: _('The OLSRd plugin reads information about meshed networks from the txtinfo plugin of OLSRd.'),
 

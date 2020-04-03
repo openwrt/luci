@@ -1,4 +1,5 @@
 'use strict';
+'require baseclass';
 'require rpc';
 
 var callSystemInfo = rpc.declare({
@@ -19,7 +20,7 @@ function progressbar(value, max, byte) {
 	}, E('div', { 'style': 'width:%.2f%%'.format(pc) }));
 }
 
-return L.Class.extend({
+return baseclass.extend({
 	title: _('Memory'),
 
 	load: function() {

@@ -1,4 +1,5 @@
 'use strict';
+'require view';
 'require form';
 
 var desc = _(""
@@ -9,7 +10,7 @@ var desc = _(""
 	+ "some very very basic uses of pagekite.</em>"
 );
 
-return L.view.extend({
+return view.extend({
 	render: function() {
 		var m, s, o;
 

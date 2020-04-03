@@ -1,8 +1,9 @@
 'use strict';
+'require view';
 'require fs';
 'require ui';
 
-return L.view.extend({
+return view.extend({
 	load: function() {
 		return fs.exec_direct('/bin/dmesg', [ '-r' ]).catch(function(err) {
 			ui.addNotification(null, E('p', {}, _('Unable to load log data: ' + err.message)));

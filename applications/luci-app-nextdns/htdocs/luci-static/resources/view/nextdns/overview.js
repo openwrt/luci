@@ -1,7 +1,8 @@
 'use strict';
+'require view';
 'require form';
 
-return L.view.extend({
+return view.extend({
 	render: function() {
 		var m, s, o;
 		

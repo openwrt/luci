@@ -1,4 +1,6 @@
 'use strict';
+'require baseclass';
+'require dom';
 'require network';
 
 function renderbox(radio, networks) {
@@ -73,11 +75,11 @@ function wifirate(rt) {
 	return s;
 }
 
-return L.Class.extend({
+return baseclass.extend({
 	title: _('Wireless'),
 
 	handleDelClient: function(wifinet, mac, ev) {
-		L.dom.parent(ev.currentTarget, '.tr').style.opacity = 0.5;
+		dom.parent(ev.currentTarget, '.tr').style.opacity = 0.5;
 		ev.currentTarget.classList.add('spinning');
 		ev.currentTarget.disabled = true;
 		ev.currentTarget.blur();

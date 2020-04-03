@@ -1,8 +1,9 @@
 'use strict';
+'require baseclass';
 'require form';
 'require tools.widgets as widgets';
 
-return L.Class.extend({
+return baseclass.extend({
 	title: _('Wireless iwinfo Plugin Configuration'),
 	description: _('The iwinfo plugin collects statistics about wireless signal strength, noise and quality.'),
 

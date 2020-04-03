@@ -1,8 +1,9 @@
 'use strict';
+'require baseclass';
 'require fs';
 'require form';
 
-return L.Class.extend({
+return baseclass.extend({
 	title: _('DF Plugin Configuration'),
 	description: _('The df plugin collects statistics about the disk space usage on different devices, mount points or filesystem types.'),
 

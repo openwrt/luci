@@ -1,4 +1,7 @@
 'use strict';
+'require view';
+'require dom';
+'require poll';
 'require fs';
 'require network';
 
@@ -35,7 +38,7 @@ function startPolling(includes, containers) {
 					containers[i].parentNode.style.display = '';
 					containers[i].parentNode.classList.add('fade-in');
 
-					L.dom.content(containers[i], content);
+					dom.content(containers[i], content);
 				}
 			}
 
@@ -48,11 +51,11 @@ function startPolling(includes, containers) {
 	};
 
 	return step().then(function() {
-		L.Poll.add(step);
+		poll.add(step);
 	});
 }
 
-return L.view.extend({
+return view.extend({
 	load: function() {
 		return L.resolveDefault(fs.list('/www' + L.resource('view/status/include')), []).then(function(entries) {
 			return Promise.all(entries.filter(function(e) {

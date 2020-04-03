@@ -1,7 +1,8 @@
 'use strict';
+'require baseclass';
 'require form';
 
-return L.Class.extend({
+return baseclass.extend({
 	title: _('Entropy Plugin Configuration'),
 	description: _('The entropy plugin collects statistics about the available entropy.'),
 

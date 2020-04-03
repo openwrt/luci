@@ -1,8 +1,9 @@
 'use strict';
+'require baseclass';
 'require fs';
 'require form';
 
-return L.Class.extend({
+return baseclass.extend({
 	title: _('OpenVPN Plugin Configuration'),
 	description: _('The OpenVPN plugin gathers information about the current vpn connection status.'),
 

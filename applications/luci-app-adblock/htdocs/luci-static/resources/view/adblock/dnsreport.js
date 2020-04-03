@@ -1,4 +1,5 @@
 'use strict';
+'require view';
 'require fs';
 'require ui';
 
@@ -186,7 +187,7 @@ function handleAction(ev) {
 	}
 }
 
-return L.view.extend({
+return view.extend({
 	load: function() {
 		return L.resolveDefault(fs.exec_direct('/etc/init.d/adblock', ['report', '+', '50', 'false', 'json']),'');
 	},

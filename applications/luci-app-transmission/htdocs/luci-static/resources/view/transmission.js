@@ -1,4 +1,5 @@
 'use strict';
+'require view';
 'require fs';
 'require uci';
 'require rpc';
@@ -17,7 +18,7 @@ function setFlagBool(o) {
 	o.disabled = 'false';
 }
 
-return L.view.extend({
+return view.extend({
 	load: function() {
 		return Promise.all([
 			L.resolveDefault(callServiceList('transmission')),

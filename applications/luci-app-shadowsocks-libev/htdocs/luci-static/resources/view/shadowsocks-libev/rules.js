@@ -1,4 +1,5 @@
 'use strict';
+'require view';
 'require uci';
 'require fs';
 'require form';
@@ -12,7 +13,7 @@ function src_dst_option(s /*, ... */) {
 	o.datatype = 'or(ipaddr,cidr)';
 }
 
-return L.view.extend({
+return view.extend({
 	load: function() {
 		return Promise.all([
 			L.resolveDefault(fs.stat('/usr/lib/iptables/libxt_recent.so'), {}),

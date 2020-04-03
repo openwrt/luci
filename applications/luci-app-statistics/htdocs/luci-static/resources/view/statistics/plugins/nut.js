@@ -1,7 +1,8 @@
 'use strict';
+'require baseclass';
 'require form';
 
-return L.Class.extend({
+return baseclass.extend({
 	title: _('UPS Plugin Configuration'),
 	description: _('The NUT plugin reads information about Uninterruptible Power Supplies.'),
 

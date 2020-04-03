@@ -1,9 +1,11 @@
 'use strict';
+'require view';
+'require poll';
 'require fs';
 
-return L.view.extend({
+return view.extend({
 	render: function() {
-		L.Poll.add(function() {
+		poll.add(function() {
 			return L.resolveDefault(fs.exec('/sbin/logread', ['-e', 'nextdns']), { code: 1 })
 			.then(function(res) {
 				var content;
