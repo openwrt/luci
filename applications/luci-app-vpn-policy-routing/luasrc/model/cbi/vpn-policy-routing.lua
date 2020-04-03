@@ -20,30 +20,36 @@ if ubusStatus and ubusStatus[packageName] and
 	 ubusStatus[packageName]["instances"]["main"]["data"] and
 	 ubusStatus[packageName]["instances"]["main"]["data"]["status"] and 
 	 ubusStatus[packageName]["instances"]["main"]["data"]["status"][1] then
-	pkgGateways = ubusStatus[packageName]["instances"]["main"]["data"]["status"][1]["gateway"]
-	pkgGateways = pkgGateways and pkgGateways:gsub('\\n', '\n')
-	pkgGateways = pkgGateways and pkgGateways:gsub('\\033%[0;32m%[\\xe2\\x9c\\x93%]\\033%[0m', '✓')
-	pkgErrors = ubusStatus[packageName]["instances"]["main"]["data"]["status"][1]["error"]
-	pkgErrors = pkgErrors and pkgErrors:gsub('\\n', '\n')
-	pkgErrors = pkgErrors and pkgErrors:gsub('\\033%[0;31mERROR\\033%[0m: ', '')
-	pkgWarnings = ubusStatus[packageName]["instances"]["main"]["data"]["status"][1]["warning"]
-	pkgWarnings = pkgWarnings and pkgWarnings:gsub('\\n', '\n')
-	pkgWarnings = pkgWarnings and pkgWarnings:gsub('\\033%[0;33mWARNING\\033%[0m: ', '')
-	pkgMode = ubusStatus[packageName]["instances"]["main"]["data"]["status"][1]["mode"]
+	serviceGateways = ubusStatus[packageName]["instances"]["main"]["data"]["status"][1]["gateway"]
+	serviceGateways = serviceGateways and serviceGateways:gsub('\\n', '\n')
+	serviceGateways = serviceGateways and serviceGateways:gsub('\\033%[0;32m%[\\xe2\\x9c\\x93%]\\033%[0m', '✓')
+	serviceErrors = ubusStatus[packageName]["instances"]["main"]["data"]["status"][1]["error"]
+	serviceErrors = serviceErrors and serviceErrors:gsub('\\n', '\n')
+	serviceErrors = serviceErrors and serviceErrors:gsub('\\033%[0;31mERROR\\033%[0m: ', '')
+	serviceWarnings = ubusStatus[packageName]["instances"]["main"]["data"]["status"][1]["warning"]
+	serviceWarnings = serviceWarnings and serviceWarnings:gsub('\\n', '\n')
+	serviceWarnings = serviceWarnings and serviceWarnings:gsub('\\033%[0;33mWARNING\\033%[0m: ', '')
+	serviceMode = ubusStatus[packageName]["instances"]["main"]["data"]["status"][1]["mode"]
 end
 
-local pkgVersion = tostring(util.trim(sys.exec("opkg list-installed " .. packageName .. " | awk '{print $3}'")))
-if not pkgVersion or pkgVersion == "" then
-	pkgVersion = ""
-	pkgStatus, pkgStatusLabel = "NotFound", packageName .. " " .. translate("is not installed or not found")
+local serviceRunning, statusText = false, nil
+local packageVersion = tostring(util.trim(sys.exec("opkg list-installed " .. packageName .. " | awk '{print $3}'")))
+if not packageVersion or packageVersion == "" then
+	packageVersion = ""
+	statusText = packageName .. " " .. translate("is not installed or not found")
 else  
-	pkgVersion = " [" .. packageName .. " " .. pkgVersion .. "]"
-end
-local pkgStatus, pkgStatusLabel = "Stopped", translate("Stopped")
+	packageVersion = " [" .. packageName .. " " .. packageVersion .. "]"
+end 
 if sys.call("iptables -t mangle -L | grep -q VPR_PREROUTING") == 0 then
-	pkgStatus, pkgStatusLabel = "Running", translate("Running")
-	if pkgMode and pkgMode == "strict" then
-		pkgStatusLabel = pkgStatusLabel .. " " .. translate("(strict mode)")
+	serviceRunning = true
+	statusText = translate("Running")
+	if serviceMode and serviceMode == "strict" then
+		statusText = statusText .. " (" .. translate("strict mode") .. ")"
+	end
+else
+	statusText = translate("Stopped")
+	if uci:get(packageName, "config", "enabled") ~= "1" then
+		statusText = statusText .. " (" .. translate("disabled") .. ")"
 	end
 end
 
@@ -74,8 +80,8 @@ if (type(lanIPAddr) == "table") then
 								lanIPAddr = lanIPAddr[i]
 								break
 				end
-				lanIPAddr = string.match(lanIPAddr,"[0-9.]+")
-end          
+				lanIPAddr = lanIPAddr:match("[0-9.]+")
+end
 if lanIPAddr and lanNetmask then
 	laPlaceholder = ip.new(lanIPAddr .. "/" .. lanNetmask )
 end
@@ -114,27 +120,29 @@ end
 
 m = Map("vpn-policy-routing", translate("VPN and WAN Policy-Based Routing"))
 
-h = m:section(NamedSection, "config", packageName, translate("Service Status") .. pkgVersion)
+h = m:section(NamedSection, "config", packageName, translate("Service Status") .. packageVersion)
 status = h:option(DummyValue, "_dummy", translate("Service Status"))
 status.template = "vpn-policy-routing/status"
-status.value = pkgStatusLabel
-if pkgStatus:match("Running") and pkgGateways and pkgGateways ~= "" then
+status.value = statusText
+if serviceRunning and serviceGateways and serviceGateways ~= "" then
 	gateways = h:option(DummyValue, "_dummy", translate("Service Gateways"))
 	gateways.template = packageName .. "/status-gateways"
-	gateways.value = pkgGateways
+	gateways.value = serviceGateways
 end
-if pkgErrors and pkgErrors ~= "" then
+if serviceErrors and serviceErrors ~= "" then
 	errors = h:option(DummyValue, "_dummy", translate("Service Errors"))
 	errors.template = packageName .. "/status-textarea"
-	errors.value = pkgErrors
+	errors.value = serviceErrors
 end
-if pkgWarnings and pkgWarnings ~= "" then
+if serviceWarnings and serviceWarnings ~= "" then
 	warnings = h:option(DummyValue, "_dummy", translate("Service Warnings"))
 	warnings.template = packageName .. "/status-textarea"
-	warnings.value = pkgWarnings
+	warnings.value = serviceWarnings
 end
-buttons = h:option(DummyValue, "_dummy")
-buttons.template = packageName .. "/buttons"
+if packageVersion ~= "" then
+	buttons = h:option(DummyValue, "_dummy")
+	buttons.template = packageName .. "/buttons"
+end
 
 -- General Options
 config = m:section(NamedSection, "config", "vpn-policy-routing", translate("Configuration"))
@@ -208,7 +216,7 @@ icmp:value("", translate("No Change"))
 icmp:value("wan", translate("WAN"))
 uci:foreach("network", "interface", function(s)
 	local name=s['.name']
-	if is_supported_interface(s) then icmp:value(name, string.upper(name)) end
+	if is_supported_interface(s) then icmp:value(name, name:upper()) end
 end)
 icmp.rmempty = true
 
@@ -338,10 +346,10 @@ gw.rmempty = false
 uci:foreach("network", "interface", function(s)
 	local name=s['.name']
 	if is_wan(name) then
-		gw:value(name, string.upper(name))
+		gw:value(name, name:upper())
 		if not gw.default then gw.default = name end
 	elseif is_supported_interface(s) then 
-		gw:value(name, string.upper(name)) 
+		gw:value(name, name:upper()) 
 	end
 end)
 
@@ -351,7 +359,7 @@ dscp = m:section(NamedSection, "config", "vpn-policy-routing", translate("DSCP T
 uci:foreach("network", "interface", function(s)
 	local name=s['.name']
 	if is_supported_interface(s) then 
-		local x = dscp:option(Value, name .. "_dscp", string.upper(name) .. " " .. translate("DSCP Tag"))
+		local x = dscp:option(Value, name .. "_dscp", name:upper() .. " " .. translate("DSCP Tag"))
 		x.rmempty = true
 		x.datatype = "range(1,63)"
 	end
