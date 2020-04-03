@@ -1,4 +1,7 @@
 'use strict';
+'require view';
+'require poll';
+'require request';
 'require ui';
 'require rpc';
 'require network';
@@ -15,7 +18,7 @@ var graphPolls = [],
 
 Math.log2 = Math.log2 || function(x) { return Math.log(x) * Math.LOG2E; };
 
-return L.view.extend({
+return view.extend({
 	load: function() {
 		return Promise.all([
 			this.loadSVG(L.resource('wireless.svg')),
@@ -102,7 +105,7 @@ return L.view.extend({
 	},
 
 	pollData: function() {
-		L.Poll.add(L.bind(function() {
+		poll.add(L.bind(function() {
 			var tasks = [];
 
 			for (var i = 0; i < graphPolls.length; i++) {
@@ -221,7 +224,7 @@ return L.view.extend({
 	},
 
 	loadSVG: function(src) {
-		return L.Request.get(src).then(function(response) {
+		return request.get(src).then(function(response) {
 			if (!response.ok)
 				throw new Error(response.statusText);
 

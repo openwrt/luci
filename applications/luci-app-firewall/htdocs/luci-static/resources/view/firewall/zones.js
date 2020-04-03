@@ -1,4 +1,5 @@
 'use strict';
+'require view';
 'require rpc';
 'require uci';
 'require form';
@@ -7,7 +8,7 @@
 'require tools.firewall as fwtool';
 'require tools.widgets as widgets';
 
-return L.view.extend({
+return view.extend({
 	callConntrackHelpers: rpc.declare({
 		object: 'luci',
 		method: 'getConntrackHelpers',

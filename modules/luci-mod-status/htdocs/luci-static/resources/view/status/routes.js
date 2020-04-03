@@ -1,4 +1,5 @@
 'use strict';
+'require view';
 'require fs';
 'require rpc';
 'require validation';
@@ -25,7 +26,7 @@ function applyMask(addr, mask, v6) {
 		v6 ? '%x:%x:%x:%x:%x:%x:%x:%x' : '%d.%d.%d.%d', words);
 }
 
-return L.view.extend({
+return view.extend({
 	load: function() {
 		return Promise.all([
 			callNetworkInterfaceDump(),

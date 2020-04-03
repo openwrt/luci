@@ -1,4 +1,7 @@
 'use strict';
+'require view';
+'require dom';
+'require poll';
 'require fs';
 'require ui';
 'require uci';
@@ -109,7 +112,7 @@ function render_status(node, ifc, with_device) {
 function render_modal_status(node, ifc) {
 	var dev = ifc ? (ifc.getDevice() || ifc.getL3Device() || ifc.getL3Device()) : null;
 
-	L.dom.content(node, [
+	dom.content(node, [
 		E('img', {
 			'src': L.resource('icons/%s%s.png').format(dev ? dev.getType() : 'ethernet', (dev && dev.isUp()) ? '' : '_disabled'),
 			'title': dev ? dev.getTypeI18n() : _('Not present')
@@ -140,7 +143,7 @@ function render_ifacebox_status(node, ifc) {
 	c.push(E('small', {}, ifc.isAlias() ? _('Alias of "%s"').format(ifc.isAlias())
 	                                    : (dev ? dev.getName() : E('em', _('Not present')))));
 
-	L.dom.content(node, c);
+	dom.content(node, c);
 
 	return firewall.getZoneByNetwork(ifc.getName()).then(L.bind(function(zone) {
 		this.style.backgroundColor = zone ? zone.getColor() : '#EEEEEE';
@@ -185,7 +188,7 @@ function iface_updown(up, id, ev, force) {
 							'class': 'cbi-button cbi-button-negative important',
 							'click': function(ev) {
 								dsc.setAttribute('disconnect', '');
-								L.dom.content(dsc, E('em', _('Interface is shutting down...')));
+								dom.content(dsc, E('em', _('Interface is shutting down...')));
 
 								ui.hideModal();
 							}
@@ -195,13 +198,13 @@ function iface_updown(up, id, ev, force) {
 			}
 			else {
 				dsc.setAttribute('disconnect', '');
-				L.dom.content(dsc, E('em', _('Interface is shutting down...')));
+				dom.content(dsc, E('em', _('Interface is shutting down...')));
 			}
 		});
 	}
 	else {
 		dsc.setAttribute(up ? 'reconnect' : 'disconnect', force ? 'force' : '');
-		L.dom.content(dsc, E('em', up ? _('Interface is reconnecting...') : _('Interface is shutting down...')));
+		dom.content(dsc, E('em', up ? _('Interface is reconnecting...') : _('Interface is shutting down...')));
 	}
 }
 
@@ -224,7 +227,7 @@ function get_netmask(s, use_cfgvalue) {
 	return mask;
 }
 
-return L.view.extend({
+return view.extend({
 	poll_status: function(map, networks) {
 		var resolveZone = null;
 
@@ -245,10 +248,10 @@ return L.view.extend({
 			    dynamic = ifc ? ifc.isDynamic() : false;
 
 			if (dsc.hasAttribute('reconnect')) {
-				L.dom.content(dsc, E('em', _('Interface is starting...')));
+				dom.content(dsc, E('em', _('Interface is starting...')));
 			}
 			else if (dsc.hasAttribute('disconnect')) {
-				L.dom.content(dsc, E('em', _('Interface is stopping...')));
+				dom.content(dsc, E('em', _('Interface is stopping...')));
 			}
 			else if (ifc.getProtocol() || uci.get('network', ifc.getName()) == null) {
 				render_status(dsc, ifc, false);
@@ -258,18 +261,18 @@ return L.view.extend({
 				if (e) e.disabled = true;
 
 				var link = L.url('admin/system/opkg') + '?query=luci-proto';
-				L.dom.content(dsc, [
+				dom.content(dsc, [
 					E('em', _('Unsupported protocol type.')), E('br'),
 					E('a', { href: link }, _('Install protocol extensions...'))
 				]);
 			}
 			else {
-				L.dom.content(dsc, E('em', _('Interface not present or not connected yet.')));
+				dom.content(dsc, E('em', _('Interface not present or not connected yet.')));
 			}
 
 			if (stat) {
 				var dev = ifc.getDevice();
-				L.dom.content(stat, [
+				dom.content(stat, [
 					E('img', {
 						'src': L.resource('icons/%s%s.png').format(dev ? dev.getType() : 'ethernet', (dev && dev.isUp()) ? '' : '_disabled'),
 						'title': dev ? dev.getTypeI18n() : _('Not present')
@@ -336,7 +339,7 @@ return L.view.extend({
 			    disabled = net ? !net.isUp() : true,
 			    dynamic = net ? net.isDynamic() : false;
 
-			L.dom.content(tdEl.lastChild, [
+			dom.content(tdEl.lastChild, [
 				E('button', {
 					'class': 'cbi-button cbi-button-neutral reconnect',
 					'click': iface_updown.bind(this, true, section_id),
@@ -965,7 +968,7 @@ return L.view.extend({
 
 
 		return m.render().then(L.bind(function(m, nodes) {
-			L.Poll.add(L.bind(function() {
+			poll.add(L.bind(function() {
 				var section_ids = m.children[0].cfgsections(),
 				    tasks = [];
 

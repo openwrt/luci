@@ -1,4 +1,5 @@
 'use strict';
+'require baseclass';
 'require fs';
 'require rpc';
 
@@ -12,7 +13,7 @@ var callSystemInfo = rpc.declare({
 	method: 'info'
 });
 
-return L.Class.extend({
+return baseclass.extend({
 	title: _('System'),
 
 	load: function() {

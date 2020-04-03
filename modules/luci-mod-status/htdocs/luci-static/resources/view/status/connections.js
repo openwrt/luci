@@ -1,4 +1,7 @@
 'use strict';
+'require view';
+'require poll';
+'require request';
 'require rpc';
 
 var callLuciRealtimeStats = rpc.declare({
@@ -30,7 +33,7 @@ var recheck_lookup_queue = {};
 
 Math.log2 = Math.log2 || function(x) { return Math.log(x) * Math.LOG2E; };
 
-return L.view.extend({
+return view.extend({
 	load: function() {
 		return Promise.all([
 			this.loadSVG(L.resource('connections.svg'))
@@ -177,7 +180,7 @@ return L.view.extend({
 	},
 
 	pollData: function() {
-		L.Poll.add(L.bind(function() {
+		poll.add(L.bind(function() {
 			var tasks = [
 				L.resolveDefault(callLuciConntrackList(), [])
 			];
@@ -300,7 +303,7 @@ return L.view.extend({
 	},
 
 	loadSVG: function(src) {
-		return L.Request.get(src).then(function(response) {
+		return request.get(src).then(function(response) {
 			if (!response.ok)
 				throw new Error(response.statusText);
 

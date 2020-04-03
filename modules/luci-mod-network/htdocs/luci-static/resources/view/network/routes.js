@@ -1,9 +1,10 @@
 'use strict';
+'require view';
 'require form';
 'require network';
 'require tools.widgets as widgets';
 
-return L.view.extend({
+return view.extend({
 	load: function() {
 		return network.getDevices();
 	},

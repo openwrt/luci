@@ -63,7 +63,7 @@ Chart.defaults.global.tooltipTemplate = function(tip) {
 
 function kpi(id, val1, val2, val3)
 {
-	var e = L.dom.elem(id) ? id : document.getElementById(id);
+	var e = dom.elem(id) ? id : document.getElementById(id);
 
 	if (val1 && val2 && val3)
 		e.innerHTML = _('%s, %s and %s').format(val1, val2, val3);
@@ -96,8 +96,8 @@ function pie(id, data)
 		}
 	}
 
-	var node = L.dom.elem(id) ? id : document.getElementById(id),
-	    key = L.dom.elem(id) ? id.id : id,
+	var node = dom.elem(id) ? id : document.getElementById(id),
+	    key = dom.elem(id) ? id.id : id,
 	    ctx = node.getContext('2d');
 
 	if (chartRegistry.hasOwnProperty(key))
@@ -279,7 +279,7 @@ function renderHostDetail(tooltip)
 
 	var rxData = [], txData = [];
 
-	L.dom.content(tooltip, [
+	dom.content(tooltip, [
 		E('div', { 'class': 'head' }, [
 			E('div', { 'class': 'pie' }, [
 				E('label', _('Download')),

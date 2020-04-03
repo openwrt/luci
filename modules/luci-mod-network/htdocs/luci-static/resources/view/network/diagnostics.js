@@ -1,9 +1,11 @@
 'use strict';
+'require view';
+'require dom';
 'require fs';
 'require ui';
 'require uci';
 
-return L.view.extend({
+return view.extend({
 	handleCommand: function(exec, args) {
 		var buttons = document.querySelectorAll('.diag-action > .cbi-button');
 
@@ -14,7 +16,7 @@ return L.view.extend({
 			var out = document.querySelector('.command-output');
 			    out.style.display = '';
 
-			L.dom.content(out, [ res.stdout || '', res.stderr || '' ]);
+			dom.content(out, [ res.stdout || '', res.stderr || '' ]);
 		}).catch(function(err) {
 			ui.addNotification(null, E('p', [ err ]))
 		}).finally(function() {

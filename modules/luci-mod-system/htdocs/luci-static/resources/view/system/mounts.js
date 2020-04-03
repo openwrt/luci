@@ -1,4 +1,5 @@
 'use strict';
+'require view';
 'require fs';
 'require ui';
 'require uci';
@@ -69,7 +70,7 @@ function device_textvalue(devices, section_id) {
 	}
 }
 
-return L.view.extend({
+return view.extend({
 	handleDetect: function(m, ev) {
 		return callBlockDetect()
 			.then(L.bind(uci.unload, uci, 'fstab'))

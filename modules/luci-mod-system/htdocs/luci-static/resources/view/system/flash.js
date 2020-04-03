@@ -1,4 +1,6 @@
 'use strict';
+'require view';
+'require dom';
 'require form';
 'require rpc';
 'require fs';
@@ -60,7 +62,7 @@ function findStorageSize(procmtd, procpart) {
 
 var mapdata = { actions: {}, config: {} };
 
-return L.view.extend({
+return view.extend({
 	load: function() {
 		var tasks = [
 			L.resolveDefault(fs.stat('/lib/upgrade/platform.sh'), {}),
@@ -166,7 +168,7 @@ return L.view.extend({
 	},
 
 	handleBlock: function(hostname, ev) {
-		var mtdblock = L.dom.parent(ev.target, '.cbi-section').querySelector('[data-name="mtdselect"] select').value;
+		var mtdblock = dom.parent(ev.target, '.cbi-section').querySelector('[data-name="mtdselect"] select').value;
 		var form = E('form', {
 			'method': 'post',
 			'action': L.env.cgi_base + '/cgi-download',

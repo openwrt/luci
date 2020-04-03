@@ -1,4 +1,5 @@
 'use strict';
+'require baseclass';
 'require rpc';
 
 var callLuciDSLStatus = rpc.declare({
@@ -40,7 +41,7 @@ function renderbox(dsl) {
 	]);
 }
 
-return L.Class.extend({
+return baseclass.extend({
 	title: _('DSL'),
 
 	load: function() {

@@ -1,9 +1,10 @@
 'use strict';
+'require view';
 'require fs';
 'require form';
 'require tools.widgets as widgets';
 
-return L.view.extend({
+return view.extend({
 	load: function() {
 		return Promise.all([
 			L.resolveDefault(fs.stat('/sbin/block'), null),

@@ -1,9 +1,10 @@
 'use strict';
+'require view';
 'require rpc';
 'require fs';
 'require ui';
 
-return L.view.extend({
+return view.extend({
 	callInitList: rpc.declare({
 		object: 'luci',
 		method: 'getInitList',

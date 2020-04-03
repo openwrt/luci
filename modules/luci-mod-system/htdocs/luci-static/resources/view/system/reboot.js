@@ -1,9 +1,10 @@
 'use strict';
+'require view';
 'require fs';
 'require ui';
 'require uci';
 
-return L.view.extend({
+return view.extend({
 	load: function() {
 		return uci.changes();
 	},
