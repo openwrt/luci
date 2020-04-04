@@ -364,11 +364,6 @@ return view.extend({
 		o.rmempty = false;
 
 		o = s.taboption('additional', form.Value, 'adb_fetchparm', _('Download Parameters'), _('Special config options for the selected download utility.'))
-		o.value('--timeout=20 -O');
-		o.value('--connect-timeout 20 --silent --show-error --location -o');
-		o.value('--no-cache --no-cookies --max-redirect=0 --timeout=20 -O');
-		o.value('--timeout=20 --allow-overwrite=true --auto-file-renaming=false --check-certificate=true --dir=" " -o');
-		o.default = false;
 		o.rmempty = true;
 
 		/*
