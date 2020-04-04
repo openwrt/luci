@@ -25,6 +25,7 @@ return view.extend({
 			E('p', {},
 				E('textarea', {
 					'style': 'width: 100% !important; padding: 5px; font-family: monospace',
+					'spellcheck': 'false',
 					'wrap': 'off',
 					'rows': 25
 				}, [ blacklist != null ? blacklist : '' ])
