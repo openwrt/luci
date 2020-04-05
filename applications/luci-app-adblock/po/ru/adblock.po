@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LuCI: adblock\n"
 "POT-Creation-Date: 2017-10-22 13:00+0300\n"
-"PO-Revision-Date: 2020-04-02 19:50+0000\n"
-"Last-Translator: Anton Kikin <a.a.kikin@gmail.com>\n"
+"PO-Revision-Date: 2020-04-05 16:31+0000\n"
+"Last-Translator: sergio <sergio+it@outerface.net>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsadblock/ru/>\n"
 "Language: ru\n"
@@ -22,7 +22,7 @@ msgstr "Действие"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:214
 msgid "Active Sources"
-msgstr ""
+msgstr "Активные источники"
 
 #: applications/luci-app-adblock/luasrc/controller/adblock.lua:6
 #: applications/luci-app-adblock/root/usr/share/luci/menu.d/luci-app-adblock.json:3
@@ -34,20 +34,22 @@ msgid "Adblock action"
 msgstr ""
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:10
+#, fuzzy
 msgid "Add Blacklist Domain"
-msgstr ""
+msgstr "Добавить домен в черный список"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:45
+#, fuzzy
 msgid "Add Whitelist Domain"
-msgstr ""
+msgstr "Добавить домен в белый список"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:11
 msgid "Add this (sub-)domain to your local blacklist."
-msgstr ""
+msgstr "Добавить (под-)домен в ваш локальный черный список."
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:46
 msgid "Add this (sub-)domain to your local whitelist."
-msgstr ""
+msgstr "Добавить (под-)домен в ваш локальный белый список."
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:408
 msgid "Additional Jail Blocklist"
@@ -55,7 +57,7 @@ msgstr ""
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:267
 msgid "Additional Settings"
-msgstr ""
+msgstr "Дополнительные настройки"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:330
 msgid "Additional trigger delay in seconds before adblock processing begins."
@@ -63,11 +65,11 @@ msgstr "Дополнительная задержка в секундах до �
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:268
 msgid "Advanced DNS Settings"
-msgstr ""
+msgstr "Дополнительные настройки DNS"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:270
 msgid "Advanced E-Mail Settings"
-msgstr ""
+msgstr "Расширенные настройки электронной почты"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:269
 msgid "Advanced Report Settings"
@@ -90,6 +92,8 @@ msgid ""
 "Base Temp Directory for all adblock related runtime operations, e.g. "
 "downloading, sorting, merging etc."
 msgstr ""
+"Временная директория для всех операций во время работы  AdBlock-а, например "
+"загрузки, сортировки, слияния и т.д."
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/blacklist.js:14
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:33
@@ -97,41 +101,51 @@ msgid ""
 "Blacklist changes have been saved. Refresh your adblock lists that changes "
 "take effect."
 msgstr ""
+"Изменения черного списка сохранены. Обновите списки AdBlock-а, чтобы они "
+"вступили в силу."
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:280
 msgid "Blacklist..."
-msgstr ""
+msgstr "Черный список..."
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:209
 msgid "Blocked Domain"
-msgstr "Блокированные домены"
+msgstr "Заблокированные домены"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:211
 msgid "Blocked Domains"
-msgstr ""
+msgstr "Заблокированные домены"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:347
 msgid "Blocklist Backup"
-msgstr ""
+msgstr "Бэкап черного списка"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:80
+#, fuzzy
 msgid "Blocklist Query"
-msgstr ""
+msgstr "Блокировка запросов"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:314
+#, fuzzy
 msgid "Blocklist Query..."
-msgstr ""
+msgstr "Заблокировать запрос..."
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:271
+#, fuzzy
 msgid "Blocklist Sources"
-msgstr "Источники списков блокировок"
+msgstr "Источники черных списков"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:408
+#, fuzzy
 msgid ""
 "Builds an additional DNS blocklist to block access to all domains except "
 "those listed in the whitelist. Please note: You can use this restrictive "
 "blocklist e.g. for guest wifi or kidsafe configurations."
 msgstr ""
+"Создает дополнительный блок-список DNS для блокирования доступа ко всем "
+"доменам, кроме перечисленных в белом списке. Обратите внимание: Вы можете "
+"использовать этот ограничительный блок-список, например, для гостевых "
+"конфигураций WiFi или детского режима."
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:21
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:56
@@ -146,24 +160,31 @@ msgid "Client"
 msgstr "Клиент"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:126
+#, fuzzy
 msgid ""
 "Configuration of the adblock package to block ad/abuse domains by using DNS. "
 "For further information <a href=\"https://github.com/openwrt/packages/blob/"
 "master/net/adblock/files/README.md\" target=\"_blank\" rel=\"noreferrer "
 "noopener\" >check the online documentation</a>"
 msgstr ""
+"Конфигурация AdBlock-а для блокировки рекламных/мошеннических доменов с "
+"помощью DNS. Чтобы получить больше информации, прочитайте <a href=\""
+"https://github.com/openwrt/packages/blob/master/net/adblock/files/README.md\""
+" target=\"_blank\" rel=\"noreferrer noopener\" >онлайн документацию</a>"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:204
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:206
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:208
 msgid "Count"
-msgstr "Счёт"
+msgstr "Количество"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:347
 msgid ""
 "Create compressed blocklist backups, they will be used in case of download "
 "errors or during startup."
 msgstr ""
+"Создать сжатые бэкапы списков блокировок, для использования при проблемах с "
+"загрузкой или во время запуска."
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:217
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:375
