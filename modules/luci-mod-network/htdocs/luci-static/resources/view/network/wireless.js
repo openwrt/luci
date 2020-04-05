@@ -949,7 +949,7 @@ return view.extend({
 				o = ss.taboption('general', form.Value, 'bssid', _('<abbr title="Basic Service Set Identifier">BSSID</abbr>'));
 				o.datatype = 'macaddr';
 
-				o = ss.taboption('general', widgets.NetworkSelect, 'network', _('Network'), _('Choose the network(s) you want to attach to this wireless interface or fill out the <em>create</em> field to define a new network.'));
+				o = ss.taboption('general', widgets.NetworkSelect, 'network', _('Network'), _('Choose the network(s) you want to attach to this wireless interface or fill out the <em>unspecified</em> field to define a new network.'));
 				o.rmempty = true;
 				o.multiple = true;
 				o.novirtual = true;
