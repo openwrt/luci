@@ -1,9 +1,7 @@
 'use strict';
-'require view';
-'require poll';
 'require fs';
 
-return view.extend({
+return L.view.extend({
 	load: function() {
 		return Promise.all([
 			L.resolveDefault(fs.stat('/sbin/logread'), null),
@@ -12,7 +10,7 @@ return view.extend({
 	},
 	render: function(stat) {
 		var logger = stat[0] ? stat[0].path : stat[1] ? stat[1].path : null;
-		poll.add(function() {
+		L.Poll.add(function() {
 			return L.resolveDefault(fs.exec_direct(logger, ['-e', 'adblock-'])).then(function(res) {
 				var log = document.getElementById("logfile");
 				if (res) {
