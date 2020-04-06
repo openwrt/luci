@@ -7,6 +7,33 @@ local uci = require("luci.model.uci").cursor()
 
 local packageName = "https-dns-proxy"
 local providers_dir = "/usr/lib/lua/luci/" .. packageName .. "/providers/"
+local helperText = ""
+
+function create_helper_text()
+	local initText = "<br />" .. translate("For more information on different options check") .. " "
+	for filename in fs.dir(providers_dir) do
+		local p_func = loadfile(providers_dir .. filename)
+		setfenv(p_func, { _ = i18n.translate })
+		local p = p_func()
+		if p.help_link then
+			local url, domain
+			url = p.help_link
+			domain = p.help_link_text or url:match('^%w+://([^/]+)')
+			if not helperText:find(domain) then
+				if helperText == "" then
+					helperText = initText
+				else
+					helperText = helperText .. ", "
+				end
+				helperText = helperText .. [[<a href="]] .. url .. [[">]] .. domain .. [[</a>]]
+			end
+		end
+	end
+	if helperText ~= "" then
+		local a = helperText:gsub('(.*),%s.*$', '%1')
+		helperText = a .. " " .. translate("and") .. helperText:sub(#a + 2) .. "."
+	end
+end
 
 function get_provider_name(value)
 	for filename in fs.dir(providers_dir) do
@@ -83,17 +110,10 @@ else
 	buttons.template = packageName .. "/buttons"
 end
 
+create_helper_text()
 s3 = m:section(TypedSection, "https-dns-proxy", translate("Instances"), translate("When you add/remove any instances below, they will be used to override the 'DNS forwardings' section of ")
 		.. [[ <a href="]] .. dispatcher.build_url("admin/network/dhcp") .. [[">]]
-		.. translate("DHCP and DNS") .. [[</a>]] .. "."
-    .. "<br />"
-    .. translate("For more information on different options check ")
-		.. [[ <a href="https://adguard.com/en/adguard-dns/overview.html">]]
-    .. "AdGuard.com" .. [[</a>]] .. ", "
-		.. [[ <a href="https://cleanbrowsing.org/guides/dnsoverhttps">]]
-    .. "CleanBrowsing.org" .. [[</a>]] .. " " .. translate("and") .. " "
-		.. [[ <a href="https://www.quad9.net/doh-quad9-dns-servers/">]]
-    .. "Quad9.net" .. [[</a>]] .. ".")
+		.. translate("DHCP and DNS") .. [[</a>]] .. "." .. helperText)
 s3.template = "cbi/tblsection"
 s3.sortable  = false
 s3.anonymous = true
