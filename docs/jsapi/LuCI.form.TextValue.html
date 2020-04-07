@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Class: WifiDevice</title>
+    <title>Class: TextValue</title>
     
     
     <script src="scripts/prettify/prettify.js"></script>
@@ -3209,7 +3209,7 @@
     </ul>
 </div>
     <div class="main">
-        <h1 class="page-title" data-filename="LuCI.network.WifiDevice.html">Class: WifiDevice</h1>
+        <h1 class="page-title" data-filename="LuCI.form.TextValue.html">Class: TextValue</h1>
         
 
 
@@ -3218,14 +3218,13 @@
     
 <header>
     <h2>
-        <span class="ancestors"><a href="LuCI.html">LuCI</a><a href="LuCI.network.html">.network</a>.</span>
+        <span class="ancestors"><a href="LuCI.html">LuCI</a><a href="LuCI.form.html">.form</a>.</span>
     
-    WifiDevice
+    TextValue
     </h2>
     
-        <div class="class-description"><p>A <code>Network.WifiDevice</code> class instance represents a wireless radio device
-present on the system and provides wireless capability information as
-well as methods for enumerating related wireless networks.</p></div>
+        <div class="class-description"><p>The <code>TextValue</code> class implements a multi-line textarea input using
+<a href="LuCI.ui.Textarea.html"><code>LuCI.ui.Textarea</code></a>.</p></div>
     
 </header>  
 
@@ -3237,14 +3236,14 @@ well as methods for enumerating related wireless networks.</p></div>
         
 <dt>
     <div class="nameContainer">
-        <h4 class="name" id="WifiDevice">
+        <h4 class="name" id="TextValue">
             
-            new LuCI.network.WifiDevice<span class="signature">()</span>
+            new LuCI.form.TextValue<span class="signature">(form, section, option, <span class="optional">title</span>, <span class="optional">description</span>)</span>
         </h4>
     
         
         <div class="tag-source">
-            <a href="network.js.html">network.js</a>, <a href="network.js.html#line3062">line 3062</a>
+            <a href="form.js.html">form.js</a>, <a href="form.js.html#line3463">line 3463</a>
         </div>
         
     </div>
@@ -3253,96 +3252,6 @@ well as methods for enumerating related wireless networks.</p></div>
 </dt>
 <dd>
     
-    
-
-    
-    
-    
-    
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    
-    
-</dd>
-
-    
-    </div>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-        <h3 class="subsection-title">Methods</h3>
-        
-        <dl>
-            
-<dt>
-    <div class="nameContainer">
-        <h4 class="name" id="addWifiNetwork">
-            
-            addWifiNetwork<span class="signature">(<span class="optional">options</span>)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{Promise.&lt;(null|<a href="LuCI.network.WifiNetwork.html">LuCI.network.WifiNetwork</a>)>}</span>
-        </h4>
-    
-        
-        <div class="tag-source">
-            <a href="network.js.html">network.js</a>, <a href="network.js.html#line3328">line 3328</a>
-        </div>
-        
-    </div>
-
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>Adds a new wireless network associated with this radio device to the
-configuration and sets its options to the provided values.</p>
-    </div>
     
 
     
@@ -3372,13 +3281,106 @@ configuration and sets its options to the provided values.</p>
 	
         <tr>
             
-                <td class="name"><code>options</code></td>
+                <td class="name"><code>form</code></td>
             
             
             <td class="type">
             
                 
-<span class="param-type">Object.&lt;string, (string|Array.&lt;string>)></span>
+<span class="param-type"><a href="LuCI.form.Map.html">LuCI.form.Map</a></span>
+|
+
+<span class="param-type"><a href="LuCI.form.JSONMap.html">LuCI.form.JSONMap</a></span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                    
+                    
+                        
+                    
+                
+                <p>The configuration form this section is added to. It is automatically passed
+by <a href="LuCI.form.AbstractSection.html#option"><code>option()</code></a> or
+<a href="LuCI.form.AbstractSection.html#taboption"><code>taboption()</code></a> when adding the
+option to the section.</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>section</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type"><a href="LuCI.form.AbstractSection.html">LuCI.form.AbstractSection</a></span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                    
+                    
+                        
+                    
+                
+                <p>The configuration section this option is added to. It is automatically passed
+by <a href="LuCI.form.AbstractSection.html#option"><code>option()</code></a> or
+<a href="LuCI.form.AbstractSection.html#taboption"><code>taboption()</code></a> when adding the
+option to the section.</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>option</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                    
+                    
+                        
+                    
+                
+                <p>The name of the UCI option to map.</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>title</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
 
 
             
@@ -3395,7 +3397,37 @@ configuration and sets its options to the provided values.</p>
                         
                     
                 
-                <p>The options to set for the newly added wireless network.</p></td>
+                <p>The title caption of the option element.</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>description</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                    
+                        <span class="optional">optional</span>
+                    
+                    
+                        
+                    
+                
+                <p>The description text of the option element.</p></td>
         </tr>
 	
 	
@@ -3438,37 +3470,77 @@ configuration and sets its options to the provided values.</p>
     
     
     
-    <h5>Returns:</h5>
     
+    
+</dd>
 
-
-<table class="params">
-    <thead>
-    <tr>
+    
+    </div>
+    
+    
+        <h3 class="subsection-title">Extends</h3>
         
-        <th>Type</th>
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-    <tbody>
+        <ul>
+            <li><a href="LuCI.form.Value.html">LuCI.form.Value</a></li>
+        </ul>
     
-        <tr>
-            
-            <td class="type">
-            
-                        Promise.&lt;(null|<a href="LuCI.network.WifiNetwork.html">LuCI.network.WifiNetwork</a>)>
-                        
-                    
-            </td>
-            <td class="description last">Returns a promise resolving to a <code>WifiNetwork</code> instance describing
-the newly added wireless network or <code>null</code> if the given options
-were invalid.</td>
-        </tr>
     
-    </tbody>
-</table>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+        <h3 class="subsection-title">Members</h3>
+        
+        <dl>
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="cols">cols<span class="type-signature type number">number</span> </h4>
+    </div>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>Allows to specify the <a href="LuCI.ui.Textarea.html#.InitOptions"><code>cols</code></a>
+property of the underlying textarea widget.</p>
+    </div>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
 
     
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-default">Default Value:</dt>
+    <dd class="tag-default"><ul class="dummy"><li>null</li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
     
     
 </dd>
@@ -3477,14 +3549,836 @@ were invalid.</td>
             
 <dt>
     <div class="nameContainer">
-        <h4 class="name" id="deleteWifiNetwork">
+        <h4 class="name" id="monospace">monospace<span class="type-signature type boolean">boolean</span> </h4>
+    </div>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>Enforces the use of a monospace font for the textarea contents when set
+to <code>true</code>.</p>
+    </div>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-default">Default Value:</dt>
+    <dd class="tag-default"><ul class="dummy"><li>false</li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
             
-            deleteWifiNetwork<span class="signature">(network)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{Promise.&lt;boolean>}</span>
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="rows">rows<span class="type-signature type number">number</span> </h4>
+    </div>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>Allows to specify the <a href="LuCI.ui.Textarea.html#.InitOptions"><code>rows</code></a>
+property of the underlying textarea widget.</p>
+    </div>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-default">Default Value:</dt>
+    <dd class="tag-default"><ul class="dummy"><li>null</li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="wrap">wrap<span class="type-signature type number">number</span> </h4>
+    </div>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>Allows to specify the <a href="LuCI.ui.Textarea.html#.InitOptions"><code>wrap</code></a>
+property of the underlying textarea widget.</p>
+    </div>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-default">Default Value:</dt>
+    <dd class="tag-default"><ul class="dummy"><li>null</li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="datatype">datatype<span class="type-signature type string">string</span> </h4>
+    </div>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>Specifies a datatype constraint expression to validate input values
+against. Refer to <code>LuCI.validation</code> for details on the format.</p>
+<p>If the user entered input does not match the datatype validation, the
+option element is marked as invalid.</p>
+    </div>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-default">Default Value:</dt>
+    <dd class="tag-default"><ul class="dummy"><li>null</li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="default">default<span class="type-signature type *">*</span> </h4>
+    </div>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>Sets a default value to use when the underlying UCI option is not set.</p>
+    </div>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-default">Default Value:</dt>
+    <dd class="tag-default"><ul class="dummy"><li>null</li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="editable">editable<span class="type-signature type boolean">boolean</span> </h4>
+    </div>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>Mark grid section option element as editable.</p>
+<p>Options which are displayed in the table portion of a <code>GridSection</code>
+instance are rendered as readonly text by default. By setting the
+<code>editable</code> property of a child option element to <code>true</code>, that element
+is rendered as full input widget within its cell instead of a text only
+preview.</p>
+<p>This property has no effect on options that are not children of grid
+section elements.</p>
+    </div>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-default">Default Value:</dt>
+    <dd class="tag-default"><ul class="dummy"><li>false</li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="modalonly">modalonly<span class="type-signature type boolean">boolean</span> </h4>
+    </div>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>Move grid section option element into the table, the modal popup or both.</p>
+<p>If this property is <code>null</code> (the default), the option element is
+displayed in both the table preview area and the per-section instance
+modal popup of a grid section. When it is set to <code>false</code> the option
+is only shown in the table but not the modal popup. When set to <code>true</code>,
+the option is only visible in the modal popup but not the table.</p>
+<p>This property has no effect on options that are not children of grid
+section elements.</p>
+    </div>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-default">Default Value:</dt>
+    <dd class="tag-default"><ul class="dummy"><li>null</li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="optional">optional<span class="type-signature type boolean">boolean</span> </h4>
+    </div>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>If set to <code>true</code>, the underlying ui input widget is allowed to be empty,
+otherwise the option element is marked invalid when no value is entered
+or selected by the user.</p>
+    </div>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-default">Default Value:</dt>
+    <dd class="tag-default"><ul class="dummy"><li>false</li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="password">password<span class="type-signature type boolean">boolean</span> </h4>
+    </div>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>If set to <code>true</code>, the field is rendered as password input, otherwise
+as plain text input.</p>
+    </div>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-default">Default Value:</dt>
+    <dd class="tag-default"><ul class="dummy"><li>false</li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="placeholder">placeholder<span class="type-signature type string">string</span> </h4>
+    </div>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>Set a placeholder string to use when the input field is empty.</p>
+    </div>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-default">Default Value:</dt>
+    <dd class="tag-default"><ul class="dummy"><li>null</li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="rmempty">rmempty<span class="type-signature type boolean">boolean</span> </h4>
+    </div>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>If set to <code>false</code>, the underlying option value is retained upon saving
+the form when the option element is disabled due to unsatisfied
+dependency constraints.</p>
+    </div>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-default">Default Value:</dt>
+    <dd class="tag-default"><ul class="dummy"><li>true</li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="uciconfig">uciconfig<span class="type-signature type string">string</span> </h4>
+    </div>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>Override the UCI configuration name to read the option value from.</p>
+<p>By default, the configuration name is inherited from the parent Map.
+By setting this property, a deviating configuration may be specified.</p>
+<p>The default is null, means inheriting from the parent form.</p>
+    </div>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-default">Default Value:</dt>
+    <dd class="tag-default"><ul class="dummy"><li>null</li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="ucioption">ucioption<span class="type-signature type string">string</span> </h4>
+    </div>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>Override the UCI option name to read the value from.</p>
+<p>By default, the elements name, which is passed as third argument to
+the constructor, is used as UCI option name. By setting this property,
+a deviating UCI option may be specified.</p>
+<p>The default is null, means using the option element name.</p>
+    </div>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-default">Default Value:</dt>
+    <dd class="tag-default"><ul class="dummy"><li>null</li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="ucisection">ucisection<span class="type-signature type string">string</span> </h4>
+    </div>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>Override the UCI section name to read the option value from.</p>
+<p>By default, the section ID is inherited from the parent section element.
+By setting this property, a deviating section may be specified.</p>
+<p>The default is null, means inheriting from the parent section.</p>
+    </div>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-default">Default Value:</dt>
+    <dd class="tag-default"><ul class="dummy"><li>null</li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="validate">validate<span class="type-signature type function">function</span> </h4>
+    </div>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>Specifies a custom validation function to test the user input for
+validity. The validation function must return <code>true</code> to accept the
+value. Any other return value type is converted to a string and
+displayed to the user as validation error message.</p>
+<p>If the user entered input does not pass the validation function, the
+option element is marked as invalid.</p>
+    </div>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-default">Default Value:</dt>
+    <dd class="tag-default"><ul class="dummy"><li>null</li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="width">width<span class="type-signature type number">number</span> <span class="type-signature type string">string</span> </h4>
+    </div>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>Override the cell width of a table or grid section child option.</p>
+<p>If the property is set to a numeric value, it is treated as pixel width
+which is set on the containing cell element of the option, essentially
+forcing a certain column width. When the property is set to a string
+value, it is applied as-is to the CSS <code>width</code> property.</p>
+<p>This property has no effect on options that are not children of grid or
+table section elements.</p>
+    </div>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-default">Default Value:</dt>
+    <dd class="tag-default"><ul class="dummy"><li>null</li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        </dl>
+    
+    
+    
+        <h3 class="subsection-title">Methods</h3>
+        
+        <dl>
+            
+<dt>
+    <div class="nameContainer inherited">
+        <h4 class="name" id="append">
+            
+                <span class="inherited"><a href="LuCI.form.AbstractElement.html#append">inherited</a></span>
+            
+            append<span class="signature">(element)</span>
         </h4>
     
         
         <div class="tag-source">
-            <a href="network.js.html">network.js</a>, <a href="network.js.html#line3353">line 3353</a>
+            <a href="form.js.html">form.js</a>, <a href="form.js.html#line202">line 202</a>
         </div>
         
     </div>
@@ -3495,8 +4389,7 @@ were invalid.</td>
     
     
     <div class="description">
-        <p>Deletes the wireless network with the given name associated with this
-radio device.</p>
+        <p>Add another form element as children to this element.</p>
     </div>
     
 
@@ -3527,13 +4420,13 @@ radio device.</p>
 	
         <tr>
             
-                <td class="name"><code>network</code></td>
+                <td class="name"><code>element</code></td>
             
             
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">AbstractElement</span>
 
 
             
@@ -3543,10 +4436,7 @@ radio device.</p>
             
             <td class="description last">
                 
-                <p>The name of the wireless network to lookup. This may be either an uci
-configuration section ID, a network ID in the form <code>radio#.network#</code>
-or a Linux network device name like <code>wlan0</code> which is resolved to the
-corresponding configuration section through <code>ubus</code> runtime information.</p></td>
+                <p>The form element to add.</p></td>
         </tr>
 	
 	
@@ -3589,38 +4479,6 @@ corresponding configuration section through <code>ubus</code> runtime informatio
     
     
     
-    <h5>Returns:</h5>
-    
-
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Type</th>
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-    <tbody>
-    
-        <tr>
-            
-            <td class="type">
-            
-                        Promise.&lt;boolean>
-                        
-                    
-            </td>
-            <td class="description last">Returns a promise resolving to <code>true</code> when the wireless network was
-successfully deleted from the configuration or <code>false</code> when the given
-network could not be found or if the found network was not associated
-with this wireless radio device.</td>
-        </tr>
-    
-    </tbody>
-</table>
-
-    
     
     
 </dd>
@@ -3628,15 +4486,17 @@ with this wireless radio device.</td>
         
             
 <dt>
-    <div class="nameContainer">
-        <h4 class="name" id="get">
+    <div class="nameContainer inherited">
+        <h4 class="name" id="cbid">
             
-            get<span class="signature">(opt)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{null|string|Array.&lt;string>}</span>
+                <span class="inherited"><a href="LuCI.form.AbstractValue.html#cbid">inherited</a></span>
+            
+            cbid<span class="signature">(section_id)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{string}</span>
         </h4>
     
         
         <div class="tag-source">
-            <a href="network.js.html">network.js</a>, <a href="network.js.html#line3102">line 3102</a>
+            <a href="form.js.html">form.js</a>, <a href="form.js.html#line1525">line 1525</a>
         </div>
         
     </div>
@@ -3647,7 +4507,11 @@ with this wireless radio device.</td>
     
     
     <div class="description">
-        <p>Read the given UCI option value of this wireless device.</p>
+        <p>Obtain the internal ID (&quot;cbid&quot;) of the element instance.</p>
+<p>Since each form section element may map multiple underlying
+configuration sections, the configuration section ID is required to
+form a fully qualified ID pointing to the specific element instance
+within the given specific section.</p>
     </div>
     
 
@@ -3678,7 +4542,7 @@ with this wireless radio device.</td>
 	
         <tr>
             
-                <td class="name"><code>opt</code></td>
+                <td class="name"><code>section_id</code></td>
             
             
             <td class="type">
@@ -3694,7 +4558,7 @@ with this wireless radio device.</td>
             
             <td class="description last">
                 
-                <p>The UCI option name to read.</p></td>
+                <p>The configuration section ID</p></td>
         </tr>
 	
 	
@@ -3735,6 +4599,33 @@ with this wireless radio device.</td>
     
     
     
+    <h5>Throws:</h5>
+    
+            
+
+<dl>
+    <dt>
+        <div class="param-desc">
+        <p>Throws a <code>TypeError</code> exception when no <code>section_id</code> was specified.</p>
+        </div>
+    </dt>
+    <dt>
+        <dl>
+            <dt>
+                Type
+            </dt>
+            <dd>
+                
+<span class="param-type">TypeError</span>
+
+
+            </dd>
+        </dl>
+    </dt>
+</dl>
+
+
+        
     
     
     <h5>Returns:</h5>
@@ -3755,18 +4646,11 @@ with this wireless radio device.</td>
             
             <td class="type">
             
-                        null
-                         | 
-                    
                         string
-                         | 
-                    
-                        Array.&lt;string>
                         
                     
             </td>
-            <td class="description last">Returns the UCI option value or <code>null</code> if the requested option is
-not found.</td>
+            <td class="description last">Returns the element ID.</td>
         </tr>
     
     </tbody>
@@ -3780,15 +4664,17 @@ not found.</td>
         
             
 <dt>
-    <div class="nameContainer">
-        <h4 class="name" id="getHTModes">
+    <div class="nameContainer inherited">
+        <h4 class="name" id="cfgvalue">
             
-            getHTModes<span class="signature">()</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{Array.&lt;string>}</span>
+                <span class="inherited"><a href="LuCI.form.AbstractValue.html#cfgvalue">inherited</a></span>
+            
+            cfgvalue<span class="signature">(section_id)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{*}</span>
         </h4>
     
         
         <div class="tag-source">
-            <a href="network.js.html">network.js</a>, <a href="network.js.html#line3180">line 3180</a>
+            <a href="form.js.html">form.js</a>, <a href="form.js.html#line1599">line 1599</a>
         </div>
         
     </div>
@@ -3799,9 +4685,11 @@ not found.</td>
     
     
     <div class="description">
-        <p>Gets a list of supported htmodes.</p>
-<p>The htmode values describe the wide-frequency options supported by
-the wireless phy.</p>
+        <p>Query the underlying configuration value.</p>
+<p>The default implementation of this method returns the cached return
+value of <a href="LuCI.form.AbstractValue.html#load"><code>load()</code></a>. It may be
+overwritten by user code to obtain the configuration value in a
+different way.</p>
     </div>
     
 
@@ -3809,6 +4697,51 @@ the wireless phy.</p>
     
     
     
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>section_id</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                <p>The configuration section ID</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
     
     
     
@@ -3844,6 +4777,33 @@ the wireless phy.</p>
     
     
     
+    <h5>Throws:</h5>
+    
+            
+
+<dl>
+    <dt>
+        <div class="param-desc">
+        <p>Throws a <code>TypeError</code> exception when no <code>section_id</code> was specified.</p>
+        </div>
+    </dt>
+    <dt>
+        <dl>
+            <dt>
+                Type
+            </dt>
+            <dd>
+                
+<span class="param-type">TypeError</span>
+
+
+            </dd>
+        </dl>
+    </dt>
+</dl>
+
+
+        
     
     
     <h5>Returns:</h5>
@@ -3864,467 +4824,113 @@ the wireless phy.</p>
             
             <td class="type">
             
-                        Array.&lt;string>
+                        *
                         
                     
             </td>
-            <td class="description last">Returns an array of valid htmode values for this radio. Currently
-known mode values are:
+            <td class="description last">Returns the configuration value.</td>
+        </tr>
+    
+    </tbody>
+</table>
+
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer inherited">
+        <h4 class="name" id="depends">
+            
+                <span class="inherited"><a href="LuCI.form.AbstractValue.html#depends">inherited</a></span>
+            
+            depends<span class="signature">(optionname_or_depends, optionvalue)</span>
+        </h4>
+    
+        
+        <div class="tag-source">
+            <a href="form.js.html">form.js</a>, <a href="form.js.html#line1407">line 1407</a>
+        </div>
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Add a dependency contraint to the option.</p>
+<p>Dependency constraints allow making the presence of option elements
+dependant on the current values of certain other options within the
+same form. An option element with unsatisfied dependencies will be
+hidden from the view and its current value is omitted when saving.</p>
+<p>Multiple constraints (that is, multiple calls to <code>depends()</code>) are
+treated as alternatives, forming a logical &quot;or&quot; expression.</p>
+<p>By passing an object of name =&gt; value pairs as first argument, it is
+possible to depend on multiple options simultaneously, allowing to form
+a logical &quot;and&quot; expression.</p>
+<p>Option names may be given in &quot;dot notation&quot; which allows to reference
+option elements outside of the current form section. If a name without
+dot is specified, it refers to an option within the same configuration
+section. If specified as <code>configname.sectionid.optionname</code>,
+options anywhere within the same form may be specified.</p>
+<p>The object notation also allows for a number of special keys which are
+not treated as option names but as modifiers to influence the dependency
+constraint evaluation. The associated value of these special &quot;tag&quot; keys
+is ignored. The recognized tags are:</p>
 <ul>
-<li><code>HT20</code> - applicable to IEEE 802.11n, 20 MHz wide channels</li>
-<li><code>HT40</code> - applicable to IEEE 802.11n, 40 MHz wide channels</li>
-<li><code>VHT20</code> - applicable to IEEE 802.11ac, 20 MHz wide channels</li>
-<li><code>VHT40</code> - applicable to IEEE 802.11ac, 40 MHz wide channels</li>
-<li><code>VHT80</code> - applicable to IEEE 802.11ac, 80 MHz wide channels</li>
-<li><code>VHT160</code> - applicable to IEEE 802.11ac, 160 MHz wide channels</li>
-</ul></td>
-        </tr>
-    
-    </tbody>
-</table>
-
-    
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <div class="nameContainer">
-        <h4 class="name" id="getHWModes">
-            
-            getHWModes<span class="signature">()</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{Array.&lt;string>}</span>
-        </h4>
-    
-        
-        <div class="tag-source">
-            <a href="network.js.html">network.js</a>, <a href="network.js.html#line3159">line 3159</a>
-        </div>
-        
-    </div>
-
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>Gets a list of supported hwmodes.</p>
-<p>The hwmode values describe the frequency band and wireless standard
-versions supported by the wireless phy.</p>
-    </div>
-    
-
-    
-    
-    
-    
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Type</th>
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-    <tbody>
-    
-        <tr>
-            
-            <td class="type">
-            
-                        Array.&lt;string>
-                        
-                    
-            </td>
-            <td class="description last">Returns an array of valid hwmode values for this radio. Currently
-known mode values are:
+  <li>
+   <code>!reverse</code><br>
+   Invert the dependency, instead of requiring another option to be
+   equal to the dependency value, that option should <em>not</em> be
+   equal.
+  </li>
+  <li>
+   <code>!contains</code><br>
+   Instead of requiring an exact match, the dependency is considered
+   satisfied when the dependency value is contained within the option
+   value.
+  </li>
+  <li>
+   <code>!default</code><br>
+   The dependency is always satisfied
+  </li>
+</ul>
+<p>Examples:</p>
 <ul>
-<li><code>a</code> - Legacy 802.11a mode, 5 GHz, up to 54 Mbit/s</li>
-<li><code>b</code> - Legacy 802.11b mode, 2.4 GHz, up to 11 Mbit/s</li>
-<li><code>g</code> - Legacy 802.11g mode, 2.4 GHz, up to 54 Mbit/s</li>
-<li><code>n</code> - IEEE 802.11n mode, 2.4 or 5 GHz, up to 600 Mbit/s</li>
-<li><code>ac</code> - IEEE 802.11ac mode, 5 GHz, up to 6770 Mbit/s</li>
-</ul></td>
-        </tr>
-    
-    </tbody>
-</table>
-
-    
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <div class="nameContainer">
-        <h4 class="name" id="getI18n">
-            
-            getI18n<span class="signature">()</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{string}</span>
-        </h4>
-    
-        
-        <div class="tag-source">
-            <a href="network.js.html">network.js</a>, <a href="network.js.html#line3191">line 3191</a>
-        </div>
-        
-    </div>
-
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>Get a string describing the wireless radio hardware.</p>
-    </div>
-    
-
-    
-    
-    
-    
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Type</th>
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-    <tbody>
-    
-        <tr>
-            
-            <td class="type">
-            
-                        string
-                        
-                    
-            </td>
-            <td class="description last">Returns the description string.</td>
-        </tr>
-    
-    </tbody>
-</table>
-
-    
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <div class="nameContainer">
-        <h4 class="name" id="getName">
-            
-            getName<span class="signature">()</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{string}</span>
-        </h4>
-    
-        
-        <div class="tag-source">
-            <a href="network.js.html">network.js</a>, <a href="network.js.html#line3140">line 3140</a>
-        </div>
-        
-    </div>
-
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>Get the configuration name of this wireless radio.</p>
-    </div>
-    
-
-    
-    
-    
-    
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Type</th>
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-    <tbody>
-    
-        <tr>
-            
-            <td class="type">
-            
-                        string
-                        
-                    
-            </td>
-            <td class="description last">Returns the UCI section name (e.g. <code>radio0</code>) of the corresponding
-radio configuration which also serves as unique logical identifier
-for the wireless phy.</td>
-        </tr>
-    
-    </tbody>
-</table>
-
-    
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <div class="nameContainer">
-        <h4 class="name" id="getScanList">
-            
-            getScanList<span class="signature">()</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{Promise.&lt;Array.&lt;<a href="LuCI.network.html#.WifiScanResult">LuCI.network.WifiScanResult</a>>>}</span>
-        </h4>
-    
-        
-        <div class="tag-source">
-            <a href="network.js.html">network.js</a>, <a href="network.js.html#line3252">line 3252</a>
-        </div>
-        
-    </div>
-
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>Trigger a wireless scan on this radio device and obtain a list of
-nearby networks.</p>
-    </div>
-    
-
-    
-    
-    
-    
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Type</th>
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-    <tbody>
-    
-        <tr>
-            
-            <td class="type">
-            
-                        Promise.&lt;Array.&lt;<a href="LuCI.network.html#.WifiScanResult">LuCI.network.WifiScanResult</a>>>
-                        
-                    
-            </td>
-            <td class="description last">Returns a promise resolving to an array of scan result objects
-describing the networks found in the vincinity.</td>
-        </tr>
-    
-    </tbody>
-</table>
-
-    
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <div class="nameContainer">
-        <h4 class="name" id="getWifiNetwork">
-            
-            getWifiNetwork<span class="signature">(network)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{Promise.&lt;<a href="LuCI.network.WifiNetwork.html">LuCI.network.WifiNetwork</a>>}</span>
-        </h4>
-    
-        
-        <div class="tag-source">
-            <a href="network.js.html">network.js</a>, <a href="network.js.html#line3285">line 3285</a>
-        </div>
-        
-    </div>
-
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>Get the wifi network of the given name belonging to this radio device</p>
+ <li>
+  <code>opt.depends("foo", "test")</code><br>
+  Require the value of `foo` to be `test`.
+ </li>
+ <li>
+  <code>opt.depends({ foo: "test" })</code><br>
+  Equivalent to the previous example.
+ </li>
+ <li>
+  <code>opt.depends({ foo: "test", bar: "qrx" })</code><br>
+  Require the value of `foo` to be `test` and the value of `bar` to be
+  `qrx`.
+ </li>
+ <li>
+  <code>opt.depends({ foo: "test" })<br>
+        opt.depends({ bar: "qrx" })</code><br>
+  Require either <code>foo</code> to be set to <code>test</code>,
+  <em>or</em> the <code>bar</code> option to be <code>qrx</code>.
+ </li>
+ <li>
+  <code>opt.depends("test.section1.foo", "bar")</code><br>
+  Require the "foo" form option within the "section1" section to be
+  set to "bar".
+ </li>
+ <li>
+  <code>opt.depends({ foo: "test", "!contains": true })</code><br>
+  Require the "foo" option value to contain the substring "test".
+ </li>
+</ul>
     </div>
     
 
@@ -4355,494 +4961,1825 @@ describing the networks found in the vincinity.</td>
 	
         <tr>
             
-                <td class="name"><code>network</code></td>
+                <td class="name"><code>optionname_or_depends</code></td>
             
             
             <td class="type">
             
                 
 <span class="param-type">string</span>
-
-
-            
-            </td>
-            
-            
-            
-            <td class="description last">
-                
-                <p>The name of the wireless network to lookup. This may be either an uci
-configuration section ID, a network ID in the form <code>radio#.network#</code>
-or a Linux network device name like <code>wlan0</code> which is resolved to the
-corresponding configuration section through <code>ubus</code> runtime information.</p></td>
-        </tr>
-	
-	
-	</tbody>
-</table>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Type</th>
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-    <tbody>
-    
-        <tr>
-            
-            <td class="type">
-            
-                        Promise.&lt;<a href="LuCI.network.WifiNetwork.html">LuCI.network.WifiNetwork</a>>
-                        
-                    
-            </td>
-            <td class="description last">Returns a promise resolving to a <code>Network.WifiNetwork</code> instance
-representing the wireless network and rejecting with <code>null</code> if
-the given network could not be found or is not associated with
-this radio device.</td>
-        </tr>
-    
-    </tbody>
-</table>
-
-    
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <div class="nameContainer">
-        <h4 class="name" id="getWifiNetworks">
-            
-            getWifiNetworks<span class="signature">()</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{Promise.&lt;Array.&lt;<a href="LuCI.network.WifiNetwork.html">LuCI.network.WifiNetwork</a>>>}</span>
-        </h4>
-    
-        
-        <div class="tag-source">
-            <a href="network.js.html">network.js</a>, <a href="network.js.html#line3304">line 3304</a>
-        </div>
-        
-    </div>
-
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>Get all wireless networks associated with this wireless radio device.</p>
-    </div>
-    
-
-    
-    
-    
-    
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Type</th>
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-    <tbody>
-    
-        <tr>
-            
-            <td class="type">
-            
-                        Promise.&lt;Array.&lt;<a href="LuCI.network.WifiNetwork.html">LuCI.network.WifiNetwork</a>>>
-                        
-                    
-            </td>
-            <td class="description last">Returns a promise resolving to an array of <code>Network.WifiNetwork</code>
-instances respresenting the wireless networks associated with this
-radio device.</td>
-        </tr>
-    
-    </tbody>
-</table>
-
-    
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <div class="nameContainer">
-        <h4 class="name" id="isDisabled">
-            
-            isDisabled<span class="signature">()</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{boolean}</span>
-        </h4>
-    
-        
-        <div class="tag-source">
-            <a href="network.js.html">network.js</a>, <a href="network.js.html#line3128">line 3128</a>
-        </div>
-        
-    </div>
-
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>Checks whether this wireless radio is disabled.</p>
-    </div>
-    
-
-    
-    
-    
-    
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Type</th>
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-    <tbody>
-    
-        <tr>
-            
-            <td class="type">
-            
-                        boolean
-                        
-                    
-            </td>
-            <td class="description last">Returns <code>true</code> when the wireless radio is marked as disabled in <code>ubus</code>
-runtime state or when the <code>disabled</code> option is set in the corresponding
-UCI configuration.</td>
-        </tr>
-    
-    </tbody>
-</table>
-
-    
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <div class="nameContainer">
-        <h4 class="name" id="isUp">
-            
-            isUp<span class="signature">()</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{boolean}</span>
-        </h4>
-    
-        
-        <div class="tag-source">
-            <a href="network.js.html">network.js</a>, <a href="network.js.html#line3263">line 3263</a>
-        </div>
-        
-    </div>
-
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>Check whether the wireless radio is marked as up in the <code>ubus</code>
-runtime state.</p>
-    </div>
-    
-
-    
-    
-    
-    
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Type</th>
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-    <tbody>
-    
-        <tr>
-            
-            <td class="type">
-            
-                        boolean
-                        
-                    
-            </td>
-            <td class="description last">Returns <code>true</code> when the radio device is up, else <code>false</code>.</td>
-        </tr>
-    
-    </tbody>
-</table>
-
-    
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <div class="nameContainer">
-        <h4 class="name" id="set">
-            
-            set<span class="signature">(opt, val)</span>
-        </h4>
-    
-        
-        <div class="tag-source">
-            <a href="network.js.html">network.js</a>, <a href="network.js.html#line3116">line 3116</a>
-        </div>
-        
-    </div>
-
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>Set the given UCI option of this network to the given value.</p>
-    </div>
-    
-
-    
-    
-    
-    
-    
-        
-
-<table class="params">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>opt</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-            
-            
-            
-            <td class="description last">
-                
-                <p>The name of the UCI option to set.</p></td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>val</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">null</span>
 |
 
+<span class="param-type">Object.&lt;string, (string|boolean)></span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                <p>The name of the option to depend on or an object describing multiple
+dependencies which must be satified (a logical &quot;and&quot; expression).</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>optionvalue</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                <p>When invoked with a plain option name as first argument, this parameter
+specifies the expected value. In case an object is passed as first
+argument, this parameter is ignored.</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer inherited">
+        <h4 class="name" id="formvalue">
+            
+                <span class="inherited"><a href="LuCI.form.AbstractValue.html#formvalue">inherited</a></span>
+            
+            formvalue<span class="signature">(section_id)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{*}</span>
+        </h4>
+    
+        
+        <div class="tag-source">
+            <a href="form.js.html">form.js</a>, <a href="form.js.html#line1627">line 1627</a>
+        </div>
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Query the current form input value.</p>
+<p>The default implementation of this method returns the current input
+value of the underlying <a href="LuCI.ui.AbstractElement.html"><code>LuCI.ui</code></a> widget.
+It may be overwritten by user code to handle input values differently.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>section_id</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                <p>The configuration section ID</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    <h5>Throws:</h5>
+    
+            
+
+<dl>
+    <dt>
+        <div class="param-desc">
+        <p>Throws a <code>TypeError</code> exception when no <code>section_id</code> was specified.</p>
+        </div>
+    </dt>
+    <dt>
+        <dl>
+            <dt>
+                Type
+            </dt>
+            <dd>
+                
+<span class="param-type">TypeError</span>
+
+
+            </dd>
+        </dl>
+    </dt>
+</dl>
+
+
+        
+    
+    
+    <h5>Returns:</h5>
+    
+
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    
+        <tr>
+            
+            <td class="type">
+            
+                        *
+                        
+                    
+            </td>
+            <td class="description last">Returns the current input value.</td>
+        </tr>
+    
+    </tbody>
+</table>
+
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer inherited">
+        <h4 class="name" id="getUIElement">
+            
+                <span class="inherited"><a href="LuCI.form.AbstractValue.html#getUIElement">inherited</a></span>
+            
+            getUIElement<span class="signature">(section_id)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{<a href="LuCI.ui.AbstractElement.html">LuCI.ui.AbstractElement</a>|null}</span>
+        </h4>
+    
+        
+        <div class="tag-source">
+            <a href="form.js.html">form.js</a>, <a href="form.js.html#line1576">line 1576</a>
+        </div>
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Obtain the underlying <code>LuCI.ui</code> element instance.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>section_id</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                <p>The configuration section ID</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    <h5>Throws:</h5>
+    
+            
+
+<dl>
+    <dt>
+        <div class="param-desc">
+        <p>Throws a <code>TypeError</code> exception when no <code>section_id</code> was specified.</p>
+        </div>
+    </dt>
+    <dt>
+        <dl>
+            <dt>
+                Type
+            </dt>
+            <dd>
+                
+<span class="param-type">TypeError</span>
+
+
+            </dd>
+        </dl>
+    </dt>
+</dl>
+
+
+        
+    
+    
+    <h5>Returns:</h5>
+    
+
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    
+        <tr>
+            
+            <td class="type">
+            
+                        <a href="LuCI.ui.AbstractElement.html">LuCI.ui.AbstractElement</a>
+                         | 
+                    
+                        null
+                        
+                    
+            </td>
+            <td class="description last">Returns the <code>LuCI.ui</code> element instance or <code>null</code> in case the form
+option implementation does not use <code>LuCI.ui</code> widgets.</td>
+        </tr>
+    
+    </tbody>
+</table>
+
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer inherited">
+        <h4 class="name" id="isActive">
+            
+                <span class="inherited"><a href="LuCI.form.AbstractValue.html#isActive">inherited</a></span>
+            
+            isActive<span class="signature">(section_id)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{boolean}</span>
+        </h4>
+    
+        
+        <div class="tag-source">
+            <a href="form.js.html">form.js</a>, <a href="form.js.html#line1715">line 1715</a>
+        </div>
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Test whether the option element is currently active.</p>
+<p>An element is active when it is not hidden due to unsatisfied dependency
+constraints.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>section_id</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                <p>The configuration section ID</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    
+        <tr>
+            
+            <td class="type">
+            
+                        boolean
+                        
+                    
+            </td>
+            <td class="description last">Returns <code>true</code> if the option element currently is active, otherwise it
+returns <code>false</code>.</td>
+        </tr>
+    
+    </tbody>
+</table>
+
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer inherited">
+        <h4 class="name" id="isValid">
+            
+                <span class="inherited"><a href="LuCI.form.AbstractValue.html#isValid">inherited</a></span>
+            
+            isValid<span class="signature">(section_id)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{boolean}</span>
+        </h4>
+    
+        
+        <div class="tag-source">
+            <a href="form.js.html">form.js</a>, <a href="form.js.html#line1697">line 1697</a>
+        </div>
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Test whether the input value is currently valid.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>section_id</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                <p>The configuration section ID</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    
+        <tr>
+            
+            <td class="type">
+            
+                        boolean
+                        
+                    
+            </td>
+            <td class="description last">Returns <code>true</code> if the input value currently is valid, otherwise it
+returns <code>false</code>.</td>
+        </tr>
+    
+    </tbody>
+</table>
+
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer inherited">
+        <h4 class="name" id="load">
+            
+                <span class="inherited"><a href="LuCI.form.AbstractValue.html#load">inherited</a></span>
+            
+            load<span class="signature">(section_id)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{*|Promise.&lt;*>}</span>
+        </h4>
+    
+        
+        <div class="tag-source">
+            <a href="form.js.html">form.js</a>, <a href="form.js.html#line1553">line 1553</a>
+        </div>
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Load the underlying configuration value.</p>
+<p>The default implementation of this method reads and returns the
+underlying UCI option value (or the related JavaScript property for
+<code>JSONMap</code> instances). It may be overwritten by user code to load data
+from nonstandard sources.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>section_id</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                <p>The configuration section ID</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    <h5>Throws:</h5>
+    
+            
+
+<dl>
+    <dt>
+        <div class="param-desc">
+        <p>Throws a <code>TypeError</code> exception when no <code>section_id</code> was specified.</p>
+        </div>
+    </dt>
+    <dt>
+        <dl>
+            <dt>
+                Type
+            </dt>
+            <dd>
+                
+<span class="param-type">TypeError</span>
+
+
+            </dd>
+        </dl>
+    </dt>
+</dl>
+
+
+        
+    
+    
+    <h5>Returns:</h5>
+    
+
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    
+        <tr>
+            
+            <td class="type">
+            
+                        *
+                         | 
+                    
+                        Promise.&lt;*>
+                        
+                    
+            </td>
+            <td class="description last">Returns the configuration value to initialize the option element with.
+The return value of this function is filtered through <code>Promise.resolve()</code>
+so it may return promises if overridden by user code.</td>
+        </tr>
+    
+    </tbody>
+</table>
+
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer inherited">
+        <h4 class="name" id="parse">
+            
+                <span class="inherited"><a href="LuCI.form.AbstractValue.html#parse">inherited</a></span>
+            
+            parse<span class="signature">(section_id)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{Promise.&lt;void>}</span>
+        </h4>
+    
+        
+        <div class="tag-source">
+            <a href="form.js.html">form.js</a>, <a href="form.js.html#line1752">line 1752</a>
+        </div>
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Parse the option element input.</p>
+<p>The function is invoked when the <code>parse()</code> method has been invoked on
+the parent form and triggers input value reading and validation.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>section_id</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                <p>The configuration section ID</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    
+        <tr>
+            
+            <td class="type">
+            
+                        Promise.&lt;void>
+                        
+                    
+            </td>
+            <td class="description last">Returns a promise resolving once the input value has been read and
+validated or rejecting in case the input value does not meet the
+validation constraints.</td>
+        </tr>
+    
+    </tbody>
+</table>
+
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer inherited">
+        <h4 class="name" id="remove">
+            
+                <span class="inherited"><a href="LuCI.form.AbstractValue.html#remove">inherited</a></span>
+            
+            remove<span class="signature">(section_id)</span>
+        </h4>
+    
+        
+        <div class="tag-source">
+            <a href="form.js.html">form.js</a>, <a href="form.js.html#line1820">line 1820</a>
+        </div>
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Remove the corresponding value from the configuration.</p>
+<p>This function is invoked upon saving the parent form when the option
+element has been hidden due to unsatisfied dependencies or when the
+user cleared the input value and the option is marked optional.</p>
+<p>The default implementation simply removes the associated option from the
+UCI configuration (or the associated JavaScript object property in
+case of <code>JSONMap</code> forms). It may be overwritten by user code to
+implement alternative removal logic, e.g. to retain the original value.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>section_id</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                <p>The configuration section ID</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer inherited">
+        <h4 class="name" id="stripTags">
+            
+                <span class="inherited"><a href="LuCI.form.AbstractElement.html#stripTags">inherited</a></span>
+            
+            stripTags<span class="signature">(input)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{string}</span>
+        </h4>
+    
+        
+        <div class="tag-source">
+            <a href="form.js.html">form.js</a>, <a href="form.js.html#line278">line 278</a>
+        </div>
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Strip any HTML tags from the given input string.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>input</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                <p>The input string to clean.</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    
+        <tr>
+            
+            <td class="type">
+            
+                        string
+                        
+                    
+            </td>
+            <td class="description last">The cleaned input string with HTML removes removed.</td>
+        </tr>
+    
+    </tbody>
+</table>
+
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer inherited">
+        <h4 class="name" id="textvalue">
+            
+                <span class="inherited"><a href="LuCI.form.AbstractValue.html#textvalue">inherited</a></span>
+            
+            textvalue<span class="signature">(section_id)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{string}</span>
+        </h4>
+    
+        
+        <div class="tag-source">
+            <a href="form.js.html">form.js</a>, <a href="form.js.html#line1651">line 1651</a>
+        </div>
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Obtain a textual input representation.</p>
+<p>The default implementation of this method returns the HTML escaped
+current input value of the underlying
+<a href="LuCI.ui.AbstractElement.html"><code>LuCI.ui</code></a> widget. User code or specific
+option element implementations may overwrite this function to apply a
+different logic, e.g. to return <code>Yes</code> or <code>No</code> depending on the checked
+state of checkbox elements.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>section_id</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                <p>The configuration section ID</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    <h5>Throws:</h5>
+    
+            
+
+<dl>
+    <dt>
+        <div class="param-desc">
+        <p>Throws a <code>TypeError</code> exception when no <code>section_id</code> was specified.</p>
+        </div>
+    </dt>
+    <dt>
+        <dl>
+            <dt>
+                Type
+            </dt>
+            <dd>
+                
+<span class="param-type">TypeError</span>
+
+
+            </dd>
+        </dl>
+    </dt>
+</dl>
+
+
+        
+    
+    
+    <h5>Returns:</h5>
+    
+
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    
+        <tr>
+            
+            <td class="type">
+            
+                        string
+                        
+                    
+            </td>
+            <td class="description last">Returns the text representation of the current input value.</td>
+        </tr>
+    
+    </tbody>
+</table>
+
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer inherited">
+        <h4 class="name" id="titleFn">
+            
+                <span class="inherited"><a href="LuCI.form.AbstractElement.html#titleFn">inherited</a></span>
+            
+            titleFn<span class="signature">(property, fmt_args)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{string|null}</span>
+        </h4>
+    
+        
+        <div class="tag-source">
+            <a href="form.js.html">form.js</a>, <a href="form.js.html#line312">line 312</a>
+        </div>
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Format the given named property as title string.</p>
+<p>This function looks up the given named property and formats its value
+suitable for use as element caption or description string. It also
+strips any HTML tags from the result.</p>
+<p>If the property value is a string, it is passed to <code>String.format()</code>
+along with any additional parameters passed to <code>titleFn()</code>.</p>
+<p>If the property value is a function, it is invoked with any additional
+<code>titleFn()</code> parameters as arguments and the obtained return value is
+converted to a string.</p>
+<p>In all other cases, <code>null</code> is returned.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>property</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                    
+                    
+                        
+                    
+                
+                <p>The name of the element property to use.</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>fmt_args</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">*</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                    
+                    
+                        
+                    
+                        <span class="repeatable">repeatable</span>
+                    
+                
+                <p>Extra values to format the title string with.</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    
+        <tr>
+            
+            <td class="type">
+            
+                        string
+                         | 
+                    
+                        null
+                        
+                    
+            </td>
+            <td class="description last">The formatted title string or <code>null</code> if the property did not exist or
+was neither a string nor a function.</td>
+        </tr>
+    
+    </tbody>
+</table>
+
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer inherited">
+        <h4 class="name" id="write">
+            
+                <span class="inherited"><a href="LuCI.form.AbstractValue.html#write">inherited</a></span>
+            
+            write<span class="signature">(section_id, formvalue)</span>
+        </h4>
+    
+        
+        <div class="tag-source">
+            <a href="form.js.html">form.js</a>, <a href="form.js.html#line1797">line 1797</a>
+        </div>
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Write the current input value into the configuration.</p>
+<p>This function is invoked upon saving the parent form when the option
+element is valid and when its input value has been changed compared to
+the initial value returned by
+<a href="LuCI.form.AbstractValue.html#cfgvalue"><code>cfgvalue()</code></a>.</p>
+<p>The default implementation simply sets the given input value in the
+UCI configuration (or the associated JavaScript object property in
+case of <code>JSONMap</code> forms). It may be overwritten by user code to
+implement alternative save logic, e.g. to transform the input value
+before it is written.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>section_id</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                <p>The configuration section ID</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>formvalue</code></td>
+            
+            
+            <td class="type">
+            
+                
 <span class="param-type">string</span>
 |
 
@@ -4856,8 +6793,7 @@ runtime state.</p>
             
             <td class="description last">
                 
-                <p>The value to set or <code>null</code> to remove the given option from the
-configuration.</p></td>
+                <p>The input value to write.</p></td>
         </tr>
 	
 	
