@@ -1,9 +1,8 @@
 'use strict';
-'require view';
 'require fs';
 'require ui';
 
-return view.extend({
+return L.view.extend({
 	load: function() {
 		return L.resolveDefault(fs.read_direct('/etc/adblock/adblock.blacklist'), '');
 	},
