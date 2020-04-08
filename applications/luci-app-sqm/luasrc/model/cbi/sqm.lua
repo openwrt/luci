@@ -20,7 +20,7 @@ local sys = require "luci.sys"
 --local ifaces = net:get_interfaces()
 local ifaces = sys.net:devices()
 local path = "/usr/lib/sqm"
-local run_path = "/tmp/run/sqm/available_qdiscs"
+local run_path = "/var/run/sqm/available_qdiscs"
 
 m = Map("sqm", translate("Smart Queue Management"),
 	translate("With <abbr title=\"Smart Queue Management\">SQM</abbr> you " ..
