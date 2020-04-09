@@ -1,0 +1,167 @@
+{
+	"luci-mod-system-config": {
+		"description": "Grant access to system configuration",
+		"read": {
+			"ubus": {
+				"luci": [ "getInitList", "getLEDs", "getLocaltime", "getTimezones", "getUSBDevices" ]
+			},
+			"uci": [ "luci", "system" ]
+		},
+		"write": {
+			"ubus": {
+				"luci": [ "setInitAction", "setLocaltime", "setPassword" ]
+			},
+			"uci": [ "luci", "system" ]
+		}
+	},
+
+	"luci-mod-system-ssh": {
+		"description": "Grant access to SSH configuration",
+		"read": {
+			"file": {
+				"/etc/dropbear/authorized_keys": [ "read" ]
+			},
+			"ubus": {
+				"file": [ "read" ]
+			},
+			"uci": [ "dropbear" ]
+		},
+		"write": {
+			"file": {
+				"/etc/dropbear/authorized_keys": [ "write" ]
+			},
+			"ubus": {
+				"file": [ "write" ],
+				"luci": [ "setInitAction", "setLocaltime" ]
+			},
+			"uci": [ "system" ]
+		}
+	},
+
+	"luci-mod-system-init": {
+		"description": "Grant access to startup configuration",
+		"read": {
+			"file": {
+				"/etc/rc.local": [ "read" ]
+			},
+			"ubus": {
+				"file": [ "read" ],
+				"luci": [ "getInitList" ]
+			}
+		},
+		"write": {
+			"file": {
+				"/etc/rc.local": [ "write" ]
+			},
+			"ubus": {
+				"file": [ "write" ],
+				"luci": [ "setInitAction" ]
+			}
+		}
+	},
+
+	"luci-mod-system-cron": {
+		"description": "Grant access to crontab configuration",
+		"read": {
+			"file": {
+				"/etc/crontabs/root": [ "read" ]
+			},
+			"ubus": {
+				"file": [ "read" ]
+			}
+		},
+		"write": {
+			"file": {
+				"/etc/crontabs/root": [ "write" ]
+			},
+			"ubus": {
+				"file": [ "write" ]
+			}
+		}
+	},
+
+	"luci-mod-system-mounts": {
+		"description": "Grant access to mount configuration",
+		"read": {
+			"file": {
+				"/etc/filesystems": [ "read" ],
+				"/proc/filesystems": [ "read" ],
+				"/usr/bin/btrfsck": [ "list" ],
+				"/usr/bin/ntfsfix": [ "list" ],
+				"/usr/sbin/e2fsck": [ "list" ],
+				"/usr/sbin/fsck.f2fs": [ "list" ],
+				"/usr/sbin/fsck.fat": [ "list" ]
+			},
+			"ubus": {
+				"file": [ "read", "stat" ],
+				"luci": [ "getBlockDevices", "getMountPoints" ]
+			},
+			"uci": [ "fstab" ]
+		},
+		"write": {
+			"file": {
+				"/etc/crontabs/root": [ "write" ],
+				"/bin/umount": [ "exec" ],
+				"/sbin/block": [ "exec" ]
+			},
+			"ubus": {
+				"file": [ "exec", "write" ],
+				"luci": [ "setBlockDetect" ]
+			},
+			"uci": [ "fstab" ]
+		}
+	},
+
+	"luci-mod-system-flash": {
+		"description": "Grant access to flash operations",
+		"read": {
+			"cgi-io": [ "backup", "download" ],
+			"file": {
+				"/dev/mtdblock[0-9]*": [ "read" ],
+				"/etc/sysupgrade.conf": [ "read" ],
+				"/lib/upgrade/platform.sh": [ "list" ],
+				"/proc/mounts": [ "read" ],
+				"/proc/mtd": [ "read" ],
+				"/proc/partitions": [ "read" ],
+				"/proc/sys/kernel/hostname": [ "read" ],
+				"/sbin/sysupgrade --list-backup": [ "exec" ]
+			},
+			"ubus": {
+				"file": [ "exec", "read", "stat" ]
+			}
+		},
+		"write": {
+			"cgi-io": [ "upload" ],
+			"file": {
+				"/bin/tar -tzf /tmp/backup.tar.gz": [ "exec" ],
+				"/etc/sysupgrade.conf": [ "write" ],
+				"/sbin/firstboot -r -y": [ "exec" ],
+				"/sbin/reboot": [ "exec" ],
+				"/sbin/sysupgrade --force /tmp/firmware.bin": [ "exec" ],
+				"/sbin/sysupgrade -n --force /tmp/firmware.bin": [ "exec" ],
+				"/sbin/sysupgrade -n /tmp/firmware.bin": [ "exec" ],
+				"/sbin/sysupgrade --restore-backup /tmp/backup.tar.gz": [ "exec" ],
+				"/sbin/sysupgrade --test /tmp/firmware.bin": [ "exec" ],
+				"/sbin/sysupgrade /tmp/firmware.bin": [ "exec" ],
+				"/tmp/backup.tar.gz": [ "write" ],
+				"/tmp/firmware.bin": [ "write" ]
+			},
+			"ubus": {
+				"file": [ "exec", "remove", "write" ],
+				"system": [ "validate_firmware_image" ]
+			}
+		}
+	},
+
+	"luci-mod-system-reboot": {
+		"description": "Allow rebooting the device",
+		"write": {
+			"file": {
+				"/sbin/reboot": [ "exec" ]
+			},
+			"ubus": {
+				"file": [ "exec" ]
+			}
+		}
+	}
+}
