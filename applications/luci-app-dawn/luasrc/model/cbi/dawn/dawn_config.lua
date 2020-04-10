@@ -11,7 +11,7 @@ s:option(Value, "chan_util", "Channel Utilization")
 s:option(Value, "max_chan_util", "Above Maximum Channel Utilization")
 
 s = m:section(TypedSection, "metric", "Threshold", "Thresholds"); s.anonymous = true;
-s:option(Value, "bandwith_threshold", "Bandwidth Threshold")
+s:option(Value, "bandwidth_threshold", "Bandwidth Threshold")
 s:option(Value, "rssi_val", "RSSI Threshold")
 s:option(Value, "low_rssi_val", "Low RSSI Threshold")
 s:option(Value, "chan_util_val", "Channel Utilization Threshold")
