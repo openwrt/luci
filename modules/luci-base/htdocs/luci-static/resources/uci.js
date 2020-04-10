@@ -31,44 +31,50 @@ return baseclass.extend(/** @lends LuCI.uci.prototype */ {
 		object: 'uci',
 		method: 'get',
 		params: [ 'config' ],
-		expect: { values: { } }
+		expect: { values: { } },
+		reject: true
 	}),
-
 
 	callOrder: rpc.declare({
 		object: 'uci',
 		method: 'order',
-		params: [ 'config', 'sections' ]
+		params: [ 'config', 'sections' ],
+		reject: true
 	}),
 
 	callAdd: rpc.declare({
 		object: 'uci',
 		method: 'add',
 		params: [ 'config', 'type', 'name', 'values' ],
-		expect: { section: '' }
+		expect: { section: '' },
+		reject: true
 	}),
 
 	callSet: rpc.declare({
 		object: 'uci',
 		method: 'set',
-		params: [ 'config', 'section', 'values' ]
+		params: [ 'config', 'section', 'values' ],
+		reject: true
 	}),
 
 	callDelete: rpc.declare({
 		object: 'uci',
 		method: 'delete',
-		params: [ 'config', 'section', 'options' ]
+		params: [ 'config', 'section', 'options' ],
+		reject: true
 	}),
 
 	callApply: rpc.declare({
 		object: 'uci',
 		method: 'apply',
-		params: [ 'timeout', 'rollback' ]
+		params: [ 'timeout', 'rollback' ],
+		reject: true
 	}),
 
 	callConfirm: rpc.declare({
 		object: 'uci',
-		method: 'confirm'
+		method: 'confirm',
+		reject: true
 	}),
 
 
