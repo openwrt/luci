@@ -564,11 +564,18 @@ var CBIMap = CBIAbstractElement.extend(/** @lends LuCI.form.Map.prototype */ {
 			.then(this.data.save.bind(this.data))
 			.then(this.load.bind(this))
 			.catch(function(e) {
-				if (!silent)
-					alert('Cannot save due to invalid values');
+				if (!silent) {
+					ui.showModal(_('Save error'), [
+						E('p', {}, [ _('An error occurred while saving the form:') ]),
+						E('p', {}, [ E('em', { 'style': 'white-space:pre' }, [ e.message ]) ]),
+						E('div', { 'class': 'right' }, [
+							E('button', { 'click': ui.hideModal }, [ _('Dismiss') ])
+						])
+					]);
+				}
 
-				return Promise.reject();
-			}).finally(this.renderContents.bind(this));
+				return Promise.reject(e);
+			}).then(this.renderContents.bind(this));
 	},
 
 	/**
@@ -1754,8 +1761,10 @@ var CBIAbstractValue = CBIAbstractElement.extend(/** @lends LuCI.form.AbstractVa
 		    cval = this.cfgvalue(section_id),
 		    fval = active ? this.formvalue(section_id) : null;
 
-		if (active && !this.isValid(section_id))
-			return Promise.reject();
+		if (active && !this.isValid(section_id)) {
+			var title = this.stripTags(this.title).trim();
+			return Promise.reject(new TypeError(_('Option "%s" contains an invalid input value.').format(title || this.option)));
+		}
 
 		if (fval != '' && fval != null) {
 			if (this.forcewrite || !isEqual(cval, fval))
@@ -1766,8 +1775,8 @@ var CBIAbstractValue = CBIAbstractElement.extend(/** @lends LuCI.form.AbstractVa
 				return Promise.resolve(this.remove(section_id));
 			}
 			else if (!isEqual(cval, fval)) {
-				console.log('This should have been catched by isValid()');
-				return Promise.reject();
+				var title = this.stripTags(this.title).trim();
+				return Promise.reject(new TypeError(_('Option "%s" must not be empty.').format(title || this.option)));
 			}
 		}
 
@@ -3366,8 +3375,10 @@ var CBIFlagValue = CBIValue.extend(/** @lends LuCI.form.FlagValue.prototype */ {
 		if (this.isActive(section_id)) {
 			var fval = this.formvalue(section_id);
 
-			if (!this.isValid(section_id))
-				return Promise.reject();
+			if (!this.isValid(section_id)) {
+				var title = this.stripTags(this.title).trim();
+				return Promise.reject(new TypeError(_('Option "%s" contains an invalid input value.').format(title || this.option)));
+			}
 
 			if (fval == this.default && (this.optional || this.rmempty))
 				return Promise.resolve(this.remove(section_id));
