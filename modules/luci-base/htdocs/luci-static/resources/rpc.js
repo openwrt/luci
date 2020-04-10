@@ -93,6 +93,10 @@ return baseclass.extend(/** @lends LuCI.rpc.prototype */ {
 			ret = msg.result;
 		}
 		else if (Array.isArray(msg.result)) {
+			if (req.raise && msg.result[0] !== 0)
+				L.raise('RPCError', 'RPC call to %s/%s failed with ubus code %d: %s',
+					req.object, req.method, msg.result[0], this.getStatusText(msg.result[0]));
+
 			ret = (msg.result.length > 1) ? msg.result[1] : msg.result[0];
 		}
 
@@ -228,6 +232,10 @@ return baseclass.extend(/** @lends LuCI.rpc.prototype */ {
 	 * Specfies an optional filter function which is invoked to transform the
 	 * received reply data before it is returned to the caller.
 	 *
+	 * @property {boolean} [reject=false]
+	 * If set to `true`, non-zero ubus call status codes are treated as fatal
+	 * error and lead to the rejection of the call promise. The default
+	 * behaviour is to resolve with the call return code value instead.
 	 */
 
 	/**
@@ -316,7 +324,8 @@ return baseclass.extend(/** @lends LuCI.rpc.prototype */ {
 					params:  params,
 					priv:    priv,
 					object:  options.object,
-					method:  options.method
+					method:  options.method,
+					raise:   options.reject
 				};
 
 				/* build message object */
