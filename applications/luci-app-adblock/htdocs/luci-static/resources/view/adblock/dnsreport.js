@@ -188,7 +188,7 @@ function handleAction(ev) {
 
 return L.view.extend({
 	load: function() {
-		return L.resolveDefault(fs.exec_direct('/etc/init.d/adblock', ['report', '+', '50', 'false', 'json']),'');
+		return L.resolveDefault(fs.exec_direct('/etc/init.d/adblock', ['report', '+', '50', 'true', 'json']),'');
 	},
 
 	render: function(dnsreport) {
