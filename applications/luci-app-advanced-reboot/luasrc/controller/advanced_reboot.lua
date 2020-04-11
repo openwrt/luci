@@ -42,7 +42,7 @@ function get_partition_os_info(op_ubi)
 			cp_info = util.trim(util.exec('. /etc/os-release && echo "$OPENWRT_RELEASE"'))
 		end 
 	end
-	logger(i18n.translate("attempting to mount alternative partition") .. " (mtd" .. tostring(op_ubi) .. ")")
+	logger(i18n.translatef("attempting to mount alternative partition (mtd%s)", tostring(op_ubi))
 	alt_partition_unmount(op_ubi)
 	alt_partition_mount(op_ubi)
 	if fs.access("/alt/rom/etc/os-release") then
@@ -51,7 +51,7 @@ function get_partition_os_info(op_ubi)
 			op_info = util.trim(util.exec('. /alt/rom/etc/os-release && echo "$OPENWRT_RELEASE"'))
 		end 
 	end
-	logger(i18n.translate("attempting to unmount alternative partition") .. " (mtd" .. tostring(op_ubi) .. ")")
+	logger(i18n.translatef("attempting to unmount alternative partition (mtd%s)", tostring(op_ubi))
 	alt_partition_unmount(op_ubi)
 	return cp_info, op_info
 end
@@ -176,7 +176,7 @@ function action_template()
 				bev1p2=bev1p2,
 				p2_os=p2_os,
 				current_partition=current_partition,
-				errorMessage = errorMessage})
+				errorMessage=errorMessage})
 end
 
 function action_reboot()
@@ -209,28 +209,28 @@ function action_altreboot()
 			if bev1 then
 				curEnvSetting = tonumber(util.trim(util.exec("fw_printenv -n " .. bev1)))
 				if not curEnvSetting then
-					errorMessage = errorMessage .. i18n.translate("Unable to obtain firmware environment variable") .. ": " .. bev1 .. ". "
-					util.perror(i18n.translate("Unable to obtain firmware environment variable") .. ": " .. bev1 .. ".")
+					errorMessage = errorMessage .. i18n.translatef("Unable to obtain firmware environment variable: %s.", bev1)
+					util.perror(i18n.translatef("Unable to obtain firmware environment variable: %s.", bev1))
 				else
 					newEnvSetting = curEnvSetting == bev1p1 and bev1p2 or bev1p1
 					errorCode = sys.call("fw_setenv " .. bev1 .. " " .. newEnvSetting)
 						if errorCode ~= 0 then
-							errorMessage = errorMessage or "" .. i18n.translate("Unable to set firmware environment variable") .. ": " .. bev1 .. " " .. i18n.translate("to") .. " " .. newEnvSetting .. ". "
-							util.perror(i18n.translate("Unable to set firmware environment variable") .. ": " .. bev1 .. " " .. i18n.translate("to") .. " " .. newEnvSetting .. ".")
+							errorMessage = errorMessage or "" .. i18n.translatef("Unable to set firmware environment variable: %s to %s.", bev1, newEnvSetting)
+							util.perror(i18n.translatef("Unable to set firmware environment variable: %s to %s.", bev1, newEnvSetting))
 						end
 				end
 			end
 			if bev2 then
 				curEnvSetting = util.trim(util.exec("fw_printenv -n " .. bev2))
 				if not curEnvSetting then
-					errorMessage = errorMessage or "" .. i18n.translate("Unable to obtain firmware environment variable") .. ": " .. bev2 .. ". "
-					util.perror(i18n.translate("Unable to obtain firmware environment variable") .. ": " .. bev2 .. ".")
+					errorMessage = errorMessage or "" .. i18n.translatef("Unable to obtain firmware environment variable: %s.", bev2)
+					util.perror(i18n.translatef("Unable to obtain firmware environment variable: %s.", bev2))
 				else
 					newEnvSetting = curEnvSetting == bev2p1 and bev2p2 or bev2p1
 					errorCode = sys.call("fw_setenv " .. bev2 .. " '" .. newEnvSetting .. "'")
 					if errorCode ~= 0 then
-						errorMessage = errorMessage or "" .. i18n.translate("Unable to set firmware environment variable") .. ": " .. bev2 .. " " .. i18n.translate("to") .. " " .. newEnvSetting .. ". "
-						util.perror(i18n.translate("Unable to set firmware environment variable") .. ": " .. bev2 .. " " .. i18n.translate("to") .. " " .. newEnvSetting .. ".")
+						errorMessage = errorMessage or "" .. i18n.translatef("Unable to set firmware environment variable: %s to %s.", bev2, newEnvSetting)
+						util.perror(i18n.translatef("Unable to set firmware environment variable: %s to %s.", bev2, newEnvSetting))
 					end
 				end
 			end
@@ -245,8 +245,8 @@ function action_altreboot()
 				if zyxelNewBootFlag then
 					errorCode = sys.call("printf \"" .. zyxelNewBootFlag .. "\" >" .. zyxelFlagPartition )
 					if errorCode ~= 0 then
-						errorMessage = errorMessage or "" .. i18n.translate("Unable to set Dual Boot Flag Partition entry for partition") .. ": " .. zyxelFlagPartition .. ". "
-						util.perror(i18n.translate("Unable to set Dual Boot Flag Partition entry for partition") .. ": " .. zyxelFlagPartition .. ".")
+						errorMessage = errorMessage or "" .. i18n.translatef("Unable to set Dual Boot Flag Partition entry for partition: %s.", zyxelFlagPartition)
+						util.perror(i18n.translatef("Unable to set Dual Boot Flag Partition entry for partition: %s.", zyxelFlagPartition))
 					end
 				end
 			end
