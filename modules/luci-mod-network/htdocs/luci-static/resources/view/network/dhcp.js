@@ -66,6 +66,9 @@ CBILease6Status = form.DummyValue.extend({
 });
 
 function validateHostname(sid, s) {
+	if (s == null || s == '')
+		return true;
+
 	if (s.length > 256)
 		return _('Expecting: %s').format(_('valid hostname'));
 
