@@ -99,7 +99,7 @@ function validateServerSpec(sid, s) {
 	if (s == null || s == '')
 		return true;
 
-	var m = s.match(/^\/(.+)\/(.*)$/);
+	var m = s.match(/^(?:\/(.+)\/)?(.*)$/);
 	if (!m)
 		return _('Expecting: %s').format(_('valid hostname'));
 
@@ -116,11 +116,20 @@ function validateServerSpec(sid, s) {
 
 	if (!m)
 		return _('Expecting: %s').format(_('valid IP address'));
-	else if (validation.parseIPv4(m[1]) && m[3] != null && !validation.parseIPv4(m[3]))
-		return _('Expecting: %s').format(_('valid IPv4 address'));
-	else if (validation.parseIPv6(m[1]) && m[3] != null && !validation.parseIPv6(m[3]))
-		return _('Expecting: %s').format(_('valid IPv6 address'));
-	else if ((m[2] != null && +m[2] > 65535) || (m[4] != null && +m[4] > 65535))
+
+	if (validation.parseIPv4(m[1])) {
+		if (m[3] != null && !validation.parseIPv4(m[3]))
+			return _('Expecting: %s').format(_('valid IPv4 address'));
+	}
+	else if (validation.parseIPv6(m[1])) {
+		if (m[3] != null && !validation.parseIPv6(m[3]))
+			return _('Expecting: %s').format(_('valid IPv6 address'));
+	}
+	else {
+		return _('Expecting: %s').format(_('valid IP address'));
+	}
+
+	if ((m[2] != null && +m[2] > 65535) || (m[4] != null && +m[4] > 65535))
 		return _('Expecting: %s').format(_('valid port value'));
 
 	return true;
