@@ -10,6 +10,10 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
 "X-Generator: Weblate 3.11-dev\n"
 
+#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:58
+msgid "%s is not installed or not found"
+msgstr ""
+
 #: applications/luci-app-https-dns-proxy/luasrc/https-dns-proxy/providers/com.adguard.dns-family.lua:3
 msgid "AdGuard (Family Protection)"
 msgstr "अ‍ॅडगार्ड (कौटुंबिक संरक्षण)"
@@ -34,15 +38,11 @@ msgstr "क्लीन ब्राउझिंग (सुरक्षा फ�
 msgid "Cloudflare"
 msgstr "क्लाउडफ्लेअर"
 
-#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:85
-msgid "DHCP and DNS"
-msgstr "डीएचसीपी आणि डीएनएस"
-
 #: applications/luci-app-https-dns-proxy/luasrc/controller/https-dns-proxy.lua:4
 msgid "DNS Over HTTPS Proxy"
 msgstr "एचटीटीपीएस प्रॉक्सी वर डीएनएस"
 
-#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:64
+#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:92
 msgid "DNS Over HTTPS Proxy Settings"
 msgstr "एचटीटीपीएस प्रॉक्सी सेटिंग वरील डीएनएस"
 
@@ -54,23 +54,19 @@ msgstr "डीएनएस.एसबी"
 msgid "Digitale Gesellschaft"
 msgstr "डिजिटेल गसेल्सशाफ्ट"
 
-#: applications/luci-app-https-dns-proxy/luasrc/view/https-dns-proxy/buttons.htm:53
+#: applications/luci-app-https-dns-proxy/luasrc/view/https-dns-proxy/buttons.htm:57
 msgid "Disable"
 msgstr "अक्षम करा"
 
-#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:56
-msgid "DoH"
-msgstr "DoH"
-
-#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:143
+#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:163
 msgid "EDNS client subnet"
 msgstr "ईडीएनएस क्लायंट सबनेट"
 
-#: applications/luci-app-https-dns-proxy/luasrc/view/https-dns-proxy/buttons.htm:51
+#: applications/luci-app-https-dns-proxy/luasrc/view/https-dns-proxy/buttons.htm:54
 msgid "Enable"
 msgstr "सक्षम करा"
 
-#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:87
+#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:13
 msgid "For more information on different options check"
 msgstr "वेगवेगळ्या पर्यायांवर अधिक माहितीसाठी तपासा"
 
@@ -78,15 +74,23 @@ msgstr "वेगवेगळ्या पर्यायांवर अधि�
 msgid "Google"
 msgstr "गूगल"
 
-#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:83
+#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:112
 msgid "Instances"
 msgstr "उदाहरणे"
 
-#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:126
+#: applications/luci-app-https-dns-proxy/luasrc/https-dns-proxy/providers/gr.libredns.doh.lua:3
+msgid "LibreDNS"
+msgstr ""
+
+#: applications/luci-app-https-dns-proxy/luasrc/https-dns-proxy/providers/gr.libredns.doh-ads.lua:3
+msgid "LibreDNS (No Ads)"
+msgstr ""
+
+#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:146
 msgid "Listen address"
 msgstr "ऐकण्याचा पत्ता"
 
-#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:139
+#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:159
 msgid "Listen port"
 msgstr "ऐकण्याचा पत्ता"
 
@@ -98,7 +102,7 @@ msgstr "लोड करीत आहे"
 msgid "ODVR (nic.cz)"
 msgstr "ODVR (nic.cz)"
 
-#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:146
+#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:166
 msgid "Proxy server"
 msgstr "प्रॉक्सी सर्व्हर"
 
@@ -118,59 +122,78 @@ msgstr "Quad 9 (सुरक्षित)"
 msgid "Quad 9 (Unsecured)"
 msgstr "Quad 9 (असुरक्षित)"
 
-#: applications/luci-app-https-dns-proxy/luasrc/view/https-dns-proxy/buttons.htm:43
+#: applications/luci-app-https-dns-proxy/luasrc/view/https-dns-proxy/buttons.htm:44
 msgid "Reload"
 msgstr "रीलोड करा"
 
-#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:99
+#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:119
 msgid "Resolver"
 msgstr "निराकरणकर्ता"
 
-#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:56
-msgid "Running"
-msgstr "चालू आहे"
+#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:84
+msgid "Running: %s DoH at %s:%s"
+msgstr ""
 
-#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:66
-#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:68
+#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:96
 msgid "Service Status"
 msgstr "सेवा स्थिती"
+
+#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:94
+msgid "Service Status [%s %s]"
+msgstr ""
 
 #: applications/luci-app-https-dns-proxy/luasrc/view/https-dns-proxy/buttons.htm:41
 msgid "Start"
 msgstr "प्रारंभ करा"
 
-#: applications/luci-app-https-dns-proxy/luasrc/view/https-dns-proxy/buttons.htm:45
+#: applications/luci-app-https-dns-proxy/luasrc/view/https-dns-proxy/buttons.htm:47
 msgid "Stop"
 msgstr "थांबा"
 
-#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:37
+#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:62
 msgid "Stopped"
 msgstr "बंद"
 
-#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:22
+#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:49
 msgid "Unknown Provider"
 msgstr "अज्ञात प्रदाता"
 
-#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:83
+#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:113
 msgid ""
 "When you add/remove any instances below, they will be used to override the "
-"'DNS forwardings' section of"
+"'DNS forwardings' section of <a href=\"%s\">DHCP and DNS</a>."
 msgstr ""
-"जेव्हा आपण खाली कोणतीही उदाहरणे जोडता / काढता तेव्हा ती 'डीएनएस फॉरवर्डिंग' "
-"विभागाच्या अधिलिखितसाठी वापरली जाईल"
 
-#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:91
+#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:34
 msgid "and"
 msgstr "आणि"
 
-#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:56
-msgid "at"
-msgstr "येथे"
-
-#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:32
-msgid "is not installed or not found"
-msgstr "स्थापित केलेले नाही किंवा सापडले नाही"
+#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:64
+msgid "disabled"
+msgstr ""
 
 #: applications/luci-app-https-dns-proxy/luasrc/https-dns-proxy/providers.disabled/cn.rubyfish.dns.lua:3
 msgid "rubyfish.cn"
 msgstr "rubyfish.cn"
+
+#~ msgid "DHCP and DNS"
+#~ msgstr "डीएचसीपी आणि डीएनएस"
+
+#~ msgid "DoH"
+#~ msgstr "DoH"
+
+#~ msgid "Running"
+#~ msgstr "चालू आहे"
+
+#~ msgid ""
+#~ "When you add/remove any instances below, they will be used to override "
+#~ "the 'DNS forwardings' section of"
+#~ msgstr ""
+#~ "जेव्हा आपण खाली कोणतीही उदाहरणे जोडता / काढता तेव्हा ती 'डीएनएस फॉरवर्डिंग' "
+#~ "विभागाच्या अधिलिखितसाठी वापरली जाईल"
+
+#~ msgid "at"
+#~ msgstr "येथे"
+
+#~ msgid "is not installed or not found"
+#~ msgstr "स्थापित केलेले नाही किंवा सापडले नाही"
