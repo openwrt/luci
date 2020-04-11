@@ -1,7 +1,7 @@
 <%#
  Copyright 2008 Steven Barth <steven@midlink.org>
  Copyright 2008-2015 Jo-Philipp Wich <jow@openwrt.org>
- Copyright 2017-2018 Stan Grishin <stangri@melmac.net>
+ Copyright 2017-2020 Stan Grishin <stangri@melmac.net>
  Licensed to the public under the Apache License 2.0.
 -%>
 
@@ -28,7 +28,7 @@
 			<div class="th cbi-section-table-cell"><%:Firmware%></div>
 			<div class="th cbi-section-table-cell"><%:Reboot%></div>
 		</div>
-		<div class="tr cbi-section-table-row cbi-rowstyle-1">
+		<div class="tr cbi-section-table-row cbi-rowstyle-<%- if bev1p1 == current_partition then -%><%=1%><%- else -%><%=2%><%- end -%>">
 			<div class="td">
 				<%=string.format("%X", bev1p1)%>
 			</div>
@@ -52,7 +52,7 @@
 				<%- end -%>
 			</div>
 		</div>
-		<div class="tr cbi-section-table-row cbi-rowstyle-2">
+		<div class="tr cbi-section-table-row cbi-rowstyle-<%- if bev1p2 == current_partition then -%><%=1%><%- else -%><%=2%><%- end -%>">
 			<div class="td">
 				<%=string.format("%X", bev1p2)%>
 			</div>
