@@ -15,7 +15,8 @@ local http = require "luci.http"
 local sys = require "luci.sys"
 local dispatcher = require "luci.dispatcher"
 local uci = require "luci.model.uci".cursor()
-local packageName = "luci-app-advanced-reboot"
+local packageName = "advanced-reboot"
+local devices_dir = "/usr/lib/lua/luci/" .. packageName .. "/devices/"
 
 function logger(t)
 	util.exec("logger -t " .. packageName .. " '" .. tostring(t) .. "'")
@@ -34,25 +35,25 @@ function is_alt_mountable(p1_mtd, p2_mtd)
 end
 
 function get_partition_os_info(op_ubi)
-	local cp_info, ap_info
+	local cp_info, op_info
 	if fs.access("/etc/os-release") then
 		cp_info = util.trim(util.exec('. /etc/os-release && echo "$PRETTY_NAME"'))
 		if cp_info:find("SNAPSHOT") then
 			cp_info = util.trim(util.exec('. /etc/os-release && echo "$OPENWRT_RELEASE"'))
 		end 
 	end
-	logger(i18n.translate("attempting to mount alternative partition") .. " (mtd" .. tostring(op_ubi) .. ")")
+	logger(i18n.translatef("attempting to mount alternative partition (mtd%s)", tostring(op_ubi))
 	alt_partition_unmount(op_ubi)
 	alt_partition_mount(op_ubi)
 	if fs.access("/alt/rom/etc/os-release") then
-		ap_info = util.trim(util.exec('. /alt/rom/etc/os-release && echo "$PRETTY_NAME"'))
-		if ap_info:find("SNAPSHOT") then
-			ap_info = util.trim(util.exec('. /alt/rom/etc/os-release && echo "$OPENWRT_RELEASE"'))
+		op_info = util.trim(util.exec('. /alt/rom/etc/os-release && echo "$PRETTY_NAME"'))
+		if op_info:find("SNAPSHOT") then
+			op_info = util.trim(util.exec('. /alt/rom/etc/os-release && echo "$OPENWRT_RELEASE"'))
 		end 
 	end
-	logger(i18n.translate("attempting to unmount alternative partition") .. " (mtd" .. tostring(op_ubi) .. ")")
+	logger(i18n.translatef("attempting to unmount alternative partition (mtd%s)", tostring(op_ubi))
 	alt_partition_unmount(op_ubi)
-	return cp_info, ap_info
+	return cp_info, op_info
 end
 
 function alt_partition_mount(op_ubi)
@@ -71,6 +72,7 @@ function alt_partition_mount(op_ubi)
 end
 
 function alt_partition_unmount(op_ubi)
+	local i
 	local mtdCount = tonumber(util.exec("ubinfo | grep 'Present UBI devices' | grep -c ','"))
 	mtdCount = mtdCount and mtdCount + 1 or 10
 --	util.exec("[ -d /alt/firmware ] && umount /alt/firmware")
@@ -87,117 +89,107 @@ function alt_partition_unmount(op_ubi)
 	end
 end
 
-devices = {
-	-- deviceName, boardName, part1MTD, part2MTD, offset, envVar1, envVar1Value1, envVar1Value2, envVar2, envVar2Value1, envVar2Value2
-	{"Linksys EA3500", "linksys-audi", "mtd3", "mtd5", 32, "boot_part", 1, 2, "bootcmd", "run nandboot", "run altnandboot"},
-	{"Linksys E4200v2/EA4500", "linksys-viper", "mtd3", "mtd5", 32, "boot_part", 1, 2, "bootcmd", "run nandboot", "run altnandboot"},
-	{"Linksys EA6350v3", "linksys-ea6350v3", "mtd10", "mtd12", 192, "boot_part", 1, 2},
-	{"Linksys EA8300", "linksys-ea8300", "mtd10", "mtd12", 192, "boot_part", 1, 2},
-	{"Linksys EA8500", "ea8500", "mtd13", "mtd15", 32, "boot_part", 1, 2},
---  {"Linksys EA9500", "linksys-panamera", "mtd3", "mtd6", 28, "boot_part", 1, 2},
-	{"Linksys WRT1200AC", "linksys-caiman", "mtd4", "mtd6", 32, "boot_part", 1, 2, "bootcmd", "run nandboot", "run altnandboot"},
-	{"Linksys WRT1900AC", "linksys-mamba", "mtd4", "mtd6", 32, "boot_part", 1, 2, "bootcmd", "run nandboot", "run altnandboot"},
-	{"Linksys WRT1900ACv2", "linksys-cobra", "mtd4", "mtd6", 32, "boot_part", 1, 2, "bootcmd", "run nandboot", "run altnandboot"},
-	{"Linksys WRT1900ACS", "linksys-shelby", "mtd4", "mtd6", 32, "boot_part", 1, 2, "bootcmd", "run nandboot", "run altnandboot"},
-	{"Linksys WRT3200ACM", "linksys-rango", "mtd5", "mtd7", 32, "boot_part", 1, 2, "bootcmd", "run nandboot", "run altnandboot"},
-	{"Linksys WRT32X", "linksys-venom", "mtd5", "mtd7", nil, "boot_part", 1, 2, "bootcmd", "run nandboot", "run altnandboot"},
-	{"ZyXEL NBG6817", "nbg6817", "mmcblk0p4", "mmcblk0p7", 32, nil, 255, 1}
-}
-
--- local errorMessage, d
--- local device_name, p1_mtd, p2_mtd, offset, bev1, bev1p1, bev1p2, bev2, bev2p1, bev2p2
-romBoardName = util.trim(util.exec("cat /tmp/sysinfo/board_name"))
-
-for i=1, #devices do
-	d = devices[i][2]:gsub('%p','')
-	if romBoardName and romBoardName:gsub('%p',''):match(d) then
-		device_name = devices[i][1]
-		p1_mtd = devices[i][3] or nil
-		p2_mtd = devices[i][4] or nil
-		offset = devices[i][5] or nil
-		bev1 = devices[i][6] or nil
-		bev1p1 = tonumber(devices[i][7]) or nil
-		bev1p2 = tonumber(devices[i][8]) or nil
-		bev2 = devices[i][9] or nil
-		bev2p1 = devices[i][10] or nil
-		bev2p2 = devices[i][11] or nil
-		if p1_mtd and offset then
-			p1_label = util.trim(util.exec("dd if=/dev/" .. p1_mtd .. " bs=1 skip=" .. offset .. " count=128" .. "  2>/dev/null"))
-			n, p1_version = p1_label:match('(Linux)-([%d|.]+)')
-		end
-		if p2_mtd and offset then
-			p2_label = util.trim(util.exec("dd if=/dev/" .. p2_mtd .. " bs=1 skip=" .. offset .. " count=128" .. "  2>/dev/null"))
-			n, p2_version = p2_label:match('(Linux)-([%d|.]+)')
-		end
-		if p1_label and p1_label:find("LEDE") then p1_os = "LEDE" end
-		if p1_label and p1_label:find("OpenWrt") then p1_os = "OpenWrt" end
-		if p1_label and p1_label:find("Linksys") then p1_os = "Linksys" end
-		if p2_label and p2_label:find("LEDE") then p2_os = "LEDE" end
-		if p2_label and p2_label:find("OpenWrt") then p2_os = "OpenWrt" end
-		if p2_label and p2_label:find("Linksys") then p2_os = "Linksys" end
-		if device_name == "ZyXEL NBG6817" then
-			if not p1_os then p1_os = "ZyXEL" end
-			if not p2_os then p2_os = "ZyXEL" end
-		end
-		if device_name == "Linksys WRT32X" then
-			if not p1_os then p1_os = "Unknown/Compressed" end
-			if not p2_os then p2_os = "Unknown/Compressed" end
-		end
-		if not p1_os then p1_os = "Unknown" end
-		if not p2_os then p2_os = "Unknown" end
-		if p1_os and p1_version then p1_os = p1_os .. " (Linux " .. p1_version .. ")" end
-		if p2_os and p2_version then p2_os = p2_os .. " (Linux " .. p2_version .. ")" end
-
-		if device_name == "ZyXEL NBG6817" then
-			if not zyxelFlagPartition then zyxelFlagPartition = util.trim(util.exec(". /lib/functions.sh; find_mtd_part 0:DUAL_FLAG")) end
-			if not zyxelFlagPartition then
-				errorMessage = errorMessage or "" .. i18n.translate("Unable to find Dual Boot Flag Partition." .. " ")
-				util.perror(i18n.translate("Unable to find Dual Boot Flag Partition."))
+function obtain_device_info()
+	local p, boardName, n, p1_label, p1_version, p2_label, p2_version, p1_os, p2_os
+	local errorMessage, current_partition
+	local op_ubi, cp_info, op_info, zyxelFlagPartition
+	local romBoardName = util.trim(util.exec("cat /tmp/sysinfo/board_name"))
+	for filename in fs.dir(devices_dir) do
+		local p_func = loadfile(devices_dir .. filename)
+		setfenv(p_func, { _ = i18n.translate })
+		p = p_func()
+		boardName = p.boardName:gsub('%p','')
+		if romBoardName and romBoardName:gsub('%p',''):match(boardName) then
+			if p.labelOffset then
+				if p.partition1MTD then
+					p1_label = util.trim(util.exec("dd if=/dev/" .. p.partition1MTD .. " bs=1 skip=" .. p.labelOffset .. " count=128" .. "  2>/dev/null"))
+					n, p1_version = p1_label:match('(Linux)-([%d|.]+)')
+				end
+				if p.partition2MTD then
+					p2_label = util.trim(util.exec("dd if=/dev/" .. p.partition2MTD .. " bs=1 skip=" .. p.labelOffset .. " count=128" .. "  2>/dev/null"))
+					n, p2_version = p2_label:match('(Linux)-([%d|.]+)')
+				end
+				if p1_label and p1_label:find("LEDE") then p1_os = "LEDE" end
+				if p1_label and p1_label:find("OpenWrt") then p1_os = "OpenWrt" end
+				if p1_label and p.vendorName and p1_label:find(p.vendorName) then p1_os = p.vendorName end
+				if p2_label and p2_label:find("LEDE") then p2_os = "LEDE" end
+				if p2_label and p2_label:find("OpenWrt") then p2_os = "OpenWrt" end
+				if p2_label and p.vendorName and p2_label:find(p.vendorName) then p2_os = p.vendorName end
+				if not p1_os then p1_os = p.vendorName .. "/" .. i18n.translate("Unknown") end
+				if not p2_os then p2_os = p.vendorName .. "/" .. i18n.translate("Unknown") end
+				if p1_os and p1_version then p1_os = p1_os .. " (Linux " .. p1_version .. ")" end
+				if p2_os and p2_version then p2_os = p2_os .. " (Linux " .. p2_version .. ")" end
 			else
-				current_partition = tonumber(util.exec("dd if=" .. zyxelFlagPartition .. " bs=1 count=1 2>/dev/null | hexdump -n 1 -e '1/1 \"%d\"'"))
+				p1_os = p.vendorName .. "/" .. i18n.translate("Unknown") .. " (" .. i18n.translate("Compressed") .. ")"
+				p2_os = p.vendorName .. "/" .. i18n.translate("Unknown") .. " (" .. i18n.translate("Compressed") .. ")"
 			end
-		else
-			if fs.access("/usr/sbin/fw_printenv") and fs.access("/usr/sbin/fw_setenv") then
-				current_partition = tonumber(util.trim(util.exec("fw_printenv -n " .. bev1)))
-			end
-		end
-		other_partition = current_partition == bev1p2 and bev1p1 or bev1p2
-		
-		if is_alt_mountable(p1_mtd, p2_mtd) then
-			if current_partition == bev1p1 then
-				op_ubi = tonumber(p2_mtd:sub(4)) + 1
+
+			if p.bootEnv1 then
+				if fs.access("/usr/sbin/fw_printenv") and fs.access("/usr/sbin/fw_setenv") then
+					current_partition = tonumber(util.trim(util.exec("fw_printenv -n " .. p.bootEnv1)))
+				end
 			else
-				op_ubi = tonumber(p1_mtd:sub(4)) + 1
+				if not zyxelFlagPartition then zyxelFlagPartition = util.trim(util.exec(". /lib/functions.sh; find_mtd_part 0:DUAL_FLAG")) end
+				if zyxelFlagPartition then
+					current_partition = tonumber(util.exec("dd if=" .. zyxelFlagPartition .. " bs=1 count=1 2>/dev/null | hexdump -n 1 -e '1/1 \"%d\"'"))
+				else
+					errorMessage = errorMessage or i18n.translate("Unable to find Dual Boot Flag Partition.")
+					util.perror(i18n.translate("Unable to find Dual Boot Flag Partition."))
+				end
 			end
-			local cp_info, ap_info = get_partition_os_info(op_ubi)
-			if current_partition == bev1p1 then
-				p1_os = cp_info or p1_os
-				p2_os = ap_info or p2_os
-			else
-				p1_os = ap_info or p1_os
-				p2_os = cp_info or p2_os
+			
+			if is_alt_mountable(p.partition1MTD, p.partition2MTD) then
+				if current_partition == p.bootEnv1Partition1Value then
+					op_ubi = tonumber(p.partition2MTD:sub(4)) + 1
+				else
+					op_ubi = tonumber(p.partition1MTD:sub(4)) + 1
+				end
+				local cp_info, op_info = get_partition_os_info(op_ubi)
+				if current_partition == p.bootEnv1Partition1Value then
+					p1_os = cp_info or p1_os
+					p2_os = op_info or p2_os
+				else
+					p1_os = op_info or p1_os
+					p2_os = cp_info or p2_os
+				end
 			end
+			return romBoardName, p.vendorName .. " " .. p.deviceName, p.bootEnv1, p.bootEnv1Partition1Value, p1_os, p.bootEnv1Partition2Value, p2_os, p.bootEnv2, p.bootEnv2Partition1Value, p.bootEnv2Partition1Value, current_partition
 		end
 	end
+	return romBoardName, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil
 end
 
 function index()
-	entry({"admin", "system", "advanced_reboot"}, template("advanced_reboot/advanced_reboot"), _("Advanced Reboot"), 90)
+	entry({"admin", "system", "advanced_reboot"}, call("action_template"), _("Advanced Reboot"), 90)
 	entry({"admin", "system", "advanced_reboot", "reboot"}, post("action_reboot"))
 	entry({"admin", "system", "advanced_reboot", "alternative_reboot"}, post("action_altreboot"))
 	entry({"admin", "system", "advanced_reboot", "power_off"}, post("action_poweroff"))
+end
+
+function action_template()
+	local romBoardName, device_name, bev1, bev1p1, p1_os, bev1p2, p2_os, bev2, bev2p1, bev2p2, current_partition = obtain_device_info()
+	ltemplate.render("advanced_reboot/advanced_reboot",{
+				romBoardName=romBoardName,
+				device_name=device_name,
+				bev1p1=bev1p1,
+				p1_os=p1_os,
+				bev1p2=bev1p2,
+				p2_os=p2_os,
+				current_partition=current_partition,
+				errorMessage=errorMessage})
 end
 
 function action_reboot()
 	ltemplate.render("advanced_reboot/applyreboot", {
 				title = i18n.translate("Rebooting..."),
 				msg   = i18n.translate("The system is rebooting now.<br /> DO NOT POWER OFF THE DEVICE!<br /> Wait a few minutes before you try to reconnect. It might be necessary to renew the address of your computer to reach the device again, depending on your settings."),
-				addr  = ip.new(type(ip) == "string" and ip or "192.168.1.1") or "192.168.1.1"
+				addr  = ip.new(util.imatch(uci:get("network", "lan", "ipaddr"))() or "192.168.1.1")
 			})
 	sys.reboot()
 end
 
 function action_altreboot()
+	local romBoardName, device_name, bev1, bev1p1, p1_os, bev1p2, p2_os, bev2, bev2p1, bev2p2, current_partition = obtain_device_info()
 	local zyxelFlagPartition, zyxelBootFlag, zyxelNewBootFlag, errorCode, curEnvSetting, newEnvSetting
 	errorMessage = nil
 	errorCode = 0
@@ -217,28 +209,28 @@ function action_altreboot()
 			if bev1 then
 				curEnvSetting = tonumber(util.trim(util.exec("fw_printenv -n " .. bev1)))
 				if not curEnvSetting then
-					errorMessage = errorMessage .. i18n.translate("Unable to obtain firmware environment variable") .. ": " .. bev1 .. ". "
-					util.perror(i18n.translate("Unable to obtain firmware environment variable") .. ": " .. bev1 .. ".")
+					errorMessage = errorMessage .. i18n.translatef("Unable to obtain firmware environment variable: %s.", bev1)
+					util.perror(i18n.translatef("Unable to obtain firmware environment variable: %s.", bev1))
 				else
 					newEnvSetting = curEnvSetting == bev1p1 and bev1p2 or bev1p1
 					errorCode = sys.call("fw_setenv " .. bev1 .. " " .. newEnvSetting)
 						if errorCode ~= 0 then
-							errorMessage = errorMessage or "" .. i18n.translate("Unable to set firmware environment variable") .. ": " .. bev1 .. " " .. i18n.translate("to") .. " " .. newEnvSetting .. ". "
-							util.perror(i18n.translate("Unable to set firmware environment variable") .. ": " .. bev1 .. " " .. i18n.translate("to") .. " " .. newEnvSetting .. ".")
+							errorMessage = errorMessage or "" .. i18n.translatef("Unable to set firmware environment variable: %s to %s.", bev1, newEnvSetting)
+							util.perror(i18n.translatef("Unable to set firmware environment variable: %s to %s.", bev1, newEnvSetting))
 						end
 				end
 			end
 			if bev2 then
 				curEnvSetting = util.trim(util.exec("fw_printenv -n " .. bev2))
 				if not curEnvSetting then
-					errorMessage = errorMessage or "" .. i18n.translate("Unable to obtain firmware environment variable") .. ": " .. bev2 .. ". "
-					util.perror(i18n.translate("Unable to obtain firmware environment variable") .. ": " .. bev2 .. ".")
+					errorMessage = errorMessage or "" .. i18n.translatef("Unable to obtain firmware environment variable: %s.", bev2)
+					util.perror(i18n.translatef("Unable to obtain firmware environment variable: %s.", bev2))
 				else
 					newEnvSetting = curEnvSetting == bev2p1 and bev2p2 or bev2p1
 					errorCode = sys.call("fw_setenv " .. bev2 .. " '" .. newEnvSetting .. "'")
 					if errorCode ~= 0 then
-						errorMessage = errorMessage or "" .. i18n.translate("Unable to set firmware environment variable") .. ": " .. bev2 .. " " .. i18n.translate("to") .. " " .. newEnvSetting .. ". "
-						util.perror(i18n.translate("Unable to set firmware environment variable") .. ": " .. bev2 .. " " .. i18n.translate("to") .. " " .. newEnvSetting .. ".")
+						errorMessage = errorMessage or "" .. i18n.translatef("Unable to set firmware environment variable: %s to %s.", bev2, newEnvSetting)
+						util.perror(i18n.translatef("Unable to set firmware environment variable: %s to %s.", bev2, newEnvSetting))
 					end
 				end
 			end
@@ -253,8 +245,8 @@ function action_altreboot()
 				if zyxelNewBootFlag then
 					errorCode = sys.call("printf \"" .. zyxelNewBootFlag .. "\" >" .. zyxelFlagPartition )
 					if errorCode ~= 0 then
-						errorMessage = errorMessage or "" .. i18n.translate("Unable to set Dual Boot Flag Partition entry for partition") .. ": " .. zyxelFlagPartition .. ". "
-						util.perror(i18n.translate("Unable to set Dual Boot Flag Partition entry for partition") .. ": " .. zyxelFlagPartition .. ".")
+						errorMessage = errorMessage or "" .. i18n.translatef("Unable to set Dual Boot Flag Partition entry for partition: %s.", zyxelFlagPartition)
+						util.perror(i18n.translatef("Unable to set Dual Boot Flag Partition entry for partition: %s.", zyxelFlagPartition))
 					end
 				end
 			end
@@ -263,7 +255,7 @@ function action_altreboot()
 			ltemplate.render("advanced_reboot/applyreboot", {
 						title = i18n.translate("Rebooting..."),
 						msg   = i18n.translate("The system is rebooting to an alternative partition now.<br /> DO NOT POWER OFF THE DEVICE!<br /> Wait a few minutes before you try to reconnect. It might be necessary to renew the address of your computer to reach the device again, depending on your settings."),
-						addr  = ip.new(uci:get("network", "lan", "ipaddr")) or "192.168.1.1"
+						addr  = ip.new(util.imatch(uci:get("network", "lan", "ipaddr"))() or "192.168.1.1")
 					})
 			sys.reboot()
 		else
@@ -296,7 +288,7 @@ function action_poweroff()
 		ltemplate.render("advanced_reboot/applyreboot", {
 					title = i18n.translate("Shutting down..."),
 					msg   = i18n.translate("The system is shutting down now.<br /> DO NOT POWER OFF THE DEVICE!<br /> It might be necessary to renew the address of your computer to reach the device again, depending on your settings."),
-					addr  = ip.new(uci:get("network", "lan", "ipaddr")) or "192.168.1.1"
+					addr  = ip.new(util.imatch(uci:get("network", "lan", "ipaddr"))() or "192.168.1.1")
 				})
 		sys.call("/sbin/poweroff")
 	end
