@@ -11,10 +11,8 @@ This is free software, licensed under the Apache License, Version 2.0
 </textarea>
 
 <div>
-<%- local readmeURL = "https://github.com/openwrt/packages/tree/master/net/vpn-policy-routing/files/README.md" -%>
-<%=translate("Checkmark represents the default gateway. See the") .. " " 
-.. [[<a href="]] .. readmeURL .. [[#a-word-about-default-routing" target="_blank">]] 
-.. translate("README") .. [[</a>]] .. " " .. translate("for details.")%>
+<%- local readmeURL = "https://github.com/openwrt/packages/tree/master/net/vpn-policy-routing/files/README.md#a-word-about-default-routing" -%>
+<%=translatef("Checkmark represents the default gateway. See the <a href=\"%s\" target=\"_blank\">README</a> for details.", readmeURL)%>
 </div>
 
 <%+cbi/valuefooter%>
