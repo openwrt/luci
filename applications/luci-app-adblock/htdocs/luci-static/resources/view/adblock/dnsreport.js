@@ -149,7 +149,7 @@ function handleAction(ev) {
 				])
 			]),
 			E('label', { 'class': 'cbi-input-text', 'style': 'padding-top:.5em' }, [
-				E('input', { 'class': 'cbi-input-text', 'id': 'search' }, [
+				E('input', { 'class': 'cbi-input-text', 'spellcheck': 'false', 'id': 'search' }, [
 			]),
 			'\xa0\xa0\xa0',
 			_('Filter criteria like date, domain or client (optional)')
@@ -165,7 +165,7 @@ function handleAction(ev) {
 					'id': 'refresh',
 					'click': ui.createHandlerFn(this, async function(ev) {
 						var count = document.getElementById('count').value;
-						var search = document.getElementById('search').value.trim().replace(/[^a-z0-9\.\-]/g,'') || '+';
+						var search = document.getElementById('search').value.trim().replace(/[^a-z0-9\.\-\:]/g,'') || '+';
 						L.resolveDefault(fs.exec_direct('/etc/init.d/adblock', ['report', search, count, 'true', 'json']),'');
 						var running = 1;
 						while (running === 1) {
@@ -188,7 +188,7 @@ function handleAction(ev) {
 
 return L.view.extend({
 	load: function() {
-		return L.resolveDefault(fs.exec_direct('/etc/init.d/adblock', ['report', '+', '50', 'true', 'json']),'');
+		return L.resolveDefault(fs.exec_direct('/etc/init.d/adblock', ['report', '+', '50', 'false', 'json']),'');
 	},
 
 	render: function(dnsreport) {
@@ -293,6 +293,8 @@ return L.view.extend({
 
 		return E('div', { 'class': 'cbi-map', 'id': 'map' }, [
 			E('div', { 'class': 'cbi-section' }, [
+				E('p', _('This shows the last generated DNS Report, press the refresh button to get a current one.')),
+				E('p', '\xa0'),
 				E('div', { 'class': 'cbi-value', 'style': 'margin-bottom:5px' }, [
 				E('label', { 'class': 'cbi-value-title', 'style': 'padding-top:0rem' }, _('Start Date')),
 				E('div', { 'class': 'cbi-value-field', 'id': 'start', 'style': 'margin-bottom:5px;margin-left:200px;color:#37c' }, (content.data.start_date || '-') + ', ' + (content.data.start_time || '-'))]),
