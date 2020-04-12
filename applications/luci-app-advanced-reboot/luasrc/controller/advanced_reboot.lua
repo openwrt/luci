@@ -42,7 +42,7 @@ function get_partition_os_info(op_ubi)
 			cp_info = util.trim(util.exec('. /etc/os-release && echo "$OPENWRT_RELEASE"'))
 		end 
 	end
-	logger(i18n.translatef("attempting to mount alternative partition (mtd%s)", tostring(op_ubi))
+	logger(i18n.translatef("attempting to mount alternative partition (mtd%s)", tostring(op_ubi)))
 	alt_partition_unmount(op_ubi)
 	alt_partition_mount(op_ubi)
 	if fs.access("/alt/rom/etc/os-release") then
@@ -51,7 +51,7 @@ function get_partition_os_info(op_ubi)
 			op_info = util.trim(util.exec('. /alt/rom/etc/os-release && echo "$OPENWRT_RELEASE"'))
 		end 
 	end
-	logger(i18n.translatef("attempting to unmount alternative partition (mtd%s)", tostring(op_ubi))
+	logger(i18n.translatef("attempting to unmount alternative partition (mtd%s)", tostring(op_ubi)))
 	alt_partition_unmount(op_ubi)
 	return cp_info, op_info
 end
