@@ -2087,7 +2087,8 @@
 	    domParser = null,
 	    originalCBIInit = null,
 	    rpcBaseURL = null,
-	    sysFeatures = null;
+	    sysFeatures = null,
+	    preloadClasses = null;
 
 	/* "preload" builtin classes to make the available via require */
 	var classes = {
@@ -2486,6 +2487,55 @@
 			return Promise.resolve(sysFeatures);
 		},
 
+		probePreloadClasses: function() {
+			var sessionid = classes.rpc.getSessionID();
+
+			if (preloadClasses == null) {
+				try {
+					var data = JSON.parse(window.sessionStorage.getItem('preloadClasses'));
+
+					if (this.isObject(data) && this.isObject(data[sessionid]))
+						preloadClasses = data[sessionid];
+				}
+				catch (e) {}
+			}
+
+			if (!Array.isArray(preloadClasses)) {
+				preloadClasses = this.resolveDefault(classes.rpc.declare({
+					object: 'file',
+					method: 'list',
+					params: [ 'path' ],
+					expect: { 'entries': [] }
+				})(this.fspath(this.resource('preload'))), []).then(function(entries) {
+					var classes = [];
+
+					for (var i = 0; i < entries.length; i++) {
+						if (entries[i].type != 'file')
+							continue;
+
+						var m = entries[i].name.match(/(.+)\.js$/);
+
+						if (m)
+							classes.push('preload.%s'.format(m[1]));
+					}
+
+					try {
+						var data = {};
+						    data[sessionid] = classes;
+
+						window.sessionStorage.setItem('preloadClasses', JSON.stringify(data));
+					}
+					catch (e) {}
+
+					preloadClasses = classes;
+
+					return classes;
+				});
+			}
+
+			return Promise.resolve(preloadClasses);
+		},
+
 		/**
 		 * Test whether a particular system feature is available, such as
 		 * hostapd SAE support or an installed firewall. The features are
@@ -2577,7 +2627,18 @@
 				L.notifySessionExpiry();
 			});
 
-			return this.probeSystemFeatures().finally(this.initDOM);
+			return Promise.all([
+				this.probeSystemFeatures(),
+				this.probePreloadClasses()
+			]).finally(L.bind(function() {
+				var tasks = [];
+
+				if (Array.isArray(preloadClasses))
+					for (var i = 0; i < preloadClasses.length; i++)
+						tasks.push(this.require(preloadClasses[i]));
+
+				return Promise.all(tasks);
+			}, this)).finally(this.initDOM);
 		},
 
 		/* private */
