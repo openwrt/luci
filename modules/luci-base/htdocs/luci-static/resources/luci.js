@@ -2597,6 +2597,37 @@
 		env: {},
 
 		/**
+		 * Construct an absolute filesystem path relative to the server
+		 * document root.
+		 *
+		 * @instance
+		 * @memberof LuCI
+		 *
+		 * @param {...string} [parts]
+		 * An array of parts to join into a path.
+		 *
+		 * @return {string}
+		 * Return the joined path.
+		 */
+		fspath: function(/* ... */) {
+			var path = this.env.documentroot;
+
+			for (var i = 0; i < arguments.length; i++)
+				path += '/' + arguments[i];
+
+			var p = path.replace(/\/+$/, '').replace(/\/+/g, '/').split(/\//),
+			    res = [];
+
+			for (var i = 0; i < p.length; i++)
+				if (p[i] == '..')
+					res.pop();
+				else if (p[i] != '.')
+					res.push(p[i]);
+
+			return res.join('/');
+		},
+
+		/**
 		 * Construct a relative URL path from the given prefix and parts.
 		 * The resulting URL is guaranteed to only contain the characters
 		 * `a-z`, `A-Z`, `0-9`, `_`, `.`, `%`, `,`, `;`, and `-` as well
