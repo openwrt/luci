@@ -2228,18 +2228,6 @@
 
 			Object.assign(env, setenv);
 
-			document.addEventListener('poll-start', function(ev) {
-				document.querySelectorAll('[id^="xhr_poll_status"]').forEach(function(e) {
-					e.style.display = (e.id == 'xhr_poll_status_off') ? 'none' : '';
-				});
-			});
-
-			document.addEventListener('poll-stop', function(ev) {
-				document.querySelectorAll('[id^="xhr_poll_status"]').forEach(function(e) {
-					e.style.display = (e.id == 'xhr_poll_status_on') ? 'none' : '';
-				});
-			});
-
 			var domReady = new Promise(function(resolveFn, rejectFn) {
 				document.addEventListener('DOMContentLoaded', resolveFn);
 			});
@@ -2697,6 +2685,16 @@
 					return;
 
 				LuCI.prototype.notifySessionExpiry();
+			});
+
+			document.addEventListener('poll-start', function(ev) {
+				uiClass.showIndicator('poll-status', _('Refreshing'), function(ev) {
+					Request.poll.active() ? Request.poll.stop() : Request.poll.start();
+				});
+			});
+
+			document.addEventListener('poll-stop', function(ev) {
+				uiClass.showIndicator('poll-status', _('Paused'), null, 'inactive');
 			});
 
 			return Promise.all([
