@@ -537,6 +537,7 @@ return baseclass.extend({
 				display_items: 10,
 				dropdown_items: -1,
 				create: true,
+				disabled: (this.readonly != null) ? this.readonly : this.map.readonly,
 				validate: function(value) {
 					var v = L.toArray(value);
 
