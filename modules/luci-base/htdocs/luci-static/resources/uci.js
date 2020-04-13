@@ -784,22 +784,22 @@ return baseclass.extend(/** @lends LuCI.uci.prototype */ {
 		if (n)
 			for (var conf in n) {
 				for (var sid in n[conf]) {
-					var r = {
+					var p = {
 						config: conf,
 						values: { }
 					};
 
 					for (var k in n[conf][sid]) {
 						if (k == '.type')
-							r.type = n[conf][sid][k];
+							p.type = n[conf][sid][k];
 						else if (k == '.create')
-							r.name = n[conf][sid][k];
+							p.name = n[conf][sid][k];
 						else if (k.charAt(0) != '.')
-							r.values[k] = n[conf][sid][k];
+							p.values[k] = n[conf][sid][k];
 					}
 
 					snew.push(n[conf][sid]);
-					tasks.push(self.callAdd(r.config, r.type, r.name, r.values));
+					tasks.push(self.callAdd(p.config, p.type, p.name, p.values));
 				}
 
 				pkgs[conf] = true;
