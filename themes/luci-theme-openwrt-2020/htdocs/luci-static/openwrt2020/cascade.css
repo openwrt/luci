@@ -903,7 +903,7 @@ button.important {
 
 button[disabled], button.disabled, .btn[disabled], .btn.disabled {
 	pointer-events: none;
-	opacity: .5;
+	opacity: .6;
 }
 
 .cbi-button-apply, .cbi-button-positive {
@@ -970,6 +970,12 @@ button[disabled], button.disabled, .btn[disabled], .btn.disabled {
 	background: var(--danger-color);
 }
 
+.cbi-checkbox input[type="checkbox"][disabled] + label::before,
+.cbi-checkbox input[type="checkbox"][disabled] + label::after {
+	pointer-events: none;
+	opacity: .6;
+}
+
 input:not([type]),
 input[type="text"],
 input[type="password"],
@@ -991,6 +997,14 @@ select:focus,
 .cbi-dropdown:not(.btn):not(.cbi-button):focus,
 .cbi-dropdown[open]:not(.btn):not(.cbi-button) {
 	border-color: var(--main-dark-color);
+}
+
+input[disabled]:not([type]),
+input[disabled][type="text"],
+input[disabled][type="password"],
+select[disabled] {
+	opacity: .6;
+	pointer-events: none;
 }
 
 input:not([type]) + .btn, input:not([type]) + button,
