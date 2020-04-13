@@ -59,6 +59,11 @@ var UIElement = baseclass.extend(/** @lends LuCI.ui.AbstractElement.prototype */
 	 * standard validation constraints are checked. The function should return
 	 * `true` to accept the given input value. Any other return value type is
 	 * converted to a string and treated as validation error message.
+	 *
+	 * @property {boolean} [disabled=false]
+	 * Specifies whether the widget should be rendered in disabled state
+	 * (`true`) or not (`false`). Disabled widgets cannot be interacted with
+	 * and are displayed in a slightly faded style.
 	 */
 
 	/**
@@ -322,6 +327,7 @@ var UITextfield = UIElement.extend(/** @lends LuCI.ui.Textfield.prototype */ {
 			'type': this.options.password ? 'password' : 'text',
 			'class': this.options.password ? 'cbi-input-password' : 'cbi-input-text',
 			'readonly': this.options.readonly ? '' : null,
+			'disabled': this.options.disabled ? '' : null,
 			'maxlength': this.options.maxlength,
 			'placeholder': this.options.placeholder,
 			'value': this.value,
@@ -445,6 +451,7 @@ var UITextarea = UIElement.extend(/** @lends LuCI.ui.Textarea.prototype */ {
 			'name': this.options.name,
 			'class': 'cbi-input-textarea',
 			'readonly': this.options.readonly ? '' : null,
+			'disabled': this.options.disabled ? '' : null,
 			'placeholder': this.options.placeholder,
 			'style': !this.options.cols ? 'width:100%' : null,
 			'cols': this.options.cols,
@@ -557,6 +564,7 @@ var UICheckbox = UIElement.extend(/** @lends LuCI.ui.Checkbox.prototype */ {
 			'type': 'checkbox',
 			'value': this.options.value_enabled,
 			'checked': (this.value == this.options.value_enabled) ? '' : null,
+			'disabled': this.options.disabled ? '' : null,
 			'data-widget-id': this.options.id ? 'widget.' + this.options.id : null
 		}));
 
@@ -708,7 +716,8 @@ var UISelect = UIElement.extend(/** @lends LuCI.ui.Select.prototype */ {
 				'name': this.options.name,
 				'size': this.options.size,
 				'class': 'cbi-input-select',
-				'multiple': this.options.multiple ? '' : null
+				'multiple': this.options.multiple ? '' : null,
+				'disabled': this.options.disabled ? '' : null
 			}));
 
 			if (this.options.optional)
@@ -738,7 +747,8 @@ var UISelect = UIElement.extend(/** @lends LuCI.ui.Select.prototype */ {
 						'type': this.options.multiple ? 'checkbox' : 'radio',
 						'class': this.options.multiple ? 'cbi-input-checkbox' : 'cbi-input-radio',
 						'value': keys[i],
-						'checked': (this.values.indexOf(keys[i]) > -1) ? '' : null
+						'checked': (this.values.indexOf(keys[i]) > -1) ? '' : null,
+						'disabled': this.options.disabled ? '' : null
 					}),
 					this.choices[keys[i]] || keys[i]
 				]));
@@ -963,6 +973,7 @@ var UIDropdown = UIElement.extend(/** @lends LuCI.ui.Dropdown.prototype */ {
 			'class': 'cbi-dropdown',
 			'multiple': this.options.multiple ? '' : null,
 			'optional': this.options.optional ? '' : null,
+			'disabled': this.options.disabled ? '' : null
 		}, E('ul'));
 
 		var keys = Object.keys(this.choices);
@@ -2130,7 +2141,8 @@ var UIDynamicList = UIElement.extend(/** @lends LuCI.ui.DynamicList.prototype */
 				'id': this.options.id ? 'widget.' + this.options.id : null,
 				'type': 'text',
 				'class': 'cbi-input-text',
-				'placeholder': this.options.placeholder
+				'placeholder': this.options.placeholder,
+				'disabled': this.options.disabled ? '' : null
 			});
 
 			dl.lastElementChild.appendChild(inputEl);
@@ -2239,6 +2251,9 @@ var UIDynamicList = UIElement.extend(/** @lends LuCI.ui.DynamicList.prototype */
 	handleClick: function(ev) {
 		var dl = ev.currentTarget,
 		    item = findParent(ev.target, '.item');
+
+		if (this.options.disabled)
+			return;
 
 		if (item) {
 			this.removeItem(dl, item);
@@ -2562,7 +2577,8 @@ var UIFileUpload = UIElement.extend(/** @lends LuCI.ui.FileUpload.prototype */ {
 			return this.bind(E('div', { 'id': this.options.id }, [
 				E('button', {
 					'class': 'btn',
-					'click': UI.prototype.createHandlerFn(this, 'handleFileBrowser')
+					'click': UI.prototype.createHandlerFn(this, 'handleFileBrowser'),
+					'disabled': this.options.disabled ? '' : null
 				}, label),
 				E('div', {
 					'class': 'cbi-filebrowser'
