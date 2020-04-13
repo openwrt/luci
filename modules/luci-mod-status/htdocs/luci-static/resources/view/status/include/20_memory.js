@@ -23,7 +23,7 @@ return L.Class.extend({
 	title: _('Memory'),
 
 	load: function() {
-		return L.resolveDefault(callSystemInfo(), {});
+		return L.resolveDefault(callSystemInfo(), {}); 
 	},
 
 	render: function(systeminfo) {
