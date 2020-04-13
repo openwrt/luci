@@ -1,10 +1,18 @@
 'use strict';
 'require ui';
 'require uci';
+'require rpc';
 'require dom';
 'require baseclass';
 
 var scope = this;
+
+var callSessionAccess = rpc.declare({
+	object: 'session',
+	method: 'access',
+	params: [ 'scope', 'object', 'function' ],
+	expect: { 'access': false }
+});
 
 var CBIJSONConfig = baseclass.extend({
 	__init__: function(data) {
@@ -360,7 +368,6 @@ var CBIMap = CBIAbstractElement.extend(/** @lends LuCI.form.Map.prototype */ {
 
 		this.config = config;
 		this.parsechain = [ config ];
-		this.readonly = false;
 		this.data = uci;
 	},
 
@@ -369,6 +376,10 @@ var CBIMap = CBIAbstractElement.extend(/** @lends LuCI.form.Map.prototype */ {
 	 *
 	 * If set to `true`, the Map instance is marked readonly and any form
 	 * option elements added to it will inherit the readonly state.
+	 *
+	 * If left unset, the Map will test the access permission of the primary
+	 * uci configuration upon loading and mark the form readonly if no write
+	 * permissions are granted.
 	 *
 	 * @name LuCI.form.Map.prototype#readonly
 	 * @type boolean
@@ -520,8 +531,17 @@ var CBIMap = CBIAbstractElement.extend(/** @lends LuCI.form.Map.prototype */ {
 	 * an error.
 	 */
 	load: function() {
-		return this.data.load(this.parsechain || [ this.config ])
-			.then(this.loadChildren.bind(this));
+		var doCheckACL = (!(this instanceof CBIJSONMap) && this.readonly == null);
+
+		return Promise.all([
+			doCheckACL ? callSessionAccess('uci', this.config, 'write') : true,
+			this.data.load(this.parsechain || [ this.config ])
+		]).then(L.bind(function(res) {
+			if (res[0] === false)
+				this.readonly = true;
+
+			return this.loadChildren();
+		}, this));
 	},
 
 	/**
