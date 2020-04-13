@@ -3800,26 +3800,13 @@ var UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 		 * The number of changes to indicate.
 		 */
 		setIndicator: function(n) {
-			var i = document.querySelector('.uci_change_indicator');
-			if (i == null) {
-				var poll = document.getElementById('xhr_poll_status');
-				i = poll.parentNode.insertBefore(E('a', {
-					'href': '#',
-					'class': 'uci_change_indicator label notice',
-					'click': L.bind(this.displayChanges, this)
-				}), poll);
-			}
-
 			if (n > 0) {
-				dom.content(i, [ _('Unsaved Changes'), ': ', n ]);
-				i.classList.add('flash');
-				i.style.display = '';
-				document.dispatchEvent(new CustomEvent('uci-new-changes'));
+				UI.prototype.showIndicator('uci-changes',
+					'%s: %d'.format(_('Unsaved Changes'), n),
+					L.bind(this.displayChanges, this));
 			}
 			else {
-				i.classList.remove('flash');
-				i.style.display = 'none';
-				document.dispatchEvent(new CustomEvent('uci-clear-changes'));
+				UI.prototype.hideIndicator('uci-changes');
 			}
 		},
 
