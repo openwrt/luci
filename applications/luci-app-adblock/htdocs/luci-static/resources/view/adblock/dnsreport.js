@@ -165,7 +165,7 @@ function handleAction(ev) {
 					'id': 'refresh',
 					'click': ui.createHandlerFn(this, async function(ev) {
 						var count = document.getElementById('count').value;
-						var search = document.getElementById('search').value.trim().replace(/[^a-z0-9\.\-\:]/g,'') || '+';
+						var search = document.getElementById('search').value.trim().replace(/[^\w\.\-\:]/g,'') || '+';
 						L.resolveDefault(fs.exec_direct('/etc/init.d/adblock', ['report', search, count, 'true', 'json']),'');
 						var running = 1;
 						while (running === 1) {
