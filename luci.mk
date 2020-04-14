@@ -59,19 +59,30 @@ LUCI_LC_ALIAS.zh_Hant=zh-tw
 
 PKG_NAME?=$(LUCI_NAME)
 
-PKG_PO_VERSION?=$(if $(DUMP),x,$(strip $(shell \
-	set -- $$(git log -1 --format="%ct %h" --abbrev=7 -- po); \
-	secs="$$(($$1 % 86400))"; \
-	yday="$$(date --utc --date="@$$1" "+%y.%j")"; \
-	printf 'git-%s.%05d-%s' "$$yday" "$$secs" "$$2" \
-)))
 
-PKG_SRC_VERSION?=$(if $(DUMP),x,$(strip $(shell \
-	set -- $$(git log -1 --format="%ct %h" --abbrev=7 -- . ':(exclude)po'); \
-	secs="$$(($$1 % 86400))"; \
-	yday="$$(date --utc --date="@$$1" "+%y.%j")"; \
-	printf 'git-%s.%05d-%s' "$$yday" "$$secs" "$$2" \
-)))
+# 1: everything expect po subdir or only po subdir
+define findrev
+  $(shell \
+    if git log -1 >/dev/null 2>/dev/null; then \
+      set -- $$(git log -1 --format="%ct %h" --abbrev=7 -- '$(if $(1),:(exclude))po'); \
+      secs="$$(($$1 % 86400))"; \
+      yday="$$(date --utc --date="@$$1" "+%y.%j")"; \
+      printf 'git-%s.%05d-%s' "$$yday" "$$secs" "$$2"; \
+    else \
+      ts=$$(find . -type f $(if $(1),-not) -path './po/*' -printf '%T@\n' 2>/dev/null | sort -rn | head -n1 | cut -d. -f1); \
+      if [ -n "$$ts" ]; then \
+        secs="$$(($$ts % 86400))"; \
+        date="$$(date --utc --date="@$$ts" "+%y%m%d")"; \
+        printf '%s.%05d' "$$date" "$$secs"; \
+      else \
+        echo "unknown"; \
+      fi; \
+    fi \
+  )
+endef
+
+PKG_PO_VERSION?=$(if $(DUMP),x,$(strip $(call findrev)))
+PKG_SRC_VERSION?=$(if $(DUMP),x,$(strip $(call findrev,1)))
 
 PKG_GITBRANCH?=$(if $(DUMP),x,$(strip $(shell \
 	variant="LuCI"; \
