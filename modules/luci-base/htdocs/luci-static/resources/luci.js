@@ -2051,15 +2051,7 @@
 		 * methods are overwritten with `null`.
 		 */
 		addFooter: function() {
-			var footer = E([]),
-			    vp = document.getElementById('view'),
-			    readonly = true;
-
-			vp.querySelectorAll('.cbi-map').forEach(function(map) {
-				var m = DOM.findClassInstance(map);
-				if (m && !m.readonly)
-					readonly = false;
-			});
+			var footer = E([]);
 
 			var saveApplyBtn = this.handleSaveApply ? new L.ui.ComboButton('0', {
 				0: [ _('Save & Apply') ],
@@ -2069,8 +2061,7 @@
 					0: 'btn cbi-button cbi-button-apply important',
 					1: 'btn cbi-button cbi-button-negative important'
 				},
-				click: L.ui.createHandlerFn(this, 'handleSaveApply'),
-				disabled: readonly || null
+				click: L.ui.createHandlerFn(this, 'handleSaveApply')
 			}).render() : E([]);
 
 			if (this.handleSaveApply || this.handleSave || this.handleReset) {
@@ -2078,13 +2069,11 @@
 					saveApplyBtn, ' ',
 					this.handleSave ? E('button', {
 						'class': 'cbi-button cbi-button-save',
-						'click': L.ui.createHandlerFn(this, 'handleSave'),
-						'disabled': readonly || null
+						'click': L.ui.createHandlerFn(this, 'handleSave')
 					}, [ _('Save') ]) : '', ' ',
 					this.handleReset ? E('button', {
 						'class': 'cbi-button cbi-button-reset',
-						'click': L.ui.createHandlerFn(this, 'handleReset'),
-						'disabled': readonly || null
+						'click': L.ui.createHandlerFn(this, 'handleReset')
 					}, [ _('Reset') ]) : ''
 				]));
 			}
@@ -3071,35 +3060,6 @@
 							try { json = res.json() } catch(e) {}
 						cb(res.xhr, json, res.duration);
 					});
-		},
-
-		/**
-		 * Check whether the current session has been granted the given ACL
-		 * group permissions.
-		 *
-		 * @param {string} aclGroupName
-		 * The ACL group name to check.
-		 *
-		 * @return {boolean|null}
-		 * Returns `null` if the session does not have the specified grant,
-		 * returns `false` if the permissions are granted readonly or
-		 * `true` if they're granted read/write.
-		 */
-		hasAcl: function(aclGroupName) {
-			if (!this.isObject(this.env.accessgroups) ||
-			    !this.env.accessgroups.hasOwnProperty(aclGroupName) ||
-			    !Array.isArray(this.env.accessgroups[aclGroupName]))
-				return null;
-
-			for (var i = 0; i < this.env.accessgroups[aclGroupName].length; i++)
-				if (this.env.accessgroups[aclGroupName][i] == 'write')
-					return true;
-
-			for (var i = 0; i < this.env.accessgroups[aclGroupName].length; i++)
-				if (this.env.accessgroups[aclGroupName][i] == 'read')
-					return false;
-
-			return null;
 		},
 
 		/**
