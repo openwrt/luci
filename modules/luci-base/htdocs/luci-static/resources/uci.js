@@ -547,8 +547,12 @@ return baseclass.extend(/** @lends LuCI.uci.prototype */ {
 				c[conf][sid] = {};
 
 			/* undelete option */
-			if (d[conf] && d[conf][sid])
+			if (d[conf] && d[conf][sid]) {
 				d[conf][sid] = d[conf][sid].filter(function(o) { return o !== opt });
+
+				if (d[conf][sid].length == 0)
+					delete d[conf][sid];
+			}
 
 			c[conf][sid][opt] = val;
 		}
