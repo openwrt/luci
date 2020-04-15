@@ -1824,6 +1824,101 @@
 	});
 
 	/**
+	 * @class session
+	 * @memberof LuCI
+	 * @hideconstructor
+	 * @classdesc
+	 *
+	 * The `session` class provides various session related functionality.
+	 */
+	var Session = Class.singleton(/** @lends LuCI.session.prototype */ {
+		__name__: 'LuCI.session',
+
+		/**
+		 * Retrieve the current session ID.
+		 *
+		 * @returns {string}
+		 * Returns the current session ID.
+		 */
+		getID: function() {
+			return env.sessionid || '00000000000000000000000000000000';
+		},
+
+		/**
+		 * Retrieve data from the local session storage.
+		 *
+		 * @param {string} [key]
+		 * The key to retrieve from the session data store. If omitted, all
+		 * session data will be returned.
+		 *
+		 * @returns {*}
+		 * Returns the stored session data or `null` if the given key wasn't
+		 * found.
+		 */
+		getLocalData: function(key) {
+			try {
+				var sid = this.getID(),
+				    item = 'luci-session-store',
+				    data = JSON.parse(window.sessionStorage.getItem(item));
+
+				if (!LuCI.prototype.isObject(data) || !data.hasOwnProperty(sid)) {
+					data = {};
+					data[sid] = {};
+				}
+
+				if (key != null)
+					return data[sid].hasOwnProperty(key) ? data[sid][key] : null;
+
+				return data[sid];
+			}
+			catch (e) {
+				return (key != null) ? null : {};
+			}
+		},
+
+		/**
+		 * Set data in the local session storage.
+		 *
+		 * @param {string} key
+		 * The key to set in the session data store.
+		 *
+		 * @param {*} value
+		 * The value to store. It will be internally converted to JSON before
+		 * being put in the session store.
+		 *
+		 * @returns {boolean}
+		 * Returns `true` if the data could be stored or `false` on error.
+		 */
+		setLocalData: function(key, value) {
+			if (key == null)
+				return false;
+
+			try {
+				var sid = this.getID(),
+				    item = 'luci-session-store',
+				    data = JSON.parse(window.sessionStorage.getItem(item));
+
+				if (!LuCI.prototype.isObject(data) || !data.hasOwnProperty(sid)) {
+					data = {};
+					data[sid] = {};
+				}
+
+				if (value != null)
+					data[sid][key] = value;
+				else
+					delete data[sid][key];
+
+				window.sessionStorage.setItem(item, JSON.stringify(data));
+
+				return true;
+			}
+			catch (e) {
+				return false;
+			}
+		}
+	});
+
+	/**
 	 * @class view
 	 * @memberof LuCI
 	 * @hideconstructor
@@ -2096,6 +2191,7 @@
 		dom: DOM,
 		poll: Poll,
 		request: Request,
+		session: Session,
 		view: View
 	};
 
