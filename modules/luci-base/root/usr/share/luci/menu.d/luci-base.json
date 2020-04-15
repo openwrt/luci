@@ -138,5 +138,16 @@
 			"function": "action_confirm"
 		},
 		"auth": {}
+	},
+
+	"admin/menu": {
+		"action": {
+			"type": "call",
+			"module": "luci.controller.admin.index",
+			"function": "action_menu"
+		},
+		"auth": {
+			"methods": [ "cookie:sysauth" ]
+		}
 	}
 }
