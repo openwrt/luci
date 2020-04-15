@@ -3121,6 +3121,22 @@
 		},
 
 		/**
+		 * Check whether a view has sufficient permissions.
+		 *
+		 * @return {boolean|null}
+		 * Returns `null` if the current session has no permission at all to
+		 * load resources required by the view. Returns `false` if readonly
+		 * permissions are granted or `true` if at least one required ACL
+		 * group is granted with write permissions.
+		 */
+		hasViewPermission: function() {
+			if (!this.isObject(env.nodespec) || !env.nodespec.satisfied)
+			    return null;
+
+			return !env.nodespec.readonly;
+		},
+
+		/**
 		 * Deprecated wrapper around {@link LuCI.poll.remove Poll.remove()}.
 		 *
 		 * @deprecated
