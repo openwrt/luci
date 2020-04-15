@@ -2148,7 +2148,23 @@
 		 * methods are overwritten with `null`.
 		 */
 		addFooter: function() {
-			var footer = E([]);
+			var footer = E([]),
+			    vp = document.getElementById('view'),
+			    hasmap = false,
+			    readonly = true;
+
+			vp.querySelectorAll('.cbi-map').forEach(function(map) {
+				var m = DOM.findClassInstance(map);
+				if (m) {
+					hasmap = true;
+
+					if (!m.readonly)
+						readonly = false;
+				}
+			});
+
+			if (!hasmap)
+				readonly = !L.hasViewPermission();
 
 			var saveApplyBtn = this.handleSaveApply ? new L.ui.ComboButton('0', {
 				0: [ _('Save & Apply') ],
@@ -2158,7 +2174,8 @@
 					0: 'btn cbi-button cbi-button-apply important',
 					1: 'btn cbi-button cbi-button-negative important'
 				},
-				click: L.ui.createHandlerFn(this, 'handleSaveApply')
+				click: L.ui.createHandlerFn(this, 'handleSaveApply'),
+				disabled: readonly || null
 			}).render() : E([]);
 
 			if (this.handleSaveApply || this.handleSave || this.handleReset) {
@@ -2166,11 +2183,13 @@
 					saveApplyBtn, ' ',
 					this.handleSave ? E('button', {
 						'class': 'cbi-button cbi-button-save',
-						'click': L.ui.createHandlerFn(this, 'handleSave')
+						'click': L.ui.createHandlerFn(this, 'handleSave'),
+						'disabled': readonly || null
 					}, [ _('Save') ]) : '', ' ',
 					this.handleReset ? E('button', {
 						'class': 'cbi-button cbi-button-reset',
-						'click': L.ui.createHandlerFn(this, 'handleReset')
+						'click': L.ui.createHandlerFn(this, 'handleReset'),
+						'disabled': readonly || null
 					}, [ _('Reset') ]) : ''
 				]));
 			}
