@@ -2510,12 +2510,8 @@
 
 		/* DOM setup */
 		probeRPCBaseURL: function() {
-			if (rpcBaseURL == null) {
-				try {
-					rpcBaseURL = window.sessionStorage.getItem('rpcBaseURL');
-				}
-				catch (e) { }
-			}
+			if (rpcBaseURL == null)
+				rpcBaseURL = Session.getLocalData('rpcBaseURL');
 
 			if (rpcBaseURL == null) {
 				var rpcFallbackURL = this.url('admin/ubus');
@@ -2525,11 +2521,7 @@
 				}, function() {
 					return (rpcBaseURL = rpcFallbackURL);
 				}).then(function(url) {
-					try {
-						window.sessionStorage.setItem('rpcBaseURL', url);
-					}
-					catch (e) { }
-
+					Session.setLocalData('rpcBaseURL', url);
 					return url;
 				});
 			}
@@ -2538,17 +2530,8 @@
 		},
 
 		probeSystemFeatures: function() {
-			var sessionid = classes.rpc.getSessionID();
-
-			if (sysFeatures == null) {
-				try {
-					var data = JSON.parse(window.sessionStorage.getItem('sysFeatures'));
-
-					if (this.isObject(data) && this.isObject(data[sessionid]))
-						sysFeatures = data[sessionid];
-				}
-				catch (e) {}
-			}
+			if (sysFeatures == null)
+				sysFeatures = Session.getLocalData('features');
 
 			if (!this.isObject(sysFeatures)) {
 				sysFeatures = classes.rpc.declare({
@@ -2556,14 +2539,7 @@
 					method: 'getFeatures',
 					expect: { '': {} }
 				})().then(function(features) {
-					try {
-						var data = {};
-						    data[sessionid] = features;
-
-						window.sessionStorage.setItem('sysFeatures', JSON.stringify(data));
-					}
-					catch (e) {}
-
+					Session.setLocalData('features', features);
 					sysFeatures = features;
 
 					return features;
@@ -2574,17 +2550,8 @@
 		},
 
 		probePreloadClasses: function() {
-			var sessionid = classes.rpc.getSessionID();
-
-			if (preloadClasses == null) {
-				try {
-					var data = JSON.parse(window.sessionStorage.getItem('preloadClasses'));
-
-					if (this.isObject(data) && this.isObject(data[sessionid]))
-						preloadClasses = data[sessionid];
-				}
-				catch (e) {}
-			}
+			if (preloadClasses == null)
+				preloadClasses = Session.getLocalData('preload');
 
 			if (!Array.isArray(preloadClasses)) {
 				preloadClasses = this.resolveDefault(classes.rpc.declare({
@@ -2605,14 +2572,7 @@
 							classes.push('preload.%s'.format(m[1]));
 					}
 
-					try {
-						var data = {};
-						    data[sessionid] = classes;
-
-						window.sessionStorage.setItem('preloadClasses', JSON.stringify(data));
-					}
-					catch (e) {}
-
+					Session.setLocalData('preload', classes);
 					preloadClasses = classes;
 
 					return classes;
