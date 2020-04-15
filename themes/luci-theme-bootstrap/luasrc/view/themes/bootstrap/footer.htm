@@ -12,6 +12,9 @@
     <ul class="breadcrumb pull-right" id="modemenu" style="display:none"></ul>
    </footer>
   </div>
+  <% if luci.dispatcher.context.authsession then %>
+  <script type="text/javascript">L.require('menu-bootstrap')</script>
+  <% end %>
  </body>
 </html>
 
