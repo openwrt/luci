@@ -134,6 +134,35 @@ local function check_uci_depends(conf)
 	return true
 end
 
+local function check_acl_depends(require_groups, groups)
+	if type(require_groups) == "table" and #require_groups > 0 then
+		local writable = false
+
+		for _, group in ipairs(require_groups) do
+			local read = false
+			local write = false
+			if type(groups) == "table" and type(groups[group]) == "table" then
+				for _, perm in ipairs(groups[group]) do
+					if perm == "read" then
+						read = true
+					elseif perm == "write" then
+						write = true
+					end
+				end
+			end
+			if not read and not write then
+				return nil
+			elseif write then
+				writable = true
+			end
+		end
+
+		return writable
+	end
+
+	return true
+end
+
 local function check_depends(spec)
 	if type(spec.depends) ~= "table" then
 		return true
@@ -493,6 +522,7 @@ end
 
 local function session_retrieve(sid, allowed_users)
 	local sdat = util.ubus("session", "get", { ubus_rpc_session = sid })
+	local sacl = util.ubus("session", "access", { ubus_rpc_session = sid })
 
 	if type(sdat) == "table" and
 	   type(sdat.values) == "table" and
@@ -501,42 +531,38 @@ local function session_retrieve(sid, allowed_users)
 	    util.contains(allowed_users, sdat.values.username))
 	then
 		uci:set_session_id(sid)
-		return sid, sdat.values
+		return sid, sdat.values, type(sacl) == "table" and sacl or {}
 	end
 
-	return nil, nil
+	return nil, nil, nil
 end
 
-local function session_setup(user, pass, allowed_users)
-	if util.contains(allowed_users, user) then
-		local login = util.ubus("session", "login", {
-			username = user,
-			password = pass,
-			timeout  = tonumber(luci.config.sauth.sessiontime)
+local function session_setup(user, pass)
+	local login = util.ubus("session", "login", {
+		username = user,
+		password = pass,
+		timeout  = tonumber(luci.config.sauth.sessiontime)
+	})
+
+	local rp = context.requestpath
+		and table.concat(context.requestpath, "/") or ""
+
+	if type(login) == "table" and
+	   type(login.ubus_rpc_session) == "string"
+	then
+		util.ubus("session", "set", {
+			ubus_rpc_session = login.ubus_rpc_session,
+			values = { token = sys.uniqueid(16) }
 		})
 
-		local rp = context.requestpath
-			and table.concat(context.requestpath, "/") or ""
+		io.stderr:write("luci: accepted login on /%s for %s from %s\n"
+			%{ rp, user or "?", http.getenv("REMOTE_ADDR") or "?" })
 
-		if type(login) == "table" and
-		   type(login.ubus_rpc_session) == "string"
-		then
-			util.ubus("session", "set", {
-				ubus_rpc_session = login.ubus_rpc_session,
-				values = { token = sys.uniqueid(16) }
-			})
-
-			io.stderr:write("luci: accepted login on /%s for %s from %s\n"
-				%{ rp, user, http.getenv("REMOTE_ADDR") or "?" })
-
-			return session_retrieve(login.ubus_rpc_session)
-		end
-
-		io.stderr:write("luci: failed login on /%s for %s from %s\n"
-			%{ rp, user, http.getenv("REMOTE_ADDR") or "?" })
+		return session_retrieve(login.ubus_rpc_session)
 	end
 
-	return nil, nil
+	io.stderr:write("luci: failed login on /%s for %s from %s\n"
+		%{ rp, user or "?", http.getenv("REMOTE_ADDR") or "?" })
 end
 
 local function check_authentication(method)
@@ -635,7 +661,28 @@ local function merge_trees(node_a, node_b)
 	return node_a
 end
 
-function menu_json()
+local function apply_tree_acls(node, acl)
+	if type(node.children) == "table" then
+		for _, child in pairs(node.children) do
+			apply_tree_acls(child, acl)
+		end
+	end
+
+	local perm
+	if type(node.depends) == "table" then
+		perm = check_acl_depends(node.depends.acl, acl["access-group"])
+	else
+		perm = true
+	end
+
+	if perm == nil then
+		node.satisfied = false
+	elseif perm == false then
+		node.readonly = true
+	end
+end
+
+function menu_json(acl)
 	local tree = context.tree or createtree()
 	local lua_tree = tree_to_json(tree, {
 		action = {
@@ -645,7 +692,13 @@ function menu_json()
 	})
 
 	local json_tree = createtree_json()
-	return merge_trees(lua_tree, json_tree)
+	local menu_tree = merge_trees(lua_tree, json_tree)
+
+	if acl then
+		apply_tree_acls(menu_tree, acl)
+	end
+
+	return menu_tree
 end
 
 local function init_template_engine(ctx)
@@ -738,6 +791,8 @@ function dispatch(request)
 	local requested_path_node = {}
 	local requested_path_args = {}
 
+	local required_path_acls = {}
+
 	for i, s in ipairs(request) do
 		if type(page.children) ~= "table" or not page.children[s] then
 			page = nil
@@ -754,6 +809,21 @@ function dispatch(request)
 		cors = page.cors or cors
 		suid = page.setuser or suid
 		sgid = page.setgroup or sgid
+
+		if type(page.depends) == "table" and type(page.depends.acl) == "table" then
+			for _, group in ipairs(page.depends.acl) do
+				local found = false
+				for _, item in ipairs(required_path_acls) do
+					if item == group then
+						found = true
+						break
+					end
+				end
+				if not found then
+					required_path_acls[#required_path_acls + 1] = group
+				end
+			end
+		end
 
 		requested_path_full[i] = s
 		requested_path_node[i] = s
@@ -778,16 +848,16 @@ function dispatch(request)
 	ctx.requested = ctx.requested or page
 
 	if type(auth) == "table" and type(auth.methods) == "table" and #auth.methods > 0 then
-		local sid, sdat
+		local sid, sdat, sacl
 		for _, method in ipairs(auth.methods) do
-			sid, sdat = check_authentication(method)
+			sid, sdat, sacl = check_authentication(method)
 
-			if sid and sdat then
+			if sid and sdat and sacl then
 				break
 			end
 		end
 
-		if not (sid and sdat) and auth.login then
+		if not (sid and sdat and sacl) and auth.login then
 			local user = http.getenv("HTTP_AUTH_USER")
 			local pass = http.getenv("HTTP_AUTH_PASS")
 
@@ -796,7 +866,9 @@ function dispatch(request)
 				pass = http.formvalue("luci_password")
 			end
 
-			sid, sdat = session_setup(user, pass, { "root" })
+			if user and pass then
+				sid, sdat, sacl = session_setup(user, pass)
+			end
 
 			if not sid then
 				context.path = {}
@@ -815,7 +887,7 @@ function dispatch(request)
 			return
 		end
 
-		if not sid or not sdat then
+		if not sid or not sdat or not sacl then
 			http.status(403, "Forbidden")
 			http.header("X-LuCI-Login-Required", "yes")
 			return
@@ -824,6 +896,17 @@ function dispatch(request)
 		ctx.authsession = sid
 		ctx.authtoken = sdat.token
 		ctx.authuser = sdat.username
+		ctx.authacl = sacl
+	end
+
+	if #required_path_acls > 0 then
+		local perm = check_acl_depends(required_path_acls, ctx.authacl and ctx.authacl["access-group"])
+		if perm == nil then
+			http.status(403, "Forbidden")
+			return
+		end
+
+		page.readonly = not perm
 	end
 
 	local action = (page and type(page.action) == "table") and page.action or {}
