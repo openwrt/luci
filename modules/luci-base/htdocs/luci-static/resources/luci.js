@@ -1211,7 +1211,7 @@
 	 * To import the class in views, use `'require dom'`, to import it in
 	 * external JavaScript, use `L.require("dom").then(...)`.
 	 */
-	var DOM = Class.singleton(/* @lends LuCI.dom.prototype */ {
+	var DOM = Class.singleton(/** @lends LuCI.dom.prototype */ {
 		__name__: 'LuCI.dom',
 
 		/**
@@ -1927,7 +1927,7 @@
 	 * The `view` class forms the basis of views and provides a standard
 	 * set of methods to inherit from.
 	 */
-	var View = Class.extend(/* @lends LuCI.view.prototype */ {
+	var View = Class.extend(/** @lends LuCI.view.prototype */ {
 		__name__: 'LuCI.view',
 
 		__init__: function() {
