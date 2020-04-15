@@ -35,9 +35,6 @@
 		<% end -%>
 		<script src="<%=url('admin/translations', luci.i18n.context.lang)%><%# ?v=PKG_VERSION %>"></script>
 		<script src="<%=resource%>/cbi.js"></script>
-		<script src="<%=resource%>/xhr.js"></script>
-
-		<% include("themes/bootstrap/json-menu") %>
 	</head>
 
 	<body class="lang_<%=luci.i18n.context.lang%> <% if node then %><%= striptags( node.title ) %><%- end %>" data-page="<%= pcdata(table.concat(disp.context.requestpath, "-")) %>">
@@ -46,12 +43,7 @@
 				<div class="container">
 					<a class="brand" href="#"><%=boardinfo.hostname or "?"%></a>
 					<ul class="nav" id="topmenu" style="display:none"></ul>
-					<div id="indicators" class="pull-right">
-						<span id="xhr_poll_status" style="display:none" onclick="XHR.running() ? XHR.halt() : XHR.run()">
-							<span class="label success" id="xhr_poll_status_on"><%:Auto Refresh%> <%:on%></span>
-							<span class="label" id="xhr_poll_status_off" style="display:none"><%:Auto Refresh%> <%:off%></span>
-						</span>
-					</div>
+					<div id="indicators" class="pull-right"></div>
 				</div>
 			</div>
 		</header>
