@@ -356,7 +356,9 @@ function initNetworkState(refresh) {
 			L.resolveDefault(callLuciWirelessDevices(), {}),
 			L.resolveDefault(callLuciHostHints(), {}),
 			getProtocolHandlers(),
-			L.resolveDefault(uci.load(['network', 'wireless', 'luci']))
+			L.resolveDefault(uci.load('network')),
+			L.resolveDefault(uci.load('wireless')),
+			L.resolveDefault(uci.load('luci'))
 		]).then(function(data) {
 			var netifd_ifaces = data[0],
 			    board_json    = data[1],
