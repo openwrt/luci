@@ -2,6 +2,7 @@
 'require validation';
 'require baseclass';
 'require request';
+'require session';
 'require poll';
 'require dom';
 'require rpc';
@@ -3463,16 +3464,14 @@ var UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 
 		/** @private */
 		getActiveTabState: function() {
-			var page = document.body.getAttribute('data-page');
+			var page = document.body.getAttribute('data-page'),
+			    state = session.getLocalData('tab');
 
-			try {
-				var val = JSON.parse(window.sessionStorage.getItem('tab'));
-				if (val.page === page && L.isObject(val.paths))
-					return val;
-			}
-			catch(e) {}
+			if (L.isObject(state) && state.page === page && L.isObject(state.paths))
+				return state;
 
-			window.sessionStorage.removeItem('tab');
+			session.setLocalData('tab', null);
+
 			return { page: page, paths: {} };
 		},
 
@@ -3484,17 +3483,12 @@ var UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 
 		/** @private */
 		setActiveTabId: function(pane, tabIndex) {
-			var path = this.getPathForPane(pane);
+			var path = this.getPathForPane(pane),
+			    state = this.getActiveTabState();
 
-			try {
-				var state = this.getActiveTabState();
-				    state.paths[path] = tabIndex;
+			state.paths[path] = tabIndex;
 
-			    window.sessionStorage.setItem('tab', JSON.stringify(state));
-			}
-			catch (e) { return false; }
-
-			return true;
+			return session.setLocalData('tab', state);
 		},
 
 		/** @private */
