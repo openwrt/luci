@@ -97,6 +97,12 @@ config statistics 'collectd_entropy'
 config statistics 'collectd_exec'
 	option enable '0'
 
+#example for sqm_collect plugin
+#config collectd_exec_input
+#        option cmduser 'nobody'
+#        option cmdgroup 'nogroup'
+#        option cmdline '/usr/libexec/collectd/sqm_collectd.sh eth0 ifb4eth0'
+
 config statistics 'collectd_interface'
 	option enable '1'
 	option Interfaces 'br-lan'
