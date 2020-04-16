@@ -1718,7 +1718,7 @@
 		 */
 		bindClassInstance: function(node, inst) {
 			if (!(inst instanceof Class))
-				L.error('TypeError', 'Argument must be a class instance');
+				LuCI.prototype.error('TypeError', 'Argument must be a class instance');
 
 			return this.data(node, '_class', inst);
 		},
@@ -1938,13 +1938,13 @@
 			DOM.content(vp, E('div', { 'class': 'spinning' }, _('Loading view…')));
 
 			return Promise.resolve(this.load())
-				.then(L.bind(this.render, this))
-				.then(L.bind(function(nodes) {
+				.then(LuCI.prototype.bind(this.render, this))
+				.then(LuCI.prototype.bind(function(nodes) {
 					var vp = document.getElementById('view');
 
 					DOM.content(vp, nodes);
 					DOM.append(vp, this.addFooter());
-				}, this)).catch(L.error);
+				}, this)).catch(LuCI.prototype.error);
 		},
 
 		/**
@@ -2078,7 +2078,7 @@
 		 */
 		handleSaveApply: function(ev, mode) {
 			return this.handleSave(ev).then(function() {
-				L.ui.changes.apply(mode == '0');
+				classes.ui.changes.apply(mode == '0');
 			});
 		},
 
@@ -2164,9 +2164,9 @@
 			});
 
 			if (!hasmap)
-				readonly = !L.hasViewPermission();
+				readonly = !LuCI.prototype.hasViewPermission();
 
-			var saveApplyBtn = this.handleSaveApply ? new L.ui.ComboButton('0', {
+			var saveApplyBtn = this.handleSaveApply ? new classes.ui.ComboButton('0', {
 				0: [ _('Save & Apply') ],
 				1: [ _('Apply unchecked') ]
 			}, {
@@ -2174,7 +2174,7 @@
 					0: 'btn cbi-button cbi-button-apply important',
 					1: 'btn cbi-button cbi-button-negative important'
 				},
-				click: L.ui.createHandlerFn(this, 'handleSaveApply'),
+				click: classes.ui.createHandlerFn(this, 'handleSaveApply'),
 				disabled: readonly || null
 			}).render() : E([]);
 
@@ -2183,12 +2183,12 @@
 					saveApplyBtn, ' ',
 					this.handleSave ? E('button', {
 						'class': 'cbi-button cbi-button-save',
-						'click': L.ui.createHandlerFn(this, 'handleSave'),
+						'click': classes.ui.createHandlerFn(this, 'handleSave'),
 						'disabled': readonly || null
 					}, [ _('Save') ]) : '', ' ',
 					this.handleReset ? E('button', {
 						'class': 'cbi-button cbi-button-reset',
-						'click': L.ui.createHandlerFn(this, 'handleReset'),
+						'click': classes.ui.createHandlerFn(this, 'handleReset'),
 						'disabled': readonly || null
 					}, [ _('Reset') ]) : ''
 				]));
@@ -2345,12 +2345,13 @@
 		 */
 		error: function(type, fmt /*, ...*/) {
 			try {
-				L.raise.apply(L, Array.prototype.slice.call(arguments));
+				LuCI.prototype.raise.apply(LuCI.prototype,
+					Array.prototype.slice.call(arguments));
 			}
 			catch (e) {
 				if (!e.reported) {
-					if (L.ui)
-						L.ui.addNotification(e.name || _('Runtime error'),
+					if (classes.ui)
+						classes.ui.addNotification(e.name || _('Runtime error'),
 							E('pre', {}, e.message), 'danger');
 					else
 						DOM.content(document.querySelector('#maincontent'),
@@ -2429,7 +2430,7 @@
 			if (classes[name] != null) {
 				/* Circular dependency */
 				if (from.indexOf(name) != -1)
-					L.raise('DependencyError',
+					LuCI.prototype.raise('DependencyError',
 						'Circular dependency: class "%s" depends on "%s"',
 						name, from.join('" which depends on "'));
 
@@ -2441,7 +2442,7 @@
 
 			var compileClass = function(res) {
 				if (!res.ok)
-					L.raise('NetworkError',
+					LuCI.prototype.raise('NetworkError',
 						'HTTP error %d while loading class file "%s"', res.status, url);
 
 				var source = res.text(),
@@ -2466,7 +2467,7 @@
 
 						if (m) {
 							var dep = m[1], as = m[2] || dep.replace(/[^a-zA-Z0-9_]/g, '_');
-							depends.push(L.require(dep, from));
+							depends.push(LuCI.prototype.require(dep, from));
 							args += ', ' + as;
 						}
 						else if (!strictmatch.exec(s)) {
@@ -2492,7 +2493,7 @@
 								.format(args, source, res.url));
 					}
 					catch (error) {
-						L.raise('SyntaxError', '%s\n  in %s:%s',
+						LuCI.prototype.raise('SyntaxError', '%s\n  in %s:%s',
 							error.message, res.url, error.lineNumber || '?');
 					}
 
@@ -2500,7 +2501,7 @@
 					_class = _factory.apply(_factory, [window, document, L].concat(instances));
 
 					if (!Class.isSubclass(_class))
-					    L.error('TypeError', '"%s" factory yields invalid constructor', name);
+					    LuCI.prototype.error('TypeError', '"%s" factory yields invalid constructor', name);
 
 					if (_class.displayName == 'AnonymousClass')
 						_class.displayName = toCamelCase(name + 'Class');
@@ -2639,7 +2640,7 @@
 		notifySessionExpiry: function() {
 			Poll.stop();
 
-			L.ui.showModal(_('Session expired'), [
+			classes.ui.showModal(_('Session expired'), [
 				E('div', { class: 'alert-message warning' },
 					_('A new login is required since the authentication session expired.')),
 				E('div', { class: 'right' },
@@ -2652,7 +2653,7 @@
 					}, _('To login…')))
 			]);
 
-			L.raise('SessionError', 'Login session is expired');
+			LuCI.prototype.raise('SessionError', 'Login session is expired');
 		},
 
 		/* private */
@@ -2666,10 +2667,13 @@
 			rpcClass.setBaseURL(rpcBaseURL);
 
 			rpcClass.addInterceptor(function(msg, req) {
-				if (!L.isObject(msg) || !L.isObject(msg.error) || msg.error.code != -32002)
+				if (!LuCI.prototype.isObject(msg) ||
+				    !LuCI.prototype.isObject(msg.error) ||
+				    msg.error.code != -32002)
 					return;
 
-				if (!L.isObject(req) || (req.object == 'session' && req.method == 'access'))
+				if (!LuCI.prototype.isObject(req) ||
+				    (req.object == 'session' && req.method == 'access'))
 					return;
 
 				return rpcClass.declare({
@@ -2677,7 +2681,7 @@
 					'method': 'access',
 					'params': [ 'scope', 'object', 'function' ],
 					'expect': { access: true }
-				})('uci', 'luci', 'read').catch(L.notifySessionExpiry);
+				})('uci', 'luci', 'read').catch(LuCI.prototype.notifySessionExpiry);
 			});
 
 			Request.addInterceptor(function(res) {
@@ -2689,7 +2693,7 @@
 				if (!isDenied)
 					return;
 
-				L.notifySessionExpiry();
+				LuCI.prototype.notifySessionExpiry();
 			});
 
 			document.addEventListener('poll-start', function(ev) {
@@ -2705,7 +2709,7 @@
 			return Promise.all([
 				this.probeSystemFeatures(),
 				this.probePreloadClasses()
-			]).finally(L.bind(function() {
+			]).finally(LuCI.prototype.bind(function() {
 				var tasks = [];
 
 				if (Array.isArray(preloadClasses))
@@ -3298,7 +3302,7 @@
 		 */
 		get: function(url, data, callback, timeout) {
 			this.active = true;
-			L.get(url, data, this._response.bind(this, callback), timeout);
+			LuCI.prototype.get(url, data, this._response.bind(this, callback), timeout);
 		},
 
 		/**
@@ -3325,7 +3329,7 @@
 		 */
 		post: function(url, data, callback, timeout) {
 			this.active = true;
-			L.post(url, data, this._response.bind(this, callback), timeout);
+			LuCI.prototype.post(url, data, this._response.bind(this, callback), timeout);
 		},
 
 		/**
@@ -3379,12 +3383,12 @@
 		 * Throws an `InternalError` with the message `Not implemented`
 		 * when invoked.
 		 */
-		send_form: function() { L.error('InternalError', 'Not implemented') },
+		send_form: function() { LuCI.prototype.error('InternalError', 'Not implemented') },
 	});
 
-	XHR.get = function() { return window.L.get.apply(window.L, arguments) };
-	XHR.post = function() { return window.L.post.apply(window.L, arguments) };
-	XHR.poll = function() { return window.L.poll.apply(window.L, arguments) };
+	XHR.get = function() { return LuCI.prototype.get.apply(LuCI.prototype, arguments) };
+	XHR.post = function() { return LuCI.prototype.post.apply(LuCI.prototype, arguments) };
+	XHR.poll = function() { return LuCI.prototype.poll.apply(LuCI.prototype, arguments) };
 	XHR.stop = Request.poll.remove.bind(Request.poll);
 	XHR.halt = Request.poll.stop.bind(Request.poll);
 	XHR.run = Request.poll.start.bind(Request.poll);
