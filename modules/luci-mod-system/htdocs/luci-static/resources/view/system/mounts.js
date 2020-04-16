@@ -212,7 +212,8 @@ return view.extend({
 					'%.2f%% (%1024.2mB)'.format(100 / this.mounts[i].size * used, used),
 					umount ? E('button', {
 						'class': 'btn cbi-button-remove',
-						'click': ui.createHandlerFn(view, 'handleUmount', m, this.mounts[i].mount)
+						'click': ui.createHandlerFn(view, 'handleUmount', m, this.mounts[i].mount),
+						'disabled': this.map.readonly || null
 					}, [ _('Unmount') ]) : '-'
 				]);
 			}
