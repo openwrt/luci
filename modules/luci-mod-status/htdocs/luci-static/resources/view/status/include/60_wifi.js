@@ -2,6 +2,14 @@
 'require baseclass';
 'require dom';
 'require network';
+'require rpc';
+
+var callSessionAccess = rpc.declare({
+	object: 'session',
+	method: 'access',
+	params: [ 'scope', 'object', 'function' ],
+	expect: { 'access': false }
+});
 
 function renderbox(radio, networks) {
 	var chan = null,
@@ -91,7 +99,8 @@ return baseclass.extend({
 		return Promise.all([
 			network.getWifiDevices(),
 			network.getWifiNetworks(),
-			network.getHostHints()
+			network.getHostHints(),
+			callSessionAccess('access-group', 'luci-mod-status-index-wifi', 'write')
 		]).then(function(radios_networks_hints) {
 			var tasks = [];
 
@@ -110,7 +119,8 @@ return baseclass.extend({
 		var seen = {},
 		    radios = data[0],
 		    networks = data[1],
-		    hosthints = data[2];
+		    hosthints = data[2],
+		    hasWritePermission = data[3];
 
 		var table = E('div', { 'class': 'network-status-table' });
 
@@ -209,7 +219,7 @@ return baseclass.extend({
 					])
 				];
 
-				if (networks[i].isClientDisconnectSupported()) {
+				if (networks[i].isClientDisconnectSupported() && hasWritePermission) {
 					if (assoclist.firstElementChild.childNodes.length < 6)
 						assoclist.firstElementChild.appendChild(E('div', { 'class': 'th cbi-section-actions' }));
 
