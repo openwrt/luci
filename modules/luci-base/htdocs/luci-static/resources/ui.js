@@ -2126,7 +2126,8 @@ var UIDynamicList = UIElement.extend(/** @lends LuCI.ui.DynamicList.prototype */
 	render: function() {
 		var dl = E('div', {
 			'id': this.options.id,
-			'class': 'cbi-dynlist'
+			'class': 'cbi-dynlist',
+			'disabled': this.options.disabled ? '' : null
 		}, E('div', { 'class': 'add-item' }));
 
 		if (this.choices) {
