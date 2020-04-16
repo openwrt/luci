@@ -2997,6 +2997,14 @@ var UIMenu = baseclass.singleton(/** @lends LuCI.ui.menu.prototype */ {
 	},
 
 	/**
+	 * Flush the internal menu cache to force loading a new structure on the
+	 * next page load.
+	 */
+	flushCache: function() {
+		session.setLocalData('menu', null);
+	},
+
+	/**
 	 * @param {LuCI.ui.menu.MenuNode} [node]
 	 * The menu node to retrieve the children for. Defaults to the menu's
 	 * internal root node if omitted.
