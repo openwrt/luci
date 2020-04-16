@@ -44,6 +44,8 @@ return view.extend({
 		var m, s, o;
 
 		m = new form.JSONMap(formData, _('Router Password'), _('Changes the administrator password for accessing the device'));
+		m.readonly = !L.hasViewPermission();
+
 		s = m.section(form.NamedSection, 'password', 'password');
 
 		o = s.option(form.Value, 'pw1', _('Password'));
