@@ -10,6 +10,8 @@
 'require firewall';
 'require tools.widgets as widgets';
 
+var isReadonlyView = !L.hasViewPermission() || null;
+
 function count_changes(section_id) {
 	var changes = ui.changes.changes, n = 0;
 
@@ -281,8 +283,8 @@ return view.extend({
 				]);
 			}
 
-			btn1.disabled = btn1.classList.contains('spinning') || btn2.classList.contains('spinning') || dynamic;
-			btn2.disabled = btn1.classList.contains('spinning') || btn2.classList.contains('spinning') || dynamic || disabled;
+			btn1.disabled = isReadonlyView || btn1.classList.contains('spinning') || btn2.classList.contains('spinning') || dynamic;
+			btn2.disabled = isReadonlyView || btn1.classList.contains('spinning') || btn2.classList.contains('spinning') || dynamic || disabled;
 		}
 
 		return Promise.all([ resolveZone, network.flushCache() ]);
