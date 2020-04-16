@@ -153,6 +153,12 @@ body {
 	padding: 1em;
 }
 
+#mainmenu:empty {
+	max-width: 0;
+	padding: 1em 0;
+	transition: all .2s ease-in-out;
+}
+
 #mainmenu > div {
 	position: sticky;
 	top: 1em;
@@ -976,6 +982,10 @@ button[disabled], button.disabled, .btn[disabled], .btn.disabled {
 	opacity: .6;
 }
 
+.cbi-checkbox input[type="checkbox"][disabled] {
+	pointer-events: none;
+}
+
 input:not([type]),
 input[type="text"],
 input[type="password"],
@@ -1002,7 +1012,8 @@ select:focus,
 input[disabled]:not([type]),
 input[disabled][type="text"],
 input[disabled][type="password"],
-select[disabled] {
+select[disabled],
+.cbi-dynlist[disabled] {
 	opacity: .6;
 	pointer-events: none;
 }
@@ -1147,6 +1158,10 @@ textarea {
 	color: var(--secondary-bright-color);
 	cursor: pointer;
 	pointer-events: all;
+}
+
+.cbi-dynlist[disabled] > .item::after {
+	pointer-events: none;
 }
 
 .cbi-dynlist > .item:hover {
