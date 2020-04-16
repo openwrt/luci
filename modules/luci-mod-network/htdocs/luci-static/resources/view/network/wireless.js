@@ -11,6 +11,8 @@
 'require firewall';
 'require tools.widgets as widgets';
 
+var isReadonlyView = !L.hasViewPermission();
+
 function count_changes(section_id) {
 	var changes = ui.changes.changes, n = 0;
 
@@ -441,7 +443,8 @@ var CBIWifiFrequencyValue = form.Value.extend({
 				E('select', {
 					'class': 'mode',
 					'style': 'width:auto',
-					'change': L.bind(this.toggleWifiMode, this, elem)
+					'change': L.bind(this.toggleWifiMode, this, elem),
+					'disabled': (this.disabled != null) ? this.disabled : this.map.readonly
 				})
 			]),
 			E('label', { 'style': 'float:left; margin-right:3px' }, [
@@ -449,21 +452,24 @@ var CBIWifiFrequencyValue = form.Value.extend({
 				E('select', {
 					'class': 'band',
 					'style': 'width:auto',
-					'change': L.bind(this.toggleWifiBand, this, elem)
+					'change': L.bind(this.toggleWifiBand, this, elem),
+					'disabled': (this.disabled != null) ? this.disabled : this.map.readonly
 				})
 			]),
 			E('label', { 'style': 'float:left; margin-right:3px' }, [
 				_('Channel'), E('br'),
 				E('select', {
 					'class': 'channel',
-					'style': 'width:auto'
+					'style': 'width:auto',
+					'disabled': (this.disabled != null) ? this.disabled : this.map.readonly
 				})
 			]),
 			E('label', { 'style': 'float:left; margin-right:3px' }, [
 				_('Width'), E('br'),
 				E('select', {
 					'class': 'htmode',
-					'style': 'width:auto'
+					'style': 'width:auto',
+					'disabled': (this.disabled != null) ? this.disabled : this.map.readonly
 				})
 			]),
 			E('br', { 'style': 'clear:left' })
@@ -592,9 +598,9 @@ return view.extend({
 			if (stat.hasAttribute('restart'))
 				dom.content(stat, E('em', _('Device is restarting…')));
 
-			btns[0].disabled = busy;
-			btns[1].disabled = busy;
-			btns[2].disabled = busy;
+			btns[0].disabled = isReadonlyView || busy;
+			btns[1].disabled = (isReadonlyView && radioDev) || busy;
+			btns[2].disabled = isReadonlyView || busy;
 		}
 
 		var table = document.querySelector('#wifi_assoclist_table'),
@@ -654,7 +660,8 @@ return view.extend({
 						ev.currentTarget.blur();
 
 						net.disconnectClient(mac, true, 5, 60000);
-					}, this, bss.network, bss.mac)
+					}, this, bss.network, bss.mac),
+					'disabled': isReadonlyView || null
 				}, [ _('Disconnect') ]));
 			}
 			else {
