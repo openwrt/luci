@@ -6,6 +6,8 @@
 'require fs';
 'require ui';
 
+var isReadonlyView = !L.hasViewPermission();
+
 var callSystemValidateFirmwareImage = rpc.declare({
 	object: 'system',
 	method: 'validate_firmware_image',
@@ -353,6 +355,7 @@ return view.extend({
 
 		m = new form.JSONMap(mapdata, _('Flash operations'));
 		m.tabbed = true;
+		m.readonly = isReadonlyView;
 
 		s = m.section(form.NamedSection, 'actions', _('Actions'));
 
@@ -422,7 +425,8 @@ return view.extend({
 					node.appendChild(E('div', { 'class': 'cbi-page-actions' }, [
 						E('button', {
 							'class': 'cbi-button cbi-button-save',
-							'click': ui.createHandlerFn(view, 'handleBackupSave', this.map)
+							'click': ui.createHandlerFn(view, 'handleBackupSave', this.map),
+							'disabled': isReadonlyView
 						}, [ _('Save') ])
 					]));
 
