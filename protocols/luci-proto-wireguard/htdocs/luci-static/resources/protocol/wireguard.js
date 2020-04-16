@@ -124,7 +124,14 @@ return network.registerProtocol('wireguard', {
 
 		o = ss.option(form.DynamicList, 'allowed_ips', _('Allowed IPs'), _("Required. IP addresses and prefixes that this peer is allowed to use inside the tunnel. Usually the peer's tunnel IP addresses and the networks the peer routes through the tunnel."));
 		o.datatype = 'ipaddr';
-		o.rmempty = false;
+		o.validate = function(section, value) {
+			var opt = this.map.lookupOption('allowed_ips', section);
+			var ips = opt[0].formvalue(section);
+			if (ips.length == 0) {
+				return _('Value must not be empty');
+			}
+			return true;
+		};
 
 		o = ss.option(form.Flag, 'route_allowed_ips', _('Route Allowed IPs'), _('Optional. Create routes for Allowed IPs for this peer.'));
 
