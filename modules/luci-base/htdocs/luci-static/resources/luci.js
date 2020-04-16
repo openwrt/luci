@@ -12,6 +12,8 @@
 (function(window, document, undefined) {
 	'use strict';
 
+	var env = {};
+
 	/* Object.assign polyfill for IE */
 	if (typeof Object.assign !== 'function') {
 		Object.defineProperty(Object, 'assign', {
@@ -1069,7 +1071,7 @@
 		 */
 		add: function(fn, interval) {
 			if (interval == null || interval <= 0)
-				interval = window.L ? window.L.env.pollinterval : null;
+				interval = env.pollinterval || null;
 
 			if (isNaN(interval) || typeof(fn) != 'function')
 				throw new TypeError('Invalid argument to LuCI.poll.add()');
@@ -2101,24 +2103,24 @@
 
 	var LuCI = Class.extend(/** @lends LuCI.prototype */ {
 		__name__: 'LuCI',
-		__init__: function(env) {
+		__init__: function(setenv) {
 
 			document.querySelectorAll('script[src*="/luci.js"]').forEach(function(s) {
-				if (env.base_url == null || env.base_url == '') {
+				if (setenv.base_url == null || setenv.base_url == '') {
 					var m = (s.getAttribute('src') || '').match(/^(.*)\/luci\.js(?:\?v=([^?]+))?$/);
 					if (m) {
-						env.base_url = m[1];
-						env.resource_version = m[2];
+						setenv.base_url = m[1];
+						setenv.resource_version = m[2];
 					}
 				}
 			});
 
-			if (env.base_url == null)
+			if (setenv.base_url == null)
 				this.error('InternalError', 'Cannot find url of luci.js');
 
-			env.cgi_base = env.scriptname.replace(/\/[^\/]+$/, '');
+			setenv.cgi_base = setenv.scriptname.replace(/\/[^\/]+$/, '');
 
-			Object.assign(this.env, env);
+			Object.assign(env, setenv);
 
 			var domReady = new Promise(function(resolveFn, rejectFn) {
 				document.addEventListener('DOMContentLoaded', resolveFn);
@@ -2319,7 +2321,7 @@
 				return Promise.resolve(classes[name]);
 			}
 
-			url = '%s/%s.js%s'.format(L.env.base_url, name.replace(/\./g, '/'), (L.env.resource_version ? '?v=' + L.env.resource_version : ''));
+			url = '%s/%s.js%s'.format(env.base_url, name.replace(/\./g, '/'), (env.resource_version ? '?v=' + env.resource_version : ''));
 			from = [ name ].concat(from);
 
 			var compileClass = function(res) {
@@ -2422,8 +2424,8 @@
 			if (rpcBaseURL == null) {
 				var rpcFallbackURL = this.url('admin/ubus');
 
-				rpcBaseURL = Request.get(this.env.ubuspath).then(function(res) {
-					return (rpcBaseURL = (res.status == 400) ? L.env.ubuspath : rpcFallbackURL);
+				rpcBaseURL = Request.get(env.ubuspath).then(function(res) {
+					return (rpcBaseURL = (res.status == 400) ? env.ubuspath : rpcFallbackURL);
 				}, function() {
 					return (rpcBaseURL = rpcFallbackURL);
 				}).then(function(url) {
@@ -2653,7 +2655,7 @@
 		 * @instance
 		 * @memberof LuCI
 		 */
-		env: {},
+		env: env,
 
 		/**
 		 * Construct an absolute filesystem path relative to the server
@@ -2669,7 +2671,7 @@
 		 * Return the joined path.
 		 */
 		fspath: function(/* ... */) {
-			var path = this.env.documentroot;
+			var path = env.documentroot;
 
 			for (var i = 0; i < arguments.length; i++)
 				path += '/' + arguments[i];
@@ -2738,7 +2740,7 @@
 		 * Returns the resulting URL path.
 		 */
 		url: function() {
-			return this.path(this.env.scriptname, arguments);
+			return this.path(env.scriptname, arguments);
 		},
 
 		/**
@@ -2760,7 +2762,7 @@
 		 * Returns the resulting URL path.
 		 */
 		resource: function() {
-			return this.path(this.env.resource, arguments);
+			return this.path(env.resource, arguments);
 		},
 
 		/**
@@ -2782,7 +2784,7 @@
 		 * Returns the resulting URL path.
 		 */
 		media: function() {
-			return this.path(this.env.media, arguments);
+			return this.path(env.media, arguments);
 		},
 
 		/**
@@ -2795,7 +2797,7 @@
 		 * Returns the URL path to the current view.
 		 */
 		location: function() {
-			return this.path(this.env.scriptname, this.env.requestpath);
+			return this.path(env.scriptname, env.requestpath);
 		},
 
 
@@ -3039,9 +3041,9 @@
 		 */
 		poll: function(interval, url, args, cb, post) {
 			if (interval !== null && interval <= 0)
-				interval = this.env.pollinterval;
+				interval = env.pollinterval;
 
-			var data = post ? { token: this.env.token } : null,
+			var data = post ? { token: env.token } : null,
 			    method = post ? 'POST' : 'GET';
 
 			if (!/^(?:\/|\S+:\/\/)/.test(url))
