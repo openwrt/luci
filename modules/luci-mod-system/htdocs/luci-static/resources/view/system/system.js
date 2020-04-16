@@ -62,14 +62,16 @@ CBILocalTime = form.DummyValue.extend({
 					'class': 'cbi-button cbi-button-apply',
 					'click': ui.createHandlerFn(this, function() {
 						return callSetLocaltime(Math.floor(Date.now() / 1000));
-					})
+					}),
+					'disabled': (this.readonly != null) ? this.readonly : this.map.readonly
 				}, _('Sync with browser')),
 				' ',
 				this.ntpd_support ? E('button', {
 					'class': 'cbi-button cbi-button-apply',
 					'click': ui.createHandlerFn(this, function() {
 						return callInitAction('sysntpd', 'restart');
-					})
+					}),
+					'disabled': (this.readonly != null) ? this.readonly : this.map.readonly
 				}, _('Sync with NTP-Server')) : ''
 			])
 		]);
