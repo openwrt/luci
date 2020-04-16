@@ -195,7 +195,6 @@ document.addEventListener('luci-loaded', function(ev) {
 	$(".slide > a").removeAttr("href");
 
 	if (mainNodeName != undefined) {
-		console.log(mainNodeName);
 		switch (mainNodeName) {
 			case "node-status-system_log":
 			case "node-status-kernel_log":
