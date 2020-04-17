@@ -1,4 +1,6 @@
 'use strict';
+'require view';
+'require poll';
 'require fs';
 'require ui';
 'require uci';
@@ -98,7 +100,7 @@ async function handleAction(ev) {
 		}
 	}
 
-	L.Poll.start();
+	poll.start();
 	fs.exec_direct('/etc/init.d/adblock', [ev])
 	var running = 1;
 	while (running === 1) {
@@ -109,10 +111,10 @@ async function handleAction(ev) {
 			}
 		})
 	}
-	L.Poll.stop();
+	poll.stop();
 }
 
-return L.view.extend({
+return view.extend({
 	load: function() {
 		return Promise.all([
 			L.resolveDefault(fs.exec_direct('/etc/init.d/adblock', ['list']), {}),
@@ -129,7 +131,7 @@ return L.view.extend({
 		/*
 			poll runtime information
 		*/
-		pollData: L.Poll.add(function() {
+		pollData: poll.add(function() {
 			return L.resolveDefault(fs.read_direct('/tmp/adb_runtime.json'), 'null').then(function(res) {
 				var info = JSON.parse(res);
 				var status = document.getElementById('status');
@@ -142,7 +144,7 @@ return L.view.extend({
 					} else {
 						if (status.classList.contains("spinning")) {
 							status.classList.remove("spinning");
-							L.Poll.stop();
+							poll.stop();
 						}
 					}
 					if (status.textContent.substr(0,6) === 'paused' && document.getElementById('btn_suspend')) {
