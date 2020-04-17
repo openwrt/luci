@@ -3291,12 +3291,23 @@ var UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 		}
 
 		var handlerFn = (typeof(handler) == 'function') ? handler : null,
-		    indicatorElem = indicatorDiv.querySelector('span[data-indicator="%s"]'.format(id)) ||
-			indicatorDiv.appendChild(E('span', {
+		    indicatorElem = indicatorDiv.querySelector('span[data-indicator="%s"]'.format(id));
+
+		if (indicatorElem == null) {
+			var beforeElem = null;
+
+			for (beforeElem = indicatorDiv.firstElementChild;
+			     beforeElem != null;
+			     beforeElem = beforeElem.nextElementSibling)
+				if (beforeElem.getAttribute('data-indicator') > id)
+					break;
+
+			indicatorElem = indicatorDiv.insertBefore(E('span', {
 				'data-indicator': id,
 				'data-clickable': handlerFn ? true : null,
 				'click': handlerFn
-			}, ['']));
+			}, ['']), beforeElem);
+		}
 
 		if (label == indicatorElem.firstChild.data && style == indicatorElem.getAttribute('data-style'))
 			return false;
