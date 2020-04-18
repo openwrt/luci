@@ -2944,6 +2944,27 @@ var UIFileUpload = UIElement.extend(/** @lends LuCI.ui.FileUpload.prototype */ {
 	}
 });
 
+
+function scrubMenu(node) {
+	var hasSatisfiedChild = false;
+
+	if (L.isObject(node.children)) {
+		for (var k in node.children) {
+			var child = scrubMenu(node.children[k]);
+
+			if (child.title)
+				hasSatisfiedChild = hasSatisfiedChild || child.satisfied;
+		}
+	}
+
+	if (L.isObject(node.action) &&
+	    node.action.type == 'firstchild' &&
+	    hasSatisfiedChild == false)
+		node.satisfied = false;
+
+	return node;
+};
+
 /**
  * Handle menu.
  *
@@ -2979,7 +3000,7 @@ var UIMenu = baseclass.singleton(/** @lends LuCI.ui.menu.prototype */ {
 
 		if (!L.isObject(this.menu)) {
 			this.menu = request.get(L.url('admin/menu')).then(L.bind(function(menu) {
-				this.menu = menu.json();
+				this.menu = scrubMenu(menu.json());
 				session.setLocalData('menu', this.menu);
 
 				return this.menu;
