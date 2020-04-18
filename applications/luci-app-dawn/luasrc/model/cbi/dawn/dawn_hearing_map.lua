@@ -1,4 +1,4 @@
-m = Map("Hearing Map", translate("Hearing Map"))
+m = Map("dawn", "Hearing Map", translate("Hearing Map"))
 m.pageaction = false
 
 s = m:section(NamedSection, "__hearingmap__")

@@ -1,4 +1,4 @@
-m = Map("Network Overview", translate("Network Overview"))
+m = Map("dawn", "Network Overview", translate("Network Overview"))
 m.pageaction = false
 
 s = m:section(NamedSection, "__networkoverview__")
