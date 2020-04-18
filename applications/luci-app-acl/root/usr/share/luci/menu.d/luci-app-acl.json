@@ -1,0 +1,14 @@
+{
+	"admin/system/acl": {
+		"title": "ACL Settings",
+		"order": 10,
+		"action": {
+			"type": "view",
+			"path": "system/acl"
+		},
+		"depends": {
+			"acl": [ "luci-app-acl" ],
+			"uci": { "rpcd": true }
+		}
+	}
+}
