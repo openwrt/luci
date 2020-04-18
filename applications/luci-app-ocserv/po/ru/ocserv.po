@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2020-04-17 11:38+0000\n"
-"Last-Translator: anonymous <noreply@weblate.org>\n"
+"PO-Revision-Date: 2020-04-17 16:50+0000\n"
+"Last-Translator: sergio <sergio+it@outerface.net>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsocserv/ru/>\n"
 "Language: ru\n"
@@ -98,16 +98,16 @@ msgstr ""
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:16
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/user-config.lua:16
 msgid "Enable server"
-msgstr ""
+msgstr "Включить сервер"
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:75
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/user-config.lua:65
 msgid "Enable support for CISCO AnyConnect clients"
-msgstr ""
+msgstr "Включить поддержку клиентов CISCO AnyConnect"
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/user-config.lua:44
 msgid "Firewall Zone"
-msgstr ""
+msgstr "Зона брандмауэра"
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:12
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/user-config.lua:12
@@ -122,11 +122,11 @@ msgstr "Группа"
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/users.lua:65
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/users.lua:68
 msgid "IP"
-msgstr ""
+msgstr "IP"
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:138
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:149
@@ -134,7 +134,7 @@ msgstr ""
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/user-config.lua:128
 #: applications/luci-app-ocserv/luasrc/view/ocserv_status.htm:53
 msgid "IP Address"
-msgstr ""
+msgstr "IP адрес"
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:58
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/user-config.lua:52
@@ -144,7 +144,7 @@ msgstr "Макс. кол-во обслуживаемых клиентов"
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:59
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/user-config.lua:53
 msgid "Max same clients"
-msgstr ""
+msgstr "Максимальное количество одинаковых клиентов"
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/users.lua:22
 msgid "Name"
@@ -153,14 +153,14 @@ msgstr "Имя"
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:151
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/user-config.lua:131
 msgid "Netmask (or IPv6-prefix)"
-msgstr ""
+msgstr "Маска (или IPv6-префикс)"
 
 #: applications/luci-app-ocserv/luasrc/controller/ocserv.lua:14
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:7
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/user-config.lua:7
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/users.lua:7
 msgid "OpenConnect VPN"
-msgstr ""
+msgstr "VPN OpenConnect"
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/users.lua:24
 msgid "Password"
@@ -174,7 +174,7 @@ msgstr "Порт"
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:62
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/user-config.lua:56
 msgid "Predictable IPs"
-msgstr ""
+msgstr "Предсказуемые IP"
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:107
 msgid ""
@@ -184,11 +184,16 @@ msgid ""
 "network in LAN covering 192.168.1.0/24 use 192.168.1.192/26 to reserve the "
 "upper 62 addresses."
 msgstr ""
+"Предоставлять адреса клиентам из подсети LAN; если включено, нижестоящая "
+"сеть должна быть подсетью LAN. Обратите внимание, что первый адрес указанной "
+"подсети будет зарезервирован ocserv, так что он не должен использоваться. "
+"Если у вас имеется сеть в зоне LAN, перекрывающая 192.168.1.0/24, то "
+"используйте 192.168.1.192/26 для резервирования 62 вышестоящих адресов."
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:143
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/user-config.lua:122
 msgid "Routing table"
-msgstr ""
+msgstr "Таблица маршрутизации"
 
 #: applications/luci-app-ocserv/luasrc/controller/ocserv.lua:19
 msgid "Server Settings"
@@ -196,7 +201,7 @@ msgstr "Настройки сервера"
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:20
 msgid "Server's Public Key ID"
-msgstr ""
+msgstr "ID публичного ключа сервера"
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/users.lua:73
 #: applications/luci-app-ocserv/luasrc/view/ocserv_status.htm:58
@@ -219,19 +224,21 @@ msgid ""
 "network different than the LAN addresses unless proxy ARP is enabled. Leave "
 "empty to attempt auto-configuration."
 msgstr ""
+"Адрес IPv4 подсети предоставляемый клиентам; должен отличаться от LAN если "
+"не включено проксирование ARP. Оставьте пустым для автонастройки."
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:125
 msgid ""
 "The IPv6 subnet address to provide to clients; leave empty to attempt auto-"
 "configuration."
 msgstr ""
-"Адрес подсети IPv6, предоставляемый клиентам, остается пустым для выполнения "
-"автоматической настройки."
+"Предоставляемый клиентам адрес IPv6 подсети, оставьте пустым для "
+"автонастройки."
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:63
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/user-config.lua:57
 msgid "The assigned IPs will be selected deterministically"
-msgstr ""
+msgstr "Назначаемые IP будут выбраны детерминировано"
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:50
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/user-config.lua:38
