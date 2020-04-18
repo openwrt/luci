@@ -100,6 +100,7 @@ return baseclass.extend({
 			network.getWifiDevices(),
 			network.getWifiNetworks(),
 			network.getHostHints(),
+			callSessionAccess('access-group', 'luci-mod-status-index-wifi', 'read'),
 			callSessionAccess('access-group', 'luci-mod-status-index-wifi', 'write')
 		]).then(function(radios_networks_hints) {
 			var tasks = [];
@@ -120,7 +121,8 @@ return baseclass.extend({
 		    radios = data[0],
 		    networks = data[1],
 		    hosthints = data[2],
-		    hasWritePermission = data[3];
+		    hasReadPermission = data[3],
+		    hasWritePermission = data[4];
 
 		var table = E('div', { 'class': 'network-status-table' });
 
@@ -240,8 +242,8 @@ return baseclass.extend({
 
 		return E([
 			table,
-			E('h3', _('Associated Stations')),
-			assoclist
+			hasReadPermission ? E('h3', _('Associated Stations')) : E([]),
+			hasReadPermission ? assoclist : E([])
 		]);
 	}
 });

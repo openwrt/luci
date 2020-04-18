@@ -14,7 +14,7 @@ return baseclass.extend({
 
 	load: function() {
 		return Promise.all([
-			L.resolveDefault(callLuciDHCPLeases(), {}),
+			callLuciDHCPLeases(),
 			network.getHostHints()
 		]);
 	},
