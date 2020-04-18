@@ -10,7 +10,10 @@ function invokeIncludesLoad(includes) {
 
 	for (var i = 0; i < includes.length; i++) {
 		if (typeof(includes[i].load) == 'function') {
-			tasks.push(includes[i].load());
+			tasks.push(includes[i].load().catch(L.bind(function() {
+				this.failed = true;
+			}, includes[i])));
+
 			has_load = true;
 		}
 		else {
@@ -28,6 +31,9 @@ function startPolling(includes, containers) {
 		}).then(function(results) {
 			for (var i = 0; i < includes.length; i++) {
 				var content = null;
+
+				if (includes[i].failed)
+					continue;
 
 				if (typeof(includes[i].render) == 'function')
 					content = includes[i].render(results ? results[i] : null);
