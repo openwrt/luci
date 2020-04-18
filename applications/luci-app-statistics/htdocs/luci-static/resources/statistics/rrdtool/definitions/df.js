@@ -72,6 +72,7 @@ return baseclass.extend({
 		};
 
 		var types = graph.dataTypes(host, plugin, plugin_instance);
+		var p = [];
 
 		for (var i = 0; i < types.length; i++)
 			if (types[i] == 'percent_bytes')
