@@ -2421,7 +2421,7 @@ var CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection.p
 						(typeof(opt.width) == 'number') ? opt.width+'px' : opt.width;
 			}
 
-			if (this.sortable || this.extedit || this.addremove || has_more)
+			if (this.sortable || this.extedit || this.addremove || has_more || has_action)
 				trEl.appendChild(E('div', {
 					'class': 'th cbi-section-table-cell cbi-section-actions'
 				}));
