@@ -23,6 +23,11 @@ config statistics 'collectd_rrdtool'
 	option RRASingle '1'
 	option RRATimespans '1hour 1day 1week 1month 1year'
 
+config statistics 'collectd_syslog'
+	option enable '1'
+	option LogLevel 'warning'
+	option NotifyLevel 'WARNING'
+
 config statistics 'collectd_csv'
 	option enable '0'
 	option StoreRates '0'

@@ -18,7 +18,8 @@ LUCI_DEPENDS:= \
 	+collectd-mod-memory \
 	+collectd-mod-interface \
 	+collectd-mod-load \
-	+collectd-mod-network
+	+collectd-mod-network \
+	+collectd-mod-syslog
 
 define Package/luci-app-statistics/conffiles
 /etc/config/luci_statistics
