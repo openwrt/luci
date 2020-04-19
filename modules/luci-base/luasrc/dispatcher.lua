@@ -324,6 +324,14 @@ local function tree_to_json(node, json)
 				end
 			end
 
+			if type(subnode.acl_depends) == "table" then
+				for _, acl in ipairs(subnode.acl_depends) do
+					spec.depends = spec.depends or {}
+					spec.depends.acl = spec.depends.acl or {}
+					spec.depends.acl[#spec.depends.acl + 1] = acl
+				end
+			end
+
 			if (subnode.sysauth_authenticator ~= nil) or
 			   (subnode.sysauth ~= nil and subnode.sysauth ~= false)
 			then
