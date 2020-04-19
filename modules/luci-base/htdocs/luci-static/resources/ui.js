@@ -444,7 +444,8 @@ var UITextarea = UIElement.extend(/** @lends LuCI.ui.Textarea.prototype */ {
 
 	/** @override */
 	render: function() {
-		var frameEl = E('div', { 'id': this.options.id }),
+		var style = !this.options.cols ? 'width:100%' : null,
+		    frameEl = E('div', { 'id': this.options.id, 'style': style }),
 		    value = (this.value != null) ? String(this.value) : '';
 
 		frameEl.appendChild(E('textarea', {
@@ -454,7 +455,7 @@ var UITextarea = UIElement.extend(/** @lends LuCI.ui.Textarea.prototype */ {
 			'readonly': this.options.readonly ? '' : null,
 			'disabled': this.options.disabled ? '' : null,
 			'placeholder': this.options.placeholder,
-			'style': !this.options.cols ? 'width:100%' : null,
+			'style': style,
 			'cols': this.options.cols,
 			'rows': this.options.rows,
 			'wrap': this.options.wrap ? '' : null
