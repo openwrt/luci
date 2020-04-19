@@ -14,7 +14,11 @@ function index()
 	if not nixio.fs.access("/etc/config/travelmate") then
 		return
 	end
-	entry({"admin", "services", "travelmate"}, firstchild(), _("Travelmate"), 40).dependent = false
+
+	local e = entry({"admin", "services", "travelmate"}, firstchild(), _("Travelmate"), 40)
+	e.dependent = false
+	e.acl_depends = { "luci-app-travelmate" }
+
 	entry({"admin", "services", "travelmate", "tab_from_cbi"}, cbi("travelmate/overview_tab", {hideresetbtn=true, hidesavebtn=true}), _("Overview"), 10).leaf = true
 	entry({"admin", "services", "travelmate", "stations"}, template("travelmate/stations"), _("Wireless Stations"), 20).leaf = true
 	entry({"admin", "services", "travelmate", "log"}, template("travelmate/logread"), _("View Logfile"), 30).leaf = true

@@ -16,7 +16,7 @@ function index()
 
 	entry({"admin", "status", "mwan"},
 		alias("admin", "status", "mwan", "overview"),
-		_("Load Balancing"), 600)
+		_("Load Balancing"), 600).acl_depends = { "luci-app-mwan3" }
 
 	entry({"admin", "status", "mwan", "overview"},
 		template("mwan/status_interface"))
@@ -38,7 +38,7 @@ function index()
 
 	entry({"admin", "network", "mwan"},
 		alias("admin", "network", "mwan", "interface"),
-		_("Load Balancing"), 600)
+		_("Load Balancing"), 600).acl_depends = { "luci-app-mwan3" }
 
 	entry({"admin", "network", "mwan", "globals"},
 		cbi("mwan/globalsconfig"),

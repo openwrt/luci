@@ -30,12 +30,27 @@ function index()
 	page.target = cbi("lxc")
 	page.title = _("LXC Containers")
 	page.order = 70
+	page.acl_depends = { "luci-app-lxc" }
 
-	entry({"admin", "services", "lxc_create"}, call("lxc_create"), nil).leaf = true
-	entry({"admin", "services", "lxc_action"}, call("lxc_action"), nil).leaf = true
-	entry({"admin", "services", "lxc_get_downloadable"}, call("lxc_get_downloadable"), nil).leaf = true
-	entry({"admin", "services", "lxc_configuration_get"}, call("lxc_configuration_get"), nil).leaf = true
-	entry({"admin", "services", "lxc_configuration_set"}, call("lxc_configuration_set"), nil).leaf = true
+	page = entry({"admin", "services", "lxc_create"}, call("lxc_create"), nil)
+	page.acl_depends = { "luci-app-lxc" }
+	page.leaf = true
+
+	page = entry({"admin", "services", "lxc_action"}, call("lxc_action"), nil)
+	page.acl_depends = { "luci-app-lxc" }
+	page.leaf = true
+
+	page = entry({"admin", "services", "lxc_get_downloadable"}, call("lxc_get_downloadable"), nil)
+	page.acl_depends = { "luci-app-lxc" }
+	page.leaf = true
+
+	page = entry({"admin", "services", "lxc_configuration_get"}, call("lxc_configuration_get"), nil)
+	page.acl_depends = { "luci-app-lxc" }
+	page.leaf = true
+
+	page = entry({"admin", "services", "lxc_configuration_set"}, call("lxc_configuration_set"), nil)
+	page.acl_depends = { "luci-app-lxc" }
+	page.leaf = true
 end
 
 function lxc_get_downloadable()

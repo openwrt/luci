@@ -13,7 +13,11 @@ function index()
 	if not nixio.fs.access("/etc/config/banip") then
 		return
 	end
-	entry({"admin", "services", "banip"}, firstchild(), _("banIP"), 40).dependent = false
+
+	local e = entry({"admin", "services", "banip"}, firstchild(), _("banIP"), 40)
+	e.dependent = false
+	e.acl_depends = { "luci-app-banip" }
+
 	entry({"admin", "services", "banip", "tab_from_cbi"}, cbi("banip/overview_tab", {hideresetbtn=true, hidesavebtn=true}), _("Overview"), 10).leaf = true
 	entry({"admin", "services", "banip", "ipset"}, template("banip/ipsetview"), _("IPSet-Lookup"), 20).leaf = true
 	entry({"admin", "services", "banip", "ripe"}, template("banip/ripeview"), _("RIPE-Lookup"), 30).leaf = true

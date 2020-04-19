@@ -4,7 +4,7 @@
 module("luci.controller.nlbw", package.seeall)
 
 function index()
-	entry({"admin", "nlbw"}, firstchild(), _("Bandwidth Monitor"), 80)
+	entry({"admin", "nlbw"}, firstchild(), _("Bandwidth Monitor"), 80).acl_depends = { "luci-app-nlbwmon" }
 	entry({"admin", "nlbw", "display"}, template("nlbw/display"), _("Display"), 1)
 	entry({"admin", "nlbw", "config"}, cbi("nlbw/config"), _("Configuration"), 2)
 	entry({"admin", "nlbw", "backup"}, template("nlbw/backup"), _("Backup"), 3)

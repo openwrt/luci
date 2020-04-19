@@ -3,7 +3,7 @@
 module("luci.controller.adblock", package.seeall)
 
 function index()
-	entry({"admin", "services", "adblock"}, firstchild(), _("Adblock"), 60)
+	entry({"admin", "services", "adblock"}, firstchild(), _("Adblock"), 60).acl_depends = { "luci-app-adblock" }
 	entry({"admin", "services", "adblock", "overview"}, view("adblock/overview"), _("Overview"), 10)
 	entry({"admin", "services", "adblock", "dnsreport"}, view("adblock/dnsreport"), _("DNS Report"), 20)
 	entry({"admin", "services", "adblock", "blacklist"}, view("adblock/blacklist"), _("Edit Blacklist"), 30)

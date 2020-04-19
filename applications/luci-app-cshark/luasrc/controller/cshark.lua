@@ -18,20 +18,26 @@ function index()
 		page.target = cbi("admin_network/cshark")
 		page.title = _("CloudShark")
 		page.order = 70
+		page.acl_depends = { "luci-app-cshark" }
 
 		page = entry({"admin", "network", "cshark_iface_dump_start"}, call("cshark_iface_dump_start"), nil)
+		page.acl_depends = { "luci-app-cshark" }
 		page.leaf = true
 
 		page = entry({"admin", "network", "cshark_iface_dump_stop"}, call("cshark_iface_dump_stop"), nil)
+		page.acl_depends = { "luci-app-cshark" }
 		page.leaf = true
 
 		page = entry({"admin", "network", "cshark_check_status"}, call("cshark_check_status"), nil)
+		page.acl_depends = { "luci-app-cshark" }
 		page.leaf = true
 
 		page = entry({"admin", "network", "cshark_link_list_get"}, call("cshark_link_list_get"), nil)
+		page.acl_depends = { "luci-app-cshark" }
 		page.leaf = true
 
 		page = entry({"admin", "network", "cshark_link_list_clear"}, call("cshark_link_list_clear"), nil)
+		page.acl_depends = { "luci-app-cshark" }
 		page.leaf = true
 end
 

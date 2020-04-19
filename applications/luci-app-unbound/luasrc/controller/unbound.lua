@@ -18,8 +18,9 @@ function index()
 
 
     -- Expanded View
-    entry({"admin", "services", "unbound"},
-        firstchild(), _("Recursive DNS")).dependent = false
+    local e = entry({"admin", "services", "unbound"}, firstchild(), _("Recursive DNS"))
+    e.dependent = false
+    e.acl_depends = { "luci-app-unbound" }
 
     -- UCI Tab(s)
     entry({"admin", "services", "unbound", "configure"},

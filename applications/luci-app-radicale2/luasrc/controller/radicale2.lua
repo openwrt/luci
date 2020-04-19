@@ -12,6 +12,7 @@ function index()
 
 	page = entry({"admin", "services", "radicale2"}, alias("admin", "services", "radicale2", "server"), _("Radicale 2.x"))
 	page.leaf = false
+	page.acl_depends = { "luci-app-radicale2" }
 
 	page = entry({"admin", "services", "radicale2", "server"}, cbi("radicale2/server"), _("Server Settings"))
 	page.leaf = true
