@@ -2246,6 +2246,16 @@ var CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection.p
 	 */
 
 	/**
+	 * If set to `true`, the header row with the options descriptions will
+	 * not be displayed. By default, descriptions row is automatically displayed
+	 * when at least one option has a description.
+	 *
+	 * @name LuCI.form.TableSection.prototype#nodescriptions
+	 * @type boolean
+	 * @default false
+	 */
+
+	/**
 	 * The `TableSection` implementation does not support option tabbing, so
 	 * its implementation of `tab()` will always throw an exception when
 	 * invoked.
@@ -2382,7 +2392,7 @@ var CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection.p
 			trEls.appendChild(trEl);
 		}
 
-		if (has_descriptions) {
+		if (has_descriptions && !this.nodescriptions) {
 			var trEl = E('div', {
 				'class': 'tr cbi-section-table-descr ' + anon_class
 			});
