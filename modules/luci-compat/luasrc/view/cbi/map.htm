@@ -2,26 +2,8 @@
 	<div class="alert-message warning"><%=pcdata(msg)%></div>
 <%- end end -%>
 
-<%
-  local function has_access(config, level)
-    local rv = luci.util.ubus("session", "access", {
-		ubus_rpc_session = luci.dispatcher.context.authsession,
-		scope = "uci",
-		object = config,
-		["function"] = level
-    })
-
-    return (type(rv) == "table" and rv.access == true) or false
-  end
-
-  local is_readable = has_access(self.config, "read")
-  local is_writable = has_access(self.config, "write")
-
-  has_writeable_map = has_writeable_map or is_writable
-%>
-
-<% if is_readable then %>
-<div class="cbi-map" id="cbi-<%=self.config%>"<%=ifattr(not is_writable, "style", "opacity:.6; pointer-events:none")%>>
+<% if readable then %>
+<div class="cbi-map" id="cbi-<%=self.config%>"<%=ifattr(not writable, "style", "opacity:.6; pointer-events:none")%>>
 	<% if self.title and #self.title > 0 then %>
 		<h2 name="content"><%=self.title%></h2>
 	<% end %>

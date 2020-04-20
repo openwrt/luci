@@ -19,15 +19,15 @@
 		end
 
 		if display_apply then
-			%><input class="btn cbi-button cbi-button-apply" type="button" value="<%:Save & Apply%>" onclick="cbi_submit(this, 'cbi.apply')"<%=ifattr(not has_writeable_map, "disabled")%> /> <%
+			%><input class="btn cbi-button cbi-button-apply" type="button" value="<%:Save & Apply%>" onclick="cbi_submit(this, 'cbi.apply')"<%=ifattr(not writable, "disabled")%> /> <%
 		end
 
 		if display_save then
-			%><input class="btn cbi-button cbi-button-save" type="submit" value="<%:Save%>"<%=ifattr(not has_writeable_map, "disabled")%> /> <%
+			%><input class="btn cbi-button cbi-button-save" type="submit" value="<%:Save%>"<%=ifattr(not writable, "disabled")%> /> <%
 		end
 
 		if display_reset then
-			%><input class="btn cbi-button cbi-button-reset" type="button" value="<%:Reset%>" onclick="location.href='<%=REQUEST_URI%>'"<%=ifattr(not has_writeable_map, "disabled")%> /> <%
+			%><input class="btn cbi-button cbi-button-reset" type="button" value="<%:Reset%>" onclick="location.href='<%=REQUEST_URI%>'"<%=ifattr(not writable, "disabled")%> /> <%
 		end
 
 		%></div><%
