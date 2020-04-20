@@ -1,0 +1,117 @@
+#!/bin/sh
+
+case "$1" in
+
+	backup)
+		dbdir=$(uci -q get nlbwmon.@nlbwmon[0].database_directory)
+
+		if [ ! -d "${dbdir:-/var/lib/nlbwmon}" ]; then
+			echo "Unable to locate database directory" >&2
+			exit 1
+		fi
+
+		exec /bin/tar -C "${dbdir:-/var/lib/nlbwmon}" -c -z . -f -
+	;;
+
+	commit)
+		exec /usr/sbin/nlbw -c commit
+	;;
+
+	download)
+		shift
+
+		type=json
+		delim=,
+		period=
+		group_by=
+		order_by=
+
+		while [ -n "$1" ]; do
+			case "$1" in
+				-f)
+					case "$2" in
+						csv|json) type=$2 ;;
+						*) echo "Invalid data format" >&2; exit 1 ;;
+					esac
+					shift
+				;;
+				-s)
+					case "$2" in
+						?) delim=$2 ;;
+						*) echo "Invalid delimitter" >&2; exit 1 ;;
+					esac
+					shift
+				;;
+				-t)
+					case "$2" in
+						[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]) period=$2 ;;
+						*) echo "Invalid period" >&2; exit 1 ;;
+					esac
+					shift
+				;;
+				-g|-o)
+					case "$1:$2" in
+						-g:?*) group_by=$2 ;;
+						-o:?*) order_by=$2 ;;
+						*) echo "Argument required for $1" >&2; exit 1 ;;
+					esac
+					shift
+				;;
+				*)
+					echo "Unknown option $1" >&2
+					exit 1
+				;;
+			esac
+			shift
+		done
+
+		exec /usr/sbin/nlbw -c $type -s$delim \
+			${period:+-t $period} \
+			${group_by:+-g "$group_by"} \
+			${order_by:+-o "$order_by"}
+	;;
+
+	periods)
+		for date in $(/usr/sbin/nlbw -c list); do
+			case "$date" in
+				[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9])
+					res="${res:+$res, }\"$date\""
+				;;
+			esac
+		done
+
+		printf '{ "periods": [ %s ] }' "$res"
+	;;
+
+	restore)
+		if [ ! -f /tmp/nlbw-restore.tar.gz ]; then
+			echo "Unable to locate archive to restore" >&2
+			exit 1
+		fi
+
+		dbdir=$(uci -q get nlbwmon.@nlbwmon[0].database_directory)
+		files=$(/bin/tar -tzf /tmp/nlbw-restore.tar.gz | grep -E '^(\./)?[0-9]{8}\.db(\.gz)?$' | tr '\n' ' ')
+
+		if [ -z "$files" ]; then
+			echo "Invalid or empty backup archive" >&2
+			exit 1
+		fi
+
+		/etc/init.d/nlbwmon stop
+		/bin/mkdir -p "${dbdir:-/var/lib/nlbwmon}"
+
+		for file in $(/bin/tar -C "${dbdir:-/var/lib/nlbwmon}" -vxzf /tmp/nlbw-restore.tar.gz $files); do
+			res="${res:+$res, }\"${file#./}\""
+		done
+
+		/bin/rm -f /tmp/nlbw-restore.tar.gz
+		/etc/init.d/nlbwmon start
+
+		printf '{ "restored": [ %s ] }' "$res"
+	;;
+
+	*)
+		echo "Usage: $0 {commit|download|periods|restore}" >&2
+		exit 1
+	;;
+esac
