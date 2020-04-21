@@ -42,6 +42,11 @@ config statistics 'collectd_logfile'
 config statistics 'collectd_network'
 	option enable '0'
 
+config statistics 'collectd_syslog'
+   option enable '0'
+   option LogLevel 'warning'
+   option NotifyLevel 'WARNING'
+
 config statistics 'collectd_unixsock'
 	option enable '0'
 	option SocketFile '/var/run/collectd/query.sock'
