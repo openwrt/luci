@@ -49,8 +49,9 @@ elseif targetDNS == "unbound.adb_list" then
 	outputGzip="/etc/" .. packageName .. ".unbound.gz"
 end
 
+local packageVersion = packageName .. " " .. tostring(util.trim(sys.exec("opkg list-installed " .. packageName .. " | awk '{print $3}'")))
 local tmpfs, tmpfsMessage, tmpfsError, tmpfsStats
-local tmpfsVersion, tmpfsStatus = "", "Stopped"
+local tmpfsStatus = "statusStopped"
 if fs.access("/var/run/" .. packageName .. ".json") then
 	tmpfs = jsonc.parse(util.trim(sys.exec("cat /var/run/" .. packageName .. ".json")))
 end
@@ -67,11 +68,6 @@ if tmpfs and tmpfs['data'] then
 	end
 	if tmpfs['data']['stats'] and tmpfs['data']['stats'] ~= "" then
 		tmpfsStats = tmpfs['data']['stats']
-	end
-	if tmpfs['data']['version'] and tmpfs['data']['version'] ~= "" then
-		tmpfsVersion = packageName .. " " .. tmpfs['data']['version']
-	else 
-		tmpfsVersion = packageName
 	end
 end
 
@@ -111,7 +107,7 @@ m.on_after_apply = function(self)
 	sys.call("/etc/init.d/simple-adblock restart")
 end
 
-h = m:section(NamedSection, "config", "simple-adblock", translatef("Service Status [%s]", tmpfsVersion))
+h = m:section(NamedSection, "config", "simple-adblock", translatef("Service Status [%s]", packageVersion))
 
 if tmpfsStatus == "statusStarting" or
 	 tmpfsStatus == "statusRestarting" or
@@ -143,7 +139,7 @@ else
 		ss = h:option(DummyValue, "_dummy", translate("Service Status"))
 		ss.template = "simple-adblock/status"
 		if tmpfsStatus == "statusSuccess" then
-			ss.value = translatef("%s is blocking %s domains (with %s).", tmpfsVersion, util.trim(sys.exec("wc -l < " .. outputFile)), targetDNS)
+			ss.value = translatef("%s is blocking %s domains (with %s).", packageVersion, util.trim(sys.exec("wc -l < " .. outputFile)), targetDNS)
 		else
 			ss.value = statusTable[tmpfsStatus]
 		end
@@ -167,7 +163,7 @@ else
 			end
 		end
 	end
-	if tmpfsVersion ~= "" then
+	if packageVersion ~= "" then
 		buttons = h:option(DummyValue, "_dummy")
 		buttons.template = packageName .. "/buttons"
 	end
