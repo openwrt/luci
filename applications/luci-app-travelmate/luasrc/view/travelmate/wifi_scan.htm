@@ -1,5 +1,5 @@
 <%#
-Copyright 2017-2019 Dirk Brenken (dev@brenken.org)
+Copyright 2017-2020 Dirk Brenken (dev@brenken.org)
 This is free software, licensed under the Apache License, Version 2.0
 -%>
 
@@ -7,7 +7,14 @@ This is free software, licensed under the Apache License, Version 2.0
 	local sys = require("luci.sys")
 	local utl = require("luci.util")
 	local dev = luci.http.formvalue("device")
-	local iw  = luci.sys.wifi.getiwinfo(dev)
+	local ifn = utl.trim(sys.exec("/bin/ubus -S call network.wireless status 2>/dev/null | jsonfilter -l1 -e \"@." .. dev .. ".interfaces.*.ifname\" 2>/dev/null"))
+	local iw
+
+	if ifn ~= "" then
+		iw = sys.wifi.getiwinfo(ifn)
+	else
+		iw = sys.wifi.getiwinfo(dev)
+	end
 
 	if not iw then
 		luci.http.redirect(luci.dispatcher.build_url("admin/services/travelmate/stations"))
