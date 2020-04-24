@@ -7,7 +7,7 @@ This is free software, licensed under the Apache License, Version 2.0
 	local sys = require("luci.sys")
 	local utl = require("luci.util")
 	local dev = luci.http.formvalue("device")
-	local ifn = utl.trim(sys.exec("/bin/ubus -S call network.wireless status 2>/dev/null | jsonfilter -l1 -e \"@." .. dev .. ".interfaces.*.ifname\" 2>/dev/null"))
+	local ifn = utl.trim(sys.exec("/bin/ubus -S call network.wireless status 2>/dev/null | jsonfilter -l1 -e '@." .. dev .. ".interfaces[@.config.mode=\"sta\"].ifname' 2>/dev/null"))
 	local iw
 
 	if ifn ~= "" then
