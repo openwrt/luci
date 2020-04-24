@@ -41,7 +41,7 @@
 		<header>
 			<div class="fill">
 				<div class="container">
-					<a class="brand" href="#"><%=boardinfo.hostname or "?"%></a>
+					<a class="brand" href="<% if luci.dispatcher.context.authsession then %><%=url('admin/status/overview')%><% else %>#<% end %>"><%=boardinfo.hostname or "?"%></a>
 					<ul class="nav" id="topmenu" style="display:none"></ul>
 					<div id="indicators" class="pull-right"></div>
 				</div>
