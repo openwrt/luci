@@ -89,7 +89,7 @@ else
 	end
 end
 
-m = Map("https-dns-proxy", translate("DNS Over HTTPS Proxy Settings"))
+m = Map("https-dns-proxy", translate("DNS HTTPS Proxy Settings"))
 
 h = m:section(TypedSection, "_dummy", translatef("Service Status [%s %s]", packageName, packageVersion))
 h.template = "cbi/nullsection"
