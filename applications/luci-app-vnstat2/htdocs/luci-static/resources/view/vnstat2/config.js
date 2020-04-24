@@ -8,6 +8,8 @@
 'require form';
 'require tools.widgets as widgets';
 
+var isReadonlyView = !L.hasViewPermission() || null;
+
 return view.extend({
 	handleDeleteModal: function(m, iface, ev) {
 		L.showModal(_('Delete interface <em>%h</em>').format(iface), [
@@ -88,7 +90,8 @@ return view.extend({
 					this.interfaces[i],
 					E('button', {
 						'class': 'btn cbi-button-remove',
-						'click': ui.createHandlerFn(view, 'handleDeleteModal', m, this.interfaces[i])
+						'click': ui.createHandlerFn(view, 'handleDeleteModal', m, this.interfaces[i]),
+						'disabled': isReadonlyView
 					}, [ _('Delete…') ])
 				]);
 			}
