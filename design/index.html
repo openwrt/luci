@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <link href="css/font-awesome.min.css" rel="stylesheet">
+  <link href="css/main.css" rel="stylesheet">
+</head>
+<body class="container">
+	<main>
+		<section class="col-12 col-md-12">
+			<article id="navigation">
+				<nav>
+					<ul>
+						<li><a href="#" data-page="dashboard">Dashboard</a></li>
+						<li><a href="#" data-page="quick-configuration">Quick configuration</a></li>
+						<li><a href="#" data-page="static-ip">Static IP</a></li>
+						<li><a href="#" data-page="port-redirects">Port redirects</a></li>
+						<li>
+							<span>Advanced configuration</span>
+							<ul class="d-none">
+								<li class="pl-5"><a href="#" data-page="advanced-configuration-wifi">Wifi</a></li>
+								<li class="pl-5"><a href="#" data-page="advanced-configuration-wan">Wan</a></li>
+							</ul>
+						</li>
+						<li>
+							<div class="form-group search-container">
+							    <form class="form-inline mr-auto search-header" method="get" action="/search/">
+							        <input class="form-control" type="text" name="q" value="" placeholder="Recherche" aria-label="Search">
+							        <button class="btn" type="submit"><i class="fa fa-search"></i></button>
+							    </form>
+								 <ul class="d-none" style="
+								     position: absolute;
+    top: 38px;
+    background-color: #fff;
+    height: 42px;
+    border-radius: 0 0 0.29em 0.29em;
+    width: 17.4%;
+    border: 1px solid #ced4da;
+    text-align: center;
+    border-top: none;
+								">
+							        	<li>Configuration wifi</li>
+							        </ul>
+							</div>
+						</li>
+						<div class="clearfix"></div>
+					</ul>
+				</nav>
+				<hr/>
+			</article>
+		</section>
+		<section class="col-12 col-md-12">
+			<article id="dashboard" class="d-none">
+				<div class="network-status">
+
+						<ul>
+							<li class="text-center">
+								
+								<div class="router-status-self bg-style1">
+
+										<div class="router-status-info">
+
+											<svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path fill="currentColor" d="M173.93 96.81a8.12 8.12 0 0 0 11.23.07C230.55 55 289.48 32 352 32s121.45 23 166.83 64.88a8.12 8.12 0 0 0 11.23-.07l11.53-11.34a8 8 0 0 0-.11-11.56C490 26.18 423 0 352 0S214 26.18 162.52 73.91a8 8 0 0 0-.11 11.56zM352 112a179.26 179.26 0 0 0-120.38 45.8 8 8 0 0 0-.15 11.64l11.53 11.3a8.21 8.21 0 0 0 11.22.14 148.17 148.17 0 0 1 195.64 0 8.21 8.21 0 0 0 11.22-.14l11.49-11.3a8 8 0 0 0-.15-11.64A179.26 179.26 0 0 0 352 112zm176 208H368v-88a8 8 0 0 0-8-8h-16a8 8 0 0 0-8 8v88H48a48 48 0 0 0-48 48v96a48 48 0 0 0 48 48h480a48 48 0 0 0 48-48v-96a48 48 0 0 0-48-48zm16 144a16 16 0 0 1-16 16H48a16 16 0 0 1-16-16v-96a16 16 0 0 1 16-16h480a16 16 0 0 1 16 16zm-360-72a24 24 0 1 0 24 24 24 24 0 0 0-24-24zm-80 0a24 24 0 1 0 24 24 24 24 0 0 0-24-24z"></path></svg>
+											<hr/>
+											<div class="mt-3 mx-auto text-left settings-info">
+												<p class="mt-2">
+													<span class="d-inline-block">Internet：</span>
+													<span class="label label-success">YES</span>
+												</p>
+												<p class="mt-2">
+													<span class="d-inline-block">Uptime：</span>
+													<span class="">1d 15h 48m 7s</span>
+												</p>
+												<p class="mt-2">
+													<span class="d-inline-block">Modele：</span>
+													<span class="">HUAWEI WiFi Q2 Pro</span>
+												</p>
+												<p class="mt-2">
+													<span class="d-inline-block">Version：</span>
+													<span class="">OpenWrt r11924</span>
+												</p>
+												<p class="mt-2">
+													<span class="d-inline-block">IPv4 Public：</span>
+													<span >58.78.19.88</span>
+												</p>
+												<p class="mt-2">
+													<span class="d-inline-block">DNS Server：</span>
+													<span >4.4.4.4 , 8.8.8.8</span>
+												</p>
+												<p class="mt-2">
+													<span class="d-inline-block">MAC Adress：</span>
+													<span class="">23:EF:AC:DA:53:22</span>
+												</p>
+											</div>
+											<hr/>
+										</div>
+							 </div>
+							</li>
+							<li class="text-center">
+								<div class="router-status">
+
+										<div class="router-status-wifi bg-style1">
+
+											<div class="wifi-group">
+
+														
+
+
+<div class="wifi-devices">
+
+<div class="wifi-info">
+<svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><path fill="currentColor" d="M320 320c-44.18 0-80 35.82-80 80 0 44.19 35.83 80 80 80 44.19 0 80-35.84 80-80 0-44.18-35.82-80-80-80zm0 128c-26.47 0-48-21.53-48-48s21.53-48 48-48 48 21.53 48 48-21.53 48-48 48zm316.21-290.05C459.22-9.9 180.95-10.06 3.79 157.95c-4.94 4.69-5.08 12.51-.26 17.32l5.69 5.69c4.61 4.61 12.07 4.74 16.8.25 164.99-156.39 423.64-155.76 587.97 0 4.73 4.48 12.19 4.35 16.8-.25l5.69-5.69c4.81-4.81 4.67-12.63-.27-17.32zM526.02 270.31c-117.34-104.48-294.86-104.34-412.04 0-5.05 4.5-5.32 12.31-.65 17.2l5.53 5.79c4.46 4.67 11.82 4.96 16.66.67 105.17-93.38 264-93.21 368.98 0 4.83 4.29 12.19 4.01 16.66-.67l5.53-5.79c4.65-4.89 4.38-12.7-.67-17.2z"></path></svg>
+<hr/>
+<div class="mt-3 mx-auto text-left settings-info">
+		<p class="mt-2">
+			<span class="d-inline-block">Active：</span>
+			<span class="label label-success">YES</span>
+		</p>
+		<p class="mt-2">
+			<span class="d-inline-block">SSID：</span>
+			<span class="">Maison</span>
+		</p>
+		<p class="mt-2">
+			<span class="d-inline-block">Mode：</span>
+			<span>2.4Ghz</span>
+		</p>
+		<p class="mt-2">
+			<span class="d-inline-block">Connection：</span>
+			<span>3 devices</span>
+		</p>
+		<p class="mt-2">
+			<span class="d-inline-block">MAC Adress：</span>
+			<span class="">02:42:AC:1A:00:02</span>
+		</p>
+	</div>
+	<hr/>
+</div>
+
+	<ul class="devices-list">
+		<li>
+			<svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><path fill="currentColor" d="M608 128H416a32 32 0 0 0-32 32v320a32 32 0 0 0 32 32h192a32 32 0 0 0 32-32V160a32 32 0 0 0-32-32zm0 352H416V160h192zM96 32h384v64h32V32a32 32 0 0 0-32-32H96a32 32 0 0 0-32 32v256H16a16 16 0 0 0-16 16v16a64.14 64.14 0 0 0 63.91 64H352v-32H63.91A32 32 0 0 1 32 320h320v-32H96z"></path></svg>
+
+			<hr/>
+
+			<div class="mt-3 mx-auto text-center settings-info">
+					<p class="mt-1">
+						<strong>Signal</strong><br/>
+
+						<div class="progress mt-3">
+							<div class="progress-bar bg-success" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
+			    			</div>
+			    		</div>
+					</p>
+					<p class="mt-2">
+						<strong>Uptime</strong><br/>
+						<span>2h 10m 21s</span>
+					</p>
+					<p class="mt-1">
+						<strong>Upload / Download</strong><br/>
+						<span>10.53MB / 3.12GB</span>
+					</p>
+					<p class="mt-1">
+						<strong>Mac Address</strong><br/>
+						<span>5D:A8:4D:52:5C:D8</span>
+					</p>
+					<p class="mt-1">
+						<strong>IPv4 Address</strong><br/>
+						<span>192.168.1.19</span>
+					</p>
+					<p class="mt-1">
+						<strong>IPv6 Address</strong><br/>
+						<span>2001:db8::a:74e6:b5f3:fe92:830e</span>
+					</p>
+					<hr/>
+			</div>
+		</li>
+
+		
+		<li>
+			<svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><path fill="currentColor" d="M608 128H416a32 32 0 0 0-32 32v320a32 32 0 0 0 32 32h192a32 32 0 0 0 32-32V160a32 32 0 0 0-32-32zm0 352H416V160h192zM96 32h384v64h32V32a32 32 0 0 0-32-32H96a32 32 0 0 0-32 32v256H16a16 16 0 0 0-16 16v16a64.14 64.14 0 0 0 63.91 64H352v-32H63.91A32 32 0 0 1 32 320h320v-32H96z"></path></svg>
+			<hr/>
+
+			<div class="mt-3 mx-auto text-center settings-info">
+					<p class="mt-1">
+						<strong>Signal</strong><br/>
+
+						<div class="progress mt-3">
+							<div class="progress-bar bg-warning" role="progressbar" style="width: 45%" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100">
+			    			</div>
+			    		</div>
+					</p>
+					<p class="mt-2">
+						<strong>Uptime</strong><br/>
+						<span>3h 10m 21s</span>
+					</p>
+					<p class="mt-1">
+						<strong>Upload / Download</strong><br/>
+						<span>60.53MB / 4.12GB</span>
+					</p>
+					<p class="mt-1">
+						<strong>Mac Address</strong><br/>
+						<span>EA:95:C5:52:AF:BD</span>
+					</p>
+					<p class="mt-1">
+						<strong>IPv4 Address</strong><br/>
+						<span>192.168.1.22</span>
+					</p>
+					<p class="mt-1">
+						<strong>IPv6 Address</strong><br/>
+						<span>2001:db8::a:74e6:b5f3:fe92:830e</span>
+					</p>
+					<hr/>
+			</div>
+		</li>
+
+		<li>
+			<svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><path fill="currentColor" d="M608 128H416a32 32 0 0 0-32 32v320a32 32 0 0 0 32 32h192a32 32 0 0 0 32-32V160a32 32 0 0 0-32-32zm0 352H416V160h192zM96 32h384v64h32V32a32 32 0 0 0-32-32H96a32 32 0 0 0-32 32v256H16a16 16 0 0 0-16 16v16a64.14 64.14 0 0 0 63.91 64H352v-32H63.91A32 32 0 0 1 32 320h320v-32H96z"></path></svg>
+			
+				<hr/>
+				<div class="mt-3 mx-auto text-center settings-info">
+					<p class="mt-1">
+						<strong>Signal</strong><br/>
+						<div class="progress mt-3">
+							<div class="progress-bar bg-danger" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+			    			</div>
+			    		</div>
+					</p>
+					<p class="mt-2">
+						<strong>Uptime</strong><br/>
+						<span>9h 10m 21s</span>
+					</p>
+					<p class="mt-1">
+						<strong>Upload / Download</strong><br/>
+						<span>99.53MB / 9.12GB</span>
+					</p>
+					<p class="mt-1">
+						<strong>Mac Address</strong><br/>
+						<span>02:52:DF:9D:01:33</span>
+					</p>
+					<p class="mt-1">
+						<strong>IPv4 Address</strong><br/>
+						<span>192.168.1.53</span>
+					</p>
+					<p class="mt-1">
+						<strong>IPv6 Address</strong><br/>
+						<span>2001:db8::a:74e6:b5f3:fe92:830e</span>
+					</p>
+					<hr/>
+			</div>
+		</li>
+
+<li>
+			<svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><path fill="currentColor" d="M608 128H416a32 32 0 0 0-32 32v320a32 32 0 0 0 32 32h192a32 32 0 0 0 32-32V160a32 32 0 0 0-32-32zm0 352H416V160h192zM96 32h384v64h32V32a32 32 0 0 0-32-32H96a32 32 0 0 0-32 32v256H16a16 16 0 0 0-16 16v16a64.14 64.14 0 0 0 63.91 64H352v-32H63.91A32 32 0 0 1 32 320h320v-32H96z"></path></svg>
+			
+				<hr/>
+				<div class="mt-3 mx-auto text-center settings-info">
+					<p class="mt-1">
+						<strong>Signal</strong><br/>
+						<div class="progress mt-3">
+							<div class="progress-bar bg-success" role="progressbar" style="width: 66%" aria-valuenow="66" aria-valuemin="0" aria-valuemax="100">
+			    			</div>
+			    		</div>
+					</p>
+					<p class="mt-2">
+						<strong>Uptime</strong><br/>
+						<span>23h 10m 21s</span>
+					</p>
+					<p class="mt-1">
+						<strong>Upload / Download</strong><br/>
+						<span>100.53MB / 19.87GB</span>
+					</p>
+					<p class="mt-1">
+						<strong>Mac Address</strong><br/>
+						<span>23:AC:3A:FF:21:EE</span>
+					</p>
+					<p class="mt-1">
+						<strong>IPv4 Address</strong><br/>
+						<span>192.168.1.89</span>
+					</p>
+					<p class="mt-1">
+						<strong>IPv6 Address</strong><br/>
+						<span>2001:de8::a:74e6:b5f3:fe92:830e</span>
+					</p>
+					<hr/>
+			</div>
+		</li>
+	</ul>
+
+</div>
+
+</div>
+											
+</div>
+ 
+
+									
+
+										<div class="router-status-ethernet bg-style1">
+
+
+<svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><path fill="currentColor" d="M632 240H336v-80h80c17.67 0 32-14.33 32-32V32c0-17.67-14.33-32-32-32H224c-17.67 0-32 14.33-32 32v96c0 17.67 14.33 32 32 32h80v80H8c-4.42 0-8 3.58-8 8v16c0 4.42 3.58 8 8 8h120v80H64c-17.67 0-32 14.33-32 32v96c0 17.67 14.33 32 32 32h160c17.67 0 32-14.33 32-32v-96c0-17.67-14.33-32-32-32h-64v-80h320v80h-64c-17.67 0-32 14.33-32 32v96c0 17.67 14.33 32 32 32h160c17.67 0 32-14.33 32-32v-96c0-17.67-14.33-32-32-32h-64v-80h120c4.42 0 8-3.58 8-8v-16c0-4.42-3.58-8-8-8zM224 384v96H64v-96h160zm0-256V32h192v96H224zm352 256v96H416v-96h160z"></path></svg>
+<hr/>
+	<ul class="devices-list">
+		<li>
+		<svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M496 192h-48v-48c0-8.8-7.2-16-16-16h-48V80c0-8.8-7.2-16-16-16H144c-8.8 0-16 7.2-16 16v48H80c-8.8 0-16 7.2-16 16v48H16c-8.8 0-16 7.2-16 16v224c0 8.8 7.2 16 16 16h480c8.8 0 16-7.2 16-16V208c0-8.8-7.2-16-16-16zm-16 224h-64V288h-32v128h-64V288h-32v128h-64V288h-32v128h-64V288H96v128H32V224h64v-64h64V96h192v64h64v64h64v192z"></path></svg>
+			<hr/>
+			<div class="mt-3 mx-auto text-center settings-info">
+					<p class="mt-2">
+						<strong>Uptime</strong><br/>
+						<span>23h 12m 21s</span>
+					</p>
+					<p class="mt-1">
+						<strong>Upload / Download</strong><br/>
+						<span>100.99MB / 21.20GB</span>
+					</p>
+					<p class="mt-1">
+						<strong>Mac Address</strong><br/>
+						<span>6D:C1:24:DE:8D:B2</span>
+					</p>
+					<p class="mt-1">
+						<strong>IPv4 Address</strong><br/>
+						<span>192.168.1.31</span>
+					</p>
+					<p class="mt-1">
+						<strong>IPv6 Address</strong><br/>
+						<span>2011:da8::a:79e6:b5f3:fe92:830e</span>
+					</p>
+					<hr/>
+			</div>
+
+		</li>
+
+		
+		<li>
+		<svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M496 192h-48v-48c0-8.8-7.2-16-16-16h-48V80c0-8.8-7.2-16-16-16H144c-8.8 0-16 7.2-16 16v48H80c-8.8 0-16 7.2-16 16v48H16c-8.8 0-16 7.2-16 16v224c0 8.8 7.2 16 16 16h480c8.8 0 16-7.2 16-16V208c0-8.8-7.2-16-16-16zm-16 224h-64V288h-32v128h-64V288h-32v128h-64V288h-32v128h-64V288H96v128H32V224h64v-64h64V96h192v64h64v64h64v192z"></path></svg>
+		 <hr/>
+			<div class="mt-3 mx-auto text-center settings-info">
+					<p class="mt-2">
+						<strong>Uptime</strong><br/>
+						<span>10h 10m 21s</span>
+					</p>
+					<p class="mt-1">
+						<strong>Upload / Download</strong><br/>
+						<span>10.99MB / 10.20GB</span>
+					</p>
+					<p class="mt-1">
+						<strong>Mac Address</strong><br/>
+						<span>66:8C:3D:DA:42:AE</span>
+					</p>
+					<p class="mt-1">
+						<strong>IPv4 Address</strong><br/>
+						<span>192.168.1.18</span>
+					</p>
+					<p class="mt-1">
+						<strong>IPv6 Address</strong><br/>
+						<span>2011:da8::a:79e6:b5f3:fe92:830e</span>
+					</p>
+					<hr/>
+			</div>
+		</li>
+
+		<li>
+	<svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M496 192h-48v-48c0-8.8-7.2-16-16-16h-48V80c0-8.8-7.2-16-16-16H144c-8.8 0-16 7.2-16 16v48H80c-8.8 0-16 7.2-16 16v48H16c-8.8 0-16 7.2-16 16v224c0 8.8 7.2 16 16 16h480c8.8 0 16-7.2 16-16V208c0-8.8-7.2-16-16-16zm-16 224h-64V288h-32v128h-64V288h-32v128h-64V288h-32v128h-64V288H96v128H32V224h64v-64h64V96h192v64h64v64h64v192z"></path></svg>
+			
+			<hr/>
+			<div class="mt-3 mx-auto text-center settings-info">
+					<p class="mt-2">
+						<strong>Uptime</strong><br/>
+						<span>19h 10m 21s</span>
+					</p>
+					<p class="mt-1">
+						<strong>Upload / Download</strong><br/>
+						<span>10.53MB / 2.02GB</span>
+					</p>
+					<p class="mt-1">
+						<strong>Mac Address</strong><br/>
+						<span>75:B1:43:67:DA:3B</span>
+					</p>
+					<p class="mt-1">
+						<strong>IPv4 Address</strong><br/>
+						<span>192.168.1.33</span>
+					</p>
+					<p class="mt-1">
+						<strong>IPv6 Address</strong><br/>
+						<span>2001:db8::a:74e6:b5f3:fe92:830e</span>
+					</p>
+					<hr/>
+			</div>
+		</li>
+
+		<li>
+		<svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M496 192h-48v-48c0-8.8-7.2-16-16-16h-48V80c0-8.8-7.2-16-16-16H144c-8.8 0-16 7.2-16 16v48H80c-8.8 0-16 7.2-16 16v48H16c-8.8 0-16 7.2-16 16v224c0 8.8 7.2 16 16 16h480c8.8 0 16-7.2 16-16V208c0-8.8-7.2-16-16-16zm-16 224h-64V288h-32v128h-64V288h-32v128h-64V288h-32v128h-64V288H96v128H32V224h64v-64h64V96h192v64h64v64h64v192z"></path></svg>
+			<hr/>
+			<div class="mt-3 mx-auto text-center settings-info">
+					<p class="mt-2">
+						<strong>Uptime</strong><br/>
+						<span>12h 11m 20s</span>
+					</p>
+					<p class="mt-1">
+						<strong>Upload / Download</strong><br/>
+						<span>50.99MB / 50.21GB</span>
+					</p>
+					<p class="mt-1">
+						<strong>Mac Address</strong><br/>
+						<span>33:8C:3A:AD:2D:AE</span>
+					</p>
+					<p class="mt-1">
+						<strong>IPv4 Address</strong><br/>
+						<span>192.168.1.88</span>
+					</p>
+					<p class="mt-1">
+						<strong>IPv6 Address</strong><br/>
+						<span>2011:aa8::a:79e6:b5f3:fw92:830e</span>
+					</p>
+					<hr/>
+			</div>
+		</li>
+
+		<li>
+		<svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M496 192h-48v-48c0-8.8-7.2-16-16-16h-48V80c0-8.8-7.2-16-16-16H144c-8.8 0-16 7.2-16 16v48H80c-8.8 0-16 7.2-16 16v48H16c-8.8 0-16 7.2-16 16v224c0 8.8 7.2 16 16 16h480c8.8 0 16-7.2 16-16V208c0-8.8-7.2-16-16-16zm-16 224h-64V288h-32v128h-64V288h-32v128h-64V288h-32v128h-64V288H96v128H32V224h64v-64h64V96h192v64h64v64h64v192z"></path></svg>
+			<hr/>
+			<div class="mt-3 mx-auto text-center settings-info">
+					<p class="mt-2">
+						<strong>Uptime</strong><br/>
+						<span>19h 11m 20s</span>
+					</p>
+					<p class="mt-1">
+						<strong>Upload / Download</strong><br/>
+						<span>99MB / 61GB</span>
+					</p>
+					<p class="mt-1">
+						<strong>Mac Address</strong><br/>
+						<span>23:8A:3B:DD:2D:AE</span>
+					</p>
+					<p class="mt-1">
+						<strong>IPv4 Address</strong><br/>
+						<span>192.168.1.100</span>
+					</p>
+					<p class="mt-1">
+						<strong>IPv6 Address</strong><br/>
+						<span>2011:ea8::a:72e6:b5f3:fw92:830e</span>
+					</p>
+					<hr/>
+			</div>
+		</li>
+
+		<li>
+		<svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M496 192h-48v-48c0-8.8-7.2-16-16-16h-48V80c0-8.8-7.2-16-16-16H144c-8.8 0-16 7.2-16 16v48H80c-8.8 0-16 7.2-16 16v48H16c-8.8 0-16 7.2-16 16v224c0 8.8 7.2 16 16 16h480c8.8 0 16-7.2 16-16V208c0-8.8-7.2-16-16-16zm-16 224h-64V288h-32v128h-64V288h-32v128h-64V288h-32v128h-64V288H96v128H32V224h64v-64h64V96h192v64h64v64h64v192z"></path></svg>
+			<hr/>
+			<div class="mt-3 mx-auto text-center settings-info">
+					<p class="mt-2">
+						<strong>Uptime</strong><br/>
+						<span>12h 11m 20s</span>
+					</p>
+					<p class="mt-1">
+						<strong>Upload / Download</strong><br/>
+						<span>50.99MB / 50.21GB</span>
+					</p>
+					<p class="mt-1">
+						<strong>Mac Address</strong><br/>
+						<span>33:8C:3A:AD:2D:AE</span>
+					</p>
+					<p class="mt-1">
+						<strong>IPv4 Address</strong><br/>
+						<span>192.168.1.88</span>
+					</p>
+					<p class="mt-1">
+						<strong>IPv6 Address</strong><br/>
+						<span>2011:aa8::a:79e6:b5f3:fw92:830e</span>
+					</p>
+					<hr/>
+			</div>
+		</li>
+
+		<div class="clearfix"></div>
+	</ul>
+
+
+										</div>
+
+								</div>
+
+							</li>
+
+						</ul>
+				</div>
+
+			</article> 
+
+			<article id="quick-configuration" class="d-none">
+				<form>
+
+					<fieldset>
+	    				<legend>Administrator</legend>
+	    				<hr class="mt-1" />
+
+						  <div class="form-group row">
+						    <label for="admin-password" class="col-sm-3 col-md-3 col-form-label">New Password</label>
+						    <div class="col-sm-9">
+						      <input type="password" class="form-control" id="admin-password" placeholder="new password">
+						    </div>
+						  </div>
+
+						  <div class="form-group row">
+						    <label for="admin-password2" class="col-sm-3 col-md-3 col-form-label">Confirm Password</label>
+						    <div class="col-sm-9">
+						      <input type="password" class="form-control" id="admin-password2" placeholder="confirm password">
+						    </div>
+						  </div>
+
+					 </fieldset>
+
+					<fieldset>
+	    				<legend>Wan</legend>
+	    				<hr class="mt-1" />
+
+						  <div class="form-group row ">
+ 							<label for="wan-protocol" class="col-sm-3 col-md-2 col-form-label">Protocol</label>
+						    <div class="col-sm-9 col-md-4">
+	 							 <select id="wan-protocol" class="form-control">
+							        <option selected>DHCP</option>
+							        <option>PPPoE</option>
+							        <option>Static address</option>
+							      </select>
+						    </div>
+						  </div>
+
+		 			     <div class="form-group row">
+						    <label for="pap-username" class="col-sm-3 col-md-2 col-form-label"> Username</label>
+						    <div class="col-sm-9">
+						      <input type="text" class="form-control" id="pap-username" placeholder="PAP Username for internet">
+						    </div>
+						  </div>
+
+						  <div class="form-group row">
+						    <label for="pap-password" class="col-sm-3 col-md-2 col-form-label"> Password</label>
+						    <div class="col-sm-9">
+						      <input type="password" class="form-control" id="pap-password" placeholder="PAP password for internet">
+						    </div>
+						  </div>
+
+						  <div class="form-group row">
+						    <label for="wan-dns" class="col-sm-3 col-md-2 col-form-label">DNS</label>
+						    <div class="col-sm-9">
+						      <input type="text" class="form-control" id="wan-dns" placeholder="Use custom DNS servers ex: 8.8.8.8">
+						    </div>
+						  </div>
+					 </fieldset>
+
+					<fieldset>
+	    				<legend>Wifi</legend>
+	    				<hr class="mt-1" />
+ 
+						<div class="form-group row">
+						    <label for="wifi-enable" class="col-sm-2 col-form-label">Enable</label>
+						    <div class="col-sm-10 col-md-6 ml-3">
+							  <input class="form-check-input position-static" type="checkbox" id="wifi-enable" value="1" checked>
+						    </div>
+						  </div>
+
+						<div class="form-group row ">
+ 							<label for="wifi-mod1" class="col-sm-2 col-form-label">Mod</label>
+						    <div class="col-sm-10 col-md-6 ml-3">
+							  <input class="form-check-input position-static" type="radio" name="blankRadio" id="wifi-mod1" value="option1" checked>
+							 <label class="form-check-label mr-5" for="wifi-mod1">
+							    2.4Ghz
+							  </label>
+ 						<input class="form-check-input position-static" type="radio" name="blankRadio" id="wifi-mod2">
+							 <label class="form-check-label" for="wifi-mod2">
+							    5Ghz
+							  </label>
+						    </div>
+						  </div>
+
+		 			     <div class="form-group row">
+						    <label for="wifi-ssid" class="col-sm-2 col-form-label">SSID</label>
+						    <div class="col-sm-10">
+						      <input type="text" class="form-control" id="wifi-ssid" placeholder="New name for wifi">
+						    </div>
+						  </div>
+
+						  <div class="form-group row ">
+ 							<label for="wifi-encryption" class="col-sm-2 col-form-label">Encryption</label>
+						    <div class="col-sm-10 col-md-4">
+	 							 <select id="wifi-encryption" class="form-control">
+							        <option selected>WPA (PSK)</option>
+							        <option>WPA2 (PSK)</option>
+							      </select>
+						    </div>
+						  </div>
+
+						  <div class="form-group row">
+						    <label for="wifi-password" class="col-sm-2 col-form-label">Password</label>
+						    <div class="col-sm-10">
+						      <input type="password" class="form-control" id="wifi-password" placeholder="New password for wifi">
+						      <small class="form-text text-muted">Recommended to use alphanumeric characters</small>
+						    </div>
+						  </div>
+					 </fieldset>
+
+					  <div class="form-group">
+					      <button type="submit" class="btn btn-success float-right">Save Configuration</button>
+					    </div>
+				</form>
+
+			</article> 			
+
+			<article id="static-ip" class="d-none">
+				<form>
+					<fieldset>
+						<legend>
+							<span class="h1">Static Leases</span>
+							<button type="submit" style="margin-right:3.8em;" class="h1 btn btn-primary float-right">Add</button>
+	    				</legend>
+						 
+						<table class="table table-hover">
+						  <thead>
+						    <tr>
+						      <th scope="col">
+						      	<p>Hostname</p>
+								<small class="form-text text-muted small">Device  alias</small>
+						      </th>
+ 						 	  <th scope="col">
+						      	<p>MAC Address</p>
+								<small class="form-text text-muted small">Mac Address of device</small>
+						      </th>
+						      <th scope="col">
+						      	<p>IPv4 Address</p>
+								<small class="form-text text-muted small">Custom IPv4 Address</small>
+						      </th>
+						      <th scope="col"></th>
+						    </tr>
+						  </thead>
+						  <tbody>
+						    <tr>
+						      <td>						    
+						       <input type="text" class="form-control"  placeholder="Ex: Huawei P30" value="Ipad">
+							 </td>
+ 							 <td>						    
+						       <input type="text" class="form-control"  placeholder="Ex: 1A:3D:4C:7D:9C" value="9A:1D:4C:5D:2C">
+							 </td>
+ 							 <td>						    
+						       <input type="text" class="form-control"  placeholder="Ex: 192.168.1.10" value="192.168.1.19">
+							 </td>
+							 <td>						    
+						       <button type="submit" class="btn btn-danger">Delete</button>
+							 </td>
+						    </tr>
+ 							<tr>
+						      <td>						    
+						       <input type="text" class="form-control"  placeholder="Ex: Huawei P30" >
+							 </td>
+ 							 <td>						    
+						       <input type="text" class="form-control"  placeholder="Ex: 1A:3D:4C:7D:9C">
+							 </td>
+ 							 <td>						    
+						       <input type="text" class="form-control"  placeholder="Ex: 192.168.1.10">
+							 </td>
+							 <td>						    
+						       <button type="submit" class="btn btn-danger">Delete</button>
+							 </td>
+						    </tr>
+						  </tbody>
+						</table>
+						<div class="text-right mr-2">
+							<button type="submit" class="btn btn-success">Save Configuration</button>
+						</div>
+					 </fieldset>
+				</form>
+			</article> 
+
+			<article id="port-redirects" class="d-none">
+				<form>
+					<fieldset>
+	    				<legend>
+    						<span class="h1">Port Forwards</span>
+							<button type="submit" class="h1 btn btn-primary float-right">Add</button>
+	    				</legend>
+						 
+						<table class="table table-hover">
+						  <thead>
+						    <tr>
+						      <th scope="col">
+						      	<p>Alias</p>
+								<small class="form-text text-muted small">Service alias</small>
+						      </th>
+ 						 	  <th scope="col">
+						      	<p>Protocol</p>
+								<small class="form-text text-muted small">Protocol TCP/UDP</small>
+						      </th>
+						      <th scope="col">
+						      	<p>Internal address</p>
+								<small class="form-text text-muted small">Custom Port Forwards</small>
+						      </th>
+ 						 	  <th scope="col">
+						      	<p>Internal port</p>
+								<small class="form-text text-muted small">Custom Port Forwards</small>
+						      </th>
+						      <th scope="col"></th>
+						    </tr>
+						  </thead>
+						  <tbody>
+						    <tr>
+						      <td>						    
+						       <input type="text" class="form-control"  placeholder="Ex: FTP" value="FTP">
+							 </td>
+ 							 <td>						    
+						       <input type="text" class="form-control"  placeholder="Ex: TCP" value="TCP">
+							 </td>
+ 							 <td>						    
+						       <input type="text" class="form-control"  placeholder="Ex: 192.168.1.10"value="192.168.1.20">
+							 </td>
+							 <td>						    
+						       <input type="text" class="form-control"  placeholder="Ex: 233"value="2020">
+							 </td>
+							 <td>						    
+						       <button type="submit" class="btn btn-danger">Delete</button>
+							 </td>
+						    </tr>
+ 							<tr>
+						      <td>						    
+						       <input type="text" class="form-control"  placeholder="Ex: FTP">
+							 </td>
+ 							 <td>						    
+						       <input type="text" class="form-control"  placeholder="Ex: TCP">
+							 </td>
+ 							 <td>						    
+						       <input type="text" class="form-control"  placeholder="Ex: 192.168.1.10">
+							 </td>
+							 <td>						    
+						       <input type="text" class="form-control"  placeholder="Ex: 233">
+							 </td>
+							 <td>						    
+						       <button type="submit" class="btn btn-danger">Delete</button>
+							 </td>
+						    </tr>
+						  </tbody>
+						</table>
+						<div class="text-right mr-2">
+							<button type="submit" class="btn btn-success">Save Configuration</button>
+						</div>
+					 </fieldset>
+				</form>
+			</article>
+
+			<article id="advanced-configuration-wifi" class="d-none">
+				<form>
+					<fieldset>
+	    				 <legend>Wifi</legend>
+					 	 <hr class="mt-1" />
+ 
+						<div class="form-group row">
+						    <label for="wifi-enable1" class="col-sm-2 col-md-2 col-form-label">Enable</label>
+						    <div class="col-sm-10 col-md-6 ml-3">
+							  <input class="form-check-input position-static" type="checkbox" id="wifi-enable1" value="1" checked>
+						    </div>
+						  </div>
+
+						<div class="form-group row ">
+ 							<label for="wifi-mod11" class="col-sm-2 col-md-2 col-form-label">Mod</label>
+						    <div class="col-sm-10 col-md-6 ml-3">
+							  <input class="form-check-input position-static" type="radio" id="wifi-mod11" value="1" checked>
+							 <label class="form-check-label mr-5" for="wifi-mod22">
+							    2.4Ghz
+							  </label>
+ 						<input class="form-check-input position-static" type="radio" name="blankRadio" id="wifi-mod22" value="option1" >
+							 <label class="form-check-label" for="wifi-mod22">
+							    5Ghz
+							  </label>
+						    </div>
+						  </div>
+
+		 			     <div class="form-group row">
+						    <label for="wifi-ssid1" class="col-sm-2 col-md-2 col-form-label">SSID</label>
+						    <div class="col-sm-10">
+						      <input type="text" class="form-control" id="ifi-ssid1" placeholder="New name for wifi">
+						    </div>
+						  </div>
+
+						  <div class="form-group row ">
+ 							<label for="wifi-encryption1" class="col-sm-2 col-md-2 col-form-label">Encryption</label>
+						    <div class="col-sm-10 col-md-4">
+	 							 <select id="wifi-encryption1" class="form-control">
+							        <option selected>WPA (PSK)</option>
+							        <option>WPA2 (PSK)</option>
+							      </select>
+						    </div>
+						  </div>
+
+						  <div class="form-group row">
+						    <label for="wifi-password1" class="col-sm-2 col-md-2 col-form-label">Password</label>
+						    <div class="col-sm-10">
+						      <input type="password" class="form-control" id="wifi-password1" placeholder="New password for wifi">
+						      <small class="form-text text-muted">Recommended to use alphanumeric characters</small>
+
+  						      <button type="submit" class="btn btn-success mt-3 float-right">Save Configuration</button>
+						    </div>
+						  </div>
+					 </fieldset>
+				</form>
+			</article> 
+
+			<article id="advanced-configuration-wan" class="d-none">
+			  <form>
+				<fieldset>
+					 <legend>Wan</legend>
+					 <hr class="mt-1" />
+ 					 <div class="form-group row ">
+							<label for="wan-protocol1" class="col-sm-3 col-md-2 col-form-label">Protocol</label>
+					    <div class="col-sm-9 col-md-4">
+								 <select id="wan-protocol1" class="form-control">
+						        <option selected>DHCP</option>
+						        <option>PPPoE</option>
+						        <option>Static address</option>
+						      </select>
+					    </div>
+					  </div>
+
+	 			     <div class="form-group row">
+					    <label for="pap-username1" class="col-sm-3 col-md-2 col-form-label"> Username</label>
+					    <div class="col-sm-9">
+					      <input type="text" class="form-control" id="pap-username1" placeholder="PAP Username for internet">
+					    </div>
+					  </div>
+
+					  <div class="form-group row">
+					    <label for="pap-password1" class="col-sm-3 col-md-2 col-form-label"> Password</label>
+					    <div class="col-sm-9">
+					      <input type="password" class="form-control" id="pap-password1" placeholder="PAP password for internet">
+					    </div>
+					  </div>
+
+					  <div class="form-group row">
+					    <label for="wan-dns1" class="col-sm-3 col-md-2 col-form-label">DNS</label>
+					    <div class="col-sm-9">
+					      <input type="text" class="form-control" id="wan-dns1" placeholder="Use custom DNS servers ex: 8.8.8.8">
+					      <button type="submit" class="btn btn-success mt-3 float-right">Save Configuration</button>
+					    </div>
+					  </div>
+				</fieldset>					     
+			   </form>
+			</article> 
+		</section>
+	</main>	
+
+  <script src="js/jquery.min.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
