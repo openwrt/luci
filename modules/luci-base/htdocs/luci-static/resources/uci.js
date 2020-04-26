@@ -295,7 +295,8 @@ return baseclass.extend(/** @lends LuCI.uci.prototype */ {
 	 * The ID of the section to remove.
 	 */
 	remove: function(conf, sid) {
-		var n = this.state.creates,
+		var v = this.state.values,
+		    n = this.state.creates,
 		    c = this.state.changes,
 		    d = this.state.deletes;
 
@@ -303,7 +304,7 @@ return baseclass.extend(/** @lends LuCI.uci.prototype */ {
 		if (n[conf] && n[conf][sid]) {
 			delete n[conf][sid];
 		}
-		else {
+		else if (v[conf] && v[conf][sid]) {
 			if (c[conf])
 				delete c[conf][sid];
 
@@ -785,6 +786,16 @@ return baseclass.extend(/** @lends LuCI.uci.prototype */ {
 		    pkgs = { },
 		    tasks = [];
 
+		if (d)
+			for (var conf in d) {
+				for (var sid in d[conf]) {
+					var o = d[conf][sid];
+					tasks.push(self.callDelete(conf, sid, (o === true) ? null : o));
+				}
+
+				pkgs[conf] = true;
+			}
+
 		if (n)
 			for (var conf in n) {
 				for (var sid in n[conf]) {
@@ -813,16 +824,6 @@ return baseclass.extend(/** @lends LuCI.uci.prototype */ {
 			for (var conf in c) {
 				for (var sid in c[conf])
 					tasks.push(self.callSet(conf, sid, c[conf][sid]));
-
-				pkgs[conf] = true;
-			}
-
-		if (d)
-			for (var conf in d) {
-				for (var sid in d[conf]) {
-					var o = d[conf][sid];
-					tasks.push(self.callDelete(conf, sid, (o === true) ? null : o));
-				}
 
 				pkgs[conf] = true;
 			}
