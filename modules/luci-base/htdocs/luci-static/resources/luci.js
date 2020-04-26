@@ -1847,6 +1847,16 @@
 		},
 
 		/**
+		 * Retrieve the current session token.
+		 *
+		 * @returns {string|null}
+		 * Returns the current session token or `null` if not logged in.
+		 */
+		getToken: function() {
+			return env.token || null;
+		},
+
+		/**
 		 * Retrieve data from the local session storage.
 		 *
 		 * @param {string} [key]
