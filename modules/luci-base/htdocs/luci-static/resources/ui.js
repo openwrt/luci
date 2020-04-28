@@ -739,12 +739,14 @@ var UISelect = UIElement.extend(/** @lends LuCI.ui.Select.prototype */ {
 			}
 		}
 		else {
-			var brEl = (this.options.orientation === 'horizontal') ? document.createTextNode(' ') : E('br');
+			var brEl = (this.options.orientation === 'horizontal') ? document.createTextNode(' \xa0 ') : E('br');
 
 			for (var i = 0; i < keys.length; i++) {
-				frameEl.appendChild(E('label', {}, [
+				frameEl.appendChild(E('span', {
+					'class': 'cbi-%s'.format(this.options.multiple ? 'checkbox' : 'radio')
+				}, [
 					E('input', {
-						'id': this.options.id ? 'widget.' + this.options.id : null,
+						'id': this.options.id ? 'widget.%s.%d'.format(this.options.id, i) : null,
 						'name': this.options.id || this.options.name,
 						'type': this.options.multiple ? 'checkbox' : 'radio',
 						'class': this.options.multiple ? 'cbi-input-checkbox' : 'cbi-input-radio',
@@ -752,11 +754,15 @@ var UISelect = UIElement.extend(/** @lends LuCI.ui.Select.prototype */ {
 						'checked': (this.values.indexOf(keys[i]) > -1) ? '' : null,
 						'disabled': this.options.disabled ? '' : null
 					}),
-					this.choices[keys[i]] || keys[i]
+					E('label', { 'for': this.options.id ? 'widget.%s.%d'.format(this.options.id, i) : null }),
+					E('span', {
+						'click': function(ev) {
+							ev.currentTarget.previousElementSibling.previousElementSibling.click();
+						}
+					}, [ this.choices[keys[i]] || keys[i] ])
 				]));
 
-				if (i + 1 == this.options.size)
-					frameEl.appendChild(brEl);
+				frameEl.appendChild(brEl.cloneNode());
 			}
 		}
 
@@ -789,7 +795,7 @@ var UISelect = UIElement.extend(/** @lends LuCI.ui.Select.prototype */ {
 		if (this.options.widget == 'select')
 			return this.node.firstChild.value;
 
-		var radioEls = frameEl.querySelectorAll('input[type="radio"]');
+		var radioEls = this.node.querySelectorAll('input[type="radio"]');
 		for (var i = 0; i < radioEls.length; i++)
 			if (radioEls[i].checked)
 				return radioEls[i].value;
