@@ -2,7 +2,7 @@
 'require baseclass';
 
 return baseclass.extend({
-	trigger: _('heartbeat (kernel)'),
+	trigger: _('Heartbeat interval (kernel: heartbeat)'),
 	kernel: true,
 	addFormOptions(s){
 		var o;

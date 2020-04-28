@@ -2,7 +2,7 @@
 'require baseclass';
 
 return baseclass.extend({
-	trigger: _('none (kernel)'),
+	trigger: _('Always off (kernel: none)'),
 	kernel: true,
 	addFormOptions(s){
 		var o;

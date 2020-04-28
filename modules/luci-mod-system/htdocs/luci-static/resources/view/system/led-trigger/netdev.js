@@ -4,7 +4,7 @@
 'require tools.widgets as widgets';
 
 return baseclass.extend({
-	trigger: _("netdev (kernel)"),
+	trigger: _("Network device activity (kernel: netdev)"),
 	kernel: true,
 	addFormOptions(s){
 		var o;
