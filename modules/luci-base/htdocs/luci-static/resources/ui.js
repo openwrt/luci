@@ -712,7 +712,7 @@ var UISelect = UIElement.extend(/** @lends LuCI.ui.Select.prototype */ {
 		else if (Array.isArray(this.options.sort))
 			keys = this.options.sort;
 
-		if (this.options.widget == 'select') {
+		if (this.options.widget != 'radio' && this.options.widget != 'checkbox') {
 			frameEl.appendChild(E('select', {
 				'id': this.options.id ? 'widget.' + this.options.id : null,
 				'name': this.options.name,
