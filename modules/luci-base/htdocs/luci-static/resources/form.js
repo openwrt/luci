@@ -531,12 +531,15 @@ var CBIMap = CBIAbstractElement.extend(/** @lends LuCI.form.Map.prototype */ {
 	 * an error.
 	 */
 	load: function() {
-		var doCheckACL = (!(this instanceof CBIJSONMap) && this.readonly == null);
+		var doCheckACL = (!(this instanceof CBIJSONMap) && this.readonly == null),
+		    loadTasks = [ doCheckACL ? callSessionAccess('uci', this.config, 'write') : true ],
+		    configs = this.parsechain || [ this.config ];
 
-		return Promise.all([
-			doCheckACL ? callSessionAccess('uci', this.config, 'write') : true,
-			this.data.load(this.parsechain || [ this.config ])
-		]).then(L.bind(function(res) {
+		loadTasks.push.apply(loadTasks, configs.map(L.bind(function(config, i) {
+			return i ? L.resolveDefault(this.data.load(config)) : this.data.load(config);
+		}, this)));
+
+		return Promise.all(loadTasks).then(L.bind(function(res) {
 			if (res[0] === false)
 				this.readonly = true;
 
