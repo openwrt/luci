@@ -1754,6 +1754,10 @@ var CBIAbstractValue = CBIAbstractElement.extend(/** @lends LuCI.form.AbstractVa
 
 		if (field && field.classList.contains('hidden') == active) {
 			field.classList[active ? 'remove' : 'add']('hidden');
+
+			if (dom.matches(field.parentNode, '.td.cbi-value-field'))
+				field.parentNode.classList[active ? 'remove' : 'add']('inactive');
+
 			return true;
 		}
 
