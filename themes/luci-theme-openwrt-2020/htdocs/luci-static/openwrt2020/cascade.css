@@ -317,7 +317,8 @@ body.modal-overlay-active #modal_overlay {
 .td input[type="password"],
 .td select,
 .td .cbi-dropdown:not(.btn):not(.cbi-button),
-.td .cbi-dynlist {
+.td .cbi-dynlist,
+.td .control-group {
 	min-width: auto;
 	width: 100%;
 }
@@ -1065,6 +1066,7 @@ textarea {
 .control-group {
 	display: inline-flex;
 	margin: 0 -.125rem;
+	min-width: 20.25em;
 }
 
 .control-group > *,
@@ -1074,12 +1076,13 @@ textarea {
 
 .control-group > * {
 	margin: .125rem !important;
-	min-width: auto;
+	min-width: auto !important;
 }
 
 .control-group > select,
 .control-group > input:not([type]),
-.control-group > input[type="text"] {
+.control-group > input[type="text"],
+.control-group > input[type="password"] {
 	flex: 10;
 }
 
