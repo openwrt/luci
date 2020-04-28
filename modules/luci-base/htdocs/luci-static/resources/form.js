@@ -520,8 +520,16 @@ var CBIMap = CBIAbstractElement.extend(/** @lends LuCI.form.Map.prototype */ {
 	 * an error.
 	 */
 	load: function() {
-		return this.data.load(this.parsechain || [ this.config ])
-			.then(this.loadChildren.bind(this));
+		var loadTasks = [],
+		    configs = this.parsechain || [ this.config ];
+
+		loadTasks.push.apply(loadTasks, configs.map(L.bind(function(config, i) {
+			return i ? L.resolveDefault(this.data.load(config)) : this.data.load(config);
+		}, this)));
+
+		return Promise.all(loadTasks).then(L.bind(function(res) {
+			return this.loadChildren();
+		}, this));
 	},
 
 	/**
