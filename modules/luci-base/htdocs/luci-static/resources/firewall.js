@@ -5,7 +5,7 @@
 
 
 function initFirewallState() {
-	return uci.load('firewall');
+	return L.resolveDefault(uci.load('firewall'));
 }
 
 function parseEnum(s, values) {
