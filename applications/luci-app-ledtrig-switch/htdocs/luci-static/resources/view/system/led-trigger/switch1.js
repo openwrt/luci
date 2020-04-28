@@ -3,7 +3,7 @@
 'require form';
 
 return baseclass.extend({
-	trigger: _('switch1 (kernel)'),
+	trigger: _('Switch support (kernel: switch1)'),
 	kernel: true,
 	addFormOptions(s){
 		var o;
