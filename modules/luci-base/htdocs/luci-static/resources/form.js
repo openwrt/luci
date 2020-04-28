@@ -3292,6 +3292,7 @@ var CBIListValue = CBIValue.extend(/** @lends LuCI.form.ListValue.prototype */ {
 	__init__: function() {
 		this.super('__init__', arguments);
 		this.widget = 'select';
+		this.orientation = 'horizontal';
 		this.deplist = [];
 	},
 
@@ -3303,6 +3304,29 @@ var CBIListValue = CBIValue.extend(/** @lends LuCI.form.ListValue.prototype */ {
 	 * @default null
 	 */
 
+	/**
+	 * Set the type of the underlying form controls.
+	 *
+	 * May be one of `select` or `radio`. If set to `select`, an HTML
+	 * select element is rendered, otherwise a collection of `radio`
+	 * elements is used.
+	 *
+	 * @name LuCI.form.ListValue.prototype#widget
+	 * @type string
+	 * @default select
+	 */
+
+	/**
+	 * Set the orientation of the underlying radio or checkbox elements.
+	 *
+	 * May be one of `horizontal` or `vertical`. Only applies to non-select
+	 * widget types.
+	 *
+	 * @name LuCI.form.ListValue.prototype#orientation
+	 * @type string
+	 * @default horizontal
+	 */
+
 	 /** @private */
 	renderWidget: function(section_id, option_index, cfgvalue) {
 		var choices = this.transformChoices();
@@ -3310,7 +3334,9 @@ var CBIListValue = CBIValue.extend(/** @lends LuCI.form.ListValue.prototype */ {
 			id: this.cbid(section_id),
 			size: this.size,
 			sort: this.keylist,
+			widget: this.widget,
 			optional: this.optional,
+			orientation: this.orientation,
 			placeholder: this.placeholder,
 			validate: L.bind(this.validate, this, section_id),
 			disabled: (this.readonly != null) ? this.readonly : this.map.readonly
