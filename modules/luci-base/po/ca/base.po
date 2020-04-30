@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-06-10 03:40+0200\n"
-"PO-Revision-Date: 2020-01-14 15:21+0000\n"
-"Last-Translator: Franco Castillo <castillofrancodamian@gmail.com>\n"
+"PO-Revision-Date: 2020-04-30 05:51+0000\n"
+"Last-Translator: Roger Pueyo Centelles <weblate@rogerpueyo.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/openwrt/luci/ca/>"
 "\n"
 "Language: ca\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.11-dev\n"
+"X-Generator: Weblate 4.0.2\n"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:927
 msgid "%.1f dB"
@@ -558,7 +558,7 @@ msgstr ""
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:569
 msgid "An error occurred while saving the form:"
-msgstr ""
+msgstr "Hi ha hagut un error en desar el formulari:"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:888
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:20
@@ -940,19 +940,19 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1504
 msgid "Certificate constraint (Domain)"
-msgstr ""
+msgstr "Restricció de certificat (Domini)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1501
 msgid "Certificate constraint (SAN)"
-msgstr ""
+msgstr "Restricció de certificat (SAN)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1498
 msgid "Certificate constraint (Subject)"
-msgstr ""
+msgstr "Restricció de certificat (Subjecte)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1507
 msgid "Certificate constraint (Wildcard)"
-msgstr ""
+msgstr "Restricció de certificat (Comodí)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1498
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1556
@@ -960,6 +960,9 @@ msgid ""
 "Certificate constraint substring - e.g. /CN=wifi.mycompany.com<br />See "
 "`logread -f` during handshake for actual values"
 msgstr ""
+"Subcadena de restricció de certificat - p. ex. /CN=wifi.mycompany.com<br/>"
+"Vegeu `logread -f` durant l'establiment del protocol d'enllaç per conèixer "
+"els valors reals"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1504
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1562
@@ -5523,6 +5526,8 @@ msgstr ""
 msgid ""
 "This option cannot be used because the ca-bundle package is not installed."
 msgstr ""
+"Aquesta opció no es pot utilitzar perquè el paquet ca-bundle no està "
+"instal·lat."
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:1997
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2292
@@ -5661,7 +5666,7 @@ msgstr ""
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/dmesg.js:9
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/syslog.js:15
 msgid "Unable to load log data:"
-msgstr ""
+msgstr "No s'han pogut carregar les dades del registre:"
 
 #: modules/luci-compat/luasrc/model/network/proto_modemmanager.lua:54
 #: modules/luci-compat/luasrc/model/network/proto_qmi.lua:54
@@ -5676,11 +5681,11 @@ msgstr ""
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:278
 msgid "Unable to reset ip6tables counters: %s"
-msgstr ""
+msgstr "No s'han pogut restablir els comptadors ip6tables: %s"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:276
 msgid "Unable to reset iptables counters: %s"
-msgstr ""
+msgstr "No s'han pogut restablir els comptadors iptables: %s"
 
 #: modules/luci-compat/luasrc/model/network/proto_4x6.lua:61
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dslite.js:7
@@ -5694,7 +5699,7 @@ msgstr ""
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:284
 msgid "Unable to restart firewall: %s"
-msgstr ""
+msgstr "No s'ha pogut reiniciar el tallafocs: %s"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/crontab.js:18
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:340
@@ -5924,7 +5929,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1483
 msgid "Use system certificates"
-msgstr ""
+msgstr "Empra els certificats del sistema"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1541
 msgid "Use system certificates for inner-tunnel"
@@ -6223,9 +6228,8 @@ msgid "auto"
 msgstr "auto"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:85
-#, fuzzy
 msgid "automatic"
-msgstr "estàtic"
+msgstr "automàtic"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:82
 msgid "baseT"
@@ -6333,8 +6337,9 @@ msgid "half-duplex"
 msgstr ""
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/heartbeat.js:5
+#, fuzzy
 msgid "heartbeat (kernel)"
-msgstr ""
+msgstr "batec (kernel)"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:566
 msgid "hexadecimal encoded value"
