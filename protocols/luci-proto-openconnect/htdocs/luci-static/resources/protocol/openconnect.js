@@ -102,6 +102,7 @@ return network.registerProtocol('openconnect', {
 
 		s.taboption('general', form.Value, 'serverhash', _("VPN Server's certificate SHA1 hash"));
 		s.taboption('general', form.Value, 'authgroup', _('Auth Group'));
+		s.taboption('general', form.Value, 'usergroup', _('User Group'));
 		s.taboption("general", form.Value, "username", _("Username"));
 
 		o = s.taboption('general', form.Value, 'password', _('Password'));
