@@ -13,6 +13,7 @@ LUCI_PKGARCH?=$(if $(realpath src/Makefile),,all)
 
 # Language code titles
 LUCI_LANG.bg=български (Bulgarian)
+LUCI_LANG.bn_BD=বাংলা (Bengali)
 LUCI_LANG.ca=Català (Catalan)
 LUCI_LANG.cs=Čeština (Czech)
 LUCI_LANG.de=Deutsch (German)
@@ -51,6 +52,7 @@ LUCI_MENU.proto=5. Protocols
 LUCI_MENU.lib=6. Libraries
 
 # Language aliases
+LUCI_LC_ALIAS.bn_BD=bn
 LUCI_LC_ALIAS.nb_NO=no
 LUCI_LC_ALIAS.pt_BR=pt-br
 LUCI_LC_ALIAS.zh_Hans=zh-cn
