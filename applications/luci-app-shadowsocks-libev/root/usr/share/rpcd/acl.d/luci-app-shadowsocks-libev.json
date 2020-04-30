@@ -4,12 +4,14 @@
 		"read": {
 			"ubus": {
 				"service": [ "list" ]
-			}
+			},
+			"uci": [ "shadowsocks-libev" ]
 		},
 		"write": {
 			"file": {
 				"/etc/shadowsocks-libev/*": [ "write" ]
-			}
+			},
+			"uci": [ "shadowsocks-libev" ]
 		}
 	}
 }
