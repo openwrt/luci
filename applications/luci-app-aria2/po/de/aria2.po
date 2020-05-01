@@ -30,7 +30,7 @@ msgstr "Alle Proxy"
 msgid "Append HEADERs to HTTP request header."
 msgstr "HEADER zu den HTTP-Anfrage-Header anhängen."
 
-#: applications/luci-app-aria2/luasrc/controller/aria2.lua:18
+#: applications/luci-app-aria2/luasrc/controller/aria2.lua:17
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:35
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/files.lua:14
 #: applications/luci-app-aria2/luasrc/view/aria2/log_template.htm:45
@@ -91,7 +91,7 @@ msgstr "Sammle Daten..."
 msgid "Config file directory"
 msgstr "Verzeichnis der Konfigurationsdatei"
 
-#: applications/luci-app-aria2/luasrc/controller/aria2.lua:21
+#: applications/luci-app-aria2/luasrc/controller/aria2.lua:22
 msgid "Configuration"
 msgstr "Konfiguration"
 
@@ -130,8 +130,8 @@ msgstr "Festplatten-Cache"
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:259
 msgid "Don't split less than 2*SIZE byte range. Possible values: 1M-1024M."
 msgstr ""
-"Splitte nicht wenn die Byte-Range kleiner als 2*SIZE beträgt. Mögliche Werte:"
-" 1M-1024M."
+"Splitte nicht wenn die Byte-Range kleiner als 2*SIZE beträgt. Mögliche "
+"Werte: 1M-1024M."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:254
 msgid "Download a file using N connections."
@@ -215,7 +215,7 @@ msgstr "Dateizuweisung"
 msgid "File does not exist."
 msgstr "Datei existiert nicht."
 
-#: applications/luci-app-aria2/luasrc/controller/aria2.lua:24
+#: applications/luci-app-aria2/luasrc/controller/aria2.lua:25
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/files.lua:14
 msgid "Files"
 msgstr "Dateien"
@@ -235,6 +235,10 @@ msgstr "Speichern erzwingen"
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:129
 msgid "Generate Randomly"
 msgstr "Zufällig generieren"
+
+#: applications/luci-app-aria2/root/usr/share/rpcd/acl.d/luci-app-aria2.json:3
+msgid "Grant UCI access for luci-app-aria2"
+msgstr ""
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:210
 msgid "HTTP accept gzip"
@@ -325,7 +329,7 @@ msgstr ""
 msgid "Loading"
 msgstr "Lade"
 
-#: applications/luci-app-aria2/luasrc/controller/aria2.lua:27
+#: applications/luci-app-aria2/luasrc/controller/aria2.lua:28
 msgid "Log"
 msgstr "Protokoll"
 
@@ -601,8 +605,8 @@ msgid ""
 msgstr ""
 "Sende <code>Cache-Control: no-cache</code> und <code>Pragma: no-cache</code> "
 "Header, um zwischengespeicherte Inhalte zu vermeiden. Wenn sie deaktiviert "
-"sind, werden diese Header nicht gesendet, und Sie können mit der Option \""
-"Header\" einen Cache-Control-Header mit einer beliebigen Direktive "
+"sind, werden diese Header nicht gesendet, und Sie können mit der Option "
+"\"Header\" einen Cache-Control-Header mit einer beliebigen Direktive "
 "hinzufügen."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:336
@@ -695,14 +699,14 @@ msgid ""
 "FAT32 because it takes almost same time as \"prealloc\" and it blocks aria2 "
 "entirely until allocation finishes."
 msgstr ""
-"Geben Sie die File-Allocation-Methode an. Für neuere Dateisysteme wie ext4 ("
-"mit Unterstützung von Extents), btrfs, xfs oder NTFS (nur MinGW-Build) ist \""
-"falloc\" die beste Wahl. Diese ordnet (wenige GiB) große Dateien fast sofort "
-"zu, ist aber möglicherweise nicht verfügbar, wenn das System nicht über die "
-"posix_fallocate(3)-Funktion verfügt. Die \"falloc\"-Methode sollte nicht mit "
-"älteren Dateisystemen wie ext3 und FAT32 verwendet werden, da es fast "
-"dieselbe Zeit wie \"prealloc\" benötigt und aria2 vollständig blockiert, bis "
-"die Zuweisung abgeschlossen ist."
+"Geben Sie die File-Allocation-Methode an. Für neuere Dateisysteme wie ext4 "
+"(mit Unterstützung von Extents), btrfs, xfs oder NTFS (nur MinGW-Build) ist "
+"\"falloc\" die beste Wahl. Diese ordnet (wenige GiB) große Dateien fast "
+"sofort zu, ist aber möglicherweise nicht verfügbar, wenn das System nicht "
+"über die posix_fallocate(3)-Funktion verfügt. Die \"falloc\"-Methode sollte "
+"nicht mit älteren Dateisystemen wie ext3 und FAT32 verwendet werden, da es "
+"fast dieselbe Zeit wie \"prealloc\" benötigt und aria2 vollständig "
+"blockiert, bis die Zuweisung abgeschlossen ist."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:368
 msgid ""

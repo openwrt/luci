@@ -169,6 +169,10 @@ msgstr "Przełączniki kontekstu"
 msgid "Context switch monitoring enabled"
 msgstr "Monitorowanie przełącznika kontekstowego włączone"
 
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/syslog.js:23
+msgid "Controls which notifications should be sent to syslog."
+msgstr ""
+
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/network.js:28
 msgid "Create statistics about the network plugin itself"
 msgstr "Tworzenie statystyk dotyczących samej wtyczki sieciowej"
@@ -280,6 +284,7 @@ msgstr "Włącz statystyki"
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/processes.js:12
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:12
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:21
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/syslog.js:12
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:12
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/thermal.js:13
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/unixsock.js:13
@@ -376,7 +381,11 @@ msgstr "Wtyczki ogólne"
 msgid "Generate a separate graph for each logged user"
 msgstr "Generowanie oddzielnego wykresu dla każdego zalogowanego użytkownika"
 
-#: applications/luci-app-statistics/root/usr/share/luci/menu.d/luci-app-statistics.json:14
+#: applications/luci-app-statistics/root/usr/share/rpcd/acl.d/luci-app-statistics.json:3
+msgid "Grant access to statistics resources"
+msgstr ""
+
+#: applications/luci-app-statistics/root/usr/share/luci/menu.d/luci-app-statistics.json:15
 msgid "Graphs"
 msgstr "Wykresy"
 
@@ -487,6 +496,10 @@ msgstr "Monitorowanie obciążenia włączone"
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/graphs.js:108
 msgid "Loading data…"
 msgstr "Ładowanie danych…"
+
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/syslog.js:14
+msgid "Log level"
+msgstr ""
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/iptables.js:20
 msgid "Match IPv4 iptables rules"
@@ -800,6 +813,10 @@ msgstr ""
 "RRD, katalog przechowywania i wszystkie jego katalogi nadrzędne muszą być "
 "czytelne dla świata."
 
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/syslog.js:23
+msgid "Notify level"
+msgstr ""
+
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/collectd.js:77
 msgid "Number of threads for data collection"
 msgstr "Liczba wątków do zbierania danych"
@@ -964,7 +981,11 @@ msgstr "Port serwera"
 msgid "Set the maximum size for datagrams sent over the network"
 msgstr "Ustawienie maksymalnej wielkości datagramów wysyłanych przez sieć"
 
-#: applications/luci-app-statistics/root/usr/share/luci/menu.d/luci-app-statistics.json:23
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/syslog.js:14
+msgid "Sets the syslog log-level."
+msgstr ""
+
+#: applications/luci-app-statistics/root/usr/share/luci/menu.d/luci-app-statistics.json:24
 msgid "Setup"
 msgstr "Konfiguracja"
 
@@ -1057,6 +1078,18 @@ msgstr "Przechowywane okresy czasu"
 msgid "Storing CSV data in %s"
 msgstr "Przechowywanie danych CSV w %s"
 
+#: applications/luci-app-statistics/root/usr/share/luci/statistics/plugins/syslog.json:2
+msgid "Syslog"
+msgstr ""
+
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/syslog.js:6
+msgid "Syslog Plugin Configuration"
+msgstr ""
+
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/syslog.js:32
+msgid "Syslog enabled"
+msgstr ""
+
 #: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/load.js:7
 #: applications/luci-app-statistics/root/usr/share/luci/statistics/plugins/load.json:2
 msgid "System Load"
@@ -1104,6 +1137,12 @@ msgid ""
 "The OpenVPN plugin gathers information about the current vpn connection "
 "status."
 msgstr "Wtyczka openvpn gromadzi informacje o aktualnym stanie połączenia vpn."
+
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/syslog.js:7
+msgid ""
+"The SysLog plugin receives log messages from the daemon and dispatches them "
+"to syslog."
+msgstr ""
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/iptables.js:132
 msgid "The chain name must not contain spaces"
