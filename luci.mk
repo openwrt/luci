@@ -60,8 +60,10 @@ LUCI_LC_ALIAS.pt_BR=pt-br
 LUCI_LC_ALIAS.zh_Hans=zh-cn
 LUCI_LC_ALIAS.zh_Hant=zh-tw
 
-
-PKG_NAME?=$(LUCI_NAME)
+# Default locations
+HTDOCS = /www
+LUA_LIBRARYDIR = /usr/lib/lua
+LUCI_LIBRARYDIR = $(LUA_LIBRARYDIR)/luci
 
 
 # 1: everything expect po subdir or only po subdir
@@ -89,6 +91,14 @@ define findrev
   )
 endef
 
+PKG_NAME?=$(LUCI_NAME)
+PKG_RELEASE?=1
+PKG_INSTALL:=$(if $(realpath src/Makefile),1)
+PKG_BUILD_DEPENDS += lua/host luci-base/host LUCI_CSSTIDY:csstidy/host LUCI_SRCDIET:luasrcdiet/host $(LUCI_BUILD_DEPENDS)
+PKG_CONFIG_DEPENDS += CONFIG_LUCI_SRCDIET CONFIG_LUCI_JSMIN CONFIG_LUCI_CSSTIDY
+
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
+
 PKG_PO_VERSION?=$(if $(DUMP),x,$(strip $(call findrev)))
 PKG_SRC_VERSION?=$(if $(DUMP),x,$(strip $(call findrev,1)))
 
@@ -106,13 +116,6 @@ PKG_GITBRANCH?=$(if $(DUMP),x,$(strip $(shell \
 	echo "$$variant" \
 )))
 
-PKG_RELEASE?=1
-PKG_INSTALL:=$(if $(realpath src/Makefile),1)
-PKG_BUILD_DEPENDS += lua/host luci-base/host LUCI_CSSTIDY:csstidy/host LUCI_SRCDIET:luasrcdiet/host $(LUCI_BUILD_DEPENDS)
-PKG_CONFIG_DEPENDS += CONFIG_LUCI_SRCDIET CONFIG_LUCI_JSMIN CONFIG_LUCI_CSSTIDY
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
-
 include $(INCLUDE_DIR)/package.mk
 
 define Package/$(PKG_NAME)
@@ -129,30 +132,6 @@ endef
 ifneq ($(LUCI_DESCRIPTION),)
  define Package/$(PKG_NAME)/description
    $(strip $(LUCI_DESCRIPTION))
- endef
-endif
-
-# Language selection for luci-base
-ifeq ($(PKG_NAME),luci-base)
- define Package/luci-base/config
-   config LUCI_SRCDIET
-	bool "Minify Lua sources"
-	default n
-
-   config LUCI_JSMIN
-	bool "Minify JavaScript sources"
-	default y
-
-   config LUCI_CSSTIDY
-        bool "Minify CSS files"
-        default y
-
-   menu "Translations"$(foreach lang,$(LUCI_LANGUAGES),
-
-     config LUCI_LANG_$(lang)
-	   tristate "$(shell echo '$(LUCI_LANG.$(lang))' | sed -e 's/^.* (\(.*\))$$/\1/') ($(lang))")
-
-   endmenu
  endef
 endif
 
@@ -180,39 +159,6 @@ else
  define Build/Compile
  endef
 endif
-
-HTDOCS = /www
-LUA_LIBRARYDIR = /usr/lib/lua
-LUCI_LIBRARYDIR = $(LUA_LIBRARYDIR)/luci
-
-define SrcDiet
-	$(FIND) $(1) -type f -name '*.lua' | while read src; do \
-		if LUA_PATH="$(STAGING_DIR_HOSTPKG)/lib/lua/5.1/?.lua" luasrcdiet --noopt-binequiv -o "$$$$src.o" "$$$$src"; \
-		then mv "$$$$src.o" "$$$$src"; fi; \
-	done
-endef
-
-define JsMin
-	$(FIND) $(1) -type f -name '*.js' | while read src; do \
-		if jsmin < "$$$$src" > "$$$$src.o"; \
-		then mv "$$$$src.o" "$$$$src"; fi; \
-	done
-endef
-
-define CssTidy
-	$(FIND) $(1) -type f -name '*.css' | while read src; do \
-		if csstidy "$$$$src" --template=highest --remove_last_semicolon=true "$$$$src.o"; \
-		then mv "$$$$src.o" "$$$$src"; fi; \
-	done
-endef
-
-define SubstituteVersion
-	$(FIND) $(1) -type f -name '*.htm' | while read src; do \
-		$(SED) 's/<%# *\([^ ]*\)PKG_VERSION *%>/\1$(if $(PKG_VERSION),$(PKG_VERSION),$(PKG_SRC_VERSION))/g' \
-		    -e 's/"\(<%= *\(media\|resource\) *%>[^"]*\.\(js\|css\)\)"/"\1?v=$(if $(PKG_VERSION),$(PKG_VERSION),$(PKG_SRC_VERSION))"/g' \
-			"$$$$src"; \
-	done
-endef
 
 define Package/$(PKG_NAME)/install
 	if [ -d $(PKG_BUILD_DIR)/luasrc ]; then \
@@ -248,6 +194,60 @@ define Package/$(PKG_NAME)/postinst
 	exit 0
 }
 endef
+endif
+
+# some generic macros that can be used by all packages
+define SrcDiet
+	$(FIND) $(1) -type f -name '*.lua' | while read src; do \
+		if LUA_PATH="$(STAGING_DIR_HOSTPKG)/lib/lua/5.1/?.lua" luasrcdiet --noopt-binequiv -o "$$$$src.o" "$$$$src"; \
+		then mv "$$$$src.o" "$$$$src"; fi; \
+	done
+endef
+
+define JsMin
+	$(FIND) $(1) -type f -name '*.js' | while read src; do \
+		if jsmin < "$$$$src" > "$$$$src.o"; \
+		then mv "$$$$src.o" "$$$$src"; fi; \
+	done
+endef
+
+define CssTidy
+	$(FIND) $(1) -type f -name '*.css' | while read src; do \
+		if csstidy "$$$$src" --template=highest --remove_last_semicolon=true "$$$$src.o"; \
+		then mv "$$$$src.o" "$$$$src"; fi; \
+	done
+endef
+
+define SubstituteVersion
+	$(FIND) $(1) -type f -name '*.htm' | while read src; do \
+		$(SED) 's/<%# *\([^ ]*\)PKG_VERSION *%>/\1$(if $(PKG_VERSION),$(PKG_VERSION),$(PKG_SRC_VERSION))/g' \
+		    -e 's/"\(<%= *\(media\|resource\) *%>[^"]*\.\(js\|css\)\)"/"\1?v=$(if $(PKG_VERSION),$(PKG_VERSION),$(PKG_SRC_VERSION))"/g' \
+			"$$$$src"; \
+	done
+endef
+
+# additional setting luci-base package
+ifeq ($(PKG_NAME),luci-base)
+ define Package/luci-base/config
+   config LUCI_SRCDIET
+	bool "Minify Lua sources"
+	default n
+
+   config LUCI_JSMIN
+	bool "Minify JavaScript sources"
+	default y
+
+   config LUCI_CSSTIDY
+        bool "Minify CSS files"
+        default y
+
+   menu "Translations"$(foreach lang,$(LUCI_LANGUAGES),
+
+     config LUCI_LANG_$(lang)
+	   tristate "$(shell echo '$(LUCI_LANG.$(lang))' | sed -e 's/^.* (\(.*\))$$/\1/') ($(lang))")
+
+   endmenu
+ endef
 endif
 
 
