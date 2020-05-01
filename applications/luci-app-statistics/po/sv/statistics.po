@@ -165,6 +165,10 @@ msgstr ""
 msgid "Context switch monitoring enabled"
 msgstr ""
 
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/syslog.js:23
+msgid "Controls which notifications should be sent to syslog."
+msgstr ""
+
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/network.js:28
 msgid "Create statistics about the network plugin itself"
 msgstr ""
@@ -276,6 +280,7 @@ msgstr ""
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/processes.js:12
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:12
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:21
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/syslog.js:12
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:12
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/thermal.js:13
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/unixsock.js:13
@@ -372,7 +377,11 @@ msgstr "Generall insticksprogram"
 msgid "Generate a separate graph for each logged user"
 msgstr "Generera en separat graf för varje loggade användare"
 
-#: applications/luci-app-statistics/root/usr/share/luci/menu.d/luci-app-statistics.json:14
+#: applications/luci-app-statistics/root/usr/share/rpcd/acl.d/luci-app-statistics.json:3
+msgid "Grant access to statistics resources"
+msgstr ""
+
+#: applications/luci-app-statistics/root/usr/share/luci/menu.d/luci-app-statistics.json:15
 msgid "Graphs"
 msgstr "Grafer"
 
@@ -473,6 +482,10 @@ msgstr ""
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/graphs.js:30
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/graphs.js:108
 msgid "Loading data…"
+msgstr ""
+
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/syslog.js:14
+msgid "Log level"
 msgstr ""
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/iptables.js:20
@@ -768,6 +781,10 @@ msgid ""
 "directory and all its parent directories need to be world readable."
 msgstr ""
 
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/syslog.js:23
+msgid "Notify level"
+msgstr ""
+
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/collectd.js:77
 msgid "Number of threads for data collection"
 msgstr "Antalet trådar för insamling av data"
@@ -932,7 +949,11 @@ msgstr "Server-port"
 msgid "Set the maximum size for datagrams sent over the network"
 msgstr ""
 
-#: applications/luci-app-statistics/root/usr/share/luci/menu.d/luci-app-statistics.json:23
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/syslog.js:14
+msgid "Sets the syslog log-level."
+msgstr ""
+
+#: applications/luci-app-statistics/root/usr/share/luci/menu.d/luci-app-statistics.json:24
 msgid "Setup"
 msgstr "Installera"
 
@@ -1024,6 +1045,18 @@ msgstr "Lagrade tidsspann"
 msgid "Storing CSV data in %s"
 msgstr ""
 
+#: applications/luci-app-statistics/root/usr/share/luci/statistics/plugins/syslog.json:2
+msgid "Syslog"
+msgstr ""
+
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/syslog.js:6
+msgid "Syslog Plugin Configuration"
+msgstr ""
+
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/syslog.js:32
+msgid "Syslog enabled"
+msgstr ""
+
 #: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/load.js:7
 #: applications/luci-app-statistics/root/usr/share/luci/statistics/plugins/load.json:2
 msgid "System Load"
@@ -1068,6 +1101,12 @@ msgstr ""
 msgid ""
 "The OpenVPN plugin gathers information about the current vpn connection "
 "status."
+msgstr ""
+
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/syslog.js:7
+msgid ""
+"The SysLog plugin receives log messages from the daemon and dispatches them "
+"to syslog."
 msgstr ""
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/iptables.js:132
