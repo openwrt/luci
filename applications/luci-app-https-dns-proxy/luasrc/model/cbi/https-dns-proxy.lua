@@ -110,7 +110,7 @@ end
 
 create_helper_text()
 s3 = m:section(TypedSection, "https-dns-proxy", translate("Instances"), 
-	translatef("When you add/remove any instances below, they will be used to override the 'DNS forwardings' section of <a href=\"%s\">DHCP and DNS</a>.", dispatcher.build_url("admin/network/dhcp")) .. helperText)
+	translatef("When you add/remove any instances below, they will be used to override the 'DNS forwardings' section of %sDHCP and DNS%s.", "<a href=\"" .. dispatcher.build_url("admin/network/dhcp") .. "\">", "</a>") .. helperText)
 s3.template = "cbi/tblsection"
 s3.sortable  = false
 s3.anonymous = true
