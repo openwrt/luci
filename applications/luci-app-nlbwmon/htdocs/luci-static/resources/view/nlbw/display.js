@@ -50,8 +50,8 @@ return view.extend({
 	loadOUI: function() {
 		var url = 'https://raw.githubusercontent.com/jow-/oui-database/master/oui.json';
 
-		return L.resolveDefault(request.get(url, { cache: true }), []).then(function(res) {
-			res = res.json();
+		return L.resolveDefault(request.get(url, { cache: true })).then(function(res) {
+			res = res ? res.json() : [];
 
 			if (Array.isArray(res))
 				ouiData = res;
