@@ -773,7 +773,7 @@ var UISelect = UIElement.extend(/** @lends LuCI.ui.Select.prototype */ {
 	bind: function(frameEl) {
 		this.node = frameEl;
 
-		if (this.options.widget == 'select') {
+		if (this.options.widget != 'radio' && this.options.widget != 'checkbox') {
 			this.setUpdateEvents(frameEl.firstChild, 'change', 'click', 'blur');
 			this.setChangeEvents(frameEl.firstChild, 'change');
 		}
@@ -792,7 +792,7 @@ var UISelect = UIElement.extend(/** @lends LuCI.ui.Select.prototype */ {
 
 	/** @override */
 	getValue: function() {
-		if (this.options.widget == 'select')
+		if (this.options.widget != 'radio' && this.options.widget != 'checkbox')
 			return this.node.firstChild.value;
 
 		var radioEls = this.node.querySelectorAll('input[type="radio"]');
@@ -805,7 +805,7 @@ var UISelect = UIElement.extend(/** @lends LuCI.ui.Select.prototype */ {
 
 	/** @override */
 	setValue: function(value) {
-		if (this.options.widget == 'select') {
+		if (this.options.widget != 'radio' && this.options.widget != 'checkbox') {
 			if (value == null)
 				value = '';
 
