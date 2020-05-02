@@ -1,7 +1,7 @@
 module("luci.controller.simple-adblock", package.seeall)
 function index()
 	if nixio.fs.access("/etc/config/simple-adblock") then
-		entry({"admin", "services", "simple-adblock"}, cbi("simple-adblock"), _("Simple AdBlock"))
+		entry({"admin", "services", "simple-adblock"}, cbi("simple-adblock"), _("Simple AdBlock")).acl_depends = { "luci-app-simple-adblock" }
 		entry({"admin", "services", "simple-adblock", "action"}, call("simple_adblock_action"), nil).leaf = true
 	end
 end

@@ -191,7 +191,7 @@ if fs.access(sysfs_path) then
 end
 if #leds ~= 0 then
 	o4 = s:taboption("basic", Value, "led", translate("LED to indicate status"),
-		translatef("Pick the LED not already used in <a href=\"%s\">System LED Configuration</a>.", dispatcher.build_url("admin", "system", "leds")))
+		translatef("Pick the LED not already used in %sSystem LED Configuration%s.", "<a href=\"" .. dispatcher.build_url("admin", "system", "leds") .. "\">", "</a>"))
 	o4.rmempty = false
 	o4:value("", translate("none"))
 	for k, v in ipairs(leds) do
