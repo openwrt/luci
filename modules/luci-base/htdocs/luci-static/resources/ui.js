@@ -3028,6 +3028,7 @@ var UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 		dom.append(dlg, children);
 
 		document.body.classList.add('modal-overlay-active');
+		modalDiv.scrollTop = 0;
 
 		return dlg;
 	},
