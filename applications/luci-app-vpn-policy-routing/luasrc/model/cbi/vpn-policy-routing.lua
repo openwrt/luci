@@ -156,13 +156,13 @@ verb:value("2", translate("Verbose output"))
 verb.default = 2
 
 se = config:taboption("basic", ListValue, "strict_enforcement", translate("Strict enforcement"),
-	translatef("See the <a href=\"%s\" target=\"_blank\">README</a> for details.", readmeURL .. "#strict-enforcement"))
+	translatef("See the %sREADME%s for details.", "<a href=\"" .. readmeURL .. "#strict-enforcement" .. "\" target=\"_blank\">", "</a>"))
 se:value("0", translate("Do not enforce policies when their gateway is down"))
 se:value("1", translate("Strictly enforce policies when their gateway is down"))
 se.default = 1
 
 dest_ipset = config:taboption("basic", ListValue, "dest_ipset", translate("The ipset option for remote policies"),
-	translatef("Please check the <a href=\"%s\" target=\"_blank\">README</a> before changing this option.", readmeURL .. "#service-configuration-settings"))
+	translatef("Please check the %sREADME%s before changing this option.", "<a href=\"" .. readmeURL .. "#service-configuration-settings" .. "\" target=\"_blank\">", "</a>"))
 dest_ipset:value("", translate("Disabled"))
 dest_ipset:value("ipset", translate("Use ipset command"))
 dest_ipset:value("dnsmasq.ipset", translate("Use DNSMASQ ipset"))
@@ -170,7 +170,7 @@ dest_ipset.default = ""
 dest_ipset.rmempty = true
 
 src_ipset = config:taboption("basic", ListValue, "src_ipset", translate("The ipset option for local policies"),
-	translatef("Please check the <a href=\"%s\" target=\"_blank\">README</a> before changing this option.", readmeURL .. "#service-configuration-settings"))
+	translatef("Please check the %sREADME%s before changing this option.", "<a href=\"" .. readmeURL .. "#service-configuration-settings" .. "\" target=\"_blank\">", "</a>"))
 src_ipset:value("0", translate("Disabled"))
 src_ipset:value("1", translate("Use ipset command"))
 
@@ -180,7 +180,7 @@ ipv6:value("1", translate("Enabled"))
 
 -- Advanced Options
 config:tab("advanced", translate("Advanced Configuration"),
-	translatef("%sWARNING:%s Please make sure to check the <a href=\"%s\" target=\"_blank\">README</a> before changing anything in this section! Change any of the settings below with extreme caution!%s" , "<br/>&nbsp;&nbsp;&nbsp;&nbsp;<b>", "</b>", readmeURL .. "#service-configuration-settings", "<br/><br/>"))
+	translatef("%sWARNING:%s Please make sure to check the %sREADME%s before changing anything in this section! Change any of the settings below with extreme caution!%s" , "<br/>&nbsp;&nbsp;&nbsp;&nbsp;<b>", "</b>", "<a href=\"" .. readmeURL .. "#service-configuration-settings" .. "\" target=\"_blank\">", "</a>", "<br/><br/>"))
 
 supportedIface = config:taboption("advanced", DynamicList, "supported_interface", translate("Supported Interfaces"), translate("Allows to specify the list of interface names (in lower case) to be explicitly supported by the service. Can be useful if your OpenVPN tunnels have dev option other than tun* or tap*."))
 supportedIface.optional = false
@@ -344,7 +344,7 @@ uci:foreach("network", "interface", function(s)
 end)
 
 dscp = m:section(NamedSection, "config", "vpn-policy-routing", translate("DSCP Tagging"), 
-	translatef("Set DSCP tags (in range between 1 and 63) for specific interfaces. See the <a href=\"%s\" target=\"_blank\">README</a> for details.", readmeURL .. "#dscp-tag-based-policies"))
+	translatef("Set DSCP tags (in range between 1 and 63) for specific interfaces. See the %sREADME%s for details.", "<a href=\"" .. readmeURL .. "#dscp-tag-based-policies" .. "\" target=\"_blank\">", "</a>"))
 uci:foreach("network", "interface", function(s)
 	local name=s['.name']
 	if is_supported_interface(s) then 
@@ -356,7 +356,7 @@ end)
 
 -- Includes
 inc = m:section(TypedSection, "include", translate("Custom User File Includes"), 
-	translatef("Run the following user files after setting up but before restarting DNSMASQ. See the <a href=\"%s\" target=\"_blank\">README</a> for details.", readmeURL .. "#custom-user-files"))
+	translatef("Run the following user files after setting up but before restarting DNSMASQ. See the %sREADME%s for details.", "<a href=\"" .. readmeURL .. "#custom-user-files" .. "\" target=\"_blank\">", "</a>"))
 inc.template = "cbi/tblsection"
 inc.sortable  = true
 inc.anonymous = true
