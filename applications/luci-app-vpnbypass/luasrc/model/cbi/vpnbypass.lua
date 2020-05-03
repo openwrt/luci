@@ -5,12 +5,9 @@ local util = require "luci.util"
 local packageName = "vpnbypass"
 
 local packageVersion, statusText = nil, nil 
-packageVersion = tostring(util.trim(sys.exec("opkg list-installed " .. packageName .. " | awk '{print $3}'")))
-if not packageVersion or packageVersion == "" then
-	packageVersion = ""
-	statusText = packageName .. " " .. translate("is not installed or not found")
-else  
-	packageVersion = " [" .. packageName .. " " .. packageVersion .. "]"
+packageVersion = tostring(util.trim(sys.exec("opkg list-installed " .. packageName .. " | awk '{print $3}'"))) or ""
+if packageVersion == "" then
+	statusText = translatef("%s is not installed or not found", packageName)
 end
 
 local serviceRunning, serviceEnabled = false, false
@@ -26,13 +23,13 @@ if serviceRunning then
 else
 	statusText = translate("Stopped")
 	if not serviceEnabled then
-		statusText = statusText .. " (" .. translate("disabled") .. ")"
+		statusText = translatef("%s (disabled)", statusText)
 	end
 end
 
 m = Map("vpnbypass", translate("VPN Bypass Settings"))
 
-h = m:section(NamedSection, "config", packageName, translate("Service Status") .. packageVersion)
+h = m:section(NamedSection, "config", packageName, translatef("Service Status [%s %s]", packageName, packageVersion))
 ss = h:option(DummyValue, "_dummy", translate("Service Status"))
 ss.template = packageName .. "/status"
 ss.value = statusText
@@ -75,9 +72,8 @@ d = Map("dhcp")
 s4 = d:section(TypedSection, "dnsmasq")
 s4.anonymous = true
 di = s4:option(DynamicList, "ipset", translate("Domains to Bypass"),
-		translate("Domains to be accessed directly (outside of the VPN tunnel), see ")
-		.. [[<a href="]] .. readmeURL .. [[#bypass-domains-formatsyntax" target="_blank">]]
-		.. translate("README") .. [[</a> ]] .. translate("for syntax"))
+		translatef("Domains to be accessed directly (outside of the VPN tunnel), see %sREADME%s for syntax", 
+		"<a href=\"" .. readmeURL   .. "#bypass-domains-formatsyntax" .. "\" target=\"_blank\">", "</a>"))
 function d.on_after_commit(map)
 	util.exec("/etc/init.d/dnsmasq restart >/dev/null 2>&1")
 end
