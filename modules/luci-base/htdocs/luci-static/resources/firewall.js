@@ -493,7 +493,7 @@ Zone = AbstractFirewallItem.extend({
 
 		uci.set('firewall', sid, 'src', this.getName());
 
-		return new Redirect(sid);
+		return new Rule(sid);
 	},
 
 	getColor: function(forName) {
