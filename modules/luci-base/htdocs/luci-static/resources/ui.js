@@ -368,7 +368,7 @@ var UITextfield = UIElement.extend(/** @lends LuCI.ui.Textfield.prototype */ {
 
 	/** @override */
 	setValue: function(value) {
-		var inputEl = this.node.childNodes[+!!this.options.password];
+		var inputEl = this.node.querySelector('input');
 		inputEl.value = value;
 	}
 });
