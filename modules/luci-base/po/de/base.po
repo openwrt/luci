@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-05-26 17:57+0200\n"
-"PO-Revision-Date: 2020-03-03 13:33+0000\n"
-"Last-Translator: Jo <jo@mein.io>\n"
+"PO-Revision-Date: 2020-05-02 10:21+0000\n"
+"Last-Translator: ce4 <chregger@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/openwrt/luci/de/"
 ">\n"
 "Language: de\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.0-dev\n"
+"X-Generator: Weblate 4.1-dev\n"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:910
 msgid "%.1f dB"
@@ -84,7 +84,7 @@ msgstr "-- anhand Label selektieren --"
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:254
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:360
 msgid "-- match by uuid --"
-msgstr "-- UUID vergleichen --"
+msgstr "--durch uuid wählen --"
 
 #: modules/luci-compat/luasrc/view/cbi/firewall_zonelist.htm:27
 #: modules/luci-compat/luasrc/view/cbi/network_ifacelist.htm:44
@@ -279,7 +279,7 @@ msgstr "APN"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:196
 msgid "ARP"
-msgstr ""
+msgstr "ARP"
 
 #: protocols/luci-proto-relay/htdocs/luci-static/resources/protocol/relay.js:175
 msgid "ARP retry threshold"
@@ -955,19 +955,19 @@ msgstr "Kategorie"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1489
 msgid "Certificate constraint (Domain)"
-msgstr ""
+msgstr "Zertifikatseinschränkung (Domain)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1486
 msgid "Certificate constraint (SAN)"
-msgstr ""
+msgstr "Zertifikatseinschränkung (SAN)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1483
 msgid "Certificate constraint (Subject)"
-msgstr ""
+msgstr "Zertifikatseinschränkung (Betreff)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1492
 msgid "Certificate constraint (Wildcard)"
-msgstr ""
+msgstr "Zertifikatseinschränkung (Wildcard)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1483
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1529
@@ -975,6 +975,9 @@ msgid ""
 "Certificate constraint substring - e.g. /CN=wifi.mycompany.com<br />See "
 "`logread -f` during handshake for actual values"
 msgstr ""
+"Zertifikatseinschränkungs-Zeichenkette, z.B. /CN=wlan.meineorganisation."
+"de<br />Siehe `logread -f` während des Verbindungsaufbaus für tatsächliche "
+"Werte"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1489
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1535
@@ -982,6 +985,8 @@ msgid ""
 "Certificate constraint(s) against DNS SAN values (if available)<br />or "
 "Subject CN (exact match)"
 msgstr ""
+"Zertifikatseinschränkungen der DNS-SAN-Werte (falls verfügbar)<br />oder "
+"exakter Vergleich des <em>Subject CN</em>"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1492
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1538
@@ -989,6 +994,8 @@ msgid ""
 "Certificate constraint(s) against DNS SAN values (if available)<br />or "
 "Subject CN (suffix match)"
 msgstr ""
+"Zertifikatseinschränkungen der DNS-SAN-Werte (falls verfügbar)<br />oder "
+"Suffix-Vergleich des <em>Subject CN</em>"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1486
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1532
@@ -996,12 +1003,15 @@ msgid ""
 "Certificate constraint(s) via Subject Alternate Name values<br />(supported "
 "attributes: EMAIL, DNS, URI) - e.g. DNS:wifi.mycompany.com"
 msgstr ""
+"Zertifikatseinschränkungen mittels <em>Subject Alternate Name</em> "
+"Werten<br />(unterstützte Attribute: EMAIL, DNS, URI) - z.B.: <code>DNS:wifi."
+"mycompany.com</code>"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:51
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:54
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:198
 msgid "Chain"
-msgstr "Kette (Chain)"
+msgstr "Kette"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2567
 msgid "Changes"
@@ -2466,7 +2476,7 @@ msgstr "IPv4-Adresse"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:163
 msgid "IPv4-Gateway"
-msgstr ""
+msgstr "IPv4-Gateway"
 
 #: modules/luci-compat/luasrc/model/network/proto_ipip.lua:9
 #: protocols/luci-proto-ipip/htdocs/luci-static/resources/protocol/ipip.js:10
@@ -2715,19 +2725,19 @@ msgstr "Startscripte"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1535
 msgid "Inner certificate constraint (Domain)"
-msgstr ""
+msgstr "Einschränkung für inneres Zertifikat (Domain)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1532
 msgid "Inner certificate constraint (SAN)"
-msgstr ""
+msgstr "Einschränkung für inneres Zertifikat (SAN)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1529
 msgid "Inner certificate constraint (Subject)"
-msgstr ""
+msgstr "Einschränkung für inneres Zertifikat (Subject)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1538
 msgid "Inner certificate constraint (Wildcard)"
-msgstr ""
+msgstr "Einschränkung für inneres Zertifikat (Wildcard)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:263
 msgid "Install protocol extensions..."
@@ -2768,7 +2778,7 @@ msgstr "Der Netzwerkadapter hat %d ausstehende Änderungen"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:87
 msgid "Interface is disabled"
-msgstr ""
+msgstr "Schnittstelle ist deaktiviert"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:59
 msgid "Interface is marked for deletion"
@@ -3091,7 +3101,7 @@ msgstr "Aktive Schnittstellen"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:55
 msgid "Listen Port"
-msgstr "Port (lauschen)"
+msgstr "Listen-Port"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:16
 msgid "Listen only on the given interface or, if unspecified, on all"
@@ -3354,7 +3364,7 @@ msgstr "Mittel"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/20_memory.js:23
 msgid "Memory"
-msgstr "Hauptspeicher"
+msgstr "Speicher"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/processes.js:72
 msgid "Memory usage (%)"
@@ -3602,11 +3612,11 @@ msgstr "Kein NAT-T"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:74
 msgid "No RX signal"
-msgstr ""
+msgstr "Kein Signal empfangen"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:64
 msgid "No client associated"
-msgstr ""
+msgstr "Keine Clients assoziiert"
 
 #: modules/luci-base/htdocs/luci-static/resources/rpc.js:398
 msgid "No data received"
@@ -3700,7 +3710,7 @@ msgstr "Nicht Gefunden"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:70
 msgid "Not associated"
-msgstr ""
+msgstr "Nicht assoziiert"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:31
 msgid "Not connected"
@@ -4447,7 +4457,7 @@ msgstr "DNS-Rebind-Schutz"
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/reboot.js:13
 #: modules/luci-mod-system/luasrc/controller/admin/system.lua:30
 msgid "Reboot"
-msgstr "Neu starten"
+msgstr "Neu Starten"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:149
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:158
@@ -4561,7 +4571,7 @@ msgstr "Benötigt \"hostapd\""
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1228
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1229
 msgid "Requires hostapd with EAP Suite-B support"
-msgstr ""
+msgstr "Benötigt hostapd mit EAP Suite-B-Unterstützung"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1226
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1227
@@ -4582,7 +4592,7 @@ msgid ""
 "Requires the 'full' version of wpad/hostapd and support from the wifi driver "
 "<br />(as of Jan 2019: ath9k, ath10k, mwlwifi and mt76)"
 msgstr ""
-"Benötigt die \"full\" Variante von wpad/hostapd und Unterstützung vom WLAN-"
+"Benötigt die \"full\"-Variante von wpad/hostapd und Unterstützung vom WLAN-"
 "Treiber<br />(Stand: Januar 2019: ath9k, ath10k, mwlwifi, mt76)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:218
@@ -4605,7 +4615,7 @@ msgstr "Benötigt \"wpa-supplicant\""
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1242
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1243
 msgid "Requires wpa-supplicant with EAP Suite-B support"
-msgstr ""
+msgstr "Benötigt wpa-supplicant mit EAP Suite-B-Unterstützung"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1240
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1241
@@ -4655,7 +4665,7 @@ msgstr "Resource nicht gefunden"
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/startup.js:76
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/startup.js:98
 msgid "Restart"
-msgstr "Neustarten"
+msgstr "Neustart"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:311
 msgid "Restart Firewall"
@@ -5165,7 +5175,7 @@ msgstr "Status"
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/startup.js:77
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/startup.js:99
 msgid "Stop"
-msgstr "Stoppen"
+msgstr "Stopp"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1634
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1728
@@ -5820,7 +5830,7 @@ msgstr "Kann Anfrage nicht zustellen"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/dmesg.js:8
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/syslog.js:8
 msgid "Unable to load log data:"
-msgstr ""
+msgstr "Protokolldaten können nicht geladen werden:"
 
 #: modules/luci-compat/luasrc/model/network/proto_modemmanager.lua:54
 #: modules/luci-compat/luasrc/model/network/proto_qmi.lua:54
@@ -5834,11 +5844,11 @@ msgstr "Die Mountinformationen können nicht ermittelt werden"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:276
 msgid "Unable to reset ip6tables counters: %s"
-msgstr ""
+msgstr "Die ip6tables-Zähler können nicht zurückgesetzt werden: %s"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:274
 msgid "Unable to reset iptables counters: %s"
-msgstr ""
+msgstr "Die iptables-Zähler können nicht zurückgesetzt werden: %s"
 
 #: modules/luci-compat/luasrc/model/network/proto_4x6.lua:61
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dslite.js:7
@@ -5852,7 +5862,7 @@ msgstr "Der Name des entfernten Hosts konnte nicht aufgelöst werden"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:282
 msgid "Unable to restart firewall: %s"
-msgstr ""
+msgstr "Die Firewall kann nicht neu gestartet werden: %s"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/crontab.js:17
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:338
@@ -6866,34 +6876,17 @@ msgstr "ja"
 msgid "« Back"
 msgstr "« Zurück"
 
-#~ msgid "Bad address specified!"
-#~ msgstr "Ungültige Adresse angegeben!"
+msgid "Aggregate Transmit Power(ACTATP)"
+msgstr "Vollständige Sendeleistung (ACTATP)"
 
-#~ msgid "Install iputils-traceroute6 for IPv6 traceroute"
-#~ msgstr ""
-#~ "Bitte \"iputils-traceroute6\" installieren um IPv6-Routenverfolgung "
-#~ "nutzen zu können"
+msgid "Expecting an hexadecimal assignment hint"
+msgstr "Erwarte einen hexadezimalen Zuordnungshinweis"
 
-#~ msgid "Loading"
-#~ msgstr "Lade"
+msgid "IP address in invalid"
+msgstr "IP-Adresse ist ungültig"
 
-#~ msgid "No signal"
-#~ msgstr "Kein Signal"
+msgid "Non Pre-emtive CRC errors (CRC_P)"
+msgstr "Nicht-präemptive CRC-Fehler (CRC_P)"
 
-#~ msgid "Waiting for command to complete..."
-#~ msgstr "Der Befehl wird ausgeführt..."
-
-#~ msgid "Aggregate Transmit Power(ACTATP)"
-#~ msgstr "Vollständige Sendeleistung (ACTATP)"
-
-#~ msgid "Expecting an hexadecimal assignment hint"
-#~ msgstr "Erwarte einen hexadezimalen Zuordnungshinweis"
-
-#~ msgid "IP address in invalid"
-#~ msgstr "IP-Adresse ist ungültig"
-
-#~ msgid "Non Pre-emtive CRC errors (CRC_P)"
-#~ msgstr "Nicht-präemptive CRC-Fehler (CRC_P)"
-
-#~ msgid "Pre-emtive CRC errors (CRCP_P)"
-#~ msgstr "Präemptive CRC-Fehler (CRCP_P)"
+msgid "Pre-emtive CRC errors (CRCP_P)"
+msgstr "Präemptive CRC-Fehler (CRCP_P)"

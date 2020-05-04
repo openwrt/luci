@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: luci-app-ddns 2.4.0-1\n"
 "POT-Creation-Date: 2016-01-30 11:07+0100\n"
-"PO-Revision-Date: 2020-02-09 15:51+0000\n"
-"Last-Translator: Bob Weetabix <weetabixlalol@grr.la>\n"
+"PO-Revision-Date: 2020-04-08 09:38+0000\n"
+"Last-Translator: Florian L. <florian.ligneul@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsddns/fr/>\n"
 "Language: fr\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 3.11-dev\n"
+"X-Generator: Weblate 4.0-dev\n"
 
 #: applications/luci-app-ddns/luasrc/view/ddns/overview_status.htm:145
 msgid "&"
@@ -375,6 +375,7 @@ msgstr "Conseils"
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:279
 msgid "Hostname/FQDN to validate, if IP update happen or necessary"
 msgstr ""
+"Nom d'hôte/FQDN à valider, si une mise à jour IP se produit ou si nécessaire"
 
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:660
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:710
@@ -424,6 +425,8 @@ msgid ""
 "If this service section is disabled it could not be started.<br />Neither "
 "from LuCI interface nor from console"
 msgstr ""
+"Si cette section de service est désactivée, elle n'a pas pu être démarrée."
+"<br /> Ni à partir de l'interface LuCI ni à partir de la console"
 
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/hints.lua:160
 msgid "If using secure communication you should verify server certificates!"
@@ -455,6 +458,8 @@ msgid ""
 "Install 'ca-certificates' package or needed certificates by hand into /etc/"
 "ssl/certs default directory"
 msgstr ""
+"Installez le paquet 'ca-certificats' ou les certificats nécessaires à la "
+"main dans le répertoire par défaut /etc/ssl/certs"
 
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:666
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:716
@@ -503,17 +508,17 @@ msgstr "Longueur du journal"
 
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:1293
 msgid "Log to file"
-msgstr ""
+msgstr "Connectez-vous au fichier"
 
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:1279
 msgid "Log to syslog"
-msgstr ""
+msgstr "Connectez-vous à syslog"
 
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:278
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/overview.lua:113
 #: applications/luci-app-ddns/luasrc/view/ddns/system_status.htm:50
 msgid "Lookup Hostname"
-msgstr ""
+msgstr "Rechercher le nom d'hôte"
 
 #: applications/luci-app-ddns/luasrc/controller/ddns.lua:101
 msgid "NOT installed"
@@ -524,12 +529,16 @@ msgid ""
 "Neither GNU Wget with SSL nor cURL installed to select a network to use for "
 "communication."
 msgstr ""
+"Ni GNU Wget avec SSL ni cURL installé pour sélectionner un réseau à utiliser "
+"pour la communication."
 
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/hints.lua:69
 msgid ""
 "Neither GNU Wget with SSL nor cURL installed to support secure updates via "
 "HTTPS protocol."
 msgstr ""
+"Ni GNU Wget avec SSL ni cURL installé pour prendre en charge les mises à "
+"jour sécurisées via le protocole HTTPS."
 
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:664
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:714
@@ -568,7 +577,7 @@ msgstr "Pas de journaux"
 
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/global.lua:47
 msgid "Non-public and by default blocked IP's"
-msgstr ""
+msgstr "IP non publiques et par défaut bloquées"
 
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:1284
 msgid "Notice"
@@ -581,10 +590,13 @@ msgstr "Nombre de dernières lignes stockées dans les fichiers journaux"
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:1148
 msgid "OPTIONAL: Force the usage of pure IPv4/IPv6 only communication."
 msgstr ""
+"FACULTATIF: Force l'utilisation de la communication IPv4/IPv6 uniquement."
 
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:1214
 msgid "OPTIONAL: Force the use of TCP instead of default UDP on DNS requests."
 msgstr ""
+"FACULTATIF: Forcez l'utilisation de TCP au lieu d'UDP par défaut sur les "
+"requêtes DNS."
 
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:1117
 msgid "OPTIONAL: Network to use for communication"
@@ -626,11 +638,11 @@ msgstr "Paramètre facultatif"
 
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:515
 msgid "Optional: Replaces [PARAMENC] in Update-URL (URL-encoded)"
-msgstr ""
+msgstr "Facultatif: Remplace [PARAMENC] dans Update-URL (URL encodée)"
 
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:526
 msgid "Optional: Replaces [PARAMOPT] in Update-URL (NOT URL-encoded)"
-msgstr ""
+msgstr "Facultatif: Remplace [PARAMOPT] dans Update-URL (NON codé URL)"
 
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/overview.lua:94
 msgid "Overview"
@@ -689,11 +701,11 @@ msgstr ""
 
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:503
 msgid "Replaces [PASSWORD] in Update-URL (URL-encoded)"
-msgstr ""
+msgstr "Remplace [MOT DE PASSE] dans Update-URL (URL encodée)"
 
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:492
 msgid "Replaces [USERNAME] in Update-URL (URL-encoded)"
-msgstr ""
+msgstr "Remplace [NON D'UTILISATEUR] dans Update-URL (URL encodée)"
 
 #: applications/luci-app-ddns/luasrc/controller/ddns.lua:188
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/overview.lua:213
@@ -732,7 +744,7 @@ msgstr "Démarrer/Arrêter"
 
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/global.lua:75
 msgid "Status directory"
-msgstr ""
+msgstr "Répertoire d'état"
 
 #: applications/luci-app-ddns/luasrc/controller/ddns.lua:198
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/overview.lua:221
@@ -749,7 +761,7 @@ msgstr ""
 
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:1428
 msgid "The default setting of '0' will retry infinite."
-msgstr ""
+msgstr "Le paramètre par défaut de '0' réessayera à l'infini."
 
 #: applications/luci-app-ddns/luasrc/view/ddns/system_status.htm:36
 msgid "There is no service configured."
@@ -788,10 +800,12 @@ msgid ""
 "Update URL to be used for updating your DDNS Provider.<br />Follow "
 "instructions you will find on their WEB page."
 msgstr ""
+"Mettre à jour l'URL à utiliser pour mettre à jour votre fournisseur DDNS."
+"<br /> Suivez les instructions que vous trouverez sur leur page WEB."
 
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:600
 msgid "Use HTTP Secure"
-msgstr ""
+msgstr "Utilisez HTTP Secure"
 
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/global.lua:113
 msgid "Use cURL"
@@ -853,6 +867,9 @@ msgid ""
 "You should install 'bind-host' or 'knot-host' or 'drill' or 'hostip' "
 "package, if you need to specify a DNS server to detect your registered IP."
 msgstr ""
+"Vous devez installer le package 'bind-host' ou 'knot-host' ou 'drill' ou "
+"'hostip', si vous devez spécifier un serveur DNS pour détecter votre IP "
+"enregistrée."
 
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/hints.lua:121
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/hints.lua:136
@@ -860,6 +877,8 @@ msgid ""
 "You should install 'bind-host' or 'knot-host' or 'drill' package for DNS "
 "requests."
 msgstr ""
+"Vous devez installer le package 'bind-host' ou 'knot-host' ou 'drill' pour "
+"les requêtes DNS."
 
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/hints.lua:117
 msgid "You should install 'wget' or 'curl' or 'uclient-fetch' package."
