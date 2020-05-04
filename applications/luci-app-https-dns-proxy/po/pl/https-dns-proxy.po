@@ -11,6 +11,10 @@ msgstr ""
 "|| n%100>=20) ? 1 : 2;\n"
 "X-Generator: Weblate 3.10.1\n"
 
+#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:58
+msgid "%s is not installed or not found"
+msgstr ""
+
 #: applications/luci-app-https-dns-proxy/luasrc/https-dns-proxy/providers/com.adguard.dns-family.lua:3
 msgid "AdGuard (Family Protection)"
 msgstr "AdGuard (Ochrona rodzinna)"
@@ -18,6 +22,18 @@ msgstr "AdGuard (Ochrona rodzinna)"
 #: applications/luci-app-https-dns-proxy/luasrc/https-dns-proxy/providers/com.adguard.dns.lua:3
 msgid "AdGuard (Standard)"
 msgstr "AdGuard (Standardowy)"
+
+#: applications/luci-app-https-dns-proxy/luasrc/https-dns-proxy/providers/ca.cira.canadianshield.family.lua:3
+msgid "CIRA Canadian Shield (Family)"
+msgstr ""
+
+#: applications/luci-app-https-dns-proxy/luasrc/https-dns-proxy/providers/ca.cira.canadianshield.private.lua:3
+msgid "CIRA Canadian Shield (Private)"
+msgstr ""
+
+#: applications/luci-app-https-dns-proxy/luasrc/https-dns-proxy/providers/ca.cira.canadianshield.protected.lua:3
+msgid "CIRA Canadian Shield (Protected)"
+msgstr ""
 
 #: applications/luci-app-https-dns-proxy/luasrc/https-dns-proxy/providers/org.cleanbrowsing.doh-adult.lua:3
 msgid "CleanBrowsing (Adult Filter)"
@@ -35,17 +51,13 @@ msgstr "CleanBrowsing (Filtr bezpieczeństwa)"
 msgid "Cloudflare"
 msgstr "Cloudflare"
 
-#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:85
-msgid "DHCP and DNS"
-msgstr "DHCP i DNS"
-
 #: applications/luci-app-https-dns-proxy/luasrc/controller/https-dns-proxy.lua:4
-msgid "DNS Over HTTPS Proxy"
-msgstr "DNS Over HTTPS"
+msgid "DNS HTTPS Proxy"
+msgstr ""
 
-#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:64
-msgid "DNS Over HTTPS Proxy Settings"
-msgstr "Ustawienia DNS Over HTTPS"
+#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:92
+msgid "DNS HTTPS Proxy Settings"
+msgstr ""
 
 #: applications/luci-app-https-dns-proxy/luasrc/https-dns-proxy/providers.disabled/sb.dns.lua:3
 msgid "DNS.SB"
@@ -55,23 +67,19 @@ msgstr "DNS.SB"
 msgid "Digitale Gesellschaft"
 msgstr "Digitale Gesellschaft"
 
-#: applications/luci-app-https-dns-proxy/luasrc/view/https-dns-proxy/buttons.htm:53
+#: applications/luci-app-https-dns-proxy/luasrc/view/https-dns-proxy/buttons.htm:57
 msgid "Disable"
 msgstr "Wyłącz"
 
-#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:56
-msgid "DoH"
-msgstr "DoH"
-
-#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:143
+#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:163
 msgid "EDNS client subnet"
 msgstr "Podsieć klienta EDNS"
 
-#: applications/luci-app-https-dns-proxy/luasrc/view/https-dns-proxy/buttons.htm:51
+#: applications/luci-app-https-dns-proxy/luasrc/view/https-dns-proxy/buttons.htm:54
 msgid "Enable"
 msgstr "Włącz"
 
-#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:87
+#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:13
 msgid "For more information on different options check"
 msgstr "Aby uzyskać więcej informacji na temat różnych opcji, sprawdź"
 
@@ -79,15 +87,23 @@ msgstr "Aby uzyskać więcej informacji na temat różnych opcji, sprawdź"
 msgid "Google"
 msgstr "Google"
 
-#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:83
+#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:112
 msgid "Instances"
 msgstr "Instancje"
 
-#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:126
+#: applications/luci-app-https-dns-proxy/luasrc/https-dns-proxy/providers/gr.libredns.doh.lua:3
+msgid "LibreDNS"
+msgstr ""
+
+#: applications/luci-app-https-dns-proxy/luasrc/https-dns-proxy/providers/gr.libredns.doh-ads.lua:3
+msgid "LibreDNS (No Ads)"
+msgstr ""
+
+#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:146
 msgid "Listen address"
 msgstr "Nasłuchiwany adres"
 
-#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:139
+#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:159
 msgid "Listen port"
 msgstr "Nasłuchiwany port"
 
@@ -99,7 +115,7 @@ msgstr "Ładowanie"
 msgid "ODVR (nic.cz)"
 msgstr "ODVR (nic.cz)"
 
-#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:146
+#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:166
 msgid "Proxy server"
 msgstr "Serwer proxy"
 
@@ -119,59 +135,84 @@ msgstr "Quad 9 (Zabezpieczony)"
 msgid "Quad 9 (Unsecured)"
 msgstr "Quad 9 (Niezabezpieczony)"
 
-#: applications/luci-app-https-dns-proxy/luasrc/view/https-dns-proxy/buttons.htm:43
+#: applications/luci-app-https-dns-proxy/luasrc/view/https-dns-proxy/buttons.htm:44
 msgid "Reload"
 msgstr "Przeładuj"
 
-#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:99
+#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:119
 msgid "Resolver"
 msgstr "Dostawca"
 
-#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:56
-msgid "Running"
-msgstr "Działa"
+#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:84
+msgid "Running: %s DoH at %s:%s"
+msgstr ""
 
-#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:66
-#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:68
+#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:96
 msgid "Service Status"
 msgstr "Status usługi"
+
+#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:94
+msgid "Service Status [%s %s]"
+msgstr ""
 
 #: applications/luci-app-https-dns-proxy/luasrc/view/https-dns-proxy/buttons.htm:41
 msgid "Start"
 msgstr "Uruchom"
 
-#: applications/luci-app-https-dns-proxy/luasrc/view/https-dns-proxy/buttons.htm:45
+#: applications/luci-app-https-dns-proxy/luasrc/view/https-dns-proxy/buttons.htm:47
 msgid "Stop"
 msgstr "Stop"
 
-#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:37
+#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:62
 msgid "Stopped"
 msgstr "Zatrzymany"
 
-#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:22
+#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:49
 msgid "Unknown Provider"
 msgstr "Nieznany dostawca"
 
-#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:83
+#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:113
 msgid ""
 "When you add/remove any instances below, they will be used to override the "
-"'DNS forwardings' section of"
+"'DNS forwardings' section of %sDHCP and DNS%s."
 msgstr ""
-"Po dodaniu/usunięciu dowolnej instancji poniżej, zastąpią one ustawienia "
-"sekcji 'Przekazywania DNS' w"
 
-#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:91
+#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:34
 msgid "and"
 msgstr "i"
 
-#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:56
-msgid "at"
-msgstr "na"
-
-#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:32
-msgid "is not installed or not found"
-msgstr "nie jest zainstalowany lub nie został znaleziony"
+#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:64
+msgid "disabled"
+msgstr ""
 
 #: applications/luci-app-https-dns-proxy/luasrc/https-dns-proxy/providers.disabled/cn.rubyfish.dns.lua:3
 msgid "rubyfish.cn"
 msgstr "rubyfish.cn"
+
+#~ msgid "DHCP and DNS"
+#~ msgstr "DHCP i DNS"
+
+#~ msgid "DNS Over HTTPS Proxy"
+#~ msgstr "DNS Over HTTPS"
+
+#~ msgid "DNS Over HTTPS Proxy Settings"
+#~ msgstr "Ustawienia DNS Over HTTPS"
+
+#~ msgid "DoH"
+#~ msgstr "DoH"
+
+#~ msgid "Running"
+#~ msgstr "Działa"
+
+#~ msgid ""
+#~ "When you add/remove any instances below, they will be used to override "
+#~ "the 'DNS forwardings' section of"
+#~ msgstr ""
+#~ "Po dodaniu/usunięciu dowolnej instancji poniżej, zastąpią one ustawienia "
+#~ "sekcji 'Przekazywania DNS' w"
+
+#~ msgid "at"
+#~ msgstr "na"
+
+#~ msgid "is not installed or not found"
+#~ msgstr "nie jest zainstalowany lub nie został znaleziony"
