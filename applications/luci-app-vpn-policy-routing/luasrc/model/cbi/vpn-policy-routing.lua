@@ -282,7 +282,7 @@ if laPlaceholder then
 	la.placeholder = laPlaceholder
 end
 la.rmempty = true
-la.datatype    = 'list(neg(or(host,network,macaddr)))'
+la.datatype    = 'list(neg(or(host,network,macaddr,string)))'
 
 lp = p:option(Value, "src_port", translate("Local ports"))
 lp.datatype    = 'list(neg(or(portrange, string)))'
