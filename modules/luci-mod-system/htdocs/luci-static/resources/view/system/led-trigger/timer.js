@@ -3,7 +3,7 @@
 'require form';
 
 return baseclass.extend({
-	trigger: _('timer (kernel)'),
+	trigger: _('Custom flash interval (kernel: timer)'),
 	kernel: true,
 	addFormOptions(s){
 		var o;

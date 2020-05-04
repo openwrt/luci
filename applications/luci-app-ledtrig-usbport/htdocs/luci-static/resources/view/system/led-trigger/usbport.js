@@ -11,7 +11,7 @@ var callUSB = rpc.declare({
 });
 
 return baseclass.extend({
-	trigger: _('usbport (kernel)'),
+	trigger: _('USB (kernel: usbport)'),
 	kernel: true,
 	addFormOptions(s){
 		var o;

@@ -4,7 +4,7 @@
 'require tools.widgets as widgets';
 
 return baseclass.extend({
-	trigger: _('rssi (service)'),
+	trigger: _('WiFi signal quality (service: rssileds)'),
 	kernel: false,
 	addFormOptions(s){
 		var o;
