@@ -4097,22 +4097,22 @@ var CBISectionValue = CBIValue.extend(/** @lends LuCI.form.SectionValue.prototyp
 
 	/** @override */
 	load: function(section_id) {
-		return this.subsection.load();
+		return this.subsection.load(section_id);
 	},
 
 	/** @override */
 	parse: function(section_id) {
-		return this.subsection.parse();
+		return this.subsection.parse(section_id);
 	},
 
 	/** @private */
 	renderWidget: function(section_id, option_index, cfgvalue) {
-		return this.subsection.render();
+		return this.subsection.render(section_id);
 	},
 
 	/** @private */
 	checkDepends: function(section_id) {
-		this.subsection.checkDepends();
+		this.subsection.checkDepends(section_id);
 		return CBIValue.prototype.checkDepends.apply(this, [ section_id ]);
 	},
 
