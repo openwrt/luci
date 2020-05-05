@@ -1,40 +1,46 @@
 msgid ""
 msgstr ""
+"PO-Revision-Date: 2020-05-05 06:18+0000\n"
+"Last-Translator: Franco Castillo <castillofrancodamian@gmail.com>\n"
+"Language-Team: Spanish <https://hosted.weblate.org/projects/openwrt/"
+"luciapplicationsacme/es/>\n"
 "Language: es\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.1-dev\n"
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:18
 msgid "ACME certificates"
-msgstr ""
+msgstr "Certificados ACME"
 
 #: applications/luci-app-acme/root/usr/share/luci/menu.d/luci-app-acme.json:3
 msgid "ACME certsP38"
-msgstr ""
+msgstr "ACME certsP38"
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:27
 msgid "ACME global config"
-msgstr ""
+msgstr "Configuración global de ACME"
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:35
 msgid "Account email"
-msgstr ""
+msgstr "Cuenta de email"
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:43
 msgid "Certificate config"
-msgstr ""
+msgstr "Configuración de certificado"
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:94
 msgid "DNS API"
-msgstr ""
+msgstr "API de DNS"
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:102
 msgid "DNS API credentials"
-msgstr ""
+msgstr "Credenciales de API de DNS"
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:88
 msgid "Domain names"
-msgstr ""
+msgstr "Nombres de dominio"
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:89
 msgid ""
@@ -42,40 +48,46 @@ msgid ""
 "subject name, subsequent names will be alt names. Note that all domain names "
 "must point at the router in the global DNS."
 msgstr ""
+"Nombres de dominio para incluir en el certificado. El primer nombre será el "
+"nombre del sujeto, los nombres posteriores serán nombres alternativos. Tenga "
+"en cuenta que todos los nombres de dominio deben apuntar al enrutador en el "
+"DNS global."
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:36
 msgid "Email address to associate with account key."
-msgstr ""
+msgstr "Dirección de correo electrónico para asociar con la clave de la cuenta."
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:40
 msgid "Enable debug logging"
-msgstr ""
+msgstr "Activar registro de depuración"
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:47
 msgid "Enabled"
-msgstr ""
+msgstr "Activado"
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:51
 msgid ""
 "Get certificate from the Letsencrypt staging server (use for testing; the "
 "certificate won't be valid)."
 msgstr ""
+"Obtenga el certificado del servidor de ensayo Letsencrypt (utilícelo para "
+"realizar pruebas; el certificado no será válido)."
 
 #: applications/luci-app-acme/root/usr/share/rpcd/acl.d/luci-app-acme.json:3
 msgid "Grant UCI access for luci-app-acme"
-msgstr ""
+msgstr "Conceder acceso UCI para luci-app-acme"
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:55
 msgid "Key size"
-msgstr ""
+msgstr "Tamaño de clave"
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:56
 msgid "Key size (and type) for the generated certificate."
-msgstr ""
+msgstr "Tamaño de clave (y tipo) para el certificado generado."
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:30
 msgid "State directory"
-msgstr ""
+msgstr "Directorio del estado"
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:103
 msgid ""
@@ -84,6 +96,11 @@ msgid ""
 "credentials required by each API. Add multiple entries here in KEY=VAL shell "
 "variable format to supply multiple credential variables."
 msgstr ""
+"Las credenciales para el modo API de DNS seleccionado anteriormente. "
+"Consulte https://github.com/Neilpang/acme.sh/tree/master/dnsapi#how-to-use-"
+"dns-api para ver el formato de credenciales requerido por cada API. Agregue "
+"varias entradas aquí en formato de variable de shell KEY=VAL para "
+"proporcionar múltiples variables de credenciales."
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:19
 msgid ""
@@ -94,6 +111,13 @@ msgid ""
 "address. Once configured, issuing certificates can take a while. Check the "
 "logs for progress and any errors."
 msgstr ""
+"Esto configura la instalación automática de certificados ACME (Letsencrypt). "
+"Simplemente complete esto para configurar el enrutador con certificados "
+"emitidos por Letsencrypt para la interfaz web. Tenga en cuenta que los "
+"nombres de dominio en el certificado ya deben estar configurados para "
+"apuntar a la dirección IP pública del enrutador. Una vez configurado, la "
+"emisión de certificados puede demorar un tiempo. Verifique los registros de "
+"progreso y cualquier error."
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:95
 msgid ""
@@ -104,6 +128,12 @@ msgid ""
 "supports wildcard certificates. Using this mode requires the acme-dnsapi "
 "package to be installed."
 msgstr ""
+"Para usar el modo DNS para emitir certificados, configúrelo con el nombre de "
+"una API DNS compatible con acme.sh. Consulte https://github.com/Neilpang/"
+"acme.sh/tree/master/dnsapi para ver la lista de API disponibles. En modo "
+"DNS, el nombre de dominio no tiene que resolverse en la dirección IP del "
+"enrutador. El modo DNS también es el único modo que admite certificados "
+"comodín. El uso de este modo requiere que se instale el paquete acme-dnsapi."
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:75
 msgid ""
@@ -111,6 +141,10 @@ msgid ""
 "for one certificate).Nginx must support ssl, if not it won't start as it "
 "needs to be compiled with ssl support to use cert options"
 msgstr ""
+"Actualice la configuración de nginx con este certificado una vez emitido ("
+"solo seleccione esto para un certificado). Nginx debe ser compatible con "
+"SSL, de lo contrario no se iniciará, ya que debe compilarse con soporte SSL "
+"para usar opciones de certificado"
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:67
 msgid ""
@@ -118,22 +152,25 @@ msgid ""
 "for one certificate).Is also available luci-app-uhttpd to configure uhttpd "
 "form the LuCI interface."
 msgstr ""
+"Actualice la configuración de uhttpd con este certificado una vez emitido ("
+"solo seleccione esto para un certificado). También está disponible luci-app-"
+"uhttpd para configurar uhttpd desde la interfaz LuCI."
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:74
 msgid "Use for nginx"
-msgstr ""
+msgstr "Usar para nginx"
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:66
 msgid "Use for uhttpd"
-msgstr ""
+msgstr "Usar para uhttpd"
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:50
 msgid "Use staging server"
-msgstr ""
+msgstr "Usar servidor de ensayo"
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:82
 msgid "Webroot directory"
-msgstr ""
+msgstr "Directorio Webroot"
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:83
 msgid ""
@@ -141,7 +178,10 @@ msgid ""
 "Acme in webroot mode. The web server must be accessible from the internet on "
 "port 80."
 msgstr ""
+"Directorio raíz del servidor web. Configure esto en la raíz del documento "
+"del servidor web para ejecutar Acme en modo webroot. El servidor web debe "
+"ser accesible desde internet en el puerto 80."
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:31
 msgid "Where certs and other state files are kept."
-msgstr ""
+msgstr "Donde se mantienen los certificados y otros archivos de estado."
