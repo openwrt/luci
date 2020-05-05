@@ -10,7 +10,7 @@ var callServiceList = rpc.declare({
 	object: 'service',
 	method: 'list',
 	params: [ 'name' ],
-	expect: { '': {} }
+	expect: { 'transmission': {} }
 });
 
 function setFlagBool(o) {
@@ -29,11 +29,7 @@ return view.extend({
 	render: function(res) {
 		var port = uci.get_first('transmission', 'transmission', 'rpc_port') || '9091';
 
-		var instances = {};
-		try {
-			instances = res[0]['transmission']['instances'];
-		} catch (e) {}
-		var running = instances.length > 0;
+		var running = Object.keys(res[0].instances || {}).length > 0;
 
 		var webinstalled = res[1] || !!uci.get_first('transmission', 'transmission', 'web_home');
 
