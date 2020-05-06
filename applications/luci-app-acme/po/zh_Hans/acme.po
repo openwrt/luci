@@ -1,81 +1,87 @@
 msgid ""
 msgstr ""
+"PO-Revision-Date: 2020-05-06 12:25+0000\n"
+"Last-Translator: zhanhb <zhanhb88@gmail.com>\n"
+"Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
+"openwrt/luciapplicationsacme/zh_Hans/>\n"
 "Language: zh_Hans\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.1-dev\n"
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:18
 msgid "ACME certificates"
-msgstr ""
+msgstr "ACME证书"
 
 #: applications/luci-app-acme/root/usr/share/luci/menu.d/luci-app-acme.json:3
 msgid "ACME certsP38"
-msgstr ""
+msgstr "ACME证书P38"
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:27
 msgid "ACME global config"
-msgstr ""
+msgstr "ACME全局配置"
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:35
 msgid "Account email"
-msgstr ""
+msgstr "电子邮件帐户"
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:43
 msgid "Certificate config"
-msgstr ""
+msgstr "证书配置"
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:94
 msgid "DNS API"
-msgstr ""
+msgstr "DNS API"
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:102
 msgid "DNS API credentials"
-msgstr ""
+msgstr "DNS API凭证"
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:88
 msgid "Domain names"
-msgstr ""
+msgstr "域名"
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:89
 msgid ""
 "Domain names to include in the certificate. The first name will be the "
 "subject name, subsequent names will be alt names. Note that all domain names "
 "must point at the router in the global DNS."
-msgstr ""
+msgstr "证书中要包含的域名。第一个名字将是主题名，后面的名字将是主题备用名称。注意，所有公共DNS的域名结果必须指向路由器。"
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:36
 msgid "Email address to associate with account key."
-msgstr ""
+msgstr "与帐户密钥关联的电子邮件地址。"
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:40
 msgid "Enable debug logging"
-msgstr ""
+msgstr "启用调试日志记录"
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:47
 msgid "Enabled"
-msgstr ""
+msgstr "已启用"
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:51
 msgid ""
 "Get certificate from the Letsencrypt staging server (use for testing; the "
 "certificate won't be valid)."
-msgstr ""
+msgstr "从Letsencrypt测试环境签署证书(该证书不是合法证书)。"
 
 #: applications/luci-app-acme/root/usr/share/rpcd/acl.d/luci-app-acme.json:3
 msgid "Grant UCI access for luci-app-acme"
-msgstr ""
+msgstr "授予UCI访问luci-app-acme的权限"
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:55
 msgid "Key size"
-msgstr ""
+msgstr "密钥长度"
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:56
 msgid "Key size (and type) for the generated certificate."
-msgstr ""
+msgstr "生成的证书的密钥长度（和类型）。"
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:30
 msgid "State directory"
-msgstr ""
+msgstr "状态文件夹"
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:103
 msgid ""
@@ -84,6 +90,8 @@ msgid ""
 "credentials required by each API. Add multiple entries here in KEY=VAL shell "
 "variable format to supply multiple credential variables."
 msgstr ""
+"上面选择的DNS API模式的凭证。关于每个API所需的凭证格式，请参见https://github.com/Neilpang/acme.sh/tree/"
+"master/dnsapi#how-to-use-dns-api。在这里以KEY=VAL变量格式添加多个条目，以提供多个凭证变量。"
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:19
 msgid ""
@@ -94,6 +102,8 @@ msgid ""
 "address. Once configured, issuing certificates can take a while. Check the "
 "logs for progress and any errors."
 msgstr ""
+"这将配置ACME（Letsencrypt）自动证书安装。只需填写此内容即可为路由器配置由Letsencrypt颁发的Web界面证书。请注意，证书中的域名必"
+"须已经配置为指向路由器的公网IP地址。配置完成后，颁发证书可能需要一段时间。从日志中查看签署进度和错误。"
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:95
 msgid ""
@@ -104,6 +114,9 @@ msgid ""
 "supports wildcard certificates. Using this mode requires the acme-dnsapi "
 "package to be installed."
 msgstr ""
+"要使用DNS模式颁发证书，请将其设置为acme.sh支持的DNS API的名称。有关可用的API列表，请参见https://github.com/"
+"Neilpang/acme.sh/tree/master/dnsapi。在DNS模式下，域名不必解析为路由器IP。 DNS模式也是唯一支持通配符证书的模式"
+"。使用此模式需要安装acme-dnsapi软件包。"
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:75
 msgid ""
@@ -111,6 +124,8 @@ msgid ""
 "for one certificate).Nginx must support ssl, if not it won't start as it "
 "needs to be compiled with ssl support to use cert options"
 msgstr ""
+"颁发此证书后，用该证书更新nginx配置（只能有一个证书配置选中该选项）。Nginx必须支持ssl，如果无法启动，则必须使用ssl支持进行编译才能使用证书"
+"选项"
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:67
 msgid ""
@@ -118,30 +133,31 @@ msgid ""
 "for one certificate).Is also available luci-app-uhttpd to configure uhttpd "
 "form the LuCI interface."
 msgstr ""
+"签发此证书后，使用此证书更新uhttpd配置（只能有一个证书配置选中该选项）。也可通过LuCI界面的luci-app-uhttpd来配置uhttpd。"
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:74
 msgid "Use for nginx"
-msgstr ""
+msgstr "用于Nginx"
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:66
 msgid "Use for uhttpd"
-msgstr ""
+msgstr "用于uhttpd"
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:50
 msgid "Use staging server"
-msgstr ""
+msgstr "使用测试环境"
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:82
 msgid "Webroot directory"
-msgstr ""
+msgstr "Webroot文件夹"
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:83
 msgid ""
 "Webserver root directory. Set this to the webserver document root to run "
 "Acme in webroot mode. The web server must be accessible from the internet on "
 "port 80."
-msgstr ""
+msgstr "Webserver根目录。设置为Web服务器文档根目录，在webroot模式下运行Acme。Web服务器必须允许从互联网上使用80端口访问。"
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:31
 msgid "Where certs and other state files are kept."
-msgstr ""
+msgstr "存放证书和其他状态文件的位置。"
