@@ -2462,7 +2462,7 @@
 				    args = '';
 
 				/* find require statements in source */
-				for (var i = 0, off = -1, quote = -1, esc = false; i < source.length; i++) {
+				for (var i = 0, off = -1, quote = -1, esc = false, parComm = false, lineComm = false; i < source.length; i++) {
 					var chr = source.charCodeAt(i);
 
 					if (esc) {
@@ -2470,6 +2470,25 @@
 					}
 					else if (chr == 92) {
 						esc = true;
+					}
+					/* check for \n  to detect end of comment */
+					else if (lineComm && source.charCodeAt(i) == 10) {
+						lineComm = false;
+					}
+					// check for */ to detect end of comment
+					else if (parComm && source.charCodeAt(i) == 42 && source.charCodeAt(i + 1) == 47) {
+						parComm = false;
+					}
+					else if (parComm || lineComm) {
+						continue;
+					}
+					/* check for /* to detect start of comment */
+					else if (source.charCodeAt(i) == 47 && source.charCodeAt(i + 1) == 42) {
+						parComm = true;
+					}
+					/* check for // to detect start of comment */
+					else if (source.charCodeAt(i) == 47 && source.charCodeAt(i + 1) == 47) {
+						lineComm = true;
 					}
 					else if (chr == quote) {
 						var s = source.substring(off, i),
