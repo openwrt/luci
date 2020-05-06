@@ -519,7 +519,7 @@ end
 function user.checkpasswd(username, pass)
 	local pwh, pwe = user.getpasswd(username)
 	if pwe then
-		return (pwh == nil or nixio.crypt(pass, pwh) == pwh)
+		return (pwh ~= nil and nixio.crypt(pass, pwh) == pwh)
 	end
 	return false
 end
