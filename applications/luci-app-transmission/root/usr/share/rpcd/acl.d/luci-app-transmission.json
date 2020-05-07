@@ -3,6 +3,8 @@
 		"description": "Grant UCI access for luci-app-transmission",
 		"read": {
 			"file": {
+				"/etc/group": [ "read" ],
+				"/etc/passwd": [ "read" ],
 				"/usr/share/transmission/web/index.html": [ "list" ]
 			},
 			"ubus": {
