@@ -12,8 +12,10 @@ services:
             - ${WORKSPACE_TEMP_DIR}:/tmp/
             - ${THEME_STATIC}:/www/luci-static/bootstrap/
             - ${THEME_TEMPLATE}:/usr/lib/lua/luci/view/themes/bootstrap/
+
         ports:
-            - "${PORT}:80"
+            - "${HTTP_PORT}:80"
+            - "${SFTP_PORT}:22"
 
 ### Volumes Setup ###########################################
 
