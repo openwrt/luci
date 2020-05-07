@@ -2614,21 +2614,24 @@ var UIFileUpload = UIElement.extend(/** @lends LuCI.ui.FileUpload.prototype */ {
 		switch (type) {
 		case 'symlink':
 			return E('img', {
-				'src': L.resource('cbi/link.gif'),
+				'src': L.resource('cbi/link.svg'),
+				'width': 16,
 				'title': _('Symbolic link'),
 				'class': 'middle'
 			});
 
 		case 'directory':
 			return E('img', {
-				'src': L.resource('cbi/folder.gif'),
+				'src': L.resource('cbi/folder.svg'),
+				'width': 16,
 				'title': _('Directory'),
 				'class': 'middle'
 			});
 
 		default:
 			return E('img', {
-				'src': L.resource('cbi/file.gif'),
+				'src': L.resource('cbi/file.svg'),
+				'width': 16,
 				'title': _('File'),
 				'class': 'middle'
 			});
