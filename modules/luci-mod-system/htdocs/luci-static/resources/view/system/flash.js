@@ -426,7 +426,7 @@ return view.extend({
 						E('button', {
 							'class': 'cbi-button cbi-button-save',
 							'click': ui.createHandlerFn(view, 'handleBackupSave', this.map),
-							'disabled': isReadonlyView
+							'disabled': isReadonlyView || null
 						}, [ _('Save') ])
 					]));
 
