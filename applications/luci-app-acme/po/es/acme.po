@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2020-05-09 06:42+0000\n"
+"PO-Revision-Date: 2020-05-12 20:03+0000\n"
 "Last-Translator: Franco Castillo <castillofrancodamian@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsacme/es/>\n"
@@ -32,7 +32,7 @@ msgstr "Configuración de certificado"
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:107
 msgid "Challenge Alias"
-msgstr ""
+msgstr "Alias de desafío"
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:94
 msgid "DNS API"
@@ -44,7 +44,7 @@ msgstr "Credenciales de API de DNS"
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:112
 msgid "Domain Alias"
-msgstr ""
+msgstr "Alias de dominio"
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:88
 msgid "Domain names"
@@ -104,6 +104,9 @@ msgid ""
 "official/acme.sh/wiki/DNS-alias-mode for the details of this process. LUCI "
 "only supports one challenge alias per certificate."
 msgstr ""
+"El alias de desafío para usar en TODOS los dominios. Consulte https://github."
+"com/acmesh-official/acme.sh/wiki/DNS-alias-mode para obtener detalles sobre "
+"este proceso. LUCI solo admite un alias de desafío por certificado."
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:102
 msgid ""
@@ -112,6 +115,11 @@ msgid ""
 "by each API. Add multiple entries here in KEY=VAL shell variable format to "
 "supply multiple credential variables."
 msgstr ""
+"Las credenciales para el modo API de DNS seleccionado anteriormente. "
+"Consulte https://github.com/acmesh-official/acme.sh/wiki/dnsapi para ver el "
+"formato de credenciales requerido por cada API. Agregue varias entradas aquí "
+"en formato de variable de shell KEY=VAL para proporcionar múltiples "
+"variables de credenciales."
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:113
 msgid ""
@@ -119,6 +127,10 @@ msgid ""
 "official/acme.sh/wiki/DNS-alias-mode for the details of this process. LUCI "
 "only supports one challenge domain per certificate."
 msgstr ""
+"El alias de dominio que se usará para TODOS los dominios. Consulte "
+"https://github.com/acmesh-official/acme.sh/wiki/DNS-alias-mode para obtener "
+"detalles sobre este proceso. LUCI solo admite un dominio de desafío por "
+"certificado."
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:19
 msgid ""
@@ -146,6 +158,12 @@ msgid ""
 "supports wildcard certificates. Using this mode requires the acme-dnsapi "
 "package to be installed."
 msgstr ""
+"Para usar el modo DNS para emitir certificados, configúralo con el nombre de "
+"una API DNS compatible con acme.sh. Consulte https://github.com/"
+"acmesh-official/acme.sh/wiki/dnsapi para ver la lista de API disponibles. En "
+"modo DNS, el nombre de dominio no tiene que resolverse en la dirección IP "
+"del enrutador. El modo DNS también es el único modo que admite certificados "
+"comodín. El uso de este modo requiere que se instale el paquete acme-dnsapi."
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:75
 msgid ""
