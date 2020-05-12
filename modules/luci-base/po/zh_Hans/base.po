@@ -23,7 +23,7 @@ msgstr "%.1f dB"
 msgid "%d Bit"
 msgstr "%d Bit"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:3639
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3642
 msgid "%d invalid field(s)"
 msgstr "%d 个无效字段"
 
@@ -241,7 +241,7 @@ msgid ""
 msgstr ""
 "<br/>注意：如果 crontab 文件在编辑前为空，则需要手动重新启动 cron 服务。"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:2676
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:2679
 msgid "A directory with the same name already exists."
 msgstr "已存在同名的目录。"
 
@@ -273,8 +273,29 @@ msgid "APN"
 msgstr "APN"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:197
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:352
 msgid "ARP"
 msgstr "ARP"
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:365
+msgid "ARP IP Targets"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:357
+msgid "ARP Interval"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:381
+msgid "ARP Validation"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:373
+msgid "ARP mode to consider a slave as being up"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:77
+msgid "ARP monitoring is not supported for the selected policy!"
+msgstr ""
 
 #: protocols/luci-proto-relay/htdocs/luci-static/resources/protocol/relay.js:175
 msgid "ARP retry threshold"
@@ -357,11 +378,23 @@ msgstr "已分配的 DHCP 租约"
 msgid "Active DHCPv6 Leases"
 msgstr "已分配的 DHCPv6 租约"
 
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:203
+msgid "Active-Backup policy (active-backup, 1)"
+msgstr ""
+
 #: modules/luci-base/htdocs/luci-static/resources/network.js:3650
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:929
 #: protocols/luci-proto-hnet/htdocs/luci-static/resources/protocol/hnet.js:23
 msgid "Ad-Hoc"
 msgstr "点对点 Ad-Hoc"
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:208
+msgid "Adaptive load balancing (balance-alb, 6)"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:207
+msgid "Adaptive transmit load balancing (balance-tlb, 5)"
+msgstr ""
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2013
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2016
@@ -465,6 +498,24 @@ msgstr "高级设置"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:28
 msgid "Aggregate Transmit Power (ACTATP)"
 msgstr "总发射功率（ACTATP）"
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:258
+msgid "Aggregation Selection Logic"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:261
+msgid "Aggregator: All slaves down or has no slaves (stable, 0)"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:263
+msgid ""
+"Aggregator: Chosen by the largest number of ports + slave added/removed or "
+"state changes (count, 2)"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:262
+msgid "Aggregator: Slave added/removed or state changes (bandwidth, 1)"
+msgstr ""
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:171
 msgid "Alert"
@@ -672,16 +723,16 @@ msgstr "任意区域"
 msgid "Apply backup?"
 msgstr "应用备份？"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4226
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4229
 msgid "Apply request failed with status <code>%h</code>"
 msgstr "应用请求失败，状态 <code>%h</code>"
 
 #: modules/luci-base/htdocs/luci-static/resources/luci.js:2181
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4092
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4095
 msgid "Apply unchecked"
 msgstr "强制应用"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4165
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4168
 msgid "Applying configuration changes… %ds"
 msgstr "正在等待配置被应用… %ds"
 
@@ -882,6 +933,10 @@ msgstr "传输速率"
 msgid "Bogus NX Domain Override"
 msgstr "忽略虚假空域名解析"
 
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:199
+msgid "Bonding Policy"
+msgstr ""
+
 #: modules/luci-base/htdocs/luci-static/resources/network.js:2861
 #: modules/luci-compat/luasrc/model/network.lua:1421
 msgid "Bridge"
@@ -900,8 +955,12 @@ msgstr "桥接号"
 msgid "Bring up on boot"
 msgstr "开机自动运行"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:2766
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:3749
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:205
+msgid "Broadcast policy (broadcast, 3)"
+msgstr ""
+
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:2769
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3752
 msgid "Browse…"
 msgstr "浏览…"
 
@@ -909,7 +968,7 @@ msgstr "浏览…"
 msgid "Buffered"
 msgstr "已缓冲"
 
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:137
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:138
 msgid "CA certificate; if empty it will be saved after the first connection."
 msgstr "CA 证书，如果留空，则证书将在第一次连接后被保存。"
 
@@ -932,8 +991,8 @@ msgstr "已缓存"
 msgid "Call failed"
 msgstr "调用失败"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:2859
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:3758
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:2862
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3761
 #: modules/luci-compat/luasrc/view/cbi/delegator.htm:14
 #: modules/luci-compat/luasrc/view/cbi/simpleform.htm:52
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:187
@@ -1003,11 +1062,11 @@ msgstr ""
 msgid "Chain"
 msgstr "链"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:3978
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3981
 msgid "Changes"
 msgstr "更改数"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4261
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4264
 msgid "Changes have been reverted."
 msgstr "更改已恢复。"
 
@@ -1152,16 +1211,16 @@ msgstr ""
 "杂度。此解决方法可能会导致互操作性问题，并降低密钥协商的可靠性，特别是在流量"
 "负载较重的环境中。"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:3978
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3981
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:421
 msgid "Configuration"
 msgstr "配置"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4140
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4143
 msgid "Configuration changes applied."
 msgstr "配置已应用。"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4078
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4081
 msgid "Configuration changes have been rolled back!"
 msgstr "配置已回滚！"
 
@@ -1196,6 +1255,14 @@ msgstr "失去连接"
 msgid "Connections"
 msgstr "连接"
 
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:377
+msgid "Consider the slave up when all ARP IP targets are reachable (all, 1)"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:376
+msgid "Consider the slave up when any ARP IP target is reachable (any, 0)"
+msgstr ""
+
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/crontab.js:18
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:340
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/startup.js:55
@@ -1208,7 +1275,7 @@ msgstr "内容已保存。"
 msgid "Continue"
 msgstr "继续"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4114
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4117
 msgid ""
 "Could not regain access to the device after applying the configuration "
 "changes. You might need to reconnect if you modified network related "
@@ -1406,7 +1473,7 @@ msgstr "默认路由"
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dslite.js:67
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/map.js:80
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:108
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:149
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:150
 msgid "Default gateway"
 msgstr "默认网关"
 
@@ -1431,7 +1498,7 @@ msgstr ""
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2508
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2512
 #: modules/luci-base/htdocs/luci-static/resources/form.js:3000
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:2828
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:2831
 #: modules/luci-compat/luasrc/view/cbi/nsection.htm:11
 #: modules/luci-compat/luasrc/view/cbi/tblsection.htm:162
 #: modules/luci-compat/luasrc/view/cbi/tsection.htm:16
@@ -1443,7 +1510,7 @@ msgstr "删除"
 msgid "Delete key"
 msgstr "删除密钥"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:2725
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:2728
 msgid "Delete request failed: %s"
 msgstr "删除请求失败：%s"
 
@@ -1460,7 +1527,7 @@ msgstr "发送流量指示消息间隔"
 msgid "Description"
 msgstr "描述"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:2824
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:2827
 msgid "Deselect"
 msgstr "取消"
 
@@ -1505,7 +1572,7 @@ msgstr "设备未激活"
 msgid "Device is restarting…"
 msgstr "设备正在重启…"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4113
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4116
 msgid "Device unreachable!"
 msgstr "无法连接到设备！"
 
@@ -1522,7 +1589,7 @@ msgstr "网络诊断"
 msgid "Dial number"
 msgstr "拨号号码"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:2622
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:2624
 msgid "Directory"
 msgstr "目录"
 
@@ -1589,9 +1656,9 @@ msgstr "尝试断开连接失败"
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:606
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2707
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:3259
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:3995
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4084
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3262
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3998
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4087
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1680
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:330
 msgid "Dismiss"
@@ -1628,7 +1695,7 @@ msgstr "不转发公共域名服务器无法回应的请求"
 msgid "Do not forward reverse lookups for local networks"
 msgstr "不转发本地网络的反向查询"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:2711
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:2714
 msgid "Do you really want to delete \"%s\" ?"
 msgstr "您真的要删除“%s”吗？"
 
@@ -1640,7 +1707,7 @@ msgstr "您真的要删除以下 SSH 密钥吗？"
 msgid "Do you really want to erase all settings?"
 msgstr "您真的要清除所有设置吗？"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:2709
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:2712
 msgid "Do you really want to recursively delete the directory \"%s\" ?"
 msgstr "您真的要删除目录“%s”吗？"
 
@@ -1667,6 +1734,10 @@ msgstr ""
 msgid "Down"
 msgstr "下移"
 
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:402
+msgid "Down Delay"
+msgstr ""
+
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:366
 msgid "Download backup"
 msgstr "下载备份"
@@ -1682,6 +1753,10 @@ msgstr "下游 SNR 偏移"
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2466
 msgid "Drag to reorder"
 msgstr "拖动以重排"
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:341
+msgid "Drop Duplicate Frames"
+msgstr ""
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:12
 msgid "Dropbear Instance"
@@ -1772,6 +1847,10 @@ msgstr "开启 <abbr title=\"Spanning Tree Protocol\">STP</abbr>"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:373
 msgid "Enable DNS lookups"
 msgstr "启用 DNS 查找"
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:292
+msgid "Enable Dynamic Shuffling Of Flows"
+msgstr ""
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6in4.js:60
 msgid "Enable HE.net dynamic endpoint update"
@@ -1923,6 +2002,14 @@ msgstr "以太网适配器"
 msgid "Ethernet Switch"
 msgstr "以太网交换机"
 
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:270
+msgid "Every 30 seconds (slow, 0)"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:271
+msgid "Every second (fast, 1)"
+msgstr ""
+
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:399
 msgid "Exclude interfaces"
 msgstr "排除接口"
@@ -1946,6 +2033,10 @@ msgstr "这里需要一个十六进制值"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:136
 msgid "Expecting: %s"
 msgstr "需要：%s"
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:48
+msgid "Expecting: non-empty value"
+msgstr ""
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:50
 msgid "Expires"
@@ -2000,7 +2091,7 @@ msgstr "FT 协议"
 msgid "Failed to change the system password."
 msgstr "更改系统密码失败。"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4072
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4075
 msgid "Failed to confirm apply within %ds, waiting for rollback…"
 msgstr "在 %d 秒内确认应用失败，等待回滚…"
 
@@ -2008,7 +2099,7 @@ msgstr "在 %d 秒内确认应用失败，等待回滚…"
 msgid "Failed to execute \"/etc/init.d/%s %s\" action: %s"
 msgstr "执行“/etc/init.d/%s %s”失败：%s"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:2629
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:2632
 msgid "File"
 msgstr "文件"
 
@@ -2016,7 +2107,7 @@ msgstr "文件"
 msgid "File not accessible"
 msgstr "文件无法访问"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:2767
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:2770
 msgid "Filename"
 msgstr "文件名"
 
@@ -2036,6 +2127,18 @@ msgstr "过滤本地包"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:218
 msgid "Filter useless"
 msgstr "过滤无用包"
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:388
+msgid "Filtering for all slaves, no validation"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:389
+msgid "Filtering for all slaves, validation only for active slave"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:390
+msgid "Filtering for all slaves, validation only for backup slaves"
+msgstr ""
 
 #: modules/luci-compat/luasrc/model/network/proto_ncm.lua:65
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:23
@@ -2437,6 +2540,10 @@ msgstr "主机映射"
 msgid "Hybrid"
 msgstr "混合"
 
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:206
+msgid "IEEE 802.3ad Dynamic link aggregation (802.3ad, 4)"
+msgstr ""
+
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:75
 msgid "IKE DH Group"
 msgstr "IKE DH 组"
@@ -2487,6 +2594,7 @@ msgid "IPv4 Upstream"
 msgstr "IPv4 上游"
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/static.js:178
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:162
 msgid "IPv4 address"
 msgstr "IPv4 地址"
 
@@ -2503,6 +2611,7 @@ msgid "IPv4 gateway"
 msgstr "IPv4 网关"
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/static.js:179
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:168
 msgid "IPv4 netmask"
 msgstr "IPv4 子网掩码"
 
@@ -2687,7 +2796,7 @@ msgstr "如果指定，则通过分区卷标而不是固定的设备文件来挂
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dslite.js:67
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/map.js:80
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:108
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:149
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:150
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/l2tp.js:56
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/ppp.js:100
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoa.js:87
@@ -2889,6 +2998,10 @@ msgstr "内部"
 msgid "Internal Server Error"
 msgstr "内部服务器错误"
 
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:283
+msgid "Interval For Sending Learning Packets"
+msgstr ""
+
 #: modules/luci-compat/luasrc/view/cbi/tblsection.htm:192
 #: modules/luci-compat/luasrc/view/cbi/tsection.htm:42
 msgid "Invalid"
@@ -2989,6 +3102,10 @@ msgstr "L2TP"
 msgid "L2TP Server"
 msgstr "L2TP 服务器"
 
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:267
+msgid "LACPDU Packets"
+msgstr ""
+
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:131
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/ppp.js:115
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoa.js:102
@@ -3065,7 +3182,7 @@ msgstr "留空则自动探测"
 msgid "Leave empty to use the current WAN address"
 msgstr "留空则使用当前 WAN 地址"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:3980
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3983
 msgid "Legend:"
 msgstr "图例："
 
@@ -3096,6 +3213,14 @@ msgstr "线路状态"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:19
 msgid "Line Uptime"
 msgstr "线路运行时间"
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:123
+msgid "Link Aggregation (Channel Bonding)"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:348
+msgid "Link Monitoring"
+msgstr ""
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/netdev.js:23
 msgid "Link On"
@@ -3170,7 +3295,7 @@ msgstr "负载"
 msgid "Load Average"
 msgstr "平均负载"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:2894
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:2897
 msgid "Loading directory contents…"
 msgstr "正在载入目录内容…"
 
@@ -3280,6 +3405,10 @@ msgstr "网络地址的起始分配基址。"
 msgid "MAC"
 msgstr "MAC"
 
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:251
+msgid "MAC Address For The Actor"
+msgstr ""
+
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:38
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2061
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:56
@@ -3326,6 +3455,18 @@ msgstr "MD5"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:71
 msgid "MHz"
 msgstr "MHz"
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:353
+msgid "MII"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:421
+msgid "MII / ETHTOOL ioctls"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:394
+msgid "MII Interval"
+msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:54
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:53
@@ -3427,12 +3568,24 @@ msgstr "Mesh ID"
 msgid "Method not found"
 msgstr "方法未找到"
 
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:349
+msgid "Method of link monitoring"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:418
+msgid "Method to determine link status"
+msgstr ""
+
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:46
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:165
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:183
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:69
 msgid "Metric"
 msgstr "跃点数"
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:235
+msgid "Minimum Number of Links"
+msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:202
 msgid "Mirror monitor port"
@@ -3590,7 +3743,7 @@ msgid "NTP server candidates"
 msgstr "候选 NTP 服务器"
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2388
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:3735
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3738
 #: modules/luci-compat/luasrc/view/cbi/tblsection.htm:27
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:710
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:67
@@ -3648,6 +3801,8 @@ msgid "Next »"
 msgstr "前进 »"
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:3472
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:296
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:345
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:108
 msgid "No"
 msgstr "否"
@@ -3680,7 +3835,7 @@ msgstr "没有关联的客户端"
 msgid "No data received"
 msgstr "没有接收到数据"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:2834
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:2837
 msgid "No entries in this directory"
 msgstr "此目录中没有内容"
 
@@ -3699,6 +3854,15 @@ msgstr "无可用信息"
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/map.js:8
 msgid "No matching prefix delegation"
 msgstr "无匹配的前缀委托"
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:140
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:143
+msgid "No more slaves available"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:187
+msgid "No more slaves available, can not save interface"
+msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:251
 msgid "No negative cache"
@@ -3724,6 +3888,10 @@ msgstr "当前还没有公钥。"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:90
 msgid "No rules in this chain."
 msgstr "本链没有规则。"
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:384
+msgid "No validation or filtering"
+msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:152
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:825
@@ -3800,6 +3968,10 @@ msgstr "注意"
 msgid "Nslookup"
 msgstr "Nslookup"
 
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:332
+msgid "Number of IGMP membership reports"
+msgstr ""
+
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:355
 msgid "Number of cached DNS entries (max is 10000, 0 is no caching)"
 msgstr "缓存的 DNS 条目数量（最大 10000，0 表示不缓存）"
@@ -3807,6 +3979,10 @@ msgstr "缓存的 DNS 条目数量（最大 10000，0 表示不缓存）"
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:199
 msgid "Number of parallel threads used for compression"
 msgstr "用于压缩的并行线程数"
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:309
+msgid "Number of peer notifications after failover event"
+msgstr ""
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:69
 msgid "Obfuscated Group Password"
@@ -3828,6 +4004,7 @@ msgid "Obtain IPv6-Address"
 msgstr "获取 IPv6 地址"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/default-on.js:18
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:351
 msgid "Off"
 msgstr "关"
 
@@ -3869,6 +4046,11 @@ msgstr "选项卡上存在一个或多个无效/必需值"
 msgid "One or more required fields have no value!"
 msgstr "一个或多个必选项值为空！"
 
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:229
+msgid ""
+"Only if current active slave fails and the primary slave is up (failure, 2)"
+msgstr ""
+
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:439
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/backupfiles.lua:19
 msgid "Open list..."
@@ -3892,11 +4074,11 @@ msgstr "选项 \"%s\" 包含无效的输入值."
 msgid "Option \"%s\" must not be empty."
 msgstr "选项 \"%s\" 必须不能为空."
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:3987
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3990
 msgid "Option changed"
 msgstr "选项已更改"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:3989
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3992
 msgid "Option removed"
 msgstr "选项已移除"
 
@@ -4005,7 +4187,7 @@ msgstr "重设 MAC 地址"
 #: protocols/luci-proto-ipip/htdocs/luci-static/resources/protocol/ipip.js:53
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:54
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:114
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:157
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:158
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/l2tp.js:71
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/ppp.js:145
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoa.js:132
@@ -4045,7 +4227,7 @@ msgstr "重设内部路由表"
 msgid "Overview"
 msgstr "概览"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:2677
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:2680
 msgid "Overwrite existing file \"%s\" ?"
 msgstr "覆盖已存在的文件“%s”吗？"
 
@@ -4154,6 +4336,10 @@ msgstr "数据包引导"
 msgid "Packets"
 msgstr "数据包"
 
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:275
+msgid "Packets To Transmit Before Moving To Next Slave"
+msgstr ""
+
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:152
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:825
 msgid "Part of zone %q"
@@ -4162,7 +4348,7 @@ msgstr "区域 %q"
 #: modules/luci-base/luasrc/view/sysauth.htm:29
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1591
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js:51
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:107
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:108
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:58
 msgid "Password"
 msgstr "密码"
@@ -4186,7 +4372,7 @@ msgstr "内部私钥的密码"
 msgid "Password strength"
 msgstr "密码强度"
 
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:110
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:111
 msgid "Password2"
 msgstr "密码 2"
 
@@ -4296,7 +4482,7 @@ msgstr "数据包"
 msgid "Please enter your username and password."
 msgstr "请输入用户名和密码。"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:3718
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3721
 msgid "Please select the file to upload."
 msgstr "请选择要上传的文件。"
 
@@ -4358,6 +4544,20 @@ msgstr "不监听这些接口。"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1075
 msgid "Prevents client-to-client communication"
 msgstr "禁止客户端间通信"
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:211
+msgid "Primary Slave"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:228
+msgid ""
+"Primary becomes active slave when it comes back up if speed and duplex "
+"better than current slave (better, 1)"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:227
+msgid "Primary becomes active slave whenever it comes back up (always, 0)"
+msgstr ""
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:50
 msgid "Private Key"
@@ -4692,6 +4892,10 @@ msgstr "需要带 OWE 支持的 wpa-supplicant"
 msgid "Requires wpa-supplicant with SAE support"
 msgstr "需要带 SAE 支持的 wpa-supplicant"
 
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:224
+msgid "Reselection policy for primary slave"
+msgstr ""
+
 #: modules/luci-base/htdocs/luci-static/resources/luci.js:2203
 #: modules/luci-base/luasrc/view/sysauth.htm:39
 #: modules/luci-compat/luasrc/view/cbi/delegator.htm:17
@@ -4747,19 +4951,19 @@ msgstr "恢复配置"
 msgid "Reveal/hide password"
 msgstr "显示/隐藏 密码"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4003
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4006
 msgid "Revert"
 msgstr "恢复"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4088
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4091
 msgid "Revert changes"
 msgstr "恢复更改"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4270
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4273
 msgid "Revert request failed with status <code>%h</code>"
 msgstr "恢复请求失败，状态 <code>%h</code>"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4250
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4253
 msgid "Reverting configuration…"
 msgstr "正在恢复配置…"
 
@@ -4770,6 +4974,10 @@ msgstr "TFTP 服务器的根目录"
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:297
 msgid "Root preparation"
 msgstr "根目录准备"
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:202
+msgid "Round-Robin policy (balance-rr, 0)"
+msgstr ""
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:129
 msgid "Route Allowed IPs"
@@ -4873,7 +5081,7 @@ msgid "Save"
 msgstr "保存"
 
 #: modules/luci-base/htdocs/luci-static/resources/luci.js:2180
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:3999
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4002
 #: modules/luci-compat/luasrc/view/cbi/footer.htm:22
 msgid "Save & Apply"
 msgstr "保存并应用"
@@ -4899,11 +5107,11 @@ msgstr "扫描"
 msgid "Scheduled Tasks"
 msgstr "计划任务"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:3983
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3986
 msgid "Section added"
 msgstr "添加的节点"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:3985
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3988
 msgid "Section removed"
 msgstr "移除的节点"
 
@@ -4921,10 +5129,14 @@ msgstr ""
 "设备时使用！"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2581
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:2718
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:2883
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:2721
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:2886
 msgid "Select file…"
 msgstr "选择文件…"
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:318
+msgid "Selects the transmit hash policy to use for slave selection"
+msgstr ""
 
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:144
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/ppp.js:128
@@ -4970,9 +5182,21 @@ msgstr ""
 "不管接口的链路状态如何，总是用应用设置（如果勾选，链路状态变更将不再触发 "
 "hotplug 事件处理）。"
 
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:300
+msgid "Set same MAC Address to all slaves"
+msgstr ""
+
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:642
 msgid "Set this interface as master for the dhcpv6 relay."
 msgstr "将此接口设置为 dhcpv6 中继的主接口。"
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:304
+msgid "Set to currently active slave (active, 1)"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:305
+msgid "Set to first slave added to the bond (follow, 2)"
+msgstr ""
 
 #: modules/luci-compat/luasrc/model/network/proto_modemmanager.lua:55
 #: modules/luci-compat/luasrc/model/network/proto_qmi.lua:55
@@ -5040,7 +5264,7 @@ msgstr "信号衰减（SATN）"
 msgid "Signal:"
 msgstr "信号："
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:3736
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3739
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:217
 msgid "Size"
 msgstr "大小"
@@ -5067,6 +5291,10 @@ msgstr "跳到内容"
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:45
 msgid "Skip to navigation"
 msgstr "跳转到导航"
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:178
+msgid "Slave Interfaces"
+msgstr ""
 
 #: modules/luci-base/htdocs/luci-static/resources/network.js:2867
 #: modules/luci-compat/luasrc/model/network.lua:1428
@@ -5104,9 +5332,37 @@ msgstr "源地址"
 msgid "Source Address"
 msgstr "源地址"
 
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:342
+msgid ""
+"Specifies that duplicate frames (received on inactive ports) should be "
+"dropped or delivered"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:358
+msgid "Specifies the ARP link monitoring frequency in milliseconds"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:366
+msgid "Specifies the IP addresses to use for ARP monitoring"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:395
+msgid "Specifies the MII link monitoring frequency in milliseconds"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:259
+msgid "Specifies the aggregation selection logic to use"
+msgstr ""
+
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:292
 msgid "Specifies the directory the device is attached to"
 msgstr "指定设备的挂载目录"
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:252
+msgid ""
+"Specifies the mac-address for the actor in protocol packet exchanges "
+"(LACPDUs). If empty, masters' mac address defaults to system default"
+msgstr ""
 
 #: protocols/luci-proto-relay/htdocs/luci-static/resources/protocol/relay.js:175
 msgid ""
@@ -5128,6 +5384,106 @@ msgid ""
 msgstr ""
 "指定最大发射功率。依据监管要求和使用情况，驱动程序可能将实际发射功率限定在此"
 "值以下。"
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:236
+msgid ""
+"Specifies the minimum number of links that must be active before asserting "
+"carrier"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:200
+msgid "Specifies the mode to be used for this bonding interface"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:333
+msgid ""
+"Specifies the number of IGMP membership reports to be issued after a "
+"failover event in 200ms intervals"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:276
+msgid ""
+"Specifies the number of packets to transmit through a slave before moving to "
+"the next one"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:310
+msgid ""
+"Specifies the number of peer notifications (gratuitous ARPs and unsolicited "
+"IPv6 Neighbor Advertisements) to be issued after a failover event"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:284
+msgid ""
+"Specifies the number of seconds between instances where the bonding driver "
+"sends learning packets to each slaves peer switch"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:374
+msgid "Specifies the quantity of ARP IP targets that must be reachable"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:268
+msgid ""
+"Specifies the rate in which the link partner will be asked to transmit "
+"LACPDU packets"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:225
+msgid ""
+"Specifies the reselection policy for the primary slave when failure of the "
+"active slave or recovery of the primary slave occurs"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:244
+msgid "Specifies the system priority"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:403
+msgid ""
+"Specifies the time in milliseconds to wait before disabling a slave after a "
+"link failure detection"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:411
+msgid ""
+"Specifies the time in milliseconds to wait before enabling a slave after a "
+"link recovery detection"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:382
+msgid ""
+"Specifies whether ARP probes and replies should be validated or non-ARP "
+"traffic should be filtered for link monitoring"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:301
+msgid ""
+"Specifies whether active-backup mode should set all slaves to the same MAC "
+"address at enslavement"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:419
+msgid ""
+"Specifies whether or not miimon should use MII or ETHTOOL ioctls vs. "
+"netif_carrier_ok()"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:293
+msgid ""
+"Specifies whether to shuffle active flows across slaves based on the load"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:179
+msgid ""
+"Specifies which slave interfaces should be attached to this bonding interface"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:212
+msgid ""
+"Specifies which slave is the primary device. It will always be the active "
+"slave while it is available"
+msgstr ""
 
 #: protocols/luci-proto-ipip/htdocs/luci-static/resources/protocol/ipip.js:63
 msgid "Specify a TOS (Type of Service)."
@@ -5162,7 +5518,7 @@ msgstr "启动优先级"
 msgid "Start refresh"
 msgstr "开始刷新"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4203
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4206
 msgid "Starting configuration apply…"
 msgstr "开始应用配置…"
 
@@ -5281,7 +5637,7 @@ msgstr "切换协议"
 msgid "Switch to CIDR list notation"
 msgstr "切换到 CIDR 列表记法"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:2615
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:2616
 msgid "Symbolic link"
 msgstr "符号链接"
 
@@ -5304,6 +5660,10 @@ msgstr "系统"
 #: modules/luci-mod-status/root/usr/share/luci/menu.d/luci-mod-status.json:39
 msgid "System Log"
 msgstr "系统日志"
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:243
+msgid "System Priority"
+msgstr ""
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:104
 msgid "System Properties"
@@ -5388,7 +5748,7 @@ msgstr ""
 msgid "The configuration file could not be loaded due to the following error:"
 msgstr "由于以下错误，配置文件无法被加载："
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4079
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4082
 msgid ""
 "The device could not be reached within %d seconds after applying the pending "
 "changes, which caused the configuration to be rolled back for safety "
@@ -5464,9 +5824,17 @@ msgstr "IPv4 前缀长度（位），其余的用在 IPv6 地址。"
 msgid "The length of the IPv6 prefix in bits"
 msgstr "IPv6 前缀长度（位）"
 
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:163
+msgid "The local IPv4 address"
+msgstr ""
+
 #: protocols/luci-proto-ipip/htdocs/luci-static/resources/protocol/ipip.js:44
 msgid "The local IPv4 address over which the tunnel is created (optional)."
 msgstr "所创建隧道的本地 IPv4 地址（可选）。"
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:169
+msgid "The local IPv4 netmask"
+msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1914
 msgid "The network name is already used"
@@ -5565,7 +5933,7 @@ msgstr "不支持所上传的映像文件格式，请选择适合当前平台的
 msgid "There are no active leases"
 msgstr "没有已分配的租约"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4218
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4221
 msgid "There are no changes to apply"
 msgstr "没有待应用的更改"
 
@@ -5728,6 +6096,10 @@ msgstr "传输"
 msgid "Transmit"
 msgstr "传送"
 
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:317
+msgid "Transmit Hash Policy"
+msgstr ""
+
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:74
 msgid "Trigger"
 msgstr "触发器"
@@ -5882,7 +6254,7 @@ msgstr "卸载分区"
 msgid "Unnamed key"
 msgstr "未命名的密钥"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:3923
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3926
 msgid "Unsaved Changes"
 msgstr "未保存的配置"
 
@@ -5908,7 +6280,11 @@ msgstr "不支持的协议类型。"
 msgid "Up"
 msgstr "上移"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:3810
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:410
+msgid "Up Delay"
+msgstr ""
+
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3813
 msgid "Upload"
 msgstr "上传"
 
@@ -5923,21 +6299,21 @@ msgstr "从这里上传一个 sysupgrade 兼容镜像以更新正在运行的固
 msgid "Upload archive..."
 msgstr "上传备份…"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:2772
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:2775
 msgid "Upload file"
 msgstr "上传文件"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:2747
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:2750
 msgid "Upload file…"
 msgstr "上传文件…"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:2694
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:3798
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:2697
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3801
 msgid "Upload request failed: %s"
 msgstr "上传请求失败：%s"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:3717
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:3771
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3720
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3774
 msgid "Uploading file…"
 msgstr "正在上传文件…"
 
@@ -6000,6 +6376,20 @@ msgstr "隧道接口的 MTU"
 msgid "Use TTL on tunnel interface"
 msgstr "隧道接口的 TTL"
 
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:320
+msgid "Use XOR of hardware MAC addresses (layer2)"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:321
+msgid "Use XOR of hardware MAC addresses and IP addresses (layer2+3)"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:323
+msgid ""
+"Use XOR of hardware MAC addresses and IP addresses, rely on skb_flow_dissect "
+"(encap2+3)"
+msgstr ""
+
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:294
 msgid "Use as external overlay (/overlay)"
 msgstr "作为外部 overlay 使用（/overlay）"
@@ -6052,7 +6442,7 @@ msgstr "使用默认网关"
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dslite.js:70
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/map.js:83
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:111
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:152
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:153
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/l2tp.js:67
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/ppp.js:111
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoa.js:98
@@ -6087,6 +6477,15 @@ msgstr ""
 "选字段，可为每个主机单独设定 DHCP 租期的时长，例如：12h、3d、infinite，分别表"
 "示 12 小时、3 天、永久。"
 
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:322
+msgid "Use upper layer protocol information (layer3+4)"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:324
+msgid ""
+"Use upper layer protocol information, rely on skb_flow_dissect (encap3+4)"
+msgstr ""
+
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/20_memory.js:36
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:194
 msgid "Used"
@@ -6104,16 +6503,20 @@ msgstr ""
 "用于两种不同的用途：RADIUS NAS ID 和 802.11r R0KH-ID。通常的 WPA(2)-PSK 不需"
 "要。"
 
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:113
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:105
+msgid "User Group"
+msgstr ""
+
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:114
 msgid "User certificate (PEM encoded)"
 msgstr "用户证书（PEM）"
 
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:125
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:126
 msgid "User key (PEM encoded)"
 msgstr "用户密钥（PEM）"
 
 #: modules/luci-base/luasrc/view/sysauth.htm:23
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:105
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:106
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:56
 msgid "Username"
 msgstr "用户名"
@@ -6167,6 +6570,18 @@ msgid ""
 "Validate server certificate using built-in system CA bundle,<br />requires "
 "the \"ca-bundle\" package"
 msgstr "使用系统内置的 CA 包验证服务器证书，<br />需要“ca-bundle”软件包"
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:387
+msgid "Validation for all slaves"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:385
+msgid "Validation only for active slave"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:386
+msgid "Validation only for backup slaves"
+msgstr ""
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:73
 msgid "Vendor"
@@ -6311,10 +6726,20 @@ msgstr "将收到的 DNS 请求写入系统日志"
 msgid "Write system log to file"
 msgstr "将系统日志写入文件"
 
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:204
+msgid "XOR policy (balance-xor, 2)"
+msgstr ""
+
 #: modules/luci-base/htdocs/luci-static/resources/form.js:3472
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:295
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:344
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:109
 msgid "Yes"
 msgstr "是"
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:303
+msgid "Yes (none, 0)"
+msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:176
 msgid ""
@@ -6338,6 +6763,17 @@ msgstr ""
 msgid ""
 "You must enable JavaScript in your browser or LuCI will not work properly."
 msgstr "必须开启浏览器的 JavaScript 支持，否则 LuCI 无法正常工作。"
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:115
+msgid ""
+"You must select a primary interface which is included in selected slave "
+"interfaces!"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:96
+msgid ""
+"You must select at least one ARP IP target if ARP monitoring is selected!"
+msgstr ""
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:192
 msgid "ZRam Compression Algorithm"
@@ -6522,6 +6958,10 @@ msgstr "中等安全性"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1457
 msgid "minutes"
 msgstr "分钟"
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:422
+msgid "netif_carrier_ok()"
+msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:46
 msgid "no"

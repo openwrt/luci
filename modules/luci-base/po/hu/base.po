@@ -21,7 +21,7 @@ msgstr "%.1f dB"
 msgid "%d Bit"
 msgstr "%d bit"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:3639
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3642
 msgid "%d invalid field(s)"
 msgstr "%d érvénytelen mező"
 
@@ -243,7 +243,7 @@ msgstr ""
 "<br/>Megjegyzés: újra kell indítania kézzel a cron szolgáltatást, ha a "
 "crontab fájl üres volt a szerkesztés előtt."
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:2676
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:2679
 msgid "A directory with the same name already exists."
 msgstr "Már létezik egy ilyen nevű könyvtár."
 
@@ -275,8 +275,29 @@ msgid "APN"
 msgstr "APN"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:197
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:352
 msgid "ARP"
 msgstr "ARP"
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:365
+msgid "ARP IP Targets"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:357
+msgid "ARP Interval"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:381
+msgid "ARP Validation"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:373
+msgid "ARP mode to consider a slave as being up"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:77
+msgid "ARP monitoring is not supported for the selected policy!"
+msgstr ""
 
 #: protocols/luci-proto-relay/htdocs/luci-static/resources/protocol/relay.js:175
 msgid "ARP retry threshold"
@@ -362,11 +383,23 @@ msgstr "Aktív DHCP bérletek"
 msgid "Active DHCPv6 Leases"
 msgstr "Aktív DHCPv6 bérletek"
 
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:203
+msgid "Active-Backup policy (active-backup, 1)"
+msgstr ""
+
 #: modules/luci-base/htdocs/luci-static/resources/network.js:3650
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:929
 #: protocols/luci-proto-hnet/htdocs/luci-static/resources/protocol/hnet.js:23
 msgid "Ad-Hoc"
 msgstr "Eseti"
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:208
+msgid "Adaptive load balancing (balance-alb, 6)"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:207
+msgid "Adaptive transmit load balancing (balance-tlb, 5)"
+msgstr ""
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2013
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2016
@@ -470,6 +503,24 @@ msgstr "Speciális beállítások"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:28
 msgid "Aggregate Transmit Power (ACTATP)"
 msgstr "Összesített átviteli teljesítmény (ACTATP)"
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:258
+msgid "Aggregation Selection Logic"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:261
+msgid "Aggregator: All slaves down or has no slaves (stable, 0)"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:263
+msgid ""
+"Aggregator: Chosen by the largest number of ports + slave added/removed or "
+"state changes (count, 2)"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:262
+msgid "Aggregator: Slave added/removed or state changes (bandwidth, 1)"
+msgstr ""
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:171
 msgid "Alert"
@@ -687,16 +738,16 @@ msgstr "Bármely zóna"
 msgid "Apply backup?"
 msgstr "Alkalmazza a biztonsági mentést?"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4226
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4229
 msgid "Apply request failed with status <code>%h</code>"
 msgstr "A kérés alkalmazása meghiúsult <code>%h</code> állapotkóddal"
 
 #: modules/luci-base/htdocs/luci-static/resources/luci.js:2181
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4092
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4095
 msgid "Apply unchecked"
 msgstr "Kijelöletlenek alkalmazása"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4165
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4168
 msgid "Applying configuration changes… %ds"
 msgstr "A beállítások változtatásainak alkalmazása… %d mp"
 
@@ -907,6 +958,10 @@ msgstr "Bitsebesség"
 msgid "Bogus NX Domain Override"
 msgstr "Hamis NX-tartomány felülbírálása"
 
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:199
+msgid "Bonding Policy"
+msgstr ""
+
 #: modules/luci-base/htdocs/luci-static/resources/network.js:2861
 #: modules/luci-compat/luasrc/model/network.lua:1421
 msgid "Bridge"
@@ -925,8 +980,12 @@ msgstr "Hídegység száma"
 msgid "Bring up on boot"
 msgstr "Felhozás rendszerindításkor"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:2766
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:3749
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:205
+msgid "Broadcast policy (broadcast, 3)"
+msgstr ""
+
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:2769
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3752
 msgid "Browse…"
 msgstr "Tallózás…"
 
@@ -934,7 +993,7 @@ msgstr "Tallózás…"
 msgid "Buffered"
 msgstr "Pufferelt"
 
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:137
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:138
 msgid "CA certificate; if empty it will be saved after the first connection."
 msgstr ""
 "Hitelesítésszolgáltató tanúsítványa. Ha üres, akkor mentésre kerül az első "
@@ -959,8 +1018,8 @@ msgstr "Gyorsítótárazott"
 msgid "Call failed"
 msgstr "Hívás sikertelen"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:2859
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:3758
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:2862
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3761
 #: modules/luci-compat/luasrc/view/cbi/delegator.htm:14
 #: modules/luci-compat/luasrc/view/cbi/simpleform.htm:52
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:187
@@ -1034,11 +1093,11 @@ msgstr ""
 msgid "Chain"
 msgstr "Lánc"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:3978
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3981
 msgid "Changes"
 msgstr "Változtatások"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4261
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4264
 msgid "Changes have been reverted."
 msgstr "A változtatások visszavonva."
 
@@ -1196,16 +1255,16 @@ msgstr ""
 "a kulcsegyeztetés robusztusságának csökkentését okozhatja, különösen az erős "
 "forgalomterheléssel rendelkező környezetekben."
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:3978
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3981
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:421
 msgid "Configuration"
 msgstr "Beállítás"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4140
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4143
 msgid "Configuration changes applied."
 msgstr "A beállítás változtatásai alkalmazva."
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4078
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4081
 msgid "Configuration changes have been rolled back!"
 msgstr "A beállítás változtatásai vissza lettek állítva!"
 
@@ -1240,6 +1299,14 @@ msgstr "A kapcsolat elveszett"
 msgid "Connections"
 msgstr "Kapcsolatok"
 
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:377
+msgid "Consider the slave up when all ARP IP targets are reachable (all, 1)"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:376
+msgid "Consider the slave up when any ARP IP target is reachable (any, 0)"
+msgstr ""
+
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/crontab.js:18
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:340
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/startup.js:55
@@ -1252,7 +1319,7 @@ msgstr "A tartalom mentésre került."
 msgid "Continue"
 msgstr "Tovább"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4114
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4117
 msgid ""
 "Could not regain access to the device after applying the configuration "
 "changes. You might need to reconnect if you modified network related "
@@ -1454,7 +1521,7 @@ msgstr "Alapértelmezett útvonal"
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dslite.js:67
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/map.js:80
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:108
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:149
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:150
 msgid "Default gateway"
 msgstr "Alapértelmezett átjáró"
 
@@ -1480,7 +1547,7 @@ msgstr ""
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2508
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2512
 #: modules/luci-base/htdocs/luci-static/resources/form.js:3000
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:2828
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:2831
 #: modules/luci-compat/luasrc/view/cbi/nsection.htm:11
 #: modules/luci-compat/luasrc/view/cbi/tblsection.htm:162
 #: modules/luci-compat/luasrc/view/cbi/tsection.htm:16
@@ -1492,7 +1559,7 @@ msgstr "Törlés"
 msgid "Delete key"
 msgstr "Kulcs törlése"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:2725
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:2728
 msgid "Delete request failed: %s"
 msgstr "Törlési kérés sikertelen: %s"
 
@@ -1509,7 +1576,7 @@ msgstr "Kézbesítési forgalom jelző üzenet időköze"
 msgid "Description"
 msgstr "Leírás"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:2824
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:2827
 msgid "Deselect"
 msgstr "Kijelölés megszüntetése"
 
@@ -1554,7 +1621,7 @@ msgstr "Az eszköz nem aktív"
 msgid "Device is restarting…"
 msgstr "Az eszköz újraindul…"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4113
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4116
 msgid "Device unreachable!"
 msgstr "Az eszköz elérhetetlen!"
 
@@ -1571,7 +1638,7 @@ msgstr "Diagnosztika"
 msgid "Dial number"
 msgstr "Szám tárcsázása"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:2622
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:2624
 msgid "Directory"
 msgstr "Könyvtár"
 
@@ -1638,9 +1705,9 @@ msgstr "Leválasztási kísérlet sikertelen"
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:606
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2707
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:3259
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:3995
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4084
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3262
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3998
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4087
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1680
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:330
 msgid "Dismiss"
@@ -1681,7 +1748,7 @@ msgstr ""
 msgid "Do not forward reverse lookups for local networks"
 msgstr "Ne továbbítson fordított keresési kéréseket a helyi hálózathoz"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:2711
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:2714
 msgid "Do you really want to delete \"%s\" ?"
 msgstr "Valóban törölni szeretné ezt: „%s”?"
 
@@ -1693,7 +1760,7 @@ msgstr "Valóban törölni szeretné a következő SSH-kulcsot?"
 msgid "Do you really want to erase all settings?"
 msgstr "Valóban törölni szeretné az összes beállítást?"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:2709
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:2712
 msgid "Do you really want to recursively delete the directory \"%s\" ?"
 msgstr "Valóban törölni szeretné rekurzívan a(z) „%s” könyvtárat?"
 
@@ -1721,6 +1788,10 @@ msgstr ""
 msgid "Down"
 msgstr "Le"
 
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:402
+msgid "Down Delay"
+msgstr ""
+
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:366
 msgid "Download backup"
 msgstr "Biztonsági mentés letöltése"
@@ -1736,6 +1807,10 @@ msgstr "Belső SNR eltolás"
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2466
 msgid "Drag to reorder"
 msgstr "Húzza az átrendezéshez"
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:341
+msgid "Drop Duplicate Frames"
+msgstr ""
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:12
 msgid "Dropbear Instance"
@@ -1832,6 +1907,10 @@ msgstr "<abbr title=\"Spanning Tree Protocol\">STP</abbr> engedélyezése"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:373
 msgid "Enable DNS lookups"
 msgstr "DNS keresések engedélyezése"
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:292
+msgid "Enable Dynamic Shuffling Of Flows"
+msgstr ""
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6in4.js:60
 msgid "Enable HE.net dynamic endpoint update"
@@ -1985,6 +2064,14 @@ msgstr "Ethernet adapter"
 msgid "Ethernet Switch"
 msgstr "Ethernet kapcsoló"
 
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:270
+msgid "Every 30 seconds (slow, 0)"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:271
+msgid "Every second (fast, 1)"
+msgstr ""
+
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:399
 msgid "Exclude interfaces"
 msgstr "Csatolók kizárása"
@@ -2008,6 +2095,10 @@ msgstr "Hexadecimális hozzárendelési tipp várt"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:136
 msgid "Expecting: %s"
 msgstr "Elvárás: %s"
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:48
+msgid "Expecting: non-empty value"
+msgstr ""
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:50
 msgid "Expires"
@@ -2062,7 +2153,7 @@ msgstr "FT protokoll"
 msgid "Failed to change the system password."
 msgstr "Nem sikerült megváltoztatni a rendszer jelszavát."
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4072
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4075
 msgid "Failed to confirm apply within %ds, waiting for rollback…"
 msgstr ""
 "Nem sikerült megerősíteni az alkalmazást %d másodpercen belül, várakozás a "
@@ -2072,7 +2163,7 @@ msgstr ""
 msgid "Failed to execute \"/etc/init.d/%s %s\" action: %s"
 msgstr "Nem sikerült végrehajtani az „/etc/init.d/%s %s” műveletet: %s"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:2629
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:2632
 msgid "File"
 msgstr "Fájl"
 
@@ -2080,7 +2171,7 @@ msgstr "Fájl"
 msgid "File not accessible"
 msgstr "A fájl nem érhető el"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:2767
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:2770
 msgid "Filename"
 msgstr "Fájlnév"
 
@@ -2100,6 +2191,18 @@ msgstr "Személyes szűrése"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:218
 msgid "Filter useless"
 msgstr "Használhatatlan szűrése"
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:388
+msgid "Filtering for all slaves, no validation"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:389
+msgid "Filtering for all slaves, validation only for active slave"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:390
+msgid "Filtering for all slaves, validation only for backup slaves"
+msgstr ""
 
 #: modules/luci-compat/luasrc/model/network/proto_ncm.lua:65
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:23
@@ -2508,6 +2611,10 @@ msgstr "Gépnevek"
 msgid "Hybrid"
 msgstr "Hibrid"
 
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:206
+msgid "IEEE 802.3ad Dynamic link aggregation (802.3ad, 4)"
+msgstr ""
+
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:75
 msgid "IKE DH Group"
 msgstr "IKE DH csoport"
@@ -2558,6 +2665,7 @@ msgid "IPv4 Upstream"
 msgstr "Külső IPv4"
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/static.js:178
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:162
 msgid "IPv4 address"
 msgstr "IPv4-cím"
 
@@ -2574,6 +2682,7 @@ msgid "IPv4 gateway"
 msgstr "IPv4-átjáró"
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/static.js:179
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:168
 msgid "IPv4 netmask"
 msgstr "IPv4 hálózati maszk"
 
@@ -2762,7 +2871,7 @@ msgstr ""
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dslite.js:67
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/map.js:80
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:108
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:149
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:150
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/l2tp.js:56
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/ppp.js:100
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoa.js:87
@@ -2970,6 +3079,10 @@ msgstr "Belső"
 msgid "Internal Server Error"
 msgstr "Belső kiszolgálóhiba"
 
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:283
+msgid "Interval For Sending Learning Packets"
+msgstr ""
+
 #: modules/luci-compat/luasrc/view/cbi/tblsection.htm:192
 #: modules/luci-compat/luasrc/view/cbi/tsection.htm:42
 msgid "Invalid"
@@ -3076,6 +3189,10 @@ msgstr "L2TP"
 msgid "L2TP Server"
 msgstr "L2TP-kiszolgáló"
 
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:267
+msgid "LACPDU Packets"
+msgstr ""
+
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:131
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/ppp.js:115
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoa.js:102
@@ -3152,7 +3269,7 @@ msgstr "Automatikus felismeréshez hagyja üresen"
 msgid "Leave empty to use the current WAN address"
 msgstr "Hagyja üresen a jelenlegi WAN-cím használatához"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:3980
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3983
 msgid "Legend:"
 msgstr "Jelmagyarázat:"
 
@@ -3185,6 +3302,14 @@ msgstr "Vonal állapota"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:19
 msgid "Line Uptime"
 msgstr "Vonal működési ideje"
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:123
+msgid "Link Aggregation (Channel Bonding)"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:348
+msgid "Link Monitoring"
+msgstr ""
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/netdev.js:23
 msgid "Link On"
@@ -3264,7 +3389,7 @@ msgstr "Terhelés"
 msgid "Load Average"
 msgstr "Átlagos terhelés"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:2894
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:2897
 msgid "Loading directory contents…"
 msgstr "Könyvtártartalmak betöltése…"
 
@@ -3380,6 +3505,10 @@ msgstr "Legalacsonyabb bérelt cím a hálózati címtől való eltolásként."
 msgid "MAC"
 msgstr "MAC"
 
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:251
+msgid "MAC Address For The Actor"
+msgstr ""
+
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:38
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2061
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:56
@@ -3426,6 +3555,18 @@ msgstr "MD5"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:71
 msgid "MHz"
 msgstr "MHz"
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:353
+msgid "MII"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:421
+msgid "MII / ETHTOOL ioctls"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:394
+msgid "MII Interval"
+msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:54
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:53
@@ -3529,12 +3670,24 @@ msgstr "Hálóazonosító"
 msgid "Method not found"
 msgstr "Nem található módszer"
 
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:349
+msgid "Method of link monitoring"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:418
+msgid "Method to determine link status"
+msgstr ""
+
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:46
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:165
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:183
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:69
 msgid "Metric"
 msgstr "Mérőszám"
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:235
+msgid "Minimum Number of Links"
+msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:202
 msgid "Mirror monitor port"
@@ -3694,7 +3847,7 @@ msgid "NTP server candidates"
 msgstr "NTP-kiszolgáló jelöltek"
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2388
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:3735
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3738
 #: modules/luci-compat/luasrc/view/cbi/tblsection.htm:27
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:710
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:67
@@ -3751,6 +3904,8 @@ msgid "Next »"
 msgstr "Következő »"
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:3472
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:296
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:345
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:108
 msgid "No"
 msgstr "Nem"
@@ -3783,7 +3938,7 @@ msgstr ""
 msgid "No data received"
 msgstr "Nem érkezett adat"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:2834
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:2837
 msgid "No entries in this directory"
 msgstr "Nincsenek bejegyzések ebben a könyvtárban"
 
@@ -3802,6 +3957,15 @@ msgstr "Nincs elérhető információ"
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/map.js:8
 msgid "No matching prefix delegation"
 msgstr "Nincs egyező előtag-delegálás"
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:140
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:143
+msgid "No more slaves available"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:187
+msgid "No more slaves available, can not save interface"
+msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:251
 msgid "No negative cache"
@@ -3827,6 +3991,10 @@ msgstr "Még nincsenek nyilvános kulcsok."
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:90
 msgid "No rules in this chain."
 msgstr "Nincsenek szabályok ebben a láncban."
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:384
+msgid "No validation or filtering"
+msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:152
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:825
@@ -3903,6 +4071,10 @@ msgstr "Figyelmeztetés"
 msgid "Nslookup"
 msgstr "Nslookup"
 
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:332
+msgid "Number of IGMP membership reports"
+msgstr ""
+
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:355
 msgid "Number of cached DNS entries (max is 10000, 0 is no caching)"
 msgstr ""
@@ -3912,6 +4084,10 @@ msgstr ""
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:199
 msgid "Number of parallel threads used for compression"
 msgstr "A tömörítéshez használt párhuzamos szálak száma"
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:309
+msgid "Number of peer notifications after failover event"
+msgstr ""
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:69
 msgid "Obfuscated Group Password"
@@ -3933,6 +4109,7 @@ msgid "Obtain IPv6-Address"
 msgstr "IPv6-cím beszerzése"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/default-on.js:18
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:351
 msgid "Off"
 msgstr "Ki"
 
@@ -3974,6 +4151,11 @@ msgstr "Egy vagy több érvénytelen/szükséges érték a lapon"
 msgid "One or more required fields have no value!"
 msgstr "Egy vagy több kötelező mezőnek nincs értéke!"
 
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:229
+msgid ""
+"Only if current active slave fails and the primary slave is up (failure, 2)"
+msgstr ""
+
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:439
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/backupfiles.lua:19
 msgid "Open list..."
@@ -3997,11 +4179,11 @@ msgstr ""
 msgid "Option \"%s\" must not be empty."
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:3987
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3990
 msgid "Option changed"
 msgstr "Beállítás megváltoztatva"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:3989
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3992
 msgid "Option removed"
 msgstr "Beállítás eltávolítva"
 
@@ -4118,7 +4300,7 @@ msgstr "MAC-cím felülbírálása"
 #: protocols/luci-proto-ipip/htdocs/luci-static/resources/protocol/ipip.js:53
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:54
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:114
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:157
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:158
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/l2tp.js:71
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/ppp.js:145
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoa.js:132
@@ -4160,7 +4342,7 @@ msgstr "A belső útvonalakhoz használt tábla felülbírálása"
 msgid "Overview"
 msgstr "Áttekintés"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:2677
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:2680
 msgid "Overwrite existing file \"%s\" ?"
 msgstr "Felülírja a meglévő „%s” fájlt?"
 
@@ -4269,6 +4451,10 @@ msgstr ""
 msgid "Packets"
 msgstr "Csomagok"
 
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:275
+msgid "Packets To Transmit Before Moving To Next Slave"
+msgstr ""
+
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:152
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:825
 msgid "Part of zone %q"
@@ -4277,7 +4463,7 @@ msgstr "A(z) %q zóna része"
 #: modules/luci-base/luasrc/view/sysauth.htm:29
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1591
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js:51
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:107
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:108
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:58
 msgid "Password"
 msgstr "Jelszó"
@@ -4301,7 +4487,7 @@ msgstr "A belső személyes kulcs jelszava"
 msgid "Password strength"
 msgstr "Jelszóerősség"
 
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:110
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:111
 msgid "Password2"
 msgstr "2. jelszó"
 
@@ -4411,7 +4597,7 @@ msgstr "csom."
 msgid "Please enter your username and password."
 msgstr "Adja meg a felhasználónevét és a jelszavát."
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:3718
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3721
 msgid "Please select the file to upload."
 msgstr "Válassza ki a feltöltendő fájlt."
 
@@ -4475,6 +4661,20 @@ msgstr "Figyelés megakadályozása ezeken a csatolókon."
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1075
 msgid "Prevents client-to-client communication"
 msgstr "Megakadályozza az ügyfél-ügyfél közti kommunikációt"
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:211
+msgid "Primary Slave"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:228
+msgid ""
+"Primary becomes active slave when it comes back up if speed and duplex "
+"better than current slave (better, 1)"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:227
+msgid "Primary becomes active slave whenever it comes back up (always, 0)"
+msgstr ""
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:50
 msgid "Private Key"
@@ -4822,6 +5022,10 @@ msgstr "OWA támogatással rendelkező WPA-ügyfél szükséges"
 msgid "Requires wpa-supplicant with SAE support"
 msgstr "SAE támogatással rendelkező WPA-ügyfél szükséges"
 
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:224
+msgid "Reselection policy for primary slave"
+msgstr ""
+
 #: modules/luci-base/htdocs/luci-static/resources/luci.js:2203
 #: modules/luci-base/luasrc/view/sysauth.htm:39
 #: modules/luci-compat/luasrc/view/cbi/delegator.htm:17
@@ -4877,19 +5081,19 @@ msgstr "Biztonsági mentés visszaállítása"
 msgid "Reveal/hide password"
 msgstr "Jelszó felfedése/elrejtése"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4003
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4006
 msgid "Revert"
 msgstr "Visszavonás"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4088
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4091
 msgid "Revert changes"
 msgstr "Változtatások visszavonása"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4270
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4273
 msgid "Revert request failed with status <code>%h</code>"
 msgstr "A kérés visszavonása meghiúsult <code>%h</code> állapotkóddal"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4250
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4253
 msgid "Reverting configuration…"
 msgstr "Beállítás visszaállítása…"
 
@@ -4900,6 +5104,10 @@ msgstr "TFTP-n keresztül kiszolgált fájlok gyökérkönyvtára"
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:297
 msgid "Root preparation"
 msgstr "Gyökér előkészítés"
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:202
+msgid "Round-Robin policy (balance-rr, 0)"
+msgstr ""
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:129
 msgid "Route Allowed IPs"
@@ -5005,7 +5213,7 @@ msgid "Save"
 msgstr "Mentés"
 
 #: modules/luci-base/htdocs/luci-static/resources/luci.js:2180
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:3999
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4002
 #: modules/luci-compat/luasrc/view/cbi/footer.htm:22
 msgid "Save & Apply"
 msgstr "Mentés és alkalmazás"
@@ -5031,11 +5239,11 @@ msgstr "Keresés"
 msgid "Scheduled Tasks"
 msgstr "Ütemezett feladatok"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:3983
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3986
 msgid "Section added"
 msgstr "Szakasz hozzáadva"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:3985
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3988
 msgid "Section removed"
 msgstr "Szakasz eltávolítva"
 
@@ -5054,10 +5262,14 @@ msgstr ""
 "ha biztos abban, hogy a firmware helyes és az Ön eszközéhez készült!"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2581
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:2718
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:2883
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:2721
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:2886
 msgid "Select file…"
 msgstr "Fájl kiválasztása…"
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:318
+msgid "Selects the transmit hash policy to use for slave selection"
+msgstr ""
 
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:144
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/ppp.js:128
@@ -5106,9 +5318,21 @@ msgstr ""
 "be van állítva, akkor a hordozó érzékeseményei nem hívják meg a gyors "
 "csatlakozási kezelőket)."
 
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:300
+msgid "Set same MAC Address to all slaves"
+msgstr ""
+
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:642
 msgid "Set this interface as master for the dhcpv6 relay."
 msgstr "A csatoló beállítása mesterként a dhcpv6 átjátszónál."
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:304
+msgid "Set to currently active slave (active, 1)"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:305
+msgid "Set to first slave added to the bond (follow, 2)"
+msgstr ""
 
 #: modules/luci-compat/luasrc/model/network/proto_modemmanager.lua:55
 #: modules/luci-compat/luasrc/model/network/proto_qmi.lua:55
@@ -5176,7 +5400,7 @@ msgstr "Jel csillapítása (SATN)"
 msgid "Signal:"
 msgstr "Jel:"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:3736
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3739
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:217
 msgid "Size"
 msgstr "Méret"
@@ -5203,6 +5427,10 @@ msgstr "Ugrás a tartalomhoz"
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:45
 msgid "Skip to navigation"
 msgstr "Ugrás a navigációhoz"
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:178
+msgid "Slave Interfaces"
+msgstr ""
 
 #: modules/luci-base/htdocs/luci-static/resources/network.js:2867
 #: modules/luci-compat/luasrc/model/network.lua:1428
@@ -5241,9 +5469,37 @@ msgstr "Forrás"
 msgid "Source Address"
 msgstr "Forráscím"
 
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:342
+msgid ""
+"Specifies that duplicate frames (received on inactive ports) should be "
+"dropped or delivered"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:358
+msgid "Specifies the ARP link monitoring frequency in milliseconds"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:366
+msgid "Specifies the IP addresses to use for ARP monitoring"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:395
+msgid "Specifies the MII link monitoring frequency in milliseconds"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:259
+msgid "Specifies the aggregation selection logic to use"
+msgstr ""
+
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:292
 msgid "Specifies the directory the device is attached to"
 msgstr "Megadja azt a könyvtárat, amelyhez az eszköz csatlakoztatva van"
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:252
+msgid ""
+"Specifies the mac-address for the actor in protocol packet exchanges "
+"(LACPDUs). If empty, masters' mac address defaults to system default"
+msgstr ""
 
 #: protocols/luci-proto-relay/htdocs/luci-static/resources/protocol/relay.js:175
 msgid ""
@@ -5271,6 +5527,106 @@ msgstr ""
 "használhat. A szabályozási követelményektől és a vezeték nélküli "
 "használattól függően a tényleges átviteli teljesítményt csökkentheti az "
 "illesztőprogram."
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:236
+msgid ""
+"Specifies the minimum number of links that must be active before asserting "
+"carrier"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:200
+msgid "Specifies the mode to be used for this bonding interface"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:333
+msgid ""
+"Specifies the number of IGMP membership reports to be issued after a "
+"failover event in 200ms intervals"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:276
+msgid ""
+"Specifies the number of packets to transmit through a slave before moving to "
+"the next one"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:310
+msgid ""
+"Specifies the number of peer notifications (gratuitous ARPs and unsolicited "
+"IPv6 Neighbor Advertisements) to be issued after a failover event"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:284
+msgid ""
+"Specifies the number of seconds between instances where the bonding driver "
+"sends learning packets to each slaves peer switch"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:374
+msgid "Specifies the quantity of ARP IP targets that must be reachable"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:268
+msgid ""
+"Specifies the rate in which the link partner will be asked to transmit "
+"LACPDU packets"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:225
+msgid ""
+"Specifies the reselection policy for the primary slave when failure of the "
+"active slave or recovery of the primary slave occurs"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:244
+msgid "Specifies the system priority"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:403
+msgid ""
+"Specifies the time in milliseconds to wait before disabling a slave after a "
+"link failure detection"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:411
+msgid ""
+"Specifies the time in milliseconds to wait before enabling a slave after a "
+"link recovery detection"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:382
+msgid ""
+"Specifies whether ARP probes and replies should be validated or non-ARP "
+"traffic should be filtered for link monitoring"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:301
+msgid ""
+"Specifies whether active-backup mode should set all slaves to the same MAC "
+"address at enslavement"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:419
+msgid ""
+"Specifies whether or not miimon should use MII or ETHTOOL ioctls vs. "
+"netif_carrier_ok()"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:293
+msgid ""
+"Specifies whether to shuffle active flows across slaves based on the load"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:179
+msgid ""
+"Specifies which slave interfaces should be attached to this bonding interface"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:212
+msgid ""
+"Specifies which slave is the primary device. It will always be the active "
+"slave while it is available"
+msgstr ""
 
 #: protocols/luci-proto-ipip/htdocs/luci-static/resources/protocol/ipip.js:63
 msgid "Specify a TOS (Type of Service)."
@@ -5309,7 +5665,7 @@ msgstr "Indítási prioritás"
 msgid "Start refresh"
 msgstr "Frissítés indítása"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4203
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4206
 msgid "Starting configuration apply…"
 msgstr "Beállítások alkalmazásának indítása…"
 
@@ -5432,7 +5788,7 @@ msgstr "Protokoll váltása"
 msgid "Switch to CIDR list notation"
 msgstr "Váltás CIDR lista jelölésre"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:2615
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:2616
 msgid "Symbolic link"
 msgstr "Szimbolikus hivatkozás"
 
@@ -5455,6 +5811,10 @@ msgstr "Rendszer"
 #: modules/luci-mod-status/root/usr/share/luci/menu.d/luci-mod-status.json:39
 msgid "System Log"
 msgstr "Rendszernapló"
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:243
+msgid "System Priority"
+msgstr ""
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:104
 msgid "System Properties"
@@ -5543,7 +5903,7 @@ msgstr ""
 msgid "The configuration file could not be loaded due to the following error:"
 msgstr "A beállítófájlt nem sikerült betölteni a következő hiba miatt:"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4079
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4082
 msgid ""
 "The device could not be reached within %d seconds after applying the pending "
 "changes, which caused the configuration to be rolled back for safety "
@@ -5631,9 +5991,17 @@ msgstr ""
 msgid "The length of the IPv6 prefix in bits"
 msgstr "Az IPv6-előtag hossza bitekben"
 
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:163
+msgid "The local IPv4 address"
+msgstr ""
+
 #: protocols/luci-proto-ipip/htdocs/luci-static/resources/protocol/ipip.js:44
 msgid "The local IPv4 address over which the tunnel is created (optional)."
 msgstr "A helyi IPv4-cím, amely fölött az alagút létrejön (elhagyható)."
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:169
+msgid "The local IPv4 netmask"
+msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1914
 msgid "The network name is already used"
@@ -5744,7 +6112,7 @@ msgstr ""
 msgid "There are no active leases"
 msgstr "Nincsenek aktív bérletek"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4218
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4221
 msgid "There are no changes to apply"
 msgstr "Nincsenek alkalmazandó változtatások"
 
@@ -5927,6 +6295,10 @@ msgstr "Átvitel"
 msgid "Transmit"
 msgstr "Átvitel"
 
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:317
+msgid "Transmit Hash Policy"
+msgstr ""
+
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:74
 msgid "Trigger"
 msgstr "Aktiváló"
@@ -6081,7 +6453,7 @@ msgstr "Leválasztás"
 msgid "Unnamed key"
 msgstr "Névtelen kulcs"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:3923
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3926
 msgid "Unsaved Changes"
 msgstr "Mentetlen változtatások"
 
@@ -6107,7 +6479,11 @@ msgstr "Nem támogatott protokolltípus."
 msgid "Up"
 msgstr "Fel"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:3810
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:410
+msgid "Up Delay"
+msgstr ""
+
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3813
 msgid "Upload"
 msgstr "Feltöltés"
 
@@ -6124,21 +6500,21 @@ msgstr ""
 msgid "Upload archive..."
 msgstr "Archívum feltöltése…"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:2772
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:2775
 msgid "Upload file"
 msgstr "Fájl feltöltése"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:2747
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:2750
 msgid "Upload file…"
 msgstr "Fájl feltöltése…"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:2694
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:3798
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:2697
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3801
 msgid "Upload request failed: %s"
 msgstr "Feltöltési kérés sikertelen: %s"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:3717
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:3771
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3720
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3774
 msgid "Uploading file…"
 msgstr "Fájl feltöltése…"
 
@@ -6202,6 +6578,20 @@ msgstr "MTU használata az alagút csatolón"
 msgid "Use TTL on tunnel interface"
 msgstr "TTL használata alagútcsatolón"
 
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:320
+msgid "Use XOR of hardware MAC addresses (layer2)"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:321
+msgid "Use XOR of hardware MAC addresses and IP addresses (layer2+3)"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:323
+msgid ""
+"Use XOR of hardware MAC addresses and IP addresses, rely on skb_flow_dissect "
+"(encap2+3)"
+msgstr ""
+
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:294
 msgid "Use as external overlay (/overlay)"
 msgstr "Használat külső rátétként (/overlay)"
@@ -6254,7 +6644,7 @@ msgstr "Alapértelmezett átjáró használata"
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dslite.js:70
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/map.js:83
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:111
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:152
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:153
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/l2tp.js:67
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/ppp.js:111
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoa.js:98
@@ -6291,6 +6681,15 @@ msgstr ""
 "használható egy nem szabványos, a gépre jellemző bérleti idő beállításához, "
 "mint például 12h, 3d vagy végtelen."
 
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:322
+msgid "Use upper layer protocol information (layer3+4)"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:324
+msgid ""
+"Use upper layer protocol information, rely on skb_flow_dissect (encap3+4)"
+msgstr ""
+
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/20_memory.js:36
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:194
 msgid "Used"
@@ -6308,16 +6707,20 @@ msgstr ""
 "Két különböző célra használják: RADIUS NAS-azonosító és 802.11r R0KH-"
 "azonosító. Nem szükséges normál WPA(2)-PSK esetén."
 
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:113
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:105
+msgid "User Group"
+msgstr ""
+
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:114
 msgid "User certificate (PEM encoded)"
 msgstr "Felhasználói tanúsítvány (PEM kódolású)"
 
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:125
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:126
 msgid "User key (PEM encoded)"
 msgstr "Felhasználói kulcs (PEM kódolású)"
 
 #: modules/luci-base/luasrc/view/sysauth.htm:23
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:105
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:106
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:56
 msgid "Username"
 msgstr "Felhasználónév"
@@ -6374,6 +6777,18 @@ msgstr ""
 "A kiszolgáló tanúsítványának ellenőrzése a rendszer beépített<br /"
 ">hitelesítésszolgáltató-csomagjának használatával. A „ca-bundle” csomagot "
 "igényli"
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:387
+msgid "Validation for all slaves"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:385
+msgid "Validation only for active slave"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:386
+msgid "Validation only for backup slaves"
+msgstr ""
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:73
 msgid "Vendor"
@@ -6521,10 +6936,20 @@ msgstr "Fogadott DNS-kérések írása a rendszernaplóba"
 msgid "Write system log to file"
 msgstr "Rendszernapló írása fájlba"
 
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:204
+msgid "XOR policy (balance-xor, 2)"
+msgstr ""
+
 #: modules/luci-base/htdocs/luci-static/resources/form.js:3472
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:295
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:344
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:109
 msgid "Yes"
 msgstr "Igen"
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:303
+msgid "Yes (none, 0)"
+msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:176
 msgid ""
@@ -6555,6 +6980,17 @@ msgid ""
 msgstr ""
 "Engedélyezni kell a JavaScript használatát a böngészőben, különben a LuCI "
 "nem fog megfelelően működni."
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:115
+msgid ""
+"You must select a primary interface which is included in selected slave "
+"interfaces!"
+msgstr ""
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:96
+msgid ""
+"You must select at least one ARP IP target if ARP monitoring is selected!"
+msgstr ""
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:192
 msgid "ZRam Compression Algorithm"
@@ -6739,6 +7175,10 @@ msgstr "közepes biztonság"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1457
 msgid "minutes"
 msgstr "perc"
+
+#: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:422
+msgid "netif_carrier_ok()"
+msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:46
 msgid "no"
