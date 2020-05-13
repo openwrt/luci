@@ -77,7 +77,7 @@ return view.extend({
 			o.rmempty = true;
 			o.modalonly = true;
 			o.cfgvalue = function(section_id) {
-				var cfgvalue = this.super('cfgvalue', [section_id]);
+				var cfgvalue = this.map.data.get('network', section_id, 'table');
 				return cfgvalue || 'main';
 			};
 
