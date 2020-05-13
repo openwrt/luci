@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LuCI: base\n"
 "POT-Creation-Date: 2010-05-09 01:01+0300\n"
-"PO-Revision-Date: 2020-05-05 22:27+0000\n"
+"PO-Revision-Date: 2020-05-12 20:02+0000\n"
 "Last-Translator: Anton Kikin <a.a.kikin@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/openwrt/luci/ru/>"
 "\n"
@@ -284,23 +284,23 @@ msgstr "ARP"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:365
 msgid "ARP IP Targets"
-msgstr ""
+msgstr "IP-адреса ARP мониторинга"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:357
 msgid "ARP Interval"
-msgstr ""
+msgstr "ARP интервал"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:381
 msgid "ARP Validation"
-msgstr ""
+msgstr "ARP валидация"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:373
 msgid "ARP mode to consider a slave as being up"
-msgstr ""
+msgstr "Режим ARP для определения ведомого как находящегося в рабочем состоянии"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:77
 msgid "ARP monitoring is not supported for the selected policy!"
-msgstr ""
+msgstr "Мониторинг ARP не поддерживается для выбранной политики!"
 
 #: protocols/luci-proto-relay/htdocs/luci-static/resources/protocol/relay.js:175
 msgid "ARP retry threshold"
@@ -388,7 +388,7 @@ msgstr "Активные DHCPv6 аренды"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:203
 msgid "Active-Backup policy (active-backup, 1)"
-msgstr ""
+msgstr "Политика активного резервирования (active-backup, 1)"
 
 #: modules/luci-base/htdocs/luci-static/resources/network.js:3650
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:929
@@ -398,11 +398,11 @@ msgstr "Ad-Hoc"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:208
 msgid "Adaptive load balancing (balance-alb, 6)"
-msgstr ""
+msgstr "Адаптивная балансировка нагрузки (balance-alb, 6)"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:207
 msgid "Adaptive transmit load balancing (balance-tlb, 5)"
-msgstr ""
+msgstr "Адаптивная балансировка нагрузки передачи (balance-tlb, 5)"
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2013
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2016
@@ -510,21 +510,25 @@ msgstr "Aggregate Transmit Power (ACTATP)"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:258
 msgid "Aggregation Selection Logic"
-msgstr ""
+msgstr "Логика выбора для агрегации"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:261
 msgid "Aggregator: All slaves down or has no slaves (stable, 0)"
 msgstr ""
+"Агрегатор: Все ведомые отключены (нет линка) или нет ведомых (stable, 0)"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:263
 msgid ""
 "Aggregator: Chosen by the largest number of ports + slave added/removed or "
 "state changes (count, 2)"
 msgstr ""
+"Агрегатор: Выбирается по наибольшему количеству портов + добавление/удаление "
+"ведомых или изменение состояния (count, 2)"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:262
 msgid "Aggregator: Slave added/removed or state changes (bandwidth, 1)"
 msgstr ""
+"Агрегатор: Добавление/удаление ведомых или изменение состояния (bandwidth, 1)"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:171
 msgid "Alert"
@@ -969,7 +973,7 @@ msgstr "Переопределение поддельного NX-домена"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:199
 msgid "Bonding Policy"
-msgstr ""
+msgstr "Политика объединения"
 
 #: modules/luci-base/htdocs/luci-static/resources/network.js:2861
 #: modules/luci-compat/luasrc/model/network.lua:1421
@@ -991,7 +995,7 @@ msgstr "Запустить при загрузке"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:205
 msgid "Broadcast policy (broadcast, 3)"
-msgstr ""
+msgstr "Широковещательная политика (broadcast, 3)"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2769
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:3752
@@ -1310,10 +1314,14 @@ msgstr "Соединения"
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:377
 msgid "Consider the slave up when all ARP IP targets are reachable (all, 1)"
 msgstr ""
+"Считать ведомый включенным, когда все IP-адреса ARP мониторинга достижимы ("
+"all, 1)"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:376
 msgid "Consider the slave up when any ARP IP target is reachable (any, 0)"
 msgstr ""
+"Считать ведомый включенным, когда любой из IP-адресов ARP мониторинга "
+"достижим (any, 0)"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/crontab.js:18
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:340
@@ -1796,7 +1804,7 @@ msgstr "Вниз"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:402
 msgid "Down Delay"
-msgstr ""
+msgstr "Задержка отключения интерфейса"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:366
 msgid "Download backup"
@@ -1816,7 +1824,7 @@ msgstr "Перетащите, чтобы изменить порядок"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:341
 msgid "Drop Duplicate Frames"
-msgstr ""
+msgstr "Отбрасывать дубликаты кадров"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:12
 msgid "Dropbear Instance"
@@ -1915,7 +1923,7 @@ msgstr "Разрешить DNS-запросы"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:292
 msgid "Enable Dynamic Shuffling Of Flows"
-msgstr ""
+msgstr "Включить динамическую перестановку потоков"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6in4.js:60
 msgid "Enable HE.net dynamic endpoint update"
@@ -2073,11 +2081,11 @@ msgstr "Ethernet-коммутатор"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:270
 msgid "Every 30 seconds (slow, 0)"
-msgstr ""
+msgstr "Каждые 30 секунд (slow, 0)"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:271
 msgid "Every second (fast, 1)"
-msgstr ""
+msgstr "Каждую секунду (fast, 1)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:399
 msgid "Exclude interfaces"
@@ -2105,7 +2113,7 @@ msgstr "Ожидается: %s"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:48
 msgid "Expecting: non-empty value"
-msgstr ""
+msgstr "Ожидается: непустое значение"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:50
 msgid "Expires"
@@ -2201,15 +2209,15 @@ msgstr "Фильтровать бесполезные"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:388
 msgid "Filtering for all slaves, no validation"
-msgstr ""
+msgstr "Фильтрация для всех ведомых, без проверки"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:389
 msgid "Filtering for all slaves, validation only for active slave"
-msgstr ""
+msgstr "Фильтрация для всех ведомых, проверка только для активного ведомого"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:390
 msgid "Filtering for all slaves, validation only for backup slaves"
-msgstr ""
+msgstr "Фильтрация для всех ведомых, проверка только для резервных ведомых"
 
 #: modules/luci-compat/luasrc/model/network/proto_ncm.lua:65
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:23
@@ -2617,7 +2625,7 @@ msgstr "Гибрид"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:206
 msgid "IEEE 802.3ad Dynamic link aggregation (802.3ad, 4)"
-msgstr ""
+msgstr "Динамическая агрегация каналов IEEE 802.3ad (802.3ad, 4)"
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:75
 msgid "IKE DH Group"
@@ -3083,7 +3091,7 @@ msgstr "Внутренняя ошибка сервера"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:283
 msgid "Interval For Sending Learning Packets"
-msgstr ""
+msgstr "Интервал отправки обучающих (learning) пакетов"
 
 #: modules/luci-compat/luasrc/view/cbi/tblsection.htm:192
 #: modules/luci-compat/luasrc/view/cbi/tsection.htm:42
@@ -3191,7 +3199,7 @@ msgstr "L2TP-сервер"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:267
 msgid "LACPDU Packets"
-msgstr ""
+msgstr "LACPDU пакеты"
 
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:131
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/ppp.js:115
@@ -3303,11 +3311,11 @@ msgstr "Время бесперебойной работы линии"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:123
 msgid "Link Aggregation (Channel Bonding)"
-msgstr ""
+msgstr "Агрегация соединений (объединение каналов)"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:348
 msgid "Link Monitoring"
-msgstr ""
+msgstr "Мониторинг соединения"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/netdev.js:23
 msgid "Link On"
@@ -3507,7 +3515,7 @@ msgstr "MAC"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:251
 msgid "MAC Address For The Actor"
-msgstr ""
+msgstr "MAC-адрес для актора"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:38
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2061
@@ -3558,15 +3566,15 @@ msgstr "МГц"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:353
 msgid "MII"
-msgstr ""
+msgstr "MII"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:421
 msgid "MII / ETHTOOL ioctls"
-msgstr ""
+msgstr "MII / ioctl вызовы ETHTOOL"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:394
 msgid "MII Interval"
-msgstr ""
+msgstr "MII интервал"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:54
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:53
@@ -3672,11 +3680,11 @@ msgstr "Метод не найден"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:349
 msgid "Method of link monitoring"
-msgstr ""
+msgstr "Метод мониторинга соединений"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:418
 msgid "Method to determine link status"
-msgstr ""
+msgstr "Метод определения состояния соединений"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:46
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:165
@@ -3687,7 +3695,7 @@ msgstr "Метрика"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:235
 msgid "Minimum Number of Links"
-msgstr ""
+msgstr "Минимальное количество соединений"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:202
 msgid "Mirror monitor port"
@@ -3961,11 +3969,11 @@ msgstr "Отсутствует соответствующая делегация
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:140
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:143
 msgid "No more slaves available"
-msgstr ""
+msgstr "Больше нет доступных ведомых интерфейсов"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:187
 msgid "No more slaves available, can not save interface"
-msgstr ""
+msgstr "Больше нет доступных ведомых, сохранить интерфейс невозможно"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:251
 msgid "No negative cache"
@@ -3994,7 +4002,7 @@ msgstr "Нет правил в данной цепочке."
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:384
 msgid "No validation or filtering"
-msgstr ""
+msgstr "Без проверки или фильтрации"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:152
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:825
@@ -4073,7 +4081,7 @@ msgstr "DNS-запрос"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:332
 msgid "Number of IGMP membership reports"
-msgstr ""
+msgstr "Количество отчётов о членстве IGMP"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:355
 msgid "Number of cached DNS entries (max is 10000, 0 is no caching)"
@@ -4087,7 +4095,7 @@ msgstr "Количество параллельных потоков испол�
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:309
 msgid "Number of peer notifications after failover event"
-msgstr ""
+msgstr "Количество peer-уведомлений после события отказа"
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:69
 msgid "Obfuscated Group Password"
@@ -4155,6 +4163,8 @@ msgstr "Одно или несколько обязательных полей �
 msgid ""
 "Only if current active slave fails and the primary slave is up (failure, 2)"
 msgstr ""
+"Только в том случае, если текущий активный ведомый выходит из строя и "
+"первичный ведомый работает (failure, 2)"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:439
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/backupfiles.lua:19
@@ -4453,7 +4463,7 @@ msgstr "Пакеты"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:275
 msgid "Packets To Transmit Before Moving To Next Slave"
-msgstr ""
+msgstr "Количество пакетов перед переходом на следующий ведомый"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:152
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:825
@@ -4664,17 +4674,21 @@ msgstr "Не позволяет клиентам обмениваться дру
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:211
 msgid "Primary Slave"
-msgstr ""
+msgstr "Первичный ведомый интерфейс"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:228
 msgid ""
 "Primary becomes active slave when it comes back up if speed and duplex "
 "better than current slave (better, 1)"
 msgstr ""
+"Первичный становится активным ведомым при его восстановлении, если скорость "
+"и дуплекс лучше, чем у текущего ведомого (better, 1)"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:227
 msgid "Primary becomes active slave whenever it comes back up (always, 0)"
 msgstr ""
+"Первичный становится активным ведомым всякий раз, когда он восстанавливается "
+"(always, 0)"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:50
 msgid "Private Key"
@@ -5022,7 +5036,7 @@ msgstr "Требуется wpa-supplicant с поддержкой SAE"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:224
 msgid "Reselection policy for primary slave"
-msgstr ""
+msgstr "Политика переизбрания для первичного ведомого"
 
 #: modules/luci-base/htdocs/luci-static/resources/luci.js:2203
 #: modules/luci-base/luasrc/view/sysauth.htm:39
@@ -5105,7 +5119,7 @@ msgstr "Подготовка корневой директории"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:202
 msgid "Round-Robin policy (balance-rr, 0)"
-msgstr ""
+msgstr "Политика round-robin (balance-rr, 0)"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:129
 msgid "Route Allowed IPs"
@@ -5267,7 +5281,7 @@ msgstr "Выбрать файл…"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:318
 msgid "Selects the transmit hash policy to use for slave selection"
-msgstr ""
+msgstr "Определяет хэш политику передачи пакетов через объединенные интерфейсы"
 
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:144
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/ppp.js:128
@@ -5318,7 +5332,7 @@ msgstr ""
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:300
 msgid "Set same MAC Address to all slaves"
-msgstr ""
+msgstr "Установить один и тот же MAC-адрес для всех ведомых интерфейсов"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:642
 msgid "Set this interface as master for the dhcpv6 relay."
@@ -5326,11 +5340,13 @@ msgstr "Установить этот интерфейс в качестве м�
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:304
 msgid "Set to currently active slave (active, 1)"
-msgstr ""
+msgstr "Установить на текущем активном ведомом интерфейсе (active, 1)"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:305
 msgid "Set to first slave added to the bond (follow, 2)"
 msgstr ""
+"Установить на первом ведомом интерфейсе, добавленном в объединение (follow, "
+"2)"
 
 #: modules/luci-compat/luasrc/model/network/proto_modemmanager.lua:55
 #: modules/luci-compat/luasrc/model/network/proto_qmi.lua:55
@@ -5428,7 +5444,7 @@ msgstr "Перейти к навигации"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:178
 msgid "Slave Interfaces"
-msgstr ""
+msgstr "Ведомые интерфейсы"
 
 #: modules/luci-base/htdocs/luci-static/resources/network.js:2867
 #: modules/luci-compat/luasrc/model/network.lua:1428
@@ -5472,22 +5488,24 @@ msgid ""
 "Specifies that duplicate frames (received on inactive ports) should be "
 "dropped or delivered"
 msgstr ""
+"Определяет, должны ли дубликаты фреймов (полученные на неактивных портах) "
+"быть отброшены или доставлены"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:358
 msgid "Specifies the ARP link monitoring frequency in milliseconds"
-msgstr ""
+msgstr "Определяет частоту ARP мониторинга соединения в миллисекундах"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:366
 msgid "Specifies the IP addresses to use for ARP monitoring"
-msgstr ""
+msgstr "Определяет IP-адреса, которые будут использоваться для ARP мониторинга"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:395
 msgid "Specifies the MII link monitoring frequency in milliseconds"
-msgstr ""
+msgstr "Определяет частоту MII мониторинга соединения в миллисекундах"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:259
 msgid "Specifies the aggregation selection logic to use"
-msgstr ""
+msgstr "Определяет используемую логику выбора для агрегации"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:292
 msgid "Specifies the directory the device is attached to"
@@ -5498,6 +5516,9 @@ msgid ""
 "Specifies the mac-address for the actor in protocol packet exchanges "
 "(LACPDUs). If empty, masters' mac address defaults to system default"
 msgstr ""
+"Определяет MAC-адрес для актора во время обмена пакетами протокола (LACPDU). "
+"Если пустой, в качестве MAC-адреса актора будет использоваться MAC-адрес "
+"мастера"
 
 #: protocols/luci-proto-relay/htdocs/luci-static/resources/protocol/relay.js:175
 msgid ""
@@ -5530,100 +5551,135 @@ msgid ""
 "Specifies the minimum number of links that must be active before asserting "
 "carrier"
 msgstr ""
+"Определяет минимальное количество соединений, которое должно быть активным "
+"для включения интерфейса объединения (carrier on)"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:200
 msgid "Specifies the mode to be used for this bonding interface"
 msgstr ""
+"Определяет режим, который будет использоваться для этого интерфейса "
+"объединения"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:333
 msgid ""
 "Specifies the number of IGMP membership reports to be issued after a "
 "failover event in 200ms intervals"
 msgstr ""
+"Определяет количество отчетов о членстве в IGMP, которые должны быть "
+"отправлены после события отказа с интервалом 200 мс"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:276
 msgid ""
 "Specifies the number of packets to transmit through a slave before moving to "
 "the next one"
 msgstr ""
+"Определяет количество пакетов для передачи через ведомый интерфейс перед "
+"переходом к следующему ведомому"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:310
 msgid ""
 "Specifies the number of peer notifications (gratuitous ARPs and unsolicited "
 "IPv6 Neighbor Advertisements) to be issued after a failover event"
 msgstr ""
+"Определяет количество peer-уведомлений (самообращённые ARP и незапрашиваемые "
+"IPv6-объявления соседей), которые должны быть отправлены после события отказа"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:284
 msgid ""
 "Specifies the number of seconds between instances where the bonding driver "
 "sends learning packets to each slaves peer switch"
 msgstr ""
+"Определяет количество секунд между моментами, когда драйвер объединения "
+"посылает обучающие пакеты на каждый пир ведомого устройства"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:374
 msgid "Specifies the quantity of ARP IP targets that must be reachable"
 msgstr ""
+"Определяет количество IP-адресов ARP мониторинга, которые должны быть "
+"достижимы"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:268
 msgid ""
 "Specifies the rate in which the link partner will be asked to transmit "
 "LACPDU packets"
 msgstr ""
+"Определяет скорость, с которой партнер соединения будет запрашивать передачу "
+"пакетов LACPDU"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:225
 msgid ""
 "Specifies the reselection policy for the primary slave when failure of the "
 "active slave or recovery of the primary slave occurs"
 msgstr ""
+"Определяет политику повторного выбора для первичного ведомого, когда "
+"происходит сбой активного ведомого или восстановление первичного ведомого"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:244
 msgid "Specifies the system priority"
-msgstr ""
+msgstr "Определяет системный приоритет"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:403
 msgid ""
 "Specifies the time in milliseconds to wait before disabling a slave after a "
 "link failure detection"
 msgstr ""
+"Определяет время в миллисекундах для ожидания перед отключением ведомого "
+"после обнаружения сбоя в соединении"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:411
 msgid ""
 "Specifies the time in milliseconds to wait before enabling a slave after a "
 "link recovery detection"
 msgstr ""
+"Определяет время в миллисекундах для ожидания перед включением ведомого "
+"после обнаружения восстановления соединения"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:382
 msgid ""
 "Specifies whether ARP probes and replies should be validated or non-ARP "
 "traffic should be filtered for link monitoring"
 msgstr ""
+"Определяет, должны ли проверяться запросы и ответы ARP или же для "
+"мониторинга соединения следует фильтровать трафик, не связанный с ARP"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:301
 msgid ""
 "Specifies whether active-backup mode should set all slaves to the same MAC "
 "address at enslavement"
 msgstr ""
+"Определяет, должен ли режим активного резервирования устанавливать для всех "
+"ведомых устройств один и тот же MAC-адрес при добавлении устройства в "
+"качестве ведомого"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:419
 msgid ""
 "Specifies whether or not miimon should use MII or ETHTOOL ioctls vs. "
 "netif_carrier_ok()"
 msgstr ""
+"Определяет, должен ли miimon использовать MII или ioctl вызовы ETHTOOL "
+"вместо netif_carrier_ok()"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:293
 msgid ""
 "Specifies whether to shuffle active flows across slaves based on the load"
 msgstr ""
+"Определяет, следует ли перемещать активные потоки между ведомыми в "
+"зависимости от нагрузки"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:179
 msgid ""
 "Specifies which slave interfaces should be attached to this bonding interface"
 msgstr ""
+"Определяет, какие ведомые интерфейсы должны быть включены в этот интерфейс "
+"объединения"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:212
 msgid ""
 "Specifies which slave is the primary device. It will always be the active "
 "slave while it is available"
 msgstr ""
+"Определяет, какой ведомый интерфейс является основным устройством. Он всегда "
+"будет активным ведомым, пока он доступен"
 
 #: protocols/luci-proto-ipip/htdocs/luci-static/resources/protocol/ipip.js:63
 msgid "Specify a TOS (Type of Service)."
@@ -5810,7 +5866,7 @@ msgstr "Системный журнал"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:243
 msgid "System Priority"
-msgstr ""
+msgstr "Системный приоритет"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:104
 msgid "System Properties"
@@ -5984,7 +6040,7 @@ msgstr "Длина префикса IPv6 в битах"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:163
 msgid "The local IPv4 address"
-msgstr ""
+msgstr "Локальный IPv4-адрес"
 
 #: protocols/luci-proto-ipip/htdocs/luci-static/resources/protocol/ipip.js:44
 msgid "The local IPv4 address over which the tunnel is created (optional)."
@@ -5992,7 +6048,7 @@ msgstr "Локальный адрес IPv4, по которому создает
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:169
 msgid "The local IPv4 netmask"
-msgstr ""
+msgstr "Локальная маска сети IPv4"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1914
 msgid "The network name is already used"
@@ -6279,7 +6335,7 @@ msgstr "Передача"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:317
 msgid "Transmit Hash Policy"
-msgstr ""
+msgstr "Хэш политика передачи пакетов"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:74
 msgid "Trigger"
@@ -6463,7 +6519,7 @@ msgstr "Вверх"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:410
 msgid "Up Delay"
-msgstr ""
+msgstr "Задержка включения интерфейса"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:3813
 msgid "Upload"
@@ -6561,17 +6617,19 @@ msgstr "Использовать TTL на интерфейсе туннеля"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:320
 msgid "Use XOR of hardware MAC addresses (layer2)"
-msgstr ""
+msgstr "Использовать XOR аппаратных MAC-адресов (layer2)"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:321
 msgid "Use XOR of hardware MAC addresses and IP addresses (layer2+3)"
-msgstr ""
+msgstr "Использовать XOR аппаратных MAC-адресов и IP-адресов (layer2+3)"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:323
 msgid ""
 "Use XOR of hardware MAC addresses and IP addresses, rely on skb_flow_dissect "
 "(encap2+3)"
 msgstr ""
+"Использовать XOR аппаратных MAC-адресов и IP-адресов, используя "
+"skb_flow_dissect (encap2+3)"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:294
 msgid "Use as external overlay (/overlay)"
@@ -6665,12 +6723,14 @@ msgstr ""
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:322
 msgid "Use upper layer protocol information (layer3+4)"
-msgstr ""
+msgstr "Использовать информацию протокола верхнего уровня (layer3+4)"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:324
 msgid ""
 "Use upper layer protocol information, rely on skb_flow_dissect (encap3+4)"
 msgstr ""
+"Использовать информацию протокола верхнего уровня, используя "
+"skb_flow_dissect (encap3+4)"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/20_memory.js:36
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:194
@@ -6691,7 +6751,7 @@ msgstr ""
 
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:105
 msgid "User Group"
-msgstr ""
+msgstr "Группа пользователя"
 
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:114
 msgid "User certificate (PEM encoded)"
@@ -6761,15 +6821,15 @@ msgstr ""
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:387
 msgid "Validation for all slaves"
-msgstr ""
+msgstr "Проверка для всех ведомых"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:385
 msgid "Validation only for active slave"
-msgstr ""
+msgstr "Проверка только для активного ведомого"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:386
 msgid "Validation only for backup slaves"
-msgstr ""
+msgstr "Проверка только для резервных ведомых"
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:73
 msgid "Vendor"
@@ -6920,7 +6980,7 @@ msgstr "Записывать системные события в файл"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:204
 msgid "XOR policy (balance-xor, 2)"
-msgstr ""
+msgstr "Политика XOR (balance-xor, 2)"
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:3472
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:295
@@ -6931,7 +6991,7 @@ msgstr "Да"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:303
 msgid "Yes (none, 0)"
-msgstr ""
+msgstr "Да (none, 0)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:176
 msgid ""
@@ -6967,11 +7027,15 @@ msgid ""
 "You must select a primary interface which is included in selected slave "
 "interfaces!"
 msgstr ""
+"Вы должны выбрать основной интерфейс, который входит в состав выбранных "
+"ведомых интерфейсов!"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:96
 msgid ""
 "You must select at least one ARP IP target if ARP monitoring is selected!"
 msgstr ""
+"При указании IP-адресов ARP мониторинга необходимо выбрать по крайней мере "
+"один IP-адрес!"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:192
 msgid "ZRam Compression Algorithm"
@@ -7159,7 +7223,7 @@ msgstr "минут(ы)"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:422
 msgid "netif_carrier_ok()"
-msgstr ""
+msgstr "netif_carrier_ok()"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:46
 msgid "no"
