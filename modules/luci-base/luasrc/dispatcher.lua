@@ -1034,6 +1034,35 @@ function dispatch(request)
 	end
 end
 
+local function hash_filelist(files)
+	local fprint = {}
+	local n = 0
+
+	for i, file in ipairs(files) do
+		local st = fs.stat(file)
+		if st then
+			fprint[n + 1] = '%x' % st.ino
+			fprint[n + 2] = '%x' % st.mtime
+			fprint[n + 3] = '%x' % st.size
+			n = n + 3
+		end
+	end
+
+	return nixio.crypt(table.concat(fprint, "|"), "$1$"):sub(5):gsub("/", ".")
+end
+
+local function read_cachefile(file, reader)
+	local euid = sys.process.info("uid")
+	local fuid = fs.stat(file, "uid")
+	local mode = fs.stat(file, "modestr")
+
+	if euid ~= fuid or mode ~= "rw-------" then
+		return nil
+	end
+
+	return reader(file)
+end
+
 function createindex()
 	local controllers = { }
 	local base = "%s/controller/" % util.libpath()
@@ -1047,25 +1076,19 @@ function createindex()
 		controllers[#controllers+1] = path
 	end
 
+	local cachefile
+
 	if indexcache then
-		local cachedate = fs.stat(indexcache, "mtime")
-		if cachedate then
-			local realdate = 0
-			for _, obj in ipairs(controllers) do
-				local omtime = fs.stat(obj, "mtime")
-				realdate = (omtime and omtime > realdate) and omtime or realdate
-			end
+		cachefile = "%s.%s.lua" %{ indexcache, hash_filelist(controllers) }
 
-			if cachedate > realdate and sys.process.info("uid") == 0 then
-				assert(
-					sys.process.info("uid") == fs.stat(indexcache, "uid")
-					and fs.stat(indexcache, "modestr") == "rw-------",
-					"Fatal: Indexcache is not sane!"
-				)
+		local res = read_cachefile(cachefile, function(path) return loadfile(path)() end)
+		if res then
+			index = res
+			return res
+		end
 
-				index = loadfile(indexcache)()
-				return index
-			end
+		for file in (fs.glob("%s.*.lua" % indexcache) or function() end) do
+			fs.unlink(file)
 		end
 	end
 
@@ -1086,8 +1109,8 @@ function createindex()
 		end
 	end
 
-	if indexcache then
-		local f = nixio.open(indexcache, "w", 600)
+	if cachefile then
+		local f = nixio.open(cachefile, "w", 600)
 		f:writeall(util.get_bytecode(index))
 		f:close()
 	end
@@ -1110,29 +1133,16 @@ function createtree_json()
 	}
 
 	local files = {}
-	local fprint = {}
 	local cachefile
 
 	for file in (fs.glob("/usr/share/luci/menu.d/*.json") or function() end) do
 		files[#files+1] = file
-
-		if indexcache then
-			local st = fs.stat(file)
-			if st then
-				fprint[#fprint+1] = '%x' % st.ino
-				fprint[#fprint+1] = '%x' % st.mtime
-				fprint[#fprint+1] = '%x' % st.size
-			end
-		end
 	end
 
 	if indexcache then
-		cachefile = "%s.%s.json" %{
-			indexcache,
-			nixio.crypt(table.concat(fprint, "|"), "$1$"):sub(5):gsub("/", ".")
-		}
+		cachefile = "%s.%s.json" %{ indexcache, hash_filelist(files) }
 
-		local res = json.parse(fs.readfile(cachefile) or "")
+		local res = read_cachefile(cachefile, function(path) return json.parse(fs.readfile(path) or "") end)
 		if res then
 			return res
 		end
@@ -1175,7 +1185,9 @@ function createtree_json()
 	end
 
 	if cachefile then
-		fs.writefile(cachefile, json.stringify(tree))
+		local f = nixio.open(cachefile, "w", 600)
+		f:writeall(json.stringify(tree))
+		f:close()
 	end
 
 	return tree
