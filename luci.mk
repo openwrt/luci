@@ -20,6 +20,7 @@ LUCI_LANG.de=Deutsch (German)
 LUCI_LANG.el=Ελληνικά (Greek)
 LUCI_LANG.en=English
 LUCI_LANG.es=Español (Spanish)
+LUCI_LANG.fi=Suomi (Finnish)
 LUCI_LANG.fr=Français (French)
 LUCI_LANG.he=עִבְרִית (Hebrew)
 LUCI_LANG.hi=हिंदी (Hindi)
