@@ -3,24 +3,25 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-03-30 17:00+0200\n"
-"PO-Revision-Date: 2013-02-26 00:44+0200\n"
-"Last-Translator: val56 <valentin_sonet@hotmail.fr>\n"
-"Language-Team: French\n"
+"PO-Revision-Date: 2020-05-10 12:47+0000\n"
+"Last-Translator: viking76 <liaudetgael@gmail.com>\n"
+"Language-Team: French <https://hosted.weblate.org/projects/openwrt/"
+"luciapplicationsfirewall/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Pootle 2.0.6\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 4.1-dev\n"
 
 msgid "%s in %s"
-msgstr ""
+msgstr "%s dans %s"
 
 msgid "%s%s with %s"
-msgstr ""
+msgstr "%s%s avec %s"
 
 msgid "%s, %s in %s"
-msgstr ""
+msgstr "%s, %s dans %s"
 
 msgid "(Unnamed Entry)"
 msgstr ""
@@ -44,7 +45,7 @@ msgid "Accept forward"
 msgstr ""
 
 msgid "Accept input"
-msgstr ""
+msgstr "Accepter l'entrée"
 
 msgid "Accept output"
 msgstr ""
@@ -81,6 +82,10 @@ msgid ""
 "otherwise covered by the firewall framework. The commands are executed after "
 "each firewall restart, right after the default ruleset has been loaded."
 msgstr ""
+"Les règles personnalisées vous permettent d'exécuter des commandes iptables "
+"arbitraires qui ne sont pas autrement couvertes par le framework de pare-"
+"feu. Les commandes sont exécutées après chaque redémarrage du pare-feu, "
+"juste après le chargement de l'ensemble de règles par défaut."
 
 msgid "Destination IP address"
 msgstr "Adresse IP de destination"
@@ -95,7 +100,7 @@ msgid "Destination zone"
 msgstr "Zone de destination"
 
 msgid "Disable"
-msgstr ""
+msgstr "Désactiver"
 
 msgid "Discard forward"
 msgstr ""
@@ -134,7 +139,7 @@ msgid "Enable logging on this zone"
 msgstr "Activer les traces (logs) sur cette zone"
 
 msgid "Experimental feature. Not fully compatible with QoS/SQM."
-msgstr ""
+msgstr "Fonction expérimentale. Pas entièrement compatible avec QoS/SQM."
 
 msgid "External IP address"
 msgstr "Adresse IP externe"
@@ -146,7 +151,7 @@ msgid "External zone"
 msgstr "Zone externe"
 
 msgid "Extra arguments"
-msgstr ""
+msgstr "Arguments supplémentaires"
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 #  applications/luci-fw/luasrc/model/cbi/luci_fw/zones.lua                    #
@@ -156,13 +161,13 @@ msgid "Firewall"
 msgstr "Pare-feu"
 
 msgid "Firewall - Custom Rules"
-msgstr "Pare-feu -- Règles personnalisées"
+msgstr "Pare-feu - Règles personnalisées"
 
 msgid "Firewall - Port Forwards"
-msgstr "Pare-feu -- Redirections de ports"
+msgstr "Pare-feu - Redirections de ports"
 
 msgid "Firewall - Traffic Rules"
-msgstr "Pare-feu -- Règles de trafic"
+msgstr "Pare-feu - Règles de trafic"
 
 msgid "Firewall - Zone Settings"
 msgstr "Pare-feu - Configuration des zones"
@@ -171,13 +176,13 @@ msgid "Force connection tracking"
 msgstr "Forcer le suivi des connexions"
 
 msgid "Forward"
-msgstr "Transfert"
+msgstr "Transférer"
 
 msgid "Forward to"
 msgstr "Transférer à"
 
 msgid "Friday"
-msgstr ""
+msgstr "Vendredi"
 
 msgid "From %s in %s"
 msgstr ""
@@ -201,16 +206,16 @@ msgid "General Settings"
 msgstr "Paramètres généraux"
 
 msgid "Hardware flow offloading"
-msgstr ""
+msgstr "Déchargement de flux matériel"
 
 msgid "IP"
-msgstr ""
+msgstr "IP"
 
 msgid "IP range"
-msgstr ""
+msgstr "Plage IP"
 
 msgid "IPs"
-msgstr ""
+msgstr "IPs"
 
 msgid "IPv4"
 msgstr "IPv4"
@@ -246,10 +251,10 @@ msgid "Limit log messages"
 msgstr "Limiter les messages de journalisation"
 
 msgid "MAC"
-msgstr ""
+msgstr "MAC"
 
 msgid "MACs"
-msgstr ""
+msgstr "MACs"
 
 msgid "MSS clamping"
 msgstr "Contrainte du MSS"
@@ -258,7 +263,7 @@ msgid "Masquerading"
 msgstr "Masquage"
 
 msgid "Match"
-msgstr ""
+msgstr "Match"
 
 msgid "Match ICMP type"
 msgstr "Type ICMP correspondant"
@@ -279,10 +284,10 @@ msgid ""
 msgstr ""
 
 msgid "Monday"
-msgstr ""
+msgstr "Lundi"
 
 msgid "Month Days"
-msgstr ""
+msgstr "Mois jours"
 
 msgid "Name"
 msgstr "Nom"
@@ -304,17 +309,22 @@ msgstr "Nouvelle source NAT"
 
 msgid "Only match incoming traffic directed at the given IP address."
 msgstr ""
+"Correspondre uniquement au trafic entrant dirigé vers l'adresse IP donnée."
 
 msgid "Only match incoming traffic from these MACs."
 msgstr "Montrer seulement le trafic entrant provenant de ces adresses MAC."
 
 msgid "Only match incoming traffic from this IP or range."
 msgstr ""
+"Correspondre uniquement au trafic entrant provenant de cette adresse IP ou "
+"de cette plage."
 
 msgid ""
 "Only match incoming traffic originating from the given source port or port "
 "range on the client host"
 msgstr ""
+"Faire correspondre uniquement le trafic entrant provenant du port source ou "
+"de la plage de ports donné sur l'hôte client"
 
 msgid "Open ports on router"
 msgstr "Ports ouverts sur le routeur"
@@ -330,6 +340,8 @@ msgstr ""
 
 msgid "Passes additional arguments to iptables. Use with care!"
 msgstr ""
+"Passe des arguments supplémentaires aux tables d'adresses IP. A utiliser "
+"avec précaution !"
 
 msgid "Port Forwards"
 msgstr "Redirections de port"
@@ -363,7 +375,7 @@ msgid "Refuse output"
 msgstr ""
 
 msgid "Requires hardware NAT support. Implemented at least for mt7621"
-msgstr ""
+msgstr "Nécessite un support NAT matériel. Implémenté au moins pour mt7621"
 
 msgid "Restart Firewall"
 msgstr ""
@@ -396,7 +408,7 @@ msgid "Rewrite to source %s, %s"
 msgstr ""
 
 msgid "Routing/NAT Offloading"
-msgstr ""
+msgstr "Routage/déchargement NAT"
 
 msgid "Rule is disabled"
 msgstr ""
@@ -411,13 +423,13 @@ msgid "SNAT port"
 msgstr "Port SNAT"
 
 msgid "Saturday"
-msgstr ""
+msgstr "Samedi"
 
 msgid "Software based offloading for routing/NAT"
-msgstr ""
+msgstr "Déchargement basé sur logiciel pour le routage/NAT"
 
 msgid "Software flow offloading"
-msgstr ""
+msgstr "Déchargement de flux logiciel"
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 #  applications/luci-fw/luasrc/model/cbi/luci_fw/rrule.lua                    #
@@ -474,19 +486,19 @@ msgid "Source zone"
 msgstr "Zone source"
 
 msgid "Start Date (yyyy-mm-dd)"
-msgstr ""
+msgstr "Date de début (aaaa-mm-jj)"
 
 msgid "Start Time (hh:mm:ss)"
 msgstr ""
 
 msgid "Stop Date (yyyy-mm-dd)"
-msgstr ""
+msgstr "Date d'arrêt (aaaa-mm-jj)"
 
 msgid "Stop Time (hh:mm:ss)"
 msgstr ""
 
 msgid "Sunday"
-msgstr ""
+msgstr "Dimanche"
 
 msgid ""
 "The firewall creates zones over your network interfaces to control network "
@@ -524,7 +536,6 @@ msgid ""
 "entry, such as matched source and destination hosts."
 msgstr ""
 
-#, fuzzy
 msgid ""
 "This section defines common properties of %q. The <em>input</em> and "
 "<em>output</em> options set the default policies for traffic entering and "
@@ -532,18 +543,18 @@ msgid ""
 "forwarded traffic between different networks within the zone. <em>Covered "
 "networks</em> specifies which available networks are members of this zone."
 msgstr ""
-"Cette section définit des propriétés communes de %q. Les options <em>entrée</"
+"Cette section définit les propriétés communes de %q. Les options <em>entrée</"
 "em> et <em>sortie</em> définissent les politiques par défaut pour le trafic "
-"entrant et sortant de cette zone, tandis que l'option <em>transmission</em> "
-"décrit la politique pour le trafic transmis entre différents réseaux dans "
-"cette zone. Les <em>réseaux couverts</em> indiquent quels réseaux "
-"disponibles sont membre de cette zone."
+"entrant et sortant de cette zone tandis que l'option <em>en avant</em> "
+"décrit la politique pour le trafic transféré entre différents réseaux dans "
+"la zone. <em>Réseaux couverts</em> spécifie quels réseaux disponibles sont "
+"membres de cette zone."
 
 msgid "Thursday"
-msgstr ""
+msgstr "Jeudi"
 
 msgid "Time in UTC"
-msgstr ""
+msgstr "Heure en UTC"
 
 msgid "To %s at %s on <var>this device</var>"
 msgstr ""
@@ -571,18 +582,21 @@ msgid ""
 "for example to reject traffic between certain hosts or to open WAN ports on "
 "the router."
 msgstr ""
+"Les règles de trafic définissent des politiques pour les paquets voyageant "
+"entre différentes zones, par exemple pour rejeter le trafic entre certains "
+"hôtes ou pour ouvrir des ports WAN sur le routeur."
 
 msgid "Tuesday"
-msgstr ""
+msgstr "Mardi"
 
 msgid "Unnamed SNAT"
 msgstr ""
 
 msgid "Unnamed forward"
-msgstr ""
+msgstr "Transférer sans nom"
 
 msgid "Unnamed rule"
-msgstr ""
+msgstr "Règle sans nom"
 
 msgid "Via %s"
 msgstr ""
@@ -591,10 +605,10 @@ msgid "Via %s at %s"
 msgstr ""
 
 msgid "Wednesday"
-msgstr ""
+msgstr "Mercredi"
 
 msgid "Week Days"
-msgstr ""
+msgstr "Jours de la semaine"
 
 msgid ""
 "You may specify multiple by selecting \"-- custom --\" and then entering "
@@ -613,39 +627,38 @@ msgstr "Zones"
 msgid "accept"
 msgstr "accepter"
 
-#, fuzzy
 msgid "any"
 msgstr "tous"
 
 msgid "any host"
-msgstr ""
+msgstr "n'importe quel hôte"
 
 msgid "any router IP"
 msgstr ""
 
 msgid "any zone"
-msgstr ""
+msgstr "n'importe quelle zone"
 
 msgid "day"
-msgstr ""
+msgstr "journée"
 
 msgid "don't track"
-msgstr ""
+msgstr "ne pas suivre"
 
 msgid "drop"
 msgstr "ignorer"
 
 msgid "hour"
-msgstr ""
+msgstr "heure"
 
 msgid "minute"
-msgstr ""
+msgstr "minute"
 
 msgid "not"
-msgstr ""
+msgstr "ne pas"
 
 msgid "port"
-msgstr ""
+msgstr "port"
 
 msgid "ports"
 msgstr ""
@@ -654,13 +667,13 @@ msgid "reject"
 msgstr "rejeter"
 
 msgid "second"
-msgstr ""
+msgstr "seconde"
 
 msgid "traffic"
 msgstr ""
 
 msgid "type"
-msgstr ""
+msgstr "type"
 
 msgid "types"
 msgstr ""
