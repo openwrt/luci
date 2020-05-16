@@ -300,7 +300,7 @@ return view.extend({
 		o = s.option(cbiACLLevel, '_write', _('Write access'));
 		o.modalonly = false;
 
-		o = s.option(form.ListValue, '_level', _('Acess level'));
+		o = s.option(form.ListValue, '_level', _('Access level'));
 		o.modalonly = true;
 		o.value('write', _('full', 'All permissions granted'));
 		o.value('read', _('readonly', 'Only read permissions granted'));
