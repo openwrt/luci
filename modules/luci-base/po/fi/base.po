@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2020-05-16 19:08+0000\n"
+"PO-Revision-Date: 2020-05-17 10:09+0000\n"
 "Last-Translator: Hannu Nyman <hannu.nyman@iki.fi>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/openwrt/luci/fi/>"
 "\n"
@@ -323,9 +323,9 @@ msgid ""
 "Linux network interfaces which can be used in conjunction with DHCP or PPP "
 "to dial into the provider network."
 msgstr ""
-"ATM-sillat paljastavat kapseloidun ethernetin AAL5-yhteyksissä "
-"virtuaalisiksi Linux-sovittimiksi, joita voidaan käyttää yhdessä DHCP: n tai "
-"PPP: n kanssa yhdistämiseen palvelutarjoajan verkkoon."
+"ATM-sillat muuntavat kapseloidun ethernetin AAL5-yhteyksissä virtuaalisiksi "
+"Linux-sovittimiksi, joita voidaan käyttää yhdessä DHCP:n tai PPP:n kanssa "
+"yhdistämiseen palvelutarjoajan verkkoon."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:977
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoa.js:62
@@ -554,7 +554,8 @@ msgstr ""
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:25
 msgid "Allow <abbr title=\"Secure Shell\">SSH</abbr> password authentication"
-msgstr "Salli <abbr title = \"Secure Shell\"> SSH </abbr> salasanan todennus"
+msgstr ""
+"Salli <abbr title = \"Secure Shell\"> SSH </abbr> salasanalla kirjautuminen"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1112
 msgid "Allow AP mode to disconnect STAs based on low ACK condition"
@@ -621,7 +622,7 @@ msgstr "Aina pois päältä (ydin: ei mitään)"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/default-on.js:6
 msgid "Always on (kernel: default-on)"
-msgstr "Aina päällä (ydin: oletusasetus)"
+msgstr "Aina päällä (ydin: oletus-päällä)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:907
 msgid ""
@@ -894,7 +895,7 @@ msgstr "Varmuuskopioi / Kirjoita laiteohjelmisto"
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:323
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/backupfiles.lua:12
 msgid "Backup file list"
-msgstr "Varmuuskopiotavat tiedostot"
+msgstr "Varmuuskopioitavat tiedostot"
 
 #: modules/luci-compat/luasrc/view/cbi/wireless_modefreq.htm:158
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:451
@@ -912,10 +913,10 @@ msgid ""
 "configuration files marked by opkg, essential base files and the user "
 "defined backup patterns."
 msgstr ""
-"Alla on määritetty varmuuskopioitavien tiedostojen luettelo. Se koostuu "
-"muutoksista konfigurointitiedostoista, jotka on merkitty opkg: llä, "
-"välttämättömistä perustiedostoista ja käyttäjän määrittelemistä "
-"varmuuskopiokuvioista."
+"Alla on päätelty varmuuskopioitavien tiedostojen luettelo. Se koostuu opkg:n "
+"tunnistamista muutetuista konfigurointitiedostoista, välttämättömistä "
+"perustiedostoista ja käyttäjän erikseen määrittelemistä varmuuskopioitavista "
+"tiedostoista."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:388
 msgid ""
@@ -1039,7 +1040,7 @@ msgid ""
 "`logread -f` during handshake for actual values"
 msgstr ""
 "Varmenteen rajoittaminen - esim. /CN=wifi.omayritys.com <br /> Katso "
-"todelliset arvot `logread -f` yhteyden kättelyn aikana"
+"todelliset arvot `logread -f`avulla yhteyden kättelyn aikana"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1511
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1569
@@ -1065,8 +1066,8 @@ msgid ""
 "Certificate constraint(s) via Subject Alternate Name values<br />(supported "
 "attributes: EMAIL, DNS, URI) - e.g. DNS:wifi.mycompany.com"
 msgstr ""
-"Varmennerajoitukset kohteen vaihtoehtoisen nimen arvojen kautta <br /> "
-"(tuetut määritteet: EMAIL, DNS, URI) - esim. DNS: wifi.mycompany.com"
+"Varmennerajoitukset kohteen vaihtoehtoisen nimen (SAN) arvojen kautta <br /> "
+"(tuetut määritteet: EMAIL, DNS, URI) - esim. DNS:wifi.mycompany.com"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:53
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:56
@@ -1084,7 +1085,7 @@ msgstr ""
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js:46
 msgid "Changes the administrator password for accessing the device"
-msgstr "Muuttaa järjestelmänvalvojan salasanaa laitteen käyttöä varten"
+msgstr "Muuttaa järjestelmänvalvojan salasanaa"
 
 #: modules/luci-compat/luasrc/view/cbi/wireless_modefreq.htm:162
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:128
@@ -1124,18 +1125,18 @@ msgid ""
 "fill out the <em>custom</em> field to define a new zone and attach the "
 "interface to it."
 msgstr ""
-"Valitse palomuurivyöhyke, jonka haluat määrittää tälle sovittimelle. Valitse "
-"<em> määrittelemätön </em> poistaaksesi sovittimen liittyvästä vyöhykkeestä "
-"tai täyttämällä <em> mukautettu </em> -kenttä määrittääksesi uuden "
-"vyöhykkeen ja liittääksesi sovittimen siihen."
+"Valitse palomuurivyöhyke, johon haluat sijoittaa tämän sovittemen. Valitse "
+"<em>määrittelemätön</em> poistaaksesi sovittimen vyöhykkeeltä tai täytä <em> "
+"mukautettu </em> -kenttä määrittääksesi uuden vyöhykkeen ja liittääksesi "
+"sovittimen siihen."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:959
 msgid ""
 "Choose the network(s) you want to attach to this wireless interface or fill "
 "out the <em>custom</em> field to define a new network."
 msgstr ""
-"Valitse verkko (t), jonka haluat liittää tähän langattomaan sovittimeen, tai "
-"määritä uusi verkko täyttämällä <em> mukautettu </em> -kenttä."
+"Valitse verkko(t), jonka haluat liittää tähän langattomaan sovittimeen, tai "
+"määritä uusi verkko täyttämällä <em>mukautettu</em>-kenttä."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1148
 msgid "Cipher"
@@ -1693,7 +1694,7 @@ msgid ""
 msgstr ""
 "Dnsmasq on yhdistetty <abbr title=\"Dynamic Host Configuration Protocol\""
 ">DHCP</abbr>-palvelin ja <abbr title=\"Domain Name System\">DNS</abbr>-"
-"välittäjä <abbr title=\"Network Address Translation\">NAT</abbr> palomuurille"
+"välittäjä <abbr title=\"Network Address Translation\">NAT</abbr>-palomuurille"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:252
 msgid "Do not cache negative replies, e.g. for not existing domains"
@@ -1740,8 +1741,8 @@ msgid ""
 "Don't forward <abbr title=\"Domain Name System\">DNS</abbr>-Requests without "
 "<abbr title=\"Domain Name System\">DNS</abbr>-Name"
 msgstr ""
-"Älä lähetä <abbr title = \"Domain Name System\"> DNS </abbr> -kyselyitä "
-"ilman <abbr title = \"Domain Name System\"> DNS </abbr> -nimeä"
+"Älä lähetä <abbr title=\"Domain Name System\">DNS</abbr>-kyselyitä ilman <"
+"abbr title=\"Domain Name System\">DNS</abbr>-nimeä"
 
 #: modules/luci-compat/luasrc/view/cbi/tblsection.htm:152
 msgid "Down"
@@ -1863,7 +1864,7 @@ msgstr ""
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:292
 msgid "Enable Dynamic Shuffling Of Flows"
-msgstr "Ota käyttöön dynaaminen sekoittaminen"
+msgstr "Ota käyttöön tietocirtojen dynaaminen sekoittaminen"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6in4.js:60
 msgid "Enable HE.net dynamic endpoint update"
@@ -2226,7 +2227,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:598
 msgid "Force"
-msgstr "Pakoita"
+msgstr "Pakota"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:907
 msgid "Force 40MHz mode"
@@ -2390,7 +2391,7 @@ msgstr "Anna pääsy DSL-tilanäyttöön"
 
 #: protocols/luci-proto-openconnect/root/usr/share/rpcd/acl.d/luci-openconnect.json:3
 msgid "Grant access to LuCI OpenConnect procedures"
-msgstr "Anna pääsy LuCI OpenConnect -menettelyihin"
+msgstr "Anna pääsy LuCI OpenConnect -toimintoihin"
 
 #: modules/luci-mod-system/root/usr/share/rpcd/acl.d/luci-mod-system.json:19
 msgid "Grant access to SSH configuration"
@@ -2398,7 +2399,7 @@ msgstr "Anna pääsy SSH määrityksiin"
 
 #: modules/luci-base/root/usr/share/rpcd/acl.d/luci-base.json:12
 msgid "Grant access to basic LuCI procedures"
-msgstr "Anna pääsy LuCI:n perusmenetelmiin"
+msgstr "Anna pääsy LuCI:n perustoimintoihin"
 
 #: modules/luci-mod-system/root/usr/share/rpcd/acl.d/luci-mod-system.json:64
 msgid "Grant access to crontab configuration"
@@ -2422,15 +2423,15 @@ msgstr "Anna pääsy mmcliin"
 
 #: modules/luci-mod-system/root/usr/share/rpcd/acl.d/luci-mod-system.json:84
 msgid "Grant access to mount configuration"
-msgstr "Anna pääsy liitos-määrityksiin"
+msgstr "Anna pääsy levyjen liitos-määrityksiin (mount)"
 
 #: modules/luci-mod-network/root/usr/share/rpcd/acl.d/luci-mod-network.json:3
 msgid "Grant access to network configuration"
-msgstr "Anna pääsy verkko-määrityksiin"
+msgstr "Anna pääsy verkkoasetuksiin"
 
 #: modules/luci-mod-network/root/usr/share/rpcd/acl.d/luci-mod-network.json:46
 msgid "Grant access to network diagnostic tools"
-msgstr "Anna pääsy verkon diagnostiikkatyökaluille"
+msgstr "Anna pääsy verkon diagnostiikkatyökaluihin"
 
 #: modules/luci-base/root/usr/share/rpcd/acl.d/luci-base.json:36
 msgid "Grant access to network status information"
@@ -2438,7 +2439,7 @@ msgstr "Anna pääsy verkon tilan tietoihin"
 
 #: modules/luci-mod-status/root/usr/share/rpcd/acl.d/luci-mod-status.json:13
 msgid "Grant access to process status"
-msgstr "Anna pääsy prosessin tilaan"
+msgstr "Anna pääsy prosessien tilatietoihin"
 
 #: modules/luci-mod-status/root/usr/share/rpcd/acl.d/luci-mod-status.json:3
 msgid "Grant access to realtime statistics"
@@ -2527,8 +2528,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:31
 msgid "Host-<abbr title=\"Internet Protocol Address\">IP</abbr> or Network"
-msgstr ""
-"Isäntä- <abbr title = \"Internet Protocol Address\"> IP </abbr> tai verkko"
+msgstr "Isäntä-<abbr title=\"Internet Protocol Address\">IP</abbr> tai verkko"
 
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoe.js:102
 msgid "Host-Uniq tag content"
@@ -2843,11 +2843,12 @@ msgid ""
 "slow process as the swap-device cannot be accessed with the high datarates "
 "of the <abbr title=\"Random Access Memory\">RAM</abbr>."
 msgstr ""
-"Jos fyysistä muistia ei ole riittävästi vapaana, käyttämätöntä tietoa "
-"voidaan väliaikaisesti vaihtaa vaihtolaitteeseen, jolloin saadaan enemmän "
-"käytettävää <abbr title = \"Random Access Memory\"> RAM </abbr>. Huomaa, "
-"että datanvaihto on erittäin hidas prosessi, koska vaihtolaitteeseen ei "
-"voida päästä <abbr title = \"Random Access Memory\"> RAM </abbr> -nopeudella."
+"Jos fyysistä muistia ei ole riittävästi vapaana, käyttämättömiä "
+"muistialueita voidaan väliaikaisesti siirtää swap-vaihtolaitteeseen, jolloin "
+"näennäisesti saadaan enemmän käytettävissä olevaa <abbr title=\"Random "
+"Access Memory\">RAM</abbr>-muistia. Huomaa, että datanvaihto on erittäin "
+"hidas prosessi, koska vaihtolaite ei toimi <abbr title=\"Random Access "
+"Memory\">RAM</abbr>-muistin nopeudella."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:197
 msgid "Ignore <code>/etc/hosts</code>"
@@ -2939,7 +2940,7 @@ msgstr ""
 
 #: modules/luci-compat/luasrc/view/cbi/map.htm:43
 msgid "Insufficient permissions to read UCI configuration."
-msgstr "Riittämättömät oikeudet lukea UCI-määrityksiä."
+msgstr "Riittämättömät oikeudet lukea UCI-asetuksia."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:464
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:471
@@ -3689,8 +3690,8 @@ msgid ""
 "Mount Points define at which point a memory device will be attached to the "
 "filesystem"
 msgstr ""
-"Liitoskohdat määrittelevät, mihin kohtaan muistilaite liitetään "
-"tiedostojärjestelmään"
+"Liitoskohta määrittää, mihin kohtaan tiedostojärjestelmää muistilaite "
+"liitetään"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:154
 msgid "Mount attached devices"
@@ -4473,7 +4474,7 @@ msgstr "Fyysiset asetukset"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/diagnostics.js:80
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/diagnostics.js:90
 msgid "Ping"
-msgstr ""
+msgstr "Latenssi"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:48
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:49
@@ -4486,7 +4487,7 @@ msgstr "Paket."
 
 #: modules/luci-base/luasrc/view/sysauth.htm:19
 msgid "Please enter your username and password."
-msgstr "Anna käyttäjätunnus ja salasanasi."
+msgstr "Anna käyttäjätunnus ja salasana."
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:3721
 msgid "Please select the file to upload."
@@ -4565,7 +4566,9 @@ msgstr ""
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:227
 msgid "Primary becomes active slave whenever it comes back up (always, 0)"
-msgstr "Ensisijainen tulee aktiivinen orja, kun se palautuu (aina, 0)"
+msgstr ""
+"Ensisijainen tulee aktiiviseksi orjaksi heti palautuessaan käyttökelpoiseksi "
+"(aina, 0)"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:53
 msgid "Private Key"
@@ -4701,8 +4704,8 @@ msgid ""
 "Read <code>/etc/ethers</code> to configure the <abbr title=\"Dynamic Host "
 "Configuration Protocol\">DHCP</abbr>-Server"
 msgstr ""
-"Lue <code> /etc/ethers </code> määrittääksesi <abbr title = \"Dynamic Host "
-"Configuration Protocol\"> DHCP </abbr> -palvelin"
+"Lue <code>/etc/ethers</code> määrittääksesi <abbr title=\"Dynamic Host "
+"Configuration Protocol\">DHCP</abbr>-palvelin"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:402
 msgid "Really switch protocol?"
@@ -4876,7 +4879,7 @@ msgstr ""
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1252
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1253
 msgid "Requires wpa-supplicant with EAP Suite-B support"
-msgstr "Vaatii wpa-lisäaineen EAP Suite-B -tuella"
+msgstr "Vaatii wpa-supplicant EAP Suite-B -tuella"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1250
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1251
@@ -5560,19 +5563,19 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:19
 msgid "Static IPv4 Routes"
-msgstr "Staattiset IPv4-reitit"
+msgstr "Pysyvät IPv4-reitit"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:19
 msgid "Static IPv6 Routes"
-msgstr "Staattiset IPv4-reitit"
+msgstr "Pysyvät IPv4-reitit"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:165
 msgid "Static Leases"
-msgstr "Staattiset lainat"
+msgstr "Pysyvät lainat"
 
 #: modules/luci-mod-network/root/usr/share/luci/menu.d/luci-mod-network.json:76
 msgid "Static Routes"
-msgstr "Staattiset reitit"
+msgstr "Pysyvät reitit"
 
 #: modules/luci-base/htdocs/luci-static/resources/network.js:1965
 #: modules/luci-base/htdocs/luci-static/resources/protocol/static.js:172
@@ -5806,7 +5809,7 @@ msgstr ""
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:195
 msgid "The following rules are currently active on this system."
-msgstr "Seuraavat säännöt ovat käytössä tässä järjestelmässä."
+msgstr "Seuraavat säännöt ovat tällä hetkellä käytössä tässä järjestelmässä."
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/static.js:154
 msgid "The gateway address must not be a local IP address"
@@ -6681,7 +6684,7 @@ msgstr ""
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:87
 #: modules/luci-mod-status/root/usr/share/luci/menu.d/luci-mod-status.json:105
 msgid "Wireless"
-msgstr ""
+msgstr "Langaton"
 
 #: modules/luci-base/htdocs/luci-static/resources/network.js:2858
 #: modules/luci-compat/luasrc/model/network.lua:1419
@@ -6785,7 +6788,7 @@ msgstr ""
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:96
 msgid ""
 "You must select at least one ARP IP target if ARP monitoring is selected!"
-msgstr "Valitse vähintään yksi ARP IP-tavoite, koska ARP-valvonta on valittu!"
+msgstr "Valitse vähintään yksi ARP IP-kohde, koska ARP-valvonta on valittu!"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:192
 msgid "ZRam Compression Algorithm"
@@ -6962,8 +6965,8 @@ msgstr ""
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:189
 msgid "local <abbr title=\"Domain Name System\">DNS</abbr> file"
 msgstr ""
-"paikallinen <abbr title = \"Verkkotunnusten nimijärjestelmä\"> DNS </abbr> "
-"tiedosto"
+"paikallinen <abbr title = \"Verkkotunnusten nimijärjestelmä\""
+">DNS</abbr>-tiedosto"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1308
 msgid "medium security"
@@ -6975,7 +6978,7 @@ msgstr ""
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:422
 msgid "netif_carrier_ok()"
-msgstr "netif_carrier_ok ()"
+msgstr "netif_carrier_ok()"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:46
 msgid "no"
