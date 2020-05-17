@@ -42,7 +42,8 @@
 			"path": "system/dropbear"
 		},
 		"depends": {
-			"acl": [ "luci-mod-system-ssh" ]
+			"acl": [ "luci-mod-system-ssh" ],
+			"fs": {	"/usr/sbin/dropbear": "executable" }
 		}
 	},
 
@@ -54,7 +55,8 @@
 			"path": "system/sshkeys"
 		},
 		"depends": {
-			"acl": [ "luci-mod-system-ssh" ]
+			"acl": [ "luci-mod-system-ssh" ],
+			"fs": {	"/usr/sbin/dropbear": "executable" }
 		}
 	},
 
