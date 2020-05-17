@@ -31,6 +31,9 @@
 		"action": {
 			"type": "view",
 			"path": "system/dropbear"
+		},
+		"depends": {
+			"fs": {	"/usr/sbin/dropbear": "executable" }
 		}
 	},
 
@@ -40,6 +43,9 @@
 		"action": {
 			"type": "view",
 			"path": "system/sshkeys"
+		},
+		"depends": {
+			"fs": {	"/usr/sbin/dropbear": "executable" }
 		}
 	},
 
