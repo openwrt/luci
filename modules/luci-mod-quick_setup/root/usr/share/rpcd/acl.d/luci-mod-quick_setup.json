@@ -1,0 +1,32 @@
+{
+  "luci-mod-quick_setup": {
+    "description": "Grant access to quick setup",
+    "read": {
+      "cgi-io": [ "exec" ],
+      "file": {
+        "/usr/libexec/luci-peeraddr": [ "exec" ]
+      },
+      "ubus": {
+        "file": [ "exec" ],
+        "iwinfo": [ "assoclist", "countrylist", "freqlist", "txpowerlist" ],
+        "luci": [ "getSwconfigFeatures", "getSwconfigPortState" ]
+      },
+      "uci": [ "dhcp", "firewall", "network", "wireless" ]
+    },
+    "write": {
+      "cgi-io": [ "exec" ],
+      "file": {
+        "/sbin/ifup": [ "exec" ],
+        "/sbin/ifdown": [ "exec" ],
+        "/sbin/wifi": [ "exec" ]
+      },
+      "ubus": {
+        "file": [ "exec" ],
+        "hostapd.*": [ "del_client" ],
+        "iwinfo": [ "scan" ],
+        "luci": ["setPassword" ]
+      },
+      "uci": [ "luci", "system", "dhcp", "firewall", "network", "wireless" ]
+    }
+  }
+}
