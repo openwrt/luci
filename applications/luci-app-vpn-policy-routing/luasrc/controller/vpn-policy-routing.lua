@@ -3,9 +3,8 @@ function index()
 	if nixio.fs.access("/etc/config/vpn-policy-routing") then
 		local e = entry({"admin", "vpn"}, firstchild(), _("VPN"), 60)
 		e.dependent = false
-		e.acl_depends = { "luci-app-vpn-policy-routing" }
 
-		entry({"admin", "vpn", "vpn-policy-routing"}, cbi("vpn-policy-routing"), _("VPN Policy Routing"))
+		entry({"admin", "vpn", "vpn-policy-routing"}, cbi("vpn-policy-routing"), _("VPN Policy Routing")).acl_depends = { "luci-app-vpn-policy-routing" }
 		entry({"admin", "vpn", "vpn-policy-routing", "action"}, call("vpn_policy_routing_action"), nil).leaf = true
 	end
 end
