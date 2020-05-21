@@ -12,6 +12,7 @@ LUCI_DEFAULTS:=$(notdir $(wildcard ${CURDIR}/root/etc/uci-defaults/*))
 LUCI_PKGARCH?=$(if $(realpath src/Makefile),,all)
 
 # Language code titles
+LUCI_LANG.ar=العربية (Arabic)
 LUCI_LANG.bg=български (Bulgarian)
 LUCI_LANG.bn_BD=বাংলা (Bengali)
 LUCI_LANG.ca=Català (Catalan)
