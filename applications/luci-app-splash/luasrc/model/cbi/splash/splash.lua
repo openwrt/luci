@@ -11,8 +11,8 @@ s:option(Value, "leasetime", translate("Clearance time"), translate("Clients tha
 local redir = s:option(Value, "redirect_url", translate("Redirect target"), translate("Clients are redirected to this page after they have accepted the splash. If this is left empty they are redirected to the page they had requested."))
 redir.rmempty = true
 
-s:option(Value, "limit_up", translate("Upload limit"), translate("Clients upload speed is limited to this value (kbyte/s)"))
-s:option(Value, "limit_down", translate("Download limit"), translate("Clients download speed is limited to this value (kbyte/s)"))
+s:option(Value, "limit_up", translate("Upload limit"), translate("Clients upload speed is limited to this value (kB/s)"))
+s:option(Value, "limit_down", translate("Download limit"), translate("Clients download speed is limited to this value (kB/s)"))
 
 s:option(DummyValue, "_tmp", "",
 	translate("Bandwidth limit for clients is only activated when both up- and download limit are set. " ..

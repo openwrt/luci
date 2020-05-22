@@ -286,13 +286,13 @@ return view.extend({
 				E('div', { 'class': 'table', 'style': 'width:100%;table-layout:fixed' }, [
 					E('div', { 'class': 'tr' }, [
 						E('div', { 'class': 'td right top' }, E('strong', { 'style': 'border-bottom:2px solid green' }, [ _('Phy Rate:') ])),
-						E('div', { 'class': 'td', 'id': 'rate_bw_cur' }, [ '0 MBit/s' ]),
+						E('div', { 'class': 'td', 'id': 'rate_bw_cur' }, [ '0 Mbit/s' ]),
 
 						E('div', { 'class': 'td right top' }, E('strong', {}, [ _('Average:') ])),
-						E('div', { 'class': 'td', 'id': 'rate_bw_avg' }, [ '0 MBit/s' ]),
+						E('div', { 'class': 'td', 'id': 'rate_bw_avg' }, [ '0 Mbit/s' ]),
 
 						E('div', { 'class': 'td right top' }, E('strong', {}, [ _('Peak:') ])),
-						E('div', { 'class': 'td', 'id': 'rate_bw_peak' }, [ '0 MBit/s' ])
+						E('div', { 'class': 'td', 'id': 'rate_bw_peak' }, [ '0 Mbit/s' ])
 					])
 				])
 			]));
@@ -318,9 +318,9 @@ return view.extend({
 			this.updateGraph(ifname, csvg2, [ { line: 'rate', multiply: 0.001 } ], function(svg, info) {
 				var G = svg.firstElementChild, tab = svg.parentNode;
 
-				G.getElementById('label_25').firstChild.data = '%.2f %s'.format(info.label_25, _('MBit/s'));
-				G.getElementById('label_50').firstChild.data = '%.2f %s'.format(info.label_50, _('MBit/s'));
-				G.getElementById('label_75').firstChild.data = '%.2f %s'.format(info.label_75, _('MBit/s'));
+				G.getElementById('label_25').firstChild.data = '%.2f %s'.format(info.label_25, _('Mbit/s'));
+				G.getElementById('label_50').firstChild.data = '%.2f %s'.format(info.label_50, _('Mbit/s'));
+				G.getElementById('label_75').firstChild.data = '%.2f %s'.format(info.label_75, _('Mbit/s'));
 
 				tab.querySelector('#scale2').firstChild.data = _('(%d minute window, %d second interval)').format(info.timeframe, info.interval);
 

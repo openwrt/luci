@@ -33,7 +33,7 @@ s:option(DummyValue, "_la", translate("Load")).value =
  string.format("%.2f, %.2f, %.2f", loads[1] / 65535.0, loads[2] / 65535.0, loads[3] / 65535.0)
 
 s:option(DummyValue, "_memtotal", translate("Memory")).value =
- string.format("%.2f MB (%.0f%% %s, %.0f%% %s)",
+ string.format("%.2f MiB (%.0f%% %s, %.0f%% %s)",
   tonumber(memory.total) / 1024 / 1024,
   100 * memory.buffered / memory.total,
   tostring(translate("buffered")),

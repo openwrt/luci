@@ -294,8 +294,8 @@ function display(pattern)
 		currentDisplayRows.push([
 			name,
 			ver,
-			pkg.size ? '%.1024mB'.format(pkg.size)
-			         : (altsize ? '~%.1024mB'.format(altsize) : '-'),
+			pkg.size ? '%1024mB'.format(pkg.size)
+			         : (altsize ? '~%1024mB'.format(altsize) : '-'),
 			desc,
 			btn
 		]);
@@ -533,9 +533,9 @@ function renderDependencyItem(dep, info)
 		var text = pkg.name;
 
 		if (pkg.installsize)
-			text += ' (%.1024mB)'.format(pkg.installsize);
+			text += ' (%1024mB)'.format(pkg.installsize);
 		else if (pkg.size)
-			text += ' (~%.1024mB)'.format(pkg.size);
+			text += ' (~%1024mB)'.format(pkg.size);
 
 		li.appendChild(E('span', { 'data-tooltip': pkg.description },
 			[ text, ' ', pkgStatus(pkg, vop, ver, info) ]));
@@ -636,9 +636,9 @@ function handleInstall(ev)
 	    size;
 
 	if (pkg.installsize)
-		size = _('~%.1024mB installed').format(pkg.installsize);
+		size = _('~%1024mB installed').format(pkg.installsize);
 	else if (pkg.size)
-		size = _('~%.1024mB compressed').format(pkg.size);
+		size = _('~%1024mB compressed').format(pkg.size);
 	else
 		size = _('unknown');
 
@@ -662,7 +662,7 @@ function handleInstall(ev)
 		});
 
 	inst = E('p', {},
-		_('Require approx. %.1024mB size for %d package(s) to install.')
+		_('Require approx. %1024mB size for %d package(s) to install.')
 			.format(totalsize, totalpkgs));
 
 	if (deps) {
@@ -824,9 +824,9 @@ function handleRemove(ev)
 	    size, desc;
 
 	if (avail.installsize)
-		size = _('~%.1024mB installed').format(avail.installsize);
+		size = _('~%1024mB installed').format(avail.installsize);
 	else if (avail.size)
-		size = _('~%.1024mB compressed').format(avail.size);
+		size = _('~%1024mB compressed').format(avail.size);
 	else
 		size = _('unknown');
 
@@ -985,7 +985,7 @@ function updateLists(data)
 		    	.sort(function(a, b) { return a.mount > b.mount })[0] || { size: 0, free: 0 };
 
 		pg.firstElementChild.style.width = Math.floor(mount.size ? ((100 / mount.size) * mount.free) : 100) + '%';
-		pg.setAttribute('title', '%s (%.1024mB)'.format(pg.firstElementChild.style.width, mount.free));
+		pg.setAttribute('title', '%s (%1024mB)'.format(pg.firstElementChild.style.width, mount.free));
 
 		parseList(data[1], packages.available);
 		parseList(data[2], packages.installed);

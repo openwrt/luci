@@ -630,8 +630,8 @@ String.prototype.format = function()
 						}
 
 						subst = (td > 0)
-							? String.format('%dd %dh %dm %ds', td, th, tm, ts)
-							: String.format('%dh %dm %ds', th, tm, ts);
+							? String.format('%d:%d:%d:%d', td, th, tm, ts)
+							: String.format('%d:%d:%d', th, tm, ts);
 
 						break;
 
@@ -641,7 +641,9 @@ String.prototype.format = function()
 
 						var i = 0;
 						var val = (+param || 0);
-						var units = [ ' ', ' K', ' M', ' G', ' T', ' P', ' E' ];
+						var units = (mf === 1024)
+							? [ ' ', ' Ki', ' Mi', ' Gi', ' Ti', ' Pi', ' Ei' ]
+							: [ ' ', ' k', ' M', ' G', ' T', ' P', ' E' ];
 
 						for (i = 0; (i < units.length) && (val > mf); i++)
 							val /= mf;

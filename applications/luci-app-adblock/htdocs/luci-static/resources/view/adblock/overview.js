@@ -273,8 +273,8 @@ return view.extend({
 		s.tab('sources', _('Blocklist Sources'), _('List of supported and fully pre-configured adblock sources, already active sources are pre-selected.<br /> \
 			<b><em>To avoid OOM errors, please do not select too many lists!</em></b><br /> \
 			List size information with the respective domain ranges as follows:<br /> \
-			&#8226;&#xa0;<b>S</b> (-10k), <b>M</b> (10k-30k) and <b>L</b> (30k-80k) should work for 128 MByte devices,<br /> \
-			&#8226;&#xa0;<b>XL</b> (80k-200k) should work for 256-512 MByte devices,<br /> \
+			&#8226;&#xa0;<b>S</b> (-10k), <b>M</b> (10k-30k) and <b>L</b> (30k-80k) should work for 128 MiB devices,<br /> \
+			&#8226;&#xa0;<b>XL</b> (80k-200k) should work for 256-512 MiB devices,<br /> \
 			&#8226;&#xa0;<b>XXL</b> (200k-) needs more RAM and Multicore support, e.g. x86 or raspberry devices.<br /> \
 			<p>&#xa0;</p>'));
 
@@ -442,7 +442,7 @@ return view.extend({
 		o.datatype = 'range(1,10)';
 		o.rmempty = true;
 
-		o = s.taboption('adv_report', form.Value, 'adb_repchunksize', _('Report Chunk Size'), _('Report chunk size used by tcpdump in MByte.'));
+		o = s.taboption('adv_report', form.Value, 'adb_repchunksize', _('Report Chunk Size'), _('Report chunk size used by tcpdump in MB.'));
 		o.placeholder = '1';
 		o.datatype = 'range(1,10)';
 		o.rmempty = true;

@@ -55,9 +55,9 @@ o:depends("limit_type","static")
 o = s:taboption("limit", ListValue, "static_unit_dl", translate("Default Download Unit"), translate("Default unit for download rate"))
 o.default = def_unit_dl or "kbytes"
 o:depends("limit_type","static")
-o:value("bytes", "Bytes/s")
-o:value("kbytes", "KBytes/s")
-o:value("mbytes", "MBytes/s")
+o:value("bytes", "B/s")
+o:value("kbytes", "kB/s")
+o:value("mbytes", "MB/s")
 
 o = s:taboption("limit", Value, "static_rate_ul", translate("Default Upload Rate"), translate("Default value for upload rate"))
 o.datatype = "uinteger"
@@ -67,19 +67,19 @@ o:depends("limit_type","static")
 o = s:taboption("limit", ListValue, "static_unit_ul", translate("Default Upload Unit"), translate("Default unit for upload rate"))
 o.default = def_unit_ul or "kbytes"
 o:depends("limit_type","static")
-o:value("bytes", "Bytes/s")
-o:value("kbytes", "KBytes/s")
-o:value("mbytes", "MBytes/s")
+o:value("bytes", "B/s")
+o:value("kbytes", "kB/s")
+o:value("mbytes", "MB/s")
 
 --
 -- Dynamic
 --
-o = s:taboption("limit", Value, "dynamic_bw_down", translate("Download Bandwidth (Mbps)"), translate("Default value for download bandwidth"))
+o = s:taboption("limit", Value, "dynamic_bw_down", translate("Download Bandwidth (Mbit/s)"), translate("Default value for download bandwidth"))
 o.default = def_up or '100'
 o.datatype = "uinteger"
 o:depends("limit_type","dynamic")
 
-o = s:taboption("limit", Value, "dynamic_bw_up", translate("Upload Bandwidth (Mbps)"), translate("Default value for upload bandwidth"))
+o = s:taboption("limit", Value, "dynamic_bw_up", translate("Upload Bandwidth (Mbit/s)"), translate("Default value for upload bandwidth"))
 o.default = def_down or '100'
 o.datatype = "uinteger"
 o:depends("limit_type","dynamic")
@@ -141,9 +141,9 @@ if limit_enable == "1" and limit_type == "static" then
 
 	o = x:option(ListValue, "unit", translate("Unit"))
 	o.default = def_unit_dl or "kbytes"
-	o:value("bytes", "Bytes/s")
-	o:value("kbytes", "KBytes/s")
-	o:value("mbytes", "MBytes/s")
+	o:value("bytes", "B/s")
+	o:value("kbytes", "kB/s")
+	o:value("mbytes", "MB/s")
 
 --
 -- Static Limit Rate - Upload Rate
@@ -178,9 +178,9 @@ if limit_enable == "1" and limit_type == "static" then
 
 	o = y:option(ListValue, "unit", translate("Unit"))
 	o.default = def_unit_ul or "kbytes"
-	o:value("bytes", "Bytes/s")
-	o:value("kbytes", "KBytes/s")
-	o:value("mbytes", "MBytes/s")
+	o:value("bytes", "B/s")
+	o:value("kbytes", "kB/s")
+	o:value("mbytes", "MB/s")
 
 end
 
@@ -256,9 +256,9 @@ if limit_mac_enable == "1" then
 
 	o = x:option(ListValue, "drunit", translate("Unit"))
 	o.default = def_unit_dl or "kbytes"
-	o:value("bytes", "Bytes/s")
-	o:value("kbytes", "KBytes/s")
-	o:value("mbytes", "MBytes/s")
+	o:value("bytes", "B/s")
+	o:value("kbytes", "kB/s")
+	o:value("mbytes", "MB/s")
 
 	o = x:option(Value, "urate", translate("Upload Rate"))
 	o.default = def_rate_ul or '50'
@@ -267,9 +267,9 @@ if limit_mac_enable == "1" then
 
 	o = x:option(ListValue, "urunit", translate("Unit"))
 	o.default = def_unit_ul or "kbytes"
-	o:value("bytes", "Bytes/s")
-	o:value("kbytes", "KBytes/s")
-	o:value("mbytes", "MBytes/s")
+	o:value("bytes", "B/s")
+	o:value("kbytes", "kB/s")
+	o:value("mbytes", "MB/s")
 
 end
 

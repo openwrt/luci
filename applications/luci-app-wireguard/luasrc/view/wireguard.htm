@@ -84,11 +84,11 @@
 		var seconds = (now.getTime() / 1000) - timestamp;
 		var ago = "";
 		if (seconds < 60) {
-			ago = parseInt(seconds) + '<%:s ago%>';
+			ago = parseInt(seconds) + '\u202f<%:s ago%>';
 		} else if (seconds < 3600) {
-			ago = parseInt(seconds / 60) + '<%:m ago%>';
+			ago = parseInt(seconds / 60) + '\u202f<%:min ago%>';
 		} else if (seconds < 86401) {
-			ago = parseInt(seconds / 3600) + '<%:h ago%>';
+			ago = parseInt(seconds / 3600) + '\u202f<%:h ago%>';
 		} else {
 			ago = '<%:over a day ago%>';
 		}

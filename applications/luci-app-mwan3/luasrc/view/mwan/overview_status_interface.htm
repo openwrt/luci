@@ -8,12 +8,7 @@
 
 function secondsToString(time) {
 	var seconds = parseInt(time, 10);
-
-	var hrs   = Math.floor(seconds / 3600);
-	seconds  -= hrs*3600;
-	var mnts = Math.floor(seconds / 60);
-	seconds  -= mnts*60;
-	return String.format("%sh:%sm:%ss", hrs, mnts, seconds);
+	return '%t'.format(seconds);
 }
 
 XHR.poll(-1, '<%=luci.dispatcher.build_url("admin", "status", "mwan", "interface_status")%>', null,

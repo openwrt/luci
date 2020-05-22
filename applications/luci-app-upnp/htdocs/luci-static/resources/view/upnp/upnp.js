@@ -134,10 +134,10 @@ return view.extend({
 			_('Puts extra debugging information into the system log'))
 
 		s.taboption('general', form.Value, 'download', _('Downlink'),
-			_('Value in KByte/s, informational only')).rmempty = true
+			_('Value in kB/s, informational only')).rmempty = true
 
 		s.taboption('general', form.Value, 'upload', _('Uplink'),
-			_('Value in KByte/s, informational only')).rmempty = true
+			_('Value in kB/s, informational only')).rmempty = true
 
 		o = s.taboption('general', form.Value, 'port', _('Port'))
 		o.datatype = 'port'

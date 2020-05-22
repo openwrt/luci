@@ -11,7 +11,7 @@ return baseclass.extend({
 
 	rrdargs: function(graph, host, plugin, plugin_instance, dtype) {
 		var traffic = {
-			title: "%H: DNS traffic", vlabel: "Bit/s",
+			title: "%H: DNS traffic", vlabel: "bit/s",
 
 			data: {
 				sources: {

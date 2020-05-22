@@ -9,42 +9,41 @@ local uci  = require "luci.model.uci"
 local ip   = require "luci.ip"
 
 function byte_format(byte)
-	local suff = {"B", "KB", "MB", "GB", "TB"}
+	local suff = {"B", "KiB", "MiB", "GiB", "TiB"}
 	for i=1, 5 do
 		if byte > 1024 and i < 5 then
 			byte = byte / 1024
 		else
-			return string.format("%.2f %s", byte, suff[i]) 
-		end 
+			return string.format("%.2f %s", byte, suff[i])
+		end
 	end
 end
 
 function date_format(secs)
-	local suff = {"min", "h", "d"}
 	local mins = 0
 	local hour = 0
 	local days = 0
-	
+
 	secs = math.floor(secs)
 	if secs > 60 then
 		mins = math.floor(secs / 60)
 		secs = secs % 60
 	end
-	
+
 	if mins > 60 then
 		hour = math.floor(mins / 60)
 		mins = mins % 60
 	end
-	
+
 	if hour > 24 then
 		days = math.floor(hour / 24)
 		hour = hour % 24
 	end
-	
+
 	if days > 0 then
-		return string.format("%.0fd %02.0fh %02.0fmin %02.0fs", days, hour, mins, secs)
+		return string.format("%.0f:%02.0f:%02.0f:%02.0f", days, hour, mins, secs)
 	else
-		return string.format("%02.0fh %02.0fmin %02.0fs", hour, mins, secs)
+		return string.format("%02.0f:%02.0f:%02.0f", hour, mins, secs)
 	end
 end
 
@@ -70,15 +69,15 @@ end
 
 function firewall_find_zone(name)
 	local find
-	
-	luci.model.uci.cursor():foreach("firewall", "zone", 
+
+	luci.model.uci.cursor():foreach("firewall", "zone",
 		function (section)
 			if section.name == name then
 				find = section[".name"]
 			end
 		end
 	)
-	
+
 	return find
 end
 

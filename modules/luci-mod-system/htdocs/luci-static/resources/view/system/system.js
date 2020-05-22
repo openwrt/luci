@@ -138,7 +138,7 @@ return view.extend({
 		 * Logging
 		 */
 
-		o = s.taboption('logging', form.Value, 'log_size', _('System log buffer size'), "kiB")
+		o = s.taboption('logging', form.Value, 'log_size', _('System log buffer size'), "KiB")
 		o.optional    = true
 		o.placeholder = 16
 		o.datatype    = 'uinteger'
@@ -184,7 +184,7 @@ return view.extend({
 		if (L.hasSystemFeature('zram')) {
 			s.tab('zram', _('ZRam Settings'));
 
-			o = s.taboption('zram', form.Value, 'zram_size_mb', _('ZRam Size'), _('Size of the ZRam device in megabytes'));
+			o = s.taboption('zram', form.Value, 'zram_size_mb', _('ZRam Size'), _('Size of the ZRam device in mebibytes'));
 			o.optional    = true;
 			o.placeholder = 16;
 			o.datatype    = 'uinteger';
