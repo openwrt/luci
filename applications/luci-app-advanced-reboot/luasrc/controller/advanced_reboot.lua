@@ -160,7 +160,7 @@ function obtain_device_info()
 end
 
 function index()
-	entry({"admin", "system", "advanced_reboot"}, call("action_template"), _("Advanced Reboot"), 90)
+	entry({"admin", "system", "advanced_reboot"}, call("action_template"), _("Advanced Reboot"), 90).acl_depends = { "luci-app-advanced-reboot" }
 	entry({"admin", "system", "advanced_reboot", "reboot"}, post("action_reboot"))
 	entry({"admin", "system", "advanced_reboot", "alternative_reboot"}, post("action_altreboot"))
 	entry({"admin", "system", "advanced_reboot", "power_off"}, post("action_poweroff"))
