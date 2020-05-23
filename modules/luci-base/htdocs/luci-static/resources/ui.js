@@ -1179,7 +1179,7 @@ var UIDropdown = UIElement.extend(/** @lends LuCI.ui.Dropdown.prototype */ {
 			ul.style.maxHeight = (vpHeight * 0.5) + 'px';
 			ul.style.WebkitOverflowScrolling = 'touch';
 
-			function getScrollParent(element) {
+			var getScrollParent = function(element) {
 				var parent = element,
 				    style = getComputedStyle(element),
 				    excludeStaticParent = (style.position === 'absolute');
