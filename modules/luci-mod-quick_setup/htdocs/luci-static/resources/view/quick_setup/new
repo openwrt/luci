@@ -1,3 +1,4 @@
+
 'use strict';
 'require view';
 'require dom';
@@ -40,7 +41,6 @@ var callSetPassword=rpc.declare({
 });
 
 
-
 return view.extend({
     checkPassword:function(section_id,value){
         var strength=document.querySelector('.cbi-value-description'),
@@ -64,10 +64,12 @@ return view.extend({
             network.getDSLModemType(),
             network.getNetworks(),
             network.getWifiNetworks(),
+            network.getWifiDevices(),
             uci.changes()
         ]).then(L.bind(function(data) {
             this.networks = data[1];
             this.wifis = data[2];
+            this.devices = data[3];
         }, this));
     },
 
@@ -83,7 +85,7 @@ return view.extend({
         o.password=true;
         o.validate=this.checkPassword;
 
-        o = s.option(form.Value,'pw2',_('Confirmation'),' ');
+        o = s.option(form.Value,'pw2',_('Confirmation'));
         o.password=true;
         o.renderWidget=function(){
             var node=form.Value.prototype.renderWidget.apply(this,arguments);
@@ -111,6 +113,7 @@ return view.extend({
             }
         }
 
+       // console.log(uci.get('rpcd', 'login[0]'));
         proto = s.option(form.ListValue, 'proto', _('Protocol'));
         proto.value('');
         proto.value('PPPoE');
@@ -172,12 +175,26 @@ return view.extend({
         var SSID, pd, enable, wifi, ssid;
 
         for (var i = 0; i < this.wifis.length; i++) {
-            if(uci.get('wireless', this.wifis[i].getName(), 'network') == 'lan'){ //2.4GHz
+            var network = uci.get('wireless', this.wifis[i].getName(), 'network');
+            //var hwmode = uci.get('wireless',this.devices[i].getName(), 'hwmode');
+            if(network == 'lan'){ //2.4GHz
                 formData.wifi.section_id = this.wifis[i].getName();
+                formData.wifi.ghz2 = true;
                 wifi = this.wifis[i];
                 ssid = wifi.getSSID();
                 formData.wifi.pw4 = uci.get('wireless', formData.wifi.section_id, 'key')
             }
+            /*
+            if(network == 'lan' && hwmode == '11a'){ //5GHz
+                section_id5 = this.wifis[i].getName();
+                formData.wifi.ghz5 = true;
+                wifi_5 = this.wifis[i];
+                device_5 = this.devices[i];
+                ssid_5 = wifi_5.getSSID();
+                formData.wifi.pw4 = uci.get('wireless', section_id5, 'key')
+            }
+
+             */
         }
 
         enable = s.option(form.Flag, 'enable', _('Enable'));
@@ -195,6 +212,7 @@ return view.extend({
         pd = s.option(form.Value, 'pw4', _('Password'));
         pd.password=true;
         pd.validate=this.checkPassword;
+        //pd.default = password;
 
         return m.render().then(L.bind(function(){
             return m.save(function () {
@@ -216,9 +234,21 @@ return view.extend({
                     uci.set('network', formData.wan.section_id, 'ip6addr', formData.wan.ipv6_addr);
                     uci.set('network', formData.wan.section_id, 'ip6gw', formData.wan.ipv6_gateway);
                 }
-
+            }else if(formData.wan.proto == 'PPPoE'){
+                uci.set('network', formData.wan.section_id, 'username', formData.wan.username);
+                uci.set('network', formData.wan.section_id, 'password', formData.wan.pw3);
             }
+
+            uci.set('wireless', formData.wifi.section_id, 'ssid', formData.wifi.SSID);
+            uci.set('wireless', formData.wifi.section_id, 'key', formData.wifi.pw4);
+
+            if(formData.wifi.enable == 0)
+                uci.set('wireless', formData.wifi.section_id, 'disabled', 1);
+            else
+                uci.set('wireless', formData.wifi.section_id, 'disabled', 0);
+
             uci.save();
+
             if(formData.administrator.pw1!=formData.administrator.pw2){
                 ui.addNotification(null,E('p',_('Given password confirmation did not match, password not changed!')),'danger');
                 return;
