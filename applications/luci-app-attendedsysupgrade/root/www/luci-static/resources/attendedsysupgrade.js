@@ -63,7 +63,6 @@ function setup() {
     ubus_call("rpc-sys", "packagelist", {}, "packages");
     ubus_call("system", "board", {}, "release");
     ubus_call("system", "board", {}, "board_name");
-    ubus_call("system", "board", {}, "model");
     ubus_call("system", "info", {}, "memory");
     uci_get({
         "config": "attendedsysupgrade",
@@ -220,13 +219,14 @@ function upgrade_check() {
 
 function upgrade_request() {
     // Request firmware using the following parameters
-    // distro, version, target, board_name/model, packages
+    // distro, version, target, board_name, packages
     $("#upgrade_button").disabled = true;
     hide("#edit_packages");
     hide("#edit_button");
     hide("#keep_container");
 
     // add board info to let server determine profile
+    request_dict.target = data.release.target
     request_dict.profile = data.board_name
 
     if (data.edit_packages == true) {
