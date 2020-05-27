@@ -37,19 +37,19 @@ return network.registerProtocol('vxlan6', {
 	renderFormOptions: function(s) {
 		var o;
 
-		o = s.taboption('general', form.Value, 'remote', _('Remote IPv6 address'), _('The IPv6 address or the fully-qualified domain name of the remote end.'));
+		o = s.taboption('general', form.Value, 'peer6addr', _('Remote IPv6 address'), _('The IPv6 address or the fully-qualified domain name of the remote end.'));
 		o.optional = false;
 		o.datatype = 'or(hostname,cidr6)';
 
-		o = s.taboption('general', form.Value, 'local', _('Local IPv6 address'), _('The local IPv6 address over which the tunnel is created (optional).'));
+		o = s.taboption('general', form.Value, 'ip6addr', _('Local IPv6 address'), _('The local IPv6 address over which the tunnel is created (optional).'));
 		o.optional = true;
 		o.datatype = 'cidr6';
 
-		o = s.taboption('general', form.Value, 'id', _('VXLAN network identifier'), _('ID used to uniquely identify the VXLAN'));
+		o = s.taboption('general', form.Value, 'vid', _('VXLAN network identifier'), _('ID used to uniquely identify the VXLAN'));
 		o.optional = true;
 		o.datatype = 'range(1, 16777216)';
 
-		o = s.taboption('general', widgets.NetworkSelect, 'link', _('Bind interface'), _('Bind the tunnel to this interface (optional).'));
+		o = s.taboption('general', widgets.NetworkSelect, 'tunlink', _('Bind interface'), _('Bind the tunnel to this interface (optional).'));
 		o.exclude = s.section;
 		o.nocreate = true;
 		o.optional = true;

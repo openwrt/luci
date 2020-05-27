@@ -37,19 +37,19 @@ return network.registerProtocol('vxlan', {
 	renderFormOptions: function(s) {
 		var o;
 
-		o = s.taboption('general', form.Value, 'remote', _('Remote IPv4 address'), _('The IPv4 address or the fully-qualified domain name of the remote end.'));
+		o = s.taboption('general', form.Value, 'peeraddr', _('Remote IPv4 address'), _('The IPv4 address or the fully-qualified domain name of the remote end.'));
 		o.optional = false;
 		o.datatype = 'or(hostname,ip4addr("nomask"))';
 
-		o = s.taboption('general', form.Value, 'local', _('Local IPv4 address'), _('The local IPv4 address over which the tunnel is created (optional).'));
+		o = s.taboption('general', form.Value, 'ipaddr', _('Local IPv4 address'), _('The local IPv4 address over which the tunnel is created (optional).'));
 		o.optional = true;
 		o.datatype = 'ip4addr("nomask")';
 
-		o = s.taboption('general', form.Value, 'id', _('VXLAN network identifier'), _('ID used to uniquely identify the VXLAN'));
+		o = s.taboption('general', form.Value, 'vid', _('VXLAN network identifier'), _('ID used to uniquely identify the VXLAN'));
 		o.optional = true;
 		o.datatype = 'range(1, 16777216)';
 
-		o = s.taboption('general', widgets.NetworkSelect, 'link', _('Bind interface'), _('Bind the tunnel to this interface (optional).'));
+		o = s.taboption('general', widgets.NetworkSelect, 'tunlink', _('Bind interface'), _('Bind the tunnel to this interface (optional).'));
 		o.exclude = s.section;
 		o.nocreate = true;
 		o.optional = true;
