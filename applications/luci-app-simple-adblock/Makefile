@@ -10,7 +10,7 @@ LUCI_TITLE:=Simple Adblock Web UI
 LUCI_DESCRIPTION:=Provides Web UI for simple-adblock service.
 LUCI_DEPENDS:=+luci-compat +luci-mod-admin-full +simple-adblock
 LUCI_PKGARCH:=all
-PKG_RELEASE:=46
+PKG_RELEASE:=48
 
 include ../../luci.mk
 
