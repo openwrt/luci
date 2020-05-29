@@ -2443,11 +2443,18 @@
 				    args = '';
 
 				/* find require statements in source */
-				for (var i = 0, off = -1, quote = -1, esc = false; i < source.length; i++) {
+				for (var i = 0, off = -1, prev = -1, quote = -1, comment = -1, esc = false; i < source.length; i++) {
 					var chr = source.charCodeAt(i);
 
 					if (esc) {
 						esc = false;
+					}
+					else if (comment != -1) {
+						if ((comment == 47 && chr == 10) || (comment == 42 && prev == 42 && chr == 47))
+							comment = -1;
+					}
+					else if ((chr == 42 || chr == 47) && prev == 47) {
+						comment = chr;
 					}
 					else if (chr == 92) {
 						esc = true;
@@ -2472,6 +2479,8 @@
 						off = i + 1;
 						quote = chr;
 					}
+
+					prev = chr;
 				}
 
 				/* load dependencies and instantiate class */
