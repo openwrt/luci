@@ -9,7 +9,21 @@ local packageName = "https-dns-proxy"
 local providers_dir = "/usr/lib/lua/luci/" .. packageName .. "/providers/"
 local helperText = ""
 
-function create_helper_text()
+function getPackageVersion()
+	local opkgFile = "/usr/lib/opkg/status"
+	local line
+	local flag = false
+	for line in io.lines(opkgFile) do
+		if flag then
+			return line:match('[%d%.$-]+') or ""
+		elseif line:find("Package: " .. packageName:gsub("%-", "%%%-")) then
+			flag = true
+		end
+	end
+	return ""
+end
+
+function createHelperText()
 	local initText = "<br />" .. translate("For more information on different options check") .. " "
 	for filename in fs.dir(providers_dir) do
 		local p_func = loadfile(providers_dir .. filename)
@@ -25,7 +39,7 @@ function create_helper_text()
 				else
 					helperText = helperText .. ", "
 				end
-				helperText = helperText .. [[<a href="]] .. url .. [[">]] .. domain .. [[</a>]]
+				helperText = helperText .. [[<a href="]] .. url .. [[" target="_blank">]] .. domain .. [[</a>]]
 			end
 		end
 	end
@@ -35,7 +49,7 @@ function create_helper_text()
 	end
 end
 
-function get_provider_name(value)
+function getProviderName(value)
 	for filename in fs.dir(providers_dir) do
 		local p_func = loadfile(providers_dir .. filename)
 		setfenv(p_func, { _ = i18n.translate })
@@ -51,7 +65,7 @@ end
 
 local packageStatus, packageStatusCode
 local ubusStatus = util.ubus("service", "list", { name = packageName })
-local packageVersion = tostring(util.trim(sys.exec("opkg list-installed " .. packageName .. " | awk '{print $3}'"))) or ""
+local packageVersion = getPackageVersion()
 
 if packageVersion == "" then
 	packageStatusCode = -1
@@ -81,7 +95,7 @@ else
 				end
 				la = la or "127.0.0.1"
 				lp = lp or n + 5053
-				packageStatus = packageStatus .. translatef("Running: %s DoH at %s:%s", get_provider_name(url), la, lp) .. "\n"
+				packageStatus = packageStatus .. translatef("Running: %s DoH at %s:%s", getProviderName(url), la, lp) .. "\n"
 			else
 				break
 			end
@@ -108,7 +122,7 @@ else
 	buttons.template = packageName .. "/buttons"
 end
 
-create_helper_text()
+createHelperText()
 s3 = m:section(TypedSection, "https-dns-proxy", translate("Instances"), 
 	translatef("When you add/remove any instances below, they will be used to override the 'DNS forwardings' section of %sDHCP and DNS%s.", "<a href=\"" .. dispatcher.build_url("admin/network/dhcp") .. "\">", "</a>") .. helperText)
 s3.template = "cbi/tblsection"
