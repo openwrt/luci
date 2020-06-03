@@ -8,7 +8,6 @@
 function validateHostname(sid, s) {
     if (s == null || s == '')
         return true;
-
     if (s.length > 256)
         return _('Expecting: %s').format(_('valid hostname'));
 
@@ -37,7 +36,7 @@ return view.extend({
 
         m = new form.Map('dhcp', _('Static IP'));
 
-        s = m.section(form.GridSection, 'leases', _('Static Leases'), _('Static leases are used to assign fixed IP addresses and symbolic hostnames to DHCP clients. They are alo required for non-dynamic interface configurations where only hosts with a corresponding lease are served.'));
+        s = m.section(form.TableSection, 'leases', _('Static Leases'), _('Static leases are used to assign fixed IP addresses and symbolic hostnames to DHCP clients. They are alo required for non-dynamic interface configurations where only hosts with a corresponding lease are served.'));
         s.addremove = true;
         s.anonymous = true;
 
