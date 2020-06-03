@@ -45,6 +45,11 @@ return network.registerProtocol('vxlan', {
 		o.optional = true;
 		o.datatype = 'ip4addr("nomask")';
 
+		o = s.taboption('general', form.Value, 'port', _('Destination port'));
+		o.optional = true;
+		o.placeholder = 4789;
+		o.datatype = 'port';
+
 		o = s.taboption('general', form.Value, 'vid', _('VXLAN network identifier'), _('ID used to uniquely identify the VXLAN'));
 		o.optional = true;
 		o.datatype = 'range(1, 16777216)';
