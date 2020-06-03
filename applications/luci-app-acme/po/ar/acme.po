@@ -1,48 +1,55 @@
 msgid ""
 msgstr ""
+"PO-Revision-Date: 2020-06-03 12:10+0000\n"
+"Last-Translator: Marwan Amireh <amirehmarwan@gmail.com>\n"
+"Language-Team: Arabic <https://hosted.weblate.org/projects/openwrt/"
+"luciapplicationsacme/ar/>\n"
 "Language: ar\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
+"&& n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
+"X-Generator: Weblate 4.1-dev\n"
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:18
 msgid "ACME certificates"
-msgstr ""
+msgstr "‍ شهادات بيئة إدارة الشهادات التلقائية"
 
 #: applications/luci-app-acme/root/usr/share/luci/menu.d/luci-app-acme.json:3
 msgid "ACME certs"
-msgstr ""
+msgstr "شهادات بيئة إدارة الشهادات التلقائية"
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:27
 msgid "ACME global config"
-msgstr ""
+msgstr "التكوين العالمي لبيئة إدارة الشهادات التلقائية"
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:35
 msgid "Account email"
-msgstr ""
+msgstr "حساب البريد الإلكتروني"
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:43
 msgid "Certificate config"
-msgstr ""
+msgstr "تكوين الشهادة"
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:107
 msgid "Challenge Alias"
-msgstr ""
+msgstr "الاسم المستعار لاعتراض"
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:94
 msgid "DNS API"
-msgstr ""
+msgstr "واجهة برمجة تطبيقات لنظام أسماء النطاقات"
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:101
 msgid "DNS API credentials"
-msgstr ""
+msgstr "مؤهلات واجهة برمجة تطبيقات لنظام أسماء النطاقات"
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:112
 msgid "Domain Alias"
-msgstr ""
+msgstr "اسم المستعار لنطاق إنترنت\n"
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:88
 msgid "Domain names"
-msgstr ""
+msgstr "أسماء النطاقات"
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:89
 msgid ""
@@ -50,36 +57,41 @@ msgid ""
 "subject name, subsequent names will be alt names. Note that all domain names "
 "must point at the router in the global DNS."
 msgstr ""
+"أسماء النطاقات المراد تضمينها في الشهادة. سيكون الاسم الأول هو اسم الموضوع، "
+"وستكون الأسماء اللاحقة أسماء بديلة. لاحظ أن جميع أسماء النطاقات يجب أن تشير "
+"إلى جهاز التوجيه في نظام أسماء النطاقات العام."
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:36
 msgid "Email address to associate with account key."
-msgstr ""
+msgstr "عنوان البريد الإلكتروني لربطه بمفتاح الحساب."
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:40
 msgid "Enable debug logging"
-msgstr ""
+msgstr "مكن السجل للتصحيح البرمجي"
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:47
 msgid "Enabled"
-msgstr ""
+msgstr "ممكّن"
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:51
 msgid ""
 "Get certificate from the Letsencrypt staging server (use for testing; the "
 "certificate won't be valid)."
 msgstr ""
+"احصل على شهادة من خادم Let's Encrypt المرحلي (استخدم للاختبار. الشهادة لن "
+"تكون صالحة)."
 
 #: applications/luci-app-acme/root/usr/share/rpcd/acl.d/luci-app-acme.json:3
 msgid "Grant UCI access for luci-app-acme"
-msgstr ""
+msgstr "منح الوصول فريد معرف العميل ل luci-app-acme"
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:55
 msgid "Key size"
-msgstr ""
+msgstr "حجم المفتاح"
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:56
 msgid "Key size (and type) for the generated certificate."
-msgstr ""
+msgstr "حجم المفتاح (والنوع) للشهادة التي تم إنشاؤها."
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:30
 msgid "State directory"
@@ -91,6 +103,9 @@ msgid ""
 "official/acme.sh/wiki/DNS-alias-mode for the details of this process. LUCI "
 "only supports one challenge alias per certificate."
 msgstr ""
+"الاسم المستعار الاعتراضي لاستخدامه لكل أسماء النقابات. انظرإلى https://github"
+".com/acmesh-official/acme.sh/wiki/DNS-alias-mode للاطلاع على تفاصيل هذه "
+"العملية. يدعم LUCI اسمًا مستعارًا واحدًا فقط للاعتراض لكل شهادة."
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:102
 msgid ""
@@ -99,6 +114,10 @@ msgid ""
 "by each API. Add multiple entries here in KEY=VAL shell variable format to "
 "supply multiple credential variables."
 msgstr ""
+"بيانات اعتماد وضع واجهة برمجة تطبيقات نظام اسم المجال المحدد أعلاه.  راجع "
+"https://github.com/acmesh-official/acme.sh/wiki/dnsapi لتنسيق بيانات "
+"الاعتماد التي تتطلبها كل واجهة برمجة تطبيقات.  أضف إدخالات متعددة هنا في "
+"تنسيق متغير shell \"KEY = VAL\" لتوفير متغيرات اعتماد متعددة."
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:113
 msgid ""
@@ -116,6 +135,11 @@ msgid ""
 "address. Once configured, issuing certificates can take a while. Check the "
 "logs for progress and any errors."
 msgstr ""
+"يؤدي هذا إلى تهيئة تثبيت الشهادة من بروتوكول بيئة إدارة الشهادات المؤتمتة.  "
+"ما عليك سوى ملء هذا لتكوين واجهة الويب بالشهادات الصادرة من Let's Encrypt.  "
+"يرجى ملاحظة أنه يجب بالفعل تكوين أسماء النطاقات في الشهادة للإشارة إلى عنوان "
+"بروتوكول الإنترنت العام لجهاز التوجيه.  بمجرد التكوين ، يمكن أن يستغرق إصدار "
+"الشهادات بعض الوقت.  يمكنك التحقق من سجلات التقدم وأية أخطاء."
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:95
 msgid ""
