@@ -250,7 +250,7 @@ msgstr ""
 msgid "A directory with the same name already exists."
 msgstr "Директория с таким же именем уже существует."
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2655
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2664
 msgid "A new login is required since the authentication session expired."
 msgstr "Время сессии истекло, требуется повторная аутентификация."
 
@@ -955,10 +955,14 @@ msgstr ""
 "по умолчанию для Linux)"
 
 #: protocols/luci-proto-ipip/htdocs/luci-static/resources/protocol/ipip.js:48
+#: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:57
+#: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:52
 msgid "Bind interface"
 msgstr "Открытый интерфейс"
 
 #: protocols/luci-proto-ipip/htdocs/luci-static/resources/protocol/ipip.js:48
+#: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:57
+#: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:52
 msgid "Bind the tunnel to this interface (optional)."
 msgstr "Открытый туннель для этого интерфейса (необязательно)."
 
@@ -1605,6 +1609,10 @@ msgstr "Тема оформления"
 msgid "Destination"
 msgstr "Направление"
 
+#: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:48
+msgid "Destination port"
+msgstr ""
+
 #: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:59
 #: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:165
 msgid "Destination zone"
@@ -1990,6 +1998,11 @@ msgstr ""
 "Включить управление пакетами (packet steering) для всех CPU. Может как "
 "помочь так и замедлить скорость сети (в зависимости от устройства)."
 
+#: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:80
+#: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:75
+msgid "Enable rx checksum"
+msgstr ""
+
 #: protocols/luci-proto-ipip/htdocs/luci-static/resources/protocol/ipip.js:67
 msgid "Enable the DF (Don't Fragment) flag of the encapsulating packets."
 msgstr "Включите флаг DF (не Фрагментировать) инкапсулирующих пакетов."
@@ -1997,6 +2010,11 @@ msgstr "Включите флаг DF (не Фрагментировать) ин�
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:837
 msgid "Enable this network"
 msgstr "Включить данную сеть"
+
+#: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:84
+#: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:79
+msgid "Enable tx checksum"
+msgstr ""
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:243
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:352
@@ -2623,6 +2641,11 @@ msgstr "Имена хостов"
 #: protocols/luci-proto-hnet/htdocs/luci-static/resources/protocol/hnet.js:24
 msgid "Hybrid"
 msgstr "Гибрид"
+
+#: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:53
+#: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:48
+msgid "ID used to uniquely identify the VXLAN"
+msgstr ""
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:206
 msgid "IEEE 802.3ad Dynamic link aggregation (802.3ad, 4)"
@@ -3422,11 +3445,13 @@ msgstr "Присвоение локального IP-адреса"
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6rd.js:39
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6to4.js:39
 #: protocols/luci-proto-relay/htdocs/luci-static/resources/protocol/relay.js:151
+#: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:44
 msgid "Local IPv4 address"
 msgstr "Локальный IPv4-адрес"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6in4.js:54
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dslite.js:45
+#: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:44
 msgid "Local IPv6 address"
 msgstr "Локальный IPv6-адрес"
 
@@ -4303,6 +4328,8 @@ msgstr "Исходящая зона"
 #: modules/luci-base/htdocs/luci-static/resources/protocol/static.js:222
 #: protocols/luci-proto-hnet/htdocs/luci-static/resources/protocol/hnet.js:40
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:50
+#: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:76
+#: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:71
 msgid "Override MAC address"
 msgstr "Назначить MAC-адрес"
 
@@ -4319,14 +4346,20 @@ msgstr "Назначить MAC-адрес"
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoe.js:110
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pptp.js:119
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:97
+#: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:62
+#: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:57
 msgid "Override MTU"
 msgstr "Назначить MTU"
 
 #: protocols/luci-proto-ipip/htdocs/luci-static/resources/protocol/ipip.js:63
+#: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:72
+#: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:67
 msgid "Override TOS"
 msgstr "Отвергать TOS"
 
 #: protocols/luci-proto-ipip/htdocs/luci-static/resources/protocol/ipip.js:58
+#: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:67
+#: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:62
 msgid "Override TTL"
 msgstr "Отвергать TTL"
 
@@ -4531,7 +4564,7 @@ msgstr "Путь к внутренним Client-сертификатам"
 msgid "Path to inner Private Key"
 msgstr "Путь к внутреннему Приватному ключу"
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2716
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2725
 msgid "Paused"
 msgstr "Приостановлено"
 
@@ -4888,7 +4921,7 @@ msgstr "Переподключить этот интерфейс"
 msgid "References"
 msgstr "Ссылки"
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2710
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2719
 msgid "Refreshing"
 msgstr "Обновляется"
 
@@ -4913,12 +4946,17 @@ msgstr "Мост-ретранслятор"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6in4.js:50
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6rd.js:49
+#: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:40
 msgid "Remote IPv4 address"
 msgstr "Удалённый IPv4-адрес"
 
 #: protocols/luci-proto-ipip/htdocs/luci-static/resources/protocol/ipip.js:40
 msgid "Remote IPv4 address or FQDN"
 msgstr "Удалённый IPv4-адрес или FQDN"
+
+#: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:40
+msgid "Remote IPv6 address"
+msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:849
 msgid "Remove"
@@ -5315,7 +5353,7 @@ msgstr "Тип службы"
 msgid "Services"
 msgstr "Службы"
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2653
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2662
 msgid "Session expired"
 msgstr "Сессия истекла"
 
@@ -5684,10 +5722,14 @@ msgstr ""
 "будет активным ведомым, пока он доступен"
 
 #: protocols/luci-proto-ipip/htdocs/luci-static/resources/protocol/ipip.js:63
+#: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:72
+#: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:67
 msgid "Specify a TOS (Type of Service)."
 msgstr "Укажите TOS (Тип обслуживания)."
 
 #: protocols/luci-proto-ipip/htdocs/luci-static/resources/protocol/ipip.js:58
+#: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:67
+#: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:62
 msgid ""
 "Specify a TTL (Time to Live) for the encapsulating packet other than the "
 "default (64)."
@@ -5696,6 +5738,8 @@ msgstr ""
 "(64)."
 
 #: protocols/luci-proto-ipip/htdocs/luci-static/resources/protocol/ipip.js:53
+#: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:62
+#: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:57
 msgid ""
 "Specify an MTU (Maximum Transmission Unit) other than the default (1280 "
 "bytes)."
@@ -5932,10 +5976,18 @@ msgstr ""
 "HE.net конфигурация обновления конечной точки изменена, теперь вы должны "
 "использовать простое имя пользователя вместо ID пользователя!"
 
+#: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:40
+msgid "The IPv4 address or the fully-qualified domain name of the remote end."
+msgstr ""
+
 #: protocols/luci-proto-ipip/htdocs/luci-static/resources/protocol/ipip.js:40
 msgid ""
 "The IPv4 address or the fully-qualified domain name of the remote tunnel end."
 msgstr "IPv4-адрес или полное доменное имя удаленного конца туннеля."
+
+#: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:40
+msgid "The IPv6 address or the fully-qualified domain name of the remote end."
+msgstr ""
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6rd.js:53
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/map.js:59
@@ -6045,12 +6097,17 @@ msgid "The local IPv4 address"
 msgstr "Локальный IPv4-адрес"
 
 #: protocols/luci-proto-ipip/htdocs/luci-static/resources/protocol/ipip.js:44
+#: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:44
 msgid "The local IPv4 address over which the tunnel is created (optional)."
 msgstr "Локальный адрес IPv4, по которому создается туннель (необязательно)."
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:169
 msgid "The local IPv4 netmask"
 msgstr "Локальная маска сети IPv4"
+
+#: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:44
+msgid "The local IPv6 address over which the tunnel is created (optional)."
+msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1914
 msgid "The network name is already used"
@@ -6292,7 +6349,7 @@ msgstr "Интервал регенерации ключей GTK"
 msgid "Timezone"
 msgstr "Часовой пояс"
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2663
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2672
 msgid "To login…"
 msgstr "Аутентификация…"
 
@@ -6811,6 +6868,19 @@ msgstr "Сертификат SHA1 hash VPN сервера"
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:9
 msgid "VPNC (CISCO 3000 (and others) VPN)"
 msgstr "VPNC (CISCO 3000 (и другие) VPN)"
+
+#: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:10
+msgid "VXLAN (RFC7348)"
+msgstr ""
+
+#: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:53
+#: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:48
+msgid "VXLAN network identifier"
+msgstr ""
+
+#: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:10
+msgid "VXLANv6 (RFC7348)"
+msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1490
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1548
