@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2008-2014 The LuCI Team <luci@lists.subsignal.org>
+# Copyright (C) 2020 WANG Biyun <Biyun.Wang@etu.univ-grenoble-alpes.fr>
 #
 # This is free software, licensed under the Apache License, Version 2.0 .
 #

@@ -7,12 +7,12 @@
 'require uci';
 'require network';
 
-var formData={
-    administrator:{
+var formData = {
+    administrator: {
         pw1:null,
         pw2:null
     },
-    wan:{
+    wan: {
         section_id:null,
         proto:null,
         ipv4_addr:null,
@@ -23,7 +23,7 @@ var formData={
         username:null,
         pw3:null
     },
-    wifi:{
+    wifi: {
         section_id_2:null,
         section_id_5:null,
         enable:null,
@@ -34,7 +34,7 @@ var formData={
         Ghz_5:null
     }
 };
-var callSetPassword=rpc.declare({
+var callSetPassword = rpc.declare({
     object:'luci',
     method:'setPassword',
     params:['username','password'],
@@ -47,19 +47,20 @@ var callSetPassword=rpc.declare({
 
 return view.extend({
     checkPassword:function(section_id,value){
-        var strength=document.querySelector('.cbi-value-description'),
-            strongRegex=new RegExp("^(?=.{8,})(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*\\W).*$","g"),
-            mediumRegex=new RegExp("^(?=.{7,})(((?=.*[A-Z])(?=.*[a-z]))|((?=.*[A-Z])(?=.*[0-9]))|((?=.*[a-z])(?=.*[0-9]))).*$","g"),
-            enoughRegex=new RegExp("(?=.{6,}).*","g");
-        if(strength&&value.length){
+        var strength = document.querySelector('.cbi-value-description'),
+            strongRegex = new RegExp("^(?=.{8,})(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*\\W).*$","g"),
+            mediumRegex = new RegExp("^(?=.{7,})(((?=.*[A-Z])(?=.*[a-z]))|((?=.*[A-Z])(?=.*[0-9]))|((?=.*[a-z])(?=.*[0-9]))).*$","g"),
+            enoughRegex = new RegExp("(?=.{6,}).*","g");
+
+        if (strength&&value.length) {
             if(false==enoughRegex.test(value))
-                strength.innerHTML='%s: <span style="color:red">%s</span>'.format(_('Password strength'),_('More Characters'));
+                strength.innerHTML = '%s: <span style="color:red">%s</span>'.format(_('Password strength'),_('More Characters'));
             else if(strongRegex.test(value))
-                strength.innerHTML='%s: <span style="color:green">%s</span>'.format(_('Password strength'),_('Strong'));
+                strength.innerHTML = '%s: <span style="color:green">%s</span>'.format(_('Password strength'),_('Strong'));
             else if(mediumRegex.test(value))
-                strength.innerHTML='%s: <span style="color:orange">%s</span>'.format(_('Password strength'),_('Medium'));
+                strength.innerHTML = '%s: <span style="color:orange">%s</span>'.format(_('Password strength'),_('Medium'));
             else
-                strength.innerHTML='%s: <span style="color:red">%s</span>'.format(_('Password strength'),_('Weak'));}
+                strength.innerHTML = '%s: <span style="color:red">%s</span>'.format(_('Password strength'),_('Weak'));}
         return true;
     },
 
@@ -84,16 +85,16 @@ return view.extend({
         s.anonymous = true;
         s.addremove = false;
 
-        o = s.option(form.Value,'pw1',_('New password'));
-        o.password=true;
-        o.validate=this.checkPassword;
+        o = s.option(form.Value, 'pw1', _('New password'));
+        o.password = true;
+        o.validate = this.checkPassword;
 
-        o = s.option(form.Value,'pw2',_('Confirmation'),' ');
-        o.password=true;
-        o.renderWidget=function(){
-            var node=form.Value.prototype.renderWidget.apply(this,arguments);
+        o = s.option(form.Value, 'pw2', _('Confirmation'));
+        o.password = true;
+        o.renderWidget = function(){
+            var node = form.Value.prototype.renderWidget.apply(this,arguments);
             node.querySelector('input').addEventListener('keydown',function(ev){
-                if(ev.keyCode==13&&!ev.currentTarget.classList.contains('cbi-input-invalid'))
+                if(ev.keyCode == 13 && !ev.currentTarget.classList.contains('cbi-input-invalid'))
                     document.querySelector('.cbi-button-save').click();
             });
             return node;
@@ -174,10 +175,10 @@ return view.extend({
         var SSID, pd, enable, ssid, ssid_5, Ghz_2, Ghz_5, device_2, device_5;
 
         for (var i = 0; i < this.devices.length; i++) {
-            if(uci.get('wireless', this.devices[i].getName(), 'hwmode') == '11g'){//2.4Ghz
+            if (uci.get('wireless', this.devices[i].getName(), 'hwmode') == '11g') {//2.4Ghz
                 device_2 = i;
             }
-            if(uci.get('wireless', this.devices[i].getName(), 'hwmode') == '11a'){//5Ghz
+            if (uci.get('wireless', this.devices[i].getName(), 'hwmode') == '11a') {//5Ghz
                 device_5 = i;
             }
         }
@@ -186,14 +187,14 @@ return view.extend({
             var device = uci.get('wireless', this.wifis[i].getName(), 'device');
             var hw = uci.get('wireless', device, 'hwmode');
 
-            if(uci.get('wireless', this.wifis[i].getName(), 'network') == 'lan' && hw == '11g'){//2.4GHz
+            if (uci.get('wireless', this.wifis[i].getName(), 'network') == 'lan' && hw == '11g') {//2.4GHz
                 formData.wifi.Ghz_2 = true;
                 formData.wifi.section_id_2 = this.wifis[i].getName();
                 Ghz_2 = i;
                 ssid = uci.get('wireless', this.wifis[i].getName(), 'ssid');
                 formData.wifi.pw4 = uci.get('wireless', formData.wifi.section_id_2, 'key');
             }
-            if(uci.get('wireless', this.wifis[i].getName(), 'network') == 'lan' && hw == '11a'){//5GHz
+            if (uci.get('wireless', this.wifis[i].getName(), 'network') == 'lan' && hw == '11a') {//5GHz
                 formData.wifi.Ghz_5 = true;
                 formData.wifi.section_id_5 = this.wifis[i].getName();
                 Ghz_5 = i;
@@ -207,13 +208,13 @@ return view.extend({
             }
         }
 
-        if(formData.wifi.Ghz_2 == null){
+        if (formData.wifi.Ghz_2 == null) {
             var device = this.devices[device_2].getName();
             var mode = uci.get('wireless', this.wifis[Ghz_5].getName(), 'mode');
             var encryption = uci.get('wireless', this.wifis[Ghz_5].getName(), 'encryption');
             var key = uci.get('wireless', this.wifis[Ghz_5].getName(), 'key');
             var ssid = uci.get('wireless', this.wifis[Ghz_5].getName(), 'ssid');
-            if(ssid.includes('_2')){
+            if (ssid.includes('_2')) {
                 ssid = ssid.substring(0,ssid.indexOf('_2'));
             }
 
@@ -229,7 +230,7 @@ return view.extend({
             formData.wifi.section_id_2 = wifi_id;
         }
 
-        if(formData.wifi.Ghz_5 == null){
+        if (formData.wifi.Ghz_5 == null) {
             var device = this.devices[device_5].getName();
             var mode = uci.get('wireless', this.wifis[Ghz_2].getName(), 'mode');
             var encryption = uci.get('wireless', this.wifis[Ghz_2].getName(), 'encryption');
@@ -253,10 +254,10 @@ return view.extend({
 
         enable = s.option(form.Flag, 'enable', _('Enable'));
         enable.default = true;
-        if(enable.enabled == true){
+        if (enable.enabled == true) {
             formData.wifi.enable = 1;
         }
-        else{
+        else {
             formData.wifi.enable = 0;
         }
 
@@ -265,8 +266,8 @@ return view.extend({
 
         pd = s.option(form.Value, 'pw4', _('Wifi password'));
         pd.default = formData.wifi.pw4;
-        pd.password=true;
-        pd.validate=this.checkPassword;
+        pd.password = true;
+        pd.validate = this.checkPassword;
 
         o = s.option(form.Value, 'SSID_2', _('Secondary Wifi network (5 GHz)'), _('This secondary Wifi network is faster but has a lower range.'));
         o.default = ssid_5;
@@ -279,11 +280,11 @@ return view.extend({
         }, this));
 
     },
-    handleSave:function(){
-        var map=document.querySelector('.cbi-map');
+    handleSave: function(){
+        var map = document.querySelector('.cbi-map');
         return dom.callClassMethod(map,'save').then(function(){
             uci.set('network', formData.wan.section_id, 'proto', formData.wan.proto);
-            if(formData.wan.proto == 'static'){
+            if (formData.wan.proto == 'static') {
                 if(formData.wan.ipv6_addr == null){
                     uci.set('network', formData.wan.section_id, 'ipaddr', formData.wan.ipv4_addr);
                     uci.set('network', formData.wan.section_id, 'netmask', formData.wan.netmask);
@@ -294,7 +295,7 @@ return view.extend({
                     uci.set('network', formData.wan.section_id, 'ip6gw', formData.wan.ipv6_gateway);
                 }
             }
-            if(formData.wan.proto == 'PPPoE'){
+            if (formData.wan.proto == 'PPPoE') {
                 uci.set('network', formData.wan.section_id, 'username', formData.wan.username);
                 uci.set('network', formData.wan.section_id, 'password', formData.wan.pw3);
             }
@@ -302,36 +303,33 @@ return view.extend({
             uci.set('wireless', formData.wifi.section_id_5, 'key', formData.wifi.pw4);
             uci.set('wireless', formData.wifi.section_id_2, 'ssid', formData.wifi.SSID);
             uci.set('wireless', formData.wifi.section_id_5, 'ssid', formData.wifi.SSID+'_2');
-            if(formData.wifi.enable == false){
+            if (formData.wifi.enable == false) {
                 uci.set('wireless', formData.wifi.section_id_2, 'disabled', 1);
                 uci.set('wireless', formData.wifi.section_id_5, 'disabled', 1);
             }
-            else{
+            else {
                 uci.set('wireless', formData.wifi.section_id_2, 'disabled', 0);
                 uci.set('wireless', formData.wifi.section_id_5, 'disabled', 0);
             }
             uci.save();
-            if(formData.administrator.pw1!=formData.administrator.pw2){
-                ui.addNotification(null,E('p',_('Given password confirmation did not match, password not changed!')),'danger');
+            if (formData.administrator.pw1 != formData.administrator.pw2) {
+                ui.addNotification(null, E('p', _('Given password confirmation did not match, password not changed!')), 'danger');
                 return;
             }
-            if(formData.wan.section_id == null || formData.wan.proto == 'none'){
-                ui.addNotification(null,E('p',_('Error!')),'danger');
-                return;
-            }
-            if(formData.administrator.pw1 != null){
-                var success = callSetPassword('root',formData.administrator.pw1);
-                if(success){
-                    ui.addNotification(null,E('p',_('The system password has been successfully changed.')),'info');
+            if (formData.administrator.pw1 != null) {
+                var success = callSetPassword('root', formData.administrator.pw1);
+                if (success) {
+                    ui.addNotification(null, E('p', _('The system password has been successfully changed.')), 'info');
                 }
-                else if(!success)
-                    ui.addNotification(null,E('p',_('Failed to change the system password.')),'danger');
-                formData.administrator.pw1=null;
-                formData.administrator.pw2=null;
+                else {
+                    ui.addNotification(null, E('p', _('Failed to change the system password.')), 'danger');
+                }
+                formData.administrator.pw1 = null;
+                formData.administrator.pw2 = null;
             }
             dom.callClassMethod(map,'render');
         });
     },
-    handleReset:null
+    handleReset: null
 
 });
