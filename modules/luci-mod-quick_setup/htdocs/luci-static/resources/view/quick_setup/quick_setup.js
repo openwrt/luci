@@ -9,29 +9,29 @@
 
 var formData = {
     administrator: {
-        pw1:null,
-        pw2:null
+        pw1: null,
+        pw2: null
     },
     wan: {
-        section_id:null,
-        proto:null,
-        ipv4_addr:null,
-        netmask:null,
-        ipv4_gateway:null,
-        ipv6_addr:null,
-        ipv6_gateway:null,
-        username:null,
-        pw3:null
+        section_id: null,
+        proto: null,
+        ipv4_addr: null,
+        netmask: null,
+        ipv4_gateway: null,
+        ipv6_addr: null,
+        ipv6_gateway: null,
+        username: null,
+        pw3: null
     },
     wifi: {
-        section_id_2:null,
-        section_id_5:null,
-        enable:null,
-        SSID:null,
-        SSID_2:null,
-        pw4:null,
-        Ghz_2:null,
-        Ghz_5:null
+        section_id_2: null,
+        section_id_5: null,
+        enable: null,
+        SSID: null,
+        SSID_2: null,
+        pw4: null,
+        Ghz_2: null,
+        Ghz_5: null
     }
 };
 var callSetPassword = rpc.declare({
