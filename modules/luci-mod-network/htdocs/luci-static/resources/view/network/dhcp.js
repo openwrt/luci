@@ -303,7 +303,7 @@ return view.extend({
 
 		o.depends('rebind_protection', '1');
 		o.placeholder = 'ihost.netflix.com';
-		o.validate = validateAddressList;
+		o.datatype = 'list(unique(hostname))';
 
 
 		o = s.taboption('advanced', form.Value, 'port',
@@ -410,7 +410,7 @@ return view.extend({
 		ss.anonymous = true;
 
 		so = ss.option(form.Value, 'name', _('Hostname'));
-		so.validate = validateHostname;
+		so.datatype = 'hostname';
 		so.rmempty  = true;
 		so.write = function(section, value) {
 			uci.set('dhcp', section, 'name', value);
