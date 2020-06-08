@@ -43,8 +43,6 @@ var callSetPassword = rpc.declare({
     }
 });
 
-
-
 return view.extend({
     checkPassword:function(section_id,value){
         var strength = document.querySelector('.cbi-value-description'),
