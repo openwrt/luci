@@ -90,9 +90,11 @@ if [ "${QUERY##*/}" == "all" ]; then
 	QALL=1
 fi
 
-if [ "$QUERY" == '$info' ]; then
+if [ "$QUERY" == '%24info' ]; then
 	echo '{ "info": [ '
 	print_query status
+#sleep for bad code, see 
+sleep 2
 	echo -n ","
 	print_query interfaces && echo -n "," || echo -n '{ "interfaces": "" },'
 	print_query links && echo -n "," || echo -n '{ "links": "" },'
@@ -100,7 +102,7 @@ if [ "$QUERY" == '$info' ]; then
 	echo "] }"
 fi
 
-if [ "$QUERY" == '$neighbours' ]; then
+if [ "$QUERY" == '%24neighbours' ]; then
 	QALL=1
 	echo '{ "neighbours": [ '
 	echo '{ "originators": '
@@ -111,11 +113,11 @@ if [ "$QUERY" == '$neighbours' ]; then
 	echo "} ] }"
 	exit 0
 
-else if [ "$QUERY" == '$tunnels' ]; then
+else if [ "$QUERY" == '%24tunnels' ]; then
 	bmx7 -c --jshow tunnels /r=0
 	exit 0
 
-	else if [ "$QUERY" == '$originators' ]; then
+	else if [ "$QUERY" == '%24originators' ]; then
 		bmx7 -c --jshow originators /r=0
 		exit 0
 
