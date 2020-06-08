@@ -52,15 +52,15 @@ return view.extend({
             mediumRegex = new RegExp("^(?=.{7,})(((?=.*[A-Z])(?=.*[a-z]))|((?=.*[A-Z])(?=.*[0-9]))|((?=.*[a-z])(?=.*[0-9]))).*$","g"),
             enoughRegex = new RegExp("(?=.{6,}).*","g");
 
-        if (strength&&value.length) {
-            if(false==enoughRegex.test(value))
-                strength.innerHTML = '%s: <span style="color:red">%s</span>'.format(_('Password strength'),_('More Characters'));
+        if (strength && value.length) {
+            if(false == enoughRegex.test(value))
+                strength.innerHTML = '%s: <span style = "color:red">%s</span>'.format(_('Password strength'),_('More Characters'));
             else if(strongRegex.test(value))
-                strength.innerHTML = '%s: <span style="color:green">%s</span>'.format(_('Password strength'),_('Strong'));
+                strength.innerHTML = '%s: <span style = "color:green">%s</span>'.format(_('Password strength'),_('Strong'));
             else if(mediumRegex.test(value))
-                strength.innerHTML = '%s: <span style="color:orange">%s</span>'.format(_('Password strength'),_('Medium'));
+                strength.innerHTML = '%s: <span style = "color:orange">%s</span>'.format(_('Password strength'),_('Medium'));
             else
-                strength.innerHTML = '%s: <span style="color:red">%s</span>'.format(_('Password strength'),_('Weak'));}
+                strength.innerHTML = '%s: <span style = "color:red">%s</span>'.format(_('Password strength'),_('Weak'));}
         return true;
     },
 
