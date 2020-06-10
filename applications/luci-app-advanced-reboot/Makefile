@@ -10,10 +10,9 @@ LUCI_TITLE:=Advanced Linksys Reboot Web UI
 LUCI_DESCRIPTION:=Provides Web UI (found under System/Advanced Reboot) to reboot supported Linksys and ZyXEL routers to\
 	an alternative partition. Also provides Web UI to shut down (power off) your device. 	Supported dual-partition\
 	routers are listed at https://github.com/openwrt/luci/blob/master/applications/luci-app-advanced-reboot/README.md
-
 LUCI_DEPENDS:=+luci-compat +luci-mod-admin-full
 LUCI_PKGARCH:=all
-PKG_RELEASE:=52
+PKG_RELEASE:=54
 
 include ../../luci.mk
 
