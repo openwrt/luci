@@ -1,7 +1,7 @@
 return {
 	vendorName = "Linksys",
 	deviceName = "EA3500",
-	boardName = "linksys-audi",
+	boardNames = { "linksys-audi", "linksys,audi" },
 	partition1MTD = "mtd3",
 	partition2MTD = "mtd5",
 	labelOffset = 32,

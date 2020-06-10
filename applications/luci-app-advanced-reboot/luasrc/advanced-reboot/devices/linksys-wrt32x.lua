@@ -1,7 +1,7 @@
 return {
 	vendorName = "Linksys",
 	deviceName = "WRT32X",
-	boardName = "linksys-venom",
+	boardNames = { "linksys-venom", "linksys,venom", "linksys,wrt32x" },
 	partition1MTD = "mtd5",
 	partition2MTD = "mtd7",
 	labelOffset = nil,
