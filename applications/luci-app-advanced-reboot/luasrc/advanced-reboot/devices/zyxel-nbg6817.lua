@@ -1,7 +1,7 @@
 return {
 	vendorName = "ZyXEL",
 	deviceName = "NBG6817",
-	boardName = "nbg6817",
+	boardNames = { "nbg6817" },
 	partition1MTD = "mmcblk0p4",
 	partition2MTD = "mmcblk0p7",
 	labelOffset = 32,

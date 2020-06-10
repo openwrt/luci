@@ -1,0 +1,96 @@
+{
+	"luci-app-advanced-reboot": {
+		"description": "Grant UCI and file access for luci-app-advanced-reboot",
+		"read": {
+			"cgi-io": [
+				"exec"
+			],
+			"file": {
+				"/usr/lib/lua/luci/advanced-reboot/devices/*": [
+					"read"
+				],
+				"/sys/devices/virtual/ubi/ubi*/mtd_num": [
+					"read"
+				],
+				"/etc/os-release": [
+					"read"
+				],
+				"/alt/rom/etc/os-release": [
+					"read"
+				],
+				"/usr/sbin/fw_printenv *": [
+					"exec"
+				],
+				"/usr/sbin/fw_setenv *": [
+					"exec"
+				],
+				"/usr/sbin/ubiattach *": [
+					"exec"
+				],
+				"/usr/sbin/ubiblock *": [
+					"exec"
+				],
+				"/usr/sbin/ubidetach *": [
+					"exec"
+				],
+				"/usr/sbin/ubinfo *": [
+					"exec"
+				],
+				"/bin/cat *": [
+					"exec"
+				],
+				"/usr/bin/cat *": [
+					"exec"
+				],
+				"/bin/dd *": [
+					"exec"
+				],
+				"/usr/bin/dd *": [
+					"exec"
+				],
+				"/bin/hexdump *": [
+					"exec"
+				],
+				"/usr/bin/hexdump *": [
+					"exec"
+				],
+				"/bin/logger -t advanced-reboot *": [
+					"exec"
+				],
+				"/usr/bin/logger -t advanced-reboot *": [
+					"exec"
+				],
+				"/bin/mkdir *": [
+					"exec"
+				],
+				"/usr/bin/mkdir *": [
+					"exec"
+				],
+				"/bin/mount *": [
+					"exec"
+				],
+				"/usr/bin/mount *": [
+					"exec"
+				],
+				"/bin/printf *": [
+					"exec"
+				],
+				"/usr/bin/printf *": [
+					"exec"
+				],
+				"/bin/rm *": [
+					"exec"
+				],
+				"/usr/bin/rm *": [
+					"exec"
+				],
+				"/lib/functions.sh": [
+					"exec"
+				]
+			},
+			"uci": [
+				"network"
+			]
+		}
+	}
+}
