@@ -511,7 +511,14 @@ return view.extend({
 			o.value('-',"-- " + _("custom") + " --");
 
 		o.cfgvalue = function(section_id) {
-			return uci.get('ddns', section_id, 'service_name');
+			var service = uci.get('ddns', section_id, 'service_name'),
+				update_script = uci.get('ddns', section_id, 'update_script'),
+				update_url = uci.get('ddns', section_id, 'update_url');
+
+			if (!service && (update_script || update_url))
+				return "-";
+
+			return service;
 		}
 
 		o.write = function(section_id, formvalue) {
@@ -529,18 +536,40 @@ return view.extend({
 		_("Update URL to be used for updating your DDNS Provider." + "<br />" +
 		"Follow instructions you will find on their WEB page."));
 		o.modalonly = true;
-		o.rmempty	= false;
+		o.rmempty	= true;
+		o.optional = true;
 		o.depends("ipv6_service_name","-");
 		o.depends("ipv4_service_name","-");
+
+		o.validate = function(section_id, value) {
+			var other = this.section.children.filter(function(o) { return o.option == 'update_script' })[0].formvalue(section_id);
+
+			if ((value == "" && other == "") || (value != "" && other != "")) {
+				return _("Insert a Update Script OR a Update URL");
+			}
+
+			return true;
+		}
 
 		// update_script
 
 		o = s.taboption('basic', form.Value, 'update_script', _("Custom update-script"),
 		_("Custom update script to be used for updating your DDNS Provider."));
 		o.modalonly = true;
-		o.rmempty	= false;
+		o.rmempty	= true;
+		o.optional = true;
 		o.depends("ipv6_service_name","-");
 		o.depends("ipv4_service_name","-");
+
+		o.validate = function(section_id, value) {
+			var other = this.section.children.filter(function(o) { return o.option == 'update_url' })[0].formvalue(section_id);
+
+			if ((value == "" && other == "") || (value != "" && other != "")) {
+				return _("Insert a Update Script OR a Update URL");
+			}
+
+			return true;
+		}
 
 		// domain
 
