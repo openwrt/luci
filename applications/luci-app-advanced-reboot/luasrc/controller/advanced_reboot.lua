@@ -1,4 +1,4 @@
--- Copyright 2017-2018 Stan Grishin <stangri@melmac.net>
+-- Copyright 2017-2020 Stan Grishin <stangri@melmac.net>
 -- Licensed to the public under the Apache License 2.0.
 
 module("luci.controller.advanced_reboot", package.seeall)
@@ -98,15 +98,23 @@ function obtain_device_info()
 		local p_func = loadfile(devices_dir .. filename)
 		setfenv(p_func, { _ = i18n.translate })
 		p = p_func()
-		boardName = p.boardName:gsub('%p','')
+		if p.boardName then
+			boardName = p.boardName:gsub('%p','')
+		end
+		if p.boardNames then
+			for i, v in pairs(p.boardNames) do
+				boardName = v:gsub('%p','')
+				if romBoardName and romBoardName:gsub('%p',''):match(boardName) then break end
+			end
+		end
 		if romBoardName and romBoardName:gsub('%p',''):match(boardName) then
 			if p.labelOffset then
 				if p.partition1MTD then
-					p1_label = util.trim(util.exec("dd if=/dev/" .. p.partition1MTD .. " bs=1 skip=" .. p.labelOffset .. " count=128" .. "  2>/dev/null"))
+					p1_label = util.trim(util.exec("dd if=/dev/" .. p.partition1MTD .. " bs=1 skip=" .. p.labelOffset .. " count=128" .. " 2>/dev/null"))
 					n, p1_version = p1_label:match('(Linux)-([%d|.]+)')
 				end
 				if p.partition2MTD then
-					p2_label = util.trim(util.exec("dd if=/dev/" .. p.partition2MTD .. " bs=1 skip=" .. p.labelOffset .. " count=128" .. "  2>/dev/null"))
+					p2_label = util.trim(util.exec("dd if=/dev/" .. p.partition2MTD .. " bs=1 skip=" .. p.labelOffset .. " count=128" .. " 2>/dev/null"))
 					n, p2_version = p2_label:match('(Linux)-([%d|.]+)')
 				end
 				if p1_label and p1_label:find("LEDE") then p1_os = "LEDE" end
@@ -160,7 +168,7 @@ function obtain_device_info()
 end
 
 function index()
-	entry({"admin", "system", "advanced_reboot"}, call("action_template"), _("Advanced Reboot"), 90)
+	entry({"admin", "system", "advanced_reboot"}, call("action_template"), _("Advanced Reboot"), 90).acl_depends = { "luci-app-advanced-reboot" }
 	entry({"admin", "system", "advanced_reboot", "reboot"}, post("action_reboot"))
 	entry({"admin", "system", "advanced_reboot", "alternative_reboot"}, post("action_altreboot"))
 	entry({"admin", "system", "advanced_reboot", "power_off"}, post("action_poweroff"))
