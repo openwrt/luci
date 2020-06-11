@@ -1,0 +1,14 @@
+{
+  "admin/static_ip": {
+    "title": "Static IP",
+    "order": 150,
+    "action": {
+      "type": "view",
+      "path": "static_ip/static_ip"
+    },
+    "depends": {
+      "acl": [ "luci-mod-static_ip" ],
+      "uci": { "dhcp": true }
+    }
+  }
+}
