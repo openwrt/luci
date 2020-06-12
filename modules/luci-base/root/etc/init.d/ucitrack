@@ -35,7 +35,7 @@ register_trigger() {
 			;;
 			*)
 				logger -t "ucitrack" "Setting up non-init /etc/config/$config reload handler: $exec"
-				procd_add_config_trigger "config.change" "$config" "$exec"
+				procd_add_config_trigger "config.change" "$config" $exec
 			;;
 		esac
 	fi
