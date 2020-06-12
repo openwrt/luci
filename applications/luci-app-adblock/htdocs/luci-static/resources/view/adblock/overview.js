@@ -301,10 +301,10 @@ return view.extend({
 		o = s.taboption('general', form.Flag, 'adb_safesearch', _('Enable SafeSearch'), _('Enforcing SafeSearch for Google, Bing, DuckDuckGo, Yandex, YouTube and Pixabay.'));
 		o.rmempty = false;
 
-		o = s.taboption('general', form.ListValue, 'adb_safesearchmod', _('YouTube SafeSearch'), _('Choose restrictive, moderated or disabled SafeSearch filters for youtube. Please note: even Moderate filter might be to restrictive for some content, e.g. music.'));
+		o = s.taboption('general', form.ListValue, 'adb_safesearchmod', _('YouTube SafeSearch'), _('Choose restrictive, moderate or disabled SafeSearch filters for YouTube. Please note: even moderate filter might be to restrictive for some content, e.g. music.'));
 		o.depends('adb_safesearch', '1');
 		o.value('disabled');
-		o.value('moderated');
+		o.value('moderate');
 		o.value('restrictive')
 		o.rmempty = false;
 
