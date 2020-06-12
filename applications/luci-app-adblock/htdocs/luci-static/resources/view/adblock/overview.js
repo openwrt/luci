@@ -298,12 +298,15 @@ return view.extend({
 		o.placeholder = '53 853 5353';
 		o.rmempty = true;
 
-		o = s.taboption('general', form.Flag, 'adb_safesearch', _('Enable SafeSearch'), _('Enforcing SafeSearch for google, bing, duckduckgo, yandex, youtube and pixabay.'));
+		o = s.taboption('general', form.Flag, 'adb_safesearch', _('Enable SafeSearch'), _('Enforcing SafeSearch for Google, Bing, DuckDuckGo, Yandex, YouTube and Pixabay.'));
 		o.rmempty = false;
 
-		o = s.taboption('general', form.Flag, 'adb_safesearchmod', _('SafeSearch Moderate'), _('Enable moderate SafeSearch filters for youtube.'));
+		o = s.taboption('general', form.ListValue, 'adb_safesearchmod', _('YouTube SafeSearch'), _('Choose restrictive, moderated or disabled SafeSearch filters for youtube. Please note: even Moderate filter might be to restrictive for some content, e.g. music.'));
 		o.depends('adb_safesearch', '1');
-		o.rmempty = true;
+		o.value('disabled');
+		o.value('moderated');
+		o.value('restrictive')
+		o.rmempty = false;
 
 		o = s.taboption('general', form.Flag, 'adb_report', _('DNS Report'), _('Gather DNS related network traffic via tcpdump and provide a DNS Report on demand. \
 			Please note: this needs additional \'tcpdump-mini\' package installation and a full adblock service restart to take effect.'));
