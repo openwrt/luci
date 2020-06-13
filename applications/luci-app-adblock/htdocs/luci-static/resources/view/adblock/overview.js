@@ -268,7 +268,7 @@ return view.extend({
 		s.tab('general',  _('General Settings'));
 		s.tab('additional', _('Additional Settings'));
 		s.tab('adv_dns', _('Advanced DNS Settings'));
-		s.tab('adv_report', _('Advanced Report Settings'));
+		s.tab('adv_report', _('Advanced Report Settings'), _('Changes on this tab needs a full adblock service restart to take effect.<br /><p>&#xa0;</p>'));
 		s.tab('adv_email', _('Advanced E-Mail Settings'));
 		s.tab('sources', _('Blocklist Sources'), _('List of supported and fully pre-configured adblock sources, already active sources are pre-selected.<br /> \
 			<b><em>To avoid OOM errors, please do not select too many lists!</em></b><br /> \
@@ -301,7 +301,16 @@ return view.extend({
 		o = s.taboption('general', form.Flag, 'adb_safesearch', _('Enable SafeSearch'), _('Enforcing SafeSearch for google, bing, duckduckgo, yandex, youtube and pixabay.'));
 		o.rmempty = false;
 
-		o = s.taboption('general', form.Flag, 'adb_safesearchmod', _('SafeSearch Moderate'), _('Enable moderate SafeSearch filters for youtube.'));
+		o = s.taboption('general', form.MultiValue, 'adb_safesearchlist', _('Limit SafeSearch'), _('Limit SafeSearch to certain providers.'));
+		o.depends('adb_safesearch', '1');
+		o.value('google');
+		o.value('bing');
+		o.value('yandex');
+		o.value('youtube');
+		o.value('pixabay');
+		o.rmempty = true;
+
+		o = s.taboption('general', form.Flag, 'adb_safesearchmod', _('Relax SafeSearch'), _('Enable moderate SafeSearch filters for youtube.'));
 		o.depends('adb_safesearch', '1');
 		o.rmempty = true;
 
