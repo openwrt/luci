@@ -19,17 +19,7 @@ var CBIJSONConfig = baseclass.extend({
 			if (!data.hasOwnProperty(sectiontype))
 				continue;
 
-			if (L.isObject(data[sectiontype])) {
-				this.data[sectiontype] = Object.assign(data[sectiontype], {
-					'.anonymous': false,
-					'.name': sectiontype,
-					'.type': sectiontype
-				});
-
-				section_ids.push(sectiontype);
-				num_sections++;
-			}
-			else if (Array.isArray(data[sectiontype])) {
+			if (Array.isArray(data[sectiontype])) {
 				for (var i = 0, index = 0; i < data[sectiontype].length; i++) {
 					var item = data[sectiontype][i],
 					    anonymous, name;
@@ -56,6 +46,16 @@ var CBIJSONConfig = baseclass.extend({
 						'.type': sectiontype
 					});
 				}
+			}
+			else if (L.isObject(data[sectiontype])) {
+				this.data[sectiontype] = Object.assign(data[sectiontype], {
+					'.anonymous': false,
+					'.name': sectiontype,
+					'.type': sectiontype
+				});
+
+				section_ids.push(sectiontype);
+				num_sections++;
 			}
 		}
 
