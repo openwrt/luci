@@ -44,6 +44,18 @@ msgstr "将 IPv6 条目添加到阻止列表。"
 msgid "Advanced Configuration"
 msgstr "高级配置"
 
+#: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:330
+msgid "Allowed Domain URLs"
+msgstr ""
+
+#: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:325
+msgid "Allowed Domains"
+msgstr ""
+
+#: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:323
+msgid "Allowed and Blocked Lists Management"
+msgstr ""
+
 #: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:312
 msgid ""
 "Attempt to create a compressed cache of block-list in the persistent memory."
@@ -54,16 +66,16 @@ msgid "Basic Configuration"
 msgstr "基本配置"
 
 #: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:340
-msgid "Blacklisted Domain URLs"
-msgstr "列入黑名单的域名 URL"
+msgid "Blocked Domain URLs"
+msgstr ""
 
-#: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:330
-msgid "Blacklisted Domains"
-msgstr "列入黑名单的域名"
+#: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:335
+msgid "Blocked Domains"
+msgstr ""
 
 #: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:345
-msgid "Blacklisted Hosts URLs"
-msgstr "列入黑名单的主机 URL"
+msgid "Blocked Hosts URLs"
+msgstr ""
 
 #: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:188
 msgid "Cache file containing %s domains found."
@@ -196,13 +208,13 @@ msgid ""
 "on timeout/fail."
 msgstr "如果安装并检测到 curl，则会在超时/失败时重试指定次数。"
 
-#: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:330
-msgid "Individual domains to be blacklisted."
-msgstr "黑名单中的域名。"
-
 #: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:325
-msgid "Individual domains to be whitelisted."
-msgstr "白名单中的域名。"
+msgid "Individual domains to be allowed."
+msgstr ""
+
+#: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:335
+msgid "Individual domains to be blocked."
+msgstr ""
 
 #: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:186
 #: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:190
@@ -329,17 +341,17 @@ msgstr "抑制输出"
 msgid "Task"
 msgstr "任务"
 
-#: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:340
-msgid "URLs to lists of domains to be blacklisted."
-msgstr "列入黑名单的域名列表 URL。"
+#: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:330
+msgid "URLs to lists of domains to be allowed."
+msgstr ""
 
-#: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:335
-msgid "URLs to lists of domains to be whitelisted."
-msgstr "列入白名单的域名列表 URL。"
+#: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:340
+msgid "URLs to lists of domains to be blocked."
+msgstr ""
 
 #: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:345
-msgid "URLs to lists of hosts to be blacklisted."
-msgstr "列入黑名单的主机名列表 URL。"
+msgid "URLs to lists of hosts to be blocked."
+msgstr ""
 
 #: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:284
 msgid "Unbound AdBlock List"
@@ -357,18 +369,6 @@ msgstr "详细输出"
 msgid "Warning"
 msgstr ""
 
-#: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:323
-msgid "Whitelist and Blocklist Management"
-msgstr "白名单和黑名单管理"
-
-#: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:335
-msgid "Whitelisted Domain URLs"
-msgstr "白名单域名 URL"
-
-#: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:325
-msgid "Whitelisted Domains"
-msgstr "白名单域名"
-
 #: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:143
 msgid "failed to access shared memory"
 msgstr ""
@@ -378,7 +378,7 @@ msgid "failed to create '%s' file"
 msgstr ""
 
 #: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:153
-msgid "failed to create blocklist or restart DNS resolver"
+msgid "failed to create block-list or restart DNS resolver"
 msgstr ""
 
 #: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:149
@@ -410,7 +410,7 @@ msgid "failed to parse"
 msgstr ""
 
 #: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:146
-msgid "failed to process whitelist"
+msgid "failed to process allow-list"
 msgstr ""
 
 #: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:155
@@ -444,6 +444,39 @@ msgstr ""
 #: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:252
 msgid "none"
 msgstr "无"
+
+#~ msgid "Blacklisted Domain URLs"
+#~ msgstr "列入黑名单的域名 URL"
+
+#~ msgid "Blacklisted Domains"
+#~ msgstr "列入黑名单的域名"
+
+#~ msgid "Blacklisted Hosts URLs"
+#~ msgstr "列入黑名单的主机 URL"
+
+#~ msgid "Individual domains to be blacklisted."
+#~ msgstr "黑名单中的域名。"
+
+#~ msgid "Individual domains to be whitelisted."
+#~ msgstr "白名单中的域名。"
+
+#~ msgid "URLs to lists of domains to be blacklisted."
+#~ msgstr "列入黑名单的域名列表 URL。"
+
+#~ msgid "URLs to lists of domains to be whitelisted."
+#~ msgstr "列入白名单的域名列表 URL。"
+
+#~ msgid "URLs to lists of hosts to be blacklisted."
+#~ msgstr "列入黑名单的主机名列表 URL。"
+
+#~ msgid "Whitelist and Blocklist Management"
+#~ msgstr "白名单和黑名单管理"
+
+#~ msgid "Whitelisted Domain URLs"
+#~ msgstr "白名单域名 URL"
+
+#~ msgid "Whitelisted Domains"
+#~ msgstr "白名单域名"
 
 #~ msgid ""
 #~ "Pick the DNS resolution option to create the adblock list for, see the"

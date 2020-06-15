@@ -44,6 +44,18 @@ msgstr "Добавьте записи IPv6 в черный список."
 msgid "Advanced Configuration"
 msgstr "расширенная конфигурация"
 
+#: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:330
+msgid "Allowed Domain URLs"
+msgstr ""
+
+#: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:325
+msgid "Allowed Domains"
+msgstr ""
+
+#: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:323
+msgid "Allowed and Blocked Lists Management"
+msgstr ""
+
 #: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:312
 msgid ""
 "Attempt to create a compressed cache of block-list in the persistent memory."
@@ -54,16 +66,16 @@ msgid "Basic Configuration"
 msgstr "Базовая конфигурация"
 
 #: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:340
-msgid "Blacklisted Domain URLs"
-msgstr "URL ссылки Черных<br />списков доменов"
+msgid "Blocked Domain URLs"
+msgstr ""
 
-#: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:330
-msgid "Blacklisted Domains"
-msgstr "Черный список доменов"
+#: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:335
+msgid "Blocked Domains"
+msgstr ""
 
 #: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:345
-msgid "Blacklisted Hosts URLs"
-msgstr "URL ссылки Черных<br />списков хостов"
+msgid "Blocked Hosts URLs"
+msgstr ""
 
 #: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:188
 msgid "Cache file containing %s domains found."
@@ -200,13 +212,13 @@ msgstr ""
 "Если curl установлен и обнаружен, он попытается загрузить это много раз по "
 "тайм-ауту / неудаче."
 
-#: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:330
-msgid "Individual domains to be blacklisted."
-msgstr "Отдельные домены должны быть в черном списке."
-
 #: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:325
-msgid "Individual domains to be whitelisted."
-msgstr "Отдельные домены должны быть в белом списке."
+msgid "Individual domains to be allowed."
+msgstr ""
+
+#: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:335
+msgid "Individual domains to be blocked."
+msgstr ""
 
 #: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:186
 #: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:190
@@ -338,17 +350,17 @@ msgstr "Запретить запись"
 msgid "Task"
 msgstr "задача"
 
-#: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:340
-msgid "URLs to lists of domains to be blacklisted."
-msgstr "URL-адреса списков доменов, которые должны быть в черном списке."
+#: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:330
+msgid "URLs to lists of domains to be allowed."
+msgstr ""
 
-#: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:335
-msgid "URLs to lists of domains to be whitelisted."
-msgstr "URL-адреса списков доменов, которые должны быть в белом списке."
+#: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:340
+msgid "URLs to lists of domains to be blocked."
+msgstr ""
 
 #: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:345
-msgid "URLs to lists of hosts to be blacklisted."
-msgstr "URL-адреса списков хостов, которые должны быть в черном списке."
+msgid "URLs to lists of hosts to be blocked."
+msgstr ""
 
 #: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:284
 msgid "Unbound AdBlock List"
@@ -366,18 +378,6 @@ msgstr "Подробный вывод"
 msgid "Warning"
 msgstr "Внимание"
 
-#: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:323
-msgid "Whitelist and Blocklist Management"
-msgstr "Белый и черный списки управления"
-
-#: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:335
-msgid "Whitelisted Domain URLs"
-msgstr "URL ссылки Белых списков доменов"
-
-#: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:325
-msgid "Whitelisted Domains"
-msgstr "Белый список доменов"
-
 #: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:143
 msgid "failed to access shared memory"
 msgstr ""
@@ -387,7 +387,7 @@ msgid "failed to create '%s' file"
 msgstr ""
 
 #: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:153
-msgid "failed to create blocklist or restart DNS resolver"
+msgid "failed to create block-list or restart DNS resolver"
 msgstr ""
 
 #: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:149
@@ -419,7 +419,7 @@ msgid "failed to parse"
 msgstr ""
 
 #: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:146
-msgid "failed to process whitelist"
+msgid "failed to process allow-list"
 msgstr ""
 
 #: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:155
@@ -453,6 +453,39 @@ msgstr ""
 #: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:252
 msgid "none"
 msgstr "ничего"
+
+#~ msgid "Blacklisted Domain URLs"
+#~ msgstr "URL ссылки Черных<br />списков доменов"
+
+#~ msgid "Blacklisted Domains"
+#~ msgstr "Черный список доменов"
+
+#~ msgid "Blacklisted Hosts URLs"
+#~ msgstr "URL ссылки Черных<br />списков хостов"
+
+#~ msgid "Individual domains to be blacklisted."
+#~ msgstr "Отдельные домены должны быть в черном списке."
+
+#~ msgid "Individual domains to be whitelisted."
+#~ msgstr "Отдельные домены должны быть в белом списке."
+
+#~ msgid "URLs to lists of domains to be blacklisted."
+#~ msgstr "URL-адреса списков доменов, которые должны быть в черном списке."
+
+#~ msgid "URLs to lists of domains to be whitelisted."
+#~ msgstr "URL-адреса списков доменов, которые должны быть в белом списке."
+
+#~ msgid "URLs to lists of hosts to be blacklisted."
+#~ msgstr "URL-адреса списков хостов, которые должны быть в черном списке."
+
+#~ msgid "Whitelist and Blocklist Management"
+#~ msgstr "Белый и черный списки управления"
+
+#~ msgid "Whitelisted Domain URLs"
+#~ msgstr "URL ссылки Белых списков доменов"
+
+#~ msgid "Whitelisted Domains"
+#~ msgstr "Белый список доменов"
 
 #~ msgid "Grant UCI access for luci-app-simple-adblock"
 #~ msgstr "Предоставить UCI доступ для luci-app-simple-adblock"
