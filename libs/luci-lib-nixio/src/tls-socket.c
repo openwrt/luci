@@ -239,7 +239,7 @@ static int nixio_tls_sock__tostring(lua_State *L) {
 
 
 /* ctx function table */
-static const luaL_reg M[] = {
+static const luaL_Reg M[] = {
 	{"recv", 		nixio_tls_sock_recv},
 	{"send", 		nixio_tls_sock_send},
 	{"read", 		nixio_tls_sock_recv},

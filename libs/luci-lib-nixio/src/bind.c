@@ -269,14 +269,14 @@ static int nixio_sock_accept(lua_State *L) {
 }
 
 /* module table */
-static const luaL_reg R[] = {
+static const luaL_Reg R[] = {
 	{"bind",		nixio_bind},
 	{"connect",		nixio_connect},
 	{NULL,			NULL}
 };
 
 /* object table */
-static const luaL_reg M[] = {
+static const luaL_Reg M[] = {
 	{"bind",		nixio_sock_bind},
 	{"connect",		nixio_sock_connect},
 	{"listen",		nixio_sock_listen},

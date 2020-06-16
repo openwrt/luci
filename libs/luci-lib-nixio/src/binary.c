@@ -296,7 +296,7 @@ static int nixio_bin_b64decode(lua_State *L) {
 }
 
 /* module table */
-static const luaL_reg R[] = {
+static const luaL_Reg R[] = {
 	{"hexlify",		nixio_bin_hexlify},
 	{"unhexlify",	nixio_bin_unhexlify},
 	{"crc32",		nixio_bin_crc32},

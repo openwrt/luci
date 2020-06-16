@@ -519,7 +519,7 @@ static int nixio_statvfs(lua_State *L) {
 
 
 /* module table */
-static const luaL_reg R[] = {
+static const luaL_Reg R[] = {
 #ifndef __WINNT__
 	{"glob",		nixio_glob},
 	{"mkfifo",		nixio_mkfifo},

@@ -544,7 +544,7 @@ static int nixio_getifaddrs(lua_State *L) {
 
 
 /* module table */
-static const luaL_reg R[] = {
+static const luaL_Reg R[] = {
 #if defined(__linux__) || defined(BSD)
 	{"getifaddrs",	nixio_getifaddrs},
 #endif
@@ -554,7 +554,7 @@ static const luaL_reg R[] = {
 };
 
 /* object table */
-static const luaL_reg M[] = {
+static const luaL_Reg M[] = {
 	{"getsockname",	nixio_sock_getsockname},
 	{"getpeername",	nixio_sock_getpeername},
 	{NULL,			NULL}
