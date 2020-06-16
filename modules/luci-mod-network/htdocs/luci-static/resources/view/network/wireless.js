@@ -1195,6 +1195,9 @@ return view.extend({
 					var has_ap_eap192 = L.hasSystemFeature('hostapd', 'suiteb192'),
 					    has_sta_eap192 = L.hasSystemFeature('wpasupplicant', 'suiteb192');
 
+					// Probe WEP support
+					var has_ap_wep = L.hasSystemFeature('hostapd', 'wep'),
+					    has_sta_wep = L.hasSystemFeature('wpasupplicant', 'wep');
 
 					if (has_hostapd || has_supplicant) {
 						crypto_modes.push(['psk2',      'WPA2-PSK',                    35]);
@@ -1208,6 +1211,11 @@ return view.extend({
 					if (has_ap_sae || has_sta_sae) {
 						crypto_modes.push(['sae',       'WPA3-SAE',                     31]);
 						crypto_modes.push(['sae-mixed', 'WPA2-PSK/WPA3-SAE Mixed Mode', 30]);
+					}
+
+					if (has_ap_wep || has_sta_wep) {
+						crypto_modes.push(['wep-open',   _('WEP Open System'), 11]);
+						crypto_modes.push(['wep-shared', _('WEP Shared Key'),  10]);
 					}
 
 					if (has_ap_eap || has_sta_eap) {
@@ -1226,8 +1234,8 @@ return view.extend({
 
 					encr.crypto_support = {
 						'ap': {
-							'wep-open': true,
-							'wep-shared': true,
+							'wep-open': has_ap_wep || _('Requires hostapd with WEP support'),
+							'wep-shared': has_ap_wep || _('Requires hostapd with WEP support'),
 							'psk': has_hostapd || _('Requires hostapd'),
 							'psk2': has_hostapd || _('Requires hostapd'),
 							'psk-mixed': has_hostapd || _('Requires hostapd'),
@@ -1240,8 +1248,8 @@ return view.extend({
 							'owe': has_ap_owe || _('Requires hostapd with OWE support')
 						},
 						'sta': {
-							'wep-open': true,
-							'wep-shared': true,
+							'wep-open': has_sta_wep || _('Requires wpa-supplicant with WEP support'),
+							'wep-shared': has_sta_wep || _('Requires wpa-supplicant with WEP support'),
 							'psk': has_supplicant || _('Requires wpa-supplicant'),
 							'psk2': has_supplicant || _('Requires wpa-supplicant'),
 							'psk-mixed': has_supplicant || _('Requires wpa-supplicant'),
@@ -1295,10 +1303,10 @@ return view.extend({
 					crypto_modes.push(['psk2',     'WPA2-PSK',                    33]);
 					crypto_modes.push(['psk+psk2', 'WPA-PSK/WPA2-PSK Mixed Mode', 22]);
 					crypto_modes.push(['psk',      'WPA-PSK',                     21]);
+					crypto_modes.push(['wep-open',   _('WEP Open System'),        11]);
+					crypto_modes.push(['wep-shared', _('WEP Shared Key'),         10]);
 				}
 
-				crypto_modes.push(['wep-open',   _('WEP Open System'), 11]);
-				crypto_modes.push(['wep-shared', _('WEP Shared Key'),  10]);
 				crypto_modes.push(['none',       _('No Encryption'),   0]);
 
 				crypto_modes.sort(function(a, b) { return b[2] - a[2] });
