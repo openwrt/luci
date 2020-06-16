@@ -4,6 +4,7 @@
 
 Luci statistics - collectd configuration generator
 (c) 2008 Freifunk Leipzig / Jo-Philipp Wich <jow@openwrt.org>
+(c) 2020 Joseph Nahmias <joe@nahmias.net>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -42,6 +43,8 @@ function section( plugin )
 
 		if type( plugins[plugin] ) == "function" then
 			params = plugins[plugin]( config )
+		elseif type( plugins[plugin] ) == "nil" then
+			return
 		else
 			params = config_generic( config, plugins[plugin][1], plugins[plugin][2], plugins[plugin][3], plugin == "collectd" )
 		end
@@ -98,10 +101,31 @@ function config_exec( c )
 	local str = ""
 
 	for s in pairs(sections) do
-		for key, type in pairs({ Exec="collectd_exec_input", NotificationExec="collectd_exec_notify" }) do
-			if sections[s][".type"] == type then
+		for plugin, key in pairs({ collectd_exec_input="Exec", collectd_exec_notify="NotificationExec", collectd_sqm="Exec" }) do
+			if sections[s][".type"] == plugin then
 
 				cmd = sections[s].cmdline
+
+				if plugin == "collectd_sqm" and sections[s].enable == "1" then
+					-- TODO: don't hardcode path to sqm_collectd.sh
+					local sqm_cmd = "/usr/libexec/collectd/sqm_collectd.sh"
+					if sections[s].Interfaces then
+						-- user said which interfaces to collect on
+						cmd = sqm_cmd .. " "
+							.. table.concat(sections[s].Interfaces, " ")
+					else
+						-- collect on the interfaces that have sqm enabled
+						local sqm_ifcs = ""
+						for k,v in pairs(uci:get_all("sqm")) do
+							if v.enabled == "1" then
+								sqm_ifcs = sqm_ifcs .. " " .. v.interface
+							end
+						end
+						if sqm_ifcs ~= "" then
+							cmd = sqm_cmd .. sqm_ifcs
+						end
+					end
+				end
 
 				if cmd then
 					cmd   = cmd:gsub("^%s+", ""):gsub("%s+$", "")
@@ -292,6 +316,9 @@ for filename in nixio.fs.dir(plugin_dir) do
 	local name = filename:gsub("%.lua", "")
 	if (name == "exec") then
 		plugins[name] = config_exec
+	elseif (name == 'sqm') then
+		-- sqm uses the Exec plugin
+		plugins[name] = nil
 	elseif (name == "iptables") then
 		plugins[name] = config_iptables
 	elseif (name == "curl") then
@@ -303,6 +330,16 @@ for filename in nixio.fs.dir(plugin_dir) do
 	end
 end
 
+if sections.collectd_sqm.enable == "1" and sections.collectd_exec.enable == "0" then
+	-- blank out all disabled exec_input & exec_notify
+	for k,v in pairs(sections) do
+		if v[".type"] == "collectd_exec_input" or v[".type"] == "collectd_exec_notify" then
+			v.cmdline = nil
+		end
+	end
+	-- enable Exec plugin for SQM
+	sections.collectd_exec.enable = "1"
+end
 
 preprocess = {
 	RRATimespans = function(val)
