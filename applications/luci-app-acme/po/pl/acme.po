@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2020-05-12 20:03+0000\n"
+"PO-Revision-Date: 2020-06-17 18:41+0000\n"
 "Last-Translator: Marcin Net <marcin.net@linux.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsacme/pl/>\n"
@@ -9,7 +9,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.1-dev\n"
+"X-Generator: Weblate 4.1.1-dev\n"
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:18
 msgid "ACME certificates"
@@ -17,39 +17,39 @@ msgstr "Certyfikaty ACME"
 
 #: applications/luci-app-acme/root/usr/share/luci/menu.d/luci-app-acme.json:3
 msgid "ACME certs"
-msgstr ""
+msgstr "Certyfikaty ACME"
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:27
 msgid "ACME global config"
-msgstr ""
+msgstr "Konfiguracja globalna ACME"
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:35
 msgid "Account email"
-msgstr ""
+msgstr "Konto email"
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:43
 msgid "Certificate config"
-msgstr ""
+msgstr "Konfiguracja certyfikatu"
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:107
 msgid "Challenge Alias"
-msgstr ""
+msgstr "Alias wyzwania"
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:94
 msgid "DNS API"
-msgstr ""
+msgstr "DNS API"
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:101
 msgid "DNS API credentials"
-msgstr ""
+msgstr "Poświadczenia interfejsu API DNS"
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:112
 msgid "Domain Alias"
-msgstr ""
+msgstr "Alias Domeny"
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:88
 msgid "Domain names"
-msgstr ""
+msgstr "Nazwy domen"
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:89
 msgid ""
@@ -57,14 +57,17 @@ msgid ""
 "subject name, subsequent names will be alt names. Note that all domain names "
 "must point at the router in the global DNS."
 msgstr ""
+"Nazwy domen, które należy uwzględnić w certyfikacie. Imię będzie imieniem "
+"podmiotu, kolejne imiona będą imionami alternatywnymi. Pamiętaj, że "
+"wszystkie nazwy domen muszą wskazywać na router w globalnym DNS."
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:36
 msgid "Email address to associate with account key."
-msgstr ""
+msgstr "Adres email do powiązania z kluczem konta."
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:40
 msgid "Enable debug logging"
-msgstr ""
+msgstr "Włącz rejestrowanie debugowania"
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:47
 msgid "Enabled"
@@ -75,22 +78,24 @@ msgid ""
 "Get certificate from the Letsencrypt staging server (use for testing; the "
 "certificate won't be valid)."
 msgstr ""
+"Uzyskaj certyfikat z serwera pomostowego Letsencrypt (użyj go do testowania; "
+"certyfikat nie będzie ważny)."
 
 #: applications/luci-app-acme/root/usr/share/rpcd/acl.d/luci-app-acme.json:3
 msgid "Grant UCI access for luci-app-acme"
-msgstr ""
+msgstr "Udziel dostępu UCI dla luci-app-acme"
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:55
 msgid "Key size"
-msgstr ""
+msgstr "Rozmiar klucza"
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:56
 msgid "Key size (and type) for the generated certificate."
-msgstr ""
+msgstr "Rozmiar klucza (i typ) dla wygenerowanego certyfikatu."
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:30
 msgid "State directory"
-msgstr ""
+msgstr "Katalog stanu"
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:108
 msgid ""
@@ -98,6 +103,10 @@ msgid ""
 "official/acme.sh/wiki/DNS-alias-mode for the details of this process. LUCI "
 "only supports one challenge alias per certificate."
 msgstr ""
+"Alias wyzwania do użycia dla WSZYSTKICH domen. Zobacz https://github.com/"
+"acmesh-official/acme.sh/wiki/DNS-alias-mode, aby uzyskać szczegółowe "
+"informacje na temat tego procesu. LUCI obsługuje tylko jeden alias wyzwania "
+"na certyfikat."
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:102
 msgid ""
@@ -106,6 +115,10 @@ msgid ""
 "by each API. Add multiple entries here in KEY=VAL shell variable format to "
 "supply multiple credential variables."
 msgstr ""
+"Poświadczenia dla wybranego powyżej trybu API DNS. Zobacz https://github.com/"
+"acmesh-official/acme.sh/wiki/dnsapi, aby uzyskać informacje na temat formatu "
+"poświadczeń wymaganych przez każdy interfejs API. Dodaj tutaj wiele wpisów w "
+"formacie zmiennej powłoki KEY=VAL, aby podać wiele zmiennych referencji."
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:113
 msgid ""
@@ -113,6 +126,10 @@ msgid ""
 "official/acme.sh/wiki/DNS-alias-mode for the details of this process. LUCI "
 "only supports one challenge domain per certificate."
 msgstr ""
+"Alias domeny używany dla WSZYSTKICH domen. Zobacz https://github.com/"
+"acmesh-official/acme.sh/wiki/DNS-alias-mode, aby uzyskać szczegółowe "
+"informacje na temat tego procesu. LUCI obsługuje tylko jedną domenę wyzwania "
+"na certyfikat."
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:19
 msgid ""
@@ -123,6 +140,12 @@ msgid ""
 "address. Once configured, issuing certificates can take a while. Check the "
 "logs for progress and any errors."
 msgstr ""
+"To konfiguruje automatyczną instalację certyfikatu ACME (Letsencrypt). "
+"Wystarczy wypełnić to, aby router skonfigurował certyfikaty wydane przez "
+"Letsencrypt dla interfejsu internetowego. Pamiętaj, że nazwy domen w "
+"certyfikacie muszą być już skonfigurowane tak, aby wskazywały na publiczny "
+"adres IP routera. Po skonfigurowaniu wydawanie certyfikatów może chwilę "
+"potrwać. Sprawdź dzienniki pod kątem postępu i ewentualnych błędów."
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:95
 msgid ""
@@ -133,6 +156,13 @@ msgid ""
 "supports wildcard certificates. Using this mode requires the acme-dnsapi "
 "package to be installed."
 msgstr ""
+"Aby używać trybu DNS do wydawania certyfikatów, ustaw na nazwę interfejsu "
+"API DNS obsługiwanego przez acme.sh. Zobacz https://github.com/"
+"acmesh-official/acme.sh/wiki/dnsapi, aby uzyskać listę dostępnych "
+"interfejsów API. W trybie DNS nazwa domeny nie musi być tłumaczona na adres "
+"IP routera. Tryb DNS jest także jedynym trybem obsługującym certyfikaty "
+"wieloznaczne. Korzystanie z tego trybu wymaga zainstalowania pakietu acme-"
+"dnsapi."
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:75
 msgid ""
@@ -140,6 +170,10 @@ msgid ""
 "for one certificate).Nginx must support ssl, if not it won't start as it "
 "needs to be compiled with ssl support to use cert options"
 msgstr ""
+"Zaktualizuj konfigurację nginx przy użyciu tego certyfikatu (wybierz to "
+"tylko dla jednego certyfikatu). Nginx musi obsługiwać ssl, jeśli nie, nie "
+"uruchomi się, ponieważ należy go skompilować z obsługą ssl, aby użyć opcji "
+"certyfikatu"
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:67
 msgid ""
@@ -147,22 +181,25 @@ msgid ""
 "for one certificate).Is also available luci-app-uhttpd to configure uhttpd "
 "form the LuCI interface."
 msgstr ""
+"Zaktualizuj konfigurację uhttpd z tym certyfikatem po wystawieniu (wybierz "
+"to tylko dla jednego certyfikatu). Jest również dostępna luci-app-uhttpd do "
+"konfiguracji uhttpd z interfejsu LuCI."
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:74
 msgid "Use for nginx"
-msgstr ""
+msgstr "Użyj dla nginx"
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:66
 msgid "Use for uhttpd"
-msgstr ""
+msgstr "Użyj dla uhttpd"
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:50
 msgid "Use staging server"
-msgstr ""
+msgstr "Użyj serwera pomostowego"
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:82
 msgid "Webroot directory"
-msgstr ""
+msgstr "Katalog Webroot"
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:83
 msgid ""
@@ -170,7 +207,10 @@ msgid ""
 "Acme in webroot mode. The web server must be accessible from the internet on "
 "port 80."
 msgstr ""
+"Katalog główny serwera WWW. Ustaw to na katalog główny serwera WWW, aby "
+"uruchomić Acme w trybie webroot. Serwer WWW musi być dostępny z Internetu na "
+"porcie 80."
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:31
 msgid "Where certs and other state files are kept."
-msgstr ""
+msgstr "Gdzie przechowywane są certyfikaty i inne pliki stanu."

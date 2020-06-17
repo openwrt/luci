@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: LuCI\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-04-20 09:40+0200\n"
-"PO-Revision-Date: 2020-06-16 16:09+0000\n"
+"PO-Revision-Date: 2020-06-17 18:41+0000\n"
 "Last-Translator: Marcin Net <marcin.net@linux.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/openwrt/luci/pl/>"
 "\n"
@@ -293,7 +293,7 @@ msgstr "Walidacja ARP"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:373
 msgid "ARP mode to consider a slave as being up"
-msgstr ""
+msgstr "Tryb ARP, aby uznać niewolnika za aktywnego"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:77
 msgid "ARP monitoring is not supported for the selected policy!"
@@ -513,16 +513,21 @@ msgstr "Logika wyboru agregacji"
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:261
 msgid "Aggregator: All slaves down or has no slaves (stable, 0)"
 msgstr ""
+"Agregator: wszyscy niewolnicy są wyłączeni lub nie ma niewolników (stabilny, "
+"0)"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:263
 msgid ""
 "Aggregator: Chosen by the largest number of ports + slave added/removed or "
 "state changes (count, 2)"
 msgstr ""
+"Agregator: Wybrany według największej liczby portów + dodanych/usuniętych "
+"niewolników lub zmian stanu (liczba, 2)"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:262
 msgid "Aggregator: Slave added/removed or state changes (bandwidth, 1)"
 msgstr ""
+"Agregator: Dodano/usunięto niewolnika lub zmiany stanu (przepustowość, 1)"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:171
 msgid "Alert"
@@ -1299,10 +1304,11 @@ msgstr "Połączenia"
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:377
 msgid "Consider the slave up when all ARP IP targets are reachable (all, 1)"
 msgstr ""
+"Rozważ niewolnika, gdy wszystkie cele ARP IP są osiągalne (wszystkie, 1)"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:376
 msgid "Consider the slave up when any ARP IP target is reachable (any, 0)"
-msgstr ""
+msgstr "Rozważ niewolnika, gdy dowolny cel ARP IP jest osiągalny (dowolny, 0)"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/crontab.js:18
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:340
@@ -1587,7 +1593,7 @@ msgstr "Przeznaczenie"
 
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:48
 msgid "Destination port"
-msgstr ""
+msgstr "Port docelowy"
 
 #: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:59
 #: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:165
@@ -1980,7 +1986,7 @@ msgstr ""
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:80
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:75
 msgid "Enable rx checksum"
-msgstr ""
+msgstr "Włącz sumę kontrolną rx"
 
 #: protocols/luci-proto-ipip/htdocs/luci-static/resources/protocol/ipip.js:67
 msgid "Enable the DF (Don't Fragment) flag of the encapsulating packets."
@@ -1988,12 +1994,12 @@ msgstr "Włącz flagę DF (Nie fragmentuj) pakietów szyfrujących."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:837
 msgid "Enable this network"
-msgstr "Włącz sieć"
+msgstr "Włącz tą sieć"
 
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:84
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:79
 msgid "Enable tx checksum"
-msgstr ""
+msgstr "Włącz sumę kontrolną tx"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:243
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:352
@@ -2208,15 +2214,19 @@ msgstr "Filtruj bezużyteczne"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:388
 msgid "Filtering for all slaves, no validation"
-msgstr ""
+msgstr "Filtrowanie dla wszystkich niewolników, bez sprawdzania poprawności"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:389
 msgid "Filtering for all slaves, validation only for active slave"
 msgstr ""
+"Filtrowanie dla wszystkich niewolników, sprawdzanie tylko dla aktywnego "
+"niewolnika"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:390
 msgid "Filtering for all slaves, validation only for backup slaves"
 msgstr ""
+"Filtrowanie dla wszystkich niewolników, sprawdzanie poprawności tylko dla "
+"serwerów podrzędnych kopii zapasowych"
 
 #: modules/luci-compat/luasrc/model/network/proto_ncm.lua:65
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:23
@@ -2627,7 +2637,7 @@ msgstr "Hybrydowy"
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:53
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:48
 msgid "ID used to uniquely identify the VXLAN"
-msgstr ""
+msgstr "Identyfikator używany do jednoznacznej identyfikacji VXLAN"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:206
 msgid "IEEE 802.3ad Dynamic link aggregation (802.3ad, 4)"
@@ -3520,7 +3530,7 @@ msgstr "MAC"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:251
 msgid "MAC Address For The Actor"
-msgstr ""
+msgstr "Adres MAC dla aktora"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:38
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2061
@@ -3571,15 +3581,15 @@ msgstr "MHz"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:353
 msgid "MII"
-msgstr ""
+msgstr "MII"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:421
 msgid "MII / ETHTOOL ioctls"
-msgstr ""
+msgstr "MII / ETHTOOL ioctls"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:394
 msgid "MII Interval"
-msgstr ""
+msgstr "Interwał MII"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:54
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:53
@@ -4693,10 +4703,13 @@ msgid ""
 "Primary becomes active slave when it comes back up if speed and duplex "
 "better than current slave (better, 1)"
 msgstr ""
+"Podstawowy staje się aktywnym niewolnikiem, gdy wraca do góry, jeśli "
+"prędkość i dupleks są lepsze niż obecni niewolnicy (lepiej, 1)"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:227
 msgid "Primary becomes active slave whenever it comes back up (always, 0)"
 msgstr ""
+"Główny staje się aktywnym niewolnikiem za każdym razem, gdy wróci (zawsze 0)"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:53
 msgid "Private Key"
@@ -4928,7 +4941,7 @@ msgstr "Zdalny adres IPv4 lub FQDN"
 
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:40
 msgid "Remote IPv6 address"
-msgstr ""
+msgstr "Zdalny adres IPv6"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:849
 msgid "Remove"
@@ -5353,11 +5366,11 @@ msgstr "Ustaw ten interfejs jako główny dla przekaźnika dhcpv6."
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:304
 msgid "Set to currently active slave (active, 1)"
-msgstr ""
+msgstr "Ustaw na aktualnego aktywnego niewolnika (aktywny, 1)"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:305
 msgid "Set to first slave added to the bond (follow, 2)"
-msgstr ""
+msgstr "Ustaw na pierwszego niewolnika dodanego do wiązania (wykonaj 2)"
 
 #: modules/luci-compat/luasrc/model/network/proto_modemmanager.lua:55
 #: modules/luci-compat/luasrc/model/network/proto_qmi.lua:55
@@ -5499,22 +5512,24 @@ msgid ""
 "Specifies that duplicate frames (received on inactive ports) should be "
 "dropped or delivered"
 msgstr ""
+"Określa, że zduplikowane ramki (odbierane na nieaktywnych portach) powinny "
+"zostać usunięte lub dostarczone"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:358
 msgid "Specifies the ARP link monitoring frequency in milliseconds"
-msgstr ""
+msgstr "Określa częstotliwość monitorowania łącza ARP w milisekundach"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:366
 msgid "Specifies the IP addresses to use for ARP monitoring"
-msgstr ""
+msgstr "Określa adresy IP używane do monitorowania ARP"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:395
 msgid "Specifies the MII link monitoring frequency in milliseconds"
-msgstr ""
+msgstr "Określa częstotliwość monitorowania łącza MII w milisekundach"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:259
 msgid "Specifies the aggregation selection logic to use"
-msgstr ""
+msgstr "Określa logikę wyboru agregacji, która ma być używana"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:292
 msgid "Specifies the directory the device is attached to"
@@ -5525,6 +5540,8 @@ msgid ""
 "Specifies the mac-address for the actor in protocol packet exchanges "
 "(LACPDUs). If empty, masters' mac address defaults to system default"
 msgstr ""
+"Określa adres mac aktora w wymianie pakietów protokołów (LACPDU). Jeśli jest "
+"pusty, adres główny MAC jest domyślnie ustawiony na domyślny systemowy"
 
 #: protocols/luci-proto-relay/htdocs/luci-static/resources/protocol/relay.js:175
 msgid ""
@@ -5557,100 +5574,132 @@ msgid ""
 "Specifies the minimum number of links that must be active before asserting "
 "carrier"
 msgstr ""
+"Określa minimalną liczbę łączy, które muszą być aktywne przed potwierdzeniem "
+"operatora"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:200
 msgid "Specifies the mode to be used for this bonding interface"
-msgstr ""
+msgstr "Określa tryb, który ma być używany dla tego interfejsu wiązania"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:333
 msgid ""
 "Specifies the number of IGMP membership reports to be issued after a "
 "failover event in 200ms intervals"
 msgstr ""
+"Określa liczbę raportów członkostwa IGMP, które zostaną wydane po zdarzeniu "
+"awaryjnym w odstępach 200 ms"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:276
 msgid ""
 "Specifies the number of packets to transmit through a slave before moving to "
 "the next one"
 msgstr ""
+"Określa liczbę pakietów do przesłania przez urządzenie podrzędne przed "
+"przejściem do następnego"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:310
 msgid ""
 "Specifies the number of peer notifications (gratuitous ARPs and unsolicited "
 "IPv6 Neighbor Advertisements) to be issued after a failover event"
 msgstr ""
+"Określa liczbę powiadomień równorzędnych (nieodpłatne ARP i niechciane "
+"reklamy sąsiedzkie IPv6), które mają być wysyłane po zdarzeniu przełączenia "
+"awaryjnego"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:284
 msgid ""
 "Specifies the number of seconds between instances where the bonding driver "
 "sends learning packets to each slaves peer switch"
 msgstr ""
+"Określa liczbę sekund między instancjami, w których sterownik łączenia "
+"wysyła pakiety uczenia się do każdego przełącznika równorzędnego niewolnika"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:374
 msgid "Specifies the quantity of ARP IP targets that must be reachable"
-msgstr ""
+msgstr "Określa ilość docelowych adresów IP ARP, które muszą być osiągalne"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:268
 msgid ""
 "Specifies the rate in which the link partner will be asked to transmit "
 "LACPDU packets"
 msgstr ""
+"Określa szybkość, z jaką partner łącza zostanie poproszony o przesłanie "
+"pakietów LACPDU"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:225
 msgid ""
 "Specifies the reselection policy for the primary slave when failure of the "
 "active slave or recovery of the primary slave occurs"
 msgstr ""
+"Określa zasadę ponownego wyboru dla podstawowego urządzenia podrzędnego, gdy "
+"wystąpi awaria aktywnego urządzenia podrzędnego lub odtwarzanie podstawowego "
+"urządzenia podrzędnego"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:244
 msgid "Specifies the system priority"
-msgstr ""
+msgstr "Określa priorytet systemu"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:403
 msgid ""
 "Specifies the time in milliseconds to wait before disabling a slave after a "
 "link failure detection"
 msgstr ""
+"Określa czas w milisekundach oczekiwania przed wyłączeniem urządzenia "
+"podrzędnego po wykryciu awarii łącza"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:411
 msgid ""
 "Specifies the time in milliseconds to wait before enabling a slave after a "
 "link recovery detection"
 msgstr ""
+"Określa czas w milisekundach oczekiwania przed włączeniem urządzenia "
+"podrzędnego po wykryciu odzyskiwania łącza"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:382
 msgid ""
 "Specifies whether ARP probes and replies should be validated or non-ARP "
 "traffic should be filtered for link monitoring"
 msgstr ""
+"Określa, czy sondy ARP i odpowiedzi powinny być sprawdzane, czy ruch inny "
+"niż ARP powinien być filtrowany w celu monitorowania łącza"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:301
 msgid ""
 "Specifies whether active-backup mode should set all slaves to the same MAC "
 "address at enslavement"
 msgstr ""
+"Określa, czy tryb aktywnego tworzenia kopii zapasowych powinien ustawić "
+"wszystkie urządzenia podrzędne na ten sam adres MAC podczas zniewolenia"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:419
 msgid ""
 "Specifies whether or not miimon should use MII or ETHTOOL ioctls vs. "
 "netif_carrier_ok()"
 msgstr ""
+"Określa, czy miimon powinien używać ioctls MII czy ETHTOOL vs. "
+"netif_carrier_ok ()"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:293
 msgid ""
 "Specifies whether to shuffle active flows across slaves based on the load"
 msgstr ""
+"Określa, czy należy tasować aktywne przepływy między urządzeniami "
+"podrzędnymi na podstawie obciążenia"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:179
 msgid ""
 "Specifies which slave interfaces should be attached to this bonding interface"
 msgstr ""
+"Określa, które interfejsy podrzędne powinny być dołączone do tego interfejsu "
+"łączenia"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:212
 msgid ""
 "Specifies which slave is the primary device. It will always be the active "
 "slave while it is available"
 msgstr ""
+"Określa, które urządzenie podrzędne jest urządzeniem podstawowym. Zawsze "
+"będzie aktywnym niewolnikiem, dopóki będzie dostępny"
 
 #: protocols/luci-proto-ipip/htdocs/luci-static/resources/protocol/ipip.js:63
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:72
@@ -5842,7 +5891,7 @@ msgstr "Log systemowy"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:243
 msgid "System Priority"
-msgstr ""
+msgstr "Priorytet systemu"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:104
 msgid "System Properties"
@@ -5909,7 +5958,7 @@ msgstr ""
 
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:40
 msgid "The IPv4 address or the fully-qualified domain name of the remote end."
-msgstr ""
+msgstr "Adres IPv4 lub w pełni kwalifikowana nazwa domeny zdalnego końca."
 
 #: protocols/luci-proto-ipip/htdocs/luci-static/resources/protocol/ipip.js:40
 msgid ""
@@ -5919,7 +5968,7 @@ msgstr ""
 
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:40
 msgid "The IPv6 address or the fully-qualified domain name of the remote end."
-msgstr ""
+msgstr "Adres IPv6 lub w pełni kwalifikowana nazwa domeny zdalnego końca."
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6rd.js:53
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/map.js:59
@@ -6029,7 +6078,7 @@ msgstr "Długość prefiksu IPv6 w bitach"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:163
 msgid "The local IPv4 address"
-msgstr ""
+msgstr "Lokalny adres IPv4"
 
 #: protocols/luci-proto-ipip/htdocs/luci-static/resources/protocol/ipip.js:44
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:44
@@ -6038,11 +6087,11 @@ msgstr "Lokalny adres IPv4, na którym tworzony jest tunel (opcjonalnie)."
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:169
 msgid "The local IPv4 netmask"
-msgstr ""
+msgstr "Lokalna maska dla IPv4"
 
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:44
 msgid "The local IPv6 address over which the tunnel is created (optional)."
-msgstr ""
+msgstr "Lokalny adres IPv6, na którym tworzony jest tunel (opcjonalnie)."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1914
 msgid "The network name is already used"
@@ -6332,7 +6381,7 @@ msgstr "Nadawanie"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:317
 msgid "Transmit Hash Policy"
-msgstr ""
+msgstr "Zasady przesyłania skrótów"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:74
 msgid "Trigger"
@@ -6516,7 +6565,7 @@ msgstr "Góra"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:410
 msgid "Up Delay"
-msgstr ""
+msgstr "Opóźnienie w górę"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:3813
 msgid "Upload"
@@ -6613,17 +6662,19 @@ msgstr "Użyj TTL na interfejsie tunelu"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:320
 msgid "Use XOR of hardware MAC addresses (layer2)"
-msgstr ""
+msgstr "Użyj XOR sprzętowych adresów MAC (warstwa 2)"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:321
 msgid "Use XOR of hardware MAC addresses and IP addresses (layer2+3)"
-msgstr ""
+msgstr "Użyj XOR sprzętowych adresów MAC i adresów IP (warstwa 2 + 3)"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:323
 msgid ""
 "Use XOR of hardware MAC addresses and IP addresses, rely on skb_flow_dissect "
 "(encap2+3)"
 msgstr ""
+"Użyj XOR sprzętowych adresów MAC i adresów IP, polegaj na skb_flow_dissect ("
+"encap2 + 3)"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:294
 msgid "Use as external overlay (/overlay)"
@@ -6716,12 +6767,14 @@ msgstr ""
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:322
 msgid "Use upper layer protocol information (layer3+4)"
-msgstr ""
+msgstr "Użyj informacji protokołu górnej warstwy (warstwa 3 + 4)"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:324
 msgid ""
 "Use upper layer protocol information, rely on skb_flow_dissect (encap3+4)"
 msgstr ""
+"Użyj informacji protokołu górnej warstwy, polegaj na skb_flow_dissect ("
+"encap3 + 4)"
 
 # Przy liście zamontowanych systemów plików
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/20_memory.js:36
@@ -6743,7 +6796,7 @@ msgstr ""
 
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:105
 msgid "User Group"
-msgstr ""
+msgstr "Grupa użytkownika"
 
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:114
 msgid "User certificate (PEM encoded)"
@@ -6804,16 +6857,16 @@ msgstr "VPNC (CISCO 3000 (i inne) VPN)"
 
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:10
 msgid "VXLAN (RFC7348)"
-msgstr ""
+msgstr "VXLAN (RFC7348)"
 
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:53
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:48
 msgid "VXLAN network identifier"
-msgstr ""
+msgstr "Identyfikator sieci VXLAN"
 
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:10
 msgid "VXLANv6 (RFC7348)"
-msgstr ""
+msgstr "VXLANv6 (RFC7348)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1490
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1548
@@ -6826,19 +6879,19 @@ msgstr ""
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:387
 msgid "Validation for all slaves"
-msgstr ""
+msgstr "Weryfikacja dla wszystkich niewolników"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:385
 msgid "Validation only for active slave"
-msgstr ""
+msgstr "Weryfikacja tylko dla aktywnego niewolnika"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:386
 msgid "Validation only for backup slaves"
-msgstr ""
+msgstr "Weryfikacja tylko dla zapasowych niewolników"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:134
 msgid "Value must not be empty"
-msgstr ""
+msgstr "Wartość nie może być pusta"
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:73
 msgid "Vendor"
@@ -6988,7 +7041,7 @@ msgstr "Zapisz dziennik systemowy do pliku"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:204
 msgid "XOR policy (balance-xor, 2)"
-msgstr ""
+msgstr "Zasady XOR (balance-xor, 2)"
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:3472
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:295
@@ -6999,7 +7052,7 @@ msgstr "Tak"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:303
 msgid "Yes (none, 0)"
-msgstr ""
+msgstr "Tak (Nie 0)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:176
 msgid ""
@@ -7035,11 +7088,14 @@ msgid ""
 "You must select a primary interface which is included in selected slave "
 "interfaces!"
 msgstr ""
+"Należy wybrać interfejs podstawowy, który znajduje się w wybranych "
+"interfejsach podrzędnych!"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:96
 msgid ""
 "You must select at least one ARP IP target if ARP monitoring is selected!"
 msgstr ""
+"Musisz wybrać co najmniej jeden cel ARP IP, jeśli wybrano monitorowanie ARP!"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:192
 msgid "ZRam Compression Algorithm"
@@ -7227,7 +7283,7 @@ msgstr "minuty"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:422
 msgid "netif_carrier_ok()"
-msgstr ""
+msgstr "netif_carrier_ok()"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:46
 msgid "no"
