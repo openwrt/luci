@@ -1,0 +1,12 @@
+{
+    "luci-mod-simple_configuration": {
+      "description": "Access to DHCP and firewall configuration",
+      "read": {
+        "luci-rpc": ["getDUIDHints"],
+        "uci": [ "dhcp", "firewall", "network", "wireless" ]
+      },
+      "write": {
+        "uci": [ "luci", "system", "dhcp", "firewall"]
+      }
+    }
+}
