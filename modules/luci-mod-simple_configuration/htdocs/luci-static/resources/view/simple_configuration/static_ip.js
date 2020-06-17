@@ -53,7 +53,6 @@ return view.extend({
             uci.unset('dhcp', section, 'dns');
         };
 
-
         o = s.option(form.Value, 'mac', _('<abbr title="Media Access Control">MAC</abbr>-Address'));
         o.datatype = 'list(unique(macaddr))';
         o.rmempty  = true;
@@ -64,13 +63,14 @@ return view.extend({
             if (!Array.isArray(macs))
                 macs = (macs != null && macs != '') ? macs.split(/\ss+/) : [];
 
-            for (var i = 0, mac; (mac = macs[i]) != null; i++)
-                if (/^([0-9a-fA-F]{1,2}):([0-9a-fA-F]{1,2}):([0-9a-fA-F]{1,2}):([0-9a-fA-F]{1,2}):([0-9a-fA-F]{1,2}):([0-9a-fA-F]{1,2})$/.test(mac))
+            for (var i = 0, mac; (mac = macs[i]) != null; i++) {
+                if (/^([0-9a-fA-F]{1,2}):([0-9a-fA-F]{1,2}):([0-9a-fA-F]{1,2}):([0-9a-fA-F]{1,2}):([0-9a-fA-F]{1,2}):([0-9a-fA-F]{1,2})$/.test(mac)) {
                     result.push('%02X:%02X:%02X:%02X:%02X:%02X'.format(
                         parseInt(RegExp.$1, 16), parseInt(RegExp.$2, 16),
                         parseInt(RegExp.$3, 16), parseInt(RegExp.$4, 16),
                         parseInt(RegExp.$5, 16), parseInt(RegExp.$6, 16)));
-
+                }
+            }
             return result.length ? result.join(' ') : null;
         };
         o.renderWidget = function(section_id, option_index, cfgvalue) {
