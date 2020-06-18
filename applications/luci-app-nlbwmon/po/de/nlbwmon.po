@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2020-06-16 16:09+0000\n"
+"PO-Revision-Date: 2020-06-18 18:06+0000\n"
 "Last-Translator: Cloud Strife <gilgamesh8472@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsnlbwmon/de/>\n"
@@ -110,7 +110,8 @@ msgstr "<big id=\"layer7-most-tx\">0</big> verursachen den meisten Upload"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:876
 msgid "<big id=\"layer7-total\">0</big> different application protocols"
-msgstr "<big id=\"layer7-total\">0</big> verschiedene Anwendungsprotokolle"
+msgstr ""
+"<big id=\"layer7-total\">0</big> verschiedene Anwendungsprotokolle</big>"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:837
 msgid "<big id=\"rx-total\">0</big> download"
@@ -161,8 +162,9 @@ msgid ""
 "Changing the accounting interval type will invalidate existing databases!"
 "<br /><strong><a href=\"%s\">Download backup</a></strong>."
 msgstr ""
-"Das wechseln des Berechnungszeitraum-Typs wird alle existierenden Datebanken "
-"löschen!<br /><strong><a href=\"%s\">Backup sichern</a></strong>."
+"Das Wechseln des Berechnungszeitraum-Typs wird alle existierenden "
+"Datenbanken ungültig machen!<br /><strong><a href=\"%s\">Backup "
+"herunterladen</a></strong>."
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/config.js:64
 msgid ""
@@ -170,6 +172,10 @@ msgid ""
 "specific date, e.g. every 3rd. Choose \"Fixed interval\" to restart the "
 "accounting period exactly every N days, beginning at a given date."
 msgstr ""
+"Wähle \"Tag des Monats\", um den Abrechnungszeitraum monatlich an einem "
+"bestimmten Datum neu zu starten, z.B. jeden dritten des Monats. Wähle "
+"\"Festes Intervall\", um den Abrechnungszeitraum genau alle N Tage ab einem "
+"bestimmten Datum neu zu starten."
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:856
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:895
@@ -211,7 +217,7 @@ msgid ""
 "Database storage directory. One file per accounting period will be placed "
 "into this directory."
 msgstr ""
-"Datenbank-Verzeichnis. Für jeden Berechnungszeitraum wird eine Datei "
+"Datenbank-Speicherverzeichnis. Für jeden Berechnungszeitraum wird eine Datei "
 "angelegt."
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/config.js:72
@@ -224,7 +230,7 @@ msgid ""
 "towards the end of month, e.g. \"-5\" to specify the 27th of July or the "
 "24th of February."
 msgstr ""
-"Monatstag an dem der neue Berechnungszeitraum beginnt. Negative Zahlen "
+"Monatstag, an dem der neue Berechnungszeitraum beginnt. Negative Zahlen "
 "werden vom Monatsende her interpretiert, z.B. \"-5\" für den 27. Juli oder "
 "24. Februar."
 
@@ -266,7 +272,7 @@ msgstr "Download / Anwendung"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/backup.js:58
 msgid "Download Database Backup"
-msgstr "Datenbank-Backup sichern"
+msgstr "Datenbank-Backup herunterladen"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:909
 msgid "Dualstack enabled hosts"
@@ -290,7 +296,7 @@ msgstr "Backuparchiv konnte nicht geladen werden: %s"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:780
 msgid "Failed to download traffic data: %s"
-msgstr "Netzverkehrsdaten konnten nicht geladen werden: %s"
+msgstr "Datenverkehr konnte nicht geladen werden: %s"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/backup.js:28
 msgid "Failed to restore backup archive: %s"
@@ -329,7 +335,7 @@ msgstr "Host"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:607
 msgid "Hostname: <big id=\"bubble-hostname\">example.org</big>"
-msgstr "Hostnamen: <big id=\"bubble-hostname\">example.org</big>"
+msgstr "Hostname: <big id=\"bubble-hostname\">example.org</big>"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:513
 msgid "IPv4"
@@ -353,7 +359,7 @@ msgid ""
 "Interval at which the temporary in-memory database is committed to the "
 "persistent database directory."
 msgstr ""
-"Zeitintervall nach dem die in-Memory-Datenbank periodisch auf auf dem "
+"Zeitintervall, nach dem die in-Memory-Datenbank periodisch auf auf dem "
 "Festspeicher persistiert wird."
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/config.js:162
@@ -407,7 +413,7 @@ msgstr "Netlink-Bandbreitenmonitor"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/backup.js:51
 msgid "Netlink Bandwidth Monitor - Backup / Restore"
-msgstr "Netlink-Bandbreitenmonitor Sichern/Wiederherstellen"
+msgstr "Netlink-Bandbreitenmonitor - Sichern/Wiederherstellen"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/config.js:52
 msgid "Netlink Bandwidth Monitor - Configuration"
@@ -422,14 +428,16 @@ msgstr "Noch keine Daten aufgezeichnet."
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/config.js:121
 msgid "Only conntrack streams from or to any of these networks are counted."
 msgstr ""
+"Es werden nur Conntrack-Streams von oder zu einem dieser Netzwerke gezählt."
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/config.js:130
 msgid "Only conntrack streams from or to any of these subnets are counted."
 msgstr ""
+"Es werden nur Conntrack-Streams von oder zu einem dieser Subnetze gezählt."
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/config.js:144
 msgid "Preallocate database"
-msgstr ""
+msgstr "Datenbank vorab zuordnen"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:339
 msgid "Protocol"
@@ -437,7 +445,7 @@ msgstr "Protokoll"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/config.js:61
 msgid "Protocol Mapping"
-msgstr ""
+msgstr "Protokollzuordnung"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/config.js:61
 msgid ""
@@ -445,10 +453,14 @@ msgid ""
 "line. The first value specifies the IP protocol, the second value the port "
 "number and the third column is the name of the mapped protocol."
 msgstr ""
+"Protokollzuordnungen zur Unterscheidung von Verkehrstypen pro Host, eine "
+"Zuordnung pro Leitung. Der erste Wert gibt das IP-Protokoll an, der zweite "
+"Wert die Portnummer und die dritte Spalte den Namen des zugeordneten "
+"Protokolls."
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/config.js:161
 msgid "Refresh interval"
-msgstr ""
+msgstr "Aktualisierungsintervall"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/backup.js:56
 msgid "Restore"
@@ -456,7 +468,7 @@ msgstr "Wiederherstellen"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/backup.js:52
 msgid "Restore Database Backup"
-msgstr ""
+msgstr "Wiederherstellen der Datenbanksicherung"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/backup.js:20
 msgid "Restore complete"
@@ -464,7 +476,7 @@ msgstr "Wiederherstellung durchgeführt"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:285
 msgid "Select accounting period:"
-msgstr ""
+msgstr "Abrechnungszeitraum auswählen:"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:334
 msgid "Source IP"
@@ -476,17 +488,20 @@ msgstr "Startdatum"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/config.js:97
 msgid "Start date of the first accounting period, e.g. begin of ISP contract."
-msgstr ""
+msgstr "Startdatum der ersten Abrechnungsperiode, z.B. Beginn des ISP-Vertrags."
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/config.js:151
 msgid "Stored periods"
-msgstr ""
+msgstr "Gespeicherte Zeiträume"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/config.js:53
 msgid ""
 "The Netlink Bandwidth Monitor (nlbwmon) is a lightweight, efficient traffic "
 "accounting program keeping track of bandwidth usage per host and protocol."
 msgstr ""
+"Der Netlink-Bandbreitenmonitor (nlbwmon) ist ein leichtes, effizientes "
+"Programm zur Datenverkehrsabrechnung, das die Bandbreitennutzung pro Host "
+"und Protokoll verfolgt."
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/backup.js:21
 msgid "The following database files have been restored:"
@@ -497,14 +512,17 @@ msgid ""
 "The maximum amount of entries that should be put into the database, setting "
 "the limit to 0 will allow databases to grow indefinitely."
 msgstr ""
+"Die maximale Anzahl von Einträgen, die in die Datenbank aufgenommen werden "
+"sollen. Wenn das Limit auf 0 gesetzt wird, können Datenbanken unbegrenzt "
+"wachsen."
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:825
 msgid "Traffic / Host"
-msgstr ""
+msgstr "Datenverkehr / Host"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:822
 msgid "Traffic Distribution"
-msgstr ""
+msgstr "Datenverkehrsaufteilung"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:92
 msgid "Unable to fetch traffic statistic data: %s"
@@ -512,11 +530,11 @@ msgstr "Netzverkehr-Statistiken konnten nicht geladen werden: %s"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:618
 msgid "Up. (Bytes)"
-msgstr ""
+msgstr "Up. (Bytes)"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:619
 msgid "Up. (Pkts.)"
-msgstr ""
+msgstr "Up. (Pkts.)"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:602
 msgid "Upload"
@@ -526,21 +544,21 @@ msgstr "Hochladen"
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:890
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:930
 msgid "Upload (Bytes)"
-msgstr ""
+msgstr "Hochladen (Bytes)"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:852
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:891
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:931
 msgid "Upload (Packets)"
-msgstr ""
+msgstr "Hochladen (Pakete)"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:870
 msgid "Upload / Application"
-msgstr ""
+msgstr "Hochladen / Anwendung"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:608
 msgid "Vendor: <big id=\"bubble-vendor\">Example Corp.</big>"
-msgstr ""
+msgstr "Anbieter: <big id=\"bubble-vendor\">Beispiel Corp.</big>"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/config.js:75
 msgid "Warning"
@@ -552,6 +570,9 @@ msgid ""
 "makes accessing old data slightly slower but helps to reduce storage "
 "requirements."
 msgstr ""
+"Gibt an, ob Archivdatenbanken via gzip komprimiert werden sollen. Durch das "
+"Komprimieren der Datenbankdateien wird der Zugriff auf alte Daten etwas "
+"langsamer, der Speicherbedarf wird jedoch reduziert."
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/config.js:145
 msgid ""
@@ -559,10 +580,14 @@ msgid ""
 "mainly useful for memory constrained systems which might not be able to "
 "satisfy memory allocation after longer uptime periods."
 msgstr ""
+"Gibt an, ob die maximal mögliche Datenbankgröße im Speicher vorab zugewiesen "
+"werden soll. Dies ist hauptsächlich für Systeme mit eingeschränktem Speicher "
+"nützlich, die die Speicherzuweisung nach längeren Betriebszeiten "
+"möglicherweise nicht erfüllen können."
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:130
 msgid "no traffic"
-msgstr ""
+msgstr "kein Datenverkehr"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:335
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:394
@@ -572,7 +597,7 @@ msgstr ""
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:640
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:645
 msgid "other"
-msgstr ""
+msgstr "anderes"
 
 #~ msgid "Invalid or empty backup archive"
 #~ msgstr "Ungültiges oder leeres Backup Archiv"
