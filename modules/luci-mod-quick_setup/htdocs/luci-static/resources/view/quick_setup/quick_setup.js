@@ -271,6 +271,11 @@ return view.extend({
         var map = document.querySelector('.cbi-map');
         return dom.callClassMethod(map,'save').then(function(){
             uci.set('network', formData.wan.section_id, 'proto', formData.wan.proto);
+            if (formData.wan.proto == 'dhcp') {
+                uci.unset('network', formData.wan.section_id, 'ipaddr');
+                uci.unset('network', formData.wan.section_id, 'netmask');
+                uci.unset('network', formData.wan.section_id, 'gateway');
+            }
             if (formData.wan.proto == 'static') {
                 if(formData.wan.ipv6_addr == null){
                     uci.set('network', formData.wan.section_id, 'ipaddr', formData.wan.ipv4_addr);
@@ -290,6 +295,7 @@ return view.extend({
             uci.set('wireless', formData.wifi.section_id_5, 'key', formData.wifi.pw4);
             uci.set('wireless', formData.wifi.section_id_2, 'ssid', formData.wifi.SSID);
             uci.set('wireless', formData.wifi.section_id_5, 'ssid', formData.wifi.SSID+'_2');
+
             if (formData.wifi.enable == false) {
                 uci.set('wireless', formData.wifi.section_id_2, 'disabled', 1);
                 uci.set('wireless', formData.wifi.section_id_5, 'disabled', 1);
