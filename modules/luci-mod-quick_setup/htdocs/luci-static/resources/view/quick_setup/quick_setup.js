@@ -157,12 +157,6 @@ return view.extend({
         o.depends('proto', 'pppoe');
         o.password = true;
 
-        s.render = function() {
-            return Promise.all([
-                {},
-                this.renderUCISection('wan')
-            ]).then(this.renderContents.bind(this));
-        };
         //***************************************
 
         //**************************************
@@ -205,7 +199,6 @@ return view.extend({
                 formData.wifi.pw4 = uci.get('wireless', formData.wifi.section_id_5, 'key');
             }
         }
-
         if (formData.wifi.Ghz_2 == null) {
             var device = this.devices[device_2].getName();
             var mode = uci.get('wireless', this.wifis[Ghz_5].getName(), 'mode');
@@ -271,11 +264,7 @@ return view.extend({
         o.default = ssid_5;
         o.readonly = true;
 
-
-        return m.render().then(L.bind(function(){
-            return m.save(function () {
-            });
-        }, this));
+        return m.render();
 
     },
     handleSave: function(){
