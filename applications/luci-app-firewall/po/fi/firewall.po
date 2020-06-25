@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-03-30 17:00+0200\n"
-"PO-Revision-Date: 2020-06-24 17:42+0000\n"
+"PO-Revision-Date: 2020-06-25 19:08+0000\n"
 "Last-Translator: Petri Asikainen <uniluodossa@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsfirewall/fi/>\n"
@@ -57,7 +57,7 @@ msgid ""
 "<var data-tooltip=\"ACCEPT\">Accept</var> %{src?%{dest?forward:input}:output}"
 msgstr ""
 "<var data-tooltip=\"ACCEPT\"> Hyväksy</var> "
-"%{src?%{dest?forward:input}:output}"
+"%{src?%{dest?välitä:tuleva}:lähtevä}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:87
 msgid "<var data-tooltip=\"ACCEPT\">Prevent source rewrite</var>"
@@ -75,7 +75,7 @@ msgstr ""
 msgid ""
 "<var data-tooltip=\"DROP\">Drop</var> %{src?%{dest?forward:input}:output}"
 msgstr ""
-"<var data-tooltip=\"DROP\">Pudota</var> %{src?%{dest?forward:input}:output}"
+"<var data-tooltip=\"DROP\">Pudota</var> %{src?%{dest?välitä:tuleva}:lähtevä}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:133
 msgid ""
@@ -113,13 +113,14 @@ msgid ""
 "output}"
 msgstr ""
 "<var data-tooltip=\"NOTRACK\">Älä seuraa</var> "
-"%{src?%{dest?forward:input}:output}"
+"%{src?%{dest?välitä:tuleva}:lähtevä}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:121
 msgid ""
 "<var data-tooltip=\"REJECT\">Reject</var> %{src?%{dest?forward:input}:output}"
 msgstr ""
-"<var data-tooltip=\"REJECT\">Hylkää</var> %{src?%{dest?forward:input}:output}"
+"<var data-tooltip=\"REJECT\">Hylkää</var> "
+"%{src?%{dest?välitä:tuleva}:lähtevä}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:81
 msgid ""
@@ -177,11 +178,11 @@ msgstr "Salli \"virheellinen\" liikenne"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:323
 msgid "Allow forward from <em>source zones</em>:"
-msgstr "Salli eteenpäin välitys <em>lähdevyöhykkeeltä</em>:"
+msgstr "Salli välitys <em>lähdevyöhykkeeltä</em>:"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:282
 msgid "Allow forward to <em>destination zones</em>:"
-msgstr "Salli eteenpäin välitys <em>kohdevyöhykkeelle</em>:"
+msgstr "Salli välitys <em>kohdevyöhykkeelle</em>:"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:508
 msgid "Any"
@@ -299,8 +300,8 @@ msgid ""
 "Do not install extra rules to reject forwarded traffic with conntrack state "
 "<em>invalid</em>. This may be required for complex asymmetric route setups."
 msgstr ""
-"Älä asenna ylimääräisiä sääntöjä edelleenlähetetyn liikenteen hylkäämiseksi, "
-"jos conntrack-tila on <em> virheellinen </em>. Tätä voidaan tarvita "
+"Älä asenna ylimääräisiä sääntöjä välitetyn liikenteen hylkäämiseksi, jos "
+"conntrack-tila on <em> virheellinen </em>. Tätä voidaan tarvita "
 "monimutkaisissa epäsymmetrisissä reittiasetuksissa."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:45
@@ -530,7 +531,7 @@ msgstr ""
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:48
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:130
 msgid "Input"
-msgstr "Tulo"
+msgstr "Tuleva"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:234
 msgid "Internal IP address"
@@ -697,8 +698,8 @@ msgid ""
 "NAT rules allow fine grained control over the source IP to use for outbound "
 "or forwarded traffic."
 msgstr ""
-"NAT-säännöt sallivat lähde-IP: n hienostuneen hallinnan käytettäväksi "
-"lähtevässä tai edelleenlähetettyssä liikenteessä."
+"NAT-säännöt sallivat lähde-IP:n hienostuneen hallinnan käytettäväksi "
+"lähtevässä tai välitetyssä liikenteessä."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:158
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:214
@@ -739,7 +740,7 @@ msgstr "Lähtevä vyöhyke"
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:49
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:131
 msgid "Output"
-msgstr "Lähtö"
+msgstr "Lähtevä"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:285
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:423
@@ -980,13 +981,12 @@ msgid ""
 "<em>not</em> imply a permission to forward from wan to lan as well."
 msgstr ""
 "Alla olevat asetukset ohjaavat tämän vyöhykkeen (%s) ja muiden vyöhykkeiden "
-"välisiä edelleenlähetyskäytäntöjä. <em> Kohdevyöhyke</em> kattavat "
-"välitettävän liikenteen <strong>, joka on peräisin kohteesta %q</strong>. "
-"<em> Lähdevyöhykkeet</em> vastaavat välitettyä liikennettä muilta "
-"vyöhykkeiltä <strong>, jotka on kohdistettu kohteeseen %q</strong>. "
-"Edelleenlähetyssääntö on <em>yksisuuntainen</em>, esimerkiksi eteenpäin "
-"lanista waniin <em> ei</em> merkitse lupaa myös päästä eteenpäin wanista "
-"laniin."
+"välisiä välityskäytäntöjä. <em> Kohdevyöhyke</em> kattavat välitettävän "
+"liikenteen <strong>, joka on peräisin kohteesta %q</strong>. <em> "
+"Lähdevyöhykkeet</em> vastaavat välitettyä liikennettä muilta vyöhykkeiltä "
+"<strong>, jotka on kohdistettu kohteeseen %q</strong>. Välityssääntö on "
+"<em>yksisuuntainen</em>, esimerkiksi eteenpäin lanista waniin <em> ei</em> "
+"merkitse lupaa myös päästä eteenpäin wanista laniin."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:104
 msgid ""
@@ -996,9 +996,9 @@ msgid ""
 "forwarded traffic between different networks within the zone. <em>Covered "
 "networks</em> specifies which available networks are members of this zone."
 msgstr ""
-"Tässä osassa määritetään kohteen %q yleiset ominaisuudet. <em>input</em> ja "
-"<em> output</em> -asetukset asettavat oletuskäytännöt tälle alueelle "
-"saapuville ja sieltä poistuneille liikenteelle, kun taas <em>forward</em> -"
+"Tässä osassa määritetään kohteen %q yleiset ominaisuudet. <em>tuleva</em> ja "
+"<em> lä'htevä</em> -asetukset asettavat oletuskäytännöt tälle alueelle "
+"saapuville ja sieltä poistuneille liikenteelle, kun taas <em>välitä</em> -"
 "vaihtoehdossa kuvataan alueen eri verkkojen välisen välitettyä liikennettä "
 "koskeva käytäntö. <em> Katetut verkot</em> määrittävät, mitkä käytettävissä "
 "olevat verkot ovat tämän vyöhykkeen jäseniä."
