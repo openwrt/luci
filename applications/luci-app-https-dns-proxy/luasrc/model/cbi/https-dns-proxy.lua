@@ -174,9 +174,6 @@ lp = s3:option(Value, "listen_port", translate("Listen port"))
 lp.datatype = "port"
 lp.value    = n + 5053
 
-sa = s3:option(Value, "edns_subnet", translate("EDNS client subnet"))
-sa.rmempty  = true
-
 ps = s3:option(Value, "proxy_server", translate("Proxy server"))
 ps.rmempty  = true
 
