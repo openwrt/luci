@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-06-10 03:40+0200\n"
-"PO-Revision-Date: 2020-06-17 18:41+0000\n"
-"Last-Translator: Satoru Yoshida <ramat@ram.ne.jp>\n"
+"PO-Revision-Date: 2020-06-27 14:41+0000\n"
+"Last-Translator: INAGAKI Hiroshi <musashino.open@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/openwrt/luci/ja/"
 ">\n"
 "Language: ja\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.1.1-dev\n"
+"X-Generator: Weblate 4.2-dev\n"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:929
 msgid "%.1f dB"
@@ -616,11 +616,11 @@ msgstr "常にデフォルト ルーターを通知する"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/none.js:5
 msgid "Always off (kernel: none)"
-msgstr ""
+msgstr "常にオフ (kernel: none)"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/default-on.js:6
 msgid "Always on (kernel: default-on)"
-msgstr ""
+msgstr "常にオン (kernel: default-on)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:907
 msgid ""
@@ -632,7 +632,7 @@ msgstr ""
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:603
 msgid "An error occurred while saving the form:"
-msgstr ""
+msgstr "フォームの保存中にエラーが発生:"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:890
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:20
@@ -1031,19 +1031,19 @@ msgstr "カテゴリー"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1511
 msgid "Certificate constraint (Domain)"
-msgstr ""
+msgstr "証明書制限（ドメイン）"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1508
 msgid "Certificate constraint (SAN)"
-msgstr ""
+msgstr "証明書制限（SAN）"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1505
 msgid "Certificate constraint (Subject)"
-msgstr ""
+msgstr "証明書制限（サブジェクト）"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1514
 msgid "Certificate constraint (Wildcard)"
-msgstr ""
+msgstr "証明書制限（ワイルドカード）"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1505
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1563
@@ -1051,6 +1051,8 @@ msgid ""
 "Certificate constraint substring - e.g. /CN=wifi.mycompany.com<br />See "
 "`logread -f` during handshake for actual values"
 msgstr ""
+"サブジェクト内の項目によって証明書の制限を行います。（例: /CN=wifi.mycompany.com）<br />実際の値は `logread "
+"-f`をハンドシェイク中に確認してください。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1511
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1569
@@ -1072,6 +1074,8 @@ msgid ""
 "Certificate constraint(s) via Subject Alternate Name values<br />(supported "
 "attributes: EMAIL, DNS, URI) - e.g. DNS:wifi.mycompany.com"
 msgstr ""
+"サブジェクト代替名によって証明書の制限を行います。<br />サポートされる属性: EMAIL, DNS, URI（例: DNS:wifi."
+"mycompany.com）"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:53
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:56
@@ -1369,7 +1373,7 @@ msgstr ""
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/timer.js:6
 msgid "Custom flash interval (kernel: timer)"
-msgstr ""
+msgstr "カスタムな点滅間隔 (kernel: timer)"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:59
 msgid ""
@@ -2536,7 +2540,7 @@ msgstr ""
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/heartbeat.js:5
 msgid "Heartbeat interval (kernel: heartbeat)"
-msgstr ""
+msgstr "ハートビート (kernel: heartbeat)"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:100
 msgid ""
@@ -2603,7 +2607,7 @@ msgstr "ハイブリッド"
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:53
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:48
 msgid "ID used to uniquely identify the VXLAN"
-msgstr ""
+msgstr "VXLANの識別に使用される ID"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:206
 msgid "IEEE 802.3ad Dynamic link aggregation (802.3ad, 4)"
@@ -2987,7 +2991,7 @@ msgstr "プロトコル拡張機能をインストールします..."
 msgid ""
 "Instead of joining any network with a matching SSID, only connect to the "
 "BSSID <code>%h</code>."
-msgstr ""
+msgstr "一致した SSID のネットワークへの参加に代わり、 BSSID <code>%h</code> にのみ接続します。"
 
 #: modules/luci-compat/luasrc/view/cbi/map.htm:43
 msgid "Insufficient permissions to read UCI configuration."
@@ -3449,7 +3453,7 @@ msgstr "ローカライズクエリ"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1930
 msgid "Lock to BSSID"
-msgstr ""
+msgstr "BSSID へのロック"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:164
 msgid "Log output level"
@@ -3863,7 +3867,7 @@ msgstr "ネットワークブート用イメージ"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/netdev.js:7
 msgid "Network device activity (kernel: netdev)"
-msgstr ""
+msgstr "ネットワークデバイス アクティビティ (kernel: netdev)"
 
 #: modules/luci-base/htdocs/luci-static/resources/network.js:15
 #: modules/luci-compat/luasrc/model/network.lua:33
@@ -3872,7 +3876,7 @@ msgstr "ネットワーク デバイスが存在しません"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:777
 msgid "New interface for \"%s\" can not be created: %s"
-msgstr ""
+msgstr "\"%s\" の新しいインターフェースを作成できません: %s"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:713
 msgid "New interface name…"
@@ -3960,7 +3964,7 @@ msgstr "パスワードが設定されていません!"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:110
 msgid "No peers defined yet"
-msgstr ""
+msgstr "ピアはまだ定義されていません"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:121
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:268
@@ -4426,7 +4430,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:882
 msgid "Packet Steering"
-msgstr ""
+msgstr "パケット ステアリング"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:53
 msgid "Packets"
@@ -4502,7 +4506,7 @@ msgstr "秘密鍵のパス"
 
 #: modules/luci-base/htdocs/luci-static/resources/luci.js:2725
 msgid "Paused"
-msgstr ""
+msgstr "一時停止"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/bandwidth.js:271
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/bandwidth.js:281
@@ -4939,7 +4943,7 @@ msgstr "hostapd が必要"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1238
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1239
 msgid "Requires hostapd with EAP Suite-B support"
-msgstr ""
+msgstr "EAP Suite-B サポートを含む hostapd が必要"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1236
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1237
@@ -4983,7 +4987,7 @@ msgstr "wpa-supplicant が必要"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1252
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1253
 msgid "Requires wpa-supplicant with EAP Suite-B support"
-msgstr ""
+msgstr "EAP Suite-B サポートを含む wpa-supplicant が必要"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1250
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1251
@@ -6754,7 +6758,7 @@ msgstr ""
 msgid ""
 "Validate server certificate using built-in system CA bundle,<br />requires "
 "the \"ca-bundle\" package"
-msgstr ""
+msgstr "サーバー証明書をビルトインのシステム CA バンドルを用いて検証します。<br />\"ca-bundle\" パッケージが必要です。"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:387
 msgid "Validation for all slaves"
