@@ -884,7 +884,12 @@ function dispatch(request)
 				http.status(403, "Forbidden")
 				http.header("X-LuCI-Login-Required", "yes")
 
-				return tpl.render("sysauth", { duser = "root", fuser = user })
+				local scope = { duser = "root", fuser = user }
+				local ok, res = util.copcall(tpl.render_string, [[<% include("themes/" .. theme .. "/sysauth") %>]], scope)
+				if ok then
+					return res
+				end
+				return tpl.render("sysauth", scope)
 			end
 
 			http.header("Set-Cookie", 'sysauth=%s; path=%s; SameSite=Strict; HttpOnly%s' %{
