@@ -153,7 +153,7 @@ int nixio__addr_write(nixio_addr *addr, struct sockaddr *saddr) {
 /**
  * netmask to prefix helper
  */
-int nixio__addr_prefix(struct sockaddr *saddr) {
+static int nixio__addr_prefix(struct sockaddr *saddr) {
 	int prefix = 0;
 	size_t len;
 	uint8_t *addr;
