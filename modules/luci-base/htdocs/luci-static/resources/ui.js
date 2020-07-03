@@ -3053,7 +3053,13 @@ var UIMenu = baseclass.singleton(/** @lends LuCI.ui.menu.prototype */ {
 		}
 
 		return children.sort(function(a, b) {
-			return ((a.order || 1000) - (b.order || 1000));
+			var wA = a.order || 1000,
+			    wB = b.order || 1000;
+
+			if (wA != wB)
+				return wA - wB;
+
+			return a.name > b.name;
 		});
 	}
 });
