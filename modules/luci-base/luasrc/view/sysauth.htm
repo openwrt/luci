@@ -4,12 +4,22 @@
  Licensed to the public under the Apache License 2.0.
 -%>
 
+<%
+	local pam_allowed_attempts = tonumber(luci.util.exec(
+		"cat /etc/pam.d/common-auth | awk '/pam_tally2.so/ {print substr($4,6)}'"
+	))
+%>
+
 <%+header%>
 
 <form method="post" action="<%=pcdata(FULL_REQUEST_URI)%>">
 	<%- if fuser then %>
 		<div class="alert-message warning">
-			<p><%:Invalid username and/or password! Please try again.%></p>
+			<p>
+				<%:Invalid username and/or password! Please try again.%><br>
+				<%=pam_allowed_attempts%>
+				<%: failed login attempts will result in your account becoming locked.%>
+			</p>
 		</div>
 	<% end -%>
 

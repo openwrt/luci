@@ -555,19 +555,35 @@ local function session_setup(user, pass)
 	local rp = context.requestpath
 		and table.concat(context.requestpath, "/") or ""
 
-	if type(login) == "table" and
-	   type(login.ubus_rpc_session) == "string"
+	local pam_attempts = tonumber(luci.util.exec(
+		"pam_tally2 --user " .. user .. " | awk '/" .. user .. "/ {print $2}'"
+	))
+
+	local pam_allowed_attempts = tonumber(luci.util.exec(
+		"cat /etc/pam.d/common-auth | awk '/pam_tally2.so/ {print substr($4,6)}'"
+	))
+
+	if
+		pam_attempts < pam_allowed_attempts and
+		type(login) == "table" and
+		type(login.ubus_rpc_session) == "string"
 	then
 		util.ubus("session", "set", {
 			ubus_rpc_session = login.ubus_rpc_session,
 			values = { token = sys.uniqueid(16) }
 		})
 
+		-- create ssh login to clear pam_tally counter
+		luci.util.exec("sshpass -p " .. pass .. " ssh -yI 5 " .. user .. "@localhost &>/dev/null")
+
 		io.stderr:write("luci: accepted login on /%s for %s from %s\n"
 			%{ rp, user or "?", http.getenv("REMOTE_ADDR") or "?" })
 
 		return session_retrieve(login.ubus_rpc_session)
 	end
+
+	-- create a dummy SSH login attempt to iterate the pam_tally counter
+	luci.util.exec("sshpass -p _fake_password_ ssh -yI 2 " .. user .. "@localhost &>/dev/null")
 
 	io.stderr:write("luci: failed login on /%s for %s from %s\n"
 		%{ rp, user or "?", http.getenv("REMOTE_ADDR") or "?" })
