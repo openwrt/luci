@@ -1,0 +1,66 @@
+{
+	"admin/network/yggdrasil": {
+		"title": "Yggdrasil",
+		"action": {
+			"type": "firstchild"
+		},
+		"depends": {
+			"acl": [ "luci-app-yggdrasil" ],
+			"uci": { "yggdrasil": true }
+		}
+	},
+
+	"admin/network/yggdrasil/status": {
+		"title": "Status",
+		"order": 1,
+		"action": {
+			"type": "view",
+			"path": "yggdrasil/status"
+		}
+	},
+
+	"admin/network/yggdrasil/peers": {
+		"title": "Peers",
+		"order": 2,
+		"action": {
+			"type": "view",
+			"path": "yggdrasil/peers"
+		}
+	},
+
+	"admin/network/yggdrasil/settings": {
+		"title": "Settings",
+		"order": 3,
+		"action": {
+			"type": "view",
+			"path": "yggdrasil/settings"
+		}
+	},
+
+	"admin/network/yggdrasil/keys": {
+		"title": "Encryption keys",
+		"order": 4,
+		"action": {
+			"type": "view",
+			"path": "yggdrasil/keys"
+		}
+	},
+
+	"admin/network/yggdrasil/session_firewall": {
+		"title": "Session firewall",
+		"order": 5,
+		"action": {
+			"type": "view",
+			"path": "yggdrasil/session_firewall"
+		}
+	},
+
+	"admin/network/yggdrasil/tunnel_routing": {
+		"title": "Tunnel routing",
+		"order": 6,
+		"action": {
+			"type": "view",
+			"path": "yggdrasil/tunnel_routing"
+		}
+	}
+}

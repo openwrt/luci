@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2020-01-28 03:40+0000\n"
+"PO-Revision-Date: 2020-05-24 17:41+0000\n"
 "Last-Translator: Marcin Net <marcin.net@linux.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsmwan3/pl/>\n"
@@ -9,7 +9,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 3.11-dev\n"
+"X-Generator: Weblate 4.1-dev\n"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interfaceconfig.lua:176
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interfaceconfig.lua:192
@@ -240,13 +240,17 @@ msgstr ""
 msgid "Globals"
 msgstr "Globalne"
 
+#: applications/luci-app-mwan3/root/usr/share/rpcd/acl.d/luci-app-mwan3.json:3
+msgid "Grant UCI access for luci-app-mwan3"
+msgstr "Udziel dostępu UCI do luci-app-mwan3"
+
 #: applications/luci-app-mwan3/luasrc/view/mwan/status_diagnostics.htm:76
 msgid "Hotplug ifdown"
-msgstr "Hotplug ifdown"
+msgstr "Przełącznik, jeśli odłączono"
 
 #: applications/luci-app-mwan3/luasrc/view/mwan/status_diagnostics.htm:75
 msgid "Hotplug ifup"
-msgstr "Hotplug ifup"
+msgstr "Przełącznik, jeśli podłączono"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/globalsconfig.lua:45
 msgid "How often should rtmon update the interface routing table"
@@ -343,7 +347,7 @@ msgstr "Logowanie"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/globalsconfig.lua:28
 msgid "Loglevel"
-msgstr "Loglevel"
+msgstr "Poziom logowania"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/globalsconfig.lua:8
 msgid "MWAN - Globals"
@@ -435,8 +439,8 @@ msgid ""
 "May be entered as a single or multiple port(s) (eg \"22\" or \"80,443\") or "
 "as a portrange (eg \"1024:2048\") without quotes"
 msgstr ""
-"Może być wprowadzony jako pojedynczy lub wielokrotny port (np. \"22\" lub \""
-"80,443\") lub jako portrange (np. \"1024:2048\") bez cudzysłowów"
+"Może być wprowadzony jako pojedynczy lub wielokrotny port (np. \"22\" lub "
+"\"80,443\") lub jako portrange (np. \"1024:2048\") bez cudzysłowów"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/member.lua:17
 msgid "Member"
@@ -488,8 +492,8 @@ msgid ""
 "Name of IPset rule. Requires IPset rule in /etc/dnsmasq.conf (eg \"ipset=/"
 "youtube.com/youtube\")"
 msgstr ""
-"Nazwa reguły IPset. Wymaga reguły IPset w /etc/dnsmasq.conf (np. \""
-"ipset=/youtube.com/youtube\")"
+"Nazwa reguły IPset. Wymaga reguły IPset w /etc/dnsmasq.conf (np. \"ipset=/"
+"youtube.com/youtube\")"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interface.lua:166
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/ruleconfig.lua:50
@@ -643,8 +647,8 @@ msgid ""
 "z, 0-9, _ and no spaces<br />Rules may not share the same name as configured "
 "interfaces, members or policies"
 msgstr ""
-"Reguły określają, który ruch będzie korzystał z określonej polityki MWAN <br "
-"/> Reguły są oparte na adresie IP, porcie lub protokole <br /> Reguły są "
+"Reguły określają, który ruch będzie korzystał z określonej polityki MWAN "
+"<br /> Reguły są oparte na adresie IP, porcie lub protokole <br /> Reguły są "
 "dopasowywane od góry do dołu <br /> Reguły poniżej pasującej reguły są "
 "ignorowane <br /> Ruch niezgodny z żadną regułą jest kierowany przy użyciu "
 "głównej tabeli trasowania <br /> Ruch przeznaczony dla znanych (innych niż "
@@ -728,17 +732,17 @@ msgstr ""
 "jest interpretowany jako skrypt powłoki.<br/>Pierwszą linią skryptu musi być "
 "&#34;#!/bin/sh&#34; bez cudzysłowów.<br/>Linie rozpoczynające się od # są "
 "komentarzami i nie są wykonywane.<br/>Wprowadź tutaj swoją własną akcję "
-"mwan3, będą one<br/>wykonywane z każdym zdarzeniem interfejsu netifd hotplug<"
-"br />na interfejsach, dla których mwan3 jest włączone.<br /><br/>Są trzy "
-"główne zmienne środowiskowe, które są przekazywane do tego skryptu.<br/><br/"
-">$ACTION <br/>* \"ifup\" jest wywoływany przez netifd i mwan3track <br/>* \""
-"ifdown\" jest wywoływany przez netifd i mwan3track <br/>* \"połączony\" jest "
-"wywoływany przez mwan3track tylko wtedy, gdy śledzenie było udane <br/>* \""
-"rozłączony\" jest wywoływany przez mwan3track tylko wtedy, gdy śledzenie nie "
-"powiodło się <br/>$INTERFACE Nazwa interfejsu, który poszedł w górę lub w "
-"dół (e.np. \"wan\" lub \"wwan\")<br/>$DEVICE Nazwa fizyczna urządzenia, "
-"którego interfejs poszedł w górę lub w dół (np. \"eth0\" lub \"wwan0\")<br/><"
-"br/>"
+"mwan3, będą one<br/>wykonywane z każdym zdarzeniem interfejsu netifd "
+"hotplug<br />na interfejsach, dla których mwan3 jest włączone.<br /><br/>Są "
+"trzy główne zmienne środowiskowe, które są przekazywane do tego skryptu.<br/"
+"><br/>$ACTION <br/>* \"ifup\" jest wywoływany przez netifd i mwan3track <br/"
+">* \"ifdown\" jest wywoływany przez netifd i mwan3track <br/>* \"połączony\" "
+"jest wywoływany przez mwan3track tylko wtedy, gdy śledzenie było udane <br/"
+">* \"rozłączony\" jest wywoływany przez mwan3track tylko wtedy, gdy "
+"śledzenie nie powiodło się <br/>$INTERFACE Nazwa interfejsu, który poszedł w "
+"górę lub w dół (e.np. \"wan\" lub \"wwan\")<br/>$DEVICE Nazwa fizyczna "
+"urządzenia, którego interfejs poszedł w górę lub w dół (np. \"eth0\" lub "
+"\"wwan0\")<br/><br/>"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interfaceconfig.lua:37
 msgid "Tracking hostname or IP address"

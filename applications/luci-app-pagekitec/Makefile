@@ -7,7 +7,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=LuCI Support for PageKite
-LUCI_DEPENDS:=+luci-compat +pagekitec
+LUCI_DEPENDS:=+pagekitec
 
 PKG_MAINTAINER:=Karl Palsson <karlp@tweak.net.au>
 

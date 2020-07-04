@@ -1,14 +1,15 @@
 'use strict';
+'require view';
 'require fs';
 'require form';
 'require tools.widgets as widgets';
 
-return L.view.extend({
+return view.extend({
 	load: function() {
 		return Promise.all([
 			L.resolveDefault(fs.stat('/sbin/block'), null),
 			L.resolveDefault(fs.stat('/etc/config/fstab'), null),
-			L.resolveDefault(fs.exec('/usr/sbin/usmbd', ['-V']), {}).then(function(res) { return L.toArray((res.stdout || '').match(/version : (\S+)/))[1] }),
+			L.resolveDefault(fs.exec('/usr/sbin/ksmbd.mountd', ['-V']), {}).then(function(res) { return L.toArray((res.stdout || '').match(/version : (\S+)/))[1] }),
 			L.resolveDefault(fs.exec('/sbin/modinfo', ['ksmbd']), {}).then(function(res) { return L.toArray((res.stdout || '').match(/version:\t(\S+)/))[1] }),
 		]);
 	},
@@ -38,6 +39,9 @@ return L.view.extend({
 
 		o = s.taboption('general', form.Value, 'description', _('Description'));
 		o.placeholder = 'Ksmbd on OpenWrt';
+		
+		o = s.taboption('general', form.Flag, 'allow_legacy_protocols', _('Allow legacy (insecure) protocols/authentication.'),
+			_('Allow legacy smb(v1)/Lanman connections, needed for older devices without smb(v2.1/3) support.'));
 
 		o = s.taboption('template', form.TextValue, '_tmpl',
 			_('Edit the template that is used for generating the ksmbd configuration.'),

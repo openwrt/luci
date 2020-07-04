@@ -1,4 +1,6 @@
 'use strict';
+'require baseclass';
+'require dom';
 'require rpc';
 'require uci';
 
@@ -18,14 +20,14 @@ callUpnpDeleteRule = rpc.declare({
 });
 
 handleDelRule = function(num, ev) {
-	L.dom.parent(ev.currentTarget, '.tr').style.opacity = 0.5;
+	dom.parent(ev.currentTarget, '.tr').style.opacity = 0.5;
 	ev.currentTarget.classList.add('spinning');
 	ev.currentTarget.disabled = true;
 	ev.currentTarget.blur();
 	callUpnpDeleteRule(num);
 };
 
-return L.Class.extend({
+return baseclass.extend({
 	title: _('Active UPnP Redirects'),
 
 	load: function() {

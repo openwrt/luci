@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2020-01-28 03:40+0000\n"
+"PO-Revision-Date: 2020-05-02 15:56+0000\n"
 "Last-Translator: Marcin Net <marcin.net@linux.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsaria2/pl/>\n"
@@ -9,7 +9,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 3.11-dev\n"
+"X-Generator: Weblate 4.1-dev\n"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:296
 msgid "<abbr title=\"Local Peer Discovery\">LPD</abbr> enabled"
@@ -31,7 +31,7 @@ msgstr "Wszystkie proxy"
 msgid "Append HEADERs to HTTP request header."
 msgstr "Dodaj HEADERs do nagłówka żądania HTTP."
 
-#: applications/luci-app-aria2/luasrc/controller/aria2.lua:18
+#: applications/luci-app-aria2/luasrc/controller/aria2.lua:17
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:35
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/files.lua:14
 #: applications/luci-app-aria2/luasrc/view/aria2/log_template.htm:45
@@ -91,7 +91,7 @@ msgstr "Trwa zbieranie danych..."
 msgid "Config file directory"
 msgstr "Katalog plików konfiguracyjnych"
 
-#: applications/luci-app-aria2/luasrc/controller/aria2.lua:21
+#: applications/luci-app-aria2/luasrc/controller/aria2.lua:22
 msgid "Configuration"
 msgstr "Konfiguracja"
 
@@ -211,7 +211,7 @@ msgstr "Przydział dla pliku"
 msgid "File does not exist."
 msgstr "Plik nie istnieje."
 
-#: applications/luci-app-aria2/luasrc/controller/aria2.lua:24
+#: applications/luci-app-aria2/luasrc/controller/aria2.lua:25
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/files.lua:14
 msgid "Files"
 msgstr "Pliki"
@@ -231,6 +231,10 @@ msgstr "Wymuś zapisanie"
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:129
 msgid "Generate Randomly"
 msgstr "Generuj losowo"
+
+#: applications/luci-app-aria2/root/usr/share/rpcd/acl.d/luci-app-aria2.json:3
+msgid "Grant UCI access for luci-app-aria2"
+msgstr "Udziel dostępu UCI do luci-app-aria2"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:210
 msgid "HTTP accept gzip"
@@ -320,7 +324,7 @@ msgstr ""
 msgid "Loading"
 msgstr "Ładowanie"
 
-#: applications/luci-app-aria2/luasrc/controller/aria2.lua:27
+#: applications/luci-app-aria2/luasrc/controller/aria2.lua:28
 msgid "Log"
 msgstr "Dziennik"
 
@@ -615,26 +619,26 @@ msgstr ""
 msgid ""
 "Set max download speed per each download in bytes/sec. 0 means unrestricted."
 msgstr ""
-"Ustaw maksymalną prędkość poszczególnych pobierań w Bajtach/s. 0 oznacza "
+"Ustaw maksymalną prędkość poszczególnych pobierań w bajtach/s. 0 oznacza "
 "brak limitów."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:470
 msgid "Set max overall download speed in bytes/sec. 0 means unrestricted."
 msgstr ""
-"Ustaw łączną maksymalną prędkość pobierania w Bajtach/s. 0 oznacza brak "
+"Ustaw łączną maksymalną prędkość pobierania w bajtach/s. 0 oznacza brak "
 "limitów."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:355
 msgid "Set max overall upload speed in bytes/sec. 0 means unrestricted."
 msgstr ""
-"Ustaw maksymalną łączną prędkość wysyłania w Bajtach/s. 0 oznacza brak "
+"Ustaw maksymalną łączną prędkość wysyłania w bajtach/s. 0 oznacza brak "
 "limitów."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:362
 msgid ""
 "Set max upload speed per each torrent in bytes/sec. 0 means unrestricted."
 msgstr ""
-"Ustaw maksymalną prędkość wysyłania poszczególnych torrentów w Bajtach/s. 0 "
+"Ustaw maksymalną prędkość wysyłania poszczególnych torrentów w bajtach/s. 0 "
 "oznacza brak limitów."
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:231
@@ -682,8 +686,8 @@ msgid ""
 "entirely until allocation finishes."
 msgstr ""
 "Określ metodę alokacji plików. Jeśli używasz nowszych systemów plików takich "
-"jak ext4 (z obsługą extentów), btrfs, xfs lub NTFS (tylko MinGW build), \""
-"falloc\" jest najlepszym wyborem. Przydziela on duże(kilka) plików GiB) "
+"jak ext4 (z obsługą extentów), btrfs, xfs lub NTFS (tylko MinGW build), "
+"\"falloc\" jest najlepszym wyborem. Przydziela on duże(kilka) plików GiB) "
 "prawie natychmiast, ale może nie być dostępny, jeśli system nie posiada "
 "funkcji posix_fallocate(3). Nie używaj \"falloc\" ze starszymi systemami "
 "plików, takimi jak ext3 i FAT32, ponieważ zajmuje to prawie tyle samo czasu "
@@ -832,9 +836,9 @@ msgid ""
 "PKCS12 files with a blank import password can be opened!<br/>When using PEM, "
 "you have to specify the \"Private key\" as well."
 msgstr ""
-"Użyj certyfikatu klienta w FILE. Certyfikat musi być albo w pliku PKCS12 ("
-".p12, .pfx) albo w formacie PEM.<br/>PKCS12 musi zawierać certyfikat, klucz "
-"i opcjonalnie łańcuch dodatkowych certyfikatów. Tylko pliki PKCS12 z pustym "
+"Użyj certyfikatu klienta w FILE. Certyfikat musi być albo w pliku PKCS12 (."
+"p12, .pfx) albo w formacie PEM.<br/>PKCS12 musi zawierać certyfikat, klucz i "
+"opcjonalnie łańcuch dodatkowych certyfikatów. Tylko pliki PKCS12 z pustym "
 "importowanym hasłem mogą być otwierane! <br/>Podczas używania PEM należy "
 "również określić \"Klucz prywatny\"."
 

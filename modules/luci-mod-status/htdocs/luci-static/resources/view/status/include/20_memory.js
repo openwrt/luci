@@ -1,4 +1,5 @@
 'use strict';
+'require baseclass';
 'require rpc';
 
 var callSystemInfo = rpc.declare({
@@ -19,7 +20,7 @@ function progressbar(value, max, byte) {
 	}, E('div', { 'style': 'width:%.2f%%'.format(pc) }));
 }
 
-return L.Class.extend({
+return baseclass.extend({
 	title: _('Memory'),
 
 	load: function() {
@@ -32,7 +33,7 @@ return L.Class.extend({
 
 		var fields = [
 			_('Total Available'), (mem.available) ? mem.available : (mem.total && mem.free && mem.buffered) ? mem.free + mem.buffered : null, mem.total,
-			_('Free'),            (mem.total && mem.free) ? mem.free : null, mem.total,
+			_('Used'),            (mem.total && mem.free) ? (mem.total - mem.free) : null, mem.total,
 			_('Buffered'),        (mem.total && mem.buffered) ? mem.buffered : null, mem.total
 		];
 

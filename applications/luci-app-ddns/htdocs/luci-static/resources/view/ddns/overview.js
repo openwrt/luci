@@ -1,4 +1,7 @@
 'use strict';
+'require view';
+'require dom';
+'require poll';
 'require uci';
 'require rpc';
 'require fs';
@@ -41,7 +44,7 @@ callDDnsGetStatus = rpc.declare({
 	expect: {  }
 });
 
-return L.view.extend({
+return view.extend({
 
 	callDDnsGetEnv: rpc.declare({
 		object: 'luci.ddns',
@@ -64,12 +67,12 @@ return L.view.extend({
 
 		ddns_toggle.innerHTML = status['_enabled'] ? _('Stop DDNS') : _('Start DDNS')
 
-		L.dom.content(ddns_enabled, function() {
+		dom.content(ddns_enabled, function() {
 			return E([], [
 				E('div', {}, status['_enabled'] ? _('DDNS Autostart enabled') : [
 					_('DDNS Autostart disabled'),
 					E('div', { 'class' : 'cbi-value-description' },
-					_("Currently DDNS updates are not started at boot or on interface events.") + "<br>" +
+					_("Currently DDNS updates are not started at boot or on interface events.") + "<br />" +
 					_("This is the default if you run DDNS scripts by yourself (i.e. via cron with force_interval set to '0')"))
 				]),]);
 		});
@@ -103,8 +106,8 @@ return L.view.extend({
 					service_status = '<b>' + _('Running') + '</b> : ' + service[section_id].pid;
 			}
 
-			cfg_detail_ip.innerHTML = host + '<br>' + ip;
-			cfg_update.innerHTML = last_update + '<br>' + next_update;
+			cfg_detail_ip.innerHTML = host + '<br />' + ip;
+			cfg_update.innerHTML = last_update + '<br />' + next_update;
 			cfg_status.innerHTML = service_status;
 		}
 
@@ -160,13 +163,13 @@ return L.view.extend({
 		o.cfgvalue = function() {
 			var res = status[this.option];
 			if (!res) {
-				this.description = _("Currently DDNS updates are not started at boot or on interface events.") + "<br>" +
+				this.description = _("Currently DDNS updates are not started at boot or on interface events.") + "<br />" +
 				_("This is the default if you run DDNS scripts by yourself (i.e. via cron with force_interval set to '0')")
 			}
 			return res ? _('DDNS Autostart enabled') : _('DDNS Autostart disabled')
 		};
 
-		o = s.option(form.DummyValue, '_toggle', '&nbsp');
+		o = s.option(form.DummyValue, '_toggle', '&#160;');
 		o.cfgvalue = function() {
 			var action = status['_enabled'] ? 'stop' : 'start';
 			return E([], [
@@ -182,7 +185,7 @@ return L.view.extend({
 			}, _(action.toUpperCase() + ' DDns'))]);
 		};
 
-		o = s.option(form.DummyValue, '_restart', '&nbsp');
+		o = s.option(form.DummyValue, '_restart', '&#160;');
 		o.cfgvalue = function() {
 			return E([], [
 				E('button', {
@@ -199,8 +202,8 @@ return L.view.extend({
 			o = s.option(form.DummyValue, '_no_ipv6');
 			o.rawhtml  = true;
 			o.title = '<b>' + _("IPv6 not supported") + '</b>';
-			o.cfgvalue = function() { return _("IPv6 is currently not (fully) supported by this system") + "<br>" +
-			_("Please follow the instructions on OpenWrt's homepage to enable IPv6 support") + "<br>" +
+			o.cfgvalue = function() { return _("IPv6 is currently not (fully) supported by this system") + "<br />" +
+			_("Please follow the instructions on OpenWrt's homepage to enable IPv6 support") + "<br />" +
 			_("or update your system to the latest OpenWrt Release")};
 		}
 
@@ -374,7 +377,7 @@ return L.view.extend({
 					(resolved[section_id].pid && cfg_enabled == '1'))
 				stop_opt['disabled'] = 'disabled';
 
-			L.dom.content(tdEl.lastChild, [
+			dom.content(tdEl.lastChild, [
 				E('button', stop_opt, _('Stop')),
 				E('button', reload_opt, _('Reload')),
 				tdEl.lastChild.childNodes[0],
@@ -391,7 +394,7 @@ return L.view.extend({
 			return '<b>' + section_id + '</b>';
 		}
 
-		o = s.option(form.DummyValue, '_cfg_detail_ip', _('Lookup Hostname') + "<br>" + _('Registered IP'));
+		o = s.option(form.DummyValue, '_cfg_detail_ip', _('Lookup Hostname') + "<br />" + _('Registered IP'));
 		o.rawhtml   = true;
 		o.modalonly = false;
 		o.textvalue = function(section_id) {
@@ -400,7 +403,7 @@ return L.view.extend({
 			if (resolved[section_id] && resolved[section_id].ip)
 				ip = resolved[section_id].ip;
 
-			return host + '<br>' + ip;
+			return host + '<br />' + ip;
 		};
 
 		o = s.option(form.Flag, 'enabled', _('Enabled'));
@@ -408,7 +411,7 @@ return L.view.extend({
 		o.editable = true;
 		o.modalonly = false;
 
-		o = s.option(form.DummyValue, '_cfg_update', _('Last Update') + "<br>" + _('Next Update'));
+		o = s.option(form.DummyValue, '_cfg_update', _('Last Update') + "<br />" + _('Next Update'));
 		o.rawhtml   = true;
 		o.modalonly = false;
 		o.textvalue = function(section_id) {
@@ -420,7 +423,7 @@ return L.view.extend({
 					next_update =  NextUpdateStrings[resolved[section_id].next_update] || resolved[section_id].next_update;
 			}
 
-			return  last_update + '<br>' + next_update;
+			return  last_update + '<br />' + next_update;
 		};
 
 		s.modaltitle = function(section_id) {
@@ -508,7 +511,14 @@ return L.view.extend({
 			o.value('-',"-- " + _("custom") + " --");
 
 		o.cfgvalue = function(section_id) {
-			return uci.get('ddns', section_id, 'service_name');
+			var service = uci.get('ddns', section_id, 'service_name'),
+				update_script = uci.get('ddns', section_id, 'update_script'),
+				update_url = uci.get('ddns', section_id, 'update_url');
+
+			if (!service && (update_script || update_url))
+				return "-";
+
+			return service;
 		}
 
 		o.write = function(section_id, formvalue) {
@@ -526,18 +536,40 @@ return L.view.extend({
 		_("Update URL to be used for updating your DDNS Provider." + "<br />" +
 		"Follow instructions you will find on their WEB page."));
 		o.modalonly = true;
-		o.rmempty	= false;
+		o.rmempty	= true;
+		o.optional = true;
 		o.depends("ipv6_service_name","-");
 		o.depends("ipv4_service_name","-");
+
+		o.validate = function(section_id, value) {
+			var other = this.section.children.filter(function(o) { return o.option == 'update_script' })[0].formvalue(section_id);
+
+			if ((value == "" && other == "") || (value != "" && other != "")) {
+				return _("Insert a Update Script OR a Update URL");
+			}
+
+			return true;
+		}
 
 		// update_script
 
 		o = s.taboption('basic', form.Value, 'update_script', _("Custom update-script"),
 		_("Custom update script to be used for updating your DDNS Provider."));
 		o.modalonly = true;
-		o.rmempty	= false;
+		o.rmempty	= true;
+		o.optional = true;
 		o.depends("ipv6_service_name","-");
 		o.depends("ipv4_service_name","-");
+
+		o.validate = function(section_id, value) {
+			var other = this.section.children.filter(function(o) { return o.option == 'update_url' })[0].formvalue(section_id);
+
+			if ((value == "" && other == "") || (value != "" && other != "")) {
+				return _("Insert a Update Script OR a Update URL");
+			}
+
+			return true;
+		}
 
 		// domain
 
@@ -586,7 +618,7 @@ return L.view.extend({
 
 			o = s.taboption('basic', form.Value, 'cacert',
 				_("Path to CA-Certificate"),
-				_("directory or path/file") + "<br>" +
+				_("directory or path/file") + "<br />" +
 				_("or") + '<b>' + " IGNORE " + '</b>' +
 				_("to run HTTPS without verification of server certificates (insecure)"));
 			o.modalonly = true;
@@ -650,8 +682,8 @@ return L.view.extend({
 		// ip_url
 
 		o = s.taboption('advanced', form.Value, 'ip_url', _("URL to detect"),
-		_("Defines the Web page to read systems IP-Address from" + '<br>' +
-		_('Example for IPv4' + ': http://checkip.dyndns.com') + '<br>' +
+		_("Defines the Web page to read systems IP-Address from" + '<br />' +
+		_('Example for IPv4' + ': http://checkip.dyndns.com') + '<br />' +
 		_('Example for IPv6' + ': http://checkipv6.dyndns.com')));
 		o.depends("ip_source", "web")
 
@@ -708,7 +740,7 @@ return L.view.extend({
 
 		if (env['has_bindnet']) {
 			o = s.taboption('advanced', widgets.ZoneSelect, 'bind_network', _("Bind Network"),
-				_('OPTIONAL: Network to use for communication') + '<br>' +
+				_('OPTIONAL: Network to use for communication') + '<br />' +
 				_("Network on which the ddns-updater scripts will be started"));
 			o.depends("ip_source", "web");
 			o.optional = true;
@@ -783,7 +815,7 @@ return L.view.extend({
 		o.optional = true;
 		o.modalonly = true;
 		o.cfgvalue = function(section_id) {
-			this.description = _("Writes detailed messages to log file. File will be truncated automatically.") + "<br>" +
+			this.description = _("Writes detailed messages to log file. File will be truncated automatically.") + "<br />" +
 			_("File") + ': "' + logdir + '/' + section_id + '.log"';
 			return uci.get('ddns', section_id, 'use_logfile');
 		};
@@ -852,7 +884,7 @@ return L.view.extend({
 		o.default  = "minutes"
 		o.value("minutes", _("minutes"));
 		o.value("hours", _("hours"));
-		o.value("hours", _("days"));
+		o.value("days", _("days"));
 
 		// retry_count
 
@@ -907,7 +939,7 @@ return L.view.extend({
 		o.modalonly = true;
 
 		o.update_log = L.bind(function(view, log_data) {
-			return document.getElementById('log_area').innerHTML = log_data.result;
+			return document.getElementById('log_area').textContent = log_data.result;
 		}, o, this)
 
 		o.render = L.bind(function() {
@@ -942,7 +974,7 @@ return L.view.extend({
 		o = s.option(form.Value, 'ddns_dateformat', _('Date format'));
 		o.description = '<a href="http://www.cplusplus.com/reference/ctime/strftime/" target="_blank">'
 			+ _("For supported codes look here")
-			+ '</a><br>' +
+			+ '</a><br />' +
 			_('Current setting: ') + '<b>' + status['_curr_dateformat'] + '</b>';
 		o.default = "%F %R"
 		o.optional = true;
@@ -982,7 +1014,7 @@ return L.view.extend({
 		}
 
 		return m.render().then(L.bind(function(m, nodes) {
-			L.Poll.add(L.bind(function() {
+			poll.add(L.bind(function() {
 				return Promise.all([
 					this.callDDnsGetServicesStatus(),
 					callDDnsGetStatus()

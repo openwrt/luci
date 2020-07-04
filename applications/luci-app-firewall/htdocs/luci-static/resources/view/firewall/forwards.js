@@ -1,4 +1,5 @@
 'use strict';
+'require view';
 'require ui';
 'require rpc';
 'require uci';
@@ -84,7 +85,7 @@ function rule_target_txt(s) {
 	});
 }
 
-return L.view.extend({
+return view.extend({
 	callHostHints: rpc.declare({
 		object: 'luci-rpc',
 		method: 'getHostHints',

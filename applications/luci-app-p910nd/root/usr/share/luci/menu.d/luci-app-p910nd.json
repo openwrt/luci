@@ -1,0 +1,15 @@
+{
+	"admin/services/p910nd": {
+		"title": "p910nd - Printer server",
+		"order": 60,
+		"action": {
+			"type": "cbi",
+			"path": "p910nd",
+			"post": { "cbi.submit": true }
+		},
+		"depends": {
+			"acl": [ "luci-app-p910nd" ],
+			"uci": { "p910nd": true }
+		}
+	}
+}

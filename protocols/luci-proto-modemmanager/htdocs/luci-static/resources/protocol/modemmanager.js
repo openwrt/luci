@@ -1,21 +1,40 @@
 'use strict';
-'require rpc';
+'require fs';
 'require form';
 'require network';
 
-var callFileList = rpc.declare({
-	object: 'file',
-	method: 'list',
-	params: [ 'path' ],
-	expect: { entries: [] },
-	filter: function(list, params) {
-		var rv = [];
-		for (var i = 0; i < list.length; i++)
-			if (list[i].name.match(/^cdc-wdm/))
-				rv.push(params.path + list[i].name);
-		return rv.sort();
-	}
-});
+function getModemList() {
+	return fs.exec_direct('/usr/bin/mmcli', [ '-L' ]).then(function(res) {
+		var lines = (res || '').split(/\n/),
+		    tasks = [];
+
+		for (var i = 0; i < lines.length; i++) {
+			var m = lines[i].match(/\/Modem\/(\d+)/);
+			if (m)
+				tasks.push(fs.exec_direct('/usr/bin/mmcli', [ '-m', m[1] ]));
+		}
+
+		return Promise.all(tasks).then(function(res) {
+			var modems = [];
+
+			for (var i = 0; i < res.length; i++) {
+				var man = res[i].match(/manufacturer: ([^\n]+)/),
+				    mod = res[i].match(/model: ([^\n]+)/),
+				    dev = res[i].match(/device: ([^\n]+)/);
+
+				if (dev) {
+					modems.push({
+						device:       dev[1].trim(),
+						manufacturer: (man ? man[1].trim() : '') || '?',
+						model:        (mod ? mod[1].trim() : '') || dev[1].trim()
+					});
+				}
+			}
+
+			return modems;
+		});
+	});
+}
 
 network.registerPatternVirtual(/^mobiledata-.+$/);
 network.registerErrorCode('CALL_FAILED', _('Call failed'));
@@ -57,9 +76,10 @@ return network.registerProtocol('modemmanager', {
 		o = s.taboption('general', form.ListValue, 'device', _('Modem device'));
 		o.rmempty = false;
 		o.load = function(section_id) {
-			return callFileList('/dev/').then(L.bind(function(devices) {
+			return getModemList().then(L.bind(function(devices) {
 				for (var i = 0; i < devices.length; i++)
-					this.value(devices[i]);
+					this.value(devices[i].device,
+						'%s - %s'.format(devices[i].manufacturer, devices[i].model));
 				return form.Value.prototype.load.apply(this, [section_id]);
 			}, this));
 		};

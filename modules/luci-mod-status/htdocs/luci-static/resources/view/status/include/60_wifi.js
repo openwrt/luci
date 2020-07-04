@@ -1,5 +1,15 @@
 'use strict';
+'require baseclass';
+'require dom';
 'require network';
+'require rpc';
+
+var callSessionAccess = rpc.declare({
+	object: 'session',
+	method: 'access',
+	params: [ 'scope', 'object', 'function' ],
+	expect: { 'access': false }
+});
 
 function renderbox(radio, networks) {
 	var chan = null,
@@ -58,26 +68,26 @@ function renderbox(radio, networks) {
 }
 
 function wifirate(rt) {
-	var s = '%.1f %s, %d%s'.format(rt.rate / 1000, _('Mbit/s'), rt.mhz, _('MHz')),
+	var s = '%.1f\xa0%s, %d\xa0%s'.format(rt.rate / 1000, _('Mbit/s'), rt.mhz, _('MHz')),
 	    ht = rt.ht, vht = rt.vht,
 		mhz = rt.mhz, nss = rt.nss,
 		mcs = rt.mcs, sgi = rt.short_gi;
 
 	if (ht || vht) {
-		if (vht) s += ', VHT-MCS %d'.format(mcs);
-		if (nss) s += ', VHT-NSS %d'.format(nss);
-		if (ht)  s += ', MCS %s'.format(mcs);
-		if (sgi) s += ', ' + _('Short GI');
+		if (vht) s += ', VHT-MCS\xa0%d'.format(mcs);
+		if (nss) s += ', VHT-NSS\xa0%d'.format(nss);
+		if (ht)  s += ', MCS\xa0%s'.format(mcs);
+		if (sgi) s += ', ' + _('Short GI').replace(/ /g, '\xa0');
 	}
 
 	return s;
 }
 
-return L.Class.extend({
+return baseclass.extend({
 	title: _('Wireless'),
 
 	handleDelClient: function(wifinet, mac, ev) {
-		L.dom.parent(ev.currentTarget, '.tr').style.opacity = 0.5;
+		dom.parent(ev.currentTarget, '.tr').style.opacity = 0.5;
 		ev.currentTarget.classList.add('spinning');
 		ev.currentTarget.disabled = true;
 		ev.currentTarget.blur();
@@ -89,7 +99,9 @@ return L.Class.extend({
 		return Promise.all([
 			network.getWifiDevices(),
 			network.getWifiNetworks(),
-			network.getHostHints()
+			network.getHostHints(),
+			callSessionAccess('access-group', 'luci-mod-status-index-wifi', 'read'),
+			callSessionAccess('access-group', 'luci-mod-status-index-wifi', 'write')
 		]).then(function(radios_networks_hints) {
 			var tasks = [];
 
@@ -108,7 +120,9 @@ return L.Class.extend({
 		var seen = {},
 		    radios = data[0],
 		    networks = data[1],
-		    hosthints = data[2];
+		    hosthints = data[2],
+		    hasReadPermission = data[3],
+		    hasWritePermission = data[4];
 
 		var table = E('div', { 'class': 'network-status-table' });
 
@@ -119,13 +133,13 @@ return L.Class.extend({
 		if (!table.lastElementChild)
 			return null;
 
-		var assoclist = E('div', { 'class': 'table' }, [
+		var assoclist = E('div', { 'class': 'table assoclist' }, [
 			E('div', { 'class': 'tr table-titles' }, [
 				E('div', { 'class': 'th nowrap' }, _('Network')),
 				E('div', { 'class': 'th hide-xs' }, _('MAC-Address')),
 				E('div', { 'class': 'th' }, _('Host')),
-				E('div', { 'class': 'th nowrap' }, '%s / %s'.format(_('Signal'), _('Noise'))),
-				E('div', { 'class': 'th nowrap' }, '%s / %s'.format(_('RX Rate'), _('TX Rate')))
+				E('div', { 'class': 'th' }, '%s / %s'.format(_('Signal'), _('Noise'))),
+				E('div', { 'class': 'th' }, '%s / %s'.format(_('RX Rate'), _('TX Rate')))
 			])
 		]);
 
@@ -139,14 +153,14 @@ return L.Class.extend({
 				    ipv6 = hosthints.getIP6AddrByMACAddr(bss.mac);
 
 				var icon;
-				var q = (-1 * (bss.noise - bss.signal)) / 5;
-				if (q < 1)
+				var q = Math.min((bss.signal + 110) / 70 * 100, 100);
+				if (q == 0)
 					icon = L.resource('icons/signal-0.png');
-				else if (q < 2)
+				else if (q < 25)
 					icon = L.resource('icons/signal-0-25.png');
-				else if (q < 3)
+				else if (q < 50)
 					icon = L.resource('icons/signal-25-50.png');
-				else if (q < 4)
+				else if (q < 75)
 					icon = L.resource('icons/signal-50-75.png');
 				else
 					icon = L.resource('icons/signal-75-100.png');
@@ -154,37 +168,51 @@ return L.Class.extend({
 				var sig_title, sig_value;
 
 				if (bss.noise) {
-					sig_value = '%d / %d %s'.format(bss.signal, bss.noise, _('dBm'));
+					sig_value = '%d/%d\xa0%s'.format(bss.signal, bss.noise, _('dBm'));
 					sig_title = '%s: %d %s / %s: %d %s / %s %d'.format(
 						_('Signal'), bss.signal, _('dBm'),
 						_('Noise'), bss.noise, _('dBm'),
 						_('SNR'), bss.signal - bss.noise);
 				}
 				else {
-					sig_value = '%d %s'.format(bss.signal, _('dBm'));
+					sig_value = '%d\xa0%s'.format(bss.signal, _('dBm'));
 					sig_title = '%s: %d %s'.format(_('Signal'), bss.signal, _('dBm'));
 				}
 
 				var hint;
 
 				if (name && ipv4 && ipv6)
-					hint = '%s (%s, %s)'.format(name, ipv4, ipv6);
+					hint = '%s <span class="hide-xs">(%s, %s)</span>'.format(name, ipv4, ipv6);
 				else if (name && (ipv4 || ipv6))
-					hint = '%s (%s)'.format(name, ipv4 || ipv6);
+					hint = '%s <span class="hide-xs">(%s)</span>'.format(name, ipv4 || ipv6);
 				else
 					hint = name || ipv4 || ipv6 || '?';
 
 				var row = [
-					E('span', { 'class': 'ifacebadge', 'title': networks[i].getI18n() }, [
+					E('span', {
+						'class': 'ifacebadge',
+						'title': networks[i].getI18n(),
+						'data-ifname': networks[i].getIfname(),
+						'data-ssid': networks[i].getActiveSSID()
+					}, [
 						E('img', { 'src': L.resource('icons/wifi.png') }),
-						' ', networks[i].getShortName(),
-						E('small', {}, [ ' (', networks[i].getIfname(), ')' ])
+						E('span', {}, [
+							' ', networks[i].getShortName(),
+							E('small', {}, [ ' (', networks[i].getIfname(), ')' ])
+						])
 					]),
 					bss.mac,
 					hint,
-					E('span', { 'class': 'ifacebadge', 'title': sig_title }, [
+					E('span', {
+						'class': 'ifacebadge',
+						'title': sig_title,
+						'data-signal': bss.signal,
+						'data-noise': bss.noise
+					}, [
 						E('img', { 'src': icon }),
-						' ', sig_value
+						E('span', {}, [
+							' ', sig_value
+						])
 					]),
 					E('span', {}, [
 						E('span', wifirate(bss.rx)),
@@ -193,9 +221,9 @@ return L.Class.extend({
 					])
 				];
 
-				if (networks[i].isClientDisconnectSupported()) {
+				if (networks[i].isClientDisconnectSupported() && hasWritePermission) {
 					if (assoclist.firstElementChild.childNodes.length < 6)
-						assoclist.firstElementChild.appendChild(E('div', { 'class': 'th nowrap right' }, [ _('Disconnect') ]));
+						assoclist.firstElementChild.appendChild(E('div', { 'class': 'th cbi-section-actions' }));
 
 					row.push(E('button', {
 						'class': 'cbi-button cbi-button-remove',
@@ -214,8 +242,8 @@ return L.Class.extend({
 
 		return E([
 			table,
-			E('h3', _('Associated Stations')),
-			assoclist
+			hasReadPermission ? E('h3', _('Associated Stations')) : E([]),
+			hasReadPermission ? assoclist : E([])
 		]);
 	}
 });

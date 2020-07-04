@@ -1,4 +1,5 @@
 'use strict';
+'require baseclass';
 'require rpc';
 'require network';
 
@@ -8,22 +9,22 @@ var callLuciDHCPLeases = rpc.declare({
 	expect: { '': {} }
 });
 
-return L.Class.extend({
-	title: _('Active DHCP Leases'),
+return baseclass.extend({
+	title: '',
 
 	load: function() {
 		return Promise.all([
-			L.resolveDefault(callLuciDHCPLeases(), {}),
+			callLuciDHCPLeases(),
 			network.getHostHints()
 		]);
 	},
 
-	render: function(data) {
+	renderLeases: function(data) {
 		var leases = Array.isArray(data[0].dhcp_leases) ? data[0].dhcp_leases : [],
 		    leases6 = Array.isArray(data[0].dhcp6_leases) ? data[0].dhcp6_leases : [],
 		    machints = data[1].getMACHints(false);
 
-		var table = E('div', { 'class': 'table' }, [
+		var table = E('div', { 'class': 'table lases' }, [
 			E('div', { 'class': 'tr table-titles' }, [
 				E('div', { 'class': 'th' }, _('Hostname')),
 				E('div', { 'class': 'th' }, _('IPv4-Address')),
@@ -50,7 +51,7 @@ return L.Class.extend({
 			];
 		}), E('em', _('There are no active leases')));
 
-		var table6 = E('div', { 'class': 'table' }, [
+		var table6 = E('div', { 'class': 'table leases6' }, [
 			E('div', { 'class': 'tr table-titles' }, [
 				E('div', { 'class': 'th' }, _('Host')),
 				E('div', { 'class': 'th' }, _('IPv6-Address')),
@@ -88,9 +89,17 @@ return L.Class.extend({
 		}), E('em', _('There are no active leases')));
 
 		return E([
+			E('h3', _('Active DHCP Leases')),
 			table,
 			E('h3', _('Active DHCPv6 Leases')),
 			table6
 		]);
+	},
+
+	render: function(data) {
+		if (L.hasSystemFeature('dnsmasq') || L.hasSystemFeature('odhcpd'))
+			return this.renderLeases(data);
+
+		return E([]);
 	}
 });

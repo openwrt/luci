@@ -1,0 +1,14 @@
+{
+	"admin/services/acme": {
+		"title": "ACME certs",
+		"order": 50,
+		"action": {
+			"type": "cbi",
+			"path": "acme",
+			"post": { "cbi.submit": true }
+		},
+		"depends": {
+			"acl": [ "luci-app-acme" ]
+		}
+	}
+}

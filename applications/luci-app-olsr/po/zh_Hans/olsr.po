@@ -4,16 +4,16 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2019-11-18 05:08+0000\n"
-"Last-Translator: Chen Minqiang <ptpt52@gmail.com>\n"
+"PO-Revision-Date: 2020-02-19 20:00+0000\n"
+"Last-Translator: xiazhang <xz@xia.plus>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "openwrt/luciapplicationsolsr/zh_Hans/>\n"
-"Language: zh-cn\n"
+"Language: zh_Hans\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 3.10-dev\n"
+"X-Generator: Weblate 3.11\n"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/mid.htm:13
 msgid "Active MID announcements"
@@ -95,14 +95,14 @@ msgstr ""
 msgid "Device"
 msgstr "设备"
 
-#: applications/luci-app-olsr/luasrc/controller/olsr.lua:75
+#: applications/luci-app-olsr/luasrc/controller/olsr.lua:76
 msgid "Display"
 msgstr "显示"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/smartgw.htm:60
 #: applications/luci-app-olsr/luasrc/view/status-olsr/smartgw.htm:112
 msgid "Downlink"
-msgstr "下行链接"
+msgstr "下行链路"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/overview.htm:203
 msgid "Download Config"
@@ -132,12 +132,12 @@ msgid ""
 "parameters are ignored. Default is \"no\"."
 msgstr ""
 "启用 SmartGateway。如果禁用，则将忽略 SmartGateway 的其他所有参数。缺省"
-"值：“no”"
+"值：“no”。"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdiface.lua:36
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdiface6.lua:36
 msgid "Enable this interface."
-msgstr "启用这个接口"
+msgstr "启用这个接口。"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdplugins.lua:249
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdplugins6.lua:249
@@ -185,12 +185,12 @@ msgstr "网关"
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdiface.lua:31
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdiface6.lua:31
 msgid "General Settings"
-msgstr "基本设置"
+msgstr "常规设置"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:39
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:39
 msgid "General settings"
-msgstr "一般设置"
+msgstr "常规设置"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/legend.htm:9
 msgid "Good (2 < ETX < 4)"
@@ -200,19 +200,23 @@ msgstr "好（2 < ETX < 4）"
 msgid "Good (30 > SNR > 20)"
 msgstr "好（30 > SNR > 20）"
 
+#: applications/luci-app-olsr/root/usr/share/rpcd/acl.d/luci-app-olsr.json:3
+msgid "Grant UCI access for luci-app-olsr"
+msgstr ""
+
 #: applications/luci-app-olsr/luasrc/view/status-olsr/legend.htm:8
 #: applications/luci-app-olsr/luasrc/view/status-olsr/legend.htm:17
 msgid "Green"
 msgstr "绿"
 
-#: applications/luci-app-olsr/luasrc/controller/olsr.lua:53
+#: applications/luci-app-olsr/luasrc/controller/olsr.lua:54
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:402
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:383
 #: applications/luci-app-olsr/luasrc/view/status-olsr/overview.htm:178
 msgid "HNA"
 msgstr "HNA"
 
-#: applications/luci-app-olsr/luasrc/controller/olsr4.lua:24
+#: applications/luci-app-olsr/luasrc/controller/olsr4.lua:25
 msgid "HNA Announcements"
 msgstr "HNA 通告"
 
@@ -230,7 +234,7 @@ msgstr "HNA 间隔"
 msgid "HNA validity time"
 msgstr "HNA 有效时长"
 
-#: applications/luci-app-olsr/luasrc/controller/olsr6.lua:24
+#: applications/luci-app-olsr/luasrc/controller/olsr6.lua:25
 msgid "HNA6 Announcements"
 msgstr "HNA 通告"
 
@@ -441,7 +445,7 @@ msgstr ""
 "接口模式用于防止以太网交换机接口上不必要的数据包转发。有效模式"
 "是“mesh”和“ether”。默认为“mesh”。"
 
-#: applications/luci-app-olsr/luasrc/controller/olsr.lua:70
+#: applications/luci-app-olsr/luasrc/controller/olsr.lua:71
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:354
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:335
 #: applications/luci-app-olsr/luasrc/view/status-olsr/interfaces.htm:14
@@ -596,7 +600,7 @@ msgstr "链接总数"
 msgid "Local interface IP"
 msgstr "本地接口 IP"
 
-#: applications/luci-app-olsr/luasrc/controller/olsr.lua:58
+#: applications/luci-app-olsr/luasrc/controller/olsr.lua:59
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:395
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:376
 msgid "MID"
@@ -636,7 +640,7 @@ msgstr ""
 #: applications/luci-app-olsr/luasrc/view/status-olsr/routes.htm:50
 #: applications/luci-app-olsr/luasrc/view/status-olsr/routes.htm:110
 msgid "Metric"
-msgstr "度量"
+msgstr "跃点数"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:226
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:376
@@ -689,7 +693,7 @@ msgstr "邻居"
 msgid "Neighbour IP"
 msgstr "邻居 IP"
 
-#: applications/luci-app-olsr/luasrc/controller/olsr.lua:37
+#: applications/luci-app-olsr/luasrc/controller/olsr.lua:38
 msgid "Neighbours"
 msgstr "邻居"
 
@@ -813,8 +817,8 @@ msgstr "此网络中的智能网关概览"
 msgid "Plugin configuration"
 msgstr "插件配置"
 
-#: applications/luci-app-olsr/luasrc/controller/olsr4.lua:29
-#: applications/luci-app-olsr/luasrc/controller/olsr6.lua:29
+#: applications/luci-app-olsr/luasrc/controller/olsr4.lua:30
+#: applications/luci-app-olsr/luasrc/controller/olsr6.lua:30
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdplugins.lua:240
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdplugins6.lua:240
 msgid "Plugins"
@@ -860,9 +864,9 @@ msgstr ""
 "解析状态页面上的主机名。通常允许这样做是安全的，但如果您使用公共 IP，且具有不"
 "稳定的 DNS 设置，则这些页面的加载速度会非常慢。这种情况下，在此禁用它。"
 
-#: applications/luci-app-olsr/luasrc/controller/olsr.lua:43
+#: applications/luci-app-olsr/luasrc/controller/olsr.lua:44
 msgid "Routes"
-msgstr "路由"
+msgstr "路由表"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/mid.htm:21
 msgid "Secondary OLSR interfaces"
@@ -903,11 +907,11 @@ msgstr "显示 IPv6"
 msgid "Signal Noise Ratio in dB"
 msgstr "信噪比（dB）"
 
-#: applications/luci-app-olsr/luasrc/controller/olsr.lua:64
+#: applications/luci-app-olsr/luasrc/controller/olsr.lua:65
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:44
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:44
 msgid "SmartGW"
-msgstr "SmartGW"
+msgstr "智能网关"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/smartgw.htm:97
 msgid "SmartGW announcements"
@@ -1037,7 +1041,7 @@ msgstr ""
 msgid "Timing and Validity"
 msgstr "时间和有效性"
 
-#: applications/luci-app-olsr/luasrc/controller/olsr.lua:48
+#: applications/luci-app-olsr/luasrc/controller/olsr.lua:49
 msgid "Topology"
 msgstr "拓扑"
 
@@ -1055,7 +1059,7 @@ msgstr "无法连接到 OLSR 守护程序！"
 #: applications/luci-app-olsr/luasrc/view/status-olsr/smartgw.htm:59
 #: applications/luci-app-olsr/luasrc/view/status-olsr/smartgw.htm:111
 msgid "Uplink"
-msgstr "上行链接"
+msgstr "上行链路"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:166
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:160
@@ -1157,7 +1161,7 @@ msgstr "未连接"
 #: applications/luci-app-olsr/luasrc/view/status-olsr/smartgw.htm:30
 #: applications/luci-app-olsr/luasrc/view/status-olsr/smartgw.htm:134
 msgid "infinite"
-msgstr ""
+msgstr "无限"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/interfaces.htm:40
 #: applications/luci-app-olsr/luasrc/view/status-olsr/smartgw.htm:29

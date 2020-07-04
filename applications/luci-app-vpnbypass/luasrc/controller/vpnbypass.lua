@@ -1,7 +1,10 @@
 module("luci.controller.vpnbypass", package.seeall)
 function index()
 	if nixio.fs.access("/etc/config/vpnbypass") then
-		entry({"admin", "vpn", "vpnbypass"}, cbi("vpnbypass"), _("VPN Bypass"))
+		local e = entry({"admin", "vpn"}, firstchild(), _("VPN"), 60)
+		e.dependent = false
+
+		entry({"admin", "vpn", "vpnbypass"}, cbi("vpnbypass"), _("VPN Bypass")).acl_depends = { "luci-app-vpnbypass" }
 		entry({"admin", "vpn", "vpnbypass", "action"}, call("vpnbypass_action"), nil).leaf = true
 	end
 end
@@ -11,7 +14,7 @@ function vpnbypass_action(name)
 	if name == "start" then
 		luci.sys.init.start(packageName)
 	elseif name == "action" then
-		luci.util.exec("/etc/init.d/" .. packageName .. " reload >/dev/null 2>&1")
+		luci.util.exec("/etc/init.d/" .. packageName .. " restart >/dev/null 2>&1")
 		luci.util.exec("/etc/init.d/dnsmasq restart >/dev/null 2>&1")
 	elseif name == "stop" then
 		luci.sys.init.stop(packageName)

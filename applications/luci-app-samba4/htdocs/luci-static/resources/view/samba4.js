@@ -1,9 +1,10 @@
 'use strict';
+'require view';
 'require fs';
 'require form';
 'require tools.widgets as widgets';
 
-return L.view.extend({
+return view.extend({
 	load: function() {
 		return Promise.all([
 			L.resolveDefault(fs.stat('/sbin/block'), null),
@@ -38,11 +39,18 @@ return L.view.extend({
 		o = s.taboption('general', form.Value, 'description', _('Description'));
 		o.placeholder = 'Samba4 on OpenWrt';
 		
+		s.taboption('general', form.Flag, 'enable_extra_tuning', _('Enable extra Tuning'),
+			_('Enable some community driven tuning parameters, that may improve write speeds and better operation via WiFi.\
+			Not recommend if multiple clients write to the same files, at the same time!'));
+		
 		s.taboption('general', form.Flag, 'disable_async_io', _('Force synchronous  I/O'),
 			_('On lower-end devices may increase speeds, by forceing synchronous I/O instead of the default asynchronous.'));
 
-		o = s.taboption('general', form.Flag, 'macos', _('Enable macOS compatible shares'),
+		s.taboption('general', form.Flag, 'macos', _('Enable macOS compatible shares'),
 			_('Enables Apple\'s AAPL extension globally and adds macOS compatibility options to all shares.'));
+			
+		s.taboption('general', form.Flag, 'allow_legacy_protocols', _('Allow legacy (insecure) protocols/authentication.'),
+			_('Allow legacy smb(v1)/Lanman connections, needed for older devices without smb(v2.1/3) support.'));
 
 		if (stats[2].type === 'file') {
 			s.taboption('general', form.Flag, 'disable_netbios', _('Disable Netbios')) 

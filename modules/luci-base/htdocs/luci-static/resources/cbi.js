@@ -101,7 +101,8 @@ function trimws(s) {
 }
 
 function _(s, c) {
-	return (window.TR && TR[sfh(trimws(s))]) || s;
+	var k = (c != null ? trimws(c) + '\u0001' : '') + trimws(s);
+	return (window.TR && TR[sfh(k)]) || s;
 }
 
 function N_(n, s, p, c) {
@@ -730,6 +731,9 @@ if (typeof(window.CustomEvent) !== 'function') {
 }
 
 function cbi_dropdown_init(sb) {
+	if (sb && L.dom.findClassInstance(sb) instanceof L.ui.Dropdown)
+		return;
+
 	var dl = new L.ui.Dropdown(sb, null, { name: sb.getAttribute('name') });
 	return dl.bind(sb);
 }

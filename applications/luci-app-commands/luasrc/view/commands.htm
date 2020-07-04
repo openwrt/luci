@@ -136,28 +136,40 @@
 <form method="get" action="<%=pcdata(FULL_REQUEST_URI)%>">
 	<div class="cbi-map">
 		<h2 name="content"><%:Custom Commands%></h2>
-
-		<fieldset class="cbi-section">
-			<% local _, command; for _, command in ipairs(commands) do %>
-			<div class="commandbox">
-				<h3><%=pcdata(command.name)%></h3>
-				<p><%:Command:%> <code><%=pcdata(command.command)%></code></p>
-				<% if command.param == "1" then %>
-					<p><%:Arguments:%> <input type="text" id="<%=command['.name']%>" /></p>
-				<% end %>
-				<div>
-					<input type="button" value="<%:Run%>" class="cbi-button cbi-button-apply" onclick="command_run('<%=command['.name']%>')" />
-					<input type="button" value="<%:Download%>" class="cbi-button cbi-button-download" onclick="command_download('<%=command['.name']%>')" />
-					<% if command.public == "1" then %>
-						<input type="button" value="<%:Link%>" class="cbi-button cbi-button-link" onclick="command_link('<%=command['.name']%>')" />
-					<% end %>
+		<% if #commands == 0 then %>
+			<div class="cbi-section">
+				<div class="table cbi-section-table">
+					<div class="tr cbi-section-table-row">
+						<p>
+							<em><%:This section contains no values yet%></em>
+						</p>
+					</div>
 				</div>
 			</div>
-			<% end %>
+		<% else %>
+			<fieldset class="cbi-section">
+				<% local _, command; for _, command in ipairs(commands) do %>
+				<div class="commandbox">
+					<h3><%=pcdata(command.name)%></h3>
+					<p><%:Command:%> <code><%=pcdata(command.command)%></code></p>
+					<% if command.param == "1" then %>
+						<p><%:Arguments:%> <input type="text" id="<%=command['.name']%>" /></p>
+					<% end %>
+					<div>
+						<input type="button" value="<%:Run%>" class="cbi-button cbi-button-apply" onclick="command_run('<%=command['.name']%>')" />
+						<input type="button" value="<%:Download%>" class="cbi-button cbi-button-download" onclick="command_download('<%=command['.name']%>')" />
+						<% if command.public == "1" then %>
+							<input type="button" value="<%:Link%>" class="cbi-button cbi-button-link" onclick="command_link('<%=command['.name']%>')" />
+						<% end %>
+					</div>
+				</div>
+				<% end %>
 
-			<br style="clear:both" /><br />
-			<a name="output"></a>
-		</fieldset>
+				<br style="clear:both" /><br />
+				<a name="output"></a>
+			</fieldset>
+		<% end %>
+
 	</div>
 
 	<fieldset class="cbi-section" style="display:none">

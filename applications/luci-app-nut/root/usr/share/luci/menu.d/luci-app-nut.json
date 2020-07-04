@@ -1,0 +1,55 @@
+{
+	"admin/services/nut": {
+		"title": "Network UPS Tools",
+		"action": {
+			"type": "firstchild"
+		},
+		"depends": {
+			"acl": [ "luci-app-nut" ],
+			"uci": [
+				{ "nut_server": true },
+				{ "nut_monitor": true },
+				{ "nut_cgi": true }
+			]
+		}
+	},
+
+	"admin/services/nut/server": {
+		"title": "Network UPS Tools (Server)",
+		"order": 1,
+		"action": {
+			"type": "cbi",
+			"path": "nut_server",
+			"post": { "cbi.submit": true }
+		},
+		"depends": {
+			"uci": { "nut_server": true }
+		}
+	},
+
+	"admin/services/nut/monitor": {
+		"title": "Network UPS Tools (Monitor)",
+		"order": 2,
+		"action": {
+			"type": "cbi",
+			"path": "nut_monitor",
+			"post": { "cbi.submit": true }
+		},
+		"depends": {
+			"uci": { "nut_monitor": true }
+		}
+	},
+
+	"admin/services/nut/cgi": {
+		"title": "Network UPS Tools (CGI)",
+		"order": 3,
+		"action": {
+			"type": "cbi",
+			"path": "nut_cgi",
+			"post": { "cbi.submit": true }
+		},
+		"depends": {
+			"uci": { "nut_cgi": true }
+		}
+	}
+}

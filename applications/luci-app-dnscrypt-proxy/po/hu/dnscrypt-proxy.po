@@ -1,21 +1,21 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2019-12-20 21:22+0000\n"
-"Last-Translator: Balázs Úr <balazs@urbalazs.hu>\n"
+"PO-Revision-Date: 2020-03-31 13:27+0000\n"
+"Last-Translator: Tamas Szanto <taszanto@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsdnscrypt-proxy/hu/>\n"
 "Language: hu\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.10\n"
+"X-Generator: Weblate 4.0-dev\n"
 
 #: applications/luci-app-dnscrypt-proxy/luasrc/model/cbi/dnscrypt-proxy/overview_tab.lua:139
 #: applications/luci-app-dnscrypt-proxy/luasrc/model/cbi/dnscrypt-proxy/overview_tab.lua:161
 msgid "-------"
 msgstr "-------"
 
-#: applications/luci-app-dnscrypt-proxy/luasrc/controller/dnscrypt-proxy.lua:17
+#: applications/luci-app-dnscrypt-proxy/luasrc/controller/dnscrypt-proxy.lua:21
 msgid "Advanced"
 msgstr "Speciális"
 
@@ -27,8 +27,8 @@ msgstr "Alternatív feloldólista"
 msgid ""
 "Apply DNSCrypt-Proxy specific settings to the Dnsmasq configuration.<br />"
 msgstr ""
-"A DNSCrypt-Proxyra jellemző beállítások alkalmazása a Dnsmasq beállításaira.<"
-"br />"
+"A DNSCrypt-Proxyra jellemző beállítások alkalmazása a Dnsmasq beállításaira."
+"<br />"
 
 #: applications/luci-app-dnscrypt-proxy/luasrc/model/cbi/dnscrypt-proxy/overview_tab.lua:228
 msgid "Blacklist"
@@ -71,16 +71,16 @@ msgstr "Egyéni beállítófájl létrehozása"
 msgid "DNS Query Logfile"
 msgstr "DNS-lekérdezés naplófájlja"
 
-#: applications/luci-app-dnscrypt-proxy/luasrc/controller/dnscrypt-proxy.lua:14
+#: applications/luci-app-dnscrypt-proxy/luasrc/controller/dnscrypt-proxy.lua:15
 #: applications/luci-app-dnscrypt-proxy/luasrc/model/cbi/dnscrypt-proxy/overview_tab.lua:58
 msgid "DNSCrypt-Proxy"
 msgstr "DNSCrypt-Proxy"
 
-#: applications/luci-app-dnscrypt-proxy/luasrc/controller/dnscrypt-proxy.lua:35
+#: applications/luci-app-dnscrypt-proxy/luasrc/controller/dnscrypt-proxy.lua:39
 msgid "DNSCrypt-Proxy Logfile"
 msgstr "DNSCrypt-Proxy naplófájlja"
 
-#: applications/luci-app-dnscrypt-proxy/luasrc/controller/dnscrypt-proxy.lua:26
+#: applications/luci-app-dnscrypt-proxy/luasrc/controller/dnscrypt-proxy.lua:30
 msgid "DNSCrypt-Proxy Resolver List"
 msgstr "DNSCrypt-Proxy feloldólista"
 
@@ -103,15 +103,15 @@ msgstr ""
 "A jelenlegi feloldólista letöltése a „github.com/dyne/dnscrypt-proxy” "
 "helyről."
 
-#: applications/luci-app-dnscrypt-proxy/luasrc/controller/dnscrypt-proxy.lua:18
+#: applications/luci-app-dnscrypt-proxy/luasrc/controller/dnscrypt-proxy.lua:22
 msgid "Edit DNSCrypt-Proxy Configuration"
 msgstr "A DNSCrypt-Proxy beállításainak szerkesztése"
 
-#: applications/luci-app-dnscrypt-proxy/luasrc/controller/dnscrypt-proxy.lua:19
+#: applications/luci-app-dnscrypt-proxy/luasrc/controller/dnscrypt-proxy.lua:23
 msgid "Edit Dnsmasq Configuration"
 msgstr "A Dnsmasq beállításainak szerkesztése"
 
-#: applications/luci-app-dnscrypt-proxy/luasrc/controller/dnscrypt-proxy.lua:20
+#: applications/luci-app-dnscrypt-proxy/luasrc/controller/dnscrypt-proxy.lua:24
 msgid "Edit Resolvcrypt Configuration"
 msgstr "A Resolvcrypt beállításainak szerkesztése"
 
@@ -143,6 +143,10 @@ msgstr ""
 #: applications/luci-app-dnscrypt-proxy/luasrc/model/cbi/dnscrypt-proxy/overview_tab.lua:97
 msgid "General Options"
 msgstr "Általános beállítások"
+
+#: applications/luci-app-dnscrypt-proxy/root/usr/share/rpcd/acl.d/luci-app-dnscrypt-proxy.json:3
+msgid "Grant UCI access for luci-app-dnscrypt-proxy"
+msgstr ""
 
 #: applications/luci-app-dnscrypt-proxy/luasrc/model/cbi/dnscrypt-proxy/overview_tab.lua:189
 msgid "IP Address"
@@ -199,9 +203,9 @@ msgstr "Nem érhető el SSL támogatás.<br />"
 msgid "No default resolver list and no SSL support available.<br />"
 msgstr "Nem érhető el alapértelmezett feloldólista és SSL támogatás.<br />"
 
-#: applications/luci-app-dnscrypt-proxy/luasrc/controller/dnscrypt-proxy.lua:15
+#: applications/luci-app-dnscrypt-proxy/luasrc/controller/dnscrypt-proxy.lua:19
 msgid "Overview"
-msgstr "Áttekintő"
+msgstr "Áttekintés"
 
 #: applications/luci-app-dnscrypt-proxy/luasrc/model/cbi/dnscrypt-proxy/overview_tab.lua:160
 msgid "Please edit the file manually in the 'Advanced' section."
@@ -284,8 +288,8 @@ msgid ""
 "g.'domains:/path/to/dbl.txt' or 'ips:/path/to/ipbl.txt'."
 msgstr ""
 "Ennek a tulajdonságnak az értéke a tiltólista típusa és az útvonal a "
-"fájlhoz, például „domains:/elérési/út/dbl.txt” vagy „ips:/elérési/út/"
-"ipbl.txt”."
+"fájlhoz, például „domains:/elérési/út/dbl.txt” vagy „ips:/elérési/út/ipbl."
+"txt”."
 
 #: applications/luci-app-dnscrypt-proxy/luasrc/model/cbi/dnscrypt-proxy/configuration_tab.lua:21
 msgid ""
@@ -343,10 +347,10 @@ msgstr ""
 msgid "Transfer Options To Dnsmasq"
 msgstr "Beállítások átvitele a Dnsmasq számára"
 
-#: applications/luci-app-dnscrypt-proxy/luasrc/controller/dnscrypt-proxy.lua:16
+#: applications/luci-app-dnscrypt-proxy/luasrc/controller/dnscrypt-proxy.lua:20
 msgid "View Logfile"
 msgstr "Naplófájl megtekintése"
 
-#: applications/luci-app-dnscrypt-proxy/luasrc/controller/dnscrypt-proxy.lua:21
+#: applications/luci-app-dnscrypt-proxy/luasrc/controller/dnscrypt-proxy.lua:25
 msgid "View Resolver List"
 msgstr "Feloldólista megtekintése"

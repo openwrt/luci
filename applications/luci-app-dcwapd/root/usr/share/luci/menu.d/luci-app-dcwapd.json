@@ -1,0 +1,14 @@
+{
+	"admin/network/dcwapd": {
+		"title": "Dual Channel WiFi",
+		"action": {
+			"type": "cbi",
+			"path": "dcwapd/dcwapd",
+			"post": { "cbi.submit": true }
+		},
+		"depends": {
+			"acl": [ "luci-app-dcwapd" ],
+			"uci": { "dcwapd": true }
+		}
+	}
+}

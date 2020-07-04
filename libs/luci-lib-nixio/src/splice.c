@@ -161,7 +161,7 @@ static int nixio_sendfile(lua_State *L) {
 }
 
 /* module table */
-static const luaL_reg R[] = {
+static const luaL_Reg R[] = {
 #ifdef _GNU_SOURCE
 #ifdef SPLICE_F_MOVE
 	{"splice",			nixio_splice},

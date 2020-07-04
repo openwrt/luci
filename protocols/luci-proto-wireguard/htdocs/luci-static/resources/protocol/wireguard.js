@@ -1,4 +1,5 @@
 'use strict';
+'require uci';
 'require form';
 'require network';
 
@@ -7,6 +8,9 @@ function validateBase64(section_id, value) {
 		return true;
 
 	if (value.length != 44 || !value.match(/^(?:[A-Za-z0-9+\/]{4})*(?:[A-Za-z0-9+\/]{2}==|[A-Za-z0-9+\/]{3}=)?$/))
+		return _('Invalid Base64 key string');
+
+	if (value[43] != "=" )
 		return _('Invalid Base64 key string');
 
 	return true;
@@ -60,6 +64,8 @@ return network.registerProtocol('wireguard', {
 		o.datatype = 'ipaddr';
 		o.optional = true;
 
+		o = s.taboption('general', form.Flag, 'nohostroute', _('No Host Routes'), _('Optional. Do not create host routes to peers.'));
+		o.optional = true;
 
 		// -- advanced --------------------------------------------------------------------
 
@@ -121,7 +127,14 @@ return network.registerProtocol('wireguard', {
 
 		o = ss.option(form.DynamicList, 'allowed_ips', _('Allowed IPs'), _("Required. IP addresses and prefixes that this peer is allowed to use inside the tunnel. Usually the peer's tunnel IP addresses and the networks the peer routes through the tunnel."));
 		o.datatype = 'ipaddr';
-		o.rmempty = false;
+		o.validate = function(section, value) {
+			var opt = this.map.lookupOption('allowed_ips', section);
+			var ips = opt[0].formvalue(section);
+			if (ips.length == 0) {
+				return _('Value must not be empty');
+			}
+			return true;
+		};
 
 		o = ss.option(form.Flag, 'route_allowed_ips', _('Route Allowed IPs'), _('Optional. Create routes for Allowed IPs for this peer.'));
 
@@ -136,5 +149,11 @@ return network.registerProtocol('wireguard', {
 		o = ss.option(form.Value, 'persistent_keepalive', _('Persistent Keep Alive'), _('Optional. Seconds between keep alive messages. Default is 0 (disabled). Recommended value if this device is behind a NAT is 25.'));
 		o.datatype = 'range(0,65535)';
 		o.placeholder = '0';
+	},
+
+	deleteConfiguration: function() {
+		uci.sections('network', 'wireguard_%s'.format(this.sid), function(s) {
+			uci.remove('network', s['.name']);
+		});
 	}
 });

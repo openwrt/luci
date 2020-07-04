@@ -170,7 +170,7 @@ sub preprocess_json($$) {
 	my ($path, $source) = @_;
 	my ($file) = $path =~ m!([^/]+)$!;
 
-	$source =~ s/("(?:title)")\s*:\s*("(?:[^"\\]|\\.)*")/$1: _($2)/sg;
+	$source =~ s/("(?:title|description)")\s*:\s*("(?:[^"\\]|\\.)*")/$1: _($2)/sg;
 
 	return ($source);
 }
@@ -181,7 +181,7 @@ my $msguniq_pid = open2($msguniq_out, $msguniq_in, 'msguniq', '-s');
 
 print $msguniq_in "msgid \"\"\nmsgstr \"Content-Type: text/plain; charset=UTF-8\"\n";
 
-if (open F, "find @ARGV -type f '(' -name '*.htm' -o -name '*.lua' -o -name '*.js' -o -path '*/menu.d/*.json' ')' |")
+if (open F, "find @ARGV -type f '(' -name '*.htm' -o -name '*.lua' -o -name '*.js' -o -path '*/menu.d/*.json' -o -path '*/acl.d/*.json' -o -path '*/statistics/plugins/*.json' ')' |")
 {
 	while (defined( my $file = readline F))
 	{

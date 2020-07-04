@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2019-11-05 01:56+0000\n"
-"Last-Translator: Yurii Petrashko <yuripet@gmail.com>\n"
+"PO-Revision-Date: 2020-02-17 11:51+0000\n"
+"Last-Translator: Olexandr Nesterenko <olexn@ukr.net>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsahcp/uk/>\n"
 "Language: uk\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<="
 "4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 3.10-dev\n"
+"X-Generator: Weblate 3.11-dev\n"
 
 #: applications/luci-app-ahcp/luasrc/controller/ahcp.lua:11
 #: applications/luci-app-ahcp/luasrc/model/cbi/ahcp.lua:4
@@ -19,7 +19,6 @@ msgid "AHCP Server"
 msgstr "Сервер AHCP"
 
 #: applications/luci-app-ahcp/luasrc/model/cbi/ahcp.lua:4
-#, fuzzy
 msgid ""
 "AHCP is an autoconfiguration protocol for IPv6 and dual-stack IPv6/IPv4 "
 "networks designed to be used in place of router discovery or DHCP on "
@@ -27,8 +26,10 @@ msgid ""
 "every link-layer broadcast domain, for example mobile ad-hoc networks."
 msgstr ""
 "AHCP є протоколом автоматичної конфігурації мереж IPv6 та IPv6/IPv4, що "
-"разраблений для використання замість DHCP. Наприклад, він використовується у "
-"стільникових ad-hoc мережах."
+"розроблений для використання замість DHCP та протоколів виявлення "
+"маршрутизаторів в мережах, де складно чи неможливо налаштувати сервер в "
+"середині кожної широкомовної зони канального рівня, наприклад в мобільних ad-"
+"hoc мережах."
 
 #: applications/luci-app-ahcp/luasrc/view/ahcp_status.htm:34
 msgid "Active AHCP Leases"
@@ -64,7 +65,7 @@ msgstr "Збирання даних..."
 
 #: applications/luci-app-ahcp/luasrc/model/cbi/admin_network/proto_ahcp.lua:55
 msgid "Disable DNS setup"
-msgstr ""
+msgstr "Вимкнути налаштування DNS"
 
 #: applications/luci-app-ahcp/luasrc/model/cbi/ahcp.lua:21
 msgid "Forwarder"
@@ -73,6 +74,10 @@ msgstr "Спрямовувач"
 #: applications/luci-app-ahcp/luasrc/model/cbi/ahcp.lua:13
 msgid "General Setup"
 msgstr "Загальні налаштування"
+
+#: applications/luci-app-ahcp/root/usr/share/rpcd/acl.d/luci-app-ahcp.json:3
+msgid "Grant UCI access for luci-app-ahcp"
+msgstr ""
 
 #: applications/luci-app-ahcp/luasrc/model/cbi/admin_network/proto_ahcp.lua:24
 #: applications/luci-app-ahcp/luasrc/model/cbi/ahcp.lua:61
@@ -100,7 +105,7 @@ msgstr "Термін дії оренди"
 
 #: applications/luci-app-ahcp/luasrc/model/cbi/ahcp.lua:105
 msgid "Log file"
-msgstr "Файл журналу"
+msgstr "Файл звіту"
 
 #: applications/luci-app-ahcp/luasrc/model/cbi/admin_network/proto_ahcp.lua:11
 #: applications/luci-app-ahcp/luasrc/model/cbi/ahcp.lua:50
@@ -144,7 +149,7 @@ msgstr ""
 
 #: applications/luci-app-ahcp/luasrc/view/ahcp_status.htm:25
 msgid "The AHCP Service is not running."
-msgstr "Сервіс AHCP не запущено"
+msgstr "Сервіс AHCP не запущено."
 
 #: applications/luci-app-ahcp/luasrc/view/ahcp_status.htm:27
 msgid "The AHCP Service is running with ID %s."

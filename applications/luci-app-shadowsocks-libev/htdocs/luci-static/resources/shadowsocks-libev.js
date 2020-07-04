@@ -1,4 +1,5 @@
 'use strict';
+'require baseclass';
 'require uci';
 'require form';
 'require network';
@@ -67,7 +68,7 @@ function ucival_to_bool(val) {
 	return val === 'true' || val === '1' || val === 'yes' || val === 'on';
 }
 
-return L.Class.extend({
+return baseclass.extend({
 	values_actions: function(o) {
 		o.value('bypass');
 		o.value('forward');

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2020-01-28 03:40+0000\n"
+"PO-Revision-Date: 2020-06-27 14:41+0000\n"
 "Last-Translator: Marcin Net <marcin.net@linux.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsolsr/pl/>\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 3.11-dev\n"
+"X-Generator: Weblate 4.2-dev\n"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/mid.htm:13
 msgid "Active MID announcements"
@@ -96,7 +96,7 @@ msgstr ""
 msgid "Device"
 msgstr "Urządzenie"
 
-#: applications/luci-app-olsr/luasrc/controller/olsr.lua:75
+#: applications/luci-app-olsr/luasrc/controller/olsr.lua:76
 msgid "Display"
 msgstr "Wyświetl"
 
@@ -166,8 +166,8 @@ msgid ""
 msgstr ""
 "FIBMetric kontroluje wartość metryczną zestawów OLSRd tras hosta. \"płaska\" "
 "oznacza, że wartość metryczna jest zawsze 2. Jest to preferowana wartość, "
-"ponieważ pomaga trasowaniu jądra Linuksa, aby oczyścić starsze trasy. \""
-"poprawne\" używa hopcount jako wartość metryki. \"approx\" używa hopcount "
+"ponieważ pomaga trasowaniu jądra Linuksa, aby oczyścić starsze trasy. "
+"\"poprawne\" używa hopcount jako wartość metryki. \"approx\" używa hopcount "
 "jako wartość metryki zbyt, ale tylko zaktualizować hopcount jeśli nexthop "
 "zmiany zbyt. Domyślnie jest \"płaska\"."
 
@@ -196,7 +196,7 @@ msgstr "Ustawienia główne"
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:39
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:39
 msgid "General settings"
-msgstr "Ustawienia ogólne"
+msgstr "Ustawienia główne"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/legend.htm:9
 msgid "Good (2 < ETX < 4)"
@@ -206,19 +206,23 @@ msgstr "Dobre (2 < ETX < 4)"
 msgid "Good (30 > SNR > 20)"
 msgstr "Dobre (30 > SNR > 20)"
 
+#: applications/luci-app-olsr/root/usr/share/rpcd/acl.d/luci-app-olsr.json:3
+msgid "Grant UCI access for luci-app-olsr"
+msgstr "Udziel dostępu UCI do luci-app-olsr"
+
 #: applications/luci-app-olsr/luasrc/view/status-olsr/legend.htm:8
 #: applications/luci-app-olsr/luasrc/view/status-olsr/legend.htm:17
 msgid "Green"
 msgstr "Zielony"
 
-#: applications/luci-app-olsr/luasrc/controller/olsr.lua:53
+#: applications/luci-app-olsr/luasrc/controller/olsr.lua:54
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:402
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:383
 #: applications/luci-app-olsr/luasrc/view/status-olsr/overview.htm:178
 msgid "HNA"
 msgstr "HNA"
 
-#: applications/luci-app-olsr/luasrc/controller/olsr4.lua:24
+#: applications/luci-app-olsr/luasrc/controller/olsr4.lua:25
 msgid "HNA Announcements"
 msgstr "Ogłoszenia HNA"
 
@@ -236,7 +240,7 @@ msgstr "Interwał HNA"
 msgid "HNA validity time"
 msgstr "Czas poprawności HNA"
 
-#: applications/luci-app-olsr/luasrc/controller/olsr6.lua:24
+#: applications/luci-app-olsr/luasrc/controller/olsr6.lua:25
 msgid "HNA6 Announcements"
 msgstr "Ogłoszenia HNA6"
 
@@ -466,7 +470,7 @@ msgstr ""
 "pakietów. Prawidłowe tryby to \"mesh\" i \"ether\". Domyślna wartość to "
 "\"mesh\"."
 
-#: applications/luci-app-olsr/luasrc/controller/olsr.lua:70
+#: applications/luci-app-olsr/luasrc/controller/olsr.lua:71
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:354
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:335
 #: applications/luci-app-olsr/luasrc/view/status-olsr/interfaces.htm:14
@@ -608,9 +612,9 @@ msgid ""
 "routing.<br /><b>0</b> = do not use link quality<br /><b>2</b> = use link "
 "quality for MPR selection and routing<br />Default is \"2\""
 msgstr ""
-"Przełączanie poziomu jakości łącza między hopcount i cost-based (głównie ETX)"
-" routing.<br /><b>0</b> = nie używaj jakości łącza<br /><b>2</b> = używaj "
-"jakości łącza do wyboru MPR i routingu<br/>Domyślnie \"2\""
+"Przełączanie poziomu jakości łącza między hopcount i cost-based (głównie "
+"ETX) routing.<br /><b>0</b> = nie używaj jakości łącza<br /><b>2</b> = "
+"używaj jakości łącza do wyboru MPR i routingu<br/>Domyślnie \"2\""
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:245
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:239
@@ -632,7 +636,7 @@ msgstr "Linków w sumie"
 msgid "Local interface IP"
 msgstr "IP lokalnego interfejsu"
 
-#: applications/luci-app-olsr/luasrc/controller/olsr.lua:58
+#: applications/luci-app-olsr/luasrc/controller/olsr.lua:59
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:395
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:376
 msgid "MID"
@@ -694,8 +698,8 @@ msgstr ""
 "Pomnóż trasy przez podany tutaj współczynnik. Dozwolone wartości mieszczą "
 "się w zakresie od 0.01 do 1.0. Jest używany tylko wtedy, gdy poziom LQ jest "
 "większy niż 0. Przykłady: <br/> zmniejsz LQ do 192.168.0.1 o połowę: "
-"192.168.0.1 0,5 <br/> zmniejsz LQ do wszystkich węzłów tego interfejsu o 20%:"
-" domyślnie 0.8"
+"192.168.0.1 0,5 <br/> zmniejsz LQ do wszystkich węzłów tego interfejsu o "
+"20%: domyślnie 0.8"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:240
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdiface6.lua:71
@@ -729,7 +733,7 @@ msgstr "Sąsiedzi"
 msgid "Neighbour IP"
 msgstr "IP sąsiadów"
 
-#: applications/luci-app-olsr/luasrc/controller/olsr.lua:37
+#: applications/luci-app-olsr/luasrc/controller/olsr.lua:38
 msgid "Neighbours"
 msgstr "Sąsiedzi"
 
@@ -853,8 +857,8 @@ msgstr "Przegląd bram SmartGateway w tej sieci"
 msgid "Plugin configuration"
 msgstr "Ustawienia pluginu"
 
-#: applications/luci-app-olsr/luasrc/controller/olsr4.lua:29
-#: applications/luci-app-olsr/luasrc/controller/olsr6.lua:29
+#: applications/luci-app-olsr/luasrc/controller/olsr4.lua:30
+#: applications/luci-app-olsr/luasrc/controller/olsr6.lua:30
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdplugins.lua:240
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdplugins6.lua:240
 msgid "Plugins"
@@ -904,7 +908,7 @@ msgstr ""
 "to strony te będą ładować się naprawdę wolno. W tym przypadku wyłącz go "
 "tutaj."
 
-#: applications/luci-app-olsr/luasrc/controller/olsr.lua:43
+#: applications/luci-app-olsr/luasrc/controller/olsr.lua:44
 msgid "Routes"
 msgstr "Trasy"
 
@@ -949,7 +953,7 @@ msgstr "Pokaż IPv6"
 msgid "Signal Noise Ratio in dB"
 msgstr "Współczynnik szumu sygnału w dB"
 
-#: applications/luci-app-olsr/luasrc/controller/olsr.lua:64
+#: applications/luci-app-olsr/luasrc/controller/olsr.lua:65
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:44
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:44
 msgid "SmartGW"
@@ -1087,7 +1091,7 @@ msgstr ""
 msgid "Timing and Validity"
 msgstr "Czas trwania i ważność"
 
-#: applications/luci-app-olsr/luasrc/controller/olsr.lua:48
+#: applications/luci-app-olsr/luasrc/controller/olsr.lua:49
 msgid "Topology"
 msgstr "Topologia"
 
@@ -1097,8 +1101,8 @@ msgid ""
 "Type of service value for the IP header of control traffic. Default is "
 "\"16\"."
 msgstr ""
-"Typ wartości usługi dla nagłówka IP ruchu sterującego. Domyślnie jest to \""
-"16\"."
+"Typ wartości usługi dla nagłówka IP ruchu sterującego. Domyślnie jest to "
+"\"16\"."
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/error_olsr.htm:9
 msgid "Unable to connect to the OLSR daemon!"

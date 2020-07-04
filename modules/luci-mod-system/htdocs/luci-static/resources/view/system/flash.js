@@ -1,8 +1,12 @@
 'use strict';
+'require view';
+'require dom';
 'require form';
 'require rpc';
 'require fs';
 'require ui';
+
+var isReadonlyView = !L.hasViewPermission();
 
 var callSystemValidateFirmwareImage = rpc.declare({
 	object: 'system',
@@ -60,7 +64,7 @@ function findStorageSize(procmtd, procpart) {
 
 var mapdata = { actions: {}, config: {} };
 
-return L.view.extend({
+return view.extend({
 	load: function() {
 		var tasks = [
 			L.resolveDefault(fs.stat('/lib/upgrade/platform.sh'), {}),
@@ -166,7 +170,7 @@ return L.view.extend({
 	},
 
 	handleBlock: function(hostname, ev) {
-		var mtdblock = L.dom.parent(ev.target, '.cbi-section').querySelector('[data-name="mtdselect"] select').value;
+		var mtdblock = dom.parent(ev.target, '.cbi-section').querySelector('[data-name="mtdselect"] select').value;
 		var form = E('form', {
 			'method': 'post',
 			'action': L.env.cgi_base + '/cgi-download',
@@ -351,6 +355,7 @@ return L.view.extend({
 
 		m = new form.JSONMap(mapdata, _('Flash operations'));
 		m.tabbed = true;
+		m.readonly = isReadonlyView;
 
 		s = m.section(form.NamedSection, 'actions', _('Actions'));
 
@@ -420,7 +425,8 @@ return L.view.extend({
 					node.appendChild(E('div', { 'class': 'cbi-page-actions' }, [
 						E('button', {
 							'class': 'cbi-button cbi-button-save',
-							'click': ui.createHandlerFn(view, 'handleBackupSave', this.map)
+							'click': ui.createHandlerFn(view, 'handleBackupSave', this.map),
+							'disabled': isReadonlyView || null
 						}, [ _('Save') ])
 					]));
 

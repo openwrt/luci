@@ -208,7 +208,7 @@ static int nixio_sock_recvfrom(lua_State *L) {
 
 
 /* module table */
-static const luaL_reg M[] = {
+static const luaL_Reg M[] = {
 	{"send",	nixio_sock_send},
 	{"sendto",	nixio_sock_sendto},
 	{"recv",	nixio_sock_recv},

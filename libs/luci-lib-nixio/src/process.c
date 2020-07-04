@@ -412,7 +412,7 @@ static int nixio_sysinfo(lua_State *L) {
 
 
 /* module table */
-static const luaL_reg R[] = {
+static const luaL_Reg R[] = {
 #ifdef __linux__
 	{"sysinfo",		nixio_sysinfo},
 #endif

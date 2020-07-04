@@ -7,7 +7,11 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=LuCI support for the MWAN3 multiwan hotplug script
-LUCI_DEPENDS:=+luci-compat +mwan3 +libuci-lua +luci-mod-admin-full +luci-app-firewall +luci-lib-nixio
+LUCI_DEPENDS:=+luci-compat \
+	+mwan3 \
+	+libuci-lua \
+	+luci-mod-admin-full \
+	+luci-lib-nixio
 LUCI_PKGARCH:=all
 PKG_LICENSE:=GPLv2
 

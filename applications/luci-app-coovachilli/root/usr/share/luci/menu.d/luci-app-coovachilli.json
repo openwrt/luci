@@ -1,0 +1,44 @@
+{
+	"admin/services/coovachilli": {
+		"title": "CoovaChilli",
+		"order": 90,
+		"action": {
+			"type": "cbi",
+			"path": "coovachilli",
+			"post": { "cbi.submit": true }
+		},
+		"depends": {
+			"acl": [ "luci-app-coovachilli" ]
+		}
+	},
+
+	"admin/services/coovachilli/network": {
+		"title": "Network Configuration",
+		"order": 1,
+		"action": {
+			"type": "cbi",
+			"path": "coovachilli_network",
+			"post": { "cbi.submit": true }
+		}
+	},
+
+	"admin/services/coovachilli/radius": {
+		"title": "RADIUS configuration",
+		"order": 2,
+		"action": {
+			"type": "cbi",
+			"path": "coovachilli_radius",
+			"post": { "cbi.submit": true }
+		}
+	},
+
+	"admin/services/coovachilli/auth": {
+		"title": "UAM and MAC Authentication",
+		"order": 3,
+		"action": {
+			"type": "cbi",
+			"path": "coovachilli_auth",
+			"post": { "cbi.submit": true }
+		}
+	}
+}

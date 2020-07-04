@@ -134,12 +134,41 @@ local function check_uci_depends(conf)
 	return true
 end
 
+local function check_acl_depends(require_groups, groups)
+	if type(require_groups) == "table" and #require_groups > 0 then
+		local writable = false
+
+		for _, group in ipairs(require_groups) do
+			local read = false
+			local write = false
+			if type(groups) == "table" and type(groups[group]) == "table" then
+				for _, perm in ipairs(groups[group]) do
+					if perm == "read" then
+						read = true
+					elseif perm == "write" then
+						write = true
+					end
+				end
+			end
+			if not read and not write then
+				return nil
+			elseif write then
+				writable = true
+			end
+		end
+
+		return writable
+	end
+
+	return true
+end
+
 local function check_depends(spec)
 	if type(spec.depends) ~= "table" then
 		return true
 	end
 
-	if type(spec.depends.fs) == "table" and not check_fs_depends(spec.depends.fs) then
+	if type(spec.depends.fs) == "table" then
 		local satisfied = false
 		local alternatives = (#spec.depends.fs > 0) and spec.depends.fs or { spec.depends.fs }
 		for _, alternative in ipairs(alternatives) do
@@ -193,7 +222,8 @@ local function target_to_json(target, module)
 	elseif target.type == "cbi" then
 		action = {
 			["type"] = "cbi",
-			["path"] = target.model
+			["path"] = target.model,
+			["config"] = target.config
 		}
 	elseif target.type == "form" then
 		action = {
@@ -291,6 +321,14 @@ local function tree_to_json(node, json)
 					spec.depends = spec.depends or {}
 					spec.depends.uci = spec.depends.uci or {}
 					spec.depends.uci[k] = v
+				end
+			end
+
+			if type(subnode.acl_depends) == "table" then
+				for _, acl in ipairs(subnode.acl_depends) do
+					spec.depends = spec.depends or {}
+					spec.depends.acl = spec.depends.acl or {}
+					spec.depends.acl[#spec.depends.acl + 1] = acl
 				end
 			end
 
@@ -492,6 +530,7 @@ end
 
 local function session_retrieve(sid, allowed_users)
 	local sdat = util.ubus("session", "get", { ubus_rpc_session = sid })
+	local sacl = util.ubus("session", "access", { ubus_rpc_session = sid })
 
 	if type(sdat) == "table" and
 	   type(sdat.values) == "table" and
@@ -500,42 +539,38 @@ local function session_retrieve(sid, allowed_users)
 	    util.contains(allowed_users, sdat.values.username))
 	then
 		uci:set_session_id(sid)
-		return sid, sdat.values
+		return sid, sdat.values, type(sacl) == "table" and sacl or {}
 	end
 
-	return nil, nil
+	return nil, nil, nil
 end
 
-local function session_setup(user, pass, allowed_users)
-	if util.contains(allowed_users, user) then
-		local login = util.ubus("session", "login", {
-			username = user,
-			password = pass,
-			timeout  = tonumber(luci.config.sauth.sessiontime)
+local function session_setup(user, pass)
+	local login = util.ubus("session", "login", {
+		username = user,
+		password = pass,
+		timeout  = tonumber(luci.config.sauth.sessiontime)
+	})
+
+	local rp = context.requestpath
+		and table.concat(context.requestpath, "/") or ""
+
+	if type(login) == "table" and
+	   type(login.ubus_rpc_session) == "string"
+	then
+		util.ubus("session", "set", {
+			ubus_rpc_session = login.ubus_rpc_session,
+			values = { token = sys.uniqueid(16) }
 		})
 
-		local rp = context.requestpath
-			and table.concat(context.requestpath, "/") or ""
+		io.stderr:write("luci: accepted login on /%s for %s from %s\n"
+			%{ rp, user or "?", http.getenv("REMOTE_ADDR") or "?" })
 
-		if type(login) == "table" and
-		   type(login.ubus_rpc_session) == "string"
-		then
-			util.ubus("session", "set", {
-				ubus_rpc_session = login.ubus_rpc_session,
-				values = { token = sys.uniqueid(16) }
-			})
-
-			io.stderr:write("luci: accepted login on /%s for %s from %s\n"
-				%{ rp, user, http.getenv("REMOTE_ADDR") or "?" })
-
-			return session_retrieve(login.ubus_rpc_session)
-		end
-
-		io.stderr:write("luci: failed login on /%s for %s from %s\n"
-			%{ rp, user, http.getenv("REMOTE_ADDR") or "?" })
+		return session_retrieve(login.ubus_rpc_session)
 	end
 
-	return nil, nil
+	io.stderr:write("luci: failed login on /%s for %s from %s\n"
+		%{ rp, user or "?", http.getenv("REMOTE_ADDR") or "?" })
 end
 
 local function check_authentication(method)
@@ -634,7 +669,28 @@ local function merge_trees(node_a, node_b)
 	return node_a
 end
 
-function menu_json()
+local function apply_tree_acls(node, acl)
+	if type(node.children) == "table" then
+		for _, child in pairs(node.children) do
+			apply_tree_acls(child, acl)
+		end
+	end
+
+	local perm
+	if type(node.depends) == "table" then
+		perm = check_acl_depends(node.depends.acl, acl["access-group"])
+	else
+		perm = true
+	end
+
+	if perm == nil then
+		node.satisfied = false
+	elseif perm == false then
+		node.readonly = true
+	end
+end
+
+function menu_json(acl)
 	local tree = context.tree or createtree()
 	local lua_tree = tree_to_json(tree, {
 		action = {
@@ -644,7 +700,13 @@ function menu_json()
 	})
 
 	local json_tree = createtree_json()
-	return merge_trees(lua_tree, json_tree)
+	local menu_tree = merge_trees(lua_tree, json_tree)
+
+	if acl then
+		apply_tree_acls(menu_tree, acl)
+	end
+
+	return menu_tree
 end
 
 local function init_template_engine(ctx)
@@ -737,6 +799,8 @@ function dispatch(request)
 	local requested_path_node = {}
 	local requested_path_args = {}
 
+	local required_path_acls = {}
+
 	for i, s in ipairs(request) do
 		if type(page.children) ~= "table" or not page.children[s] then
 			page = nil
@@ -753,6 +817,21 @@ function dispatch(request)
 		cors = page.cors or cors
 		suid = page.setuser or suid
 		sgid = page.setgroup or sgid
+
+		if type(page.depends) == "table" and type(page.depends.acl) == "table" then
+			for _, group in ipairs(page.depends.acl) do
+				local found = false
+				for _, item in ipairs(required_path_acls) do
+					if item == group then
+						found = true
+						break
+					end
+				end
+				if not found then
+					required_path_acls[#required_path_acls + 1] = group
+				end
+			end
+		end
 
 		requested_path_full[i] = s
 		requested_path_node[i] = s
@@ -777,16 +856,16 @@ function dispatch(request)
 	ctx.requested = ctx.requested or page
 
 	if type(auth) == "table" and type(auth.methods) == "table" and #auth.methods > 0 then
-		local sid, sdat
+		local sid, sdat, sacl
 		for _, method in ipairs(auth.methods) do
-			sid, sdat = check_authentication(method)
+			sid, sdat, sacl = check_authentication(method)
 
-			if sid and sdat then
+			if sid and sdat and sacl then
 				break
 			end
 		end
 
-		if not (sid and sdat) and auth.login then
+		if not (sid and sdat and sacl) and auth.login then
 			local user = http.getenv("HTTP_AUTH_USER")
 			local pass = http.getenv("HTTP_AUTH_PASS")
 
@@ -795,7 +874,9 @@ function dispatch(request)
 				pass = http.formvalue("luci_password")
 			end
 
-			sid, sdat = session_setup(user, pass, { "root" })
+			if user and pass then
+				sid, sdat, sacl = session_setup(user, pass)
+			end
 
 			if not sid then
 				context.path = {}
@@ -803,7 +884,12 @@ function dispatch(request)
 				http.status(403, "Forbidden")
 				http.header("X-LuCI-Login-Required", "yes")
 
-				return tpl.render("sysauth", { duser = "root", fuser = user })
+				local scope = { duser = "root", fuser = user }
+				local ok, res = util.copcall(tpl.render_string, [[<% include("themes/" .. theme .. "/sysauth") %>]], scope)
+				if ok then
+					return res
+				end
+				return tpl.render("sysauth", scope)
 			end
 
 			http.header("Set-Cookie", 'sysauth=%s; path=%s; SameSite=Strict; HttpOnly%s' %{
@@ -814,7 +900,7 @@ function dispatch(request)
 			return
 		end
 
-		if not sid or not sdat then
+		if not sid or not sdat or not sacl then
 			http.status(403, "Forbidden")
 			http.header("X-LuCI-Login-Required", "yes")
 			return
@@ -823,6 +909,17 @@ function dispatch(request)
 		ctx.authsession = sid
 		ctx.authtoken = sdat.token
 		ctx.authuser = sdat.username
+		ctx.authacl = sacl
+	end
+
+	if #required_path_acls > 0 then
+		local perm = check_acl_depends(required_path_acls, ctx.authacl and ctx.authacl["access-group"])
+		if perm == nil then
+			http.status(403, "Forbidden")
+			return
+		end
+
+		page.readonly = not perm
 	end
 
 	local action = (page and type(page.action) == "table") and page.action or {}
@@ -942,6 +1039,35 @@ function dispatch(request)
 	end
 end
 
+local function hash_filelist(files)
+	local fprint = {}
+	local n = 0
+
+	for i, file in ipairs(files) do
+		local st = fs.stat(file)
+		if st then
+			fprint[n + 1] = '%x' % st.ino
+			fprint[n + 2] = '%x' % st.mtime
+			fprint[n + 3] = '%x' % st.size
+			n = n + 3
+		end
+	end
+
+	return nixio.crypt(table.concat(fprint, "|"), "$1$"):sub(5):gsub("/", ".")
+end
+
+local function read_cachefile(file, reader)
+	local euid = sys.process.info("uid")
+	local fuid = fs.stat(file, "uid")
+	local mode = fs.stat(file, "modestr")
+
+	if euid ~= fuid or mode ~= "rw-------" then
+		return nil
+	end
+
+	return reader(file)
+end
+
 function createindex()
 	local controllers = { }
 	local base = "%s/controller/" % util.libpath()
@@ -955,25 +1081,19 @@ function createindex()
 		controllers[#controllers+1] = path
 	end
 
+	local cachefile
+
 	if indexcache then
-		local cachedate = fs.stat(indexcache, "mtime")
-		if cachedate then
-			local realdate = 0
-			for _, obj in ipairs(controllers) do
-				local omtime = fs.stat(obj, "mtime")
-				realdate = (omtime and omtime > realdate) and omtime or realdate
-			end
+		cachefile = "%s.%s.lua" %{ indexcache, hash_filelist(controllers) }
 
-			if cachedate > realdate and sys.process.info("uid") == 0 then
-				assert(
-					sys.process.info("uid") == fs.stat(indexcache, "uid")
-					and fs.stat(indexcache, "modestr") == "rw-------",
-					"Fatal: Indexcache is not sane!"
-				)
+		local res = read_cachefile(cachefile, function(path) return loadfile(path)() end)
+		if res then
+			index = res
+			return res
+		end
 
-				index = loadfile(indexcache)()
-				return index
-			end
+		for file in (fs.glob("%s.*.lua" % indexcache) or function() end) do
+			fs.unlink(file)
 		end
 	end
 
@@ -994,8 +1114,8 @@ function createindex()
 		end
 	end
 
-	if indexcache then
-		local f = nixio.open(indexcache, "w", 600)
+	if cachefile then
+		local f = nixio.open(cachefile, "w", 600)
 		f:writeall(util.get_bytecode(index))
 		f:close()
 	end
@@ -1018,29 +1138,16 @@ function createtree_json()
 	}
 
 	local files = {}
-	local fprint = {}
 	local cachefile
 
 	for file in (fs.glob("/usr/share/luci/menu.d/*.json") or function() end) do
 		files[#files+1] = file
-
-		if indexcache then
-			local st = fs.stat(file)
-			if st then
-				fprint[#fprint+1] = '%x' % st.ino
-				fprint[#fprint+1] = '%x' % st.mtime
-				fprint[#fprint+1] = '%x' % st.size
-			end
-		end
 	end
 
 	if indexcache then
-		cachefile = "%s.%s.json" %{
-			indexcache,
-			nixio.crypt(table.concat(fprint, "|"), "$1$"):sub(5):gsub("/", ".")
-		}
+		cachefile = "%s.%s.json" %{ indexcache, hash_filelist(files) }
 
-		local res = json.parse(fs.readfile(cachefile) or "")
+		local res = read_cachefile(cachefile, function(path) return json.parse(fs.readfile(path) or "") end)
 		if res then
 			return res
 		end
@@ -1083,7 +1190,9 @@ function createtree_json()
 	end
 
 	if cachefile then
-		fs.writefile(cachefile, json.stringify(tree))
+		local f = nixio.open(cachefile, "w", 600)
+		f:writeall(json.stringify(tree))
+		f:close()
 	end
 
 	return tree
@@ -1237,11 +1346,22 @@ function _cbi(self, ...)
 	local cbi = require "luci.cbi"
 	local tpl = require "luci.template"
 	local http = require "luci.http"
+	local util = require "luci.util"
 
 	local config = self.config or {}
 	local maps = cbi.load(self.model, ...)
 
 	local state = nil
+
+	local function has_uci_access(config, level)
+		local rv = util.ubus("session", "access", {
+			ubus_rpc_session = context.authsession,
+			scope = "uci", object = config,
+			["function"] = level
+		})
+
+		return (type(rv) == "table" and rv.access == true) or false
+	end
 
 	local i, res
 	for i, res in ipairs(maps) do
@@ -1296,6 +1416,7 @@ function _cbi(self, ...)
 	local applymap   = false
 	local pageaction = true
 	local parsechain = { }
+	local writable   = false
 
 	for i, res in ipairs(maps) do
 		if res.apply_needed and res.parsechain then
@@ -1321,12 +1442,19 @@ function _cbi(self, ...)
 	end
 
 	for i, res in ipairs(maps) do
+		local is_readable_map = has_uci_access(res.config, "read")
+		local is_writable_map = has_uci_access(res.config, "write")
+
+		writable = writable or is_writable_map
+
 		res:render({
 			firstmap   = (i == 1),
 			redirect   = redirect,
 			messages   = messages,
 			pageaction = pageaction,
-			parsechain = parsechain
+			parsechain = parsechain,
+			readable   = is_readable_map,
+			writable   = is_writable_map
 		})
 	end
 
@@ -1337,7 +1465,8 @@ function _cbi(self, ...)
 			redirect      = redirect,
 			state         = state,
 			autoapply     = config.autoapply,
-			trigger_apply = applymap
+			trigger_apply = applymap,
+			writable      = writable
 		})
 	end
 end

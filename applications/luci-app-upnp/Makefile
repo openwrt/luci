@@ -7,7 +7,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=Universal Plug & Play configuration module
-LUCI_DEPENDS:=+luci-compat +miniupnpd
+LUCI_DEPENDS:=+miniupnpd
 
 include ../../luci.mk
 

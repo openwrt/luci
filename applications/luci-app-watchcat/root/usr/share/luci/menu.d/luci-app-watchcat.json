@@ -1,0 +1,15 @@
+{
+	"admin/services/watchcat": {
+		"title": "Watchcat",
+		"order": 90,
+		"action": {
+			"type": "cbi",
+			"path": "watchcat/watchcat",
+			"post": { "cbi.submit": true }
+		},
+		"depends": {
+			"acl": [ "luci-app-watchcat" ],
+			"uci": { "system": true }
+		}
+	}
+}

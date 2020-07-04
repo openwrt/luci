@@ -4,16 +4,16 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2019-10-17 06:36+0000\n"
-"Last-Translator: Zheng Qian <sotux82@gmail.com>\n"
+"PO-Revision-Date: 2020-02-18 11:31+0000\n"
+"Last-Translator: SunSpring <yearnsun@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "openwrt/luciapplicationspolipo/zh_Hans/>\n"
-"Language: zh-cn\n"
+"Language: zh_Hans\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 3.9\n"
+"X-Generator: Weblate 3.11\n"
 
 #: applications/luci-app-polipo/luasrc/model/cbi/polipo.lua:121
 msgid "Advanced Settings"
@@ -33,7 +33,7 @@ msgid ""
 "username:password format."
 msgstr "支持 HTTP 基本身份验证。提供用户名和密码格式为：用户名:密码。"
 
-#: applications/luci-app-polipo/luasrc/controller/polipo.lua:13
+#: applications/luci-app-polipo/root/usr/share/luci/menu.d/luci-app-polipo.json:24
 msgid "Configuration"
 msgstr "配置"
 
@@ -68,7 +68,11 @@ msgstr "第一 PMM 段大小（以字节表示）"
 #: applications/luci-app-polipo/luasrc/model/cbi/polipo.lua:10
 #: applications/luci-app-polipo/luasrc/model/cbi/polipo.lua:120
 msgid "General Settings"
-msgstr "基本设置"
+msgstr "常规设置"
+
+#: applications/luci-app-polipo/root/usr/share/rpcd/acl.d/luci-app-polipo.json:3
+msgid "Grant UCI access for luci-app-polipo"
+msgstr ""
 
 #: applications/luci-app-polipo/luasrc/model/cbi/polipo.lua:113
 msgid "How much RAM should Polipo use for its cache."
@@ -137,8 +141,8 @@ msgstr "Polipo 应该转发请求所到的上层代理（以 主机:端口号 �
 msgid "Parent proxy authentication"
 msgstr "上层代理地址验证"
 
-#: applications/luci-app-polipo/luasrc/controller/polipo.lua:11
 #: applications/luci-app-polipo/luasrc/model/cbi/polipo.lua:4
+#: applications/luci-app-polipo/root/usr/share/luci/menu.d/luci-app-polipo.json:3
 msgid "Polipo"
 msgstr "Polipo"
 
@@ -222,7 +226,7 @@ msgstr "第一个 PMM 段的大小，若未定义，默认为两倍 PMM 段的�
 msgid "Size to which cached files should be truncated"
 msgstr "缓存文件应截断为的大小"
 
-#: applications/luci-app-polipo/luasrc/controller/polipo.lua:12
+#: applications/luci-app-polipo/root/usr/share/luci/menu.d/luci-app-polipo.json:15
 msgid "Status"
 msgstr "状态"
 

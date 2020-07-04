@@ -1,8 +1,10 @@
 module("luci.controller.vpn-policy-routing", package.seeall)
 function index()
 	if nixio.fs.access("/etc/config/vpn-policy-routing") then
-		entry({"admin", "vpn"}, firstchild(), _("VPN"), 60).dependent=false
-		entry({"admin", "vpn", "vpn-policy-routing"}, cbi("vpn-policy-routing"), _("VPN Policy Routing"))
+		local e = entry({"admin", "vpn"}, firstchild(), _("VPN"), 60)
+		e.dependent = false
+
+		entry({"admin", "vpn", "vpn-policy-routing"}, cbi("vpn-policy-routing"), _("VPN Policy Routing")).acl_depends = { "luci-app-vpn-policy-routing" }
 		entry({"admin", "vpn", "vpn-policy-routing", "action"}, call("vpn_policy_routing_action"), nil).leaf = true
 	end
 end
@@ -12,7 +14,7 @@ function vpn_policy_routing_action(name)
 	if name == "start" then
 		luci.sys.init.start(packageName)
 	elseif name == "action" then
-		luci.util.exec("/etc/init.d/" .. packageName .. " reload >/dev/null 2>&1")
+		luci.util.exec("/etc/init.d/" .. packageName .. " restart >/dev/null 2>&1")
 	elseif name == "stop" then
 		luci.sys.init.stop(packageName)
 	elseif name == "enable" then

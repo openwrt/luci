@@ -747,6 +747,7 @@ static int cidr_mask(lua_State *L)
 	if (!(p2 = lua_newuserdata(L, sizeof(*p2))))
 		return 0;
 
+	p2->scope = 0;
 	p2->bits = AF_BITS(p1->family);
 	p2->family = p1->family;
 
@@ -790,6 +791,7 @@ static int cidr_mapped4(lua_State *L)
 	if (!(p2 = lua_newuserdata(L, sizeof(*p2))))
 		return 0;
 
+	p2->scope = 0;
 	p2->family = AF_INET;
 	p2->bits = (p1->bits > AF_BITS(AF_INET)) ? AF_BITS(AF_INET) : p1->bits;
 	memcpy(&p2->addr.v4, p1->addr.v6.s6_addr + 12, sizeof(p2->addr.v4));
@@ -830,6 +832,7 @@ static int cidr_tolinklocal(lua_State *L)
 	if (!(p2 = lua_newuserdata(L, sizeof(*p2))))
 		return 0;
 
+	p2->scope = p1->scope;
 	p2->family = AF_INET6;
 	p2->bits = AF_BITS(AF_INET6);
 	p2->addr.u8[0] = 0xFE;
@@ -870,6 +873,7 @@ static int cidr_tomac(lua_State *L)
 	if (!(p2 = lua_newuserdata(L, sizeof(*p2))))
 		return 0;
 
+	p2->scope = 0;
 	p2->family = AF_PACKET;
 	p2->bits = AF_BITS(AF_PACKET);
 	p2->addr.u8[0] = p1->addr.u8[8] ^ 0x02;

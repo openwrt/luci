@@ -1,8 +1,11 @@
 'use strict';
+'require view';
 'require fs';
 'require ui';
 
-return L.view.extend({
+var isReadonlyView = !L.hasViewPermission() || null;
+
+return view.extend({
 	load: function() {
 		return L.resolveDefault(fs.read('/etc/crontabs/root'), '');
 	},
@@ -21,10 +24,10 @@ return L.view.extend({
 	render: function(crontab) {
 		return E([
 			E('h2', _('Scheduled Tasks')),
-			E('p', {},
+			E('p', { 'class': 'cbi-section-descr' },
 				_('This is the system crontab in which scheduled tasks can be defined.') +
 				_('<br/>Note: you need to manually restart the cron service if the crontab file was empty before editing.')),
-			E('p', {}, E('textarea', { 'style': 'width:100%', 'rows': 10 }, [ crontab != null ? crontab : '' ]))
+			E('p', {}, E('textarea', { 'style': 'width:100%', 'rows': 10, 'disabled': isReadonlyView }, [ crontab != null ? crontab : '' ]))
 		]);
 	},
 

@@ -20,30 +20,33 @@ if ubusStatus and ubusStatus[packageName] and
 	 ubusStatus[packageName]["instances"]["main"]["data"] and
 	 ubusStatus[packageName]["instances"]["main"]["data"]["status"] and 
 	 ubusStatus[packageName]["instances"]["main"]["data"]["status"][1] then
-	pkgGateways = ubusStatus[packageName]["instances"]["main"]["data"]["status"][1]["gateway"]
-	pkgGateways = pkgGateways and pkgGateways:gsub('\\n', '\n')
-	pkgGateways = pkgGateways and pkgGateways:gsub('\\033%[0;32m%[\\xe2\\x9c\\x93%]\\033%[0m', '✓')
-	pkgErrors = ubusStatus[packageName]["instances"]["main"]["data"]["status"][1]["error"]
-	pkgErrors = pkgErrors and pkgErrors:gsub('\\n', '\n')
-	pkgErrors = pkgErrors and pkgErrors:gsub('\\033%[0;31mERROR\\033%[0m: ', '')
-	pkgWarnings = ubusStatus[packageName]["instances"]["main"]["data"]["status"][1]["warning"]
-	pkgWarnings = pkgWarnings and pkgWarnings:gsub('\\n', '\n')
-	pkgWarnings = pkgWarnings and pkgWarnings:gsub('\\033%[0;33mWARNING\\033%[0m: ', '')
-	pkgMode = ubusStatus[packageName]["instances"]["main"]["data"]["status"][1]["mode"]
+	serviceGateways = ubusStatus[packageName]["instances"]["main"]["data"]["status"][1]["gateway"]
+	serviceGateways = serviceGateways and serviceGateways:gsub('\\n', '\n')
+	serviceGateways = serviceGateways and serviceGateways:gsub('\\033%[0;32m%[\\xe2\\x9c\\x93%]\\033%[0m', '✓')
+	serviceErrors = ubusStatus[packageName]["instances"]["main"]["data"]["status"][1]["error"]
+	serviceErrors = serviceErrors and serviceErrors:gsub('\\n', '\n')
+	serviceErrors = serviceErrors and serviceErrors:gsub('\\033%[0;31mERROR\\033%[0m: ', '')
+	serviceWarnings = ubusStatus[packageName]["instances"]["main"]["data"]["status"][1]["warning"]
+	serviceWarnings = serviceWarnings and serviceWarnings:gsub('\\n', '\n')
+	serviceWarnings = serviceWarnings and serviceWarnings:gsub('\\033%[0;33mWARNING\\033%[0m: ', '')
+	serviceMode = ubusStatus[packageName]["instances"]["main"]["data"]["status"][1]["mode"]
 end
 
-local pkgVersion = tostring(util.trim(sys.exec("opkg list-installed " .. packageName .. " | awk '{print $3}'")))
-if not pkgVersion or pkgVersion == "" then
-	pkgVersion = ""
-	pkgStatus, pkgStatusLabel = "NotFound", packageName .. " " .. translate("is not installed or not found")
-else  
-	pkgVersion = " [" .. packageName .. " " .. pkgVersion .. "]"
-end
-local pkgStatus, pkgStatusLabel = "Stopped", translate("Stopped")
+local serviceRunning, statusText = false, nil
+local packageVersion = tostring(util.trim(sys.exec("opkg list-installed " .. packageName .. " | awk '{print $3}'"))) or ""
+if packageVersion == "" then
+	statusText = translatef("%s is not installed or not found", packageName)
+end 
 if sys.call("iptables -t mangle -L | grep -q VPR_PREROUTING") == 0 then
-	pkgStatus, pkgStatusLabel = "Running", translate("Running")
-	if pkgMode and pkgMode == "strict" then
-		pkgStatusLabel = pkgStatusLabel .. " " .. translate("(strict mode)")
+	serviceRunning = true
+	statusText = translate("Running")
+	if serviceMode and serviceMode == "strict" then
+		statusText = translatef("%s (strict mode)", statusText)
+	end
+else
+	statusText = translate("Stopped")
+	if uci:get(packageName, "config", "enabled") ~= "1" then
+		statusText = translatef("%s (disabled)", statusText)
 	end
 end
 
@@ -67,14 +70,14 @@ end
 
 local lanIPAddr = uci:get("network", "lan", "ipaddr")
 local lanNetmask = uci:get("network", "lan", "netmask")
--- if multiple ip addresses on lan interface, will be return as table of CIDR notations i.e. {"10.0.0.1/24","10.0.0.2/24"}
+-- if multiple ip addresses on lan interface, will be returned as table of CIDR notations i.e. {"10.0.0.1/24","10.0.0.2/24"}
 if (type(lanIPAddr) == "table") then
 				first = true
 				for i,line in ipairs(lanIPAddr) do
 								lanIPAddr = lanIPAddr[i]
 								break
 				end
-				lanIPAddr = string.match(lanIPAddr,"[0-9.]+")
+				lanIPAddr = lanIPAddr:match("[0-9.]+")
 end          
 if lanIPAddr and lanNetmask then
 	laPlaceholder = ip.new(lanIPAddr .. "/" .. lanNetmask )
@@ -114,27 +117,29 @@ end
 
 m = Map("vpn-policy-routing", translate("VPN and WAN Policy-Based Routing"))
 
-h = m:section(NamedSection, "config", packageName, translate("Service Status") .. pkgVersion)
+h = m:section(NamedSection, "config", packageName, translatef("Service Status [%s %s]", packageName, packageVersion))
 status = h:option(DummyValue, "_dummy", translate("Service Status"))
 status.template = "vpn-policy-routing/status"
-status.value = pkgStatusLabel
-if pkgStatus:match("Running") and pkgGateways and pkgGateways ~= "" then
+status.value = statusText
+if serviceRunning and serviceGateways and serviceGateways ~= "" then
 	gateways = h:option(DummyValue, "_dummy", translate("Service Gateways"))
 	gateways.template = packageName .. "/status-gateways"
-	gateways.value = pkgGateways
+	gateways.value = serviceGateways
 end
-if pkgErrors and pkgErrors ~= "" then
+if serviceErrors and serviceErrors ~= "" then
 	errors = h:option(DummyValue, "_dummy", translate("Service Errors"))
 	errors.template = packageName .. "/status-textarea"
-	errors.value = pkgErrors
+	errors.value = serviceErrors
 end
-if pkgWarnings and pkgWarnings ~= "" then
+if serviceWarnings and serviceWarnings ~= "" then
 	warnings = h:option(DummyValue, "_dummy", translate("Service Warnings"))
 	warnings.template = packageName .. "/status-textarea"
-	warnings.value = pkgWarnings
+	warnings.value = serviceWarnings
 end
-buttons = h:option(DummyValue, "_dummy")
-buttons.template = packageName .. "/buttons"
+if packageVersion ~= "" then
+	buttons = h:option(DummyValue, "_dummy")
+	buttons.template = packageName .. "/buttons"
+end
 
 -- General Options
 config = m:section(NamedSection, "config", "vpn-policy-routing", translate("Configuration"))
@@ -144,23 +149,20 @@ config.override_depends = true
 -- Basic Options
 config:tab("basic", translate("Basic Configuration"))
 
-verb = config:taboption("basic", ListValue, "verbosity", translate("Output verbosity"),translate("Controls both system log and console output verbosity."))
+verb = config:taboption("basic", ListValue, "verbosity", translate("Output verbosity"), translate("Controls both system log and console output verbosity."))
 verb:value("0", translate("Suppress/No output"))
 verb:value("1", translate("Condensed output"))
 verb:value("2", translate("Verbose output"))
 verb.default = 2
 
-se = config:taboption("basic", ListValue, "strict_enforcement", translate("Strict enforcement"),translate("See the") .. " "
-	.. [[<a href="]] .. readmeURL .. [[#strict-enforcement" target="_blank">]]
-	.. translate("README") .. [[</a>]] .. " " .. translate("for details."))
+se = config:taboption("basic", ListValue, "strict_enforcement", translate("Strict enforcement"),
+	translatef("See the %sREADME%s for details.", "<a href=\"" .. readmeURL .. "#strict-enforcement" .. "\" target=\"_blank\">", "</a>"))
 se:value("0", translate("Do not enforce policies when their gateway is down"))
 se:value("1", translate("Strictly enforce policies when their gateway is down"))
 se.default = 1
 
 dest_ipset = config:taboption("basic", ListValue, "dest_ipset", translate("The ipset option for remote policies"),
-	translate("Please check the") .. " "
-	.. [[<a href="]] .. readmeURL .. [[#additional-settings" target="_blank">]]
-	.. translate("README") .. [[</a>]] .. " " .. translate("before changing this option."))
+	translatef("Please check the %sREADME%s before changing this option.", "<a href=\"" .. readmeURL .. "#service-configuration-settings" .. "\" target=\"_blank\">", "</a>"))
 dest_ipset:value("", translate("Disabled"))
 dest_ipset:value("ipset", translate("Use ipset command"))
 dest_ipset:value("dnsmasq.ipset", translate("Use DNSMASQ ipset"))
@@ -168,9 +170,7 @@ dest_ipset.default = ""
 dest_ipset.rmempty = true
 
 src_ipset = config:taboption("basic", ListValue, "src_ipset", translate("The ipset option for local policies"),
-	translate("Please check the") .. " "
-	.. [[<a href="]] .. readmeURL .. [[#additional-settings" target="_blank">]]
-	.. translate("README") .. [[</a>]] .. " " .. translate("before changing this option."))
+	translatef("Please check the %sREADME%s before changing this option.", "<a href=\"" .. readmeURL .. "#service-configuration-settings" .. "\" target=\"_blank\">", "</a>"))
 src_ipset:value("0", translate("Disabled"))
 src_ipset:value("1", translate("Use ipset command"))
 
@@ -180,9 +180,7 @@ ipv6:value("1", translate("Enabled"))
 
 -- Advanced Options
 config:tab("advanced", translate("Advanced Configuration"),
-	"<br/>&nbsp;&nbsp;&nbsp;&nbsp;<b>" .. translate("WARNING:") .. "</b>" .. " " .. translate("Please make sure to check the") .. " "
-	.. [[<a href="]] .. readmeURL .. [[#additional-settings" target="_blank">]] .. translate("README") .. [[</a>]] .. " "
-	.. translate("before changing anything in this section! Change any of the settings below with extreme caution!") .. "<br/><br/>")
+	translatef("%sWARNING:%s Please make sure to check the %sREADME%s before changing anything in this section! Change any of the settings below with extreme caution!%s" , "<br/>&nbsp;&nbsp;&nbsp;&nbsp;<b>", "</b>", "<a href=\"" .. readmeURL .. "#service-configuration-settings" .. "\" target=\"_blank\">", "</a>", "<br/><br/>"))
 
 supportedIface = config:taboption("advanced", DynamicList, "supported_interface", translate("Supported Interfaces"), translate("Allows to specify the list of interface names (in lower case) to be explicitly supported by the service. Can be useful if your OpenVPN tunnels have dev option other than tun* or tap*."))
 supportedIface.optional = false
@@ -208,7 +206,7 @@ icmp:value("", translate("No Change"))
 icmp:value("wan", translate("WAN"))
 uci:foreach("network", "interface", function(s)
 	local name=s['.name']
-	if is_supported_interface(s) then icmp:value(name, string.upper(name)) end
+	if is_supported_interface(s) then icmp:value(name, name:upper()) end
 end)
 icmp.rmempty = true
 
@@ -284,7 +282,7 @@ if laPlaceholder then
 	la.placeholder = laPlaceholder
 end
 la.rmempty = true
-la.datatype    = 'list(neg(or(host,network,macaddr)))'
+la.datatype    = 'list(neg(or(host,network,macaddr,string)))'
 
 lp = p:option(Value, "src_port", translate("Local ports"))
 lp.datatype    = 'list(neg(or(portrange, string)))'
@@ -338,29 +336,27 @@ gw.rmempty = false
 uci:foreach("network", "interface", function(s)
 	local name=s['.name']
 	if is_wan(name) then
-		gw:value(name, string.upper(name))
+		gw:value(name, name:upper())
 		if not gw.default then gw.default = name end
 	elseif is_supported_interface(s) then 
-		gw:value(name, string.upper(name)) 
+		gw:value(name, name:upper()) 
 	end
 end)
 
-dscp = m:section(NamedSection, "config", "vpn-policy-routing", translate("DSCP Tagging"), translate("Set DSCP tags (in range between 1 and 63) for specific interfaces. See the") .. " "
-	.. [[<a href="]] .. readmeURL .. [[#dscp-tag-based-policies" target="_blank">]]
-	.. translate("README") .. [[</a>]] .. " " .. translate("for details."))
+dscp = m:section(NamedSection, "config", "vpn-policy-routing", translate("DSCP Tagging"), 
+	translatef("Set DSCP tags (in range between 1 and 63) for specific interfaces. See the %sREADME%s for details.", "<a href=\"" .. readmeURL .. "#dscp-tag-based-policies" .. "\" target=\"_blank\">", "</a>"))
 uci:foreach("network", "interface", function(s)
 	local name=s['.name']
 	if is_supported_interface(s) then 
-		local x = dscp:option(Value, name .. "_dscp", string.upper(name) .. " " .. translate("DSCP Tag"))
+		local x = dscp:option(Value, name .. "_dscp", name:upper() .. " " .. translate("DSCP Tag"))
 		x.rmempty = true
 		x.datatype = "range(1,63)"
 	end
 end)
 
 -- Includes
-inc = m:section(TypedSection, "include", translate("Custom User File Includes"), translate("Run the following user files after setting up but before restarting DNSMASQ. See the") .. " "
-	.. [[<a href="]] .. readmeURL .. [[#custom-user-files" target="_blank">]]
-	.. translate("README") .. [[</a>]] .. " " .. translate("for details."))
+inc = m:section(TypedSection, "include", translate("Custom User File Includes"), 
+	translatef("Run the following user files after setting up but before restarting DNSMASQ. See the %sREADME%s for details.", "<a href=\"" .. readmeURL .. "#custom-user-files" .. "\" target=\"_blank\">", "</a>"))
 inc.template = "cbi/tblsection"
 inc.sortable  = true
 inc.anonymous = true

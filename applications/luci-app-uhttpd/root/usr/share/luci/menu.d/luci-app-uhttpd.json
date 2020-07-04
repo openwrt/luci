@@ -1,0 +1,14 @@
+{
+	"admin/services/uhttpd/*": {
+		"title": "uHTTPd",
+		"action": {
+			"type": "cbi",
+			"path": "uhttpd/uhttpd",
+			"post": { "cbi.submit": true }
+		},
+		"depends": {
+			"acl": [ "luci-app-uhttpd" ],
+			"uci": { "uhttpd": true }
+		}
+	}
+}

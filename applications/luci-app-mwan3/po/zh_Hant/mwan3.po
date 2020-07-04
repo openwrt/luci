@@ -3,15 +3,15 @@
 #
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2019-12-19 19:40+0000\n"
-"Last-Translator: 孤爺仔 <7312140@qq.com>\n"
+"PO-Revision-Date: 2020-06-30 13:41+0000\n"
+"Last-Translator: Hulen <shift0106@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "openwrt/luciapplicationsmwan3/zh_Hant/>\n"
-"Language: zh-tw\n"
+"Language: zh_Hant\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 3.10-dev\n"
+"X-Generator: Weblate 4.2-dev\n"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interfaceconfig.lua:176
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interfaceconfig.lua:192
@@ -81,7 +81,7 @@ msgstr "%d 秒"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/ruleconfig.lua:58
 msgid "-- Please choose --"
-msgstr ""
+msgstr "-- 請選擇 --"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interfaceconfig.lua:66
 msgid ""
@@ -100,7 +100,7 @@ msgstr "取值範圍：1-256。如果不填寫，預設值為 1"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/globalsconfig.lua:32
 msgid "Alert"
-msgstr ""
+msgstr "警示"
 
 #: applications/luci-app-mwan3/luasrc/controller/mwan3.lua:177
 msgid "All required IP rules for interface %s found"
@@ -130,11 +130,11 @@ msgstr "收集資料中..."
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/globalsconfig.lua:33
 msgid "Critical"
-msgstr ""
+msgstr "致命錯誤"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/globalsconfig.lua:38
 msgid "Debug"
-msgstr ""
+msgstr "除錯 Debug"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/rule.lua:81
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/ruleconfig.lua:29
@@ -171,29 +171,29 @@ msgstr "當 Ping 成功次數達到這個數值後，已經被認為離線的介
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/globalsconfig.lua:31
 msgid "Emergency"
-msgstr ""
+msgstr "緊急"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interfaceconfig.lua:59
 msgid "Enable ssl tracking"
-msgstr ""
+msgstr "啟用 SSL 跟蹤"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interface.lua:160
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interfaceconfig.lua:23
 msgid "Enabled"
-msgstr "已啟用"
+msgstr "啟用"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/ruleconfig.lua:64
 msgid ""
 "Enables firewall rule logging (global mwan3 logging must also be enabled)"
-msgstr ""
+msgstr "啟用防火牆規則日誌 (必須啟用全域 mwan3 日誌)"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/globalsconfig.lua:23
 msgid "Enables global firewall logging"
-msgstr ""
+msgstr "啟用全域防火牆日誌"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interfaceconfig.lua:60
 msgid "Enables https tracking on ssl port 443"
-msgstr ""
+msgstr "啟用在 SSL 連接埠 443 上的 https 跟蹤"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/globalsconfig.lua:16
 msgid "Enter value in hex, starting with <code>0x</code>"
@@ -201,7 +201,7 @@ msgstr "輸入十六進位制值，以 <code>0x</code> 開頭"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/globalsconfig.lua:34
 msgid "Error"
-msgstr ""
+msgstr "錯誤"
 
 #: applications/luci-app-mwan3/luasrc/view/mwan/status_diagnostics.htm:81
 msgid "Execute"
@@ -217,7 +217,7 @@ msgstr "故障檢測間隔"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/globalsconfig.lua:29
 msgid "Firewall loglevel"
-msgstr ""
+msgstr "防火牆日誌級別"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/globalsconfig.lua:15
 msgid "Firewall mask"
@@ -235,6 +235,10 @@ msgstr "在介面事件觸發時重新整理全局防火牆連線跟蹤表"
 msgid "Globals"
 msgstr "全局"
 
+#: applications/luci-app-mwan3/root/usr/share/rpcd/acl.d/luci-app-mwan3.json:3
+msgid "Grant UCI access for luci-app-mwan3"
+msgstr ""
+
 #: applications/luci-app-mwan3/luasrc/view/mwan/status_diagnostics.htm:76
 msgid "Hotplug ifdown"
 msgstr "Hotplug ifdown"
@@ -251,7 +255,7 @@ msgstr "rtmon 應該多久更新一次介面路由表"
 #: applications/luci-app-mwan3/luasrc/view/mwan/status_diagnostics.htm:56
 #: applications/luci-app-mwan3/luasrc/view/mwan/status_troubleshooting.htm:29
 msgid "INFO: MWAN not running"
-msgstr "資訊：MWAN 沒有運行"
+msgstr "資訊：MWAN 沒有執行"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/ruleconfig.lua:56
 msgid "IPset"
@@ -267,7 +271,7 @@ msgstr "IPv6"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/globalsconfig.lua:37
 msgid "Info"
-msgstr ""
+msgstr "資訊"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interfaceconfig.lua:26
 msgid "Initial state"
@@ -334,15 +338,15 @@ msgstr "載入中"
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/globalsconfig.lua:22
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/ruleconfig.lua:63
 msgid "Logging"
-msgstr ""
+msgstr "日誌"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/globalsconfig.lua:28
 msgid "Loglevel"
-msgstr ""
+msgstr "日誌級別"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/globalsconfig.lua:8
 msgid "MWAN - Globals"
-msgstr "MWAN - 全局"
+msgstr "MWAN - 全域"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interface.lua:139
 msgid "MWAN - Interfaces"
@@ -405,10 +409,9 @@ msgid ""
 ">Interfaces may not share the same name as configured members, policies or "
 "rules"
 msgstr ""
-"MWAN 支援最多 252 個物理或邏輯介面。<br />MWAN 要求所有介面必須在 /etc/"
-"config/network 中設定唯一的閘道器躍點。<br />名稱必須與 /etc/config/network "
-"中的介面名稱匹配。<br />名稱允許包括 A-Z、a-z、0-9、_ 但是不能有空格。<br />"
-"接口不應該與成員、策略、規則中的任意一個設定項使用相同的名稱"
+"MWAN 支援最多 252 個物理或邏輯介面。<br />MWAN 要求所有介面必須在 /etc/config/network 中設定唯一的閘道器躍點。"
+"<br />名稱必須與 /etc/config/network 中的介面名稱匹配。<br />名稱允許包括 A-Z、a-z、0-9、_ 但是不能有空格。"
+"<br />介面不應該與成員、策略、規則中的任意一個設定項使用相同的名稱"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interfaceconfig.lua:92
 msgid "Max TTL"
@@ -487,7 +490,7 @@ msgstr ""
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interface.lua:166
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/ruleconfig.lua:50
 msgid "No"
-msgstr "否"
+msgstr "不"
 
 #: applications/luci-app-mwan3/luasrc/view/mwan/overview_status_interface.htm:76
 msgid "No MWAN interfaces found"
@@ -503,7 +506,7 @@ msgstr "未定義介面 %s 的跟蹤主機。"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/globalsconfig.lua:36
 msgid "Notice"
-msgstr ""
+msgstr "注意"
 
 #: applications/luci-app-mwan3/luasrc/controller/mwan3.lua:60
 msgid "Notification"
@@ -589,7 +592,7 @@ msgstr "分配的策略"
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/rule.lua:93
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/ruleconfig.lua:36
 msgid "Protocol"
-msgstr "通訊協議"
+msgstr "協定"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interfaceconfig.lua:198
 msgid "Recovery interval"
@@ -787,7 +790,7 @@ msgstr "正在等待指令完成…"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/globalsconfig.lua:35
 msgid "Warning"
-msgstr ""
+msgstr "警告"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/member.lua:39
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/memberconfig.lua:29
@@ -812,7 +815,7 @@ msgstr "黑洞（丟棄）"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interfaceconfig.lua:246
 msgid "connected (mwan3)"
-msgstr ""
+msgstr "已連線 (mwan3)"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/policy.lua:82
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/policyconfig.lua:30
@@ -822,15 +825,15 @@ msgstr "預設（使用主路由表）"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interfaceconfig.lua:247
 msgid "disconnected (mwan3)"
-msgstr ""
+msgstr "未連線 (mwan3)"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interfaceconfig.lua:245
 msgid "ifdown (netifd)"
-msgstr ""
+msgstr "ifdown (netifd)"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interfaceconfig.lua:244
 msgid "ifup (netifd)"
-msgstr ""
+msgstr "ifup (netifd)"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/policy.lua:84
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/policyconfig.lua:28

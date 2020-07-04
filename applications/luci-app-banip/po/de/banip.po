@@ -1,14 +1,14 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2019-11-26 17:11+0000\n"
-"Last-Translator: Mark Mühlbacher <cyris@gmx.at>\n"
+"PO-Revision-Date: 2020-04-02 13:16+0000\n"
+"Last-Translator: CE4 <chregger@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsbanip/de/>\n"
 "Language: de\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.10-dev\n"
+"X-Generator: Weblate 4.0-dev\n"
 
 #: applications/luci-app-banip/luasrc/view/banip/ripeview.htm:89
 msgid "ASN Overview"
@@ -28,7 +28,7 @@ msgstr ""
 "Zusätzliche Triggerverzögerung in Sekunden bevor die BanIP-Verarbeitung "
 "beginnt."
 
-#: applications/luci-app-banip/luasrc/controller/banip.lua:21
+#: applications/luci-app-banip/luasrc/controller/banip.lua:25
 msgid "Advanced"
 msgstr "Fortgeschritten"
 
@@ -63,7 +63,6 @@ msgstr ""
 "IPSet."
 
 #: applications/luci-app-banip/luasrc/view/banip/ripeview.htm:92
-#, fuzzy
 msgid "Country Resources"
 msgstr "Länderressourcen"
 
@@ -95,17 +94,17 @@ msgstr "Download-Werkzeug"
 msgid "Download Utility, RT Monitor"
 msgstr "Download-Dienstprogramm, RT Monitor"
 
-#: applications/luci-app-banip/luasrc/controller/banip.lua:22
+#: applications/luci-app-banip/luasrc/controller/banip.lua:26
 msgid "Edit Blacklist"
-msgstr "Negativliste bearbeiten"
+msgstr "Blackliste bearbeiten"
 
-#: applications/luci-app-banip/luasrc/controller/banip.lua:24
+#: applications/luci-app-banip/luasrc/controller/banip.lua:28
 msgid "Edit Configuration"
 msgstr "Konfiguration bearbeiten"
 
-#: applications/luci-app-banip/luasrc/controller/banip.lua:23
+#: applications/luci-app-banip/luasrc/controller/banip.lua:27
 msgid "Edit Whitelist"
-msgstr "Positivliste bearbeiten"
+msgstr "Whiteliste bearbeiten"
 
 #: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:20
 msgid "Enable banIP"
@@ -138,12 +137,16 @@ msgid ""
 "For further performance improvements you can raise this value, e.g. '8' or "
 "'16' should be safe."
 msgstr ""
-"Für weitere Leistungssteigerungen können Sie diesen Wert erhöhen, z.B. \"8\" "
-"oder \"16\" sollte sicher sein."
+"Für weitere Leistungssteigerungen kann dieser Wert erhöht werden, z.B. \"8\" "
+"oder \"16\" sollte problemlos sein."
 
 #: applications/luci-app-banip/luasrc/view/banip/ripeview.htm:88
 msgid "Geo Location"
 msgstr "Geo-Standort"
+
+#: applications/luci-app-banip/root/usr/share/rpcd/acl.d/luci-app-banip.json:3
+msgid "Grant UCI access for luci-app-banip"
+msgstr ""
 
 #: applications/luci-app-banip/luasrc/view/banip/ripeview.htm:95
 msgid "IANA Information"
@@ -161,7 +164,7 @@ msgstr "IPSet Information"
 msgid "IPSet Sources"
 msgstr "IPSet-Quellen"
 
-#: applications/luci-app-banip/luasrc/controller/banip.lua:18
+#: applications/luci-app-banip/luasrc/controller/banip.lua:22
 msgid "IPSet-Lookup"
 msgstr "IPSet-Lookup"
 
@@ -207,11 +210,11 @@ msgstr "Lade ..."
 
 #: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:114
 msgid "Local Save Blacklist Addons"
-msgstr ""
+msgstr "Blacklist Addons lokal speichern"
 
 #: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:119
 msgid "Local Save Whitelist Addons"
-msgstr ""
+msgstr "Whitelist Addons lokal speichern"
 
 #: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:87
 msgid "Low Priority Service"
@@ -237,7 +240,7 @@ msgstr ""
 "Optionen für weitere Optimierungen, falls die Standardeinstellungen nicht "
 "für Sie geeignet sind."
 
-#: applications/luci-app-banip/luasrc/controller/banip.lua:17
+#: applications/luci-app-banip/luasrc/controller/banip.lua:21
 msgid "Overview"
 msgstr "Übersicht"
 
@@ -256,7 +259,7 @@ msgstr ""
 msgid "Please edit this file directly in a terminal session."
 msgstr "Bitte bearbeiten Sie diese Datei direkt in einer Terminalsitzung."
 
-#: applications/luci-app-banip/luasrc/controller/banip.lua:19
+#: applications/luci-app-banip/luasrc/controller/banip.lua:23
 msgid "RIPE-Lookup"
 msgstr "RIPE-Lookup"
 
@@ -299,9 +302,8 @@ msgid "SSH Daemon"
 msgstr "SSH-Dienst (Daemon)"
 
 #: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:43
-#, fuzzy
 msgid "SSH/LuCI RT Monitor"
-msgstr "SSH/LuCI RT Monitor"
+msgstr "SSH/LuCI RT-Monitor"
 
 #: applications/luci-app-banip/luasrc/model/cbi/banip/blacklist_tab.lua:27
 #: applications/luci-app-banip/luasrc/model/cbi/banip/configuration_tab.lua:26
@@ -336,7 +338,6 @@ msgstr ""
 "benötigt weniger Ressourcen vom System."
 
 #: applications/luci-app-banip/luasrc/view/banip/ipsetview.htm:51
-#, fuzzy
 msgid "Show only set member with packet counter &gt; 0"
 msgstr "Nur Set-Member mit Paketzähler &gt; 0 anzeigen"
 
@@ -345,6 +346,8 @@ msgid ""
 "Size of the download queue to handle downloads &amp; IPset processing in "
 "parallel (default '4')."
 msgstr ""
+"Größe der Download-Warteschlange zur Handhabung von Downloads und paralleler "
+"IPSet-Verarbeitung (default '4')."
 
 #: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:135
 msgid ""
@@ -380,8 +383,8 @@ msgid ""
 "\" rel=\"noopener noreferrer\">here</a>."
 msgstr ""
 "Die RIPEstat Data API ist die öffentliche Datenschnittstelle von RIPE NCC, "
-"für Details siehe <a href=\"https://stat.ripe.net/docs/data_api\" target=\""
-"_blank\" rel=\"noopener noreferrer\">hier</a>."
+"für Details siehe <a href=\"https://stat.ripe.net/docs/data_api\" target="
+"\"_blank\" rel=\"noopener noreferrer\">hier</a>."
 
 #: applications/luci-app-banip/luasrc/model/cbi/banip/blacklist_tab.lua:18
 #: applications/luci-app-banip/luasrc/model/cbi/banip/configuration_tab.lua:17
@@ -434,6 +437,8 @@ msgid ""
 "This data call returns the containing prefix and announcing ASN of a given "
 "IP address."
 msgstr ""
+"Dieser Datenaufruf gibt das enthaltene Präfix und die announcing-ASN einer "
+"bestimmten IP-Adresse zurück."
 
 #: applications/luci-app-banip/luasrc/view/banip/ripeview.htm:37
 msgid ""
@@ -464,15 +469,15 @@ msgstr ""
 msgid ""
 "This form allows you to modify the content of the banIP blacklist (%s).<br />"
 msgstr ""
-"Dieses Formular ermöglicht, den Inhalt der banIP-Blacklist (%s) zu ändern.<"
-"br />"
+"Dieses Formular ermöglicht, den Inhalt der banIP-Blacklist (%s) zu ändern."
+"<br />"
 
 #: applications/luci-app-banip/luasrc/model/cbi/banip/whitelist_tab.lua:31
 msgid ""
 "This form allows you to modify the content of the banIP whitelist (%s).<br />"
 msgstr ""
-"Dieses Formular ermöglicht, den Inhalt der banIP-Whitelist (%s) zu ändern.<"
-"br />"
+"Dieses Formular ermöglicht, den Inhalt der banIP-Whitelist (%s) zu ändern."
+"<br />"
 
 #: applications/luci-app-banip/luasrc/model/cbi/banip/configuration_tab.lua:30
 msgid ""
@@ -484,13 +489,13 @@ msgstr ""
 
 #: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:138
 msgid "Trigger Delay"
-msgstr "Auslöseverzögerung"
+msgstr "Verzögerung Trigger-Bedingung"
 
 #: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:83
 msgid "Verbose Debug Logging"
 msgstr "Ausführliche Debug-Protokollierung"
 
-#: applications/luci-app-banip/luasrc/controller/banip.lua:20
+#: applications/luci-app-banip/luasrc/controller/banip.lua:24
 msgid "View Logfile"
 msgstr "Protokolldatei anzeigen"
 
@@ -524,7 +529,7 @@ msgstr ""
 msgid "Whois Information"
 msgstr "Whois-Informationen"
 
-#: applications/luci-app-banip/luasrc/controller/banip.lua:16
+#: applications/luci-app-banip/luasrc/controller/banip.lua:17
 #: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:10
 msgid "banIP"
 msgstr "banIP"

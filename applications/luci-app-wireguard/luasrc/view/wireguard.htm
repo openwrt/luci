@@ -179,9 +179,20 @@
 	});
 //]]></script>
 
-<h2>WireGuard Status</h2>
+<h2><%:WireGuard Status%></h2>
 
 <div class="cbi-section">
+
+<% if next(data) == nil then %>
+	<div class="table cbi-section-table">
+		<div class="tr cbi-section-table-row">
+			<p>
+				<em><%:This section contains no values yet%></em>
+			</p>
+		</div>
+	</div>
+<% end %>
+
 <%-
 local ikey, iface
 for ikey, iface in pairs(data) do

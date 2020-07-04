@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LuCI: wireguard\n"
 "POT-Creation-Date: 2018-01-01 21:00+0300\n"
-"PO-Revision-Date: 2020-01-16 20:37+0000\n"
+"PO-Revision-Date: 2020-05-12 20:02+0000\n"
 "Last-Translator: Anton Kikin <a.a.kikin@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationswireguard/ru/>\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<="
 "4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 3.10.2-dev\n"
+"X-Generator: Weblate 4.1-dev\n"
 "Project-Info: Это технический перевод, не дословный. Главное-удобный русский "
 "интерфейс, все проверялось в графическом режиме, совместим с другими apps\n"
 
@@ -20,12 +20,12 @@ msgstr ""
 msgid "Allowed IPs"
 msgstr "Разрешенные IP-адреса"
 
-#: applications/luci-app-wireguard/luasrc/view/wireguard.htm:225
-#: applications/luci-app-wireguard/luasrc/view/wireguard.htm:259
+#: applications/luci-app-wireguard/luasrc/view/wireguard.htm:236
+#: applications/luci-app-wireguard/luasrc/view/wireguard.htm:270
 msgid "Collecting data..."
 msgstr "Сбор данных..."
 
-#: applications/luci-app-wireguard/luasrc/view/wireguard.htm:220
+#: applications/luci-app-wireguard/luasrc/view/wireguard.htm:231
 msgid "Configuration"
 msgstr "Конфигурация"
 
@@ -45,17 +45,17 @@ msgstr "Конечная точка"
 msgid "Firewall Mark"
 msgstr "Метка межсетевого экрана"
 
-#: applications/luci-app-wireguard/luasrc/view/wireguard.htm:189
+#: applications/luci-app-wireguard/luasrc/view/wireguard.htm:200
 msgid "Interface"
 msgstr "Интерфейс"
 
 #: applications/luci-app-wireguard/luasrc/view/wireguard.htm:116
 msgid "Interface does not have a public key!"
-msgstr "Интерфейс не имеет Публичного Ключа!"
+msgstr "Интерфейс не имеет публичного ключа!"
 
 #: applications/luci-app-wireguard/luasrc/view/wireguard.htm:166
 msgid "Latest Handshake"
-msgstr "Последний Хендшейк"
+msgstr "Последнее «рукопожатие» (handshake)"
 
 #: applications/luci-app-wireguard/luasrc/view/wireguard.htm:125
 msgid "Listen Port"
@@ -65,24 +65,24 @@ msgstr "Порт для входящих соединений"
 msgid "Never"
 msgstr "Никогда"
 
-#: applications/luci-app-wireguard/luasrc/view/wireguard.htm:251
+#: applications/luci-app-wireguard/luasrc/view/wireguard.htm:262
 msgid "Peer"
 msgstr "Узел"
 
 #: applications/luci-app-wireguard/luasrc/view/wireguard.htm:156
 msgid "Persistent Keepalive"
-msgstr "Постоянные Проверки Активности"
+msgstr "Постоянные проверки активности (keepalive)"
 
 #: applications/luci-app-wireguard/luasrc/view/wireguard.htm:119
 #: applications/luci-app-wireguard/luasrc/view/wireguard.htm:139
 msgid "Public Key"
-msgstr "Публичный Ключ"
+msgstr "Публичный ключ"
 
-#: applications/luci-app-wireguard/luasrc/view/wireguard.htm:191
+#: applications/luci-app-wireguard/luasrc/view/wireguard.htm:202
 msgid "Show/Hide QR-Code"
 msgstr "Показать/скрыть QR-код"
 
-#: applications/luci-app-wireguard/luasrc/view/wireguard.htm:211
+#: applications/luci-app-wireguard/luasrc/view/wireguard.htm:222
 msgid ""
 "The QR-Code works per wg interface, it will be refreshed with every manual "
 "page reload and transfers the following information:"
@@ -90,11 +90,16 @@ msgstr ""
 "QR-код работает для каждого wg интерфейса, он будет обновляться при каждой "
 "ручной перезагрузке страницы и содержать следующую информацию:"
 
-#: applications/luci-app-wireguard/luasrc/controller/wireguard.lua:7
+#: applications/luci-app-wireguard/luasrc/view/wireguard.htm:190
+msgid "This section contains no values yet"
+msgstr "Здесь не содержатся необходимые значения"
+
+#: applications/luci-app-wireguard/luasrc/view/wireguard.htm:182
+#: applications/luci-app-wireguard/root/usr/share/luci/menu.d/luci-app-wireguard.json:3
 msgid "WireGuard Status"
 msgstr "Состояние WireGuard"
 
-#: applications/luci-app-wireguard/luasrc/view/wireguard.htm:212
+#: applications/luci-app-wireguard/luasrc/view/wireguard.htm:223
 msgid ""
 "[Interface] A random, on the fly generated 'PrivateKey', the key will not be "
 "saved on the router"
@@ -102,7 +107,7 @@ msgstr ""
 "[Interface] Случайный, сгенерированный на лету приватный ключ (PrivateKey). "
 "Данный ключ не будет сохранен на маршрутизаторе"
 
-#: applications/luci-app-wireguard/luasrc/view/wireguard.htm:213
+#: applications/luci-app-wireguard/luasrc/view/wireguard.htm:224
 msgid ""
 "[Peer] The 'PublicKey' of that wg interface and the 'AllowedIPs' with the "
 "default of '0.0.0.0/0, ::/0' to allow sending traffic to any IPv4 and IPv6 "

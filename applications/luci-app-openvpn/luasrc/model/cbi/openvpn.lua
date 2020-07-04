@@ -159,9 +159,9 @@ function proto.cfgvalue(self, section)
 	if not val then
 		local file_cfg = self.map:get(section, "config")
 		if file_cfg and fs.access(file_cfg) then
-			val = sys.exec("awk '{if(match(tolower($1),/^proto$/)&&match(tolower($2),/^udp[46]*$|^tcp[46]*-server$|^tcp[46]*-client$/)){cnt++;printf tolower($2);exit}}END{if(cnt==0)printf \"-\"}' " ..file_cfg)
+			val = sys.exec("awk '{if(match(tolower($1),/^proto$/)&&match(tolower($2),/^udp[46]*$|^tcp[a-z46-]*$/)){cnt++;print tolower(substr($2,1,3));exit}}END{if(cnt==0)printf \"-\"}' " ..file_cfg)
 			if val == "-" then
-				val = sys.exec("awk '{if(match(tolower($1),/^remote$/)&&match(tolower($4),/^udp[46]*$|^tcp[46]*-server$|^tcp[46]*-client$/)){cnt++;printf $4;exit}}END{if(cnt==0)printf \"-\"}' " ..file_cfg)
+				val = sys.exec("awk '{if(match(tolower($1),/^remote$/)&&match(tolower($4),/^udp[46]*$|^tcp[a-z46-]*$/)){cnt++;print tolower(substr($4,1,3));exit}}END{if(cnt==0)printf \"-\"}' " ..file_cfg)
 			end
 		end
 	end

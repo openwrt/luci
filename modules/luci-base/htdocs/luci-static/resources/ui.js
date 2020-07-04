@@ -1,30 +1,129 @@
 'use strict';
+'require validation';
+'require baseclass';
+'require request';
+'require session';
+'require poll';
+'require dom';
 'require rpc';
 'require uci';
-'require validation';
 'require fs';
 
 var modalDiv = null,
     tooltipDiv = null,
+    indicatorDiv = null,
     tooltipTimeout = null;
 
-var UIElement = L.Class.extend({
+/**
+ * @class AbstractElement
+ * @memberof LuCI.ui
+ * @hideconstructor
+ * @classdesc
+ *
+ * The `AbstractElement` class serves as abstract base for the different widgets
+ * implemented by `LuCI.ui`. It provides the common logic for getting and
+ * setting values, for checking the validity state and for wiring up required
+ * events.
+ *
+ * UI widget instances are usually not supposed to be created by view code
+ * directly, instead they're implicitely created by `LuCI.form` when
+ * instantiating CBI forms.
+ *
+ * This class is automatically instantiated as part of `LuCI.ui`. To use it
+ * in views, use `'require ui'` and refer to `ui.AbstractElement`. To import
+ * it in external JavaScript, use `L.require("ui").then(...)` and access the
+ * `AbstractElement` property of the class instance value.
+ */
+var UIElement = baseclass.extend(/** @lends LuCI.ui.AbstractElement.prototype */ {
+	/**
+	 * @typedef {Object} InitOptions
+	 * @memberof LuCI.ui.AbstractElement
+	 *
+	 * @property {string} [id]
+	 * Specifies the widget ID to use. It will be used as HTML `id` attribute
+	 * on the toplevel widget DOM node.
+	 *
+	 * @property {string} [name]
+	 * Specifies the widget name which is set as HTML `name` attribute on the
+	 * corresponding `<input>` element.
+	 *
+	 * @property {boolean} [optional=true]
+	 * Specifies whether the input field allows empty values.
+	 *
+	 * @property {string} [datatype=string]
+	 * An expression describing the input data validation constraints.
+	 * It defaults to `string` which will allow any value.
+	 * See {@link LuCI.validation} for details on the expression format.
+	 *
+	 * @property {function} [validator]
+	 * Specifies a custom validator function which is invoked after the
+	 * standard validation constraints are checked. The function should return
+	 * `true` to accept the given input value. Any other return value type is
+	 * converted to a string and treated as validation error message.
+	 *
+	 * @property {boolean} [disabled=false]
+	 * Specifies whether the widget should be rendered in disabled state
+	 * (`true`) or not (`false`). Disabled widgets cannot be interacted with
+	 * and are displayed in a slightly faded style.
+	 */
+
+	/**
+	 * Read the current value of the input widget.
+	 *
+	 * @instance
+	 * @memberof LuCI.ui.AbstractElement
+	 * @returns {string|string[]|null}
+	 * The current value of the input element. For simple inputs like text
+	 * fields or selects, the return value type will be a - possibly empty -
+	 * string. Complex widgets such as `DynamicList` instances may result in
+	 * an array of strings or `null` for unset values.
+	 */
 	getValue: function() {
-		if (L.dom.matches(this.node, 'select') || L.dom.matches(this.node, 'input'))
+		if (dom.matches(this.node, 'select') || dom.matches(this.node, 'input'))
 			return this.node.value;
 
 		return null;
 	},
 
+	/**
+	 * Set the current value of the input widget.
+	 *
+	 * @instance
+	 * @memberof LuCI.ui.AbstractElement
+	 * @param {string|string[]|null} value
+	 * The value to set the input element to. For simple inputs like text
+	 * fields or selects, the value should be a - possibly empty - string.
+	 * Complex widgets such as `DynamicList` instances may accept string array
+	 * or `null` values.
+	 */
 	setValue: function(value) {
-		if (L.dom.matches(this.node, 'select') || L.dom.matches(this.node, 'input'))
+		if (dom.matches(this.node, 'select') || dom.matches(this.node, 'input'))
 			this.node.value = value;
 	},
 
+	/**
+	 * Check whether the current input value is valid.
+	 *
+	 * @instance
+	 * @memberof LuCI.ui.AbstractElement
+	 * @returns {boolean}
+	 * Returns `true` if the current input value is valid or `false` if it does
+	 * not meet the validation constraints.
+	 */
 	isValid: function() {
 		return (this.validState !== false);
 	},
 
+	/**
+	 * Force validation of the current input value.
+	 *
+	 * Usually input validation is automatically triggered by various DOM events
+	 * bound to the input widget. In some cases it is required though to manually
+	 * trigger validation runs, e.g. when programmatically altering values.
+	 *
+	 * @instance
+	 * @memberof LuCI.ui.AbstractElement
+	 */
 	triggerValidation: function() {
 		if (typeof(this.vfunc) != 'function')
 			return false;
@@ -36,6 +135,30 @@ var UIElement = L.Class.extend({
 		return (wasValid != this.isValid());
 	},
 
+	/**
+	 * Dispatch a custom (synthetic) event in response to received events.
+	 *
+	 * Sets up event handlers on the given target DOM node for the given event
+	 * names that dispatch a custom event of the given type to the widget root
+	 * DOM node.
+	 *
+	 * The primary purpose of this function is to set up a series of custom
+	 * uniform standard events such as `widget-update`, `validation-success`,
+	 * `validation-failure` etc. which are triggered by various different
+	 * widget specific native DOM events.
+	 *
+	 * @instance
+	 * @memberof LuCI.ui.AbstractElement
+	 * @param {Node} targetNode
+	 * Specifies the DOM node on which the native event listeners should be
+	 * registered.
+	 *
+	 * @param {string} synevent
+	 * The name of the custom event to dispatch to the widget root DOM node.
+	 *
+	 * @param {string[]} events
+	 * The native DOM events for which event handlers should be registered.
+	 */
 	registerEvents: function(targetNode, synevent, events) {
 		var dispatchFn = L.bind(function(ev) {
 			this.node.dispatchEvent(new CustomEvent(synevent, { bubbles: true }));
@@ -45,6 +168,22 @@ var UIElement = L.Class.extend({
 			targetNode.addEventListener(events[i], dispatchFn);
 	},
 
+	/**
+	 * Setup listeners for native DOM events that may update the widget value.
+	 *
+	 * Sets up event handlers on the given target DOM node for the given event
+	 * names which may cause the input value to update, such as `keyup` or
+	 * `onclick` events. In contrast to change events, such update events will
+	 * trigger input value validation.
+	 *
+	 * @instance
+	 * @memberof LuCI.ui.AbstractElement
+	 * @param {Node} targetNode
+	 * Specifies the DOM node on which the event listeners should be registered.
+	 *
+	 * @param {...string} events
+	 * The DOM events for which event handlers should be registered.
+	 */
 	setUpdateEvents: function(targetNode /*, ... */) {
 		var datatype = this.options.datatype,
 		    optional = this.options.hasOwnProperty('optional') ? this.options.optional : true,
@@ -56,7 +195,7 @@ var UIElement = L.Class.extend({
 		if (!datatype && !validate)
 			return;
 
-		this.vfunc = L.ui.addValidator.apply(L.ui, [
+		this.vfunc = UI.prototype.addValidator.apply(UI.prototype, [
 			targetNode, datatype || 'string',
 			optional, validate
 		].concat(events));
@@ -70,6 +209,24 @@ var UIElement = L.Class.extend({
 		}, this));
 	},
 
+	/**
+	 * Setup listeners for native DOM events that may change the widget value.
+	 *
+	 * Sets up event handlers on the given target DOM node for the given event
+	 * names which may cause the input value to change completely, such as
+	 * `change` events in a select menu. In contrast to update events, such
+	 * change events will not trigger input value validation but they may cause
+	 * field dependencies to get re-evaluated and will mark the input widget
+	 * as dirty.
+	 *
+	 * @instance
+	 * @memberof LuCI.ui.AbstractElement
+	 * @param {Node} targetNode
+	 * Specifies the DOM node on which the event listeners should be registered.
+	 *
+	 * @param {...string} events
+	 * The DOM events for which event handlers should be registered.
+	 */
 	setChangeEvents: function(targetNode /*, ... */) {
 		var tag_changed = L.bind(function(ev) { this.setAttribute('data-changed', true) }, this.node);
 
@@ -77,10 +234,71 @@ var UIElement = L.Class.extend({
 			targetNode.addEventListener(arguments[i], tag_changed);
 
 		this.registerEvents(targetNode, 'widget-change', this.varargs(arguments, 1));
-	}
+	},
+
+	/**
+	 * Render the widget, setup event listeners and return resulting markup.
+	 *
+	 * @instance
+	 * @memberof LuCI.ui.AbstractElement
+	 *
+	 * @returns {Node}
+	 * Returns a DOM Node or DocumentFragment containing the rendered
+	 * widget markup.
+	 */
+	render: function() {}
 });
 
-var UITextfield = UIElement.extend({
+/**
+ * Instantiate a text input widget.
+ *
+ * @constructor Textfield
+ * @memberof LuCI.ui
+ * @augments LuCI.ui.AbstractElement
+ *
+ * @classdesc
+ *
+ * The `Textfield` class implements a standard single line text input field.
+ *
+ * UI widget instances are usually not supposed to be created by view code
+ * directly, instead they're implicitely created by `LuCI.form` when
+ * instantiating CBI forms.
+ *
+ * This class is automatically instantiated as part of `LuCI.ui`. To use it
+ * in views, use `'require ui'` and refer to `ui.Textfield`. To import it in
+ * external JavaScript, use `L.require("ui").then(...)` and access the
+ * `Textfield` property of the class instance value.
+ *
+ * @param {string} [value=null]
+ * The initial input value.
+ *
+ * @param {LuCI.ui.Textfield.InitOptions} [options]
+ * Object describing the widget specific options to initialize the input.
+ */
+var UITextfield = UIElement.extend(/** @lends LuCI.ui.Textfield.prototype */ {
+	/**
+	 * In addition to the [AbstractElement.InitOptions]{@link LuCI.ui.AbstractElement.InitOptions}
+	 * the following properties are recognized:
+	 *
+	 * @typedef {LuCI.ui.AbstractElement.InitOptions} InitOptions
+	 * @memberof LuCI.ui.Textfield
+	 *
+	 * @property {boolean} [password=false]
+	 * Specifies whether the input should be rendered as concealed password field.
+	 *
+	 * @property {boolean} [readonly=false]
+	 * Specifies whether the input widget should be rendered readonly.
+	 *
+	 * @property {number} [maxlength]
+	 * Specifies the HTML `maxlength` attribute to set on the corresponding
+	 * `<input>` element. Note that this a legacy property that exists for
+	 * compatibility reasons. It is usually better to `maxlength(N)` validation
+	 * expression.
+	 *
+	 * @property {string} [placeholder]
+	 * Specifies the HTML `placeholder` attribute which is displayed when the
+	 * corresponding `<input>` element is empty.
+	 */
 	__init__: function(value, options) {
 		this.value = value;
 		this.options = Object.assign({
@@ -89,71 +307,128 @@ var UITextfield = UIElement.extend({
 		}, options);
 	},
 
+	/** @override */
 	render: function() {
 		var frameEl = E('div', { 'id': this.options.id });
-
-		if (this.options.password) {
-			frameEl.classList.add('nowrap');
-			frameEl.appendChild(E('input', {
-				'type': 'password',
-				'style': 'position:absolute; left:-100000px',
-				'aria-hidden': true,
-				'tabindex': -1,
-				'name': this.options.name ? 'password.%s'.format(this.options.name) : null
-			}));
-		}
-
-		frameEl.appendChild(E('input', {
+		var inputEl = E('input', {
 			'id': this.options.id ? 'widget.' + this.options.id : null,
 			'name': this.options.name,
-			'type': this.options.password ? 'password' : 'text',
+			'type': 'text',
 			'class': this.options.password ? 'cbi-input-password' : 'cbi-input-text',
 			'readonly': this.options.readonly ? '' : null,
+			'disabled': this.options.disabled ? '' : null,
 			'maxlength': this.options.maxlength,
 			'placeholder': this.options.placeholder,
 			'value': this.value,
-		}));
+		});
 
-		if (this.options.password)
-			frameEl.appendChild(E('button', {
-				'class': 'cbi-button cbi-button-neutral',
-				'title': _('Reveal/hide password'),
-				'aria-label': _('Reveal/hide password'),
-				'click': function(ev) {
-					var e = this.previousElementSibling;
-					e.type = (e.type === 'password') ? 'text' : 'password';
-					ev.preventDefault();
-				}
-			}, '∗'));
+		if (this.options.password) {
+			frameEl.appendChild(E('div', { 'class': 'control-group' }, [
+				inputEl,
+				E('button', {
+					'class': 'cbi-button cbi-button-neutral',
+					'title': _('Reveal/hide password'),
+					'aria-label': _('Reveal/hide password'),
+					'click': function(ev) {
+						var e = this.previousElementSibling;
+						e.type = (e.type === 'password') ? 'text' : 'password';
+						ev.preventDefault();
+					}
+				}, '∗')
+			]));
+
+			window.requestAnimationFrame(function() { inputEl.type = 'password' });
+		}
+		else {
+			frameEl.appendChild(inputEl);
+		}
 
 		return this.bind(frameEl);
 	},
 
+	/** @private */
 	bind: function(frameEl) {
-		var inputEl = frameEl.childNodes[+!!this.options.password];
+		var inputEl = frameEl.querySelector('input');
 
 		this.node = frameEl;
 
 		this.setUpdateEvents(inputEl, 'keyup', 'blur');
 		this.setChangeEvents(inputEl, 'change');
 
-		L.dom.bindClassInstance(frameEl, this);
+		dom.bindClassInstance(frameEl, this);
 
 		return frameEl;
 	},
 
+	/** @override */
 	getValue: function() {
-		var inputEl = this.node.childNodes[+!!this.options.password];
+		var inputEl = this.node.querySelector('input');
 		return inputEl.value;
 	},
 
+	/** @override */
 	setValue: function(value) {
-		var inputEl = this.node.childNodes[+!!this.options.password];
+		var inputEl = this.node.querySelector('input');
 		inputEl.value = value;
 	}
 });
 
-var UITextarea = UIElement.extend({
+/**
+ * Instantiate a textarea widget.
+ *
+ * @constructor Textarea
+ * @memberof LuCI.ui
+ * @augments LuCI.ui.AbstractElement
+ *
+ * @classdesc
+ *
+ * The `Textarea` class implements a multiline text area input field.
+ *
+ * UI widget instances are usually not supposed to be created by view code
+ * directly, instead they're implicitely created by `LuCI.form` when
+ * instantiating CBI forms.
+ *
+ * This class is automatically instantiated as part of `LuCI.ui`. To use it
+ * in views, use `'require ui'` and refer to `ui.Textarea`. To import it in
+ * external JavaScript, use `L.require("ui").then(...)` and access the
+ * `Textarea` property of the class instance value.
+ *
+ * @param {string} [value=null]
+ * The initial input value.
+ *
+ * @param {LuCI.ui.Textarea.InitOptions} [options]
+ * Object describing the widget specific options to initialize the input.
+ */
+var UITextarea = UIElement.extend(/** @lends LuCI.ui.Textarea.prototype */ {
+	/**
+	 * In addition to the [AbstractElement.InitOptions]{@link LuCI.ui.AbstractElement.InitOptions}
+	 * the following properties are recognized:
+	 *
+	 * @typedef {LuCI.ui.AbstractElement.InitOptions} InitOptions
+	 * @memberof LuCI.ui.Textarea
+	 *
+	 * @property {boolean} [readonly=false]
+	 * Specifies whether the input widget should be rendered readonly.
+	 *
+	 * @property {string} [placeholder]
+	 * Specifies the HTML `placeholder` attribute which is displayed when the
+	 * corresponding `<textarea>` element is empty.
+	 *
+	 * @property {boolean} [monospace=false]
+	 * Specifies whether a monospace font should be forced for the textarea
+	 * contents.
+	 *
+	 * @property {number} [cols]
+	 * Specifies the HTML `cols` attribute to set on the corresponding
+	 * `<textarea>` element.
+	 *
+	 * @property {number} [rows]
+	 * Specifies the HTML `rows` attribute to set on the corresponding
+	 * `<textarea>` element.
+	 *
+	 * @property {boolean} [wrap=false]
+	 * Specifies whether the HTML `wrap` attribute should be set.
+	 */
 	__init__: function(value, options) {
 		this.value = value;
 		this.options = Object.assign({
@@ -164,8 +439,10 @@ var UITextarea = UIElement.extend({
 		}, options);
 	},
 
+	/** @override */
 	render: function() {
-		var frameEl = E('div', { 'id': this.options.id }),
+		var style = !this.options.cols ? 'width:100%' : null,
+		    frameEl = E('div', { 'id': this.options.id, 'style': style }),
 		    value = (this.value != null) ? String(this.value) : '';
 
 		frameEl.appendChild(E('textarea', {
@@ -173,8 +450,9 @@ var UITextarea = UIElement.extend({
 			'name': this.options.name,
 			'class': 'cbi-input-textarea',
 			'readonly': this.options.readonly ? '' : null,
+			'disabled': this.options.disabled ? '' : null,
 			'placeholder': this.options.placeholder,
-			'style': !this.options.cols ? 'width:100%' : null,
+			'style': style,
 			'cols': this.options.cols,
 			'rows': this.options.rows,
 			'wrap': this.options.wrap ? '' : null
@@ -186,6 +464,7 @@ var UITextarea = UIElement.extend({
 		return this.bind(frameEl);
 	},
 
+	/** @private */
 	bind: function(frameEl) {
 		var inputEl = frameEl.firstElementChild;
 
@@ -194,21 +473,67 @@ var UITextarea = UIElement.extend({
 		this.setUpdateEvents(inputEl, 'keyup', 'blur');
 		this.setChangeEvents(inputEl, 'change');
 
-		L.dom.bindClassInstance(frameEl, this);
+		dom.bindClassInstance(frameEl, this);
 
 		return frameEl;
 	},
 
+	/** @override */
 	getValue: function() {
 		return this.node.firstElementChild.value;
 	},
 
+	/** @override */
 	setValue: function(value) {
 		this.node.firstElementChild.value = value;
 	}
 });
 
-var UICheckbox = UIElement.extend({
+/**
+ * Instantiate a checkbox widget.
+ *
+ * @constructor Checkbox
+ * @memberof LuCI.ui
+ * @augments LuCI.ui.AbstractElement
+ *
+ * @classdesc
+ *
+ * The `Checkbox` class implements a simple checkbox input field.
+ *
+ * UI widget instances are usually not supposed to be created by view code
+ * directly, instead they're implicitely created by `LuCI.form` when
+ * instantiating CBI forms.
+ *
+ * This class is automatically instantiated as part of `LuCI.ui`. To use it
+ * in views, use `'require ui'` and refer to `ui.Checkbox`. To import it in
+ * external JavaScript, use `L.require("ui").then(...)` and access the
+ * `Checkbox` property of the class instance value.
+ *
+ * @param {string} [value=null]
+ * The initial input value.
+ *
+ * @param {LuCI.ui.Checkbox.InitOptions} [options]
+ * Object describing the widget specific options to initialize the input.
+ */
+var UICheckbox = UIElement.extend(/** @lends LuCI.ui.Checkbox.prototype */ {
+	/**
+	 * In addition to the [AbstractElement.InitOptions]{@link LuCI.ui.AbstractElement.InitOptions}
+	 * the following properties are recognized:
+	 *
+	 * @typedef {LuCI.ui.AbstractElement.InitOptions} InitOptions
+	 * @memberof LuCI.ui.Checkbox
+	 *
+	 * @property {string} [value_enabled=1]
+	 * Specifies the value corresponding to a checked checkbox.
+	 *
+	 * @property {string} [value_disabled=0]
+	 * Specifies the value corresponding to an unchecked checkbox.
+	 *
+	 * @property {string} [hiddenname]
+	 * Specifies the HTML `name` attribute of the hidden input backing the
+	 * checkbox. This is a legacy property existing for compatibility reasons,
+	 * it is required for HTML based form submissions.
+	 */
 	__init__: function(value, options) {
 		this.value = value;
 		this.options = Object.assign({
@@ -217,7 +542,9 @@ var UICheckbox = UIElement.extend({
 		}, options);
 	},
 
+	/** @override */
 	render: function() {
+		var id = 'cb%08x'.format(Math.random() * 0xffffffff);
 		var frameEl = E('div', {
 			'id': this.options.id,
 			'class': 'cbi-checkbox'
@@ -231,43 +558,125 @@ var UICheckbox = UIElement.extend({
 			}));
 
 		frameEl.appendChild(E('input', {
-			'id': this.options.id ? 'widget.' + this.options.id : null,
+			'id': id,
 			'name': this.options.name,
 			'type': 'checkbox',
 			'value': this.options.value_enabled,
-			'checked': (this.value == this.options.value_enabled) ? '' : null
+			'checked': (this.value == this.options.value_enabled) ? '' : null,
+			'disabled': this.options.disabled ? '' : null,
+			'data-widget-id': this.options.id ? 'widget.' + this.options.id : null
 		}));
+
+		frameEl.appendChild(E('label', { 'for': id }));
 
 		return this.bind(frameEl);
 	},
 
+	/** @private */
 	bind: function(frameEl) {
 		this.node = frameEl;
 
-		this.setUpdateEvents(frameEl.lastElementChild, 'click', 'blur');
-		this.setChangeEvents(frameEl.lastElementChild, 'change');
+		this.setUpdateEvents(frameEl.lastElementChild.previousElementSibling, 'click', 'blur');
+		this.setChangeEvents(frameEl.lastElementChild.previousElementSibling, 'change');
 
-		L.dom.bindClassInstance(frameEl, this);
+		dom.bindClassInstance(frameEl, this);
 
 		return frameEl;
 	},
 
+	/**
+	 * Test whether the checkbox is currently checked.
+	 *
+	 * @instance
+	 * @memberof LuCI.ui.Checkbox
+	 * @returns {boolean}
+	 * Returns `true` when the checkbox is currently checked, otherwise `false`.
+	 */
 	isChecked: function() {
-		return this.node.lastElementChild.checked;
+		return this.node.lastElementChild.previousElementSibling.checked;
 	},
 
+	/** @override */
 	getValue: function() {
 		return this.isChecked()
 			? this.options.value_enabled
 			: this.options.value_disabled;
 	},
 
+	/** @override */
 	setValue: function(value) {
-		this.node.lastElementChild.checked = (value == this.options.value_enabled);
+		this.node.lastElementChild.previousElementSibling.checked = (value == this.options.value_enabled);
 	}
 });
 
-var UISelect = UIElement.extend({
+/**
+ * Instantiate a select dropdown or checkbox/radiobutton group.
+ *
+ * @constructor Select
+ * @memberof LuCI.ui
+ * @augments LuCI.ui.AbstractElement
+ *
+ * @classdesc
+ *
+ * The `Select` class implements either a traditional HTML `<select>` element
+ * or a group of checkboxes or radio buttons, depending on whether multiple
+ * values are enabled or not.
+ *
+ * UI widget instances are usually not supposed to be created by view code
+ * directly, instead they're implicitely created by `LuCI.form` when
+ * instantiating CBI forms.
+ *
+ * This class is automatically instantiated as part of `LuCI.ui`. To use it
+ * in views, use `'require ui'` and refer to `ui.Select`. To import it in
+ * external JavaScript, use `L.require("ui").then(...)` and access the
+ * `Select` property of the class instance value.
+ *
+ * @param {string|string[]} [value=null]
+ * The initial input value(s).
+ *
+ * @param {Object<string, string>} choices
+ * Object containing the selectable choices of the widget. The object keys
+ * serve as values for the different choices while the values are used as
+ * choice labels.
+ *
+ * @param {LuCI.ui.Select.InitOptions} [options]
+ * Object describing the widget specific options to initialize the inputs.
+ */
+var UISelect = UIElement.extend(/** @lends LuCI.ui.Select.prototype */ {
+	/**
+	 * In addition to the [AbstractElement.InitOptions]{@link LuCI.ui.AbstractElement.InitOptions}
+	 * the following properties are recognized:
+	 *
+	 * @typedef {LuCI.ui.AbstractElement.InitOptions} InitOptions
+	 * @memberof LuCI.ui.Select
+	 *
+	 * @property {boolean} [multiple=false]
+	 * Specifies whether multiple choice values may be selected.
+	 *
+	 * @property {string} [widget=select]
+	 * Specifies the kind of widget to render. May be either `select` or
+	 * `individual`. When set to `select` an HTML `<select>` element will be
+	 * used, otherwise a group of checkbox or radio button elements is created,
+	 * depending on the value of the `multiple` option.
+	 *
+	 * @property {string} [orientation=horizontal]
+	 * Specifies whether checkbox / radio button groups should be rendered
+	 * in a `horizontal` or `vertical` manner. Does not apply to the `select`
+	 * widget type.
+	 *
+	 * @property {boolean|string[]} [sort=false]
+	 * Specifies if and how to sort choice values. If set to `true`, the choice
+	 * values will be sorted alphabetically. If set to an array of strings, the
+	 * choice sort order is derived from the array.
+	 *
+	 * @property {number} [size]
+	 * Specifies the HTML `size` attribute to set on the `<select>` element.
+	 * Only applicable to the `select` widget type.
+	 *
+	 * @property {string} [placeholder=-- Please choose --]
+	 * Specifies a placeholder text which is displayed when no choice is
+	 * selected yet. Only applicable to the `select` widget type.
+	 */
 	__init__: function(value, choices, options) {
 		if (!L.isObject(choices))
 			choices = {};
@@ -290,6 +699,7 @@ var UISelect = UIElement.extend({
 			this.options.optional = true;
 	},
 
+	/** @override */
 	render: function() {
 		var frameEl = E('div', { 'id': this.options.id }),
 		    keys = Object.keys(this.choices);
@@ -299,13 +709,14 @@ var UISelect = UIElement.extend({
 		else if (Array.isArray(this.options.sort))
 			keys = this.options.sort;
 
-		if (this.options.widget == 'select') {
+		if (this.options.widget != 'radio' && this.options.widget != 'checkbox') {
 			frameEl.appendChild(E('select', {
 				'id': this.options.id ? 'widget.' + this.options.id : null,
 				'name': this.options.name,
 				'size': this.options.size,
 				'class': 'cbi-input-select',
-				'multiple': this.options.multiple ? '' : null
+				'multiple': this.options.multiple ? '' : null,
+				'disabled': this.options.disabled ? '' : null
 			}));
 
 			if (this.options.optional)
@@ -325,33 +736,41 @@ var UISelect = UIElement.extend({
 			}
 		}
 		else {
-			var brEl = (this.options.orientation === 'horizontal') ? document.createTextNode(' ') : E('br');
+			var brEl = (this.options.orientation === 'horizontal') ? document.createTextNode(' \xa0 ') : E('br');
 
 			for (var i = 0; i < keys.length; i++) {
-				frameEl.appendChild(E('label', {}, [
+				frameEl.appendChild(E('span', {
+					'class': 'cbi-%s'.format(this.options.multiple ? 'checkbox' : 'radio')
+				}, [
 					E('input', {
-						'id': this.options.id ? 'widget.' + this.options.id : null,
+						'id': this.options.id ? 'widget.%s.%d'.format(this.options.id, i) : null,
 						'name': this.options.id || this.options.name,
 						'type': this.options.multiple ? 'checkbox' : 'radio',
 						'class': this.options.multiple ? 'cbi-input-checkbox' : 'cbi-input-radio',
 						'value': keys[i],
-						'checked': (this.values.indexOf(keys[i]) > -1) ? '' : null
+						'checked': (this.values.indexOf(keys[i]) > -1) ? '' : null,
+						'disabled': this.options.disabled ? '' : null
 					}),
-					this.choices[keys[i]] || keys[i]
+					E('label', { 'for': this.options.id ? 'widget.%s.%d'.format(this.options.id, i) : null }),
+					E('span', {
+						'click': function(ev) {
+							ev.currentTarget.previousElementSibling.previousElementSibling.click();
+						}
+					}, [ this.choices[keys[i]] || keys[i] ])
 				]));
 
-				if (i + 1 == this.options.size)
-					frameEl.appendChild(brEl);
+				frameEl.appendChild(brEl.cloneNode());
 			}
 		}
 
 		return this.bind(frameEl);
 	},
 
+	/** @private */
 	bind: function(frameEl) {
 		this.node = frameEl;
 
-		if (this.options.widget == 'select') {
+		if (this.options.widget != 'radio' && this.options.widget != 'checkbox') {
 			this.setUpdateEvents(frameEl.firstChild, 'change', 'click', 'blur');
 			this.setChangeEvents(frameEl.firstChild, 'change');
 		}
@@ -363,16 +782,17 @@ var UISelect = UIElement.extend({
 			}
 		}
 
-		L.dom.bindClassInstance(frameEl, this);
+		dom.bindClassInstance(frameEl, this);
 
 		return frameEl;
 	},
 
+	/** @override */
 	getValue: function() {
-		if (this.options.widget == 'select')
+		if (this.options.widget != 'radio' && this.options.widget != 'checkbox')
 			return this.node.firstChild.value;
 
-		var radioEls = frameEl.querySelectorAll('input[type="radio"]');
+		var radioEls = this.node.querySelectorAll('input[type="radio"]');
 		for (var i = 0; i < radioEls.length; i++)
 			if (radioEls[i].checked)
 				return radioEls[i].value;
@@ -380,8 +800,9 @@ var UISelect = UIElement.extend({
 		return null;
 	},
 
+	/** @override */
 	setValue: function(value) {
-		if (this.options.widget == 'select') {
+		if (this.options.widget != 'radio' && this.options.widget != 'checkbox') {
 			if (value == null)
 				value = '';
 
@@ -397,7 +818,135 @@ var UISelect = UIElement.extend({
 	}
 });
 
-var UIDropdown = UIElement.extend({
+/**
+ * Instantiate a rich dropdown choice widget.
+ *
+ * @constructor Dropdown
+ * @memberof LuCI.ui
+ * @augments LuCI.ui.AbstractElement
+ *
+ * @classdesc
+ *
+ * The `Dropdown` class implements a rich, stylable dropdown menu which
+ * supports non-text choice labels.
+ *
+ * UI widget instances are usually not supposed to be created by view code
+ * directly, instead they're implicitely created by `LuCI.form` when
+ * instantiating CBI forms.
+ *
+ * This class is automatically instantiated as part of `LuCI.ui`. To use it
+ * in views, use `'require ui'` and refer to `ui.Dropdown`. To import it in
+ * external JavaScript, use `L.require("ui").then(...)` and access the
+ * `Dropdown` property of the class instance value.
+ *
+ * @param {string|string[]} [value=null]
+ * The initial input value(s).
+ *
+ * @param {Object<string, *>} choices
+ * Object containing the selectable choices of the widget. The object keys
+ * serve as values for the different choices while the values are used as
+ * choice labels.
+ *
+ * @param {LuCI.ui.Dropdown.InitOptions} [options]
+ * Object describing the widget specific options to initialize the dropdown.
+ */
+var UIDropdown = UIElement.extend(/** @lends LuCI.ui.Dropdown.prototype */ {
+	/**
+	 * In addition to the [AbstractElement.InitOptions]{@link LuCI.ui.AbstractElement.InitOptions}
+	 * the following properties are recognized:
+	 *
+	 * @typedef {LuCI.ui.AbstractElement.InitOptions} InitOptions
+	 * @memberof LuCI.ui.Dropdown
+	 *
+	 * @property {boolean} [optional=true]
+	 * Specifies whether the dropdown selection is optional. In contrast to
+	 * other widgets, the `optional` constraint of dropdowns works differently;
+	 * instead of marking the widget invalid on empty values when set to `false`,
+	 * the user is not allowed to deselect all choices.
+	 *
+	 * For single value dropdowns that means that no empty "please select"
+	 * choice is offered and for multi value dropdowns, the last selected choice
+	 * may not be deselected without selecting another choice first.
+	 *
+	 * @property {boolean} [multiple]
+	 * Specifies whether multiple choice values may be selected. It defaults
+	 * to `true` when an array is passed as input value to the constructor.
+	 *
+	 * @property {boolean|string[]} [sort=false]
+	 * Specifies if and how to sort choice values. If set to `true`, the choice
+	 * values will be sorted alphabetically. If set to an array of strings, the
+	 * choice sort order is derived from the array.
+	 *
+	 * @property {string} [select_placeholder=-- Please choose --]
+	 * Specifies a placeholder text which is displayed when no choice is
+	 * selected yet.
+	 *
+	 * @property {string} [custom_placeholder=-- custom --]
+	 * Specifies a placeholder text which is displayed in the text input
+	 * field allowing to enter custom choice values. Only applicable if the
+	 * `create` option is set to `true`.
+	 *
+	 * @property {boolean} [create=false]
+	 * Specifies whether custom choices may be entered into the dropdown
+	 * widget.
+	 *
+	 * @property {string} [create_query=.create-item-input]
+	 * Specifies a CSS selector expression used to find the input element
+	 * which is used to enter custom choice values. This should not normally
+	 * be used except by widgets derived from the Dropdown class.
+	 *
+	 * @property {string} [create_template=script[type="item-template"]]
+	 * Specifies a CSS selector expression used to find an HTML element
+	 * serving as template for newly added custom choice values.
+	 *
+	 * Any `{{value}}` placeholder string within the template elements text
+	 * content will be replaced by the user supplied choice value, the
+	 * resulting string is parsed as HTML and appended to the end of the
+	 * choice list. The template markup may specify one HTML element with a
+	 * `data-label-placeholder` attribute which is replaced by a matching
+	 * label value from the `choices` object or with the user supplied value
+	 * itself in case `choices` contains no matching choice label.
+	 *
+	 * If the template element is not found or if no `create_template` selector
+	 * expression is specified, the default markup for newly created elements is
+	 * `<li data-value="{{value}}"><span data-label-placeholder="true" /></li>`.
+	 *
+	 * @property {string} [create_markup]
+	 * This property allows specifying the markup for custom choices directly
+	 * instead of referring to a template element through CSS selectors.
+	 *
+	 * Apart from that it works exactly like `create_template`.
+	 *
+	 * @property {number} [display_items=3]
+	 * Specifies the maximum amount of choice labels that should be shown in
+	 * collapsed dropdown state before further selected choices are cut off.
+	 *
+	 * Only applicable when `multiple` is `true`.
+	 *
+	 * @property {number} [dropdown_items=-1]
+	 * Specifies the maximum amount of choices that should be shown when the
+	 * dropdown is open. If the amount of available choices exceeds this number,
+	 * the dropdown area must be scrolled to reach further items.
+	 *
+	 * If set to `-1`, the dropdown menu will attempt to show all choice values
+	 * and only resort to scrolling if the amount of choices exceeds the available
+	 * screen space above and below the dropdown widget.
+	 *
+	 * @property {string} [placeholder]
+	 * This property serves as a shortcut to set both `select_placeholder` and
+	 * `custom_placeholder`. Either of these properties will fallback to
+	 * `placeholder` if not specified.
+	 *
+	 * @property {boolean} [readonly=false]
+	 * Specifies whether the custom choice input field should be rendered
+	 * readonly. Only applicable when `create` is `true`.
+	 *
+	 * @property {number} [maxlength]
+	 * Specifies the HTML `maxlength` attribute to set on the custom choice
+	 * `<input>` element. Note that this a legacy property that exists for
+	 * compatibility reasons. It is usually better to `maxlength(N)` validation
+	 * expression. Only applicable when `create` is `true`.
+	 */
 	__init__: function(value, choices, options) {
 		if (typeof(choices) != 'object')
 			choices = {};
@@ -422,12 +971,14 @@ var UIDropdown = UIElement.extend({
 		}, options);
 	},
 
+	/** @override */
 	render: function() {
 		var sb = E('div', {
 			'id': this.options.id,
 			'class': 'cbi-dropdown',
 			'multiple': this.options.multiple ? '' : null,
 			'optional': this.options.optional ? '' : null,
+			'disabled': this.options.disabled ? '' : null
 		}, E('ul'));
 
 		var keys = Object.keys(this.choices);
@@ -445,7 +996,7 @@ var UIDropdown = UIElement.extend({
 		for (var i = 0; i < keys.length; i++) {
 			var label = this.choices[keys[i]];
 
-			if (L.dom.elem(label))
+			if (dom.elem(label))
 				label = label.cloneNode(true);
 
 			sb.lastElementChild.appendChild(E('li', {
@@ -464,8 +1015,8 @@ var UIDropdown = UIElement.extend({
 			});
 
 			if (this.options.datatype || this.options.validate)
-				L.ui.addValidator(createEl, this.options.datatype || 'string',
-				                  true, this.options.validate, 'blur', 'keyup');
+				UI.prototype.addValidator(createEl, this.options.datatype || 'string',
+				                          true, this.options.validate, 'blur', 'keyup');
 
 			sb.lastElementChild.appendChild(E('li', { 'data-value': '-' }, createEl));
 		}
@@ -477,6 +1028,7 @@ var UIDropdown = UIElement.extend({
 		return this.bind(sb);
 	},
 
+	/** @private */
 	bind: function(sb) {
 		var o = this.options;
 
@@ -547,7 +1099,7 @@ var UIDropdown = UIElement.extend({
 		else
 			sb.removeAttribute('empty');
 
-		L.dom.content(more, (ndisplay == this.options.display_items)
+		dom.content(more, (ndisplay == this.options.display_items)
 			? (this.options.select_placeholder || this.options.placeholder) : '···');
 
 
@@ -586,11 +1138,12 @@ var UIDropdown = UIElement.extend({
 		this.setUpdateEvents(sb, 'cbi-dropdown-open', 'cbi-dropdown-close');
 		this.setChangeEvents(sb, 'cbi-dropdown-change', 'cbi-dropdown-close');
 
-		L.dom.bindClassInstance(sb, this);
+		dom.bindClassInstance(sb, this);
 
 		return sb;
 	},
 
+	/** @private */
 	openDropdown: function(sb) {
 		var st = window.getComputedStyle(sb, null),
 		    ul = sb.querySelector('ul'),
@@ -615,8 +1168,6 @@ var UIDropdown = UIElement.extend({
 		if ('ontouchstart' in window) {
 			var vpWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0),
 			    vpHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0),
-			    scrollFrom = window.pageYOffset,
-			    scrollTo = scrollFrom + rect.top - vpHeight * 0.5,
 			    start = null;
 
 			ul.style.top = sb.offsetHeight + 'px';
@@ -624,6 +1175,31 @@ var UIDropdown = UIElement.extend({
 			ul.style.right = (rect.right - vpWidth) + 'px';
 			ul.style.maxHeight = (vpHeight * 0.5) + 'px';
 			ul.style.WebkitOverflowScrolling = 'touch';
+
+			var getScrollParent = function(element) {
+				var parent = element,
+				    style = getComputedStyle(element),
+				    excludeStaticParent = (style.position === 'absolute');
+
+				if (style.position === 'fixed')
+					return document.body;
+
+				while ((parent = parent.parentElement) != null) {
+					style = getComputedStyle(parent);
+
+					if (excludeStaticParent && style.position === 'static')
+						continue;
+
+					if (/(auto|scroll)/.test(style.overflow + style.overflowY + style.overflowX))
+						return parent;
+				}
+
+				return document.body;
+			}
+
+			var scrollParent = getScrollParent(sb),
+			    scrollFrom = scrollParent.scrollTop,
+			    scrollTo = scrollFrom + rect.top - vpHeight * 0.5;
 
 			var scrollStep = function(timestamp) {
 				if (!start) {
@@ -633,11 +1209,11 @@ var UIDropdown = UIElement.extend({
 
 				var duration = Math.max(timestamp - start, 1);
 				if (duration < 100) {
-					document.body.scrollTop = scrollFrom + (scrollTo - scrollFrom) * (duration / 100);
+					scrollParent.scrollTop = scrollFrom + (scrollTo - scrollFrom) * (duration / 100);
 					window.requestAnimationFrame(scrollStep);
 				}
 				else {
-					document.body.scrollTop = scrollTo;
+					scrollParent.scrollTop = scrollTo;
 				}
 			};
 
@@ -696,6 +1272,7 @@ var UIDropdown = UIElement.extend({
 		this.setFocus(sb, sel || li[0], true);
 	},
 
+	/** @private */
 	closeDropdown: function(sb, no_focus) {
 		if (!sb.hasAttribute('open'))
 			return;
@@ -724,6 +1301,7 @@ var UIDropdown = UIElement.extend({
 		this.saveValues(sb, ul);
 	},
 
+	/** @private */
 	toggleItem: function(sb, li, force_state) {
 		if (li.hasAttribute('unselectable'))
 			return;
@@ -785,7 +1363,7 @@ var UIDropdown = UIElement.extend({
 			else
 				sb.removeAttribute('empty');
 
-			L.dom.content(more, (ndisplay === this.options.display_items)
+			dom.content(more, (ndisplay === this.options.display_items)
 				? (this.options.select_placeholder || this.options.placeholder) : '···');
 		}
 		else {
@@ -804,6 +1382,7 @@ var UIDropdown = UIElement.extend({
 		this.saveValues(sb, li.parentNode);
 	},
 
+	/** @private */
 	transformItem: function(sb, li) {
 		var cbox = E('form', {}, E('input', { type: 'checkbox', tabindex: -1, onclick: 'event.preventDefault()' })),
 		    label = E('label');
@@ -815,6 +1394,7 @@ var UIDropdown = UIElement.extend({
 		li.appendChild(label);
 	},
 
+	/** @private */
 	saveValues: function(sb, ul) {
 		var sel = ul.querySelectorAll('li[selected]'),
 		    div = sb.lastElementChild,
@@ -864,6 +1444,7 @@ var UIDropdown = UIElement.extend({
 		}));
 	},
 
+	/** @private */
 	setValues: function(sb, values) {
 		var ul = sb.querySelector('ul');
 
@@ -900,6 +1481,7 @@ var UIDropdown = UIElement.extend({
 		}
 	},
 
+	/** @private */
 	setFocus: function(sb, elem, scroll) {
 		if (sb && sb.hasAttribute && sb.hasAttribute('locked-in'))
 			return;
@@ -923,6 +1505,7 @@ var UIDropdown = UIElement.extend({
 		}
 	},
 
+	/** @private */
 	createChoiceElement: function(sb, value, label) {
 		var tpl = sb.querySelector(this.options.create_template),
 		    markup = null;
@@ -950,6 +1533,7 @@ var UIDropdown = UIElement.extend({
 		return new_item;
 	},
 
+	/** @private */
 	createItems: function(sb, value) {
 		var sbox = this,
 		    val = (value || '').trim(),
@@ -987,6 +1571,19 @@ var UIDropdown = UIElement.extend({
 		});
 	},
 
+	/**
+	 * Remove all existing choices from the dropdown menu.
+	 *
+	 * This function removes all preexisting dropdown choices from the widget,
+	 * keeping only choices currently being selected unless `reset_values` is
+	 * given, in which case all choices and deselected and removed.
+	 *
+	 * @instance
+	 * @memberof LuCI.ui.Dropdown
+	 * @param {boolean} [reset_value=false]
+	 * If set to `true`, deselect and remove selected choices as well instead
+	 * of keeping them.
+	 */
 	clearChoices: function(reset_value) {
 		var ul = this.node.querySelector('ul'),
 		    lis = ul ? ul.querySelectorAll('li[data-value]') : [],
@@ -1005,6 +1602,23 @@ var UIDropdown = UIElement.extend({
 			this.setValues(this.node, {});
 	},
 
+	/**
+	 * Add new choices to the dropdown menu.
+	 *
+	 * This function adds further choices to an existing dropdown menu,
+	 * ignoring choice values which are already present.
+	 *
+	 * @instance
+	 * @memberof LuCI.ui.Dropdown
+	 * @param {string[]} values
+	 * The choice values to add to the dropdown widget.
+	 *
+	 * @param {Object<string, *>} labels
+	 * The choice label values to use when adding dropdown choices. If no
+	 * label is found for a particular choice value, the value itself is used
+	 * as label text. Choice labels may be any valid value accepted by
+	 * {@link LuCI.dom#content}.
+	 */
 	addChoices: function(values, labels) {
 		var sb = this.node,
 		    ul = sb.querySelector('ul'),
@@ -1035,12 +1649,16 @@ var UIDropdown = UIElement.extend({
 		}
 	},
 
+	/**
+	 * Close all open dropdown widgets in the current document.
+	 */
 	closeAllDropdowns: function() {
 		document.querySelectorAll('.cbi-dropdown[open]').forEach(function(s) {
 			s.dispatchEvent(new CustomEvent('cbi-dropdown-close', {}));
 		});
 	},
 
+	/** @private */
 	handleClick: function(ev) {
 		var sb = ev.currentTarget;
 
@@ -1062,6 +1680,7 @@ var UIDropdown = UIElement.extend({
 		ev.stopPropagation();
 	},
 
+	/** @private */
 	handleKeydown: function(ev) {
 		var sb = ev.currentTarget;
 
@@ -1119,12 +1738,14 @@ var UIDropdown = UIElement.extend({
 		}
 	},
 
+	/** @private */
 	handleDropdownClose: function(ev) {
 		var sb = ev.currentTarget;
 
 		this.closeDropdown(sb, true);
 	},
 
+	/** @private */
 	handleDropdownSelect: function(ev) {
 		var sb = ev.currentTarget,
 		    li = findParent(ev.target, 'li');
@@ -1136,6 +1757,7 @@ var UIDropdown = UIElement.extend({
 		this.closeDropdown(sb, true);
 	},
 
+	/** @private */
 	handleMouseover: function(ev) {
 		var sb = ev.currentTarget;
 
@@ -1148,6 +1770,7 @@ var UIDropdown = UIElement.extend({
 			this.setFocus(sb, li);
 	},
 
+	/** @private */
 	handleFocus: function(ev) {
 		var sb = ev.currentTarget;
 
@@ -1157,10 +1780,12 @@ var UIDropdown = UIElement.extend({
 		});
 	},
 
+	/** @private */
 	handleCanaryFocus: function(ev) {
 		this.closeDropdown(ev.currentTarget.parentNode);
 	},
 
+	/** @private */
 	handleCreateKeydown: function(ev) {
 		var input = ev.currentTarget,
 		    sb = findParent(input, '.cbi-dropdown');
@@ -1179,6 +1804,7 @@ var UIDropdown = UIElement.extend({
 		}
 	},
 
+	/** @private */
 	handleCreateFocus: function(ev) {
 		var input = ev.currentTarget,
 		    cbox = findParent(input, 'li').querySelector('input[type="checkbox"]'),
@@ -1190,6 +1816,7 @@ var UIDropdown = UIElement.extend({
 		sb.setAttribute('locked-in', '');
 	},
 
+	/** @private */
 	handleCreateBlur: function(ev) {
 		var input = ev.currentTarget,
 		    cbox = findParent(input, 'li').querySelector('input[type="checkbox"]'),
@@ -1201,10 +1828,12 @@ var UIDropdown = UIElement.extend({
 		sb.removeAttribute('locked-in');
 	},
 
+	/** @private */
 	handleCreateClick: function(ev) {
 		ev.currentTarget.querySelector(this.options.create_query).focus();
 	},
 
+	/** @override */
 	setValue: function(values) {
 		if (this.options.multiple) {
 			if (!Array.isArray(values))
@@ -1231,6 +1860,7 @@ var UIDropdown = UIElement.extend({
 		}
 	},
 
+	/** @override */
 	getValue: function() {
 		var div = this.node.lastElementChild,
 		    h = div.querySelectorAll('input[type="hidden"]'),
@@ -1243,7 +1873,61 @@ var UIDropdown = UIElement.extend({
 	}
 });
 
-var UICombobox = UIDropdown.extend({
+/**
+ * Instantiate a rich dropdown choice widget allowing custom values.
+ *
+ * @constructor Combobox
+ * @memberof LuCI.ui
+ * @augments LuCI.ui.Dropdown
+ *
+ * @classdesc
+ *
+ * The `Combobox` class implements a rich, stylable dropdown menu which allows
+ * to enter custom values. Historically, comboboxes used to be a dedicated
+ * widget type in LuCI but nowadays they are direct aliases of dropdown widgets
+ * with a set of enforced default properties for easier instantiation.
+ *
+ * UI widget instances are usually not supposed to be created by view code
+ * directly, instead they're implicitely created by `LuCI.form` when
+ * instantiating CBI forms.
+ *
+ * This class is automatically instantiated as part of `LuCI.ui`. To use it
+ * in views, use `'require ui'` and refer to `ui.Combobox`. To import it in
+ * external JavaScript, use `L.require("ui").then(...)` and access the
+ * `Combobox` property of the class instance value.
+ *
+ * @param {string|string[]} [value=null]
+ * The initial input value(s).
+ *
+ * @param {Object<string, *>} choices
+ * Object containing the selectable choices of the widget. The object keys
+ * serve as values for the different choices while the values are used as
+ * choice labels.
+ *
+ * @param {LuCI.ui.Combobox.InitOptions} [options]
+ * Object describing the widget specific options to initialize the dropdown.
+ */
+var UICombobox = UIDropdown.extend(/** @lends LuCI.ui.Combobox.prototype */ {
+	/**
+	 * Comboboxes support the same properties as
+	 * [Dropdown.InitOptions]{@link LuCI.ui.Dropdown.InitOptions} but enforce
+	 * specific values for the following properties:
+	 *
+	 * @typedef {LuCI.ui.Dropdown.InitOptions} InitOptions
+	 * @memberof LuCI.ui.Combobox
+	 *
+	 * @property {boolean} multiple=false
+	 * Since Comboboxes never allow selecting multiple values, this property
+	 * is forcibly set to `false`.
+	 *
+	 * @property {boolean} create=true
+	 * Since Comboboxes always allow custom choice values, this property is
+	 * forcibly set to `true`.
+	 *
+	 * @property {boolean} optional=true
+	 * Since Comboboxes are always optional, this property is forcibly set to
+	 * `true`.
+	 */
 	__init__: function(value, choices, options) {
 		this.super('__init__', [ value, choices, Object.assign({
 			select_placeholder: _('-- Please choose --'),
@@ -1258,7 +1942,75 @@ var UICombobox = UIDropdown.extend({
 	}
 });
 
-var UIComboButton = UIDropdown.extend({
+/**
+ * Instantiate a combo button widget offering multiple action choices.
+ *
+ * @constructor ComboButton
+ * @memberof LuCI.ui
+ * @augments LuCI.ui.Dropdown
+ *
+ * @classdesc
+ *
+ * The `ComboButton` class implements a button element which can be expanded
+ * into a dropdown to chose from a set of different action choices.
+ *
+ * UI widget instances are usually not supposed to be created by view code
+ * directly, instead they're implicitely created by `LuCI.form` when
+ * instantiating CBI forms.
+ *
+ * This class is automatically instantiated as part of `LuCI.ui`. To use it
+ * in views, use `'require ui'` and refer to `ui.ComboButton`. To import it in
+ * external JavaScript, use `L.require("ui").then(...)` and access the
+ * `ComboButton` property of the class instance value.
+ *
+ * @param {string|string[]} [value=null]
+ * The initial input value(s).
+ *
+ * @param {Object<string, *>} choices
+ * Object containing the selectable choices of the widget. The object keys
+ * serve as values for the different choices while the values are used as
+ * choice labels.
+ *
+ * @param {LuCI.ui.ComboButton.InitOptions} [options]
+ * Object describing the widget specific options to initialize the button.
+ */
+var UIComboButton = UIDropdown.extend(/** @lends LuCI.ui.ComboButton.prototype */ {
+	/**
+	 * ComboButtons support the same properties as
+	 * [Dropdown.InitOptions]{@link LuCI.ui.Dropdown.InitOptions} but enforce
+	 * specific values for some properties and add aditional button specific
+	 * properties.
+	 *
+	 * @typedef {LuCI.ui.Dropdown.InitOptions} InitOptions
+	 * @memberof LuCI.ui.ComboButton
+	 *
+	 * @property {boolean} multiple=false
+	 * Since ComboButtons never allow selecting multiple actions, this property
+	 * is forcibly set to `false`.
+	 *
+	 * @property {boolean} create=false
+	 * Since ComboButtons never allow creating custom choices, this property
+	 * is forcibly set to `false`.
+	 *
+	 * @property {boolean} optional=false
+	 * Since ComboButtons must always select one action, this property is
+	 * forcibly set to `false`.
+	 *
+	 * @property {Object<string, string>} [classes]
+	 * Specifies a mapping of choice values to CSS class names. If an action
+	 * choice is selected by the user and if a corresponding entry exists in
+	 * the `classes` object, the class names corresponding to the selected
+	 * value are set on the button element.
+	 *
+	 * This is useful to apply different button styles, such as colors, to the
+	 * combined button depending on the selected action.
+	 *
+	 * @property {function} [click]
+	 * Specifies a handler function to invoke when the user clicks the button.
+	 * This function will be called with the button DOM node as `this` context
+	 * and receive the DOM click event as first as well as the selected action
+	 * choice value as second argument.
+	 */
 	__init__: function(value, choices, options) {
 		this.super('__init__', [ value, choices, Object.assign({
 			sort: true
@@ -1269,6 +2021,7 @@ var UIComboButton = UIDropdown.extend({
 		}) ]);
 	},
 
+	/** @override */
 	render: function(/* ... */) {
 		var node = UIDropdown.prototype.render.apply(this, arguments),
 		    val = this.getValue();
@@ -1279,17 +2032,19 @@ var UIComboButton = UIDropdown.extend({
 		return node;
 	},
 
+	/** @private */
 	handleClick: function(ev) {
 		var sb = ev.currentTarget,
 		    t = ev.target;
 
-		if (sb.hasAttribute('open') || L.dom.matches(t, '.cbi-dropdown > span.open'))
+		if (sb.hasAttribute('open') || dom.matches(t, '.cbi-dropdown > span.open'))
 			return UIDropdown.prototype.handleClick.apply(this, arguments);
 
 		if (this.options.click)
 			return this.options.click.call(sb, ev, this.getValue());
 	},
 
+	/** @private */
 	toggleItem: function(sb /*, ... */) {
 		var rv = UIDropdown.prototype.toggleItem.apply(this, arguments),
 		    val = this.getValue();
@@ -1303,7 +2058,59 @@ var UIComboButton = UIDropdown.extend({
 	}
 });
 
-var UIDynamicList = UIElement.extend({
+/**
+ * Instantiate a dynamic list widget.
+ *
+ * @constructor DynamicList
+ * @memberof LuCI.ui
+ * @augments LuCI.ui.AbstractElement
+ *
+ * @classdesc
+ *
+ * The `DynamicList` class implements a widget which allows the user to specify
+ * an arbitrary amount of input values, either from free formed text input or
+ * from a set of predefined choices.
+ *
+ * UI widget instances are usually not supposed to be created by view code
+ * directly, instead they're implicitely created by `LuCI.form` when
+ * instantiating CBI forms.
+ *
+ * This class is automatically instantiated as part of `LuCI.ui`. To use it
+ * in views, use `'require ui'` and refer to `ui.DynamicList`. To import it in
+ * external JavaScript, use `L.require("ui").then(...)` and access the
+ * `DynamicList` property of the class instance value.
+ *
+ * @param {string|string[]} [value=null]
+ * The initial input value(s).
+ *
+ * @param {Object<string, *>} [choices]
+ * Object containing the selectable choices of the widget. The object keys
+ * serve as values for the different choices while the values are used as
+ * choice labels. If omitted, no default choices are presented to the user,
+ * instead a plain text input field is rendered allowing the user to add
+ * arbitrary values to the dynamic list.
+ *
+ * @param {LuCI.ui.DynamicList.InitOptions} [options]
+ * Object describing the widget specific options to initialize the dynamic list.
+ */
+var UIDynamicList = UIElement.extend(/** @lends LuCI.ui.DynamicList.prototype */ {
+	/**
+	 * In case choices are passed to the dynamic list contructor, the widget
+	 * supports the same properties as [Dropdown.InitOptions]{@link LuCI.ui.Dropdown.InitOptions}
+	 * but enforces specific values for some dropdown properties.
+	 *
+	 * @typedef {LuCI.ui.Dropdown.InitOptions} InitOptions
+	 * @memberof LuCI.ui.DynamicList
+	 *
+	 * @property {boolean} multiple=false
+	 * Since dynamic lists never allow selecting multiple choices when adding
+	 * another list item, this property is forcibly set to `false`.
+	 *
+	 * @property {boolean} optional=true
+	 * Since dynamic lists use an embedded dropdown to present a list of
+	 * predefined choice values, the dropdown must be made optional to allow
+	 * it to remain unselected.
+	 */
 	__init__: function(values, choices, options) {
 		if (!Array.isArray(values))
 			values = (values != null && values != '') ? [ values ] : [];
@@ -1319,10 +2126,12 @@ var UIDynamicList = UIElement.extend({
 		});
 	},
 
+	/** @override */
 	render: function() {
 		var dl = E('div', {
 			'id': this.options.id,
-			'class': 'cbi-dynlist'
+			'class': 'cbi-dynlist',
+			'disabled': this.options.disabled ? '' : null
 		}, E('div', { 'class': 'add-item' }));
 
 		if (this.choices) {
@@ -1338,21 +2147,22 @@ var UIDynamicList = UIElement.extend({
 				'id': this.options.id ? 'widget.' + this.options.id : null,
 				'type': 'text',
 				'class': 'cbi-input-text',
-				'placeholder': this.options.placeholder
+				'placeholder': this.options.placeholder,
+				'disabled': this.options.disabled ? '' : null
 			});
 
 			dl.lastElementChild.appendChild(inputEl);
-			dl.lastElementChild.appendChild(E('div', { 'class': 'cbi-button cbi-button-add' }, '+'));
+			dl.lastElementChild.appendChild(E('div', { 'class': 'btn cbi-button cbi-button-add' }, '+'));
 
 			if (this.options.datatype || this.options.validate)
-				L.ui.addValidator(inputEl, this.options.datatype || 'string',
-				                  true, this.options.validate, 'blur', 'keyup');
+				UI.prototype.addValidator(inputEl, this.options.datatype || 'string',
+				                          true, this.options.validate, 'blur', 'keyup');
 		}
 
 		for (var i = 0; i < this.values.length; i++) {
 			var label = this.choices ? this.choices[this.values[i]] : null;
 
-			if (L.dom.elem(label))
+			if (dom.elem(label))
 				label = label.cloneNode(true);
 
 			this.addItem(dl, this.values[i], label);
@@ -1361,6 +2171,7 @@ var UIDynamicList = UIElement.extend({
 		return this.bind(dl);
 	},
 
+	/** @private */
 	bind: function(dl) {
 		dl.addEventListener('click', L.bind(this.handleClick, this));
 		dl.addEventListener('keydown', L.bind(this.handleKeydown, this));
@@ -1371,11 +2182,12 @@ var UIDynamicList = UIElement.extend({
 		this.setUpdateEvents(dl, 'cbi-dynlist-change');
 		this.setChangeEvents(dl, 'cbi-dynlist-change');
 
-		L.dom.bindClassInstance(dl, this);
+		dom.bindClassInstance(dl, this);
 
 		return dl;
 	},
 
+	/** @private */
 	addItem: function(dl, value, text, flash) {
 		var exists = false,
 		    new_item = E('div', { 'class': flash ? 'item flash' : 'item', 'tabindex': 0 }, [
@@ -1414,6 +2226,7 @@ var UIDynamicList = UIElement.extend({
 		}));
 	},
 
+	/** @private */
 	removeItem: function(dl, item) {
 		var value = item.querySelector('input[type="hidden"]').value;
 		var sb = dl.querySelector('.cbi-dropdown');
@@ -1440,9 +2253,13 @@ var UIDynamicList = UIElement.extend({
 		}));
 	},
 
+	/** @private */
 	handleClick: function(ev) {
 		var dl = ev.currentTarget,
 		    item = findParent(ev.target, '.item');
+
+		if (this.options.disabled)
+			return;
 
 		if (item) {
 			this.removeItem(dl, item);
@@ -1456,6 +2273,7 @@ var UIDynamicList = UIElement.extend({
 		}
 	},
 
+	/** @private */
 	handleDropdownChange: function(ev) {
 		var dl = ev.currentTarget,
 		    sbIn = ev.detail.instance,
@@ -1485,6 +2303,7 @@ var UIDynamicList = UIElement.extend({
 		this.addItem(dl, sbVal.value, label, true);
 	},
 
+	/** @private */
 	handleKeydown: function(ev) {
 		var dl = ev.currentTarget,
 		    item = findParent(ev.target, '.item');
@@ -1526,6 +2345,7 @@ var UIDynamicList = UIElement.extend({
 		}
 	},
 
+	/** @override */
 	getValue: function() {
 		var items = this.node.querySelectorAll('.item > input[type="hidden"]'),
 		    input = this.node.querySelector('.add-item > input[type="text"]'),
@@ -1542,6 +2362,7 @@ var UIDynamicList = UIElement.extend({
 		return v;
 	},
 
+	/** @override */
 	setValue: function(values) {
 		if (!Array.isArray(values))
 			values = (values != null && values != '') ? [ values ] : [];
@@ -1557,18 +2378,70 @@ var UIDynamicList = UIElement.extend({
 				this.choices ? this.choices[values[i]] : null);
 	},
 
+	/**
+	 * Add new suggested choices to the dynamic list.
+	 *
+	 * This function adds further choices to an existing dynamic list,
+	 * ignoring choice values which are already present.
+	 *
+	 * @instance
+	 * @memberof LuCI.ui.DynamicList
+	 * @param {string[]} values
+	 * The choice values to add to the dynamic lists suggestion dropdown.
+	 *
+	 * @param {Object<string, *>} labels
+	 * The choice label values to use when adding suggested choices. If no
+	 * label is found for a particular choice value, the value itself is used
+	 * as label text. Choice labels may be any valid value accepted by
+	 * {@link LuCI.dom#content}.
+	 */
 	addChoices: function(values, labels) {
 		var dl = this.node.lastElementChild.firstElementChild;
-		L.dom.callClassMethod(dl, 'addChoices', values, labels);
+		dom.callClassMethod(dl, 'addChoices', values, labels);
 	},
 
+	/**
+	 * Remove all existing choices from the dynamic list.
+	 *
+	 * This function removes all preexisting suggested choices from the widget.
+	 *
+	 * @instance
+	 * @memberof LuCI.ui.DynamicList
+	 */
 	clearChoices: function() {
 		var dl = this.node.lastElementChild.firstElementChild;
-		L.dom.callClassMethod(dl, 'clearChoices');
+		dom.callClassMethod(dl, 'clearChoices');
 	}
 });
 
-var UIHiddenfield = UIElement.extend({
+/**
+ * Instantiate a hidden input field widget.
+ *
+ * @constructor Hiddenfield
+ * @memberof LuCI.ui
+ * @augments LuCI.ui.AbstractElement
+ *
+ * @classdesc
+ *
+ * The `Hiddenfield` class implements an HTML `<input type="hidden">` field
+ * which allows to store form data without exposing it to the user.
+ *
+ * UI widget instances are usually not supposed to be created by view code
+ * directly, instead they're implicitely created by `LuCI.form` when
+ * instantiating CBI forms.
+ *
+ * This class is automatically instantiated as part of `LuCI.ui`. To use it
+ * in views, use `'require ui'` and refer to `ui.Hiddenfield`. To import it in
+ * external JavaScript, use `L.require("ui").then(...)` and access the
+ * `Hiddenfield` property of the class instance value.
+ *
+ * @param {string|string[]} [value=null]
+ * The initial input value.
+ *
+ * @param {LuCI.ui.AbstractElement.InitOptions} [options]
+ * Object describing the widget specific options to initialize the hidden input.
+ */
+var UIHiddenfield = UIElement.extend(/** @lends LuCI.ui.Hiddenfield.prototype */ {
 	__init__: function(value, options) {
 		this.value = value;
 		this.options = Object.assign({
@@ -1576,6 +2449,7 @@ var UIHiddenfield = UIElement.extend({
 		}, options);
 	},
 
+	/** @override */
 	render: function() {
 		var hiddenEl = E('input', {
 			'id': this.options.id,
@@ -1586,24 +2460,89 @@ var UIHiddenfield = UIElement.extend({
 		return this.bind(hiddenEl);
 	},
 
+	/** @private */
 	bind: function(hiddenEl) {
 		this.node = hiddenEl;
 
-		L.dom.bindClassInstance(hiddenEl, this);
+		dom.bindClassInstance(hiddenEl, this);
 
 		return hiddenEl;
 	},
 
+	/** @override */
 	getValue: function() {
 		return this.node.value;
 	},
 
+	/** @override */
 	setValue: function(value) {
 		this.node.value = value;
 	}
 });
 
-var UIFileUpload = UIElement.extend({
+/**
+ * Instantiate a file upload widget.
+ *
+ * @constructor FileUpload
+ * @memberof LuCI.ui
+ * @augments LuCI.ui.AbstractElement
+ *
+ * @classdesc
+ *
+ * The `FileUpload` class implements a widget which allows the user to upload,
+ * browse, select and delete files beneath a predefined remote directory.
+ *
+ * UI widget instances are usually not supposed to be created by view code
+ * directly, instead they're implicitely created by `LuCI.form` when
+ * instantiating CBI forms.
+ *
+ * This class is automatically instantiated as part of `LuCI.ui`. To use it
+ * in views, use `'require ui'` and refer to `ui.FileUpload`. To import it in
+ * external JavaScript, use `L.require("ui").then(...)` and access the
+ * `FileUpload` property of the class instance value.
+ *
+ * @param {string|string[]} [value=null]
+ * The initial input value.
+ *
+ * @param {LuCI.ui.DynamicList.InitOptions} [options]
+ * Object describing the widget specific options to initialize the file
+ * upload control.
+ */
+var UIFileUpload = UIElement.extend(/** @lends LuCI.ui.FileUpload.prototype */ {
+	/**
+	 * In addition to the [AbstractElement.InitOptions]{@link LuCI.ui.AbstractElement.InitOptions}
+	 * the following properties are recognized:
+	 *
+	 * @typedef {LuCI.ui.AbstractElement.InitOptions} InitOptions
+	 * @memberof LuCI.ui.FileUpload
+	 *
+	 * @property {boolean} [show_hidden=false]
+	 * Specifies whether hidden files should be displayed when browsing remote
+	 * files. Note that this is not a security feature, hidden files are always
+	 * present in the remote file listings received, this option merely controls
+	 * whether they're displayed or not.
+	 *
+	 * @property {boolean} [enable_upload=true]
+	 * Specifies whether the widget allows the user to upload files. If set to
+	 * `false`, only existing files may be selected. Note that this is not a
+	 * security feature. Whether file upload requests are accepted remotely
+	 * depends on the ACL setup for the current session. This option merely
+	 * controls whether the upload controls are rendered or not.
+	 *
+	 * @property {boolean} [enable_remove=true]
+	 * Specifies whether the widget allows the user to delete remove files.
+	 * If set to `false`, existing files may not be removed. Note that this is
+	 * not a security feature. Whether file delete requests are accepted
+	 * remotely depends on the ACL setup for the current session. This option
+	 * merely controls whether the file remove controls are rendered or not.
+	 *
+	 * @property {string} [root_directory=/etc/luci-uploads]
+	 * Specifies the remote directory the upload and file browsing actions take
+	 * place in. Browsing to directories outside of the root directory is
+	 * prevented by the widget. Note that this is not a security feature.
+	 * Whether remote directories are browseable or not solely depends on the
+	 * ACL setup for the current session.
+	 */
 	__init__: function(value, options) {
 		this.value = value;
 		this.options = Object.assign({
@@ -1614,17 +2553,19 @@ var UIFileUpload = UIElement.extend({
 		}, options);
 	},
 
+	/** @private */
 	bind: function(browserEl) {
 		this.node = browserEl;
 
 		this.setUpdateEvents(browserEl, 'cbi-fileupload-select', 'cbi-fileupload-cancel');
 		this.setChangeEvents(browserEl, 'cbi-fileupload-select', 'cbi-fileupload-cancel');
 
-		L.dom.bindClassInstance(browserEl, this);
+		dom.bindClassInstance(browserEl, this);
 
 		return browserEl;
 	},
 
+	/** @override */
 	render: function() {
 		return L.resolveDefault(this.value != null ? fs.stat(this.value) : null).then(L.bind(function(stat) {
 			var label;
@@ -1642,7 +2583,8 @@ var UIFileUpload = UIElement.extend({
 			return this.bind(E('div', { 'id': this.options.id }, [
 				E('button', {
 					'class': 'btn',
-					'click': L.ui.createHandlerFn(this, 'handleFileBrowser')
+					'click': UI.prototype.createHandlerFn(this, 'handleFileBrowser'),
+					'disabled': this.options.disabled ? '' : null
 				}, label),
 				E('div', {
 					'class': 'cbi-filebrowser'
@@ -1656,6 +2598,7 @@ var UIFileUpload = UIElement.extend({
 		}, this));
 	},
 
+	/** @private */
 	truncatePath: function(path) {
 		if (path.length > 50)
 			path = path.substring(0, 25) + '…' + path.substring(path.length - 25);
@@ -1663,31 +2606,36 @@ var UIFileUpload = UIElement.extend({
 		return path;
 	},
 
+	/** @private */
 	iconForType: function(type) {
 		switch (type) {
 		case 'symlink':
 			return E('img', {
-				'src': L.resource('cbi/link.gif'),
+				'src': L.resource('cbi/link.svg'),
+				'width': 16,
 				'title': _('Symbolic link'),
 				'class': 'middle'
 			});
 
 		case 'directory':
 			return E('img', {
-				'src': L.resource('cbi/folder.gif'),
+				'src': L.resource('cbi/folder.svg'),
+				'width': 16,
 				'title': _('Directory'),
 				'class': 'middle'
 			});
 
 		default:
 			return E('img', {
-				'src': L.resource('cbi/file.gif'),
+				'src': L.resource('cbi/file.svg'),
+				'width': 16,
 				'title': _('File'),
 				'class': 'middle'
 			});
 		}
 	},
 
+	/** @private */
 	canonicalizePath: function(path) {
 		return path.replace(/\/{2,}/, '/')
 			.replace(/\/\.(\/|$)/g, '/')
@@ -1695,6 +2643,7 @@ var UIFileUpload = UIElement.extend({
 			.replace(/\/$/, '');
 	},
 
+	/** @private */
 	splitPath: function(path) {
 		var croot = this.canonicalizePath(this.options.root_directory || '/'),
 		    cpath = this.canonicalizePath(path || '/');
@@ -1712,6 +2661,7 @@ var UIFileUpload = UIElement.extend({
 		return parts;
 	},
 
+	/** @private */
 	handleUpload: function(path, list, ev) {
 		var form = ev.target.parentNode,
 		    fileinput = form.querySelector('input[type="file"]'),
@@ -1736,7 +2686,7 @@ var UIFileUpload = UIElement.extend({
 		data.append('filename', path + '/' + filename);
 		data.append('filedata', fileinput.files[0]);
 
-		return L.Request.post(L.env.cgi_base + '/cgi-upload', data, {
+		return request.post(L.env.cgi_base + '/cgi-upload', data, {
 			progress: L.bind(function(btn, ev) {
 				btn.firstChild.data = '%.2f%%'.format((ev.loaded / ev.total) * 100);
 			}, this, ev.target)
@@ -1750,6 +2700,7 @@ var UIFileUpload = UIElement.extend({
 		}, this, path, ev));
 	},
 
+	/** @private */
 	handleDelete: function(path, fileStat, ev) {
 		var parent = path.replace(/\/[^\/]+$/, '') || '/',
 		    name = path.replace(/^.+\//, ''),
@@ -1767,7 +2718,7 @@ var UIFileUpload = UIElement.extend({
 			    hidden = this.node.lastElementChild;
 
 			if (path == hidden.value) {
-				L.dom.content(button, _('Select file…'));
+				dom.content(button, _('Select file…'));
 				hidden.value = '';
 			}
 
@@ -1779,6 +2730,7 @@ var UIFileUpload = UIElement.extend({
 		}
 	},
 
+	/** @private */
 	renderUpload: function(path, list) {
 		if (!this.options.enable_upload)
 			return E([]);
@@ -1818,13 +2770,14 @@ var UIFileUpload = UIElement.extend({
 				E('div', {}, E('input', { 'type': 'text', 'placeholder': _('Filename') })),
 				E('button', {
 					'class': 'btn cbi-button-save',
-					'click': L.ui.createHandlerFn(this, 'handleUpload', path, list),
+					'click': UI.prototype.createHandlerFn(this, 'handleUpload', path, list),
 					'disabled': true
 				}, [ _('Upload file') ])
 			])
 		]);
 	},
 
+	/** @private */
 	renderListing: function(container, path, list) {
 		var breadcrumb = E('p'),
 		    rows = E('ul');
@@ -1854,7 +2807,7 @@ var UIFileUpload = UIElement.extend({
 					E('a', {
 						'href': '#',
 						'style': selected ? 'font-weight:bold' : null,
-						'click': L.ui.createHandlerFn(this, 'handleSelect',
+						'click': UI.prototype.createHandlerFn(this, 'handleSelect',
 							entrypath, list[i].type != 'directory' ? list[i] : null)
 					}, '%h'.format(list[i].name))
 				]),
@@ -1870,11 +2823,11 @@ var UIFileUpload = UIElement.extend({
 				E('div', [
 					selected ? E('button', {
 						'class': 'btn',
-						'click': L.ui.createHandlerFn(this, 'handleReset')
+						'click': UI.prototype.createHandlerFn(this, 'handleReset')
 					}, [ _('Deselect') ]) : '',
 					this.options.enable_remove ? E('button', {
 						'class': 'btn cbi-button-negative',
-						'click': L.ui.createHandlerFn(this, 'handleDelete', entrypath, list[i])
+						'click': UI.prototype.createHandlerFn(this, 'handleDelete', entrypath, list[i])
 					}, [ _('Delete') ]) : ''
 				])
 			]));
@@ -1888,16 +2841,16 @@ var UIFileUpload = UIElement.extend({
 
 		for (var i = 0; i < dirs.length; i++) {
 			cur = cur ? cur + '/' + dirs[i] : dirs[i];
-			L.dom.append(breadcrumb, [
+			dom.append(breadcrumb, [
 				i ? ' » ' : '',
 				E('a', {
 					'href': '#',
-					'click': L.ui.createHandlerFn(this, 'handleSelect', cur || '/', null)
+					'click': UI.prototype.createHandlerFn(this, 'handleSelect', cur || '/', null)
 				}, dirs[i] != '' ? '%h'.format(dirs[i]) : E('em', '(root)')),
 			]);
 		}
 
-		L.dom.content(container, [
+		dom.content(container, [
 			breadcrumb,
 			rows,
 			E('div', { 'class': 'right' }, [
@@ -1905,12 +2858,13 @@ var UIFileUpload = UIElement.extend({
 				E('a', {
 					'href': '#',
 					'class': 'btn',
-					'click': L.ui.createHandlerFn(this, 'handleCancel')
+					'click': UI.prototype.createHandlerFn(this, 'handleCancel')
 				}, _('Cancel'))
 			]),
 		]);
 	},
 
+	/** @private */
 	handleCancel: function(ev) {
 		var button = this.node.firstElementChild,
 		    browser = button.nextElementSibling;
@@ -1923,22 +2877,24 @@ var UIFileUpload = UIElement.extend({
 		ev.preventDefault();
 	},
 
+	/** @private */
 	handleReset: function(ev) {
 		var button = this.node.firstElementChild,
 		    hidden = this.node.lastElementChild;
 
 		hidden.value = '';
-		L.dom.content(button, _('Select file…'));
+		dom.content(button, _('Select file…'));
 
 		this.handleCancel(ev);
 	},
 
+	/** @private */
 	handleSelect: function(path, fileStat, ev) {
-		var browser = L.dom.parent(ev.target, '.cbi-filebrowser'),
+		var browser = dom.parent(ev.target, '.cbi-filebrowser'),
 		    ul = browser.querySelector('ul');
 
 		if (fileStat == null) {
-			L.dom.content(ul, E('em', { 'class': 'spinning' }, _('Loading directory contents…')));
+			dom.content(ul, E('em', { 'class': 'spinning' }, _('Loading directory contents…')));
 			L.resolveDefault(fs.list(path), []).then(L.bind(this.renderListing, this, browser, path));
 		}
 		else {
@@ -1947,7 +2903,7 @@ var UIFileUpload = UIElement.extend({
 
 			path = this.canonicalizePath(path);
 
-			L.dom.content(button, [
+			dom.content(button, [
 				this.iconForType(fileStat.type),
 				' %s (%1000mB)'.format(this.truncatePath(path), fileStat.size)
 			]);
@@ -1961,6 +2917,7 @@ var UIFileUpload = UIElement.extend({
 		}
 	},
 
+	/** @private */
 	handleFileBrowser: function(ev) {
 		var button = ev.target,
 		    browser = button.nextElementSibling,
@@ -1973,7 +2930,7 @@ var UIFileUpload = UIElement.extend({
 
 		return L.resolveDefault(fs.list(path), []).then(L.bind(function(button, browser, path, list) {
 			document.querySelectorAll('.cbi-filebrowser.open').forEach(function(browserEl) {
-				L.dom.findClassInstance(browserEl).handleCancel(ev);
+				dom.findClassInstance(browserEl).handleCancel(ev);
 			});
 
 			button.style.display = 'none';
@@ -1983,24 +2940,142 @@ var UIFileUpload = UIElement.extend({
 		}, this, button, browser, path));
 	},
 
+	/** @override */
 	getValue: function() {
 		return this.node.lastElementChild.value;
 	},
 
+	/** @override */
 	setValue: function(value) {
 		this.node.lastElementChild.value = value;
 	}
 });
 
 
-return L.Class.extend({
+function scrubMenu(node) {
+	var hasSatisfiedChild = false;
+
+	if (L.isObject(node.children)) {
+		for (var k in node.children) {
+			var child = scrubMenu(node.children[k]);
+
+			if (child.title)
+				hasSatisfiedChild = hasSatisfiedChild || child.satisfied;
+		}
+	}
+
+	if (L.isObject(node.action) &&
+	    node.action.type == 'firstchild' &&
+	    hasSatisfiedChild == false)
+		node.satisfied = false;
+
+	return node;
+};
+
+/**
+ * Handle menu.
+ *
+ * @constructor menu
+ * @memberof LuCI.ui
+ *
+ * @classdesc
+ *
+ * Handles menus.
+ */
+var UIMenu = baseclass.singleton(/** @lends LuCI.ui.menu.prototype */ {
+	/**
+	 * @typedef {Object} MenuNode
+	 * @memberof LuCI.ui.menu
+
+	 * @property {string} name - The internal name of the node, as used in the URL
+	 * @property {number} order - The sort index of the menu node
+	 * @property {string} [title] - The title of the menu node, `null` if the node should be hidden
+	 * @property {satisified} boolean - Boolean indicating whether the menu enries dependencies are satisfied
+	 * @property {readonly} [boolean] - Boolean indicating whether the menu entries underlying ACLs are readonly
+	 * @property {LuCI.ui.menu.MenuNode[]} [children] - Array of child menu nodes.
+	 */
+
+	/**
+	 * Load and cache current menu tree.
+	 *
+	 * @returns {Promise<LuCI.ui.menu.MenuNode>}
+	 * Returns a promise resolving to the root element of the menu tree.
+	 */
+	load: function() {
+		if (this.menu == null)
+			this.menu = session.getLocalData('menu');
+
+		if (!L.isObject(this.menu)) {
+			this.menu = request.get(L.url('admin/menu')).then(L.bind(function(menu) {
+				this.menu = scrubMenu(menu.json());
+				session.setLocalData('menu', this.menu);
+
+				return this.menu;
+			}, this));
+		}
+
+		return Promise.resolve(this.menu);
+	},
+
+	/**
+	 * Flush the internal menu cache to force loading a new structure on the
+	 * next page load.
+	 */
+	flushCache: function() {
+		session.setLocalData('menu', null);
+	},
+
+	/**
+	 * @param {LuCI.ui.menu.MenuNode} [node]
+	 * The menu node to retrieve the children for. Defaults to the menu's
+	 * internal root node if omitted.
+	 *
+	 * @returns {LuCI.ui.menu.MenuNode[]}
+	 * Returns an array of child menu nodes.
+	 */
+	getChildren: function(node) {
+		var children = [];
+
+		if (node == null)
+			node = this.menu;
+
+		for (var k in node.children) {
+			if (!node.children.hasOwnProperty(k))
+				continue;
+
+			if (!node.children[k].satisfied)
+				continue;
+
+			if (!node.children[k].hasOwnProperty('title'))
+				continue;
+
+			children.push(Object.assign(node.children[k], { name: k }));
+		}
+
+		return children.sort(function(a, b) {
+			return ((a.order || 1000) - (b.order || 1000));
+		});
+	}
+});
+
+/**
+ * @class ui
+ * @memberof LuCI
+ * @hideconstructor
+ * @classdesc
+ *
+ * Provides high level UI helper functionality.
+ * To import the class in views, use `'require ui'`, to import it in
+ * external JavaScript, use `L.require("ui").then(...)`.
+ */
+var UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 	__init__: function() {
 		modalDiv = document.body.appendChild(
-			L.dom.create('div', { id: 'modal_overlay' },
-				L.dom.create('div', { class: 'modal', role: 'dialog', 'aria-modal': true })));
+			dom.create('div', { id: 'modal_overlay' },
+				dom.create('div', { class: 'modal', role: 'dialog', 'aria-modal': true })));
 
 		tooltipDiv = document.body.appendChild(
-			L.dom.create('div', { class: 'cbi-tooltip' }));
+			dom.create('div', { class: 'cbi-tooltip' }));
 
 		/* setup old aliases */
 		L.showModal = this.showModal;
@@ -2019,7 +3094,35 @@ return L.Class.extend({
 		document.addEventListener('uci-loaded', this.changes.init.bind(this.changes));
 	},
 
-	/* Modal dialog */
+	/**
+	 * Display a modal overlay dialog with the specified contents.
+	 *
+	 * The modal overlay dialog covers the current view preventing interaction
+	 * with the underlying view contents. Only one modal dialog instance can
+	 * be opened. Invoking showModal() while a modal dialog is already open will
+	 * replace the open dialog with a new one having the specified contents.
+	 *
+	 * Additional CSS class names may be passed to influence the appearence of
+	 * the dialog. Valid values for the classes depend on the underlying theme.
+	 *
+	 * @see LuCI.dom.content
+	 *
+	 * @param {string} [title]
+	 * The title of the dialog. If `null`, no title element will be rendered.
+	 *
+	 * @param {*} contents
+	 * The contents to add to the modal dialog. This should be a DOM node or
+	 * a document fragment in most cases. The value is passed as-is to the
+	 * `dom.content()` function - refer to its documentation for applicable
+	 * values.
+	 *
+	 * @param {...string} [classes]
+	 * A number of extra CSS class names which are set on the modal dialog
+	 * element.
+	 *
+	 * @returns {Node}
+	 * Returns a DOM Node representing the modal dialog element.
+	 */
 	showModal: function(title, children /* , ... */) {
 		var dlg = modalDiv.firstElementChild;
 
@@ -2028,19 +3131,30 @@ return L.Class.extend({
 		for (var i = 2; i < arguments.length; i++)
 			dlg.classList.add(arguments[i]);
 
-		L.dom.content(dlg, L.dom.create('h4', {}, title));
-		L.dom.append(dlg, children);
+		dom.content(dlg, dom.create('h4', {}, title));
+		dom.append(dlg, children);
 
 		document.body.classList.add('modal-overlay-active');
+		modalDiv.scrollTop = 0;
 
 		return dlg;
 	},
 
+	/**
+	 * Close the open modal overlay dialog.
+	 *
+	 * This function will close an open modal dialog and restore the normal view
+	 * behaviour. It has no effect if no modal dialog is currently open.
+	 *
+	 * Note that this function is stand-alone, it does not rely on `this` and
+	 * will not invoke other class functions so it suitable to be used as event
+	 * handler as-is without the need to bind it first.
+	 */
 	hideModal: function() {
 		document.body.classList.remove('modal-overlay-active');
 	},
 
-	/* Tooltip */
+	/** @private */
 	showTooltip: function(ev) {
 		var target = findParent(ev.target, '[data-tooltip]');
 
@@ -2078,6 +3192,7 @@ return L.Class.extend({
 		}));
 	},
 
+	/** @private */
 	hideTooltip: function(ev) {
 		if (ev.target === tooltipDiv || ev.relatedTarget === tooltipDiv ||
 		    tooltipDiv.contains(ev.target) || tooltipDiv.contains(ev.relatedTarget))
@@ -2094,6 +3209,36 @@ return L.Class.extend({
 		tooltipDiv.dispatchEvent(new CustomEvent('tooltip-close', { bubbles: true }));
 	},
 
+	/**
+	 * Add a notification banner at the top of the current view.
+	 *
+	 * A notification banner is an alert message usually displayed at the
+	 * top of the current view, spanning the entire availibe width.
+	 * Notification banners will stay in place until dismissed by the user.
+	 * Multiple banners may be shown at the same time.
+	 *
+	 * Additional CSS class names may be passed to influence the appearence of
+	 * the banner. Valid values for the classes depend on the underlying theme.
+	 *
+	 * @see LuCI.dom.content
+	 *
+	 * @param {string} [title]
+	 * The title of the notification banner. If `null`, no title element
+	 * will be rendered.
+	 *
+	 * @param {*} contents
+	 * The contents to add to the notification banner. This should be a DOM
+	 * node or a document fragment in most cases. The value is passed as-is
+	 * to the `dom.content()` function - refer to its documentation for
+	 * applicable values.
+	 *
+	 * @param {...string} [classes]
+	 * A number of extra CSS class names which are set on the notification
+	 * banner element.
+	 *
+	 * @returns {Node}
+	 * Returns a DOM Node representing the notification banner element.
+	 */
 	addNotification: function(title, children /*, ... */) {
 		var mc = document.querySelector('#maincontent') || document.body;
 		var msg = E('div', {
@@ -2111,7 +3256,7 @@ return L.Class.extend({
 					'class': 'btn',
 					'style': 'margin-left:auto; margin-top:auto',
 					'click': function(ev) {
-						L.dom.parent(ev.target, '.alert-message').classList.add('fade-out');
+						dom.parent(ev.target, '.alert-message').classList.add('fade-out');
 					},
 
 				}, [ _('Dismiss') ])
@@ -2119,9 +3264,9 @@ return L.Class.extend({
 		]);
 
 		if (title != null)
-			L.dom.append(msg.firstElementChild, E('h4', {}, title));
+			dom.append(msg.firstElementChild, E('h4', {}, title));
 
-		L.dom.append(msg.firstElementChild, children);
+		dom.append(msg.firstElementChild, children);
 
 		for (var i = 2; i < arguments.length; i++)
 			msg.classList.add(arguments[i]);
@@ -2131,7 +3276,132 @@ return L.Class.extend({
 		return msg;
 	},
 
-	/* Widget helper */
+	/**
+	 * Display or update an header area indicator.
+	 *
+	 * An indicator is a small label displayed in the header area of the screen
+	 * providing few amounts of status information such as item counts or state
+	 * toggle indicators.
+	 *
+	 * Multiple indicators may be shown at the same time and indicator labels
+	 * may be made clickable to display extended information or to initiate
+	 * further actions.
+	 *
+	 * Indicators can either use a default `active` or a less accented `inactive`
+	 * style which is useful for indicators representing state toggles.
+	 *
+	 * @param {string} id
+	 * The ID of the indicator. If an indicator with the given ID already exists,
+	 * it is updated with the given label and style.
+	 *
+	 * @param {string} label
+	 * The text to display in the indicator label.
+	 *
+	 * @param {function} [handler]
+	 * A handler function to invoke when the indicator label is clicked/touched
+	 * by the user. If omitted, the indicator is not clickable/touchable.
+	 *
+	 * Note that this parameter only applies to new indicators, when updating
+	 * existing labels it is ignored.
+	 *
+	 * @param {string} [style=active]
+	 * The indicator style to use. May be either `active` or `inactive`.
+	 *
+	 * @returns {boolean}
+	 * Returns `true` when the indicator has been updated or `false` when no
+	 * changes were made.
+	 */
+	showIndicator: function(id, label, handler, style) {
+		if (indicatorDiv == null) {
+			indicatorDiv = document.body.querySelector('#indicators');
+
+			if (indicatorDiv == null)
+				return false;
+		}
+
+		var handlerFn = (typeof(handler) == 'function') ? handler : null,
+		    indicatorElem = indicatorDiv.querySelector('span[data-indicator="%s"]'.format(id));
+
+		if (indicatorElem == null) {
+			var beforeElem = null;
+
+			for (beforeElem = indicatorDiv.firstElementChild;
+			     beforeElem != null;
+			     beforeElem = beforeElem.nextElementSibling)
+				if (beforeElem.getAttribute('data-indicator') > id)
+					break;
+
+			indicatorElem = indicatorDiv.insertBefore(E('span', {
+				'data-indicator': id,
+				'data-clickable': handlerFn ? true : null,
+				'click': handlerFn
+			}, ['']), beforeElem);
+		}
+
+		if (label == indicatorElem.firstChild.data && style == indicatorElem.getAttribute('data-style'))
+			return false;
+
+		indicatorElem.firstChild.data = label;
+		indicatorElem.setAttribute('data-style', (style == 'inactive') ? 'inactive' : 'active');
+		return true;
+	},
+
+	/**
+	 * Remove an header area indicator.
+	 *
+	 * This function removes the given indicator label from the header indicator
+	 * area. When the given indicator is not found, this function does nothing.
+	 *
+	 * @param {string} id
+	 * The ID of the indicator to remove.
+	 *
+	 * @returns {boolean}
+	 * Returns `true` when the indicator has been removed or `false` when the
+	 * requested indicator was not found.
+	 */
+	hideIndicator: function(id) {
+		var indicatorElem = indicatorDiv ? indicatorDiv.querySelector('span[data-indicator="%s"]'.format(id)) : null;
+
+		if (indicatorElem == null)
+			return false;
+
+		indicatorDiv.removeChild(indicatorElem);
+		return true;
+	},
+
+	/**
+	 * Formats a series of label/value pairs into list-like markup.
+	 *
+	 * This function transforms a flat array of alternating label and value
+	 * elements into a list-like markup, using the values in `separators` as
+	 * separators and appends the resulting nodes to the given parent DOM node.
+	 *
+	 * Each label is suffixed with `: ` and wrapped into a `<strong>` tag, the
+	 * `<strong>` element and the value corresponding to the label are
+	 * subsequently wrapped into a `<span class="nowrap">` element.
+	 *
+	 * The resulting `<span>` element tuples are joined by the given separators
+	 * to form the final markup which is appened to the given parent DOM node.
+	 *
+	 * @param {Node} node
+	 * The parent DOM node to append the markup to. Any previous child elements
+	 * will be removed.
+	 *
+	 * @param {Array<*>} items
+	 * An alternating array of labels and values. The label values will be
+	 * converted to plain strings, the values are used as-is and may be of
+	 * any type accepted by `LuCI.dom.content()`.
+	 *
+	 * @param {*|Array<*>} [separators=[E('br')]]
+	 * A single value or an array of separator values to separate each
+	 * label/value pair with. The function will cycle through the separators
+	 * when joining the pairs. If omitted, the default separator is a sole HTML
+	 * `<br>` element. Separator values are used as-is and may be of any type
+	 * accepted by `LuCI.dom.content()`.
+	 *
+	 * @returns {Node}
+	 * Returns the parent DOM node the formatted markup has been added to.
+	 */
 	itemlist: function(node, items, separators) {
 		var children = [];
 
@@ -2149,24 +3419,39 @@ return L.Class.extend({
 				]));
 
 				if ((i+2) < items.length)
-					children.push(L.dom.elem(sep) ? sep.cloneNode(true) : sep);
+					children.push(dom.elem(sep) ? sep.cloneNode(true) : sep);
 			}
 		}
 
-		L.dom.content(node, children);
+		dom.content(node, children);
 
 		return node;
 	},
 
-	/* Tabs */
-	tabs: L.Class.singleton({
+	/**
+	 * @class
+	 * @memberof LuCI.ui
+	 * @hideconstructor
+	 * @classdesc
+	 *
+	 * The `tabs` class handles tab menu groups used throughout the view area.
+	 * It takes care of setting up tab groups, tracking their state and handling
+	 * related events.
+	 *
+	 * This class is automatically instantiated as part of `LuCI.ui`. To use it
+	 * in views, use `'require ui'` and refer to `ui.tabs`. To import it in
+	 * external JavaScript, use `L.require("ui").then(...)` and access the
+	 * `tabs` property of the class instance value.
+	 */
+	tabs: baseclass.singleton(/* @lends LuCI.ui.tabs.prototype */ {
+		/** @private */
 		init: function() {
 			var groups = [], prevGroup = null, currGroup = null;
 
 			document.querySelectorAll('[data-tab]').forEach(function(tab) {
 				var parent = tab.parentNode;
 
-				if (L.dom.matches(tab, 'li') && L.dom.matches(parent, 'ul.cbi-tabmenu'))
+				if (dom.matches(tab, 'li') && dom.matches(parent, 'ul.cbi-tabmenu'))
 					return;
 
 				if (!parent.hasAttribute('data-tab-group'))
@@ -2192,6 +3477,27 @@ return L.Class.extend({
 			this.updateTabs();
 		},
 
+		/**
+		 * Initializes a new tab group from the given tab pane collection.
+		 *
+		 * This function cycles through the given tab pane DOM nodes, extracts
+		 * their tab IDs, titles and active states, renders a corresponding
+		 * tab menu and prepends it to the tab panes common parent DOM node.
+		 *
+		 * The tab menu labels will be set to the value of the `data-tab-title`
+		 * attribute of each corresponding pane. The last pane with the
+		 * `data-tab-active` attribute set to `true` will be selected by default.
+		 *
+		 * If no pane is marked as active, the first one will be preselected.
+		 *
+		 * @instance
+		 * @memberof LuCI.ui.tabs
+		 * @param {Array<Node>|NodeList} panes
+		 * A collection of tab panes to build a tab group menu for. May be a
+		 * plain array of DOM nodes or a NodeList collection, such as the result
+		 * of a `querySelectorAll()` call or the `.childNodes` property of a
+		 * DOM node.
+		 */
 		initTabGroup: function(panes) {
 			if (typeof(panes) != 'object' || !('length' in panes) || panes.length === 0)
 				return;
@@ -2244,13 +3550,29 @@ return L.Class.extend({
 				this.setActiveTabId(panes[selected], selected);
 			}
 
+			panes[selected].dispatchEvent(new CustomEvent('cbi-tab-active', {
+				detail: { tab: panes[selected].getAttribute('data-tab') }
+			}));
+
 			this.updateTabs(group);
 		},
 
+		/**
+		 * Checks whether the given tab pane node is empty.
+		 *
+		 * @instance
+		 * @memberof LuCI.ui.tabs
+		 * @param {Node} pane
+		 * The tab pane to check.
+		 *
+		 * @returns {boolean}
+		 * Returns `true` if the pane is empty, else `false`.
+		 */
 		isEmptyPane: function(pane) {
-			return L.dom.isEmpty(pane, function(n) { return n.classList.contains('cbi-tab-descr') });
+			return dom.isEmpty(pane, function(n) { return n.classList.contains('cbi-tab-descr') });
 		},
 
+		/** @private */
 		getPathForPane: function(pane) {
 			var path = [], node = null;
 
@@ -2267,39 +3589,36 @@ return L.Class.extend({
 			return path.join('/');
 		},
 
+		/** @private */
 		getActiveTabState: function() {
-			var page = document.body.getAttribute('data-page');
+			var page = document.body.getAttribute('data-page'),
+			    state = session.getLocalData('tab');
 
-			try {
-				var val = JSON.parse(window.sessionStorage.getItem('tab'));
-				if (val.page === page && L.isObject(val.paths))
-					return val;
-			}
-			catch(e) {}
+			if (L.isObject(state) && state.page === page && L.isObject(state.paths))
+				return state;
 
-			window.sessionStorage.removeItem('tab');
+			session.setLocalData('tab', null);
+
 			return { page: page, paths: {} };
 		},
 
+		/** @private */
 		getActiveTabId: function(pane) {
 			var path = this.getPathForPane(pane);
 			return +this.getActiveTabState().paths[path] || 0;
 		},
 
+		/** @private */
 		setActiveTabId: function(pane, tabIndex) {
-			var path = this.getPathForPane(pane);
+			var path = this.getPathForPane(pane),
+			    state = this.getActiveTabState();
 
-			try {
-				var state = this.getActiveTabState();
-				    state.paths[path] = tabIndex;
+			state.paths[path] = tabIndex;
 
-			    window.sessionStorage.setItem('tab', JSON.stringify(state));
-			}
-			catch (e) { return false; }
-
-			return true;
+			return session.setLocalData('tab', state);
 		},
 
+		/** @private */
 		updateTabs: function(ev, root) {
 			(root || document).querySelectorAll('[data-tab-title]').forEach(L.bind(function(pane) {
 				var menu = pane.parentNode.previousElementSibling,
@@ -2330,6 +3649,7 @@ return L.Class.extend({
 			}, this));
 		},
 
+		/** @private */
 		switchTab: function(ev) {
 			var tab = ev.target.parentNode,
 			    name = tab.getAttribute('data-tab'),
@@ -2351,10 +3671,11 @@ return L.Class.extend({
 			});
 
 			group.childNodes.forEach(function(pane) {
-				if (L.dom.matches(pane, '[data-tab]')) {
+				if (dom.matches(pane, '[data-tab]')) {
 					if (pane.getAttribute('data-tab') === name) {
 						pane.setAttribute('data-tab-active', 'true');
-						L.ui.tabs.setActiveTabId(pane, index);
+						pane.dispatchEvent(new CustomEvent('cbi-tab-active', { detail: { tab: name } }));
+						UI.prototype.tabs.setActiveTabId(pane, index);
 					}
 					else {
 						pane.setAttribute('data-tab-active', 'false');
@@ -2366,10 +3687,37 @@ return L.Class.extend({
 		}
 	}),
 
-	/* File uploading */
+	/**
+	 * @typedef {Object} FileUploadReply
+	 * @memberof LuCI.ui
+
+	 * @property {string} name - Name of the uploaded file without directory components
+	 * @property {number} size - Size of the uploaded file in bytes
+	 * @property {string} checksum - The MD5 checksum of the received file data
+	 * @property {string} sha256sum - The SHA256 checksum of the received file data
+	 */
+
+	/**
+	 * Display a modal file upload prompt.
+	 *
+	 * This function opens a modal dialog prompting the user to select and
+	 * upload a file to a predefined remote destination path.
+	 *
+	 * @param {string} path
+	 * The remote file path to upload the local file to.
+	 *
+	 * @param {Node} [progessStatusNode]
+	 * An optional DOM text node whose content text is set to the progress
+	 * percentage value during file upload.
+	 *
+	 * @returns {Promise<LuCI.ui.FileUploadReply>}
+	 * Returns a promise resolving to a file upload status object on success
+	 * or rejecting with an error in case the upload failed or has been
+	 * cancelled by the user.
+	 */
 	uploadFile: function(path, progressStatusNode) {
 		return new Promise(function(resolveFn, rejectFn) {
-			L.ui.showModal(_('Uploading file…'), [
+			UI.prototype.showModal(_('Uploading file…'), [
 				E('p', _('Please select the file to upload.')),
 				E('div', { 'style': 'display:flex' }, [
 					E('div', { 'class': 'left', 'style': 'flex:1' }, [
@@ -2377,7 +3725,7 @@ return L.Class.extend({
 							type: 'file',
 							style: 'display:none',
 							change: function(ev) {
-								var modal = L.dom.parent(ev.target, '.modal'),
+								var modal = dom.parent(ev.target, '.modal'),
 								    body = modal.querySelector('p'),
 								    upload = modal.querySelector('.cbi-button-action.important'),
 								    file = ev.currentTarget.files[0];
@@ -2385,7 +3733,7 @@ return L.Class.extend({
 								if (file == null)
 									return;
 
-								L.dom.content(body, [
+								dom.content(body, [
 									E('ul', {}, [
 										E('li', {}, [ '%s: %s'.format(_('Name'), file.name.replace(/^.*[\\\/]/, '')) ]),
 										E('li', {}, [ '%s: %1024mB'.format(_('Size'), file.size) ])
@@ -2407,7 +3755,7 @@ return L.Class.extend({
 						E('button', {
 							'class': 'btn',
 							'click': function() {
-								L.ui.hideModal();
+								UI.prototype.hideModal();
 								rejectFn(new Error('Upload has been cancelled'));
 							}
 						}, [ _('Cancel') ]),
@@ -2416,14 +3764,14 @@ return L.Class.extend({
 							'class': 'btn cbi-button-action important',
 							'disabled': true,
 							'click': function(ev) {
-								var input = L.dom.parent(ev.target, '.modal').querySelector('input[type="file"]');
+								var input = dom.parent(ev.target, '.modal').querySelector('input[type="file"]');
 
 								if (!input.files[0])
 									return;
 
 								var progress = E('div', { 'class': 'cbi-progressbar', 'title': '0%' }, E('div', { 'style': 'width:0' }));
 
-								L.ui.showModal(_('Uploading file…'), [ progress ]);
+								UI.prototype.showModal(_('Uploading file…'), [ progress ]);
 
 								var data = new FormData();
 
@@ -2433,7 +3781,7 @@ return L.Class.extend({
 
 								var filename = input.files[0].name;
 
-								L.Request.post(L.env.cgi_base + '/cgi-upload', data, {
+								request.post(L.env.cgi_base + '/cgi-upload', data, {
 									timeout: 0,
 									progress: function(pev) {
 										var percent = (pev.loaded / pev.total) * 100;
@@ -2447,10 +3795,10 @@ return L.Class.extend({
 								}).then(function(res) {
 									var reply = res.json();
 
-									L.ui.hideModal();
+									UI.prototype.hideModal();
 
 									if (L.isObject(reply) && reply.failure) {
-										L.ui.addNotification(null, E('p', _('Upload request failed: %s').format(reply.message)));
+										UI.prototype.addNotification(null, E('p', _('Upload request failed: %s').format(reply.message)));
 										rejectFn(new Error(reply.failure));
 									}
 									else {
@@ -2458,7 +3806,7 @@ return L.Class.extend({
 										resolveFn(reply);
 									}
 								}, function(err) {
-									L.ui.hideModal();
+									UI.prototype.hideModal();
 									rejectFn(err);
 								});
 							}
@@ -2469,7 +3817,26 @@ return L.Class.extend({
 		});
 	},
 
-	/* Reconnect handling */
+	/**
+	 * Perform a device connectivity test.
+	 *
+	 * Attempt to fetch a well known ressource from the remote device via HTTP
+	 * in order to test connectivity. This function is mainly useful to wait
+	 * for the router to come back online after a reboot or reconfiguration.
+	 *
+	 * @param {string} [proto=http]
+	 * The protocol to use for fetching the resource. May be either `http`
+	 * (the default) or `https`.
+	 *
+	 * @param {string} [host=window.location.host]
+	 * Override the host address to probe. By default the current host as seen
+	 * in the address bar is probed.
+	 *
+	 * @returns {Promise<Event>}
+	 * Returns a promise resolving to a `load` event in case the device is
+	 * reachable or rejecting with an `error` event in case it is not reachable
+	 * or rejecting with `null` when the connectivity check timed out.
+	 */
 	pingDevice: function(proto, ipaddr) {
 		var target = '%s://%s%s?%s'.format(proto || 'http', ipaddr || window.location.host, L.resource('icons/loading.gif'), Math.random());
 
@@ -2485,11 +3852,22 @@ return L.Class.extend({
 		});
 	},
 
+	/**
+	 * Wait for device to come back online and reconnect to it.
+	 *
+	 * Poll each given hostname or IP address and navigate to it as soon as
+	 * one of the addresses becomes reachable.
+	 *
+	 * @param {...string} [hosts=[window.location.host]]
+	 * The list of IP addresses and host names to check for reachability.
+	 * If omitted, the current value of `window.location.host` is used by
+	 * default.
+	 */
 	awaitReconnect: function(/* ... */) {
 		var ipaddrs = arguments.length ? arguments : [ window.location.host ];
 
 		window.setTimeout(L.bind(function() {
-			L.Poll.add(L.bind(function() {
+			poll.add(L.bind(function() {
 				var tasks = [], reachable = false;
 
 				for (var i = 0; i < 2; i++)
@@ -2499,7 +3877,7 @@ return L.Class.extend({
 
 				return Promise.all(tasks).then(function() {
 					if (reachable) {
-						L.Poll.stop();
+						poll.stop();
 						window.location = reachable;
 					}
 				});
@@ -2507,8 +3885,21 @@ return L.Class.extend({
 		}, this), 5000);
 	},
 
-	/* UCI Changes */
-	changes: L.Class.singleton({
+	/**
+	 * @class
+	 * @memberof LuCI.ui
+	 * @hideconstructor
+	 * @classdesc
+	 *
+	 * The `changes` class encapsulates logic for visualizing, applying,
+	 * confirming and reverting staged UCI changesets.
+	 *
+	 * This class is automatically instantiated as part of `LuCI.ui`. To use it
+	 * in views, use `'require ui'` and refer to `ui.changes`. To import it in
+	 * external JavaScript, use `L.require("ui").then(...)` and access the
+	 * `changes` property of the class instance value.
+	 */
+	changes: baseclass.singleton(/* @lends LuCI.ui.changes.prototype */ {
 		init: function() {
 			if (!L.env.sessionid)
 				return;
@@ -2516,28 +3907,41 @@ return L.Class.extend({
 			return uci.changes().then(L.bind(this.renderChangeIndicator, this));
 		},
 
+		/**
+		 * Set the change count indicator.
+		 *
+		 * This function updates or hides the UCI change count indicator,
+		 * depending on the passed change count. When the count is greater
+		 * than 0, the change indicator is displayed or updated, otherwise it
+		 * is removed.
+		 *
+		 * @instance
+		 * @memberof LuCI.ui.changes
+		 * @param {number} numChanges
+		 * The number of changes to indicate.
+		 */
 		setIndicator: function(n) {
-			var i = document.querySelector('.uci_change_indicator');
-			if (i == null) {
-				var poll = document.getElementById('xhr_poll_status');
-				i = poll.parentNode.insertBefore(E('a', {
-					'href': '#',
-					'class': 'uci_change_indicator label notice',
-					'click': L.bind(this.displayChanges, this)
-				}), poll);
-			}
-
 			if (n > 0) {
-				L.dom.content(i, [ _('Unsaved Changes'), ': ', n ]);
-				i.classList.add('flash');
-				i.style.display = '';
+				UI.prototype.showIndicator('uci-changes',
+					'%s: %d'.format(_('Unsaved Changes'), n),
+					L.bind(this.displayChanges, this));
 			}
 			else {
-				i.classList.remove('flash');
-				i.style.display = 'none';
+				UI.prototype.hideIndicator('uci-changes');
 			}
 		},
 
+		/**
+		 * Update the change count indicator.
+		 *
+		 * This function updates the UCI change count indicator from the given
+		 * UCI changeset structure.
+		 *
+		 * @instance
+		 * @memberof LuCI.ui.changes
+		 * @param {Object<string, Array<LuCI.uci.ChangeRecord>>} changes
+		 * The UCI changeset to count.
+		 */
 		renderChangeIndicator: function(changes) {
 			var n_changes = 0;
 
@@ -2549,6 +3953,7 @@ return L.Class.extend({
 			this.setIndicator(n_changes);
 		},
 
+		/** @private */
 		changeTemplates: {
 			'add-3':      '<ins>uci add %0 <strong>%3</strong> # =%2</ins>',
 			'set-3':      '<ins>uci set %0.<strong>%2</strong>=%3</ins>',
@@ -2562,9 +3967,18 @@ return L.Class.extend({
 			'rename-4':   '<var>uci rename %0.%2.%3=<strong>%4</strong></var>'
 		},
 
+		/**
+		 * Display the current changelog.
+		 *
+		 * Open a modal dialog visualizing the currently staged UCI changes
+		 * and offer options to revert or apply the shown changes.
+		 *
+		 * @instance
+		 * @memberof LuCI.ui.changes
+		 */
 		displayChanges: function() {
 			var list = E('div', { 'class': 'uci-change-list' }),
-			    dlg = L.ui.showModal(_('Configuration') + ' / ' + _('Changes'), [
+			    dlg = UI.prototype.showModal(_('Configuration') + ' / ' + _('Changes'), [
 				E('div', { 'class': 'cbi-section' }, [
 					E('strong', _('Legend:')),
 					E('div', { 'class': 'uci-change-legend' }, [
@@ -2580,7 +3994,7 @@ return L.Class.extend({
 					E('div', { 'class': 'right' }, [
 						E('button', {
 							'class': 'btn',
-							'click': L.ui.hideModal
+							'click': UI.prototype.hideModal
 						}, [ _('Dismiss') ]), ' ',
 						E('button', {
 							'class': 'cbi-button cbi-button-positive important',
@@ -2630,29 +4044,31 @@ return L.Class.extend({
 			dlg.classList.add('uci-dialog');
 		},
 
+		/** @private */
 		displayStatus: function(type, content) {
 			if (type) {
-				var message = L.ui.showModal('', '');
+				var message = UI.prototype.showModal('', '');
 
 				message.classList.add('alert-message');
 				DOMTokenList.prototype.add.apply(message.classList, type.split(/\s+/));
 
 				if (content)
-					L.dom.content(message, content);
+					dom.content(message, content);
 
 				if (!this.was_polling) {
-					this.was_polling = L.Request.poll.active();
-					L.Request.poll.stop();
+					this.was_polling = request.poll.active();
+					request.poll.stop();
 				}
 			}
 			else {
-				L.ui.hideModal();
+				UI.prototype.hideModal();
 
 				if (this.was_polling)
-					L.Request.poll.start();
+					request.poll.start();
 			}
 		},
 
+		/** @private */
 		rollback: function(checked) {
 			if (checked) {
 				this.displayStatus('warning spinning',
@@ -2661,21 +4077,21 @@ return L.Class.extend({
 
 				var call = function(r, data, duration) {
 					if (r.status === 204) {
-						L.ui.changes.displayStatus('warning', [
+						UI.prototype.changes.displayStatus('warning', [
 							E('h4', _('Configuration changes have been rolled back!')),
 							E('p', _('The device could not be reached within %d seconds after applying the pending changes, which caused the configuration to be rolled back for safety reasons. If you believe that the configuration changes are correct nonetheless, perform an unchecked configuration apply. Alternatively, you can dismiss this warning and edit changes before attempting to apply again, or revert all pending changes to keep the currently working configuration state.').format(L.env.apply_rollback)),
 							E('div', { 'class': 'right' }, [
 								E('button', {
 									'class': 'btn',
-									'click': L.bind(L.ui.changes.displayStatus, L.ui.changes, false)
+									'click': L.bind(UI.prototype.changes.displayStatus, UI.prototype.changes, false)
 								}, [ _('Dismiss') ]), ' ',
 								E('button', {
 									'class': 'btn cbi-button-action important',
-									'click': L.bind(L.ui.changes.revert, L.ui.changes)
+									'click': L.bind(UI.prototype.changes.revert, UI.prototype.changes)
 								}, [ _('Revert changes') ]), ' ',
 								E('button', {
 									'class': 'btn cbi-button-negative important',
-									'click': L.bind(L.ui.changes.apply, L.ui.changes, false)
+									'click': L.bind(UI.prototype.changes.apply, UI.prototype.changes, false)
 								}, [ _('Apply unchecked') ])
 							])
 						]);
@@ -2685,7 +4101,7 @@ return L.Class.extend({
 
 					var delay = isNaN(duration) ? 0 : Math.max(1000 - duration, 0);
 					window.setTimeout(function() {
-						L.Request.request(L.url('admin/uci/confirm'), {
+						request.request(L.url('admin/uci/confirm'), {
 							method: 'post',
 							timeout: L.env.apply_timeout * 1000,
 							query: { sid: L.env.sessionid, token: L.env.token }
@@ -2703,6 +4119,7 @@ return L.Class.extend({
 			}
 		},
 
+		/** @private */
 		confirm: function(checked, deadline, override_token) {
 			var tt;
 			var ts = Date.now();
@@ -2715,19 +4132,19 @@ return L.Class.extend({
 			var call = function(r, data, duration) {
 				if (Date.now() >= deadline) {
 					window.clearTimeout(tt);
-					L.ui.changes.rollback(checked);
+					UI.prototype.changes.rollback(checked);
 					return;
 				}
 				else if (r && (r.status === 200 || r.status === 204)) {
 					document.dispatchEvent(new CustomEvent('uci-applied'));
 
-					L.ui.changes.setIndicator(0);
-					L.ui.changes.displayStatus('notice',
+					UI.prototype.changes.setIndicator(0);
+					UI.prototype.changes.displayStatus('notice',
 						E('p', _('Configuration changes applied.')));
 
 					window.clearTimeout(tt);
 					window.setTimeout(function() {
-						//L.ui.changes.displayStatus(false);
+						//UI.prototype.changes.displayStatus(false);
 						window.location = window.location.href.split('#')[0];
 					}, L.env.apply_display * 1000);
 
@@ -2736,10 +4153,10 @@ return L.Class.extend({
 
 				var delay = isNaN(duration) ? 0 : Math.max(1000 - duration, 0);
 				window.setTimeout(function() {
-					L.Request.request(L.url('admin/uci/confirm'), {
+					request.request(L.url('admin/uci/confirm'), {
 						method: 'post',
 						timeout: L.env.apply_timeout * 1000,
-						query: L.ui.changes.confirm_auth
+						query: UI.prototype.changes.confirm_auth
 					}).then(call, call);
 				}, delay);
 			};
@@ -2747,7 +4164,7 @@ return L.Class.extend({
 			var tick = function() {
 				var now = Date.now();
 
-				L.ui.changes.displayStatus('notice spinning',
+				UI.prototype.changes.displayStatus('notice spinning',
 					E('p', _('Applying configuration changes… %ds')
 						.format(Math.max(Math.floor((deadline - Date.now()) / 1000), 0))));
 
@@ -2764,74 +4181,141 @@ return L.Class.extend({
 			window.setTimeout(call, Math.max(L.env.apply_holdoff * 1000 - ((ts + L.env.apply_rollback * 1000) - deadline), 1));
 		},
 
+		/**
+		 * Apply the staged configuration changes.
+		 *
+		 * Start applying staged configuration changes and open a modal dialog
+		 * with a progress indication to prevent interaction with the view
+		 * during the apply process. The modal dialog will be automatically
+		 * closed and the current view reloaded once the apply process is
+		 * complete.
+		 *
+		 * @instance
+		 * @memberof LuCI.ui.changes
+		 * @param {boolean} [checked=false]
+		 * Whether to perform a checked (`true`) configuration apply or an
+		 * unchecked (`false`) one.
+
+		 * In case of a checked apply, the configuration changes must be
+		 * confirmed within a specific time interval, otherwise the device
+		 * will begin to roll back the changes in order to restore the previous
+		 * settings.
+		 */
 		apply: function(checked) {
 			this.displayStatus('notice spinning',
 				E('p', _('Starting configuration apply…')));
 
-			L.Request.request(L.url('admin/uci', checked ? 'apply_rollback' : 'apply_unchecked'), {
+			request.request(L.url('admin/uci', checked ? 'apply_rollback' : 'apply_unchecked'), {
 				method: 'post',
 				query: { sid: L.env.sessionid, token: L.env.token }
 			}).then(function(r) {
 				if (r.status === (checked ? 200 : 204)) {
 					var tok = null; try { tok = r.json(); } catch(e) {}
 					if (checked && tok !== null && typeof(tok) === 'object' && typeof(tok.token) === 'string')
-						L.ui.changes.confirm_auth = tok;
+						UI.prototype.changes.confirm_auth = tok;
 
-					L.ui.changes.confirm(checked, Date.now() + L.env.apply_rollback * 1000);
+					UI.prototype.changes.confirm(checked, Date.now() + L.env.apply_rollback * 1000);
 				}
 				else if (checked && r.status === 204) {
-					L.ui.changes.displayStatus('notice',
+					UI.prototype.changes.displayStatus('notice',
 						E('p', _('There are no changes to apply')));
 
 					window.setTimeout(function() {
-						L.ui.changes.displayStatus(false);
+						UI.prototype.changes.displayStatus(false);
 					}, L.env.apply_display * 1000);
 				}
 				else {
-					L.ui.changes.displayStatus('warning',
+					UI.prototype.changes.displayStatus('warning',
 						E('p', _('Apply request failed with status <code>%h</code>')
 							.format(r.responseText || r.statusText || r.status)));
 
 					window.setTimeout(function() {
-						L.ui.changes.displayStatus(false);
+						UI.prototype.changes.displayStatus(false);
 					}, L.env.apply_display * 1000);
 				}
 			});
 		},
 
+		/**
+		 * Revert the staged configuration changes.
+		 *
+		 * Start reverting staged configuration changes and open a modal dialog
+		 * with a progress indication to prevent interaction with the view
+		 * during the revert process. The modal dialog will be automatically
+		 * closed and the current view reloaded once the revert process is
+		 * complete.
+		 *
+		 * @instance
+		 * @memberof LuCI.ui.changes
+		 */
 		revert: function() {
 			this.displayStatus('notice spinning',
 				E('p', _('Reverting configuration…')));
 
-			L.Request.request(L.url('admin/uci/revert'), {
+			request.request(L.url('admin/uci/revert'), {
 				method: 'post',
 				query: { sid: L.env.sessionid, token: L.env.token }
 			}).then(function(r) {
 				if (r.status === 200) {
 					document.dispatchEvent(new CustomEvent('uci-reverted'));
 
-					L.ui.changes.setIndicator(0);
-					L.ui.changes.displayStatus('notice',
+					UI.prototype.changes.setIndicator(0);
+					UI.prototype.changes.displayStatus('notice',
 						E('p', _('Changes have been reverted.')));
 
 					window.setTimeout(function() {
-						//L.ui.changes.displayStatus(false);
+						//UI.prototype.changes.displayStatus(false);
 						window.location = window.location.href.split('#')[0];
 					}, L.env.apply_display * 1000);
 				}
 				else {
-					L.ui.changes.displayStatus('warning',
+					UI.prototype.changes.displayStatus('warning',
 						E('p', _('Revert request failed with status <code>%h</code>')
 							.format(r.statusText || r.status)));
 
 					window.setTimeout(function() {
-						L.ui.changes.displayStatus(false);
+						UI.prototype.changes.displayStatus(false);
 					}, L.env.apply_display * 1000);
 				}
 			});
 		}
 	}),
 
+	/**
+	 * Add validation constraints to an input element.
+	 *
+	 * Compile the given type expression and optional validator function into
+	 * a validation function and bind it to the specified input element events.
+	 *
+	 * @param {Node} field
+	 * The DOM input element node to bind the validation constraints to.
+	 *
+	 * @param {string} type
+	 * The datatype specification to describe validation constraints.
+	 * Refer to the `LuCI.validation` class documentation for details.
+	 *
+	 * @param {boolean} [optional=false]
+	 * Specifies whether empty values are allowed (`true`) or not (`false`).
+	 * If an input element is not marked optional it must not be empty,
+	 * otherwise it will be marked as invalid.
+	 *
+	 * @param {function} [vfunc]
+	 * Specifies a custom validation function which is invoked after the
+	 * other validation constraints are applied. The validation must return
+	 * `true` to accept the passed value. Any other return type is converted
+	 * to a string and treated as validation error message.
+	 *
+	 * @param {...string} [events=blur, keyup]
+	 * The list of events to bind. Each received event will trigger a field
+	 * validation. If omitted, the `keyup` and `blur` events are bound by
+	 * default.
+	 *
+	 * @returns {function}
+	 * Returns the compiled validator function which can be used to manually
+	 * trigger field validation or to bind it to further events.
+	 *
+	 * @see LuCI.validation
+	 */
 	addValidator: function(field, type, optional, vfunc /*, ... */) {
 		if (type == null)
 			return;
@@ -2841,7 +4325,7 @@ return L.Class.extend({
 			events.push('blur', 'keyup');
 
 		try {
-			var cbiValidator = L.validation.create(field, type, optional, vfunc),
+			var cbiValidator = validation.create(field, type, optional, vfunc),
 			    validatorFn = cbiValidator.validate.bind(cbiValidator);
 
 			for (var i = 0; i < events.length; i++)
@@ -2854,6 +4338,35 @@ return L.Class.extend({
 		catch (e) { }
 	},
 
+	/**
+	 * Create a pre-bound event handler function.
+	 *
+	 * Generate and bind a function suitable for use in event handlers. The
+	 * generated function automatically disables the event source element
+	 * and adds an active indication to it by adding appropriate CSS classes.
+	 *
+	 * It will also await any promises returned by the wrapped function and
+	 * re-enable the source element after the promises ran to completion.
+	 *
+	 * @param {*} ctx
+	 * The `this` context to use for the wrapped function.
+	 *
+	 * @param {function|string} fn
+	 * Specifies the function to wrap. In case of a function value, the
+	 * function is used as-is. If a string is specified instead, it is looked
+	 * up in `ctx` to obtain the function to wrap. In both cases the bound
+	 * function will be invoked with `ctx` as `this` context
+	 *
+	 * @param {...*} extra_args
+	 * Any further parameter as passed as-is to the bound event handler
+	 * function in the same order as passed to `createHandlerFn()`.
+	 *
+	 * @returns {function|null}
+	 * Returns the pre-bound handler function which is suitable to be passed
+	 * to `addEventListener()`. Returns `null` if the given `fn` argument is
+	 * a string which could not be found in `ctx` or if `ctx[fn]` is not a
+	 * valid function value.
+	 */
 	createHandlerFn: function(ctx, fn /*, ... */) {
 		if (typeof(fn) == 'string')
 			fn = ctx[fn];
@@ -2864,7 +4377,7 @@ return L.Class.extend({
 		var arg_offset = arguments.length - 2;
 
 		return Function.prototype.bind.apply(function() {
-			var t = arguments[arg_offset].target;
+			var t = arguments[arg_offset].currentTarget;
 
 			t.classList.add('spinning');
 			t.disabled = true;
@@ -2878,6 +4391,40 @@ return L.Class.extend({
 			});
 		}, this.varargs(arguments, 2, ctx));
 	},
+
+	/**
+	 * Load specified view class path and set it up.
+	 *
+	 * Transforms the given view path into a class name, requires it
+	 * using [LuCI.require()]{@link LuCI#require} and asserts that the
+	 * resulting class instance is a descendant of
+	 * [LuCI.view]{@link LuCI.view}.
+	 *
+	 * By instantiating the view class, its corresponding contents are
+	 * rendered and included into the view area. Any runtime errors are
+	 * catched and rendered using [LuCI.error()]{@link LuCI#error}.
+	 *
+	 * @param {string} path
+	 * The view path to render.
+	 *
+	 * @returns {Promise<LuCI.view>}
+	 * Returns a promise resolving to the loaded view instance.
+	 */
+	instantiateView: function(path) {
+		var className = 'view.%s'.format(path.replace(/\//g, '.'));
+
+		return L.require(className).then(function(view) {
+			if (!(view instanceof View))
+				throw new TypeError('Loaded class %s is not a descendant of View'.format(className));
+
+			return view;
+		}).catch(function(err) {
+			dom.content(document.querySelector('#view'), null);
+			L.error(err);
+		});
+	},
+
+	menu: UIMenu,
 
 	AbstractElement: UIElement,
 
@@ -2893,3 +4440,5 @@ return L.Class.extend({
 	Hiddenfield: UIHiddenfield,
 	FileUpload: UIFileUpload
 });
+
+return UI;

@@ -19,7 +19,7 @@ config statistics 'rrdtool'
 config statistics 'collectd_rrdtool'
 	option enable '1'
 	option DataDir '/tmp/rrd'
-	option RRARows '100'
+	option RRARows '144'
 	option RRASingle '1'
 	option RRATimespans '1hour 1day 1week 1month 1year'
 
@@ -41,6 +41,11 @@ config statistics 'collectd_logfile'
 
 config statistics 'collectd_network'
 	option enable '0'
+
+config statistics 'collectd_syslog'
+   option enable '0'
+   option LogLevel 'warning'
+   option NotifyLevel 'WARNING'
 
 config statistics 'collectd_unixsock'
 	option enable '0'
@@ -91,6 +96,12 @@ config statistics 'collectd_entropy'
 
 config statistics 'collectd_exec'
 	option enable '0'
+
+#example for sqm_collect plugin
+#config collectd_exec_input
+#        option cmduser 'nobody'
+#        option cmdgroup 'nogroup'
+#        option cmdline '/usr/libexec/collectd/sqm_collectd.sh eth0 ifb4eth0'
 
 config statistics 'collectd_interface'
 	option enable '1'

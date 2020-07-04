@@ -3,15 +3,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-05-19 19:36+0200\n"
-"PO-Revision-Date: 2012-11-14 14:40+0200\n"
-"Last-Translator: Kentaro <kentaro.matsuyama@gmail.com>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2020-06-27 14:41+0000\n"
+"Last-Translator: Satoru Yoshida <ramat@ram.ne.jp>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/openwrt/"
+"luciapplicationsolsr/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Pootle 2.0.6\n"
+"X-Generator: Weblate 4.2-dev\n"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/mid.htm:13
 msgid "Active MID announcements"
@@ -71,12 +72,12 @@ msgstr "ブロードキャストアドレス"
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:265
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdiface.lua:90
 msgid "Can only be a valid IPv4 or IPv6 address or 'default'"
-msgstr ""
+msgstr "有効な IPv4 または IPv6 アドレス、または「default」のみ可能です"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:259
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdiface6.lua:90
 msgid "Can only be a valid IPv6 address or 'default'"
-msgstr ""
+msgstr "有効な IPv6 アドレスまたは「default」のみ可能です"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/overview.htm:198
 msgid "Configuration"
@@ -92,9 +93,9 @@ msgstr ""
 msgid "Device"
 msgstr "デバイス"
 
-#: applications/luci-app-olsr/luasrc/controller/olsr.lua:75
+#: applications/luci-app-olsr/luasrc/controller/olsr.lua:76
 msgid "Display"
-msgstr "ディスプレイ"
+msgstr "表示"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/smartgw.htm:60
 #: applications/luci-app-olsr/luasrc/view/status-olsr/smartgw.htm:112
@@ -199,19 +200,23 @@ msgstr ""
 msgid "Good (30 > SNR > 20)"
 msgstr ""
 
+#: applications/luci-app-olsr/root/usr/share/rpcd/acl.d/luci-app-olsr.json:3
+msgid "Grant UCI access for luci-app-olsr"
+msgstr "luci-app-olsr に UCI アクセスを許可"
+
 #: applications/luci-app-olsr/luasrc/view/status-olsr/legend.htm:8
 #: applications/luci-app-olsr/luasrc/view/status-olsr/legend.htm:17
 msgid "Green"
-msgstr ""
+msgstr "緑"
 
-#: applications/luci-app-olsr/luasrc/controller/olsr.lua:53
+#: applications/luci-app-olsr/luasrc/controller/olsr.lua:54
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:402
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:383
 #: applications/luci-app-olsr/luasrc/view/status-olsr/overview.htm:178
 msgid "HNA"
 msgstr "HNA"
 
-#: applications/luci-app-olsr/luasrc/controller/olsr4.lua:24
+#: applications/luci-app-olsr/luasrc/controller/olsr4.lua:25
 msgid "HNA Announcements"
 msgstr "HNA 通知"
 
@@ -229,7 +234,7 @@ msgstr "HNA 送信間隔"
 msgid "HNA validity time"
 msgstr "HNA 有効時間"
 
-#: applications/luci-app-olsr/luasrc/controller/olsr6.lua:24
+#: applications/luci-app-olsr/luasrc/controller/olsr6.lua:25
 #, fuzzy
 msgid "HNA6 Announcements"
 msgstr "HNA 通知"
@@ -256,12 +261,12 @@ msgstr "Hello 有効時間"
 #: applications/luci-app-olsr/luasrc/view/status-olsr/common_js.htm:12
 #: applications/luci-app-olsr/luasrc/view/status-olsr/common_js.htm:20
 msgid "Hide IPv4"
-msgstr ""
+msgstr "IPv4 を隠す"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/common_js.htm:13
 #: applications/luci-app-olsr/luasrc/view/status-olsr/common_js.htm:28
 msgid "Hide IPv6"
-msgstr ""
+msgstr "IPv6 を隠す"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdhna.lua:12
 msgid "Hna4"
@@ -457,7 +462,7 @@ msgstr ""
 "パケットの送信を抑制するために使用します。有効なモードは\"mesh\"及び\"ether"
 "\"です。標準設定は\"mesh\"です。"
 
-#: applications/luci-app-olsr/luasrc/controller/olsr.lua:70
+#: applications/luci-app-olsr/luasrc/controller/olsr.lua:71
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:354
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:335
 #: applications/luci-app-olsr/luasrc/view/status-olsr/interfaces.htm:14
@@ -617,7 +622,7 @@ msgstr "リンク数の合計"
 msgid "Local interface IP"
 msgstr "ローカルインターフェース IP"
 
-#: applications/luci-app-olsr/luasrc/controller/olsr.lua:58
+#: applications/luci-app-olsr/luasrc/controller/olsr.lua:59
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:395
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:376
 msgid "MID"
@@ -707,7 +712,7 @@ msgstr "隣接ノード"
 msgid "Neighbour IP"
 msgstr "隣接ノード IP"
 
-#: applications/luci-app-olsr/luasrc/controller/olsr.lua:37
+#: applications/luci-app-olsr/luasrc/controller/olsr.lua:38
 msgid "Neighbours"
 msgstr "隣接ノード"
 
@@ -793,7 +798,7 @@ msgstr "OLSR ノード"
 #: applications/luci-app-olsr/luasrc/view/status-olsr/legend.htm:10
 #: applications/luci-app-olsr/luasrc/view/status-olsr/legend.htm:19
 msgid "Orange"
-msgstr ""
+msgstr "オレンジ"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/overview.htm:157
 msgid "Overview"
@@ -832,8 +837,8 @@ msgstr "ネットワーク内のスマート・ゲートウェイ一覧"
 msgid "Plugin configuration"
 msgstr "プラグイン設定"
 
-#: applications/luci-app-olsr/luasrc/controller/olsr4.lua:29
-#: applications/luci-app-olsr/luasrc/controller/olsr6.lua:29
+#: applications/luci-app-olsr/luasrc/controller/olsr4.lua:30
+#: applications/luci-app-olsr/luasrc/controller/olsr6.lua:30
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdplugins.lua:240
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdplugins6.lua:240
 msgid "Plugins"
@@ -864,7 +869,7 @@ msgstr "プレフィックス"
 #: applications/luci-app-olsr/luasrc/view/status-olsr/legend.htm:11
 #: applications/luci-app-olsr/luasrc/view/status-olsr/legend.htm:20
 msgid "Red"
-msgstr ""
+msgstr "赤"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrddisplay.lua:9
 msgid "Resolve"
@@ -881,9 +886,9 @@ msgstr ""
 "使用している場合、ページの読み込み速度が極端に遅くなります。その場合はこの機"
 "能を無効にしてください。"
 
-#: applications/luci-app-olsr/luasrc/controller/olsr.lua:43
+#: applications/luci-app-olsr/luasrc/controller/olsr.lua:44
 msgid "Routes"
-msgstr "経路"
+msgstr "経路情報"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/mid.htm:21
 msgid "Secondary OLSR interfaces"
@@ -917,17 +922,17 @@ msgstr ""
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/common_js.htm:20
 msgid "Show IPv4"
-msgstr ""
+msgstr "IPv4 を表示"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/common_js.htm:28
 msgid "Show IPv6"
-msgstr ""
+msgstr "IPv6 を表示"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/legend.htm:14
 msgid "Signal Noise Ratio in dB"
 msgstr ""
 
-#: applications/luci-app-olsr/luasrc/controller/olsr.lua:64
+#: applications/luci-app-olsr/luasrc/controller/olsr.lua:65
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:44
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:44
 msgid "SmartGW"
@@ -1059,7 +1064,7 @@ msgstr ""
 msgid "Timing and Validity"
 msgstr "送信間隔及び有効時間"
 
-#: applications/luci-app-olsr/luasrc/controller/olsr.lua:48
+#: applications/luci-app-olsr/luasrc/controller/olsr.lua:49
 msgid "Topology"
 msgstr "トポロジー"
 
@@ -1126,7 +1131,7 @@ msgstr ""
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdiface.lua:60
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdiface6.lua:60
 msgid "Weight"
-msgstr "Weight"
+msgstr "ウエイト"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:236
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:230
@@ -1177,16 +1182,16 @@ msgstr "Willingness"
 #: applications/luci-app-olsr/luasrc/view/status-olsr/legend.htm:9
 #: applications/luci-app-olsr/luasrc/view/status-olsr/legend.htm:18
 msgid "Yellow"
-msgstr ""
+msgstr "黄色"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/interfaces.htm:38
 msgid "down"
-msgstr ""
+msgstr "下へ"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/smartgw.htm:30
 #: applications/luci-app-olsr/luasrc/view/status-olsr/smartgw.htm:134
 msgid "infinite"
-msgstr ""
+msgstr "無限"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/interfaces.htm:40
 #: applications/luci-app-olsr/luasrc/view/status-olsr/smartgw.htm:29
@@ -1196,11 +1201,11 @@ msgstr ""
 #: applications/luci-app-olsr/luasrc/view/status-olsr/smartgw.htm:138
 #: applications/luci-app-olsr/luasrc/view/status-olsr/smartgw.htm:139
 msgid "no"
-msgstr ""
+msgstr "いいえ"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/interfaces.htm:38
 msgid "up"
-msgstr ""
+msgstr "上へ"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/interfaces.htm:40
 #: applications/luci-app-olsr/luasrc/view/status-olsr/smartgw.htm:29
@@ -1210,7 +1215,7 @@ msgstr ""
 #: applications/luci-app-olsr/luasrc/view/status-olsr/smartgw.htm:138
 #: applications/luci-app-olsr/luasrc/view/status-olsr/smartgw.htm:139
 msgid "yes"
-msgstr ""
+msgstr "はい"
 
 #~ msgid "Status"
 #~ msgstr "ステータス"

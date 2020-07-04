@@ -1,14 +1,14 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2020-01-09 07:25+0000\n"
-"Last-Translator: Rya Lin <ray.xue@my.com>\n"
+"PO-Revision-Date: 2020-07-02 23:41+0000\n"
+"Last-Translator: SunSpring <yearnsun@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "openwrt/luciapplicationsbanip/zh_Hans/>\n"
-"Language: zh-cn\n"
+"Language: zh_Hans\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 3.10.1-dev\n"
+"X-Generator: Weblate 4.2-dev\n"
 
 #: applications/luci-app-banip/luasrc/view/banip/ripeview.htm:89
 msgid "ASN Overview"
@@ -26,7 +26,7 @@ msgstr "ASN/国家"
 msgid "Additional trigger delay in seconds before banIP processing begins."
 msgstr "banIP 处理开始之前的额外触发延迟（以秒为单位）。"
 
-#: applications/luci-app-banip/luasrc/controller/banip.lua:21
+#: applications/luci-app-banip/luasrc/controller/banip.lua:25
 msgid "Advanced"
 msgstr "高级"
 
@@ -44,7 +44,9 @@ msgid ""
 "Blacklist auto addons are stored temporary in the IPSet and saved "
 "permanently in the local blacklist. Disable this option to prevent the local "
 "save."
-msgstr "黑名单自动加载项临时存储在 IPSet 中，并永久保存在本地黑名单中。禁用此选项以防止本地保存。"
+msgstr ""
+"黑名单自动加载项临时存储在 IPSet 中，并永久保存在本地黑名单中。禁用此选项以防"
+"止本地保存。"
 
 #: applications/luci-app-banip/luasrc/view/banip/ipsetview.htm:45
 msgid "Check the current available IPSets."
@@ -87,15 +89,15 @@ msgstr "下载工具"
 msgid "Download Utility, RT Monitor"
 msgstr "下载工具，实时监视器"
 
-#: applications/luci-app-banip/luasrc/controller/banip.lua:22
+#: applications/luci-app-banip/luasrc/controller/banip.lua:26
 msgid "Edit Blacklist"
 msgstr "编辑黑名单"
 
-#: applications/luci-app-banip/luasrc/controller/banip.lua:24
+#: applications/luci-app-banip/luasrc/controller/banip.lua:28
 msgid "Edit Configuration"
 msgstr "编辑设置"
 
-#: applications/luci-app-banip/luasrc/controller/banip.lua:23
+#: applications/luci-app-banip/luasrc/controller/banip.lua:27
 msgid "Edit Whitelist"
 msgstr "编辑白名单"
 
@@ -131,6 +133,10 @@ msgstr "为了进一步提高性能，您可以提高此值，例如：8 或 16 
 msgid "Geo Location"
 msgstr "地理位置"
 
+#: applications/luci-app-banip/root/usr/share/rpcd/acl.d/luci-app-banip.json:3
+msgid "Grant UCI access for luci-app-banip"
+msgstr "授予UCI访问luci-app-banip的权限"
+
 #: applications/luci-app-banip/luasrc/view/banip/ripeview.htm:95
 msgid "IANA Information"
 msgstr "IANA 信息"
@@ -147,7 +153,7 @@ msgstr "IPSet 信息"
 msgid "IPSet Sources"
 msgstr "IPSet 源"
 
-#: applications/luci-app-banip/luasrc/controller/banip.lua:18
+#: applications/luci-app-banip/luasrc/controller/banip.lua:22
 msgid "IPSet-Lookup"
 msgstr "IPSet查找"
 
@@ -180,7 +186,7 @@ msgstr "最后运行"
 #: applications/luci-app-banip/luasrc/view/banip/ipsetview.htm:59
 #: applications/luci-app-banip/luasrc/view/banip/ripeview.htm:97
 msgid "Load"
-msgstr "负载"
+msgstr "加载"
 
 #: applications/luci-app-banip/luasrc/view/banip/runtime.htm:81
 msgid "Loading"
@@ -192,14 +198,12 @@ msgid "Loading ..."
 msgstr "加载中…"
 
 #: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:114
-#, fuzzy
 msgid "Local Save Blacklist Addons"
-msgstr "本地保存黑名单插件"
+msgstr "本地保存黑名单"
 
 #: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:119
-#, fuzzy
 msgid "Local Save Whitelist Addons"
-msgstr "本地保存白名单插件"
+msgstr "本地保存白名单"
 
 #: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:87
 msgid "Low Priority Service"
@@ -223,7 +227,7 @@ msgid ""
 "Options for further tweaking in case the defaults are not suitable for you."
 msgstr "在默认设置并不适合您时的额外选项。"
 
-#: applications/luci-app-banip/luasrc/controller/banip.lua:17
+#: applications/luci-app-banip/luasrc/controller/banip.lua:21
 msgid "Overview"
 msgstr "概览"
 
@@ -232,7 +236,9 @@ msgstr "概览"
 msgid ""
 "Please add only one IPv4 or IPv6 address per line. IP ranges in CIDR "
 "notation and comments introduced with '#' are allowed."
-msgstr "请每行仅添加一个 IPv4 或 IPv6 地址。允许使用 CIDR 表示法中的 IP 范围和以“#”开头的注释。"
+msgstr ""
+"请每行仅添加一个 IPv4 或 IPv6 地址。允许使用 CIDR 表示法中的 IP 范围和以“#”开"
+"头的注释。"
 
 #: applications/luci-app-banip/luasrc/model/cbi/banip/blacklist_tab.lua:19
 #: applications/luci-app-banip/luasrc/model/cbi/banip/configuration_tab.lua:18
@@ -240,7 +246,7 @@ msgstr "请每行仅添加一个 IPv4 或 IPv6 地址。允许使用 CIDR 表示
 msgid "Please edit this file directly in a terminal session."
 msgstr "请直接在终端会话中编辑此文件。"
 
-#: applications/luci-app-banip/luasrc/controller/banip.lua:19
+#: applications/luci-app-banip/luasrc/controller/banip.lua:23
 msgid "RIPE-Lookup"
 msgstr "RIPE-Lookup"
 
@@ -330,7 +336,6 @@ msgid ""
 msgstr "所选下载工具的特殊选项，例如：“--timeout=20 -O”。"
 
 #: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:144
-#, fuzzy
 msgid "Start Type"
 msgstr "启动类型"
 
@@ -344,7 +349,8 @@ msgstr "在后台启动一个小型 log/banIP 监视器，以实时阻止 SSH/Lu
 msgid ""
 "Target directory for banIP backups. Default is '/tmp', please use preferably "
 "a non-volatile disk if available."
-msgstr "banIP 备份的目标目录。默认值为“/tmp”，请尽可能使用非易失性磁盘（如果有）。"
+msgstr ""
+"banIP 备份的目标目录。默认值为“/tmp”，请尽可能使用非易失性磁盘（如果有）。"
 
 #: applications/luci-app-banip/luasrc/view/banip/ripeview.htm:77
 msgid ""
@@ -352,8 +358,9 @@ msgid ""
 "details look <a href=\"https://stat.ripe.net/docs/data_api\" target=\"_blank"
 "\" rel=\"noopener noreferrer\">here</a>."
 msgstr ""
-"RIPEstat 数据 API 是 RIPE NCC 提供的公共数据接口，有关详细信息，请参见<a href=\"https://stat.ripe."
-"net/docs/data_api\" target=\"_blank\" rel=\"noopener noreferrer\">此处</a>。"
+"RIPEstat 数据 API 是 RIPE NCC 提供的公共数据接口，有关详细信息，请参见<a "
+"href=\"https://stat.ripe.net/docs/data_api\" target=\"_blank\" rel="
+"\"noopener noreferrer\">此处</a>。"
 
 #: applications/luci-app-banip/luasrc/model/cbi/banip/blacklist_tab.lua:18
 #: applications/luci-app-banip/luasrc/model/cbi/banip/configuration_tab.lua:17
@@ -377,7 +384,9 @@ msgstr "通过此数据调用，可以访问 IANA 维护的各种数据源。"
 msgid ""
 "This data call lists the Internet resources associated with a country, "
 "including ASNs, IPv4 ranges and IPv4/6 CIDR prefixes."
-msgstr "此数据调用列出了与一个国家/地区关联的 Internet 资源，包括 ASN，IPv4 范围和 IPv4/6 CIDR 前缀。"
+msgstr ""
+"此数据调用列出了与一个国家/地区关联的 Internet 资源，包括 ASN，IPv4 范围和 "
+"IPv4/6 CIDR 前缀。"
 
 #: applications/luci-app-banip/luasrc/view/banip/ripeview.htm:25
 msgid "This data call returns all announced prefixes for a given ASN."
@@ -390,29 +399,33 @@ msgid ""
 msgstr "此数据调用返回给定 IP 空间或 ASN 情况下已声明 IP 前缀的地理位置信息。"
 
 #: applications/luci-app-banip/luasrc/view/banip/ripeview.htm:28
-#, fuzzy
 msgid ""
 "This data call returns the containing prefix and announcing ASN of a given "
 "IP address."
-msgstr "此数据调用返回包含的前缀和通告给定 IP 地址的 ASN。"
+msgstr "此数据包会调用返回的前缀和给定 IP 地址通告的 ASN。"
 
 #: applications/luci-app-banip/luasrc/view/banip/ripeview.htm:37
 msgid ""
 "This data call returns the recursive chain of DNS forward (A/AAAA/CNAME) and "
 "reverse (PTR) records starting form either a hostname or an IP address."
-msgstr "此数据调用返回从主机名或 IP 地址开始的 DNS 正向（A/AAAA/ CNAME）和反向（PTR）记录的递归链。"
+msgstr ""
+"此数据调用返回从主机名或 IP 地址开始的 DNS 正向（A/AAAA/ CNAME）和反向（PTR）"
+"记录的递归链。"
 
 #: applications/luci-app-banip/luasrc/view/banip/ripeview.htm:34
 msgid ""
 "This data call returns whois information from the relevant Regional Internet "
 "Registry and Routing Registry."
-msgstr "此数据调用从相关的区域 Internet 注册中心和路由注册中心返回 whois 信息。"
+msgstr ""
+"此数据调用从相关的区域 Internet 注册中心和路由注册中心返回 whois 信息。"
 
 #: applications/luci-app-banip/luasrc/view/banip/ripeview.htm:22
 msgid ""
 "This data call shows general informations about an ASN like its announcement "
 "status and the name of its holder according to the WHOIS service."
-msgstr "此数据调用显示有关 ASN 的常规信息，例如其通告状态和根据 WHOIS 服务的持有人名称。"
+msgstr ""
+"此数据调用显示有关 ASN 的常规信息，例如其通告状态和根据 WHOIS 服务的持有人名"
+"称。"
 
 #: applications/luci-app-banip/luasrc/model/cbi/banip/blacklist_tab.lua:31
 msgid ""
@@ -438,7 +451,7 @@ msgstr "触发延迟"
 msgid "Verbose Debug Logging"
 msgstr "详细的调试记录"
 
-#: applications/luci-app-banip/luasrc/controller/banip.lua:20
+#: applications/luci-app-banip/luasrc/controller/banip.lua:24
 msgid "View Logfile"
 msgstr "查看日志文件"
 
@@ -463,13 +476,15 @@ msgid ""
 "Whitelist auto addons are stored temporary in the IPSet and saved "
 "permanently in the local whitelist. Disable this option to prevent the local "
 "save."
-msgstr "白名单自动加载项被临时存储在 IPSet 中，并永久保存在本地白名单中。禁用此选项以防止本地保存。"
+msgstr ""
+"白名单自动加载项被临时存储在 IPSet 中，并永久保存在本地白名单中。禁用此选项以"
+"防止本地保存。"
 
 #: applications/luci-app-banip/luasrc/view/banip/ripeview.htm:93
 msgid "Whois Information"
 msgstr "Whois 信息"
 
-#: applications/luci-app-banip/luasrc/controller/banip.lua:16
+#: applications/luci-app-banip/luasrc/controller/banip.lua:17
 #: applications/luci-app-banip/luasrc/model/cbi/banip/overview_tab.lua:10
 msgid "banIP"
 msgstr "banIP"

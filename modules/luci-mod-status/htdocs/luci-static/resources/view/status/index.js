@@ -1,4 +1,7 @@
 'use strict';
+'require view';
+'require dom';
+'require poll';
 'require fs';
 'require network';
 
@@ -7,7 +10,10 @@ function invokeIncludesLoad(includes) {
 
 	for (var i = 0; i < includes.length; i++) {
 		if (typeof(includes[i].load) == 'function') {
-			tasks.push(includes[i].load());
+			tasks.push(includes[i].load().catch(L.bind(function() {
+				this.failed = true;
+			}, includes[i])));
+
 			has_load = true;
 		}
 		else {
@@ -26,6 +32,9 @@ function startPolling(includes, containers) {
 			for (var i = 0; i < includes.length; i++) {
 				var content = null;
 
+				if (includes[i].failed)
+					continue;
+
 				if (typeof(includes[i].render) == 'function')
 					content = includes[i].render(results ? results[i] : null);
 				else if (includes[i].content != null)
@@ -35,7 +44,7 @@ function startPolling(includes, containers) {
 					containers[i].parentNode.style.display = '';
 					containers[i].parentNode.classList.add('fade-in');
 
-					L.dom.content(containers[i], content);
+					dom.content(containers[i], content);
 				}
 			}
 
@@ -48,11 +57,11 @@ function startPolling(includes, containers) {
 	};
 
 	return step().then(function() {
-		L.Poll.add(step);
+		poll.add(step);
 	});
 }
 
-return L.view.extend({
+return view.extend({
 	load: function() {
 		return L.resolveDefault(fs.list('/www' + L.resource('view/status/include')), []).then(function(entries) {
 			return Promise.all(entries.filter(function(e) {
@@ -82,7 +91,7 @@ return L.view.extend({
 			var container = E('div');
 
 			rv.appendChild(E('div', { 'class': 'cbi-section', 'style': 'display:none' }, [
-				E('h3', title),
+				title != '' ? E('h3', title) : '',
 				container
 			]));
 

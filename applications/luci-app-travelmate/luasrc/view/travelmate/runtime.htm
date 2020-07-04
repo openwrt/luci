@@ -193,8 +193,8 @@ This is free software, licensed under the Apache License, Version 2.0
 				end
 
 				if ssid and enc and key then
-					local e_ssid = string.gsub(ssid,"[\"\\';:, ]",[[\\\%1]])
-					local e_key = string.gsub(key,"[\"\\';:, ]",[[\\\%1]])
+					local e_ssid = string.gsub(ssid,"[\"\\';:,()&`|<> ]",[[\\\%1]])
+					local e_key = string.gsub(key,"[\"\\';:,()&`|<> ]",[[\\\%1]])
 
 					if fs.access("/usr/bin/qrencode") then
 						qrcode = luci.sys.exec("/usr/bin/qrencode --inline --8bit --type=SVG --output=- 'WIFI:S:\"'" .. e_ssid .. "'\";T:'" .. enc .. "';P:\"'" .. e_key .. "'\";H:'" .. hidden .. "';'")

@@ -1,9 +1,10 @@
 'use strict';
+'require view';
 'require form';
 'require network';
 'require tools.widgets as widgets';
 
-return L.view.extend({
+return view.extend({
 	load: function() {
 		return network.getDevices();
 	},
@@ -76,7 +77,7 @@ return L.view.extend({
 			o.rmempty = true;
 			o.modalonly = true;
 			o.cfgvalue = function(section_id) {
-				var cfgvalue = this.super('cfgvalue', [section_id]);
+				var cfgvalue = this.map.data.get('network', section_id, 'table');
 				return cfgvalue || 'main';
 			};
 

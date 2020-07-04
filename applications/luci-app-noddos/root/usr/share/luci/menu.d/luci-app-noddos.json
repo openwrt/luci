@@ -1,0 +1,23 @@
+{
+	"admin/status/noddos": {
+		"title": "Noddos Clients",
+		"order": 3,
+		"action": {
+			"type": "template",
+			"path": "noddos/clients"
+		},
+		"depends": {
+			"acl": [ "luci-app-noddos" ]
+		}
+	},
+
+	"admin/network/noddos": {
+		"title": "Noddos Client Tracking",
+		"order": 55,
+		"action": {
+			"type": "cbi",
+			"path": "noddos",
+			"post": { "cbi.submit": true }
+		}
+	}
+}

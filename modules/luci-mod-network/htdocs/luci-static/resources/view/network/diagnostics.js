@@ -1,9 +1,11 @@
 'use strict';
+'require view';
+'require dom';
 'require fs';
 'require ui';
 'require uci';
 
-return L.view.extend({
+return view.extend({
 	handleCommand: function(exec, args) {
 		var buttons = document.querySelectorAll('.diag-action > .cbi-button');
 
@@ -14,7 +16,7 @@ return L.view.extend({
 			var out = document.querySelector('.command-output');
 			    out.style.display = '';
 
-			L.dom.content(out, [ res.stdout || '', res.stderr || '' ]);
+			dom.content(out, [ res.stdout || '', res.stderr || '' ]);
 		}).catch(function(err) {
 			ui.addNotification(null, E('p', [ err ]))
 		}).finally(function() {
@@ -26,7 +28,7 @@ return L.view.extend({
 	handlePing: function(ev, cmd) {
 		var exec = cmd || 'ping',
 		    addr = ev.currentTarget.parentNode.previousSibling.value,
-		    args = (exec == 'ping') ? [ '-c', '5', '-W', '1', addr ] : [ '-c', '5', addr ];
+		    args = (exec == 'ping') ? [ '-4', '-c', '5', '-W', '1', addr ] : [ '-6', '-c', '5', addr ];
 
 		return this.handleCommand(exec, args);
 	},
@@ -79,8 +81,8 @@ return L.view.extend({
 							}, {
 								'click': ui.createHandlerFn(this, 'handlePing'),
 								'classes': {
-									'ping': 'cbi-button cbi-button-action',
-									'ping6': 'cbi-button cbi-button-action'
+									'ping': 'btn cbi-button cbi-button-action',
+									'ping6': 'btn cbi-button cbi-button-action'
 								}
 							}).render() : E('button', {
 								'class': 'cbi-button cbi-button-action',
@@ -102,8 +104,8 @@ return L.view.extend({
 							}, {
 								'click': ui.createHandlerFn(this, 'handleTraceroute'),
 								'classes': {
-									'traceroute': 'cbi-button cbi-button-action',
-									'traceroute6': 'cbi-button cbi-button-action'
+									'traceroute': 'btn cbi-button cbi-button-action',
+									'traceroute6': 'btn cbi-button cbi-button-action'
 								}
 							}).render() : E('button', {
 								'class': 'cbi-button cbi-button-action',

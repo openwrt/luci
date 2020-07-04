@@ -4,14 +4,16 @@
 		"read": {
 			"file": {
 				"/etc/ksmbd/smb.conf.template": [ "read" ],
-				"/usr/sbin/usmbd": [ "exec" ],
+				"/usr/sbin/ksmbd.mountd": [ "exec" ],
 				"/sbin/modinfo": [ "exec" ]
-			}
+			},
+			"uci": [ "ksmbd" ]
 		},
 		"write": {
 			"file": {
 				"/etc/ksmbd/smb.conf.template": [ "write" ]
-			}
+			},
+			"uci": [ "ksmbd" ]
 		}
 	}
 }

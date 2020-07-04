@@ -1,7 +1,8 @@
 'use strict';
+'require view';
 'require form';
 
-return L.view.extend({
+return view.extend({
 	render: function() {
 		var m, s, o;
 
@@ -33,7 +34,6 @@ return L.view.extend({
 			try { JSON.parse(v); return true; } catch (e) { return e.message; }
 		}
 
-		s.option(form.Flag, "IfTAPMode", _("Enable tap mode"));
 		s.option(form.Value, "IfMTU", _("MTU size for the interface"));
 		s.option(form.Value, "SwitchOptions_MaxTotalQueueSize", 
 			_("Maximum size of all switch queues combined"));
@@ -53,8 +53,8 @@ return L.view.extend({
 				"Multicast peer discovery will work regardless of any listeners set " +
 				"here. Each listener should be specified in URI format as above, e.g. " +
 				"tcp://0.0.0.0:0 or tcp://[::]:0 to listen on all interfaces."));
-		o.option(form.Value, "address", 
 			_("Address to listen for incoming connections"), 
+		o.option(form.Value, "uri",
 			_("e.g. tcp://0.0.0.0:0 or tcp://[::]:0"));
 		o.anonymous = true;
 		o.addremove = true;

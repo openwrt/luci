@@ -2,73 +2,79 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LuCI: vpnbypass\n"
 "POT-Creation-Date: 2018-01-01 21:00+0300\n"
-"PO-Revision-Date: 2020-01-19 20:38+0000\n"
-"Last-Translator: Anton Kikin <a.a.kikin@gmail.com>\n"
+"PO-Revision-Date: 2020-06-07 15:48+0000\n"
+"Last-Translator: Artem <KovalevArtem.ru@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsvpnbypass/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<="
-"4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 3.11-dev\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 4.1-dev\n"
 "Project-Info: Это технический перевод, не дословный. Главное-удобный русский "
 "интерфейс, все проверялось в графическом режиме, совместим с другими apps\n"
 
-#: applications/luci-app-vpnbypass/luasrc/view/vpnbypass/buttons.htm:50
+#: applications/luci-app-vpnbypass/luasrc/model/cbi/vpnbypass.lua:26
+msgid "%s (disabled)"
+msgstr ""
+
+#: applications/luci-app-vpnbypass/luasrc/model/cbi/vpnbypass.lua:10
+msgid "%s is not installed or not found"
+msgstr "%s не установлен или не найден"
+
+#: applications/luci-app-vpnbypass/luasrc/view/vpnbypass/buttons.htm:57
 msgid "Disable"
 msgstr "Отключить"
 
-#: applications/luci-app-vpnbypass/luasrc/model/cbi/vpnbypass.lua:62
+#: applications/luci-app-vpnbypass/luasrc/model/cbi/vpnbypass.lua:74
 msgid "Domains to Bypass"
 msgstr "Домены, для<br />обхода блокировки"
 
-#: applications/luci-app-vpnbypass/luasrc/model/cbi/vpnbypass.lua:63
-msgid "Domains to be accessed directly (outside of the VPN tunnel), see"
-msgstr "Домены должны быть доступны напрямую (вне VPN-туннеля), см."
+#: applications/luci-app-vpnbypass/luasrc/model/cbi/vpnbypass.lua:75
+msgid ""
+"Domains to be accessed directly (outside of the VPN tunnel), see %sREADME%s "
+"for syntax"
+msgstr ""
 
-#: applications/luci-app-vpnbypass/luasrc/view/vpnbypass/buttons.htm:48
+#: applications/luci-app-vpnbypass/luasrc/view/vpnbypass/buttons.htm:54
 msgid "Enable"
 msgstr "Включить"
+
+#: applications/luci-app-vpnbypass/root/usr/share/rpcd/acl.d/luci-app-vpnbypass.json:3
+msgid "Grant UCI access for luci-app-vpnbypass"
+msgstr "Предоставить UCI доступ для luci-app-vpnbypass"
 
 #: applications/luci-app-vpnbypass/luasrc/view/vpnbypass/js.htm:51
 msgid "Loading"
 msgstr "Загрузка"
 
-#: applications/luci-app-vpnbypass/luasrc/model/cbi/vpnbypass.lua:45
+#: applications/luci-app-vpnbypass/luasrc/model/cbi/vpnbypass.lua:57
 msgid "Local IP Addresses to Bypass"
 msgstr "Локальный IP-адрес<br />обхода VPN"
 
-#: applications/luci-app-vpnbypass/luasrc/model/cbi/vpnbypass.lua:45
+#: applications/luci-app-vpnbypass/luasrc/model/cbi/vpnbypass.lua:57
 msgid ""
 "Local IP addresses or subnets with direct internet access (outside of the "
 "VPN tunnel)"
 msgstr ""
-"Локальные IP-адреса или подсети с прямым доступом в интернет (вне "
-"VPN-туннеля)"
+"Локальные IP-адреса или подсети с прямым доступом в интернет (вне VPN-"
+"туннеля)"
 
-#: applications/luci-app-vpnbypass/luasrc/model/cbi/vpnbypass.lua:31
+#: applications/luci-app-vpnbypass/luasrc/model/cbi/vpnbypass.lua:43
 msgid "Local Ports to Bypass"
 msgstr "Локальные порты для запуска обхода VPN"
 
-#: applications/luci-app-vpnbypass/luasrc/model/cbi/vpnbypass.lua:31
+#: applications/luci-app-vpnbypass/luasrc/model/cbi/vpnbypass.lua:43
 msgid "Local ports to trigger VPN Bypass"
 msgstr "Локальные порты<br />для обхода VPN"
 
-#: applications/luci-app-vpnbypass/luasrc/model/cbi/vpnbypass.lua:65
-msgid "README"
-msgstr "Описание"
-
-#: applications/luci-app-vpnbypass/luasrc/view/vpnbypass/buttons.htm:40
-msgid "Reload"
-msgstr "Перезапустить"
-
-#: applications/luci-app-vpnbypass/luasrc/model/cbi/vpnbypass.lua:52
+#: applications/luci-app-vpnbypass/luasrc/model/cbi/vpnbypass.lua:64
 msgid "Remote IP Addresses to Bypass"
 msgstr "Удаленные IP-адреса<br />обхода VPN"
 
-#: applications/luci-app-vpnbypass/luasrc/model/cbi/vpnbypass.lua:52
+#: applications/luci-app-vpnbypass/luasrc/model/cbi/vpnbypass.lua:64
 msgid ""
 "Remote IP addresses or subnets which will be accessed directly (outside of "
 "the VPN tunnel)"
@@ -76,46 +82,75 @@ msgstr ""
 "Удаленные IP-адреса или подсети, которые будут доступны напрямую (вне "
 "туннеля VPN)"
 
-#: applications/luci-app-vpnbypass/luasrc/model/cbi/vpnbypass.lua:38
+#: applications/luci-app-vpnbypass/luasrc/model/cbi/vpnbypass.lua:50
 msgid "Remote Ports to Bypass"
 msgstr "Удаленные порты<br />для обхода VPN"
 
-#: applications/luci-app-vpnbypass/luasrc/model/cbi/vpnbypass.lua:38
+#: applications/luci-app-vpnbypass/luasrc/model/cbi/vpnbypass.lua:50
 msgid "Remote ports to trigger VPN Bypass"
 msgstr "Удаленные порты для запуска обхода VPN"
 
+#: applications/luci-app-vpnbypass/luasrc/view/vpnbypass/buttons.htm:44
+msgid "Restart"
+msgstr "Перезапустить"
+
 #: applications/luci-app-vpnbypass/luasrc/model/cbi/vpnbypass.lua:22
-#: applications/luci-app-vpnbypass/luasrc/model/cbi/vpnbypass.lua:23
+msgid "Running"
+msgstr "Запущенные"
+
+#: applications/luci-app-vpnbypass/luasrc/model/cbi/vpnbypass.lua:33
 msgid "Service Status"
 msgstr "Статус сервиса"
 
-#: applications/luci-app-vpnbypass/luasrc/view/vpnbypass/buttons.htm:38
+#: applications/luci-app-vpnbypass/luasrc/model/cbi/vpnbypass.lua:32
+msgid "Service Status [%s %s]"
+msgstr ""
+
+#: applications/luci-app-vpnbypass/luasrc/view/vpnbypass/buttons.htm:41
 msgid "Start"
 msgstr "Запустить"
 
-#: applications/luci-app-vpnbypass/luasrc/view/vpnbypass/buttons.htm:42
+#: applications/luci-app-vpnbypass/luasrc/view/vpnbypass/buttons.htm:47
 msgid "Stop"
 msgstr "Остановить"
 
+#: applications/luci-app-vpnbypass/luasrc/model/cbi/vpnbypass.lua:24
+msgid "Stopped"
+msgstr "Остановлено"
+
 #: applications/luci-app-vpnbypass/luasrc/controller/vpnbypass.lua:4
+msgid "VPN"
+msgstr "VPN"
+
+#: applications/luci-app-vpnbypass/luasrc/controller/vpnbypass.lua:7
 msgid "VPN Bypass"
 msgstr "Обход VPN"
 
-#: applications/luci-app-vpnbypass/luasrc/model/cbi/vpnbypass.lua:29
+#: applications/luci-app-vpnbypass/luasrc/model/cbi/vpnbypass.lua:41
 msgid "VPN Bypass Rules"
 msgstr "Правила обхода VPN"
 
-#: applications/luci-app-vpnbypass/luasrc/model/cbi/vpnbypass.lua:20
+#: applications/luci-app-vpnbypass/luasrc/model/cbi/vpnbypass.lua:30
 msgid "VPN Bypass Settings"
 msgstr "Настройка обхода VPN"
 
-#: applications/luci-app-vpnbypass/luasrc/model/cbi/vpnbypass.lua:65
-msgid "for syntax"
-msgstr "для синтаксиса"
+#~ msgid "Domains to be accessed directly (outside of the VPN tunnel), see"
+#~ msgstr "Домены должны быть доступны напрямую (вне VPN-туннеля), см."
 
-#: applications/luci-app-vpnbypass/luasrc/model/cbi/vpnbypass.lua:11
-msgid "is not installed or not found"
-msgstr "не установлен или не найден"
+#~ msgid "README"
+#~ msgstr "Описание"
+
+#~ msgid "disabled"
+#~ msgstr "отключено"
+
+#~ msgid "for syntax"
+#~ msgstr "для синтаксиса"
+
+#~ msgid "is not installed or not found"
+#~ msgstr "не установлен или не найден"
+
+#~ msgid "Reload"
+#~ msgstr "Перезапустить"
 
 #~ msgid "Enable/start service"
 #~ msgstr "Включение / Запуск сервиса"

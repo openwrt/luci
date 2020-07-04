@@ -1,11 +1,14 @@
 'use strict';
+'require view';
+'require dom';
+'require uci';
 'require fs';
 'require ui';
 'require rpc';
 'require form';
 'require tools.widgets as widgets';
 
-return L.view.extend({
+return view.extend({
 	formdata: { wol: {} },
 
 	callHostHints: rpc.declare({
@@ -18,7 +21,8 @@ return L.view.extend({
 		return Promise.all([
 			L.resolveDefault(fs.stat('/usr/bin/etherwake')),
 			L.resolveDefault(fs.stat('/usr/bin/wol')),
-			this.callHostHints()
+			this.callHostHints(),
+			uci.load('etherwake')
 		]);
 	},
 
@@ -48,6 +52,7 @@ return L.view.extend({
 			o = s.option(widgets.DeviceSelect, 'iface', _('Network interface to use'),
 				_('Specifies the interface the WoL packet is sent on'));
 
+			o.default = uci.get('etherwake', 'setup', 'interface');
 			o.rmempty = false;
 			o.noaliases = true;
 			o.noinactive = true;
@@ -79,7 +84,7 @@ return L.view.extend({
 		var map = document.querySelector('#maincontent .cbi-map'),
 		    data = this.formdata;
 
-		return L.dom.callClassMethod(map, 'save').then(function() {
+		return dom.callClassMethod(map, 'save').then(function() {
 			if (!data.wol.mac)
 				return alert(_('No target host specified!'));
 

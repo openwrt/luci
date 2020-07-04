@@ -1,4 +1,5 @@
 'use strict';
+'require view';
 'require form';
 'require tools.widgets as widgets';
 
@@ -88,7 +89,7 @@ function defOpts(s, opts, params) {
 	}
 }
 
-return L.view.extend({
+return view.extend({
 	render: function() {
 		var m, s, o;
 

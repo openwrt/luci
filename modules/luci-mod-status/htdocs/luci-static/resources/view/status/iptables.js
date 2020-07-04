@@ -1,10 +1,12 @@
 'use strict';
+'require view';
+'require poll';
 'require fs';
 'require ui';
 
 var table_names = [ 'Filter', 'NAT', 'Mangle', 'Raw' ];
 
-return L.view.extend({
+return view.extend({
 	load: function() {
 		return L.resolveDefault(fs.stat('/usr/sbin/ip6tables'));
 	},
@@ -130,7 +132,7 @@ return L.view.extend({
 			else if (m[1].match(/^num /)) {
 				continue;
 			}
-			else if ((m2 = m[1].match(/^(\d+) +(\d+) +(\d+) +(.*?) +(\S+) +(\S*) +(\S+) +(\S+) +([a-f0-9:.]+(?:\/[a-f0-9:.]+)?) +([a-f0-9:.]+(?:\/[a-f0-9:.]+)?) +(.+)$/)) !== null) {
+			else if ((m2 = m[1].match(/^(\d+) +(\d+) +(\d+) +(.*?) +(\S+) +(\S*) +(\S+) +(\S+) +(!?[a-f0-9:.]+(?:\/[a-f0-9:.]+)?) +(!?[a-f0-9:.]+(?:\/[a-f0-9:.]+)?) +(.+)$/)) !== null) {
 				var num = +m2[1],
 				    pkts = +m2[2],
 				    bytes = +m2[3],
@@ -215,7 +217,7 @@ return L.view.extend({
 		if (has_ip6tables)
 			cmds.push('/usr/sbin/ip6tables');
 
-		L.Poll.add(L.bind(function() {
+		poll.add(L.bind(function() {
 			var tasks = [];
 
 			for (var i = 0; i < cmds.length; i++) {

@@ -1,4 +1,5 @@
 'use strict';
+'require view';
 'require fs';
 'require rpc';
 'require validation';
@@ -25,7 +26,7 @@ function applyMask(addr, mask, v6) {
 		v6 ? '%x:%x:%x:%x:%x:%x:%x:%x' : '%d.%d.%d.%d', words);
 }
 
-return L.view.extend({
+return view.extend({
 	load: function() {
 		return Promise.all([
 			callNetworkInterfaceDump(),
@@ -118,8 +119,6 @@ return L.view.extend({
 			    type = (m ? m[1] : null) || 'unicast',
 			    dest = m ? (m[2] == 'default' ? (v6 ? '::/0' : '0.0.0.0/0') : m[2]) : null,
 			    flags = m ? m[3].trim().split(/\s+/) : [];
-
-			console.debug(lines[i], m);
 
 			if (!dest || type != 'unicast' || dest == 'fe80::/64' || dest == 'ff00::/8')
 				continue;

@@ -2,7 +2,7 @@ config core main
 	option lang auto
 	option mediaurlbase /luci-static/bootstrap
 	option resourcebase /luci-static/resources
-	option ubuspath /ubus
+	option ubuspath /ubus/
 	
 config extern flash_keep
 	option uci 		"/etc/config/"
@@ -25,7 +25,7 @@ config internal ccache
 config internal themes
 
 config internal apply
-	option rollback 30
+	option rollback 90
 	option holdoff 4
 	option timeout 5
 	option display 1.5

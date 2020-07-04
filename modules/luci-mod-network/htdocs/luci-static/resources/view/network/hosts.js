@@ -1,8 +1,9 @@
 'use strict';
+'require view';
 'require rpc';
 'require form';
 
-return L.view.extend({
+return view.extend({
 	callHostHints: rpc.declare({
 		object: 'luci-rpc',
 		method: 'getHostHints',

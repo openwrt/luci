@@ -1,0 +1,14 @@
+{
+	"admin/network/firewall/bcp38": {
+		"title": "BCP38",
+		"order": 50,
+		"action": {
+			"type": "cbi",
+			"path": "bcp38",
+			"post": { "cbi.submit": true }
+		},
+		"depends": {
+			"acl": [ "luci-app-bcp38" ]
+		}
+	}
+}

@@ -1,4 +1,5 @@
 'use strict';
+'require view';
 'require form';
 'require uci';
 'require ui';
@@ -6,7 +7,7 @@
 
 var conf = 'shadowsocks-libev';
 
-return L.view.extend({
+return view.extend({
 	render: function() {
 		var m, s, o;
 

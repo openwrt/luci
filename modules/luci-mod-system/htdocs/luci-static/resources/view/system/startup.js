@@ -1,9 +1,12 @@
 'use strict';
+'require view';
 'require rpc';
 'require fs';
 'require ui';
 
-return L.view.extend({
+var isReadonlyView = !L.hasViewPermission() || null;
+
+return view.extend({
 	callInitList: rpc.declare({
 		object: 'luci',
 		method: 'getInitList',
@@ -36,12 +39,12 @@ return L.view.extend({
 	},
 
 	handleEnableDisable: function(name, isEnabled, ev) {
-		return this.handleAction(name, isEnabled ? 'disable' : 'enable', ev).then(L.bind(function(name, isEnabled, cell) {
-			L.dom.content(cell, this.renderEnableDisable({
+		return this.handleAction(name, isEnabled ? 'disable' : 'enable', ev).then(L.bind(function(name, isEnabled, btn) {
+			btn.parentNode.replaceChild(this.renderEnableDisable({
 				name: name,
 				enabled: isEnabled
-			}));
-		}, this, name, !isEnabled, ev.currentTarget.parentNode));
+			}), btn);
+		}, this, name, !isEnabled, ev.currentTarget));
 	},
 
 	handleRcLocalSave: function(ev) {
@@ -58,7 +61,8 @@ return L.view.extend({
 	renderEnableDisable: function(init) {
 		return E('button', {
 			class: 'btn cbi-button-%s'.format(init.enabled ? 'positive' : 'negative'),
-			click: ui.createHandlerFn(this, 'handleEnableDisable', init.name, init.enabled)
+			click: ui.createHandlerFn(this, 'handleEnableDisable', init.name, init.enabled),
+			disabled: isReadonlyView
 		}, init.enabled ? _('Enabled') : _('Disabled'));
 	},
 
@@ -71,10 +75,7 @@ return L.view.extend({
 			E('div', { 'class': 'tr table-titles' }, [
 				E('div', { 'class': 'th' }, _('Start priority')),
 				E('div', { 'class': 'th' }, _('Initscript')),
-				E('div', { 'class': 'th' }, _('Enable/Disable')),
-				E('div', { 'class': 'th' }, _('Start')),
-				E('div', { 'class': 'th' }, _('Restart')),
-				E('div', { 'class': 'th' }, _('Stop'))
+				E('div', { 'class': 'th nowrap cbi-section-actions' })
 			])
 		]);
 
@@ -93,10 +94,12 @@ return L.view.extend({
 			rows.push([
 				'%02d'.format(list[i].index),
 				list[i].name,
-				this.renderEnableDisable(list[i]),
-				E('button', { 'class': 'btn cbi-button-action', 'click': ui.createHandlerFn(this, 'handleAction', list[i].name, 'start') }, _('Start')),
-				E('button', { 'class': 'btn cbi-button-action', 'click': ui.createHandlerFn(this, 'handleAction', list[i].name, 'restart') }, _('Restart')),
-				E('button', { 'class': 'btn cbi-button-action', 'click': ui.createHandlerFn(this, 'handleAction', list[i].name, 'stop') }, _('Stop'))
+				E('div', [
+					this.renderEnableDisable(list[i]),
+					E('button', { 'class': 'btn cbi-button-action', 'click': ui.createHandlerFn(this, 'handleAction', list[i].name, 'start'), 'disabled': isReadonlyView }, _('Start')),
+					E('button', { 'class': 'btn cbi-button-action', 'click': ui.createHandlerFn(this, 'handleAction', list[i].name, 'restart'), 'disabled': isReadonlyView }, _('Restart')),
+					E('button', { 'class': 'btn cbi-button-action', 'click': ui.createHandlerFn(this, 'handleAction', list[i].name, 'stop'), 'disabled': isReadonlyView }, _('Stop'))
+				])
 			]);
 		}
 
@@ -111,11 +114,12 @@ return L.view.extend({
 				]),
 				E('div', { 'data-tab': 'rc', 'data-tab-title': _('Local Startup') }, [
 					E('p', {}, _('This is the content of /etc/rc.local. Insert your own commands here (in front of \'exit 0\') to execute them at the end of the boot process.')),
-					E('p', {}, E('textarea', { 'style': 'width:100%', 'rows': 20 }, [ (rcLocal != null ? rcLocal : '') ])),
+					E('p', {}, E('textarea', { 'style': 'width:100%', 'rows': 20, 'disabled': isReadonlyView }, [ (rcLocal != null ? rcLocal : '') ])),
 					E('div', { 'class': 'cbi-page-actions' }, [
 						E('button', {
 							'class': 'btn cbi-button-save',
-							'click': ui.createHandlerFn(this, 'handleRcLocalSave')
+							'click': ui.createHandlerFn(this, 'handleRcLocalSave'),
+							'disabled': isReadonlyView
 						}, _('Save'))
 					])
 				])

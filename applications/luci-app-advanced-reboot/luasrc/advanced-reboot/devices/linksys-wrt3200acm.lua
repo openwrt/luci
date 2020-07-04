@@ -1,7 +1,7 @@
 return {
 	vendorName = "Linksys",
 	deviceName = "WRT3200ACM",
-	boardName = "linksys-rango",
+	boardNames = { "linksys-rango", "linksys,rango", "linksys,wrt3200acm" },
 	partition1MTD = "mtd5",
 	partition2MTD = "mtd7",
 	labelOffset = 32,
