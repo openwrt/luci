@@ -41,7 +41,20 @@ return view.extend({
 		s.anonymous = true;
 		s.addremove = false;
 
-		o = s.option(form.Flag, 'syn_flood', _('Enable SYN-flood protection'));
+		o = s.option(form.Flag, 'synflood_protect', _('Enable SYN-flood protection'));
+		o.cfgvalue = function(section_id) {
+			var val = uci.get('firewall', section_id, 'synflood_protect');
+			return (val != null) ? val : uci.get('firewall', section_id, 'syn_flood');
+		};
+		o.write = function(section_id, value) {
+			uci.unset('firewall', section_id, 'syn_flood');
+			uci.set('firewall', section_id, 'synflood_protect', value);
+		};
+		o.remove = function(section_id) {
+			uci.unset('firewall', section_id, 'syn_flood');
+			uci.unset('firewall', section_id, 'synflood_protect');
+		};
+
 		o = s.option(form.Flag, 'drop_invalid', _('Drop invalid packets'));
 
 		var p = [
