@@ -9,7 +9,7 @@ PKG_MAINTAINER:=Steven Hessing <steven.hessing@gmail.com>
 
 LUCI_TITLE:=Noddos Service Web UI
 LUCI_DESCRIPTION:=Provides Web UI for Noddos service.
-LUCI_DEPENDS:=+luci +luci-compat +noddos
+LUCI_DEPENDS:=+luci +luci-compat +noddos @BROKEN
 LUCI_PKGARCH:=all
 PKG_RELEASE:=1
 
