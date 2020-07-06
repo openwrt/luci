@@ -613,6 +613,12 @@ local function get_children(node)
 end
 
 local function find_subnode(root, prefix, recurse, descended)
+	-- First child can cause recursion, so to _stop_ and find a node, it needs to be "something else"
+	local valid = root.title ~= nil and root.action ~= nil and root.action.type ~= "firstchild"
+	if valid and prefix then
+		return prefix
+	end
+
 	local children = get_children(root)
 
 	if #children > 0 and (not descended or recurse) then
@@ -630,18 +636,6 @@ local function find_subnode(root, prefix, recurse, descended)
 			if res_path then
 				return res_path
 			end
-		end
-	end
-
-	if descended then
-		if not recurse or
-		   root.action.type == "cbi" or
-		   root.action.type == "form" or
-		   root.action.type == "view" or
-		   root.action.type == "template" or
-		   root.action.type == "arcombine"
-		then
-			return prefix
 		end
 	end
 end
