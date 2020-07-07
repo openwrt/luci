@@ -10,12 +10,14 @@
 			},
 			"ubus": {
 				"service": [ "list" ]
-			}
+			},
+			"uci": [ "smartdns" ]
 		},
 		"write": {
 			"file": {
 				"/etc/smartdns/*": [ "write" ]
-			}
+			},
+			"uci": [ "smartdns" ]
 		}
 	}
 }
