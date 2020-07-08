@@ -55,36 +55,43 @@
 		<%if not require("luci.sys").init.enabled("mwan3") then%>
 		<div><strong><%:INFO: MWAN not running%></strong></div>
 		<%end%>
-		<fieldset class="cbi-section">
-			<br />
-
-			<div style="width:30%; float:left">
-				<label class="cbi-value-title"><%:Interface%></label>
-				<select name="iface" style="width:auto">
-					<% for _, z in ipairs(iface) do -%><option value="<%=z%>"><%=z%></option><%- end %>
-				</select>
+		<div class="cbi-section">
+			<div class="cbi-section-node">
+				<div class="cbi-value">
+					<label class="cbi-value-title"><%:Interface%></label>
+					<div class="cbi-value-field">
+					<select class="cbi-input-select" name="iface">
+						<% for _, z in ipairs(iface) do -%><option value="<%=z%>"><%=z%></option><%- end %>
+					</select>
+				</div>
+				</div>
 			</div>
 
-			<div style="width:30%; float:left">
-				<label class="cbi-value-title"><%:Task%></label>
-				<select name="task" style="width:auto">
-					<option value="ping_gateway"><%:Ping default gateway%></option>
-					<option value="ping_trackips"><%:Ping tracking IP%></option>
-					<option value="check_rules"><%:Check IP rules%></option>
-					<option value="check_routes"><%:Check routing table%></option>
-					<option value="hotplug_ifup"><%:Hotplug ifup%></option>
-					<option value="hotplug_ifdown"><%:Hotplug ifdown%></option>
-				</select>
+			<div class="cbi-section-node">
+				<div class="cbi-value">
+					<label class="cbi-value-title"><%:Task%></label>
+					<div class="cbi-value-field">
+					<select class="cbi-input-select" name="task">
+						<option value="ping_gateway"><%:Ping default gateway%></option>
+						<option value="ping_trackips"><%:Ping tracking IP%></option>
+						<option value="check_rules"><%:Check IP rules%></option>
+						<option value="check_routes"><%:Check routing table%></option>
+						<option value="hotplug_ifup"><%:Hotplug ifup%></option>
+						<option value="hotplug_ifdown"><%:Hotplug ifdown%></option>
+					</select>
+					</div>
+				</div>
 			</div>
+		</div>
 
-			<div style="width:30%; float:left">
-				<input type="button" value="<%:Execute%>" class="cbi-button cbi-button-apply" onclick="update_status(this.form.iface.value, this.form.task.value)"/>
-			</div>
-		</fieldset>
+		<div class="cbi-section-create">
+			<input type="button" value="<%:Execute%>" class="btn cbi-button cbi-button-apply" onclick="update_status(this.form.iface.value, this.form.task.value)"/>
+		</div>
+
+		<div class="cbi-section" style="display:none">
+			<span id="diag-rc-output"></span>
+		</div>
 	</div>
-	<fieldset class="cbi-section" style="display:none">
-		<span id="diag-rc-output"></span>
-	</fieldset>
 </form>
 
 <%+footer%>
