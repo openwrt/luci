@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2020-07-02 23:42+0000\n"
-"Last-Translator: Marwan Amireh <amirehmarwan@gmail.com>\n"
+"PO-Revision-Date: 2020-07-09 06:17+0000\n"
+"Last-Translator: Mohammed Abu Hassan <medo94125@gmail.com>\n"
 "Language-Team: Arabic <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsacme/ar/>\n"
 "Language: ar\n"
@@ -95,7 +95,7 @@ msgstr "حجم المفتاح (والنوع) للشهادة التي تم إنش
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:30
 msgid "State directory"
-msgstr ""
+msgstr "دليل الدولة"
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:108
 msgid ""
@@ -153,6 +153,11 @@ msgid ""
 "supports wildcard certificates. Using this mode requires the acme-dnsapi "
 "package to be installed."
 msgstr ""
+"لاستخدام وضع DNS لإصدار الشهادات ، قم بتعيين هذا على اسم API DNS المدعوم من "
+"acme.sh. راجع https://github.com/acmesh-official/acme.sh/wiki/dnsapi للحصول "
+"على قائمة واجهات برمجة التطبيقات المتاحة. في وضع DNS ، لا يلزم حل اسم المجال "
+"إلى IP الخاص بالموجه. وضع DNS هو أيضًا الوضع الوحيد الذي يدعم شهادات أحرف "
+"البدل. يتطلب استخدام هذا الوضع تثبيت حزمة acme-dnsapi."
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:75
 msgid ""
@@ -160,6 +165,9 @@ msgid ""
 "for one certificate).Nginx must support ssl, if not it won't start as it "
 "needs to be compiled with ssl support to use cert options"
 msgstr ""
+"قم بتحديث nginx config بهذه الشهادة بمجرد إصدارها (حدد هذا فقط لشهادة واحدة)"
+". يجب أن يدعم nginx SSL ، إذا لم يكن كذلك ، فلن يبدأ لأنه يحتاج إلى تجميع مع "
+"دعم SSL لاستخدام خيارات الشهادة"
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:67
 msgid ""
@@ -167,22 +175,24 @@ msgid ""
 "for one certificate).Is also available luci-app-uhttpd to configure uhttpd "
 "form the LuCI interface."
 msgstr ""
+"قم بتحديث تكوين uhttpd بهذه الشهادة بمجرد إصدارها (حدد هذا فقط لشهادة واحدة)"
+". كما يتوفر luci-app-uhttpd لتكوين uhttpd من واجهة LuCI."
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:74
 msgid "Use for nginx"
-msgstr ""
+msgstr "استخدم ل nginx"
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:66
 msgid "Use for uhttpd"
-msgstr ""
+msgstr "استخدم ل uhttpd"
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:50
 msgid "Use staging server"
-msgstr ""
+msgstr "استخدم خادم الترحيل"
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:82
 msgid "Webroot directory"
-msgstr ""
+msgstr "دليل Webroot"
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:83
 msgid ""
@@ -190,7 +200,9 @@ msgid ""
 "Acme in webroot mode. The web server must be accessible from the internet on "
 "port 80."
 msgstr ""
+"الدليل الجذر لخادم الويب. اضبط هذا على جذر وثيقة خادم الويب لتشغيل Acme في "
+"وضع webroot. يجب الوصول إلى خادم الويب من الإنترنت على المنفذ 80."
 
 #: applications/luci-app-acme/luasrc/model/cbi/acme.lua:31
 msgid "Where certs and other state files are kept."
-msgstr ""
+msgstr "حيث يتم حفظ شهادات وملفات الدولة الأخرى."
