@@ -112,7 +112,7 @@ msgid "Also scan this Routing table for connected networks"
 msgstr ""
 "接続されたネットワークのために、追加でスキャンするルーティングテーブルです。"
 
-#: applications/luci-app-mwan3/luasrc/view/mwan/status_diagnostics.htm:73
+#: applications/luci-app-mwan3/luasrc/view/mwan/status_diagnostics.htm:77
 msgid "Check IP rules"
 msgstr "IP ルールのチェック"
 
@@ -120,7 +120,7 @@ msgstr "IP ルールのチェック"
 msgid "Check link quality"
 msgstr "リンク品質のチェック"
 
-#: applications/luci-app-mwan3/luasrc/view/mwan/status_diagnostics.htm:74
+#: applications/luci-app-mwan3/luasrc/view/mwan/status_diagnostics.htm:78
 msgid "Check routing table"
 msgstr "ルーティング テーブルのチェック"
 
@@ -209,7 +209,7 @@ msgstr "<code>0x</code> で始まる16進数の値を入力してください。
 msgid "Error"
 msgstr "エラー"
 
-#: applications/luci-app-mwan3/luasrc/view/mwan/status_diagnostics.htm:81
+#: applications/luci-app-mwan3/luasrc/view/mwan/status_diagnostics.htm:88
 msgid "Execute"
 msgstr "実行"
 
@@ -247,11 +247,11 @@ msgstr "全般"
 msgid "Grant UCI access for luci-app-mwan3"
 msgstr "luci-app-mwan3 に UCI アクセスを許可"
 
-#: applications/luci-app-mwan3/luasrc/view/mwan/status_diagnostics.htm:76
+#: applications/luci-app-mwan3/luasrc/view/mwan/status_diagnostics.htm:80
 msgid "Hotplug ifdown"
 msgstr "ホットプラグ ifdown"
 
-#: applications/luci-app-mwan3/luasrc/view/mwan/status_diagnostics.htm:75
+#: applications/luci-app-mwan3/luasrc/view/mwan/status_diagnostics.htm:79
 msgid "Hotplug ifup"
 msgstr "ホットプラグ ifup"
 
@@ -290,7 +290,7 @@ msgstr "初期状態"
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/memberconfig.lua:18
 #: applications/luci-app-mwan3/luasrc/view/mwan/status_detail.htm:10
 #: applications/luci-app-mwan3/luasrc/view/mwan/status_diagnostics.htm:10
-#: applications/luci-app-mwan3/luasrc/view/mwan/status_diagnostics.htm:62
+#: applications/luci-app-mwan3/luasrc/view/mwan/status_diagnostics.htm:61
 #: applications/luci-app-mwan3/luasrc/view/mwan/status_interface.htm:10
 #: applications/luci-app-mwan3/luasrc/view/mwan/status_troubleshooting.htm:10
 msgid "Interface"
@@ -546,7 +546,7 @@ msgstr "インターフェース %s に IP ルールが一つのみ見つかり�
 msgid "Ping count"
 msgstr "Ping 回数"
 
-#: applications/luci-app-mwan3/luasrc/view/mwan/status_diagnostics.htm:71
+#: applications/luci-app-mwan3/luasrc/view/mwan/status_diagnostics.htm:75
 msgid "Ping default gateway"
 msgstr "デフォルト ゲートウェイへのping"
 
@@ -571,7 +571,7 @@ msgstr "Ping サイズ"
 msgid "Ping timeout"
 msgstr "Ping タイムアウト"
 
-#: applications/luci-app-mwan3/luasrc/view/mwan/status_diagnostics.htm:72
+#: applications/luci-app-mwan3/luasrc/view/mwan/status_diagnostics.htm:76
 msgid "Ping tracking IP"
 msgstr "トラッキング IP へのping"
 
@@ -589,11 +589,14 @@ msgid ""
 "spaces<br />Names must be 15 characters or less<br />Policies may not share "
 "the same name as configured interfaces, members or rules"
 msgstr ""
-"ポリシーは、MWANがどのようにトラフィックの分配を行うかを制御する、1つ以上のメンバーをグループ化するプロファイルです。<br /"
-">最小のメトリックを持つメンバー インターフェースが最初に使用されます。<br />同じメトリックを持つ複数のインターフェースでは、負荷分散を行います。"
-"<br />負荷分散に設定されたメンバー インターフェースでは、ウェイトの値が大きい方により多くのトラフィックを分配します。<br />名前は A-Z, "
-"a-z, 0-9, _ を含むことができますが、スペースは使用できません。また、15文字以内でなければなりません。<br "
-"/>ポリシーでは、設定済みのインターフェースやメンバー、ルールと同じ名前を使用することはできません。"
+"ポリシーは、MWANがどのようにトラフィックの分配を行うかを制御する、1つ以上のメ"
+"ンバーをグループ化するプロファイルです。<br />最小のメトリックを持つメンバー "
+"インターフェースが最初に使用されます。<br />同じメトリックを持つ複数のイン"
+"ターフェースでは、負荷分散を行います。<br />負荷分散に設定されたメンバー イン"
+"ターフェースでは、ウェイトの値が大きい方により多くのトラフィックを分配しま"
+"す。<br />名前は A-Z, a-z, 0-9, _ を含むことができますが、スペースは使用でき"
+"ません。また、15文字以内でなければなりません。<br />ポリシーでは、設定済みの"
+"インターフェースやメンバー、ルールと同じ名前を使用することはできません。"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/policy.lua:51
 msgid "Policy"
@@ -689,7 +692,7 @@ msgstr "Sticky タイムアウト"
 msgid "Supports CIDR notation (eg \"192.168.100.0/24\") without quotes"
 msgstr "CIDR 表記のサポート（例: \"192.168.100.0/24\"）"
 
-#: applications/luci-app-mwan3/luasrc/view/mwan/status_diagnostics.htm:69
+#: applications/luci-app-mwan3/luasrc/view/mwan/status_diagnostics.htm:72
 msgid "Task"
 msgstr "タスク"
 

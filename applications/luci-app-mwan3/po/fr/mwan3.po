@@ -108,7 +108,7 @@ msgstr "Toutes les règles IP requises pour l’interface %s trouvées"
 msgid "Also scan this Routing table for connected networks"
 msgstr "Analysez également cette table de routage pour les réseaux connectés"
 
-#: applications/luci-app-mwan3/luasrc/view/mwan/status_diagnostics.htm:73
+#: applications/luci-app-mwan3/luasrc/view/mwan/status_diagnostics.htm:77
 msgid "Check IP rules"
 msgstr "Vérifiez les règles IP"
 
@@ -116,7 +116,7 @@ msgstr "Vérifiez les règles IP"
 msgid "Check link quality"
 msgstr "Vérifier la qualité du lien"
 
-#: applications/luci-app-mwan3/luasrc/view/mwan/status_diagnostics.htm:74
+#: applications/luci-app-mwan3/luasrc/view/mwan/status_diagnostics.htm:78
 msgid "Check routing table"
 msgstr "Vérifier la table de routage"
 
@@ -205,7 +205,7 @@ msgstr "Entrez la valeur en hexadécimal, en commençant par <code> 0x </code>"
 msgid "Error"
 msgstr "Erreur"
 
-#: applications/luci-app-mwan3/luasrc/view/mwan/status_diagnostics.htm:81
+#: applications/luci-app-mwan3/luasrc/view/mwan/status_diagnostics.htm:88
 msgid "Execute"
 msgstr "Exécuter"
 
@@ -241,11 +241,11 @@ msgstr "Globales"
 msgid "Grant UCI access for luci-app-mwan3"
 msgstr "Accorder tout les accès l'UCI pour luci-app-mwan3"
 
-#: applications/luci-app-mwan3/luasrc/view/mwan/status_diagnostics.htm:76
+#: applications/luci-app-mwan3/luasrc/view/mwan/status_diagnostics.htm:80
 msgid "Hotplug ifdown"
 msgstr "Hotplug ifdown"
 
-#: applications/luci-app-mwan3/luasrc/view/mwan/status_diagnostics.htm:75
+#: applications/luci-app-mwan3/luasrc/view/mwan/status_diagnostics.htm:79
 msgid "Hotplug ifup"
 msgstr "Hotplug ifup"
 
@@ -286,7 +286,7 @@ msgstr "État initial"
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/memberconfig.lua:18
 #: applications/luci-app-mwan3/luasrc/view/mwan/status_detail.htm:10
 #: applications/luci-app-mwan3/luasrc/view/mwan/status_diagnostics.htm:10
-#: applications/luci-app-mwan3/luasrc/view/mwan/status_diagnostics.htm:62
+#: applications/luci-app-mwan3/luasrc/view/mwan/status_diagnostics.htm:61
 #: applications/luci-app-mwan3/luasrc/view/mwan/status_interface.htm:10
 #: applications/luci-app-mwan3/luasrc/view/mwan/status_troubleshooting.htm:10
 msgid "Interface"
@@ -441,8 +441,8 @@ msgid ""
 "May be entered as a single or multiple port(s) (eg \"22\" or \"80,443\") or "
 "as a portrange (eg \"1024:2048\") without quotes"
 msgstr ""
-"Peut être inscrit comme un seul ou plusieurs ports (par exemple « 22 » ou « "
-"80,443 ») ou comme un portrange (par exemple « 1024:2048 ») sans guillemets"
+"Peut être inscrit comme un seul ou plusieurs ports (par exemple « 22 » ou "
+"« 80,443 ») ou comme un portrange (par exemple « 1024:2048 ») sans guillemets"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/member.lua:17
 msgid "Member"
@@ -542,7 +542,7 @@ msgstr "Une seule règle IP pour l’interface %s trouvée"
 msgid "Ping count"
 msgstr "Comptage de ping"
 
-#: applications/luci-app-mwan3/luasrc/view/mwan/status_diagnostics.htm:71
+#: applications/luci-app-mwan3/luasrc/view/mwan/status_diagnostics.htm:75
 msgid "Ping default gateway"
 msgstr "Passerelle par défaut Ping"
 
@@ -567,7 +567,7 @@ msgstr "Taille du ping"
 msgid "Ping timeout"
 msgstr "Délai d’expiration ping"
 
-#: applications/luci-app-mwan3/luasrc/view/mwan/status_diagnostics.htm:72
+#: applications/luci-app-mwan3/luasrc/view/mwan/status_diagnostics.htm:76
 msgid "Ping tracking IP"
 msgstr "Ping suivi IP"
 
@@ -698,7 +698,7 @@ msgstr ""
 "Supporte la notation CIDR (par exemple \"192.168.100.0/24\") sans les "
 "guillemets"
 
-#: applications/luci-app-mwan3/luasrc/view/mwan/status_diagnostics.htm:69
+#: applications/luci-app-mwan3/luasrc/view/mwan/status_diagnostics.htm:72
 msgid "Task"
 msgstr "Tâche"
 
@@ -740,23 +740,23 @@ msgid ""
 "Physical device name which interface went up or down (e.g. \"eth0\" or "
 "\"wwan0\")<br /><br />"
 msgstr ""
-"Cette section vous permet de modifier le contenu du fichier \"/etc/mwan3."
-"user\".<br />Le fichier est également préservé lors de la mise à jour du "
-"système.<br /><br />Notes :<br />Ce fichier est interprété comme un script "
-"shell.<br />La première ligne du script doit être &#34;# !/bin/sh &#34; sans "
-"les guillemets. <br />Les lignes commençant par # sont des commentaires et "
-"ne sont pas exécutées. <br />Mettez votre action mwan3 personnalisée ici, "
-"elle sera <br />exécutée avec chaque événement <br />de l'interface de "
-"hotplug netifd sur les interfaces pour lesquelles mwan3 est activé.<br /><br "
-"/>Il y a trois variables d'environnement principales qui sont passées à ce "
-"script.<br /><br />$ACTION <br />* \"ifup\" est appelé par netifd et "
-"mwan3track <br />* \"ifdown\" est appelé par netifd et mwan3track <br />* "
-"\"connected\" est appelé par mwan3track uniquement si le suivi a réussi <br "
-"/>* \"disconnected\" est appelé par mwan3track uniquement si le suivi a "
-"échoué <br />$INTERFACE Nom de l'interface qui est montée ou descendue ("
-"e.par exemple \"wan\" ou \"wwan\") <br />$DEVICE Nom de l'appareil physique "
-"dont l'interface est montée ou descendue (par exemple \"eth0\" ou \"wwan0\") "
-"<br /> <br />"
+"Cette section vous permet de modifier le contenu du fichier \"/etc/mwan3.user"
+"\".<br />Le fichier est également préservé lors de la mise à jour du système."
+"<br /><br />Notes :<br />Ce fichier est interprété comme un script shell."
+"<br />La première ligne du script doit être &#34;# !/bin/sh &#34; sans les "
+"guillemets. <br />Les lignes commençant par # sont des commentaires et ne "
+"sont pas exécutées. <br />Mettez votre action mwan3 personnalisée ici, elle "
+"sera <br />exécutée avec chaque événement <br />de l'interface de hotplug "
+"netifd sur les interfaces pour lesquelles mwan3 est activé.<br /><br />Il y "
+"a trois variables d'environnement principales qui sont passées à ce script."
+"<br /><br />$ACTION <br />* \"ifup\" est appelé par netifd et mwan3track "
+"<br />* \"ifdown\" est appelé par netifd et mwan3track <br />* \"connected\" "
+"est appelé par mwan3track uniquement si le suivi a réussi <br />* "
+"\"disconnected\" est appelé par mwan3track uniquement si le suivi a échoué "
+"<br />$INTERFACE Nom de l'interface qui est montée ou descendue (e.par "
+"exemple \"wan\" ou \"wwan\") <br />$DEVICE Nom de l'appareil physique dont "
+"l'interface est montée ou descendue (par exemple \"eth0\" ou \"wwan0\") <br /"
+"> <br />"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interfaceconfig.lua:37
 msgid "Tracking hostname or IP address"
