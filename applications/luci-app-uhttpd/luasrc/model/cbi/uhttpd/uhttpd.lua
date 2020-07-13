@@ -91,9 +91,9 @@ o = ucs:taboption("general", Flag, "rfc1918_filter", translate("Ignore private I
 o.default = o.enabled
 o.rmempty = false
 
-cert_file = ucs:taboption("general", FileUpload, "cert", translate("HTTPS Certificate (DER or PEM format)"))
+cert_file = ucs:taboption("general", FileUpload, "cert", translate("HTTPS Certificate (DER Encoded)"))
 
-key_file = ucs:taboption("general", FileUpload, "key", translate("HTTPS Private Key (DER or PEM format)"))
+key_file = ucs:taboption("general", FileUpload, "key", translate("HTTPS Private Key (DER Encoded)"))
 
 o = ucs:taboption("general", Button, "remove_old", translate("Remove old certificate and key"),
 		  translate("uHTTPd will generate a new self-signed certificate using the configuration shown below."))
