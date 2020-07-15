@@ -3,9 +3,6 @@
 START=99
 DOCKERD_CONF="/etc/docker/daemon.json"
 
-config_load dockerman
-config_get daemon_ea "local" daemon_ea
-
 init_dockerman_chain(){
 	iptables -N DOCKER-MAN >/dev/null 2>&1
 	iptables -F DOCKER-MAN >/dev/null 2>&1
@@ -31,6 +28,10 @@ handle_allowed_interface(){
 
 start(){
 	[ ! -x "/etc/init.d/dockerd" ] && return 0
+
+	config_load dockerman
+	config_get daemon_ea "local" daemon_ea
+
 	init_dockerman_chain
 	if [ -n "$daemon_ea" ]; then
 		handle_allowed_interface
