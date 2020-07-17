@@ -138,7 +138,7 @@ if (valman == "0") then
     dlk = s1:taboption("DHCP", ListValue, "dhcp_link",
         translate("DHCP Link"),
         translate("Link to supported programs to load DHCP into DNS"))
-    dlk:value("none", translate("No Link"))
+    dlk:value("none", translate("(none)"))
     dlk:value("dnsmasq", "dnsmasq")
     dlk:value("odhcpd", "odhcpd")
     dlk.rmempty = false
@@ -154,8 +154,6 @@ if (valman == "0") then
         translate("Domain suffix for this router and DHCP clients"))
     dom.placeholder = "lan"
     dom.optional = true
-    dom:depends("dhcp_link", "none")
-    dom:depends("dhcp_link", "odhcpd")
 
     dty = s1:taboption("DHCP", ListValue, "domain_type",
         translate("Local Domain Type"),
@@ -269,6 +267,12 @@ if (valman == "0") then
         translate("Prevent excessively short cache periods"))
     tlm.datatype = "and(uinteger,min(0),max(1200))"
     tlm.placeholder = "120"
+
+    rtt = s1:taboption("resource", Value, "rate_limit",
+        translate("Query Rate Limit"),
+        translate("Prevent client query overload; zero is off"))
+    rtt.datatype = "and(uinteger,min(0),max(5000))"
+    rtt.placeholder = "0"
 
     stt = s1:taboption("resource", Flag, "extended_stats",
         translate("Extended Statistics"),
