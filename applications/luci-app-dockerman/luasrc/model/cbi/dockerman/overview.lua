@@ -18,7 +18,12 @@ function byte_format(byte)
   end
 end
 
-local map_dockerman = Map("dockerman", translate("Docker"), translate("DockerMan is a Simple Docker manager client for LuCI, If you have any issue please visit:") .. " ".. [[<a href="https://github.com/lisaac/luci-app-dockerman" target="_blank">]] ..translate("Github") .. [[</a>]])
+local map_dockerman = Map("dockerd", translate("Docker"),
+	translate("DockerMan is a Simple Docker manager client for LuCI, If you have any issue please visit:") ..
+	" " ..
+	[[<a href="https://github.com/lisaac/luci-app-dockerman" target="_blank">]] ..
+	translate("Github") ..
+	[[</a>]])
 local docker_info_table = {}
 -- docker_info_table['0OperatingSystem'] = {_key=translate("Operating System"),_value='-'}
 -- docker_info_table['1Architecture'] = {_key=translate("Architecture"),_value='-'}
@@ -42,7 +47,7 @@ s.images_total = '-'
 s.networks_total = '-'
 s.volumes_total = '-'
 local containers_list
--- local socket = luci.model.uci.cursor():get("dockerman", "local", "socket_path")
+-- local socket = luci.model.uci.cursor():get("dockerd", "globals", "socket_path")
 if (require "luci.model.docker").new():_ping().code == 200 then
   local dk = docker.new()
   containers_list = dk.containers:list({query = {all=true}}).body
@@ -86,9 +91,8 @@ if (require "luci.model.docker").new():_ping().code == 200 then
 end
 s.template = "dockerman/overview"
 
-local section_dockerman = map_dockerman:section(NamedSection, "local", "section", translate("Setting"))
+local section_dockerman = map_dockerman:section(NamedSection, "globals", "section", translate("Setting"))
 section_dockerman:tab("daemon", translate("Docker Daemon"))
-section_dockerman:tab("ac", translate("Access Control"))
 section_dockerman:tab("dockerman",  translate("DockerMan"))
 
 local socket_path = section_dockerman:taboption("dockerman", Value, "socket_path", translate("Docker Socket Path"))
@@ -117,23 +121,31 @@ remote_port.default = "2375"
 -- local debug_path = section_dockerman:taboption("dockerman", Value, "debug_path", translate("Debug Tempfile Path"), translate("Where you want to save the debug tempfile"))
 
 if nixio.fs.access("/usr/bin/dockerd") then
-  local dockerd_enable = section_dockerman:taboption("daemon", Flag, "daemon_ea", translate("Enable"))
-  dockerd_enable.enabled = "true"
-  dockerd_enable.rmempty = true
-  local data_root = section_dockerman:taboption("daemon", Value, "daemon_data_root", translate("Docker Root Dir"))
-  data_root.placeholder = "/opt/docker/"
-  local registry_mirrors = section_dockerman:taboption("daemon", DynamicList, "daemon_registry_mirrors", translate("Registry Mirrors"))
-  registry_mirrors:value("https://hub-mirror.c.163.com", "https://hub-mirror.c.163.com")
+	local o
 
-  local log_level = section_dockerman:taboption("daemon", ListValue, "daemon_log_level", translate("Log Level"), translate('Set the logging level'))
-  log_level:value("debug", "debug")
-  log_level:value("info", "info")
-  log_level:value("warn", "warn")
-  log_level:value("error", "error")
-  log_level:value("fatal", "fatal")
-  local hosts = section_dockerman:taboption("daemon", DynamicList, "daemon_hosts", translate("Server Host"), translate('Daemon unix socket (unix:///var/run/docker.sock) or TCP Remote Hosts (tcp://0.0.0.0:2375), default: unix:///var/run/docker.sock'))
-  hosts:value("unix:///var/run/docker.sock", "unix:///var/run/docker.sock")
-  hosts:value("tcp://0.0.0.0:2375", "tcp://0.0.0.0:2375")
-  hosts.rmempty = true
+	o = section_dockerman:taboption("daemon", Value, "data_root",
+		translate("Docker Root Dir"))
+	o.placeholder = "/opt/docker/"
+
+	o = section_dockerman:taboption("daemon", DynamicList, "registry_mirrors",
+		translate("Registry Mirrors"))
+	o:value("https://hub-mirror.c.163.com", "https://hub-mirror.c.163.com")
+
+	o = section_dockerman:taboption("daemon", ListValue, "log_level",
+		translate("Log Level"),
+		translate('Set the logging level'))
+	o:value("debug", "debug")
+	o:value("info", "info")
+	o:value("warn", "warn")
+	o:value("error", "error")
+	o:value("fatal", "fatal")
+
+	o = section_dockerman:taboption("daemon", DynamicList, "hosts",
+		translate("Server Host"),
+		translate('Daemon unix socket (unix:///var/run/docker.sock) or TCP Remote Hosts (tcp://0.0.0.0:2375), default: unix:///var/run/docker.sock'))
+	o:value("unix:///var/run/docker.sock", "unix:///var/run/docker.sock")
+	o:value("tcp://0.0.0.0:2375", "tcp://0.0.0.0:2375")
+	o.rmempty = true
 end
+
 return map_dockerman

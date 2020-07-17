@@ -16,13 +16,13 @@ function index()
 
   entry({"admin","docker","overview"},cbi("dockerman/overview"),_("Overview"),0).leaf=true
 
-  local remote = luci.model.uci.cursor():get("dockerman", "local", "remote_endpoint")
+  local remote = luci.model.uci.cursor():get("dockerd", "globals", "remote_endpoint")
   if remote ==  nil then
-    local socket = luci.model.uci.cursor():get("dockerman", "local", "socket_path")
+    local socket = luci.model.uci.cursor():get("dockerd", "globals", "socket_path")
     if socket and not nixio.fs.access(socket) then return end
   elseif remote == "true" then
-    local host = luci.model.uci.cursor():get("dockerman", "local", "remote_host")
-    local port = luci.model.uci.cursor():get("dockerman", "local", "remote_port")
+    local host = luci.model.uci.cursor():get("dockerd", "globals", "remote_host")
+    local port = luci.model.uci.cursor():get("dockerd", "globals", "remote_port")
     if not host or not port then return end
   end
 

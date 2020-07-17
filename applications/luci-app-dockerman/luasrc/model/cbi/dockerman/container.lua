@@ -537,10 +537,10 @@ elseif action == "console" then
       luci.util.exec(kill_ttyd)
       local hosts
       local uci = (require "luci.model.uci").cursor()
-      local remote = uci:get("dockerman", "local", "remote_endpoint")
-      local socket_path = (remote == "false" or not remote) and  uci:get("dockerman", "local", "socket_path") or nil
-      local host = (remote == "true") and uci:get("dockerman", "local", "remote_host") or nil
-      local port = (remote == "true") and uci:get("dockerman", "local", "remote_port") or nil
+      local remote = uci:get("dockerd", "globals", "remote_endpoint")
+      local socket_path = (remote == "false" or not remote) and  uci:get("dockerd", "globals", "socket_path") or nil
+      local host = (remote == "true") and uci:get("dockerd", "globals", "remote_host") or nil
+      local port = (remote == "true") and uci:get("dockerd", "globals", "remote_port") or nil
       if remote and host and port then
         hosts = host .. ':'.. port
       elseif socket_path then

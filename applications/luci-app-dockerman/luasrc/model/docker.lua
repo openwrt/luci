@@ -222,22 +222,22 @@ end
 
 _docker.new = function(option)
   local option = option or {}
-  local remote = uci:get("dockerman", "local", "remote_endpoint")
+  local remote = uci:get("dockerd", "globals", "remote_endpoint")
   options = {
-    host = (remote == "true") and (option.host or uci:get("dockerman", "local", "remote_host")) or nil,
-    port = (remote == "true") and (option.port or uci:get("dockerman", "local", "remote_port")) or nil,
-    debug = option.debug or uci:get("dockerman", "local", "debug") == 'true' and true or false,
-    debug_path = option.debug_path or uci:get("dockerman", "local", "debug_path")
+    host = (remote == "true") and (option.host or uci:get("dockerd", "globals", "remote_host")) or nil,
+    port = (remote == "true") and (option.port or uci:get("dockerd", "globals", "remote_port")) or nil,
+    debug = option.debug or uci:get("dockerd", "globals", "debug") == 'true' and true or false,
+    debug_path = option.debug_path or uci:get("dockerd", "globals", "debug_path") or "/tmp/.docker_debug"
   }
-  options.socket_path = (remote ~= "true" or not options.host or not options.port) and (option.socket_path or uci:get("dockerman", "local", "socket_path") or "/var/run/docker.sock") or nil
+  options.socket_path = (remote ~= "true" or not options.host or not options.port) and (option.socket_path or uci:get("dockerd", "globals", "socket_path") or "/var/run/docker.sock") or nil
   local _new = docker.new(options)
-  _new.options.status_path = uci:get("dockerman", "local", "status_path")
+  _new.options.status_path = uci:get("dockerd", "globals", "status_path") or "/tmp/.docker_status"
   _new.containers_upgrade = upgrade
   _new.containers_duplicate_config = duplicate_config
   return _new
 end
 _docker.options={}
-_docker.options.status_path = uci:get("dockerman", "local", "status_path")
+_docker.options.status_path = uci:get("dockerd", "globals", "status_path") or "/tmp/.docker_status"
 
 _docker.append_status=function(self,val)
   if not val then return end
@@ -330,7 +330,7 @@ end
 
 _docker.create_macvlan_interface = function(name, device, gateway, subnet)
   if not nixio.fs.access("/etc/config/network") or not nixio.fs.access("/etc/config/firewall") then return end
-  if uci:get("dockerman", "local", "remote_endpoint") == "true" then return end
+  if uci:get("dockerd", "globals", "remote_endpoint") == "true" then return end
   local ip = require "luci.ip"
   local if_name = "docker_"..name
   local dev_name = "macvlan_"..name
@@ -371,7 +371,7 @@ end
 
 _docker.remove_macvlan_interface = function(name)
   if not nixio.fs.access("/etc/config/network") or not nixio.fs.access("/etc/config/firewall") then return end
-  if uci:get("dockerman", "local", "remote_endpoint") == "true" then return end
+  if uci:get("dockerd", "globals", "remote_endpoint") == "true" then return end
   local if_name = "docker_"..name
   local dev_name = "macvlan_"..name
   uci:foreach("firewall", "zone", function(s)
