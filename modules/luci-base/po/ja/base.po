@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-06-10 03:40+0200\n"
-"PO-Revision-Date: 2020-06-17 18:41+0000\n"
-"Last-Translator: Satoru Yoshida <ramat@ram.ne.jp>\n"
+"PO-Revision-Date: 2020-06-27 14:41+0000\n"
+"Last-Translator: INAGAKI Hiroshi <musashino.open@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/openwrt/luci/ja/"
 ">\n"
 "Language: ja\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.1.1-dev\n"
+"X-Generator: Weblate 4.2-dev\n"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:913
 msgid "%.1f dB"
@@ -23,7 +23,7 @@ msgstr "%.1f dB"
 msgid "%d Bit"
 msgstr "%d ビット"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:3645
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3651
 msgid "%d invalid field(s)"
 msgstr "無効な入力欄: %d 個"
 
@@ -560,7 +560,7 @@ msgstr ""
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:588
 msgid "An error occurred while saving the form:"
-msgstr ""
+msgstr "フォームの保存中にエラーが発生:"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:874
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:20
@@ -660,16 +660,16 @@ msgstr "全てのゾーン"
 msgid "Apply backup?"
 msgstr "バックアップの適用"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4232
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4238
 msgid "Apply request failed with status <code>%h</code>"
 msgstr "適用リクエストはステータス <code>%h</code> で失敗しました"
 
 #: modules/luci-base/htdocs/luci-static/resources/luci.js:2165
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4098
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4104
 msgid "Apply unchecked"
 msgstr "チェック無しの適用"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4171
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4177
 msgid "Applying configuration changes… %ds"
 msgstr "設定を適用中です… %d 秒"
 
@@ -896,7 +896,7 @@ msgid "Bring up on boot"
 msgstr "デフォルトで起動する"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2772
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:3755
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3761
 msgid "Browse…"
 msgstr "参照…"
 
@@ -927,7 +927,7 @@ msgid "Call failed"
 msgstr "呼び出しに失敗しました"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2865
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:3764
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3770
 #: modules/luci-compat/luasrc/view/cbi/delegator.htm:14
 #: modules/luci-compat/luasrc/view/cbi/simpleform.htm:52
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:185
@@ -945,19 +945,19 @@ msgstr "カテゴリー"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1492
 msgid "Certificate constraint (Domain)"
-msgstr ""
+msgstr "証明書制限（ドメイン）"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1489
 msgid "Certificate constraint (SAN)"
-msgstr ""
+msgstr "証明書制限（SAN）"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1486
 msgid "Certificate constraint (Subject)"
-msgstr ""
+msgstr "証明書制限（サブジェクト）"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1495
 msgid "Certificate constraint (Wildcard)"
-msgstr ""
+msgstr "証明書制限（ワイルドカード）"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1486
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1532
@@ -965,6 +965,8 @@ msgid ""
 "Certificate constraint substring - e.g. /CN=wifi.mycompany.com<br />See "
 "`logread -f` during handshake for actual values"
 msgstr ""
+"サブジェクト内の項目によって証明書の制限を行います。（例: /CN=wifi.mycompany."
+"com）<br />実際の値は `logread -f`をハンドシェイク中に確認してください。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1492
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1538
@@ -986,6 +988,8 @@ msgid ""
 "Certificate constraint(s) via Subject Alternate Name values<br />(supported "
 "attributes: EMAIL, DNS, URI) - e.g. DNS:wifi.mycompany.com"
 msgstr ""
+"サブジェクト代替名によって証明書の制限を行います。<br />サポートされる属性: "
+"EMAIL, DNS, URI（例: DNS:wifi.mycompany.com）"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:53
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:56
@@ -993,11 +997,11 @@ msgstr ""
 msgid "Chain"
 msgstr "チェイン"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:3984
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3990
 msgid "Changes"
 msgstr "変更"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4267
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4273
 msgid "Changes have been reverted."
 msgstr "変更は取り消されました。"
 
@@ -1152,16 +1156,16 @@ msgstr ""
 "この回避策は、相互運用性の問題や、特に高負荷のトラフィック環境下におけるキー "
 "ネゴシエーションの信頼性低下の原因となることがあります。"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:3984
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3990
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:418
 msgid "Configuration"
 msgstr "設定"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4146
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4152
 msgid "Configuration changes applied."
 msgstr "設定が適用されました。"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4084
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4090
 msgid "Configuration changes have been rolled back!"
 msgstr "設定はロールバックされました！"
 
@@ -1208,7 +1212,7 @@ msgstr "内容が保存されました。"
 msgid "Continue"
 msgstr "続行"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4120
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4126
 msgid ""
 "Could not regain access to the device after applying the configuration "
 "changes. You might need to reconnect if you modified network related "
@@ -1498,7 +1502,7 @@ msgstr "デバイスがアクティブではありません"
 msgid "Device is restarting…"
 msgstr "デバイスを再起動中…"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4119
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4125
 msgid "Device unreachable!"
 msgstr "デバイスに到達できません！"
 
@@ -1582,9 +1586,9 @@ msgstr "切断の試行が失敗しました"
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:591
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2692
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:3265
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4001
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4090
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3271
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4007
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4096
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1649
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:328
 msgid "Dismiss"
@@ -2000,7 +2004,7 @@ msgstr "FT プロトコル"
 msgid "Failed to change the system password."
 msgstr "システム パスワードの変更に失敗しました。"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4078
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4084
 msgid "Failed to confirm apply within %ds, waiting for rollback…"
 msgstr "%d 秒以内の適用を確認できませんでした。ロールバック中です…"
 
@@ -2705,6 +2709,8 @@ msgid ""
 "Instead of joining any network with a matching SSID, only connect to the "
 "BSSID <code>%h</code>."
 msgstr ""
+"一致した SSID のネットワークへの参加に代わり、 BSSID <code>%h</code> にのみ接"
+"続します。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:462
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:469
@@ -2962,7 +2968,7 @@ msgstr "空欄の場合、自動検知を行います"
 msgid "Leave empty to use the current WAN address"
 msgstr "空欄の場合、現在のWANアドレスを使用します"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:3986
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3992
 msgid "Legend:"
 msgstr "凡例:"
 
@@ -3146,7 +3152,7 @@ msgstr "ローカライズクエリ"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1899
 msgid "Lock to BSSID"
-msgstr ""
+msgstr "BSSID へのロック"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:162
 msgid "Log output level"
@@ -3490,7 +3496,7 @@ msgid "NTP server candidates"
 msgstr "NTPサーバー候補"
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2373
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:3741
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3747
 #: modules/luci-compat/luasrc/view/cbi/tblsection.htm:27
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:708
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:50
@@ -3599,7 +3605,7 @@ msgstr "パスワードが設定されていません!"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:105
 msgid "No peers defined yet"
-msgstr ""
+msgstr "ピアはまだ定義されていません"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:118
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:259
@@ -3778,11 +3784,11 @@ msgstr "オプション \"%s\" には無効な入力値が含まれています�
 msgid "Option \"%s\" must not be empty."
 msgstr "オプション \"%s\" を入力してください。"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:3993
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3999
 msgid "Option changed"
 msgstr "変更されるオプション"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:3995
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4001
 msgid "Option removed"
 msgstr "削除されるオプション"
 
@@ -4094,7 +4100,7 @@ msgstr "秘密鍵のパス"
 
 #: modules/luci-base/htdocs/luci-static/resources/luci.js:2706
 msgid "Paused"
-msgstr ""
+msgstr "一時停止"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/bandwidth.js:271
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/bandwidth.js:281
@@ -4170,7 +4176,7 @@ msgstr "パケット"
 msgid "Please enter your username and password."
 msgstr "ユーザー名とパスワードを入力してください。"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:3724
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3730
 msgid "Please select the file to upload."
 msgstr "アップロードするファイルを選択してください。"
 
@@ -4516,7 +4522,7 @@ msgstr "hostapd が必要"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1231
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1232
 msgid "Requires hostapd with EAP Suite-B support"
-msgstr ""
+msgstr "EAP Suite-B サポートを含む hostapd が必要"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1229
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1230
@@ -4560,7 +4566,7 @@ msgstr "wpa-supplicant が必要"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1245
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1246
 msgid "Requires wpa-supplicant with EAP Suite-B support"
-msgstr ""
+msgstr "EAP Suite-B サポートを含む wpa-supplicant が必要"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1243
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1244
@@ -4632,19 +4638,19 @@ msgstr "バックアップから復元する"
 msgid "Reveal/hide password"
 msgstr "パスワードを表示する/隠す"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4009
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4015
 msgid "Revert"
 msgstr "元に戻す"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4094
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4100
 msgid "Revert changes"
 msgstr "変更の取り消し"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4276
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4282
 msgid "Revert request failed with status <code>%h</code>"
 msgstr "取り消しのリクエストはステータス <code>%h</code> で失敗しました"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4256
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4262
 msgid "Reverting configuration…"
 msgstr "設定を元に戻しています…"
 
@@ -4760,7 +4766,7 @@ msgid "Save"
 msgstr "保存"
 
 #: modules/luci-base/htdocs/luci-static/resources/luci.js:2164
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4005
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4011
 #: modules/luci-compat/luasrc/view/cbi/footer.htm:22
 msgid "Save & Apply"
 msgstr "保存 & 適用"
@@ -4786,11 +4792,11 @@ msgstr "スキャン"
 msgid "Scheduled Tasks"
 msgstr "スケジュールタスク"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:3989
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3995
 msgid "Section added"
 msgstr "追加されるセクション"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:3991
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3997
 msgid "Section removed"
 msgstr "削除されるセクション"
 
@@ -4928,7 +4934,7 @@ msgstr ""
 msgid "Signal:"
 msgstr "信号:"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:3742
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3748
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:215
 msgid "Size"
 msgstr "サイズ"
@@ -5054,7 +5060,7 @@ msgstr "優先順位"
 msgid "Start refresh"
 msgstr "リフレッシュを開始"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4209
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4215
 msgid "Starting configuration apply…"
 msgstr "設定の適用を開始しています…"
 
@@ -5293,7 +5299,7 @@ msgstr ""
 msgid "The configuration file could not be loaded due to the following error:"
 msgstr "設定ファイルは以下のエラーにより読み込めませんでした:"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4085
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4091
 msgid ""
 "The device could not be reached within %d seconds after applying the pending "
 "changes, which caused the configuration to be rolled back for safety "
@@ -5485,7 +5491,7 @@ msgstr ""
 msgid "There are no active leases"
 msgstr "アクティブなリースはありません"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4224
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4230
 msgid "There are no changes to apply"
 msgstr "適用する変更はありません"
 
@@ -5813,7 +5819,7 @@ msgstr "アンマウント"
 msgid "Unnamed key"
 msgstr "名称未設定の公開鍵"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:3929
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3935
 msgid "Unsaved Changes"
 msgstr "保存されていない変更"
 
@@ -5839,7 +5845,7 @@ msgstr "サポートされていないプロトコルタイプ"
 msgid "Up"
 msgstr "上へ"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:3816
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3822
 msgid "Upload"
 msgstr "アップロード"
 
@@ -5865,12 +5871,12 @@ msgid "Upload file…"
 msgstr "ファイルをアップロード…"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2700
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:3804
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3810
 msgid "Upload request failed: %s"
 msgstr "アップロード リクエスト失敗: %s"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:3723
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:3777
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3729
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3783
 msgid "Uploading file…"
 msgstr "ファイルのアップロード…"
 
