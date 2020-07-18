@@ -10,6 +10,11 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Weblate 4.0-dev\n"
 
+#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:141
+#: applications/luci-app-unbound/luasrc/model/cbi/unbound/zone-details.lua:53
+msgid "(none)"
+msgstr ""
+
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/zones.lua:96
 msgid "(root)"
 msgstr "（根）"
@@ -38,7 +43,7 @@ msgstr ""
 msgid "Advanced"
 msgstr "進階"
 
-#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:245
+#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:243
 msgid "Aggressive"
 msgstr "激進"
 
@@ -54,7 +59,7 @@ msgstr "權威（區域檔案）"
 msgid "Basic"
 msgstr "基本"
 
-#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:250
+#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:248
 msgid "Break down query components for limited added privacy"
 msgstr "細分查詢元件以增加有限的隱私"
 
@@ -62,15 +67,19 @@ msgstr "細分查詢元件以增加有限的隱私"
 msgid "Break the loop where DNSSEC needs NTP and NTP needs DNS"
 msgstr "打破 DNSSEC 需要 NTP，NTP 又需要 DNS 的迴圈"
 
+#: applications/luci-app-unbound/luasrc/model/cbi/unbound/zone-details.lua:52
+msgid "Check for local program to allow forward to localhost"
+msgstr ""
+
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:83
 msgid "Choose Unbounds listening port"
 msgstr "選擇 Unbounds 監聽埠"
 
-#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:221
+#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:219
 msgid "Chose the IP versions used upstream and downstream"
 msgstr "選擇上游和下游使用的 IP 版本"
 
-#: applications/luci-app-unbound/luasrc/model/cbi/unbound/zone-details.lua:56
+#: applications/luci-app-unbound/luasrc/model/cbi/unbound/zone-details.lua:64
 msgid "Connect to servers using TLS"
 msgstr "使用 TLS 連線到伺服器"
 
@@ -90,7 +99,11 @@ msgstr "DHCPv4 到 SLAAC"
 msgid "DNS Cache"
 msgstr ""
 
-#: applications/luci-app-unbound/luasrc/model/cbi/unbound/zone-details.lua:55
+#: applications/luci-app-unbound/luasrc/model/cbi/unbound/zone-details.lua:51
+msgid "DNS Plugin"
+msgstr ""
+
+#: applications/luci-app-unbound/luasrc/model/cbi/unbound/zone-details.lua:63
 msgid "DNS over TLS"
 msgstr "DNS over TLS"
 
@@ -102,13 +115,13 @@ msgstr "DNS64 字首"
 msgid "DNSSEC NTP Fix"
 msgstr "DNSSEC NTP 修復"
 
-#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:222
-#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:233
-#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:243
+#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:220
+#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:231
+#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:241
 msgid "Default"
 msgstr "預設"
 
-#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:164
+#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:162
 msgid "Denied (nxdomain)"
 msgstr "否認（nxdomain）"
 
@@ -116,7 +129,7 @@ msgstr "否認（nxdomain）"
 msgid "Directed Zone"
 msgstr "轉移區域"
 
-#: applications/luci-app-unbound/luasrc/model/cbi/unbound/zone-details.lua:77
+#: applications/luci-app-unbound/luasrc/model/cbi/unbound/zone-details.lua:85
 msgid "Directory only part of URL"
 msgstr "目錄只是 URL 的一部分"
 
@@ -124,7 +137,7 @@ msgstr "目錄只是 URL 的一部分"
 msgid "Domain Insecure"
 msgstr "域不安全"
 
-#: applications/luci-app-unbound/luasrc/model/cbi/unbound/zone-details.lua:72
+#: applications/luci-app-unbound/luasrc/model/cbi/unbound/zone-details.lua:80
 msgid "Domain name to verify TLS certificate"
 msgstr "用於驗證 TLS 證書的域名"
 
@@ -132,7 +145,7 @@ msgstr "用於驗證 TLS 證書的域名"
 msgid "Domain suffix for this router and DHCP clients"
 msgstr "此路由器和 DHCP 客戶端的域名字尾"
 
-#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:262
+#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:260
 msgid "EDNS Size"
 msgstr "EDNS 大小"
 
@@ -187,7 +200,7 @@ msgstr "啟用 DNSSEC"
 msgid "Enable Unbound"
 msgstr "啟用 Unbound"
 
-#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:211
+#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:209
 msgid "Enable access for unbound-control"
 msgstr "啟用 unbound-control 訪問"
 
@@ -211,15 +224,15 @@ msgstr "啟用此轉移區域"
 msgid "Enabled"
 msgstr "啟用"
 
-#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:274
+#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:278
 msgid "Extended Statistics"
 msgstr "擴充套件統計"
 
-#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:275
+#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:279
 msgid "Extended statistics are printed from unbound-control"
 msgstr "擴充套件統計資訊從 unbound-control 列印"
 
-#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:196
+#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:194
 msgid "Extra DNS"
 msgstr "額外的 DNS"
 
@@ -263,7 +276,7 @@ msgstr "轉發（簡單切換）"
 msgid "Forward TLS"
 msgstr "轉發 TLS"
 
-#: applications/luci-app-unbound/luasrc/model/cbi/unbound/zone-details.lua:52
+#: applications/luci-app-unbound/luasrc/model/cbi/unbound/zone-details.lua:60
 msgid "Forward to upstream nameservers (ISP)"
 msgstr "轉發到上游名稱伺服器（ISP）"
 
@@ -271,84 +284,84 @@ msgstr "轉發到上游名稱伺服器（ISP）"
 msgid "Grant UCI access for luci-app-unbound"
 msgstr ""
 
-#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:178
-#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:190
+#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:176
+#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:188
 msgid "Host FQDN, All Addresses"
 msgstr "主機 FQDN，所有地址"
 
-#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:200
+#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:198
 msgid "Host Records"
 msgstr "主機記錄"
 
-#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:201
+#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:199
 msgid "Host/MX/SRV RR"
 msgstr "主機/MX/SRV RR"
 
-#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:202
+#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:200
 msgid "Host/MX/SRV/CNAME RR"
 msgstr "主機/MX/SRV/CNAME RR"
 
-#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:177
-#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:189
+#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:175
+#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:187
 msgid "Hostname, All Addresses"
 msgstr "主機名，所有地址"
 
-#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:176
-#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:188
+#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:174
+#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:186
 msgid "Hostname, Primary Address"
 msgstr "主機名，主要地址"
 
-#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:173
+#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:171
 msgid "How to enter the LAN or local network router in DNS"
 msgstr "如何在 DNS 中進入 LAN 或本地網路路由器"
 
-#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:162
+#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:160
 msgid "How to treat queries of this local domain"
 msgstr "如何處理此本地域的查詢"
 
-#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:224
+#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:222
 msgid "IP4 All and IP6 Local"
 msgstr "所有 IP4 及本地 IP6"
 
-#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:223
+#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:221
 msgid "IP4 Only"
 msgstr "僅 IP4"
 
-#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:227
+#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:225
 msgid "IP4 and IP6"
 msgstr "IP4 及 IP6"
 
-#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:225
+#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:223
 msgid "IP6 Only*"
 msgstr "僅 IP6*"
 
-#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:226
+#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:224
 msgid "IP6 Preferred"
 msgstr "首選 IP6"
 
-#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:199
+#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:197
 msgid "Ignore"
 msgstr "忽視"
 
-#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:179
-#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:191
+#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:177
+#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:189
 msgid "Interface FQDN, All Addresses"
 msgstr "介面 FQDN，所有地址"
 
-#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:172
+#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:170
 msgid "LAN DNS"
 msgstr "區域網 DNS"
 
-#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:237
+#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:235
 msgid "Large"
 msgstr "大"
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:120
-#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:281
+#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:285
 msgid "Limit days between RFC5011 copies to reduce flash writes"
 msgstr "限制 RFC5011 副本之間的天數，以減少快閃記憶體寫入"
 
-#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:263
+#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:261
 msgid "Limit extended DNS packet size"
 msgstr "限制擴充套件 DNS 資料包大小"
 
@@ -372,15 +385,15 @@ msgstr "本地資料"
 msgid "Local Domain"
 msgstr "本地域名"
 
-#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:161
+#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:159
 msgid "Local Domain Type"
 msgstr "本地域名型別"
 
-#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:215
+#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:213
 msgid "Local Host, Encrypted"
 msgstr "本地主機，加密"
 
-#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:214
+#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:212
 msgid "Local Host, No Encryption"
 msgstr "本地主機，無加密"
 
@@ -388,11 +401,11 @@ msgstr "本地主機，無加密"
 msgid "Local Service"
 msgstr "本地服務"
 
-#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:216
+#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:214
 msgid "Local Subnet, Encrypted"
 msgstr "本地子網，加密"
 
-#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:217
+#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:215
 msgid "Local Subnet, Static Encryption"
 msgstr "本地子網，靜態加密"
 
@@ -408,20 +421,20 @@ msgstr "日誌"
 msgid "Manual Conf"
 msgstr "手動配置"
 
-#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:236
+#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:234
 msgid "Medium"
 msgstr "中等"
 
-#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:231
+#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:229
 msgid "Memory Resource"
 msgstr "記憶體資源"
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:130
-#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:291
+#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:295
 msgid "Networks that may trigger Unbound to reload (avoid wan6)"
 msgstr "可觸發 Unbound 重新載入的網路（避免 wan6）"
 
-#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:175
+#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:173
 msgid "No Entry"
 msgstr "無條目"
 
@@ -429,11 +442,7 @@ msgstr "無條目"
 msgid "No Filter"
 msgstr "無過濾器"
 
-#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:141
-msgid "No Link"
-msgstr "無連結"
-
-#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:213
+#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:211
 msgid "No Remote Control"
 msgstr "無遠端控制"
 
@@ -455,16 +464,16 @@ msgid ""
 msgstr ""
 "組織轉移轉發、存根和權威區域<a href=\"%s\" target=\"_blank\">（幫助）</a>。"
 
-#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:185
+#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:183
 msgid "Override the WAN side router entry in DNS"
 msgstr "覆蓋路由器中的 WAN 端 DNS 條目"
 
-#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:244
+#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:242
 msgid "Passive"
 msgstr "被動"
 
-#: applications/luci-app-unbound/luasrc/model/cbi/unbound/zone-details.lua:60
-#: applications/luci-app-unbound/luasrc/model/cbi/unbound/zone-details.lua:66
+#: applications/luci-app-unbound/luasrc/model/cbi/unbound/zone-details.lua:68
+#: applications/luci-app-unbound/luasrc/model/cbi/unbound/zone-details.lua:74
 msgid "Port servers will receive queries on"
 msgstr "伺服器將接收查詢的埠"
 
@@ -472,7 +481,11 @@ msgstr "伺服器將接收查詢的埠"
 msgid "Prefix for generated DNS64 addresses"
 msgstr "生成 DNS64 地址的字首"
 
-#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:269
+#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:273
+msgid "Prevent client query overload; zero is off"
+msgstr ""
+
+#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:267
 msgid "Prevent excessively short cache periods"
 msgstr "防止快取期過短"
 
@@ -484,23 +497,27 @@ msgstr "防止 127.0.0.0/8 的上游響應"
 msgid "Protect against upstream responses within local subnets"
 msgstr "防止本地子網內的上游響應"
 
-#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:249
+#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:247
 msgid "Query Minimize"
 msgstr "最小化查詢"
+
+#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:272
+msgid "Query Rate Limit"
+msgstr ""
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/zones.lua:75
 msgid "Recurse"
 msgstr "遞迴"
 
-#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:220
+#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:218
 msgid "Recursion Protocol"
 msgstr "遞迴協議"
 
-#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:241
+#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:239
 msgid "Recursion Strength"
 msgstr "遞迴強度"
 
-#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:242
+#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:240
 msgid "Recursion activity affects memory growth and CPU load"
 msgstr "遞迴活動會增大記憶體使用和 CPU 負載"
 
@@ -509,7 +526,7 @@ msgstr "遞迴活動會增大記憶體使用和 CPU 負載"
 msgid "Recursive DNS"
 msgstr "遞迴 DNS"
 
-#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:165
+#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:163
 msgid "Refused"
 msgstr "拒絕"
 
@@ -518,7 +535,7 @@ msgid "Resource"
 msgstr "資源"
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:119
-#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:280
+#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:284
 msgid "Root DSKEY Age"
 msgstr "Root DSKEY 年齡"
 
@@ -529,11 +546,11 @@ msgstr "Root DSKEY 年齡"
 msgid "Save"
 msgstr "儲存"
 
-#: applications/luci-app-unbound/luasrc/model/cbi/unbound/zone-details.lua:59
+#: applications/luci-app-unbound/luasrc/model/cbi/unbound/zone-details.lua:67
 msgid "Server Port"
 msgstr "伺服器埠"
 
-#: applications/luci-app-unbound/luasrc/model/cbi/unbound/zone-details.lua:65
+#: applications/luci-app-unbound/luasrc/model/cbi/unbound/zone-details.lua:73
 msgid "Server TLS Port"
 msgstr "伺服器 TLS 埠"
 
@@ -562,11 +579,11 @@ msgstr "顯示：Unbound"
 msgid "Skip UCI and use /etc/unbound/unbound.conf"
 msgstr "跳過 UCI 並使用 /etc/unbound/unbound.conf"
 
-#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:235
+#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:233
 msgid "Small"
 msgstr "小"
 
-#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:166
+#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:164
 msgid "Static (local only)"
 msgstr "靜態（僅限本地）"
 
@@ -579,11 +596,11 @@ msgstr "統計"
 msgid "Status"
 msgstr "狀態"
 
-#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:256
+#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:254
 msgid "Strict Minimize"
 msgstr "嚴格最小化"
 
-#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:257
+#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:255
 msgid "Strict version of 'query minimize' but it can break DNS"
 msgstr "嚴格版本的“最小化查詢”，但會破壞 DNS 標準"
 
@@ -591,11 +608,11 @@ msgstr "嚴格版本的“最小化查詢”，但會破壞 DNS 標準"
 msgid "Stub (forced recursion)"
 msgstr "存根（強制遞迴）"
 
-#: applications/luci-app-unbound/luasrc/model/cbi/unbound/zone-details.lua:71
+#: applications/luci-app-unbound/luasrc/model/cbi/unbound/zone-details.lua:79
 msgid "TLS Name Index"
 msgstr "TLS 名稱索引"
 
-#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:268
+#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:266
 msgid "TTL Minimum"
 msgstr "最小 TTL"
 
@@ -632,16 +649,16 @@ msgstr "顯示 Unbound 自我報告的效能統計資訊。"
 msgid "This shows syslog filtered for events involving Unbound."
 msgstr "顯示篩選出的涉及 Unbound 事件的 syslog。"
 
-#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:234
+#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:232
 msgid "Tiny"
 msgstr "小"
 
-#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:167
+#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:165
 msgid "Transparent (local/global)"
 msgstr "透明（本地/全球）"
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:129
-#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:290
+#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:294
 msgid "Trigger Networks"
 msgstr "觸發網路"
 
@@ -662,7 +679,7 @@ msgstr ""
 "Unbound <a href=\"%s\" target=\"_blank\">(NLnet Labs)</a>是一個驗證、遞迴和緩"
 "存 DNS 解析器<a href=\"%s\" target=\"_blank\">（幫助）</a>。"
 
-#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:210
+#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:208
 msgid "Unbound Control App"
 msgstr "Unbound 控制應用程式"
 
@@ -674,7 +691,7 @@ msgstr ""
 msgid "Undefined"
 msgstr "未定義"
 
-#: applications/luci-app-unbound/luasrc/model/cbi/unbound/zone-details.lua:51
+#: applications/luci-app-unbound/luasrc/model/cbi/unbound/zone-details.lua:59
 msgid "Use 'resolv.conf.auto'"
 msgstr "使用“resolv.conf.auto”"
 
@@ -682,19 +699,19 @@ msgstr "使用“resolv.conf.auto”"
 msgid "Use DHCPv4 MAC to discover IP6 hosts SLAAC (EUI64)"
 msgstr "使用 DHCPv4 MAC 發現 IP6 主機 SLAAC（EUI64）"
 
-#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:187
+#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:185
 msgid "Use Upstream"
 msgstr "使用上游"
 
-#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:197
+#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:195
 msgid "Use extra DNS entries found in /etc/config/dhcp"
 msgstr "使用 /etc/config/dhcp 中的額外 DNS 條目"
 
-#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:232
+#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:230
 msgid "Use menu System/Processes to observe any memory growth"
 msgstr "使用 系統/程序 選單觀察記憶體增長"
 
-#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:184
+#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:182
 msgid "WAN DNS"
 msgstr "WAN DNS"
 
@@ -702,7 +719,7 @@ msgstr "WAN DNS"
 msgid "Zone (Domain) names included in this zone combination"
 msgstr "包含在此區域組合中的區域（域）名稱"
 
-#: applications/luci-app-unbound/luasrc/model/cbi/unbound/zone-details.lua:76
+#: applications/luci-app-unbound/luasrc/model/cbi/unbound/zone-details.lua:84
 msgid "Zone Download URL"
 msgstr "區域下載 URL"
 
@@ -724,7 +741,7 @@ msgid "accept upstream results for"
 msgstr "接受上游結果"
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:123
-#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:284
+#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:288
 msgid "default"
 msgstr "預設"
 
@@ -733,7 +750,7 @@ msgid "download from <var>%s</var>"
 msgstr "從 <var>%s</var> 下載"
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:126
-#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:287
+#: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:291
 msgid "never"
 msgstr "從不"
 
@@ -760,6 +777,9 @@ msgstr "使用名稱伺服器"
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/zones.lua:165
 msgid "with default certificate for <var>%s</var>"
 msgstr "使用 <var>%s</var> 的預設證書"
+
+#~ msgid "No Link"
+#~ msgstr "無連結"
 
 #~ msgid "Adblock domain list '"
 #~ msgstr "Adblock 域名列表'"
