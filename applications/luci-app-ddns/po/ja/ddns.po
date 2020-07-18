@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: luci-app-ddns 2.4.0-1\n"
 "POT-Creation-Date: 2016-01-30 11:07+0100\n"
-"PO-Revision-Date: 2020-06-19 10:06+0000\n"
+"PO-Revision-Date: 2020-06-27 14:41+0000\n"
 "Last-Translator: Satoru Yoshida <ramat@ram.ne.jp>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsddns/ja/>\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.1.1\n"
+"X-Generator: Weblate 4.2-dev\n"
 
 msgid "&"
 msgstr ""
@@ -26,7 +26,7 @@ msgid "Advanced Settings"
 msgstr "詳細設定"
 
 msgid "Allow non-public IP's"
-msgstr ""
+msgstr "非公開の IP を許可"
 
 msgid "Applying changes"
 msgstr ""
@@ -44,25 +44,31 @@ msgid ""
 msgstr ""
 
 msgid "Bind Network"
-msgstr ""
+msgstr "ネットワークをバインド"
 
 msgid "Binding to a specific network not supported"
-msgstr ""
+msgstr "特定のネットワークへのバインドはサポートされていません"
 
 msgid ""
 "BusyBox's nslookup and Wget do not support to specify the IP version to use "
 "for communication with DDNS Provider!"
 msgstr ""
+"BusyBox の nslookup と wget は、DDNS プロバイダーとの通信に使用する IP のバー"
+"ジョン指定をサポートしていません。"
 
 msgid ""
 "BusyBox's nslookup and hostip do not support to specify to use TCP instead "
 "of default UDP when requesting DNS server!"
 msgstr ""
+"BusyBox の nslookup と hostip は、DNSサーバーをリクエストする際にデフォルト"
+"の UDP の代わりに TCP を使用する指定をサポートしていません。"
 
 msgid ""
 "BusyBox's nslookup in the current compiled version does not handle given DNS "
 "Servers correctly!"
 msgstr ""
+"現在のコンパイル済バージョンの BusyBox の nslookup は、指定された DNS サー"
+"バーを正しく処理しません。"
 
 msgid "Casual users should not change this setting"
 msgstr ""
@@ -71,7 +77,7 @@ msgid "Change provider"
 msgstr ""
 
 msgid "Check Interval"
-msgstr ""
+msgstr "チェック間隔"
 
 msgid "Collecting data..."
 msgstr ""
@@ -86,6 +92,8 @@ msgid ""
 "Configure here the details for all Dynamic DNS services including this LuCI "
 "application."
 msgstr ""
+"ここでは、この LuCI アプリケーションを含むすべての DDNS サービスの詳細を構成"
+"します。"
 
 msgid "Configure here the details for selected Dynamic DNS service."
 msgstr ""
@@ -105,16 +113,16 @@ msgid ""
 msgstr ""
 
 msgid "Custom update script to be used for updating your DDNS Provider."
-msgstr ""
+msgstr "DDNS プロバイダーの更新に使用するカスタム更新スクリプトです。"
 
 msgid "Custom update-URL"
 msgstr "手動アップデート-URL"
 
 msgid "Custom update-script"
-msgstr ""
+msgstr "カスタム更新スクリプト"
 
 msgid "DDNS Autostart disabled"
-msgstr ""
+msgstr "DDNS 自動開始が無効"
 
 msgid "DDNS Client Configuration"
 msgstr ""
@@ -123,16 +131,16 @@ msgid "DDNS Client Documentation"
 msgstr ""
 
 msgid "DDNS Service provider"
-msgstr ""
+msgstr "DDNS サービス・プロバイダー"
 
 msgid "DNS requests via TCP not supported"
-msgstr ""
+msgstr "TCP 経由の DNS リクエストはサポートされていません"
 
 msgid "DNS-Server"
-msgstr ""
+msgstr "DNS サーバー"
 
 msgid "Date format"
-msgstr ""
+msgstr "日付形式"
 
 msgid "Defines the Web page to read systems IPv4-Address from"
 msgstr ""
@@ -141,7 +149,7 @@ msgid "Defines the Web page to read systems IPv6-Address from"
 msgstr ""
 
 msgid "Defines the interface to read systems IP-Address from"
-msgstr ""
+msgstr "システムの IP アドレス読み取り元のインターフェースを定義 :"
 
 msgid "Defines the network to read systems IPv4-Address from"
 msgstr ""
@@ -160,7 +168,7 @@ msgid ""
 msgstr ""
 
 msgid "Defines which IP address 'IPv4/IPv6' is send to the DDNS provider"
-msgstr ""
+msgstr "DDNS プロバイダーに送信される IP アドレス「IPv4/IPv6」を定義"
 
 msgid "Details for"
 msgstr ""
@@ -176,7 +184,7 @@ msgid "Disabled"
 msgstr "無効"
 
 msgid "Domain"
-msgstr ""
+msgstr "ドメイン"
 
 msgid "Dynamic DNS"
 msgstr "ダイナミックDNS"
@@ -189,7 +197,7 @@ msgstr ""
 "てルーターにアクセスすることができます。"
 
 msgid "Enable secure communication with DDNS provider"
-msgstr ""
+msgstr "DDNS プロバイダーとの安全な通信を有効にする"
 
 msgid "Enabled"
 msgstr "有効"
@@ -198,10 +206,10 @@ msgid "Error"
 msgstr "エラー"
 
 msgid "Error Retry Counter"
-msgstr ""
+msgstr "エラー再試行カウンター"
 
 msgid "Error Retry Interval"
-msgstr ""
+msgstr "エラー再試行間隔"
 
 msgid "Event Network"
 msgstr ""
@@ -221,10 +229,10 @@ msgid ""
 msgstr ""
 
 msgid "For detailed information about parameter settings look here."
-msgstr ""
+msgstr "パラメーター設定について詳しくはこちらをご覧ください。"
 
 msgid "For supported codes look here"
-msgstr ""
+msgstr "サポートされているコードについては、こちらをご覧ください"
 
 msgid "Force IP Version"
 msgstr ""
@@ -236,27 +244,29 @@ msgid "Force Interval"
 msgstr ""
 
 msgid "Force TCP on DNS"
-msgstr ""
+msgstr "DNS で TCP を強制"
 
 msgid "Forced IP Version don't matched"
 msgstr ""
 
 msgid "Format"
-msgstr ""
+msgstr "形式"
 
 msgid "Format: IP or FQDN"
-msgstr ""
+msgstr "形式: IP または FQDN"
 
 msgid ""
 "GNU Wget will use the IP of given network, cURL will use the physical "
 "interface."
 msgstr ""
+"GNU wget は指定されたネットワークの IP を使用し、cURL は物理インターフェース"
+"を使用します。"
 
 msgid "Global Settings"
 msgstr ""
 
 msgid "HTTPS not supported"
-msgstr ""
+msgstr "HTTPS はサポートされていません"
 
 msgid "Hints"
 msgstr ""
@@ -268,7 +278,7 @@ msgid "IP address source"
 msgstr ""
 
 msgid "IP address version"
-msgstr ""
+msgstr "IP アドレスのバージョン"
 
 msgid "IPv4-Address"
 msgstr "IPv4 アドレス"
@@ -283,7 +293,7 @@ msgid ""
 msgstr ""
 
 msgid "IPv6 not supported"
-msgstr ""
+msgstr "IPv6 はサポートされていません"
 
 msgid "IPv6-Address"
 msgstr "IPv6 アドレス"
@@ -295,9 +305,11 @@ msgid ""
 "If this service section is disabled it could not be started.<br />Neither "
 "from LuCI interface nor from console"
 msgstr ""
+"このサービス・セクションが無効の場合、<br />LuCI インターフェースおよびコン"
+"ソールのどちらからも開始できません"
 
 msgid "If using secure communication you should verify server certificates!"
-msgstr ""
+msgstr "安全な通信を使用する場合は、サーバー証明書を検証する必要があります。"
 
 msgid ""
 "If you want to send updates for IPv4 and IPv6 you need to define two "
@@ -307,6 +319,8 @@ msgstr ""
 msgid ""
 "In some versions cURL/libcurl in OpenWrt is compiled without proxy support."
 msgstr ""
+"一部のバージョンでは、OpenWrt の cURL/libcurl は、プロキシ・サポートなしでコ"
+"ンパイルされます。"
 
 msgid "Info"
 msgstr "情報"
@@ -334,28 +348,28 @@ msgid "It is NOT recommended for casual users to change settings on this page."
 msgstr ""
 
 msgid "Last Update"
-msgstr ""
+msgstr "最終更新"
 
 msgid "Loading"
 msgstr ""
 
 msgid "Log File Viewer"
-msgstr ""
+msgstr "ログファイル・ビューア"
 
 msgid "Log directory"
 msgstr "ログ・ディレクトリ"
 
 msgid "Log length"
-msgstr ""
+msgstr "ログの長さ"
 
 msgid "Log to file"
-msgstr ""
+msgstr "ファイルへログを記録"
 
 msgid "Log to syslog"
-msgstr ""
+msgstr "syslog へログを記録"
 
 msgid "Lookup Hostname"
-msgstr ""
+msgstr "ホスト名をルックアップ"
 
 msgid "NOT installed"
 msgstr ""
@@ -374,22 +388,22 @@ msgid "Network"
 msgstr "ネットワーク"
 
 msgid "Network on which the ddns-updater scripts will be started"
-msgstr ""
+msgstr "ddns-updater スクリプトが開始されるネットワーク"
 
 msgid "Never"
 msgstr "無し"
 
 msgid "Next Update"
-msgstr ""
+msgstr "次の更新"
 
 msgid "No certificates found"
-msgstr ""
+msgstr "証明書が見つかりません"
 
 msgid "No data"
 msgstr ""
 
 msgid "No logging"
-msgstr ""
+msgstr "ログを記録しない"
 
 msgid "Non-public and by default blocked IP's"
 msgstr ""
@@ -407,7 +421,7 @@ msgid "OPTIONAL: Force the use of TCP instead of default UDP on DNS requests."
 msgstr ""
 
 msgid "OPTIONAL: Network to use for communication"
-msgstr ""
+msgstr "オプション : 通信に使用するネットワーク"
 
 msgid "OPTIONAL: Proxy-Server for detection and updates."
 msgstr ""
@@ -440,7 +454,7 @@ msgid "Overview"
 msgstr ""
 
 msgid "PROXY-Server"
-msgstr ""
+msgstr "プロキシ・サーバー"
 
 msgid "PROXY-Server not supported"
 msgstr ""
@@ -455,7 +469,7 @@ msgid "Please [Save & Apply] your changes first"
 msgstr ""
 
 msgid "Please press [Read] button"
-msgstr ""
+msgstr "[読込] ボタンを押してください"
 
 msgid "Please update to the current version!"
 msgstr ""
@@ -464,13 +478,13 @@ msgid "Process ID"
 msgstr ""
 
 msgid "Read / Reread log file"
-msgstr ""
+msgstr "ログファイルの読み込み/再読み込み"
 
 msgid "Really change DDNS provider?"
 msgstr ""
 
 msgid "Registered IP"
-msgstr ""
+msgstr "登録済み IP"
 
 msgid "Replaces [DOMAIN] in Update-URL"
 msgstr ""
@@ -485,7 +499,7 @@ msgid "Run once"
 msgstr ""
 
 msgid "Script"
-msgstr ""
+msgstr "スクリプト"
 
 msgid "Show more"
 msgstr ""
@@ -506,7 +520,7 @@ msgid "Status directory"
 msgstr ""
 
 msgid "Stopped"
-msgstr ""
+msgstr "停止済"
 
 msgid ""
 "The currently installed 'ddns-scripts' package did not support all available "
@@ -514,13 +528,13 @@ msgid ""
 msgstr ""
 
 msgid "The default setting of '0' will retry infinite."
-msgstr ""
+msgstr "デフォルトのゼロを設定すると、無限に再試行します。"
 
 msgid "There is no service configured."
-msgstr ""
+msgstr "構成済のサービスはありません。"
 
 msgid "Timer Settings"
-msgstr ""
+msgstr "タイマー設定"
 
 msgid "To change global settings click here"
 msgstr ""
@@ -532,7 +546,7 @@ msgid "URL"
 msgstr "URL"
 
 msgid "URL to detect"
-msgstr ""
+msgstr "検出する URL"
 
 msgid "Unknown error"
 msgstr ""
@@ -549,19 +563,19 @@ msgid "Use HTTP Secure"
 msgstr ""
 
 msgid "Use cURL"
-msgstr ""
+msgstr "cURL を使用"
 
 msgid "User defined script to read systems IP-Address"
-msgstr ""
+msgstr "システムの IP アドレスを読み取るユーザー定義スクリプト"
 
 msgid "Username"
 msgstr "ユーザー名"
 
 msgid "Using specific DNS Server not supported"
-msgstr ""
+msgstr "特定の DNS サーバーの使用はサポートされていません"
 
 msgid "Verify"
-msgstr ""
+msgstr "検証"
 
 msgid "Version"
 msgstr ""
@@ -578,42 +592,57 @@ msgstr "警告"
 msgid ""
 "Writes detailed messages to log file. File will be truncated automatically."
 msgstr ""
+"詳細メッセージをログファイルに書き込みます。 ファイルは自動的に切り捨てられま"
+"す。"
 
 msgid ""
 "Writes log messages to syslog. Critical Errors will always be written to "
 "syslog."
 msgstr ""
+"ログメッセージを syslog に書き込みます。 重大なエラーは常に syslog に書き込ま"
+"れます。"
 
 msgid ""
 "You should install 'bind-host' or 'knot-host' or 'drill' or 'hostip' "
 "package, if you need to specify a DNS server to detect your registered IP."
 msgstr ""
+"登録済 IP を検出するため DNS サーバーを指定する必要がある場合は、bind-host、"
+"knot-host、drill または hostip パッケージをインストールする必要があります。"
 
 msgid ""
 "You should install 'bind-host' or 'knot-host' or 'drill' package for DNS "
 "requests."
 msgstr ""
+"DNS リクエストするには、bind-host、knot-host または drill パッケージをインス"
+"トールする必要があります。"
 
 msgid "You should install 'wget' or 'curl' or 'uclient-fetch' package."
 msgstr ""
+"wget、curl または uclient-fetch パッケージをインストールする必要があります。"
 
 msgid ""
 "You should install 'wget' or 'curl' or 'uclient-fetch' with 'libustream-"
 "*ssl' package."
 msgstr ""
+"libustream-*ssl パッケージとともに wget、curl または uclient-fetch パッケージ"
+"をインストールする必要があります。"
 
 msgid "You should install 'wget' or 'curl' package."
-msgstr ""
+msgstr "wget または curl パッケージをインストールする必要があります。"
 
 msgid ""
 "You should install 'wget' or 'uclient-fetch' package or replace libcurl."
 msgstr ""
+"wget または uclient-fetch パッケージをインストールするか、または libcurl を置"
+"き換える必要があります。"
 
 msgid "cURL is installed, but libcurl was compiled without proxy support."
 msgstr ""
+"cURL はインストール済ですが、libcurl はプロキシ・サポートなしでコンパイルされ"
+"ています。"
 
 msgid "cURL without Proxy Support"
-msgstr ""
+msgstr "プロキシ・サポートなしの cURL"
 
 msgid "can not detect local IP. Please select a different Source combination"
 msgstr ""
@@ -628,7 +657,7 @@ msgid "days"
 msgstr ""
 
 msgid "directory or path/file"
-msgstr ""
+msgstr "ディレクトリまたはパス/ファイル"
 
 msgid "either url or script could be set"
 msgstr ""
@@ -685,7 +714,7 @@ msgid "nslookup can not resolve host"
 msgstr ""
 
 msgid "or"
-msgstr ""
+msgstr "または"
 
 msgid "or higher"
 msgstr ""
@@ -712,7 +741,7 @@ msgid "required"
 msgstr ""
 
 msgid "seconds"
-msgstr ""
+msgstr "秒"
 
 msgid "to run HTTPS without verification of server certificates (insecure)"
 msgstr ""
