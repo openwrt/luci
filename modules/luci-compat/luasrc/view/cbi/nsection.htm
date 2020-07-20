@@ -8,7 +8,7 @@
 		<%- end %>
 		<% if self.addremove then -%>
 			<div class="cbi-section-remove right">
-				<input type="submit" class="cbi-button" name="cbi.rns.<%=self.config%>.<%=section%>" value="<%:Delete%>" />
+				<input type="submit" class="btn cbi-button" name="cbi.rns.<%=self.config%>.<%=section%>" value="<%:Delete%>" />
 			</div>
 		<%- end %>
 		<div class="cbi-section-node<% if self.tabs then %> cbi-section-node-tabbed<% end %>" id="cbi-<%=self.config%>-<%=section%>">
@@ -22,7 +22,7 @@
 			<legend><%=self.title%></legend>
 		<%- end %>
 		<div class="cbi-section-descr"><%=self.description%></div>
-		<input type="submit" class="cbi-button cbi-button-add" name="cbi.cns.<%=self.config%>.<%=self.section%>" value="<%:Add%>" />
+		<input type="submit" class="btn cbi-button cbi-button-add" name="cbi.cns.<%=self.config%>.<%=self.section%>" value="<%:Add%>" />
 	</div>
 	<%- end %>
 <% end %>

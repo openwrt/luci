@@ -45,26 +45,26 @@
 			%><div class="cbi-page-actions"><%
 
 			if display_back then
-				%><input class="cbi-button cbi-button-link" type="button" value="<%:Back to Overview%>" onclick="location.href='<%=pcdata(redirect)%>'" /> <%
+				%><input class="btn cbi-button cbi-button-link" type="button" value="<%:Back to Overview%>" onclick="location.href='<%=pcdata(redirect)%>'" /> <%
 			end
 
 			if display_cancel then
 				local label = pcdata(self.cancel or translate("Cancel"))
-				%><input class="cbi-button cbi-button-link" type="button" value="<%=label%>" onclick="cbi_submit(this, 'cbi.cancel')" /> <%
+				%><input class="btn cbi-button cbi-button-link" type="button" value="<%=label%>" onclick="cbi_submit(this, 'cbi.cancel')" /> <%
 			end
 
 			if display_skip then
-				%><input class="cbi-button cbi-button-neutral" type="button" value="<%:Skip%>" onclick="cbi_submit(this, 'cbi.skip')" /> <%
+				%><input class="btn cbi-button cbi-button-neutral" type="button" value="<%:Skip%>" onclick="cbi_submit(this, 'cbi.skip')" /> <%
 			end
 
 			if display_submit then
 				local label = pcdata(self.submit or translate("Submit"))
-				%><input class="cbi-button cbi-button-save" type="submit" value="<%=label%>" /> <%
+				%><input class="btn cbi-button cbi-button-save" type="submit" value="<%=label%>" /> <%
 			end
 
 			if display_reset then
 				local label = pcdata(self.reset or translate("Reset"))
-				%><input class="cbi-button cbi-button-reset" type="reset" value="<%=label%>" /> <%
+				%><input class="btn cbi-button cbi-button-reset" type="reset" value="<%=label%>" /> <%
 			end
 
 			%></div><%
