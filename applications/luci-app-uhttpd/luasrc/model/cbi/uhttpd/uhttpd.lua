@@ -211,9 +211,15 @@ o = s:option(Value, "days", translate("Valid for # of Days"))
 o.default = 730
 o.datatype = "uinteger"
 
+o = s:option(Value, "key_type", translate("Key type: RSA or EC"))
+o.default = "RSA"
+
 o = s:option(Value, "bits", translate("Length of key in bits"))
 o.default = 2048
 o.datatype = "min(1024)"
+
+o = s:option(Value, "ec_curve", translate("Elliptic curve (EC) to use"))
+o.default = "P-256"
 
 o = s:option(Value, "commonname", translate("Server Hostname"), translate("a.k.a CommonName"))
 o.default = luci.sys.hostname()
