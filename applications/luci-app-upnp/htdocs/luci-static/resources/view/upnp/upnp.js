@@ -167,14 +167,16 @@ return view.extend({
 		o = s.taboption('advanced', form.Value, 'upnp_lease_file', _('UPnP lease file'))
 		o.placeholder = '/var/run/miniupnpd.leases'
 
-        	s.taboption('advanced', form.Flag, 'use_stun', _('Use STUN')).default = '0'
+        s.taboption('advanced', form.Flag, 'use_stun', _('Use STUN')).default = '0'
 
 		o = s.taboption('advanced', form.Value, 'stun_host', _('STUN host'))
 		o.placeholder = 'stun.stunprotocol.org'
+		o.depends('use_stun', '1');
 
 		o = s.taboption('advanced', form.Value, 'stun_port', _('STUN port'))
 		o.datatype    = 'uinteger'
 		o.placeholder = 3478
+		o.depends('use_stun', '1');
 		
 		s = m.section(form.GridSection, 'perm_rule', _('MiniUPnP ACLs'),
 			_('ACLs specify which external ports may be redirected to which internal addresses and ports'))
