@@ -121,14 +121,19 @@ return view.extend({
 		o = s.taboption('general', form.Flag, 'enabled', _('Start UPnP and NAT-PMP service'));
 		o.rmempty  = false;
 
-		s.taboption('general', form.Flag, 'enable_upnp', _('Enable UPnP functionality')).default = '1'
-		s.taboption('general', form.Flag, 'enable_natpmp', _('Enable NAT-PMP functionality')).default = '1'
+		s.taboption('general', form.Flag, 'enable_upnp', _('Enable UPnP functionality'))
+		s.default = '1'
+
+		s.taboption('general', form.Flag, 'enable_natpmp', _('Enable NAT-PMP functionality'))
+		s.default = '1'
 
 		s.taboption('general', form.Flag, 'secure_mode', _('Enable secure mode'),
-			_('Allow adding forwards only to requesting ip addresses')).default = '1'
+			_('Allow adding forwards only to requesting ip addresses'))
+		s.default = '1'
 
 		s.taboption('general', form.Flag, 'igdv1', _('Enable IGDv1 mode'),
-			_('Advertise as IGDv1 device instead of IGDv2')).default = '0'
+			_('Advertise as IGDv1 device instead of IGDv2'))
+		s.default = '0'
 
 		s.taboption('general', form.Flag, 'log_output', _('Enable additional logging'),
 			_('Puts extra debugging information into the system log'))
@@ -143,7 +148,8 @@ return view.extend({
 		o.datatype = 'port'
 		o.default  = 5000
 
-		s.taboption('advanced', form.Flag, 'system_uptime', _('Report system instead of daemon uptime')).default = '1'
+		s.taboption('advanced', form.Flag, 'system_uptime', _('Report system instead of daemon uptime'))
+		s.default = '1'
 
 		s.taboption('advanced', form.Value, 'uuid', _('Device UUID'))
 		s.taboption('advanced', form.Value, 'serial_number', _('Announced serial number'))
