@@ -88,6 +88,9 @@ return baseclass.extend({
 
 		o = s.option(form.Flag, 'IgnoreSelected', _('Monitor all except specified'));
 		o.depends('enable', '1');
+
+		o = s.option(form.Flag, 'ValuesPercentage', _('Free space, reserved space and used space is reported as relative values'));
+		o.depends('enable', '1');
 	},
 
 	configSummary: function(section) {
