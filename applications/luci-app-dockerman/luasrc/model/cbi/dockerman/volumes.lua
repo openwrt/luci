@@ -3,7 +3,6 @@ LuCI - Lua Configuration Interface
 Copyright 2019 lisaac <https://github.com/lisaac/luci-app-dockerman>
 ]]--
 
-
 local docker = require "luci.model.docker"
 local dk = docker.new()
 
@@ -113,9 +112,9 @@ o.forcewrite = true
 o.write = function(self, section)
 	local volume_selected = {}
 
-	for _, volume_table_sid in ipairs(volume_list) do
-		if volume_list[volume_table_sid]._selected == 1 then
-			volume_selected[#volume_selected+1] = volume_table_sid
+	for k in pairs(volume_list) do
+		if volume_list[k]._selected == 1 then
+			volume_selected[#volume_selected+1] = k
 		end
 	end
 
