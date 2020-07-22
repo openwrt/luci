@@ -30,12 +30,191 @@ local is_quot_complete = function(str)
   return true
 end
 
+function contains(list, x)
+	for _, v in pairs(list) do
+		if v == x then
+			return true
+		end
+	end
+	return false
+end
+
 local resolve_cli = function(cmd_line)
-  local config = {advance = 1}
-  local key_no_val = '|t|d|i|tty|rm|read_only|interactive|init|help|detach|privileged|P|publish_all|'
-  local key_with_val = '|sysctl|add_host|a|attach|blkio_weight_device|cap_add|cap_drop|device|device_cgroup_rule|device_read_bps|device_read_iops|device_write_bps|device_write_iops|dns|dns_option|dns_search|e|env|env_file|expose|group_add|l|label|label_file|link|link_local_ip|log_driver|log_opt|network_alias|p|publish|security_opt|storage_opt|tmpfs|v|volume|volumes_from|blkio_weight|cgroup_parent|cidfile|cpu_period|cpu_quota|cpu_rt_period|cpu_rt_runtime|c|cpu_shares|cpus|cpuset_cpus|cpuset_mems|detach_keys|disable_content_trust|domainname|entrypoint|gpus|health_cmd|health_interval|health_retries|health_start_period|health_timeout|h|hostname|ip|ip6|ipc|isolation|kernel_memory|log_driver|mac_address|m|memory|memory_reservation|memory_swap|memory_swappiness|mount|name|network|no_healthcheck|oom_kill_disable|oom_score_adj|pid|pids_limit|restart|runtime|shm_size|sig_proxy|stop_signal|stop_timeout|ulimit|u|user|userns|uts|volume_driver|w|workdir|'
-  local key_abb = {net='network',a='attach',c='cpu-shares',d='detach',e='env',h='hostname',i='interactive',l='label',m='memory',p='publish',P='publish_all',t='tty',u='user',v='volume',w='workdir'}
-  local key_with_list = '|sysctl|add_host|a|attach|blkio_weight_device|cap_add|cap_drop|device|device_cgroup_rule|device_read_bps|device_read_iops|device_write_bps|device_write_iops|dns|dns_option|dns_search|e|env|env_file|expose|group_add|l|label|label_file|link|link_local_ip|log_driver|log_opt|network_alias|p|publish|security_opt|storage_opt|tmpfs|v|volume|volumes_from|'
+	local config = {
+		advance = 1
+	}
+
+	local key_no_val = {
+		't',
+		'd',
+		'i',
+		'tty',
+		'rm',
+		'read_only',
+		'interactive',
+		'init',
+		'help',
+		'detach',
+		'privileged',
+		'P',
+		'publish_all',
+	}
+
+	local key_with_val = {
+		'sysctl',
+		'add_host',
+		'a',
+		'attach',
+		'blkio_weight_device',
+		'cap_add',
+		'cap_drop',
+		'device',
+		'device_cgroup_rule',
+		'device_read_bps',
+		'device_read_iops',
+		'device_write_bps',
+		'device_write_iops',
+		'dns',
+		'dns_option',
+		'dns_search',
+		'e',
+		'env',
+		'env_file',
+		'expose',
+		'group_add',
+		'l',
+		'label',
+		'label_file',
+		'link',
+		'link_local_ip',
+		'log_driver',
+		'log_opt',
+		'network_alias',
+		'p',
+		'publish',
+		'security_opt',
+		'storage_opt',
+		'tmpfs',
+		'v',
+		'volume',
+		'volumes_from',
+		'blkio_weight',
+		'cgroup_parent',
+		'cidfile',
+		'cpu_period',
+		'cpu_quota',
+		'cpu_rt_period',
+		'cpu_rt_runtime',
+		'c',
+		'cpu_shares',
+		'cpus',
+		'cpuset_cpus',
+		'cpuset_mems',
+		'detach_keys',
+		'disable_content_trust',
+		'domainname',
+		'entrypoint',
+		'gpus',
+		'health_cmd',
+		'health_interval',
+		'health_retries',
+		'health_start_period',
+		'health_timeout',
+		'h',
+		'hostname',
+		'ip',
+		'ip6',
+		'ipc',
+		'isolation',
+		'kernel_memory',
+		'log_driver',
+		'mac_address',
+		'm',
+		'memory',
+		'memory_reservation',
+		'memory_swap',
+		'memory_swappiness',
+		'mount',
+		'name',
+		'network',
+		'no_healthcheck',
+		'oom_kill_disable',
+		'oom_score_adj',
+		'pid',
+		'pids_limit',
+		'restart',
+		'runtime',
+		'shm_size',
+		'sig_proxy',
+		'stop_signal',
+		'stop_timeout',
+		'ulimit',
+		'u',
+		'user',
+		'userns',
+		'uts',
+		'volume_driver',
+		'w',
+		'workdir'
+	}
+
+	local key_abb = {
+		net='network',
+		a='attach',
+		c='cpu-shares',
+		d='detach',
+		e='env',
+		h='hostname',
+		i='interactive',
+		l='label',
+		m='memory',
+		p='publish',
+		P='publish_all',
+		t='tty',
+		u='user',
+		v='volume',
+		w='workdir'
+	}
+
+	local key_with_list = {
+		'sysctl',
+		'add_host',
+		'a',
+		'attach',
+		'blkio_weight_device',
+		'cap_add',
+		'cap_drop',
+		'device',
+		'device_cgroup_rule',
+		'device_read_bps',
+		'device_read_iops',
+		'device_write_bps',
+		'device_write_iops',
+		'dns',
+		'dns_optiondns_search',
+		'e',
+		'env',
+		'env_file',
+		'expose',
+		'group_add',
+		'l',
+		'label',
+		'label_file',
+		'link',
+		'link_local_ip',
+		'log_driver',
+		'log_opt',
+		'network_alias',
+		'p',
+		'publish',
+		'security_opt',
+		'storage_opt',
+		'tmpfs',
+		'v',
+		'volume',
+		'volumes_from',
+	}
+
   local key = nil
   local _key = nil
   local val = nil
@@ -80,11 +259,11 @@ local resolve_cli = function(cmd_line)
       if key then
         key = key:gsub("-","_")
         key = key_abb[key] or key
-        if key_no_val:match("|"..key.."|") then
+        if contains(key_no_val, key) then
           config[key] = true
           val = nil
           key = nil
-        elseif key_with_val:match("|"..key.."|") then
+        elseif contains(key_with_val, key) then
           -- if key == "cap_add" then config.privileged = true end
         else
           key = nil
@@ -129,7 +308,7 @@ local resolve_cli = function(cmd_line)
     end
     if (key or _key) and val then
       key = _key or key
-      if key_with_list:match("|"..key.."|") then
+      if contains(key_with_list, key) then
         if not config[key] then config[key] = {} end
         if _key then
           config[key][#config[key]] = config[key][#config[key]] .. " " .. w
