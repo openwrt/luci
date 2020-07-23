@@ -89,7 +89,7 @@ function get_containers()
 	return data
 end
 
-local c_lists = get_containers()
+local container_list = get_containers()
 
 m = SimpleForm("docker", translate("Docker"))
 m.submit=false
@@ -103,55 +103,54 @@ if s.err then
 	docker:clear_status()
 end
 
-c_table = m:section(Table, c_lists, translate("Containers"))
-c_table.nodescr=true
+s = m:section(Table, container_list, translate("Containers"))
+s.nodescr=true
 
-container_selecter = c_table:option(Flag, "_selected","")
-container_selecter.disabled = 0
-container_selecter.enabled = 1
-container_selecter.default = 0
-container_selecter.write=function(self, section, value)
-	c_lists[section]._selected = value
+o = s:option(Flag, "_selected","")
+o.disabled = 0
+o.enabled = 1
+o.default = 0
+o.write=function(self, section, value)
+	container_list[section]._selected = value
 end
 
-container_id = c_table:option(DummyValue, "_id", translate("ID"))
-container_id.width="10%"
+o = s:option(DummyValue, "_id", translate("ID"))
+o.width="10%"
 
-container_name = c_table:option(DummyValue, "_name", translate("Container Name"))
-container_name.rawhtml = true
+o = s:option(DummyValue, "_name", translate("Container Name"))
+o.rawhtml = true
 
-container_status = c_table:option(DummyValue, "_status", translate("Status"))
-container_status.width="15%"
-container_status.rawhtml=true
+o = s:option(DummyValue, "_status", translate("Status"))
+o.width="15%"
+o.rawhtml=true
 
-container_ip = c_table:option(DummyValue, "_network", translate("Network"))
-container_ip.width="15%"
+o = s:option(DummyValue, "_network", translate("Network"))
+o.width="15%"
 
-container_ports = c_table:option(DummyValue, "_ports", translate("Ports"))
-container_ports.width="10%"
-container_ports.rawhtml = true
+o = s:option(DummyValue, "_ports", translate("Ports"))
+o.width="10%"
+o.rawhtml = true
 
-container_image = c_table:option(DummyValue, "_image", translate("Image"))
-container_image.width="10%"
+o = s:option(DummyValue, "_image", translate("Image"))
+o.width="10%"
 
-container_command = c_table:option(DummyValue, "_command", translate("Command"))
-container_command.width="20%"
+o = s:option(DummyValue, "_command", translate("Command"))
+o.width="20%"
 
 local start_stop_remove = function(m,cmd)
-	local c_selected = {}
+	local container_selected = {}
 
-	local c_table_sids = c_table:cfgsections()
-	for _, c_table_sid in ipairs(c_table_sids) do
-		if c_lists[c_table_sid]._selected == 1 then
-			c_selected[#c_selected+1] = c_lists[c_table_sid].name
+	for k in pairs(container_list) do
+		if container_list[k]._selected == 1 then
+			container_selected[#container_selected + 1] = container_list[k].name
 		end
 	end
 
-	if #c_selected >0 then
+	if #container_selected  > 0 then
 		local success = true
 
 		docker:clear_status()
-		for _,cont in ipairs(c_selected) do
+		for _, cont in ipairs(container_selected) do
 			docker:append_status("Containers: " .. cmd .. " " .. cont .. "...")
 			local res = dk.containers[cmd](dk, {id = cont})
 			if res and res.code >= 300 then
@@ -170,63 +169,62 @@ local start_stop_remove = function(m,cmd)
 	end
 end
 
-action_section = m:section(Table,{{}})
-action_section.notitle=true
-action_section.rowcolors=false
-action_section.template="cbi/nullsection"
+s = m:section(Table,{{}})
+s.notitle=true
+s.rowcolors=false
+s.template="cbi/nullsection"
 
-btnnew=action_section:option(Button, "_new")
-btnnew.inputtitle= translate("New")
-btnnew.template = "dockerman/cbi/inlinebutton"
-btnnew.inputstyle = "add"
-btnnew.forcewrite = true
-btnnew.write = function(self, section)
+o = s:option(Button, "_new")
+o.inputtitle= translate("New")
+o.template = "dockerman/cbi/inlinebutton"
+o.inputstyle = "add"
+o.forcewrite = true
+o.write = function(self, section)
 	luci.http.redirect(luci.dispatcher.build_url("admin/docker/newcontainer"))
 end
 
-btnstart=action_section:option(Button, "_start")
-btnstart.template = "dockerman/cbi/inlinebutton"
-btnstart.inputtitle=translate("Start")
-btnstart.inputstyle = "apply"
-btnstart.forcewrite = true
-btnstart.write = function(self, section)
+o = s:option(Button, "_start")
+o.template = "dockerman/cbi/inlinebutton"
+o.inputtitle=translate("Start")
+o.inputstyle = "apply"
+o.forcewrite = true
+o.write = function(self, section)
 	start_stop_remove(m,"start")
 end
 
-btnrestart=action_section:option(Button, "_restart")
-btnrestart.template = "dockerman/cbi/inlinebutton"
-btnrestart.inputtitle=translate("Restart")
-btnrestart.inputstyle = "reload"
-btnrestart.forcewrite = true
-btnrestart.write = function(self, section)
+o = s:option(Button, "_restart")
+o.template = "dockerman/cbi/inlinebutton"
+o.inputtitle=translate("Restart")
+o.inputstyle = "reload"
+o.forcewrite = true
+o.write = function(self, section)
 	start_stop_remove(m,"restart")
 end
 
-btnstop=action_section:option(Button, "_stop")
-btnstop.template = "dockerman/cbi/inlinebutton"
-btnstop.inputtitle=translate("Stop")
-btnstop.inputstyle = "reset"
-btnstop.forcewrite = true
-btnstop.write = function(self, section)
+o = s:option(Button, "_stop")
+o.template = "dockerman/cbi/inlinebutton"
+o.inputtitle=translate("Stop")
+o.inputstyle = "reset"
+o.forcewrite = true
+o.write = function(self, section)
 	start_stop_remove(m,"stop")
 end
 
-
-btnkill=action_section:option(Button, "_kill")
-btnkill.template = "dockerman/cbi/inlinebutton"
-btnkill.inputtitle=translate("Kill")
-btnkill.inputstyle = "reset"
-btnkill.forcewrite = true
-btnkill.write = function(self, section)
+o = s:option(Button, "_kill")
+o.template = "dockerman/cbi/inlinebutton"
+o.inputtitle=translate("Kill")
+o.inputstyle = "reset"
+o.forcewrite = true
+o.write = function(self, section)
 	start_stop_remove(m,"kill")
 end
 
-btnremove=action_section:option(Button, "_remove")
-btnremove.template = "dockerman/cbi/inlinebutton"
-btnremove.inputtitle=translate("Remove")
-btnremove.inputstyle = "remove"
-btnremove.forcewrite = true
-btnremove.write = function(self, section)
+o = s:option(Button, "_remove")
+o.template = "dockerman/cbi/inlinebutton"
+o.inputtitle=translate("Remove")
+o.inputstyle = "remove"
+o.forcewrite = true
+o.write = function(self, section)
 	start_stop_remove(m,"remove")
 end
 
