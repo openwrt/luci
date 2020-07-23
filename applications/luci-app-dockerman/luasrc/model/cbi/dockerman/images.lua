@@ -3,12 +3,11 @@ LuCI - Lua Configuration Interface
 Copyright 2019 lisaac <https://github.com/lisaac/luci-app-dockerman>
 ]]--
 
-require "luci.util"
-local uci = luci.model.uci.cursor()
 local docker = require "luci.model.docker"
 local dk = docker.new()
 
 local containers, images, res
+local m, s, o
 
 res = dk.images:list()
 if res.code < 300 then
@@ -44,7 +43,7 @@ function get_images()
 				data[index]["_tags"] =(data[index]["_tags"] and ( data[index]["_tags"] .. "<br>" )or "") .. ((v1:match("<none>") or (#v.RepoTags == 1)) and v1 or ('<a href="javascript:un_tag(\''..v1..'\')" class="dockerman_link" title="'..translate("Remove tag")..'" >' .. v1 .. '</a>'))
 
 				if not data[index]["tag"] then
-					data[index]["tag"] = v1--:match("<none>") and nil or v1
+					data[index]["tag"] = v1
 				end
 			end
 		else
@@ -73,17 +72,18 @@ m = SimpleForm("docker", translate("Docker"))
 m.submit=false
 m.reset=false
 
-local pull_value={_image_tag_name="", _registry="index.docker.io"}
-local pull_section = m:section(SimpleSection, translate("Pull Image"))
-pull_section.template="cbi/nullsection"
-local tag_name = pull_section:option(Value, "_image_tag_name")
-tag_name.template = "dockerman/cbi/inlinevalue"
-tag_name.placeholder="lisaac/luci:latest"
-local action_pull = pull_section:option(Button, "_pull")
-action_pull.inputtitle= translate("Pull")
-action_pull.template = "dockerman/cbi/inlinebutton"
-action_pull.inputstyle = "add"
-tag_name.write = function(self, section, value)
+local pull_value={
+	_image_tag_name="",
+	_registry="index.docker.io"
+}
+
+s = m:section(SimpleSection, translate("Pull Image"))
+s.template="cbi/nullsection"
+
+o = s:option(Value, "_image_tag_name")
+o.template = "dockerman/cbi/inlinevalue"
+o.placeholder="lisaac/luci:latest"
+o.write = function(self, section, value)
 	local hastag = value:find(":")
 
 	if not hastag then
@@ -91,7 +91,12 @@ tag_name.write = function(self, section, value)
 	end
 	pull_value["_image_tag_name"] = value
 end
-action_pull.write = function(self, section)
+
+o = s:option(Button, "_pull")
+o.inputtitle= translate("Pull")
+o.template = "dockerman/cbi/inlinebutton"
+o.inputstyle = "add"
+o.write = function(self, section)
 	local tag = pull_value["_image_tag_name"]
 	local json_stringify = luci.jsonc and luci.jsonc.stringify
 
@@ -111,34 +116,40 @@ action_pull.write = function(self, section)
 	luci.http.redirect(luci.dispatcher.build_url("admin/docker/images"))
 end
 
-local import_section = m:section(SimpleSection, translate("Import Images"))
-local im = import_section:option(DummyValue, "_image_import")
-im.template = "dockerman/images_import"
+s = m:section(SimpleSection, translate("Import Images"))
 
-local image_table = m:section(Table, image_list, translate("Images"))
-image_table:option(DummyValue, "_tags", translate("RepoTags")).rawhtml = true
-image_table:option(DummyValue, "_containers", translate("Containers")).rawhtml = true
-image_table:option(DummyValue, "_size", translate("Size"))
-image_table:option(DummyValue, "_created", translate("Created"))
+o = s:option(DummyValue, "_image_import")
+o.template = "dockerman/images_import"
 
-local image_selecter = image_table:option(Flag, "_selected","")
-image_selecter.disabled = 0
-image_selecter.enabled = 1
-image_selecter.default = 0
-image_selecter.write = function(self, section, value)
+s = m:section(Table, image_list, translate("Images"))
+
+o = s:option(Flag, "_selected","")
+o.disabled = 0
+o.enabled = 1
+o.default = 0
+o.write = function(self, section, value)
 	image_list[section]._selected = value
 end
 
-local image_id = image_table:option(DummyValue, "_id", translate("ID"))
-image_id.rawhtml = true
+o = s:option(DummyValue, "_tags", translate("RepoTags"))
+o.rawhtml = true
+
+o = s:option(DummyValue, "_containers", translate("Containers"))
+o.rawhtml = true
+
+o = s:option(DummyValue, "_size", translate("Size"))
+
+o = s:option(DummyValue, "_created", translate("Created"))
+
+o = s:option(DummyValue, "_id", translate("ID"))
+o.rawhtml = true
 
 local remove_action = function(force)
 	local image_selected = {}
 
-	local image_table_sids = image_table:cfgsections()
-	for _, image_table_sid in ipairs(image_table_sids) do
-		if image_list[image_table_sid]._selected == 1 then
-			image_selected[#image_selected+1] = (image_list[image_table_sid]["_tags"]:match("<br>") or image_list[image_table_sid]["_tags"]:match("&lt;none&gt;")) and image_list[image_table_sid].id or image_list[image_table_sid].tag
+	for k in pairs(image_list) do
+		if image_list[k]._selected == 1 then
+			image_selected[#image_selected+1] = (image_list[k]["_tags"]:match("<br>") or image_list[k]["_tags"]:match("&lt;none&gt;")) and image_list[k].id or image_list[k].tag
 		end
 	end
 
@@ -146,7 +157,7 @@ local remove_action = function(force)
 		local success = true
 
 		docker:clear_status()
-		for _,img in ipairs(image_selected) do
+		for _, img in ipairs(image_selected) do
 			local query
 			docker:append_status("Images: " .. "remove" .. " " .. img .. "...")
 
@@ -154,7 +165,10 @@ local remove_action = function(force)
 				query = {force = true}
 			end
 
-			local msg = dk.images:remove({id = img, query = query})
+			local msg = dk.images:remove({
+				id = img,
+				query = query
+			})
 			if msg.code ~= 200 then
 				docker:append_status("code:" .. msg.code.." ".. (msg.body.message and msg.body.message or msg.message).. "\n")
 				success = false
@@ -171,56 +185,55 @@ local remove_action = function(force)
 	end
 end
 
-local docker_status = m:section(SimpleSection)
-docker_status.template = "dockerman/apply_widget"
-docker_status.err = docker:read_status()
-docker_status.err = docker_status.err and docker_status.err:gsub("\n","<br>"):gsub(" ","&nbsp;")
-if docker_status.err then
+s = m:section(SimpleSection)
+s.template = "dockerman/apply_widget"
+s.err = docker:read_status()
+s.err = s.err and s.err:gsub("\n","<br>"):gsub(" ","&nbsp;")
+if s.err then
 	docker:clear_status()
 end
 
-local action = m:section(Table,{{}})
-action.notitle=true
-action.rowcolors=false
-action.template="cbi/nullsection"
+s = m:section(Table,{{}})
+s.notitle=true
+s.rowcolors=false
+s.template="cbi/nullsection"
 
-local btnremove = action:option(Button, "remove")
-btnremove.inputtitle= translate("Remove")
-btnremove.template = "dockerman/cbi/inlinebutton"
-btnremove.inputstyle = "remove"
-btnremove.forcewrite = true
-btnremove.write = function(self, section)
+o = s:option(Button, "remove")
+o.inputtitle= translate("Remove")
+o.template = "dockerman/cbi/inlinebutton"
+o.inputstyle = "remove"
+o.forcewrite = true
+o.write = function(self, section)
 	remove_action()
 end
 
-local btnforceremove = action:option(Button, "forceremove")
-btnforceremove.inputtitle= translate("Force Remove")
-btnforceremove.template = "dockerman/cbi/inlinebutton"
-btnforceremove.inputstyle = "remove"
-btnforceremove.forcewrite = true
-btnforceremove.write = function(self, section)
+o = s:option(Button, "forceremove")
+o.inputtitle= translate("Force Remove")
+o.template = "dockerman/cbi/inlinebutton"
+o.inputstyle = "remove"
+o.forcewrite = true
+o.write = function(self, section)
 	remove_action(true)
 end
 
-local btnsave = action:option(Button, "save")
-btnsave.inputtitle= translate("Save")
-btnsave.template = "dockerman/cbi/inlinebutton"
-btnsave.inputstyle = "edit"
-btnsave.forcewrite = true
-btnsave.write = function (self, section)
+o = s:option(Button, "save")
+o.inputtitle= translate("Save")
+o.template = "dockerman/cbi/inlinebutton"
+o.inputstyle = "edit"
+o.forcewrite = true
+o.write = function (self, section)
 	local image_selected = {}
 
-	local image_table_sids = image_table:cfgsections()
-	for _, image_table_sid in ipairs(image_table_sids) do
-		if image_list[image_table_sid]._selected == 1 then
-			image_selected[#image_selected+1] = image_list[image_table_sid].id --image_id:cfgvalue(image_table_sid)
+	for k in pairs(image_list) do
+		if image_list[k]._selected == 1 then
+			image_selected[#image_selected + 1] = image_list[k].id
 		end
 	end
 
 	if next(image_selected) ~= nil then
 		local names, first
 
-		for _,img in ipairs(image_selected) do
+		for _, img in ipairs(image_selected) do
 			names = names and (names .. "&names=".. img) or img
 		end
 
@@ -253,9 +266,9 @@ btnsave.write = function (self, section)
 	end
 end
 
-local btnload = action:option(Button, "load")
-btnload.inputtitle= translate("Load")
-btnload.template = "dockerman/images_load"
-btnload.inputstyle = "add"
+o = s:option(Button, "load")
+o.inputtitle= translate("Load")
+o.template = "dockerman/images_load"
+o.inputstyle = "add"
 
 return m
