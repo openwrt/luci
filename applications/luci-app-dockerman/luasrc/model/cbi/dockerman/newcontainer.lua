@@ -3,10 +3,9 @@ LuCI - Lua Configuration Interface
 Copyright 2019 lisaac <https://github.com/lisaac/luci-app-dockerman>
 ]]--
 
-require "luci.util"
-local uci = luci.model.uci.cursor()
-
 local docker = require "luci.model.docker"
+
+local m, s, o
 
 local dk = docker.new()
 
@@ -437,70 +436,69 @@ elseif cmd_line and cmd_line:match("^duplicate/[^/]+$") then
 	end
 end
 
-local m = SimpleForm("docker", translate("Docker"))
+m = SimpleForm("docker", translate("Docker"))
 m.redirect = luci.dispatcher.build_url("admin", "docker", "containers")
 
-docker_status = m:section(SimpleSection)
-docker_status.template = "dockerman/apply_widget"
-docker_status.err=docker:read_status()
-docker_status.err=docker_status.err and docker_status.err:gsub("\n","<br>"):gsub(" ","&nbsp;")
-if docker_status.err then
+s = m:section(SimpleSection)
+s.template = "dockerman/apply_widget"
+s.err=docker:read_status()
+s.err=s.err and s.err:gsub("\n","<br>"):gsub(" ","&nbsp;")
+if s.err then
 	docker:clear_status()
 end
 
-local s = m:section(SimpleSection, translate("New Container"))
+s = m:section(SimpleSection, translate("New Container"))
 s.addremove = true
 s.anonymous = true
 
-local d = s:option(DummyValue,"cmd_line", translate("Resolve CLI"))
-d.rawhtml  = true
-d.template = "dockerman/newcontainer_resolve"
+o = s:option(DummyValue,"cmd_line", translate("Resolve CLI"))
+o.rawhtml  = true
+o.template = "dockerman/newcontainer_resolve"
 
-d = s:option(Value, "name", translate("Container Name"))
-d.rmempty = true
-d.default = default_config.name or nil
+o = s:option(Value, "name", translate("Container Name"))
+o.rmempty = true
+o.default = default_config.name or nil
 
-d = s:option(Flag, "interactive", translate("Interactive (-i)"))
-d.rmempty = true
-d.disabled = 0
-d.enabled = 1
-d.default = default_config.interactive and 1 or 0
+o = s:option(Flag, "interactive", translate("Interactive (-i)"))
+o.rmempty = true
+o.disabled = 0
+o.enabled = 1
+o.default = default_config.interactive and 1 or 0
 
-d = s:option(Flag, "tty", translate("TTY (-t)"))
-d.rmempty = true
-d.disabled = 0
-d.enabled = 1
-d.default = default_config.tty and 1 or 0
+o = s:option(Flag, "tty", translate("TTY (-t)"))
+o.rmempty = true
+o.disabled = 0
+o.enabled = 1
+o.default = default_config.tty and 1 or 0
 
-d = s:option(Value, "image", translate("Docker Image"))
-d.rmempty = true
-d.default = default_config.image or nil
+o = s:option(Value, "image", translate("Docker Image"))
+o.rmempty = true
+o.default = default_config.image or nil
 for _, v in ipairs (images) do
 	if v.RepoTags then
-		d:value(v.RepoTags[1], v.RepoTags[1])
+		o:value(v.RepoTags[1], v.RepoTags[1])
 	end
 end
 
-d = s:option(Flag, "_force_pull", translate("Always pull image first"))
-d.rmempty = true
-d.disabled = 0
-d.enabled = 1
-d.default = 0
+o = s:option(Flag, "_force_pull", translate("Always pull image first"))
+o.rmempty = true
+o.disabled = 0
+o.enabled = 1
+o.default = 0
 
-d = s:option(Flag, "privileged", translate("Privileged"))
-d.rmempty = true
-d.disabled = 0
-d.enabled = 1
-d.default = default_config.privileged and 1 or 0
+o = s:option(Flag, "privileged", translate("Privileged"))
+o.rmempty = true
+o.disabled = 0
+o.enabled = 1
+o.default = default_config.privileged and 1 or 0
 
-d = s:option(ListValue, "restart", translate("Restart Policy"))
-d.rmempty = true
-
-d:value("no", "No")
-d:value("unless-stopped", "Unless stopped")
-d:value("always", "Always")
-d:value("on-failure", "On failure")
-d.default = default_config.restart or "unless-stopped"
+o = s:option(ListValue, "restart", translate("Restart Policy"))
+o.rmempty = true
+o:value("no", "No")
+o:value("unless-stopped", "Unless stopped")
+o:value("always", "Always")
+o:value("on-failure", "On failure")
+o.default = default_config.restart or "unless-stopped"
 
 local d_network = s:option(ListValue, "network", translate("Networks"))
 d_network.rmempty = true
@@ -511,37 +509,37 @@ d_ip.datatype="ip4addr"
 d_ip:depends("network", "nil")
 d_ip.default = default_config.ip or nil
 
-d = s:option(DynamicList, "link", translate("Links with other containers"))
-d.placeholder = "container_name:alias"
-d.rmempty = true
-d:depends("network", "bridge")
-d.default = default_config.link or nil
+o = s:option(DynamicList, "link", translate("Links with other containers"))
+o.placeholder = "container_name:alias"
+o.rmempty = true
+o:depends("network", "bridge")
+o.default = default_config.link or nil
 
-d = s:option(DynamicList, "dns", translate("Set custom DNS servers"))
-d.placeholder = "8.8.8.8"
-d.rmempty = true
-d.default = default_config.dns or nil
+o = s:option(DynamicList, "dns", translate("Set custom DNS servers"))
+o.placeholder = "8.8.8.8"
+o.rmempty = true
+o.default = default_config.dns or nil
 
-d = s:option(Value, "user",
+o = s:option(Value, "user",
 	translate("User(-u)"),
 	translate("The user that commands are run as inside the container.(format: name|uid[:group|gid])"))
-d.placeholder = "1000:1000"
-d.rmempty = true
-d.default = default_config.user or nil
+o.placeholder = "1000:1000"
+o.rmempty = true
+o.default = default_config.user or nil
 
-d = s:option(DynamicList, "env",
+o = s:option(DynamicList, "env",
 	translate("Environmental Variable(-e)"),
 	translate("Set environment variables to inside the container"))
-d.placeholder = "TZ=Asia/Shanghai"
-d.rmempty = true
-d.default = default_config.env or nil
+o.placeholder = "TZ=Asia/Shanghai"
+o.rmempty = true
+o.default = default_config.env or nil
 
-d = s:option(DynamicList, "volume",
+o = s:option(DynamicList, "volume",
 	translate("Bind Mount(-v)"),
 	translate("Bind mount a volume"))
-d.placeholder = "/media:/media:slave"
-d.rmempty = true
-d.default = default_config.volume or nil
+o.placeholder = "/media:/media:slave"
+o.rmempty = true
+o.default = default_config.volume or nil
 
 local d_publish = s:option(DynamicList, "publish",
 	translate("Exposed Ports(-p)"),
@@ -550,107 +548,107 @@ d_publish.placeholder = "2200:22/tcp"
 d_publish.rmempty = true
 d_publish.default = default_config.publish or nil
 
-d = s:option(Value, "command", translate("Run command"))
-d.placeholder = "/bin/sh init.sh"
-d.rmempty = true
-d.default = default_config.command or nil
+o = s:option(Value, "command", translate("Run command"))
+o.placeholder = "/bin/sh init.sh"
+o.rmempty = true
+o.default = default_config.command or nil
 
-d = s:option(Flag, "advance", translate("Advance"))
-d.rmempty = true
-d.disabled = 0
-d.enabled = 1
-d.default = default_config.advance or 0
+o = s:option(Flag, "advance", translate("Advance"))
+o.rmempty = true
+o.disabled = 0
+o.enabled = 1
+o.default = default_config.advance or 0
 
-d = s:option(Value, "hostname",
+o = s:option(Value, "hostname",
 	translate("Host Name"),
 	translate("The hostname to use for the container"))
-d.rmempty = true
-d.default = default_config.hostname or nil
-d:depends("advance", 1)
+o.rmempty = true
+o.default = default_config.hostname or nil
+o:depends("advance", 1)
 
-d = s:option(Flag, "publish_all",
+o = s:option(Flag, "publish_all",
 	translate("Exposed All Ports(-P)"),
 	translate("Allocates an ephemeral host port for all of a container's exposed ports"))
-d.rmempty = true
-d.disabled = 0
-d.enabled = 1
-d.default = default_config.publish_all and 1 or 0
-d:depends("advance", 1)
+o.rmempty = true
+o.disabled = 0
+o.enabled = 1
+o.default = default_config.publish_all and 1 or 0
+o:depends("advance", 1)
 
-d = s:option(DynamicList, "device",
+o = s:option(DynamicList, "device",
 	translate("Device(--device)"),
 	translate("Add host device to the container"))
-d.placeholder = "/dev/sda:/dev/xvdc:rwm"
-d.rmempty = true
-d:depends("advance", 1)
-d.default = default_config.device or nil
+o.placeholder = "/dev/sda:/dev/xvdc:rwm"
+o.rmempty = true
+o:depends("advance", 1)
+o.default = default_config.device or nil
 
-d = s:option(DynamicList, "tmpfs",
+o = s:option(DynamicList, "tmpfs",
 	translate("Tmpfs(--tmpfs)"),
 	translate("Mount tmpfs directory"))
-d.placeholder = "/run:rw,noexec,nosuid,size=65536k"
-d.rmempty = true
-d:depends("advance", 1)
-d.default = default_config.tmpfs or nil
+o.placeholder = "/run:rw,noexec,nosuid,size=65536k"
+o.rmempty = true
+o:depends("advance", 1)
+o.default = default_config.tmpfs or nil
 
-d = s:option(DynamicList, "sysctl",
+o = s:option(DynamicList, "sysctl",
 	translate("Sysctl(--sysctl)"),
 	translate("Sysctls (kernel parameters) options"))
-d.placeholder = "net.ipv4.ip_forward=1"
-d.rmempty = true
-d:depends("advance", 1)
-d.default = default_config.sysctl or nil
+o.placeholder = "net.ipv4.ip_forward=1"
+o.rmempty = true
+o:depends("advance", 1)
+o.default = default_config.sysctl or nil
 
-d = s:option(DynamicList, "cap_add",
+o = s:option(DynamicList, "cap_add",
 	translate("CAP-ADD(--cap-add)"),
 	translate("A list of kernel capabilities to add to the container"))
-d.placeholder = "NET_ADMIN"
-d.rmempty = true
-d:depends("advance", 1)
-d.default = default_config.cap_add or nil
+o.placeholder = "NET_ADMIN"
+o.rmempty = true
+o:depends("advance", 1)
+o.default = default_config.cap_add or nil
 
-d = s:option(Value, "cpus",
+o = s:option(Value, "cpus",
 	translate("CPUs"),
 	translate("Number of CPUs. Number is a fractional number. 0.000 means no limit"))
-d.placeholder = "1.5"
-d.rmempty = true
-d:depends("advance", 1)
-d.datatype="ufloat"
-d.default = default_config.cpus or nil
+o.placeholder = "1.5"
+o.rmempty = true
+o:depends("advance", 1)
+o.datatype="ufloat"
+o.default = default_config.cpus or nil
 
-d = s:option(Value, "cpu_shares",
+o = s:option(Value, "cpu_shares",
 	translate("CPU Shares Weight"),
 	translate("CPU shares relative weight, if 0 is set, the system will ignore the value and use the default of 1024"))
-d.placeholder = "1024"
-d.rmempty = true
-d:depends("advance", 1)
-d.datatype="uinteger"
-d.default = default_config.cpu_shares or nil
+o.placeholder = "1024"
+o.rmempty = true
+o:depends("advance", 1)
+o.datatype="uinteger"
+o.default = default_config.cpu_shares or nil
 
-d = s:option(Value, "memory",
+o = s:option(Value, "memory",
 	translate("Memory"),
 	translate("Memory limit (format: <number>[<unit>]). Number is a positive integer. Unit can be one of b, k, m, or g. Minimum is 4M"))
-d.placeholder = "128m"
-d.rmempty = true
-d:depends("advance", 1)
-d.default = default_config.memory or nil
+o.placeholder = "128m"
+o.rmempty = true
+o:depends("advance", 1)
+o.default = default_config.memory or nil
 
-d = s:option(Value, "blkio_weight",
+o = s:option(Value, "blkio_weight",
 	translate("Block IO Weight"),
 	translate("Block IO weight (relative weight) accepts a weight value between 10 and 1000"))
-d.placeholder = "500"
-d.rmempty = true
-d:depends("advance", 1)
-d.datatype="uinteger"
-d.default = default_config.blkio_weight or nil
+o.placeholder = "500"
+o.rmempty = true
+o:depends("advance", 1)
+o.datatype="uinteger"
+o.default = default_config.blkio_weight or nil
 
-d = s:option(DynamicList, "log_opt",
+o = s:option(DynamicList, "log_opt",
 	translate("Log driver options"),
 	translate("The logging configuration for this container"))
-d.placeholder = "max-size=1m"
-d.rmempty = true
-d:depends("advance", 1)
-d.default = default_config.log_opt or nil
+o.placeholder = "max-size=1m"
+o.rmempty = true
+o:depends("advance", 1)
+o.default = default_config.log_opt or nil
 
 for _, v in ipairs (networks) do
 	if v.Name then
