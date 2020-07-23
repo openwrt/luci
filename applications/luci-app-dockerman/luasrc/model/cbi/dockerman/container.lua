@@ -304,7 +304,17 @@ if action == "info" then
 		},
 	}
 
-	table_info["06start"] = container_info.State.Status == "running" and {_key = translate("Start Time"),  _value = container_info.State and container_info.State.StartedAt or "-"} or {_key = translate("Finish Time"),  _value = container_info.State and container_info.State.FinishedAt or "-"}
+	if container_info.State.Status == "running" then
+		table_info["06start"] = {
+			_key = translate("Start Time"),
+			_value = container_info.State and container_info.State.StartedAt or "-"
+		}
+	else
+		table_info["06start"] = {
+			_key = translate("Finish Time"),
+			_value = container_info.State and container_info.State.FinishedAt or "-"
+		}
+	end
 
 	table_info["07healthy"] = {
 		_key = translate("Healthy"),
@@ -385,16 +395,17 @@ if action == "info" then
 		_button=translate("Connect")
 	}
 
-	d_info = m:section(Table,table_info)
-	d_info.nodescr=true
-	d_info.formvalue=function(self, section)
+	s = m:section(Table,table_info)
+	s.nodescr=true
+	s.formvalue=function(self, section)
 		return table_info
 	end
 
-	dv_key = d_info:option(DummyValue, "_key", translate("Info"))
-	dv_key.width = "20%"
-	dv_value = d_info:option(ListValue, "_value")
-	dv_value.render = function(self, section, scope)
+	o = s:option(DummyValue, "_key", translate("Info"))
+	o.width = "20%"
+
+	o = s:option(ListValue, "_value")
+	o.render = function(self, section, scope)
 		if table_info[section]._key == translate("Name") then
 			self:reset_values()
 			self.template = "cbi/value"
@@ -432,23 +443,23 @@ if action == "info" then
 			DummyValue.render(self, section, scope)
 		end
 	end
-
-	dv_value.forcewrite = true -- for write function using simpleform 
-	dv_value.write = function(self, section, value)
+	o.forcewrite = true
+	o.write = function(self, section, value)
 		table_info[section]._value=value
 	end
-	dv_value.validate = function(self, value)
+	o.validate = function(self, value)
 		return value
 	end
-	dv_opts = d_info:option(Value, "_opts")
-	dv_opts.forcewrite = true -- for write function using simpleform 
-	dv_opts.write = function(self, section, value)
+
+	o = s:option(Value, "_opts")
+	o.forcewrite = true
+	o.write = function(self, section, value)
 		table_info[section]._opts=value
 	end
-	dv_opts.validate = function(self, value)
+	o.validate = function(self, value)
 		return value
 	end
-	dv_opts.render = function(self, section, scope)
+	o.render = function(self, section, scope)
 		if table_info[section]._key==translate("Connect Network") then
 			self.template = "cbi/value"
 			self.keylist = {}
@@ -465,11 +476,11 @@ if action == "info" then
 		end
 	end
 
-	btn_update = d_info:option(Button, "_button")
-	btn_update.forcewrite = true
-	btn_update.render = function(self, section, scope)
+	o = s:option(Button, "_button")
+	o.forcewrite = true
+	o.render = function(self, section, scope)
 		if table_info[section]._button and table_info[section]._value ~= nil then
-			btn_update.inputtitle=table_info[section]._button
+			self.inputtitle=table_info[section]._button
 			self.template = "cbi/button"
 			self.inputstyle = "edit"
 			Button.render(self, section, scope)
@@ -479,10 +490,9 @@ if action == "info" then
 			DummyValue.render(self, section, scope)
 		end
 	end
-
-	btn_update.write = function(self, section, value)
-
+	o.write = function(self, section, value)
 		local res
+
 		docker:clear_status()
 
 		if section == "01name" then
@@ -548,7 +558,7 @@ if action == "info" then
 		luci.http.redirect(luci.dispatcher.build_url("admin/docker/container/"..container_id.."/info"))
 	end
 elseif action == "resources" then
-	local s = m:section(SimpleSection)
+	s = m:section(SimpleSection)
 	o = s:option( Value, "cpus",
 		translate("CPUs"),
 		translate("Number of CPUs. Number is a fractional number. 0.000 means no limit."))
@@ -618,20 +628,19 @@ elseif action == "resources" then
 	end
 
 elseif action == "file" then
-	local filesection= m:section(SimpleSection)
+	s = m:section(SimpleSection)
+	s.template = "dockerman/container_file"
+	s.container = container_id
 	m.submit = false
 	m.reset  = false
-	filesection.template = "dockerman/container_file"
-	filesection.container = container_id
 elseif action == "inspect" then
-	local inspectsection= m:section(SimpleSection)
-	inspectsection.syslog = luci.jsonc.stringify(container_info, true)
-	inspectsection.title = translate("Container Inspect")
-	inspectsection.template = "dockerman/logs"
+	s = m:section(SimpleSection)
+	s.syslog = luci.jsonc.stringify(container_info, true)
+	s.title = translate("Container Inspect")
+	s.template = "dockerman/logs"
 	m.submit = false
 	m.reset  = false
 elseif action == "logs" then
-	local logsection= m:section(SimpleSection)
 	local logs = ""
 	local query ={
 		stdout = 1,
@@ -639,15 +648,17 @@ elseif action == "logs" then
 		tail = 1000
 	}
 
-	local logs = dk.containers:logs({id = container_id, query = query})
+	s = m:section(SimpleSection)
+
+	logs = dk.containers:logs({id = container_id, query = query})
 	if logs.code == 200 then
-		logsection.syslog=logs.body
+		s.syslog=logs.body
 	else
-		logsection.syslog="Get Logs ERROR\n"..logs.code..": "..logs.body
+		s.syslog="Get Logs ERROR\n"..logs.code..": "..logs.body
 	end
 
-	logsection.title=translate("Container Logs")
-	logsection.template = "dockerman/logs"
+	s.title=translate("Container Logs")
+	s.template = "dockerman/logs"
 	m.submit = false
 	m.reset  = false
 elseif action == "console" then
@@ -655,36 +666,40 @@ elseif action == "console" then
 	m.reset  = false
 	local cmd_docker = luci.util.exec("which docker"):match("^.+docker") or nil
 	local cmd_ttyd = luci.util.exec("which ttyd"):match("^.+ttyd") or nil
+
 	if cmd_docker and cmd_ttyd and container_info.State.Status == "running" then
-		local consolesection= m:section(SimpleSection)
 		local cmd = "/bin/sh"
 		local uid
-		local vcommand = consolesection:option(Value, "command", translate("Command"))
-		vcommand:value("/bin/sh", "/bin/sh")
-		vcommand:value("/bin/ash", "/bin/ash")
-		vcommand:value("/bin/bash", "/bin/bash")
-		vcommand.default = "/bin/sh"
-		vcommand.forcewrite = true
-		vcommand.write = function(self, section, value)
+
+		s = m:section(SimpleSection)
+
+		o = s:option(Value, "command", translate("Command"))
+		o:value("/bin/sh", "/bin/sh")
+		o:value("/bin/ash", "/bin/ash")
+		o:value("/bin/bash", "/bin/bash")
+		o.default = "/bin/sh"
+		o.forcewrite = true
+		o.write = function(self, section, value)
 			cmd = value
 		end
 
-		local vuid = consolesection:option(Value, "uid", translate("UID"))
-		vuid.forcewrite = true
-		vuid.write = function(self, section, value)
+		o = s:option(Value, "uid", translate("UID"))
+		o.forcewrite = true
+		o.write = function(self, section, value)
 			uid = value
 		end
 
-		local btn_connect = consolesection:option(Button, "connect")
-		btn_connect.render = function(self, section, scope)
+		o = s:option(Button, "connect")
+		o.render = function(self, section, scope)
 			self.inputstyle = "add"
 			self.title = " "
 			self.inputtitle = translate("Connect")
 			Button.render(self, section, scope)
 		end
-		btn_connect.write = function(self, section)
+		o.write = function(self, section)
 			local cmd_docker = luci.util.exec("which docker"):match("^.+docker") or nil
 			local cmd_ttyd = luci.util.exec("which ttyd"):match("^.+ttyd") or nil
+
 			if not cmd_docker or not cmd_ttyd or cmd_docker:match("^%s+$") or cmd_ttyd:match("^%s+$") then return end
 				local kill_ttyd = 'netstat -lnpt | grep ":7682[ \t].*ttyd$" | awk \'{print $NF}\' | awk -F\'/\' \'{print "kill -9 " $1}\' | sh > /dev/null'
 				luci.util.exec(kill_ttyd)
@@ -701,16 +716,19 @@ elseif action == "console" then
 				else
 				return
 			end
+
 			local start_cmd = cmd_ttyd .. ' -d 2 --once -p 7682 '.. cmd_docker .. ' -H "'.. hosts ..'" exec -it ' .. (uid and uid ~= "" and (" -u ".. uid  .. ' ') or "").. container_id .. ' ' .. cmd .. ' &'
 			os.execute(start_cmd)
-			local console = consolesection:option(DummyValue, "console")
-			console.container_id = container_id
-			console.template = "dockerman/container_console"
+
+			o = s:option(DummyValue, "console")
+			o.container_id = container_id
+			o.template = "dockerman/container_console"
 		end
 	end
 elseif action == "stats" then
 	local response = dk.containers:top({id = container_id, query = {ps_args="-aux"}})
 	local container_top
+
 	if response.code == 200 then
 		container_top=response.body
 	else
@@ -721,10 +739,9 @@ elseif action == "stats" then
 	end
 
 	if type(container_top) == "table" then
-		container_top=response.body
-		stat_section = m:section(SimpleSection)
-		stat_section.container_id = container_id
-		stat_section.template = "dockerman/container_stats"
+		s = m:section(SimpleSection)
+		s.container_id = container_id
+		s.template = "dockerman/container_stats"
 		table_stats = {
 			cpu={
 				key=translate("CPU Useage"),
@@ -735,14 +752,17 @@ elseif action == "stats" then
 				value='-'
 			}
 		}
-		stat_section = m:section(Table, table_stats, translate("Stats"))
-		stat_section:option(DummyValue, "key", translate("Stats")).width="33%"
-		stat_section:option(DummyValue, "value")
-		top_section= m:section(Table, container_top.Processes, translate("TOP"))
+
+		container_top = response.body
+		s = m:section(Table, table_stats, translate("Stats"))
+		s:option(DummyValue, "key", translate("Stats")).width="33%"
+		s:option(DummyValue, "value")
+		top_section = m:section(Table, container_top.Processes, translate("TOP"))
 		for i, v in ipairs(container_top.Titles) do
 			top_section:option(DummyValue, i, translate(v))
 		end
 	end
+
 	m.submit = false
 	m.reset  = false
 end
