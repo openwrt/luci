@@ -3,8 +3,6 @@ LuCI - Lua Configuration Interface
 Copyright 2019 lisaac <https://github.com/lisaac/luci-app-dockerman>
 ]]--
 
-require "luci.util"
-local uci = luci.model.uci.cursor()
 local docker = require "luci.model.docker"
 
 local m, s, o
@@ -53,72 +51,75 @@ m = SimpleForm("docker", translate("Docker"))
 m.submit=false
 m.reset=false
 
-network_table = m:section(Table, network_list, translate("Networks"))
-network_table.nodescr=true
+s = m:section(Table, network_list, translate("Networks"))
+s.nodescr=true
 
-network_selecter = network_table:option(Flag, "_selected","")
-network_selecter.template = "dockerman/cbi/xfvalue"
-network_id = network_table:option(DummyValue, "_id", translate("ID"))
-network_selecter.disabled = 0
-network_selecter.enabled = 1
-network_selecter.default = 0
-network_selecter.render = function(self, section, scope)
+o = s:option(Flag, "_selected","")
+o.template = "dockerman/cbi/xfvalue"
+o.disabled = 0
+o.enabled = 1
+o.default = 0
+o.render = function(self, section, scope)
 	self.disable = 0
 	if network_list[section]["_name"] == "bridge" or network_list[section]["_name"] == "none" or network_list[section]["_name"] == "host" then
 		self.disable = 1
 	end
 	Flag.render(self, section, scope)
 end
-
-network_name = network_table:option(DummyValue, "_name", translate("Network Name"))
-network_driver = network_table:option(DummyValue, "_driver", translate("Driver"))
-network_interface = network_table:option(DummyValue, "_interface", translate("Parent Interface"))
-network_subnet = network_table:option(DummyValue, "_subnet", translate("Subnet"))
-network_gateway = network_table:option(DummyValue, "_gateway", translate("Gateway"))
-
-network_selecter.write = function(self, section, value)
+o.write = function(self, section, value)
 	network_list[section]._selected = value
 end
 
-docker_status = m:section(SimpleSection)
-docker_status.template = "dockerman/apply_widget"
-docker_status.err=docker:read_status()
-docker_status.err=docker_status.err and docker_status.err:gsub("\n","<br>"):gsub(" ","&nbsp;")
-if docker_status.err then
+o = s:option(DummyValue, "_id", translate("ID"))
+
+o = s:option(DummyValue, "_name", translate("Network Name"))
+
+o = s:option(DummyValue, "_driver", translate("Driver"))
+
+o = s:option(DummyValue, "_interface", translate("Parent Interface"))
+
+o = s:option(DummyValue, "_subnet", translate("Subnet"))
+
+o = s:option(DummyValue, "_gateway", translate("Gateway"))
+
+s = m:section(SimpleSection)
+s.template = "dockerman/apply_widget"
+s.err = docker:read_status()
+s.err = s.err and s.err:gsub("\n","<br>"):gsub(" ","&nbsp;")
+if s.err then
 	docker:clear_status()
 end
 
-action = m:section(Table,{{}})
-action.notitle=true
-action.rowcolors=false
-action.template="cbi/nullsection"
+s = m:section(Table,{{}})
+s.notitle=true
+s.rowcolors=false
+s.template="cbi/nullsection"
 
-btnnew=action:option(Button, "_new")
-btnnew.inputtitle= translate("New")
-btnnew.template = "dockerman/cbi/inlinebutton"
-btnnew.notitle=true
-btnnew.inputstyle = "add"
-btnnew.forcewrite = true
-btnnew.write = function(self, section)
-	uci.http.redirect(luci.dispatcher.build_url("admin/docker/newnetwork"))
+o = s:option(Button, "_new")
+o.inputtitle= translate("New")
+o.template = "dockerman/cbi/inlinebutton"
+o.notitle=true
+o.inputstyle = "add"
+o.forcewrite = true
+o.write = function(self, section)
+	luci.http.redirect(luci.dispatcher.build_url("admin/docker/newnetwork"))
 end
 
-btnremove = action:option(Button, "_remove")
-btnremove.inputtitle= translate("Remove")
-btnremove.template = "dockerman/cbi/inlinebutton"
-btnremove.inputstyle = "remove"
-btnremove.forcewrite = true
-btnremove.write = function(self, section)
+o = s:option(Button, "_remove")
+o.inputtitle= translate("Remove")
+o.template = "dockerman/cbi/inlinebutton"
+o.inputstyle = "remove"
+o.forcewrite = true
+o.write = function(self, section)
 	local network_selected = {}
 	local network_name_selected = {}
 	local network_driver_selected = {}
 
-	local network_table_sids = network_table:cfgsections()
-	for _, network_table_sid in ipairs(network_table_sids) do
-		if network_list[network_table_sid]._selected == 1 then
-			network_selected[#network_selected+1] = network_list[network_table_sid]._id
-			network_name_selected[#network_name_selected+1] = network_list[network_table_sid]._name
-			network_driver_selected[#network_driver_selected+1] = network_list[network_table_sid]._driver
+	for k in pairs(network_list) do
+		if network_list[k]._selected == 1 then
+			network_selected[#network_selected + 1] = network_list[k]._id
+			network_name_selected[#network_name_selected + 1] = network_list[k]._name
+			network_driver_selected[#network_driver_selected + 1] = network_list[k]._driver
 		end
 	end
 
