@@ -369,6 +369,10 @@ local function tree_to_json(node, json)
 	return json
 end
 
+function base_url(url)
+	return http.getcookie("pathname") .. url
+end
+
 function build_url(...)
 	local path = {...}
 	local url = { http.getenv("SCRIPT_NAME") or "" }
@@ -385,7 +389,7 @@ function build_url(...)
 		url[#url+1] = "/"
 	end
 
-	return table.concat(url, "")
+	return base_url(table.concat(url, ""))
 end
 
 
@@ -759,9 +763,9 @@ local function init_template_engine(ctx)
 		export      = function(k, v) if tpl.context.viewns[k] == nil then tpl.context.viewns[k] = v end end;
 		striptags   = xml.striptags;
 		pcdata      = xml.pcdata;
-		media       = media;
+		media       = base_url(media);
 		theme       = fs.basename(media);
-		resource    = luci.config.main.resourcebase;
+		resource    = base_url(luci.config.main.resourcebase);
 		ifattr      = function(...) return _ifattr(...) end;
 		attr        = function(...) return _ifattr(true, ...) end;
 		url         = build_url;
@@ -777,7 +781,7 @@ local function init_template_engine(ctx)
 				url[#url+1] = "?"
 				url[#url+1] = query
 			end
-			return table.concat(url, "")
+			return base_url(table.concat(url, ""))
 		elseif key == "token" then
 			return ctx.authtoken
 		else
