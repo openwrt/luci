@@ -4,9 +4,11 @@ Copyright 2019 lisaac <https://github.com/lisaac/luci-app-dockerman>
 ]]--
 
 local docker = require "luci.docker"
+local fs = require "nixio.fs"
 local uci = (require "luci.model.uci").cursor()
 
 local _docker = {}
+_docker.options = {}
 
 --pull image and return iamge id
 local update_image = function(self, image_name)
@@ -267,29 +269,25 @@ local duplicate_config = function (self, request)
 	return get_config(container_info.body, image_config)
 end
 
-_docker.new = function(option)
-	local option = option or {}
+_docker.new = function()
 
 	local remote = uci:get("dockerd", "globals", "remote_endpoint")
-	options = {
-		host = (remote == "true") and (option.host or uci:get("dockerd", "globals", "remote_host")) or nil,
-		port = (remote == "true") and (option.port or uci:get("dockerd", "globals", "remote_port")) or nil,
-		debug = option.debug or uci:get("dockerd", "globals", "debug") == 'true' and true or false,
-		debug_path = option.debug_path or uci:get("dockerd", "globals", "debug_path") or "/tmp/.docker_debug"
+
+	_docker.options = {
+		host = (remote == "true") and (uci:get("dockerd", "globals", "remote_host")) or nil,
+		port = (remote == "true") and (uci:get("dockerd", "globals", "remote_port")) or nil,
+		socket_path = (remote ~= "true") and (uci:get("dockerd", "globals", "socket_path") or "/var/run/docker.sock") or nil,
+		debug = uci:get("dockerd", "globals", "debug") == 'true' and true or false,
+		debug_path = uci:get("dockerd", "globals", "debug_path") or "/tmp/.docker_debug",
+		status_path = uci:get("dockerd", "globals", "status_path") or "/tmp/.docker_status"
 	}
 
-	options.socket_path = (remote ~= "true" or not options.host or not options.port) and (option.socket_path or uci:get("dockerd", "globals", "socket_path") or "/var/run/docker.sock") or nil
-
-	local _new = docker.new(options)
-	_new.options.status_path = uci:get("dockerd", "globals", "status_path") or "/tmp/.docker_status"
+	local _new = docker.new(_docker.options)
 	_new.containers_upgrade = upgrade
 	_new.containers_duplicate_config = duplicate_config
 
 	return _new
 end
-
-_docker.options={}
-_docker.options.status_path = uci:get("dockerd", "globals", "status_path") or "/tmp/.docker_status"
 
 _docker.append_status=function(self,val)
 	if not val then
@@ -310,11 +308,11 @@ _docker.write_status=function(self,val)
 end
 
 _docker.read_status=function(self)
-	return nixio.fs.readfile(self.options.status_path)
+	return fs.readfile(self.options.status_path)
 end
 
 _docker.clear_status=function(self)
-	nixio.fs.remove(self.options.status_path)
+	fs.remove(self.options.status_path)
 end
 
 local status_cb = function(res, source, handler)
@@ -381,7 +379,7 @@ _docker.import_image_show_status_cb = function(res, source)
 end
 
 _docker.create_macvlan_interface = function(name, device, gateway, subnet)
-	if not nixio.fs.access("/etc/config/network") or not nixio.fs.access("/etc/config/firewall") then
+	if not fs.access("/etc/config/network") or not fs.access("/etc/config/firewall") then
 		return
 	end
 
@@ -432,7 +430,7 @@ _docker.create_macvlan_interface = function(name, device, gateway, subnet)
 end
 
 _docker.remove_macvlan_interface = function(name)
-	if not nixio.fs.access("/etc/config/network") or not nixio.fs.access("/etc/config/firewall") then
+	if not fs.access("/etc/config/network") or not fs.access("/etc/config/firewall") then
 		return
 	end
 
