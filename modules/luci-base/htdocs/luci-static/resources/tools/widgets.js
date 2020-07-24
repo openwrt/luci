@@ -580,6 +580,8 @@ var CBIUserSelect = form.ListValue.extend({
 
 	load: function(section_id) {
 		return getUsers().then(L.bind(function(users) {
+			delete this.keylist;
+			delete this.vallist;
 			for (var i = 0; i < users.length; i++) {
 				this.value(users[i]);
 			}
