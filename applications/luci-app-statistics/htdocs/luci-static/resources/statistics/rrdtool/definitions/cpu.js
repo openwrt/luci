@@ -5,7 +5,7 @@
 'require uci';
 
 return baseclass.extend({
-	title: _('Processor'),
+	title: _('CPU'),
 
 	rrdargs: function(graph, host, plugin, plugin_instance, dtype) {
 		var p = [];
