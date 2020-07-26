@@ -23,6 +23,12 @@ return baseclass.extend({
 		o.rmempty = false;
 		o.depends('enable', '1');
 
+		o = s.option(form.Flag, 'ReportNumCpu', _('Report number of CPUs'),
+			_('When set to true, reports number of available CPUs'));
+		o.default = '0';
+		o.rmempty = false;
+		o.depends('enable', '1');
+
 		o = s.option(form.Flag, 'ValuesPercentage', _('Report in percent'),
 			_('When set to true, we request percentage values'));
 		o.depends({ 'enable': '1', 'ReportByCpu': '1', 'ReportByState': '1' });
