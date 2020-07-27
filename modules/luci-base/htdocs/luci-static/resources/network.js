@@ -1224,6 +1224,22 @@ Network = baseclass.extend(/** @lends LuCI.network.prototype */ {
 				devices[netid] = this.instantiateDevice(netid);
 			}
 
+			/* find uci declared devices */
+			var uciDevices = uci.sections('network', 'device');
+
+			for (var i = 0; i < uciDevices.length; i++) {
+				var type = uciDevices[i].type,
+				    name = uciDevices[i].name;
+
+				if (!type || !name || devices.hasOwnProperty(name))
+					continue;
+
+				if (type == 'bridge')
+					_state.isBridge[name] = true;
+
+				devices[name] = this.instantiateDevice(name);
+			}
+
 			var rv = [];
 
 			for (var netdev in devices)
