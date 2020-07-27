@@ -603,7 +603,7 @@ var CBIMap = CBIAbstractElement.extend(/** @lends LuCI.form.Map.prototype */ {
 						E('p', {}, [ _('An error occurred while saving the form:') ]),
 						E('p', {}, [ E('em', { 'style': 'white-space:pre' }, [ e.message ]) ]),
 						E('div', { 'class': 'right' }, [
-							E('button', { 'click': ui.hideModal }, [ _('Dismiss') ])
+							E('button', { 'class': 'btn', 'click': ui.hideModal }, [ _('Dismiss') ])
 						])
 					]);
 				}
