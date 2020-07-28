@@ -333,6 +333,7 @@ return view.extend({
 		s.tab('advanced', _('Advanced Settings'));
 		s.tab('physical', _('Physical Settings'));
 		s.tab('brport', _('Bridge port specific options'));
+		s.tab('bridgevlan', _('Bridge VLAN filtering'));
 		s.tab('firewall', _('Firewall Settings'));
 		s.tab('dhcp', _('DHCP Server'));
 
@@ -717,7 +718,21 @@ return view.extend({
 							o.depends('proto', protoval);
 					}
 				}
+
+				this.activeSection = s.section;
 			}, this));
+		};
+
+		s.handleModalCancel = function(/* ... */) {
+			var type = uci.get('network', this.activeSection || this.addedSection, 'type'),
+			    ifname = (type == 'bridge') ? 'br-%s'.format(this.activeSection || this.addedSection) : null;
+
+			uci.sections('network', 'bridge-vlan', function(bvs) {
+				if (ifname != null && bvs.device == ifname)
+					uci.remove('network', bvs['.name']);
+			});
+
+			return form.GridSection.prototype.handleModalCancel.apply(this, arguments);
 		};
 
 		s.handleAdd = function(ev) {
@@ -823,8 +838,9 @@ return view.extend({
 												protoclass.addDevice(dev);
 											});
 										}
-									}).then(L.bind(m.children[0].renderMoreOptionsModal, m.children[0], nameval));
 
+										m.children[0].addedSection = section_id;
+									}).then(L.bind(m.children[0].renderMoreOptionsModal, m.children[0], nameval));
 								});
 							})
 						}, _('Create interface'))
@@ -972,6 +988,17 @@ return view.extend({
 			    dev = getDevice(s.section);
 
 			nettools.addDeviceOptions(s, dev, isNew);
+		};
+
+		s.handleModalCancel = function(/* ... */) {
+			var name = uci.get('network', this.addedSection, 'name')
+
+			uci.sections('network', 'bridge-vlan', function(bvs) {
+				if (name != null && bvs.device == name)
+					uci.remove('network', bvs['.name']);
+			});
+
+			return form.GridSection.prototype.handleModalCancel.apply(this, arguments);
 		};
 
 		function getDevice(section_id) {
