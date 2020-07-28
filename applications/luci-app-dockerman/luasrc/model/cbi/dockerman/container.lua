@@ -700,28 +700,31 @@ elseif action == "console" then
 			local cmd_docker = luci.util.exec("which docker"):match("^.+docker") or nil
 			local cmd_ttyd = luci.util.exec("which ttyd"):match("^.+ttyd") or nil
 
-			if not cmd_docker or not cmd_ttyd or cmd_docker:match("^%s+$") or cmd_ttyd:match("^%s+$") then return end
-				local kill_ttyd = 'netstat -lnpt | grep ":7682[ \t].*ttyd$" | awk \'{print $NF}\' | awk -F\'/\' \'{print "kill -9 " $1}\' | sh > /dev/null'
-				luci.util.exec(kill_ttyd)
-				local hosts
-				local uci = (require "luci.model.uci").cursor()
-				local remote = uci:get_bool("dockerd", "globals", "remote_endpoint")
-				local host = nil
-				local port = nil
-				local socket = nil
+			if not cmd_docker or not cmd_ttyd or cmd_docker:match("^%s+$") or cmd_ttyd:match("^%s+$")then
+				return
+			end
 
-				if remote then
-					host = uci:get("dockerd", "globals", "remote_host") or nil
-					port = uci:get("dockerd", "globals", "remote_port") or nil
-				else
-					socket = uci:get("dockerd", "globals", "socket_path") or nil
-				end
+			local kill_ttyd = 'netstat -lnpt | grep ":7682[ \t].*ttyd$" | awk \'{print $NF}\' | awk -F\'/\' \'{print "kill -9 " $1}\' | sh > /dev/null'
+			luci.util.exec(kill_ttyd)
+			local hosts
+			local uci = (require "luci.model.uci").cursor()
+			local remote = uci:get_bool("dockerd", "globals", "remote_endpoint")
+			local host = nil
+			local port = nil
+			local socket = nil
 
-				if remote and host and port then
-					hosts = host .. ':'.. port
-				elseif socket_path then
-					hosts = "unix://" .. socket_path
-				else
+			if remote then
+				host = uci:get("dockerd", "globals", "remote_host") or nil
+				port = uci:get("dockerd", "globals", "remote_port") or nil
+			else
+				socket = uci:get("dockerd", "globals", "socket_path") or nil
+			end
+
+			if remote and host and port then
+				hosts = host .. ':'.. port
+			elseif socket_path then
+				hosts = "unix://" .. socket_path
+			else
 				return
 			end
 
