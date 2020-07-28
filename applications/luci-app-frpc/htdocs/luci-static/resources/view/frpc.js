@@ -50,7 +50,7 @@ var bindInfoConf = [
 
 var domainConf = [
 	[form.Value, 'custom_domains', _('Custom domains')],
-	[form.Value, 'sub_domain', _('Subdomain')],
+	[form.Value, 'subdomain', _('Subdomain')],
 ];
 
 var httpProxyConf = [
