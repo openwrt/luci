@@ -1,4 +1,5 @@
 'use strict';
+'require ui';
 'require uci';
 'require form';
 'require network';
@@ -83,6 +84,18 @@ function isBridgePort(dev) {
 	});
 
 	return isPort;
+}
+
+function renderDevBadge(dev) {
+	var type = dev.getType(), up = dev.isUp();
+
+	return E('span', { 'class': 'ifacebadge', 'style': 'font-weight:normal' }, [
+		E('img', {
+			'class': 'middle',
+			'src': L.resource('icons/%s%s.png').format(type, up ? '' : '_disabled')
+		}),
+		' ', dev.getName()
+	]);
 }
 
 function lookupDevName(s, section_id) {
@@ -179,6 +192,162 @@ function deviceRefresh(section_id) {
 		uielem.setValue(this.cfgvalue(section_id));
 	}
 }
+
+
+var cbiTagValue = form.Value.extend({
+	renderWidget: function(section_id, option_index, cfgvalue) {
+		var widget = new ui.Dropdown(cfgvalue || ['-'], {
+			'-': E([], [
+				E('span', { 'class': 'hide-open', 'style': 'font-family:monospace' }, [ '—' ]),
+				E('span', { 'class': 'hide-close' }, [ _('Do not participate', 'VLAN port state') ])
+			]),
+			'u': E([], [
+				E('span', { 'class': 'hide-open', 'style': 'font-family:monospace' }, [ 'u' ]),
+				E('span', { 'class': 'hide-close' }, [ _('Egress untagged', 'VLAN port state') ])
+			]),
+			't': E([], [
+				E('span', { 'class': 'hide-open', 'style': 'font-family:monospace' }, [ 't' ]),
+				E('span', { 'class': 'hide-close' }, [ _('Egress tagged', 'VLAN port state') ])
+			]),
+			'*': E([], [
+				E('span', { 'class': 'hide-open', 'style': 'font-family:monospace' }, [ '*' ]),
+				E('span', { 'class': 'hide-close' }, [ _('Primary VLAN ID', 'VLAN port state') ])
+			])
+		}, {
+			id: this.cbid(section_id),
+			sort: [ '-', 'u', 't', '*' ],
+			optional: false,
+			multiple: true
+		});
+
+		var field = this;
+
+		widget.toggleItem = function(sb, li, force_state) {
+			var lis = li.parentNode.querySelectorAll('li'),
+			    toggle = ui.Dropdown.prototype.toggleItem;
+
+			toggle.apply(this, [sb, li, force_state]);
+
+			if (force_state != null)
+				return;
+
+			switch (li.getAttribute('data-value'))
+			{
+			case '-':
+				if (li.hasAttribute('selected')) {
+					for (var i = 0; i < lis.length; i++) {
+						switch (lis[i].getAttribute('data-value')) {
+						case '-':
+							break;
+
+						case '*':
+							toggle.apply(this, [sb, lis[i], false]);
+							lis[i].setAttribute('unselectable', '');
+							break;
+
+						default:
+							toggle.apply(this, [sb, lis[i], false]);
+						}
+					}
+				}
+				break;
+
+			case 't':
+			case 'u':
+				if (li.hasAttribute('selected')) {
+					for (var i = 0; i < lis.length; i++) {
+						switch (lis[i].getAttribute('data-value')) {
+						case li.getAttribute('data-value'):
+							break;
+
+						case '*':
+							lis[i].removeAttribute('unselectable');
+							break;
+
+						default:
+							toggle.apply(this, [sb, lis[i], false]);
+						}
+					}
+				}
+				else {
+					toggle.apply(this, [sb, li, true]);
+				}
+				break;
+
+			case '*':
+				if (li.hasAttribute('selected')) {
+					var section_ids = field.section.cfgsections();
+
+					for (var i = 0; i < section_ids.length; i++) {
+						var other_widget = field.getUIElement(section_ids[i]),
+						    other_value = L.toArray(other_widget.getValue());
+
+						if (other_widget === this)
+							continue;
+
+						var new_value = other_value.filter(function(v) { return v != '*' });
+
+						if (new_value.length == other_value.length)
+							continue;
+
+						other_widget.setValue(new_value);
+						break;
+					}
+				}
+			}
+		};
+
+		var node = widget.render();
+
+		node.style.minWidth = '4em';
+
+		if (cfgvalue == '-')
+			node.querySelector('li[data-value="*"]').setAttribute('unselectable', '');
+
+		return node;
+	},
+
+	cfgvalue: function(section_id) {
+		var pname = this.port,
+		    spec = L.toArray(uci.get('network', section_id, 'ports')).filter(function(p) { return p.replace(/:[ut*]+$/, '') == pname })[0];
+
+		if (spec && spec.match(/t/))
+			return spec.match(/\*/) ? ['t', '*'] : ['t'];
+		else if (spec)
+			return spec.match(/\*/) ? ['u', '*'] : ['u'];
+		else
+			return ['-'];
+	},
+
+	write: function(section_id, value) {
+		var ports = [];
+
+		for (var i = 0; i < this.section.children.length; i++) {
+			var opt = this.section.children[i];
+
+			if (opt.port) {
+				var val = L.toArray(opt.formvalue(section_id)).join('');
+
+				switch (val) {
+				case '-':
+					break;
+
+				case 'u':
+					ports.push(opt.port);
+					break;
+
+				default:
+					ports.push('%s:%s'.format(opt.port, val));
+					break;
+				}
+			}
+		}
+
+		uci.set('network', section_id, 'ports', ports);
+	},
+
+	remove: function() {}
+});
 
 return baseclass.extend({
 	replaceOption: function(s, tabName, optionClass, optionName, optionTitle, optionDescription) {
@@ -649,5 +818,167 @@ return baseclass.extend({
 			o.default = o.disabled;
 			o.depends(Object.assign({ multicast: '1' }, simpledep));
 		}
+
+		o = this.addOption(s, 'bridgevlan', form.Flag, 'vlan_filtering', _('Enable VLAN filterering'));
+		o.depends('type', 'bridge');
+		o.updateDefaultValue = function(section_id) {
+			var device = isIface ? 'br-%s'.format(s.section) : uci.get('network', s.section, 'name'),
+			    uielem = this.getUIElement(section_id),
+			    has_vlans = false;
+
+			uci.sections('network', 'bridge-vlan', function(bvs) {
+				has_vlans = has_vlans || (bvs.device == device);
+			});
+
+			this.default = has_vlans ? this.enabled : this.disabled;
+
+			if (uielem && !uielem.isChanged())
+				uielem.setValue(this.default);
+		};
+
+		o = this.addOption(s, 'bridgevlan', form.SectionValue, 'bridge-vlan', form.TableSection, 'bridge-vlan');
+		o.depends('type', 'bridge');
+		o.renderWidget = function(/* ... */) {
+			return form.SectionValue.prototype.renderWidget.apply(this, arguments).then(L.bind(function(node) {
+				node.style.overflowX = 'auto';
+				node.style.overflowY = 'visible';
+				node.style.paddingBottom = '100px';
+				node.style.marginBottom = '-100px';
+
+				return node;
+			}, this));
+		};
+
+		ss = o.subsection;
+		ss.addremove = true;
+		ss.anonymous = true;
+
+		ss.renderHeaderRows = function(/* ... */) {
+			var node = form.TableSection.prototype.renderHeaderRows.apply(this, arguments);
+
+			node.querySelectorAll('.th').forEach(function(th) {
+				th.classList.add('middle');
+			});
+
+			return node;
+		};
+
+		ss.filter = function(section_id) {
+			var devname = isIface ? 'br-%s'.format(s.section) : uci.get('network', s.section, 'name');
+			return (uci.get('network', section_id, 'device') == devname);
+		};
+
+		ss.render = function(/* ... */) {
+			return form.TableSection.prototype.render.apply(this, arguments).then(L.bind(function(node) {
+				if (this.node)
+					this.node.parentNode.replaceChild(node, this.node);
+
+				this.node = node;
+
+				return node;
+			}, this));
+		};
+
+		ss.redraw = function() {
+			return this.load().then(L.bind(this.render, this));
+		};
+
+		ss.updatePorts = function(ports) {
+			var devices = ports.map(function(port) {
+				return network.instantiateDevice(port)
+			}).filter(function(dev) {
+				return dev.getType() != 'wifi' || dev.isUp();
+			});
+
+			this.children = this.children.filter(function(opt) { return !opt.option.match(/^port_/) });
+
+			for (var i = 0; i < devices.length; i++) {
+				o = ss.option(cbiTagValue, 'port_%s'.format(sfh(devices[i].getName())), renderDevBadge(devices[i]));
+				o.port = devices[i].getName();
+			}
+
+			var section_ids = this.cfgsections(),
+			    device_names = devices.reduce(function(names, dev) { names[dev.getName()] = true; return names }, {});
+
+			for (var i = 0; i < section_ids.length; i++) {
+				var old_spec = L.toArray(uci.get('network', section_ids[i], 'ports')),
+				    new_spec = old_spec.filter(function(spec) { return device_names[spec.replace(/:[ut*]+$/, '')] });
+
+				if (old_spec.length != new_spec.length)
+					uci.set('network', section_ids[i], 'ports', new_spec.length ? new_spec : null);
+			}
+		};
+
+		ss.handleAdd = function(ev) {
+			return s.parse().then(L.bind(function() {
+				var device = isIface ? 'br-%s'.format(s.section) : uci.get('network', s.section, 'name'),
+				    section_ids = this.cfgsections(),
+				    section_id = null,
+				    max_vlan_id = 0;
+
+				if (!device)
+					return;
+
+				for (var i = 0; i < section_ids.length; i++) {
+					var vid = +uci.get('network', section_ids[i], 'vlan');
+
+					if (vid > max_vlan_id)
+						max_vlan_id = vid;
+				}
+
+				section_id = uci.add('network', 'bridge-vlan');
+				uci.set('network', section_id, 'device', device);
+				uci.set('network', section_id, 'vlan', max_vlan_id + 1);
+
+				s.children.forEach(function(opt) {
+					switch (opt.option) {
+					case 'type':
+					case 'name_complex':
+						var input = opt.map.findElement('id', 'widget.%s'.format(opt.cbid(s.section)));
+						if (input)
+							input.disabled = true;
+						break;
+					}
+				});
+
+				s.getOption('vlan_filtering').updateDefaultValue(s.section);
+
+				return this.redraw();
+			}, this));
+		};
+
+		o = ss.option(form.Value, 'vlan', _('VLAN ID'));
+		o.datatype = 'range(1, 4094)';
+
+		o.renderWidget = function(/* ... */) {
+			var node = form.Value.prototype.renderWidget.apply(this, arguments);
+
+			node.style.width = '5em';
+
+			return node;
+		};
+
+		o.validate = function(section_id, value) {
+			var section_ids = this.section.cfgsections();
+
+			for (var i = 0; i < section_ids.length; i++) {
+				if (section_ids[i] == section_id)
+					continue;
+
+				if (uci.get('network', section_ids[i], 'vlan') == value)
+					return _('The VLAN ID must be unique');
+			}
+
+			return true;
+		};
+
+		o = ss.option(form.Flag, 'local', _('Local'));
+		o.default = o.enabled;
+
+		var ports = isIface
+			? (ifc.getDevices() || L.toArray(ifc.getDevice())).map(function(dev) { return dev.getName() })
+			: L.toArray(uci.get('network', s.section, 'ifname'));
+
+		ss.updatePorts(ports);
 	}
 });
