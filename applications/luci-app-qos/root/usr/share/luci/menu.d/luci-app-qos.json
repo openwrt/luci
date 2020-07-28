@@ -1,0 +1,14 @@
+{
+	"admin/network/qos": {
+		"title": "QoS",
+		"action": {
+			"type": "cbi",
+			"path": "qos/qos",
+			"post": { "cbi.submit": true }
+		},
+		"depends": {
+			"acl": [ "luci-app-qos" ],
+			"uci": { "qos": true }
+		}
+	}
+}

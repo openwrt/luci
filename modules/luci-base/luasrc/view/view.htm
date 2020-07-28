@@ -1,0 +1,12 @@
+<%+header%>
+
+<div id="view">
+	<div class="spinning"><%:Loading view…%></div>
+	<script type="text/javascript">
+		L.require('ui').then(function(ui) {
+			ui.instantiateView('<%=view%>');
+		});
+	</script>
+</div>
+
+<%+footer%>

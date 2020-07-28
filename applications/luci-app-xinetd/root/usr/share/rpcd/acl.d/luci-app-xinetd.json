@@ -1,0 +1,14 @@
+{
+	"luci-app-xinetd": {
+		"description": "Grant access to luci-app-xinetd",
+		"read": {
+			"file": {
+				"/etc/passwd": [ "read" ]
+			},
+			"uci": [ "xinetd" ]
+		},
+		"write": {
+			"uci": [ "xinetd" ]
+		}
+	}
+}

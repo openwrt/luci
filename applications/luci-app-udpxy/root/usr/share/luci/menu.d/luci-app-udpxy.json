@@ -1,0 +1,14 @@
+{
+	"admin/services/udpxy": {
+		"title": "udpxy",
+		"action": {
+			"type": "cbi",
+			"path": "udpxy",
+			"post": { "cbi.submit": true }
+		},
+		"depends": {
+			"acl": [ "luci-app-udpxy" ],
+			"uci": { "udpxy": true }
+		}
+	}
+}

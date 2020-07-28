@@ -1,0 +1,46 @@
+{
+	"unauthenticated": {
+		"description": "Allow system feature probing",
+		"read": {
+			"ubus": {
+				"luci": [ "getFeatures" ]
+			}
+		}
+	},
+
+	"luci-base": {
+		"description": "Grant access to basic LuCI procedures",
+		"read": {
+			"file": {
+				"/": [ "list" ],
+				"/*": [ "list" ]
+			},
+			"ubus": {
+				"file": [ "list" ],
+				"uci": [ "changes", "get" ]
+			}
+		},
+		"write": {
+			"cgi-io": [ "upload" ],
+			"file": {
+				"/etc/luci-uploads/*": [ "write" ]
+			},
+			"ubus": {
+				"file": [ "remove" ],
+				"uci": [ "add", "apply", "confirm", "delete", "order", "rename", "set" ]
+			}
+		}
+	},
+
+	"luci-base-network-status": {
+		"description": "Grant access to network status information",
+		"read": {
+			"ubus": {
+				"luci-rpc": [ "getBoardJSON", "getHostHints", "getNetworkDevices", "getWirelessDevices" ],
+				"network": [ "get_proto_handlers" ],
+				"network.interface": [ "dump" ]
+			},
+			"uci": [ "luci", "network", "wireless" ]
+		}
+	}
+}

@@ -1,0 +1,9 @@
+#!/bin/sh
+
+uci -q batch <<-EOF >/dev/null
+	delete ucitrack.minidlna
+	set ucitrack.minidlna=minidlna
+	commit ucitrack
+EOF
+
+exit 0

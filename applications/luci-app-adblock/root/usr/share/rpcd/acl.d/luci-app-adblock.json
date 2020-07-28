@@ -1,0 +1,31 @@
+{
+	"luci-app-adblock": {
+		"description": "Grant access to LuCI app adblock",
+		"write": {
+			"uci": ["adblock"],
+			"file": {
+				"/etc/adblock/*": ["read"],
+				"/etc/adblock/adblock.blacklist": ["write"],
+				"/etc/adblock/adblock.whitelist": ["write"]
+			}
+		},
+		"read": {
+			"cgi-io": [ "exec" ],
+			"file": {
+				"/var/run/adblock.pid": ["read"],
+				"/tmp/adb_runtime.json": ["read"],
+				"/etc/crontabs/root": ["read"],
+				"/sbin/logread -e adblock-": [ "exec" ],
+				"/usr/sbin/logread -e adblock-": [ "exec" ],
+				"/etc/init.d/adblock list" : [ "exec" ],
+				"/etc/init.d/adblock start" : [ "exec" ],
+				"/etc/init.d/adblock suspend" : [ "exec" ],
+				"/etc/init.d/adblock resume" : [ "exec" ],
+				"/etc/init.d/adblock report * [0-9]* [a-z]* json" : [ "exec" ],
+				"/etc/init.d/adblock timer * [0-9]* [0-9*]* [1-7,-*]*" : [ "exec" ],
+				"/etc/init.d/adblock query *" : [ "exec" ]
+			},
+			"uci": ["adblock"]
+		}
+	}
+}

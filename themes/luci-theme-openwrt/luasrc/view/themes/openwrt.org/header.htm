@@ -1,0 +1,85 @@
+<%#
+ Copyright 2008 Steven Barth <steven@midlink.org>
+ Copyright 2008-2010 Jo-Philipp Wich <jow@openwrt.org>
+ Licensed to the public under the Apache License 2.0.
+-%>
+
+<%
+	local sys  = require "luci.sys"
+	local util = require "luci.util"
+	local http = require "luci.http"
+	local disp = require "luci.dispatcher"
+	local ver  = require "luci.version"
+
+	local sysinfo = util.ubus("system", "info") or { }
+	local loadinfo = sysinfo.load or { 0, 0, 0 }
+	local boardinfo = util.ubus("system", "board") or { }
+
+	local node = disp.context.dispatched
+
+	http.prepare_content("application/xhtml+xml")
+-%>
+
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<%=luci.i18n.context.lang%>" lang="<%=luci.i18n.context.lang%>">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta http-equiv="Content-Script-Type" content="text/javascript" />
+<link rel="stylesheet" type="text/css" media="screen" href="<%=media%>/cascade.css" />
+<% if node and node.css then %><link rel="stylesheet" type="text/css" media="screen" href="<%=resource%>/<%=node.css%>" />
+<% end -%>
+<% if css then %><style title="text/css">
+<%= css %>
+</style>
+<% end -%>
+<script type="text/javascript" src="<%=url('admin/translations', luci.i18n.context.lang)%><%# ?v=PKG_VERSION %>"></script>
+<script type="text/javascript" src="<%=resource%>/cbi.js"></script>
+
+<title><%=striptags( (boardinfo.hostname or "?") .. ( (node and node.title) and ' - ' .. translate(node.title) or '')) %> - LuCI</title>
+</head>
+<body class="lang_<%=luci.i18n.context.lang%>" data-page="<%= pcdata(table.concat(disp.context.requestpath, "-")) %>">
+
+<p class="skiplink">
+<span id="skiplink1"><a href="#navigation"><%:Skip to navigation%></a></span>
+<span id="skiplink2"><a href="#content"><%:Skip to content%></a></span>
+</p>
+
+<div id="menubar">
+<h2 class="navigation"><a id="navigation" name="navigation"><%:Navigation%></a></h2>
+
+<div class="hostinfo">
+	<%=(boardinfo.hostname or "?")%> | <%=ver.distversion%> |
+	<%:Load%>: <%="%.2f" % (loadinfo[1] / 65535.0)%> <%="%.2f" % (loadinfo[2] / 65535.0)%> <%="%.2f" % (loadinfo[3] / 65535.0)%>
+</div>
+
+<div id="indicators"></div>
+
+<ul id="modemenu" style="display:none"></ul>
+
+<div class="clear"></div>
+</div>
+
+<div id="maincontainer">
+	<div id="mainmenu" style="display:none"></div>
+
+	<div id="maincontent">
+		<div id="tabmenu" style="display:none"></div>
+
+		<noscript>
+			<div class="alert-message warning">
+				<h4><%:JavaScript required!%></h4>
+				<p><%:You must enable JavaScript in your browser or LuCI will not work properly.%></p>
+			</div>
+		</noscript>
+
+		<%- if luci.sys.process.info("uid") == 0 and luci.sys.user.getuser("root") and not luci.sys.user.getpasswd("root") and category ~= "failsafe" then -%>
+		<div class="alert-message warning">
+			<h4><%:No password set!%></h4>
+			<p><%:There is no password set on this router. Please configure a root password to protect the web interface and enable SSH.%></p>
+			<% if disp.lookup("admin/system/admin") then %>
+				<div class="right"><a class="btn" href="<%=url("admin/system/admin")%>"><%:Go to password configuration...%></a></div>
+			<% end %>
+		</div>
+		<%- end -%>

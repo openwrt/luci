@@ -1,0 +1,152 @@
+{
+	"admin": {
+		"title": "Administration",
+		"order": 10,
+		"action": {
+			"type": "firstchild",
+			"recurse": true
+		},
+		"auth": {
+			"methods": [ "cookie:sysauth" ],
+			"login": true
+		}
+	},
+
+	"admin/status": {
+		"title": "Status",
+		"order": 10,
+		"action": {
+			"type": "firstchild",
+			"preferred": "overview",
+			"recurse": true
+		}
+	},
+
+	"admin/system": {
+		"title": "System",
+		"order": 20,
+		"action": {
+			"type": "firstchild",
+			"preferred": "system",
+			"recurse": true
+		}
+	},
+
+	"admin/services": {
+		"title": "Services",
+		"order": 40,
+		"action": {
+			"type": "firstchild",
+			"recurse": true
+		}
+	},
+
+	"admin/network": {
+		"title": "Network",
+		"order": 50,
+		"action": {
+			"type": "firstchild",
+			"recurse": true
+		}
+	},
+
+	"admin/vpn": {
+		"title": "VPN",
+		"order": 70,
+		"action": {
+			"type": "firstchild",
+			"recurse": true
+		}
+	},
+
+	"admin/translations/*": {
+		"action": {
+			"type": "call",
+			"module": "luci.controller.admin.index",
+			"function": "action_translations"
+		},
+		"auth": {}
+	},
+
+	"admin/ubus/*": {
+		"action": {
+			"type": "call",
+			"module": "luci.controller.admin.index",
+			"function": "action_ubus"
+		},
+		"auth": {}
+	},
+
+	"admin/logout": {
+		"title": "Logout",
+		"order": 999,
+		"action": {
+			"type": "call",
+			"module": "luci.controller.admin.index",
+			"function": "action_logout"
+		},
+		"depends": {
+			"acl": [ "luci-base" ]
+		}
+	},
+
+	"admin/uci": {
+		"action": {
+			"type": "firstchild"
+		}
+	},
+
+	"admin/uci/revert": {
+		"action": {
+			"type": "call",
+			"module": "luci.controller.admin.uci",
+			"function": "action_revert",
+			"post": true
+		}
+	},
+
+	"admin/uci/apply_rollback": {
+		"cors": true,
+		"action": {
+			"type": "call",
+			"module": "luci.controller.admin.uci",
+			"function": "action_apply_rollback",
+			"post": true
+		},
+		"auth": {
+			"methods": [ "cookie:sysauth" ]
+		}
+	},
+
+	"admin/uci/apply_unchecked": {
+		"cors": true,
+		"action": {
+			"type": "call",
+			"module": "luci.controller.admin.uci",
+			"function": "action_apply_unchecked",
+			"post": true
+		},
+		"auth": {
+			"methods": [ "cookie:sysauth" ]
+		}
+	},
+
+	"admin/uci/confirm": {
+		"cors": true,
+		"action": {
+			"type": "call",
+			"module": "luci.controller.admin.uci",
+			"function": "action_confirm"
+		},
+		"auth": {}
+	},
+
+	"admin/menu": {
+		"action": {
+			"type": "call",
+			"module": "luci.controller.admin.index",
+			"function": "action_menu"
+		},
+		"auth": {}
+	}
+}

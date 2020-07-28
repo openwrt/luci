@@ -1,0 +1,14 @@
+{
+	"luci-app-nextdns": {
+		"description": "Grant logread access to LuCI app nextdns",
+		"read": {
+			"file": {
+				"/sbin/logread": [ "exec" ]
+			},
+			"uci": [ "nextdns" ]
+		},
+		"write": {
+			"uci": [ "nextdns" ]
+		}
+	}
+}

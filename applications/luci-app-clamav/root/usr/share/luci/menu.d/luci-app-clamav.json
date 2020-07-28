@@ -1,0 +1,13 @@
+{
+	"admin/services/clamav": {
+		"title": "ClamAV",
+		"action": {
+			"type": "cbi",
+			"path": "clamav",
+			"post": { "cbi.submit": true }
+		},
+		"depends": {
+			"acl": [ "luci-app-clamav" ]
+		}
+	}
+}
