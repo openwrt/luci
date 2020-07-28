@@ -270,13 +270,23 @@ local duplicate_config = function (self, request)
 end
 
 _docker.new = function()
+	local host = nil
+	local port = nil
+	local socket = nil
 
-	local remote = uci:get("dockerd", "globals", "remote_endpoint")
+	local remote = uci:get_bool("dockerd", "globals", "remote_endpoint")
+
+	if remote then
+		host = uci:get("dockerd", "globals", "remote_host") or nil
+		port = uci:get("dockerd", "globals", "remote_port") or nil
+	else
+		socket = uci:get("dockerd", "globals", "socket_path") or "/var/run/docker.sock"
+	end
 
 	_docker.options = {
-		host = (remote == "true") and (uci:get("dockerd", "globals", "remote_host")) or nil,
-		port = (remote == "true") and (uci:get("dockerd", "globals", "remote_port")) or nil,
-		socket_path = (remote ~= "true") and (uci:get("dockerd", "globals", "socket_path") or "/var/run/docker.sock") or nil,
+		host = host,
+		port = port,
+		socket_path = socket,
 		debug = uci:get("dockerd", "globals", "debug") == 'true' and true or false,
 		debug_path = uci:get("dockerd", "globals", "debug_path") or "/tmp/.docker_debug",
 		status_path = uci:get("dockerd", "globals", "status_path") or "/tmp/.docker_status"
