@@ -120,6 +120,14 @@ if nixio.fs.access("/usr/bin/dockerd") then
 	o.placeholder = "/opt/docker/"
 	o:depends("remote_endpoint", 0)
 
+	o = s:option(Value, "bip",
+		translate("Default bridge"),
+		translate("Configure the default bridge network"))
+	o.placeholder = "172.17.0.1/16"
+	o.default = "172.17.0.1/16"
+	o.datatype = "ipaddr"
+	o:depends("remote_endpoint", 0)
+
 	o = s:option(DynamicList, "registry_mirrors",
 		translate("Registry Mirrors"))
 	o:value("https://hub-mirror.c.163.com", "https://hub-mirror.c.163.com")
