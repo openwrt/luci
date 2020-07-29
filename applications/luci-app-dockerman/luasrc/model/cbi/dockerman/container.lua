@@ -723,7 +723,7 @@ elseif action == "console" then
 			if remote and host and port then
 				hosts = host .. ':'.. port
 			elseif socket_path then
-				hosts = "unix://" .. socket_path
+				hosts = socket_path
 			else
 				return
 			end

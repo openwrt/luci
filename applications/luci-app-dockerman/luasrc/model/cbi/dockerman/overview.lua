@@ -99,9 +99,8 @@ o.rmempty = false
 
 o = s:option(Value, "socket_path",
 	translate("Docker Socket Path"))
-o.default = "/var/run/docker.sock"
-o.placeholder = "/var/run/docker.sock"
-o.rmempty = false
+o.default = "unix://var/run/docker.sock"
+o.placeholder = "unix://var/run/docker.sock"
 o:depends("remote_endpoint", 1)
 
 o = s:option(Value, "remote_host",
