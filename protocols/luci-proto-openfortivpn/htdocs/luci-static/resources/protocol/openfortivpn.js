@@ -61,7 +61,11 @@ return network.registerProtocol('openfortivpn', {
 		o.datatype = 'and(hexstring,length(64))'
 		o.optional = true;
 
-		o = s.taboption('advanced', form.Flag, 'peerdns', _('Use DNS server provided by VPN'));
+		o = s.taboption('advanced', form.Flag, 'defaultroute', _('Use default gateway'), _('If unchecked, no default route is configured'));
+		o.default = o.enabled;
+		o.optional = true;
+
+		o = s.taboption('advanced', form.Flag, 'peerdns', _('Use DNS servers advertised by peer'), _('If unchecked, the advertised DNS server addresses are ignored'));
 		o.default = o.enabled;
 		o.optional = true;
 
