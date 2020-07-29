@@ -84,12 +84,21 @@ return view.extend({
 
 					if (stype === 'ss_server') {
 						ss.options_server(s, { tab: 'general' });
-						o = s.taboption('general', form.Value, 'bind_address',
-							_('Bind address'),
-							_('The address ss-server will initiate connection from'));
+						o = s.taboption('advanced', form.Value, 'local_address',
+							_('Local address'),
+							_('The address ss-server will initiate connections from'));
 						o.datatype = 'ipaddr';
-						o.placeholder = '0.0.0.0';
 						ss.values_ipaddr(o, res[1]);
+						o = s.taboption('advanced', form.Value, 'local_ipv4_address',
+							_('Local IPv4 address'),
+							_('The IPv4 address ss-server will initiate IPv4 connections from'));
+						o.datatype = 'ip4addr';
+						ss.values_ip4addr(o, res[1]);
+						o = s.taboption('advanced', form.Value, 'local_ipv6_address',
+							_('Local IPv6 address'),
+							_('The IPv6 address ss-server will initiate IPv6 connections from'));
+						o.datatype = 'ip6addr';
+						ss.values_ip6addr(o, res[1]);
 					} else {
 						ss.options_client(s, 'general', res[1]);
 						if (stype === 'ss_tunnel') {
