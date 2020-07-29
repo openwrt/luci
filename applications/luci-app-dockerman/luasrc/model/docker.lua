@@ -272,7 +272,7 @@ end
 _docker.new = function()
 	local host = nil
 	local port = nil
-	local socket = nil
+	local socket_path = nil
 	local debug_path = nil
 
 	local remote = uci:get_bool("dockerd", "globals", "remote_endpoint")
@@ -280,7 +280,7 @@ _docker.new = function()
 		host = uci:get("dockerd", "globals", "remote_host") or nil
 		port = uci:get("dockerd", "globals", "remote_port") or nil
 	else
-		socket = uci:get("dockerd", "globals", "socket_path") or "/var/run/docker.sock"
+		socket_path = uci:get("dockerd", "globals", "socket_path") or "/var/run/docker.sock"
 	end
 
 	local debug = uci:get_bool("dockerd", "globals", "debug")
@@ -291,7 +291,7 @@ _docker.new = function()
 	_docker.options = {
 		host = host,
 		port = port,
-		socket_path = socket,
+		socket_path = socket_path,
 		debug = debug,
 		debug_path = debug_path,
 		status_path = uci:get("dockerd", "globals", "status_path") or "/tmp/.docker_status"
