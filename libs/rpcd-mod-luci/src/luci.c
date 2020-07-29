@@ -317,6 +317,10 @@ duid2ea(const char *duid)
 static struct {
 	FILE *dnsmasq_file;
 	FILE *odhcpd_file;
+	char *dnsmasq_files;
+	char *odhcpd_files;
+	int dnsmasq_files_offset;
+	int odhcpd_files_offset;
 	time_t now;
 } lease_state = { };
 
@@ -340,6 +344,8 @@ find_leasefile(struct uci_context *uci, const char *section)
 	struct uci_package *pkg = NULL;
 	struct uci_section *s;
 	struct uci_element *e;
+	char *leasefiles = NULL;
+	int leasefiles_len = 0;
 
 	pkg = uci_lookup_package(uci, ptr.package);
 
@@ -351,6 +357,8 @@ find_leasefile(struct uci_context *uci, const char *section)
 	}
 
 	uci_foreach_element(&pkg->sections, e) {
+		char *tmp = NULL;
+
 		s = uci_to_section(e);
 
 		if (strcmp(s->type, section))
@@ -370,23 +378,41 @@ find_leasefile(struct uci_context *uci, const char *section)
 		if (ptr.o->type != UCI_TYPE_STRING)
 			continue;
 
-		return ptr.o->v.string;
+		//double null terminated
+		tmp=calloc(leasefiles_len + strlen(ptr.o->v.string) + 2,sizeof(char));
+		memcpy(tmp, leasefiles, leasefiles_len);
+		free(leasefiles);
+		leasefiles=tmp;
+		strcpy(leasefiles + leasefiles_len, ptr.o -> v.string);
+		leasefiles_len += strlen(ptr.o->v.string) + 1;
 	}
-
-	return NULL;
+	return leasefiles;
 }
 
 static void
 lease_close(void)
 {
+	lease_state.dnsmasq_files_offset=0;
+	lease_state.odhcpd_files_offset=0;
+
 	if (lease_state.dnsmasq_file) {
 		fclose(lease_state.dnsmasq_file);
 		lease_state.dnsmasq_file = NULL;
 	}
 
+	if (lease_state.dnsmasq_files) {
+		free(lease_state.dnsmasq_files);
+		lease_state.dnsmasq_files = NULL;
+	}
+
 	if (lease_state.odhcpd_file) {
 		fclose(lease_state.odhcpd_file);
 		lease_state.odhcpd_file = NULL;
+	}
+
+	if (lease_state.odhcpd_files) {
+		free(lease_state.odhcpd_files);
+		lease_state.odhcpd_files = NULL;
 	}
 }
 
@@ -406,11 +432,20 @@ lease_open(void)
 	lease_state.now = time(NULL);
 
 	p = find_leasefile(uci, "dnsmasq");
-	lease_state.dnsmasq_file = fopen(p ? p : "/tmp/dhcp.leases", "r");
+	lease_state.dnsmasq_files = p;
+	if (!p){
+		lease_state.dnsmasq_files = strdup("/tmp/hosts/dhcp.leases_");
+		lease_state.dnsmasq_files[strlen(lease_state.dnsmasq_files)-1] = 0;
+	}
+	lease_state.dnsmasq_files_offset=0;
 
 	p = find_leasefile(uci, "odhcpd");
-	lease_state.odhcpd_file = fopen(p ? p : "/tmp/hosts/odhcpd", "r");
-
+	lease_state.odhcpd_files = p;
+	if (!p){
+		lease_state.odhcpd_files = strdup("/tmp/hosts/odhcpd_");
+		lease_state.odhcpd_files[strlen(lease_state.odhcpd_files)-1] = 0;
+	}
+	lease_state.odhcpd_files_offset=0;
 	uci_free_context(uci);
 }
 
@@ -424,7 +459,13 @@ lease_next(void)
 
 	memset(&e, 0, sizeof(e));
 
-	if (lease_state.dnsmasq_file) {
+	while (lease_state.dnsmasq_files[lease_state.dnsmasq_files_offset]){
+		if (!lease_state.dnsmasq_file) {
+			lease_state.dnsmasq_file = fopen(lease_state.dnsmasq_files + lease_state.dnsmasq_files_offset, "r");
+			lease_state.dnsmasq_files_offset += strlen(lease_state.dnsmasq_files + lease_state.dnsmasq_files_offset) + 1;
+		}
+		if ( !lease_state.dnsmasq_file )
+			continue;
 		while (fgets(e.buf, sizeof(e.buf), lease_state.dnsmasq_file)) {
 			p = strtok(e.buf, " \t\n");
 
@@ -489,7 +530,13 @@ lease_next(void)
 		lease_state.dnsmasq_file = NULL;
 	}
 
-	if (lease_state.odhcpd_file) {
+	while (lease_state.odhcpd_files[lease_state.odhcpd_files_offset]){
+		if (!lease_state.odhcpd_file) {
+			lease_state.odhcpd_file = fopen(lease_state.odhcpd_files + lease_state.odhcpd_files_offset, "r");
+			lease_state.odhcpd_files_offset += strlen(lease_state.odhcpd_files + lease_state.odhcpd_files_offset) + 1;
+		}
+		if ( !lease_state.odhcpd_file )
+			continue;
 		while (fgets(e.buf, sizeof(e.buf), lease_state.odhcpd_file)) {
 			strtok(e.buf, " \t\n"); /* # */
 			strtok(NULL, " \t\n"); /* iface */
