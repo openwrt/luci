@@ -1,12 +1,12 @@
 <br>
 <ul class="cbi-tabmenu">
-	<li  id="cbi-tab-container_info"><a id="a-cbi-tab-container_info" href=""><%:Info%></a></li>
+	<li id="cbi-tab-container_info"><a id="a-cbi-tab-container_info" href=""><%:Info%></a></li>
 	<li id="cbi-tab-container_resources"><a id="a-cbi-tab-container_resources" href=""><%:Resources%></a></li>
-	<li  id="cbi-tab-container_stats"><a id="a-cbi-tab-container_stats" href=""><%:Stats%></a></li>
-	<li  id="cbi-tab-container_file"><a id="a-cbi-tab-container_file" href=""><%:File%></a></li>
-	<li  id="cbi-tab-container_console"><a id="a-cbi-tab-container_console" href=""><%:Console%></a></li>
-	<li  id="cbi-tab-container_inspect"><a id="a-cbi-tab-container_inspect" href=""><%:Inspect%></a></li>
-	<li  id="cbi-tab-container_logs"><a id="a-cbi-tab-container_logs" href=""><%:Logs%></a></li>
+	<li id="cbi-tab-container_stats"><a id="a-cbi-tab-container_stats" href=""><%:Stats%></a></li>
+	<li id="cbi-tab-container_file"><a id="a-cbi-tab-container_file" href=""><%:File%></a></li>
+	<li id="cbi-tab-container_console"><a id="a-cbi-tab-container_console" href=""><%:Console%></a></li>
+	<li id="cbi-tab-container_inspect"><a id="a-cbi-tab-container_inspect" href=""><%:Inspect%></a></li>
+	<li id="cbi-tab-container_logs"><a id="a-cbi-tab-container_logs" href=""><%:Logs%></a></li>
 </ul>
 
 <script type="text/javascript">
@@ -20,7 +20,8 @@
 		document.getElementById("a-cbi-tab-container_" + item).href= path[0]+"/admin/docker/container/"+container_id+'/'+item
 		if (action === item) {
 			document.getElementById("cbi-tab-container_" + item).className="cbi-tab"
-		}	else {
+		}
+		else {
 			document.getElementById("cbi-tab-container_" + item).className="cbi-tab-disabled"
 		}
 	})
