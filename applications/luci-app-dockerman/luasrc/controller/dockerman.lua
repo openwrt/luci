@@ -64,12 +64,24 @@ function action_events()
 
 	if events.code == 200 then
 		for _, v in ipairs(events.body) do
+			local date = "unknown"
+			if v and v.time then
+				date = os.date("%Y-%m-%d %H:%M:%S", v.time)
+			end
+
+			local name = v.Actor.Attributes.name or "unknown"
+			local action = v.Action or "unknown"
+
 			if v and v.Type == "container" then
-				logs = (logs ~= "" and (logs .. "\n") or logs) .. "[" .. os.date("%Y-%m-%d %H:%M:%S", v.time) .."] "..v.Type.. " " .. (v.Action or "null") .. " Container ID:"..  (v.Actor.ID or "null") .. " Container Name:" .. (v.Actor.Attributes.name or "null")
+				local id = v.Actor.ID or "unknown"
+				logs = logs .. string.format("[%s] %s %s Container ID: %s Container Name: %s\n", date, v.Type, action, id, name)
 			elseif v.Type == "network" then
-				logs = (logs ~= "" and (logs .. "\n") or logs) .. "[" .. os.date("%Y-%m-%d %H:%M:%S", v.time) .."] "..v.Type.. " " .. v.Action .. " Container ID:"..( v.Actor.Attributes.container or "null" ) .. " Network Name:" .. (v.Actor.Attributes.name or "null") .. " Network type:".. v.Actor.Attributes.type or ""
+				local container = v.Actor.Attributes.container or "unknown"
+				local network = v.Actor.Attributes.type or "unknown"
+				logs = logs .. string.format("[%s] %s %s Container ID: %s Network Name: %s Network type: %s\n", date, v.Type, action, container, name, network)
 			elseif v.Type == "image" then
-				logs = (logs ~= "" and (logs .. "\n") or logs) .. "[" .. os.date("%Y-%m-%d %H:%M:%S", v.time) .."] "..v.Type.. " " .. v.Action .. " Image:".. (v.Actor.ID or "null").. " Image Name:" .. (v.Actor.Attributes.name or "null")
+				local id = v.Actor.ID or "unknown"
+				logs = logs .. string.format("[%s] %s %s Image: %s Image name: %s\n", date, v.Type, action, id, name)
 			end
 		end
 	end
