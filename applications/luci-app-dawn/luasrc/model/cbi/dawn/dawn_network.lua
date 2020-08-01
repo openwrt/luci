@@ -14,13 +14,15 @@ function s.render(self, sid)
 		local sys = require "luci.sys"
 		local hosts = sys.net.host_hints()
 		local stat = utl.ubus("dawn", "get_network", { })
+		local n_ssid = 0
 		local name, macs
+
 		for name, macs in pairs(stat) do
 		%>
 
 			<div class="cbi-section-node">
 			<h3>SSID: <%= name %></h3>
-			<div class="table" id=network_overview_main">
+			<div class="table" id="network_overview_main_<%= n_ssid %>">
 				<div class="tr table-titles">
 					<div class="th">AP</div>
 					<div class="th">Clients</div>
@@ -88,6 +90,7 @@ function s.render(self, sid)
 			</div>
 			</div>
 		<%
+		n_ssid = n_ssid + 1
 		end
 		%>
 	]])
