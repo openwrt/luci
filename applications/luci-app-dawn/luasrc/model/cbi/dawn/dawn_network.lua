@@ -73,7 +73,7 @@ function s.render(self, sid)
 									<div class="td"><%= clientmac %></div>
 									<div class="td"><%= (clientvals.ht == true) and "available" or "not available" %></div>
 									<div class="td"><%= (clientvals.vht == true) and "available" or "not available" %></div>
-									<div class="td"><%= "%d" %clientvals.signal %></div>
+									<div class="td"><%= (clientvals.signal ~= nil) and ("%d" %clientvals.signal) or "?" %></div>
 								</div>
 								<%
 								end
