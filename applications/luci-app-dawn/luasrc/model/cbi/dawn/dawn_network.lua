@@ -9,7 +9,7 @@ function s.render(self, sid)
 	local utl = require "luci.util"
 	tpl.render_string([[
 		<%
-	    local status = require "luci.tools.ieee80211"
+		local status = require "luci.tools.ieee80211"
 		local utl = require "luci.util"
 		local sys = require "luci.sys"
 		local hosts = sys.net.host_hints()
@@ -19,7 +19,7 @@ function s.render(self, sid)
 		%>
 
 			<div class="cbi-section-node">
-	        <h3>SSID: <%= name %></h3>
+			<h3>SSID: <%= name %></h3>
 			<div class="table" id=network_overview_main">
 				<div class="tr table-titles">
 					<div class="th">AP</div>
