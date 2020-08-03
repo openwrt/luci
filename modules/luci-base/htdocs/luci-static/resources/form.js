@@ -1054,6 +1054,108 @@ var CBIAbstractSection = CBIAbstractElement.extend(/** @lends LuCI.form.Abstract
 		return obj;
 	},
 
+	/**
+	 * Query underlying option configuration values.
+	 *
+	 * This function is sensitive to the amount of arguments passed to it;
+	 * if only one argument is specified, the configuration values of all
+	 * options within this section are returned as dictionary.
+	 *
+	 * If both the section ID and an option name are supplied, this function
+	 * returns the configuration value of the specified option only.
+	 *
+	 * @param {string} section_id
+	 * The configuration section ID
+	 *
+	 * @param {string} [option]
+	 * The name of the option to query
+	 *
+	 * @returns {null|string|string[]|Object<string, null|string|string[]>}
+	 * Returns either a dictionary of option names and their corresponding
+	 * configuration values or just a single configuration value, depending
+	 * on the amount of passed arguments.
+	 */
+	cfgvalue: function(section_id, option) {
+		var rv = (arguments.length == 1) ? {} : null;
+
+		for (var i = 0, o; (o = this.children[i]) != null; i++)
+			if (rv)
+				rv[o.option] = o.cfgvalue(section_id);
+			else if (o.option == option)
+				return o.cfgvalue(section_id);
+
+		return rv;
+	},
+
+	/**
+	 * Query underlying option widget input values.
+	 *
+	 * This function is sensitive to the amount of arguments passed to it;
+	 * if only one argument is specified, the widget input values of all
+	 * options within this section are returned as dictionary.
+	 *
+	 * If both the section ID and an option name are supplied, this function
+	 * returns the widget input value of the specified option only.
+	 *
+	 * @param {string} section_id
+	 * The configuration section ID
+	 *
+	 * @param {string} [option]
+	 * The name of the option to query
+	 *
+	 * @returns {null|string|string[]|Object<string, null|string|string[]>}
+	 * Returns either a dictionary of option names and their corresponding
+	 * widget input values or just a single widget input value, depending
+	 * on the amount of passed arguments.
+	 */
+	formvalue: function(section_id, option) {
+		var rv = (arguments.length == 1) ? {} : null;
+
+		for (var i = 0, o; (o = this.children[i]) != null; i++) {
+			var func = this.map.root ? this.children[i].formvalue : this.children[i].cfgvalue;
+
+			if (rv)
+				rv[o.option] = func.call(o, section_id);
+			else if (o.option == option)
+				return func.call(o, section_id);
+		}
+
+		return rv;
+	},
+
+	/**
+	 * Obtain underlying option LuCI.ui widget instances.
+	 *
+	 * This function is sensitive to the amount of arguments passed to it;
+	 * if only one argument is specified, the LuCI.ui widget instances of all
+	 * options within this section are returned as dictionary.
+	 *
+	 * If both the section ID and an option name are supplied, this function
+	 * returns the LuCI.ui widget instance value of the specified option only.
+	 *
+	 * @param {string} section_id
+	 * The configuration section ID
+	 *
+	 * @param {string} [option]
+	 * The name of the option to query
+	 *
+	 * @returns {null|LuCI.ui.AbstractElement|Object<string, null|LuCI.ui.AbstractElement>}
+	 * Returns either a dictionary of option names and their corresponding
+	 * widget input values or just a single widget input value, depending
+	 * on the amount of passed arguments.
+	 */
+	getUIElement: function(section_id, option) {
+		var rv = (arguments.length == 1) ? {} : null;
+
+		for (var i = 0, o; (o = this.children[i]) != null; i++)
+			if (rv)
+				rv[o.option] = o.getUIElement(section_id);
+			else if (o.option == option)
+				return o.getUIElement(section_id);
+
+		return rv;
+	},
+
 	/** @private */
 	renderUCISection: function(section_id) {
 		var renderTasks = [];
