@@ -1375,6 +1375,21 @@ var CBIAbstractValue = CBIAbstractElement.extend(/** @lends LuCI.form.AbstractVa
 	 */
 
 	/**
+	 * Register a custom value change handler.
+	 *
+	 * If this property is set to a function value, the function is invoked
+	 * whenever the value of the underlying UI input element is changing.
+	 *
+	 * The invoked handler function will receive the DOM click element as
+	 * first and the underlying configuration section ID as well as the input
+	 * value as second and third argument respectively.
+	 *
+	 * @name LuCI.form.AbstractValue.prototype#onchange
+	 * @type function
+	 * @default null
+	 */
+
+	/**
 	 * Add a dependency contraint to the option.
 	 *
 	 * Dependency constraints allow making the presence of option elements
@@ -3121,6 +3136,20 @@ var CBIValue = CBIAbstractValue.extend(/** @lends LuCI.form.Value.prototype */ {
 	},
 
 	/** @private */
+	handleValueChange: function(section_id, state, ev) {
+		if (typeof(this.onchange) != 'function')
+			return;
+
+		var value = this.formvalue(section_id);
+
+		if (isEqual(value, state.previousValue))
+			return;
+
+		state.previousValue = value;
+		this.onchange.call(this, ev, section_id, value);
+	},
+
+	/** @private */
 	renderFrame: function(section_id, in_table, option_index, nodes) {
 		var config_name = this.uciconfig || this.section.uciconfig || this.map.config,
 		    depend_list = this.transformDepList(section_id),
@@ -3188,6 +3217,9 @@ var CBIValue = CBIAbstractValue.extend(/** @lends LuCI.form.Value.prototype */ {
 
 		if (depend_list && depend_list.length)
 			optionEl.classList.add('hidden');
+
+		optionEl.addEventListener('widget-change',
+			L.bind(this.handleValueChange, this, section_id, {}));
 
 		optionEl.addEventListener('widget-change',
 			L.bind(this.map.checkDepends, this.map));
