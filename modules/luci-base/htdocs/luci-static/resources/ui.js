@@ -102,6 +102,32 @@ var UIElement = baseclass.extend(/** @lends LuCI.ui.AbstractElement.prototype */
 	},
 
 	/**
+	 * Set the current placeholder value of the input widget.
+	 *
+	 * @instance
+	 * @memberof LuCI.ui.AbstractElement
+	 * @param {string|string[]|null} value
+	 * The placeholder to set for the input element. Only applicable to text
+	 * inputs, not to radio buttons, selects or similar.
+	 */
+	setPlaceholder: function(value) {
+		var node = this.node ? this.node.querySelector('input,textarea') : null;
+		if (node) {
+			switch (node.getAttribute('type') || 'text') {
+			case 'password':
+			case 'search':
+			case 'tel':
+			case 'text':
+			case 'url':
+				if (value != null && value != '')
+					node.setAttribute('placeholder', value);
+				else
+					node.removeAttribute('placeholder');
+			}
+		}
+	},
+
+	/**
 	 * Check whether the current input value is valid.
 	 *
 	 * @instance
