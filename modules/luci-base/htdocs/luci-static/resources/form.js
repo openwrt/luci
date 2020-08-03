@@ -1132,6 +1132,9 @@ var CBIAbstractSection = CBIAbstractElement.extend(/** @lends LuCI.form.Abstract
 
 
 var isEqual = function(x, y) {
+	if (typeof(y) == 'object' && y instanceof RegExp)
+		return (x == null) ? false : y.test(x);
+
 	if (x != null && y != null && typeof(x) != typeof(y))
 		return false;
 
@@ -1428,6 +1431,10 @@ var CBIAbstractValue = CBIAbstractElement.extend(/** @lends LuCI.form.AbstractVa
 	 *   Equivalent to the previous example.
 	 *  </li>
 	 *  <li>
+	 *   <code>opt.depends({ foo: /test/ })</code><br>
+	 *   Require the value of `foo` to match the regular expression `/test/`.
+	 *  </li>
+	 *  <li>
 	 *   <code>opt.depends({ foo: "test", bar: "qrx" })</code><br>
 	 *   Require the value of `foo` to be `test` and the value of `bar` to be
 	 *   `qrx`.
@@ -1449,11 +1456,11 @@ var CBIAbstractValue = CBIAbstractElement.extend(/** @lends LuCI.form.AbstractVa
 	 *  </li>
 	 * </ul>
 	 *
-	 * @param {string|Object<string, string|boolean>} optionname_or_depends
+	 * @param {string|Object<string, string|RegExp>} optionname_or_depends
 	 * The name of the option to depend on or an object describing multiple
 	 * dependencies which must be satified (a logical "and" expression).
 	 *
-	 * @param {string} optionvalue
+	 * @param {string} optionvalue|RegExp
 	 * When invoked with a plain option name as first argument, this parameter
 	 * specifies the expected value. In case an object is passed as first
 	 * argument, this parameter is ignored.
