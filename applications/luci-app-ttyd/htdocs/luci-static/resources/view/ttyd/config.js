@@ -70,8 +70,12 @@ return view.extend({
 		o = s.option(form.Value, 'ssl_ca', _('SSL ca'), _('SSL CA file path for client certificate verification'));
 		o.depends('ssl', '1');
 
-		o = s.option(form.Value, 'debug', _('Debug'), _('Set log level (default: 7)'));
-		o.placeholder = '7';
+		o = s.option(form.ListValue, 'debug', _('Debug'), _('Set log level (default: 7)'));
+		o.value('1', _('Error'));
+		o.value('3', _('Warning'));
+		o.value('7', _('Notice'));
+		o.value('15', _('Info'));
+		o.default = '7';
 
 		s.option(form.Value, 'command', _('Command'));
 
