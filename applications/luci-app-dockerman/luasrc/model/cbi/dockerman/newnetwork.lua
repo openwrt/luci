@@ -29,7 +29,7 @@ o = s:option(Value, "name",
 	translate("Name of the network that can be selected during container creation"))
 o.rmempty = true
 
-o = s:option(ListValue, "dirver", translate("Driver"))
+o = s:option(ListValue, "driver", translate("Driver"))
 o.rmempty = true
 o:value("bridge", translate("Bridge device"))
 o:value("macvlan", translate("MAC VLAN"))
@@ -38,7 +38,7 @@ o:value("overlay", translate("Overlay network"))
 
 o = s:option(Value, "parent", translate("Base device"))
 o.rmempty = true
-o:depends("dirver", "macvlan")
+o:depends("driver", "macvlan")
 local interfaces = luci.sys and luci.sys.net and luci.sys.net.devices() or {}
 for _, v in ipairs(interfaces) do
 	o:value(v, v)
@@ -46,7 +46,7 @@ end
 
 o = s:option(ListValue, "macvlan_mode", translate("Mode"))
 o.rmempty = true
-o:depends("dirver", "macvlan")
+o:depends("driver", "macvlan")
 o.default="bridge"
 o:value("bridge", translate("Bridge (Support direct communication between MAC VLANs)"))
 o:value("private", translate("Private (Prevent communication between MAC VLANs)"))
@@ -55,7 +55,7 @@ o:value("passthru", translate("Pass-through (Mirror physical device to single MA
 
 o = s:option(ListValue, "ipvlan_mode", translate("Ipvlan Mode"))
 o.rmempty = true
-o:depends("dirver", "ipvlan")
+o:depends("driver", "ipvlan")
 o.default="l3"
 o:value("l2", translate("L2 bridge"))
 o:value("l3", translate("L3 bridge"))
@@ -67,7 +67,7 @@ o.rmempty = true
 o.disabled = 0
 o.enabled = 1
 o.default = 0
-o:depends("dirver", "overlay")
+o:depends("driver", "overlay")
 
 o = s:option(DynamicList, "options", translate("Options"))
 o.rmempty = true
@@ -75,14 +75,14 @@ o.placeholder="com.docker.network.driver.mtu=1500"
 
 o = s:option(Flag, "internal", translate("Internal"), translate("Restrict external access to the network"))
 o.rmempty = true
-o:depends("dirver", "overlay")
+o:depends("driver", "overlay")
 o.disabled = 0
 o.enabled = 1
 o.default = 0
 
 if nixio.fs.access("/etc/config/network") and nixio.fs.access("/etc/config/firewall")then
 	o = s:option(Flag, "op_macvlan", translate("Create macvlan interface"), translate("Auto create macvlan interface in Openwrt"))
-	o:depends("dirver", "macvlan")
+	o:depends("driver", "macvlan")
 	o.disabled = 0
 	o.enabled = 1
 	o.default = 1
@@ -128,7 +128,7 @@ o:depends("ipv6", 1)
 m.handle = function(self, state, data)
 	if state == FORM_VALID then
 		local name = data.name
-		local driver = data.dirver
+		local driver = data.driver
 
 		local internal = data.internal == 1 and true or false
 
