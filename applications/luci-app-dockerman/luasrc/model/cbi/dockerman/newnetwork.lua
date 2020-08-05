@@ -24,41 +24,41 @@ s = m:section(SimpleSection, translate("New Network"))
 s.addremove = true
 s.anonymous = true
 
-o = s:option(Value, "name", translate("Network Name"))
+o = s:option(Value, "name",
+	translate("Network Name"),
+	translate("Name of the network that can be selected during container creation"))
 o.rmempty = true
 
 o = s:option(ListValue, "dirver", translate("Driver"))
 o.rmempty = true
-o:value("bridge", "bridge")
-o:value("macvlan", "macvlan")
-o:value("ipvlan", "ipvlan")
-o:value("overlay", "overlay")
+o:value("bridge", translate("Bridge device"))
+o:value("macvlan", translate("MAC VLAN"))
+o:value("ipvlan",  translate("IP VLAN"))
+o:value("overlay", translate("Overlay network"))
 
-o = s:option(Value, "parent", translate("Parent Interface"))
+o = s:option(Value, "parent", translate("Base device"))
 o.rmempty = true
 o:depends("dirver", "macvlan")
 local interfaces = luci.sys and luci.sys.net and luci.sys.net.devices() or {}
 for _, v in ipairs(interfaces) do
 	o:value(v, v)
 end
-o.default="br-lan"
-o.placeholder="br-lan"
 
-o = s:option(Value, "macvlan_mode", translate("Macvlan Mode"))
+o = s:option(ListValue, "macvlan_mode", translate("Mode"))
 o.rmempty = true
 o:depends("dirver", "macvlan")
 o.default="bridge"
-o:value("bridge", "bridge")
-o:value("private", "private")
-o:value("vepa", "vepa")
-o:value("passthru", "passthru")
+o:value("bridge", translate("Bridge (Support direct communication between MAC VLANs)"))
+o:value("private", translate("Private (Prevent communication between MAC VLANs)"))
+o:value("vepa", translate("VEPA (Virtual Ethernet Port Aggregator)"))
+o:value("passthru", translate("Pass-through (Mirror physical device to single MAC VLAN)"))
 
-o = s:option(Value, "ipvlan_mode", translate("Ipvlan Mode"))
+o = s:option(ListValue, "ipvlan_mode", translate("Ipvlan Mode"))
 o.rmempty = true
 o:depends("dirver", "ipvlan")
 o.default="l3"
-o:value("l2", "l2")
-o:value("l3", "l3")
+o:value("l2", translate("L2 bridge"))
+o:value("l3", translate("L3 bridge"))
 
 o = s:option(Flag, "ingress",
 	translate("Ingress"),
