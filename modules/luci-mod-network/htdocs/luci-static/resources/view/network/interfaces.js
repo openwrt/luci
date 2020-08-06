@@ -212,21 +212,19 @@ function iface_updown(up, id, ev, force) {
 
 function get_netmask(s, use_cfgvalue) {
 	var readfn = use_cfgvalue ? 'cfgvalue' : 'formvalue',
-	    addropt = s.children.filter(function(o) { return o.option == 'ipaddr'})[0],
-	    addrvals = addropt ? L.toArray(addropt[readfn](s.section)) : [],
-	    maskopt = s.children.filter(function(o) { return o.option == 'netmask'})[0],
-	    maskval = maskopt ? maskopt[readfn](s.section) : null,
-	    firstsubnet = maskval ? addrvals[0] + '/' + maskval : addrvals.filter(function(a) { return a.indexOf('/') > 0 })[0];
+	    addrs = L.toArray(s[readfn](s.section, 'ipaddr')),
+	    mask = s[readfn](s.section, 'netmask'),
+	    firstsubnet = mask ? addrs[0] + '/' + mask : addrs.filter(function(a) { return a.indexOf('/') > 0 })[0];
 
 	if (firstsubnet == null)
 		return null;
 
-	var mask = firstsubnet.split('/')[1];
+	var subnetmask = firstsubnet.split('/')[1];
 
-	if (!isNaN(mask))
-		mask = network.prefixToMask(+mask);
+	if (!isNaN(subnetmask))
+		subnetmask = network.prefixToMask(+subnetmask);
 
-	return mask;
+	return subnetmask;
 }
 
 return view.extend({
@@ -610,9 +608,9 @@ return view.extend({
 					};
 
 					so.validate = function(section_id, value) {
-						var node = this.map.findElement('id', this.cbid(section_id));
-						if (node)
-							node.querySelector('input').setAttribute('placeholder', get_netmask(s, false));
+						var uielem = this.getUIElement(section_id);
+						if (uielem)
+							uielem.setPlaceholder(get_netmask(s, false));
 						return form.Value.prototype.validate.apply(this, [ section_id, value ]);
 					};
 
@@ -865,12 +863,9 @@ return view.extend({
 
 		o = s.taboption('advanced', form.Flag, 'force_link', _('Force link'), _('Set interface properties regardless of the link carrier (If set, carrier sense events do not invoke hotplug handlers).'));
 		o.modalonly = true;
-		o.render = function(option_index, section_id, in_table) {
-			var protoopt = this.section.children.filter(function(o) { return o.option == 'proto' })[0],
-			    protoval = protoopt ? protoopt.cfgvalue(section_id) : null;
-
-			this.default = (protoval == 'static') ? this.enabled : this.disabled;
-			return this.super('render', [ option_index, section_id, in_table ]);
+		o.defaults = {
+			'1': [{ proto: 'static' }],
+			'0': []
 		};
 
 
