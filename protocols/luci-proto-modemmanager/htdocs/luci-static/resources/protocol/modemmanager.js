@@ -120,11 +120,8 @@ return network.registerProtocol('modemmanager', {
 		o = s.taboption('advanced', form.Value, 'mtu', _('Override MTU'));
 		o.placeholder = dev ? (dev.getMTU() || '1500') : '1500';
 		o.datatype    = 'max(9200)';
-		
+
 		o = s.taboption('general', form.Value, 'signalrate', _('Signal Refresh Rate'), _("In seconds"));
 		o.datatype = 'uinteger';
-		
-		s.taboption('general', form.Value, 'metric', _('Gateway metric'));
-
 	}
 });

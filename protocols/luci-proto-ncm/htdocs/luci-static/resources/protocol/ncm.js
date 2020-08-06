@@ -104,20 +104,5 @@ return network.registerProtocol('ncm', {
 		o = s.taboption('advanced', form.Value, 'delay', _('Modem init timeout'), _('Maximum amount of seconds to wait for the modem to become ready'));
 		o.placeholder = '10';
 		o.datatype    = 'min(1)';
-
-		o = s.taboption('advanced', form.Flag, 'defaultroute', _('Default gateway'), _('If unchecked, no default route is configured'));
-		o.default = o.enabled;
-
-		o = s.taboption('advanced', form.Value, 'metric', _('Use gateway metric'));
-		o.placeholder = '0';
-		o.datatype    = 'uinteger';
-		o.depends('defaultroute', '1');
-
-		o = s.taboption('advanced', form.Flag, 'peerdns', _('Use DNS servers advertised by peer'), _('If unchecked, the advertised DNS server addresses are ignored'));
-		o.default = o.enabled;
-
-		o = s.taboption('advanced', form.DynamicList, 'dns', _('Use custom DNS servers'));
-		o.depends('peerdns', '0');
-		o.datatype = 'ipaddr';
 	}
 });

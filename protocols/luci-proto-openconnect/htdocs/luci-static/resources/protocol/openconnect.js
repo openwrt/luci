@@ -153,14 +153,6 @@ return network.registerProtocol('openconnect', {
 			return callSetCertificateFiles(section_id, null, null, sanitizeCert(value));
 		};
 
-		o = s.taboption('advanced', form.Flag, 'defaultroute', _('Default gateway'), _('If unchecked, no default route is configured'));
-		o.default = o.enabled;
-
-		o = s.taboption('advanced', form.Value, 'metric', _('Use gateway metric'));
-		o.placeholder = '0';
-		o.datatype    = 'uinteger';
-		o.depends('defaultroute', '1');
-
 		o = s.taboption('advanced', form.Value, 'mtu', _('Override MTU'));
 		o.optional = true;
 		o.placeholder = 1406;
