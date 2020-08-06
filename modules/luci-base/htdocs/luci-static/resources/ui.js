@@ -128,6 +128,21 @@ var UIElement = baseclass.extend(/** @lends LuCI.ui.AbstractElement.prototype */
 	},
 
 	/**
+	 * Check whether the input value was altered by the user.
+	 *
+	 * @instance
+	 * @memberof LuCI.ui.AbstractElement
+	 * @returns {boolean}
+	 * Returns `true` if the input value has been altered by the user or
+	 * `false` if it is unchaged. Note that if the user modifies the initial
+	 * value and changes it back to the original state, it is still reported
+	 * as changed.
+	 */
+	isChanged: function() {
+		return (this.node ? this.node.getAttribute('data-changed') : null) == 'true';
+	},
+
+	/**
 	 * Check whether the current input value is valid.
 	 *
 	 * @instance
