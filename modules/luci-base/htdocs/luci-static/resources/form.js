@@ -1156,6 +1156,36 @@ var CBIAbstractSection = CBIAbstractElement.extend(/** @lends LuCI.form.Abstract
 		return rv;
 	},
 
+	/**
+	 * Obtain underlying option objects.
+	 *
+	 * This function is sensitive to the amount of arguments passed to it;
+	 * if no option name is specified, all options within this section are
+	 * returned as dictionary.
+	 *
+	 * If an option name is supplied, this function returns the matching
+	 * LuCI.form.AbstractValue instance only.
+	 *
+	 * @param {string} [option]
+	 * The name of the option object to obtain
+	 *
+	 * @returns {null|LuCI.form.AbstractValue|Object<string, LuCI.form.AbstractValue>}
+	 * Returns either a dictionary of option names and their corresponding
+	 * option instance objects or just a single object instance value,
+	 * depending on the amount of passed arguments.
+	 */
+	getOption: function(option) {
+		var rv = (arguments.length == 0) ? {} : null;
+
+		for (var i = 0, o; (o = this.children[i]) != null; i++)
+			if (rv)
+				rv[o.option] = o;
+			else if (o.option == option)
+				return o;
+
+		return rv;
+	},
+
 	/** @private */
 	renderUCISection: function(section_id) {
 		var renderTasks = [];
