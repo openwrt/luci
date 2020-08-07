@@ -28,7 +28,6 @@ var formData = {
         section_id_5: null,
         enable: null,
         SSID: null,
-        SSID_2: null,
         pw4: null,
         Ghz_2: null,
         Ghz_5: null
@@ -164,7 +163,7 @@ return view.extend({
         s.anonymous = true;
         s.addremove = false;
 
-        var SSID, pd, enable, ssid, ssid_5, Ghz_2, Ghz_5, device_2, device_5;
+        var SSID, pd, enable, ssid, Ghz_2, Ghz_5, device_2, device_5;
 
         for (var i = 0; i < this.devices.length; i++) {
             if (uci.get('wireless', this.devices[i].getName(), 'hwmode') == '11g') {//2.4Ghz
@@ -190,12 +189,7 @@ return view.extend({
                 formData.wifi.Ghz_5 = true;
                 formData.wifi.section_id_5 = this.wifis[i].getName();
                 Ghz_5 = i;
-                ssid_5 = uci.get('wireless', this.wifis[i].getName(), 'ssid');
-                if(!ssid_5.includes('_2')){
-                    ssid_5 = ssid_5 + '_2';
-                }
-                uci.set('wireless', formData.wifi.section_id_5, 'ssid', ssid_5);
-                uci.save();
+                ssid = uci.get('wireless', this.wifis[i].getName(), 'ssid');
                 formData.wifi.pw4 = uci.get('wireless', formData.wifi.section_id_5, 'key');
             }
         }
@@ -205,9 +199,6 @@ return view.extend({
             var encryption = uci.get('wireless', this.wifis[Ghz_5].getName(), 'encryption');
             var key = uci.get('wireless', this.wifis[Ghz_5].getName(), 'key');
             var ssid = uci.get('wireless', this.wifis[Ghz_5].getName(), 'ssid');
-            if (ssid.includes('_2')) {
-                ssid = ssid.substring(0,ssid.indexOf('_2'));
-            }
 
             var wifi_id = uci.add('wireless', 'wifi-iface', 'default_radio'+this.wifis.length);
             uci.set('wireless', wifi_id, 'device', device);
@@ -227,7 +218,6 @@ return view.extend({
             var encryption = uci.get('wireless', this.wifis[Ghz_2].getName(), 'encryption');
             var key = uci.get('wireless', this.wifis[Ghz_2].getName(), 'key');
             var ssid = uci.get('wireless', this.wifis[Ghz_2].getName(), 'ssid');
-            ssid = ssid + '_2';
 
             var wifi_id = uci.add('wireless', 'wifi-iface', 'default_radio'+this.wifis.length);
             uci.set('wireless', wifi_id, 'device', device);
@@ -241,7 +231,6 @@ return view.extend({
             formData.wifi.section_id_5 = wifi_id;
         }
         ssid = uci.get('wireless', formData.wifi.section_id_2, 'ssid');
-        ssid_5 = uci.get('wireless', formData.wifi.section_id_5, 'ssid');
 
         enable = s.option(form.Flag, 'enable', _('Enable'));
         enable.default = true;
@@ -259,10 +248,6 @@ return view.extend({
         pd.default = formData.wifi.pw4;
         pd.password = true;
         pd.validate = this.checkPassword;
-
-        o = s.option(form.Value, 'SSID_2', _('Secondary Wifi network (5 GHz)'), _('This secondary Wifi network is faster but has a lower range.'));
-        o.default = ssid_5;
-        o.readonly = true;
 
         return m.render();
 
@@ -291,10 +276,24 @@ return view.extend({
                 uci.set('network', formData.wan.section_id, 'username', formData.wan.username);
                 uci.set('network', formData.wan.section_id, 'password', formData.wan.pw3);
             }
-            uci.set('wireless', formData.wifi.section_id_2, 'key', formData.wifi.pw4);
-            uci.set('wireless', formData.wifi.section_id_5, 'key', formData.wifi.pw4);
-            uci.set('wireless', formData.wifi.section_id_2, 'ssid', formData.wifi.SSID);
-            uci.set('wireless', formData.wifi.section_id_5, 'ssid', formData.wifi.SSID+'_2');
+
+            if (formData.administrator.pw4 != null) {
+                uci.set('wireless', formData.wifi.section_id_2, 'key', formData.wifi.pw4);
+                uci.set('wireless', formData.wifi.section_id_5, 'key', formData.wifi.pw4);
+            }
+            else {
+                ui.addNotification(null, E('p', _('The password of wifi is empty!')), 'danger');
+                return;
+            }
+
+            if (!formData.wifi.SSID.includes('OpenWrt')) {
+                uci.set('wireless', formData.wifi.section_id_2, 'ssid', formData.wifi.SSID);
+                uci.set('wireless', formData.wifi.section_id_5, 'ssid', formData.wifi.SSID);
+            }
+            else {
+                ui.addNotification(null, E('p', _('Given SSID is not valid!')), 'danger');
+                return;
+            }
 
             if (formData.wifi.enable == false) {
                 uci.set('wireless', formData.wifi.section_id_2, 'disabled', 1);
@@ -305,6 +304,7 @@ return view.extend({
                 uci.set('wireless', formData.wifi.section_id_5, 'disabled', 0);
             }
             uci.save();
+            
             if (formData.administrator.pw1 != formData.administrator.pw2) {
                 ui.addNotification(null, E('p', _('Given password confirmation did not match, password not changed!')), 'danger');
                 return;
