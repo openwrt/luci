@@ -136,7 +136,7 @@ function Graph._generic( self, opts, plugin, plugin_instance, dtype, index )
 	function __def(source)
 
 		local inst = source.sname
-		local rrd  = source.rrd:gsub(":", "\\:")
+		local rrd  = source.rrd
 		local ds   = source.ds
 
 		if not ds or ds:len() == 0 then ds = "value" end
