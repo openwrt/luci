@@ -51,7 +51,7 @@ ifeq ($(OS),SunOS)
 endif
 
 ifneq (,$(findstring MINGW,$(OS))$(findstring mingw,$(OS))$(findstring Windows,$(OS)))
-	NIXIO_CROSS_CC:=$(shell which i586-mingw32msvc-cc)
+	NIXIO_CROSS_CC:=$(shell command -v i586-mingw32msvc-cc)
 ifneq (,$(NIXIO_CROSS_CC))
 	CC:=$(NIXIO_CROSS_CC)
 endif

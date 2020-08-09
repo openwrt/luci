@@ -179,23 +179,23 @@ local methods = {
 			local cache = {}
 
 			local function has_wget()
-				return (sys.call( [[which wget >/dev/null 2>&1]] ) == 0)
+				return (sys.call( [[command -v wget >/dev/null 2>&1]] ) == 0)
 			end
 
 			local function has_wgetssl()
 				if cache['has_wgetssl'] then return cache['has_wgetssl'] end
-				local res = (sys.call( [[which wget-ssl >/dev/null 2>&1]] ) == 0)
+				local res = (sys.call( [[command -v wget-ssl >/dev/null 2>&1]] ) == 0)
 				cache['has_wgetssl'] = res
 				return res
 			end
 
 			local function has_curlssl()
-				return (sys.call( [[$(which curl) -V 2>&1 | grep -qF "https"]] ) == 0)
+				return (sys.call( [[$(command -v curl) -V 2>&1 | grep -qF "https"]] ) == 0)
 			end
 
 			local function has_fetch()
 				if cache['has_fetch'] then return cache['has_fetch'] end
-				local res = (sys.call( [[which uclient-fetch >/dev/null 2>&1]] ) == 0)
+				local res = (sys.call( [[command -v uclient-fetch >/dev/null 2>&1]] ) == 0)
 				cache['has_fetch'] = res
 				return res
 			end
@@ -206,7 +206,7 @@ local methods = {
 
 			local function has_curl()
 				if cache['has_curl'] then return cache['has_curl'] end
-				local res = (sys.call( [[which curl >/dev/null 2>&1]] ) == 0)
+				local res = (sys.call( [[command -v curl >/dev/null 2>&1]] ) == 0)
 				cache['has_curl'] = res
 				return res
 			end
@@ -216,7 +216,7 @@ local methods = {
 			end
 
 			local function has_bbwget()
-				return (sys.call( [[$(which wget) -V 2>&1 | grep -iqF "busybox"]] ) == 0)
+				return (sys.call( [[$(command -v wget) -V 2>&1 | grep -iqF "busybox"]] ) == 0)
 			end
 
 			res['has_wget'] = has_wget() or false
@@ -229,17 +229,17 @@ local methods = {
 
 			local function has_bindhost()
 				if cache['has_bindhost'] then return cache['has_bindhost'] end
-				local res = (sys.call( [[which host >/dev/null 2>&1]] ) == 0)
+				local res = (sys.call( [[command -v host >/dev/null 2>&1]] ) == 0)
 				if res then
 					cache['has_bindhost'] = res
 					return true
 				end
-				res = (sys.call( [[which khost >/dev/null 2>&1]] ) == 0)
+				res = (sys.call( [[command -v khost >/dev/null 2>&1]] ) == 0)
 				if res then
 					cache['has_bindhost'] = res
 					return true
 				end
-				res = (sys.call( [[which drill >/dev/null 2>&1]] ) == 0)
+				res = (sys.call( [[command -v drill >/dev/null 2>&1]] ) == 0)
 				if res then
 					cache['has_bindhost'] = res
 					return true
@@ -251,11 +251,11 @@ local methods = {
 			res['has_bindhost'] = cache['has_bindhost'] or has_bindhost() or false
 
 			local function has_hostip()
-				return (sys.call( [[which hostip >/dev/null 2>&1]] ) == 0)
+				return (sys.call( [[command -v hostip >/dev/null 2>&1]] ) == 0)
 			end
 
 			local function has_nslookup()
-				return (sys.call( [[which nslookup >/dev/null 2>&1]] ) == 0)
+				return (sys.call( [[command -v nslookup >/dev/null 2>&1]] ) == 0)
 			end
 
 			res['has_dnsserver'] = cache['has_bindhost'] or has_nslookup() or has_hostip() or has_bindhost() or false
