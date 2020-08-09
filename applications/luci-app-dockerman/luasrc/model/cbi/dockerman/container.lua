@@ -664,8 +664,8 @@ elseif action == "logs" then
 elseif action == "console" then
 	m.submit = false
 	m.reset  = false
-	local cmd_docker = luci.util.exec("which docker"):match("^.+docker") or nil
-	local cmd_ttyd = luci.util.exec("which ttyd"):match("^.+ttyd") or nil
+	local cmd_docker = luci.util.exec("command -v docker"):match("^.+docker") or nil
+	local cmd_ttyd = luci.util.exec("command -v ttyd"):match("^.+ttyd") or nil
 
 	if cmd_docker and cmd_ttyd and container_info.State.Status == "running" then
 		local cmd = "/bin/sh"
@@ -697,8 +697,8 @@ elseif action == "console" then
 			Button.render(self, section, scope)
 		end
 		o.write = function(self, section)
-			local cmd_docker = luci.util.exec("which docker"):match("^.+docker") or nil
-			local cmd_ttyd = luci.util.exec("which ttyd"):match("^.+ttyd") or nil
+			local cmd_docker = luci.util.exec("command -v docker"):match("^.+docker") or nil
+			local cmd_ttyd = luci.util.exec("command -v ttyd"):match("^.+ttyd") or nil
 
 			if not cmd_docker or not cmd_ttyd or cmd_docker:match("^%s+$") or cmd_ttyd:match("^%s+$")then
 				return

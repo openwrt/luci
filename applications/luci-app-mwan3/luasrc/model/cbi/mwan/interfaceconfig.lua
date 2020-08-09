@@ -41,18 +41,18 @@ track_ip.datatype = "host"
 track_method = mwan_interface:option(ListValue, "track_method", translate("Tracking method"))
 track_method.default = "ping"
 track_method:value("ping")
-if os.execute("which nping 1>/dev/null") == 0 then
+if os.execute("command -v nping 1>/dev/null") == 0 then
 	track_method:value("nping-tcp")
 	track_method:value("nping-udp")
 	track_method:value("nping-icmp")
 	track_method:value("nping-arp")
 end
 
-if os.execute("which arping 1>/dev/null") == 0 then
+if os.execute("command -v arping 1>/dev/null") == 0 then
 	track_method:value("arping")
 end
 
-if os.execute("which httping 1>/dev/null") == 0 then
+if os.execute("command -v httping 1>/dev/null") == 0 then
 	track_method:value("httping")
 end
 
