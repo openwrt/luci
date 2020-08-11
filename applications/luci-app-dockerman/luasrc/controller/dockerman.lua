@@ -12,7 +12,7 @@ function index()
 	e.dependent = false
 	e.acl_depends = { "luci-app-dockerman" }
 
-	entry({"admin", "docker", "overview"},cbi("dockerman/overview"),_("Overview"),0).leaf=true
+	entry({"admin", "docker", "overview"},cbi("dockerman/overview"),_("Overview"), 1).leaf=true
 
 	local remote = luci.model.uci.cursor():get_bool("dockerd", "globals", "remote_endpoint")
 	if remote then
@@ -32,11 +32,11 @@ function index()
 		return
 	end
 
-	entry({"admin", "docker", "containers"}, form("dockerman/containers"), _("Containers"),1).leaf=true
-	entry({"admin", "docker", "images"}, form("dockerman/images"), _("Images"),2).leaf=true
-	entry({"admin", "docker", "networks"}, form("dockerman/networks"), _("Networks"),3).leaf=true
-	entry({"admin", "docker", "volumes"}, form("dockerman/volumes"), _("Volumes"),4).leaf=true
-	entry({"admin", "docker", "events"}, call("action_events"), _("Events"),5)
+	entry({"admin", "docker", "containers"}, form("dockerman/containers"), _("Containers"), 2).leaf=true
+	entry({"admin", "docker", "images"}, form("dockerman/images"), _("Images"), 3).leaf=true
+	entry({"admin", "docker", "networks"}, form("dockerman/networks"), _("Networks"), 4).leaf=true
+	entry({"admin", "docker", "volumes"}, form("dockerman/volumes"), _("Volumes"), 5).leaf=true
+	entry({"admin", "docker", "events"}, call("action_events"), _("Events"), 6)
 
 	entry({"admin", "docker", "newcontainer"}, form("dockerman/newcontainer")).leaf=true
 	entry({"admin", "docker", "newnetwork"}, form("dockerman/newnetwork")).leaf=true
@@ -64,12 +64,24 @@ function action_events()
 
 	if events.code == 200 then
 		for _, v in ipairs(events.body) do
+			local date = "unknown"
+			if v and v.time then
+				date = os.date("%Y-%m-%d %H:%M:%S", v.time)
+			end
+
+			local name = v.Actor.Attributes.name or "unknown"
+			local action = v.Action or "unknown"
+
 			if v and v.Type == "container" then
-				logs = (logs ~= "" and (logs .. "\n") or logs) .. "[" .. os.date("%Y-%m-%d %H:%M:%S", v.time) .."] "..v.Type.. " " .. (v.Action or "null") .. " Container ID:"..  (v.Actor.ID or "null") .. " Container Name:" .. (v.Actor.Attributes.name or "null")
+				local id = v.Actor.ID or "unknown"
+				logs = logs .. string.format("[%s] %s %s Container ID: %s Container Name: %s\n", date, v.Type, action, id, name)
 			elseif v.Type == "network" then
-				logs = (logs ~= "" and (logs .. "\n") or logs) .. "[" .. os.date("%Y-%m-%d %H:%M:%S", v.time) .."] "..v.Type.. " " .. v.Action .. " Container ID:"..( v.Actor.Attributes.container or "null" ) .. " Network Name:" .. (v.Actor.Attributes.name or "null") .. " Network type:".. v.Actor.Attributes.type or ""
+				local container = v.Actor.Attributes.container or "unknown"
+				local network = v.Actor.Attributes.type or "unknown"
+				logs = logs .. string.format("[%s] %s %s Container ID: %s Network Name: %s Network type: %s\n", date, v.Type, action, container, name, network)
 			elseif v.Type == "image" then
-				logs = (logs ~= "" and (logs .. "\n") or logs) .. "[" .. os.date("%Y-%m-%d %H:%M:%S", v.time) .."] "..v.Type.. " " .. v.Action .. " Image:".. (v.Actor.ID or "null").. " Image Name:" .. (v.Actor.Attributes.name or "null")
+				local id = v.Actor.ID or "unknown"
+				logs = logs .. string.format("[%s] %s %s Image: %s Image name: %s\n", date, v.Type, action, id, name)
 			end
 		end
 	end

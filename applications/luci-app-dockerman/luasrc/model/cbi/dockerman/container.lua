@@ -704,11 +704,14 @@ elseif action == "console" then
 				return
 			end
 
-			local kill_ttyd = 'netstat -lnpt | grep ":7682[ \t].*ttyd$" | awk \'{print $NF}\' | awk -F\'/\' \'{print "kill -9 " $1}\' | sh > /dev/null'
-			luci.util.exec(kill_ttyd)
+			local pid = luci.util.trim(luci.util.exec("netstat -lnpt | grep :7682 | grep ttyd | tr -s ' ' | cut -d ' ' -f7 | cut -d'/' -f1"))
+			if pid and pid ~= "" then
+				luci.util.exec("kill -9 " .. pid)
+			end
+
 			local hosts
-			local uci = (require "luci.model.uci").cursor()
-			local remote = uci:get_bool("dockerd", "globals", "remote_endpoint")
+			local uci = require "luci.model.uci".cursor()
+			local remote = uci:get_bool("dockerd", "globals", "remote_endpoint") or false
 			local host = nil
 			local port = nil
 			local socket = nil
@@ -717,18 +720,25 @@ elseif action == "console" then
 				host = uci:get("dockerd", "globals", "remote_host") or nil
 				port = uci:get("dockerd", "globals", "remote_port") or nil
 			else
-				socket = uci:get("dockerd", "globals", "socket_path") or nil
+				socket = uci:get("dockerd", "globals", "socket_path") or "/var/run/docker.sock"
 			end
 
 			if remote and host and port then
 				hosts = host .. ':'.. port
-			elseif socket_path then
-				hosts = socket_path
+			elseif socket then
+				hosts = socket
 			else
 				return
 			end
 
-			local start_cmd = cmd_ttyd .. ' -d 2 --once -p 7682 '.. cmd_docker .. ' -H "'.. hosts ..'" exec -it ' .. (uid and uid ~= "" and (" -u ".. uid  .. ' ') or "").. container_id .. ' ' .. cmd .. ' &'
+			if uid and uid ~= "" then
+				uid = "-u " .. uid
+			else
+				uid = ""
+			end
+
+			local start_cmd = string.format('%s -d 2 --once -p 7682 %s -H "unix://%s" exec -it %s %s %s&', cmd_ttyd, cmd_docker, hosts, uid, container_id, cmd)
+
 			os.execute(start_cmd)
 
 			o = s:option(DummyValue, "console")
