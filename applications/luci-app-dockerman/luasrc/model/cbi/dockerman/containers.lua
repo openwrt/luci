@@ -178,7 +178,7 @@ s.rowcolors=false
 s.template="cbi/nullsection"
 
 o = s:option(Button, "_new")
-o.inputtitle= translate("New")
+o.inputtitle= translate("Add")
 o.template = "dockerman/cbi/inlinebutton"
 o.inputstyle = "add"
 o.forcewrite = true
