@@ -45,13 +45,12 @@ function get_containers()
 	end
 
 	for i, v in ipairs(containers) do
-		local index = v.Created .. v.Id
+		local index = v.Id
 
 		data[index]={}
 		data[index]["_selected"] = 0
 		data[index]["_id"] = v.Id:sub(1,12)
-		data[index]["name"] = v.Names[1]:sub(2)
-		data[index]["_name"] = '<a href='..luci.dispatcher.build_url("admin/docker/container/"..v.Id)..'  class="dockerman_link" title="'..translate("Container detail")..'">'.. v.Names[1]:sub(2).."</a>"
+		data[index]["_name"] = v.Names[1]:sub(2)
 		data[index]["_status"] = v.Status
 
 		if v.Status:find("^Up") then
@@ -104,7 +103,11 @@ if s.err then
 end
 
 s = m:section(Table, container_list, translate("Containers"))
-s.nodescr=true
+s.addremove = false
+s.sectionhead = translate("Containers")
+s.sortable = false
+s.template = "cbi/tblsection"
+s.extedit = luci.dispatcher.build_url("admin", "docker", "container","%s")
 
 o = s:option(Flag, "_selected","")
 o.disabled = 0
@@ -142,7 +145,7 @@ local start_stop_remove = function(m,cmd)
 
 	for k in pairs(container_list) do
 		if container_list[k]._selected == 1 then
-			container_selected[#container_selected + 1] = container_list[k].name
+			container_selected[#container_selected + 1] = container_list[k]._name
 		end
 	end
 
