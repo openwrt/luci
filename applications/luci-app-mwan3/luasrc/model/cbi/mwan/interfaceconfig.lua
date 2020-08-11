@@ -30,7 +30,8 @@ initial_state:value("online", translate("Online"))
 initial_state:value("offline", translate("Offline"))
 
 family = mwan_interface:option(ListValue, "family", translate("Internet Protocol"))
-family.default = "ipv4"
+family.default = ""
+family:value("", translate("IPv4 IPv6"))
 family:value("ipv4", translate("IPv4"))
 family:value("ipv6", translate("IPv6"))
 

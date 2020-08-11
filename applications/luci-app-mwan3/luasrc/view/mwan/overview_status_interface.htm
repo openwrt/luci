@@ -25,16 +25,18 @@ XHR.poll(-1, '<%=luci.dispatcher.build_url("admin", "status", "mwan", "interface
 				var statusview = '';
 				for ( var iface in status.interfaces)
 				{
+					for (var family in status.interfaces[iface])
+					{
 					var state = '';
 					var css = '';
 					var time = '';
-					switch (status.interfaces[iface].status)
+					switch (status.interfaces[iface][family].status)
 					{
 						case 'online':
 							state = '<%:Online%>';
 							time = String.format(
 								'<div><strong>Uptime:&nbsp;</strong>%s</div>',
-								secondsToString(status.interfaces[iface].online)
+								secondsToString(status.interfaces[iface][family].online)
 							);
 							css = 'success';
 							break;
@@ -42,7 +44,7 @@ XHR.poll(-1, '<%=luci.dispatcher.build_url("admin", "status", "mwan", "interface
 							state = '<%:Offline%>';
 							time = String.format(
 								'<div><strong>Downtime:&nbsp;</strong>%s</div>',
-								secondsToString(status.interfaces[iface].offline)
+								secondsToString(status.interfaces[iface][family].offline)
 							);
 							css = 'danger';
 							break;
@@ -58,7 +60,7 @@ XHR.poll(-1, '<%=luci.dispatcher.build_url("admin", "status", "mwan", "interface
 					);
 					statusview += String.format(
 						'<div><strong>Interface:&nbsp;</strong>%s</div>',
-						iface
+						iface + "(" + family + ")"
 					);
 					statusview += String.format(
 						'<div><strong>Status:&nbsp;</strong>%s</div>',
@@ -69,6 +71,7 @@ XHR.poll(-1, '<%=luci.dispatcher.build_url("admin", "status", "mwan", "interface
 						statusview += time;
 					}
 					statusview += '</div>'
+					}
 				}
 				statusDiv.innerHTML = statusview;
 			}
