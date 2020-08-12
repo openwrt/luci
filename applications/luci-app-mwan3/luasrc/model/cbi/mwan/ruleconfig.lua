@@ -30,6 +30,8 @@ o.datatype = ipaddr
 
 o = s:option(Value, "src_port", translate("Source port"),
 	translate("May be entered as a single or multiple port(s) (eg \"22\" or \"80,443\") or as a portrange (eg \"1024:2048\") without quotes"))
+o:depends("proto", "tcp")
+o:depends("proto", "udp")
 
 o = s:option(Value, "dest_ip", translate("Destination address"),
 	translate("Supports CIDR notation (eg \"192.168.100.0/24\") without quotes"))
@@ -37,6 +39,8 @@ o.datatype = ipaddr
 
 o = s:option(Value, "dest_port", translate("Destination port"),
 	translate("May be entered as a single or multiple port(s) (eg \"22\" or \"80,443\") or as a portrange (eg \"1024:2048\") without quotes"))
+o:depends("proto", "tcp")
+o:depends("proto", "udp")
 
 o = s:option(Value, "proto", translate("Protocol"),
 	translate("View the content of /etc/protocols for protocol description"))
