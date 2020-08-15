@@ -40,7 +40,7 @@ return network.registerProtocol('map', {
 	renderFormOptions: function(s) {
 		var o;
 
-		o = s.taboption('general', form.ListValue, 'type', _('Type'));
+		o = s.taboption('general', form.ListValue, 'maptype', _('Type'));
 		o.value('map-e', 'MAP-E');
 		o.value('map-t', 'MAP-T');
 		o.value('lw4o6', 'LW4over6');
