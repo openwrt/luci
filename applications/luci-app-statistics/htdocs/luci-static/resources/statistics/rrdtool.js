@@ -376,7 +376,7 @@ return baseclass.extend({
 
 		function __def(source) {
 			var inst = source.sname,
-			    rrd  = source.rrd.replace(/[\\:]/g, '\\$&'),
+			    rrd  = source.rrd,
 			    ds   = source.ds || 'value';
 
 			_args.push(
