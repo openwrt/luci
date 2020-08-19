@@ -663,9 +663,9 @@ local function ubus_return(...)
 	return ...
 end
 
-function ubus(object, method, data)
+function ubus(object, method, data, path, timeout)
 	if not _ubus_connection then
-		_ubus_connection = _ubus.connect()
+		_ubus_connection = _ubus.connect(path, timeout)
 		assert(_ubus_connection, "Unable to establish ubus connection")
 	end
 
