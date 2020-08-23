@@ -489,7 +489,7 @@ return view.extend({
 		o.value('-',"-- " + _("custom") + " --");
 
 		o.cfgvalue = function(section_id) {
-			return uci.get('ddns', section_id, 'service_name');
+			return uci.get('ddns', section_id, 'service_name') || '-';
 		}
 
 		o.write = function(section_id, formvalue) {
