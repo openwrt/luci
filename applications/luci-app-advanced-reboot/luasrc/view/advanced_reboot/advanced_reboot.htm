@@ -42,12 +42,12 @@
 				<%- if bev1p1 == current_partition then -%>
 				<form method="post" action="<%=url('admin/system/advanced_reboot/reboot')%>">
 					<input type="hidden" name="token" value="<%=token%>" />
-					<input id="reboot-button" type="submit" class="cbi-button cbi-button-apply important" value="<%:Reboot to current partition%>" />
+					<input id="reboot-button" type="submit" class="btn cbi-button cbi-button-apply important" value="<%:Reboot to current partition%>" />
 				</form>
 			<%- else -%>
 			<form method="post" action="<%=url('admin/system/advanced_reboot/alternative_reboot')%>">
 				<input type="hidden" name="token" value="<%=token%>" />
-				<input id="altreboot-button" type="submit" class="cbi-button cbi-button-apply important" value="<%:Reboot to alternative partition...%>" />
+				<input id="altreboot-button" type="submit" class="btn cbi-button cbi-button-apply important" value="<%:Reboot to alternative partition...%>" />
 			</form>
 				<%- end -%>
 			</div>
@@ -66,12 +66,12 @@
 				<%- if bev1p2 == current_partition then -%>
 					<form method="post" action="<%=url('admin/system/advanced_reboot/reboot')%>">
 						<input type="hidden" name="token" value="<%=token%>" />
-						<input id="reboot-button" type="submit" class="cbi-button cbi-button-apply important" value="<%:Reboot to current partition%>" />
+						<input id="reboot-button" type="submit" class="btn cbi-button cbi-button-apply important" value="<%:Reboot to current partition%>" />
 					</form>
 				<%- else -%>
 				<form method="post" action="<%=url('admin/system/advanced_reboot/alternative_reboot')%>">
 					<input type="hidden" name="token" value="<%=token%>" />
-					<input id="altreboot-button" type="submit" class="cbi-button cbi-button-apply important" value="<%:Reboot to alternative partition...%>" />
+					<input id="altreboot-button" type="submit" class="btn cbi-button cbi-button-apply important" value="<%:Reboot to alternative partition...%>" />
 				</form>
 				<%- end -%>
 			</div>
@@ -91,7 +91,7 @@
 <%- if nixio.fs.access("/sbin/poweroff") then -%>
 <form method="post" action="<%=url('admin/system/advanced_reboot/power_off')%>">
 	<input type="hidden" name="token" value="<%=token%>" />
-	<input id="poweroff-button" type="submit" class="cbi-button cbi-button-apply important" value="<%:Perform power off...%>" />
+	<input id="poweroff-button" type="submit" class="btn cbi-button cbi-button-apply important" value="<%:Perform power off...%>" />
 </form>
 <%- else -%>
 	<p class="alert-message warning"><%:Warning: This system does not support powering off!%></p>
