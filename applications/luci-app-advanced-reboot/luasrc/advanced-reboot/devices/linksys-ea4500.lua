@@ -1,7 +1,7 @@
 return {
 	vendorName = "Linksys",
-	deviceName = "EA3500",
-	boardNames = { "linksys-audi", "linksys,audi", "linksys-ea3500", "linksys,ea3500" },
+	deviceName = "EA4500",
+	boardNames = { "linksys-e4500", "linksys,e4500" },
 	partition1MTD = "mtd3",
 	partition2MTD = "mtd5",
 	labelOffset = 32,
@@ -12,4 +12,3 @@ return {
 	bootEnv2Partition1Value = "run nandboot",
 	bootEnv2Partition2Value = "run altnandboot"
 }
-
