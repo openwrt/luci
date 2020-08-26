@@ -1613,33 +1613,31 @@ return view.extend({
 
 					if (hwtype == 'mac80211') {
 						// ieee802.11w options
-						if (L.hasSystemFeature('hostapd', '11w')) {
-							o = ss.taboption('encryption', form.ListValue, 'ieee80211w', _('802.11w Management Frame Protection'), _("Requires the 'full' version of wpad/hostapd and support from the wifi driver <br />(as of Jan 2019: ath9k, ath10k, mwlwifi and mt76)"));
-							o.value('', _('Disabled'));
-							o.value('1', _('Optional'));
-							o.value('2', _('Required'));
-							add_dependency_permutations(o, { mode: ['ap', 'ap-wds', 'sta', 'sta-wds'], encryption: ['owe', 'psk2', 'psk-mixed', 'sae', 'sae-mixed', 'wpa2', 'wpa3', 'wpa3-mixed'] });
+						o = ss.taboption('encryption', form.ListValue, 'ieee80211w', _('802.11w Management Frame Protection'), _("Requires support from the wifi driver <br />(as of Jan 2019: ath9k, ath10k, mwlwifi and mt76)"));
+						o.value('', _('Disabled'));
+						o.value('1', _('Optional'));
+						o.value('2', _('Required'));
+						add_dependency_permutations(o, { mode: ['ap', 'ap-wds', 'sta', 'sta-wds'], encryption: ['owe', 'psk2', 'psk-mixed', 'sae', 'sae-mixed', 'wpa2', 'wpa3', 'wpa3-mixed'] });
 
-							o.defaults = {
-								'2': [{ encryption: 'sae' }, { encryption: 'owe' }, { encryption: 'wpa3' }, { encryption: 'wpa3-mixed' }],
-								'1': [{ encryption: 'sae-mixed'}],
-								'':  []
-							};
-
-							o = ss.taboption('encryption', form.Value, 'ieee80211w_max_timeout', _('802.11w maximum timeout'), _('802.11w Association SA Query maximum timeout'));
-							o.depends('ieee80211w', '1');
-							o.depends('ieee80211w', '2');
-							o.datatype = 'uinteger';
-							o.placeholder = '1000';
-							o.rmempty = true;
-
-							o = ss.taboption('encryption', form.Value, 'ieee80211w_retry_timeout', _('802.11w retry timeout'), _('802.11w Association SA Query retry timeout'));
-							o.depends('ieee80211w', '1');
-							o.depends('ieee80211w', '2');
-							o.datatype = 'uinteger';
-							o.placeholder = '201';
-							o.rmempty = true;
+						o.defaults = {
+							'2': [{ encryption: 'sae' }, { encryption: 'owe' }, { encryption: 'wpa3' }, { encryption: 'wpa3-mixed' }],
+							'1': [{ encryption: 'sae-mixed'}],
+							'':  []
 						};
+
+						o = ss.taboption('encryption', form.Value, 'ieee80211w_max_timeout', _('802.11w maximum timeout'), _('802.11w Association SA Query maximum timeout'));
+						o.depends('ieee80211w', '1');
+						o.depends('ieee80211w', '2');
+						o.datatype = 'uinteger';
+						o.placeholder = '1000';
+						o.rmempty = true;
+
+						o = ss.taboption('encryption', form.Value, 'ieee80211w_retry_timeout', _('802.11w retry timeout'), _('802.11w Association SA Query retry timeout'));
+						o.depends('ieee80211w', '1');
+						o.depends('ieee80211w', '2');
+						o.datatype = 'uinteger';
+						o.placeholder = '201';
+						o.rmempty = true;
 
 						o = ss.taboption('encryption', form.Flag, 'wpa_disable_eapol_key_retries', _('Enable key reinstallation (KRACK) countermeasures'), _('Complicates key reinstallation attacks on the client side by disabling retransmission of EAPOL-Key frames that are used to install keys. This workaround might cause interoperability issues and reduced robustness of key negotiation especially in environments with heavy traffic load.'));
 						add_dependency_permutations(o, { mode: ['ap', 'ap-wds'], encryption: ['psk2', 'psk-mixed', 'sae', 'sae-mixed', 'wpa2', 'wpa3', 'wpa3-mixed'] });
