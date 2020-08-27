@@ -39,7 +39,7 @@ return network.registerProtocol('openfortivpn', {
 	renderFormOptions: function(s) {
 		var o;
 
-		o = s.taboption('general', form.Value, 'server', _('VPN Server'));
+		o = s.taboption('general', form.Value, 'peeraddr', _('VPN Server'));
 		o.datatype = 'host(0)';
 
 		o = s.taboption('general', form.Value, 'port', _('VPN Server port'));
@@ -52,7 +52,7 @@ return network.registerProtocol('openfortivpn', {
 		o = s.taboption('general', form.Value, 'password', _('Password'));
 		o.password = true;
 
-		o = s.taboption('advanced', widgets.NetworkSelect, 'iface_name', _('Bind interface'), _('Bind the tunnel to this interface (optional).'));
+		o = s.taboption('advanced', widgets.NetworkSelect, 'tunlink', _('Bind interface'), _('Bind the tunnel to this interface (optional).'));
 		o.exclude = s.section;
 		o.nocreate = true;
 		o.optional = true;
