@@ -155,7 +155,7 @@ dev.cfgvalue = function(self, section)
 	local v, e
 
 	v = m.uci:get("fstab", section, "uuid")
-	e = v and devices[v:lower()]
+	e = v and devices[v]
 	if v and e and e.size then
 		return "UUID: %s (%s, %d MB)" %{ tp.pcdata(v), e.dev, e.size }
 	elseif v and e then
