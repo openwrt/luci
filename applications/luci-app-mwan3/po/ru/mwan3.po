@@ -127,7 +127,7 @@ msgstr "Проверка качества подключения"
 msgid "Check routing table"
 msgstr "Проверить таблицу маршрутизации"
 
-#: applications/luci-app-mwan3/luasrc/view/mwan/overview_status_interface.htm:97
+#: applications/luci-app-mwan3/luasrc/view/mwan/overview_status_interface.htm:98
 #: applications/luci-app-mwan3/luasrc/view/mwan/status_detail.htm:34
 #: applications/luci-app-mwan3/luasrc/view/mwan/status_troubleshooting.htm:34
 msgid "Collecting data..."
@@ -341,7 +341,7 @@ msgstr "Крайнее средство"
 msgid "Load Balancing"
 msgstr "Балансировка нагрузки"
 
-#: applications/luci-app-mwan3/luasrc/view/mwan/overview_status_interface.htm:96
+#: applications/luci-app-mwan3/luasrc/view/mwan/overview_status_interface.htm:97
 #: applications/luci-app-mwan3/luasrc/view/mwan/status_detail.htm:33
 #: applications/luci-app-mwan3/luasrc/view/mwan/status_diagnostics.htm:36
 #: applications/luci-app-mwan3/luasrc/view/mwan/status_troubleshooting.htm:33
@@ -385,7 +385,7 @@ msgstr "MWAN - Правила"
 msgid "MWAN Interface Configuration - %s"
 msgstr "Настройка интерфейса MWAN - %s"
 
-#: applications/luci-app-mwan3/luasrc/view/mwan/overview_status_interface.htm:94
+#: applications/luci-app-mwan3/luasrc/view/mwan/overview_status_interface.htm:95
 msgid "MWAN Interfaces"
 msgstr "MWAN интерфейсы"
 
@@ -508,7 +508,7 @@ msgstr ""
 msgid "No"
 msgstr "Нет"
 
-#: applications/luci-app-mwan3/luasrc/view/mwan/overview_status_interface.htm:76
+#: applications/luci-app-mwan3/luasrc/view/mwan/overview_status_interface.htm:77
 msgid "No MWAN interfaces found"
 msgstr "Интерфейсы MWAN не найдены"
 
@@ -594,11 +594,10 @@ msgstr ""
 "распределение трафика в сети MWAN.<br />Первыми используются интерфейсы-узлы "
 "с более низкими значениями метрики.<br />Интерфейсы с одинаковыми значениями "
 "метрики используются для балансировки нагрузки.<br />Балансировка нагружки "
-"распределяется в соответствии с назначенными значениями веса для "
-"интерфейсов.<br />Имена могут содержать символы A-Z, a-z, 0-9, _ без "
-"пробелов.<br />Имена должны быть не более 15 символов.<br />Политики не "
-"могут иметь одинаковые имена с настроенными интерфейсами, узлами или "
-"правилами"
+"распределяется в соответствии с назначенными значениями веса для интерфейсов."
+"<br />Имена могут содержать символы A-Z, a-z, 0-9, _ без пробелов.<br /"
+">Имена должны быть не более 15 символов.<br />Политики не могут иметь "
+"одинаковые имена с настроенными интерфейсами, узлами или правилами"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/policy.lua:51
 msgid "Policy"
@@ -656,17 +655,17 @@ msgid ""
 "z, 0-9, _ and no spaces<br />Rules may not share the same name as configured "
 "interfaces, members or policies"
 msgstr ""
-"Правила определяют, какой трафик будет использовать конкретную политику "
-"MWAN.<br />Правила основываются на IP-адресе, номере порта или протоколе.<br "
-"/>Правила исполняются сверху вниз.<br />Правила, расположенные ниже "
+"Правила определяют, какой трафик будет использовать конкретную политику MWAN."
+"<br />Правила основываются на IP-адресе, номере порта или протоколе.<br /"
+">Правила исполняются сверху вниз.<br />Правила, расположенные ниже "
 "сопоставленного правила, игнорируются.<br />Трафик, не соответствующий "
-"никакому правилу, маршрутизируется с помощью основной таблицы "
-"маршрутизации.<br />Трафик, предназначенный для известных (не по умолчанию) "
-"сетей, обрабатывается основной таблицей маршрутизации.<br />Трафик "
-"соответствующий правилу, но при отключенных всех интерфейсах для данной "
-"политики, будет заблокирован.<br />Имена могут содержать символы A-Z, a-z, 0-"
-"9, _ без пробелов.<br />Правила не могут иметь одинаковые имена с "
-"настроенными интерфейсами, узлами или политиками"
+"никакому правилу, маршрутизируется с помощью основной таблицы маршрутизации."
+"<br />Трафик, предназначенный для известных (не по умолчанию) сетей, "
+"обрабатывается основной таблицей маршрутизации.<br />Трафик соответствующий "
+"правилу, но при отключенных всех интерфейсах для данной политики, будет "
+"заблокирован.<br />Имена могут содержать символы A-Z, a-z, 0-9, _ без "
+"пробелов.<br />Правила не могут иметь одинаковые имена с настроенными "
+"интерфейсами, узлами или политиками"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/ruleconfig.lua:53
 msgid "Seconds. Acceptable values: 1-1000000. Defaults to 600 if not set"
@@ -744,15 +743,16 @@ msgstr ""
 "быть &#34;#!/bin/sh&#34; без кавычек.<br />Строки, начинающиеся с «#», "
 "являются комментариями и не исполняются.<br />Добавляя сюда своё собственное "
 "действие mwan3, оно будет<br />выполняться при каждом событии интерфейса "
-"netifd hotplug<br />на тех интерфейсах, для которых mwan3 включён. <br /><br "
-"/>Есть три основные переменные окружения, которые передаются этому скрипту. "
-"<br /><br />$ACTION <br />* «ifup» вызывается netifd и mwan3track <br />* "
-"«ifdown» вызывается netifd и mwan3track <br />* «connected» вызывается "
-"mwan3track только если отслеживание было успешным <br />* «disconnected» "
-"вызывается mwan3track только в случае неудачного отслеживания <br />$"
-"INTERFACE имя интерфейса, который был подключен или отключен (например, «wan»"
-" или «wwan»)<br />$DEVICE имя физического устройства, интерфейс которого был "
-"подключен или отключен (например, «eth0» или «wwan0»)<br /><br />"
+"netifd hotplug<br />на тех интерфейсах, для которых mwan3 включён. <br /"
+"><br />Есть три основные переменные окружения, которые передаются этому "
+"скрипту. <br /><br />$ACTION <br />* «ifup» вызывается netifd и mwan3track "
+"<br />* «ifdown» вызывается netifd и mwan3track <br />* «connected» "
+"вызывается mwan3track только если отслеживание было успешным <br />* "
+"«disconnected» вызывается mwan3track только в случае неудачного отслеживания "
+"<br />$INTERFACE имя интерфейса, который был подключен или отключен "
+"(например, «wan» или «wwan»)<br />$DEVICE имя физического устройства, "
+"интерфейс которого был подключен или отключен (например, «eth0» или "
+"«wwan0»)<br /><br />"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interfaceconfig.lua:37
 msgid "Tracking hostname or IP address"
