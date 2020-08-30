@@ -15,9 +15,9 @@ function simple_adblock_action(name)
 	elseif name == "stop" then
 		luci.sys.init.stop(packageName)
 	elseif name == "enable" then
-		luci.util.exec("uci set " .. packageName .. ".config.enabled=1; uci commit " .. packageName)
+		luci.sys.init.enable(packageName)
 	elseif name == "disable" then
-		luci.util.exec("uci set " .. packageName .. ".config.enabled=0; uci commit " .. packageName)
+		luci.sys.init.disable(packageName)
 	end
 	luci.http.prepare_content("text/plain")
 	luci.http.write("0")
