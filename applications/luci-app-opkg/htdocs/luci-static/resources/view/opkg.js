@@ -775,6 +775,9 @@ function handleOpkg(ev)
 				E('div', {
 					'class': 'btn',
 					'click': L.bind(function(res) {
+						if (L.ui.menu && L.ui.menu.flushCache)
+							L.ui.menu.flushCache();
+
 						L.hideModal();
 						updateLists();
 
