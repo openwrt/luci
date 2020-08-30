@@ -15,17 +15,7 @@ local http = require "luci.http"
 local dispatcher = require "luci.dispatcher"
 
 function getPackageVersion()
-	local opkgFile = "/usr/lib/opkg/status"
-	local line
-	local flag = false
-	for line in io.lines(opkgFile) do
-		if flag then
-			return line:match('[%d%.$-]+') or ""
-		elseif line:find("Package: " .. packageName:gsub("%-", "%%%-")) then
-			flag = true
-		end
-	end
-	return ""
+	return util.trim(util.exec("/etc/init.d/" .. packageName .. " version 2>/dev/null")) or ""
 end
 
 function getFileLines(file)
@@ -153,7 +143,9 @@ errorTable["errorRestoreCache"] = translatef("failed to move '%s' to '%s'", outp
 errorTable["errorOhSnap"] = translate("failed to create block-list or restart DNS resolver")
 errorTable["errorStopping"] = translatef("failed to stop %s", packageName)
 errorTable["errorDNSReload"] = translate("failed to reload/restart DNS resolver")
+errorTable["errorDownloadingConfigUpdate"] = translate("failed to download Config Update file")
 errorTable["errorDownloadingList"] = translate("failed to download")
+errorTable["errorParsingConfigUpdate"] = translate("failed to parse Config Update file")
 errorTable["errorParsingList"] = translate("failed to parse")
 errorTable["errorNoSSLSupport"] = translate("no HTTPS/SSL support on device")
 
@@ -228,6 +220,11 @@ end
 s = m:section(NamedSection, "config", "simple-adblock", translate("Configuration"))
 -- General options
 s:tab("basic", translate("Basic Configuration"))
+
+o1 = s:taboption("basic", ListValue, "config_update_enabled", translate("Automatic Config Update"), translate("Perform config update before downloading the block/allow-lists."))
+o1:value("0", translate("Disable"))
+o1:value("1", translate("Enable"))
+o1.default = 0
 
 o2 = s:taboption("basic", ListValue, "verbosity", translate("Output Verbosity Setting"), translate("Controls system log and console output verbosity."))
 o2:value("0", translate("Suppress output"))
