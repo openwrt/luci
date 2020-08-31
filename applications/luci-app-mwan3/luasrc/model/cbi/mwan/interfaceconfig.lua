@@ -119,7 +119,7 @@ failure_latency:value("300")
 
 failure_loss = mwan_interface:option(Value, "failure_loss", translate("Max packet loss [%]"))
 failure_loss:depends("check_quality", 1)
-failure_loss.default = "20"
+failure_loss.default = "40"
 failure_loss:value("2")
 failure_loss:value("5")
 failure_loss:value("10")
@@ -140,7 +140,7 @@ recovery_latency:value("300")
 
 recovery_loss = mwan_interface:option(Value, "recovery_loss", translate("Min packet loss [%]"))
 recovery_loss:depends("check_quality", 1)
-recovery_loss.default = "5"
+recovery_loss.default = "10"
 recovery_loss:value("2")
 recovery_loss:value("5")
 recovery_loss:value("10")
