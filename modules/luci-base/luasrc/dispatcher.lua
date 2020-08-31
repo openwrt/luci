@@ -395,7 +395,7 @@ function error404(message)
 
 	local function render()
 		local template = require "luci.template"
-		template.render("error404")
+		template.render("error404", {message=message})
 	end
 
 	if not util.copcall(render) then
