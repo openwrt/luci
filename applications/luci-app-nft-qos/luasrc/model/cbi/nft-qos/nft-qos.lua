@@ -115,72 +115,72 @@ wa.cbi_add_networks(o)
 --
 if limit_enable == "1" and limit_type == "static" then
 
-x = m:section(TypedSection, "download", translate("Static QoS-Download Rate"))
-x.anonymous = true
-x.addremove = true
-x.template = "cbi/tblsection"
+	x = m:section(TypedSection, "download", translate("Static QoS-Download Rate"))
+	x.anonymous = true
+	x.addremove = true
+	x.template = "cbi/tblsection"
 
-o = x:option(Value, "hostname", translate("Hostname"))
-o.datatype = "hostname"
-o.default = 'undefined'
+	o = x:option(Value, "hostname", translate("Hostname"))
+	o.datatype = "hostname"
+	o.default = 'undefined'
 
-if has_ipv6 then
-	o = x:option(Value, "ipaddr", translate("IP Address (v4 / v6)"))
-else
-	o = x:option(Value, "ipaddr", translate("IP Address (v4 Only)"))
-end
-o.datatype = "ipaddr"
-if nixio.fs.access("/tmp/dhcp.leases") or nixio.fs.access("/var/dhcp6.leases") then
-	o.titleref = luci.dispatcher.build_url("admin", "status", "overview")
-end
+	if has_ipv6 then
+		o = x:option(Value, "ipaddr", translate("IP Address (v4 / v6)"))
+	else
+		o = x:option(Value, "ipaddr", translate("IP Address (v4 Only)"))
+	end
+	o.datatype = "ipaddr"
+	if nixio.fs.access("/tmp/dhcp.leases") or nixio.fs.access("/var/dhcp6.leases") then
+		o.titleref = luci.dispatcher.build_url("admin", "status", "overview")
+	end
 
-o = x:option(Value, "rate", translate("Rate"))
-o.default = def_rate_dl or '50'
-o.size = 4
-o.datatype = "uinteger"
+	o = x:option(Value, "rate", translate("Rate"))
+	o.default = def_rate_dl or '50'
+	o.size = 4
+	o.datatype = "uinteger"
 
-o = x:option(ListValue, "unit", translate("Unit"))
-o.default = def_unit_dl or "kbytes"
-o:value("bytes", "Bytes/s")
-o:value("kbytes", "KBytes/s")
-o:value("mbytes", "MBytes/s")
+	o = x:option(ListValue, "unit", translate("Unit"))
+	o.default = def_unit_dl or "kbytes"
+	o:value("bytes", "Bytes/s")
+	o:value("kbytes", "KBytes/s")
+	o:value("mbytes", "MBytes/s")
 
 --
 -- Static Limit Rate - Upload Rate
 --
-y = m:section(TypedSection, "upload", translate("Static QoS-Upload Rate"))
-y.anonymous = true
-y.addremove = true
-y.template = "cbi/tblsection"
+	y = m:section(TypedSection, "upload", translate("Static QoS-Upload Rate"))
+	y.anonymous = true
+	y.addremove = true
+	y.template = "cbi/tblsection"
 
-o = y:option(Value, "hostname", translate("Hostname"))
-o.datatype = "hostname"
-o.default = 'undefined'
+	o = y:option(Value, "hostname", translate("Hostname"))
+	o.datatype = "hostname"
+	o.default = 'undefined'
 
-if has_ipv6 then
-	o = y:option(Value, "ipaddr", translate("IP Address (v4 / v6)"))
-else
-	o = y:option(Value, "ipaddr", translate("IP Address (v4 Only)"))
-end
-o.datatype = "ipaddr"
-if nixio.fs.access("/tmp/dhcp.leases") or nixio.fs.access("/var/dhcp6.leases") then
-	o.titleref = luci.dispatcher.build_url("admin", "status", "overview")
-end
+	if has_ipv6 then
+		o = y:option(Value, "ipaddr", translate("IP Address (v4 / v6)"))
+	else
+		o = y:option(Value, "ipaddr", translate("IP Address (v4 Only)"))
+	end
+	o.datatype = "ipaddr"
+	if nixio.fs.access("/tmp/dhcp.leases") or nixio.fs.access("/var/dhcp6.leases") then
+		o.titleref = luci.dispatcher.build_url("admin", "status", "overview")
+	end
 
-o = y:option(Value, "macaddr", translate("MAC (optional)"))
-o.rmempty = true
-o.datatype = "macaddr"
+	o = y:option(Value, "macaddr", translate("MAC (optional)"))
+	o.rmempty = true
+	o.datatype = "macaddr"
 
-o = y:option(Value, "rate", translate("Rate"))
-o.default = def_rate_ul or '50'
-o.size = 4
-o.datatype = "uinteger"
+	o = y:option(Value, "rate", translate("Rate"))
+	o.default = def_rate_ul or '50'
+	o.size = 4
+	o.datatype = "uinteger"
 
-o = y:option(ListValue, "unit", translate("Unit"))
-o.default = def_unit_ul or "kbytes"
-o:value("bytes", "Bytes/s")
-o:value("kbytes", "KBytes/s")
-o:value("mbytes", "MBytes/s")
+	o = y:option(ListValue, "unit", translate("Unit"))
+	o.default = def_unit_ul or "kbytes"
+	o:value("bytes", "Bytes/s")
+	o:value("kbytes", "KBytes/s")
+	o:value("mbytes", "MBytes/s")
 
 end
 
@@ -189,38 +189,38 @@ end
 --
 if enable_priority == "1" then
 
-s = m:section(TypedSection, "priority", translate("Traffic Priority Settings"))
-s.anonymous = true
-s.addremove = true
-s.template = "cbi/tblsection"
+	s = m:section(TypedSection, "priority", translate("Traffic Priority Settings"))
+	s.anonymous = true
+	s.addremove = true
+	s.template = "cbi/tblsection"
 
-o = s:option(ListValue, "protocol", translate("Protocol"))
-o.default = "tcp"
-o:value("tcp", "TCP")
-o:value("udp", "UDP")
-o:value("udplite", "UDP-Lite")
-o:value("sctp", "SCTP")
-o:value("dccp", "DCCP")
+	o = s:option(ListValue, "protocol", translate("Protocol"))
+	o.default = "tcp"
+	o:value("tcp", "TCP")
+	o:value("udp", "UDP")
+	o:value("udplite", "UDP-Lite")
+	o:value("sctp", "SCTP")
+	o:value("dccp", "DCCP")
 
-o = s:option(ListValue, "priority", translate("Priority"))
-o.default = "1"
-o:value("-400", "1")
-o:value("-300", "2")
-o:value("-225", "3")
-o:value("-200", "4")
-o:value("-150", "5")
-o:value("-100", "6")
-o:value("0", "7")
-o:value("50", "8")
-o:value("100", "9")
-o:value("225", "10")
-o:value("300", "11")
+	o = s:option(ListValue, "priority", translate("Priority"))
+	o.default = "1"
+	o:value("-400", "1")
+	o:value("-300", "2")
+	o:value("-225", "3")
+	o:value("-200", "4")
+	o:value("-150", "5")
+	o:value("-100", "6")
+	o:value("0", "7")
+	o:value("50", "8")
+	o:value("100", "9")
+	o:value("225", "10")
+	o:value("300", "11")
 
-o = s:option(Value, "service", translate("Service"), translate("e.g. https, 23, (separator is comma)"))
-o.default = '?'
+	o = s:option(Value, "service", translate("Service"), translate("e.g. https, 23, (separator is comma)"))
+	o.default = '?'
 
-o = s:option(Value, "comment", translate("Comment"))
-o.default = '?'
+	o = s:option(Value, "comment", translate("Comment"))
+	o.default = '?'
 
 end
 
