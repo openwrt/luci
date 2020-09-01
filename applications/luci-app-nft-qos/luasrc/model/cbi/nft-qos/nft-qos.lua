@@ -15,6 +15,7 @@ local def_up = uci:get("nft-qos", "default", "dynamic_bw_up")
 local def_down = uci:get("nft-qos", "default", "dynamic_bw_down")
 
 local limit_enable = uci:get("nft-qos", "default", "limit_enable")
+local limit_mac_enable = uci:get("nft-qos", "default", "limit_mac_enable")
 local limit_type = uci:get("nft-qos", "default", "limit_type")
 local enable_priority = uci:get("nft-qos", "default", "priority_enable")
 
@@ -29,7 +30,8 @@ s = m:section(TypedSection, "default", translate("NFT-QoS Settings"))
 s.addremove = false
 s.anonymous = true
 
-s:tab("limit", "Limit Rate")
+s:tab("limit", "Limit Rate by IP Address")
+s:tab("limitmac", "Limit Rate by Mac Address")
 s:tab("priority", "Traffic Priority")
 
 --
@@ -132,10 +134,6 @@ if nixio.fs.access("/tmp/dhcp.leases") or nixio.fs.access("/var/dhcp6.leases") t
 	o.titleref = luci.dispatcher.build_url("admin", "status", "overview")
 end
 
-o = x:option(Value, "macaddr", translate("MAC (optional)"))
-o.rmempty = true
-o.datatype = "macaddr"
-
 o = x:option(Value, "rate", translate("Rate"))
 o.default = def_rate_dl or '50'
 o.size = 4
@@ -223,6 +221,55 @@ o.default = '?'
 
 o = s:option(Value, "comment", translate("Comment"))
 o.default = '?'
+
+end
+
+--
+-- limit speed by mac address
+--
+o = s:taboption("limitmac", Flag, "limit_mac_enable", translate("Limit Enable"), translate("Enable Limit Rate Feature"))
+o.default = limit_mac_enable or o.enabled
+o.rmempty = false
+
+--
+-- Static By Mac Address
+--
+if limit_mac_enable == "1" then
+
+	x = m:section(TypedSection, "client", translate("Limit Traffic Rate By Mac Address"))
+	x.anonymous = true
+	x.addremove = true
+	x.template = "cbi/tblsection"
+
+	o = x:option(Value, "hostname", translate("Hostname"))
+	o.datatype = "hostname"
+	o.default = ''
+
+	o = x:option(Value, "macaddr", translate("MAC Address"))
+	o.rmempty = true
+	o.datatype = "macaddr"
+
+	o = x:option(Value, "drate", translate("Download Rate"))
+	o.default = def_rate_dl or '50'
+	o.size = 4
+	o.datatype = "uinteger"
+
+	o = x:option(ListValue, "drunit", translate("Unit"))
+	o.default = def_unit_dl or "kbytes"
+	o:value("bytes", "Bytes/s")
+	o:value("kbytes", "KBytes/s")
+	o:value("mbytes", "MBytes/s")
+
+	o = x:option(Value, "urate", translate("Upload Rate"))
+	o.default = def_rate_ul or '50'
+	o.size = 4
+	o.datatype = "uinteger"
+
+	o = x:option(ListValue, "urunit", translate("Unit"))
+	o.default = def_unit_ul or "kbytes"
+	o:value("bytes", "Bytes/s")
+	o:value("kbytes", "KBytes/s")
+	o:value("mbytes", "MBytes/s")
 
 end
 
