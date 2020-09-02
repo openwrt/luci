@@ -92,5 +92,7 @@ return network.registerProtocol('map', {
 		o = s.taboption('advanced', form.Value, 'mtu', _('Use MTU on tunnel interface'));
 		o.placeholder = '1280';
 		o.datatype    = 'max(9200)';
+
+		o = s.taboption('advanced', form.Flag, 'legacymap', _('Use legacy MAP'), _('Use legacy MAP interface identifier format (draft-ietf-softwire-map-00) instead of RFC7597'));
 	}
 });
