@@ -150,9 +150,7 @@ return view.extend({
 
 		m = new form.Map('ddns', _('Dynamic DNS'));
 
-		var is = m.section(form.NamedSection, 'global', 'ddns', _('Information'));
-
-		s = is;
+		s = m.section(form.NamedSection, 'global', 'ddns', _('Information'));
 
 		s.tab('info', _('Information'));
 		s.tab('global', _('Global Settings'));
