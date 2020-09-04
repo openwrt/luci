@@ -501,51 +501,44 @@ return view.extend({
 		s.tab('timer', _('Timer Settings'));
 		s.tab('logview', _('Log File Viewer'));
 
-		// TAB: BASIC
-
-		// enabled
-		o = s.taboption('basic', form.Flag, 'enabled', _('Enabled'),_("If this service section is disabled it could not be started." + "<br />" +
-		"Neither from LuCI interface nor from console"));
+		o = s.taboption('basic', form.Flag, 'enabled',
+			_('Enabled'),
+			_("If this service section is disabled it could not be started.")
+			+ "<br />" +
+			_("Neither from LuCI interface nor from console."));
 		o.modalonly = true;
 		o.rmempty  = false;
 		o.default = '1';
 
-		// lookup_host
-
-		o = s.taboption('basic', form.Value, 'lookup_host', _("Lookup Hostname"),
-		_("Hostname/FQDN to validate, if IP update happen or necessary") );
-		o.rmempty	= false;
+		o = s.taboption('basic', form.Value, 'lookup_host',
+			_("Lookup Hostname"),
+			_("Hostname/FQDN to validate, if IP update happen or necessary"));
+		o.rmempty = false;
 		o.placeholder = "myhost.example.com";
 		o.datatype = 'and(minlength(3),hostname("strict"))';
 		o.modalonly = true;
 
-		// use_ipv6
-
-		o = s.taboption('basic', form.ListValue, 'use_ipv6', _("IP address version"),
-		_("Defines which IP address 'IPv4/IPv6' is send to the DDNS provider"));
+		o = s.taboption('basic', form.ListValue, 'use_ipv6',
+			_("IP address version"),
+			_("Defines which IP address 'IPv4/IPv6' is send to the DDNS provider"));
 		o.default = '0';
 		o.modalonly = true;
 		o.rmempty  = false;
-
 		o.value("0", _("IPv4-Address"))
-		if (env["has_ipv6"])
+		if (env["has_ipv6"]) {
 			o.value("1", _("IPv6-Address"))
-
-		// service_name
-
-		o = s.taboption('basic', form.ListValue, 'ipv4_service_name', _("DDNS Service provider") + " [IPv4]");
-		o.depends("use_ipv6", "0")
-		o.modalonly = true;
-
-		for (var i = 0; i < services4.length; i++)
-			o.value(services4[i]);
-
-		o.value('-',"-- " + _("custom") + " --");
-
-		o.cfgvalue = function(section_id) {
-			return uci.get('ddns', section_id, 'service_name') || '-';
 		}
 
+		o = s.taboption('basic', form.ListValue, 'ipv4_service_name',
+			String.format('%s %s', _("DDNS Service provider"), "[IPv4]"));
+		o.depends("use_ipv6", "0")
+		o.modalonly = true;
+		o.value('-',"-- " + _("custom") + " --");
+		for (var i = 0; i < services4.length; i++)
+			o.value(services4[i]);
+		o.cfgvalue = function(section_id) {
+			return uci.get('ddns', section_id, 'service_name') || '-';
+		};
 		o.write = function(section_id, formvalue) {
 			if (formvalue != '-') {
 				uci.set('ddns', section_id, 'update_url', null);
@@ -555,15 +548,14 @@ return view.extend({
 			return uci.set('ddns', section_id, 'service_name', null);
 		};
 
-		o = s.taboption('basic', form.ListValue, 'ipv6_service_name', _("DDNS Service provider") + " [IPv6]");
+		o = s.taboption('basic', form.ListValue, 'ipv6_service_name',
+			String.format('%s %s', _("DDNS Service provider"), "[IPv6]"));
 		o.depends("use_ipv6", "1")
 		o.modalonly = true;
-
-		for (var i = 0; i < services6.length; i++)
+		o.value('-',"-- " + _("custom") + " --");
+		for (var i = 0; i < services6.length; i++) {
 			o.value(services6[i]);
-
-			o.value('-',"-- " + _("custom") + " --");
-
+		}
 		o.cfgvalue = function(section_id) {
 			var service = uci.get('ddns', section_id, 'service_name'),
 				update_script = uci.get('ddns', section_id, 'update_script'),
@@ -573,8 +565,7 @@ return view.extend({
 				return "-";
 
 			return service;
-		}
-
+		};
 		o.write = function(section_id, formvalue) {
 			if (formvalue != '-') {
 				uci.set('ddns', section_id, 'update_url', null);
@@ -584,17 +575,16 @@ return view.extend({
 			return uci.set('ddns', section_id, 'service_name', null);
 		};
 
-		// update_url
-
-		o = s.taboption('basic', form.Value, 'update_url', _("Custom update-URL"),
-		_("Update URL to be used for updating your DDNS Provider." + "<br />" +
-		"Follow instructions you will find on their WEB page."));
+		o = s.taboption('basic', form.Value, 'update_url',
+			_("Custom update-URL"),
+			_("Update URL to be used for updating your DDNS Provider.")
+			+ "<br />" +
+			_("Follow instructions you will find on their WEB page."));
 		o.modalonly = true;
-		o.rmempty	= true;
+		o.rmempty = true;
 		o.optional = true;
 		o.depends("ipv6_service_name","-");
 		o.depends("ipv4_service_name","-");
-
 		o.validate = function(section_id, value) {
 			var other = this.section.children.filter(function(o) { return o.option == 'update_script' })[0].formvalue(section_id);
 
@@ -603,18 +593,16 @@ return view.extend({
 			}
 
 			return true;
-		}
+		};
 
-		// update_script
-
-		o = s.taboption('basic', form.Value, 'update_script', _("Custom update-script"),
-		_("Custom update script to be used for updating your DDNS Provider."));
+		o = s.taboption('basic', form.Value, 'update_script',
+			_("Custom update-script"),
+			_("Custom update script to be used for updating your DDNS Provider."));
 		o.modalonly = true;
-		o.rmempty	= true;
+		o.rmempty = true;
 		o.optional = true;
 		o.depends("ipv6_service_name","-");
 		o.depends("ipv4_service_name","-");
-
 		o.validate = function(section_id, value) {
 			var other = this.section.children.filter(function(o) { return o.option == 'update_url' })[0].formvalue(section_id);
 
@@ -623,78 +611,69 @@ return view.extend({
 			}
 
 			return true;
-		}
+		};
 
-		// domain
-
-		o = s.taboption('basic', form.Value, 'domain', _("Domain"),
-		_("Replaces [USERNAME] in Update-URL (URL-encoded)"));
+		o = s.taboption('basic', form.Value, 'domain',
+			_("Domain"),
+			_("Replaces [USERNAME] in Update-URL (URL-encoded)"));
 		o.modalonly = true;
-		o.rmempty	= false;
+		o.rmempty = false;
 
-		// username
-
-		o = s.taboption('basic', form.Value, 'username', _("Username"),
-		_("Replaces [USERNAME] in Update-URL (URL-encoded)"));
+		o = s.taboption('basic', form.Value, 'username',
+			_("Username"),
+			_("Replaces [USERNAME] in Update-URL (URL-encoded)"));
 		o.modalonly = true;
-		o.rmempty	= false;
+		o.rmempty = false;
 
-		// password
-
-
-		o = s.taboption('basic', form.Value, 'password', _("Password"),
-		_("Replaces [PASSWORD] in Update-URL (URL-encoded)"));
+		o = s.taboption('basic', form.Value, 'password',
+			_("Password"),
+			_("Replaces [PASSWORD] in Update-URL (URL-encoded)"));
 		o.password = true;
 		o.modalonly = true;
-		o.rmempty	= false;
+		o.rmempty = false;
 
-		// param_enc
-
-		o = s.taboption('basic', form.Value, 'param_enc', _("Optional Encoded Parameter"),
-		_("Optional: Replaces [PARAMENC] in Update-URL (URL-encoded)"));
+		o = s.taboption('basic', form.Value, 'param_enc',
+			_("Optional Encoded Parameter"),
+			_("Optional: Replaces [PARAMENC] in Update-URL (URL-encoded)"));
 		o.optional = true;
 		o.modalonly = true;
 
-		// param_opt
-
-		o = s.taboption('basic', form.Value, 'param_opt', _("Optional Parameter"),
-		_("Optional: Replaces [PARAMOPT] in Update-URL (NOT URL-encoded)"));
+		o = s.taboption('basic', form.Value, 'param_opt',
+			_("Optional Parameter"),
+			_("Optional: Replaces [PARAMOPT] in Update-URL (NOT URL-encoded)"));
 		o.optional = true;
 		o.modalonly = true;
-
-		// use_https
 
 		if (env['has_ssl']) {
-			o = s.taboption('basic', form.Flag, 'use_https', _("Use HTTP Secure"),
+			o = s.taboption('basic', form.Flag, 'use_https',
+				_("Use HTTP Secure"),
 				_("Enable secure communication with DDNS provider"));
 			o.optional = true;
 			o.modalonly = true;
 
 			o = s.taboption('basic', form.Value, 'cacert',
 				_("Path to CA-Certificate"),
-				_("directory or path/file") + "<br />" +
-				_("or") + '<b>' + " IGNORE " + '</b>' +
+				_("directory or path/file")
+				+ "<br />" +
+				_("or")
+				+ '<b>' + " IGNORE " + '</b>' +
 				_("to run HTTPS without verification of server certificates (insecure)"));
 			o.modalonly = true;
 			o.depends("use_https", "1");
 			o.placeholder = "/etc/ssl/certs";
-			o.rmempty	= false;
+			o.rmempty = false;
 		};
 
-		// TAB Advanced
 
-		// ip_source
-
-		o = s.taboption('advanced', form.ListValue, 'ip_source', _("IP address source"),
-		_("Defines the source to read systems IP-Address from, that will be send to the DDNS provider"));
-
+		o = s.taboption('advanced', form.ListValue, 'ip_source',
+			_("IP address source"),
+			_("Defines the source to read systems IP-Address from, that will be send to the DDNS provider"));
 		o.modalonly = true;
 		o.default = "network";
 		o.value("network", _("Network"));
 		o.value("web", _("URL"));
 		o.value("interface", _("Interface"));
 		o.value("script", _("Script"));
-
 		o.write = function(section_id, formvalue) {
 			switch(formvalue) {
 				case 'network':
@@ -724,59 +703,51 @@ return view.extend({
 			return uci.set('ddns', section_id, 'ip_source', formvalue )
 		};
 
-		// ip_network
-
-		o = s.taboption('advanced', widgets.NetworkSelect, 'ip_network', _("Network"),
-		_("Defines the network to read systems IP-Address from"));
+		o = s.taboption('advanced', widgets.NetworkSelect, 'ip_network',
+			_("Network"),
+			_("Defines the network to read systems IP-Address from"));
 		o.depends('ip_source','network');
 		o.modalonly = true;
 		o.default = 'wan';
 		o.multiple = false;
 
-		// ip_url
-
-		o = s.taboption('advanced', form.Value, 'ip_url', _("URL to detect"),
-		_("Defines the Web page to read systems IP-Address from" + '<br />' +
-		_('Example for IPv4' + ': http://checkip.dyndns.com') + '<br />' +
-		_('Example for IPv6' + ': http://checkipv6.dyndns.com')));
+		o = s.taboption('advanced', form.Value, 'ip_url',
+			_("URL to detect"),
+			_("Defines the Web page to read systems IP-Address from.")
+			+ '<br />' +
+			String.format('%s %s', _('Example for IPv4'), ': http://checkip.dyndns.com')
+			+ '<br />' +
+			String.format('%s %s', _('Example for IPv6'), ': http://checkipv6.dyndns.com'));
 		o.depends("ip_source", "web")
-
 		o.modalonly = true;
 
-		// ip_interface
-
-		o = s.taboption('advanced', widgets.DeviceSelect, 'ip_interface', _("Interface"),
-		_("Defines the interface to read systems IP-Address from"));
-
+		o = s.taboption('advanced', widgets.DeviceSelect, 'ip_interface',
+			_("Interface"),
+			_("Defines the interface to read systems IP-Address from"));
 		o.modalonly = true;
 		o.depends("ip_source", "interface")
 		o.multiple = false;
 		o.default = 'wan';
 
-		// ip_script
-
-		o = s.taboption('advanced', form.Value, 'ip_script', _("Script"),
-		_("User defined script to read systems IP-Address"));
-
+		o = s.taboption('advanced', form.Value, 'ip_script',
+			_("Script"),
+			_("User defined script to read systems IP-Address"));
 		o.modalonly = true;
 		o.depends("ip_source", "script")
 		o.placeholder = "/path/to/script.sh"
 
-		// interface
-
-		o = s.taboption('advanced', widgets.DeviceSelect, 'interface', _("Event Network"),
-		_("Network on which the ddns-updater scripts will be started"));
-
+		o = s.taboption('advanced', widgets.DeviceSelect, 'interface',
+			_("Event Network"),
+			_("Network on which the ddns-updater scripts will be started"));
 		o.modalonly = true;
 		o.multiple = false;
 		o.default = 'wan';
 		o.depends("ip_source", "web");
 		o.depends("ip_source", "script");
 
-		// interface_show
-
-		o = s.taboption('advanced', form.DummyValue, '_interface', _("Event Network"),
-		_("Network on which the ddns-updater scripts will be started"));
+		o = s.taboption('advanced', form.DummyValue, '_interface',
+			_("Event Network"),
+			_("Network on which the ddns-updater scripts will be started"));
 		o.depends("ip_source", "interface");
 		o.depends("ip_source", "network");
 		o.forcewrite = true;
@@ -790,11 +761,11 @@ return view.extend({
 			return uci.set('ddns', section_id, 'interface', val);
 		};
 
-		// bind_network
-
 		if (env['has_bindnet']) {
-			o = s.taboption('advanced', widgets.ZoneSelect, 'bind_network', _("Bind Network"),
-				_('OPTIONAL: Network to use for communication') + '<br />' +
+			o = s.taboption('advanced', widgets.ZoneSelect, 'bind_network',
+				_("Bind Network"),
+				_('OPTIONAL: Network to use for communication')
+				+ '<br />' +
 				_("Network on which the ddns-updater scripts will be started"));
 			o.depends("ip_source", "web");
 			o.optional = true;
@@ -802,30 +773,26 @@ return view.extend({
 			o.modalonly = true;
 		}
 
-		// force_ipversion
-
 		if (env['has_forceip']) {
-			o = s.taboption('advanced', form.Flag, 'force_ipversion', _("Force IP Version"),
+			o = s.taboption('advanced', form.Flag, 'force_ipversion',
+				_("Force IP Version"),
 				_('OPTIONAL: Force the usage of pure IPv4/IPv6 only communication.'));
 			o.optional = true;
 			o.rmempty = true;
 			o.modalonly = true;
 		}
 
-		// dns_server
-
 		if (env['has_dnsserver']) {
 			o = s.taboption("advanced", form.Value, "dns_server",
 				_("DNS-Server"),
-				_("OPTIONAL: Use non-default DNS-Server to detect 'Registered IP'.") + "<br />" +
+				_("OPTIONAL: Use non-default DNS-Server to detect 'Registered IP'.")
+				+ "<br />" +
 				_("Format: IP or FQDN"));
 			o.placeholder = "mydns.lan"
 			o.optional = true;
 			o.rmempty = true;
 			o.modalonly = true;
 		}
-
-		// force_dnstcp
 
 		if (env['has_bindhost']) {
 			o = s.taboption("advanced", form.Flag, "force_dnstcp",
@@ -836,25 +803,24 @@ return view.extend({
 			o.modalonly = true;
 		}
 
-		// proxy
-
 		if (env['has_proxy']) {
-			o = s.taboption("advanced", form.Value, "proxy", _("PROXY-Server"),
-				_("OPTIONAL: Proxy-Server for detection and updates.") + "<br />" +
-				_("Format") + ": " + '<b>' + "[user:password@]proxyhost:port" + '</b>' + "<br />" +
-				_("IPv6 address must be given in square brackets") + ": " +
-				'<b>' + " [2001:db8::1]:8080" + '</b>');
+			o = s.taboption("advanced", form.Value, "proxy",
+				_("PROXY-Server"),
+				_("OPTIONAL: Proxy-Server for detection and updates.")
+				+ "<br />" +
+				String.format('%s: <b>%s</b>', _("Format"), "[user:password@]proxyhost:port")
+				+ "<br />" +
+				String.format('%s: <b>%s</b>', _("IPv6 address must be given in square brackets"), "[2001:db8::1]:8080"));
 			o.optional = true;
 			o.rmempty = true;
 			o.modalonly = true;
 		}
 
-		// use_syslog
-
-		o = s.taboption("advanced", form.ListValue, "use_syslog", _("Log to syslog"),
+		o = s.taboption("advanced", form.ListValue, "use_syslog",
+			_("Log to syslog"),
 			_("Writes log messages to syslog. Critical Errors will always be written to syslog."));
 		o.modalonly = true;
-		o.placeholder = "2"
+		o.default = "2"
 		o.optional = true;
 		o.value("0", _("No logging"))
 		o.value("1", _("Info"))
@@ -862,9 +828,8 @@ return view.extend({
 		o.value("3", _("Warning"))
 		o.value("4", _("Error"))
 
-		// use_logfile
-
-		o = s.taboption("advanced", form.Flag, "use_logfile", _("Log to file"));
+		o = s.taboption("advanced", form.Flag, "use_logfile",
+			_("Log to file"));
 		o.default = '1';
 		o.optional = true;
 		o.modalonly = true;
@@ -874,14 +839,12 @@ return view.extend({
 			return uci.get('ddns', section_id, 'use_logfile');
 		};
 
-		// TAB Timer
 
-		// check_interval
-		o = s.taboption("timer", form.Value, "check_interval", _("Check Interval"));
+		o = s.taboption("timer", form.Value, "check_interval",
+			_("Check Interval"));
 		o.placeholder = "30";
 		o.modalonly = true;
 		o.datatype = 'uinteger';
-
 		o.validate = function(section_id, formvalue) {
 			var unit = this.section.children.filter(function(o) { return o.option == 'check_unit' })[0].formvalue(section_id),
 				time_to_sec = time_res[unit || 'minutes'] * formvalue;
@@ -890,28 +853,26 @@ return view.extend({
 				return _('Values below 5 minutes == 300 seconds are not supported');
 
 			return true;
-
 		};
 
-		// check_interval
-		o = s.taboption("timer", form.ListValue, "check_unit",'Check Unit');
-		o.description = _("Interval unit to check for changed IP");
+		o = s.taboption("timer", form.ListValue, "check_unit",
+			_('Check Unit'),
+			_("Interval unit to check for changed IP"));
 		o.modalonly = true;
 		o.default  = "minutes"
 		o.value("seconds", _("seconds"));
 		o.value("minutes", _("minutes"));
 		o.value("hours", _("hours"));
 
-		// force_interval
-
-		o = s.taboption("timer", form.Value, "force_interval", _("Force Interval"));
-		o.description = _("Interval to force updates send to DDNS Provider" + "<br />" +
-		"Setting this parameter to 0 will force the script to only run once");
+		o = s.taboption("timer", form.Value, "force_interval",
+			_("Force Interval"),
+			_("Interval to force updates send to DDNS Provider")
+			+ "<br />" +
+			_("Setting this parameter to 0 will force the script to only run once"));
 		o.placeholder = "72";
 		o.optional = true;
 		o.modalonly = true;
 		o.datatype = 'uinteger';
-
 		o.validate = function(section_id, formvalue) {
 
 			if (!formvalue)
@@ -929,10 +890,9 @@ return view.extend({
 			return true;
 		};
 
-		// force_unit
-
-		o = s.taboption("timer", form.ListValue, "force_unit",'Force Unit');
-		o.description = _("Interval unit to force updates send to DDNS Provider");
+		o = s.taboption("timer", form.ListValue, "force_unit", 
+			_('Force Unit'),
+			_("Interval unit to force updates send to DDNS Provider"));
 		o.modalonly = true;
 		o.optional = true;
 		o.default  = "minutes"
@@ -940,39 +900,35 @@ return view.extend({
 		o.value("hours", _("hours"));
 		o.value("days", _("days"));
 
-		// retry_count
-
-		o = s.taboption("timer", form.Value, "retry_count", _("Error Retry Counter"));
-		o.description = _("On Error the script will stop execution after given number of retrys")
-		+ "<br />"
-		+ _("The default setting of '0' will retry infinite.");
+		o = s.taboption("timer", form.Value, "retry_count",
+			_("Error Retry Counter"),
+			_("On Error the script will stop execution after given number of retrys")
+			+ "<br />" +
+			_("The default setting of '0' will retry infinite."));
 		o.placeholder = "0";
 		o.optional = true;
 		o.modalonly = true;
 		o.datatype = 'uinteger';
 
-		// retry_interval
-
-		o = s.taboption("timer", form.Value, "retry_interval", _("Error Retry Interval"));
-		o.description = _("On Error the script will stop execution after given number of retrys")
-		+ "<br />"
-		+ _("The default setting of '0' will retry infinite.");
+		o = s.taboption("timer", form.Value, "retry_interval",
+			_("Error Retry Interval"),
+			_("On Error the script will stop execution after given number of retrys")
+			+ "<br />" +
+			_("The default setting of '0' will retry infinite."));
 		o.placeholder = "60";
 		o.optional = true;
 		o.modalonly = true;
 		o.datatype = 'uinteger';
 
-		// retry_unit
-
-		o = s.taboption("timer", form.ListValue, "retry_unit",'Retry Unit');
-		o.description = _("On Error the script will retry the failed action after given time");
+		o = s.taboption("timer", form.ListValue, "retry_unit",
+			_('Retry Unit'),
+			_("On Error the script will retry the failed action after given time"));
 		o.modalonly = true;
 		o.optional = true;
 		o.default  = "seconds"
 		o.value("seconds", _("seconds"));
 		o.value("minutes", _("minutes"));
 
-		// TAB logview
 
 		o = s.taboption("logview", form.DummyValue, '_read_log', '');
 		o.depends('use_logfile','1');
