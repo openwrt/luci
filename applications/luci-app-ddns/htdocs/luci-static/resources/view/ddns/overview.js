@@ -154,12 +154,15 @@ return view.extend({
 
 		s = is;
 
-		o = s.option(form.DummyValue, '_version', _('Dynamic DNS Version'));
+		s.tab('info', _('Information'));
+		s.tab('global', _('Global Settings'));
+
+		o = s.taboption('info', form.DummyValue, '_version', _('Dynamic DNS Version'));
 		o.cfgvalue = function() {
 			return status[this.option];
 		};
 
-		o = s.option(form.DummyValue, '_enabled', _('State'));
+		o = s.taboption('info', form.DummyValue, '_enabled', _('State'));
 		o.cfgvalue = function() {
 			var res = status[this.option];
 			if (!res) {
@@ -169,7 +172,7 @@ return view.extend({
 			return res ? _('DDNS Autostart enabled') : _('DDNS Autostart disabled')
 		};
 
-		o = s.option(form.DummyValue, '_toggle', '&#160;');
+		o = s.taboption('info', form.DummyValue, '_toggle', '&#160;');
 		o.cfgvalue = function() {
 			var action = status['_enabled'] ? 'stop' : 'start';
 			return E([], [
@@ -185,7 +188,7 @@ return view.extend({
 			}, _(action.toUpperCase() + ' DDns'))]);
 		};
 
-		o = s.option(form.DummyValue, '_restart', '&#160;');
+		o = s.taboption('info', form.DummyValue, '_restart', '&#160;');
 		o.cfgvalue = function() {
 			return E([], [
 				E('button', {
@@ -199,7 +202,7 @@ return view.extend({
 		// DDns hints
 
 		if (!env['has_ipv6']) {
-			o = s.option(form.DummyValue, '_no_ipv6');
+			o = s.taboption('info', form.DummyValue, '_no_ipv6');
 			o.rawhtml  = true;
 			o.title = '<b>' + _("IPv6 not supported") + '</b>';
 			o.cfgvalue = function() { return _("IPv6 is currently not (fully) supported by this system") + "<br />" +
@@ -208,7 +211,7 @@ return view.extend({
 		}
 
 		if (!env['has_ssl']) {
-			o = s.option(form.DummyValue, '_no_https');
+			o = s.taboption('info', form.DummyValue, '_no_https');
 			o.titleref = L.url("admin", "system", "opkg")
 			o.rawhtml  = true;
 			o.title = '<b>' + _("HTTPS not supported") + '</b>';
@@ -220,7 +223,7 @@ return view.extend({
 		}
 
 		if (!env['has_bindnet']) {
-			o = s.option(form.DummyValue, '_no_bind_network');
+			o = s.taboption('info', form.DummyValue, '_no_bind_network');
 			o.titleref = L.url("admin", "system", "opkg")
 			o.rawhtml  = true;
 			o.title = '<b>' + _("Binding to a specific network not supported") + '</b>';
@@ -234,7 +237,7 @@ return view.extend({
 		}
 
 		if (!env['has_proxy']) {
-			o = s.option(form.DummyValue, '_no_proxy');
+			o = s.taboption('info', form.DummyValue, '_no_proxy');
 			o.titleref = L.url("admin", "system", "opkg")
 			o.rawhtml  = true;
 			o.title = '<b>' + _("cURL without Proxy Support") + '</b>';
@@ -246,7 +249,7 @@ return view.extend({
 		}
 
 		if (!env['has_forceip']) {
-			o = s.option(form.DummyValue, '_no_force_ip');
+			o = s.taboption('info', form.DummyValue, '_no_force_ip');
 			o.titleref = L.url("admin", "system", "opkg")
 			o.rawhtml  = true;
 			o.title = '<b>' + _("Force IP Version not supported") + '</b>';
@@ -257,7 +260,7 @@ return view.extend({
 		}
 
 		if (!env['has_bindhost']) {
-			o = s.option(form.DummyValue, '_no_dnstcp');
+			o = s.taboption('info', form.DummyValue, '_no_dnstcp');
 			o.titleref = L.url("admin", "system", "opkg")
 			o.rawhtml  = true;
 			o.title = '<b>' + _("DNS requests via TCP not supported") + '</b>';
@@ -268,7 +271,7 @@ return view.extend({
 		}
 
 		if (!env['has_dnsserver']) {
-			o = s.option(form.DummyValue, '_no_dnsserver');
+			o = s.taboption('info', form.DummyValue, '_no_dnsserver');
 			o.titleref = L.url("admin", "system", "opkg")
 			o.rawhtml  = true;
 			o.title = '<b>' + _("Using specific DNS Server not supported") + '</b>';
@@ -280,7 +283,7 @@ return view.extend({
 		}
 
 		if (env['has_ssl'] && !env['has_cacerts']) {
-			o = s.option(form.DummyValue, '_no_certs');
+			o = s.taboption('info', form.DummyValue, '_no_certs');
 			o.titleref = L.url("admin", "system", "opkg")
 			o.rawhtml  = true;
 			o.title = '<b>' + _("No certificates found") + '</b>';
@@ -288,6 +291,59 @@ return view.extend({
 			"<br />- " +
 			_("Install 'ca-certificates' package or needed certificates " +
 				"by hand into /etc/ssl/certs default directory")};
+		}
+
+		// Advanced Configuration Section
+
+		o = s.taboption('global', form.Flag, 'upd_privateip', _("Allow non-public IP's"));
+		o.description = _("Non-public and by default blocked IP's") + ':'
+		+ '<br /><strong>IPv4: </strong>'
+		+ '0/8, 10/8, 100.64/10, 127/8, 169.254/16, 172.16/12, 192.168/16'
+		+ '<br /><strong>IPv6: </strong>'
+		+ '::/32, f000::/4"';
+		o.default = "0";
+		o.optional = true;
+
+		o = s.taboption('global', form.Value, 'ddns_dateformat', _('Date format'));
+		o.description = '<a href="http://www.cplusplus.com/reference/ctime/strftime/" target="_blank">'
+			+ _("For supported codes look here")
+			+ '</a><br />' +
+			_('Current setting: ') + '<b>' + status['_curr_dateformat'] + '</b>';
+		o.default = "%F %R"
+		o.optional = true;
+		o.rmempty = true;
+
+		o = s.taboption('global', form.Value, 'ddns_rundir', _('Status directory'));
+		o.description = _('Directory contains PID and other status information for each running section.');
+		o.default = "/var/run/ddns";
+		o.optional = true;
+		o.rmempty = true;
+
+		o = s.taboption('global', form.Value, 'ddns_logdir', _('Log directory'));
+		o.description = _('Directory contains Log files for each running section.');
+		o.default = "/var/log/ddns";
+		o.optional = true;
+		o.rmempty = true;
+		o.validate = function(section_id, formvalue) {
+			if (formvalue.indexOf('../') !== -1)
+				return _('"../" not allowed in path for Security Reason.')
+
+			return true;
+		}
+
+		o = s.taboption('global', form.Value, 'ddns_loglines', _('Log length'));
+		o.description = _('Number of last lines stored in log files');
+		o.datatype = 'min(1)';
+		o.default = '250';
+
+		if (env['has_wget'] && env['has_curl']) {
+
+			o = s.taboption('global', form.Flag, 'use_curl', _('Use cURL'));
+			o.description = _('If Wget and cURL package are installed, Wget is used for communication by default.');
+			o.default = "0";
+			o.optional = true;
+			o.rmempty = true;
+
 		}
 
 		// DDns services
@@ -948,70 +1004,6 @@ return view.extend({
 				E('p', {}, E('textarea', { 'style': 'width:100%', 'rows': 20, 'readonly' : 'readonly', 'id' : 'log_area' }, _('Please press [Read] button') ))
 			]);
 		}, o, this)
-
-
-		// Advanced Configuration Section
-
-		s = m.section(form.NamedSection, 'global', 'ddns', _('Global Configuration'));
-		s.description = _('Configure here the details for all Dynamic DNS services including this LuCI application.')
-			+ '<br /><strong>'
-			+ _("It is NOT recommended for casual users to change settings on this page.")
-			+ '</strong><br />'
-			+ '<a href="https://openwrt.org/docs/guide-user/base-system/ddns#section_ddns" target="_blank">'
-			+ _('For detailed information about parameter settings look here.')
-			+ '</a>';
-		s.addremove = false;
-
-		o = s.option(form.Flag, 'upd_privateip', _("Allow non-public IP's"));
-		o.description = _("Non-public and by default blocked IP's") + ':'
-		+ '<br /><strong>IPv4: </strong>'
-		+ '0/8, 10/8, 100.64/10, 127/8, 169.254/16, 172.16/12, 192.168/16'
-		+ '<br /><strong>IPv6: </strong>'
-		+ '::/32, f000::/4"';
-		o.default = "0";
-		o.optional = true;
-
-		o = s.option(form.Value, 'ddns_dateformat', _('Date format'));
-		o.description = '<a href="http://www.cplusplus.com/reference/ctime/strftime/" target="_blank">'
-			+ _("For supported codes look here")
-			+ '</a><br />' +
-			_('Current setting: ') + '<b>' + status['_curr_dateformat'] + '</b>';
-		o.default = "%F %R"
-		o.optional = true;
-		o.rmempty = true;
-
-		o = s.option(form.Value, 'ddns_rundir', _('Status directory'));
-		o.description = _('Directory contains PID and other status information for each running section.');
-		o.default = "/var/run/ddns";
-		o.optional = true;
-		o.rmempty = true;
-
-		o = s.option(form.Value, 'ddns_logdir', _('Log directory'));
-		o.description = _('Directory contains Log files for each running section.');
-		o.default = "/var/log/ddns";
-		o.optional = true;
-		o.rmempty = true;
-		o.validate = function(section_id, formvalue) {
-			if (formvalue.indexOf('../') !== -1)
-				return _('"../" not allowed in path for Security Reason.')
-
-			return true;
-		}
-
-		o = s.option(form.Value, 'ddns_loglines', _('Log length'));
-		o.description = _('Number of last lines stored in log files');
-		o.datatype = 'min(1)';
-		o.default = '250';
-
-		if (env['has_wget'] && env['has_curl']) {
-
-			o = s.option(form.Flag, 'use_curl', _('Use cURL'));
-			o.description = _('If Wget and cURL package are installed, Wget is used for communication by default.');
-			o.default = "0";
-			o.optional = true;
-			o.rmempty = true;
-
-		}
 
 		return m.render().then(L.bind(function(m, nodes) {
 			poll.add(L.bind(function() {
