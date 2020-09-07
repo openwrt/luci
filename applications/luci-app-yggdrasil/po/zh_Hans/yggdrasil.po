@@ -1,22 +1,22 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2020-03-07 21:24+0000\n"
-"Last-Translator: liushuyu011 <liushuyu011@gmail.com>\n"
+"PO-Revision-Date: 2020-09-07 10:27+0000\n"
+"Last-Translator: Dounx <imdounx@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "openwrt/luciapplicationsyggdrasil/zh_Hans/>\n"
 "Language: zh_Hans\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.0-dev\n"
+"X-Generator: Weblate 4.3-dev\n"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/status.js:33
 msgid "Active peers"
-msgstr ""
+msgstr "活跃的对等端"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:56
 msgid "Address to listen for incoming connections"
-msgstr ""
+msgstr "侦听传入连接的地址"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/session_firewall.js:16
 msgid "Allow from direct"
@@ -24,23 +24,24 @@ msgstr "允许直连"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/session_firewall.js:18
 msgid "Allow from remote"
-msgstr ""
+msgstr "允许远程访问"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/session_firewall.js:17
 msgid "Allow network traffic from directly connected peers"
-msgstr ""
+msgstr "允许来自直接连接的对等端的网络流量"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/session_firewall.js:19
+#, fuzzy
 msgid ""
 "Allow network traffic from remote nodes on the network that you are not "
 "directly peered with"
-msgstr ""
+msgstr "允许来自您未直接与之对等的网络上远程节点的网络流量"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/session_firewall.js:21
 msgid ""
 "Allow outbound network traffic regardless of AllowFromDirect or "
 "AllowFromRemote"
-msgstr ""
+msgstr "无论 AllowFromDirect 还是 AllowFromRemote，都允许出站网络流量"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/tunnel_routing.js:14
 msgid ""
@@ -49,12 +50,15 @@ msgid ""
 "similar to a VPN tunnel. Tunnelling works between any two nodes and does not "
 "require them to be directly peered."
 msgstr ""
+"允许通过 Yggdrasil 隧道传输非 Yggdrasil 流量。这有效地使您可以使用 Yggdrasil 来路由或桥接其他网络，类似于 VPN "
+"隧道。隧道在任何两个节点之间工作，并且不需要直接对等。"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/session_firewall.js:21
 msgid "Always allow outbound"
 msgstr "总是允许出站流量"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/session_firewall.js:31
+#, fuzzy
 msgid "Blacklisted public keys"
 msgstr "已拉黑的公钥"
 
@@ -66,10 +70,12 @@ msgid ""
 "prevents this, so that only items specified in \"NodeInfo\" are sent back if "
 "specified."
 msgstr ""
+"默认情况下，nodeinfo 包含一些默认值，包括平台，体系结构和 Yggdrasil 版本。这些在调查网络和诊断网络路由问题时会有所帮助。启用 "
+"nodeinfo 隐私选项可防止这种情况，因此，如果启用，则仅发送回在“ NodeInfo”中指定的项目。"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:22
 msgid "Enable NodeInfo privacy"
-msgstr ""
+msgstr "启用 NodeInfo 隐私"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/session_firewall.js:14
 msgid "Enable session firewall"
@@ -94,7 +100,7 @@ msgstr "常规设置"
 
 #: applications/luci-app-yggdrasil/root/usr/share/rpcd/acl.d/luci-app-yggdrasil.json:3
 msgid "Grant access to LuCI app yggdrasil"
-msgstr ""
+msgstr "授予访问LuCI app yggdrasil的权限"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/tunnel_routing.js:26
 msgid "IPv4 local subnet"
@@ -110,14 +116,16 @@ msgid "IPv4 subnet"
 msgstr "IPv4 子网"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/tunnel_routing.js:20
+#, fuzzy
 msgid "IPv4 subnets belonging to remote nodes, mapped to the node's public"
-msgstr ""
+msgstr "属于远程节点的IPv4子网，映射到该节点的公共节点"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/tunnel_routing.js:27
+#, fuzzy
 msgid ""
 "IPv4 subnets belonging to this node's end of the tunnels. Only traffic from "
 "these ranges will be tunnelled."
-msgstr ""
+msgstr "属于隧道的此节点末端的IPv4子网。只有这些范围内的流量将通过隧道传输。"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/tunnel_routing.js:40
 msgid "IPv6 local subnet"
@@ -134,7 +142,7 @@ msgstr "IPv6 子网"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/tunnel_routing.js:34
 msgid "IPv6 subnets belonging to remote nodes, mapped to the node's public"
-msgstr ""
+msgstr "属于远程节点的 IPv6 子网，映射到该节点的公共节点"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/tunnel_routing.js:41
 msgid ""
