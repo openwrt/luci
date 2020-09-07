@@ -33,17 +33,6 @@ o:value("info", translate("Info"))
 o:value("debug", translate("Debug"))
 o:depends("logging", "1")
 
-o = s:option(Value, "rtmon_interval",
-	translate("Update interval"),
-	translate("How often should rtmon update the interface routing table"))
-o.datatype = "integer"
-o.default = "5"
-o:value("1", translatef("%d second", 1))
-o:value("3", translatef("%d seconds", 3))
-o:value("5", translatef("%d seconds", 5))
-o:value("7", translatef("%d seconds", 7))
-o:value("10", translatef("%d seconds", 10))
-
 o = s:option(DynamicList, "rt_table_lookup",
 	translate("Routing table lookup"),
 	translate("Also scan this Routing table for connected networks"))
