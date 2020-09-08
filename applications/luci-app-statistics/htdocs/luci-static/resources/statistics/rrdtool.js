@@ -515,7 +515,7 @@ return baseclass.extend({
 			if (!gopts.rrasingle)
 				_args.push('GPRINT:%s_min:MIN:\tMin\\: %s'.format(source.sname, numfmt));
 
-			/* always include AVERAGE */
+			/* don't include AVERAGE if noavg option is set */
 			if (!source.noavg)
 				_args.push('GPRINT:%s_avg:AVERAGE:\tAvg\\: %s'.format(source.sname, numfmt));
 
