@@ -13,7 +13,7 @@ o = s:option(Value, "mmx_mask",
 	translate("Firewall mask"),
 	translate("Enter value in hex, starting with <code>0x</code>"))
 o.datatype = "hex(4)"
-o.default = "0xff00"
+o.default = "0x3F00"
 
 o = s:option(Flag, "logging",
 	translate("Logging"),
