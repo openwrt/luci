@@ -7,29 +7,28 @@
 var isReadonlyView = !L.hasViewPermission() || null;
 
 return view.extend({
-	callInitList: rpc.declare({
-		object: 'luci',
-		method: 'getInitList',
+	callRcList: rpc.declare({
+		object: 'rc',
+		method: 'list',
 		expect: { '': {} }
 	}),
 
-	callInitAction: rpc.declare({
-		object: 'luci',
-		method: 'setInitAction',
+	callRcInit: rpc.declare({
+		object: 'rc',
+		method: 'init',
 		params: [ 'name', 'action' ],
-		expect: { result: false }
 	}),
 
 	load: function() {
 		return Promise.all([
 			L.resolveDefault(fs.read('/etc/rc.local'), ''),
-			this.callInitList()
+			this.callRcList()
 		]);
 	},
 
 	handleAction: function(name, action, ev) {
-		return this.callInitAction(name, action).then(function(success) {
-			if (success != true)
+		return this.callRcInit(name, action).then(function(ret) {
+			if (ret)
 				throw _('Command failed');
 
 			return true;
@@ -80,19 +79,19 @@ return view.extend({
 		]);
 
 		for (var init in initList)
-			if (initList[init].index < 100)
+			if (initList[init].start < 100)
 				list.push(Object.assign({ name: init }, initList[init]));
 
 		list.sort(function(a, b) {
-			if (a.index != b.index)
-				return a.index - b.index
+			if (a.start != b.start)
+				return a.start - b.start
 
 			return a.name > b.name;
 		});
 
 		for (var i = 0; i < list.length; i++) {
 			rows.push([
-				'%02d'.format(list[i].index),
+				'%02d'.format(list[i].start),
 				list[i].name,
 				E('div', [
 					this.renderEnableDisable(list[i]),
