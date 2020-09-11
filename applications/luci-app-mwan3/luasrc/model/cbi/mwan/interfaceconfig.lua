@@ -148,7 +148,7 @@ recovery_loss:value("20")
 recovery_loss:value("25")
 
 timeout = mwan_interface:option(ListValue, "timeout", translate("Ping timeout"))
-timeout.default = "2"
+timeout.default = "4"
 timeout:value("1", translatef("%d second", 1))
 timeout:value("2", translatef("%d seconds", 2))
 timeout:value("3", translatef("%d seconds", 3))
