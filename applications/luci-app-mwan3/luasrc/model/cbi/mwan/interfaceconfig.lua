@@ -213,7 +213,7 @@ recovery:value("3600", translatef("%d hour", 1))
 
 down = mwan_interface:option(ListValue, "down", translate("Interface down"),
 	translate("Interface will be deemed down after this many failed ping tests"))
-down.default = "3"
+down.default = "5"
 down:value("1")
 down:value("2")
 down:value("3")
@@ -227,7 +227,7 @@ down:value("10")
 
 up = mwan_interface:option(ListValue, "up", translate("Interface up"),
 	translate("Downed interface will be deemed up after this many successful ping tests"))
-up.default = "3"
+up.default = "5"
 up:value("1")
 up:value("2")
 up:value("3")
