@@ -282,6 +282,13 @@ return view.extend({
 		o.validate = validateServerSpec;
 
 
+		o = s.taboption('general', form.DynamicList, 'address', _('Addresses'),
+			_('List of domains to force to an IP address.'));
+		
+		o.optional = true;
+		o.placeholder = '/router.local/192.168.0.1';
+
+
 		o = s.taboption('general', form.Flag, 'rebind_protection',
 			_('Rebind protection'),
 			_('Discard upstream RFC1918 responses'));
