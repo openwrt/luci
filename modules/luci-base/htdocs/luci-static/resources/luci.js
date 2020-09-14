@@ -2553,10 +2553,16 @@
 				rpcBaseURL = Session.getLocalData('rpcBaseURL');
 
 			if (rpcBaseURL == null) {
+				var msg = {
+					jsonrpc: '2.0',
+					id:      'init',
+					method:  'list',
+					params:  undefined
+				};
 				var rpcFallbackURL = this.url('admin/ubus');
 
-				rpcBaseURL = Request.get(env.ubuspath).then(function(res) {
-					return (rpcBaseURL = (res.status == 400) ? env.ubuspath : rpcFallbackURL);
+				rpcBaseURL = Request.post(env.ubuspath, msg, { nobatch: true }).then(function(res) {
+					return (rpcBaseURL = res.status == 200 ? env.ubuspath : rpcFallbackURL);
 				}, function() {
 					return (rpcBaseURL = rpcFallbackURL);
 				}).then(function(url) {
