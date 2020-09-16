@@ -8,7 +8,7 @@ return view.extend({
 		
 		m = new form.Map('nextdns', _('NextDNS'),
 			_('NextDNS Configuration.')
-			+ '<br>'
+			+ '<br />'
 			+ _('For further information, go to \
 				<a href="https://nextdns.io" target="_blank">nextdns.io</a>.'));
 
@@ -22,7 +22,7 @@ return view.extend({
 
 		s.option(form.Value, 'config', _('Configuration ID'),
 			_('The ID of your NextDNS configuration.')
-			+ '<br>'
+			+ '<br />'
 			+ _('Go to nextdns.io to create a configuration.'));
 
 		o = s.option(form.Flag, 'report_client_info', _('Report Client Info'),
@@ -32,7 +32,7 @@ return view.extend({
 
 		o = s.option(form.Flag, 'hardened_privacy', _('Hardened Privacy'),
 			_('When enabled, use DNS servers located in jurisdictions with strong privacy laws.')
-			+ '<br>'
+			+ '<br />'
 			+ _('Available locations are: Switzerland, Iceland, Finland, Panama and Hong Kong.'));
 		o.rmempty = false;
 
