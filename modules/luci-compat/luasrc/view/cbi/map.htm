@@ -2,7 +2,7 @@
 	<div class="alert-message warning"><%=pcdata(msg)%></div>
 <%- end end -%>
 
-<% if readable then %>
+<% if firstmap and readable then %>
 <div class="cbi-map" id="cbi-<%=self.config%>"<%=ifattr(not writable, "style", "opacity:.6; pointer-events:none")%>>
 	<% if self.title and #self.title > 0 then %>
 		<h2 name="content"><%=self.title%></h2>
@@ -39,6 +39,6 @@
 		<%- self:render_children() %>
 	<% end %>
 </div>
-<% else %>
+<% elseif firstmap then %>
 <div class="alert-message warning"><%:Insufficient permissions to read UCI configuration.%></div>
 <% end %>
