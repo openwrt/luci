@@ -2,7 +2,7 @@ local uci = require("luci.model.uci").cursor()
 
 nextdns = Map("nextdns", translate("NextDNS"),
 	translate("NextDNS Configuration.")
-	.. "<br>"
+	.. "<br />"
 	.. translatef("For further information, go to "
 	..            "<a href=\"https://nextdns.io\" target=\"_blank\">nextdns.io</a>"))
 
@@ -20,7 +20,7 @@ enabled.rmempty = false
 
 conf = s:option(Value, "config", translate("Configuration ID"),
 	translate("The ID of your NextDNS configuration.")
-	.. "<br>"
+	.. "<br />"
 	.. translate("Go to nextdns.io to create a configuration."))
 conf.rmempty = false
 
@@ -30,7 +30,7 @@ report_client_info.rmempty = false
 
 hardened_privacy = s:option(Flag, "hardened_privacy", translate("Hardened Privacy"),
 	translate("When enabled, use DNS servers located in jurisdictions with strong privacy laws.")
-	.. "<br>"
+	.. "<br />"
 	.. translate("Available locations are: Switzerland, Iceland, Finland, Panama and Hong Kong."))
 hardened_privacy.rmempty = false
 
