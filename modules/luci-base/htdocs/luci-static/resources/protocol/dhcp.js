@@ -20,7 +20,7 @@ return network.registerProtocol('dhcp', {
 		var dev = this.getL2Device() || this.getDevice(), o;
 
 		o = s.taboption('general', form.Value, 'hostname', _('Hostname to send when requesting DHCP'));
-		o.datatype    = 'hostname';
+		o.datatype    = 'or(hostname, "*")';
 		o.load = function(section_id) {
 			return callFileRead('/proc/sys/kernel/hostname').then(L.bind(function(hostname) {
 				this.placeholder = hostname;
