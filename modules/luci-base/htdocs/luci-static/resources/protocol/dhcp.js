@@ -21,8 +21,8 @@ return network.registerProtocol('dhcp', {
 
 		o = s.taboption('general', form.Value, 'hostname', _('Hostname to send when requesting DHCP'));
 		o.default = '';
-		o.value('', 'Send the hostname of this device');
-		o.value('*', 'Do not send a hostname');
+		o.value('', _('Send the hostname of this device'));
+		o.value('*', _('Do not send a hostname'));
 		o.datatype    = 'or(hostname, "*")';
 		o.load = function(section_id) {
 			return callFileRead('/proc/sys/kernel/hostname').then(L.bind(function(hostname) {
