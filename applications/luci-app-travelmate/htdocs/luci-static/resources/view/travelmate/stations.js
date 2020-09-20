@@ -841,14 +841,20 @@ return view.extend({
 			bssid = L.toArray(map.lookupOption('bssid', '_add_trm'))[0].formvalue('_add_trm'),
 			encryption = L.toArray(map.lookupOption('encryption', '_add_trm'))[0].formvalue('_add_trm'),
 			password = L.toArray(map.lookupOption('key', '_add_trm'))[0].formvalue('_add_trm');
-			if (!ssid || ((encryption.includes('psk') || encryption.includes('wpa') || encryption.includes('sae')) && !password)) {
-				return;
+			if (!ssid || ((encryption.includes('psk') || encryption.includes('wpa') || encryption.includes('sae')) && !password )) {
+				if (!ssid) {
+					ui.addNotification(null, E('p', 'Empty SSID, the uplink station could not be saved.'), 'error');
+				}
+				else {
+					ui.addNotification(null, E('p', 'Empty Password, the uplink station could not be saved.'), 'error');
+				}
+				return ui.hideModal();
 			}
 			for (var i = 0; i < w_sections.length; i++) {
 				if (w_sections[i].device === device && w_sections[i].ssid === ssid) {
 					if (ignore_bssid === '1' || (ignore_bssid === '0' && w_sections[i].bssid === bssid)) {
-						ui.hideModal();
-						return;
+						ui.addNotification(null, E('p', 'Duplicate wireless entry, the uplink station could not be saved.'), 'error');
+						return ui.hideModal();
 					}
 				}
 			}
