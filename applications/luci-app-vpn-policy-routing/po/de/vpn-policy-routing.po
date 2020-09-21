@@ -1,22 +1,23 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2020-07-11 21:29+0000\n"
-"Last-Translator: ssantos <ssantos@web.de>\n"
+"PO-Revision-Date: 2020-09-19 18:03+0000\n"
+"Last-Translator: Jonny Tischbein <jonny_tischbein@systemli.org>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsvpn-policy-routing/de/>\n"
 "Language: de\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.2-dev\n"
+"X-Generator: Weblate 4.3-dev\n"
 
 #: applications/luci-app-vpn-policy-routing/luasrc/model/cbi/vpn-policy-routing.lua:49
 msgid "%s (disabled)"
-msgstr ""
+msgstr "%s (deaktiviert)"
 
 #: applications/luci-app-vpn-policy-routing/luasrc/model/cbi/vpn-policy-routing.lua:44
+#, fuzzy
 msgid "%s (strict mode)"
-msgstr ""
+msgstr "%s (Strickter Modus)"
 
 #: applications/luci-app-vpn-policy-routing/luasrc/model/cbi/vpn-policy-routing.lua:38
 msgid "%s is not installed or not found"
@@ -28,12 +29,18 @@ msgid ""
 "anything in this section! Change any of the settings below with extreme "
 "caution!%s"
 msgstr ""
+"%sWARNUNG.%s Bitte lies die %sREADME%s bevor du diesen Abschnitt "
+"bearbeitest! Ändere alle Einstellungen mit extremer Vorsicht!%s"
 
 #: applications/luci-app-vpn-policy-routing/luasrc/model/cbi/vpn-policy-routing.lua:200
+#, fuzzy
 msgid ""
 "Add an ip rule, not an iptables entry for policies with just the local "
 "address. Use with caution to manipulte policies priorities."
 msgstr ""
+"Füge eine IP Regel, nicht einen iptables Eintrag als Regel mit "
+"ausschließlich lokalen Adressen hinzu. Ändere die Prioritäten der Regeln mit "
+"Vorischt."
 
 #: applications/luci-app-vpn-policy-routing/luasrc/model/cbi/vpn-policy-routing.lua:182
 msgid "Advanced Configuration"
@@ -45,6 +52,9 @@ msgid ""
 "explicitly supported by the service. Can be useful if your OpenVPN tunnels "
 "have dev option other than tun* or tap*."
 msgstr ""
+"Ermöglicht die Angabe der Liste der Schnittstellennamen (in Kleinbuchstaben)"
+", die vom Dienst explizit unterstützt werden sollen. Es kann nützlich sein, "
+"wenn deine OpenVPN-Tunnel eine andere dev-Option als tun* oder tap* haben."
 
 #: applications/luci-app-vpn-policy-routing/luasrc/model/cbi/vpn-policy-routing.lua:188
 msgid ""
@@ -52,6 +62,9 @@ msgid ""
 "by the service. Can be useful if running both VPN server and VPN client on "
 "the router."
 msgstr ""
+"Ermöglicht die Liste der Schnittstellennamen (in Kleinbuchstaben), die vom "
+"Dienst ignoriert werden sollen, anzugeben. Es kann nützlich sein, sowohl VPN-"
+"Server als auch VPN-Client auf dem Router auszuführen."
 
 #: applications/luci-app-vpn-policy-routing/luasrc/model/cbi/vpn-policy-routing.lua:196
 msgid "Append"
@@ -81,6 +94,8 @@ msgstr "Kette"
 msgid ""
 "Checkmark represents the default gateway. See the %sREADME%s for details."
 msgstr ""
+"Ein Haken steht für den Standardgateway. Lies die %sREADME%s für "
+"Einzelheiten."
 
 #: applications/luci-app-vpn-policy-routing/luasrc/model/cbi/vpn-policy-routing.lua:275
 msgid "Comment"
