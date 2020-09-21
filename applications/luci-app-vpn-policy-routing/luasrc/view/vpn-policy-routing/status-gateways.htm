@@ -1,5 +1,5 @@
 <%#
-Copyright 2017-2019 Stan Grishin (stangri@melmac.net)
+Copyright 2017-2020 Stan Grishin (stangri@melmac.net)
 This is free software, licensed under the Apache License, Version 2.0
 -%>
 
@@ -11,8 +11,8 @@ This is free software, licensed under the Apache License, Version 2.0
 </textarea>
 
 <div>
-<%- local readmeURL = "https://github.com/openwrt/packages/tree/master/net/vpn-policy-routing/files/README.md" -%>
-<%=translatef("Checkmark represents the default gateway. See the %sREADME%s for details.", "<a href=\"" .. readmeURL .. "#a-word-about-default-routing" .. "\" target=\"_blank\">", "</a>")%>
+	<%- local readmeURL = "https://github.com/openwrt/packages/tree/master/net/vpn-policy-routing/files/README.md" -%>
+	<%=translatef("The %s represents the default gateway. See the %sREADME%s for details.", "<strong>✓</strong>", "<a href=\"" .. readmeURL .. "#a-word-about-default-routing" .. "\" target=\"_blank\">", "</a>")%>
 </div>
 
 <%+cbi/valuefooter%>

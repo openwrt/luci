@@ -13,6 +13,20 @@ local dispatcher = require "luci.dispatcher"
 local enabledFlag = uci:get(packageName, "config", "enabled")
 local enc
 
+function getPackageVersion()
+	local opkgFile = "/usr/lib/opkg/status"
+	local line
+	local flag = false
+	for line in io.lines(opkgFile) do
+		if flag then
+			return line:match('[%d%.$-]+') or ""
+		elseif line:find("Package: " .. packageName:gsub("%-", "%%%-")) then
+			flag = true
+		end
+	end
+	return ""
+end
+
 local ubusStatus = util.ubus("service", "list", { name = packageName })
 if ubusStatus and ubusStatus[packageName] and 
 	 ubusStatus[packageName]["instances"] and 
@@ -33,7 +47,7 @@ if ubusStatus and ubusStatus[packageName] and
 end
 
 local serviceRunning, statusText = false, nil
-local packageVersion = tostring(util.trim(sys.exec("opkg list-installed " .. packageName .. " | awk '{print $3}'"))) or ""
+local packageVersion = getPackageVersion()
 if packageVersion == "" then
 	statusText = translatef("%s is not installed or not found", packageName)
 end 
@@ -78,7 +92,7 @@ if (type(lanIPAddr) == "table") then
 								break
 				end
 				lanIPAddr = lanIPAddr:match("[0-9.]+")
-end          
+end
 if lanIPAddr and lanNetmask then
 	laPlaceholder = ip.new(lanIPAddr .. "/" .. lanNetmask )
 end
