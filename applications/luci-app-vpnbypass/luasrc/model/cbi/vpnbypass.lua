@@ -4,8 +4,22 @@ local sys = require "luci.sys"
 local util = require "luci.util"
 local packageName = "vpnbypass"
 
-local packageVersion, statusText = nil, nil 
-packageVersion = tostring(util.trim(sys.exec("opkg list-installed " .. packageName .. " | awk '{print $3}'"))) or ""
+function getPackageVersion()
+	local opkgFile = "/usr/lib/opkg/status"
+	local line
+	local flag = false
+	for line in io.lines(opkgFile) do
+		if flag then
+			return line:match('[%d%.$-]+') or ""
+		elseif line:find("Package: " .. packageName:gsub("%-", "%%%-")) then
+			flag = true
+		end
+	end
+	return ""
+end
+
+local packageVersion = getPackageVersion()
+local statusText = nil 
 if packageVersion == "" then
 	statusText = translatef("%s is not installed or not found", packageName)
 end
