@@ -148,7 +148,7 @@ recovery_loss:value("20")
 recovery_loss:value("25")
 
 timeout = mwan_interface:option(ListValue, "timeout", translate("Ping timeout"))
-timeout.default = "2"
+timeout.default = "4"
 timeout:value("1", translatef("%d second", 1))
 timeout:value("2", translatef("%d seconds", 2))
 timeout:value("3", translatef("%d seconds", 3))
@@ -161,7 +161,7 @@ timeout:value("9", translatef("%d seconds", 9))
 timeout:value("10", translatef("%d seconds", 10))
 
 interval = mwan_interface:option(ListValue, "interval", translate("Ping interval"))
-interval.default = "5"
+interval.default = "10"
 interval:value("1", translatef("%d second", 1))
 interval:value("3", translatef("%d seconds", 3))
 interval:value("5", translatef("%d seconds", 5))
@@ -213,7 +213,7 @@ recovery:value("3600", translatef("%d hour", 1))
 
 down = mwan_interface:option(ListValue, "down", translate("Interface down"),
 	translate("Interface will be deemed down after this many failed ping tests"))
-down.default = "3"
+down.default = "5"
 down:value("1")
 down:value("2")
 down:value("3")
@@ -227,7 +227,7 @@ down:value("10")
 
 up = mwan_interface:option(ListValue, "up", translate("Interface up"),
 	translate("Downed interface will be deemed up after this many successful ping tests"))
-up.default = "3"
+up.default = "5"
 up:value("1")
 up:value("2")
 up:value("3")
