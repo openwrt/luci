@@ -99,7 +99,7 @@ function configCheck()
 			if trackingNumber and #trackingNumber > 0 then
 				overview[iface]["tracking"] = #trackingNumber
 				overview[iface]["reliability"] = false
-				local reliabilityNumber = tonumber(uci:get("mwan3", iface, "reliability"))
+				local reliabilityNumber = tonumber(uci:get("mwan3", iface, "reliability") or "1")
 				if reliabilityNumber and reliabilityNumber <= #trackingNumber then
 					overview[iface]["reliability"] = true
 				end
