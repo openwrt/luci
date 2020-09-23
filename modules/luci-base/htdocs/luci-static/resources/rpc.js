@@ -33,9 +33,6 @@ return baseclass.extend(/** @lends LuCI.rpc.prototype */ {
 						req[i].params[2]
 					);
 		}
-		else if (req.params) {
-			q += '/%s.%s'.format(req.params[1], req.params[2]);
-		}
 
 		return request.post(rpcBaseURL + q, req, {
 			timeout: (L.env.rpctimeout || 20) * 1000,
