@@ -254,7 +254,7 @@ return view.extend({
 		o.readonly = true;
 
 		o = s.taboption('wireless', form.ListValue, 'encryption', _('Encryption'));
-		o.value('sae', _('WPA3 Pers.'));
+		o.value('sae', _('WPA3 Pers. (SAE)'));
 		o.value('sae-mixed', _('WPA2/WPA3 Pers. (CCMP)'));
 		o.value('psk2', _('WPA2 Pers.'));
 		o.value('psk2+ccmp', _('WPA2 Pers. (CCMP)'));
@@ -264,8 +264,8 @@ return view.extend({
 		o.value('psk+tkip', _('WPA Pers. (TKIP)'));
 		o.value('psk-mixed+ccmp', _('WPA/WPA2 Pers. (CCMP)'));
 		o.value('psk-mixed+tkip', _('WPA/WPA2 Pers. (TKIP)'));
-		o.value('wpa3', _('WPA3 Ent.'));
-		o.value('wpa3-mixed', _('WPA3/WPA2 Ent.'));
+		o.value('wpa3', _('WPA3 Ent. (CCMP)'));
+		o.value('wpa3-mixed', _('WPA2/WPA3 Ent. (CCMP)'));
 		o.value('wpa2+ccmp', _('WPA2 Ent. (CCMP)'));
 		o.value('wpa2+tkip', _('WPA2 Ent. (TKIP)'));
 		o.value('wpa+ccmp', _('WPA Ent. (CCMP)'));
@@ -303,10 +303,10 @@ return view.extend({
 					cfgvalue = 'WPA/WPA2 Pers. (TKIP)';
 					break;
 				case 'wpa3':
-					cfgvalue = 'WPA3 Ent.';
+					cfgvalue = 'WPA3 Ent. (CCMP)';
 					break;
 				case 'wpa3-mixed':
-					cfgvalue = 'WPA3/WPA2 Ent.';
+					cfgvalue = 'WPA2/WPA3 Ent. (CCMP)';
 					break;
 				case 'wpa2+ccmp':
 					cfgvalue = 'WPA2 Ent. (CCMP)';
@@ -637,6 +637,14 @@ return view.extend({
 									case 'mixed WPA/WPA2 PSK (TKIP, CCMP)':
 										encryption = 'psk-mixed+ccmp';
 										tbl_encryption = 'WPA/WPA2 Pers. (CCMP)';
+										break;
+									case 'WPA3 802.1X (CCMP)':
+										encryption = 'wpa3';
+										tbl_encryption = 'WPA3 Ent. (CCMP)';
+										break;
+									case 'mixed WPA2/WPA3 802.1X (CCMP)':
+										encryption = 'wpa3-mixed';
+										tbl_encryption = 'WPA2/WPA3 Ent. (CCMP)';
 										break;
 									case 'WPA PSK (CCMP)':
 										encryption = 'psk2+ccmp';
