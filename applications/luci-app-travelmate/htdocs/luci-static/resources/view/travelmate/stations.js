@@ -104,10 +104,10 @@ function handleSectionsVal(action, section_id, option, value) {
 */
 function handleStatus() {
 	poll.add(function() {
-		L.resolveDefault(fs.stat('/var/run/travelmate.refresh'), null).then(function(res) {
+		L.resolveDefault(fs.stat('/var/state/travelmate.refresh'), null).then(function(res) {
 			if (res) {
-				L.resolveDefault(fs.read_direct('/var/run/travelmate.refresh'), null).then(function(res) {
-					fs.remove('/var/run/travelmate.refresh');
+				L.resolveDefault(fs.read_direct('/var/state/travelmate.refresh'), null).then(function(res) {
+					fs.remove('/var/state/travelmate.refresh');
 					if (res && res === 'ui_reload') {
 						location.reload();
 					}

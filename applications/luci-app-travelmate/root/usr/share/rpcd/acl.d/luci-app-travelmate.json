@@ -3,7 +3,7 @@
 		"description": "Grant access to LuCI app travelmate",
 		"write": {
 			"file": {
-				"/var/run/travelmate.refresh": [ "write" ]
+				"/var/state/travelmate.refresh": [ "write" ]
 			},
 			"uci": [ "travelmate" ]
 		},
@@ -12,7 +12,7 @@
 			"file": {
 				"/etc/travelmate/*.login": [ "list" ],
 				"/var/run/travelmate.pid": [ "read" ],
-				"/var/run/travelmate.refresh": [ "read" ],
+				"/var/state/travelmate.refresh": [ "read" ],
 				"/tmp/trm_runtime.json": [ "read" ],
 				"/sbin/logread -e trm-": [ "exec" ],
 				"/usr/sbin/logread -e trm-": [ "exec" ],
