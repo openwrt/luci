@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2020-01-14 15:22+0000\n"
-"Last-Translator: Franco Castillo <castillofrancodamian@gmail.com>\n"
+"PO-Revision-Date: 2020-09-29 14:41+0000\n"
+"Last-Translator: Mehmet Çetin <excom_zkko@hotmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsopkg/tr/>\n"
 "Language: tr\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 3.11-dev\n"
+"X-Generator: Weblate 4.3-dev\n"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1044
 msgid "Actions"
@@ -19,7 +19,7 @@ msgstr "Eylemler"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:850
 msgid "Automatically remove unused dependencies"
-msgstr ""
+msgstr "Kullanılmayan bağımlılıkları otomatik olarak kaldır"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1054
 msgid "Available"
@@ -32,6 +32,11 @@ msgid ""
 "custom repository entries. The configuration in the other files may be "
 "changed but is usually not preserved by <em>sysupgrade</em>."
 msgstr ""
+"Aşağıda <em>opkg</em> tarafından kullanılan çeşitli yapılandırma "
+"dosyalarının bir listesi bulunmaktadır. Genel ayarlar için <em>opkg.conf</"
+"em> ve özel depo girişleri için <em>customfeeds.conf</em> kullanın. Diğer "
+"dosyalardaki yapılandırmalar değiştirilebilir ancak genellikle "
+"<em>sysupgrade</em> tarafından korunmaz."
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:697
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:743
@@ -43,15 +48,15 @@ msgstr "İptal"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1031
 msgid "Clear"
-msgstr ""
+msgstr "Temizle"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1048
 msgid "Configure opkg…"
-msgstr ""
+msgstr "opkg'yi yapılandır…"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:669
 msgid "Dependencies"
-msgstr ""
+msgstr "Bağımlılıklar"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:675
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:835
@@ -61,31 +66,31 @@ msgstr "Açıklama"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:680
 msgid "Details for package <em>%h</em>"
-msgstr ""
+msgstr "Paket detayları <em>%h</em>"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:923
 msgid "Dismiss"
-msgstr "Reddet"
+msgstr "Kapat"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:332
 msgid "Displaying %d-%d of %d"
-msgstr ""
+msgstr "Görüntülenen %d-%d toplam %d"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1036
 msgid "Download and install package"
-msgstr ""
+msgstr "Paket indir ve yükle"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:901
 msgid "Errors"
-msgstr ""
+msgstr "Hatalar"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:878
 msgid "Executing package manager"
-msgstr ""
+msgstr "Paket yöneticisi çalıştırılıyor"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1028
 msgid "Filter"
-msgstr ""
+msgstr "Filtre"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1023
 msgid "Free space"
@@ -93,19 +98,19 @@ msgstr "Boş alan"
 
 #: applications/luci-app-opkg/root/usr/share/rpcd/acl.d/luci-app-opkg.json:3
 msgid "Grant access to opkg management"
-msgstr ""
+msgstr "Opkg yönetimine erişim izni verin"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:705
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:721
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:959
 msgid "Install"
-msgstr ""
+msgstr "Yükle"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:283
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:494
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1055
 msgid "Installed"
-msgstr ""
+msgstr "Yüklendi"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:727
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:936
@@ -113,19 +118,20 @@ msgid ""
 "Installing packages from untrusted sources is a potential security risk! "
 "Really attempt to install <em>%h</em>?"
 msgstr ""
+"Güvenilmeyen kaynaklardan paket yüklemek, güvenlik riski oluşturabilir! Bu "
+"paketi yüklemeyi gerçekten denemek istiyor musunuz <em>% h </em>?"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:272
 msgid "Install…"
-msgstr ""
+msgstr "Yükle…"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:754
-#, fuzzy
 msgid "Loading configuration data…"
-msgstr "Yapılandırmaya dön"
+msgstr "Yapılandırma verisi yükleniyor…"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:977
 msgid "Loading package information…"
-msgstr ""
+msgstr "Paket bilgisi yükleniyor…"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:939
 msgid "MD5"
@@ -134,98 +140,96 @@ msgstr "MD5"
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:737
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:935
 msgid "Manually install package"
-msgstr ""
+msgstr "Elle paket yükle"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:482
 msgid "Needs upgrade"
-msgstr ""
+msgstr "Yükseltme gerekli"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1063
 msgid "Next page"
-msgstr ""
+msgstr "Sonraki sayfa"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:345
 msgid "No information available"
-msgstr ""
+msgstr "Bilgi bulunmamaktadır"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:333
-#, fuzzy
 msgid "No packages"
-msgstr "Kullanılabilir Paketler"
+msgstr "Paket(ler) yok"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:349
 msgid "No packages matching \"<strong>%h</strong>\"."
-msgstr ""
+msgstr "Eşleşen paket yok \"<strong>%h</strong>\"."
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:514
-#, fuzzy
 msgid "Not available"
-msgstr "Toplam Mevcut"
+msgstr "Mevcut değil"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:499
 msgid "Not installed"
-msgstr ""
+msgstr "Yüklenmedi"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1039
 msgid "OK"
-msgstr ""
+msgstr "Tamam"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:753
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:801
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:815
-#, fuzzy
 msgid "OPKG Configuration"
-msgstr "Cihaz Yapılandırması"
+msgstr "OPKG Yapılandırması"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:692
 msgid "Overwrite files from other package(s)"
-msgstr ""
+msgstr "Diğer paket(ler)in dosyalarının üzerine yaz"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1069
 msgid "Package name"
-msgstr ""
+msgstr "Paket adı"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1038
 msgid "Package name or URL…"
-msgstr ""
+msgstr "Paket adı veya URL…"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1061
 msgid "Previous page"
-msgstr ""
+msgstr "Önceki sayfa"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:734
 msgid "Really attempt to install <em>%h</em>?"
-msgstr ""
+msgstr "Gerçekten yüklemeyi denemek istiyor musunuz <em>%h</em>?"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:864
 msgid "Remove"
-msgstr ""
+msgstr "Kaldır"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:840
 msgid "Remove package <em>%h</em>"
-msgstr ""
+msgstr "Paketi kaldır <em>%h</em>"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:260
 msgid "Remove…"
-msgstr ""
+msgstr "Kaldır…"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:665
 msgid "Require approx. %.1024mB size for %d package(s) to install."
 msgstr ""
+"%d paket(ler)ini yüklemek için yaklaşık %.1024mB boyutunda alan gerekli."
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:489
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:507
 msgid "Require version %h %h, installed %h"
-msgstr ""
+msgstr "Gereken sürüm %h %h, yüklü olan %h"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:512
 msgid ""
 "Required dependency package <em>%h</em> is not available in any repository."
-msgstr ""
+msgstr "Gerekli olan bağımlılık paketi <em>%h</em> hiçbir depoda mevcut değil."
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:480
 msgid "Requires update to %h %h"
-msgstr ""
+msgstr "Şu sürüme güncellenmesi gerekiyor %h %h"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:350
 msgid "Reset"
@@ -233,16 +237,15 @@ msgstr "Sıfırla"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:940
 msgid "SHA256"
-msgstr ""
+msgstr "SHA256"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:812
 msgid "Save"
 msgstr "Kaydet"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:802
-#, fuzzy
 msgid "Saving configuration data…"
-msgstr "Cihaz Yapılandırması"
+msgstr "Yapılandırma verisi kaydediliyor…"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:683
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:843
@@ -261,71 +264,75 @@ msgstr "Yazılım"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:906
 msgid "The <em>opkg %h</em> command failed with code <code>%d</code>."
-msgstr ""
+msgstr "<em>opkg %h</em> komutu <code>%d</code> koduyla başarısız oldu."
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:485
 msgid ""
 "The installed version of package <em>%h</em> is not compatible, require %s "
 "while %s is installed."
 msgstr ""
+"Yüklü olan <em>%h</em> paketinin sürümü uyumlu değil. Gerekli olan %s iken, "
+"%s sürümü yüklü."
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:730
 msgid "The package <em>%h</em> is not available in any configured repository."
-msgstr ""
+msgstr "<em>%h</em> paketi yapılandırılmış depoların hiçbirinde mevcut değil."
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:502
 msgid ""
 "The repository version of package <em>%h</em> is not compatible, require %s "
 "but only %s is available."
 msgstr ""
+"<em>%h</em> paketinin depo bulunan sürümü uyumlu değil. Gerekli olan %s iken "
+"sadece %s sürümü mevcut."
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1030
 msgid "Type to filter…"
-msgstr ""
+msgstr "Filtrelemek için yazın…"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:925
 msgid "Unable to execute <em>opkg %s</em> command: %s"
-msgstr ""
+msgstr "<em>opkg %s</em> komutu çalıştırılamıyor: %s"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:768
 msgid "Unable to read %s: %s"
-msgstr ""
+msgstr "Okunamıyor %s: %s"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:807
 msgid "Unable to save %s: %s"
-msgstr ""
+msgstr "Kaydedilemiyor %s: %s"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1046
 msgid "Update lists…"
-msgstr ""
+msgstr "Listeyi güncelle…"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1056
 msgid "Updates"
-msgstr ""
+msgstr "Güncellemeler"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:249
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:278
 msgid "Upgrade…"
-msgstr ""
+msgstr "Yükselt…"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1047
 msgid "Upload Package…"
-msgstr ""
+msgstr "Paket Yükle…"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:682
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:842
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1070
 msgid "Version"
-msgstr "Versiyon"
+msgstr "Sürüm"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:491
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:509
 msgid "Version incompatible"
-msgstr ""
+msgstr "Sürüm uyumsuz"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:880
 msgid "Waiting for the <em>opkg %h</em> command to complete…"
-msgstr ""
+msgstr "<em>opkg %h</em> komutunun tamamlanması bekleniyor…"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:643
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:831
@@ -336,9 +343,9 @@ msgstr "bilinmeyen"
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:641
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:829
 msgid "~%.1024mB compressed"
-msgstr ""
+msgstr "~%.1024mB sıkıştırıldı"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:639
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:827
 msgid "~%.1024mB installed"
-msgstr ""
+msgstr "~%.1024mB yüklendi"
