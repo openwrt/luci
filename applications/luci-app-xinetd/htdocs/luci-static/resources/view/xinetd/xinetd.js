@@ -59,11 +59,10 @@ return view.extend({
 		o.rmempty = false;
 		o.modalonly = true;
 
-		o = s.taboption('basic', form.ListValue, 'type', _('Type'), _('Type of service'));
-		o.default = 'UNLISTED';
-		// FIXME for now we will only support unlisted services, maybe later we could use the (very long) list from /etc/services if needed
-		// o.value('INTERNAL', _('INTERNAL'));
-		o.value('UNLISTED', _('UNLISTED'));
+		o = s.taboption('basic', form.ListValue, 'protocol', _('Protocol'), _('The protocol to be used for this service'));
+		o.default = 'tcp';
+		o.value('tcp', _('TCP'));
+		o.value('udp', _('UDP'));
 		o.rmempty = false;
 		o.modalonly = true;
 
@@ -83,31 +82,9 @@ return view.extend({
 		return true;
 		};
 
-		o = s.taboption('basic', form.ListValue, 'wait', _('Threading behaviour'), _('Selection of the threading for this service'));
-		o.default = 'no';
-		o.value('yes', _('Single-Threaded Service'));
-		o.value('no', _('Multi-Threaded Service'));
-		o.rmempty = false;
-		o.modalonly = true;
-
-		o = s.taboption('basic', form.ListValue, 'socket_type', _('Socket type'), _('The type of the socket used for this service'));
-		o.default = 'stream';
-		o.value('stream', _('stream-based service'));
-		o.value('dgram', _('datagram-based service'));
-		o.value('raw', _('direct access to IP service'));
-		o.value('seqpacket', _('sequential datagram transmission service'));
-		o.rmempty = false;
-		o.modalonly = true;
-
-		o = s.taboption('basic', form.ListValue, 'protocol', _('Protocol'), _('The protocol to be used for this service'));
-		o.default = 'tcp';
-		o.value('tcp', _('TCP'));
-		o.value('udp', _('UDP'));
-		o.rmempty = false;
-		o.modalonly = true;
-
-		o = s.taboption('basic', widgets.UserSelect, 'user', _('User (UID)'), _('User ID for the server process for this service'));
-		o.rmempty = false;
+		o = s.taboption('basic', form.DynamicList, 'only_from', _('Allowed hosts'), _('List of allowed hosts to access this service'));
+		o.datatype = 'host';
+		o.cast = 'string';
 		o.modalonly = true;
 
 		o = s.taboption('basic', form.Value, 'server', _('Server'), _('Complete path to the executable server file'));
@@ -129,19 +106,48 @@ return view.extend({
 			});
 		};
 
-		o = s.taboption('basic', form.Value, 'server_args', _('Server arguments'), _('Additional arguments passed to the server. There is no validation of this input.'));
+		// Advanced settings
+		o = s.taboption('advanced', form.ListValue, 'type', _('Type'), _('Type of service'));
+		o.default = 'UNLISTED';
+		// FIXME for now we will only support unlisted services, maybe later we could use the (very long) list from /etc/services if needed
+		// o.value('INTERNAL', _('INTERNAL'));
+		o.value('UNLISTED', _('UNLISTED'));
+		o.rmempty = false;
+		o.modalonly = true;
+
+		o = s.taboption('advanced', form.ListValue, 'wait', _('Threading behaviour'), _('Selection of the threading for this service'));
+		o.default = 'no';
+		o.value('yes', _('Single-Threaded Service'));
+		o.value('no', _('Multi-Threaded Service'));
+		o.rmempty = false;
+		o.modalonly = true;
+
+		o = s.taboption('advanced', form.ListValue, 'socket_type', _('Socket type'), _('The type of the socket used for this service'));
+		o.default = 'stream';
+		o.value('stream', _('stream-based service'));
+		o.value('dgram', _('datagram-based service'));
+		o.value('raw', _('direct access to IP service'));
+		o.value('seqpacket', _('sequential datagram transmission service'));
+		o.rmempty = false;
+		o.modalonly = true;
+
+		o = s.taboption('advanced', widgets.UserSelect, 'user', _('User (UID)'), _('User ID for the server process for this service'));
+		o.rmempty = false;
+		o.modalonly = true;
+
+		o = s.taboption('advanced', form.Value, 'server_args', _('Server arguments'), _('Additional arguments passed to the server. There is no validation of this input.'));
 		o.datatype = 'string';
 		o.modalonly = true;
 
 		// Advanced settings
-		o = s.taboption('advanced', form.DynamicList, 'only_from', _('Allowed hosts'), _('List of allowed hosts to access this service'));
+		o = s.taboption('advanced', form.DynamicList, 'no_access', _('Forbidden hosts'), _('List of forbidden hosts to access this service'));
 		o.datatype = 'host';
 		o.cast = 'string';
 		o.modalonly = true;
 
-		o = s.taboption('advanced', form.DynamicList, 'no_access', _('Forbidden hosts'), _('List of forbidden hosts to access this service'));
-		o.datatype = 'host';
-		o.cast = 'string';
+		o = s.taboption('advanced', form.Value, 'instances', _('Number of instances'), _('Number of simultaneously running servers for this service. Argument is any number or the keyword \'UNLIMITED\''));
+		o.datatype = 'or("UNLIMITED", uinteger)';
+		o.value('UNLIMITED', 'UNLIMITED');
 		o.modalonly = true;
 
 		o = s.taboption('advanced', form.DynamicList, 'access_times', _('Access times'), _('Time intervals within service is available (Format hh:mm-hh:mm)'));
@@ -166,11 +172,6 @@ return view.extend({
 			return _('Expected \'[Number] [Number]\'');
 
 		};
-
-		o = s.taboption('advanced', form.Value, 'instances', _('Number of instances'), _('Number of simultaneously running servers for this service. Argument is any number or the keyword \'UNLIMITED\''));
-		o.datatype = 'or("UNLIMITED", uinteger)';
-		o.value('UNLIMITED', 'UNLIMITED');
-		o.modalonly = true;
 
 		o = s.taboption('advanced', form.MultiValue, 'log_on_success', _('Log on success'), _('Informations that should be logged for this service in case of successful connection'));
 		o.value('PID', _('Server PID'));
