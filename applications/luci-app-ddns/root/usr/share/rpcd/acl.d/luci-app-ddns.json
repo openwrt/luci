@@ -7,8 +7,12 @@
 				"luci": [ "setInitAction" ]
 			},
 			"file": {
-				"/etc/ddns/services": [ "read" ],
-				"/etc/ddns/services_ipv6": [ "read" ],
+				"/usr/share/ddns/default": [ "list" ],
+				"/usr/share/ddns/default/*": [ "read" ],
+				"/usr/share/ddns/custom": [ "list" ],
+				"/usr/share/ddns/custom/*": [ "read" ],
+				"/usr/share/ddns/list": [ "read" ],
+				"/usr/bin/ddns": [ "exec" ],
 				"/usr/lib/ddns/dynamic_dns_lucihelper.sh": [ "exec" ]
 			},
 			"uci": [ "ddns" ]

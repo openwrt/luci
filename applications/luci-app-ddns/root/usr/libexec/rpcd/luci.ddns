@@ -7,6 +7,7 @@ local UCI = require "luci.model.uci"
 local sys  = require "luci.sys"
 local util = require "luci.util"
 
+local ddns_package_path = "/usr/share/ddns"
 local luci_helper = "/usr/lib/ddns/dynamic_dns_lucihelper.sh"
 local srv_name    = "ddns-scripts"
 
@@ -155,6 +156,7 @@ local methods = {
 			local ipkg = require "luci.model.ipkg"
 			local uci = UCI.cursor()
 			local dateformat = uci:get("ddns", "global", "ddns_dateformat") or "%F %R"
+			local services_mtime = fs.stat(ddns_package_path .. "/list", 'mtime')
 			uci:unload("ddns")
 			local ver, srv_ver_cmd
 			local res = {}
@@ -169,6 +171,7 @@ local methods = {
 			res['_version'] = ver and #ver > 0 and ver or nil
 			res['_enabled'] = sys.init.enabled("ddns")
 			res['_curr_dateformat'] = os.date(dateformat)
+			res['_services_list'] = services_mtime and os.date(dateformat, services_mtime) or 'NO_LIST'
 
 			return res
 		end
