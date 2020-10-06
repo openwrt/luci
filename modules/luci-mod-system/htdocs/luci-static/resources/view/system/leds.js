@@ -88,6 +88,32 @@ return view.extend({
 				var plugin = plugins[i];
 				plugin.form.addFormOptions(s);
 			}
+
+			var opts = s.getOption();
+
+			var removeIfNoneActive = function(original_remove_fn, section_id) {
+				var isAnyActive = false;
+
+				for (var optname in opts) {
+					if (opts[optname].ucioption != this.ucioption)
+						continue;
+
+					if (!opts[optname].isActive(section_id))
+						continue;
+
+					isAnyActive = true;
+					break;
+				}
+
+				if (!isAnyActive)
+					original_remove_fn.call(this, section_id);
+			};
+
+			for (var optname in opts) {
+				if (!opts[optname].ucioption || optname == opts[optname].ucioption)
+					continue;
+				opts[optname].remove = removeIfNoneActive.bind(opts[optname], opts[optname].remove);
+			}
 		};
 
 		return m.render();
