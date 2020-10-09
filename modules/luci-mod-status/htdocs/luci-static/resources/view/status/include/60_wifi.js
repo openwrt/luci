@@ -40,11 +40,27 @@ return baseclass.extend({
 		return s;
 	},
 
-	handleDelClient: function(wifinet, mac, ev) {
+	handleDelClient: function(wifinet, mac, ev, cmd) {
+		var exec = cmd || 'disconnect';
+
 		dom.parent(ev.currentTarget, '.tr').style.opacity = 0.5;
 		ev.currentTarget.classList.add('spinning');
 		ev.currentTarget.disabled = true;
 		ev.currentTarget.blur();
+
+		if (exec == 'addlist') {
+			var macs = [ mac ]
+
+			for (var mac in this.iface_maclist) {
+				macs.push(mac)
+			}
+
+			uci.set('wireless', wifinet.sid, 'maclist', macs);
+
+			return uci.save()
+				.then(L.bind(L.ui.changes.init, L.ui.changes))
+				.then(L.bind(L.ui.changes.displayChanges, L.ui.changes));
+		}
 
 		wifinet.disconnectClient(mac, true, 5, 60000);
 	},
@@ -188,6 +204,8 @@ return baseclass.extend({
 		}, this));
 	},
 
+	isDeviceAdded: {},
+
 	render: function(data) {
 		var seen = {},
 		    radios = data[0],
@@ -218,6 +236,17 @@ return baseclass.extend({
 		var rows = [];
 
 		for (var i = 0; i < networks.length; i++) {
+			var macfilter = uci.get('wireless', networks[i].sid, 'macfilter');
+
+			if (macfilter != null && macfilter != 'disable') {
+				this.isDeviceAdded = {};
+				var macs = L.toArray(uci.get('wireless', networks[i].sid, 'maclist'));
+				for (var j = 0; j < macs.length; j++) {
+					var mac = macs[j].toUpperCase();
+					this.isDeviceAdded[mac] = true;
+				}
+			}
+
 			for (var k = 0; k < networks[i].assoclist.length; k++) {
 				var bss = networks[i].assoclist[k],
 				    name = hosthints.getHostnameByMACAddr(bss.mac),
@@ -297,10 +326,26 @@ return baseclass.extend({
 					if (assoclist.firstElementChild.childNodes.length < 6)
 						assoclist.firstElementChild.appendChild(E('div', { 'class': 'th cbi-section-actions' }));
 
-					row.push(E('button', {
-						'class': 'cbi-button cbi-button-remove',
-						'click': L.bind(this.handleDelClient, this, networks[i], bss.mac)
-					}, [ _('Disconnect') ]));
+					if (macfilter != null && macfilter != 'disable' && !this.isDeviceAdded[bss.mac]) {
+						row.push(new L.ui.ComboButton('button', {
+								'addlist': macfilter == 'allow' ?  _('Add to Whitelist') : _('Add to Blacklist'),
+								'disconnect': _('Disconnect')
+							}, {
+								'click': L.bind(this.handleDelClient, this, networks[i], bss.mac),
+								'sort': [ 'disconnect', 'addlist' ],
+								'classes': {
+									'addlist': 'btn cbi-button cbi-button-remove',
+									'disconnect': 'btn cbi-button cbi-button-remove'
+								}
+							}).render()
+						)
+					}
+					else { 
+						row.push(E('button', {
+							'class': 'cbi-button cbi-button-remove',
+							'click': L.bind(this.handleDelClient, this, networks[i], bss.mac)
+						}, [ _('Disconnect') ]));
+					}
 				}
 				else {
 					row.push('-');
