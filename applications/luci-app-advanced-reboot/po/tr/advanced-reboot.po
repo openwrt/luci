@@ -1,14 +1,14 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2019-12-04 12:07+0000\n"
-"Last-Translator: Caglar Ozalp <cozalp@gmail.com>\n"
+"PO-Revision-Date: 2020-09-28 13:26+0000\n"
+"Last-Translator: Mehmet Çetin <excom_zkko@hotmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsadvanced-reboot/tr/>\n"
 "Language: tr\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.10-dev\n"
+"X-Generator: Weblate 4.3-dev\n"
 
 #: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:171
 #: applications/luci-app-advanced-reboot/luasrc/view/advanced_reboot/advanced_reboot.htm:10
@@ -32,7 +32,7 @@ msgstr "Değişiklikler uygulandı."
 #: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:131
 #: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:132
 msgid "Compressed"
-msgstr ""
+msgstr "Sıkıştırılmış"
 
 #: applications/luci-app-advanced-reboot/luasrc/view/advanced_reboot/alternative_reboot.htm:10
 #: applications/luci-app-advanced-reboot/luasrc/view/advanced_reboot/power_off.htm:10
@@ -148,6 +148,9 @@ msgid ""
 "might be necessary to renew the address of your computer to reach the device "
 "again, depending on your settings."
 msgstr ""
+"Sistem şimdi kapanıyor.<br /> LÜTFEN GÜCÜ KESMEYİN!<br /> Ayarlarınıza bağlı "
+"olarak, cihaza tekrar ulaşmak için bilgisayarınızın adresini yenilemeniz "
+"gerekebilir."
 
 #: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:144
 #: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:145
@@ -161,26 +164,26 @@ msgstr "Dual Boot Flag bölümü bulunamadı."
 #: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:234
 #: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:235
 msgid "Unable to obtain firmware environment variable: %s."
-msgstr ""
+msgstr "Yazılım ortam değişkeni alınamıyor: %s."
 
 #: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:256
 #: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:257
 msgid "Unable to set Dual Boot Flag Partition entry for partition: %s."
-msgstr ""
+msgstr "Bölüm için Çift Önyükleme İşareti ayarlanamıyor: %s."
 
 #: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:226
 #: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:227
 #: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:240
 #: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:241
 msgid "Unable to set firmware environment variable: %s to %s."
-msgstr ""
+msgstr "Yazılım ortam değişkeni ayarlanamıyor: %s'ten %s'e."
 
 #: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:126
 #: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:127
 #: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:131
 #: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:132
 msgid "Unknown"
-msgstr ""
+msgstr "Bilinmiyor"
 
 #: applications/luci-app-advanced-reboot/luasrc/view/advanced_reboot/alternative_reboot.htm:12
 msgid ""
@@ -193,6 +196,14 @@ msgid ""
 "back to the currently active partition.<br /><br /> Click \"Proceed\" below "
 "to reboot device to an alternative partition."
 msgstr ""
+"UYARI: Alternatif bir bölümün kendi ayarları ve tamamen farklı ürün yazılımı "
+"olabilir. <br /> <br /> Alternatif bölümdeki ağ yapılandırmanız ve Kablosuz "
+"Ağ isim/şifreniz farklı olabileceğinden, cihaz yeniden başlatıldığında "
+"bağlantı sağlayabilmek için bilgisayar ayarlarınızı düzenlemeniz "
+"gerekebilir. <br /> <br /> Lütfen alternatif bölüm yazılımının, aktif bölümü "
+"değiştirmek veya şu an aktif olan bölüme geri dönebilmek için kolay bir yol "
+"sağlamayabileceğini unutmayın.<br /> <br />Cihazı alternatif bir bölümde "
+"yeniden başlatmak için lütfen aşağıdaki \"Devam Et\" seçeneğini tıklayın."
 
 #: applications/luci-app-advanced-reboot/luasrc/view/advanced_reboot/power_off.htm:12
 msgid ""
@@ -200,6 +211,9 @@ msgid ""
 "support power off.<br /><br /> Click \"Proceed\" below to power off your "
 "device."
 msgstr ""
+"UYARI: Kapat seçeneği, kapatma fonksiyonunu desteklemeyen bir cihazın "
+"yeniden başlatma işlemi yapmasına neden olabilir. <br /> <br /> Cihazınızı "
+"kapatmak için aşağıdaki \"Devam et\" seçeneğine tıklayın."
 
 #: applications/luci-app-advanced-reboot/luasrc/view/advanced_reboot/applyreboot.htm:46
 msgid "Waiting for changes to be applied..."
@@ -208,23 +222,26 @@ msgstr "Değişikliklerin uygulanması bekleniyor..."
 #: applications/luci-app-advanced-reboot/luasrc/view/advanced_reboot/advanced_reboot.htm:83
 msgid "Warning: Device (%s) is unknown or isn't a dual-partition device!"
 msgstr ""
+"Uyarı: Cihaz (%s) bilinmiyor ya da çift önyükleme özelliğini desteklemiyor!"
 
 #: applications/luci-app-advanced-reboot/luasrc/view/advanced_reboot/advanced_reboot.htm:14
 msgid "Warning: There are unsaved changes that will get lost on reboot!"
 msgstr ""
+"Uyarı: Yeniden başlatılınca kaybedilecek henüz kaydedilmemiş değişiklikler "
+"var!"
 
 #: applications/luci-app-advanced-reboot/luasrc/view/advanced_reboot/advanced_reboot.htm:97
 msgid "Warning: This system does not support powering off!"
-msgstr ""
+msgstr "Uyarı: Bu sistem kapatma fonksiyonunu desteklemiyor!"
 
 #: applications/luci-app-advanced-reboot/luasrc/view/advanced_reboot/advanced_reboot.htm:85
 msgid "Warning: Unable to obtain device information!"
-msgstr ""
+msgstr "Uyarı: Cihaz bilgisi alınamıyor!"
 
 #: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:45
 msgid "attempting to mount alternative partition (mtd%s)"
-msgstr ""
+msgstr "alternatif bölüm bağlanmaya çalışılıyor (mtd%s)"
 
 #: applications/luci-app-advanced-reboot/luasrc/controller/advanced_reboot.lua:54
 msgid "attempting to unmount alternative partition (mtd%s)"
-msgstr ""
+msgstr "alternatif bölümün bağlantısı kesilmeye çalışılıyor (mtd%s)"

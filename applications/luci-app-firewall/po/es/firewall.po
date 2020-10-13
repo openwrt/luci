@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-03-30 17:00+0200\n"
-"PO-Revision-Date: 2020-07-12 20:10+0000\n"
+"PO-Revision-Date: 2020-10-08 03:26+0000\n"
 "Last-Translator: Franco Castillo <castillofrancodamian@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsfirewall/es/>\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.2-dev\n"
+"X-Generator: Weblate 4.3-dev\n"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:48
 msgid ""
@@ -100,8 +100,8 @@ msgid ""
 "<var data-tooltip=\"MARK\">%{set_mark?Assign:XOR}</var> firewall mark <var>"
 "%{set_mark?:%{set_xmark}}</var>"
 msgstr ""
-"<var data-tooltip=\"MARK\">%{set_mark?Asignar:XOR}</var> marca de firewall "
-"<var>%{set_mark?:%{set_xmark}}</var>"
+"<var data-tooltip=\"MARK\">%{set_mark?Asignar:XOR}</var> marca de "
+"cortafuegos<var>%{set_mark?:%{set_xmark}}</var>"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:84
 msgid "<var data-tooltip=\"MASQUERADE\">Automatically rewrite</var> source IP"
@@ -267,9 +267,9 @@ msgid ""
 "each firewall restart, right after the default ruleset has been loaded."
 msgstr ""
 "Las reglas personalizadas le permiten ejecutar comandos de iptables que no "
-"están disponibles en el marco del firewall. Los comandos se ejecutarán tras "
-"cualquier reinicio del FIrewall, justo tras haber cargado el conjunto de "
-"reglas predeterminadas."
+"están disponibles en el marco del Cortafuegos. Los comandos se ejecutarán "
+"tras cualquier reinicio del Cortafuegos, justo tras haber cargado el "
+"conjunto de reglas predeterminadas."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:374
 msgid "DSCP classification"
@@ -374,31 +374,31 @@ msgstr "Argumentos fuente adicionales"
 
 #: applications/luci-app-firewall/luasrc/controller/firewall.lua:6
 msgid "Firewall"
-msgstr "Firewall"
+msgstr "Cortafuegos"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/custom.js:25
 msgid "Firewall - Custom Rules"
-msgstr "Firewall - Reglas personalizadas"
+msgstr "Cortafuegos - Reglas personalizadas"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:127
 msgid "Firewall - NAT Rules"
-msgstr "Firewall - Reglas de NAT"
+msgstr "Cortafuegos - Reglas de NAT"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:129
 msgid "Firewall - Port Forwards"
-msgstr "Firewall - Reenvío de puertos"
+msgstr "Cortafuegos - Reenvío de puertos"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:173
 msgid "Firewall - Traffic Rules"
-msgstr "Firewall - Reglas de tráfico"
+msgstr "Cortafuegos - Reglas de tráfico"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:37
 msgid "Firewall - Zone Settings"
-msgstr "Firewall - Configuración de la zona"
+msgstr "Cortafuegos - Configuración de la zona"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:645
 msgid "Firewall configuration migration"
-msgstr "Migración de configuración de Firewall"
+msgstr "Migración de configuración del Cortafuegos"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:63
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:145
@@ -664,7 +664,7 @@ msgstr ""
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:318
 msgid "Matches a specific firewall mark or a range of different marks."
 msgstr ""
-"Coincide con una marca de firewall específica o un rango de marcas "
+"Coincide con una marca de Cortafuegos específica o un rango de marcas "
 "diferentes."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:240
@@ -768,8 +768,8 @@ msgstr ""
 "tráfico de origen y destino permite hacer coincidir paquetes basados en "
 "otros criterios que no sean interfaces o subredes. Estas opciones se deben "
 "usar con extremo cuidado, ya que los valores inválidos pueden hacer que el "
-"conjunto de reglas del firewall se rompa, exponiendo completamente todos los "
-"servicios."
+"conjunto de reglas del cortafuegos se rompa, exponiendo completamente todos "
+"los servicios."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:132
 #: applications/luci-app-firewall/luasrc/controller/firewall.lua:12
@@ -944,16 +944,16 @@ msgid ""
 "The existing firewall configuration needs to be changed for LuCI to function "
 "properly."
 msgstr ""
-"La configuración de firewall existente debe cambiarse para que LuCI funcione "
-"correctamente."
+"La configuración del cortafuegos existente debe cambiarse para que LuCI "
+"funcione correctamente."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:38
 msgid ""
 "The firewall creates zones over your network interfaces to control network "
 "traffic flow."
 msgstr ""
-"El Firewall crea zonas sobre sus interfaces de red para controlar el flujo "
-"del tráfico."
+"El Cortafuegos crea zonas sobre sus interfaces de red para controlar el "
+"flujo del tráfico."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:202
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:291
@@ -1106,7 +1106,7 @@ msgid ""
 "the updated configuration."
 msgstr ""
 "Al presionar \"Continuar\", las secciones de \"redireccionamiento\" con "
-"\"SNAT\" de destino se convertirán en secciones \"nat\" y el firewall se "
+"\"SNAT\" de destino se convertirán en secciones \"nat\" y el cortafuegos se "
 "reiniciará para aplicar la configuración actualizada."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:257
@@ -1135,7 +1135,7 @@ msgstr ""
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:330
 msgid "Valid firewall mark required"
-msgstr "Se requiere una marca de firewall válida"
+msgstr "Se requiere una marca de cortafuegos válida"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:434
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:262
@@ -1149,7 +1149,7 @@ msgstr "Días de la semana"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:373
 msgid "XOR firewall mark"
-msgstr "Marca de firewall XOR"
+msgstr "Marca de cortafuegos XOR"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:315
 msgid "XOR mark"
@@ -1196,7 +1196,7 @@ msgstr "cualquier zona"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:372
 msgid "apply firewall mark"
-msgstr "aplicar marca de firewall"
+msgstr "aplicar marca de cortafuegos"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:371
 msgid "assign conntrack helper"
@@ -1271,4 +1271,4 @@ msgstr "Sin especificar"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:338
 msgid "valid firewall mark"
-msgstr "marca de firewall válida"
+msgstr "marca de cortafuegos válida"
