@@ -28,7 +28,7 @@ return view.extend({
 	handlePing: function(ev, cmd) {
 		var exec = cmd || 'ping',
 		    addr = ev.currentTarget.parentNode.previousSibling.value,
-		    args = (exec == 'ping') ? [ '-4', '-c', '5', '-W', '1', addr ] : [ '-6', '-c', '5', addr ];
+		    args = (exec == 'ping') ? [ '-4', '-c', '5', '-W', '1', addr ] : [ '-c', '5', addr ];
 
 		return this.handleCommand(exec, args);
 	},
