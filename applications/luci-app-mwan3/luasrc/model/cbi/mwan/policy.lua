@@ -53,9 +53,13 @@ mwan_policy.sortable = true
 mwan_policy.template = "cbi/tblsection"
 mwan_policy.extedit = dsp.build_url("admin", "network", "mwan", "policy", "%s")
 function mwan_policy.create(self, section)
-	TypedSection.create(self, section)
-	m.uci:save("mwan3")
-	luci.http.redirect(dsp.build_url("admin", "network", "mwan", "policy", section))
+	if #section > 15 then
+		self.invalid_cts = true
+	else
+		TypedSection.create(self, section)
+		m.uci:save("mwan3")
+		luci.http.redirect(dsp.build_url("admin", "network", "mwan", "policy", section))
+	end
 end
 
 use_member = mwan_policy:option(DummyValue, "use_member", translate("Members assigned"))
