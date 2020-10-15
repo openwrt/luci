@@ -11,16 +11,4 @@ if uci -q show fwknopd | grep \\.h\\?keytype > /dev/null; then
 	uci commit fwknopd
 fi
 
-# Generate valid keys
-if [ "$(uci -q get fwknopd.@access[0].KEY)" = "CHANGEME" ]; then
-	uci delete fwknopd.@access[0].KEY
-	uci delete fwknopd.@access[0].HMAC_KEY
-	uci set fwknopd.@access[0].KEY_BASE64=`fwknopd --key-gen | awk '/^KEY/ {print $2;}'`
-	uci set fwknopd.@access[0].HMAC_KEY_BASE64=`fwknopd --key-gen | awk '/^HMAC/ {print $2;}'`
-	uci set fwknopd.@config[0].ENABLE_IPT_FORWARDING='y'
-	uci set fwknopd.@config[0].ENABLE_NAT_DNS='y'
-
-	uci commit fwknopd
-fi
-
 exit 0
