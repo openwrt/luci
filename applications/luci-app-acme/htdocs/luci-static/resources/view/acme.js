@@ -51,6 +51,16 @@ return view.extend({
 				"(use for testing; the certificate won't be valid)."));
 		o.rmempty = false;
 
+		o = s.option(form.Flag, "use_acme_server",
+			_("Custom ACME CA"), _("Use a custom CA instead of Let's Encrypt."));
+		o.depends("use_staging", "0");
+		o.default = false;
+
+		o = s.option(form.Value, "acme_server", _("ACME server URL"),
+			_("Custom ACME server directory URL."));
+		o.depends("use_acme_server", "1");
+		o.optional = true;
+
 		o = s.option(form.ListValue, "keylength", _("Key size"),
 			_("Key size (and type) for the generated certificate."));
 		o.value("2048", _("RSA 2048 bits"));
