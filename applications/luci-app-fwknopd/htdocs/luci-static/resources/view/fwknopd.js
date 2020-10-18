@@ -21,6 +21,19 @@ function lines(content) {
 	return content.split(/\r?\n/);
 }
 
+function parseLine(rawLine) {
+	if (rawLine[0] != '#' && rawLine[0] != ';') {
+		var line = rawLine.split(/ ([^;]*)/, 2);
+		if (line.length == 2) {
+			var key = line[0].trim();
+			var value = line[1].trim();
+			if (key && value)
+				return [key, value];
+		}
+	}
+	return null;
+}
+
 function parseKeys(content) {
 	var l = lines(content);
 	var keys = {};
@@ -35,6 +48,7 @@ function parseKeys(content) {
 var KeyTypeValue = form.ListValue.extend({
 	__init__: function() {
 		this.super('__init__', arguments);
+		this.hidden = false;
 	},
 
 	cfgvalue: function(section_id) {
@@ -48,6 +62,18 @@ var KeyTypeValue = form.ListValue.extend({
 				return this.keylist[i];
 		}
 		return this.keylist[0];
+	},
+
+	render: function(section_id, option_index, cfgvalue) {
+		return this.super('render', arguments)
+			.then(L.bind(function(el) {
+				// Use direct style to hide, because class .hidden
+				// is used by this.isActive(). We want full functionality,
+				// but hidden field
+				if (this.hidden)
+					el.style.display = 'none';
+				return el;
+			}, this));
 	},
 
 	remove: function() {
@@ -250,12 +276,203 @@ var GenerateButton = form.Button.extend({
 		else
 			return Promise.resolve(null);
 	},
+});
 
+var ParseButton = form.Button.extend({
+	__init__: function() {
+		this.super('__init__', arguments);
+		this.onclick = L.bind(this.parseAccessConf, this);
+	},
+
+	parseAccessConf: function() {
+		this.stanzas = [];
+		var ctx = {
+			processLine: L.bind(this.processAccessLine, this),
+			remainingLines: [],
+			stanzas: {
+				last: {},
+				all: []
+			}
+		};
+		return fs.read('/etc/fwknop/access.conf')
+			.then(L.bind(this.parseFile, this, ctx))
+			.then(L.bind(function() {
+				if (ctx.stanzas.all.length > 0)
+					return this.renderStanzas(ctx.stanzas.all)
+						.then(function(topEl) {
+							var dlg = ui.showModal(_('Firewall Knock Operator Daemon'), [
+								topEl,
+								E('button', {
+									'class': 'cbi-button cbi-button-neutral',
+									'click': ui.hideModal
+								}, _('Close'))
+							], 'cbi-modal');
+							dlg.querySelector('button').focus();
+							dlg.parentNode.scrollTop = 0;
+						});
+				else {
+					var dlg = ui.showModal(_('Firewall Knock Operator Daemon'), [
+						E('p', _("No stanza found.")),
+						E('button', {
+							'class': 'cbi-button cbi-button-neutral',
+							'click': ui.hideModal
+						}, _('Close'))
+					]);
+					dlg.querySelector('button').focus();
+				}
+			}, this))
+			.catch(function(err) {
+				L.error(err);
+			});
+	},
+
+	parseFile: function(ctx, content) {
+		ctx.remainingLines.unshift.apply(ctx.remainingLines, lines(content));
+		return this.parseLines(ctx);
+	},
+
+	parseFolder: function(ctx, folder, entries) {
+		// Parse and process files in order
+		var parseJobs = [];
+		var parsedLines = [];
+		entries.sort(function(el1, el2) {
+			return (el1.name > el2.name) ? 1
+				: (el1.name < el2.name) ? -1
+				: 0;
+		});
+		entries.forEach(L.bind(function(entry) {
+			var ctxLines = [];
+			parsedLines.unshift(ctxLines);
+			parseJobs.push(fs.read(folder + '/' + entry.name)
+				.then(function(content) {
+					ctxLines.push.apply(ctxLines, lines(content));
+				}));
+		}, this));
+		return Promise.all(parseJobs)
+			.then(L.bind(function(ctx) {
+				parsedLines.forEach(function(lines) {
+					ctx.remainingLines.unshift.apply(ctx.remainingLines, lines);
+				});
+			}, this, ctx))
+			.then(L.bind(this.parseLines, this, ctx));
+	},
+
+	parseLines: function(ctx) {
+		while (ctx.remainingLines.length > 0) {
+			var line = parseLine(ctx.remainingLines.shift());
+			if (line) {
+				var result = ctx.processLine.call(this, ctx, line[0], line[1]);
+				if (result)
+					return result;
+			}
+		}
+	},
+
+	processAccessLine: function(ctx, key, value) {
+		if (key.endsWith(':')) {
+			key = key.slice(0, -1);
+		}
+		if (key == "%include") {
+			return fs.read(value)
+				.then(L.bind(this.parseFile, this, ctx));
+		} else if (key == "%include_folder") {
+			return fs.list(value)
+				.then(L.bind(this.parseFolder, this, ctx, value));
+		} else if (key == "%include_keys") {
+			var keysCtx = {
+				processLine: L.bind(this.processKeysLine, this),
+				remainingLines: [],
+				stanzas: ctx.stanzas
+			};
+			return fs.read(value)
+				.then(L.bind(this.parseFile, this, keysCtx))
+				.then(L.bind(this.parseLines, this, ctx));
+		} else {
+			if (key == 'SOURCE') {
+				ctx.stanzas.last = {};
+				ctx.stanzas.all.push(ctx.stanzas.last);
+			}
+			ctx.stanzas.last[key] = value;
+		}
+	},
+
+	processKeysLine: function(ctx, key, value) {
+		// Simplification - accept only KEY arguments
+		if (ctx.stanzas.last && key.match(/KEY/))
+			ctx.stanzas.last[key] = value;
+	},
+
+	renderStanzas: function(stanzas) {
+		var svgJobs = [];
+		var config = {};
+		config.access = stanzas;
+
+		var m, s, o;
+
+		var accessSection;
+		var sourceValue;
+
+		m = new form.JSONMap(config, null, _('Custom configuration read from /etc/fwknop/access.conf.'));
+		m.readonly = true;
+
+		// set the access.conf settings
+		accessSection = s = m.section(form.TypedSection, 'access', _('access.conf stanzas'));
+		s.anonymous = true;
+
+		var qrCode = s.option(QrCodeValue, 'qr', _('QR code'), ('QR code to configure fwknopd Android application.'));
+
+		sourceValue = s.option(form.Value, 'SOURCE', 'SOURCE');
+		s.option(form.Value, 'DESTINATION', 'DESTINATION');
+
+		o = s.option(form.Value, 'KEY', 'KEY');
+		o.depends('keytype', 'KEY');
+		o.validate = function(section_id, value) {
+			return (String(value).length > 0 && !INVALID_KEYS.includes(value)) ? true : _('The symmetric key has to be specified.');
+		}
+
+		o = s.option(form.Value, 'KEY_BASE64', 'KEY_BASE64');
+		o.depends('keytype', 'KEY_BASE64');
+		o.validate = function(section_id, value) {
+			return (String(value).length > 0 && !INVALID_KEYS.includes(value)) ? true : _('The symmetric key has to be specified.');
+		}
+
+		o = s.option(KeyTypeValue, 'keytype');
+		o.value('KEY', _('Normal key'));
+		o.value('KEY_BASE64', _('Base64 key'));
+		o.hidden = true;
+
+		o = s.option(form.Value, 'HMAC_KEY', 'HMAC_KEY');
+		o.depends('hkeytype', 'HMAC_KEY');
+		o.validate = function(section_id, value) {
+			return (String(value).length > 0 && !INVALID_KEYS.includes(value)) ? true : _('The HMAC authentication key has to be specified.');
+		}
+
+		o = s.option(form.Value, 'HMAC_KEY_BASE64', 'HMAC_KEY_BASE64');
+		o.depends('hkeytype', 'HMAC_KEY_BASE64');
+		o.validate = function(section_id, value) {
+			return (String(value).length > 0 && !INVALID_KEYS.includes(value)) ? true : _('The HMAC authentication key has to be specified.');
+		}
+
+		o = s.option(KeyTypeValue, 'hkeytype');
+		o.value('HMAC_KEY', _('Normal key'));
+		o.value('HMAC_KEY_BASE64', _('Base64 key'));
+		o.hidden = true;
+
+		return m.load()
+			.then(L.bind(m.render, m));
+	}
 });
 
 return view.extend({
 
-	render: function() {
+	load: function() {
+		return Promise.all([
+			L.resolveDefault(fs.stat('/etc/fwknop/access.conf'))
+		]);
+	},
+
+	render: function(results) {
+		var has_access_conf = results[0];
 		var m, s, o;
 
 		m = new form.Map('fwknopd', _('Firewall Knock Operator Daemon'));
@@ -263,6 +480,14 @@ return view.extend({
 		s = m.section(form.TypedSection, 'global', _('Enable Uci/Luci control'));
 		s.anonymous = true;
 		s.option(form.Flag, 'uci_enabled', _('Enable config overwrite'), _('When unchecked, the config files in /etc/fwknopd will be used as is, ignoring any settings here.'));
+
+		if ( has_access_conf ) {
+			o = s.option(ParseButton, 'parse', _('Custom configuration'), _('Parses the /etc/fwknop/access.conf file (and \
+								included files/folders/keys) and generates QR codes for all found \
+								stanzas. Handles only files in /etc/fwknop folder due to access rights \
+								restrictions.'));
+			o.inputtitle = _("Show access.conf QR codes");
+		}
 
 		s = m.section(form.TypedSection, 'network', _('Network configuration'));
 		s.anonymous = true;
