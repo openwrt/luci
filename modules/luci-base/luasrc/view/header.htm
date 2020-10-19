@@ -29,7 +29,7 @@
 		ubuspath       = luci.config.main.ubuspath or '/ubus/',
 		sessionid      = luci.dispatcher.context.authsession,
 		nodespec       = luci.dispatcher.context.dispatched,
-		apply_rollback = math.max(applyconf and applyconf.rollback or 30, 30),
+		apply_rollback = math.max(applyconf and applyconf.rollback or 90, 90),
 		apply_holdoff  = math.max(applyconf and applyconf.holdoff or 4, 1),
 		apply_timeout  = math.max(applyconf and applyconf.timeout or 5, 1),
 		apply_display  = math.max(applyconf and applyconf.display or 1.5, 1),
