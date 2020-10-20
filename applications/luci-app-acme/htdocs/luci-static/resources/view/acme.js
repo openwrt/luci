@@ -44,7 +44,6 @@ return view.extend({
 		s.addremove = true;
 
 		o = s.tab("general", _("General Settings"));
-		o = s.tab("services", _("Services"));
 		o = s.tab("challenge", _("Challenge Validation"));
 		o = s.tab("advanced", _('Advanced Settings'));
 
@@ -73,7 +72,7 @@ return view.extend({
 		o.datatype = "list(string)";
 
 		if (stats[1].type === 'file') {
-			o = s.taboption('services', form.Flag, "update_uhttpd", _("Use for uhttpd"),
+			o = s.taboption('general', form.Flag, "update_uhttpd", _("Use for uhttpd"),
 				_("Update the uhttpd config with this certificate once issued " +
 					"(only select this for one certificate). " +
 					"Is also available luci-app-uhttpd to configure uhttpd form the LuCI interface."));
@@ -81,7 +80,7 @@ return view.extend({
 		}
 
 		if (stats[0].type === 'file') {
-			o = s.taboption('services', form.Flag, "update_nginx", _("Use for nginx"),
+			o = s.taboption('general', form.Flag, "update_nginx", _("Use for nginx"),
 				_("Update the nginx config with this certificate once issued " +
 					"(only select this for one certificate). " +
 					"Nginx must support ssl, if not it won't start as it needs to be " +
