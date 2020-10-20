@@ -3351,10 +3351,10 @@ var CBIValue = CBIAbstractValue.extend(/** @lends LuCI.form.Value.prototype */ {
 			optionEl.classList.add('hidden');
 
 		optionEl.addEventListener('widget-change',
-			L.bind(this.handleValueChange, this, section_id, {}));
+			L.bind(this.map.checkDepends, this.map));
 
 		optionEl.addEventListener('widget-change',
-			L.bind(this.map.checkDepends, this.map));
+			L.bind(this.handleValueChange, this, section_id, {}));
 
 		dom.bindClassInstance(optionEl, this);
 
