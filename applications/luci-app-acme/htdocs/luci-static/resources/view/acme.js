@@ -88,7 +88,10 @@ return view.extend({
 			o.rmempty = false;
 		}
 
-		o = s.taboption('challenge', form.ListValue, "validation_method", _("Validation method"));
+		o = s.taboption('challenge', form.ListValue, "validation_method", _("Validation method"),
+			_("Standalone mode will use the built-in webserver of acme.sh to issue a certificate. " +
+			"Webroot mode will use an existing webserver to issue a certificate. " +
+			"DNS mode will allow you to use the DNS API of your DNS provider to issue a certificate."));
 		o.value("standalone", _("Standalone"));
 		o.value("webroot", _("Webroot"));
 		o.value("dns", _("DNS"));
