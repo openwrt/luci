@@ -24,7 +24,7 @@ return view.extend({
 				"Check the logs for progress and any errors."));
 
 		s = m.section(form.TypedSection, "acme", _("ACME global config"));
-		s.anonymous = true
+		s.anonymous = true;
 
 		o = s.option(form.Value, "state_dir", _("State directory"),
 			_("Where certs and other state files are kept."));
@@ -43,25 +43,19 @@ return view.extend({
 		s.anonymous = false;
 		s.addremove = true;
 
-		o = s.option(form.Flag, "enabled", _("Enabled"));
+		o = s.tab("general", _("General Settings"));
+		o = s.tab("challenge", _("Challenge Validation"));
+		o = s.tab("advanced", _('Advanced Settings'));
+
+		o = s.taboption('general', form.Flag, "enabled", _("Enabled"));
 		o.rmempty = false;
 
-		o = s.option(form.Flag, "use_staging", _("Use staging server"),
+		o = s.taboption('general', form.Flag, "use_staging", _("Use staging server"),
 			_("Get certificate from the Letsencrypt staging server " +
 				"(use for testing; the certificate won't be valid)."));
 		o.rmempty = false;
 
-		o = s.option(form.Flag, "use_acme_server",
-			_("Custom ACME CA"), _("Use a custom CA instead of Let's Encrypt."));
-		o.depends("use_staging", "0");
-		o.default = false;
-
-		o = s.option(form.Value, "acme_server", _("ACME server URL"),
-			_("Custom ACME server directory URL."));
-		o.depends("use_acme_server", "1");
-		o.optional = true;
-
-		o = s.option(form.ListValue, "keylength", _("Key size"),
+		o = s.taboption('general', form.ListValue, "keylength", _("Key size"),
 			_("Key size (and type) for the generated certificate."));
 		o.value("2048", _("RSA 2048 bits"));
 		o.value("3072", _("RSA 3072 bits"));
@@ -71,8 +65,14 @@ return view.extend({
 		o.default = "2048";
 		o.rmempty = false;
 
+		o = s.taboption('general', form.DynamicList, "domains", _("Domain names"),
+			_("Domain names to include in the certificate. " +
+				"The first name will be the subject name, subsequent names will be alt names. " +
+				"Note that all domain names must point at the router in the global DNS."));
+		o.datatype = "list(string)";
+
 		if (stats[1].type === 'file') {
-			o = s.option(form.Flag, "update_uhttpd", _("Use for uhttpd"),
+			o = s.taboption('general', form.Flag, "update_uhttpd", _("Use for uhttpd"),
 				_("Update the uhttpd config with this certificate once issued " +
 					"(only select this for one certificate). " +
 					"Is also available luci-app-uhttpd to configure uhttpd form the LuCI interface."));
@@ -80,7 +80,7 @@ return view.extend({
 		}
 
 		if (stats[0].type === 'file') {
-			o = s.option(form.Flag, "update_nginx", _("Use for nginx"),
+			o = s.taboption('general', form.Flag, "update_nginx", _("Use for nginx"),
 				_("Update the nginx config with this certificate once issued " +
 					"(only select this for one certificate). " +
 					"Nginx must support ssl, if not it won't start as it needs to be " +
@@ -88,41 +88,66 @@ return view.extend({
 			o.rmempty = false;
 		}
 
-		o = s.option(form.Value, "webroot", _("Webroot directory"),
+		o = s.taboption('challenge', form.ListValue, "validation_method", _("Validation method"),
+			_("Standalone mode will use the built-in webserver of acme.sh to issue a certificate. " +
+			"Webroot mode will use an existing webserver to issue a certificate. " +
+			"DNS mode will allow you to use the DNS API of your DNS provider to issue a certificate."));
+		o.value("standalone", _("Standalone"));
+		o.value("webroot", _("Webroot"));
+		o.value("dns", _("DNS"));
+		o.default = "standalone";
+
+		o = s.taboption('challenge', form.Value, "webroot", _("Webroot directory"),
 			_("Webserver root directory. Set this to the webserver " +
 				"document root to run Acme in webroot mode. The web " +
 				"server must be accessible from the internet on port 80."));
 		o.optional = true;
+		o.depends("validation_method", "webroot");
 
-		o = s.option(form.DynamicList, "domains", _("Domain names"),
-			_("Domain names to include in the certificate. " +
-				"The first name will be the subject name, subsequent names will be alt names. " +
-				"Note that all domain names must point at the router in the global DNS."));
-		o.datatype = "list(string)";
-
-		s.option(form.Value, "dns", _("DNS API"),
+		o = s.taboption('challenge', form.Value, "dns", _("DNS API"),
 			_("To use DNS mode to issue certificates, set this to the name of a DNS API supported by acme.sh. " +
 				"See https://github.com/acmesh-official/acme.sh/wiki/dnsapi for the list of available APIs. " +
 				"In DNS mode, the domain name does not have to resolve to the router IP. " +
 				"DNS mode is also the only mode that supports wildcard certificates. " +
 				"Using this mode requires the acme-dnsapi package to be installed."));
+		o.depends("validation_method", "dns");
 
-		o = s.option(form.DynamicList, "credentials", _("DNS API credentials"),
+		o = s.taboption('challenge', form.DynamicList, "credentials", _("DNS API credentials"),
 			_("The credentials for the DNS API mode selected above. " +
 				"See https://github.com/acmesh-official/acme.sh/wiki/dnsapi for the format of credentials required by each API. " +
 				"Add multiple entries here in KEY=VAL shell variable format to supply multiple credential variables."))
 		o.datatype = "list(string)";
+		o.depends("validation_method", "dns");
 
-		s.option(form.Value, "calias", _("Challenge Alias"),
+		o = s.taboption('challenge', form.Value, "calias", _("Challenge Alias"),
 			_("The challenge alias to use for ALL domains. " +
 				"See https://github.com/acmesh-official/acme.sh/wiki/DNS-alias-mode for the details of this process. " +
 				"LUCI only supports one challenge alias per certificate."));
+		o.depends("validation_method", "dns");
 
-		s.option(form.Value, "dalias", _("Domain Alias"),
+		o = s.taboption('challenge', form.Value, "dalias", _("Domain Alias"),
 			_("The domain alias to use for ALL domains. " +
 				"See https://github.com/acmesh-official/acme.sh/wiki/DNS-alias-mode for the details of this process. " +
 				"LUCI only supports one challenge domain per certificate."));
+		o.depends("validation_method", "dns");
+
+		o = s.taboption('advanced', form.Flag, "use_acme_server",
+			_("Custom ACME CA"), _("Use a custom CA instead of Let's Encrypt."));
+		o.depends("use_staging", "0");
+		o.default = false;
+
+		o = s.taboption('advanced', form.Value, "acme_server", _("ACME server URL"),
+			_("Custom ACME server directory URL."));
+		o.depends("use_acme_server", "1");
+		o.placeholder = "https://api.buypass.com/acme/directory";
+		o.optional = true;
+
+		o = s.taboption('advanced', form.Value, 'days', _('Days until renewal'));
+		o.optional    = true;
+		o.placeholder = 90;
+		o.datatype    = 'uinteger';
 
 		return m.render()
 	}
 })
+
