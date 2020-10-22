@@ -26,6 +26,20 @@ function applyMask(addr, mask, v6) {
 		v6 ? '%x:%x:%x:%x:%x:%x:%x:%x' : '%d.%d.%d.%d', words);
 }
 
+function eui48ToIPv6LinkLocal(eui48) {
+	var eui48_arr = eui48.toLowerCase().split(":");
+
+	if ( eui48.length != (3*6-1) || eui48_arr.length != 6 )
+		return null;
+
+	eui48_arr.splice(3, 0, "ff", "fe")
+	eui48_arr[0] = (parseInt(eui48_arr[0], 16)^2).toString(16)
+
+	var eui64_arr = [eui48_arr[0]+eui48_arr[1], eui48_arr[2]+eui48_arr[3], eui48_arr[4]+eui48_arr[5], eui48_arr[6]+eui48_arr[7]];
+	var eui64 = eui64_arr.map(x => x.replace(/^0+/, '')).join(":");
+	return "fe80::" + eui64;
+}
+
 return view.extend({
 	load: function() {
 		return Promise.all([
@@ -89,13 +103,16 @@ return view.extend({
 			    flags = m ? m[2].trim().split(/\s+/) : [],
 			    state = (m ? m[3] : null) || 'FAILED';
 
-			if (!addr || state == 'FAILED' || addr.match(/^fe[89a-f][0-9a-f]:/))
+			if (!addr || state == 'FAILED')
 				continue;
 
 			for (var j = 0; j < flags.length; j += 2)
 				flags[flags[j]] = flags[j + 1];
 
 			if (!flags.lladdr)
+				continue;
+
+			if (v6 && addr.match(/^fe[89a-f][0-9a-f]:/) && eui48ToIPv6LinkLocal(flags.lladdr) == addr)
 				continue;
 
 			var net = this.getNetworkByDevice(networks, flags.dev, addr, v6 ? 128 : 32, v6);
