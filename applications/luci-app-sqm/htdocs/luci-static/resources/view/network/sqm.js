@@ -68,7 +68,7 @@ return view.extend({
 			return uci.set("sqm", section, "enabled", value);
 		}, this);
 
-		o = s.taboption("tab_basic", widgets.NetworkSelect, "interface", _("Interface name"));
+		o = s.taboption("tab_basic", widgets.DeviceSelect, "interface", _("Interface name"));
 		o.rmempty = false;
 
 		o = s.taboption("tab_basic", form.Value, "download", _("Download speed (kbit/s) (ingress) set to 0 to selectively disable ingress shaping:"));
