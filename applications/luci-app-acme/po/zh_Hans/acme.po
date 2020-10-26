@@ -22,46 +22,76 @@ msgstr "ACME 证书"
 msgid "ACME global config"
 msgstr "ACME 全局配置"
 
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:139
+msgid "ACME server URL"
+msgstr ""
+
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:34
 msgid "Account email"
 msgstr "电子邮件帐户"
+
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:48
+msgid "Advanced Settings"
+msgstr ""
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:42
 msgid "Certificate config"
 msgstr "证书配置"
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:106
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:122
 msgid "Challenge Alias"
 msgstr "质询别名"
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:93
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:47
+msgid "Challenge Validation"
+msgstr ""
+
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:135
+msgid "Custom ACME CA"
+msgstr ""
+
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:140
+msgid "Custom ACME server directory URL."
+msgstr ""
+
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:97
+msgid "DNS"
+msgstr ""
+
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:107
 msgid "DNS API"
 msgstr "DNS API"
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:100
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:115
 msgid "DNS API credentials"
 msgstr "DNS API 凭证"
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:111
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:145
+msgid "Days until renewal"
+msgstr ""
+
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:128
 msgid "Domain Alias"
 msgstr "域名别名"
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:87
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:68
 msgid "Domain names"
 msgstr "域名"
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:88
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:69
 msgid ""
 "Domain names to include in the certificate. The first name will be the "
 "subject name, subsequent names will be alt names. Note that all domain names "
 "must point at the router in the global DNS."
-msgstr "证书中要包含的域名。第一个名字将是主题名，后面的名字将是主题备用名称。请注意，所有域名都必须在路由中指向全局 DNS。"
+msgstr ""
+"证书中要包含的域名。第一个名字将是主题名，后面的名字将是主题备用名称。请注"
+"意，所有域名都必须在路由中指向全局 DNS。"
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:59
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:63
 msgid "ECC 256 bits"
 msgstr "ECC 256 位"
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:60
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:64
 msgid "ECC 384 bits"
 msgstr "ECC 384 位"
 
@@ -73,11 +103,15 @@ msgstr "与帐户密钥关联的电子邮件地址。"
 msgid "Enable debug logging"
 msgstr "启用调试日志记录"
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:46
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:50
 msgid "Enabled"
 msgstr "已启用"
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:50
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:46
+msgid "General Settings"
+msgstr ""
+
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:54
 msgid ""
 "Get certificate from the Letsencrypt staging server (use for testing; the "
 "certificate won't be valid)."
@@ -87,57 +121,72 @@ msgstr "从 Letsencrypt 临时服务器获取证书(用于测试;证书无效)�
 msgid "Grant UCI access for luci-app-acme"
 msgstr "授予 UCI 访问 luci-app-acme 的权限"
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:54
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:58
 msgid "Key size"
 msgstr "密钥长度"
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:55
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:59
 msgid "Key size (and type) for the generated certificate."
 msgstr "生成的证书的密钥长度(和类型)。"
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:56
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:60
 msgid "RSA 2048 bits"
 msgstr "RSA 2048 位"
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:57
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:61
 msgid "RSA 3072 bits"
 msgstr "RSA 3072 位"
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:58
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:62
 msgid "RSA 4096 bits"
 msgstr "RSA 4096 位"
+
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:95
+msgid "Standalone"
+msgstr ""
+
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:92
+msgid ""
+"Standalone mode will use the built-in webserver of acme.sh to issue a "
+"certificate. Webroot mode will use an existing webserver to issue a "
+"certificate. DNS mode will allow you to use the DNS API of your DNS provider "
+"to issue a certificate."
+msgstr ""
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:29
 msgid "State directory"
 msgstr "状态文件夹"
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:107
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:123
 msgid ""
 "The challenge alias to use for ALL domains. See https://github.com/acmesh-"
 "official/acme.sh/wiki/DNS-alias-mode for the details of this process. LUCI "
 "only supports one challenge alias per certificate."
 msgstr ""
-"用于所有域名的质询别名(challenge alias)。有关此过程的详细信息，请参阅 https://github.com/"
-"acmesh-official/acme.sh/wiki/DNS-alias-mode。LUCI 每个证书只支持一个质询别名。"
+"用于所有域名的质询别名(challenge alias)。有关此过程的详细信息，请参阅 "
+"https://github.com/acmesh-official/acme.sh/wiki/DNS-alias-mode。LUCI 每个证书"
+"只支持一个质询别名。"
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:101
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:116
 msgid ""
 "The credentials for the DNS API mode selected above. See https://github.com/"
 "acmesh-official/acme.sh/wiki/dnsapi for the format of credentials required "
 "by each API. Add multiple entries here in KEY=VAL shell variable format to "
 "supply multiple credential variables."
 msgstr ""
-"上面选择的 DNS API 模式的凭据。请参阅 https://github.com/acmesh-official/acme.sh/wiki/"
-"dnsapi 以了解每个 API 所需的凭据格式。在此处以 KEY=VAL shell 变量格式添加多个条目，以提供多个凭据变量。"
+"上面选择的 DNS API 模式的凭据。请参阅 https://github.com/acmesh-official/"
+"acme.sh/wiki/dnsapi 以了解每个 API 所需的凭据格式。在此处以 KEY=VAL shell 变"
+"量格式添加多个条目，以提供多个凭据变量。"
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:112
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:129
 msgid ""
 "The domain alias to use for ALL domains. See https://github.com/acmesh-"
 "official/acme.sh/wiki/DNS-alias-mode for the details of this process. LUCI "
 "only supports one challenge domain per certificate."
 msgstr ""
-"用于所有域名的别名(domain alias)。有关此过程的详细信息，请参阅 https://github.com/acmesh-official/"
-"acme.sh/wiki/DNS-alias-mode。LUCI 每个证书只支持一个质询别名。"
+"用于所有域名的别名(domain alias)。有关此过程的详细信息，请参阅 https://"
+"github.com/acmesh-official/acme.sh/wiki/DNS-alias-mode。LUCI 每个证书只支持一"
+"个质询别名。"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:18
 msgid ""
@@ -148,10 +197,12 @@ msgid ""
 "address. Once configured, issuing certificates can take a while. Check the "
 "logs for progress and any errors."
 msgstr ""
-"这将配置 ACME (Letsencrypt) 自动证书安装。只需填写此内容即可为路由器配置由 Letsencrypt 颁发的 Web 界面证书。请注意，"
-"证书中的域名必须已经配置为指向路由器的公网 IP 地址。配置完成后，颁发证书可能需要一段时间。从日志中查看签署进度和错误。"
+"这将配置 ACME (Letsencrypt) 自动证书安装。只需填写此内容即可为路由器配置由 "
+"Letsencrypt 颁发的 Web 界面证书。请注意，证书中的域名必须已经配置为指向路由器"
+"的公网 IP 地址。配置完成后，颁发证书可能需要一段时间。从日志中查看签署进度和"
+"错误。"
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:94
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:108
 msgid ""
 "To use DNS mode to issue certificates, set this to the name of a DNS API "
 "supported by acme.sh. See https://github.com/acmesh-official/acme.sh/wiki/"
@@ -160,51 +211,65 @@ msgid ""
 "supports wildcard certificates. Using this mode requires the acme-dnsapi "
 "package to be installed."
 msgstr ""
-"若要使用 DNS 模式颁发证书，请将其设置为 acme.sh 支持的 DNS API 的名称。有关可用 API 的列表，请参阅 "
-"https://github.com/acmesh-official/acme.sh/wiki/dnsapi。在 DNS "
-"模式下，域名不必解析为路由器IP。DNS 模式也是唯一支持通配符证书的模式。使用此模式需要安装 acme-dnsapi 包。"
+"若要使用 DNS 模式颁发证书，请将其设置为 acme.sh 支持的 DNS API 的名称。有关可"
+"用 API 的列表，请参阅 https://github.com/acmesh-official/acme.sh/wiki/"
+"dnsapi。在 DNS 模式下，域名不必解析为路由器IP。DNS 模式也是唯一支持通配符证书"
+"的模式。使用此模式需要安装 acme-dnsapi 包。"
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:74
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:84
 msgid ""
 "Update the nginx config with this certificate once issued (only select this "
 "for one certificate). Nginx must support ssl, if not it won't start as it "
 "needs to be compiled with ssl support to use cert options"
 msgstr ""
-"颁发此证书后，用该证书更新 nginx 配置（只能有一个证书配置选中该选项）。Nginx 必须支持 "
-"ssl，如果无法启动，则必须使用ssl支持进行编译才能使用证书选项"
+"颁发此证书后，用该证书更新 nginx 配置（只能有一个证书配置选中该选项）。Nginx "
+"必须支持 ssl，如果无法启动，则必须使用ssl支持进行编译才能使用证书选项"
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:66
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:76
 msgid ""
 "Update the uhttpd config with this certificate once issued (only select this "
 "for one certificate). Is also available luci-app-uhttpd to configure uhttpd "
 "form the LuCI interface."
 msgstr ""
-"签发此证书后，使用此证书更新 uhttpd 配置（只能有一个证书配置选中该选项）。也可通过 LuCI 界面的 luci-app-uhttpd 来配置 "
-"uhttpd。"
+"签发此证书后，使用此证书更新 uhttpd 配置（只能有一个证书配置选中该选项）。也"
+"可通过 LuCI 界面的 luci-app-uhttpd 来配置 uhttpd。"
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:73
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:135
+msgid "Use a custom CA instead of Let's Encrypt."
+msgstr ""
+
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:83
 msgid "Use for nginx"
 msgstr "用于 Nginx"
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:65
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:75
 msgid "Use for uhttpd"
 msgstr "用于 uhttpd"
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:49
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:53
 msgid "Use staging server"
 msgstr "使用临时服务器"
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:81
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:91
+msgid "Validation method"
+msgstr ""
+
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:96
+msgid "Webroot"
+msgstr ""
+
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:100
 msgid "Webroot directory"
 msgstr "Webroot 文件夹"
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:82
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:101
 msgid ""
 "Webserver root directory. Set this to the webserver document root to run "
 "Acme in webroot mode. The web server must be accessible from the internet on "
 "port 80."
 msgstr ""
-"Webserver 根目录。设置为 Web 服务器文档根目录，在 webroot 模式下运行 Acme。Web 服务器必须允许从互联网上使用80端口访问。"
+"Webserver 根目录。设置为 Web 服务器文档根目录，在 webroot 模式下运行 Acme。"
+"Web 服务器必须允许从互联网上使用80端口访问。"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:30
 msgid "Where certs and other state files are kept."
