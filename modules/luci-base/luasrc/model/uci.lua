@@ -123,10 +123,10 @@ function apply(self, rollback)
 	if rollback then
 		local sys = require "luci.sys"
 		local conf = require "luci.config"
-		local timeout = tonumber(conf and conf.apply and conf.apply.rollback or 30) or 0
+		local timeout = tonumber(conf and conf.apply and conf.apply.rollback or 90) or 0
 
 		_, err = call("apply", {
-			timeout = (timeout > 30) and timeout or 30,
+			timeout = (timeout > 90) and timeout or 90,
 			rollback = true
 		})
 
