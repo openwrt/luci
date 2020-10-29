@@ -284,7 +284,7 @@ return view.extend({
 
 		o = s.taboption('general', form.DynamicList, 'address', _('Addresses'),
 			_('List of domains to force to an IP address.'));
-		
+
 		o.optional = true;
 		o.placeholder = '/router.local/192.168.0.1';
 
@@ -419,6 +419,7 @@ return view.extend({
 		so = ss.option(form.Value, 'name', _('Hostname'));
 		so.validate = validateHostname;
 		so.rmempty  = true;
+		so.sortable = true;
 		so.write = function(section, value) {
 			uci.set('dhcp', section, 'name', value);
 			uci.set('dhcp', section, 'dns', '1');
@@ -431,6 +432,8 @@ return view.extend({
 		so = ss.option(form.Value, 'mac', _('<abbr title="Media Access Control">MAC</abbr>-Address'));
 		so.datatype = 'list(unique(macaddr))';
 		so.rmempty  = true;
+		so.sortable = true;
+		so.sortmode = 'addr';
 		so.cfgvalue = function(section) {
 			var macs = L.toArray(uci.get('dhcp', section, 'mac')),
 			    result = [];
@@ -471,6 +474,8 @@ return view.extend({
 
 		so = ss.option(form.Value, 'ip', _('<abbr title="Internet Protocol Version 4">IPv4</abbr>-Address'));
 		so.datatype = 'or(ip4addr,"ignore")';
+		so.sortable = true;
+		so.sortmode = 'addr';
 		so.validate = function(section, value) {
 			var mac = this.map.lookupOption('mac', section),
 			    name = this.map.lookupOption('name', section),
@@ -490,15 +495,18 @@ return view.extend({
 		});
 
 		so = ss.option(form.Value, 'leasetime', _('Lease time'));
+		so.sortable = true;
 		so.rmempty = true;
 
 		so = ss.option(form.Value, 'duid', _('<abbr title="The DHCP Unique Identifier">DUID</abbr>'));
 		so.datatype = 'and(rangelength(20,36),hexstring)';
+		so.sortable = true;
 		Object.keys(duids).forEach(function(duid) {
 			so.value(duid, '%s (%s)'.format(duid, duids[duid].hostname || duids[duid].macaddr || duids[duid].ip6addr || '?'));
 		});
 
 		so = ss.option(form.Value, 'hostid', _('<abbr title="Internet Protocol Version 6">IPv6</abbr>-Suffix (hex)'));
+		so.sortable = true;
 
 		o = s.taboption('leases', CBILeaseStatus, '__status__');
 
