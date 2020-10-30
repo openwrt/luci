@@ -308,6 +308,7 @@ return view.extend({
 		o.value('network-redirect');
 		o.value('network-unknown');
 		o.value('network-unreachable');
+		o.value('packet-too-big');
 		o.value('parameter-problem');
 		o.value('port-unreachable');
 		o.value('precedence-cutoff');
