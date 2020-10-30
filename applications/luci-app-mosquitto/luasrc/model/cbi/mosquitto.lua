@@ -160,6 +160,7 @@ OptionalFlag(s, "cleansession", "Clean session")
 OptionalFlag(s, "notifications", "notifications",
     "Attempt to notify the local and remote broker of connection status, defaults to $SYS/broker/connections/<clientid>/state")
 s:option(Value, "notification_topic", "Topic to use for local+remote remote for notifications.").optional = true
+OptionalFlag(s, "notification_local_only", "Notifications local only", "Bridge connection states should only be published locally")
 
 s:option(Value, "remote_clientid", "Client id to use on remote end of this bridge connection").optional = true
 s:option(Value, "local_clientid", "Client id to use locally. Important when bridging to yourself").optional = true
