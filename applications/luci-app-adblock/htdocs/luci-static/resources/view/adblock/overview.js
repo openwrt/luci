@@ -252,7 +252,7 @@ return view.extend({
 					E('button', {
 						'class': 'cbi-button cbi-button-apply',
 						'click': ui.createHandlerFn(this, function() {
-							return handleAction('start');
+							return handleAction('reload');
 						})
 					}, [ _('Refresh') ])
 				])
