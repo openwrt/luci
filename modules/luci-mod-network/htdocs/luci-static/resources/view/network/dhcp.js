@@ -496,7 +496,7 @@ return view.extend({
 		so.rmempty = true;
 
 		so = ss.option(form.Value, 'duid', _('<abbr title="The DHCP Unique Identifier">DUID</abbr>'));
-		so.datatype = 'and(rangelength(20,36),hexstring)';
+		so.datatype = 'duid';
 		Object.keys(duids).forEach(function(duid) {
 			so.value(duid, '%s (%s)'.format(duid, duids[duid].hostname || duids[duid].macaddr || duids[duid].ip6addr || '?'));
 		});

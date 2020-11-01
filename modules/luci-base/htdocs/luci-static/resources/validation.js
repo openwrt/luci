@@ -272,6 +272,11 @@ var ValidatorFactory = baseclass.extend({
 				_('valid IPv6 prefix value (0-128)'));
 		},
 
+		duid: function() {
+			var hex = this.value.replace(/:/g, '');
+			return this.assert(this.apply('rangelength', hex, [20, 36]) && this.apply('hexstring', hex), _('valid DUID'));
+		},
+
 		cidr: function() {
 			return this.assert(this.apply('cidr4') || this.apply('cidr6'), _('valid IPv4 or IPv6 CIDR'));
 		},
