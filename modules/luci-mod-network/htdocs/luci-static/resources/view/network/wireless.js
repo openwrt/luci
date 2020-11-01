@@ -1742,7 +1742,7 @@ return view.extend({
 						E('span', { 'style': s }, '%h'.format(network.formatWifiEncryption(res.encryption))),
 						E('div', { 'class': 'right' }, E('button', {
 							'class': 'cbi-button cbi-button-action important',
-							'click': L.bind(this.handleJoin, this, radioDev, res)
+							'click': ui.createHandlerFn(this, 'handleJoin', radioDev, res)
 						}, _('Join Network')))
 					]);
 
@@ -1886,7 +1886,7 @@ return view.extend({
 		};
 
 		s.handleJoin = function(radioDev, bss, ev) {
-			this.handleScanAbort(ev);
+			poll.remove(this.pollFn);
 
 			var m2 = new form.Map('wireless'),
 			    s2 = m2.section(form.NamedSection, '_new_'),
