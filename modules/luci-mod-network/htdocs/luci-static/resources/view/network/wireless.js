@@ -1841,11 +1841,11 @@ return view.extend({
 					uci.set('wireless', section_id, 'bssid', bss.bssid);
 				}
 
-				if (is_sae) {
+				if (is_sae.length > 0) {
 					uci.set('wireless', section_id, 'encryption', 'sae');
 					uci.set('wireless', section_id, 'key', passval);
 				}
-				else if (is_psk) {
+				else if (is_psk.length > 0) {
 					for (var i = enc.wpa.length - 1; i >= 0; i--) {
 						if (enc.wpa[i] == 2) {
 							uci.set('wireless', section_id, 'encryption', 'psk2');
