@@ -1742,7 +1742,7 @@ return view.extend({
 						E('span', { 'style': s }, '%h'.format(network.formatWifiEncryption(res.encryption))),
 						E('div', { 'class': 'right' }, E('button', {
 							'class': 'cbi-button cbi-button-action important',
-							'click': L.bind(this.handleJoin, this, radioDev, res)
+							'click': ui.createHandlerFn(this, 'handleJoin', radioDev, res)
 						}, _('Join Network')))
 					]);
 
@@ -1841,11 +1841,11 @@ return view.extend({
 					uci.set('wireless', section_id, 'bssid', bss.bssid);
 				}
 
-				if (is_sae) {
+				if (is_sae.length > 0) {
 					uci.set('wireless', section_id, 'encryption', 'sae');
 					uci.set('wireless', section_id, 'key', passval);
 				}
-				else if (is_psk) {
+				else if (is_psk.length > 0) {
 					for (var i = enc.wpa.length - 1; i >= 0; i--) {
 						if (enc.wpa[i] == 2) {
 							uci.set('wireless', section_id, 'encryption', 'psk2');
@@ -1886,7 +1886,7 @@ return view.extend({
 		};
 
 		s.handleJoin = function(radioDev, bss, ev) {
-			this.handleScanAbort(ev);
+			poll.remove(this.pollFn);
 
 			var m2 = new form.Map('wireless'),
 			    s2 = m2.section(form.NamedSection, '_new_'),
