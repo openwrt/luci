@@ -7,15 +7,15 @@ msgid ""
 "to $SYS/broker/connections/<clientid>/state"
 msgstr ""
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:175
+#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:176
 msgid "Automatic, but no restarts"
 msgstr ""
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:174
+#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:175
 msgid "Automatic, but stopped when not used"
 msgstr ""
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:173
+#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:174
 msgid "Automatic, includes restarts"
 msgstr ""
 
@@ -31,8 +31,12 @@ msgstr ""
 msgid "Autosave on changes"
 msgstr ""
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:203
+#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:204
 msgid "Bridge PSK"
+msgstr ""
+
+#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:164
+msgid "Bridge connection states should only be published locally"
 msgstr ""
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:131
@@ -63,11 +67,11 @@ msgstr ""
 msgid "Client expiration"
 msgstr ""
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:166
+#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:167
 msgid "Client id to use locally. Important when bridging to yourself"
 msgstr ""
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:165
+#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:166
 msgid "Client id to use on remote end of this bridge connection"
 msgstr ""
 
@@ -79,7 +83,7 @@ msgstr ""
 msgid "Depends on your openssl version, empty to support all"
 msgstr ""
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:220
+#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:221
 msgid "Directory to search for CA files"
 msgstr ""
 
@@ -91,23 +95,23 @@ msgstr ""
 msgid "Grant UCI access for luci-app-mosquitto"
 msgstr ""
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:179
+#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:180
 msgid "How long to wait before disconnecting"
 msgstr ""
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:176
+#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:177
 msgid "How long to wait before reconnecting"
 msgstr ""
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:182
+#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:183
 msgid "How many messages to queue before restarting lazy bridge"
 msgstr ""
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:170
+#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:171
 msgid "How should this bridge be started"
 msgstr ""
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:193
+#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:194
 msgid "Identity for TLS-PSK"
 msgstr ""
 
@@ -118,11 +122,11 @@ msgid ""
 "mosquitto.conf (and this page is ignored)"
 msgstr ""
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:167
+#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:168
 msgid "Keepalive interval for this bridge"
 msgstr ""
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:203
+#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:204
 msgid "Key for TLS-PSK"
 msgstr ""
 
@@ -170,7 +174,11 @@ msgstr ""
 msgid "Mosquitto MQTT Broker"
 msgstr ""
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:200
+#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:164
+msgid "Notifications local only"
+msgstr ""
+
+#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:201
 msgid "Only hex numbers are allowed (use A-F characters and 0-9 digits)"
 msgstr ""
 
@@ -180,7 +188,7 @@ msgid ""
 "only available from localhost"
 msgstr ""
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:193
+#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:194
 msgid "PSK Bridge Identity"
 msgstr ""
 
@@ -188,15 +196,15 @@ msgstr ""
 msgid "PSK Hint to provide to connecting clients"
 msgstr ""
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:217
+#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:218
 msgid "Path to CA file"
 msgstr ""
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:226
+#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:227
 msgid "Path to PEM encoded keyfile"
 msgstr ""
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:223
+#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:224
 msgid "Path to PEM encoded server certificate file"
 msgstr ""
 
@@ -236,11 +244,11 @@ msgstr ""
 msgid "Protocol to use when listening"
 msgstr ""
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:189
+#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:190
 msgid "Remote password"
 msgstr ""
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:188
+#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:189
 msgid "Remote username"
 msgstr ""
 
@@ -267,11 +275,11 @@ msgid "Should persistence to disk be enabled at all"
 msgstr ""
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:116
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:209
+#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:210
 msgid "TLS Version"
 msgstr ""
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:210
+#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:211
 msgid ""
 "The remote broker must support the same version of TLS for the connection to "
 "succeed."
@@ -313,7 +321,7 @@ msgstr ""
 msgid "address[:port] of remote broker"
 msgstr ""
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:187
+#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:188
 msgid ""
 "attempt to notify the remote broker that this is a bridge, not all brokers "
 "support this."
