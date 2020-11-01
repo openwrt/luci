@@ -1799,8 +1799,8 @@ return view.extend({
 			    zoneval = zoneopt ? zoneopt.formvalue('_new_') : null,
 			    enc = L.isObject(bss.encryption) ? bss.encryption : null,
 			    is_wep = (enc && Array.isArray(enc.wep)),
-			    is_psk = (enc && Array.isArray(enc.wpa) && L.toArray(enc.authentication).filter(function(a) { return a == 'psk' })),
-			    is_sae = (enc && Array.isArray(enc.wpa) && L.toArray(enc.authentication).filter(function(a) { return a == 'sae' }));
+			    is_psk = (enc && Array.isArray(enc.wpa) && L.toArray(enc.authentication).filter(function(a) { return a == 'psk' }).length > 0),
+			    is_sae = (enc && Array.isArray(enc.wpa) && L.toArray(enc.authentication).filter(function(a) { return a == 'sae' }).length > 0);
 
 			if (nameval == null || (passopt && passval == null))
 				return;
@@ -1841,11 +1841,11 @@ return view.extend({
 					uci.set('wireless', section_id, 'bssid', bss.bssid);
 				}
 
-				if (is_sae.length > 0) {
+				if (is_sae) {
 					uci.set('wireless', section_id, 'encryption', 'sae');
 					uci.set('wireless', section_id, 'key', passval);
 				}
-				else if (is_psk.length > 0) {
+				else if (is_psk) {
 					for (var i = enc.wpa.length - 1; i >= 0; i--) {
 						if (enc.wpa[i] == 2) {
 							uci.set('wireless', section_id, 'encryption', 'psk2');
