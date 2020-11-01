@@ -1790,11 +1790,13 @@ return view.extend({
 		s.handleJoinConfirm = function(radioDev, bss, form, ev) {
 			var nameopt = L.toArray(form.lookupOption('name', '_new_'))[0],
 			    passopt = L.toArray(form.lookupOption('password', '_new_'))[0],
+			    ssidopt = L.toArray(form.lookupOption('ssid', '_new_'))[0],
 			    bssidopt = L.toArray(form.lookupOption('bssid', '_new_'))[0],
 			    zoneopt = L.toArray(form.lookupOption('zone', '_new_'))[0],
 			    replopt = L.toArray(form.lookupOption('replace', '_new_'))[0],
 			    nameval = (nameopt && nameopt.isValid('_new_')) ? nameopt.formvalue('_new_') : null,
 			    passval = (passopt && passopt.isValid('_new_')) ? passopt.formvalue('_new_') : null,
+			    ssidval = (ssidopt && ssidopt.isValid('_new_')) ? ssidopt.formvalue('_new_') : null,
 			    bssidval = (bssidopt && bssidopt.isValid('_new_')) ? bssidopt.formvalue('_new_') : null,
 			    zoneval = zoneopt ? zoneopt.formvalue('_new_') : null,
 			    enc = L.isObject(bss.encryption) ? bss.encryption : null,
@@ -1840,6 +1842,9 @@ return view.extend({
 				else if (bss.bssid != null) {
 					uci.set('wireless', section_id, 'bssid', bss.bssid);
 				}
+
+				if (ssidval != null)
+					uci.set('wireless', section_id, 'ssid', ssidval);
 
 				if (is_sae) {
 					uci.set('wireless', section_id, 'encryption', 'sae');
@@ -1909,6 +1914,11 @@ return view.extend({
 					{},
 					this.renderUCISection('_new_')
 				]).then(this.renderContents.bind(this));
+			};
+
+			if (bss.ssid == null) {
+				name = s2.option(form.Value, 'ssid', _('Network SSID'), _('The correct SSID must be manually specified when joining a hidden wireless network'));
+				name.rmempty = false;
 			};
 
 			replace = s2.option(form.Flag, 'replace', _('Replace wireless configuration'), _('Check this option to delete the existing networks from this radio.'));
