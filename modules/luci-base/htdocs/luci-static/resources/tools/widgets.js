@@ -355,6 +355,16 @@ var CBINetworkSelect = form.ListValue.extend({
 		return span;
 	},
 
+	validateNetwork: function(section_id, cfgvalue) {
+		var networks = L.toArray(cfgvalue)
+
+		for (var i = 0; i < networks.length; i++)
+			if (networks[i].indexOf('-') != -1)
+				return false, _("Invalid interface name. '-' is forbidden.");
+
+		return this.validate(section_id, cfgvalue);
+	},
+
 	renderWidget: function(section_id, option_index, cfgvalue) {
 		var values = L.toArray((cfgvalue != null) ? cfgvalue : this.default),
 		    choices = {},
@@ -393,7 +403,7 @@ var CBINetworkSelect = form.ListValue.extend({
 			select_placeholder: E('em', _('unspecified')),
 			display_items: this.display_size || this.size || 3,
 			dropdown_items: this.dropdown_size || this.size || 5,
-			validate: L.bind(this.validate, this, section_id),
+			validate: L.bind(this.validateNetwork, this, section_id),
 			create: !this.nocreate,
 			create_markup: '' +
 				'<li data-value="{{value}}">' +
