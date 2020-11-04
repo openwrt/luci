@@ -37,8 +37,6 @@ o = s:option(DynamicList, "rt_table_lookup",
 	translate("Routing table lookup"),
 	translate("Also scan this Routing table for connected networks"))
 o.datatype = "integer"
-o:value("1", translatef("Routing table %d", 1))
-o:value("2", translatef("Routing table %d", 2))
 o:value("220", translatef("Routing table %d", 220))
 
 return m
