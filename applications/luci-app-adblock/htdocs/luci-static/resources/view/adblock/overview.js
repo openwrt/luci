@@ -344,6 +344,8 @@ return view.extend({
 		o.rmempty = true;
 
 		o = s.taboption('additional', form.ListValue, 'adb_maxqueue', _('Download Queue'), _('Size of the download queue for download processing (incl. sorting, merging etc.) in parallel.'));
+		o.value('1');
+		o.value('2');
 		o.value('4');
 		o.value('8');
 		o.value('16');
