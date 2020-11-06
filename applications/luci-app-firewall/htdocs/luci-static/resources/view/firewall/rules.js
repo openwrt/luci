@@ -214,6 +214,18 @@ return view.extend({
 		o = s.taboption('general', form.Value, 'name', _('Name'));
 		o.placeholder = _('Unnamed rule');
 		o.modalonly = true;
+		o.validate = function(section_id, value) {
+			if (value == '') return _('Please enter a meaningful name');
+			var rules = uci.sections('firewall', 'rule');
+			for (var i = 0; i < rules.length; i++) {
+				var name = rules[i].name;
+				if ( name == value ) {
+					if ( section_id != rules[i]['.name'] )
+						return _('Rule name is already assigned');
+				}
+			}
+			return true
+		};
 
 		o = s.option(form.DummyValue, '_match', _('Match'));
 		o.modalonly = false;
