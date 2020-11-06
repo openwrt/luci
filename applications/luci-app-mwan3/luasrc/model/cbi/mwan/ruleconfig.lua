@@ -21,8 +21,8 @@ s.dynamic = false
 o = s:option(ListValue, "family", translate("Internet Protocol"))
 o.default = ""
 o:value("", translate("IPv4 and IPv6"))
-o:value("ipv4", translate("only IPv4"))
-o:value("ipv6", translate("only IPv6"))
+o:value("ipv4", translate("IPv4 only"))
+o:value("ipv6", translate("IPv6 only"))
 
 o = s:option(Value, "src_ip", translate("Source address"),
 	translate("Supports CIDR notation (eg \"192.168.100.0/24\") without quotes"))
