@@ -15,6 +15,8 @@ return baseclass.extend({
 		if (plugin_instance != '')
 			title = "%H: Processor usage on core #%pi";
 
+		var show_idle = uci.get("luci_statistics", "collectd_cpu", "ShowIdle") == "1" ? true : false;
+
 		if (uci.get("luci_statistics", "collectd_cpu", "ReportByState") == "1") {
 			var cpu = {
 				title: title,
@@ -25,7 +27,7 @@ return baseclass.extend({
 				data: {
 					instances: {
 						cpu: [
-							"idle",
+							...(show_idle ? ["idle"] : []),
 							"interrupt",
 							"nice",
 							"softirq",
@@ -81,7 +83,7 @@ return baseclass.extend({
 				data: {
 					instances: {
 						percent: [
-							"idle",
+							...(show_idle ? ["idle"] : []),
 							"interrupt",
 							"nice",
 							"softirq",
