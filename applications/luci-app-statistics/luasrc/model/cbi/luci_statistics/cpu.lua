@@ -17,6 +17,7 @@ reportbycpu = s:option( Flag, "ReportByCpu",
 	translate("Report by CPU"),
 	translate("By setting this, CPU is not aggregate of all processors on the system"))
 reportbycpu.default = 1
+reportbycpu.rmempty = false
 reportbycpu:depends( "enable", 1 )
 
 -- collectd_cpu.reportbystate (ReportByState)
@@ -24,13 +25,15 @@ reportbystate = s:option( Flag, "ReportByState",
 	translate("Report by state"),
 	translate("When set to true, reports per-state metric (system, user, idle)"))
 reportbystate.default = 1
+reportbystate.rmempty = false
 reportbystate:depends( "enable", 1 )
 
 -- collectd_cpu.valuespercentage (ValuesPercentage)
 valuespercentage = s:option( Flag, "ValuesPercentage",
 	translate("Report in percent"),
 	translate("When set to true, we request percentage values"))
-valuespercentage.default = 0
+valuespercentage.default = 1
+valuespercentage.rmempty = false
 valuespercentage:depends({ enable = 1, ReportByCpu = 1, ReportByState = 1 })
 
 return m

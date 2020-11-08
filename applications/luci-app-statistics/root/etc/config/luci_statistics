@@ -62,6 +62,9 @@ config statistics 'collectd_contextswitch'
 
 config statistics 'collectd_cpu'
 	option enable '1'
+	option ReportByCpu '1'
+	option ReportByState '1'
+	option ValuesPercentage '1'
 
 config statistics 'collectd_cpufreq'
 	option enable '0'
