@@ -1,0 +1,25 @@
+{
+	"admin/troubleshooting": {
+		"title": "Troubleshooting",
+		"order": 80,
+		"action": {
+			"type": "firstchild"
+		}
+	},
+	"admin/troubleshooting/packet_capture": {
+		"title": "Packet Capture",
+		"order": 1,
+		"action": {
+			"type": "view",
+			"path": "packet_capture/tcpdump"
+		},
+		"depends" : {
+            "acl": [ "luci-app-packet-capture" ],
+			"uci": { "packet_capture": true },
+			"fs": { "/usr/sbin/packet_capture": "executable",
+					"/usr/sbin/packet_capture_start": "executable",
+					"/usr/sbin/packet_capture_stop": "executable" 
+			}
+        }
+	}
+}

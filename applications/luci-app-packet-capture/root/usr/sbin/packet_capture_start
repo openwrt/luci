@@ -1,0 +1,42 @@
+#!/bin/sh
+
+. /usr/share/libubox/jshn.sh
+
+json_load "$1"
+json_get_var interface interface
+json_get_var filter filter
+json_get_var duration duration
+json_get_var packets packets
+json_get_var verbose verbose
+json_get_var domains domains
+json_get_var file file
+
+args="-n"
+
+if [ "$domains" == "1" ];then
+	args=""
+fi
+
+if  [ -n "$interface" ];then
+	args="$args  -i  $interface"
+fi
+
+if [ -n "$packets" ];then
+	args="$args  -c $packets"
+fi
+
+if [ "$verbose" == "1"  ];then
+	args="$args  -e"
+fi
+
+if [ "$file" == "1" ];then
+	mem=$(awk '/MemTotal/ {print $2}' /proc/meminfo)
+	args="$args -W 2 -C $((mem/(1024 * 10))) -w /tmp/capture.pcap -z /usr/sbin/packet_capture_stop"
+fi
+
+if [ -n "$filter" ];then
+    echo "$filter" >> /tmp/tcpdump_filter
+fi
+
+(/usr/sbin/packet_capture "$args" "$duration")&
+exit 0

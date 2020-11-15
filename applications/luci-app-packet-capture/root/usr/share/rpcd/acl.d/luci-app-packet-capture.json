@@ -1,0 +1,24 @@
+{
+	"luci-app-packet-capture": {
+		"description": "Grant access to tcpdump ubus object",
+		"read": {
+			"cgi-io": [ "download", "exec" ],
+			"ubus": {
+				"tcpdump": [ "*" ],
+				"luci": [ "getProcessList" ]
+			},
+			"uci": [ "packet_capture", "system" ],
+			"file": {
+				"/tmp/capture.pcap": [ "read", "write" ]
+			}
+		},
+		"write": {
+			"uci": [ "packet_capture" ],
+			"file": {
+				"/usr/sbin/packet_capture_start": [ "exec" ],
+				"/usr/sbin/packet_capture_stop": [ "exec" ],
+				"/usr/sbin/packet_capture": [ "exec" ]
+			}
+		}
+	}
+}
