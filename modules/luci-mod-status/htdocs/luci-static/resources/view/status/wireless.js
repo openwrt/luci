@@ -21,8 +21,8 @@ Math.log2 = Math.log2 || function(x) { return Math.log(x) * Math.LOG2E; };
 return view.extend({
 	load: function() {
 		return Promise.all([
-			this.loadSVG(L.resource('wireless.svg')),
-			this.loadSVG(L.resource('wifirate.svg')),
+			this.loadSVG(L.resource('svg/wireless.svg')),
+			this.loadSVG(L.resource('svg/wifirate.svg')),
 			network.getWifiDevices().then(function(radios) {
 				var tasks = [], all_networks = [];
 

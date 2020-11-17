@@ -27,7 +27,7 @@ function rate(n, br) {
 return view.extend({
 	load: function() {
 		return Promise.all([
-			this.loadSVG(L.resource('bandwidth.svg')),
+			this.loadSVG(L.resource('svg/bandwidth.svg')),
 			network.getDevices()
 		]);
 	},
