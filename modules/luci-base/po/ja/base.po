@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-06-10 03:40+0200\n"
-"PO-Revision-Date: 2020-11-14 12:48+0000\n"
+"PO-Revision-Date: 2020-11-17 12:29+0000\n"
 "Last-Translator: RyotaGamer <21ryotagamer@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/openwrt/luci/ja/"
 ">\n"
@@ -317,7 +317,6 @@ msgid "ARP Validation"
 msgstr "ARP検証"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:373
-#, fuzzy
 msgid "ARP mode to consider a slave as being up"
 msgstr "スレーブが稼働していると見なすARPモード"
 
@@ -519,7 +518,7 @@ msgstr "アドレス"
 
 #: protocols/luci-proto-relay/htdocs/luci-static/resources/protocol/relay.js:151
 msgid "Address to access local relay bridge"
-msgstr "ローカルリレーブリッジにアクセスするアドレス"
+msgstr "ローカル リレーブリッジにアクセスするためのアドレス"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:285
 msgid "Addresses"
@@ -633,7 +632,7 @@ msgstr "リモートホストがSSH転送されたローカルのポートに接
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:31
 msgid "Allow root logins with password"
-msgstr "パスワード付きのrootログインを許可"
+msgstr "パスワードでの root ログインを許可"
 
 #: modules/luci-base/root/usr/share/rpcd/acl.d/luci-base.json:3
 msgid "Allow system feature probing"
@@ -641,7 +640,7 @@ msgstr "システム機能の調査を許可"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:31
 msgid "Allow the <em>root</em> user to login with password"
-msgstr "パスワード付きの<em>root</em>権限ログインを許可"
+msgstr "パスワードでの <em>root</em> 権限へのログインを許可します"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:301
 msgid ""
@@ -963,9 +962,8 @@ msgid ""
 "configuration files marked by opkg, essential base files and the user "
 "defined backup patterns."
 msgstr ""
-"以下は、バックアップの際に含まれるファイルのリストです。このリストは、opkgに"
-"よって変更された設定ファイル、重要な基本ファイル、ユーザーが設定したパターン"
-"に一致したファイルの一覧です。"
+"以下は、バックアップの際に含まれるファイルのリストです。このリストは、変更がopkgに認識されている設定ファイル、重要な基本ファイル、ユーザーが設定したパ"
+"ターンに一致したファイルの一覧です。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:395
 msgid ""
@@ -1044,7 +1042,7 @@ msgstr "バッファ済み"
 
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:138
 msgid "CA certificate; if empty it will be saved after the first connection."
-msgstr "CA証明書; 空白の場合、最初の接続後に保存されます。"
+msgstr "CA証明書（空白の場合、最初の接続後に保存されます。）"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/464xlat.js:7
 msgid "CLAT configuration failed"
@@ -1190,42 +1188,36 @@ msgid ""
 "fill out the <em>custom</em> field to define a new zone and attach the "
 "interface to it."
 msgstr ""
-"このインターフェースに割り当てるファイアウォールゾーンを選択してください。"
-"<em>設定しない</em>を選択して設定済みのゾーンを削除します。<em>カスタム</em>"
-"フィールドにゾーン名を入力すると、新しくゾーンを作成し、このインターフェース"
-"に設定します。"
+"このインターフェースに割り当てるファイアウォールゾーンを選択してください。<em>設定しない</em>を選択すると、割り当てられたゾーンを削除します。<e"
+"m>カスタム</em>フィールドにゾーン名を入力すると、新しくゾーンを作成し、このインターフェースを追加します。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:959
 msgid ""
 "Choose the network(s) you want to attach to this wireless interface or fill "
 "out the <em>custom</em> field to define a new network."
 msgstr ""
-"無線インターフェースをアタッチするネットワークを選択してください。または、"
-"<em>作成</em>欄を選択すると新しいネットワークを作成します。"
+"この無線インターフェースを追加するネットワークを選択してください。<em>カスタム</em>フィールドにネットワーク名を入力すると、新しいネットワークを作"
+"成します。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1148
 msgid "Cipher"
-msgstr "暗号化方式"
+msgstr "暗号"
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:91
 msgid "Cisco UDP encapsulation"
-msgstr "Cisco UDP カプセル化"
+msgstr "Cisco UDPカプセル化"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:363
 msgid ""
 "Click \"Generate archive\" to download a tar archive of the current "
 "configuration files."
-msgstr ""
-"\"バックアップアーカイブを生成\" をクリックすると、現在の設定ファイルをtar形"
-"式のアーカイブファイルとしてダウンロードします。"
+msgstr "\"アーカイブを生成\"をクリックすると、現在の設定ファイルをtar形式のアーカイブファイルとしてダウンロードします。"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:396
 msgid ""
 "Click \"Save mtdblock\" to download specified mtdblock file. (NOTE: THIS "
 "FEATURE IS FOR PROFESSIONALS! )"
-msgstr ""
-"指定したmtdblockファイルをダウンロードするには、\"mtdblockを保存\"をクリック"
-"してください。（注意: この機能はプロフェッショナル向けです！）"
+msgstr "\"mtdblockを保存\"をクリックすると、指定したmtdblockファイルをダウンロードします。（注意: この機能はプロ向けです！）"
 
 #: modules/luci-base/htdocs/luci-static/resources/network.js:3683
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:928
@@ -1252,13 +1244,11 @@ msgstr "閉じる"
 msgid ""
 "Close inactive connection after the given amount of seconds, use 0 to "
 "persist connection"
-msgstr ""
-"設定した秒数後に、使用していない接続を閉じます。0を設定した場合、接続を維持し"
-"ます"
+msgstr "設定した秒数後に、非アクティブな接続を閉じます。0を設定した場合、接続を維持します"
 
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/backupfiles.lua:49
 msgid "Close list..."
-msgstr "リストを閉じる"
+msgstr "リストを閉じる..."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:42
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:61
@@ -1276,7 +1266,7 @@ msgstr "コマンド"
 
 #: modules/luci-base/htdocs/luci-static/resources/rpc.js:401
 msgid "Command OK"
-msgstr "コマンド OK"
+msgstr "コマンドOK"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/startup.js:33
 msgid "Command failed"
@@ -1293,17 +1283,16 @@ msgid ""
 "workaround might cause interoperability issues and reduced robustness of key "
 "negotiation especially in environments with heavy traffic load."
 msgstr ""
-"キーのインストールに使用される EAPOL キーフレームの再送信を無効にすることによ"
-"り、クライアント サイドの Key Reinstallation Attacks（KRACK）を困難にします。"
-"この回避策は、相互運用性の問題や、特に高負荷のトラフィック環境下におけるキー "
-"ネゴシエーションの信頼性低下の原因となることがあります。"
+"キーのインストールに使用されるEAPOLキーフレームの再送信を無効化することにより、クライアント側のKey Reinstallation Attacks（"
+"KRACK）を困難にします。これは互換性の問題を発生させたり、主に高負荷のトラフィック環境下におけるキーネゴシエーションの信頼性低下の原因になることがあり"
+"ます。"
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:101
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:106
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:103
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:108
 msgid "Compute outgoing checksum (optional)."
-msgstr ""
+msgstr "送信チェックサムを計算します（オプション）。"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4028
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:426
@@ -1316,12 +1305,12 @@ msgstr "設定が適用されました。"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4128
 msgid "Configuration changes have been rolled back!"
-msgstr "設定はロールバックされました！"
+msgstr "設定がロールバックされました！"
 
 #: modules/luci-compat/luasrc/model/network/proto_ncm.lua:63
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:21
 msgid "Configuration failed"
-msgstr "設定が失敗しました"
+msgstr "設定に失敗しました"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:175
 msgid "Confirm disconnect"
@@ -1334,12 +1323,12 @@ msgstr "確認"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:46
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:51
 msgid "Connected"
-msgstr "接続中"
+msgstr "接続済み"
 
 #: modules/luci-base/htdocs/luci-static/resources/network.js:9
 #: modules/luci-compat/luasrc/model/network.lua:27
 msgid "Connection attempt failed"
-msgstr "接続の試行が失敗しました"
+msgstr "接続の試行に失敗しました"
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:40
 msgid "Connection attempt failed."
@@ -1347,7 +1336,7 @@ msgstr "接続の試行に失敗しました。"
 
 #: modules/luci-base/htdocs/luci-static/resources/rpc.js:411
 msgid "Connection lost"
-msgstr "接続喪失"
+msgstr "接続が失われました"
 
 #: modules/luci-mod-status/root/usr/share/luci/menu.d/luci-mod-status.json:117
 msgid "Connections"
@@ -1355,11 +1344,11 @@ msgstr "接続数"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:377
 msgid "Consider the slave up when all ARP IP targets are reachable (all, 1)"
-msgstr ""
+msgstr "すべてのARP IPターゲットが到達可能な場合に、スレーブと見なす（all、1）"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:376
 msgid "Consider the slave up when any ARP IP target is reachable (any, 0)"
-msgstr ""
+msgstr "任意のARP IPターゲットが到達可能な場合に、スレーブと見なす （any、0）"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/crontab.js:18
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:340
@@ -1379,9 +1368,8 @@ msgid ""
 "changes. You might need to reconnect if you modified network related "
 "settings such as the IP address or wireless security credentials."
 msgstr ""
-"設定の変更を適用後、デバイスへのアクセスを回復できませんでした。もし IP アド"
-"レスや無線のセキュリティ認証情報などのネットワーク関連の設定を変更した場合、"
-"再接続が必要かもしれません。"
+"設定の変更を適用後、デバイスに再接続できませんでした。IPアドレスや無線のセキュリティ認証情報などのネットワーク関連の設定を変更した場合、手動で再接続する"
+"必要があるかもしれません。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:189
 msgid "Country"
@@ -1394,7 +1382,7 @@ msgstr "国コード"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:491
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1952
 msgid "Create / Assign firewall-zone"
-msgstr "ファイアウォールゾーンの作成 / 割り当て"
+msgstr "ファイアウォールゾーンの作成または割り当て"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:798
 msgid "Create interface"
@@ -1411,7 +1399,7 @@ msgstr "重大"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:174
 msgid "Cron Log Level"
-msgstr "Cronのログ出力レベル"
+msgstr "Cronログレベル"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:533
 msgid "Current power"
@@ -1424,31 +1412,29 @@ msgstr "現在の出力"
 #: modules/luci-compat/luasrc/view/cbi/network_ifacelist.htm:82
 #: modules/luci-compat/luasrc/view/cbi/network_ifacelist.htm:83
 msgid "Custom Interface"
-msgstr "新しいインターフェース"
+msgstr "カスタマイズされたインターフェース"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:36
 msgid "Custom delegated IPv6-prefix"
-msgstr ""
+msgstr "カスタムデリゲートされたIPv6プレフィックス"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:382
 msgid ""
 "Custom files (certificates, scripts) may remain on the system. To prevent "
 "this, perform a factory-reset first."
-msgstr ""
-"カスタムファイル（証明書、スクリプト）がシステムに残る可能性があります。これ"
-"を防ぐには、最初に factory-reset を行ってください。"
+msgstr "カスタムファイル（証明書、スクリプト）がシステムに残ることがあります。これを防ぐには、最初に初期化を行ってください。"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/timer.js:6
 msgid "Custom flash interval (kernel: timer)"
-msgstr "カスタムな点滅間隔（kernel: timer）"
+msgstr "任意の点滅間隔（kernel: timer）"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:59
 msgid ""
 "Customizes the behaviour of the device <abbr title=\"Light Emitting Diode"
 "\">LED</abbr>s if possible."
 msgstr ""
-"デバイスの <abbr title=\"Light Emitting Diode\">LED</abbr> の挙動をカスタマイ"
-"ズします。"
+"デバイスの<abbr title=\"Light Emitting Diode\""
+">LED</abbr>の動作をカスタマイズします（デバイスが対応している場合）。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1353
 msgid "DAE-Client"
@@ -1469,13 +1455,13 @@ msgstr "DHCPサーバー"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:155
 #: modules/luci-mod-network/root/usr/share/luci/menu.d/luci-mod-network.json:50
 msgid "DHCP and DNS"
-msgstr "DHCP および DNS"
+msgstr "DHCPおよびDNS"
 
 #: modules/luci-base/htdocs/luci-static/resources/network.js:1982
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:16
 #: modules/luci-compat/luasrc/model/network.lua:969
 msgid "DHCP client"
-msgstr "DHCP クライアント"
+msgstr "DHCPクライアント"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:619
 msgid "DHCP-Options"
@@ -1484,7 +1470,7 @@ msgstr "DHCPオプション"
 #: modules/luci-compat/luasrc/model/network/proto_dhcpv6.lua:7
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:7
 msgid "DHCPv6 client"
-msgstr "DHCPv6 クライアント"
+msgstr "DHCPv6クライアント"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:646
 msgid "DHCPv6-Mode"
@@ -1516,7 +1502,7 @@ msgstr "DNSSEC"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:232
 msgid "DNSSEC check unsigned"
-msgstr "DNSSEC 未署名チェック"
+msgstr "DNSSEC未署名チェック"
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:99
 msgid "DPD Idle Timeout"
@@ -1524,7 +1510,7 @@ msgstr "DPDアイドルタイムアウト"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dslite.js:41
 msgid "DS-Lite AFTR address"
-msgstr "DS-Lite AFTR アドレス"
+msgstr "DS-Lite AFTRアドレス"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:887
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:45
@@ -1533,15 +1519,15 @@ msgstr "DSL"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:14
 msgid "DSL Status"
-msgstr "DSL ステータス"
+msgstr "DSLステータス"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:920
 msgid "DSL line mode"
-msgstr "DSL 回線モード"
+msgstr "DSL回線モード"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1088
 msgid "DTIM Interval"
-msgstr "DTIM インターバル"
+msgstr "DTIM間隔"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:57
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:127
@@ -1561,11 +1547,11 @@ msgstr "デバッグ"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1343
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1358
 msgid "Default %d"
-msgstr "初期設定 %d"
+msgstr "デフォルト %d"
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:107
 msgid "Default Route"
-msgstr "デフォルト ルート"
+msgstr "デフォルトルート"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/464xlat.js:48
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6in4.js:85
@@ -1576,15 +1562,15 @@ msgstr "デフォルト ルート"
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:108
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:150
 msgid "Default gateway"
-msgstr "デフォルト ゲートウェイ"
+msgstr "デフォルトゲートウェイ"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:646
 msgid "Default is stateless + stateful"
-msgstr "デフォルトは ステートレス + ステートフル"
+msgstr "デフォルトはステートレス + ステートフル"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/default-on.js:11
 msgid "Default state"
-msgstr "初期状態"
+msgstr "デフォルト状態"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:619
 msgid ""
@@ -1592,8 +1578,8 @@ msgid ""
 "\"<code>6,192.168.2.1,192.168.2.2</code>\" which advertises different DNS "
 "servers to clients."
 msgstr ""
-"追加のDHCPオプションを設定します（例: \"<code>6,192.168.2.1,192.168.2.2</"
-"code>\" と設定することで、クライアントに指定のDNSサーバーを通知します）。"
+"追加のDHCPオプションを設定します（例: クライアントに指定のDNSサーバーを通知するには、\"<code>6,192.168.2.1,192.168."
+"2.2</code>\"と設定します）。"
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2237
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2662
@@ -1609,19 +1595,19 @@ msgstr "削除"
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:180
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:186
 msgid "Delete key"
-msgstr "公開鍵を削除"
+msgstr "鍵を削除"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2769
 msgid "Delete request failed: %s"
-msgstr "削除リクエスト失敗: %s"
+msgstr "削除の要求に失敗しました: %s"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:847
 msgid "Delete this network"
-msgstr "ネットワークを削除します"
+msgstr "このネットワークを削除"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1088
 msgid "Delivery Traffic Indication Message Interval"
-msgstr "Delivery Traffic Indication Message インターバル"
+msgstr "Delivery Traffic Indication Message（DTIM）間隔"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:340
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:134
@@ -1670,7 +1656,7 @@ msgstr "デバイス設定"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:132
 msgid "Device is not active"
-msgstr "デバイスがアクティブではありません"
+msgstr "デバイスはアクティブではありません"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:224
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:599
@@ -1683,20 +1669,20 @@ msgstr "モデムマネージャーはデバイスを管理していません。
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4163
 msgid "Device unreachable!"
-msgstr "デバイスに到達できません！"
+msgstr "デバイスにアクセスできません！"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/reboot.js:53
 msgid "Device unreachable! Still waiting for device..."
-msgstr "デバイスに接続できません！まだデバイスを待っています..."
+msgstr "デバイスにアクセスできません！まだデバイスを待っています..."
 
 #: modules/luci-mod-network/root/usr/share/luci/menu.d/luci-mod-network.json:88
 msgid "Diagnostics"
-msgstr "診断機能"
+msgstr "診断"
 
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:101
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:93
 msgid "Dial number"
-msgstr "番号をダイヤル"
+msgstr "ダイヤル番号"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2665
 msgid "Directory"
@@ -1712,25 +1698,25 @@ msgid ""
 "Disable <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr> for "
 "this interface."
 msgstr ""
-"このインターフェースでは<abbr title=\"Dynamic Host Configuration Protocol"
-"\">DHCP</abbr>を使用しない。"
+"このインターフェースでの<abbr title=\"Dynamic Host Configuration Protocol\""
+">DHCP</abbr>を無効にする。"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:174
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:373
 msgid "Disable DNS lookups"
-msgstr "DNS 逆引きを無効化"
+msgstr "DNS逆引きを無効化"
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:93
 msgid "Disable Encryption"
-msgstr "暗号化を無効にする"
+msgstr "暗号化を無効化"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1098
 msgid "Disable Inactivity Polling"
-msgstr "非アクティブ状態ポーリングを無効化"
+msgstr "非アクティブ状態のポーリングを無効化"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:837
 msgid "Disable this network"
-msgstr "このネットワークを無効にします"
+msgstr "このネットワークを無効化"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1608
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:13
@@ -1871,7 +1857,7 @@ msgstr "ダウン遅延"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:366
 msgid "Download backup"
-msgstr "バックアップアーカイブのダウンロード"
+msgstr "バックアップをダウンロード"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:404
 msgid "Download mtdblock"
@@ -2523,11 +2509,11 @@ msgstr "ローカルで PMK を生成"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:368
 msgid "Generate archive"
-msgstr "バックアップアーカイブを生成"
+msgstr "アーカイブを生成"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js:79
 msgid "Given password confirmation did not match, password not changed!"
-msgstr "入力したパスワードが一致しません。パスワードは変更されません！"
+msgstr "入力された確認用パスワードが一致していません。パスワードは変更されませんでした！"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:146
 msgid "Global Settings"
@@ -3747,7 +3733,7 @@ msgstr "無効な MAP ルールです"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/wireless.js:322
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/wireless.js:323
 msgid "MBit/s"
-msgstr "メガビット/秒"
+msgstr "Mbps"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:218
 msgid "MD5"
@@ -3841,7 +3827,7 @@ msgstr "最大送信出力"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/wireless.js:328
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/wireless.js:329
 msgid "Mbit/s"
-msgstr "メガビット/秒"
+msgstr "Mbps"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js:35
 msgid "Medium"
