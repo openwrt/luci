@@ -135,7 +135,8 @@ return view.extend({
 				dest,
 				(v6 ? flags.from : flags.via) || '-',
 				String(flags.metric || 0),
-				flags.table || 'main'
+				flags.table || 'main',
+				flags.proto,
 			]);
 		}
 
@@ -163,7 +164,8 @@ return view.extend({
 				E('div', { 'class': 'th' }, [ _('Target') ]),
 				E('div', { 'class': 'th' }, [ _('IPv4-Gateway') ]),
 				E('div', { 'class': 'th' }, [ _('Metric') ]),
-				E('div', { 'class': 'th' }, [ _('Table') ])
+				E('div', { 'class': 'th' }, [ _('Table') ]),
+				E('div', { 'class': 'th' }, [ _('Protocol') ]),
 			])
 		]);
 
@@ -181,7 +183,8 @@ return view.extend({
 				E('div', { 'class': 'th' }, [ _('Target') ]),
 				E('div', { 'class': 'th' }, [ _('Source') ]),
 				E('div', { 'class': 'th' }, [ _('Metric') ]),
-				E('div', { 'class': 'th' }, [ _('Table') ])
+				E('div', { 'class': 'th' }, [ _('Table') ]),
+				E('div', { 'class': 'th' }, [ _('Protocol') ]),
 			])
 		]);
 
