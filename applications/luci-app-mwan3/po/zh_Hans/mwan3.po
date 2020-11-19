@@ -3,8 +3,8 @@
 #
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2020-11-17 12:29+0000\n"
-"Last-Translator: SunSpring <yearnsun@gmail.com>\n"
+"PO-Revision-Date: 2020-11-18 13:28+0000\n"
+"Last-Translator: Chen Minqiang <ptpt52@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "openwrt/luciapplicationsmwan3/zh_Hans/>\n"
 "Language: zh_Hans\n"
@@ -111,7 +111,7 @@ msgstr "检查 IP 规则"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interfaceconfig.lua:104
 msgid "Check link quality"
-msgstr "检查连接数量"
+msgstr "检查连接质量"
 
 #: applications/luci-app-mwan3/luasrc/view/mwan/status_diagnostics.htm:78
 msgid "Check routing table"
@@ -232,7 +232,7 @@ msgstr "全局"
 
 #: applications/luci-app-mwan3/root/usr/share/rpcd/acl.d/luci-app-mwan3.json:3
 msgid "Grant UCI access for luci-app-mwan3"
-msgstr ""
+msgstr "给 luci-app-mwan3 授权 UCI 访问"
 
 #: applications/luci-app-mwan3/luasrc/view/mwan/status_diagnostics.htm:80
 msgid "Hotplug ifdown"
@@ -830,6 +830,9 @@ msgid ""
 ">Interfaces may not share the same name as configured members, policies or "
 "rules"
 msgstr ""
+"mwan3 要求所有在/etc/config/network中的接口(interface)设置独立的metric参数<br />接口名字要和/etc/"
+"config/network的一致<br />名字可以包含字符A-Z，a-z，0-9，_ ，但不能有空格<br "
+"/>接口名字也不能和配置的成员，策略，或者规则相同"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/policy.lua:88
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/policyconfig.lua:28
