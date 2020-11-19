@@ -14,12 +14,12 @@
 			"path": "packet_capture/tcpdump"
 		},
 		"depends" : {
-            "acl": [ "luci-app-packet-capture" ],
+			"acl": [ "luci-app-packet-capture" ],
 			"uci": { "packet_capture": true },
-			"fs": { "/usr/sbin/packet_capture": "executable",
-					"/usr/sbin/packet_capture_start": "executable",
-					"/usr/sbin/packet_capture_stop": "executable" 
+			"fs": { 
+				"/usr/libexec/rpcd/luci.tcpdump": "executable",
+				"/usr/libexec/luci_tcpdump_stop": "executable"
 			}
-        }
+		}
 	}
 }

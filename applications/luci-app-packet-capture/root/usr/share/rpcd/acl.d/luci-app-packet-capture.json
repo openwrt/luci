@@ -4,20 +4,19 @@
 		"read": {
 			"cgi-io": [ "download", "exec" ],
 			"ubus": {
-				"tcpdump": [ "*" ],
-				"luci": [ "getProcessList" ]
+				"luci.tcpdump": [ "*" ],
+				"luci.tcpdump.notify": [ "*" ]
 			},
 			"uci": [ "packet_capture", "system" ],
 			"file": {
-				"/tmp/capture.pcap": [ "read", "write" ]
+				"/tmp/capture.pcap": [ "read" ]
 			}
 		},
 		"write": {
 			"uci": [ "packet_capture" ],
 			"file": {
-				"/usr/sbin/packet_capture_start": [ "exec" ],
-				"/usr/sbin/packet_capture_stop": [ "exec" ],
-				"/usr/sbin/packet_capture": [ "exec" ]
+				"/usr/libexec/luci_tcpdump_stop": [ "exec" ],
+				"/tmp/capture.pcap": [ "write" ]
 			}
 		}
 	}

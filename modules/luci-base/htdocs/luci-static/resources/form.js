@@ -4023,7 +4023,8 @@ var CBIButtonValue = CBIValue.extend(/** @lends LuCI.form.ButtonValue.prototype 
 						ev.currentTarget.parentNode.nextElementSibling.value = value;
 						return this.map.save();
 					}, section_id),
-					'disabled': ((this.readonly != null) ? this.readonly : this.map.readonly) || null
+					'disabled': ((this.readonly != null) ? this.readonly : this.map.readonly) || null,
+					'data-action': (this.data_action != null ? this.data_action : null)
 				}, [ btn_title ])
 			]);
 		else

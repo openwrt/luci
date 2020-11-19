@@ -11,45 +11,25 @@ var eventSource,
 	captureFilePoll,
 	hostName;
 
-function stopTcpdump() {
-	fs.exec("/usr/sbin/packet_capture_stop").then(function(replay) {
-		if(eventSource) { 
-			eventSource.close();
-		}
-	}.bind(this)).catch(function(error) {
-		console.log(error);
-	});
-}
-
-window.onbeforeunload = stopTcpdump;
-
-var callLuciProcessList = rpc.declare({
-	object: 'luci',
-	method: 'getProcessList',
-	expect: { result: [] }
+var callTcpdumpStart = rpc.declare({
+	object: 'luci.tcpdump',
+	method: 'tcpdumpStart',
+	params:  [ "domains",  "interface", "packets", "duration", "verbose", "file", "filter" ],
+	expect: { '': {} }
 });
 
-var callInitAction = rpc.declare({
-	object: 'luci',
-	method: 'setInitAction',
-	params: [ 'name', 'action' ],
-	expect: { result: false }
+var callTcpdumpStop =  rpc.declare({
+	object: 'luci.tcpdump',
+	method: 'tcpdumpStop',
+	expect: { '': {} }
 });
 
-function findButton(title) {
-	var buttons = document.querySelectorAll('button');
-	for (var i=0; i < buttons.length; i++) {
-		if (buttons[i].firstChild.nodeValue == title) {
-			return buttons[i];
-		}
-	}
-}
+window.addEventListener('beforeunload', callTcpdumpStop);
 
 function addOutput() {
 	var tcpdumpOut = document.querySelectorAll('[id$="tcpdump_out"]')[0];
-	if(tcpdumpOut) {
+	if (tcpdumpOut)
 		return;
-	}
 
 	var frameEl = E('div', {'class': 'cbi-value'});
 
@@ -64,9 +44,8 @@ function addOutput() {
 	frameEl.firstElementChild.style.fontFamily = 'monospace';
 
 	var downloadBtn = document.querySelectorAll('[id$="download_file"]')[0];
-	if(downloadBtn) {
+	if (downloadBtn)
 		downloadBtn.parentNode.insertBefore(frameEl, downloadBtn.nextSibling);
-	}
 }
 
 var downloadCaptureFile = function(ev) {
@@ -76,8 +55,9 @@ var downloadCaptureFile = function(ev) {
 		enctype: 'application/x-www-form-urlencoded'
 	}, E('input', { type: 'hidden', name: 'sessionid', value: rpc.getSessionID()},
 	   E('input', { type: 'hidden', name: 'path', value: "/tmp/capture.pcap"},
-	   E('input', { type: 'hidden', name: 'filename', value: hostName + "-" + Date.now() + ".pcap"}
-	))));
+	   E('input', { type: 'hidden', name: 'filename', value: hostName + "-" + Date.now() + ".pcap"},
+	   E('input', { type: 'hidden', name: 'mimetype', value: 'application/vnd.tcpdump.pcap'}
+	)))));
 
 	ev.currentTarget.parentNode.appendChild(form);
 	form.submit();
@@ -85,60 +65,54 @@ var downloadCaptureFile = function(ev) {
 }
 
 function subscribeTcpdump() {
-	eventSource = new EventSource('/ubus/subscribe/tcpdump' + '?' + rpc.getSessionID());
+	if (eventSource)
+		eventSource.close();
+
+	eventSource = new EventSource('/ubus/subscribe/luci.tcpdump.notify' + '?' + rpc.getSessionID());
 	eventSource.onerror = function(event) {
 		eventSource.close();
-		console.log(event);	
-	};
+	}
 
 	addOutput();
 	var textOut = document.querySelectorAll('[id$="tcpdump_out"]')[0];
 	textOut.value = "";
-	eventSource.addEventListener("tcpdump.data", function(event) {
+	eventSource.addEventListener("luci.tcpdump.notify.data", function(event) {
 		textOut.value = textOut.value + "\n" + JSON.parse(event.data).data;
 	});
 }
 
 function updateButtons() {
 	var tasks = [];
-	tasks.push(callLuciProcessList().then(L.bind(function(list) {
-		for (var i = 0; i < list.length; i++) {
-			if(list[i].COMMAND.includes("/usr/sbin/packet_capture")) {
-				var downloadBtn = document.querySelectorAll('[id$="download_file"]')[0];
-				if(!downloadBtn) {
-					return;
-				}
-				if(!eventSource || eventSource.readyState == 2) {
-					subscribeTcpdump();
-				}
-				var textOut = document.querySelectorAll('[id$="tcpdump_out"]')[0];
-				if(textOut) {
-					textOut.style.borderColor = "green";
-				}
-				var startBtn = document.querySelectorAll('[id$="start_tcpdump"]')[0];
-				if(startBtn) {
-					startBtn.hidden = true;
-				}
-				var stopBtn = document.querySelectorAll('[id$="stop_tcpdump"]')[0];
-				if(stopBtn) {
-					stopBtn.hidden = false;
-				}
-				return;
-			}
-		}
+	tasks.push(fs.stat("/var/run/luci-tcpdump.pid").then(L.bind(function(res) {
+		var downloadBtn = document.querySelectorAll('[id$="download_file"]')[0];
+		if (!downloadBtn)
+			return;
+		if (!eventSource || eventSource.readyState == 2)
+			subscribeTcpdump();
 		var textOut = document.querySelectorAll('[id$="tcpdump_out"]')[0];
-		if(textOut) {
-			textOut.style.borderColor = "red";
-		}
+		if (textOut)
+			textOut.style.borderColor = "green";
 		var startBtn = document.querySelectorAll('[id$="start_tcpdump"]')[0];
-		if(startBtn) {
-			startBtn.hidden = false;
-		}
+		if (startBtn)
+			startBtn.hidden = true;
 		var stopBtn = document.querySelectorAll('[id$="stop_tcpdump"]')[0];
-		if(stopBtn) {
+		if (stopBtn)
+			stopBtn.hidden = false;
+		return;
+	})).catch(function(error) {
+		var textOut = document.querySelectorAll('[id$="tcpdump_out"]')[0];
+		if (textOut)
+			textOut.style.borderColor = "red";
+		var startBtn = document.querySelectorAll('[id$="start_tcpdump"]')[0];
+		if (startBtn)
+			startBtn.hidden = false;
+		var stopBtn = document.querySelectorAll('[id$="stop_tcpdump"]')[0];
+		if (stopBtn)
 			stopBtn.hidden = true;
-		}
-	})));
+		if (eventSource)
+			eventSource.close();
+	}));
+
 	return  Promise.all(tasks);
 }
 
@@ -151,12 +125,11 @@ function updatePollCheckCaptureFileExists() {
 function checkCaptureFileExists() {
 	var tasks = [];
 	tasks.push(fs.stat("/tmp/capture.pcap").then(L.bind(function(res) {
-		var downloadBtn = findButton("Download");
-		if(!downloadBtn) {
+		var downloadBtn = document.querySelector('[data-action="download"]');
+		if (!downloadBtn)
 			return;
-		}
-		var downloadCheckBox = document.querySelectorAll('[id$="file"]')[0].checked;
-		if(!downloadCheckBox) {
+		var downloadCheckBox = document.querySelectorAll('[data-widget-id$="file"]')[0].checked;
+		if (!downloadCheckBox) {
 			fs.remove("/tmp/capture.pcap").then(function(replay) {
 				downloadBtn.disabled = true;;
 			}.bind(this)).catch(function(error) {
@@ -166,10 +139,9 @@ function checkCaptureFileExists() {
 			downloadBtn.disabled = false;
 		}
 	})).catch(function(error) {
-		var downloadBtn = findButton("Download");
-		if(downloadBtn) {
+		var downloadBtn = document.querySelector('[data-action="download"]');
+		if (downloadBtn)
 			downloadBtn.disabled = true;
-		}
 	}));
 
 	return  Promise.all(tasks);
@@ -225,40 +197,41 @@ return L.view.extend({
 		o = s.option(form.Button, 'start_tcpdump', _('Start tcpdump'), _(''));
 		o.inputstyle = 'apply';
 		o.onclick = ui.createHandlerFn(this, function(section_id, ev) {
-			var downloadBtn = findButton("Download");
-			if(!downloadBtn) {
+			var downloadBtn = document.querySelector('[data-action="download"]');
+			if (!downloadBtn)
 				return;
-			}
 			fs.remove("/tmp/capture.pcap").then(function(replay) {
 				downloadBtn.disabled = true;;
 			}.bind(this)).catch(function(error) {
 				console.log(error);
 			});
 
-			var iface = document.querySelectorAll('[id$="interface"]')[1].value,
-			    filter = document.querySelectorAll('[id$="filter"]')[2].value,
-				packets = document.querySelectorAll('[id$="packets"]')[2].value,
-				duration = document.querySelectorAll('[id$="duration"]')[2].value,
-				verbose = document.querySelectorAll('[id$="verbose"]')[0].checked,
-				domains = document.querySelectorAll('[id$="domains"]')[0].checked,
-				file = document.querySelectorAll('[id$="file"]')[0].checked;
+			var iface = document.querySelectorAll('[id$="interface"]')[1].value ? document.querySelectorAll('[id$="interface"]')[1].value : null,
+			    filter = document.querySelectorAll('[id$="filter"]')[2].value ? document.querySelectorAll('[id$="filter"]')[2].value : null,
+				packets = document.querySelectorAll('[id$="packets"]')[2].value ? document.querySelectorAll('[id$="packets"]')[2].value : null,
+				duration = document.querySelectorAll('[id$="duration"]')[2].value ? document.querySelectorAll('[id$="duration"]')[2].value : null,
+				verbose = document.querySelectorAll('[data-widget-id$="verbose"]')[0].checked ? true : false,
+				domains = document.querySelectorAll('[data-widget-id$="domains"]')[0].checked ? true : false,
+				file = document.querySelectorAll('[data-widget-id$="file"]')[0].checked ? true : false
 
-			var args = {
-				"interface": iface,
-				"filter": filter,
-				"packets": packets,
-				"duration": duration,
-				"verbose": verbose,
-				"domains": domains,
-				"file": file
-			}
-		
-			return fs.exec_direct('/usr/sbin/packet_capture_start', [JSON.stringify(args)]).then(function(replay) {
+			return callTcpdumpStart(domains, iface, packets, duration, verbose, file, filter).then(function(replay) {
+					if (replay.error){
+					ui.showModal(_(replay.substring(error_position + 6, replay.length)), [
+						E('div', { 'class': 'right' }, [
+							E('button', {
+								'class': 'cbi-button cbi-button-negative important',
+								'click': function(ev) {
+									ui.hideModal();
+								}
+							}, _('Close')),
+						])
+					]);
+					return;
+				}
 				rpc.list.apply(rpc).then(function(res) {
 					for (var k in res) {
-						if(res[k] == "tcpdump" ){
+						if (res[k] == "luci.tcpdump.notify" )
 							subscribeTcpdump()
-						}
 					}
 				}.bind(this));
 			}.bind(this)).catch(function(error) {
@@ -269,10 +242,9 @@ return L.view.extend({
 		o = s.option(form.Button, 'stop_tcpdump', _('Stop tcpdump'), _(''));
 		o.inputstyle = 'apply';
 		o.onclick =  ui.createHandlerFn(this, function(section_id, ev) {
-			if(!eventSource) {
+			if (!eventSource)
 				return;
-			};
-			return fs.exec("/usr/sbin/packet_capture_stop").then(function(replay) {
+			return callTcpdumpStop().then(function(replay) {
 				eventSource.close();
 			}.bind(this)).catch(function(error) {
 				console.log(error);
@@ -282,6 +254,7 @@ return L.view.extend({
 		o = s.option(form.Button, 'download_file', _('Download capture file'));
 		o.inputstyle = 'action important';
 		o.inputtitle = _('Download');
+		o.data_action = 'download'
 		o.onclick = this.handleDownload;
 
 		L.Poll.add(L.bind(updateButtons, m),1);
