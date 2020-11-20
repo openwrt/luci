@@ -186,9 +186,11 @@ return view.extend({
 				}
 
 			return Promise.all(tasks).then(function(zone_networks) {
-				if (zone_networks[0])
+				if (zone_networks[0]) {
+					zone_networks[0].clearNetworks();
 					for (var i = 1; i < zone_networks.length; i++)
 						zone_networks[0].addNetwork(zone_networks[i].getName());
+				}
 			});
 		};
 
