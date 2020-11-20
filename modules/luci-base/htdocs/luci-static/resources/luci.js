@@ -1954,7 +1954,9 @@
 
 					DOM.content(vp, nodes);
 					DOM.append(vp, this.addFooter());
-				}, this)).catch(LuCI.prototype.error);
+				}, this))
+				.then(LuCI.prototype.bind(this.afterRender, this))
+				.catch(LuCI.prototype.error);
 		},
 
 		/**
@@ -2010,6 +2012,31 @@
 		 * to a `Node` value.
 		 */
 		render: function() {},
+
+		/**
+		 * The afterRender function is invoked after the
+		 * {@link LuCI.dom#append dom.append()} function and can be
+		 * used to manipulate the DOM immediately after it has been
+		 * appended and written to the webpage.
+		 *
+		 * The invocation of this function is wrapped by
+		 * `Promise.resolve()` so it may return Promises if needed.
+		 *
+		 * The return value of the function (or the resolved values
+		 * of the promise returned by it) will be ignored.
+		 *
+		 * This function is supposed to be overwritten by subclasses,
+		 * the default implementation does nothing.
+		 *
+		 * @instance
+		 * @abstract
+		 * @memberof LuCI.view
+		 * @param {null}
+		 *
+		 * @returns {Node|Promise<Node>}
+		 * May return any value or a Promise resolving to any value.
+		 */
+		afterRender: function() {},
 
 		/**
 		 * The handleSave function is invoked when the user clicks
