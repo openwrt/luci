@@ -169,11 +169,11 @@ return view.extend({
 
 		s.taboption('advanced', form.Flag, 'use_stun', _('Use STUN'))
 
-		o = s.taboption('advanced', form.Value, 'stun_host  ', _('STUN Host'))
+		o = s.taboption('advanced', form.Value, 'stun_host', _('STUN Host'))
 		o.depends('use_stun', '1');
 		o.datatype    = 'host'
 
-		o = s.taboption('advanced', form.Value, 'stun_port ', _('STUN Port'))
+		o = s.taboption('advanced', form.Value, 'stun_port', _('STUN Port'))
 		o.depends('use_stun', '1');
 		o.datatype    = 'port'
 		o.placeholder = '0-65535'
