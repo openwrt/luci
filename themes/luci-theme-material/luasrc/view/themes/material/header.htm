@@ -190,7 +190,7 @@
 		<div class="container">
 			<span class="showSide"></span>
 			<a id="logo" href="<% if luci.dispatcher.context.authsession then %><%=url('admin/status/overview')%><% else %>#<% end %>"><img src="<%=media%>/brand.png" alt="OpenWrt"></a>
-			<a class="brand" href="#"><%=boardinfo.hostname or "?"%></a>
+			<a class="brand" href="/#"><%=boardinfo.hostname or "?"%></a>
 			<div class="status" id="indicators">
 				<span id="xhr_poll_status" style="display:none" onclick="XHR.running() ? XHR.halt() : XHR.run()">
 					<span class="label success" id="xhr_poll_status_on"><span class="mobile-hide"><%:Auto Refresh%></span> <%:on%></span>

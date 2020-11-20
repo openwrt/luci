@@ -258,7 +258,7 @@
 	<div class="main">
 		<div class="main-left">
 			<div class="nav-container">
-				<a class="brand" href="#">
+				<a class="brand" href="/#">
 					<%=boardinfo.hostname or "?"%></a>
 				<div class="navbar-container" id="navBox">
 					<% render_topmenu() %>
@@ -270,7 +270,7 @@
 				<div class="logoImg">
                                         <img class="mobile-hide" src="<%=media%>/logo.png" alt="Rosy">
                                         <img src="<%=media%>/mobile-loginBG.png" class="PC-hide">
-                                	<a class="brand" href="#"><%=boardinfo.hostname or "?"%></a>
+                                	<a class="brand" href="/#"><%=boardinfo.hostname or "?"%></a>
                                 </div>
 				<div class="container">
 					<%- if luci.sys.process.info("uid") == 0 and luci.sys.user.getuser("root") and not luci.sys.user.getpasswd("root") then -%>
