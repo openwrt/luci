@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LuCI: mwan3\n"
 "POT-Creation-Date: 2017-09-14 16:00+0300\n"
-"PO-Revision-Date: 2020-07-27 08:09+0000\n"
-"Last-Translator: Anton Kikin <a.a.kikin@gmail.com>\n"
+"PO-Revision-Date: 2020-11-21 18:02+0000\n"
+"Last-Translator: sergio <sergio+it@outerface.net>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsmwan3/ru/>\n"
 "Language: ru\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.2-dev\n"
+"X-Generator: Weblate 4.4-dev\n"
 "Project-Info: Это технический перевод, не дословный. Главное-удобный русский "
 "интерфейс, все проверялось в графическом режиме, совместим с другими apps\n"
 
@@ -269,11 +269,11 @@ msgstr "IPv4"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/ruleconfig.lua:23
 msgid "IPv4 and IPv6"
-msgstr ""
+msgstr "IPv4 и IPv6"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/ruleconfig.lua:24
 msgid "IPv4 only"
-msgstr ""
+msgstr "Только IPv4"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interfaceconfig.lua:35
 msgid "IPv6"
@@ -281,7 +281,7 @@ msgstr "IPv6"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/ruleconfig.lua:25
 msgid "IPv6 only"
-msgstr ""
+msgstr "Только IPv6"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/globalsconfig.lua:32
 msgid "Info"
@@ -872,6 +872,7 @@ msgid "ifup (netifd)"
 msgstr "подключено (ifup, netifd)"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interface.lua:143
+#, fuzzy
 msgid ""
 "mwan3 requires that all interfaces have a unique metric configured in /etc/"
 "config/network<br />Names must match the interface name found in /etc/config/"
@@ -879,6 +880,11 @@ msgid ""
 ">Interfaces may not share the same name as configured members, policies or "
 "rules"
 msgstr ""
+"mwan3 требует, чтобы все интерфейсы имели уникальную метрику, настроенную в /"
+"etc/config/network<br />Имена должны соответствовать имени интерфейса, "
+"указанному в /etc/config/network<br />Имена могут содержать символы A-Z, a-"
+"z, 0-9, _ без пробелов<br />Интерфейсы не могут иметь одинакового имени с "
+"настроенными участниками, политиками или правилами"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/policy.lua:88
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/policyconfig.lua:28
