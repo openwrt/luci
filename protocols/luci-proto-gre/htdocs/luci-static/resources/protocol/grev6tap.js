@@ -100,7 +100,7 @@ return network.registerProtocol('grev6tap', {
 		o.optional = true;
 		o.datatype = 'integer';
 
-		o = s.taboption('advanced', form.Value, 'okey', _("Outgoing key"), _("Key for outgoing packets (optinal)."));
+		o = s.taboption('advanced', form.Value, 'okey', _("Outgoing key"), _("Key for outgoing packets (optional)."));
 		o.optional = true;
 		o.datatype = 'integer';
 
