@@ -475,7 +475,7 @@ select[readonly], textarea[readonly] {
 }
 
 .cbi-optionals, .cbi-section-create {
-  padding: 0 0 10px 10px
+  padding: 10px;
 }
 
 .cbi-section-create {
@@ -926,6 +926,7 @@ footer {
   left: 0;
   right: 0;
   bottom: 0;
+  z-index: 999;
   text-align: center;
   font-size: 85%;
   border-top: 1px solid #ddd;
@@ -1602,6 +1603,7 @@ table table td, .cbi-value-field table td {
 .cbi-value-description, .cbi-tblsection .cbi-section-descr, form .cbi-tab-descr {
   margin: .25em 0 0;
   padding: 2px 0 2px 1.7em;
+  min-height: 18px;
   font-weight: 400;
   line-height: 1.1;
   background: url("data:image/svg+xml,%3Csvg viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m59.06 32a27.06 27.06 0 1 1 -54.12 0 27.06 27.06 0 1 1 54.12 0z' fill='%23fff' stroke='%2359f' stroke-linejoin='round' stroke-width='7.91'/%3E%3Cpath d='m27.93 37.18v-1.58q0-2.05.87-3.56.88-1.5 3.2-3.2 2.24-1.6 2.94-2.6.72-1 .72-2.24 0-1.38-1.02-2.1-1.02-.72-2.86-.72-3.2 0-7.3 2.1l-2.32-4.67q4.75-2.66 10.08-2.66 4.4 0 6.97 2.1 2.6 2.1 2.6 5.62 0 2.34-1.07 4.04-1.07 1.7-4.04 3.83-2.05 1.5-2.6 2.3-.53.8-.53 2.07v1.28zm-.68 7.3q0-1.8.96-2.7.96-.92 2.8-.92 1.77 0 2.73.94.98.94.98 2.68 0 1.68-.98 2.66-.98.96-2.73.96-1.8 0-2.77-.94-.98-.96-.98-2.68z' fill='%2359f'/%3E%3C/svg%3E") left center no-repeat;
@@ -2330,8 +2332,25 @@ label {
 
 .tr, .tr .td, #cbi-fstab-global .cbi-value, .cbi-section-create,
 #cbi-network-switch_vlan .table .tr:nth-child(2) .th.cbi-section-table-cell, div[id^="status_"],
-.cbi-value {
+.cbi-value, .cbi-page-actions, .cbi-optionals {
   background: linear-gradient(to bottom, #f6f6f6, #eaeaea) !important;
+}
+
+.cbi-page-actions {
+  margin-top: -1px;
+  border: 1px solid #ddd;
+  box-shadow: inset 0 0 0 1px #fff, inset 0 0 1px 1px rgba(96,96,255,.6);
+}
+
+.cbi-optionals {
+  border: 1px solid #ddd;
+  box-shadow: inset 0 0 0 1px #fff;
+}
+
+.cbi-page-actions::after {
+  content: "";
+  display: inline-block;
+  width: 20px;
 }
 
 div[data-tab="leases"] .cbi-value {
