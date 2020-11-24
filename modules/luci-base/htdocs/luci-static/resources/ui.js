@@ -3597,9 +3597,11 @@ var UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 				this.setActiveTabId(panes[selected], selected);
 			}
 
-			panes[selected].dispatchEvent(new CustomEvent('cbi-tab-active', {
-				detail: { tab: panes[selected].getAttribute('data-tab') }
-			}));
+			requestAnimationFrame(L.bind(function(pane) {
+				pane.dispatchEvent(new CustomEvent('cbi-tab-active', {
+					detail: { tab: pane.getAttribute('data-tab') }
+				}));
+			}, this, panes[selected]));
 
 			this.updateTabs(group);
 		},
