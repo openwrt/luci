@@ -93,6 +93,12 @@ return network.registerProtocol('openconnect', {
 		    certLoadPromise = null,
 		    o;
 
+		o = s.taboption('general', form.ListValue, 'vpn_protocol', _('VPN Protocol'));
+		o.value('anyconnect', 'Cisco AnyConnect SSL VPN');
+		o.value('nc', 'Juniper Network Connect');
+		o.value('gp', 'GlobalProtect SSL VPN');
+		o.value('pulse', 'Pulse Connect Secure SSL VPN');
+
 		o = s.taboption('general', form.Value, 'server', _('VPN Server'));
 		o.datatype = 'host(0)';
 
