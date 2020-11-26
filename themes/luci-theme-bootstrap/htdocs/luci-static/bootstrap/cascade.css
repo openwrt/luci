@@ -200,7 +200,7 @@ ol {
 
 li {
   line-height: 18px;
-  color: #ddd
+/*  color: #ddd*/
 }
 
 ul.unstyled {
@@ -1156,6 +1156,10 @@ body.modal-overlay-active #modal_overlay {
   background: url("data:image/svg+xml,%3Csvg viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m5.29 17.93 26.71 28.14 26.71-28.14' fill='none' stroke='%23888' stroke-linecap='round' stroke-linejoin='round' stroke-width='10'/%3E%3C/svg%3E") center center no-repeat;
 }
 
+.cbi-dropdown.cbi-button-action>.more::after {
+  background: url("data:image/svg+xml,%3Csvg viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m5.29 17.93 26.71 28.14 26.71-28.14' fill='none' stroke='%230069d6' stroke-linecap='round' stroke-linejoin='round' stroke-width='10'/%3E%3C/svg%3E") center center no-repeat;
+}
+
 .cbi-dropdown.btn>.open, .cbi-dropdown.cbi-button>.open {
   margin-left: .5em;
   padding: 0 10px;
@@ -1651,7 +1655,7 @@ form .cbi-tab-descr {
   border-radius: 2px;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, .2), 0 1px 2px rgba(0, 0, 0, .05);
   background-color: #fff;
-  min-width: 100px;
+  min-width: 120px;
   background: linear-gradient(#fff, #fff 25%, #f9f9f9);
 }
 
@@ -2300,11 +2304,23 @@ div.td.left:first-child, label.cbi-value-title {
 }
 
 div[style="width:100%;height:300px;border:1px solid #000;background:#fff"] {
-  margin-bottom: 6px;
-  width: calc(100% - 6px) !important;
+  margin: 0 0 -3px 6px;
+  width: calc(100% - 12px) !important;
   border: 1px solid #888 !important;
   box-shadow: 0 0 0 1px #999, 0 0 0 2px #fff, 0 0 0 5px #ddd, 0 0 0 6px #888;
   background: linear-gradient(to bottom, #fff, #f2f2f2) !important;
+}
+
+div[style="width:100%;height:300px;border:1px solid #000;background:#fff"] + .right {
+  margin: -20px 12px 10px 0;
+  width: 300px;
+  float: right;
+  border: none !important;
+  background: none !important;
+}
+
+div[style="width:100%;height:300px;border:1px solid #000;background:#fff"] + .right + br {
+  display: none;
 }
 
 label {
@@ -2316,7 +2332,7 @@ label {
   border-right: 1px solid #ddd !important;
 }
 
-.tr .th, .tr.table-titles, .tr.cbi-section-table-titles, h3, #cbi-uhttpd-cert legend {
+.tr .th, .tr.table-titles, .tr.cbi-section-table-titles, h3, #cbi-uhttpd-cert legend, h4, #cbi-network-globals legend {
   background: linear-gradient(to bottom, #f6f6f6 50%, #eaeaea 50%);
 }
 
@@ -2332,14 +2348,19 @@ label {
 
 .tr, .tr .td, #cbi-fstab-global .cbi-value, .cbi-section-create,
 #cbi-network-switch_vlan .table .tr:nth-child(2) .th.cbi-section-table-cell, div[id^="status_"],
-.cbi-value, .cbi-page-actions, .cbi-optionals {
+.cbi-value, .cbi-page-actions, .cbi-optionals, div[style="width:100%;table-layout:fixed"] + .right {
   background: linear-gradient(to bottom, #f6f6f6, #eaeaea) !important;
 }
 
-.cbi-page-actions {
+.cbi-page-actions, div[style="width:100%;table-layout:fixed"] + .right {
   margin-top: -1px;
   border: 1px solid #ddd;
   box-shadow: inset 0 0 0 1px #fff, inset 0 0 1px 1px rgba(96,96,255,.6);
+}
+
+div[style="width:100%;table-layout:fixed"] + .right {
+  margin-top: -41px;
+  padding: 20px;
 }
 
 .cbi-optionals {
@@ -2363,7 +2384,7 @@ div[data-tab="leases"] .cbi-value {
 }
 
 .cbi-value {
-  margin: 0 0 -1px;
+  margin: 0 0 -1px !important;
   padding: 10px 12px;
   border: 1px solid #ddd;
 }
@@ -2391,7 +2412,7 @@ div[id^="value_"]::before {
   border: 1px solid #ddd;
 }
 
-.table {
+.table:not(.lases):not(.leases6) {
   margin-bottom: 40px !important;
 }
 
@@ -2400,12 +2421,20 @@ div[id^="value_"]::before {
   color: #555;
 }
 
-h3, #cbi-uhttpd-cert legend {
+h3, h4, #cbi-uhttpd-cert legend, #cbi-network-globals legend {
   padding: 0 8px;
   margin: 14px 0 -1px;
   display: inline-block;
   border: 1px solid #ddd;
   border-radius: 3px 3px 0 0;
+}
+
+.modal h4 {
+  margin: -13px 0 10px !important;
+  padding: 4px 8px;
+  font-size: 115%;
+  border-top: none;
+  border-radius: 0 0 4px 4px;
 }
 
 #cbi-banip-source h3 {
@@ -2453,6 +2482,14 @@ div[data-tab="leases"] .cbi-section-create {
   border-radius: 0 0 3px 3px;
 }
 
+.cbi-section.fade-in + .cbi-section.fade-in {
+  margin-top: -35px;
+}
+
+.table + h3 {
+  margin-top: 0;
+}
+
 footer::after {
   content: " | Bootstrap theme mods by dr|z3d";
   display: inline;
@@ -2474,6 +2511,14 @@ div[id^="cbi-banip"].tr {
 
 #cbi-uhttpd-uhttpd h3 {
   display: none;
+}
+
+#cbi-network-globals-ula_prefix {
+  margin-top: 35px;
+}
+
+#cbi-network + .cbi-page-actions.control-group {
+  margin-top: 40px;
 }
 
 @supports (background-blend-mode: luminosity) { /* exclude ms browsers */
