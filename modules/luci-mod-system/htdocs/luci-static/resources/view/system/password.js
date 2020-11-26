@@ -25,6 +25,7 @@ return view.extend({
 		    strongRegex = new RegExp("^(?=.{8,})(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*\\W).*$", "g"),
 		    mediumRegex = new RegExp("^(?=.{7,})(((?=.*[A-Z])(?=.*[a-z]))|((?=.*[A-Z])(?=.*[0-9]))|((?=.*[a-z])(?=.*[0-9]))).*$", "g"),
 		    enoughRegex = new RegExp("(?=.{6,}).*", "g");
+		var validCharRange = /^[A-Za-z\d !"#$%&'()+,-./:;<=>?@\[\\*\]\^_`{|}~]{1,}$/;
 
 		if (strength && value.length) {
 			if (false == enoughRegex.test(value))
@@ -35,6 +36,11 @@ return view.extend({
 				strength.innerHTML = '%s: <span style="color:orange">%s</span>'.format(_('Password strength'), _('Medium'));
 			else
 				strength.innerHTML = '%s: <span style="color:red">%s</span>'.format(_('Password strength'), _('Weak'));
+
+			if (validCharRange.exec(value) == null) {
+				strength.innerHTML = '%s: <span style="color:red">%s</span>'.format(_('Password'), _('Invalid'));
+				return false;
+			}
 		}
 
 		return true;
