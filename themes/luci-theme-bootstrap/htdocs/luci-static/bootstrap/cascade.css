@@ -2412,10 +2412,6 @@ div[id^="value_"]::before {
   border: 1px solid #ddd;
 }
 
-.table:not(.lases):not(.leases6) {
-  margin-bottom: 40px !important;
-}
-
 .zone-src + span {
   font-size: 170%;
   color: #555;
@@ -2519,6 +2515,14 @@ div[id^="cbi-banip"].tr {
 
 #cbi-network + .cbi-page-actions.control-group {
   margin-top: 40px;
+}
+
+body:not(.Firewall) .table:not(.lases):not(.leases6) {
+  margin-bottom: 40px !important;
+}
+
+.Firewall .table {
+  margin-bottom: 0 !important;
 }
 
 @supports (background-blend-mode: luminosity) { /* exclude ms browsers */
