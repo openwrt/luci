@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2020-11-07 18:12+0000\n"
-"Last-Translator: Michal L <michalrmsmi@wp.pl>\n"
+"PO-Revision-Date: 2020-11-27 20:38+0000\n"
+"Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsfwknopd/pl/>\n"
 "Language: pl\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.3.2\n"
+"X-Generator: Weblate 4.4-dev\n"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:599
 msgid ""
@@ -200,7 +200,7 @@ msgstr "Konfiguracja sieci"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:315
 msgid "No stanza found."
-msgstr ""
+msgstr "Nie znaleziono stanzy."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:440
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:457
@@ -215,6 +215,9 @@ msgid ""
 "and generates QR codes for all found stanzas. Handles only files in /etc/"
 "fwknop folder due to access rights restrictions."
 msgstr ""
+"Parsuje plik /etc/fwknop/access.conf (i dołączone pliki /folders/keys) oraz "
+"generuje kody QR dla wszystkich znalezionych stanc. Obsługuje tylko pliki w "
+"folderze /etc/fwknop ze względu na ograniczenia w prawach dostępu."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:422
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:506
@@ -245,6 +248,11 @@ msgid ""
 "“192.168.10.0/24”), and individual IP addresses can be specified as well. "
 "Multiple entries are comma-separated."
 msgstr ""
+"Adres docelowy, dla którego pakiet SPA zostanie zaakceptowany. Ciąg \"ANY\" "
+"jest również akceptowany, jeśli prawidłowy pakiet SPA powinien być "
+"honorowany dla dowolnego docelowego adresu IP. Sieci powinny być określone w "
+"notacji CIDR (np. \"192.168.10.0/24\"), a także można określić poszczególne "
+"adresy IP. Wiele wpisów jest oddzielonych przecinkami."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:494
 msgid ""
@@ -263,6 +271,11 @@ msgid ""
 "“192.168.10.0/24”), and individual IP addresses can be specified as well. "
 "Multiple entries are comma-separated."
 msgstr ""
+"Adres źródłowy, z którego będzie przyjmowany pakiet SPA. Ciąg znaków \"ANY\" "
+"jest również akceptowany, jeśli ważny pakiet SPA powinien być honorowany z "
+"dowolnego źródłowego adresu IP. Sieci powinny być określone w notacji CIDR ("
+"np. \"192.168.10.0/24\"), można również określić poszczególne adresy IP. "
+"Wielokrotne wpisy są oddzielone przecinkami."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:514
 msgid "The source address has to be specified."

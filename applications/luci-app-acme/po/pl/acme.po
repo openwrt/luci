@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2020-11-07 18:12+0000\n"
-"Last-Translator: Michal L <michalrmsmi@wp.pl>\n"
+"PO-Revision-Date: 2020-11-27 20:38+0000\n"
+"Last-Translator: Marcin Net <marcin.net@linux.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsacme/pl/>\n"
 "Language: pl\n"
@@ -9,7 +9,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.3.2\n"
+"X-Generator: Weblate 4.4-dev\n"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:17
 msgid "ACME certificates"
@@ -45,15 +45,15 @@ msgstr "Alias wyzwania"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:47
 msgid "Challenge Validation"
-msgstr ""
+msgstr "Weryfikacja wyzwań"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:135
 msgid "Custom ACME CA"
-msgstr ""
+msgstr "Niestandardowy ACME CA"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:140
 msgid "Custom ACME server directory URL."
-msgstr ""
+msgstr "Niestandardowy adres URL katalogu serwera ACME."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:97
 msgid "DNS"
@@ -147,7 +147,7 @@ msgstr "RSA 4096 bitów"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:95
 msgid "Standalone"
-msgstr ""
+msgstr "Autonomiczny"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:92
 msgid ""
@@ -156,6 +156,10 @@ msgid ""
 "certificate. DNS mode will allow you to use the DNS API of your DNS provider "
 "to issue a certificate."
 msgstr ""
+"W trybie autonomicznym do wystawienia certyfikatu zostanie użyty wbudowany "
+"webserwerver acme.sh. Tryb Webroot wykorzysta istniejący webserwerver do "
+"wystawienia certyfikatu. Tryb DNS pozwala na użycie DNS API dostawcy DNS do "
+"wystawienia certyfikatu."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:29
 msgid "State directory"
@@ -232,10 +236,10 @@ msgid ""
 "for one certificate). Nginx must support ssl, if not it won't start as it "
 "needs to be compiled with ssl support to use cert options"
 msgstr ""
-"Zaktualizuj konfigurację nginx przy użyciu tego certyfikatu (wybierz to "
-"tylko dla jednego certyfikatu). Nginx musi obsługiwać ssl, jeśli nie, nie "
-"uruchomi się, ponieważ należy go skompilować z obsługą ssl, aby użyć opcji "
-"certyfikatu"
+"Zaktualizuj konfigurację nginx za pomocą tego certyfikatu po jego wydaniu ("
+"wybierz to tylko dla jednego certyfikatu). Nginx musi obsługiwać ssl, jeśli "
+"nie, to nie uruchomi się, ponieważ musi być skompilowany z obsługą ssl, aby "
+"użyć opcji cert"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:76
 msgid ""
@@ -249,7 +253,7 @@ msgstr ""
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:135
 msgid "Use a custom CA instead of Let's Encrypt."
-msgstr ""
+msgstr "Użyj niestandardowego CA zamiast Let's Encrypt."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:83
 msgid "Use for nginx"
@@ -269,7 +273,7 @@ msgstr "Metoda walidacji"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:96
 msgid "Webroot"
-msgstr ""
+msgstr "Webroot"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:100
 msgid "Webroot directory"
