@@ -12,7 +12,7 @@ function handleAction(ev) {
 			E('p', _('Add this (sub-)domain to your local blacklist.')),
 			E('div', { 'class': 'left', 'style': 'display:flex; flex-direction:column' }, [
 				E('label', { 'class': 'cbi-input-text', 'style': 'padding-top:.5em' }, [
-					E('input', { 'class': 'cbi-input-text', 'style': 'width:300px', 'id': 'blacklist', 'value': ev.target.getAttribute('value') }, [])
+					E('input', { 'class': 'cbi-input-text', 'style': 'width:300px', 'spellcheck': 'false', 'id': 'blacklist', 'value': ev.target.getAttribute('value') }, [])
 				])
 			]),
 			E('div', { 'class': 'right' }, [
@@ -47,7 +47,7 @@ function handleAction(ev) {
 			E('p', _('Add this (sub-)domain to your local whitelist.')),
 			E('div', { 'class': 'left', 'style': 'display:flex; flex-direction:column' }, [
 				E('label', { 'class': 'cbi-input-text', 'style': 'padding-top:.5em' }, [
-					E('input', { 'class': 'cbi-input-text', 'style': 'width:300px', 'id': 'whitelist', 'value': ev.target.getAttribute('value') }, [])
+					E('input', { 'class': 'cbi-input-text', 'style': 'width:300px', 'spellcheck': 'false', 'id': 'whitelist', 'value': ev.target.getAttribute('value') }, [])
 				])
 			]),
 			E('div', { 'class': 'right' }, [
@@ -86,6 +86,7 @@ function handleAction(ev) {
 						'class': 'cbi-input-text',
 						'placeholder': 'google.com',
 						'style': 'width:300px',
+						'spellcheck': 'false',
 						'id': 'search'
 					})
 				])
@@ -227,13 +228,13 @@ return view.extend({
 				b_cnt = content.data.top_domains[i].count;
 			}
 			if (content.data.top_domains[i]) {
-				b_addr = content.data.top_domains[i].address;
+				b_addr = '<a href="https://duckduckgo.com/?q=' + encodeURIComponent(content.data.top_domains[i].address) + '&k1=-1&km=l&kh=1" target="_blank" title="Search this domain">' + content.data.top_domains[i].address + '</a>';
 			}
 			if (content.data.top_blocked[i]) {
 				c_cnt = content.data.top_blocked[i].count;
 			}
 			if (content.data.top_blocked[i]) {
-				c_addr = content.data.top_blocked[i].address;
+				c_addr = '<a href="https://duckduckgo.com/?q=' + encodeURIComponent(content.data.top_blocked[i].address) + '&k1=-1&km=l&kh=1" target="_blank" title="Search this domain">' + content.data.top_blocked[i].address + '</a>';
 			}
 			rows_top.push([
 				a_cnt,
@@ -284,7 +285,7 @@ return view.extend({
 					content.data.requests[i].date,
 					content.data.requests[i].time,
 					content.data.requests[i].client,
-					content.data.requests[i].domain,
+					'<a href="https://duckduckgo.com/?q=' + encodeURIComponent(content.data.requests[i].domain) + '&k1=-1&km=l&kh=1" target="_blank" title="Search this domain">' + content.data.requests[i].domain + '</a>',
 					content.data.requests[i].rc,
 					button
 				]);
@@ -297,16 +298,16 @@ return view.extend({
 				E('p', _('This shows the last generated DNS Report, press the refresh button to get a current one.')),
 				E('p', '\xa0'),
 				E('div', { 'class': 'cbi-value', 'style': 'margin-bottom:5px' }, [
-				E('label', { 'class': 'cbi-value-title', 'style': 'padding-top:0rem' }, _('Start Date')),
+				E('label', { 'class': 'cbi-value-title', 'style': 'padding-top:0rem' }, _('Start Timestamp')),
 				E('div', { 'class': 'cbi-value-field', 'id': 'start', 'style': 'margin-bottom:5px;margin-left:200px;color:#37c' }, (content.data.start_date || '-') + ', ' + (content.data.start_time || '-'))]),
 				E('div', { 'class': 'cbi-value', 'style': 'margin-bottom:5px' }, [
-				E('label', { 'class': 'cbi-value-title', 'style': 'padding-top:0rem' }, _('End Date')),
+				E('label', { 'class': 'cbi-value-title', 'style': 'padding-top:0rem' }, _('End Timestamp')),
 				E('div', { 'class': 'cbi-value-field', 'id': 'end', 'style': 'margin-bottom:5px;margin-left:200px;color:#37c' }, (content.data.end_date || '-') + ', ' + (content.data.end_time || '-'))]),
 				E('div', { 'class': 'cbi-value', 'style': 'margin-bottom:5px' }, [
-				E('label', { 'class': 'cbi-value-title', 'style': 'padding-top:0rem' }, _('DNS Requests (total)')),
+				E('label', { 'class': 'cbi-value-title', 'style': 'padding-top:0rem' }, _('Total DNS Requests')),
 				E('div', { 'class': 'cbi-value-field', 'id': 'total', 'style': 'margin-bottom:5px;margin-left:200px;color:#37c' }, content.data.total || '-')]),
 				E('div', { 'class': 'cbi-value', 'style': 'margin-bottom:5px' }, [
-				E('label', { 'class': 'cbi-value-title', 'style': 'padding-top:0rem' }, _('DNS Requests (blocked)')),
+				E('label', { 'class': 'cbi-value-title', 'style': 'padding-top:0rem' }, _('Blocked DNS Requests')),
 				E('div', { 'class': 'cbi-value-field', 'id': 'blocked', 'style': 'margin-bottom:5px;margin-left:200px;color:#37c' }, (content.data.blocked || '-') + ' (' + (content.data.percent || '-') + ')')]),
 				E('div', { 'class': 'right' }, [
 					E('button', {
