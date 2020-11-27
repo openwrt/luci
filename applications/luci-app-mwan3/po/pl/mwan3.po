@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2020-05-24 17:41+0000\n"
+"PO-Revision-Date: 2020-11-27 20:38+0000\n"
 "Last-Translator: Marcin Net <marcin.net@linux.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsmwan3/pl/>\n"
@@ -9,7 +9,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.1-dev\n"
+"X-Generator: Weblate 4.4-dev\n"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interfaceconfig.lua:176
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interfaceconfig.lua:192
@@ -216,11 +216,11 @@ msgstr "Interwał awarii"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interfaceconfig.lua:108
 msgid "Failure latency [ms]"
-msgstr ""
+msgstr "Opóźnienie błędu [ms]"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interfaceconfig.lua:120
 msgid "Failure packet loss [%]"
-msgstr ""
+msgstr "Błąd utraty pakietów [%]"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/globalsconfig.lua:24
 msgid "Firewall loglevel"
@@ -271,11 +271,11 @@ msgstr "IPv4"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/ruleconfig.lua:23
 msgid "IPv4 and IPv6"
-msgstr ""
+msgstr "IPv4 i IPv6"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/ruleconfig.lua:24
 msgid "IPv4 only"
-msgstr ""
+msgstr "Tylko IPv4"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interfaceconfig.lua:35
 msgid "IPv6"
@@ -283,7 +283,7 @@ msgstr "IPv6"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/ruleconfig.lua:25
 msgid "IPv6 only"
-msgstr ""
+msgstr "Tylko IPv6"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/globalsconfig.lua:32
 msgid "Info"
@@ -591,11 +591,11 @@ msgstr "Interwał odzyskiwania"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interfaceconfig.lua:129
 msgid "Recovery latency [ms]"
-msgstr ""
+msgstr "Opóźnienie odzyskiwania [ms]"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interfaceconfig.lua:141
 msgid "Recovery packet loss [%]"
-msgstr ""
+msgstr "Utrata pakietów odzyskiwania [%]"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/globalsconfig.lua:40
 msgid "Routing table %d"
@@ -863,6 +863,11 @@ msgid ""
 ">Interfaces may not share the same name as configured members, policies or "
 "rules"
 msgstr ""
+"mwan3 wymaga, aby wszystkie interfejsy miały unikalną metrykę skonfigurowaną "
+"w /etc/config/network<br />Nazwy muszą być zgodne z nazwą interfejsu "
+"znalezionego w /etc/config/network<br />Nazwy mogą zawierać znaki A-Z, a-z, "
+"0-9, _ i żadnych spacji<br />Interfejsy nie mogą mieć takiej samej nazwy jak "
+"skonfigurowane elementy członkowskie, zasady lub reguły"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/policy.lua:88
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/policyconfig.lua:28
