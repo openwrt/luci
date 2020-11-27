@@ -31,15 +31,15 @@ CBILeaseStatus = form.DummyValue.extend({
 	renderWidget: function(section_id, option_id, cfgvalue) {
 		return E([
 			E('h4', _('Active DHCP Leases')),
-			E('div', { 'id': 'lease_status_table', 'class': 'table' }, [
-				E('div', { 'class': 'tr table-titles' }, [
-					E('div', { 'class': 'th' }, _('Hostname')),
-					E('div', { 'class': 'th' }, _('IPv4-Address')),
-					E('div', { 'class': 'th' }, _('MAC-Address')),
-					E('div', { 'class': 'th' }, _('Lease time remaining'))
+			E('table', { 'id': 'lease_status_table', 'class': 'table' }, [
+				E('tr', { 'class': 'tr table-titles' }, [
+					E('th', { 'class': 'th' }, _('Hostname')),
+					E('th', { 'class': 'th' }, _('IPv4-Address')),
+					E('th', { 'class': 'th' }, _('MAC-Address')),
+					E('th', { 'class': 'th' }, _('Lease time remaining'))
 				]),
-				E('div', { 'class': 'tr placeholder' }, [
-					E('div', { 'class': 'td' }, E('em', _('Collecting data...')))
+				E('tr', { 'class': 'tr placeholder' }, [
+					E('td', { 'class': 'td' }, E('em', _('Collecting data...')))
 				])
 			])
 		]);
@@ -50,15 +50,15 @@ CBILease6Status = form.DummyValue.extend({
 	renderWidget: function(section_id, option_id, cfgvalue) {
 		return E([
 			E('h4', _('Active DHCPv6 Leases')),
-			E('div', { 'id': 'lease6_status_table', 'class': 'table' }, [
-				E('div', { 'class': 'tr table-titles' }, [
-					E('div', { 'class': 'th' }, _('Host')),
-					E('div', { 'class': 'th' }, _('IPv6-Address')),
-					E('div', { 'class': 'th' }, _('DUID')),
-					E('div', { 'class': 'th' }, _('Lease time remaining'))
+			E('table', { 'id': 'lease6_status_table', 'class': 'table' }, [
+				E('tr', { 'class': 'tr table-titles' }, [
+					E('th', { 'class': 'th' }, _('Host')),
+					E('th', { 'class': 'th' }, _('IPv6-Address')),
+					E('th', { 'class': 'th' }, _('DUID')),
+					E('th', { 'class': 'th' }, _('Lease time remaining'))
 				]),
-				E('div', { 'class': 'tr placeholder' }, [
-					E('div', { 'class': 'td' }, E('em', _('Collecting data...')))
+				E('tr', { 'class': 'tr placeholder' }, [
+					E('td', { 'class': 'td' }, E('em', _('Collecting data...')))
 				])
 			])
 		]);

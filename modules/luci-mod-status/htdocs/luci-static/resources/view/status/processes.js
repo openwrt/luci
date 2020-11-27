@@ -64,14 +64,14 @@ return view.extend({
 			E('h2', _('Processes')),
 			E('div', { 'class': 'cbi-map-descr' }, _('This list gives an overview over currently running system processes and their status.')),
 
-			E('div', { 'class': 'table' }, [
-				E('div', { 'class': 'tr table-titles' }, [
-					E('div', { 'class': 'th' }, _('PID')),
-					E('div', { 'class': 'th' }, _('Owner')),
-					E('div', { 'class': 'th' }, _('Command')),
-					E('div', { 'class': 'th' }, _('CPU usage (%)')),
-					E('div', { 'class': 'th' }, _('Memory usage (%)')),
-					E('div', { 'class': 'th center nowrap cbi-section-actions' })
+			E('table', { 'class': 'table' }, [
+				E('tr', { 'class': 'tr table-titles' }, [
+					E('th', { 'class': 'th' }, _('PID')),
+					E('th', { 'class': 'th' }, _('Owner')),
+					E('th', { 'class': 'th' }, _('Command')),
+					E('th', { 'class': 'th' }, _('CPU usage (%)')),
+					E('th', { 'class': 'th' }, _('Memory usage (%)')),
+					E('th', { 'class': 'th center nowrap cbi-section-actions' })
 				])
 			])
 		]);

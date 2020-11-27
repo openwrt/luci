@@ -649,7 +649,7 @@ return view.extend({
 
 			if (bss.network.isClientDisconnectSupported()) {
 				if (table.firstElementChild.childNodes.length < 6)
-					table.firstElementChild.appendChild(E('div', { 'class': 'th cbi-section-actions'}));
+					table.firstElementChild.appendChild(E('th', { 'class': 'th cbi-section-actions'}));
 
 				row.push(E('button', {
 					'class': 'cbi-button cbi-button-remove',
@@ -850,7 +850,7 @@ return view.extend({
 				];
 			}
 
-			return E('div', { 'class': 'td middle cbi-section-actions' }, E('div', btns));
+			return E('td', { 'class': 'td middle cbi-section-actions' }, E('div', btns));
 		};
 
 		s.addModalOptions = function(s) {
@@ -1656,15 +1656,15 @@ return view.extend({
 		};
 
 		s.handleScan = function(radioDev, ev) {
-			var table = E('div', { 'class': 'table' }, [
-				E('div', { 'class': 'tr table-titles' }, [
-					E('div', { 'class': 'th col-2 middle center' }, _('Signal')),
-					E('div', { 'class': 'th col-4 middle left' }, _('SSID')),
-					E('div', { 'class': 'th col-2 middle center hide-xs' }, _('Channel')),
-					E('div', { 'class': 'th col-2 middle left hide-xs' }, _('Mode')),
-					E('div', { 'class': 'th col-3 middle left hide-xs' }, _('BSSID')),
-					E('div', { 'class': 'th col-3 middle left' }, _('Encryption')),
-					E('div', { 'class': 'th cbi-section-actions right' }, ' '),
+			var table = E('table', { 'class': 'table' }, [
+				E('tr', { 'class': 'tr table-titles' }, [
+					E('th', { 'class': 'th col-2 middle center' }, _('Signal')),
+					E('th', { 'class': 'th col-4 middle left' }, _('SSID')),
+					E('th', { 'class': 'th col-2 middle center hide-xs' }, _('Channel')),
+					E('th', { 'class': 'th col-2 middle left hide-xs' }, _('Mode')),
+					E('th', { 'class': 'th col-3 middle left hide-xs' }, _('BSSID')),
+					E('th', { 'class': 'th col-3 middle left' }, _('Encryption')),
+					E('th', { 'class': 'th cbi-section-actions right' }, ' '),
 				])
 			]);
 
@@ -2073,13 +2073,13 @@ return view.extend({
 					.then(L.bind(this.poll_status, this, nodes));
 			}, this), 5);
 
-			var table = E('div', { 'class': 'table assoclist', 'id': 'wifi_assoclist_table' }, [
-				E('div', { 'class': 'tr table-titles' }, [
-					E('div', { 'class': 'th nowrap' }, _('Network')),
-					E('div', { 'class': 'th hide-xs' }, _('MAC-Address')),
-					E('div', { 'class': 'th' }, _('Host')),
-					E('div', { 'class': 'th' }, _('Signal / Noise')),
-					E('div', { 'class': 'th' }, _('RX Rate / TX Rate'))
+			var table = E('table', { 'class': 'table assoclist', 'id': 'wifi_assoclist_table' }, [
+				E('tr', { 'class': 'tr table-titles' }, [
+					E('th', { 'class': 'th nowrap' }, _('Network')),
+					E('th', { 'class': 'th hide-xs' }, _('MAC-Address')),
+					E('th', { 'class': 'th' }, _('Host')),
+					E('th', { 'class': 'th' }, _('Signal / Noise')),
+					E('th', { 'class': 'th' }, _('RX Rate / TX Rate'))
 				])
 			]);
 

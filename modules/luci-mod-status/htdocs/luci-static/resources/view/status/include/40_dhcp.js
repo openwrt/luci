@@ -81,13 +81,13 @@ return baseclass.extend({
 			}
 		};
 
-		var table = E('div', { 'class': 'table lases' }, [
-			E('div', { 'class': 'tr table-titles' }, [
-				E('div', { 'class': 'th' }, _('Hostname')),
-				E('div', { 'class': 'th' }, _('IPv4-Address')),
-				E('div', { 'class': 'th' }, _('MAC-Address')),
-				E('div', { 'class': 'th' }, _('Lease time remaining')),
-				E('div', { 'class': 'th cbi-section-actions' }, _('Static Lease'))
+		var table = E('table', { 'class': 'table lases' }, [
+			E('tr', { 'class': 'tr table-titles' }, [
+				E('th', { 'class': 'th' }, _('Hostname')),
+				E('th', { 'class': 'th' }, _('IPv4-Address')),
+				E('th', { 'class': 'th' }, _('MAC-Address')),
+				E('th', { 'class': 'th' }, _('Lease time remaining')),
+				E('th', { 'class': 'th cbi-section-actions' }, _('Static Lease'))
 			])
 		]);
 
@@ -120,13 +120,13 @@ return baseclass.extend({
 			return rows;
 		}, this)), E('em', _('There are no active leases')));
 
-		var table6 = E('div', { 'class': 'table leases6' }, [
-			E('div', { 'class': 'tr table-titles' }, [
-				E('div', { 'class': 'th' }, _('Host')),
-				E('div', { 'class': 'th' }, _('IPv6-Address')),
-				E('div', { 'class': 'th' }, _('DUID')),
-				E('div', { 'class': 'th' }, _('Lease time remaining')),
-				E('div', { 'class': 'th cbi-section-actions' }, _('Static Lease'))
+		var table6 = E('table', { 'class': 'table leases6' }, [
+			E('tr', { 'class': 'tr table-titles' }, [
+				E('th', { 'class': 'th' }, _('Host')),
+				E('th', { 'class': 'th' }, _('IPv6-Address')),
+				E('th', { 'class': 'th' }, _('DUID')),
+				E('th', { 'class': 'th' }, _('Lease time remaining')),
+				E('th', { 'class': 'th cbi-section-actions' }, _('Static Lease'))
 			])
 		]);
 

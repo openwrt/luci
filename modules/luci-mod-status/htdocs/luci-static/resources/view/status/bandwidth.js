@@ -260,26 +260,26 @@ return view.extend({
 				E('div', { 'class': 'right' }, E('small', { 'id': 'scale' }, '-')),
 				E('br'),
 
-				E('div', { 'class': 'table', 'style': 'width:100%;table-layout:fixed' }, [
-					E('div', { 'class': 'tr' }, [
-						E('div', { 'class': 'td right top' }, E('strong', { 'style': 'border-bottom:2px solid blue' }, [ _('Inbound:') ])),
-						E('div', { 'class': 'td', 'id': 'rx_bw_cur' }, rate(0, true)),
+				E('table', { 'class': 'table', 'style': 'width:100%;table-layout:fixed' }, [
+					E('tr', { 'class': 'tr' }, [
+						E('td', { 'class': 'td right top' }, E('strong', { 'style': 'border-bottom:2px solid blue' }, [ _('Inbound:') ])),
+						E('td', { 'class': 'td', 'id': 'rx_bw_cur' }, rate(0, true)),
 
-						E('div', { 'class': 'td right top' }, E('strong', {}, [ _('Average:') ])),
-						E('div', { 'class': 'td', 'id': 'rx_bw_avg' }, rate(0, true)),
+						E('td', { 'class': 'td right top' }, E('strong', {}, [ _('Average:') ])),
+						E('td', { 'class': 'td', 'id': 'rx_bw_avg' }, rate(0, true)),
 
-						E('div', { 'class': 'td right top' }, E('strong', {}, [ _('Peak:') ])),
-						E('div', { 'class': 'td', 'id': 'rx_bw_peak' }, rate(0, true))
+						E('td', { 'class': 'td right top' }, E('strong', {}, [ _('Peak:') ])),
+						E('td', { 'class': 'td', 'id': 'rx_bw_peak' }, rate(0, true))
 					]),
-					E('div', { 'class': 'tr' }, [
-						E('div', { 'class': 'td right top' }, E('strong', { 'style': 'border-bottom:2px solid green' }, [ _('Outbound:') ])),
-						E('div', { 'class': 'td', 'id': 'tx_bw_cur' }, rate(0, true)),
+					E('tr', { 'class': 'tr' }, [
+						E('td', { 'class': 'td right top' }, E('strong', { 'style': 'border-bottom:2px solid green' }, [ _('Outbound:') ])),
+						E('td', { 'class': 'td', 'id': 'tx_bw_cur' }, rate(0, true)),
 
-						E('div', { 'class': 'td right top' }, E('strong', {}, [ _('Average:') ])),
-						E('div', { 'class': 'td', 'id': 'tx_bw_avg' }, rate(0, true)),
+						E('td', { 'class': 'td right top' }, E('strong', {}, [ _('Average:') ])),
+						E('td', { 'class': 'td', 'id': 'tx_bw_avg' }, rate(0, true)),
 
-						E('div', { 'class': 'td right top' }, E('strong', {}, [ _('Peak:') ])),
-						E('div', { 'class': 'td', 'id': 'tx_bw_peak' }, rate(0, true))
+						E('td', { 'class': 'td right top' }, E('strong', {}, [ _('Peak:') ])),
+						E('td', { 'class': 'td', 'id': 'tx_bw_peak' }, rate(0, true))
 					])
 				])
 			]));

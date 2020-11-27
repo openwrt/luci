@@ -73,16 +73,16 @@ var cbiACLSelect = form.Value.extend({
 		var readMatches = globListToRegExp(section_id, 'read'),
 		    writeMatches = globListToRegExp(section_id, 'write');
 
-		var table = E('div', { 'class': 'table' }, [
-			E('div', { 'class': 'tr' }, [
-				E('div', { 'class': 'th' }, [ _('ACL group') ]),
-				E('div', { 'class': 'th' }, [ _('Description') ]),
-				E('div', { 'class': 'th' }, [ _('Access level') ])
+		var table = E('table', { 'class': 'table' }, [
+			E('tr', { 'class': 'tr' }, [
+				E('th', { 'class': 'th' }, [ _('ACL group') ]),
+				E('th', { 'class': 'th' }, [ _('Description') ]),
+				E('th', { 'class': 'th' }, [ _('Access level') ])
 			]),
-			E('div', { 'class': 'tr' }, [
-				E('div', { 'class': 'td' }, [ '' ]),
-				E('div', { 'class': 'td' }, [ '' ]),
-				E('div', { 'class': 'td' }, [
+			E('tr', { 'class': 'tr' }, [
+				E('td', { 'class': 'td' }, [ '' ]),
+				E('td', { 'class': 'td' }, [ '' ]),
+				E('td', { 'class': 'td' }, [
 					_('Set all: ', 'Set all permissions in the table below to one of the given values'),
 					E('a', { 'href': '#', 'click': function() {
 						table.querySelectorAll('select').forEach(function(select) { select.value = select.options[0].value });
@@ -102,10 +102,10 @@ var cbiACLSelect = form.Value.extend({
 			    isReadable = (readMatches[0].test(aclGroupName) && !readMatches[1].test(aclGroupName)) || null,
 			    isWritable = (writeMatches[0].test(aclGroupName) && !writeMatches[1].test(aclGroupName)) || null;
 
-			table.appendChild(E('div', { 'class': 'tr' }, [
-				E('div', { 'class': 'td' }, [ aclGroupName ]),
-				E('div', { 'class': 'td' }, [ aclList[aclGroupName].description || '-' ]),
-				E('div', { 'class': 'td' }, [
+			table.appendChild(E('tr', { 'class': 'tr' }, [
+				E('td', { 'class': 'td' }, [ aclGroupName ]),
+				E('td', { 'class': 'td' }, [ aclList[aclGroupName].description || '-' ]),
+				E('td', { 'class': 'td' }, [
 					E('select', { 'data-acl-group': aclGroupName }, [
 						isRequired ? E([]) : E('option', { 'value': '' }, [ _('denied', 'No permissions granted') ]),
 						E('option', { 'value': 'read', 'selected': isReadable }, [ _('readonly', 'Only read permissions granted') ]),

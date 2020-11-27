@@ -223,13 +223,13 @@ return baseclass.extend({
 		if (!table.lastElementChild)
 			return null;
 
-		var assoclist = E('div', { 'class': 'table assoclist' }, [
-			E('div', { 'class': 'tr table-titles' }, [
-				E('div', { 'class': 'th nowrap' }, _('Network')),
-				E('div', { 'class': 'th hide-xs' }, _('MAC-Address')),
-				E('div', { 'class': 'th' }, _('Host')),
-				E('div', { 'class': 'th' }, '%s / %s'.format(_('Signal'), _('Noise'))),
-				E('div', { 'class': 'th' }, '%s / %s'.format(_('RX Rate'), _('TX Rate')))
+		var assoclist = E('table', { 'class': 'table assoclist' }, [
+			E('tr', { 'class': 'tr table-titles' }, [
+				E('th', { 'class': 'th nowrap' }, _('Network')),
+				E('th', { 'class': 'th hide-xs' }, _('MAC-Address')),
+				E('th', { 'class': 'th' }, _('Host')),
+				E('th', { 'class': 'th' }, '%s / %s'.format(_('Signal'), _('Noise'))),
+				E('th', { 'class': 'th' }, '%s / %s'.format(_('RX Rate'), _('TX Rate')))
 			])
 		]);
 
@@ -324,7 +324,7 @@ return baseclass.extend({
 
 				if (networks[i].isClientDisconnectSupported() && hasWritePermission) {
 					if (assoclist.firstElementChild.childNodes.length < 6)
-						assoclist.firstElementChild.appendChild(E('div', { 'class': 'th cbi-section-actions' }));
+						assoclist.firstElementChild.appendChild(E('th', { 'class': 'th cbi-section-actions' }));
 
 					if (macfilter != null && macfilter != 'disable' && !this.isDeviceAdded[bss.mac]) {
 						row.push(new L.ui.ComboButton('button', {

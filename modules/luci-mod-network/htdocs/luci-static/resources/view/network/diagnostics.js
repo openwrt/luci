@@ -66,9 +66,9 @@ return view.extend({
 
 		return E([], [
 			E('h2', {}, [ _('Network Utilities') ]),
-			E('div', { 'class': 'table' }, [
-				E('div', { 'class': 'tr' }, [
-					E('div', { 'class': 'td left' }, [
+			E('table', { 'class': 'table' }, [
+				E('tr', { 'class': 'tr' }, [
+					E('td', { 'class': 'td left' }, [
 						E('input', {
 							'style': 'margin:5px 0',
 							'type': 'text',
@@ -91,7 +91,7 @@ return view.extend({
 						])
 					]),
 
-					E('div', { 'class': 'td left' }, [
+					E('td', { 'class': 'td left' }, [
 						E('input', {
 							'style': 'margin:5px 0',
 							'type': 'text',
@@ -114,7 +114,7 @@ return view.extend({
 						])
 					]),
 
-					E('div', { 'class': 'td left' }, [
+					E('td', { 'class': 'td left' }, [
 						E('input', {
 							'style': 'margin:5px 0',
 							'type': 'text',

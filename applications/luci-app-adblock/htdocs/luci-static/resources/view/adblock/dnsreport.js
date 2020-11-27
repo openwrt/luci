@@ -200,14 +200,14 @@ return view.extend({
 		content = JSON.parse(dnsreport);
 
 		var rows_top = [];
-		var tbl_top  = E('div', { 'class': 'table', 'id': 'top_10' }, [
-			E('div', { 'class': 'tr table-titles' }, [
-				E('div', { 'class': 'th right' }, _('Count')),
-				E('div', { 'class': 'th' }, _('Name / IP Address')),
-				E('div', { 'class': 'th right' }, _('Count')),
-				E('div', { 'class': 'th' }, _('Domain')),
-				E('div', { 'class': 'th right' }, _('Count')),
-				E('div', { 'class': 'th' }, _('Blocked Domain'))
+		var tbl_top  = E('table', { 'class': 'table', 'id': 'top_10' }, [
+			E('tr', { 'class': 'tr table-titles' }, [
+				E('th', { 'class': 'th right' }, _('Count')),
+				E('th', { 'class': 'th' }, _('Name / IP Address')),
+				E('th', { 'class': 'th right' }, _('Count')),
+				E('th', { 'class': 'th' }, _('Domain')),
+				E('th', { 'class': 'th right' }, _('Count')),
+				E('th', { 'class': 'th' }, _('Blocked Domain'))
 			])
 		]);
 
@@ -247,14 +247,14 @@ return view.extend({
 		cbi_update_table(tbl_top, rows_top);
 
 		var rows_requests = [];
-		var tbl_requests  = E('div', { 'class': 'table', 'id': 'requests' }, [
-			E('div', { 'class': 'tr table-titles' }, [
-				E('div', { 'class': 'th' }, _('Date')),
-				E('div', { 'class': 'th' }, _('Time')),
-				E('div', { 'class': 'th' }, _('Client')),
-				E('div', { 'class': 'th' }, _('Domain')),
-				E('div', { 'class': 'th' }, _('Answer')),
-				E('div', { 'class': 'th' }, _('Action'))
+		var tbl_requests  = E('table', { 'class': 'table', 'id': 'requests' }, [
+			E('tr', { 'class': 'tr table-titles' }, [
+				E('th', { 'class': 'th' }, _('Date')),
+				E('th', { 'class': 'th' }, _('Time')),
+				E('th', { 'class': 'th' }, _('Client')),
+				E('th', { 'class': 'th' }, _('Domain')),
+				E('th', { 'class': 'th' }, _('Answer')),
+				E('th', { 'class': 'th' }, _('Action'))
 			])
 		]);
 
