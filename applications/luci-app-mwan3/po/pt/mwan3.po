@@ -212,6 +212,14 @@ msgstr "Esperar o estado da interface no evento up"
 msgid "Failure interval"
 msgstr "Intervalo de falha"
 
+#: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interfaceconfig.lua:108
+msgid "Failure latency [ms]"
+msgstr ""
+
+#: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interfaceconfig.lua:120
+msgid "Failure packet loss [%]"
+msgstr ""
+
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/globalsconfig.lua:24
 msgid "Firewall loglevel"
 msgstr "Nível de log do firewall"
@@ -412,14 +420,6 @@ msgstr "Estado do MWAN - Solução de problemas"
 msgid "Max TTL"
 msgstr "TTL máximo"
 
-#: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interfaceconfig.lua:108
-msgid "Max packet latency [ms]"
-msgstr "Latência máxima do pacote [ms]"
-
-#: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interfaceconfig.lua:120
-msgid "Max packet loss [%]"
-msgstr "Perda máxima de pacotes [%]"
-
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/ruleconfig.lua:32
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/ruleconfig.lua:41
 msgid ""
@@ -462,14 +462,6 @@ msgstr "Membros designados"
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/memberconfig.lua:25
 msgid "Metric"
 msgstr "Métrica"
-
-#: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interfaceconfig.lua:129
-msgid "Min packet latency [ms]"
-msgstr "Latência mínima de pacotes [ms]"
-
-#: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interfaceconfig.lua:141
-msgid "Min packet loss [%]"
-msgstr "Perda mínima de pacotes [%]"
 
 #: applications/luci-app-mwan3/luasrc/controller/mwan3.lua:190
 msgid "Missing both IP rules for interface %s"
@@ -596,6 +588,14 @@ msgstr "Protocolo"
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interfaceconfig.lua:198
 msgid "Recovery interval"
 msgstr "Intervalo de recuperação"
+
+#: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interfaceconfig.lua:129
+msgid "Recovery latency [ms]"
+msgstr ""
+
+#: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interfaceconfig.lua:141
+msgid "Recovery packet loss [%]"
+msgstr ""
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/globalsconfig.lua:40
 msgid "Routing table %d"
@@ -859,8 +859,8 @@ msgid ""
 ">Interfaces may not share the same name as configured members, policies or "
 "rules"
 msgstr ""
-"mwan3 requer que todas as interfaces tenham uma métrica única configurada em "
-"/etc/config/network<br />Os nomes devem coincidir com o nome da interface "
+"mwan3 requer que todas as interfaces tenham uma métrica única configurada "
+"em /etc/config/network<br />Os nomes devem coincidir com o nome da interface "
 "encontrada em /etc/config/network<br />Os nomes podem conter os caracteres A-"
 "Z, a-z, 0-9, _ e não devem conter espaços<br />As interfaces não podem "
 "partilhar o mesmo nome de membros configurados, políticas ou regras"
@@ -870,6 +870,18 @@ msgstr ""
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/ruleconfig.lua:81
 msgid "unreachable (reject)"
 msgstr "inacessível (rejeitar)"
+
+#~ msgid "Max packet latency [ms]"
+#~ msgstr "Latência máxima do pacote [ms]"
+
+#~ msgid "Max packet loss [%]"
+#~ msgstr "Perda máxima de pacotes [%]"
+
+#~ msgid "Min packet latency [ms]"
+#~ msgstr "Latência mínima de pacotes [ms]"
+
+#~ msgid "Min packet loss [%]"
+#~ msgstr "Perda mínima de pacotes [%]"
 
 #~ msgid "How often should rtmon update the interface routing table"
 #~ msgstr ""

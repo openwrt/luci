@@ -210,6 +210,14 @@ msgstr "在 up 事件发生时的预期接口状态"
 msgid "Failure interval"
 msgstr "故障检测间隔"
 
+#: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interfaceconfig.lua:108
+msgid "Failure latency [ms]"
+msgstr ""
+
+#: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interfaceconfig.lua:120
+msgid "Failure packet loss [%]"
+msgstr ""
+
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/globalsconfig.lua:24
 msgid "Firewall loglevel"
 msgstr "防火墙日志级别"
@@ -408,14 +416,6 @@ msgstr "MWAN 状态 - 故障排除"
 msgid "Max TTL"
 msgstr "最大 TTL"
 
-#: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interfaceconfig.lua:108
-msgid "Max packet latency [ms]"
-msgstr "最大数据包延迟 [ms]"
-
-#: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interfaceconfig.lua:120
-msgid "Max packet loss [%]"
-msgstr "最大数据包丢失率 [%]"
-
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/ruleconfig.lua:32
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/ruleconfig.lua:41
 msgid ""
@@ -457,14 +457,6 @@ msgstr "分配的成员"
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/memberconfig.lua:25
 msgid "Metric"
 msgstr "跃点数"
-
-#: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interfaceconfig.lua:129
-msgid "Min packet latency [ms]"
-msgstr "最小数据包延迟 [ms]"
-
-#: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interfaceconfig.lua:141
-msgid "Min packet loss [%]"
-msgstr "最小数据包丢失率 [%]"
 
 #: applications/luci-app-mwan3/luasrc/controller/mwan3.lua:190
 msgid "Missing both IP rules for interface %s"
@@ -588,6 +580,14 @@ msgstr "协议"
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interfaceconfig.lua:198
 msgid "Recovery interval"
 msgstr "故障恢复间隔"
+
+#: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interfaceconfig.lua:129
+msgid "Recovery latency [ms]"
+msgstr ""
+
+#: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interfaceconfig.lua:141
+msgid "Recovery packet loss [%]"
+msgstr ""
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/globalsconfig.lua:40
 msgid "Routing table %d"
@@ -830,15 +830,27 @@ msgid ""
 ">Interfaces may not share the same name as configured members, policies or "
 "rules"
 msgstr ""
-"mwan3 要求所有在/etc/config/network中的接口(interface)设置独立的metric参数<br />接口名字要和/etc/"
-"config/network的一致<br />名字可以包含字符A-Z，a-z，0-9，_ ，但不能有空格<br "
-"/>接口名字也不能和配置的成员，策略，或者规则相同"
+"mwan3 要求所有在/etc/config/network中的接口(interface)设置独立的metric参数"
+"<br />接口名字要和/etc/config/network的一致<br />名字可以包含字符A-Z，a-z，"
+"0-9，_ ，但不能有空格<br />接口名字也不能和配置的成员，策略，或者规则相同"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/policy.lua:88
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/policyconfig.lua:28
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/ruleconfig.lua:81
 msgid "unreachable (reject)"
 msgstr "不可达（拒绝）"
+
+#~ msgid "Max packet latency [ms]"
+#~ msgstr "最大数据包延迟 [ms]"
+
+#~ msgid "Max packet loss [%]"
+#~ msgstr "最大数据包丢失率 [%]"
+
+#~ msgid "Min packet latency [ms]"
+#~ msgstr "最小数据包延迟 [ms]"
+
+#~ msgid "Min packet loss [%]"
+#~ msgstr "最小数据包丢失率 [%]"
 
 #~ msgid "How often should rtmon update the interface routing table"
 #~ msgstr "rtmon 应该多久更新一次接口路由表"
