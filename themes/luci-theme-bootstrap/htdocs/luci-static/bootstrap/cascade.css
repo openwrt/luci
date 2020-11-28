@@ -98,7 +98,7 @@ textarea {
 
 body {
   background-color: #fff;
-  font-family: Open Sans, Segoe UI, Ubuntu, sans-serif;
+  font-family: Open Sans, Segoe UI, Ubuntu, -apple-system, DejaVu Sans, sans-serif;
   font-size: 13px;
   font-weight: 600;
   line-height: 18px;
@@ -2675,4 +2675,10 @@ input[type=radio]:not(:checked)::before {
 ul.dropdown input[type=checkbox], ul.dropdown input[type=radio]  {
   margin-left: 5px;
   margin-right: 5px;
+}
+
+@media screen and (max-width: 1000px) {
+  .btn, button, select {
+    min-width: 80px;
+  }
 }
