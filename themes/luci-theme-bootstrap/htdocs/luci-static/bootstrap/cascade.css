@@ -354,8 +354,18 @@ input, textarea, select, .cbi-dropdown:not(.btn):not(.cbi-button), .uneditable-i
   font-size: 13px;
   line-height: 18px;
   border: 1px solid #bbb;
-  border-radius: 3px;
-  padding: 4px
+  border-radius: 2px;
+  padding: 4px;
+  color: #555;
+}
+
+input:focus, textarea:focus, select:hover {
+  color: #333;
+}
+
+[readonly] {
+  font-style: italic;
+  color: #888;
 }
 
 input, select, .cbi-dropdown:not(.btn):not(.cbi-button), .uneditable-input {
@@ -561,11 +571,11 @@ select[readonly], textarea[readonly] {
 }
 
 .table .th, .table .td {
-  display: table-cell;
+  padding: 10px 10px 9px;
   vertical-align: middle;
+  display: table-cell;
   line-height: 18px;
   text-align: left;
-  padding: 10px 10px 9px
 }
 
 .table .tr:first-child .th {
@@ -939,7 +949,7 @@ footer {
   left: 0;
   right: 0;
   bottom: 0;
-  z-index: 2;
+  z-index: 20;
   text-align: center;
   font-size: 85%;
   border-top: 1px solid #ddd;
@@ -1176,7 +1186,7 @@ body.modal-overlay-active #modal_overlay {
   background: url("data:image/svg+xml,%3Csvg viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m5.29 17.93 26.71 28.14 26.71-28.14' fill='none' stroke='%23555' stroke-linecap='round' stroke-linejoin='round' stroke-width='10'/%3E%3C/svg%3E") center center no-repeat;
 }
 
-.cbi-dropdown.cbi-button-action>.more::after {
+.cbi-dropdown.cbi-button-action>.more::after, .diag-action .cbi-dropdown.btn.cbi-button.cbi-button-action .open::after {
   background: url("data:image/svg+xml,%3Csvg viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m5.29 17.93 26.71 28.14 26.71-28.14' fill='none' stroke='%230069d6' stroke-linecap='round' stroke-linejoin='round' stroke-width='10'/%3E%3C/svg%3E") center center no-repeat;
 }
 
@@ -1205,6 +1215,7 @@ body.modal-overlay-active #modal_overlay {
   align-self: center;
   color: inherit;
   text-shadow: none;
+  line-height: 31px;
 }
 
 .cbi-dropdown>ul.dropdown>li, .cbi-dropdown:not(.btn):not(.cbi-button)>ul>li {
@@ -1532,8 +1543,9 @@ header span[data-indicator="poll-status"]::before {
   animation: linear spin 3s forwards no-repeat;
 }
 
-.cbi-button.spinning {
-  line-height: normal;
+.cbi-button, .cbi-button.spinning {
+  line-height: 20px !important;
+  min-width: 130px;
 }
 
 header [data-indicator][data-clickable] {
@@ -2161,7 +2173,9 @@ dl, form {
 }
 
 .cbi-dynlist>.add-item, .td.cbi-section-actions>* {
-  display: flex
+  display: flex;
+  align-items: flex-end;
+  justify-content: right;
 }
 
 .td>input[type=text], .td>input[type=password], .td>select, .td>.cbi-dropdown:not(.btn):not(.cbi-button), .cbi-dynlist>.add-item>.cbi-dropdown, .cbi-section-create>*>input, .table[width="100%"], .th[width="100%"], .td[width="100%"], .cbi-dropdown[open]>ul.dropdown>li>input.create-item-input:first-child:last-child, #syslog, .table.cbi-section-table input[type=password], .table.cbi-section-table input[type=text], .table.cbi-section-table textarea, .table.cbi-section-table select, .cbi-filebrowser .upload>div>input {
@@ -2270,7 +2284,6 @@ select {
   min-width: 120px;
   vertical-align: middle;
   text-overflow: ellipsis;
-  color: #333;
   border: 1px solid #bbb;
   border-radius: 2px;
   box-shadow: inset 0 0 0 1px #fff;
@@ -2283,7 +2296,6 @@ select {
 }
 
 select:hover, select:active {
-  color: #41444d;
   background: url("data:image/svg+xml,%3Csvg viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m5.29 17.93 26.71 28.14 26.71-28.14' fill='none' stroke='%23333' stroke-linecap='round' stroke-linejoin='round' stroke-width='10'/%3E%3C/svg%3E") right 8px center no-repeat, linear-gradient(to bottom, #ddd 0%, #fff 100%) !important;
   background-size: 10px auto, 100% 100% !important;
   outline: none;
@@ -2377,6 +2389,18 @@ label {
   background: linear-gradient(to bottom, #f6f6f6, #eaeaea) !important;
 }
 
+/* Enable for zebra table styling */
+/*
+.tr:nth-child(odd) td, .cbi-value:nth-child(odd) {
+  background: linear-gradient(to bottom, rgba(220,220,255,.5), rgba(220,220,255,.5)), linear-gradient(to bottom, #f6f6f6, #eaeaea) !important;
+  background: #dfdfdf !important;
+}
+
+.tr:nth-child(even) td, .cbi-value:nth-child(even) {
+  background: #eee !important;
+}
+*/
+
 .cbi-page-actions, div[style="width:100%;table-layout:fixed"] + .right {
   margin-top: -1px;
   border: 1px solid #ddd;
@@ -2427,6 +2451,7 @@ div[id^="value_"]::before {
 
 .tr:hover, .tr:hover .td, #cbi-fstab-global .cbi-value:hover, .cbi-value:hover {
   background: linear-gradient(to bottom, #f2f2f2, #f2f2d2) !important;
+  background: #ffd !important;
 }
 
 .tr:last-child {
