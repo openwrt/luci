@@ -299,7 +299,7 @@ form .clearfix, .cbi-value {
 label, input, button, select, textarea {
   font-family: Open Sans, Segoe UI, Ubuntu, sans-serif;
   font-size: 13px;
-  font-weight: 400;
+  font-weight: 600;
   line-height: normal
 }
 
@@ -418,6 +418,19 @@ input, select, .cbi-dropdown:not(.btn):not(.cbi-button), .uneditable-input {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.cbi-dynlist>.add-item, .cbi-dynlist>.item {
+  min-width: 240px;
+  min-height: 30px;
+}
+
+.cbi-dynlist>.add-item {
+  min-width: 244px;
+}
+
+.btn.cbi-button.cbi-button-add {
+  margin-right: 0;
 }
 
 select {
@@ -926,7 +939,7 @@ footer {
   left: 0;
   right: 0;
   bottom: 0;
-  z-index: 999;
+  z-index: 2;
   text-align: center;
   font-size: 85%;
   border-top: 1px solid #ddd;
@@ -1116,7 +1129,7 @@ body.modal-overlay-active #modal_overlay {
 }
 
 .cbi-dropdown.btn>ul:not(.dropdown), .cbi-dropdown.cbi-button>ul:not(.dropdown) {
-  margin: 0 0 0 13px!important
+  margin: 0 0 0 13px !important;
 }
 
 .cbi-dropdown.btn.spinning>ul:not(.dropdown), .cbi-dropdown.cbi-button.spinning>ul:not(.dropdown) {
@@ -1137,7 +1150,7 @@ body.modal-overlay-active #modal_overlay {
   text-shadow: none;
 }
 
-.cbi-dropdown>.open::after, .cbi-dropdown>.more::after {
+.cbi-dropdown>.open::after, .cbi-dropdown>.more::after, .cbi-dropdown.btn.cbi-button.cbi-button-apply.important>.open::after {
   content: "";
   display: inline-block;
   background: url("data:image/svg+xml,%3Csvg viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m5.29 17.93 26.71 28.14 26.71-28.14' fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='10'/%3E%3C/svg%3E") center center no-repeat;
@@ -1150,10 +1163,17 @@ body.modal-overlay-active #modal_overlay {
   left: 30%;
 }
 
-#cbi-dhcp .cbi-dropdown > .open::after {
+.cbi-dropdown.btn.cbi-button.cbi-button-apply.important>.open::after {
+  margin-left: 8px;
   left: auto;
   right: 8px;
-  background: url("data:image/svg+xml,%3Csvg viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m5.29 17.93 26.71 28.14 26.71-28.14' fill='none' stroke='%23888' stroke-linecap='round' stroke-linejoin='round' stroke-width='10'/%3E%3C/svg%3E") center center no-repeat;
+}
+
+#cbi-dhcp .cbi-dropdown > .open::after, ul ~ .more + .open::after {
+  margin-left: 8px;
+  left: auto;
+  right: 8px;
+  background: url("data:image/svg+xml,%3Csvg viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m5.29 17.93 26.71 28.14 26.71-28.14' fill='none' stroke='%23555' stroke-linecap='round' stroke-linejoin='round' stroke-width='10'/%3E%3C/svg%3E") center center no-repeat;
 }
 
 .cbi-dropdown.cbi-button-action>.more::after {
@@ -1454,32 +1474,66 @@ button.btn::-moz-focus-inner, input[type=submit].btn::-moz-focus-inner {
 }
 
 .label, header [data-indicator] {
+  margin-left: 2px;
+  margin-bottom: -1px;
+  padding: 2px 5px 3px 3px;
+  display: inline-block;
+  white-space: nowrap;
+  text-transform: uppercase;
   font-size: 9.75px;
   font-weight: 700;
-  color: #fff!important;
-  text-transform: uppercase;
-  white-space: nowrap;
-  background-color: #bfbfbf;
-  border-radius: 3px;
+  color: #fff !important;
   text-shadow: none;
-  margin-left: 2px;
-  padding: 1px 5px 2px 3px;
+  border-radius: 3px;
+  background-color: #bfbfbf;
 }
 
 header span[data-indicator="poll-status"] {
-  margin-bottom: -1px;
-  padding: 2px 5px 3px 3px;
   min-width: 80px;
-  display: inline-block;
 }
 
-header span[data-indicator="poll-status"][data-style="inactive"]::before {
+header #indicators [data-indicator="poll-status"]::before {
+  position: static;
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  margin: 0 2px -4px 0;
+  mix-blend-mode: difference;
+  animation: linear spin 5s forwards;
+  opacity: .7;
+}
+
+@keyframes spin {
+  from {transform: rotate(-720deg)}
+  to {transform: rotate(0)}
+}
+
+header span[data-indicator="poll-status"]::before {
   margin: 0 7px -2px 8px;
   content: "";
   display: inline-block;
   width: 12px;
   height: 12px;
   background: linear-gradient(to right, #eee, #eee 3px, rgba(0,0,0,0) 3px, rgba(0,0,0,0) 9px, #eee 9px);
+}
+
+.spinning::before, .label.notice, header span[data-indicator="poll-status"]::before {
+  margin-right: 8px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 48px;
+  content: "";
+  background-image: url("data:image/svg+xml,%3Csvg fill-rule='evenodd' viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m31.22 7.48c.5 0 1 .05 1.5.08l-1.5 6.83v3.7a13.8 13.8 0 0 0 -13.5 13.79 13.77 13.77 0 0 0 13.5 13.77l1.5-.1-1.5 10.7c-13.32-.12-24.02-11.05-23.85-24.38-.15-13.34 10.53-24.25 23.85-24.39z' fill='%234d4d4d'/%3E%3Cg fill='%23b3b3b3' transform='matrix(-1.59 0 0 -1.59 39.79 66.25)'%3E%3Cpath d='m4.43 6.13c.32 0 .63.03.94.05l-.94 4.29v2.33c-4.72.1-8.49 3.95-8.49 8.67s3.77 8.57 8.49 8.67l.95-.06-.95 6.72c-8.38-.09-15.1-6.96-15-15.34-.09-8.38 6.62-15.25 15-15.34z'/%3E%3Cpath d='m2.53 3.4v14l7-7z'/%3E%3C/g%3E%3Cpath d='m28.2 3.15v22.27l11.16-11.14z' fill='%234d4d4d'/%3E%3C/svg%3E");
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: 16px;
+  animation: linear spin 3s forwards no-repeat;
+}
+
+.cbi-button.spinning {
+  line-height: normal;
 }
 
 header [data-indicator][data-clickable] {
@@ -1507,13 +1561,20 @@ a.label:hover {
   background-color: #62cffc;
 }
 
+header [data-indicator="uci-changes"][data-style="active"] {
+  padding: 2px 7px 3px;
+  margin-left: 4px;
+  color: #fff !important;
+  background: #900 !important;
+}
+
 form.inline {
   display: inline;
   margin-bottom: 0
 }
 
 header .pull-right {
-  padding-top: 8px
+  padding-top: 8px;
 }
 
 /*.cbi-section-table .tr:hover .td, .cbi-section-table .tr:hover .th, .cbi-section-table .tr:hover::before {
@@ -1559,11 +1620,10 @@ header .pull-right {
 }
 
 .cbi-value-field {
-  line-height: 1.5em
+  line-height: 24px;
 }
 
 .cbi-value-field input[type=checkbox], .cbi-value-field input[type=radio] {
-/*  margin-top: 8px;*/
   margin-right: 6px
 }
 
@@ -1659,6 +1719,10 @@ form .cbi-tab-descr {
   background: linear-gradient(#fff, #fff 25%, #f9f9f9);
 }
 
+#cbi-network-interface .ifacebox {
+  min-width: 200px;
+}
+
 .ifacebox .ifacebox-head {
   border-bottom: 1px solid #ddd;
   background: #eee;
@@ -1666,17 +1730,10 @@ form .cbi-tab-descr {
   box-shadow: inset 0 0 0 1px #fff;
 }
 
-.ifacebox-head[style="background-color:#f09090"], .ifacebox-head[style="background-color:#90f090"] {
-  text-shadow: 0 1px 1px #000;
-  color: #fff;
-}
-
-.ifacebox-head[style="background-color:#f09090"] {
-  background: linear-gradient(to bottom, #f99, #f44) !important;
-}
-
-.ifacebox-head[style="background-color:#90f090"] {
-  background: linear-gradient(to bottom, #9f9, #494) !important;
+.ifacebox-head {
+  color: #000;
+  text-shadow: 0 1px 1px rgba(255,255,255,.75);
+  position: relative;
 }
 
 .ifacebox .ifacebox-head.active {
@@ -1949,40 +2006,8 @@ html body.apply-overlay-active {
   to {opacity: 1}
 }
 
-.spinning::before, .label.notice, header #indicators [data-indicator][data-style="active"]::before {
-  margin-right: 8px;
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  width: 48px;
-  content: "";
-  background-image: url("data:image/svg+xml,%3Csvg fill-rule='evenodd' viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m31.22 7.48c.5 0 1 .05 1.5.08l-1.5 6.83v3.7a13.8 13.8 0 0 0 -13.5 13.79 13.77 13.77 0 0 0 13.5 13.77l1.5-.1-1.5 10.7c-13.32-.12-24.02-11.05-23.85-24.38-.15-13.34 10.53-24.25 23.85-24.39z' fill='%234d4d4d'/%3E%3Cg fill='%23b3b3b3' transform='matrix(-1.59 0 0 -1.59 39.79 66.25)'%3E%3Cpath d='m4.43 6.13c.32 0 .63.03.94.05l-.94 4.29v2.33c-4.72.1-8.49 3.95-8.49 8.67s3.77 8.57 8.49 8.67l.95-.06-.95 6.72c-8.38-.09-15.1-6.96-15-15.34-.09-8.38 6.62-15.25 15-15.34z'/%3E%3Cpath d='m2.53 3.4v14l7-7z'/%3E%3C/g%3E%3Cpath d='m28.2 3.15v22.27l11.16-11.14z' fill='%234d4d4d'/%3E%3C/svg%3E");
-  background-position: center center;
-  background-repeat: no-repeat;
-  background-size: 16px;
-  animation: linear spin 3s forwards infinite;
-}
-
 #modal_overlay .label.notice {
   display: none;
-}
-
-header #indicators [data-indicator][data-style="active"]::before {
-  position: static;
-  display: inline-block;
-  width: 16px;
-  height: 16px;
-  margin: 0 2px -4px 0;
-  mix-blend-mode: difference;
-  animation: linear spin 5s forwards infinite;
-  animation: none;
-  opacity: .7;
-}
-
-@keyframes spin {
-  from {transform: rotate(-720deg)}
-  to {transform: rotate(0)}
 }
 
 [data-tab-title] {
@@ -2160,7 +2185,7 @@ header div>ul .menu-dropdown a.menu, .nav .menu-dropdown a.menu, header div>ul .
 }
 
 .cbi-tabmenu.map, .cbi-dropdown>ul>li>form>input[type=checkbox] {
-  margin: 0
+  margin: 0 5px 0 3px;
 }
 
 .cbi-tabcontainer>fieldset.cbi-section[id]>legend, .tab-content>.tab-pane, .tab-content>div, .cbi-dropdown>ul.preview, .cbi-dropdown>ul>li .hide-close, .cbi-dropdown[open]>ul.dropdown>li .hide-open, .hidden, #modemenu li:last-child span.divider {
@@ -2427,7 +2452,7 @@ h3, h4, #cbi-uhttpd-cert legend, #cbi-network-globals legend {
 
 .modal h4 {
   margin: -13px 0 10px !important;
-  padding: 4px 8px;
+  padding: 6px 8px;
   font-size: 115%;
   border-top: none;
   border-radius: 0 0 4px 4px;
@@ -2517,13 +2542,17 @@ div[id^="cbi-banip"].tr {
   margin-top: 40px;
 }
 
-body:not(.Firewall) .table:not(.lases):not(.leases6) {
+body:not(.Firewall):not(.Wireless) .table:not(.lases):not(.leases6) {
   margin-bottom: 40px !important;
 }
 
-.Firewall .table {
+.Firewall .table, #cbi-wireless .table.cbi-section-table {
   margin-bottom: 0 !important;
 }
+
+/*#wifi_assoclist_table {
+  margin-bottom: -1px !important;
+}*/
 
 @supports (background-blend-mode: luminosity) { /* exclude ms browsers */
 input[type="checkbox"], input[type="checkbox"]:checked, input[type="checkbox"][disabled], input[type="checkbox"][disabled]:checked {
@@ -2612,8 +2641,13 @@ input[type=checkbox]:not(:checked)::before, input[type=radio]:not(:checked)::bef
   will-change: transform;
 }
 
-input[type="radio"]:not(:checked)::before {
+input[type=radio]:not(:checked)::before {
   border-radius: 50%;
 }
 }
 /* end custom radios/checkboxes */
+
+ul.dropdown input[type=checkbox], ul.dropdown input[type=radio]  {
+  margin-left: 5px;
+  margin-right: 5px;
+}
