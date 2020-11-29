@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-06-10 03:40+0200\n"
-"PO-Revision-Date: 2020-11-27 04:14+0000\n"
+"PO-Revision-Date: 2020-11-29 07:51+0000\n"
 "Last-Translator: Ryota <21ryotagamer@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/openwrt/luci/ja/"
 ">\n"
@@ -483,7 +483,7 @@ msgstr "hostsファイルから提供される名前にローカルドメイン�
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:311
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:757
 msgid "Add new interface..."
-msgstr "インターフェースの新規作成..."
+msgstr "インターフェースを新規作成..."
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:125
 msgid "Add peer"
@@ -1201,9 +1201,8 @@ msgid ""
 "Choose the network(s) you want to attach to this wireless interface or fill "
 "out the <em>custom</em> field to define a new network."
 msgstr ""
-"この無線インターフェースを追加するネットワークを選択してください。<em>カスタ"
-"ム</em>フィールドにネットワーク名を入力すると、新しいネットワークを作成しま"
-"す。"
+"この無線インターフェースを追加するネットワークを選択してください。<em>カスタム</em>フィールドにネットワーク名を入力すると新規ネットワークを作成し"
+"ます。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1148
 msgid "Cipher"
@@ -3891,11 +3890,11 @@ msgstr "方法が見つかりません"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:349
 msgid "Method of link monitoring"
-msgstr "リンク監視の方法"
+msgstr "リンクを監視する方法"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:418
 msgid "Method to determine link status"
-msgstr ""
+msgstr "リンクの状態を確認する方法"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:46
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:166
@@ -3922,7 +3921,7 @@ msgstr "モバイルデータ"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1442
 msgid "Mobility Domain"
-msgstr "モビリティ ドメイン"
+msgstr "モビリティドメイン"
 
 #: modules/luci-compat/luasrc/view/cbi/wireless_modefreq.htm:154
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:157
@@ -3939,19 +3938,19 @@ msgid "Model"
 msgstr "モデル"
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:43
+#, fuzzy
 msgid "Modem bearer teardown in progress."
-msgstr ""
+msgstr "モデムベアラを終了中です。"
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:42
 msgid ""
 "Modem connection in progress. Please wait. This process will timeout after 2 "
 "minutes."
-msgstr ""
-"モデム接続中です。お待ちください。このプロセスは2分後にタイムアウトします。"
+msgstr "モデム接続中です。しばらくお待ちください。この処理は2分後にタイムアウトします。"
 
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:72
 msgid "Modem default"
-msgstr "モデム デフォルト"
+msgstr "モデムデフォルト"
 
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:73
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:82
@@ -3959,22 +3958,22 @@ msgstr "モデム デフォルト"
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/ppp.js:73
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:57
 msgid "Modem device"
-msgstr "モデム デバイス"
+msgstr "モデムデバイス"
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:41
 msgid "Modem disconnection in progress. Please wait."
-msgstr "モデム切断中です。お待ちください。"
+msgstr "モデム切断中です。しばらくお待ちください。"
 
 #: modules/luci-compat/luasrc/model/network/proto_ncm.lua:66
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:24
 msgid "Modem information query failed"
-msgstr ""
+msgstr "モデム情報の問い合わせに失敗しました"
 
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:112
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:104
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:93
 msgid "Modem init timeout"
-msgstr "モデム初期化タイムアウト"
+msgstr "モデム準備タイムアウト"
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:44
 msgid "Modem is disabled."
@@ -4009,23 +4008,21 @@ msgstr "マウントポイント"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:229
 msgid "Mount Points - Mount Entry"
-msgstr "マウントポイント - マウント"
+msgstr "マウントポイント-マウント一覧"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:340
 msgid "Mount Points - Swap Entry"
-msgstr "マウントポイント - スワップ"
+msgstr "マウントポイント-スワップ一覧"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:228
 msgid ""
 "Mount Points define at which point a memory device will be attached to the "
 "filesystem"
-msgstr ""
-"マウントポイントは、記憶デバイスがファイルシステムのどこに接続されているかを"
-"表示しています"
+msgstr "マウントポイントは、記憶デバイスがファイルシステムのどこに接続されているかを定義したものです"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:154
 msgid "Mount attached devices"
-msgstr "アタッチ済みデバイスをマウント"
+msgstr "接続済みデバイスをマウント"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:162
 msgid "Mount filesystems not specifically configured"
@@ -4041,11 +4038,11 @@ msgstr "マウントポイント"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:158
 msgid "Mount swap not specifically configured"
-msgstr "明確に設定されていないスワップ パーティションをマウント"
+msgstr "明確に設定されていないスワップパーティションをマウント"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:223
 msgid "Mounted file systems"
-msgstr "マウント中のファイルシステム"
+msgstr "マウント済みファイルシステム"
 
 #: modules/luci-compat/luasrc/view/cbi/tblsection.htm:152
 msgid "Move down"
@@ -4068,11 +4065,11 @@ msgstr "NAS ID"
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:87
 msgid "NAT-T Mode"
-msgstr "NAT-T モード"
+msgstr "NAT-Tモード"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/464xlat.js:41
 msgid "NAT64 Prefix"
-msgstr "NAT64 プレフィックス"
+msgstr "NAT64プレフィックス"
 
 #: modules/luci-compat/luasrc/model/network/proto_ncm.lua:26
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:31
@@ -4085,7 +4082,7 @@ msgstr "NDP-プロキシ"
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:72
 msgid "NT Domain"
-msgstr "NT ドメイン"
+msgstr "NTドメイン"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:274
 msgid "NTP server candidates"
@@ -4101,7 +4098,7 @@ msgstr "名前"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1926
 msgid "Name of the new network"
-msgstr "新しいネットワークの名前"
+msgstr "新規ネットワークの名前"
 
 #: themes/luci-theme-openwrt-2020/luasrc/view/themes/openwrt2020/header.htm:40
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:50
@@ -4121,24 +4118,24 @@ msgstr "ネットワーク"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1920
 msgid "Network SSID"
-msgstr ""
+msgstr "ネットワークSSID"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/diagnostics.js:68
 msgid "Network Utilities"
-msgstr "ネットワーク ユーティリティ"
+msgstr "ネットワークユーティリティ"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:380
 msgid "Network boot image"
-msgstr "ネットワークブート用イメージ"
+msgstr "ネットワークブートイメージ"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/netdev.js:7
 msgid "Network device activity (kernel: netdev)"
-msgstr "ネットワークデバイス アクティビティ（kernel: netdev）"
+msgstr "ネットワークデバイスアクティビティ（kernel: netdev）"
 
 #: modules/luci-base/htdocs/luci-static/resources/network.js:15
 #: modules/luci-compat/luasrc/model/network.lua:33
 msgid "Network device is not present"
-msgstr "ネットワークデバイスが存在しない"
+msgstr "ネットワークデバイスが存在しません"
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:57
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:62
@@ -4147,7 +4144,7 @@ msgstr "ネットワークインターフェース"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:777
 msgid "New interface for \"%s\" can not be created: %s"
-msgstr "\"%s\" の新しいインターフェースを作成できません: %s"
+msgstr "\"%s\"の新規インターフェースを作成できません: %s"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:713
 msgid "New interface name…"
@@ -4178,7 +4175,7 @@ msgstr "暗号化なし"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:87
 msgid "No Host Routes"
-msgstr "ホストのルートがありません"
+msgstr "ホストルートなし"
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:89
 msgid "No NAT-T"
@@ -4186,23 +4183,23 @@ msgstr "NAT-Tを使用しない"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:79
 msgid "No RX signal"
-msgstr "RX 信号なし"
+msgstr "RX信号なし"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:69
 msgid "No client associated"
-msgstr "クライアントが関連付けられていません"
+msgstr "接続済みクライアントなし"
 
 #: modules/luci-base/htdocs/luci-static/resources/rpc.js:406
 msgid "No data received"
-msgstr "受信データなし"
+msgstr "受信済みデータなし"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2878
 msgid "No entries in this directory"
-msgstr "ディレクトリ内にエントリーがありません"
+msgstr "このディレクトリ内にエントリーがありません"
 
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/backupfiles.lua:82
 msgid "No files found"
-msgstr "ファイルが見つかりませんでした"
+msgstr "ファイルが見つかりません"
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:86
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:91
@@ -4220,21 +4217,22 @@ msgstr "情報なし"
 
 #: modules/luci-compat/luasrc/model/network/proto_4x6.lua:63
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/map.js:8
+#, fuzzy
 msgid "No matching prefix delegation"
-msgstr ""
+msgstr "一致するプレフィックスデレゲーションがありません"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:140
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:143
 msgid "No more slaves available"
-msgstr ""
+msgstr "これ以上利用可能なスレーブがありません"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:187
 msgid "No more slaves available, can not save interface"
-msgstr ""
+msgstr "これ以上利用可能なスレーブがないため、インターフェースを保存できません"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:251
 msgid "No negative cache"
-msgstr "ネガティブキャッシュを行なわない"
+msgstr "ネガティブキャッシュなし"
 
 #: themes/luci-theme-bootstrap/luasrc/view/themes/bootstrap/header.htm:54
 #: themes/luci-theme-material/luasrc/view/themes/material/header.htm:212
@@ -4246,7 +4244,7 @@ msgstr "パスワードが設定されていません！"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:130
 msgid "No peers defined yet"
-msgstr "ピアはまだ定義されていません"
+msgstr "まだピアが定義されていません"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:121
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:268
@@ -4255,16 +4253,16 @@ msgstr "まだ公開鍵はありません。"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:90
 msgid "No rules in this chain."
-msgstr "チェイン内にルールがありません。"
+msgstr "このチェインにルールがありません。"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:384
 msgid "No validation or filtering"
-msgstr ""
+msgstr "検証またはフィルタリングなし"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:152
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:825
 msgid "No zone assigned"
-msgstr "ゾーンが設定されていません"
+msgstr "割り当てられたゾーンがありません"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:58
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:84
@@ -4283,8 +4281,9 @@ msgid "Noise:"
 msgstr "ノイズ:"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:35
+#, fuzzy
 msgid "Non Pre-emptive CRC errors (CRC_P)"
-msgstr ""
+msgstr "非プリエンプティブCRCエラー（CRC_P）"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:394
 msgid "Non-wildcard"
@@ -4306,7 +4305,7 @@ msgstr "見つかりません"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:75
 msgid "Not associated"
-msgstr "関連付けられていません"
+msgstr "接続されていません"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:32
 msgid "Not connected"
@@ -4318,11 +4317,11 @@ msgstr "未接続"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:146
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:280
 msgid "Not present"
-msgstr "存在しない"
+msgstr "存在しません"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:101
 msgid "Not started on boot"
-msgstr "システム起動時に開始されません"
+msgstr "ブート時に開始されていません"
 
 #: modules/luci-base/htdocs/luci-static/resources/rpc.js:409
 msgid "Not supported"
@@ -4338,21 +4337,19 @@ msgstr "Nslookup"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:332
 msgid "Number of IGMP membership reports"
-msgstr ""
+msgstr "IGMPメンバーシップレポートの数"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:362
 msgid "Number of cached DNS entries (max is 10000, 0 is no caching)"
-msgstr ""
-"キャッシュされる DNS エントリーの数です。（最大 10000 件。 0の場合はキャッ"
-"シュしない）"
+msgstr "キャッシュされるDNSエントリーの数（最大10000件、0の場合キャッシュしない）"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:199
 msgid "Number of parallel threads used for compression"
-msgstr "圧縮に使用される、並列スレッド数"
+msgstr "圧縮に使用する並列スレッド数"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:309
 msgid "Number of peer notifications after failover event"
-msgstr ""
+msgstr "フェールオーバー処理後のピア通知の数"
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:69
 msgid "Obfuscated Group Password"
@@ -4371,7 +4368,7 @@ msgstr "難読化されたパスワード"
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pptp.js:67
 #: protocols/luci-proto-pppossh/htdocs/luci-static/resources/protocol/pppossh.js:93
 msgid "Obtain IPv6-Address"
-msgstr "IPv6 アドレスの取得"
+msgstr "IPv6アドレス取得"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/default-on.js:18
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:351
@@ -4388,7 +4385,7 @@ msgstr "オン"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:96
 msgid "On-Link route"
-msgstr "On-Link ルート"
+msgstr "On-Linkルート"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/timer.js:11
 msgid "On-State Delay"
@@ -4396,11 +4393,11 @@ msgstr "点灯時間"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:481
 msgid "One of hostname or mac address must be specified!"
-msgstr "1つ以上のホスト名またはMACアドレスを設定してください！"
+msgstr "ホスト名またはMACアドレスを指定してください！"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:466
 msgid "One of the following: %s"
-msgstr "次のうちいずれか一つ: %s"
+msgstr "次のうちいずれか1つ: %s"
 
 #: modules/luci-compat/luasrc/view/cbi/nullsection.htm:17
 #: modules/luci-compat/luasrc/view/cbi/ucisection.htm:22
@@ -4409,7 +4406,7 @@ msgstr "1つ以上のフィールドに無効な値が設定されています�
 
 #: modules/luci-compat/luasrc/view/cbi/map.htm:32
 msgid "One or more invalid/required values on tab"
-msgstr "タブに1つ以上の 無効/必須 の値があります"
+msgstr "タブに1つ以上の無効/必須の値があります"
 
 #: modules/luci-compat/luasrc/view/cbi/nullsection.htm:19
 #: modules/luci-compat/luasrc/view/cbi/ucisection.htm:24
@@ -4419,7 +4416,7 @@ msgstr "1つ以上のフィールドに値が設定されていません！"
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:229
 msgid ""
 "Only if current active slave fails and the primary slave is up (failure, 2)"
-msgstr ""
+msgstr "現在アクティブなスレーブが失敗し、プライマリスレーブが起動している場合のみ（failure、2）"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:444
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/backupfiles.lua:19
@@ -4442,11 +4439,11 @@ msgstr "動作周波数"
 #: modules/luci-base/htdocs/luci-static/resources/form.js:1971
 #: modules/luci-base/htdocs/luci-static/resources/form.js:3653
 msgid "Option \"%s\" contains an invalid input value."
-msgstr "オプション \"%s\" には無効な入力値が含まれています。"
+msgstr "オプション\"%s\"に無効な入力値が含まれています。"
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:1984
 msgid "Option \"%s\" must not be empty."
-msgstr "オプション \"%s\" を入力してください。"
+msgstr "オプション\"%s\"を設定してください。"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4037
 msgid "Option changed"
@@ -4465,7 +4462,7 @@ msgstr "オプション"
 msgid ""
 "Optional. 32-bit mark for outgoing encrypted packets. Enter value in hex, "
 "starting with <code>0x</code>."
-msgstr ""
+msgstr "暗号化された送信パケットの32ビットマークです。<code>0x</code>から始まる16進数を入力してください（オプション）。"
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/static.js:218
 msgid ""
