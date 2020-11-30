@@ -109,10 +109,10 @@ body {
 }
 
 .container {
-  width: 100%;
-  max-width: 1600px;
   margin-left: auto;
   margin-right: auto;
+  width: 100%;
+  max-width: 1600px;
   zoom: 1
 }
 
@@ -2399,8 +2399,18 @@ div[id^="cbi-firewall"].tr.cbi-section-table-row:hover {
   background-size: 16px !important;
 }
 
-div[id^="cbi-firewall"].cbi-section-table-row[data-title]::before {
+div[id^="cbi-firewall"].cbi-section-table-row[data-title]::before, #packages div.td[data-title="Package name"] {
   padding-left: 34px !important;
+}
+
+#packages div.td[data-title="Package name"] {
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 460 460'%3E%3Cpath d='M200.002 210l30 250 200-115V115z' fill='%23fb992d'/%3E%3Cpath d='M230 200v260L30 345V115z' fill='%23ffb739'/%3E%3Cpath d='M29.998 115l69.915 40.2 132.46-38.92 67.534-76.087L229.998 0z' fill='%23fb992d'/%3E%3Cpath d='M160.096 189.804L229.998 230l200-115-69.9-40.202-133.44 39.48z' fill='%23f67a21'/%3E%3Cpath d='M160.096 289.803L99.913 255.2v-100l58.01 4.53 2.172 30.074z' fill='%23ffeac3'/%3E%3Cpath d='M99.913 155.2L299.907 40.193l60.19 34.605-200.002 115.006z' fill='%23ffd488'/%3E%3C/svg%3E") 12px center no-repeat, linear-gradient(to bottom, #f6f6f6, #eaeaea) !important;
+  background-size: 16px, 100% !important;
+}
+
+#packages .tr:hover div.td[data-title="Package name"] {
+  background: #ffd url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 460 460'%3E%3Cpath d='M200.002 210l30 250 200-115V115z' fill='%23fb992d'/%3E%3Cpath d='M230 200v260L30 345V115z' fill='%23ffb739'/%3E%3Cpath d='M29.998 115l69.915 40.2 132.46-38.92 67.534-76.087L229.998 0z' fill='%23fb992d'/%3E%3Cpath d='M160.096 189.804L229.998 230l200-115-69.9-40.202-133.44 39.48z' fill='%23f67a21'/%3E%3Cpath d='M160.096 289.803L99.913 255.2v-100l58.01 4.53 2.172 30.074z' fill='%23ffeac3'/%3E%3Cpath d='M99.913 155.2L299.907 40.193l60.19 34.605-200.002 115.006z' fill='%23ffd488'/%3E%3C/svg%3E") 12px center no-repeat !important;
+  background-size: 16px, 100% !important;
 }
 
 /* Enable for zebra table styling */
@@ -2588,10 +2598,6 @@ body:not(.Firewall):not(.Wireless) .table:not(.lases):not(.leases6) {
 .Firewall .table, #cbi-wireless .table.cbi-section-table {
   margin-bottom: 0 !important;
 }
-
-/*#wifi_assoclist_table {
-  margin-bottom: -1px !important;
-}*/
 
 @supports (background-blend-mode: luminosity) { /* exclude ms browsers */
 input[type="checkbox"], input[type="checkbox"]:checked, input[type="checkbox"][disabled], input[type="checkbox"][disabled]:checked {
