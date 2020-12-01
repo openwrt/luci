@@ -888,6 +888,12 @@ return view.extend({
 
 					o = ss.taboption('advanced', CBIWifiCountryValue, 'country', _('Country Code'));
 					o.wifiNetwork = radioNet;
+ 
+					o = ss.taboption('advanced', form.ListValue, 'cell_density', _('Coverage cell density'), _('Configures data rates based on the coverage cell density. Normal configures basic rates to 6, 12, 24 Mbps if legacy 802.11b rates are not used else to 5.5, 11 Mbps. High configures basic rates to 12, 24 Mbps if legacy 802.11b rates are not used else to the 11 Mbps rate. Very High configures 24 Mbps as the basic rate. Supported rates lower than the minimum basic rate are not offered.'));
+					o.value('0', _('Disabled'));
+					o.value('1', _('Normal'));
+					o.value('2', _('High'));
+					o.value('3', _('Very High'));
 
 					o = ss.taboption('advanced', form.Flag, 'legacy_rates', _('Allow legacy 802.11b rates'));
 					o.default = o.enabled;
