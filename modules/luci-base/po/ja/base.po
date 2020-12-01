@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-06-10 03:40+0200\n"
-"PO-Revision-Date: 2020-11-29 07:51+0000\n"
+"PO-Revision-Date: 2020-12-01 16:16+0000\n"
 "Last-Translator: Ryota <21ryotagamer@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/openwrt/luci/ja/"
 ">\n"
@@ -1429,7 +1429,7 @@ msgstr "カスタマイズされたインターフェース"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:36
 msgid "Custom delegated IPv6-prefix"
-msgstr "カスタムデリゲートされたIPv6プレフィックス"
+msgstr "委任されたカスタムIPv6プレフィックス"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:382
 msgid ""
@@ -4471,10 +4471,9 @@ msgid ""
 "server, use the suffix (like '::1') to form the IPv6 address ('a:b:c:d::1') "
 "for the interface."
 msgstr ""
-"使用できる値: 'eui64', 'random', または '::1' や '::1:2' のような固定値。"
-"IPv6 プレフィックス（例: 'a:b:c:d::'）を委任サーバーから受信する際、インター"
-"フェースの IPv6 アドレス（'a:b:c:d::1'）を形成するために使用されるサフィック"
-"ス（例: '::1'）を指定します（オプション） 。"
+"IPv6プレフィックス（例: 'a:b:c:d::'）を代理サーバーから受信する場合、インターフェースのIPv6アドレス（'a:b:c:d::1'）を形成"
+"するために使用されるサフィックス（例: '::1'）を指定します（オプション） 。使用できる値: "
+"'eui64','random'または'::1'や'::1:2'のような固定値。"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:143
 msgid ""
@@ -4484,15 +4483,15 @@ msgstr ""
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:159
 msgid "Optional. Create routes for Allowed IPs for this peer."
-msgstr ""
+msgstr "このピアの許可されたIPのルートを作成します（オプション）。"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:134
 msgid "Optional. Description of peer."
-msgstr ""
+msgstr "ピアの説明（オプション）。"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:87
 msgid "Optional. Do not create host routes to peers."
-msgstr ""
+msgstr "ピアへのホストルートを作成しない（オプション）。"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:161
 msgid ""
@@ -4504,23 +4503,22 @@ msgstr ""
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:97
 msgid "Optional. Maximum Transmission Unit of tunnel interface."
-msgstr "トンネル インターフェースのMaximum Transmission Unit（オプション）。"
+msgstr "トンネルインターフェースのMaximum Transmission Unit（オプション）。"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:165
 msgid "Optional. Port of peer."
 msgstr "ピアのポート（オプション）。"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:169
+#, fuzzy
 msgid ""
 "Optional. Seconds between keep alive messages. Default is 0 (disabled). "
 "Recommended value if this device is behind a NAT is 25."
-msgstr ""
-"キープアライブ メッセージの送信間隔（秒）です。既定値: ０。このデバイスがNAT"
-"以下に存在する場合の推奨値は25です（オプション）。"
+msgstr "キープアライブメッセージの送信間隔（秒）です。デフォルトは0（無効）です。このデバイスがNATを使用する場合の推奨値は25です（オプション）。"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:78
 msgid "Optional. UDP port used for outgoing and incoming packets."
-msgstr "発信パケットと受信パケットに使用されるUDPポート（オプション）。"
+msgstr "送信パケットと受信パケットに使用されるUDPポート（オプション）。"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:71
 msgid "Options"
@@ -4543,21 +4541,21 @@ msgstr "送信:"
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:103
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:108
 msgid "Outgoing checksum"
-msgstr ""
+msgstr "送信チェックサム"
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:96
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:101
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:98
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:103
 msgid "Outgoing key"
-msgstr ""
+msgstr "送信キー"
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:103
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:108
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:105
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:110
 msgid "Outgoing serialization"
-msgstr ""
+msgstr "送信シリアル化"
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:50
 msgid "Output Interface"
@@ -4579,7 +4577,7 @@ msgstr "オーバーラップ"
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:76
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:71
 msgid "Override MAC address"
-msgstr "MACアドレスを上書きする"
+msgstr "MACアドレスを上書き"
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:61
 #: modules/luci-base/htdocs/luci-static/resources/protocol/static.js:226
@@ -4602,7 +4600,7 @@ msgstr "MACアドレスを上書きする"
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:62
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:57
 msgid "Override MTU"
-msgstr "MTUを上書きする"
+msgstr "MTUを上書き"
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:74
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:79
@@ -4610,7 +4608,7 @@ msgstr "MTUを上書きする"
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:72
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:67
 msgid "Override TOS"
-msgstr "TOS を上書き"
+msgstr "TOSを上書き"
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:69
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:74
@@ -4620,7 +4618,7 @@ msgstr "TOS を上書き"
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:67
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:62
 msgid "Override TTL"
-msgstr "TTL を上書き"
+msgstr "TTLを上書き"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1079
 msgid "Override default interface name"
@@ -4628,7 +4626,7 @@ msgstr "デフォルトのインターフェース名を上書き"
 
 #: protocols/luci-proto-relay/htdocs/luci-static/resources/protocol/relay.js:167
 msgid "Override the gateway in DHCP responses"
-msgstr "DHCPレスポンス内のゲートウェイアドレスを上書きする"
+msgstr "DHCPレスポンス内のゲートウェイを上書き"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:603
 msgid ""
@@ -4648,11 +4646,11 @@ msgstr "概要"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2721
 msgid "Overwrite existing file \"%s\" ?"
-msgstr "既存のファイル \"%s\" を上書きしますか？"
+msgstr "既存のファイル\"%s\"を上書きしますか？"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/processes.js:70
 msgid "Owner"
-msgstr "所有者"
+msgstr "オーナー"
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:97
 msgid "PAP/CHAP (both)"
@@ -4669,7 +4667,7 @@ msgstr "PAP/CHAP（両方）"
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:82
 #: protocols/luci-proto-sstp/htdocs/luci-static/resources/protocol/sstp.js:46
 msgid "PAP/CHAP password"
-msgstr "PAP/CHAP パスワード"
+msgstr "PAP/CHAPパスワード"
 
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:96
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:103
@@ -4682,7 +4680,7 @@ msgstr "PAP/CHAP パスワード"
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:77
 #: protocols/luci-proto-sstp/htdocs/luci-static/resources/protocol/sstp.js:44
 msgid "PAP/CHAP username"
-msgstr "PAP/CHAP ユーザー名"
+msgstr "PAP/CHAPユーザー名"
 
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:101
 msgid "PDP Type"
@@ -4702,11 +4700,11 @@ msgstr "PIN"
 #: modules/luci-base/htdocs/luci-static/resources/network.js:21
 #: modules/luci-compat/luasrc/model/network.lua:39
 msgid "PIN code rejected"
-msgstr "PIN コードが拒否されました"
+msgstr "PINコードが拒否されました"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1477
 msgid "PMK R1 Push"
-msgstr ""
+msgstr "PMK R1プッシュ"
 
 #: modules/luci-compat/luasrc/model/network/proto_ppp.lua:13
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/ppp.js:43
@@ -4739,19 +4737,19 @@ msgstr "PPtP"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/map.js:73
 msgid "PSID offset"
-msgstr "PSID オフセット"
+msgstr "PSIDオフセット"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/map.js:70
 msgid "PSID-bits length"
-msgstr "PSID ビット長"
+msgstr "PSIDビット長"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:918
 msgid "PTM/EFM (Packet Transfer Mode)"
-msgstr ""
+msgstr "PTM/EFM（パケット転送モード）"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:882
 msgid "Packet Steering"
-msgstr "パケット ステアリング"
+msgstr "パケットステアリング"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:53
 msgid "Packets"
@@ -4759,12 +4757,12 @@ msgstr "パケット"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:275
 msgid "Packets To Transmit Before Moving To Next Slave"
-msgstr ""
+msgstr "次のスレーブに移動する前に送信するパケット"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:152
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:825
 msgid "Part of zone %q"
-msgstr "ゾーン %q の一部"
+msgstr "ゾーン%qの一部"
 
 #: modules/luci-base/luasrc/view/sysauth.htm:29
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1599
@@ -4785,7 +4783,7 @@ msgstr "秘密鍵のパスワード"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1589
 msgid "Password of inner Private Key"
-msgstr "秘密鍵のパスワード"
+msgstr "秘密内部鍵のパスワード"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js:31
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js:33
@@ -4800,35 +4798,35 @@ msgstr "パスワード2"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:239
 msgid "Paste or drag SSH key file…"
-msgstr "貼付けまたはSSH鍵ファイルをドラッグ…"
+msgstr "鍵を貼り付けるか、SSHキーファイルをドラッグ…"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1510
 msgid "Path to CA-Certificate"
-msgstr "CA 証明書へのパス"
+msgstr "CA証明書のパス"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1525
 msgid "Path to Client-Certificate"
-msgstr "クライアント証明書へのパス"
+msgstr "クライアント証明書のパス"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1528
 msgid "Path to Private Key"
-msgstr "秘密鍵へのパス"
+msgstr "秘密鍵のパス"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1568
 msgid "Path to inner CA-Certificate"
-msgstr "CA 証明書のパス"
+msgstr "内部CA証明書のパス"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1583
 msgid "Path to inner Client-Certificate"
-msgstr "クライアント証明書のパス"
+msgstr "内部クライアント証明書のパス"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1586
 msgid "Path to inner Private Key"
-msgstr "秘密鍵のパス"
+msgstr "秘密内部鍵のパス"
 
 #: modules/luci-base/htdocs/luci-static/resources/luci.js:2731
 msgid "Paused"
-msgstr "一時停止"
+msgstr "一時停止中"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/bandwidth.js:271
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/bandwidth.js:281
@@ -4846,12 +4844,12 @@ msgstr "ピーク:"
 
 #: protocols/luci-proto-pppossh/htdocs/luci-static/resources/protocol/pppossh.js:89
 msgid "Peer IP address to assign"
-msgstr "割り当てるピア IP アドレス"
+msgstr "割り当てるピアIPアドレス"
 
 #: modules/luci-base/htdocs/luci-static/resources/network.js:14
 #: modules/luci-compat/luasrc/model/network.lua:32
 msgid "Peer address is missing"
-msgstr "ピアのアドレスがありません"
+msgstr "ピアアドレスがありません"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:115
 msgid "Peers"
@@ -4859,26 +4857,26 @@ msgstr "ピア"
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:80
 msgid "Perfect Forward Secrecy"
-msgstr ""
+msgstr "Perfect Forward Secrecy（前方秘匿性）"
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:103
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:108
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:105
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:110
 msgid "Perform outgoing packets serialization (optional)."
-msgstr ""
+msgstr "送信パケットのシリアル化を実行します（オプション）。"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/reboot.js:34
 msgid "Perform reboot"
-msgstr "再起動を実行"
+msgstr "再起動する"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:378
 msgid "Perform reset"
-msgstr "初期化実行"
+msgstr "初期化する"
 
 #: modules/luci-base/htdocs/luci-static/resources/rpc.js:407
 msgid "Permission denied"
-msgstr "パーミッション拒否"
+msgstr "アクセス許可が拒否されました"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:169
 msgid "Persistent Keep Alive"
@@ -4925,27 +4923,29 @@ msgstr "ポート"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:278
 msgid "Port status:"
-msgstr "ポート ステータス:"
+msgstr "ポートステータス:"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:492
+#, fuzzy
 msgid "Potential negation of: %s"
-msgstr ""
+msgstr "存在しない可能性があります: %s"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:38
 msgid "Power Management Mode"
 msgstr "電力管理モード"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:36
+#, fuzzy
 msgid "Pre-emptive CRC errors (CRCP_P)"
-msgstr ""
+msgstr "プリエンプティブCRCエラー（CRCP_P）"
 
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:73
 msgid "Prefer LTE"
-msgstr "LTE を優先"
+msgstr "LTEを優先"
 
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:74
 msgid "Prefer UMTS"
-msgstr "UMTS を優先"
+msgstr "UMTSを優先"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:33
 msgid "Prefix Delegated"
@@ -4953,7 +4953,7 @@ msgstr "委任されたプレフィックス（PD）"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:143
 msgid "Preshared Key"
-msgstr "事前共有鍵"
+msgstr "事前共有キー"
 
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:131
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/ppp.js:115
@@ -4964,9 +4964,7 @@ msgstr "事前共有鍵"
 msgid ""
 "Presume peer to be dead after given amount of LCP echo failures, use 0 to "
 "ignore failures"
-msgstr ""
-"設定回数のLCP echo 確認失敗後、ピアノードがダウンしているものと見なします。0"
-"を設定した場合、失敗しても無視します"
+msgstr "設定された回数LCP echoが失敗後、ピアがダウンしたと見なします。0を設定した場合、失敗しても無視します"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:407
 msgid "Prevent listening on these interfaces."
@@ -4974,21 +4972,22 @@ msgstr "これらのインターフェースでのリッスンを停止します
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1075
 msgid "Prevents client-to-client communication"
-msgstr "クライアント同士の通信を制限します"
+msgstr "クライアント同士の通信を制限"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:211
 msgid "Primary Slave"
-msgstr ""
+msgstr "プライマリスレーブ"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:228
 msgid ""
 "Primary becomes active slave when it comes back up if speed and duplex "
 "better than current slave (better, 1)"
-msgstr ""
+msgstr "現在のスレーブよりアクティブスレーブの方が速度とデュプレックスが優れている場合、プライマリはアクティブスレーブになります（better、1）"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:227
+#, fuzzy
 msgid "Primary becomes active slave whenever it comes back up (always, 0)"
-msgstr ""
+msgstr "プライマリが復旧するとアクティブスレーブになります（always、0）"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:61
 msgid "Private Key"
@@ -5019,11 +5018,11 @@ msgstr "プロトコル"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:265
 msgid "Provide NTP server"
-msgstr "NTPサーバー機能を有効にする"
+msgstr "NTPサーバーを有効化"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:825
 msgid "Provide new network"
-msgstr "新しいネットワークを設定します"
+msgstr "新しいネットワークを設定"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1004
 msgid "Pseudo Ad-Hoc (ahdemo)"
