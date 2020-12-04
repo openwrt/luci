@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-06-10 03:40+0200\n"
-"PO-Revision-Date: 2020-12-01 16:16+0000\n"
-"Last-Translator: Ryota <21ryotagamer@gmail.com>\n"
+"PO-Revision-Date: 2020-12-04 12:08+0000\n"
+"Last-Translator: INAGAKI Hiroshi <musashino.open@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/openwrt/luci/ja/"
 ">\n"
 "Language: ja\n"
@@ -3843,7 +3843,7 @@ msgstr "モデムの準備が完了するまでの最大の待ち時間（秒）
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:586
 msgid "Maximum number of leased addresses."
-msgstr "これは割り当て済みアドレスの最大数です。"
+msgstr "リースされるアドレスの最大数です。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:886
 msgid "Maximum transmit power"
@@ -3886,7 +3886,7 @@ msgstr "メッシュID"
 
 #: modules/luci-base/htdocs/luci-static/resources/rpc.js:404
 msgid "Method not found"
-msgstr "方法が見つかりません"
+msgstr "メソッドが見つかりません"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:349
 msgid "Method of link monitoring"
@@ -3973,7 +3973,7 @@ msgstr "モデム情報の問い合わせに失敗しました"
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:104
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:93
 msgid "Modem init timeout"
-msgstr "モデム準備タイムアウト"
+msgstr "モデム初期化タイムアウト"
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:44
 msgid "Modem is disabled."
@@ -4783,7 +4783,7 @@ msgstr "秘密鍵のパスワード"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1589
 msgid "Password of inner Private Key"
-msgstr "秘密内部鍵のパスワード"
+msgstr "内部秘密鍵のパスワード"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js:31
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js:33
@@ -4798,7 +4798,7 @@ msgstr "パスワード2"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:239
 msgid "Paste or drag SSH key file…"
-msgstr "鍵を貼り付けるか、SSHキーファイルをドラッグ…"
+msgstr "SSH鍵を貼り付けるかファイルをドラッグ…"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1510
 msgid "Path to CA-Certificate"
@@ -4822,7 +4822,7 @@ msgstr "内部クライアント証明書のパス"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1586
 msgid "Path to inner Private Key"
-msgstr "秘密内部鍵のパス"
+msgstr "内部秘密鍵のパス"
 
 #: modules/luci-base/htdocs/luci-static/resources/luci.js:2731
 msgid "Paused"
@@ -4857,7 +4857,7 @@ msgstr "ピア"
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:80
 msgid "Perfect Forward Secrecy"
-msgstr "Perfect Forward Secrecy（前方秘匿性）"
+msgstr "Perfect Forward Secrecy（完全転送秘密）"
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:103
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:108
@@ -4953,7 +4953,7 @@ msgstr "委任されたプレフィックス（PD）"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:143
 msgid "Preshared Key"
-msgstr "事前共有キー"
+msgstr "事前共有鍵"
 
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:131
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/ppp.js:115
@@ -5039,39 +5039,37 @@ msgid ""
 "device, paste an OpenSSH compatible public key line or drag a <code>.pub</"
 "code> file into the input field."
 msgstr ""
-"公開鍵は、プレーン パスワードの使用と比べ、高セキュリティなパスワードなしで"
-"の SSH ログインを可能とします。新しい鍵をデバイスにアップロードするために、入"
-"力欄に OpenSSH 互換の公開鍵（1行）を貼り付けるか、 <code>.pub</code> ファイル"
-"をドラッグしてください。"
+"公開鍵を使うことで、普通のパスワードよりもセキュリティが高いSSHログインが可能です。新しい鍵をデバイスにアップロードするには、入力欄にOpenSSH互換"
+"の公開鍵（1行）を貼り付けるか、<code>.pub</code>ファイルをドラッグしてください。"
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/static.js:214
+#, fuzzy
 msgid "Public prefix routed to this device for distribution to clients."
-msgstr ""
+msgstr "クライアントに接続するために、このデバイスにルーティングされるパブリックプレフィックスです。"
 
 #: modules/luci-compat/luasrc/model/network/proto_qmi.lua:9
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:27
 msgid "QMI Cellular"
-msgstr "QMI セルラー"
+msgstr "QMIセルラー"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:140
 msgid "Quality"
-msgstr "クオリティ"
+msgstr "品質"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:264
+#, fuzzy
 msgid ""
 "Query all available upstream <abbr title=\"Domain Name System\">DNS</abbr> "
 "servers"
-msgstr ""
-"アップストリームの利用可能な全 <abbr title=\"Domain Name System\">DNS</abbr> "
-"サーバを問い合わせます"
+msgstr "利用可能なすべての上位<abbr title=\"Domain Name System\">DNS</abbr>サーバに問い合わせる"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1465
 msgid "R0 Key Lifetime"
-msgstr "R0 キーの有効期間"
+msgstr "R0キー有効期限"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1471
 msgid "R1 Key Holder"
-msgstr ""
+msgstr "R1キーホルダー"
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:88
 msgid "RFC3947 NAT-T mode"
