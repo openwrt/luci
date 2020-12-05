@@ -119,7 +119,7 @@ return baseclass.extend({
 			else
 				icon = L.resource('icons/signal-75-100.png');
 
-			var WPS_button;
+			var WPS_button = null;
 
 			if (this.isWPSEnabled[net.sid]) {
 				if (net.wps_status == 'Active') {
