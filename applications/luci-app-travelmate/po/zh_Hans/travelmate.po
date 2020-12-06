@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2020-11-24 18:29+0000\n"
-"Last-Translator: Forbidden <10278743+f0rb1d@users.noreply.github.com>\n"
+"PO-Revision-Date: 2020-12-03 11:51+0000\n"
+"Last-Translator: Chris <christangwu@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "openwrt/luciapplicationstravelmate/zh_Hans/>\n"
 "Language: zh_Hans\n"
@@ -67,7 +67,7 @@ msgstr "自动"
 msgid ""
 "Automatically add open uplinks like hotel captive portals to your wireless "
 "config."
-msgstr "自动将开放的上行链路（例如酒店门户网络）添加到您的无线配置中。"
+msgstr "自动将开放的上行链路（例如酒店的强制登录门户）添加到您的无线配置中。"
 
 #: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:112
 msgid ""
@@ -89,11 +89,11 @@ msgstr "返回概述"
 
 #: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:148
 msgid "Buffer size in bytes to prepare nearby scan results."
-msgstr "用于暂存附近扫描结果的缓冲区大小（单位为字节）。"
+msgstr "用于暂存扫描结果的缓冲区大小（单位为字节）。"
 
 #: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:58
 msgid "Captive Portal Detection"
-msgstr "强制门户检测"
+msgstr "强制登录门户检测"
 
 #: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:59
 msgid ""
@@ -192,7 +192,7 @@ msgstr "加密"
 msgid ""
 "External script reference which will be called for automated captive portal "
 "logins."
-msgstr "外部脚本参考，将用于门户网络的自动登录。"
+msgstr "引用外部脚本，将用于强制登录门户的登录。"
 
 #: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:100
 msgid "Extra Options"
@@ -240,7 +240,7 @@ msgstr "强制 TKIP 和 CCMP（AES）"
 #: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:136
 msgid ""
 "How long should travelmate wait for a successful wlan uplink connection."
-msgstr "travelmate 等待 wlan 上行连接成功最长时间。"
+msgstr "travelmate 等待 wlan 上行链路连接成功的最长时间。"
 
 #: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/wifi_add.lua:105
 #: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/wifi_edit.lua:87
@@ -282,7 +282,7 @@ msgstr "加载中"
 msgid ""
 "Minimum signal quality threshold as percent for conditional uplink (dis-) "
 "connections."
-msgstr "最小信号质量阈值（百分比），作为（断开）连接上行的条件。"
+msgstr "最小信号质量阈值（百分比），作为连接（断开）上行链路的条件。"
 
 #: applications/luci-app-travelmate/luasrc/view/travelmate/stations.htm:132
 msgid "Move down"
@@ -408,7 +408,7 @@ msgstr ""
 
 #: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:124
 msgid "Retry limit to connect to an uplink."
-msgstr "连接到上行连接的重试限制。"
+msgstr "连接到上行链路的重试次数限制。"
 
 #: applications/luci-app-travelmate/luasrc/view/travelmate/runtime.htm:102
 msgid "Runtime Information"
@@ -458,7 +458,7 @@ msgstr "信号强度"
 msgid ""
 "Space separated list of additional arguments passed to the Auto Login "
 "Script, i.e. username and password"
-msgstr "传递给自动登录脚本的其他可选参数的空格分隔列表，比如用户名和密码"
+msgstr "分隔传递给自动登录脚本的其他可选参数的列表，比如用户名和密码"
 
 #: applications/luci-app-travelmate/luasrc/view/travelmate/runtime.htm:116
 msgid "Station ID (RADIO/SSID/BSSID)"
@@ -508,7 +508,7 @@ msgstr "此步骤只需执行一次。"
 #: applications/luci-app-travelmate/luasrc/controller/travelmate.lua:17
 #: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:13
 msgid "Travelmate"
-msgstr "旅行伴侣"
+msgstr "Travelmate"
 
 #: applications/luci-app-travelmate/luasrc/view/travelmate/runtime.htm:104
 msgid "Travelmate Status (Quality)"
@@ -520,7 +520,7 @@ msgstr "Travelmate 版本"
 
 #: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:64
 msgid "Treat missing internet availability as an error."
-msgstr "将没有可用互联网视为错误。"
+msgstr "将无法连接互联网视为错误。"
 
 #: applications/luci-app-travelmate/luasrc/model/cbi/travelmate/overview_tab.lua:117
 msgid "Trigger Delay"
