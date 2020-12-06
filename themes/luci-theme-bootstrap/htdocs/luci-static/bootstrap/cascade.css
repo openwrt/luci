@@ -444,19 +444,23 @@ input, select, .cbi-dropdown:not(.btn):not(.cbi-button), .uneditable-input {
   padding-top: 5px;
 }
 
-select {
-  background: #fff;
+select.cbi-button.cbi-input-select {
+  padding: initial;
   box-shadow: inset 0 -1px 3px rgba(0, 0, 0, .1);
-  padding: initial
+  background: url("data:image/svg+xml,%3Csvg viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m5.29 17.93 26.71 28.14 26.71-28.14' fill='none' stroke='%23555' stroke-linecap='round' stroke-linejoin='round' stroke-width='10'/%3E%3C/svg%3E") right 8px center no-repeat, linear-gradient(to bottom, #f2f2f2, #e8e8e8);
+  background-size: 12px;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
 }
 
 input[type=file] {
-  background-color: #fff;
-  border: initial;
-  line-height: initial;
-  box-shadow: none;
+  padding: initial;
   width: auto!important;
-  padding: initial
+  line-height: initial;
+  border: initial;
+  box-shadow: none;
+  background-color: #fff;
 }
 
 input[type=button], input[type=reset], input[type=submit] {
@@ -1310,7 +1314,9 @@ input[type=text] + .cbi-button-add, input[type=text] + .cbi-button-neutral, inpu
 }
 
 select+.cbi-button {
-  border-left-color: transparent
+  margin-top: 6px;
+  margin-bottom: 6px;
+  border-left-color: transparent;
 }
 
 .cbi-title-ref {
@@ -1700,6 +1706,13 @@ table table td, .cbi-value-field table td {
   background-size: 16px 16px;
 }
 
+div:not(.cbi-checkbox) + .cbi-value-description {
+    margin-top: 4px;
+    margin-bottom: -4px;
+    padding-left: 20px;
+    background-position: left center;
+}
+
 @media screen and (min-width: 1000px) {
   .cbi-value-description {
     padding-left: 20px;
@@ -1864,7 +1877,22 @@ form .cbi-tab-descr {
 }
 
 .ifacebadge.large {
-  display: inline-flex
+  border: 1px solid #ddd;
+  display: inline-flex;
+  position: relative;
+}
+
+.ifacebadge.large small {
+  margin: auto 4px auto 0 !important;
+  padding: 8px 4px;
+  vertical-align: middle;
+  height: 100%;
+}
+
+.ifacebadge.large small + span {
+  margin: -8px 0;
+  padding: 4px 0 4px 8px;
+  border-left: 1px solid #ddd;
 }
 
 .network-status-table .ifacebox-body .ifacebadge>span {
@@ -2654,6 +2682,13 @@ body.LED .cbi-section-create {
 .cbi-button.cbi-button-save {
   margin-top: 0 !important;
   margin-bottom: 0 !important;
+}
+
+@media screen and (min-width: 1400px) {
+
+div[id$="-ifc-description"] {
+  columns: 2 auto;
+}
 }
 
 @supports (background-blend-mode: luminosity) { /* exclude ms browsers */
