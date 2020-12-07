@@ -76,10 +76,10 @@ return view.extend({
 		};
 
 		o.render = L.bind(function(view, section_id) {
-			var table = E('div', { 'class': 'table' }, [
-				E('div', { 'class': 'tr table-titles' }, [
-					E('div', { 'class': 'th' }, _('Interface')),
-					E('div', { 'class': 'th right' }, _('Delete'))
+			var table = E('table', { 'class': 'table' }, [
+				E('tr', { 'class': 'tr table-titles' }, [
+					E('th', { 'class': 'th' }, _('Interface')),
+					E('th', { 'class': 'th right' }, _('Delete'))
 				])
 			]);
 

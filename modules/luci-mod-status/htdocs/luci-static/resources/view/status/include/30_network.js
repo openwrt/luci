@@ -81,12 +81,12 @@ return baseclass.extend({
 			_('Active Connections'), ct_max ? ct_count : null
 		];
 
-		var ctstatus = E('div', { 'class': 'table' });
+		var ctstatus = E('table', { 'class': 'table' });
 
 		for (var i = 0; i < fields.length; i += 2) {
-			ctstatus.appendChild(E('div', { 'class': 'tr' }, [
-				E('div', { 'class': 'td left', 'width': '33%' }, [ fields[i] ]),
-				E('div', { 'class': 'td left' }, [
+			ctstatus.appendChild(E('tr', { 'class': 'tr' }, [
+				E('td', { 'class': 'td left', 'width': '33%' }, [ fields[i] ]),
+				E('td', { 'class': 'td left' }, [
 					(fields[i + 1] != null) ? progressbar(fields[i + 1], ct_max) : '?'
 				])
 			]));

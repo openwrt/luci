@@ -88,14 +88,14 @@
 </div>
 
 <script type="text/javascript">//<![CDATA[
-	new TablePooler(1,"/cgi-bin/bmx7-info", {'$info':''}, "config_div", function(st){
+	new TablePooler(10,"/cgi-bin/bmx7-info", {'info':''}, "config_div", function(st){
 		var res = Array();
 		var sta = st.info[0].status;
 		res.push([sta.shortId, sta.name, sta.primaryIp, sta.nodeKey, sta.shortDhash, sta.revision]);
 		return res;
 	});
 
-	new TablePooler(1,"/cgi-bin/bmx7-info", {'$info':''}, "status_div", function(st){
+	new TablePooler(10,"/cgi-bin/bmx7-info", {'info':''}, "status_div", function(st){
 		var res = Array();
 		var sta = st.info[0].status;
 		var mem = st.info[3].memory.bmx7;
@@ -105,7 +105,7 @@
 		return res;
 	});
 
-	new TablePooler(1,"/cgi-bin/bmx7-info", {'$info':''}, "ifaces_div", function(st){
+	new TablePooler(10,"/cgi-bin/bmx7-info", {'info':''}, "ifaces_div", function(st){
 		var res = Array();
 		var ifaces = st.info[1].interfaces;
 
@@ -115,7 +115,7 @@
 		return res;
 	});
 
-	new TablePooler(1,"/cgi-bin/bmx7-info", {'$info':''}, "links_div", function(st){
+	new TablePooler(10,"/cgi-bin/bmx7-info", {'info':''}, "links_div", function(st){
 		var res = Array();
 		links = st.info[2].links;
 

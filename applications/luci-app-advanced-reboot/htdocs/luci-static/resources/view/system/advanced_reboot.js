@@ -198,12 +198,12 @@ return view.extend({
 
 		body.appendChild(E('h3', device_info.device_name + _(' Partitions')));
 		if (device_info.device_name) {
-			var partitions_table = E('div', { 'class': 'table' }, [
-				E('div', { 'class': 'tr table-titles' }, [
-					E('div', { 'class': 'th' }, [ _('Partition') ]),
-					E('div', { 'class': 'th' }, [ _('Status') ]),
-					E('div', { 'class': 'th' }, [ _('Firmware') ]),
-					E('div', { 'class': 'th' }, [ _('Reboot') ])
+			var partitions_table = E('table', { 'class': 'table' }, [
+				E('tr', { 'class': 'tr table-titles' }, [
+					E('th', { 'class': 'th' }, [ _('Partition') ]),
+					E('th', { 'class': 'th' }, [ _('Status') ]),
+					E('th', { 'class': 'th' }, [ _('Firmware') ]),
+					E('th', { 'class': 'th' }, [ _('Reboot') ])
 				])
 			]);
 

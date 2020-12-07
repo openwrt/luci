@@ -22,13 +22,13 @@ return baseclass.extend({
 	render: function(data) {
 		var services = data[0];
 
-		var table = E('div', { 'class': 'table' }, [
-			E('div', { 'class': 'tr table-titles' }, [
-				E('div', { 'class': 'th' }, _('Configuration')),
-				E('div', { 'class': 'th' }, _('Next Update')),
-				E('div', { 'class': 'th' }, _('Lookup Hostname')),
-				E('div', { 'class': 'th' }, _('Registered IP')),
-				E('div', { 'class': 'th' }, _('Network'))
+		var table = E('table', { 'class': 'table' }, [
+			E('tr', { 'class': 'tr table-titles' }, [
+				E('th', { 'class': 'th' }, _('Configuration')),
+				E('th', { 'class': 'th' }, _('Next Update')),
+				E('th', { 'class': 'th' }, _('Lookup Hostname')),
+				E('th', { 'class': 'th' }, _('Registered IP')),
+				E('th', { 'class': 'th' }, _('Network'))
 			])
 		]);
 

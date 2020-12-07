@@ -1,7 +1,9 @@
 'use strict';
 'require baseclass';
 'require rpc';
+'require uci';
 'require network';
+'require validation';
 
 var callLuciDHCPLeases = rpc.declare({
 	object: 'luci-rpc',
@@ -12,29 +14,85 @@ var callLuciDHCPLeases = rpc.declare({
 return baseclass.extend({
 	title: '',
 
+	isMACStatic: {},
+	isDUIDStatic: {},
+
 	load: function() {
 		return Promise.all([
 			callLuciDHCPLeases(),
-			network.getHostHints()
+			network.getHostHints(),
+			uci.load('dhcp')
 		]);
+	},
+
+	handleCreateStaticLease: function(lease, ev) {
+		ev.currentTarget.classList.add('spinning');
+		ev.currentTarget.disabled = true;
+		ev.currentTarget.blur();
+
+		var cfg = uci.add('dhcp', 'host');
+		uci.set('dhcp', cfg, 'name', lease.hostname || '-');
+		uci.set('dhcp', cfg, 'ip', lease.ipaddr);
+		uci.set('dhcp', cfg, 'mac', lease.macaddr.toUpperCase());
+
+		return uci.save()
+			.then(L.bind(L.ui.changes.init, L.ui.changes))
+			.then(L.bind(L.ui.changes.displayChanges, L.ui.changes));
+	},
+
+	handleCreateStaticLease6: function(lease, ev) {
+		ev.currentTarget.classList.add('spinning');
+		ev.currentTarget.disabled = true;
+		ev.currentTarget.blur();
+
+		var cfg = uci.add('dhcp', 'host'),
+		    ip6arr = lease.ip6addrs[0] ? validation.parseIPv6(lease.ip6addrs[0]) : null;
+
+		uci.set('dhcp', cfg, 'name', lease.hostname || '-');
+		uci.set('dhcp', cfg, 'duid', lease.duid.toUpperCase());
+		uci.set('dhcp', cfg, 'mac', lease.macaddr);
+		if (ip6arr)
+			uci.set('dhcp', cfg, 'hostid', (ip6arr[6] * 0xFFFF + ip6arr[7]).toString(16));
+
+		return uci.save()
+			.then(L.bind(L.ui.changes.init, L.ui.changes))
+			.then(L.bind(L.ui.changes.displayChanges, L.ui.changes));
 	},
 
 	renderLeases: function(data) {
 		var leases = Array.isArray(data[0].dhcp_leases) ? data[0].dhcp_leases : [],
 		    leases6 = Array.isArray(data[0].dhcp6_leases) ? data[0].dhcp6_leases : [],
-		    machints = data[1].getMACHints(false);
+		    machints = data[1].getMACHints(false),
+		    hosts = uci.sections('dhcp', 'host');
 
-		var table = E('div', { 'class': 'table lases' }, [
-			E('div', { 'class': 'tr table-titles' }, [
-				E('div', { 'class': 'th' }, _('Hostname')),
-				E('div', { 'class': 'th' }, _('IPv4-Address')),
-				E('div', { 'class': 'th' }, _('MAC-Address')),
-				E('div', { 'class': 'th' }, _('Lease time remaining'))
+		for (var i = 0; i < hosts.length; i++) {
+			var host = hosts[i];
+
+			if (host.mac) {
+				var macs = L.toArray(host.mac);
+				for (var j = 0; j < macs.length; j++) {
+					var mac = macs[j].toUpperCase();
+					this.isMACStatic[mac] = true;
+				}
+			}
+			if (host.duid) {
+				var duid = host.duid.toUpperCase();
+				this.isDUIDStatic[duid] = true;
+			}
+		};
+
+		var table = E('table', { 'class': 'table lases' }, [
+			E('tr', { 'class': 'tr table-titles' }, [
+				E('th', { 'class': 'th' }, _('Hostname')),
+				E('th', { 'class': 'th' }, _('IPv4-Address')),
+				E('th', { 'class': 'th' }, _('MAC-Address')),
+				E('th', { 'class': 'th' }, _('Lease time remaining')),
+				E('th', { 'class': 'th cbi-section-actions' }, _('Static Lease'))
 			])
 		]);
 
-		cbi_update_table(table, leases.map(function(lease) {
-			var exp;
+		cbi_update_table(table, leases.map(L.bind(function(lease) {
+			var exp, rows;
 
 			if (lease.expires === false)
 				exp = E('em', _('unlimited'));
@@ -43,25 +101,37 @@ return baseclass.extend({
 			else
 				exp = '%t'.format(lease.expires);
 
-			return [
+			rows = [
 				lease.hostname || '-',
 				lease.ipaddr,
 				lease.macaddr,
 				exp
 			];
-		}), E('em', _('There are no active leases')));
 
-		var table6 = E('div', { 'class': 'table leases6' }, [
-			E('div', { 'class': 'tr table-titles' }, [
-				E('div', { 'class': 'th' }, _('Host')),
-				E('div', { 'class': 'th' }, _('IPv6-Address')),
-				E('div', { 'class': 'th' }, _('DUID')),
-				E('div', { 'class': 'th' }, _('Lease time remaining'))
+			if (lease.macaddr != null) {
+				var mac = lease.macaddr.toUpperCase();
+				rows.push(E('button', {
+					'class': 'cbi-button cbi-button-apply',
+					'click': L.bind(this.handleCreateStaticLease, this, lease),
+					'disabled': this.isMACStatic[mac]
+				}, [ _('Set Static') ]));
+			}
+
+			return rows;
+		}, this)), E('em', _('There are no active leases')));
+
+		var table6 = E('table', { 'class': 'table leases6' }, [
+			E('tr', { 'class': 'tr table-titles' }, [
+				E('th', { 'class': 'th' }, _('Host')),
+				E('th', { 'class': 'th' }, _('IPv6-Address')),
+				E('th', { 'class': 'th' }, _('DUID')),
+				E('th', { 'class': 'th' }, _('Lease time remaining')),
+				E('th', { 'class': 'th cbi-section-actions' }, _('Static Lease'))
 			])
 		]);
 
-		cbi_update_table(table6, leases6.map(function(lease) {
-			var exp;
+		cbi_update_table(table6, leases6.map(L.bind(function(lease) {
+			var exp, rows;
 
 			if (lease.expires === false)
 				exp = E('em', _('unlimited'));
@@ -80,13 +150,24 @@ return baseclass.extend({
 			else if (hint)
 				host = hint[1];
 
-			return [
+			rows = [
 				host || '-',
 				lease.ip6addrs ? lease.ip6addrs.join(' ') : lease.ip6addr,
 				lease.duid,
 				exp
 			];
-		}), E('em', _('There are no active leases')));
+
+			if (lease.duid != null) {
+				var duid = lease.duid.toUpperCase();
+				rows.push(E('button', {
+					'class': 'cbi-button cbi-button-apply',
+					'click': L.bind(this.handleCreateStaticLease6, this, lease),
+					'disabled': this.isDUIDStatic[duid]
+				}, [ _('Set Static') ]));
+			}
+
+			return rows;
+		}, this)), E('em', _('There are no active leases')));
 
 		return E([
 			E('h3', _('Active DHCP Leases')),

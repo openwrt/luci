@@ -393,6 +393,7 @@ var CBINetworkSelect = form.ListValue.extend({
 			select_placeholder: E('em', _('unspecified')),
 			display_items: this.display_size || this.size || 3,
 			dropdown_items: this.dropdown_size || this.size || 5,
+			datatype: this.multiple ? 'list(uciname)' : 'uciname',
 			validate: L.bind(this.validate, this, section_id),
 			create: !this.nocreate,
 			create_markup: '' +

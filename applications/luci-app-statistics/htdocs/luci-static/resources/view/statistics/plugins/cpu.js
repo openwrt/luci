@@ -23,8 +23,16 @@ return baseclass.extend({
 		o.rmempty = false;
 		o.depends('enable', '1');
 
+		o = s.option(form.Flag, 'ShowIdle', _('Show Idle state'),
+			_('Report also the value for the idle metric'));
+		o.default = '0';
+		o.rmempty = false;
+		o.depends({'enable': '1', 'ReportByState': '1'});
+
 		o = s.option(form.Flag, 'ValuesPercentage', _('Report in percent'),
 			_('When set to true, we request percentage values'));
+		o.default = '1';
+		o.rmempty = false;
 		o.depends({ 'enable': '1', 'ReportByCpu': '1', 'ReportByState': '1' });
 	},
 

@@ -509,7 +509,7 @@ user.getuser = nixio.getpw
 function user.getpasswd(username)
 	local pwe = nixio.getsp and nixio.getsp(username) or nixio.getpw(username)
 	local pwh = pwe and (pwe.pwdp or pwe.passwd)
-	if not pwh or #pwh < 1 or pwh == "!" or pwh == "x" then
+	if not pwh or #pwh < 1 then
 		return nil, pwe
 	else
 		return pwh, pwe

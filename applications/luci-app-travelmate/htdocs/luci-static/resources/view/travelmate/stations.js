@@ -227,7 +227,7 @@ return view.extend({
 					'click': ui.createHandlerFn(this, handleRemove, section_id)
 				}, _('Del'))
 			];
-			return E('div', { 'class': 'td middle cbi-section-actions' }, E('div', btns));
+			return E('td', { 'class': 'td middle cbi-section-actions' }, E('div', btns));
 		};
 
 		o = s.taboption('travelmate', form.Flag, '_enabled', _('Enabled'));
@@ -566,14 +566,14 @@ return view.extend({
 			modal 'scan' dialog
 		*/
 		s.handleScan = function(radio) {
-			var table = E('div', { 'class': 'table' }, [
-				E('div', { 'class': 'tr table-titles' }, [
-					E('div', { 'class': 'th col-1 middle left' }, _('Strength')),
-					E('div', { 'class': 'th col-1 middle left hide-xs' }, _('Channel')),
-					E('div', { 'class': 'th col-2 middle left' }, _('SSID')),
-					E('div', { 'class': 'th col-2 middle left' }, _('BSSID')),
-					E('div', { 'class': 'th col-3 middle left' }, _('Encryption')),
-					E('div', { 'class': 'th cbi-section-actions right' }, '\xa0')
+			var table = E('table', { 'class': 'table' }, [
+				E('tr', { 'class': 'tr table-titles' }, [
+					E('th', { 'class': 'th col-1 middle left' }, _('Strength')),
+					E('th', { 'class': 'th col-1 middle left hide-xs' }, _('Channel')),
+					E('th', { 'class': 'th col-2 middle left' }, _('SSID')),
+					E('th', { 'class': 'th col-2 middle left' }, _('BSSID')),
+					E('th', { 'class': 'th col-3 middle left' }, _('Encryption')),
+					E('th', { 'class': 'th cbi-section-actions right' }, '\xa0')
 				])
 			]);
 			cbi_update_table(table, [], E('em', { class: 'spinning' }, _('Starting wireless scan on \'' + radio + '\'...')));
