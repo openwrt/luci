@@ -40,8 +40,7 @@ endef
 
 define Package/rpcd-mod-rrdns/postinst
 #!/bin/sh
-killall -HUP rpcd 2>/dev/null
-exit 0
+[ -n "$$IPKG_INSTROOT" ] || /etc/init.d/rpcd reload
 endef
 
 $(eval $(call BuildPackage,rpcd-mod-rrdns))
