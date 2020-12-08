@@ -1319,6 +1319,11 @@ select+.cbi-button {
   border-left-color: transparent;
 }
 
+select+.cbi-button.cbi-button-fieldadd {
+    margin-top: 3px;
+    margin-bottom: 0;
+}
+
 .cbi-title-ref {
   color: #37c
 }
@@ -2519,9 +2524,12 @@ div[id^="value_"]::before {
   margin-bottom: -41px;
 }
 
-.tr:hover, .tr:hover .td, #cbi-fstab-global .cbi-value:hover, .cbi-value:hover {
-  background: linear-gradient(to bottom, #f2f2f2, #f2f2d2) !important;
+.tr:hover td, #cbi-fstab-global .cbi-value:hover, .cbi-value:hover {
   background: #ffd !important;
+}
+
+#modal_overlay .tr:hover td, #modal_overlay .cbi-value:hover {
+  background: linear-gradient(to bottom, #f6f6f6, #eaeaea) !important;
 }
 
 .tr:last-child {
@@ -2679,6 +2687,10 @@ body.LED .cbi-section-create {
 .cbi-button.cbi-button-save {
   margin-top: 0 !important;
   margin-bottom: 0 !important;
+}
+
+.th {
+  white-space: nowrap;
 }
 
 @media screen and (min-width: 1400px) {
