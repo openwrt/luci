@@ -1,0 +1,41 @@
+{
+	"admin/troubleshooting": {
+		"title": "Troubleshooting",
+		"order": 80,
+		"action": {
+			"type": "firstchild"
+		}
+	},
+
+	"admin/troubleshooting/tputmeas": {
+		"title": "Throughput Measurements",
+		"order": 1,
+		"action": {
+			"type": "alias",
+			"path": "admin/troubleshooting/tputmeas/client"
+		},
+		"depends" : {
+			"acl": [ "luci-app-throughput-measurements" ],
+			"uci": { "luci_tputmeas": true },
+			"fs": { "/usr/libexec/rpcd/luci.tputmeas": "executable" }
+		}
+	},
+
+	"admin/troubleshooting/tputmeas/client": {
+		"title": "Iperf3 Client",
+		"order": 10,
+		"action": {
+			"type": "view",
+			"path": "tputmeas/client"
+		}
+	},
+
+	"admin/troubleshooting/tputmeas/server": {
+		"title": "Iperf3 Server",
+		"order": 20,
+		"action": {
+			"type": "view",
+			"path": "tputmeas/server"
+		}
+	}
+}

@@ -1,0 +1,238 @@
+#!/usr/bin/env lua
+
+local ubus = require "ubus"
+local uci = require "luci.model.uci"
+local nixio = require "nixio"
+local fs = require "nixio.fs"
+local json = require "luci.jsonc"
+local sys = require "luci.sys"
+
+local methods = {
+	iperf3Start = {
+		args = { mode = "mode", server_address = "server_address", interface = "interface",
+				interface_address = "interface_address", port = "port", duration = "duration",
+				bytes = "bytes", udp = false,  bitrate = "bitrate", reverse = false, bidir = false,
+				connections = "connections", interval = "interval" },
+		call = function(args)
+			local iperf3_cmd = "/usr/bin/iperf3 --forceflush "
+
+			if not args then
+				return { error = "Lack of arguments" }
+			end
+
+			if (not args.mode or (args.mode ~= "-c" and args.mode ~= "-s")) then
+				return { error = "mode has not been specified " }
+			end
+
+			iperf3_cmd = iperf3_cmd .. args.mode
+
+			if args.server_address and args.server_address ~= '' then
+				local addr = luci.ip.new(args.server_address)
+				if addr then
+					iperf3_cmd = iperf3_cmd .. " " .. tostring(addr:host())
+				else
+					return { error = "Invalid server address" }
+				end
+			end
+
+			if args.interface and args.interface ~= '' then
+				local ifa = nixio.getifaddrs()
+				for k, v in pairs(ifa) do
+					if ifa[k].name == args.interface and ifa[k].family == "inet" and ifa[k].addr then
+						iperf3_cmd = iperf3_cmd .. " -B " .. ifa[k].addr
+					end
+				end
+			elseif args.interface_address and args.interface_address ~= '' then
+				local ifa = nixio.getifaddrs()
+				local ok = false
+				for k, v in pairs(ifa) do
+					if ifa[k].addr == args.interface_address then
+						iperf3_cmd = iperf3_cmd .. " -B " .. ifa[k].addr
+						ok = true
+					end
+				end
+				if not ok then
+					return { error = "Incorrect format of an interface address" }
+				end
+			end
+
+			if args.port and args.port ~= '' then
+			    local port_num = tonumber(args.port)
+				if port_num and port_num > 0 and port_num <= 65535 then
+					iperf3_cmd = iperf3_cmd .. " -p " .. args.port
+				else
+					return { error = "Incorrect port argument" }
+				end
+			end
+
+			if args.duration and args.duration ~= '' then
+				local duration_num = tonumber(args.duration)
+				if duration_num and duration_num > 0 then
+					iperf3_cmd = iperf3_cmd .. " -t " .. args.duration
+				else
+					return { error = "Incorrect duration argument" }
+				end
+			end
+
+			if args.bytes and args.bytes ~= '' then
+				if args.bytes:match("^[0-9]*$") or args.bytes:match("^[0-9]*[kKmM]$") then
+					iperf3_cmd = iperf3_cmd .. " -n " .. args.bytes
+				else
+					return { error = "Incorrect bytes argument" }
+				end
+			end
+
+			if args.udp then
+				iperf3_cmd = iperf3_cmd .. " -u"
+			end
+
+			if args.bitrate then
+				if args.bitrate:match("^[0-9]*$") or args.bitrate:match("^[0-9]*[kKmM]$") then
+					iperf3_cmd = iperf3_cmd .. " -b " .. args.bitrate
+				else
+					return { error = "Incorrect bitrate argument" }
+				end
+			end
+
+			if args.reverse then
+				iperf3_cmd = iperf3_cmd .. " -R"
+			end
+
+			if args.bidir then
+				iperf3_cmd = iperf3_cmd .. " --bidir"
+			end
+
+			if args.connections then
+				if tonumber(args.connections) then
+					iperf3_cmd = iperf3_cmd .. " -P " .. args.connections
+				else
+					return { error = "Incorrect connections argument" }
+				end
+			end
+
+			if args.interval then
+				if tonumber(args.interval) then
+					iperf3_cmd = iperf3_cmd .. " -i " .. args.interval
+				else
+					return { error = "Incorrect interval argument" }
+				end
+			end
+
+			iperf3_cmd = iperf3_cmd .. "  2>&1"
+
+			local pid = nixio.fork()
+			if pid == 0 then
+				local conn = ubus.connect()
+				if not conn then
+					print("Failed to connect to ubus")
+					os.exit(1)
+				end
+
+				local cpid = nixio.getpid()
+				fs.writefile("/var/run/luci-iperf3.pid", cpid)
+
+				local ubus_objects = {
+					["luci.tputmeas.notify"] = {
+					}
+				}
+				conn:add( ubus_objects )
+
+				nixio.poll({}, 1000)
+
+				local pipe, err = io.popen("flock -n -x /var/lock/luci-iperf3.lock /bin/sh -c 'echo $$ > /var/run/luci-iperf3.pid && sleep 1 && exec %s'" % iperf3_cmd)
+				if pipe then
+					for line in pipe:lines() do
+					local params = {
+							data = line
+					}
+					conn:notify(ubus_objects["luci.tputmeas.notify"].__ubusobj, "luci.tputmeas.notify.data", params)
+					end
+				else
+					return { error = "Failed to execute iperf3 client: " .. err }
+				end
+
+				conn:close()
+				pipe:close()
+				fs.remove("/var/run/luci-iperf3.pid")
+			else
+				return { result = "success" }
+			end
+		end
+	},
+	iperf3Stop = {
+		call = function(args)
+			local pid = fs.readfile("/var/run/luci-iperf3.pid")
+			if not pid then
+				return { error = "iperf3 process in not running" }
+			end
+			if fs.readlink("/proc/%d/exe" % pid) == "/usr/bin/iperf3" then
+				nixio.kill(pid, 15)
+			else
+				return { error = "iperf3 process is already stopped" }
+			end
+
+			return { result = "success" }
+		end
+	},
+}
+
+local function parseInput()
+	local parse = json.new()
+	local done, err
+
+	while true do
+		local chunk = io.read(4096)
+		if not chunk then
+			break
+		elseif not done and not err then
+			done, err = parse:parse(chunk)
+		end
+	end
+
+	if not done then
+		print(json.stringify({ error = err or "Incomplete input" }))
+		os.exit(1)
+	end
+
+	return parse:get()
+end
+
+local function validateArgs(func, uargs)
+	local method = methods[func]
+	if not method then
+		print(json.stringify({ error = "Method not found" }))
+		os.exit(1)
+	end
+
+	if type(uargs) ~= "table" then
+		print(json.stringify({ error = "Invalid arguments" }))
+		os.exit(1)
+	end
+
+	uargs.ubus_rpc_session = nil
+
+	local k, v
+	local margs = method.args or {}
+	for k, v in pairs(uargs) do
+		if margs[k] == nil or
+		   (v ~= nil and type(v) ~= type(margs[k]))
+		then
+			print(json.stringify({ error = "Invalid arguments" }))
+			os.exit(1)
+		end
+	end
+
+	return method
+end
+
+if arg[1] == "list" then
+	local _, method, rv = nil, nil, {}
+	for _, method in pairs(methods) do rv[_] = method.args or {} end
+	print((json.stringify(rv):gsub(":%[%]", ":{}")))
+elseif arg[1] == "call" then
+	local args = parseInput()
+	local method = validateArgs(arg[2], args)
+	local result, code = method.call(args)
+	print((json.stringify(result):gsub("^%[%]$", "{}")))
+	os.exit(code or 0)
+end
