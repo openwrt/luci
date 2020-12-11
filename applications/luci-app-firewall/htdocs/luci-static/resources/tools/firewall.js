@@ -522,6 +522,9 @@ return baseclass.extend({
 				}
 			}, this));
 
+			if (cfgvalue == '*' || cfgvalue == 'any' || cfgvalue == 'all')
+				cfgvalue = 'all';
+
 			return cfgvalue;
 		},
 
