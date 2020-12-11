@@ -188,6 +188,11 @@ config statistics 'collectd_processes'
 config statistics 'collectd_sensors'
 	option enable '0'
 
+config statistics 'collectd_snmp6'
+	option enable '0'
+	option Interfaces 'br-lan'
+	option IgnoreSelected '0'
+
 config statistics 'collectd_splash_leases'
 	option enable '0'
 
