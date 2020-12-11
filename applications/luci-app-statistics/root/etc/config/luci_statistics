@@ -86,6 +86,10 @@ config statistics 'collectd_df'
 	option IgnoreSelected '0'
 	option ValuesPercentage '0'
 
+config statistics 'collectd_dhcpleases'
+	option enable '0'
+	option Path '/tmp/dhcp.leases'
+
 config statistics 'collectd_disk'
 	option enable '0'
 	option Disks 'hda1 hdb'
@@ -190,4 +194,3 @@ config statistics 'collectd_thermal'
 
 config statistics 'collectd_uptime'
 	option enable '0'
-
