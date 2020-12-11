@@ -162,7 +162,7 @@ local knownParams = {
 		{ ListValue,
 			"compress",
 			{ "lzo", "lz4", "stub-v2"},
-			translate("Enable a compression algorithm") },
+			translate("Security recommendation: It is recommended to not enable compression and set this parameter to `stub-v2`") },
 	} },
 
 	{ "networking", translate("Networking"), {
