@@ -254,7 +254,7 @@ local knownParams = {
 		{ ListValue,
 			"comp_lzo",
 			{ "yes", "no", "adaptive" },
-			translate("Use fast LZO compression") },
+			translate("Security recommendation: It is recommended to not enable compression and set this parameter to `no`")},
 		{ Flag,
 			"comp_noadapt",
 			0,
