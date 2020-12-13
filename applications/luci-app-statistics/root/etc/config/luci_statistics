@@ -75,7 +75,7 @@ config statistics 'collectd_curl'
 config statistics 'collectd_df'
 	option enable '0'
 	option Devices '/dev/mtdblock/4'
-	option MountPoints '/jffs'
+	option MountPoints '/overlay'
 	option FSTypes 'tmpfs'
 	option IgnoreSelected '0'
 
@@ -148,6 +148,9 @@ config statistics 'collectd_olsrd'
 	option enable '0'
 	option Port '2006'
 	option Host '127.0.0.1'
+
+config statistics 'collectd_openvpn'
+	option enable '0'
 
 config statistics 'collectd_ping'
 	option enable '0'
