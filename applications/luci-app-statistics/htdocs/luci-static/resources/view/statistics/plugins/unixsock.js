@@ -13,7 +13,7 @@ return baseclass.extend({
 		o = s.option(form.Flag, 'enable', _('Enable this plugin'));
 
 		o = s.option(form.Value, 'SocketFile', _('Socket path'));
-		o.default = '/var/run/collect-query.socket';
+		o.default = '/var/run/collectd/query.sock';
 		o.depends('enable', '1');
 
 		o = s.option(widgets.GroupSelect, 'SocketGroup', _('Socket group'), _('Change the ownership of the socket file to the specified group.'));

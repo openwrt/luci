@@ -36,7 +36,7 @@ return baseclass.extend({
 		o.depends('RRASingle', '0');
 
 		o = s.option(form.DynamicList, 'RRATimespans', _('Stored timespans'));
-		o.default = '10min 1day 1week 1month 1year';
+		o.default = '1hour 1day 1week 1month 1year';
 		o.depends('enable', '1');
 		o.validate = function(section_id, value) {
 			if (value == '')
@@ -49,7 +49,7 @@ return baseclass.extend({
 		};
 
 		o = s.option(form.Value, 'RRARows', _('Rows per RRA'));
-		o.placeholder = '1200';
+		o.default = '144';
 		o.datatype = 'min(1)';
 		o.depends('enable', '1');
 
