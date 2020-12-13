@@ -17,7 +17,7 @@ enable.default = 0
 
 -- collectd_unixsock.socketfile (SocketFile)
 socketfile = s:option( Value, "SocketFile" )
-socketfile.default = "/var/run/collect-query.socket"
+socketfile.default = "/var/run/collectd/query.sock"
 socketfile:depends( "enable", 1 )
 
 -- collectd_unixsock.socketgroup (SocketGroup)

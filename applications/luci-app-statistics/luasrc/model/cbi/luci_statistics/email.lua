@@ -20,7 +20,7 @@ enable.default = 0
 
 -- collectd_email.socketfile (SocketFile)
 socketfile = s:option( Value, "SocketFile", translate("Socket file") )
-socketfile.default = "/var/run/collect-email.sock"
+socketfile.default = "/var/run/collectd/email.sock"
 socketfile:depends( "enable", 1 )
 
 -- collectd_email.socketgroup (SocketGroup)

@@ -65,7 +65,7 @@ rramax:depends( "RRASingle", 0 )
 -- collectd_rrdtool.rratimespans (RRATimespan)
 rratimespans = s:option( Value, "RRATimespans",
 	translate("Stored timespans"), translate("seconds; multiple separated by space") )
-rratimespans.default  = "600 86400 604800 2678400 31622400"
+rratimespans.default  = "3600 86400 604800 2678400 31622400"
 rratimespans.rmempty  = true
 rratimespans.optional = true
 rratimespans:depends( "enable", 1 )
@@ -73,7 +73,7 @@ rratimespans:depends( "enable", 1 )
 -- collectd_rrdtool.rrarows (RRARows)
 rrarows = s:option( Value, "RRARows", translate("Rows per RRA") )
 rrarows.isinteger = true
-rrarows.default   = 100
+rrarows.default   = 144
 rrarows.rmempty   = true
 rrarows.optional  = true
 rrarows:depends( "enable", 1 )

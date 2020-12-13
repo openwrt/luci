@@ -31,7 +31,7 @@ addressfamily:depends( "enable", 1 )
 -- collectd_ping.ttl (TTL)
 ttl = s:option( Value, "TTL", translate("TTL for ping packets") )
 ttl.isinteger = true
-ttl.default   = 128
+ttl.default   = 127
 ttl:depends( "enable", 1 )
 
 -- collectd_ping.interval (Interval)
