@@ -38,6 +38,20 @@
 		}
 	},
 
+	"luci-mod-system-uhttpd": {
+		"description": "Grant access to uHTTPd configuration",
+		"read": {
+			"uci": [ "uhttpd" ]
+		},
+		"write": {
+			"ubus": {
+				"luci": [ "setInitAction" ]
+			},
+			"uci": [ "uhttpd" ]
+		}
+	},
+
+
 	"luci-mod-system-init": {
 		"description": "Grant access to startup configuration",
 		"read": {

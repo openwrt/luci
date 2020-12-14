@@ -60,6 +60,20 @@
 		}
 	},
 
+	"admin/system/admin/uhttpd": {
+		"title": "HTTP(S) Access",
+		"order": 4,
+		"action": {
+			"type": "view",
+			"path": "system/uhttpd"
+		},
+		"depends": {
+			"acl": [ "luci-mod-system-uhttpd" ],
+			"fs": {	"/usr/sbin/uhttpd": "executable" }
+		}
+	},
+
+
 	"admin/system/startup": {
 		"title": "Startup",
 		"order": 45,
