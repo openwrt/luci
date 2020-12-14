@@ -9,11 +9,14 @@
 	local http = require "luci.http"
 	local disp = require "luci.dispatcher"
 	local ver  = require "luci.version"
+	local http = require "luci.http"
+	local fs = require "nixio.fs"
 
 	local boardinfo = util.ubus("system", "board") or { }
 
 	local node = disp.context.dispatched
 	local path = table.concat(disp.context.path, "-")
+	local https_active = http.getenv("HTTPS") == "on"
 
 	http.prepare_content("text/html; charset=UTF-8")
 -%>
@@ -62,6 +65,19 @@
 				<p><%:There is no password set on this router. Please configure a root password to protect the web interface.%></p>
 				<% if disp.lookup("admin/system/admin") then %>
 					<div class="right"><a class="btn" href="<%=url("admin/system/admin")%>"><%:Go to password configuration...%></a></div>
+				<% end %>
+			</div>
+			<%- end -%>
+
+			<%- if path ~= "" and path ~= "admin-system-admin-uhttpd" and not https_active and fs.access("/etc/uhttpd.key") and fs.access("/etc/uhttpd.crt") then -%>
+			<div class="alert-message info">
+				<h4><%:HTTPS is available%></h4>
+				<p>
+				<%_Make router management more secure with <abbr title="Hyper Text Transfer Secure">HTTPS</abbr> protocol.%>
+				<%_Please read <a href="https://openwrt.org/docs/guide-user/luci/luci.secure">Accessing LuCI Web Interface Securely</a> first.%>
+				</p>
+				<% if disp.lookup("admin/system/admin") then %>
+					<div class="right"><a class="btn" href="<%=url("admin/system/admin/uhttpd")%>"><%:Go to HTTPS configuration...%></a></div>
 				<% end %>
 			</div>
 			<%- end -%>
