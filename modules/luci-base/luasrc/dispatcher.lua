@@ -1260,21 +1260,17 @@ function node(...)
 	return c
 end
 
-function lookup(...)
-	local i, path = nil, {}
-	for i = 1, select('#', ...) do
-		local name, arg = nil, tostring(select(i, ...))
-		for name in arg:gmatch("[^/]+") do
-			path[#path+1] = name
-		end
+function lookup(path)
+	if not path or #path == 0 then
+		return
 	end
 
-	for i = #path, 1, -1 do
-		local node = context.treecache[table.concat(path, ".", 1, i)]
-		if node and (i == #path or node.leaf) then
-			return node, build_url(unpack(path))
-		end
-	end
+	local p = path:gsub('/', '.children.')
+	local fn = loadstring(string.format("return menu.children.%s", p))
+	setfenv(fn, { menu = menu_json() })
+
+	local r, v = pcall(fn)
+	if r then return v end
 end
 
 function _create_node(path)
