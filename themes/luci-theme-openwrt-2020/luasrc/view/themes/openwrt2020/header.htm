@@ -50,14 +50,21 @@
 	<div id="mainmenu"></div>
 
 	<div id="maincontent">
-		<%- if luci.sys.process.info("uid") == 0 and luci.sys.user.getuser("root") and not luci.sys.user.getpasswd("root") and category ~= "failsafe" and path ~= "admin-system-admin-password" then -%>
-		<div class="alert-message warning">
-			<h4><%:No password set!%></h4>
-			<p><%:There is no password set on this router. Please configure a root password to protect the web interface.%></p>
-			<% if disp.lookup("admin/system/admin") then %>
-				<div class="right"><a class="btn" href="<%=url("admin/system/admin")%>"><%:Go to password configuration...%></a></div>
-			<% end %>
-		</div>
+		<%- if luci.sys.process.info("uid") == 0 and luci.sys.user.getuser("root") and not luci.sys.user.getpasswd("root") and category ~= "failsafe" then -%>
+			<%- if path == "" then -%>
+			<div class="alert-message warning">
+				<h4><%:No password set!%></h4>
+				<p><%_There is no password set on this router, make it more secure by clicking on the <b>Login</b> button and setting the password.%></p>
+			</div>
+			<%- elseif path ~= "admin-system-admin-password" then -%>
+			<div class="alert-message warning">
+				<h4><%:No password set!%></h4>
+				<p><%:There is no password set on this router. Please configure a root password to protect the web interface.%></p>
+				<% if disp.lookup("admin/system/admin") then %>
+					<div class="right"><a class="btn" href="<%=url("admin/system/admin")%>"><%:Go to password configuration...%></a></div>
+				<% end %>
+			</div>
+			<%- end -%>
 		<%- end -%>
 
 		<div id="tabmenu" style="display:none"></div>
