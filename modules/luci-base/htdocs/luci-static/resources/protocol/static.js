@@ -136,7 +136,7 @@ return network.registerProtocol('static', {
 			return network.getWANNetworks().then(L.bind(function(wans) {
 				if (wans.length == 1) {
 					var gwaddr = wans[0].getGatewayAddr();
-					this.placeholder = gwaddr ? '%s (%s)'.format(gwaddr, wans[0].getName()) : '';
+					this.placeholder = gwaddr ? '%s %s (%s)'.format(_('Add IPv4 gateway…'), gwaddr, wans[0].getName()) : _('Add IPv4 gateway…');
 				}
 
 				return form.Value.prototype.render.apply(this, [ option_index, section_id, in_table ]);
