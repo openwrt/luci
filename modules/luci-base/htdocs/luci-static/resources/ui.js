@@ -610,6 +610,17 @@ var UICheckbox = UIElement.extend(/** @lends LuCI.ui.Checkbox.prototype */ {
 
 		frameEl.appendChild(E('label', { 'for': id }));
 
+		if (this.options.tooltip != null) {
+			frameEl.appendChild(
+				E('label', { 'class': 'cbi-tooltip-container' },[
+					"⚠️",
+					E('div', { 'class': 'cbi-tooltip' },
+						this.options.tooltip
+					)
+				])
+			);
+		}
+
 		return this.bind(frameEl);
 	},
 
