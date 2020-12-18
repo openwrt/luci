@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2020-12-07 16:38+0000\n"
-"Last-Translator: Hulen <shift0106@gmail.com>\n"
+"PO-Revision-Date: 2020-12-18 05:29+0000\n"
+"Last-Translator: akibou <jinwenxin1997@icloud.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "openwrt/luciapplicationsacme/zh_Hant/>\n"
 "Language: zh_Hant\n"
@@ -12,15 +12,15 @@ msgstr ""
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:17
 msgid "ACME certificates"
-msgstr "ACME 證書"
+msgstr "ACME 憑證"
 
 #: applications/luci-app-acme/root/usr/share/luci/menu.d/luci-app-acme.json:3
 msgid "ACME certs"
-msgstr "ACME 認證"
+msgstr "ACME 憑證"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:26
 msgid "ACME global config"
-msgstr "ACME 全域配置"
+msgstr "ACME 全域組態"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:139
 msgid "ACME server URL"
@@ -28,7 +28,7 @@ msgstr "ACME 伺服器 URL"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:34
 msgid "Account email"
-msgstr "帳號 Email"
+msgstr "Email 帳號"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:48
 msgid "Advanced Settings"
@@ -36,7 +36,7 @@ msgstr "進階設定"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:42
 msgid "Certificate config"
-msgstr "證書配置"
+msgstr "憑證組態"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:122
 msgid "Challenge Alias"
@@ -52,7 +52,7 @@ msgstr "自訂 ACME CA"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:140
 msgid "Custom ACME server directory URL."
-msgstr "自訂 ACME 伺服器資料夾 URL。"
+msgstr "自訂 ACME 伺服器目錄 URL。"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:97
 msgid "DNS"
@@ -64,11 +64,11 @@ msgstr "DNS API"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:115
 msgid "DNS API credentials"
-msgstr "DNS API 證書"
+msgstr "DNS API 憑證"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:145
 msgid "Days until renewal"
-msgstr "重新整理前的天數"
+msgstr "更新前的天數"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:128
 msgid "Domain Alias"
@@ -83,9 +83,7 @@ msgid ""
 "Domain names to include in the certificate. The first name will be the "
 "subject name, subsequent names will be alt names. Note that all domain names "
 "must point at the router in the global DNS."
-msgstr ""
-"網域名稱要包含在證書內。第一個名稱將會是標題名稱，隨後的名稱將會是簡稱或代替"
-"名稱。請注意，所有網域名稱都必須指向全域DNS中的路由器。"
+msgstr "要包含在憑證中的網域名稱。第一個名稱將設定為主體名稱，其他則為主體備用名稱。請注意，所有域名都必須被全域 DNS 指向路由器的 IP 位址。"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:63
 msgid "ECC 256 bits"
@@ -101,7 +99,7 @@ msgstr "與帳號金鑰關聯的 Email 地址。"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:39
 msgid "Enable debug logging"
-msgstr "啟用偵錯日誌記錄"
+msgstr "啟用除錯日誌"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:50
 msgid "Enabled"
@@ -115,11 +113,11 @@ msgstr "一般設定"
 msgid ""
 "Get certificate from the Letsencrypt staging server (use for testing; the "
 "certificate won't be valid)."
-msgstr "從 Letsencrypt 站台伺服器取得證書（用於測試；該證書不會生效）。"
+msgstr "從 Letsencrypt 臨時伺服器取得憑證（僅供測試用途，憑證無效）。"
 
 #: applications/luci-app-acme/root/usr/share/rpcd/acl.d/luci-app-acme.json:3
 msgid "Grant UCI access for luci-app-acme"
-msgstr "為 luci-app-acme 給予 UCI 訪問"
+msgstr "給予 UCI 存取 luci-app-acme 的權限"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:58
 msgid "Key size"
@@ -127,7 +125,7 @@ msgstr "金鑰大小"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:59
 msgid "Key size (and type) for the generated certificate."
-msgstr "產生的證書的金鑰長度(和類型)。"
+msgstr "生成的憑證的金鑰大小（和類型）。"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:60
 msgid "RSA 2048 bits"
@@ -152,12 +150,12 @@ msgid ""
 "certificate. DNS mode will allow you to use the DNS API of your DNS provider "
 "to issue a certificate."
 msgstr ""
-"獨立模式將使用 acme.sh 的內建 Web 伺服器來頒發證書。Webroot 模式將使用現有的 Web 伺服器來頒發證書。DNS 模式將允許您使用 "
-"DNS 提供商的 DNS API 頒發證書。"
+"獨立模式將使用 acme.sh 的內建 Web 伺服器來頒發憑證。Webroot 模式將使用現有的 Web 伺服器來頒發憑證。DNS 模式將容許您使用 "
+"DNS 服務提供者的 DNS API 來頒發憑證。"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:29
 msgid "State directory"
-msgstr ""
+msgstr "狀態資料夾"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:123
 msgid ""
@@ -165,6 +163,8 @@ msgid ""
 "official/acme.sh/wiki/DNS-alias-mode for the details of this process. LUCI "
 "only supports one challenge alias per certificate."
 msgstr ""
+"所有網域使用的 Challenge 別名。 參考 https://github.com/acmesh-official/acme.sh/wiki/DNS-"
+"alias-mode 取得該行程的詳細資訊。LuCI 僅支援每個憑證擁有單個 Challenge 別名。"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:116
 msgid ""
@@ -173,6 +173,8 @@ msgid ""
 "by each API. Add multiple entries here in KEY=VAL shell variable format to "
 "supply multiple credential variables."
 msgstr ""
+"上方選取的 DNS API 模式的憑證。 參考 https://github.com/acmesh-official/acme.sh/wiki/"
+"dnsapi 取得每個 API 所需憑證的格式。要提供多個憑證的變數，請在這裡添加多項格式為 KEY=VAL 的 Shell 變數。"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:129
 msgid ""
@@ -180,6 +182,8 @@ msgid ""
 "official/acme.sh/wiki/DNS-alias-mode for the details of this process. LUCI "
 "only supports one challenge domain per certificate."
 msgstr ""
+"所有網域使用的網域別名。參考 https://github.com/acmesh-official/acme.sh/wiki/DNS-alias-"
+"mode 取得該行程的詳細資訊。LuCI 僅支援每個憑證擁有單個網域別名。"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:18
 msgid ""
@@ -190,6 +194,8 @@ msgid ""
 "address. Once configured, issuing certificates can take a while. Check the "
 "logs for progress and any errors."
 msgstr ""
+"ACME (Letsencrypt) 自動憑證安裝組態。在此簡單填寫將為路由器的 Web 介面取得藉由 Letsencrypt 頒發的憑證。請注意，"
+"憑證中的域名必須已被設定為指向路由器的公共 IP 位址。設定後憑證的頒發可能要一段時間，檢查日誌來獲得憑證頒發的進展和任何錯誤。"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:108
 msgid ""
@@ -200,6 +206,9 @@ msgid ""
 "supports wildcard certificates. Using this mode requires the acme-dnsapi "
 "package to be installed."
 msgstr ""
+"要使用 DNS 模式來頒發憑證，請在此填寫 acme.sh 支援的 DNS API 的名稱。參考 https://github.com/"
+"acmesh-official/acme.sh/wiki/dnsapi 取得可用的 API 列表。在 DNS 模式下，域名不必解析到路由器的 IP 位址。"
+"DNS 模式也是支援萬用字元憑證的唯一模式。需要安裝 acme-dnsapi 套件後才能使用該模式。"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:84
 msgid ""
@@ -207,6 +216,8 @@ msgid ""
 "for one certificate). Nginx must support ssl, if not it won't start as it "
 "needs to be compiled with ssl support to use cert options"
 msgstr ""
+"頒發該憑證後，使用該憑證來更新 Nginx 組態（僅選擇此憑證）。Nginx 必須支援 SSL 否則將無法啟動，因為它需要編譯的 SSL "
+"支援才能使用憑證選項。"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:76
 msgid ""
@@ -214,6 +225,8 @@ msgid ""
 "for one certificate). Is also available luci-app-uhttpd to configure uhttpd "
 "form the LuCI interface."
 msgstr ""
+"頒發該憑證後，使用該憑證來更新 uHTTPd 設定（僅選擇此憑證）。也可以使用 luci-app-uhttpd 的 LuCI 介面對 uHTTPd "
+"進行設定。"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:135
 msgid "Use a custom CA instead of Let's Encrypt."
@@ -225,18 +238,17 @@ msgstr "用於 Nginx"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:75
 msgid "Use for uhttpd"
-msgstr "用於 uhttpd"
+msgstr "用於 uHTTPd"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:53
 msgid "Use staging server"
-msgstr "使用站台伺服器"
+msgstr "使用臨時伺服器"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:91
 msgid "Validation method"
-msgstr "驗證方式"
+msgstr "驗證方法"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:96
-#, fuzzy
 msgid "Webroot"
 msgstr "Webroot"
 
@@ -249,8 +261,8 @@ msgid ""
 "Webserver root directory. Set this to the webserver document root to run "
 "Acme in webroot mode. The web server must be accessible from the internet on "
 "port 80."
-msgstr ""
+msgstr "設定 Web 伺服器文件的根目錄以在 Webroot 模式下運行 ACME。Web 伺服器必須允許在 Internet 上使用 80 埠訪問。"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:30
 msgid "Where certs and other state files are kept."
-msgstr ""
+msgstr "儲存憑證和其他狀態檔案的位置。"
