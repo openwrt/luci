@@ -48,6 +48,7 @@ mwan_rule = m:section(TypedSection, "rule", nil,
 	"Rules are based on IP address, port or protocol<br />" ..
 	"Rules are matched from top to bottom<br />" ..
 	"Rules below a matching rule are ignored<br />" ..
+	"Traffic on port 443/HTTPS over QUIC or Chrome is UDP<br />" ..
 	"Traffic not matching any rule is routed using the main routing table<br />" ..
 	"Traffic destined for known (other than default) networks is handled by the main routing table<br />" ..
 	"Traffic matching a rule, but all WAN interfaces for that policy are down will be blackholed<br />" ..
