@@ -3,7 +3,7 @@
 #
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2020-12-07 16:38+0000\n"
+"PO-Revision-Date: 2020-12-20 16:20+0000\n"
 "Last-Translator: Hulen <shift0106@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "openwrt/luciapplicationsmwan3/zh_Hant/>\n"
@@ -240,7 +240,7 @@ msgstr "全局"
 
 #: applications/luci-app-mwan3/root/usr/share/rpcd/acl.d/luci-app-mwan3.json:3
 msgid "Grant UCI access for luci-app-mwan3"
-msgstr ""
+msgstr "給予 UCI 存取 luci-app-mwan3 的權限"
 
 #: applications/luci-app-mwan3/luasrc/view/mwan/status_diagnostics.htm:80
 msgid "Hotplug ifdown"
@@ -266,11 +266,11 @@ msgstr "IPv4"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/ruleconfig.lua:23
 msgid "IPv4 and IPv6"
-msgstr ""
+msgstr "IPv4 和 IPv6"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/ruleconfig.lua:24
 msgid "IPv4 only"
-msgstr ""
+msgstr "僅 IPv4"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interfaceconfig.lua:35
 msgid "IPv6"
@@ -278,7 +278,7 @@ msgstr "IPv6"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/ruleconfig.lua:25
 msgid "IPv6 only"
-msgstr ""
+msgstr "僅 IPv6"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/globalsconfig.lua:32
 msgid "Info"
@@ -828,6 +828,9 @@ msgid ""
 ">Interfaces may not share the same name as configured members, policies or "
 "rules"
 msgstr ""
+"mwan3 要求所有在 /etc/config/network 中的介面 (interface) 設定獨立的 metric 參數<br />介面名稱要和/"
+"etc/config/network的一致<br />名稱可以包含字元 A-Z，a-z，0-9，_ ，但不能有空格<br "
+"/>介面名稱也不能和設定的成員，原則，或者規則相同"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/policy.lua:88
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/policyconfig.lua:28
