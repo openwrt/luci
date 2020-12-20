@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-05-19 19:36+0200\n"
-"PO-Revision-Date: 2020-10-17 15:26+0000\n"
-"Last-Translator: RyotaGamer <21ryotagamer@gmail.com>\n"
+"PO-Revision-Date: 2020-12-10 19:29+0000\n"
+"Last-Translator: Ryota <21ryotagamer@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsolsr/ja/>\n"
 "Language: ja\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.3.1-dev\n"
+"X-Generator: Weblate 4.4-dev\n"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/mid.htm:13
 msgid "Active MID announcements"
@@ -121,14 +121,14 @@ msgstr "ETX"
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdplugins.lua:15
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdplugins6.lua:15
 msgid "Enable"
-msgstr "有効"
+msgstr "有効化"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:140
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:134
 msgid ""
 "Enable SmartGateway. If it is disabled, then all other SmartGateway "
 "parameters are ignored. Default is \"no\"."
-msgstr "スマートゲートウェイを有効にします。無効の場合、その他全てのスマートゲートウェイの設定値は無視されます。初期設定は\"無効\"です。"
+msgstr "スマートゲートウェイを有効にします。無効の場合、その他すべてのスマートゲートウェイの設定値は無視されます。初期設定は\"無効\"です。"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdiface.lua:36
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdiface6.lua:36
@@ -198,7 +198,7 @@ msgstr ""
 
 #: applications/luci-app-olsr/root/usr/share/rpcd/acl.d/luci-app-olsr.json:3
 msgid "Grant UCI access for luci-app-olsr"
-msgstr "luci-app-olsr に UCI アクセスを許可"
+msgstr "luci-app-olsrにUCIアクセスを許可"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/legend.htm:8
 #: applications/luci-app-olsr/luasrc/view/status-olsr/legend.htm:17
@@ -329,7 +329,7 @@ msgstr "IPv4"
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:278
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdiface.lua:103
 msgid "IPv4 broadcast"
-msgstr "IPv4 ブロードキャスト"
+msgstr "IPv4ブロードキャスト"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:279
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdiface.lua:104
@@ -568,7 +568,7 @@ msgid ""
 msgstr ""
 "リンク品質 (LQ) アルゴリズムを設定します (LQ レベルが2の場合のみ有効)。<br /><b>etx_float</b>: 浮動小数点演算＋"
 "指数関数エイジング<br /><b>etx_fpm</b> : etx_floatと同様、ただし整数値演算を行います<br /><b>etx_ff</"
-"b> : ETX freifunk, ETXの変形版であり、ETX算出のためにHelloパケットだけでなく全てのOLSRトラフィックを使用します<br "
+"b> : ETX freifunk, ETXの変形版であり、ETX算出のためにHelloパケットだけでなくすべてのOLSRトラフィックを使用します<br "
 "/><b>etx_ffeth</b>: etx_ffと互換性のない変形版です。イーサネットのリンクにETX 0.1を設定することができます<br />"
 "初期設定は\"etx_ff\"です。"
 
@@ -669,10 +669,9 @@ msgid ""
 ">reduce LQ to fd91:662e:3c58::1 by half: fd91:662e:3c58::1 0.5<br />reduce "
 "LQ to all nodes on this interface by 20%: default 0.8"
 msgstr ""
-"経路のLQと設定値の乗算を行います。設定可能な値は0.01-1です。この設定はLQ レベ"
-"ルが0以上の場合のみ設定可能です。<br />例:192.168.0.1へのLQを半分にする場合: "
-"192.168.0.1 0.5<br />このインターフェースから全てのノードへ対して20%減らす場"
-"合: default 0.8"
+"経路のLQと設定値の乗算を行います。設定可能な値は0.01-1です。この設定はLQ レベルが0以上の場合のみ設定可能です。<br />例:192.168."
+"0.1へのLQを半分にする場合: 192.168.0.1 0.5<br />このインターフェースからすべてのノードへ対して20%減らす場合: "
+"default 0.8"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:201
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:195
@@ -868,7 +867,7 @@ msgstr ""
 
 #: applications/luci-app-olsr/luasrc/controller/olsr.lua:44
 msgid "Routes"
-msgstr "経路情報"
+msgstr "ルート"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/mid.htm:21
 msgid "Secondary OLSR interfaces"
@@ -997,11 +996,9 @@ msgid ""
 "device. Visit <a href='http://www.olsr.org'>olsrd.org</a> for help and "
 "documentation."
 msgstr ""
-"OLSRデーモンは、Optimized Link State Routingプロコトルを実装したサービスで"
-"す。OLSRはどのようなネットワーク環境でもメッシュルーティングを実現します。"
-"OLSRはアドホック・モードをサポートした全ての無線LANカードをサポートし、もちろ"
-"ん全てのイーサネットデバイスでも使用可能です。<a href='http://www.olsr."
-"org'>olsrd.org</a>にアクセスして、ヘルプ及びドキュメントを参照してください。"
+"OLSRデーモンは、Optimized Link State Routingプロコトルを実装したサービスです。OLSRはどのようなネットワーク環境でもメッ"
+"シュルーティングを実現します。OLSRはアドホック・モードをサポートしたすべての無線LANカードをサポートし、もちろんすべてのイーサネットデバイスでも使用"
+"可能です。<a href='http://www.olsr.org'>olsrd.org</a>にアクセスして、ヘルプ及びドキュメントを参照してください。"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:194
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:188

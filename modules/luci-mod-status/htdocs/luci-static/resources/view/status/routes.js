@@ -135,7 +135,8 @@ return view.extend({
 				dest,
 				(v6 ? flags.from : flags.via) || '-',
 				String(flags.metric || 0),
-				flags.table || 'main'
+				flags.table || 'main',
+				flags.proto,
 			]);
 		}
 
@@ -149,39 +150,41 @@ return view.extend({
 		    ip6neigh = data[3].stdout || '',
 		    ip6route = data[4].stdout || '';
 
-		var neigh4tbl = E('div', { 'class': 'table' }, [
-			E('div', { 'class': 'tr table-titles' }, [
-				E('div', { 'class': 'th' }, [ _('IPv4-Address') ]),
-				E('div', { 'class': 'th' }, [ _('MAC-Address') ]),
-				E('div', { 'class': 'th' }, [ _('Interface') ])
+		var neigh4tbl = E('table', { 'class': 'table' }, [
+			E('tr', { 'class': 'tr table-titles' }, [
+				E('th', { 'class': 'th' }, [ _('IPv4-Address') ]),
+				E('th', { 'class': 'th' }, [ _('MAC-Address') ]),
+				E('th', { 'class': 'th' }, [ _('Interface') ])
 			])
 		]);
 
-		var route4tbl = E('div', { 'class': 'table' }, [
-			E('div', { 'class': 'tr table-titles' }, [
-				E('div', { 'class': 'th' }, [ _('Network') ]),
-				E('div', { 'class': 'th' }, [ _('Target') ]),
-				E('div', { 'class': 'th' }, [ _('IPv4-Gateway') ]),
-				E('div', { 'class': 'th' }, [ _('Metric') ]),
-				E('div', { 'class': 'th' }, [ _('Table') ])
+		var route4tbl = E('table', { 'class': 'table' }, [
+			E('tr', { 'class': 'tr table-titles' }, [
+				E('th', { 'class': 'th' }, [ _('Network') ]),
+				E('th', { 'class': 'th' }, [ _('Target') ]),
+				E('th', { 'class': 'th' }, [ _('IPv4-Gateway') ]),
+				E('th', { 'class': 'th' }, [ _('Metric') ]),
+				E('th', { 'class': 'th' }, [ _('Table') ]),
+				E('th', { 'class': 'th' }, [ _('Protocol') ]),
 			])
 		]);
 
-		var neigh6tbl = E('div', { 'class': 'table' }, [
-			E('div', { 'class': 'tr table-titles' }, [
-				E('div', { 'class': 'th' }, [ _('IPv6-Address') ]),
-				E('div', { 'class': 'th' }, [ _('MAC-Address') ]),
-				E('div', { 'class': 'th' }, [ _('Interface') ])
+		var neigh6tbl = E('table', { 'class': 'table' }, [
+			E('tr', { 'class': 'tr table-titles' }, [
+				E('th', { 'class': 'th' }, [ _('IPv6-Address') ]),
+				E('th', { 'class': 'th' }, [ _('MAC-Address') ]),
+				E('th', { 'class': 'th' }, [ _('Interface') ])
 			])
 		]);
 
-		var route6tbl = E('div', { 'class': 'table' }, [
-			E('div', { 'class': 'tr table-titles' }, [
-				E('div', { 'class': 'th' }, [ _('Network') ]),
-				E('div', { 'class': 'th' }, [ _('Target') ]),
-				E('div', { 'class': 'th' }, [ _('Source') ]),
-				E('div', { 'class': 'th' }, [ _('Metric') ]),
-				E('div', { 'class': 'th' }, [ _('Table') ])
+		var route6tbl = E('table', { 'class': 'table' }, [
+			E('tr', { 'class': 'tr table-titles' }, [
+				E('th', { 'class': 'th' }, [ _('Network') ]),
+				E('th', { 'class': 'th' }, [ _('Target') ]),
+				E('th', { 'class': 'th' }, [ _('Source') ]),
+				E('th', { 'class': 'th' }, [ _('Metric') ]),
+				E('th', { 'class': 'th' }, [ _('Table') ]),
+				E('th', { 'class': 'th' }, [ _('Protocol') ]),
 			])
 		]);
 

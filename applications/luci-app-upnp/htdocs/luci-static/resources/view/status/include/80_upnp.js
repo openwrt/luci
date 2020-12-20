@@ -38,15 +38,15 @@ return baseclass.extend({
 
 	render: function(data) {
 
-		var table = E('div', { 'class': 'table', 'id': 'upnp_status_table' }, [
-			E('div', { 'class': 'tr table-titles' }, [
-				E('div', { 'class': 'th' }, _('Protocol')),
-				E('div', { 'class': 'th' }, _('External Port')),
-				E('div', { 'class': 'th' }, _('Client Address')),
-				E('div', { 'class': 'th' }, _('Host')),
-				E('div', { 'class': 'th' }, _('Client Port')),
-				E('div', { 'class': 'th' }, _('Description')),
-				E('div', { 'class': 'th cbi-section-actions' }, '')
+		var table = E('table', { 'class': 'table', 'id': 'upnp_status_table' }, [
+			E('tr', { 'class': 'tr table-titles' }, [
+				E('th', { 'class': 'th' }, _('Protocol')),
+				E('th', { 'class': 'th' }, _('External Port')),
+				E('th', { 'class': 'th' }, _('Client Address')),
+				E('th', { 'class': 'th' }, _('Host')),
+				E('th', { 'class': 'th' }, _('Client Port')),
+				E('th', { 'class': 'th' }, _('Description')),
+				E('th', { 'class': 'th cbi-section-actions' }, '')
 			])
 		]);
 

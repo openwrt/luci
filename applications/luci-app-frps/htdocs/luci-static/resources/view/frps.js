@@ -38,7 +38,8 @@ var commonConf = [
 	[form.Value, 'custom_404_page', _('Custom 404 page'), _('Custom404Page specifies a path to a custom 404 page to display. If this value is "", a default page will be displayed.<br>By default, this value is "".')],
 	[form.Value, 'allow_ports', _('Allow ports'), _('AllowPorts specifies a set of ports that clients are able to proxy to. If the length of this value is 0, all ports are allowed.<br>By default, this value is an empty set.')],
 	[form.Value, 'max_ports_per_client', _('Max ports per client'), _('MaxPortsPerClient specifies the maximum number of ports a single client may proxy to. If this value is 0, no limit will be applied.<br>By default, this value is 0.'), {datatype: 'uinteger'}],
-	[form.Value, 'heartbeat_timeout', _('Heartbeat timeout'), _('HeartBeatTimeout specifies the maximum time to wait for a heartbeat before terminating the connection. It is not recommended to change this value.<br>By default, this value is 90.'), {datatype: 'uinteger'}]
+	[form.Value, 'heartbeat_timeout', _('Heartbeat timeout'), _('HeartBeatTimeout specifies the maximum time to wait for a heartbeat before terminating the connection. It is not recommended to change this value.<br>By default, this value is 90.'), {datatype: 'uinteger'}],
+	[form.DynamicList, '_', _('Additional settings'), _('This list can be used to specify some additional parameters which have not been included in this LuCI.'), {placeholder: 'Key-A=Value-A'}]
 ];
 
 function setParams(o, params) {

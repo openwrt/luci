@@ -15,6 +15,7 @@ return baseclass.extend({
 		o = s.option(widgets.DeviceSelect, 'Interfaces', _('Monitor interfaces'));
 		o.multiple = true;
 		o.noaliases = true;
+		o.default = 'br-lan';
 		o.depends('enable', '1');
 
 		o = s.option(form.Flag, 'IgnoreSelected', _('Monitor all except specified'));

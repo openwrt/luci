@@ -25,15 +25,15 @@ return baseclass.extend({
 
 		var container_wapper = E('div', { 'class': 'router-status-lan dashboard-bg box-s1' });
 		var container_box = E('div', { 'class': 'lan-info devices-list' });
-		var container_devices = E('div', { 'class': 'table assoclist devices-info' }, [
-			E('div', { 'class': 'tr table-titles  dashboard-bg' }, [
-				E('div', { 'class': 'th nowrap' }, _('Hostname')),
-				E('div', { 'class': 'th' }, _('IP Address')),
-				E('div', { 'class': 'th' }, _('MAC')),
+		var container_devices = E('table', { 'class': 'table assoclist devices-info' }, [
+			E('tr', { 'class': 'tr table-titles  dashboard-bg' }, [
+				E('th', { 'class': 'th nowrap' }, _('Hostname')),
+				E('th', { 'class': 'th' }, _('IP Address')),
+				E('th', { 'class': 'th' }, _('MAC')),
 			])
 		]);
 
-		var container_deviceslist = E('div', { 'class': 'table assoclist devices-info' });
+		var container_deviceslist = E('table', { 'class': 'table assoclist devices-info' });
 
 		container_box.appendChild(E('div', { 'class': 'title'}, [
 			E('img', {
@@ -48,21 +48,21 @@ return baseclass.extend({
 		for(var idx in this.params.lan.devices) {
 			var deivce = this.params.lan.devices[idx];
 
-			container_deviceslist.appendChild(E('div', { 'class': 'tr cbi-rowstyle-1'}, [
+			container_deviceslist.appendChild(E('tr', { 'class': 'tr cbi-rowstyle-1'}, [
 
-				E('div', { 'class': 'td device-info'}, [
+				E('td', { 'class': 'td device-info'}, [
 					E('p', {}, [
 						E('span', { 'class': 'd-inline-block'}, [ deivce.hostname ]),
 					]),
 				]),
 
-				E('div', { 'class': 'td device-info'}, [
+				E('td', { 'class': 'td device-info'}, [
 					E('p', {}, [
 						E('span', { 'class': 'd-inline-block'}, [ deivce.ipv4 ]),
 					]),
 				]),
 
-				E('div', { 'class': 'td device-info'}, [
+				E('td', { 'class': 'td device-info'}, [
 					E('p', {}, [
 						E('span', { 'class': 'd-inline-block'}, [ deivce.macaddr ]),
 					]),

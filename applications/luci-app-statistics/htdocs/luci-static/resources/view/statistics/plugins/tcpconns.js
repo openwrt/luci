@@ -14,11 +14,12 @@ return baseclass.extend({
 		o = s.option(form.Flag, 'ListeningPorts', _('Monitor all local listen ports'));
 		o.depends('enable', '1');
 		o.rmempty = false;
-		o.default = '1';
+		o.default = '0';
 
 		o = s.option(form.DynamicList, 'LocalPorts', _('Monitor local ports'));
 		o.optional = true;
 		o.datatype = 'port';
+		o.default = '22 80';
 		o.depends({ enable: '1', ListeningPorts: '0' });
 
 		o = s.option(form.DynamicList, 'RemotePorts', _('Monitor remote ports'));

@@ -79,7 +79,7 @@ return network.registerProtocol('grev6', {
 		o = s.taboption('advanced', form.Value, 'tos', _("Traffic Class"), _("Specify a Traffic Class. Can be <code>inherit</code> (the outer header inherits the value of the inner header) or an hexadecimal value <code>00..FF</code> (optional)."));
 		o.optional = true;
 		o.validate = function(section_id, value) {
-			if (value.length > 0 && !value.match(/^[a-f0-9]{1,2}$/i) && !value.match(/^inherit$/i)))
+			if (value.length > 0 && !value.match(/^[a-f0-9]{1,2}$/i) && !value.match(/^inherit$/i))
 				return _("Invalid Traffic Class value, expected 00..FF or inherit");
 
 			return true;
@@ -95,7 +95,7 @@ return network.registerProtocol('grev6', {
 		o.optional = true;
 		o.datatype = 'integer';
 
-		o = s.taboption('advanced', form.Value, 'okey', _("Outgoing key"), _("Key for outgoing packets (optinal)."));
+		o = s.taboption('advanced', form.Value, 'okey', _("Outgoing key"), _("Key for outgoing packets (optional)."));
 		o.optional = true;
 		o.datatype = 'integer';
 

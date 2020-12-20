@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2020-10-09 00:10+0000\n"
-"Last-Translator: Artem <KovalevArtem.ru@gmail.com>\n"
+"PO-Revision-Date: 2020-11-22 15:35+0000\n"
+"Last-Translator: Andrey Yukhimchak <yukhymchak.a@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsvpn-policy-routing/ru/>\n"
 "Language: ru\n"
@@ -9,7 +9,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.3-dev\n"
+"X-Generator: Weblate 4.4-dev\n"
 
 #: applications/luci-app-vpn-policy-routing/luasrc/model/cbi/vpn-policy-routing.lua:63
 msgid "%s (disabled)"
@@ -29,6 +29,9 @@ msgid ""
 "anything in this section! Change any of the settings below with extreme "
 "caution!%s"
 msgstr ""
+"%sWARNING:%s Пожалуйста ознакомьтесь с %sREADME%s перед любыми изменениями в "
+"этой секции! Любые изменения в настройках ниже проводите с предельной "
+"осторожностью!%s"
 
 #: applications/luci-app-vpn-policy-routing/luasrc/model/cbi/vpn-policy-routing.lua:214
 msgid ""
@@ -46,6 +49,9 @@ msgid ""
 "explicitly supported by the service. Can be useful if your OpenVPN tunnels "
 "have dev option other than tun* or tap*."
 msgstr ""
+"Позволяет указать список имен интерфейсов (в нижнем регистре) для явной "
+"поддержки службой. Может быть полезно если ваши OpenVPN тоннели "
+"сконфигурированы с переменной разработчика отличной от tun* или tap*."
 
 #: applications/luci-app-vpn-policy-routing/luasrc/model/cbi/vpn-policy-routing.lua:202
 msgid ""
@@ -53,18 +59,21 @@ msgid ""
 "by the service. Can be useful if running both VPN server and VPN client on "
 "the router."
 msgstr ""
+"Позволяет указать список имен интерфейсов (в нижнем регистре) для "
+"игнорирования службой. Может быть полезно если VPN сервер и VPN клиент "
+"запущены на одном маршрутизаторе."
 
 #: applications/luci-app-vpn-policy-routing/luasrc/model/cbi/vpn-policy-routing.lua:210
 msgid "Append"
-msgstr ""
+msgstr "Добавить"
 
 #: applications/luci-app-vpn-policy-routing/luasrc/model/cbi/vpn-policy-routing.lua:227
 msgid "Append local IP Tables rules"
-msgstr ""
+msgstr "Добавить локальные правила IP Tables"
 
 #: applications/luci-app-vpn-policy-routing/luasrc/model/cbi/vpn-policy-routing.lua:230
 msgid "Append remote IP Tables rules"
-msgstr ""
+msgstr "Добавить удалённые правила IP Tables"
 
 #: applications/luci-app-vpn-policy-routing/luasrc/model/cbi/vpn-policy-routing.lua:164
 msgid "Basic Configuration"
@@ -92,7 +101,7 @@ msgstr ""
 
 #: applications/luci-app-vpn-policy-routing/luasrc/model/cbi/vpn-policy-routing.lua:168
 msgid "Condensed output"
-msgstr ""
+msgstr "Сжатый вывод"
 
 #: applications/luci-app-vpn-policy-routing/luasrc/model/cbi/vpn-policy-routing.lua:159
 msgid "Configuration"
@@ -101,6 +110,7 @@ msgstr "Конфигурация"
 #: applications/luci-app-vpn-policy-routing/luasrc/model/cbi/vpn-policy-routing.lua:166
 msgid "Controls both system log and console output verbosity."
 msgstr ""
+"Управляет уровнем подробности для системного журнала и вывода в консоль."
 
 #: applications/luci-app-vpn-policy-routing/luasrc/model/cbi/vpn-policy-routing.lua:372
 msgid "Custom User File Includes"
@@ -135,11 +145,11 @@ msgstr "Отключено"
 
 #: applications/luci-app-vpn-policy-routing/luasrc/model/cbi/vpn-policy-routing.lua:258
 msgid "Display these protocols in protocol column in Web UI."
-msgstr ""
+msgstr "Отображать эти протоколы в строке протоколов Web UI."
 
 #: applications/luci-app-vpn-policy-routing/luasrc/model/cbi/vpn-policy-routing.lua:174
 msgid "Do not enforce policies when their gateway is down"
-msgstr ""
+msgstr "Не применять политики когда их шлюз отключен"
 
 #: applications/luci-app-vpn-policy-routing/luasrc/view/vpn-policy-routing/buttons.htm:54
 msgid "Enable"

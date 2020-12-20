@@ -140,8 +140,7 @@ m = Map("mwan3", translate("MWAN - Interfaces"),
 	interfaceWarnings(configCheck()))
 
 mwan_interface = m:section(TypedSection, "interface", nil,
-	translate("MWAN supports up to 252 physical and/or logical interfaces<br />" ..
-	"MWAN requires that all interfaces have a unique metric configured in /etc/config/network<br />" ..
+	translate("mwan3 requires that all interfaces have a unique metric configured in /etc/config/network<br />" ..
 	"Names must match the interface name found in /etc/config/network<br />" ..
 	"Names may contain characters A-Z, a-z, 0-9, _ and no spaces<br />" ..
 	"Interfaces may not share the same name as configured members, policies or rules"))

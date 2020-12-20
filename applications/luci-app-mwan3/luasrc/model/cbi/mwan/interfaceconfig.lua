@@ -105,7 +105,7 @@ check_quality = mwan_interface:option(Flag, "check_quality", translate("Check li
 check_quality:depends("track_method", "ping")
 check_quality.default = false
 
-failure_latency = mwan_interface:option(Value, "failure_latency", translate("Max packet latency [ms]"))
+failure_latency = mwan_interface:option(Value, "failure_latency", translate("Failure latency [ms]"))
 failure_latency:depends("check_quality", 1)
 failure_latency.default = "1000"
 failure_latency:value("25")
@@ -117,7 +117,7 @@ failure_latency:value("200")
 failure_latency:value("250")
 failure_latency:value("300")
 
-failure_loss = mwan_interface:option(Value, "failure_loss", translate("Max packet loss [%]"))
+failure_loss = mwan_interface:option(Value, "failure_loss", translate("Failure packet loss [%]"))
 failure_loss:depends("check_quality", 1)
 failure_loss.default = "40"
 failure_loss:value("2")
@@ -126,7 +126,7 @@ failure_loss:value("10")
 failure_loss:value("20")
 failure_loss:value("25")
 
-recovery_latency = mwan_interface:option(Value, "recovery_latency", translate("Min packet latency [ms]"))
+recovery_latency = mwan_interface:option(Value, "recovery_latency", translate("Recovery latency [ms]"))
 recovery_latency:depends("check_quality", 1)
 recovery_latency.default = "500"
 recovery_latency:value("25")
@@ -138,7 +138,7 @@ recovery_latency:value("200")
 recovery_latency:value("250")
 recovery_latency:value("300")
 
-recovery_loss = mwan_interface:option(Value, "recovery_loss", translate("Min packet loss [%]"))
+recovery_loss = mwan_interface:option(Value, "recovery_loss", translate("Recovery packet loss [%]"))
 recovery_loss:depends("check_quality", 1)
 recovery_loss.default = "10"
 recovery_loss:value("2")

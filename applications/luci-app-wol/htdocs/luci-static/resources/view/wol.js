@@ -71,7 +71,7 @@ return view.extend({
 		});
 
 		if (has_ewk) {
-			o = s.option(form.Flag, 'broadcast', ('Send to broadcast address'));
+			o = s.option(form.Flag, 'broadcast', _('Send to broadcast address'));
 
 			if (has_wol)
 				o.depends('executable', '/usr/bin/etherwake');
@@ -104,7 +104,7 @@ return view.extend({
 			}
 
 			ui.showModal(_('Waking host'), [
-				E('p', { 'class': 'spinning' }, [ 'Starting WoL utility…' ])
+				E('p', { 'class': 'spinning' }, [ _('Starting WoL utility…') ])
 			]);
 
 			return fs.exec(bin, args).then(function(res) {

@@ -252,7 +252,7 @@ return view.extend({
 					E('button', {
 						'class': 'cbi-button cbi-button-apply',
 						'click': ui.createHandlerFn(this, function() {
-							return handleAction('start');
+							return handleAction('reload');
 						})
 					}, [ _('Refresh') ])
 				])
@@ -290,12 +290,25 @@ return view.extend({
 		o.nocreate = true;
 		o.rmempty = true;
 
-		o = s.taboption('general', form.Flag, 'adb_forcedns', _('Force Local DNS'), _('Redirect all DNS queries from \'lan\' zone to the local DNS resolver, applies to UDP and TCP protocol.'));
+		o = s.taboption('general', form.Flag, 'adb_forcedns', _('Force Local DNS'), _('Redirect all DNS queries from specified zones to the local DNS resolver, applies to UDP and TCP protocol.'));
 		o.rmempty = false;
 
-		o = s.taboption('general', form.Value, 'adb_portlist', _('Local DNS Ports'), _('Space separated list of DNS-related firewall ports which should be forced locally.'));
+		o = s.taboption('general', widgets.ZoneSelect, 'adb_zonelist', _('Forced Zones'), _('Firewall source zones that should be forced locally.'));
 		o.depends('adb_forcedns', '1');
-		o.placeholder = '53 853 5353';
+		o.unspecified = true;
+		o.multiple = true;
+		o.nocreate = true;
+		o.rmempty = true;
+
+		o = s.taboption('general', form.DynamicList, 'adb_portlist', _('Forced Ports'), _('Firewall ports that should be forced locally.'));
+		o.depends('adb_forcedns', '1');
+		o.unspecified = true;
+		o.multiple = true;
+		o.nocreate = false;
+		o.datatype = 'port';
+		o.value('53');
+		o.value('853');
+		o.value('5353');
 		o.rmempty = true;
 
 		o = s.taboption('general', form.Flag, 'adb_safesearch', _('Enable SafeSearch'), _('Enforcing SafeSearch for google, bing, duckduckgo, yandex, youtube and pixabay.'));
@@ -344,6 +357,8 @@ return view.extend({
 		o.rmempty = true;
 
 		o = s.taboption('additional', form.ListValue, 'adb_maxqueue', _('Download Queue'), _('Size of the download queue for download processing (incl. sorting, merging etc.) in parallel.'));
+		o.value('1');
+		o.value('2');
 		o.value('4');
 		o.value('8');
 		o.value('16');
@@ -366,11 +381,12 @@ return view.extend({
 		o.rmempty = true;
 
 		o = s.taboption('additional', form.ListValue, 'adb_fetchutil', _('Download Utility'), _('List of supported and fully pre-configured download utilities.'));
+		o.value('', _('- unspecified -'));
 		o.value('uclient-fetch');
 		o.value('wget');
 		o.value('curl');
 		o.value('aria2c');
-		o.rmempty = false;
+		o.rmempty = true;
 
 		o = s.taboption('additional', form.Value, 'adb_fetchparm', _('Download Parameters'), _('Special config options for the selected download utility.'))
 		o.rmempty = true;
@@ -380,12 +396,13 @@ return view.extend({
 		*/
 		o = s.taboption('adv_dns', form.ListValue, 'adb_dns', _('DNS Backend'), _('List of supported DNS backends with their default list directory. \
 			To overwrite the default path use the \'DNS Directory\' option.'));
+		o.value('', _('- unspecified -'));
 		o.value('dnsmasq', _('dnsmasq (/tmp/dnsmasq.d)'));
 		o.value('unbound', _('unbound (/var/lib/unbound)'));
 		o.value('named', _('named (/var/lib/bind)'));
 		o.value('kresd', _('kresd (/etc/kresd)'));
 		o.value('raw', _('raw (/tmp)'));
-		o.rmempty = false;
+		o.rmempty = true;
 
 		o = s.taboption('adv_dns', form.Value, 'adb_dnsdir', _('DNS Directory'), _('Target directory for the generated blocklist \'adb_list.overall\'.'));
 		o.placeholder = '/tmp';

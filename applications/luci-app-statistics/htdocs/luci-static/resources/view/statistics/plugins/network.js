@@ -57,7 +57,7 @@ return baseclass.extend({
 
 		o = ss.option(form.Value, 'host', _('Server host'));
 		o.default = '0.0.0.0';
-		o.datatype = 'ipaddr("nomask")';
+		o.datatype = 'or(hostname,ipaddr("nomask"))';
 
 		o = ss.option(form.Value, 'port', _('Server port'));
 		o.default = '25826';

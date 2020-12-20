@@ -44,7 +44,7 @@
 
 <script type="text/javascript">//<![CDATA[
 	var xhr = new XHR(),
-	uci_apply_rollback = <%=math.max(luci.config and luci.config.apply and luci.config.apply.rollback or 30, 30)%>,
+	uci_apply_rollback = <%=math.max(luci.config and luci.config.apply and luci.config.apply.rollback or 90, 90)%>,
 	uci_apply_holdoff = <%=math.max(luci.config and luci.config.apply and luci.config.apply.holdoff or 4, 1)%>,
 	uci_apply_timeout = <%=math.max(luci.config and luci.config.apply and luci.config.apply.timeout or 5, 1)%>,
 	uci_apply_display = <%=math.max(luci.config and luci.config.apply and luci.config.apply.display or 1.5, 1)%>,

@@ -16,6 +16,7 @@ return baseclass.extend({
 			_('When none selected, all interfaces will be monitored.'));
 		o.multiple = true;
 		o.noaliases = true;
+		o.default = 'br-lan';
 		o.depends('enable', '1');
 
 		o = s.option(form.DynamicList, 'IgnoreSources', _('Ignore source addresses'));

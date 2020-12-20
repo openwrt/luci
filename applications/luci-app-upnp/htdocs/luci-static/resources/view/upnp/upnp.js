@@ -78,15 +78,15 @@ return view.extend({
 		s = m.section(form.GridSection, '_active_rules');
 
 		s.render = L.bind(function(view, section_id) {
-			var table = E('div', { 'class': 'table cbi-section-table', 'id': 'upnp_status_table' }, [
-				E('div', { 'class': 'tr table-titles' }, [
-					E('div', { 'class': 'th' }, _('Protocol')),
-					E('div', { 'class': 'th' }, _('External Port')),
-					E('div', { 'class': 'th' }, _('Client Address')),
-					E('div', { 'class': 'th' }, _('Host')),
-					E('div', { 'class': 'th' }, _('Client Port')),
-					E('div', { 'class': 'th' }, _('Description')),
-					E('div', { 'class': 'th cbi-section-actions' }, '')
+			var table = E('table', { 'class': 'table cbi-section-table', 'id': 'upnp_status_table' }, [
+				E('tr', { 'class': 'tr table-titles' }, [
+					E('th', { 'class': 'th' }, _('Protocol')),
+					E('th', { 'class': 'th' }, _('External Port')),
+					E('th', { 'class': 'th' }, _('Client Address')),
+					E('th', { 'class': 'th' }, _('Host')),
+					E('th', { 'class': 'th' }, _('Client Port')),
+					E('th', { 'class': 'th' }, _('Description')),
+					E('th', { 'class': 'th cbi-section-actions' }, '')
 				])
 			]);
 
@@ -166,6 +166,17 @@ return view.extend({
 
 		o = s.taboption('advanced', form.Value, 'upnp_lease_file', _('UPnP lease file'))
 		o.placeholder = '/var/run/miniupnpd.leases'
+
+		s.taboption('advanced', form.Flag, 'use_stun', _('Use STUN'))
+
+		o = s.taboption('advanced', form.Value, 'stun_host', _('STUN Host'))
+		o.depends('use_stun', '1');
+		o.datatype    = 'host'
+
+		o = s.taboption('advanced', form.Value, 'stun_port', _('STUN Port'))
+		o.depends('use_stun', '1');
+		o.datatype    = 'port'
+		o.placeholder = '0-65535'
 
 		s = m.section(form.GridSection, 'perm_rule', _('MiniUPnP ACLs'),
 			_('ACLs specify which external ports may be redirected to which internal addresses and ports'))

@@ -20,7 +20,7 @@
 
 <script type="text/javascript" src="<%=resource%>/bmx7/js/polling.js"></script>
 <script type="text/javascript">//<![CDATA[
-		new TablePooler(10,"/cgi-bin/bmx7-info", {'$originators':''}, "nodes_div", function(st){
+		new TablePooler(10,"/cgi-bin/bmx7-info", {'originators':''}, "nodes_div", function(st){
 			var originators = st.originators;
 			var res = Array();
 			originators.forEach(function(originator,i){

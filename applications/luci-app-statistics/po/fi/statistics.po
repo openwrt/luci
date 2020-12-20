@@ -92,7 +92,7 @@ msgstr "CPU:n kellotaajuus -lisäosan asetukset"
 msgid "CPU Plugin Configuration"
 msgstr "CPU-laajennuksen määritykset"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/cpu.js:32
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/cpu.js:40
 msgid "CPU monitoring is enabled"
 msgstr "Suorittimen valvonta on käytössä"
 
@@ -104,7 +104,7 @@ msgstr "CSV Tulostus"
 msgid "CSV Plugin Configuration"
 msgstr "CSV-laajennuksen määritys"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:69
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:70
 msgid "Cache collected data for"
 msgstr "Välimuistiin kerätyt tiedot"
 
@@ -179,6 +179,18 @@ msgstr "Luo tilastoja itse verkkolaajennuksesta"
 msgid "DF Plugin Configuration"
 msgstr "DF-laajennuksen määritykset"
 
+#: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/dhcpleases.js:7
+msgid "DHCP Leases"
+msgstr ""
+
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/dhcpleases.js:6
+msgid "DHCP Leases Plugin Configuration"
+msgstr ""
+
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/dhcpleases.js:14
+msgid "DHCP leases file"
+msgstr ""
+
 #: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/dns.js:10
 #: applications/luci-app-statistics/root/usr/share/luci/statistics/plugins/dns.json:2
 msgid "DNS"
@@ -199,6 +211,10 @@ msgstr "Tietojoukkojen määritystiedosto"
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/cpufreq.js:22
 msgid "Detailled CPU frequency monitoring enabled"
 msgstr "Yksityiskohtainen suorittimen taajuuden valvonta käytössä"
+
+#: applications/luci-app-statistics/root/usr/share/luci/statistics/plugins/dhcpleases.json:2
+msgid "Dhcpleases"
+msgstr ""
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/collectd.js:65
 msgid "Directory for collectd plugins"
@@ -264,6 +280,7 @@ msgstr "Ota tilastot käyttöön"
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/csv.js:12
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/curl.js:11
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/df.js:13
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/dhcpleases.js:12
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/disk.js:13
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/dns.js:13
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/email.js:13
@@ -326,7 +343,7 @@ msgstr "Exec"
 msgid "Exec Plugin Configuration"
 msgstr "Exec laajennuksen määritys"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:66
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:67
 msgid "Expecting decimal value lower than one"
 msgstr "Odottaa desimaaliarvoa pienempää kuin yksi"
 
@@ -334,7 +351,7 @@ msgstr "Odottaa desimaaliarvoa pienempää kuin yksi"
 msgid "Expecting permssions in octal notation"
 msgstr "Edellyttää oikeuksia oktaalimerkittynä"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:48
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:49
 msgid "Expecting valid time range"
 msgstr "Edellyttää voimassa olevaa ajanjaksoa"
 
@@ -359,7 +376,7 @@ msgstr "Palomuuri"
 msgid "Firewall (IPv6)"
 msgstr "Palomuuri (IPv6)"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:89
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:90
 msgid "Flush cache after"
 msgstr "Tyhjennä välimuisti jälkeen"
 
@@ -437,7 +454,7 @@ msgstr "IP-osoite tai isäntänimi, josta txtinfo-syöte haetaan"
 msgid "IRQ Plugin Configuration"
 msgstr "IRQ-laajennuksen määritys"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/dns.js:21
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/dns.js:22
 msgid "Ignore source addresses"
 msgstr "Ohita lähdeosoitteet"
 
@@ -470,6 +487,13 @@ msgstr "Iptables-laajennuksen määritys"
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/iwinfo.js:15
 msgid "Leave unselected to automatically determine interfaces to monitor."
 msgstr "Tyhjä arvo = valvottavat sovittimet valitaan automaattisesti."
+
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:39
+msgid ""
+"List of time spans to be stored in RRD database. E.g. \"1hour 1day 14day\". "
+"Allowed timespan types: min, h, hour(s), d, day(s), w, week(s), m, month(s), "
+"y, year(s)"
+msgstr ""
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/network.js:40
 msgid "Listen host"
@@ -539,7 +563,7 @@ msgstr "Muistin valvonta käytössä"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/df.js:89
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/disk.js:32
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/interface.js:20
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/interface.js:21
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/irq.js:45
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/iwinfo.js:25
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/netlink.js:41
@@ -598,11 +622,11 @@ msgstr "Valvo liitoskohtia"
 msgid "Monitor processes"
 msgstr "Valvo prosesseja"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:24
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:25
 msgid "Monitor remote ports"
 msgstr "Etäporttien valvonta"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:37
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:38
 msgid "Monitoring %s and %s"
 msgstr "Valvotaan kohdetta %s ja %s"
 
@@ -616,11 +640,15 @@ msgid_plural "Monitoring APC UPS at hosts %s, port %d"
 msgstr[0] "Valvotaan APC UPS isäntää %s, port %d"
 msgstr[1] "Valvotaan APC UPS isäntiä %s, port %d"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/dns.js:31
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/dhcpleases.js:19
+msgid "Monitoring DHCP leases enabled"
+msgstr ""
+
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/dns.js:32
 msgid "Monitoring DNS queries on all interfaces"
 msgstr "DNS-kyselyiden valvonta kaikissa sovittimissa"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/dns.js:33
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/dns.js:34
 msgid "Monitoring DNS queries on one interface"
 msgid_plural "Monitoring DNS queries on %d interfaces"
 msgstr[0] "DNS-kyselyiden valvonta sovittimessa"
@@ -636,7 +664,7 @@ msgid_plural "Monitoring all but %d disks"
 msgstr[0] "Kaikkien paitsi yhden levyn valvonta"
 msgstr[1] "Kaikkien paitsi %d levyn valvonta"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/interface.js:31
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/interface.js:32
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/iwinfo.js:36
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/netlink.js:54
 msgid "Monitoring all but one interface"
@@ -664,7 +692,7 @@ msgstr "Kaikkien levyjen valvonta"
 msgid "Monitoring all except %s, %s, %s"
 msgstr "Valvotaan kaikkia paitsi %s, %s, %s"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/interface.js:29
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/interface.js:30
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/iwinfo.js:34
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/netlink.js:52
 msgid "Monitoring all interfaces"
@@ -690,7 +718,7 @@ msgstr "Kaikkien lämpövyöhykkeiden valvonta"
 msgid "Monitoring all thermal zones except %s"
 msgstr "Kaikkien lämpövyöhykkeiden valvonta paitsi %s"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:35
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:36
 msgid "Monitoring local listen ports"
 msgstr "Paikallisten kuunteluporttien valvonta"
 
@@ -718,7 +746,7 @@ msgid_plural "Monitoring %d hosts"
 msgstr[0] "Yhden isännän valvonta"
 msgstr[1] "Valvoo %d isäntää"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/interface.js:33
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/interface.js:34
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/iwinfo.js:38
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/netlink.js:56
 msgid "Monitoring one interface"
@@ -882,7 +910,7 @@ msgstr "Suoritin"
 msgid "Qdisc monitoring"
 msgstr "Qdisc valvonta"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:56
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:57
 msgid "RRD XFiles Factor"
 msgstr "RRD XFiles-tekijä"
 
@@ -902,6 +930,10 @@ msgstr "RRDTool"
 msgid "RRDTool Plugin Configuration"
 msgstr "RRDTool-lisäosan asetukset"
 
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/cpu.js:27
+msgid "Report also the value for the idle metric"
+msgstr ""
+
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/cpu.js:14
 msgid "Report by CPU"
 msgstr "Raportoi CPU-kohtaisesti"
@@ -910,11 +942,11 @@ msgstr "Raportoi CPU-kohtaisesti"
 msgid "Report by state"
 msgstr "Raportoi tilan mukaan"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/cpu.js:26
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/cpu.js:32
 msgid "Report in percent"
 msgstr "Raportoi prosentteina"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:51
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:52
 msgid "Rows per RRA"
 msgstr "Rivimäärä RRA-tietokannassa"
 
@@ -939,8 +971,8 @@ msgstr "Komentojono"
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/ping.js:31
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:19
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:24
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:69
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:89
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:70
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:90
 msgid "Seconds"
 msgstr "Sekuntia"
 
@@ -988,6 +1020,10 @@ msgstr "Collectd-perusasetukset"
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/netlink.js:31
 msgid "Shaping class monitoring"
 msgstr "Muotoiluluokan asetukset"
+
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/cpu.js:26
+msgid "Show Idle state"
+msgstr ""
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:34
 msgid "Show max values instead of averages"
@@ -1170,6 +1206,10 @@ msgid ""
 msgstr ""
 "Levytila-lisäosa kerää tietoja levyn käytöstä eri laitteissa, liitoskohdissa "
 "tai tiedostojärjestelmissä."
+
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/dhcpleases.js:7
+msgid "The dhcpleases plugin collects information about assigned DHCP leases."
+msgstr ""
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/disk.js:8
 msgid ""
@@ -1447,7 +1487,7 @@ msgstr "Raportointi tilakohtaisesti (system, user, idle)"
 msgid "When set to true, we request absolute values"
 msgstr "Raportointi absoluuttisina arvoina"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/cpu.js:27
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/cpu.js:33
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/memory.js:18
 msgid "When set to true, we request percentage values"
 msgstr "Raportointi prosentteina"
@@ -1461,7 +1501,7 @@ msgstr "Langaton"
 msgid "Wireless iwinfo Plugin Configuration"
 msgstr "Langattoman verkon iwinfo-lisäosan asetukset"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:96
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:97
 msgid "Writing *.rrd files to %s"
 msgstr "Kirjoitetaan rrd-tiedostot hakemistoon %s"
 
@@ -1502,7 +1542,7 @@ msgid_plural "%d filesystem types"
 msgstr[0] "Yksi tiedostojärjestelmä"
 msgstr[1] "%d tiedostojärjestelmää"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:38
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:39
 msgid "one local port"
 msgid_plural "%d local ports"
 msgstr[0] "Yksi paikallinen portti"
@@ -1514,7 +1554,7 @@ msgid_plural "%d mounts"
 msgstr[0] "Yksi liitoskohta"
 msgstr[1] "%s liitoskohtaa"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:39
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:40
 msgid "one remote port"
 msgid_plural "%d remote ports"
 msgstr[0] "Yksi vastapuolen portti"

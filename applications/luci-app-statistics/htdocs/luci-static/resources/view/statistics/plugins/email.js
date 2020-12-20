@@ -13,7 +13,7 @@ return baseclass.extend({
 		o = s.option(form.Flag, 'enable', _('Enable this plugin'));
 
 		o = s.option(form.Value, 'SocketFile', _('Socket file'));
-		o.default = '/var/run/collect-email.sock';
+		o.default = '/var/run/collectd/email.sock';
 		o.depends('enable', '1');
 
 		o = s.option(widgets.GroupSelect, 'SocketGroup', _('Socket group'));

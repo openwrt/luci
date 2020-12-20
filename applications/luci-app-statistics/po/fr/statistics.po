@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-05-19 19:36+0200\n"
-"PO-Revision-Date: 2020-06-20 14:41+0000\n"
-"Last-Translator: ButterflyOfFire <ButterflyOfFire@protonmail.com>\n"
+"PO-Revision-Date: 2020-11-14 12:48+0000\n"
+"Last-Translator: David Elie-Dit-Cosaque <david.elieditcosaque@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsstatistics/fr/>\n"
 "Language: fr\n"
@@ -12,16 +12,16 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.2-dev\n"
+"X-Generator: Weblate 4.4-dev\n"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/apcups.js:7
 #: applications/luci-app-statistics/root/usr/share/luci/statistics/plugins/apcups.json:2
 msgid "APC UPS"
-msgstr ""
+msgstr "Onduleur"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/apcups.js:6
 msgid "APCUPS Plugin Configuration"
-msgstr ""
+msgstr "Configuration du plugin onduleur"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/memory.js:14
 msgid "Absolute values"
@@ -92,7 +92,7 @@ msgstr ""
 msgid "CPU Plugin Configuration"
 msgstr "Configuration du greffon sur le CPU"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/cpu.js:32
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/cpu.js:40
 msgid "CPU monitoring is enabled"
 msgstr "Surveillance de CPU activée"
 
@@ -104,7 +104,7 @@ msgstr "Sortie au format CSV"
 msgid "CSV Plugin Configuration"
 msgstr "Configuration du greffon CSV"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:69
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:70
 msgid "Cache collected data for"
 msgstr "Mettre en cache les données collectées pendant"
 
@@ -179,6 +179,18 @@ msgstr "Créer des statistiques sur le plugin réseau lui-même"
 msgid "DF Plugin Configuration"
 msgstr "Configuration du greffon DF"
 
+#: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/dhcpleases.js:7
+msgid "DHCP Leases"
+msgstr ""
+
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/dhcpleases.js:6
+msgid "DHCP Leases Plugin Configuration"
+msgstr ""
+
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/dhcpleases.js:14
+msgid "DHCP leases file"
+msgstr ""
+
 #: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/dns.js:10
 #: applications/luci-app-statistics/root/usr/share/luci/statistics/plugins/dns.json:2
 msgid "DNS"
@@ -199,6 +211,10 @@ msgstr "Fichier de définition des lots de données"
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/cpufreq.js:22
 msgid "Detailled CPU frequency monitoring enabled"
 msgstr "Surveillance détaillée de la fréquence CPU activée"
+
+#: applications/luci-app-statistics/root/usr/share/luci/statistics/plugins/dhcpleases.json:2
+msgid "Dhcpleases"
+msgstr ""
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/collectd.js:65
 msgid "Directory for collectd plugins"
@@ -264,6 +280,7 @@ msgstr "Activer les statistiques"
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/csv.js:12
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/curl.js:11
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/df.js:13
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/dhcpleases.js:12
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/disk.js:13
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/dns.js:13
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/email.js:13
@@ -326,7 +343,7 @@ msgstr "Exec"
 msgid "Exec Plugin Configuration"
 msgstr "Configuration du greffon Exec"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:66
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:67
 msgid "Expecting decimal value lower than one"
 msgstr "Valeur décimale inférieure à un attendue"
 
@@ -334,7 +351,7 @@ msgstr "Valeur décimale inférieure à un attendue"
 msgid "Expecting permssions in octal notation"
 msgstr "Permissions attendues en notation octale"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:48
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:49
 msgid "Expecting valid time range"
 msgstr "Page de temps valide attendue"
 
@@ -359,7 +376,7 @@ msgstr "Pare-feu"
 msgid "Firewall (IPv6)"
 msgstr "Pare-feu (IPv6)"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:89
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:90
 msgid "Flush cache after"
 msgstr "Vidanger le cache après"
 
@@ -440,7 +457,7 @@ msgstr ""
 msgid "IRQ Plugin Configuration"
 msgstr "Configuration du greffon IRQ"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/dns.js:21
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/dns.js:22
 msgid "Ignore source addresses"
 msgstr "Ignorer les adresses-source"
 
@@ -472,6 +489,13 @@ msgstr "Configuration du greffon IPtables"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/iwinfo.js:15
 msgid "Leave unselected to automatically determine interfaces to monitor."
+msgstr ""
+
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:39
+msgid ""
+"List of time spans to be stored in RRD database. E.g. \"1hour 1day 14day\". "
+"Allowed timespan types: min, h, hour(s), d, day(s), w, week(s), m, month(s), "
+"y, year(s)"
 msgstr ""
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/network.js:40
@@ -540,7 +564,7 @@ msgstr "Surveillance de la mémoire activée"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/df.js:89
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/disk.js:32
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/interface.js:20
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/interface.js:21
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/irq.js:45
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/iwinfo.js:25
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/netlink.js:41
@@ -599,11 +623,11 @@ msgstr "Points de montage à surveiller"
 msgid "Monitor processes"
 msgstr "Processus à surveiller"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:24
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:25
 msgid "Monitor remote ports"
 msgstr "Surveiller les ports destinataires"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:37
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:38
 msgid "Monitoring %s and %s"
 msgstr "Surveillance de %s et %s"
 
@@ -617,11 +641,15 @@ msgid_plural "Monitoring APC UPS at hosts %s, port %d"
 msgstr[0] "Surveillance des APC UPS au niveau de l'hôte %s, port %s"
 msgstr[1] "Surveillance des APC UPS au niveau des hôtes %s, port %s"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/dns.js:31
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/dhcpleases.js:19
+msgid "Monitoring DHCP leases enabled"
+msgstr ""
+
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/dns.js:32
 msgid "Monitoring DNS queries on all interfaces"
 msgstr "Surveillance des requêtes DNS sur toutes les interfaces"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/dns.js:33
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/dns.js:34
 msgid "Monitoring DNS queries on one interface"
 msgid_plural "Monitoring DNS queries on %d interfaces"
 msgstr[0] "Surveillance des requêtes DNS sur une interface"
@@ -637,7 +665,7 @@ msgid_plural "Monitoring all but %d disks"
 msgstr[0] "Surveillance de tous les disques sauf un"
 msgstr[1] "Surveillance de tous les disques sauf %d"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/interface.js:31
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/interface.js:32
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/iwinfo.js:36
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/netlink.js:54
 msgid "Monitoring all but one interface"
@@ -665,7 +693,7 @@ msgstr "Surveillance de tous les disques"
 msgid "Monitoring all except %s, %s, %s"
 msgstr "Surveillance de tous sauf %s, %s, %s"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/interface.js:29
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/interface.js:30
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/iwinfo.js:34
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/netlink.js:52
 msgid "Monitoring all interfaces"
@@ -691,7 +719,7 @@ msgstr "Surveillance de toutes les zones thermiques"
 msgid "Monitoring all thermal zones except %s"
 msgstr "Surveillance de toutes les zones thermiques sauf %s"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:35
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:36
 msgid "Monitoring local listen ports"
 msgstr "Surveillance des ports d’écoute locaux"
 
@@ -719,7 +747,7 @@ msgid_plural "Monitoring %d hosts"
 msgstr[0] "Surveillance d’un hôte"
 msgstr[1] "Surveillance de %d hôtes"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/interface.js:33
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/interface.js:34
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/iwinfo.js:38
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/netlink.js:56
 msgid "Monitoring one interface"
@@ -881,7 +909,7 @@ msgstr "Processeur"
 msgid "Qdisc monitoring"
 msgstr "Surveillance Qdisc"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:56
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:57
 msgid "RRD XFiles Factor"
 msgstr "Facteur RRD XFiles"
 
@@ -901,6 +929,10 @@ msgstr "RRDTool"
 msgid "RRDTool Plugin Configuration"
 msgstr "Configuration du greffon RRDTool"
 
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/cpu.js:27
+msgid "Report also the value for the idle metric"
+msgstr ""
+
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/cpu.js:14
 msgid "Report by CPU"
 msgstr ""
@@ -909,11 +941,11 @@ msgstr ""
 msgid "Report by state"
 msgstr ""
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/cpu.js:26
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/cpu.js:32
 msgid "Report in percent"
 msgstr ""
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:51
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:52
 msgid "Rows per RRA"
 msgstr "Lignes par RRA"
 
@@ -938,8 +970,8 @@ msgstr "Script"
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/ping.js:31
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:19
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:24
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:69
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:89
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:70
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:90
 msgid "Seconds"
 msgstr "Secondes"
 
@@ -987,6 +1019,10 @@ msgstr "Configurer collectd"
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/netlink.js:31
 msgid "Shaping class monitoring"
 msgstr "Surveillance liées à la priorité"
+
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/cpu.js:26
+msgid "Show Idle state"
+msgstr ""
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:34
 msgid "Show max values instead of averages"
@@ -1166,6 +1202,10 @@ msgid ""
 msgstr ""
 "Le plugin DF récupère des données sur l'utilisation de l'espace-disque sur "
 "différents périphériques, points de montage ou types de systèmes de fichiers."
+
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/dhcpleases.js:7
+msgid "The dhcpleases plugin collects information about assigned DHCP leases."
+msgstr ""
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/disk.js:8
 msgid ""
@@ -1455,7 +1495,7 @@ msgstr ""
 msgid "When set to true, we request absolute values"
 msgstr ""
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/cpu.js:27
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/cpu.js:33
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/memory.js:18
 msgid "When set to true, we request percentage values"
 msgstr ""
@@ -1469,7 +1509,7 @@ msgstr "Sans-fil"
 msgid "Wireless iwinfo Plugin Configuration"
 msgstr ""
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:96
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:97
 msgid "Writing *.rrd files to %s"
 msgstr "Écriture de fichiers *.rrd dans %s"
 
@@ -1496,7 +1536,7 @@ msgstr ""
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/collectd.js:139
 msgid "none"
-msgstr "Aucun"
+msgstr "aucun"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/df.js:107
 msgid "one device"
@@ -1510,7 +1550,7 @@ msgid_plural "%d filesystem types"
 msgstr[0] "un type de système de fichiers"
 msgstr[1] "%d types de système de fichiers"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:38
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:39
 msgid "one local port"
 msgid_plural "%d local ports"
 msgstr[0] "un port local"
@@ -1522,7 +1562,7 @@ msgid_plural "%d mounts"
 msgstr[0] "un point de montage"
 msgstr[1] "%d points de montage"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:39
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:40
 msgid "one remote port"
 msgid_plural "%d remote ports"
 msgstr[0] "un port distant"

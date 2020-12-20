@@ -35,8 +35,9 @@ return baseclass.extend({
 			_('Max values for a period can be used instead of averages when not using \'only average RRAs\''));
 		o.depends('RRASingle', '0');
 
-		o = s.option(form.DynamicList, 'RRATimespans', _('Stored timespans'));
-		o.default = '10min 1day 1week 1month 1year';
+		o = s.option(form.DynamicList, 'RRATimespans', _('Stored timespans'),
+			_('List of time spans to be stored in RRD database. E.g. "1hour 1day 14day". Allowed timespan types: min, h, hour(s), d, day(s), w, week(s), m, month(s), y, year(s)'));
+		o.default = '1hour 1day 1week 1month 1year';
 		o.depends('enable', '1');
 		o.validate = function(section_id, value) {
 			if (value == '')
@@ -49,7 +50,7 @@ return baseclass.extend({
 		};
 
 		o = s.option(form.Value, 'RRARows', _('Rows per RRA'));
-		o.placeholder = '1200';
+		o.default = '144';
 		o.datatype = 'min(1)';
 		o.depends('enable', '1');
 
