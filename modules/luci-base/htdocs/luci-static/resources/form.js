@@ -3616,6 +3616,17 @@ var CBIFlagValue = CBIValue.extend(/** @lends LuCI.form.FlagValue.prototype */ {
 	 * @default null
 	 */
 
+	/**
+	 * Set a tooltip icon.
+	 *
+	 * If set, this icon will be shown for the default one.
+	 * This could also be a png icon from the resources directory.
+	 *
+	 * @name LuCI.form.TypedSection.prototype#tooltipicon
+	 * @type string
+	 * @default 'ℹ️';
+	 */
+
 	/** @private */
 	renderWidget: function(section_id, option_index, cfgvalue) {
 		var tooltip = null;
@@ -3631,6 +3642,7 @@ var CBIFlagValue = CBIValue.extend(/** @lends LuCI.form.FlagValue.prototype */ {
 			value_disabled: this.disabled,
 			validate: L.bind(this.validate, this, section_id),
 			tooltip: tooltip,
+			tooltipicon: this.tooltipicon,
 			disabled: (this.readonly != null) ? this.readonly : this.map.readonly
 		});
 
