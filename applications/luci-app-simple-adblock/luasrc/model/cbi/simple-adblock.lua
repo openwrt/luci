@@ -1,10 +1,8 @@
 -- Copyright 2016-2018 Stan Grishin <stangri@melmac.net>
 -- Licensed to the public under the Apache License 2.0.
 
-local readmeURL = "https://github.com/openwrt/packages/tree/master/net/simple-adblock/files/README.md"
--- local readmeURL = "https://github.com/stangri/openwrt_packages/tree/master/simple-adblock/files/README.md"
-
 local packageName = "simple-adblock"
+local readmeURL = "https://docs.openwrt.melmac.net/" .. packageName .. "/"
 local uci = require "luci.model.uci".cursor()
 local util = require "luci.util"
 local sys = require "luci.sys"
@@ -264,7 +262,7 @@ end
 
 s:tab("advanced", translate("Advanced Configuration"))
 
-local dns_descr = translatef("Pick the DNS resolution option to create the adblock list for, see the <a href=\"%s#dns-resolution-option\" target=\"_blank\">README</a> for details.", readmeURL)
+local dns_descr = translatef("Pick the DNS resolution option to create the adblock list for, see the %sREADME%s for details.", "<a href=\"" .. readmeURL .. "#dns-resolution-option\" target=\"_blank\">", "</a>")
 
 if not checkDnsmasq() then
 	dns_descr = dns_descr .. "<br />" .. translatef("Please note that %s is not supported on this system.", "<i>dnsmasq.addnhosts</i>")
