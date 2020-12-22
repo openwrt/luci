@@ -59,6 +59,12 @@ config statistics 'collectd_apcups'
 	option Host 'localhost'
 	option Port '3551'
 
+config statistics 'collectd_chrony'
+	option enable '0'
+	option Host '127.0.0.1'
+	option Port '323'
+	option Timeout '2'
+
 config statistics 'collectd_conntrack'
 	option enable '0'
 
