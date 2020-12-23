@@ -106,7 +106,7 @@ var SSHPubkeyDecoder = L.Class.singleton({
 function renderKeyItem(pubkey) {
 	return E('div', {
 		class: 'item',
-		click: isReadonlyView ? null : removeKey,
+		click: removeKey,
 		'data-key': pubkey.src
 	}, [
 		E('strong', pubkey.comment || _('Unnamed key')), E('br'),
