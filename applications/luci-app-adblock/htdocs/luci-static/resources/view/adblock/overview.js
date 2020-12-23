@@ -366,11 +366,12 @@ return L.view.extend({
 		o.rmempty = true;
 
 		o = s.taboption('additional', form.ListValue, 'adb_fetchutil', _('Download Utility'), _('List of supported and fully pre-configured download utilities.'));
+		o.value('', _('- unspecified -'));
 		o.value('uclient-fetch');
 		o.value('wget');
 		o.value('curl');
 		o.value('aria2c');
-		o.rmempty = false;
+		o.rmempty = true;
 
 		o = s.taboption('additional', form.Value, 'adb_fetchparm', _('Download Parameters'), _('Special config options for the selected download utility.'))
 		o.rmempty = true;
@@ -380,12 +381,13 @@ return L.view.extend({
 		*/
 		o = s.taboption('adv_dns', form.ListValue, 'adb_dns', _('DNS Backend'), _('List of supported DNS backends with their default list directory. \
 			To overwrite the default path use the \'DNS Directory\' option.'));
+		o.value('', _('- unspecified -'));
 		o.value('dnsmasq', _('dnsmasq (/tmp/dnsmasq.d)'));
 		o.value('unbound', _('unbound (/var/lib/unbound)'));
 		o.value('named', _('named (/var/lib/bind)'));
 		o.value('kresd', _('kresd (/etc/kresd)'));
 		o.value('raw', _('raw (/tmp)'));
-		o.rmempty = false;
+		o.rmempty = true;
 
 		o = s.taboption('adv_dns', form.Value, 'adb_dnsdir', _('DNS Directory'), _('Target directory for the generated blocklist \'adb_list.overall\'.'));
 		o.placeholder = '/tmp';
