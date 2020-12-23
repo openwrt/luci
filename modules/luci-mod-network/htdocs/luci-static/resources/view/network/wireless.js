@@ -392,6 +392,8 @@ var CBIWifiFrequencyValue = form.Value.extend({
 
 		this.setValues(band, this.bands[mode.value]);
 		this.toggleWifiChannel(elem);
+
+		this.map.checkDepends();
 	},
 
 	toggleWifiChannel: function(elem) {
@@ -461,6 +463,7 @@ var CBIWifiFrequencyValue = form.Value.extend({
 				E('select', {
 					'class': 'channel',
 					'style': 'width:auto',
+					'change': L.bind(this.map.checkDepends, this.map),
 					'disabled': (this.disabled != null) ? this.disabled : this.map.readonly
 				})
 			]),
@@ -469,6 +472,7 @@ var CBIWifiFrequencyValue = form.Value.extend({
 				E('select', {
 					'class': 'htmode',
 					'style': 'width:auto',
+					'change': L.bind(this.map.checkDepends, this.map),
 					'disabled': (this.disabled != null) ? this.disabled : this.map.readonly
 				})
 			]),
@@ -884,6 +888,7 @@ return view.extend({
 
 				if (hwtype == 'mac80211') {
 					o = ss.taboption('general', form.Flag, 'legacy_rates', _('Allow legacy 802.11b rates'), _('Legacy or badly behaving devices may require legacy 802.11b rates to interoperate. Airtime efficiency may be significantly reduced where these are used. It is recommended to not allow 802.11b rates where possible.'));
+					o.depends({'_freq': '11g', '!contains': true});
 
 					o = ss.taboption('general', CBIWifiTxPowerValue, 'txpower', _('Maximum transmit power'), _('Specifies the maximum transmit power the wireless radio may use. Depending on regulatory requirements and wireless usage, the actual transmit power may be reduced by the driver.'));
 					o.wifiNetwork = radioNet;
