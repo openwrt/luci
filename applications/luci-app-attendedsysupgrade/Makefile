@@ -4,7 +4,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=LuCI support for attended sysupgrades
-LUCI_DEPENDS:=+luci-base +uhttpd-mod-ubus +attendedsysupgrade-common +cgi-io
+LUCI_DEPENDS:=+luci-base +attendedsysupgrade-common +cgi-io
 
 include ../../luci.mk
 
