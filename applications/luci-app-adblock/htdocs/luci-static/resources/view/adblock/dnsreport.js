@@ -227,13 +227,17 @@ return L.view.extend({
 				b_cnt = content.data.top_domains[i].count;
 			}
 			if (content.data.top_domains[i]) {
-				b_addr = '<a href="https://duckduckgo.com/?q=' + encodeURIComponent(content.data.top_domains[i].address) + '&k1=-1&km=l&kh=1" target="_blank" title="Search this domain">' + content.data.top_domains[i].address + '</a>';
+				//[!CDATA[
+					b_addr = '<a href="https://duckduckgo.com/?q=' + encodeURIComponent(content.data.top_domains[i].address) + '&amp;k1=-1&amp;km=l&amp;kh=1" target="_blank" title="Search this domain">' + content.data.top_domains[i].address + '</a>';
+				//]]>
 			}
 			if (content.data.top_blocked[i]) {
 				c_cnt = content.data.top_blocked[i].count;
 			}
 			if (content.data.top_blocked[i]) {
-				c_addr = '<a href="https://duckduckgo.com/?q=' + encodeURIComponent(content.data.top_blocked[i].address) + '&k1=-1&km=l&kh=1" target="_blank" title="Search this domain">' + content.data.top_blocked[i].address + '</a>';
+				//[!CDATA[
+					c_addr = '<a href="https://duckduckgo.com/?q=' + encodeURIComponent(content.data.top_blocked[i].address) + '&amp;k1=-1&amp;km=l&amp;kh=1" target="_blank" title="Search this domain">' + content.data.top_blocked[i].address + '</a>';
+				//]]>
 			}
 			rows_top.push([
 				a_cnt,
@@ -284,7 +288,9 @@ return L.view.extend({
 					content.data.requests[i].date,
 					content.data.requests[i].time,
 					content.data.requests[i].client,
-					'<a href="https://duckduckgo.com/?q=' + encodeURIComponent(content.data.requests[i].domain) + '&k1=-1&km=l&kh=1" target="_blank" title="Search this domain">' + content.data.requests[i].domain + '</a>',
+					//[!CDATA[
+						'<a href="https://duckduckgo.com/?q=' + encodeURIComponent(content.data.requests[i].domain) + '&amp;k1=-1&amp;km=l&amp;kh=1" target="_blank" title="Search this domain">' + content.data.requests[i].domain + '</a>',
+					//]]>
 					content.data.requests[i].rc,
 					button
 				]);
