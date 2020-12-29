@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2020-12-18 05:29+0000\n"
-"Last-Translator: akibou <jinwenxin1997@icloud.com>\n"
+"PO-Revision-Date: 2020-12-27 15:29+0000\n"
+"Last-Translator: operator <omniplay@hotmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "openwrt/luciapplicationstinyproxy/zh_Hant/>\n"
 "Language: zh_Hant\n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.4-dev\n"
+"X-Generator: Weblate 4.4.1-dev\n"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:219
 msgid ""
@@ -18,54 +18,56 @@ msgid ""
 "upstream proxy, <em>Reject access</em> disables any upstream proxy for the "
 "target"
 msgstr ""
+"<em>通過代理</em>通過指定的上游代理將請求路由到給定目標，<em>拒絕存取</em>為"
+"目標禁用任何上游代理"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:108
 msgid ""
 "Adds an \"X-Tinyproxy\" HTTP header with the client IP address to forwarded "
 "requests"
-msgstr ""
+msgstr "將帶有客戶端IP地址的“ X-Tinyproxy” HTTP標頭添加到轉發的請求中"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:126
 msgid "Allowed clients"
-msgstr ""
+msgstr "允許的客戶端"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:133
 msgid "Allowed connect ports"
-msgstr ""
+msgstr "允許的連接埠號"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:47
 msgid "Bind address"
-msgstr ""
+msgstr "綁定位址"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:149
 msgid ""
 "By default, basic POSIX expressions are used for filtering. Enable this to "
 "activate extended regular expressions"
-msgstr ""
+msgstr "預設情況下，基本POSIX表達式用於過濾。啟用它以啟動擴展的正則表達式"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:153
 msgid ""
 "By default, filter strings are treated as case-insensitive. Enable this to "
 "make the matching case-sensitive"
-msgstr ""
+msgstr "預設情況下，過濾器字符串被視為不區分大小寫。啟用它以讓匹配區分大小寫"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:145
 msgid ""
 "By default, filtering is done based on domain names. Enable this to match "
 "against URLs instead"
-msgstr ""
+msgstr "預設情況下，過濾是基於網域名稱進行的。啟用它以匹配URL替代"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:157
 msgid ""
 "By default, the filter rules act as blacklist. Enable this option to only "
 "allow matched URLs or domain names"
-msgstr ""
+msgstr "預設情況下，過濾規則為黑名單。啟用此選項僅允許匹配的URL或網域名稱"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:226
 msgid ""
 "Can be either an IP address or range, a domain name or \".\" for any host "
 "without domain"
-msgstr ""
+msgstr "可以是IP地址或範圍，網域名稱或 “.\"對於任何沒有網域的主機"
 
 #: applications/luci-app-tinyproxy/luasrc/controller/tinyproxy.lua:14
 msgid "Configuration"
@@ -73,78 +75,78 @@ msgstr "組態"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:164
 msgid "Connection timeout"
-msgstr ""
+msgstr "連線逾時"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:156
 msgid "Default deny"
-msgstr ""
+msgstr "預設拒絕"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:17
 msgid "Enable Tinyproxy server"
-msgstr ""
+msgstr "啟用Tinyproxy伺服器"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:55
 msgid "Error page"
-msgstr ""
+msgstr "錯誤頁面"
 
 #: applications/luci-app-tinyproxy/luasrc/view/tinyproxy_status.htm:36
 msgid "Failed to retrieve statistics from url:"
-msgstr ""
+msgstr "無法從網址檢索統計信息："
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:148
 msgid "Filter by RegExp"
-msgstr ""
+msgstr "按RegExp篩選"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:144
 msgid "Filter by URLs"
-msgstr ""
+msgstr "按網址過濾"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:152
 msgid "Filter case-sensitive"
-msgstr ""
+msgstr "篩選器區分大小寫"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:140
 msgid "Filter file"
-msgstr ""
+msgstr "篩選檔案"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:13
 msgid "Filtering and ACLs"
-msgstr ""
+msgstr "過濾和存取過濾清單"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:11
 msgid "General settings"
-msgstr ""
+msgstr "一般設定值"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:97
 msgid "Group"
-msgstr "組"
+msgstr "群組"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:63
 msgid "HTML template file to serve for stat host requests"
-msgstr ""
+msgstr "HTML模板文件可用於統計主機請求"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:56
 msgid "HTML template file to serve when HTTP errors occur"
-msgstr ""
+msgstr "HTML模板文件在HTTP錯誤發生時提供服務"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:118
 msgid "Header whitelist"
-msgstr ""
+msgstr "白名單標頭"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:127
 msgid ""
 "List of IP addresses or ranges which are allowed to use the proxy server"
-msgstr ""
+msgstr "允許使用代理伺服器的IP地址或範圍的列表"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:134
 msgid ""
 "List of allowed ports for the CONNECT method. A single value \"0\" allows "
 "all ports"
-msgstr ""
+msgstr "CONNECT方式允許的埠號列表。單個值“ 0”允許所有埠"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:39
 msgid "Listen address"
-msgstr ""
+msgstr "監聽地址"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:31
 msgid "Listen port"
@@ -156,7 +158,7 @@ msgstr "日誌檔案"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:74
 msgid "Log file to use for dumping messages"
-msgstr ""
+msgstr "用於轉儲郵件的日誌文件"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:80
 msgid "Log level"
@@ -164,118 +166,118 @@ msgstr "日誌記錄層級"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:81
 msgid "Logging verbosity of the Tinyproxy process"
-msgstr ""
+msgstr "Tinyproxy程序的詳細記錄"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:172
 msgid "Max. clients"
-msgstr ""
+msgstr "最大用戶數"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:200
 msgid "Max. requests per server"
-msgstr ""
+msgstr "每台伺服器最大請求"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:186
 msgid "Max. spare servers"
-msgstr ""
+msgstr "最大備用伺服器"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:173
 msgid "Maximum allowed number of concurrently connected clients"
-msgstr ""
+msgstr "允許的最大同時連接客戶端數"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:201
 msgid ""
 "Maximum allowed number of requests per process. If it is exeeded, the "
 "process is restarted. Zero means unlimited."
-msgstr ""
+msgstr "每個程序允許的最大請求數。如果已執行，則重新啟動該過程。零表示無限。"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:187
 msgid "Maximum number of prepared idle processes"
-msgstr ""
+msgstr "準備的最大空閒程序數"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:165
 msgid "Maximum number of seconds an inactive connection is held open"
-msgstr ""
+msgstr "無效連接保持打開狀態的最大秒數"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:179
 msgid "Min. spare servers"
-msgstr ""
+msgstr "最小備用伺服器"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:180
 msgid "Minimum number of prepared idle processes"
-msgstr ""
+msgstr "準備的最小空閒程序數"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:194
 msgid "Number of idle processes to start when launching Tinyproxy"
-msgstr ""
+msgstr "啟動Tinyproxy時要啟動的空閒進程數"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:141
 msgid "Plaintext file with URLs or domains to filter. One entry per line"
-msgstr ""
+msgstr "具有要過濾的URL或域的純文本文件。每行一個條目"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:218
 msgid "Policy"
-msgstr ""
+msgstr "政策"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:12
 msgid "Privacy settings"
-msgstr ""
+msgstr "政策 設定值"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:222
 msgid "Reject access"
-msgstr ""
+msgstr "拒絕存取"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:8
 msgid "Server Settings"
-msgstr ""
+msgstr "伺服器設定值"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:14
 msgid "Server limits"
-msgstr ""
+msgstr "伺服器限制"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:119
 msgid ""
 "Specifies HTTP header names which are allowed to pass-through, all others "
 "are discarded. Leave empty to disable header filtering"
-msgstr ""
+msgstr "指定允許傳遞的HTTP標頭名稱，所有其它標頭均被丟棄。留空以禁用標題過濾"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:32
 msgid "Specifies the HTTP port Tinyproxy is listening on for requests"
-msgstr ""
+msgstr "指定Tinyproxy正在監聽請求的HTTP埠號"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:112
 msgid "Specifies the Tinyproxy hostname to use in the Via HTTP header"
-msgstr ""
+msgstr "指定在Via HTTP標頭中使用的Tinyproxy主機名稱"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:48
 msgid ""
 "Specifies the address Tinyproxy binds to for outbound forwarded requests"
-msgstr ""
+msgstr "指定Tinyproxy綁定到外出轉發請求的位址"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:40
 msgid "Specifies the addresses Tinyproxy is listening on for requests"
-msgstr ""
+msgstr "指定Tinyproxy正在監聽請求的位址"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:98
 msgid "Specifies the group name the Tinyproxy process is running as"
-msgstr ""
+msgstr "指定運行Tinyproxy程序的群組名稱"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:234
 msgid ""
 "Specifies the upstream proxy to use for accessing the target host. Format is "
 "<code>address:port</code>"
-msgstr ""
+msgstr "指定用於存取目標主機的上游代理。格式為<code>位址：埠號 </code>"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:92
 msgid "Specifies the user name the Tinyproxy process is running as"
-msgstr ""
+msgstr "指定Tinyproxy程序運行所使用的用戶名稱"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:193
 msgid "Start spare servers"
-msgstr ""
+msgstr "啟動備用伺服器"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:62
 msgid "Statistics page"
-msgstr ""
+msgstr "統計頁面"
 
 #: applications/luci-app-tinyproxy/luasrc/controller/tinyproxy.lua:13
 msgid "Status"
@@ -283,52 +285,52 @@ msgstr "狀態"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:225
 msgid "Target host"
-msgstr ""
+msgstr "目標主機"
 
 #: applications/luci-app-tinyproxy/luasrc/controller/tinyproxy.lua:12
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:5
 msgid "Tinyproxy"
-msgstr ""
+msgstr "Tinyproxy伺服器"
 
 #: applications/luci-app-tinyproxy/luasrc/view/tinyproxy_status.htm:51
 msgid "Tinyproxy Status"
-msgstr ""
+msgstr "Tinyproxy狀態"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:6
 msgid "Tinyproxy is a small and fast non-caching HTTP(S)-Proxy"
-msgstr ""
+msgstr "Tinyproxy是一個小型且快速的非快取的HTTP(S)-代理"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:211
 msgid "Upstream Proxies"
-msgstr ""
+msgstr "上游代理"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:212
 msgid ""
 "Upstream proxy rules define proxy servers to use when accessing certain IP "
 "addresses or domains."
-msgstr ""
+msgstr "上游代理規則定義存取某些IP位址或網域時要使用的代理伺服器。"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:69
 msgid "Use syslog"
-msgstr ""
+msgstr "使用系統日誌"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:91
 msgid "User"
-msgstr ""
+msgstr "用戶"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:111
 msgid "Via hostname"
-msgstr ""
+msgstr "透過主機名稱"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:221
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:233
 msgid "Via proxy"
-msgstr ""
+msgstr "透過代理"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:70
 msgid "Writes log messages to syslog instead of a log file"
-msgstr ""
+msgstr "將日誌消息寫入syslog而不是日誌文件"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:107
 msgid "X-Tinyproxy header"
-msgstr ""
+msgstr "X-Tinyproxy標頭"
