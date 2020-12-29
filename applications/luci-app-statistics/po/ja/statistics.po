@@ -118,6 +118,19 @@ msgstr "チェイン"
 msgid "Change the ownership of the socket file to the specified group."
 msgstr "ソケットファイルの所有権を指定されたグループに変更します。"
 
+#: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/chrony.js:8
+#: applications/luci-app-statistics/root/usr/share/luci/statistics/plugins/chrony.json:2
+msgid "Chrony"
+msgstr ""
+
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/chrony.js:6
+msgid "Chrony Plugin Configuration"
+msgstr ""
+
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/chrony.js:32
+msgid "Chrony monitoring enabled"
+msgstr ""
+
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/olsrd.js:21
 msgid "CollectLinks"
 msgstr "CollectLinks"
@@ -277,6 +290,7 @@ msgid "Enable statistics"
 msgstr "統計を有効化"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/apcups.js:12
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/chrony.js:12
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/cpu.js:12
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/cpufreq.js:12
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/csv.js:12
@@ -445,6 +459,10 @@ msgstr ""
 msgid "Host"
 msgstr "ホスト"
 
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/chrony.js:14
+msgid "Host running chrony"
+msgstr ""
+
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/collectd.js:51
 msgid "Hostname"
 msgstr "ホスト名"
@@ -497,8 +515,9 @@ msgid ""
 "Allowed timespan types: min, h, hour(s), d, day(s), w, week(s), m, month(s), "
 "y, year(s)"
 msgstr ""
-"RRD データベースに保存される期間のリスト。例: \"1hour 1day 14day\"。許可される期間の種類 : min, h, hour(s), "
-"d, day(s), w, week(s), m, month(s), y, year(s)"
+"RRD データベースに保存される期間のリスト。例: \"1hour 1day 14day\"。許可され"
+"る期間の種類 : min, h, hour(s), d, day(s), w, week(s), m, month(s), y, "
+"year(s)"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/network.js:40
 msgid "Listen host"
@@ -884,6 +903,14 @@ msgstr "ポート"
 msgid "Port for apcupsd communication"
 msgstr "apcupsd 通信用のポート"
 
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/chrony.js:20
+msgid "Port for chronyd"
+msgstr ""
+
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/chrony.js:15
+msgid "Possibly bug in collectd. Only 127.0.0.1 and localhost work"
+msgstr ""
+
 #: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/processes.js:7
 #: applications/luci-app-statistics/root/usr/share/luci/statistics/plugins/processes.json:2
 msgid "Processes"
@@ -960,6 +987,7 @@ msgid "Script"
 msgstr "スクリプト"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/collectd.js:74
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/chrony.js:25
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/ping.js:31
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:19
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:24
@@ -1170,6 +1198,10 @@ msgstr ""
 msgid "The chain name must not contain spaces"
 msgstr "チェイン名にスペースを含めることはできません"
 
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/chrony.js:7
+msgid "The chrony plugin will monitor chrony NTP server statistics"
+msgstr ""
+
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/iptables.js:153
 msgid "The comment to match must not contain spaces"
 msgstr "コメントにスペースを含めることはできません"
@@ -1202,7 +1234,8 @@ msgstr ""
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/dhcpleases.js:7
 msgid "The dhcpleases plugin collects information about assigned DHCP leases."
-msgstr "dhcpleases プラグインは、割り当てられた DHCP リースに関する情報を収集します。"
+msgstr ""
+"dhcpleases プラグインは、割り当てられた DHCP リースに関する情報を収集します。"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/disk.js:8
 msgid ""
@@ -1418,6 +1451,10 @@ msgid ""
 msgstr ""
 "このセクションでは、ローカルに収集されたデータを送信するサーバーを設定しま"
 "す。"
+
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/chrony.js:25
+msgid "Timeout for polling chrony"
+msgstr ""
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/collectd.js:80
 msgid "Try to lookup fully qualified hostname"
