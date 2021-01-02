@@ -68,32 +68,6 @@ HTDOCS = /www
 LUA_LIBRARYDIR = /usr/lib/lua
 LUCI_LIBRARYDIR = $(LUA_LIBRARYDIR)/luci
 
-
-# 1: everything expect po subdir or only po subdir
-define findrev
-  $(shell \
-    if git log -1 >/dev/null 2>/dev/null; then \
-      set -- $$(git log -1 --format="%ct %h" --abbrev=7 -- $(if $(1),. ':(exclude)po',po)); \
-      if [ -n "$$1" ]; then
-        secs="$$(($$1 % 86400))"; \
-        yday="$$(date --utc --date="@$$1" "+%y.%j")"; \
-        printf 'git-%s.%05d-%s' "$$yday" "$$secs" "$$2"; \
-      else \
-        echo "unknown"; \
-      fi; \
-    else \
-      ts=$$(find . -type f $(if $(1),-not) -path './po/*' -printf '%T@\n' 2>/dev/null | sort -rn | head -n1 | cut -d. -f1); \
-      if [ -n "$$ts" ]; then \
-        secs="$$(($$ts % 86400))"; \
-        date="$$(date --utc --date="@$$ts" "+%y%m%d")"; \
-        printf '%s.%05d' "$$date" "$$secs"; \
-      else \
-        echo "unknown"; \
-      fi; \
-    fi \
-  )
-endef
-
 PKG_NAME?=$(LUCI_NAME)
 PKG_RELEASE?=1
 PKG_INSTALL:=$(if $(realpath src/Makefile),1)
@@ -102,8 +76,8 @@ PKG_CONFIG_DEPENDS += CONFIG_LUCI_SRCDIET CONFIG_LUCI_JSMIN CONFIG_LUCI_CSSTIDY
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
 
-PKG_PO_VERSION?=$(if $(DUMP),x,$(strip $(call findrev)))
-PKG_SRC_VERSION?=$(if $(DUMP),x,$(strip $(call findrev,1)))
+PKG_PO_VERSION?=$(if $(DUMP),x,$(strip $(call findrev,1)))
+PKG_SRC_VERSION?=$(if $(DUMP),x,$(strip $(call findrev)))
 
 PKG_GITBRANCH?=$(if $(DUMP),x,$(strip $(shell \
 	variant="LuCI"; \
