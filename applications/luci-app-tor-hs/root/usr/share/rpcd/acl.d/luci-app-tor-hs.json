@@ -1,0 +1,16 @@
+{
+	"luci-app-tor-hs": {
+		"description": "Grant access to Tor hidden service configurator",
+		"read": {
+			"ubus": {
+				"file":["read","list"],
+				"tor-hs-rpc": ["list-hs"]
+			},
+			"uci": [  "tor-hs" ],
+			"file": {"/etc/tor":["list","read"]}
+		},
+		"write": {
+			"uci": ["tor-hs"]
+		}
+	}
+}

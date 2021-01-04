@@ -1,0 +1,48 @@
+{
+	"admin/services/tor-hs": {
+		"title": "Tor Hidden service",
+		"order": 90,
+		"action": {
+			"type": "firstchild"
+		},
+		"depends": {
+			"acl": [ "luci-app-tor-hs" ],
+			"uci": { "tor-hs":true }
+		}
+	},
+	"admin/services/tor-hs/common": {
+		"title": "Common settings",
+		"order": 90,
+		"action": {
+			"type": "view",
+			"path": "tor_hs_common"
+		},
+		"depends": {
+			"acl": [ "luci-app-tor-hs" ]
+		}
+	},
+	"admin/services/tor-hs/setting": {
+		"title": "Hidden service configuration",
+		"order": 90,
+		"action": {
+			"type": "view",
+			"path": "tor_hs_setting"
+		},
+		"depends": {
+			"acl": [ "luci-app-tor-hs" ],
+			"uci": { "tor-hs":true }
+		}
+	},
+	"admin/services/tor-hs/status": {
+		"title": "Hidden service status",
+		"order": 90,
+		"action": {
+			"type": "view",
+			"path": "tor_hs_status"
+		},
+		"depends": {
+			"acl": [ "luci-app-tor-hs" ],
+			"uci": { "tor-hs":true }
+		}
+	}
+}
