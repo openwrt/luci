@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2020-12-26 06:29+0000\n"
-"Last-Translator: gao_cai_sheng <qwq233@qwq2333.top>\n"
+"PO-Revision-Date: 2021-01-05 19:20+0000\n"
+"Last-Translator: zhanhb <zhanhb88@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "openwrt/luciapplicationsyggdrasil/zh_Hans/>\n"
 "Language: zh_Hans\n"
@@ -185,6 +185,8 @@ msgid ""
 "that SOCKS peerings will NOT be affected by this option and should go in the "
 "\"Peers\" section instead."
 msgstr ""
+"URI格式的出站对等连接的连接字符串列表，按源接口排列，例如{“ eth0”：[tcp：//a.b.c."
+"d：e]}。请注意，SOCKS对等不会受到此选项的影响，而应进入“对等”部分。"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/peers.js:12
 msgid ""
@@ -193,6 +195,8 @@ msgid ""
 "the operating system routing table, therefore you should use this section "
 "when you may connect via different interfaces."
 msgstr ""
+"URI格式的出站对等连接的连接字符串列表。例如，tcp://a.b.c.d:e 或 socks://a.b.c.d:e/f.g.h."
+"i:j。这些连接将遵循操作系统路由表，因此，当您可以通过不同的接口进行连接时，应使用本部分。"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:50
 msgid "Listen addresses"
@@ -206,6 +210,8 @@ msgid ""
 "should be specified in URI format as above, e.g. tcp://0.0.0.0:0 or tcp://"
 "[::]:0 to listen on all interfaces."
 msgstr ""
+"侦听传入连接的地址。您需要添加侦听器来接受来自非本地节点的传入对等端。不管这里设置了什么监听器，多播对等发现都可以工作。每个侦听器都应按上述 URI "
+"格式指定，例如，tcp://0.0.0.0:0 或 tcp://[::]:0 侦听所有接口。"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:37
 msgid "MTU size for the interface"
@@ -213,7 +219,7 @@ msgstr "接口的 MTU 大小"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:39
 msgid "Maximum size of all switch queues combined"
-msgstr ""
+msgstr "所有交换队列的最大大小"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:41
 msgid "Multicast interfaces"
@@ -233,7 +239,7 @@ msgstr ""
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:29
 msgid "NodeInfo"
-msgstr ""
+msgstr "节点信息"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:30
 msgid ""
@@ -264,7 +270,7 @@ msgid ""
 "Regular expressions for which interfaces multicast peer discovery should be "
 "enabled on. If none specified, multicast peer discovery is disabled. The "
 "default value is .* which uses all interfaces."
-msgstr ""
+msgstr "应启用多播对等方发现的接口的正则表达式。如果未指定，则禁用多播对等发现。默认值为 .* ，使用所有接口。"
 
 #: applications/luci-app-yggdrasil/root/usr/share/luci/menu.d/luci-app-yggdrasil.json:50
 msgid "Session firewall"
@@ -276,7 +282,7 @@ msgstr "会话防火墙设置"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:46
 msgid "Set .* to multicast on all interfaces"
-msgstr ""
+msgstr "将 .* 设置为所有接口上的多播"
 
 #: applications/luci-app-yggdrasil/root/usr/share/luci/menu.d/luci-app-yggdrasil.json:32
 msgid "Settings"
@@ -284,11 +290,11 @@ msgstr "设置"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/keys.js:18
 msgid "Signing private key"
-msgstr ""
+msgstr "签名私钥"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/keys.js:17
 msgid "Signing public key"
-msgstr ""
+msgstr "签名公钥"
 
 #: applications/luci-app-yggdrasil/root/usr/share/luci/menu.d/luci-app-yggdrasil.json:14
 msgid "Status"
@@ -309,6 +315,8 @@ msgid ""
 "localtraffic, it is best to leave this as the default value of 0. This "
 "option cannot currently be changed by reloading config during runtime."
 msgstr ""
+"用于已配置的MulticastInterfaces的链接本地TCP侦听器的端口号。此选项不影响“监听”选项中指定的监听器。除非您计划对防火墙link-"
+"localtraffic进行防火墙，否则最好将其保留为默认值0。此选项当前无法通过在运行时重新加载配置来更改。"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/tunnel_routing.js:11
 msgid "Tunnel Routing"
