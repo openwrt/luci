@@ -525,7 +525,7 @@ function user.checkpasswd(username, pass)
 end
 
 function user.setpasswd(username, password)
-	return os.execute("(echo %s; sleep 1; echo %s) | passwd %s >/dev/null 2>&1" %{
+	return os.execute("(echo %s; sleep 1; echo %s) | busybox passwd %s >/dev/null 2>&1" %{
 		luci.util.shellquote(password),
 		luci.util.shellquote(password),
 		luci.util.shellquote(username)
