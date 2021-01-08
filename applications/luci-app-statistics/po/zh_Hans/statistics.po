@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-06-10 03:40+0200\n"
-"PO-Revision-Date: 2021-01-05 19:20+0000\n"
-"Last-Translator: zhanhb <zhanhb88@gmail.com>\n"
+"PO-Revision-Date: 2021-01-08 12:12+0000\n"
+"Last-Translator: Eric <spice2wolf@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "openwrt/luciapplicationsstatistics/zh_Hans/>\n"
 "Language: zh_Hans\n"
@@ -123,7 +123,7 @@ msgstr "将套接字文件的所有权更改为指定的组。"
 #: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/chrony.js:8
 #: applications/luci-app-statistics/root/usr/share/luci/statistics/plugins/chrony.json:2
 msgid "Chrony"
-msgstr ""
+msgstr "Chrony系统校时"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/chrony.js:6
 msgid "Chrony Plugin Configuration"
@@ -230,7 +230,6 @@ msgid "Detailled CPU frequency monitoring enabled"
 msgstr "详细的CPU频率监控已启用"
 
 #: applications/luci-app-statistics/root/usr/share/luci/statistics/plugins/dhcpleases.json:2
-#, fuzzy
 msgid "Dhcpleases"
 msgstr "Dhcp租约"
 
@@ -290,7 +289,7 @@ msgstr "启用转发"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/network.js:28
 msgid "Enable statistics"
-msgstr ""
+msgstr "启用统计"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/apcups.js:12
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/chrony.js:12
@@ -364,15 +363,15 @@ msgstr "Exec 插件配置"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:67
 msgid "Expecting decimal value lower than one"
-msgstr ""
+msgstr "期望的十进制值小于1"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/email.js:33
 msgid "Expecting permssions in octal notation"
-msgstr ""
+msgstr "期望八进制表示法"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:49
 msgid "Expecting valid time range"
-msgstr ""
+msgstr "预期有效时间范围"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/cpufreq.js:15
 msgid "Extra items"
@@ -380,7 +379,7 @@ msgstr "额外项目"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/curl.js:14
 msgid "Fetch pages"
-msgstr ""
+msgstr "提取页面"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/netlink.js:36
 msgid "Filter class monitoring"
@@ -406,7 +405,7 @@ msgstr "转发监听服务器和应用服务器之间数据"
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/df.js:92
 msgid ""
 "Free space, reserved space and used space is reported as relative values"
-msgstr ""
+msgstr "可用空间、预留空间和已用空间报告为相对值"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/openvpn.js:21
 msgid "Gather compression statistics"
@@ -422,7 +421,7 @@ msgstr "为每个登录用户生成单独的图表"
 
 #: applications/luci-app-statistics/root/usr/share/rpcd/acl.d/luci-app-statistics.json:3
 msgid "Grant access to statistics resources"
-msgstr ""
+msgstr "授予访问统计资源的权限"
 
 #: applications/luci-app-statistics/root/usr/share/luci/menu.d/luci-app-statistics.json:15
 msgid "Graphs"
@@ -462,7 +461,7 @@ msgstr "主机"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/chrony.js:14
 msgid "Host running chrony"
-msgstr ""
+msgstr "主机chrony运行中"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/collectd.js:51
 msgid "Hostname"
@@ -516,6 +515,8 @@ msgid ""
 "Allowed timespan types: min, h, hour(s), d, day(s), w, week(s), m, month(s), "
 "y, year(s)"
 msgstr ""
+"要存储在 RRD 数据库中的时间跨度列表。比如， “ 1 小时 1 天 14 "
+"天”。允许的时间跨度类型：min、h、hour(s)、d、day(s)、w、week(s)、m、month(s)、y、year(s)"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/network.js:40
 msgid "Listen host"
@@ -535,7 +536,7 @@ msgstr "负载插件配置"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/load.js:10
 msgid "Load monitoring enabled"
-msgstr ""
+msgstr "已启用负载监控"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/graphs.js:30
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/graphs.js:108
@@ -548,11 +549,11 @@ msgstr "日志记录等级"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/iptables.js:20
 msgid "Match IPv4 iptables rules"
-msgstr ""
+msgstr "匹配IPv4 iptables规则"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/iptables.js:20
 msgid "Match IPv6 iptables rules"
-msgstr ""
+msgstr "匹配IPv6 iptables规则"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:35
 msgid ""
@@ -566,7 +567,7 @@ msgstr "最大允许连接数"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/network.js:20
 msgid "Maximum packet size"
-msgstr ""
+msgstr "最大数据包大小"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/memory.js:10
 #: applications/luci-app-statistics/root/usr/share/luci/statistics/plugins/memory.json:2
@@ -579,7 +580,7 @@ msgstr "内存插件配置"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/memory.js:23
 msgid "Memory monitoring enabled"
-msgstr ""
+msgstr "已启用内存监控"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/df.js:89
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/disk.js:32
@@ -590,11 +591,11 @@ msgstr ""
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:47
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/thermal.js:34
 msgid "Monitor all except specified"
-msgstr "监测所有（特别注明除外）"
+msgstr "监控除指定外的所有项目"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:14
 msgid "Monitor all local listen ports"
-msgstr "监测所有本地监听端口"
+msgstr "监控所有本地监听端口"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/thermal.js:15
 msgid "Monitor device(s) / thermal zone(s)"
@@ -648,143 +649,143 @@ msgstr "监测远程端口"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:38
 msgid "Monitoring %s and %s"
-msgstr ""
+msgstr "监视％s和％s"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/df.js:106
 msgid "Monitoring %s, %s, %s"
-msgstr ""
+msgstr "监视％s，％s，％s"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/apcups.js:29
 msgid "Monitoring APC UPS at host %s, port %d"
 msgid_plural "Monitoring APC UPS at hosts %s, port %d"
-msgstr[0] ""
+msgstr[0] "在主机％s，端口％d上监视APC UPS"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/dhcpleases.js:19
 msgid "Monitoring DHCP leases enabled"
-msgstr ""
+msgstr "已启用 DHCP 租约监控"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/dns.js:32
 msgid "Monitoring DNS queries on all interfaces"
-msgstr ""
+msgstr "监视所有接口上的DNS查询"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/dns.js:34
 msgid "Monitoring DNS queries on one interface"
 msgid_plural "Monitoring DNS queries on %d interfaces"
-msgstr[0] ""
+msgstr[0] "监听 %d 个接口上的 DNS 查询中"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/olsrd.js:44
 msgid "Monitoring OLSRd status at %s:%d"
-msgstr ""
+msgstr "在％s：％d监视OLSRd状态"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/disk.js:43
 msgid "Monitoring all but one disk"
 msgid_plural "Monitoring all but %d disks"
-msgstr[0] ""
+msgstr[0] "监视除 ％d 磁盘外的所有磁盘"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/interface.js:32
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/iwinfo.js:36
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/netlink.js:54
 msgid "Monitoring all but one interface"
 msgid_plural "Monitoring all but %d interfaces"
-msgstr[0] ""
+msgstr[0] "监控除 %d 接口外的所有接口"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/irq.js:56
 msgid "Monitoring all but one interrupt"
 msgid_plural "Monitoring all but %d interrupts"
-msgstr[0] ""
+msgstr[0] "监控除 %d 中断外的所有中断"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:56
 msgid "Monitoring all but one sensor"
 msgid_plural "Monitoring all but %d sensors"
-msgstr[0] ""
+msgstr[0] "监控除 %d 传感器外的所有传感器"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/disk.js:41
 msgid "Monitoring all disks"
-msgstr ""
+msgstr "监视所有磁盘"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/df.js:106
 msgid "Monitoring all except %s, %s, %s"
-msgstr ""
+msgstr "监视除％s，％s和％s外的所有内容"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/interface.js:30
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/iwinfo.js:34
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/netlink.js:52
 msgid "Monitoring all interfaces"
-msgstr ""
+msgstr "监视所有接口"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/irq.js:54
 msgid "Monitoring all interrupts"
-msgstr ""
+msgstr "监视所有中断"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/df.js:104
 msgid "Monitoring all partitions"
-msgstr ""
+msgstr "监视所有分区"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:60
 msgid "Monitoring all sensors"
-msgstr ""
+msgstr "监视所有传感器"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/thermal.js:50
 msgid "Monitoring all thermal zones"
-msgstr ""
+msgstr "监控所有温控区"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/thermal.js:46
 msgid "Monitoring all thermal zones except %s"
-msgstr ""
+msgstr "正监控除 %s 以外的所有温控区"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:36
 msgid "Monitoring local listen ports"
-msgstr ""
+msgstr "监视本地监听端口"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/openvpn.js:44
 msgid "Monitoring one OpenVPN instance"
 msgid_plural "Monitoring %d OpenVPN instances"
-msgstr[0] ""
+msgstr[0] "正监控 %d 个 OpenVPN 实例"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/nut.js:21
 msgid "Monitoring one UPS"
 msgid_plural "Monitoring %d UPSes"
-msgstr[0] ""
+msgstr[0] "正监控 %d 个 UPS"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/disk.js:45
 msgid "Monitoring one disk"
 msgid_plural "Monitoring %d disks"
-msgstr[0] ""
+msgstr[0] "正监控 %d 块磁盘"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/ping.js:41
 msgid "Monitoring one host"
 msgid_plural "Monitoring %d hosts"
-msgstr[0] ""
+msgstr[0] "正监控 %d 个主机"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/interface.js:34
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/iwinfo.js:38
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/netlink.js:56
 msgid "Monitoring one interface"
 msgid_plural "Monitoring %d interfaces"
-msgstr[0] ""
+msgstr[0] "正监控 %d 个接口"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/irq.js:58
 msgid "Monitoring one interrupt"
 msgid_plural "Monitoring %d interrupts"
-msgstr[0] ""
+msgstr[0] "正监控 %d 个中断"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/processes.js:23
 msgid "Monitoring one process"
 msgid_plural "Monitoring %d processes"
-msgstr[0] ""
+msgstr[0] "正监控 %d 个进程"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:58
 msgid "Monitoring one sensor"
 msgid_plural "Monitoring %d sensors"
-msgstr[0] ""
+msgstr[0] "正监控 %d 个传感器"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/splash_leases.js:10
 msgid "Monitoring splash leases"
-msgstr ""
+msgstr "正监控 splash 租约"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/thermal.js:47
 msgid "Monitoring thermal zones %s"
-msgstr ""
+msgstr "正监控温控区 %s"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/cpufreq.js:16
 msgid "More details about frequency usage and transitions"
@@ -813,7 +814,7 @@ msgstr "网络插件配置"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/network.js:69
 msgid "Network communication enabled"
-msgstr ""
+msgstr "已启用网络通信"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/collectd.js:87
 msgid "Network plugins"
@@ -821,7 +822,7 @@ msgstr "Network 插件"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/graphs.js:169
 msgid "No RRD data found"
-msgstr ""
+msgstr "未找到 RRD 数据"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:15
 msgid ""
@@ -833,7 +834,7 @@ msgstr ""
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/syslog.js:23
 msgid "Notify level"
-msgstr ""
+msgstr "通知级别"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/collectd.js:77
 msgid "Number of threads for data collection"
@@ -888,7 +889,7 @@ msgstr "Ping 插件配置"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/collectd.js:136
 msgid "Plugin is disabled"
-msgstr ""
+msgstr "插件已禁用"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/olsrd.js:18
 msgid "Port"
@@ -900,11 +901,11 @@ msgstr "apcupsd 通信端口"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/chrony.js:20
 msgid "Port for chronyd"
-msgstr ""
+msgstr "chronyd 端口"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/chrony.js:15
 msgid "Possibly bug in collectd. Only 127.0.0.1 and localhost work"
-msgstr ""
+msgstr "可能是 collectd 的 bug。只有 127.0.0.1 和 localhost 工作"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/processes.js:7
 #: applications/luci-app-statistics/root/usr/share/luci/statistics/plugins/processes.json:2
@@ -946,7 +947,7 @@ msgstr "RRDTool 插件配置"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/cpu.js:27
 msgid "Report also the value for the idle metric"
-msgstr ""
+msgstr "还报告空闲指标的值"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/cpu.js:14
 msgid "Report by CPU"
@@ -966,15 +967,15 @@ msgstr "行/RRA"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/iptables.js:161
 msgid "Rule monitoring enabled"
-msgstr ""
+msgstr "已启用监控规则"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/sqm.js:7
 msgid "SQM"
-msgstr ""
+msgstr "SQM"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/sqmcake.js:7
 msgid "SQM-Cake"
-msgstr ""
+msgstr "SQM-Cake"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/exec.js:24
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/exec.js:44
@@ -1010,7 +1011,7 @@ msgstr "服务器主机"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/network.js:50
 msgid "Server interfaces"
-msgstr ""
+msgstr "服务器接口"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/network.js:62
 msgid "Server port"
@@ -1018,11 +1019,11 @@ msgstr "服务器端口"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/network.js:20
 msgid "Set the maximum size for datagrams sent over the network"
-msgstr ""
+msgstr "设置通过网络发送的数据报的最大大小"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/syslog.js:14
 msgid "Sets the syslog log-level."
-msgstr ""
+msgstr "设置系统日志日志级别。"
 
 #: applications/luci-app-statistics/root/usr/share/luci/menu.d/luci-app-statistics.json:24
 msgid "Setup"
@@ -1030,7 +1031,7 @@ msgstr "设置"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/graphs.js:176
 msgid "Setup collectd"
-msgstr ""
+msgstr "设置collectd"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/netlink.js:31
 msgid "Shaping class monitoring"
@@ -1038,7 +1039,7 @@ msgstr "整形类监控"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/cpu.js:26
 msgid "Show Idle state"
-msgstr ""
+msgstr "显示空闲状态"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:34
 msgid "Show max values instead of averages"
@@ -1046,11 +1047,11 @@ msgstr "显示最大值而不是平均值"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/cpufreq.js:23
 msgid "Simple CPU frequency monitoring enabled"
-msgstr ""
+msgstr "已启用简单 CPU 频率监控"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/unixsock.js:34
 msgid "Socket %s active"
-msgstr ""
+msgstr "套接字 ％s 处于活动状态"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/email.js:15
 msgid "Socket file"
@@ -1063,7 +1064,7 @@ msgstr "套接字组"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/unixsock.js:15
 msgid "Socket path"
-msgstr ""
+msgstr "套接字路径"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/email.js:24
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/unixsock.js:25
@@ -1085,7 +1086,7 @@ msgstr "收集指定拓扑相关信息。"
 #: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/splash_leases.js:10
 #: applications/luci-app-statistics/root/usr/share/luci/statistics/plugins/splash_leases.json:2
 msgid "Splash Leases"
-msgstr ""
+msgstr "Splash Leases"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/splash_leases.js:6
 msgid "Splash Leases Plugin Configuration"
@@ -1118,19 +1119,19 @@ msgstr "存储时间跨度"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/csv.js:24
 msgid "Storing CSV data in %s"
-msgstr ""
+msgstr "正在将 CSV 数据保存到 %s"
 
 #: applications/luci-app-statistics/root/usr/share/luci/statistics/plugins/syslog.json:2
 msgid "Syslog"
-msgstr ""
+msgstr "Syslog"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/syslog.js:6
 msgid "Syslog Plugin Configuration"
-msgstr ""
+msgstr "Syslog 插件设置"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/syslog.js:32
 msgid "Syslog enabled"
-msgstr ""
+msgstr "Syslog 已启用"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/load.js:7
 #: applications/luci-app-statistics/root/usr/share/luci/statistics/plugins/load.json:2
@@ -1182,19 +1183,19 @@ msgstr "OpenVPN 插件可以获取 VPN 连接当前状态。"
 msgid ""
 "The SysLog plugin receives log messages from the daemon and dispatches them "
 "to syslog."
-msgstr ""
+msgstr "SysLog 插件从守护进程接受日志消息，并将其分发到 syslog。"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/iptables.js:132
 msgid "The chain name must not contain spaces"
-msgstr ""
+msgstr "链名称不能包含空格"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/chrony.js:7
 msgid "The chrony plugin will monitor chrony NTP server statistics"
-msgstr ""
+msgstr "chrony 插件将监视 chrony NTP 服务器统计信息"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/iptables.js:153
 msgid "The comment to match must not contain spaces"
-msgstr ""
+msgstr "注释不能包含空格"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/conntrack.js:7
 msgid ""
@@ -1220,7 +1221,7 @@ msgstr "df 插件收集磁盘空间使用情况、挂载点及文件系统相关
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/dhcpleases.js:7
 msgid "The dhcpleases plugin collects information about assigned DHCP leases."
-msgstr ""
+msgstr "dhcpleases 插件收集关于分配的DHCP租约的信息。"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/disk.js:8
 msgid ""
@@ -1258,7 +1259,7 @@ msgstr ""
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/iptables.js:80
 msgid "The instance name must not contain spaces"
-msgstr ""
+msgstr "实例名称不能包含空格"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/interface.js:8
 msgid ""
@@ -1372,7 +1373,7 @@ msgstr "运行时间插件收集系统启动时间的统计信息。"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/graphs.js:170
 msgid "There is no RRD data available yet to render graphs."
-msgstr ""
+msgstr "尚无可用的RRD数据来制作图表。"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/thermal.js:7
 #: applications/luci-app-statistics/root/usr/share/luci/statistics/plugins/thermal.json:2
@@ -1404,7 +1405,7 @@ msgstr "定义本地收集数据被发送到哪台 Collected 服务器。"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/chrony.js:25
 msgid "Timeout for polling chrony"
-msgstr ""
+msgstr "轮询时间超时"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/collectd.js:80
 msgid "Try to lookup fully qualified hostname"
@@ -1447,7 +1448,7 @@ msgstr "运行时间插件配置"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/uptime.js:10
 msgid "Uptime monitoring enabled"
-msgstr ""
+msgstr "上线时间监测已启用"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/openvpn.js:24
 msgid "Use improved naming schema"
@@ -1468,11 +1469,11 @@ msgstr "详细监测"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/disk.js:16
 msgid "When none selected, all disks will be monitored."
-msgstr ""
+msgstr "未选取时，将监测所有磁盘。"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/dns.js:16
 msgid "When none selected, all interfaces will be monitored."
-msgstr ""
+msgstr "未选取时，将监测所有接口。"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/cpu.js:21
 msgid "When set to true, reports per-state metric (system, user, idle)"
@@ -1498,17 +1499,17 @@ msgstr "无线 iwinfo 插件配置"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:97
 msgid "Writing *.rrd files to %s"
-msgstr ""
+msgstr "正在写入 *.rrd 文件到 %s"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/graphs.js:171
 msgid ""
 "You need to configure <em>collectd</em> to gather data into <em>.rrd</em> "
 "files."
-msgstr ""
+msgstr "您需要设置 <em>collectd</em> 来将数据写入 <em>.rrd</em> 文件中。"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/curl.js:31
 msgid "cURL plugin enabled"
-msgstr ""
+msgstr "cURL 插件已启用"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/curl.js:10
 #: applications/luci-app-statistics/root/usr/share/luci/statistics/plugins/curl.json:2
@@ -1526,27 +1527,27 @@ msgstr "无"
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/df.js:107
 msgid "one device"
 msgid_plural "%d devices"
-msgstr[0] ""
+msgstr[0] "%d 个设备"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/df.js:109
 msgid "one filesystem type"
 msgid_plural "%d filesystem types"
-msgstr[0] ""
+msgstr[0] "%d 个文件系统类型"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:39
 msgid "one local port"
 msgid_plural "%d local ports"
-msgstr[0] ""
+msgstr[0] "%d 个本地端口"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/df.js:108
 msgid "one mount"
 msgid_plural "%d mounts"
-msgstr[0] ""
+msgstr[0] "%d 个挂载"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:40
 msgid "one remote port"
 msgid_plural "%d remote ports"
-msgstr[0] ""
+msgstr[0] "%d 个远程端口"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:29
 msgid "reduces rrd size"

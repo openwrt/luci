@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-01-05 13:29+0000\n"
-"Last-Translator: Eric <spice2wolf@gmail.com>\n"
+"PO-Revision-Date: 2021-01-07 17:03+0000\n"
+"Last-Translator: Liao junchao <liaojunchao@outlook.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "openwrt/luciapplicationsadblock/zh_Hans/>\n"
 "Language: zh_Hans\n"
@@ -334,11 +334,11 @@ msgstr "过滤条件，例如日期，域或客户（可选）"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:303
 msgid "Firewall ports that should be forced locally."
-msgstr ""
+msgstr "本地应强制使用的防火墙端口。"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:296
 msgid "Firewall source zones that should be forced locally."
-msgstr ""
+msgstr "本地应强制使用的防火墙源域。"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:425
 msgid "Flush DNS Cache"
@@ -354,11 +354,11 @@ msgstr "强制本地 DNS"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:303
 msgid "Forced Ports"
-msgstr ""
+msgstr "强制端口"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:296
 msgid "Forced Zones"
-msgstr ""
+msgstr "强制区域"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:330
 msgid ""
@@ -496,7 +496,7 @@ msgstr "adblock 通知 E-Mail 的收件人地址。"
 msgid ""
 "Redirect all DNS queries from specified zones to the local DNS resolver, "
 "applies to UDP and TCP protocol."
-msgstr ""
+msgstr "将所有DNS查询从指定区域重定向到本地DNS解析器，适用于UDP和TCP协议。"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:349
 msgid ""
@@ -621,7 +621,7 @@ msgstr "并行下载处理 (分类、合并等) 的下载队列大小。"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:494
 msgid "Sources (Size, Focus)"
-msgstr ""
+msgstr "来源（大小，焦点）"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:467
 msgid "Space separated list of ports used by tcpdump."
@@ -629,7 +629,7 @@ msgstr "tcpdump使用的端口列表，用空格分隔端口。"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:391
 msgid "Special config options for the selected download utility."
-msgstr ""
+msgstr "所选下载实用程序的特殊配置选项。"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:307
 msgid "Start Timestamp"
@@ -637,7 +637,7 @@ msgstr "开始时间戳"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:287
 msgid "Startup Trigger Interface"
-msgstr ""
+msgstr "启动触发界面"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:210
 msgid "Status / Version"
@@ -651,13 +651,13 @@ msgstr "暂停"
 msgid ""
 "Target directory for DNS related report files. Default is '/tmp', please use "
 "preferably an usb stick or another local disk."
-msgstr ""
+msgstr "DNS相关报告文件的目标目录。默认值为“ / tmp”，请最好使用USB记忆棒或其他本地磁盘。"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:377
 msgid ""
 "Target directory for blocklist backups. Default is '/tmp', please use "
 "preferably an usb stick or another local disk."
-msgstr ""
+msgstr "阻止列表备份的目标目录。默认值为“/tmp”，请最好使用U 盘或本地磁盘进行备份。"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:407
 msgid "Target directory for the generated blocklist 'adb_list.overall'."
@@ -677,15 +677,15 @@ msgstr "刷新计时器已更新。"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:52
 msgid "The day of the week (opt., values: 1-7 possibly sep. by , or -)"
-msgstr ""
+msgstr "一周的一天 (非必要，可选值：1-7，可用 . 或 - 分隔)"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:42
 msgid "The hours portition (req., range: 0-23)"
-msgstr ""
+msgstr "小时部分（必填项，范围：0-23）"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:47
 msgid "The minutes portion (opt., range: 0-59)"
-msgstr ""
+msgstr "分钟部分（可选，范围：0-59）"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/logread.js:28
 msgid "The syslog output, pre-filtered for adblock related messages only."
@@ -697,6 +697,7 @@ msgid ""
 "<br /> Please note: add only one domain per line. Comments introduced with "
 "'#' are allowed - ip addresses, wildcards and regex are not."
 msgstr ""
+"这是始终拒绝某些（子）域的本地adblock黑名单。<br />请注意：每行仅添加一个域。允许以“＃”开头的注释-不允许使用IP地址，通配符和正则表达式。"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/whitelist.js:23
 msgid ""
@@ -704,12 +705,13 @@ msgid ""
 "<br /> Please note: add only one domain per line. Comments introduced with "
 "'#' are allowed - ip addresses, wildcards and regex are not."
 msgstr ""
+"这是本地adblock白名单，始终允许某些（子）域。<br />请注意：每行仅添加一个域。允许以“＃”开头的注释-不允许使用IP地址，通配符和正则表达式。"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:304
 msgid ""
 "This shows the last generated DNS Report, press the refresh button to get a "
 "current one."
-msgstr ""
+msgstr "这显示了上次生成的 DNS 报告，按刷新按钮获取当前报告。"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:258
 msgid "Time"
@@ -717,21 +719,21 @@ msgstr "时间"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:411
 msgid "Timeout to wait for a successful DNS backend restart."
-msgstr ""
+msgstr "等待成功的DNS后端重新启动的超时。"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:16
 msgid ""
 "To keep your adblock lists up-to-date, you should setup an automatic update "
 "job for these lists."
-msgstr ""
+msgstr "为了使您的广告过滤列表保持最新，你应该为这些列表设置一个自动更新作业。"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:336
 msgid "Top 10 Statistics"
-msgstr ""
+msgstr "前 10 统计数据"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:478
 msgid "Topic for adblock notification E-Mails."
-msgstr ""
+msgstr "广告拦截通知邮件的主题。"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:313
 msgid "Total DNS Requests"
@@ -771,11 +773,11 @@ msgstr "kresd (/etc/kresd)"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:150
 msgid "max. result set size"
-msgstr ""
+msgstr "最大结果集大小"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:402
 msgid "named (/var/lib/bind)"
-msgstr ""
+msgstr "已命名 (/var/lib/bind)"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:404
 msgid "raw (/tmp)"
