@@ -3,8 +3,8 @@
 #
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2021-01-05 13:29+0000\n"
-"Last-Translator: Hulen <shift0106@gmail.com>\n"
+"PO-Revision-Date: 2021-01-09 15:32+0000\n"
+"Last-Translator: akibou <jinwenxin1997@icloud.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "openwrt/luciapplicationsfirewall/zh_Hant/>\n"
 "Language: zh_Hant\n"
@@ -384,17 +384,16 @@ msgid "Forward"
 msgstr "轉發"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:30
-#, fuzzy
 msgid ""
 "Forwarded IPv4%{proto?, protocol %{proto#%{next?, }<var>%{item.name}</"
 "var>}}%{mark?, mark <var%{mark.inv? data-tooltip=\"Match fwmarks except "
 "%{mark.num}%{mark.mask? with mask %{mark.mask}}.\":%{mark.mask? data-tooltip="
 "\"Mask fwmark value with %{mark.mask} before compare.\"}}>%{mark.val}</var>}"
 msgstr ""
-"Forwarded IPv4%{proto?, protocol %{proto#%{next?, }<var>%{item.name}</"
-"var>}}%{mark?, mark <var%{mark.inv? data-tooltip=\"Match fwmarks except "
-"%{mark.num}%{mark.mask? with mask %{mark.mask}}.\":%{mark.mask? data-tooltip="
-"\"Mask fwmark value with %{mark.mask} before compare.\"}}>%{mark.val}</var>}"
+"已轉發 IPv4%{proto?，協定：%{proto#%{next?, }<var>%{item."
+"name}</var>}}%{mark?，標記：<var%{mark.inv? data-tooltip=\"除非 fwmark 為 %{mark."
+"num}，%{mark.mask?並且其遮罩為 %{mark.mask}，}否則不匹配。\":%{mark.mask? data-tooltip="
+"\"匹配前，設定 fwmark 的遮罩為 %{mark.mask}。\"}}>%{mark.val}</var>}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:437
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:264
@@ -402,7 +401,6 @@ msgid "Friday"
 msgstr "星期五"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:39
-#, fuzzy
 msgid ""
 "From %{src}%{src_device?, interface <var>%{src_device}</var>}%{src_ip?, IP "
 "%{src_ip#%{next?, }<var%{item.inv? data-tooltip=\"Match IP addresses except "
@@ -410,14 +408,12 @@ msgid ""
 "<var%{item.inv? data-tooltip=\"Match ports except %{item.val}.\"}>%{item."
 "ival}</var>}}"
 msgstr ""
-"From %{src}%{src_device?, interface <var>%{src_device}</var>}%{src_ip?, IP "
-"%{src_ip#%{next?, }<var%{item.inv? data-tooltip=\"Match IP addresses except "
-"%{item.val}.\"}>%{item.ival}</var>}}%{src_port?, port %{src_port#%{next?, }"
-"<var%{item.inv? data-tooltip=\"Match ports except %{item.val}.\"}>%{item."
-"ival}</var>}}"
+"來自：%{src}%{src_device?，介面：<var>%{src_device}</var>}%{src_ip?，IP：%{src_ip#%{"
+"next?, }<var%{item.inv? data-tooltip=\"除非 IP 位址為 %{item.val}，否則不匹配。\"}>%{item"
+".ival}</var>}}%{src_port?，埠：%{src_port#%{next?, }<var%{item.inv? data-"
+"tooltip=\"除非埠為 %{item.val}，否則不匹配。\"}>%{item.ival}</var>}}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:64
-#, fuzzy
 msgid ""
 "From %{src}%{src_device?, interface <var>%{src_device}</var>}%{src_ip?, IP "
 "%{src_ip#%{next?, }<var%{item.inv? data-tooltip=\"Match IP addresses except "
@@ -428,17 +424,15 @@ msgid ""
 "name}}.\":%{item.hint.name? data-tooltip=\"%{item.hint.name}\"}}>%{item.ival}"
 "</var>}}"
 msgstr ""
-"From %{src}%{src_device?, interface <var>%{src_device}</var>}%{src_ip?, IP "
-"%{src_ip#%{next?, }<var%{item.inv? data-tooltip=\"Match IP addresses except "
-"%{item.val}.\"}>%{item.ival}</var>}}%{src_port?, port %{src_port#%{next?, }"
-"<var%{item.inv? data-tooltip=\"Match ports except %{item.val}.\"}>%{item."
-"ival}</var>}}%{src_mac?, MAC %{src_mac#%{next?, }<var%{item.inv? data-"
-"tooltip=\"Match MACs except %{item.val}%{item.hint.name? a.k.a. %{item.hint."
-"name}}.\":%{item.hint.name? data-tooltip=\"%{item.hint.name}\"}}>%{item.ival}"
-"</var>}}"
+"來自：%{src}%{src_device?，介面：<var>%{src_device}</var>}%{src_ip?，IP：%{src_ip#%{"
+"next?, }<var%{item.inv? data-tooltip=\"除非 IP 位址為 %{item.val}，否則不匹配。\"}>%{item"
+".ival}</var>}}%{src_port?，埠：port %{src_port#%{next?, }<var%{item.inv? data-"
+"tooltip=\"除非埠為 %{item.val}，否則不匹配。\"}>%{item."
+"ival}</var>}}%{src_mac?，MAC：%{src_mac#%{next?, }<var%{item.inv? data-tooltip="
+"\"除非 MAC 為 %{item.val}%{item.hint.name?（又名 %{item.hint.name}）}，否則不匹配。\":%{"
+"item.hint.name? data-tooltip=\"%{item.hint.name}\"}}>%{item.ival}</var>}}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:48
-#, fuzzy
 msgid ""
 "From %{src}%{src_ip?, IP %{src_ip#%{next?, }<var%{item.inv? data-tooltip="
 "\"Match IP addresses except %{item.val}.\"}>%{item.ival}</var>}}%{src_port?, "
@@ -448,13 +442,12 @@ msgid ""
 "k.a. %{item.hint.name}}.\":%{item.hint.name? data-tooltip=\"%{item.hint."
 "name}\"}}>%{item.ival}</var>}}"
 msgstr ""
-"From %{src}%{src_ip?, IP %{src_ip#%{next?, }<var%{item.inv? data-tooltip="
-"\"Match IP addresses except %{item.val}.\"}>%{item.ival}</var>}}%{src_port?, "
-"port %{src_port#%{next?, }<var%{item.inv? data-tooltip=\"Match ports except "
-"%{item.val}.\"}>%{item.ival}</var>}}%{src_mac?, MAC %{src_mac#%{next?, }<var"
-"%{item.inv? data-tooltip=\"Match MACs except %{item.val}%{item.hint.name? a."
-"k.a. %{item.hint.name}}.\":%{item.hint.name? data-tooltip=\"%{item.hint."
-"name}\"}}>%{item.ival}</var>}}"
+"來自：%{src}%{src_ip?，IP：%{src_ip#%{next?, }<var%{item.inv? data-tooltip=\"除非 "
+"IP 位址為 %{item.val}，否則不匹配。\"}>%{item.ival}</var>}}%{src_port?，埠：%{src_port#%{"
+"next?, }<var%{item.inv? data-tooltip=\"除非埠為 %{item.val}，否則不匹配。\"}>%{item."
+"ival}</var>}}%{src_mac?，MAC：%{src_mac#%{next?, }<var%{item.inv? data-tooltip="
+"\"除非 MAC 為 %{item.val}%{item.hint.name?（又名 %{item.hint.name}）}，否則不匹配。\":%{"
+"item.hint.name? data-tooltip=\"%{item.hint.name}\"}}>%{item.ival}</var>}}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:137
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:181
@@ -467,7 +460,7 @@ msgstr "一般設定"
 
 #: applications/luci-app-firewall/root/usr/share/rpcd/acl.d/luci-app-firewall.json:3
 msgid "Grant access to firewall configuration"
-msgstr "允許存取FW防火牆設定值"
+msgstr "授予存取防火牆組態的權限"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:87
 msgid "Hardware flow offloading"
@@ -493,7 +486,6 @@ msgid "Inbound device"
 msgstr "輸入設備"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:38
-#, fuzzy
 msgid ""
 "Incoming IPv4%{proto?, protocol %{proto#%{next?, }%{item.types?<var class="
 "\"cbi-tooltip-container\">%{item.name}<span class=\"cbi-tooltip\">ICMP with "
@@ -505,15 +497,15 @@ msgid ""
 "except &quot;%{helper.name}&quot;\">%{helper.val}</var>:<var data-tooltip="
 "\"%{helper.name}\">%{helper.val}</var>}}"
 msgstr ""
-"Incoming IPv4%{proto?, protocol %{proto#%{next?, }%{item.types?<var class="
-"\"cbi-tooltip-container\">%{item.name}<span class=\"cbi-tooltip\">ICMP with "
-"types %{item.types#%{next?, }<var>%{item}</var>}</span></var>:<var>%{item."
-"name}</var>}}}%{mark?, mark <var%{mark.inv? data-tooltip=\"Match fwmarks "
-"except %{mark.num}%{mark.mask? with mask %{mark.mask}}.\":%{mark.mask? data-"
-"tooltip=\"Mask fwmark value with %{mark.mask} before compare.\"}}>%{mark.val}"
-"</var>}%{helper?, helper %{helper.inv?<var data-tooltip=\"Match any helper "
-"except &quot;%{helper.name}&quot;\">%{helper.val}</var>:<var data-tooltip="
-"\"%{helper.name}\">%{helper.val}</var>}}"
+"傳入 IPv4%{proto?，協定：%{proto#%{next?, }%{item.types?<var class=\"cbi-tooltip-"
+"container\">%{item.name}<span class=\"cbi-tooltip\">ICMP 包含類型：%{item.types#%{"
+"next?, }<var>%{item}</var>}</span></var>:<var>%{item."
+"name}</var>}}}%{mark?，標記：<var%{mark.inv? data-tooltip=\"除非 fwmark 為 %{mark."
+"num}，%{mark.mask?並且其遮罩為 %{mark.mask}，}否則不匹配。\":%{mark.mask? data-tooltip="
+"\"匹配前，設定 fwmark 的遮罩為 %{mark.mask}。\"}}>%{mark.val}</var>}%{helper?，幫手：%{"
+"helper.inv?<var data-tooltip=\"除非幫手為 &quot;%{helper.name}&quot;，否則不匹配。\""
+">%{helper.val}</var>:<var data-tooltip=\"%{helper.name}\">%{helper."
+"val}</var>}}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:61
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:143
@@ -942,7 +934,6 @@ msgid "Time in UTC"
 msgstr "UTC 時間"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:77
-#, fuzzy
 msgid ""
 "To %{dest}%{dest_device?, interface <var>%{dest_device}</var>}%{dest_ip?, IP "
 "%{dest_ip#%{next?, }<var%{item.inv? data-tooltip=\"Match IP addresses except "
@@ -950,14 +941,12 @@ msgid ""
 "<var%{item.inv? data-tooltip=\"Match ports except %{item.val}.\"}>%{item."
 "ival}</var>}}"
 msgstr ""
-"To %{dest}%{dest_device?, interface <var>%{dest_device}</var>}%{dest_ip?, IP "
-"%{dest_ip#%{next?, }<var%{item.inv? data-tooltip=\"Match IP addresses except "
-"%{item.val}.\"}>%{item.ival}</var>}}%{dest_port?, port %{dest_port#%{next?, }"
-"<var%{item.inv? data-tooltip=\"Match ports except %{item.val}.\"}>%{item."
-"ival}</var>}}"
+"到：%{dest}%{dest_device?，介面：<var>%{dest_device}</var>}%{dest_ip?，IP：%{dest_ip#"
+"%{next?, }<var%{item.inv? data-tooltip=\"除非 IP 位址為 %{item.val}，否則不匹配。\""
+"}>%{item.ival}</var>}}%{dest_port?，埠：%{dest_port#%{next?, }<var%{item.inv? "
+"data-tooltip=\"除非埠為 %{item.val}，否則不匹配。\"}>%{item.ival}</var>}}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:49
-#, fuzzy
 msgid ""
 "To %{dest}%{dest_device?, via interface <var>%{dest_device}</"
 "var>}%{dest_ip?, IP %{dest_ip#%{next?, }<var%{item.inv? data-tooltip=\"Match "
@@ -965,24 +954,22 @@ msgid ""
 "%{dest_port#%{next?, }<var%{item.inv? data-tooltip=\"Match ports except "
 "%{item.val}.\"}>%{item.ival}</var>}}"
 msgstr ""
-"To %{dest}%{dest_device?, via interface <var>%{dest_device}</"
-"var>}%{dest_ip?, IP %{dest_ip#%{next?, }<var%{item.inv? data-tooltip=\"Match "
-"IP addresses except %{item.val}.\"}>%{item.ival}</var>}}%{dest_port?, port "
-"%{dest_port#%{next?, }<var%{item.inv? data-tooltip=\"Match ports except "
-"%{item.val}.\"}>%{item.ival}</var>}}"
+"到：%{dest}%{dest_device?，透過介面：<var>%{dest_device}</var>}%{dest_ip?，IP：%{dest_i"
+"p#%{next?, }<var%{item.inv? data-tooltip=\"除非 IP 位址為 %{item.val}，否則不匹配。\""
+"}>%{item.ival}</var>}}%{dest_port?，埠：%{dest_port#%{next?, }<var%{item.inv? "
+"data-tooltip=\"除非埠為 %{item.val}，否則不匹配。\"}>%{item.ival}</var>}}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:57
-#, fuzzy
 msgid ""
 "To %{dest}%{dest_ip?, IP %{dest_ip#%{next?, }<var%{item.inv? data-tooltip="
 "\"Match IP addresses except %{item.val}.\"}>%{item.ival}</"
 "var>}}%{dest_port?, port %{dest_port#%{next?, }<var%{item.inv? data-tooltip="
 "\"Match ports except %{item.val}.\"}>%{item.ival}</var>}}"
 msgstr ""
-"To %{dest}%{dest_ip?, IP %{dest_ip#%{next?, }<var%{item.inv? data-tooltip="
-"\"Match IP addresses except %{item.val}.\"}>%{item.ival}</"
-"var>}}%{dest_port?, port %{dest_port#%{next?, }<var%{item.inv? data-tooltip="
-"\"Match ports except %{item.val}.\"}>%{item.ival}</var>}}"
+"到：%{dest}%{dest_ip?，IP：%{dest_ip#%{next?, }<var%{item.inv? data-tooltip=\"除非 "
+"IP 位址為 %{item.val}，否則不匹配。\"}>%{item."
+"ival}</var>}}%{dest_port?，埠：%{dest_port#%{next?, }<var%{item.inv? data-"
+"tooltip=\"除非埠為 %{item.val}，否則不匹配。\"}>%{item.ival}</var>}}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:393
 msgid "Tracking helper"
