@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2021-01-09 15:32+0000\n"
+"PO-Revision-Date: 2021-01-10 16:32+0000\n"
 "Last-Translator: akibou <jinwenxin1997@icloud.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "openwrt/luciapplicationsacme/zh_Hant/>\n"
@@ -83,7 +83,7 @@ msgid ""
 "Domain names to include in the certificate. The first name will be the "
 "subject name, subsequent names will be alt names. Note that all domain names "
 "must point at the router in the global DNS."
-msgstr "憑證中包含的網域名稱；第一個名稱為「主體名稱」，其他則為「主體備用名稱」。請注意，所有域名都必須被全域 DNS 指向路由器的 IP 位址。"
+msgstr "憑證中包含的網域名稱；第一個名稱為「主體名稱」，其他則為「主體備用名稱」。請注意：所有域名都必須被全域 DNS 指向路由器的 IP 位址。"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:63
 msgid "ECC 256 bits"
@@ -125,7 +125,7 @@ msgstr "金鑰大小"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:59
 msgid "Key size (and type) for the generated certificate."
-msgstr "生成憑證的金鑰大小（和類型）。"
+msgstr "產生憑證的金鑰大小（和類型）。"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:60
 msgid "RSA 2048 bits"
@@ -150,7 +150,7 @@ msgid ""
 "certificate. DNS mode will allow you to use the DNS API of your DNS provider "
 "to issue a certificate."
 msgstr ""
-"「獨立模式」將使用 acme.sh 內建的 Web 伺服器來頒發憑證；「Webroot 模式」則使用現有的 Web 伺服器；「DNS 模式」允許您使用 "
+"「獨立模式」將使用 acme.sh 內建的 Web 伺服器來頒發憑證；「Webroot 模式」則使用現存的 Web 伺服器；「DNS 模式」允許您使用 "
 "DNS 服務提供者的 DNS API 來頒發憑證。"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:29
@@ -174,7 +174,7 @@ msgid ""
 "supply multiple credential variables."
 msgstr ""
 "已選擇的「DNS API 的憑證」；參考 https://github.com/acmesh-official/acme.sh/wiki/dnsapi "
-"取得每個 API 的憑證格式。要提供多個憑證變數，請在此添加格式為 \"KEY=VAL\" 的多個條目。"
+"取得每個 API 所需的憑證格式。要提供多個憑證變數，請在此添加格式為 \"KEY=VAL\" 的多個條目。"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:129
 msgid ""
@@ -183,7 +183,7 @@ msgid ""
 "only supports one challenge domain per certificate."
 msgstr ""
 "所有網域使用的網域別名；參考 https://github.com/acmesh-official/acme.sh/wiki/DNS-alias-"
-"mode 取得該行程的詳細資訊。LuCI 僅支援每個憑證擁有單個網域別名。"
+"mode 取得該行程的詳細資訊。LuCI 僅支援每個憑證擁有唯一網域別名。"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:18
 msgid ""
@@ -195,7 +195,7 @@ msgid ""
 "logs for progress and any errors."
 msgstr ""
 "您可以在這裡配置 ACME (Let's Encrypt) 實現憑證的自動安裝；簡單填寫後將為路由器的 Web 介面取得藉由 Let's Encrypt "
-"頒發的憑證。請注意，憑證中的域名必須指向路由器的公共 IP 位址。配置後頒發憑證需要一段時間，檢查日誌來獲取進展和任何錯誤。"
+"頒發的憑證。請注意：憑證中的域名必須指向路由器的公共 IP 位址。配置後頒發憑證需要一段時間，檢查日誌來獲取進展和任何錯誤。"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:108
 msgid ""
@@ -207,8 +207,8 @@ msgid ""
 "package to be installed."
 msgstr ""
 "要使用「DNS 模式」來頒發憑證，請在此處填寫 acme.sh 支援的 DNS API 的名稱；參考 https://github.com/"
-"acmesh-official/acme.sh/wiki/dnsapi 取得可用的 API 列表。在 DNS 模式下域名不必解析為路由器 "
-"IP，該模式也是支援萬用字元憑證的唯一模式。請注意，必須安裝 acme-dnsapi 套件後才能使用該模式。"
+"acmesh-official/acme.sh/wiki/dnsapi 取得可用的 API 清單。在 DNS 模式下域名不必解析為路由器 "
+"IP，該模式也是支援萬用字元憑證的唯一模式。請注意：必須安裝 acme-dnsapi 套件後才能使用該模式。"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:84
 msgid ""
@@ -216,7 +216,7 @@ msgid ""
 "for one certificate). Nginx must support ssl, if not it won't start as it "
 "needs to be compiled with ssl support to use cert options"
 msgstr ""
-"頒發後，使用該憑證來更新 Nginx 組態（申請多個憑證時只容許其中一個開啟此選項）。Nginx 必須支援 SSL，因為它需要編譯的 SSL "
+"頒發後，使用該憑證來更新 Nginx 組態（申請多個憑證時只能選擇其中一個啟用此選項）。Nginx 必須支援 SSL，因為它需要編譯的 SSL "
 "支援才能使用憑證，否則將無法啟動"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:76
@@ -225,7 +225,7 @@ msgid ""
 "for one certificate). Is also available luci-app-uhttpd to configure uhttpd "
 "form the LuCI interface."
 msgstr ""
-"頒發後，使用該憑證來更新 uHTTPd 組態（申請多個憑證時只容許其中一個開啟此選項）。您也可以使用 luci-app-uhttpd 的 LuCI "
+"頒發後，使用該憑證來更新 uHTTPd 組態（申請多個憑證時只能選擇其中一個啟用此選項）。您也可以使用 luci-app-uhttpd 的 LuCI "
 "介面來配置 uHTTPd。"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:135
@@ -262,7 +262,7 @@ msgid ""
 "Acme in webroot mode. The web server must be accessible from the internet on "
 "port 80."
 msgstr ""
-"Web 伺服器根目錄；設定 Web 伺服器文件的根目錄以在「Webroot 模式」下運行 ACME。Web 伺服器的 80 埠必須允許從 "
+"Web 伺服器根目錄；設定 Web 伺服器文件的根目錄以在「Webroot 模式」下執行 ACME。Web 伺服器的 80 埠必須允許從 "
 "Internet 訪問。"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:30
