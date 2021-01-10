@@ -63,8 +63,8 @@ return view.extend({
 		if (scanCache[res.bssid].graph == null)
 			scanCache[res.bssid].graph = [];
 
-		for (var i=0; i < channels.length; i++) {
-			var chan_offset = offset_tbl[channels[i]],
+		channels.forEach(function(channel) {
+			var chan_offset = offset_tbl[channel],
 				points = [
 				(chan_offset-(step*channel_width))+','+height,
 				(chan_offset-(step*(channel_width-1)))+','+height_diff,
@@ -94,11 +94,12 @@ return view.extend({
 			scanCache[res.bssid].graph[i].line.setAttribute('points', points);
 			scanCache[res.bssid].graph[i].group.style.zIndex = res.signal*-1;
 			scanCache[res.bssid].graph[i].group.style.opacity = res.stale ? '0.5' : null;
-		}
+		})
 	},
 
-	create_channel_graph: function(chan_analysis, freq_tbl, is5GHz) {
-		var columns = is5GHz ? freq_tbl.length * 4 : freq_tbl.length + 3,
+	create_channel_graph: function(chan_analysis, freq_tbl, freq) {
+		var is5GHz = freq == '5GHz',
+		    columns = is5GHz ? freq_tbl.length * 4 : freq_tbl.length + 3,
 		    chan_graph = chan_analysis.graph,
 		    G = chan_graph.firstElementChild,
 		    step = (chan_graph.offsetWidth - 2) / columns,
@@ -127,7 +128,7 @@ return view.extend({
 
 		createGraphHLine(G,curr_offset);
 		for (var i=0; i< freq_tbl.length;i++) {
-			var channel = freq_tbl[i].channel
+			var channel = freq_tbl[i]
 			chan_analysis.offset_tbl[channel] = curr_offset+step;
 
 			createGraphHLine(G,curr_offset+step);
@@ -135,7 +136,7 @@ return view.extend({
 			curr_offset += step;
 
 			if (is5GHz && freq_tbl[i+1]) {
-				var next_channel = freq_tbl[i+1].channel;
+				var next_channel = freq_tbl[i+1];
 				/* Check if we are transitioning to another 5Ghz band range */
 				if ((next_channel - channel) == 4) {
 					for (var j=1; j < 4; j++) {
@@ -195,32 +196,32 @@ return view.extend({
 
 			scanCache[local_wifi.bssid].data = local_wifi;
 
-			var center_channels = [local_wifi.center_chan1],
-			    chan_width_text = local_wifi.htmode.replace(/(V)*HT/,''),
-			    chan_width;
+			if (chan_analysis.offset_tbl[local_wifi.channel] != null) {
+				var center_channels = [local_wifi.center_chan1],
+				    chan_width_text = local_wifi.htmode.replace(/(V)*HT/,''),
+				    chan_width = parseInt(chan_width_text)/10;
 
-			if (local_wifi.center_chan2) {
-				center_channels.push(local_wifi.center_chan2);
-				chan_width = 8;
-			} else {
-				chan_width = parseInt(chan_width_text)/10;
+				if (local_wifi.center_chan2) {
+					center_channels.push(local_wifi.center_chan2);
+					chan_width = 8;
+				}
+
+				local_wifi.signal = -10;
+				local_wifi.ssid = 'Local Interface';
+
+				this.add_wifi_to_graph(chan_analysis, local_wifi, scanCache, center_channels, chan_width);
+				rows.push([
+					this.render_signal_badge(q, local_wifi.signal),
+					[
+						E('span', { 'style': 'color:'+scanCache[local_wifi.bssid].color }, '⬤ '),
+						local_wifi.ssid
+					],
+					'%d'.format(local_wifi.channel),
+					'%h MHz'.format(chan_width_text),
+					'%h'.format(local_wifi.mode),
+					'%h'.format(local_wifi.bssid)
+				]);
 			}
-
-			local_wifi.signal = -10;
-			local_wifi.ssid = 'Local Interface';
-
-			this.add_wifi_to_graph(chan_analysis, local_wifi, scanCache, center_channels, chan_width);
-			rows.push([
-				this.render_signal_badge(q, local_wifi.signal),
-				[
-					E('span', { 'style': 'color:'+scanCache[local_wifi.bssid].color }, '⬤ '),
-					local_wifi.ssid
-				],
-				'%d'.format(local_wifi.channel),
-				'%h MHz'.format(chan_width_text),
-				'%h'.format(local_wifi.mode),
-				'%h'.format(local_wifi.bssid)
-			]);
 
 			for (var k in scanCache)
 				if (scanCache[k].stale)
@@ -252,20 +253,25 @@ return view.extend({
 					center_channels = [res.channel],
 					chan_width = 2;
 
+				/* Skip WiFi not supported by the current band */
+				if (chan_analysis.offset_tbl[res.channel] == null)
+					continue;
+
 				res.channel_width = "20 MHz";
-				if (res.ht_operation.channel_width == 2040) { /* 40 MHz Channel Enabled */
-					if (res.ht_operation.secondary_channel_offset == "below") {
-						res.channel_width = "40 MHz";
-						chan_width = 4; /* 40 MHz Channel Used */
-						center_channels[0] -= 2;
-					} else if (res.ht_operation.secondary_channel_offset == "above") {
-						res.channel_width = "40 MHz";
-						chan_width = 4; /* 40 MHz Channel Used */
-						center_channels[0] += 2;
-					} else {
-						res.channel_width = "20 MHz (40 MHz Intolerant)";
+				if (res.ht_operation != null)
+					if (res.ht_operation.channel_width == 2040) { /* 40 MHz Channel Enabled */
+						if (res.ht_operation.secondary_channel_offset == "below") {
+							res.channel_width = "40 MHz";
+							chan_width = 4; /* 40 MHz Channel Used */
+							center_channels[0] -= 2;
+						} else if (res.ht_operation.secondary_channel_offset == "above") {
+							res.channel_width = "40 MHz";
+							chan_width = 4; /* 40 MHz Channel Used */
+							center_channels[0] += 2;
+						} else {
+							res.channel_width = "20 MHz (40 MHz Intolerant)";
+						}
 					}
-				}
 
 				if (res.vht_operation != null) {
 					center_channels[0] = res.vht_operation.center_freq_1;
@@ -344,40 +350,57 @@ return view.extend({
 		var v = E('div', {}, E('div'));
 
 		for (var ifname in wifiDevs) {
-			var csvg = svg.cloneNode(true),
-			    freq_tbl = wifiDevs[ifname].freq,
-			    is5GHz = freq_tbl[0].mhz >= 5000,
-			    table = E('div', { 'class': 'table' }, [
-			    	E('div', { 'class': 'tr table-titles' }, [
-			    		E('div', { 'class': 'th col-2 middle center' }, _('Signal')),
-			    		E('div', { 'class': 'th col-4 middle left' }, _('SSID')),
-			    		E('div', { 'class': 'th col-2 middle center hide-xs' }, _('Channel')),
-			    		E('div', { 'class': 'th col-3 middle left' }, _('Channel Width')),
-			    		E('div', { 'class': 'th col-2 middle left hide-xs' }, _('Mode')),
-			    		E('div', { 'class': 'th col-3 middle left hide-xs' }, _('BSSID'))
-			    	])
-			    ]),
-			    tab = E('div', { 'data-tab': ifname, 'data-tab-title': ifname+' ('+(is5GHz ? '5GHz' : '2.4GHz')+') ' },
-			    		[E('br'),csvg,E('br'),table,E('br')]),
-			    graph_data = {
-			    	graph: csvg,
-			    	offset_tbl: {},
-			    	col_width: 0,
-			    	tab: tab,
-			    };
-
-			this.radios[ifname] = { 
-				dev: wifiDevs[ifname].dev,
-				graph: graph_data,
-				table: table,
-				scanCache: {}
+			var freq_tbl = {
+				['2.4GHz'] : [],
+				['5GHz'] : [],
 			};
 
-			cbi_update_table(table, [], E('em', { class: 'spinning' }, _('Starting wireless scan...')));
+			/* Split FrequencyList in Bands */
+			wifiDevs[ifname].freq.forEach(function(freq) {
+				if (freq.mhz >= 5000) {
+					freq_tbl['5GHz'].push(freq.channel);
+				} else {
+					freq_tbl['2.4GHz'].push(freq.channel);
+				}
+			});
 
-			v.firstElementChild.appendChild(tab)
+			for (var freq in freq_tbl) {
+				if (freq_tbl[freq].length == 0)
+					continue;
 
-			requestAnimationFrame(L.bind(this.create_channel_graph, this, graph_data, freq_tbl, is5GHz));
+				var csvg = svg.cloneNode(true),
+				table = E('div', { 'class': 'table' }, [
+					E('div', { 'class': 'tr table-titles' }, [
+						E('div', { 'class': 'th col-2 middle center' }, _('Signal')),
+						E('div', { 'class': 'th col-4 middle left' }, _('SSID')),
+						E('div', { 'class': 'th col-2 middle center hide-xs' }, _('Channel')),
+						E('div', { 'class': 'th col-3 middle left' }, _('Channel Width')),
+						E('div', { 'class': 'th col-2 middle left hide-xs' }, _('Mode')),
+						E('div', { 'class': 'th col-3 middle left hide-xs' }, _('BSSID'))
+					])
+				]),
+				tab = E('div', { 'data-tab': ifname+freq, 'data-tab-title': ifname+' ('+freq+')' },
+						[E('br'),csvg,E('br'),table,E('br')]),
+				graph_data = {
+					graph: csvg,
+					offset_tbl: {},
+					col_width: 0,
+					tab: tab,
+				};
+
+				this.radios[ifname+freq] = { 
+					dev: wifiDevs[ifname].dev,
+					graph: graph_data,
+					table: table,
+					scanCache: {}
+				};
+
+				cbi_update_table(table, [], E('em', { class: 'spinning' }, _('Starting wireless scan...')));
+
+				v.firstElementChild.appendChild(tab)
+
+				requestAnimationFrame(L.bind(this.create_channel_graph, this, graph_data, freq_tbl[freq], freq));
+			}
 		}
 
 		ui.tabs.initTabGroup(v.firstElementChild.childNodes);
