@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2021-01-10 16:32+0000\n"
+"PO-Revision-Date: 2021-01-12 16:07+0000\n"
 "Last-Translator: akibou <jinwenxin1997@icloud.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "openwrt/luciapplicationsacme/zh_Hant/>\n"
@@ -83,7 +83,7 @@ msgid ""
 "Domain names to include in the certificate. The first name will be the "
 "subject name, subsequent names will be alt names. Note that all domain names "
 "must point at the router in the global DNS."
-msgstr "憑證中包含的網域名稱；第一個名稱為「主體名稱」，其他則為「主體備用名稱」。請注意：所有域名都必須被全域 DNS 指向路由器的 IP 位址。"
+msgstr "憑證中包含的網域名稱；第一個域名為「主體名稱」，其他則為「主體備用名稱」。請注意：所有域名都必須被全域 DNS 指向路由器的 IP 位址。"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:63
 msgid "ECC 256 bits"
@@ -150,7 +150,7 @@ msgid ""
 "certificate. DNS mode will allow you to use the DNS API of your DNS provider "
 "to issue a certificate."
 msgstr ""
-"「獨立模式」將使用 acme.sh 內建的 Web 伺服器來頒發憑證；「Webroot 模式」則使用現存的 Web 伺服器；「DNS 模式」允許您使用 "
+"「獨立模式」將使用 acme.sh 內建的 Web 伺服器來頒發憑證，「Webroot 模式」則使用現存的 Web 伺服器，「DNS 模式」允許您使用 "
 "DNS 服務提供者的 DNS API 來頒發憑證。"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:29
@@ -194,8 +194,8 @@ msgid ""
 "address. Once configured, issuing certificates can take a while. Check the "
 "logs for progress and any errors."
 msgstr ""
-"您可以在這裡配置 ACME (Let's Encrypt) 實現憑證的自動安裝；簡單填寫後將為路由器的 Web 介面取得藉由 Let's Encrypt "
-"頒發的憑證。請注意：憑證中的域名必須指向路由器的公共 IP 位址。配置後頒發憑證需要一段時間，檢查日誌來獲取進展和任何錯誤。"
+"您可以在這裡配置 ACME (Let's Encrypt) 實現憑證的自動安裝，簡單填寫該組態將為路由器的 Web 介面取得藉由 Let's "
+"Encrypt 頒發的憑證。請注意：憑證中的域名必須指向路由器的公共 IP 位址。配置完成後憑證頒發需要一段時間，請檢視日誌來獲取其進展和任何錯誤。"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:108
 msgid ""
@@ -207,7 +207,7 @@ msgid ""
 "package to be installed."
 msgstr ""
 "要使用「DNS 模式」來頒發憑證，請在此處填寫 acme.sh 支援的 DNS API 的名稱；參考 https://github.com/"
-"acmesh-official/acme.sh/wiki/dnsapi 取得可用的 API 清單。在 DNS 模式下域名不必解析為路由器 "
+"acmesh-official/acme.sh/wiki/dnsapi 取得可用的 API 清單。在DNS 模式下域名不必解析為路由器 "
 "IP，該模式也是支援萬用字元憑證的唯一模式。請注意：必須安裝 acme-dnsapi 套件後才能使用該模式。"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:84
