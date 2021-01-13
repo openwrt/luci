@@ -186,6 +186,10 @@ lp = s3:option(Value, "listen_port", translate("Listen port"))
 lp.datatype = "port"
 lp.value    = n + 5053
 
+dscp = s3:option(Value, "dscp_codepoint", translate("DSCP Codepoint"))
+dscp.datatype = "range(0,63)"
+dscp.rmempty  = true
+
 ps = s3:option(Value, "proxy_server", translate("Proxy server"))
 ps.rmempty  = true
 
