@@ -157,7 +157,7 @@ return view.extend({
 			}
 
 			res.push([
-				(partition.number).toString(16).toUpperCase(),
+				(partition.number+0x100).toString(16).substr(-2).toUpperCase(),
 				_(partition.state),
 				partition.os.replace("Unknown", _("Unknown")).replace("Compressed", _("Compressed")),
 				E('button', {
