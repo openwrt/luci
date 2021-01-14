@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"PO-Revision-Date: 2020-11-17 12:29+0000\n"
-"Last-Translator: gw826943555 <gw826943555@qq.com>\n"
+"PO-Revision-Date: 2021-01-13 10:47+0000\n"
+"Last-Translator: xiazhang <xz@xia.plus>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "openwrt/luciapplicationsfirewall/zh_Hans/>\n"
 "Language: zh_Hans\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.4-dev\n"
+"X-Generator: Weblate 4.4.1-dev\n"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:48
 msgid ""
@@ -143,16 +143,16 @@ msgid ""
 "traffic, e.g. <code>-p tcp --dport 443</code> to only match outbound HTTPS "
 "traffic."
 msgstr ""
-"附加 <em>iptables</em> 参数对区域出流量分类。如：<code>-p tcp --dport 443</"
-"code> 仅匹配出站 HTTPS 流量。"
+"用于对区域目标流量进行分类的额外 <em>iptables</em> 参数。如：<code>-p tcp --dport 443</code> "
+"表示仅匹配出站 HTTPS 流量。"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:266
 msgid ""
 "Additional raw <em>iptables</em> arguments to classify zone source traffic, "
 "e.g. <code>-p tcp --sport 443</code> to only match inbound HTTPS traffic."
 msgstr ""
-"附加 <em>iptables</em> 参数对区域入流量分类。如：<code>-p tcp --sport 443</"
-"code> 仅匹配入站 HTTPS 流量。"
+"用于对区域源流量进行分类的额外 <em>iptables</em> 参数。如：<code>-p tcp --sport 443</code> "
+"表示仅匹配入站 HTTPS 流量。"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:138
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:182
@@ -566,7 +566,7 @@ msgstr "环回源 IP"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:212
 msgid "MASQUERADE - Automatically rewrite to outbound interface IP"
-msgstr "MASQUERADE - 自动重写为出站接口 IP"
+msgstr "MASQUERADE - 自动重写源地址为出站接口 IP"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:162
 msgid "MSS clamping"
