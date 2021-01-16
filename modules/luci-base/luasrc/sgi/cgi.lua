@@ -35,11 +35,11 @@ function run()
 		limitsource(io.stdin, tonumber(luci.sys.getenv("CONTENT_LENGTH"))),
 		ltn12.sink.file(io.stderr)
 	)
-	
+
 	local x = coroutine.create(luci.dispatcher.httpdispatch)
 	local hcache = ""
 	local active = true
-	
+
 	while coroutine.status(x) ~= "dead" do
 		local res, id, data1, data2 = coroutine.resume(x, r)
 

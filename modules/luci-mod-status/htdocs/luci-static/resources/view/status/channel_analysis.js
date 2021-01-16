@@ -388,7 +388,7 @@ return view.extend({
 					tab: tab,
 				};
 
-				this.radios[ifname+freq] = { 
+				this.radios[ifname+freq] = {
 					dev: wifiDevs[ifname].dev,
 					graph: graph_data,
 					table: table,
