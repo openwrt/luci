@@ -29,14 +29,14 @@ return baseclass.extend({
 		    ht = rt.ht, vht = rt.vht,
 			mhz = rt.mhz, nss = rt.nss,
 			mcs = rt.mcs, sgi = rt.short_gi;
-	
+
 		if (ht || vht) {
 			if (vht) s += ', VHT-MCS\xa0%d'.format(mcs);
 			if (nss) s += ', VHT-NSS\xa0%d'.format(nss);
 			if (ht)  s += ', MCS\xa0%s'.format(mcs);
 			if (sgi) s += ', ' + _('Short GI').replace(/ /g, '\xa0');
 		}
-	
+
 		return s;
 	},
 
@@ -99,12 +99,12 @@ return baseclass.extend({
 		    freq = null,
 		    rate = null,
 		    badges = [];
-	
+
 		for (var i = 0; i < networks.length; i++) {
 			var net = networks[i],
 			    is_assoc = (net.getBSSID() != '00:00:00:00:00:00' && net.getChannel() && !net.isDisabled()),
 			    quality = net.getSignalPercent();
-	
+
 			var icon;
 			if (net.isDisabled())
 				icon = L.resource('icons/signal-none.png');
@@ -134,7 +134,7 @@ return baseclass.extend({
 					}, [ _('Start WPS') ])
 				}
 			}
-	
+
 			var badge = renderBadge(
 				icon,
 				'%s: %d dBm / %s: %d%%'.format(_('Signal'), net.getSignal(), _('Quality'), quality),
@@ -147,14 +147,14 @@ return baseclass.extend({
 				_('WPS status'), this.WPSTranslateTbl[net.wps_status],
 				'', WPS_button
 			);
-	
+
 			badges.push(badge);
-	
+
 			chan = (chan != null) ? chan : net.getChannel();
 			freq = (freq != null) ? freq : net.getFrequency();
 			rate = (rate != null) ? rate : net.getBitRate();
 		}
-	
+
 		return E('div', { class: 'ifacebox' }, [
 			E('div', { class: 'ifacebox-head center ' + (radio.isUp() ? 'active' : '') },
 				E('strong', radio.getName())),
@@ -340,7 +340,7 @@ return baseclass.extend({
 							}).render()
 						)
 					}
-					else { 
+					else {
 						row.push(E('button', {
 							'class': 'cbi-button cbi-button-remove',
 							'click': L.bind(this.handleDelClient, this, networks[i], bss.mac)

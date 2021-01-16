@@ -284,7 +284,7 @@ return view.extend({
 
 		o = s.taboption('general', form.DynamicList, 'address', _('Addresses'),
 			_('List of domains to force to an IP address.'));
-		
+
 		o.optional = true;
 		o.placeholder = '/router.local/192.168.0.1';
 
