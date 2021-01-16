@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: luci-app-ddns 2.4.0-1\n"
 "POT-Creation-Date: 2016-01-30 11:07+0100\n"
-"PO-Revision-Date: 2020-11-29 22:23+0000\n"
-"Last-Translator: Ryota <21ryotagamer@gmail.com>\n"
+"PO-Revision-Date: 2021-01-02 13:00+0000\n"
+"Last-Translator: INAGAKI Hiroshi <musashino.open@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsddns/ja/>\n"
 "Language: ja\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.4-dev\n"
+"X-Generator: Weblate 4.4.1-dev\n"
 
 #: applications/luci-app-ddns/luasrc/view/ddns/overview_status.htm:145
 msgid "&"
@@ -33,7 +33,7 @@ msgstr "詳細設定"
 
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/global.lua:46
 msgid "Allow non-public IP's"
-msgstr "非公開の IP を許可"
+msgstr "非パブリック IP を許可"
 
 #: applications/luci-app-ddns/luasrc/view/ddns/overview_status.htm:176
 msgid "Applying changes"
@@ -143,7 +143,7 @@ msgstr ""
 
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:452
 msgid "Custom update script to be used for updating your DDNS Provider."
-msgstr "DDNS プロバイダーの更新に使用するカスタム更新スクリプトです。"
+msgstr "DDNS プロバイダーの更新に使用されるカスタム更新スクリプトです。"
 
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:412
 msgid "Custom update-URL"
@@ -282,7 +282,7 @@ msgstr "エラー再試行間隔"
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:1019
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:1058
 msgid "Event Network"
-msgstr ""
+msgstr "イベント ネットワーク"
 
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:1295
 msgid "File"
@@ -313,17 +313,17 @@ msgstr "サポートされているコードについては、こちらをご覧
 
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:1139
 msgid "Force IP Version"
-msgstr ""
+msgstr "IP バージョンの強制"
 
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:1145
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:1154
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/hints.lua:112
 msgid "Force IP Version not supported"
-msgstr ""
+msgstr "IP バージョンの強制はサポートされていません"
 
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:1357
 msgid "Force Interval"
-msgstr ""
+msgstr "強制の間隔"
 
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:1205
 msgid "Force TCP on DNS"
@@ -367,12 +367,12 @@ msgstr ""
 
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:279
 msgid "Hostname/FQDN to validate, if IP update happen or necessary"
-msgstr ""
+msgstr "IP 更新が発生した、または必要な場合に検証するホスト名または FQDN です"
 
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:660
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:710
 msgid "IP address source"
-msgstr ""
+msgstr "IP アドレス読み取り元"
 
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:301
 msgid "IP address version"
@@ -384,7 +384,7 @@ msgstr "IPv4アドレス"
 
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:1244
 msgid "IPv6 address must be given in square brackets"
-msgstr ""
+msgstr "IPv6 アドレスは角括弧内に記述される必要があります"
 
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/hints.lua:57
 msgid ""
@@ -444,6 +444,8 @@ msgid ""
 "Install 'ca-certificates' package or needed certificates by hand into /etc/"
 "ssl/certs default directory"
 msgstr ""
+"'ca-certificates' パッケージをインストールするか、必要な証明書をデフォルト"
+"の /etc/ssl/certs ディレクトリに手動で配置してください"
 
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:666
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:716
@@ -500,7 +502,7 @@ msgstr "syslog へログを記録"
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/overview.lua:113
 #: applications/luci-app-ddns/luasrc/view/ddns/system_status.htm:50
 msgid "Lookup Hostname"
-msgstr "ホスト名をルックアップ"
+msgstr "ルックアップするホスト名"
 
 #: applications/luci-app-ddns/luasrc/controller/ddns.lua:101
 msgid "NOT installed"
@@ -511,12 +513,16 @@ msgid ""
 "Neither GNU Wget with SSL nor cURL installed to select a network to use for "
 "communication."
 msgstr ""
+"通信に使用するネットワークを選択するために必要な、SSL をサポートする GNU "
+"Wget または cURL のどちらもインストールされていません。"
 
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/hints.lua:69
 msgid ""
 "Neither GNU Wget with SSL nor cURL installed to support secure updates via "
 "HTTPS protocol."
 msgstr ""
+"HTTPS プロトコルを介したセキュアなアップデートをサポートするための、 SSL をサ"
+"ポートする GNU Wget または cURL のどちらもインストールされていません。"
 
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:664
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:714
@@ -555,7 +561,7 @@ msgstr "ログを記録しない"
 
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/global.lua:47
 msgid "Non-public and by default blocked IP's"
-msgstr ""
+msgstr "非パブリックかつデフォルトでブロックされる IP"
 
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:1284
 msgid "Notice"
@@ -563,15 +569,17 @@ msgstr "注意"
 
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/global.lua:96
 msgid "Number of last lines stored in log files"
-msgstr ""
+msgstr "ログファイルに保存される行数です"
 
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:1148
 msgid "OPTIONAL: Force the usage of pure IPv4/IPv6 only communication."
-msgstr ""
+msgstr "オプション: IPv4/IPv6 に限定した純粋な通信の使用を強制します。"
 
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:1214
 msgid "OPTIONAL: Force the use of TCP instead of default UDP on DNS requests."
 msgstr ""
+"オプション: DNS リクエストにおいて、デフォルトの UDP に代わって TCP の使用を"
+"強制します。"
 
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:1117
 msgid "OPTIONAL: Network to use for communication"
@@ -579,11 +587,12 @@ msgstr "オプション : 通信に使用するネットワーク"
 
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:1242
 msgid "OPTIONAL: Proxy-Server for detection and updates."
-msgstr ""
+msgstr "オプション: 検出とアップデートに使用するプロキシ サーバーです。"
 
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:1166
 msgid "OPTIONAL: Use non-default DNS-Server to detect 'Registered IP'."
 msgstr ""
+"オプション: 登録済み IP の検出に非デフォルトの DNS サーバーを使用します。"
 
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:1470
 msgid "On Error the script will retry the failed action after given time"
@@ -591,7 +600,7 @@ msgstr ""
 
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:1426
 msgid "On Error the script will stop execution after given number of retrys"
-msgstr ""
+msgstr "指定された再試行回数後のスクリプトのエラーで実行を停止します"
 
 #: applications/luci-app-ddns/luasrc/controller/ddns.lua:68
 msgid "OpenWrt Wiki"
@@ -599,19 +608,23 @@ msgstr ""
 
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:514
 msgid "Optional Encoded Parameter"
-msgstr ""
+msgstr "エンコードされたパラメーター（オプション）"
 
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:525
 msgid "Optional Parameter"
-msgstr ""
+msgstr "パラメーター（オプション）"
 
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:515
 msgid "Optional: Replaces [PARAMENC] in Update-URL (URL-encoded)"
 msgstr ""
+"オプション: 更新 URL 内の [PARAMENC] を置き換えます（URL エンコードされたも"
+"の）"
 
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:526
 msgid "Optional: Replaces [PARAMOPT] in Update-URL (NOT URL-encoded)"
 msgstr ""
+"オプション: 更新 URL 内の [PARAMOPT] を置き換えます（URL エンコードされていな"
+"いもの）"
 
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/overview.lua:94
 msgid "Overview"
@@ -670,17 +683,17 @@ msgstr ""
 
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:503
 msgid "Replaces [PASSWORD] in Update-URL (URL-encoded)"
-msgstr ""
+msgstr "更新 URL 内の [PASSWORD] を置き換えます（URL エンコードされたもの）"
 
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:492
 msgid "Replaces [USERNAME] in Update-URL (URL-encoded)"
-msgstr ""
+msgstr "更新 URL 内の [USERNAME] を置き換えます（URL エンコードされたもの）"
 
 #: applications/luci-app-ddns/luasrc/controller/ddns.lua:188
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/overview.lua:213
 #: applications/luci-app-ddns/luasrc/view/ddns/overview_status.htm:64
 msgid "Run once"
-msgstr ""
+msgstr "一度のみ実行"
 
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:667
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:717
@@ -713,7 +726,7 @@ msgstr ""
 
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/global.lua:75
 msgid "Status directory"
-msgstr ""
+msgstr "ステータス ディレクトリ"
 
 #: applications/luci-app-ddns/luasrc/controller/ddns.lua:198
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/overview.lua:221
@@ -772,7 +785,7 @@ msgstr ""
 
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:600
 msgid "Use HTTP Secure"
-msgstr ""
+msgstr "HTTPS の使用"
 
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/global.lua:113
 msgid "Use cURL"

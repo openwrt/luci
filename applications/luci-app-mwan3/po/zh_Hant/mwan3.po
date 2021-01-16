@@ -3,15 +3,15 @@
 #
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2020-12-26 06:29+0000\n"
-"Last-Translator: operator <omniplay@hotmail.com>\n"
+"PO-Revision-Date: 2021-01-16 08:58+0000\n"
+"Last-Translator: akibou <jinwenxin1997@icloud.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "openwrt/luciapplicationsmwan3/zh_Hant/>\n"
 "Language: zh_Hant\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.4.1-dev\n"
+"X-Generator: Weblate 4.5-dev\n"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interfaceconfig.lua:171
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interfaceconfig.lua:187
@@ -104,11 +104,11 @@ msgstr "警示"
 
 #: applications/luci-app-mwan3/luasrc/controller/mwan3.lua:177
 msgid "All required IP rules for interface %s found"
-msgstr "找到介面 %s 的所有必需 IP 規則"
+msgstr "要找到介面 %s 所需的全部 IP 規則"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/globalsconfig.lua:57
 msgid "Also scan this Routing table for connected networks"
-msgstr "同時掃描此路由表以查詢已連線的網路"
+msgstr "同時掃描此路由表，以檢視已連接的網路"
 
 #: applications/luci-app-mwan3/luasrc/view/mwan/status_diagnostics.htm:77
 msgid "Check IP rules"
@@ -126,7 +126,7 @@ msgstr "檢查路由表"
 #: applications/luci-app-mwan3/luasrc/view/mwan/status_detail.htm:34
 #: applications/luci-app-mwan3/luasrc/view/mwan/status_troubleshooting.htm:34
 msgid "Collecting data..."
-msgstr "收集資料中……"
+msgstr "收集資料中…"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/globalsconfig.lua:33
 msgid "Critical"
@@ -134,7 +134,7 @@ msgstr "致命錯誤"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/globalsconfig.lua:38
 msgid "Debug"
-msgstr "除錯 Debug"
+msgstr "除錯"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/rule.lua:81
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/ruleconfig.lua:29
@@ -233,7 +233,7 @@ msgstr "熱插拔ifdown"
 
 #: applications/luci-app-mwan3/luasrc/view/mwan/status_diagnostics.htm:79
 msgid "Hotplug ifup"
-msgstr "熱插拔ifup"
+msgstr "熱插拔 ifup"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/globalsconfig.lua:45
 msgid "How often should rtmon update the interface routing table"
@@ -378,7 +378,7 @@ msgstr "MWAN 規則配置 - %s"
 
 #: applications/luci-app-mwan3/luasrc/view/mwan/status_detail.htm:27
 msgid "MWAN Status - Detail"
-msgstr "MWAN 狀態 - 詳細"
+msgstr "MWAN 狀態－詳細"
 
 #: applications/luci-app-mwan3/luasrc/view/mwan/status_diagnostics.htm:54
 msgid "MWAN Status - Diagnostics"
@@ -563,11 +563,11 @@ msgid ""
 "spaces<br />Names must be 15 characters or less<br />Policies may not share "
 "the same name as configured interfaces, members or rules"
 msgstr ""
-"“策略”把成員進行分組，告訴 MWAN 如何分配“規則”中使用這一策略的流量<br />擁有"
-"較低躍點數的成員將會被優先使用。擁有相同躍點數的成員把流量進行負載均衡。<br /"
-">進行負載均衡的成員之間擁有較高比重的成員將會被分配到更多流量。<br />名稱允許"
-"包括 A-Z、a-z、0-9、_ 但是不能有空格。名稱應該在 15 個字元以內<br />策略不應"
-"該與介面、成員、規則中的任意一個設定項使用相同的名稱"
+"「政策」設定檔用來劃分一個或多個成員，並控制 MWAN 如何散發流量<br />擁有較低"
+"權值的成員介面將被優先使用<br />擁有相同權值的成員介面將被負載平衡<br />負載"
+"平衡的成員介面中，擁有較高權重的成員介面將散發到更多流量<br />名稱允許包含 "
+"\"A-Z, a-z, 0-9, _\"，不能使用空格<br />名稱不得超過 15 個字元<br />「政策」"
+"名稱不應該與配置的介面、成員或規則名稱相同"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/policy.lua:51
 msgid "Policy"
@@ -695,14 +695,17 @@ msgid ""
 "Physical device name which interface went up or down (e.g. \"eth0\" or "
 "\"wwan0\")<br /><br />"
 msgstr ""
-"這裡允許您修改“/etc/mwan3.user”的內容。<br />該檔案在 sysupgrade 期間也會保"
-"留。<br /><br />注意：<br />該檔案會作為 shell 指令碼解釋。<br />指令碼的第一"
-"行必須是 &#34;#!/bin/sh&#34;，不帶引號。<br />以 # 開頭的行是註釋，不會運行。"
-"<br />將您的自定義 mwan3 動作放在這裡，他們將<br />在啟用 mwan3 的介面上<br /"
-">在 netifd hotplug 介面事件時運行。<br /><br />有三個主要的環境變數傳遞給這個"
-"指令碼。<br /><br />$ACTION “ifup”或“ifdown”<br />$INTERFACE 啟動或停止的介面"
-"名（例如“wan”或“wwan”）<br />$DEVICE 啟動或停止介面的物理裝置名（例"
-"如“eth0”或“wwan0”）<br /><br />"
+"您可以在這裡修改 \"/etc/mwan3.user\" 的內容。<br />在執行 sysupgrade 期間，該"
+"檔案也會被保留。<br /><br />請注意：<br />該檔案會被解譯為「Shell 指令碼」。"
+"<br />指令碼的第一行必須是 &#34;#!/bin/sh&#34;（引號之內）。<br />以 \"#\" 開"
+"頭的行是註解，不會被執行。<br />請您在此處自訂 mwan3 動作，他們將<br />在已啟"
+"用 mwan3 的介面上<br />被每個 netifd 熱插拔介面事件執行。<br /><br />傳遞到該"
+"指令碼的主要環境變數有三個。<br /><br />$ACTION<br />* \"ifup\" 藉由 netifd "
+"與 mwan3track 呼叫<br />* \"ifdown\" 也藉由 netifd 與 mwan3track 呼叫<br />* "
+"\"connected\" 只在追蹤成功時藉由 mwan3track 呼叫<br />* \"disconnected\" 只在"
+"追蹤失敗時藉由 mwan3track 呼叫<br />$INTERFACE 為開啟或關閉的介面名稱（例如："
+"\"WAN\" 抑或 \"WWAN\"）<br />$DEVICE 為開啟或關閉的介面實體裝置（例如："
+"\"eth0\" 抑或 \"wwan0\"）<br /><br />"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interfaceconfig.lua:36
 msgid "Tracking hostname or IP address"

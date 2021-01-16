@@ -1,24 +1,29 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2015-05-12 21:03-0500\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2021-01-12 22:25+0000\n"
+"Last-Translator: Francesco Grosso <tregemmelli@gmail.com>\n"
+"Language-Team: Italian <https://hosted.weblate.org/projects/openwrt/"
+"luciapplicationsfwknopd/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.4.1-dev\n"
 
 #: applications/luci-app-fwknopd/luasrc/model/cbi/fwknopd.lua:48
 msgid ""
 "Allow SPA clients to request access to services through an iptables firewall "
 "instead of just to it."
 msgstr ""
+"Permetti ai client SPA di richiedere accesso ai servizi tramite un firewall "
+"iptables invece che direttamente."
 
 #: applications/luci-app-fwknopd/luasrc/model/cbi/fwknopd.lua:49
 msgid "Allow SPA clients to request forwarding destination by DNS name."
 msgstr ""
+"Permetti ai client SPA di richiedere la destinazione di inoltro per nome DNS."
 
 #: applications/luci-app-fwknopd/luasrc/model/cbi/fwknopd.lua:22
 msgid "Base 64 key"
@@ -31,6 +36,9 @@ msgid ""
 "to honor any proto/port request specified in the SPA data (unless of it "
 "matches any “RESTRICT_PORTS” entries). Multiple entries are comma-separated."
 msgstr ""
+"Definire un set di porte e protocolli (tcp o udp) esplicitamente non "
+"consentiti indipendentemente dalla validità del pacchetto SPA in ingresso. "
+"Più voci sono separate da virgole."
 
 #: applications/luci-app-fwknopd/luasrc/model/cbi/fwknopd.lua:36
 msgid ""
@@ -39,6 +47,10 @@ msgid ""
 "“FW_ACCESS_TIMEOUT” is not set then the default timeout of 30 seconds will "
 "automatically be set."
 msgstr ""
+"Definire la durata dell'accesso a fwknopd attraverso il firewall dopo una "
+"sequenza di knock valida da un indirizzo IP di origine. Se "
+"“FW_ACCESS_TIMEOUT” non è impostato, verrà impostato automaticamente il "
+"timeout predefinito di 30 secondi."
 
 #: applications/luci-app-fwknopd/luasrc/model/cbi/fwknopd.lua:18
 #: applications/luci-app-fwknopd/luasrc/model/cbi/fwknopd.lua:20
@@ -46,14 +58,16 @@ msgid ""
 "Define the symmetric key used for decrypting an incoming SPA packet that is "
 "encrypted by the fwknop client with Rijndael."
 msgstr ""
+"Definire la chiave simmetrica utilizzata per decrittografare un pacchetto "
+"SPA in ingresso crittografato dal client fwknop con Rijndael."
 
 #: applications/luci-app-fwknopd/luasrc/model/cbi/fwknopd.lua:6
 msgid "Enable Uci/Luci control"
-msgstr ""
+msgstr "Abilita il controllo Uci/Luci"
 
 #: applications/luci-app-fwknopd/luasrc/model/cbi/fwknopd.lua:8
 msgid "Enable config overwrite"
-msgstr ""
+msgstr "Abilita la sovrascrittura della configurazione"
 
 #: applications/luci-app-fwknopd/luasrc/controller/fwknopd.lua:13
 msgid "Firewall Knock Daemon"
@@ -71,6 +85,12 @@ msgid ""
 "resolve the external address (if the client behind a NAT) or the client must "
 "know the external IP and set it via the -a argument."
 msgstr ""
+"Forza tutti i pacchetti SPA a contenere un indirizzo IP reale all'interno "
+"dei dati crittografati. Ciò rende impossibile utilizzare l'argomento della "
+"riga di comando -s sulla riga di comando del client fwknop, quindi è "
+"necessario utilizzare -R per risolvere automaticamente l'indirizzo esterno "
+"(se il client dietro un NAT) o il client deve conoscere l'IP esterno e "
+"impostalo tramite l'argomento -a."
 
 #: applications/luci-app-fwknopd/luasrc/model/cbi/fwknopd.lua:46
 msgid ""
@@ -85,6 +105,7 @@ msgstr ""
 #: applications/luci-app-fwknopd/luasrc/model/cbi/fwknopd.lua:47
 msgid "Specify the ethernet interface on which fwknopd will sniff packets."
 msgstr ""
+"Specificare l'interfaccia ethernet su cui fwknopd analizzerà i pacchetti."
 
 #: applications/luci-app-fwknopd/luasrc/model/cbi/fwknopd.lua:28
 msgid "The base64 hmac key"
@@ -99,6 +120,8 @@ msgid ""
 "When unchecked, the config files in /etc/fwknopd will be used as is, "
 "ignoring any settings here."
 msgstr ""
+"Se deselezionato, i file di configurazione in / etc / fwknopd verranno usati "
+"così come sono, ignorando qualsiasi impostazione qui."
 
 #: applications/luci-app-fwknopd/luasrc/model/cbi/fwknopd.lua:10
 msgid "access.conf stanzas"
@@ -106,4 +129,4 @@ msgstr ""
 
 #: applications/luci-app-fwknopd/luasrc/model/cbi/fwknopd.lua:44
 msgid "fwknopd.conf config options"
-msgstr ""
+msgstr "Opzioni di configurazione di fwknopd.conf"
