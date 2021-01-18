@@ -982,12 +982,13 @@
 						if (!Poll.active())
 							return;
 
+						var res_json = null;
 						try {
-							callback(res, res.json(), res.duration);
+							res_json = res.json();
 						}
-						catch (err) {
-							callback(res, null, res.duration);
-						}
+						catch (err) {}
+
+						callback(res, res_json, res.duration);
 					});
 				};
 
