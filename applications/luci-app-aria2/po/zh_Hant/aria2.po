@@ -3,7 +3,7 @@
 #
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2021-01-17 20:54+0000\n"
+"PO-Revision-Date: 2021-01-18 19:24+0000\n"
 "Last-Translator: akibou <jinwenxin1997@icloud.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "openwrt/luciapplicationsaria2/zh_Hant/>\n"
@@ -19,7 +19,7 @@ msgstr "啟用 <abbr title=\"Local Peer Discovery\">LPD</abbr>"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:414
 msgid "Additional BT tracker"
-msgstr "附加 BT Tracker"
+msgstr "附加 BitTorrent tracker"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:419
 msgid "Advanced Options"
@@ -31,7 +31,7 @@ msgstr "全部代理"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:228
 msgid "Append HEADERs to HTTP request header."
-msgstr "附加 HTTP 請求標頭。"
+msgstr "附加該值到 HTTP 請求頭欄位。"
 
 #: applications/luci-app-aria2/luasrc/controller/aria2.lua:17
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:35
@@ -95,7 +95,7 @@ msgstr "組態"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:230
 msgid "Connect timeout"
-msgstr "連接逾時時間"
+msgstr "連線逾時時間"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/files.lua:19
 msgid "Content of config file: <code>%s</code>"
@@ -142,11 +142,11 @@ msgstr "檔案為空。"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:280
 msgid "Enable IPv4 DHT functionality. It also enables UDP tracker support."
-msgstr "啟用 IPv4 DHT 功能；這將同時啟用 UDP Tracker 支援。"
+msgstr "啟用 IPv4「分散式雜湊表」功能；這將同時啟用對 \"UDP tracker\" 協定的支援。"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:290
 msgid "Enable IPv6 DHT functionality."
-msgstr "啟用 IPv6 DHT 功能。"
+msgstr "啟用 IPv6「分散式雜湊表」功能。"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:298
 msgid "Enable Local Peer Discovery."
@@ -232,7 +232,7 @@ msgstr "授予 luci-app-aria2 擁有 UCI 存取的權限"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:210
 msgid "HTTP accept gzip"
-msgstr "HTTP 啟用 gzip"
+msgstr "啟用 HTTP 壓縮"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:219
 msgid "HTTP no cache"
@@ -244,7 +244,7 @@ msgstr "HTTP/FTP/SFTP 選項"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:227
 msgid "Header"
-msgstr "標頭"
+msgstr "頭欄位"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/files.lua:15
 msgid "Here shows the files used by aria2."
@@ -561,8 +561,9 @@ msgid ""
 "if remote server responds with <code>Content-Encoding: gzip</code> or "
 "<code>Content-Encoding: deflate</code>."
 msgstr ""
-"傳送 <code>Accept: deflate, gzip</code> 請求標頭，當伺服器回應標頭包含 <code>Content-Encoding:"
-" gzip</code> 或者 <code>Content-Encoding: deflate</code> 時解壓回應資料。"
+"傳送請求頭欄位：<code>Accept: deflate, gzip</code>；當遠端伺服器的回應頭欄位中具有 <code>Content-"
+"Encoding: gzip</code> 或 <code>Content-Encoding: deflate</code> "
+"時解壓回應資料，以提高資料傳輸速度。"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:220
 msgid ""
@@ -587,7 +588,7 @@ msgstr ""
 msgid ""
 "Set UDP listening port used by DHT (IPv4, IPv6) and UDP tracker. Make sure "
 "that the specified ports are open for incoming UDP traffic."
-msgstr "為 DHT (IPv4，IPv6)和 UDP tracker 設定 UDP 監聽連接埠。請確保正確放行了這些連接埠的 UDP 入站通信。"
+msgstr "設定用於 DHT (IPv4, IPv6) 和 UDP tracker 協定的 UDP 監聽埠；請確保指定的通訊埠允許 UDP 傳入流量。"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:477
 msgid ""
