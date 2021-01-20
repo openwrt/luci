@@ -3,7 +3,7 @@
 #
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2021-01-18 19:24+0000\n"
+"PO-Revision-Date: 2021-01-20 10:36+0000\n"
 "Last-Translator: akibou <jinwenxin1997@icloud.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "openwrt/luciapplicationsaria2/zh_Hant/>\n"
@@ -31,7 +31,7 @@ msgstr "全部代理"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:228
 msgid "Append HEADERs to HTTP request header."
-msgstr "附加該值到 HTTP 請求頭欄位。"
+msgstr "附加該值到 HTTP 請求頭。"
 
 #: applications/luci-app-aria2/luasrc/controller/aria2.lua:17
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:35
@@ -83,7 +83,7 @@ msgstr "下載速度小於或等於該值（單位：B/s）時關閉連線，輸
 #: applications/luci-app-aria2/luasrc/view/aria2/log_template.htm:49
 #: applications/luci-app-aria2/luasrc/view/aria2/settings_header.htm:29
 msgid "Collecting data..."
-msgstr "收集資料中…"
+msgstr "正在收集資料中…"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:73
 msgid "Config file directory"
@@ -142,7 +142,7 @@ msgstr "檔案為空。"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:280
 msgid "Enable IPv4 DHT functionality. It also enables UDP tracker support."
-msgstr "啟用 IPv4「分散式雜湊表」功能；這將同時啟用對 \"UDP tracker\" 協定的支援。"
+msgstr "啟用 IPv4「分散式雜湊表」功能；這將同時啟用對「UDP tracker 協定」的支援。"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:290
 msgid "Enable IPv6 DHT functionality."
@@ -150,23 +150,23 @@ msgstr "啟用 IPv6「分散式雜湊表」功能。"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:298
 msgid "Enable Local Peer Discovery."
-msgstr "啟用本地 peer 發現。"
+msgstr "啟用「本地節點發現」。"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:307
 msgid "Enable Peer Exchange extension."
-msgstr "啟用 peer 交換擴充套件。"
+msgstr "啟用「節點交換」擴充套件。"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:442
 msgid "Enable disk cache (in bytes), set 0 to disabled."
-msgstr "啟用硬碟快取（單位：B），輸入 0 則表示停用。"
+msgstr "啟用磁碟快取（單位：B），輸入 0 則表示停用。"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:77
 msgid "Enable logging"
-msgstr "啟用日誌"
+msgstr "啟用日誌記錄"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:305
 msgid "Enable peer exchange"
-msgstr "啟用 peer 交換"
+msgstr "啟用 PEX"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:166
 msgid "Enable proxy"
@@ -212,7 +212,7 @@ msgstr "檔案"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:348
 msgid "Follow torrent"
-msgstr "自動新增下載的種子"
+msgstr "下載種子後自動建立其下載任務"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:38
 msgid "For more information, please visit: %s"
@@ -286,7 +286,7 @@ msgstr "JSON-RPC URL"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:351
 msgid "Keep in memory"
-msgstr "儲存在記憶體中"
+msgstr "是，但不會儲存種子"
 
 #: applications/luci-app-aria2/luasrc/view/aria2/log_template.htm:34
 msgid "Last 50 lines of log file:"
@@ -298,21 +298,21 @@ msgstr "系統日誌最後 50 行內容："
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:62
 msgid "Leave blank to use default user."
-msgstr "要使用預設使用者，請留空。"
+msgstr "如果不選擇，則使用預設使用者。"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:415
 msgid "List of additional BitTorrent tracker's announce URI."
-msgstr "附加 BitTorrent Tracker 清單的發布 URI。"
+msgstr "附加 BitTorrent tracker 清單的發布 URI。"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:488
 msgid ""
 "List of extra settings. Format: option=value, eg. <code>netrc-path=/tmp/."
 "netrc</code>."
-msgstr "額外設定清單；格式：option=value（例如：<code>netrc-path=/tmp/.netrc</code>）。"
+msgstr "額外設定清單；格式為 option=value（例如：<code>netrc-path=/tmp/.netrc</code>）。"
 
 #: applications/luci-app-aria2/luasrc/view/aria2/log_template.htm:48
 msgid "Loading"
-msgstr "載入中"
+msgstr "正在載入中"
 
 #: applications/luci-app-aria2/luasrc/controller/aria2.lua:28
 msgid "Log"
@@ -332,7 +332,7 @@ msgstr "日誌級別"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:240
 msgid "Lowest speed limit"
-msgstr "最低限速"
+msgstr "最小速度限制"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:94
 msgid "Max concurrent downloads"
@@ -344,7 +344,7 @@ msgstr "同一伺服器最大連線數"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:475
 msgid "Max download limit"
-msgstr "最大下載限速"
+msgstr "最大下載速度限制"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:253
 msgid "Max number of split"
@@ -356,15 +356,15 @@ msgstr "最大檔案開啟數"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:468
 msgid "Max overall download limit"
-msgstr "最大整體下載限速"
+msgstr "最大整體下載速度限制"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:353
 msgid "Max overall upload limit"
-msgstr "最大整體上傳限速"
+msgstr "最大整體上傳速度限制"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:372
 msgid "Max peers"
-msgstr "最大 peer 數量"
+msgstr "最大節點數量"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:262
 msgid "Max tries"
@@ -372,7 +372,7 @@ msgstr "最大重試次數"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:360
 msgid "Max upload limit"
-msgstr "最大上傳限速"
+msgstr "最大上傳速度限制"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:258
 msgid "Min split size"
@@ -380,7 +380,7 @@ msgstr "最小分割大小"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:115
 msgid "No Authentication"
-msgstr "無認證"
+msgstr "不認證"
 
 #: applications/luci-app-aria2/luasrc/view/aria2/log_template.htm:35
 #: applications/luci-app-aria2/luasrc/view/aria2/log_template.htm:37
@@ -401,7 +401,7 @@ msgstr "暫停"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:99
 msgid "Pause download after added."
-msgstr "加入任務後暫停下載。"
+msgstr "加入任務後，暫停此下載任務。"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:105
 msgid "Pause downloads created as a result of metadata download."
@@ -468,7 +468,7 @@ msgid ""
 "RPC transport will be encrypted by SSL/TLS. The RPC clients must use https "
 "scheme to access the server. For WebSocket client, use wss scheme."
 msgstr ""
-"用 SSL/TLS 加密 RPC 連接。RPC 用戶端必須使用 HTTPS 協定來連接服務端，對於 WebSocket 用戶端，則使用 WSS 協定。"
+"通過 SSL/TLS 加密 RPC 傳輸；RPC 客戶端必須使用「HTTPS 協定」來存取伺服器，WebSocket 客戶端則使用「WWS 協定」。"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:119
 msgid "RPC username"
@@ -491,7 +491,7 @@ msgstr "BitTorrent 下載完成時移除未選擇的檔案；檔案將從您的�
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:377
 msgid "Request peer speed limit"
-msgstr "請求節點限速"
+msgstr "請求節點速度限制"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:266
 msgid "Retry wait"
@@ -513,8 +513,8 @@ msgid ""
 "This option also saves control file in that situations. This may be useful "
 "to save BitTorrent seeding which is recognized as completed state."
 msgstr ""
-"即使下載任務已完成或已移除，也將其儲存到「工作階段檔」；同時，啟用此選項也將儲存「控制檔」。這可能有助於您儲存被辨識為已完成狀態的 BitTorrent "
-"種子。"
+"即使下載任務已完成或已移除，也將其儲存到「工作階段檔」；於此同時，啟用此選項還會儲存「控制檔」。這可能有助於您儲存被辨識為「已完成狀態」的 "
+"BitTorrent 種子。"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:435
 msgid ""
@@ -561,7 +561,7 @@ msgid ""
 "if remote server responds with <code>Content-Encoding: gzip</code> or "
 "<code>Content-Encoding: deflate</code>."
 msgstr ""
-"傳送請求頭欄位：<code>Accept: deflate, gzip</code>；當遠端伺服器的回應頭欄位中具有 <code>Content-"
+"傳送請求頭欄位：<code>Accept: deflate, gzip</code>；當遠端伺服器的回應頭中具有 <code>Content-"
 "Encoding: gzip</code> 或 <code>Content-Encoding: deflate</code> "
 "時解壓回應資料，以提高資料傳輸速度。"
 
@@ -629,7 +629,7 @@ msgstr "設定"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:483
 msgid "Settings in this section will be added to config file."
-msgstr "這個區域中的設定資訊將被加入到設定檔案中。"
+msgstr "此部分的設定將被加入到組態檔。"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:487
 msgid "Settings list"
@@ -708,13 +708,13 @@ msgstr "Aria2 服務執行中。"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:74
 msgid "The directory to store the config file, session file and DHT file."
-msgstr "用於儲存設定檔、工作階段檔和 DHT 檔案的目錄。"
+msgstr "儲存設定檔、工作階段檔和 DHT 檔案的目錄。"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:70
 msgid ""
 "The directory to store the downloaded file. For example <code>/mnt/sda1</"
 "code>."
-msgstr "用於放置下載檔案的目錄。例如：<code>/mnt/sda1</code>。"
+msgstr "儲存下載檔案的目錄（例如：<code>/mnt/sda1</code>）。"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:81
 msgid "The file name of the log file."
@@ -722,7 +722,7 @@ msgstr "日誌檔的檔案名稱。"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:249
 msgid "The maximum number of connections to one server for each download."
-msgstr "每個下載任務使用的單一伺服器最大連線數。"
+msgstr "每個下載任務與同一伺服器建立的最大連線數。"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:281
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:291
@@ -765,9 +765,8 @@ msgid ""
 "PKCS12 files with a blank import password can be opened!<br/>When using PEM, "
 "you have to specify the \"RPC private key\" as well."
 msgstr ""
-"使用檔案中的憑證作為 RPC 伺服器。憑證必須為 PKCS12 (.p12, .pfx) 或者 PEM 格式。<br/>PKCS12 "
-"檔案必須包含憑證，一個金鑰和可選的附加憑證。只有匯入密碼為空白的 PKCS12 檔案才能被開啟。<br/>使用 PEM 時，您必須同時指定「RPC "
-"私鑰」。"
+"RPC 伺服器使用的「憑證檔」；憑證格式必須為 PKCS12 (.p12, .pfx) 或 PEM。<br/>PKCS12 "
+"檔案必須包含憑證、金鑰以及可選的附加「憑證鏈」，且該檔案不能有匯入密碼！<br/>使用 PEM 時，您必須同時指定「RPC 私鑰」。"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:196
 msgid ""
@@ -777,21 +776,20 @@ msgid ""
 "PKCS12 files with a blank import password can be opened!<br/>When using PEM, "
 "you have to specify the \"Private key\" as well."
 msgstr ""
-"使用檔案中的用戶端憑證。憑證必須為 PKCS12 (.p12, .pfx) 或者 PEM 格式。<br/>PKCS12 "
-"檔案必須包含憑證，一個金鑰和可選的附加憑證。只有匯入密碼為空白的 PKCS12 檔案才能被開啟。<br/>使用 PEM 時，您必須同時指定「RPC "
-"私鑰」。"
+"客戶端使用的「憑證檔」；憑證格式必須為 PKCS12 (.p12, .pfx) 或 PEM。<br/>PKCS12 "
+"檔案必須包含憑證、金鑰以及可選的附加「憑證鏈」，且該檔案不能有匯入密碼！<br/>使用 PEM 時，您必須同時指定「私鑰」。"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:150
 msgid ""
 "Use the private key in FILE for RPC server. The private key must be "
 "decrypted and in PEM format."
-msgstr "使用檔案中的私鑰作為 RPC 伺服器。私鑰必須解密並且為 PEM 格式。"
+msgstr "RPC 伺服器使用的「私鑰檔」；私鑰必須被解密，且格式為 PEM。"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:204
 msgid ""
 "Use the private key in FILE. The private key must be decrypted and in PEM "
 "format. The behavior when encrypted one is given is undefined."
-msgstr "使用檔案中的私鑰。私鑰必須解密並且為 PEM 格式，不支援加密的私鑰。"
+msgstr "使用的「私鑰檔」；私鑰必須被解密，且格式為 PEM。"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:271
 msgid "User agent"
@@ -818,7 +816,7 @@ msgstr "警告"
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:471
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:478
 msgid "You can append K or M."
-msgstr "您可以對其附加單位（K 或 M）。"
+msgstr "您可以在該值後附加單位 K 或 M。"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:457
 msgid "falloc"
