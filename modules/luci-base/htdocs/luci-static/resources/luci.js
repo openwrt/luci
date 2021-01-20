@@ -672,12 +672,12 @@
 		 * if it is an object, it will be converted to JSON, in all other
 		 * cases it is converted to a string.
 		 *
-	     * @property {Object<string, string>} [header]
-	     * Specifies HTTP headers to set for the request.
-	     *
-	     * @property {function} [progress]
-	     * An optional request callback function which receives ProgressEvent
-	     * instances as sole argument during the HTTP request transfer.
+		 * @property {Object<string, string>} [header]
+		 * Specifies HTTP headers to set for the request.
+		 *
+		 * @property {function} [progress]
+		 * An optional request callback function which receives ProgressEvent
+		 * instances as sole argument during the HTTP request transfer.
 		 */
 
 		/**
