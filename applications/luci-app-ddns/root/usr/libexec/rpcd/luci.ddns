@@ -187,7 +187,7 @@ local methods = {
 
 			local function has_wgetssl()
 				if cache['has_wgetssl'] then return cache['has_wgetssl'] end
-				local res = (sys.call( [[command -v wget-ssl >/dev/null 2>&1]] ) == 0)
+				local res = has_wget() and (sys.call( [[wget --version | grep -qF +https >/dev/null 2>&1]] ) == 0)
 				cache['has_wgetssl'] = res
 				return res
 			end
