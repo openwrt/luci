@@ -4,20 +4,18 @@
 'require ui';
 'require rpc';
 
-var callLuciProcessList = rpc.declare({
-	object: 'luci',
-	method: 'getProcessList',
-	expect: { result: [] }
-});
-
 return view.extend({
 	load: function() {
-		return callLuciProcessList();
+		return rpc.declare({
+	        	object: 'luci',
+			method: 'getProcessList',
+			expect: { result: [] }
+		});
 	},
 
 	handleSignal: function(signum, pid, ev) {
 		return fs.exec('/bin/kill', ['-%d'.format(signum), '%s'.format(pid)]).then(L.bind(function() {
-			return callLuciProcessList().then(L.bind(function(processes) {
+			return this.load().then(L.bind(function(processes) {
 				this.updateTable('.table', processes);
 			}, this));
 		}, this)).catch(function(e) { ui.addNotification(null, E('p', e.message)) });
