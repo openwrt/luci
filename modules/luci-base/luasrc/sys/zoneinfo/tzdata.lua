@@ -28,7 +28,7 @@ TZ = {
 	{ 'Africa/Gaborone', 'CAT-2' },
 	{ 'Africa/Harare', 'CAT-2' },
 	{ 'Africa/Johannesburg', 'SAST-2' },
-	{ 'Africa/Juba', 'EAT-3' },
+	{ 'Africa/Juba', 'CAT-2' },
 	{ 'Africa/Kampala', 'EAT-3' },
 	{ 'Africa/Khartoum', 'CAT-2' },
 	{ 'Africa/Kigali', 'CAT-2' },
