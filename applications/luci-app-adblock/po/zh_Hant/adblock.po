@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-01-16 08:58+0000\n"
+"PO-Revision-Date: 2021-01-28 10:32+0000\n"
 "Last-Translator: akibou <jinwenxin1997@icloud.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "openwrt/luciapplicationsadblock/zh_Hant/>\n"
@@ -19,7 +19,7 @@ msgstr ""
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:369
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:384
 msgid "- unspecified -"
-msgstr "- 未指定 -"
+msgstr "未指定"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:261
 msgid "Action"
@@ -48,11 +48,11 @@ msgstr "加入白名單域名"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:11
 msgid "Add this (sub-)domain to your local blacklist."
-msgstr "加入此（子）域名到您的本地黑名單。"
+msgstr "加入該（子）域名到您的本地黑名單。"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:46
 msgid "Add this (sub-)domain to your local whitelist."
-msgstr "加入此（子）域名到您的本地白名單。"
+msgstr "加入該（子）域名到您的本地白名單。"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:416
 msgid "Additional Jail Blocklist"
@@ -95,7 +95,7 @@ msgid ""
 "Base Temp Directory for all adblock related runtime operations, e.g. "
 "downloading, sorting, merging etc."
 msgstr ""
-"執行期間所有與 Adblock 操作（例如下載、排序、合併等）相關的「基本臨時目錄」。"
+"執行期間所有與 Adblock 操作（例如下載、排序、合併等）相關的基本臨時目錄。"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/blacklist.js:14
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:33
@@ -142,8 +142,8 @@ msgid ""
 "those listed in the whitelist. Please note: You can use this restrictive "
 "blocklist e.g. for guest wifi or kidsafe configurations."
 msgstr ""
-"建立一個附加的 DNS 封鎖清單，以封鎖使用者存取除了「此白名單包含域名」之外的所"
-"有網域；請注意：您可以在訪客 Wi-Fi 抑或兒童安全組態中使用此限制性封鎖清單。"
+"建立附加的 Jail 封鎖清單，以封鎖使用者存取除「此名單包含域名」之外的所有網"
+"域；請注意：您可以在訪客 Wi-Fi 抑或兒童安全組態中使用此限制性封鎖清單。"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:21
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:56
@@ -171,10 +171,10 @@ msgid ""
 "master/net/adblock/files/README.md\" target=\"_blank\" rel=\"noreferrer "
 "noopener\" >check the online documentation</a>"
 msgstr ""
-"您可以在這裡設定 Adblock（廣告封鎖）套件的組態，通過使用 DNS 來封鎖「廣告／濫"
-"用網域」；要獲得更多資訊，<a href=\"https://github.com/openwrt/packages/blob/"
-"master/net/adblock/files/README.md\" target=\"_blank\" rel=\"noreferrer "
-"noopener\" >請檢視線上文件</a>"
+"您可以在這裡設定 Adblock（廣告封鎖）套件的組態，以透過 DNS 封鎖廣告／濫用網"
+"域；<a href=\"https://github.com/openwrt/packages/blob/master/net/adblock/"
+"files/README.md\" target=\"_blank\" rel=\"noreferrer noopener\" >請參閱線上文"
+"件</a> 以獲得更多資訊"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:205
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:207
@@ -186,7 +186,7 @@ msgstr "計數"
 msgid ""
 "Create compressed blocklist backups, they will be used in case of download "
 "errors or during startup."
-msgstr "建立壓縮的封鎖清單備份；它們將在下載錯誤或啟動期間被使用。"
+msgstr "建立壓縮的封鎖清單備份；它們將在下載錯誤時或啟動期間被使用。"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:217
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:382
@@ -209,7 +209,7 @@ msgstr "DNS 報告"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:396
 msgid "DNS Restart Timeout"
-msgstr "DNS 重新啟動逾時時間"
+msgstr "DNS 重新啟動逾時值"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:256
 msgid "Date"
@@ -227,7 +227,7 @@ msgstr "停用 DNS 重新啟動"
 msgid ""
 "Disable adblock triggered restarts for dns backends with autoload/inotify "
 "functions."
-msgstr "停用 Adblock 觸發具有「自動載入／inotify」功能的 DNS 後端重新啟動。"
+msgstr "停用 Adblock 觸發具有「自動載入／inotify 功能」的 DNS 後端重新啟動。"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:413
 msgid "Disable selective DNS whitelisting (RPZ pass through)."
@@ -298,11 +298,11 @@ msgstr "啟用 Adblock 服務。"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:331
 msgid "Enable verbose debug logging in case of any processing errors."
-msgstr "在出現任何處理錯誤的情況下，請啟用記錄「詳細除錯日誌」。"
+msgstr "在出現任何處理錯誤的情況下，請啟用詳細除錯日誌記錄。"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:282
 msgid "Enabled"
-msgstr "已啟用"
+msgstr "啟用"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:309
 msgid "End Timestamp"
@@ -313,7 +313,8 @@ msgid ""
 "Enforcing SafeSearch for google, bing, duckduckgo, yandex, youtube and "
 "pixabay."
 msgstr ""
-"正在強制執行 Google, Bing, DuckDuckGo, Yandex, YouTube, Pixabay 的安全搜尋。"
+"正在強制執行 Google, Bing, DuckDuckGo, Yandex, YouTube, Pixabay 的安全搜尋"
+"中。"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:16
 msgid "Existing job(s)"
@@ -321,19 +322,19 @@ msgstr "現存工作"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:401
 msgid "External DNS Lookup Domain"
-msgstr "外部 DNS 查詢的域名"
+msgstr "供 DNS 查詢的外部域名"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:401
 msgid ""
 "External domain to check for a successful DNS backend restart. Please note: "
 "To disable this check set this option to 'false'."
 msgstr ""
-"使用「外部網域」來檢查 DNS 後端是否成功重新啟動；請注意：要停用此檢查，請將此"
-"選項設定為 \"false\"。"
+"使用外部網域來檢查「DNS 後端」是否成功重新啟動；請注意：要停用此檢查，請輸入 "
+"\"false\"。"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:156
 msgid "Filter criteria like date, domain or client (optional)"
-msgstr "篩選器準則（例如：日期、域名或客戶端）（可選）"
+msgstr "篩選器準則（例如：日期、域名或客戶端，可選）"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:410
 msgid "Flush DNS Cache"
@@ -354,7 +355,7 @@ msgid ""
 "installation and a full adblock service restart to take effect."
 msgstr ""
 "透過 tcpdump 收集與 DNS 相關的網路流量，並隨需提供 DNS 報告；請注意：這需要安"
-"裝附加的 \"tcpdump-mini\" 套件，且在完全重新啟動 Adblock 服務後才能生效。"
+"裝 \"tcpdump-mini\" 附加套件，且在完全重新啟動 Adblock 服務後才能生效。"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:266
 msgid "General Settings"
@@ -378,23 +379,23 @@ msgstr "最新 DNS 請求"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:302
 msgid "Limit SafeSearch"
-msgstr "限制安全搜尋"
+msgstr "限制性安全搜尋"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:302
 msgid "Limit SafeSearch to certain providers."
-msgstr "啟用「限制安全搜尋」，以限制給定搜尋引擎的搜尋範圍。"
+msgstr "啟用限制性安全搜尋，以限制給定搜尋引擎的搜尋範圍。"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:432
 msgid "List of available network devices used by tcpdump."
-msgstr "tcpdump 使用的可用網路裝置清單。"
+msgstr "用於 tcpdump 的可用網路裝置清單。"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:285
 msgid ""
 "List of available network interfaces to trigger the adblock start. Choose "
 "'unspecified' to use a classic startup timeout instead of a network trigger."
 msgstr ""
-"用來觸發 Adblock 啟動的可用網路介面清單；選擇「未指定」則使用傳統的啟動逾時時"
-"間，而不通過網路觸發。"
+"用來觸發 Adblock 啟動的可用網路介面清單；選擇「未指定」則使用傳統的啟動逾時，"
+"而不透過網路觸發。"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:382
 msgid ""
@@ -415,10 +416,10 @@ msgid ""
 "support, e.g. x86 or raspberry devices.<br /> <p>&#xa0;</p>"
 msgstr ""
 "Adblock 支援的來源清單（完全預先配置），預先選擇的來源已啟動。<br /><b><em>為"
-"避免出現 OOM 錯誤，請不要選擇太多的清單！</em></b><br />與清單大小和各自使用"
-"範圍相關的資訊，如下所述：<br />&#8226;&#xa0;<b>S</b> (&lt;10k), <b>M</b> "
-"(10k-30k) 以及 <b>L</b> (30k-80k) 適用於 128 MB 裝置，<br />&#8226;&#xa0;"
-"<b>XL</b> (80k-200k) 適用於 256-512 MB 裝置，<br />&#8226;&#xa0;<b>XXL</b> "
+"避免出現 OOM 錯誤，請不要選擇太多的清單！</em></b><br />與清單包含域名數和各"
+"自使用範圍相關的資訊，如下所述：<br />&#8226;&#xa0;<b>S</b> (&lt;10k), <b>M</"
+"b> (10k-30k) 和 <b>L</b> (30k-80k) 適用於 128MB 裝置，<br />&#8226;&#xa0;"
+"<b>XL</b> (80k-200k) 適用於 256-512MB 裝置，<br />&#8226;&#xa0;<b>XXL</b> "
 "(&gt;200k) 則需要更多的 RAM 和多核心處理器支援（例如：x86 抑或樹莓派裝置）。"
 "<br /><p>&#xa0;</p>"
 
@@ -458,7 +459,7 @@ msgstr "概覽"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:467
 msgid "Profile used by 'msmtp' for adblock notification E-Mails."
-msgstr "\"msmtp\" 使用的設定檔，以便 Adblock 傳送通知電子郵件。"
+msgstr "\"msmtp\" 使用的設定檔，用於 Adblock 寄送通知電子郵件。"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:131
 msgid "Query"
@@ -466,14 +467,15 @@ msgstr "查詢"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:81
 msgid "Query active blocklists and backups for a specific domain."
-msgstr "查詢特定網域的活躍封鎖清單和備份。"
+msgstr "查詢「特定網域」的活躍封鎖清單和備份。"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:471
 msgid ""
 "Raise the notification count, to get E-Mails if the overall blocklist count "
 "is less or equal to the given limit."
 msgstr ""
-"提高通知數量；除非整體封鎖清單數小於或等於給定的限制，否則不會取得電子郵件。"
+"提高通知數量；除非整體「封鎖清單數」小於或等於給定的限制，否則將不再取得電子"
+"郵件。"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:323
 msgid "Receiver address for adblock notification e-mails."
@@ -547,7 +549,7 @@ msgstr "報告 tcpdump 使用的區塊數量。"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:447
 msgid "Report chunk size used by tcpdump in MByte."
-msgstr "報告 tcpdump 使用的區塊大小 (MB)。"
+msgstr "報告 tcpdump 使用的區塊大小（單位：MB）。"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:406
 msgid ""
@@ -555,8 +557,8 @@ msgid ""
 "Please note: This option starts a small ubus/adblock monitor in the "
 "background."
 msgstr ""
-"在 DNS 後端載入後，重設最終的 DNS 封鎖清單 \"adb_list.overall\"。請注意：啟用"
-"此選項會在後台啟動一個小型監視器（位於 ubus/adblock）。"
+"在 DNS 後端載入後，重設最終的 DNS 封鎖清單 \"adb_list.overall\"；請注意：啟用"
+"此選項會在後台啟動用於 Adblock 的 ubus 小型監視器。"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:95
 msgid "Result"
@@ -589,7 +591,7 @@ msgid ""
 "Send adblock related notification e-mails. Please note: this needs "
 "additional 'msmtp' package installation."
 msgstr ""
-"傳送與 Adblock 相關的通知電子郵件；請注意：這需要安裝附加的 \"msmtp\" 套件。"
+"寄送與 Adblock 相關的通知電子郵件；請注意：這需要安裝 \"msmtp\" 附加套件。"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:459
 msgid "Sender address for adblock notification E-Mails."
@@ -621,7 +623,7 @@ msgstr "與 DNS 相關的防火牆連接埠，應在本地強制 (以空格分�
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:452
 msgid "Space separated list of ports used by tcpdump."
-msgstr "tcpdump 使用的通訊埠號（以空格來分隔）。"
+msgstr "tcpdump 使用的通訊埠號（以空格分隔）。"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:376
 msgid "Special config options for the selected download utility."
@@ -648,16 +650,16 @@ msgid ""
 "Target directory for DNS related report files. Default is '/tmp', please use "
 "preferably an usb stick or another local disk."
 msgstr ""
-"與 DNS 相關報告檔的目標目錄；請最好使用 USB 隨身碟或其他本地磁碟來儲存，其預"
-"設值為 \"/tmp\"。"
+"DNS 相關報告檔的目標目錄（預設值：\"/tmp\"）；請最好使用 USB 隨身碟或其他本地"
+"磁碟來儲存。"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:362
 msgid ""
 "Target directory for blocklist backups. Default is '/tmp', please use "
 "preferably an usb stick or another local disk."
 msgstr ""
-"封鎖清單備份的目標目錄；請最好使用 USB 隨身碟或其他本地磁碟來儲存，其預設值"
-"為 \"/tmp\"。"
+"封鎖清單備份的目標目錄（預設值：\"/tmp\"）；請最好使用 USB 隨身碟或其他本地磁"
+"碟來儲存。"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:392
 msgid "Target directory for the generated blocklist 'adb_list.overall'."
@@ -677,15 +679,15 @@ msgstr "重新整理計時器已更新。"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:50
 msgid "The day of the week (opt., values: 1-7 possibly sep. by , or -)"
-msgstr "一週內的某天（取值範圍：1-7，以 \",\" 抑或 \"-\" 來分隔）（可選）"
+msgstr "一週內的某天（取值範圍：1-7，以 \",\" 抑或 \"-\" 分隔，可選）"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:40
 msgid "The hours portition (req., range: 0-23)"
-msgstr "小時部分（取值範圍：0-23）（必需）"
+msgstr "小時部分（取值範圍：0-23，必需）"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:45
 msgid "The minutes portion (opt., range: 0-59)"
-msgstr "分鐘部分（取值範圍：0-59）（必需）"
+msgstr "分鐘部分（取值範圍：0-59，必需）"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/logread.js:26
 msgid "The syslog output, pre-filtered for adblock related messages only."
@@ -723,13 +725,13 @@ msgstr "時間"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:396
 msgid "Timeout to wait for a successful DNS backend restart."
-msgstr "等待 DNS 後端成功重新啟動的逾時時間。"
+msgstr "等待 DNS 後端成功重新啟動的逾時值。"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:14
 msgid ""
 "To keep your adblock lists up-to-date, you should setup an automatic update "
 "job for these lists."
-msgstr "要保持最新的 adblock 清單，您應該設定這些清單的自動更新工作。"
+msgstr "要保持最新的 Adblock 清單，您應該設定這些清單的自動更新工作。"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:335
 msgid "Top 10 Statistics"
