@@ -169,7 +169,7 @@ prov.write = function(self, section, value)
 	uci:save(packageName)
 end
 
-la = s3:option(Value, "listen_addr", translate("Listen address"))
+la = s3:option(Value, "listen_addr", translate("Listen Address"))
 la.datatype    = "host"
 la.placeholder = "127.0.0.1"
 la.rmempty     = true
@@ -182,7 +182,7 @@ uci:foreach(packageName, packageName, function(s)
 		n = n + 1
 end)
 
-lp = s3:option(Value, "listen_port", translate("Listen port"))
+lp = s3:option(Value, "listen_port", translate("Listen Port"))
 lp.datatype = "port"
 lp.value    = n + 5053
 
@@ -190,7 +190,7 @@ dscp = s3:option(Value, "dscp_codepoint", translate("DSCP Codepoint"))
 dscp.datatype = "range(0,63)"
 dscp.rmempty  = true
 
-ps = s3:option(Value, "proxy_server", translate("Proxy server"))
+ps = s3:option(Value, "proxy_server", translate("Proxy Server"))
 ps.rmempty  = true
 
 return m
