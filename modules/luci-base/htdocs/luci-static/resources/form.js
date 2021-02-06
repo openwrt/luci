@@ -3929,11 +3929,21 @@ var CBIDummyValue = CBIValue.extend(/** @lends LuCI.form.DummyValue.prototype */
 	 * @default null
 	 */
 
+    /**
+	 * Render the UCI option value as hidden using the HTML display: none style property.
+	 *
+	 * By default, the value is displayed
+	 *
+	 * @name LuCI.form.DummyValue.prototype#hidden
+	 * @type boolean
+	 * @default null
+	 */
+
 	/** @private */
 	renderWidget: function(section_id, option_index, cfgvalue) {
 		var value = (cfgvalue != null) ? cfgvalue : this.default,
 		    hiddenEl = new ui.Hiddenfield(value, { id: this.cbid(section_id) }),
-		    outputEl = E('div');
+		    outputEl = E('div', { 'style': this.hidden ? 'display:none' : null });
 
 		if (this.href && !((this.readonly != null) ? this.readonly : this.map.readonly))
 			outputEl.appendChild(E('a', { 'href': this.href }));
