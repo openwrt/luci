@@ -569,6 +569,13 @@ var ValidatorFactory = baseclass.extend({
 				_('hexadecimal encoded value'));
 		},
 
+		apn: function() {
+			if (this.value.length <= 63)
+				return this.assert(this.value.match(/^[a-zA-Z0-9\-.]*[a-zA-Z0-9]$/), _('valid APN'));
+
+			return this.assert(false, _('valid APN'));
+		},
+
 		string: function() {
 			return true;
 		}
