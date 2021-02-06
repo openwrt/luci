@@ -90,7 +90,8 @@ return network.registerProtocol('modemmanager', {
 			}, this));
 		};
 
-		s.taboption('general', form.Value, 'apn', _('APN'));
+		o = s.taboption('general', form.Value, 'apn', _('APN'));
+		o.datatype = 'apn';
 
 		o = s.taboption('general', form.Value, 'pincode', _('PIN'));
 		o.datatype = 'and(uinteger,maxlength(4))';
