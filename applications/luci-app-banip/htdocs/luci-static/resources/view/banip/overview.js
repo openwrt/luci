@@ -490,11 +490,35 @@ return view.extend({
 
 		o = s.taboption('adv_chain', form.DummyValue, '_sub');
 		o.rawhtml = true;
-		o.default = '<em><b>Individual IPSet Types</b></em>';
+		o.default = '<em><b>Individual IPSet Settings</b></em>';
 
-		/*
-			prepare source data
-		*/
+		o = s.taboption('adv_chain', form.ListValue, 'ban_maclist_timeout', _('Maclist Timeout'), _('Set the maclist IPSet timeout.'));
+		o.value('1800', _('30 minutes'));
+		o.value('3600', _('1 hour'));
+		o.value('21600', _('6 hours'));
+		o.value('43200', _('12 hours'));
+		o.value('86400', _('24 hours'));
+		o.optional = true;
+		o.rmempty = true;
+
+		o = s.taboption('adv_chain', form.ListValue, 'ban_whitelist_timeout', _('Whitelist Timeout'), _('Set the whitelist IPSet timeout.'));
+		o.value('1800', _('30 minutes'));
+		o.value('3600', _('1 hour'));
+		o.value('21600', _('6 hours'));
+		o.value('43200', _('12 hours'));
+		o.value('86400', _('24 hours'));
+		o.optional = true;
+		o.rmempty = true;
+
+		o = s.taboption('adv_chain', form.ListValue, 'ban_blacklist_timeout', _('Blacklist Timeout'), _('Set the blacklist IPSet timeout.'));
+		o.value('1800', _('30 minutes'));
+		o.value('3600', _('1 hour'));
+		o.value('21600', _('6 hours'));
+		o.value('43200', _('12 hours'));
+		o.value('86400', _('24 hours'));
+		o.optional = true;
+		o.rmempty = true;
+
 		var info, source, sources = [];
 		if (result[0]) {
 			sources = result[0].trim().split('\n');
@@ -753,6 +777,18 @@ return view.extend({
 		o = s.taboption('sources', form.DummyValue, '_sub');
 		o.rawhtml = true;
 		o.default = '<em><b>Local Sources</b></em>';
+
+		o = s.taboption('sources', form.MultiValue, 'ban_localsources', _('Local Sources'), _('Limit the selection to certain local sources.'));
+		o.value('maclist');
+		o.value('whitelist');
+		o.value('blacklist');
+		o.optional = true;
+		o.rmempty = true;
+
+		o = s.taboption('sources', form.DynamicList, 'ban_extrasources', _('Extra Sources'), _('Add additional, non-banIP related IPSets e.g. for reporting and queries.'));
+		o.datatype = 'uciname';
+		o.optional = true;
+		o.rmempty = true;
 
 		o = s.taboption('sources', form.Flag, 'ban_autoblacklist', _('Auto Blacklist'), _('Automatically transfers suspicious IPs from the log to the banIP blacklist during runtime.'));
 		o.rmempty = false;
