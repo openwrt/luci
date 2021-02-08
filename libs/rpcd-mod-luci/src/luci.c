@@ -1703,60 +1703,6 @@ rpc_luci_get_board_json(struct ubus_context *ctx, struct ubus_object *obj,
 	return UBUS_STATUS_OK;
 }
 
-static int
-rpc_luci_get_dsl_status(struct ubus_context *ctx, struct ubus_object *obj,
-                        struct ubus_request_data *req, const char *method,
-                        struct blob_attr *msg)
-{
-	char line[128], *p, *s;
-	FILE *cmd;
-
-	cmd = popen("/etc/init.d/dsl_control lucistat", "r");
-
-	if (!cmd)
-		return UBUS_STATUS_NOT_FOUND;
-
-	blob_buf_init(&blob, 0);
-
-	while (fgets(line, sizeof(line), cmd)) {
-		if (strncmp(line, "dsl.", 4))
-			continue;
-
-		p = strchr(line, '=');
-
-		if (!p)
-			continue;
-
-		s = p + strlen(p) - 1;
-
-		while (s >= p && isspace(*s))
-			*s-- = 0;
-
-		*p++ = 0;
-
-		if (!strcmp(p, "nil"))
-			continue;
-
-		if (isdigit(*p)) {
-			blobmsg_add_u32(&blob, line + 4, strtoul(p, NULL, 0));
-		}
-		else if (*p == '"') {
-			s = p + strlen(p) - 1;
-
-			if (s >= p && *s == '"')
-				*s = 0;
-
-			blobmsg_add_string(&blob, line + 4, p + 1);
-		}
-	}
-
-	fclose(cmd);
-
-	ubus_send_reply(ctx, req, blob.head);
-	return UBUS_STATUS_OK;
-}
-
-
 enum {
 	RPC_L_FAMILY,
 	__RPC_L_MAX,
@@ -1867,7 +1813,6 @@ rpc_luci_api_init(const struct rpc_daemon_ops *o, struct ubus_context *ctx)
 		UBUS_METHOD_NOARG("getHostHints", rpc_luci_get_host_hints),
 		UBUS_METHOD_NOARG("getDUIDHints", rpc_luci_get_duid_hints),
 		UBUS_METHOD_NOARG("getBoardJSON", rpc_luci_get_board_json),
-		UBUS_METHOD_NOARG("getDSLStatus", rpc_luci_get_dsl_status),
 		UBUS_METHOD("getDHCPLeases", rpc_luci_get_dhcp_leases, rpc_get_leases_policy)
 	};
 
