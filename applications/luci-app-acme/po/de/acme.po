@@ -1,14 +1,14 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2020-11-21 12:21+0000\n"
-"Last-Translator: Andreas Götz <agoetz@tdt.de>\n"
+"PO-Revision-Date: 2021-02-08 04:46+0000\n"
+"Last-Translator: Zocker1012 <julian.schoemer.1997@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsacme/de/>\n"
 "Language: de\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.4-dev\n"
+"X-Generator: Weblate 4.5-dev\n"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:17
 msgid "ACME certificates"
@@ -24,7 +24,7 @@ msgstr "Globale ACME Einstellungen"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:139
 msgid "ACME server URL"
-msgstr ""
+msgstr "ACME Server URL"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:34
 msgid "Account email"
@@ -32,7 +32,7 @@ msgstr "Account E-Mail"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:48
 msgid "Advanced Settings"
-msgstr ""
+msgstr "Erweiterte Einstellungen"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:42
 msgid "Certificate config"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:135
 msgid "Custom ACME CA"
-msgstr ""
+msgstr "Individuelles ACME-Zertifikat"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:140
 msgid "Custom ACME server directory URL."
@@ -56,7 +56,7 @@ msgstr ""
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:97
 msgid "DNS"
-msgstr ""
+msgstr "DNS"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:107
 msgid "DNS API"
@@ -68,7 +68,7 @@ msgstr "DNS API Zugangsdaten"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:145
 msgid "Days until renewal"
-msgstr ""
+msgstr "Tage bis zur Erneuerung"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:128
 msgid "Domain Alias"
@@ -123,15 +123,15 @@ msgstr ""
 
 #: applications/luci-app-acme/root/usr/share/rpcd/acl.d/luci-app-acme.json:3
 msgid "Grant UCI access for luci-app-acme"
-msgstr "Gewähre UCI Zugriff auf luci-app-acme"
+msgstr "UCI Zugriff auf luci-app-acme erlauben"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:58
 msgid "Key size"
-msgstr "Schlüssellänge"
+msgstr "Schlüsselgröße"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:59
 msgid "Key size (and type) for the generated certificate."
-msgstr "Schlüsselgröße (und -typ) für das generierte Zertifikat."
+msgstr "Schlüsselgröße (und Typ) für das generierte Zertifikat."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:60
 msgid "RSA 2048 bits"
@@ -156,6 +156,10 @@ msgid ""
 "certificate. DNS mode will allow you to use the DNS API of your DNS provider "
 "to issue a certificate."
 msgstr ""
+"Der eigenständige Modus nutzt den in acme.sh integrierten Webserver, um das "
+"Zertifikat zu erhalten. Im Webroot-Modus wird ein bereits vorhandener "
+"Webserver genutzt. Der DNS-Modus erlaubt es, die API deines DNS-Providers "
+"für die Zertifikatausstellung zu verwenden."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:29
 msgid "State directory"
@@ -190,10 +194,9 @@ msgid ""
 "official/acme.sh/wiki/DNS-alias-mode for the details of this process. LUCI "
 "only supports one challenge domain per certificate."
 msgstr ""
-"Der Domänenalias, der für ALLE Domänen verwendet werden soll. Weitere "
-"Informationen zu diesem Vorgang finden Sie unter https://github.com/acmesh-"
-"official/acme.sh/wiki/DNS-alias-mode. LUCI unterstützt nur eine Challenge-"
-"Domain pro Zertifikat."
+"Der für ALLE Domänen zu nutzende Alias. Siehe https://github.com/"
+"acmesh-official/acme.sh/wiki/DNS-alias-mode für Details zu diesem Prozess. "
+"LUCI unterstützt nur eine Domänenanforderung pro Zertifikat."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:18
 msgid ""
@@ -254,11 +257,11 @@ msgstr ""
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:135
 msgid "Use a custom CA instead of Let's Encrypt."
-msgstr ""
+msgstr "Nutze individuelles Zertifikat statt Let's Encrypt."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:83
 msgid "Use for nginx"
-msgstr "Verwenden Sie für Nginx"
+msgstr "Für nginx verwenden"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:75
 msgid "Use for uhttpd"
@@ -270,11 +273,11 @@ msgstr "Staging-Server verwenden"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:91
 msgid "Validation method"
-msgstr ""
+msgstr "Überprüfungsmethode"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:96
 msgid "Webroot"
-msgstr ""
+msgstr "Webroot"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:100
 msgid "Webroot directory"
