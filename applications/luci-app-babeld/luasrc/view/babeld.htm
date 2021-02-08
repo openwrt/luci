@@ -1,0 +1,309 @@
+<%
+    function apply_acls(filename, session)
+        local json = require "luci.jsonc"
+        local util = require "luci.util"
+        local fs   = require "nixio.fs"
+
+        local grants = { }
+
+        local acl = json.parse(fs.readfile(filename))
+        if type(acl) ~= "table" then
+            return
+        end
+
+        local group, perms
+        for group, perms in pairs(acl) do
+            local perm, scopes
+            for perm, scopes in pairs(perms) do
+                if type(scopes) == "table" then
+                    local scope, objects
+                    for scope, objects in pairs(scopes) do
+                        if type(objects) == "table" then
+                            if not grants[scope] then
+                                grants[scope] = { }
+                            end
+
+                            if next(objects) == 1 then
+                                local _, object
+                                for _, object in ipairs(objects) do
+                                    if not grants[scope][object] then
+                                        grants[scope][object] = { }
+                                    end
+                                    table.insert(grants[scope][object], perm)
+                                end
+                            else
+                                local object, funcs
+                                for object, funcs in pairs(objects) do
+                                    if type(funcs) == "table" then
+                                        local _, func
+                                        for _, func in ipairs(funcs) do
+                                            if not grants[scope][object] then
+                                                grants[scope][object] = { }
+                                            end
+                                            table.insert(grants[scope][object], func)
+                                        end
+                                    end
+                                end
+                            end
+                        end
+                    end
+                end
+            end
+        end
+
+        local _, scope, object, func
+        for scope, _ in pairs(grants) do
+            local objects = { }
+            for object, _ in pairs(_) do
+                for _, func in ipairs(_) do
+                    table.insert(objects, { object, func })
+                end
+            end
+
+            util.ubus("session", "grant", {
+                ubus_rpc_session = session,
+                scope = scope, objects = objects
+            })
+        end
+    end
+
+    apply_acls("/usr/share/rpcd/acl.d/luci-app-babeld.json", luci.dispatcher.context.authsession)
+%>
+
+<%+header%>
+<script type="text/javascript" src="<%=resource%>/babeld.js"></script>
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+<script type="text/javascript">
+	$(function () {
+	data = {};
+	data["ubus_rpc_session"] = "<%=luci.dispatcher.context.authsession%>"
+	origin = document.location.href.replace(location.pathname, "")
+	ubus_url = origin + "/ubus/"
+
+	var info = ubus_call("babeld", "get_info", {});
+	renderTableInfo(info, "babeld-info");
+
+	var xroutes = ubus_call("babeld", "get_xroutes", {});
+	renderTableXRoutes(xroutes["IPv4"], "xroutes-ipv4");
+	renderTableXRoutes(xroutes["IPv6"], "xroutes-ipv6");
+
+	var routes = ubus_call("babeld", "get_routes", {});
+	renderTableRoutes(routes["IPv4"], "routes-ipv4");
+	renderTableRoutes(routes["IPv6"], "routes-ipv6");
+
+	var neighbours = ubus_call("babeld", "get_neighbours", {});
+	renderTableNeighbours(neighbours["IPv4"], "neighbours-ipv4");
+	renderTableNeighbours(neighbours["IPv6"], "neighbours-ipv6");
+	});
+
+	function renderTableInfo(data, target) {
+		var table_body = $("#" + target);
+		console.log(data);
+		content = "";
+		content += "<tr class=" + target + ">";
+		content += "<td>" + data['babeld-version'] + "</td>";
+		content += "<td>" + data['my-id'] + "</td>";
+		content += "<td>" + data['host'] + "</td>";
+		content += "</tr>";
+		table_body.append(content);
+	}
+
+	function renderTableXRoutes(data, type) {
+		var table_body = $("#" + type);
+
+		jQuery.each(data, function (prefix, info) {
+				content = "";
+				content += "<tr class=" + type + ">";
+				content += "<td><a href='" + prefix + "' target='_blank'>" + prefix + "</a></td>";
+				content += "<td>" + info['metric'] + "</td>";
+				content += "<td><a href='" + info['src-prefix'] + "' target='_blank'>" + info['src-prefix'] + "</a></td>";
+				content += "</tr>";
+				table_body.append(content);
+		});
+	}
+
+	function renderTableRoutes(data, target) {
+            var table_body = $("#" + target);
+
+            jQuery.each(data, function (prefix, info) {
+                console.log(prefix, info);
+                    content = "";
+                    content += "<tr class=" + target + ">";
+                    content += "<td><a href='" + prefix + "' target='_blank'>" + prefix + "</a></td>";
+                    content += "<td><a href='" + info['src-prefix'] + "' target='_blank'>" + info['src-prefix'] + "</a></td>";
+					content += "<td>" + info['route_metric'] + "</td>";
+                    content += "<td>" + info['route_smoothed_metric'] + "</td>";
+                    content += "<td>" + info['refmetric'] + "</td>";
+                    content += "<td>" + info['id'] + "</td>";
+                    content += "<td>" + info['seqno'] + "</td>";
+                    content += "<td>" + info['channels'] + "</td>";
+                    content += "<td>" + info['age'] + "</td>";
+                    content += "<td>" + info['via'] + "</td>";
+                    content += "<td>" + info['nexthop'] + "</td>";
+                    content += "<td>" + info['installed'] + "</td>";
+                    content += "<td>" + info['feasible'] + "</td>";
+                    content += "</tr>";
+                    table_body.append(content);
+            });
+		}
+		
+		function renderTableNeighbours(data, target) {
+            var table_body = $("#" + target);
+
+            jQuery.each(data, function (neighbour, info) {
+                console.log(neighbour, info);
+                    content = "";
+                    content += "<tr class=" + target + ">";
+                    content += "<td><a href='" + neighbour + "' target='_blank'>" + neighbour + "</a></td>";
+					content += "<td>" + info['dev'] + "</td>";
+					content += "<td>" + info['hello-reach'] + "</td>";
+					content += "<td>" + info['rxcost'] + "</td>";
+					content += "<td>" + info['txcost'] + "</td>";
+					content += "<td>" + info['rtt'] + "</td>";
+					content += "<td>" + info['channel'] + "</td>";
+					content += "<td>" + info['if_up'] + "</td>";
+                    content += "</tr>";
+                    table_body.append(content);
+            });
+        }
+</script>
+
+<div class="container">                                                                      
+	<br>                                                   
+	<h2>Info</h2>
+	<div class="table-responsive">
+		<table class="table table-striped">
+			<thead>
+				<th>Babeld-Version</th>
+				<th>My-Id</th>
+				<th>Host</th>
+			</thead>
+			<tbody id="babeld-info">                            
+														
+			</tbody>                                       
+		</table>
+	</div>
+</div>
+
+<hr>
+
+<div class="container">                                                                      
+	<br>                                                   
+	<h2>X-Routes</h2>
+	<div class="table-responsive">
+		<table class="table table-striped">
+			<thead>
+				<th>IPv4 Prefix</th>
+				<th>Metric</th>
+				<th>Source-Prefix</th>
+			</thead>
+			<tbody id="xroutes-ipv4">                            
+														
+			</tbody>                                       
+		</table>
+	</div>
+	<hr>
+	<div class="table-responsive">
+		<table class="table table-striped">
+			<thead>
+				<th>IPv6 Prefix</th>
+				<th>Metric</th>
+				<th>Source-Prefix</th>
+			</thead>
+			<tbody id="xroutes-ipv6">
+			
+			</tbody>
+		</table>
+	</div>
+</div>
+
+<hr>
+
+<h2>Routes Tables</h2>
+<div class="table-responsive">
+	<table class="table table-striped">
+		<thead>
+			<th>IPv4 Prefix</th>
+			<th>Source-Prefix</th>
+			<th>Route-Metric</th>
+			<th>Route Smoothed Metric</th>
+			<th>Refmetric</th>
+			<th>ID</th>
+			<th>Seq. No</th>
+			<th>Channels</th>
+			<th>Age</th>
+			<th>Via</th>
+			<th>Nexthop</th>
+			<th>Installed</th>
+			<th>Feasible</th>
+		</thead>
+		<tbody id="routes-ipv4">
+
+		</tbody>
+	</table>
+</div>
+<div class="table-responsive">
+	<table class="table table-striped">
+		<thead>
+			<th>IPv6 Prefix</th>
+			<th>Source-Prefix</th>
+			<th>Route-Metric</th>
+			<th>Route Smoothed Metric</th>
+			<th>Refmetric</th>
+			<th>ID</th>
+			<th>Seq. No</th>
+			<th>Channels</th>
+			<th>Age</th>
+			<th>Via</th>
+			<th>Nexthop</th>
+			<th>Installed</th>
+			<th>Feasible</th>
+		</thead>
+		<tbody id="routes-ipv6">
+
+		</tbody>
+	</table>
+</div>
+
+<hr>
+
+<h2>Neighbours Tables</h2>
+<div class="table-responsive">
+	<table class="table table-striped">
+		<thead>
+			<th>IPv4 Neighbour</th>
+			<th>Device</th>
+			<th>Hello-Reach</th>
+			<th>Rxcost</th>
+			<th>Txcost</th>
+			<th>RTT</th>
+			<th>Channel</th>
+			<th>Interface up</th>
+		</thead>
+		<tbody id="neighbours-ipv4">
+
+		</tbody>
+	</table>
+</div>
+<div class="table-responsive">
+	<table class="table table-striped">
+		<thead>
+			<th>IPv6 Neighbour</th>
+			<th>Device</th>
+			<th>Hello-Reach</th>
+			<th>Rxcost</th>
+			<th>Txcost</th>
+			<th>RTT</th>
+			<th>Channel</th>
+			<th>Interface up</th>
+		</thead>
+		<tbody id="neighbours-ipv6">
+
+		</tbody>
+	</table>
+</div>
+
+<%+footer%>
