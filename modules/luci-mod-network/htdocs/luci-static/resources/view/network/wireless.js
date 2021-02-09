@@ -1375,6 +1375,33 @@ return view.extend({
 				o.rmempty = true;
 				o.password = true;
 
+				o = ss.taboption('encryption', form.ListValue, 'dynamic_vlan', _('Dynamic VLAN'), _('Allow RADIUS authentication server to decide which VLAN # is used for the stations.'));
+				add_dependency_permutations(o, { mode: ['ap', 'ap-wds'], encryption: ['wpa', 'wpa2', 'wpa3', 'wpa3-mixed'] });
+				o.value('0', _('Disabled'));
+				o.value('1', _('Optional'));
+				o.value('2', _('Required'));
+				o.default = '0';
+				o.rmempty = true;
+
+				o = ss.taboption('encryption', form.ListValue, 'vlan_naming', _('VLAN Naming'), _('When hostapd creates a VLAN interface on vlan_tagged_interfaces, it needs to know how to name it.'));
+				add_dependency_permutations(o, { mode: ['ap', 'ap-wds'], encryption: ['wpa', 'wpa2', 'wpa3', 'wpa3-mixed'] });
+				o.value('0', _('vlan<XXX>'));
+				o.value('1', _('<vlan_tagged_interface>.<XXX>'));
+				o.default = '1';
+				o.rmempty = true;
+
+				o = ss.taboption('encryption', widgets.NetworkSelect, 'vlan_tagged_interface', _('VLAN Tagged Interface'), _('Interface where 802.1q tagged packets should appear when a RADIUS server is used.'));
+				add_dependency_permutations(o, { mode: ['ap', 'ap-wds'], encryption: ['wpa', 'wpa2', 'wpa3', 'wpa3-mixed'] });
+				o.rmempty = true;
+				o.nocreate = true;
+				o.novirtual = true;
+				o.multiple = false;
+
+				o = ss.taboption('encryption', form.Value, 'vlan_bridge', _('VLAN Bridge'), _('Bridge (prefix) to add the wifi and the tagged interface to. Default brvlan<iface> br<iface>.<vlan>'));
+				add_dependency_permutations(o, { mode: ['ap', 'ap-wds'], encryption: ['wpa', 'wpa2', 'wpa3', 'wpa3-mixed'] });
+				o.rmempty = true;
+				o.default = '';
+
 
 				o = ss.taboption('encryption', form.Value, '_wpa_key', _('Key'));
 				o.depends('encryption', 'psk');
