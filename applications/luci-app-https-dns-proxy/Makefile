@@ -10,7 +10,6 @@ LUCI_TITLE:=DNS Over HTTPS Proxy Web UI
 LUCI_DESCRIPTION:=Provides Web UI for DNS Over HTTPS Proxy
 LUCI_DEPENDS:=+luci-compat +luci-mod-admin-full +https-dns-proxy
 LUCI_PKGARCH:=all
-PKG_RELEASE:=12
 
 include ../../luci.mk
 

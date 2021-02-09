@@ -71,6 +71,19 @@
 		}
 	},
 
+	"admin/status/channel_analysis": {
+		"title": "Channel Analysis",
+		"order": 7,
+		"action": {
+			"type": "view",
+			"path": "status/channel_analysis"
+		},
+		"depends": {
+			"acl": [ "luci-mod-status-channel_analysis" ],
+			"uci": { "wireless": { "@wifi-device": true } }
+		}
+	},
+
 	"admin/status/realtime": {
 		"title": "Realtime Graphs",
 		"order": 7,

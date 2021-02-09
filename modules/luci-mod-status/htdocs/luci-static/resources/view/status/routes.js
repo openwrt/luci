@@ -215,4 +215,3 @@ return view.extend({
 	handleSave: null,
 	handleReset: null
 });
-

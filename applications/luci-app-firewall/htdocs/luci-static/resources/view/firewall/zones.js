@@ -158,6 +158,14 @@ return view.extend({
 
 		o = s.taboption('general', form.Flag, 'masq', _('Masquerading'));
 		o.editable = true;
+		o.tooltip = function(section_id) {
+			var masq_src = uci.get('firewall', section_id, 'masq_src')
+			var masq_dest = uci.get('firewall', section_id, 'masq_dest')
+			if (masq_src || masq_dest)
+				return _('Limited masquerading enabled');
+
+			return null;
+		};
 
 		o = s.taboption('general', form.Flag, 'mtu_fix', _('MSS clamping'));
 		o.modalonly = true;

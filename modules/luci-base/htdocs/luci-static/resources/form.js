@@ -3671,13 +3671,47 @@ var CBIFlagValue = CBIValue.extend(/** @lends LuCI.form.FlagValue.prototype */ {
 	 * @default 0
 	 */
 
+	/**
+	 * Set a tooltip for the flag option.
+	 *
+	 * If set to a string, it will be used as-is as a tooltip.
+	 *
+	 * If set to a function, the function will be invoked and the return
+	 * value will be shown as a tooltip. If the return value of the function
+	 * is `null` no tooltip will be set.
+	 *
+	 * @name LuCI.form.TypedSection.prototype#tooltip
+	 * @type string|function
+	 * @default null
+	 */
+
+	/**
+	 * Set a tooltip icon.
+	 *
+	 * If set, this icon will be shown for the default one.
+	 * This could also be a png icon from the resources directory.
+	 *
+	 * @name LuCI.form.TypedSection.prototype#tooltipicon
+	 * @type string
+	 * @default 'ℹ️';
+	 */
+
 	/** @private */
 	renderWidget: function(section_id, option_index, cfgvalue) {
+		var tooltip = null;
+
+		if (typeof(this.tooltip) == 'function')
+			tooltip = this.tooltip.apply(this, [section_id]);
+		else if (typeof(this.tooltip) == 'string')
+			tooltip = (arguments.length > 1) ? ''.format.apply(this.tooltip, this.varargs(arguments, 1)) : this.tooltip;
+
 		var widget = new ui.Checkbox((cfgvalue != null) ? cfgvalue : this.default, {
 			id: this.cbid(section_id),
 			value_enabled: this.enabled,
 			value_disabled: this.disabled,
 			validate: L.bind(this.validate, this, section_id),
+			tooltip: tooltip,
+			tooltipicon: this.tooltipicon,
 			disabled: (this.readonly != null) ? this.readonly : this.map.readonly
 		});
 

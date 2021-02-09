@@ -56,6 +56,15 @@
 		}
 	},
 
+	"luci-mod-status-channel_analysis": {
+		"description": "Grant access to the system route status",
+		"read": {
+			"ubus": {
+				"iwinfo": [ "info", "freqlist" ]
+			}
+		}
+	},
+
 	"luci-mod-status-firewall": {
 		"description": "Grant access to firewall status",
 		"read": {
@@ -111,7 +120,7 @@
 		"description": "Grant access to DSL status display",
 		"read": {
 			"ubus": {
-				"luci-rpc": [ "getDSLStatus" ]
+				"dsl": [ "metrics" ]
 			}
 		}
 	},

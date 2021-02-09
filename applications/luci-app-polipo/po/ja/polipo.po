@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-05-19 19:36+0200\n"
-"PO-Revision-Date: 2020-11-15 19:47+0000\n"
+"PO-Revision-Date: 2021-02-07 07:33+0000\n"
 "Last-Translator: Satoru Yoshida <ramat@ram.ne.jp>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationspolipo/ja/>\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.4-dev\n"
+"X-Generator: Weblate 4.5-dev\n"
 
 #: applications/luci-app-polipo/luasrc/model/cbi/polipo.lua:121
 msgid "Advanced Settings"
@@ -73,7 +73,7 @@ msgstr "一般設定"
 
 #: applications/luci-app-polipo/root/usr/share/rpcd/acl.d/luci-app-polipo.json:3
 msgid "Grant UCI access for luci-app-polipo"
-msgstr "luci-app-polipo に UCI アクセスを許可"
+msgstr "luci-app-polipoにUCIアクセスを許可"
 
 #: applications/luci-app-polipo/luasrc/model/cbi/polipo.lua:113
 msgid "How much RAM should Polipo use for its cache."
@@ -85,11 +85,11 @@ msgstr "RAM キャッシュサイズ (単位:バイト)"
 
 #: applications/luci-app-polipo/luasrc/model/cbi/polipo.lua:18
 msgid "Listen address"
-msgstr "待ち受けアドレス"
+msgstr "リッスンアドレス"
 
 #: applications/luci-app-polipo/luasrc/model/cbi/polipo.lua:26
 msgid "Listen port"
-msgstr "待ち受けポート"
+msgstr "リッスンポート"
 
 #: applications/luci-app-polipo/luasrc/model/cbi/polipo.lua:126
 msgid ""
@@ -176,7 +176,7 @@ msgstr ""
 
 #: applications/luci-app-polipo/luasrc/model/cbi/polipo.lua:27
 msgid "Port on which Polipo will listen"
-msgstr "Polipoが待ち受けを行うポート番号です。"
+msgstr "Polipoがリッスンを行うポート番号です。"
 
 #: applications/luci-app-polipo/luasrc/model/cbi/polipo.lua:8
 msgid "Proxy"
@@ -247,16 +247,15 @@ msgid ""
 "The interface on which Polipo will listen. To listen on all interfaces use "
 "0.0.0.0 or :: (IPv6)."
 msgstr ""
-"Polipoが待ち受けを行うインターフェースです。0.0.0.0 または :: (IPv6) "
-"を設定した場合、すべてのインターフェースで待ち受けを行います。"
+"Polipoがリッスンを行うインターフェースです。0.0.0.0または:: (IPv6)を設定した場合、すべてのインターフェースでリッスンを行います。"
 
 #: applications/luci-app-polipo/luasrc/model/cbi/polipo.lua:155
 msgid "Time after which cached files will be deleted"
-msgstr ""
+msgstr "キャッシュされたファイルが削除されるまでの時間"
 
 #: applications/luci-app-polipo/luasrc/model/cbi/polipo.lua:147
 msgid "Time after which cached files will be truncated"
-msgstr ""
+msgstr "キャッシュされたファイルが切り捨てられるまでの時間"
 
 #: applications/luci-app-polipo/luasrc/model/cbi/polipo.lua:170
 msgid "To enable PMM, PMM segment size must be set to some positive value."
@@ -284,10 +283,9 @@ msgid ""
 "that are allowed to connect. The format is IP address or network address "
 "(192.168.1.123, 192.168.1.0/24, 2001:660:116::/48 (IPv6))"
 msgstr ""
-"待ち受けアドレスを0.0.0.0 または :: (IPv6) に設定した場合、アクセスを許可する"
-"クライアントアドレスを設定してください。設定フォーマットはIPアドレスかネット"
-"ワークアドレスです。(例:192.168.1.123, 192.168.1.0/24, 2001:660:116::/48 "
-"(IPv6))"
+"リッスンアドレスを0.0.0.0 または :: (IPv6) "
+"に設定した場合、アクセスを許可するクライアントアドレスを設定してください。形式はIPアドレスかネットワークアドレスです。(例:"
+"192.168.1.123, 192.168.1.0/24, 2001:660:116::/48 (IPv6))"
 
 #: applications/luci-app-polipo/luasrc/model/cbi/polipo.lua:16
 msgid "enable"

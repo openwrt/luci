@@ -5,7 +5,7 @@
 local dsp = require "luci.dispatcher"
 local uci = require "uci"
 
-local m, mwan_policy, use_member, last_resort
+local m, s, o
 
 function policyCheck()
 	local policy_error = {}
@@ -38,7 +38,7 @@ end
 m = Map("mwan3", translate("MWAN - Policies"),
 	policyError(policyCheck()))
 
-mwan_policy = m:section(TypedSection, "policy", nil,
+s = m:section(TypedSection, "policy", nil,
 	translate("Policies are profiles grouping one or more members controlling how MWAN distributes traffic<br />" ..
 	"Member interfaces with lower metrics are used first<br />" ..
 	"Member interfaces with the same metric will be load-balanced<br />" ..
@@ -46,13 +46,13 @@ mwan_policy = m:section(TypedSection, "policy", nil,
 	"Names may contain characters A-Z, a-z, 0-9, _ and no spaces<br />" ..
 	"Names must be 15 characters or less<br />" ..
 	"Policies may not share the same name as configured interfaces, members or rules"))
-mwan_policy.addremove = true
-mwan_policy.dynamic = false
-mwan_policy.sectionhead = translate("Policy")
-mwan_policy.sortable = true
-mwan_policy.template = "cbi/tblsection"
-mwan_policy.extedit = dsp.build_url("admin", "network", "mwan", "policy", "%s")
-function mwan_policy.create(self, section)
+s.addremove = true
+s.dynamic = false
+s.sectionhead = translate("Policy")
+s.sortable = true
+s.template = "cbi/tblsection"
+s.extedit = dsp.build_url("admin", "network", "mwan", "policy", "%s")
+function s.create(self, section)
 	if #section > 15 then
 		self.invalid_cts = true
 	else
@@ -62,9 +62,9 @@ function mwan_policy.create(self, section)
 	end
 end
 
-use_member = mwan_policy:option(DummyValue, "use_member", translate("Members assigned"))
-use_member.rawhtml = true
-function use_member.cfgvalue(self, s)
+o = s:option(DummyValue, "use_member", translate("Members assigned"))
+o.rawhtml = true
+function o.cfgvalue(self, s)
 	local memberConfig, memberList = self.map:get(s, "use_member"), ""
 	if memberConfig then
 		for k,v in pairs(memberConfig) do
@@ -76,9 +76,9 @@ function use_member.cfgvalue(self, s)
 	end
 end
 
-last_resort = mwan_policy:option(DummyValue, "last_resort", translate("Last resort"))
-last_resort.rawhtml = true
-function last_resort.cfgvalue(self, s)
+o = s:option(DummyValue, "last_resort", translate("Last resort"))
+o.rawhtml = true
+function o.cfgvalue(self, s)
 	local action = self.map:get(s, "last_resort")
 	if action == "blackhole" then
 		return translate("blackhole (drop)")

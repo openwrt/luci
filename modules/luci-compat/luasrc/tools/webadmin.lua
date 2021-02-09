@@ -14,8 +14,8 @@ function byte_format(byte)
 		if byte > 1024 and i < 5 then
 			byte = byte / 1024
 		else
-			return string.format("%.2f %s", byte, suff[i]) 
-		end 
+			return string.format("%.2f %s", byte, suff[i])
+		end
 	end
 end
 
@@ -24,23 +24,23 @@ function date_format(secs)
 	local mins = 0
 	local hour = 0
 	local days = 0
-	
+
 	secs = math.floor(secs)
 	if secs > 60 then
 		mins = math.floor(secs / 60)
 		secs = secs % 60
 	end
-	
+
 	if mins > 60 then
 		hour = math.floor(mins / 60)
 		mins = mins % 60
 	end
-	
+
 	if hour > 24 then
 		days = math.floor(hour / 24)
 		hour = hour % 24
 	end
-	
+
 	if days > 0 then
 		return string.format("%.0fd %02.0fh %02.0fmin %02.0fs", days, hour, mins, secs)
 	else
@@ -70,15 +70,15 @@ end
 
 function firewall_find_zone(name)
 	local find
-	
-	luci.model.uci.cursor():foreach("firewall", "zone", 
+
+	luci.model.uci.cursor():foreach("firewall", "zone",
 		function (section)
 			if section.name == name then
 				find = section[".name"]
 			end
 		end
 	)
-	
+
 	return find
 end
 

@@ -22,12 +22,13 @@ var SSHPubkeyDecoder = baseclass.singleton({
 
 	decode: function(s)
 	{
-		var parts = s.split(/\s+/);
-		if (parts.length < 2)
+		var parts = s.trim().match(/^((?:(?:^|,)[^ =,]+(?:=(?:[^ ",]+|"(?:[^"\\]|\\.)*"))?)+ +)?(ssh-dss|ssh-rsa|ssh-ed25519|ecdsa-sha2-nistp[0-9]+) +([^ ]+)( +.*)?$/);
+
+		if (!parts)
 			return null;
 
 		var key = null;
-		try { key = atob(parts[1]); } catch(e) {}
+		try { key = atob(parts[3]); } catch(e) {}
 		if (!key)
 			return null;
 
@@ -40,7 +41,7 @@ var SSHPubkeyDecoder = baseclass.singleton({
 			return null;
 
 		var type = key.substr(off + 4, len);
-		if (type !== parts[0])
+		if (type !== parts[2])
 			return null;
 
 		off += 4 + len;
@@ -72,28 +73,56 @@ var SSHPubkeyDecoder = baseclass.singleton({
 		if (len2 & 1)
 			len2--;
 
-		var comment = parts.slice(2).join(' '),
-		    fprint = parts[1].length > 68 ? parts[1].substr(0, 33) + '…' + parts[1].substr(-34) : parts[1];
+		var comment = (parts[4] || '').trim(),
+		    fprint = parts[3].length > 68 ? parts[3].substr(0, 33) + '…' + parts[3].substr(-34) : parts[3];
+
+		var options = null;
+		(parts[1] || '').trim().replace(/(?:^|,)([^ =,]+)(?:=(?:([^ ",]+)|"((?:[^"\\]|\\.)*)"))?/g, function(m, k, p, q) {
+			options = options || {};
+
+			if (options.hasOwnProperty(k))
+				options[k] += ',' + (q || p || true);
+			else
+				options[k] = (q || p || true);
+		});
 
 		switch (type)
 		{
 		case 'ssh-rsa':
-			return { type: 'RSA', bits: len2 * 8, comment: comment, fprint: fprint };
+			return { type: 'RSA', bits: len2 * 8, comment: comment, options: options, fprint: fprint, src: s };
 
 		case 'ssh-dss':
-			return { type: 'DSA', bits: len1 * 8, comment: comment, fprint: fprint };
+			return { type: 'DSA', bits: len1 * 8, comment: comment, options: options, fprint: fprint, src: s };
 
 		case 'ssh-ed25519':
-			return { type: 'ECDH', curve: 'Curve25519', comment: comment, fprint: fprint };
+			return { type: 'ECDH', curve: 'Curve25519', comment: comment, options: options, fprint: fprint, src: s };
 
 		case 'ecdsa-sha2':
-			return { type: 'ECDSA', curve: curve, comment: comment, fprint: fprint };
+			return { type: 'ECDSA', curve: curve, comment: comment, options: options, fprint: fprint, src: s };
 
 		default:
 			return null;
 		}
 	}
 });
+
+function renderKeyItem(pubkey) {
+	return E('div', {
+		class: 'item',
+		click: isReadonlyView ? null : removeKey,
+		'data-key': pubkey.src
+	}, [
+		E('strong', pubkey.comment || _('Unnamed key')), E('br'),
+		E('small', [
+			'%s, %s'.format(pubkey.type, pubkey.curve || _('%d Bit').format(pubkey.bits)),
+			pubkey.options ? E([], [
+				' / ', _('Options:'), ' ',
+				E('code', Object.keys(pubkey.options).sort().join(', '))
+			]) : '',
+			E('br'), E('code', pubkey.fprint)
+		])
+	]);
+}
 
 function renderKeys(keys) {
 	var list = document.querySelector('.cbi-dynlist');
@@ -104,17 +133,7 @@ function renderKeys(keys) {
 	keys.forEach(function(key) {
 		var pubkey = SSHPubkeyDecoder.decode(key);
 		if (pubkey)
-			list.insertBefore(E('div', {
-				class: 'item',
-				click: removeKey,
-				'data-key': key
-			}, [
-				E('strong', pubkey.comment || _('Unnamed key')), E('br'),
-				E('small', [
-					'%s, %s'.format(pubkey.type, pubkey.curve || _('%d Bit').format(pubkey.bits)),
-					E('br'), E('code', pubkey.fprint)
-				])
-			]), list.lastElementChild);
+			list.insertBefore(renderKeyItem(pubkey), list.lastElementChild);
 	});
 
 	if (list.firstElementChild === list.lastElementChild)
@@ -159,7 +178,7 @@ function addKey(ev) {
 		input.value = '';
 
 		return saveKeys(keys).then(function() {
-			var added = list.querySelector('[data-key="%s"]'.format(key));
+			var added = list.querySelector('[data-key="%s"]'.format(key.replace(/["\\]/g, '\\$&')));
 			if (added)
 				added.classList.add('flash');
 		});
@@ -220,8 +239,10 @@ function handleWindowDragDropIgnore(ev) {
 return view.extend({
 	load: function() {
 		return fs.lines('/etc/dropbear/authorized_keys').then(function(lines) {
-			return lines.filter(function(line) {
-				return line.match(/^(ssh-rsa|ssh-dss|ssh-ed25519|ecdsa-sha2)\b/) != null;
+			return lines.map(function(line) {
+				return SSHPubkeyDecoder.decode(line);
+			}).filter(function(line) {
+				return line != null;
 			});
 		});
 	},
@@ -248,20 +269,8 @@ return view.extend({
 			])
 		]);
 
-		keys.forEach(L.bind(function(key) {
-			var pubkey = SSHPubkeyDecoder.decode(key);
-			if (pubkey)
-				list.insertBefore(E('div', {
-					class: 'item',
-					click: isReadonlyView ? null : ui.createHandlerFn(this, removeKey),
-					'data-key': key
-				}, [
-					E('strong', pubkey.comment || _('Unnamed key')), E('br'),
-					E('small', [
-						'%s, %s'.format(pubkey.type, pubkey.curve || _('%d Bit').format(pubkey.bits)),
-						E('br'), E('code', pubkey.fprint)
-					])
-				]), list.lastElementChild);
+		keys.forEach(L.bind(function(pubkey) {
+			list.insertBefore(renderKeyItem(pubkey), list.lastElementChild);
 		}, this));
 
 		if (list.firstElementChild === list.lastElementChild)

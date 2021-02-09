@@ -51,7 +51,7 @@ return view.extend({
 					'click': ui.hideModal
 				}, _('Cancel')), ' ',
 				E('button', {
-					'class': 'cbi-button cbi-button-positive important',
+					'class': 'btn cbi-button cbi-button-positive important',
 					'click': L.bind(this.callPowerOff, this)
 				}, _('Proceed'))
 			])
@@ -134,7 +134,7 @@ return view.extend({
 						'click': ui.hideModal
 					}, _('Cancel')), ' ',
 					E('button', {
-						'class': 'cbi-button cbi-button-positive important',
+						'class': 'btn cbi-button cbi-button-positive important',
 						'click': L.bind(this.handleTogglePartition, this)
 					}, _('Proceed'))
 				])
@@ -157,11 +157,11 @@ return view.extend({
 			}
 
 			res.push([
-				(partition.number).toString(16).toUpperCase(),
+				(partition.number+0x100).toString(16).substr(-2).toUpperCase(),
 				_(partition.state),
 				partition.os.replace("Unknown", _("Unknown")).replace("Compressed", _("Compressed")),
 				E('button', {
-					'class': 'cbi-button cbi-button-apply important',
+					'class': 'btn cbi-button cbi-button-apply important',
 					'click': ui.createHandlerFn(this, func)
 				}, text)
 			])
@@ -220,7 +220,7 @@ return view.extend({
 		body.appendChild(E('hr'));
 		body.appendChild(
 			poweroff_supported ? E('button', {
-				'class': 'cbi-button cbi-button-apply important',
+				'class': 'btn cbi-button cbi-button-apply important',
 				'click': ui.createHandlerFn(this, 'handlePowerOff')
 			}, _('Perform power off...'))
 

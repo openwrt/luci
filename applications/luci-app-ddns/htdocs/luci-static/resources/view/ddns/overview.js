@@ -66,7 +66,7 @@ return view.extend({
 	 *    downloaded)
 	 * 3. /usr/share/ddns/list contains all the service that can be
 	 *    downloaded by using the ddns script ('service on demand' feature)
-	 * 
+	 *
 	 * (Special services that requires a dedicated package ARE NOT
 	 * supported by the 'service on demand' feature)
 	 */
@@ -98,7 +98,7 @@ return view.extend({
 		}, this))
 	},
 
-	/* 
+	/*
 	* Check if the service is supported.
 	* If the script doesn't find any json assume a 'service on demand' install.
 	* If a json is found check if the ip type is supported.
@@ -469,10 +469,10 @@ return view.extend({
 			var section_id = name.isValid('_new_') ? name.formvalue('_new_') : null,
 				service_value = service_name.isValid('_new_') ? service_name.formvalue('_new_') : null,
 				ipv6_value = ipv6.isValid('_new_') ? ipv6.formvalue('_new_') : null;
-	
+
 			if (section_id == null || section_id == '' || service_value == null || section_id == '' || ipv6_value == null || ipv6_value == '')
 				return;
-	
+
 			return m.save(function() {
 				uci.add('ddns', 'service', section_id);
 				uci.set('ddns', section_id, 'service_name', service_value);
@@ -1008,7 +1008,7 @@ return view.extend({
 						return true;
 					};
 
-					o = s.taboption("timer", form.ListValue, "force_unit", 
+					o = s.taboption("timer", form.ListValue, "force_unit",
 						_('Force Unit'),
 						_("Interval unit to force updates send to DDNS Provider"));
 					o.modalonly = true;

@@ -95,7 +95,7 @@ return view.extend({
 		for (var i=0; i < qdiscs.length; i++) {
 			o.value(qdiscs[i].name);
 		}
-		o.default = "fq_codel";
+		o.default = "cake";
 		o.rmempty = false;
 
 		var qos_desc = "";
@@ -108,7 +108,7 @@ return view.extend({
 			else
 				qos_desc += "No help text</p>";
 		}
-		o.default = "simple.qos";
+		o.default = "piece_of_cake.qos";
 		o.rmempty = false;
 		o.description = qos_desc;
 
