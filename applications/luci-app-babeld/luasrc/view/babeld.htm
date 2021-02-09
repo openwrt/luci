@@ -1,0 +1,22 @@
+<%+header%>
+<script type="text/javascript" src="<%=resource%>/babeld.js"></script>
+
+<div id="babeld"></div>
+
+<script type="text/javascript">
+    data = {};
+    data["ubus_rpc_session"] = "<%=luci.dispatcher.context.authsession%>"
+    origin = document.location.href.replace(location.pathname, "")
+    ubus_url = origin + "/ubus/"
+
+    var info = ubus_call("babeld", "get_info", {});
+    var xroutes = ubus_call("babeld", "get_xroutes", {});
+    var routes = ubus_call("babeld", "get_routes", {});
+    var neighbours = ubus_call("babeld", "get_neighbours", {});
+
+    renderTableInfo(info, 'babeld');
+    renderTableXRoutes(xroutes, 'babeld');
+    renderTableRoutes(routes, 'babeld');
+    renderTableNeighbours(neighbours, 'babeld');
+</script>
+<%+footer%>
