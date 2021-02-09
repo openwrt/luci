@@ -1390,12 +1390,15 @@ return view.extend({
 				o.default = '1';
 				o.rmempty = true;
 
-				o = ss.taboption('encryption', widgets.NetworkSelect, 'vlan_tagged_interface', _('VLAN Tagged Interface'), _('Interface where 802.1q tagged packets should appear when a RADIUS server is used.'));
+				o = ss.taboption('encryption', widgets.DeviceSelect, 'vlan_tagged_interface', _('VLAN Tagged Interface'), _('Interface where 802.1q tagged packets should appear when a RADIUS server is used.'));
 				add_dependency_permutations(o, { mode: ['ap', 'ap-wds'], encryption: ['wpa', 'wpa2', 'wpa3', 'wpa3-mixed'] });
 				o.rmempty = true;
 				o.nocreate = true;
-				o.novirtual = true;
+				o.noaliases = true;
+				o.nobridges = false;
+				o.noinactive = false;
 				o.multiple = false;
+				o.optional = true;
 
 				o = ss.taboption('encryption', form.Value, 'vlan_bridge', _('VLAN Bridge'), _('Bridge (prefix) to add the wifi and the tagged interface to. Default brvlan<iface> br<iface>.<vlan>'));
 				add_dependency_permutations(o, { mode: ['ap', 'ap-wds'], encryption: ['wpa', 'wpa2', 'wpa3', 'wpa3-mixed'] });
