@@ -30,12 +30,6 @@ return view.extend({
 		o.default = '1';
 		o.rmempty = false;
 
-		o = s.option(form.Flag, 'hardened_privacy', _('Hardened Privacy'),
-			_('When enabled, use DNS servers located in jurisdictions with strong privacy laws.')
-			+ '<br />'
-			+ _('Available locations are: Switzerland, Iceland, Finland, Panama and Hong Kong.'));
-		o.rmempty = false;
-
 		o = s.option(form.Flag, 'log_queries', _('Log Queries'),
 			_('Log individual queries to system log.'));
 		o.rmempty = false;
