@@ -232,18 +232,18 @@ s:tab("basic", translate("Basic Configuration"))
 o1 = s:taboption("basic", ListValue, "config_update_enabled", translate("Automatic Config Update"), translate("Perform config update before downloading the block/allow-lists."))
 o1:value("0", translate("Disable"))
 o1:value("1", translate("Enable"))
-o1.default = 0
+o1.default = "0"
 
 o2 = s:taboption("basic", ListValue, "verbosity", translate("Output Verbosity Setting"), translate("Controls system log and console output verbosity."))
 o2:value("0", translate("Suppress output"))
 o2:value("1", translate("Some output"))
 o2:value("2", translate("Verbose output"))
-o2.default = 2
+o2.default = "2"
 
 o3 = s:taboption("basic", ListValue, "force_dns", translate("Force Router DNS"), translate("Forces Router DNS use on local devices, also known as DNS Hijacking."))
 o3:value("0", translate("Let local devices use their own DNS servers if set"))
 o3:value("1", translate("Force Router DNS server to all local devices"))
-o3.default = 1
+o3.default = "1"
 
 local sysfs_path = "/sys/class/leds/"
 local leds = {}
@@ -312,7 +312,7 @@ o7.datatype = "range(0,30)"
 o8 = s:taboption("advanced", ListValue, "parallel_downloads", translate("Simultaneous processing"), translate("Launch all lists downloads and processing simultaneously, reducing service start time."))
 o8:value("0", translate("Do not use simultaneous processing"))
 o8:value("1", translate("Use simultaneous processing"))
-o8.default = 1
+o8.default = "1"
 
 o10 = s:taboption("advanced", ListValue, "compressed_cache", translate("Store compressed cache file on router"), translate("Attempt to create a compressed cache of block-list in the persistent memory."))
 o10:value("0", translate("Do not store compressed cache"))
