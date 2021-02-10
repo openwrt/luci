@@ -635,6 +635,7 @@ local function find_subnode(root, prefix, recurse, descended)
 
 	if descended then
 		if not recurse or
+		   root.action.type == "call" or
 		   root.action.type == "cbi" or
 		   root.action.type == "form" or
 		   root.action.type == "view" or
