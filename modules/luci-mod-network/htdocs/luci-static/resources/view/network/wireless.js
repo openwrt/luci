@@ -1400,7 +1400,7 @@ return view.extend({
 				o.multiple = false;
 				o.optional = true;
 
-				o = ss.taboption('encryption', form.Value, 'vlan_bridge', _('VLAN Bridge'), _('Bridge (prefix) to add the wifi and the tagged interface to. Default brvlan<iface> br<iface>.<vlan>'));
+				o = ss.taboption('encryption', form.Value, 'vlan_bridge', _('VLAN Bridge'), _('Bridge (prefix) to add the wifi and the tagged interface to. Default brvlan&lt;iface&gt;, br&lt;iface&gt;.&lt;vlan&gt;'));
 				add_dependency_permutations(o, { mode: ['ap', 'ap-wds'], encryption: ['wpa', 'wpa2', 'wpa3', 'wpa3-mixed'] });
 				o.rmempty = true;
 				o.default = '';
