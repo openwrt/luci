@@ -2546,23 +2546,36 @@ var CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection.p
 				if (opt.modalonly)
 					continue;
 
-				trEl.appendChild(E('th', {
+				var tcEl = E('div', {
 					'class': 'th cbi-section-table-cell',
+					'data-name': opt.option,
 					'data-widget': opt.__name__
-				}));
+				});
+
+				trEl.appendChild(tcEl);
 
 				if (opt.width != null)
-					trEl.lastElementChild.style.width =
+					tcEl.style.width =
 						(typeof(opt.width) == 'number') ? opt.width+'px' : opt.width;
 
 				if (opt.titleref)
-					trEl.lastElementChild.appendChild(E('a', {
+					tcEl.appendChild(E('a', {
 						'href': opt.titleref,
 						'class': 'cbi-title-ref',
 						'title': this.titledesc || _('Go to relevant configuration page')
 					}, opt.title));
 				else
-					dom.content(trEl.lastElementChild, opt.title);
+					dom.content(tcEl, opt.title);
+
+					if (opt.sortable) {
+						tcEl.classList.add('cbi-section-table-column-sortable', 'cbi-colum-sorted-none');
+						L.dom.attr(tcEl,	{'data-direction' : null,
+							'data-sortmode': opt.sortmode || 'lex',
+							'style': 'cursor:pointer',
+							'title': _('Click to sort by ' + tcEl.textContent),
+							'click': L.bind(this.handleSortCol, this)
+						});
+					}
 			}
 
 			if (this.sortable || this.extedit || this.addremove || has_more || has_action)
@@ -2668,6 +2681,62 @@ var CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection.p
 		}
 
 		return tdEl;
+	},
+
+	handleSortCol: function(ev) {
+		var tc = (tc => {while(tc && !tc.classList.contains('cbi-section-table-column-sortable')) tc = tc.parentNode; return tc})(ev.target),
+ 				config_name = this.uciconfig || this.map.config,
+				option_name = tc && tc.getAttribute('data-name'),
+				dir = 1,
+				sortmode = tc.getAttribute('data-sortmode') || 'lex',
+				tr = tc && tc.parentNode,
+				tb = tr && tr.parentNode,
+				rows = [],
+				data = this.map.data;
+
+		if (!tb) return false;
+
+		tr.querySelectorAll('.cbi-colum-sorted-asc, .cbi-colum-sorted-desc').forEach(function(ta) {
+			if (ta === tc && ta.classList.contains('cbi-colum-sorted-asc')) dir = -1;
+			ta.classList.remove('cbi-colum-sorted-asc', 'cbi-colum-sorted-desc');
+			ta.classList.add('cbi-colum-sorted-none');
+		});
+
+		tb.querySelectorAll('[data-sid]').forEach(function(tr) {
+			var sid = tr.getAttribute('data-sid'),
+					v = (data.get(config_name, sid, option_name) || '').toLowerCase();
+
+			switch (sortmode) {
+			case 'addr':
+				v = v.replace(/(?:^|[.:])([0-9a-fA-F]{1,4})/g, function(m0, m1) { return ('000' + m1.toLowerCase()).substr(-4) })
+				break;
+
+			case 'num':
+				v = +v ;
+				break;
+			}
+			rows.push({tr: tr, sid:  sid,  value: v});
+		});
+
+		rows.sort(function(a, b) {
+			if (sortmode == 'num')
+				return (a.value - b.value) * dir;
+			else
+				return a.value.localeCompare(b.value) * dir;
+		});
+
+		rows.forEach(function(row) {
+			tb.insertBefore(row.tr, null);
+			data.move(config_name, row.sid, null, true);
+		});
+
+		tc.classList.remove('cbi-colum-sorted-none');
+		tc.classList.add('cbi-colum-sorted-' + (dir > 0 ? 'asc' : 'desc'));
+
+		ev.stopPropagation();
+		ev.preventDefault();
+
+		return false;
 	},
 
 	/** @private */
