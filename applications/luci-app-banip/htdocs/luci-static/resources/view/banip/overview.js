@@ -10,7 +10,7 @@
 /*
 	button handling
 */
-async function handleAction(ev) {
+function handleAction(ev) {
 	if (ev === 'timer') {
 		L.ui.showModal(_('Refresh Timer'), [
 			E('p', _('To keep your banIP lists up-to-date, you should setup an automatic update job for these lists.')),
@@ -68,7 +68,7 @@ async function handleAction(ev) {
 			]),
 			E('div', { 'class': 'right' }, [
 				E('button', {
-					'class': 'btn',
+					'class': 'btn cbi-button',
 					'click': L.hideModal
 				}, _('Cancel')),
 				' ',
@@ -115,29 +115,11 @@ async function handleAction(ev) {
 		return
 	}
 
-	if (document.getElementById('status') && document.getElementById('btn_suspend')) {
-		if (document.getElementById('status').textContent.substr(0,6) === 'paused') {
-			ev = 'resume';
-		}
+	if (document.getElementById('status') && document.getElementById('status').textContent.substr(0,6) === 'paused') {
+		ev = 'resume';
 	}
 
-	poll.start();
 	fs.exec_direct('/etc/init.d/banip', [ev])
-	var running = 1;
-	while (running === 1) {
-		await new Promise(r => setTimeout(r, 1000));
-		L.resolveDefault(fs.read_direct('/var/run/banip.pid')).then(function(res) {
-			if (!res) {
-				running = 0;
-				if (document.getElementById('status') && document.getElementById('btn_suspend')) {
-					if (document.getElementById('status').textContent.substr(0,7) === 'enabled') {
-						document.querySelector('#btn_suspend').textContent = 'Suspend';
-					}
-				}
-			}
-		})
-	}
-	poll.stop();
 }
 
 return view.extend({
@@ -176,11 +158,15 @@ return view.extend({
 					} else {
 						if (inf_stat.classList.contains("spinning")) {
 							inf_stat.classList.remove("spinning");
-							poll.stop();
+							if (document.getElementById('btn_suspend')) {
+								if (inf_stat.textContent.substr(0,6) === 'paused') {
+									document.querySelector('#btn_suspend').textContent = 'Resume';
+								}
+								if (document.getElementById('status').textContent.substr(0,7) === 'enabled') {
+									document.querySelector('#btn_suspend').textContent = 'Suspend';
+								}
+							}
 						}
-					}
-					if (inf_stat.textContent.substr(0,6) === 'paused' && document.getElementById('btn_suspend')) {
-						document.querySelector('#btn_suspend').textContent = 'Resume';
 					}
 				} else if (inf_stat) {
 					inf_stat.textContent = '-';
@@ -316,14 +302,14 @@ return view.extend({
 				]),
 				E('div', { class: 'right' }, [
 					E('button', {
-						'class': 'cbi-button cbi-button-apply',
+						'class': 'btn cbi-button cbi-button-apply',
 						'click': ui.createHandlerFn(this, function() {
 							return handleAction('timer');
 						})
 					}, [ _('Refresh Timer...') ]),
 					'\xa0\xa0\xa0',
 					E('button', {
-						'class': 'cbi-button cbi-button-apply',
+						'class': 'btn cbi-button cbi-button-apply',
 						'id': 'btn_suspend',
 						'click': ui.createHandlerFn(this, function() {
 							return handleAction('suspend');
@@ -331,14 +317,14 @@ return view.extend({
 					}, [ _('Suspend') ]),
 					'\xa0\xa0\xa0',
 					E('button', {
-						'class': 'cbi-button cbi-button-positive',
+						'class': 'btn cbi-button cbi-button-positive',
 						'click': ui.createHandlerFn(this, function() {
 							return handleAction('refresh');
 						})
 					}, [ _('Refresh') ]),
 					'\xa0\xa0\xa0',
 					E('button', {
-						'class': 'cbi-button cbi-button-negative',
+						'class': 'btn cbi-button cbi-button-negative',
 						'click': ui.createHandlerFn(this, function() {
 							return handleAction('restart');
 						})
@@ -525,6 +511,8 @@ return view.extend({
 		}
 
 		o = s.taboption('adv_chain', form.MultiValue, 'ban_settype_src', _('SRC IPSet Type'), _('Set individual SRC type per IPset to block only incoming packets.'));
+		o.value('whitelist');
+		o.value('blacklist');
 		for (var i = 0; i < sources.length; i++) {
 			if (sources[i].match(/^\s+\+/)) {
 				source = sources[i].match(/^\s+\+\s(\w+)\s/)[1].trim();
@@ -535,6 +523,8 @@ return view.extend({
 		o.rmempty = true;
 
 		o = s.taboption('adv_chain', form.MultiValue, 'ban_settype_dst', _('DST IPSet Type'), _('Set individual DST type per IPset to block only outgoing packets.'));
+		o.value('whitelist');
+		o.value('blacklist');
 		for (var i = 0; i < sources.length; i++) {
 			if (sources[i].match(/^\s+\+/)) {
 				source = sources[i].match(/^\s+\+\s(\w+)\s/)[1].trim();
@@ -545,6 +535,8 @@ return view.extend({
 		o.rmempty = true;
 
 		o = s.taboption('adv_chain', form.MultiValue, 'ban_settype_all', _('SRC+DST IPSet Type'), _('Set individual SRC+DST type per IPset to block incoming and outgoing packets.'));
+		o.value('whitelist');
+		o.value('blacklist');
 		for (var i = 0; i < sources.length; i++) {
 			if (sources[i].match(/^\s+\+/)) {
 				source = sources[i].match(/^\s+\+\s(\w+)\s/)[1].trim();
