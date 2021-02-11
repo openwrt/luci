@@ -1,0 +1,14 @@
+{
+	"admin/network/cname": {
+		"title": "Canonical Names",
+		"order": 45,
+		"action": {
+			"type": "view",
+			"path": "network/cname"
+		},
+		"depends": {
+			"acl": [ "luci-mod-cname" ],
+			"uci": { "dhcp": true }
+		}
+	}
+}
