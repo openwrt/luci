@@ -191,7 +191,7 @@ return view.extend({
 		o.modalonly = true;
 		o.rmempty = false;
 		o.nocreate = true;
-		o.default = 'wan6' ? 'wan6' : 'wan';
+		o.default = 'wan6';
 
 		o = fwtool.addMACOption(s, 'advanced', 'src_mac', _('Source MAC address'),
 			_('Only match incoming traffic from these MACs.'), hosts);
