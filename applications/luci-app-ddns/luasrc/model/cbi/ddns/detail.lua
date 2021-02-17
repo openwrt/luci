@@ -105,22 +105,22 @@ local function _verify_ip_source()
 		_arg = (_ipv6 == "1")
 			and ipn6:formvalue(section)
 			or  ipn4:formvalue(section)
-		command = command .. [[n ]] .. _arg
+		command = command .. [[n ]] .. UTIL.shellquote(_arg)
 	elseif _source == "web" then
 		_arg = (_ipv6 == "1")
 			and iurl6:formvalue(section)
 			or  iurl4:formvalue(section)
-		command = command .. [[u ]] .. _arg
+		command = command .. [[u ]] .. UTIL.shellquote(_arg)
 
 		-- proxy only needed for checking url
 		_arg = (pxy) and pxy:formvalue(section) or ""
 		if (_arg and #_arg > 0) then
-			command = command .. [[ -p ]] .. _arg
+			command = command .. [[ -p ]] .. UTIL.shellquote(_arg)
 		end
 	elseif _source == "interface" then
-		command = command .. [[i ]] .. ipi:formvalue(section)
+		command = command .. [[i ]] .. UTIL.shellquote(ipi:formvalue(section))
 	elseif _source == "script" then
-		command = command .. [[s ]] .. ips:formvalue(section)
+		command = command .. [[s ]] .. UTIL.shellquote(ips:formvalue(section))
 	end
 	command = command .. [[ -- get_local_ip]]
 	return (SYS.call(command) == 0)
@@ -436,7 +436,7 @@ function uurl.validate(self, value)
 		return nil, err_tab_basic(self) .. "<QUERY> " .. translate("missing / required")
 	elseif not url.host then
 		return nil, err_tab_basic(self) .. "<HOST> " .. translate("missing / required")
-	elseif SYS.call([[nslookup ]] .. url.host .. [[ >/dev/null 2>&1]]) ~= 0 then
+	elseif SYS.call([[nslookup ]] .. UTIL.shellquote(url.host) .. [[ >/dev/null 2>&1]]) ~= 0 then
 		return nil, err_tab_basic(self) .. translate("can not resolve host: ") .. url.host
 	end
 
@@ -864,7 +864,7 @@ function iurl4.validate(self, value)
 		return nil, err_tab_adv(self) .. translate("must start with 'http://'")
 	elseif not url.host then
 		return nil, err_tab_adv(self) .. "<HOST> " .. translate("missing / required")
-	elseif SYS.call([[nslookup ]] .. url.host .. [[>/dev/null 2>&1]]) ~= 0 then
+	elseif SYS.call([[nslookup ]] .. UTIL.shellquote(url.host) .. [[>/dev/null 2>&1]]) ~= 0 then
 		return nil, err_tab_adv(self) .. translate("can not resolve host: ") .. url.host
 	else
 		return value
@@ -915,7 +915,7 @@ function iurl6.validate(self, value)
 		return nil, err_tab_adv(self) .. translate("must start with 'http://'")
 	elseif not url.host then
 		return nil, err_tab_adv(self) .. "<HOST> " .. translate("missing / required")
-	elseif SYS.call([[nslookup ]] .. url.host .. [[>/dev/null 2>&1]]) ~= 0 then
+	elseif SYS.call([[nslookup ]] .. UTIL.shellquote(url.host) .. [[>/dev/null 2>&1]]) ~= 0 then
 		return nil, err_tab_adv(self) .. translate("can not resolve host: ") .. url.host
 	else
 		return value
@@ -1180,7 +1180,7 @@ if has_dnsserver or ( ( m:get(section, "dns_server") or "" ) ~= "" ) then
 			local command = CTRL.luci_helper .. [[ -]]
 			if (ipv6 == 1)  then command = command .. [[6]] end
 			if (force == 1) then command = command .. [[f]] end
-			command = command .. [[d ]] .. value .. [[ -- verify_dns]]
+			command = command .. [[d ]] .. UTIL.shellquote(value) .. [[ -- verify_dns]]
 
 			local ret = SYS.call(command)
 			if     ret == 0 then return value	-- everything OK
@@ -1256,7 +1256,7 @@ if has_proxy or ( ( m:get(section, "proxy") or "" ) ~= "" ) then
 			local command = CTRL.luci_helper .. [[ -]]
 			if (ipv6 == 1)  then command = command .. [[6]] end
 			if (force == 1) then command = command .. [[f]] end
-			command = command .. [[p ]] .. value .. [[ -- verify_proxy]]
+			command = command .. [[p ]] .. UTIL.shellquote(value) .. [[ -- verify_proxy]]
 			local ret = SYS.call(command)
 			if     ret == 0 then return value
 			elseif ret == 2 then return nil, err_tab_adv(self) .. translate("nslookup can not resolve host")
