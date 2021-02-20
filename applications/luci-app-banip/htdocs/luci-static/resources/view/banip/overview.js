@@ -680,17 +680,17 @@ return view.extend({
 		o.optional = true;
 		o.rmempty = true;
 
-		o = s.taboption('adv_log', form.Value, 'ban_ssh_logcount', _('SSH Log Count'), _('Number of the failed ssh login repetitions of the same ip in the log before banning.'));
+		o = s.taboption('adv_log', form.Value, 'ban_ssh_logcount', _('SSH Log Count'), _('Number of failed ssh login repetitions of the same ip in the log before banning.'));
 		o.placeholder = '3';
 		o.datatype = 'range(1,10)';
 		o.rmempty = true;
 
-		o = s.taboption('adv_log', form.Value, 'ban_luci_logcount', _('LuCI Log Count'), _('Number of the failed LuCI login repetitions of the same ip in the log before banning.'));
+		o = s.taboption('adv_log', form.Value, 'ban_luci_logcount', _('LuCI Log Count'), _('Number of failed LuCI login repetitions of the same ip in the log before banning.'));
 		o.placeholder = '3';
 		o.datatype = 'range(1,10)';
 		o.rmempty = true;
 
-		o = s.taboption('adv_log', form.Value, 'ban_nginx_logcount', _('NGINX Log Count'), _('Number of the failed nginx requests of the same ip in the log before banning.'));
+		o = s.taboption('adv_log', form.Value, 'ban_nginx_logcount', _('NGINX Log Count'), _('Number of failed nginx requests of the same ip in the log before banning.'));
 		o.placeholder = '5';
 		o.datatype = 'range(1,20)';
 		o.rmempty = true;
