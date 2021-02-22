@@ -294,6 +294,13 @@ return view.extend({
 		o.modalonly = true;
 		o.default = 'tcp udp';
 
+		o = s.taboption('general', form.Value, 'ipset', _('IPset'));
+		o.modalonly = true;
+		uci.sections('firewall', 'ipset', function(data){
+			o.value(data['name'], data['name']);
+		});
+		o.placeholder = ('-- select IPset --');
+
 		o = s.taboption('advanced', form.MultiValue, 'icmp_type', _('Match ICMP type'));
 		o.modalonly = true;
 		o.multiple = true;
