@@ -48,7 +48,9 @@ msgid ""
 "Define a set of ports and protocols (tcp or udp) that are explicitly not "
 "allowed regardless of the validity of the incoming SPA packet. Multiple "
 "entries are comma-separated."
-msgstr "定義一組明確禁止的埠號和協定（tcp或udp），無論傳入SPA封包的有效性如何。多個條目以逗號分隔。"
+msgstr ""
+"定義一組明確禁止的埠號和協定（tcp或udp），無論傳入SPA封包的有效性如何。多個條"
+"目以逗號分隔。"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:576
 msgid ""
@@ -65,7 +67,9 @@ msgstr ""
 msgid ""
 "Define the HMAC authentication key (in Base64 encoding) used for verifying "
 "the authenticity of the SPA packet before the packet is decrypted."
-msgstr "定義HMAC身份驗證金鑰（採用Base64編碼），用於在解密SPA封包之前驗證該封包的真實性。"
+msgstr ""
+"定義HMAC身份驗證金鑰（採用Base64編碼），用於在解密SPA封包之前驗證該封包的真實"
+"性。"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:554
 msgid ""
@@ -80,14 +84,16 @@ msgid ""
 "“FW_ACCESS_TIMEOUT” is not set then the default timeout of 30 seconds will "
 "automatically be set."
 msgstr ""
-"定義在取得源 IP 位址的有效敲門序列後，fwknopd 允許通過防火牆存取的「時間長度」。如果未設定 “FW_ACCESS_TIMEOUT”，"
-"將自動設定逾時 30 秒為預設值。"
+"定義在取得源 IP 位址的有效敲門序列後，fwknopd 允許通過防火牆存取的「時間長"
+"度」。如果未設定 “FW_ACCESS_TIMEOUT”，將自動設定逾時 30 秒為預設值。"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:540
 msgid ""
 "Define the symmetric key (in Base64 encoding) used for decrypting an "
 "incoming SPA packet that is encrypted by the fwknop client with Rijndael."
-msgstr "定義對稱金鑰（採用Base64編碼），該對稱金鑰用於解密由fwknop客戶端使用Rijndael加密的傳入SPA封包。"
+msgstr ""
+"定義對稱金鑰（採用Base64編碼），該對稱金鑰用於解密由fwknop客戶端使用Rijndael"
+"加密的傳入SPA封包。"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:532
 msgid ""
@@ -141,8 +147,9 @@ msgid ""
 "authentication key used to verify the authenticity of the incoming SPA "
 "packet before the packet is decrypted."
 msgstr ""
-"生成用於解密傳入SPA封包的對稱金鑰，該對稱金鑰由fwknop客戶端使用Rijndael區塊密碼進行加密，以及生成HMAC身份驗證金鑰，用於在解密該SPA"
-"消息之前驗證傳入SPA封包的真實性。"
+"生成用於解密傳入SPA封包的對稱金鑰，該對稱金鑰由fwknop客戶端使用Rijndael區塊密"
+"碼進行加密，以及生成HMAC身份驗證金鑰，用於在解密該SPA消息之前驗證傳入SPA封包"
+"的真實性。"
 
 #: applications/luci-app-fwknopd/root/usr/share/rpcd/acl.d/luci-app-fwknopd.json:3
 msgid "Grant UCI access for luci-app-fwknopd"
@@ -191,8 +198,8 @@ msgid ""
 "and generates QR codes for all found stanzas. Handles only files in /etc/"
 "fwknop folder due to access rights restrictions."
 msgstr ""
-"解析 /etc/fwknop/access.conf 檔案（以及包含的檔案／資料夾／金鑰），並為所有找到的節生成 QR 碼。由於存取權限的限制，僅處理 /"
-"etc/fwknop 資料夾中的檔案。"
+"解析 /etc/fwknop/access.conf 檔案（以及包含的檔案／資料夾／金鑰），並為所有找"
+"到的節生成 QR 碼。由於存取權限的限制，僅處理 /etc/fwknop 資料夾中的檔案。"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:422
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:506
@@ -222,15 +229,18 @@ msgid ""
 "“192.168.10.0/24”), and individual IP addresses can be specified as well. "
 "Multiple entries are comma-separated."
 msgstr ""
-"SPA封包將被接受的目標位址。如果有效的SPA封包應遵循任何目標IP，則也接受字符串“ ANY”。應該以CIDR表示法指定網絡（例如 “ 192.168."
-"10.0/24”），也可以指定單個IP地址。多個條目以逗號分隔。"
+"SPA封包將被接受的目標位址。如果有效的SPA封包應遵循任何目標IP，則也接受字符"
+"串“ ANY”。應該以CIDR表示法指定網絡（例如 “ 192.168.10.0/24”），也可以指定單個"
+"IP地址。多個條目以逗號分隔。"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:494
 msgid ""
 "The network on which the daemon listens. The daemon is automatically started "
 "when the network is up-and-running. This option has precedence over "
 "“PCAP_INTF” option."
-msgstr "常駐服務監聽的網絡。網絡啟動並運行時，常駐服務會自動啟動。此選項優先於“ PCAP_INTF”選項。"
+msgstr ""
+"常駐服務監聽的網絡。網絡啟動並運行時，常駐服務會自動啟動。此選項優先於“ "
+"PCAP_INTF”選項。"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:508
 msgid ""
@@ -240,8 +250,9 @@ msgid ""
 "“192.168.10.0/24”), and individual IP addresses can be specified as well. "
 "Multiple entries are comma-separated."
 msgstr ""
-"將接受SPA封包的來源位址。如果應該從任何來源IP接受有效的SPA封包，則也接受字符“ANY”。應該以CIDR表示法指定網絡（例如“ 192.168.10"
-".0/24”），也可以指定單個IP地址。多個條目以逗號分隔。"
+"將接受SPA封包的來源位址。如果應該從任何來源IP接受有效的SPA封包，則也接受字"
+"符“ANY”。應該以CIDR表示法指定網絡（例如“ 192.168.10.0/24”），也可以指定單個IP"
+"地址。多個條目以逗號分隔。"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:514
 msgid "The source address has to be specified."
@@ -269,12 +280,3 @@ msgstr "access.conf 節"
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:595
 msgid "fwknopd.conf config options"
 msgstr "fwknopd.conf 配置選項"
-
-#~ msgid "Firewall Knock Operator"
-#~ msgstr "Firewall Knock 操作者"
-
-#~ msgid "The Base64 HMAC key"
-#~ msgstr "base64 HMAC 金鑰"
-
-#~ msgid "Use ANY for any source IP"
-#~ msgstr "對任何源 IP 使用 ANY"

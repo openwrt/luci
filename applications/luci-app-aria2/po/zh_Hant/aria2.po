@@ -117,7 +117,9 @@ msgstr "除錯"
 msgid ""
 "Disable IPv6. This is useful if you have to use broken DNS and want to avoid "
 "terribly slow AAAA record lookup."
-msgstr "停用 IPv6；如果您的 IPv6 連線不穩定，並希望 DNS 避免查詢緩慢的 AAAA 紀錄，請啟用此選項。"
+msgstr ""
+"停用 IPv6；如果您的 IPv6 連線不穩定，並希望 DNS 避免查詢緩慢的 AAAA 紀錄，請"
+"啟用此選項。"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:440
 msgid "Disk cache"
@@ -125,7 +127,9 @@ msgstr "磁碟快取"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:259
 msgid "Don't split less than 2*SIZE byte range. Possible values: 1M-1024M."
-msgstr "檔案的最小分割大小（取值範圍：1-1024M）；如果「檔案大小」小於該值的 2 倍，則不會分割此檔案。"
+msgstr ""
+"檔案的最小分割大小（取值範圍：1-1024M）；如果「檔案大小」小於該值的 2 倍，則"
+"不會分割此檔案。"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:254
 msgid "Download a file using N connections."
@@ -142,7 +146,8 @@ msgstr "檔案為空。"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:280
 msgid "Enable IPv4 DHT functionality. It also enables UDP tracker support."
-msgstr "啟用 IPv4「分散式雜湊表」功能；這將同時啟用對「UDP tracker 協定」的支援。"
+msgstr ""
+"啟用 IPv4「分散式雜湊表」功能；這將同時啟用對「UDP tracker 協定」的支援。"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:290
 msgid "Enable IPv6 DHT functionality."
@@ -269,8 +274,8 @@ msgid ""
 "Configuring this option with your preferred download speed can increase your "
 "download speed in some cases."
 msgstr ""
-"如果某個 BT 任務的下載速度小於設定的速度，Aria2 會臨時提高 Peer "
-"的數量來嘗試取得更大的下載速度。在某些情況下，設定此選項能提高您的下載速度。"
+"如果某個 BT 任務的下載速度小於設定的速度，Aria2 會臨時提高 Peer 的數量來嘗試"
+"取得更大的下載速度。在某些情況下，設定此選項能提高您的下載速度。"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:88
 msgid "Info"
@@ -308,7 +313,9 @@ msgstr "附加 BitTorrent tracker 清單的發布 URI。"
 msgid ""
 "List of extra settings. Format: option=value, eg. <code>netrc-path=/tmp/."
 "netrc</code>."
-msgstr "額外設定清單；格式為 option=value（例如：<code>netrc-path=/tmp/.netrc</code>）。"
+msgstr ""
+"額外設定清單；格式為 option=value（例如：<code>netrc-path=/tmp/.netrc</"
+"code>）。"
 
 #: applications/luci-app-aria2/luasrc/view/aria2/log_template.htm:48
 msgid "Loading"
@@ -468,7 +475,8 @@ msgid ""
 "RPC transport will be encrypted by SSL/TLS. The RPC clients must use https "
 "scheme to access the server. For WebSocket client, use wss scheme."
 msgstr ""
-"通過 SSL/TLS 加密 RPC 傳輸；RPC 客戶端必須使用「HTTPS 協定」來存取伺服器，WebSocket 客戶端則使用「WWS 協定」。"
+"通過 SSL/TLS 加密 RPC 傳輸；RPC 客戶端必須使用「HTTPS 協定」來存取伺服器，"
+"WebSocket 客戶端則使用「WWS 協定」。"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:119
 msgid "RPC username"
@@ -487,7 +495,9 @@ msgid ""
 "Removes the unselected files when download is completed in BitTorrent. "
 "Please use this option with care because it will actually remove files from "
 "your disk."
-msgstr "BitTorrent 下載完成時移除未選擇的檔案；檔案將從您的磁碟中永久移除，請小心使用此選項。"
+msgstr ""
+"BitTorrent 下載完成時移除未選擇的檔案；檔案將從您的磁碟中永久移除，請小心使用"
+"此選項。"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:377
 msgid "Request peer speed limit"
@@ -505,7 +515,8 @@ msgstr "執行守護行程的使用者"
 msgid ""
 "Save a control file (*.aria2) every N seconds. If 0 is given, a control file "
 "is not saved during download."
-msgstr "每 N 秒儲存下載「控制檔案」(*.aria2)。設定 0 表示在下載過程中不儲存控制檔案。"
+msgstr ""
+"每 N 秒儲存下載「控制檔案」(*.aria2)。設定 0 表示在下載過程中不儲存控制檔案。"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:461
 msgid ""
@@ -513,14 +524,17 @@ msgid ""
 "This option also saves control file in that situations. This may be useful "
 "to save BitTorrent seeding which is recognized as completed state."
 msgstr ""
-"即使下載任務已完成或已移除，也將其儲存到「工作階段檔」；於此同時，啟用此選項還會儲存「控制檔」。這可能有助於您儲存被辨識為「已完成狀態」的 "
-"BitTorrent 種子。"
+"即使下載任務已完成或已移除，也將其儲存到「工作階段檔」；於此同時，啟用此選項"
+"還會儲存「控制檔」。這可能有助於您儲存被辨識為「已完成狀態」的 BitTorrent 種"
+"子。"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:435
 msgid ""
 "Save error/unfinished downloads to session file every N seconds. If 0 is "
 "given, file will be saved only when aria2 exits."
-msgstr "每 N 秒將失敗的/未完成的下載儲存到工作階段檔案。設定 0 則僅在 Aria2 退出時儲存。"
+msgstr ""
+"每 N 秒將失敗的/未完成的下載儲存到工作階段檔案。設定 0 則僅在 Aria2 退出時儲"
+"存。"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:316
 msgid ""
@@ -528,8 +542,8 @@ msgid ""
 "BitTorrent Magnet URI is used. The file name is hex encoded info hash with "
 "suffix \".torrent\"."
 msgstr ""
-"儲存元資料為 \".torrent\" 檔案；此選項僅在使用 BitTorrent 磁力連結下載時生效。檔案名稱（包含字尾 \".torrent\""
-"）為十六進位編碼的雜湊值。"
+"儲存元資料為 \".torrent\" 檔案；此選項僅在使用 BitTorrent 磁力連結下載時生"
+"效。檔案名稱（包含字尾 \".torrent\"）為十六進位編碼的雜湊值。"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:315
 msgid "Save metadata"
@@ -561,9 +575,9 @@ msgid ""
 "if remote server responds with <code>Content-Encoding: gzip</code> or "
 "<code>Content-Encoding: deflate</code>."
 msgstr ""
-"傳送請求頭欄位：<code>Accept: deflate, gzip</code>；當遠端伺服器的回應頭中具有 <code>Content-"
-"Encoding: gzip</code> 或 <code>Content-Encoding: deflate</code> "
-"時解壓回應資料，以提高資料傳輸速度。"
+"傳送請求頭欄位：<code>Accept: deflate, gzip</code>；當遠端伺服器的回應頭中具"
+"有 <code>Content-Encoding: gzip</code> 或 <code>Content-Encoding: deflate</"
+"code> 時解壓回應資料，以提高資料傳輸速度。"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:220
 msgid ""
@@ -572,8 +586,9 @@ msgid ""
 "you can add Cache-Control header with a directive you like using \"Header\" "
 "option."
 msgstr ""
-"傳送 <code>Cache-Control: no-cache</code> 和 <code>Pragma: no-cache</code> "
-"請求標頭來防止快取內容，停用則不傳送。您也可用使用「請求標頭」選項來設定 Cache-Control 請求標頭。"
+"傳送 <code>Cache-Control: no-cache</code> 和 <code>Pragma: no-cache</code> 請"
+"求標頭來防止快取內容，停用則不傳送。您也可用使用「請求標頭」選項來設定 Cache-"
+"Control 請求標頭。"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:336
 msgid ""
@@ -581,14 +596,16 @@ msgid ""
 "\"6881-6999\" and \"6881-6889,6999\". Make sure that the specified ports are "
 "open for incoming TCP traffic."
 msgstr ""
-"為 BitTorrent 下載設定 TCP 連接埠。支援的格式：「6881,6885」，「6881-6999」和「6881-6889,6999」。"
-"請確保正確放行了這些連接埠的 TCP 入站通信。"
+"為 BitTorrent 下載設定 TCP 連接埠。支援的格式：「6881,6885」，「6881-6999」和"
+"「6881-6889,6999」。請確保正確放行了這些連接埠的 TCP 入站通信。"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:342
 msgid ""
 "Set UDP listening port used by DHT (IPv4, IPv6) and UDP tracker. Make sure "
 "that the specified ports are open for incoming UDP traffic."
-msgstr "設定用於 DHT (IPv4, IPv6) 和 UDP tracker 協定的 UDP 監聽埠；請確保指定的通訊埠允許 UDP 傳入流量。"
+msgstr ""
+"設定用於 DHT (IPv4, IPv6) 和 UDP tracker 協定的 UDP 監聽埠；請確保指定的通訊"
+"埠允許 UDP 傳入流量。"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:477
 msgid ""
@@ -613,7 +630,9 @@ msgid ""
 "Set the connect timeout in seconds to establish connection to HTTP/FTP/proxy "
 "server. After the connection is established, this option makes no effect and "
 "\"Timeout\" option is used instead."
-msgstr "設定 HTTP、FTP 和代理伺服器的連線逾時時間。當連線建立後，該選項失去作用，而「逾時時間」選項會被使用。"
+msgstr ""
+"設定 HTTP、FTP 和代理伺服器的連線逾時時間。當連線建立後，該選項失去作用，而"
+"「逾時時間」選項會被使用。"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:267
 msgid "Set the seconds to wait between retries."
@@ -649,10 +668,11 @@ msgid ""
 "FAT32 because it takes almost same time as \"prealloc\" and it blocks aria2 "
 "entirely until allocation finishes."
 msgstr ""
-"指定檔案分配方式。如果您使用的檔案系統較新，例如：ext4 (支援擴展分區)、btrfs、xfs 或者 NTFS (僅限 MinGW "
-"版本)，強烈推薦「falloc」，這種方式幾乎能立即分配比較大的檔案 (GB)，但是它要求您的系統必須支援 posix_fallocate(3) 函數。"
-"不要在 ext3 或者 FAT32 這些舊檔案系統中使用「falloc」，因為它花費的時間和「prealloc」幾乎一樣多，"
-"而且在檔案分配過程中會阻塞整個 Aria2 處理程序。"
+"指定檔案分配方式。如果您使用的檔案系統較新，例如：ext4 (支援擴展分區)、"
+"btrfs、xfs 或者 NTFS (僅限 MinGW 版本)，強烈推薦「falloc」，這種方式幾乎能立"
+"即分配比較大的檔案 (GB)，但是它要求您的系統必須支援 posix_fallocate(3) 函數。"
+"不要在 ext3 或者 FAT32 這些舊檔案系統中使用「falloc」，因為它花費的時間和"
+"「prealloc」幾乎一樣多，而且在檔案分配過程中會阻塞整個 Aria2 處理程序。"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:368
 msgid ""
@@ -665,14 +685,18 @@ msgid ""
 "Specify seeding time in minutes. If \"Seed ratio\" option is specified along "
 "with this option, seeding ends when at least one of the conditions is "
 "satisfied. Specifying 0 disables seeding after download completed."
-msgstr "指定做種時間 (分鍾)。如果同時指定了「做種比例」選項，那麼將在任一條件滿足時停止做種。設定 0 表示下載完成後停止做種。"
+msgstr ""
+"指定做種時間 (分鍾)。如果同時指定了「做種比例」選項，那麼將在任一條件滿足時停"
+"止做種。設定 0 表示下載完成後停止做種。"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:402
 msgid ""
 "Specify share ratio. Seed completed torrents until share ratio reaches "
 "RATIO. You are strongly encouraged to specify equals or more than 1.0 here. "
 "Specify 0.0 if you intend to do seeding regardless of share ratio."
-msgstr "指定做種比例。BT 下載完成之後持續做種，直到比例達到指定值。強烈建議將此選項設定為大於或等於 1.0。設定為 0.0 來無限做種。"
+msgstr ""
+"指定做種比例。BT 下載完成之後持續做種，直到比例達到指定值。強烈建議將此選項設"
+"定為大於或等於 1.0。設定為 0.0 來無限做種。"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:373
 msgid "Specify the maximum number of peers per torrent, 0 means unlimited."
@@ -685,14 +709,16 @@ msgid ""
 "than 20 bytes are specified, random byte data are added to make its length "
 "20 bytes."
 msgstr ""
-"設定 Peer ID 前綴。Peer ID 的長度為 20 位元組。如果設定超過了 20 位元組，將僅使用前面的 20 位元組。如果設定少於 20 "
-"位元組，將加入額外的隨機字元來讓長度達到 20 位元組。"
+"設定 Peer ID 前綴。Peer ID 的長度為 20 位元組。如果設定超過了 20 位元組，將僅"
+"使用前面的 20 位元組。如果設定少於 20 位元組，將加入額外的隨機字元來讓長度達"
+"到 20 位元組。"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:388
 msgid ""
 "Stop BitTorrent download if download speed is 0 in consecutive N seconds. If "
 "0 is given, this feature is disabled."
-msgstr "當 BT 任務在 N 秒的持續時間內的下載速度一直為 0，則停止下載。0 表示停用。"
+msgstr ""
+"當 BT 任務在 N 秒的持續時間內的下載速度一直為 0，則停止下載。0 表示停用。"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:387
 msgid "Stop timeout"
@@ -755,7 +781,8 @@ msgstr "為所有協定使用代理伺服器。"
 msgid ""
 "Use the certificate authorities in FILE to verify the peers. The certificate "
 "file must be in PEM format and can contain multiple CA certificates."
-msgstr "使用檔案中的憑證來驗證對端。憑證檔案必須為 PEM 格式並且可以包含多個憑證。"
+msgstr ""
+"使用檔案中的憑證來驗證對端。憑證檔案必須為 PEM 格式並且可以包含多個憑證。"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:141
 msgid ""
@@ -765,8 +792,9 @@ msgid ""
 "PKCS12 files with a blank import password can be opened!<br/>When using PEM, "
 "you have to specify the \"RPC private key\" as well."
 msgstr ""
-"RPC 伺服器使用的「憑證檔」；憑證格式必須為 PKCS12 (.p12, .pfx) 或 PEM。<br/>PKCS12 "
-"檔案必須包含憑證、金鑰以及可選的附加「憑證鏈」，且該檔案不能有匯入密碼！<br/>使用 PEM 時，您必須同時指定「RPC 私鑰」。"
+"RPC 伺服器使用的「憑證檔」；憑證格式必須為 PKCS12 (.p12, .pfx) 或 PEM。<br/"
+">PKCS12 檔案必須包含憑證、金鑰以及可選的附加「憑證鏈」，且該檔案不能有匯入密"
+"碼！<br/>使用 PEM 時，您必須同時指定「RPC 私鑰」。"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:196
 msgid ""
@@ -776,8 +804,9 @@ msgid ""
 "PKCS12 files with a blank import password can be opened!<br/>When using PEM, "
 "you have to specify the \"Private key\" as well."
 msgstr ""
-"客戶端使用的「憑證檔」；憑證格式必須為 PKCS12 (.p12, .pfx) 或 PEM。<br/>PKCS12 "
-"檔案必須包含憑證、金鑰以及可選的附加「憑證鏈」，且該檔案不能有匯入密碼！<br/>使用 PEM 時，您必須同時指定「私鑰」。"
+"客戶端使用的「憑證檔」；憑證格式必須為 PKCS12 (.p12, .pfx) 或 PEM。<br/"
+">PKCS12 檔案必須包含憑證、金鑰以及可選的附加「憑證鏈」，且該檔案不能有匯入密"
+"碼！<br/>使用 PEM 時，您必須同時指定「私鑰」。"
 
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:150
 msgid ""
@@ -829,119 +858,3 @@ msgstr "prealloc"
 #: applications/luci-app-aria2/luasrc/model/cbi/aria2/config.lua:456
 msgid "trunc"
 msgstr "trunc"
-
-#~ msgid "\"Falloc\" is not available in all cases."
-#~ msgstr "\"Falloc\" 並不是在所有情況下都可用"
-
-#~ msgid "<abbr title=\"Distributed Hash Table\">DHT</abbr> enabled"
-#~ msgstr "啟用<abbr title=\"分散式雜湊表\">DHT</abbr>"
-
-#~ msgid "Additional Bt tracker enabled"
-#~ msgstr "額外新增的 Bt tracker"
-
-#~ msgid "Aria2 Settings"
-#~ msgstr "Aria2 配置"
-
-#~ msgid "Aria2 Status"
-#~ msgstr "Aria2 狀態"
-
-#~ msgid ""
-#~ "Aria2 is a multi-protocol &amp; multi-source download utility, here you "
-#~ "can configure the settings."
-#~ msgstr "Aria2 是一個支援多協議多執行緒的下載器, 您可以在這裡對其進行配置。"
-
-#~ msgid "Autosave session interval"
-#~ msgstr "定時儲存會話間隔"
-
-#~ msgid "BitTorrent Settings"
-#~ msgstr "BitTorrent 設定"
-
-#~ msgid "Default download directory"
-#~ msgstr "預設下載目錄"
-
-#~ msgid "Enable log"
-#~ msgstr "啟用日誌"
-
-#~ msgid "Falloc"
-#~ msgstr "快速 alloc（Falloc）"
-
-#~ msgid "Files and Locations"
-#~ msgstr "檔案和目錄"
-
-#~ msgid "General Settings"
-#~ msgstr "常規設定"
-
-#~ msgid "List of additional Bt tracker"
-#~ msgstr "附加 Bt tracker 列表"
-
-#~ msgid "List of extra settings"
-#~ msgstr "附加選項列表"
-
-#~ msgid "Max number of peers per torrent"
-#~ msgstr "單個種子最大連線數"
-
-#~ msgid "Off"
-#~ msgstr "關閉"
-
-#~ msgid "Open AriaNg"
-#~ msgstr "開啟 AriaNg"
-
-#~ msgid "Open WebUI-Aria2"
-#~ msgstr "開啟 WebUI-Aria2"
-
-#~ msgid "Open YAAW"
-#~ msgstr "開啟 YAAW"
-
-#~ msgid "Overall download limit"
-#~ msgstr "全域性下載限速"
-
-#~ msgid "Overall speed limit enabled"
-#~ msgstr "啟用全侷限速"
-
-#~ msgid "Overall upload limit"
-#~ msgstr "全域性上傳限速"
-
-#~ msgid "Per task download limit"
-#~ msgstr "單任務下載限速"
-
-#~ msgid "Per task speed limit enabled"
-#~ msgstr "啟用單任務限速"
-
-#~ msgid "Per task upload limit"
-#~ msgstr "單任務上傳限速"
-
-#~ msgid "Prealloc"
-#~ msgstr "預分配"
-
-#~ msgid "Preallocation"
-#~ msgstr "磁碟預分配"
-
-#~ msgid "RPC Token"
-#~ msgstr "RPC 令牌"
-
-#~ msgid "Sec"
-#~ msgstr "秒"
-
-#~ msgid "Task Settings"
-#~ msgstr "任務設定"
-
-#~ msgid "Trunc"
-#~ msgstr "Trunc"
-
-#~ msgid "User agent value"
-#~ msgstr "使用者代理（UA）"
-
-#~ msgid "View Json-RPC URL"
-#~ msgstr "檢視 Json-RPC URL"
-
-#~ msgid "in bytes, You can append K or M."
-#~ msgstr "單位 B, 您可以在數字後跟上 K 或 M。"
-
-#~ msgid "in bytes/sec, You can append K or M."
-#~ msgstr "單位 B/s, 您可以在數字後跟上 K 或 M。"
-
-#~ msgid "Log file is in the config file dir."
-#~ msgstr "日誌檔案在配置檔案目錄下"
-
-#~ msgid "General settings"
-#~ msgstr "基本設定"

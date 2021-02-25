@@ -11,7 +11,7 @@ msgstr ""
 "|| n%100>=20) ? 1 : 2;\n"
 "X-Generator: Weblate 4.5-dev\n"
 
-#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:73
+#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:72
 msgid "%s is not installed or not found"
 msgstr "%s nie jest zainstalowany lub nie znaleziono"
 
@@ -63,7 +63,7 @@ msgstr "Cloudflare (filtr rodzinny)"
 msgid "Cloudflare (Security Protection)"
 msgstr "Cloudflare (filtr bezpieczeństwa)"
 
-#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:126
+#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:124
 msgid "Configuration"
 msgstr "Konfiguracja"
 
@@ -71,7 +71,7 @@ msgstr "Konfiguracja"
 msgid "DNS HTTPS Proxy"
 msgstr "DNS HTTPS Proxy"
 
-#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:107
+#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:105
 msgid "DNS HTTPS Proxy Settings"
 msgstr "Ustawienia DNS HTTPS Proxy"
 
@@ -91,7 +91,7 @@ msgstr "DNSCrypt.ca (DNS2)"
 msgid "DNSPod.cn Public DNS"
 msgstr "DNSPod.cn Publiczny DNS"
 
-#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:189
+#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:191
 msgid "DSCP Codepoint"
 msgstr "Punkt kodowy DSCP"
 
@@ -103,7 +103,7 @@ msgstr "Digitale Gesellschaft"
 msgid "Disable"
 msgstr "Wyłącz"
 
-#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:134
+#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:132
 msgid "Do not update configs"
 msgstr "Nie aktualizuj konfiguracji"
 
@@ -115,6 +115,18 @@ msgstr "Włącz"
 msgid "For more information on different options check"
 msgstr "Aby uzyskać więcej informacji o różnych opcjach, sprawdź"
 
+#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:134
+msgid "Force Router DNS"
+msgstr ""
+
+#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:136
+msgid "Force Router DNS server to all local devices"
+msgstr ""
+
+#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:134
+msgid "Forces Router DNS use on local devices, also known as DNS Hijacking."
+msgstr ""
+
 #: applications/luci-app-https-dns-proxy/luasrc/https-dns-proxy/providers/google.dns.lua:3
 msgid "Google"
 msgstr "Google"
@@ -123,19 +135,24 @@ msgstr "Google"
 msgid "Grant UCI and file access for luci-app-https-dns-proxy"
 msgstr "Udziel dostępu UCI i plikom do luci-app-https-dns-proxy"
 
-#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:126
-msgid ""
-"If update DNSMASQ config is selected, when you add/remove any instances "
-"below, they will be used to override the 'DNS forwardings' section of %sDHCP "
-"and DNS%s (%smore information%s)."
+#: applications/luci-app-https-dns-proxy/luasrc/https-dns-proxy/providers/net.idnet.doh.lua:3
+msgid "IDNet.net (UK)"
 msgstr ""
-"Jeśli wybrano aktualizację konfiguracji DNSMASQ, po dodaniu lub usunięciu "
-"poniższych instancji zostaną one użyte do zastąpienia sekcji „Przekazywania "
-"DNS” w %sDHCP oraz DNS%s (%swięcej informacji%s)."
 
-#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:138
+#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:125
+msgid ""
+"If update option is selected, the 'DNS forwardings' section of %sDHCP and DNS"
+"%s will be automatically updated to use selected DoH providers (%smore "
+"information%s)."
+msgstr ""
+
+#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:140
 msgid "Instances"
 msgstr "Instancje"
+
+#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:135
+msgid "Let local devices use their own DNS servers if set"
+msgstr ""
 
 #: applications/luci-app-https-dns-proxy/luasrc/https-dns-proxy/providers/gr.libredns.doh.lua:3
 msgid "LibreDNS"
@@ -145,11 +162,11 @@ msgstr "LibreDNS"
 msgid "LibreDNS (No Ads)"
 msgstr "LibreDNS (bez reklam)"
 
-#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:172
+#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:174
 msgid "Listen Address"
 msgstr "Nasłuchiwany adres"
 
-#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:185
+#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:187
 msgid "Listen Port"
 msgstr "Port nasłuchu"
 
@@ -173,7 +190,7 @@ msgstr "OpenDNS"
 msgid "OpenDNS (Family Shield)"
 msgstr "OpenDNS (filtr rodzinny)"
 
-#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:193
+#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:195
 msgid "Proxy Server"
 msgstr "Serwer proxy"
 
@@ -201,19 +218,19 @@ msgstr "Quad 9 (niezabezpieczony)"
 msgid "Reload"
 msgstr "Przeładuj"
 
-#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:145
+#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:147
 msgid "Resolver"
 msgstr "Dostawca"
 
-#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:99
+#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:91
 msgid "Running: %s DoH at %s:%s"
 msgstr "Uruchomione: %s DoH w %s:%s"
 
-#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:111
+#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:109
 msgid "Service Status"
 msgstr "Status usługi"
 
-#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:109
+#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:107
 msgid "Service Status [%s %s]"
 msgstr "Stan usługi [%s %s]"
 
@@ -225,7 +242,7 @@ msgstr "Uruchom"
 msgid "Stop"
 msgstr "Zatrzymaj"
 
-#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:77
+#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:98
 msgid "Stopped"
 msgstr "Zatrzymany"
 
@@ -233,15 +250,15 @@ msgstr "Zatrzymany"
 msgid "Unknown Provider"
 msgstr "Nieznany dostawca"
 
-#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:131
+#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:129
 msgid "Update %s config"
 msgstr "Zaktualizuj konfigurację %s"
 
-#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:127
+#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:125
 msgid "Update DNSMASQ Config on Start/Stop"
 msgstr "Zaktualizuj konfigurację DNSMASQ przy uruchamianiu i zatrzymywaniu"
 
-#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:128
+#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:126
 msgid "Update all configs"
 msgstr "Zaktualizuj wszystkie konfiguracje"
 
@@ -249,92 +266,10 @@ msgstr "Zaktualizuj wszystkie konfiguracje"
 msgid "and"
 msgstr "i"
 
-#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:79
+#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:100
 msgid "disabled"
 msgstr "wyłączony"
 
 #: applications/luci-app-https-dns-proxy/luasrc/https-dns-proxy/providers.disabled/cn.rubyfish.dns.lua:3
 msgid "rubyfish.cn"
 msgstr "rubyfish.cn"
-
-#~ msgid "Listen address"
-#~ msgstr "Nasłuchiwany adres"
-
-#~ msgid "Listen port"
-#~ msgstr "Nasłuchiwany port"
-
-#~ msgid "Proxy server"
-#~ msgstr "Serwer proxy"
-
-#~ msgid ""
-#~ "When you add/remove any instances below, they will be used to override "
-#~ "the 'DNS forwardings' section of %sDHCP and DNS%s."
-#~ msgstr ""
-#~ "Po dodaniu/usunięciu instancji, zostaną one użyte do nadpisania "
-#~ "'Przekazywania DNS' w sekcji %sDHCP i DNS%s."
-
-#~ msgid "Alidns"
-#~ msgstr "Alidns"
-
-#~ msgid "EDNS client subnet"
-#~ msgstr "Podsieć klienta EDNS"
-
-#~ msgid "Grant UCI access for luci-app-https-dns-proxy"
-#~ msgstr "Udziel dostępu UCI do luci-app-https-dns-proxy"
-
-#~ msgid ""
-#~ "When you add/remove any instances below, they will be used to override "
-#~ "the 'DNS forwardings' section of <a href=\"%s\">DHCP and DNS</a>."
-#~ msgstr ""
-#~ "Po dodaniu/usunięciu poniższych wystąpień zostaną one użyte do "
-#~ "zastąpienia sekcji \"Przekazywanie DNS\" w obszarze <a href=\"%s\">DHCP i "
-#~ "DNS</a>."
-
-#~ msgid "DNS Over HTTPS Proxy"
-#~ msgstr "DNS Over HTTPS"
-
-#~ msgid "DNS Over HTTPS Proxy Settings"
-#~ msgstr "Ustawienia DNS Over HTTPS"
-
-#~ msgid "DHCP and DNS"
-#~ msgstr "DHCP i DNS"
-
-#~ msgid "DoH"
-#~ msgstr "DoH"
-
-#~ msgid "Running"
-#~ msgstr "Działa"
-
-#~ msgid ""
-#~ "When you add/remove any instances below, they will be used to override "
-#~ "the 'DNS forwardings' section of"
-#~ msgstr ""
-#~ "Po dodaniu/usunięciu dowolnej instancji poniżej, zastąpią one ustawienia "
-#~ "sekcji 'Przekazywania DNS' w"
-
-#~ msgid "at"
-#~ msgstr "na"
-
-#~ msgid "is not installed or not found"
-#~ msgstr "nie jest zainstalowany lub nie znaleziono"
-
-#~ msgid "DNS over HTTPS Proxy"
-#~ msgstr "Proxy DNS over HTTPS"
-
-#~ msgid "DNS over HTTPS Proxy Settings"
-#~ msgstr "Ustawiania proxy DNS over HTTPS"
-
-#~ msgid "Provider"
-#~ msgstr "Dostawca"
-
-#~ msgid "Subnet address"
-#~ msgstr "Adres podsieci"
-
-#~ msgid "Uknown Provider"
-#~ msgstr "Nieznany dostawca"
-
-#~ msgid "HTTPS DNS Proxy"
-#~ msgstr "HTTPS DNS Proxy"
-
-#~ msgid "HTTPS DNS Proxy Settings"
-#~ msgstr "Ustawienia Proxy HTTPS DNS"
