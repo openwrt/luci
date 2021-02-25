@@ -285,7 +285,7 @@ duid2ea(const char *duid)
 	switch (len) {
 	case 28:
 		if (!strncmp(duid, "00010001", 8))
-			p = duid + 8;
+			p = duid + 16;
 
 		break;
 
