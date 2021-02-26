@@ -17,7 +17,7 @@ function handleAction(ev) {
 			]),
 			E('div', { 'class': 'right' }, [
 				E('button', {
-					'class': 'btn',
+					'class': 'btn cbi-button',
 					'click': L.hideModal
 				}, _('Cancel')),
 				' ',
@@ -52,7 +52,7 @@ function handleAction(ev) {
 			]),
 			E('div', { 'class': 'right' }, [
 				E('button', {
-					'class': 'btn',
+					'class': 'btn cbi-button',
 					'click': L.hideModal
 				}, _('Cancel')),
 				' ',
@@ -104,7 +104,7 @@ function handleAction(ev) {
 			]),
 			E('div', { 'class': 'right' }, [
 				E('button', {
-					'class': 'btn',
+					'class': 'btn cbi-button',
 					'click': L.hideModal
 				}, _('Cancel')),
 				' ',
@@ -158,7 +158,7 @@ function handleAction(ev) {
 			]),
 			E('div', { 'class': 'right' }, [
 				E('button', {
-					'class': 'btn',
+					'class': 'btn cbi-button',
 					'click': L.hideModal
 				}, _('Cancel')),
 				' ',
@@ -195,7 +195,7 @@ return view.extend({
 
 	render: function(dnsreport) {
 		if (!dnsreport) {
-			dnsreport = '{ "data": "" }';
+			dnsreport = '{}';
 		};
 		var content;
 		content = JSON.parse(dnsreport);
@@ -213,32 +213,28 @@ return view.extend({
 		]);
 
 		var max = 0;
-		if (content.data.top_clients && content.data.top_domains && content.data.top_blocked) {
-			max = Math.max(content.data.top_clients.length, content.data.top_domains.length, content.data.top_blocked.length);
+		if (content.top_clients && content.top_domains && content.top_blocked) {
+			max = Math.max(content.top_clients.length, content.top_domains.length, content.top_blocked.length);
 		}
 		for (var i = 0; i < max; i++) {
 			var a_cnt = '\xa0', a_addr = '\xa0', b_cnt = '\xa0', b_addr = '\xa0', c_cnt = '\xa0', c_addr = '\xa0';
-			if (content.data.top_clients[i]) {
-				a_cnt = content.data.top_clients[i].count;
+			if (content.top_clients[i]) {
+				a_cnt = content.top_clients[i].count;
 			}
-			if (content.data.top_clients[i]) {
-				a_addr = content.data.top_clients[i].address;
+			if (content.top_clients[i]) {
+				a_addr = content.top_clients[i].address;
 			}
-			if (content.data.top_domains[i]) {
-				b_cnt = content.data.top_domains[i].count;
+			if (content.top_domains[i]) {
+				b_cnt = content.top_domains[i].count;
 			}
-			if (content.data.top_domains[i]) {
-				//[!CDATA[
-					b_addr = '<a href="https://duckduckgo.com/?q=' + encodeURIComponent(content.data.top_domains[i].address) + '&amp;k1=-1&amp;km=l&amp;kh=1" target="_blank" title="Search this domain">' + content.data.top_domains[i].address + '</a>';
-				//]]>
+			if (content.top_domains[i]) {
+				b_addr = '<a href="https://duckduckgo.com/?q=' + encodeURIComponent(content.top_domains[i].address) + '&amp;k1=-1&amp;km=l&amp;kh=1" target="_blank" rel="noreferrer noopener" title="Domain Lookup">' + content.top_domains[i].address + '</a>';
 			}
-			if (content.data.top_blocked[i]) {
-				c_cnt = content.data.top_blocked[i].count;
+			if (content.top_blocked[i]) {
+				c_cnt = content.top_blocked[i].count;
 			}
-			if (content.data.top_blocked[i]) {
-				//[!CDATA[
-					c_addr = '<a href="https://duckduckgo.com/?q=' + encodeURIComponent(content.data.top_blocked[i].address) + '&amp;k1=-1&amp;km=l&amp;kh=1" target="_blank" title="Search this domain">' + content.data.top_blocked[i].address + '</a>';
-				//]]>
+			if (content.top_blocked[i]) {
+				c_addr = '<a href="https://duckduckgo.com/?q=' + encodeURIComponent(content.top_blocked[i].address) + '&amp;k1=-1&amp;km=l&amp;kh=1" target="_blank" rel="noreferrer noopener" title="Domain Lookup">' + content.top_blocked[i].address + '</a>';
 			}
 			rows_top.push([
 				a_cnt,
@@ -264,35 +260,33 @@ return view.extend({
 		]);
 
 		max = 0;
-		if (content.data.requests) {
+		if (content.requests) {
 			var button;
-			max = content.data.requests.length;
+			max = content.requests.length;
 			for (var i = 0; i < max; i++) {
-				if (content.data.requests[i].rc === 'NX') {
+				if (content.requests[i].rc === 'NX') {
 					button = E('button', {
-						'class': 'cbi-button cbi-button-apply',
+						'class': 'btn cbi-button cbi-button-positive',
 						'style': 'word-break: inherit',
 						'name': 'whitelist',
-						'value': content.data.requests[i].domain,
+						'value': content.requests[i].domain,
 						'click': handleAction
 					}, [ _('Whitelist...') ]);
 				} else {
 					button = E('button', {
-						'class': 'cbi-button cbi-button-apply',
+						'class': 'btn cbi-button cbi-button-negative',
 						'style': 'word-break: inherit',
 						'name': 'blacklist',
-						'value': content.data.requests[i].domain,
+						'value': content.requests[i].domain,
 						'click': handleAction
 					}, [ _('Blacklist...') ]);
 				}
 				rows_requests.push([
-					content.data.requests[i].date,
-					content.data.requests[i].time,
-					content.data.requests[i].client,
-					//[!CDATA[
-						'<a href="https://duckduckgo.com/?q=' + encodeURIComponent(content.data.requests[i].domain) + '&amp;k1=-1&amp;km=l&amp;kh=1" target="_blank" title="Search this domain">' + content.data.requests[i].domain + '</a>',
-					//]]>
-					content.data.requests[i].rc,
+					content.requests[i].date,
+					content.requests[i].time,
+					content.requests[i].client,
+					'<a href="https://duckduckgo.com/?q=' + encodeURIComponent(content.requests[i].domain) + '&amp;k1=-1&amp;km=l&amp;kh=1" target="_blank" rel="noreferrer noopener" title="Domain Lookup">' + content.requests[i].domain + '</a>',
+					content.requests[i].rc,
 					button
 				]);
 			}
@@ -301,30 +295,34 @@ return view.extend({
 
 		return E('div', { 'class': 'cbi-map', 'id': 'map' }, [
 			E('div', { 'class': 'cbi-section' }, [
-				E('p', _('This shows the last generated DNS Report, press the refresh button to get a current one.')),
+				E('p', _('This tab shows the last generated DNS Report, press the \'Refresh\' button to get a current one.')),
 				E('p', '\xa0'),
-				E('div', { 'class': 'cbi-value', 'style': 'margin-bottom:5px' }, [
-				E('label', { 'class': 'cbi-value-title', 'style': 'padding-top:0rem' }, _('Start Timestamp')),
-				E('div', { 'class': 'cbi-value-field', 'id': 'start', 'style': 'margin-bottom:5px;margin-left:200px;color:#37c' }, (content.data.start_date || '-') + ', ' + (content.data.start_time || '-'))]),
-				E('div', { 'class': 'cbi-value', 'style': 'margin-bottom:5px' }, [
-				E('label', { 'class': 'cbi-value-title', 'style': 'padding-top:0rem' }, _('End Timestamp')),
-				E('div', { 'class': 'cbi-value-field', 'id': 'end', 'style': 'margin-bottom:5px;margin-left:200px;color:#37c' }, (content.data.end_date || '-') + ', ' + (content.data.end_time || '-'))]),
-				E('div', { 'class': 'cbi-value', 'style': 'margin-bottom:5px' }, [
-				E('label', { 'class': 'cbi-value-title', 'style': 'padding-top:0rem' }, _('Total DNS Requests')),
-				E('div', { 'class': 'cbi-value-field', 'id': 'total', 'style': 'margin-bottom:5px;margin-left:200px;color:#37c' }, content.data.total || '-')]),
-				E('div', { 'class': 'cbi-value', 'style': 'margin-bottom:5px' }, [
-				E('label', { 'class': 'cbi-value-title', 'style': 'padding-top:0rem' }, _('Blocked DNS Requests')),
-				E('div', { 'class': 'cbi-value-field', 'id': 'blocked', 'style': 'margin-bottom:5px;margin-left:200px;color:#37c' }, (content.data.blocked || '-') + ' (' + (content.data.percent || '-') + ')')]),
+				E('div', { 'class': 'cbi-value' }, [
+					E('div', { 'class': 'cbi-value-title', 'style': 'float:left;width:230px' }, _('Start Timestamp')),
+					E('div', { 'class': 'cbi-value-title', 'id': 'start', 'style': 'float:left;color:#37c' }, (content.start_date || '-') + ', ' + (content.start_time || '-'))
+				]),
+				E('div', { 'class': 'cbi-value' }, [
+					E('div', { 'class': 'cbi-value-title', 'style': 'float:left;width:230px' }, _('End Timestamp')),
+					E('div', { 'class': 'cbi-value-title', 'id': 'end', 'style': 'float:left;color:#37c' }, (content.end_date || '-') + ', ' + (content.end_time || '-'))
+				]),
+				E('div', { 'class': 'cbi-value' }, [
+					E('div', { 'class': 'cbi-value-title', 'style': 'float:left;width:230px' }, _('Total DNS Requests')),
+					E('div', { 'class': 'cbi-value-title', 'id': 'total', 'style': 'float:left;color:#37c' }, content.total || '-')
+				]),
+				E('div', { 'class': 'cbi-value' }, [
+					E('div', { 'class': 'cbi-value-title', 'style': 'float:left;width:230px' }, _('Blocked DNS Requests')),
+					E('div', { 'class': 'cbi-value-title', 'id': 'blocked', 'style': 'float:left;color:#37c' }, (content.blocked || '-') + ' (' + (content.percent || '-') + ')')
+				]),
 				E('div', { 'class': 'right' }, [
 					E('button', {
-						'class': 'cbi-button cbi-button-apply',
+						'class': 'btn cbi-button cbi-button-apply',
 						'click': ui.createHandlerFn(this, function() {
 							return handleAction('query');
 						})
 					}, [ _('Blocklist Query...') ]),
 					'\xa0\xa0\xa0',
 					E('button', {
-						'class': 'cbi-button cbi-button-apply',
+						'class': 'btn cbi-button cbi-button-positive',
 						'click': ui.createHandlerFn(this, function() {
 							return handleAction('refresh');
 						})

@@ -8,7 +8,7 @@ return view.extend({
 		return L.resolveDefault(fs.read_direct('/etc/adblock/adblock.blacklist'), '');
 	},
 	handleSave: function(ev) {
-		var value = ((document.querySelector('textarea').value || '').trim().toLowerCase().replace(/\r\n/g, '\n').replace(/[^a-z0-9\.\-\#\n]/g, '')) + '\n';
+		var value = ((document.querySelector('textarea').value || '').trim().toLowerCase().replace(/\r\n/g, '\n')) + '\n';
 		return fs.write('/etc/adblock/adblock.blacklist', value)
 			.then(function(rc) {
 				document.querySelector('textarea').value = value;
