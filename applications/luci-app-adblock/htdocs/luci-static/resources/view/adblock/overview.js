@@ -10,7 +10,7 @@
 /*
 	button handling
 */
-async function handleAction(ev) {
+function handleAction(ev) {
 	if (ev === 'timer') {
 		L.ui.showModal(_('Refresh Timer'), [
 			E('p', _('To keep your adblock lists up-to-date, you should setup an automatic update job for these lists.')),
@@ -26,7 +26,7 @@ async function handleAction(ev) {
 			]),
 			E('div', { 'class': 'left', 'style': 'display:flex; flex-direction:column' }, [
 				E('label', { 'class': 'cbi-input-select', 'style': 'padding-top:.5em' }, [
-				E('h5', _('Set/Replace a new adblock job')),
+				E('h5', _('Set a new adblock job')),
 				E('select', { 'class': 'cbi-input-select', 'id': 'timerA' }, [
 					E('option', { 'value': 'start' }, 'Start'),
 					E('option', { 'value': 'reload' }, 'Reload'),
@@ -52,21 +52,40 @@ async function handleAction(ev) {
 				_('The day of the week (opt., values: 1-7 possibly sep. by , or -)')
 				])
 			]),
+			E('div', { 'class': 'left', 'style': 'display:flex; flex-direction:column' }, [
+				E('label', { 'class': 'cbi-input-select', 'style': 'padding-top:.5em' }, [
+					E('h5', _('Remove an existing job')),
+					E('input', { 'class': 'cbi-input-text', 'id': 'lineno', 'maxlength': '2' }, [
+					]),
+					'\xa0\xa0\xa0',
+					_('Line number to remove')
+				])
+			]),
 			E('div', { 'class': 'right' }, [
 				E('button', {
-					'class': 'btn',
+					'class': 'btn cbi-button',
 					'click': L.hideModal
 				}, _('Cancel')),
 				' ',
 				E('button', {
 					'class': 'btn cbi-button-action',
 					'click': ui.createHandlerFn(this, function(ev) {
+						var lineno  = document.getElementById('lineno').value;
 						var action  = document.getElementById('timerA').value;
 						var hours   = document.getElementById('timerH').value;
 						var minutes = document.getElementById('timerM').value || '0';
 						var days    = document.getElementById('timerD').value || '*';
 						if (hours) {
-							L.resolveDefault(fs.exec_direct('/etc/init.d/adblock', ['timer', action, hours, minutes, days]))
+							L.resolveDefault(fs.exec_direct('/etc/init.d/adblock', ['timer', 'add', action, hours, minutes, days]))
+							.then(function(res) {
+								if (res) {
+									ui.addNotification(null, E('p', _('The Refresh Timer could not been updated.')), 'error');
+								} else {
+									ui.addNotification(null, E('p', _('The Refresh Timer has been updated.')), 'info');
+								}
+							});
+						} else if (lineno) {
+							L.resolveDefault(fs.exec_direct('/etc/init.d/adblock', ['timer', 'remove', lineno]))
 							.then(function(res) {
 								if (res) {
 									ui.addNotification(null, E('p', _('The Refresh Timer could not been updated.')), 'error');
@@ -83,7 +102,7 @@ async function handleAction(ev) {
 				}, _('Save'))
 			])
 		]);
-		L.resolveDefault(fs.read_direct('/etc/crontabs/root'), ' ')
+		L.resolveDefault(fs.exec_direct('/etc/init.d/adblock', ['timer', 'list']))
 		.then(function(res) {
 			document.getElementById('cronView').value = res.trim();
 		});
@@ -91,33 +110,18 @@ async function handleAction(ev) {
 		return
 	}
 
-	if (ev === 'suspend') {
-		if (document.getElementById('status') && document.getElementById('btn_suspend') && document.getElementById('status').textContent.substr(0,6) === 'paused') {
-			document.querySelector('#btn_suspend').textContent = 'Suspend';
-			ev = 'resume';
-		} else if (document.getElementById('status') && document.getElementById('btn_suspend')) {
-			document.querySelector('#btn_suspend').textContent = 'Resume';
-		}
+	if (document.getElementById('status') && document.getElementById('status').textContent.substr(0,6) === 'paused') {
+		ev = 'resume';
 	}
 
-	poll.start();
 	fs.exec_direct('/etc/init.d/adblock', [ev])
-	var running = 1;
-	while (running === 1) {
-		await new Promise(r => setTimeout(r, 1000));
-		L.resolveDefault(fs.read_direct('/var/run/adblock.pid')).then(function(res) {
-			if (!res) {
-				running = 0;
-			}
-		})
-	}
-	poll.stop();
 }
 
 return view.extend({
 	load: function() {
 		return Promise.all([
 			L.resolveDefault(fs.exec_direct('/etc/init.d/adblock', ['list']), {}),
+			L.resolveDefault(fs.read_direct('/etc/adblock/adblock.categories'), ''),
 			uci.load('adblock')
 		]);
 	},
@@ -136,15 +140,22 @@ return view.extend({
 				var info = JSON.parse(res);
 				var status = document.getElementById('status');
 				if (status && info) {
-					status.textContent = (info.data.adblock_status || '-') + ' / ' + (info.data.adblock_version || '-');
-					if (info.data.adblock_status === "running") {
+					status.textContent = (info.adblock_status || '-') + ' / ' + (info.adblock_version || '-');
+					if (info.adblock_status === "running") {
 						if (!status.classList.contains("spinning")) {
 							status.classList.add("spinning");
 						}
 					} else {
 						if (status.classList.contains("spinning")) {
 							status.classList.remove("spinning");
-							poll.stop();
+							if (document.getElementById('btn_suspend')) {
+								if (status.textContent.substr(0,6) === 'paused') {
+									document.querySelector('#btn_suspend').textContent = 'Resume';
+								}
+								if (document.getElementById('status').textContent.substr(0,7) === 'enabled') {
+									document.querySelector('#btn_suspend').textContent = 'Suspend';
+								}
+							}
 						}
 					}
 					if (status.textContent.substr(0,6) === 'paused' && document.getElementById('btn_suspend')) {
@@ -158,43 +169,43 @@ return view.extend({
 				}
 				var domains = document.getElementById('domains');
 				if (domains && info) {
-					domains.textContent = parseInt(info.data.blocked_domains, 10).toLocaleString() || '-';
+					domains.textContent = parseInt(info.blocked_domains, 10).toLocaleString() || '-';
 				}
 				var sources = document.getElementById('sources');
 				var src_array = [];
 				if (sources && info) {
-					for (var i = 0; i < info.data.active_sources.length; i++) {
-						if (i < info.data.active_sources.length-1) {
-							src_array += info.data.active_sources[i].source + ', ';
+					for (var i = 0; i < info.active_sources.length; i++) {
+						if (i < info.active_sources.length-1) {
+							src_array += info.active_sources[i].source + ', ';
 						} else {
-							src_array += info.data.active_sources[i].source
+							src_array += info.active_sources[i].source
 						}
 					}
 					sources.textContent = src_array || '-';
 				}
 				var backend = document.getElementById('backend');
 				if (backend && info) {
-					backend.textContent = info.data.dns_backend || '-';
+					backend.textContent = info.dns_backend || '-';
 				}
 				var utils = document.getElementById('utils');
 				if (utils && info) {
-					utils.textContent = info.data.run_utils || '-';
+					utils.textContent = info.run_utils || '-';
 				}
 				var ifaces = document.getElementById('ifaces');
 				if (ifaces && info) {
-					ifaces.textContent = info.data.run_ifaces || '-';
+					ifaces.textContent = info.run_ifaces || '-';
 				}
 				var dirs = document.getElementById('dirs');
 				if (dirs && info) {
-					dirs.textContent = info.data.run_directories || '-';
+					dirs.textContent = info.run_directories || '-';
 				}
 				var flags = document.getElementById('flags');
 				if (flags && info) {
-					flags.textContent = info.data.run_flags || '-';
+					flags.textContent = info.run_flags || '-';
 				}
 				var run = document.getElementById('run');
 				if (run && info) {
-					run.textContent = info.data.last_run || '-';
+					run.textContent = info.last_run || '-';
 				}
 			});
 		}, 1);
@@ -206,43 +217,52 @@ return view.extend({
 		s.render = L.bind(function(view, section_id) {
 			return E('div', { 'class': 'cbi-section' }, [
 				E('h3', _('Information')), 
-				E('div', { 'class': 'cbi-value', 'style': 'margin-bottom:5px' }, [
-				E('label', { 'class': 'cbi-value-title', 'style': 'padding-top:0rem' }, _('Status / Version')),
-				E('div', { 'class': 'cbi-value-field spinning', 'id': 'status', 'style': 'font-weight: bold;margin-bottom:5px;color:#37c' },'\xa0')]),
-				E('div', { 'class': 'cbi-value', 'style': 'margin-bottom:5px' }, [
-				E('label', { 'class': 'cbi-value-title', 'style': 'padding-top:0rem' }, _('Blocked Domains')),
-				E('div', { 'class': 'cbi-value-field', 'id': 'domains', 'style': 'font-weight: bold;margin-bottom:5px;color:#37c' },'-')]),
-				E('div', { 'class': 'cbi-value', 'style': 'margin-bottom:5px' }, [
-				E('label', { 'class': 'cbi-value-title', 'style': 'padding-top:0rem' }, _('Active Sources')),
-				E('div', { 'class': 'cbi-value-field', 'id': 'sources', 'style': 'font-weight: bold;margin-bottom:5px;color:#37c' },'-')]),
-				E('div', { 'class': 'cbi-value', 'style': 'margin-bottom:5px' }, [
-				E('label', { 'class': 'cbi-value-title', 'style': 'padding-top:0rem' }, _('DNS Backend')),
-				E('div', { 'class': 'cbi-value-field', 'id': 'backend', 'style': 'font-weight: bold;margin-bottom:5px;color:#37c' },'-')]),
-				E('div', { 'class': 'cbi-value', 'style': 'margin-bottom:5px' }, [
-				E('label', { 'class': 'cbi-value-title', 'style': 'padding-top:0rem' }, _('Run Utils')),
-				E('div', { 'class': 'cbi-value-field', 'id': 'utils', 'style': 'font-weight: bold;margin-bottom:5px;color:#37c' },'-')]),
-				E('div', { 'class': 'cbi-value', 'style': 'margin-bottom:5px' }, [
-				E('label', { 'class': 'cbi-value-title', 'style': 'padding-top:0rem' }, _('Run Interfaces')),
-				E('div', { 'class': 'cbi-value-field', 'id': 'ifaces', 'style': 'font-weight: bold;margin-bottom:5px;color:#37c' },'-')]),
-				E('div', { 'class': 'cbi-value', 'style': 'margin-bottom:5px' }, [
-				E('label', { 'class': 'cbi-value-title', 'style': 'padding-top:0rem' }, _('Run Directories')),
-				E('div', { 'class': 'cbi-value-field', 'id': 'dirs', 'style': 'font-weight: bold;margin-bottom:5px;color:#37c' },'-')]),
-				E('div', { 'class': 'cbi-value', 'style': 'margin-bottom:5px' }, [
-				E('label', { 'class': 'cbi-value-title', 'style': 'padding-top:0rem' }, _('Run Flags')),
-				E('div', { 'class': 'cbi-value-field', 'id': 'flags', 'style': 'font-weight: bold;margin-bottom:5px;color:#37c' },'-')]),
-				E('div', { 'class': 'cbi-value', 'style': 'margin-bottom:5px' }, [
-				E('label', { 'class': 'cbi-value-title', 'style': 'padding-top:0rem' }, _('Last Run')),
-				E('div', { 'class': 'cbi-value-field', 'id': 'run', 'style': 'font-weight: bold;margin-bottom:5px;color:#37c' },'-')]),
+				E('div', { 'class': 'cbi-value' }, [
+					E('label', { 'class': 'cbi-value-title', 'style': 'padding-top:0rem' }, _('Status / Version')),
+					E('div', { 'class': 'cbi-value-field spinning', 'id': 'status', 'style': 'color:#37c' },'\xa0')
+				]),
+				E('div', { 'class': 'cbi-value' }, [
+					E('label', { 'class': 'cbi-value-title', 'style': 'padding-top:0rem' }, _('Blocked Domains')),
+					E('div', { 'class': 'cbi-value-field', 'id': 'domains', 'style': 'color:#37c' },'-')
+				]),
+				E('div', { 'class': 'cbi-value' }, [
+					E('label', { 'class': 'cbi-value-title', 'style': 'padding-top:0rem' }, _('Active Sources')),
+					E('div', { 'class': 'cbi-value-field', 'id': 'sources', 'style': 'color:#37c' },'-')
+				]),
+				E('div', { 'class': 'cbi-value' }, [
+					E('label', { 'class': 'cbi-value-title', 'style': 'padding-top:0rem' }, _('DNS Backend')),
+					E('div', { 'class': 'cbi-value-field', 'id': 'backend', 'style': 'color:#37c' },'-')
+				]),
+				E('div', { 'class': 'cbi-value' }, [
+					E('label', { 'class': 'cbi-value-title', 'style': 'padding-top:0rem' }, _('Run Utils')),
+					E('div', { 'class': 'cbi-value-field', 'id': 'utils', 'style': 'color:#37c' },'-')
+				]),
+				E('div', { 'class': 'cbi-value' }, [
+					E('label', { 'class': 'cbi-value-title', 'style': 'padding-top:0rem' }, _('Run Interfaces')),
+					E('div', { 'class': 'cbi-value-field', 'id': 'ifaces', 'style': 'color:#37c' },'-')
+				]),
+				E('div', { 'class': 'cbi-value' }, [
+					E('label', { 'class': 'cbi-value-title', 'style': 'padding-top:0rem' }, _('Run Directories')),
+					E('div', { 'class': 'cbi-value-field', 'id': 'dirs', 'style': 'color:#37c' },'-')
+				]),
+				E('div', { 'class': 'cbi-value' }, [
+					E('label', { 'class': 'cbi-value-title', 'style': 'padding-top:0rem' }, _('Run Flags')),
+					E('div', { 'class': 'cbi-value-field', 'id': 'flags', 'style': 'color:#37c' },'-')
+				]),
+				E('div', { 'class': 'cbi-value' }, [
+					E('label', { 'class': 'cbi-value-title', 'style': 'padding-top:0rem' }, _('Last Run')),
+					E('div', { 'class': 'cbi-value-field', 'id': 'run', 'style': 'color:#37c' },'-')
+				]),
 				E('div', { class: 'right' }, [
 					E('button', {
-						'class': 'cbi-button cbi-button-apply',
+						'class': 'btn cbi-button cbi-button-apply',
 						'click': ui.createHandlerFn(this, function() {
 							return handleAction('timer');
 						})
 					}, [ _('Refresh Timer...') ]),
 					'\xa0\xa0\xa0',
 					E('button', {
-						'class': 'cbi-button cbi-button-apply',
+						'class': 'btn cbi-button cbi-button-apply',
 						'id': 'btn_suspend',
 						'click': ui.createHandlerFn(this, function() {
 							return handleAction('suspend');
@@ -250,11 +270,18 @@ return view.extend({
 					}, [ _('Suspend') ]),
 					'\xa0\xa0\xa0',
 					E('button', {
-						'class': 'cbi-button cbi-button-apply',
+						'class': 'btn cbi-button cbi-button-positive',
 						'click': ui.createHandlerFn(this, function() {
 							return handleAction('reload');
 						})
-					}, [ _('Refresh') ])
+					}, [ _('Reload') ]),
+					'\xa0\xa0\xa0',
+					E('button', {
+						'class': 'btn cbi-button cbi-button-negative',
+						'click': ui.createHandlerFn(this, function() {
+							return handleAction('restart');
+						})
+					}, [ _('Restart') ])
 				])
 			]);
 		}, o, this);
@@ -268,15 +295,9 @@ return view.extend({
 		s.tab('general',  _('General Settings'));
 		s.tab('additional', _('Additional Settings'));
 		s.tab('adv_dns', _('Advanced DNS Settings'));
-		s.tab('adv_report', _('Advanced Report Settings'), _('Changes on this tab needs a full adblock service restart to take effect.<br /><p>&#xa0;</p>'));
+		s.tab('adv_report', _('Advanced Report Settings'));
 		s.tab('adv_email', _('Advanced E-Mail Settings'));
-		s.tab('sources', _('Blocklist Sources'), _('List of supported and fully pre-configured adblock sources, already active sources are pre-selected.<br /> \
-			<b><em>To avoid OOM errors, please do not select too many lists!</em></b><br /> \
-			List size information with the respective domain ranges as follows:<br /> \
-			&#8226;&#xa0;<b>S</b> (-10k), <b>M</b> (10k-30k) and <b>L</b> (30k-80k) should work for 128 MByte devices,<br /> \
-			&#8226;&#xa0;<b>XL</b> (80k-200k) should work for 256-512 MByte devices,<br /> \
-			&#8226;&#xa0;<b>XXL</b> (200k-) needs more RAM and Multicore support, e.g. x86 or raspberry devices.<br /> \
-			<p>&#xa0;</p>'));
+		s.tab('sources', _('Blocklist Sources'));
 
 		/*
 			general settings tab
@@ -374,10 +395,9 @@ return view.extend({
 		o.default = 1
 		o.rmempty = false;
 
-		o = s.taboption('additional', form.Value, 'adb_backupdir', _('Backup Directory'), _('Target directory for blocklist backups. \
-			Default is \'/tmp\', please use preferably an usb stick or another local disk.'));
+		o = s.taboption('additional', form.Value, 'adb_backupdir', _('Backup Directory'), _('Target directory for blocklist backups.'));
 		o.depends('adb_backup', '1');
-		o.placeholder = '/tmp';
+		o.placeholder = '/tmp/adblock-Backup';
 		o.rmempty = true;
 
 		o = s.taboption('additional', form.ListValue, 'adb_fetchutil', _('Download Utility'), _('List of supported and fully pre-configured download utilities.'));
@@ -388,7 +408,7 @@ return view.extend({
 		o.value('aria2c');
 		o.rmempty = true;
 
-		o = s.taboption('additional', form.Value, 'adb_fetchparm', _('Download Parameters'), _('Special config options for the selected download utility.'))
+		o = s.taboption('additional', form.Value, 'adb_fetchparm', _('Download Parameters'), _('Special config options for the selected download utility.'));
 		o.rmempty = true;
 
 		/*
@@ -418,10 +438,6 @@ return view.extend({
 		o.placeholder = 'example.com';
 		o.rmempty = true;
 
-		o = s.taboption('adv_dns', form.Flag, 'adb_dnsfilereset', _('DNS File Reset'), _('Resets the final DNS blocklist \'adb_list.overall\' after DNS backend loading. \
-			Please note: This option starts a small ubus/adblock monitor in the background.'));
-		o.rmempty = false;
-
 		o = s.taboption('adv_dns', form.Flag, 'adb_dnsflush', _('Flush DNS Cache'), _('Flush the DNS Cache before adblock processing as well.'));
 		o.rmempty = true;
 
@@ -444,14 +460,17 @@ return view.extend({
 		/*
 			advanced report settings tab
 		*/
+		o = s.taboption('adv_report', form.DummyValue, '_sub');
+		o.rawhtml = true;
+		o.default = '<em><b>Changes on this tab needs a full adblock service restart to take effect.</b></em>';
+
 		o = s.taboption('adv_report', widgets.DeviceSelect, 'adb_repiface', _('Report Interface'), _('List of available network devices used by tcpdump.'));
 		o.unspecified = true;
 		o.nocreate = false;
 		o.rmempty = true;
 
-		o = s.taboption('adv_report', form.Value, 'adb_reportdir', _('Report Directory'), _('Target directory for DNS related report files. \
-			Default is \'/tmp\', please use preferably an usb stick or another local disk.'));
-		o.placeholder = '/tmp';
+		o = s.taboption('adv_report', form.Value, 'adb_reportdir', _('Report Directory'), _('Target directory for DNS related report files.'));
+		o.placeholder = '/tmp/adblock-Report';
 		o.rmempty = true;
 
 		o = s.taboption('adv_report', form.Value, 'adb_repchunkcnt', _('Report Chunk Count'), _('Report chunk count used by tcpdump.'));
@@ -491,18 +510,102 @@ return view.extend({
 		/*
 			blocklist sources tab
 		*/
+		o = s.taboption('sources', form.DummyValue, '_sub');
+		o.rawhtml = true;
+		o.default = '<em><b>List of supported and fully pre-configured adblock sources.</b></em><br /> \
+			List size information with the respective domain ranges as follows:<br /> \
+			&#8226;&#xa0;<b>S</b> (-10k), <b>M</b> (10k-30k) and <b>L</b> (30k-80k) should work for 128 MByte devices,<br /> \
+			&#8226;&#xa0;<b>XL</b> (80k-200k) should work for 256-512 MByte devices,<br /> \
+			&#8226;&#xa0;<b>XXL</b> (200k-) needs more RAM and Multicore support, e.g. x86 or raspberry devices.<br /> \
+			&#8226;&#xa0;<b>VAR</b> (50k-500k) variable size depending on the selection.<br />';
+
+		var name, size, focus, sources = [];
+		if (result[0]) {
+			sources = result[0].trim().split('\n');
+		}
+
 		o = s.taboption('sources', form.MultiValue, 'adb_sources', _('Sources (Size, Focus)'));
-		var lines, name, size, focus;
-		lines = result[0].trim().split('\n');
-		for (var i = 0; i < lines.length; i++) {
-			if (lines[i].match(/^\s+\+/)) {
-				name  = lines[i].match(/^\s+\+\s(\w+)\s/)[1] || '-';
-				size  = lines[i].match(/^\s+\+\s\w+[\sx]+(\w+)/)[1] || '-';
-				focus = lines[i].match(/^\s+\+\s\w+[\sx]+\w+\s+([\w\+]+)/)[1] || '-';
+		for (var i = 0; i < sources.length; i++) {
+			if (sources[i].match(/^\s+\+/)) {
+				name  = sources[i].match(/^\s+\+\s(\w+)\s/)[1] || '-';
+				size  = sources[i].match(/^\s+\+\s\w+[\sx]+(\w+)/)[1] || '-';
+				focus = sources[i].match(/^\s+\+\s\w+[\sx]+\w+\s+([\w\+]+)/)[1] || '-';
 				o.value(name, name + ' (' + size + ', ' + focus + ')');
 			}
 		}
-		o.rmempty = false;
+		o.optional = true;
+		o.rmempty = true;
+
+		/*
+			prepare category data
+		*/
+		var code, category, list, path, categories = [];
+		if (result[1]) {
+			categories = result[1].trim().split('\n');
+		}
+
+		o = s.taboption('sources', form.DummyValue, '_sub');
+		o.rawhtml = true;
+		o.default = '<em><b>Shallalist Archive Selection</b></em>';
+
+		o = s.taboption('sources', form.DynamicList, 'adb_sha_sources', _('Categories'));
+		for (var i = 0; i < categories.length; i++) {
+			code = categories[i].match(/^(\w+);/)[1].trim();
+			if (code === 'sha') {
+				category = categories[i].match(/^\w+;(.*$)/)[1].trim();
+				o.value(category);
+			}
+		}
+		o.optional = true;
+		o.rmempty = true;
+
+		o = s.taboption('sources', form.DummyValue, '_sub');
+		o.rawhtml = true;
+		o.default = '<em><b>UTCapitole Archive Selection</b></em>';
+
+		o = s.taboption('sources', form.DynamicList, 'adb_utc_sources', _('Categories'));
+		for (var i = 0; i < categories.length; i++) {
+			code = categories[i].match(/^(\w+);/)[1].trim();
+			if (code === 'utc') {
+				category = categories[i].match(/^\w+;(.*$)/)[1].trim();
+				o.value(category);
+			}
+		}
+		o.optional = true;
+		o.rmempty = true;
+
+		o = s.taboption('sources', form.DummyValue, '_sub');
+		o.rawhtml = true;
+		o.default = '<em><b>Energized List Selection</b></em>';
+
+		o = s.taboption('sources', form.DynamicList, 'adb_eng_sources', _('Variants'));
+		for (var i = 0; i < categories.length; i++) {
+			code = categories[i].match(/^(\w+);/)[1].trim();
+			if (code === 'eng') {
+				list = categories[i].match(/^\w+;(.*);/)[1].trim();
+				path = categories[i].match(/^.*;(.*$)/)[1].trim();
+				o.value(path, list);
+			}
+		}
+		o.optional = true;
+		o.rmempty = true;
+
+		o = s.taboption('sources', form.DummyValue, '_sub');
+		o.rawhtml = true;
+		o.default = '<em><b>StevenBlack List Selection</b></em>';
+
+		o = s.taboption('sources', form.DynamicList, 'adb_stb_sources', _('Variants'));
+		for (var i = 0; i < categories.length; i++) {
+			code = categories[i].match(/^(\w+);/)[1].trim();
+			if (code === 'stb') {
+				list = categories[i].match(/^\w+;(.*);/)[1].trim();
+				path = categories[i].match(/^.*;(.*$)/)[1].trim();
+				o.value(path, list);
+			}
+		}
+		o.optional = true;
+		o.rmempty = true;
+
 		return m.render();
 	},
 	handleReset: null
