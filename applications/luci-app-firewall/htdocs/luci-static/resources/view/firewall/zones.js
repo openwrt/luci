@@ -254,7 +254,7 @@ return view.extend({
 		o.depends('auto_helper', '0');
 		o.modalonly = true;
 		for (var i = 0; i < ctHelpers.length; i++)
-			o.value(ctHelpers[i].name, '<span class="hide-close">%s (%s)</span><span class="hide-open">%s</span>'.format(ctHelpers[i].description, ctHelpers[i].name.toUpperCase(), ctHelpers[i].name.toUpperCase()));
+			o.value(ctHelpers[i].name, ctHelpers[i].description + ' (' + ctHelpers[i].name.toUpperCase() + ')');
 
 		o = s.taboption('advanced', form.Flag, 'log', _('Enable logging on this zone'));
 		o.modalonly = true;
