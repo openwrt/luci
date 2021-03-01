@@ -111,16 +111,6 @@ LuCI system utilities / network related functions.
 ]]
 
 ---[[
-Returns the current arp-table entries as two-dimensional table.
-
-@class function
-@name net.arptable
-@return	Table of table containing the current arp entries.
---			The following fields are defined for arp entry objects:
---			{ "IP address", "HW address", "HW type", "Flags", "Mask", "Device" }
-]]
-
----[[
 Returns a two-dimensional table of mac address hints.
 
 @class function
@@ -174,45 +164,6 @@ Determine the names of available network interfaces.
 @class function
 @name net.devices
 @return	Table containing all current interface names
-]]
-
----[[
-Return information about available network interfaces.
-
-@class function
-@name net.deviceinfo
-@return	Table containing all current interface names and their information
-]]
-
----[[
-Returns the current kernel routing table entries.
-
-@class function
-@name net.routes
-@return	Table of tables with properties of the corresponding routes.
---			The following fields are defined for route entry tables:
---			{ "dest", "gateway", "metric", "refcount", "usecount", "irtt",
---			  "flags", "device" }
-]]
-
----[[
-Returns the current ipv6 kernel routing table entries.
-
-@class function
-@name net.routes6
-@return	Table of tables with properties of the corresponding routes.
---			The following fields are defined for route entry tables:
---			{ "source", "dest", "nexthop", "metric", "refcount", "usecount",
---			  "flags", "device" }
-]]
-
----[[
-Tests whether the given host responds to ping probes.
-
-@class function
-@name net.pingtest
-@param host	String containing a hostname or IPv4 address
-@return		Number containing 0 on success and >= 1 on error
 ]]
 
 ---[[
