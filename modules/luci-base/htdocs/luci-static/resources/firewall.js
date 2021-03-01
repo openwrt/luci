@@ -106,7 +106,6 @@ Firewall = L.Class.extend({
 			    z = uci.add('firewall', 'zone');
 
 			uci.set('firewall', z, 'name',    name);
-			uci.set('firewall', z, 'network', ' ');
 			uci.set('firewall', z, 'input',   d.getInput()   || 'DROP');
 			uci.set('firewall', z, 'output',  d.getOutput()  || 'DROP');
 			uci.set('firewall', z, 'forward', d.getForward() || 'DROP');
@@ -347,17 +346,17 @@ Zone = AbstractFirewallItem.extend({
 			return false;
 
 		newNetworks.push(network);
-		this.set('network', newNetworks.join(' '));
+		this.set('network', newNetworks);
 
 		return true;
 	},
 
 	deleteNetwork: function(network) {
 		var oldNetworks = this.getNetworks(),
-            newNetworks = oldNetworks.filter(function(net) { return net != network });
+		    newNetworks = oldNetworks.filter(function(net) { return net != network });
 
 		if (newNetworks.length > 0)
-			this.set('network', newNetworks.join(' '));
+			this.set('network', newNetworks);
 		else
 			this.set('network', null);
 
@@ -369,7 +368,7 @@ Zone = AbstractFirewallItem.extend({
 	},
 
 	clearNetworks: function() {
-		this.set('network', ' ');
+		this.set('network', null);
 	},
 
 	getDevices: function() {
