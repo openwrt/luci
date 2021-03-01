@@ -1453,6 +1453,18 @@ Network = baseclass.extend(/** @lends LuCI.network.prototype */ {
 				}
 			}
 
+			rv.sort(function(a, b) {
+				if (a.metric != b.metric)
+					return (a.metric - b.metric);
+
+				if (a.interface < b.interface)
+					return -1;
+				else if (a.interface > b.interface)
+					return 1;
+
+				return 0;
+			});
+
 			return rv;
 		}, this));
 	},
