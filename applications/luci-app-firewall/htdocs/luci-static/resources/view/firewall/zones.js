@@ -178,19 +178,24 @@ return view.extend({
 		};
 		o.write = function(section_id, formvalue) {
 			var name = uci.get('firewall', section_id, 'name'),
-			    cfgvalue = this.cfgvalue(section_id);
+			    cfgvalue = this.cfgvalue(section_id),
+			    oldNetworks = L.toArray(cfgvalue),
+			    newNetworks = L.toArray(formvalue);
 
-			if (typeof(cfgvalue) == 'string' && Array.isArray(formvalue) && (cfgvalue == formvalue.join(' ')))
+			oldNetworks.sort();
+			newNetworks.sort();
+
+			if (oldNetworks.join(' ') == newNetworks.join(' '))
 				return;
 
 			var tasks = [ firewall.getZone(name) ];
 
 			if (Array.isArray(formvalue))
-				for (var i = 0; i < formvalue.length; i++) {
-					var netname = formvalue[i];
-					tasks.push(network.getNetwork(netname).then(function(net) {
+				for (var i = 0; i < newNetworks.length; i++) {
+					var netname = newNetworks[i];
+					tasks.push(network.getNetwork(netname).then(L.bind(function(netname, net) {
 						return net || network.addNetwork(netname, { 'proto': 'none' });
-					}));
+					}, this, netname)));
 				}
 
 			return Promise.all(tasks).then(function(zone_networks) {
