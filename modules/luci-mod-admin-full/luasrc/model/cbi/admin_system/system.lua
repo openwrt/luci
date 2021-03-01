@@ -40,6 +40,14 @@ function o.write(self, section, value)
 end
 
 
+-- could be used also as a default for LLDP, SNMP "system description" in the future
+o = s:taboption("general", Value, "description", translate("Description"), translate("An optional, short description for this device"))
+o.optional = true
+
+o = s:taboption("general", TextValue, "notes", translate("Notes"), translate("Optional, free-form notes about this device"))
+o.optional = true
+
+
 o = s:taboption("general", ListValue, "zonename", translate("Timezone"))
 o:value("UTC")
 
