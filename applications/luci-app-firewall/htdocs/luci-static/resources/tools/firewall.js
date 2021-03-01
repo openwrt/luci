@@ -444,7 +444,7 @@ return baseclass.extend({
 		var o = s.taboption(tab, multiple ? this.CBIDynamicMultiValueList : form.Value, name, label, description);
 
 		o.modalonly = true;
-		o.datatype = 'list(neg(ipmask))';
+		o.datatype = 'list(neg(ipmask("true")))';
 		o.placeholder = multiple ? _('-- add IP --') : _('any');
 
 		if (family != null) {
