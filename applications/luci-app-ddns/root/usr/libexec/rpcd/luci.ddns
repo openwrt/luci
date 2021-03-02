@@ -109,12 +109,8 @@ local methods = {
 					tonumber(s["force_interval"]) or 72,
 					s["force_unit"] or "hours" )
 
-				-- process running but update needs to happen
-				-- problems if force_seconds > uptime
-				force_seconds = (force_seconds > uptime) and uptime or force_seconds
-
 				if last_update > 0 then
-					local epoch = os.time() - uptime + last_update + force_seconds
+					local epoch = os.time() - uptime + last_update
 					-- use linux date to convert epoch
 					converted_last_update = epoch2date(epoch,date_format)
 					next_update = epoch2date(epoch + force_seconds)
