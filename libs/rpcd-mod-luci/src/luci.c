@@ -1120,9 +1120,9 @@ struct host_hint {
 
 struct host_hint_addr {
 	struct avl_node avl;
-        int af;
-        int prio;
-        union {
+	int af;
+	int prio;
+	union {
 		struct in_addr in;
 		struct in6_addr in6;
 	} addr;
@@ -1131,18 +1131,18 @@ struct host_hint_addr {
 static int
 host_hint_addr_avl_cmp(const void *k1, const void *k2, void *ptr)
 {
-        struct host_hint_addr *a1 = (struct host_hint_addr *)k1;
-        struct host_hint_addr *a2 = (struct host_hint_addr *)k2;
+	struct host_hint_addr *a1 = (struct host_hint_addr *)k1;
+	struct host_hint_addr *a2 = (struct host_hint_addr *)k2;
 
-        if (a1->prio != a2->prio &&
-            a1->prio != HOST_HINT_PRIO_IGNORE &&
-            a2->prio != HOST_HINT_PRIO_IGNORE)
-                return a1->prio < a2->prio ? 1 : -1;
+	if (a1->prio != a2->prio &&
+	    a1->prio != HOST_HINT_PRIO_IGNORE &&
+	    a2->prio != HOST_HINT_PRIO_IGNORE)
+		return a1->prio < a2->prio ? 1 : -1;
 
-        if (a1->af != a2->af)
-                return a1->af < a2->af ? -1 : 1;
+	if (a1->af != a2->af)
+		return a1->af < a2->af ? -1 : 1;
 
-        return memcmp(&a1->addr, &a2->addr, sizeof(a1->addr));
+	return memcmp(&a1->addr, &a2->addr, sizeof(a1->addr));
 }
 
 static int
@@ -1180,8 +1180,8 @@ rpc_luci_get_host_hint(struct reply_context *rctx, struct ether_addr *ea)
 			return NULL;
 
 		hint->avl.key = strcpy(p, mac);
-                avl_init(&hint->ipaddrs, host_hint_addr_avl_cmp, false, NULL);
-                avl_init(&hint->ip6addrs, host_hint_addr_avl_cmp, false, NULL);
+		avl_init(&hint->ipaddrs, host_hint_addr_avl_cmp, false, NULL);
+		avl_init(&hint->ip6addrs, host_hint_addr_avl_cmp, false, NULL);
 		avl_insert(&rctx->avl, &hint->avl);
 	}
 
@@ -1191,44 +1191,44 @@ rpc_luci_get_host_hint(struct reply_context *rctx, struct ether_addr *ea)
 static void
 rpc_luci_add_host_hint_addr(struct host_hint *hint, int af, int prio, void *addr)
 {
-        struct host_hint_addr e, *a;
-        struct avl_tree *addrs = af == AF_INET ? &hint->ipaddrs : &hint->ip6addrs;
+	struct host_hint_addr e, *a;
+	struct avl_tree *addrs = af == AF_INET ? &hint->ipaddrs : &hint->ip6addrs;
 
 	if (!addr)
 		return;
 
 	memset(&e, 0, sizeof(e));
-        e.af = af;
-        /* ignore prio when comparing against existing addresses */
-        e.prio = HOST_HINT_PRIO_IGNORE;
+	e.af = af;
+	/* ignore prio when comparing against existing addresses */
+	e.prio = HOST_HINT_PRIO_IGNORE;
 
-        if (af == AF_INET)
-                memcpy(&e.addr.in, (struct in_addr *)addr, sizeof(e.addr.in));
-        else
-                memcpy(&e.addr.in6, (struct in6_addr *)addr, sizeof(e.addr.in6));
+	if (af == AF_INET)
+		memcpy(&e.addr.in, (struct in_addr *)addr, sizeof(e.addr.in));
+	else
+		memcpy(&e.addr.in6, (struct in6_addr *)addr, sizeof(e.addr.in6));
 
-        a = avl_find_element(addrs, &e, a, avl);
+	a = avl_find_element(addrs, &e, a, avl);
 
-        if (a) {
-                /* update prio of existing address if higher */
-                if (prio <= a->prio)
-                        return;
+	if (a) {
+		/* update prio of existing address if higher */
+		if (prio <= a->prio)
+			return;
 
-                avl_delete(addrs, &a->avl);
-                a->prio = prio;
-                avl_insert(addrs, &a->avl);
-                return;
-        }
+		avl_delete(addrs, &a->avl);
+		a->prio = prio;
+		avl_insert(addrs, &a->avl);
+		return;
+	}
 
-        a = calloc(1, sizeof(*a));
+	a = calloc(1, sizeof(*a));
 
-        if (!a)
-                return;
+	if (!a)
+		return;
 
-        memcpy(a, &e, sizeof(*a));
-        a->prio = prio;
-        a->avl.key = a;
-        avl_insert(addrs, &a->avl);
+	memcpy(a, &e, sizeof(*a));
+	a->prio = prio;
+	a->avl.key = a;
+	avl_insert(addrs, &a->avl);
 }
 
 static void
@@ -1276,9 +1276,9 @@ static int nl_cb_dump_neigh(struct nl_msg *msg, void *arg)
 		return NL_SKIP;
 
 	if (nd->ndm_family == AF_INET)
-                rpc_luci_add_host_hint_ipaddr(hint, HOST_HINT_PRIO_NL, (struct in_addr *)dst);
+		rpc_luci_add_host_hint_ipaddr(hint, HOST_HINT_PRIO_NL, (struct in_addr *)dst);
 	else
-                rpc_luci_add_host_hint_ip6addr(hint, HOST_HINT_PRIO_NL, (struct in6_addr *)dst);
+		rpc_luci_add_host_hint_ip6addr(hint, HOST_HINT_PRIO_NL, (struct in6_addr *)dst);
 
 	return NL_SKIP;
 }
@@ -1361,7 +1361,7 @@ rpc_luci_get_host_hints_ether(struct reply_context *rctx)
 			continue;
 
 		if (inet_pton(AF_INET, p, &in) == 1) {
-                        rpc_luci_add_host_hint_ipaddr(hint, HOST_HINT_PRIO_ETHER, &in);
+			rpc_luci_add_host_hint_ipaddr(hint, HOST_HINT_PRIO_ETHER, &in);
 		}
 		else if (*p && !hint->hostname) {
 			hint->hostname = strdup(p);
@@ -1383,7 +1383,7 @@ rpc_luci_get_host_hints_uci(struct reply_context *rctx)
 	struct uci_section *s;
 	struct in_addr in;
 	char *p, *n;
-        int i;
+	int i;
 
 	uci = uci_alloc_context();
 
@@ -1442,7 +1442,7 @@ rpc_luci_get_host_hints_uci(struct reply_context *rctx)
 					continue;
 
 				if (in.s_addr != 0)
-                                        rpc_luci_add_host_hint_ipaddr(hint, HOST_HINT_PRIO_STATIC_LEASE, &in);
+					rpc_luci_add_host_hint_ipaddr(hint, HOST_HINT_PRIO_STATIC_LEASE, &in);
 
 				if (n && !hint->hostname)
 					hint->hostname = strdup(n);
@@ -1456,7 +1456,7 @@ rpc_luci_get_host_hints_uci(struct reply_context *rctx)
 					continue;
 
 				if (in.s_addr != 0)
-                                        rpc_luci_add_host_hint_ipaddr(hint, HOST_HINT_PRIO_STATIC_LEASE, &in);
+					rpc_luci_add_host_hint_ipaddr(hint, HOST_HINT_PRIO_STATIC_LEASE, &in);
 
 				if (n && !hint->hostname)
 					hint->hostname = strdup(n);
@@ -1473,11 +1473,11 @@ rpc_luci_get_host_hints_uci(struct reply_context *rctx)
 			continue;
 
 		for (i = 0; i < lease->n_addr; i++) {
-                        if (lease->af == AF_INET)
-                                rpc_luci_add_host_hint_ipaddr(hint, HOST_HINT_PRIO_LEASEFILE, &lease->addr[i].in);
-                        else if (lease->af == AF_INET6)
-                                rpc_luci_add_host_hint_ip6addr(hint, HOST_HINT_PRIO_LEASEFILE, &lease->addr[i].in6);
-                }
+			if (lease->af == AF_INET)
+				rpc_luci_add_host_hint_ipaddr(hint, HOST_HINT_PRIO_LEASEFILE, &lease->addr[i].in);
+			else if (lease->af == AF_INET6)
+				rpc_luci_add_host_hint_ip6addr(hint, HOST_HINT_PRIO_LEASEFILE, &lease->addr[i].in6);
+		}
 
 		if (lease->hostname && !hint->hostname)
 			hint->hostname = strdup(lease->hostname);
@@ -1557,10 +1557,10 @@ rpc_luci_get_host_hints_ifaddrs(struct reply_context *rctx)
 
 			if (hint) {
 				if (device->in.s_addr != 0)
-                                        rpc_luci_add_host_hint_ipaddr(hint, HOST_HINT_PRIO_IFADDRS, &device->in);
+					rpc_luci_add_host_hint_ipaddr(hint, HOST_HINT_PRIO_IFADDRS, &device->in);
 
 				if (memcmp(&device->in6, &empty_in6, sizeof(empty_in6)) != 0)
-                                        rpc_luci_add_host_hint_ip6addr(hint, HOST_HINT_PRIO_IFADDRS, &device->in6);
+					rpc_luci_add_host_hint_ip6addr(hint, HOST_HINT_PRIO_IFADDRS, &device->in6);
 			}
 		}
 
@@ -1589,7 +1589,7 @@ rpc_luci_get_host_hints_rrdns_cb(struct ubus_request *req, int type,
 
 			if (inet_pton(AF_INET6, blobmsg_name(cur), &in6) == 1) {
 				avl_for_each_element(&rctx->avl, hint, avl) {
-                                        rpc_luci_add_host_hint_ip6addr(hint, HOST_HINT_PRIO_RRDNS, &in6);
+					rpc_luci_add_host_hint_ip6addr(hint, HOST_HINT_PRIO_RRDNS, &in6);
 					if (!avl_is_empty(&hint->ip6addrs)) {
 						if (hint->hostname)
 							free(hint->hostname);
@@ -1601,7 +1601,7 @@ rpc_luci_get_host_hints_rrdns_cb(struct ubus_request *req, int type,
 			}
 			else if (inet_pton(AF_INET, blobmsg_name(cur), &in) == 1) {
 				avl_for_each_element(&rctx->avl, hint, avl) {
-                                        rpc_luci_add_host_hint_ipaddr(hint, HOST_HINT_PRIO_RRDNS, &in);
+					rpc_luci_add_host_hint_ipaddr(hint, HOST_HINT_PRIO_RRDNS, &in);
 					if (!avl_is_empty(&hint->ipaddrs)) {
 						if (hint->hostname)
 							free(hint->hostname);
@@ -1633,20 +1633,20 @@ rpc_luci_get_host_hints_rrdns(struct reply_context *rctx)
 	a = blobmsg_open_array(&req, "addrs");
 
 	avl_for_each_element(&rctx->avl, hint, avl) {
-                avl_for_each_element(&hint->ipaddrs, addr, avl) {
-                        if (addr->addr.in.s_addr != 0) {
-                                inet_ntop(AF_INET, &addr->addr.in, buf, sizeof(buf));
-                                blobmsg_add_string(&req, NULL, buf);
-                                n++;
-                        }
-                }
-                avl_for_each_element(&hint->ip6addrs, addr, avl) {
-                        if (memcmp(&addr->addr.in6, &empty_in6, sizeof(empty_in6))) {
-                                inet_ntop(AF_INET6, &addr->addr.in6, buf, sizeof(buf));
-                                blobmsg_add_string(&req, NULL, buf);
-                                n++;
-                        }
-                }
+		avl_for_each_element(&hint->ipaddrs, addr, avl) {
+			if (addr->addr.in.s_addr != 0) {
+				inet_ntop(AF_INET, &addr->addr.in, buf, sizeof(buf));
+				blobmsg_add_string(&req, NULL, buf);
+				n++;
+			}
+		}
+		avl_for_each_element(&hint->ip6addrs, addr, avl) {
+			if (memcmp(&addr->addr.in6, &empty_in6, sizeof(empty_in6))) {
+				inet_ntop(AF_INET6, &addr->addr.in6, buf, sizeof(buf));
+				blobmsg_add_string(&req, NULL, buf);
+				n++;
+			}
+		}
 	}
 
 	blobmsg_close_array(&req, a);
@@ -1670,7 +1670,7 @@ static int
 rpc_luci_get_host_hints_finish(struct reply_context *rctx)
 {
 	struct host_hint *hint, *nexthint;
-        struct host_hint_addr *addr, *nextaddr;
+	struct host_hint_addr *addr, *nextaddr;
 	char buf[INET6_ADDRSTRLEN];
 	struct in6_addr in6 = {};
 	void *o, *a;
@@ -1678,31 +1678,31 @@ rpc_luci_get_host_hints_finish(struct reply_context *rctx)
 	avl_remove_all_elements(&rctx->avl, hint, avl, nexthint) {
 		o = blobmsg_open_table(&rctx->blob, hint->avl.key);
 
-                a = blobmsg_open_array(&rctx->blob, "ipaddrs");
+		a = blobmsg_open_array(&rctx->blob, "ipaddrs");
 
-                avl_remove_all_elements(&hint->ipaddrs, addr, avl, nextaddr) {
-                        if (addr->addr.in.s_addr != 0) {
-                                inet_ntop(AF_INET, &addr->addr.in, buf, sizeof(buf));
-                                blobmsg_add_string(&rctx->blob, NULL, buf);
-                        }
+		avl_remove_all_elements(&hint->ipaddrs, addr, avl, nextaddr) {
+			if (addr->addr.in.s_addr != 0) {
+				inet_ntop(AF_INET, &addr->addr.in, buf, sizeof(buf));
+				blobmsg_add_string(&rctx->blob, NULL, buf);
+			}
 
-                        free(addr);
-                }
+			free(addr);
+		}
 
-                blobmsg_close_array(&rctx->blob, a);
+		blobmsg_close_array(&rctx->blob, a);
 
-                a = blobmsg_open_array(&rctx->blob, "ip6addrs");
+		a = blobmsg_open_array(&rctx->blob, "ip6addrs");
 
-                avl_remove_all_elements(&hint->ip6addrs, addr, avl, nextaddr) {
-                        if (memcmp(&addr->addr.in6, &in6, sizeof(in6))) {
-                                inet_ntop(AF_INET6, &addr->addr.in6, buf, sizeof(buf));
-                                blobmsg_add_string(&rctx->blob, NULL, buf);
-                        }
+		avl_remove_all_elements(&hint->ip6addrs, addr, avl, nextaddr) {
+			if (memcmp(&addr->addr.in6, &in6, sizeof(in6))) {
+				inet_ntop(AF_INET6, &addr->addr.in6, buf, sizeof(buf));
+				blobmsg_add_string(&rctx->blob, NULL, buf);
+			}
 
-                        free(addr);
-                }
+			free(addr);
+		}
 
-                blobmsg_close_array(&rctx->blob, a);
+		blobmsg_close_array(&rctx->blob, a);
 
 		if (hint->hostname)
 			blobmsg_add_string(&rctx->blob, "name", hint->hostname);
