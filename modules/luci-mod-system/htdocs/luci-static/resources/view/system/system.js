@@ -195,11 +195,6 @@ return view.extend({
 			o.value('lzo', 'lzo');
 			o.value('lz4', 'lz4');
 			o.value('zstd', 'zstd');
-
-			o = s.taboption('zram', form.Value, 'zram_comp_streams', _('ZRam Compression Streams'), _('Number of parallel threads used for compression'));
-			o.optional    = true;
-			o.placeholder = 1;
-			o.datatype    = 'uinteger';
 		}
 
 		/*
