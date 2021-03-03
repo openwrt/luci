@@ -250,10 +250,6 @@ msgstr "Povolit TLS a převzít roli klienta"
 msgid "Enable TLS and assume server role"
 msgstr "Povolit TLS a převzít roli serveru"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:165
-msgid "Enable a compression algorithm"
-msgstr "Povolit kompresní algoritmus"
-
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:278
 msgid "Enable internal datagram fragmentation"
 msgstr "Povolit interní fragmentaci datagramů"
@@ -576,6 +572,19 @@ msgstr ""
 msgid "Section to modify the OVPN config file (%s)"
 msgstr "Sekce pro úpravu konfiguračního souboru OVPN (%s)"
 
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:257
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-basic.lua:45
+msgid ""
+"Security recommendation: It is recommended to not enable compression and set "
+"this parameter to `no`"
+msgstr ""
+
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:165
+msgid ""
+"Security recommendation: It is recommended to not enable compression and set "
+"this parameter to `stub-v2`"
+msgstr ""
+
 #: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:85
 msgid "Select template ..."
 msgstr "Vybrat šablonu …"
@@ -780,11 +789,6 @@ msgstr "Nahrát"
 msgid "Upload ovpn file"
 msgstr "Nahrát OVPN soubor"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:257
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-basic.lua:45
-msgid "Use fast LZO compression"
-msgstr "Používat rychlou kompresi LZO"
-
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:510
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-basic.lua:97
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-basic.lua:103
@@ -827,6 +831,12 @@ msgstr "časový limit nečinnosti TUN/TAP"
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn.lua:111
 msgid "yes (%i)"
 msgstr "ano (%i)"
+
+#~ msgid "Enable a compression algorithm"
+#~ msgstr "Povolit kompresní algoritmus"
+
+#~ msgid "Use fast LZO compression"
+#~ msgstr "Používat rychlou kompresi LZO"
 
 #~ msgid "%s"
 #~ msgstr "%s"
