@@ -754,7 +754,7 @@ return view.extend({
 
 		o = s.taboption('sources', form.DummyValue, '_sub');
 		o.rawhtml = true;
-		o.default = '<em><b>Country selection</b></em>';
+		o.default = '<em><b>Country Selection</b></em>';
 
 		/*
 			prepare country data
@@ -775,7 +775,7 @@ return view.extend({
 
 		o = s.taboption('sources', form.DummyValue, '_sub');
 		o.rawhtml = true;
-		o.default = '<em><b>ASN selection</b></em>';
+		o.default = '<em><b>ASN Selection</b></em>';
 
 		o = s.taboption('sources', form.DynamicList, 'ban_asns', _('ASNs'));
 		o.datatype = 'uinteger';
