@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2021-03-03 01:50+0000\n"
+"PO-Revision-Date: 2021-03-04 13:50+0000\n"
 "Last-Translator: Said Zakaria <said.zakaria@gmail.com>\n"
 "Language-Team: Arabic <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsopkg/ar/>\n"
@@ -9,7 +9,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
-"X-Generator: Weblate 4.5\n"
+"X-Generator: Weblate 4.5.1-dev\n"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1044
 msgid "Actions"
@@ -17,7 +17,7 @@ msgstr "إجراءات"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:850
 msgid "Automatically remove unused dependencies"
-msgstr ""
+msgstr "قم بإزالة التبعيات غير المستخدمة تلقائيًا"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1054
 msgid "Available"
@@ -30,6 +30,10 @@ msgid ""
 "custom repository entries. The configuration in the other files may be "
 "changed but is usually not preserved by <em>sysupgrade</em>."
 msgstr ""
+"يوجد أدناه قائمة بملفات التكوين المتنوعة المستخدمة بواسطة <em> opkg </em>. "
+"استخدم <em> opkg.conf </em> للإعدادات العامة و <em> customfeeds.conf </em> "
+"لإدخالات المستودع المخصصة. قد يتم تغيير التهيئة في الملفات الأخرى ولكن عادةً "
+"لا يتم الاحتفاظ بها بواسطة <em> sysupgrade </em>."
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:697
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:743
@@ -41,15 +45,15 @@ msgstr "إلغاء"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1031
 msgid "Clear"
-msgstr ""
+msgstr "إجلاء"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1048
 msgid "Configure opkg…"
-msgstr ""
+msgstr "تكوين opkg …"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:669
 msgid "Dependencies"
-msgstr ""
+msgstr "التبعيات"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:675
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:835
@@ -59,7 +63,7 @@ msgstr "الوصف"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:680
 msgid "Details for package <em>%h</em>"
-msgstr ""
+msgstr "تفاصيل الحزمة <em>%h </em>"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:923
 msgid "Dismiss"
@@ -67,43 +71,43 @@ msgstr "إلغاء"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:332
 msgid "Displaying %d-%d of %d"
-msgstr ""
+msgstr "عرض d% -%d من %d"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1036
 msgid "Download and install package"
-msgstr ""
+msgstr "قم بتنزيل الحزمة وتثبيتها"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:901
 msgid "Errors"
-msgstr ""
+msgstr "أخطاء"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:878
 msgid "Executing package manager"
-msgstr ""
+msgstr "تنفيذ مدير الحزم"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1028
 msgid "Filter"
-msgstr ""
+msgstr "مصفي"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1023
 msgid "Free space"
-msgstr ""
+msgstr "مساحة فارغة"
 
 #: applications/luci-app-opkg/root/usr/share/rpcd/acl.d/luci-app-opkg.json:3
 msgid "Grant access to opkg management"
-msgstr ""
+msgstr "منح حقوق الدخول لإدارة opkg"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:705
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:721
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:959
 msgid "Install"
-msgstr ""
+msgstr "تثبيت"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:283
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:494
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1055
 msgid "Installed"
-msgstr ""
+msgstr "مثبت"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:727
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:936
@@ -111,227 +115,231 @@ msgid ""
 "Installing packages from untrusted sources is a potential security risk! "
 "Really attempt to install <em>%h</em>?"
 msgstr ""
+"يعد تثبيت الحزم من مصادر غير موثوق بها مخاطرة أمنية محتملة! هل تحاول حقًا "
+"تثبيت <em>%h</em>?"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:272
 msgid "Install…"
-msgstr ""
+msgstr "تثبيت…"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:754
 msgid "Loading configuration data…"
-msgstr ""
+msgstr "تحميل بيانات التكوين …"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:977
 msgid "Loading package information…"
-msgstr ""
+msgstr "جارٍ تحميل معلومات الحزمة …"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:939
 msgid "MD5"
-msgstr ""
+msgstr "MD5"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:737
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:935
 msgid "Manually install package"
-msgstr ""
+msgstr "قم بتثبيت الحزمة يدويًا"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:482
 msgid "Needs upgrade"
-msgstr ""
+msgstr "يحتاج إلى ترقية"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1063
 msgid "Next page"
-msgstr ""
+msgstr "الصفحة التالية"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:345
 msgid "No information available"
-msgstr ""
+msgstr "لا توجد معلومات متاحة"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:333
 msgid "No packages"
-msgstr ""
+msgstr "لا توجد حزم"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:349
 msgid "No packages matching \"<strong>%h</strong>\"."
-msgstr ""
+msgstr "لا توجد حزم تطابق \"<strong>%h </strong>\"."
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:514
 msgid "Not available"
-msgstr ""
+msgstr "غير متوفر"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:499
 msgid "Not installed"
-msgstr ""
+msgstr "غير مثبت"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1039
 msgid "OK"
-msgstr ""
+msgstr "موافق"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:753
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:801
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:815
 msgid "OPKG Configuration"
-msgstr ""
+msgstr "تكوين OPKG"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:692
 msgid "Overwrite files from other package(s)"
-msgstr ""
+msgstr "الكتابة فوق الملفات من حزم أخرى"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1069
 msgid "Package name"
-msgstr ""
+msgstr "اسم الحزمة"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1038
 msgid "Package name or URL…"
-msgstr ""
+msgstr "اسم الحزمة أو URL …"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1061
 msgid "Previous page"
-msgstr ""
+msgstr "الصفحة السابقة"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:734
 msgid "Really attempt to install <em>%h</em>?"
-msgstr ""
+msgstr "هل تحاول حقًا تثبيت <em> %h </em>؟"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:864
 msgid "Remove"
-msgstr ""
+msgstr "نزع"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:840
 msgid "Remove package <em>%h</em>"
-msgstr ""
+msgstr "قم بإزالة الحزمة <em>% h </em>"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:260
 msgid "Remove…"
-msgstr ""
+msgstr "يزيل…"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:665
 msgid "Require approx. %.1024mB size for %d package(s) to install."
-msgstr ""
+msgstr "تتطلب تقريبا. ٪ .1024 ميغا بايت حجم لتثبيت %d حزمة (حزم)."
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:489
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:507
 msgid "Require version %h %h, installed %h"
-msgstr ""
+msgstr "إصدار مطلوب %h% h ، مثبت %h"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:512
 msgid ""
 "Required dependency package <em>%h</em> is not available in any repository."
-msgstr ""
+msgstr "حزمة التبعية المطلوبة <em>%h </em> غير متوفرة في أي مستودع."
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:480
 msgid "Requires update to %h %h"
-msgstr ""
+msgstr "يتطلب التحديث إلى %h% h"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:350
 msgid "Reset"
-msgstr ""
+msgstr "إعادة ضبط"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:940
 msgid "SHA256"
-msgstr ""
+msgstr "SHA256"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:812
 msgid "Save"
-msgstr ""
+msgstr "إحفض"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:802
 msgid "Saving configuration data…"
-msgstr ""
+msgstr "جارٍ حفظ بيانات التكوين …"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:683
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:843
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:938
 msgid "Size"
-msgstr ""
+msgstr "مقاس"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1071
 msgid "Size (.ipk)"
-msgstr ""
+msgstr "الحجم (.ipk)"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1019
 #: applications/luci-app-opkg/root/usr/share/luci/menu.d/luci-app-opkg.json:3
 msgid "Software"
-msgstr ""
+msgstr "برنامج"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:906
 msgid "The <em>opkg %h</em> command failed with code <code>%d</code>."
-msgstr ""
+msgstr "فشل الأمر <em> opkg % h </em> برمز <code>%d </code>."
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:485
 msgid ""
 "The installed version of package <em>%h</em> is not compatible, require %s "
 "while %s is installed."
 msgstr ""
+"الإصدار المثبت من الحزمة <em>% h </em> غير متوافق ، يتطلب٪ s أثناء تثبيت %s."
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:730
 msgid "The package <em>%h</em> is not available in any configured repository."
-msgstr ""
+msgstr "الحزمة <em>%h </em> ليست متاحة في أي مستودع تم تكوينه."
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:502
 msgid ""
 "The repository version of package <em>%h</em> is not compatible, require %s "
 "but only %s is available."
 msgstr ""
+"إصدار المستودع للحزمة <em>%h </em> غير متوافق ، يتطلب %s ولكن يتوفر%s فقط."
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1030
 msgid "Type to filter…"
-msgstr ""
+msgstr "اكتب للتصفية …"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:925
 msgid "Unable to execute <em>opkg %s</em> command: %s"
-msgstr ""
+msgstr "تعذر تنفيذ أمر <em> opkg %s </em>:%s"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:768
 msgid "Unable to read %s: %s"
-msgstr ""
+msgstr "غير قادر على قراءة٪ s: %s%"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:807
 msgid "Unable to save %s: %s"
-msgstr ""
+msgstr "غير قادر على حفظ٪ %s% : s"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1046
 msgid "Update lists…"
-msgstr ""
+msgstr "تحديث القوائم …"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1056
 msgid "Updates"
-msgstr ""
+msgstr "التحديثات"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:249
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:278
 msgid "Upgrade…"
-msgstr ""
+msgstr "تحديث النظام…"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1047
 msgid "Upload Package…"
-msgstr ""
+msgstr "تحميل الحزمة …"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:682
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:842
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1070
 msgid "Version"
-msgstr ""
+msgstr "الإصدار"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:491
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:509
 msgid "Version incompatible"
-msgstr ""
+msgstr "الإصدار غير متوافق"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:880
 msgid "Waiting for the <em>opkg %h</em> command to complete…"
-msgstr ""
+msgstr "في انتظار إكمال أمر <em> opkg %h </em> …"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:643
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:831
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1024
 msgid "unknown"
-msgstr ""
+msgstr "غير معروف"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:641
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:829
 msgid "~%.1024mB compressed"
-msgstr ""
+msgstr "مضغوط ~٪ .1024 ميغا بايت"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:639
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:827
 msgid "~%.1024mB installed"
-msgstr ""
+msgstr "تم تثبيت ~٪ .1024 ميغا بايت"
