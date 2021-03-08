@@ -38,7 +38,7 @@
 	end
 -%>
 
-<div class="cbi-value"><label class="cbi-value-title">Service Control</label>
+<%+cbi/valueheader%>
 	<div class="cbi-value-field">
 		<input type="button" class="btn cbi-button cbi-button-apply" id="btn_start" name="start" value="<%:Start%>"
 			onclick="button_action(this)" />
@@ -60,7 +60,7 @@
 			onclick="button_action(this)" />
 		<span id="btn_disable_spinner" class="btn_spinner"></span>
 	</div>
-</div>
+<%+cbi/valuefooter%>
 
 <%-if not btn_start_status then%>
 <script type="text/javascript">document.getElementById("btn_start").disabled = true;</script>
