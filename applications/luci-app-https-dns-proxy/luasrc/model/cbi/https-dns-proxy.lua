@@ -88,7 +88,7 @@ else
 			end
 			la = la or "127.0.0.1"
 			lp = lp or n + 5053
-			packageStatus = packageStatus .. translatef("Running: %s DoH at %s:%s", getProviderName(url), la, lp) .. "\n"
+			packageStatus = packageStatus .. translatef("%s DoH at %s:%s", getProviderName(url), la, lp) .. "\n"
 		else
 			break
 		end
@@ -107,17 +107,10 @@ m = Map("https-dns-proxy", translate("DNS HTTPS Proxy Settings"))
 h = m:section(TypedSection, "_dummy", translatef("Service Status [%s %s]", packageName, packageVersion))
 h.template = "cbi/nullsection"
 ss = h:option(DummyValue, "_dummy", translate("Service Status"))
-if packageStatusCode == -1 then
-	ss.template = packageName .. "/status"
-	ss.value = packageStatus
-else
-		if packageStatusCode == 0 then
-			ss.template = packageName .. "/status"
-		else
-			ss.template = packageName .. "/status-textarea"
-		end
-	ss.value = packageStatus
-	buttons = h:option(DummyValue, "_dummy")
+ss.template = packageName .. "/status"
+ss.value = packageStatus
+if packageStatusCode ~= -1 then
+	buttons = h:option(DummyValue, "_dummy", translate("Service Control"))
 	buttons.template = packageName .. "/buttons"
 end
 
