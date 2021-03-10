@@ -8,13 +8,14 @@ readonly devices_dir="/usr/share/advanced-reboot/devices/"
 . /usr/share/libubox/jshn.sh
 
 logger() { /usr/bin/logger -t advanced-reboot "$1"; }
+is_present() { command -v "$1" >/dev/null 2>&1; }
 
 is_alt_mountable() {
 	local p1_mtd="$1" p2_mtd="$2"
 	if [ "${p1_mtd:0:3}" = "mtd" ] && [ "${p2_mtd:0:3}" = "mtd" ] && \
-		[ -x "/usr/sbin/ubiattach" ] && \
-		[ -x "/usr/sbin/ubiblock" ] && \
-		[ -x "/bin/mount" ]; then
+		is_present 'ubiattach' && \
+		is_present 'ubiblock' && \
+		is_present 'mount'; then
 		return 0
 	else
 		return 1
@@ -23,26 +24,22 @@ is_alt_mountable() {
 
 alt_partition_mount() {
 	local ubi_dev op_ubi="$1"
-	for i in alt_rom alt_overlay firmware; do [ ! -d "$i" ] && mkdir -p "/alt/${i}"; done
+	mkdir -p /var/alt_rom
 	ubi_dev="$(ubiattach -m "$op_ubi")"
 	ubi_dev="$(echo "$ubi_dev" | sed -n "s/^UBI device number\s*\(\d*\),.*$/\1/p")"
 	if [ -z "$ubi_dev" ]; then 
 		ubidetach -m "$op_ubi"
 		return 1
 	fi
-	ubiblock --create "/dev/ubi${ubi_dev}_0"
-	mount -t squashfs -o ro "/dev/ubiblock${ubi_dev}_0" /alt/alt_rom
-	mount -t ubifs "/dev/ubi${ubi_dev}_0" /alt/alt_overlay
-	# mount -t overlay overlay -o noatime,lowerdir=/alt/rom,upperdir=/alt/overlay/upper,workdir=/alt/overlay/work /alt/firmware
+	ubiblock --create "/dev/ubi${ubi_dev}_0" && \
+	mount -t squashfs -r "/dev/ubiblock${ubi_dev}_0" /var/alt_rom
 }
 
 alt_partition_unmount() {
 	local mtdCount i=0 op_ubi="$1"
 	mtdCount="$(ubinfo | grep 'Present UBI devices' | tr ',' '\n' | grep -c 'ubi')"
 	[ -z "$mtdCount" ] && mtdCount=10
-	# [ -d /alt/firmware ] && umount /alt/firmware
-	[ -d /alt/alt_overlay ] && umount /alt/alt_overlay
-	[ -d /alt/alt_rom ] && umount /alt/alt_rom
+	[ -d /var/alt_rom ] && umount /var/alt_rom
 	while [ "$i" -le "$mtdCount" ]; do
 		if [ ! -e "/sys/devices/virtual/ubi/ubi${i}/mtd_num" ]; then
 			break
@@ -51,7 +48,7 @@ alt_partition_unmount() {
 		if [ -n "$ubi_mtd" ] && [ "$ubi_mtd" = "$op_ubi" ]; then
 			ubiblock --remove /dev/ubi${i}_0
 			ubidetach -m "$op_ubi"
-			rm -rf /alt
+			rm -rf /var/alt_rom
 		fi
 		i=$((i + 1))
 	done
@@ -73,10 +70,10 @@ get_alt_partition_os_info(){
 	logger "attempting to mount alternative partition (mtd${op_ubi})"
 	alt_partition_unmount "$op_ubi"
 	alt_partition_mount "$op_ubi"
-	if [ -s "/alt/alt_rom/etc/os-release" ]; then
-		op_info="$(. /alt/alt_rom/etc/os-release && echo "$PRETTY_NAME")"
+	if [ -s "/var/alt_rom/etc/os-release" ]; then
+		op_info="$(. /var/alt_rom/etc/os-release && echo "$PRETTY_NAME")"
 		if [ "${op_info//SNAPSHOT}" != "$op_info" ]; then
-			op_info="$(. /alt/alt_rom/etc/os-release && echo "${OPENWRT_RELEASE%%-*}")"
+			op_info="$(. /var/alt_rom/etc/os-release && echo "${OPENWRT_RELEASE%%-*}")"
 		fi
 	fi
 	logger "attempting to unmount alternative partition (mtd${op_ubi})"
