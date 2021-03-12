@@ -2172,7 +2172,7 @@ var CBITypedSection = CBIAbstractSection.extend(/** @lends LuCI.form.TypedSectio
 		else {
 			var nameEl = E('input', {
 				'type': 'text',
-				'class': 'cbi-section-create-name',
+				'class': 'cbi-section-create-name cbi-input-invalid',
 				'disabled': this.map.readonly || null
 			});
 
@@ -2193,7 +2193,7 @@ var CBITypedSection = CBIAbstractSection.extend(/** @lends LuCI.form.TypedSectio
 				})
 			]);
 
-			ui.addValidator(nameEl, 'uciname', true, 'blur', 'keyup');
+			ui.addValidator(nameEl, 'uciname', false, 'blur', 'keyup');
 		}
 
 		return createEl;
