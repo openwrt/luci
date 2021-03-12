@@ -350,7 +350,7 @@ function cbi_init() {
 function cbi_validate_form(form, errmsg)
 {
 	/* if triggered by a section removal or addition, don't validate */
-	if (form.cbi_state == 'add-section' || form.cbi_state == 'del-section')
+	if (form.cbi_state == 'del-section')
 		return true;
 
 	if (form.cbi_validators) {
