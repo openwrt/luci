@@ -2212,11 +2212,21 @@ var CBITypedSection = CBIAbstractSection.extend(/** @lends LuCI.form.TypedSectio
 
 						return this.handleAdd(ev, nameEl.value);
 					}),
-					'disabled': this.map.readonly || null
+					'disabled': true
 				}, [ btn_title || _('Add') ])
 			]);
 
-			ui.addValidator(nameEl, 'uciname', true, 'blur', 'keyup');
+			ui.addValidator(nameEl, 'uciname', true, function(v) {
+				var button = document.querySelector('.cbi-section-create > .cbi-button-add');
+				if (v !== '') {
+					button.disabled = false;
+					return true;
+				}
+				else {
+					button.disabled = true;
+					return _('Expecting: %s').format(_('non-empty value'));
+				}
+			}, 'blur', 'keyup');
 		}
 
 		return createEl;
