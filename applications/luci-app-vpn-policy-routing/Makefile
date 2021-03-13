@@ -5,6 +5,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_LICENSE:=GPL-3.0-or-later
 PKG_MAINTAINER:=Stan Grishin <stangri@melmac.net>
+PKG_VERSION:=0.3.2-20
 
 LUCI_TITLE:=VPN Policy-Based Routing Service Web UI
 LUCI_DESCRIPTION:=Provides Web UI for vpn-policy-routing service.
