@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LuCI: adblock\n"
 "POT-Creation-Date: 2017-10-22 13:00+0300\n"
-"PO-Revision-Date: 2021-02-01 16:02+0000\n"
-"Last-Translator: sergio <sergio+it@outerface.net>\n"
+"PO-Revision-Date: 2021-03-11 08:13+0000\n"
+"Last-Translator: Artem <KovalevArtem.ru@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsadblock/ru/>\n"
 "Language: ru\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.5-dev\n"
+"X-Generator: Weblate 4.5.2-dev\n"
 "Project-Info: Это технический перевод, не дословный. Главное-удобный русский "
 "интерфейс, все проверялось в графическом режиме, совместим с другими apps\n"
 
@@ -139,7 +139,7 @@ msgstr "Поиск по чёрному списку..."
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:300
 msgid "Blocklist Sources"
-msgstr "Источники чёрных списков"
+msgstr "Источники черного списка"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:447
 msgid ""
@@ -387,7 +387,7 @@ msgstr ""
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:295
 msgid "General Settings"
-msgstr "Основные настройки"
+msgstr "Общие настройки"
 
 #: applications/luci-app-adblock/root/usr/share/rpcd/acl.d/luci-app-adblock.json:3
 msgid "Grant access to LuCI app adblock"
@@ -421,7 +421,7 @@ msgstr ""
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:61
 msgid "Line number to remove"
-msgstr ""
+msgstr "Номер строки для удаления"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:467
 msgid "List of available network devices used by tcpdump."
@@ -580,7 +580,7 @@ msgstr "Размер фрагментов отчёта, используемых
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:284
 msgid "Restart"
-msgstr ""
+msgstr "Перезапустить"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:96
 msgid "Result"
@@ -818,67 +818,3 @@ msgstr "raw (/tmp)"
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:421
 msgid "unbound (/var/lib/unbound)"
 msgstr "unbound (/var/lib/unbound)"
-
-#~ msgid ""
-#~ "Changes on this tab needs a full adblock service restart to take effect."
-#~ "<br /><p>&#xa0;</p>"
-#~ msgstr ""
-#~ "Для вступления в силу изменений на этой вкладке требуется полный "
-#~ "перезапуск службы Adblock.<br /> <p> &#xa0; </p>"
-
-#~ msgid "DNS File Reset"
-#~ msgstr "Сброс файла DNS"
-
-#~ msgid ""
-#~ "List of supported and fully pre-configured adblock sources, already "
-#~ "active sources are pre-selected.<br /> <b><em>To avoid OOM errors, please "
-#~ "do not select too many lists!</em></b><br /> List size information with "
-#~ "the respective domain ranges as follows:<br /> &#8226;&#xa0;<b>S</b> "
-#~ "(-10k), <b>M</b> (10k-30k) and <b>L</b> (30k-80k) should work for 128 "
-#~ "MByte devices,<br /> &#8226;&#xa0;<b>XL</b> (80k-200k) should work for "
-#~ "256-512 MByte devices,<br /> &#8226;&#xa0;<b>XXL</b> (200k-) needs more "
-#~ "RAM and Multicore support, e.g. x86 or raspberry devices.<br /> <p>&#xa0;"
-#~ "</p>"
-#~ msgstr ""
-#~ "Список поддерживаемых предварительно настроенных источников списков "
-#~ "блокировок, уже активные источники отмечены.<br /> <b><em>Во избежание "
-#~ "ошибок нехватки памяти не выбирайте слишком много списков!</em></b><br /"
-#~ ">Информация о размере списков:<br /> &#8226;&#xa0;<b>S</b> (<10k), <b>M</"
-#~ "b> (10k-30k) и <b>L</b> (30k-80k) должны работать на устройствах с 128 "
-#~ "МБайт ОЗУ,<br /> &#8226;&#xa0;<b>XL</b> (80k-200k) должны работать на "
-#~ "устройствах с 256–512 МБайт ОЗУ,<br /> &#8226;&#xa0;<b>XXL</b> (200k<) "
-#~ "требуют больше ОЗУ и многоядерный процессор, (например, на основе "
-#~ "raspberry или x86).<br /> <p>&#xa0;</p>"
-
-#~ msgid ""
-#~ "Resets the final DNS blocklist 'adb_list.overall' after DNS backend "
-#~ "loading. Please note: This option starts a small ubus/adblock monitor in "
-#~ "the background."
-#~ msgstr ""
-#~ "Сброс последнего списка блокировок DNS 'adb_list.overall' после загрузки "
-#~ "службы DNS. <br /> <i>Обратите внимание: эта опция запускает в фоне "
-#~ "небольшой монитор ubus/adblock.</i>"
-
-#~ msgid "Set/Replace a new adblock job"
-#~ msgstr "Создать новое/заменить задание Adblock"
-
-#~ msgid ""
-#~ "Target directory for DNS related report files. Default is '/tmp', please "
-#~ "use preferably an usb stick or another local disk."
-#~ msgstr ""
-#~ "Каталог для отчетов, связанных с DNS. По умолчанию — '/tmp', "
-#~ "предпочтительно использовать USB-накопитель или другой локальный диск."
-
-#~ msgid ""
-#~ "Target directory for blocklist backups. Default is '/tmp', please use "
-#~ "preferably an usb stick or another local disk."
-#~ msgstr ""
-#~ "Каталог для резервных копий списков блокировок. По умолчанию — '/tmp', "
-#~ "предпочтительно использовать USB-накопитель или другой локальный диск."
-
-#~ msgid ""
-#~ "This shows the last generated DNS Report, press the refresh button to get "
-#~ "a current one."
-#~ msgstr ""
-#~ "Отображение последнего отчёта DNS, нажмите кнопку «Обновить» для создания "
-#~ "нового."
