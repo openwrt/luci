@@ -24,10 +24,6 @@ msgstr "%s 错误: %s"
 msgid "%s Error: %s %s"
 msgstr "%s 错误: %s %s"
 
-#: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:198
-msgid "%s is blocking %s domains (with %s)."
-msgstr "%s正在阻止%s域（包含%s）。"
-
 #: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:129
 msgid "%s is not installed or not found"
 msgstr "%s 未安装或未找到"
@@ -80,6 +76,10 @@ msgstr "已拦截域名"
 #: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:350
 msgid "Blocked Hosts URLs"
 msgstr "封锁的主机网址"
+
+#: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:198
+msgid "Blocking %s domains (with %s)."
+msgstr ""
 
 #: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:188
 msgid "Cache file containing %s domains found."
@@ -261,7 +261,8 @@ msgstr "在下载阻止/允许列表之前执行配置更新。"
 msgid ""
 "Pick the DNS resolution option to create the adblock list for, see the "
 "%sREADME%s for details."
-msgstr "选择DNS解析选项以为其创建广告阻止列表，有关详细信息，请参见%sREADME%s。"
+msgstr ""
+"选择DNS解析选项以为其创建广告阻止列表，有关详细信息，请参见%sREADME%s。"
 
 #: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:255
 msgid "Pick the LED not already used in %sSystem LED Configuration%s."
@@ -283,6 +284,10 @@ msgstr "重新启动中"
 #: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:300
 msgid "Run service after set delay on boot."
 msgstr "系统启动后延后指定时间再启动本服务。"
+
+#: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:223
+msgid "Service Control"
+msgstr ""
 
 #: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:172
 #: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:182
@@ -462,6 +467,9 @@ msgstr "设备上没有 HTTPS/SSL 支持"
 #: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:257
 msgid "none"
 msgstr "无"
+
+#~ msgid "%s is blocking %s domains (with %s)."
+#~ msgstr "%s正在阻止%s域（包含%s）。"
 
 #~ msgid "Blacklisted Domain URLs"
 #~ msgstr "列入黑名单的域名 URL"
