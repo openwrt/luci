@@ -21,7 +21,7 @@ return view.extend({
 		return E([
 			E('p', {},
 				_('This is the local banIP blacklist to always-deny certain IP/CIDR addresses.<br /> \
-				<em><b>Please note:</b></em> add only one IPv4 or IPv6 address per line. Comments introduced with \'#\' are allowed - domains, wildcards and regex are not.')),
+				<em><b>Please note:</b></em> add only one IPv4 address, IPv6 address or domain name per line. Comments introduced with \'#\' are allowed - wildcards and regex are not.')),
 			E('p', {},
 				E('textarea', {
 					'style': 'width: 100% !important; padding: 5px; font-family: monospace',
