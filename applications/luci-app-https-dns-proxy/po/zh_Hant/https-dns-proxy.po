@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-02-05 14:57+0000\n"
+"PO-Revision-Date: 2021-03-14 05:18+0000\n"
 "Last-Translator: Hulen <shift0106@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "openwrt/luciapplicationshttps-dns-proxy/zh_Hant/>\n"
@@ -14,11 +14,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.5-dev\n"
+"X-Generator: Weblate 4.5.2-dev\n"
 
 #: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:91
 msgid "%s DoH at %s:%s"
-msgstr ""
+msgstr "%s DoH ，位址是 %s:%s"
 
 #: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:72
 msgid "%s is not installed or not found"
@@ -38,15 +38,15 @@ msgstr "阿里巴巴DNS"
 
 #: applications/luci-app-https-dns-proxy/luasrc/https-dns-proxy/providers/ca.cira.canadianshield.family.lua:3
 msgid "CIRA Canadian Shield (Family)"
-msgstr "CIRA加拿大盾(家用)"
+msgstr "CIRA 加拿大護盾 (家庭)"
 
 #: applications/luci-app-https-dns-proxy/luasrc/https-dns-proxy/providers/ca.cira.canadianshield.private.lua:3
 msgid "CIRA Canadian Shield (Private)"
-msgstr "CIRA加拿大盾(私用)"
+msgstr "CIRA 加拿大護盾 (隱私)"
 
 #: applications/luci-app-https-dns-proxy/luasrc/https-dns-proxy/providers/ca.cira.canadianshield.protected.lua:3
 msgid "CIRA Canadian Shield (Protected)"
-msgstr "CIRA加拿大盾(保護級)"
+msgstr "CIRA 加拿大護盾 (受保護)"
 
 #: applications/luci-app-https-dns-proxy/luasrc/https-dns-proxy/providers/org.cleanbrowsing.doh-adult.lua:3
 msgid "CleanBrowsing (Adult Filter)"
@@ -66,11 +66,11 @@ msgstr "Cloudflare"
 
 #: applications/luci-app-https-dns-proxy/luasrc/https-dns-proxy/providers/com.cloudflare-dns.family.lua:3
 msgid "Cloudflare (Family Protection)"
-msgstr "Cloudflare（家庭保護）"
+msgstr "Cloudflare (家庭保護)"
 
 #: applications/luci-app-https-dns-proxy/luasrc/https-dns-proxy/providers/com.cloudflare-dns.security.lua:3
 msgid "Cloudflare (Security Protection)"
-msgstr "Cloudflare（安全防護）"
+msgstr "Cloudflare (安全保護)"
 
 #: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:117
 msgid "Configuration"
@@ -126,15 +126,15 @@ msgstr "有關不同選項的更多資訊，請檢查"
 
 #: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:127
 msgid "Force Router DNS"
-msgstr ""
+msgstr "強制使用路由器 DNS"
 
 #: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:129
 msgid "Force Router DNS server to all local devices"
-msgstr ""
+msgstr "強制所有本地裝置使用路由器 DNS"
 
 #: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:127
 msgid "Forces Router DNS use on local devices, also known as DNS Hijacking."
-msgstr ""
+msgstr "強制在本地裝置上使用路由器 DNS，也稱為 DNS 劫持。"
 
 #: applications/luci-app-https-dns-proxy/luasrc/https-dns-proxy/providers/google.dns.lua:3
 msgid "Google"
@@ -146,7 +146,7 @@ msgstr "授予 luci-app-https-dns-proxy 擁有 UCI 和檔案存取的權限"
 
 #: applications/luci-app-https-dns-proxy/luasrc/https-dns-proxy/providers/net.idnet.doh.lua:3
 msgid "IDNet.net (UK)"
-msgstr ""
+msgstr "IDNet.net (英國)"
 
 #: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:118
 msgid ""
@@ -154,6 +154,7 @@ msgid ""
 "%s will be automatically updated to use selected DoH providers (%smore "
 "information%s)."
 msgstr ""
+"如果選擇了「更新」選項，則 %sDHCP and DNS%s 的 'DNS轉發' 部分會自動更新到使用選取的 DoH 提供者 (%s更多資訊%s)。"
 
 #: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:133
 msgid "Instances"
@@ -161,7 +162,7 @@ msgstr "例項"
 
 #: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:128
 msgid "Let local devices use their own DNS servers if set"
-msgstr ""
+msgstr "如果進行了設定，允許本地裝置使用自己的 DNS 伺服器"
 
 #: applications/luci-app-https-dns-proxy/luasrc/https-dns-proxy/providers/gr.libredns.doh.lua:3
 msgid "LibreDNS"
@@ -173,11 +174,11 @@ msgstr "LibreDNS (無廣告)"
 
 #: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:167
 msgid "Listen Address"
-msgstr ""
+msgstr "監聽位址"
 
 #: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:180
 msgid "Listen Port"
-msgstr ""
+msgstr "監聽連接埠"
 
 #: applications/luci-app-https-dns-proxy/luasrc/view/https-dns-proxy/js.htm:52
 msgid "Loading"
@@ -185,7 +186,7 @@ msgstr "正在載入中"
 
 #: applications/luci-app-https-dns-proxy/luasrc/https-dns-proxy/providers/io.nextdns.dns.lua:3
 msgid "NextDNS.io"
-msgstr ""
+msgstr "NextDNS.io"
 
 #: applications/luci-app-https-dns-proxy/luasrc/https-dns-proxy/providers/cz.nic.odvr.lua:3
 msgid "ODVR (nic.cz)"
@@ -197,15 +198,15 @@ msgstr "OpenDNS"
 
 #: applications/luci-app-https-dns-proxy/luasrc/https-dns-proxy/providers/com.opendns.familyshield.doh.lua:3
 msgid "OpenDNS (Family Shield)"
-msgstr "OpenDNS (家庭盾)"
+msgstr "OpenDNS (家庭護盾)"
 
 #: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:188
 msgid "Proxy Server"
-msgstr ""
+msgstr "Proxy 伺服器"
 
 #: applications/luci-app-https-dns-proxy/luasrc/https-dns-proxy/providers/tw.twnic.dns.lua:3
 msgid "Quad 101 (Taiwan)"
-msgstr ""
+msgstr "Quad 101 (台灣)"
 
 #: applications/luci-app-https-dns-proxy/luasrc/https-dns-proxy/providers/net.quad9.dns.lua:3
 msgid "Quad 9 (Recommended)"
@@ -213,15 +214,15 @@ msgstr "Quad 9 (建議)"
 
 #: applications/luci-app-https-dns-proxy/luasrc/https-dns-proxy/providers/net.quad9.dns11.lua:3
 msgid "Quad 9 (Secured with ECS Support)"
-msgstr "Quad 9 (通過ECS支持獲得保護)"
+msgstr "Quad 9 (透過 ECS 支援獲得保護)"
 
 #: applications/luci-app-https-dns-proxy/luasrc/https-dns-proxy/providers/net.quad9.dns9.lua:3
 msgid "Quad 9 (Secured)"
-msgstr "Quad 9 (擔保)"
+msgstr "Quad 9 (受保護)"
 
 #: applications/luci-app-https-dns-proxy/luasrc/https-dns-proxy/providers/net.quad9.dns10.lua:3
 msgid "Quad 9 (Unsecured)"
-msgstr "Quad 9 (無擔保)"
+msgstr "Quad 9 (未受保護)"
 
 #: applications/luci-app-https-dns-proxy/luasrc/view/https-dns-proxy/buttons.htm:44
 msgid "Reload"
@@ -233,7 +234,7 @@ msgstr "解析程式"
 
 #: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:113
 msgid "Service Control"
-msgstr ""
+msgstr "服務控制"
 
 #: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:109
 msgid "Service Status"
@@ -261,7 +262,7 @@ msgstr "未知的提供商"
 
 #: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:122
 msgid "Update %s config"
-msgstr "更新 %s 設置"
+msgstr "更新 %s 設定"
 
 #: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:118
 msgid "Update DNSMASQ Config on Start/Stop"
@@ -269,7 +270,7 @@ msgstr "在開始/停止時更新 DNSMASQ 設定"
 
 #: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:119
 msgid "Update all configs"
-msgstr "更新所有設置"
+msgstr "更新所有設定"
 
 #: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:49
 msgid "and"
