@@ -332,6 +332,7 @@ return view.extend({
 				}, [ _('Hide empty chains') ]),
 				' ',
 				E('button', {
+					'class': 'cbi-button',
 					'data-raw-counters': false,
 					'click': ui.createHandlerFn(this, 'handleRawCounters')
 				}, [ _('Show raw counters') ]),
