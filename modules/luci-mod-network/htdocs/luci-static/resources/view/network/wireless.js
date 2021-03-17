@@ -987,8 +987,17 @@ return view.extend({
 								return net || network.addNetwork(name, { proto: 'none' });
 							}, this, values[i])).then(L.bind(function(dev, net) {
 								if (net) {
-									if (!net.isEmpty())
-										net.set('type', 'bridge');
+									if (!net.isEmpty()) {
+										var target_dev = net.getDevice();
+
+										/* Resolve parent interface of vlan */
+										while (target_dev && target_dev.getType() == 'vlan')
+											target_dev = target_dev.getParent();
+
+										if (!target_dev || target_dev.getType() != 'bridge')
+											net.set('type', 'bridge');
+									}
+
 									net.addDevice(dev);
 								}
 							}, this, dev)));
