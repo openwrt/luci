@@ -9,6 +9,7 @@
 'require network';
 'require firewall';
 'require tools.widgets as widgets';
+'require tools.network as nettools';
 
 var isReadonlyView = !L.hasViewPermission() || null;
 
@@ -212,21 +213,19 @@ function iface_updown(up, id, ev, force) {
 
 function get_netmask(s, use_cfgvalue) {
 	var readfn = use_cfgvalue ? 'cfgvalue' : 'formvalue',
-	    addropt = s.children.filter(function(o) { return o.option == 'ipaddr'})[0],
-	    addrvals = addropt ? L.toArray(addropt[readfn](s.section)) : [],
-	    maskopt = s.children.filter(function(o) { return o.option == 'netmask'})[0],
-	    maskval = maskopt ? maskopt[readfn](s.section) : null,
-	    firstsubnet = maskval ? addrvals[0] + '/' + maskval : addrvals.filter(function(a) { return a.indexOf('/') > 0 })[0];
+	    addrs = L.toArray(s[readfn](s.section, 'ipaddr')),
+	    mask = s[readfn](s.section, 'netmask'),
+	    firstsubnet = mask ? addrs[0] + '/' + mask : addrs.filter(function(a) { return a.indexOf('/') > 0 })[0];
 
 	if (firstsubnet == null)
 		return null;
 
-	var mask = firstsubnet.split('/')[1];
+	var subnetmask = firstsubnet.split('/')[1];
 
-	if (!isNaN(mask))
-		mask = network.prefixToMask(+mask);
+	if (!isNaN(subnetmask))
+		subnetmask = network.prefixToMask(+subnetmask);
 
-	return mask;
+	return subnetmask;
 }
 
 return view.extend({
@@ -293,13 +292,23 @@ return view.extend({
 	load: function() {
 		return Promise.all([
 			network.getDSLModemType(),
+			network.getDevices(),
+			fs.lines('/etc/iproute2/rt_tables'),
 			uci.changes()
 		]);
 	},
 
 	render: function(data) {
 		var dslModemType = data[0],
+		    netDevs = data[1],
 		    m, s, o;
+
+		var rtTables = data[2].map(function(l) {
+			var m = l.trim().match(/^(\d+)\s+(\S+)$/);
+			return m ? [ +m[1], m[2] ] : null;
+		}).filter(function(e) {
+			return e && e[0] > 0;
+		});
 
 		m = new form.Map('network');
 		m.tabbed = true;
@@ -323,6 +332,8 @@ return view.extend({
 		s.tab('general', _('General Settings'));
 		s.tab('advanced', _('Advanced Settings'));
 		s.tab('physical', _('Physical Settings'));
+		s.tab('brport', _('Bridge port specific options'));
+		s.tab('bridgevlan', _('Bridge VLAN filtering'));
 		s.tab('firewall', _('Firewall Settings'));
 		s.tab('dhcp', _('DHCP Server'));
 
@@ -413,80 +424,6 @@ return view.extend({
 				o.modalonly = true;
 				o.default = o.enabled;
 
-				type = s.taboption('physical', form.Flag, 'type', _('Bridge interfaces'), _('Creates a bridge over specified interface(s)'));
-				type.modalonly = true;
-				type.disabled = '';
-				type.enabled = 'bridge';
-				type.write = type.remove = function(section_id, value) {
-					var protocol = network.getProtocol(proto_select.formvalue(section_id)),
-					    ifnameopt = this.section.children.filter(function(o) { return o.option == (value ? 'ifname_multi' : 'ifname_single') })[0];
-
-					if (!protocol.isVirtual() && !this.isActive(section_id))
-						return;
-
-					var old_ifnames = [],
-					    devs = ifc.getDevices() || L.toArray(ifc.getDevice());
-
-					for (var i = 0; i < devs.length; i++)
-						old_ifnames.push(devs[i].getName());
-
-					var new_ifnames = L.toArray(ifnameopt.formvalue(section_id));
-
-					if (!value)
-						new_ifnames.length = Math.max(new_ifnames.length, 1);
-
-					old_ifnames.sort();
-					new_ifnames.sort();
-
-					for (var i = 0; i < Math.max(old_ifnames.length, new_ifnames.length); i++) {
-						if (old_ifnames[i] != new_ifnames[i]) {
-							// backup_ifnames()
-							for (var j = 0; j < old_ifnames.length; j++)
-								ifc.deleteDevice(old_ifnames[j]);
-
-							for (var j = 0; j < new_ifnames.length; j++)
-								ifc.addDevice(new_ifnames[j]);
-
-							break;
-						}
-					}
-
-					if (value)
-						uci.set('network', section_id, 'type', 'bridge');
-					else
-						uci.unset('network', section_id, 'type');
-				};
-
-				stp = s.taboption('physical', form.Flag, 'stp', _('Enable <abbr title="Spanning Tree Protocol">STP</abbr>'), _('Enables the Spanning Tree Protocol on this bridge'));
-
-				igmp = s.taboption('physical', form.Flag, 'igmp_snooping', _('Enable <abbr title="Internet Group Management Protocol">IGMP</abbr> snooping'), _('Enables IGMP snooping on this bridge'));
-
-				ifname_single = s.taboption('physical', widgets.DeviceSelect, 'ifname_single', _('Interface'));
-				ifname_single.nobridges = ifc.isBridge();
-				ifname_single.noaliases = false;
-				ifname_single.optional = false;
-				ifname_single.network = ifc.getName();
-				ifname_single.write = ifname_single.remove = function() {};
-
-				ifname_multi = s.taboption('physical', widgets.DeviceSelect, 'ifname_multi', _('Interface'));
-				ifname_multi.nobridges = ifc.isBridge();
-				ifname_multi.noaliases = true;
-				ifname_multi.multiple = true;
-				ifname_multi.optional = true;
-				ifname_multi.network = ifc.getName();
-				ifname_multi.display_size = 6;
-				ifname_multi.write = ifname_multi.remove = function() {};
-
-				ifname_single.cfgvalue = ifname_multi.cfgvalue = function(section_id) {
-					var devs = ifc.getDevices() || L.toArray(ifc.getDevice()),
-					    ifnames = [];
-
-					for (var i = 0; i < devs.length; i++)
-						ifnames.push(devs[i].getName());
-
-					return ifnames;
-				};
-
 				if (L.hasSystemFeature('firewall')) {
 					o = s.taboption('firewall', widgets.ZoneSelect, '_zone', _('Create / Assign firewall-zone'), _('Choose the firewall zone you want to assign to this interface. Select <em>unspecified</em> to remove the interface from the associated zone or fill out the <em>custom</em> field to define a new zone and attach the interface to it.'));
 					o.network = ifc.getName();
@@ -530,14 +467,6 @@ return view.extend({
 
 					if (protocols[i].getProtocol() != uci.get('network', s.section, 'proto'))
 						proto_switch.depends('proto', protocols[i].getProtocol());
-
-					if (!protocols[i].isVirtual()) {
-						type.depends('proto', protocols[i].getProtocol());
-						stp.depends({ type: 'bridge', proto: protocols[i].getProtocol() });
-						igmp.depends({ type: 'bridge', proto: protocols[i].getProtocol() });
-						ifname_single.depends({ type: '', proto: protocols[i].getProtocol() });
-						ifname_multi.depends({ type: 'bridge', proto: protocols[i].getProtocol() });
-					}
 				}
 
 				if (L.hasSystemFeature('dnsmasq') || L.hasSystemFeature('odhcpd')) {
@@ -610,9 +539,9 @@ return view.extend({
 					};
 
 					so.validate = function(section_id, value) {
-						var node = this.map.findElement('id', this.cbid(section_id));
-						if (node)
-							node.querySelector('input').setAttribute('placeholder', get_netmask(s, false));
+						var uielem = this.getUIElement(section_id);
+						if (uielem)
+							uielem.setPlaceholder(get_netmask(s, false));
 						return form.Value.prototype.validate.apply(this, [ section_id, value ]);
 					};
 
@@ -660,24 +589,126 @@ return view.extend({
 				}
 
 				ifc.renderFormOptions(s);
+				nettools.addDeviceOptions(s, null, true);
+
+				// Common interface options
+				o = nettools.replaceOption(s, 'advanced', form.Flag, 'defaultroute', _('Use default gateway'), _('If unchecked, no default route is configured'));
+				o.default = o.enabled;
+
+				o = nettools.replaceOption(s, 'advanced', form.Flag, 'peerdns', _('Use DNS servers advertised by peer'), _('If unchecked, the advertised DNS server addresses are ignored'));
+				o.default = o.enabled;
+
+				o = nettools.replaceOption(s, 'advanced', form.DynamicList, 'dns', _('Use custom DNS servers'));
+				o.depends('peerdns', '0');
+				o.datatype = 'ipaddr';
+
+				o = nettools.replaceOption(s, 'advanced', form.DynamicList, 'dns_search', _('DNS search domains'));
+				o.depends('peerdns', '0');
+				o.datatype = 'hostname';
+
+				o = nettools.replaceOption(s, 'advanced', form.Value, 'dns_metric', _('DNS weight'), _('The DNS server entries in the local resolv.conf are primarily sorted by the weight specified here'));
+				o.datatype = 'uinteger';
+				o.placeholder = '0';
+
+				o = nettools.replaceOption(s, 'advanced', form.Value, 'metric', _('Use gateway metric'));
+				o.datatype = 'uinteger';
+				o.placeholder = '0';
+
+				o = nettools.replaceOption(s, 'advanced', form.Value, 'ip4table', _('Override IPv4 routing table'));
+				o.datatype = 'or(uinteger, string)';
+				for (var i = 0; i < rtTables.length; i++)
+					o.value(rtTables[i][1], '%s (%d)'.format(rtTables[i][1], rtTables[i][0]));
+
+				o = nettools.replaceOption(s, 'advanced', form.Value, 'ip6table', _('Override IPv6 routing table'));
+				o.datatype = 'or(uinteger, string)';
+				for (var i = 0; i < rtTables.length; i++)
+					o.value(rtTables[i][1], '%s (%d)'.format(rtTables[i][0], rtTables[i][1]));
+
+				o = nettools.replaceOption(s, 'advanced', form.Flag, 'delegate', _('Delegate IPv6 prefixes'), _('Enable downstream delegation of IPv6 prefixes available on this interface'));
+				o.default = o.enabled;
+
+				o = nettools.replaceOption(s, 'advanced', form.Value, 'ip6assign', _('IPv6 assignment length'), _('Assign a part of given length of every public IPv6-prefix to this interface'));
+				o.value('', _('disabled'));
+				o.value('64');
+				o.datatype = 'max(128)';
+
+				o = nettools.replaceOption(s, 'advanced', form.Value, 'ip6hint', _('IPv6 assignment hint'), _('Assign prefix parts using this hexadecimal subprefix ID for this interface.'));
+				o.placeholder = '0';
+				o.validate = function(section_id, value) {
+					if (value == null || value == '')
+						return true;
+
+					var n = parseInt(value, 16);
+
+					if (!/^(0x)?[0-9a-fA-F]+$/.test(value) || isNaN(n) || n >= 0xffffffff)
+						return _('Expecting a hexadecimal assignment hint');
+
+					return true;
+				};
+				for (var i = 33; i <= 64; i++)
+					o.depends('ip6assign', String(i));
+
+
+				o = nettools.replaceOption(s, 'advanced', form.DynamicList, 'ip6class', _('IPv6 prefix filter'), _('If set, downstream subnets are only allocated from the given IPv6 prefix classes.'));
+				o.value('local', 'local (%s)'.format(_('Local ULA')));
+
+				var prefixClasses = {};
+
+				this.networks.forEach(function(net) {
+					var prefixes = net._ubus('ipv6-prefix');
+					if (Array.isArray(prefixes)) {
+						prefixes.forEach(function(pfx) {
+							if (L.isObject(pfx) && typeof(pfx['class']) == 'string') {
+								prefixClasses[pfx['class']] = prefixClasses[pfx['class']] || {};
+								prefixClasses[pfx['class']][net.getName()] = true;
+							}
+						});
+					}
+				});
+
+				Object.keys(prefixClasses).sort().forEach(function(c) {
+					var networks = Object.keys(prefixClasses[c]).sort().join(', ');
+					o.value(c, (c != networks) ? '%s (%s)'.format(c, networks) : c);
+				});
+
+
+				o = nettools.replaceOption(s, 'advanced', form.Value, 'ip6ifaceid', _('IPv6 suffix'), _("Optional. Allowed values: 'eui64', 'random', fixed value like '::1' or '::1:2'. When IPv6 prefix (like 'a:b:c:d::') is received from a delegating server, use the suffix (like '::1') to form the IPv6 address ('a:b:c:d::1') for the interface."));
+				o.datatype = 'ip6hostid';
+				o.placeholder = '::1';
+
+				o = nettools.replaceOption(s, 'advanced', form.Value, 'ip6weight', _('IPv6 preference'), _('When delegating prefixes to multiple downstreams, interfaces with a higher preference value are considered first when allocating subnets.'));
+				o.datatype = 'uinteger';
+				o.placeholder = '0';
 
 				for (var i = 0; i < s.children.length; i++) {
 					o = s.children[i];
 
 					switch (o.option) {
 					case 'proto':
-					case 'delegate':
 					case 'auto':
-					case 'type':
-					case 'stp':
-					case 'igmp_snooping':
-					case 'ifname_single':
-					case 'ifname_multi':
 					case '_dhcp':
 					case '_zone':
 					case '_switch_proto':
 					case '_ifacestat_modal':
 						continue;
+
+					case 'ifname_multi':
+					case 'ifname_single':
+					case 'igmp_snooping':
+					case 'stp':
+					case 'type':
+						var deps = [];
+						for (var j = 0; j < protocols.length; j++) {
+							if (!protocols[j].isVirtual()) {
+								if (o.deps.length)
+									for (var k = 0; k < o.deps.length; k++)
+										deps.push(Object.assign({ proto: protocols[j].getProtocol() }, o.deps[k]));
+								else
+									deps.push({ proto: protocols[j].getProtocol() });
+							}
+						}
+						o.deps = deps;
+						break;
 
 					default:
 						if (o.deps.length)
@@ -687,7 +718,21 @@ return view.extend({
 							o.depends('proto', protoval);
 					}
 				}
+
+				this.activeSection = s.section;
 			}, this));
+		};
+
+		s.handleModalCancel = function(/* ... */) {
+			var type = uci.get('network', this.activeSection || this.addedSection, 'type'),
+			    ifname = (type == 'bridge') ? 'br-%s'.format(this.activeSection || this.addedSection) : null;
+
+			uci.sections('network', 'bridge-vlan', function(bvs) {
+				if (ifname != null && bvs.device == ifname)
+					uci.remove('network', bvs['.name']);
+			});
+
+			return form.GridSection.prototype.handleModalCancel.apply(this, arguments);
 		};
 
 		s.handleAdd = function(ev) {
@@ -793,8 +838,9 @@ return view.extend({
 												protoclass.addDevice(dev);
 											});
 										}
-									}).then(L.bind(m.children[0].renderMoreOptionsModal, m.children[0], nameval));
 
+										m.children[0].addedSection = section_id;
+									}).then(L.bind(m.children[0].renderMoreOptionsModal, m.children[0], nameval));
 								});
 							})
 						}, _('Create interface'))
@@ -865,14 +911,208 @@ return view.extend({
 
 		o = s.taboption('advanced', form.Flag, 'force_link', _('Force link'), _('Set interface properties regardless of the link carrier (If set, carrier sense events do not invoke hotplug handlers).'));
 		o.modalonly = true;
-		o.render = function(option_index, section_id, in_table) {
-			var protoopt = this.section.children.filter(function(o) { return o.option == 'proto' })[0],
-			    protoval = protoopt ? protoopt.cfgvalue(section_id) : null;
-
-			this.default = (protoval == 'static') ? this.enabled : this.disabled;
-			return this.super('render', [ option_index, section_id, in_table ]);
+		o.defaults = {
+			'1': [{ proto: 'static' }],
+			'0': []
 		};
 
+
+		// Device configuration
+		s = m.section(form.GridSection, 'device', _('Devices'));
+		s.addremove = true;
+		s.anonymous = true;
+		s.addbtntitle = _('Add device configuration…');
+
+		s.cfgsections = function() {
+			var sections = uci.sections('network', 'device'),
+			    section_ids = sections.sort(function(a, b) { return a.name > b.name }).map(function(s) { return s['.name'] });
+
+			for (var i = 0; i < netDevs.length; i++) {
+				if (sections.filter(function(s) { return s.name == netDevs[i].getName() }).length)
+					continue;
+
+				if (netDevs[i].getType() == 'wifi' && !netDevs[i].isUp())
+					continue;
+
+				/* Unless http://lists.openwrt.org/pipermail/openwrt-devel/2020-July/030397.html is implemented,
+				   we cannot properly redefine bridges as devices, so filter them away for now... */
+
+				var m = netDevs[i].isBridge() ? netDevs[i].getName().match(/^br-([A-Za-z0-9_]+)$/) : null,
+				    s = m ? uci.get('network', m[1]) : null;
+
+				if (s && s['.type'] == 'interface' && s.type == 'bridge')
+					continue;
+
+				section_ids.push('dev:%s'.format(netDevs[i].getName()));
+			}
+
+			return section_ids;
+		};
+
+		s.renderMoreOptionsModal = function(section_id, ev) {
+			var m = section_id.match(/^dev:(.+)$/);
+
+			if (m) {
+				var devtype = getDevType(section_id);
+
+				section_id = uci.add('network', 'device');
+
+				uci.set('network', section_id, 'name', m[1]);
+				uci.set('network', section_id, 'type', (devtype != 'ethernet') ? devtype : null);
+
+				this.addedSection = section_id;
+			}
+
+			return this.super('renderMoreOptionsModal', [section_id, ev]);
+		};
+
+		s.renderRowActions = function(section_id) {
+			var trEl = this.super('renderRowActions', [ section_id, _('Configure…') ]),
+			    deleteBtn = trEl.querySelector('button:last-child');
+
+			deleteBtn.firstChild.data = _('Reset');
+			deleteBtn.disabled = section_id.match(/^dev:/) ? true : null;
+
+			return trEl;
+		};
+
+		s.modaltitle = function(section_id) {
+			var m = section_id.match(/^dev:(.+)$/),
+			    name = m ? m[1] : uci.get('network', section_id, 'name');
+
+			return name ? '%s: %q'.format(getDevTypeDesc(section_id), name) : _('Add device configuration');
+		};
+
+		s.addModalOptions = function(s) {
+			var isNew = (uci.get('network', s.section, 'name') == null),
+			    dev = getDevice(s.section);
+
+			nettools.addDeviceOptions(s, dev, isNew);
+		};
+
+		s.handleModalCancel = function(/* ... */) {
+			var name = uci.get('network', this.addedSection, 'name')
+
+			uci.sections('network', 'bridge-vlan', function(bvs) {
+				if (name != null && bvs.device == name)
+					uci.remove('network', bvs['.name']);
+			});
+
+			return form.GridSection.prototype.handleModalCancel.apply(this, arguments);
+		};
+
+		function getDevice(section_id) {
+			var m = section_id.match(/^dev:(.+)$/),
+			    name = m ? m[1] : uci.get('network', section_id, 'name');
+
+			return netDevs.filter(function(d) { return d.getName() == name })[0];
+		}
+
+		function getDevType(section_id) {
+			var cfgtype = uci.get('network', section_id, 'type'),
+			    dev = getDevice(section_id);
+
+			switch (cfgtype || (dev ? dev.getType() : '')) {
+			case '':
+				return null;
+
+			case 'vlan':
+			case '8021q':
+				return '8021q';
+
+			case '8021ad':
+				return '8021ad';
+
+			case 'bridge':
+				return 'bridge';
+
+			case 'tunnel':
+				return 'tunnel';
+
+			case 'macvlan':
+				return 'macvlan';
+
+			case 'veth':
+				return 'veth';
+
+			case 'wifi':
+			case 'alias':
+			case 'switch':
+			case 'ethernet':
+			default:
+				return 'ethernet';
+			}
+		}
+
+		function getDevTypeDesc(section_id) {
+			switch (getDevType(section_id) || '') {
+			case '':
+				return E('em', [ _('Device not present') ]);
+
+			case '8021q':
+				return _('VLAN (802.1q)');
+
+			case '8021ad':
+				return _('VLAN (802.1ad)');
+
+			case 'bridge':
+				return _('Bridge device');
+
+			case 'tunnel':
+				return _('Tunnel device');
+
+			case 'macvlan':
+				return _('MAC VLAN');
+
+			case 'veth':
+				return _('Virtual Ethernet');
+
+			default:
+				return _('Network device');
+			}
+		}
+
+		o = s.option(form.DummyValue, 'name', _('Device'));
+		o.modalonly = false;
+		o.textvalue = function(section_id) {
+			var dev = getDevice(section_id),
+			    ext = section_id.match(/^dev:/);
+
+			return E('span', {
+				'class': 'ifacebadge',
+				'style': ext ? 'opacity:.5' : null
+			}, [
+				render_iface(dev), ' ', dev ? dev.getName() : (uci.get('network', section_id, 'name') || '?')
+			]);
+		};
+
+		o = s.option(form.DummyValue, 'type', _('Type'));
+		o.textvalue = getDevTypeDesc;
+		o.modalonly = false;
+
+		o = s.option(form.DummyValue, 'macaddr', _('MAC Address'));
+		o.modalonly = false;
+		o.textvalue = function(section_id) {
+			var dev = getDevice(section_id),
+			    val = uci.get('network', section_id, 'macaddr'),
+			    mac = dev ? dev.getMAC() : null;
+
+			return val ? E('strong', {
+				'data-tooltip': _('The value is overridden by configuration. Original: %s').format(mac || _('unknown'))
+			}, [ val.toUpperCase() ]) : (mac || '-');
+		};
+
+		o = s.option(form.DummyValue, 'mtu', _('MTU'));
+		o.modalonly = false;
+		o.textvalue = function(section_id) {
+			var dev = getDevice(section_id),
+			    val = uci.get('network', section_id, 'mtu'),
+			    mtu = dev ? dev.getMTU() : null;
+
+			return val ? E('strong', {
+				'data-tooltip': _('The value is overridden by configuration. Original: %s').format(mtu || _('unknown'))
+			}, [ val ]) : (mtu || '-').toString();
+		};
 
 		s = m.section(form.TypedSection, 'globals', _('Global network options'));
 		s.addremove = false;

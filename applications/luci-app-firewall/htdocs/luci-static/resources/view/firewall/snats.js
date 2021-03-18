@@ -217,9 +217,8 @@ return view.extend({
 		o.placeholder = null;
 		o.depends('target', 'SNAT');
 		o.validate = function(section_id, value) {
-			var port = this.map.lookupOption('snat_port', section_id),
-			    a = this.formvalue(section_id),
-			    p = port ? port[0].formvalue(section_id) : null;
+			var a = this.formvalue(section_id),
+			    p = this.section.formvalue(section_id, 'snat_port');
 
 			if ((a == null || a == '') && (p == null || p == '') && value == '')
 				return _('A rewrite IP must be specified!');

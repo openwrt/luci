@@ -179,28 +179,6 @@ return network.registerProtocol('static', {
 		s.taboption('general', this.CBINetmaskValue, 'netmask', _('IPv4 netmask'));
 		s.taboption('general', this.CBIGatewayValue, 'gateway', _('IPv4 gateway'));
 		s.taboption('general', this.CBIBroadcastValue, 'broadcast', _('IPv4 broadcast'));
-		s.taboption('general', form.DynamicList, 'dns', _('Use custom DNS servers'));
-
-		o = s.taboption('general', form.Value, 'ip6assign', _('IPv6 assignment length'), _('Assign a part of given length of every public IPv6-prefix to this interface'));
-		o.value('', _('disabled'));
-		o.value('64');
-		o.datatype = 'max(64)';
-
-		o = s.taboption('general', form.Value, 'ip6hint', _('IPv6 assignment hint'), _('Assign prefix parts using this hexadecimal subprefix ID for this interface.'));
-		o.placeholder = '0';
-		o.validate = function(section_id, value) {
-			if (value == null || value == '')
-				return true;
-
-			var n = parseInt(value, 16);
-
-			if (!/^(0x)?[0-9a-fA-F]+$/.test(value) || isNaN(n) || n >= 0xffffffff)
-				return _('Expecting a hexadecimal assignment hint');
-
-			return true;
-		};
-		for (var i = 33; i <= 64; i++)
-			o.depends('ip6assign', String(i));
 
 		o = s.taboption('general', form.DynamicList, 'ip6addr', _('IPv6 address'));
 		o.datatype = 'ip6addr';
@@ -215,10 +193,6 @@ return network.registerProtocol('static', {
 		o.datatype = 'ip6addr';
 		o.depends('ip6assign', '');
 
-		o = s.taboption('general', form.Value, 'ip6ifaceid', _('IPv6 suffix'), _("Optional. Allowed values: 'eui64', 'random', fixed value like '::1' or '::1:2'. When IPv6 prefix (like 'a:b:c:d::') is received from a delegating server, use the suffix (like '::1') to form the IPv6 address ('a:b:c:d::1') for the interface."));
-		o.datatype = 'ip6hostid';
-		o.placeholder = '::1';
-
 		o = s.taboption('advanced', form.Value, 'macaddr', _('Override MAC address'));
 		o.datatype = 'macaddr';
 		o.placeholder = dev ? (dev.getMAC() || '') : '';
@@ -226,9 +200,5 @@ return network.registerProtocol('static', {
 		o = s.taboption('advanced', form.Value, 'mtu', _('Override MTU'));
 		o.datatype = 'max(9200)';
 		o.placeholder = dev ? (dev.getMTU() || '1500') : '1500';
-
-		o = s.taboption('advanced', form.Value, 'metric', _('Use gateway metric'));
-		o.placeholder = this.getMetric() || '0';
-		o.datatype = 'uinteger';
 	}
 });
