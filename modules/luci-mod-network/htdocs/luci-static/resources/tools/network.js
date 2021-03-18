@@ -94,7 +94,7 @@ function renderDevBadge(dev) {
 			'class': 'middle',
 			'src': L.resource('icons/%s%s.png').format(type, up ? '' : '_disabled')
 		}),
-		' ', dev.getName()
+		'\x0a', dev.getName()
 	]);
 }
 
@@ -304,7 +304,7 @@ var cbiTagValue = form.Value.extend({
 		if (cfgvalue == '-')
 			node.querySelector('li[data-value="*"]').setAttribute('unselectable', '');
 
-		return node;
+		return E('div', { 'style': 'display:inline-block' }, node);
 	},
 
 	cfgvalue: function(section_id) {
@@ -387,9 +387,16 @@ return baseclass.extend({
 		    gensection = ifc ? 'physical' : 'devgeneral',
 		    advsection = ifc ? 'physical' : 'devadvanced',
 		    simpledep = ifc ? { type: '', ifname_single: /^[^@]/ } : { type: '' },
+		    disableLegacyBridging = isIface && deviceSectionExists(null, 'br-%s'.format(ifc.getName())),
 		    o, ss;
 
-		if (isIface) {
+		/* If an externally configured br-xxx interface already exists,
+		 * then disable legacy bridge configuration */
+		if (disableLegacyBridging) {
+			o = this.addOption(s, gensection, form.HiddenValue, 'type');
+			o.cfgvalue = function() { return '' };
+		}
+		else if (isIface) {
 			var type;
 
 			type = this.addOption(s, gensection, form.Flag, 'type', _('Bridge interfaces'), _('Creates a bridge over specified interface(s)'));
@@ -577,11 +584,26 @@ return baseclass.extend({
 		}
 		else {
 			o.write = o.remove = setIfActive;
-			o.default = L.toArray(dev ? dev.getPorts() : null).filter(function(p) { return p.getType() != 'wifi' || p.isUp() }).map(function(p) { return p.getName() });
+			o.default = L.toArray(dev ? dev.getPorts() : null).filter(function(p) { return p.getType() != 'wifi' }).map(function(p) { return p.getName() });
 			o.filter = function(section_id, device_name) {
-				var d = network.instantiateDevice(device_name);
-				return d.getType() != 'wifi' || d.isUp();
+				var bridge_name = uci.get('network', section_id, 'name'),
+				    choice_dev = network.instantiateDevice(device_name),
+				    parent_dev = choice_dev.getParent();
+
+				/* only show wifi networks which are already present in "option ifname" */
+				if (choice_dev.getType() == 'wifi') {
+					var ifnames = L.toArray(uci.get('network', section_id, 'ifname'));
+
+					for (var i = 0; i < ifnames.length; i++)
+						if (ifnames[i] == device_name)
+							return true;
+
+					return false;
+				}
+
+				return (!parent_dev || parent_dev.getName() != bridge_name);
 			};
+			o.description = _('Specifies the wired ports to attach to this bridge. In order to attach wireless networks, choose the associated interface as network in the wireless settings.')
 		}
 		o.onchange = function(ev, section_id, values) {
 			ss.updatePorts(values);
@@ -975,9 +997,40 @@ return baseclass.extend({
 		o = ss.option(form.Flag, 'local', _('Local'));
 		o.default = o.enabled;
 
-		var ports = isIface
-			? (ifc.getDevices() || L.toArray(ifc.getDevice())).map(function(dev) { return dev.getName() })
-			: L.toArray(uci.get('network', s.section, 'ifname'));
+		/* Do not touch bridge port state from interface config if legacy
+		 * bridge config is disabled due to explicitely declared br-xxx
+		 * device section... */
+		if (disableLegacyBridging)
+			return;
+
+		var ports = [];
+
+		if (isIface) {
+			Array.prototype.push.apply(ports, L.toArray(ifc.getDevices() || ifc.getDevice()).map(function(dev) {
+				return dev.getName();
+			}));
+		}
+		else {
+			var seen_ports = {};
+
+			L.toArray(uci.get('network', s.section, 'ifname')).forEach(function(ifname) {
+				seen_ports[ifname] = true;
+			});
+
+			uci.sections('network', 'bridge-vlan', function(bvs) {
+				L.toArray(bvs.ports).forEach(function(portspec) {
+					var m = portspec.match(/^([^:]+)(?::[ut*]+)?$/);
+
+					if (m)
+						seen_ports[m[1]] = true;
+				});
+			});
+
+			for (var port_name in seen_ports)
+				ports.push(port_name);
+		}
+
+		ports.sort();
 
 		ss.updatePorts(ports);
 	}
