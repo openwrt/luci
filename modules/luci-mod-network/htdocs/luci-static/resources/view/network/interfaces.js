@@ -1076,13 +1076,17 @@ return view.extend({
 		o.modalonly = false;
 		o.textvalue = function(section_id) {
 			var dev = getDevice(section_id),
-			    ext = section_id.match(/^dev:/);
+			    ext = section_id.match(/^dev:/),
+			    icon = render_iface(dev);
 
-			return E('span', {
-				'class': 'ifacebadge',
-				'style': ext ? 'opacity:.5' : null
-			}, [
-				render_iface(dev), ' ', dev ? dev.getName() : (uci.get('network', section_id, 'name') || '?')
+			if (ext)
+				icon.querySelector('img').style.opacity = '.5';
+
+			return E('span', { 'class': 'ifacebadge' }, [
+				icon,
+				E('span', { 'style': ext ? 'opacity:.5' : null }, [
+					dev ? dev.getName() : (uci.get('network', section_id, 'name') || '?')
+				])
 			]);
 		};
 
