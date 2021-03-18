@@ -387,9 +387,11 @@ function initNetworkState(refresh) {
 					stats:    dev.stats,
 					macaddr:  dev.mac,
 					type:     dev.type,
+					devtype:  dev.devtype,
 					mtu:      dev.mtu,
 					qlen:     dev.qlen,
 					wireless: dev.wireless,
+					parent:   dev.parent,
 					ipaddrs:  [],
 					ip6addrs: []
 				};
@@ -428,6 +430,16 @@ function initNetworkState(refresh) {
 
 				s.bridges[name] = b;
 				s.isBridge[name] = true;
+			}
+
+			for (var name in luci_devs) {
+				var dev = luci_devs[name];
+
+				if (!dev.parent || dev.devtype != 'dsa')
+					continue;
+
+				s.isSwitch[dev.parent] = true;
+				s.isSwitch[name] = true;
 			}
 
 			if (L.isObject(board_json.switch)) {
@@ -1207,6 +1219,59 @@ Network = baseclass.extend(/** @lends LuCI.network.prototype */ {
 
 					_state.isSwitch[vlandev] = true;
 				}
+			}
+
+			/* find bridge VLAN devices */
+			var uciBridgeVLANs = uci.sections('network', 'bridge-vlan');
+			for (var i = 0; i < uciBridgeVLANs.length; i++) {
+				var basedev = uciBridgeVLANs[i].device,
+				    local = uciBridgeVLANs[i].local,
+				    alias = uciBridgeVLANs[i].alias,
+				    vid = +uciBridgeVLANs[i].vlan,
+				    ports = L.toArray(uciBridgeVLANs[i].ports);
+
+				if (local == '0')
+					continue;
+
+				if (isNaN(vid) || vid < 0 || vid > 4095)
+					continue;
+
+				var vlandev = '%s.%s'.format(basedev, alias || vid);
+
+				_state.isBridge[basedev] = true;
+
+				if (!_state.bridges.hasOwnProperty(basedev))
+					_state.bridges[basedev] = {
+						name:    basedev,
+						ifnames: []
+					};
+
+				if (!devices.hasOwnProperty(vlandev))
+					devices[vlandev] = this.instantiateDevice(vlandev);
+
+				ports.forEach(function(port_name) {
+					var m = port_name.match(/^([^:]+)(?::[ut*]+)?$/),
+					    p = m ? m[1] : null;
+
+					if (!p)
+						return;
+
+					if (_state.bridges[basedev].ifnames.filter(function(sd) { return sd.name == p }).length)
+						return;
+
+					_state.netdevs[p] = _state.netdevs[p] || {
+						name: p,
+						ipaddrs: [],
+						ip6addrs: [],
+						type: 1,
+						devtype: 'ethernet',
+						stats: {},
+						flags: {}
+					};
+
+					_state.bridges[basedev].ifnames.push(_state.netdevs[p]);
+					_state.netdevs[p].bridge = _state.bridges[basedev];
+				});
 			}
 
 			/* find wireless interfaces */
@@ -2738,7 +2803,7 @@ Device = baseclass.extend(/** @lends LuCI.network.Device.prototype */ {
 		}
 
 		this.ifname  = this.ifname || ifname;
-		this.dev     = _state.netdevs[this.ifname];
+		this.dev     = Object.assign({}, _state.netdevs[this.ifname]);
 		this.network = network;
 	},
 
@@ -2809,7 +2874,7 @@ Device = baseclass.extend(/** @lends LuCI.network.Device.prototype */ {
 	},
 
 	/**
-	 * Get the type of the device..
+	 * Get the type of the device.
 	 *
 	 * @returns {string}
 	 * Returns a string describing the type of the network device:
@@ -2824,15 +2889,15 @@ Device = baseclass.extend(/** @lends LuCI.network.Device.prototype */ {
 	getType: function() {
 		if (this.ifname != null && this.ifname.charAt(0) == '@')
 			return 'alias';
-		else if (this.wif != null || isWifiIfname(this.ifname))
+		else if (this.dev.devtype == 'wlan' || this.wif != null || isWifiIfname(this.ifname))
 			return 'wifi';
-		else if (_state.isBridge[this.ifname])
+		else if (this.dev.devtype == 'bridge' || _state.isBridge[this.ifname])
 			return 'bridge';
 		else if (_state.isTunnel[this.ifname])
 			return 'tunnel';
-		else if (this.ifname.indexOf('.') > -1)
+		else if (this.dev.devtype == 'vlan' || this.ifname.indexOf('.') > -1)
 			return 'vlan';
-		else if (_state.isSwitch[this.ifname])
+		else if (this.dev.devtype == 'dsa' || _state.isSwitch[this.ifname])
 			return 'switch';
 		else
 			return 'ethernet';
@@ -2889,7 +2954,8 @@ Device = baseclass.extend(/** @lends LuCI.network.Device.prototype */ {
 			return _('Bridge');
 
 		case 'switch':
-			return _('Ethernet Switch');
+			return (_state.netdevs[this.ifname] && _state.netdevs[this.ifname].devtype == 'dsa')
+				? _('Switch port') : _('Ethernet Switch');
 
 		case 'vlan':
 			return (_state.isSwitch[this.ifname] ? _('Switch VLAN') : _('Software VLAN'));
@@ -3076,6 +3142,22 @@ Device = baseclass.extend(/** @lends LuCI.network.Device.prototype */ {
 	 */
 	getWifiNetwork: function() {
 		return (this.wif != null ? this.wif : null);
+	},
+
+	/**
+	 * Get the logical parent device of this device.
+	 *
+	 * In case of DSA switch ports, the parent device will be the DSA switch
+	 * device itself, for VLAN devices, the parent refers to the base device
+	 * etc.
+	 *
+	 * @returns {null|LuCI.network.Device}
+	 * Returns a `Network.Device` instance representing the parent device or
+	 * `null` when this device has no parent, as it is the case for e.g.
+	 * ordinary ethernet interfaces.
+	 */
+	getParent: function() {
+		return this.dev.parent ? Network.prototype.instantiateDevice(this.dev.parent) : null;
 	}
 });
 
