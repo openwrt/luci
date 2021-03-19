@@ -285,7 +285,7 @@ duid2ea(const char *duid)
 	switch (len) {
 	case 28:
 		if (!strncmp(duid, "00010001", 8))
-			p = duid + 8;
+			p = duid + 16;
 
 		break;
 
@@ -659,6 +659,20 @@ rpc_luci_parse_network_device_sys(const char *name, struct ifaddrs *ifaddr)
 	if (*p)
 		blobmsg_add_string(&blob, "master", p);
 
+	p = strstr(readstr("/sys/class/net/%s/uevent", name), "DEVTYPE=");
+	if (p) {
+		for (n = 0, p += strlen("DEVTYPE=");; n++) {
+			if (p[n] == '\0' || p[n] == '\n') {
+				p[n] = 0;
+				blobmsg_add_string(&blob, "devtype", p);
+				break;
+			}
+		}
+	}
+	else {
+		blobmsg_add_string(&blob, "devtype", "ethernet");
+	}
+
 	for (af = AF_INET; af != 0; af = (af == AF_INET) ? AF_INET6 : 0) {
 		a = blobmsg_open_array(&blob,
 		                       (af == AF_INET) ? "ipaddrs" : "ip6addrs");
@@ -709,6 +723,24 @@ rpc_luci_parse_network_device_sys(const char *name, struct ifaddrs *ifaddr)
 		blobmsg_add_u32(&blob, "ifindex", sll->sll_ifindex);
 
 		ifa_flags |= ifa->ifa_flags;
+
+		n = atoi(readstr("/sys/class/net/%s/iflink", name));
+
+		if (n != sll->sll_ifindex) {
+			for (ifa = ifaddr; ifa != NULL; ifa = ifa->ifa_next) {
+				if (ifa->ifa_addr == NULL || ifa->ifa_addr->sa_family != AF_PACKET)
+					continue;
+
+				sll = (struct sockaddr_ll *)ifa->ifa_addr;
+
+				if (sll->sll_ifindex != n)
+					continue;
+
+				blobmsg_add_string(&blob, "parent", ifa->ifa_name);
+				break;
+			}
+		}
+
 		break;
 	}
 

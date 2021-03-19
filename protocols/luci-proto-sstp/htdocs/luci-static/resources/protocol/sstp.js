@@ -58,22 +58,6 @@ return network.registerProtocol('sstp', {
 		o.value('4', _('4', 'sstp log level value'));
 		o.default = '0';
 
-		var defaultroute = s.taboption('advanced', form.Flag, 'defaultroute', _('Use default gateway'), _('If unchecked, no default route is configured'));
-		defaultroute.default = defaultroute.enabled;
-
-		o = s.taboption('advanced', form.Value, 'metric', _('Use gateway metric'));
-		o.placeholder = '0';
-		o.datatype    = 'uinteger';
-		o.depends('defaultroute', defaultroute.enabled);
-
-		o = s.taboption('advanced', form.Flag, 'peerdns', _('Use DNS servers advertised by peer'), _('If unchecked, the advertised DNS server addresses are ignored'));
-		o.default = o.enabled;
-
-		o = s.taboption('advanced', form.DynamicList, 'dns', _('Use custom DNS servers'));
-		o.depends('peerdns', '0');
-		o.datatype = 'ipaddr';
-		o.cast     = 'string';
-
 		o = s.taboption('advanced', form.Value, 'mtu', _('Override MTU'));
 		o.placeholder = dev ? (dev.getMTU() || '1500') : '1500';
 		o.datatype    = 'max(9200)';

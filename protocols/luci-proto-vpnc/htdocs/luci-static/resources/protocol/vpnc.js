@@ -103,9 +103,5 @@ return network.registerProtocol('vpnc', {
 		o = s.taboption('general', form.Value, 'target_network', _('Target network'));
 		o.placeholder = '0.0.0.0/0';
 		o.datatype    = 'network';
-
-		o = s.taboption('general', form.ListValue, 'defaultroute', _('Default Route'), _('Set VPN as Default Route'));
-		o.value('0', _('No'));
-		o.value('1', _('Yes'));
 	}
 });

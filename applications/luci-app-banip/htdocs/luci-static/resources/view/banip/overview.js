@@ -676,7 +676,23 @@ return view.extend({
 		o.value('dropbear');
 		o.value('sshd');
 		o.value('luci');
+		o.value('nginx');
 		o.optional = true;
+		o.rmempty = true;
+
+		o = s.taboption('adv_log', form.Value, 'ban_ssh_logcount', _('SSH Log Count'), _('Number of failed ssh login repetitions of the same ip in the log before banning.'));
+		o.placeholder = '3';
+		o.datatype = 'range(1,10)';
+		o.rmempty = true;
+
+		o = s.taboption('adv_log', form.Value, 'ban_luci_logcount', _('LuCI Log Count'), _('Number of failed LuCI login repetitions of the same ip in the log before banning.'));
+		o.placeholder = '3';
+		o.datatype = 'range(1,10)';
+		o.rmempty = true;
+
+		o = s.taboption('adv_log', form.Value, 'ban_nginx_logcount', _('NGINX Log Count'), _('Number of failed nginx requests of the same ip in the log before banning.'));
+		o.placeholder = '5';
+		o.datatype = 'range(1,20)';
 		o.rmempty = true;
 
 		o = s.taboption('adv_log', form.Value, 'ban_logopts_src', _('SRC Log Options'), _('Set special SRC log options, e.g. to set a limit rate.'));
@@ -738,7 +754,7 @@ return view.extend({
 
 		o = s.taboption('sources', form.DummyValue, '_sub');
 		o.rawhtml = true;
-		o.default = '<em><b>Country selection</b></em>';
+		o.default = '<em><b>Country Selection</b></em>';
 
 		/*
 			prepare country data
@@ -759,7 +775,7 @@ return view.extend({
 
 		o = s.taboption('sources', form.DummyValue, '_sub');
 		o.rawhtml = true;
-		o.default = '<em><b>ASN selection</b></em>';
+		o.default = '<em><b>ASN Selection</b></em>';
 
 		o = s.taboption('sources', form.DynamicList, 'ban_asns', _('ASNs'));
 		o.datatype = 'uinteger';

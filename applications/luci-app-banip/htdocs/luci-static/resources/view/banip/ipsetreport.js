@@ -123,7 +123,7 @@ return view.extend({
 				E('th', { 'class': 'th' }, _('Count MAC')),
 				E('th', { 'class': 'th' }, _('Count ACC')),
 				E('th', { 'class': 'th' }, _('Entry Details')),
-				E('th', { 'class': 'th' }, _('')),
+				E('th', { 'class': 'th' }, '\xa0'),
 				E('th', { 'class': 'th' }, _('Action'))
 			])
 		]);

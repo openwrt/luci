@@ -3,15 +3,15 @@
 #
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2021-01-25 09:27+0000\n"
-"Last-Translator: akibou <jinwenxin1997@icloud.com>\n"
+"PO-Revision-Date: 2021-03-14 05:16+0000\n"
+"Last-Translator: Hulen <shift0106@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "openwrt/luciapplicationssimple-adblock/zh_Hant/>\n"
 "Language: zh_Hant\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.5-dev\n"
+"X-Generator: Weblate 4.5.2-dev\n"
 
 #: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:217
 msgid "%s Error: %s"
@@ -20,10 +20,6 @@ msgstr "%s 錯誤：%s"
 #: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:215
 msgid "%s Error: %s %s"
 msgstr "%s 錯誤：%s %s"
-
-#: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:198
-msgid "%s is blocking %s domains (with %s)."
-msgstr "%s 正在封鎖 %s 網域（具有 %s）。"
 
 #: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:129
 msgid "%s is not installed or not found"
@@ -77,6 +73,10 @@ msgstr "封鎖的域名"
 #: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:350
 msgid "Blocked Hosts URLs"
 msgstr "封鎖的主機網址"
+
+#: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:198
+msgid "Blocking %s domains (with %s)."
+msgstr "封鎖 %s 個網域 (用 %s)。"
 
 #: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:188
 msgid "Cache file containing %s domains found."
@@ -187,15 +187,15 @@ msgstr "強制重新載入中"
 
 #: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:243
 msgid "Force Router DNS"
-msgstr "強制路由器 DNS"
+msgstr "強制使用路由器 DNS"
 
 #: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:245
 msgid "Force Router DNS server to all local devices"
-msgstr "強制路由器 DNS 服務所有本地裝置"
+msgstr "強制所有本地裝置使用路由器 DNS"
 
 #: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:243
 msgid "Forces Router DNS use on local devices, also known as DNS Hijacking."
-msgstr "強制在本地設備上使用路由器DNS，也稱為DNS劫持。"
+msgstr "強制在本地裝置上使用路由器 DNS，也稱為 DNS 劫持。"
 
 #: applications/luci-app-simple-adblock/root/usr/share/rpcd/acl.d/luci-app-simple-adblock.json:3
 msgid "Grant UCI and file access for luci-app-simple-adblock"
@@ -236,7 +236,7 @@ msgstr "同時啟動所有列表下載和處理，從而縮短了服務啟動時
 
 #: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:244
 msgid "Let local devices use their own DNS servers if set"
-msgstr "如果設定，讓本地裝置使用自己的 DNS 伺服器"
+msgstr "如果進行了設定，允許本地裝置使用自己的 DNS 伺服器"
 
 #: applications/luci-app-simple-adblock/luasrc/view/simple-adblock/js.htm:51
 msgid "Loading"
@@ -258,7 +258,8 @@ msgstr "下載封鎖／允許清單前執行組態更新。"
 msgid ""
 "Pick the DNS resolution option to create the adblock list for, see the "
 "%sREADME%s for details."
-msgstr "選擇 DNS 解析選項以建立 Adblock 清單，請參閱 %sREADME%s 以獲得詳細資訊。"
+msgstr ""
+"選擇 DNS 解析選項以建立 Adblock 清單，請參閱 %sREADME%s 以獲得詳細資訊。"
 
 #: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:255
 msgid "Pick the LED not already used in %sSystem LED Configuration%s."
@@ -280,6 +281,10 @@ msgstr "重新啟動中"
 #: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:300
 msgid "Run service after set delay on boot."
 msgstr "設定啟動後延遲執行服務。"
+
+#: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:223
+msgid "Service Control"
+msgstr "服務控制"
 
 #: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:172
 #: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:182
@@ -459,6 +464,9 @@ msgstr "設備不支持HTTPS / SSL"
 #: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:257
 msgid "none"
 msgstr "無"
+
+#~ msgid "%s is blocking %s domains (with %s)."
+#~ msgstr "%s 正在封鎖 %s 網域（具有 %s）。"
 
 #~ msgid "Blacklisted Domain URLs"
 #~ msgstr "列入黑名單的域名 URL"

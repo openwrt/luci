@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2020-05-02 15:56+0000\n"
+"PO-Revision-Date: 2021-03-04 13:50+0000\n"
 "Last-Translator: Marcin Net <marcin.net@linux.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsopenvpn/pl/>\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.1-dev\n"
+"X-Generator: Weblate 4.5.1-dev\n"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:364
 msgid "'net30', 'p2p', or 'subnet'"
@@ -249,10 +249,6 @@ msgstr "Włącz TLS i przyjmij rolę klienta"
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:648
 msgid "Enable TLS and assume server role"
 msgstr "Włącz TLS i przyjmij rolę serwera"
-
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:165
-msgid "Enable a compression algorithm"
-msgstr "Włącz algorytm kompresji"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:278
 msgid "Enable internal datagram fragmentation"
@@ -578,6 +574,23 @@ msgstr ""
 msgid "Section to modify the OVPN config file (%s)"
 msgstr "Sekcja modyfikacji pliku konfiguracyjnego OVPN (%s)"
 
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:257
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-basic.lua:45
+msgid ""
+"Security recommendation: It is recommended to not enable compression and set "
+"this parameter to `no`"
+msgstr ""
+"Zalecenie dotyczące bezpieczeństwa: zaleca się, aby nie włączać kompresji i "
+"ustawić ten parametr na 'nie'"
+
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:165
+msgid ""
+"Security recommendation: It is recommended to not enable compression and set "
+"this parameter to `stub-v2`"
+msgstr ""
+"Zalecenie dotyczące bezpieczeństwa: zaleca się, aby nie włączać kompresji i "
+"ustawić ten parametr na 'stub-v2'"
+
 #: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:85
 msgid "Select template ..."
 msgstr "Wybierz szablon ..."
@@ -785,11 +798,6 @@ msgstr "Wyślij"
 msgid "Upload ovpn file"
 msgstr "Prześlij plik ovpn"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:257
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-basic.lua:45
-msgid "Use fast LZO compression"
-msgstr "Użyj szybkiej kompresji LZO"
-
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:510
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-basic.lua:97
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-basic.lua:103
@@ -832,6 +840,12 @@ msgstr "czas bezczynności TUN/TAP"
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn.lua:111
 msgid "yes (%i)"
 msgstr "tak (%i)"
+
+#~ msgid "Enable a compression algorithm"
+#~ msgstr "Włącz algorytm kompresji"
+
+#~ msgid "Use fast LZO compression"
+#~ msgstr "Użyj szybkiej kompresji LZO"
 
 #~ msgid "%s"
 #~ msgstr "%s"

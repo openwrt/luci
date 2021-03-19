@@ -425,11 +425,26 @@ return baseclass.extend({
 		opt.addChoices(choices[0], choices[1]);
 	},
 
+	CBIDynamicMultiValueList: form.DynamicList.extend({
+		renderWidget: function(/* ... */) {
+			var dl = form.DynamicList.prototype.renderWidget.apply(this, arguments),
+			    inst = dom.findClassInstance(dl);
+
+			inst.addItem = function(dl, value, text, flash) {
+				var values = L.toArray(value);
+				for (var i = 0; i < values.length; i++)
+					ui.DynamicList.prototype.addItem.call(this, dl, values[i], null, true);
+			};
+
+			return dl;
+		}
+	}),
+
 	addIPOption: function(s, tab, name, label, description, family, hosts, multiple) {
-		var o = s.taboption(tab, multiple ? form.DynamicList : form.Value, name, label, description);
+		var o = s.taboption(tab, multiple ? this.CBIDynamicMultiValueList : form.Value, name, label, description);
 
 		o.modalonly = true;
-		o.datatype = 'list(neg(ipmask))';
+		o.datatype = 'list(neg(ipmask("true")))';
 		o.placeholder = multiple ? _('-- add IP --') : _('any');
 
 		if (family != null) {
@@ -474,7 +489,7 @@ return baseclass.extend({
 	},
 
 	addMACOption: function(s, tab, name, label, description, hosts) {
-		var o = s.taboption(tab, form.DynamicList, name, label, description);
+		var o = s.taboption(tab, this.CBIDynamicMultiValueList, name, label, description);
 
 		o.modalonly = true;
 		o.datatype = 'list(macaddr)';
