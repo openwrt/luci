@@ -5,6 +5,7 @@
 	--secondary-dark-color: #212322;
 	--danger-color: #CC1111;
 	--warning-color: #CC8800;
+	--success-color: #5CB85C;
 	--regular-font: "GalanoGrotesqueW00-Regular";
 	--base-font-size: 16px;
 }
@@ -269,74 +270,69 @@ body.modal-overlay-active #modal_overlay {
  * table layout
  */
 
-.table {
-	display: table;
+table {
 	width: 100%;
 	margin: 0 0 1rem 0;
 	position: relative;
+	border-collapse: collapse;
 }
 
-.tr {
-	display: table-row;
-}
-
-.tr.cbi-section-table-titles[data-title]::before {
+tr.cbi-section-table-titles[data-title]::before {
 	font-weight: bold;
 	border-top: none;
 }
 
-.tr[data-title]::before {
+tr[data-title]::before {
 	content: attr(data-title);
 	display: table-cell;
 	border-top: 1px solid var(--main-dark-color);
 	padding: .5em;
 }
 
-.th {
+th {
+	text-align: left;
 	font-weight: bold;
-	display: table-cell;
 	padding: .5em;
 	/* word-break: break-word; */
 }
 
-.cbi-section-table-descr .th {
+.cbi-section-table-descr th {
 	opacity: .8;
 	font-size: 90%;
 	font-weight: normal;
 }
 
-.td {
-	display: table-cell;
+td {
 	border-top: 1px solid var(--main-dark-color);
 	padding: .5em;
 	vertical-align: middle;
 }
 
-.td input:not([type]),
-.td input[type="text"],
-.td input[type="password"],
-.td select,
-.td .cbi-dropdown:not(.btn):not(.cbi-button),
-.td .cbi-dynlist,
-.td .control-group {
+td input:not([type]),
+td input[type="text"],
+td input[type="password"],
+td select,
+td .cbi-dropdown:not(.btn):not(.cbi-button),
+td .cbi-dynlist,
+td .control-group {
 	min-width: auto;
 	width: 100%;
 }
 
-.tr.drag-over-above {
+tr.drag-over-above {
 	box-shadow: 0 -6px 6px var(--main-bright-color);
 }
 
-.tr.drag-over-below {
+tr.drag-over-below {
 	box-shadow: 0 6px 6px var(--main-bright-color);
 }
 
-.tr.placeholder {
+tr.placeholder {
 	height: 4em;
 	position: relative;
 }
 
-.tr.placeholder > .td {
+tr.placeholder > td {
 	position: absolute;
 	left: 0;
 	right: 0;
@@ -356,51 +352,51 @@ body.modal-overlay-active #modal_overlay {
  	justify-content: space-around;
  }
 
-.assoclist .td,
-[data-page="admin-status-overview"] .td {
+.assoclist td,
+[data-page="admin-status-overview"] td {
 	font-size: .9rem;
 	vertical-align: middle;
 }
 
-.assoclist .td:nth-of-type(3) > span {
+.assoclist td:nth-of-type(3) > span {
 	display: block;
 	max-width: 270px;
 	font-size: .8rem;
 }
 
-.assoclist .td:nth-of-type(5) > span {
+.assoclist td:nth-of-type(5) > span {
 	font-size: .8rem;
 }
 
-.assoclist .td > .ifacebadge {
+.assoclist td > .ifacebadge {
 	flex-wrap: wrap;
 	justify-content: space-around;
 	max-width: 120px;
 	padding: .2em;
 }
 
-.assoclist .td > .ifacebadge::after {
+.assoclist td > .ifacebadge::after {
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
 
-.assoclist .td > .ifacebadge > img {
+.assoclist td > .ifacebadge > img {
 	margin: 0 25px;
 }
 
-.assoclist .td > .ifacebadge[data-ssid][data-ifname] > span {
+.assoclist td > .ifacebadge[data-ssid][data-ifname] > span {
 	display: none;
 }
 
-.assoclist .td > .ifacebadge[data-ssid][data-ifname]::after {
+.assoclist td > .ifacebadge[data-ssid][data-ifname]::after {
 	content: attr(data-ssid) " (" attr(data-ifname) ")";
 }
 
-[data-page="admin-status-overview"] .td:nth-of-type(3) {
+[data-page="admin-status-overview"] td:nth-of-type(3) {
 	min-width: 100px;
 }
 
-[data-page="admin-network-firewall"] .table > .tr > *:nth-child(1) {
+[data-page="admin-network-firewall"] table > tr > *:nth-child(1) {
 	flex: 1 1 30%;
 }
 
@@ -412,8 +408,8 @@ body.modal-overlay-active #modal_overlay {
 	flex: 1;
 }
 
-[data-page="admin-status-processes"] .table .td:nth-of-type(3),
-[data-tab="leases"] .table .td[data-name="duid"] {
+[data-page="admin-status-processes"] table td:nth-of-type(3),
+[data-tab="leases"] table td[data-name="duid"] {
 	word-break: break-word;
 }
 
@@ -851,6 +847,10 @@ ul > li {
 
 .alert-message.danger {
 	background: var(--danger-color);
+}
+
+.alert-message.success {
+	background: var(--success-color);
 }
 
 .alert-message .btn {
@@ -1660,25 +1660,25 @@ ul.errors {
 		display: none !important;
 	}
 
-	.table {
+	table {
 		display: flex;
 		flex-direction: column;
 	}
 
-	.tr {
+	tr {
 		display: block;
 		border-bottom: 1px solid var(--main-dark-color);
 		margin-bottom: .5em;
 		padding-bottom: .5em;
 	}
 
-	.tr.cbi-section-table-titles[data-title]::before,
-	.tr.cbi-section-table-titles,
-	.tr.cbi-section-table-descr {
+	tr.cbi-section-table-titles[data-title]::before,
+	tr.cbi-section-table-titles,
+	tr.cbi-section-table-descr {
 		display: none;
 	}
 
-	.tr[data-title]::before {
+	tr[data-title]::before {
 		display: block;
 		font-weight: bold;
 		border-top: none;
@@ -1686,23 +1686,23 @@ ul.errors {
 		font-size: 110%;
 	}
 
-	.td {
+	td {
 		display: block;
 		border-top: none;
 		text-align: left !important;
 		padding: .2em 0;
 	}
 
-	.th, .table-titles {
+	th, table-titles {
 		display: none;
 	}
 
-	.td[data-title] {
+	td[data-title] {
 		position: relative;
 		padding: .2em 0 .2em 40%;
 	}
 
-	.td[data-title]::before {
+	td[data-title]::before {
 		content: attr(data-title) ": ";
 		white-space: nowrap;
 		font-weight: bold;
@@ -1719,7 +1719,7 @@ ul.errors {
 		align-items: center;
 	}
 
-	.td[data-title]::after {
+	td[data-title]::after {
 		content: "";
 		width: 2em;
 		position: absolute;
@@ -1730,93 +1730,93 @@ ul.errors {
 		background: linear-gradient(90deg, rgba(255, 255, 255, 0), var(--secondary-bright-color) 90%);
 	}
 
-	[data-page="admin-status-overview"] .cbi-section:nth-of-type(1) .td:first-of-type,
-	[data-page="admin-status-overview"] .cbi-section:nth-of-type(2) .td:first-of-type {
+	[data-page="admin-status-overview"] .cbi-section:nth-of-type(1) td:first-of-type,
+	[data-page="admin-status-overview"] .cbi-section:nth-of-type(2) td:first-of-type {
 		font-weight: bold;
 		max-width: none;
 		width: 100%;
 	}
 
-	[data-page="admin-status-overview"] .td > span > span { font-size: .9rem; }
+	[data-page="admin-status-overview"] td > span > span { font-size: .9rem; }
 
-	[data-page="admin-status-routes"] .table:nth-of-type(3) .td:nth-of-type(1) { word-break: break-all; }
+	[data-page="admin-status-routes"] table:nth-of-type(3) td:nth-of-type(1) { word-break: break-all; }
 
-	[data-page="admin-network-firewall-zones"] .td[data-name="_info"] {
+	[data-page="admin-network-firewall-zones"] td[data-name="_info"] {
 		padding: .2em 0;
 		line-height: 2.2rem;
 	}
 
-	[data-page="admin-network-firewall-zones"] .td[data-name="_info"]::before,
-	[data-page="admin-network-firewall-zones"] .td[data-name="_info"]::after {
+	[data-page="admin-network-firewall-zones"] td[data-name="_info"]::before,
+	[data-page="admin-network-firewall-zones"] td[data-name="_info"]::after {
 		display: none;
 	}
 
-	[data-page="admin-network-firewall-zones"] .td[data-name="_info"] label {
+	[data-page="admin-network-firewall-zones"] td[data-name="_info"] label {
 		font-size: 1rem;
 	}
 
-	#cbi-wireless-wifi-device .tr { display: flex; flex-wrap: wrap; }
-	#cbi-wireless-wifi-device .tr > *:nth-child(1) { flex: 1 1 20%; align-self: center; }
-	#cbi-wireless-wifi-device .tr > *:nth-child(2) { flex: 2 2 75%; }
-	#cbi-wireless-wifi-device .tr > *:nth-child(3) { flex: 3 3 100%; }
+	#cbi-wireless-wifi-device tr { display: flex; flex-wrap: wrap; }
+	#cbi-wireless-wifi-device tr > *:nth-child(1) { flex: 1 1 20%; align-self: center; }
+	#cbi-wireless-wifi-device tr > *:nth-child(2) { flex: 2 2 75%; }
+	#cbi-wireless-wifi-device tr > *:nth-child(3) { flex: 3 3 100%; }
 
-	#cbi-network-interface .tr { display: flex; flex-wrap: wrap; }
-	#cbi-network-interface .tr > *:nth-child(1) { flex: 1 1 33%; align-self: center; }
-	#cbi-network-interface .tr > *:nth-child(2) { flex: 2 2 60%; align-self: center; font-size: .9rem; overflow: hidden; }
-	#cbi-network-interface .tr > *:nth-child(3) { flex: 3 3 100%; }
-	#cbi-network-interface .tr > *:nth-child(2) > div { overflow: hidden; text-overflow: ellipsis; }
+	#cbi-network-interface tr { display: flex; flex-wrap: wrap; }
+	#cbi-network-interface tr > *:nth-child(1) { flex: 1 1 33%; align-self: center; }
+	#cbi-network-interface tr > *:nth-child(2) { flex: 2 2 60%; align-self: center; font-size: .9rem; overflow: hidden; }
+	#cbi-network-interface tr > *:nth-child(3) { flex: 3 3 100%; }
+	#cbi-network-interface tr > *:nth-child(2) > div { overflow: hidden; text-overflow: ellipsis; }
 
-	.assoclist .tr {
+	.assoclist tr {
 		display: flex;
 		flex-wrap: wrap;
 	}
 
-	.assoclist .td > .ifacebadge {
+	.assoclist td > .ifacebadge {
 		max-width: 90px;
 	}
 
-	.assoclist .td > .ifacebadge > img {
+	.assoclist td > .ifacebadge > img {
 		margin: 0 35px;
 	}
 
-	.assoclist .td > .ifacebadge > span {
+	.assoclist td > .ifacebadge > span {
 		display: none;
 	}
 
-	.assoclist .td > .ifacebadge[data-ifname]::after {
+	.assoclist td > .ifacebadge[data-ifname]::after {
 		content: attr(data-ifname);
 	}
 
-	.assoclist .td > .ifacebadge[data-signal]::after {
+	.assoclist td > .ifacebadge[data-signal]::after {
 		content: attr(data-signal) " dBm";
 	}
 
-	.assoclist .td:nth-of-type(3) {
+	.assoclist td:nth-of-type(3) {
 		font-weight: bold;
 		font-size: 1rem;
 	}
 
-	.assoclist .td:nth-of-type(1), .assoclist .td:nth-of-type(4) {
+	.assoclist td:nth-of-type(1), .assoclist td:nth-of-type(4) {
 		flex: 1 1 100px;
 		margin-right: .5em;
 	}
 
-	.assoclist .td:nth-of-type(3), .assoclist .td:nth-of-type(5) {
+	.assoclist td:nth-of-type(3), .assoclist td:nth-of-type(5) {
 		flex: 2 2 calc(100% - 110px);
 		overflow: hidden;
 		text-overflow: ellipsis;
 		align-self: center;
 	}
 
-	.assoclist .td:nth-of-type(6) { flex: 1; text-align: right !important; }
-	.assoclist .td[data-title] { padding: .2em 0; }
-	.assoclist .td[data-title]::before,
-	.assoclist .td[data-title]::after { display: none; }
+	.assoclist td:nth-of-type(6) { flex: 1; text-align: right !important; }
+	.assoclist td[data-title] { padding: .2em 0; }
+	.assoclist td[data-title]::before,
+	.assoclist td[data-title]::after { display: none; }
 
-	.leases6 .td:nth-of-type(3) { word-wrap: break-word; }
+	.leases6 td:nth-of-type(3) { word-wrap: break-word; }
 
-	.td.cbi-section-actions > div { display: flex; }
-	.td.cbi-section-actions > div > * { flex: 1; }
+	td.cbi-section-actions > div { display: flex; }
+	td.cbi-section-actions > div > * { flex: 1; }
 
 	body.modal-overlay-active #modal_overlay > .modal {
 		width: 95%;
@@ -1919,7 +1919,7 @@ ul.errors {
 }
 
 @media only screen and (min-width: 800px) and (max-width: 1200px) {
-	.assoclist .tr > *:nth-of-type(2) {
+	.assoclist tr > *:nth-of-type(2) {
 		display: none;
 	}
 }

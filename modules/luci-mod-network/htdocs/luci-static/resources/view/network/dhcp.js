@@ -472,6 +472,25 @@ return view.extend({
 			so.value(mac, hint ? '%s (%s)'.format(mac, hint) : mac);
 		});
 
+		so.write = function(section, value) {
+			var ip = this.map.lookupOption('ip', section)[0].formvalue(section);
+			var hosts = uci.sections('dhcp', 'host');
+			var section_removed = false;
+
+			for (var i = 0; i < hosts.length; i++) {
+				if (ip == hosts[i].ip) {
+					uci.set('dhcp', hosts[i]['.name'], 'mac', [hosts[i].mac, value].join(' '));
+					uci.remove('dhcp', section);
+					section_removed = true;
+					break;
+				}
+			}
+
+			if (!section_removed) {
+				uci.set('dhcp', section, 'mac', value);
+			}
+		}
+
 		so = ss.option(form.Value, 'ip', _('<abbr title="Internet Protocol Version 4">IPv4</abbr>-Address'));
 		so.datatype = 'or(ip4addr,"ignore")';
 		so.sortable = true;

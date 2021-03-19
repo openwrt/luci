@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LuCI: simple-adblock\n"
 "POT-Creation-Date: 2017-12-07 14:00+0300\n"
-"PO-Revision-Date: 2021-01-09 15:32+0000\n"
-"Last-Translator: Nt0G <nt0gggg@gmail.com>\n"
+"PO-Revision-Date: 2021-03-14 05:16+0000\n"
+"Last-Translator: masta0f1eave <lomskoff.dima@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationssimple-adblock/ru/>\n"
 "Language: ru\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.4.1-dev\n"
+"X-Generator: Weblate 4.5.2-dev\n"
 "Project-Info: Это технический перевод, не дословный. Главное-удобный русский "
 "интерфейс, все проверялось в графическом режиме, совместим с другими apps\n"
 
@@ -23,10 +23,6 @@ msgstr "%s Ошибка: %s"
 #: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:215
 msgid "%s Error: %s %s"
 msgstr "%s Ошибка: %s %s"
-
-#: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:198
-msgid "%s is blocking %s domains (with %s)."
-msgstr "%s блокирует %s домены (с %s)."
 
 #: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:129
 msgid "%s is not installed or not found"
@@ -80,6 +76,10 @@ msgstr "Блокируемые домены"
 #: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:350
 msgid "Blocked Hosts URLs"
 msgstr "URL-адреса блокируемых хостов"
+
+#: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:198
+msgid "Blocking %s domains (with %s)."
+msgstr ""
 
 #: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:188
 msgid "Cache file containing %s domains found."
@@ -192,7 +192,6 @@ msgid "Force Reloading"
 msgstr "Принудительная перезагрузка"
 
 #: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:243
-#, fuzzy
 msgid "Force Router DNS"
 msgstr "Назначить DNS роутера"
 
@@ -290,7 +289,7 @@ msgstr "Выберите светодиод, не используемый %sSys
 #: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:273
 #: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:276
 msgid "Please note that %s is not supported on this system."
-msgstr "<i>Обратите внимание: %s не поддерживается в этой системе.</i>"
+msgstr "Обратите внимание: %s не поддерживается в этой системе."
 
 #: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:132
 msgid "Restarting"
@@ -299,6 +298,10 @@ msgstr "Перезапуск"
 #: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:300
 msgid "Run service after set delay on boot."
 msgstr "Запуск службы при загрузке системы после установленной задержки."
+
+#: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:223
+msgid "Service Control"
+msgstr "Управление службой"
 
 #: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:172
 #: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:182
@@ -480,6 +483,9 @@ msgstr "нет поддержки HTTPS/SSL на устройстве"
 #: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:257
 msgid "none"
 msgstr "ничего"
+
+#~ msgid "%s is blocking %s domains (with %s)."
+#~ msgstr "%s блокирует %s домены (с %s)."
 
 #~ msgid "Blacklisted Domain URLs"
 #~ msgstr "URL ссылки Черных<br />списков доменов"

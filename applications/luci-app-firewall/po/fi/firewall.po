@@ -44,11 +44,11 @@ msgstr ""
 "%{helper.name}&quot;\">%{helper.val}</var>:<var data-tooltip=\"%{helper."
 "name}\">%{helper.val}</var>}}"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:433
+#: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:448
 msgid "-- add IP --"
 msgstr "- lisää IP -"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:481
+#: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:496
 msgid "-- add MAC --"
 msgstr "- lisää MAC -"
 
@@ -131,7 +131,7 @@ msgstr ""
 "%{snat_ip? IP-<var>%{snat_ip}</var>} %{snat_port?portti <var>{snat_port}</"
 "var>}"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:225
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:224
 msgid "A rewrite IP must be specified!"
 msgstr "Uudelleenkirjoitus IP on määritettävä!"
 
@@ -140,14 +140,14 @@ msgid "ACCEPT - Disable address rewriting"
 msgstr "HYVÄKSY - Uudelleenkirjoittamatta osoitetta"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:173
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:229
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:377
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:224
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:372
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:158
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:208
 msgid "Action"
 msgstr "Toiminta"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:284
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:289
 msgid ""
 "Additional raw <em>iptables</em> arguments to classify zone destination "
 "traffic, e.g. <code>-p tcp --dport 443</code> to only match outbound HTTPS "
@@ -157,7 +157,7 @@ msgstr ""
 "luokittelemiseksi, esimerkiksi <code>-p tcp --dport 443</code> vastaa vain "
 "lähtevää HTTPS-liikennettä."
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:274
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:279
 msgid ""
 "Additional raw <em>iptables</em> arguments to classify zone source traffic, "
 "e.g. <code>-p tcp --sport 443</code> to only match inbound HTTPS traffic."
@@ -173,26 +173,26 @@ msgstr ""
 msgid "Advanced Settings"
 msgstr "Lisäasetukset"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:246
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:251
 msgid "Allow \"invalid\" traffic"
 msgstr "Salli \"virheellinen\" liikenne"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:346
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:351
 msgid "Allow forward from <em>source zones</em>:"
 msgstr "Salli välitys <em>lähdevyöhykkeeltä</em>:"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:305
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:310
 msgid "Allow forward to <em>destination zones</em>:"
 msgstr "Salli välitys <em>kohdevyöhykkeelle</em>:"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:508
+#: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:523
 msgid "Any"
 msgstr "Mikä tahansa"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:443
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:459
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:258
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:274
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:438
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:454
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:257
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:273
 msgid "Any day"
 msgstr "Minä päivänä tahansa"
 
@@ -209,15 +209,15 @@ msgstr ""
 msgid "Apply the given DSCP class or value to established connections."
 msgstr "Käytä annettua DSCP-luokkaa tai arvoa muodostetuille yhteyksille."
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:405
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:400
 msgid "Assign the specified connection tracking helper to matched traffic."
 msgstr "Määritä yhteysseurantaapuri vastaavalle liikenteelle."
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:249
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:254
 msgid "Automatic helper assignment"
 msgstr "Automaattinen avustajan määritys"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:249
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:254
 msgid ""
 "Automatically assign conntrack helpers based on traffic protocol and port"
 msgstr ""
@@ -227,7 +227,7 @@ msgstr ""
 msgid "Conntrack Settings"
 msgstr "Conntrack-asetukset"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:253
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:258
 msgid "Conntrack helpers"
 msgstr "Conntrack-auttajat"
 
@@ -235,11 +235,11 @@ msgstr "Conntrack-auttajat"
 msgid "Contents have been saved."
 msgstr "Sisältö on tallennettu."
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:656
+#: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:671
 msgid "Continue"
 msgstr "Jatka"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:216
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:221
 msgid "Covered devices"
 msgstr "Katetut laitteet"
 
@@ -247,7 +247,7 @@ msgstr "Katetut laitteet"
 msgid "Covered networks"
 msgstr "Katetut verkot"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:221
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:226
 msgid "Covered subnets"
 msgstr "Katetut aliverkot"
 
@@ -266,7 +266,7 @@ msgstr ""
 "palomuurin uudelleenkäynnistyksen jälkeen heti oletussääntöjoukon lataamisen "
 "jälkeen."
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:387
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:382
 msgid "DSCP classification"
 msgstr "DSCP-luokitus"
 
@@ -278,25 +278,25 @@ msgstr "DSCP-merkki"
 msgid "DSCP mark required"
 msgstr "DSCP-merkki vaaditaan"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:368
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:363
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:194
 msgid "Destination address"
 msgstr "Kohdeosoite"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:370
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:365
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:199
 msgid "Destination port"
 msgstr "Kohdeportti"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:362
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:357
 msgid "Destination zone"
 msgstr "Kohdevyöhyke"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:273
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:268
 msgid "Device name"
 msgstr "Laitteen nimi"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:246
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:251
 msgid ""
 "Do not install extra rules to reject forwarded traffic with conntrack state "
 "<em>invalid</em>. This may be required for complex asymmetric route setups."
@@ -310,7 +310,7 @@ msgid "Drop invalid packets"
 msgstr "Pudota virheelliset paketit"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:181
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:235
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:230
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:164
 msgid "Enable"
 msgstr "Ota käyttöön"
@@ -323,7 +323,7 @@ msgstr "Ota käyttöön NAT Loopback"
 msgid "Enable SYN-flood protection"
 msgstr "Käytä SYN-flood suojausta"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:259
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:264
 msgid "Enable logging on this zone"
 msgstr "Ota kirjaaminen käyttöön tällä vyöhykkeellä"
 
@@ -335,7 +335,7 @@ msgstr "Odotettiin: %s"
 msgid "Experimental feature. Not fully compatible with QoS/SQM."
 msgstr "Kokeellinen ominaisuus. Ei täysin yhteensopiva QoS/SQM:n kanssa."
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:253
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:258
 msgid "Explicitly choses allowed connection tracking helpers for zone traffic"
 msgstr "Valitse käsin sallivat yhteydenseuranta-apurit vyöhykeliikenteelle"
 
@@ -348,12 +348,12 @@ msgid "External port"
 msgstr "Ulkoinen portti"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:284
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:435
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:249
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:430
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:248
 msgid "Extra arguments"
 msgstr "Ylimääräiset argumentit"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:284
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:289
 msgid "Extra destination arguments"
 msgstr "Lisäkohdeargumentit"
 
@@ -361,7 +361,7 @@ msgstr "Lisäkohdeargumentit"
 msgid "Extra iptables arguments"
 msgstr "Extra iptables argumentit"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:274
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:279
 msgid "Extra source arguments"
 msgstr "Lisälähdeargumentit"
 
@@ -393,7 +393,7 @@ msgstr "Palomuuri - Liikennesäännöt"
 msgid "Firewall - Zone Settings"
 msgstr "Palomuuri - vyöhykeasetukset"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:649
+#: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:664
 msgid "Firewall configuration migration"
 msgstr "Palomuurin määritysten siirto"
 
@@ -414,8 +414,8 @@ msgstr ""
 "%{mark.num}%{mark.mask? maski %{mark.mask}}.\":%{mark.mask? data-tooltip="
 "\"Maskaa merkintä %{mark.mask} enne vertailua.\"}}>%{mark.val}</var>}"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:449
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:264
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:444
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:263
 msgid "Friday"
 msgstr "Perjantai"
 
@@ -489,22 +489,22 @@ msgstr "Anna pääsy palomuurin määrityksiin"
 msgid "Hardware flow offloading"
 msgstr "Laitteistovirran purku"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:284
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:227
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:279
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:232
 msgid "IPv4 and IPv6"
 msgstr "IPv4 ja IPv6"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:285
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:228
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:280
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:233
 msgid "IPv4 only"
 msgstr "Vain IPv4"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:286
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:229
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:281
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:234
 msgid "IPv6 only"
 msgstr "Vain IPv6"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:256
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:251
 msgid "Inbound device"
 msgstr "Saapuva laite"
 
@@ -559,7 +559,7 @@ msgstr "Virheellinen raja-arvo"
 msgid "Limit burst"
 msgstr "Rajoita purskeet"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:262
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:267
 msgid "Limit log messages"
 msgstr "Rajoita lokisanomia"
 
@@ -603,7 +603,7 @@ msgid "Masquerading"
 msgstr "Naamiointi"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:162
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:218
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:213
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:147
 msgid "Match"
 msgstr "Vastaa"
@@ -612,11 +612,11 @@ msgstr "Vastaa"
 msgid "Match DSCP"
 msgstr "Vastaa DSCP"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:297
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:292
 msgid "Match ICMP type"
 msgstr "Vastaa ICMP-tyyppiä"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:253
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:248
 msgid "Match device"
 msgstr "Vastaa laitetta"
 
@@ -643,7 +643,7 @@ msgstr ""
 "portti-alueesta."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:262
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:412
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:407
 msgid "Match helper"
 msgstr "Vastaa auttajaa"
 
@@ -660,7 +660,7 @@ msgid "Match mark"
 msgstr "Vastaa merkkiä"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:262
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:412
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:407
 msgid "Match traffic using the specified connection tracking helper."
 msgstr "Vastaa liikennettä määritetyllä yhteydenseuranta-apurilla."
 
@@ -668,7 +668,7 @@ msgstr "Vastaa liikennettä määritetyllä yhteydenseuranta-apurilla."
 msgid "Matches a specific firewall mark or a range of different marks."
 msgstr "Vastaa tiettyä palomuurimerkkintää tai joukkoa erilaisia merkkintöjä."
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:240
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:239
 msgid "Matches forwarded traffic using the specified outbound network device."
 msgstr "Vastaa välitettyä liikennettä tietyn lähtevän sovittimen perusteella."
 
@@ -684,13 +684,13 @@ msgstr ""
 "Alkuperäinen enimmäismäärä vastaamaan: tämä määrä kasvatetaan yhdellä aina, "
 "määritettyyn numeroon saakka, kunnes annettu määrä saavutetaan."
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:445
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:260
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:440
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:259
 msgid "Monday"
 msgstr "Maanantai"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:455
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:270
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:450
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:269
 msgid "Month Days"
 msgstr "Kuukauden päivät"
 
@@ -708,7 +708,7 @@ msgstr ""
 "lähtevässä tai välitetyssä liikenteessä."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:158
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:214
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:209
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:143
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:121
 msgid "Name"
@@ -734,8 +734,8 @@ msgstr ""
 "Vastaa vain saapuvaa liikennettä, joka on lähtöisin annetusta lähdeportista "
 "tai porttialueesta"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:257
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:239
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:252
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:238
 msgid "Outbound device"
 msgstr "Lähtevälaite"
 
@@ -749,12 +749,12 @@ msgid "Output"
 msgstr "Lähtevä"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:285
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:436
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:250
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:431
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:249
 msgid "Passes additional arguments to iptables. Use with care!"
 msgstr "Välittää lisäargumentteja iptablesille. Käytä varoen!"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:271
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:276
 msgid ""
 "Passing raw iptables arguments to source and destination traffic "
 "classification rules allows to match packets based on other criteria than "
@@ -781,7 +781,7 @@ msgstr ""
 "tiettyyn tietokoneeseen tai palveluun yksityisessä lähiverkossa."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:186
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:293
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:288
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:169
 msgid "Protocol"
 msgstr "Protokolla"
@@ -800,16 +800,16 @@ msgstr "Uudelleenohjaa saapuva liikenne määritettyyn sisäiseen palvelimeen"
 msgid "Requires hardware NAT support. Implemented at least for mt7621"
 msgstr "Edellyttää laitteiston NAT-tukea. Toteutettu ainakin mt7621: lle"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:239
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:244
 msgid "Restrict Masquerading to given destination subnets"
 msgstr "Rajoita naamiointi tiettyihin kohdeverkkoihin"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:232
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:237
 msgid "Restrict Masquerading to given source subnets"
 msgstr "Rajoita naamiointi tiettyihin kohdeverkkoihin"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:281
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:226
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:276
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:231
 msgid "Restrict to address family"
 msgstr "Rajoita tietyille osoitteille"
 
@@ -822,13 +822,13 @@ msgid "Rewrite matched traffic to the specified source IP address."
 msgstr ""
 "Kirjoita vastaava tietoliikenne uudelleen määritettyyn lähde-IP-osoitteeseen."
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:231
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:230
 msgid "Rewrite matched traffic to the specified source port or port range."
 msgstr ""
 "Kirjoita vastaava tietoliikenne uudelleen määritettyyn lähdeporttiin tai "
 "porttialueeseen."
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:230
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:229
 msgid "Rewrite port"
 msgstr "Uudelleenkirjoita portti"
 
@@ -840,8 +840,8 @@ msgstr "Reititys/NAT-purku"
 msgid "SNAT - Rewrite to specific source IP or port"
 msgstr "SNAT - Kirjoita tiettyyn lähde IP:hen tai porttiin"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:450
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:265
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:445
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:264
 msgid "Saturday"
 msgstr "Lauantai"
 
@@ -900,27 +900,27 @@ msgid "Source IP address"
 msgstr "Lähde-IP-osoite"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:196
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:352
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:347
 msgid "Source MAC address"
 msgstr "Lähde MAC-osoite"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:353
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:348
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:180
 msgid "Source address"
 msgstr "Lähdeosoite"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:206
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:355
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:350
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:185
 msgid "Source port"
 msgstr "Lähdeportti"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:190
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:346
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:341
 msgid "Source zone"
 msgstr "Lähdevyöhyke"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:274
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:269
 msgid ""
 "Specifies whether to tie this traffic rule to a specific inbound or outbound "
 "network device."
@@ -936,32 +936,32 @@ msgstr ""
 "Määrittää, käytetäänkö ulkoista vai sisäistä IP-osoitetta heijastuneeseen "
 "liikenteeseen."
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:474
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:289
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:469
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:288
 msgid "Start Date (yyyy-mm-dd)"
 msgstr "Aloituspäivä (vvvv-kk-pp)"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:466
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:281
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:461
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:280
 msgid "Start Time (hh.mm.ss)"
 msgstr "Aloitusaika (hh.mm.ss)"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:478
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:293
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:473
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:292
 msgid "Stop Date (yyyy-mm-dd)"
 msgstr "Lopetuspäivä (vvv-kk-pp)"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:470
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:285
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:465
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:284
 msgid "Stop Time (hh.mm.ss)"
 msgstr "Lopetusaika (hh.mm.ss)"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:444
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:259
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:439
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:258
 msgid "Sunday"
 msgstr "Sunnuntai"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:650
+#: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:665
 msgid ""
 "The existing firewall configuration needs to be changed for LuCI to function "
 "properly."
@@ -975,8 +975,8 @@ msgstr ""
 "Palomuuri luo vyöhykkeitä verkkosovittimista verkkoliikenteen kulun "
 "hallitsemiseksi."
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:212
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:301
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:217
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:306
 msgid ""
 "The options below control the forwarding policies between this zone (%s) and "
 "other zones. <em>Destination zones</em> cover forwarded traffic "
@@ -1008,8 +1008,8 @@ msgstr ""
 "koskeva käytäntö. <em> Katetut verkot</em> määrittävät, mitkä käytettävissä "
 "olevat verkot ovat tämän vyöhykkeen jäseniä."
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:448
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:263
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:443
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:262
 msgid "Thursday"
 msgstr "Torstai"
 
@@ -1018,12 +1018,12 @@ msgstr "Torstai"
 msgid "Time Restrictions"
 msgstr "Aikarajoitukset"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:482
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:297
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:477
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:296
 msgid "Time in UTC"
 msgstr "UTC-aika"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:248
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:243
 msgid "Time restritions are enabled for this rule"
 msgstr "Aikarajoitukset ovat käytössä tälle säännölle"
 
@@ -1067,7 +1067,7 @@ msgstr ""
 "var>}}%{dest_port?, port %{dest_port#%{next?, }<var%{item.inv? data-tooltip="
 "\"Vastaa muita portteja paitsi %{item.val}.\"}>%{item.ival}</var>}}"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:405
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:400
 msgid "Tracking helper"
 msgstr "Seurantaapuri"
 
@@ -1086,8 +1086,8 @@ msgstr ""
 "paketeille, esimerkiksi tiettyjen isäntien välisen liikenteen hylkäämiseksi "
 "tai WAN-porttien avaamiseksi reitittimessä."
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:446
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:261
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:441
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:260
 msgid "Tuesday"
 msgstr "Tiistai"
 
@@ -1096,7 +1096,7 @@ msgid "Unable to save contents: %s"
 msgstr "Sisältöä ei voi tallentaa: %s"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:277
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:427
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:422
 msgid "Unknown or not installed conntrack helper \"%s\""
 msgstr "Tuntematon tai asentamaton conntrack-auttaja \"% s\""
 
@@ -1111,7 +1111,7 @@ msgid "Unnamed forward"
 msgstr "Nimeämätön välitys"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:190
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:215
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:210
 msgid "Unnamed rule"
 msgstr "Nimetön sääntö"
 
@@ -1119,11 +1119,11 @@ msgstr "Nimetön sääntö"
 msgid "Unnamed zone"
 msgstr "Nimeämätön vyöhyke"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:554
+#: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:569
 msgid "Unrecognized protocol"
 msgstr "Tunnistamaton protokolla"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:651
+#: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:666
 msgid ""
 "Upon pressing \"Continue\", \"redirect\" sections with target \"SNAT\" will "
 "be converted to \"nat\" sections and the firewall will be restarted to apply "
@@ -1141,7 +1141,7 @@ msgstr "Käytä ulkoista IP-osoitetta"
 msgid "Use internal IP address"
 msgstr "Käytä sisäistä IP-osoitetta"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:216
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:221
 msgid ""
 "Use this option to classify zone traffic by raw, non-<em>uci</em> managed "
 "network devices."
@@ -1149,7 +1149,7 @@ msgstr ""
 "Tämän vaihtoehdon avulla voit luokitella vyöhykeliikennettä raakana, ei-"
 "<em>uci</em> -hallittujen sovittimien avulla."
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:221
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:226
 msgid ""
 "Use this option to classify zone traffic by source or destination subnet "
 "instead of networks or devices."
@@ -1161,17 +1161,17 @@ msgstr ""
 msgid "Valid firewall mark required"
 msgstr "Kelvollinen palomuurimerkintä vaaditaan"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:447
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:262
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:442
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:261
 msgid "Wednesday"
 msgstr "Keskiviikko"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:439
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:254
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:434
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:253
 msgid "Week Days"
 msgstr "Viikon päivät"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:386
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:381
 msgid "XOR firewall mark"
 msgstr "XOR-palomuurimerintä"
 
@@ -1187,23 +1187,23 @@ msgstr "Vyöhyke ⇒ Välitys"
 msgid "Zones"
 msgstr "Vyöhykkeet"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:381
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:376
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:69
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:151
 msgid "accept"
 msgstr "hyväksy"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:267
-#: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:433
-#: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:455
+#: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:448
+#: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:470
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:211
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:243
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:264
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:302
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:358
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:373
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:407
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:414
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:297
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:353
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:368
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:402
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:409
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:190
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:203
 msgid "any"
@@ -1218,11 +1218,11 @@ msgstr "mikä tahansa"
 msgid "any zone"
 msgstr "mikä tahansa vyöhyke"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:385
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:380
 msgid "apply firewall mark"
 msgstr "aseta palomuurimerkintä"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:384
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:379
 msgid "assign conntrack helper"
 msgstr "määritä conntrack-helper"
 
@@ -1232,15 +1232,15 @@ msgstr "määritä conntrack-helper"
 msgid "day"
 msgstr "päivä"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:234
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:233
 msgid "do not rewrite"
 msgstr "älä kirjoita uudelleen"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:383
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:378
 msgid "don't track"
 msgstr "älä seuraa"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:380
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:375
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:68
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:150
 msgid "drop"
@@ -1258,7 +1258,7 @@ msgstr "tunti"
 msgid "minute"
 msgstr "minuutti"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:382
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:377
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:67
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:149
 msgid "reject"
@@ -1280,8 +1280,8 @@ msgid "this device"
 msgstr "tämä laite"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:116
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:211
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:300
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:216
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:305
 msgid "this new zone"
 msgstr "tämä uusi vyöhyke"
 
@@ -1289,7 +1289,7 @@ msgstr "tämä uusi vyöhyke"
 msgid "unlimited"
 msgstr "rajoittamaton"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:255
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:250
 msgid "unspecified"
 msgstr "määrittelemätön"
 

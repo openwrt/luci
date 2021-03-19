@@ -4,7 +4,8 @@
 'require fs';
 'require ui';
 
-var table_names = [ 'Filter', 'NAT', 'Mangle', 'Raw' ];
+var table_names = [ 'Filter', 'NAT', 'Mangle', 'Raw' ],
+    raw_style = 'font-family:monospace;font-size:smaller;text-align:right';
 
 return view.extend({
 	load: function() {
@@ -60,8 +61,8 @@ return view.extend({
 				E('h4', { 'id': 'rule_%s-%s_%s'.format(is_ipv6 ? 'ipv6' : 'ipv4', table.toLowerCase(), chain) }, title),
 				E('table', { 'class': 'table' }, [
 					E('tr', { 'class': 'tr table-titles' }, [
-						E('th', { 'class': 'th center' }, _('Pkts.')),
-						E('th', { 'class': 'th center' }, _('Traffic')),
+						E('th', { 'class': 'th' }, _('Pkts.')),
+						E('th', { 'class': 'th' }, _('Traffic')),
 						E('th', { 'class': 'th' }, _('Target')),
 						E('th', { 'class': 'th' }, _('Prot.')),
 						E('th', { 'class': 'th' }, _('In')),
@@ -105,6 +106,7 @@ return view.extend({
 		var chain_refs = {};
 		var re = /([^\n]*)\n/g;
 		var m, m2;
+		var raw = document.querySelector('[data-raw-counters="true"]');
 
 		while ((m = re.exec(s)) != null) {
 			if (m[1].match(/^Chain (.+) \(policy (\w+) (\d+) packets, (\d+) bytes\)$/)) {
@@ -152,12 +154,22 @@ return view.extend({
 					}) || '-';
 
 				current_rules.push([
-					'%.2m'.format(pkts).nobr(),
-					'%.2mB'.format(bytes).nobr(),
+					E('div', {
+						'class': 'nowrap',
+						'style': raw ? raw_style : null,
+						'data-format': '%.2m',
+						'data-value': pkts
+					}, (raw ? '%d' : '%.2m').format(pkts)),
+					E('div', {
+						'class': 'nowrap',
+						'style': raw ? raw_style : null,
+						'data-format': '%.2mB',
+						'data-value': bytes
+					}, (raw ? '%d' : '%.2mB').format(bytes)),
 					target ? '<span class="target">%s</span>'.format(target) : '-',
 					proto,
-					(indev !== '*') ? '<span class="ifacebadge">%s</span>'.format(indev) : '*',
-					(outdev !== '*') ? '<span class="ifacebadge">%s</span>'.format(outdev) : '*',
+					(indev !== '*') ? '<span class="ifacebadge nowrap">%s</span>'.format(indev) : '*',
+					(outdev !== '*') ? '<span class="ifacebadge nowrap">%s</span>'.format(outdev) : '*',
 					srcnet,
 					dstnet,
 					options,
@@ -256,6 +268,23 @@ return view.extend({
 		}
 	},
 
+	handleRawCounters: function(ev) {
+		var btn = ev.currentTarget,
+		    raw = (btn.getAttribute('data-raw-counters') === 'false');
+
+		btn.setAttribute('data-raw-counters', raw);
+		btn.firstChild.data = raw ? _('Human-readable counters') : _('Show raw counters');
+		btn.blur();
+
+		document.querySelectorAll('[data-value]')
+			.forEach(function(div) {
+				var fmt = raw ? '%d' : div.getAttribute('data-format');
+
+				div.style = raw ? raw_style : '';
+				div.innerText = fmt.format(div.getAttribute('data-value'));
+			});
+	},
+
 	handleHideEmpty: function(ev) {
 		var btn = ev.currentTarget,
 		    hide = (btn.getAttribute('data-hide-empty') === 'false');
@@ -301,6 +330,12 @@ return view.extend({
 					'data-hide-empty': false,
 					'click': ui.createHandlerFn(this, 'handleHideEmpty')
 				}, [ _('Hide empty chains') ]),
+				' ',
+				E('button', {
+					'class': 'cbi-button',
+					'data-raw-counters': false,
+					'click': ui.createHandlerFn(this, 'handleRawCounters')
+				}, [ _('Show raw counters') ]),
 				' ',
 				E('button', {
 					'class': 'cbi-button',

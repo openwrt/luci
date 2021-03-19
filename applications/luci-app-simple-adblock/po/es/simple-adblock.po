@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-01-03 17:29+0000\n"
+"PO-Revision-Date: 2021-03-14 05:16+0000\n"
 "Last-Translator: Franco Castillo <castillofrancodamian@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationssimple-adblock/es/>\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.4.1-dev\n"
+"X-Generator: Weblate 4.5.2-dev\n"
 
 #: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:217
 msgid "%s Error: %s"
@@ -20,10 +20,6 @@ msgstr "%s Error: %s"
 #: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:215
 msgid "%s Error: %s %s"
 msgstr "%s Error: %s %s"
-
-#: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:198
-msgid "%s is blocking %s domains (with %s)."
-msgstr "%s está bloqueando %s dominios (con %s)."
 
 #: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:129
 msgid "%s is not installed or not found"
@@ -79,6 +75,10 @@ msgstr "Dominios bloqueados"
 #: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:350
 msgid "Blocked Hosts URLs"
 msgstr "URLs de hosts bloqueadas"
+
+#: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:198
+msgid "Blocking %s domains (with %s)."
+msgstr "Bloqueando %s dominios(con %s)."
 
 #: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:188
 msgid "Cache file containing %s domains found."
@@ -190,11 +190,11 @@ msgstr "Forzar recarga"
 
 #: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:243
 msgid "Force Router DNS"
-msgstr "Forzar al DNS de enrutador"
+msgstr "Forzar al DNS del enrutador"
 
 #: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:245
 msgid "Force Router DNS server to all local devices"
-msgstr "Forzar el servidor DNS del enrutador a todos los dispositivos locales"
+msgstr "Forzar al servidor DNS del enrutador a todos los dispositivos locales"
 
 #: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:243
 msgid "Forces Router DNS use on local devices, also known as DNS Hijacking."
@@ -246,8 +246,8 @@ msgstr ""
 #: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:244
 msgid "Let local devices use their own DNS servers if set"
 msgstr ""
-"Dejar que los dispositivos locales usen sus propios servidores DNS si están "
-"configurados"
+"Permita que los dispositivos locales usen sus propios servidores DNS si "
+"están configurados"
 
 #: applications/luci-app-simple-adblock/luasrc/view/simple-adblock/js.htm:51
 msgid "Loading"
@@ -297,6 +297,10 @@ msgstr "Reiniciando"
 msgid "Run service after set delay on boot."
 msgstr "Ejecute el servicio después de la demora establecida en el arranque."
 
+#: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:223
+msgid "Service Control"
+msgstr "Control de servicio"
+
 #: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:172
 #: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:182
 #: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:195
@@ -310,7 +314,7 @@ msgstr "Estado del servicio [%s %s]"
 #: applications/luci-app-simple-adblock/luasrc/controller/simple-adblock.lua:4
 #: applications/luci-app-simple-adblock/root/usr/share/luci/menu.d/luci-app-simple-adblock.json:3
 msgid "Simple AdBlock"
-msgstr "Simple AdBlock"
+msgstr "AdBlock simple"
 
 #: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:160
 msgid "Simple AdBlock Settings"
@@ -478,6 +482,9 @@ msgstr "sin soporte HTTPS/SSL en el dispositivo"
 #: applications/luci-app-simple-adblock/luasrc/model/cbi/simple-adblock.lua:257
 msgid "none"
 msgstr "ninguno"
+
+#~ msgid "%s is blocking %s domains (with %s)."
+#~ msgstr "%s está bloqueando %s dominios (con %s)."
 
 #~ msgid ""
 #~ "Pick the DNS resolution option to create the adblock list for, see the <a "

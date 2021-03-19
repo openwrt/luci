@@ -346,12 +346,12 @@ return view.extend({
 
 			trafData.push({
 				value: rec.rx_bytes + rec.tx_bytes,
-				label: ["%s: %%.2mB".format(key), cell]
+				label: ["%s: %%1024.2mB".format(key), cell]
 			});
 
 			connData.push({
 				value: rec.conns,
-				label: ["%s: %%.2m".format(key), cell]
+				label: ["%s: %%1000.2m".format(key), cell]
 			});
 
 			rx_total += rec.rx_bytes;
@@ -404,12 +404,12 @@ return view.extend({
 
 			rxData.push({
 				value: rec.rx_bytes,
-				label: ["%s: %%.2mB".format(rec.layer7 || _('other')), cell]
+				label: ["%s: %%1024.2mB".format(rec.layer7 || _('other')), cell]
 			});
 
 			txData.push({
 				value: rec.tx_bytes,
-				label: ["%s: %%.2mB".format(rec.layer7 || _('other')), cell]
+				label: ["%s: %%1024.2mB".format(rec.layer7 || _('other')), cell]
 			});
 
 			if (rec.layer7) {
@@ -533,14 +533,14 @@ return view.extend({
 		if (rx4_total > 0 || tx4_total > 0)
 			shareData.push({
 				value: rx4_total + tx4_total,
-				label: ["IPv4: %.2mB"],
+				label: ["IPv4: %1024.2mB"],
 				color: 'hsl(140, 100%, 50%)'
 		        });
 
 		if (rx6_total > 0 || tx6_total > 0)
 			shareData.push({
 				value: rx6_total + tx6_total,
-				label: ["IPv6: %.2mB"],
+				label: ["IPv6: %1024.2mB"],
 				color: 'hsl(180, 100%, 50%)'
 			});
 

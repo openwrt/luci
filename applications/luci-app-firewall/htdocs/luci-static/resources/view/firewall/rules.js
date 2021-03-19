@@ -193,13 +193,8 @@ return view.extend({
 		s.handleAdd = function(ev) {
 			var config_name = this.uciconfig || this.map.config,
 			    section_id = uci.add(config_name, this.sectiontype),
-			    opt1, opt2;
-
-			for (var i = 0; i < this.children.length; i++)
-				if (this.children[i].option == 'src')
-					opt1 = this.children[i];
-				else if (this.children[i].option == 'dest')
-					opt2 = this.children[i];
+			    opt1 = this.getOption('src'),
+			    opt2 = this.getOption('dest');
 
 			opt1.default = 'wan';
 			opt2.default = 'lan';

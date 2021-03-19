@@ -24,10 +24,6 @@ return network.registerProtocol('hnet', {
 		o.value('hybrid', _('Hybrid'));
 		o.default = 'auto';
 
-		o = s.taboption('advanced', form.Value, 'ip6assign', _('IPv6 assignment length'), _('Assign a part of given length of every public IPv6-prefix to this interface'));
-		o.datatype = 'max(128)';
-		o.default = '64';
-
 		s.taboption('advanced', form.Value, 'link_id', _('IPv6 assignment hint'), _('Assign prefix parts using this hexadecimal subprefix ID for this interface.'));
 
 		o = s.taboption('advanced', form.Value, 'ip4assign', _('IPv4 assignment length'));

@@ -180,7 +180,7 @@ return view.extend({
 		o = fwtool.addIPOption(s, 'general', 'src_ip', _('Source address'),
 			_('Match forwarded traffic from this IP or range.'), 'ipv4', hosts);
 		o.rmempty = true;
-		o.datatype = 'neg(ipmask4)';
+		o.datatype = 'neg(ipmask4("true"))';
 
 		o = s.taboption('general', form.Value, 'src_port', _('Source port'),
 			_('Match forwarded traffic originating from the given source port or port range.'));
@@ -194,7 +194,7 @@ return view.extend({
 		o = fwtool.addIPOption(s, 'general', 'dest_ip', _('Destination address'),
 			_('Match forwarded traffic directed at the given IP address.'), 'ipv4', hosts);
 		o.rmempty = true;
-		o.datatype = 'neg(ipmask4)';
+		o.datatype = 'neg(ipmask4("true"))';
 
 		o = s.taboption('general', form.Value, 'dest_port', _('Destination port'),
 			_('Match forwarded traffic directed at the given destination port or port range.'));
@@ -217,9 +217,8 @@ return view.extend({
 		o.placeholder = null;
 		o.depends('target', 'SNAT');
 		o.validate = function(section_id, value) {
-			var port = this.map.lookupOption('snat_port', section_id),
-			    a = this.formvalue(section_id),
-			    p = port ? port[0].formvalue(section_id) : null;
+			var a = this.formvalue(section_id),
+			    p = this.section.formvalue(section_id, 'snat_port');
 
 			if ((a == null || a == '') && (p == null || p == '') && value == '')
 				return _('A rewrite IP must be specified!');

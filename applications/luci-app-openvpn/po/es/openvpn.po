@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-06-10 03:41+0200\n"
-"PO-Revision-Date: 2020-06-10 21:49+0000\n"
+"PO-Revision-Date: 2021-03-06 14:44+0000\n"
 "Last-Translator: Franco Castillo <castillofrancodamian@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsopenvpn/es/>\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.1-dev\n"
+"X-Generator: Weblate 4.5.1\n"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:364
 msgid "'net30', 'p2p', or 'subnet'"
@@ -249,10 +249,6 @@ msgstr "Activar TLS y asumir el rol de cliente"
 msgid "Enable TLS and assume server role"
 msgstr "Activar TLS y asumir el rol del servidor"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:165
-msgid "Enable a compression algorithm"
-msgstr "Activar un algoritmo de compresión"
-
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:278
 msgid "Enable internal datagram fragmentation"
 msgstr "Activar la fragmentación interna del datagrama"
@@ -417,7 +413,7 @@ msgstr "Optimizar escrituras TUN/TAP/UDP"
 
 #: applications/luci-app-openvpn/luasrc/view/openvpn/pageswitch.htm:11
 msgid "Overview"
-msgstr "Visión general"
+msgstr "Vista general"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:674
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-basic.lua:73
@@ -577,6 +573,23 @@ msgstr ""
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-file.lua:40
 msgid "Section to modify the OVPN config file (%s)"
 msgstr "Sección para modificar el archivo de configuración OVPN (% )"
+
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:257
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-basic.lua:45
+msgid ""
+"Security recommendation: It is recommended to not enable compression and set "
+"this parameter to `no`"
+msgstr ""
+"Recomendación de seguridad: se recomienda no activar la compresión y "
+"establecer este parámetro en \"no\""
+
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:165
+msgid ""
+"Security recommendation: It is recommended to not enable compression and set "
+"this parameter to `stub-v2`"
+msgstr ""
+"Recomendación de seguridad: se recomienda no activar la compresión y "
+"establecer este parámetro en \"stub-v2\""
 
 #: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:85
 msgid "Select template ..."
@@ -785,11 +798,6 @@ msgstr "Cargar"
 msgid "Upload ovpn file"
 msgstr "Subir archivo ovpn"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:257
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-basic.lua:45
-msgid "Use fast LZO compression"
-msgstr "Compresión rápida LZO"
-
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:510
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-basic.lua:97
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-basic.lua:103
@@ -832,6 +840,12 @@ msgstr "Espera de inactividad tun/tap"
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn.lua:111
 msgid "yes (%i)"
 msgstr "sí (%i)"
+
+#~ msgid "Enable a compression algorithm"
+#~ msgstr "Activar un algoritmo de compresión"
+
+#~ msgid "Use fast LZO compression"
+#~ msgstr "Compresión rápida LZO"
 
 #~ msgid "%s"
 #~ msgstr "%s"
