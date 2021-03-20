@@ -53,16 +53,6 @@ function deviceSectionExists(section_id, devname) {
 		exists = exists || (ss['.name'] != section_id && ss.name == devname /* && !ss.type*/);
 	});
 
-	/* Until http://lists.openwrt.org/pipermail/openwrt-devel/2020-July/030397.html lands,
-	   prevent redeclaring interface bridges */
-	if (!exists) {
-		var m = devname.match(/^br-([A-Za-z0-9_]+)$/),
-		    s = m ? uci.get('network', m[1]) : null;
-
-		if (s && s['.type'] == 'interface' && s.type == 'bridge')
-			exists = true;
-	}
-
 	return exists;
 }
 
