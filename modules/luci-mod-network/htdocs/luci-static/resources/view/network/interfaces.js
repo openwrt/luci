@@ -596,9 +596,11 @@ return view.extend({
 				o.default = o.enabled;
 
 				o = nettools.replaceOption(s, 'advanced', form.Flag, 'peerdns', _('Use DNS servers advertised by peer'), _('If unchecked, the advertised DNS server addresses are ignored'));
+				o.depends({ 'proto': 'static', '!reverse': true });
 				o.default = o.enabled;
 
 				o = nettools.replaceOption(s, 'advanced', form.DynamicList, 'dns', _('Use custom DNS servers'));
+				o.depends('proto', 'static');
 				o.depends('peerdns', '0');
 				o.datatype = 'ipaddr';
 
