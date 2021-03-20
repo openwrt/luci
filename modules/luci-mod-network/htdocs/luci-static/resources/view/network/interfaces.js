@@ -825,7 +825,7 @@ return view.extend({
 									}
 
 									return m.save(function() {
-										uci.add('network', 'interface', nameval);
+										var section_id = uci.add('network', 'interface', nameval);
 
 										protoclass.set('proto', protoval);
 
