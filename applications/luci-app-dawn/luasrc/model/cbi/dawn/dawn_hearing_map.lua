@@ -10,14 +10,15 @@ function s.render(self, sid)
         local utl = require "luci.util"
         local status = require "luci.tools.ieee80211"
         local stat = utl.ubus("dawn", "get_hearing_map", { })
+        local n_ssid = 0
         local name, macs
 
         for name, macs in pairs(stat) do
         %>
         <div class="cbi-section-node">
-	        <h3>SSID: <%= name %></h3>
-            <div class="table" id="dawn_hearing_map">
-		        <div class="tr table-titles">
+        <h3>SSID: <%= name %></h3>
+            <div class="table" id="dawn_hearing_map_<%= n_ssid %>">
+                <div class="tr table-titles">
                     <div class="th">Client MAC</div>
                     <div class="th">AP MAC</div>
                     <div class="th">Frequency</div>
@@ -55,17 +56,17 @@ function s.render(self, sid)
                             <div class="td"><%= "%d" %data2.num_sta %></div>
                             <div class="td"><%= "%d" %data2.score %></div>
                         </div>
-			    <%
-			            count_loop = count_loop + 1
+                <%
+                        count_loop = count_loop + 1
                     end
                 end
                 %>
             </div>
         </div>
         <%
+        n_ssid = n_ssid + 1
         end
         %>
-    </div>
     ]])
 end
 

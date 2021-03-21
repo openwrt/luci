@@ -9,18 +9,20 @@ function s.render(self, sid)
 	local utl = require "luci.util"
 	tpl.render_string([[
 		<%
-	    local status = require "luci.tools.ieee80211"
+		local status = require "luci.tools.ieee80211"
 		local utl = require "luci.util"
 		local sys = require "luci.sys"
 		local hosts = sys.net.host_hints()
 		local stat = utl.ubus("dawn", "get_network", { })
+		local n_ssid = 0
 		local name, macs
+
 		for name, macs in pairs(stat) do
 		%>
 
 			<div class="cbi-section-node">
-	        <h3>SSID: <%= name %></h3>
-			<div class="table" id=network_overview_main">
+			<h3>SSID: <%= name %></h3>
+			<div class="table" id="network_overview_main_<%= n_ssid %>">
 				<div class="tr table-titles">
 					<div class="th">AP</div>
 					<div class="th">Clients</div>
@@ -71,7 +73,7 @@ function s.render(self, sid)
 									<div class="td"><%= clientmac %></div>
 									<div class="td"><%= (clientvals.ht == true) and "available" or "not available" %></div>
 									<div class="td"><%= (clientvals.vht == true) and "available" or "not available" %></div>
-									<div class="td"><%= "%d" %clientvals.signal %></div>
+									<div class="td"><%= (clientvals.signal ~= nil) and ("%d" %clientvals.signal) or "?" %></div>
 								</div>
 								<%
 								end
@@ -88,6 +90,7 @@ function s.render(self, sid)
 			</div>
 			</div>
 		<%
+		n_ssid = n_ssid + 1
 		end
 		%>
 	]])
