@@ -20,8 +20,8 @@ return view.extend({
 
 		o = s.taboption('general', form.ListValue, 'mode',
 			_('Mode'),
-			_("Ping Reboot: Reboot this device if a ping to a specified host fails for a specified duration of time. <br> \
-				Periodic Reboot: Reboot this device after a specified interval of time. <br> \
+			_("Ping Reboot: Reboot this device if a ping to a specified host fails for a specified duration of time. <br /> \
+				Periodic Reboot: Reboot this device after a specified interval of time. <br /> \
 				Restart Interface: Restart a network interface if a ping to a specified host fails for a specified duration of time."));
 		o.value('ping_reboot', _('Ping Reboot'));
 		o.value('periodic_reboot', _('Periodic Reboot'));
@@ -29,14 +29,14 @@ return view.extend({
 
 		o = s.taboption('general', form.Value, 'period', 
 			_('Period'), 
-			_("In Periodic Reboot mode, it defines how often to reboot. <br> \
+			_("In Periodic Reboot mode, it defines how often to reboot. <br /> \
 				In Ping Reboot mode, it defines the longest period of \
-				time without a reply from the Host To Check before a reboot is engaged. <br> \
+				time without a reply from the Host To Check before a reboot is engaged. <br /> \
 				In Network Restart mode, it defines the longest period of \
 				time without a reply from the Host to Check before the interface is restarted. \
-				<br><br>The default unit is seconds, without a suffix, but you can use the \
+				<br /><br />The default unit is seconds, without a suffix, but you can use the \
 				suffix <b>m</b> for minutes, <b>h</b> for hours or <b>d</b> \
-				for days. <br><br>Examples:<ul><li>10 seconds would be: <b>10</b> or <b>10s</b></li><li>5 minutes would be: <b>5m</b></li><li> \
+				for days. <br /><br />Examples:<ul><li>10 seconds would be: <b>10</b> or <b>10s</b></li><li>5 minutes would be: <b>5m</b></li><li> \
 				1 hour would be: <b>1h</b></li><li>1 week would be: <b>7d</b></li><ul>"));
 		o.default = '6h';
 
@@ -49,7 +49,7 @@ return view.extend({
 		o = s.taboption('general', form.Value, 'pingperiod', 
 			_('Check Interval'), 
 			_("How often to ping the host specified above. \
-				<br><br>The default unit is seconds, without a suffix, but you can use the suffix <b>m</b> for minutes, <b>h</b> for hours or <b>d</b> for days. <br><br> \
+				<br /><br />The default unit is seconds, without a suffix, but you can use the suffix <b>m</b> for minutes, <b>h</b> for hours or <b>d</b> for days. <br /><br /> \
 				Examples:<ul><li>10 seconds would be: <b>10</b> or <b>10s</b></li><li>5 minutes would be: <b>5m</b></li><li>1 hour would be: <b>1h</b></li><li>1 week would be: <b>7d</b></li><ul>"));
 		o.default = '30s';
 		o.depends({ mode: "ping_reboot" });
@@ -69,7 +69,7 @@ return view.extend({
 
 		o = s.taboption('general', form.Value, 'forcedelay',
 			_('Force Reboot Delay'),
-			_("Applies to Ping Reboot and Periodic Reboot modes</i> <br> When rebooting the router, the service will trigger a soft reboot. \
+			_("Applies to Ping Reboot and Periodic Reboot modes</i> <br /> When rebooting the router, the service will trigger a soft reboot. \
 				Entering a non-zero value here will trigger a delayed hard reboot if the soft reboot were to fail. \
 				Enter the number of seconds to wait for the soft reboot to fail or use 0 to disable the forced reboot delay."));
 		o.default = '1m';
@@ -79,13 +79,13 @@ return view.extend({
 		o = s.taboption('general', widgets.NetworkSelect, 'interface',
 			_('Interface'),
 			_('Interface to monitor and/or restart'),
-			_('<i>Applies to Ping Reboot and Restart Interface modes</i> <br> Specify the interface to monitor and restart if a ping over it fails.'));
+			_('<i>Applies to Ping Reboot and Restart Interface modes</i> <br /> Specify the interface to monitor and restart if a ping over it fails.'));
 		o.depends({ mode: 'ping_reboot' });
 		o.depends({ mode: 'restart_iface' });
 
 		o = s.taboption('general', widgets.NetworkSelect, 'mmifacename',
 			_('Name of ModemManager Interface'), 
-			_("Applies to Ping Reboot and Restart Interface modes</i> <br> If using ModemManager, \
+			_("Applies to Ping Reboot and Restart Interface modes</i> <br /> If using ModemManager, \
 				you can have Watchcat restart your ModemManger interface by specifying its name."));
 		o.depends({ mode: 'restart_iface' });
 		o.optional = true;
