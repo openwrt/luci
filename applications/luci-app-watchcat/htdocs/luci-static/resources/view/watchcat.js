@@ -76,7 +76,7 @@ return view.extend({
 		o.depends({ mode: 'ping_reboot' });
 		o.depends({ mode: 'periodic_reboot' });
 
-		o = s.taboption('general', widgets.NetworkSelect, 'interface',
+		o = s.taboption('general', widgets.DeviceSelect, 'interface',
 			_('Interface'),
 			_('Interface to monitor and/or restart'),
 			_('<i>Applies to Ping Reboot and Restart Interface modes</i> <br /> Specify the interface to monitor and restart if a ping over it fails.'));
