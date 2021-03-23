@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2021-03-14 05:16+0000\n"
+"PO-Revision-Date: 2021-03-23 11:29+0000\n"
 "Last-Translator: Hulen <shift0106@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "openwrt/luciapplicationswatchcat/zh_Hant/>\n"
@@ -19,7 +19,7 @@ msgstr ""
 msgid ""
 "<i>Applies to Ping Reboot and Restart Interface modes</i> <br /> Specify the "
 "interface to monitor and restart if a ping over it fails."
-msgstr ""
+msgstr "<i>應用於 Ping Reboot 和 Restart 介面模式</i><br />指定監視介面並在對該介面的 ping 失敗時重新啟動。"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:72
 msgid ""
@@ -29,6 +29,9 @@ msgid ""
 "fail. Enter the number of seconds to wait for the soft reboot to fail or use "
 "0 to disable the forced reboot delay."
 msgstr ""
+"應用於 Ping Reboot 和定期 Rebbot 模式</i> <br "
+"/>當重新啟動路由器時，該服務將觸發軟開機。如果軟開機失敗，在這裡輸入非零值將觸發延遲的硬開機。輸入等待軟開機失敗的秒數或使用 0 "
+"來停用強制重新啟動延遲。"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:88
 msgid ""
@@ -36,6 +39,8 @@ msgid ""
 "ModemManager, you can have Watchcat restart your ModemManger interface by "
 "specifying its name."
 msgstr ""
+"應用於 Ping Reboot 和 Restart 介面模式</i> <br />如果使用 ModemManager，您可以透過指定名稱讓 "
+"Watchcat 重新啟動您的 ModemManager 介面。"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:63
 msgid "Big: 248 bytes"
@@ -79,6 +84,10 @@ msgid ""
 "b></li><li>1 hour would be: <b>1h</b></li><li>1 week would be: <b>7d</b></"
 "li><ul>"
 msgstr ""
+"多長時間 ping 一次上面指定的主機。<br /><br />預設單位是秒，不帶尾碼，但您可以使用尾碼<b>m</b>代表分鐘， <b>h</b> "
+"代表小時或 <b>d</b>代表天數。<br /><br />範例：<ul><li>10秒是：<b>10</b> o或<b>10s</b></"
+"li><li>5 分鐘是：: <b>5m</b></li><li>1 小時是：<b>1h</b></li><li>1 "
+"週是：<b>7d</b></li><ul>"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:64
 msgid "Huge: 1492 bytes"
@@ -104,6 +113,11 @@ msgid ""
 "li><li> 1 hour would be: <b>1h</b></li><li>1 week would be: <b>7d</b></"
 "li><ul>"
 msgstr ""
+"在定期重新啟動模式下，它定義重新啟動的間隔。 <br />在 Ping 重新啟動模式下，它定義在重新啟動前沒有收到來自要檢查的主機的回覆的最長時間。"
+"<br />在網路重新啟動模式下，它定義介面重新啟動前，沒有收到要檢查的主機的回覆的最長時間。<br /><br "
+"/>預設單位是秒，不帶尾碼，但您可以使用尾碼<b>m</b>代表分鐘， <b>h</b> 代表小時或 <b>d</b>代表天數。<br /><br "
+"/>範例：<ul><li>10秒是：<b>10</b> o或<b>10s</b></li><li>5 分鐘是：: <b>5m</b></li><li>1 "
+"小時是：<b>1h</b></li><li>1 週是：<b>7d</b></li><ul>"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:80
 msgid "Interface"
@@ -149,6 +163,8 @@ msgid ""
 "interface if a ping to a specified host fails for a specified duration of "
 "time."
 msgstr ""
+"Ping 重新啟動：如果在指定的一段時間內，ping 指定主機始終失敗，則重新啟動該裝置。<br />定期重新啟動：在指定的時間間隔後重新啟動該裝置。"
+"<br />重新啟動介面：如果在指定的時間內，ping 指定主機始終失敗，則重新啟動網路介面。"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:28
 msgid "Restart Interface"
