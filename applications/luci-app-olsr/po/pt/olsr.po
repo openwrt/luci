@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-05-26 19:03+0200\n"
-"PO-Revision-Date: 2020-11-01 08:19+0000\n"
+"PO-Revision-Date: 2021-03-13 09:19+0000\n"
 "Last-Translator: ssantos <ssantos@web.de>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsolsr/pt/>\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.3.2-dev\n"
+"X-Generator: Weblate 4.5.2-dev\n"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/mid.htm:13
 msgid "Active MID announcements"
@@ -44,7 +44,7 @@ msgstr "Permitir a selecção de uma gateway IPv4 para saída com NAT"
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:155
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:149
 msgid "Announce uplink"
-msgstr "Anunciar uplink"
+msgstr "Anunciar ligação ascendente"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/hna.htm:39
 #: applications/luci-app-olsr/luasrc/view/status-olsr/hna.htm:90
@@ -426,7 +426,7 @@ msgstr ""
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:184
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:178
 msgid "IPv6-Prefix of the uplink"
-msgstr "Prefixo IPv6 do enlace superior (uplink)"
+msgstr "Prefixo IPv6 da ligação ascendente (uplink)"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:202
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:196
@@ -979,14 +979,14 @@ msgid ""
 "Specifies the speed of the uplink in kilobits/s. First parameter is "
 "upstream, second parameter is downstream. Default is \"128 1024\"."
 msgstr ""
-"Especifica a velocidade do enlace superior (uplink) em kilobits/s. O "
+"Especifica a velocidade da ligação ascendente (uplink) em kilobits/s. O "
 "primeiro parâmetro é a taxa de envio (upstream) e o segundo parâmetro é a "
 "taxa de recebimento (downstream). O padrão é \"128 1024\"."
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:176
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:170
 msgid "Speed of the uplink"
-msgstr "Velocidade do uplink"
+msgstr "Velocidade da ligação ascendente"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/interfaces.htm:25
 msgid "State"
@@ -1081,10 +1081,11 @@ msgid ""
 "the IPv6 gateway without any kind of address translation. The maximum prefix "
 "length is 64 bits. Default is \"::/0\" (no prefix)."
 msgstr ""
-"Isto pode ser usado para sinalizar o prefixo IPv6 externo do enlace superior "
-"(uplink) para os clientes. Isto pode permitir que um cliente mude o endereço "
-"IPv6 local para usar o roteador IPv6 sem qualquer tradução de endereços. O "
-"tamanho máximo do prefixo é 64 bits. O padrão é \"::/0\" (nenhum prefixo)."
+"Isto pode ser usado para sinalizar o prefixo IPv6 externo do ligação "
+"ascendente (uplink) para os clientes. Isto pode permitir que um cliente mude "
+"o endereço IPv6 local para usar o roteador IPv6 sem qualquer tradução de "
+"endereços. O tamanho máximo do prefixo é 64 bits. O padrão é "
+"\"::/0\" (nenhum prefixo)."
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:224
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:218
@@ -1113,12 +1114,12 @@ msgstr "Não foi possivel ligar ao servidor OLSR!"
 #: applications/luci-app-olsr/luasrc/view/status-olsr/smartgw.htm:59
 #: applications/luci-app-olsr/luasrc/view/status-olsr/smartgw.htm:111
 msgid "Uplink"
-msgstr "Uplink"
+msgstr "Ligação ascendente"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:166
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:160
 msgid "Uplink uses NAT"
-msgstr "O uplink usa NAT"
+msgstr "A ligação ascendente usa NAT"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:116
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:110
@@ -1190,8 +1191,8 @@ msgid ""
 "detected by looking for a local HNA of 0.0.0.0/0, ::ffff:0:0/96 or 2000::/3. "
 "Default setting is \"both\"."
 msgstr ""
-"Que tipo de enlace superior (uplink) é exportado para outros nós da rede em "
-"malha. Um enlace superior é detectado buscando por uma <abbr title=\"Host "
+"Que tipo de ligação ascendente (uplink) é exportado para outros nós da rede "
+"em malha. Um enlace superior é detetado a buscar por uma <abbr title=\"Host "
 "and network association, Associação de equipamentos e redes\">HNA</abbr> "
 "local de 0.0.0.0/0, ::ffff:0:0/96 ou 2000::/3. O padrão é \"ambos\"."
 
@@ -1201,8 +1202,8 @@ msgid ""
 "detected by looking for a local HNA6 ::ffff:0:0/96 or 2000::/3. Default "
 "setting is \"both\"."
 msgstr ""
-"Que tipo de enlace superior (uplink) é exportado para outros nós da rede em "
-"malha. Um enlace superior é detectado buscando por uma <abbr title=\"Host "
+"Que tipo de ligação ascendente (uplink) é exportado para outros nós da rede "
+"em malha. Um enlace superior é detetado a buscar por uma <abbr title=\"Host "
 "and network association, Associação de equipamentos e redes\">HNA</abbr> "
 "local de 0.0.0.0/0, ::ffff:0:0/96 ou 2000::/3. O padrão é \"ambos\"."
 
