@@ -382,16 +382,19 @@ return baseclass.extend({
 		    disableLegacyBridging = isIface && deviceSectionExists(null, 'br-%s'.format(ifc.getName()), 'bridge'),
 		    o, ss;
 
-		/* If an externally configured br-xxx interface already exists,
-		 * then disable legacy bridge configuration */
-		if (disableLegacyBridging) {
-			o = this.addOption(s, gensection, form.HiddenValue, 'type');
-			o.cfgvalue = function() { return '' };
-		}
-		else if (isIface) {
+		if (isIface) {
 			var type;
 
-			type = this.addOption(s, gensection, form.Flag, 'type', _('Bridge interfaces'), _('Creates a bridge over specified interface(s)'));
+			/* If an externally configured br-xxx interface already exists,
+			 * then disable legacy bridge configuration */
+			if (disableLegacyBridging) {
+				type = this.addOption(s, gensection, form.HiddenValue, 'type');
+				type.cfgvalue = function() { return '' };
+			}
+			else {
+				type = this.addOption(s, gensection, form.Flag, 'type', _('Bridge interfaces'), _('Creates a bridge over specified interface(s)'));
+			}
+
 			type.modalonly = true;
 			type.disabled = '';
 			type.enabled = 'bridge';
