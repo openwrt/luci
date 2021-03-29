@@ -131,7 +131,7 @@ function deviceCfgValue(section_id) {
 	var ds = lookupDevSection(this.section, section_id, false);
 
 	return (ds ? uci.get('network', ds, this.option) : null) ||
-		uci.get('network', section_id, this.option) ||
+		(this.migrate ? uci.get('network', section_id, this.option) : null) ||
 		this.default;
 }
 
@@ -139,7 +139,9 @@ function deviceWrite(section_id, formvalue) {
 	var ds = lookupDevSection(this.section, section_id, true);
 
 	uci.set('network', ds, this.option, formvalue);
-	uci.unset('network', section_id, this.option);
+
+	if (this.migrate)
+		uci.unset('network', section_id, this.option);
 }
 
 function deviceRemove(section_id) {
@@ -162,7 +164,8 @@ function deviceRemove(section_id) {
 			uci.unset('network', ds, this.option);
 	}
 
-	uci.unset('network', section_id, this.option);
+	if (this.migrate)
+		uci.unset('network', section_id, this.option);
 }
 
 function deviceRefresh(section_id) {
@@ -364,6 +367,7 @@ return baseclass.extend({
 		var o = this.replaceOption(s, tabName, optionClass, optionName, optionTitle, optionDescription);
 
 		if (s.sectiontype == 'interface' && optionName != 'type' && optionName != 'vlan_filtering') {
+			o.migrate = true;
 			o.cfgvalue = deviceCfgValue;
 			o.write = deviceWrite;
 			o.remove = deviceRemove;
@@ -777,6 +781,7 @@ return baseclass.extend({
 		o.depends(simpledep);
 
 		o = this.addOption(s, gensection, form.Flag, 'ipv6', _('Enable IPv6'));
+		o.migrate = false;
 		o.default = o.enabled;
 		o.depends(simpledep);
 
