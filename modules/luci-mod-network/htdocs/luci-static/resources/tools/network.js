@@ -158,6 +158,8 @@ function deviceRemove(section_id) {
 
 		if (empty)
 			uci.remove('network', ds);
+		else
+			uci.unset('network', ds, this.option);
 	}
 
 	uci.unset('network', section_id, this.option);
