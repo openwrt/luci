@@ -90,7 +90,8 @@ return network.registerProtocol('ppp', {
 		o.password = true;
 
 		if (L.hasSystemFeature('ipv6')) {
-			o = s.taboption('advanced', form.ListValue, 'ipv6', _('Obtain IPv6-Address'), _('Enable IPv6 negotiation on the PPP link'));
+			o = s.taboption('advanced', form.ListValue, 'ppp_ipv6', _('Obtain IPv6-Address'), _('Enable IPv6 negotiation on the PPP link'));
+			o.ucioption = 'ipv6';
 			o.value('auto', _('Automatic'));
 			o.value('0', _('Disabled'));
 			o.value('1', _('Manual'));

@@ -48,7 +48,8 @@ return network.registerProtocol('sstp', {
 
 		// -- advanced --------------------------------------------------------------------
 
-		o = s.taboption('advanced', form.Flag, 'ipv6', _('IPv6 support'), _('If checked, adds "+ipv6" to the pppd options'));
+		o = s.taboption('advanced', form.Flag, 'ppp_ipv6', _('IPv6 support'), _('If checked, adds "+ipv6" to the pppd options'));
+		o.ucioption = 'ipv6';
 
 		o = s.taboption('advanced', form.ListValue, 'log_level', _('sstpc Log-level'));
 		o.value('0', _('0', 'sstp log level value'));

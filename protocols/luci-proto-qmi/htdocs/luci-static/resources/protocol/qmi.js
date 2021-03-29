@@ -86,7 +86,8 @@ return network.registerProtocol('qmi', {
 		o.password = true;
 
 		if (L.hasSystemFeature('ipv6')) {
-			o = s.taboption('advanced', form.Flag, 'ipv6', _('Enable IPv6 negotiation'));
+			o = s.taboption('advanced', form.Flag, 'ppp_ipv6', _('Enable IPv6 negotiation'));
+			o.ucioption = 'ipv6';
 			o.default = o.disabled;
 		}
 

@@ -90,7 +90,8 @@ return network.registerProtocol('pppossh', {
 		o.datatype = 'ipaddr("nomask")';
 
 		if (L.hasSystemFeature('ipv6')) {
-			o = s.taboption('advanced', form.Flag, 'ipv6', _('Obtain IPv6-Address'), _('Enable IPv6 negotiation on the PPP link'));
+			o = s.taboption('advanced', form.Flag, 'ppp_ipv6', _('Obtain IPv6-Address'), _('Enable IPv6 negotiation on the PPP link'));
+			o.ucioption = 'ipv6';
 			o.default = o.disabled;
 		}
 
