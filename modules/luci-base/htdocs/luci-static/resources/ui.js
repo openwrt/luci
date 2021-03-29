@@ -633,8 +633,9 @@ var UICheckbox = UIElement.extend(/** @lends LuCI.ui.Checkbox.prototype */ {
 	bind: function(frameEl) {
 		this.node = frameEl;
 
-		this.setUpdateEvents(frameEl.lastElementChild.previousElementSibling, 'click', 'blur');
-		this.setChangeEvents(frameEl.lastElementChild.previousElementSibling, 'change');
+		var input = frameEl.querySelector('input[type="checkbox"]');
+		this.setUpdateEvents(input, 'click', 'blur');
+		this.setChangeEvents(input, 'change');
 
 		dom.bindClassInstance(frameEl, this);
 
@@ -650,7 +651,7 @@ var UICheckbox = UIElement.extend(/** @lends LuCI.ui.Checkbox.prototype */ {
 	 * Returns `true` when the checkbox is currently checked, otherwise `false`.
 	 */
 	isChecked: function() {
-		return this.node.lastElementChild.previousElementSibling.checked;
+		return this.node.querySelector('input[type="checkbox"]').checked;
 	},
 
 	/** @override */
@@ -662,7 +663,7 @@ var UICheckbox = UIElement.extend(/** @lends LuCI.ui.Checkbox.prototype */ {
 
 	/** @override */
 	setValue: function(value) {
-		this.node.lastElementChild.previousElementSibling.checked = (value == this.options.value_enabled);
+		this.node.querySelector('input[type="checkbox"]').checked = (value == this.options.value_enabled);
 	}
 });
 
