@@ -145,24 +145,9 @@ function deviceWrite(section_id, formvalue) {
 }
 
 function deviceRemove(section_id) {
-	var ds = lookupDevSection(this.section, section_id, false),
-	    sv = ds ? uci.get('network', ds) : null;
+	var ds = lookupDevSection(this.section, section_id, false);
 
-	if (sv) {
-		var empty = true;
-
-		for (var opt in sv) {
-			if (opt.charAt(0) == '.' || opt == 'name' || opt == this.option)
-				continue;
-
-			empty = false;
-		}
-
-		if (empty)
-			uci.remove('network', ds);
-		else
-			uci.unset('network', ds, this.option);
-	}
+	uci.unset('network', ds, this.option);
 
 	if (this.migrate)
 		uci.unset('network', section_id, this.option);
@@ -186,6 +171,28 @@ function deviceRefresh(section_id) {
 
 		uielem.setValue(this.cfgvalue(section_id));
 	}
+}
+
+function sectionParse() {
+	var ds = lookupDevSection(this, this.section, false);
+
+	return form.NamedSection.prototype.parse.apply(this).then(function() {
+		var sv = ds ? uci.get('network', ds) : null;
+
+		if (sv) {
+			var empty = true;
+
+			for (var opt in sv) {
+				if (opt.charAt(0) == '.' || opt == 'name')
+					continue;
+
+				empty = false;
+			}
+
+			if (empty)
+				uci.remove('network', ds);
+	        }
+	});
 }
 
 
@@ -387,6 +394,9 @@ return baseclass.extend({
 		    o, ss;
 
 		if (isIface) {
+			if (!s.hasOwnProperty('parse'))
+				s.parse = sectionParse;
+
 			var type;
 
 			/* If an externally configured br-xxx interface already exists,
