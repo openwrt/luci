@@ -46,11 +46,11 @@ function validateQoSMap(section_id, value) {
 	return true;
 }
 
-function deviceSectionExists(section_id, devname) {
+function deviceSectionExists(section_id, devname, devtype) {
 	var exists = false;
 
 	uci.sections('network', 'device', function(ss) {
-		exists = exists || (ss['.name'] != section_id && ss.name == devname /* && !ss.type*/);
+		exists = exists || (ss['.name'] != section_id && ss.name == devname && (!devtype || devtype == ss.type));
 	});
 
 	return exists;
@@ -379,7 +379,7 @@ return baseclass.extend({
 		    gensection = ifc ? 'physical' : 'devgeneral',
 		    advsection = ifc ? 'physical' : 'devadvanced',
 		    simpledep = ifc ? { type: '', ifname_single: /^[^@]/ } : { type: '' },
-		    disableLegacyBridging = isIface && deviceSectionExists(null, 'br-%s'.format(ifc.getName())),
+		    disableLegacyBridging = isIface && deviceSectionExists(null, 'br-%s'.format(ifc.getName()), 'bridge'),
 		    o, ss;
 
 		/* If an externally configured br-xxx interface already exists,
