@@ -24,16 +24,18 @@ return view.extend({
 		m  = new form.Map('tor-hs', 'Common settings');
 
 		s = m.section(form.NamedSection, 'common', _('Global settings'));
-		o = s.option(form.Value, 'HSDir', _('HSDir'),_('Path to directory with hidden services.'));
+		o = s.option(form.Value, 'HSDir', _('HSDir'), _('Path to directory with hidden services.'));
 		o.rmempty = false;
+		o.datatype = "directory";
 
-		o = s.option(form.Value, 'GenConf', _('GenConf'),_('Path to generated config file.'));
+		o = s.option(form.Value, 'GenConf', _('GenConf'), _('Path to generated config file.'));
 		o.rmempty = false;
+		o.datatype = "file";
 
 		o = s.option(form.Flag, 'RestartTor', _('Restart Tor'), _('Restart Tor daemon after tor-hs config change'));
 		o.rmempty = false;
 
-		o = s.option(form.Flag, 'UpdateTorConf', _('Auto-update Tor config'),_('Auto-update Tor uci config.'));
+		o = s.option(form.Flag, 'UpdateTorConf', _('Auto-update Tor config'), _('Auto-update Tor uci config.'));
 		o.rmempty = false;
 		o.default=0;
 

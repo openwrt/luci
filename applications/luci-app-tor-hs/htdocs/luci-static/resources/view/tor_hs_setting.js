@@ -17,6 +17,7 @@ return view.extend({
 		o.option(form.Value, "Description", _("Description"));
 		o.option(form.Flag, "Enabled", _("Enabled"));
 		o.option(form.Value, "IPv4", _("IPv4"));
+		o.datatype = 'ip4addr("nomask")';
 		o.option(form.DynamicList, "PublicLocalPort", _("Public Local Port"));
 		o.option(form.Value, "HookScript", _("HookScript"));
 		o.anonymous = true;
