@@ -66,8 +66,13 @@ return view.extend({
 
 		o.rmempty = false;
 
-		Object.keys(hosts).sort().forEach(function(mac) {
-			o.value(mac, E([], [ mac, ' (', E('strong', [hosts[mac].name || hosts[mac].ipv4 || hosts[mac].ipv6 || '?']), ')' ]));
+		L.sortedKeys(hosts).forEach(function(mac) {
+			o.value(mac, E([], [ mac, ' (', E('strong', [
+				hosts[mac].name ||
+				L.toArray(hosts[mac].ipaddrs || hosts[mac].ipv4)[0] ||
+				L.toArray(hosts[mac].ip6addrs || hosts[mac].ipv6)[0] ||
+				'?'
+			]), ')' ]));
 		});
 
 		if (has_ewk) {

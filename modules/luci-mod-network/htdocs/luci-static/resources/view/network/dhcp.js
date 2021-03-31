@@ -450,7 +450,11 @@ return view.extend({
 
 			node.addEventListener('cbi-dropdown-change', L.bind(function(ipopt, section_id, ev) {
 				var mac = ev.detail.value.value;
-				if (mac == null || mac == '' || !hosts[mac] || !hosts[mac].ipv4)
+				if (mac == null || mac == '' || !hosts[mac])
+					return;
+
+				var iphint = L.toArray(hosts[mac].ipaddrs || hosts[mac].ipv4)[0];
+				if (iphint == null)
 					return;
 
 				var ip = ipopt.formvalue(section_id);
@@ -459,13 +463,13 @@ return view.extend({
 
 				var node = ipopt.map.findElement('id', ipopt.cbid(section_id));
 				if (node)
-					dom.callClassMethod(node, 'setValue', hosts[mac].ipv4);
+					dom.callClassMethod(node, 'setValue', iphint);
 			}, this, ipopt, section_id));
 
 			return node;
 		};
 		Object.keys(hosts).forEach(function(mac) {
-			var hint = hosts[mac].name || hosts[mac].ipv4;
+			var hint = hosts[mac].name || L.toArray(hosts[mac].ipaddrs || hosts[mac].ipv4)[0];
 			so.value(mac, hint ? '%s (%s)'.format(mac, hint) : mac);
 		});
 
@@ -501,11 +505,18 @@ return view.extend({
 
 			return true;
 		};
+
+		var ipaddrs = {};
+
 		Object.keys(hosts).forEach(function(mac) {
-			if (hosts[mac].ipv4) {
-				var hint = hosts[mac].name;
-				so.value(hosts[mac].ipv4, hint ? '%s (%s)'.format(hosts[mac].ipv4, hint) : hosts[mac].ipv4);
-			}
+			var addrs = L.toArray(hosts[mac].ipaddrs || hosts[mac].ipv4);
+
+			for (var i = 0; i < addrs.length; i++)
+				ipaddrs[addrs[i]] = hosts[mac].name;
+		});
+
+		L.sortedKeys(ipaddrs, null, 'addr').forEach(function(ipv4) {
+			so.value(ipv4, ipaddrs[ipv4] ? '%s (%s)'.format(ipv4, ipaddrs[ipv4]) : ipv4);
 		});
 
 		so = ss.option(form.Value, 'leasetime', _('Lease time'));
@@ -563,7 +574,7 @@ return view.extend({
 									exp = '%t'.format(lease.expires);
 
 								var hint = lease.macaddr ? hosts[lease.macaddr] : null,
-								    name = hint ? (hint.name || hint.ipv4 || hint.ipv6) : null,
+								    name = hint ? (hint.name || L.toArray(hint.ipaddrs || hint.ipv4)[0] || L.toArray(hint.ip6addrs || hint.ipv6)[0]) : null,
 								    host = null;
 
 								if (name && lease.hostname && lease.hostname != name && lease.ip6addr != name)
