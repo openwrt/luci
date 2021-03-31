@@ -1755,7 +1755,8 @@ Hosts = baseclass.extend(/** @lends LuCI.network.Hosts.prototype */ {
 	 * the corresponding host.
 	 */
 	getIPAddrByMACAddr: function(mac) {
-		return this.hosts[mac] ? this.hosts[mac].ipv4 : null;
+		return this.hosts[mac] && Array.isArray(this.hosts[mac].ipaddrs) &&
+			this.hosts[mac].ipaddrs.length ? this.hosts[mac].ipaddrs[0] : null;
 	},
 
 	/**
@@ -1770,7 +1771,8 @@ Hosts = baseclass.extend(/** @lends LuCI.network.Hosts.prototype */ {
 	 * the corresponding host.
 	 */
 	getIP6AddrByMACAddr: function(mac) {
-		return this.hosts[mac] ? this.hosts[mac].ipv6 : null;
+		return this.hosts[mac] && Array.isArray(this.hosts[mac].ip6addrs) &&
+			this.hosts[mac].ip6addrs.length ? this.hosts[mac].ip6addrs[0] : null;
 	},
 
 	/**
@@ -1786,8 +1788,9 @@ Hosts = baseclass.extend(/** @lends LuCI.network.Hosts.prototype */ {
 	 */
 	getHostnameByIPAddr: function(ipaddr) {
 		for (var mac in this.hosts)
-			if (this.hosts[mac].ipv4 == ipaddr && this.hosts[mac].name != null)
-				return this.hosts[mac].name;
+			for (var ip in this.hosts[mac].ipaddrs)
+				if (ip == ipaddr && this.hosts[mac].name != null)
+					return this.hosts[mac].name;
 		return null;
 	},
 
@@ -1804,8 +1807,9 @@ Hosts = baseclass.extend(/** @lends LuCI.network.Hosts.prototype */ {
 	 */
 	getMACAddrByIPAddr: function(ipaddr) {
 		for (var mac in this.hosts)
-			if (this.hosts[mac].ipv4 == ipaddr)
-				return mac;
+			for (var ip in this.hosts[mac].ipaddrs)
+				if (ip == ipaddr)
+					return mac;
 		return null;
 	},
 
@@ -1822,8 +1826,9 @@ Hosts = baseclass.extend(/** @lends LuCI.network.Hosts.prototype */ {
 	 */
 	getHostnameByIP6Addr: function(ip6addr) {
 		for (var mac in this.hosts)
-			if (this.hosts[mac].ipv6 == ip6addr && this.hosts[mac].name != null)
-				return this.hosts[mac].name;
+			for (var ip in this.hosts[mac].ip6addrs)
+				if (ip == ip6addr && this.hosts[mac].name != null)
+					return this.hosts[mac].name;
 		return null;
 	},
 
@@ -1840,8 +1845,9 @@ Hosts = baseclass.extend(/** @lends LuCI.network.Hosts.prototype */ {
 	 */
 	getMACAddrByIP6Addr: function(ip6addr) {
 		for (var mac in this.hosts)
-			if (this.hosts[mac].ipv6 == ip6addr)
-				return mac;
+			for (var ip in this.hosts[mac].ip6addrs)
+				if (ip == ip6addr)
+					return mac;
 		return null;
 	},
 
@@ -1868,11 +1874,19 @@ Hosts = baseclass.extend(/** @lends LuCI.network.Hosts.prototype */ {
 	 */
 	getMACHints: function(preferIp6) {
 		var rv = [];
-		for (var mac in this.hosts) {
-			var hint = this.hosts[mac].name ||
-				this.hosts[mac][preferIp6 ? 'ipv6' : 'ipv4'] ||
-				this.hosts[mac][preferIp6 ? 'ipv4' : 'ipv6'];
 
+		for (var mac in this.hosts) {
+			var hint = this.hosts[mac].name;
+			if (!hint) {
+				var addrs = this.hosts[mac][preferIp6 ? 'ip6addrs' : 'ipaddrs'];
+				if (Array.isArray(addrs) && addrs.length)
+					hint = addrs[0];
+			}
+			if (!hint) {
+				addrs = this.hosts[mac][preferIp6 ? 'ipaddrs' : 'ip6addrs'];
+				if (Array.isArray(addrs) && addrs.length)
+					hint = addrs[0];
+			}
 			rv.push([mac, hint]);
 		}
 		return rv.sort(function(a, b) { return a[0] > b[0] });

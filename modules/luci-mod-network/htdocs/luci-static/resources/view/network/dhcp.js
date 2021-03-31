@@ -450,7 +450,7 @@ return view.extend({
 
 			node.addEventListener('cbi-dropdown-change', L.bind(function(ipopt, section_id, ev) {
 				var mac = ev.detail.value.value;
-				if (mac == null || mac == '' || !hosts[mac] || !hosts[mac].ipv4)
+				if (mac == null || mac == '' || !hosts[mac] || !hosts[mac].ipaddrs || !hosts[mac].ipaddrs.length)
 					return;
 
 				var ip = ipopt.formvalue(section_id);
@@ -459,13 +459,13 @@ return view.extend({
 
 				var node = ipopt.map.findElement('id', ipopt.cbid(section_id));
 				if (node)
-					dom.callClassMethod(node, 'setValue', hosts[mac].ipv4);
+					dom.callClassMethod(node, 'setValue', hosts[mac].ipaddrs[0]);
 			}, this, ipopt, section_id));
 
 			return node;
 		};
 		Object.keys(hosts).forEach(function(mac) {
-			var hint = hosts[mac].name || hosts[mac].ipv4;
+			var hint = hosts[mac].name || (hosts[mac].ipaddrs && hosts[mac].ipaddrs.length && hosts[mac].ipaddrs[0]);
 			so.value(mac, hint ? '%s (%s)'.format(mac, hint) : mac);
 		});
 
@@ -482,10 +482,10 @@ return view.extend({
 
 			return true;
 		};
-		Object.keys(hosts).forEach(function(mac) {
-			if (hosts[mac].ipv4) {
+		L.sortedKeys(hosts).forEach(function(mac) {
+			if (hosts[mac].ipaddrs && hosts[mac].ipaddrs.length) {
 				var hint = hosts[mac].name;
-				so.value(hosts[mac].ipv4, hint ? '%s (%s)'.format(hosts[mac].ipv4, hint) : hosts[mac].ipv4);
+				so.value(hosts[mac].ipaddrs[0], hint ? '%s (%s)'.format(hosts[mac].ipaddrs[0], hint) : hosts[mac].ipaddrs[0]);
 			}
 		});
 
@@ -544,8 +544,10 @@ return view.extend({
 									exp = '%t'.format(lease.expires);
 
 								var hint = lease.macaddr ? hosts[lease.macaddr] : null,
-								    name = hint ? (hint.name || hint.ipv4 || hint.ipv6) : null,
-								    host = null;
+									name = hint ? (hint.name ||
+													(hint.ipaddrs && hint.ipaddrs.length && hint.ipaddrs[0]) ||
+													(hint.ip6addrs && hint.ip6addrs.length && hint.ip6addrs[0])) : null,
+									host = null;
 
 								if (name && lease.hostname && lease.hostname != name && lease.ip6addr != name)
 									host = '%s (%s)'.format(lease.hostname, name);

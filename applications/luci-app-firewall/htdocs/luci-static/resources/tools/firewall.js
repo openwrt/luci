@@ -395,22 +395,30 @@ return baseclass.extend({
 		var choice_values = [], choice_labels = {};
 
 		if (!family || family == 'ipv4') {
-			L.sortedKeys(hosts, 'ipv4', 'addr').forEach(function(mac) {
-				var val = hosts[mac].ipv4,
-				    txt = hosts[mac].name || mac;
+			L.sortedKeys(hosts).forEach(function(mac) {
+				if (hosts[mac].ipaddrs && hosts[mac].ipaddrs.length) {
+					hosts[mac].ipaddrs.forEach(function(ip) {
+						var val = ip,
+							txt = hosts[mac].name || mac;
 
-				choice_values.push(val);
-				choice_labels[val] = E([], [ val, ' (', E('strong', {}, [txt]), ')' ]);
+						choice_values.push(val);
+						choice_labels[val] = E([], [ val, ' (', E('strong', {}, [txt]), ')' ]);
+					});
+				}
 			});
 		}
 
 		if (!family || family == 'ipv6') {
-			L.sortedKeys(hosts, 'ipv6', 'addr').forEach(function(mac) {
-				var val = hosts[mac].ipv6,
-				    txt = hosts[mac].name || mac;
+			L.sortedKeys(hosts).forEach(function(mac) {
+				if (hosts[mac].ip6addrs && hosts[mac].ip6addrs.length) {
+					hosts[mac].ip6addrs.forEach(function(ip) {
+						var val = ip,
+							txt = hosts[mac].name || mac;
 
-				choice_values.push(val);
-				choice_labels[val] = E([], [ val, ' (', E('strong', {}, [txt]), ')' ]);
+						choice_values.push(val);
+						choice_labels[val] = E([], [ val, ' (', E('strong', {}, [txt]), ')' ]);
+					});
+				}
 			});
 		}
 
@@ -497,7 +505,9 @@ return baseclass.extend({
 
 		L.sortedKeys(hosts).forEach(function(mac) {
 			o.value(mac, E([], [ mac, ' (', E('strong', {}, [
-				hosts[mac].name || hosts[mac].ipv4 || hosts[mac].ipv6 || '?'
+				hosts[mac].name ||
+					(hosts[mac].ipaddrs && hosts[mac].ipaddrs.length && hosts[mac].ipaddrs[0]) ||
+					(hosts[mac].ip6addrs && hosts[mac].ip6addrs.length && hosts[mac].ip6addrs[0]) || '?'
 			]), ')' ]));
 		});
 
