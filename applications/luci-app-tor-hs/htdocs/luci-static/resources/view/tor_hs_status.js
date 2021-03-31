@@ -25,7 +25,6 @@ return view.extend({
 		var uci_hs_list=data[0]["hs-list"];
 		var tbl_lines=[];
 
-
 		tbl_lines.push(
 				E('tr',{'class':'tr'},[
 				E('th',{'class':'th'} ,_("Name")),
@@ -35,21 +34,23 @@ return view.extend({
 				E('th',{'class':'th'} ,_("External port"))
 		]));
 
-		uci_hs_list.forEach(function(entry) {
-			var extern_ports=[]
-			entry.ports.forEach(function(port) {
-				extern_ports.push(port.split(";")[0]);
-			});
+		if(typeof uci_hs_list  !== 'undefined'){
+			uci_hs_list.forEach(function(entry) {
+				var extern_ports=[]
+				entry.ports.forEach(function(port) {
+					extern_ports.push(port.split(";")[0]);
+				});
 
-			tbl_lines.push(
-				E('tr',{'class':'tr'},[
-					E('td',{'class':'td'} ,entry.name),
-					E('td',{'class':'td'} ,entry.description),
-					E('td',{'class':'td'} ,entry.enabled),
-					E('td',{'class':'td'} ,entry.hostname),
-					E('td',{'class':'td'} ,extern_ports.join(", "))
-			]));
-		});
+				tbl_lines.push(
+					E('tr',{'class':'tr'},[
+						E('td', {'class':'td'}, entry.name),
+						E('td', {'class':'td'}, entry.description),
+						E('td', {'class':'td'}, entry.enabled),
+						E('td', {'class':'td'}, entry.hostname),
+						E('td', {'class':'td'}, extern_ports.join(", "))
+				]));
+			});
+		}
 
 		var tbl=E('table',{'class': 'table'}, tbl_lines);
 
