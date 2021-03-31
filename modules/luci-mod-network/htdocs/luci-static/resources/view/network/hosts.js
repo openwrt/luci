@@ -31,11 +31,18 @@ return view.extend({
 		o = s.option(form.Value, 'ip', _('IP address'));
 		o.datatype = 'ipaddr';
 		o.rmempty = true;
-		L.sortedKeys(hosts, 'ipv4', 'addr').forEach(function(mac) {
-			o.value(hosts[mac].ipv4, '%s (%s)'.format(
-				hosts[mac].ipv4,
-				hosts[mac].name || mac
-			));
+
+		var ipaddrs = {};
+
+		Object.keys(hosts).forEach(function(mac) {
+			var addrs = L.toArray(hosts[mac].ipaddrs || hosts[mac].ipv4);
+
+			for (var i = 0; i < addrs.length; i++)
+				ipaddrs[addrs[i]] = hosts[mac].name || mac;
+		});
+
+		L.sortedKeys(ipaddrs, null, 'addr').forEach(function(ipv4) {
+			o.value(ipv4, '%s (%s)'.format(ipv4, ipaddrs[ipv4]));
 		});
 
 		return m.render();
