@@ -545,25 +545,68 @@ return view.extend({
 						return form.Value.prototype.validate.apply(this, [ section_id, value ]);
 					};
 
-					ss.taboption('advanced', form.DynamicList, 'dhcp_option', _('DHCP-Options'), _('Define additional DHCP options, for example "<code>6,192.168.2.1,192.168.2.2</code>" which advertises different DNS servers to clients.'));
+					ss.taboption('advanced', form.DynamicList, 'dhcp_option', _('DHCP-Options'), _('Define additional DHCP options, \
+						for example "<code>6,192.168.2.1,192.168.2.2</code>" which advertises different DNS servers to clients.'));
 
 					for (var i = 0; i < ss.children.length; i++)
 						if (ss.children[i].option != 'ignore')
 							ss.children[i].depends('ignore', '0');
 
-					so = ss.taboption('ipv6', form.ListValue, 'ra', _('Router Advertisement-Service'));
+					so = ss.taboption('ipv6', form.ListValue, 'ra', _('<abbr title="Router Advertisement">RA</abbr>-Service'), _('<ul style="list-style-type:none;">\
+						<li><strong>server mode</strong>: Router advertises itself as the default IPv6 gateway \
+						via <abbr title="Router Advertisement, ICMPv6 Type 134">RA</abbr> messages \
+						(to <code>ff02::1</code>) and provides <abbr title="Prefix Delegation">PD</abbr> to downstream devices.</li>\
+						<li><strong>relay mode</strong>:  Router relays <abbr title="Router Advertisement, ICMPv6 Type 134">RA</abbr> from upstream, \
+						and extends upstream (e.g. WAN) interface config and prefix to downstream (e.g. LAN) interfaces.</li>\
+						<li><strong>hybrid mode</strong>: Router does both server+relay; extends upstream config and prefix downstream, and \
+						uses <abbr title="Prefix Delegation">PD</abbr> locally.</li></ul>'));
 					so.value('', _('disabled'));
 					so.value('server', _('server mode'));
 					so.value('relay', _('relay mode'));
 					so.value('hybrid', _('hybrid mode'));
 
-					so = ss.taboption('ipv6', form.ListValue, 'dhcpv6', _('DHCPv6-Service'));
+					so = ss.taboption('ipv6', form.ListValue, 'ra_management', _('DHCPv6-Mode'), _('Default is stateless + stateful<br />\
+						<ul style="list-style-type:none;">\
+						<li><strong>stateless</strong>: Router advertises prefixes, host uses <abbr title="Stateless Address Auto Config">SLAAC</abbr> \
+						to self assign its own address. No DHCPv6.</li>\
+						<li><strong>stateless + stateful</strong>: SLAAC. In addition, router assigns an IPv6 address to a host via DHCPv6.</li>\
+						<li><strong>stateful-only</strong>:  No SLAAC. Router assigns an IPv6 address to a host via DHCPv6.</li><ul>'));
+					so.value('0', _('stateless'));
+					so.value('1', _('stateless + stateful'));
+					so.value('2', _('stateful-only'));
+					so.depends('dhcpv6', 'server');
+					so.depends('dhcpv6', 'hybrid');
+					so.default = '1';
+
+					so = ss.taboption('ipv6', form.ListValue, 'dhcpv6', _('DHCPv6-Service'), _('<ul style="list-style-type:none;">\
+						<li><strong>server mode</strong>: Router assigns IPs and delegates prefixes \
+						(<abbr title="Prefix Delegation">PD</abbr>) to downstream interfaces.</li>\
+						<li><strong>relay mode</strong>:   Router relays WAN interface config downstream. Helps support upstream \
+						links that lack <abbr title="Prefix Delegation">PD</abbr>.</li>\
+						<li><strong>hybrid mode</strong>:  Router does combination of server+relay.</li></ul>'));
 					so.value('', _('disabled'));
 					so.value('server', _('server mode'));
 					so.value('relay', _('relay mode'));
 					so.value('hybrid', _('hybrid mode'));
 
-					so = ss.taboption('ipv6', form.ListValue, 'ndp', _('NDP-Proxy'));
+					so = ss.taboption('ipv6', form.ListValue, 'ndp', _('<abbr title="Neighbour Discovery Protocol">NDP</abbr>-Proxy'), _('Reverts to \
+						disabled internally if there are no interfaces with boolean <code>ndproxy_slave</code> set to 1. Think of \
+						<abbr title="Neighbour Discovery Protocol">NDP</abbr> Proxy as Proxy ARP for IPv6: unify hosts on different physical \
+						hardware segments into the same IP subnet. Consists of <abbr title="Neighbour Solicitation, Type 135">NS</abbr> and \
+						<abbr title="Neighbour Advertisement, Type 136">NA</abbr> messages. <abbr title="Neighbour Discovery Protocol">NDP</abbr>-Proxy \
+						listens for <abbr title="Neighbour Solicitation, Type 135">NS</abbr> on an interface marked with boolean \
+						<code>master</code> as 1 (i.e. upstream), then queries the slave/internal interfaces for that target IP before finally \
+						sending an <abbr title="Neighbour Advertisement, Type 136">NA</abbr> message. \
+						<abbr title="Neighbour Discovery Protocol">NDP</abbr> is effectively ARP for IPv6. \
+						<abbr title="Neighbour Solicitation, Type 135">NS</abbr> and <abbr title="Neighbour Advertisement, Type 136">NA</abbr> \
+						detect reachability and duplicate addresses on a link, themselves also a prerequisite for SLAAC autoconfig.<br />\
+						<ul style="list-style-type:none;">\
+						<li><strong>disabled</strong>: No <abbr title="Neighbour Discovery Protocol">NDP</abbr> messages are proxied through to \
+						<code>ndproxy_slave</code> true interfaces.</li>	\
+						<li><strong>relay mode</strong>: Proxies <abbr title="Neighbour Discovery Protocol">NDP</abbr> messages from <code>master</code> to \
+						<code>ndproxy_slave</code> true interfaces. Helps to support provider links without \
+						<abbr title="Prefix Delegation">PD</abbr>, and to firewall proxied hosts.</li>\
+						<li><strong>hybrid mode</strong>: Relay mode is disabled unless the interface boolean <code>master</code> is 1.</li></ul>'));
 					so.value('', _('disabled'));
 					so.value('relay', _('relay mode'));
 					so.value('hybrid', _('hybrid mode'));
@@ -572,15 +615,7 @@ return view.extend({
 					so.depends('dhcpv6', 'relay');
 					so.depends('dhcpv6', 'hybrid');
 
-					so = ss.taboption('ipv6', form.ListValue, 'ra_management', _('DHCPv6-Mode'), _('Default is stateless + stateful'));
-					so.value('0', _('stateless'));
-					so.value('1', _('stateless + stateful'));
-					so.value('2', _('stateful-only'));
-					so.depends('dhcpv6', 'server');
-					so.depends('dhcpv6', 'hybrid');
-					so.default = '1';
-
-					so = ss.taboption('ipv6', form.Flag, 'ra_default', _('Always announce default router'), _('Announce as default router even if no public prefix is available.'));
+					so = ss.taboption('ipv6', form.Flag, 'ra_default', _('Announce as default router'), _('Always, even if no public prefix is available.'));
 					so.depends('ra', 'server');
 					so.depends('ra', 'hybrid');
 
@@ -1126,7 +1161,9 @@ return view.extend({
 		s.addremove = false;
 		s.anonymous = true;
 
-		o = s.option(form.Value, 'ula_prefix', _('IPv6 ULA-Prefix'));
+		o = s.option(form.Value, 'ula_prefix', _('IPv6 ULA-Prefix'), _('Unique Local Address - in the range <code>fc00::/7</code>. \
+			Typically only within the &#8216;local&#8217; half <code>fd00::/8</code>. ULA for IPv6 is analogous to IPv4 private network addressing.\
+			This prefix is randomly generated at first install.'));
 		o.datatype = 'cidr6';
 
 		o = s.option(form.Flag, 'packet_steering', _('Packet Steering'), _('Enable packet steering across all CPUs. May help or hinder network speed.'));
