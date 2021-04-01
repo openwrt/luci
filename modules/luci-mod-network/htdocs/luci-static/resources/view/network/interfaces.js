@@ -565,6 +565,50 @@ return view.extend({
 					so.value('relay', _('relay mode'));
 					so.value('hybrid', _('hybrid mode'));
 
+					so = ss.taboption('ipv6', form.Value, 'ra_maxinterval', _('Max <abbr title="Router Advertisement">RA</abbr> interval'), _('Maximum time allowed \
+						between sending unsolicited <abbr title="Router Advertisement, ICMPv6 Type 134">RA</abbr>. Default is 600 seconds (<code>600</code>).'));
+					so.optional = true;
+					so.default = '600';
+					so.depends('ra', 'server');
+					so.depends('ra', 'hybrid');
+					so.depends('ra', 'relay');
+
+
+					so = ss.taboption('ipv6', form.Value, 'ra_mininterval', _('Min <abbr title="Router Advertisement">RA</abbr> interval'), _('Minimum time allowed \
+						between sending unsolicited <abbr title="Router Advertisement, ICMPv6 Type 134">RA</abbr>. Default is 200 seconds (<code>200</code>).'));
+					so.optional = true;
+					so.default = '200';
+					so.depends('ra', 'server');
+					so.depends('ra', 'hybrid');
+					so.depends('ra', 'relay');
+
+					so = ss.taboption('ipv6', form.Value, 'ra_lifetime', _('<abbr title="Router Advertisement">RA</abbr> Lifetime'), _('Router Lifetime published \
+						in <abbr title="Router Advertisement, ICMPv6 Type 134">RA</abbr> messages. Default is 1800 seconds (<code>1800</code>). \
+						Max 9000 seconds.'));
+					so.optional = true;
+					so.default = '1800';
+					so.depends('ra', 'server');
+					so.depends('ra', 'hybrid');
+					so.depends('ra', 'relay');
+
+					so = ss.taboption('ipv6', form.Value, 'ra_mtu', _('<abbr title="Router Advertisement">RA</abbr> MTU'), _('The <abbr title="Maximum Transmission Unit">MTU</abbr> \
+						to be published in <abbr title="Router Advertisement, ICMPv6 Type 134">RA</abbr> messages. Default is 0 (<code>0</code>).\
+						Min 1280.'));
+					so.optional = true;
+					so.default = '0';
+					so.depends('ra', 'server');
+					so.depends('ra', 'hybrid');
+					so.depends('ra', 'relay');
+
+					so = ss.taboption('ipv6', form.Value, 'ra_hoplimit', _('<abbr title="Router Advertisement">RA</abbr> Hop Limit'), _('The maximum hops \
+						to be published in <abbr title="Router Advertisement">RA</abbr> messages.<br>Default is 0 (<code>0</code>), meaning unspecified.\
+						Max 255.'));
+					so.optional = true;
+					so.default = '0';
+					so.depends('ra', 'server');
+					so.depends('ra', 'hybrid');
+					so.depends('ra', 'relay');
+
 					so = ss.taboption('ipv6', form.ListValue, 'ra_management', _('DHCPv6-Mode'), _('Default is stateless + stateful<br />\
 						<ul style="list-style-type:none;">\
 						<li><strong>stateless</strong>: Router advertises prefixes, host uses <abbr title="Stateless Address Auto Config">SLAAC</abbr> \
@@ -610,6 +654,17 @@ return view.extend({
 					so.value('', _('disabled'));
 					so.value('relay', _('relay mode'));
 					so.value('hybrid', _('hybrid mode'));
+
+					so = ss.taboption('ipv6', form.Flag, 'ndproxy_routing', _('Learn routes from NDP'), _('Default is on.'));
+					so.default = '1';
+
+					so = ss.taboption('ipv6', form.Flag, 'ndproxy_slave', _('NDP-Proxy slave'), _('Set interface as NDP-Proxy external slave. Default is off.'));
+
+					so = ss.taboption('ipv6', form.DynamicList, 'ndproxy_static', _('Static NDP-Proxy prefixes'));
+
+					so = ss.taboption('ipv6', form.Flag , 'master', _('Master'), _('Set this interface as master for the dhcpv6 relay.'));
+					so.depends('dhcpv6', 'relay');
+					so.depends('dhcpv6', 'hybrid');
 
 					so = ss.taboption('ipv6', form.Flag , 'master', _('Master'), _('Set this interface as master for the dhcpv6 relay.'));
 					so.depends('dhcpv6', 'relay');
