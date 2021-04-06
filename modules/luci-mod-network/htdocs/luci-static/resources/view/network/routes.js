@@ -20,6 +20,7 @@ return view.extend({
 			s.anonymous = true;
 			s.addremove = true;
 			s.sortable = true;
+			s.nodescriptions = true;
 
 			s.tab('general', _('General Settings'));
 			s.tab('advanced', _('Advanced Settings'));
@@ -27,6 +28,10 @@ return view.extend({
 			o = s.taboption('general', widgets.NetworkSelect, 'interface', _('Interface'));
 			o.rmempty = false;
 			o.nocreate = true;
+
+			o = s.taboption('general', form.Flag, 'disabled', _('Disable'), _('Disable this route'));
+			o.rmempty = true;
+			o.default = o.disabled;
 
 			o = s.taboption('general', form.Value, 'target', _('Target'), (i == 4) ? _('Host-<abbr title="Internet Protocol Address">IP</abbr> or Network') : _('<abbr title="Internet Protocol Version 6">IPv6</abbr>-Address or Network (CIDR)'));
 			o.datatype = (i == 4) ? 'ip4addr' : 'ip6addr';
