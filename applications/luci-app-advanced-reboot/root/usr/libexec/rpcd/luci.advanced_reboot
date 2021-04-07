@@ -100,7 +100,7 @@ find_device_data(){
 print_json() { json_init; json_add_string "$1" "$2"; json_dump; json_cleanup; }
 
 obtain_device_info(){
-	local romBoardName p zyxelFlagPartition
+	local romBoardName p zyxelFlagPartition i
 	local vendorName deviceName partition1MTD partition2MTD labelOffset
 	local bootEnv1 bootEnv1Partition1Value bootEnv1Partition2Value
 	local bootEnv2 bootEnv2Partition1Value bootEnv2Partition2Value
@@ -167,15 +167,20 @@ obtain_device_info(){
 			current_partition="$(/usr/sbin/fw_printenv -n "${bootEnv1}")"
 		fi
 	else
+		for i in '0:dual_flag' '0:DUAL_FLAG'; do
+			zyxelFlagPartition="$(find_mtd_part "$i" 2>/dev/null)"
+			[ -n "$zyxelFlagPartition" ] && break
+		done
 		if [ -z "$zyxelFlagPartition" ]; then
-			zyxelFlagPartition="$(find_mtd_part 0:DUAL_FLAG 2>/dev/null)"
-		fi
-		if [ -n "$zyxelFlagPartition" ]; then
-			current_partition="$(dd if="${zyxelFlagPartition}" bs=1 count=1 2>/dev/null | hexdump -n 1 -e '1/1 "%d"')"
-		else
 			print_json 'error' 'NO_DUAL_FLAG'
 			logger "Unable to find Dual Boot Environment or Dual Boot Flag Partition."
 			return
+		elif [ ! -b "$zyxelFlagPartition" ]; then
+			print_json 'error' 'NO_DUAL_FLAG_BLOCK'
+			logger "The Dual Boot Flag Partition: $zyxelFlagPartition is not block device."
+			return
+		else
+			current_partition="$(dd if="${zyxelFlagPartition}" bs=1 count=1 2>/dev/null | hexdump -n 1 -e '1/1 "%d"')"
 		fi
 	fi
 
@@ -201,7 +206,6 @@ obtain_device_info(){
 	if [ -n "$p2_os" ] && [ -n "$p2_version" ]; then
 		p2_os="$p2_os (Linux ${p2_version})"
 	fi
-
 
 	json_init
 	json_add_int 'current_partition' "$current_partition"
@@ -231,7 +235,7 @@ obtain_device_info(){
 }
 
 toggle_boot_partition(){
-	local zyxelFlagPartition zyxelBootFlag zyxelNewBootFlag curEnvSetting newEnvSetting
+	local zyxelFlagPartition i zyxelBootFlag zyxelNewBootFlag curEnvSetting newEnvSetting
 	local romBoardName p
 	local bev1 bev2 bev1p1 bev1p2 bev2p1 bev2p2
 	local vendorName deviceName partition1MTD partition2MTD labelOffset
@@ -333,12 +337,17 @@ toggle_boot_partition(){
 		json_init
 		json_dump; json_cleanup;
 	else # NetGear device
+		for i in '0:dual_flag' '0:DUAL_FLAG'; do
+			zyxelFlagPartition="$(find_mtd_part "$i" 2>/dev/null)"
+			[ -n "$zyxelFlagPartition" ] && break
+		done
 		if [ -z "$zyxelFlagPartition" ]; then
-			zyxelFlagPartition="$(find_mtd_part 0:DUAL_FLAG 2>/dev/null)"
-		fi
-		if [ -z "$zyxelFlagPartition" ]; then
-			logger "Unable to find Dual Boot Flag Partition."
 			print_json 'error' 'NO_DUAL_FLAG'
+			logger "Unable to find Dual Boot Environment or Dual Boot Flag Partition."
+			return
+		elif [ ! -b "$zyxelFlagPartition" ]; then
+			print_json 'error' 'NO_DUAL_FLAG_BLOCK'
+			logger "The Dual Boot Flag Partition: $zyxelFlagPartition is not block device."
 			return
 		else
 			zyxelBootFlag="$(dd if="${zyxelFlagPartition}" bs=1 count=1 2>/dev/null | hexdump -n 1 -e '1/1 "%d"')"
