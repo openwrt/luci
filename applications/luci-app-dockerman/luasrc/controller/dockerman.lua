@@ -22,7 +22,7 @@ function index()
 			return
 		end
 	else
-		local socket = luci.model.uci.cursor():get("dockerd", "globals", "socket_path")
+		local socket = luci.model.uci.cursor():get("dockerd", "globals", "socket_path") or "/var/run/docker.sock"
 		if socket and not nixio.fs.access(socket) then
 			return
 		end
