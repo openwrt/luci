@@ -100,7 +100,9 @@ o.rmempty = false
 o = s:option(Value, "remote_host",
 	translate("Remote Host"),
 	translate("Host or IP Address for the connection to a remote docker instance"))
-	o.datatype = "host"
+o.datatype = "host"
+o.rmempty = false
+o.optional = false
 o.placeholder = "10.1.1.2"
 o:depends("remote_endpoint", 1)
 
