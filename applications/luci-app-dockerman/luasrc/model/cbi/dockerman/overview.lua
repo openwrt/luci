@@ -97,12 +97,6 @@ o = s:option(Flag, "remote_endpoint",
 	translate("Connect to remote endpoint"))
 o.rmempty = false
 
-o = s:option(Value, "socket_path",
-	translate("Docker Socket Path"))
-o.default = "unix:///var/run/docker.sock"
-o.placeholder = "unix:///var/run/docker.sock"
-o:depends("remote_endpoint", 1)
-
 o = s:option(Value, "remote_host",
 	translate("Remote Host"))
 o.placeholder = "10.1.1.2"
