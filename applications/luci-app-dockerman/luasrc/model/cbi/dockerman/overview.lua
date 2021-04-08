@@ -109,7 +109,9 @@ o:depends("remote_endpoint", 1)
 o = s:option(Value, "remote_port",
 	translate("Remote Port"))
 o.placeholder = "2375"
-o.default = "2375"
+o.datatype = "port"
+o.rmempty = false
+o.optional = false
 o:depends("remote_endpoint", 1)
 
 if nixio.fs.access("/usr/bin/dockerd") then
