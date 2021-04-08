@@ -122,8 +122,9 @@ if nixio.fs.access("/usr/bin/dockerd") then
 	o:depends("remote_endpoint", 0)
 
 	o = s:option(DynamicList, "registry_mirrors",
-		translate("Registry Mirrors"))
-	o:value("https://hub-mirror.c.163.com", "https://hub-mirror.c.163.com")
+		translate("Registry Mirrors"),
+		translate("It replaces the daemon registry mirrors with a new set of registry mirrors"))
+	o.placeholder = translate("Example: https://hub-mirror.c.163.com")
 	o:depends("remote_endpoint", 0)
 
 	o = s:option(ListValue, "log_level",
