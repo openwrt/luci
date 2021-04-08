@@ -130,11 +130,11 @@ if nixio.fs.access("/usr/bin/dockerd") then
 	o = s:option(ListValue, "log_level",
 		translate("Log Level"),
 		translate('Set the logging level'))
-	o:value("debug", "debug")
-	o:value("", "info") -- This is the default debug level from the deamon is optin is not set
-	o:value("warn", "warn")
-	o:value("error", "error")
-	o:value("fatal", "fatal")
+	o:value("debug", translate("Debug"))
+	o:value("", translate("Info")) -- This is the default debug level from the deamon is optin is not set
+	o:value("warn", translate("Warning"))
+	o:value("error", translate("Error"))
+	o:value("fatal", translate("Fatal"))
 	o.rmempty = true
 	o:depends("remote_endpoint", 0)
 
