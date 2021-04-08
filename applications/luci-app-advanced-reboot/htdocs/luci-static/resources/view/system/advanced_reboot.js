@@ -8,7 +8,8 @@
 return view.extend({
 	translateTable: {
 		NO_BOARD_NAME : function(args) { return _('Unable to find Device Board Name.')},
-		NO_DUAL_FLAG : function(args) {return _('Unable to find Dual Boot Flag Partition.')},
+		NO_DUAL_FLAG: function (args) { return _('Unable to find Dual Boot Flag Partition.') },
+		NO_DUAL_FLAG_BLOCK: function (args) { return _('The Dual Boot Flag Partition: %s is not a block device.').format(args[0])},
 		ERR_SET_DUAL_FLAG : function(args) { return _('Unable to set Dual Boot Flag Partition entry for partition: %s.').format(args[0])},
 		NO_FIRM_ENV : function(args) { return _('Unable to obtain firmware environment variable: %s.').format(args[0])},
 		ERR_SET_ENV : function(args) { return _('Unable to set firmware environment variable: %s to %s.').format(args[0],args[1])}
