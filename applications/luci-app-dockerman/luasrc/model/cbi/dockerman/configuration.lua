@@ -4,10 +4,10 @@
 local m, s, o
 
 m = Map("dockerd",
-	translate("Docker"),
-	translate("DockerMan is a Simple Docker manager client for LuCI"))
+	translate("Docker - Configuration"),
+	translate("DockerMan is a simple docker manager client for LuCI"))
 
-s = m:section(NamedSection, "globals", "section", translate("Setting"))
+s = m:section(NamedSection, "globals", "section", translate("Global settings"))
 
 o = s:option(Flag, "remote_endpoint",
 	translate("Remote Endpoint"),
