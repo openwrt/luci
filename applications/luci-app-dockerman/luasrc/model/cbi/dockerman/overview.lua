@@ -118,7 +118,6 @@ if nixio.fs.access("/usr/bin/dockerd") then
 		translate("Default bridge"),
 		translate("Configure the default bridge network"))
 	o.placeholder = "172.17.0.1/16"
-	o.default = "172.17.0.1/16"
 	o.datatype = "ipaddr"
 	o:depends("remote_endpoint", 0)
 
