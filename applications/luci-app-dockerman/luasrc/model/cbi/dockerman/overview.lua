@@ -139,9 +139,8 @@ if nixio.fs.access("/usr/bin/dockerd") then
 
 	o = s:option(DynamicList, "hosts",
 		translate("Client connection"),
-		translate('Specifies where the Docker daemon will listen for client connections'))
-	o:value("unix:///var/run/docker.sock", "unix:///var/run/docker.sock")
-	o:value("tcp://0.0.0.0:2375", "tcp://0.0.0.0:2375")
+		translate('Specifies where the Docker daemon will listen for client connections (default: unix:///var/run/docker.sock)'))
+	o.placeholder = translate("Example: tcp://0.0.0.0:2375")
 	o.rmempty = true
 	o:depends("remote_endpoint", 0)
 end
