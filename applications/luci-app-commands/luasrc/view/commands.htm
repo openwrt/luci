@@ -109,10 +109,10 @@
 		{
 			var prefix = location.protocol + '//' + location.host + '<%=url('command')%>/';
 			var suffix = (args ? '/' + args : '');
-			
+
 			var link = prefix + id + suffix;
 			var link_nodownload = prefix + id + "s" + suffix;
-			
+
 			legend.style.display = 'none';
 			output.parentNode.style.display = 'block';
 			output.innerHTML = String.format(
@@ -156,10 +156,10 @@
 						<p><%:Arguments:%> <input type="text" id="<%=command['.name']%>" /></p>
 					<% end %>
 					<div>
-						<input type="button" value="<%:Run%>" class="cbi-button cbi-button-apply" onclick="command_run('<%=command['.name']%>')" />
-						<input type="button" value="<%:Download%>" class="cbi-button cbi-button-download" onclick="command_download('<%=command['.name']%>')" />
+						<button class="cbi-button cbi-button-apply" onclick="command_run('<%=command['.name']%>')"><%:Run%></button>
+						<button class="cbi-button cbi-button-download" onclick="command_download('<%=command['.name']%>')"><%:Download%></button>
 						<% if command.public == "1" then %>
-							<input type="button" value="<%:Link%>" class="cbi-button cbi-button-link" onclick="command_link('<%=command['.name']%>')" />
+							<button class="cbi-button cbi-button-link" onclick="command_link('<%=command['.name']%>')"><%:Link%></button>
 						<% end %>
 					</div>
 				</div>
