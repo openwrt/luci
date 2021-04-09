@@ -46,12 +46,12 @@ function render_titles()
 		return
 	end
 
-	%><div class="tr cbi-section-table-titles <%=anonclass%>"<%=titlename%>><%
+	%><tr class="tr cbi-section-table-titles <%=anonclass%>"<%=titlename%>><%
 
 	local i, k
 	for i, k in ipairs(self.children) do
 		if not k.optional then
-			%><div class="th cbi-section-table-cell"<%=
+			%><th class="th cbi-section-table-cell"<%=
 				width(k) .. attr('data-widget', k.typename) %>><%
 
 			if k.titleref then
@@ -64,15 +64,15 @@ function render_titles()
 				%></a><%
 			end
 
-			%></div><%
+			%></th><%
 		end
 	end
 
 	if self.sortable or self.extedit or self.addremove then
-		%><div class="th cbi-section-table-cell cbi-section-actions"></div><%
+		%><th class="th cbi-section-table-cell cbi-section-actions"></th><%
 	end
 
-	%></div><%
+	%></tr><%
 
 	rowcnt = rowcnt + 1
 end
@@ -82,25 +82,25 @@ function render_descriptions()
 		return
 	end
 
-	%><div class="tr cbi-section-table-descr <%=anonclass%>"><%
+	%><tr class="tr cbi-section-table-descr <%=anonclass%>"><%
 
 	local i, k
 	for i, k in ipairs(self.children) do
 		if not k.optional then
-			%><div class="th cbi-section-table-cell"<%=
+			%><th class="th cbi-section-table-cell"<%=
 				width(k) .. attr("data-widget", k.typename) %>><%
 
 			write(k.description)
 
-			%></div><%
+			%></th><%
 		end
 	end
 
 	if self.sortable or self.extedit or self.addremove then
-		%><div class="th cbi-section-table-cell cbi-section-actions"></div><%
+		%><th class="th cbi-section-table-cell cbi-section-actions"></th><%
 	end
 
-	%></div><%
+	%></tr><%
 
 	rowcnt = rowcnt + 1
 end
@@ -116,7 +116,7 @@ end
 		<input type="hidden" id="cbi.sts.<%=self.config%>.<%=self.sectiontype%>" name="cbi.sts.<%=self.config%>.<%=self.sectiontype%>" value="" />
 	<%- end -%>
 	<div class="cbi-section-descr"><%=self.description%></div>
-	<div class="table cbi-section-table">
+	<table class="table cbi-section-table">
 		<%-
 			render_titles()
 			render_descriptions()
@@ -134,7 +134,7 @@ end
 					valuefooter = "cbi/cell_valuefooter"
 				}
 		-%>
-		<div class="tr cbi-section-table-row<%=colorclass%>" id="cbi-<%=self.config%>-<%=section%>"<%=sectiontitle%>>
+		<tr class="tr cbi-section-table-row<%=colorclass%>" id="cbi-<%=self.config%>-<%=section%>"<%=sectiontitle%>>
 			<%-
 				local node
 				for k, node in ipairs(self.children) do
@@ -145,7 +145,7 @@ end
 			-%>
 
 			<%- if self.sortable or self.extedit or self.addremove then -%>
-				<div class="td cbi-section-table-cell nowrap cbi-section-actions">
+				<td class="td cbi-section-table-cell nowrap cbi-section-actions">
 					<div>
 						<%- if self.sortable then -%>
 							<input class="btn cbi-button cbi-button-up" type="button" value="<%:Up%>" onclick="return cbi_row_swap(this, true, 'cbi.sts.<%=self.config%>.<%=self.sectiontype%>')" title="<%:Move up%>" />
@@ -162,17 +162,17 @@ end
 							<input class="btn cbi-button cbi-button-remove" type="submit" value="<%:Delete%>"  onclick="this.form.cbi_state='del-section'; return true" name="cbi.rts.<%=self.config%>.<%=k%>" alt="<%:Delete%>" title="<%:Delete%>" />
 						<%- end -%>
 					</div>
-				</div>
+				</td>
 			<%- end -%>
-		</div>
+		</tr>
 		<%- end -%>
 
 		<%- if isempty then -%>
-		<div class="tr cbi-section-table-row placeholder">
-			<div class="td"><em><%:This section contains no values yet%></em></div>
-		</div>
+		<tr class="tr cbi-section-table-row placeholder">
+			<td class="td"><em><%:This section contains no values yet%></em></td>
+		</tr>
 		<%- end -%>
-	</div>
+	</table>
 
 	<% if self.error then %>
 		<div class="cbi-section-error">
