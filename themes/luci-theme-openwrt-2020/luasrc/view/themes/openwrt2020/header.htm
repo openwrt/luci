@@ -28,6 +28,10 @@
 <script type="text/javascript" src="<%=url('admin/translations', luci.i18n.context.lang)%><%# ?v=PKG_VERSION %>"></script>
 <script type="text/javascript" src="<%=resource%>/cbi.js"></script>
 <title><%=striptags( (boardinfo.hostname or "?") .. ( (node and node.title) and ' - ' .. translate(node.title) or '')) %> - LuCI</title>
+<% if css then %><style title="text/css">
+<%= css %>
+</style>
+<% end -%>
 </head>
 <body class="lang_<%=luci.i18n.context.lang%>" data-page="<%= pcdata(path) %>">
 
