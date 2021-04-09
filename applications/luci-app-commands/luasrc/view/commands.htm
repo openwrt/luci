@@ -37,7 +37,7 @@
 <script type="text/javascript">//<![CDATA[
 	var stxhr = new XHR();
 
-	function command_run(id)
+	function command_run(ev, id)
 	{
 		var args;
 		var field = document.getElementById(id);
@@ -83,9 +83,11 @@
 				}
 			);
 		}
+
+		ev.preventDefault();
 	}
 
-	function command_download(id)
+	function command_download(ev, id)
 	{
 		var args;
 		var field = document.getElementById(id);
@@ -93,9 +95,11 @@
 			args = encodeURIComponent(field.value);
 
 		location.href = '<%=url('admin/system/commands/download')%>/' + id + (args ? '/' + args : '');
+
+		ev.preventDefault();
 	}
 
-	function command_link(id)
+	function command_link(ev, id)
 	{
 		var legend = document.getElementById('command-rc-legend');
 		var output = document.getElementById('command-rc-output');
@@ -122,6 +126,8 @@
 
 			location.hash = '#output';
 		}
+
+		ev.preventDefault();
 	}
 
 //]]></script>
@@ -156,10 +162,10 @@
 						<p><%:Arguments:%> <input type="text" id="<%=command['.name']%>" /></p>
 					<% end %>
 					<div>
-						<button class="cbi-button cbi-button-apply" onclick="command_run('<%=command['.name']%>')"><%:Run%></button>
-						<button class="cbi-button cbi-button-download" onclick="command_download('<%=command['.name']%>')"><%:Download%></button>
+						<button class="cbi-button cbi-button-apply" onclick="command_run(event, '<%=command['.name']%>')"><%:Run%></button>
+						<button class="cbi-button cbi-button-download" onclick="command_download(event, '<%=command['.name']%>')"><%:Download%></button>
 						<% if command.public == "1" then %>
-							<button class="cbi-button cbi-button-link" onclick="command_link('<%=command['.name']%>')"><%:Link%></button>
+							<button class="cbi-button cbi-button-link" onclick="command_link(event, '<%=command['.name']%>')"><%:Link%></button>
 						<% end %>
 					</div>
 				</div>
