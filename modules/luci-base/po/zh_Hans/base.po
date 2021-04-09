@@ -4,8 +4,8 @@
 #
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2021-04-05 07:55+0000\n"
-"Last-Translator: Meano Lee <meanocat@gmail.com>\n"
+"PO-Revision-Date: 2021-04-09 08:04+0000\n"
+"Last-Translator: Eric <spice2wolf@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "openwrt/luci/zh_Hans/>\n"
 "Language: zh_Hans\n"
@@ -236,23 +236,23 @@ msgstr "<abbr title=\"Media Access Control\">MAC</abbr> 地址"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:636
 msgid "<abbr title=\"Neighbour Discovery Protocol\">NDP</abbr>-Proxy"
-msgstr ""
+msgstr "<abbr title=\"Neighbour Discovery Protocol\">NDP</abbr>代理"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:603
 msgid "<abbr title=\"Router Advertisement\">RA</abbr> Hop Limit"
-msgstr ""
+msgstr "<abbr title=\"Router Advertisement\">RA</abbr>跳数限制"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:585
 msgid "<abbr title=\"Router Advertisement\">RA</abbr> Lifetime"
-msgstr ""
+msgstr "<abbr title=\"Router Advertisement\">RA</abbr>生命周期"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:594
 msgid "<abbr title=\"Router Advertisement\">RA</abbr> MTU"
-msgstr ""
+msgstr "<abbr title=\"Router Advertisement\">RA</abbr>MTU"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:555
 msgid "<abbr title=\"Router Advertisement\">RA</abbr>-Service"
-msgstr ""
+msgstr "<abbr title=\"Router Advertisement\">RA</abbr>服务"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:514
 msgid "<abbr title=\"The DHCP Unique Identifier\">DUID</abbr>"
@@ -299,6 +299,13 @@ msgid ""
 "downstream, and uses <abbr title=\"Prefix Delegation\">PD</abbr> locally.</"
 "li></ul>"
 msgstr ""
+"<ul style=\"list-style-type:none;\"> <strong><li><服务器模式</strong>: "
+"路由器将自己广播为默认的IPv6网关发布，借助于 <abbr title=\"Router Advertisement, ICMPv6 Type "
+"134\">RA</abbr> 消息 (to <code>ff02::1</code>) 并提供 <abbr title=\"Prefix "
+"Delegation\">PD</abbr> 给下游设备。</li> <li><strong>中继模式</strong>: 路由从上游中继 <abbr "
+"title=\"Router Advertisement, ICMPv6 Type 134\">RA</abbr>，并扩展上游 (如 WAN) "
+"接口配置和前缀到下游 (如 LAN) 接口。</li> <li><strong>混合模式</strong>: "
+"路由器既做服务器又做中继；扩展上游配置和前缀到下游，并本地使用 <abbr title=\"Prefix Delegation\">PD</abbr>。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:625
 msgid ""
@@ -310,6 +317,11 @@ msgid ""
 "<li><strong>hybrid mode</strong>: Router does combination of server+relay.</"
 "li></ul>"
 msgstr ""
+"<ul style=\"list-style-type:none;\"> <li><strong>服务器模式</strong>: "
+"路由器分配IP并委托前缀(<abbr title=\"Prefix Delegation\">PD</abbr>) 到下游接口。</li> "
+"<li><strong>中继模式</strong>: 路由器中继WAN接口配置下游。帮助支持缺少<abbr title=\"Prefix "
+"Delegation\">PD</abbr>的上游链接。</li> <li><strong>混合模式</strong>: "
+"路由器做服务器+中继的组合。</li></ul>"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:480
 msgid "A configuration for the device \"%s\" already exists"
@@ -737,7 +749,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:673
 msgid "Always, even if no public prefix is available."
-msgstr ""
+msgstr "始终，即使没有可用的公共前缀。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:803
 msgid "Amount of Duplicate Address Detection probes to send"
@@ -749,7 +761,7 @@ msgstr "保存表单时出错:"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:125
 msgid "An optional, short description for this device"
-msgstr ""
+msgstr "此设备的可选简短说明"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1232
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:20
@@ -814,7 +826,7 @@ msgstr "Annex M G.992.5"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:673
 msgid "Announce as default router"
-msgstr ""
+msgstr "宣布为默认路由器"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:678
 msgid "Announced DNS domains"
@@ -1685,7 +1697,7 @@ msgstr "默认 %d"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:658
 msgid "Default is on."
-msgstr ""
+msgstr "Default 是开启的。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:612
 msgid ""
@@ -1697,6 +1709,11 @@ msgid ""
 "<li><strong>stateful-only</strong>: No SLAAC. Router assigns an IPv6 address "
 "to a host via DHCPv6.</li><ul>"
 msgstr ""
+"Default 是无状态+有状态。<br /> <ul style=\"list-style-type:none;\"> "
+"<li><strong>无状态</strong>: 路由器广播前缀，主机使用<abbr title=\"Stateless Address Auto "
+"Config\">SLAAC</abbr>来自分配自己的地址。无 DHCPv6。</li> <li><strong>无状态+ "
+"有状态</strong>:SLAAC。此外，路由器通过 DHCPv6 给一个主机分配一个 IPv6 地址。</li> "
+"<li><strong>仅有状态</strong>: 无 SLAAC。路由器通过 DHCPv6 给一个主机分配一个 IPv6 地址。</li><ul>"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/default-on.js:11
 msgid "Default state"
@@ -3692,7 +3709,7 @@ msgstr "学习"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:658
 msgid "Learn routes from NDP"
-msgstr ""
+msgstr "从 NDP 学习路由"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:511
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:520
@@ -4097,7 +4114,7 @@ msgstr "主设备"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:568
 msgid "Max <abbr title=\"Router Advertisement\">RA</abbr> interval"
-msgstr ""
+msgstr "最长<abbr title=\"Router Advertisement\">RA</abbr>间隔"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:22
 msgid "Max. Attainable Data Rate (ATTNDR)"
@@ -4143,6 +4160,8 @@ msgid ""
 "Advertisement, ICMPv6 Type 134\">RA</abbr>. Default is 600 seconds "
 "(<code>600</code>)."
 msgstr ""
+"发送未被请求的<abbr title=\"Router Advertisement, ICMPv6 Type 134\""
+">RA</abbr>间所允许的最长时间。默认值是600秒 (<code>600</code>)。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:893
 msgid "Maximum transmit power"
@@ -4206,7 +4225,7 @@ msgstr "跃点数"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:577
 msgid "Min <abbr title=\"Router Advertisement\">RA</abbr> interval"
-msgstr ""
+msgstr "最短<abbr title=\"Router Advertisement\">RA</abbr>间隔"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:788
 msgid "Minimum ARP validity time"
@@ -4228,6 +4247,8 @@ msgid ""
 "Advertisement, ICMPv6 Type 134\">RA</abbr>. Default is 200 seconds "
 "(<code>200</code>)."
 msgstr ""
+"发送未经请求的<abbr title=\"Router Advertisement, ICMPv6 Type 134\""
+">RA</abbr>间隔间所允许的最短时间。默认是200秒 (<code>200</code>)。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:202
 msgid "Mirror monitor port"
@@ -4409,7 +4430,7 @@ msgstr "NCM"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:661
 msgid "NDP-Proxy slave"
-msgstr ""
+msgstr "NDP 代理从机"
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:72
 msgid "NT Domain"
@@ -4681,7 +4702,7 @@ msgstr "注意：有些无线驱动程序不完全支持802.11w。例如，mwlwi
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:128
 msgid "Notes"
-msgstr ""
+msgstr "附注"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:174
 msgid "Notice"
@@ -4815,7 +4836,7 @@ msgstr "可选"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:128
 msgid "Optional, free-form notes about this device"
-msgstr ""
+msgstr "关于此设备的可选的自由格式的注释"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:97
 msgid ""
@@ -5862,6 +5883,25 @@ msgid ""
 "hosts.</li> <li><strong>hybrid mode</strong>: Relay mode is disabled unless "
 "the interface boolean <code>master</code> is 1.</li></ul>"
 msgstr ""
+"在内部恢复为禁用，如果没有布尔值 <code>ndproxy_slave</code> 设为1的接口。把 <abbr title=\"Neighbour "
+"Discovery Protocol\">NDP</abbr> 代理看作 IPv6 的 ARP 代理: 将不同物理硬件段的主机统一到同一个IP子网中。"
+"组成部分有 <abbr title=\"Neighbour Solicitation, Type 135\">NS</abbr> 和 <abbr "
+"title=\"Neighbour Advertisement, Type 136\">NA</abbr> 消息。<abbr title="
+"\"Neighbour Discovery Protocol\">NDP</abbr>-代理在一个接口上侦听 <abbr title="
+"\"Neighbour Solicitation, Type 135\">NS</abbr>，这个接口的布尔值 <code>master</code> "
+"被标记为1 (比如，上游)，然后查询那个目标IP的slave/内部接口，最后发送一条<abbr title=\"Neighbour "
+"Advertisement, Type 136\">NA</abbr> 消息。 <abbr title=\"Neighbour Discovery "
+"Protocol\">NDP</abbr> 是IPv6的有效ARP。 <abbr title=\"Neighbour Solicitation, "
+"Type 135\">NS</abbr> 和 <abbr title=\"Neighbour Advertisement, Type 136\">NA</"
+"abbr> 检测链路上的可达性和重复地址，它们本身也是SLAAC autoconfig 的先决条件。<br /> <ul style=\"list-"
+"style-type:none;\"> <li><strong>已禁用</strong>: 否 <abbr title=\"Neighbour "
+"Discovery Protocol\">NDP</abbr> 消息被代理到 <code>ndproxy_slave</code> 真实接口。</li> "
+"<li><strong>中继模式</strong>: 代理 <abbr title=\"Neighbour Discovery Protocol\""
+">NDP</abbr> 消息，方向是从 <code>master</code> 到 <code>ndproxy_slave</code> 真实接口。"
+"帮助支持没有<abbr title=\"Prefix Delegation\">PD</abbr>的提供者链接，以及到防火墙代理主机。</li> "
+"<li><strong>混合模式</strong>: 中继模式被禁用，除非接口的布尔 <code>master</code> 为 "
+"1。</li></ul></code> 为 1。</li></ul>以及到防火墙代理主机。</li> <li><strong>混合模式</strong>:"
+" 中继模式被禁用，除非接口的布尔 <code>master</code> 为 1。</li>ul>"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:673
 msgid "Robustness"
@@ -5897,11 +5937,13 @@ msgid ""
 "134\">RA</abbr> messages. Default is 1800 seconds (<code>1800</code>). Max "
 "9000 seconds."
 msgstr ""
+"路由生命周期，发布形式为<abbr title=\"Router Advertisement, ICMPv6 Type 134\""
+">RA</abbr>消息。默认值是1800秒(<code>1800</code>)。最长 9000 秒。"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js:46
 #: modules/luci-mod-system/root/usr/share/luci/menu.d/luci-mod-system.json:26
 msgid "Router Password"
-msgstr "主机密码"
+msgstr "路由器密码"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:15
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:197
@@ -6097,7 +6139,7 @@ msgstr "设置静态"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:661
 msgid "Set interface as NDP-Proxy external slave. Default is off."
-msgstr ""
+msgstr "将接口设置为NDP代理外部从机。 默认为关闭。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1006
 msgid ""
@@ -6566,7 +6608,7 @@ msgstr "静态地址分配"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:663
 msgid "Static NDP-Proxy prefixes"
-msgstr ""
+msgstr "静态NDP代理前缀"
 
 #: modules/luci-mod-network/root/usr/share/luci/menu.d/luci-mod-network.json:76
 msgid "Static Routes"
@@ -6762,6 +6804,9 @@ msgid ""
 "<abbr title=\"Router Advertisement, ICMPv6 Type 134\">RA</abbr> messages. "
 "Default is 0 (<code>0</code>). Min 1280."
 msgstr ""
+"将要发布的<abbr title=\"Maximum Transmission Unit\">MTU</abbr>，发布形式为<abbr title="
+"\"Router Advertisement, ICMPv6 Type 134\">RA</abbr>消息。默认值为0 "
+"(<code>0</code>)。最小值1280。"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:84
 msgid "The <em>block mount</em> command failed with code %d"
@@ -6958,6 +7003,8 @@ msgid ""
 "abbr> messages.<br>Default is 0 (<code>0</code>), meaning unspecified. Max "
 "255."
 msgstr ""
+"将以<abbr title=\"Router Advertisement\">RA</abbr>消息形式发布的最大跳数。<br>默认值为0 "
+"(<code>0</code>)，意味着未指定。最大值255。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1949
 msgid "The network name is already used"
@@ -7404,6 +7451,8 @@ msgid ""
 "analogous to IPv4 private network addressing. This prefix is randomly "
 "generated at first install."
 msgstr ""
+"唯一本地地址- 选取范围在<code>fc00::/7</code>。通常仅在&#8216;本地&#8217;半<code>fd00::/8</code>"
+"。用于IPv6的ULA与IPv4专用网络寻址类似。此前缀是在首次安装时随机生成的。"
 
 #: modules/luci-base/htdocs/luci-static/resources/network.js:2060
 #: modules/luci-compat/luasrc/model/network.lua:971
