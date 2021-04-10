@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LuCI: base\n"
 "POT-Creation-Date: 2010-05-09 01:01+0300\n"
-"PO-Revision-Date: 2021-04-09 08:04+0000\n"
-"Last-Translator: Anton Kikin <a.a.kikin@gmail.com>\n"
+"PO-Revision-Date: 2021-04-09 12:29+0000\n"
+"Last-Translator: The_BadUser <vanjavs@mail.ru>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/openwrt/luci/ru/>"
 "\n"
 "Language: ru\n"
@@ -239,7 +239,7 @@ msgstr "<abbr title=\"Управление доступом к носителю\
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:636
 msgid "<abbr title=\"Neighbour Discovery Protocol\">NDP</abbr>-Proxy"
-msgstr "<abbr title=\"Neighbour Discovery Protocol\">NDP</abbr>-Proxy"
+msgstr "<abbr title=\"Протокол обнаружения соседей\">NDP</abbr>-Proxy"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:603
 msgid "<abbr title=\"Router Advertisement\">RA</abbr> Hop Limit"
@@ -1128,7 +1128,7 @@ msgstr "Открытый туннель для этого интерфейса (
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:188
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:165
 msgid "Bitrate"
-msgstr "Скорость"
+msgstr "Битрейт"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:266
 msgid "Bogus NX Domain Override"
@@ -4060,7 +4060,7 @@ msgstr "Запуск пакетов и служб пользователя, пр
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/10_system.js:59
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:117
 msgid "Local Time"
-msgstr "Дата и время"
+msgstr "Местное время"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:747
 msgid "Local ULA"
@@ -4834,7 +4834,7 @@ msgstr "Не ассоциировано"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:32
 msgid "Not connected"
-msgstr "Не подключено"
+msgstr "Не подключен"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:46
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:81
@@ -6074,6 +6074,31 @@ msgid ""
 "hosts.</li> <li><strong>hybrid mode</strong>: Relay mode is disabled unless "
 "the interface boolean <code>master</code> is 1.</li></ul>"
 msgstr ""
+"Возвращается к внутреннему отключению, если нет интерфейсов с логическим "
+"значением <code>ndproxy_slave</code>, равным 1. Подумайте о проксе <abbr "
+"title=\"Протокол обнаружения соседей\">NDP</abbr> как о прокси ARP для IPv6: "
+"объедините хосты на разных сегментах физического оборудования в одну IP-"
+"подсеть. Состоит из сообщений <abbr title=\"Neighbour Solicitation, Type "
+"135\">NS</abbr> и <abbr title=\"Neighbour Advertisement, Type 136\">NA</"
+"abbr>. Прокси <abbr title=\"Протокол обнаружения соседей\">NDP</abbr> "
+"прослушивает <abbr title=\"Neighbour Solicitation, Type 135\">NS</abbr> на "
+"интерфейсе, помеченном логическим <code>master</code> как 1 (т.е. upstream), "
+"затем запрашивает ведомые/внутренние интерфейсы для этого целевого IP перед "
+"тем, как, наконец, послать сообщение <abbr title=\"Neighbour Advertisement, "
+"Type 136\">NA</abbr>. <abbr title=\"Протокол обнаружения соседей\">NDP</"
+"abbr> - это фактически ARP для IPv6. <abbr title=\"Neighbour Solicitation, "
+"Type 135\">NS</abbr> и <abbr title=\"Neighbour Advertisement, Type 136\">NA</"
+"abbr> обнаруживают достижимость и дублируют адреса на канале связи, что само "
+"по себе также является необходимым условием для автоконфигурации SLAAC.<br /"
+"> <ul style=\"list-style-type:none;\"> <li><strong>disabled</strong>: "
+"Никакие <abbr title=\"Протокол обнаружения соседей\">NDP</abbr> сообщения не "
+"проксируются через true интерфейсы <code>ndproxy_slave</code>.</li> "
+"<li><strong>режим реле</strong>: Сообщения прокси <abbr title=\"Протокол "
+"обнаружения соседей\">NDP</abbr> из <code>master</code> через true "
+"интерфейсы <code>ndproxy_slave</code>. Helps to support provider links "
+"without <abbr title=\"Prefix Delegation\">PD</abbr>, and to firewall proxied "
+"hosts.</li> <li><strong>гибридный режим</strong>: Режим реле отключен, если "
+"логический интерфейс <code>master</code> является 1.</li></ul>"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:673
 msgid "Robustness"
@@ -7806,7 +7831,7 @@ msgstr "Задержка включения интерфейса"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:3881
 msgid "Upload"
-msgstr "Загрузка"
+msgstr "Загрузить"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:413
 msgid ""
@@ -8267,7 +8292,7 @@ msgstr "WireGuard VPN"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:10
 #: modules/luci-mod-status/root/usr/share/luci/menu.d/luci-mod-status.json:118
 msgid "Wireless"
-msgstr "Wi-Fi"
+msgstr "Беспроводная"
 
 #: modules/luci-base/htdocs/luci-static/resources/network.js:2951
 #: modules/luci-compat/luasrc/model/network.lua:1419
