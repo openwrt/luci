@@ -83,6 +83,10 @@ elseif targetDNS == "dnsmasq.conf" then
 	outputFile="/var/dnsmasq.d/" .. packageName .. ""
 	outputCache="/var/run/" .. packageName .. ".dnsmasq.cache"
 	outputGzip="/etc/" .. packageName .. ".dnsmasq.gz"
+elseif targetDNS == "dnsmasq.ipset" then
+	outputFile="/var/dnsmasq.d/" .. packageName .. ".ipset"
+	outputCache="/var/run/" .. packageName .. ".ipset.cache"
+	outputGzip="/etc/" .. packageName .. ".ipset.gz"
 elseif targetDNS == "dnsmasq.servers" then
 	outputFile="/var/run/" .. packageName .. ".servers"
 	outputCache="/var/run/" .. packageName .. ".servers.cache"
