@@ -5,7 +5,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_LICENSE:=GPL-3.0-or-later
 PKG_MAINTAINER:=Stan Grishin <stangri@melmac.net>
-PKG_VERSION:=1.8.5-1
+PKG_VERSION:=1.8.7-3
 
 LUCI_TITLE:=Simple Adblock Web UI
 LUCI_DESCRIPTION:=Provides Web UI for simple-adblock service.
