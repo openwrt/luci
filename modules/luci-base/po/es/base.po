@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-06-10 03:41+0200\n"
-"PO-Revision-Date: 2021-04-10 02:06+0000\n"
+"PO-Revision-Date: 2021-04-11 16:26+0000\n"
 "Last-Translator: Franco Castillo <castillofrancodamian@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/openwrt/luci/es/>"
 "\n"
@@ -291,6 +291,7 @@ msgstr ""
 "estaba vacío antes de editar."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:555
+#, fuzzy
 msgid ""
 "<ul style=\"list-style-type:none;\"> <li><strong>server mode</strong>: "
 "Router advertises itself as the default IPv6 gateway via <abbr title="
@@ -304,8 +305,21 @@ msgid ""
 "downstream, and uses <abbr title=\"Prefix Delegation\">PD</abbr> locally.</"
 "li></ul>"
 msgstr ""
+"<ul style=\"list-style-type:none;\"> <li><strong>Modo servidor</strong>: El "
+"enrutador se anuncia a sí mismo como la puerta de enlace IPv6 predeterminada "
+"a través de mensajes <abbr title=\"Router Advertisement, ICMPv6 Type 134\""
+">RA</abbr> (to <code>ff02::1</code>) y proporciona <abbr title=\"Prefix "
+"Delegation\">PD</abbr> a los dispositivos descendentes.</li> "
+"<li><strong>Modo relé</strong>: El enrutador reenvía <abbr title=\"Prefix "
+"Delegation\">PD</abbr> desde el flujo ascendente y extiende la configuración "
+"de la interfaz ascendente (p. Ej., WAN) y el prefijo a las interfaces "
+"descendentes (p. e., LAN) </li> <li><strong>Mod híbrido</strong>: El "
+"enrutador hace tanto servidor + retransmisión; extiende la configuración "
+"ascendente y el prefijo descendente, y usa <abbr title=\"Prefix Delegation\""
+">PD</abbr> localmente.</li></ul>"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:625
+#, fuzzy
 msgid ""
 "<ul style=\"list-style-type:none;\"> <li><strong>server mode</strong>: "
 "Router assigns IPs and delegates prefixes (<abbr title=\"Prefix Delegation"
@@ -315,6 +329,14 @@ msgid ""
 "<li><strong>hybrid mode</strong>: Router does combination of server+relay.</"
 "li></ul>"
 msgstr ""
+"<ul style=\"list-style-type:none;\"> <li><strong>Modo servidor</strong>: El "
+"enrutador asigna direcciones IP y delega prefijos (<abbr title=\"Prefix "
+"Delegation\">PD</abbr>) a interfaces descendentes.</li> <li><strong>Modo "
+"relé</strong>: El enrutador retransmite la configuración de la interfaz WAN "
+"en sentido descendente. Ayuda a soportar enlaces ascendentes que carecen "
+"<abbr title=\"Prefix Delegation\">PD</abbr>.</li> <li><strong>Modo "
+"híbrido</strong>: El enrutador hace una combinación de servidor + "
+"relé.</li></ul>"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:480
 msgid "A configuration for the device \"%s\" already exists"
@@ -4575,7 +4597,7 @@ msgstr "NCM"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:661
 msgid "NDP-Proxy slave"
-msgstr ""
+msgstr "Esclavo de Proxy NDP"
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:72
 msgid "NT Domain"
@@ -6306,8 +6328,11 @@ msgid "Set Static"
 msgstr "Establecer estática"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:661
+#, fuzzy
 msgid "Set interface as NDP-Proxy external slave. Default is off."
 msgstr ""
+"Configure la interfaz como esclavo externo de Proxy NDP. El valor "
+"predeterminado es desactivado."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1006
 msgid ""
@@ -6827,7 +6852,7 @@ msgstr "Asignaciones estáticas"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:663
 msgid "Static NDP-Proxy prefixes"
-msgstr ""
+msgstr "Prefijos de Proxy NDP estáticos"
 
 #: modules/luci-mod-network/root/usr/share/luci/menu.d/luci-mod-network.json:76
 msgid "Static Routes"
@@ -7023,11 +7048,15 @@ msgid "Terminate"
 msgstr "Terminar"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:594
+#, fuzzy
 msgid ""
 "The <abbr title=\"Maximum Transmission Unit\">MTU</abbr> to be published in "
 "<abbr title=\"Router Advertisement, ICMPv6 Type 134\">RA</abbr> messages. "
 "Default is 0 (<code>0</code>). Min 1280."
 msgstr ""
+"La <abbr title=\"Maximum Transmission Unit\">MTU</abbr> que se publicará en "
+"los mensajes <abbr title=\"Router Advertisement, ICMPv6 Type 134\">RA</"
+"abbr>. El valor predeterminado es 0 (<code>0</code>). Mínimo 1280."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:84
 msgid "The <em>block mount</em> command failed with code %d"
@@ -7246,11 +7275,15 @@ msgstr ""
 "distribuyen en un intervalo mayor"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:603
+#, fuzzy
 msgid ""
 "The maximum hops to be published in <abbr title=\"Router Advertisement\">RA</"
 "abbr> messages.<br>Default is 0 (<code>0</code>), meaning unspecified. Max "
 "255."
 msgstr ""
+"El número máximo de saltos que se publicarán en los mensajes <abbr title="
+"\"Router Advertisement\">RA</abbr>.<br>El valor predeterminado es 0 "
+"(<code>0</code>), es decir, no especificado. Máximo 255."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1949
 msgid "The network name is already used"
