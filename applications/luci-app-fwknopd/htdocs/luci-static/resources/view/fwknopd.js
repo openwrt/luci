@@ -591,6 +591,9 @@ return view.extend({
 							This makes it impossible to use the -s command line argument on the fwknop client command line, so either -R \
 							has to be used to automatically resolve the external address (if the client behind a NAT) or the client must \
 							know the external IP and set it via the -a argument.'));
+		s:option(YNValue, 'ENABLE_CMD_EXEC', 'ENABLE_CMD_EXEC', _('This instructs fwknopd to accept complete commands that are contained within an authorization packet. \
+							Any such command will be executed on the fwknopd server as the user specified by the “CMD_EXEC_USER” or as the user \
+							that started fwknopd if that is not set.'));
 
 		s = m.section(form.TypedSection, 'config', _('fwknopd.conf config options'));
 		s.anonymous=true;
