@@ -601,7 +601,7 @@ return view.extend({
 					so.depends('ra', 'relay');
 
 					so = ss.taboption('ipv6', form.Value, 'ra_hoplimit', _('<abbr title="Router Advertisement">RA</abbr> Hop Limit'), _('The maximum hops \
-						to be published in <abbr title="Router Advertisement">RA</abbr> messages.<br>Default is 0 (<code>0</code>), meaning unspecified.\
+						to be published in <abbr title="Router Advertisement">RA</abbr> messages.<br />Default is 0 (<code>0</code>), meaning unspecified.\
 						Max 255.'));
 					so.optional = true;
 					so.default = '0';
@@ -614,7 +614,7 @@ return view.extend({
 						<li><strong>stateless</strong>: Router advertises prefixes, host uses <abbr title="Stateless Address Auto Config">SLAAC</abbr> \
 						to self assign its own address. No DHCPv6.</li>\
 						<li><strong>stateless + stateful</strong>: SLAAC. In addition, router assigns an IPv6 address to a host via DHCPv6.</li>\
-						<li><strong>stateful-only</strong>:  No SLAAC. Router assigns an IPv6 address to a host via DHCPv6.</li><ul>'));
+						<li><strong>stateful-only</strong>:  No SLAAC. Router assigns an IPv6 address to a host via DHCPv6.</li></ul>'));
 					so.value('0', _('stateless'));
 					so.value('1', _('stateless + stateful'));
 					so.value('2', _('stateful-only'));
