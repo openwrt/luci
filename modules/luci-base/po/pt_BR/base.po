@@ -335,13 +335,13 @@ msgid ""
 "li></ul>"
 msgstr ""
 "<ul style=\"list-style-type:none;\"> <li><strong> Modo servidor</strong>: O "
-"roteador atribui os IPs e delega os prefixos (<abbr title=\"Prefix "
-"Delegation\">PD</abbr>) para as interfaces dos dispositivos.</li> "
-"<li><strong>modo de distribuição</strong>: O roteador distribui a "
-"configuração da interface WAN para os dispositivos. Ajuda o suporte dos "
-"links que não possuem <abbr title=\"Prefix Delegation\">PD</abbr> (delegação "
-"de prefixo).</li> <li><strong>modo híbrido</strong>: O roteador faz a "
-"combinação de servidor+distribuidor.</li></ul>"
+"roteador atribui os IPs e delega os prefixos (<abbr title=\"Prefix Delegation"
+"\">PD</abbr>) para as interfaces dos dispositivos.</li> <li><strong>modo de "
+"distribuição</strong>: O roteador distribui a configuração da interface WAN "
+"para os dispositivos. Ajuda o suporte dos links que não possuem <abbr title="
+"\"Prefix Delegation\">PD</abbr> (delegação de prefixo).</li> "
+"<li><strong>modo híbrido</strong>: O roteador faz a combinação de servidor"
+"+distribuidor.</li></ul>"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:480
 msgid "A configuration for the device \"%s\" already exists"
@@ -1800,16 +1800,8 @@ msgid ""
 "address. No DHCPv6.</li> <li><strong>stateless + stateful</strong>: SLAAC. "
 "In addition, router assigns an IPv6 address to a host via DHCPv6.</li> "
 "<li><strong>stateful-only</strong>: No SLAAC. Router assigns an IPv6 address "
-"to a host via DHCPv6.</li><ul>"
+"to a host via DHCPv6.</li></ul>"
 msgstr ""
-"O padrão é stateless + stateful<br /> <ul style=\"list-style-type:none;\"> "
-"<li><strong>stateless</strong>: O roteador faz o anúncio dos prefixos, o "
-"host usa <abbr title=\"Stateless Address Auto Config\">SLAAC</abbr> para "
-"atribuir o seu próprio endereço automaticamente. No DHCPv6.</li> "
-"<li>>strong>stateless + stateful</strong>: Com SLAAC. Além disso, o roteador "
-"atribui um endereço IPv6 a um host através do DHCPv6.</li>> <li><strong"
-">stateful-only</strong>: Sem o SLAAC. O roteador atribui um endereço IPv6 a "
-"um host através do DHCPv6.</li><ul>"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/default-on.js:11
 msgid "Default state"
@@ -2940,7 +2932,7 @@ msgstr "Opção global de rede"
 
 #: themes/luci-theme-bootstrap/luasrc/view/themes/bootstrap/header.htm:57
 #: themes/luci-theme-material/luasrc/view/themes/material/header.htm:215
-#: themes/luci-theme-openwrt-2020/luasrc/view/themes/openwrt2020/header.htm:58
+#: themes/luci-theme-openwrt-2020/luasrc/view/themes/openwrt2020/header.htm:62
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:82
 msgid "Go to password configuration..."
 msgstr "Ir para a configuração de senha..."
@@ -4356,9 +4348,9 @@ msgid ""
 "Advertisement, ICMPv6 Type 134\">RA</abbr>. Default is 600 seconds "
 "(<code>600</code>)."
 msgstr ""
-"O tempo máximo permitido entre o envio não solicitado do <abbr title=\"Router"
-" Advertisement, ICMPv6 Type 134\">RA</abbr>. O tempo predefinido são 600 "
-"segundos (<code>600</code>)."
+"O tempo máximo permitido entre o envio não solicitado do <abbr title="
+"\"Router Advertisement, ICMPv6 Type 134\">RA</abbr>. O tempo predefinido são "
+"600 segundos (<code>600</code>)."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:893
 msgid "Maximum transmit power"
@@ -4446,9 +4438,9 @@ msgid ""
 "Advertisement, ICMPv6 Type 134\">RA</abbr>. Default is 200 seconds "
 "(<code>200</code>)."
 msgstr ""
-"O tempo mínimo permitido entre o envio não solicitado do <abbr title=\"Router"
-" Advertisement, ICMPv6 Type 134\">RA</abbr>. O tempo predefinido são 200 "
-"segundos (<code>200</code>)."
+"O tempo mínimo permitido entre o envio não solicitado do <abbr title="
+"\"Router Advertisement, ICMPv6 Type 134\">RA</abbr>. O tempo predefinido são "
+"200 segundos (<code>200</code>)."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:202
 msgid "Mirror monitor port"
@@ -4656,7 +4648,7 @@ msgstr "Nome"
 msgid "Name of the new network"
 msgstr "Nome da nova rede"
 
-#: themes/luci-theme-openwrt-2020/luasrc/view/themes/openwrt2020/header.htm:40
+#: themes/luci-theme-openwrt-2020/luasrc/view/themes/openwrt2020/header.htm:44
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:50
 msgid "Navigation"
 msgstr "Navegação"
@@ -4808,7 +4800,7 @@ msgstr "Nenhum cache negativo"
 
 #: themes/luci-theme-bootstrap/luasrc/view/themes/bootstrap/header.htm:54
 #: themes/luci-theme-material/luasrc/view/themes/material/header.htm:212
-#: themes/luci-theme-openwrt-2020/luasrc/view/themes/openwrt2020/header.htm:55
+#: themes/luci-theme-openwrt-2020/luasrc/view/themes/openwrt2020/header.htm:59
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:79
 msgid "No password set!"
 msgstr "Nenhuma senha definida!"
@@ -6137,21 +6129,22 @@ msgstr ""
 "seja, o principal), depois consulta as interfaces escravo/interno para este "
 "IP alvo antes de finalmente enviar uma mensagem <abbr title=\"Neighbour "
 "Advertisement, Type 136\">NA</abbr>. <abbr title=\"Neighbour Discovery "
-"Protocol\">O NDP</abbr> é um ARP efetivo para o IPv6. <abbr title=\"Neighbour"
-" Solicitation, Type 135\">NS</abbr> e <abbr title=\"Neighbour Advertisement, "
-"Type 136\">NA</abbr> detectam se os endereços são alcançáveis e se estão "
-"duplicados em um enlace, é um pré-requisito próprio para a auto configuração "
-"do SLAAC.<br /> <ul style=\"list-style-type:none;\"> <li><strong> "
-"desativado</strong>: Não as mensagens do <abbr title=\"Neighbour Discovery "
-"Protocol\">NDP</abbr> são enviadas pelas interfaces verdadeiras do proxy "
-"<code>ndproxy_slave</code>.</li> <li><strong>modo de distribuição</strong>: "
-"As mensagens dos proxies <abbr title=\"Neighbour Discovery Protocol\">NDP</"
-"abbr> a partir das interfaces verdadeiras do <code>master</code> para o "
-"<code>ndproxy_slave</code>. Ajuda a compatibilidade dos provedores dos "
-"enlaces sem <abbr title=\"Prefix Delegation\">PD</abbr> e para os hosts que "
-"forem um proxy do firewall.</li> <li><strong>modo híbrido</strong>: O modo "
-"de distribuição está desativado até que a interface <code>master</code> "
-"tenha um valor boleano igual a 1.</li></ul>"
+"Protocol\">O NDP</abbr> é um ARP efetivo para o IPv6. <abbr title="
+"\"Neighbour Solicitation, Type 135\">NS</abbr> e <abbr title=\"Neighbour "
+"Advertisement, Type 136\">NA</abbr> detectam se os endereços são alcançáveis "
+"e se estão duplicados em um enlace, é um pré-requisito próprio para a auto "
+"configuração do SLAAC.<br /> <ul style=\"list-style-type:none;\"> "
+"<li><strong> desativado</strong>: Não as mensagens do <abbr title="
+"\"Neighbour Discovery Protocol\">NDP</abbr> são enviadas pelas interfaces "
+"verdadeiras do proxy <code>ndproxy_slave</code>.</li> <li><strong>modo de "
+"distribuição</strong>: As mensagens dos proxies <abbr title=\"Neighbour "
+"Discovery Protocol\">NDP</abbr> a partir das interfaces verdadeiras do "
+"<code>master</code> para o <code>ndproxy_slave</code>. Ajuda a "
+"compatibilidade dos provedores dos enlaces sem <abbr title=\"Prefix "
+"Delegation\">PD</abbr> e para os hosts que forem um proxy do firewall.</li> "
+"<li><strong>modo híbrido</strong>: O modo de distribuição está desativado "
+"até que a interface <code>master</code> tenha um valor boleano igual a 1.</"
+"li></ul>"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:673
 msgid "Robustness"
@@ -6526,12 +6519,12 @@ msgstr "Tamanho do dispositivo ZRam em megabytes"
 msgid "Skip"
 msgstr "Pular"
 
-#: themes/luci-theme-openwrt-2020/luasrc/view/themes/openwrt2020/header.htm:36
+#: themes/luci-theme-openwrt-2020/luasrc/view/themes/openwrt2020/header.htm:40
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:46
 msgid "Skip to content"
 msgstr "Pular para o conteúdo"
 
-#: themes/luci-theme-openwrt-2020/luasrc/view/themes/openwrt2020/header.htm:35
+#: themes/luci-theme-openwrt-2020/luasrc/view/themes/openwrt2020/header.htm:39
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:45
 msgid "Skip to navigation"
 msgstr "Pular para a navegação"
@@ -7350,12 +7343,9 @@ msgstr ""
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:603
 msgid ""
 "The maximum hops to be published in <abbr title=\"Router Advertisement\">RA</"
-"abbr> messages.<br>Default is 0 (<code>0</code>), meaning unspecified. Max "
+"abbr> messages.<br />Default is 0 (<code>0</code>), meaning unspecified. Max "
 "255."
 msgstr ""
-"A quantidade máxima dos saltos que serão publicados nas mensagens do <abbr "
-"title=\"Router Advertisement\">RA</abbr>.<br>A predefinição é 0 "
-"(<code>0</code>) que significa indeterminado. Com o máximo de 255."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1949
 msgid "The network name is already used"
@@ -7491,7 +7481,7 @@ msgstr "Não há alterações a serem aplicadas"
 
 #: themes/luci-theme-bootstrap/luasrc/view/themes/bootstrap/header.htm:55
 #: themes/luci-theme-material/luasrc/view/themes/material/header.htm:213
-#: themes/luci-theme-openwrt-2020/luasrc/view/themes/openwrt2020/header.htm:56
+#: themes/luci-theme-openwrt-2020/luasrc/view/themes/openwrt2020/header.htm:60
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:80
 msgid ""
 "There is no password set on this router. Please configure a root password to "
@@ -9003,6 +8993,33 @@ msgstr "sim"
 #: modules/luci-compat/luasrc/view/cbi/delegator.htm:20
 msgid "« Back"
 msgstr "« Voltar"
+
+#~ msgid ""
+#~ "Default is stateless + stateful<br /> <ul style=\"list-style-type:none;"
+#~ "\"> <li><strong>stateless</strong>: Router advertises prefixes, host uses "
+#~ "<abbr title=\"Stateless Address Auto Config\">SLAAC</abbr> to self assign "
+#~ "its own address. No DHCPv6.</li> <li><strong>stateless + stateful</"
+#~ "strong>: SLAAC. In addition, router assigns an IPv6 address to a host via "
+#~ "DHCPv6.</li> <li><strong>stateful-only</strong>: No SLAAC. Router assigns "
+#~ "an IPv6 address to a host via DHCPv6.</li><ul>"
+#~ msgstr ""
+#~ "O padrão é stateless + stateful<br /> <ul style=\"list-style-type:none;"
+#~ "\"> <li><strong>stateless</strong>: O roteador faz o anúncio dos "
+#~ "prefixos, o host usa <abbr title=\"Stateless Address Auto Config\">SLAAC</"
+#~ "abbr> para atribuir o seu próprio endereço automaticamente. No DHCPv6.</"
+#~ "li> <li>>strong>stateless + stateful</strong>: Com SLAAC. Além disso, o "
+#~ "roteador atribui um endereço IPv6 a um host através do DHCPv6.</li>> "
+#~ "<li><strong>stateful-only</strong>: Sem o SLAAC. O roteador atribui um "
+#~ "endereço IPv6 a um host através do DHCPv6.</li><ul>"
+
+#~ msgid ""
+#~ "The maximum hops to be published in <abbr title=\"Router Advertisement"
+#~ "\">RA</abbr> messages.<br>Default is 0 (<code>0</code>), meaning "
+#~ "unspecified. Max 255."
+#~ msgstr ""
+#~ "A quantidade máxima dos saltos que serão publicados nas mensagens do "
+#~ "<abbr title=\"Router Advertisement\">RA</abbr>.<br>A predefinição é 0 "
+#~ "(<code>0</code>) que significa indeterminado. Com o máximo de 255."
 
 #~ msgid "Always announce default router"
 #~ msgstr "Sempre anuncie o roteador padrão"

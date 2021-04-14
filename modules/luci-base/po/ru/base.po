@@ -309,15 +309,15 @@ msgstr ""
 "<ul style=\"list-style-type:none;\"> <li><strong>режим сервера</strong>: "
 "Маршрутизатор объявляет себя в качестве IPv6 шлюза по умолчанию через <abbr "
 "title=\"Router Advertisement, ICMPv6 Type 134\">RA</abbr> сообщения (на "
-"адрес <code>ff02::1</code>) и предоставляет <abbr title=\"Prefix Delegation\""
-">PD</abbr> нижестоящим устройствам.</li> <li><strong>режим передачи</strong>:"
-" Маршрутизатор передаёт <abbr title=\"Router Advertisement, ICMPv6 Type 134\""
-">RA</abbr> с восходящего потока и расширяет конфигурацию интерфейсов "
-"восходящего потока (например, WAN) и префиксы для интерфейсов нисходящего "
-"потока (например, LAN).</li> <li><strong>гибридный режим</strong>: "
-"Маршрутизатор выполняет обе роли; расширяет конфигурацию и префиксы "
-"устройств и использует <abbr title=\"Prefix Delegation\">PD</abbr> "
-"локально.</li></ul>"
+"адрес <code>ff02::1</code>) и предоставляет <abbr title=\"Prefix Delegation"
+"\">PD</abbr> нижестоящим устройствам.</li> <li><strong>режим передачи</"
+"strong>: Маршрутизатор передаёт <abbr title=\"Router Advertisement, ICMPv6 "
+"Type 134\">RA</abbr> с восходящего потока и расширяет конфигурацию "
+"интерфейсов восходящего потока (например, WAN) и префиксы для интерфейсов "
+"нисходящего потока (например, LAN).</li> <li><strong>гибридный режим</"
+"strong>: Маршрутизатор выполняет обе роли; расширяет конфигурацию и префиксы "
+"устройств и использует <abbr title=\"Prefix Delegation\">PD</abbr> локально."
+"</li></ul>"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:625
 msgid ""
@@ -330,8 +330,8 @@ msgid ""
 "li></ul>"
 msgstr ""
 "<ul style=\"list-style-type:none;\"> <li><strong>режим сервера</strong>: "
-"Маршрутизатор назначает IP-адреса и делегирует префиксы (<abbr title=\"Prefix"
-" Delegation\">PD</abbr>) интерфейсам нисходящего потока.</li> "
+"Маршрутизатор назначает IP-адреса и делегирует префиксы (<abbr title="
+"\"Prefix Delegation\">PD</abbr>) интерфейсам нисходящего потока.</li> "
 "<li><strong>режим передачи</strong>: Маршрутизатор передаёт конфигурацию WAN "
 "интерфейса в нисходящих поток. Помогает поддерживать восходящие соединения, "
 "в которых отсутствует <abbr title=\"Prefix Delegation\">PD</abbr>.</li> "
@@ -1785,17 +1785,8 @@ msgid ""
 "address. No DHCPv6.</li> <li><strong>stateless + stateful</strong>: SLAAC. "
 "In addition, router assigns an IPv6 address to a host via DHCPv6.</li> "
 "<li><strong>stateful-only</strong>: No SLAAC. Router assigns an IPv6 address "
-"to a host via DHCPv6.</li><ul>"
+"to a host via DHCPv6.</li></ul>"
 msgstr ""
-"Значение по умолчанию — 'без и с сохранением состояния'.<ul style=\"list-"
-"style-type:none;\"> <li><strong>без сохранения состояния</strong>: "
-"Маршрутизатор объявляет префиксы, хост использует <abbr title=\"Stateless "
-"Address Auto Config\">SLAAC</abbr> для самостоятельного назначения своего "
-"адреса. DHCPv6 не используется.</li> <li><strong>без и с сохранением "
-"состояния</strong>: В дополнение к SLAAC маршрутизатор назначает IPv6-адрес "
-"хосту через DHCPv6.</li> <li><strong>только с сохранением состояния</strong>:"
-" SLAAC не используется. Маршрутизатор назначает IPv6-адрес хосту через "
-"DHCPv6.</li><ul>"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/default-on.js:11
 msgid "Default state"
@@ -2908,7 +2899,7 @@ msgstr "Основные настройки сети"
 
 #: themes/luci-theme-bootstrap/luasrc/view/themes/bootstrap/header.htm:57
 #: themes/luci-theme-material/luasrc/view/themes/material/header.htm:215
-#: themes/luci-theme-openwrt-2020/luasrc/view/themes/openwrt2020/header.htm:58
+#: themes/luci-theme-openwrt-2020/luasrc/view/themes/openwrt2020/header.htm:62
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:82
 msgid "Go to password configuration..."
 msgstr "Перейти к настройке пароля..."
@@ -4610,7 +4601,7 @@ msgstr "Название"
 msgid "Name of the new network"
 msgstr "Имя новой сети"
 
-#: themes/luci-theme-openwrt-2020/luasrc/view/themes/openwrt2020/header.htm:40
+#: themes/luci-theme-openwrt-2020/luasrc/view/themes/openwrt2020/header.htm:44
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:50
 msgid "Navigation"
 msgstr "Навигация"
@@ -4762,7 +4753,7 @@ msgstr "Отключить кэш отрицательных ответов"
 
 #: themes/luci-theme-bootstrap/luasrc/view/themes/bootstrap/header.htm:54
 #: themes/luci-theme-material/luasrc/view/themes/material/header.htm:212
-#: themes/luci-theme-openwrt-2020/luasrc/view/themes/openwrt2020/header.htm:55
+#: themes/luci-theme-openwrt-2020/luasrc/view/themes/openwrt2020/header.htm:59
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:79
 msgid "No password set!"
 msgstr "Пароль не установлен!"
@@ -6466,12 +6457,12 @@ msgstr "Размер ZRam в мегабайтах"
 msgid "Skip"
 msgstr "Пропустить"
 
-#: themes/luci-theme-openwrt-2020/luasrc/view/themes/openwrt2020/header.htm:36
+#: themes/luci-theme-openwrt-2020/luasrc/view/themes/openwrt2020/header.htm:40
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:46
 msgid "Skip to content"
 msgstr "Перейти к содержимому"
 
-#: themes/luci-theme-openwrt-2020/luasrc/view/themes/openwrt2020/header.htm:35
+#: themes/luci-theme-openwrt-2020/luasrc/view/themes/openwrt2020/header.htm:39
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:45
 msgid "Skip to navigation"
 msgstr "Перейти к навигации"
@@ -7280,12 +7271,9 @@ msgstr ""
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:603
 msgid ""
 "The maximum hops to be published in <abbr title=\"Router Advertisement\">RA</"
-"abbr> messages.<br>Default is 0 (<code>0</code>), meaning unspecified. Max "
+"abbr> messages.<br />Default is 0 (<code>0</code>), meaning unspecified. Max "
 "255."
 msgstr ""
-"Максимальное число прыжков, публикуемое в <abbr title=\"Router "
-"Advertisement\">RA</abbr> сообщениях. По умолчанию 0 (<code>0</code>), то "
-"есть не определено. Максимальное значение 255."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1949
 msgid "The network name is already used"
@@ -7418,7 +7406,7 @@ msgstr "Нет изменений для применения"
 
 #: themes/luci-theme-bootstrap/luasrc/view/themes/bootstrap/header.htm:55
 #: themes/luci-theme-material/luasrc/view/themes/material/header.htm:213
-#: themes/luci-theme-openwrt-2020/luasrc/view/themes/openwrt2020/header.htm:56
+#: themes/luci-theme-openwrt-2020/luasrc/view/themes/openwrt2020/header.htm:60
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:80
 msgid ""
 "There is no password set on this router. Please configure a root password to "
@@ -8919,6 +8907,34 @@ msgstr "да"
 #: modules/luci-compat/luasrc/view/cbi/delegator.htm:20
 msgid "« Back"
 msgstr "« Назад"
+
+#~ msgid ""
+#~ "Default is stateless + stateful<br /> <ul style=\"list-style-type:none;"
+#~ "\"> <li><strong>stateless</strong>: Router advertises prefixes, host uses "
+#~ "<abbr title=\"Stateless Address Auto Config\">SLAAC</abbr> to self assign "
+#~ "its own address. No DHCPv6.</li> <li><strong>stateless + stateful</"
+#~ "strong>: SLAAC. In addition, router assigns an IPv6 address to a host via "
+#~ "DHCPv6.</li> <li><strong>stateful-only</strong>: No SLAAC. Router assigns "
+#~ "an IPv6 address to a host via DHCPv6.</li><ul>"
+#~ msgstr ""
+#~ "Значение по умолчанию — 'без и с сохранением состояния'.<ul style=\"list-"
+#~ "style-type:none;\"> <li><strong>без сохранения состояния</strong>: "
+#~ "Маршрутизатор объявляет префиксы, хост использует <abbr title=\"Stateless "
+#~ "Address Auto Config\">SLAAC</abbr> для самостоятельного назначения своего "
+#~ "адреса. DHCPv6 не используется.</li> <li><strong>без и с сохранением "
+#~ "состояния</strong>: В дополнение к SLAAC маршрутизатор назначает IPv6-"
+#~ "адрес хосту через DHCPv6.</li> <li><strong>только с сохранением "
+#~ "состояния</strong>: SLAAC не используется. Маршрутизатор назначает IPv6-"
+#~ "адрес хосту через DHCPv6.</li><ul>"
+
+#~ msgid ""
+#~ "The maximum hops to be published in <abbr title=\"Router Advertisement"
+#~ "\">RA</abbr> messages.<br>Default is 0 (<code>0</code>), meaning "
+#~ "unspecified. Max 255."
+#~ msgstr ""
+#~ "Максимальное число прыжков, публикуемое в <abbr title=\"Router "
+#~ "Advertisement\">RA</abbr> сообщениях. По умолчанию 0 (<code>0</code>), то "
+#~ "есть не определено. Максимальное значение 255."
 
 #~ msgid "Always announce default router"
 #~ msgstr "Объявлять всегда, как маршрутизатор по умолчанию"

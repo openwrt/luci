@@ -299,14 +299,15 @@ msgid ""
 "downstream, and uses <abbr title=\"Prefix Delegation\">PD</abbr> locally.</"
 "li></ul>"
 msgstr ""
-"<ul style=\"list-style-type:none;\"> <li><strong>服务器模式</strong>：路由器通过 <abbr "
-"title=\"Router Advertisement, ICMPv6 Type 134\">RA</abbr> 报文（发送至 "
-"<code>ff02::1</code>）宣传自己是默认的 IPv6 网关，并向下游设备提供 <abbr title=\"Prefix "
-"Delegation\">PD</abbr>。</li> <li><strong>中继模式</strong>：路由器从上游中继 <abbr title="
-"\"Router Advertisement, ICMPv6 Type 134\""
-">RA</abbr>，并将上游（如WAN）接口的配置和前缀扩展到下游（如LAN）接口。</li> "
-"<li><strong>混合模式</strong>：路由器同时做服务器+中继，将上游配置和前缀扩展到下游，并在本地使用 <abbr title="
-"\"Prefix Delegation\">PD</abbr>。</li></ul>"
+"<ul style=\"list-style-type:none;\"> <li><strong>服务器模式</strong>：路由器"
+"通过 <abbr title=\"Router Advertisement, ICMPv6 Type 134\">RA</abbr> 报文（发"
+"送至 <code>ff02::1</code>）宣传自己是默认的 IPv6 网关，并向下游设备提供 "
+"<abbr title=\"Prefix Delegation\">PD</abbr>。</li> <li><strong>中继模式</"
+"strong>：路由器从上游中继 <abbr title=\"Router Advertisement, ICMPv6 Type "
+"134\">RA</abbr>，并将上游（如WAN）接口的配置和前缀扩展到下游（如LAN）接口。</"
+"li> <li><strong>混合模式</strong>：路由器同时做服务器+中继，将上游配置和前缀"
+"扩展到下游，并在本地使用 <abbr title=\"Prefix Delegation\">PD</abbr>。</li></"
+"ul>"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:625
 msgid ""
@@ -318,11 +319,11 @@ msgid ""
 "<li><strong>hybrid mode</strong>: Router does combination of server+relay.</"
 "li></ul>"
 msgstr ""
-"<ul style=\"list-style-type:none;\"> "
-"<li><strong>服务器模式</strong>：路由器向下游接口分配IP和委托前缀（<abbr title=\"Prefix "
-"Delegation\">PD</abbr>）。</li> <li><strong>中继模式</strong>：路由器向下游中继 WAN 接口的配置，"
-"以支持缺少 <abbr title=\"Prefix Delegation\">PD</abbr> 的上行链路。</li> "
-"<li><strong>混合模式</strong>：服务器+中继的组合。</li></ul>"
+"<ul style=\"list-style-type:none;\"> <li><strong>服务器模式</strong>：路由器"
+"向下游接口分配IP和委托前缀（<abbr title=\"Prefix Delegation\">PD</abbr>）。</"
+"li> <li><strong>中继模式</strong>：路由器向下游中继 WAN 接口的配置，以支持缺"
+"少 <abbr title=\"Prefix Delegation\">PD</abbr> 的上行链路。</li> <li><strong>"
+"混合模式</strong>：服务器+中继的组合。</li></ul>"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:480
 msgid "A configuration for the device \"%s\" already exists"
@@ -411,7 +412,9 @@ msgid ""
 "ATM bridges expose encapsulated ethernet in AAL5 connections as virtual "
 "Linux network interfaces which can be used in conjunction with DHCP or PPP "
 "to dial into the provider network."
-msgstr "ATM 桥是以 AAL5 协议封装以太网的虚拟 Linux 网桥，可与 DHCP 或 PPP 一同使用来连接到运营商网络。"
+msgstr ""
+"ATM 桥是以 AAL5 协议封装以太网的虚拟 Linux 网桥，可与 DHCP 或 PPP 一同使用来"
+"连接到运营商网络。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1319
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoa.js:62
@@ -630,17 +633,23 @@ msgstr "聚合选择逻辑"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:261
 msgid "Aggregator: All slaves down or has no slaves (stable, 0)"
-msgstr "聚合器：由最大聚合带宽选择，所有从属设备均离线或没有从属设备时重新进行选择（stable，0）"
+msgstr ""
+"聚合器：由最大聚合带宽选择，所有从属设备均离线或没有从属设备时重新进行选择"
+"（stable，0）"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:263
 msgid ""
 "Aggregator: Chosen by the largest number of ports + slave added/removed or "
 "state changes (count, 2)"
-msgstr "聚合器：由号码最大的从属设备选择，从属设备新增/删除或其状态变化时重新进行选择（count，2）"
+msgstr ""
+"聚合器：由号码最大的从属设备选择，从属设备新增/删除或其状态变化时重新进行选择"
+"（count，2）"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:262
 msgid "Aggregator: Slave added/removed or state changes (bandwidth, 1)"
-msgstr "聚合器：由最大聚合带宽选择，从属设备新增/删除或其状态变化时重新进行选择（bandwidth，1）"
+msgstr ""
+"聚合器：由最大聚合带宽选择，从属设备新增/删除或其状态变化时重新进行选择"
+"（bandwidth，1）"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:178
 msgid "Alert"
@@ -1211,7 +1220,9 @@ msgstr "证书约束（通配符）"
 msgid ""
 "Certificate constraint substring - e.g. /CN=wifi.mycompany.com<br />See "
 "`logread -f` during handshake for actual values"
-msgstr "证书约束子字符串 - 例如：/CN=wifi.mycompany.com<br />请参阅握手期间“logread -f”的实际值"
+msgstr ""
+"证书约束子字符串 - 例如：/CN=wifi.mycompany.com<br />请参阅握手期间“logread -"
+"f”的实际值"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1538
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1596
@@ -1232,7 +1243,9 @@ msgstr "针对 DNS SAN 值（如果可用）的证书约束<br />或主题 CN（
 msgid ""
 "Certificate constraint(s) via Subject Alternate Name values<br />(supported "
 "attributes: EMAIL, DNS, URI) - e.g. DNS:wifi.mycompany.com"
-msgstr "通过主题备用名称值（支持的属性：电子邮件、DNS、URI）<br />的证书约束 - 例如 DNS：wifi.mycompany.com"
+msgstr ""
+"通过主题备用名称值（支持的属性：电子邮件、DNS、URI）<br />的证书约束 - 例如 "
+"DNS：wifi.mycompany.com"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:54
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:57
@@ -1326,7 +1339,9 @@ msgstr "点击“生成备份”下载当前配置文件的 tar 存档。"
 msgid ""
 "Click \"Save mtdblock\" to download specified mtdblock file. (NOTE: THIS "
 "FEATURE IS FOR PROFESSIONALS! )"
-msgstr "点击“保存 mtdblock”以下载指定的 mtdblock 分区文件。（注意：此功能适用于专业人士！）"
+msgstr ""
+"点击“保存 mtdblock”以下载指定的 mtdblock 分区文件。（注意：此功能适用于专业人"
+"士！）"
 
 #: modules/luci-base/htdocs/luci-static/resources/network.js:3777
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:938
@@ -1430,9 +1445,11 @@ msgid ""
 "the basic rate. Supported rates lower than the minimum basic rate are not "
 "offered."
 msgstr ""
-"根据无线信号覆盖密度来配置数据速率。Normal（正常）：如果不使用旧的 802.11b 速率，则将基础速率配置为 6、12、24 Mbps，否则配置为 "
-"5.5、11 Mbps。High（高）：如果不使用旧的 802.11b 速率，则将基础速率配置为 12、24 Mbps，否则配置为 11 Mbps 速率。"
-"Very High（非常高）：配置 24 Mbps 为基础速率，不提供低于最低基础速率的支持速率。"
+"根据无线信号覆盖密度来配置数据速率。Normal（正常）：如果不使用旧的 802.11b 速"
+"率，则将基础速率配置为 6、12、24 Mbps，否则配置为 5.5、11 Mbps。High（高）："
+"如果不使用旧的 802.11b 速率，则将基础速率配置为 12、24 Mbps，否则配置为 11 "
+"Mbps 速率。Very High（非常高）：配置 24 Mbps 为基础速率，不提供低于最低基础速"
+"率的支持速率。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1064
 msgid "Configure…"
@@ -1698,13 +1715,8 @@ msgid ""
 "address. No DHCPv6.</li> <li><strong>stateless + stateful</strong>: SLAAC. "
 "In addition, router assigns an IPv6 address to a host via DHCPv6.</li> "
 "<li><strong>stateful-only</strong>: No SLAAC. Router assigns an IPv6 address "
-"to a host via DHCPv6.</li><ul>"
+"to a host via DHCPv6.</li></ul>"
 msgstr ""
-"默认为无状态 + 有状态。<br /> <ul style=\"list-style-type:none;\"> "
-"<li><strong>无状态</strong>：路由器广播前缀，主机使用 <abbr title=\"Stateless Address Auto "
-"Config\">SLAAC</abbr> 来自分配自己的地址，不使用 DHCPv6。</li> <li><strong>无状态 + "
-"有状态</strong>：使用 SLAAC 的同时，路由器通过 DHCPv6 给一个主机分配一个 IPv6 地址。</li> "
-"<li><strong>仅有状态</strong>：不使用 SLAAC，路由器通过 DHCPv6 给一个主机分配一个 IPv6 地址。</li><ul>"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/default-on.js:11
 msgid "Default state"
@@ -1716,8 +1728,8 @@ msgid ""
 "\"<code>6,192.168.2.1,192.168.2.2</code>\" which advertises different DNS "
 "servers to clients."
 msgstr ""
-"设置 DHCP 的附加选项，例如设定“<code>6,192.168.2.1,192.168.2.2</code>”表示通告不同的 DNS "
-"服务器给客户端。"
+"设置 DHCP 的附加选项，例如设定“<code>6,192.168.2.1,192.168.2.2</code>”表示通"
+"告不同的 DNS 服务器给客户端。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:575
 msgid ""
@@ -2080,7 +2092,8 @@ msgstr "动态隧道"
 msgid ""
 "Dynamically allocate DHCP addresses for clients. If disabled, only clients "
 "having static leases will be served."
-msgstr "为所有客户端提供 DHCP 服务。如果禁用，将只对具有静态租约的客户端提供服务。"
+msgstr ""
+"为所有客户端提供 DHCP 服务。如果禁用，将只对具有静态租约的客户端提供服务。"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/map.js:67
 msgid "EA-bits length"
@@ -2555,7 +2568,8 @@ msgstr "最终确认失败"
 msgid ""
 "Find all currently attached filesystems and swap and replace configuration "
 "with defaults based on what was detected"
-msgstr "查找当前系统上的所有文件系统和交换分区，并根据查找结果生成并替换现有配置"
+msgstr ""
+"查找当前系统上的所有文件系统和交换分区，并根据查找结果生成并替换现有配置"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:824
 msgid "Find and join network"
@@ -2792,7 +2806,7 @@ msgstr "全局网络选项"
 
 #: themes/luci-theme-bootstrap/luasrc/view/themes/bootstrap/header.htm:57
 #: themes/luci-theme-material/luasrc/view/themes/material/header.htm:215
-#: themes/luci-theme-openwrt-2020/luasrc/view/themes/openwrt2020/header.htm:58
+#: themes/luci-theme-openwrt-2020/luasrc/view/themes/openwrt2020/header.htm:62
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:82
 msgid "Go to password configuration..."
 msgstr "跳转到密码配置页…"
@@ -3293,9 +3307,9 @@ msgid ""
 "slow process as the swap-device cannot be accessed with the high datarates "
 "of the <abbr title=\"Random Access Memory\">RAM</abbr>."
 msgstr ""
-"如果物理内存不足，闲置数据可自动移到交换设备暂存，以增加可用的 <abbr title=\"Random Access Memory\""
-">RAM</abbr>。请注意：数据交换的过程会非常慢，因为交换设备无法像 <abbr title=\"Random Access Memory\""
-">RAM</abbr> 那样的高速地访问。"
+"如果物理内存不足，闲置数据可自动移到交换设备暂存，以增加可用的 <abbr title="
+"\"Random Access Memory\">RAM</abbr>。请注意：数据交换的过程会非常慢，因为交换"
+"设备无法像 <abbr title=\"Random Access Memory\">RAM</abbr> 那样的高速地访问。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:197
 msgid "Ignore <code>/etc/hosts</code>"
@@ -3499,7 +3513,9 @@ msgid ""
 "Interval in centiseconds between multicast general queries. By varying the "
 "value, an administrator may tune the number of IGMP messages on the subnet; "
 "larger values cause IGMP Queries to be sent less often"
-msgstr "组播常规查询之间的时间间隔（以毫秒为单位）。通过更改该值，管理员可以调整子网中 IGMP 消息的数量。 数值越大，IGMP 查询的发送频率越低"
+msgstr ""
+"组播常规查询之间的时间间隔（以毫秒为单位）。通过更改该值，管理员可以调整子网"
+"中 IGMP 消息的数量。 数值越大，IGMP 查询的发送频率越低"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:644
 msgid "Interval in seconds for STP hello packets"
@@ -3733,8 +3749,8 @@ msgid ""
 "interoperate. Airtime efficiency may be significantly reduced where these "
 "are used. It is recommended to not allow 802.11b rates where possible."
 msgstr ""
-"过时或性能欠佳的设备可能需要旧的 802.11b 速率才能互联。在使用这些速率的情况下，信道占用效率可能会显著降低。建议尽可能不使用 802.11b "
-"速率。"
+"过时或性能欠佳的设备可能需要旧的 802.11b 速率才能互联。在使用这些速率的情况"
+"下，信道占用效率可能会显著降低。建议尽可能不使用 802.11b 速率。"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4051
 msgid "Legend:"
@@ -4147,8 +4163,8 @@ msgid ""
 "Advertisement, ICMPv6 Type 134\">RA</abbr>. Default is 600 seconds "
 "(<code>600</code>)."
 msgstr ""
-"发送未被请求的<abbr title=\"Router Advertisement, ICMPv6 Type 134\""
-">RA</abbr>间所允许的最长时间。默认值是600秒 (<code>600</code>)。"
+"发送未被请求的<abbr title=\"Router Advertisement, ICMPv6 Type 134\">RA</abbr>"
+"间所允许的最长时间。默认值是600秒 (<code>600</code>)。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:893
 msgid "Maximum transmit power"
@@ -4234,8 +4250,8 @@ msgid ""
 "Advertisement, ICMPv6 Type 134\">RA</abbr>. Default is 200 seconds "
 "(<code>200</code>)."
 msgstr ""
-"发送未经请求的<abbr title=\"Router Advertisement, ICMPv6 Type 134\""
-">RA</abbr>间隔间所允许的最短时间。默认是200秒 (<code>200</code>)。"
+"发送未经请求的<abbr title=\"Router Advertisement, ICMPv6 Type 134\">RA</abbr>"
+"间隔间所允许的最短时间。默认是200秒 (<code>200</code>)。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:202
 msgid "Mirror monitor port"
@@ -4439,7 +4455,7 @@ msgstr "名称"
 msgid "Name of the new network"
 msgstr "新网络的名称"
 
-#: themes/luci-theme-openwrt-2020/luasrc/view/themes/openwrt2020/header.htm:40
+#: themes/luci-theme-openwrt-2020/luasrc/view/themes/openwrt2020/header.htm:44
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:50
 msgid "Navigation"
 msgstr "导航"
@@ -4591,7 +4607,7 @@ msgstr "禁用无效信息缓存"
 
 #: themes/luci-theme-bootstrap/luasrc/view/themes/bootstrap/header.htm:54
 #: themes/luci-theme-material/luasrc/view/themes/material/header.htm:212
-#: themes/luci-theme-openwrt-2020/luasrc/view/themes/openwrt2020/header.htm:55
+#: themes/luci-theme-openwrt-2020/luasrc/view/themes/openwrt2020/header.htm:59
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:79
 msgid "No password set!"
 msgstr "未设置密码！"
@@ -5870,24 +5886,27 @@ msgid ""
 "hosts.</li> <li><strong>hybrid mode</strong>: Relay mode is disabled unless "
 "the interface boolean <code>master</code> is 1.</li></ul>"
 msgstr ""
-"如果没有将布尔值 <code>ndproxy_slave</code> 设置为 1 的接口，则在内部恢复为禁用状态。将 <abbr title="
-"\"Neighbour Discovery Protocol\">NDP</abbr> 代理视为 IPv6 的代理 ARP："
-"将不同物理硬件段上的主机统一到同一 IP 子网中。由 <abbr title=\"Neighbour Solicitation, Type 135\""
-">NS</abbr> 和 <abbr title=\"Neighbour Advertisement, Type 136\">NA</abbr> "
-"消息组成。<abbr title=\"Neighbour Discovery Protocol\">NDP</abbr> 代理在布尔值 "
-"<code>master</code> 为 1（即上游）的接口上侦听 <abbr title=\"Neighbour Solicitation, "
-"Type 135\">NS</abbr>，然后查询该目标 IP 的从属/内部接口，最后发送 <abbr title=\"Neighbour "
-"Advertisement, Type 136\">NA</abbr> 消息。 <abbr title=\"Neighbour Discovery "
-"Protocol\">NDP</abbr> 实际上是用于 IPv6 的 ARP。<abbr title=\"Neighbour "
-"Solicitation, Type 135\">NS</abbr> 和 <abbr title=\"Neighbour Advertisement, "
-"Type 136\">NA</abbr> 用于检测链路上的可达性及重复地址，它们本身也是 SLAAC 自动配置的先决条件。<br /> <ul style"
-"=\"list-style-type:none;\"> <li><strong>已禁用</strong>：没有 <abbr title="
-"\"Neighbour Discovery Protocol\">NDP</abbr> 消息将会被被代理到 <code>ndproxy_slave</"
-"code> 为真的接口。</li> <li><strong>中继模式</strong>：将 <code>master</code> 的 <abbr "
-"title=\"Neighbour Discovery Protocol\">NDP</abbr> 消息代理到 <code>ndproxy_slave</"
-"code> 为真的接口。有助于支持没有 <abbr title=\"Prefix Delegation\">PD</abbr> "
-"的提供商链路，并支持防火墙代理的主机。</li> <li><strong>混合模式</strong>：除非接口布尔值 <code>master</"
-"code> 为 1，否则禁用中继模式。</li></ul>"
+"如果没有将布尔值 <code>ndproxy_slave</code> 设置为 1 的接口，则在内部恢复为禁"
+"用状态。将 <abbr title=\"Neighbour Discovery Protocol\">NDP</abbr> 代理视为 "
+"IPv6 的代理 ARP：将不同物理硬件段上的主机统一到同一 IP 子网中。由 <abbr "
+"title=\"Neighbour Solicitation, Type 135\">NS</abbr> 和 <abbr title="
+"\"Neighbour Advertisement, Type 136\">NA</abbr> 消息组成。<abbr title="
+"\"Neighbour Discovery Protocol\">NDP</abbr> 代理在布尔值 <code>master</code> "
+"为 1（即上游）的接口上侦听 <abbr title=\"Neighbour Solicitation, Type "
+"135\">NS</abbr>，然后查询该目标 IP 的从属/内部接口，最后发送 <abbr title="
+"\"Neighbour Advertisement, Type 136\">NA</abbr> 消息。 <abbr title="
+"\"Neighbour Discovery Protocol\">NDP</abbr> 实际上是用于 IPv6 的 ARP。<abbr "
+"title=\"Neighbour Solicitation, Type 135\">NS</abbr> 和 <abbr title="
+"\"Neighbour Advertisement, Type 136\">NA</abbr> 用于检测链路上的可达性及重复"
+"地址，它们本身也是 SLAAC 自动配置的先决条件。<br /> <ul style=\"list-style-"
+"type:none;\"> <li><strong>已禁用</strong>：没有 <abbr title=\"Neighbour "
+"Discovery Protocol\">NDP</abbr> 消息将会被被代理到 <code>ndproxy_slave</"
+"code> 为真的接口。</li> <li><strong>中继模式</strong>：将 <code>master</"
+"code> 的 <abbr title=\"Neighbour Discovery Protocol\">NDP</abbr> 消息代理到 "
+"<code>ndproxy_slave</code> 为真的接口。有助于支持没有 <abbr title=\"Prefix "
+"Delegation\">PD</abbr> 的提供商链路，并支持防火墙代理的主机。</li> "
+"<li><strong>混合模式</strong>：除非接口布尔值 <code>master</code> 为 1，否则"
+"禁用中继模式。</li></ul>"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:673
 msgid "Robustness"
@@ -5923,8 +5942,8 @@ msgid ""
 "134\">RA</abbr> messages. Default is 1800 seconds (<code>1800</code>). Max "
 "9000 seconds."
 msgstr ""
-"在 <abbr title=\"Router Advertisement, ICMPv6 Type 134\">RA</abbr> 消息中通告的路由寿命。"
-"默认为 1800 秒（<code>1800</code>）。最长 9000 秒。"
+"在 <abbr title=\"Router Advertisement, ICMPv6 Type 134\">RA</abbr> 消息中通告"
+"的路由寿命。默认为 1800 秒（<code>1800</code>）。最长 9000 秒。"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js:46
 #: modules/luci-mod-system/root/usr/share/luci/menu.d/luci-mod-system.json:26
@@ -6246,12 +6265,12 @@ msgstr "ZRam 设备的大小（以兆字节为单位）"
 msgid "Skip"
 msgstr "跳过"
 
-#: themes/luci-theme-openwrt-2020/luasrc/view/themes/openwrt2020/header.htm:36
+#: themes/luci-theme-openwrt-2020/luasrc/view/themes/openwrt2020/header.htm:40
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:46
 msgid "Skip to content"
 msgstr "跳到内容"
 
-#: themes/luci-theme-openwrt-2020/luasrc/view/themes/openwrt2020/header.htm:35
+#: themes/luci-theme-openwrt-2020/luasrc/view/themes/openwrt2020/header.htm:39
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:45
 msgid "Skip to navigation"
 msgstr "跳转到导航"
@@ -6790,9 +6809,9 @@ msgid ""
 "<abbr title=\"Router Advertisement, ICMPv6 Type 134\">RA</abbr> messages. "
 "Default is 0 (<code>0</code>). Min 1280."
 msgstr ""
-"将要发布的<abbr title=\"Maximum Transmission Unit\">MTU</abbr>，发布形式为<abbr title="
-"\"Router Advertisement, ICMPv6 Type 134\">RA</abbr>消息。默认值为0 "
-"(<code>0</code>)。最小值1280。"
+"将要发布的<abbr title=\"Maximum Transmission Unit\">MTU</abbr>，发布形式为"
+"<abbr title=\"Router Advertisement, ICMPv6 Type 134\">RA</abbr>消息。默认值为"
+"0 (<code>0</code>)。最小值1280。"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:84
 msgid "The <em>block mount</em> command failed with code %d"
@@ -6986,11 +7005,9 @@ msgstr ""
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:603
 msgid ""
 "The maximum hops to be published in <abbr title=\"Router Advertisement\">RA</"
-"abbr> messages.<br>Default is 0 (<code>0</code>), meaning unspecified. Max "
+"abbr> messages.<br />Default is 0 (<code>0</code>), meaning unspecified. Max "
 "255."
 msgstr ""
-"将以<abbr title=\"Router Advertisement\">RA</abbr>消息形式发布的最大跳数。<br>默认值为0 "
-"(<code>0</code>)，意味着未指定。最大值255。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1949
 msgid "The network name is already used"
@@ -7113,7 +7130,7 @@ msgstr "没有待应用的更改"
 
 #: themes/luci-theme-bootstrap/luasrc/view/themes/bootstrap/header.htm:55
 #: themes/luci-theme-material/luasrc/view/themes/material/header.htm:213
-#: themes/luci-theme-openwrt-2020/luasrc/view/themes/openwrt2020/header.htm:56
+#: themes/luci-theme-openwrt-2020/luasrc/view/themes/openwrt2020/header.htm:60
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:80
 msgid ""
 "There is no password set on this router. Please configure a root password to "
@@ -7437,8 +7454,9 @@ msgid ""
 "analogous to IPv4 private network addressing. This prefix is randomly "
 "generated at first install."
 msgstr ""
-"唯一本地地址- 选取范围在<code>fc00::/7</code>。通常仅在&#8216;本地&#8217;半<code>fd00::/8</code>"
-"。用于IPv6的ULA与IPv4专用网络寻址类似。此前缀是在首次安装时随机生成的。"
+"唯一本地地址- 选取范围在<code>fc00::/7</code>。通常仅在&#8216;本地&#8217;半"
+"<code>fd00::/8</code>。用于IPv6的ULA与IPv4专用网络寻址类似。此前缀是在首次安"
+"装时随机生成的。"
 
 #: modules/luci-base/htdocs/luci-static/resources/network.js:2060
 #: modules/luci-compat/luasrc/model/network.lua:971
@@ -8565,6 +8583,31 @@ msgstr "是"
 #: modules/luci-compat/luasrc/view/cbi/delegator.htm:20
 msgid "« Back"
 msgstr "« 后退"
+
+#~ msgid ""
+#~ "Default is stateless + stateful<br /> <ul style=\"list-style-type:none;"
+#~ "\"> <li><strong>stateless</strong>: Router advertises prefixes, host uses "
+#~ "<abbr title=\"Stateless Address Auto Config\">SLAAC</abbr> to self assign "
+#~ "its own address. No DHCPv6.</li> <li><strong>stateless + stateful</"
+#~ "strong>: SLAAC. In addition, router assigns an IPv6 address to a host via "
+#~ "DHCPv6.</li> <li><strong>stateful-only</strong>: No SLAAC. Router assigns "
+#~ "an IPv6 address to a host via DHCPv6.</li><ul>"
+#~ msgstr ""
+#~ "默认为无状态 + 有状态。<br /> <ul style=\"list-style-type:none;\"> "
+#~ "<li><strong>无状态</strong>：路由器广播前缀，主机使用 <abbr title="
+#~ "\"Stateless Address Auto Config\">SLAAC</abbr> 来自分配自己的地址，不使用 "
+#~ "DHCPv6。</li> <li><strong>无状态 + 有状态</strong>：使用 SLAAC 的同时，路"
+#~ "由器通过 DHCPv6 给一个主机分配一个 IPv6 地址。</li> <li><strong>仅有状态</"
+#~ "strong>：不使用 SLAAC，路由器通过 DHCPv6 给一个主机分配一个 IPv6 地址。</"
+#~ "li><ul>"
+
+#~ msgid ""
+#~ "The maximum hops to be published in <abbr title=\"Router Advertisement"
+#~ "\">RA</abbr> messages.<br>Default is 0 (<code>0</code>), meaning "
+#~ "unspecified. Max 255."
+#~ msgstr ""
+#~ "将以<abbr title=\"Router Advertisement\">RA</abbr>消息形式发布的最大跳数。"
+#~ "<br>默认值为0 (<code>0</code>)，意味着未指定。最大值255。"
 
 #~ msgid "Always announce default router"
 #~ msgstr "总是通告默认路由"
