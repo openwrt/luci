@@ -251,11 +251,9 @@ return view.extend({
 
 
 				if ((!is_valid || is_too_big) && is_forceable)
-					body.push(E('p', {}, E('label', { 'class': 'btn alert-message danger' }, [
-						force, ' ', _('Force upgrade'),
-						E('br'), E('br'),
-						_('Select \'Force upgrade\' to flash the image even if the image format check fails. Use only if you are sure that the firmware is correct and meant for your device!')
-					])));
+					body.push(E('p', { 'class': 'alert-message danger' }, [
+						force, ' ', _('Force upgrade: Select \'Force upgrade\' to flash the image even if the image format check fails. Use only if you are sure that the firmware is correct and meant for your device!')
+					]));
 
 				var cntbtn = E('button', {
 					'class': 'btn cbi-button-action important',
