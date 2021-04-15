@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2021-04-13 11:51+0000\n"
+"PO-Revision-Date: 2021-04-15 17:26+0000\n"
 "Last-Translator: xiazhang <xz@xia.plus>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "openwrt/luci/zh_Hans/>\n"
@@ -299,15 +299,13 @@ msgid ""
 "downstream, and uses <abbr title=\"Prefix Delegation\">PD</abbr> locally.</"
 "li></ul>"
 msgstr ""
-"<ul style=\"list-style-type:none;\"> <li><strong>服务器模式</strong>：路由器"
-"通过 <abbr title=\"Router Advertisement, ICMPv6 Type 134\">RA</abbr> 报文（发"
-"送至 <code>ff02::1</code>）宣传自己是默认的 IPv6 网关，并向下游设备提供 "
-"<abbr title=\"Prefix Delegation\">PD</abbr>。</li> <li><strong>中继模式</"
-"strong>：路由器从上游中继 <abbr title=\"Router Advertisement, ICMPv6 Type "
-"134\">RA</abbr>，并将上游（如WAN）接口的配置和前缀扩展到下游（如LAN）接口。</"
-"li> <li><strong>混合模式</strong>：路由器同时做服务器+中继，将上游配置和前缀"
-"扩展到下游，并在本地使用 <abbr title=\"Prefix Delegation\">PD</abbr>。</li></"
-"ul>"
+"<ul style=\"list-style-type:none;\"> <li><strong>服务器模式</strong>：路由器通过 <abbr "
+"title=\"Router Advertisement, ICMPv6 Type 134\">RA</abbr> 报文（发送至 "
+"<code>ff02::1</code>）通告自己是默认的 IPv6 网关，并向下游设备提供 <abbr title=\"Prefix "
+"Delegation\">PD</abbr>。</li> <li><strong>中继模式</strong>：路由器从上游中继 <abbr title="
+"\"Router Advertisement, ICMPv6 Type 134\">RA</abbr>，并将上游（如 WAN）接口的配置和前缀扩展到下游（"
+"如 LAN）接口。</li> <li><strong>混合模式</strong>：路由器同时做服务器 + 中继，将上游配置和前缀扩展到下游，并在本地使用 "
+"<abbr title=\"Prefix Delegation\">PD</abbr>。</li></ul>"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:625
 msgid ""
@@ -379,7 +377,7 @@ msgstr "ARP 校验"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:373
 msgid "ARP mode to consider a slave as being up"
-msgstr "在 ARP 模式下将从机视为已启动"
+msgstr "在 ARP 模式下将从属设备视为已启动"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:77
 msgid "ARP monitoring is not supported for the selected policy!"
@@ -525,7 +523,7 @@ msgstr "添加 IPv6 地址…"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:65
 msgid "Add LED action"
-msgstr "添加 LED 动作"
+msgstr "添加 LED 事件"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:219
 msgid "Add VLAN"
@@ -769,7 +767,7 @@ msgstr "保存表单时出错："
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:125
 msgid "An optional, short description for this device"
-msgstr "此设备的可选简短备注"
+msgstr "此设备的可选简短描述"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1232
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:20
@@ -1717,6 +1715,11 @@ msgid ""
 "<li><strong>stateful-only</strong>: No SLAAC. Router assigns an IPv6 address "
 "to a host via DHCPv6.</li></ul>"
 msgstr ""
+"默认值是有状态 + 无状态<br /> <ul style=\"list-style-type:none;\"> "
+"<li><strong>无状态</strong>：路由器广播前缀，主机使用 <abbr title=\"Stateless Address Auto "
+"Config\">SLAAC</abbr> 自行分配自己的地址，不使用 DHCPv6。</li> <li><strong>无状态 + "
+"有状态</strong>：使用 SLAAC 的同时， 路由器通过 DHCPv6 将 IPv6 地址分配给主机。</li> "
+"<li><strong>仅有状态</strong>：不使用 SLAAC，路由器通过 DHCPv6 将 IPv6 地址分配给主机。</li></ul>"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/default-on.js:11
 msgid "Default state"
@@ -2169,7 +2172,7 @@ msgstr "启用 DNS 查找"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:292
 msgid "Enable Dynamic Shuffling Of Flows"
-msgstr "启用流的动态随机分配"
+msgstr "启用流的动态调整"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6in4.js:60
 msgid "Enable HE.net dynamic endpoint update"
@@ -2937,7 +2940,7 @@ msgstr "请求头错误代码错误（HEC）"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/heartbeat.js:5
 msgid "Heartbeat interval (kernel: heartbeat)"
-msgstr "心跳间隔（kernel：heartbeat）"
+msgstr "间歇闪烁（kernel：heartbeat）"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:644
 msgid "Hello interval"
@@ -3800,8 +3803,7 @@ msgstr "链路活动"
 msgid ""
 "List of <abbr title=\"Domain Name System\">DNS</abbr> servers to forward "
 "requests to"
-msgstr ""
-"将请求转发到的 <abbr title=\"Domain Name System\">DNS</abbr> 服务器列表"
+msgstr "此列表将域名解析请求转发到指定 <abbr title=\"Domain Name System\">DNS</abbr> 服务器"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1501
 msgid ""
@@ -3838,7 +3840,7 @@ msgstr "允许 RFC1918 响应的域名列表"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:286
 msgid "List of domains to force to an IP address."
-msgstr "强制使用IP地址的域列表。"
+msgstr "此列表将域名强制指向某个 IP 地址。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:267
 msgid "List of hosts that supply bogus NX domain results"
@@ -3858,7 +3860,7 @@ msgstr "仅监听指定的接口，未指定则监听全部"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:318
 msgid "Listening port for inbound DNS queries"
-msgstr "入站 DNS 查询端口"
+msgstr "DNS 服务器的监听端口"
 
 #: modules/luci-mod-status/root/usr/share/luci/menu.d/luci-mod-status.json:100
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:54
@@ -3981,9 +3983,7 @@ msgstr "日志"
 msgid ""
 "Logical network from which to select the local endpoint if local IPv6 "
 "address is empty and no WAN IPv6 is available (optional)."
-msgstr ""
-"如果本地IPv6地址为空，且没有广域网IPv6可用，则从中选择本地端点的逻辑网络（可"
-"选）。"
+msgstr "如果本地 IPv6 地址为空，且没有广域网 IPv6 可用，则从中选择本地端点的逻辑网络（可选）。"
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:57
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:62
@@ -4433,7 +4433,7 @@ msgstr "NCM"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:661
 msgid "NDP-Proxy slave"
-msgstr "NDP 代理从机"
+msgstr "NDP 代理从属设备"
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:72
 msgid "NT Domain"
@@ -4595,11 +4595,11 @@ msgstr "无匹配的前缀委托"
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:140
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:143
 msgid "No more slaves available"
-msgstr "没有更多的 slaves 可用"
+msgstr "没有更多的从属设备可用"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:187
 msgid "No more slaves available, can not save interface"
-msgstr "缺少 slaves 可用，无法储存接口"
+msgstr "没有更多的从属设备可用，无法保存接口"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:251
 msgid "No negative cache"
@@ -4705,7 +4705,7 @@ msgstr "注意：有些无线驱动程序不完全支持802.11w。例如，mwlwi
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:128
 msgid "Notes"
-msgstr "附注"
+msgstr "备注"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:174
 msgid "Notice"
@@ -4796,7 +4796,7 @@ msgstr "启用后仅允许与非隔离网桥端口通信"
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:229
 msgid ""
 "Only if current active slave fails and the primary slave is up (failure, 2)"
-msgstr "仅当前的活跃 slave 发生故障，且主 slave 在运行中时 （故障，2）"
+msgstr "仅在当前活跃从属设备发生故障，且主从属设备在线时（failure，2）"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:444
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/backupfiles.lua:19
@@ -4839,7 +4839,7 @@ msgstr "可选"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:128
 msgid "Optional, free-form notes about this device"
-msgstr "关于此设备的可选的自由格式的注释"
+msgstr "此设备的可选任意格式备注"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:97
 msgid ""
@@ -5150,7 +5150,7 @@ msgstr "数据包"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:275
 msgid "Packets To Transmit Before Moving To Next Slave"
-msgstr "移动到下个 Slave 前要传输的数据包"
+msgstr "切换到下一个从属设备前要传输的数据包"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:153
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:967
@@ -5384,7 +5384,7 @@ msgstr "禁止客户端间通信"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:211
 msgid "Primary Slave"
-msgstr "主 Slave"
+msgstr "主从属设备"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:216
 msgctxt "VLAN port state"
@@ -5395,13 +5395,11 @@ msgstr "主 VLAN ID"
 msgid ""
 "Primary becomes active slave when it comes back up if speed and duplex "
 "better than current slave (better, 1)"
-msgstr ""
-"如速度和双工均好于当前 slave，主 slave 在再次运行时就会成为活跃 slave （较"
-"好，1）"
+msgstr "如果主从属设备速度和双工优于当前的从属设备，则当其重新上线时成为活动的从属设备（better，1）"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:227
 msgid "Primary becomes active slave whenever it comes back up (always, 0)"
-msgstr "只要主 slave 重新上线，它就会成为活跃 slave （始终，0）"
+msgstr "只要主从属设备重新上线，它就会成为活跃从属设备（always，0）"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:630
 msgid "Priority"
@@ -5781,7 +5779,7 @@ msgstr "需要 wpa-supplicant 支持 WEP"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:224
 msgid "Reselection policy for primary slave"
-msgstr "主 slave 的重选策略"
+msgstr "主从属设备的重选策略"
 
 #: modules/luci-base/htdocs/luci-static/resources/luci.js:2204
 #: modules/luci-base/luasrc/view/sysauth.htm:39
@@ -6095,7 +6093,7 @@ msgstr "选择文件…"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:318
 msgid "Selects the transmit hash policy to use for slave selection"
-msgstr "挑选 slave 选择所用的传输散列策略"
+msgstr "选择用于从属设备选择的传输哈希策略"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:774
 msgid "Send ICMP redirects"
@@ -6144,19 +6142,17 @@ msgstr "设置静态"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:661
 msgid "Set interface as NDP-Proxy external slave. Default is off."
-msgstr "将接口设置为NDP代理外部从机。 默认为关闭。"
+msgstr "将接口设置为 NDP 代理外部从属设备。默认为关闭。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1006
 msgid ""
 "Set interface properties regardless of the link carrier (If set, carrier "
 "sense events do not invoke hotplug handlers)."
-msgstr ""
-"不管接口的链路状态如何，总是用应用设置（如果勾选，链路状态变更将不再触发 "
-"hotplug 事件处理）。"
+msgstr "不管接口的链路状态如何，总是用应用设置（如果勾选，链路状态变更将不再触发热插拔事件处理）。"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:300
 msgid "Set same MAC Address to all slaves"
-msgstr "为所有 slave 设置相同的 MAC 地址"
+msgstr "为所有从属设备设置相同的 MAC 地址"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:665
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:669
@@ -6165,11 +6161,11 @@ msgstr "将此接口设置为 dhcpv6 中继的主接口。"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:304
 msgid "Set to currently active slave (active, 1)"
-msgstr "设置到当前活跃的 slave （活跃，1）"
+msgstr "设置到当前活跃的从属设备（active，1）"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:305
 msgid "Set to first slave added to the bond (follow, 2)"
-msgstr "设置到第一个添加到 bond 的 slave （遵循，2）"
+msgstr "设置到第一个添加到 bond 接口的从属设备（follow，2）"
 
 #: modules/luci-compat/luasrc/model/network/proto_modemmanager.lua:55
 #: modules/luci-compat/luasrc/model/network/proto_qmi.lua:55
@@ -6277,7 +6273,7 @@ msgstr "跳转到导航"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:178
 msgid "Slave Interfaces"
-msgstr "Slave 接口"
+msgstr "从属接口"
 
 #: modules/luci-base/htdocs/luci-static/resources/network.js:2961
 #: modules/luci-compat/luasrc/model/network.lua:1428
@@ -6395,7 +6391,7 @@ msgstr "明确发生故障转移事件后在200毫秒间隔内发出的 IGMP 成
 msgid ""
 "Specifies the number of packets to transmit through a slave before moving to "
 "the next one"
-msgstr "明确移动到下一个 slave 之前要通过当前 slave 传输的数据包的数量"
+msgstr "指定在切换到下一个从属设备前要传输的数据包数量"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:310
 msgid ""
@@ -6409,7 +6405,7 @@ msgstr ""
 msgid ""
 "Specifies the number of seconds between instances where the bonding driver "
 "sends learning packets to each slaves peer switch"
-msgstr "明确 bonding 驱动向每个 slave 对端交换机发送学习包的实例间间隔的秒数"
+msgstr "指定 bonding 驱动程序向每个从属设备连接的交换机发送学习数据包的间隔秒数"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:374
 msgid "Specifies the quantity of ARP IP targets that must be reachable"
@@ -6425,8 +6421,7 @@ msgstr "明确链路伙伴被要求传输 LACPDU 包的速率"
 msgid ""
 "Specifies the reselection policy for the primary slave when failure of the "
 "active slave or recovery of the primary slave occurs"
-msgstr ""
-"明确活跃 slave 发生故障或主 slave 恢复事件发生时重新选择主 slave 的策略"
+msgstr "指定当活动从属设备发生故障或主从属设备恢复时，主从属设备的重选策略"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:244
 msgid "Specifies the system priority"
@@ -6436,13 +6431,13 @@ msgstr "明确系统优先级"
 msgid ""
 "Specifies the time in milliseconds to wait before disabling a slave after a "
 "link failure detection"
-msgstr "明确在检测到一个链接故障后禁用一个 slave 前等待的时间，单位为毫秒"
+msgstr "指定在检测到链路故障后，在禁用从属设备之前等待的时间（以毫秒为单位）"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:411
 msgid ""
 "Specifies the time in milliseconds to wait before enabling a slave after a "
 "link recovery detection"
-msgstr "明确检测到一个链接故障后启用一个 slave 前等待的时间，单位为毫秒"
+msgstr "指定在检测到链路恢复后，在启用从属设备之前等待的时间（以毫秒为单位）"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:615
 msgid ""
@@ -6463,7 +6458,7 @@ msgstr "明确是否应验证 ARP 探测和应答，或者应为了链路监控�
 msgid ""
 "Specifies whether active-backup mode should set all slaves to the same MAC "
 "address at enslavement"
-msgstr "明确活跃备份模式是否应将所有 slave 设置为同一 MAC 地址"
+msgstr "指定主备模式是否应在设置从属时，将所有从属设备设置为相同的 MAC 地址"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:419
 msgid ""
@@ -6474,18 +6469,18 @@ msgstr "明确相较 netif carrier ok()，miimon 是否应使用 MII 或 ETHTOOL
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:293
 msgid ""
 "Specifies whether to shuffle active flows across slaves based on the load"
-msgstr "明确是否根据负载在 slave 范围中对活跃流进行洗牌"
+msgstr "指定是否根据负载调整从属设备之间的活动数据流"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:179
 msgid ""
 "Specifies which slave interfaces should be attached to this bonding interface"
-msgstr "明确应将哪些 slave 接口附着于这个 bonding 接口"
+msgstr "指定哪些从属接口应连接到该 bonding 接口上"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:212
 msgid ""
 "Specifies which slave is the primary device. It will always be the active "
 "slave while it is available"
-msgstr "明确哪个 slave 是主设备。当它可用时，它将始终是活跃 slave"
+msgstr "指定哪个从属设备是主要设备。当它可用时，它将始终是活动的从属设备"
 
 #: protocols/luci-proto-ipip/htdocs/luci-static/resources/protocol/ipip.js:63
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:72
@@ -7008,6 +7003,8 @@ msgid ""
 "abbr> messages.<br />Default is 0 (<code>0</code>), meaning unspecified. Max "
 "255."
 msgstr ""
+"在 <abbr title=\"Router Advertisement\">RA</abbr> 报文中通告的最大跳数。<br />默认为 "
+"0（<code>0</code>），表示未指定。最大为 255。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1949
 msgid "The network name is already used"
@@ -7826,15 +7823,15 @@ msgstr "使用系统内置的 CA 包验证服务器证书，<br />需要“ca-bu
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:387
 msgid "Validation for all slaves"
-msgstr "验证所有 slave"
+msgstr "验证所有从属设备"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:385
 msgid "Validation only for active slave"
-msgstr "仅验证活跃 slave"
+msgstr "仅验证活跃的从属设备"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:386
 msgid "Validation only for backup slaves"
-msgstr "仅验证备份 slave"
+msgstr "仅验证备用的从属设备"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:149
 msgid "Value must not be empty"
