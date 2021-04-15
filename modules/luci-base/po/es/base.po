@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-06-10 03:41+0200\n"
-"PO-Revision-Date: 2021-04-13 11:51+0000\n"
+"PO-Revision-Date: 2021-04-15 17:26+0000\n"
 "Last-Translator: Franco Castillo <castillofrancodamian@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/openwrt/luci/es/>"
 "\n"
@@ -1783,6 +1783,7 @@ msgid "Default is on."
 msgstr "El valor predeterminado es activado."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:612
+#, fuzzy
 msgid ""
 "Default is stateless + stateful<br /> <ul style=\"list-style-type:none;\"> "
 "<li><strong>stateless</strong>: Router advertises prefixes, host uses <abbr "
@@ -1792,6 +1793,14 @@ msgid ""
 "<li><strong>stateful-only</strong>: No SLAAC. Router assigns an IPv6 address "
 "to a host via DHCPv6.</li></ul>"
 msgstr ""
+"El valor predeterminado es Sin estado + Con estado<br /> <ul style=\"list-"
+"style-type:none;\"> <li><strong>Sin estado</strong>: El enrutador anuncia "
+"prefijos, el host usa <abbr title=\"Stateless Address Auto Config\">SLAAC</"
+"abbr> para autoasignar su propia dirección. Sin DHCPv6.</li> <li><strong>Sin "
+"estado + Con estado</strong>: SLAAC. Además, el enrutador asigna una "
+"dirección IPv6 a un host a través de DHCPv6.</li> <li><strong>Con estado "
+"solamente</strong>: Sin SLAAC. El enrutador asigna una dirección IPv6 a un "
+"host a través de DHCPv6.</li></ul>"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/default-on.js:11
 msgid "Default state"
@@ -7751,12 +7760,17 @@ msgid "Unexpected reply data format"
 msgstr "Formato de datos de respuesta inesperado"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1219
+#, fuzzy
 msgid ""
 "Unique Local Address - in the range <code>fc00::/7</code>. Typically only "
 "within the &#8216;local&#8217; half <code>fd00::/8</code>. ULA for IPv6 is "
 "analogous to IPv4 private network addressing. This prefix is randomly "
 "generated at first install."
 msgstr ""
+"Dirección local única: en el rango <code>fc00::/7</code>. Por lo general, "
+"sólo dentro de la mitad &#8216;local&#8217; <code>fd00::/8</code>. ULA para "
+"IPv6 es análogo al direccionamiento de red privada IPv4. Este prefijo se "
+"genera aleatoriamente en la primera instalación."
 
 #: modules/luci-base/htdocs/luci-static/resources/network.js:2060
 #: modules/luci-compat/luasrc/model/network.lua:971
