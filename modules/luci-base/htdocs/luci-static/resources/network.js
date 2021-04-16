@@ -3293,7 +3293,7 @@ WifiDevice = baseclass.extend(/** @lends LuCI.network.WifiDevice.prototype */ {
 	 *  - `HE20` - applicable to IEEE 802.11ax, 20 MHz wide channels
 	 *  - `HE40` - applicable to IEEE 802.11ax, 40 MHz wide channels
  	 *  - `HE80` - applicable to IEEE 802.11ax, 80 MHz wide channels
-	 *  - `HE80+80` - applicable to IEEE 802.11ax, 80 MHz wide channels (multi-stream?)
+	 *  - `HE80+80` - applicable to IEEE 802.11ax, dual 80 MHz wide channels
 	 *  - `HE160` - applicable to IEEE 802.11ax, 160 MHz wide channels
 	 */
 	getHTModes: function() {
