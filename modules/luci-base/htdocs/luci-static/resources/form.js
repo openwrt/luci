@@ -1862,6 +1862,9 @@ var CBIAbstractValue = CBIAbstractElement.extend(/** @lends LuCI.form.AbstractVa
 		if (cval == null)
 			cval = this.default;
 
+		if (Array.isArray(cval))
+			cval = cval.join(' ');
+
 		return (cval != null) ? '%h'.format(cval) : null;
 	},
 
