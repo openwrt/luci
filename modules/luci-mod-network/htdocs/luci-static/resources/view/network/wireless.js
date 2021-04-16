@@ -370,7 +370,7 @@ var CBIWifiFrequencyValue = form.Value.extend({
 					'11a', '5 GHz', true
 				],
 				// 'ad': [
-				//      '?', '60 GHz', true
+				//      '11ad', '60 GHz', true
 				// ],
 				'ax': [
 					'11g', '2.4 GHz', true
