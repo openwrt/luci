@@ -3266,7 +3266,9 @@ WifiDevice = baseclass.extend(/** @lends LuCI.network.WifiDevice.prototype */ {
 	 *  - `b` - Legacy 802.11b mode, 2.4 GHz, up to 11 Mbit/s
 	 *  - `g` - Legacy 802.11g mode, 2.4 GHz, up to 54 Mbit/s
 	 *  - `n` - IEEE 802.11n mode, 2.4 or 5 GHz, up to 600 Mbit/s
-	 *  - `ac` - IEEE 802.11ac mode, 5 GHz, up to 6770 Mbit/s
+	 *  - `ac` - IEEE 802.11ac mode, 5 GHz, up to 1300 Mbit/s
+	 *  - `ad` - IEEE 802.11ad mode, 60 GHz, up to 7 Gbit/s
+	 *  - `ax` - IEEE 802.11ax mode, 2.4 or 5GHz, up to 3.5 Gbit/s (on a single stream)
 	 */
 	getHWModes: function() {
 		var hwmodes = this.ubus('dev', 'iwinfo', 'hwmodes');
