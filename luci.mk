@@ -12,6 +12,8 @@ LUCI_DEFAULTS:=$(notdir $(wildcard ${CURDIR}/root/etc/uci-defaults/*))
 LUCI_PKGARCH?=$(if $(realpath src/Makefile),,all)
 LUCI_SECTION?=luci
 LUCI_CATEGORY?=LuCI
+LUCI_URL?=https://github.com/openwrt/luci
+LUCI_MAINTAINER?=OpenWrt LuCI community
 
 # Language code titles
 LUCI_LANG.ar=العربية (Arabic)
@@ -130,6 +132,8 @@ define Package/$(PKG_NAME)
   VERSION:=$(if $(PKG_VERSION),$(PKG_VERSION),$(PKG_SRC_VERSION))
   $(if $(LUCI_EXTRA_DEPENDS),EXTRA_DEPENDS:=$(LUCI_EXTRA_DEPENDS))
   $(if $(LUCI_PKGARCH),PKGARCH:=$(LUCI_PKGARCH))
+  URL:=$(LUCI_URL)
+  MAINTAINER:=$(LUCI_MAINTAINER)
 endef
 
 ifneq ($(LUCI_DESCRIPTION),)
