@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: LuCI\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-04-20 09:40+0200\n"
-"PO-Revision-Date: 2021-04-15 17:26+0000\n"
+"PO-Revision-Date: 2021-04-17 21:19+0000\n"
 "Last-Translator: Matthaiks <kitynska@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/openwrt/luci/pl/>"
 "\n"
@@ -236,23 +236,23 @@ msgstr "Adres <abbr title=\"Media Access Control\">MAC</abbr>"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:636
 msgid "<abbr title=\"Neighbour Discovery Protocol\">NDP</abbr>-Proxy"
-msgstr ""
+msgstr "Proxy <abbr title=\"Neighbour Discovery Protocol\">NDP</abbr>"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:603
 msgid "<abbr title=\"Router Advertisement\">RA</abbr> Hop Limit"
-msgstr ""
+msgstr "Limit skoków <abbr title=\"Router Advertisement\">RA</abbr>"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:585
 msgid "<abbr title=\"Router Advertisement\">RA</abbr> Lifetime"
-msgstr ""
+msgstr "Żywotność <abbr title=\"Router Advertisement\">RA</abbr>"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:594
 msgid "<abbr title=\"Router Advertisement\">RA</abbr> MTU"
-msgstr ""
+msgstr "MTU <abbr title=\"Router Advertisement\">RA</abbr>"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:555
 msgid "<abbr title=\"Router Advertisement\">RA</abbr>-Service"
-msgstr ""
+msgstr "Usługa <abbr title=\"Router Advertisement\">RA</abbr>"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:514
 msgid "<abbr title=\"The DHCP Unique Identifier\">DUID</abbr>"
@@ -300,6 +300,17 @@ msgid ""
 "downstream, and uses <abbr title=\"Prefix Delegation\">PD</abbr> locally.</"
 "li></ul>"
 msgstr ""
+"<ul style=\"list-style-type:none;\"> <li><strong>tryb serwera</strong>: "
+"router ogłasza się jako domyślna brama IPv6 za pośrednictwem komunikatów "
+"<abbr title=\"Router Advertisement, ICMPv6 Type 134\">RA</abbr> (do "
+"<code>ff02::1</code>) i zapewnia <abbr title=\"Prefix Delegation\">PD</abbr> "
+"do urządzeń podrzędnych.</li> <li><strong>tryb przekaźnika</strong>: router "
+"przekazuje <abbr title=\"Router Advertisement, ICMPv6 Type 134\">RA</abbr> z "
+"nadrzędnego strumienia i rozszerza konfigurację interfejsu nadrzędnego (np. "
+"WAN) oraz prefiksy interfejsów podrzędnych (np. LAN).</li> <li><strong>tryb "
+"hybrydowy</strong>: router spełnia role serwera i przekaźnika; rozszerza "
+"konfigurację i prefiksy urządzeń oraz używa lokalnie <abbr title=\"Prefix "
+"Delegation\">PD</abbr>.</li></ul>"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:625
 msgid ""
@@ -311,6 +322,13 @@ msgid ""
 "<li><strong>hybrid mode</strong>: Router does combination of server+relay.</"
 "li></ul>"
 msgstr ""
+"<ul style=\"list-style-type:none;\"> <li><strong>tryb serwera</strong>: "
+"router przypisuje adresy IP i deleguje prefiksy (<abbr title=\"Prefix "
+"Delegation\">PD</abbr>) do interfejsów podrzędnych. </li> <li><strong>tryb "
+"przekaźnika</strong>: router przekazuje konfigurację interfejsu WAN w dół. "
+"Pomaga w obsłudze brakujących łączy nadrzędnych, którym brakuje <abbr title="
+"\"Prefix Delegation\">PD</abbr>.</li> <li><strong>tryb hybrydowy</strong>: "
+"router łączy funkcje serwera i przekaźnika.</li></ul>"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:480
 msgid "A configuration for the device \"%s\" already exists"
@@ -472,7 +490,7 @@ msgstr "Aktywne dzierżawy DHCPv6"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:203
 msgid "Active-Backup policy (active-backup, 1)"
-msgstr "Zasady Active-Backup (Active-Backup, 1)"
+msgstr "Zasady Active-Backup (active-backup, 1)"
 
 #: modules/luci-base/htdocs/luci-static/resources/network.js:3778
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:939
@@ -1694,7 +1712,7 @@ msgstr "Czas bezczynności DPD"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dslite.js:41
 msgid "DS-Lite AFTR address"
-msgstr "DS-Lite AFTR address"
+msgstr "Adres AFTR DS-Lite"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1229
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:44
@@ -1735,7 +1753,7 @@ msgstr "Domyślne %d"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:658
 msgid "Default is on."
-msgstr ""
+msgstr "Domyślne jest włączone."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:612
 msgid ""
@@ -1747,6 +1765,14 @@ msgid ""
 "<li><strong>stateful-only</strong>: No SLAAC. Router assigns an IPv6 address "
 "to a host via DHCPv6.</li></ul>"
 msgstr ""
+"Wartość domyślna to bezstanowy + stanowy<br /> <ul style=\"list-style-"
+"type:none;\"> <li><strong>bezstanowy</strong>: router ogłasza prefiksy, host "
+"używa <abbr title=\"Stateless Address Auto Config\">SLAAC</abbr> do "
+"samodzielnego przypisania własnego adresu. Bez DHCPv6.</li> "
+"<li><strong>bezstanowy + stanowy</strong>: SLAAC. Dodatkowo router "
+"przypisuje adres IPv6 do hosta za pośrednictwem protokołu DHCPv6.</li> "
+"<li><strong>tylko stanowy</strong>: bez SLAAC. Router przypisuje adres IPv6 "
+"do hosta za pośrednictwem protokołu DHCPv6.</li></ul>"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/default-on.js:11
 msgid "Default state"
@@ -2730,6 +2756,10 @@ msgid ""
 "format check fails. Use only if you are sure that the firmware is correct "
 "and meant for your device!"
 msgstr ""
+"Wymuś aktualizację: wybierz opcję „Wymuś aktualizację”, aby flashować obraz, "
+"nawet jeśli sprawdzanie formatu obrazu nie powiedzie się. Używaj tylko "
+"wtedy, gdy masz pewność, że oprogramowanie układowe jest poprawne i "
+"przeznaczone dla Twojego urządzenia!"
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:90
 msgid "Force use of NAT-T"
@@ -3796,7 +3826,7 @@ msgstr "Ucz"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:658
 msgid "Learn routes from NDP"
-msgstr ""
+msgstr "Ucz się tras z NDP"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:511
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:520
@@ -4217,7 +4247,7 @@ msgstr "Główny"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:568
 msgid "Max <abbr title=\"Router Advertisement\">RA</abbr> interval"
-msgstr ""
+msgstr "Maksymalny odstęp czasu <abbr title=\"Router Advertisement\">RA</abbr>"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:22
 msgid "Max. Attainable Data Rate (ATTNDR)"
@@ -4263,6 +4293,9 @@ msgid ""
 "Advertisement, ICMPv6 Type 134\">RA</abbr>. Default is 600 seconds "
 "(<code>600</code>)."
 msgstr ""
+"Maksymalny dozwolony czas między wysłaniem dobrowolnego <abbr title=\"Router "
+"Advertisement, ICMPv6 Type 134\">RA</abbr>. Wartość domyślna to 600 sekund "
+"(<code>600</code>)."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:893
 msgid "Maximum transmit power"
@@ -4326,7 +4359,7 @@ msgstr "Metryka"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:577
 msgid "Min <abbr title=\"Router Advertisement\">RA</abbr> interval"
-msgstr ""
+msgstr "Minimalny odstęp czasu <abbr title=\"Router Advertisement\">RA</abbr>"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:788
 msgid "Minimum ARP validity time"
@@ -4350,6 +4383,9 @@ msgid ""
 "Advertisement, ICMPv6 Type 134\">RA</abbr>. Default is 200 seconds "
 "(<code>200</code>)."
 msgstr ""
+"Minimalny dozwolony czas między wysłaniem dobrowolnego <abbr title=\"Router "
+"Advertisement, ICMPv6 Type 134\">RA</abbr>. Wartość domyślna to 200 sekund "
+"(<code>200</code>)."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:202
 msgid "Mirror monitor port"
@@ -4535,7 +4571,7 @@ msgstr "NCM"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:661
 msgid "NDP-Proxy slave"
-msgstr ""
+msgstr "Podrzędne NDP-Proxy"
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:72
 msgid "NT Domain"
@@ -6018,6 +6054,32 @@ msgid ""
 "hosts.</li> <li><strong>hybrid mode</strong>: Relay mode is disabled unless "
 "the interface boolean <code>master</code> is 1.</li></ul>"
 msgstr ""
+"Przywraca do wyłączonych wewnętrznie, jeśli nie ma interfejsów z wartością "
+"logiczną <code>ndproxy_slave</code> ustawioną na 1. Pomyśl o proxy <abbr "
+"title=\"Neighbour Discovery Protocol\">NDP</abbr> jak o proxy ARP dla IPv6: "
+"ujednolicenie hostów na różnych fizycznych segmentach sprzętowych w tej "
+"samej podsieci IP. Składa się z komunikatów <abbr title=\"Neighbour "
+"Solicitation, Type 135\">NS</abbr> oraz <abbr title=\"Neighbour "
+"Advertisement, Type 136\">NA</abbr>. Proxy <abbr title=\"Neighbour Discovery "
+"Protocol\">NDP</abbr> nasłuchuje <abbr title=\"Neighbour Solicitation, Type "
+"135\">NS</abbr> na interfejsie z ustawioną wartością logiczną <code>master</"
+"code> na 1 (tj. nadrzędnym), następnie zapytuje interfejsy podrzędne/"
+"wewnętrzne o docelowe IP przed ostatecznym wysłaniem komunikatu <abbr title="
+"\"Neighbour Advertisement, Type 136\">NA</abbr>. <abbr title=\"Neighbour "
+"Discovery Protocol\">NDP</abbr> jest faktycznie ARP dla IPv6. <abbr title="
+"\"Neighbour Solicitation, Type 135\">NS</abbr> oraz <abbr title=\"Neighbour "
+"Advertisement, Type 136\">NA</abbr> wykrywają osiągalność oraz duplikaty "
+"adresów na łączu, co jest również warunkiem koniecznym do autokonfiguracji "
+"SLAAC.<br /> <ul style=\"list-style-type:none;\"> "
+"<li><strong>wyłączone</strong>: żadne komunikaty <abbr title=\"Neighbour "
+"Discovery Protocol\">NDP</abbr> nie są wysyłane poprzez prawdziwe interfejsy "
+"<code>ndproxy_slave</code>.</li> <li><strong>tryb przekaźnika</strong>: "
+"wysyła komunikaty <abbr title=\"Neighbour Discovery Protocol\">NDP</abbr> z "
+"prawdziwych interfejsów <code>master</code> do <code>ndproxy_slave</code>. "
+"Pomaga wspierać łącza dostawców bez <abbr title=\"Prefix Delegation\">PD</"
+"abbr> oraz hosty proxy z zaporą sieciową.</li> <li><strong>tryb "
+"hybrydowy</strong>: tryb przekaźnika jest wyłączony, chyba że wartość "
+"logiczna interfejsu <code>master</code> wynosi 1.</li></ul>"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:673
 msgid "Robustness"
@@ -6053,6 +6115,9 @@ msgid ""
 "134\">RA</abbr> messages. Default is 1800 seconds (<code>1800</code>). Max "
 "9000 seconds."
 msgstr ""
+"Żywotność routera opublikowana w komunikatach <abbr title=\"Router "
+"Advertisement, ICMPv6 Type 134\">RA</abbr> . Wartość domyślna to 1800 sekund "
+"(<code>1800</code>). Maksymalna 9000 sekund."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js:46
 #: modules/luci-mod-system/root/usr/share/luci/menu.d/luci-mod-system.json:26
@@ -6252,6 +6317,7 @@ msgstr "Ustaw statycznie"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:661
 msgid "Set interface as NDP-Proxy external slave. Default is off."
 msgstr ""
+"Ustaw interfejs jako zewnętrzny podrzędny NDP-Proxy. Domyślnie wyłączone."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1006
 msgid ""
@@ -6767,7 +6833,7 @@ msgstr "Dzierżawy statyczne"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:663
 msgid "Static NDP-Proxy prefixes"
-msgstr ""
+msgstr "Statyczne prefiksy NDP-Proxy"
 
 #: modules/luci-mod-network/root/usr/share/luci/menu.d/luci-mod-network.json:76
 msgid "Static Routes"
@@ -6967,6 +7033,9 @@ msgid ""
 "<abbr title=\"Router Advertisement, ICMPv6 Type 134\">RA</abbr> messages. "
 "Default is 0 (<code>0</code>). Min 1280."
 msgstr ""
+"<abbr title=\"Maximum Transmission Unit\">MTU</abbr> do opublikowania w "
+"komunikatach <abbr title=\"Router Advertisement, ICMPv6 Type 134\">RA</"
+"abbr>. Domyślna wartość to 0 (<code>0</code>). Minimalna to 1280."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:84
 msgid "The <em>block mount</em> command failed with code %d"
@@ -7188,6 +7257,9 @@ msgid ""
 "abbr> messages.<br />Default is 0 (<code>0</code>), meaning unspecified. Max "
 "255."
 msgstr ""
+"Maksymalna liczba skoków do opublikowania w komunikatach <abbr title=\"Router"
+" Advertisement\">RA</abbr>.<br />Domyślna wartość to 0 (<code>0</code>), tj. "
+"nie określono. Maksymalna to 255."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1949
 msgid "The network name is already used"
@@ -7663,6 +7735,10 @@ msgid ""
 "analogous to IPv4 private network addressing. This prefix is randomly "
 "generated at first install."
 msgstr ""
+"Unikalny adres lokalny (ULA) - w zakresie <code>fc00::/7</code>. Zwykle "
+"tylko w &#8216;lokalnej&#8217; połowie <code>fd00::/8</code>. ULA dla IPv6 "
+"jest analogiczny do adresowania w sieci prywatnej IPv4. Ten prefiks jest "
+"generowany losowo podczas pierwszej instalacji."
 
 #: modules/luci-base/htdocs/luci-static/resources/network.js:2060
 #: modules/luci-compat/luasrc/model/network.lua:971
