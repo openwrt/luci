@@ -30,7 +30,11 @@ function handleAction(ev) {
 				E('select', { 'class': 'cbi-input-select', 'id': 'timerA' }, [
 					E('option', { 'value': 'start' }, 'Start'),
 					E('option', { 'value': 'reload' }, 'Reload'),
-					E('option', { 'value': 'restart' }, 'Restart')
+					E('option', { 'value': 'restart' }, 'Restart'),
+					E('option', { 'value': 'suspend' }, 'Suspend'),
+					E('option', { 'value': 'resume' }, 'Resume'),
+					E('option', { 'value': 'report gen' }, 'Report'),
+					E('option', { 'value': 'report mail' }, 'Report &amp; Mail')
 				]),
 				'\xa0\xa0\xa0',
 				_('Adblock action')
@@ -374,7 +378,7 @@ return view.extend({
 
 		o = s.taboption('additional', form.Value, 'adb_triggerdelay', _('Trigger Delay'), _('Additional trigger delay in seconds before adblock processing begins.'));
 		o.placeholder = '2';
-		o.datatype = 'range(1,120)';
+		o.datatype = 'range(1,300)';
 		o.rmempty = true;
 
 		o = s.taboption('additional', form.ListValue, 'adb_maxqueue', _('Download Queue'), _('Size of the download queue for download processing (incl. sorting, merging etc.) in parallel.'));
@@ -401,11 +405,11 @@ return view.extend({
 		o.rmempty = true;
 
 		o = s.taboption('additional', form.ListValue, 'adb_fetchutil', _('Download Utility'), _('List of supported and fully pre-configured download utilities.'));
-		o.value('', _('- unspecified -'));
 		o.value('uclient-fetch');
 		o.value('wget');
 		o.value('curl');
 		o.value('aria2c');
+		o.optional = true;
 		o.rmempty = true;
 
 		o = s.taboption('additional', form.Value, 'adb_fetchparm', _('Download Parameters'), _('Special config options for the selected download utility.'));
@@ -416,12 +420,12 @@ return view.extend({
 		*/
 		o = s.taboption('adv_dns', form.ListValue, 'adb_dns', _('DNS Backend'), _('List of supported DNS backends with their default list directory. \
 			To overwrite the default path use the \'DNS Directory\' option.'));
-		o.value('', _('- unspecified -'));
 		o.value('dnsmasq', _('dnsmasq (/tmp/dnsmasq.d)'));
 		o.value('unbound', _('unbound (/var/lib/unbound)'));
-		o.value('named', _('named (/var/lib/bind)'));
+		o.value('named', _('bind (/var/lib/bind)'));
 		o.value('kresd', _('kresd (/etc/kresd)'));
 		o.value('raw', _('raw (/tmp)'));
+		o.optional = true;
 		o.rmempty = true;
 
 		o = s.taboption('adv_dns', form.Value, 'adb_dnsdir', _('DNS Directory'), _('Target directory for the generated blocklist \'adb_list.overall\'.'));
@@ -441,7 +445,19 @@ return view.extend({
 		o = s.taboption('adv_dns', form.Flag, 'adb_dnsflush', _('Flush DNS Cache'), _('Flush the DNS Cache before adblock processing as well.'));
 		o.rmempty = true;
 
-		o = s.taboption('adv_dns', form.Flag, 'adb_dnsallow', _('Disable DNS Allow'), _('Disable selective DNS whitelisting (RPZ pass through).'));
+		o = s.taboption('adv_dns', form.Flag, 'adb_dnsallow', _('Disable DNS Allow'), _('Disable selective DNS whitelisting (RPZ-PASSTHRU).'));
+		o.rmempty = true;
+
+		o = s.taboption('adv_dns', form.DynamicList, 'adb_denyip', _('Block Local Client IPs'), _('Block all requests of certain DNS clients based on their IP address (RPZ-CLIENT-IP). \
+			Please note: This feature is currently only supported by bind DNS backend.'));
+		o.datatype = 'or(ip4addr("nomask"),ip6addr("nomask"))';
+		o.optional = true;
+		o.rmempty = true;
+
+		o = s.taboption('adv_dns', form.DynamicList, 'adb_allowip', _('Allow Local Client IPs'), _('Allow all requests of certain DNS clients based on their IP address (RPZ-CLIENT-IP). \
+			Please note: This feature is currently only supported by bind DNS backend.'));
+		o.datatype = 'or(ip4addr("nomask"),ip6addr("nomask"))';
+		o.optional = true;
 		o.rmempty = true;
 
 		o = s.taboption('adv_dns', form.Flag, 'adb_jail', _('Additional Jail Blocklist'), _('Builds an additional DNS blocklist to block access to all domains except those listed in the whitelist. \
