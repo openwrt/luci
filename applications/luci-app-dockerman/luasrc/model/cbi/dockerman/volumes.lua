@@ -66,11 +66,11 @@ end
 
 local volume_list = get_volumes()
 
-m = SimpleForm("docker", translate("Docker"))
+m = SimpleForm("docker", translate("Docker - Volumes"))
 m.submit=false
 m.reset=false
 
-s = m:section(Table, volume_list, translate("Volumes"))
+s = m:section(Table, volume_list, translate("Volumes overview"))
 
 o = s:option(Flag, "_selected","")
 o.disabled = 0
