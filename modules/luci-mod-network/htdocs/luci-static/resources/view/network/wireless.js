@@ -199,13 +199,22 @@ function format_wifirate(rate) {
 	var s = '%.1f\xa0%s, %d\xa0%s'.format(rate.rate / 1000, _('Mbit/s'), rate.mhz, _('MHz')),
 	    ht = rate.ht, vht = rate.vht,
 	    mhz = rate.mhz, nss = rate.nss,
-	    mcs = rate.mcs, sgi = rate.short_gi;
+	    mcs = rate.mcs, sgi = rate.short_gi,
+	    he = rate.he, he_gi = rate.he_gi,
+	    he_dcm = rate.he_dcm;
 
 	if (ht || vht) {
 		if (vht) s += ', VHT-MCS\xa0%d'.format(mcs);
 		if (nss) s += ', VHT-NSS\xa0%d'.format(nss);
 		if (ht)  s += ', MCS\xa0%s'.format(mcs);
 		if (sgi) s += ', ' + _('Short GI').replace(/ /g, '\xa0');
+	}
+
+	if (he) {
+		s += ', HE-MCS\xa0%d'.format(mcs);
+		if (nss) s += ', HE-NSS\xa0%d'.format(nss);
+		if (he_gi) s += ', HE-GI\xa0%d'.format(he_gi);
+		if (he_dcm) s += ', HE-DCM\xa0%d'.format(he_dcm);
 	}
 
 	return s;
@@ -320,7 +329,8 @@ var CBIWifiFrequencyValue = form.Value.extend({
 			this.modes = [
 				'', 'Legacy', true,
 				'n', 'N', hwmodelist.n,
-				'ac', 'AC', hwmodelist.ac
+				'ac', 'AC', hwmodelist.ac,
+				'ax', 'AX', hwmodelist.ax
 			];
 
 			var htmodelist = L.toArray(data[0] ? data[0].getHTModes() : null)
@@ -337,6 +347,12 @@ var CBIWifiFrequencyValue = form.Value.extend({
 					'VHT40', '40 MHz', htmodelist.VHT40,
 					'VHT80', '80 MHz', htmodelist.VHT80,
 					'VHT160', '160 MHz', htmodelist.VHT160
+				],
+				'ax': [
+					'HE20', '20 MHz', htmodelist.HE20,
+					'HE40', '40 MHz', htmodelist.HE40,
+					'HE80', '80 MHz', htmodelist.HE80,
+					'HE160', '160 MHz', htmodelist.HE160
 				]
 			};
 
@@ -351,6 +367,10 @@ var CBIWifiFrequencyValue = form.Value.extend({
 				],
 				'ac': [
 					'11a', '5 GHz', true
+				],
+				'ax': [
+					'11g', '2.4 GHz', this.channels['11g'].length > 3,
+					'11a', '5 GHz', this.channels['11a'].length > 3
 				]
 			};
 		}, this));
