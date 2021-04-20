@@ -13,7 +13,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
 "X-Generator: Weblate 4.3.2-dev\n"
 
-#: applications/luci-app-fwknopd/luasrc/model/cbi/fwknopd.lua:48
+#: applications/luci-app-fwknopd/luasrc/model/cbi/fwknopd.lua:51
 msgid ""
 "Allow SPA clients to request access to services through an iptables firewall "
 "instead of just to it."
@@ -21,7 +21,7 @@ msgstr ""
 "Permitir que clientes SPA requeiram acesso a serviços através de um firewall "
 "iptables ao invés de apenas fazê-lo."
 
-#: applications/luci-app-fwknopd/luasrc/model/cbi/fwknopd.lua:49
+#: applications/luci-app-fwknopd/luasrc/model/cbi/fwknopd.lua:52
 msgid "Allow SPA clients to request forwarding destination by DNS name."
 msgstr ""
 "Permitir que clientes SPA requeiram encaminhamento de destinos por nome DNS."
@@ -94,7 +94,7 @@ msgstr ""
 "de uma NAT) ou o ciente deve conhecer o seu endereço IP externo e defini-lo "
 "através do argumento '-a'."
 
-#: applications/luci-app-fwknopd/luasrc/model/cbi/fwknopd.lua:46
+#: applications/luci-app-fwknopd/luasrc/model/cbi/fwknopd.lua:49
 msgid ""
 "Maximum age in seconds that an SPA packet will be accepted. defaults to 120 "
 "seconds"
@@ -106,7 +106,7 @@ msgstr ""
 msgid "Normal Key"
 msgstr "Chave Normal"
 
-#: applications/luci-app-fwknopd/luasrc/model/cbi/fwknopd.lua:47
+#: applications/luci-app-fwknopd/luasrc/model/cbi/fwknopd.lua:50
 msgid "Specify the ethernet interface on which fwknopd will sniff packets."
 msgstr ""
 "Especifica o dispositivo ethernet no qual o fwknopd irá observar os pacotes."
@@ -114,6 +114,14 @@ msgstr ""
 #: applications/luci-app-fwknopd/luasrc/model/cbi/fwknopd.lua:28
 msgid "The base64 hmac key"
 msgstr "A chave de autenticação HMAC em formato base64"
+
+#: applications/luci-app-fwknopd/luasrc/model/cbi/fwknopd.lua:43
+msgid ""
+"This instructs fwknopd to accept complete commands that are contained within "
+"an authorization packet. Any such command will be executed on the fwknopd "
+"server as the user specified by the “CMD_EXEC_USER” or as the user that "
+"started fwknopd if that is not set."
+msgstr ""
 
 #: applications/luci-app-fwknopd/luasrc/model/cbi/fwknopd.lua:17
 msgid "Use ANY for any source ip"
@@ -131,6 +139,6 @@ msgstr ""
 msgid "access.conf stanzas"
 msgstr "Estâncias do access.conf"
 
-#: applications/luci-app-fwknopd/luasrc/model/cbi/fwknopd.lua:44
+#: applications/luci-app-fwknopd/luasrc/model/cbi/fwknopd.lua:47
 msgid "fwknopd.conf config options"
 msgstr "Opções do fwknopd.conf"

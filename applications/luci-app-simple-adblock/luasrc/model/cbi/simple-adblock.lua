@@ -83,6 +83,10 @@ elseif targetDNS == "dnsmasq.conf" then
 	outputFile="/var/dnsmasq.d/" .. packageName .. ""
 	outputCache="/var/run/" .. packageName .. ".dnsmasq.cache"
 	outputGzip="/etc/" .. packageName .. ".dnsmasq.gz"
+elseif targetDNS == "dnsmasq.ipset" then
+	outputFile="/var/dnsmasq.d/" .. packageName .. ".ipset"
+	outputCache="/var/run/" .. packageName .. ".ipset.cache"
+	outputGzip="/etc/" .. packageName .. ".ipset.gz"
 elseif targetDNS == "dnsmasq.servers" then
 	outputFile="/var/run/" .. packageName .. ".servers"
 	outputCache="/var/run/" .. packageName .. ".servers.cache"
@@ -195,7 +199,7 @@ else
 		ss = h:option(DummyValue, "_dummy", translate("Service Status"))
 		ss.template = "simple-adblock/status"
 		if tmpfsStatus == "statusSuccess" then
-			ss.value = translatef("%s is blocking %s domains (with %s).", packageVersion, getFileLines(outputFile), targetDNS)
+			ss.value = translatef("Blocking %s domains (with %s).", getFileLines(outputFile), targetDNS)
 		else
 			ss.value = statusTable[tmpfsStatus]
 		end
@@ -206,7 +210,7 @@ else
 		end
 		if tmpfsError then
 			es = h:option(DummyValue, "_dummy", translate("Collected Errors"))
-			es.template = "simple-adblock/error"
+			es.template = "simple-adblock/status"
 			es.value = ""
 			local err, e, url
 			for err in tmpfsError:gmatch("[%p%w]+") do
@@ -220,7 +224,7 @@ else
 		end
 	end
 	if packageVersion ~= "" then
-		buttons = h:option(DummyValue, "_dummy")
+		buttons = h:option(DummyValue, "_dummy", translate("Service Control"))
 		buttons.template = packageName .. "/buttons"
 	end
 end

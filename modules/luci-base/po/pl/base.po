@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: LuCI\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-04-20 09:40+0200\n"
-"PO-Revision-Date: 2021-02-15 09:20+0000\n"
-"Last-Translator: Marcin Net <marcin.net@linux.pl>\n"
+"PO-Revision-Date: 2021-04-15 17:26+0000\n"
+"Last-Translator: Matthaiks <kitynska@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/openwrt/luci/pl/"
 ">\n"
 "Language: pl\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.5-dev\n"
+"X-Generator: Weblate 4.6-dev\n"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:916
 msgid "%.1f dB"
@@ -59,8 +59,8 @@ msgid "-- Additional Field --"
 msgstr "-- Dodatkowe pole --"
 
 #: modules/luci-base/htdocs/luci-static/resources/cbi.js:275
-#: modules/luci-base/htdocs/luci-static/resources/form.js:3186
-#: modules/luci-base/htdocs/luci-static/resources/form.js:3518
+#: modules/luci-base/htdocs/luci-static/resources/form.js:3189
+#: modules/luci-base/htdocs/luci-static/resources/form.js:3521
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:729
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:967
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:1938
@@ -361,17 +361,17 @@ msgstr "Aktywne dzierżawy DHCP"
 msgid "Active DHCPv6 Leases"
 msgstr "Aktywne dzierżawy DHCPv6"
 
-#: modules/luci-base/htdocs/luci-static/resources/network.js:3632
+#: modules/luci-base/htdocs/luci-static/resources/network.js:3644
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:922
 #: protocols/luci-proto-hnet/htdocs/luci-static/resources/protocol/hnet.js:23
 msgid "Ad-Hoc"
 msgstr "Ad-Hoc"
 
-#: modules/luci-base/htdocs/luci-static/resources/form.js:1998
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2001
-#: modules/luci-base/htdocs/luci-static/resources/form.js:2015
-#: modules/luci-base/htdocs/luci-static/resources/form.js:2016
-#: modules/luci-base/htdocs/luci-static/resources/form.js:3001
+#: modules/luci-base/htdocs/luci-static/resources/form.js:2004
+#: modules/luci-base/htdocs/luci-static/resources/form.js:2018
+#: modules/luci-base/htdocs/luci-static/resources/form.js:2019
+#: modules/luci-base/htdocs/luci-static/resources/form.js:3004
 #: modules/luci-compat/luasrc/view/cbi/nsection.htm:25
 #: modules/luci-compat/luasrc/view/cbi/tblsection.htm:189
 #: modules/luci-compat/luasrc/view/cbi/tblsection.htm:197
@@ -471,11 +471,11 @@ msgstr "Ustawienia zaawansowane"
 msgid "Aggregate Transmit Power (ACTATP)"
 msgstr "Agregacja siły transmisji (ACTATP)"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:169
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:176
 msgid "Alert"
 msgstr "Alarm"
 
-#: modules/luci-base/htdocs/luci-static/resources/network.js:2837
+#: modules/luci-base/htdocs/luci-static/resources/network.js:2849
 #: modules/luci-compat/luasrc/model/network.lua:1416
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:59
 msgid "Alias Interface"
@@ -564,6 +564,10 @@ msgstr ""
 #: modules/luci-base/htdocs/luci-static/resources/form.js:588
 msgid "An error occurred while saving the form:"
 msgstr "Wystąpił błąd podczas zapisywania formularza:"
+
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:123
+msgid "An optional, short description for this device"
+msgstr "Opcjonalny, krótki opis tego urządzenia"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:877
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:20
@@ -861,10 +865,18 @@ msgstr ""
 "Dynamiczne powiązanie z interfejsami, a nie z adresami zastępczymi (zalecane "
 "jako domyślne ustawienie linuksa)"
 
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:59
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:64
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:64
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:69
 #: protocols/luci-proto-ipip/htdocs/luci-static/resources/protocol/ipip.js:48
 msgid "Bind interface"
 msgstr "Interfejs wiązań"
 
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:59
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:64
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:64
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:69
 #: protocols/luci-proto-ipip/htdocs/luci-static/resources/protocol/ipip.js:48
 msgid "Bind the tunnel to this interface (optional)."
 msgstr "Połącz tunel z tym interfejsem (opcjonalnie)."
@@ -879,7 +891,7 @@ msgstr "Szybkość transmisji"
 msgid "Bogus NX Domain Override"
 msgstr "Podrobione statystyki NXDOMAIN"
 
-#: modules/luci-base/htdocs/luci-static/resources/network.js:2843
+#: modules/luci-base/htdocs/luci-static/resources/network.js:2855
 #: modules/luci-compat/luasrc/model/network.lua:1420
 msgid "Bridge"
 msgstr "Most"
@@ -1091,7 +1103,7 @@ msgstr ""
 "Kliknij \"Zapisz mtdblock\", aby pobrać określony plik mtdblock. (UWAGA: "
 "FUNKCJA DLA PROFESJONALISTÓW!)"
 
-#: modules/luci-base/htdocs/luci-static/resources/network.js:3631
+#: modules/luci-base/htdocs/luci-static/resources/network.js:3643
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:921
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1026
 msgid "Client"
@@ -1162,6 +1174,13 @@ msgstr ""
 "obejście może powodować problemy z interoperacyjnością i zmniejszoną "
 "odporność kluczowych negocjacji, szczególnie w środowiskach o dużym "
 "natężeniu ruchu."
+
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:101
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:106
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:103
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:108
+msgid "Compute outgoing checksum (optional)."
+msgstr "Obliczanie sumy kontrolnej wychodzącej (opcjonalnie)."
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:3992
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:423
@@ -1247,11 +1266,11 @@ msgstr "Utwórz/Przypisz strefę zapory sieciowej"
 msgid "Create interface"
 msgstr "Stwórz interfejs"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:168
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:175
 msgid "Critical"
 msgstr "Krytyczny"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:172
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:179
 msgid "Cron Log Level"
 msgstr "Poziom logowania cron"
 
@@ -1309,7 +1328,7 @@ msgstr "Serwer DHCP"
 msgid "DHCP and DNS"
 msgstr "DHCP i DNS"
 
-#: modules/luci-base/htdocs/luci-static/resources/network.js:1966
+#: modules/luci-base/htdocs/luci-static/resources/network.js:1978
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:16
 #: modules/luci-compat/luasrc/model/network.lua:968
 msgid "DHCP client"
@@ -1390,8 +1409,8 @@ msgstr "DUID"
 msgid "Data Rate"
 msgstr "Szybkość przesyłania danych"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:163
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:174
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:170
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:181
 msgid "Debug"
 msgstr "Debugowanie"
 
@@ -1433,10 +1452,10 @@ msgstr ""
 "Zdefiniuj dodatkowe opcje DHCP, np. \"<code>6,192.168.2.1,192.168.2.2</code>"
 "\" które są rozgłaszane na serwery DNS klientów."
 
-#: modules/luci-base/htdocs/luci-static/resources/form.js:2068
-#: modules/luci-base/htdocs/luci-static/resources/form.js:2493
-#: modules/luci-base/htdocs/luci-static/resources/form.js:2497
-#: modules/luci-base/htdocs/luci-static/resources/form.js:2985
+#: modules/luci-base/htdocs/luci-static/resources/form.js:2071
+#: modules/luci-base/htdocs/luci-static/resources/form.js:2496
+#: modules/luci-base/htdocs/luci-static/resources/form.js:2500
+#: modules/luci-base/htdocs/luci-static/resources/form.js:2988
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2836
 #: modules/luci-compat/luasrc/view/cbi/nsection.htm:11
 #: modules/luci-compat/luasrc/view/cbi/tblsection.htm:162
@@ -1461,6 +1480,7 @@ msgstr "Usuń tą sieć"
 msgid "Delivery Traffic Indication Message Interval"
 msgstr "Interwał komunikatu o wskazaniu dostawy ruchu"
 
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:123
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:109
 msgid "Description"
 msgstr "Opis"
@@ -1469,7 +1489,7 @@ msgstr "Opis"
 msgid "Deselect"
 msgstr "Odznacz"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:218
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:225
 msgid "Design"
 msgstr "Motyw"
 
@@ -1593,7 +1613,7 @@ msgid "Disconnection attempt failed"
 msgstr "Próba rozłączenia nie powiodła się"
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:591
-#: modules/luci-base/htdocs/luci-static/resources/form.js:2692
+#: modules/luci-base/htdocs/luci-static/resources/form.js:2695
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:3273
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4009
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4098
@@ -1625,6 +1645,13 @@ msgstr ""
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:252
 msgid "Do not cache negative replies, e.g. for not existing domains"
 msgstr "Nie buforuj odpowiedzi negatywnych, np. dla nieistniejących domen"
+
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:86
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:91
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:88
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:93
+msgid "Do not create host route to peer (optional)."
+msgstr "Nie twórz trasy hosta do peera (opcjonalnie)."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:219
 msgid "Do not forward requests that cannot be answered by public name servers"
@@ -1662,6 +1689,8 @@ msgstr "Wymagana domena"
 msgid "Domain whitelist"
 msgstr "Białe listy (Dozwolone domeny)"
 
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:83
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:88
 #: protocols/luci-proto-ipip/htdocs/luci-static/resources/protocol/ipip.js:67
 msgid "Don't Fragment"
 msgstr "Nie fragmentuj"
@@ -1690,7 +1719,7 @@ msgstr "Pobierz mtdblock"
 msgid "Downstream SNR offset"
 msgstr "Kompensacja transmisji SNR"
 
-#: modules/luci-base/htdocs/luci-static/resources/form.js:2451
+#: modules/luci-base/htdocs/luci-static/resources/form.js:2454
 msgid "Drag to reorder"
 msgstr "Przeciągnij, aby zmienić kolejność"
 
@@ -1737,9 +1766,9 @@ msgstr "Długość EA-bits"
 msgid "EAP-Method"
 msgstr "Metoda protokołu rozszerzonego uwierzytelniania (EAP)"
 
-#: modules/luci-base/htdocs/luci-static/resources/form.js:2471
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2474
-#: modules/luci-base/htdocs/luci-static/resources/form.js:2848
+#: modules/luci-base/htdocs/luci-static/resources/form.js:2477
+#: modules/luci-base/htdocs/luci-static/resources/form.js:2851
 #: modules/luci-compat/luasrc/view/cbi/tblsection.htm:154
 #: modules/luci-compat/luasrc/view/cbi/tblsection.htm:160
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:337
@@ -1763,7 +1792,7 @@ msgstr "Edytuj tę sieć"
 msgid "Edit wireless network"
 msgstr "Edytuj ustawienia sieci bezprzewodowych"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:170
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:177
 msgid "Emergency"
 msgstr "Ratunkowy"
 
@@ -1811,7 +1840,7 @@ msgstr "Włącz negocjację IPv6 na łączu PPP"
 msgid "Enable Jumbo Frame passthrough"
 msgstr "Włącz przechodzenie ramek Jumbo"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:238
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:245
 msgid "Enable NTP client"
 msgstr "Włącz klienta NTP"
 
@@ -1847,6 +1876,15 @@ msgstr "Włącz tworzenie kopii pakietów przychodzących"
 msgid "Enable mirroring of outgoing packets"
 msgstr "Włącz tworzenie kopii pakietów wychodzących"
 
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:89
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:94
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:91
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:96
+msgid "Enable support for multicast traffic (optional)."
+msgstr "Włącz wsparcie dla ruchu multicast (opcjonalne)."
+
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:83
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:88
 #: protocols/luci-proto-ipip/htdocs/luci-static/resources/protocol/ipip.js:67
 msgid "Enable the DF (Don't Fragment) flag of the encapsulating packets."
 msgstr "Włącz flagę DF (Nie fragmentuj) pakietów szyfrujących."
@@ -1921,7 +1959,7 @@ msgstr "Usuwanie..."
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:102
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:103
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:104
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:167
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:174
 msgid "Error"
 msgstr "Błąd"
 
@@ -1929,12 +1967,12 @@ msgstr "Błąd"
 msgid "Errored seconds (ES)"
 msgstr "Ilość błędów (ES)"
 
-#: modules/luci-base/htdocs/luci-static/resources/network.js:2855
+#: modules/luci-base/htdocs/luci-static/resources/network.js:2867
 #: modules/luci-compat/luasrc/model/network.lua:1432
 msgid "Ethernet Adapter"
 msgstr "Karta Ethernet"
 
-#: modules/luci-base/htdocs/luci-static/resources/network.js:2846
+#: modules/luci-base/htdocs/luci-static/resources/network.js:2858
 #: modules/luci-compat/luasrc/model/network.lua:1422
 msgid "Ethernet Switch"
 msgstr "Switch Ethernet"
@@ -1985,15 +2023,15 @@ msgstr "Zewnętrzny Klucz R0 listy właścicieli"
 msgid "External R1 Key Holder List"
 msgstr "Zewnętrzny Klucz R1 listy właścicieli"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:144
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:151
 msgid "External system log server"
 msgstr "Serwer zewnętrzny dla logów systemowych"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:149
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:156
 msgid "External system log server port"
 msgstr "Port zewnętrznego serwera logów systemowych"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:154
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:161
 msgid "External system log server protocol"
 msgstr "Protokół zewnętrznego serwera logów systemowych"
 
@@ -2209,6 +2247,22 @@ msgstr "GHz"
 msgid "GPRS only"
 msgstr "Tylko GPRS"
 
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:10
+msgid "GRE tunnel over IPv4"
+msgstr "Tunel GRE przez IPv4"
+
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:10
+msgid "GRE tunnel over IPv6"
+msgstr "Tunel GRE przez IPv6"
+
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:10
+msgid "GRETAP tunnel over IPv4"
+msgstr "Tunel GRETAP przez IPv4"
+
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:10
+msgid "GRETAP tunnel over IPv6"
+msgstr "Tunel GRETAP przez IPv6"
+
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:44
 msgid "Gateway"
 msgstr "Brama"
@@ -2267,8 +2321,8 @@ msgstr "Globalne opcje sieciowe"
 msgid "Go to password configuration..."
 msgstr "Przejdź do konfiguracji hasła..."
 
-#: modules/luci-base/htdocs/luci-static/resources/form.js:2393
-#: modules/luci-base/htdocs/luci-static/resources/form.js:3153
+#: modules/luci-base/htdocs/luci-static/resources/form.js:2396
+#: modules/luci-base/htdocs/luci-static/resources/form.js:3156
 #: modules/luci-compat/luasrc/view/cbi/full_valueheader.htm:4
 #: modules/luci-compat/luasrc/view/cbi/tblsection.htm:58
 msgid "Go to relevant configuration page"
@@ -2427,7 +2481,7 @@ msgstr "Brama IPv4"
 msgid "IPv4 netmask"
 msgstr "Maska IPv4"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:287
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:290
 msgid "IPv4 network in address/netmask notation"
 msgstr "Zapis adresu/maski w sieci IPv4"
 
@@ -2513,7 +2567,7 @@ msgstr "Długość przydziału IPv6"
 msgid "IPv6 gateway"
 msgstr "Brama IPv6"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:292
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:295
 msgid "IPv6 network in address/netmask notation"
 msgstr "Zapis adresu/maski w sieci IPv6"
 
@@ -2680,7 +2734,28 @@ msgstr "Czas bezczynności"
 msgid "Inbound:"
 msgstr "Przychodzący:"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:164
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:100
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:105
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:102
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:107
+msgid "Incoming checksum"
+msgstr "Przychodząca suma kontrolna"
+
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:92
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:97
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:94
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:99
+msgid "Incoming key"
+msgstr "Klucz przychodzący"
+
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:102
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:107
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:104
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:109
+msgid "Incoming serialization"
+msgstr "Przychodząca serializacja"
+
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:171
 msgid "Info"
 msgstr "Informacja"
 
@@ -2811,6 +2886,16 @@ msgstr "Niewłaściwy"
 msgid "Invalid Base64 key string"
 msgstr "Nieprawidłowy ciąg klucza Base64"
 
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:78
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:83
+msgid "Invalid TOS value, expected 00..FF or inherit"
+msgstr "Nieprawidłowa wartość TOS, oczekiwana 00..FF lub pochodna"
+
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:83
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:88
+msgid "Invalid Traffic Class value, expected 00..FF or inherit"
+msgstr "Nieprawidłowa wartość klasy ruchu, spodziewane 00..FF lub pochodna"
+
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:285
 msgid "Invalid VLAN ID given! Only IDs between %d and %d are allowed."
 msgstr "Podano niewłaściwy ID VLAN! Dozwolone są tylko ID pomiędzy %d a %d."
@@ -2890,6 +2975,20 @@ msgstr "Klucz"
 msgid "Key #%d"
 msgstr "Klucz #%d"
 
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:92
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:97
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:94
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:99
+msgid "Key for incoming packets (optional)."
+msgstr "Klucz do pakietów przychodzących (opcjonalnie)."
+
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:96
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:101
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:98
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:103
+msgid "Key for outgoing packets (optional)."
+msgstr "Klucz do pakietów wychodzących (opcjonalnie)."
+
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/processes.js:54
 msgid "Kill"
 msgstr "Zabij"
@@ -2934,7 +3033,7 @@ msgstr "LLC"
 msgid "Label"
 msgstr "Oznaczenie"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:207
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:214
 msgid "Language"
 msgstr "Język"
 
@@ -3112,6 +3211,8 @@ msgstr "Lokalny adres IP jest nieprawidłowy"
 msgid "Local IP address to assign"
 msgstr "Lokalny adres IP do przypisania"
 
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:46
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:46
 #: protocols/luci-proto-ipip/htdocs/luci-static/resources/protocol/ipip.js:44
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6in4.js:40
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6rd.js:39
@@ -3120,6 +3221,8 @@ msgstr "Lokalny adres IP do przypisania"
 msgid "Local IPv4 address"
 msgstr "Lokalny adres IPv4"
 
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:46
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:53
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6in4.js:54
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dslite.js:45
 msgid "Local IPv6 address"
@@ -3175,7 +3278,7 @@ msgstr "Zapytania lokalizujące"
 msgid "Lock to BSSID"
 msgstr "Zablokuj na BSSID"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:162
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:169
 msgid "Log output level"
 msgstr "Poziom logowania"
 
@@ -3186,6 +3289,21 @@ msgstr "Loguj zapytania"
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:107
 msgid "Logging"
 msgstr "Logowanie"
+
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:57
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:57
+msgid ""
+"Logical network from which to select the local endpoint if local IPv6 "
+"address is empty and no WAN IPv6 is available (optional)."
+msgstr ""
+"Sieć logiczna, z której można wybrać lokalny punkt końcowy, jeśli lokalny "
+"adres IPv6 jest pusty i nie jest dostępna usługa WAN IPv6 (opcjonalnie)."
+
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:57
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:62
+msgid "Logical network to which the tunnel will be added (bridged) (optional)."
+msgstr ""
+"Sieć logiczna, do której tunel zostanie dodany (zmostkowy) (opcjonalnie)."
 
 #: modules/luci-base/luasrc/view/sysauth.htm:38
 msgid "Login"
@@ -3279,7 +3397,7 @@ msgstr ""
 msgid "Manual"
 msgstr "Podręcznik"
 
-#: modules/luci-base/htdocs/luci-static/resources/network.js:3630
+#: modules/luci-base/htdocs/luci-static/resources/network.js:3642
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:640
 msgid "Master"
 msgstr "Główny"
@@ -3341,7 +3459,7 @@ msgstr "Pamięć"
 msgid "Memory usage (%)"
 msgstr "Użycie RAM"
 
-#: modules/luci-base/htdocs/luci-static/resources/network.js:3633
+#: modules/luci-base/htdocs/luci-static/resources/network.js:3645
 msgid "Mesh"
 msgstr "Mesh"
 
@@ -3416,7 +3534,7 @@ msgstr "Zapytanie dotyczące modemu nie powiodło się"
 msgid "Modem init timeout"
 msgstr "Limit czasu inicjacji modemu"
 
-#: modules/luci-base/htdocs/luci-static/resources/network.js:3634
+#: modules/luci-base/htdocs/luci-static/resources/network.js:3646
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:998
 msgid "Monitor"
 msgstr "Monitor"
@@ -3425,7 +3543,7 @@ msgstr "Monitor"
 msgid "More Characters"
 msgstr "Użyj więcej znaków"
 
-#: modules/luci-base/htdocs/luci-static/resources/form.js:2335
+#: modules/luci-base/htdocs/luci-static/resources/form.js:2338
 msgid "More…"
 msgstr "Więcej…"
 
@@ -3487,6 +3605,13 @@ msgstr "Przesuń w dół"
 msgid "Move up"
 msgstr "Przesuń w górę"
 
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:89
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:94
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:91
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:96
+msgid "Multicast"
+msgstr "Multicast"
+
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1422
 msgid "NAS ID"
 msgstr "NAS ID"
@@ -3512,11 +3637,11 @@ msgstr "Proxy NDP"
 msgid "NT Domain"
 msgstr "Domena NT"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:272
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:279
 msgid "NTP server candidates"
 msgstr "Lista serwerów NTP"
 
-#: modules/luci-base/htdocs/luci-static/resources/form.js:2373
+#: modules/luci-base/htdocs/luci-static/resources/form.js:2376
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:3749
 #: modules/luci-compat/luasrc/view/cbi/tblsection.htm:27
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:708
@@ -3556,6 +3681,11 @@ msgstr "Sieciowy obraz startowy"
 msgid "Network device is not present"
 msgstr "Urządzenie sieciowe nie jest obecne"
 
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:57
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:62
+msgid "Network interface"
+msgstr "Interfejs sieciowy"
+
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:711
 msgid "New interface name…"
 msgstr "Nazwa nowego interfejsu…"
@@ -3564,7 +3694,7 @@ msgstr "Nazwa nowego interfejsu…"
 msgid "Next »"
 msgstr "Następna »"
 
-#: modules/luci-base/htdocs/luci-static/resources/form.js:3457
+#: modules/luci-base/htdocs/luci-static/resources/form.js:3460
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:108
 msgid "No"
 msgstr "Nie"
@@ -3600,6 +3730,13 @@ msgstr "Brak wpisów w tym katalogu"
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/backupfiles.lua:82
 msgid "No files found"
 msgstr "Nie znaleziono plików"
+
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:86
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:91
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:88
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:93
+msgid "No host route"
+msgstr "Brak trasy hosta"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:667
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:142
@@ -3670,7 +3807,7 @@ msgstr "Bez symboli wieloznacznych"
 msgid "None"
 msgstr "Brak"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:175
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:182
 msgid "Normal"
 msgstr "Normalny"
 
@@ -3702,7 +3839,11 @@ msgstr "Nie uruchomiony przy starcie"
 msgid "Not supported"
 msgstr "Nie wspierane"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:165
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:126
+msgid "Notes"
+msgstr "Uwagi"
+
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:172
 msgid "Notice"
 msgstr "Spostrzeżenie"
 
@@ -3716,7 +3857,7 @@ msgstr ""
 "Liczba buforowanych wpisów DNS (max wynosi 10000, 0 oznacza brak pamięci "
 "podręcznej)"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:197
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:204
 msgid "Number of parallel threads used for compression"
 msgstr "Liczba równoległych wątków użytych do kompresji"
 
@@ -3763,7 +3904,7 @@ msgstr "Zwłoka połączenia"
 msgid "One of hostname or mac address must be specified!"
 msgstr "Nazwa hosta lub adres MAC musi być podany!"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:463
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:466
 msgid "One of the following: %s"
 msgstr "Jedno z poniższych: %s"
 
@@ -3795,12 +3936,12 @@ msgstr "OpenConnect (CISCO AnyConnect)"
 msgid "Operating frequency"
 msgstr "Częstotliwość"
 
-#: modules/luci-base/htdocs/luci-static/resources/form.js:1802
-#: modules/luci-base/htdocs/luci-static/resources/form.js:3467
+#: modules/luci-base/htdocs/luci-static/resources/form.js:1805
+#: modules/luci-base/htdocs/luci-static/resources/form.js:3470
 msgid "Option \"%s\" contains an invalid input value."
 msgstr "Opcja \"%s\" zawiera nieważną wartość wejściową."
 
-#: modules/luci-base/htdocs/luci-static/resources/form.js:1815
+#: modules/luci-base/htdocs/luci-static/resources/form.js:1818
 msgid "Option \"%s\" must not be empty."
 msgstr "Opcja \"%s\" nie może być pusta."
 
@@ -3816,6 +3957,10 @@ msgstr "Usunięto wartość"
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:67
 msgid "Optional"
 msgstr "Opcjonalny"
+
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:126
+msgid "Optional, free-form notes about this device"
+msgstr "Opcjonalne, dowolne uwagi dotyczące tego urządzenia"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:77
 msgid ""
@@ -3901,6 +4046,27 @@ msgstr "Wychodzące"
 msgid "Outbound:"
 msgstr "Wychodzący:"
 
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:101
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:106
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:103
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:108
+msgid "Outgoing checksum"
+msgstr "Wychodząca suma kontrolna"
+
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:96
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:101
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:98
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:103
+msgid "Outgoing key"
+msgstr "Klucz wychodzący"
+
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:103
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:108
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:105
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:110
+msgid "Outgoing serialization"
+msgstr "Serializacja wychodząca"
+
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:50
 msgid "Output Interface"
 msgstr "Interfejs wyjściowy"
@@ -3919,6 +4085,10 @@ msgstr "Nadpisz adres MAC"
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:58
 #: modules/luci-base/htdocs/luci-static/resources/protocol/static.js:226
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:64
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:69
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:69
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:74
 #: protocols/luci-proto-hnet/htdocs/luci-static/resources/protocol/hnet.js:44
 #: protocols/luci-proto-ipip/htdocs/luci-static/resources/protocol/ipip.js:53
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:54
@@ -3932,10 +4102,16 @@ msgstr "Nadpisz adres MAC"
 msgid "Override MTU"
 msgstr "Nadpisz MTU"
 
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:74
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:79
 #: protocols/luci-proto-ipip/htdocs/luci-static/resources/protocol/ipip.js:63
 msgid "Override TOS"
 msgstr "Nadpisz TOS"
 
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:69
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:74
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:74
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:79
 #: protocols/luci-proto-ipip/htdocs/luci-static/resources/protocol/ipip.js:58
 msgid "Override TTL"
 msgstr "Nadpisz TTL"
@@ -4161,6 +4337,13 @@ msgstr "Peery"
 msgid "Perfect Forward Secrecy"
 msgstr "Doskonałe tajne przekazywanie"
 
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:103
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:108
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:105
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:110
+msgid "Perform outgoing packets serialization (optional)."
+msgstr "Wykonaj serializację wychodzących pakietów (opcjonalnie)."
+
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/reboot.js:28
 msgid "Perform reboot"
 msgstr "Wykonaj restart"
@@ -4224,7 +4407,7 @@ msgstr "Port %s"
 msgid "Port status:"
 msgstr "Status portu:"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:489
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:492
 msgid "Potential negation of: %s"
 msgstr "Potencjalne odrzucenie: %s"
 
@@ -4298,7 +4481,7 @@ msgstr "Prot."
 msgid "Protocol"
 msgstr "Protokół"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:263
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:270
 msgid "Provide NTP server"
 msgstr "Włącz serwer NTP"
 
@@ -4496,9 +4679,16 @@ msgstr "Most przekaźnikowy"
 msgid "Remote IPv4 address"
 msgstr "Zdalny adres IPv4"
 
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:42
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:42
 #: protocols/luci-proto-ipip/htdocs/luci-static/resources/protocol/ipip.js:40
 msgid "Remote IPv4 address or FQDN"
 msgstr "Zdalny adres IPv4 lub FQDN"
+
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:42
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:42
+msgid "Remote IPv6 address or FQDN"
+msgstr "Zdalny adres IPv6 lub FQDN"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:842
 msgid "Remove"
@@ -4519,6 +4709,20 @@ msgstr "Zażądaj długość prefiksu IPv6"
 #: modules/luci-base/htdocs/luci-static/resources/rpc.js:411
 msgid "Request timeout"
 msgstr "Limit czasu żądania"
+
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:100
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:105
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:102
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:107
+msgid "Require incoming checksum (optional)."
+msgstr "Wymagaj przychodzącej sumy kontrolnej (opcjonalnie)."
+
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:102
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:107
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:104
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:109
+msgid "Require incoming packets serialization (optional)."
+msgstr "Wymagaj serializacji pakietów przychodzących (opcjonalnie)."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1571
 msgid "Required"
@@ -4788,7 +4992,7 @@ msgstr "SSID"
 msgid "SWAP"
 msgstr "SWAP"
 
-#: modules/luci-base/htdocs/luci-static/resources/form.js:2697
+#: modules/luci-base/htdocs/luci-static/resources/form.js:2700
 #: modules/luci-base/htdocs/luci-static/resources/luci.js:2180
 #: modules/luci-compat/luasrc/view/cbi/error.htm:17
 #: modules/luci-compat/luasrc/view/cbi/footer.htm:26
@@ -4977,7 +5181,7 @@ msgstr "Rozmiar"
 msgid "Size of DNS query cache"
 msgstr "Rozmiar pamięci podręcznej zapytań DNS"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:185
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:192
 msgid "Size of the ZRam device in megabytes"
 msgstr "Rozmiar ZRam urządzenia w Megabajtach"
 
@@ -4994,7 +5198,7 @@ msgstr "Pomiń do zawartości"
 msgid "Skip to navigation"
 msgstr "Pomiń do nawigacji"
 
-#: modules/luci-base/htdocs/luci-static/resources/network.js:2849
+#: modules/luci-base/htdocs/luci-static/resources/network.js:2861
 #: modules/luci-compat/luasrc/model/network.lua:1427
 msgid "Software VLAN"
 msgstr "Programowy VLAN"
@@ -5031,6 +5235,11 @@ msgstr "Źródło"
 msgid "Source Address"
 msgstr "Adres Źródłowy"
 
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:57
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:57
+msgid "Source interface"
+msgstr "Interfejs źródłowy"
+
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:291
 msgid "Specifies the directory the device is attached to"
 msgstr "Podaje katalog do którego jest podłączone urządzenie"
@@ -5064,6 +5273,37 @@ msgstr ""
 msgid "Specify a TOS (Type of Service)."
 msgstr "Określ TOS (Type of Service)."
 
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:79
+msgid ""
+"Specify a TOS (Type of Service). Can be <code>inherit</code> (the outer "
+"header inherits the value of the inner header) or an hexadecimal value "
+"<code>00..FF</code> (optional)."
+msgstr ""
+"Określ tos (typ usługi). Może to być <code>inherit</code> (zewnętrzny "
+"nagłówek dziedziczy wartość nagłówka wewnętrznego) lub wartość szesnastkowa "
+"<code>00..FF</code> (opcjonalnie)."
+
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:74
+msgid ""
+"Specify a TOS (Type of Service). Can be <code>inherit</code> (the outer "
+"header inherits the value of the inner header), or an hexadecimal value "
+"<code>00..FF</code> (optional)."
+msgstr ""
+"Określ tos (typ usługi). Może to być <code>inherit</code> (nagłówek "
+"zewnętrzny dziedziczy wartość nagłówka wewnętrznego) lub wartość "
+"szesnastkowa <code>00..FF</code> (opcjonalnie)."
+
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:69
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:74
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:74
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:79
+msgid ""
+"Specify a TTL (Time to Live) for the encapsulating packet other than the "
+"default (64) (optional)."
+msgstr ""
+"Określ TTL (czas życia) dla pakietu enkapsulującego inny niż domyślny (64) "
+"(opcjonalnie)."
+
 #: protocols/luci-proto-ipip/htdocs/luci-static/resources/protocol/ipip.js:58
 msgid ""
 "Specify a TTL (Time to Live) for the encapsulating packet other than the "
@@ -5071,6 +5311,28 @@ msgid ""
 msgstr ""
 "Określ TTL (Time to Live) dla pakietu enkapsulującego innego niż domyślny "
 "(64)."
+
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:79
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:84
+msgid ""
+"Specify a Traffic Class. Can be <code>inherit</code> (the outer header "
+"inherits the value of the inner header) or an hexadecimal value <code>00.."
+"FF</code> (optional)."
+msgstr ""
+"Określ klasę ruchu. Może to być <code>inherit</code> (zewnętrzny nagłówek "
+"dziedziczy wartość nagłówka wewnętrznego) lub wartość szesnastkowa <code>00.."
+"FF</code> (opcjonalnie)."
+
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:64
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:69
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:69
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:74
+msgid ""
+"Specify an MTU (Maximum Transmission Unit) other than the default (1280 "
+"bytes) (optional)."
+msgstr ""
+"Określ jednostkę MTU (maksymalną jednostkę transmisji) inną niż domyślna "
+"(1280 bajtów) (opcjonalnie)."
 
 #: protocols/luci-proto-ipip/htdocs/luci-static/resources/protocol/ipip.js:53
 msgid ""
@@ -5125,7 +5387,7 @@ msgstr "Dzierżawy statyczne"
 msgid "Static Routes"
 msgstr "Statyczne trasy"
 
-#: modules/luci-base/htdocs/luci-static/resources/network.js:1965
+#: modules/luci-base/htdocs/luci-static/resources/network.js:1977
 #: modules/luci-base/htdocs/luci-static/resources/protocol/static.js:172
 #: modules/luci-compat/luasrc/model/network.lua:966
 msgid "Static address"
@@ -5211,7 +5473,7 @@ msgstr "Przełącznik Maski Portu"
 msgid "Switch Speed Mask"
 msgstr "Przełącznik Maski Szybkości"
 
-#: modules/luci-base/htdocs/luci-static/resources/network.js:2849
+#: modules/luci-base/htdocs/luci-static/resources/network.js:2861
 #: modules/luci-compat/luasrc/model/network.lua:1425
 msgid "Switch VLAN"
 msgstr "Przełącznik VLAN"
@@ -5255,7 +5517,7 @@ msgid "System Properties"
 msgstr "Właściwości systemu"
 
 # Wszędzie używane jest "loga" z małej litery.
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:139
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:146
 msgid "System log buffer size"
 msgstr "Rozmiar bufora logu systemowego"
 
@@ -5313,11 +5575,20 @@ msgstr ""
 "Konfiguracja aktualizacji punktu końcowego HE.net uległa zmianie, musisz "
 "teraz użyć zwykłej nazwy użytkownika zamiast ID użytkownika!"
 
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:42
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:42
 #: protocols/luci-proto-ipip/htdocs/luci-static/resources/protocol/ipip.js:40
 msgid ""
 "The IPv4 address or the fully-qualified domain name of the remote tunnel end."
 msgstr ""
 "Adres IPv4 lub w pełni zweryfikowana nazwa domeny zdalnego wyjścia z tunelu."
+
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:42
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:42
+msgid ""
+"The IPv6 address or the fully-qualified domain name of the remote tunnel end."
+msgstr ""
+"Adres IPv6 lub w pełni kwalifikowana nazwa domeny końca tunelu zdalnego."
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6rd.js:53
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/map.js:59
@@ -5425,9 +5696,16 @@ msgstr ""
 msgid "The length of the IPv6 prefix in bits"
 msgstr "Długość prefiksu IPv6 w bitach"
 
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:46
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:46
 #: protocols/luci-proto-ipip/htdocs/luci-static/resources/protocol/ipip.js:44
 msgid "The local IPv4 address over which the tunnel is created (optional)."
 msgstr "Lokalny adres IPv4, na którym tworzony jest tunel (opcjonalnie)."
+
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:46
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:53
+msgid "The local IPv6 address over which the tunnel is created (optional)."
+msgstr "Lokalny adres IPv6, na którym tworzony jest tunel (opcjonalnie)."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1883
 msgid "The network name is already used"
@@ -5643,8 +5921,8 @@ msgstr ""
 "Poniższa lista przedstawia aktualnie uruchomione procesy systemowe i ich "
 "status."
 
-#: modules/luci-base/htdocs/luci-static/resources/form.js:2036
-#: modules/luci-base/htdocs/luci-static/resources/form.js:2342
+#: modules/luci-base/htdocs/luci-static/resources/form.js:2039
+#: modules/luci-base/htdocs/luci-static/resources/form.js:2345
 #: modules/luci-compat/luasrc/view/cbi/tblsection.htm:172
 #: modules/luci-compat/luasrc/view/cbi/tsection.htm:32
 msgid "This section contains no values yet"
@@ -5658,7 +5936,7 @@ msgstr "Synchronizacja czasu"
 msgid "Time interval for rekeying GTK"
 msgstr "Odstęp czasowy dla wznowienia kluczy GTK"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:122
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:129
 msgid "Timezone"
 msgstr "Strefa czasowa"
 
@@ -5696,6 +5974,11 @@ msgstr "Śledzenie trasy"
 msgid "Traffic"
 msgstr "Ruch"
 
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:79
+#: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:84
+msgid "Traffic Class"
+msgstr "Klasa ruchu"
+
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:385
 msgid "Transfer"
 msgstr "Transfer"
@@ -5716,7 +5999,7 @@ msgstr "Rodzaj Wyzwalacza"
 msgid "Tunnel ID"
 msgstr "Numer identyfikacyjny tunelu"
 
-#: modules/luci-base/htdocs/luci-static/resources/network.js:2852
+#: modules/luci-base/htdocs/luci-static/resources/network.js:2864
 #: modules/luci-compat/luasrc/model/network.lua:1430
 msgid "Tunnel Interface"
 msgstr "Interfejs tunelu"
@@ -5835,12 +6118,12 @@ msgstr "Czas niedostępnośći (UAS)"
 msgid "Unexpected reply data format"
 msgstr "Nieprzewidziany format danych odpowiedzi"
 
-#: modules/luci-base/htdocs/luci-static/resources/network.js:1967
+#: modules/luci-base/htdocs/luci-static/resources/network.js:1979
 #: modules/luci-compat/luasrc/model/network.lua:970
 msgid "Unknown"
 msgstr "Nieznany"
 
-#: modules/luci-base/htdocs/luci-static/resources/network.js:2276
+#: modules/luci-base/htdocs/luci-static/resources/network.js:2288
 #: modules/luci-compat/luasrc/model/network.lua:1137
 msgid "Unknown error (%s)"
 msgstr "Nieznany błąd (%s)"
@@ -5849,11 +6132,11 @@ msgstr "Nieznany błąd (%s)"
 msgid "Unknown error code"
 msgstr "Nieznany kod błędu"
 
-#: modules/luci-base/htdocs/luci-static/resources/network.js:1964
+#: modules/luci-base/htdocs/luci-static/resources/network.js:1976
 #: modules/luci-base/htdocs/luci-static/resources/protocol/none.js:6
 #: modules/luci-compat/luasrc/model/network.lua:964
 msgid "Unmanaged"
-msgstr "Niezarządzalny"
+msgstr "Niezarządzany"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:195
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:216
@@ -5892,7 +6175,7 @@ msgstr "Góra"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:3824
 msgid "Upload"
-msgstr "Wyślij"
+msgstr "Wysyłanie"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:410
 msgid ""
@@ -5942,7 +6225,7 @@ msgstr "Czas pracy"
 msgid "Use <code>/etc/ethers</code>"
 msgstr "Użyj <code>/etc/ethers</code>"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:267
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:274
 msgid "Use DHCP advertised servers"
 msgstr "Użyj dedykowanych serwerów DHCP"
 
@@ -6192,8 +6475,8 @@ msgstr ""
 msgid "Waiting for device..."
 msgstr "Oczekiwanie na urządzenie..."
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:166
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:176
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:173
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:183
 msgid "Warning"
 msgstr "Ostrzeżenie"
 
@@ -6233,13 +6516,13 @@ msgstr "WireGuard VPN"
 msgid "Wireless"
 msgstr "Sieć bezprzewodowa"
 
-#: modules/luci-base/htdocs/luci-static/resources/network.js:2840
+#: modules/luci-base/htdocs/luci-static/resources/network.js:2852
 #: modules/luci-compat/luasrc/model/network.lua:1418
 msgid "Wireless Adapter"
 msgstr "Adapter bezprzewodowy"
 
-#: modules/luci-base/htdocs/luci-static/resources/network.js:2819
-#: modules/luci-base/htdocs/luci-static/resources/network.js:4023
+#: modules/luci-base/htdocs/luci-static/resources/network.js:2831
+#: modules/luci-base/htdocs/luci-static/resources/network.js:4035
 #: modules/luci-compat/luasrc/model/network.lua:1404
 #: modules/luci-compat/luasrc/model/network.lua:1865
 msgid "Wireless Network"
@@ -6281,11 +6564,11 @@ msgstr "Sieć bezprzewodowa jest włączona"
 msgid "Write received DNS requests to syslog"
 msgstr "Zapisz otrzymane żądania DNS do dziennika systemowego"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:158
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:165
 msgid "Write system log to file"
 msgstr "Zapisz dziennik systemowy do pliku"
 
-#: modules/luci-base/htdocs/luci-static/resources/form.js:3457
+#: modules/luci-base/htdocs/luci-static/resources/form.js:3460
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:109
 msgid "Yes"
 msgstr "Tak"
@@ -6318,19 +6601,19 @@ msgstr ""
 "Musisz włączyć obsługę JavaScript w swojej przeglądarce, inaczej LuCI nie "
 "będzie działać poprawnie."
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:190
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:197
 msgid "ZRam Compression Algorithm"
 msgstr "Alogrytm kompresji ZRam"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:197
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:204
 msgid "ZRam Compression Streams"
 msgstr "Strumienie kompresji ZRam"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:183
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:190
 msgid "ZRam Settings"
 msgstr "Ustawienia ZRam"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:185
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:192
 msgid "ZRam Size"
 msgstr "Rozmiar ZRam"
 
@@ -6459,7 +6742,7 @@ msgstr "pełny-duplex"
 msgid "half-duplex"
 msgstr "pół-duplex"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:566
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:569
 msgid "hexadecimal encoded value"
 msgstr "wartość zakodowana szesnastkowo"
 
@@ -6487,11 +6770,11 @@ msgstr "ignoruj"
 msgid "input"
 msgstr "wejście"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:391
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:394
 msgid "key between 8 and 63 characters"
 msgstr "klucza od 8 do 63 znaków"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:403
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:406
 msgid "key with either 5 or 13 characters"
 msgstr "klucz z 5 lub 13 znakami"
 
@@ -6520,7 +6803,7 @@ msgstr "niepowiązane"
 msgid "non-empty value"
 msgstr "niepustą wartość"
 
-#: modules/luci-base/htdocs/luci-static/resources/form.js:2838
+#: modules/luci-base/htdocs/luci-static/resources/form.js:2841
 msgid "none"
 msgstr "brak"
 
@@ -6606,7 +6889,7 @@ msgstr "otagowane"
 msgid "time units (TUs / 1.024 ms) [1000-65535]"
 msgstr "jednostki czasu (TUs / 1.024 ms) [1000-65535]"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:556
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:559
 msgid "unique value"
 msgstr "unikalna wartość"
 
@@ -6622,7 +6905,7 @@ msgstr "nieznane"
 msgid "unlimited"
 msgstr "nielimitowane"
 
-#: modules/luci-base/htdocs/luci-static/resources/form.js:3186
+#: modules/luci-base/htdocs/luci-static/resources/form.js:3189
 #: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:76
 #: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:138
 #: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:369
@@ -6653,7 +6936,7 @@ msgstr "prawidłowy adres IP"
 msgid "valid IP address or prefix"
 msgstr "prawidłowy adres IP lub prefix"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:277
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:279
 msgid "valid IPv4 CIDR"
 msgstr "prawidłowy CIDR IPv4"
 
@@ -6666,15 +6949,15 @@ msgstr "prawidłowy adres IPv4"
 msgid "valid IPv4 address or network"
 msgstr "prawidłowy adres IPv4 lub sieć"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:370
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:373
 msgid "valid IPv4 address:port"
 msgstr "prawidłowy adres IPv4:port"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:310
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:313
 msgid "valid IPv4 network"
 msgstr "prawidłowa sieć IPv4"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:272
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:273
 msgid "valid IPv4 or IPv6 CIDR"
 msgstr "prawidłowy protokół IPv4 lub IPv6 CIDR"
 
@@ -6682,7 +6965,7 @@ msgstr "prawidłowy protokół IPv4 lub IPv6 CIDR"
 msgid "valid IPv4 prefix value (0-32)"
 msgstr "prawidłowa wartość prefiksu IPv4 (0-32)"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:282
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:285
 msgid "valid IPv6 CIDR"
 msgstr "prawidłowy protokół IPv6 CIDR"
 
@@ -6695,11 +6978,11 @@ msgstr "prawidłowy adres IPv6"
 msgid "valid IPv6 address or prefix"
 msgstr "prawidłowy adres IPv6 lub prefix"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:300
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:303
 msgid "valid IPv6 host id"
 msgstr "prawidłowy identyfikator hosta IPv6"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:315
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:318
 msgid "valid IPv6 network"
 msgstr "prawidłowa sieć IPv6"
 
@@ -6707,25 +6990,25 @@ msgstr "prawidłowa sieć IPv6"
 msgid "valid IPv6 prefix value (0-128)"
 msgstr "prawidłowa wartość prefiksu IPv6 (0-128)"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:336
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:339
 msgid "valid MAC address"
 msgstr "prawidłowy MAC adres"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:407
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:410
 msgid "valid UCI identifier"
 msgstr "prawidłowy identyfikator UCI"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:358
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:361
 msgid "valid UCI identifier, hostname or IP address"
 msgstr "prawidłowy identyfikator UCI, nazwa hosta lub adres IP"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:379
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:382
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:385
 msgid "valid address:port"
 msgstr "prawidłowy adres:port"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:530
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:534
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:533
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:537
 msgid "valid date (YYYY-MM-DD)"
 msgstr "prawidłowa data (RRRR-MM-DD)"
 
@@ -6733,27 +7016,27 @@ msgstr "prawidłowa data (RRRR-MM-DD)"
 msgid "valid decimal value"
 msgstr "prawidłowa wartość dziesiętna"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:401
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:404
 msgid "valid hexadecimal WEP key"
 msgstr "prawidłowy szesnastkowy klucz WEP"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:389
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:392
 msgid "valid hexadecimal WPA key"
 msgstr "prawidłowy szesnastkowy klucz WPA"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:364
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:367
 msgid "valid host:port"
 msgstr "prawidłowy host:port"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:351
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:353
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:354
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:356
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:73
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:79
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:107
 msgid "valid hostname"
 msgstr "prawidłowa nazwa hosta"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:341
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:344
 msgid "valid hostname or IP address"
 msgstr "prawidłowa nazwa hosta lub adres IP"
 
@@ -6761,53 +7044,53 @@ msgstr "prawidłowa nazwa hosta lub adres IP"
 msgid "valid integer value"
 msgstr "poprawna wartość całkowita"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:305
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:308
 msgid "valid network in address/netmask notation"
 msgstr "prawidłowa sieć w zapisie adresu/maski sieci"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:505
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:508
 msgid "valid phone digit (0-9, \"*\", \"#\", \"!\" or \".\")"
 msgstr "poprawna wartość numeru telefonu (0-9, \"*\", \"#\", \"!\" lub \".\")"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:328
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:331
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:334
 msgid "valid port or port range (port1-port2)"
 msgstr "prawidłowy port lub zakres portów (PORT1-PORT2)"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:320
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:323
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:136
 msgid "valid port value"
 msgstr "prawidłowa wartość portu"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:510
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:513
 msgid "valid time (HH:MM:SS)"
 msgstr "prawidłowy czas (GG:MM:SS)"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:432
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:435
 msgid "value between %d and %d characters"
 msgstr "wartość pomiędzy %d i %d znaków"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:412
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:415
 msgid "value between %f and %f"
 msgstr "wartość pomiędzy %f a %f"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:416
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:419
 msgid "value greater or equal to %f"
 msgstr "wartość większą lub równą %f"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:420
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:423
 msgid "value smaller or equal to %f"
 msgstr "wartość mniejszą lub równą %f"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:426
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:429
 msgid "value with %d characters"
 msgstr "wartość z %d znakami"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:437
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:440
 msgid "value with at least %d characters"
 msgstr "o wartości co najmniej %d znaków"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:442
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:445
 msgid "value with at most %d characters"
 msgstr "o wartości nie większej niż %d znaków"
 
