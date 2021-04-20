@@ -4021,6 +4021,17 @@ WifiNetwork = baseclass.extend(/** @lends LuCI.network.WifiNetwork.prototype */ 
 	 * @property {number} [nss]
 	 * Specifies the number of spatial streams used by the transmission.
 	 * Only applicable to VHT rates.
+	 *
+	 * @property {boolean} [he]
+	 * Specifies whether this rate is an HE (IEEE 802.11ax) rate.
+	 *
+	 * @property {number} [he_gi]
+	 * Specifies whether the guard interval used for the transmission.
+	 * Only applicable to HE rates.
+	 *
+	 * @property {number} [he_dcm]
+	 * Specifies whether dual concurrent modulation is used for the transmission.
+	 * Only applicable to HE rates.
 	 */
 
 	/**
