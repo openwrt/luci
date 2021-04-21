@@ -388,6 +388,10 @@ return view.extend({
 			Logging such packets may cause an increase in latency due to it requiring additional system resources.'));
 		o.rmempty = false;
 
+		o = s.taboption('general', form.Flag, 'ban_whitelistonly', _('Whitelist Only'), _('Restrict the internet access from/to a small number of secure websites/IPs \
+			and block access from/to the rest of the internet.'));
+		o.rmempty = true;
+
 		o = s.taboption('general', form.Flag, 'ban_mail_enabled', _('E-Mail Notification'), _('Send banIP related notification e-mails. \
 			This needs the installation and setup of the additional \'msmtp\' package.'));
 		o.rmempty = false;
