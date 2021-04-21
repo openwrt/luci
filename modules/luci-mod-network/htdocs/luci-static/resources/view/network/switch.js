@@ -180,8 +180,10 @@ return view.extend({
 			s = m.section(form.NamedSection, sid, 'switch', switch_title);
 			s.addremove = false;
 
-			if (feat.vlan_option)
-				s.option(form.Flag, feat.vlan_option, _('Enable VLAN functionality'));
+			if (feat.vlan_option) {
+				o = s.option(form.Flag, feat.vlan_option, _('Enable VLAN functionality'));
+				o.rmempty = false;
+			}
 
 			if (feat.learning_option) {
 				o = s.option(form.Flag, feat.learning_option, _('Enable learning and aging'));
