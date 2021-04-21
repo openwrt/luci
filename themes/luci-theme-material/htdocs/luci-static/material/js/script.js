@@ -66,7 +66,7 @@
                 var that = $(this);
                 var href = that.attr("href");
 
-                if (href.indexOf(nodeUrl) != -1) {
+                if (href.endsWith(nodeUrl) || href.indexOf('/' + nodeUrl + '/') != -1) {
                     ulNode.click();
                     ulNode.next(".slide-menu").stop(true, true);
                     lastNode = that.parent();
