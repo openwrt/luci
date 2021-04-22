@@ -123,10 +123,22 @@ PKG_GITBRANCH?=$(if $(DUMP),x,$(strip $(shell \
 
 include $(INCLUDE_DIR)/package.mk
 
+# LUCI_SUBMENU: the submenu-item below the LuCI top-level menu inside OpoenWrt menuconfig
+#               usually one of the LUCI_MENU.* definitions
+# LUCI_SUBMENU_DEFAULT: the regular SUBMENU defined by LUCI_TYPE or derrived from the packagename
+# LUCI_SUBMENU_FORCED: manually forced value SUBMENU to set to by explicit definiton
+#                      can be any string, "none" disables the creation of a submenu 
+#                      most usefull in combination with LUCI_CATEGORY, to make the package appear
+#                      anywhere in the menu structure
+LUCI_SUBMENU_DEFAULT=$(if $(LUCI_MENU.$(LUCI_TYPE)),$(LUCI_MENU.$(LUCI_TYPE)),$(LUCI_MENU.app))
+LUCI_SUBMENU=$(if $(LUCI_SUBMENU_FORCED),$(LUCI_SUBMENU_FORCED),$(LUCI_SUBMENU_DEFAULT))
+
 define Package/$(PKG_NAME)
   SECTION:=$(LUCI_SECTION)
   CATEGORY:=$(LUCI_CATEGORY)
-  SUBMENU:=$(if $(LUCI_MENU.$(LUCI_TYPE)),$(LUCI_MENU.$(LUCI_TYPE)),$(LUCI_MENU.app))
+ifneq ($(LUCI_SUBMENU),none)
+  SUBMENU:=$(LUCI_SUBMENU)
+endif
   TITLE:=$(if $(LUCI_TITLE),$(LUCI_TITLE),LuCI $(LUCI_NAME) $(LUCI_TYPE))
   DEPENDS:=$(LUCI_DEPENDS)
   VERSION:=$(if $(PKG_VERSION),$(PKG_VERSION),$(PKG_SRC_VERSION))
