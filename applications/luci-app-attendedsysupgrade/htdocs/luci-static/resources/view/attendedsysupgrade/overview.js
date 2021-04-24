@@ -77,6 +77,7 @@ function request_sysupgrade(server_url, data) {
 	} else {
 		req = request.post(server_url + "/api/build", {
 			profile: data.board_name,
+			target: data.target,
 			version: data.version,
 			packages: data.packages,
 			diff_packages: true,
@@ -213,7 +214,7 @@ function request_sysupgrade(server_url, data) {
 	});
 }
 
-function check_sysupgrade(server_url, current_version, board_name, packages) {
+function check_sysupgrade(server_url, current_version, target, board_name, packages) {
 	displayStatus("notice spinning", E('p', _('Searching for an available sysupgrade')));
 	var current_branch = current_version.split(".").slice(0, 2).join(".");
 	var candidates = [];
@@ -253,6 +254,7 @@ function check_sysupgrade(server_url, current_version, board_name, packages) {
 				var mapdata = {
 					request: {
 						board_name: board_name,
+						target: target,
 						version: candidates[0],
 						packages: Object.keys(packages).sort(),
 					}
@@ -339,6 +341,7 @@ return view.extend({
 	render: function(res) {
 		var packages = res[0].packages;
 		var current_version = res[1].release.version;
+		var target = res[1].release.target;
 		var board_name = res[1].board_name;
 		var auto_search = uci.get_first('attendedsysupgrade', 'client', 'auto_search') || 1;
 		var server_url = uci.get_first('attendedsysupgrade', 'server', 'url');
@@ -350,13 +353,13 @@ return view.extend({
 		];
 
 		if (auto_search == 1) {
-			check_sysupgrade(server_url, current_version, board_name, packages)
+			check_sysupgrade(server_url, current_version, target, board_name, packages)
 		}
 
 		view.push(E('p', {
 			'class': 'btn cbi-button-positive',
 			'click': function() {
-				check_sysupgrade(server_url, current_version, board_name, packages)
+				check_sysupgrade(server_url, current_version, target, board_name, packages)
 			}
 		}, _('Search for sysupgrade')));
 
