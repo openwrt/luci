@@ -15,6 +15,9 @@ return baseclass.extend({
 		o.default = 'localhost';
 		o.datatype = 'host';
 		o.depends('enable', '1');
+		o.write = function(section_id, value) {
+			return form.Value.prototype.write.call(this, section_id, L.toArray(value).join(' '));
+		};
 
 		o = s.option(form.Value, 'Port', _('Port for apcupsd communication'));
 		o.default = '3551';
