@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-03-30 17:00+0200\n"
-"PO-Revision-Date: 2021-03-25 05:19+0000\n"
+"PO-Revision-Date: 2021-04-27 01:31+0000\n"
 "Last-Translator: Reza Almanda <rezaalmanda27@gmail.com>\n"
 "Language-Team: Indonesian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsfirewall/id/>\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.5.2-dev\n"
+"X-Generator: Weblate 4.7-dev\n"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:48
 msgid ""
@@ -30,6 +30,19 @@ msgid ""
 "&quot;\">%{helper.val}</var>:<var data-tooltip=\"%{helper.name}\">%{helper."
 "val}</var>}}"
 msgstr ""
+"%{src?%{dest?Forwarded:Incoming}:Outgoing} %{ipv6?%{ipv4?<var>IPv4</var> and "
+"<var>IPv6</var>:<var>IPv6</var>}:<var>IPv4</var>}%{proto?, protocol "
+"%{proto#%{next?, }%{item.types?<var class=\"cbi-tooltip-container\">%{item."
+"name}<span class=\"cbi-tooltip\">ICMP with types %{item.types#%{next?, "
+"}<var>%{item}</var>}</span></var>:<var>%{item.name}</var>}}}%{mark?, mark "
+"<var%{mark.inv? data-tooltip=\"Match fwmarks except %{mark.num}%{mark.mask? "
+"with mask %{mark.mask}}.\":%{mark.mask? data-tooltip=\"Mask fwmark value "
+"with %{mark.mask} before compare.\"}}>%{mark.val}</var>}%{dscp?, DSCP %{"
+"dscp.inv?<var data-tooltip=\"Match DSCP classifications except %{dscp."
+"num?:%{dscp.name}}\">%{dscp.val}</var>:<var>%{dscp.val}</var>}}%{helper?, "
+"helper %{helper.inv?<var data-tooltip=\"Match any helper except "
+"&quot;%{helper.name}&quot;\">%{helper.val}</var>:<var data-tooltip=\"%{helper"
+".name}\">%{helper.val}</var>}}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:448
 msgid "-- add IP --"
@@ -99,11 +112,14 @@ msgid ""
 "<var data-tooltip=\"NOTRACK\">Do not track</var> %{src?%{dest?forward:input}:"
 "output}"
 msgstr ""
+"<var data-tooltip=\"NOTRACK\">Jangan lacak</var> "
+"%{src?%{dest?forward:input}:output}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:121
 msgid ""
 "<var data-tooltip=\"REJECT\">Reject</var> %{src?%{dest?forward:input}:output}"
 msgstr ""
+"<var data-tooltip=\"REJECT\">Tolak</var> %{src?%{dest?forward:input}:output}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:81
 msgid ""
@@ -125,7 +141,7 @@ msgstr ""
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:158
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:208
 msgid "Action"
-msgstr ""
+msgstr "Aksi"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:289
 msgid ""
@@ -149,26 +165,26 @@ msgstr "Pengaturan Lanjutan"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:251
 msgid "Allow \"invalid\" traffic"
-msgstr ""
+msgstr "Izinkan lalu lintas \"tidak valid\""
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:351
 msgid "Allow forward from <em>source zones</em>:"
-msgstr ""
+msgstr "Izinkan forward dari <em> zona sumber </em>:"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:310
 msgid "Allow forward to <em>destination zones</em>:"
-msgstr ""
+msgstr "Izinkan forward ke <em> zona tujuan </em>:"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:523
 msgid "Any"
-msgstr ""
+msgstr "Apapun"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:438
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:454
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:257
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:273
 msgid "Any day"
-msgstr ""
+msgstr "Setiap hari"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:316
 msgid ""
@@ -1076,59 +1092,59 @@ msgstr ""
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:40
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:50
 msgid "any zone"
-msgstr ""
+msgstr "zona apapun"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:380
 msgid "apply firewall mark"
-msgstr ""
+msgstr "terapkan tanda firewall"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:379
 msgid "assign conntrack helper"
-msgstr ""
+msgstr "tetapkan conntrack helper"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:68
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:89
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:61
 msgid "day"
-msgstr ""
+msgstr "hari"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:233
 msgid "do not rewrite"
-msgstr ""
+msgstr "jangan menulis ulang"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:378
 msgid "don't track"
-msgstr ""
+msgstr "jangan lacak"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:375
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:68
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:150
 msgid "drop"
-msgstr ""
+msgstr "buang"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:68
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:89
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:61
 msgid "hour"
-msgstr ""
+msgstr "jam"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:68
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:89
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:61
 msgid "minute"
-msgstr ""
+msgstr "menit"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:377
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:67
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:149
 msgid "reject"
-msgstr ""
+msgstr "tolak"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:68
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:89
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:61
 msgid "second"
-msgstr ""
+msgstr "detik"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:49
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:58
@@ -1137,21 +1153,21 @@ msgstr ""
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:78
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:50
 msgid "this device"
-msgstr ""
+msgstr "peranti ini"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:116
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:216
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:305
 msgid "this new zone"
-msgstr ""
+msgstr "zona baru ini"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:353
 msgid "unlimited"
-msgstr ""
+msgstr "tak terbatas"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:250
 msgid "unspecified"
-msgstr ""
+msgstr "tidak ditentukan"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:338
 msgid "valid firewall mark"
