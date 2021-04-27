@@ -11,13 +11,10 @@ return baseclass.extend({
 
 		o = s.option(form.Flag, 'enable', _('Enable this plugin'));
 
-		o = s.option(form.DynamicList, 'Host', _('Monitor host'));
+		o = s.option(form.Value, 'Host', _('Monitor host'));
 		o.default = 'localhost';
 		o.datatype = 'host';
 		o.depends('enable', '1');
-		o.write = function(section_id, value) {
-			return form.Value.prototype.write.call(this, section_id, L.toArray(value).join(' '));
-		};
 
 		o = s.option(form.Value, 'Port', _('Port for apcupsd communication'));
 		o.default = '3551';
@@ -26,11 +23,6 @@ return baseclass.extend({
 	},
 
 	configSummary: function(section) {
-		var hosts = L.toArray(section.Host);
-		if (hosts.length)
-			return N_(hosts.length,
-				'Monitoring APC UPS at host %s, port %d',
-				'Monitoring APC UPS at hosts %s, port %d'
-			).format(hosts.join(', '), section.Port || 3551);
+		return _('Monitoring APC UPS at host %s, port %d').format(section.Host || 'localhost', section.Port || 3551);
 	}
 });
