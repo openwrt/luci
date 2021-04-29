@@ -217,6 +217,7 @@ function request_sysupgrade(server_url, data) {
 function check_sysupgrade(server_url, current_version, target, board_name, packages) {
 	displayStatus("notice spinning", E('p', _('Searching for an available sysupgrade')));
 	var current_branch = current_version.split(".").slice(0, 2).join(".");
+	var advanced_mode = uci.get_first('attendedsysupgrade', 'client', 'advanced_mode') || 0;
 	var candidates = [];
 	fetch(server_url + "/api/latest")
 		.then(response => response.json())
@@ -232,10 +233,10 @@ function check_sysupgrade(server_url, current_version, target, board_name, packa
 						break;
 					}
 
-					// warn user that a new major release would be installed
-					//if (current_branch != branch) {
-					//	branch["warn_branch_jump"] = true;
-					//}
+					// skip branch upgrades outside the advanced mode
+					if (current_branch != branch && advanced_mode == 0) {
+						continue;
+					}
 
 					candidates.unshift(version);
 
@@ -247,7 +248,6 @@ function check_sysupgrade(server_url, current_version, target, board_name, packa
 			}
 			if (candidates) {
 				var m, s, o;
-				var advanced_mode = uci.get_first('attendedsysupgrade', 'client', 'advanced_mode') || 0;
 
 				console.log(candidates);
 
