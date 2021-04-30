@@ -4063,7 +4063,7 @@ var UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 						E('button', {
 							'class': 'btn',
 							'click': UI.prototype.hideModal
-						}, [ _('Dismiss') ]), ' ',
+						}, [ _('Close') ]), ' ',
 						E('button', {
 							'class': 'cbi-button cbi-button-positive important',
 							'click': L.bind(this.apply, this, true)
