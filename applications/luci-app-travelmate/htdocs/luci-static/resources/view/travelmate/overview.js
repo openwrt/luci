@@ -144,7 +144,7 @@ return view.extend({
 	render: function(result) {
 		var m, s, o;
 
-		m = new form.Map('travelmate', 'Travelmate', _('Configuration of the travelmate package to to enable travel router functionality. \
+		m = new form.Map('travelmate', 'Travelmate', _('Configuration of the travelmate package to enable travel router functionality. \
 			For further information <a href="https://github.com/openwrt/packages/blob/master/net/travelmate/files/README.md" target="_blank" rel="noreferrer noopener" >check the online documentation</a>. <br /> \
 			<em>Please note:</em> On first start please call the \'Interface Wizard\' once, to make the necessary network- and firewall settings.'));
 
