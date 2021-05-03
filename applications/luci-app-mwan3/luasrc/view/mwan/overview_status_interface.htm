@@ -46,6 +46,20 @@ XHR.poll(-1, '<%=luci.dispatcher.build_url("admin", "status", "mwan", "interface
 							);
 							css = 'danger';
 							break;
+						case 'notracking':
+							state = '<%:No Tracking%>';
+							if ((status.interfaces[iface].uptime) > 0) {
+								time = String.format(
+									'<div><strong>Uptime:&nbsp;</strong>%s</div>',
+									secondsToString(status.interfaces[iface].uptime)
+								);
+								css = 'success';
+							}
+							else {
+								time = '<div>&nbsp;</div>'
+								css = 'warning';
+							}
+							break;
 						default:
 							state = '<%:Disabled%>';
 							time = '<div>&nbsp;</div>'
