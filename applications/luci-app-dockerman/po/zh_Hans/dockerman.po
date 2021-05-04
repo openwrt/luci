@@ -129,7 +129,6 @@ msgid "Cancel"
 msgstr "取消"
 
 #: applications/luci-app-dockerman/luasrc/model/cbi/dockerman/configuration.lua:65
-#: applications/luci-app-dockerman/luasrc/model/cbi/dockerman/overview.lua:140
 msgid "Client connection"
 msgstr "客户端连接"
 
@@ -152,7 +151,6 @@ msgid "Configuration"
 msgstr "配置"
 
 #: applications/luci-app-dockerman/luasrc/model/cbi/dockerman/configuration.lua:42
-#: applications/luci-app-dockerman/luasrc/model/cbi/dockerman/overview.lua:118
 msgid "Configure the default bridge network"
 msgstr "配置默认桥接网络"
 
@@ -168,7 +166,6 @@ msgid "Connect Network"
 msgstr "连接网络"
 
 #: applications/luci-app-dockerman/luasrc/model/cbi/dockerman/configuration.lua:14
-#: applications/luci-app-dockerman/luasrc/model/cbi/dockerman/overview.lua:96
 msgid "Connect to remote endpoint"
 msgstr "连接到远程终端"
 
@@ -233,7 +230,6 @@ msgid "Debug"
 msgstr "调试"
 
 #: applications/luci-app-dockerman/luasrc/model/cbi/dockerman/configuration.lua:41
-#: applications/luci-app-dockerman/luasrc/model/cbi/dockerman/overview.lua:117
 msgid "Default bridge"
 msgstr "默认桥接"
 
@@ -293,7 +289,6 @@ msgstr "Docker 镜像"
 
 #: applications/luci-app-dockerman/luasrc/model/cbi/dockerman/configuration.lua:36
 #: applications/luci-app-dockerman/luasrc/model/cbi/dockerman/overview.lua:30
-#: applications/luci-app-dockerman/luasrc/model/cbi/dockerman/overview.lua:112
 msgid "Docker Root Dir"
 msgstr "Docker 根目录"
 
@@ -345,7 +340,6 @@ msgid "Events"
 msgstr "事件"
 
 #: applications/luci-app-dockerman/luasrc/model/cbi/dockerman/configuration.lua:50
-#: applications/luci-app-dockerman/luasrc/model/cbi/dockerman/overview.lua:126
 msgid "Example: https://hub-mirror.c.163.com"
 msgstr "示例： https://hub-mirror.c.163.com"
 
@@ -497,7 +491,6 @@ msgid "Ipvlan Mode"
 msgstr "Ipvlan 模式"
 
 #: applications/luci-app-dockerman/luasrc/model/cbi/dockerman/configuration.lua:49
-#: applications/luci-app-dockerman/luasrc/model/cbi/dockerman/overview.lua:125
 msgid ""
 "It replaces the daemon registry mirrors with a new set of registry mirrors"
 msgstr "它将守护程序登记镜像源替换为一组新的登记镜像源"
@@ -529,7 +522,6 @@ msgid "Load"
 msgstr "负载"
 
 #: applications/luci-app-dockerman/luasrc/model/cbi/dockerman/configuration.lua:54
-#: applications/luci-app-dockerman/luasrc/model/cbi/dockerman/overview.lua:130
 msgid "Log Level"
 msgstr "日志等级"
 
@@ -711,22 +703,18 @@ msgstr "拉取镜像"
 
 #: applications/luci-app-dockerman/luasrc/model/cbi/dockerman/configuration.lua:48
 #: applications/luci-app-dockerman/luasrc/model/cbi/dockerman/overview.lua:32
-#: applications/luci-app-dockerman/luasrc/model/cbi/dockerman/overview.lua:124
 msgid "Registry Mirrors"
 msgstr "注册表镜像"
 
 #: applications/luci-app-dockerman/luasrc/model/cbi/dockerman/configuration.lua:13
-#: applications/luci-app-dockerman/luasrc/model/cbi/dockerman/overview.lua:95
 msgid "Remote Endpoint"
 msgstr "远程终端"
 
 #: applications/luci-app-dockerman/luasrc/model/cbi/dockerman/configuration.lua:18
-#: applications/luci-app-dockerman/luasrc/model/cbi/dockerman/overview.lua:100
 msgid "Remote Host"
 msgstr "远程主机"
 
 #: applications/luci-app-dockerman/luasrc/model/cbi/dockerman/configuration.lua:27
-#: applications/luci-app-dockerman/luasrc/model/cbi/dockerman/overview.lua:105
 msgid "Remote Port"
 msgstr "远程端口"
 
@@ -791,27 +779,19 @@ msgid "Set environment variables to inside the container"
 msgstr "在容器内部设置环境变量"
 
 #: applications/luci-app-dockerman/luasrc/model/cbi/dockerman/configuration.lua:55
-#: applications/luci-app-dockerman/luasrc/model/cbi/dockerman/overview.lua:131
 msgid "Set the logging level"
 msgstr "设置日志记录级别"
-
-#: applications/luci-app-dockerman/luasrc/model/cbi/dockerman/overview.lua:92
-msgid "Setting"
-msgstr "设置"
 
 #: applications/luci-app-dockerman/luasrc/model/cbi/dockerman/images.lua:146
 msgid "Size"
 msgstr "大小"
 
-#: applications/luci-app-dockerman/luasrc/model/cbi/dockerman/overview.lua:141
-msgid "Specifies where the Docker daemon will listen for client connections"
-msgstr "指定Docker守护程序侦听客户端连接的位置"
-
 #: applications/luci-app-dockerman/luasrc/model/cbi/dockerman/configuration.lua:66
 msgid ""
 "Specifies where the Docker daemon will listen for client connections "
 "(default: unix:///var/run/docker.sock)"
-msgstr "指定Docker守护程序将在何处侦听客户端连接(默认： unix:///var/run/docker.sock)"
+msgstr ""
+"指定Docker守护程序将在何处侦听客户端连接(默认： unix:///var/run/docker.sock)"
 
 #: applications/luci-app-dockerman/luasrc/model/cbi/dockerman/container.lua:218
 #: applications/luci-app-dockerman/luasrc/model/cbi/dockerman/containers.lua:193
@@ -968,7 +948,15 @@ msgstr "警告"
 msgid ""
 "When pressing the Import button, both a local image can be loaded onto the "
 "system and a valid image tar can be downloaded from remote."
-msgstr "按下导入按钮时，既可以将本地镜像文件加载到系统上，也可以从远程下载有效的Tar格式的镜像文件。"
+msgstr ""
+"按下导入按钮时，既可以将本地镜像文件加载到系统上，也可以从远程下载有效的Tar格"
+"式的镜像文件。"
+
+#~ msgid "Setting"
+#~ msgstr "设置"
+
+#~ msgid "Specifies where the Docker daemon will listen for client connections"
+#~ msgstr "指定Docker守护程序侦听客户端连接的位置"
 
 #~ msgid "Docker Container"
 #~ msgstr "Docker 容器"
