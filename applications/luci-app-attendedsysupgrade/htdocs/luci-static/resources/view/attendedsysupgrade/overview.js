@@ -24,6 +24,15 @@ var callUpgradeStart = rpc.declare({
 	params: ["keep"]
 });
 
+function get_branch(version) {
+	// determine branch of a version
+	// SNAPSHOT -> SNAPSHOT
+	// 21.02-SNAPSHOT -> 21.02
+	// 21.02.0-rc1 -> 21.02
+	// 19.07.8 -> 19.07
+	return version.replace("-SNAPSHOT", "").split(".").slice(0, 2).join(".");
+}
+
 function install_sysupgrade(url, keep, sha256) {
 	displayStatus("notice spinning", E('p', _('Downloading firmware from server to browser')));
 	request.get(url, {
@@ -89,7 +98,6 @@ function request_sysupgrade(server_url, data) {
 			case 200:
 				var res = response.json()
 				var image;
-				console.log(res)
 				for (image of res.images) {
 					if (image.type == "sysupgrade") {
 						break;
@@ -216,9 +224,10 @@ function request_sysupgrade(server_url, data) {
 
 function check_sysupgrade(server_url, current_version, target, board_name, packages) {
 	displayStatus("notice spinning", E('p', _('Searching for an available sysupgrade')));
-	var current_branch = current_version.split(".").slice(0, 2).join(".");
+	var current_branch = get_branch(current_version);
 	var advanced_mode = uci.get_first('attendedsysupgrade', 'client', 'advanced_mode') || 0;
 	var candidates = [];
+
 	fetch(server_url + "/api/latest")
 		.then(response => response.json())
 		.then(response => {
@@ -226,7 +235,7 @@ function check_sysupgrade(server_url, current_version, target, board_name, packa
 				candidates.push("SNAPSHOT");
 			} else {
 				for (let version of response["latest"]) {
-					var branch = version.split(".").slice(0, 2).join(".");
+					var branch = get_branch(version);
 
 					// already latest version installed
 					if (current_version == version) {
@@ -248,8 +257,6 @@ function check_sysupgrade(server_url, current_version, target, board_name, packa
 			}
 			if (candidates) {
 				var m, s, o;
-
-				console.log(candidates);
 
 				var mapdata = {
 					request: {
