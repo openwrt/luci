@@ -196,7 +196,7 @@ return view.extend({
 
 			scanCache[local_wifi.bssid].data = local_wifi;
 
-			if (chan_analysis.offset_tbl[local_wifi.channel] != null) {
+			if (chan_analysis.offset_tbl[local_wifi.channel] != null && local_wifi.center_chan1) {
 				var center_channels = [local_wifi.center_chan1],
 				    chan_width_text = local_wifi.htmode.replace(/(V)*HT/,''),
 				    chan_width = parseInt(chan_width_text)/10;
