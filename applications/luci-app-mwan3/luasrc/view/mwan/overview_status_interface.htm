@@ -33,7 +33,7 @@ XHR.poll(-1, '<%=luci.dispatcher.build_url("admin", "status", "mwan", "interface
 						case 'online':
 							state = '<%:Online%>';
 							time = String.format(
-								'<div><strong>Uptime:&nbsp;</strong>%s</div>',
+								'<div><strong><%:Uptime%>:&nbsp;</strong>%s</div>',
 								secondsToString(status.interfaces[iface].online)
 							);
 							css = 'success';
@@ -41,10 +41,24 @@ XHR.poll(-1, '<%=luci.dispatcher.build_url("admin", "status", "mwan", "interface
 						case 'offline':
 							state = '<%:Offline%>';
 							time = String.format(
-								'<div><strong>Downtime:&nbsp;</strong>%s</div>',
+								'<div><strong><%:Downtime%>:&nbsp;</strong>%s</div>',
 								secondsToString(status.interfaces[iface].offline)
 							);
 							css = 'danger';
+							break;
+						case 'notracking':
+							state = '<%:No Tracking%>';
+							if ((status.interfaces[iface].uptime) > 0) {
+								time = String.format(
+									'<div><strong><%:Uptime%>:&nbsp;</strong>%s</div>',
+									secondsToString(status.interfaces[iface].uptime)
+								);
+								css = 'success';
+							}
+							else {
+								time = '<div>&nbsp;</div>'
+								css = 'warning';
+							}
 							break;
 						default:
 							state = '<%:Disabled%>';
@@ -57,11 +71,11 @@ XHR.poll(-1, '<%=luci.dispatcher.build_url("admin", "status", "mwan", "interface
 						css
 					);
 					statusview += String.format(
-						'<div><strong>Interface:&nbsp;</strong>%s</div>',
+						'<div><strong><%:Interface%>:&nbsp;</strong>%s</div>',
 						iface
 					);
 					statusview += String.format(
-						'<div><strong>Status:&nbsp;</strong>%s</div>',
+						'<div><strong><%:Status%>:&nbsp;</strong>%s</div>',
 						state
 					);
 					if (time)
@@ -85,7 +99,7 @@ XHR.poll(-1, '<%=luci.dispatcher.build_url("admin", "status", "mwan", "interface
 		display: inline-block;
 		margin: 1rem;
 		padding: 1rem;
-		width: 10rem;
+		width: 15rem;
 		float: left;
 		line-height: 125%;
 	}
