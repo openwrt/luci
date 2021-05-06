@@ -117,7 +117,7 @@ msgstr "檢查連線數量"
 msgid "Check routing table"
 msgstr "檢查路由表"
 
-#: applications/luci-app-mwan3/luasrc/view/mwan/overview_status_interface.htm:98
+#: applications/luci-app-mwan3/luasrc/view/mwan/overview_status_interface.htm:112
 #: applications/luci-app-mwan3/luasrc/view/mwan/status_detail.htm:34
 #: applications/luci-app-mwan3/luasrc/view/mwan/status_troubleshooting.htm:34
 msgid "Collecting data..."
@@ -155,7 +155,7 @@ msgstr "詳細"
 msgid "Diagnostics"
 msgstr "診斷"
 
-#: applications/luci-app-mwan3/luasrc/view/mwan/overview_status_interface.htm:50
+#: applications/luci-app-mwan3/luasrc/view/mwan/overview_status_interface.htm:64
 msgid "Disabled"
 msgstr "已停用"
 
@@ -163,6 +163,10 @@ msgstr "已停用"
 msgid ""
 "Downed interface will be deemed up after this many successful ping tests"
 msgstr "當 Ping 成功次數達到這個數值後，已經被認為離線的介面將會重新上線"
+
+#: applications/luci-app-mwan3/luasrc/view/mwan/overview_status_interface.htm:44
+msgid "Downtime"
+msgstr ""
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/globalsconfig.lua:26
 msgid "Emergency"
@@ -291,6 +295,7 @@ msgstr "初始狀態"
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interface.lua:149
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/member.lua:27
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/memberconfig.lua:18
+#: applications/luci-app-mwan3/luasrc/view/mwan/overview_status_interface.htm:74
 #: applications/luci-app-mwan3/luasrc/view/mwan/status_detail.htm:10
 #: applications/luci-app-mwan3/luasrc/view/mwan/status_diagnostics.htm:10
 #: applications/luci-app-mwan3/luasrc/view/mwan/status_diagnostics.htm:61
@@ -340,7 +345,7 @@ msgstr "備用成員"
 msgid "Load Balancing"
 msgstr "負載均衡"
 
-#: applications/luci-app-mwan3/luasrc/view/mwan/overview_status_interface.htm:97
+#: applications/luci-app-mwan3/luasrc/view/mwan/overview_status_interface.htm:111
 #: applications/luci-app-mwan3/luasrc/view/mwan/status_detail.htm:33
 #: applications/luci-app-mwan3/luasrc/view/mwan/status_diagnostics.htm:36
 #: applications/luci-app-mwan3/luasrc/view/mwan/status_troubleshooting.htm:33
@@ -384,7 +389,7 @@ msgstr "MWAN - 規則"
 msgid "MWAN Interface Configuration - %s"
 msgstr "MWAN 介面配置 - %s"
 
-#: applications/luci-app-mwan3/luasrc/view/mwan/overview_status_interface.htm:95
+#: applications/luci-app-mwan3/luasrc/view/mwan/overview_status_interface.htm:109
 msgid "MWAN Interfaces"
 msgstr "MWAN 介面"
 
@@ -475,9 +480,13 @@ msgstr ""
 msgid "No"
 msgstr "不"
 
-#: applications/luci-app-mwan3/luasrc/view/mwan/overview_status_interface.htm:77
+#: applications/luci-app-mwan3/luasrc/view/mwan/overview_status_interface.htm:91
 msgid "No MWAN interfaces found"
 msgstr "沒有找到 MWAN 介面"
+
+#: applications/luci-app-mwan3/luasrc/view/mwan/overview_status_interface.htm:50
+msgid "No Tracking"
+msgstr ""
 
 #: applications/luci-app-mwan3/luasrc/controller/mwan3.lua:159
 msgid "No gateway for interface %s found."
@@ -557,9 +566,11 @@ msgid ""
 "spaces<br />Names must be 15 characters or less<br />Policies may not share "
 "the same name as configured interfaces, members or rules"
 msgstr ""
-"「政策」設定檔用來劃分一個或多個成員，並控制 MWAN 如何散發流量<br />擁有較低權值的成員介面將被優先使用<br /"
-">擁有相同權值的成員介面將被負載平衡<br />負載平衡的成員介面中，擁有較高權重的成員介面將散發到更多流量<br />名稱允許包含 \"A-Z, a-"
-"z, 0-9, _\"，不能使用空格<br />名稱不得超過 15 個字元<br />「政策」名稱不應該與配置的介面、成員或規則名稱相同"
+"「政策」設定檔用來劃分一個或多個成員，並控制 MWAN 如何散發流量<br />擁有較低"
+"權值的成員介面將被優先使用<br />擁有相同權值的成員介面將被負載平衡<br />負載"
+"平衡的成員介面中，擁有較高權重的成員介面將散發到更多流量<br />名稱允許包含 "
+"\"A-Z, a-z, 0-9, _\"，不能使用空格<br />名稱不得超過 15 個字元<br />「政策」"
+"名稱不應該與配置的介面、成員或規則名稱相同"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/policy.lua:51
 msgid "Policy"
@@ -643,6 +654,10 @@ msgstr "來源位址"
 msgid "Source port"
 msgstr "來源埠"
 
+#: applications/luci-app-mwan3/luasrc/view/mwan/overview_status_interface.htm:78
+msgid "Status"
+msgstr ""
+
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/ruleconfig.lua:55
 msgid "Sticky"
 msgstr "粘滯模式"
@@ -693,15 +708,17 @@ msgid ""
 "Physical device name which interface went up or down (e.g. \"eth0\" or "
 "\"wwan0\")<br /><br />"
 msgstr ""
-"您可以在這裡修改 \"/etc/mwan3.user\" 的內容。<br />在執行 sysupgrade 期間，該檔案也會被保留。<br /><br "
-"/>請注意：<br />該檔案會被解譯為「Shell 指令碼」。<br />指令碼的第一行必須是 &#34;#!/bin/sh&#34;（引號之內）。"
-"<br />以 \"#\" 開頭的行是註解，不會被執行。<br />請您在此處自訂 mwan3 動作，他們將<br />在已啟用 mwan3 "
-"的介面上<br />被每個 netifd 熱插拔介面事件執行。<br /><br />傳遞到該指令碼的主要環境變數有三個。<br /><br />$"
-"ACTION<br />* \"ifup\" 藉由 netifd 與 mwan3track 呼叫<br />* \"ifdown\" 也藉由 "
-"netifd 與 mwan3track 呼叫<br />* \"connected\" 只在追蹤成功時藉由 mwan3track 呼叫<br />* "
-"\"disconnected\" 只在追蹤失敗時藉由 mwan3track 呼叫<br />$INTERFACE 為開啟或關閉的介面名稱（例如：\"WAN"
-"\" 抑或 \"WWAN\"）<br />$DEVICE 為開啟或關閉的介面實體裝置（例如：\"eth0\" 抑或 \"wwan0\"）<br /"
-"><br />"
+"您可以在這裡修改 \"/etc/mwan3.user\" 的內容。<br />在執行 sysupgrade 期間，該"
+"檔案也會被保留。<br /><br />請注意：<br />該檔案會被解譯為「Shell 指令碼」。"
+"<br />指令碼的第一行必須是 &#34;#!/bin/sh&#34;（引號之內）。<br />以 \"#\" 開"
+"頭的行是註解，不會被執行。<br />請您在此處自訂 mwan3 動作，他們將<br />在已啟"
+"用 mwan3 的介面上<br />被每個 netifd 熱插拔介面事件執行。<br /><br />傳遞到該"
+"指令碼的主要環境變數有三個。<br /><br />$ACTION<br />* \"ifup\" 藉由 netifd "
+"與 mwan3track 呼叫<br />* \"ifdown\" 也藉由 netifd 與 mwan3track 呼叫<br />* "
+"\"connected\" 只在追蹤成功時藉由 mwan3track 呼叫<br />* \"disconnected\" 只在"
+"追蹤失敗時藉由 mwan3track 呼叫<br />$INTERFACE 為開啟或關閉的介面名稱（例如："
+"\"WAN\" 抑或 \"WWAN\"）<br />$DEVICE 為開啟或關閉的介面實體裝置（例如："
+"\"eth0\" 抑或 \"wwan0\"）<br /><br />"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/interfaceconfig.lua:37
 msgid "Tracking hostname or IP address"
@@ -731,6 +748,11 @@ msgstr ""
 #: applications/luci-app-mwan3/luasrc/view/mwan/status_troubleshooting.htm:13
 msgid "Troubleshooting"
 msgstr "故障排除"
+
+#: applications/luci-app-mwan3/luasrc/view/mwan/overview_status_interface.htm:36
+#: applications/luci-app-mwan3/luasrc/view/mwan/overview_status_interface.htm:53
+msgid "Uptime"
+msgstr ""
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/ruleconfig.lua:46
 msgid "View the content of /etc/protocols for protocol description"
@@ -827,9 +849,9 @@ msgid ""
 ">Interfaces may not share the same name as configured members, policies or "
 "rules"
 msgstr ""
-"mwan3 要求所有在 /etc/config/network 中的介面 (interface) 設定獨立的 metric 參數<br />介面名稱要和/"
-"etc/config/network的一致<br />名稱可以包含字元 A-Z，a-z，0-9，_ ，但不能有空格<br "
-"/>介面名稱也不能和設定的成員，原則，或者規則相同"
+"mwan3 要求所有在 /etc/config/network 中的介面 (interface) 設定獨立的 metric "
+"參數<br />介面名稱要和/etc/config/network的一致<br />名稱可以包含字元 A-Z，a-"
+"z，0-9，_ ，但不能有空格<br />介面名稱也不能和設定的成員，原則，或者規則相同"
 
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/policy.lua:88
 #: applications/luci-app-mwan3/luasrc/model/cbi/mwan/policyconfig.lua:28
