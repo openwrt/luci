@@ -348,7 +348,7 @@ return view.extend({
 				}, [ _('Restart Firewall') ])
 			]),
 			E('div', {}, [
-				E('div', { 'data-tab': 'iptables', 'data-tab-title': has_ip6tables ? _('IPv4 Firewall') : null }, [
+				E('div', { 'data-tab': 'iptables', 'data-tab-title': has_ip6tables ? _('IPv4 Firewall') : null, 'data-tab-active': has_ip6tables ? null : true }, [
 					E('p', {}, E('em', { 'class': 'spinning' }, [ _('Collecting data...') ]))
 				]),
 				has_ip6tables ? E('div', { 'data-tab': 'ip6tables', 'data-tab-title': _('IPv6 Firewall') }, [
