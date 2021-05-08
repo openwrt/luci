@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: luci-app-ddns 2.4.0-1\n"
 "POT-Creation-Date: 2016-01-30 11:07+0100\n"
-"PO-Revision-Date: 2020-03-11 01:51+0000\n"
-"Last-Translator: Tomas Greif <greif.tomas@gmail.com>\n"
+"PO-Revision-Date: 2021-05-07 11:32+0000\n"
+"Last-Translator: Adam Salač <adam@salac.me>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsddns/cs/>\n"
 "Language: cs\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.0-dev\n"
+"X-Generator: Weblate 4.7-dev\n"
 
 #: applications/luci-app-ddns/luasrc/view/ddns/overview_status.htm:145
 msgid "&"
@@ -73,18 +73,25 @@ msgid ""
 "BusyBox's nslookup and Wget do not support to specify the IP version to use "
 "for communication with DDNS Provider!"
 msgstr ""
+"Verze programů nslookup a wget, které jsou součástí balíčku BusyBox, "
+"nepodporují specifikaci verze IP pro komunikaci s poskytovatelem DDNS!"
 
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/hints.lua:133
 msgid ""
 "BusyBox's nslookup and hostip do not support to specify to use TCP instead "
 "of default UDP when requesting DNS server!"
 msgstr ""
+"Verze programů nslookup a hostip, které jsou součástí balíčku BusyBox, "
+"nepodporují využití TCP místo výchozího protokolu UDP pro dotazování serveru "
+"DNS!"
 
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/hints.lua:146
 msgid ""
 "BusyBox's nslookup in the current compiled version does not handle given DNS "
 "Servers correctly!"
 msgstr ""
+"Současně kompilovaná verze programu nslookup, která je součástí balíčku "
+"BusyBox, nemůže správně zpracovat uvedené servery DNS!"
 
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:1118
 msgid "Casual users should not change this setting"
@@ -346,7 +353,7 @@ msgstr "GNU Wget použije IP dané sítě, cURL použije fyzické rozhraní."
 
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/global.lua:26
 msgid "Global Settings"
-msgstr ""
+msgstr "Obecná nastavení"
 
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:606
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:615
@@ -439,6 +446,8 @@ msgid ""
 "Install 'ca-certificates' package or needed certificates by hand into /etc/"
 "ssl/certs default directory"
 msgstr ""
+"Nainstalujte balíček \"ca-certificates\" nebo manuálně vložte nutné "
+"certifikáty do výchozí složky /etc/ssl/certs"
 
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:666
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:716
@@ -836,6 +845,9 @@ msgid ""
 "You should install 'bind-host' or 'knot-host' or 'drill' or 'hostip' "
 "package, if you need to specify a DNS server to detect your registered IP."
 msgstr ""
+"Pokud potřebujete zadat server DNS pro zjištění registrované IP adresy, měli "
+"byste si nainstalovat balíček \"bind-host\", \"knot-host\", \"drill\" nebo "
+"\"hostip\"."
 
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/hints.lua:121
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/hints.lua:136
