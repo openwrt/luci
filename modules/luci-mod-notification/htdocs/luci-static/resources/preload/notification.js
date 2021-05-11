@@ -56,16 +56,37 @@ return baseclass.extend({
 			var time = new Date(message.timestamp*1000);
 			var date = time.toLocaleString();
 
-			rows.push([
-				date,
-				message.service,
-				message.title,
-				message.message,
-				E('button', {
-					'class': 'btn cbi-button-remove',
-					'click': ui.createHandlerFn(this, 'removeNotification', message.uuid)
-				}, _('Confirms'))
-			]);
+			switch (message.id) {
+				case 1:
+					rows.push([
+						date,
+						message.service,
+						_('No root password set'),
+						_('Please configure a root password to protect the web interface'),
+						E('a', {
+							'class': 'btn cbi-button-apply',
+							'href': L.url('admin/system/admin'),
+						}, _('Set password')),
+						E('button', {
+							'class': 'btn cbi-button-remove',
+							'click': ui.createHandlerFn(this, 'removeNotification', message.uuid)
+						}, _('Confirms'))
+					]);
+					break;
+				default:
+					rows.push([
+						date,
+						message.service,
+						message.title,
+						message.message,
+						_('No action available'),
+						E('button', {
+							'class': 'btn cbi-button-remove',
+							'click': ui.createHandlerFn(this, 'removeNotification', message.uuid)
+						}, _('Confirms'))
+					]);
+					break;
+			}
 		}
 
 		if (rows.length > 0) {
@@ -89,6 +110,7 @@ return baseclass.extend({
 						E('th', { 'class': 'th center' }, [ _('Title') ]),
 						E('th', { 'class': 'th center' }, [ _('Message') ]),
 						E('th', { 'class': 'th center' }, [ _('Action') ]),
+						E('th', { 'class': 'th center' }, [ _('Confirm') ]),
 					]),
 					E('tr', { 'class': 'tr placeholder' }, [
 						E('td', { 'class': 'td' }, [
