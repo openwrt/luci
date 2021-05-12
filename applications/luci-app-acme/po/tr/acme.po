@@ -1,14 +1,14 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2021-01-03 17:29+0000\n"
-"Last-Translator: Oğuz Ersen <oguzersen@protonmail.com>\n"
+"PO-Revision-Date: 2021-05-11 11:34+0000\n"
+"Last-Translator: semih <semiht@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsacme/tr/>\n"
 "Language: tr\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.4.1-dev\n"
+"X-Generator: Weblate 4.7-dev\n"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:17
 msgid "ACME certificates"
@@ -24,7 +24,7 @@ msgstr "ACME evrensel yapılandırma"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:139
 msgid "ACME server URL"
-msgstr ""
+msgstr "ACME sunucu URL'si"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:34
 msgid "Account email"
@@ -44,19 +44,19 @@ msgstr "Challenge Takma Adı"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:47
 msgid "Challenge Validation"
-msgstr ""
+msgstr "Zorluk Doğrulaması"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:135
 msgid "Custom ACME CA"
-msgstr ""
+msgstr "Özel ACME CA"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:140
 msgid "Custom ACME server directory URL."
-msgstr ""
+msgstr "Özel ACME sunucu dizini URL'si."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:97
 msgid "DNS"
-msgstr ""
+msgstr "DNS"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:107
 msgid "DNS API"
@@ -68,7 +68,7 @@ msgstr "DNS API bilgileri"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:145
 msgid "Days until renewal"
-msgstr ""
+msgstr "Yenilemeye kalan gün sayısı"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:128
 msgid "Domain Alias"
@@ -146,7 +146,7 @@ msgstr "RSA 4096 bit"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:95
 msgid "Standalone"
-msgstr ""
+msgstr "Bağımsız"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:92
 msgid ""
@@ -155,6 +155,10 @@ msgid ""
 "certificate. DNS mode will allow you to use the DNS API of your DNS provider "
 "to issue a certificate."
 msgstr ""
+"Bağımsız mod, sertifika vermek için acme.sh'nin yerleşik web sunucusunu "
+"kullanır. Webroot modu, bir sertifika vermek için mevcut bir web sunucusunu "
+"kullanır. DNS modu, bir sertifika vermek için DNS sağlayıcınızın DNS "
+"API'sini kullanmanıza izin verir."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:29
 msgid "State directory"
@@ -218,6 +222,12 @@ msgid ""
 "supports wildcard certificates. Using this mode requires the acme-dnsapi "
 "package to be installed."
 msgstr ""
+"Sertifikaları vermek üzere DNS modunu kullanmak için, bunu acme.sh "
+"tarafından desteklenen bir DNS API'sinin adına ayarlayın. Kullanılabilir "
+"API'lerin listesi için https://github.com/acmesh-official/acme.sh/wiki/"
+"dnsapi adresine bakın. DNS modunda, etki alanı adı yönlendirici IP'sini "
+"çözümlemesi gerekmez. DNS modu, joker karakter sertifikalarını destekleyen "
+"tek moddur. Bu modu kullanmak, acme-dnsapi paketinin yüklenmesini gerektirir."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:84
 msgid ""
@@ -225,6 +235,10 @@ msgid ""
 "for one certificate). Nginx must support ssl, if not it won't start as it "
 "needs to be compiled with ssl support to use cert options"
 msgstr ""
+"Nginx yapılandırmasını bu sertifika verildikten sonra güncelleyin (bunu "
+"yalnızca bir sertifika için seçin). Nginx, ssl'yi desteklemelidir, değilse, "
+"sertifika seçeneklerini kullanmak için ssl desteği ile derlenmesi "
+"gerektiğinden başlamaz"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:76
 msgid ""
@@ -232,26 +246,29 @@ msgid ""
 "for one certificate). Is also available luci-app-uhttpd to configure uhttpd "
 "form the LuCI interface."
 msgstr ""
+"Bu sertifika verildikten sonra uhttpd yapılandırmasını güncelleyin (bunu "
+"yalnızca bir sertifika için seçin). LuCI arayüzünden uhttpd'yi yapılandırmak "
+"için luci-app-uhttpd de mevcuttur."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:135
 msgid "Use a custom CA instead of Let's Encrypt."
-msgstr ""
+msgstr "Let's Encrypt yerine özel bir CA kullanın."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:83
 msgid "Use for nginx"
-msgstr ""
+msgstr "Nginx için kullanın"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:75
 msgid "Use for uhttpd"
-msgstr ""
+msgstr "Uhttpd için kullanın"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:53
 msgid "Use staging server"
-msgstr ""
+msgstr "Aşama sunucusu kullan"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:91
 msgid "Validation method"
-msgstr ""
+msgstr "Doğrulama yöntemi"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:96
 msgid "Webroot"
@@ -259,7 +276,7 @@ msgstr ""
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:100
 msgid "Webroot directory"
-msgstr ""
+msgstr "Webroot dizini"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:101
 msgid ""
@@ -267,7 +284,10 @@ msgid ""
 "Acme in webroot mode. The web server must be accessible from the internet on "
 "port 80."
 msgstr ""
+"Web sunucusu kök dizini. Acme'yi webroot modunda çalıştırmak için bunu web "
+"sunucusu belge köküne ayarlayın. Web sunucusuna 80 numaralı bağlantı "
+"noktasından internetten erişilebilmelidir."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:30
 msgid "Where certs and other state files are kept."
-msgstr ""
+msgstr "Sertifikaların ve diğer dosyaların tutulduğu yer."
