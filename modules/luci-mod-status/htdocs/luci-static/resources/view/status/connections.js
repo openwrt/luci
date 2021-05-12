@@ -133,8 +133,8 @@ return view.extend({
 			rows.push([
 				c.layer3.toUpperCase(),
 				c.layer4.toUpperCase(),
-				c.hasOwnProperty('sport') ? (src + ':' + c.sport) : src,
-				c.hasOwnProperty('dport') ? (dst + ':' + c.dport) : dst,
+				'%h'.format(c.hasOwnProperty('sport') ? (src + ':' + c.sport) : src),
+				'%h'.format(c.hasOwnProperty('dport') ? (dst + ':' + c.dport) : dst),
 				'%1024.2mB (%d %s)'.format(c.bytes, c.packets, _('Pkts.'))
 			]);
 		}
