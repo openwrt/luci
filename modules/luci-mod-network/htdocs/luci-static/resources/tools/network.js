@@ -499,7 +499,7 @@ return baseclass.extend({
 		o.multiple = true;
 		o.noaliases = true;
 		o.nobridges = true;
-		o.ucioption = 'ifname';
+		o.ucioption = 'ports';
 		o.write = o.remove = setIfActive;
 		o.default = L.toArray(dev ? dev.getPorts() : null).filter(function(p) { return p.getType() != 'wifi' }).map(function(p) { return p.getName() });
 		o.filter = function(section_id, device_name) {
@@ -509,7 +509,7 @@ return baseclass.extend({
 
 			/* only show wifi networks which are already present in "option ifname" */
 			if (choice_dev.getType() == 'wifi') {
-				var ifnames = L.toArray(uci.get('network', section_id, 'ifname'));
+				var ifnames = L.toArray(uci.get('network', section_id, 'ports'));
 
 				for (var i = 0; i < ifnames.length; i++)
 					if (ifnames[i] == device_name)
@@ -918,8 +918,8 @@ return baseclass.extend({
 
 		var seen_ports = {};
 
-		L.toArray(uci.get('network', s.section, 'ifname')).forEach(function(ifname) {
-			seen_ports[ifname] = true;
+		L.toArray(uci.get('network', s.section, 'ports')).forEach(function(port) {
+			seen_ports[port] = true;
 		});
 
 		uci.sections('network', 'bridge-vlan', function(bvs) {
