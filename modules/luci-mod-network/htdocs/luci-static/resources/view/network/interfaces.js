@@ -405,6 +405,12 @@ return view.extend({
 				}, this);
 				o.write = function() {};
 
+				o = s.taboption('general', widgets.DeviceSelect, 'ifname', _('Device'));
+				o.nobridges = false;
+				o.noaliases = false;
+				o.optional = false;
+				o.network = ifc.getName();
+
 				proto_select = s.taboption('general', form.ListValue, 'proto', _('Protocol'));
 				proto_select.modalonly = true;
 
@@ -673,7 +679,6 @@ return view.extend({
 				}
 
 				ifc.renderFormOptions(s);
-				nettools.addDeviceOptions(s, null, true);
 
 				// Common interface options
 				o = nettools.replaceOption(s, 'advanced', form.Flag, 'defaultroute', _('Use default gateway'), _('If unchecked, no default route is configured'));
