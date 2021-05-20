@@ -304,6 +304,12 @@ return view.extend({
 		});
 	},
 
+	deviceWithIfnameSections: function() {
+		return uci.sections('network', 'device').filter(function(ns) {
+			return ns.type == 'bridge' && !ns.ports && ns.ifname;
+		});
+	},
+
 	handleMigration: function(ev) {
 		var interfaces = this.interfaceWithIfnameSections();
 		var tasks = [];
@@ -323,6 +329,13 @@ return view.extend({
 			}));
 		});
 
+		this.deviceWithIfnameSections().forEach(function(ds) {
+			tasks.push(uci.callSet('network', ds['.name'], {
+				'ifname': '',
+				'ports': L.toArray(ds.ifname)
+			}));
+		});
+
 		return Promise.all(tasks)
 			.then(L.bind(ui.changes.init, ui.changes))
 			.then(L.bind(ui.changes.apply, ui.changes));
@@ -331,7 +344,7 @@ return view.extend({
 	renderMigration: function() {
 		ui.showModal(_('Network bridge configuration migration'), [
 			E('p', _('The existing network configuration needs to be changed for LuCI to function properly.')),
-			E('p', _('Upon pressing "Continue", bridges configuration will be moved from "interface" sections to "device" sections the network will be restarted to apply the updated configuration.')),
+			E('p', _('Upon pressing "Continue", bridges configuration will be updated and the network will be restarted to apply the updated configuration.')),
 			E('div', { 'class': 'right' },
 				E('button', {
 					'class': 'btn cbi-button-action important',
@@ -341,7 +354,8 @@ return view.extend({
 	},
 
 	render: function(data) {
-		if (this.interfaceWithIfnameSections().length)
+		if (this.interfaceWithIfnameSections().length ||
+		    this.deviceWithIfnameSections().length)
 			return this.renderMigration();
 
 		var dslModemType = data[0],
