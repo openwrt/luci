@@ -426,7 +426,7 @@ return view.extend({
 		s.addModalOptions = function(s) {
 			var protoval = uci.get('network', s.section, 'proto'),
 			    protoclass = protoval ? network.getProtocol(protoval) : null,
-			    o, ifname_single, ifname_multi, proto_select, proto_switch, type, stp, igmp, ss, so;
+			    o, proto_select, proto_switch, type, stp, igmp, ss, so;
 
 			if (!protoval)
 				return;
