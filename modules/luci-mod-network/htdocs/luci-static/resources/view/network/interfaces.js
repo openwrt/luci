@@ -822,6 +822,7 @@ return view.extend({
 					o = s.children[i];
 
 					switch (o.option) {
+					case 'ifname':
 					case 'proto':
 					case 'auto':
 					case '_dhcp':
@@ -830,8 +831,6 @@ return view.extend({
 					case '_ifacestat_modal':
 						continue;
 
-					case 'ifname_multi':
-					case 'ifname_single':
 					case 'igmp_snooping':
 					case 'stp':
 					case 'type':
