@@ -2496,14 +2496,14 @@ Protocol = baseclass.extend(/** @lends LuCI.network.Protocol.prototype */ {
 	 *
 	 * Alias interfaces are interfaces layering on top of another interface
 	 * and are denoted by a special `@interfacename` notation in the
-	 * underlying `ifname` option.
+	 * underlying `device` option.
 	 *
 	 * @returns {null|string}
 	 * Returns the name of the parent interface if this logical interface
 	 * is an alias or `null` if it is not an alias interface.
 	 */
 	isAlias: function() {
-		var ifnames = L.toArray(uci.get('network', this.sid, 'ifname')),
+		var ifnames = L.toArray(uci.get('network', this.sid, 'device')),
 		    parent = null;
 
 		for (var i = 0; i < ifnames.length; i++)
@@ -2527,9 +2527,9 @@ Protocol = baseclass.extend(/** @lends LuCI.network.Protocol.prototype */ {
 			return false;
 
 		var empty = true,
-		    ifname = this._get('ifname');
+		    device = this._get('device');
 
-		if (ifname != null && ifname.match(/\S+/))
+		if (device != null && device.match(/\S+/))
 			empty = false;
 
 		if (empty == true && getWifiNetidBySid(this.sid) != null)
@@ -2561,18 +2561,18 @@ Protocol = baseclass.extend(/** @lends LuCI.network.Protocol.prototype */ {
 	 * argument was invalid, if the device was already part of the logical
 	 * interface or if the logical interface is virtual.
 	 */
-	addDevice: function(ifname) {
-		ifname = ifnameOf(ifname);
+	addDevice: function(device) {
+		device = ifnameOf(device);
 
-		if (ifname == null || this.isFloating())
+		if (device == null || this.isFloating())
 			return false;
 
-		var wif = getWifiSidByIfname(ifname);
+		var wif = getWifiSidByIfname(device);
 
 		if (wif != null)
 			return appendValue('wireless', wif, 'network', this.sid);
 
-		return appendValue('network', this.sid, 'ifname', ifname);
+		return appendValue('network', this.sid, 'device', device);
 	},
 
 	/**
@@ -2588,20 +2588,20 @@ Protocol = baseclass.extend(/** @lends LuCI.network.Protocol.prototype */ {
 	 * argument was invalid, if the device was already part of the logical
 	 * interface or if the logical interface is virtual.
 	 */
-	deleteDevice: function(ifname) {
+	deleteDevice: function(device) {
 		var rv = false;
 
-		ifname = ifnameOf(ifname);
+		device = ifnameOf(device);
 
-		if (ifname == null || this.isFloating())
+		if (device == null || this.isFloating())
 			return false;
 
-		var wif = getWifiSidByIfname(ifname);
+		var wif = getWifiSidByIfname(device);
 
 		if (wif != null)
 			rv = removeValue('wireless', wif, 'network', this.sid);
 
-		if (removeValue('network', this.sid, 'ifname', ifname))
+		if (removeValue('network', this.sid, 'device', device))
 			rv = true;
 
 		return rv;
@@ -2627,7 +2627,7 @@ Protocol = baseclass.extend(/** @lends LuCI.network.Protocol.prototype */ {
 			return new Device(ifname, this);
 		}
 		else {
-			var ifnames = L.toArray(uci.get('network', this.sid, 'ifname'));
+			var ifnames = L.toArray(uci.get('network', this.sid, 'device'));
 
 			for (var i = 0; i < ifnames.length; i++) {
 				var m = ifnames[i].match(/^([^:/]+)/);
@@ -2682,13 +2682,10 @@ Protocol = baseclass.extend(/** @lends LuCI.network.Protocol.prototype */ {
 		if (!this.isBridge() && !(this.isVirtual() && !this.isFloating()))
 			return null;
 
-		var ifnames = L.toArray(uci.get('network', this.sid, 'ifname'));
+		var device = uci.get('network', this.sid, 'device');
 
-		for (var i = 0; i < ifnames.length; i++) {
-			if (ifnames[i].charAt(0) == '@')
-				continue;
-
-			var m = ifnames[i].match(/^([^:/]+)/);
+		if (device && device.charAt(0) != '@') {
+			var m = device.match(/^([^:/]+)/);
 			if (m != null)
 				rv.push(Network.prototype.instantiateDevice(m[1], this));
 		}
@@ -2730,25 +2727,24 @@ Protocol = baseclass.extend(/** @lends LuCI.network.Protocol.prototype */ {
 	 * Returns `true` when this logical interface contains the given network
 	 * device or `false` if not.
 	 */
-	containsDevice: function(ifname) {
-		ifname = ifnameOf(ifname);
+	containsDevice: function(device) {
+		device = ifnameOf(device);
 
-		if (ifname == null)
+		if (device == null)
 			return false;
-		else if (this.isVirtual() && '%s-%s'.format(this.getProtocol(), this.sid) == ifname)
+		else if (this.isVirtual() && '%s-%s'.format(this.getProtocol(), this.sid) == device)
 			return true;
-		else if (this.isBridge() && 'br-%s'.format(this.sid) == ifname)
+		else if (this.isBridge() && 'br-%s'.format(this.sid) == device)
 			return true;
 
-		var ifnames = L.toArray(uci.get('network', this.sid, 'ifname'));
-
-		for (var i = 0; i < ifnames.length; i++) {
-			var m = ifnames[i].match(/^([^:/]+)/);
-			if (m != null && m[1] == ifname)
+		var name = uci.get('network', this.sid, 'device');
+		if (name) {
+			var m = name.match(/^([^:/]+)/);
+			if (m != null && m[1] == device)
 				return true;
 		}
 
-		var wif = getWifiSidByIfname(ifname);
+		var wif = getWifiSidByIfname(device);
 
 		if (wif != null) {
 			var networks = L.toArray(uci.get('wireless', wif, 'network'));
@@ -2791,19 +2787,19 @@ Protocol = baseclass.extend(/** @lends LuCI.network.Protocol.prototype */ {
  * device and allows querying device details such as packet statistics or MTU.
  */
 Device = baseclass.extend(/** @lends LuCI.network.Device.prototype */ {
-	__init__: function(ifname, network) {
-		var wif = getWifiSidByIfname(ifname);
+	__init__: function(device, network) {
+		var wif = getWifiSidByIfname(device);
 
 		if (wif != null) {
 			var res = getWifiStateBySid(wif) || [],
 			    netid = getWifiNetidBySid(wif) || [];
 
-			this.wif    = new WifiNetwork(wif, res[0], res[1], netid[0], res[2], { ifname: ifname });
-			this.ifname = this.wif.getIfname();
+			this.wif    = new WifiNetwork(wif, res[0], res[1], netid[0], res[2], { ifname: device });
+			this.device = this.wif.getIfname();
 		}
 
-		this.ifname  = this.ifname || ifname;
-		this.dev     = Object.assign({}, _state.netdevs[this.ifname]);
+		this.device  = this.device || device;
+		this.dev     = Object.assign({}, _state.netdevs[this.device]);
 		this.network = network;
 	},
 
@@ -2826,7 +2822,7 @@ Device = baseclass.extend(/** @lends LuCI.network.Device.prototype */ {
 	 * Returns the name of the device, e.g. `eth0` or `wlan0`.
 	 */
 	getName: function() {
-		return (this.wif != null ? this.wif.getIfname() : this.ifname);
+		return (this.wif != null ? this.wif.getIfname() : this.device);
 	},
 
 	/**
@@ -2887,17 +2883,17 @@ Device = baseclass.extend(/** @lends LuCI.network.Device.prototype */ {
 	 *  - `ethernet` for all other device types
 	 */
 	getType: function() {
-		if (this.ifname != null && this.ifname.charAt(0) == '@')
+		if (this.device != null && this.device.charAt(0) == '@')
 			return 'alias';
-		else if (this.dev.devtype == 'wlan' || this.wif != null || isWifiIfname(this.ifname))
+		else if (this.dev.devtype == 'wlan' || this.wif != null || isWifiIfname(this.device))
 			return 'wifi';
-		else if (this.dev.devtype == 'bridge' || _state.isBridge[this.ifname])
+		else if (this.dev.devtype == 'bridge' || _state.isBridge[this.device])
 			return 'bridge';
-		else if (_state.isTunnel[this.ifname])
+		else if (_state.isTunnel[this.device])
 			return 'tunnel';
-		else if (this.dev.devtype == 'vlan' || this.ifname.indexOf('.') > -1)
+		else if (this.dev.devtype == 'vlan' || this.device.indexOf('.') > -1)
 			return 'vlan';
-		else if (this.dev.devtype == 'dsa' || _state.isSwitch[this.ifname])
+		else if (this.dev.devtype == 'dsa' || _state.isSwitch[this.device])
 			return 'switch';
 		else
 			return 'ethernet';
@@ -2914,7 +2910,7 @@ Device = baseclass.extend(/** @lends LuCI.network.Device.prototype */ {
 		if (this.wif != null)
 			return this.wif.getShortName();
 
-		return this.ifname;
+		return this.device;
 	},
 
 	/**
@@ -2954,11 +2950,11 @@ Device = baseclass.extend(/** @lends LuCI.network.Device.prototype */ {
 			return _('Bridge');
 
 		case 'switch':
-			return (_state.netdevs[this.ifname] && _state.netdevs[this.ifname].devtype == 'dsa')
+			return (_state.netdevs[this.device] && _state.netdevs[this.device].devtype == 'dsa')
 				? _('Switch port') : _('Ethernet Switch');
 
 		case 'vlan':
-			return (_state.isSwitch[this.ifname] ? _('Switch VLAN') : _('Software VLAN'));
+			return (_state.isSwitch[this.device] ? _('Switch VLAN') : _('Software VLAN'));
 
 		case 'tunnel':
 			return _('Tunnel Interface');
@@ -2977,7 +2973,7 @@ Device = baseclass.extend(/** @lends LuCI.network.Device.prototype */ {
 	 * a Linux bridge.
 	 */
 	getPorts: function() {
-		var br = _state.bridges[this.ifname],
+		var br = _state.bridges[this.device],
 		    rv = [];
 
 		if (br == null || !Array.isArray(br.ifnames))
@@ -2999,7 +2995,7 @@ Device = baseclass.extend(/** @lends LuCI.network.Device.prototype */ {
 	 * device is not a Linux bridge.
 	 */
 	getBridgeID: function() {
-		var br = _state.bridges[this.ifname];
+		var br = _state.bridges[this.device];
 		return (br != null ? br.id : null);
 	},
 
@@ -3011,7 +3007,7 @@ Device = baseclass.extend(/** @lends LuCI.network.Device.prototype */ {
 	 * enabled, else `false`.
 	 */
 	getBridgeSTP: function() {
-		var br = _state.bridges[this.ifname];
+		var br = _state.bridges[this.device];
 		return (br != null ? !!br.stp : false);
 	},
 
@@ -3123,7 +3119,7 @@ Device = baseclass.extend(/** @lends LuCI.network.Device.prototype */ {
 			var networks = enumerateNetworks.apply(L.network);
 
 			for (var i = 0; i < networks.length; i++)
-				if (networks[i].containsDevice(this.ifname) || networks[i].getIfname() == this.ifname)
+				if (networks[i].containsDevice(this.device) || networks[i].getIfname() == this.device)
 					this.networks.push(networks[i]);
 
 			this.networks.sort(networkSort);

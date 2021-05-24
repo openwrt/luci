@@ -299,7 +299,7 @@ return view.extend({
 		]);
 	},
 
-	interfaceWithIfnameSections: function() {
+	interfaceBridgeWithIfnameSections: function() {
 		return uci.sections('network', 'interface').filter(function(ns) {
 			return ns.type == 'bridge' && !ns.ports && ns.ifname;
 		});
@@ -311,8 +311,14 @@ return view.extend({
 		});
 	},
 
+	interfaceWithIfnameSections: function() {
+		return uci.sections('network', 'interface').filter(function(ns) {
+			return !ns.device && ns.ifname;
+		});
+	},
+
 	handleMigration: function(ev) {
-		var interfaces = this.interfaceWithIfnameSections();
+		var interfaces = this.interfaceBridgeWithIfnameSections();
 		var tasks = [];
 
 		interfaces.forEach(function(ns) {
@@ -326,7 +332,7 @@ return view.extend({
 
 			tasks.push(uci.callSet('network', ns['.name'], {
 				'type': '',
-				'ifname': device_name
+				'device': device_name
 			}));
 		});
 
@@ -334,6 +340,13 @@ return view.extend({
 			tasks.push(uci.callSet('network', ds['.name'], {
 				'ifname': '',
 				'ports': L.toArray(ds.ifname)
+			}));
+		});
+
+		this.interfaceWithIfnameSections().forEach(function(ns) {
+			tasks.push(uci.callSet('network', ns['.name'], {
+				'ifname': '',
+				'device': ns.ifname
 			}));
 		});
 
@@ -358,8 +371,9 @@ return view.extend({
 		var netifdVersion = (data[3] || '').match(/Version: ([^\n]+)/);
 
 		if (netifdVersion && netifdVersion[1] >= "2021-05-20" &&
-		    (this.interfaceWithIfnameSections().length ||
-		     this.deviceWithIfnameSections().length))
+		    (this.interfaceBridgeWithIfnameSections().length ||
+		     this.deviceWithIfnameSections().length ||
+		     this.interfaceWithIfnameSections().length))
 			return this.renderMigration();
 
 		var dslModemType = data[0],
@@ -468,9 +482,8 @@ return view.extend({
 				}, this);
 				o.write = function() {};
 
-				o = s.taboption('general', widgets.DeviceSelect, 'ifname', _('Device'));
+				o = s.taboption('general', widgets.DeviceSelect, 'device', _('Device'));
 				o.nobridges = false;
-				o.noaliases = false;
 				o.optional = false;
 				o.network = ifc.getName();
 
@@ -840,7 +853,7 @@ return view.extend({
 					o = s.children[i];
 
 					switch (o.option) {
-					case 'ifname':
+					case 'device':
 					case 'proto':
 					case 'auto':
 					case '_dhcp':
@@ -880,10 +893,10 @@ return view.extend({
 
 		s.handleModalCancel = function(/* ... */) {
 			var type = uci.get('network', this.activeSection || this.addedSection, 'type'),
-			    ifname = (type == 'bridge') ? 'br-%s'.format(this.activeSection || this.addedSection) : null;
+			    device = (type == 'bridge') ? 'br-%s'.format(this.activeSection || this.addedSection) : null;
 
 			uci.sections('network', 'bridge-vlan', function(bvs) {
-				if (ifname != null && bvs.device == ifname)
+				if (device != null && bvs.device == device)
 					uci.remove('network', bvs['.name']);
 			});
 
@@ -894,7 +907,7 @@ return view.extend({
 			var m2 = new form.Map('network'),
 			    s2 = m2.section(form.NamedSection, '_new_'),
 			    protocols = network.getProtocols(),
-			    proto, name, ifname;
+			    proto, name, device;
 
 			protocols.sort(function(a, b) {
 				return a.getProtocol() > b.getProtocol();
@@ -924,9 +937,9 @@ return view.extend({
 				return true;
 			};
 
-			ifname = s2.option(widgets.DeviceSelect, 'ifname', _('Device'));
-			ifname.noaliases = false;
-			ifname.optional = false;
+			device = s2.option(widgets.DeviceSelect, 'device', _('Device'));
+			device.noaliases = false;
+			device.optional = false;
 
 			proto = s2.option(form.ListValue, 'proto', _('Protocol'));
 			proto.validate = name.validate;
@@ -965,7 +978,7 @@ return view.extend({
 										var section_id = uci.add('network', 'interface', nameval);
 
 										protoclass.set('proto', protoval);
-										protoclass.addDevice(ifname.formvalue('_new_'));
+										protoclass.addDevice(device.formvalue('_new_'));
 
 										m.children[0].addedSection = section_id;
 									}).then(L.bind(m.children[0].renderMoreOptionsModal, m.children[0], nameval));
