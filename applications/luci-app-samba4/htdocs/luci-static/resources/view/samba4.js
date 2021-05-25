@@ -1,6 +1,7 @@
 'use strict';
 'require view';
 'require fs';
+'require uci';
 'require form';
 'require tools.widgets as widgets';
 
@@ -30,8 +31,22 @@ return view.extend({
 		s.tab('general',  _('General Settings'));
 		s.tab('template', _('Edit Template'));
 
-		s.taboption('general', widgets.NetworkSelect, 'interface', _('Interface'),
+		o = s.taboption('general', widgets.NetworkSelect, 'interface', _('Interface'),
 			_('Listen only on the given interface or, if unspecified, on lan'));
+		o.multiple = true;
+		o.cfgvalue = function(section_id) {
+			return uci.get('samba4', section_id, 'interface').split(' ');
+		};
+		o.write = function(section_id, formvalue) {
+			var cfgvalue = this.cfgvalue(section_id),
+				oldNetworks = L.toArray(cfgvalue),
+				newNetworks = L.toArray(formvalue);
+			oldNetworks.sort();
+			newNetworks.sort();
+			if (oldNetworks.join(' ') == newNetworks.join(' '))
+				return;
+			return uci.set('samba4', section_id, 'interface', newNetworks.join(' '));
+		};
 
 		o = s.taboption('general', form.Value, 'workgroup', _('Workgroup'));
 		o.placeholder = 'WORKGROUP';
