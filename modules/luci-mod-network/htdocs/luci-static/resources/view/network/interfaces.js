@@ -370,7 +370,7 @@ return view.extend({
 	render: function(data) {
 		var netifdVersion = (data[3] || '').match(/Version: ([^\n]+)/);
 
-		if (netifdVersion && netifdVersion[1] >= "2021-05-20" &&
+		if (netifdVersion && netifdVersion[1] >= "2021-05-26" &&
 		    (this.interfaceBridgeWithIfnameSections().length ||
 		     this.deviceWithIfnameSections().length ||
 		     this.interfaceWithIfnameSections().length))
