@@ -735,10 +735,6 @@ return view.extend({
 					so.depends('dhcpv6', 'relay');
 					so.depends('dhcpv6', 'hybrid');
 
-					so = ss.taboption('ipv6', form.Flag , 'master', _('Master'), _('Set this interface as master for the dhcpv6 relay.'));
-					so.depends('dhcpv6', 'relay');
-					so.depends('dhcpv6', 'hybrid');
-
 					so = ss.taboption('ipv6', form.Flag, 'ra_default', _('Announce as default router'), _('Always, even if no public prefix is available.'));
 					so.depends('ra', 'server');
 					so.depends('ra', 'hybrid');
