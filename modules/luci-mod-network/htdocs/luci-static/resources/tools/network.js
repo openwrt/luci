@@ -610,11 +610,13 @@ return baseclass.extend({
 		o.placeholder = getDeviceValue(dev, 'getMTU');
 		o.datatype = 'max(9200)';
 		o.depends('type', '');
+		o.depends('type', 'bridge');
 
 		o = this.addOption(s, 'devgeneral', form.Value, 'macaddr', _('MAC address'));
 		o.placeholder = getDeviceValue(dev, 'getMAC');
 		o.datatype = 'macaddr';
 		o.depends('type', '');
+		o.depends('type', 'bridge');
 		o.depends('type', 'macvlan');
 		o.depends('type', 'veth');
 
