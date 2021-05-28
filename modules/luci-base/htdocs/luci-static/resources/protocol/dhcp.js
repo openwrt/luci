@@ -17,7 +17,7 @@ return network.registerProtocol('dhcp', {
 	},
 
 	renderFormOptions: function(s) {
-		var dev = this.getL2Device() || this.getDevice(), o;
+		var o;
 
 		o = s.taboption('general', form.Value, 'hostname', _('Hostname to send when requesting DHCP'));
 		o.default = '';
@@ -38,13 +38,5 @@ return network.registerProtocol('dhcp', {
 		o.datatype  = 'hexstring';
 
 		s.taboption('advanced', form.Value, 'vendorid', _('Vendor Class to send when requesting DHCP'));
-
-		o = s.taboption('advanced', form.Value, 'macaddr', _('Override MAC address'));
-		o.datatype = 'macaddr';
-		o.placeholder = dev ? (dev.getMAC() || '') : '';
-
-		o = s.taboption('advanced', form.Value, 'mtu', _('Override MTU'));
-		o.placeholder = dev ? (dev.getMTU() || '1500') : '1500';
-		o.datatype    = 'max(9200)';
 	}
 });

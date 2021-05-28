@@ -12,7 +12,7 @@ return network.registerProtocol('dhcpv6', {
 	},
 
 	renderFormOptions: function(s) {
-		var dev = this.getL2Device() || this.getDevice(), o;
+		var o;
 
 		o = s.taboption('general', form.ListValue, 'reqaddress', _('Request IPv6-address'));
 		o.value('try');
@@ -32,13 +32,5 @@ return network.registerProtocol('dhcpv6', {
 
 		o = s.taboption('advanced', form.Value, 'clientid', _('Client ID to send when requesting DHCP'));
 		o.datatype  = 'hexstring';
-
-		o = s.taboption('advanced', form.Value, 'macaddr', _('Override MAC address'));
-		o.datatype = 'macaddr';
-		o.placeholder = dev ? (dev.getMAC() || '') : '';
-
-		o = s.taboption('advanced', form.Value, 'mtu', _('Override MTU'));
-		o.placeholder = dev ? (dev.getMTU() || '1500') : '1500';
-		o.datatype    = 'max(9200)';
 	}
 });
