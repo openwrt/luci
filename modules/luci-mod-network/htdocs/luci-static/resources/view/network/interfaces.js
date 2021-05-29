@@ -317,11 +317,10 @@ return view.extend({
 		});
 	},
 
-	handleMigration: function(ev) {
-		var interfaces = this.interfaceBridgeWithIfnameSections();
+	handleBridgeMigration: function(ev) {
 		var tasks = [];
 
-		interfaces.forEach(function(ns) {
+		this.interfaceBridgeWithIfnameSections().forEach(function(ns) {
 			var device_name = 'br-' + ns['.name'];
 
 			tasks.push(uci.callAdd('network', 'device', null, {
@@ -332,12 +331,33 @@ return view.extend({
 
 			tasks.push(uci.callSet('network', ns['.name'], {
 				'type': '',
+				'ifname': '',
 				'device': device_name
 			}));
 		});
 
+		return Promise.all(tasks)
+			.then(L.bind(ui.changes.init, ui.changes))
+			.then(L.bind(ui.changes.apply, ui.changes));
+	},
+
+	renderBridgeMigration: function() {
+		ui.showModal(_('Network bridge configuration migration'), [
+			E('p', _('The existing network configuration needs to be changed for LuCI to function properly.')),
+			E('p', _('Upon pressing "Continue", bridges configuration will be updated and the network will be restarted to apply the updated configuration.')),
+			E('div', { 'class': 'right' },
+				E('button', {
+					'class': 'btn cbi-button-action important',
+					'click': ui.createHandlerFn(this, 'handleBridgeMigration')
+				}, _('Continue')))
+		]);
+	},
+
+	handleIfnameMigration: function(ev) {
+		var tasks = [];
+
 		this.deviceWithIfnameSections().forEach(function(ds) {
-			tasks.push(uci.callSet('network', ds['.name'], {
+			tasks.push(uci.add('network', ds['.name'], {
 				'ifname': '',
 				'ports': L.toArray(ds.ifname)
 			}));
@@ -355,14 +375,14 @@ return view.extend({
 			.then(L.bind(ui.changes.apply, ui.changes));
 	},
 
-	renderMigration: function() {
-		ui.showModal(_('Network bridge configuration migration'), [
+	renderIfnameMigration: function() {
+		ui.showModal(_('Network ifname configuration migration'), [
 			E('p', _('The existing network configuration needs to be changed for LuCI to function properly.')),
-			E('p', _('Upon pressing "Continue", bridges configuration will be updated and the network will be restarted to apply the updated configuration.')),
+			E('p', _('Upon pressing "Continue", ifname options will get renamed and the network will be restarted to apply the updated configuration.')),
 			E('div', { 'class': 'right' },
 				E('button', {
 					'class': 'btn cbi-button-action important',
-					'click': ui.createHandlerFn(this, 'handleMigration')
+					'click': ui.createHandlerFn(this, 'handleIfnameMigration')
 				}, _('Continue')))
 		]);
 	},
@@ -370,11 +390,12 @@ return view.extend({
 	render: function(data) {
 		var netifdVersion = (data[3] || '').match(/Version: ([^\n]+)/);
 
-		if (netifdVersion && netifdVersion[1] >= "2021-05-26" &&
-		    (this.interfaceBridgeWithIfnameSections().length ||
-		     this.deviceWithIfnameSections().length ||
-		     this.interfaceWithIfnameSections().length))
-			return this.renderMigration();
+		if (netifdVersion && netifdVersion[1] >= "2021-05-26") {
+			if (this.interfaceBridgeWithIfnameSections().length)
+				return this.renderBridgeMigration();
+			else if (this.deviceWithIfnameSections().length || this.interfaceWithIfnameSections().length)
+				return this.renderIfnameMigration();
+		}
 
 		var dslModemType = data[0],
 		    netDevs = data[1],
