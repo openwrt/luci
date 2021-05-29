@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: LuCI\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-04-20 09:40+0200\n"
-"PO-Revision-Date: 2021-05-27 16:32+0000\n"
+"PO-Revision-Date: 2021-05-28 17:32+0000\n"
 "Last-Translator: Matthaiks <kitynska@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/openwrt/luci/pl/>"
 "\n"
@@ -1337,9 +1337,9 @@ msgid ""
 "fill out the <em>custom</em> field to define a new zone and attach the "
 "interface to it."
 msgstr ""
-"Wybierz strefę firewalla którą chcesz przypisać do tego interfejsu. Wybierz "
-"<em>nieokreślone</em> aby usunąć interfejs z przypisanej strefy lub wybierz "
-"pole <em>utwórz</em> aby zdefiniować nową strefę i przypisać ją do "
+"Wybierz strefę zapory sieciowej, którą chcesz przypisać do tego interfejsu. "
+"Wybierz <em>nieokreślone</em>, aby usunąć interfejs z przypisanej strefy lub "
+"wybierz pole <em>własne</em>, aby zdefiniować nową strefę i przypisać ją do "
 "interfejsu."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:969
@@ -1615,8 +1615,8 @@ msgid ""
 "Customizes the behaviour of the device <abbr title=\"Light Emitting Diode"
 "\">LED</abbr>s if possible."
 msgstr ""
-"Dostosuj zachowanie diod <abbr title=\"Light Emitting Diode\">LED</abbr> "
-"urządzenia jeśli jest to możliwe."
+"Dostosowuje zachowanie diod <abbr title=\"Light Emitting Diode\">LED</abbr> "
+"urządzenia, jeśli to możliwe."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:710
 msgid "DAD transmits"
@@ -1777,7 +1777,7 @@ msgid ""
 "servers to clients."
 msgstr ""
 "Zdefiniuj dodatkowe opcje DHCP, np. \"<code>6,192.168.2.1,192.168.2.2</code>"
-"\" które są rozgłaszane na serwery DNS klientów."
+"\", które rozgłaszają różne serwery DNS klientom."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:490
 msgid ""
@@ -2091,7 +2091,7 @@ msgid ""
 "<abbr title=\"Domain Name System\">DNS</abbr>-Name"
 msgstr ""
 "Nie przekazuj zapytań <abbr title=\"Domain Name System\">DNS</abbr> bez "
-"nazwy <abbr title=\"Domain Name System\">DNS</abbr>'a"
+"nazwy <abbr title=\"Domain Name System\">DNS</abbr>"
 
 #: modules/luci-compat/luasrc/view/cbi/tblsection.htm:152
 msgid "Down"
@@ -2153,8 +2153,8 @@ msgid ""
 "Dynamically allocate DHCP addresses for clients. If disabled, only clients "
 "having static leases will be served."
 msgstr ""
-"Rezerwuje adresy DHCP klientów. Jeśli wyłączone tylko klienci posiadający "
-"stałe dzierżawy będą obsłużeni."
+"Dynamicznie przydzielaj adresy DHCP klientom. Jeśli wyłączone, tylko klienci "
+"posiadający statyczne dzierżawy będą obsłużeni."
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/map.js:67
 msgid "EA-bits length"
@@ -2527,8 +2527,7 @@ msgstr "Wygasa"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:589
 msgid ""
 "Expiry time of leased addresses, minimum is 2 minutes (<code>2m</code>)."
-msgstr ""
-"Czas wygasania dzierżawy adresu, minimum to 2 Minuty (<code>2m</code>)."
+msgstr "Czas wygasania dzierżawy adresu, minimum to 2 minuty (<code>2m</code>)."
 
 #: protocols/luci-proto-hnet/htdocs/luci-static/resources/protocol/hnet.js:19
 msgid "External"
@@ -2721,7 +2720,8 @@ msgstr "Wymuś CCMP (AES)"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:596
 msgid "Force DHCP on this network even if another server is detected."
 msgstr ""
-"Wymuś uruchomienie serwera DHCP w tej sieci nawet gdy wykryto inny serwer."
+"Wymuś uruchomienie serwera DHCP w tej sieci, nawet jeśli zostanie wykryty "
+"inny serwer."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:720
 msgid "Force IGMP version"
@@ -3068,7 +3068,7 @@ msgstr "Czas wygasania hosta"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:31
 msgid "Host-<abbr title=\"Internet Protocol Address\">IP</abbr> or Network"
-msgstr "<abbr title=\"Internet Protocol Address\">IP</abbr> lub sieć Hosta"
+msgstr "<abbr title=\"Internet Protocol Address\">IP</abbr> lub sieć hosta"
 
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoe.js:88
 msgid "Host-Uniq tag content"
@@ -4996,9 +4996,9 @@ msgid ""
 "server, use the suffix (like '::1') to form the IPv6 address ('a:b:c:d::1') "
 "for the interface."
 msgstr ""
-"Opcjonalne. Dopuszczalne wartości: 'eui64', 'random', stałe wartości takie "
+"Opcjonalne. Dopuszczalne wartości: 'eui64', 'random', stałe wartości, takie "
 "jak '::1' lub '::1:2'. Kiedy prefiks IPv6 (taki jak 'a:b:c:d::') jest "
-"odbierany z serwera delegującego, użyj sufiksa (takiego jak '::1') aby "
+"odbierany z serwera delegującego, użyj sufiksa (takiego jak '::1'), aby "
 "utworzyć adres IPv6 ('a:b:c:d::1') dla tego interfejsu."
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:138
