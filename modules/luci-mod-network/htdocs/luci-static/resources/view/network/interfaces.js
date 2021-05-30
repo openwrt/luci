@@ -345,6 +345,7 @@ return view.extend({
 		ui.showModal(_('Network bridge configuration migration'), [
 			E('p', _('The existing network configuration needs to be changed for LuCI to function properly.')),
 			E('p', _('Upon pressing "Continue", bridges configuration will be updated and the network will be restarted to apply the updated configuration.')),
+			E('p', _('Depending on your current configuration this update will be triggered multiple times.')),
 			E('div', { 'class': 'right' },
 				E('button', {
 					'class': 'btn cbi-button-action important',
@@ -379,6 +380,7 @@ return view.extend({
 		ui.showModal(_('Network ifname configuration migration'), [
 			E('p', _('The existing network configuration needs to be changed for LuCI to function properly.')),
 			E('p', _('Upon pressing "Continue", ifname options will get renamed and the network will be restarted to apply the updated configuration.')),
+			E('p', _('Depending on your current configuration this update will be triggered multiple times.')),
 			E('div', { 'class': 'right' },
 				E('button', {
 					'class': 'btn cbi-button-action important',
