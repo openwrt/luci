@@ -709,18 +709,22 @@ return view.extend({
 					so.depends('ra', 'hybrid');
 					so.depends('ra', 'relay');
 
-					so = ss.taboption('ipv6', form.ListValue, 'ra_management', _('DHCPv6-Mode'), _('Default is stateless + stateful<br />\
-						<ul style="list-style-type:none;">\
-						<li><strong>stateless</strong>: Router advertises prefixes, host uses <abbr title="Stateless Address Auto Config">SLAAC</abbr> \
-						to self assign its own address. No DHCPv6.</li>\
-						<li><strong>stateless + stateful</strong>: SLAAC. In addition, router assigns an IPv6 address to a host via DHCPv6.</li>\
-						<li><strong>stateful-only</strong>:  No SLAAC. Router assigns an IPv6 address to a host via DHCPv6.</li></ul>'));
-					so.value('0', _('stateless'));
-					so.value('1', _('stateless + stateful'));
-					so.value('2', _('stateful-only'));
+					so = ss.taboption('ipv6', form.Flag, 'ra_slaac', _('Enable <abbr title="Stateless Address Auto Config">SLAAC</abbr>'));
+
+					so = ss.taboption('ipv6', form.MultiValue, 'ra_flags', _('RA Flags'), _('Default is managed config (M) and other \
+						config (O)<br /><ul style="list-style-type:none;">\
+						<li><strong>managed config (M)</strong>: Router assigns an IPv6 address to a host via DHCPv6. This must be \
+						enabled to use DHCPv6 in stateful mode</li>\
+						<li><strong>other config (O)</strong>: The router provides other configuration information (such as DNS) via \
+						DHCPv6.</li>\
+						<li><strong>none</strong>: The router does not set any RA flags</li></ul>'));
+					so.value('managed-config', _('managed config (M)'));
+					so.value('other-config', _('other config (O)'));
+					so.value('none', _('none'));
+					so.rmempty = false;
 					so.depends('dhcpv6', 'server');
 					so.depends('dhcpv6', 'hybrid');
-					so.default = '1';
+					so.default = ['other-config'];
 
 					so = ss.taboption('ipv6', form.ListValue, 'dhcpv6', _('DHCPv6-Service'), _('<ul style="list-style-type:none;">\
 						<li><strong>server mode</strong>: Router assigns IPs and delegates prefixes \
