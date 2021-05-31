@@ -361,8 +361,8 @@ var ValidatorFactory = baseclass.extend({
 		},
 
 		network: function() {
-			return this.assert(this.apply('uciname') || this.apply('host'),
-				_('valid UCI identifier, hostname or IP address'));
+			return this.assert(this.apply('uciname') || this.apply('hostname') || this.apply('ip4addr') || this.apply('ip6addr'),
+				_('valid UCI identifier, hostname or IP address range'));
 		},
 
 		hostport: function(ipv4only) {
