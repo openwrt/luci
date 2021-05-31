@@ -960,15 +960,18 @@ return view.extend({
 				return true;
 			};
 
+			proto = s2.option(form.ListValue, 'proto', _('Protocol'));
+			proto.validate = name.validate;
+
 			device = s2.option(widgets.DeviceSelect, 'device', _('Device'));
 			device.noaliases = false;
 			device.optional = false;
 
-			proto = s2.option(form.ListValue, 'proto', _('Protocol'));
-			proto.validate = name.validate;
-
 			for (var i = 0; i < protocols.length; i++) {
 				proto.value(protocols[i].getProtocol(), protocols[i].getI18n());
+
+				if (!protocols[i].isVirtual())
+					device.depends('proto', protocols[i].getProtocol());
 			}
 
 			m2.render().then(L.bind(function(nodes) {
