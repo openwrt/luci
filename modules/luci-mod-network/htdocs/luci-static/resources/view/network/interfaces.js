@@ -294,7 +294,7 @@ return view.extend({
 			network.getDSLModemType(),
 			network.getDevices(),
 			fs.lines('/etc/iproute2/rt_tables'),
-			fs.read('/usr/lib/opkg/info/netifd.control'),
+			L.resolveDefault(fs.read('/usr/lib/opkg/info/netifd.control')),
 			uci.changes()
 		]);
 	},
