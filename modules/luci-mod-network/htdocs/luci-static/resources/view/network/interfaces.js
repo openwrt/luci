@@ -503,10 +503,6 @@ return view.extend({
 				}, this);
 				o.write = function() {};
 
-				o = s.taboption('general', widgets.DeviceSelect, 'device', _('Device'));
-				o.nobridges = false;
-				o.optional = false;
-				o.network = ifc.getName();
 
 				proto_select = s.taboption('general', form.ListValue, 'proto', _('Protocol'));
 				proto_select.modalonly = true;
@@ -522,6 +518,11 @@ return view.extend({
 						.then(L.bind(m.render, m))
 						.then(L.bind(this.renderMoreOptionsModal, this, s.section));
 				}, this);
+
+				o = s.taboption('general', widgets.DeviceSelect, 'device', _('Device'));
+				o.nobridges = false;
+				o.optional = false;
+				o.network = ifc.getName();
 
 				o = s.taboption('general', form.Flag, 'auto', _('Bring up on boot'));
 				o.modalonly = true;
@@ -878,7 +879,6 @@ return view.extend({
 					o = s.children[i];
 
 					switch (o.option) {
-					case 'device':
 					case 'proto':
 					case 'auto':
 					case '_dhcp':
@@ -890,6 +890,7 @@ return view.extend({
 					case 'igmp_snooping':
 					case 'stp':
 					case 'type':
+					case 'device':
 						var deps = [];
 						for (var j = 0; j < protocols.length; j++) {
 							if (!protocols[j].isVirtual()) {
