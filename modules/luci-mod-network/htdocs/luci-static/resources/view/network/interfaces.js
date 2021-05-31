@@ -326,12 +326,14 @@ return view.extend({
 			tasks.push(uci.callAdd('network', 'device', null, {
 				'name': device_name,
 				'type': 'bridge',
-				'ports': L.toArray(ns.ifname)
+				'ports': L.toArray(ns.ifname),
+				'macaddr': ns.macaddr
 			}));
 
 			tasks.push(uci.callSet('network', ns['.name'], {
 				'type': '',
 				'ifname': '',
+				'macaddr': '',
 				'device': device_name
 			}));
 		});
