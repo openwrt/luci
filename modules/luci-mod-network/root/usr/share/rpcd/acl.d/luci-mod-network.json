@@ -5,6 +5,8 @@
 			"cgi-io": [ "exec" ],
 			"file": {
 				"/etc/iproute2/rt_tables": [ "read" ],
+				"/proc/sys/net/ipv6/conf/*/mtu": [ "read" ],
+				"/proc/sys/net/ipv6/conf/*/hop_limit": [ "read" ],
 				"/usr/libexec/luci-peeraddr": [ "exec" ],
 				"/usr/lib/opkg/info/netifd.control": [ "read" ]
 			},
