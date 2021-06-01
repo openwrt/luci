@@ -423,17 +423,19 @@ return baseclass.extend({
 		o.default = (dev ? dev.getName() : '').match(/^.+\.\d+$/) ? dev.getName().replace(/\.\d+$/, '') : '';
 		o.ucioption = 'ifname';
 		o.validate = function(section_id, value) {
-			var type = this.section.formvalue(section_id, 'type'),
-			    name = this.section.getUIElement(section_id, 'name_complex');
+			if (isNew) {
+				var type = this.section.formvalue(section_id, 'type'),
+				    name = this.section.getUIElement(section_id, 'name_complex');
 
-			if (type == 'macvlan' && value && name && !name.isChanged()) {
-				var i = 0;
+				if (type == 'macvlan' && value && name && !name.isChanged()) {
+					var i = 0;
 
-				while (deviceSectionExists(section_id, '%smac%d'.format(value, i)))
-					i++;
+					while (deviceSectionExists(section_id, '%smac%d'.format(value, i)))
+						i++;
 
-				name.setValue('%smac%d'.format(value, i));
-				name.triggerValidation();
+					name.setValue('%smac%d'.format(value, i));
+					name.triggerValidation();
+				}
 			}
 
 			return true;
