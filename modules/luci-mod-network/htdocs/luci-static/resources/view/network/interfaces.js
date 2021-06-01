@@ -521,7 +521,8 @@ return view.extend({
 						.then(L.bind(this.renderMoreOptionsModal, this, s.section));
 				}, this);
 
-				o = s.taboption('general', widgets.DeviceSelect, 'device', _('Device'));
+				o = s.taboption('general', widgets.DeviceSelect, '_net_device', _('Device'));
+				o.ucioption = 'device';
 				o.nobridges = false;
 				o.optional = false;
 				o.network = ifc.getName();
@@ -888,7 +889,7 @@ return view.extend({
 					case 'igmp_snooping':
 					case 'stp':
 					case 'type':
-					case 'device':
+					case '_net_device':
 						var deps = [];
 						for (var j = 0; j < protocols.length; j++) {
 							if (!protocols[j].isVirtual()) {
