@@ -1139,6 +1139,7 @@ return view.extend({
 			    deleteBtn = trEl.querySelector('button:last-child');
 
 			deleteBtn.firstChild.data = _('Reset');
+			deleteBtn.setAttribute('title', _('Remove related device settings from the configuration'));
 			deleteBtn.disabled = section_id.match(/^dev:/) ? true : null;
 
 			return trEl;
