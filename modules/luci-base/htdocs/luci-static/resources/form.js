@@ -2035,10 +2035,32 @@ var CBIAbstractValue = CBIAbstractElement.extend(/** @lends LuCI.form.AbstractVa
 	 * The configuration section ID
 	 */
 	remove: function(section_id) {
-		return this.map.data.unset(
-			this.uciconfig || this.section.uciconfig || this.map.config,
-			this.ucisection || section_id,
-			this.ucioption || this.option);
+		var this_cfg = this.uciconfig || this.section.uciconfig || this.map.config,
+		    this_sid = this.ucisection || section_id,
+		    this_opt = this.ucioption || this.option;
+
+		for (var i = 0; i < this.section.children.length; i++) {
+			var sibling = this.section.children[i];
+
+			if (sibling === this || sibling.ucioption == null)
+				continue;
+
+			var sibling_cfg = sibling.uciconfig || sibling.section.uciconfig || sibling.map.config,
+			    sibling_sid = sibling.ucisection || section_id,
+			    sibling_opt = sibling.ucioption || sibling.option;
+
+			if (this_cfg != sibling_cfg || this_sid != sibling_sid || this_opt != sibling_opt)
+				continue;
+
+			if (!sibling.isActive(section_id))
+				continue;
+
+			/* found another active option aliasing the same uci option name,
+			 * so we can't remove the value */
+			return;
+		}
+
+		this.map.data.unset(this_cfg, this_sid, this_opt);
 	}
 });
 
