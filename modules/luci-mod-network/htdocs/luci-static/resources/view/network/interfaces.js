@@ -1313,10 +1313,11 @@ return view.extend({
 		}
 
 		function getDevType(section_id) {
-			var cfgtype = uci.get('network', section_id, 'type'),
-			    dev = getDevice(section_id);
+			var dev = getDevice(section_id),
+			    cfg = uci.get('network', section_id),
+			    type = cfg ? (uci.get('network', section_id, 'type') || 'ethernet') : (dev ? dev.getType() : '');
 
-			switch (cfgtype || (dev ? dev.getType() : '')) {
+			switch (type) {
 			case '':
 				return null;
 
