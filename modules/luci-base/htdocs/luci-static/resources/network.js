@@ -3303,6 +3303,7 @@ WifiDevice = baseclass.extend(/** @lends LuCI.network.WifiDevice.prototype */ {
 	 *  - `g` - Legacy 802.11g mode, 2.4 GHz, up to 54 Mbit/s
 	 *  - `n` - IEEE 802.11n mode, 2.4 or 5 GHz, up to 600 Mbit/s
 	 *  - `ac` - IEEE 802.11ac mode, 5 GHz, up to 6770 Mbit/s
+	 *  - `ax` - IEEE 802.11ax mode, 2.4 or 5 GHz
 	 */
 	getHWModes: function() {
 		var hwmodes = this.ubus('dev', 'iwinfo', 'hwmodes');
@@ -3324,6 +3325,10 @@ WifiDevice = baseclass.extend(/** @lends LuCI.network.WifiDevice.prototype */ {
 	 *  - `VHT40` - applicable to IEEE 802.11ac, 40 MHz wide channels
 	 *  - `VHT80` - applicable to IEEE 802.11ac, 80 MHz wide channels
 	 *  - `VHT160` - applicable to IEEE 802.11ac, 160 MHz wide channels
+	 *  - `HE20` - applicable to IEEE 802.11ax, 20 MHz wide channels
+	 *  - `HE40` - applicable to IEEE 802.11ax, 40 MHz wide channels
+	 *  - `HE80` - applicable to IEEE 802.11ax, 80 MHz wide channels
+	 *  - `HE160` - applicable to IEEE 802.11ax, 160 MHz wide channels
 	 */
 	getHTModes: function() {
 		var htmodes = this.ubus('dev', 'iwinfo', 'htmodes');
