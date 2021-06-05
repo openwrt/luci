@@ -879,6 +879,9 @@ static bool rpc_luci_get_iwinfo(struct blob_buf *buf, const char *devname,
 	if (!iw->hwmodelist(devname, &nret)) {
 		a = blobmsg_open_array(buf, "hwmodes");
 
+		if (nret & IWINFO_80211_AX)
+			blobmsg_add_string(buf, NULL, "ax");
+
 		if (nret & IWINFO_80211_AC)
 			blobmsg_add_string(buf, NULL, "ac");
 
@@ -920,6 +923,18 @@ static bool rpc_luci_get_iwinfo(struct blob_buf *buf, const char *devname,
 
 		if (nret & IWINFO_HTMODE_VHT160)
 			blobmsg_add_string(buf, NULL, "VHT160");
+
+		if (nret & IWINFO_HTMODE_HE20)
+			blobmsg_add_string(buf, NULL, "HE20");
+
+		if (nret & IWINFO_HTMODE_HE40)
+			blobmsg_add_string(buf, NULL, "HE40");
+
+		if (nret & IWINFO_HTMODE_HE80)
+			blobmsg_add_string(buf, NULL, "HE80");
+
+		if (nret & IWINFO_HTMODE_HE160)
+			blobmsg_add_string(buf, NULL, "HE160");
 
 		blobmsg_close_array(buf, a);
 	}
