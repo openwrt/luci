@@ -46,11 +46,15 @@ function validateQoSMap(section_id, value) {
 	return true;
 }
 
-function deviceSectionExists(section_id, devname, devtype) {
+function deviceSectionExists(section_id, devname, ignore_type_match) {
 	var exists = false;
 
 	uci.sections('network', 'device', function(ss) {
-		exists = exists || (ss['.name'] != section_id && ss.name == devname && (!devtype || devtype == ss.type));
+		exists = exists || (
+			ss['.name'] != section_id &&
+			ss.name == devname &&
+			(!ignore_type_match || !ignore_type_match.test(ss.type || ''))
+		);
 	});
 
 	return exists;
@@ -409,10 +413,11 @@ return baseclass.extend({
 		o.ucioption = 'name';
 		o.write = o.remove = setIfActive;
 		o.filter = function(section_id, value) {
-			return !deviceSectionExists(section_id, value);
+			return !deviceSectionExists(section_id, value, /^(?:bridge|8021q|8021ad|macvlan|veth)$/);
 		};
 		o.validate = function(section_id, value) {
-			return deviceSectionExists(section_id, value) ? _('A configuration for the device "%s" already exists').format(value) : true;
+			return deviceSectionExists(section_id, value, /^(?:bridge|8021q|8021ad|macvlan|veth)$/)
+				? _('A configuration for the device "%s" already exists').format(value) : true;
 		};
 		o.depends('type', '');
 
@@ -479,7 +484,7 @@ return baseclass.extend({
 		o.ucioption = 'name';
 		o.write = o.remove = setIfActive;
 		o.validate = function(section_id, value) {
-			return deviceSectionExists(section_id, value) ? _('The device name "%s" is already taken').format(value) : true;
+			return deviceSectionExists(section_id, value, /^$/) ? _('The device name "%s" is already taken').format(value) : true;
 		};
 		o.depends({ type: '', '!reverse': true });
 
