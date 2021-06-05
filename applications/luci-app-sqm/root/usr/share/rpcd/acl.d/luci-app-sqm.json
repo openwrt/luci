@@ -4,7 +4,9 @@
 		"read": {
 			"file": {
 				"/var/run/sqm/available_qdiscs": [ "list" ],
-				"/usr/lib/sqm/*.qos.help": [ "read" ]
+				"/usr/lib/sqm/*.qos.help": [ "read" ],
+				"/etc/init.d/sqm enable" : [ "exec" ],
+				"/etc/init.d/sqm start" : [ "exec" ]
 			},
 			"uci": [ "sqm" ],
 			"ubus": {
