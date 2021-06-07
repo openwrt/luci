@@ -1047,7 +1047,7 @@ return view.extend({
 					bssid.depends('mode', 'sta');
 					bssid.depends('mode', 'sta-wds');
 
-					o = ss.taboption('macfilter', form.ListValue, 'macfilter', _('MAC-Address Filter'));
+					o = ss.taboption('macfilter', form.ListValue, 'macfilter', _('MAC Address Filter'));
 					o.depends('mode', 'ap');
 					o.depends('mode', 'ap-wds');
 					o.value('', _('disable'));
@@ -2113,7 +2113,7 @@ return view.extend({
 			var table = E('table', { 'class': 'table assoclist', 'id': 'wifi_assoclist_table' }, [
 				E('tr', { 'class': 'tr table-titles' }, [
 					E('th', { 'class': 'th nowrap' }, _('Network')),
-					E('th', { 'class': 'th hide-xs' }, _('MAC-Address')),
+					E('th', { 'class': 'th hide-xs' }, _('MAC address')),
 					E('th', { 'class': 'th' }, _('Host')),
 					E('th', { 'class': 'th' }, _('Signal / Noise')),
 					E('th', { 'class': 'th' }, _('RX Rate / TX Rate'))

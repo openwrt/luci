@@ -84,8 +84,8 @@ return baseclass.extend({
 		var table = E('table', { 'class': 'table lases' }, [
 			E('tr', { 'class': 'tr table-titles' }, [
 				E('th', { 'class': 'th' }, _('Hostname')),
-				E('th', { 'class': 'th' }, _('IPv4-Address')),
-				E('th', { 'class': 'th' }, _('MAC-Address')),
+				E('th', { 'class': 'th' }, _('IPv4 address')),
+				E('th', { 'class': 'th' }, _('MAC address')),
 				E('th', { 'class': 'th' }, _('Lease time remaining')),
 				E('th', { 'class': 'th cbi-section-actions' }, _('Static Lease'))
 			])
@@ -123,7 +123,7 @@ return baseclass.extend({
 		var table6 = E('table', { 'class': 'table leases6' }, [
 			E('tr', { 'class': 'tr table-titles' }, [
 				E('th', { 'class': 'th' }, _('Host')),
-				E('th', { 'class': 'th' }, _('IPv6-Address')),
+				E('th', { 'class': 'th' }, _('IPv6 address')),
 				E('th', { 'class': 'th' }, _('DUID')),
 				E('th', { 'class': 'th' }, _('Lease time remaining')),
 				E('th', { 'class': 'th cbi-section-actions' }, _('Static Lease'))

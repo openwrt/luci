@@ -53,7 +53,7 @@ function renderbox(ifc, ipv6) {
 			E('div', {}, renderBadge(
 				L.resource('icons/%s.png').format(dev ? dev.getType() : 'ethernet_disabled'), null,
 				_('Device'), dev ? dev.getI18n() : '-',
-				_('MAC-Address'), dev.getMAC())
+				_('MAC address'), dev.getMAC())
 			)
 		])
 	]);

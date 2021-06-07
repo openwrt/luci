@@ -34,8 +34,8 @@ CBILeaseStatus = form.DummyValue.extend({
 			E('table', { 'id': 'lease_status_table', 'class': 'table' }, [
 				E('tr', { 'class': 'tr table-titles' }, [
 					E('th', { 'class': 'th' }, _('Hostname')),
-					E('th', { 'class': 'th' }, _('IPv4-Address')),
-					E('th', { 'class': 'th' }, _('MAC-Address')),
+					E('th', { 'class': 'th' }, _('IPv4 address')),
+					E('th', { 'class': 'th' }, _('MAC address')),
 					E('th', { 'class': 'th' }, _('Lease time remaining'))
 				]),
 				E('tr', { 'class': 'tr placeholder' }, [
@@ -53,7 +53,7 @@ CBILease6Status = form.DummyValue.extend({
 			E('table', { 'id': 'lease6_status_table', 'class': 'table' }, [
 				E('tr', { 'class': 'tr table-titles' }, [
 					E('th', { 'class': 'th' }, _('Host')),
-					E('th', { 'class': 'th' }, _('IPv6-Address')),
+					E('th', { 'class': 'th' }, _('IPv6 address')),
 					E('th', { 'class': 'th' }, _('DUID')),
 					E('th', { 'class': 'th' }, _('Lease time remaining'))
 				]),
@@ -409,7 +409,7 @@ return view.extend({
 
 		o = s.taboption('leases', form.SectionValue, '__leases__', form.GridSection, 'host', null,
 			_('Static leases are used to assign fixed IP addresses and symbolic hostnames to DHCP clients. They are also required for non-dynamic interface configurations where only hosts with a corresponding lease are served.') + '<br />' +
-			_('Use the <em>Add</em> Button to add a new lease entry. The <em>MAC-Address</em> identifies the host, the <em>IPv4-Address</em> specifies the fixed address to use, and the <em>Hostname</em> is assigned as a symbolic name to the requesting host. The optional <em>Lease time</em> can be used to set non-standard host-specific lease time, e.g. 12h, 3d or infinite.'));
+			_('Use the <em>Add</em> Button to add a new lease entry. The <em>MAC address</em> identifies the host, the <em>IPv4 address</em> specifies the fixed address to use, and the <em>Hostname</em> is assigned as a symbolic name to the requesting host. The optional <em>Lease time</em> can be used to set non-standard host-specific lease time, e.g. 12h, 3d or infinite.'));
 
 		ss = o.subsection;
 

@@ -152,8 +152,8 @@ return view.extend({
 
 		var neigh4tbl = E('table', { 'class': 'table' }, [
 			E('tr', { 'class': 'tr table-titles' }, [
-				E('th', { 'class': 'th' }, [ _('IPv4-Address') ]),
-				E('th', { 'class': 'th' }, [ _('MAC-Address') ]),
+				E('th', { 'class': 'th' }, [ _('IPv4 address') ]),
+				E('th', { 'class': 'th' }, [ _('MAC address') ]),
 				E('th', { 'class': 'th' }, [ _('Interface') ])
 			])
 		]);
@@ -162,7 +162,7 @@ return view.extend({
 			E('tr', { 'class': 'tr table-titles' }, [
 				E('th', { 'class': 'th' }, [ _('Network') ]),
 				E('th', { 'class': 'th' }, [ _('Target') ]),
-				E('th', { 'class': 'th' }, [ _('IPv4-Gateway') ]),
+				E('th', { 'class': 'th' }, [ _('IPv4 gateway') ]),
 				E('th', { 'class': 'th' }, [ _('Metric') ]),
 				E('th', { 'class': 'th' }, [ _('Table') ]),
 				E('th', { 'class': 'th' }, [ _('Protocol') ]),
@@ -171,8 +171,8 @@ return view.extend({
 
 		var neigh6tbl = E('table', { 'class': 'table' }, [
 			E('tr', { 'class': 'tr table-titles' }, [
-				E('th', { 'class': 'th' }, [ _('IPv6-Address') ]),
-				E('th', { 'class': 'th' }, [ _('MAC-Address') ]),
+				E('th', { 'class': 'th' }, [ _('IPv6 address') ]),
+				E('th', { 'class': 'th' }, [ _('MAC address') ]),
 				E('th', { 'class': 'th' }, [ _('Interface') ])
 			])
 		]);
