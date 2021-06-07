@@ -656,7 +656,7 @@ return baseclass.extend({
 		o.datatype = 'uinteger';
 		o.depends('type', '');
 
-		o = this.addOption(s, 'devadvanced', form.Flag, 'promisc', _('Enable promiscious mode'));
+		o = this.addOption(s, 'devadvanced', form.Flag, 'promisc', _('Enable promiscuous mode'));
 		o.default = o.disabled;
 		o.depends('type', '');
 
