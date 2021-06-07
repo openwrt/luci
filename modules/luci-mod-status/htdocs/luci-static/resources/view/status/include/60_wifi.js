@@ -226,7 +226,7 @@ return baseclass.extend({
 		var assoclist = E('table', { 'class': 'table assoclist' }, [
 			E('tr', { 'class': 'tr table-titles' }, [
 				E('th', { 'class': 'th nowrap' }, _('Network')),
-				E('th', { 'class': 'th hide-xs' }, _('MAC-Address')),
+				E('th', { 'class': 'th hide-xs' }, _('MAC address')),
 				E('th', { 'class': 'th' }, _('Host')),
 				E('th', { 'class': 'th' }, '%s / %s'.format(_('Signal'), _('Noise'))),
 				E('th', { 'class': 'th' }, '%s / %s'.format(_('RX Rate'), _('TX Rate')))
