@@ -45,11 +45,11 @@ msgstr ""
 "\"匹配除 &quot;%{helper.name}&quot; 以外的任意助手。\">%{helper.val}</var>:"
 "<var data-tooltip=\"%{helper.name}\">%{helper.val}</var>}}"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:448
+#: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:461
 msgid "-- add IP --"
 msgstr "-- 添加 IP --"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:496
+#: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:509
 msgid "-- add MAC --"
 msgstr "-- 添加 MAC --"
 
@@ -173,7 +173,7 @@ msgstr "允许来自<em>源区域</em>的转发："
 msgid "Allow forward to <em>destination zones</em>:"
 msgstr "允许转发到<em>目标区域</em>："
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:523
+#: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:539
 msgid "Any"
 msgstr "任何"
 
@@ -189,7 +189,9 @@ msgid ""
 "Apply a bitwise XOR of the given value and the existing mark value on "
 "established connections. Format is value[/mask]. If a mask is specified then "
 "those bits set in the mask are zeroed out."
-msgstr "在已建立的连接上对给定值和现有标记值进行按位异或。格式为 值[/掩码]。如果指定了掩码，则掩码中设置的位将归零。"
+msgstr ""
+"在已建立的连接上对给定值和现有标记值进行按位异或。格式为 值[/掩码]。如果指定"
+"了掩码，则掩码中设置的位将归零。"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:263
 msgid "Apply the given DSCP class or value to established connections."
@@ -220,7 +222,7 @@ msgstr "连接跟踪助手"
 msgid "Contents have been saved."
 msgstr "内容已保存。"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:671
+#: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:687
 msgid "Continue"
 msgstr "继续"
 
@@ -245,7 +247,9 @@ msgid ""
 "Custom rules allow you to execute arbitrary iptables commands which are not "
 "otherwise covered by the firewall framework. The commands are executed after "
 "each firewall restart, right after the default ruleset has been loaded."
-msgstr "自定义规则允许您执行不属于防火墙框架的任意 iptables 命令。每次重启防火墙时，这些命令在默认的规则运行后立即执行。"
+msgstr ""
+"自定义规则允许您执行不属于防火墙框架的任意 iptables 命令。每次重启防火墙时，"
+"这些命令在默认的规则运行后立即执行。"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:382
 msgid "DSCP classification"
@@ -281,7 +285,9 @@ msgstr "设备名"
 msgid ""
 "Do not install extra rules to reject forwarded traffic with conntrack state "
 "<em>invalid</em>. This may be required for complex asymmetric route setups."
-msgstr "不安装额外的规则以拒绝连接跟踪状态为<em>无效</em>的转发流量。对复杂的非对称路由这可能是必需的设置。"
+msgstr ""
+"不安装额外的规则以拒绝连接跟踪状态为<em>无效</em>的转发流量。对复杂的非对称路"
+"由这可能是必需的设置。"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:58
 msgid "Drop invalid packets"
@@ -367,7 +373,7 @@ msgstr "防火墙 - 通信规则"
 msgid "Firewall - Zone Settings"
 msgstr "防火墙 - 区域设置"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:664
+#: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:680
 msgid "Firewall configuration migration"
 msgstr "防火墙配置迁移"
 
@@ -806,7 +812,9 @@ msgstr "设置标记"
 msgid ""
 "Set the given mark value on established connections. Format is value[/mask]. "
 "If a mask is specified then only those bits set in the mask are modified."
-msgstr "在已建立的连接上设置给定的标记值。格式为：值[/掩码]。如果指定了掩码，则仅修改掩码中设置的位。"
+msgstr ""
+"在已建立的连接上设置给定的标记值。格式为：值[/掩码]。如果指定了掩码，则仅修改"
+"掩码中设置的位。"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:83
 msgid "Software based offloading for routing/NAT"
@@ -878,7 +886,7 @@ msgstr "停止时间（hh.mm.ss）"
 msgid "Sunday"
 msgstr "星期日"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:665
+#: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:681
 msgid ""
 "The existing firewall configuration needs to be changed for LuCI to function "
 "properly."
@@ -990,7 +998,9 @@ msgid ""
 "Traffic rules define policies for packets traveling between different zones, "
 "for example to reject traffic between certain hosts or to open WAN ports on "
 "the router."
-msgstr "通信规则定义了不同区域间的数据包传输策略，例如：拒绝一些主机之间的通信、开放路由器 WAN 上的端口。"
+msgstr ""
+"通信规则定义了不同区域间的数据包传输策略，例如：拒绝一些主机之间的通信、开放"
+"路由器 WAN 上的端口。"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:441
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:260
@@ -1025,11 +1035,11 @@ msgstr "未命名规则"
 msgid "Unnamed zone"
 msgstr "未命名区域"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:569
+#: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:585
 msgid "Unrecognized protocol"
 msgstr "无法识别的协议"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:666
+#: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:682
 msgid ""
 "Upon pressing \"Continue\", \"redirect\" sections with target \"SNAT\" will "
 "be converted to \"nat\" sections and the firewall will be restarted to apply "
@@ -1095,8 +1105,8 @@ msgid "accept"
 msgstr "接受"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:267
-#: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:448
-#: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:470
+#: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:461
+#: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:483
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:211
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:243
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:264
