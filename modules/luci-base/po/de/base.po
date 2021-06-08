@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-05-26 17:57+0200\n"
-"PO-Revision-Date: 2021-02-08 04:46+0000\n"
+"PO-Revision-Date: 2021-06-07 11:52+0200\n"
 "Last-Translator: Zocker1012 <julian.schoemer.1997@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/openwrt/luci/de/"
 ">\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.5-dev\n"
+"X-Generator: Poedit 2.4.2\n"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:916
 msgid "%.1f dB"
@@ -51,7 +51,7 @@ msgstr "(leer)"
 #: modules/luci-compat/luasrc/view/cbi/network_netinfo.htm:23
 #: modules/luci-compat/luasrc/view/cbi/network_netlist.htm:58
 msgid "(no interfaces attached)"
-msgstr "(keine Schnittstellen)"
+msgstr "(keine Netzwerkadapter)"
 
 #: modules/luci-compat/luasrc/view/cbi/ucisection.htm:48
 msgid "-- Additional Field --"
@@ -309,13 +309,13 @@ msgid ""
 "to dial into the provider network."
 msgstr ""
 "ATM Brücken exponieren in AAL5 gekapselten Ethernetverkehr als virtuelle "
-"Linux Netzwerkschnittstellen welche z.B. in Verbindung mit DHCP oder PPP "
-"genutzt werden können um sich in das Providernetzwerk einzuwählen."
+"Linux Netzwerkadapter welche z.B. in Verbindung mit DHCP oder PPP genutzt "
+"werden können um sich in das Providernetzwerk einzuwählen."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:964
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoa.js:62
 msgid "ATM device number"
-msgstr "ATM Geräteindex"
+msgstr "ATM Adapterindex"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:37
 msgid "ATU-C System Vendor ID"
@@ -325,7 +325,7 @@ msgstr "<abbr title=\"Internet Protokoll Version 4\">IPv4</abbr>-Adresse"
 #: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:544
 #: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:548
 msgid "Absent Interface"
-msgstr "Nicht vorhandene Schnittstelle"
+msgstr "Nicht vorhandener Adapter"
 
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoe.js:47
 msgid "Access Concentrator"
@@ -572,7 +572,7 @@ msgstr "Beim Speichern des Formulars ist ein Fehler aufgetreten:"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:123
 msgid "An optional, short description for this device"
-msgstr ""
+msgstr "Kurze, optionale Beschreibung dieses Gerätes"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:877
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:20
@@ -719,7 +719,8 @@ msgstr "Assoziierungen"
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:154
 msgid "Attempt to enable configured mount points for attached devices"
 msgstr ""
-"Versuche die konfigurierten Mount-Punkte vorhandener Geräte zu aktivieren"
+"Versuche die konfigurierten Mount-Punkte vorhandener Speichergeräte zu "
+"aktivieren"
 
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:104
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:64
@@ -869,7 +870,7 @@ msgid ""
 "Bind dynamically to interfaces rather than wildcard address (recommended as "
 "linux default)"
 msgstr ""
-"Dynamisch an Schnittstellen binden statt die globale Standardadresse zu "
+"Dynamisch an Netzwerkadapter binden statt die globale Standardadresse zu "
 "benutzen (als Standard für Linux-Systeme empfohlen)"
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:59
@@ -878,7 +879,7 @@ msgstr ""
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:69
 #: protocols/luci-proto-ipip/htdocs/luci-static/resources/protocol/ipip.js:48
 msgid "Bind interface"
-msgstr "An Schnittstelle binden"
+msgstr "An Adapter binden"
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:59
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:64
@@ -1087,8 +1088,8 @@ msgid ""
 "Choose the network(s) you want to attach to this wireless interface or fill "
 "out the <em>custom</em> field to define a new network."
 msgstr ""
-"Wählt die Netzwerke die dieser WLAN-Schnittstelle zugeordnet werden. Das "
-"<em>erstelle</em>-Feld ausfüllen um ein neues Netzwerk zu erzeugen."
+"Wählt die Schnittstellen die diesem WLAN-Netzwerk zugeordnet werden. Das "
+"<em>erstelle</em>-Feld ausfüllen um eine neue Schnittstelle anzulegen."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1141
 msgid "Cipher"
@@ -1296,7 +1297,7 @@ msgstr "Aktuelle Sendeleistung"
 #: modules/luci-compat/luasrc/view/cbi/network_ifacelist.htm:82
 #: modules/luci-compat/luasrc/view/cbi/network_ifacelist.htm:83
 msgid "Custom Interface"
-msgstr "Benutzerdefinierte Schnittstelle"
+msgstr "Benutzerdefinierter Adaptername"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:36
 msgid "Custom delegated IPv6-prefix"
@@ -1526,21 +1527,22 @@ msgstr "Ziel-Zone"
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:279
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:355
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:391
+#, fuzzy
 msgid "Device"
 msgstr "Gerät"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:854
 msgid "Device Configuration"
-msgstr "Gerätekonfiguration"
+msgstr "WLAN-Adapterkonfiguration"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:130
 msgid "Device is not active"
-msgstr "Netzwerkadapter ist nicht aktiv"
+msgstr "WLAN-Adapter ist nicht aktiv"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:222
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:593
 msgid "Device is restarting…"
-msgstr "Netzwerkadapter startet neu…"
+msgstr "WLAN-Adapter startet neu…"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4127
 msgid "Device unreachable!"
@@ -1573,7 +1575,7 @@ msgid ""
 "Disable <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr> for "
 "this interface."
 msgstr ""
-"<abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr>-Server auf "
+"<abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr>-Server an "
 "dieser Schnittstelle deaktivieren."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:174
@@ -1895,7 +1897,7 @@ msgstr "Port-Mirroring für ausgehende Pakete aktivieren"
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:91
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:96
 msgid "Enable support for multicast traffic (optional)."
-msgstr ""
+msgstr "Multicast-Unterstützung aktivieren (optional)."
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:83
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:88
@@ -1991,7 +1993,7 @@ msgstr "Netzwerk Switch"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:399
 msgid "Exclude interfaces"
-msgstr "Schnittstellen ausschließen"
+msgstr "Netzwerkadapter ausschließen"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:247
 msgid "Expand hosts"
@@ -2658,8 +2660,8 @@ msgid ""
 "If specified, mount the device by the partition label instead of a fixed "
 "device node"
 msgstr ""
-"Wenn angegeben, wird das Gerät nach anhhand des Partitionslabels statt "
-"fester Gerätedatei gemounted"
+"Wenn angegeben, wird das Gerät nach anhand des Partitionslabels statt fester "
+"Gerätedatei gemounted"
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:34
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:116
@@ -2833,24 +2835,25 @@ msgstr "Schnittstelle"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:62
 msgid "Interface %q device auto-migrated from %q to %q."
 msgstr ""
-"Das Gerät der Schnittstelle %q wurde automatisch von %q auf %q geändert."
+"Der Netzwerkadapter der Schnittstelle %q wurde automatisch von %q auf %q "
+"geändert."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:910
 msgid "Interface Configuration"
-msgstr "Schnittstellenkonfiguration"
+msgstr "WLAN-Netzwerkkonfiguration"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:108
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:149
 msgid "Interface has %d pending changes"
-msgstr "Der Netzwerkadapter hat %d ausstehende Änderungen"
+msgstr "Die Schnittstelle hat %d ausstehende Änderungen"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:90
 msgid "Interface is disabled"
-msgstr "Schnittstelle ist deaktiviert"
+msgstr "Netzwerk ist deaktiviert"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:62
 msgid "Interface is marked for deletion"
-msgstr "Der Netzwerkadapter ist zum Löschen vorgemerkt"
+msgstr "Die Schnittstelle ist zum Löschen vorgemerkt"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:207
 msgid "Interface is reconnecting..."
@@ -2864,15 +2867,15 @@ msgstr "Schnittstelle fährt herunter..."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:251
 msgid "Interface is starting..."
-msgstr "Netzwerkadapter startet..."
+msgstr "Schnittstelle startet..."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:254
 msgid "Interface is stopping..."
-msgstr "Netzwerkadapter stoppt..."
+msgstr "Schnittstelle stoppt..."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1072
 msgid "Interface name"
-msgstr "Schnittstellenname"
+msgstr "Adaptername"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:120
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:270
@@ -2883,7 +2886,7 @@ msgstr "Schnittstelle existiert nicht oder ist nicht verbunden."
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:333
 #: modules/luci-mod-network/luasrc/controller/admin/network.lua:18
 msgid "Interfaces"
-msgstr "Schnittstellen"
+msgstr "Netzwerkschnittstellen"
 
 #: protocols/luci-proto-hnet/htdocs/luci-static/resources/protocol/hnet.js:20
 msgid "Internal"
@@ -2906,11 +2909,14 @@ msgstr "Ungültige Base64-Zeichenkette"
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:83
 msgid "Invalid TOS value, expected 00..FF or inherit"
 msgstr ""
+"Ungültiger TOS-Wert, erwarte einen Wert zwischen 00 und FF oder \"inherit\"."
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:83
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:88
 msgid "Invalid Traffic Class value, expected 00..FF or inherit"
 msgstr ""
+"Ungültiger Traffic-Klassen-Wert, erwarte einen Wert zwischen 00 und FF oder "
+"\"inherit\"."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:285
 msgid "Invalid VLAN ID given! Only IDs between %d and %d are allowed."
@@ -3114,7 +3120,8 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:395
 msgid "Limit listening to these interfaces, and loopback."
-msgstr "Dienste auf die angegeben Schnittstellen plus Loopback beschränken."
+msgstr ""
+"Dienste auf die angegeben Netzwerkadapter zuzüglich Loopback beschränken."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:25
 msgid "Line Attenuation (LATN)"
@@ -3188,7 +3195,7 @@ msgstr "Liste von Servern die falsche \"NX Domain\" Antworten liefern"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:394
 msgid "Listen Interfaces"
-msgstr "Aktive Schnittstellen"
+msgstr "Aktive Adapter"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:55
 msgid "Listen Port"
@@ -3543,7 +3550,7 @@ msgstr "Modem-Grundeinstellung"
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/ppp.js:73
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:57
 msgid "Modem device"
-msgstr "Modemgerät"
+msgstr "Modem-Gerätedatei"
 
 #: modules/luci-compat/luasrc/model/network/proto_ncm.lua:66
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:24
@@ -3632,7 +3639,7 @@ msgstr "Nach oben schieben"
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:91
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:96
 msgid "Multicast"
-msgstr ""
+msgstr "Multicast"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1422
 msgid "NAS ID"
@@ -3701,7 +3708,7 @@ msgstr "Netzwerk-Boot-Image"
 #: modules/luci-base/htdocs/luci-static/resources/network.js:15
 #: modules/luci-compat/luasrc/model/network.lua:33
 msgid "Network device is not present"
-msgstr "Netzwerkgerät ist nicht vorhanden"
+msgstr "Netzwerkadapter ist nicht vorhanden"
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:57
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:62
@@ -3723,7 +3730,7 @@ msgstr "Nein"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:560
 msgid "No DHCP Server configured for this interface"
-msgstr "Kein DHCP Server auf dieser Schnittstelle eingerichtet"
+msgstr "Kein DHCP Server für diese Schnittstelle eingerichtet"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1295
 msgid "No Encryption"
@@ -3863,7 +3870,7 @@ msgstr "Nicht unterstützt"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:126
 msgid "Notes"
-msgstr ""
+msgstr "Notizen"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:172
 msgid "Notice"
@@ -3982,7 +3989,7 @@ msgstr "Optional"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:126
 msgid "Optional, free-form notes about this device"
-msgstr ""
+msgstr "Beliebige, optionale Notizen über dieses Gerät"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:77
 msgid ""
@@ -4002,7 +4009,7 @@ msgstr ""
 "Optional. Mögliche Werte: 'eui64', 'random' oder Suffixes wie '::1' oder "
 "'::1:2'. Wenn ein IPv6-Präfix (wie z.B. 'a:b:c:d::') von einem delegierendem "
 "Server empfangen wird, kombiniert das System das Suffix mit dem Präfix um "
-"eine IPv6-Adresse (z.B. 'a:b:c:d::1') für die Schnittstelle zu formen."
+"eine lokale IPv6-Adresse (z.B. 'a:b:c:d::1') für die Schnittstelle zu formen."
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:118
 msgid ""
@@ -4030,7 +4037,7 @@ msgstr ""
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:72
 msgid "Optional. Maximum Transmission Unit of tunnel interface."
-msgstr "Optional. Maximale MTU für Tunnelschnittstellen."
+msgstr "Optional. Maximale MTU des Tunneladapters."
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:133
 msgid "Optional. Port of peer."
@@ -4056,7 +4063,7 @@ msgstr "Optionen"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:116
 msgid "Options:"
-msgstr ""
+msgstr "Optionen:"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:346
 msgid "Other:"
@@ -4142,7 +4149,7 @@ msgstr "TTL-Wert überschreiben"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1072
 msgid "Override default interface name"
-msgstr "Standard Schnittstellennamen überschreiben"
+msgstr "Überschreibt den Standard-Adapternamen mit dem angegebenem Wert"
 
 #: protocols/luci-proto-relay/htdocs/luci-static/resources/protocol/relay.js:167
 msgid "Override the gateway in DHCP responses"
@@ -4474,7 +4481,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:400
 msgid "Prevent listening on these interfaces."
-msgstr "Verhindert das Binden an diese Schnittstellen."
+msgstr "Verhindert das Binden an diese Netzwerkadapter."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1068
 msgid "Prevents client-to-client communication"
@@ -4889,7 +4896,7 @@ msgstr "Firewall neu starten"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:808
 msgid "Restart radio interface"
-msgstr "WLAN-Gerät neu starten"
+msgstr "WLAN-Adapter neu starten"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:369
 msgid "Restore"
@@ -4961,7 +4968,7 @@ msgid ""
 "can be reached."
 msgstr ""
 "Netzwerkrouten geben an, über welche Schnittstellen bestimmte Rechner oder "
-"Netzwerke erreicht werden können."
+"Subnetze erreicht werden können."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:206
 msgid "Rule"
@@ -5129,8 +5136,8 @@ msgid ""
 "Set interface properties regardless of the link carrier (If set, carrier "
 "sense events do not invoke hotplug handlers)."
 msgstr ""
-"Schnittstelleneigenschaften werden unabhängig vom Link gesetzt (ist die "
-"Option ausgewählt, so werden die Hotplug-Skripte bei Änderung nicht "
+"Schnittstelleeigenschaften werden unabhängig vom Verbindungszustand gesetzt "
+"(ist die Option ausgewählt, so werden die Hotplug-Skripte bei Änderung nicht "
 "aufgerufen)."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:640
@@ -5311,6 +5318,10 @@ msgid ""
 "header inherits the value of the inner header) or an hexadecimal value "
 "<code>00..FF</code> (optional)."
 msgstr ""
+"Konfiguriert einen festen <abbr title=\"Type of Service\">TOS</abbr>-Code. "
+"Mögliche Werte sind <code>inherit</code> um den TOS-Code für den äußeren "
+"Header aus dem gekapselten Paket-Header zu kopieren oder ein hexadezimaler "
+"Wert im Bereich <code>00..FF</code>."
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:74
 msgid ""
@@ -5318,6 +5329,10 @@ msgid ""
 "header inherits the value of the inner header), or an hexadecimal value "
 "<code>00..FF</code> (optional)."
 msgstr ""
+"Konfiguriert einen festen <abbr title=\"Type of Service\">TOS</abbr>-Code. "
+"Mögliche Werte sind <code>inherit</code> um den TOS-Code für den äußeren "
+"Header aus dem gekapselten Paket-Header zu kopieren oder ein hexadezimaler "
+"Wert im Bereich <code>00..FF</code>."
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:69
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:74
@@ -5345,6 +5360,10 @@ msgid ""
 "inherits the value of the inner header) or an hexadecimal value <code>00.."
 "FF</code> (optional)."
 msgstr ""
+"Konfiguriert einen festen <abbr title=\"Type of Service\">TOS</abbr>-Code. "
+"Mögliche Werte sind <code>inherit</code> um den TOS-Code für den äußeren "
+"Header aus dem gekapselten Paket-Header zu kopieren oder ein hexadezimaler "
+"Wert im Bereich <code>00..FF</code>."
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:64
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:69
@@ -5424,9 +5443,9 @@ msgid ""
 "configurations where only hosts with a corresponding lease are served."
 msgstr ""
 "Statische Leases werden genutzt um feste IP-Adressen und Hostnames zu DHCP-"
-"Clients zuzuordnen. Sie werden auch für nicht-dynamische Schnittstellen-"
-"Konfigurationen benötigt auf denen lediglich Hosts mit zugehörigem "
-"statischem Lease-Eintrag bedient werden."
+"Clients zuzuordnen. Sie werden auch für nicht-dynamische "
+"Schnittstellenkonfigurationen benötigt auf denen lediglich Hosts mit "
+"zugehörigem statischem Lease-Eintrag bedient werden."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1095
 msgid "Station inactivity limit"
@@ -6050,7 +6069,7 @@ msgstr "Tunnel-ID"
 #: modules/luci-base/htdocs/luci-static/resources/network.js:2864
 #: modules/luci-compat/luasrc/model/network.lua:1430
 msgid "Tunnel Interface"
-msgstr "Tunnelschnittstelle"
+msgstr "Tunneladapter"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/464xlat.js:44
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dslite.js:55
@@ -6099,7 +6118,7 @@ msgstr "UUID"
 #: modules/luci-compat/luasrc/model/network.lua:34
 #: modules/luci-compat/luasrc/model/network.lua:35
 msgid "Unable to determine device name"
-msgstr "Gerätename konnte nicht bestimmt werden"
+msgstr "Adaptername konnte nicht bestimmt werden"
 
 #: modules/luci-base/htdocs/luci-static/resources/network.js:18
 #: modules/luci-compat/luasrc/model/network.lua:36
@@ -6109,7 +6128,7 @@ msgstr "Externe IP-Adresse konnte nicht bestimmt werden"
 #: modules/luci-base/htdocs/luci-static/resources/network.js:19
 #: modules/luci-compat/luasrc/model/network.lua:37
 msgid "Unable to determine upstream interface"
-msgstr "Externe Netzwerkschnittstelle konnte nicht bestimmt werden"
+msgstr "Upstream-Netzwerkadapter konnte nicht bestimmt werden"
 
 #: modules/luci-base/luasrc/view/error404.htm:10
 msgid "Unable to dispatch"
@@ -6307,14 +6326,14 @@ msgstr "Muss ein ISO/IEC 3166 Länderkürzel sein."
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dslite.js:75
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/map.js:92
 msgid "Use MTU on tunnel interface"
-msgstr "Benutze MTU auf der Tunnelschnittstelle"
+msgstr "Benutze MTU auf dem Tunneladapter"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6in4.js:93
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6rd.js:73
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6to4.js:57
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/map.js:88
 msgid "Use TTL on tunnel interface"
-msgstr "Benutze TTL auf der Tunnelschnittstelle"
+msgstr "Benutze TTL auf dem Tunneladapter"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:293
 msgid "Use as external overlay (/overlay)"
@@ -6485,7 +6504,7 @@ msgstr "Überprüfen der hochgeladenen Firmware-Datei."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:57
 msgid "Virtual dynamic interface"
-msgstr "Virtuelle dynamisches Schnittstelle"
+msgstr "Virtuelle dynamische Schnittstelle"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1025
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1026
@@ -7024,7 +7043,7 @@ msgstr "gültige IPv6-Adresse"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:258
 msgid "valid IPv6 address or prefix"
-msgstr "gültige IPv6-Addresse oder gültiger IPv6-Präfix"
+msgstr "gültige IPv6 addresse oder gültiger IPv6-Präfix"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:303
 msgid "valid IPv6 host id"
