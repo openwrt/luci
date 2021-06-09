@@ -789,9 +789,7 @@ return baseclass.extend({
 		o.renderWidget = function(/* ... */) {
 			return form.SectionValue.prototype.renderWidget.apply(this, arguments).then(L.bind(function(node) {
 				node.style.overflowX = 'auto';
-				node.style.overflowY = 'visible';
-				node.style.paddingBottom = '100px';
-				node.style.marginBottom = '-100px';
+				node.style.overflowY = 'hidden';
 
 				return node;
 			}, this));
