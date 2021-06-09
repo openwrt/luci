@@ -392,7 +392,7 @@ return view.extend({
 		var tasks = [];
 
 		this.deviceWithIfnameSections().forEach(function(ds) {
-			tasks.push(uci.add('network', ds['.name'], {
+			tasks.push(uci.callSet('network', ds['.name'], {
 				'ifname': '',
 				'ports': L.toArray(ds.ifname)
 			}));
