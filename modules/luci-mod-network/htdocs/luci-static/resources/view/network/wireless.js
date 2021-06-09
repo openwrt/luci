@@ -312,16 +312,32 @@ var CBIWifiFrequencyValue = form.Value.extend({
 			this.callFrequencyList(section_id)
 		]).then(L.bind(function(data) {
 			this.channels = {
-				'11g': L.hasSystemFeature('hostapd', 'acs') ? [ 'auto', 'auto', true ] : [],
-				'11a': L.hasSystemFeature('hostapd', 'acs') ? [ 'auto', 'auto', true ] : []
+				'2g': L.hasSystemFeature('hostapd', 'acs') ? [ 'auto', 'auto', true ] : [],
+				'5g': L.hasSystemFeature('hostapd', 'acs') ? [ 'auto', 'auto', true ] : [],
+				'6g': [],
+				'60g': []
 			};
 
-			for (var i = 0; i < data[1].length; i++)
-				this.channels[(data[1][i].mhz > 2484) ? '11a' : '11g'].push(
+			for (var i = 0; i < data[1].length; i++) {
+				var band;
+
+				if (data[1][i].mhz >= 2412 && data[1][i].mhz <= 2484)
+					band = '2g';
+				else if (data[1][i].mhz >= 5160 && data[1][i].mhz <= 5885)
+					band = '5g';
+				else if (data[1][i].mhz >= 5925 && data[1][i].mhz <= 7125)
+					band = '6g';
+				else if (data[1][i].mhz >= 58329 && data[1][i].mhz <= 69120)
+					band = '60g';
+				else
+					continue;
+
+				this.channels[band].push(
 					data[1][i].channel,
 					'%d (%d Mhz)'.format(data[1][i].channel, data[1][i].mhz),
 					!data[1][i].restricted
 				);
+			}
 
 			var hwmodelist = L.toArray(data[0] ? data[0].getHWModes() : null)
 				.reduce(function(o, v) { o[v] = true; return o }, {});
@@ -358,19 +374,19 @@ var CBIWifiFrequencyValue = form.Value.extend({
 
 			this.bands = {
 				'': [
-					'11g', '2.4 GHz', this.channels['11g'].length > 3,
-					'11a', '5 GHz', this.channels['11a'].length > 3
+					'2g', '2.4 GHz', this.channels['2g'].length > 3,
+					'5g', '5 GHz', this.channels['5g'].length > 3
 				],
 				'n': [
-					'11g', '2.4 GHz', this.channels['11g'].length > 3,
-					'11a', '5 GHz', this.channels['11a'].length > 3
+					'2g', '2.4 GHz', this.channels['2g'].length > 3,
+					'5g', '5 GHz', this.channels['5g'].length > 3
 				],
 				'ac': [
-					'11a', '5 GHz', true
+					'5g', '5 GHz', true
 				],
 				'ax': [
-					'11g', '2.4 GHz', this.channels['11g'].length > 3,
-					'11a', '5 GHz', this.channels['11a'].length > 3
+					'2g', '2.4 GHz', this.channels['2g'].length > 3,
+					'5g', '5 GHz', this.channels['5g'].length > 3
 				]
 			};
 		}, this));
@@ -430,7 +446,8 @@ var CBIWifiFrequencyValue = form.Value.extend({
 		    bwdt = elem.querySelector('.htmode'),
 		    htval = uci.get('wireless', section_id, 'htmode'),
 		    hwval = uci.get('wireless', section_id, 'hwmode'),
-		    chval = uci.get('wireless', section_id, 'channel');
+		    chval = uci.get('wireless', section_id, 'channel'),
+		    bandval = uci.get('wireless', section_id, 'band');
 
 		this.setValues(mode, this.modes);
 
@@ -443,15 +460,24 @@ var CBIWifiFrequencyValue = form.Value.extend({
 
 		this.toggleWifiMode(elem);
 
-		if (/a/.test(hwval))
-			band.value = '11a';
-		else
-			band.value = '11g';
+		if (hwval != null) {
+			this.useBandOption = false;
+
+			if (/a/.test(hwval))
+				band.value = '5g';
+			else
+				band.value = '2g';
+		}
+		else {
+			this.useBandOption = true;
+
+			band.value = bandval;
+		}
 
 		this.toggleWifiBand(elem);
 
 		bwdt.value = htval;
-		chan.value = chval;
+		chan.value = chval || chan.options[0].value;
 
 		return elem;
 	},
@@ -505,7 +531,7 @@ var CBIWifiFrequencyValue = form.Value.extend({
 	cfgvalue: function(section_id) {
 		return [
 		    uci.get('wireless', section_id, 'htmode'),
-		    uci.get('wireless', section_id, 'hwmode'),
+		    uci.get('wireless', section_id, 'hwmode') || uci.get('wireless', section_id, 'band'),
 		    uci.get('wireless', section_id, 'channel')
 		];
 	},
@@ -522,7 +548,12 @@ var CBIWifiFrequencyValue = form.Value.extend({
 
 	write: function(section_id, value) {
 		uci.set('wireless', section_id, 'htmode', value[0] || null);
-		uci.set('wireless', section_id, 'hwmode', value[1]);
+
+		if (this.useBandOption)
+			uci.set('wireless', section_id, 'band', value[1]);
+		else
+			uci.set('wireless', section_id, 'hwmode', (value[1] == '2g') ? '11g' : '11a');
+
 		uci.set('wireless', section_id, 'channel', value[2]);
 	}
 });
