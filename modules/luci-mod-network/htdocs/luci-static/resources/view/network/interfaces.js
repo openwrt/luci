@@ -128,7 +128,7 @@ function render_modal_status(node, ifc) {
 
 function render_ifacebox_status(node, ifc) {
 	var dev = ifc.getL3Device() || ifc.getDevice(),
-	    subdevs = ifc.getDevices(),
+	    subdevs = dev ? dev.getPorts() : null,
 	    c = [ render_iface(dev, ifc.isAlias()) ];
 
 	if (subdevs && subdevs.length) {
