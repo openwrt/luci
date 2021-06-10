@@ -1,0 +1,23 @@
+--- a/src/test-utils.c
++++ b/src/test-utils.c
+@@ -76,17 +76,17 @@ int main(int argc, char **argv)
+ 
+ 	if (encode) {
+ 		rv = lh_urlencode(encode, 0, &len, flags);
+-		printf("length=%ld encoded=%s\n", len, rv);
++		printf("length=%zd encoded=%s\n", len, rv);
+ 		return 0;
+ 	}
+ 	else if (decode) {
+ 		rv = lh_urldecode(decode, 0, &len, flags);
+-		printf("length=%ld decoded=%s\n", len, rv);
++		printf("length=%zd decoded=%s\n", len, rv);
+ 		return 0;
+ 	}
+ 	else if (hval && attr) {
+ 		rv = lh_header_attribute(hval, 0, attr, &len);
+-		printf("length=%ld value=%s\n", len, rv);
++		printf("length=%zd value=%s\n", len, rv);
+ 		return 0;
+ 	}
+ 
