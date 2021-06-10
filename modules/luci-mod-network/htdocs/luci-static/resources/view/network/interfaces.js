@@ -368,13 +368,17 @@ return view.extend({
 				'name': device_name,
 				'type': 'bridge',
 				'ports': L.toArray(ns.ifname),
-				'macaddr': ns.macaddr
+				'mtu': ns.mtu,
+				'macaddr': ns.macaddr,
+				'igmp_snooping': ns.igmp_snooping
 			}));
 
 			tasks.push(uci.callSet('network', ns['.name'], {
 				'type': '',
 				'ifname': '',
+				'mtu': '',
 				'macaddr': '',
+				'igmp_snooping': '',
 				'device': device_name
 			}));
 		});
