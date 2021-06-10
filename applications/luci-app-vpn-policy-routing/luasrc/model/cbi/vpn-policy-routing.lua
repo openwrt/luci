@@ -9,7 +9,6 @@ local jsonc = require "luci.jsonc"
 local http = require "luci.http"
 local nutil = require "nixio.util"
 local dispatcher = require "luci.dispatcher"
-local enabledFlag = uci:get(packageName, "config", "enabled")
 local enc
 
 function getPackageVersion()
@@ -104,6 +103,8 @@ function is_supported_interface(arg)
 	local name=arg['.name']
 	local proto=arg['proto']
 	local ifname=arg['ifname']
+	local device=arg['device']
+	ifname = ifname or device
 
 	if name and is_wan(name) then return true end
 	if name and supportedIfaces:match('%f[%w]' .. name .. '%f[%W]') then return true end
@@ -268,21 +269,18 @@ webui_sorting.default = "1"
 -- Policies
 p = m:section(TypedSection, "policy", translate("Policies"), translate("Comment, interface and at least one other field are required. Multiple local and remote addresses/devices/domains and ports can be space separated. Placeholders below represent just the format/syntax and will not be used if fields are left blank."))
 p.template = "cbi/tblsection"
-enc = tonumber(uci:get("vpn-policy-routing", "config", "webui_sorting"))
-if not enc or enc ~= 0 then
+if uci:get("vpn-policy-routing", "config", "webui_sorting") == "1" then
 	p.sortable  = true
 end
 p.anonymous = true
 p.addremove = true
 
-enc = tonumber(uci:get("vpn-policy-routing", "config", "webui_enable_column"))
-if enc and enc ~= 0 then
+if uci:get("vpn-policy-routing", "config", "webui_enable_column") == "1" then
 	le = p:option(Flag, "enabled", translate("Enabled"))
 	le.default = "1"
 end
 
-local comment = uci:get_first("vpn-policy-routing", "policy", "comment")
-if comment then
+if uci:get_first("vpn-policy-routing", "policy", "comment") then
 	p:option(Value, "comment", translate("Comment"))
 else
 	p:option(Value, "name", translate("Name"))
@@ -310,28 +308,21 @@ rp.datatype    = 'list(neg(or(portrange, string)))'
 rp.placeholder = "0-65535"
 rp.rmempty = true
 
-enc = tonumber(uci:get("vpn-policy-routing", "config", "webui_protocol_column"))
-if enc and enc ~= 0 then
+if uci:get("vpn-policy-routing", "config", "webui_protocol_column") == "1" then
 	proto = p:option(ListValue, "proto", translate("Protocol"))
 	proto:value("", "AUTO")
 	proto.default = ""
 	proto.rmempty = true
 	enc = uci:get_list("vpn-policy-routing", "config", "webui_supported_protocol")
-	local count = 0
-	for key, value in pairs(enc) do
-		count = count + 1
-		proto:value(value:lower(), value:gsub(" ", "/"):upper())
-	end
-	if count == 0 then
+	if next(enc) == nil then
 		enc = { "tcp", "udp", "tcp udp", "icmp", "all" }
-		for key,value in pairs(enc) do
-			proto:value(value:lower(), value:gsub(" ", "/"):upper())
-		end
+	end
+	for key,value in pairs(enc) do
+		proto:value(value:lower(), value:gsub(" ", "/"):upper())
 	end
 end
 
-enc = tonumber(uci:get("vpn-policy-routing", "config", "webui_chain_column"))
-if enc and enc ~= 0 then
+if uci:get("vpn-policy-routing", "config", "webui_chain_column") == "1" then
 	chain = p:option(ListValue, "chain", translate("Chain"))
 	chain:value("", "PREROUTING")
 	chain:value("FORWARD", "FORWARD")
@@ -353,8 +344,8 @@ uci:foreach("network", "interface", function(s)
 		gw:value(name, name:upper()) 
 	end
 end)
-enc = tonumber(uci:get("vpn-policy-routing", "config", "webui_show_ignore_target"))
-if enc and enc ~= 0 then
+if fs.access("/etc/tor/torrc") then gw:value("tor", "TOR") end
+if uci:get("vpn-policy-routing", "config", "webui_show_ignore_target") == "1" then
 	gw:value("ignore", "IGNORE")
 end
 
