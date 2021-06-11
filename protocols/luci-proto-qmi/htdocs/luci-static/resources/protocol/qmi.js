@@ -65,7 +65,13 @@ return network.registerProtocol('qmi', {
 			}, this));
 		};
 
-		s.taboption('general', form.Value, 'apn', _('APN'));
+		o = s.taboption('general', form.Value, 'apn', _('APN'));
+		o.validate = function(section_id, value) { 
+    		    if (!/^[a-zA-Z0-9\-.]*[a-zA-Z0-9]$/.test(value))
+                        return _('Invalid APN provided');
+
+	            return true; 
+		};
 		s.taboption('general', form.Value, 'pincode', _('PIN'));
 
 		o = s.taboption('general', form.ListValue, 'auth', _('Authentication Type'));
