@@ -1,5 +1,6 @@
 'use strict';
 'require ui';
+'require dom';
 'require uci';
 'require form';
 'require network';
@@ -80,16 +81,54 @@ function isBridgePort(dev) {
 	return isPort;
 }
 
-function renderDevBadge(dev) {
-	var type = dev.getType(), up = dev.isUp();
+function updateDevBadge(node, dev) {
+	var type = dev.getType(),
+	    up = dev.getCarrier();
 
-	return E('span', { 'class': 'ifacebadge', 'style': 'font-weight:normal' }, [
+	dom.content(node, [
 		E('img', {
 			'class': 'middle',
 			'src': L.resource('icons/%s%s.png').format(type, up ? '' : '_disabled')
 		}),
 		'\x0a', dev.getName()
 	]);
+
+	return node;
+}
+
+function renderDevBadge(dev) {
+	return updateDevBadge(E('span', {
+		'class': 'ifacebadge port-status-device',
+		'style': 'font-weight:normal',
+		'data-device': dev.getName()
+	}), dev);
+}
+
+function updatePortStatus(node, dev) {
+	var carrier = dev.getCarrier(),
+	    duplex = dev.getDuplex(),
+	    speed = dev.getSpeed(),
+	    desc;
+
+	if (carrier && speed > 0 && duplex != null)
+		desc = E('abbr', {
+			'title': '%d MBit/s, %s'.format(speed, duplex == 'full' ? _('full-duplex') : _('half-duplex'))
+		}, [ '%d%s'.format(speed, duplex == 'full' ? 'FD' : 'HD') ]);
+	else if (carrier)
+		desc = document.createTextNode(_('Connected'));
+	else
+		desc = document.createTextNode(_('no link'));
+
+	dom.content(node, [ desc ]);
+
+	return node;
+}
+
+function renderPortStatus(dev) {
+	return updatePortStatus(E('span', {
+		'class': 'port-status-link',
+		'data-device': dev.getName()
+	}), dev);
 }
 
 function lookupDevName(s, section_id) {
@@ -839,7 +878,7 @@ return baseclass.extend({
 			this.children = this.children.filter(function(opt) { return !opt.option.match(/^port_/) });
 
 			for (var i = 0; i < devices.length; i++) {
-				o = ss.option(cbiTagValue, 'port_%s'.format(sfh(devices[i].getName())), renderDevBadge(devices[i]));
+				o = ss.option(cbiTagValue, 'port_%s'.format(sfh(devices[i].getName())), renderDevBadge(devices[i]), renderPortStatus(devices[i]));
 				o.port = devices[i].getName();
 			}
 
@@ -941,8 +980,21 @@ return baseclass.extend({
 		for (var port_name in seen_ports)
 			ports.push(port_name);
 
-		ports.sort();
+		ports.sort(function(a, b) {
+			var m1 = a.match(/^(.+?)([0-9]*)$/),
+			    m2 = b.match(/^(.+?)([0-9]*)$/);
+
+			if (m1[1] < m2[1])
+				return -1;
+			else if (m1[1] > m2[1])
+				return 1;
+			else
+				return +(m1[2] || 0) - +(m2[2] || 0);
+		});
 
 		ss.updatePorts(ports);
-	}
+	},
+
+	updateDevBadge: updateDevBadge,
+	updatePortStatus: updatePortStatus
 });
