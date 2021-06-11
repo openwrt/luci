@@ -319,6 +319,14 @@ return view.extend({
 			btn2.disabled = isReadonlyView || btn1.classList.contains('spinning') || btn2.classList.contains('spinning') || dynamic || disabled;
 		}
 
+		document.querySelectorAll('.port-status-device[data-device]').forEach(function(node) {
+			nettools.updateDevBadge(node, network.instantiateDevice(node.getAttribute('data-device')));
+		});
+
+		document.querySelectorAll('.port-status-link[data-device]').forEach(function(node) {
+			nettools.updatePortStatus(node, network.instantiateDevice(node.getAttribute('data-device')));
+		});
+
 		return Promise.all([ resolveZone, network.flushCache() ]);
 	},
 
