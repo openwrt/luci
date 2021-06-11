@@ -4,8 +4,8 @@
 #
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2021-06-07 14:45+0000\n"
-"Last-Translator: ywx <yangwenxiao4511@gmail.com>\n"
+"PO-Revision-Date: 2021-06-10 05:49+0000\n"
+"Last-Translator: Meano Lee <meanocat@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "openwrt/luci/zh_Hans/>\n"
 "Language: zh_Hans\n"
@@ -730,7 +730,7 @@ msgstr "此设备的可选简短描述"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1441
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:20
 msgid "Annex"
-msgstr "附件"
+msgstr "Annex"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1442
 msgid "Annex A + L + M (all)"
@@ -4188,8 +4188,8 @@ msgid ""
 "Maximum time allowed between sending unsolicited <abbr title=\"Router "
 "Advertisement, ICMPv6 Type 134\">RA</abbr>. Default is 600 seconds."
 msgstr ""
-"发送不请自来的 <abbr title=\"Router Advertisement, ICMPv6 Type 134\"> RA </"
-"abbr>间允许相隔的最长时间。默认值是 600 秒。"
+"发送主动 <abbr title=\"Router Advertisement, ICMPv6 Type 134\">RA</abbr> "
+"间允许相隔的最长时间。默认值是 600 秒。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:913
 msgid "Maximum transmit power"
@@ -4274,8 +4274,8 @@ msgid ""
 "Minimum time allowed between sending unsolicited <abbr title=\"Router "
 "Advertisement, ICMPv6 Type 134\">RA</abbr>. Default is 200 seconds."
 msgstr ""
-"发送未经请求的 <abbr title=\"Router Advertisement, ICMPv6 Type 134\">RA</"
-"abbr>间允许相隔的最短时间。默认值是 200 秒。"
+"发送主动 <abbr title=\"Router Advertisement, ICMPv6 Type 134\">RA</abbr> "
+"间允许相隔的最短时间。默认值是 200 秒。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:202
 msgid "Mirror monitor port"
@@ -6367,11 +6367,11 @@ msgstr "明确用于 ARP 监控的 IP 地址"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:395
 msgid "Specifies the MII link monitoring frequency in milliseconds"
-msgstr "明确 MII 链接监控频率，单位为毫秒"
+msgstr "以毫秒为单位指定 MII 链接监控频率"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:259
 msgid "Specifies the aggregation selection logic to use"
-msgstr "明确要使用的聚合选择逻辑"
+msgstr "指定要使用的聚合选择逻辑"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:292
 msgid "Specifies the directory the device is attached to"
@@ -6390,9 +6390,7 @@ msgstr ""
 msgid ""
 "Specifies the mac-address for the actor in protocol packet exchanges "
 "(LACPDUs). If empty, masters' mac address defaults to system default"
-msgstr ""
-"明确协议包交换 actor 的 MAC 地址（LACPDUs）。如果为空，master 的 mac 地址默认"
-"为系统默认值"
+msgstr "指定协议包交换 actor 的 MAC 地址（LACPDUs）。如果为空，master 的 mac 地址默认为系统默认值"
 
 #: protocols/luci-proto-relay/htdocs/luci-static/resources/protocol/relay.js:175
 msgid ""
@@ -6423,13 +6421,13 @@ msgstr "明确 asserting 运营商前必须处于活跃状态的链接的最小�
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:200
 msgid "Specifies the mode to be used for this bonding interface"
-msgstr "明确用于此 bonding 接口的模式"
+msgstr "指定用于此 bonding 接口的模式"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:333
 msgid ""
 "Specifies the number of IGMP membership reports to be issued after a "
 "failover event in 200ms intervals"
-msgstr "明确发生故障转移事件后在200毫秒间隔内发出的 IGMP 成员资格报告的数量"
+msgstr "指定发生故障转移事件后在200毫秒间隔内发出的 IGMP 成员资格报告的数量"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:276
 msgid ""
@@ -6441,9 +6439,7 @@ msgstr "指定在切换到下一个从属设备前要传输的数据包数量"
 msgid ""
 "Specifies the number of peer notifications (gratuitous ARPs and unsolicited "
 "IPv6 Neighbor Advertisements) to be issued after a failover event"
-msgstr ""
-"明确一次故障转移事件后要发布的对等通知（无理由的 ARPs 和未经请求的 IPv6 邻居"
-"通告）的数目"
+msgstr "指定一次故障转移事件后要发布的对等通知（无为 ARP 和主动 IPv6 邻居通告）的数目"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:284
 msgid ""
@@ -6454,13 +6450,13 @@ msgstr ""
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:374
 msgid "Specifies the quantity of ARP IP targets that must be reachable"
-msgstr "明确必须可达的 ARP IP 目标数"
+msgstr "指定必须可达的 ARP IP 目标数"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:268
 msgid ""
 "Specifies the rate in which the link partner will be asked to transmit "
 "LACPDU packets"
-msgstr "明确链路伙伴被要求传输 LACPDU 包的速率"
+msgstr "指定链路伙伴被要求传输 LACPDU 包的速率"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:225
 msgid ""
@@ -6476,7 +6472,7 @@ msgstr "明确系统优先级"
 msgid ""
 "Specifies the time in milliseconds to wait before disabling a slave after a "
 "link failure detection"
-msgstr "指定在检测到链路故障后，在禁用从属设备之前等待的时间（以毫秒为单位）"
+msgstr "指定在检测到链路故障后，在禁用从属设备之前以毫秒为单位的等待时间"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:411
 msgid ""
@@ -6509,7 +6505,7 @@ msgstr "指定主备模式是否应在设置从属时，将所有从属设备设
 msgid ""
 "Specifies whether or not miimon should use MII or ETHTOOL ioctls vs. "
 "netif_carrier_ok()"
-msgstr "明确相较 netif carrier ok()，miimon 是否应使用 MII 或 ETHTOOL ioctls"
+msgstr "指定相较 netif_carrier_ok(), miimon 是否应使用 MII 或 ETHTOOL ioctls"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:293
 msgid ""

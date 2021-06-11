@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-06-10 03:41+0200\n"
-"PO-Revision-Date: 2021-06-07 14:45+0000\n"
+"PO-Revision-Date: 2021-06-11 06:32+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "openwrt/luci/pt_BR/>\n"
@@ -6425,12 +6425,18 @@ msgid ""
 "options of sent <abbr title=\"Router Advertisement\">RA</abbr> messages. "
 "When enabled, clients will perform stateless IPv6 address autoconfiguration."
 msgstr ""
+"Define o sinalizador autônomo de configuração do endereço nas opções de "
+"informações do prefixo das mensagens enviadas do <abbr title=\"Anúncio do "
+"roteador\">RA</abbr>. Quando ativo, os clientes executarão a configuração "
+"automática de endereço IPv6 sem estado."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:707
 msgid ""
 "Set this interface as master for RA and DHCPv6 relaying as well as NDP "
 "proxying."
 msgstr ""
+"Defina esta interface como mestre para a retransmissão RA e DHCPv6, bem como "
+"proxy NDP."
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:304
 msgid "Set to currently active slave (active, 1)"
@@ -6460,7 +6466,7 @@ msgstr "Configurar Servidor DHCP"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:894
 msgid "Setup routes for proxied IPv6 neighbours."
-msgstr ""
+msgstr "Rotas de configuração para vizinhos IPv6 que tiverem proxy."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:30
 msgid "Severely Errored Seconds (SES)"
@@ -6603,6 +6609,9 @@ msgid ""
 "Specifies a fixed list of DNS search domains to announce via DHCPv6. If left "
 "unspecified, the local device DNS search domain will be announced."
 msgstr ""
+"Define uma lista fixa de domínios de pesquisa DNS para fazer o anúncio via "
+"DHCPv6. Se não for definido, o domínio de pesquisa DNS do dispositivo local "
+"será anunciado."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:867
 msgid ""
@@ -6610,6 +6619,10 @@ msgid ""
 "If left unspecified, the device will announce itself as IPv6 DNS server "
 "unless the <em>Local IPv6 DNS server</em> option is disabled."
 msgstr ""
+"Define uma lista fixa de endereços de servidor IPv6 DNS para anunciar via "
+"DHCPv6. Caso não seja definido, o dispositivo se anunciará como sendo um "
+"servidor DNS IPv6, a menos que a opção <em>Local IPv6 DNS</em> seja "
+"desativada."
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:342
 msgid ""
@@ -6648,6 +6661,9 @@ msgid ""
 "messages, for example to instruct clients to request further information via "
 "stateful DHCPv6."
 msgstr ""
+"Determina quais as bandeiras enviadas nas mensagens do <abbr title=\"Anúncio "
+"do roteador\">RA</abbr>, por exemplo, para instruir os clientes que "
+"solicitem mais informações através do estado do DHCPv6."
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:252
 msgid ""
@@ -7149,24 +7165,33 @@ msgid ""
 "<abbr title=\"Router Advertisement, ICMPv6 Type 134\">RA</abbr> messages. "
 "Minimum is 1280 bytes."
 msgstr ""
+"A <abbr title=\"Maximum Transmission Unit\">MTU</abbr> que será publicado "
+"nas mensagens do <abbr title=\"Anúncio do roteador, ICMPv6 Tipo 134\">RA</"
+"abbr>. O mínimo são 1280 bytes."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:782
 msgid ""
 "The <em>Managed address configuration</em> (M) flag indicates that IPv6 "
 "addresses are available via DHCPv6."
 msgstr ""
+"A <em>configuração do endereço gerenciado</em> o (M) indica que os endereços "
+"IPv6 estão disponíveis via DHCPv6."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:786
 msgid ""
 "The <em>Mobile IPv6 Home Agent</em> (H) flag indicates that the device is "
 "also acting as Mobile IPv6 home agent on this link."
 msgstr ""
+"O <em>Agente doméstico móvel IPv6</em> (H) indica que o dispositivo também "
+"está agindo como um agente doméstico móvel IPv6 neste link."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:784
 msgid ""
 "The <em>Other configuration</em> (O) flag indicates that other information, "
 "such as DNS servers, is available via DHCPv6."
 msgstr ""
+"A <em>Outra configuração</em> (O) indica que as outras informações como "
+"servidores DNS estão disponíveis via DHCPv6."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:84
 msgid "The <em>block mount</em> command failed with code %d"
@@ -7397,6 +7422,8 @@ msgid ""
 "The maximum hops to be published in <abbr title=\"Router Advertisement\">RA</"
 "abbr> messages. Maximum is 255 hops."
 msgstr ""
+"A quantidade máxima de saltos que serão publicados nas mensagens do <abbr "
+"title=\"Anúncio do roteador\">RA</abbr>. O máximo são 255 saltos."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1969
 msgid "The network name is already used"
@@ -8009,6 +8036,8 @@ msgid ""
 "Upon pressing \"Continue\", ifname options will get renamed and the network "
 "will be restarted to apply the updated configuration."
 msgstr ""
+"Ao pressionar \"Continuar\", as opções ifname serão renomeadas e a rede será "
+"reiniciada para aplicar a atualização da configuração."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:82
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/10_system.js:60
@@ -8672,7 +8701,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:768
 msgid "forced"
-msgstr ""
+msgstr "imposto"
 
 #: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:85
 #: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:195
@@ -8732,7 +8761,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:781
 msgid "managed config (M)"
-msgstr ""
+msgstr "configuração gerenciada (M)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1355
 msgid "medium security"
@@ -8744,7 +8773,7 @@ msgstr "minutos"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:785
 msgid "mobile home agent (H)"
-msgstr ""
+msgstr "agente doméstico móvel (H)"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:422
 msgid "netif_carrier_ok()"
@@ -8787,7 +8816,7 @@ msgstr "ligado"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:766
 msgid "on available prefix"
-msgstr ""
+msgstr "no prefixo disponível"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1356
 msgid "open network"
@@ -8795,7 +8824,7 @@ msgstr "rede aberta"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:783
 msgid "other config (O)"
-msgstr ""
+msgstr "outra configuração (O)"
 
 #: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:69
 #: modules/luci-compat/luasrc/view/cbi/firewall_zonelist.htm:46
