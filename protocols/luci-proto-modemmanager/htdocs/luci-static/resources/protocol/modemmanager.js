@@ -91,8 +91,16 @@ return network.registerProtocol('modemmanager', {
 			}, this));
 		};
 
-		s.taboption('general', form.Value, 'apn', _('APN'));
-		s.taboption('general', form.Value, 'pincode', _('PIN'));
+		o = s.taboption('general', form.Value, 'apn', _('APN'));
+		o.validate = function(section_id, value) {
+			if (!/^[a-zA-Z0-9\-.]*[a-zA-Z0-9]$/.test(value))
+				return _('Invalid APN provided');
+
+			return true;
+		};
+
+		o = s.taboption('general', form.Value, 'pincode', _('PIN'));
+		o.datatype = 'and(uinteger,minlength(4),maxlength(8))';
 
 		o = s.taboption('general', form.ListValue, 'auth', _('Authentication Type'));
 		o.value('both', _('PAP/CHAP (both)'));
