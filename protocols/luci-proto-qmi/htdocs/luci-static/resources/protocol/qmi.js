@@ -65,8 +65,16 @@ return network.registerProtocol('qmi', {
 			}, this));
 		};
 
-		s.taboption('general', form.Value, 'apn', _('APN'));
-		s.taboption('general', form.Value, 'pincode', _('PIN'));
+		o = s.taboption('general', form.Value, 'apn', _('APN'));
+		o.validate = function(section_id, value) {
+			if (!/^[a-zA-Z0-9\-.]*[a-zA-Z0-9]$/.test(value))
+				return _('Invalid APN provided');
+
+			return true;
+		};
+
+		o = s.taboption('general', form.Value, 'pincode', _('PIN'));
+		o.datatype = 'and(uinteger,minlength(4),maxlength(8))';
 
 		o = s.taboption('general', form.ListValue, 'auth', _('Authentication Type'));
 		o.value('both', 'PAP/CHAP');
@@ -99,7 +107,7 @@ return network.registerProtocol('qmi', {
 		o = s.taboption('advanced', form.Value, 'mtu', _('Override MTU'));
 		o.placeholder = dev ? (dev.getMTU() || '1500') : '1500';
 		o.datatype    = 'max(9200)';
-		
+
 		o = s.taboption('general', form.ListValue, 'pdptype', _('PDP Type'));
 		o.value('ipv4v6', 'IPv4/IPv6');
 		o.value('ipv4', 'IPv4');
