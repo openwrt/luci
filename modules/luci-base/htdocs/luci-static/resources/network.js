@@ -393,6 +393,7 @@ function initNetworkState(refresh) {
 					name:     name,
 					rawname:  name,
 					flags:    dev.flags,
+					link:     dev.link,
 					stats:    dev.stats,
 					macaddr:  dev.mac,
 					type:     dev.type,
@@ -3131,6 +3132,47 @@ Device = baseclass.extend(/** @lends LuCI.network.Device.prototype */ {
 	getRXPackets: function() {
 		var stat = this._devstate('stats');
 		return (stat != null ? stat.rx_packets || 0 : 0);
+	},
+
+	/**
+	 * Get the carrier state of the network device.
+	 *
+	 * @returns {boolean}
+	 * Returns true if the device has a carrier, e.g. when a cable is
+	 * inserted into an ethernet port of false if there is none.
+	 */
+	getCarrier: function() {
+		var link = this._devstate('link');
+		return (link != null ? link.carrier || false : false);
+	},
+
+	/**
+	 * Get the current link speed of the network device if available.
+	 *
+	 * @returns {number|null}
+	 * Returns the current speed of the network device in Mbps. If the
+	 * device supports no ethernet speed levels, null is returned.
+	 * If the device supports ethernet speeds but has no carrier, -1 is
+	 * returned.
+	 */
+	getSpeed: function() {
+		var link = this._devstate('link');
+		return (link != null ? link.speed || null : null);
+	},
+
+	/**
+	 * Get the current duplex mode of the network device if available.
+	 *
+	 * @returns {string|null}
+	 * Returns the current duplex mode of the network device. Returns
+	 * either "full" or "half" if the device supports duplex modes or
+	 * null if the duplex mode is unknown or unsupported.
+	 */
+	getDuplex: function() {
+		var link = this._devstate('link'),
+		    duplex = link ? link.duplex : null;
+
+		return (duplex != 'unknown') ? duplex : null;
 	},
 
 	/**
