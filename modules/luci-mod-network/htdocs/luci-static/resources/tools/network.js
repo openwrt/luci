@@ -825,14 +825,6 @@ return baseclass.extend({
 
 		o = this.addOption(s, 'bridgevlan', form.SectionValue, 'bridge-vlan', form.TableSection, 'bridge-vlan');
 		o.depends('type', 'bridge');
-		o.renderWidget = function(/* ... */) {
-			return form.SectionValue.prototype.renderWidget.apply(this, arguments).then(L.bind(function(node) {
-				node.style.overflowX = 'auto';
-				node.style.overflowY = 'hidden';
-
-				return node;
-			}, this));
-		};
 
 		ss = o.subsection;
 		ss.addremove = true;
@@ -855,6 +847,8 @@ return baseclass.extend({
 
 		ss.render = function(/* ... */) {
 			return form.TableSection.prototype.render.apply(this, arguments).then(L.bind(function(node) {
+				node.style.overflow = 'auto hidden';
+
 				if (this.node)
 					this.node.parentNode.replaceChild(node, this.node);
 
