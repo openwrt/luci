@@ -922,6 +922,9 @@ return baseclass.extend({
 
 				s.getOption('vlan_filtering').updateDefaultValue(s.section);
 
+				s.map.addedVLANs = s.map.addedVLANs || [];
+				s.map.addedVLANs.push(section_id);
+
 				return this.redraw();
 			}, this));
 		};
