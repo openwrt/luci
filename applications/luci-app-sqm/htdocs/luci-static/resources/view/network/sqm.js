@@ -43,15 +43,17 @@ return view.extend({
 		    scripts = data[1];
 
 		if (qdiscs.length === 0) {
-			ui.addNotification(null, 
+			ui.addNotification(null,
 				E('div', { 'class': 'left' }, [
 				E('p', _("The SQM service seems to be disabled. Please use the button below to activate this service.")),
 				E('button', {
 					'class': 'btn cbi-button-active',
 					'click': ui.createHandlerFn(this, function() {
-						fs.exec_direct('/etc/init.d/sqm', ['enable']);
-						fs.exec_direct('/etc/init.d/sqm', ['start']);
-						location.reload();
+						return fs.exec('/etc/init.d/sqm', ['enable']).then(function() {
+							return fs.exec('/etc/init.d/sqm', ['start']);
+						}).then(function() {
+							location.reload();
+						});
 					})
 				}, _('Enable SQM'))
 			]));
