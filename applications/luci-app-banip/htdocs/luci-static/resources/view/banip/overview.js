@@ -452,7 +452,12 @@ return view.extend({
 		o.optional = true;
 		o.rmempty = true;
 
-		o = s.taboption('additional', form.Value, 'ban_fetchparm', _('Download Parameters'), _('Special config options for the selected download utility.'))
+		o = s.taboption('additional', form.Flag, 'ban_fetchinsecure', _('Download Insecure'), _('Don\'t check SSL server certificates during download.'));
+		o.default = 0
+		o.rmempty = true;
+
+		o = s.taboption('additional', form.Value, 'ban_fetchparm', _('Download Parameters'), _('Manually override the pre-configured download options for the selected download utility.'))
+		o.optional = true;
 		o.rmempty = true;
 
 		/*
@@ -570,7 +575,7 @@ return view.extend({
 			result_v6 = result[1].trim().split('\n');
 		}
 
-		o = s.taboption('adv_chain', form.DynamicList, 'ban_lan_inputchains_4', _('LAN Input'), _('Default chain used by banIP is \'input_lan_rule\''));
+		o = s.taboption('adv_chain', form.DynamicList, 'ban_lan_inputchains_4', _('LAN Input'), _('Assign one or more relevant firewall chains to banIP. The default chain used by banIP is \'input_lan_rule\'.'));
 		for (var i = 0; i < result_v4.length; i++) {
 			if (result_v4[i].match(/^Chain input[\w_]+\s+/)) {
 				chain = result_v4[i].match(/\s+(input[\w_]+)\s+/)[1].trim();
@@ -581,7 +586,7 @@ return view.extend({
 		o.optional = true;
 		o.rmempty = true;
 
-		o = s.taboption('adv_chain', form.DynamicList, 'ban_lan_forwardchains_4', _('LAN Forward'), _('Default chain used by banIP is \'forwarding_lan_rule\''));
+		o = s.taboption('adv_chain', form.DynamicList, 'ban_lan_forwardchains_4', _('LAN Forward'), _('Assign one or more relevant firewall chains to banIP. The default chain used by banIP is \'forwarding_lan_rule\'.'));
 		for (var i = 0; i < result_v4.length; i++) {
 			if (result_v4[i].match(/^Chain forwarding[\w_]+\s+/)) {
 				chain = result_v4[i].match(/\s+(forwarding[\w_]+)\s+/)[1].trim();
@@ -592,7 +597,7 @@ return view.extend({
 		o.optional = true;
 		o.rmempty = true;
 
-		o = s.taboption('adv_chain', form.DynamicList, 'ban_wan_inputchains_4', _('WAN Input'), _('Default chain used by banIP is \'input_wan_rule\''));
+		o = s.taboption('adv_chain', form.DynamicList, 'ban_wan_inputchains_4', _('WAN Input'), _('Assign one or more relevant firewall chains to banIP. The default chain used by banIP is \'input_wan_rule\'.'));
 		for (var i = 0; i < result_v4.length; i++) {
 			if (result_v4[i].match(/^Chain input[\w_]+\s+/)) {
 				chain = result_v4[i].match(/\s+(input[\w_]+)\s+/)[1].trim();
@@ -603,7 +608,7 @@ return view.extend({
 		o.optional = true;
 		o.rmempty = true;
 
-		o = s.taboption('adv_chain', form.DynamicList, 'ban_wan_forwardchains_4', _('WAN Forward'), _('Default chain used by banIP is \'forwarding_wan_rule\''));
+		o = s.taboption('adv_chain', form.DynamicList, 'ban_wan_forwardchains_4', _('WAN Forward'), _('Assign one or more relevant firewall chains to banIP. The default chain used by banIP is \'forwarding_wan_rule\'.'));
 		for (var i = 0; i < result_v4.length; i++) {
 			if (result_v4[i].match(/^Chain forwarding[\w_]+\s+/)) {
 				chain = result_v4[i].match(/\s+(forwarding[\w_]+)\s+/)[1].trim();
@@ -618,7 +623,7 @@ return view.extend({
 		o.rawhtml = true;
 		o.default = '<em><b>IPv6 Chains</b></em>';
 
-		o = s.taboption('adv_chain', form.DynamicList, 'ban_lan_inputchains_6', _('LAN Input'), _('Default chain used by banIP is \'input_lan_rule\''));
+		o = s.taboption('adv_chain', form.DynamicList, 'ban_lan_inputchains_6', _('LAN Input'), _('Assign one or more relevant firewall chains to banIP. The default chain used by banIP is \'input_lan_rule\'.'));
 		for (var i = 0; i < result_v6.length; i++) {
 			if (result_v6[i].match(/^Chain input[\w_]+\s+/)) {
 				chain = result_v6[i].match(/\s+(input[\w_]+)\s+/)[1].trim();
@@ -629,7 +634,7 @@ return view.extend({
 		o.optional = true;
 		o.rmempty = true;
 
-		o = s.taboption('adv_chain', form.DynamicList, 'ban_lan_forwardchains_6', _('LAN Forward'), _('Default chain used by banIP is \'forwarding_lan_rule\''));
+		o = s.taboption('adv_chain', form.DynamicList, 'ban_lan_forwardchains_6', _('LAN Forward'), _('Assign one or more relevant firewall chains to banIP. The default chain used by banIP is \'forwarding_lan_rule\'.'));
 		for (var i = 0; i < result_v6.length; i++) {
 			if (result_v6[i].match(/^Chain forwarding[\w_]+\s+/)) {
 				chain = result_v6[i].match(/\s+(forwarding[\w_]+)\s+/)[1].trim();
@@ -640,7 +645,7 @@ return view.extend({
 		o.optional = true;
 		o.rmempty = true;
 
-		o = s.taboption('adv_chain', form.DynamicList, 'ban_wan_inputchains_6', _('WAN Input'), _('Default chain used by banIP is \'input_wan_rule\''));
+		o = s.taboption('adv_chain', form.DynamicList, 'ban_wan_inputchains_6', _('WAN Input'), _('Assign one or more relevant firewall chains to banIP. The default chain used by banIP is \'input_wan_rule\'.'));
 		for (var i = 0; i < result_v6.length; i++) {
 			if (result_v6[i].match(/^Chain input[\w_]+\s+/)) {
 				chain = result_v6[i].match(/\s+(input[\w_]+)\s+/)[1].trim();
@@ -651,7 +656,7 @@ return view.extend({
 		o.optional = true;
 		o.rmempty = true;
 
-		o = s.taboption('adv_chain', form.DynamicList, 'ban_wan_forwardchains_6', _('WAN Forward'), _('Default chain used by banIP is \'forwarding_wan_rule\''));
+		o = s.taboption('adv_chain', form.DynamicList, 'ban_wan_forwardchains_6', _('WAN Forward'), _('Assign one or more relevant firewall chains to banIP. The default chain used by banIP is \'forwarding_wan_rule\'.'));
 		for (var i = 0; i < result_v6.length; i++) {
 			if (result_v6[i].match(/^Chain forwarding[\w_]+\s+/)) {
 				chain = result_v6[i].match(/\s+(forwarding[\w_]+)\s+/)[1].trim();
