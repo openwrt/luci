@@ -834,6 +834,7 @@ return baseclass.extend({
 			var node = form.TableSection.prototype.renderHeaderRows.apply(this, arguments);
 
 			node.querySelectorAll('.th').forEach(function(th) {
+				th.classList.add('left');
 				th.classList.add('middle');
 			});
 
@@ -848,6 +849,7 @@ return baseclass.extend({
 		ss.render = function(/* ... */) {
 			return form.TableSection.prototype.render.apply(this, arguments).then(L.bind(function(node) {
 				node.style.overflow = 'auto hidden';
+				node.style.paddingTop = '1em';
 
 				if (this.node)
 					this.node.parentNode.replaceChild(node, this.node);
