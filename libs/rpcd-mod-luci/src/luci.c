@@ -31,6 +31,7 @@
 #include <net/if.h>
 #include <arpa/inet.h>
 #include <sys/types.h>
+#include <netinet/in.h>
 #include <netinet/ether.h>
 #include <linux/rtnetlink.h>
 #include <linux/if_packet.h>
@@ -220,6 +221,14 @@ readstr(const char *fmt, ...)
 	}
 
 	return data;
+}
+
+static bool
+ea_empty(struct ether_addr *ea)
+{
+	struct ether_addr empty = { 0 };
+
+	return !memcmp(ea, &empty, sizeof(empty));
 }
 
 static char *
@@ -452,9 +461,9 @@ lease_next(void)
 	char *p;
 	int n;
 
-	memset(&e, 0, sizeof(e));
-
 	while (lease_state.off < lease_state.num) {
+		memset(&e, 0, sizeof(e));
+
 		while (fgets(e.buf, sizeof(e.buf), lease_state.files[lease_state.off].fh)) {
 			if (lease_state.files[lease_state.off].odhcpd) {
 				strtok(e.buf, " \t\n"); /* # */
@@ -1185,9 +1194,8 @@ struct host_hint {
 #define HOST_HINT_PRIO_NL            10 /* neighbor table */
 #define HOST_HINT_PRIO_ETHER         50 /* /etc/ethers */
 #define HOST_HINT_PRIO_LEASEFILE    100 /* dhcp leasefile */
-#define HOST_HINT_PRIO_RRDNS        100 /* rrdns */
 #define HOST_HINT_PRIO_IFADDRS      200 /* getifaddrs() */
-#define HOST_HINT_PRIO_STATIC_LEASE 200 /* uci static leases */
+#define HOST_HINT_PRIO_STATIC_LEASE 250 /* uci static leases */
 
 struct host_hint_addr {
 	struct avl_node avl;
@@ -1538,6 +1546,9 @@ rpc_luci_get_host_hints_uci(struct reply_context *rctx)
 	lease_open();
 
 	while ((lease = lease_next()) != NULL) {
+		if (ea_empty(&lease->mac))
+			continue;
+
 		hint = rpc_luci_get_host_hint(rctx, &lease->mac);
 
 		if (!hint)
@@ -1564,8 +1575,6 @@ out:
 static void
 rpc_luci_get_host_hints_ifaddrs(struct reply_context *rctx)
 {
-	struct ether_addr empty_ea = {};
-	struct in6_addr empty_in6 = {};
 	struct ifaddrs *ifaddr, *ifa;
 	struct sockaddr_ll *sll;
 	struct avl_tree devices;
@@ -1621,8 +1630,8 @@ rpc_luci_get_host_hints_ifaddrs(struct reply_context *rctx)
 	freeifaddrs(ifaddr);
 
 	avl_remove_all_elements(&devices, device, avl, nextdevice) {
-		if (memcmp(&device->ea, &empty_ea, sizeof(empty_ea)) &&
-		    (memcmp(&device->in6, &empty_in6, sizeof(empty_in6)) ||
+		if (!ea_empty(&device->ea) &&
+		    (!IN6_IS_ADDR_UNSPECIFIED(&device->in6) ||
 		     device->in.s_addr != 0)) {
 			hint = rpc_luci_get_host_hint(rctx, &device->ea);
 
@@ -1630,7 +1639,7 @@ rpc_luci_get_host_hints_ifaddrs(struct reply_context *rctx)
 				if (device->in.s_addr != 0)
 					rpc_luci_add_host_hint_ipaddr(hint, HOST_HINT_PRIO_IFADDRS, &device->in);
 
-				if (memcmp(&device->in6, &empty_in6, sizeof(empty_in6)) != 0)
+				if (!IN6_IS_ADDR_UNSPECIFIED(&device->in6))
 					rpc_luci_add_host_hint_ip6addr(hint, HOST_HINT_PRIO_IFADDRS, &device->in6);
 			}
 		}
@@ -1647,6 +1656,7 @@ rpc_luci_get_host_hints_rrdns_cb(struct ubus_request *req, int type,
                                  struct blob_attr *msg)
 {
 	struct reply_context *rctx = req->priv;
+	struct host_hint_addr *addr;
 	struct host_hint *hint;
 	struct blob_attr *cur;
 	struct in6_addr in6;
@@ -1660,25 +1670,23 @@ rpc_luci_get_host_hints_rrdns_cb(struct ubus_request *req, int type,
 
 			if (inet_pton(AF_INET6, blobmsg_name(cur), &in6) == 1) {
 				avl_for_each_element(&rctx->avl, hint, avl) {
-					rpc_luci_add_host_hint_ip6addr(hint, HOST_HINT_PRIO_RRDNS, &in6);
-					if (!avl_is_empty(&hint->ip6addrs)) {
-						if (hint->hostname)
+					avl_for_each_element(&hint->ip6addrs, addr, avl) {
+						if (!memcmp(&addr->addr.in6, &in6, sizeof(in6))) {
 							free(hint->hostname);
-
-						hint->hostname = strdup(blobmsg_get_string(cur));
-						break;
+							hint->hostname = strdup(blobmsg_get_string(cur));
+							break;
+						}
 					}
 				}
 			}
 			else if (inet_pton(AF_INET, blobmsg_name(cur), &in) == 1) {
 				avl_for_each_element(&rctx->avl, hint, avl) {
-					rpc_luci_add_host_hint_ipaddr(hint, HOST_HINT_PRIO_RRDNS, &in);
-					if (!avl_is_empty(&hint->ipaddrs)) {
-						if (hint->hostname)
+					avl_for_each_element(&hint->ipaddrs, addr, avl) {
+						if (addr->addr.in.s_addr == in.s_addr) {
 							free(hint->hostname);
-
-						hint->hostname = strdup(blobmsg_get_string(cur));
-						break;
+							hint->hostname = strdup(blobmsg_get_string(cur));
+							break;
+						}
 					}
 				}
 			}
@@ -1691,7 +1699,6 @@ rpc_luci_get_host_hints_rrdns_cb(struct ubus_request *req, int type,
 static void
 rpc_luci_get_host_hints_rrdns(struct reply_context *rctx)
 {
-	struct in6_addr empty_in6 = {};
 	char buf[INET6_ADDRSTRLEN];
 	struct blob_buf req = {};
 	struct host_hint *hint;
@@ -1712,7 +1719,7 @@ rpc_luci_get_host_hints_rrdns(struct reply_context *rctx)
 			}
 		}
 		avl_for_each_element(&hint->ip6addrs, addr, avl) {
-			if (memcmp(&addr->addr.in6, &empty_in6, sizeof(empty_in6))) {
+			if (!IN6_IS_ADDR_UNSPECIFIED(&addr->addr.in6)) {
 				inet_ntop(AF_INET6, &addr->addr.in6, buf, sizeof(buf));
 				blobmsg_add_string(&req, NULL, buf);
 				n++;
@@ -1815,7 +1822,6 @@ rpc_luci_get_duid_hints(struct ubus_context *ctx, struct ubus_object *obj,
 {
 	struct { struct avl_node avl; } *e, *next;
 	char s[INET6_ADDRSTRLEN], *p;
-	struct ether_addr empty = {};
 	struct lease_entry *lease;
 	struct avl_tree avl;
 	void *o, *a;
@@ -1857,7 +1863,7 @@ rpc_luci_get_duid_hints(struct ubus_context *ctx, struct ubus_object *obj,
 		if (lease->hostname)
 			blobmsg_add_string(&blob, "hostname", lease->hostname);
 
-		if (memcmp(&lease->mac, &empty, sizeof(empty)))
+		if (!ea_empty(&lease->mac))
 			blobmsg_add_string(&blob, "macaddr", ea2str(&lease->mac));
 
 		blobmsg_close_table(&blob, o);
@@ -1906,7 +1912,6 @@ rpc_luci_get_dhcp_leases(struct ubus_context *ctx, struct ubus_object *obj,
                          struct blob_attr *msg)
 {
 	struct blob_attr *tb[__RPC_L_MAX];
-	struct ether_addr emptymac = {};
 	struct lease_entry *lease;
 	char s[INET6_ADDRSTRLEN];
 	int af, family = 0;
@@ -1958,7 +1963,7 @@ rpc_luci_get_dhcp_leases(struct ubus_context *ctx, struct ubus_object *obj,
 			if (lease->hostname)
 				blobmsg_add_string(&blob, "hostname", lease->hostname);
 
-			if (memcmp(&lease->mac, &emptymac, sizeof(emptymac)))
+			if (!ea_empty(&lease->mac))
 				blobmsg_add_string(&blob, "macaddr", ea2str(&lease->mac));
 
 			if (lease->duid)
