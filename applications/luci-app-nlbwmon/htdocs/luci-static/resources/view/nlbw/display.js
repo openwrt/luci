@@ -421,7 +421,10 @@ return view.extend({
 
 		cbi_update_table('#layer7-data', rows, E('em', [
 			_('No data recorded yet.'), ' ',
-			E('a', { 'href': L.url('admin/nlbw/commit') }, _('Force reload…'))
+			E('a', {
+				'href': '#',
+				'click': ui.createHandlerFn(this, 'handleCommit')
+			}, _('Force reload…'))
 		]));
 
 		this.pie('layer7-rx-pie', rxData);
@@ -525,7 +528,10 @@ return view.extend({
 
 		cbi_update_table('#ipv6-data', rows, E('em', [
 			_('No data recorded yet.'), ' ',
-			E('a', { 'href': L.url('admin/nlbw/commit') }, _('Force reload…'))
+			E('a', {
+				'href': '#',
+				'click': ui.createHandlerFn(this, 'handleCommit')
+			}, _('Force reload…'))
 		]));
 
 		var shareData = [], hostsData = [];
