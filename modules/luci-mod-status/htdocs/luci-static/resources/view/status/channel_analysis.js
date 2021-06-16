@@ -369,14 +369,14 @@ return view.extend({
 					continue;
 
 				var csvg = svg.cloneNode(true),
-				table = E('div', { 'class': 'table' }, [
-					E('div', { 'class': 'tr table-titles' }, [
-						E('div', { 'class': 'th col-2 middle center' }, _('Signal')),
-						E('div', { 'class': 'th col-4 middle left' }, _('SSID')),
-						E('div', { 'class': 'th col-2 middle center hide-xs' }, _('Channel')),
-						E('div', { 'class': 'th col-3 middle left' }, _('Channel Width')),
-						E('div', { 'class': 'th col-2 middle left hide-xs' }, _('Mode')),
-						E('div', { 'class': 'th col-3 middle left hide-xs' }, _('BSSID'))
+				table = E('table', { 'class': 'table' }, [
+					E('tr', { 'class': 'tr table-titles' }, [
+						E('th', { 'class': 'th col-2 middle center' }, _('Signal')),
+						E('th', { 'class': 'th col-4 middle left' }, _('SSID')),
+						E('th', { 'class': 'th col-2 middle center hide-xs' }, _('Channel')),
+						E('th', { 'class': 'th col-3 middle left' }, _('Channel Width')),
+						E('th', { 'class': 'th col-2 middle left hide-xs' }, _('Mode')),
+						E('th', { 'class': 'th col-3 middle left hide-xs' }, _('BSSID'))
 					])
 				]),
 				tab = E('div', { 'data-tab': ifname+freq, 'data-tab-title': ifname+' ('+freq+')' },
