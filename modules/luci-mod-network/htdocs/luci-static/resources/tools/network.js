@@ -968,6 +968,9 @@ return baseclass.extend({
 		});
 
 		uci.sections('network', 'bridge-vlan', function(bvs) {
+			if (uci.get('network', s.section, 'name') != bvs.device)
+				return;
+
 			L.toArray(bvs.ports).forEach(function(portspec) {
 				var m = portspec.match(/^([^:]+)(?::[ut*]+)?$/);
 
