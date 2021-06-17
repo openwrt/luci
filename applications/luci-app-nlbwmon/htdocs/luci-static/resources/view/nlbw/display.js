@@ -361,8 +361,8 @@ return view.extend({
 
 		cbi_update_table('#host-data', rows, E('em', [
 			_('No data recorded yet.'), ' ',
-			E('a', {
-				'href': '#',
+			E('button', {
+				'class': 'cbi-button',
 				'click': ui.createHandlerFn(this, 'handleCommit')
 			}, _('Force reload…'))
 		]));
@@ -421,8 +421,8 @@ return view.extend({
 
 		cbi_update_table('#layer7-data', rows, E('em', [
 			_('No data recorded yet.'), ' ',
-			E('a', {
-				'href': '#',
+			E('button', {
+				'class': 'cbi-button',
 				'click': ui.createHandlerFn(this, 'handleCommit')
 			}, _('Force reload…'))
 		]));
@@ -528,8 +528,8 @@ return view.extend({
 
 		cbi_update_table('#ipv6-data', rows, E('em', [
 			_('No data recorded yet.'), ' ',
-			E('a', {
-				'href': '#',
+			E('button', {
+				'class': 'cbi-button',
 				'click': ui.createHandlerFn(this, 'handleCommit')
 			}, _('Force reload…'))
 		]));
