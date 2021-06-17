@@ -945,30 +945,42 @@ return view.extend({
 				]),
 
 				E('div', { 'class': 'cbi-section', 'data-tab': 'export', 'data-tab-title': _('Export') }, [
-					E('ul', [
-						E('li', [
-							E('a', {
-								'href': '#',
-								'click': ui.createHandlerFn(this, 'handleDownload', 'csv', 'mac', '-rx,-tx')
-							}, [ _('CSV, grouped by MAC') ])
+					E('div', { 'class': 'cbi-section-node cbi-sction-node-tabbed' }, [
+						E('div', { 'class': 'cbi-value' }, [
+							E('label', { 'class': 'cbi-value-title' }, _('Grouped by MAC (CSV)')),
+							E('div', { 'class': 'cbi-value-field' }, [
+								E('button', {
+									'class': 'cbi-button',
+									'click': ui.createHandlerFn(this, 'handleDownload', 'csv', 'mac', '-rx,-tx')
+								}, [ _('Export') ])
+							])
 						]),
-						E('li', [
-							E('a', {
-								'href': '#',
-								'click': ui.createHandlerFn(this, 'handleDownload', 'csv', 'ip', '-rx,-tx')
-							}, [ _('CSV, grouped by IP') ])
+						E('div', { 'class': 'cbi-value' }, [
+							E('label', { 'class': 'cbi-value-title' }, _('Grouped by IP (CSV)')),
+							E('div', { 'class': 'cbi-value-field' }, [
+								E('button', {
+									'class': 'cbi-button',
+									'click': ui.createHandlerFn(this, 'handleDownload', 'csv', 'ip', '-rx,-tx')
+								}, [ _('Export') ])
+							])
 						]),
-						E('li', [
-							E('a', {
-								'href': '#',
-								'click': ui.createHandlerFn(this, 'handleDownload', 'csv', 'layer7', '-rx,-tx')
-							}, [ _('CSV, grouped by protocol') ])
+						E('div', { 'class': 'cbi-value' }, [
+							E('label', { 'class': 'cbi-value-title' }, _('Grouped by protocol (CSV)')),
+							E('div', { 'class': 'cbi-value-field' }, [
+								E('button', {
+									'class': 'cbi-button',
+									'click': ui.createHandlerFn(this, 'handleDownload', 'csv', 'layer7', '-rx,-tx')
+								}, [ _('Export') ])
+							])
 						]),
-						E('li', [
-							E('a', {
-								'href': '#',
-								'click': ui.createHandlerFn(this, 'handleDownload', 'json', null, null)
-							}, [ _('JSON dump') ])
+						E('div', { 'class': 'cbi-value' }, [
+							E('label', { 'class': 'cbi-value-title' }, _('Dump (JSON)')),
+							E('div', { 'class': 'cbi-value-field' }, [
+								E('button', {
+									'class': 'cbi-button',
+									'click': ui.createHandlerFn(this, 'handleDownload', 'json', null, null)
+								}, [ _('Export') ])
+							])
 						])
 					])
 				])
