@@ -359,13 +359,7 @@ return view.extend({
 			conn_total += rec.conns;
 		}
 
-		cbi_update_table('#host-data', rows, E('em', [
-			_('No data recorded yet.'), ' ',
-			E('button', {
-				'class': 'cbi-button',
-				'click': ui.createHandlerFn(this, 'handleCommit')
-			}, _('Force reload…'))
-		]));
+		cbi_update_table('#host-data', rows, E('em', _('No data recorded yet.')));
 
 		this.pie('traf-pie', trafData);
 		this.pie('conn-pie', connData);
@@ -419,13 +413,7 @@ return view.extend({
 			}
 		}
 
-		cbi_update_table('#layer7-data', rows, E('em', [
-			_('No data recorded yet.'), ' ',
-			E('button', {
-				'class': 'cbi-button',
-				'click': ui.createHandlerFn(this, 'handleCommit')
-			}, _('Force reload…'))
-		]));
+		cbi_update_table('#layer7-data', rows, E('em', 	_('No data recorded yet.')));
 
 		this.pie('layer7-rx-pie', rxData);
 		this.pie('layer7-tx-pie', txData);
@@ -526,13 +514,7 @@ return view.extend({
 			]);
 		}
 
-		cbi_update_table('#ipv6-data', rows, E('em', [
-			_('No data recorded yet.'), ' ',
-			E('button', {
-				'class': 'cbi-button',
-				'click': ui.createHandlerFn(this, 'handleCommit')
-			}, _('Force reload…'))
-		]));
+		cbi_update_table('#ipv6-data', rows, E('em', _('No data recorded yet.')));
 
 		var shareData = [], hostsData = [];
 
@@ -862,6 +844,13 @@ return view.extend({
 								E('em', { 'class': 'spinning' }, [ _('Collecting data...') ])
 							])
 						])
+					]),
+					E('div', { 'class': 'right' }, [
+						E('button', {
+							'class': 'cbi-button',
+							'click': ui.createHandlerFn(this, 'handleCommit')
+							}, _('Force reload…')
+						)
 					])
 				]),
 
@@ -901,6 +890,13 @@ return view.extend({
 								E('em', { 'class': 'spinning' }, [ _('Collecting data...') ])
 							])
 						])
+					]),
+					E('div', { 'class': 'right' }, [
+						E('button', {
+							'class': 'cbi-button',
+							'click': ui.createHandlerFn(this, 'handleCommit')
+							}, _('Force reload…')
+						)
 					])
 				]),
 
@@ -941,6 +937,13 @@ return view.extend({
 								E('em', { 'class': 'spinning' }, [ _('Collecting data...') ])
 							])
 						])
+					]),
+					E('div', { 'class': 'right' }, [
+						E('button', {
+							'class': 'cbi-button',
+							'click': ui.createHandlerFn(this, 'handleCommit')
+							}, _('Force reload…')
+						)
 					])
 				]),
 
