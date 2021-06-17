@@ -108,25 +108,38 @@ function updatePortStatus(node, dev) {
 	var carrier = dev.getCarrier(),
 	    duplex = dev.getDuplex(),
 	    speed = dev.getSpeed(),
-	    desc;
+	    desc, title;
 
-	if (carrier && speed > 0 && duplex != null)
-		desc = E('abbr', {
-			'title': '%d MBit/s, %s'.format(speed, duplex == 'full' ? _('full-duplex') : _('half-duplex'))
-		}, [ '%d%s'.format(speed, duplex == 'full' ? 'FD' : 'HD') ]);
-	else if (carrier)
-		desc = document.createTextNode(_('Connected'));
+	if (carrier && speed > 0 && duplex != null) {
+		desc = '%d%s'.format(speed, duplex == 'full' ? 'FD' : 'HD');
+		title = '%s, %d MBit/s, %s'.format(_('Connected'), speed, duplex == 'full' ? _('full-duplex') : _('half-duplex'));
+	}
+	else if (carrier) {
+		desc = _('Connected');
+	}
+	else {
+		desc = _('no link');
+	}
+
+	dom.content(node, [
+		E('img', {
+			'class': 'middle',
+			'src': L.resource('icons/port_%s.png').format(carrier ? 'up' : 'down')
+		}),
+		'\x0a', desc
+	]);
+
+	if (title)
+		node.setAttribute('data-tooltip', title);
 	else
-		desc = document.createTextNode(_('no link'));
-
-	dom.content(node, [ desc ]);
+		node.removeAttribute('data-tooltip');
 
 	return node;
 }
 
 function renderPortStatus(dev) {
 	return updatePortStatus(E('span', {
-		'class': 'port-status-link',
+		'class': 'ifacebadge port-status-link',
 		'data-device': dev.getName()
 	}), dev);
 }
