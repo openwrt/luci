@@ -272,9 +272,9 @@ var cbiTagValue = form.Value.extend({
 			if (s[0] != this.port)
 				continue;
 
-			var t = s[1].match(/t/) ? 't' : 'u';
+			var t = /t/.test(s[1] || '') ? 't' : 'u';
 
-			return s[1].match(/\*/) ? [t, '*'] : [t];
+			return /\*/.test(s[1] || '') ? [t, '*'] : [t];
 		}
 
 		return ['-'];
