@@ -1258,18 +1258,6 @@ return view.extend({
 			if (m) {
 				var devtype = getDevType(section_id);
 
-				/* Treat not explicitly configured, preexisting VLAN interfaces
-				   as simple network devices when adding configuration for them,
-				   since it is more likely that people want to set general device
-				   properties such as MAC address instead of reconfiguring ingress/
-				   egress QoS mapping, which is the only editable property of
-				   preexisting VLAN device config dialogs.
-
-				   Ref: https://github.com/openwrt/luci/issues/5102
-				 */
-				if (devtype == '8021q')
-					devtype = 'ethernet';
-
 				section_id = uci.add('network', 'device');
 
 				uci.set('network', section_id, 'name', m[1]);

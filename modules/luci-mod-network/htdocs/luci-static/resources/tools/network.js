@@ -18,23 +18,6 @@ function validateAddr(section_id, value) {
 	return addr ? true : (ipv6 ? _('Expecting a valid IPv6 address') : _('Expecting a valid IPv4 address'));
 }
 
-function setIfActive(section_id, value) {
-	if (this.isActive(section_id)) {
-		uci.set('network', section_id, this.ucioption, value);
-
-		/* Requires http://lists.openwrt.org/pipermail/openwrt-devel/2020-July/030397.html */
-		if (false && this.option == 'ifname_multi') {
-			var devname = this.section.formvalue(section_id, 'name_complex'),
-			    m = devname ? devname.match(/^br-([A-Za-z0-9_]+)$/) : null;
-
-			if (m && uci.get('network', m[1], 'type') == 'bridge') {
-				uci.set('network', m[1], 'ifname', devname);
-				uci.unset('network', m[1], 'type');
-			}
-		}
-	}
-}
-
 function validateQoSMap(section_id, value) {
 	if (value == '')
 		return true;
@@ -47,14 +30,13 @@ function validateQoSMap(section_id, value) {
 	return true;
 }
 
-function deviceSectionExists(section_id, devname, ignore_type_match) {
+function deviceSectionExists(section_id, devname) {
 	var exists = false;
 
 	uci.sections('network', 'device', function(ss) {
 		exists = exists || (
 			ss['.name'] != section_id &&
-			ss.name == devname &&
-			(!ignore_type_match || !ignore_type_match.test(ss.type || ''))
+			ss.name == devname
 		);
 	});
 
@@ -144,111 +126,27 @@ function renderPortStatus(dev) {
 	}), dev);
 }
 
-function lookupDevName(s, section_id) {
-	var typeui = s.getUIElement(section_id, 'type'),
-	    typeval = typeui ? typeui.getValue() : s.cfgvalue(section_id, 'type'),
-	    ifnameui = s.getUIElement(section_id, 'ifname_single'),
-	    ifnameval = ifnameui ? ifnameui.getValue() : s.cfgvalue(section_id, 'ifname_single');
+function updatePlaceholders(opt, section_id) {
+	var dev = network.instantiateDevice(opt.getUIElement(section_id).getValue());
 
-	return (typeval == 'bridge') ? 'br-%s'.format(section_id) : ifnameval;
-}
+	for (var i = 0, co; (co = opt.section.children[i]) != null; i++) {
+		if (co !== opt) {
+			switch (co.option) {
+			case 'mtu':
+			case 'mtu6':
+				co.getUIElement(section_id).setPlaceholder(dev.getMTU());
+				break;
 
-function lookupDevSection(s, section_id, autocreate) {
-	var devname = lookupDevName(s, section_id),
-	    devsection = null;
+			case 'macaddr':
+				co.getUIElement(section_id).setPlaceholder(dev.getMAC());
+				break;
 
-	uci.sections('network', 'device', function(ds) {
-		if (ds.name == devname)
-			devsection = ds['.name'];
-	});
-
-	if (autocreate && !devsection) {
-		devsection = uci.add('network', 'device');
-		uci.set('network', devsection, 'name', devname);
-	}
-
-	return devsection;
-}
-
-function getDeviceValue(dev, method) {
-	if (dev && dev.getL3Device)
-		dev = dev.getL3Device();
-
-	if (dev && typeof(dev[method]) == 'function')
-		return dev[method].apply(dev);
-
-	return '';
-}
-
-function deviceCfgValue(section_id) {
-	if (arguments.length == 2)
-		return;
-
-	var ds = lookupDevSection(this.section, section_id, false);
-
-	return (ds ? uci.get('network', ds, this.option) : null) ||
-		(this.migrate ? uci.get('network', section_id, this.option) : null) ||
-		this.default;
-}
-
-function deviceWrite(section_id, formvalue) {
-	var ds = lookupDevSection(this.section, section_id, true);
-
-	uci.set('network', ds, this.option, formvalue);
-
-	if (this.migrate)
-		uci.unset('network', section_id, this.option);
-}
-
-function deviceRemove(section_id) {
-	var ds = lookupDevSection(this.section, section_id, false);
-
-	uci.unset('network', ds, this.option);
-
-	if (this.migrate)
-		uci.unset('network', section_id, this.option);
-}
-
-function deviceRefresh(section_id) {
-	var dev = network.instantiateDevice(lookupDevName(this.section, section_id)),
-	    uielem = this.getUIElement(section_id);
-
-	if (uielem) {
-		switch (this.option) {
-		case 'mtu':
-		case 'mtu6':
-			uielem.setPlaceholder(dev.getMTU());
-			break;
-
-		case 'macaddr':
-			uielem.setPlaceholder(dev.getMAC());
-			break;
-		}
-
-		uielem.setValue(this.cfgvalue(section_id));
-	}
-}
-
-function sectionParse() {
-	var ds = lookupDevSection(this, this.section, false);
-
-	return form.NamedSection.prototype.parse.apply(this).then(function() {
-		var sv = ds ? uci.get('network', ds) : null;
-
-		if (sv) {
-			var empty = true;
-
-			for (var opt in sv) {
-				if (opt.charAt(0) == '.' || opt == 'name')
-					continue;
-
-				empty = false;
+			case 'txqueuelen':
+				co.getUIElement(section_id).setPlaceholder(dev._devstate('qlen'));
+				break;
 			}
-
-			if (empty)
-				uci.remove('network', ds);
-	        }
-	});
+		}
+	}
 }
 
 
@@ -426,29 +324,16 @@ return baseclass.extend({
 		return s.taboption(tabName, optionClass, optionName, optionTitle, optionDescription);
 	},
 
-	addOption: function(s, tabName, optionClass, optionName, optionTitle, optionDescription) {
-		var o = this.replaceOption(s, tabName, optionClass, optionName, optionTitle, optionDescription);
-
-		if (s.sectiontype == 'interface' && optionName != 'type' && optionName != 'vlan_filtering') {
-			o.migrate = true;
-			o.cfgvalue = deviceCfgValue;
-			o.write = deviceWrite;
-			o.remove = deviceRemove;
-			o.refresh = deviceRefresh;
-		}
-
-		return o;
-	},
-
 	addDeviceOptions: function(s, dev, isNew) {
-		var o, ss;
+		var parent_dev = dev ? dev.getParent() : null,
+		    o, ss;
 
 		s.tab('devgeneral', _('General device options'));
 		s.tab('devadvanced', _('Advanced device options'));
 		s.tab('brport', _('Bridge port specific options'));
 		s.tab('bridgevlan', _('Bridge VLAN filtering'));
 
-		o = this.addOption(s, 'devgeneral', form.ListValue, 'type', _('Device type'));
+		o = this.replaceOption(s, 'devgeneral', form.ListValue, 'type', _('Device type'));
 		o.readonly = !isNew;
 		o.value('', _('Network device'));
 		o.value('bridge', _('Bridge device'));
@@ -456,30 +341,47 @@ return baseclass.extend({
 		o.value('8021ad', _('VLAN (802.1ad)'));
 		o.value('macvlan', _('MAC VLAN'));
 		o.value('veth', _('Virtual Ethernet'));
+		o.validate = function(section_id, value) {
+			if (value == 'bridge' || value == 'veth')
+				updatePlaceholders(this.section.getOption('name_complex'), section_id);
 
-		o = this.addOption(s, 'devgeneral', widgets.DeviceSelect, 'name_simple', _('Existing device'));
+			return true;
+		};
+
+		o = this.replaceOption(s, 'devgeneral', widgets.DeviceSelect, 'name_simple', _('Existing device'));
 		o.readonly = !isNew;
 		o.rmempty = false;
 		o.noaliases = true;
 		o.default = (dev ? dev.getName() : '');
 		o.ucioption = 'name';
-		o.write = o.remove = setIfActive;
 		o.filter = function(section_id, value) {
-			return !deviceSectionExists(section_id, value, /^(?:bridge|8021q|8021ad|macvlan|veth)$/);
+			var dev = network.instantiateDevice(value);
+			return !deviceSectionExists(section_id, value) && (dev.getType() != 'wifi' || dev.isUp());
 		};
 		o.validate = function(section_id, value) {
-			return deviceSectionExists(section_id, value, /^(?:bridge|8021q|8021ad|macvlan|veth)$/)
+			updatePlaceholders(this, section_id);
+
+			return deviceSectionExists(section_id, value)
 				? _('A configuration for the device "%s" already exists').format(value) : true;
+		};
+		o.onchange = function(ev, section_id, values) {
+			updatePlaceholders(this, section_id);
 		};
 		o.depends('type', '');
 
-		o = this.addOption(s, 'devgeneral', widgets.DeviceSelect, 'ifname_single', _('Base device'));
+		o = this.replaceOption(s, 'devgeneral', widgets.DeviceSelect, 'ifname_single', _('Base device'));
 		o.readonly = !isNew;
 		o.rmempty = false;
 		o.noaliases = true;
 		o.default = (dev ? dev.getName() : '').match(/^.+\.\d+$/) ? dev.getName().replace(/\.\d+$/, '') : '';
 		o.ucioption = 'ifname';
+		o.filter = function(section_id, value) {
+			var dev = network.instantiateDevice(value);
+			return (dev.getType() != 'wifi' || dev.isUp());
+		};
 		o.validate = function(section_id, value) {
+			updatePlaceholders(this, section_id);
+
 			if (isNew) {
 				var type = this.section.formvalue(section_id, 'type'),
 				    name = this.section.getUIElement(section_id, 'name_complex');
@@ -497,12 +399,14 @@ return baseclass.extend({
 
 			return true;
 		};
-		o.write = o.remove = setIfActive;
+		o.onchange = function(ev, section_id, values) {
+			updatePlaceholders(this, section_id);
+		};
 		o.depends('type', '8021q');
 		o.depends('type', '8021ad');
 		o.depends('type', 'macvlan');
 
-		o = this.addOption(s, 'devgeneral', form.Value, 'vid', _('VLAN ID'));
+		o = this.replaceOption(s, 'devgeneral', form.Value, 'vid', _('VLAN ID'));
 		o.readonly = !isNew;
 		o.datatype = 'range(1, 4094)';
 		o.rmempty = false;
@@ -522,44 +426,47 @@ return baseclass.extend({
 		o.depends('type', '8021q');
 		o.depends('type', '8021ad');
 
-		o = this.addOption(s, 'devgeneral', form.ListValue, 'mode', _('Mode'));
+		o = this.replaceOption(s, 'devgeneral', form.ListValue, 'mode', _('Mode'));
 		o.value('vepa', _('VEPA (Virtual Ethernet Port Aggregator)', 'MACVLAN mode'));
 		o.value('private', _('Private (Prevent communication between MAC VLANs)', 'MACVLAN mode'));
 		o.value('bridge', _('Bridge (Support direct communication between MAC VLANs)', 'MACVLAN mode'));
 		o.value('passthru', _('Pass-through (Mirror physical device to single MAC VLAN)', 'MACVLAN mode'));
 		o.depends('type', 'macvlan');
 
-		o = this.addOption(s, 'devgeneral', form.Value, 'name_complex', _('Device name'));
+		o = this.replaceOption(s, 'devgeneral', form.Value, 'name_complex', _('Device name'));
 		o.rmempty = false;
 		o.datatype = 'maxlength(15)';
 		o.readonly = !isNew;
 		o.ucioption = 'name';
-		o.write = o.remove = setIfActive;
 		o.validate = function(section_id, value) {
-			return deviceSectionExists(section_id, value, /^$/) ? _('The device name "%s" is already taken').format(value) : true;
+			var dev = network.instantiateDevice(value);
+
+			if (deviceSectionExists(section_id, value) || (isNew && (dev.dev || {}).idx))
+				return _('The device name "%s" is already taken').format(value);
+
+			return true;
 		};
 		o.depends({ type: '', '!reverse': true });
 
-		o = this.addOption(s, 'devadvanced', form.DynamicList, 'ingress_qos_mapping', _('Ingress QoS mapping'), _('Defines a mapping of VLAN header priority to the Linux internal packet priority on incoming frames'));
+		o = this.replaceOption(s, 'devadvanced', form.DynamicList, 'ingress_qos_mapping', _('Ingress QoS mapping'), _('Defines a mapping of VLAN header priority to the Linux internal packet priority on incoming frames'));
 		o.rmempty = true;
 		o.validate = validateQoSMap;
 		o.depends('type', '8021q');
 		o.depends('type', '8021ad');
 
-		o = this.addOption(s, 'devadvanced', form.DynamicList, 'egress_qos_mapping', _('Egress QoS mapping'), _('Defines a mapping of Linux internal packet priority to VLAN header priority but for outgoing frames'));
+		o = this.replaceOption(s, 'devadvanced', form.DynamicList, 'egress_qos_mapping', _('Egress QoS mapping'), _('Defines a mapping of Linux internal packet priority to VLAN header priority but for outgoing frames'));
 		o.rmempty = true;
 		o.validate = validateQoSMap;
 		o.depends('type', '8021q');
 		o.depends('type', '8021ad');
 
-		o = this.addOption(s, 'devgeneral', widgets.DeviceSelect, 'ifname_multi', _('Bridge ports'));
+		o = this.replaceOption(s, 'devgeneral', widgets.DeviceSelect, 'ifname_multi', _('Bridge ports'));
 		o.size = 10;
 		o.rmempty = true;
 		o.multiple = true;
 		o.noaliases = true;
 		o.nobridges = true;
 		o.ucioption = 'ports';
-		o.write = o.remove = setIfActive;
 		o.default = L.toArray(dev ? dev.getPorts() : null).filter(function(p) { return p.getType() != 'wifi' }).map(function(p) { return p.getName() });
 		o.filter = function(section_id, device_name) {
 			var bridge_name = uci.get('network', section_id, 'name'),
@@ -665,21 +572,21 @@ return baseclass.extend({
 		o.datatype = 'uinteger';
 		o.depends({ type: 'bridge', multicast_querier: '1' });
 
-		o = this.addOption(s, 'devgeneral', form.Value, 'mtu', _('MTU'));
-		o.placeholder = getDeviceValue(dev, 'getMTU');
-		o.datatype = 'max(9200)';
-		o.depends('type', '');
-		o.depends('type', 'bridge');
+		o = this.replaceOption(s, 'devgeneral', form.Value, 'mtu', _('MTU'));
+		o.datatype = 'range(576, 9200)';
+		o.validate = function(section_id, value) {
+			var parent_mtu = (dev && dev.getType() == 'vlan') ? (parent_dev ? parent_dev.getMTU() : null) : null;
 
-		o = this.addOption(s, 'devgeneral', form.Value, 'macaddr', _('MAC address'));
-		o.placeholder = getDeviceValue(dev, 'getMAC');
+			if (parent_mtu !== null && +value > parent_mtu)
+				return _('The MTU must not exceed the parent device MTU of %d bytes').format(parent_mtu);
+
+			return true;
+		};
+
+		o = this.replaceOption(s, 'devgeneral', form.Value, 'macaddr', _('MAC address'));
 		o.datatype = 'macaddr';
-		o.depends('type', '');
-		o.depends('type', 'bridge');
-		o.depends('type', 'macvlan');
-		o.depends('type', 'veth');
 
-		o = this.addOption(s, 'devgeneral', form.Value, 'peer_name', _('Peer device name'));
+		o = this.replaceOption(s, 'devgeneral', form.Value, 'peer_name', _('Peer device name'));
 		o.rmempty = true;
 		o.datatype = 'maxlength(15)';
 		o.depends('type', 'veth');
@@ -698,21 +605,19 @@ return baseclass.extend({
 			return form.Value.prototype.load.apply(this, arguments);
 		};
 
-		o = this.addOption(s, 'devgeneral', form.Value, 'peer_macaddr', _('Peer MAC address'));
+		o = this.replaceOption(s, 'devgeneral', form.Value, 'peer_macaddr', _('Peer MAC address'));
 		o.rmempty = true;
 		o.datatype = 'macaddr';
 		o.depends('type', 'veth');
 
-		o = this.addOption(s, 'devgeneral', form.Value, 'txqueuelen', _('TX queue length'));
+		o = this.replaceOption(s, 'devgeneral', form.Value, 'txqueuelen', _('TX queue length'));
 		o.placeholder = dev ? dev._devstate('qlen') : '';
 		o.datatype = 'uinteger';
-		o.depends('type', '');
 
-		o = this.addOption(s, 'devadvanced', form.Flag, 'promisc', _('Enable promiscuous mode'));
+		o = this.replaceOption(s, 'devadvanced', form.Flag, 'promisc', _('Enable promiscuous mode'));
 		o.default = o.disabled;
-		o.depends('type', '');
 
-		o = this.addOption(s, 'devadvanced', form.ListValue, 'rpfilter', _('Reverse path filter'));
+		o = this.replaceOption(s, 'devadvanced', form.ListValue, 'rpfilter', _('Reverse path filter'));
 		o.default = '';
 		o.value('', _('disabled'));
 		o.value('loose', _('Loose filtering'));
@@ -733,93 +638,81 @@ return baseclass.extend({
 				return '';
 			}
 		};
-		o.depends('type', '');
 
-		o = this.addOption(s, 'devadvanced', form.Flag, 'acceptlocal', _('Accept local'), _('Accept packets with local source addresses'));
+		o = this.replaceOption(s, 'devadvanced', form.Flag, 'acceptlocal', _('Accept local'), _('Accept packets with local source addresses'));
 		o.default = o.disabled;
-		o.depends('type', '');
 
-		o = this.addOption(s, 'devadvanced', form.Flag, 'sendredirects', _('Send ICMP redirects'));
+		o = this.replaceOption(s, 'devadvanced', form.Flag, 'sendredirects', _('Send ICMP redirects'));
 		o.default = o.enabled;
-		o.depends('type', '');
 
-		o = this.addOption(s, 'devadvanced', form.Value, 'neighreachabletime', _('Neighbour cache validity'), _('Time in milliseconds'));
+		o = this.replaceOption(s, 'devadvanced', form.Value, 'neighreachabletime', _('Neighbour cache validity'), _('Time in milliseconds'));
 		o.placeholder = '30000';
 		o.datatype = 'uinteger';
-		o.depends('type', '');
 
-		o = this.addOption(s, 'devadvanced', form.Value, 'neighgcstaletime', _('Stale neighbour cache timeout'), _('Timeout in seconds'));
+		o = this.replaceOption(s, 'devadvanced', form.Value, 'neighgcstaletime', _('Stale neighbour cache timeout'), _('Timeout in seconds'));
 		o.placeholder = '60';
 		o.datatype = 'uinteger';
-		o.depends('type', '');
 
-		o = this.addOption(s, 'devadvanced', form.Value, 'neighlocktime', _('Minimum ARP validity time'), _('Minimum required time in seconds before an ARP entry may be replaced. Prevents ARP cache thrashing.'));
+		o = this.replaceOption(s, 'devadvanced', form.Value, 'neighlocktime', _('Minimum ARP validity time'), _('Minimum required time in seconds before an ARP entry may be replaced. Prevents ARP cache thrashing.'));
 		o.placeholder = '0';
 		o.datatype = 'uinteger';
-		o.depends('type', '');
 
-		o = this.addOption(s, 'devgeneral', form.Flag, 'ipv6', _('Enable IPv6'));
+		o = this.replaceOption(s, 'devgeneral', form.Flag, 'ipv6', _('Enable IPv6'));
 		o.migrate = false;
 		o.default = o.enabled;
-		o.depends('type', '');
 
-		o = this.addOption(s, 'devgeneral', form.Value, 'mtu6', _('IPv6 MTU'));
-		o.placeholder = getDeviceValue(dev, 'getMTU');
+		o = this.replaceOption(s, 'devgeneral', form.Value, 'mtu6', _('IPv6 MTU'));
 		o.datatype = 'max(9200)';
-		o.depends(Object.assign({ ipv6: '1' }, 'type', ''));
+		o.depends('ipv6', '1');
 
-		o = this.addOption(s, 'devgeneral', form.Value, 'dadtransmits', _('DAD transmits'), _('Amount of Duplicate Address Detection probes to send'));
+		o = this.replaceOption(s, 'devgeneral', form.Value, 'dadtransmits', _('DAD transmits'), _('Amount of Duplicate Address Detection probes to send'));
 		o.placeholder = '1';
 		o.datatype = 'uinteger';
-		o.depends(Object.assign({ ipv6: '1' }, 'type', ''));
+		o.depends('ipv6', '1');
 
 
-		o = this.addOption(s, 'devadvanced', form.Flag, 'multicast', _('Enable multicast support'));
+		o = this.replaceOption(s, 'devadvanced', form.Flag, 'multicast', _('Enable multicast support'));
 		o.default = o.enabled;
-		o.depends('type', '');
 
-		o = this.addOption(s, 'devadvanced', form.ListValue, 'igmpversion', _('Force IGMP version'));
+		o = this.replaceOption(s, 'devadvanced', form.ListValue, 'igmpversion', _('Force IGMP version'));
 		o.value('', _('No enforcement'));
 		o.value('1', _('Enforce IGMPv1'));
 		o.value('2', _('Enforce IGMPv2'));
 		o.value('3', _('Enforce IGMPv3'));
-		o.depends(Object.assign({ multicast: '1' }, 'type', ''));
+		o.depends('multicast', '1');
 
-		o = this.addOption(s, 'devadvanced', form.ListValue, 'mldversion', _('Force MLD version'));
+		o = this.replaceOption(s, 'devadvanced', form.ListValue, 'mldversion', _('Force MLD version'));
 		o.value('', _('No enforcement'));
 		o.value('1', _('Enforce MLD version 1'));
 		o.value('2', _('Enforce MLD version 2'));
-		o.depends(Object.assign({ multicast: '1' }, 'type', ''));
+		o.depends('multicast', '1');
 
 		if (isBridgePort(dev)) {
-			o = this.addOption(s, 'brport', form.Flag, 'learning', _('Enable MAC address learning'));
+			o = this.replaceOption(s, 'brport', form.Flag, 'learning', _('Enable MAC address learning'));
 			o.default = o.enabled;
-			o.depends('type', '');
 
-			o = this.addOption(s, 'brport', form.Flag, 'unicast_flood', _('Enable unicast flooding'));
+			o = this.replaceOption(s, 'brport', form.Flag, 'unicast_flood', _('Enable unicast flooding'));
 			o.default = o.enabled;
-			o.depends('type', '');
 
-			o = this.addOption(s, 'brport', form.Flag, 'isolated', _('Port isolation'), _('Only allow communication with non-isolated bridge ports when enabled'));
+			o = this.replaceOption(s, 'brport', form.Flag, 'isolated', _('Port isolation'), _('Only allow communication with non-isolated bridge ports when enabled'));
 			o.default = o.disabled;
-			o.depends('type', '');
 
-			o = this.addOption(s, 'brport', form.ListValue, 'multicast_router', _('Multicast routing'));
+			o = this.replaceOption(s, 'brport', form.ListValue, 'multicast_router', _('Multicast routing'));
 			o.value('', _('Never'));
 			o.value('1', _('Learn'));
 			o.value('2', _('Always'));
-			o.depends(Object.assign({ multicast: '1' }, 'type', ''));
+			o.depends('multicast', '1');
 
-			o = this.addOption(s, 'brport', form.Flag, 'multicast_to_unicast', _('Multicast to unicast'), _('Forward multicast packets as unicast packets on this device.'));
+			o = this.replaceOption(s, 'brport', form.Flag, 'multicast_to_unicast', _('Multicast to unicast'), _('Forward multicast packets as unicast packets on this device.'));
 			o.default = o.disabled;
-			o.depends(Object.assign({ multicast: '1' }, 'type', ''));
+			o.depends('multicast', '1');
 
-			o = this.addOption(s, 'brport', form.Flag, 'multicast_fast_leave', _('Enable multicast fast leave'));
+			o = this.replaceOption(s, 'brport', form.Flag, 'multicast_fast_leave', _('Enable multicast fast leave'));
 			o.default = o.disabled;
-			o.depends(Object.assign({ multicast: '1' }, 'type', ''));
+			o.depends('multicast', '1');
 		}
 
-		o = this.addOption(s, 'bridgevlan', form.Flag, 'vlan_filtering', _('Enable VLAN filterering'));
+		o = this.replaceOption(s, 'bridgevlan', form.Flag, 'vlan_filtering', _('Enable VLAN filterering'));
 		o.depends('type', 'bridge');
 		o.updateDefaultValue = function(section_id) {
 			var device = uci.get('network', s.section, 'name'),
@@ -836,7 +729,7 @@ return baseclass.extend({
 				uielem.setValue(this.default);
 		};
 
-		o = this.addOption(s, 'bridgevlan', form.SectionValue, 'bridge-vlan', form.TableSection, 'bridge-vlan');
+		o = this.replaceOption(s, 'bridgevlan', form.SectionValue, 'bridge-vlan', form.TableSection, 'bridge-vlan');
 		o.depends('type', 'bridge');
 
 		ss = o.subsection;
