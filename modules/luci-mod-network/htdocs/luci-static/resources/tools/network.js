@@ -264,15 +264,20 @@ var cbiTagValue = form.Value.extend({
 	},
 
 	cfgvalue: function(section_id) {
-		var pname = this.port,
-		    spec = L.toArray(uci.get('network', section_id, 'ports')).filter(function(p) { return p.replace(/:[ut*]+$/, '') == pname })[0];
+		var ports = L.toArray(uci.get('network', section_id, 'ports'));
 
-		if (spec && spec.match(/t/))
-			return spec.match(/\*/) ? ['t', '*'] : ['t'];
-		else if (spec)
-			return spec.match(/\*/) ? ['u', '*'] : ['u'];
-		else
-			return ['-'];
+		for (var i = 0; i < ports.length; i++) {
+			var s = ports[i].split(/:/);
+
+			if (s[0] != this.port)
+				continue;
+
+			var t = s[1].match(/t/) ? 't' : 'u';
+
+			return s[1].match(/\*/) ? [t, '*'] : [t];
+		}
+
+		return ['-'];
 	},
 
 	write: function(section_id, value) {
