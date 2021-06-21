@@ -73,7 +73,7 @@ return view.extend({
 		o.value('absolute', _('Fixed interval'));
 
 		o = s.taboption('general', form.DummyValue, '_warning', _('Warning'));
-		o.default = _('Changing the accounting interval type will invalidate existing databases!<br /><strong><a href="%s">Download backup</a></strong>.').format(L.url('admin/nlbw/backup'));
+		o.default = _('Changing the accounting interval type will invalidate existing databases!<br /><strong><a href="%s">Download backup</a></strong>.').format(L.url('admin/services/nlbw/backup'));
 		o.rawhtml = true;
 		if (/^[0-9]{4}-[0-9]{2}-[0-9]{2}\/[0-9]+$/.test(uci.get_first('nlbwmon', 'nlbwmon', 'database_interval')))
 			o.depends('_period', 'relative');
