@@ -717,7 +717,7 @@ return baseclass.extend({
 			o.depends('multicast', '1');
 		}
 
-		o = this.replaceOption(s, 'bridgevlan', form.Flag, 'vlan_filtering', _('Enable VLAN filterering'));
+		o = this.replaceOption(s, 'bridgevlan', form.Flag, 'vlan_filtering', _('Enable VLAN filtering'));
 		o.depends('type', 'bridge');
 		o.updateDefaultValue = function(section_id) {
 			var device = uci.get('network', s.section, 'name'),
