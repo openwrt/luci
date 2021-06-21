@@ -2203,10 +2203,8 @@ var CBITypedSection = CBIAbstractSection.extend(/** @lends LuCI.form.TypedSectio
 
 			dom.append(createEl, [
 				E('div', {}, nameEl),
-				E('input', {
+				E('button', {
 					'class': 'cbi-button cbi-button-add',
-					'type': 'submit',
-					'value': btn_title || _('Add'),
 					'title': btn_title || _('Add'),
 					'click': ui.createHandlerFn(this, function(ev) {
 						if (nameEl.classList.contains('cbi-input-invalid'))
@@ -2215,7 +2213,7 @@ var CBITypedSection = CBIAbstractSection.extend(/** @lends LuCI.form.TypedSectio
 						return this.handleAdd(ev, nameEl.value);
 					}),
 					'disabled': this.map.readonly || null
-				})
+				}, [ btn_title || _('Add') ])
 			]);
 
 			ui.addValidator(nameEl, 'uciname', true, 'blur', 'keyup');
