@@ -7,6 +7,7 @@
 			"path": "network/switch"
 		},
 		"depends": {
+			"acl": [ "luci-mod-network-config" ],
 			"fs": { "/sbin/swconfig": "executable" },
 			"uci": { "network": { "@switch": true } }
 		}
@@ -20,6 +21,7 @@
 			"path": "network/wireless"
 		},
 		"depends": {
+			"acl": [ "luci-mod-network-config" ],
 			"uci": { "wireless": { "@wifi-device": true } }
 		}
 	},
@@ -38,6 +40,9 @@
 		"action": {
 			"type": "view",
 			"path": "network/interfaces"
+		},
+		"depends": {
+			"acl": [ "luci-mod-network-config" ]
 		}
 	},
 
@@ -49,6 +54,7 @@
 			"path": "network/dhcp"
 		},
 		"depends": {
+			"acl": [ "luci-mod-network-dhcp" ],
 			"uci": { "dhcp": true }
 		}
 	},
@@ -61,6 +67,7 @@
 			"path": "network/hosts"
 		},
 		"depends": {
+			"acl": [ "luci-mod-network-dhcp" ],
 			"uci": { "dhcp": true }
 		}
 	},
@@ -71,6 +78,9 @@
 		"action": {
 			"type": "view",
 			"path": "network/routes"
+		},
+		"depends": {
+			"acl": [ "luci-mod-network-config" ]
 		}
 	},
 
@@ -80,6 +90,9 @@
 		"action": {
 			"type": "view",
 			"path": "network/diagnostics"
+		},
+		"depends": {
+			"acl": [ "luci-mod-network-diagnostics" ]
 		}
 	}
 }

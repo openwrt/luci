@@ -203,13 +203,13 @@ static int nixio_tls_ctx__tostring(lua_State *L) {
 }
 
 /* module table */
-static const luaL_reg R[] = {
+static const luaL_Reg R[] = {
 	{"tls",		nixio_tls_ctx},
 	{NULL,			NULL}
 };
 
 /* ctx function table */
-static const luaL_reg CTX_M[] = {
+static const luaL_Reg CTX_M[] = {
 	{"set_cert",			nixio_tls_ctx_set_cert},
 	{"set_verify_locations",       nixio_tls_ctx_set_verify_locations},
 	{"set_key",				nixio_tls_ctx_set_key},

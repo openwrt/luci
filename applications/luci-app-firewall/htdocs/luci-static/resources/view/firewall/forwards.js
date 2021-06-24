@@ -1,4 +1,5 @@
 'use strict';
+'require view';
 'require ui';
 'require rpc';
 'require uci';
@@ -84,7 +85,7 @@ function rule_target_txt(s) {
 	});
 }
 
-return L.view.extend({
+return view.extend({
 	callHostHints: rpc.declare({
 		object: 'luci-rpc',
 		method: 'getHostHints',
@@ -200,7 +201,7 @@ return L.view.extend({
 		o = fwtool.addIPOption(s, 'advanced', 'src_ip', _('Source IP address'),
 			_('Only match incoming traffic from this IP or range.'), 'ipv4', hosts);
 		o.rmempty = true;
-		o.datatype = 'neg(ipmask4)';
+		o.datatype = 'neg(ipmask4("true"))';
 
 		o = s.taboption('advanced', form.Value, 'src_port', _('Source port'),
 			_('Only match incoming traffic originating from the given source port or port range on the client host'));
@@ -213,7 +214,7 @@ return L.view.extend({
 
 		o = fwtool.addLocalIPOption(s, 'advanced', 'src_dip', _('External IP address'),
 			_('Only match incoming traffic directed at the given IP address.'), devs);
-		o.datatype = 'neg(ipmask4)';
+		o.datatype = 'neg(ipmask4("true"))';
 		o.rmempty = true;
 
 		o = s.taboption('general', form.Value, 'src_dport', _('External port'),

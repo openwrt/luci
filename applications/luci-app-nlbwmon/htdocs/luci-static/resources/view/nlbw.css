@@ -84,31 +84,8 @@
 	margin: 0;
 }
 
-.table .th,
-.table .td {
-	padding: 1px 3px !important;
-	border: 1px solid #ddd;
-}
-
-.table .td > a {
+.td.double > span {
 	display: block;
-}
-
-.table .placeholder .td {
-	border: none;
-}
-
-.table .td.double {
-	padding: 0 !important;
-}
-
-.table .td.double > span {
-	display: block;
-	padding: 1px 3px;
-}
-
-.table .td.double > span:first-child {
-	border-bottom: 1px solid #ddd;
 }
 
 .cbi-tooltip {
@@ -116,58 +93,22 @@
 }
 
 @media screen and (max-width: 992px) {
-	.table .tr {
-		margin-bottom: 10px;
+	.td.hide-xs {
+		display: none;
 	}
 
-	.table .th,
-	.table .td, .table .td.double {
-		padding: 1px 3px !important;
-		flex-basis: 50%;
+	.td.double:not(.hide-xs) > span {
+		white-space: nowrap;
+		text-align: left;
 	}
 
-	.table .td, .table .td::before,
-	.table .th, .table .th::before {
-		text-align: left !important;
-		font-size: 14px;
-		border: none;
-	}
-
-	#host-data .td.hostname {
-		flex-basis: 100%;
-	}
-
-	#ipv6-data .td.double > span {
-		padding: 0;
-		border-bottom: none;
-	}
-
-	#ipv6-data .td.double > span:first-child::before {
+	.td.double:not(.hide-xs) > span:first-child::before {
 		content: "IPv4: ";
-		font-style: italic;
-		font-size: 13px;
+		font-weight: bold;
 	}
 
-	#ipv6-data .td.double > span:last-child::before {
+	.td.double:not(.hide-xs) > span:last-child::before {
 		content: "IPv6: ";
-		font-style: italic;
-		font-size: 13px;
-	}
-
-	.cbi-tooltip {
-		width: 100%;
-		pointer-events: auto;
-		box-shadow: 0 0 10px 5px #000;
-		border-radius: 0;
-	}
-
-	.cbi-tooltip .table .th,
-	.cbi-tooltip .table .td {
-		flex-basis: 16%;
-		min-width: 100px;
-	}
-
-	.head .kpi {
-		font-size: 14px;
+		font-weight: bold;
 	}
 }

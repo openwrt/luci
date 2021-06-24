@@ -1,5 +1,6 @@
 'use strict';
 'require rpc';
+'require baseclass';
 
 /**
  * @class uci
@@ -12,7 +13,7 @@
  * manipulation layer on top to allow for synchroneous operations on
  * UCI configuration data.
  */
-return L.Class.extend(/** @lends LuCI.uci.prototype */ {
+return baseclass.extend(/** @lends LuCI.uci.prototype */ {
 	__init__: function() {
 		this.state = {
 			newidx:  0,
@@ -30,44 +31,50 @@ return L.Class.extend(/** @lends LuCI.uci.prototype */ {
 		object: 'uci',
 		method: 'get',
 		params: [ 'config' ],
-		expect: { values: { } }
+		expect: { values: { } },
+		reject: true
 	}),
-
 
 	callOrder: rpc.declare({
 		object: 'uci',
 		method: 'order',
-		params: [ 'config', 'sections' ]
+		params: [ 'config', 'sections' ],
+		reject: true
 	}),
 
 	callAdd: rpc.declare({
 		object: 'uci',
 		method: 'add',
 		params: [ 'config', 'type', 'name', 'values' ],
-		expect: { section: '' }
+		expect: { section: '' },
+		reject: true
 	}),
 
 	callSet: rpc.declare({
 		object: 'uci',
 		method: 'set',
-		params: [ 'config', 'section', 'values' ]
+		params: [ 'config', 'section', 'values' ],
+		reject: true
 	}),
 
 	callDelete: rpc.declare({
 		object: 'uci',
 		method: 'delete',
-		params: [ 'config', 'section', 'options' ]
+		params: [ 'config', 'section', 'options' ],
+		reject: true
 	}),
 
 	callApply: rpc.declare({
 		object: 'uci',
 		method: 'apply',
-		params: [ 'timeout', 'rollback' ]
+		params: [ 'timeout', 'rollback' ],
+		reject: true
 	}),
 
 	callConfirm: rpc.declare({
 		object: 'uci',
-		method: 'confirm'
+		method: 'confirm',
+		reject: true
 	}),
 
 
@@ -294,7 +301,8 @@ return L.Class.extend(/** @lends LuCI.uci.prototype */ {
 	 * The ID of the section to remove.
 	 */
 	remove: function(conf, sid) {
-		var n = this.state.creates,
+		var v = this.state.values,
+		    n = this.state.creates,
 		    c = this.state.changes,
 		    d = this.state.deletes;
 
@@ -302,7 +310,7 @@ return L.Class.extend(/** @lends LuCI.uci.prototype */ {
 		if (n[conf] && n[conf][sid]) {
 			delete n[conf][sid];
 		}
-		else {
+		else if (v[conf] && v[conf][sid]) {
 			if (c[conf])
 				delete c[conf][sid];
 
@@ -394,7 +402,7 @@ return L.Class.extend(/** @lends LuCI.uci.prototype */ {
 		for (var s in v)
 			if (!d || d[s] !== true)
 				if (!type || v[s]['.type'] == type)
-					sa.push(Object.assign({ }, v[s], c ? c[s] : undefined));
+					sa.push(Object.assign({ }, v[s], c ? c[s] : null));
 
 		if (n)
 			for (var s in n)
@@ -454,7 +462,7 @@ return L.Class.extend(/** @lends LuCI.uci.prototype */ {
 		/* requested option in a just created section */
 		if (n[conf] && n[conf][sid]) {
 			if (!n[conf])
-				return undefined;
+				return null;
 
 			if (opt == null)
 				return n[conf][sid];
@@ -465,14 +473,9 @@ return L.Class.extend(/** @lends LuCI.uci.prototype */ {
 		/* requested an option value */
 		if (opt != null) {
 			/* check whether option was deleted */
-			if (d[conf] && d[conf][sid]) {
-				if (d[conf][sid] === true)
-					return undefined;
-
-				for (var i = 0; i < d[conf][sid].length; i++)
-					if (d[conf][sid][i] == opt)
-						return undefined;
-			}
+			if (d[conf] && d[conf][sid])
+				if (d[conf][sid] === true || d[conf][sid][opt])
+					return null;
 
 			/* check whether option was changed */
 			if (c[conf] && c[conf][sid] && c[conf][sid][opt] != null)
@@ -482,14 +485,34 @@ return L.Class.extend(/** @lends LuCI.uci.prototype */ {
 			if (v[conf] && v[conf][sid])
 				return v[conf][sid][opt];
 
-			return undefined;
+			return null;
 		}
 
 		/* requested an entire section */
-		if (v[conf])
-			return v[conf][sid];
+		if (v[conf]) {
+			/* check whether entire section was deleted */
+			if (d[conf] && d[conf][sid] === true)
+				return null;
 
-		return undefined;
+			var s = v[conf][sid] || null;
+
+			if (s) {
+				/* merge changes */
+				if (c[conf] && c[conf][sid])
+					for (var opt in c[conf][sid])
+						if (c[conf][sid][opt] != null)
+							s[opt] = c[conf][sid][opt];
+
+				/* merge deletions */
+				if (d[conf] && d[conf][sid])
+					for (var opt in d[conf][sid])
+						delete s[opt];
+			}
+
+			return s;
+		}
+
+		return null;
 	},
 
 	/**
@@ -546,25 +569,40 @@ return L.Class.extend(/** @lends LuCI.uci.prototype */ {
 				c[conf][sid] = {};
 
 			/* undelete option */
-			if (d[conf] && d[conf][sid])
-				d[conf][sid] = d[conf][sid].filter(function(o) { return o !== opt });
+			if (d[conf] && d[conf][sid]) {
+				var empty = true;
+
+				for (var key in d[conf][sid]) {
+					if (key != opt && d[conf][sid].hasOwnProperty(key)) {
+						empty = false;
+						break;
+					}
+				}
+
+				if (empty)
+					delete d[conf][sid];
+				else
+					delete d[conf][sid][opt];
+			}
 
 			c[conf][sid][opt] = val;
 		}
 		else {
-			/* only delete in existing sections */
-			if (!(v[conf] && v[conf][sid] && v[conf][sid].hasOwnProperty(opt)) &&
-			    !(c[conf] && c[conf][sid] && c[conf][sid].hasOwnProperty(opt)))
-			    return;
+			/* revert any change for to-be-deleted option */
+			if (c[conf] && c[conf][sid])
+				delete c[conf][sid][opt];
 
-			if (!d[conf])
-				d[conf] = { };
+			/* only delete existing options */
+			if (v[conf] && v[conf][sid] && v[conf][sid].hasOwnProperty(opt)) {
+				if (!d[conf])
+					d[conf] = { };
 
-			if (!d[conf][sid])
-				d[conf][sid] = [ ];
+				if (!d[conf][sid])
+					d[conf][sid] = { };
 
-			if (d[conf][sid] !== true)
-				d[conf][sid].push(opt);
+				if (d[conf][sid] !== true)
+					d[conf][sid][opt] = true;
+			}
 		}
 	},
 
@@ -780,25 +818,39 @@ return L.Class.extend(/** @lends LuCI.uci.prototype */ {
 		    pkgs = { },
 		    tasks = [];
 
+		if (d)
+			for (var conf in d) {
+				for (var sid in d[conf]) {
+					var o = d[conf][sid];
+
+					if (o === true)
+						tasks.push(self.callDelete(conf, sid, null));
+					else
+						tasks.push(self.callDelete(conf, sid, Object.keys(o)));
+				}
+
+				pkgs[conf] = true;
+			}
+
 		if (n)
 			for (var conf in n) {
 				for (var sid in n[conf]) {
-					var r = {
+					var p = {
 						config: conf,
 						values: { }
 					};
 
 					for (var k in n[conf][sid]) {
 						if (k == '.type')
-							r.type = n[conf][sid][k];
+							p.type = n[conf][sid][k];
 						else if (k == '.create')
-							r.name = n[conf][sid][k];
+							p.name = n[conf][sid][k];
 						else if (k.charAt(0) != '.')
-							r.values[k] = n[conf][sid][k];
+							p.values[k] = n[conf][sid][k];
 					}
 
 					snew.push(n[conf][sid]);
-					tasks.push(self.callAdd(r.config, r.type, r.name, r.values));
+					tasks.push(self.callAdd(p.config, p.type, p.name, p.values));
 				}
 
 				pkgs[conf] = true;
@@ -808,16 +860,6 @@ return L.Class.extend(/** @lends LuCI.uci.prototype */ {
 			for (var conf in c) {
 				for (var sid in c[conf])
 					tasks.push(self.callSet(conf, sid, c[conf][sid]));
-
-				pkgs[conf] = true;
-			}
-
-		if (d)
-			for (var conf in d) {
-				for (var sid in d[conf]) {
-					var o = d[conf][sid];
-					tasks.push(self.callDelete(conf, sid, (o === true) ? null : o));
-				}
 
 				pkgs[conf] = true;
 			}

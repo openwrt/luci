@@ -19,7 +19,7 @@ config statistics 'rrdtool'
 config statistics 'collectd_rrdtool'
 	option enable '1'
 	option DataDir '/tmp/rrd'
-	option RRARows '100'
+	option RRARows '144'
 	option RRASingle '1'
 	option RRATimespans '1hour 1day 1week 1month 1year'
 
@@ -42,6 +42,11 @@ config statistics 'collectd_logfile'
 config statistics 'collectd_network'
 	option enable '0'
 
+config statistics 'collectd_syslog'
+	option enable '0'
+	option LogLevel 'warning'
+	option NotifyLevel 'WARNING'
+
 config statistics 'collectd_unixsock'
 	option enable '0'
 	option SocketFile '/var/run/collectd/query.sock'
@@ -54,6 +59,12 @@ config statistics 'collectd_apcups'
 	option Host 'localhost'
 	option Port '3551'
 
+config statistics 'collectd_chrony'
+	option enable '0'
+	option Host '127.0.0.1'
+	option Port '323'
+	option Timeout '2'
+
 config statistics 'collectd_conntrack'
 	option enable '0'
 
@@ -62,6 +73,10 @@ config statistics 'collectd_contextswitch'
 
 config statistics 'collectd_cpu'
 	option enable '1'
+	option ReportByCpu '1'
+	option ReportByState '1'
+	option ShowIdle '0'
+	option ValuesPercentage '1'
 
 config statistics 'collectd_cpufreq'
 	option enable '0'
@@ -72,9 +87,14 @@ config statistics 'collectd_curl'
 config statistics 'collectd_df'
 	option enable '0'
 	option Devices '/dev/mtdblock/4'
-	option MountPoints '/jffs'
+	option MountPoints '/overlay'
 	option FSTypes 'tmpfs'
 	option IgnoreSelected '0'
+	option ValuesPercentage '0'
+
+config statistics 'collectd_dhcpleases'
+	option enable '0'
+	option Path '/tmp/dhcp.leases'
 
 config statistics 'collectd_disk'
 	option enable '0'
@@ -92,10 +112,19 @@ config statistics 'collectd_entropy'
 config statistics 'collectd_exec'
 	option enable '0'
 
+#example for sqm_collect plugin
+#config collectd_exec_input
+#        option cmduser 'nobody'
+#        option cmdgroup 'nogroup'
+#        option cmdline '/usr/libexec/collectd/sqm_collectd.sh eth0 ifb4eth0'
+
 config statistics 'collectd_interface'
 	option enable '1'
 	option Interfaces 'br-lan'
 	option IgnoreSelected '0'
+
+config statistics 'collectd_ipstatistics'
+	option enable '0'
 
 config statistics 'collectd_iptables'
 	option enable '0'
@@ -146,6 +175,9 @@ config statistics 'collectd_olsrd'
 	option Port '2006'
 	option Host '127.0.0.1'
 
+config statistics 'collectd_openvpn'
+	option enable '0'
+
 config statistics 'collectd_ping'
 	option enable '0'
 	option TTL '127'
@@ -158,6 +190,11 @@ config statistics 'collectd_processes'
 
 config statistics 'collectd_sensors'
 	option enable '0'
+
+config statistics 'collectd_snmp6'
+	option enable '0'
+	option Interfaces 'br-lan'
+	option IgnoreSelected '0'
 
 config statistics 'collectd_splash_leases'
 	option enable '0'

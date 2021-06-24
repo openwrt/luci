@@ -19,10 +19,6 @@
 #include "nixio.h"
 #include <stdlib.h>
 
-const char nixio__bin2hex[16] = {
-'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'
-};
-
 static unsigned char nixio__b64encode_tbl[] =
 	"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
@@ -296,7 +292,7 @@ static int nixio_bin_b64decode(lua_State *L) {
 }
 
 /* module table */
-static const luaL_reg R[] = {
+static const luaL_Reg R[] = {
 	{"hexlify",		nixio_bin_hexlify},
 	{"unhexlify",	nixio_bin_unhexlify},
 	{"crc32",		nixio_bin_crc32},

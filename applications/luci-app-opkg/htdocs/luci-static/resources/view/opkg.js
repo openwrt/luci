@@ -1,4 +1,5 @@
 'use strict';
+'require view';
 'require fs';
 'require ui';
 'require rpc';
@@ -83,6 +84,8 @@ var css = '								\
 		margin-left: -1.5em;			\
 	}									\
 ';
+
+var isReadonlyView = !L.hasViewPermission() || null;
 
 var callMountPoints = rpc.declare({
 	object: 'luci',
@@ -178,7 +181,7 @@ function parseList(s, dest)
 			key = RegExp.$1.toLowerCase();
 			val = RegExp.$2.trim();
 		}
-		else {
+		else if (pkg) {
 			dest.pkgs[pkg.name] = pkg;
 
 			var provides = dest.providers[pkg.name] ? [] : [ pkg.name ];
@@ -683,8 +686,9 @@ function handleInstall(ev)
 		desc || '',
 		errs || inst || '',
 		E('div', { 'class': 'right' }, [
-			E('label', { 'class': 'cbi-checkbox', 'style': 'float:left; padding-top:.5em' }, [
-				E('input', { 'type': 'checkbox', 'name': 'overwrite' }), ' ',
+			E('label', { 'class': 'cbi-checkbox', 'style': 'float:left' }, [
+				E('input', { 'id': 'overwrite-cb', 'type': 'checkbox', 'name': 'overwrite', 'disabled': isReadonlyView }), ' ',
+				E('label', { 'for': 'overwrite-cb' }), ' ',
 				_('Overwrite files from other package(s)')
 			]),
 			E('div', {
@@ -696,7 +700,8 @@ function handleInstall(ev)
 				'data-command': 'install',
 				'data-package': name,
 				'class': 'btn cbi-button-action',
-				'click': handleOpkg
+				'click': handleOpkg,
+				'disabled': isReadonlyView
 			}, _('Install'))
 		])
 	]);
@@ -802,7 +807,8 @@ function handleConfig(ev)
 							ui.addNotification(null, E('p', {}, [ _('Unable to save %s: %s').format(file, err) ]));
 						});
 					})).then(ui.hideModal);
-				}
+				},
+				'disabled': isReadonlyView
 			}, _('Save')),
 		]));
 
@@ -838,8 +844,9 @@ function handleRemove(ev)
 		]),
 		desc || '',
 		E('div', { 'style': 'display:flex; justify-content:space-between; flex-wrap:wrap' }, [
-			E('label', {}, [
-				E('input', { type: 'checkbox', checked: 'checked', name: 'autoremove' }),
+			E('label', { 'class': 'cbi-checkbox', 'style': 'float:left' }, [
+				E('input', { 'id': 'autoremove-cb', 'type': 'checkbox', 'checked': 'checked', 'name': 'autoremove', 'disabled': isReadonlyView }), ' ',
+				E('label', { 'for': 'autoremove-cb' }), ' ',
 				_('Automatically remove unused dependencies')
 			]),
 			E('div', { 'style': 'flex-grow:1', 'class': 'right' }, [
@@ -852,7 +859,8 @@ function handleRemove(ev)
 					'data-command': 'remove',
 					'data-package': name,
 					'class': 'btn cbi-button-negative',
-					'click': handleOpkg
+					'click': handleOpkg,
+					'disabled': isReadonlyView
 				}, _('Remove'))
 			])
 		])
@@ -901,6 +909,9 @@ function handleOpkg(ev)
 				E('div', {
 					'class': 'btn',
 					'click': L.bind(function(res) {
+						if (ui.menu && ui.menu.flushCache)
+							ui.menu.flushCache();
+
 						ui.hideModal();
 						updateLists();
 
@@ -994,7 +1005,7 @@ function handleKeyUp(ev) {
 	}, 250);
 }
 
-return L.view.extend({
+return view.extend({
 	load: function() {
 		return downloadLists();
 	},
@@ -1015,21 +1026,27 @@ return L.view.extend({
 
 				E('div', {}, [
 					E('label', {}, _('Filter') + ':'),
-					E('input', { 'type': 'text', 'name': 'filter', 'placeholder': _('Type to filter…'), 'value': query, 'keyup': handleKeyUp }),
-					E('button', { 'class': 'btn cbi-button', 'click': handleReset }, [ _('Clear') ])
+					E('span', { 'class': 'control-group' }, [
+						E('input', { 'type': 'text', 'name': 'filter', 'placeholder': _('Type to filter…'), 'value': query, 'keyup': handleKeyUp }),
+						E('button', { 'class': 'btn cbi-button', 'click': handleReset }, [ _('Clear') ])
+					])
 				]),
 
 				E('div', {}, [
 					E('label', {}, _('Download and install package') + ':'),
-					E('input', { 'type': 'text', 'name': 'install', 'placeholder': _('Package name or URL…'), 'keydown': function(ev) { if (ev.keyCode === 13) handleManualInstall(ev) } }),
-					E('button', { 'class': 'btn cbi-button cbi-button-action', 'click': handleManualInstall }, [ _('OK') ])
+					E('span', { 'class': 'control-group' }, [
+						E('input', { 'type': 'text', 'name': 'install', 'placeholder': _('Package name or URL…'), 'keydown': function(ev) { if (ev.keyCode === 13) handleManualInstall(ev) }, 'disabled': isReadonlyView }),
+						E('button', { 'class': 'btn cbi-button cbi-button-action', 'click': handleManualInstall, 'disabled': isReadonlyView }, [ _('OK') ])
+					])
 				]),
 
 				E('div', {}, [
 					E('label', {}, _('Actions') + ':'), ' ',
-					E('button', { 'class': 'btn cbi-button-positive', 'data-command': 'update', 'click': handleOpkg }, [ _('Update lists…') ]), '\u00a0',
-					E('button', { 'class': 'btn cbi-button-action', 'click': handleUpload }, [ _('Upload Package…') ]), '\u00a0',
-					E('button', { 'class': 'btn cbi-button-neutral', 'click': handleConfig }, [ _('Configure opkg…') ])
+					E('span', { 'class': 'control-group' }, [
+						E('button', { 'class': 'btn cbi-button-positive', 'data-command': 'update', 'click': handleOpkg, 'disabled': isReadonlyView }, [ _('Update lists…') ]), ' ',
+						E('button', { 'class': 'btn cbi-button-action', 'click': handleUpload, 'disabled': isReadonlyView }, [ _('Upload Package…') ]), ' ',
+						E('button', { 'class': 'btn cbi-button-neutral', 'click': handleConfig }, [ _('Configure opkg…') ])
+					])
 				])
 			]),
 
@@ -1047,13 +1064,13 @@ return L.view.extend({
 				])
 			]),
 
-			E('div', { 'id': 'packages', 'class': 'table' }, [
-				E('div', { 'class': 'tr cbi-section-table-titles' }, [
-					E('div', { 'class': 'th col-2 left' }, [ _('Package name') ]),
-					E('div', { 'class': 'th col-2 left version' }, [ _('Version') ]),
-					E('div', { 'class': 'th col-1 center size'}, [ _('Size (.ipk)') ]),
-					E('div', { 'class': 'th col-10 left' }, [ _('Description') ]),
-					E('div', { 'class': 'th right' }, [ '\u00a0' ])
+			E('table', { 'id': 'packages', 'class': 'table' }, [
+				E('tr', { 'class': 'tr cbi-section-table-titles' }, [
+					E('th', { 'class': 'th col-2 left' }, [ _('Package name') ]),
+					E('th', { 'class': 'th col-2 left version' }, [ _('Version') ]),
+					E('th', { 'class': 'th col-1 center size'}, [ _('Size (.ipk)') ]),
+					E('th', { 'class': 'th col-10 left' }, [ _('Description') ]),
+					E('th', { 'class': 'th right cbi-section-actions' }, [ '\u00a0' ])
 				])
 			])
 		]);

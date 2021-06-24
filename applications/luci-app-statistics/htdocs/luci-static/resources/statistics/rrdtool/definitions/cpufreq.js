@@ -1,9 +1,10 @@
 /* Licensed to the public under the Apache License 2.0. */
 
 'use strict';
+'require baseclass';
 'require uci';
 
-return L.Class.extend({
+return baseclass.extend({
 	title: _('CPU Frequency'),
 
 	rrdargs: function(graph, host, plugin, plugin_instance, dtype) {

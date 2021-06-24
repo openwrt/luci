@@ -1,4 +1,7 @@
 'use strict';
+'require view';
+'require poll';
+'require request';
 'require rpc';
 
 var callLuciRealtimeStats = rpc.declare({
@@ -13,10 +16,10 @@ var graphPolls = [],
 
 Math.log2 = Math.log2 || function(x) { return Math.log(x) * Math.LOG2E; };
 
-return L.view.extend({
+return view.extend({
 	load: function() {
 		return Promise.all([
-			this.loadSVG(L.resource('load.svg'))
+			this.loadSVG(L.resource('svg/load.svg'))
 		]);
 	},
 
@@ -86,7 +89,7 @@ return L.view.extend({
 	},
 
 	pollData: function() {
-		L.Poll.add(L.bind(function() {
+		poll.add(L.bind(function() {
 			var tasks = [];
 
 			for (var i = 0; i < graphPolls.length; i++) {
@@ -183,6 +186,8 @@ return L.view.extend({
 							y = ctx.height - Math.floor(values[i][j] * data_scale);
 							//y -= Math.floor(y % (1 / data_scale));
 
+							y = isNaN(y) ? ctx.height : y;
+
 							pt += ' ' + x + ',' + y;
 						}
 
@@ -205,7 +210,7 @@ return L.view.extend({
 	},
 
 	loadSVG: function(src) {
-		return L.Request.get(src).then(function(response) {
+		return request.get(src).then(function(response) {
 			if (!response.ok)
 				throw new Error(response.statusText);
 
@@ -223,36 +228,36 @@ return L.view.extend({
 			E('div', { 'class': 'right' }, E('small', { 'id': 'scale' }, '-')),
 			E('br'),
 
-			E('div', { 'class': 'table', 'style': 'width:100%;table-layout:fixed' }, [
-				E('div', { 'class': 'tr' }, [
-					E('div', { 'class': 'td right top' }, E('strong', { 'style': 'border-bottom:2px solid #f00' }, [ _('1 Minute Load:') ])),
-					E('div', { 'class': 'td', 'id': 'lb_load01_cur' }, [ '0.00' ]),
+			E('table', { 'class': 'table', 'style': 'width:100%;table-layout:fixed' }, [
+				E('tr', { 'class': 'tr' }, [
+					E('td', { 'class': 'td right top' }, E('strong', { 'style': 'border-bottom:2px solid #f00' }, [ _('1 Minute Load:') ])),
+					E('td', { 'class': 'td', 'id': 'lb_load01_cur' }, [ '0.00' ]),
 
-					E('div', { 'class': 'td right top' }, E('strong', {}, [ _('Average:') ])),
-					E('div', { 'class': 'td', 'id': 'lb_load01_avg' }, [ '0.00' ]),
+					E('td', { 'class': 'td right top' }, E('strong', {}, [ _('Average:') ])),
+					E('td', { 'class': 'td', 'id': 'lb_load01_avg' }, [ '0.00' ]),
 
-					E('div', { 'class': 'td right top' }, E('strong', {}, [ _('Peak:') ])),
-					E('div', { 'class': 'td', 'id': 'lb_load01_peak' }, [ '0.00' ])
+					E('td', { 'class': 'td right top' }, E('strong', {}, [ _('Peak:') ])),
+					E('td', { 'class': 'td', 'id': 'lb_load01_peak' }, [ '0.00' ])
 				]),
-				E('div', { 'class': 'tr' }, [
-					E('div', { 'class': 'td right top' }, E('strong', { 'style': 'border-bottom:2px solid #f60' }, [ _('5 Minute Load:') ])),
-					E('div', { 'class': 'td', 'id': 'lb_load05_cur' }, [ '0.00' ]),
+				E('tr', { 'class': 'tr' }, [
+					E('td', { 'class': 'td right top' }, E('strong', { 'style': 'border-bottom:2px solid #f60' }, [ _('5 Minute Load:') ])),
+					E('td', { 'class': 'td', 'id': 'lb_load05_cur' }, [ '0.00' ]),
 
-					E('div', { 'class': 'td right top' }, E('strong', {}, [ _('Average:') ])),
-					E('div', { 'class': 'td', 'id': 'lb_load05_avg' }, [ '0.00' ]),
+					E('td', { 'class': 'td right top' }, E('strong', {}, [ _('Average:') ])),
+					E('td', { 'class': 'td', 'id': 'lb_load05_avg' }, [ '0.00' ]),
 
-					E('div', { 'class': 'td right top' }, E('strong', {}, [ _('Peak:') ])),
-					E('div', { 'class': 'td', 'id': 'lb_load05_peak' }, [ '0.00' ])
+					E('td', { 'class': 'td right top' }, E('strong', {}, [ _('Peak:') ])),
+					E('td', { 'class': 'td', 'id': 'lb_load05_peak' }, [ '0.00' ])
 				]),
-				E('div', { 'class': 'tr' }, [
-					E('div', { 'class': 'td right top' }, E('strong', { 'style': 'border-bottom:2px solid #fa0' }, [ _('15 Minute Load:') ])),
-					E('div', { 'class': 'td', 'id': 'lb_load15_cur' }, [ '0.00' ]),
+				E('tr', { 'class': 'tr' }, [
+					E('td', { 'class': 'td right top' }, E('strong', { 'style': 'border-bottom:2px solid #fa0' }, [ _('15 Minute Load:') ])),
+					E('td', { 'class': 'td', 'id': 'lb_load15_cur' }, [ '0.00' ]),
 
-					E('div', { 'class': 'td right top' }, E('strong', {}, [ _('Average:') ])),
-					E('div', { 'class': 'td', 'id': 'lb_load15_avg' }, [ '0.00' ]),
+					E('td', { 'class': 'td right top' }, E('strong', {}, [ _('Average:') ])),
+					E('td', { 'class': 'td', 'id': 'lb_load15_avg' }, [ '0.00' ]),
 
-					E('div', { 'class': 'td right top' }, E('strong', {}, [ _('Peak:') ])),
-					E('div', { 'class': 'td', 'id': 'lb_load15_peak' }, [ '0.00' ])
+					E('td', { 'class': 'td right top' }, E('strong', {}, [ _('Peak:') ])),
+					E('td', { 'class': 'td', 'id': 'lb_load15_peak' }, [ '0.00' ])
 				])
 			])
 		]);

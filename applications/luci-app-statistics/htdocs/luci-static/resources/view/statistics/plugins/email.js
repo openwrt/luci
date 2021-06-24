@@ -1,8 +1,9 @@
 'use strict';
+'require baseclass';
 'require form';
 'require tools.widgets as widgets';
 
-return L.Class.extend({
+return baseclass.extend({
 	title: _('E-Mail Plugin Configuration'),
 	description: _('The email plugin creates a unix socket which can be used to transmit email-statistics to a running collectd daemon. This plugin is primarily intended to be used in conjunction with Mail::SpamAssasin::Plugin::Collectd but can be used in other ways as well.'),
 
@@ -12,7 +13,7 @@ return L.Class.extend({
 		o = s.option(form.Flag, 'enable', _('Enable this plugin'));
 
 		o = s.option(form.Value, 'SocketFile', _('Socket file'));
-		o.default = '/var/run/collect-email.sock';
+		o.default = '/var/run/collectd/email.sock';
 		o.depends('enable', '1');
 
 		o = s.option(widgets.GroupSelect, 'SocketGroup', _('Socket group'));

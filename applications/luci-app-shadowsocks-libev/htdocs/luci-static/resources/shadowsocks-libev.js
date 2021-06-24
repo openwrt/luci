@@ -1,4 +1,5 @@
 'use strict';
+'require baseclass';
 'require uci';
 'require form';
 'require network';
@@ -20,6 +21,7 @@ var names_options_client = [
 ];
 
 var names_options_common = [
+	'local_address',
 	'verbose',
 	'ipv6_first',
 	'fast_open',
@@ -67,7 +69,7 @@ function ucival_to_bool(val) {
 	return val === 'true' || val === '1' || val === 'yes' || val === 'on';
 }
 
-return L.Class.extend({
+return baseclass.extend({
 	values_actions: function(o) {
 		o.value('bypass');
 		o.value('forward');
@@ -99,13 +101,25 @@ return L.Class.extend({
 			}
 		});
 	},
-	values_ipaddr: function(o, netDevs) {
+	values_ip4addr: function(o, netDevs) {
 		netDevs.forEach(function(v) {
 			v.getIPAddrs().forEach(function(a) {
 				var host = a.split('/')[0];
 				o.value(host, '%s (%s)'.format(host, v.getShortName()));
 			});
 		});
+	},
+	values_ip6addr: function(o, netDevs) {
+		netDevs.forEach(function(v) {
+			v.getIP6Addrs().forEach(function(a) {
+				var host = a.split('/')[0];
+				o.value(host, '%s (%s)'.format(host, v.getShortName()));
+			});
+		});
+	},
+	values_ipaddr: function(o, netDevs) {
+		this.values_ip4addr(o, netDevs)
+		this.values_ip6addr(o, netDevs)
 	},
 	options_client: function(s, tab, netDevs) {
 		var o = s.taboption(tab, form.ListValue, 'server', _('Remote server'));
@@ -190,7 +204,7 @@ return L.Class.extend({
 		if (stype === 'ss_server') {
 			this.cfgvalue_overview_(sdata, lines, names_options_server);
 			this.cfgvalue_overview_(sdata, lines, names_options_common);
-			this.cfgvalue_overview_(sdata, lines, ['bind_address']);
+			this.cfgvalue_overview_(sdata, lines, ['local_ipv4_address', 'local_ipv6_address']);
 		} else if (stype === 'ss_local' || stype === 'ss_redir' || stype === 'ss_tunnel') {
 			this.cfgvalue_overview_(sdata, lines, names_options_client);
 			if (stype === 'ss_tunnel') {

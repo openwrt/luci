@@ -5,7 +5,7 @@ local util = require "luci.util"
 local ipc = require "luci.ip"
 
 function index()
-	entry({"admin", "services", "splash"}, cbi("splash/splash"), _("Client-Splash"), 90)
+	entry({"admin", "services", "splash"}, cbi("splash/splash"), _("Client-Splash"), 90).acl_depends = { "luci-app-splash" }
 	entry({"admin", "services", "splash", "splashtext" }, form("splash/splashtext"), _("Splashtext"), 10)
 
 	local e

@@ -1,4 +1,5 @@
 'use strict';
+'require view';
 'require fs';
 'require uci';
 'require form';
@@ -28,7 +29,7 @@ var CBIMiniDLNAStatus = form.DummyValue.extend({
 	}
 });
 
-return L.view.extend({
+return view.extend({
 	render: function() {
 		var m, s, o;
 

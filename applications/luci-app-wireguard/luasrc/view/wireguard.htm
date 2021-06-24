@@ -179,16 +179,27 @@
 	});
 //]]></script>
 
-<h2>WireGuard Status</h2>
+<h2><%:WireGuard Status%></h2>
 
 <div class="cbi-section">
+
+<% if next(data) == nil then %>
+	<div class="table cbi-section-table">
+		<div class="tr cbi-section-table-row">
+			<p>
+				<em><%:This section contains no values yet%></em>
+			</p>
+		</div>
+	</div>
+<% end %>
+
 <%-
 local ikey, iface
 for ikey, iface in pairs(data) do
 -%>
 	<h3><%:Interface%> <%=ikey%></h3>
 	<div class="cbi-value" id="button" style="padding: 5px">
-		<input class="cbi-button cbi-button-apply" type="button" name="qrcode_<%=ikey%>" value="<%:Show/Hide QR-Code%>" onclick="toggle_qrcode(this)" />
+		<input class="btn cbi-button cbi-button-apply" type="button" name="qrcode_<%=ikey%>" value="<%:Show/Hide QR-Code%>" onclick="toggle_qrcode(this)" />
 	</div>
 <%-
 	local qr_enc

@@ -5,7 +5,7 @@
 
 
 function initFirewallState() {
-	return uci.load('firewall');
+	return L.resolveDefault(uci.load('firewall'));
 }
 
 function parseEnum(s, values) {
@@ -57,21 +57,7 @@ function getColorForName(forName) {
 	else if (forName == 'wan')
 		return '#f09090';
 
-	random.seed(parseInt(sfh(forName), 16));
-
-	var r = random.get(128),
-	    g = random.get(128),
-	    min = 0,
-	    max = 128;
-
-	if ((r + g) < 128)
-		min = 128 - r - g;
-	else
-		max = 255 - r - g;
-
-	var b = min + Math.floor(random.get() * (max - min));
-
-	return '#%02x%02x%02x'.format(0xff - r, 0xff - g, 0xff - b);
+	return random.derive_color(forName);
 }
 
 
@@ -106,7 +92,6 @@ Firewall = L.Class.extend({
 			    z = uci.add('firewall', 'zone');
 
 			uci.set('firewall', z, 'name',    name);
-			uci.set('firewall', z, 'network', ' ');
 			uci.set('firewall', z, 'input',   d.getInput()   || 'DROP');
 			uci.set('firewall', z, 'output',  d.getOutput()  || 'DROP');
 			uci.set('firewall', z, 'forward', d.getForward() || 'DROP');
@@ -140,7 +125,7 @@ Firewall = L.Class.extend({
 			var sections = uci.sections('firewall', 'zone');
 
 			for (var i = 0; i < sections.length; i++)
-				if (L.toArray(sections[i].network || sections[i].name).indexOf(network) != -1)
+				if (L.toArray(sections[i].network).indexOf(network) != -1)
 					return new Zone(sections[i]['.name']);
 
 			return null;
@@ -154,8 +139,8 @@ Firewall = L.Class.extend({
 
 			if (section != null && section['.type'] == 'zone') {
 				found = true;
-				name = zone.name;
-				uci.remove('firewall', zone['.name']);
+				name = section.name;
+				uci.remove('firewall', section['.name']);
 			}
 			else if (name != null) {
 				var sections = uci.sections('firewall', 'zone');
@@ -201,9 +186,6 @@ Firewall = L.Class.extend({
 			for (var i = 0; i < sections.length; i++) {
 				if (sections[i].name != oldName)
 					continue;
-
-				if (L.toArray(sections[i].network).length == 0)
-					uci.set('firewall', sections[i]['.name'], 'network', oldName);
 
 				uci.set('firewall', sections[i]['.name'], 'name', newName);
 				found = true;
@@ -350,17 +332,17 @@ Zone = AbstractFirewallItem.extend({
 			return false;
 
 		newNetworks.push(network);
-		this.set('network', newNetworks.join(' '));
+		this.set('network', newNetworks);
 
 		return true;
 	},
 
 	deleteNetwork: function(network) {
 		var oldNetworks = this.getNetworks(),
-            newNetworks = oldNetworks.filter(function(net) { return net != network });
+		    newNetworks = oldNetworks.filter(function(net) { return net != network });
 
 		if (newNetworks.length > 0)
-			this.set('network', newNetworks.join(' '));
+			this.set('network', newNetworks);
 		else
 			this.set('network', null);
 
@@ -372,7 +354,7 @@ Zone = AbstractFirewallItem.extend({
 	},
 
 	clearNetworks: function() {
-		this.set('network', ' ');
+		this.set('network', null);
 	},
 
 	getDevices: function() {
@@ -493,7 +475,7 @@ Zone = AbstractFirewallItem.extend({
 
 		uci.set('firewall', sid, 'src', this.getName());
 
-		return new Redirect(sid);
+		return new Rule(sid);
 	},
 
 	getColor: function(forName) {

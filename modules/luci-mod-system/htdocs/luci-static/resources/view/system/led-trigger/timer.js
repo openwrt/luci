@@ -1,8 +1,9 @@
 'use strict';
+'require baseclass';
 'require form';
 
-return L.Class.extend({
-	trigger: _('timer (kernel)'),
+return baseclass.extend({
+	trigger: _('Custom flash interval (kernel: timer)'),
 	kernel: true,
 	addFormOptions(s){
 		var o;

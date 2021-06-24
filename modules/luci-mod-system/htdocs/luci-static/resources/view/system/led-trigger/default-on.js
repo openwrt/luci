@@ -1,8 +1,9 @@
 'use strict';
+'require baseclass';
 'require form';
 
-return L.Class.extend({
-	trigger: _('default-on (kernel)'),
+return baseclass.extend({
+	trigger: _('Always on (kernel: default-on)'),
 	kernel: true,
 	addFormOptions(s){
 		var o;

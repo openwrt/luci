@@ -182,3 +182,15 @@ function action_ubus()
 	luci.http.prepare_content("application/json")
 	luci.http.write_json(response)
 end
+
+function action_menu()
+	local dsp = require "luci.dispatcher"
+	local utl = require "luci.util"
+	local http = require "luci.http"
+
+	local acls = utl.ubus("session", "access", { ubus_rpc_session = http.getcookie("sysauth") })
+	local menu = dsp.menu_json(acls or {}) or {}
+
+	http.prepare_content("application/json")
+	http.write_json(menu)
+end

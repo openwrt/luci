@@ -1,9 +1,10 @@
 /* Licensed to the public under the Apache License 2.0. */
 
 'use strict';
+'require baseclass';
 'require uci';
 
-return L.Class.extend({
+return baseclass.extend({
 	title: _('Processor'),
 
 	rrdargs: function(graph, host, plugin, plugin_instance, dtype) {
@@ -13,6 +14,8 @@ return L.Class.extend({
 
 		if (plugin_instance != '')
 			title = "%H: Processor usage on core #%pi";
+
+		var show_idle = uci.get("luci_statistics", "collectd_cpu", "ShowIdle") == "1" ? true : false;
 
 		if (uci.get("luci_statistics", "collectd_cpu", "ReportByState") == "1") {
 			var cpu = {
@@ -24,7 +27,7 @@ return L.Class.extend({
 				data: {
 					instances: {
 						cpu: [
-							"idle",
+							...(show_idle ? ["idle"] : []),
 							"interrupt",
 							"nice",
 							"softirq",
@@ -80,7 +83,7 @@ return L.Class.extend({
 				data: {
 					instances: {
 						percent: [
-							"idle",
+							...(show_idle ? ["idle"] : []),
 							"interrupt",
 							"nice",
 							"softirq",

@@ -6,8 +6,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-05-19 19:35+0200\n"
-"PO-Revision-Date: 2020-03-03 13:34+0000\n"
-"Last-Translator: Trevor <wowpapa3232@gmail.com>\n"
+"PO-Revision-Date: 2021-06-20 16:43+0000\n"
+"Last-Translator: Hulen <shift0106@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "openwrt/luciapplicationsopenvpn/zh_Hant/>\n"
 "Language: zh_Hant\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.0-dev\n"
+"X-Generator: Weblate 4.7\n"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:364
 msgid "'net30', 'p2p', or 'subnet'"
@@ -27,7 +27,7 @@ msgstr "接受從伺服器傳送過來的選項"
 
 #: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:92
 msgid "Add"
-msgstr "加入"
+msgstr "新增"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:225
 msgid "Add route after establishing connection"
@@ -35,9 +35,9 @@ msgstr "建立連線後新增路由"
 
 #: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:92
 msgid "Add template based configuration"
-msgstr ""
+msgstr "添加基於組態的模板"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:746
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:748
 msgid "Additional authentication over TLS"
 msgstr "TLS 以外的驗證"
 
@@ -50,7 +50,7 @@ msgstr "允許客戶端到客戶端的通訊"
 msgid "Allow multiple clients with same certificate"
 msgstr "允許多使用者共用同一證書"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:738
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:740
 msgid "Allow only one session"
 msgstr "只允許一個會話"
 
@@ -98,13 +98,13 @@ msgstr "認證授權"
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:80
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-basic.lua:17
 msgid "Change process priority"
-msgstr "改變程序優先順序"
+msgstr "變更行程優先權"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:40
 msgid "Change to directory before initialization"
 msgstr "初始化前改變根目錄"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:774
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:776
 msgid "Check peer certificate against a CRL"
 msgstr "驗證客戶端證書以確保其是否過期"
 
@@ -149,7 +149,7 @@ msgstr "連線重試時間間隔"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:564
 msgid "Cryptography"
-msgstr ""
+msgstr "密碼學"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:233
 msgid "Delay n seconds after connection"
@@ -189,13 +189,13 @@ msgstr "不實際執行 ifconfig 指令"
 msgid "Don't add routes automatically"
 msgstr "不自動新增路由"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:758
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:760
 msgid "Don't cache --askpass or --auth-user-pass passwords"
 msgstr "不快取 --askpass 或 --auth-user-pass passwords"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:245
 msgid "Don't drop incoming tun packets with same destination as host"
-msgstr ""
+msgstr "不要丟棄與主機目的地相同的傳入tun封包"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:387
 msgid "Don't inherit global push options"
@@ -251,10 +251,6 @@ msgstr "允許 TLS 並偽裝為客戶端"
 msgid "Enable TLS and assume server role"
 msgstr "允許 TLS 並偽裝為伺服器"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:165
-msgid "Enable a compression algorithm"
-msgstr ""
-
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:278
 msgid "Enable internal datagram fragmentation"
 msgstr "允許內部資料報分片"
@@ -267,7 +263,7 @@ msgstr "在 <em>IP</em> <em>port</em> 上啟用可管理介面"
 msgid "Enabled"
 msgstr "啟用"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:750
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:752
 msgid "Encrypt and authenticate all control channel packets with the key"
 msgstr "使用金鑰加密及認證所有的控制通道資料包"
 
@@ -294,11 +290,16 @@ msgid ""
 "Executed in server mode whenever an IPv4 address/route or MAC address is "
 "added to OpenVPN's internal routing table"
 msgstr ""
-"伺服器模式下，將每個 IPv4 位址/路由或 MAC 位址新增到 OpenVPN 的內部路由表中。"
+"只要將每個 IPv4位址/路由或 MAC位址新增到 OpenVPN 的內部路由表中, 就在伺服器模"
+"式下執行"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:742
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:744
 msgid "Exit on TLS negotiation failure"
 msgstr "TLS 驗證失敗後退出"
+
+#: applications/luci-app-openvpn/root/usr/share/rpcd/acl.d/luci-app-openvpn.json:3
+msgid "Grant access to OpenVPN configuration"
+msgstr "授予存取 OpenVPN 組態的權限"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:573
 msgid "HMAC authentication for packets"
@@ -317,7 +318,7 @@ msgstr "在服務配置模式下簡化 Helper 指令 --ping 和 --ping-restart �
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:551
 msgid "If hostname resolve fails, retry"
-msgstr "如果主機名解析錯誤，重試"
+msgstr "如果主機名稱解析失敗則重試"
 
 #: applications/luci-app-openvpn/luasrc/view/openvpn/pageswitch.htm:12
 msgid "Instance \"%s\""
@@ -326,7 +327,7 @@ msgstr "例項 \"%s\""
 #: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:18
 #: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:46
 msgid "Instance with that name already exists!"
-msgstr ""
+msgstr "具有該名稱的實例已經存在！"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:336
 msgid "Keep local IP address on restart"
@@ -340,7 +341,7 @@ msgstr "服務重啟時保持遠端 IP 位址"
 msgid "Keep tun/tap device open on restart"
 msgstr "服務重啟時自動開啟 tun/tap 裝置"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:734
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:736
 msgid "Key transition window"
 msgstr "金鑰傳輸滑動視窗"
 
@@ -372,7 +373,7 @@ msgstr "TCP佇列中輸出包的最大數量"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:168
 msgid "Networking"
-msgstr ""
+msgstr "網路化"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:447
 msgid "Number of allocated broadcast buffers"
@@ -384,9 +385,9 @@ msgstr "歷史日誌檔案的行數"
 
 #: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:95
 msgid "OVPN configuration file upload"
-msgstr ""
+msgstr "OVPN組態文件上傳"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:762
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:764
 msgid "Only accept connections from given X509 name"
 msgstr "只接收已給定的 X509 名稱的連線"
 
@@ -434,15 +435,15 @@ msgstr "每 n 秒 ping 一次遠端 TCP/UDP 埠"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-file.lua:28
 msgid "Please edit this file directly in a terminal session."
-msgstr "請直接在終端機中編輯此檔案"
+msgstr "請編輯在終端機會話中的此文件目錄."
 
 #: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:51
 msgid "Please select a valid OVPN config file to upload!"
-msgstr ""
+msgstr "請選擇一個有效的OVPN設置文件進行上傳！"
 
 #: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:23
 msgid "Please select a valid VPN template!"
-msgstr ""
+msgstr "請選擇一個有效的VPN模板！"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:161
 msgid "Policy level over usage of external programs and scripts"
@@ -450,11 +451,11 @@ msgstr "外部程式和指令碼超出了策略允許的使用範圍"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn.lua:141
 msgid "Port"
-msgstr "埠"
+msgstr "通訊埠"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn.lua:156
 msgid "Protocol"
-msgstr "協議"
+msgstr "協定"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:530
 msgid "Proxy timeout in seconds"
@@ -493,15 +494,15 @@ msgstr "遠端主機名或 IP 位址"
 msgid "Remote ping timeout"
 msgstr "遠端 ping 超時"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:718
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:720
 msgid "Renegotiate data chan. key after bytes"
 msgstr "傳輸若干位元組後重新驗證資料通道金鑰"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:722
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:724
 msgid "Renegotiate data chan. key after packets"
 msgstr "傳輸若干資料包後重新驗證資料通道金鑰"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:726
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:728
 msgid "Renegotiate data chan. key after seconds"
 msgstr "傳輸若干秒後重新驗證資料通道金鑰"
 
@@ -509,11 +510,11 @@ msgstr "傳輸若干秒後重新驗證資料通道金鑰"
 msgid "Replay protection sliding window size"
 msgstr "重播保護的滑動視窗大小"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:766
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:768
 msgid "Require explicit designation on certificate"
 msgstr "證書需要顯式指定"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:770
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:772
 msgid "Require explicit key usage on certificate"
 msgstr "證書需要明確的金鑰"
 
@@ -521,11 +522,11 @@ msgstr "證書需要明確的金鑰"
 msgid "Restart after remote ping timeout"
 msgstr "遠端 ping 超時後重啟"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:794
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:796
 msgid "Restrict the allowed ciphers to be negotiated"
-msgstr ""
+msgstr "限制要協商的允許密碼"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:714
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:716
 msgid "Retransmit timeout on TLS control channel"
 msgstr "TLS 控制通道超時後重新發送"
 
@@ -560,15 +561,28 @@ msgstr "儲存"
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-file.lua:61
 msgid ""
 "Section to add an optional 'auth-user-pass' file with your credentials (%s)"
-msgstr ""
+msgstr "本節添加帶有您的憑據（％s）的可選“ auth-user-pass”文件"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-file.lua:40
 msgid "Section to modify the OVPN config file (%s)"
-msgstr ""
+msgstr "節錄OVPN設置文件（％s）的部分"
+
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:257
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-basic.lua:45
+msgid ""
+"Security recommendation: It is recommended to not enable compression and set "
+"this parameter to `no`"
+msgstr "安全建議：建議不要啟用壓縮並將此參數設定為 `no`"
+
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:165
+msgid ""
+"Security recommendation: It is recommended to not enable compression and set "
+"this parameter to `stub-v2`"
+msgstr "安全建議：建議不要啟用壓縮並將此參數設定為 `stub-v2`"
 
 #: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:85
 msgid "Select template ..."
-msgstr ""
+msgstr "選擇模板..."
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:496
 msgid "Send notification to peer on disconnect"
@@ -576,7 +590,7 @@ msgstr "斷開連線時向客戶端傳送通知"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:15
 msgid "Service"
-msgstr ""
+msgstr "服務"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:266
 msgid "Set TCP/UDP MTU"
@@ -658,7 +672,7 @@ msgstr "指定路由預設閘道器"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:561
 msgid "Specify whether the client is required to supply a valid certificate"
-msgstr ""
+msgstr "指定是否要求客戶端提供有效憑證"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:355
 msgid "Start OpenVPN in a hibernating state"
@@ -678,7 +692,7 @@ msgstr "顯式檔案格式版本的狀態"
 
 #: applications/luci-app-openvpn/luasrc/view/openvpn/pageswitch.htm:15
 msgid "Switch to advanced configuration"
-msgstr "高階配置"
+msgstr "切換到進階組態"
 
 #: applications/luci-app-openvpn/luasrc/view/openvpn/pageswitch.htm:18
 msgid "Switch to basic configuration"
@@ -697,11 +711,11 @@ msgstr "TCP/UDP 埠 # 本地（預設 1194）"
 msgid "TCP/UDP port # for remote (default=1194)"
 msgstr "TCP/UDP 埠 # 遠端（預設 1194）"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:710
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:712
 msgid "TLS 1.3 or newer cipher"
-msgstr ""
+msgstr "TLS 1.3或更高版本的密碼"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:702
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:704
 msgid "TLS cipher"
 msgstr "TLS 加密"
 
@@ -711,7 +725,7 @@ msgstr "TOS 穿透（僅限 IPv4）"
 
 #: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:78
 msgid "Template based configuration"
-msgstr ""
+msgstr "基於模板的組態"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:437
 msgid "Temporary directory for client-connect return file"
@@ -720,24 +734,24 @@ msgstr "客戶端連線返回檔案的臨時目錄"
 #: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:12
 #: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:40
 msgid "The 'Name' field must not be empty!"
-msgstr ""
+msgstr "'名稱'欄位不能是空白！"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-file.lua:18
 msgid ""
 "The OVPN config file (%s) could not be found, please check your "
 "configuration."
-msgstr ""
+msgstr "找不到OVPN設置文件（％s），請檢查您的組態。"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:782
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:784
 msgid "The highest supported TLS version"
 msgstr "最高支援的 TLS 版本"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:786
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:788
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-basic.lua:69
 msgid "The key direction for 'tls-auth' and 'secret' options"
 msgstr "“tls-auth”和“secret”選項的金鑰型別"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:778
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:780
 msgid "The lowest supported TLS version"
 msgstr "最低支援的 TLS 版本"
 
@@ -746,12 +760,13 @@ msgid ""
 "The size of the OVPN config file (%s) is too large for online editing in "
 "LuCI (&ge; 100 KB)."
 msgstr ""
+"OVPN設置文件(％s)的尺寸太大，無法在LuCI中進行在線編輯（＆ge; 100 KB）。"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:790
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:792
 msgid "This completely disables cipher negotiation"
-msgstr ""
+msgstr "這會完全禁用密碼協商"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:730
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:732
 msgid "Timeframe for key exchange"
 msgstr "金鑰交換時間表"
 
@@ -766,12 +781,7 @@ msgstr "上傳"
 
 #: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:104
 msgid "Upload ovpn file"
-msgstr ""
-
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:257
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-basic.lua:45
-msgid "Use fast LZO compression"
-msgstr "使用快速 LZO 壓縮"
+msgstr "上傳ovpn文件"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:510
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-basic.lua:97
@@ -789,7 +799,7 @@ msgstr "把使用者名稱作為通用名稱"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:368
 msgid "VPN"
-msgstr ""
+msgstr "VPN虛擬私人網路"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:64
 msgid "Write log to file"
@@ -815,6 +825,12 @@ msgstr "tun/tap 休眠超時"
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn.lua:111
 msgid "yes (%i)"
 msgstr "是（%i）"
+
+#~ msgid "Enable a compression algorithm"
+#~ msgstr "啟用壓縮演算法"
+
+#~ msgid "Use fast LZO compression"
+#~ msgstr "使用快速 LZO 壓縮"
 
 #~ msgid "%s"
 #~ msgstr "%s"

@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-05-26 19:03+0200\n"
-"PO-Revision-Date: 2019-11-24 07:50+0000\n"
+"PO-Revision-Date: 2020-12-10 19:29+0000\n"
 "Last-Translator: ssantos <ssantos@web.de>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationstinyproxy/pt/>\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.10-dev\n"
+"X-Generator: Weblate 4.4-dev\n"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:219
 msgid ""
@@ -21,7 +21,7 @@ msgid ""
 "target"
 msgstr ""
 "<em>Via proxy</em> encaminha as requisições para um dado destino através do "
-"proxy superior especificado, <em>Rejeitar acesso</em> desabilita qualquer "
+"proxy superior especificado, <em>Rejeitar acesso</em> desativa qualquer "
 "proxy superior para o alvo"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:108
@@ -57,8 +57,8 @@ msgid ""
 "By default, filter strings are treated as case-insensitive. Enable this to "
 "make the matching case-sensitive"
 msgstr ""
-"Por padrão, as regras são tratadas como insensíveis a caixa. Ative esta "
-"opção para diferenciar maiúsculas e minúsculas"
+"Por predefinição, as regras são tratadas como não sensíveis a maiúsculas e "
+"minúsculas. Ative esta opção para diferenciar maiúsculas e minúsculas"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:145
 msgid ""
@@ -84,7 +84,7 @@ msgstr ""
 "Pode ser tanto um como uma faixa de endereços IP, um nome de dompínio ou \"."
 "\" para qualquer computador sem domínio"
 
-#: applications/luci-app-tinyproxy/root/usr/share/luci/menu.d/luci-app-tinyproxy.json:22
+#: applications/luci-app-tinyproxy/root/usr/share/luci/menu.d/luci-app-tinyproxy.json:23
 msgid "Configuration"
 msgstr "Configuração"
 
@@ -131,6 +131,10 @@ msgstr "Filtragem e ACLs"
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:11
 msgid "General settings"
 msgstr "Configurações gerais"
+
+#: applications/luci-app-tinyproxy/root/usr/share/rpcd/acl.d/luci-app-tinyproxy.json:3
+msgid "Grant UCI access for luci-app-tinyproxy"
+msgstr "Conceder acesso UCI ao luci-app-tinyproxy"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:97
 msgid "Group"
@@ -262,9 +266,8 @@ msgid ""
 "Specifies HTTP header names which are allowed to pass-through, all others "
 "are discarded. Leave empty to disable header filtering"
 msgstr ""
-"Especifica os nomes dos cabeçalhos HTTP que serão permitidos. Todos os "
-"demais serão descartados. Deixe em branco para desabilitar a filtragem de "
-"cabeçalho"
+"Especifica os nomes dos cabeçalhos HTTP que serão permitidos, todos outros "
+"serão descartados. Deixe em branco para desativar a filtragem de cabeçalho"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:32
 msgid "Specifies the HTTP port Tinyproxy is listening on for requests"
@@ -313,7 +316,7 @@ msgstr "Iniciar servidores suplentes"
 msgid "Statistics page"
 msgstr "Página de estatística"
 
-#: applications/luci-app-tinyproxy/root/usr/share/luci/menu.d/luci-app-tinyproxy.json:13
+#: applications/luci-app-tinyproxy/root/usr/share/luci/menu.d/luci-app-tinyproxy.json:14
 msgid "Status"
 msgstr "Estado"
 

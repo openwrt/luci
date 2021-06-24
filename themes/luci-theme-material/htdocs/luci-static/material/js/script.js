@@ -68,7 +68,7 @@ document.addEventListener('luci-loaded', function(ev) {
 				var that = $(this);
 				var href = that.attr("href");
 
-				if (href.indexOf(nodeUrl) != -1) {
+				if (href.endsWith(nodeUrl) || href.indexOf('/' + nodeUrl + '/') != -1) {
 					ulNode.click();
 					ulNode.next(".slide-menu").stop(true, true);
 					lastNode = that.parent();
@@ -195,7 +195,6 @@ document.addEventListener('luci-loaded', function(ev) {
 	$(".slide > a").removeAttr("href");
 
 	if (mainNodeName != undefined) {
-		console.log(mainNodeName);
 		switch (mainNodeName) {
 			case "node-status-system_log":
 			case "node-status-kernel_log":

@@ -20,7 +20,7 @@ local app_title   = I18N.translate("Radicale CalDAV/CardDAV Server")
 local app_version = "1.1.0-1"
 
 function index()
-	entry( {"admin", "services", "radicale"}, alias("admin", "services", "radicale", "edit"), _("CalDAV/CardDAV"), 58)
+	entry( {"admin", "services", "radicale"}, alias("admin", "services", "radicale", "edit"), _("CalDAV/CardDAV"), 58).acl_depends = { "luci-app-radicale" }
 	entry( {"admin", "services", "radicale", "edit"}, cbi("radicale") ).leaf = true
 	entry( {"admin", "services", "radicale", "logview"}, call("_logread") ).leaf = true
 	entry( {"admin", "services", "radicale", "startstop"}, post("_startstop") ).leaf = true

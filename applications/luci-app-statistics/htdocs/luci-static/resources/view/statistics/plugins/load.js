@@ -1,7 +1,8 @@
 'use strict';
+'require baseclass';
 'require form';
 
-return L.Class.extend({
+return baseclass.extend({
 	title: _('Load Plugin Configuration'),
 	description: _('The load plugin collects statistics about the general system load.'),
 

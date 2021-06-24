@@ -837,6 +837,12 @@ static int cidr_tolinklocal(lua_State *L)
 	p2->bits = AF_BITS(AF_INET6);
 	p2->addr.u8[0] = 0xFE;
 	p2->addr.u8[1] = 0x80;
+	p2->addr.u8[2] = 0x00;
+	p2->addr.u8[3] = 0x00;
+	p2->addr.u8[4] = 0x00;
+	p2->addr.u8[5] = 0x00;
+	p2->addr.u8[6] = 0x00;
+	p2->addr.u8[7] = 0x00;
 	p2->addr.u8[8] = p1->addr.u8[0] ^ 0x02;
 	p2->addr.u8[9] = p1->addr.u8[1];
 	p2->addr.u8[10] = p1->addr.u8[2];

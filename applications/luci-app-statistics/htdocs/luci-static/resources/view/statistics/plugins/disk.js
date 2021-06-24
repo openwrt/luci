@@ -1,8 +1,9 @@
 'use strict';
+'require baseclass';
 'require fs';
 'require form';
 
-return L.Class.extend({
+return baseclass.extend({
 	title: _('Disk Plugin Configuration'),
 	description: _('The disk plugin collects detailed usage statistics for selected partitions or whole disks.'),
 

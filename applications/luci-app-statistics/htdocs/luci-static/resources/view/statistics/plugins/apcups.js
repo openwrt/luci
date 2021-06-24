@@ -1,7 +1,8 @@
 'use strict';
+'require baseclass';
 'require form';
 
-return L.Class.extend({
+return baseclass.extend({
 	title: _('APCUPS Plugin Configuration'),
 	description: _('The APCUPS plugin collects statistics about the APC UPS.'),
 
@@ -10,7 +11,7 @@ return L.Class.extend({
 
 		o = s.option(form.Flag, 'enable', _('Enable this plugin'));
 
-		o = s.option(form.DynamicList, 'Host', _('Monitor host'));
+		o = s.option(form.Value, 'Host', _('Monitor host'));
 		o.default = 'localhost';
 		o.datatype = 'host';
 		o.depends('enable', '1');
@@ -22,11 +23,6 @@ return L.Class.extend({
 	},
 
 	configSummary: function(section) {
-		var hosts = L.toArray(section.Host);
-		if (hosts.length)
-			return N_(hosts.length,
-				'Monitoring APC UPS at host %s, port %d',
-				'Monitoring APC UPS at hosts %s, port %d'
-			).format(hosts.join(', '), section.Port || 3551);
+		return _('Monitoring APC UPS at host %s, port %d').format(section.Host || 'localhost', section.Port || 3551);
 	}
 });

@@ -1,8 +1,9 @@
 'use strict';
+'require baseclass';
 'require form';
 'require tools.widgets as widgets';
 
-return L.Class.extend({
+return baseclass.extend({
 	title: _('Exec Plugin Configuration'),
 	description: _('The exec plugin starts external commands to read values from or to notify external processes when certain threshold values have been reached.'),
 

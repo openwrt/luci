@@ -1,8 +1,9 @@
 /* Licensed to the public under the Apache License 2.0. */
 
 'use strict';
+'require baseclass';
 
-return L.Class.extend({
+return baseclass.extend({
 	title: _('Sensors'),
 
 	rrdargs: function(graph, host, plugin, plugin_instance, dtype) {

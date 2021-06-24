@@ -1,0 +1,13 @@
+{
+        "admin/network/eoip": {
+                "title": "EoIP tunnel",
+                "action": {
+                        "type": "view",
+                        "path": "eoip/eoip"
+                },
+                "depends": {
+                        "acl": [ "luci-app-eoip" ],
+                        "uci": { "eoip": true }
+                }
+        }
+}

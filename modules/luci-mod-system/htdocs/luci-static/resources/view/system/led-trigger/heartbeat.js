@@ -1,7 +1,8 @@
 'use strict';
+'require baseclass';
 
-return L.Class.extend({
-	trigger: _('heartbeat (kernel)'),
+return baseclass.extend({
+	trigger: _('Heartbeat interval (kernel: heartbeat)'),
 	kernel: true,
 	addFormOptions(s){
 		var o;

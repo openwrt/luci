@@ -1,8 +1,9 @@
 'use strict';
+'require baseclass';
 'require fs';
 'require uci';
 
-return L.Class.extend({
+return baseclass.extend({
 	title: _('miniDLNA Status'),
 
 	load: function() {

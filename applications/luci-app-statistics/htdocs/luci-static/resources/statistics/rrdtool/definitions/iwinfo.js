@@ -1,8 +1,9 @@
 /* Licensed to the public under the Apache License 2.0. */
 
 'use strict';
+'require baseclass';
 
-return L.Class.extend({
+return baseclass.extend({
 	title: _('Wireless'),
 
 	rrdargs: function(graph, host, plugin, plugin_instance, dtype) {
@@ -56,8 +57,8 @@ return L.Class.extend({
 		var bitrate = {
 			title: "%H: Average phy rate on %pi",
 			detail: true,
-			vlabel: "MBit/s",
-			number_format: "%5.1lf%sBit/s",
+			vlabel: "Mbit/s",
+			number_format: "%5.1lf%sbit/s",
 			data: {
 				types: [ "bitrate" ],
 				options: {

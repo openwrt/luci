@@ -1,4 +1,7 @@
 'use strict';
+'require view';
+'require dom';
+'require poll';
 'require ui';
 'require uci';
 'require statistics.rrdtool as rrdtool';
@@ -7,7 +10,7 @@ var pollFn = null,
     activePlugin = null,
     activeInstance = null;
 
-return L.view.extend({
+return view.extend({
 	load: function() {
 		return rrdtool.load();
 	},
@@ -22,7 +25,7 @@ return L.view.extend({
 
 		activePlugin = plugin;
 
-		L.dom.content(container, [
+		dom.content(container, [
 			E('p', {}, [
 				E('em', { 'class': 'spinning' }, [ _('Loading data…') ])
 			])
@@ -52,7 +55,7 @@ return L.view.extend({
 		})).then(function(blobs) {
 			var multiple = blobs.length > 1;
 
-			L.dom.content(container, E('div', {}, blobs.map(function(blobs, i) {
+			dom.content(container, E('div', {}, blobs.map(function(blobs, i) {
 				var plugin_instance = i ? plugin_instances[i-1] : plugin_instances.join('|'),
 				    title = '%s: %s'.format(rrdtool.pluginTitle(plugin), i ? plugin_instance : _('Overview'));
 
@@ -85,7 +88,7 @@ return L.view.extend({
 			URL.revokeObjectURL(img.src);
 		});
 
-		L.dom.content(container, null);
+		dom.content(container, null);
 
 		if (container.hasAttribute('data-initialized')) {
 			container.removeAttribute('data-initialized');
@@ -147,13 +150,13 @@ return L.view.extend({
 		var btn = ev.currentTarget;
 
 		if (pollFn) {
-			L.Poll.remove(pollFn);
+			poll.remove(pollFn);
 			pollFn = null;
 		}
 
 		if (time.value != '0') {
 			pollFn = L.bind(this.refreshGraphs, this, host, span, time, container);
-			L.Poll.add(pollFn, +time.value);
+			poll.add(pollFn, +time.value);
 		}
 	},
 
@@ -200,24 +203,30 @@ return L.view.extend({
 		var view = E([], [
 			E('h2', {}, [ _('Statistics') ]),
 			E('div', {}, [
-				E('div', {}, [
-					hostSel,
-					E('button', {
-						'class': 'cbi-button cbi-button-apply',
-						'click': ui.createHandlerFn(this, 'updateGraphs', hostSel, spanSel, timeSel, graphDiv, )
-					}, [ _('Display Host »') ]),
+				E('p', { 'class': 'controls' }, [
+					E('span', { 'class': 'nowrap' }, [
+						hostSel,
+						E('button', {
+							'class': 'cbi-button cbi-button-apply',
+							'click': ui.createHandlerFn(this, 'updateGraphs', hostSel, spanSel, timeSel, graphDiv, )
+						}, [ _('Display Host »') ]),
+					]),
 					' ',
-					spanSel,
-					E('button', {
-						'class': 'cbi-button cbi-button-apply',
-						'click': ui.createHandlerFn(this, 'updateGraphs', hostSel, spanSel, timeSel, graphDiv)
-					}, [ _('Display timespan »') ]),
+					E('span', { 'class': 'nowrap' }, [
+						spanSel,
+						E('button', {
+							'class': 'cbi-button cbi-button-apply',
+							'click': ui.createHandlerFn(this, 'updateGraphs', hostSel, spanSel, timeSel, graphDiv)
+						}, [ _('Display timespan »') ]),
+					]),
 					' ',
-					timeSel,
-					E('button', {
-						'class': 'cbi-button cbi-button-apply',
-						'click': ui.createHandlerFn(this, 'togglePolling', hostSel, spanSel, timeSel, graphDiv)
-					}, [ _('Apply interval »') ])
+					E('span', { 'class': 'nowrap' }, [
+						timeSel,
+						E('button', {
+							'class': 'cbi-button cbi-button-apply',
+							'click': ui.createHandlerFn(this, 'togglePolling', hostSel, spanSel, timeSel, graphDiv)
+						}, [ _('Apply interval »') ])
+					])
 				]),
 				E('hr'),
 				graphDiv

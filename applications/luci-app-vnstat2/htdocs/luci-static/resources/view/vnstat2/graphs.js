@@ -1,10 +1,11 @@
 // This is free software, licensed under the Apache License, Version 2.0
 
 'use strict';
+'require view';
 'require fs';
 'require ui';
 
-return L.view.extend({
+return view.extend({
 	renderTab: function(ifaces, style, title) {
 		var tab = E('div', {
 			'class': 'cbi-section',

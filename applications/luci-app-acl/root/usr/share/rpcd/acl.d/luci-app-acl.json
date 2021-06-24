@@ -1,0 +1,19 @@
+{
+	"luci-app-acl": {
+		"description": "Grant access to ACL configuration",
+		"read": {
+			"cgi-io": [ "list", "read" ],
+			"file": {
+				"/etc/passwd": [ "read" ],
+				"/usr/sbin/uhttpd": [ "list" ],
+				"/usr/sbin/uhttpd -m *": [ "exec" ],
+				"/usr/share/rpcd/acl.d": [ "list" ],
+				"/usr/share/rpcd/acl.d/*.json": [ "read" ]
+			},
+			"uci": [ "rpcd" ]
+		},
+		"write": {
+			"uci": [ "rpcd" ]
+		}
+	}
+}

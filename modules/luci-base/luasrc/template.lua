@@ -53,7 +53,7 @@ function Template.__init__(self, name, template)
 
 	-- Create a new namespace for this template
 	self.viewns = context.viewns
-	
+
 	-- If we have a cached template, skip compiling and loading
 	if not self.template then
 
@@ -71,7 +71,7 @@ function Template.__init__(self, name, template)
 
 		-- If we have no valid template throw error, otherwise cache the template
 		if not self.template then
-			error("Failed to load template '" .. name .. "'.\n" ..
+			error("Failed to load template '" .. self.name .. "'.\n" ..
 			      "Error while parsing template '" .. sourcefile .. "':\n" ..
 			      (err or "Unknown syntax error"))
 		elseif name then
@@ -84,13 +84,13 @@ end
 -- Renders a template
 function Template.render(self, scope)
 	scope = scope or getfenv(2)
-	
+
 	-- Put our predefined objects in the scope of the template
 	setfenv(self.template, setmetatable({}, {__index =
 		function(tbl, key)
 			return rawget(tbl, key) or self.viewns[key] or scope[key]
 		end}))
-	
+
 	-- Now finally render the thing
 	local stat, err = util.copcall(self.template)
 	if not stat then

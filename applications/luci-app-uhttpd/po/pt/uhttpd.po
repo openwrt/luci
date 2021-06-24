@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2019-11-20 17:05+0000\n"
+"PO-Revision-Date: 2020-12-10 19:29+0000\n"
 "Last-Translator: ssantos <ssantos@web.de>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsuhttpd/pt/>\n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 3.10-dev\n"
+"X-Generator: Weblate 4.4-dev\n"
 
 #: applications/luci-app-uhttpd/luasrc/model/cbi/uhttpd/uhttpd.lua:135
 msgid ""
@@ -51,7 +51,7 @@ msgstr "Interpretador de tipo de ficheiro CGI"
 
 #: applications/luci-app-uhttpd/luasrc/model/cbi/uhttpd/uhttpd.lua:153
 msgid "CGI is disabled if not present."
-msgstr "O CGI estará desabilitado se não presente."
+msgstr "O CGI estará desativado se não presente."
 
 #: applications/luci-app-uhttpd/luasrc/model/cbi/uhttpd/uhttpd.lua:142
 msgid "Config file (e.g. for credentials for Basic Auth)"
@@ -67,7 +67,7 @@ msgstr "País"
 
 #: applications/luci-app-uhttpd/luasrc/model/cbi/uhttpd/uhttpd.lua:173
 msgid "Disable JSON-RPC authorization via ubus session API"
-msgstr "Desabilita a autorização JSON-RPC através da API de sessão ubus"
+msgstr "Desativa a autorização JSON-RPC através da API de sessão ubus"
 
 #: applications/luci-app-uhttpd/luasrc/model/cbi/uhttpd/uhttpd.lua:129
 msgid "Do not follow symlinks outside document root"
@@ -87,7 +87,7 @@ msgstr "Ex: use index.html e index.php quando usar PHP"
 
 #: applications/luci-app-uhttpd/luasrc/model/cbi/uhttpd/uhttpd.lua:160
 msgid "Embedded Lua interpreter is disabled if not present."
-msgstr "O interpretador Lua embutido será desabilitado se não presente."
+msgstr "O interpretador Lua embutido será desativado se não presente."
 
 #: applications/luci-app-uhttpd/luasrc/model/cbi/uhttpd/uhttpd.lua:169
 msgid "Enable JSON-RPC Cross-Origin Resource Support"
@@ -107,19 +107,23 @@ msgstr "Caminho completo para o interpretador de scripts Lua"
 
 #: applications/luci-app-uhttpd/luasrc/model/cbi/uhttpd/uhttpd.lua:18
 msgid "General Settings"
-msgstr "Configurações Gerais"
+msgstr "Configurações gerais"
+
+#: applications/luci-app-uhttpd/root/usr/share/rpcd/acl.d/luci-app-uhttpd.json:3
+msgid "Grant UCI access for luci-app-uhttpd"
+msgstr "Conceder acesso UCI ao luci-app-uhttpd"
 
 #: applications/luci-app-uhttpd/luasrc/model/cbi/uhttpd/uhttpd.lua:22
 msgid "HTTP listeners (address:port)"
 msgstr "Escutas do HTTP (endereço:porta)"
 
 #: applications/luci-app-uhttpd/luasrc/model/cbi/uhttpd/uhttpd.lua:94
-msgid "HTTPS Certificate (DER Encoded)"
-msgstr "Certificado do HTTPS (codificado em formato PEM)"
+msgid "HTTPS Certificate (DER or PEM format)"
+msgstr "Certificado HTTPS (formato DER ou PEM)"
 
 #: applications/luci-app-uhttpd/luasrc/model/cbi/uhttpd/uhttpd.lua:96
-msgid "HTTPS Private Key (DER Encoded)"
-msgstr "Chave Privada do HTTPS (codificado como DER)"
+msgid "HTTPS Private Key (DER or PEM format)"
+msgstr "Chave privada de HTTPS (formato DER ou PEM)"
 
 #: applications/luci-app-uhttpd/luasrc/model/cbi/uhttpd/uhttpd.lua:50
 msgid "HTTPS listener (address:port)"
@@ -266,3 +270,9 @@ msgstr ""
 #: applications/luci-app-uhttpd/luasrc/model/cbi/uhttpd/uhttpd.lua:163
 msgid "ubus integration is disabled if not present"
 msgstr "A integração com o ubus será desativada se não presente"
+
+#~ msgid "HTTPS Certificate (DER Encoded)"
+#~ msgstr "Certificado do HTTPS (codificado em formato PEM)"
+
+#~ msgid "HTTPS Private Key (DER Encoded)"
+#~ msgstr "Chave Privada do HTTPS (codificado como DER)"

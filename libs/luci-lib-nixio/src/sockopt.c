@@ -366,7 +366,7 @@ static int nixio_sock_setsockopt(lua_State *L) {
 }
 
 /* module table */
-static const luaL_reg M[] = {
+static const luaL_Reg M[] = {
 	{"setblocking", nixio_sock_setblocking},
 	{"getsockopt",	nixio_sock_getsockopt},
 	{"setsockopt",	nixio_sock_setsockopt},

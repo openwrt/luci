@@ -26,6 +26,7 @@ function index()
 	page.target = template("status-olsr/overview")
 	page.title  = _("OLSR")
 	page.subindex = true
+	page.acl_depends = { "luci-app-olsr" }
 
 	local page  = node("admin", "status", "olsr", "json")
 	page.target = call("action_json")
@@ -74,7 +75,6 @@ function index()
 		{"admin", "services", "olsrd", "display"},
 		cbi("olsr/olsrddisplay"), _("Display")
 	)
-
 end
 
 function action_json()

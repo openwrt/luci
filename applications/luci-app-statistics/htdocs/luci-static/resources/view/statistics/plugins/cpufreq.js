@@ -1,7 +1,8 @@
 'use strict';
+'require baseclass';
 'require form';
 
-return L.Class.extend({
+return baseclass.extend({
 	title: _('CPU Frequency Plugin Configuration'),
 	description: _('This plugin collects statistics about the processor frequency scaling.'),
 

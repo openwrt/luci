@@ -1,4 +1,5 @@
 'use strict';
+'require baseclass';
 'require fs';
 'require rpc';
 
@@ -12,7 +13,7 @@ var callSystemInfo = rpc.declare({
 	method: 'info'
 });
 
-return L.Class.extend({
+return baseclass.extend({
 	title: _('System'),
 
 	load: function() {
@@ -64,12 +65,12 @@ return L.Class.extend({
 			) : null
 		];
 
-		var table = E('div', { 'class': 'table' });
+		var table = E('table', { 'class': 'table' });
 
 		for (var i = 0; i < fields.length; i += 2) {
-			table.appendChild(E('div', { 'class': 'tr' }, [
-				E('div', { 'class': 'td left', 'width': '33%' }, [ fields[i] ]),
-				E('div', { 'class': 'td left' }, [ (fields[i + 1] != null) ? fields[i + 1] : '?' ])
+			table.appendChild(E('tr', { 'class': 'tr' }, [
+				E('td', { 'class': 'td left', 'width': '33%' }, [ fields[i] ]),
+				E('td', { 'class': 'td left' }, [ (fields[i + 1] != null) ? fields[i + 1] : '?' ])
 			]));
 		}
 

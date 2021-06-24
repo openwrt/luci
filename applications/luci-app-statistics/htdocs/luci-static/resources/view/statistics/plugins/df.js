@@ -1,8 +1,9 @@
 'use strict';
+'require baseclass';
 'require fs';
 'require form';
 
-return L.Class.extend({
+return baseclass.extend({
 	title: _('DF Plugin Configuration'),
 	description: _('The df plugin collects statistics about the disk space usage on different devices, mount points or filesystem types.'),
 
@@ -86,6 +87,9 @@ return L.Class.extend({
 		};
 
 		o = s.option(form.Flag, 'IgnoreSelected', _('Monitor all except specified'));
+		o.depends('enable', '1');
+
+		o = s.option(form.Flag, 'ValuesPercentage', _('Free space, reserved space and used space is reported as relative values'));
 		o.depends('enable', '1');
 	},
 

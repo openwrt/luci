@@ -1,8 +1,9 @@
 'use strict';
+'require baseclass';
 'require form';
 'require tools.widgets as widgets';
 
-return L.Class.extend({
+return baseclass.extend({
 	title: _('Interface Plugin Configuration'),
 	description: _('The interface plugin collects traffic statistics on selected interfaces.'),
 
@@ -14,6 +15,7 @@ return L.Class.extend({
 		o = s.option(widgets.DeviceSelect, 'Interfaces', _('Monitor interfaces'));
 		o.multiple = true;
 		o.noaliases = true;
+		o.default = 'br-lan';
 		o.depends('enable', '1');
 
 		o = s.option(form.Flag, 'IgnoreSelected', _('Monitor all except specified'));

@@ -3,15 +3,15 @@
 #
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2020-02-25 09:44+0000\n"
-"Last-Translator: Trevor <wowpapa3232@gmail.com>\n"
+"PO-Revision-Date: 2021-01-15 12:32+0000\n"
+"Last-Translator: akibou <jinwenxin1997@icloud.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "openwrt/luciapplicationsuhttpd/zh_Hant/>\n"
 "Language: zh_Hant\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.0-dev\n"
+"X-Generator: Weblate 4.5-dev\n"
 
 #: applications/luci-app-uhttpd/luasrc/model/cbi/uhttpd/uhttpd.lua:135
 msgid ""
@@ -50,7 +50,7 @@ msgstr "CGI 檔案型別處理程式"
 
 #: applications/luci-app-uhttpd/luasrc/model/cbi/uhttpd/uhttpd.lua:153
 msgid "CGI is disabled if not present."
-msgstr "如果不存在，CGI 將被禁用。"
+msgstr "如果留空，則 CGI 將被停用。"
 
 #: applications/luci-app-uhttpd/luasrc/model/cbi/uhttpd/uhttpd.lua:142
 msgid "Config file (e.g. for credentials for Basic Auth)"
@@ -66,7 +66,7 @@ msgstr "國家"
 
 #: applications/luci-app-uhttpd/luasrc/model/cbi/uhttpd/uhttpd.lua:173
 msgid "Disable JSON-RPC authorization via ubus session API"
-msgstr "通過 ubus 會話 API 禁用 JSON-RPC 授權"
+msgstr "透過 ubus 工作階段 API 來停用 JSON-RPC 授權"
 
 #: applications/luci-app-uhttpd/luasrc/model/cbi/uhttpd/uhttpd.lua:129
 msgid "Do not follow symlinks outside document root"
@@ -86,7 +86,7 @@ msgstr "例如，使用 PHP 時可指定為 index.html 和 index.php"
 
 #: applications/luci-app-uhttpd/luasrc/model/cbi/uhttpd/uhttpd.lua:160
 msgid "Embedded Lua interpreter is disabled if not present."
-msgstr "如果不存在，嵌入式 Lua 直譯器將被禁用。"
+msgstr "如果留空，嵌入式 Lua 直譯器將被停用。"
 
 #: applications/luci-app-uhttpd/luasrc/model/cbi/uhttpd/uhttpd.lua:169
 msgid "Enable JSON-RPC Cross-Origin Resource Support"
@@ -106,19 +106,23 @@ msgstr "Lua 指令碼處理程式的完整真實路徑"
 
 #: applications/luci-app-uhttpd/luasrc/model/cbi/uhttpd/uhttpd.lua:18
 msgid "General Settings"
-msgstr "常規設定"
+msgstr "一般設定"
+
+#: applications/luci-app-uhttpd/root/usr/share/rpcd/acl.d/luci-app-uhttpd.json:3
+msgid "Grant UCI access for luci-app-uhttpd"
+msgstr "授予 luci-app-uhttpd 擁有 UCI 存取的權限"
 
 #: applications/luci-app-uhttpd/luasrc/model/cbi/uhttpd/uhttpd.lua:22
 msgid "HTTP listeners (address:port)"
 msgstr "HTTP 監聽（位址:埠）"
 
 #: applications/luci-app-uhttpd/luasrc/model/cbi/uhttpd/uhttpd.lua:94
-msgid "HTTPS Certificate (DER Encoded)"
-msgstr "HTTPS 證書（DER 編碼）"
+msgid "HTTPS Certificate (DER or PEM format)"
+msgstr "HTTPS數位簽證(DER 或 PEM格式)"
 
 #: applications/luci-app-uhttpd/luasrc/model/cbi/uhttpd/uhttpd.lua:96
-msgid "HTTPS Private Key (DER Encoded)"
-msgstr "HTTPS 私鑰（DER 編碼）"
+msgid "HTTPS Private Key (DER or PEM format)"
+msgstr "HTTPS 私人金鑰(DER或PEM格式)"
 
 #: applications/luci-app-uhttpd/luasrc/model/cbi/uhttpd/uhttpd.lua:50
 msgid "HTTPS listener (address:port)"
@@ -203,15 +207,15 @@ msgstr "很少需要或影響 WebUI 服務的設定"
 
 #: applications/luci-app-uhttpd/luasrc/model/cbi/uhttpd/uhttpd.lua:224
 msgid "State"
-msgstr "州"
+msgstr "狀態"
 
 #: applications/luci-app-uhttpd/luasrc/model/cbi/uhttpd/uhttpd.lua:192
 msgid "TCP Keepalive"
-msgstr "TCP Keepalive"
+msgstr "TCP 存活者"
 
 #: applications/luci-app-uhttpd/luasrc/model/cbi/uhttpd/uhttpd.lua:110
 msgid "This permanently deletes the cert, key, and configuration to use same."
-msgstr "這將永久刪除證書、金鑰及使用它的配置。"
+msgstr "這將永久刪除證書、金鑰及相同使用的配置。"
 
 #: applications/luci-app-uhttpd/luasrc/model/cbi/uhttpd/uhttpd.lua:210
 msgid "Valid for # of Days"
@@ -229,7 +233,7 @@ msgstr "Lua 指令碼的虛擬路徑字首"
 
 #: applications/luci-app-uhttpd/luasrc/model/cbi/uhttpd/uhttpd.lua:163
 msgid "Virtual path prefix for ubus via JSON-RPC integration"
-msgstr "ubus 通過 JSON-RPC 整合的虛擬路徑字首"
+msgstr "虛擬路徑字首，其用於透過 JSON-RPC 整合的 ubus"
 
 #: applications/luci-app-uhttpd/luasrc/model/cbi/uhttpd/uhttpd.lua:142
 msgid "Will not use HTTP authentication if not present"
@@ -242,7 +246,7 @@ msgstr "又名 CommonName"
 #: applications/luci-app-uhttpd/luasrc/model/cbi/uhttpd/uhttpd.lua:6
 #: applications/luci-app-uhttpd/root/usr/share/luci/menu.d/luci-app-uhttpd.json:3
 msgid "uHTTPd"
-msgstr "uHTTPd"
+msgstr "uHTTPd精簡http伺服器"
 
 #: applications/luci-app-uhttpd/luasrc/model/cbi/uhttpd/uhttpd.lua:205
 msgid "uHTTPd Self-signed Certificate Parameters"
@@ -256,4 +260,10 @@ msgstr "uHTTPd 將使用下面顯示的配置生成新的自簽名證書。"
 
 #: applications/luci-app-uhttpd/luasrc/model/cbi/uhttpd/uhttpd.lua:163
 msgid "ubus integration is disabled if not present"
-msgstr "如果不存在，則禁用 ubus 整合"
+msgstr "如果留空，則 ubus 整合將被停用"
+
+#~ msgid "HTTPS Certificate (DER Encoded)"
+#~ msgstr "HTTPS 證書（DER 編碼）"
+
+#~ msgid "HTTPS Private Key (DER Encoded)"
+#~ msgstr "HTTPS 私鑰（DER 編碼）"

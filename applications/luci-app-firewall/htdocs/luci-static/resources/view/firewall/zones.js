@@ -1,4 +1,5 @@
 'use strict';
+'require view';
 'require rpc';
 'require uci';
 'require form';
@@ -7,7 +8,7 @@
 'require tools.firewall as fwtool';
 'require tools.widgets as widgets';
 
-return L.view.extend({
+return view.extend({
 	callConntrackHelpers: rpc.declare({
 		object: 'luci',
 		method: 'getConntrackHelpers',
@@ -40,7 +41,20 @@ return L.view.extend({
 		s.anonymous = true;
 		s.addremove = false;
 
-		o = s.option(form.Flag, 'syn_flood', _('Enable SYN-flood protection'));
+		o = s.option(form.Flag, 'synflood_protect', _('Enable SYN-flood protection'));
+		o.cfgvalue = function(section_id) {
+			var val = uci.get('firewall', section_id, 'synflood_protect');
+			return (val != null) ? val : uci.get('firewall', section_id, 'syn_flood');
+		};
+		o.write = function(section_id, value) {
+			uci.unset('firewall', section_id, 'syn_flood');
+			uci.set('firewall', section_id, 'synflood_protect', value);
+		};
+		o.remove = function(section_id) {
+			uci.unset('firewall', section_id, 'syn_flood');
+			uci.unset('firewall', section_id, 'synflood_protect');
+		};
+
 		o = s.option(form.Flag, 'drop_invalid', _('Drop invalid packets'));
 
 		var p = [
@@ -81,6 +95,12 @@ return L.view.extend({
 		s.addremove = true;
 		s.anonymous = true;
 		s.sortable  = true;
+
+		s.handleRemove = function(section_id, ev) {
+			return firewall.deleteZone(section_id).then(L.bind(function() {
+				return this.super('handleRemove', [section_id, ev]);
+			}, this));
+		};
 
 		s.tab('general', _('General Settings'));
 		s.tab('advanced', _('Advanced Settings'));
@@ -138,6 +158,14 @@ return L.view.extend({
 
 		o = s.taboption('general', form.Flag, 'masq', _('Masquerading'));
 		o.editable = true;
+		o.tooltip = function(section_id) {
+			var masq_src = uci.get('firewall', section_id, 'masq_src')
+			var masq_dest = uci.get('firewall', section_id, 'masq_dest')
+			if (masq_src || masq_dest)
+				return _('Limited masquerading enabled');
+
+			return null;
+		};
 
 		o = s.taboption('general', form.Flag, 'mtu_fix', _('MSS clamping'));
 		o.modalonly = true;
@@ -150,25 +178,32 @@ return L.view.extend({
 		};
 		o.write = function(section_id, formvalue) {
 			var name = uci.get('firewall', section_id, 'name'),
-			    cfgvalue = this.cfgvalue(section_id);
+			    cfgvalue = this.cfgvalue(section_id),
+			    oldNetworks = L.toArray(cfgvalue),
+			    newNetworks = L.toArray(formvalue);
 
-			if (typeof(cfgvalue) == 'string' && Array.isArray(formvalue) && (cfgvalue == formvalue.join(' ')))
+			oldNetworks.sort();
+			newNetworks.sort();
+
+			if (oldNetworks.join(' ') == newNetworks.join(' '))
 				return;
 
 			var tasks = [ firewall.getZone(name) ];
 
 			if (Array.isArray(formvalue))
-				for (var i = 0; i < formvalue.length; i++) {
-					var netname = formvalue[i];
-					tasks.push(network.getNetwork(netname).then(function(net) {
+				for (var i = 0; i < newNetworks.length; i++) {
+					var netname = newNetworks[i];
+					tasks.push(network.getNetwork(netname).then(L.bind(function(netname, net) {
 						return net || network.addNetwork(netname, { 'proto': 'none' });
-					}));
+					}, this, netname)));
 				}
 
 			return Promise.all(tasks).then(function(zone_networks) {
-				if (zone_networks[0])
+				if (zone_networks[0]) {
+					zone_networks[0].clearNetworks();
 					for (var i = 1; i < zone_networks.length; i++)
 						zone_networks[0].addNetwork(zone_networks[i].getName());
+				}
 			});
 		};
 
@@ -189,7 +224,7 @@ return L.view.extend({
 		o.multiple = true;
 
 		o = s.taboption('advanced', form.DynamicList, 'subnet', _('Covered subnets'), _('Use this option to classify zone traffic by source or destination subnet instead of networks or devices.'));
-		o.datatype = 'neg(cidr)';
+		o.datatype = 'neg(cidr("true"))';
 		o.modalonly = true;
 		o.multiple = true;
 
@@ -224,7 +259,7 @@ return L.view.extend({
 		o.depends('auto_helper', '0');
 		o.modalonly = true;
 		for (var i = 0; i < ctHelpers.length; i++)
-			o.value(ctHelpers[i].name, '<span class="hide-close">%s (%s)</span><span class="hide-open">%s</span>'.format(ctHelpers[i].description, ctHelpers[i].name.toUpperCase(), ctHelpers[i].name.toUpperCase()));
+			o.value(ctHelpers[i].name, E('<span><span class="hide-close">%s (%s)</span><span class="hide-open">%s</span></span>'.format(ctHelpers[i].description, ctHelpers[i].name.toUpperCase(), ctHelpers[i].name.toUpperCase())));
 
 		o = s.taboption('advanced', form.Flag, 'log', _('Enable logging on this zone'));
 		o.modalonly = true;

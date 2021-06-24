@@ -1,0 +1,69 @@
+{
+	"luci-mod-network-config": {
+		"description": "Grant access to network configuration",
+		"read": {
+			"cgi-io": [ "exec" ],
+			"file": {
+				"/etc/iproute2/rt_tables": [ "read" ],
+				"/proc/sys/net/ipv6/conf/*/mtu": [ "read" ],
+				"/proc/sys/net/ipv6/conf/*/hop_limit": [ "read" ],
+				"/usr/libexec/luci-peeraddr": [ "exec" ],
+				"/usr/lib/opkg/info/netifd.control": [ "read" ]
+			},
+			"ubus": {
+				"file": [ "exec" ],
+				"iwinfo": [ "assoclist", "countrylist", "freqlist", "txpowerlist" ],
+				"luci": [ "getSwconfigFeatures", "getSwconfigPortState" ]
+			},
+			"uci": [ "dhcp", "firewall", "network", "wireless" ]
+		},
+		"write": {
+			"cgi-io": [ "exec" ],
+			"file": {
+				"/sbin/ifup": [ "exec" ],
+				"/sbin/ifdown": [ "exec" ],
+				"/sbin/wifi": [ "exec" ]
+			},
+			"ubus": {
+				"file": [ "exec" ],
+				"hostapd.*": [ "del_client" ],
+				"iwinfo": [ "scan" ]
+			},
+			"uci": [ "dhcp", "firewall", "network", "wireless" ]
+		}
+	},
+
+	"luci-mod-network-dhcp": {
+		"description": "Grant access to DHCP configuration",
+		"read": {
+			"ubus": {
+				"luci-rpc": [ "getDHCPLeases", "getDUIDHints" ]
+			},
+			"uci": [ "dhcp" ]
+		},
+		"write": {
+			"uci": [ "dhcp" ]
+		}
+	},
+
+	"luci-mod-network-diagnostics": {
+		"description": "Grant access to network diagnostic tools",
+		"read": {
+			"file": {
+				"/bin/ping": [ "exec" ],
+				"/bin/ping6": [ "exec", "list" ],
+				"/bin/traceroute": [ "exec" ],
+				"/bin/traceroute6": [ "exec", "list" ],
+				"/usr/bin/nslookup": [ "exec" ],
+				"/usr/bin/ping": [ "exec" ],
+				"/usr/bin/ping6": [ "exec", "list" ],
+				"/usr/bin/traceroute": [ "exec" ],
+				"/usr/bin/traceroute6": [ "exec", "list" ]
+			},
+			"ubus": {
+				"file": [ "exec", "stat" ]
+			},
+			"uci": [ "luci" ]
+		}
+	}
+}

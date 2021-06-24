@@ -12,6 +12,7 @@ function index()
 	page.target = firstchild()
 	page.title  = _("VoIP")
 	page.order  = 90
+	page.acl_depends = { "luci-app-ltqtapi" }
 
 	entry({"admin", "telephony", "account"}, cbi("luci_ltqtapi/account") , _("Account"), 10)
 	entry({"admin", "telephony", "contact"}, cbi("luci_ltqtapi/contact") , _("Contacts"), 20)

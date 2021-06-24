@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2020-01-26 21:49+0000\n"
+"PO-Revision-Date: 2020-06-16 16:09+0000\n"
 "Last-Translator: Marcin Net <marcin.net@linux.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsocserv/pl/>\n"
@@ -9,7 +9,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 3.11-dev\n"
+"X-Generator: Weblate 4.1.1-dev\n"
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:124
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/user-config.lua:80
@@ -116,6 +116,10 @@ msgstr "Strefa zapory sieciowej"
 msgid "General Settings"
 msgstr "Ustawienia główne"
 
+#: applications/luci-app-ocserv/root/usr/share/rpcd/acl.d/luci-app-ocserv.json:3
+msgid "Grant UCI access for luci-app-ocserv"
+msgstr "Udziel dostępu UCI do luci-app-ocserv"
+
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/users.lua:23
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/users.lua:67
 #: applications/luci-app-ocserv/luasrc/view/ocserv_status.htm:52
@@ -189,15 +193,15 @@ msgstr ""
 "Podaj adresy klientów z podsieci LAN; jeśli jest włączona, poniższa sieć "
 "musi być podsiecią LAN. Należy pamiętać, że pierwszy adres określonej "
 "podsieci będzie zarezerwowany przez ocserv, więc nie powinien być używany. "
-"Jeśli masz sieć w sieci LAN obejmującą 192.168.1.0/24, użyj 192.168.1.192/"
-"26, aby zarezerwować górne 62 adresy."
+"Jeśli masz sieć w sieci LAN obejmującą 192.168.1.0/24, użyj "
+"192.168.1.192/26, aby zarezerwować górne 62 adresy."
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:143
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/user-config.lua:122
 msgid "Routing table"
 msgstr "Tabela trasowania"
 
-#: applications/luci-app-ocserv/luasrc/controller/ocserv.lua:19
+#: applications/luci-app-ocserv/luasrc/controller/ocserv.lua:20
 msgid "Server Settings"
 msgstr "Ustawienia serwera"
 
@@ -306,7 +310,7 @@ msgstr "Użytkownik"
 msgid "User Authentication"
 msgstr "Uwierzytelnianie użytkownika"
 
-#: applications/luci-app-ocserv/luasrc/controller/ocserv.lua:24
+#: applications/luci-app-ocserv/luasrc/controller/ocserv.lua:25
 msgid "User Settings"
 msgstr "Ustawienia użytkownika"
 
@@ -345,5 +349,5 @@ msgid ""
 "View the CA certificate used by this server. You will need to save it as 'ca."
 "pem' and import it into the clients."
 msgstr ""
-"Wyświetl certyfikat CA używany przez ten serwer. Musisz zapisać go jako "
-"'ca.pem' i zaimportować do klientów."
+"Wyświetl certyfikat CA używany przez ten serwer. Musisz zapisać go jako 'ca."
+"pem' i zaimportować do klientów."

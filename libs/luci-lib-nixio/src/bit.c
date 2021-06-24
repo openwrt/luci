@@ -120,7 +120,7 @@ static int nixio_bit_swap(lua_State *L) {
 }
 
 /* module table */
-static const luaL_reg R[] = {
+static const luaL_Reg R[] = {
 	{"bor",			nixio_bit_or},
 	{"set",			nixio_bit_or},
 	{"band",		nixio_bit_and},

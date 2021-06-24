@@ -32,7 +32,7 @@ msgstr "Přidat trasu po navázání spojení"
 msgid "Add template based configuration"
 msgstr "Přidat konfiguraci založenou na předloze"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:746
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:748
 msgid "Additional authentication over TLS"
 msgstr "Dodatečné ověření přes TLS"
 
@@ -45,7 +45,7 @@ msgstr "Povolit provoz typu klient-klient"
 msgid "Allow multiple clients with same certificate"
 msgstr "Povolit více klientů se stejným certifikátem"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:738
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:740
 msgid "Allow only one session"
 msgstr "Povolit pouze jedno sezení"
 
@@ -101,7 +101,7 @@ msgstr "Změnit prioritu procesu"
 msgid "Change to directory before initialization"
 msgstr "Změnit na adresář před inicializací"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:774
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:776
 msgid "Check peer certificate against a CRL"
 msgstr ""
 "Zkontrolovat certifikát druhé strany proti revokačnímu seznamu certifikátů "
@@ -188,7 +188,7 @@ msgstr "Ve skutečnosti nespouštět příkazy ifconfig/netsh"
 msgid "Don't add routes automatically"
 msgstr "Nepřidávat trasy automaticky"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:758
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:760
 msgid "Don't cache --askpass or --auth-user-pass passwords"
 msgstr "Neukládat --askpass nebo --auth-user-pass passwords do mezipaměti"
 
@@ -250,10 +250,6 @@ msgstr "Povolit TLS a převzít roli klienta"
 msgid "Enable TLS and assume server role"
 msgstr "Povolit TLS a převzít roli serveru"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:165
-msgid "Enable a compression algorithm"
-msgstr "Povolit kompresní algoritmus"
-
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:278
 msgid "Enable internal datagram fragmentation"
 msgstr "Povolit interní fragmentaci datagramů"
@@ -266,7 +262,7 @@ msgstr "Povolit správu rozhraní na <em>IP</em> <em>port</em>"
 msgid "Enabled"
 msgstr "Zapnuto"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:750
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:752
 msgid "Encrypt and authenticate all control channel packets with the key"
 msgstr "Šifrovat a autentizovat všechny pakety řídícího kanálu pomocí klíče"
 
@@ -298,9 +294,13 @@ msgstr ""
 "Provádí se v režimu serveru, kdykoli je do interní směrovací tabulky OpenVPN "
 "přidána adresa / trasa IPv4 nebo adresa MAC"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:742
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:744
 msgid "Exit on TLS negotiation failure"
 msgstr "Ukončit při selhání vyjednávání TLS"
+
+#: applications/luci-app-openvpn/root/usr/share/rpcd/acl.d/luci-app-openvpn.json:3
+msgid "Grant access to OpenVPN configuration"
+msgstr ""
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:573
 msgid "HMAC authentication for packets"
@@ -344,7 +344,7 @@ msgstr "Ponechat vzdálenou IP adresu po restartu"
 msgid "Keep tun/tap device open on restart"
 msgstr "Ponechat TUN/TAP zařízení otevřené po restartu"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:734
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:736
 msgid "Key transition window"
 msgstr "Časové okno přechodu mezi klíči"
 
@@ -390,7 +390,7 @@ msgstr "Počet řádků ve vyrovnávací paměti historie protokolu"
 msgid "OVPN configuration file upload"
 msgstr "Nahrání konfiguračního souboru OVPN"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:762
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:764
 msgid "Only accept connections from given X509 name"
 msgstr "Přijmout pouze spojení z daného X.509 názvu"
 
@@ -498,15 +498,15 @@ msgstr "Název vzdáleného hostitele nebo adresa IP"
 msgid "Remote ping timeout"
 msgstr "Časový limit pingu protistrany"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:718
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:720
 msgid "Renegotiate data chan. key after bytes"
 msgstr "Znovuvyjednat klíč datového kanálu po n bajtech"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:722
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:724
 msgid "Renegotiate data chan. key after packets"
 msgstr "Znovuvyjednat klíč datového kanálu po n paketech"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:726
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:728
 msgid "Renegotiate data chan. key after seconds"
 msgstr "Znovuvyjednat klíč datového kanálu po n sekundách"
 
@@ -514,11 +514,11 @@ msgstr "Znovuvyjednat klíč datového kanálu po n sekundách"
 msgid "Replay protection sliding window size"
 msgstr "Velikost posuvného okna ochrany proti přehrání"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:766
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:768
 msgid "Require explicit designation on certificate"
 msgstr "Vyžadovat explicitní označení na certifikátu (zastaralé)"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:770
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:772
 msgid "Require explicit key usage on certificate"
 msgstr "Vyžadovat explicitní označení klíče u certifikátu"
 
@@ -526,11 +526,11 @@ msgstr "Vyžadovat explicitní označení klíče u certifikátu"
 msgid "Restart after remote ping timeout"
 msgstr "Vyvolat SIGUSR1 restart pro vypršení časového limitu ping protistrany"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:794
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:796
 msgid "Restrict the allowed ciphers to be negotiated"
 msgstr "Omezit povolené šifry pro vyjednání"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:714
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:716
 msgid "Retransmit timeout on TLS control channel"
 msgstr "Časový limit opakovaného odesílání v kontrolním kanálu TLS"
 
@@ -571,6 +571,19 @@ msgstr ""
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-file.lua:40
 msgid "Section to modify the OVPN config file (%s)"
 msgstr "Sekce pro úpravu konfiguračního souboru OVPN (%s)"
+
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:257
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-basic.lua:45
+msgid ""
+"Security recommendation: It is recommended to not enable compression and set "
+"this parameter to `no`"
+msgstr ""
+
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:165
+msgid ""
+"Security recommendation: It is recommended to not enable compression and set "
+"this parameter to `stub-v2`"
+msgstr ""
 
 #: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:85
 msgid "Select template ..."
@@ -703,11 +716,11 @@ msgstr "Číslo portu TCP/UDP pro místní stranu (výchozí = 1194)"
 msgid "TCP/UDP port # for remote (default=1194)"
 msgstr "Číslo portu TCP/UDP pro vzdálenou stranu (výchozí = 1194)"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:710
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:712
 msgid "TLS 1.3 or newer cipher"
 msgstr "TLS 1.3 nebo novější šifra"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:702
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:704
 msgid "TLS cipher"
 msgstr "TLS šifra"
 
@@ -734,16 +747,16 @@ msgid ""
 "configuration."
 msgstr "Konfigurační soubor OVPN (%s) nebyl nalezen, zkontrolujte konfiguraci."
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:782
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:784
 msgid "The highest supported TLS version"
 msgstr "Nejvyšší podporovaná verze TLS"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:786
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:788
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-basic.lua:69
 msgid "The key direction for 'tls-auth' and 'secret' options"
 msgstr "Směr klíče pro možnosti 'tls-auth' a 'secret'"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:778
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:780
 msgid "The lowest supported TLS version"
 msgstr "Nejnižší podporovaná verze TLS"
 
@@ -755,11 +768,11 @@ msgstr ""
 "Konfigurační soubor OVPN (%s) je příliš velký pro online úpravy v LuCI (&ge; "
 "100 KB)."
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:790
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:792
 msgid "This completely disables cipher negotiation"
 msgstr "Zcela zakázat vyjednání šifry"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:730
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:732
 msgid "Timeframe for key exchange"
 msgstr "Časový rámec pro výměnu klíčů"
 
@@ -775,11 +788,6 @@ msgstr "Nahrát"
 #: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:104
 msgid "Upload ovpn file"
 msgstr "Nahrát OVPN soubor"
-
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:257
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-basic.lua:45
-msgid "Use fast LZO compression"
-msgstr "Používat rychlou kompresi LZO"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:510
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-basic.lua:97
@@ -823,6 +831,12 @@ msgstr "časový limit nečinnosti TUN/TAP"
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn.lua:111
 msgid "yes (%i)"
 msgstr "ano (%i)"
+
+#~ msgid "Enable a compression algorithm"
+#~ msgstr "Povolit kompresní algoritmus"
+
+#~ msgid "Use fast LZO compression"
+#~ msgstr "Používat rychlou kompresi LZO"
 
 #~ msgid "%s"
 #~ msgstr "%s"

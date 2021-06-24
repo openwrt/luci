@@ -1,0 +1,18 @@
+{
+	"luci-app-transmission": {
+		"description": "Grant UCI access for luci-app-transmission",
+		"read": {
+			"file": {
+				"/usr/share/transmission/web/index.html": [ "list" ]
+			},
+			"ubus": {
+				"file": [ "stat" ],
+				"service": [ "list" ]
+			},
+			"uci": [ "transmission" ]
+		},
+		"write": {
+			"uci": [ "transmission" ]
+		}
+	}
+}

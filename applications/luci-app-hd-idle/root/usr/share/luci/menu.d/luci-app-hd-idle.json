@@ -3,11 +3,11 @@
 		"title": "HDD Idle",
 		"order": 60,
 		"action": {
-			"type": "cbi",
-			"path": "hd_idle",
-			"post": { "cbi.submit": true }
+			"type": "view",
+			"path": "hd_idle"
 		},
 		"depends": {
+			"acl": [ "luci-app-hd-idle" ],
 			"uci": { "hd-idle": true }
 		}
 	}

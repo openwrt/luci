@@ -13,6 +13,7 @@ function index()
 		cbi("olsr/olsrd6"), "OLSR IPv6"
 	)
 	ol.subindex = true
+	ol.acl_depends = { "luci-app-olsr" }
 
 	entry(
 		{"admin", "services", "olsrd6", "iface"},

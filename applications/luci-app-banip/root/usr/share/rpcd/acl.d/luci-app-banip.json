@@ -1,0 +1,38 @@
+{
+	"luci-app-banip": {
+		"description": "Grant access to LuCI app banIP",
+		"write": {
+			"uci": [ "banip" ],
+			"file": {
+				"/etc/banip/*": [ "read" ],
+				"/etc/banip/banip.blacklist": [ "write" ],
+				"/etc/banip/banip.whitelist": [ "write" ],
+				"/etc/banip/banip.maclist": [ "write" ]
+			}
+		},
+		"read": {
+			"cgi-io": [ "exec" ],
+			"file": {
+				"/var/run/banip.pid": [ "read" ],
+				"/tmp/ban_runtime.json": [ "read" ],
+				"/sbin/logread -e banIP-": [ "exec" ],
+				"/usr/sbin/logread -e banIP-": [ "exec" ],
+				"/usr/sbin/iptables -L": [ "exec" ],
+				"/usr/sbin/ip6tables -L": [ "exec" ],
+				"/etc/init.d/banip list" : [ "exec" ],
+				"/etc/init.d/banip refresh" : [ "exec" ],
+				"/etc/init.d/banip reload" : [ "exec" ],
+				"/etc/init.d/banip restart" : [ "exec" ],
+				"/etc/init.d/banip suspend" : [ "exec" ],
+				"/etc/init.d/banip resume" : [ "exec" ],
+				"/etc/init.d/banip report gen" : [ "exec" ],
+				"/etc/init.d/banip report json" : [ "exec" ],
+				"/etc/init.d/banip timer list" : [ "exec" ],
+				"/etc/init.d/banip timer remove [0-9]*" : [ "exec" ],
+				"/etc/init.d/banip timer add * [0-9]* [0-9*]* [1-7,-*]*" : [ "exec" ],
+				"/etc/init.d/banip query *" : [ "exec" ]
+			},
+			"uci": [ "banip" ]
+		}
+	}
+}

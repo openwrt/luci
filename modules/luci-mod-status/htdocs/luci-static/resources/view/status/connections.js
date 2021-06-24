@@ -1,4 +1,7 @@
 'use strict';
+'require view';
+'require poll';
+'require request';
 'require rpc';
 
 var callLuciRealtimeStats = rpc.declare({
@@ -30,10 +33,10 @@ var recheck_lookup_queue = {};
 
 Math.log2 = Math.log2 || function(x) { return Math.log(x) * Math.LOG2E; };
 
-return L.view.extend({
+return view.extend({
 	load: function() {
 		return Promise.all([
-			this.loadSVG(L.resource('connections.svg'))
+			this.loadSVG(L.resource('svg/connections.svg'))
 		]);
 	},
 
@@ -130,8 +133,8 @@ return L.view.extend({
 			rows.push([
 				c.layer3.toUpperCase(),
 				c.layer4.toUpperCase(),
-				c.hasOwnProperty('sport') ? (src + ':' + c.sport) : src,
-				c.hasOwnProperty('dport') ? (dst + ':' + c.dport) : dst,
+				'%h'.format(c.hasOwnProperty('sport') ? (src + ':' + c.sport) : src),
+				'%h'.format(c.hasOwnProperty('dport') ? (dst + ':' + c.dport) : dst),
 				'%1024.2mB (%d %s)'.format(c.bytes, c.packets, _('Pkts.'))
 			]);
 		}
@@ -177,7 +180,7 @@ return L.view.extend({
 	},
 
 	pollData: function() {
-		L.Poll.add(L.bind(function() {
+		poll.add(L.bind(function() {
 			var tasks = [
 				L.resolveDefault(callLuciConntrackList(), [])
 			];
@@ -278,6 +281,8 @@ return L.view.extend({
 							y = ctx.height - Math.floor(values[i][j] * data_scale);
 							//y -= Math.floor(y % (1 / data_scale));
 
+							y = isNaN(y) ? ctx.height : y;
+
 							pt += ' ' + x + ',' + y;
 						}
 
@@ -300,7 +305,7 @@ return L.view.extend({
 	},
 
 	loadSVG: function(src) {
-		return L.Request.get(src).then(function(response) {
+		return request.get(src).then(function(response) {
 			if (!response.ok)
 				throw new Error(response.statusText);
 
@@ -318,36 +323,36 @@ return L.view.extend({
 			E('div', { 'class': 'right' }, E('small', { 'id': 'scale' }, '-')),
 			E('br'),
 
-			E('div', { 'class': 'table', 'style': 'width:100%;table-layout:fixed' }, [
-				E('div', { 'class': 'tr' }, [
-					E('div', { 'class': 'td right top' }, E('strong', { 'style': 'border-bottom:2px solid blue' }, [ _('UDP:') ])),
-					E('div', { 'class': 'td', 'id': 'lb_udp_cur' }, [ '0' ]),
+			E('table', { 'class': 'table', 'style': 'width:100%;table-layout:fixed' }, [
+				E('tr', { 'class': 'tr' }, [
+					E('td', { 'class': 'td right top' }, E('strong', { 'style': 'border-bottom:2px solid blue' }, [ _('UDP:') ])),
+					E('td', { 'class': 'td', 'id': 'lb_udp_cur' }, [ '0' ]),
 
-					E('div', { 'class': 'td right top' }, E('strong', {}, [ _('Average:') ])),
-					E('div', { 'class': 'td', 'id': 'lb_udp_avg' }, [ '0' ]),
+					E('td', { 'class': 'td right top' }, E('strong', {}, [ _('Average:') ])),
+					E('td', { 'class': 'td', 'id': 'lb_udp_avg' }, [ '0' ]),
 
-					E('div', { 'class': 'td right top' }, E('strong', {}, [ _('Peak:') ])),
-					E('div', { 'class': 'td', 'id': 'lb_udp_peak' }, [ '0' ])
+					E('td', { 'class': 'td right top' }, E('strong', {}, [ _('Peak:') ])),
+					E('td', { 'class': 'td', 'id': 'lb_udp_peak' }, [ '0' ])
 				]),
-				E('div', { 'class': 'tr' }, [
-					E('div', { 'class': 'td right top' }, E('strong', { 'style': 'border-bottom:2px solid green' }, [ _('TCP:') ])),
-					E('div', { 'class': 'td', 'id': 'lb_tcp_cur' }, [ '0' ]),
+				E('tr', { 'class': 'tr' }, [
+					E('td', { 'class': 'td right top' }, E('strong', { 'style': 'border-bottom:2px solid green' }, [ _('TCP:') ])),
+					E('td', { 'class': 'td', 'id': 'lb_tcp_cur' }, [ '0' ]),
 
-					E('div', { 'class': 'td right top' }, E('strong', {}, [ _('Average:') ])),
-					E('div', { 'class': 'td', 'id': 'lb_tcp_avg' }, [ '0' ]),
+					E('td', { 'class': 'td right top' }, E('strong', {}, [ _('Average:') ])),
+					E('td', { 'class': 'td', 'id': 'lb_tcp_avg' }, [ '0' ]),
 
-					E('div', { 'class': 'td right top' }, E('strong', {}, [ _('Peak:') ])),
-					E('div', { 'class': 'td', 'id': 'lb_tcp_peak' }, [ '0' ])
+					E('td', { 'class': 'td right top' }, E('strong', {}, [ _('Peak:') ])),
+					E('td', { 'class': 'td', 'id': 'lb_tcp_peak' }, [ '0' ])
 				]),
-				E('div', { 'class': 'tr' }, [
-					E('div', { 'class': 'td right top' }, E('strong', { 'style': 'border-bottom:2px solid red' }, [ _('Other:') ])),
-					E('div', { 'class': 'td', 'id': 'lb_otr_cur' }, [ '0' ]),
+				E('tr', { 'class': 'tr' }, [
+					E('td', { 'class': 'td right top' }, E('strong', { 'style': 'border-bottom:2px solid red' }, [ _('Other:') ])),
+					E('td', { 'class': 'td', 'id': 'lb_otr_cur' }, [ '0' ]),
 
-					E('div', { 'class': 'td right top' }, E('strong', {}, [ _('Average:') ])),
-					E('div', { 'class': 'td', 'id': 'lb_otr_avg' }, [ '0' ]),
+					E('td', { 'class': 'td right top' }, E('strong', {}, [ _('Average:') ])),
+					E('td', { 'class': 'td', 'id': 'lb_otr_avg' }, [ '0' ]),
 
-					E('div', { 'class': 'td right top' }, E('strong', {}, [ _('Peak:') ])),
-					E('div', { 'class': 'td', 'id': 'lb_otr_peak' }, [ '0' ])
+					E('td', { 'class': 'td right top' }, E('strong', {}, [ _('Peak:') ])),
+					E('td', { 'class': 'td', 'id': 'lb_otr_peak' }, [ '0' ])
 				])
 			]),
 
@@ -373,16 +378,16 @@ return L.view.extend({
 			E('br'),
 
 			E('div', { 'class': 'cbi-section-node' }, [
-				E('div', { 'class': 'table', 'id': 'connections' }, [
-					E('div', { 'class': 'tr table-titles' }, [
-						E('div', { 'class': 'th col-2 hide-xs' }, [ _('Network') ]),
-						E('div', { 'class': 'th col-2' }, [ _('Protocol') ]),
-						E('div', { 'class': 'th col-7' }, [ _('Source') ]),
-						E('div', { 'class': 'th col-7' }, [ _('Destination') ]),
-						E('div', { 'class': 'th col-4' }, [ _('Transfer') ])
+				E('table', { 'class': 'table', 'id': 'connections' }, [
+					E('tr', { 'class': 'tr table-titles' }, [
+						E('th', { 'class': 'th col-2 hide-xs' }, [ _('Network') ]),
+						E('th', { 'class': 'th col-2' }, [ _('Protocol') ]),
+						E('th', { 'class': 'th col-7' }, [ _('Source') ]),
+						E('th', { 'class': 'th col-7' }, [ _('Destination') ]),
+						E('th', { 'class': 'th col-4' }, [ _('Transfer') ])
 					]),
-					E('div', { 'class': 'tr placeholder' }, [
-						E('div', { 'class': 'td' }, [
+					E('tr', { 'class': 'tr placeholder' }, [
+						E('td', { 'class': 'td' }, [
 							E('em', {}, [ _('Collecting data...') ])
 						])
 					])

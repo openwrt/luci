@@ -197,7 +197,7 @@ static int nixio_poll(lua_State *L) {
 }
 
 /* module table */
-static const luaL_reg R[] = {
+static const luaL_Reg R[] = {
 	{"gettimeofday", nixio_gettimeofday},
 	{"nanosleep",	nixio_nanosleep},
 	{"poll",		nixio_poll},

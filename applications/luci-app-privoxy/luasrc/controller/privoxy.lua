@@ -21,7 +21,7 @@ local app_title   = "Privoxy WEB proxy"
 local app_version = "1.0.6-1"
 
 function index()
-	entry( {"admin", "services", "privoxy"}, cbi("privoxy"), _("Privoxy WEB proxy"), 59)
+	entry( {"admin", "services", "privoxy"}, cbi("privoxy"), _("Privoxy WEB proxy"), 59).acl_depends = { "luci-app-privoxy" }
 	entry( {"admin", "services", "privoxy", "logview"}, call("logread") ).leaf = true
 	entry( {"admin", "services", "privoxy", "startstop"}, post("startstop") ).leaf = true
 	entry( {"admin", "services", "privoxy", "status"}, call("get_pid") ).leaf = true

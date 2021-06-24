@@ -1,4 +1,7 @@
 'use strict';
+'require view';
+'require poll';
+'require request';
 'require ui';
 'require rpc';
 'require network';
@@ -15,11 +18,11 @@ var graphPolls = [],
 
 Math.log2 = Math.log2 || function(x) { return Math.log(x) * Math.LOG2E; };
 
-return L.view.extend({
+return view.extend({
 	load: function() {
 		return Promise.all([
-			this.loadSVG(L.resource('wireless.svg')),
-			this.loadSVG(L.resource('wifirate.svg')),
+			this.loadSVG(L.resource('svg/wireless.svg')),
+			this.loadSVG(L.resource('svg/wifirate.svg')),
 			network.getWifiDevices().then(function(radios) {
 				var tasks = [], all_networks = [];
 
@@ -102,7 +105,7 @@ return L.view.extend({
 	},
 
 	pollData: function() {
-		L.Poll.add(L.bind(function() {
+		poll.add(L.bind(function() {
 			var tasks = [];
 
 			for (var i = 0; i < graphPolls.length; i++) {
@@ -199,6 +202,8 @@ return L.view.extend({
 							y = ctx.height - Math.floor(values[i][j] * data_scale);
 							//y -= Math.floor(y % (1 / data_scale));
 
+							y = isNaN(y) ? ctx.height : y;
+
 							pt += ' ' + x + ',' + y;
 						}
 
@@ -221,7 +226,7 @@ return L.view.extend({
 	},
 
 	loadSVG: function(src) {
-		return L.Request.get(src).then(function(response) {
+		return request.get(src).then(function(response) {
 			if (!response.ok)
 				throw new Error(response.statusText);
 
@@ -252,26 +257,26 @@ return L.view.extend({
 				E('div', { 'class': 'right' }, E('small', { 'id': 'scale' }, '-')),
 				E('br'),
 
-				E('div', { 'class': 'table', 'style': 'width:100%;table-layout:fixed' }, [
-					E('div', { 'class': 'tr' }, [
-						E('div', { 'class': 'td right top' }, E('strong', { 'style': 'border-bottom:2px solid blue' }, [ _('Signal:') ])),
-						E('div', { 'class': 'td', 'id': 'rssi_bw_cur' }, [ '0 ' + _('dBm') ]),
+				E('table', { 'class': 'table', 'style': 'width:100%;table-layout:fixed' }, [
+					E('tr', { 'class': 'tr' }, [
+						E('td', { 'class': 'td right top' }, E('strong', { 'style': 'border-bottom:2px solid blue' }, [ _('Signal:') ])),
+						E('td', { 'class': 'td', 'id': 'rssi_bw_cur' }, [ '0 ' + _('dBm') ]),
 
-						E('div', { 'class': 'td right top' }, E('strong', {}, [ _('Average:') ])),
-						E('div', { 'class': 'td', 'id': 'rssi_bw_avg' }, [ '0 ' + _('dBm') ]),
+						E('td', { 'class': 'td right top' }, E('strong', {}, [ _('Average:') ])),
+						E('td', { 'class': 'td', 'id': 'rssi_bw_avg' }, [ '0 ' + _('dBm') ]),
 
-						E('div', { 'class': 'td right top' }, E('strong', {}, [ _('Peak:') ])),
-						E('div', { 'class': 'td', 'id': 'rssi_bw_peak' }, [ '0 ' + _('dBm') ])
+						E('td', { 'class': 'td right top' }, E('strong', {}, [ _('Peak:') ])),
+						E('td', { 'class': 'td', 'id': 'rssi_bw_peak' }, [ '0 ' + _('dBm') ])
 					]),
-					E('div', { 'class': 'tr' }, [
-						E('div', { 'class': 'td right top' }, E('strong', { 'style': 'border-bottom:2px solid red' }, [ _('Noise:') ])),
-						E('div', { 'class': 'td', 'id': 'noise_bw_cur' }, [ '0 ' + _('dBm') ]),
+					E('tr', { 'class': 'tr' }, [
+						E('td', { 'class': 'td right top' }, E('strong', { 'style': 'border-bottom:2px solid red' }, [ _('Noise:') ])),
+						E('td', { 'class': 'td', 'id': 'noise_bw_cur' }, [ '0 ' + _('dBm') ]),
 
-						E('div', { 'class': 'td right top' }, E('strong', {}, [ _('Average:') ])),
-						E('div', { 'class': 'td', 'id': 'noise_bw_avg' }, [ '0 ' + _('dBm') ]),
+						E('td', { 'class': 'td right top' }, E('strong', {}, [ _('Average:') ])),
+						E('td', { 'class': 'td', 'id': 'noise_bw_avg' }, [ '0 ' + _('dBm') ]),
 
-						E('div', { 'class': 'td right top' }, E('strong', {}, [ _('Peak:') ])),
-						E('div', { 'class': 'td', 'id': 'noise_bw_peak' }, [ '0 ' + _('dBm') ])
+						E('td', { 'class': 'td right top' }, E('strong', {}, [ _('Peak:') ])),
+						E('td', { 'class': 'td', 'id': 'noise_bw_peak' }, [ '0 ' + _('dBm') ])
 					])
 				]),
 				E('br'),
@@ -280,16 +285,16 @@ return L.view.extend({
 				E('div', { 'class': 'right' }, E('small', { 'id': 'scale2' }, '-')),
 				E('br'),
 
-				E('div', { 'class': 'table', 'style': 'width:100%;table-layout:fixed' }, [
-					E('div', { 'class': 'tr' }, [
-						E('div', { 'class': 'td right top' }, E('strong', { 'style': 'border-bottom:2px solid green' }, [ _('Phy Rate:') ])),
-						E('div', { 'class': 'td', 'id': 'rate_bw_cur' }, [ '0 MBit/s' ]),
+				E('table', { 'class': 'table', 'style': 'width:100%;table-layout:fixed' }, [
+					E('tr', { 'class': 'tr' }, [
+						E('td', { 'class': 'td right top' }, E('strong', { 'style': 'border-bottom:2px solid green' }, [ _('Phy Rate:') ])),
+						E('td', { 'class': 'td', 'id': 'rate_bw_cur' }, [ '0 Mbit/s' ]),
 
-						E('div', { 'class': 'td right top' }, E('strong', {}, [ _('Average:') ])),
-						E('div', { 'class': 'td', 'id': 'rate_bw_avg' }, [ '0 MBit/s' ]),
+						E('td', { 'class': 'td right top' }, E('strong', {}, [ _('Average:') ])),
+						E('td', { 'class': 'td', 'id': 'rate_bw_avg' }, [ '0 Mbit/s' ]),
 
-						E('div', { 'class': 'td right top' }, E('strong', {}, [ _('Peak:') ])),
-						E('div', { 'class': 'td', 'id': 'rate_bw_peak' }, [ '0 MBit/s' ])
+						E('td', { 'class': 'td right top' }, E('strong', {}, [ _('Peak:') ])),
+						E('td', { 'class': 'td', 'id': 'rate_bw_peak' }, [ '0 Mbit/s' ])
 					])
 				])
 			]));
@@ -315,9 +320,9 @@ return L.view.extend({
 			this.updateGraph(ifname, csvg2, [ { line: 'rate', multiply: 0.001 } ], function(svg, info) {
 				var G = svg.firstElementChild, tab = svg.parentNode;
 
-				G.getElementById('label_25').firstChild.data = '%.2f %s'.format(info.label_25, _('MBit/s'));
-				G.getElementById('label_50').firstChild.data = '%.2f %s'.format(info.label_50, _('MBit/s'));
-				G.getElementById('label_75').firstChild.data = '%.2f %s'.format(info.label_75, _('MBit/s'));
+				G.getElementById('label_25').firstChild.data = '%.2f %s'.format(info.label_25, _('Mbit/s'));
+				G.getElementById('label_50').firstChild.data = '%.2f %s'.format(info.label_50, _('Mbit/s'));
+				G.getElementById('label_75').firstChild.data = '%.2f %s'.format(info.label_75, _('Mbit/s'));
 
 				tab.querySelector('#scale2').firstChild.data = _('(%d minute window, %d second interval)').format(info.timeframe, info.interval);
 

@@ -1,25 +1,26 @@
 msgid ""
 msgstr ""
-"Content-Type: text/plain; charset=UTF-8\n"
 "Project-Id-Version: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Language-Team: \n"
-"MIME-Version: 1.0\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.0.7\n"
-"Last-Translator: INAGAKI Hiroshi <musashino.open@gmail.com>\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
+"PO-Revision-Date: 2020-12-13 05:29+0000\n"
+"Last-Translator: Ryota <21ryotagamer@gmail.com>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/openwrt/"
+"luciapplicationsdnscrypt-proxy/ja/>\n"
 "Language: ja\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 4.4-dev\n"
 
 #: applications/luci-app-dnscrypt-proxy/luasrc/model/cbi/dnscrypt-proxy/overview_tab.lua:139
 #: applications/luci-app-dnscrypt-proxy/luasrc/model/cbi/dnscrypt-proxy/overview_tab.lua:161
 msgid "-------"
 msgstr "（利用不可）"
 
-#: applications/luci-app-dnscrypt-proxy/luasrc/controller/dnscrypt-proxy.lua:17
+#: applications/luci-app-dnscrypt-proxy/luasrc/controller/dnscrypt-proxy.lua:21
 msgid "Advanced"
-msgstr "詳細"
+msgstr "詳細設定"
 
 #: applications/luci-app-dnscrypt-proxy/luasrc/model/cbi/dnscrypt-proxy/overview_tab.lua:215
 msgid "Alternate Resolver List"
@@ -72,16 +73,16 @@ msgstr "カスタム設定ファイルの作成"
 msgid "DNS Query Logfile"
 msgstr "DNS クエリ ログファイル"
 
-#: applications/luci-app-dnscrypt-proxy/luasrc/controller/dnscrypt-proxy.lua:14
+#: applications/luci-app-dnscrypt-proxy/luasrc/controller/dnscrypt-proxy.lua:15
 #: applications/luci-app-dnscrypt-proxy/luasrc/model/cbi/dnscrypt-proxy/overview_tab.lua:58
 msgid "DNSCrypt-Proxy"
 msgstr "DNSCrypt-Proxy"
 
-#: applications/luci-app-dnscrypt-proxy/luasrc/controller/dnscrypt-proxy.lua:35
+#: applications/luci-app-dnscrypt-proxy/luasrc/controller/dnscrypt-proxy.lua:39
 msgid "DNSCrypt-Proxy Logfile"
 msgstr "DNSCrypt-Proxy ログファイル"
 
-#: applications/luci-app-dnscrypt-proxy/luasrc/controller/dnscrypt-proxy.lua:26
+#: applications/luci-app-dnscrypt-proxy/luasrc/controller/dnscrypt-proxy.lua:30
 msgid "DNSCrypt-Proxy Resolver List"
 msgstr "DNSCrypt-Proxy リゾルバ リスト"
 
@@ -104,15 +105,15 @@ msgstr ""
 "現在のリゾルバ リストを 'github.com/dyne/dnscrypt-proxy' からダウンロードしま"
 "す。"
 
-#: applications/luci-app-dnscrypt-proxy/luasrc/controller/dnscrypt-proxy.lua:18
+#: applications/luci-app-dnscrypt-proxy/luasrc/controller/dnscrypt-proxy.lua:22
 msgid "Edit DNSCrypt-Proxy Configuration"
 msgstr "DNSCrypt-Proxy 設定の編集"
 
-#: applications/luci-app-dnscrypt-proxy/luasrc/controller/dnscrypt-proxy.lua:19
+#: applications/luci-app-dnscrypt-proxy/luasrc/controller/dnscrypt-proxy.lua:23
 msgid "Edit Dnsmasq Configuration"
 msgstr "Dnsmasq 設定の編集"
 
-#: applications/luci-app-dnscrypt-proxy/luasrc/controller/dnscrypt-proxy.lua:20
+#: applications/luci-app-dnscrypt-proxy/luasrc/controller/dnscrypt-proxy.lua:24
 msgid "Edit Resolvcrypt Configuration"
 msgstr "Resolvcrypt 設定の編集"
 
@@ -137,13 +138,15 @@ msgstr "ファイル日付"
 msgid ""
 "For further information <a href=\"%s\" target=\"_blank\">see the wiki "
 "online</a>"
-msgstr ""
-"詳細な情報は <a href=\"%s\" target=\"_blank\">オンライン Wiki</a> を確認して"
-"ください。"
+msgstr "詳細な情報は <a href=\"%s\" target=\"_blank\">オンライン Wiki</a> を確認してください"
 
 #: applications/luci-app-dnscrypt-proxy/luasrc/model/cbi/dnscrypt-proxy/overview_tab.lua:97
 msgid "General Options"
 msgstr "全般オプション"
+
+#: applications/luci-app-dnscrypt-proxy/root/usr/share/rpcd/acl.d/luci-app-dnscrypt-proxy.json:3
+msgid "Grant UCI access for luci-app-dnscrypt-proxy"
+msgstr "luci-app-dnscrypt-proxyにUCIアクセスを許可"
 
 #: applications/luci-app-dnscrypt-proxy/luasrc/model/cbi/dnscrypt-proxy/overview_tab.lua:189
 msgid "IP Address"
@@ -200,7 +203,7 @@ msgid "No default resolver list and no SSL support available.<br />"
 msgstr ""
 "デフォルトのリゾルバ リストと、利用可能な SSL サポートがありません。<br />"
 
-#: applications/luci-app-dnscrypt-proxy/luasrc/controller/dnscrypt-proxy.lua:15
+#: applications/luci-app-dnscrypt-proxy/luasrc/controller/dnscrypt-proxy.lua:19
 msgid "Overview"
 msgstr "概要"
 
@@ -269,7 +272,7 @@ msgstr "設定ファイル '/etc/resolv-crypt.conf' は既に存在していま�
 
 #: applications/luci-app-dnscrypt-proxy/luasrc/model/cbi/dnscrypt-proxy/overview_tab.lua:195
 msgid "The listening port for DNS queries."
-msgstr "DNS クエリを待ち受けるポートです。"
+msgstr "DNS クエリをリッスンするポートです。"
 
 #: applications/luci-app-dnscrypt-proxy/luasrc/model/cbi/dnscrypt-proxy/overview_tab.lua:190
 msgid ""
@@ -284,9 +287,8 @@ msgid ""
 "The value for this property is the blocklist type and path to the file, e."
 "g.'domains:/path/to/dbl.txt' or 'ips:/path/to/ipbl.txt'."
 msgstr ""
-"このプロパティの値は、ブロックリストのタイプ及びファイルへのパスの組み合わせ"
-"です。（例: 'domains:/path/to/domainlist.txt' または 'ips:/path/to/iplist."
-"txt'）"
+"このプロパティの値は、ブロックリストのタイプ及びファイルへのパスの組み合わせです（例: 'domains:/path/to/"
+"domainlist.txt' または 'ips:/path/to/iplist.txt'）。"
 
 #: applications/luci-app-dnscrypt-proxy/luasrc/model/cbi/dnscrypt-proxy/configuration_tab.lua:21
 msgid ""
@@ -345,10 +347,10 @@ msgstr ""
 msgid "Transfer Options To Dnsmasq"
 msgstr "Dnsmasq の転送オプション"
 
-#: applications/luci-app-dnscrypt-proxy/luasrc/controller/dnscrypt-proxy.lua:16
+#: applications/luci-app-dnscrypt-proxy/luasrc/controller/dnscrypt-proxy.lua:20
 msgid "View Logfile"
 msgstr "ログファイルの確認"
 
-#: applications/luci-app-dnscrypt-proxy/luasrc/controller/dnscrypt-proxy.lua:21
+#: applications/luci-app-dnscrypt-proxy/luasrc/controller/dnscrypt-proxy.lua:25
 msgid "View Resolver List"
 msgstr "リゾルバ リストの確認"

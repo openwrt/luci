@@ -8,12 +8,19 @@ function index()
 		return
 	end
 
-	entry({"admin", "status", "realtime", "rate"},
-		template("nft-qos/rate"), _("Rate"), 5).leaf = true
-	entry({"admin", "status", "realtime", "rate_status"},
-		call("action_rate")).leaf = true
-	entry({"admin", "services", "nft-qos"}, cbi("nft-qos/nft-qos"),
-		_("QoS over Nftables"), 60)
+	local e
+
+	e = entry({"admin", "status", "realtime", "rate"}, template("nft-qos/rate"), _("Rate"), 5)
+	e.leaf = true
+	e.acl_depends = { "luci-app-nft-qos" }
+
+	e = entry({"admin", "status", "realtime", "rate_status"}, call("action_rate"))
+	e.leaf = true
+	e.acl_depends = { "luci-app-nft-qos" }
+
+	e = entry({"admin", "services", "nft-qos"}, cbi("nft-qos/nft-qos"), _("QoS over Nftables"), 60)
+	e.leaf = true
+	e.acl_depends = { "luci-app-nft-qos" }
 end
 
 function _action_rate(rv, n)

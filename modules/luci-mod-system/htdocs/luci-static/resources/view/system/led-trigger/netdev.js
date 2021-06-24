@@ -1,9 +1,10 @@
 'use strict';
+'require baseclass';
 'require form';
 'require tools.widgets as widgets';
 
-return L.Class.extend({
-	trigger: _("netdev (kernel)"),
+return baseclass.extend({
+	trigger: _("Network device activity (kernel: netdev)"),
 	kernel: true,
 	addFormOptions(s){
 		var o;

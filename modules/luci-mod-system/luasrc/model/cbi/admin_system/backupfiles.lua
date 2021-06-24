@@ -68,7 +68,7 @@ else
 					break
 				else
 					files[#files+1] = "<li>"
-					files[#files+1] = luci.util.pcdata(ln)
+					files[#files+1] = luci.xml.pcdata(ln)
 					files[#files+1] = "</li>"
 				end
 			end

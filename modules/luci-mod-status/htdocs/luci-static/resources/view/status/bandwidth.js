@@ -1,4 +1,8 @@
 'use strict';
+'require view';
+'require dom';
+'require poll';
+'require request';
 'require ui';
 'require rpc';
 'require network';
@@ -20,10 +24,10 @@ function rate(n, br) {
 	return [ '%1024.2mbit/s'.format(n * 8), br ? E('br') : ' ', '(%1024.2mB/s)'.format(n) ]
 }
 
-return L.view.extend({
+return view.extend({
 	load: function() {
 		return Promise.all([
-			this.loadSVG(L.resource('bandwidth.svg')),
+			this.loadSVG(L.resource('svg/bandwidth.svg')),
 			network.getDevices()
 		]);
 	},
@@ -95,7 +99,7 @@ return L.view.extend({
 	},
 
 	pollData: function() {
-		L.Poll.add(L.bind(function() {
+		poll.add(L.bind(function() {
 			var tasks = [];
 
 			for (var i = 0; i < graphPolls.length; i++) {
@@ -205,6 +209,8 @@ return L.view.extend({
 							y = ctx.height - Math.floor(values[i][j] * data_scale);
 							//y -= Math.floor(y % (1 / data_scale));
 
+							y = isNaN(y) ? ctx.height : y;
+
 							pt += ' ' + x + ',' + y;
 						}
 
@@ -227,7 +233,7 @@ return L.view.extend({
 	},
 
 	loadSVG: function(src) {
-		return L.Request.get(src).then(function(response) {
+		return request.get(src).then(function(response) {
 			if (!response.ok)
 				throw new Error(response.statusText);
 
@@ -256,26 +262,26 @@ return L.view.extend({
 				E('div', { 'class': 'right' }, E('small', { 'id': 'scale' }, '-')),
 				E('br'),
 
-				E('div', { 'class': 'table', 'style': 'width:100%;table-layout:fixed' }, [
-					E('div', { 'class': 'tr' }, [
-						E('div', { 'class': 'td right top' }, E('strong', { 'style': 'border-bottom:2px solid blue' }, [ _('Inbound:') ])),
-						E('div', { 'class': 'td', 'id': 'rx_bw_cur' }, rate(0, true)),
+				E('table', { 'class': 'table', 'style': 'width:100%;table-layout:fixed' }, [
+					E('tr', { 'class': 'tr' }, [
+						E('td', { 'class': 'td right top' }, E('strong', { 'style': 'border-bottom:2px solid blue' }, [ _('Inbound:') ])),
+						E('td', { 'class': 'td', 'id': 'rx_bw_cur' }, rate(0, true)),
 
-						E('div', { 'class': 'td right top' }, E('strong', {}, [ _('Average:') ])),
-						E('div', { 'class': 'td', 'id': 'rx_bw_avg' }, rate(0, true)),
+						E('td', { 'class': 'td right top' }, E('strong', {}, [ _('Average:') ])),
+						E('td', { 'class': 'td', 'id': 'rx_bw_avg' }, rate(0, true)),
 
-						E('div', { 'class': 'td right top' }, E('strong', {}, [ _('Peak:') ])),
-						E('div', { 'class': 'td', 'id': 'rx_bw_peak' }, rate(0, true))
+						E('td', { 'class': 'td right top' }, E('strong', {}, [ _('Peak:') ])),
+						E('td', { 'class': 'td', 'id': 'rx_bw_peak' }, rate(0, true))
 					]),
-					E('div', { 'class': 'tr' }, [
-						E('div', { 'class': 'td right top' }, E('strong', { 'style': 'border-bottom:2px solid green' }, [ _('Outbound:') ])),
-						E('div', { 'class': 'td', 'id': 'tx_bw_cur' }, rate(0, true)),
+					E('tr', { 'class': 'tr' }, [
+						E('td', { 'class': 'td right top' }, E('strong', { 'style': 'border-bottom:2px solid green' }, [ _('Outbound:') ])),
+						E('td', { 'class': 'td', 'id': 'tx_bw_cur' }, rate(0, true)),
 
-						E('div', { 'class': 'td right top' }, E('strong', {}, [ _('Average:') ])),
-						E('div', { 'class': 'td', 'id': 'tx_bw_avg' }, rate(0, true)),
+						E('td', { 'class': 'td right top' }, E('strong', {}, [ _('Average:') ])),
+						E('td', { 'class': 'td', 'id': 'tx_bw_avg' }, rate(0, true)),
 
-						E('div', { 'class': 'td right top' }, E('strong', {}, [ _('Peak:') ])),
-						E('div', { 'class': 'td', 'id': 'tx_bw_peak' }, rate(0, true))
+						E('td', { 'class': 'td right top' }, E('strong', {}, [ _('Peak:') ])),
+						E('td', { 'class': 'td', 'id': 'tx_bw_peak' }, rate(0, true))
 					])
 				])
 			]));
@@ -289,13 +295,13 @@ return L.view.extend({
 
 				tab.querySelector('#scale').firstChild.data = _('(%d minute window, %d second interval)').format(info.timeframe, info.interval);
 
-				L.dom.content(tab.querySelector('#rx_bw_cur'), rate(info.line_current[0], true));
-				L.dom.content(tab.querySelector('#rx_bw_avg'), rate(info.line_average[0], true));
-				L.dom.content(tab.querySelector('#rx_bw_peak'), rate(info.line_peak[0], true));
+				dom.content(tab.querySelector('#rx_bw_cur'), rate(info.line_current[0], true));
+				dom.content(tab.querySelector('#rx_bw_avg'), rate(info.line_average[0], true));
+				dom.content(tab.querySelector('#rx_bw_peak'), rate(info.line_peak[0], true));
 
-				L.dom.content(tab.querySelector('#tx_bw_cur'), rate(info.line_current[1], true));
-				L.dom.content(tab.querySelector('#tx_bw_avg'), rate(info.line_average[1], true));
-				L.dom.content(tab.querySelector('#tx_bw_peak'), rate(info.line_peak[1], true));
+				dom.content(tab.querySelector('#tx_bw_cur'), rate(info.line_current[1], true));
+				dom.content(tab.querySelector('#tx_bw_avg'), rate(info.line_average[1], true));
+				dom.content(tab.querySelector('#tx_bw_peak'), rate(info.line_peak[1], true));
 			});
 		}
 

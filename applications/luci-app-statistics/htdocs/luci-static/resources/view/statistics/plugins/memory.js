@@ -1,7 +1,8 @@
 'use strict';
+'require baseclass';
 'require form';
 
-return L.Class.extend({
+return baseclass.extend({
 	title: _('Memory Plugin Configuration'),
 	description: _('The memory plugin collects statistics about the memory usage.'),
 

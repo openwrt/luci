@@ -102,7 +102,7 @@ static int nixio_syslog(lua_State *L) {
 }
 
 /* module table */
-static const luaL_reg R[] = {
+static const luaL_Reg R[] = {
 	{"openlog",		nixio_openlog},
 	{"syslog",		nixio_syslog},
 	{"setlogmask",	nixio_setlogmask},

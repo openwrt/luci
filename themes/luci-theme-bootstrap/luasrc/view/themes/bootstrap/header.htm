@@ -35,23 +35,15 @@
 		<% end -%>
 		<script src="<%=url('admin/translations', luci.i18n.context.lang)%><%# ?v=PKG_VERSION %>"></script>
 		<script src="<%=resource%>/cbi.js"></script>
-		<script src="<%=resource%>/xhr.js"></script>
-
-		<% include("themes/bootstrap/json-menu") %>
 	</head>
 
 	<body class="lang_<%=luci.i18n.context.lang%> <% if node then %><%= striptags( node.title ) %><%- end %>" data-page="<%= pcdata(table.concat(disp.context.requestpath, "-")) %>">
 		<header>
 			<div class="fill">
 				<div class="container">
-					<a class="brand" href="#"><%=boardinfo.hostname or "?"%></a>
+					<a class="brand" href="/"><%=striptags(boardinfo.hostname or "?")%></a>
 					<ul class="nav" id="topmenu" style="display:none"></ul>
-					<div class="pull-right">
-						<span id="xhr_poll_status" style="display:none" onclick="XHR.running() ? XHR.halt() : XHR.run()">
-							<span class="label success" id="xhr_poll_status_on"><%:Auto Refresh%> <%:on%></span>
-							<span class="label" id="xhr_poll_status_off" style="display:none"><%:Auto Refresh%> <%:off%></span>
-						</span>
-					</div>
+					<div id="indicators" class="pull-right"></div>
 				</div>
 			</div>
 		</header>
@@ -60,7 +52,7 @@
 			<%- if luci.sys.process.info("uid") == 0 and luci.sys.user.getuser("root") and not luci.sys.user.getpasswd("root") then -%>
 				<div class="alert-message warning">
 					<h4><%:No password set!%></h4>
-					<p><%:There is no password set on this router. Please configure a root password to protect the web interface and enable SSH.%></p>
+					<p><%:There is no password set on this router. Please configure a root password to protect the web interface.%></p>
 					<% if disp.lookup("admin/system/admin") then %>
 					  <div class="right"><a class="btn" href="<%=url("admin/system/admin")%>"><%:Go to password configuration...%></a></div>
 					<% end %>

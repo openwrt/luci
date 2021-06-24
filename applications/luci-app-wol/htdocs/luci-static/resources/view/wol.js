@@ -1,4 +1,6 @@
 'use strict';
+'require view';
+'require dom';
 'require uci';
 'require fs';
 'require ui';
@@ -6,7 +8,7 @@
 'require form';
 'require tools.widgets as widgets';
 
-return L.view.extend({
+return view.extend({
 	formdata: { wol: {} },
 
 	callHostHints: rpc.declare({
@@ -64,12 +66,17 @@ return L.view.extend({
 
 		o.rmempty = false;
 
-		Object.keys(hosts).sort().forEach(function(mac) {
-			o.value(mac, E([], [ mac, ' (', E('strong', [hosts[mac].name || hosts[mac].ipv4 || hosts[mac].ipv6 || '?']), ')' ]));
+		L.sortedKeys(hosts).forEach(function(mac) {
+			o.value(mac, E([], [ mac, ' (', E('strong', [
+				hosts[mac].name ||
+				L.toArray(hosts[mac].ipaddrs || hosts[mac].ipv4)[0] ||
+				L.toArray(hosts[mac].ip6addrs || hosts[mac].ipv6)[0] ||
+				'?'
+			]), ')' ]));
 		});
 
 		if (has_ewk) {
-			o = s.option(form.Flag, 'broadcast', ('Send to broadcast address'));
+			o = s.option(form.Flag, 'broadcast', _('Send to broadcast address'));
 
 			if (has_wol)
 				o.depends('executable', '/usr/bin/etherwake');
@@ -82,7 +89,7 @@ return L.view.extend({
 		var map = document.querySelector('#maincontent .cbi-map'),
 		    data = this.formdata;
 
-		return L.dom.callClassMethod(map, 'save').then(function() {
+		return dom.callClassMethod(map, 'save').then(function() {
 			if (!data.wol.mac)
 				return alert(_('No target host specified!'));
 
@@ -102,7 +109,7 @@ return L.view.extend({
 			}
 
 			ui.showModal(_('Waking host'), [
-				E('p', { 'class': 'spinning' }, [ 'Starting WoL utility…' ])
+				E('p', { 'class': 'spinning' }, [ _('Starting WoL utility…') ])
 			]);
 
 			return fs.exec(bin, args).then(function(res) {

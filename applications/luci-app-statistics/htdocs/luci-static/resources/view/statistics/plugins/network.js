@@ -1,7 +1,8 @@
 'use strict';
+'require baseclass';
 'require form';
 
-return L.Class.extend({
+return baseclass.extend({
 	title: _('Network Plugin Configuration'),
 	description: _('The network plugin provides network based communication between different collectd instances. Collectd can operate both in client and server mode. In client mode locally collected data is transferred to a collectd server instance, in server mode the local instance receives data from other hosts.'),
 
@@ -56,7 +57,7 @@ return L.Class.extend({
 
 		o = ss.option(form.Value, 'host', _('Server host'));
 		o.default = '0.0.0.0';
-		o.datatype = 'ipaddr("nomask")';
+		o.datatype = 'or(hostname,ipaddr("nomask"))';
 
 		o = ss.option(form.Value, 'port', _('Server port'));
 		o.default = '25826';

@@ -1,5 +1,7 @@
 'use strict';
 'require rpc';
+'require request';
+'require baseclass';
 
 /**
  * @typedef {Object} FileStatEntry
@@ -152,7 +154,7 @@ function handleCgiIoReply(res) {
  * To import the class in views, use `'require fs'`, to import it in
  * external JavaScript, use `L.require("fs").then(...)`.
  */
-var FileSystem = L.Class.extend(/** @lends LuCI.fs.prototype */ {
+var FileSystem = baseclass.extend(/** @lends LuCI.fs.prototype */ {
 	/**
 	 * Obtains a listing of the specified directory.
 	 *
@@ -357,7 +359,7 @@ var FileSystem = L.Class.extend(/** @lends LuCI.fs.prototype */ {
 		var postdata = 'sessionid=%s&path=%s'
 			.format(encodeURIComponent(L.env.sessionid), encodeURIComponent(path));
 
-		return L.Request.post(L.env.cgi_base + '/cgi-download', postdata, {
+		return request.post(L.env.cgi_base + '/cgi-download', postdata, {
 			headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
 			responseType: (type == 'blob') ? 'blob' : 'text'
 		}).then(handleCgiIoReply.bind({ type: type }));
@@ -417,7 +419,7 @@ var FileSystem = L.Class.extend(/** @lends LuCI.fs.prototype */ {
 		var postdata = 'sessionid=%s&command=%s'
 			.format(encodeURIComponent(L.env.sessionid), cmdstr);
 
-		return L.Request.post(L.env.cgi_base + '/cgi-exec', postdata, {
+		return request.post(L.env.cgi_base + '/cgi-exec', postdata, {
 			headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
 			responseType: (type == 'blob') ? 'blob' : 'text'
 		}).then(handleCgiIoReply.bind({ type: type }));

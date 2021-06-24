@@ -4,15 +4,16 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2018-08-07 20:36+0800\n"
-"Last-Translator: Yangfl <mmyangfl@gmail.com>\n"
-"Language-Team:  <debian-l10n-chinese@lists.debian.org>\n"
-"Language: zh_CN\n"
+"PO-Revision-Date: 2021-03-06 14:44+0000\n"
+"Last-Translator: Meano Lee <meanocat@gmail.com>\n"
+"Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
+"openwrt/luciapplicationsahcp/zh_Hans/>\n"
+"Language: zh_Hans\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Gtranslator 2.91.7\n"
+"X-Generator: Weblate 4.5.1\n"
 
 #: applications/luci-app-ahcp/luasrc/controller/ahcp.lua:11
 #: applications/luci-app-ahcp/luasrc/model/cbi/ahcp.lua:4
@@ -26,9 +27,8 @@ msgid ""
 "networks where it is difficult or impossible to configure a server within "
 "every link-layer broadcast domain, for example mobile ad-hoc networks."
 msgstr ""
-"AHCP 是一个自动配置 IPv6 和 IPv6/IPv4 双栈网络的协议，用于在网络上进行路由探"
-"测和地址分配。因为在某些网络上为每个链路层广播域均配置服务器是非常困难的，例"
-"如移动 ad-hoc 网络。"
+"AHCP是一种用于IPv6和双栈IPv6/IPv4网络的自动配置协议，它被用来在很难或不可能在每个链路层广播域中配置服务器的网络中代替路由发现或DHCP，"
+" 比如移动自组网。"
 
 #: applications/luci-app-ahcp/luasrc/view/ahcp_status.htm:34
 msgid "Active AHCP Leases"
@@ -72,7 +72,11 @@ msgstr "转发器"
 
 #: applications/luci-app-ahcp/luasrc/model/cbi/ahcp.lua:13
 msgid "General Setup"
-msgstr "通用设置"
+msgstr "常规设置"
+
+#: applications/luci-app-ahcp/root/usr/share/rpcd/acl.d/luci-app-ahcp.json:3
+msgid "Grant UCI access for luci-app-ahcp"
+msgstr "授予UCI访问luci-app-ahcp的权限"
 
 #: applications/luci-app-ahcp/luasrc/model/cbi/admin_network/proto_ahcp.lua:24
 #: applications/luci-app-ahcp/luasrc/model/cbi/ahcp.lua:61

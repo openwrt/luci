@@ -59,19 +59,19 @@ elseif arg[1] == "call" then
 
 	if arg[2] == "getCertificates" then
 		print(json.stringify({
-			user_certificate = readfile(string.format("/etc/openconnect/user-cert-%s.pem", args.interface)),
-			user_privatekey = readfile(string.format("/etc/openconnect/user-key-%s.pem", args.interface)),
-			ca_certificate = readfile(string.format("/etc/openconnect/ca-%s.pem", args.interface))
+			user_certificate = readfile(string.format("/etc/openconnect/user-cert-vpn-%s.pem", args.interface)),
+			user_privatekey = readfile(string.format("/etc/openconnect/user-key-vpn-%s.pem", args.interface)),
+			ca_certificate = readfile(string.format("/etc/openconnect/ca-vpn-%s.pem", args.interface))
 		}))
 	elseif arg[2] == "setCertificates" then
 		if args.user_certificate then
-			writefile(string.format("/etc/openconnect/user-cert-%s.pem", args.interface), args.user_certificate)
+			writefile(string.format("/etc/openconnect/user-cert-vpn-%s.pem", args.interface), args.user_certificate)
 		end
 		if args.user_privatekey then
-			writefile(string.format("/etc/openconnect/user-key-%s.pem", args.interface), args.user_privatekey)
+			writefile(string.format("/etc/openconnect/user-key-vpn-%s.pem", args.interface), args.user_privatekey)
 		end
 		if args.ca_certificate then
-			writefile(string.format("/etc/openconnect/ca-%s.pem", args.interface), args.ca_certificate)
+			writefile(string.format("/etc/openconnect/ca-vpn-%s.pem", args.interface), args.ca_certificate)
 		end
 		print(json.stringify({ result = true }))
 	end

@@ -1,8 +1,9 @@
 'use strict';
+'require baseclass';
 'require fs';
 'require form';
 
-return L.Class.extend({
+return baseclass.extend({
 	title: _('OpenVPN Plugin Configuration'),
 	description: _('The OpenVPN plugin gathers information about the current vpn connection status.'),
 
@@ -29,7 +30,9 @@ return L.Class.extend({
 			return L.resolveDefault(fs.list('/var/run'), []).then(L.bind(function(entries) {
 				for (var i = 0; i < entries.length; i++)
 					if (entries[i].type == 'file' && entries[i].name.match(/^openvpn\..+\.status$/))
-						o.value('/var/run/' + entries[i].name);
+						this.value('/var/run/' + entries[i].name);
+
+				return this.super('load', [section_id]);
 			}, this));
 		};
 	},
@@ -38,6 +41,6 @@ return L.Class.extend({
 		var stats = L.toArray(section.StatusFile);
 
 		if (stats.length)
-			return N_(stats.length, 'Monitoring one OpenVPN instance', 'Monitoring %d OpenVPN instancees').format(stats.length);
+			return N_(stats.length, 'Monitoring one OpenVPN instance', 'Monitoring %d OpenVPN instances').format(stats.length);
 	}
 });

@@ -1,9 +1,16 @@
 'use strict';
-'require fs';
+'require view';
+'require rpc';
 'require ui';
 'require uci';
 
-return L.view.extend({
+var callReboot = rpc.declare({
+	object: 'system',
+	method: 'reboot',
+	expect: { result: 0 }
+});
+
+return view.extend({
 	load: function() {
 		return uci.changes();
 	},
@@ -30,9 +37,9 @@ return L.view.extend({
 	},
 
 	handleReboot: function(ev) {
-		return fs.exec('/sbin/reboot').then(function(res) {
-			if (res.code != 0) {
-				L.ui.addNotification(null, E('p', _('The reboot command failed with code %d').format(res.code)));
+		return callReboot().then(function(res) {
+			if (res != 0) {
+				L.ui.addNotification(null, E('p', _('The reboot command failed with code %d').format(res)));
 				L.raise('Error', 'Reboot failed');
 			}
 

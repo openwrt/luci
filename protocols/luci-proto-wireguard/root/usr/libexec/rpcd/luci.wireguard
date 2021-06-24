@@ -1,0 +1,26 @@
+#!/bin/sh
+
+. /usr/share/libubox/jshn.sh
+
+case "$1" in
+	list)
+		json_init
+		json_add_object "generateKeyPair"
+		json_close_object
+		json_dump
+	;;
+	call)
+		case "$2" in
+			generateKeyPair)
+				prv=$(wg genkey)
+				pub=$(echo $prv | wg pubkey)
+				json_init
+				json_add_object "keys"
+				json_add_string "priv" "$prv"
+				json_add_string "pub" "$pub"
+				json_close_object
+				json_dump
+			;;
+		esac
+	;;
+esac

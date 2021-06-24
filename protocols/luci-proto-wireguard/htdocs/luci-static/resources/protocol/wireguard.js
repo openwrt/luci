@@ -1,13 +1,24 @@
 'use strict';
+'require ui';
 'require uci';
+'require rpc';
 'require form';
 'require network';
+
+var generateKey = rpc.declare({
+	object: 'luci.wireguard',
+	method: 'generateKeyPair',
+	expect: { keys: {} }
+});
 
 function validateBase64(section_id, value) {
 	if (value.length == 0)
 		return true;
 
 	if (value.length != 44 || !value.match(/^(?:[A-Za-z0-9+\/]{4})*(?:[A-Za-z0-9+\/]{2}==|[A-Za-z0-9+\/]{3}=)?$/))
+		return _('Invalid Base64 key string');
+
+	if (value[43] != "=" )
 		return _('Invalid Base64 key string');
 
 	return true;
@@ -52,6 +63,18 @@ return network.registerProtocol('wireguard', {
 		o.validate = validateBase64;
 		o.rmempty = false;
 
+		o = s.taboption('general', form.Button, 'generate_key', _('Generate Key'));
+		o.inputstyle = 'apply';
+		o.onclick = ui.createHandlerFn(this, function(section_id, ev) {
+			 return generateKey().then(function(keypair) {
+				var keyInput = document.getElementById('widget.cbid.network.%s.private_key'.format(section_id)),
+				    changeEvent = new Event('change');
+
+				keyInput.value = keypair.priv || '';
+				keyInput.dispatchEvent(changeEvent);
+			});
+		}, s.section);
+
 		o = s.taboption('general', form.Value, 'listen_port', _('Listen Port'), _('Optional. UDP port used for outgoing and incoming packets.'));
 		o.datatype = 'port';
 		o.placeholder = _('random');
@@ -66,11 +89,6 @@ return network.registerProtocol('wireguard', {
 
 		// -- advanced --------------------------------------------------------------------
 
-		o = s.taboption('advanced', form.Value, 'metric', _('Metric'), _('Optional'));
-		o.datatype = 'uinteger';
-		o.placeholder = '0';
-		o.optional = true;
-
 		o = s.taboption('advanced', form.Value, 'mtu', _('MTU'), _('Optional. Maximum Transmission Unit of tunnel interface.'));
 		o.datatype = 'range(1280,1420)';
 		o.placeholder = '1420';
@@ -79,7 +97,7 @@ return network.registerProtocol('wireguard', {
 		o = s.taboption('advanced', form.Value, 'fwmark', _('Firewall Mark'), _('Optional. 32-bit mark for outgoing encrypted packets. Enter value in hex, starting with <code>0x</code>.'));
 		o.optional = true;
 		o.validate = function(section_id, value) {
-			if (value.length > 0 && !value.match(/^0x[a-fA-F0-9]{1,4}$/))
+			if (value.length > 0 && !value.match(/^0x[a-fA-F0-9]{1,8}$/))
 				return _('Invalid hexadecimal value');
 
 			return true;
@@ -124,7 +142,14 @@ return network.registerProtocol('wireguard', {
 
 		o = ss.option(form.DynamicList, 'allowed_ips', _('Allowed IPs'), _("Required. IP addresses and prefixes that this peer is allowed to use inside the tunnel. Usually the peer's tunnel IP addresses and the networks the peer routes through the tunnel."));
 		o.datatype = 'ipaddr';
-		o.rmempty = false;
+		o.validate = function(section, value) {
+			var opt = this.map.lookupOption('allowed_ips', section);
+			var ips = opt[0].formvalue(section);
+			if (ips.length == 0) {
+				return _('Value must not be empty');
+			}
+			return true;
+		};
 
 		o = ss.option(form.Flag, 'route_allowed_ips', _('Route Allowed IPs'), _('Optional. Create routes for Allowed IPs for this peer.'));
 

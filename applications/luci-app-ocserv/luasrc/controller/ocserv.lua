@@ -13,6 +13,7 @@ function index()
 	page = entry({"admin", "vpn", "ocserv"}, alias("admin", "vpn", "ocserv", "main"),
 		_("OpenConnect VPN"))
 	page.dependent = true
+	page.acl_depends = { "luci-app-ocserv" }
 	
 	page = entry({"admin", "vpn", "ocserv", "main"},
 		cbi("ocserv/main"),

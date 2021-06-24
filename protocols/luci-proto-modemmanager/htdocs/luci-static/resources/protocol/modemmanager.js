@@ -37,9 +37,15 @@ function getModemList() {
 }
 
 network.registerPatternVirtual(/^mobiledata-.+$/);
-network.registerErrorCode('CALL_FAILED', _('Call failed'));
-network.registerErrorCode('NO_CID',      _('Unable to obtain client ID'));
-network.registerErrorCode('PLMN_FAILED', _('Setting PLMN failed'));
+network.registerErrorCode('MM_CONNECT_FAILED', _('Connection attempt failed.'));
+network.registerErrorCode('MM_DISCONNECT_IN_PROGRESS', _('Modem disconnection in progress. Please wait.'));
+network.registerErrorCode('MM_CONNECT_IN_PROGRESS', _('Modem connection in progress. Please wait. This process will timeout after 2 minutes.'));
+network.registerErrorCode('MM_TEARDOWN_IN_PROGRESS', _('Modem bearer teardown in progress.'));
+network.registerErrorCode('MM_MODEM_DISABLED', _('Modem is disabled.'));
+network.registerErrorCode('DEVICE_NOT_MANAGED', _('Device not managed by ModemManager.'));
+network.registerErrorCode('INVALID_BEARER_LIST', _('Invalid bearer list. Possibly too many bearers created.  This protocol supports one and only one bearer.'));
+network.registerErrorCode('UNKNOWN_METHOD', _('Unknown and unsupported connection method.'));
+network.registerErrorCode('DISCONNECT_FAILED', _('Disconnection attempt failed.'));
 
 return network.registerProtocol('modemmanager', {
 	getI18n: function() {
@@ -73,7 +79,8 @@ return network.registerProtocol('modemmanager', {
 	renderFormOptions: function(s) {
 		var dev = this.getL3Device() || this.getDevice(), o;
 
-		o = s.taboption('general', form.ListValue, 'device', _('Modem device'));
+		o = s.taboption('general', form.ListValue, '_modem_device', _('Modem device'));
+		o.ucioption = 'device';
 		o.rmempty = false;
 		o.load = function(section_id) {
 			return getModemList().then(L.bind(function(devices) {
@@ -114,8 +121,8 @@ return network.registerProtocol('modemmanager', {
 		o = s.taboption('advanced', form.Value, 'mtu', _('Override MTU'));
 		o.placeholder = dev ? (dev.getMTU() || '1500') : '1500';
 		o.datatype    = 'max(9200)';
-		
-		s.taboption('general', form.Value, 'metric', _('Gateway metric'));
 
+		o = s.taboption('general', form.Value, 'signalrate', _('Signal Refresh Rate'), _("In seconds"));
+		o.datatype = 'uinteger';
 	}
 });

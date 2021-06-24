@@ -1,10 +1,11 @@
 {
 	"admin/services/ttyd": {
-		"title": "ttyd",
+		"title": "Terminal",
 		"action": {
 			"type": "firstchild"
 		},
 		"depends": {
+			"acl": [ "luci-app-ttyd" ],
 			"uci": { "ttyd": true }
 		}
 	},

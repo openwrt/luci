@@ -1,4 +1,5 @@
 'use strict';
+'require view';
 'require fs';
 'require form';
 
@@ -65,7 +66,7 @@ function update_active_peers() {
 	});
 }
 
-return L.view.extend({
+return view.extend({
 	load: function() {
 		return Promise.all([
 			L.resolveDefault(fs.stat("/usr/sbin/yggdrasilctl"), null),

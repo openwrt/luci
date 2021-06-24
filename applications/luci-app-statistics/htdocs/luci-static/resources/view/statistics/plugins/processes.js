@@ -1,7 +1,8 @@
 'use strict';
+'require baseclass';
 'require form';
 
-return L.Class.extend({
+return baseclass.extend({
 	title: _('Processes Plugin Configuration'),
 	description: _('The processes plugin collects information like cpu time, page faults and memory usage of selected processes.'),
 

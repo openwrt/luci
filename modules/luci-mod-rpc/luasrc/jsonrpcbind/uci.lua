@@ -29,19 +29,19 @@ function commit(config)
 end
 
 function delete(config, ...)
-	uci:load(config) 
-	return uci:delete(config, ...) and uci:save(config) 
+	uci:load(config)
+	return uci:delete(config, ...) and uci:save(config)
 end
 
 function delete_all(config, ...)
 	uci:load(config)
-	return uci:delete_all(config, ...) and uci:save(config) 
+	return uci:delete_all(config, ...) and uci:save(config)
 end
 
 function foreach(config, stype)
 	uci:load(config)
 	local sections = {}
-	
+
 	return uci:foreach(config, stype, function(section)
 		table.insert(sections, section)
 	end) and sections
@@ -80,4 +80,3 @@ function tset(config, ...)
 	uci:load(config)
 	return uci:tset(config, ...) and uci:save(config)
 end
-

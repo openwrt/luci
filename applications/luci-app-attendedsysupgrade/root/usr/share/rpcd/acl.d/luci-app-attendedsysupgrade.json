@@ -1,0 +1,17 @@
+{
+	"luci-app-attendedsysupgrade": {
+		"description": "Grant UCI access to LuCI app attendedsysupgrade",
+		"read": {
+			"uci": ["attendedsysupgrade"],
+			"ubus": {
+				"rpc-sys": ["upgrade_start", "packagelist"]
+			}
+		},
+		"write": {
+			"uci": ["attendedsysupgrade"],
+			"ubus": {
+				"rpc-sys": ["upgrade_start"]
+			}
+		}
+	}
+}

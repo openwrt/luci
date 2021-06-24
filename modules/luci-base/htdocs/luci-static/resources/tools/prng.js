@@ -89,5 +89,23 @@ return L.Class.extend({
 		}
 
 		return Math.floor(r * (u - l + 1)) + l;
+	},
+
+	derive_color: function(string) {
+		this.seed(parseInt(sfh(string), 16));
+
+		var r = this.get(128),
+		    g = this.get(128),
+		    min = 0,
+		    max = 128;
+
+		if ((r + g) < 128)
+			min = 128 - r - g;
+		else
+			max = 255 - r - g;
+
+		var b = min + Math.floor(this.get() * (max - min));
+
+		return '#%02x%02x%02x'.format(0xff - r, 0xff - g, 0xff - b);
 	}
 });

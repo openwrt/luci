@@ -253,7 +253,21 @@ static void umap_file(struct file_map *m)
 
 static void * iw_open(void)
 {
-	return dlopen("/usr/lib/libiwinfo.so", RTLD_LAZY);
+	void *iwlib = NULL;
+	glob_t paths;
+	int i;
+
+	if (glob("/usr/lib/libiwinfo.so*", 0, NULL, &paths) != 0)
+		return NULL;
+
+	for (i = 0; i < paths.gl_pathc && !iwlib; i++)
+		iwlib = dlopen(paths.gl_pathv[i], RTLD_LAZY | RTLD_LOCAL);
+
+	globfree(&paths);
+
+	if (!iwlib)
+		return NULL;
+	return iwlib;
 }
 
 static int iw_update(
@@ -492,11 +506,11 @@ static int run_daemon(void)
 		{
 			while ((e = readdir(dir)) != NULL)
 			{
+				if (!strcmp(e->d_name, "lo") || !strcmp(e->d_name, ".") || !strcmp(e->d_name, ".."))
+					continue;
+
 				if (iw && iw_update(iw, e->d_name, &rate, &rssi, &noise))
 					update_radiostat(e->d_name, rate, rssi, noise);
-
-				if (!strcmp(e->d_name, "lo"))
-					continue;
 
 				for (i = 0; i < sizeof(sysfs_stats)/sizeof(sysfs_stats[0]); i++)
 				{

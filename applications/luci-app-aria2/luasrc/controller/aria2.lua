@@ -14,8 +14,9 @@ function index()
 		return
 	end
 
-	entry({"admin", "services", "aria2"},
-		firstchild(), _("Aria2")).dependent = false
+	local e = entry({"admin", "services", "aria2"}, firstchild(), _("Aria2"))
+	e.dependent = false
+	e.acl_depends = { "luci-app-aria2" }
 
 	entry({"admin", "services", "aria2", "config"},
 		cbi("aria2/config"), _("Configuration"), 1)

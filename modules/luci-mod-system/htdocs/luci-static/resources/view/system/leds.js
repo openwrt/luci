@@ -1,4 +1,5 @@
 'use strict';
+'require view';
 'require uci';
 'require rpc';
 'require form';
@@ -10,7 +11,7 @@ var callLeds = rpc.declare({
 	expect: { '': {} }
 });
 
-return L.view.extend({
+return view.extend({
 	load: function() {
 		return Promise.all([
 			callLeds(),
@@ -86,6 +87,32 @@ return L.view.extend({
 			for (var i = 0; i < plugins.length; i++) {
 				var plugin = plugins[i];
 				plugin.form.addFormOptions(s);
+			}
+
+			var opts = s.getOption();
+
+			var removeIfNoneActive = function(original_remove_fn, section_id) {
+				var isAnyActive = false;
+
+				for (var optname in opts) {
+					if (opts[optname].ucioption != this.ucioption)
+						continue;
+
+					if (!opts[optname].isActive(section_id))
+						continue;
+
+					isAnyActive = true;
+					break;
+				}
+
+				if (!isAnyActive)
+					original_remove_fn.call(this, section_id);
+			};
+
+			for (var optname in opts) {
+				if (!opts[optname].ucioption || optname == opts[optname].ucioption)
+					continue;
+				opts[optname].remove = removeIfNoneActive.bind(opts[optname], opts[optname].remove);
 			}
 		};
 

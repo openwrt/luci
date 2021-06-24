@@ -7,7 +7,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=HTTP(S) client library
-LUCI_DEPENDS:=+luci-base +luci-lib-nixio +luci-lib-httpprotoutils
+LUCI_DEPENDS:=+luci-lib-base +luci-lib-nixio +luci-lib-httpprotoutils
 
 include ../../luci.mk
 

@@ -1,4 +1,5 @@
 'use strict';
+'require baseclass';
 'require rpc';
 
 var callSystemInfo = rpc.declare({
@@ -19,7 +20,7 @@ function progressbar(value, max, byte) {
 	}, E('div', { 'style': 'width:%.2f%%'.format(pc) }));
 }
 
-return L.Class.extend({
+return baseclass.extend({
 	title: _('Memory'),
 
 	load: function() {
@@ -42,12 +43,12 @@ return L.Class.extend({
 		if (swap.total > 0)
 			fields.push(_('Swap free'), swap.free, swap.total);
 
-		var table = E('div', { 'class': 'table' });
+		var table = E('table', { 'class': 'table' });
 
 		for (var i = 0; i < fields.length; i += 3) {
-			table.appendChild(E('div', { 'class': 'tr' }, [
-				E('div', { 'class': 'td left', 'width': '33%' }, [ fields[i] ]),
-				E('div', { 'class': 'td left' }, [
+			table.appendChild(E('tr', { 'class': 'tr' }, [
+				E('td', { 'class': 'td left', 'width': '33%' }, [ fields[i] ]),
+				E('td', { 'class': 'td left' }, [
 					(fields[i + 1] != null) ? progressbar(fields[i + 1], fields[i + 2], true) : '?'
 				])
 			]));

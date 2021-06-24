@@ -1,8 +1,9 @@
 'use strict';
+'require baseclass';
 'require form';
 'require tools.widgets as widgets';
 
-return L.Class.extend({
+return baseclass.extend({
 	title: _('DNS Plugin Configuration'),
 	description: _('The dns plugin collects detailed statistics about dns related traffic on selected interfaces.'),
 
@@ -15,6 +16,7 @@ return L.Class.extend({
 			_('When none selected, all interfaces will be monitored.'));
 		o.multiple = true;
 		o.noaliases = true;
+		o.default = 'br-lan';
 		o.depends('enable', '1');
 
 		o = s.option(form.DynamicList, 'IgnoreSources', _('Ignore source addresses'));

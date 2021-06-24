@@ -1,7 +1,8 @@
 'use strict';
+'require baseclass';
 'require form';
 
-return L.Class.extend({
+return baseclass.extend({
 	title: _('Ping Plugin Configuration'),
 	description: _('The ping plugin will send icmp echo replies to selected hosts and measure the roundtrip time for each host.'),
 
@@ -23,12 +24,12 @@ return L.Class.extend({
 		o.value('ipv6');
 
 		o = s.option(form.Value, 'TTL', _('TTL for ping packets'));
-		o.default = '128';
+		o.default = '127';
 		o.datatype = 'range(0, 255)';
 		o.depends('enable', '1');
 
 		o = s.option(form.Value, 'Interval', _('Interval for pings'), _('Seconds'));
-		o.default = '1.0';
+		o.default = '30';
 		o.datatype = 'ufloat';
 		o.depends('enable', '1');
 	},

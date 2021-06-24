@@ -48,6 +48,14 @@ else
         translate("Servers for this zone; see README.md for optional form"))
     srv.placeholder="192.0.2.53"
 
+    ast = s7:option(ListValue, "dns_assist", translate("DNS Plugin"),
+         translate("Check for local program to allow forward to localhost"))
+    ast:value("none", translate("(none)"))
+    ast:value("bind", "bind")
+    ast:value("dnsmasq", "dnsmasq")
+    ast:value("ipset-dns", "ipset-dns")
+    ast:value("nsd", "nsd")
+
     rlv = s7:option(Flag, "resolv_conf", translate("Use 'resolv.conf.auto'"),
         translate("Forward to upstream nameservers (ISP)"))
     rlv:depends("zone_type", "forward_zone")

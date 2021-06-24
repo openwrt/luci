@@ -1,4 +1,5 @@
 'use strict';
+'require baseclass';
 'require fs';
 'require form';
 
@@ -10,7 +11,7 @@ var sensorTypes = [
 	/^(?:power)[0-9]*$/,										'power'
 ];
 
-return L.Class.extend({
+return baseclass.extend({
 	title: _('Sensors Plugin Configuration'),
 	description: _('The sensors plugin uses the Linux Sensors framework to gather environmental statistics.'),
 

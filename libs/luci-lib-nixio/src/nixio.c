@@ -102,7 +102,7 @@ static int nixio_strerror(lua_State *L) {
 }
 
 /* object table */
-static const luaL_reg R[] = {
+static const luaL_Reg R[] = {
 	{"errno",		nixio_errno},
 	{"strerror",	nixio_strerror},
 	{NULL,			NULL}

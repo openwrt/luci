@@ -7,6 +7,7 @@ local UCI = require "luci.model.uci"
 local sys  = require "luci.sys"
 local util = require "luci.util"
 
+local ddns_package_path = "/usr/share/ddns"
 local luci_helper = "/usr/lib/ddns/dynamic_dns_lucihelper.sh"
 local srv_name    = "ddns-scripts"
 
@@ -108,15 +109,15 @@ local methods = {
 					tonumber(s["force_interval"]) or 72,
 					s["force_unit"] or "hours" )
 
-				-- process running but update needs to happen
-				-- problems if force_seconds > uptime
-				force_seconds = (force_seconds > uptime) and uptime or force_seconds
+				local check_seconds = calc_seconds(
+					tonumber(s["check_interval"]) or 10,
+					s["check_unit"] or "minutes" )
 
 				if last_update > 0 then
-					local epoch = os.time() - uptime + last_update + force_seconds
+					local epoch = os.time() - uptime + last_update
 					-- use linux date to convert epoch
 					converted_last_update = epoch2date(epoch,date_format)
-					next_update = epoch2date(epoch + force_seconds)
+					next_update = epoch2date(epoch + force_seconds + check_seconds)
 				end
 
 				if pid > 0 and ( last_update + force_seconds - uptime ) <= 0 then
@@ -155,6 +156,7 @@ local methods = {
 			local ipkg = require "luci.model.ipkg"
 			local uci = UCI.cursor()
 			local dateformat = uci:get("ddns", "global", "ddns_dateformat") or "%F %R"
+			local services_mtime = fs.stat(ddns_package_path .. "/list", 'mtime')
 			uci:unload("ddns")
 			local ver, srv_ver_cmd
 			local res = {}
@@ -169,6 +171,7 @@ local methods = {
 			res['_version'] = ver and #ver > 0 and ver or nil
 			res['_enabled'] = sys.init.enabled("ddns")
 			res['_curr_dateformat'] = os.date(dateformat)
+			res['_services_list'] = services_mtime and os.date(dateformat, services_mtime) or 'NO_LIST'
 
 			return res
 		end
@@ -179,23 +182,23 @@ local methods = {
 			local cache = {}
 
 			local function has_wget()
-				return (sys.call( [[which wget >/dev/null 2>&1]] ) == 0)
+				return (sys.call( [[command -v wget >/dev/null 2>&1]] ) == 0)
 			end
 
 			local function has_wgetssl()
 				if cache['has_wgetssl'] then return cache['has_wgetssl'] end
-				local res = (sys.call( [[which wget-ssl >/dev/null 2>&1]] ) == 0)
+				local res = has_wget() and (sys.call( [[wget --version | grep -qF +https >/dev/null 2>&1]] ) == 0)
 				cache['has_wgetssl'] = res
 				return res
 			end
 
 			local function has_curlssl()
-				return (sys.call( [[$(which curl) -V 2>&1 | grep -qF "https"]] ) == 0)
+				return (sys.call( [[$(command -v curl) -V 2>&1 | grep -qF "https"]] ) == 0)
 			end
 
 			local function has_fetch()
 				if cache['has_fetch'] then return cache['has_fetch'] end
-				local res = (sys.call( [[which uclient-fetch >/dev/null 2>&1]] ) == 0)
+				local res = (sys.call( [[command -v uclient-fetch >/dev/null 2>&1]] ) == 0)
 				cache['has_fetch'] = res
 				return res
 			end
@@ -206,7 +209,7 @@ local methods = {
 
 			local function has_curl()
 				if cache['has_curl'] then return cache['has_curl'] end
-				local res = (sys.call( [[which curl >/dev/null 2>&1]] ) == 0)
+				local res = (sys.call( [[command -v curl >/dev/null 2>&1]] ) == 0)
 				cache['has_curl'] = res
 				return res
 			end
@@ -216,7 +219,7 @@ local methods = {
 			end
 
 			local function has_bbwget()
-				return (sys.call( [[$(which wget) -V 2>&1 | grep -iqF "busybox"]] ) == 0)
+				return (sys.call( [[$(command -v wget) -V 2>&1 | grep -iqF "busybox"]] ) == 0)
 			end
 
 			res['has_wget'] = has_wget() or false
@@ -229,17 +232,17 @@ local methods = {
 
 			local function has_bindhost()
 				if cache['has_bindhost'] then return cache['has_bindhost'] end
-				local res = (sys.call( [[which host >/dev/null 2>&1]] ) == 0)
+				local res = (sys.call( [[command -v host >/dev/null 2>&1]] ) == 0)
 				if res then
 					cache['has_bindhost'] = res
 					return true
 				end
-				res = (sys.call( [[which khost >/dev/null 2>&1]] ) == 0)
+				res = (sys.call( [[command -v khost >/dev/null 2>&1]] ) == 0)
 				if res then
 					cache['has_bindhost'] = res
 					return true
 				end
-				res = (sys.call( [[which drill >/dev/null 2>&1]] ) == 0)
+				res = (sys.call( [[command -v drill >/dev/null 2>&1]] ) == 0)
 				if res then
 					cache['has_bindhost'] = res
 					return true
@@ -251,11 +254,11 @@ local methods = {
 			res['has_bindhost'] = cache['has_bindhost'] or has_bindhost() or false
 
 			local function has_hostip()
-				return (sys.call( [[which hostip >/dev/null 2>&1]] ) == 0)
+				return (sys.call( [[command -v hostip >/dev/null 2>&1]] ) == 0)
 			end
 
 			local function has_nslookup()
-				return (sys.call( [[which nslookup >/dev/null 2>&1]] ) == 0)
+				return (sys.call( [[command -v nslookup >/dev/null 2>&1]] ) == 0)
 			end
 
 			res['has_dnsserver'] = cache['has_bindhost'] or has_nslookup() or has_hostip() or has_bindhost() or false

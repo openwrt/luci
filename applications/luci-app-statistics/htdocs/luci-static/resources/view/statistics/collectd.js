@@ -1,10 +1,12 @@
 'use strict';
+'require view';
+'require dom';
 'require fs';
 'require ui';
 'require uci';
 'require form';
 
-return L.view.extend({
+return view.extend({
 	load: function() {
 		return Promise.all([
 			fs.list('/usr/lib/collectd'),
@@ -50,7 +52,7 @@ return L.view.extend({
 		o.load = function() {
 			return fs.trimmed('/proc/sys/kernel/hostname').then(L.bind(function(name) {
 				this.placeholder = name;
-				return uci.get('collectd', 'statistics', 'hostname');
+				return uci.get('luci_statistics', 'collectd', 'Hostname');
 			}, this));
 		};
 
@@ -172,7 +174,7 @@ return L.view.extend({
 				var trEl = this.super('renderRowActions', [ section_id, _('Configure…') ]);
 
 				if (!plugin || !plugin.form.addFormOptions)
-					L.dom.content(trEl, null);
+					dom.content(trEl, null);
 
 				return trEl;
 			};

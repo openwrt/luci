@@ -2,23 +2,22 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-02-05 14:54+0900\n"
-"Last-Translator: INAGAKI Hiroshi <musashino.open@gmail.com>\n"
-"Language-Team: \n"
+"PO-Revision-Date: 2021-02-11 14:23+0000\n"
+"Last-Translator: Satoru Yoshida <ramat@ram.ne.jp>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/openwrt/"
+"luciapplicationsuhttpd/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.0.6\n"
-"X-Poedit-Basepath: .\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 4.5-dev\n"
+"X-Poedit-Basepath: .\n"
 
 #: applications/luci-app-uhttpd/luasrc/model/cbi/uhttpd/uhttpd.lua:135
 msgid ""
 "(/old/path=/new/path) or (just /old/path which becomes /cgi-prefix/old/path)"
-msgstr ""
-"(/old/path=/new/path) または (just /old/path which becomes /cgi-prefix/old/"
-"path)"
+msgstr "（/old/path=/new/path）または（/cgi-prefix/old/path になる /old/path のみ）"
 
 #: applications/luci-app-uhttpd/luasrc/model/cbi/uhttpd/uhttpd.lua:145
 msgid "404 Error"
@@ -26,7 +25,7 @@ msgstr "404 エラー"
 
 #: applications/luci-app-uhttpd/luasrc/model/cbi/uhttpd/uhttpd.lua:7
 msgid "A lightweight single-threaded HTTP(S) server"
-msgstr "軽量なシングル スレッド HTTP(S) サーバーです。"
+msgstr "軽量なシングルスレッド HTTP（S）サーバーです"
 
 #: applications/luci-app-uhttpd/luasrc/model/cbi/uhttpd/uhttpd.lua:20
 msgid "Advanced Settings"
@@ -43,9 +42,7 @@ msgstr "サーバーがホストするファイルのベースディレクトリ
 #: applications/luci-app-uhttpd/luasrc/model/cbi/uhttpd/uhttpd.lua:22
 #: applications/luci-app-uhttpd/luasrc/model/cbi/uhttpd/uhttpd.lua:50
 msgid "Bind to specific interface:port (by specifying interface address"
-msgstr ""
-"インターフェースのアドレスを用いて、特定の インターフェース:ポート にバインド"
-"します。"
+msgstr "インターフェースのアドレスを用いて、特定の インターフェース:ポートにバインドします"
 
 #: applications/luci-app-uhttpd/luasrc/model/cbi/uhttpd/uhttpd.lua:126
 msgid "CGI filetype handler"
@@ -77,7 +74,7 @@ msgstr "ドキュメント ルート外へのシンボリックリンクを追�
 
 #: applications/luci-app-uhttpd/luasrc/model/cbi/uhttpd/uhttpd.lua:132
 msgid "Do not generate directory listings."
-msgstr "ディレクトリの待ち受けを生成しない"
+msgstr "ディレクトリのリッスンを生成しない"
 
 #: applications/luci-app-uhttpd/luasrc/model/cbi/uhttpd/uhttpd.lua:148
 msgid "Document root"
@@ -111,21 +108,25 @@ msgstr "Lua スクリプト用ハンドラへの絶対パス"
 msgid "General Settings"
 msgstr "一般設定"
 
+#: applications/luci-app-uhttpd/root/usr/share/rpcd/acl.d/luci-app-uhttpd.json:3
+msgid "Grant UCI access for luci-app-uhttpd"
+msgstr "luci-app-uhttpdにUCIアクセスを許可"
+
 #: applications/luci-app-uhttpd/luasrc/model/cbi/uhttpd/uhttpd.lua:22
 msgid "HTTP listeners (address:port)"
-msgstr "HTTP 待ち受け（アドレス:ポート）"
+msgstr "HTTP リッスン（アドレス:ポート）"
 
 #: applications/luci-app-uhttpd/luasrc/model/cbi/uhttpd/uhttpd.lua:94
-msgid "HTTPS Certificate (DER Encoded)"
-msgstr "HTTPS 証明書（DER エンコード）"
+msgid "HTTPS Certificate (DER or PEM format)"
+msgstr "HTTPS 証明書（DER または PEM 形式）"
 
 #: applications/luci-app-uhttpd/luasrc/model/cbi/uhttpd/uhttpd.lua:96
-msgid "HTTPS Private Key (DER Encoded)"
-msgstr "HTTPS 秘密鍵（DER エンコード）"
+msgid "HTTPS Private Key (DER or PEM format)"
+msgstr "HTTPS 秘密鍵（DER または PEM 形式）"
 
 #: applications/luci-app-uhttpd/luasrc/model/cbi/uhttpd/uhttpd.lua:50
 msgid "HTTPS listener (address:port)"
-msgstr "HTTPS 待ち受け（アドレス:ポート）"
+msgstr "HTTPS リッスン（アドレス:ポート）"
 
 #: applications/luci-app-uhttpd/luasrc/model/cbi/uhttpd/uhttpd.lua:90
 msgid "Ignore private IPs on public interface"
@@ -189,7 +190,7 @@ msgstr "基本認証の領域名"
 
 #: applications/luci-app-uhttpd/luasrc/model/cbi/uhttpd/uhttpd.lua:86
 msgid "Redirect all HTTP to HTTPS"
-msgstr "全ての HTTP を HTTPS にリダイレクトする"
+msgstr "すべての HTTP を HTTPS にリダイレクトする"
 
 #: applications/luci-app-uhttpd/luasrc/model/cbi/uhttpd/uhttpd.lua:109
 msgid "Remove configuration for certificate and key"
@@ -210,7 +211,7 @@ msgstr "まれに必要とされる設定、または Web UI の提供に影響�
 
 #: applications/luci-app-uhttpd/luasrc/model/cbi/uhttpd/uhttpd.lua:224
 msgid "State"
-msgstr "都道府県"
+msgstr "状態"
 
 #: applications/luci-app-uhttpd/luasrc/model/cbi/uhttpd/uhttpd.lua:192
 msgid "TCP Keepalive"
@@ -266,3 +267,9 @@ msgstr "uHTTPd は、下に表示されている設定で新しい自己署名�
 #: applications/luci-app-uhttpd/luasrc/model/cbi/uhttpd/uhttpd.lua:163
 msgid "ubus integration is disabled if not present"
 msgstr "指定しない場合、ubus 統合は無効になります。"
+
+#~ msgid "HTTPS Certificate (DER Encoded)"
+#~ msgstr "HTTPS 証明書（DER エンコード）"
+
+#~ msgid "HTTPS Private Key (DER Encoded)"
+#~ msgstr "HTTPS 秘密鍵（DER エンコード）"

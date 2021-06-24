@@ -1,4 +1,5 @@
 'use strict';
+'require view';
 'require fs';
 'require ui';
 'require uci';
@@ -69,7 +70,7 @@ function device_textvalue(devices, section_id) {
 	}
 }
 
-return L.view.extend({
+return view.extend({
 	handleDetect: function(m, ev) {
 		return callBlockDetect()
 			.then(L.bind(uci.unload, uci, 'fstab'))
@@ -185,13 +186,13 @@ return L.view.extend({
 		};
 
 		o.render = L.bind(function(view, section_id) {
-			var table = E('div', { 'class': 'table' }, [
-				E('div', { 'class': 'tr table-titles' }, [
-					E('div', { 'class': 'th' }, _('Filesystem')),
-					E('div', { 'class': 'th' }, _('Mount Point')),
-					E('div', { 'class': 'th center' }, _('Available')),
-					E('div', { 'class': 'th center' }, _('Used')),
-					E('div', { 'class': 'th' }, _('Unmount'))
+			var table = E('table', { 'class': 'table' }, [
+				E('tr', { 'class': 'tr table-titles' }, [
+					E('th', { 'class': 'th' }, _('Filesystem')),
+					E('th', { 'class': 'th' }, _('Mount Point')),
+					E('th', { 'class': 'th center' }, _('Available')),
+					E('th', { 'class': 'th center' }, _('Used')),
+					E('th', { 'class': 'th' }, _('Unmount'))
 				])
 			]);
 
@@ -211,7 +212,8 @@ return L.view.extend({
 					'%.2f%% (%1024.2mB)'.format(100 / this.mounts[i].size * used, used),
 					umount ? E('button', {
 						'class': 'btn cbi-button-remove',
-						'click': ui.createHandlerFn(view, 'handleUmount', m, this.mounts[i].mount)
+						'click': ui.createHandlerFn(view, 'handleUmount', m, this.mounts[i].mount),
+						'disabled': this.map.readonly || null
 					}, [ _('Unmount') ]) : '-'
 				]);
 			}

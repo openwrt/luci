@@ -1,9 +1,10 @@
 'use strict';
+'require baseclass';
 'require form';
 'require tools.widgets as widgets';
 
-return L.Class.extend({
-	trigger: _('rssi (service)'),
+return baseclass.extend({
+	trigger: _('WiFi signal quality (service: rssileds)'),
 	kernel: false,
 	addFormOptions(s){
 		var o;

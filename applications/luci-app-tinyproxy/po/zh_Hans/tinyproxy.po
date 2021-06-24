@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2020-02-19 13:29+0000\n"
-"Last-Translator: xiazhang <xz@xia.plus>\n"
+"PO-Revision-Date: 2021-01-13 00:56+0000\n"
+"Last-Translator: 孤爺仔 <7312140@qq.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "openwrt/luciapplicationstinyproxy/zh_Hans/>\n"
 "Language: zh_Hans\n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 3.11\n"
+"X-Generator: Weblate 4.4.1-dev\n"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:219
 msgid ""
@@ -18,8 +18,7 @@ msgid ""
 "upstream proxy, <em>Reject access</em> disables any upstream proxy for the "
 "target"
 msgstr ""
-"<em>通过代理</em>允许给定的对象经过指定的上行代理的路由请求。<em>拒绝代理</"
-"em> 禁用对象的任何上行代理。"
+"<em>Via proxy</em> 通过指定的上游代理将请求路由到给定的目标，<em>Reject access</em> 禁用目标的任何上游代理"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:108
 msgid ""
@@ -29,7 +28,7 @@ msgstr "转发请求时增加了一个客户机IP地址和“X-Tinyproxy“HTTP�
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:126
 msgid "Allowed clients"
-msgstr "授权客户端"
+msgstr "允许的客户端"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:133
 msgid "Allowed connect ports"
@@ -43,27 +42,25 @@ msgstr "绑定地址"
 msgid ""
 "By default, basic POSIX expressions are used for filtering. Enable this to "
 "activate extended regular expressions"
-msgstr ""
-"默认情况下，使用基本的POSIX表达式作为滤规则。启用这个以使用正规表达式代替之。"
+msgstr "默认情况下，使用基本的POSIX表达式进行过滤。启用它来激活扩展的正则表达式"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:153
 msgid ""
 "By default, filter strings are treated as case-insensitive. Enable this to "
 "make the matching case-sensitive"
-msgstr "默认情况下，过滤规则是不区分大小写的。启用它则转为区分大小写。"
+msgstr "默认情况下，过滤字符串是不区分大小写的。启用它转为区分大小写"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:145
 msgid ""
 "By default, filtering is done based on domain names. Enable this to match "
 "against URLs instead"
-msgstr "默认情况下，过滤器只匹配域名。启用它以匹配URL。"
+msgstr "默认情况下，过滤是基于域名的。启用它以匹配URLs"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:157
 msgid ""
 "By default, the filter rules act as blacklist. Enable this option to only "
 "allow matched URLs or domain names"
-msgstr ""
-"默认情况下，过滤规则将以黑名单形式匹配。启用它将仅允许过滤规则里的URL或域名。"
+msgstr "默认情况下，过滤规则以黑名单形式工作。启用此选项只允许匹配的URLs或域名"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:226
 msgid ""
@@ -71,7 +68,7 @@ msgid ""
 "without domain"
 msgstr "可以是IP地址或者范围，也可以是域名或者以\".\"代表任意主机"
 
-#: applications/luci-app-tinyproxy/root/usr/share/luci/menu.d/luci-app-tinyproxy.json:22
+#: applications/luci-app-tinyproxy/root/usr/share/luci/menu.d/luci-app-tinyproxy.json:23
 msgid "Configuration"
 msgstr "配置"
 
@@ -93,7 +90,7 @@ msgstr "错误页面"
 
 #: applications/luci-app-tinyproxy/luasrc/view/tinyproxy_status.htm:36
 msgid "Failed to retrieve statistics from url:"
-msgstr "从url未能检索统计信息"
+msgstr "从 url 检索统计数据失败，该url为："
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:148
 msgid "Filter by RegExp"
@@ -118,6 +115,10 @@ msgstr "过滤规则和访问控制列表"
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:11
 msgid "General settings"
 msgstr "常规设置"
+
+#: applications/luci-app-tinyproxy/root/usr/share/rpcd/acl.d/luci-app-tinyproxy.json:3
+msgid "Grant UCI access for luci-app-tinyproxy"
+msgstr "授予UCI访问luci-app-tinyproxy的权限"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:97
 msgid "Group"
@@ -144,7 +145,7 @@ msgstr "允许访问代理服务器的IP或IP段列表"
 msgid ""
 "List of allowed ports for the CONNECT method. A single value \"0\" allows "
 "all ports"
-msgstr "允许CONNECT方法连接的端口列表,0代表所有端口。"
+msgstr "值CONNECT方法允许的端口列表。单个值“0”代表允许所有端口"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:39
 msgid "Listen address"
@@ -214,7 +215,7 @@ msgstr "启动Tinyproxy时开启的进程数"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:141
 msgid "Plaintext file with URLs or domains to filter. One entry per line"
-msgstr "用于过滤器的文本，包含URL或者域名，每行一条。"
+msgstr "带要过滤的URLs或域名的纯文本文件。每行一条"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:218
 msgid "Policy"
@@ -281,7 +282,7 @@ msgstr "启动备用服务器"
 msgid "Statistics page"
 msgstr "统计页面"
 
-#: applications/luci-app-tinyproxy/root/usr/share/luci/menu.d/luci-app-tinyproxy.json:13
+#: applications/luci-app-tinyproxy/root/usr/share/luci/menu.d/luci-app-tinyproxy.json:14
 msgid "Status"
 msgstr "状态"
 
@@ -292,7 +293,7 @@ msgstr "目标主机"
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:5
 #: applications/luci-app-tinyproxy/root/usr/share/luci/menu.d/luci-app-tinyproxy.json:3
 msgid "Tinyproxy"
-msgstr "Tinyproxy"
+msgstr "Tinyproxy服务器"
 
 #: applications/luci-app-tinyproxy/luasrc/view/tinyproxy_status.htm:51
 msgid "Tinyproxy Status"
