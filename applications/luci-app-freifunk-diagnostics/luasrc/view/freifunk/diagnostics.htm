@@ -9,6 +9,7 @@
 local fs   = require "nixio.fs"
 local has_ping6 = fs.access("/bin/ping6") or fs.access("/usr/bin/ping6")
 local has_traceroute6 = fs.access("/usr/bin/traceroute6")
+local has_arpscan = fs.access("/usr/bin/arp-scan")
 %>
 
 <script type="text/javascript" src="<%=resource%>/cbi.js"></script>
@@ -62,7 +63,7 @@ local has_traceroute6 = fs.access("/usr/bin/traceroute6")
 
 			<br />
 
-			<div style="width:30%; float:left">
+			<div style="width:33%; float:left">
 				<input style="margin: 5px 0" type="text" value="dev.openwrt.org" name="ping" /><br />
 				<% if has_ping6 then %>
 				<select name="ping_proto" style="width:auto">
@@ -95,6 +96,18 @@ local has_traceroute6 = fs.access("/usr/bin/traceroute6")
 			<div style="width:33%; float:left;">
 				<input style="margin: 5px 0" type="text" value="openwrt.org" name="nslookup" /><br />
 				<input type="button" value="<%:Nslookup%>" class="cbi-button cbi-button-apply" onclick="update_status(this.form.nslookup)" />
+			</div>
+
+			<br style="clear:both" /><br />
+
+			<div style="width:33%; float:left;">
+				<% if has_arpscan then %>
+				<input style="margin: 5px 0" type="text" value="br-lan" name="arpscan" /><br />
+				<input type="button" value="<%:Arp-scan%>" class="cbi-button cbi-button-apply" onclick="update_status(this.form.arpscan)" />
+				<% else %>
+					<p>&#160;</p>
+					<p><%:Install arp-scan for ARP scan%></p>
+				<% end %>
 			</div>
 
 			<br style="clear:both" /><br />

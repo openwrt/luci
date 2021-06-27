@@ -152,6 +152,9 @@ function index()
 
 		page = entry({"admin", "network", "diag_traceroute6"}, call("diag_traceroute6"), nil)
 		page.leaf = true
+
+		page = entry({"admin", "network", "diag_arpscan"}, call("diag_arpscan"), nil)
+		page.leaf = true
 --	end
 end
 
@@ -452,4 +455,8 @@ end
 
 function diag_traceroute6(addr)
 	diag_command("traceroute6 -q 1 -w 2 -n %q 2>&1", addr)
+end
+
+function diag_arpscan(addr)
+	diag_command("arp-scan -l -I %q 2>&1", addr)
 end
