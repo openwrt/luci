@@ -72,7 +72,8 @@ return network.registerProtocol('qmi', {
 
 	            return true; 
 		};
-		s.taboption('general', form.Value, 'pincode', _('PIN'));
+		o = s.taboption('general', form.Value, 'pincode', _('PIN'));
+		o.datatype = 'and(uinteger,minlength(4),maxlength(8))';
 
 		o = s.taboption('general', form.ListValue, 'auth', _('Authentication Type'));
 		o.value('both', 'PAP/CHAP');
