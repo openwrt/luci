@@ -752,7 +752,7 @@ function cbi_update_table(table, data, placeholder) {
 		});
 
 		if (Array.isArray(data)) {
-			var n = 0, rows = target.querySelectorAll('tr, .tr');
+			var n = 0, rows = target.querySelectorAll('tr, .tr'), trows = [];
 
 			data.forEach(function(row) {
 				var trow = E('tr', { 'class': 'tr' });
@@ -770,11 +770,15 @@ function cbi_update_table(table, data, placeholder) {
 
 				trow.classList.add('cbi-rowstyle-%d'.format((n++ % 2) ? 2 : 1));
 
-				if (rows[n])
-					target.replaceChild(trow, rows[n]);
-				else
-					target.appendChild(trow);
+				trows[n] = trow;
 			});
+
+			for (var i = 1; i < n; i++) {
+				if (rows[i])
+					target.replaceChild(trows[i], rows[i]);
+				else
+					target.appendChild(trows[i]);
+			}
 
 			while (rows[++n])
 				target.removeChild(rows[n]);
