@@ -146,6 +146,9 @@ var cbiACLSelect = form.Value.extend({
 	},
 
 	write: function(section_id, value) {
+		uci.unset('rpcd', section_id, 'read');
+		uci.unset('rpcd', section_id, 'write');
+
 		if (L.isObject(value) && Array.isArray(value.read))
 			uci.set('rpcd', section_id, 'read', value.read);
 
