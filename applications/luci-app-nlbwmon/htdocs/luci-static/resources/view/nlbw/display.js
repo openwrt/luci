@@ -583,11 +583,11 @@ return view.extend({
 		dom.content(tooltip, [
 			E('div', { 'class': 'head' }, [
 				E('div', { 'class': 'pie' }, [
-					E('label', _('Download')),
+					E('label', _('Download', 'Traffic counter')),
 					E('canvas', { 'id': 'bubble-pie1', 'width': 100, 'height': 100 })
 				]),
 				E('div', { 'class': 'pie' }, [
-					E('label', _('Upload')),
+					E('label', _('Upload', 'Traffic counter')),
 					E('canvas', { 'id': 'bubble-pie2', 'width': 100, 'height': 100 })
 				]),
 				E('div', { 'class': 'kpi' }, [
