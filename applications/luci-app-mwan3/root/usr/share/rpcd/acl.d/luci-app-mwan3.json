@@ -2,9 +2,30 @@
 	"luci-app-mwan3": {
 		"description": "Grant UCI access for luci-app-mwan3",
 		"read": {
-			"uci": [ "mwan3" ]
+			"file": {
+				"/etc/mwan3.user": [ "read" ],
+				"/usr/bin/httping": [ "list" ],
+				"/usr/bin/nping": [ "list" ],
+				"/usr/bin/arping": [ "list" ],
+				"/usr/sbin/mwan3 status": [ "exec" ],
+				"/usr/sbin/mwan3 ifup *": [ "exec" ],
+				"/usr/sbin/mwan3 ifdown *": [ "exec" ],
+				"/usr/sbin/mwan3 internal ipv4": [ "exec" ],
+				"/usr/sbin/mwan3 internal ipv6": [ "exec" ],
+				"/usr/libexec/luci-mwan3 diag * *": [ "exec" ],
+				"/usr/libexec/luci-mwan3 ipset *": [ "exec" ]
+			},
+			"ubus": {
+				"mwan3": [ "status" ]
+			},
+			"uci": [ "mwan3", "network" ]
 		},
 		"write": {
+			"file": {
+				"/etc/mwan3.user": ["write"],
+				"/usr/sbin/mwan3 ifup *": [ "exec" ],
+				"/usr/sbin/mwan3 ifdown *": [ "exec" ]
+			},
 			"uci": [ "mwan3" ]
 		}
 	}
