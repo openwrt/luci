@@ -1,6 +1,6 @@
 {
-	"attendedsysupgrade": {
-		"description": "attended sysupgrade via rpcd and luci",
+	"luci-app-attendedsysupgrade": {
+		"description": "Grant UCI access to LuCI app attendedsysupgrade",
 		"read": {
 			"ubus": {
 				"rpc-sys": [
@@ -12,7 +12,7 @@
 					"info"
 				],
 				"uci": [
-					"get", "set", "commit"
+					"get"
 				]
 			},
 			"uci": [
@@ -23,6 +23,11 @@
 			"cgi-io": [
 				"upload"
 			],
+			"ubus": {
+				"uci": [
+					"set", "commit"
+				]
+			},
 			"uci": [
 				"attendedsysupgrade"
 			]
