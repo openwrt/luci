@@ -304,7 +304,7 @@ var cbiTagValue = form.Value.extend({
 			}
 		}
 
-		uci.set('network', section_id, 'ports', ports);
+		uci.set('network', section_id, 'ports', ports.length ? ports : null);
 	},
 
 	remove: function() {}
