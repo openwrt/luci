@@ -338,9 +338,10 @@ var ValidatorFactory = baseclass.extend({
 			return this.assert(this.apply('port'), _('valid port or port range (port1-port2)'));
 		},
 
-		macaddr: function() {
-			return this.assert(this.value.match(/^([a-fA-F0-9]{2}:){5}[a-fA-F0-9]{2}$/) != null,
-				_('valid MAC address'));
+		macaddr: function(multicast) {
+			var m = this.value.match(/^([a-fA-F0-9]{2}):([a-fA-F0-9]{2}:){4}[a-fA-F0-9]{2}$/);
+			return this.assert(m != null && !(+m[1] & 1) == !multicast,
+				multicast ? _('valid multicast MAC address') : _('valid MAC address'));
 		},
 
 		host: function(ipv4only) {
