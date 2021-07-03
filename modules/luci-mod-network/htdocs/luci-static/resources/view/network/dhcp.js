@@ -67,12 +67,12 @@ CBILease6Status = form.DummyValue.extend({
 });
 
 function calculateNetwork(addr, mask) {
-	addr = validation.parseIPv4(addr);
+	addr = validation.parseIPv4(String(addr));
 
 	if (!isNaN(mask))
 		mask = validation.parseIPv4(network.prefixToMask(+mask));
 	else
-		mask = validation.parseIPv4(mask);
+		mask = validation.parseIPv4(String(mask));
 
 	if (addr == null || mask == null)
 		return null;
@@ -199,7 +199,7 @@ function validateMACAddr(pools, sid, s) {
 	    this_macs = L.toArray(s).map(function(m) { return m.toUpperCase() });
 
 	for (var i = 0; i < pools.length; i++) {
-		var this_net_mask = calculateNetwork(uci.get('dhcp', sid, 'ip'), pools[i].netmask);
+		var this_net_mask = calculateNetwork(this.section.formvalue(sid, 'ip'), pools[i].netmask);
 
 		if (!this_net_mask)
 			continue;
@@ -240,8 +240,6 @@ return view.extend({
 		    duids = hosts_duids_pools[1],
 		    pools = hosts_duids_pools[2],
 		    m, s, o, ss, so;
-
-		console.debug(pools);
 
 		m = new form.Map('dhcp', _('DHCP and DNS'), _('Dnsmasq is a combined <abbr title="Dynamic Host Configuration Protocol">DHCP</abbr>-Server and <abbr title="Domain Name System">DNS</abbr>-Forwarder for <abbr title="Network Address Translation">NAT</abbr> firewalls'));
 
@@ -568,10 +566,8 @@ return view.extend({
 		so = ss.option(form.Value, 'ip', _('<abbr title="Internet Protocol Version 4">IPv4</abbr>-Address'));
 		so.datatype = 'or(ip4addr,"ignore")';
 		so.validate = function(section, value) {
-			var mac = this.map.lookupOption('mac', section),
-			    name = this.map.lookupOption('name', section),
-			    m = mac ? mac[0].formvalue(section) : null,
-			    n = name ? name[0].formvalue(section) : null;
+			var m = this.section.formvalue(section, 'mac'),
+			    n = this.section.formvalue(section, 'name');
 
 			if ((m == null || m == '') && (n == null || n == ''))
 				return _('One of hostname or mac address must be specified!');
