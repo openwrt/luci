@@ -24,7 +24,7 @@ return view.extend({
 		o.default = '1';
 		o.rmempty = false;
 
-		o = s.option(form.Flag, 'advanced_mode', _('Advances Mode'),
+		o = s.option(form.Flag, 'advanced_mode', _('Advanced Mode'),
 			_('Show advanced options like packge list modification'));
 		o.default = '0';
 		o.rmempty = false;
