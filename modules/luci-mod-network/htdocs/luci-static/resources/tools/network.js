@@ -274,7 +274,7 @@ var cbiTagValue = form.Value.extend({
 
 			var t = /t/.test(s[1] || '') ? 't' : 'u';
 
-			return /\*/.test(s[1] || '') ? [t, '*'] : [t];
+			return /\x2a/.test(s[1] || '') ? [t, '*'] : [t];
 		}
 
 		return ['-'];
@@ -304,7 +304,7 @@ var cbiTagValue = form.Value.extend({
 			}
 		}
 
-		uci.set('network', section_id, 'ports', ports);
+		uci.set('network', section_id, 'ports', ports.length ? ports : null);
 	},
 
 	remove: function() {}

@@ -508,6 +508,9 @@ return view.extend({
 		o.placeholder = '53';
 		o.rmempty = true;
 
+		o = s.taboption('adv_report', form.Flag, 'adb_represolve', _('Resolve IPs'), _('Resolve reporting IP addresses by using reverse DNS (PTR) lookups.'));
+		o.rmempty = true;
+
 		/*
 			advanced email settings tab
 		*/

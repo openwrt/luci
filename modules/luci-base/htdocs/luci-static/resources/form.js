@@ -603,7 +603,7 @@ var CBIMap = CBIAbstractElement.extend(/** @lends LuCI.form.Map.prototype */ {
 						E('p', {}, [ _('An error occurred while saving the form:') ]),
 						E('p', {}, [ E('em', { 'style': 'white-space:pre' }, [ e.message ]) ]),
 						E('div', { 'class': 'right' }, [
-							E('button', { 'class': 'btn', 'click': ui.hideModal }, [ _('Dismiss') ])
+							E('button', { 'class': 'cbi-button', 'click': ui.hideModal }, [ _('Dismiss') ])
 						])
 					]);
 				}
@@ -2203,10 +2203,8 @@ var CBITypedSection = CBIAbstractSection.extend(/** @lends LuCI.form.TypedSectio
 
 			dom.append(createEl, [
 				E('div', {}, nameEl),
-				E('input', {
+				E('button', {
 					'class': 'cbi-button cbi-button-add',
-					'type': 'submit',
-					'value': btn_title || _('Add'),
 					'title': btn_title || _('Add'),
 					'click': ui.createHandlerFn(this, function(ev) {
 						if (nameEl.classList.contains('cbi-input-invalid'))
@@ -2214,11 +2212,23 @@ var CBITypedSection = CBIAbstractSection.extend(/** @lends LuCI.form.TypedSectio
 
 						return this.handleAdd(ev, nameEl.value);
 					}),
-					'disabled': this.map.readonly || null
-				})
+					'disabled': this.map.readonly || true
+				}, [ btn_title || _('Add') ])
 			]);
 
-			ui.addValidator(nameEl, 'uciname', true, 'blur', 'keyup');
+			if (this.map.readonly !== true) {
+				ui.addValidator(nameEl, 'uciname', true, function(v) {
+					var button = document.querySelector('.cbi-section-create > .cbi-button-add');
+					if (v !== '') {
+						button.disabled = null;
+						return true;
+					}
+					else {
+						button.disabled = true;
+						return _('Expecting: %s').format(_('non-empty value'));
+					}
+				}, 'blur', 'keyup');
+			}
 		}
 
 		return createEl;
@@ -2641,9 +2651,9 @@ var CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection.p
 
 		if (this.sortable) {
 			dom.append(tdEl.lastElementChild, [
-				E('div', {
+				E('button', {
 					'title': _('Drag to reorder'),
-					'class': 'btn cbi-button drag-handle center',
+					'class': 'cbi-button drag-handle center',
 					'style': 'cursor:move',
 					'disabled': this.map.readonly || null
 				}, '☰')
@@ -2881,7 +2891,7 @@ var CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection.p
 				nodes,
 				E('div', { 'class': 'right' }, [
 					E('button', {
-						'class': 'btn',
+						'class': 'cbi-button',
 						'click': ui.createHandlerFn(this, 'handleModalCancel', m)
 					}, [ _('Dismiss') ]), ' ',
 					E('button', {

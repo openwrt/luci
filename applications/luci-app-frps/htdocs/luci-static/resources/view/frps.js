@@ -1,6 +1,7 @@
 'use strict';
 'require view';
 'require form';
+'require rpc';
 'require tools.widgets as widgets';
 
 //	[Widget, Option, Title, Description, {Param: 'Value'}],
@@ -90,11 +91,59 @@ function defOpts(s, opts, params) {
 	}
 }
 
+var callServiceList = rpc.declare({
+	object: 'service',
+	method: 'list',
+	params: ['name'],
+	expect: { '': {} }
+});
+
+function getServiceStatus() {
+	return L.resolveDefault(callServiceList('frps'), {}).then(function (res) {
+		var isRunning = false;
+		try {
+			isRunning = res['frps']['instances']['instance1']['running'];
+		} catch (e) { }
+		return isRunning;
+	});
+}
+
+function renderStatus(isRunning) {
+	var renderHTML = "";
+	var spanTemp = "<span style=\"color:%s;font-weight:bold;margin-left:15px\">%s - %s</span>";
+
+	if (isRunning) {
+		renderHTML += String.format(spanTemp, 'green', _("frp Server"), _("RUNNING"));
+	} else {
+		renderHTML += String.format(spanTemp, 'red', _("frp Server"), _("NOT RUNNING"));
+	}
+
+	return renderHTML;
+}
+
 return view.extend({
 	render: function() {
 		var m, s, o;
 
 		m = new form.Map('frps', _('frp Server'));
+
+		s = m.section(form.NamedSection, '_status');
+		s.anonymous = true;
+		s.render = function (section_id) {
+			L.Poll.add(function () {
+				return L.resolveDefault(getServiceStatus()).then(function(res) {
+					var view = document.getElementById("service_status");
+					view.innerHTML = renderStatus(res);
+				});
+			});
+
+			return E('div', { class: 'cbi-map' },
+				E('div', { class: 'cbi-section'}, [
+					E('div', { id: 'service_status' },
+						_('Collecting data ...'))
+				])
+			);
+		}
 
 		s = m.section(form.NamedSection, 'common', 'conf');
 		s.dynamic = true;

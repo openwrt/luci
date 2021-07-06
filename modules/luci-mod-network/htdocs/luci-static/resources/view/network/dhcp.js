@@ -5,6 +5,7 @@
 'require rpc';
 'require uci';
 'require form';
+'require network';
 'require validation';
 
 var callHostHints, callDUIDHints, callDHCPLeases, CBILeaseStatus, CBILease6Status;
@@ -64,6 +65,58 @@ CBILease6Status = form.DummyValue.extend({
 		]);
 	}
 });
+
+function calculateNetwork(addr, mask) {
+	addr = validation.parseIPv4(String(addr));
+
+	if (!isNaN(mask))
+		mask = validation.parseIPv4(network.prefixToMask(+mask));
+	else
+		mask = validation.parseIPv4(String(mask));
+
+	if (addr == null || mask == null)
+		return null;
+
+	return [
+		[
+			addr[0] & (mask[0] >>> 0 & 255),
+			addr[1] & (mask[1] >>> 0 & 255),
+			addr[2] & (mask[2] >>> 0 & 255),
+			addr[3] & (mask[3] >>> 0 & 255)
+		].join('.'),
+		mask.join('.')
+	];
+}
+
+function getDHCPPools() {
+	return uci.load('dhcp').then(function() {
+		let sections = uci.sections('dhcp', 'dhcp'),
+		    tasks = [], pools = [];
+
+		for (var i = 0; i < sections.length; i++) {
+			if (sections[i].ignore == '1' || !sections[i].interface)
+				continue;
+
+			tasks.push(network.getNetwork(sections[i].interface).then(L.bind(function(section_id, net) {
+				var cidr = (net.getIPAddrs()[0] || '').split('/');
+
+				if (cidr.length == 2) {
+					var net_mask = calculateNetwork(cidr[0], cidr[1]);
+
+					pools.push({
+						section_id: section_id,
+						network: net_mask[0],
+						netmask: net_mask[1]
+					});
+				}
+			}, null, sections[i]['.name'])));
+		}
+
+		return Promise.all(tasks).then(function() {
+			return pools;
+		});
+	});
+}
 
 function validateHostname(sid, s) {
 	if (s == null || s == '')
@@ -138,18 +191,54 @@ function validateServerSpec(sid, s) {
 	return true;
 }
 
+function validateMACAddr(pools, sid, s) {
+	if (s == null || s == '')
+		return true;
+
+	var leases = uci.sections('dhcp', 'host'),
+	    this_macs = L.toArray(s).map(function(m) { return m.toUpperCase() });
+
+	for (var i = 0; i < pools.length; i++) {
+		var this_net_mask = calculateNetwork(this.section.formvalue(sid, 'ip'), pools[i].netmask);
+
+		if (!this_net_mask)
+			continue;
+
+		for (var j = 0; j < leases.length; j++) {
+			if (leases[j]['.name'] == sid || !leases[j].ip)
+				continue;
+
+			var lease_net_mask = calculateNetwork(leases[j].ip, pools[i].netmask);
+
+			if (!lease_net_mask || this_net_mask[0] != lease_net_mask[0])
+				continue;
+
+			var lease_macs = L.toArray(leases[j].mac).map(function(m) { return m.toUpperCase() });
+
+			for (var k = 0; k < lease_macs.length; k++)
+				for (var l = 0; l < this_macs.length; l++)
+					if (lease_macs[k] == this_macs[l])
+						return _('The MAC address %h is already used by another static lease in the same DHCP pool').format(this_macs[l]);
+		}
+	}
+
+	return true;
+}
+
 return view.extend({
 	load: function() {
 		return Promise.all([
 			callHostHints(),
-			callDUIDHints()
+			callDUIDHints(),
+			getDHCPPools()
 		]);
 	},
 
-	render: function(hosts_duids) {
+	render: function(hosts_duids_pools) {
 		var has_dhcpv6 = L.hasSystemFeature('dnsmasq', 'dhcpv6') || L.hasSystemFeature('odhcpd'),
-		    hosts = hosts_duids[0],
-		    duids = hosts_duids[1],
+		    hosts = hosts_duids_pools[0],
+		    duids = hosts_duids_pools[1],
+		    pools = hosts_duids_pools[2],
 		    m, s, o, ss, so;
 
 		m = new form.Map('dhcp', _('DHCP and DNS'), _('Dnsmasq is a combined <abbr title="Dynamic Host Configuration Protocol">DHCP</abbr>-Server and <abbr title="Domain Name System">DNS</abbr>-Forwarder for <abbr title="Network Address Translation">NAT</abbr> firewalls'));
@@ -429,7 +518,7 @@ return view.extend({
 		};
 
 		so = ss.option(form.Value, 'mac', _('<abbr title="Media Access Control">MAC</abbr>-Address'));
-		so.datatype = 'list(unique(macaddr))';
+		so.datatype = 'list(macaddr)';
 		so.rmempty  = true;
 		so.cfgvalue = function(section) {
 			var macs = L.toArray(uci.get('dhcp', section, 'mac')),
@@ -468,42 +557,39 @@ return view.extend({
 
 			return node;
 		};
+		so.validate = validateMACAddr.bind(so, pools);
 		Object.keys(hosts).forEach(function(mac) {
 			var hint = hosts[mac].name || L.toArray(hosts[mac].ipaddrs || hosts[mac].ipv4)[0];
 			so.value(mac, hint ? '%s (%s)'.format(mac, hint) : mac);
 		});
 
-		so.write = function(section, value) {
-			var ip = this.map.lookupOption('ip', section)[0].formvalue(section);
-			var hosts = uci.sections('dhcp', 'host');
-			var section_removed = false;
-
-			for (var i = 0; i < hosts.length; i++) {
-				if (ip == hosts[i].ip) {
-					uci.set('dhcp', hosts[i]['.name'], 'mac', [hosts[i].mac, value].join(' '));
-					uci.remove('dhcp', section);
-					section_removed = true;
-					break;
-				}
-			}
-
-			if (!section_removed) {
-				uci.set('dhcp', section, 'mac', value);
-			}
-		}
-
 		so = ss.option(form.Value, 'ip', _('<abbr title="Internet Protocol Version 4">IPv4</abbr>-Address'));
 		so.datatype = 'or(ip4addr,"ignore")';
 		so.validate = function(section, value) {
-			var mac = this.map.lookupOption('mac', section),
-			    name = this.map.lookupOption('name', section),
-			    m = mac ? mac[0].formvalue(section) : null,
-			    n = name ? name[0].formvalue(section) : null;
+			var m = this.section.formvalue(section, 'mac'),
+			    n = this.section.formvalue(section, 'name');
 
 			if ((m == null || m == '') && (n == null || n == ''))
 				return _('One of hostname or mac address must be specified!');
 
-			return true;
+			if (value == null || value == '' || value == 'ignore')
+				return true;
+
+			var leases = uci.sections('dhcp', 'host');
+
+			for (var i = 0; i < leases.length; i++)
+				if (leases[i]['.name'] != section && leases[i].ip == value)
+					return _('The IP address %h is already used by another static lease').format(value);
+
+
+			for (var i = 0; i < pools.length; i++) {
+				var net_mask = calculateNetwork(value, pools[i].netmask);
+
+				if (net_mask && net_mask[0] == pools[i].network)
+					return true;
+			}
+
+			return _('The IP address is outside of any DHCP pool address range');
 		};
 
 		var ipaddrs = {};
