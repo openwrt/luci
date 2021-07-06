@@ -120,7 +120,7 @@ local methods = {
 					next_update = epoch2date(epoch + force_seconds + check_seconds)
 				end
 
-				if pid > 0 and ( last_update + force_seconds - uptime ) <= 0 then
+				if pid > 0 and ( last_update + force_seconds + check_seconds - uptime ) <= 0 then
 					next_update = "Verify"
 
 				-- run once
