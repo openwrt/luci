@@ -98,9 +98,9 @@ function getDHCPPools() {
 				continue;
 
 			tasks.push(network.getNetwork(sections[i].interface).then(L.bind(function(section_id, net) {
-				var cidr = (net.getIPAddrs()[0] || '').split('/');
+				var cidr = net ? (net.getIPAddrs()[0] || '').split('/') : null;
 
-				if (cidr.length == 2) {
+				if (cidr && cidr.length == 2) {
 					var net_mask = calculateNetwork(cidr[0], cidr[1]);
 
 					pools.push({
