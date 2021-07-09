@@ -327,7 +327,7 @@ var CBIWifiFrequencyValue = form.Value.extend({
 					band = '5g';
 				else if (data[1][i].mhz >= 5925 && data[1][i].mhz <= 7125)
 					band = '6g';
-				else if (data[1][i].mhz >= 58329 && data[1][i].mhz <= 69120)
+				else if (data[1][i].mhz >= 58320 && data[1][i].mhz <= 69120)
 					band = '60g';
 				else
 					continue;
@@ -375,7 +375,8 @@ var CBIWifiFrequencyValue = form.Value.extend({
 			this.bands = {
 				'': [
 					'2g', '2.4 GHz', this.channels['2g'].length > 3,
-					'5g', '5 GHz', this.channels['5g'].length > 3
+					'5g', '5 GHz', this.channels['5g'].length > 3,
+					'60g', '60 GHz', this.channels['60g'].length > 0
 				],
 				'n': [
 					'2g', '2.4 GHz', this.channels['2g'].length > 3,
