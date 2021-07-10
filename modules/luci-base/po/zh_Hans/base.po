@@ -4,8 +4,8 @@
 #
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2021-07-04 06:42+0000\n"
-"Last-Translator: Eric <spice2wolf@gmail.com>\n"
+"PO-Revision-Date: 2021-07-05 20:29+0000\n"
+"Last-Translator: xiazhang <xz@xia.plus>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "openwrt/luci/zh_Hans/>\n"
 "Language: zh_Hans\n"
@@ -6364,15 +6364,15 @@ msgstr ""
 msgid ""
 "Specifies that duplicate frames (received on inactive ports) should be "
 "dropped or delivered"
-msgstr "明确重复的帧（在非活动端口接收的）应该被丢弃还是交付"
+msgstr "指定重复的帧（在非活动端口接收的）应该被丢弃还是交付"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:358
 msgid "Specifies the ARP link monitoring frequency in milliseconds"
-msgstr "明确 ARP 链接监控频率，单位为毫秒"
+msgstr "指定 ARP 链接监控频率，单位为毫秒"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:366
 msgid "Specifies the IP addresses to use for ARP monitoring"
-msgstr "明确用于 ARP 监控的 IP 地址"
+msgstr "指定用于 ARP 监控的 IP 地址"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:395
 msgid "Specifies the MII link monitoring frequency in milliseconds"
@@ -6428,7 +6428,7 @@ msgstr ""
 msgid ""
 "Specifies the minimum number of links that must be active before asserting "
 "carrier"
-msgstr "明确 asserting 运营商前必须处于活跃状态的链接的最小数量"
+msgstr "指定 asserting 运营商前必须处于活跃状态的链接的最小数量"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:200
 msgid "Specifies the mode to be used for this bonding interface"
@@ -6478,13 +6478,13 @@ msgstr "指定当活动从属设备发生故障或主从属设备恢复时，主
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:244
 msgid "Specifies the system priority"
-msgstr "明确系统优先级"
+msgstr "指定系统优先级"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:403
 msgid ""
 "Specifies the time in milliseconds to wait before disabling a slave after a "
 "link failure detection"
-msgstr "指定在检测到链路故障后，在禁用从属设备之前以毫秒为单位的等待时间"
+msgstr "指定在检测到链路故障后，在禁用从属设备之前等待的时间（以毫秒为单位）"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:411
 msgid ""
@@ -6505,7 +6505,7 @@ msgstr ""
 msgid ""
 "Specifies whether ARP probes and replies should be validated or non-ARP "
 "traffic should be filtered for link monitoring"
-msgstr "明确是否应验证 ARP 探测和应答，或者应为了链路监控目的过滤非 ARP 流量"
+msgstr "指定是否应验证 ARP 探测和应答，或者应为了链路监控目的过滤非 ARP 流量"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:301
 msgid ""
@@ -6549,8 +6549,8 @@ msgid ""
 "header inherits the value of the inner header) or an hexadecimal value "
 "<code>00..FF</code> (optional)."
 msgstr ""
-"明确一个 TOS （服务类型）。可以是<code>继承</code>（外层消息头继承内部消息头"
-"的值）或一个十六进制值<code>00..FF</code>（可选）。"
+"指定一个 TOS （服务类型）。可以是<code>继承</code>（外层消息头继承内部消息头的值）或一个十六进制值<code>00.."
+"FF</code>（可选）。"
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:74
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:74
@@ -6575,8 +6575,7 @@ msgid ""
 "inherits the value of the inner header) or an hexadecimal value <code>00.."
 "FF</code> (optional)."
 msgstr ""
-"明确一个流量类。可以是<code>继承</code>（外层消息头继承内部消息头的值）或一个"
-"十六进制值<code>00..FF</code>（可选）。"
+"指定一个流量类。可以是<code>继承</code>（外层消息头继承内部消息头的值）或一个十六进制值<code>00..FF</code>（可选）。"
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:64
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:69
@@ -6885,7 +6884,7 @@ msgstr "HE.net 客户端更新设置已经被改变，您现在必须使用用�
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:586
 msgid "The IP address %h is already used by another static lease"
-msgstr "IP 地址 %h 已被另一个静态租用使用"
+msgstr "IP 地址 %h 已被另一个静态租约使用"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:596
 msgid "The IP address is outside of any DHCP pool address range"
@@ -7102,9 +7101,8 @@ msgid ""
 "segments. Often there is by default one Uplink port for a connection to the "
 "next greater network like the internet and other ports for a local network."
 msgstr ""
-"本设备上的网络端口可以组合成多个 <abbr title=\"虚拟局域网\">VLAN</abbr>，其中"
-"的计算机可以直接相互通信。<abbr title=\"虚拟局域网\">VLAN</abbr> 也常用于分割"
-"不同网段。默认通常是一条上行端口连接运营商，其余端口用于本地子网。"
+"本设备上的网络端口可以组合成多个 <abbr title=\"虚拟局域网\">VLAN</abbr>，其中的计算机可以直接相互通信。<abbr "
+"title=\"虚拟局域网\">VLAN</abbr> 也常用于分割不同网段。通常是默认一条上行端口连接运营商，其余端口用于本地网络。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:569
 msgid "The query response interval must be lower than the query interval value"
