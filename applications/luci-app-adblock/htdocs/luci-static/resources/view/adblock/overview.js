@@ -437,6 +437,16 @@ return view.extend({
 		o.placeholder = '/tmp';
 		o.rmempty = true;
 
+		o = s.taboption('adv_dns', form.ListValue, 'adb_dnsinstance', _('DNS Instance'), _('Set the dns backend instance used by adblock.'));
+		o.value('0', _('First instance (default)'));
+		o.value('1', _('Second instance'));
+		o.value('2', _('Third instance'));
+		o.value('3', _('Fourth instance'));
+		o.value('4', _('Fifth instance'));
+		o.depends('adb_dns', 'dnsmasq');
+		o.optional = true;
+		o.rmempty = true;
+
 		o = s.taboption('adv_dns', form.Value, 'adb_dnstimeout', _('DNS Restart Timeout'), _('Timeout to wait for a successful DNS backend restart.'));
 		o.placeholder = '20';
 		o.datatype = 'range(1,60)';
