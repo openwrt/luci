@@ -219,16 +219,13 @@ return view.extend({
 		o.modalonly = true;
 		o.value('shadow', _('Use UNIX password in /etc/shadow'));
 		o.value('crypted', _('Use encrypted password hash'));
-		o.value('plain', _('Use plain password'));
 		o.cfgvalue = function(section_id) {
 			var value = uci.get('rpcd', section_id, 'password') || '';
 
 			if (value.substring(0, 3) == '$p$')
 				return 'shadow';
-			else if (value.substring(0, 3) == '$1$' || value == null)
-				return 'crypted';
 			else
-				return 'plain';
+				return 'crypted';
 		};
 		o.write = function() {};
 
@@ -249,7 +246,6 @@ return view.extend({
 		o.password = true;
 		o.rmempty = false;
 		o.depends('_variant', 'crypted');
-		o.depends('_variant', 'plain');
 		o.cfgvalue = function(section_id) {
 			var value = uci.get('rpcd', section_id, 'password') || '';
 			return (value.substring(0, 3) == '$p$') ? '' : value;
