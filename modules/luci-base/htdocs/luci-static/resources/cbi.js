@@ -773,7 +773,7 @@ function cbi_update_table(table, data, placeholder) {
 				trows[n] = trow;
 			});
 
-			for (var i = 1; i < n; i++) {
+			for (var i = 1; i <= n; i++) {
 				if (rows[i])
 					target.replaceChild(trows[i], rows[i]);
 				else
