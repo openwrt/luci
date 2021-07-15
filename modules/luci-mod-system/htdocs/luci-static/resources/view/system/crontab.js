@@ -16,6 +16,8 @@ return view.extend({
 		return fs.write('/etc/crontabs/root', value).then(function(rc) {
 			document.querySelector('textarea').value = value;
 			ui.addNotification(null, E('p', _('Contents have been saved.')), 'info');
+
+			return fs.exec('/etc/init.d/cron', [ 'reload' ]);
 		}).catch(function(e) {
 			ui.addNotification(null, E('p', _('Unable to save contents: %s').format(e.message)));
 		});
@@ -24,9 +26,7 @@ return view.extend({
 	render: function(crontab) {
 		return E([
 			E('h2', _('Scheduled Tasks')),
-			E('p', { 'class': 'cbi-section-descr' },
-				_('This is the system crontab in which scheduled tasks can be defined.') +
-				_('<br/>Note: you need to manually restart the cron service if the crontab file was empty before editing.')),
+			E('p', { 'class': 'cbi-section-descr' }, _('This is the system crontab in which scheduled tasks can be defined.')),
 			E('p', {}, E('textarea', { 'style': 'width:100%', 'rows': 10, 'disabled': isReadonlyView }, [ crontab != null ? crontab : '' ]))
 		]);
 	},
