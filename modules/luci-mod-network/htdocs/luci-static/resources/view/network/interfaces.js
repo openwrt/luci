@@ -1273,7 +1273,7 @@ return view.extend({
 			var trEl = this.super('renderRowActions', [ section_id, _('Configure…') ]),
 			    deleteBtn = trEl.querySelector('button:last-child');
 
-			deleteBtn.firstChild.data = _('Reset');
+			deleteBtn.firstChild.data = _('Unconfigure');
 			deleteBtn.setAttribute('title', _('Remove related device settings from the configuration'));
 			deleteBtn.disabled = section_id.match(/^dev:/) ? true : null;
 
