@@ -1,0 +1,62 @@
+{
+	"ucentral": {
+		"title": "uCentral",
+		"order": 20,
+		"action": {
+			"type": "firstchild",
+			"recurse": true
+		},
+		"auth": {
+			"methods": [ "cookie:sysauth" ],
+			"login": true
+		}
+	},
+
+	"ucentral/status": {
+		"title": "Status",
+		"order": 1,
+		"action": {
+			"type": "view",
+			"path": "ucentral/status"
+		},
+		"depends": {
+			"acl": [ "luci-mod-ucentral" ]
+		}
+	},
+
+	"ucentral/uplink": {
+		"title": "Uplink",
+		"order": 2,
+		"action": {
+			"type": "view",
+			"path": "ucentral/uplink"
+		},
+		"depends": {
+			"acl": [ "luci-mod-ucentral" ]
+		}
+	},
+
+	"ucentral/settings": {
+		"title": "Settings",
+		"order": 3,
+		"action": {
+			"type": "view",
+			"path": "ucentral/settings"
+		},
+		"depends": {
+			"acl": [ "luci-mod-ucentral" ]
+		}
+	},
+
+	"ucentral/system": {
+		"title": "System",
+		"order": 4,
+		"action": {
+			"type": "view",
+			"path": "ucentral/system"
+		},
+		"depends": {
+			"acl": [ "luci-mod-ucentral" ]
+		}
+	}
+}

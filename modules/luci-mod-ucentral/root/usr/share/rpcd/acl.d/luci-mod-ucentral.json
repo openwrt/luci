@@ -1,0 +1,33 @@
+{
+	"luci-mod-ucentral": {
+		"description": "Grant access to ucentral configuration",
+		"read": {
+			"file": {
+				"/etc/ucentral/profile.json": [ "read" ],
+				"/proc/mounts": [ "read" ],
+				"/proc/mtd": [ "read" ]
+			},
+			"ubus": {
+				"file": [ "read" ],
+				"system": [ "board", "info" ]
+			}
+		},
+		"write": {
+			"cgi-io": [ "upload" ],
+			"file": {
+				"/etc/ucentral/profile.json": [ "write" ],
+				"/sbin/certupdate": [ "exec" ],
+				"/sbin/firstboot -r -y": [ "exec" ],
+				"/sbin/profileupdate": [ "exec" ],
+				"/sbin/sysupgrade -n /tmp/firmware.bin": [ "exec" ],
+				"/sbin/sysupgrade --test /tmp/firmware.bin": [ "exec" ],
+				"/tmp/certs.tar": [ "write" ],
+				"/tmp/firmware.bin": [ "write" ]
+			},
+			"ubus": {
+				"file": [ "exec", "remove", "write" ],
+				"system": [ "reboot", "validate_firmware_image" ]
+			}
+		}
+	}
+}
