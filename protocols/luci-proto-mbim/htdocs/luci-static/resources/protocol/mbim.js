@@ -82,6 +82,9 @@ return network.registerProtocol('mbim', {
 		o.depends('auth', 'both');
 		o.password = true;
 
+		o = s.taboption('advanced', form.Flag, 'dhcp', _('Use DHCP (not usually needed)'));
+		o.default = o.disabled;
+
 		if (L.hasSystemFeature('ipv6')) {
 			o = s.taboption('advanced', form.Flag, 'ipv6', _('Enable IPv6 negotiation'));
 			o.default = o.disabled;
