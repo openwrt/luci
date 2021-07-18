@@ -5,9 +5,9 @@
 	exit 1
 }
 
-./build/mkbasepot.sh
+[ -n "$1" ] || ./build/mkbasepot.sh
 
-find . -name '*.pot' -and -not -name base.pot | \
+find "${1:-.}" -name '*.pot' -and -not -name base.pot | \
 	while read path; do
 		dir="${path%/po/templates/*}"
 		echo -n "Updating ${path#./} ... "
@@ -15,4 +15,4 @@ find . -name '*.pot' -and -not -name base.pot | \
 		echo "done"
 	done
 
-./build/i18n-update.pl
+./build/i18n-update.pl "${1:-./*/*/po}"
