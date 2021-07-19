@@ -68,7 +68,7 @@ document.addEventListener('luci-loaded', function(ev) {
 				var that = $(this);
 				var href = that.attr("href");
 
-				if (href.endsWith(nodeUrl) || href.indexOf('/' + nodeUrl + '/') != -1) {
+				if (href.substring(href.length - nodeUrl.length, href.length) === nodeUrl || href.indexOf('/' + nodeUrl + '/') != -1) {
 					ulNode.click();
 					ulNode.next(".slide-menu").stop(true, true);
 					lastNode = that.parent();
