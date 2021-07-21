@@ -322,11 +322,10 @@ return network.registerProtocol('bonding', {
 		o.value('layer3+4', _('Use upper layer protocol information (layer3+4)'));
 		o.value('encap2+3', _('Use XOR of hardware MAC addresses and IP addresses, rely on skb_flow_dissect (encap2+3)'));
 		o.value('encap3+4', _('Use upper layer protocol information, rely on skb_flow_dissect (encap3+4)'));
-		o.depends('bonding_policy', 'balance-rr');
-		o.depends('bonding_policy', 'active-backup');
-		o.depends('bonding_policy', 'balance-tlb');
-		o.depends('bonding_policy', 'balance-alb');
 		o.depends('bonding_policy', 'balance-xor');
+		o.depends('bonding_policy', 'balance-alb');
+		o.depends('bonding_policy', 'balance-tlb');
+		o.depends('bonding_policy', '802.3ad');
 
 		o = s.taboption('advanced', form.Value, 'resend_igmp',
 				_('Number of IGMP membership reports'),
