@@ -12,12 +12,6 @@ return view.extend({
 		s.anonymous = true;
 
 		s.option(form.Value, "IfName", _("Yggdrasil's network interface name"));
-		s.option(form.Value, "LinkLocalTCPPort", _("Link-local TCP port"),
-			_("The port number to be used for the link-local TCP listeners for the "+
-				"configured MulticastInterfaces. This option does not affect listeners" +
-				"specified in the Listen option. Unless you plan to firewall link-local" +
-				"traffic, it is best to leave this as the default value of 0. This " +
-				"option cannot currently be changed by reloading config during runtime."));
 
 		s.option(form.Flag, "NodeInfoPrivacy", _("Enable NodeInfo privacy"),
 		  _("By default, nodeinfo contains some defaults including the platform," +
@@ -35,17 +29,6 @@ return view.extend({
 		}
 
 		s.option(form.Value, "IfMTU", _("MTU size for the interface"));
-		s.option(form.Value, "SwitchOptions_MaxTotalQueueSize", 
-			_("Maximum size of all switch queues combined"));
-
-		o = m.section(form.TableSection, "multicast_interface", _("Multicast interfaces"),
-			_("Regular expressions for which interfaces multicast peer discovery " +
-				"should be enabled on. If none specified, multicast peer discovery is " +
-				"disabled. The default value is .* which uses all interfaces."));
-		o.option(form.Value, "name", _("Interface name"), 
-			_("Set .* to multicast on all interfaces"));
-		o.anonymous = true;
-		o.addremove = true;
 
 		o = m.section(form.TableSection, "listen_address", _("Listen addresses"), 
 			_("Listen addresses for incoming connections. You will need to add " +
@@ -53,9 +36,20 @@ return view.extend({
 				"Multicast peer discovery will work regardless of any listeners set " +
 				"here. Each listener should be specified in URI format as above, e.g. " +
 				"tcp://0.0.0.0:0 or tcp://[::]:0 to listen on all interfaces."));
-			_("Address to listen for incoming connections"), 
 		o.option(form.Value, "uri",
 			_("e.g. tcp://0.0.0.0:0 or tcp://[::]:0"));
+		o.anonymous = true;
+		o.addremove = true;
+
+		o = m.section(form.TableSection, "multicast_interface", _("Multicast interface"), 
+			_("Configuration for which interfaces multicast peer discovery should be enabled on. " + 
+				"Regex is a regular expression which is matched against an interface name, and interfaces use the first configuration that they match gainst. " +
+				"Beacon configures whether or not the node should send link-local multicast beacons to advertise their presence, while listening for incoming connections on Port. " +
+				"Listen controls whether or not the node listens for multicast beacons and opens outgoing connections."));
+		o.option(form.Value, "regex", _("Regular expression"));
+		o.option(form.Flag, "beacon", _("Send beacons"));
+		o.option(form.Flag, "listen", _("Listen for beacons"));
+		o.option(form.Value, "port", _("Link-local port"));
 		o.anonymous = true;
 		o.addremove = true;
 
