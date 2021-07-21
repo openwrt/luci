@@ -130,6 +130,9 @@ return view.extend({
 		s.taboption('general', form.Flag, 'igdv1', _('Enable IGDv1 mode'),
 			_('Advertise as IGDv1 device instead of IGDv2')).default = '0'
 
+		s.taboption('general', form.Flag, 'ext_ip_reserved_ignore', _('Ignore address check'),
+			_('Ignore private/reserved address check'))
+
 		s.taboption('general', form.Flag, 'log_output', _('Enable additional logging'),
 			_('Puts extra debugging information into the system log'))
 
