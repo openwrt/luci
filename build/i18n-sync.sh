@@ -15,4 +15,10 @@ find "${1:-.}" -name '*.pot' -and -not -name base.pot | \
 		echo "done"
 	done
 
-./build/i18n-update.pl "${1:-./*/*/po}"
+if [ -n "$1" ]; then
+	find "$1" -path '*/templates/*.pot' -printf '%h ' | \
+		xargs -r -n 1 dirname | \
+		xargs -r -n 1 ./build/i18n-update.pl
+else
+	./build/i18n-update.pl
+fi
