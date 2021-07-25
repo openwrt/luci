@@ -3,7 +3,7 @@
 #
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2021-07-22 13:50+0000\n"
+"PO-Revision-Date: 2021-07-25 17:13+0000\n"
 "Last-Translator: Eric <spice2wolf@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "openwrt/luciapplicationsmwan3/zh_Hans/>\n"
@@ -70,29 +70,29 @@ msgstr "%d 秒"
 msgid ""
 "%s: Name of Physical device which interface went up or down (e.g. \"eth0\" "
 "or \"wwan0\")"
-msgstr "%s: 接口向上或向下的物理设备的名称 (如 \"eth0\" 或 \"wwan0\" )"
+msgstr "%s：接口启动或停止时物理设备的名称（如：“eth0”或“wwan0”）"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/notify.js:39
 msgid "%s: Name of the action that triggered this event"
-msgstr "%s: 触发此事件的操作的名称"
+msgstr "%s：触发此事件的操作的名称"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/notify.js:44
 msgid ""
 "%s: Name of the interface which went up or down (e.g. \"wan\" or \"wwan\")"
-msgstr "%s: 上行或下行接口的名称 (如，\"wan\" 或 \"wwan\")"
+msgstr "%s：启动或停止的接口名称（如：“wan”或“wwan”）"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/notify.js:40
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/notify.js:41
 msgid "* %s: Is called by netifd and mwan3track"
-msgstr "* %s: 被 netifd 和 mwan3track 调用"
+msgstr "* %s：被 netifd 和 mwan3track 调用"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/notify.js:43
 msgid "* %s: Is only called by mwan3track if tracking has failed"
-msgstr "* %s: 仅在跟踪失败时由 mwan3track 调用"
+msgstr "* %s：仅在跟踪失败时由 mwan3track 调用"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/notify.js:42
 msgid "* %s: Is only called by mwan3track if tracking was successful"
-msgstr "* %s: 仅在跟踪成功时由 mwan3track 调用"
+msgstr "* %s：仅在跟踪成功时由 mwan3track 调用"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/status/diagnostics.js:71
 msgid "-- Interface Selection --"
@@ -343,13 +343,13 @@ msgstr "备用成员"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/notify.js:34
 msgid "Lines beginning with # are comments and are not executed."
-msgstr "以#开头的行是注释，不会被执行。"
+msgstr "以 # 开头的行是注释，不会被执行。"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/policy.js:20
 msgid ""
 "Load-balanced member interfaces distribute more traffic out those with "
 "higher weights."
-msgstr "权重越高的负载均衡成员接口向外分发的流量越多。"
+msgstr "权重较高的负载均衡成员接口将分配到更多的流量。"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/globals.js:19
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:91
@@ -379,11 +379,11 @@ msgstr "成员"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/policy.js:18
 msgid "Member interfaces with lower metrics are used first."
-msgstr "首先使用指标较低的成员接口。"
+msgstr "优先使用跃点数较低的成员接口。"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/policy.js:19
 msgid "Member interfaces with the same metric will be load-balanced."
-msgstr "系统对相同度量的成员接口执行负载均衡。"
+msgstr "系统对跃点数相同的成员接口执行负载均衡。"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/policy.js:30
 msgid "Member used"
@@ -392,7 +392,7 @@ msgstr "使用的成员"
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/member.js:17
 msgid ""
 "Members are profiles attaching a metric and weight to an MWAN interface."
-msgstr "成员是将度量和权重附加到 MWAN 接口的配置文件。"
+msgstr "成员用于配置某个 MWAN 接口的跃点数和权重。"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/member.js:19
 msgid ""
@@ -413,7 +413,7 @@ msgstr "MultiWAN 管理器"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/status/diagnostics.js:79
 msgid "MultiWAN Manager - Diagnostics"
-msgstr "MultiWAN 管理器-诊断"
+msgstr "MultiWAN 管理器 - 诊断"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/globals.js:10
 msgid "MultiWAN Manager - Globals"
@@ -421,7 +421,7 @@ msgstr "MultiWAN 管理器 - 全局"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:20
 msgid "MultiWAN Manager - Interfaces"
-msgstr "MultiWAN 管理器 - 界面"
+msgstr "MultiWAN 管理器 - 接口"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/member.js:16
 msgid "MultiWAN Manager - Members"
@@ -455,7 +455,7 @@ msgstr "MultiWAN 管理器 - 故障排除"
 msgid ""
 "Mwan3 requires that all interfaces have a unique metric configured in /etc/"
 "config/network."
-msgstr "Mwan3 要求所有接口都有一个在 /etc/config/network 中配置的唯一度量。"
+msgstr "Mwan3 要求所有接口都有一个在 /etc/config/network 中配置的唯一跃点数。"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:82
 msgid ""
@@ -467,13 +467,13 @@ msgstr ""
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:23
 msgid "Names may contain characters A-Z, a-z, 0-9, _ and no spaces-"
-msgstr "称可以包含字符A-Z、A-Z、0-9和不包含空格-"
+msgstr "名称可包含字符 A-Z、a-z、0-9 和 _，但不能有空格。"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/member.js:18
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/policy.js:21
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:26
 msgid "Names may contain characters A-Z, a-z, 0-9, _ and no spaces."
-msgstr "名称可以包含字符A-Z、A-Z、0-9和不包含空格。"
+msgstr "名称可以包含字符A-Z、a-z、0-9，但不包含空格。"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/policy.js:22
 msgid "Names must be 15 characters or less."
@@ -498,7 +498,7 @@ msgstr "无跟踪"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:271
 msgid "No interface metric set!"
-msgstr "没有设置接口度量！"
+msgstr "未设置接口跃点数！"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/notify.js:31
 msgid "Notes:"
@@ -588,7 +588,7 @@ msgstr "协议"
 msgid ""
 "Put your custom mwan3 action here, they will be executed with each netifd "
 "hotplug interface event on interfaces for which mwan3 is enabled."
-msgstr "将您的自定义 mwan3 动作放在这里，它们将在启用 mwan3 的接口上的每个 netifd 热插拔接口事件中执行。"
+msgstr "您可以在此自定义 mwan3 事件响应脚本，该脚本将在启用了 mwan3 的接口触发 netifd 热插拔接口事件时执行。"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:210
 msgid "Recovery interval"
@@ -616,7 +616,7 @@ msgstr "规则"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:20
 msgid "Rules are based on IP address, port or protocol."
-msgstr "规则基于IP地址、端口或协议。"
+msgstr "规则基于 IP 地址、端口或协议。"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:21
 msgid "Rules are matched from top to bottom."
