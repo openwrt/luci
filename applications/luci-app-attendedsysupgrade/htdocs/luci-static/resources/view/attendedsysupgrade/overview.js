@@ -255,7 +255,7 @@ function check_sysupgrade(server_url, current_version, target, board_name, packa
 					}
 				}
 			}
-			if (candidates) {
+			if (candidates.length) {
 				var m, s, o;
 
 				var mapdata = {
