@@ -3021,7 +3021,7 @@ function scrubMenu(node) {
 		for (var k in node.children) {
 			var child = scrubMenu(node.children[k]);
 
-			if (child.title)
+			if (child.title && !child.firstchild_ineligible)
 				hasSatisfiedChild = hasSatisfiedChild || child.satisfied;
 		}
 	}
