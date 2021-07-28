@@ -587,64 +587,6 @@ local function check_authentication(method)
 	return session_retrieve(sid)
 end
 
-local function get_children(node)
-	local children = {}
-
-	if not node.wildcard and type(node.children) == "table" then
-		for name, child in pairs(node.children) do
-			children[#children+1] = {
-				name  = name,
-				node  = child,
-				order = child.order or 1000
-			}
-		end
-
-		table.sort(children, function(a, b)
-			if a.order == b.order then
-				return a.name < b.name
-			else
-				return a.order < b.order
-			end
-		end)
-	end
-
-	return children
-end
-
-local function find_subnode(root, prefix, recurse, descended)
-	local children = get_children(root)
-
-	if #children > 0 and (not descended or recurse) then
-		local sub_path = { unpack(prefix) }
-
-		if recurse == false then
-			recurse = nil
-		end
-
-		for _, child in ipairs(children) do
-			sub_path[#prefix+1] = child.name
-
-			local res_path = find_subnode(child.node, sub_path, recurse, true)
-
-			if res_path then
-				return res_path
-			end
-		end
-	end
-
-	if descended then
-		if not recurse or
-		   root.action.type == "cbi" or
-		   root.action.type == "form" or
-		   root.action.type == "view" or
-		   root.action.type == "template" or
-		   root.action.type == "arcombine"
-		then
-			return prefix
-		end
-	end
-end
-
 local function merge_trees(node_a, node_b)
 	for k, v in pairs(node_b) do
 		if k == "children" then
@@ -786,85 +728,177 @@ local function init_template_engine(ctx)
 	return tpl
 end
 
-function dispatch(request)
-	--context._disable_memtrace = require "luci.debug".trap_memtrace("l")
-	local ctx = context
-
-	local auth, cors, suid, sgid
-	local menu = menu_json()
-	local page = menu
-
-	local requested_path_full = {}
-	local requested_path_node = {}
-	local requested_path_args = {}
-
-	local required_path_acls = {}
-
-	for i, s in ipairs(request) do
-		if type(page.children) ~= "table" or not page.children[s] then
-			page = nil
-			break
-		end
-
-		if not page.children[s].satisfied then
-			page = nil
-			break
-		end
-
-		page = page.children[s]
-		auth = page.auth or auth
-		cors = page.cors or cors
-		suid = page.setuser or suid
-		sgid = page.setgroup or sgid
-
-		if type(page.depends) == "table" and type(page.depends.acl) == "table" then
-			for _, group in ipairs(page.depends.acl) do
-				local found = false
-				for _, item in ipairs(required_path_acls) do
-					if item == group then
-						found = true
-						break
-					end
-				end
-				if not found then
-					required_path_acls[#required_path_acls + 1] = group
-				end
-			end
-		end
-
-		requested_path_full[i] = s
-		requested_path_node[i] = s
-
-		if page.wildcard then
-			for j = i + 1, #request do
-				requested_path_args[j - i] = request[j]
-				requested_path_full[j] = request[j]
-			end
-			break
-		end
-	end
-
-	local tpl = init_template_engine(ctx)
-
-	ctx.args = requested_path_args
-	ctx.path = requested_path_node
-	ctx.dispatched = page
-
-	ctx.requestpath = ctx.requestpath or requested_path_full
-	ctx.requestargs = ctx.requestargs or requested_path_args
-	ctx.requested = ctx.requested or page
-
+local function is_authenticated(auth)
 	if type(auth) == "table" and type(auth.methods) == "table" and #auth.methods > 0 then
 		local sid, sdat, sacl
 		for _, method in ipairs(auth.methods) do
 			sid, sdat, sacl = check_authentication(method)
 
 			if sid and sdat and sacl then
-				break
+				return sid, sdat, sacl
 			end
 		end
+	end
+end
 
-		if not (sid and sdat and sacl) and auth.login then
+local function ctx_append(ctx, name, node)
+	ctx.path = ctx.path or {}
+	ctx.path[#ctx.path + 1] = name
+
+	ctx.acls = ctx.acls or {}
+
+	local acls = (type(node.depends) == "table" and type(node.depends.acl) == "table") and node.depends.acl or {}
+	for _, acl in ipairs(acls) do
+		ctx.acls[_] = acl
+	end
+
+	ctx.auth = node.auth or ctx.auth
+	ctx.cors = node.cors or ctx.cors
+	ctx.suid = node.setuser or ctx.suid
+	ctx.sgid = node.setgroup or ctx.sgid
+
+	return ctx
+end
+
+local function node_weight(node)
+	local weight = node.order or 9999
+
+	if weight > 9999 then
+		weight = 9999
+	end
+
+	if type(node.auth) == "table" and node.auth.login then
+		weight = weight + 10000
+	end
+
+	return weight
+end
+
+local function resolve_firstchild(node, sacl, login_allowed, ctx)
+	local candidate = nil
+	local candidate_ctx = nil
+
+	for name, child in pairs(node.children) do
+		if child.satisfied then
+			if not sacl then
+				local _
+				_, _, sacl = is_authenticated(node.auth)
+			end
+
+			local cacl = (type(child.depends) == "table") and child.depends.acl or nil
+			local login = login_allowed or (type(child.auth) == "table" and child.auth.login)
+			if login or check_acl_depends(cacl, sacl and sacl["access-group"]) ~= nil then
+				if child.title and type(child.action) == "table" then
+					local child_ctx = ctx_append(util.clone(ctx, true), name, child)
+					if child.action.type == "firstchild" then
+						if not candidate or node_weight(candidate) > node_weight(child) then
+							local have_grandchild = resolve_firstchild(child, sacl, login, child_ctx)
+							if have_grandchild then
+								candidate = child
+								candidate_ctx = child_ctx
+							end
+						end
+					elseif not child["firstchild-ignore"] then
+						if not candidate or node_weight(candidate) > node_weight(child) then
+							candidate = child
+							candidate_ctx = child_ctx
+						end
+					end
+				end
+			end
+		end
+	end
+
+	if candidate then
+		for k, v in pairs(candidate_ctx) do
+			ctx[k] = v
+		end
+
+		return true
+	end
+
+	return false
+end
+
+local function resolve_page(tree, request_path)
+	local node = tree
+	local sacl = nil
+	local login = false
+	local ctx = {}
+
+	for i, s in ipairs(request_path) do
+		node = node.children and node.children[s]
+
+		if not node or not node.satisfied then
+			break
+		end
+
+		ctx_append(ctx, s, node)
+
+		if not sacl then
+			local _
+			_, _, sacl = is_authenticated(node.auth)
+		end
+
+		if not login and type(node.auth) == "table" and node.auth.login then
+			login = true
+		end
+
+		if node.wildcard then
+			ctx.request_args = {}
+			ctx.request_path = util.clone(ctx.path, true)
+
+			for j = i + 1, #request_path do
+				ctx.request_path[j] = request_path[j]
+				ctx.request_args[j - i] = request_path[j]
+			end
+
+			break
+		end
+	end
+
+	if node and type(node.action) == "table" and node.action.type == "firstchild" then
+		resolve_firstchild(node, sacl, login, ctx)
+	end
+
+	ctx.acls = ctx.acls or {}
+	ctx.path = ctx.path or {}
+	ctx.request_args = ctx.request_args or {}
+	ctx.request_path = ctx.request_path or util.clone(request_path, true)
+
+	node = tree
+
+	for _, s in ipairs(ctx.path or {}) do
+		node = node.children[s]
+		assert(node, "Internal node resolve error")
+	end
+
+	return node, ctx
+end
+
+function dispatch(request)
+	--context._disable_memtrace = require "luci.debug".trap_memtrace("l")
+	local ctx = context
+
+	local auth, cors, suid, sgid
+	local menu = menu_json()
+	local page, lookup_ctx = resolve_page(menu, request)
+	local action = (page and type(page.action) == "table") and page.action or {}
+
+	local tpl = init_template_engine(ctx)
+
+	ctx.args = lookup_ctx.request_args
+	ctx.path = lookup_ctx.path
+	ctx.dispatched = page
+
+	ctx.requestpath = ctx.requestpath or lookup_ctx.request_path
+	ctx.requestargs = ctx.requestargs or lookup_ctx.request_args
+	ctx.requested = ctx.requested or page
+
+	if type(lookup_ctx.auth) == "table" and next(lookup_ctx.auth) then
+		local sid, sdat, sacl = is_authenticated(lookup_ctx.auth)
+
+		if not (sid and sdat and sacl) and lookup_ctx.auth.login then
 			local user = http.getenv("HTTP_AUTH_USER")
 			local pass = http.getenv("HTTP_AUTH_PASS")
 
@@ -911,8 +945,8 @@ function dispatch(request)
 		ctx.authacl = sacl
 	end
 
-	if #required_path_acls > 0 then
-		local perm = check_acl_depends(required_path_acls, ctx.authacl and ctx.authacl["access-group"])
+	if #lookup_ctx.acls > 0 then
+		local perm = check_acl_depends(lookup_ctx.acls, ctx.authacl and ctx.authacl["access-group"])
 		if perm == nil then
 			http.status(403, "Forbidden")
 			return
@@ -921,13 +955,11 @@ function dispatch(request)
 		page.readonly = not perm
 	end
 
-	local action = (page and type(page.action) == "table") and page.action or {}
-
 	if action.type == "arcombine" then
-		action = (#requested_path_args > 0) and action.targets[2] or action.targets[1]
+		action = (#lookup_ctx.request_args > 0) and action.targets[2] or action.targets[1]
 	end
 
-	if cors and http.getenv("REQUEST_METHOD") == "OPTIONS" then
+	if lookup_ctx.cors and http.getenv("REQUEST_METHOD") == "OPTIONS" then
 		luci.http.status(200, "OK")
 		luci.http.header("Access-Control-Allow-Origin", http.getenv("HTTP_ORIGIN") or "*")
 		luci.http.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
@@ -940,12 +972,12 @@ function dispatch(request)
 		end
 	end
 
-	if sgid then
-		sys.process.setgroup(sgid)
+	if lookup_ctx.sgid then
+		sys.process.setgroup(lookup_ctx.sgid)
 	end
 
-	if suid then
-		sys.process.setuser(suid)
+	if lookup_ctx.suid then
+		sys.process.setuser(lookup_ctx.suid)
 	end
 
 	if action.type == "view" then
@@ -968,7 +1000,7 @@ function dispatch(request)
 		       'of type "' .. type(func) .. '".')
 
 		local argv = (type(action.parameters) == "table" and #action.parameters > 0) and { unpack(action.parameters) } or {}
-		for _, s in ipairs(requested_path_args) do
+		for _, s in ipairs(lookup_ctx.request_args) do
 			argv[#argv + 1] = s
 		end
 
@@ -977,13 +1009,8 @@ function dispatch(request)
 			error500(err)
 		end
 
-	elseif action.type == "firstchild" then
-		local sub_request = find_subnode(page, requested_path_full, action.recurse)
-		if sub_request then
-			dispatch(sub_request)
-		else
-			tpl.render("empty_node_placeholder", getfenv(1))
-		end
+	--elseif action.type == "firstchild" then
+	--	tpl.render("empty_node_placeholder", getfenv(1))
 
 	elseif action.type == "alias" then
 		local sub_request = {}
@@ -991,7 +1018,7 @@ function dispatch(request)
 			sub_request[#sub_request + 1] = name
 		end
 
-		for _, s in ipairs(requested_path_args) do
+		for _, s in ipairs(lookup_ctx.request_args) do
 			sub_request[#sub_request + 1] = s
 		end
 
@@ -1009,7 +1036,7 @@ function dispatch(request)
 			n = n + 1
 		end
 
-		for _, s in ipairs(requested_path_args) do
+		for _, s in ipairs(lookup_ctx.request_args) do
 			sub_request[#sub_request + 1] = s
 		end
 
@@ -1019,19 +1046,18 @@ function dispatch(request)
 		tpl.render(action.path, getfenv(1))
 
 	elseif action.type == "cbi" then
-		_cbi({ config = action.config, model = action.path }, unpack(requested_path_args))
+		_cbi({ config = action.config, model = action.path }, unpack(lookup_ctx.request_args))
 
 	elseif action.type == "form" then
-		_form({ model = action.path }, unpack(requested_path_args))
+		_form({ model = action.path }, unpack(lookup_ctx.request_args))
 
 	else
-		local root = find_subnode(menu, {}, true)
-		if not root then
+		if not menu.children then
 			error404("No root node was registered, this usually happens if no module was installed.\n" ..
 			         "Install luci-mod-admin-full and retry. " ..
 			         "If the module is already installed, try removing the /tmp/luci-indexcache file.")
 		else
-			error404("No page is registered at '/" .. table.concat(requested_path_full, "/") .. "'.\n" ..
+			error404("No page is registered at '/" .. table.concat(lookup_ctx.request_path, "/") .. "'.\n" ..
 			         "If this url belongs to an extension, make sure it is properly installed.\n" ..
 			         "If the extension was recently installed, try removing the /tmp/luci-indexcache file.")
 		end
@@ -1133,7 +1159,8 @@ function createtree_json()
 		setgroup = "string",
 		setuser = "string",
 		title = "string",
-		wildcard = "boolean"
+		wildcard = "boolean",
+		["firstchild-ignore"] = "boolean"
 	}
 
 	local files = {}
