@@ -9,6 +9,7 @@ local packageName = "https-dns-proxy"
 local readmeURL = "https://docs.openwrt.melmac.net/" .. packageName .. "/"
 local providers_dir = "/usr/lib/lua/luci/" .. packageName .. "/providers/"
 local helperText = ""
+local http2Supported = false
 
 function getPackageVersion()
 	local opkgFile = "/usr/lib/opkg/status"
@@ -30,7 +31,7 @@ function createHelperText()
 		local p_func = loadfile(providers_dir .. filename)
 		setfenv(p_func, { _ = i18n.translate })
 		local p = p_func()
-		if p.help_link then
+		if p.help_link and (not p.http2_only or http2Supported) then
 			local url, domain
 			url = p.help_link
 			domain = p.help_link_text or url:match('^%w+://([^/]+)')
@@ -102,6 +103,10 @@ else
 	end
 end
 
+if sys.call("curl --version | grep -q HTTP2") == 0 then
+	http2Supported = true
+end
+
 m = Map("https-dns-proxy", translate("DNS HTTPS Proxy Settings"))
 
 h = m:section(TypedSection, "_dummy", translatef("Service Status [%s %s]", packageName, packageVersion))
@@ -142,7 +147,9 @@ for filename in fs.dir(providers_dir) do
 	local p_func = loadfile(providers_dir .. filename)
 	setfenv(p_func, { _ = i18n.translate })
 	local p = p_func()
-	prov:value(p.resolver_url, p.label)
+	if not p.http2_only or http2Supported then
+		prov:value(p.resolver_url, p.label)
+	end
 	if p.default then
 		prov.default = p.resolver_url
 	end
@@ -157,8 +164,12 @@ prov.write = function(self, section, value)
 		value = value:gsub('[%p%c%s]', '')
 		p.url_match = p.resolver_url:gsub('[%p%c%s]', '')
 		if value:match(p.url_match) then
-			uci:set(packageName, section, "bootstrap_dns", p.bootstrap_dns)
-			uci:set(packageName, section, "resolver_url", p.resolver_url)
+			if p.bootstrap_dns then
+				uci:set(packageName, section, "bootstrap_dns", p.bootstrap_dns)
+			end
+			if p.resolver_url then
+				uci:set(packageName, section, "resolver_url", p.resolver_url)
+			end
 		end
 	end
 	uci:save(packageName)
