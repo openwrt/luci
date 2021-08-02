@@ -172,7 +172,7 @@ return view.extend({
 			E('div', { 'class': 'right' }, [
 				E('button', {
 					'class': 'cbi-button',
-					'click': function(ev) { location.href = 'collectd' }
+					'click': function(ev) { location.href = 'statistics/collectd' }
 				}, [ _('Setup collectd') ])
 			])
 		]);
