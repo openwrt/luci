@@ -96,7 +96,7 @@ return view.extend({
 		};
 
 		o = s.taboption('basic', form.DynamicList, 'only_from', _('Allowed hosts'), _('List of allowed hosts to access this service'));
-		o.datatype = 'host';
+		o.datatype = 'or(ipaddr,ip6addr)';
 		o.cast = 'string';
 		o.modalonly = true;
 
@@ -154,7 +154,7 @@ return view.extend({
 
 		// Advanced settings
 		o = s.taboption('advanced', form.DynamicList, 'no_access', _('Forbidden hosts'), _('List of forbidden hosts to access this service'));
-		o.datatype = 'host';
+		o.datatype = 'or(ipaddr,ip6addr)';
 		o.cast = 'string';
 		o.modalonly = true;
 
