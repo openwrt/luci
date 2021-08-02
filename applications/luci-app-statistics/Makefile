@@ -16,7 +16,6 @@ LUCI_DEPENDS:= \
 	+collectd-mod-iwinfo \
 	+collectd-mod-cpu \
 	+collectd-mod-memory \
-	+collectd-mod-interface \
 	+collectd-mod-load \
 	+collectd-mod-network
 
