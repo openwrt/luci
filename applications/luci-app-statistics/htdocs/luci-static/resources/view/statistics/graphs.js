@@ -179,19 +179,19 @@ return view.extend({
 	},
 
 	renderGraphs: function() {
-		var hostSel = E('select', { 'style': 'max-width:170px', 'data-name': 'host' }, rrdtool.hostInstances().map(function(host) {
+		var hostSel = E('select', { 'class': 'cbi-input-select', 'style': 'max-width:170px', 'data-name': 'host' }, rrdtool.hostInstances().map(function(host) {
 			return E('option', {
 				'selected': (rrdtool.opts.host == host) ? 'selected' : null
 			}, [ host ])
 		}));
 
-		var spanSel = E('select', { 'style': 'max-width:170px', 'data-name': 'timespan' }, L.toArray(uci.get('luci_statistics', 'collectd_rrdtool', 'RRATimespans')).map(function(span) {
+		var spanSel = E('select', { 'class': 'cbi-input-select', 'style': 'max-width:170px', 'data-name': 'timespan' }, L.toArray(uci.get('luci_statistics', 'collectd_rrdtool', 'RRATimespans')).map(function(span) {
 			return E('option', {
 				'selected': (rrdtool.opts.timespan == span) ? 'selected' : null
 			}, [ span ])
 		}));
 
-		var timeSel = E('select', { 'style': 'max-width:170px', 'data-name': 'refresh' }, [
+		var timeSel = E('select', { 'class': 'cbi-input-select', 'style': 'max-width:170px', 'data-name': 'refresh' }, [
 			E('option', { 'value': 0 }, [ _('Do not refresh') ]),
 			E('option', { 'value': 5 }, [ _('Every 5 seconds') ]),
 			E('option', { 'value': 30 }, [ _('Every 30 seconds') ]),
