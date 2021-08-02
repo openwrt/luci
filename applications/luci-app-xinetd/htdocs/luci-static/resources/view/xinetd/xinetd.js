@@ -40,6 +40,12 @@ return view.extend({
 		o = s.option(form.DummyValue, 'server', _('Server'));
 		o.modalonly = false;
 
+		o = s.option(form.DummyValue, 'flags', _('IPv6'));
+		o.cfgvalue = function(section) {
+			return (uci.get('xinetd', section, 'flags') == "IPv6") ? _("yes") : _("no");
+		};
+		o.modalonly = false;
+
 		o = s.option(form.DummyValue, 'disable', _('Enabled'));
 		o.cfgvalue = function(section) {
 			return (uci.get('xinetd', section, 'disable') == "no") ? _("yes") : _("no");
@@ -56,6 +62,13 @@ return view.extend({
 		o.enabled  = 'no';
 		o.disabled = 'yes';
 		o.default  = o.enabled;
+		o.rmempty = false;
+		o.modalonly = true;
+
+		o = s.taboption('basic', form.Flag, 'flags', _('IPv6'), _('Listen on IPv6 additional'));
+		o.enabled  = 'IPv6';
+		o.disabled = 'IPv4';
+		o.default  = o.disabled;
 		o.rmempty = false;
 		o.modalonly = true;
 
