@@ -11,27 +11,27 @@
 		}
 	},
 
-	"admin/status/iptables": {
-		"title": "Firewall",
-		"order": 2,
-		"action": {
-			"type": "view",
-			"path": "status/iptables"
-		},
-		"depends": {
-			"acl": [ "luci-mod-status-firewall" ]
-		}
-	},
-
 	"admin/status/routes": {
-		"title": "Routes",
-		"order": 3,
+		"title": "Routing",
+		"order": 2,
 		"action": {
 			"type": "view",
 			"path": "status/routes"
 		},
 		"depends": {
 			"acl": [ "luci-mod-status-routes" ]
+		}
+	},
+
+	"admin/status/iptables": {
+		"title": "Firewall",
+		"order": 3,
+		"action": {
+			"type": "view",
+			"path": "status/iptables"
+		},
+		"depends": {
+			"acl": [ "luci-mod-status-firewall" ]
 		}
 	},
 
