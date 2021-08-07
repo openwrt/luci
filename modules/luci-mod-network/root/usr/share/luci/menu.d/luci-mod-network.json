@@ -59,22 +59,9 @@
 		}
 	},
 
-	"admin/network/hosts": {
-		"title": "Hostnames",
-		"order": 40,
-		"action": {
-			"type": "view",
-			"path": "network/hosts"
-		},
-		"depends": {
-			"acl": [ "luci-mod-network-dhcp" ],
-			"uci": { "dhcp": true }
-		}
-	},
-
 	"admin/network/routes": {
 		"title": "Static Routes",
-		"order": 50,
+		"order": 40,
 		"action": {
 			"type": "view",
 			"path": "network/routes"
@@ -86,7 +73,7 @@
 
 	"admin/network/diagnostics": {
 		"title": "Diagnostics",
-		"order": 60,
+		"order": 50,
 		"action": {
 			"type": "view",
 			"path": "network/diagnostics"
