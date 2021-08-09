@@ -24,14 +24,16 @@ function getSelectableSlaves(section_id) {
 						var slaves = L.toArray(uci.get('network', interfaces[j]['.name'], 'slaves'));
 
 						for (var k = 0; k < slaves.length; k++) {
-							if (devices[i].ifname == slaves[k] && interfaces[j]['.name'] != section_id) {
-								in_use = true;
+							if (devices[i].ifname == slaves[k] || devices[i].device == slaves[k]) {
+								if (interfaces[j]['.name'] != section_id) {
+									in_use = true;
+								}
 							}
 						}
 					}
 				}
 				if (in_use == false) {
-					rv.push(devices[i].ifname);
+					devices[i].device == null ? rv.push(devices[i].ifname) : rv.push(devices[i].device)
 				}
 			}
 		}
