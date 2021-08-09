@@ -46,31 +46,29 @@
 		}
 	},
 
-	"admin/network/dhcp": {
-		"title": "DHCP and DNS",
-		"order": 30,
-		"action": {
-			"type": "view",
-			"path": "network/dhcp"
-		},
-		"depends": {
-			"acl": [ "luci-mod-network-dhcp" ],
-			"fs": {
-				"/usr/sbin/dnsmasq": "executable"
-			},
-			"uci": { "dhcp": true }
-		}
-	},
-
 	"admin/network/routes": {
-		"title": "Static Routes",
-		"order": 40,
+		"title": "Routing",
+		"order": 30,
 		"action": {
 			"type": "view",
 			"path": "network/routes"
 		},
 		"depends": {
 			"acl": [ "luci-mod-network-config" ]
+		}
+	},
+
+	"admin/network/dhcp": {
+		"title": "DHCP and DNS",
+		"order": 40,
+		"action": {
+			"type": "view",
+			"path": "network/dhcp"
+		},
+		"depends": {
+			"acl": [ "luci-mod-network-dhcp" ],
+			"fs": { "/usr/sbin/dnsmasq": "executable" },
+			"uci": { "dhcp": true }
 		}
 	},
 
