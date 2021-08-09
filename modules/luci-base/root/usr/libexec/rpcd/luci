@@ -15,9 +15,9 @@ local methods = {
 			local sys = require "luci.sys"
 			local _, name, scripts = nil, nil, {}
 			for _, name in ipairs(args.name and { args.name } or sys.init.names()) do
-				local index = sys.init.index(name)
-				if index then
-					scripts[name] = { index = index, enabled = sys.init.enabled(name) }
+				local _enabled = sys.init.enabled(name)
+				if _enabled then
+					scripts[name] = { enabled = _enabled, startlevel = sys.init.startlevel(name), stoplevel = sys.init.stoplevel(name) }
 				else
 					return { error = "No such init script" }
 				end

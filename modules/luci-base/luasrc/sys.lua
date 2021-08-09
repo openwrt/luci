@@ -565,9 +565,16 @@ function init.names()
 	return names
 end
 
-function init.index(name)
+function init.startlevel(name)
 	if fs.access(init.dir..name) then
 		return call("env -i sh -c 'source %s%s enabled; exit ${START:-255}' >/dev/null"
+			%{ init.dir, name })
+	end
+end
+
+function init.stoplevel(name)
+	if fs.access(init.dir..name) then
+		return call("env -i sh -c 'source %s%s enabled; exit ${STOP:-255}' >/dev/null"
 			%{ init.dir, name })
 	end
 end

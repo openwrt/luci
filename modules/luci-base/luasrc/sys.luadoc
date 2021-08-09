@@ -337,12 +337,20 @@ Get the names of all installed init scripts
 ]]
 
 ---[[
-Get the index of he given init script
+Get the startlevel of he given init script
 
 @class function
-@name init.index
+@name init.startlevel
 @param name	Name of the init script
-@return		Numeric index value
+@return		Numeric startlevel value, 255 if not set
+]]
+
+Get the stoplevel of he given init script
+
+@class function
+@name init.stoplevel
+@param name	Name of the init script
+@return		Numeric stoplevel value, 255 if not set
 ]]
 
 ---[[
