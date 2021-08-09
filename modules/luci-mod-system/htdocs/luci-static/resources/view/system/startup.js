@@ -87,7 +87,7 @@ return view.extend({
 			if (a.index != b.index)
 				return a.index - b.index
 
-			return a.name > b.name;
+			return ('' + a.name).localeCompare(b.name);
 		});
 
 		for (var i = 0; i < list.length; i++) {
