@@ -225,12 +225,24 @@ return view.extend({
 			])
 		]);
 
-		cbi_update_table(neigh4tbl, this.parseNeigh(ip4neigh, networks, false));
-		cbi_update_table(route4tbl, this.parseRoute(ip4route, networks, false));
-		cbi_update_table(rule4tbl, this.parseRule(ip4rule, networks, false));
-		cbi_update_table(neigh6tbl, this.parseNeigh(ip6neigh, networks, true));
-		cbi_update_table(route6tbl, this.parseRoute(ip6route, networks, true));
-		cbi_update_table(rule6tbl, this.parseRule(ip6rule, networks, false));
+		cbi_update_table(neigh4tbl, this.parseNeigh(ip4neigh, networks, false),
+			E('em', _('No entries available'))
+		);
+		cbi_update_table(route4tbl, this.parseRoute(ip4route, networks, false),
+			E('em', _('No entries available'))
+		);
+		cbi_update_table(rule4tbl, this.parseRule(ip4rule, networks, false),
+			E('em', _('No entries available'))
+		);
+		cbi_update_table(neigh6tbl, this.parseNeigh(ip6neigh, networks, true),
+			E('em', _('No entries available'))
+		);
+		cbi_update_table(route6tbl, this.parseRoute(ip6route, networks, true),
+			E('em', _('No entries available'))
+		);
+		cbi_update_table(rule6tbl, this.parseRule(ip6rule, networks, false),
+			E('em', _('No entries available'))
+		);
 
 		var view = E([], [
 			E('h2', {}, [ _('Routing') ]),
