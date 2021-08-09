@@ -189,7 +189,7 @@ button,
 select,
 input,
 .cbi-dropdown {
-	height: 1.8rem;
+	min-height: 1.8rem;
 	padding: 0;
 	color: rgba(0, 0, 0, .87);
 	border: 0;
@@ -1661,6 +1661,7 @@ body:not(.Interfaces) .cbi-rowstyle-2:first-child {
 
 .modal ul {
 	margin-left: 2.2em;
+	word-break: break-word;
 }
 
 .modal li {
@@ -1673,21 +1674,18 @@ body:not(.Interfaces) .cbi-rowstyle-2:first-child {
 	word-break: break-word;
 }
 
-.modal .label {
-	font-size: .6rem;
-	font-weight: normal;
-	padding: .1rem .3rem;
-	padding-bottom: 0;
-	cursor: default;
-	border-radius: 0;
+.modal label.btn {
+	display: flex;
+	align-items: center;
+	white-space: normal;
+	text-align: left;
+	text-transform: none;
+	padding-bottom: 0.2rem;
+	padding-top: 0.2rem;
 }
 
-.modal .label.warning {
+.modal label.warning {
 	background-color: #f0ad4e !important;
-}
-
-.modal .btn {
-	padding: .3rem .6rem;
 }
 
 .modal.cbi-modal {
@@ -2124,11 +2122,7 @@ span[data-tooltip] .label {
 
 label > input[type="checkbox"],
 label > input[type="radio"] {
-	position: relative;
-	top: .4rem;
-	right: .2rem;
-	margin: 0;
-	vertical-align: bottom;
+	margin-right: 0.8rem;
 }
 
 label[data-index][data-depends] {

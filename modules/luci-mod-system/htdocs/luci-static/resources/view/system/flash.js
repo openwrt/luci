@@ -204,8 +204,13 @@ return view.extend({
 					.then(function(res) { reply.push(res); return reply; });
 			}, this, ev.target))
 			.then(L.bind(function(btn, res) {
-				var keep = E('input', { type: 'checkbox' }),
-				    force = E('input', { type: 'checkbox' }),
+				/* sysupgrade opts table  [0]:checkbox element [1]:check condition [2]:args to pass */
+				var opts = {
+				    keep : [ E('input', { type: 'checkbox' }), false, '-n' ],
+				    force : [ E('input', { type: 'checkbox' }), true, '--force' ],
+				    skip_orig : [ E('input', { type: 'checkbox' }), true, '-u' ],
+				    backup_pkgs : [ E('input', { type: 'checkbox' }), true, '-k' ],
+				    },
 				    is_valid = res[1].valid,
 				    is_forceable = res[1].forceable,
 				    allow_backup = res[1].allow_backup,
@@ -220,7 +225,7 @@ return view.extend({
 				]));
 
 				body.push(E('p', {}, E('label', { 'class': 'btn' }, [
-					keep, ' ', _('Keep settings and retain the current configuration')
+					opts.keep[0], ' ', _('Keep settings and retain the current configuration')
 				])));
 
 				if (!is_valid || is_too_big)
@@ -239,27 +244,45 @@ return view.extend({
 						_('The uploaded image file does not contain a supported format. Make sure that you choose the generic image format for your platform.')
 					]));
 
-				if (!allow_backup)
+				if (!allow_backup) {
 					body.push(E('p', { 'class': 'alert-message' }, [
 						_('The uploaded firmware does not allow keeping current configuration.')
 					]));
+					opts.keep[0].disabled = true;
+				} else {
+					opts.keep[0].checked = true;
 
-				if (allow_backup)
-					keep.checked = true;
-				else
-					keep.disabled = true;
+					body.push(E('p', {}, E('label', { 'class': 'btn' }, [
+						opts.skip_orig[0], ' ', _('Skip from backup files that are equal to those in /rom')
+					])));
 
-
-				if ((!is_valid || is_too_big) && is_forceable)
-					body.push(E('p', { 'class': 'alert-message danger' }, [
-						force, ' ', _('Force upgrade: Select \'Force upgrade\' to flash the image even if the image format check fails. Use only if you are sure that the firmware is correct and meant for your device!')
-					]));
+					body.push(E('p', {}, E('label', { 'class': 'btn' }, [
+						opts.backup_pkgs[0], ' ', _('Include in backup a list of current installed packages at /etc/backup/installed_packages.txt')
+					])));
+				};
 
 				var cntbtn = E('button', {
 					'class': 'btn cbi-button-action important',
-					'click': ui.createHandlerFn(this, 'handleSysupgradeConfirm', btn, keep, force),
-					'disabled': (!is_valid || is_too_big) ? true : null
+					'click': ui.createHandlerFn(this, 'handleSysupgradeConfirm', btn, opts),
 				}, [ _('Continue') ]);
+
+				if (res[2].code != 0) {
+					body.push(E('p', { 'class': 'alert-message danger' }, E('label', {}, [
+						_('Image check failed:'),
+						E('br'), E('br'),
+						res[2].stderr
+					])));
+				};
+
+				if ((!is_valid || is_too_big || res[2].code != 0) && is_forceable) {
+					body.push(E('p', {}, E('label', { 'class': 'btn alert-message danger' }, [
+						opts.force[0], ' ', _('Force upgrade'),
+						E('br'), E('br'),
+						_('Select \'Force upgrade\' to flash the image even if the image format check fails. Use only if you are sure that the firmware is correct and meant for your device!')
+					])));
+					cntbtn.disabled = true;
+				};
+
 
 				body.push(E('div', { 'class': 'right' }, [
 					E('button', {
@@ -270,8 +293,14 @@ return view.extend({
 					}, [ _('Cancel') ]), ' ', cntbtn
 				]));
 
-				force.addEventListener('change', function(ev) {
+				opts.force[0].addEventListener('change', function(ev) {
 					cntbtn.disabled = !ev.target.checked;
+				});
+
+				opts.keep[0].addEventListener('change', function(ev) {
+					opts.skip_orig[0].disabled = !ev.target.checked;
+					opts.backup_pkgs[0].disabled = !ev.target.checked;
+
 				});
 
 				ui.showModal(_('Flash image?'), body);
@@ -282,27 +311,26 @@ return view.extend({
 			}, this, ev.target));
 	},
 
-	handleSysupgradeConfirm: function(btn, keep, force, ev) {
+	handleSysupgradeConfirm: function(btn, opts, ev) {
 		btn.firstChild.data = _('Flashing…');
 
 		ui.showModal(_('Flashing…'), [
 			E('p', { 'class': 'spinning' }, _('The system is flashing now.<br /> DO NOT POWER OFF THE DEVICE!<br /> Wait a few minutes before you try to reconnect. It might be necessary to renew the address of your computer to reach the device again, depending on your settings.'))
 		]);
 
-		var opts = [];
+		var args = [];
 
-		if (!keep.checked)
-			opts.push('-n');
+		for (var key in opts)
+			/* if checkbox == condition add args to sysupgrade */
+			if (opts[key][0].checked == opts[key][1])
+				args.push(opts[key][2]);
 
-		if (force.checked)
-			opts.push('--force');
-
-		opts.push('/tmp/firmware.bin');
+		args.push('/tmp/firmware.bin');
 
 		/* Currently the sysupgrade rpc call will not return, hence no promise handling */
-		fs.exec('/sbin/sysupgrade', opts);
+		fs.exec('/sbin/sysupgrade', args);
 
-		if (keep.checked)
+		if (opts['keep'][0].checked)
 			ui.awaitReconnect(window.location.host);
 		else
 			ui.awaitReconnect('192.168.1.1', 'openwrt.lan');
