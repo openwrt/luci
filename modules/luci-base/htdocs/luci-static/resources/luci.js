@@ -655,7 +655,7 @@
 		 * Provides a password for HTTP basic authentication.
 		 *
 		 * @property {number} [timeout]
-		 * Specifies the request timeout in seconds.
+		 * Specifies the request timeout in milliseconds.
 		 *
 		 * @property {boolean} [credentials=false]
 		 * Whether to include credentials such as cookies in the request.
