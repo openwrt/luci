@@ -44,11 +44,12 @@
 	},
 
 	"luci-mod-status-routes": {
-		"description": "Grant access to the system route status",
+		"description": "Grant access to routing status",
 		"read": {
 			"file": {
 				"/sbin/ip -[46] neigh show": [ "exec" ],
-				"/sbin/ip -[46] route show table all": [ "exec" ]
+				"/sbin/ip -[46] route show table all": [ "exec" ],
+				"/sbin/ip -[46] rule show": [ "exec" ]
 			},
 			"ubus": {
 				"file": [ "exec" ]

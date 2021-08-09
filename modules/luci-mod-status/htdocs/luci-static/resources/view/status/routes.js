@@ -3,6 +3,7 @@
 'require fs';
 'require rpc';
 'require validation';
+'require ui';
 
 var callNetworkInterfaceDump = rpc.declare({
 	object: 'network.interface',
@@ -32,8 +33,10 @@ return view.extend({
 			callNetworkInterfaceDump(),
 			L.resolveDefault(fs.exec('/sbin/ip', [ '-4', 'neigh', 'show' ]), {}),
 			L.resolveDefault(fs.exec('/sbin/ip', [ '-4', 'route', 'show', 'table', 'all' ]), {}),
+			L.resolveDefault(fs.exec('/sbin/ip', [ '-4', 'rule', 'show' ]), {}),
 			L.resolveDefault(fs.exec('/sbin/ip', [ '-6', 'neigh', 'show' ]), {}),
-			L.resolveDefault(fs.exec('/sbin/ip', [ '-6', 'route', 'show', 'table', 'all' ]), {})
+			L.resolveDefault(fs.exec('/sbin/ip', [ '-6', 'route', 'show', 'table', 'all' ]), {}),
+			L.resolveDefault(fs.exec('/sbin/ip', [ '-6', 'rule', 'show' ]), {})
 		]);
 	},
 
@@ -143,12 +146,32 @@ return view.extend({
 		return res;
 	},
 
+	parseRule: function(s) {
+		var lines = s.trim().split(/\n/),
+		    res = [];
+
+		for (var i = 0; i < lines.length; i++) {
+			var m = lines[i].match(/^(\d+):\s+(.+)$/),
+			    prio = m ? m[1] : null,
+			    rule = m ? m[2] : null;
+
+			res.push([
+				prio,
+				rule
+			]);
+		}
+
+		return res;
+	},
+
 	render: function(data) {
 		var networks = data[0],
 		    ip4neigh = data[1].stdout || '',
 		    ip4route = data[2].stdout || '',
-		    ip6neigh = data[3].stdout || '',
-		    ip6route = data[4].stdout || '';
+		    ip4rule = data[3].stdout || '',
+		    ip6neigh = data[4].stdout || '',
+		    ip6route = data[5].stdout || '',
+		    ip6rule = data[6].stdout || '';
 
 		var neigh4tbl = E('table', { 'class': 'table' }, [
 			E('tr', { 'class': 'tr table-titles' }, [
@@ -165,7 +188,14 @@ return view.extend({
 				E('th', { 'class': 'th' }, [ _('IPv4 gateway') ]),
 				E('th', { 'class': 'th' }, [ _('Metric') ]),
 				E('th', { 'class': 'th' }, [ _('Table') ]),
-				E('th', { 'class': 'th' }, [ _('Protocol') ]),
+				E('th', { 'class': 'th' }, [ _('Protocol') ])
+			])
+		]);
+
+		var rule4tbl = E('table', { 'class': 'table' }, [
+			E('tr', { 'class': 'tr table-titles' }, [
+				E('th', { 'class': 'th' }, [ _('Priority') ]),
+				E('th', { 'class': 'th' }, [ _('Rule') ])
 			])
 		]);
 
@@ -184,31 +214,62 @@ return view.extend({
 				E('th', { 'class': 'th' }, [ _('Source') ]),
 				E('th', { 'class': 'th' }, [ _('Metric') ]),
 				E('th', { 'class': 'th' }, [ _('Table') ]),
-				E('th', { 'class': 'th' }, [ _('Protocol') ]),
+				E('th', { 'class': 'th' }, [ _('Protocol') ])
+			])
+		]);
+
+		var rule6tbl = E('table', { 'class': 'table' }, [
+			E('tr', { 'class': 'tr table-titles' }, [
+				E('th', { 'class': 'th' }, [ _('Priority') ]),
+				E('th', { 'class': 'th' }, [ _('Rule') ])
 			])
 		]);
 
 		cbi_update_table(neigh4tbl, this.parseNeigh(ip4neigh, networks, false));
 		cbi_update_table(route4tbl, this.parseRoute(ip4route, networks, false));
+		cbi_update_table(rule4tbl, this.parseRule(ip4rule, networks, false));
 		cbi_update_table(neigh6tbl, this.parseNeigh(ip6neigh, networks, true));
 		cbi_update_table(route6tbl, this.parseRoute(ip6route, networks, true));
+		cbi_update_table(rule6tbl, this.parseRule(ip6rule, networks, false));
 
-		return E([], [
-			E('h2', {}, [ _('Routes') ]),
+		var view = E([], [
+			E('style', { 'type': 'text/css' }, [
+				'.cbi-tooltip-container, span.jump { border-bottom:1px dotted #00f;cursor:pointer }',
+				'ul { list-style:none }',
+				'.references { position:relative }',
+				'.references .cbi-tooltip { left:0!important;top:1.5em!important }',
+				'h4>span { font-size:90% }'
+			]),
+
+			E('h2', {}, [ _('Routing') ]),
 			E('p', {}, [ _('The following rules are currently active on this system.') ]),
+			E('div', {}, [
+				E('div', { 'data-tab': 'ipv4routing', 'data-tab-title': _('IPv4 Routing') }, [
+					E('h3', {}, [ _('ARP') ]),
+					neigh4tbl,
 
-			E('h3', {}, [ _('ARP') ]),
-			neigh4tbl,
+					E('h3', {}, _('Active <abbr title="Internet Protocol Version 4">IPv4</abbr>-Routes')),
+					route4tbl,
 
-			E('h3', {}, _('Active <abbr title="Internet Protocol Version 4">IPv4</abbr>-Routes')),
-			route4tbl,
+					E('h3', {}, _('Active <abbr title="Internet Protocol Version 4">IPv4</abbr>-Rules')),
+					rule4tbl
+				]),
+				E('div', { 'data-tab': 'ipv6routing', 'data-tab-title': _('IPv6 Routing') }, [
+					E('h3', {}, [ _('IPv6 Neighbours') ]),
+					neigh6tbl,
 
-			E('h3', {}, [ _('IPv6 Neighbours') ]),
-			neigh6tbl,
+					E('h3', {}, _('Active <abbr title="Internet Protocol Version 6">IPv6</abbr>-Routes')),
+					route6tbl,
 
-			E('h3', {}, _('Active <abbr title="Internet Protocol Version 6">IPv6</abbr>-Routes')),
-			route6tbl
+					E('h3', {}, _('Active <abbr title="Internet Protocol Version 6">IPv6</abbr>-Rules')),
+					rule6tbl
+				])
+			])
 		]);
+
+		ui.tabs.initTabGroup(view.lastElementChild.childNodes);
+
+		return view;
 	},
 
 	handleSaveApply: null,
