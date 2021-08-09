@@ -33,12 +33,23 @@ return view.extend({
 		for (var i = 0; i < processes.length; i++) {
 			var proc = processes[i];
 
+			var vsz = proc['VSZ'];
+			var mem = proc['%MEM'];
+			if (vsz>0) {
+				vsz=Number(vsz/1024).toFixed(1) + ' MB';
+				mem=mem.replace('%',' %');
+			} else {
+				vsz='--';
+				mem='--';
+			}
+
 			rows.push([
 				proc.PID,
 				proc.USER,
 				proc.COMMAND,
-				proc['%CPU'],
-				proc['%MEM'],
+				vsz,
+				mem,
+				proc['%CPU'].replace('%',' %'),
 				E('div', {}, [
 					E('button', {
 						'class': 'btn cbi-button-action',
@@ -69,8 +80,9 @@ return view.extend({
 					E('th', { 'class': 'th' }, _('PID')),
 					E('th', { 'class': 'th' }, _('Owner')),
 					E('th', { 'class': 'th' }, _('Command')),
-					E('th', { 'class': 'th' }, _('CPU usage (%)')),
-					E('th', { 'class': 'th' }, _('Memory usage (%)')),
+					E('th', { 'class': 'th' }, _('Memory usage (virtual size)')),
+					E('th', { 'class': 'th' }, _('Memory usage (percentage)')),
+					E('th', { 'class': 'th' }, _('CPU usage (percentage)')),
 					E('th', { 'class': 'th center nowrap cbi-section-actions' })
 				])
 			])
