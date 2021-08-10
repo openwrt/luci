@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-05-28 17:32+0000\n"
+"PO-Revision-Date: 2021-08-02 05:59+0000\n"
 "Last-Translator: Franco Castillo <castillofrancodamian@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationswatchcat/es/>\n"
@@ -11,13 +11,15 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.7-dev\n"
+"X-Generator: Weblate 4.8-dev\n"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:82
 msgid ""
 "<i>Applies to Ping Reboot and Restart Interface modes</i> <br /> Specify the "
 "interface to monitor and restart if a ping over it fails."
 msgstr ""
+"<i>Se aplica a los modos Reinicio por Ping y Reiniciar interfaz</i> <br /> "
+"Especifique la interfaz a monitorear y reiniciar si falla un ping sobre ella."
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:72
 msgid ""
@@ -27,12 +29,12 @@ msgid ""
 "fail. Enter the number of seconds to wait for the soft reboot to fail or use "
 "0 to disable the forced reboot delay."
 msgstr ""
-"Se aplica a los modos de reinicio de ping y reinicio periódico</i><br /> Al "
-"reiniciar el enrutador, el servicio activará un reinicio suave. Si ingresa "
-"un valor distinto de cero aquí, se activará un reinicio completo retrasado "
-"si falla el reinicio suave. Ingrese la cantidad de segundos para esperar a "
-"que falle el reinicio suave o use 0 para desactivar la demora de reinicio "
-"forzado."
+"Se aplica a los modos de Reinicio por Ping y Reinicio periódico</i><br /> Al "
+"reiniciar el enrutador, el servicio desencadenará un reinicio suave. "
+"Poniendo un valor distinto de cero aquí, se desencadenará un reinicio "
+"completo retrasado si falla el reinicio suave. Ponga el número de segundos "
+"que hay que esperar a que el reinicio suave falle o use 0 para desactivar el "
+"retraso de reinicio forzado."
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:88
 msgid ""
@@ -40,6 +42,9 @@ msgid ""
 "ModemManager, you can have Watchcat restart your ModemManger interface by "
 "specifying its name."
 msgstr ""
+"Se aplica a los modos Reinicio por Ping y Reiniciar interfaz</i> <br /> Si "
+"usa ModemManager, puede hacer que Watchcat reinicie su interfaz ModemManger "
+"especificando su nombre."
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:63
 msgid "Big: 248 bytes"
@@ -47,7 +52,7 @@ msgstr "Grande: 248 bytes"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:50
 msgid "Check Interval"
-msgstr "Revisar Intervalo"
+msgstr "Intervalo de comprobación"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:71
 msgid "Force Reboot Delay"
@@ -76,6 +81,7 @@ msgid "Host To Check"
 msgstr "Host para comprobar"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:51
+#, fuzzy
 msgid ""
 "How often to ping the host specified above. <br /><br />The default unit is "
 "seconds, without a suffix, but you can use the suffix <b>m</b> for minutes, "
@@ -84,6 +90,12 @@ msgid ""
 "b></li><li>1 hour would be: <b>1h</b></li><li>1 week would be: <b>7d</b></"
 "li><ul>"
 msgstr ""
+"Con qué frecuencia hacer ping al host especificado anteriormente. <br /><br /"
+">La unidad predeterminada es segundos, si no lleva sufijo, pero se puede "
+"usar el sufijo <b>m</b> para minutos, <b>h</b> para horas o <b>d</b> para "
+"días. <br /><br /> Ejemplos:<ul><li>10 segundos sería: <b>10</b> o <b>10s</"
+"b></li><li>5 minutos sería: <b>5m</b></li><li>1 hora sería: <b>1h</b></"
+"li><li>1 semana sería: <b>7d</b></ li><ul>"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:64
 msgid "Huge: 1492 bytes"
@@ -114,6 +126,17 @@ msgid ""
 "li><li> 1 hour would be: <b>1h</b></li><li>1 week would be: <b>7d</b></"
 "li><ul>"
 msgstr ""
+"En el modo de Reinicio periódico, se define la frecuencia con la que "
+"reiniciar. <br /> En el modo Reinicio por Ping, se define el período de "
+"tiempo más largo sin una respuesta desde el Host, que hay que comprobar "
+"antes de que se inicie un reinicio. <br /> En el modo Reinicio por Red, se "
+"define el período de tiempo más largo sin una respuesta desde el host, que "
+"hay que comprobar antes de que se reinicie la interfaz. <br /> <br /> La "
+"unidad predeterminada es segundos, sin llevar sufijo, pero puede usar el "
+"sufijo <b>m</b> para minutos, <b>h</b> para horas o <b>d</b> para días. <br /"
+"> <br /> Ejemplos: <ul> <li>10 segundos sería: <b>10</b> o <b>10s</b></li> "
+"<li>5 minutos sería: <b>5m</b></li> <li>1 hora sería: <b>1h</b></li><li>1 "
+"semana sería: <b>7d</b></ li><ul>"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:80
 msgid "Interface"
@@ -148,8 +171,9 @@ msgid "Ping Packet Size"
 msgstr "Tamaño del paquete de ping"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:26
+#, fuzzy
 msgid "Ping Reboot"
-msgstr ""
+msgstr "Reinicio por Ping"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:23
 msgid ""
@@ -159,6 +183,11 @@ msgid ""
 "interface if a ping to a specified host fails for a specified duration of "
 "time."
 msgstr ""
+"Reinicio por ping: reinicia este dispositivo si falla un ping a un host "
+"especificado durante un período de tiempo especificado. <br /> Reinicio "
+"periódico: reinicia este dispositivo después de un intervalo de tiempo "
+"especificado. <br /> Reiniciar interfaz: reinicia una interfaz de red si un "
+"ping a un host especificado falla durante un período de tiempo especificado."
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:28
 msgid "Restart Interface"
