@@ -92,6 +92,18 @@
 		}
 	},
 
+	"luci-mod-status-index-pstore": {
+		"description": "Grant access to kernel crash logs",
+		"read": {
+			"file": {
+				"/sys/fs/pstore/*": [ "read" ]
+			},
+			"ubus": {
+				"file": [ "list", "read" ]
+			}
+		}
+	},
+
 	"luci-mod-status-index": {
 		"description": "Grant access to main status display",
 		"read": {
