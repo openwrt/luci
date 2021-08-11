@@ -26,11 +26,8 @@
 	</footer>
 	</div>
 </div>
-<script>
-	// thanks for Jo-Philipp Wich <jow@openwrt.org>
-	var luciLocation = <%= luci.http.write_json(luci.dispatcher.context.path) %>;
-</script>
-<script src="<%=media%>/js/jquery.min.js"></script>
-<script src="<%=media%>/js/script.js"></script>
+
+<script type="text/javascript">L.require('menu-material')</script>
+
 </body>
 </html>
