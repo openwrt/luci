@@ -117,12 +117,12 @@ return baseclass.extend({
 			if (isActive)
 				this.renderMainMenu(children[i], children[i].name);
 
-			if (i > 0 || i < children.length)
+			if (i > 0 && i < children.length)
 				ul.appendChild(E('li', {'class': 'divider'}, [E('span')]))
 		}
 
-		if (ul.children.length > 1)
-			ul.style.display = '';
+		if (children.length > 1)
+			ul.parentElement.style.display = '';
 	},
 
 	renderTabMenu: function(tree, url, level) {

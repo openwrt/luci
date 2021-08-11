@@ -430,6 +430,52 @@ header > .fill > .container > .status > * {
 	cursor: pointer;
 }
 
+.modemenu-buttons {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	color: #fff;
+	color: var(--header-color);
+	background: #09c;
+	background: var(--header-bg);
+	padding: .5rem;
+	transition: box-shadow .2s;
+	box-shadow: 0 2px 5px rgb(0 0 0 / 26%);
+}
+
+#modemenu {
+	margin: 0.25rem;
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+}
+
+#modemenu > li > a {
+	font-size: .8rem;
+	font-weight: bold;
+	padding: .3rem .8rem;
+	white-space: nowrap;
+	text-decoration: none;
+	text-transform: uppercase;
+	color: #fff !important;
+	border-radius: 3px;
+	background-color: #bfbfbf;
+	text-shadow: none;
+}
+
+#modemenu > li > a.active {
+	background-color: #5bc0de !important;
+}
+
+#modemenu > li.divider {
+	margin-left: .25rem;
+	margin-right: .25rem;
+	border: .5rem solid var(--submenu-bg-hover);
+	border-left: 1px solid var(--submenu-bg-hover);
+	border-right: 1px solid var(--submenu-bg-hover);
+	border-radius: 1rem;
+}
+
 #xhr_poll_status {
 	display: flex;
 }
