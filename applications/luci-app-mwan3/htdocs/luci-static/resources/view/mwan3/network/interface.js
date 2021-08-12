@@ -252,7 +252,7 @@ return view.extend({
 		o.value('9');
 		o.value('10');
 
-		o = s.option(form.ListValue, 'flush_conntrack', _('Flush conntrack table'),
+		o = s.option(form.DynamicList, 'flush_conntrack', _('Flush conntrack table'),
 			_('Flush global firewall conntrack table on interface events'));
 		o.value('ifup', _('ifup (netifd)'));
 		o.value('ifdown', _('ifdown (netifd)'));
