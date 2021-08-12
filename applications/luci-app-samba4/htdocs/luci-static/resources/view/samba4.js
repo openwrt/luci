@@ -29,7 +29,7 @@ return view.extend({
 		s.anonymous = true;
 
 		s.tab('general',  _('General Settings'));
-		s.tab('template', _('Edit Template'));
+		s.tab('template', _('Edit Template'), _('Edit the template that is used for generating the samba configuration.'));
 
 		o = s.taboption('general', widgets.NetworkSelect, 'interface', _('Interface'),
 			_('Listen only on the given interface or, if unspecified, on lan'));
@@ -78,7 +78,7 @@ return view.extend({
 		}
 
 		o = s.taboption('template', form.TextValue, '_tmpl',
-			_('Edit the template that is used for generating the samba configuration.'),
+			null,
 			_("This is the content of the file '/etc/samba/smb.conf.template' from which your samba configuration will be generated. \
 			Values enclosed by pipe symbols ('|') should not be changed. They get their values from the 'General Settings' tab."));
 		o.rows = 20;
