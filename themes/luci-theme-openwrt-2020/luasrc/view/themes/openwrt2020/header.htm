@@ -11,6 +11,9 @@
 	local ver  = require "luci.version"
 
 	local boardinfo = util.ubus("system", "board") or { }
+	local distrib = boardinfo.release.distribution or "?"
+	local hostname = boardinfo.hostname or "?"
+	local hostonly = hostname:match("^[^%.]+")
 
 	local node = disp.context.dispatched
 	local path = table.concat(disp.context.path, "-")
@@ -27,7 +30,7 @@
 <link rel="icon" href="<%=media%>/logo.svg" type="image/svg+xml" />
 <script type="text/javascript" src="<%=url('admin/translations', luci.i18n.context.lang)%><%# ?v=PKG_VERSION %>"></script>
 <script type="text/javascript" src="<%=resource%>/cbi.js"></script>
-<title><%=striptags( (boardinfo.hostname or "?") .. ( (node and node.title) and ' - ' .. translate(node.title) or '')) %> - LuCI</title>
+<title><%=striptags( (distrib) .. ' @' .. (hostonly) .. ( (node and node.title) and ' – ' .. translate(node.title) or '')) %></title>
 <% if css then %><style title="text/css">
 <%= css %>
 </style>
@@ -43,7 +46,7 @@
 <div id="menubar">
 	<h2 class="navigation"><a id="navigation" name="navigation"><%:Navigation%></a></h2>
 
-	<span class="hostname"><a href="/"><%=striptags(boardinfo.hostname or "?")%></a></span>
+	<span class="hostname"><a href="/"><%=striptags(hostonly)%></a></span>
 	<span class="distversion"><%=ver.distversion%></span>
 	<span id="indicators"></span>
 </div>
