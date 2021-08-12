@@ -24,17 +24,21 @@ return view.extend({
 		s = m.section(form.GridSection, 'service');
 		s.modaltitle = _('Service definitions to be used by Xinetd');
 		s.tabbed = true;
+		s.anonymous = true;
 		s.addremove = true;
 		s.addbtntitle = _('Add new service entry');
 
 		// The following dummy values are used to show the table overview without the hint texts
-		o = s.option(form.DummyValue, 'port', _('Port'));
-		o.modalonly = false;
-
-		o = s.option(form.DummyValue, 'socket_type', _('Socket type'));
+		o = s.option(form.DummyValue, 'name', _('Servicename'));
 		o.modalonly = false;
 
 		o = s.option(form.DummyValue, 'protocol', _('Protocol'));
+		o.modalonly = false;
+
+		o = s.option(form.DummyValue, 'port', _('Port'));
+		o.modalonly = false;
+
+		o = s.option(form.DummyValue, 'type', _('Type'));
 		o.modalonly = false;
 
 		o = s.option(form.DummyValue, 'server', _('Server'));
@@ -58,6 +62,16 @@ return view.extend({
 		// Now here follow the "real" values to be set in the modal (with the hint texts)
 
 		// Basic settings
+		o = s.taboption('basic', form.Value, 'name', _('Servicename'), _('Name for the service, if INTERNAL from /etc/services'));
+		o.datatype = 'string';
+		o.rmempty = false;
+		o.modalonly = true;
+		o.validate = function(section_id, value) {
+			if (/^[A-Za-z0-9-_]*$/.test(value) == true)
+				return true;
+			return _('Invalid character');
+		};
+
 		o = s.taboption('basic', form.Flag, 'disable', _('Enabled'), _('Enable or Disable this service'));
 		o.enabled  = 'no';
 		o.disabled = 'yes';
@@ -84,16 +98,6 @@ return view.extend({
 		o.depends('type', 'UNLISTED');
 		o.rmempty = false;
 		o.modalonly = true;
-		o.validate = function(section_id, value) {
-			var sections = uci.sections('xinetd', 'service');
-
-			for (var i = 0; i < sections.length; i++) {
-				if (uci.get('xinetd', sections[i]['.name'], 'port') == value && section_id != sections[i]['.name'])
-					return _('Port already in use by service "%s"'.format(sections[i]['.name']));
-			}
-
-		return true;
-		};
 
 		o = s.taboption('basic', form.DynamicList, 'only_from', _('Allowed hosts'), _('List of allowed hosts to access this service'));
 		o.datatype = 'or(ipaddr,ip6addr)';
@@ -104,6 +108,7 @@ return view.extend({
 		o.datatype = 'string';
 		o.rmempty = false;
 		o.modalonly = true;
+		o.depends('type', 'UNLISTED');
 		o.validate = validateEmpty;
 		o.write = function(section, value) {
 			return fs.stat(value).then(function(res) {
@@ -122,11 +127,24 @@ return view.extend({
 		// Advanced settings
 		o = s.taboption('advanced', form.ListValue, 'type', _('Type'), _('Type of service'));
 		o.default = 'UNLISTED';
-		// FIXME for now we will only support unlisted services, maybe later we could use the (very long) list from /etc/services if needed
-		// o.value('INTERNAL', _('INTERNAL'));
+		o.value('INTERNAL', _('INTERNAL'));
 		o.value('UNLISTED', _('UNLISTED'));
 		o.rmempty = false;
 		o.modalonly = true;
+
+		o = s.taboption('advanced', form.Value, 'id', _('Identification'), _('Required if a services can use tcp and udp.'));
+		o.datatype = 'string';
+		o.value('time-stream');
+		o.value('time-dgram');
+		o.value('daytime-stream');
+		o.value('daytime-dgram');
+		o.depends('type', 'INTERNAL');
+		o.modalonly = true;
+		o.validate = function(section_id, value) {
+			if (value.length == 0 || /^[A-Za-z0-9_-]+$/.test(value) == true)
+				return true;
+			return _('Invalid character');
+		};
 
 		o = s.taboption('advanced', form.ListValue, 'wait', _('Threading behaviour'), _('Selection of the threading for this service'));
 		o.default = 'no';
