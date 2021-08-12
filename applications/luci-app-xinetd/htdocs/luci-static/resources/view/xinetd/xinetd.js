@@ -58,6 +58,7 @@ return view.extend({
 
 		s.tab('basic', _('Basic Settings'));
 		s.tab('advanced', _('Advanced Settings'));
+		s.tab('access', _('Access Control'));
 
 		// Now here follow the "real" values to be set in the modal (with the hint texts)
 
@@ -86,12 +87,26 @@ return view.extend({
 		o.rmempty = false;
 		o.modalonly = true;
 
-		o = s.taboption('basic', form.ListValue, 'protocol', _('Protocol'), _('The protocol to be used for this service'));
-		o.default = 'tcp';
-		o.value('tcp', _('TCP'));
-		o.value('udp', _('UDP'));
+		o = s.taboption('basic', form.ListValue, 'type', _('Type'), _('Type of service'));
+		o.default = 'UNLISTED';
+		o.value('INTERNAL', _('INTERNAL'));
+		o.value('UNLISTED', _('UNLISTED'));
 		o.rmempty = false;
 		o.modalonly = true;
+
+		o = s.taboption('basic', form.Value, 'id', _('Identification'), _('Required if a services can use tcp and udp.'));
+		o.datatype = 'string';
+		o.value('time-stream');
+		o.value('time-dgram');
+		o.value('daytime-stream');
+		o.value('daytime-dgram');
+		o.depends('type', 'INTERNAL');
+		o.modalonly = true;
+		o.validate = function(section_id, value) {
+			if (value.length == 0 || /^[A-Za-z0-9_-]+$/.test(value) == true)
+				return true;
+			return _('Invalid character');
+		};
 
 		o = s.taboption('basic', form.Value, 'port', _('Port'), _('The port used for this service, valid range: 0 - 65535'));
 		o.datatype = 'port';
@@ -99,9 +114,20 @@ return view.extend({
 		o.rmempty = false;
 		o.modalonly = true;
 
-		o = s.taboption('basic', form.DynamicList, 'only_from', _('Allowed hosts'), _('List of allowed hosts to access this service'));
-		o.datatype = 'or(ipaddr,ip6addr)';
-		o.cast = 'string';
+		o = s.taboption('basic', form.ListValue, 'protocol', _('Protocol'), _('The protocol to be used for this service'));
+		o.default = 'tcp';
+		o.value('tcp', _('TCP'));
+		o.value('udp', _('UDP'));
+		o.rmempty = false;
+		o.modalonly = true;
+
+		o = s.taboption('basic', form.ListValue, 'socket_type', _('Socket type'), _('The type of the socket used for this service'));
+		o.default = 'stream';
+		o.value('stream', _('stream-based service'));
+		o.value('dgram', _('datagram-based service'));
+		o.value('raw', _('direct access to IP service'));
+		o.value('seqpacket', _('sequential datagram transmission service'));
+		o.rmempty = false;
 		o.modalonly = true;
 
 		o = s.taboption('basic', form.Value, 'server', _('Server'), _('Complete path to the executable server file'));
@@ -124,27 +150,15 @@ return view.extend({
 			});
 		};
 
+		o = s.taboption('basic', form.Value, 'server_args', _('Server arguments'), _('Additional arguments passed to the server. There is no validation of this input.'));
+		o.datatype = 'string';
+		o.modalonly = true;
+		o.depends('type', 'UNLISTED');
+
 		// Advanced settings
-		o = s.taboption('advanced', form.ListValue, 'type', _('Type'), _('Type of service'));
-		o.default = 'UNLISTED';
-		o.value('INTERNAL', _('INTERNAL'));
-		o.value('UNLISTED', _('UNLISTED'));
+		o = s.taboption('advanced', widgets.UserSelect, 'user', _('User (UID)'), _('User ID for the server process for this service'));
 		o.rmempty = false;
 		o.modalonly = true;
-
-		o = s.taboption('advanced', form.Value, 'id', _('Identification'), _('Required if a services can use tcp and udp.'));
-		o.datatype = 'string';
-		o.value('time-stream');
-		o.value('time-dgram');
-		o.value('daytime-stream');
-		o.value('daytime-dgram');
-		o.depends('type', 'INTERNAL');
-		o.modalonly = true;
-		o.validate = function(section_id, value) {
-			if (value.length == 0 || /^[A-Za-z0-9_-]+$/.test(value) == true)
-				return true;
-			return _('Invalid character');
-		};
 
 		o = s.taboption('advanced', form.ListValue, 'wait', _('Threading behaviour'), _('Selection of the threading for this service'));
 		o.default = 'no';
@@ -152,57 +166,6 @@ return view.extend({
 		o.value('no', _('Multi-Threaded Service'));
 		o.rmempty = false;
 		o.modalonly = true;
-
-		o = s.taboption('advanced', form.ListValue, 'socket_type', _('Socket type'), _('The type of the socket used for this service'));
-		o.default = 'stream';
-		o.value('stream', _('stream-based service'));
-		o.value('dgram', _('datagram-based service'));
-		o.value('raw', _('direct access to IP service'));
-		o.value('seqpacket', _('sequential datagram transmission service'));
-		o.rmempty = false;
-		o.modalonly = true;
-
-		o = s.taboption('advanced', widgets.UserSelect, 'user', _('User (UID)'), _('User ID for the server process for this service'));
-		o.rmempty = false;
-		o.modalonly = true;
-
-		o = s.taboption('advanced', form.Value, 'server_args', _('Server arguments'), _('Additional arguments passed to the server. There is no validation of this input.'));
-		o.datatype = 'string';
-		o.modalonly = true;
-
-		// Advanced settings
-		o = s.taboption('advanced', form.DynamicList, 'no_access', _('Forbidden hosts'), _('List of forbidden hosts to access this service'));
-		o.datatype = 'or(ipaddr,ip6addr)';
-		o.cast = 'string';
-		o.modalonly = true;
-
-		o = s.taboption('advanced', form.Value, 'instances', _('Number of instances'), _('Number of simultaneously running servers for this service. Argument is any number or the keyword \'UNLIMITED\''));
-		o.datatype = 'or("UNLIMITED", uinteger)';
-		o.value('UNLIMITED', 'UNLIMITED');
-		o.modalonly = true;
-
-		o = s.taboption('advanced', form.DynamicList, 'access_times', _('Access times'), _('Time intervals within service is available (Format hh:mm-hh:mm)'));
-		o.datatype = 'string';
-		o.modalonly = true;
-		o.validate = function(section_id, value) {
-			if (value.length == 0 || /^([01]\d|2[0-3]):[0-5]\d-([01]\d|2[0-3]):[0-5]\d$/.test(value) == true)
-				return true;
-
-			return _('Expected \'hh:mm-hh:mm\'');
-
-		};
-
-		o = s.taboption('advanced', form.Value, 'cps', _('Connection limit'), _('Takes two arguments: [Number of connections per second] [Number of seconds to reenable service]'));
-		o.datatype = 'string';
-		o.placeholder = '50 10';
-		o.modalonly = true;
-		o.validate = function(section_id, value) {
-			if (value.length == 0 || /^([0-9]+\s+[0-9]+$)/.test(value) == true)
-				return true;
-
-			return _('Expected \'[Number] [Number]\'');
-
-		};
 
 		o = s.taboption('advanced', form.MultiValue, 'log_on_success', _('Log on success'), _('Informations that should be logged for this service in case of successful connection'));
 		o.value('PID', _('Server PID'));
@@ -218,6 +181,41 @@ return view.extend({
 		o.value('USERID', _('User ID of the remote user'));
 		o.value('ATTEMPT', _('Failed attempts'));
 		o.modalonly = true;
+
+		// Access Control
+		o = s.taboption('access', form.DynamicList, 'only_from', _('Allowed hosts'), _('List of allowed hosts to access this service'));
+		o.datatype = 'or(ipaddr,ip6addr)';
+		o.cast = 'string';
+		o.modalonly = true;
+
+		o = s.taboption('access', form.DynamicList, 'no_access', _('Forbidden hosts'), _('List of forbidden hosts to access this service'));
+		o.datatype = 'or(ipaddr,ip6addr)';
+		o.cast = 'string';
+		o.modalonly = true;
+
+		o = s.taboption('access', form.Value, 'instances', _('Number of instances'), _('Number of simultaneously running servers for this service. Argument is any number or the keyword \'UNLIMITED\''));
+		o.datatype = 'or("UNLIMITED", uinteger)';
+		o.value('UNLIMITED', 'UNLIMITED');
+		o.modalonly = true;
+
+		o = s.taboption('access', form.Value, 'cps', _('Connection limit'), _('Takes two arguments: [Number of connections per second] [Number of seconds to reenable service]'));
+		o.datatype = 'string';
+		o.placeholder = '50 10';
+		o.modalonly = true;
+		o.validate = function(section_id, value) {
+			if (value.length == 0 || /^([0-9]+\s+[0-9]+$)/.test(value) == true)
+				return true;
+			return _('Expected \'[Number] [Number]\'');
+		};
+
+		o = s.taboption('access', form.DynamicList, 'access_times', _('Access times'), _('Time intervals within service is available (Format hh:mm-hh:mm)'));
+		o.datatype = 'string';
+		o.modalonly = true;
+		o.validate = function(section_id, value) {
+			if (value.length == 0 || /^([01]\d|2[0-3]):[0-5]\d-([01]\d|2[0-3]):[0-5]\d$/.test(value) == true)
+				return true;
+			return _('Expected \'hh:mm-hh:mm\'');
+		};
 
 		return m.render();
 	}
