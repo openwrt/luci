@@ -372,7 +372,10 @@ var CBINetworkSelect = form.ListValue.extend({
 			var network = this.networks[i],
 			    name = network.getName();
 
-			if (name == 'loopback' || name == this.exclude || !this.filter(section_id, name))
+			if (name == this.exclude || !this.filter(section_id, name))
+				continue;
+
+			if (name == 'loopback' && !this.loopback)
 				continue;
 
 			if (this.novirtual && network.isVirtual())
