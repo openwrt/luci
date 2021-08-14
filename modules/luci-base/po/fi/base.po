@@ -1,14 +1,14 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2021-06-18 19:32+0000\n"
-"Last-Translator: Demian Wright <wright.demian+weblate@gmail.com>\n"
+"PO-Revision-Date: 2021-08-13 04:43+0000\n"
+"Last-Translator: olli <olli.asikainen@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/openwrt/luci/fi/>"
 "\n"
 "Language: fi\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.7\n"
+"X-Generator: Weblate 4.8-dev\n"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1484
 msgid "%.1f dB"
@@ -2025,7 +2025,7 @@ msgstr ""
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:25
 msgid "Do not send a hostname"
-msgstr "Älä lähetä palvelinnimeä"
+msgstr "Älä lähetä isäntänimeä"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:766
 msgid ""
@@ -3843,6 +3843,9 @@ msgid ""
 "interoperate. Airtime efficiency may be significantly reduced where these "
 "are used. It is recommended to not allow 802.11b rates where possible."
 msgstr ""
+"Vanhat tai väärin toimivat laitteet saattavat tarvita vanhentuneita 802.11b -"
+"protokollan mukaisia siirtonopeuksia toimiakseen. Niiden käyttö heikentää "
+"tiedonsiirtotehoa huomattavasti eikä sitä suositella, jos vain mahdollista."
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4053
 msgid "Legend:"
@@ -3935,7 +3938,7 @@ msgstr "Luettelo verkkotunnuksista, joille sallitaan RFC1918-vastaukset"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:375
 msgid "List of domains to force to an IP address."
-msgstr ""
+msgstr "Lista verkkoalueista sekä käytettävistä IP-osoitteista."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:356
 msgid "List of hosts that supply bogus NX domain results"
@@ -4386,7 +4389,7 @@ msgstr "Malli"
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:43
 msgid "Modem bearer teardown in progress."
-msgstr ""
+msgstr "Modeemin yhteyden purkaminen käynnissä."
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:42
 msgid ""
@@ -4813,6 +4816,8 @@ msgid ""
 "Note: Some wireless drivers do not fully support 802.11w. E.g. mwlwifi may "
 "have problems"
 msgstr ""
+"Huomautus: Jotkut langattomien verkkolaitteiden ajurit eivät täysin tue "
+"802.11w -standardia. Esim. mwlwifi -ajureilla voi esiintyä ongelmia"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:128
 msgid "Notes"
@@ -7471,7 +7476,7 @@ msgstr "Aikaväli GTK:n uusimiseen"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:15
 msgid "Timed-out"
-msgstr ""
+msgstr "Aikaraja täyttyi"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:657
 msgid "Timeout in seconds"
@@ -8183,12 +8188,18 @@ msgid ""
 "Where Wi-Fi Multimedia (WMM) Mode QoS is disabled, clients may be limited to "
 "802.11a/802.11g rates."
 msgstr ""
+"Tilanteissa, joissa Wi-Fi Multimedia (WMM) tilan tiedonsiirron priorisointi "
+"(QoS) on pois käytöstä, asiakaslaitteiden nopeudet voivat rajoittua 802.11a/"
+"802.11g mukaisiin nopeuksiin."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1139
 msgid ""
 "Where the ESSID is hidden, clients may fail to roam and airtime efficiency "
 "may be significantly reduced."
 msgstr ""
+"Tilanteissa, joissa ESSID on piilotettu, saattaa asiakaslaitteiden "
+"liikkuminen verkosta toiseen epäonnistua ja tiedonsiirron teho laskea "
+"merkittävästi."
 
 #: modules/luci-compat/luasrc/view/cbi/wireless_modefreq.htm:166
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:520

@@ -3,7 +3,7 @@
 #
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2021-06-20 16:43+0000\n"
+"PO-Revision-Date: 2021-08-14 14:43+0000\n"
 "Last-Translator: Hulen <shift0106@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "openwrt/luciapplicationsmwan3/zh_Hant/>\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.7\n"
+"X-Generator: Weblate 4.8-dev\n"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:186
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:202
@@ -44,7 +44,6 @@ msgstr "%d 分鐘"
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:175
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:191
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:213
-#, fuzzy
 msgid "%d second"
 msgid_plural "%d seconds"
 msgstr[0] "%d 秒"
@@ -71,33 +70,33 @@ msgstr "%d 秒"
 msgid ""
 "%s: Name of Physical device which interface went up or down (e.g. \"eth0\" "
 "or \"wwan0\")"
-msgstr ""
+msgstr "%s：介面啟動或停止時物理裝置的名稱 (如：「eth0」或「wwan0」)"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/notify.js:39
 msgid "%s: Name of the action that triggered this event"
-msgstr ""
+msgstr "%s：觸發此事件的操作的名稱"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/notify.js:44
 msgid ""
 "%s: Name of the interface which went up or down (e.g. \"wan\" or \"wwan\")"
-msgstr ""
+msgstr "%s：啟動或停止的介面名稱 (如：「wan」或「wwan」)"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/notify.js:40
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/notify.js:41
 msgid "* %s: Is called by netifd and mwan3track"
-msgstr ""
+msgstr "* %s：被 netifd 和 mwan3track 呼叫"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/notify.js:43
 msgid "* %s: Is only called by mwan3track if tracking has failed"
-msgstr ""
+msgstr "* %s：僅在跟蹤失敗時由 mwan3track 呼叫"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/notify.js:42
 msgid "* %s: Is only called by mwan3track if tracking was successful"
-msgstr ""
+msgstr "* %s：僅在跟蹤成功時由 mwan3track 呼叫"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/status/diagnostics.js:71
 msgid "-- Interface Selection --"
-msgstr ""
+msgstr "-- 介面選擇 --"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:83
 msgid "-- Please choose --"
@@ -140,11 +139,11 @@ msgstr "檢查路由表"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/status/overview.js:95
 msgid "Collecting data ..."
-msgstr ""
+msgstr "收集資料中 ..."
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/notify.js:18
 msgid "Contents have been saved."
-msgstr ""
+msgstr "內容已儲存。"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/globals.js:27
 msgid "Critical"
@@ -323,7 +322,7 @@ msgstr "當 Ping 失敗次數達到這個數值後，介面會被認為離線"
 msgid ""
 "Interfaces may not share the same name as configured members, policies or "
 "rules."
-msgstr ""
+msgstr "介面名稱不能與已設定的成員、策略或規則相同。"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:41
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:34
@@ -344,13 +343,13 @@ msgstr "備用成員"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/notify.js:34
 msgid "Lines beginning with # are comments and are not executed."
-msgstr ""
+msgstr "以 # 開頭的行是註解，不會被執行。"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/policy.js:20
 msgid ""
 "Load-balanced member interfaces distribute more traffic out those with "
 "higher weights."
-msgstr ""
+msgstr "權重較高的負載均衡成員介面將分配到更多的流量。"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/globals.js:19
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:91
@@ -380,11 +379,11 @@ msgstr "成員"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/policy.js:18
 msgid "Member interfaces with lower metrics are used first."
-msgstr ""
+msgstr "優先使用躍點數較低的成員介面。"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/policy.js:19
 msgid "Member interfaces with the same metric will be load-balanced."
-msgstr ""
+msgstr "系統對躍點數相同的成員介面執行負載均衡。"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/policy.js:30
 msgid "Member used"
@@ -393,13 +392,13 @@ msgstr "使用的成員"
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/member.js:17
 msgid ""
 "Members are profiles attaching a metric and weight to an MWAN interface."
-msgstr ""
+msgstr "成員用於設定某個 MWAN 介面的躍點數和權重。"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/member.js:19
 msgid ""
 "Members may not share the same name as configured interfaces, policies or "
 "rules."
-msgstr ""
+msgstr "成員名稱不能與設定的介面、策略或規則相同。"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:263
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/member.js:33
@@ -410,53 +409,53 @@ msgstr "公測數"
 #: applications/luci-app-mwan3/root/usr/share/luci/menu.d/luci-app-mwan3.json:3
 #: applications/luci-app-mwan3/root/usr/share/luci/menu.d/luci-app-mwan3.json:46
 msgid "MultiWAN Manager"
-msgstr ""
+msgstr "MultiWAN 管理器"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/status/diagnostics.js:79
 msgid "MultiWAN Manager - Diagnostics"
-msgstr ""
+msgstr "MultiWAN 管理器 - 診斷"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/globals.js:10
 msgid "MultiWAN Manager - Globals"
-msgstr ""
+msgstr "MultiWAN 管理器 - 全域"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:20
 msgid "MultiWAN Manager - Interfaces"
-msgstr ""
+msgstr "MultiWAN 管理器 - 介面"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/member.js:16
 msgid "MultiWAN Manager - Members"
-msgstr ""
+msgstr "MultiWAN 管理器 - 成員"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/notify.js:26
 msgid "MultiWAN Manager - Notify"
-msgstr ""
+msgstr "MultiWAN 管理器 - 通知"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/status/overview.js:92
 msgid "MultiWAN Manager - Overview"
-msgstr ""
+msgstr "MultiWAN 管理器 - 概覽"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/policy.js:16
 msgid "MultiWAN Manager - Policies"
-msgstr ""
+msgstr "MultiWAN 管理器 - 策略"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:18
 msgid "MultiWAN Manager - Rules"
-msgstr ""
+msgstr "MultiWAN 管理器 - 規則"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/status/detail.js:12
 msgid "MultiWAN Manager - Status"
-msgstr ""
+msgstr "MultiWAN 管理器 - 狀態"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/status/troubleshooting.js:12
 msgid "MultiWAN Manager - Troubleshooting"
-msgstr ""
+msgstr "MultiWAN 管理器 - 故障排除"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:21
 msgid ""
 "Mwan3 requires that all interfaces have a unique metric configured in /etc/"
 "config/network."
-msgstr ""
+msgstr "Mwan3 要求所有介面都有一個在 /etc/config/network 中設定的唯一躍點數。"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:82
 msgid ""
@@ -468,21 +467,21 @@ msgstr ""
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:23
 msgid "Names may contain characters A-Z, a-z, 0-9, _ and no spaces-"
-msgstr ""
+msgstr "名稱可包含字元 A-Z、a-z、0-9 和 _，但不能有空格"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/member.js:18
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/policy.js:21
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:26
 msgid "Names may contain characters A-Z, a-z, 0-9, _ and no spaces."
-msgstr ""
+msgstr "名稱可以包含字元A-Z、a-z、0-9，但不包含空格。"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/policy.js:22
 msgid "Names must be 15 characters or less."
-msgstr ""
+msgstr "名稱最多 15 個字元。"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:22
 msgid "Names must match the interface name found in /etc/config/network."
-msgstr ""
+msgstr "名稱必須與 /etc/config/network 中找到的介面名稱相符。"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:73
 msgid "No"
@@ -499,11 +498,11 @@ msgstr "無跟蹤"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:271
 msgid "No interface metric set!"
-msgstr ""
+msgstr "未設定介面躍點數！"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/notify.js:31
 msgid "Notes:"
-msgstr ""
+msgstr "附註："
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/globals.js:30
 msgid "Notice"
@@ -511,7 +510,7 @@ msgstr "注意"
 
 #: applications/luci-app-mwan3/root/usr/share/luci/menu.d/luci-app-mwan3.json:96
 msgid "Notify"
-msgstr ""
+msgstr "通知"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:38
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/status/overview.js:37
@@ -527,7 +526,7 @@ msgstr "在線"
 
 #: applications/luci-app-mwan3/root/usr/share/luci/menu.d/luci-app-mwan3.json:13
 msgid "Overview"
-msgstr ""
+msgstr "概覽"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:79
 msgid "Ping count"
@@ -565,13 +564,13 @@ msgstr "Ping 跟蹤 IP"
 msgid ""
 "Policies are profiles grouping one or more members controlling how Mwan3 "
 "distributes traffic."
-msgstr ""
+msgstr "策略是將一個或多個成員分組的設定檔案，這些成員控制 Mwan3 如何分配流量。"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/policy.js:23
 msgid ""
 "Policies may not share the same name as configured interfaces, members or "
 "rules"
-msgstr ""
+msgstr "策略名稱不能與設定的介面、成員或規則相同"
 
 #: applications/luci-app-mwan3/root/usr/share/luci/menu.d/luci-app-mwan3.json:80
 msgid "Policy"
@@ -589,7 +588,7 @@ msgstr "協定"
 msgid ""
 "Put your custom mwan3 action here, they will be executed with each netifd "
 "hotplug interface event on interfaces for which mwan3 is enabled."
-msgstr ""
+msgstr "您可以在此自訂 mwan3 事件回應指令碼，該指令碼將在啟用了 mwan3 的介面觸發 netifd 熱插拔介面事件時執行。"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:210
 msgid "Recovery interval"
@@ -617,25 +616,25 @@ msgstr "規則"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:20
 msgid "Rules are based on IP address, port or protocol."
-msgstr ""
+msgstr "規則基於 IP 位址、連接埠或協定。"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:21
 msgid "Rules are matched from top to bottom."
-msgstr ""
+msgstr "規則從上到下進行相符。"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:22
 msgid "Rules below a matching rule are ignored."
-msgstr ""
+msgstr "相符規則下面的規則將被忽略。"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:27
 msgid ""
 "Rules may not share the same name as configured interfaces, members or "
 "policies."
-msgstr ""
+msgstr "規則名稱不能與設定的介面、成員或策略的名稱一樣。"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:19
 msgid "Rules specify which traffic will use a particular MWAN policy."
-msgstr ""
+msgstr "規則指定哪些流量將使用特定的 MWAN 策略。"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:77
 msgid "Seconds. Acceptable values: 1-1000000. Defaults to 600 if not set"
@@ -675,17 +674,17 @@ msgstr "任務"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/notify.js:29
 msgid "The file is also preserved during sysupgrade."
-msgstr ""
+msgstr "在系統升級期間，該檔案也被保留。"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/notify.js:33
 msgid ""
 "The first line of the script must be &#34;#!/bin/sh&#34; without quotes."
-msgstr ""
+msgstr "指令碼的第一行必須是不帶引號的 &#34;#!/bin/sh&#34;。"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/notify.js:37
 msgid ""
 "There are three main environment variables that are passed to this script."
-msgstr ""
+msgstr "傳遞到這個指令碼的主要環境變數有三個。"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:264
 msgid ""
@@ -694,7 +693,7 @@ msgstr "這裡顯示了這個介面在 /etc/config/network 中配置的躍點數
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/notify.js:32
 msgid "This file is interpreted as a shell script."
-msgstr ""
+msgstr "這個檔案被解釋為一個 shell 指令碼。"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:48
 msgid ""
@@ -704,7 +703,7 @@ msgstr "通過 ping 此主機或 IP 位址來確定鏈路是否在線。留空�
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/notify.js:28
 msgid "This section allows you to modify the content of \"/etc/mwan3.user\"."
-msgstr ""
+msgstr "這個部分允許您修改「/etc/mwan3.user」的內容。"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:47
 msgid "Tracking hostname or IP address"
@@ -722,7 +721,7 @@ msgstr "跟蹤可靠性"
 msgid ""
 "Traffic destined for known (other than default) networks is handled by the "
 "main routing table."
-msgstr ""
+msgstr "傳送到已知 (非預設) 網路的流量由主路由表處理。"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:70
 msgid ""
@@ -736,11 +735,11 @@ msgstr ""
 msgid ""
 "Traffic matching a rule, but all WAN interfaces for that policy are down "
 "will be blackholed."
-msgstr ""
+msgstr "流量相符了一條規則，但該策略的所有WAN介面都停止運作，流量將被黑洞。"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:23
 msgid "Traffic not matching any rule is routed using the main routing table."
-msgstr ""
+msgstr "不相符任何規則的流量使用主路由表進行路由。"
 
 #: applications/luci-app-mwan3/root/usr/share/luci/menu.d/luci-app-mwan3.json:37
 msgid "Troubleshooting"
@@ -748,7 +747,7 @@ msgstr "故障排除"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/notify.js:20
 msgid "Unable to save contents: %s"
-msgstr ""
+msgstr "無法儲存內容：%s"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/status/overview.js:33
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/status/overview.js:47
