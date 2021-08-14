@@ -250,7 +250,6 @@ msgstr "ANSI T1.413"
 msgid "APN"
 msgstr "APN"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:248
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:353
 msgid "ARP"
 msgstr "ARP"
@@ -353,20 +352,20 @@ msgstr "Aktionen"
 msgid "Active"
 msgstr "Aktiv"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:251
-msgid "Active <abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Routes"
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:243
+msgid "Active IPv4 Routes"
 msgstr "Aktive <abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Routen"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:254
-msgid "Active <abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Rules"
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:246
+msgid "Active IPv4 Rules"
 msgstr ""
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:261
-msgid "Active <abbr title=\"Internet Protocol Version 6\">IPv6</abbr>-Routes"
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:253
+msgid "Active IPv6 Routes"
 msgstr "Aktive <abbr title=\"Internet Protocol Version 6\">IPv6</abbr>-Routen"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:264
-msgid "Active <abbr title=\"Internet Protocol Version 6\">IPv6</abbr>-Rules"
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:256
+msgid "Active IPv6 Rules"
 msgstr ""
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:81
@@ -2850,6 +2849,7 @@ msgstr "GRETAP-Tunnel über IPv6"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:74
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:44
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:188
 msgid "Gateway"
 msgstr "Gateway"
 
@@ -3148,6 +3148,8 @@ msgid "IP Type"
 msgstr "IP-Typ"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:501
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:178
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:204
 msgid "IP address"
 msgstr "IP-Adresse"
 
@@ -3180,7 +3182,11 @@ msgstr "IPv4"
 msgid "IPv4 Firewall"
 msgstr "IPv4 Firewall"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:247
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:240
+msgid "IPv4 Neighbours"
+msgstr ""
+
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:239
 msgid "IPv4 Routing"
 msgstr ""
 
@@ -3192,7 +3198,6 @@ msgstr "IPv4-Upstream"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:38
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:585
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:88
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:178
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:164
 msgid "IPv4 address"
 msgstr "IPv4 Adresse"
@@ -3206,7 +3211,6 @@ msgid "IPv4 broadcast"
 msgstr "IPv4 Broadcast"
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/static.js:180
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:188
 msgid "IPv4 gateway"
 msgstr "IPv4 Gateway"
 
@@ -3269,7 +3273,7 @@ msgstr "IPv6 Firewall"
 msgid "IPv6 MTU"
 msgstr "IPv6-MTU"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:258
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:250
 msgid "IPv6 Neighbours"
 msgstr "IPv6 Nachbarn"
 
@@ -3277,7 +3281,7 @@ msgstr "IPv6 Nachbarn"
 msgid "IPv6 RA Settings"
 msgstr "IPv6-RA-Einstellungen"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:257
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:249
 msgid "IPv6 Routing"
 msgstr ""
 
@@ -3296,7 +3300,6 @@ msgstr "IPv6-Upstream"
 #: modules/luci-base/htdocs/luci-static/resources/protocol/static.js:183
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:57
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:127
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:204
 msgid "IPv6 address"
 msgstr "IPv6 Adresse"
 
@@ -6166,7 +6169,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:28
 #: modules/luci-mod-network/root/usr/share/luci/menu.d/luci-mod-network.json:50
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:244
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:236
 #: modules/luci-mod-status/root/usr/share/luci/menu.d/luci-mod-status.json:15
 msgid "Routing"
 msgstr ""
@@ -7320,7 +7323,7 @@ msgstr ""
 "zu gewährleisten.<br />Auf \"Fortfahren\" klicken um den Schreibvorgang zu "
 "starten."
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:245
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:237
 msgid "The following rules are currently active on this system."
 msgstr "Die folgenden Regeln sind zur Zeit auf dem System aktiv."
 

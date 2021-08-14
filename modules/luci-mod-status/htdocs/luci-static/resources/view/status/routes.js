@@ -175,7 +175,7 @@ return view.extend({
 
 		var neigh4tbl = E('table', { 'class': 'table' }, [
 			E('tr', { 'class': 'tr table-titles' }, [
-				E('th', { 'class': 'th' }, [ _('IPv4 address') ]),
+				E('th', { 'class': 'th' }, [ _('IP address') ]),
 				E('th', { 'class': 'th' }, [ _('MAC address') ]),
 				E('th', { 'class': 'th' }, [ _('Interface') ])
 			])
@@ -185,7 +185,7 @@ return view.extend({
 			E('tr', { 'class': 'tr table-titles' }, [
 				E('th', { 'class': 'th' }, [ _('Network') ]),
 				E('th', { 'class': 'th' }, [ _('Target') ]),
-				E('th', { 'class': 'th' }, [ _('IPv4 gateway') ]),
+				E('th', { 'class': 'th' }, [ _('Gateway') ]),
 				E('th', { 'class': 'th' }, [ _('Metric') ]),
 				E('th', { 'class': 'th' }, [ _('Table') ]),
 				E('th', { 'class': 'th' }, [ _('Protocol') ])
@@ -201,7 +201,7 @@ return view.extend({
 
 		var neigh6tbl = E('table', { 'class': 'table' }, [
 			E('tr', { 'class': 'tr table-titles' }, [
-				E('th', { 'class': 'th' }, [ _('IPv6 address') ]),
+				E('th', { 'class': 'th' }, [ _('IP address') ]),
 				E('th', { 'class': 'th' }, [ _('MAC address') ]),
 				E('th', { 'class': 'th' }, [ _('Interface') ])
 			])
@@ -233,35 +233,27 @@ return view.extend({
 		cbi_update_table(rule6tbl, this.parseRule(ip6rule, networks, false));
 
 		var view = E([], [
-			E('style', { 'type': 'text/css' }, [
-				'.cbi-tooltip-container, span.jump { border-bottom:1px dotted #00f;cursor:pointer }',
-				'ul { list-style:none }',
-				'.references { position:relative }',
-				'.references .cbi-tooltip { left:0!important;top:1.5em!important }',
-				'h4>span { font-size:90% }'
-			]),
-
 			E('h2', {}, [ _('Routing') ]),
 			E('p', {}, [ _('The following rules are currently active on this system.') ]),
 			E('div', {}, [
 				E('div', { 'data-tab': 'ipv4routing', 'data-tab-title': _('IPv4 Routing') }, [
-					E('h3', {}, [ _('ARP') ]),
+					E('h3', {}, [ _('IPv4 Neighbours') ]),
 					neigh4tbl,
 
-					E('h3', {}, _('Active <abbr title="Internet Protocol Version 4">IPv4</abbr>-Routes')),
+					E('h3', {}, [ _('Active IPv4 Routes') ]),
 					route4tbl,
 
-					E('h3', {}, _('Active <abbr title="Internet Protocol Version 4">IPv4</abbr>-Rules')),
+					E('h3', {}, [ _('Active IPv4 Rules') ]),
 					rule4tbl
 				]),
 				E('div', { 'data-tab': 'ipv6routing', 'data-tab-title': _('IPv6 Routing') }, [
 					E('h3', {}, [ _('IPv6 Neighbours') ]),
 					neigh6tbl,
 
-					E('h3', {}, _('Active <abbr title="Internet Protocol Version 6">IPv6</abbr>-Routes')),
+					E('h3', {}, [ _('Active IPv6 Routes') ]),
 					route6tbl,
 
-					E('h3', {}, _('Active <abbr title="Internet Protocol Version 6">IPv6</abbr>-Rules')),
+					E('h3', {}, [ _('Active IPv6 Rules') ]),
 					rule6tbl
 				])
 			])
