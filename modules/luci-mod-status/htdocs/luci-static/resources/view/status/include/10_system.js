@@ -52,7 +52,7 @@ return baseclass.extend({
 
 		var fields = [
 			_('Hostname'),         boardinfo.hostname,
-			_('Model'),            boardinfo.model,
+			_('Model'),            boardinfo.model + (boardinfo.rootfs_type == 'initramfs' ? ' - ' + _('RECOVERY') : ''),
 			_('Architecture'),     boardinfo.system,
 			_('Firmware Version'), (L.isObject(boardinfo.release) ? boardinfo.release.description + ' / ' : '') + (luciversion || ''),
 			_('Kernel Version'),   boardinfo.kernel,
