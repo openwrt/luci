@@ -226,7 +226,7 @@ function check_sysupgrade(server_url, current_version, target, board_name, packa
 	var advanced_mode = uci.get_first('attendedsysupgrade', 'client', 'advanced_mode') || 0;
 	var candidates = [];
 
-	request.get(server_url + "/api/latest", {
+	request.get(server_url + "/json/latest.json", {
 			timeout: 8000
 		})
 		.then(response => response.json())
