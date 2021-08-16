@@ -170,14 +170,12 @@ function request_sysupgrade(server_url, data) {
 			case 202:
 				res = response.json()
 				data.request_hash = res.request_hash;
-				switch (res.status) {
-					case "queued":
-						displayStatus("notice spinning", E('p', _('Request in build queue')));
-						break;
-					case "started":
-						displayStatus("notice spinning", E('p', _('Building the sysupgrade image')));
-						break;
-				}
+
+				if ("queue_position" in res)
+					displayStatus("notice spinning", E('p', _('Request in build queue position %d'.format(res.queue_position))));
+				else
+					displayStatus("notice spinning", E('p', _('Building firmware sysupgrade image')));
+
 				setTimeout(function() {
 					request_sysupgrade(server_url, data);
 				}, 5000);
