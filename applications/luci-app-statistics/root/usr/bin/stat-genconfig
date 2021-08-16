@@ -251,8 +251,8 @@ function _string( s, n, nopad )
 	if not nopad then pad = "\t" end
 
 	if s then
-		if s:find("[^%d]") or n == "Port" then
-			if not s:find("[^%w]") and n ~= "Port" then
+		if s:find("[^%d]") or n == "Port" or n == "Irq" then
+			if not s:find("[^%w]") and n ~= "Port" and n ~= "Irq" then
 				str = pad .. n .. " " .. luci.util.trim(s)
 			else
 				str = pad .. n .. ' "' .. luci.util.trim(s) .. '"'
