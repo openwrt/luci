@@ -37,8 +37,8 @@ return baseclass.extend({
 				info.name = "battery-" + dev.replace(" ", "-");
 				ui.showIndicator(info.name, info.status, null, info.state);
 				if (typeof info.color != 'undefined') {
-					info.element = document.querySelector(`[data-indicator="${info.name}"]`);
-					info.element.innerHTML = `<span style="color:${info.color}">${info.status}</span>`;
+					info.element = document.querySelector('[data-indicator="${info.name}"]');
+					info.element.innerHTML = '<span style="color:${info.color}">${info.status}</span>';
 				}
 
 				devices[dev] = info;
