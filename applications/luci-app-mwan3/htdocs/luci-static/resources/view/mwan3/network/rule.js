@@ -30,6 +30,7 @@ return view.extend({
 		s.addremove = true;
 		s.anonymous = false;
 		s.nodescriptions = true;
+		s.sortable  = true;
 
 		o = s.option(form.ListValue, 'family', _('Internet Protocol'));
 		o.default = '';
