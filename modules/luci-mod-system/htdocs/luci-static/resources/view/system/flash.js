@@ -187,7 +187,7 @@ return view.extend({
 		form.parentNode.removeChild(form);
 	},
 
-	handleSysupgrade: function(storage_size, ev) {
+	handleSysupgrade: function(storage_size, has_rootfs_data, ev) {
 		return ui.uploadFile('/tmp/firmware.bin', ev.target.firstChild)
 			.then(L.bind(function(btn, reply) {
 				btn.firstChild.data = _('Checking image…');
@@ -252,9 +252,11 @@ return view.extend({
 				} else {
 					opts.keep[0].checked = true;
 
-					body.push(E('p', {}, E('label', { 'class': 'btn' }, [
-						opts.skip_orig[0], ' ', _('Skip from backup files that are equal to those in /rom')
-					])));
+					if (has_rootfs_data) {
+						body.push(E('p', {}, E('label', { 'class': 'btn' }, [
+							opts.skip_orig[0], ' ', _('Skip from backup files that are equal to those in /rom')
+						])));
+					}
 
 					body.push(E('p', {}, E('label', { 'class': 'btn' }, [
 						opts.backup_pkgs[0], ' ', _('Include in backup a list of current installed packages at /etc/backup/installed_packages.txt')
@@ -445,7 +447,7 @@ return view.extend({
 			o = ss.option(form.Button, 'sysupgrade', _('Image'));
 			o.inputstyle = 'action important';
 			o.inputtitle = _('Flash image...');
-			o.onclick = L.bind(this.handleSysupgrade, this, storage_size);
+			o.onclick = L.bind(this.handleSysupgrade, this, storage_size, has_rootfs_data);
 		}
 
 
