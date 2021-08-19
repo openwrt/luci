@@ -67,6 +67,9 @@ return network.registerProtocol('qmi', {
 
 		o = s.taboption('general', form.Value, 'apn', _('APN'));
 		o.validate = function(section_id, value) {
+			if (value == null || value == '')
+				return true;
+
 			if (!/^[a-zA-Z0-9\-.]*[a-zA-Z0-9]$/.test(value))
 				return _('Invalid APN provided');
 
