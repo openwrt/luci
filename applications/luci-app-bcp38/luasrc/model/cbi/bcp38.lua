@@ -20,7 +20,7 @@ local ifaces = sys.net:devices()
 m = Map("bcp38", translate("BCP38"),
 	translate("This function blocks packets with private address destinations " ..
 		"from going out onto the internet as per " ..
-		"<a href=\"http://tools.ietf.org/html/bcp38\">BCP 38</a>. " ..
+		"<a href=\"https://www.rfc-editor.org/info/bcp38\">BCP 38</a>. " ..
 		"For IPv6, only source specific default routes are installed, so " ..
 		"no BCP38 firewall routes are needed."))
 
