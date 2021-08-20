@@ -36,10 +36,10 @@ return baseclass.extend({
 			_('Used'),            (mem.total && mem.free) ? (mem.total - mem.free) : null, mem.total,
 		];
 
-		if (mem.buffered)
+		if (mem.buffered != null)
 			fields.push(_('Buffered'), mem.buffered, mem.total);
 
-		if (mem.cached)
+		if (mem.cached != null)
 			fields.push(_('Cached'), mem.cached, mem.total);
 
 		if (swap.total > 0)
