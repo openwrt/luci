@@ -74,25 +74,26 @@ return view.extend({
 		var table = E('table', { 'class': 'table' }, [
 			E('tr', { 'class': 'tr table-titles' }, [
 				E('th', { 'class': 'th' }, _('Start priority')),
+				E('th', { 'class': 'th' }, _('Stop priority')),
 				E('th', { 'class': 'th' }, _('Initscript')),
 				E('th', { 'class': 'th nowrap cbi-section-actions' })
 			])
 		]);
 
 		for (var init in initList)
-			if (initList[init].index < 100)
-				list.push(Object.assign({ name: init }, initList[init]));
+			list.push(Object.assign({ name: init }, initList[init]));
 
 		list.sort(function(a, b) {
-			if (a.index != b.index)
-				return a.index - b.index
+			if (a.startlevel != b.startlevel)
+				return a.startlevel - b.startlevel
 
 			return ('' + a.name).localeCompare(b.name);
 		});
 
 		for (var i = 0; i < list.length; i++) {
 			rows.push([
-				'%02d'.format(list[i].index),
+				list[i].startlevel != 255 ? '%02d'.format(list[i].startlevel) : '--',
+				list[i].stoplevel != 255 ? '%02d'.format(list[i].stoplevel) : '--',
 				list[i].name,
 				E('div', [
 					this.renderEnableDisable(list[i]),
