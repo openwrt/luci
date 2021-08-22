@@ -185,7 +185,7 @@ function request_sysupgrade(server_url, data) {
 			case 500: // build failed
 				res = response.json()
 				var body = [
-					E('p', {}, _(res.message)),
+					E('p', {}, res.detail),
 					E('p', {}, _("Please report the error message and request")),
 					E('b', {}, _("Request to server:")),
 					E('pre', {}, JSON.stringify(data, null, 4)),
