@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-08-13 20:25+0000\n"
+"PO-Revision-Date: 2021-08-22 19:59+0000\n"
 "Last-Translator: Franco Castillo <castillofrancodamian@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationstravelmate/es/>\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.8-dev\n"
+"X-Generator: Weblate 4.8.1-dev\n"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:76
 msgid "-- AP Selection --"
@@ -89,6 +89,8 @@ msgid ""
 "requires the additional configuration of <em>Wireguard</em> or <em>OpenVPN</"
 "em>."
 msgstr ""
+"Maneja automáticamente las conexiones VPN. <br /> Nota: esta función "
+"requiere la configuración adicional de <em>Wireguard</em> u <em>OpenVPN</em>."
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/stations.js:294
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/stations.js:462
@@ -333,17 +335,21 @@ msgstr "Último inicio"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:336
 msgid "Limit AutoAdd"
-msgstr ""
+msgstr "Limitar AutoAdd"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:336
 msgid ""
 "Limit the maximum number of automatically added open uplinks. To disable "
 "this limitation set it to '0'."
 msgstr ""
+"Limite el número máximo de enlaces ascendentes abiertos agregados "
+"automáticamente. Para desactivar esta limitación, establézcala en '0'."
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:370
 msgid "Limit the nearby scan results to process only the strongest uplinks."
 msgstr ""
+"Limite los resultados del análisis cercano para procesar solo los enlaces "
+"ascendentes más fuertes."
 
 #: applications/luci-app-travelmate/root/usr/share/luci/menu.d/luci-app-travelmate.json:35
 msgid "Log View"
@@ -408,6 +414,13 @@ msgid ""
 "connection is emphasized in <span style=\"color:rgb(68, 170, 68);font-weight:"
 "bold\">green</span>."
 msgstr ""
+"Descripción general de todos los enlaces ascendentes configurados para "
+"Travelmate. Puede editar, eliminar o priorizar los enlaces ascendentes "
+"existentes arrastrando y soltando y escaneando los nuevos. <br />La conexión "
+"de enlace ascendente utilizada actualmente se enfatiza en <span style=\"color"
+":rgb(51, 119, 204);font-weight:bold\">azul</span>, una conexión de enlace "
+"ascendente VPN cifrada se enfatiza en <span style=\"color:rgb(68, 170, 68"
+");font-weight:bold\">verde</span>."
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/stations.js:403
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/stations.js:928
@@ -520,6 +533,7 @@ msgstr "Reiniciar interfaz"
 msgid ""
 "Restrict travelmate to a single radio or change the overall scanning order."
 msgstr ""
+"Restrinja Travelmate a una sola radio o cambie el orden de escaneo general."
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:350
 msgid "Retry limit to connect to an uplink."
@@ -547,7 +561,7 @@ msgstr "Guardar"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:370
 msgid "Scan Limit"
-msgstr ""
+msgstr "Límite de escaneo"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/stations.js:697
 msgid "Scan on"
@@ -679,6 +693,8 @@ msgid ""
 "This option is selected by default if this uplink was added automatically "
 "and counts as 'Open Uplink'."
 msgstr ""
+"Esta opción está seleccionada de forma predeterminada si este enlace "
+"ascendente se agregó automáticamente y cuenta como 'Abrir enlace ascendente'."
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:24
 msgid ""
@@ -712,7 +728,7 @@ msgstr "Retraso de disparo"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/stations.js:513
 msgid "Use the specified MAC address for this uplink."
-msgstr ""
+msgstr "Utilice la dirección MAC especificada para este enlace ascendente."
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:384
 msgid "User Agent"
@@ -871,19 +887,19 @@ msgstr "ninguno"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:311
 msgid "use both radios, normal sort order (radio0 radio1)"
-msgstr ""
+msgstr "utilizar ambas radios, orden de clasificación normal (radio0 radio1)"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:312
 msgid "use both radios, reverse sort order (radio1 radio0)"
-msgstr ""
+msgstr "utilizar ambas radios, orden inverso (radio1 radio0)"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:309
 msgid "use the first radio only (radio0)"
-msgstr ""
+msgstr "use la primera radio solamente (radio0)"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:310
 msgid "use the second radio only (radio1)"
-msgstr ""
+msgstr "use la segunda radio solamente (radio1)"
 
 #~ msgid ""
 #~ "Overview of all configured uplinks for travelmate.<br /> You can edit, "
