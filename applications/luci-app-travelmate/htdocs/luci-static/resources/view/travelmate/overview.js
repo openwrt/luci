@@ -14,8 +14,9 @@ function handleAction(ev) {
 	var ifaceValue;
 	if (ev === 'restart') {
 		ifaceValue = String(uci.get('travelmate', 'global', 'trm_iface') || 'trm_wwan');
-		return fs.exec('/sbin/ifup', [ifaceValue])
-			.then(fs.exec('/etc/init.d/travelmate', ['restart']))
+		return fs.exec('/etc/init.d/travelmate', ['stop'])
+			.then(fs.exec('/sbin/ifup', [ifaceValue]))
+			.then(fs.exec('/etc/init.d/travelmate', ['start']))
 	}
 	if (ev === 'setup') {
 		ifaceValue = String(uci.get('travelmate', 'global', 'trm_iface') || '');
@@ -132,7 +133,6 @@ function handleAction(ev) {
 				])
 			]);
 		});
-		return;
 	}
 }
 
@@ -156,7 +156,7 @@ return view.extend({
 		pollData: poll.add(function () {
 			return L.resolveDefault(fs.stat('/tmp/trm_runtime.json'), null).then(function (res) {
 				var status = document.getElementById('status');
-				if (res) {
+				if (res && res.size > 0) {
 					L.resolveDefault(fs.read_direct('/tmp/trm_runtime.json'), null).then(function (res) {
 						if (res) {
 							var info = JSON.parse(res);
@@ -207,6 +207,11 @@ return view.extend({
 							}
 						}
 					});
+				} else if (status) {
+					status.textContent = '-';
+					if (status.classList.contains("spinning")) {
+						status.classList.remove("spinning");
+					}
 				}
 			});
 		}, 1);

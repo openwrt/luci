@@ -167,11 +167,11 @@ function handleStatus() {
 					if (res) {
 						var info = JSON.parse(res);
 						if (info) {
-							var t_device, t_ssid, t_bssid, oldUplinkView, newUplinkView,
+							var t_device, t_ssid, t_bssid, oldUplinkView, newUplinkView, uplinkColor,
 								uplinkId = info.data.station_id.trim().split('/'),
 								oldUplinkView = document.getElementsByName('uplinkStation'),
-								w_sections = uci.sections('wireless', 'wifi-iface');
-
+								w_sections = uci.sections('wireless', 'wifi-iface'),
+								vpnStatus = info.data.ext_hooks.substr(13, 1);
 							t_device = uplinkId[0];
 							t_bssid = uplinkId[uplinkId.length - 1];
 							for (var i = 1; i < uplinkId.length - 1; i++) {
@@ -189,18 +189,22 @@ function handleStatus() {
 								}
 							}
 							else {
+								uplinkColor = (vpnStatus === "✔" ? 'rgb(68, 170, 68)' : 'rgb(51, 119, 204)');
 								for (var i = 0; i < w_sections.length; i++) {
 									newUplinkView = document.getElementById('cbi-wireless-' + w_sections[i]['.name']);
 									if (t_device === w_sections[i].device && t_ssid === w_sections[i].ssid && t_bssid === (w_sections[i].bssid || '-')) {
 										if (oldUplinkView.length === 0 && newUplinkView) {
 											newUplinkView.setAttribute('name', 'uplinkStation');
-											newUplinkView.setAttribute('style', 'text-align: left !important; color: #37c !important;font-weight: bold !important;');
+											newUplinkView.setAttribute('style', 'text-align: left !important; color: ' + uplinkColor + ' !important;font-weight: bold !important;');
 										}
 										else if (oldUplinkView.length > 0 && newUplinkView && oldUplinkView[0].getAttribute('id') !== newUplinkView.getAttribute('id')) {
 											oldUplinkView[0].removeAttribute('style');
 											oldUplinkView[0].removeAttribute('name', 'uplinkStation');
 											newUplinkView.setAttribute('name', 'uplinkStation');
-											newUplinkView.setAttribute('style', 'text-align: left !important; color: #37c !important;font-weight: bold !important;');
+											newUplinkView.setAttribute('style', 'text-align: left !important; color: ' + uplinkColor + ' !important;font-weight: bold !important;');
+										}
+										else if (newUplinkView && newUplinkView.style.color != uplinkColor) {
+											newUplinkView.setAttribute('style', 'text-align: left !important; color: ' + uplinkColor + ' !important;font-weight: bold !important;');
 										}
 									}
 								}
@@ -228,8 +232,10 @@ return view.extend({
 
 		m = new form.Map('wireless');
 		m.chain('travelmate');
-		s = m.section(form.GridSection, 'wifi-iface', null, _('Overview of all configured uplinks for travelmate.<br /> \
-			You can edit, remove or prioritize existing uplinks by drag \&#38; drop and scan for new ones. The currently used uplink is emphasized in blue.'));
+		s = m.section(form.GridSection, 'wifi-iface', null, _('Overview of all configured uplinks for travelmate. \
+			You can edit, remove or prioritize existing uplinks by drag \&#38; drop and scan for new ones.<br /> \
+			The currently used uplink connection is emphasized in <span style="color:rgb(51, 119, 204);font-weight:bold">blue</span>, \
+			an encrypted VPN uplink connection is emphasized in <span style="color:rgb(68, 170, 68);font-weight:bold">green</span>.'));
 		s.anonymous = true;
 		s.sortable = true;
 		s.filter = function (section_id) {
@@ -685,7 +691,7 @@ return view.extend({
 					radio = radios[i].sid;
 					if (radio) {
 						btns.push(E('button', {
-							'class': 'cbi-button cbi-button-positive',
+							'class': 'cbi-button cbi-button-apply',
 							'id': radio,
 							'click': ui.createHandlerFn(this, 'handleScan', radio)
 						}, [_('Scan on ' + radio + '...')]),
