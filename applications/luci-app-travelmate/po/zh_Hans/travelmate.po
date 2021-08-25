@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-05-01 14:16+0000\n"
+"PO-Revision-Date: 2021-08-22 10:08+0000\n"
 "Last-Translator: Eric <spice2wolf@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "openwrt/luciapplicationstravelmate/zh_Hans/>\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.7-dev\n"
+"X-Generator: Weblate 4.8.1-dev\n"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:76
 msgid "-- AP Selection --"
@@ -48,7 +48,7 @@ msgstr "身份验证"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/stations.js:495
 msgid "Auto Added Open Uplink"
-msgstr ""
+msgstr "自动添加开放上行链路"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/stations.js:574
 msgid "Auto Login Script"
@@ -86,6 +86,8 @@ msgid ""
 "requires the additional configuration of <em>Wireguard</em> or <em>OpenVPN</"
 "em>."
 msgstr ""
+"自动处理 VPN 连接。<br />请注意：此功能需要额外配置 <em>Wireguard</em>或"
+"<em>OpenVPN</em>。"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/stations.js:294
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/stations.js:462
@@ -239,7 +241,7 @@ msgstr "在出现任何处理错误时启用详细的调试日志。"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/stations.js:263
 msgid "Enable/Disable this network"
-msgstr ""
+msgstr "启用/禁用此网络"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:302
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/stations.js:275
@@ -319,17 +321,17 @@ msgstr "最后运行"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:336
 msgid "Limit AutoAdd"
-msgstr ""
+msgstr "限制自动添加"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:336
 msgid ""
 "Limit the maximum number of automatically added open uplinks. To disable "
 "this limitation set it to '0'."
-msgstr ""
+msgstr "限制自动添加的开放上行链路的最大数量。 要禁用此限制，请将其设置为“0”。"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:370
 msgid "Limit the nearby scan results to process only the strongest uplinks."
-msgstr ""
+msgstr "将附近的扫描结果限制为仅处理最强的上行链路。"
 
 #: applications/luci-app-travelmate/root/usr/share/luci/menu.d/luci-app-travelmate.json:35
 msgid "Log View"
@@ -337,7 +339,7 @@ msgstr "日志视图"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/stations.js:512
 msgid "MAC Address"
-msgstr ""
+msgstr "MAC 地址"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/stations.js:405
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/stations.js:930
@@ -369,7 +371,7 @@ msgstr "OWE"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/stations.js:265
 msgid "On/Off"
-msgstr ""
+msgstr "开/关"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:365
 msgid "Overall Timeout"
@@ -392,6 +394,11 @@ msgid ""
 "connection is emphasized in <span style=\"color:rgb(68, 170, 68);font-weight:"
 "bold\">green</span>."
 msgstr ""
+"travelmate 所有已配置上行链路的概览。你可以编辑、删除或对现有上行链路进行优先"
+"级设置，方法是拖 &#38; 放并扫描新上行链路。<br />当前使用的上行连接以<span "
+"style=\"color:rgb(51, 119, 204);font-weight:bold\">蓝色</span>表示，加密的 "
+"VPN 上行连接以<span style=\"color:rgb(68, 170, 68);font-weight:bold\">绿色</"
+"span>表示。"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/stations.js:403
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/stations.js:928
@@ -470,11 +477,11 @@ msgstr "travelmate电子邮件提醒的收件人地址。"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/stations.js:270
 msgid "Remove"
-msgstr ""
+msgstr "移除"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/stations.js:268
 msgid "Remove this network"
-msgstr ""
+msgstr "删除此网络"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:118
 msgid ""
@@ -488,12 +495,12 @@ msgstr "重复扫描"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:277
 msgid "Restart Interface"
-msgstr ""
+msgstr "重启实例"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:308
 msgid ""
 "Restrict travelmate to a single radio or change the overall scanning order."
-msgstr ""
+msgstr "将 travelmate 限制为单一 radio 或更改整体扫描顺序。"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:350
 msgid "Retry limit to connect to an uplink."
@@ -521,7 +528,7 @@ msgstr "保存"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:370
 msgid "Scan Limit"
-msgstr ""
+msgstr "扫描限制"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/stations.js:697
 msgid "Scan on"
@@ -638,7 +645,7 @@ msgstr "上行链路接口名称"
 msgid ""
 "This option is selected by default if this uplink was added automatically "
 "and counts as 'Open Uplink'."
-msgstr ""
+msgstr "如果此上行链路是自动添加的并被算作“开放的上行链路”，则默认选中此选项。"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:24
 msgid ""
@@ -671,7 +678,7 @@ msgstr "触发延时"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/stations.js:513
 msgid "Use the specified MAC address for this uplink."
-msgstr ""
+msgstr "为此上行链路使用指定的 MAC 地址。"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:384
 msgid "User Agent"
@@ -830,60 +837,16 @@ msgstr "无"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:311
 msgid "use both radios, normal sort order (radio0 radio1)"
-msgstr ""
+msgstr "使用两个 radio，正常排序顺序（radio0 radio1）"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:312
 msgid "use both radios, reverse sort order (radio1 radio0)"
-msgstr ""
+msgstr "使用两个 radio，反向排序（radio1 radio0）"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:309
 msgid "use the first radio only (radio0)"
-msgstr ""
+msgstr "仅使用第一个 radio (radio0)"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:310
 msgid "use the second radio only (radio1)"
-msgstr ""
-
-#~ msgid "Buffer size in bytes to prepare nearby scan results."
-#~ msgstr "用于暂存扫描结果的缓冲区大小（单位为字节）。"
-
-#~ msgid ""
-#~ "Overview of all configured uplinks for travelmate.<br /> You can edit, "
-#~ "remove or prioritize existing uplinks by drag &#38; drop and scan for new "
-#~ "ones. The currently used uplink is emphasized in blue."
-#~ msgstr ""
-#~ "travelmate已配置的所有上行链路概览。<br />你可以通过拖放来对已有的上行链路"
-#~ "进行编辑、移除、排序，或者扫描新的上行链路。目前使用中的上行链路会用蓝色予"
-#~ "以强调。"
-
-#~ msgid "Scan Buffer Size"
-#~ msgstr "扫描用缓冲区大小"
-
-#~ msgid "Automatically handle VPN (re-) connections."
-#~ msgstr "自动处理VPN（重）连接。"
-
-#~ msgid "Del"
-#~ msgstr "删除"
-
-#~ msgid "Delete this network"
-#~ msgstr "删除此网络"
-
-#~ msgid "LAN Device"
-#~ msgstr "本地网络设备"
-
-#~ msgid ""
-#~ "Please note: VPN connections require the separate setup of the "
-#~ "<em>Wireguard</em> or <em>OpenVPN</em> package.<br /><p>&#xa0;</p>"
-#~ msgstr ""
-#~ "请注意：VPN连接需要安装<em>wireguard</em>或者<em>OpenVPN</em>软件包<br /"
-#~ "><p>&#xa0;</p>"
-
-#~ msgid ""
-#~ "Restrict travelmate to a single radio or change the overall scanning "
-#~ "order (e.g. 'radio1 radio0')."
-#~ msgstr ""
-#~ "限制travelmate只能使用单一发射天线，或者修改总体的扫描顺序（如“radio1 "
-#~ "radio0”）。"
-
-#~ msgid "The lan network device, e.g. 'br-lan'."
-#~ msgstr "本地网络接口，如“br-lan”。"
+msgstr "仅使用第二个 radio (radio1)"

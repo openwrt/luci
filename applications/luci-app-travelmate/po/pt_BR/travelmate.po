@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-05-02 20:06+0000\n"
+"PO-Revision-Date: 2021-08-23 11:24+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "openwrt/luciapplicationstravelmate/pt_BR/>\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.7-dev\n"
+"X-Generator: Weblate 4.8.1-dev\n"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:76
 msgid "-- AP Selection --"
@@ -45,7 +45,7 @@ msgstr "Autenticação"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/stations.js:495
 msgid "Auto Added Open Uplink"
-msgstr ""
+msgstr "O enlace aberto foi adicionado automaticamente"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/stations.js:574
 msgid "Auto Login Script"
@@ -87,6 +87,8 @@ msgid ""
 "requires the additional configuration of <em>Wireguard</em> or <em>OpenVPN</"
 "em>."
 msgstr ""
+"Lida com as conexões VPN automaticamente.<br /> Observe que: Este recurso "
+"requer a configuração adicional do <em>Wireguard</em> ou do <em>OpenVPN</em>."
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/stations.js:294
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/stations.js:462
@@ -244,7 +246,7 @@ msgstr ""
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/stations.js:263
 msgid "Enable/Disable this network"
-msgstr ""
+msgstr "Ative/Desative esta rede"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:302
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/stations.js:275
@@ -326,17 +328,21 @@ msgstr "Última Execução"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:336
 msgid "Limit AutoAdd"
-msgstr ""
+msgstr "Limite o AutoAdd"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:336
 msgid ""
 "Limit the maximum number of automatically added open uplinks. To disable "
 "this limitation set it to '0'."
 msgstr ""
+"Limite a quantidade máxima de uplinks abertos automaticamente. Para "
+"desativar esta limitação, defina-a como '0'."
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:370
 msgid "Limit the nearby scan results to process only the strongest uplinks."
 msgstr ""
+"Limite os resultados da varredura apenas para os enlaces mais próximos e com "
+"o sinal mais forte."
 
 #: applications/luci-app-travelmate/root/usr/share/luci/menu.d/luci-app-travelmate.json:35
 msgid "Log View"
@@ -344,7 +350,7 @@ msgstr "Exiba o registro log"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/stations.js:512
 msgid "MAC Address"
-msgstr ""
+msgstr "Endereço MAC"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/stations.js:405
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/stations.js:930
@@ -378,7 +384,7 @@ msgstr "OWE"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/stations.js:265
 msgid "On/Off"
-msgstr ""
+msgstr "Ligado/Desligado"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:365
 msgid "Overall Timeout"
@@ -401,6 +407,13 @@ msgid ""
 "connection is emphasized in <span style=\"color:rgb(68, 170, 68);font-weight:"
 "bold\">green</span>."
 msgstr ""
+"Uma visão geral de todos os enlaces configurados para o travelmate. Você "
+"pode editar, remover ou priorizar os enlaces já existentes ao arrastar &#38; "
+"soltar para novas digitalizações. <br /> O enlace da conexão usada "
+"atualmente é enfatizada na cor <span style=\"color:rgb(51, 119, 204);font-"
+"weight:bold\">azul</span>, uma conexão do enlace criptografado da VPN fica "
+"destacada na cor <span style=\"color:rgb(68, 170, 68);font-weight:bold"
+"\">verde</span>."
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/stations.js:403
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/stations.js:928
@@ -486,11 +499,11 @@ msgstr ""
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/stations.js:270
 msgid "Remove"
-msgstr ""
+msgstr "Remover"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/stations.js:268
 msgid "Remove this network"
-msgstr ""
+msgstr "Remova esta rede"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:118
 msgid ""
@@ -506,12 +519,14 @@ msgstr "Repetir a varredura"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:277
 msgid "Restart Interface"
-msgstr ""
+msgstr "Reinicie a interface"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:308
 msgid ""
 "Restrict travelmate to a single radio or change the overall scanning order."
 msgstr ""
+"Restrinja o travelmate para um único rádio ou altere a ordem geral da "
+"varredura."
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:350
 msgid "Retry limit to connect to an uplink."
@@ -539,7 +554,7 @@ msgstr "Salvar"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:370
 msgid "Scan Limit"
-msgstr ""
+msgstr "Limite da varredura"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/stations.js:697
 msgid "Scan on"
@@ -663,6 +678,8 @@ msgid ""
 "This option is selected by default if this uplink was added automatically "
 "and counts as 'Open Uplink'."
 msgstr ""
+"Esta opção é selecionada por padrão se este enlace seja adicionado "
+"automaticamente e conte como 'Uplink aberto'."
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:24
 msgid ""
@@ -696,7 +713,7 @@ msgstr "Gatilho de Atraso"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/stations.js:513
 msgid "Use the specified MAC address for this uplink."
-msgstr ""
+msgstr "Use o endereço MAC definido para este enlace."
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:384
 msgid "User Agent"
@@ -855,63 +872,16 @@ msgstr "nenhum"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:311
 msgid "use both radios, normal sort order (radio0 radio1)"
-msgstr ""
+msgstr "use ambos os rádios, na ordem normal de ordenação (radio0 radio1)"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:312
 msgid "use both radios, reverse sort order (radio1 radio0)"
-msgstr ""
+msgstr "use ambos os rádios, na ordem inversa da ordenação (radio1 radio0)"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:309
 msgid "use the first radio only (radio0)"
-msgstr ""
+msgstr "use apenas o primeiro rádio (radio0)"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:310
 msgid "use the second radio only (radio1)"
-msgstr ""
-
-#~ msgid "Buffer size in bytes to prepare nearby scan results."
-#~ msgstr ""
-#~ "Tamanho do buffer em bytes para preparar os resultados de varredura mais "
-#~ "próximos."
-
-#~ msgid ""
-#~ "Overview of all configured uplinks for travelmate.<br /> You can edit, "
-#~ "remove or prioritize existing uplinks by drag &#38; drop and scan for new "
-#~ "ones. The currently used uplink is emphasized in blue."
-#~ msgstr ""
-#~ "Visão geral de todos os enlaces configurados para o travelmate. <br /> "
-#~ "Você pode editar, remover ou priorizar os enlaces já existentes ao "
-#~ "arrastar &#38; soltar e fazer uma varredura para novos enlaces. O enlace "
-#~ "atualmente utilizado está destacado em azul."
-
-#~ msgid "Scan Buffer Size"
-#~ msgstr "Tamanho do Buffer de Varredura"
-
-#~ msgid "Automatically handle VPN (re-) connections."
-#~ msgstr "Lide automaticamente com as (re-)conexões VPN."
-
-#~ msgid "Del"
-#~ msgstr "Excluir"
-
-#~ msgid "Delete this network"
-#~ msgstr "Apagar esta rede"
-
-#~ msgid "LAN Device"
-#~ msgstr "Dispositivo LAN"
-
-#~ msgid ""
-#~ "Please note: VPN connections require the separate setup of the "
-#~ "<em>Wireguard</em> or <em>OpenVPN</em> package.<br /><p>&#xa0;</p>"
-#~ msgstr ""
-#~ "Observação: As conexões VPN requerem a configuração separada do pacote "
-#~ "<em>Wireguard</em> ou o <em>OpenVPN</em>. <br /><p>&#xa0;</p>"
-
-#~ msgid ""
-#~ "Restrict travelmate to a single radio or change the overall scanning "
-#~ "order (e.g. 'radio1 radio0')."
-#~ msgstr ""
-#~ "Restringir o travelmate para um único rádio ou alterar a ordem geral da "
-#~ "varredura (por exemplo, 'radio1 radio0')."
-
-#~ msgid "The lan network device, e.g. 'br-lan'."
-#~ msgstr "O dispositivo lan da rede, por exemplo, 'br-lan'."
+msgstr "use apenas o segundo rádio (radio1)"
