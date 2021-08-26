@@ -89,7 +89,7 @@ return view.extend({
 			o = s.taboption('advanced', form.Value, 'source', _('Source Address'));
 			o.placeholder = E('em', _('automatic'));
 			for (var j = 0; j < netdevs.length; j++) {
-				var addrs = netdevs[j].getIPAddrs();
+				var addrs = (i == 4) ? netdevs[j].getIPAddrs() : netdevs[j].getIP6Addrs();
 				for (var k = 0; k < addrs.length; k++)
 					o.value(addrs[k].split('/')[0]);
 			}
