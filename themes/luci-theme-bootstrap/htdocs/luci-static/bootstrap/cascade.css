@@ -1503,8 +1503,7 @@ body.modal-overlay-active #modal_overlay {
 	margin: 0 !important;
 	padding: 0;
 	list-style: none;
-	overflow-x: hidden;
-	overflow-y: auto;
+	overflow: hidden;
 	display: flex;
 	width: 100%;
 }
@@ -1517,6 +1516,10 @@ body.modal-overlay-active #modal_overlay {
 .cbi-dropdown.btn.spinning > ul:not(.dropdown),
 .cbi-dropdown.cbi-button.spinning > ul:not(.dropdown) {
 	margin: 0 !important;
+}
+
+.cbi-dropdown > ul.dropdown {
+	overflow-y: auto;
 }
 
 .cbi-dropdown > ul.preview {
