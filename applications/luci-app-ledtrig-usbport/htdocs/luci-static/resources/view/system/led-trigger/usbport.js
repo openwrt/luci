@@ -16,7 +16,7 @@ return baseclass.extend({
 	addFormOptions(s){
 		var o;
 
-		o = s.option(form.Value, 'port', _('USB Ports'));
+		o = s.option(form.MultiValue, 'port', _('USB Ports'));
 		o.depends('trigger', 'usbport');
 		o.rmempty = true;
 		o.modalonly = true;
