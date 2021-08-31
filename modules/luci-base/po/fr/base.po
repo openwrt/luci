@@ -177,20 +177,6 @@ msgstr "Délai d'attente avant nouvelle tentative pour 802.11w"
 msgid "<abbr title=\"Basic Service Set Identifier\">BSSID</abbr>"
 msgstr "<abbr title=\"Basic Service Set Identifier\">BSSID</abbr>"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:436
-msgid "DNS query port"
-msgstr "Port des requêtes <abbr title=\"Domain Name System\">DNS</abbr>"
-
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:429
-msgid "DNS server port"
-msgstr "Port du serveur <abbr title=\"Domain Name System\">DNS</abbr>"
-
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:414
-msgid "Upstream resolvers will be queried in the order of the resolv file."
-msgstr ""
-"Les serveurs <abbr title=\"Domain Name System\">DNS</abbr> seront interrogés "
-"dans l'ordre du fichier de résolution"
-
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1009
 msgid "<abbr title=\"Extended Service Set Identifier\">ESSID</abbr>"
 msgstr "<abbr title=\"Extended Service Set Identifier\">ESSID</abbr>"
@@ -215,12 +201,6 @@ msgstr ""
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:47
 msgid "<abbr title=\"Internet Protocol Version 6\">IPv6</abbr>-Gateway"
 msgstr "Passerelle <abbr title=\"Internet Protocol Version 6\">IPv6</abbr>"
-
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:626
-msgid "IPv6 suffix (hex)"
-msgstr ""
-"Suffixe <abbr title=\"Internet Protocol Version 6\">IPv6</abbr> (en "
-"hexadécimal)"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:58
 msgid "<abbr title=\"Light Emitting Diode\">LED</abbr> Configuration"
@@ -254,22 +234,6 @@ msgstr ""
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:763
 msgid "<abbr title=\"Router Advertisement\">RA</abbr>-Service"
 msgstr ""
-
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:443
-msgid "Max. DHCP leases"
-msgstr ""
-"Nombre maximal de baux <abbr title=\"Dynamic Host Configuration Protocol"
-"\">DHCP</abbr>"
-
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:450
-msgid "Max. EDNS0 packet size"
-msgstr ""
-"Taille maximale des paquets <abbr title=\"Extension Mechanisms for Domain "
-"Name System\">EDNS0</abbr>"
-
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:457
-msgid "Max. concurrent queries"
-msgstr "Nombre maximal de requêtes concurrentes"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:370
 msgid "A configuration for the device \"%s\" already exists"
@@ -379,10 +343,16 @@ msgid "ATU-C System Vendor ID"
 msgstr "ATU-C System Vendor ID"
 
 #: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:265
-#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:544
-#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:548
+#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:547
+#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:551
 msgid "Absent Interface"
 msgstr "Interface manquante"
+
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:312
+msgid "Accept DNS queries only from hosts whose address is on a local subnet."
+msgstr ""
+"Limiter le service DNS aux interfaces des sous-réseaux sur lesquels nous "
+"desservons le DNS."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:647
 msgid "Accept local"
@@ -401,7 +371,7 @@ msgstr "Concentrateur d'accès"
 msgid "Access Point"
 msgstr "Point d'accès"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:386
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:388
 msgid "Actions"
 msgstr "Actions"
 
@@ -696,14 +666,6 @@ msgid "Allow the <em>root</em> user to login with password"
 msgstr ""
 "Autoriser l'utilisateur <em>root</em> à se connecter avec un mot de passe"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:299
-msgid ""
-"Exempt <code>127.0.0.0/8</code> and <code>::1</code> from rebinding checks, "
-"e.g. for RBL services."
-msgstr ""
-"Autorise les réponses dans la plage 127.0.0.0/8, par ex. pour les services "
-"de RBL"
-
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:143
 msgid "Allowed IPs"
 msgstr "IP autorisées"
@@ -911,8 +873,8 @@ msgstr "Groupe d'authentification"
 msgid "Authentication"
 msgstr "Authentification"
 
-#: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:105
-#: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:79
+#: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:108
+#: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:82
 msgid "Authentication Type"
 msgstr "Type d'authentification"
 
@@ -924,15 +886,10 @@ msgstr "Autoritaire"
 msgid "Authorization Required"
 msgstr "Autorisation requise"
 
-#: themes/luci-theme-material/luasrc/view/themes/material/header.htm:196
-#: themes/luci-theme-material/luasrc/view/themes/material/header.htm:197
-msgid "Auto Refresh"
-msgstr "Rafraîchissement automatique"
-
-#: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:117
+#: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:120
 #: protocols/luci-proto-hnet/htdocs/luci-static/resources/protocol/hnet.js:18
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:24
-#: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:109
+#: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:112
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/l2tp.js:51
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/ppp.js:96
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoa.js:82
@@ -1014,7 +971,7 @@ msgstr "Retour à la vue générale"
 msgid "Back to configuration"
 msgstr "Retour à la configuration"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:389
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:391
 msgid "Backup"
 msgstr "Sauvegarder"
 
@@ -1022,7 +979,7 @@ msgstr "Sauvegarder"
 msgid "Backup / Flash Firmware"
 msgstr "Sauvegarde / Mise à jour du micrologiciel"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:349
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:351
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/backupfiles.lua:12
 msgid "Backup file list"
 msgstr "Liste des fichiers de sauvegarde"
@@ -1040,7 +997,7 @@ msgstr ""
 msgid "Beacon Interval"
 msgstr "Intervalle entre les balises"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:350
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:352
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/backupfiles.lua:46
 msgid ""
 "Below is the determined list of files to backup. It consists of changed "
@@ -1084,10 +1041,6 @@ msgstr "Lier le tunnel à cette interface (facultatif)."
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:165
 msgid "Bitrate"
 msgstr "Débit"
-
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:423
-msgid "IPs to override with NXDOMAIN"
-msgstr "Contourne les « NX Domain » bogués"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:201
 msgid "Bonding Policy"
@@ -1183,7 +1136,7 @@ msgstr "L'appel a échoué"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1120
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2033
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:128
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:293
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:295
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:203
 msgid "Cancel"
 msgstr "Annuler"
@@ -1301,7 +1254,7 @@ msgstr "Vérification des archives…"
 msgid "Checking image…"
 msgstr "Vérification de l'image…"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:425
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:427
 msgid "Choose mtdblock"
 msgstr "Choisir le mtdblock"
 
@@ -1335,7 +1288,7 @@ msgstr "Code de chiffrement"
 msgid "Cisco UDP encapsulation"
 msgstr "Encapsulation UDP Cisco"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:389
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:391
 msgid ""
 "Click \"Generate archive\" to download a tar archive of the current "
 "configuration files."
@@ -1343,7 +1296,7 @@ msgstr ""
 "Cliquer sur \"Construire l'archive\" pour télécharger une archive tar des "
 "fichiers de la configuration actuelle."
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:422
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:424
 msgid ""
 "Click \"Save mtdblock\" to download specified mtdblock file. (NOTE: THIS "
 "FEATURE IS FOR PROFESSIONALS! )"
@@ -1368,7 +1321,7 @@ msgstr "Identifiant client à envoyer dans les requêtes DHCP"
 msgid "Close"
 msgstr "Fermer"
 
-#: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:153
+#: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:156
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/ppp.js:128
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoa.js:114
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoe.js:92
@@ -1391,7 +1344,7 @@ msgstr "Fermer la liste…"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:391
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:352
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:355
-#: themes/luci-theme-material/luasrc/view/themes/material/header.htm:204
+#: themes/luci-theme-material/luasrc/view/themes/material/header.htm:72
 msgid "Collecting data..."
 msgstr "Récupération des données…"
 
@@ -1432,7 +1385,7 @@ msgid "Compute outgoing checksum (optional)."
 msgstr "Calculer la somme de contrôle sortante (facultatif)."
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4051
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:452
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:454
 msgid "Configuration"
 msgstr "Configuration"
 
@@ -1529,7 +1482,7 @@ msgstr ""
 "accessible (any, 0)"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/crontab.js:18
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:366
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:368
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/startup.js:55
 msgid "Contents have been saved."
 msgstr "Le contenu a été enregistré."
@@ -1538,7 +1491,7 @@ msgstr "Le contenu a été enregistré."
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:433
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:800
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:132
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:267
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:269
 msgid "Continue"
 msgstr "Continuer"
 
@@ -1586,8 +1539,8 @@ msgstr "Niveau de journalisation de Cron"
 msgid "Current power"
 msgstr "Puissance actuelle"
 
-#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:569
-#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:571
+#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:572
+#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:574
 #: modules/luci-compat/luasrc/view/cbi/network_ifacelist.htm:51
 #: modules/luci-compat/luasrc/view/cbi/network_ifacelist.htm:53
 #: modules/luci-compat/luasrc/view/cbi/network_ifacelist.htm:82
@@ -1595,7 +1548,7 @@ msgstr "Puissance actuelle"
 msgid "Custom Interface"
 msgstr "Interface spécifique"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:408
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:410
 msgid ""
 "Custom files (certificates, scripts) may remain on the system. To prevent "
 "this, perform a factory-reset first."
@@ -1671,9 +1624,17 @@ msgstr "DNS"
 msgid "DNS forwardings"
 msgstr "transmissions DNS"
 
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:436
+msgid "DNS query port"
+msgstr "Port des requêtes <abbr title=\"Domain Name System\">DNS</abbr>"
+
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:932
 msgid "DNS search domains"
 msgstr ""
+
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:429
+msgid "DNS server port"
+msgstr "Port du serveur <abbr title=\"Domain Name System\">DNS</abbr>"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:937
 msgid "DNS weight"
@@ -1893,8 +1854,8 @@ msgstr ""
 msgid "Diagnostics"
 msgstr "Diagnostiques"
 
-#: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:111
-#: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:103
+#: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:114
+#: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:106
 msgid "Dial number"
 msgstr "Composer le numéro"
 
@@ -1941,8 +1902,8 @@ msgstr ""
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1680
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:13
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/startup.js:66
-#: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:118
-#: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:110
+#: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:121
+#: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:113
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/l2tp.js:52
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/ppp.js:97
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoa.js:83
@@ -1980,7 +1941,7 @@ msgstr "La tentative de déconnexion a échoué."
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:3330
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4157
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1759
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:356
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:358
 msgid "Dismiss"
 msgstr "Effacer"
 
@@ -2017,6 +1978,12 @@ msgstr ""
 msgid "Do not create host route to peer (optional)."
 msgstr "Ne créer pas de route hôte vers le pair (facultatif)."
 
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:260
+msgid "Do not forward DNS queries without dots or domain parts."
+msgstr ""
+"Ne pas transmettre de requêtes <abbr title=\"Domain Name System\">DNS</abbr> "
+"sans nom <abbr title=\"Domain Name System\">DNS</abbr>"
+
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:380
 msgid "Do not forward queries that cannot be answered by public resolvers."
 msgstr ""
@@ -2027,6 +1994,10 @@ msgstr ""
 msgid "Do not forward reverse lookups for local networks."
 msgstr ""
 "Ne pas transmettre les requêtes de recherche inverse pour les réseaux locaux"
+
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:331
+msgid "Do not listen on the specified interfaces."
+msgstr "Empêcher l'écoute sur ces interfaces."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:870
 msgid "Do not offer DHCPv6 service on this interface."
@@ -2083,12 +2054,6 @@ msgstr "Liste blanche de domaines"
 msgid "Don't Fragment"
 msgstr "Ne pas fragmenter"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:260
-msgid "Do not forward DNS queries without dots or domain parts."
-msgstr ""
-"Ne pas transmettre de requêtes <abbr title=\"Domain Name System\">DNS</abbr> "
-"sans nom <abbr title=\"Domain Name System\">DNS</abbr>"
-
 #: modules/luci-compat/luasrc/view/cbi/tblsection.htm:152
 msgid "Down"
 msgstr "En bas"
@@ -2097,11 +2062,11 @@ msgstr "En bas"
 msgid "Down Delay"
 msgstr "Délai de coupure"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:392
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:394
 msgid "Download backup"
 msgstr "Télécharger la sauvegarde"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:430
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:432
 msgid "Download mtdblock"
 msgstr "Télécharger mtdblock"
 
@@ -2242,7 +2207,7 @@ msgstr "Activer la mise à jour dynamique de l'extrémité du tunnel chez HE.net
 msgid "Enable IPv6"
 msgstr ""
 
-#: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:98
+#: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:101
 msgid "Enable IPv6 negotiation"
 msgstr "Activer la négociation d'IPv6"
 
@@ -2271,7 +2236,7 @@ msgstr "Activer client NTP"
 msgid "Enable Single DES"
 msgstr "Activer le DES unique"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:458
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:471
 msgid "Enable TFTP server"
 msgstr "Activer le serveur TFTP"
 
@@ -2403,11 +2368,11 @@ msgstr "Mode encapsulé"
 msgid "Encryption"
 msgstr "Chiffrement"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:156
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:149
 msgid "Endpoint Host"
 msgstr "Hôte du point terminal"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:160
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:153
 msgid "Endpoint Port"
 msgstr "Port du point terminal"
 
@@ -2477,6 +2442,14 @@ msgstr "Chaque seconde (fast, 1)"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:330
 msgid "Exclude interfaces"
 msgstr "Exclure les interfaces"
+
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:299
+msgid ""
+"Exempt <code>127.0.0.0/8</code> and <code>::1</code> from rebinding checks, "
+"e.g. for RBL services."
+msgstr ""
+"Autorise les réponses dans la plage 127.0.0.0/8, par ex. pour les services "
+"de RBL"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:356
 msgid "Existing device"
@@ -2596,9 +2569,28 @@ msgstr "Impossible d'exécuter l'action \"/etc/init.d/%s %s\" action : %s"
 msgid "File"
 msgstr "Fichier"
 
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:409
+msgid ""
+"File listing upstream resolvers, optionally domain-specific, e.g. "
+"<code>server=1.2.3.4</code>, <code>server=/domain/1.2.3.4</code>."
+msgstr ""
+"Ce fichier peut contenir des lignes telles que 'server=/domain/1.2.3.4' ou "
+"'server=1.2.3.4' pour les serveurs <abbr title=\"Domain Name System\">DNS</"
+"abbr> spécifiques au domaine ou entièrement en amont."
+
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2641
 msgid "File not accessible"
 msgstr "Fichier non accessible"
+
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:341
+msgid "File to store DHCP lease information."
+msgstr ""
+"fichier dans lequel les baux <abbr title=\"Dynamic Host Configuration "
+"Protocol\">DHCP</abbr> seront stockés"
+
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:349
+msgid "File with upstream resolvers."
+msgstr "fichier local <abbr title = \"Domain Name System\"> DNS </abbr>"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2832
 msgid "Filename"
@@ -2686,25 +2678,25 @@ msgstr "Version du micrologiciel"
 msgid "Fixed source port for outbound DNS queries."
 msgstr "Port source fixe pour les requêtes DNS sortantes"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:310
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:447
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:312
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:449
 msgid "Flash image..."
 msgstr "Envoyer une image à écrire…"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:306
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:308
 msgid "Flash image?"
 msgstr "Écrire l'image ?"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:437
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:439
 msgid "Flash new firmware image"
 msgstr "Écrire l'image du nouveau micrologiciel"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:382
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:384
 msgid "Flash operations"
 msgstr "Opérations d'écriture"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:315
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:317
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:319
 msgid "Flashing…"
 msgstr "Écriture en cours…"
 
@@ -2744,7 +2736,7 @@ msgstr "Forcer TKIP et CCMP (AES)"
 msgid "Force link"
 msgstr "Forcer le lien"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:279
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:281
 msgid "Force upgrade"
 msgstr "Forcer la mise à niveau"
 
@@ -2888,7 +2880,7 @@ msgstr "Générer une clé"
 msgid "Generate PMK locally"
 msgstr "Générer PMK localement"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:394
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:396
 msgid "Generate archive"
 msgstr "Construire l'archive"
 
@@ -2907,7 +2899,6 @@ msgid "Global network options"
 msgstr "Options globales de réseau"
 
 #: themes/luci-theme-bootstrap/luasrc/view/themes/bootstrap/header.htm:57
-#: themes/luci-theme-material/luasrc/view/themes/material/header.htm:215
 #: themes/luci-theme-openwrt-2020/luasrc/view/themes/openwrt2020/header.htm:62
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:82
 msgid "Go to password configuration..."
@@ -3141,7 +3132,7 @@ msgstr "Adresses IP"
 msgid "IP Protocol"
 msgstr "Protocole IP"
 
-#: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:123
+#: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:126
 msgid "IP Type"
 msgstr "Type IP"
 
@@ -3158,6 +3149,10 @@ msgstr "L'adresse IP n'est pas valide"
 #: modules/luci-compat/luasrc/model/network.lua:31
 msgid "IP address is missing"
 msgstr "Adresse IP manquante"
+
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:423
+msgid "IPs to override with NXDOMAIN"
+msgstr "Contourne les « NX Domain » bogués"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/diagnostics.js:79
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/diagnostics.js:102
@@ -3213,7 +3208,7 @@ msgstr "Masque-réseau IPv4"
 msgid "IPv4 network in address/netmask notation"
 msgstr "Réseau IPv4 au format adresse/masque réseau"
 
-#: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:125
+#: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:128
 msgid "IPv4 only"
 msgstr "IPv4 seulement"
 
@@ -3235,7 +3230,7 @@ msgstr "IPv4+IPv6"
 msgid "IPv4-in-IPv4 (RFC2003)"
 msgstr "IPv4 en IPv4 (RFC2003)"
 
-#: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:124
+#: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:127
 msgid "IPv4/IPv6 (both - defaults to IPv4)"
 msgstr "IPv4/IPv6 (les deux - par défaut IPv4)"
 
@@ -3311,7 +3306,7 @@ msgstr "Passerelle IPv6"
 msgid "IPv6 network in address/netmask notation"
 msgstr "Réseau IPv6 au format adresse/masque réseau"
 
-#: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:126
+#: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:129
 msgid "IPv6 only"
 msgstr "IPv6 seulement"
 
@@ -3341,6 +3336,12 @@ msgstr "Préfixe IPv6 routé"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1003
 msgid "IPv6 suffix"
 msgstr "Suffixe IPv6"
+
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:626
+msgid "IPv6 suffix (hex)"
+msgstr ""
+"Suffixe <abbr title=\"Internet Protocol Version 6\">IPv6</abbr> (en "
+"hexadécimal)"
 
 #: protocols/luci-proto-sstp/htdocs/luci-static/resources/protocol/sstp.js:51
 msgid "IPv6 support"
@@ -3406,13 +3407,13 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:919
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:64
-#: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:119
+#: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:122
 msgid "If unchecked, no default route is configured"
 msgstr "Aucune route par défaut ne sera configurée si cette case est décochée"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:923
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:68
-#: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:130
+#: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:133
 msgid "If unchecked, the advertised DNS server addresses are ignored"
 msgstr "Les serveurs DNS annoncés seront ignorés si cette case est décochée"
 
@@ -3443,11 +3444,11 @@ msgstr "Ignorer l'interface"
 msgid "Ignore resolv file"
 msgstr "Ignorer le fichier de résolution"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:445
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:447
 msgid "Image"
 msgstr "Image"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:271
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:273
 msgid "Image check failed:"
 msgstr ""
 
@@ -3464,11 +3465,11 @@ msgstr ""
 "bloquée. Cliquez sur \"Continuer\" ci-dessous pour revenir à la page "
 "précédente."
 
-#: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:133
+#: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:136
 msgid "In seconds"
 msgstr "En secondes"
 
-#: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:153
+#: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:156
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/ppp.js:128
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoa.js:114
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoe.js:92
@@ -3481,7 +3482,7 @@ msgstr "Délai d'inactivité"
 msgid "Inbound:"
 msgstr "Entrant :"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:260
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:262
 msgid ""
 "Include in backup a list of current installed packages at /etc/backup/"
 "installed_packages.txt"
@@ -3658,10 +3659,10 @@ msgstr ""
 msgid "Invalid"
 msgstr "Erreur : donnée entrée invalide"
 
-#: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:98
-#: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:97
-#: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:90
-#: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:71
+#: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:101
+#: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:100
+#: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:93
+#: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:74
 msgid "Invalid APN provided"
 msgstr ""
 
@@ -3726,7 +3727,7 @@ msgstr ""
 "tenir dans la mémoire flash, merci de vérifier le fichier !"
 
 #: themes/luci-theme-bootstrap/luasrc/view/themes/bootstrap/header.htm:64
-#: themes/luci-theme-material/luasrc/view/themes/material/header.htm:222
+#: themes/luci-theme-material/luasrc/view/themes/material/header.htm:86
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:72
 msgid "JavaScript required!"
 msgstr "Nécessite JavaScript !"
@@ -3799,7 +3800,7 @@ msgstr "Serveur L2TP"
 msgid "LACPDU Packets"
 msgstr "LACPDU Paquets"
 
-#: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:127
+#: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:130
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/ppp.js:102
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoa.js:88
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoe.js:62
@@ -3808,7 +3809,7 @@ msgstr "LACPDU Paquets"
 msgid "LCP echo failure threshold"
 msgstr "Seuil d'erreur des échos LCP"
 
-#: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:140
+#: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:143
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/ppp.js:115
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoa.js:101
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoe.js:75
@@ -3858,6 +3859,10 @@ msgstr ""
 msgid "Learn routes"
 msgstr ""
 
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:340
+msgid "Lease file"
+msgstr "Fichier de baux"
+
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:617
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:679
 msgid "Lease time"
@@ -3869,10 +3874,6 @@ msgstr "Durée du bail"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:129
 msgid "Lease time remaining"
 msgstr "Durée de validité"
-
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:340
-msgid "Lease file"
-msgstr "Fichier de baux"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/464xlat.js:41
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoe.js:47
@@ -3902,18 +3903,6 @@ msgstr "Légende :"
 msgid "Limit"
 msgstr "Limite"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:312
-msgid "Accept DNS queries only from hosts whose address is on a local subnet."
-msgstr ""
-"Limiter le service DNS aux interfaces des sous-réseaux sur lesquels nous "
-"desservons le DNS."
-
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:325
-msgid ""
-"Listen only on the specified interfaces, and loopback if not excluded "
-"explicitly."
-msgstr "Limiter l'écoute à ces interfaces, et le loopback."
-
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:24
 msgid "Line Attenuation (LATN)"
 msgstr "Atténuation de la ligne (LATN)"
@@ -3942,11 +3931,10 @@ msgstr "Lien De Suivi"
 msgid "Link On"
 msgstr "Lien établi"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:281
-msgid "List of upstream resolvers to forward queries to."
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:424
+msgid "List of IP addresses to convert into NXDOMAIN responses."
 msgstr ""
-"Liste des serveurs auquels sont transmis les requêtes <abbr title=\"Domain "
-"Name System\">DNS</abbr>"
+"Liste des hôtes qui fournissent des résultats avec des « NX domain » bogués"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1555
 msgid ""
@@ -3990,22 +3978,29 @@ msgstr "Liste des domaines où sont permises les réponses de type RFC1918"
 msgid "List of domains to force to an IP address."
 msgstr "Liste des domaines à forcer à une adresse IP."
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:424
-msgid "List of IP addresses to convert into NXDOMAIN responses."
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:281
+msgid "List of upstream resolvers to forward queries to."
 msgstr ""
-"Liste des hôtes qui fournissent des résultats avec des « NX domain » bogués"
-
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:324
-msgid "Listen interfaces"
-msgstr "Interfaces d'écoute"
+"Liste des serveurs auquels sont transmis les requêtes <abbr title=\"Domain "
+"Name System\">DNS</abbr>"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:78
 msgid "Listen Port"
 msgstr "Port d'écoute"
 
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:324
+msgid "Listen interfaces"
+msgstr "Interfaces d'écoute"
+
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:17
 msgid "Listen only on the given interface or, if unspecified, on all"
 msgstr "Écouter seulement sur l'interface spécifié, sinon sur toutes"
+
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:325
+msgid ""
+"Listen only on the specified interfaces, and loopback if not excluded "
+"explicitly."
+msgstr "Limiter l'écoute à ces interfaces, et le loopback."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:430
 msgid "Listening port for inbound DNS queries."
@@ -4070,10 +4065,6 @@ msgstr ""
 msgid "Local IPv6 address"
 msgstr "Adresse IPv6 locale"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:311
-msgid "Local service only"
-msgstr "Service local uniquement"
-
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/startup.js:115
 msgid "Local Startup"
 msgstr "Démarrage local"
@@ -4091,15 +4082,6 @@ msgstr ""
 msgid "Local domain"
 msgstr "Domaine local"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:268
-msgid ""
-"Never forward matching domains and subdomains, resolve from DHCP or hosts "
-"files only."
-msgstr ""
-"Configuration du domaine local. Les noms appartenant à ce domaine ne seront "
-"jamais transmis à un résolveur DNS, ils seront résolus seulement à partir du "
-"serveur DHCP ou des fichiers « hosts »"
-
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:272
 msgid "Local domain suffix appended to DHCP names and hosts file entries."
 msgstr ""
@@ -4109,13 +4091,9 @@ msgstr ""
 msgid "Local server"
 msgstr "Serveur local"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:384
-msgid ""
-"Return answers to DNS queries matching the subnet from which the query was "
-"received if multiple IPs are available."
-msgstr ""
-"Trouve le nom d'hôte suivant le sous-réseau d'où vient la requête si "
-"plusieurs adresses IPs sont possibles"
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:311
+msgid "Local service only"
+msgstr "Service local uniquement"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:383
 msgid "Localise queries"
@@ -4129,7 +4107,7 @@ msgstr "Verrouiller sur BSSID"
 msgid "Log output level"
 msgstr "Niveau de journalisation"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:364
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:275
 msgid "Log queries"
 msgstr "Journaliser les requêtes"
 
@@ -4260,8 +4238,8 @@ msgstr ""
 "Assurez-vous de cloner le système de fichiers racine en utilisant quelque "
 "chose comme les commandes ci-dessous :"
 
-#: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:119
-#: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:111
+#: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:122
+#: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:114
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/l2tp.js:53
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/ppp.js:98
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoa.js:84
@@ -4281,6 +4259,22 @@ msgstr ""
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:22
 msgid "Max. Attainable Data Rate (ATTNDR)"
 msgstr "Débit de données max. atteignable (ATTNDR)"
+
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:443
+msgid "Max. DHCP leases"
+msgstr ""
+"Nombre maximal de baux <abbr title=\"Dynamic Host Configuration Protocol"
+"\">DHCP</abbr>"
+
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:450
+msgid "Max. EDNS0 packet size"
+msgstr ""
+"Taille maximale des paquets <abbr title=\"Extension Mechanisms for Domain "
+"Name System\">EDNS0</abbr>"
+
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:457
+msgid "Max. concurrent queries"
+msgstr "Nombre maximal de requêtes concurrentes"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:532
 msgid "Maximum age"
@@ -4302,9 +4296,9 @@ msgstr "Nombre maximum de requêtes DNS au même moment"
 msgid "Maximum allowed size of EDNS0 UDP packets."
 msgstr "Taille maximum autorisée des paquets UDP EDNS.0"
 
-#: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:123
-#: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:115
-#: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:103
+#: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:126
+#: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:118
+#: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:106
 msgid "Maximum amount of seconds to wait for the modem to become ready"
 msgstr "Délai d'attente maximum que le modem soit prêt"
 
@@ -4469,9 +4463,9 @@ msgstr ""
 msgid "Modem information query failed"
 msgstr "Échec de la requête d'informations sur le modem"
 
-#: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:123
-#: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:115
-#: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:103
+#: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:126
+#: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:118
+#: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:106
 msgid "Modem init timeout"
 msgstr "Délai max. d'initialisation du modem"
 
@@ -4673,6 +4667,15 @@ msgstr "Interface réseau"
 msgid "Never"
 msgstr "Jamais"
 
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:268
+msgid ""
+"Never forward matching domains and subdomains, resolve from DHCP or hosts "
+"files only."
+msgstr ""
+"Configuration du domaine local. Les noms appartenant à ce domaine ne seront "
+"jamais transmis à un résolveur DNS, ils seront résolus seulement à partir du "
+"serveur DHCP ou des fichiers « hosts »"
+
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1134
 msgid "New interface for \"%s\" can not be created: %s"
 msgstr "Impossible de créer une nouvelle interface pour \"%s\": %s"
@@ -4769,7 +4772,6 @@ msgid "No negative cache"
 msgstr "Pas de cache négatif"
 
 #: themes/luci-theme-bootstrap/luasrc/view/themes/bootstrap/header.htm:54
-#: themes/luci-theme-material/luasrc/view/themes/material/header.htm:212
 #: themes/luci-theme-openwrt-2020/luasrc/view/themes/openwrt2020/header.htm:59
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:79
 msgid "No password set!"
@@ -4823,7 +4825,7 @@ msgstr "Non-wildcard"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:159
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:183
-#: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:109
+#: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:112
 msgid "None"
 msgstr "Rien"
 
@@ -4900,8 +4902,8 @@ msgstr "Mot de passe de groupe obscurci"
 msgid "Obfuscated Password"
 msgstr "Mot de passe obscurci"
 
-#: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:115
-#: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:107
+#: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:118
+#: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:110
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/l2tp.js:49
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/ppp.js:94
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoa.js:80
@@ -4965,7 +4967,7 @@ msgstr ""
 "Seulement si l'esclave actif actuel est défaillant et que l'esclave primaire "
 "est en marche (défaillance, 2)"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:470
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:472
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/backupfiles.lua:19
 msgid "Open list..."
 msgstr "Ouvrir la liste…"
@@ -5056,7 +5058,7 @@ msgstr ""
 "supplémentaire de cryptographie à clé symétrique pour la résistance post-"
 "quantique."
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:154
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:147
 msgid "Optional. Create routes for Allowed IPs for this peer."
 msgstr "Facultatif. Créer des itinéraires pour les IP autorisés pour ce pair."
 
@@ -5068,7 +5070,7 @@ msgstr "Facultatif. Description du pair."
 msgid "Optional. Do not create host routes to peers."
 msgstr "Optionnel. Ne créez pas de routes hôtes vers des homologues."
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:156
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:149
 msgid ""
 "Optional. Host of peer. Names are resolved prior to bringing up the "
 "interface."
@@ -5076,15 +5078,22 @@ msgstr ""
 "Facultatif. Hôte du pair. Les noms sont résolus avant de mettre en place "
 "l'interface."
 
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:143
+msgid ""
+"Optional. IP addresses and prefixes that this peer is allowed to use inside "
+"the tunnel. Usually the peer's tunnel IP addresses and the networks the peer "
+"routes through the tunnel."
+msgstr ""
+
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:92
 msgid "Optional. Maximum Transmission Unit of tunnel interface."
 msgstr "Facultatif. Unité de transmission maximale de l'interface du tunnel."
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:160
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:153
 msgid "Optional. Port of peer."
 msgstr "Facultatif. Port de pair."
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:164
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:157
 msgid ""
 "Optional. Seconds between keep alive messages. Default is 0 (disabled). "
 "Recommended value if this device is behind a NAT is 25."
@@ -5164,14 +5173,14 @@ msgstr ""
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:69
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:74
 #: protocols/luci-proto-ipip/htdocs/luci-static/resources/protocol/ipip.js:53
-#: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:129
+#: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:132
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:156
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/l2tp.js:57
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/ppp.js:132
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoa.js:118
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoe.js:96
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pptp.js:105
-#: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:107
+#: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:110
 #: protocols/luci-proto-sstp/htdocs/luci-static/resources/protocol/sstp.js:62
 msgid "Override MTU"
 msgstr "Modifier le MTU"
@@ -5226,37 +5235,37 @@ msgstr "Remplacer le fichier existant \"%s\" ?"
 msgid "Owner"
 msgstr "Utilisateur"
 
-#: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:106
+#: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:109
 msgid "PAP/CHAP (both)"
 msgstr "PAP/CHAP (les deux)"
 
-#: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:108
-#: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:117
-#: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:100
+#: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:111
+#: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:120
+#: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:103
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/l2tp.js:45
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/ppp.js:90
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoa.js:76
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoe.js:44
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pptp.js:63
-#: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:91
+#: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:94
 #: protocols/luci-proto-sstp/htdocs/luci-static/resources/protocol/sstp.js:46
 msgid "PAP/CHAP password"
 msgstr "Mot de passe PAP/CHAP"
 
-#: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:106
-#: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:112
-#: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:98
+#: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:109
+#: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:115
+#: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:101
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/l2tp.js:43
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/ppp.js:88
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoa.js:74
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoe.js:42
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pptp.js:61
-#: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:86
+#: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:89
 #: protocols/luci-proto-sstp/htdocs/luci-static/resources/protocol/sstp.js:44
 msgid "PAP/CHAP username"
 msgstr "Identifiant PAP/CHAP"
 
-#: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:111
+#: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:114
 msgid "PDP Type"
 msgstr "Type de PDP"
 
@@ -5264,10 +5273,10 @@ msgstr "Type de PDP"
 msgid "PID"
 msgstr "PID"
 
-#: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:103
-#: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:102
-#: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:95
-#: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:76
+#: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:106
+#: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:105
+#: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:98
+#: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:79
 msgid "PIN"
 msgstr "code PIN"
 
@@ -5457,7 +5466,7 @@ msgstr ""
 msgid "Perform reboot"
 msgstr "Redémarrer"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:404
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:406
 msgid "Perform reset"
 msgstr "Réinitialiser"
 
@@ -5465,7 +5474,7 @@ msgstr "Réinitialiser"
 msgid "Permission denied"
 msgstr "Permission refusée"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:164
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:157
 msgid "Persistent Keep Alive"
 msgstr "Maintien persistant"
 
@@ -5544,7 +5553,7 @@ msgstr "Préfixe Délégué"
 msgid "Preshared Key"
 msgstr "Clé pré-partagée"
 
-#: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:127
+#: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:130
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/ppp.js:102
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoa.js:88
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoe.js:62
@@ -5556,10 +5565,6 @@ msgid ""
 msgstr ""
 "Suppose que le pair a disparu une fois le nombre donné d'erreurs d'échos "
 "LCP ; utiliser 0 pour ignorer ces erreurs"
-
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:331
-msgid "Do not listen on the specified interfaces."
-msgstr "Empêcher l'écoute sur ces interfaces."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1148
 msgid "Prevents client-to-client communication"
@@ -5898,16 +5903,6 @@ msgstr "Obligatoire. Clé privée encodée en Base64 pour cette interface."
 msgid "Required. Base64-encoded public key of peer."
 msgstr "Obligatoire. Clé publique du pair encodée en Base64."
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:143
-msgid ""
-"Required. IP addresses and prefixes that this peer is allowed to use inside "
-"the tunnel. Usually the peer's tunnel IP addresses and the networks the peer "
-"routes through the tunnel."
-msgstr ""
-"Obligatoire. Les adresses IP et les préfixes que ce pair est autorisé à "
-"utiliser à l'intérieur du tunnel. En général, les adresses IP du tunnel du "
-"pair et les réseaux que le pair fait passer par le tunnel."
-
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1312
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1313
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1314
@@ -5937,14 +5932,6 @@ msgstr "Nécessite hostapd avec prise en charge SAE"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1311
 msgid "Requires hostapd with WEP support"
 msgstr ""
-
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:389
-msgid ""
-"Validate DNS replies and cache DNSSEC data, requires upstream to support "
-"DNSSEC."
-msgstr ""
-"Nécessite un support DNSSEC en amont ; vérifie que les réponses des domaines "
-"non signés proviennent réellement de domaines non signés"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1326
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1327
@@ -5989,7 +5976,6 @@ msgstr "Reselection politique pour esclave primaire"
 #: modules/luci-compat/luasrc/view/cbi/delegator.htm:17
 #: modules/luci-compat/luasrc/view/cbi/footer.htm:30
 #: modules/luci-compat/luasrc/view/cbi/simpleform.htm:66
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1276
 msgid "Reset"
 msgstr "Remise à zéro"
 
@@ -5997,7 +5983,7 @@ msgstr "Remise à zéro"
 msgid "Reset Counters"
 msgstr "Remise à zéro des compteurs"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:402
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:404
 msgid "Reset to defaults"
 msgstr "Ré-initialisation"
 
@@ -6027,13 +6013,21 @@ msgstr "Redémarrer le pare-feu"
 msgid "Restart radio interface"
 msgstr "Redémarrer l'interface radio"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:398
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:400
 msgid "Restore"
 msgstr "Restaurer"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:408
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:410
 msgid "Restore backup"
 msgstr "Restaurer une sauvegarde"
+
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:384
+msgid ""
+"Return answers to DNS queries matching the subnet from which the query was "
+"received if multiple IPs are available."
+msgstr ""
+"Trouve le nom d'hôte suivant le sous-réseau d'où vient la requête si "
+"plusieurs adresses IPs sont possibles"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:371
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:372
@@ -6076,7 +6070,7 @@ msgstr "Préparation root"
 msgid "Round-Robin policy (balance-rr, 0)"
 msgstr "Politique Round-Robin (balance-rr, 0)"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:154
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:147
 msgid "Route Allowed IPs"
 msgstr "Route IP autorisées"
 
@@ -6191,7 +6185,7 @@ msgstr "SWAP"
 #: modules/luci-compat/luasrc/view/cbi/error.htm:17
 #: modules/luci-compat/luasrc/view/cbi/footer.htm:26
 #: modules/luci-compat/luasrc/view/cbi/header.htm:20
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:461
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:463
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/startup.js:123
 msgid "Save"
 msgstr "Enregistrer"
@@ -6206,11 +6200,11 @@ msgstr "Enregistrer et Appliquer"
 msgid "Save error"
 msgstr "Erreur Sauvegarde"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:432
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:434
 msgid "Save mtdblock"
 msgstr "Enregistrer mtdblock"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:422
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:424
 msgid "Save mtdblock contents"
 msgstr "Enregistrer le contenu de mtdblock"
 
@@ -6235,7 +6229,7 @@ msgstr "Section retirée"
 msgid "See \"mount\" manpage for details"
 msgstr "Voir le manuel de « mount » pour les détails"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:281
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:283
 msgid ""
 "Select 'Force upgrade' to flash the image even if the image format check "
 "fails. Use only if you are sure that the firmware is correct and meant for "
@@ -6267,7 +6261,7 @@ msgstr ""
 msgid "Send ICMP redirects"
 msgstr ""
 
-#: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:140
+#: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:143
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/ppp.js:115
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoa.js:101
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoe.js:75
@@ -6377,7 +6371,7 @@ msgstr "IG court"
 msgid "Short Preamble"
 msgstr "Préambule court"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:468
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:470
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/backupfiles.lua:18
 msgid "Show current backup file list"
 msgstr "Afficher la liste des fichiers de la sauvegarde actuelle"
@@ -6416,7 +6410,7 @@ msgstr "Signal / bruit"
 msgid "Signal Attenuation (SATN)"
 msgstr "Atténuation du signal (SATN)"
 
-#: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:133
+#: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:136
 msgid "Signal Refresh Rate"
 msgstr ""
 
@@ -6442,7 +6436,7 @@ msgstr "Taille du périphérique ZRam en mégaoctets"
 msgid "Skip"
 msgstr "Passer au suivant"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:256
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:257
 msgid "Skip from backup files that are equal to those in /rom"
 msgstr ""
 
@@ -6477,7 +6471,7 @@ msgstr "Désolé, l'objet que vous avez demandé n'as pas été trouvé."
 msgid "Sorry, the server encountered an unexpected error."
 msgstr "Désolé, le serveur à rencontré une erreur inattendue."
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:440
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:442
 msgid ""
 "Sorry, there is no sysupgrade support present; a new firmware image must be "
 "flashed manually. Please refer to the wiki for device specific install "
@@ -7347,7 +7341,7 @@ msgstr ""
 "Le système est en train d'effacer la partition de configuration et "
 "redémarrera tout seul une fois cela fini."
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:318
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:320
 msgid ""
 "The system is flashing now.<br /> DO NOT POWER OFF THE DEVICE!<br /> Wait a "
 "few minutes before you try to reconnect. It might be necessary to renew the "
@@ -7372,7 +7366,7 @@ msgstr ""
 msgid "The system password has been successfully changed."
 msgstr "Le mot de passe du système a été modifié avec succès."
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:343
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:345
 msgid "The sysupgrade command failed with code %d"
 msgstr "La commande sysupgrade a échoué avec le code %d"
 
@@ -7420,7 +7414,6 @@ msgid "There are no changes to apply"
 msgstr "Il n'y a aucun changement à appliquer"
 
 #: themes/luci-theme-bootstrap/luasrc/view/themes/bootstrap/header.htm:55
-#: themes/luci-theme-material/luasrc/view/themes/material/header.htm:213
 #: themes/luci-theme-openwrt-2020/luasrc/view/themes/openwrt2020/header.htm:60
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:80
 msgid ""
@@ -7444,16 +7437,7 @@ msgstr ""
 msgid "This does not look like a valid PEM file"
 msgstr "Cela ne ressemble pas à un fichier PEM valide"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:409
-msgid ""
-"File listing upstream resolvers, optionally domain-specific, e.g. "
-"<code>server=1.2.3.4</code>, <code>server=/domain/1.2.3.4</code>."
-msgstr ""
-"Ce fichier peut contenir des lignes telles que 'server=/domain/1.2.3.4' ou "
-"'server=1.2.3.4' pour les serveurs <abbr title=\"Domain Name System\">DNS</"
-"abbr> spécifiques au domaine ou entièrement en amont."
-
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:452
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:454
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/backupfiles.lua:16
 msgid ""
 "This is a list of shell glob patterns for matching files and directories to "
@@ -7581,7 +7565,7 @@ msgstr "Fuseau horaire"
 msgid "To login…"
 msgstr "Ouvrir une session…"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:398
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:400
 msgid ""
 "To restore configuration files, you can upload a previously generated backup "
 "archive here. To reset the firmware to its initial state, click \"Perform "
@@ -7744,7 +7728,7 @@ msgid "Unable to restart firewall: %s"
 msgstr "Impossible de redémarrer le pare-feu: %s"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/crontab.js:22
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:368
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:370
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/startup.js:57
 msgid "Unable to save contents: %s"
 msgstr "Impossible d'enregistrer le contenu: %s"
@@ -7752,6 +7736,10 @@ msgstr "Impossible d'enregistrer le contenu: %s"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:32
 msgid "Unavailable Seconds (UAS)"
 msgstr "Secondes non disponibles (UAS)"
+
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1276
+msgid "Unconfigure"
+msgstr ""
 
 #: modules/luci-base/htdocs/luci-static/resources/fs.js:102
 msgid "Unexpected reply data format"
@@ -7833,7 +7821,7 @@ msgstr "Délai d'attente"
 msgid "Upload"
 msgstr "Téléverser"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:439
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:441
 msgid ""
 "Upload a sysupgrade-compatible image here to replace the running firmware."
 msgstr ""
@@ -7842,7 +7830,7 @@ msgstr ""
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:138
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:169
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:410
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:412
 msgid "Upload archive..."
 msgstr "Envoi de l'archive…"
 
@@ -7886,6 +7874,12 @@ msgid ""
 "will be restarted to apply the updated configuration."
 msgstr ""
 
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:414
+msgid "Upstream resolvers will be queried in the order of the resolv file."
+msgstr ""
+"Les serveurs <abbr title=\"Domain Name System\">DNS</abbr> seront interrogés "
+"dans l'ordre du fichier de résolution"
+
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:82
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/10_system.js:60
 msgid "Uptime"
@@ -7905,7 +7899,7 @@ msgstr "Utiliser la passerelle DHCP"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:923
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:68
-#: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:129
+#: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:132
 msgid "Use DNS servers advertised by peer"
 msgstr "Utiliser les serveurs DNS publiés par le distant"
 
@@ -7968,13 +7962,13 @@ msgstr "Utiliser des serveurs DNS spécifiques"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:919
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:64
-#: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:118
+#: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:121
 msgid "Use default gateway"
 msgstr "Utiliser la passerelle par défaut"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:941
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:72
-#: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:123
+#: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:126
 msgid "Use gateway metric"
 msgstr "Utiliser la métrique de la passerelle"
 
@@ -8146,6 +8140,14 @@ msgstr "Identificateur réseau VXLAN"
 msgid "VXLANv6 (RFC7348)"
 msgstr "VXLANv6 (RFC7348)"
 
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:389
+msgid ""
+"Validate DNS replies and cache DNSSEC data, requires upstream to support "
+"DNSSEC."
+msgstr ""
+"Nécessite un support DNSSEC en amont ; vérifie que les réponses des domaines "
+"non signés proviennent réellement de domaines non signés"
+
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1571
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1629
 msgid ""
@@ -8167,10 +8169,6 @@ msgstr "Validation uniquement pour l'esclave actif"
 msgid "Validation only for backup slaves"
 msgstr "Validation uniquement pour les esclaves de sauvegarde"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:149
-msgid "Value must not be empty"
-msgstr "La valeur ne doit pas être vide"
-
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:73
 msgid "Vendor"
 msgstr "Vendeur"
@@ -8178,6 +8176,10 @@ msgstr "Vendeur"
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:40
 msgid "Vendor Class to send when requesting DHCP"
 msgstr "Classe de fournisseur à envoyer dans les requêtes DHCP"
+
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:394
+msgid "Verify unsigned domain responses really come from unsigned domains."
+msgstr ""
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:196
 msgid "Verifying the uploaded image file."
@@ -8384,7 +8386,7 @@ msgstr ""
 "\", votre équipement pourrait ne plus être accessible !</strong>"
 
 #: themes/luci-theme-bootstrap/luasrc/view/themes/bootstrap/header.htm:65
-#: themes/luci-theme-material/luasrc/view/themes/material/header.htm:223
+#: themes/luci-theme-material/luasrc/view/themes/material/header.htm:87
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:73
 msgid ""
 "You must enable JavaScript in your browser or LuCI will not work properly."
@@ -8448,7 +8450,7 @@ msgid "bridged"
 msgstr "ponté"
 
 #: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:146
-#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:402
+#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:405
 #: modules/luci-compat/luasrc/view/cbi/firewall_zonelist.htm:35
 #: modules/luci-compat/luasrc/view/cbi/firewall_zonelist.htm:99
 #: modules/luci-compat/luasrc/view/cbi/network_netlist.htm:31
@@ -8529,12 +8531,6 @@ msgstr ""
 msgid "expired"
 msgstr "expiré"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:341
-msgid "File to store DHCP lease information."
-msgstr ""
-"fichier dans lequel les baux <abbr title=\"Dynamic Host Configuration "
-"Protocol\">DHCP</abbr> seront stockés"
-
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:780
 msgid "forced"
 msgstr ""
@@ -8592,10 +8588,6 @@ msgstr "clé avec entre 8 et 63 caractères"
 msgid "key with either 5 or 13 characters"
 msgstr "clé avec 5 ou 13 caractères"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:349
-msgid "File with upstream resolvers."
-msgstr "fichier local <abbr title = \"Domain Name System\"> DNS </abbr>"
-
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:793
 msgid "managed config (M)"
 msgstr ""
@@ -8644,13 +8636,8 @@ msgstr "pas présent"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:347
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:965
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:969
-#: themes/luci-theme-material/luasrc/view/themes/material/header.htm:197
 msgid "off"
 msgstr "Arrêté"
-
-#: themes/luci-theme-material/luasrc/view/themes/material/header.htm:196
-msgid "on"
-msgstr "Actif"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:778
 msgid "on available prefix"
@@ -8739,10 +8726,10 @@ msgstr "non limité"
 #: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:76
 #: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:138
 #: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:369
-#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:393
-#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:429
-#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:466
-#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:562
+#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:396
+#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:432
+#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:469
+#: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:565
 #: modules/luci-compat/luasrc/view/cbi/firewall_zonelist.htm:53
 #: modules/luci-compat/luasrc/view/cbi/network_netlist.htm:38
 msgid "unspecified"
@@ -8939,6 +8926,24 @@ msgstr "oui"
 #: modules/luci-compat/luasrc/view/cbi/delegator.htm:20
 msgid "« Back"
 msgstr "« Retour"
+
+#~ msgid "Auto Refresh"
+#~ msgstr "Rafraîchissement automatique"
+
+#~ msgid "on"
+#~ msgstr "Actif"
+
+#~ msgid ""
+#~ "Required. IP addresses and prefixes that this peer is allowed to use "
+#~ "inside the tunnel. Usually the peer's tunnel IP addresses and the "
+#~ "networks the peer routes through the tunnel."
+#~ msgstr ""
+#~ "Obligatoire. Les adresses IP et les préfixes que ce pair est autorisé à "
+#~ "utiliser à l'intérieur du tunnel. En général, les adresses IP du tunnel "
+#~ "du pair et les réseaux que le pair fait passer par le tunnel."
+
+#~ msgid "Value must not be empty"
+#~ msgstr "La valeur ne doit pas être vide"
 
 #~ msgid "Grant access to the system route status"
 #~ msgstr "Permettre l'acces au Status du Routage"
