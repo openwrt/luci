@@ -6,7 +6,7 @@
 
 
 var callGetWgInstances = rpc.declare({
-	object: 'luci.wireguard_status',
+	object: 'luci.wireguard',
 	method: 'getWgInstances'
 });
 

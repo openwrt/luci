@@ -7,7 +7,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=WireGuard Status
-LUCI_DEPENDS:=+wireguard-tools +luci-proto-wireguard
+LUCI_DEPENDS:=+wireguard-tools
 LUCI_PKGARCH:=all
 
 include ../../luci.mk

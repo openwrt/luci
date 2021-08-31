@@ -6,6 +6,14 @@ local io = require "io"
 local uci = require "uci"
 
 local methods = {
+	generateKeyPair = {
+		call = function()
+			local prv = sys.exec("wg genkey 2>/dev/null"):sub(1, -2)
+			local pub = sys.exec("echo '" .. prv .. "' | wg pubkey 2>/dev/null"):sub(1, -2)
+
+			return {keys = {priv = prv, pub = pub}}
+		end
+	},
 	getWgInstances = {
 		call = function()
 			local data = {}
