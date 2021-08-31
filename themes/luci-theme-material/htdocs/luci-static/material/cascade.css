@@ -293,11 +293,13 @@ small {
 	position: fixed;
 	z-index: 1000;
 	top: 0;
-	display: block;
+	opacity: 1;
+	visibility: visible;
 	width: 100%;
 	height: 100%;
 	pointer-events: none;
 	background-color: rgb(240, 240, 240);
+	transition: visibility 400ms, opacity 400ms;
 }
 
 .main > .loading > span {
@@ -347,6 +349,7 @@ small {
 	height: calc(100% - 4rem);
 	background-color: #fff;
 	background-color: var(--menu-bg-color);
+	transition: visibility 400ms, width 400ms;
 }
 
 .main-right {
@@ -425,6 +428,52 @@ header > .fill > .container > .status > * {
 	float: left;
 	margin-left: .3rem;
 	cursor: pointer;
+}
+
+.modemenu-buttons {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	color: #fff;
+	color: var(--header-color);
+	background: #09c;
+	background: var(--header-bg);
+	padding: .5rem;
+	transition: box-shadow .2s;
+	box-shadow: 0 2px 5px rgb(0 0 0 / 26%);
+}
+
+#modemenu {
+	margin: 0.25rem;
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+}
+
+#modemenu > li > a {
+	font-size: .8rem;
+	font-weight: bold;
+	padding: .3rem .8rem;
+	white-space: nowrap;
+	text-decoration: none;
+	text-transform: uppercase;
+	color: #fff !important;
+	border-radius: 3px;
+	background-color: #bfbfbf;
+	text-shadow: none;
+}
+
+#modemenu > li > a.active {
+	background-color: #5bc0de !important;
+}
+
+#modemenu > li.divider {
+	margin-left: .25rem;
+	margin-right: .25rem;
+	border: .5rem solid var(--submenu-bg-hover);
+	border-left: 1px solid var(--submenu-bg-hover);
+	border-right: 1px solid var(--submenu-bg-hover);
+	border-radius: 1rem;
 }
 
 #xhr_poll_status {
@@ -516,6 +565,10 @@ header > .fill > .container > .status > * {
 	display: none;
 }
 
+.main > .main-left > .nav > .slide.active > ul {
+	display: block;
+}
+
 .main > .main-left > .nav > .slide > .menu,
 .main > .main-left > .nav > li > [data-title="Logout"] {
 	font-size: 1.15rem;
@@ -572,10 +625,6 @@ body[class*="node-"] > .main > .main-left > .nav > .slide > .menu.active::before
 	background: none;
 }
 
-.main > .main-left > .nav > .slide > .slide-menu > li {
-	padding: .4rem 2rem;
-}
-
 .main > .main-left > .nav > .slide > .slide-menu > .active {
 	background-color: #09c;
 	background-color: var(--submenu-bg-hover-active);
@@ -584,6 +633,7 @@ body[class*="node-"] > .main > .main-left > .nav > .slide > .menu.active::before
 .main > .main-left > .nav > .slide > .slide-menu > li > a {
 	white-space: nowrap;
 	text-decoration: none;
+	padding: .4rem 2rem;
 }
 
 .main > .main-left > .nav > .slide > .slide-menu > .active > a {
@@ -2136,11 +2186,13 @@ label[data-index][data-depends] {
 .darkMask {
 	position: fixed;
 	z-index: 99;
-	display: none;
 	width: 100%;
 	height: 100%;
 	content: "";
 	background-color: rgba(0, 0, 0, .56);
+	transition: opacity 400ms, visibility 400ms;
+	visibility: hidden;
+	opacity: 0;
 }
 
 /* diagnostics */
@@ -2635,7 +2687,7 @@ input[name="nslookup"] {
 	.main-left {
 		position: fixed;
 		z-index: 100;
-		width: 0;
+		visibility: hidden;
 	}
 
 	.main-right {
