@@ -3,11 +3,12 @@
 		"title": "WireGuard",
 		"order": 92,
 		"action": {
-			"type": "template",
-			"path": "wireguard"
+			"type": "view",
+			"path": "wireguard/status"
 		},
 		"depends": {
-			"acl": [ "luci-mod-status-index" ]
+			"acl": [ "luci-app-wireguard" ],
+			"uci": { "network": true }
 		}
 	}
 }
