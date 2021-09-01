@@ -1,22 +1,35 @@
 'use strict';
 'require view';
+'require fs';
+'require uci';
 'require form';
 'require network';
 'require tools.widgets as widgets';
 
 return view.extend({
 	load: function() {
-		return network.getDevices();
+		return Promise.all([
+			network.getDevices(),
+			fs.lines('/etc/iproute2/rt_tables')
+		]);
 	},
 
-	render: function(netdevs) {
-		var m, s, o;
+	render: function(data) {
+		var netDevs = data[0],
+		    m, s, o;
 
-		m = new form.Map('network', _('Routes'), _('Routes specify over which interface and gateway a certain host or network can be reached.'));
+		var rtTables = data[1].map(function(l) {
+			var m = l.trim().match(/^(\d+)\s+(\S+)$/);
+			return m ? [ +m[1], m[2] ] : null;
+		}).filter(function(e) {
+			return e && e[0] > 0;
+		});
+
+		m = new form.Map('network', _('Routing'), _('Routing defines over which interface and gateway a certain host or network can be reached.'));
 		m.tabbed = true;
 
-		for (var i = 4; i <= 6; i += 2) {
-			s = m.section(form.GridSection, (i == 4) ? 'route' : 'route6', (i == 4) ? _('Static IPv4 Routes') : _('Static IPv6 Routes'));
+		for (var family = 4; family <= 6; family += 2) {
+			s = m.section(form.GridSection, (family == 6) ? 'route6' : 'route', (family == 6) ? _('Static IPv6 Routes') : _('Static IPv4 Routes'));
 			s.anonymous = true;
 			s.addremove = true;
 			s.sortable = true;
@@ -29,40 +42,8 @@ return view.extend({
 			o.rmempty = false;
 			o.nocreate = true;
 
-			o = s.taboption('general', form.Flag, 'disabled', _('Disable'), _('Disable this route'));
-			o.rmempty = true;
-			o.default = o.disabled;
-
-			o = s.taboption('general', form.Value, 'target', _('Target'), (i == 4) ? _('Host-<abbr title="Internet Protocol Address">IP</abbr> or Network') : _('<abbr title="Internet Protocol Version 6">IPv6</abbr>-Address or Network (CIDR)'));
-			o.datatype = (i == 4) ? 'ip4addr' : 'ip6addr';
-			o.rmempty = false;
-
-			if (i == 4) {
-				o = s.taboption('general', form.Value, 'netmask', _('<abbr title="Internet Protocol Version 4">IPv4</abbr>-Netmask'), _('if target is a network'));
-				o.placeholder = '255.255.255.255';
-				o.datatype = 'ip4addr';
-				o.rmempty = true;
-			}
-
-			o = s.taboption('general', form.Value, 'gateway', (i == 4) ? _('<abbr title="Internet Protocol Version 4">IPv4</abbr>-Gateway') : _('<abbr title="Internet Protocol Version 6">IPv6</abbr>-Gateway'));
-			o.datatype = (i == 4) ? 'ip4addr' : 'ip6addr';
-			o.rmempty = true;
-
-			o = s.taboption('advanced', form.Value, 'metric', _('Metric'));
-			o.placeholder = 0;
-			o.datatype = (i == 4) ? 'range(0,255)' : 'range(0,65535)';
-			o.rmempty = true;
-			o.textvalue = function(section_id) {
-				return this.cfgvalue(section_id) || 0;
-			};
-
-			o = s.taboption('advanced', form.Value, 'mtu', _('MTU'));
-			o.placeholder = 1500;
-			o.datatype = 'range(64,9000)';
-			o.rmempty = true;
+			o = s.taboption('general', form.ListValue, 'type', _('Route type'));
 			o.modalonly = true;
-
-			o = s.taboption('advanced', form.ListValue, 'type', _('Route type'));
 			o.value('', 'unicast');
 			o.value('local');
 			o.value('broadcast');
@@ -71,36 +52,152 @@ return view.extend({
 			o.value('prohibit');
 			o.value('blackhole');
 			o.value('anycast');
-			o.default = '';
-			o.rmempty = true;
-			o.modalonly = true;
 
-			o = s.taboption('advanced', form.Value, 'table', _('Route table'));
-			o.value('local', 'local (255)');
-			o.value('main', 'main (254)');
-			o.value('default', 'default (253)');
-			o.rmempty = true;
-			o.modalonly = true;
+			o = s.taboption('general', form.Value, 'target', _('Target'));
+			o.rmempty = false;
+			o.datatype = (family == 6) ? 'cidr6' : 'cidr4';
+			o.placeholder = (family == 6) ? '::/0' : '0.0.0.0/0';
 			o.cfgvalue = function(section_id) {
-				var cfgvalue = this.map.data.get('network', section_id, 'table');
-				return cfgvalue || 'main';
+				var t = uci.get('network', section_id, 'target'),
+				    m = uci.get('network', section_id, 'netmask'),
+				    s = (family == 6) ? 128 : 32,
+				    p = m ? network.maskToPrefix(m, (family == 6) ? true : false) : s;
+				if (t) {
+					return t.split('/')[1] ? t : t + '/' + p;
+				}
+			}
+			o.write = function(section_id, formvalue) {
+				uci.set('network', section_id, 'target', formvalue);
+				uci.unset('network', section_id, 'netmask');
+			}
+
+			o = s.taboption('general', form.Value, 'gateway', _('Gateway'));
+			o.datatype = (family == 6) ? 'ip6addr("nomask")' : 'ip4addr("nomask")';
+			o.placeholder = (family == 6) ? 'fe80::1' : '192.168.0.1';
+
+			o = s.taboption('advanced', form.Value, 'metric', _('Metric'));
+			o.datatype = 'uinteger';
+			o.placeholder = 0;
+			o.textvalue = function(section_id) {
+				return this.cfgvalue(section_id) || 0;
 			};
 
-			o = s.taboption('advanced', form.Value, 'source', _('Source Address'));
-			o.placeholder = E('em', _('automatic'));
-			for (var j = 0; j < netdevs.length; j++) {
-				var addrs = (i == 4) ? netdevs[j].getIPAddrs() : netdevs[j].getIP6Addrs();
-				for (var k = 0; k < addrs.length; k++)
-					o.value(addrs[k].split('/')[0]);
-			}
-			o.datatype = (i == 4) ? 'ip4addr' : 'ip6addr';
-			o.default = '';
-			o.rmempty = true;
+			o = s.taboption('advanced', form.Value, 'mtu', _('MTU'));
 			o.modalonly = true;
+			o.datatype = 'and(uinteger,range(64,9000))';
+			o.placeholder = 1500;
 
-			o = s.taboption('advanced', form.Flag, 'onlink', _('On-Link route'));
+			o = s.taboption('advanced', form.Value, 'table', _('Table'));
+			o.datatype = 'or(uinteger, string)';
+			for (var i = 0; i < rtTables.length; i++)
+				o.value(rtTables[i][1], '%s (%d)'.format(rtTables[i][1], rtTables[i][0]));
+			o.textvalue = function(section_id) {
+				return this.cfgvalue(section_id) || 'main';
+			};
+
+			o = s.taboption('advanced', form.Value, 'source', _('Source'));
+			o.modalonly = true;
+			o.datatype = (family == 6) ? 'ip6addr("nomask")' : 'ip4addr("nomask")';
+			o.placeholder = E('em', _('auto'));
+			for (var i = 0; i < netDevs.length; i++) {
+				var addrs = (family == 6) ? netDevs[i].getIP6Addrs() : netDevs[i].getIPAddrs();
+				for (var j = 0; j < addrs.length; j++)
+					o.value(addrs[j].split('/')[0]);
+			}
+
+			o = s.taboption('advanced', form.Flag, 'onlink', _('On-link'));
+			o.modalonly = true;
 			o.default = o.disabled;
-			o.rmempty = true;
+
+			o = s.taboption('advanced', form.Flag, 'disabled', _('Disable'));
+			o.modalonly = false;
+			o.editable = true;
+			o.default = o.disabled;
+		}
+
+		for (var family = 4; family <= 6; family += 2) {
+			s = m.section(form.GridSection, (family == 6) ? 'rule6' : 'rule', (family == 6) ? _('IPv6 Rules') : _('IPv4 Rules'));
+			s.anonymous = true;
+			s.addremove = true;
+			s.sortable = true;
+			s.nodescriptions = true;
+
+			s.tab('general', _('General Settings'));
+			s.tab('advanced', _('Advanced Settings'));
+
+			o = s.taboption('general', form.Value, 'priority', _('Priority'));
+			o.datatype = 'uinteger';
+			o.placeholder = 30000;
+			o.textvalue = function(section_id) {
+				return this.cfgvalue(section_id) || E('em', _('auto'));
+			};
+
+			o = s.taboption('general', form.ListValue, 'action', _('Rule type'));
+			o.modalonly = true;
+			o.value('', 'unicast');
+			o.value('unreachable');
+			o.value('prohibit');
+			o.value('blackhole');
+			o.value('throw');
+
+			o = s.taboption('general', widgets.NetworkSelect, 'in', _('Incoming interface'));
+			o.loopback = true;
+			o.nocreate = true;
+
+			o = s.taboption('general', form.Value, 'src', _('Source'));
+			o.datatype = (family == 6) ? 'cidr6' : 'cidr4';
+			o.placeholder = (family == 6) ? '::/0' : '0.0.0.0/0';
+			o.textvalue = function(section_id) {
+				return E('em', _('any'));
+			};
+
+			o = s.taboption('general', widgets.NetworkSelect, 'out', _('Outgoing interface'));
+			o.loopback = true;
+			o.nocreate = true;
+
+			o = s.taboption('general', form.Value, 'dest', _('Destination'));
+			o.datatype = (family == 6) ? 'cidr6' : 'cidr4';
+			o.placeholder = (family == 6) ? '::/0' : '0.0.0.0/0';
+			o.textvalue = function(section_id) {
+				return E('em', _('any'));
+			};
+
+			o = s.taboption('general', form.Value, 'lookup', _('Table'));
+			o.datatype = 'or(uinteger, string)';
+			for (var i = 0; i < rtTables.length; i++)
+				o.value(rtTables[i][1], '%s (%d)'.format(rtTables[i][1], rtTables[i][0]));
+			o.textvalue = function(section_id) {
+				return this.cfgvalue(section_id) || 'main';
+			};
+
+			o = s.taboption('advanced', form.Value, 'goto', _('Jump to rule'));
+			o.modalonly = true;
+			o.datatype = 'uinteger';
+			o.placeholder = 80000;
+
+			o = s.taboption('advanced', form.Value, 'mark', _('Firewall mark'));
+			o.modalonly = true;
+			o.datatype = 'string';
+			o.placeholder = '0x1/0xf';
+
+			o = s.taboption('advanced', form.Value, 'tos', _('Type of service'));
+			o.modalonly = true;
+			o.datatype = 'uinteger';
+			o.placeholder = 10;
+
+			o = s.taboption('advanced', form.Value, 'suppress_prefixlength', _('Prefix suppressor'));
+			o.modalonly = true;
+			o.datatype = (family == 6) ? 'ip6prefix' : 'ip4prefix';
+			o.placeholder = (family == 6) ? 64 : 24;
+
+			o = s.taboption('advanced', form.Flag, 'invert', _('Invert match'));
+			o.modalonly = true;
+			o.default = o.disabled;
+
+			o = s.taboption('advanced', form.Flag, 'disabled', _('Disable'));
+			o.modalonly = false;
+			o.editable = true;
+			o.default = o.disabled;
 		}
 
 		return m.render();
