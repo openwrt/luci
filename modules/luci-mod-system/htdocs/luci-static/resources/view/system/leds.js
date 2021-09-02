@@ -63,6 +63,7 @@ return view.extend({
 		s.addremove = true;
 		s.sortable = true;
 		s.addbtntitle = _('Add LED action');
+		s.nodescriptions = true;
 
 		s.option(form.Value, 'name', _('Name'));
 
@@ -75,13 +76,31 @@ return view.extend({
 		for (var i = 0; i < plugins.length; i++) {
 			var plugin = plugins[i];
 
-			if ( plugin.form.kernel == false )
+			if ( plugin.form.kernel == false ) {
 				o.value(plugin.name, plugin.form.trigger);
-			else
-				for (var k = 0; k < triggers.length; k++)
-					if ( plugin.name == triggers[k] )
-						o.value(plugin.name, plugin.form.trigger);
+			}
+			else {
+				if (triggers.indexOf(plugin.name) >= 0)
+					o.value(plugin.name, plugin.form.trigger);
+			}
 		}
+		o.onchange = function(ev, section, value) {
+			for (var i = 0; i < plugins.length; i++) {
+				var plugin = plugins[i];
+				if ( plugin.name === value )
+					this.map.findElement('id', 'cbid.system.%s.trigger'.format(section))
+						.nextElementSibling.innerHTML = plugin.form.description || '';
+			}
+		}
+		o.load = function(section_id) {
+			var trigger = uci.get('system', section_id, 'trigger');
+			for (var i = 0; i < plugins.length; i++) {
+				var plugin = plugins[i];
+				if ( plugin.name === trigger)
+					this.description = plugin.form.description || '';
+			}
+			return trigger;
+		};
 
 		s.addModalOptions = function(s) {
 			for (var i = 0; i < plugins.length; i++) {

@@ -4,6 +4,7 @@
 
 return baseclass.extend({
 	trigger: _('Custom flash interval (kernel: timer)'),
+	description: _('The LED blinks with the configured on/off frequency'),
 	kernel: true,
 	addFormOptions(s){
 		var o;
