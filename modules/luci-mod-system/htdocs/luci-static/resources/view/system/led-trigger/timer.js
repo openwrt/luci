@@ -8,11 +8,15 @@ return baseclass.extend({
 	addFormOptions(s){
 		var o;
 
-		o = s.option(form.Value, 'delayon', _('On-State Delay'));
+		o = s.option(form.Value, 'delayon', _('On-State Delay'),
+			_('How long (in milliseconds) the LED should be on')
+		);
 		o.modalonly = true;
 		o.depends('trigger', 'timer');
 
-		o = s.option(form.Value, 'delayoff', _('Off-State Delay'));
+		o = s.option(form.Value, 'delayoff', _('Off-State Delay'),
+			_('How long (in milliseconds) the LED should be off')
+		);
 		o.modalonly = true;
 		o.depends('trigger', 'timer');
 	}
