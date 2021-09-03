@@ -347,22 +347,6 @@ msgstr "操作"
 msgid "Active"
 msgstr "活跃"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:243
-msgid "Active IPv4 Routes"
-msgstr "活动的 <abbr title=\"互联网协议第 4 版\">IPv4</abbr> 路由"
-
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:246
-msgid "Active IPv4 Rules"
-msgstr "活跃的<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>规则"
-
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:253
-msgid "Active IPv6 Routes"
-msgstr "活动的 <abbr title=\"互联网协议第 6 版\">IPv6</abbr> 路由"
-
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:256
-msgid "Active IPv6 Rules"
-msgstr "活跃的<abbr title=\"Internet Protocol Version 6\">IPv6</abbr>规则"
-
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:81
 msgid "Active Connections"
 msgstr "活动连接"
@@ -376,6 +360,22 @@ msgstr "已分配的 DHCP 租约"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:176
 msgid "Active DHCPv6 Leases"
 msgstr "已分配的 DHCPv6 租约"
+
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:255
+msgid "Active IPv4 Routes"
+msgstr "活动的 <abbr title=\"互联网协议第 4 版\">IPv4</abbr> 路由"
+
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:258
+msgid "Active IPv4 Rules"
+msgstr "活跃的<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>规则"
+
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:265
+msgid "Active IPv6 Routes"
+msgstr "活动的 <abbr title=\"互联网协议第 6 版\">IPv6</abbr> 路由"
+
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:268
+msgid "Active IPv6 Rules"
+msgstr "活跃的<abbr title=\"Internet Protocol Version 6\">IPv6</abbr>规则"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:205
 msgid "Active-Backup policy (active-backup, 1)"
@@ -426,7 +426,7 @@ msgstr "添加 IPv6 地址…"
 msgid "Add LED action"
 msgstr "添加 LED 事件"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:219
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:221
 msgid "Add VLAN"
 msgstr "添加 VLAN"
 
@@ -1685,7 +1685,7 @@ msgstr "删除此网络"
 msgid "Delivery Traffic Indication Message Interval"
 msgstr "发送流量指示消息间隔"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:340
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:342
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:125
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:129
 msgid "Description"
@@ -2127,7 +2127,7 @@ msgstr "启用 IPv6 协商"
 msgid "Enable IPv6 negotiation on the PPP link"
 msgstr "在 PPP 链路上启用 IPv6 协商"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:192
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:194
 msgid "Enable Jumbo Frame passthrough"
 msgstr "启用巨型帧透传"
 
@@ -2168,15 +2168,15 @@ msgstr "启用此接口上可用的 IPv6 前缀的下游委托"
 msgid "Enable key reinstallation (KRACK) countermeasures"
 msgstr "启用密钥重新安装（KRACK）对策"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:187
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:189
 msgid "Enable learning and aging"
 msgstr "启用智能交换学习"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:198
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:200
 msgid "Enable mirroring of incoming packets"
 msgstr "启用流入数据包镜像"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:199
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:201
 msgid "Enable mirroring of outgoing packets"
 msgstr "启用流出数据包镜像"
 
@@ -2348,7 +2348,9 @@ msgstr "排除接口"
 msgid ""
 "Exempt <code>127.0.0.0/8</code> and <code>::1</code> from rebinding checks, "
 "e.g. for RBL services."
-msgstr "将 <code>127.0.0.0/8</code>和<code>::1</code>排除在重新绑定检查外，比如实时黑名单列表服务。"
+msgstr ""
+"将 <code>127.0.0.0/8</code>和<code>::1</code>排除在重新绑定检查外，比如实时黑"
+"名单列表服务。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:356
 msgid "Existing device"
@@ -2469,8 +2471,8 @@ msgid ""
 "File listing upstream resolvers, optionally domain-specific, e.g. "
 "<code>server=1.2.3.4</code>, <code>server=/domain/1.2.3.4</code>."
 msgstr ""
-"列出上游解析器的文件，可以特定于域名，比如 <code>server=1.2.3.4</code>，<code>server=/domain/1.2.3."
-"4</code>。"
+"列出上游解析器的文件，可以特定于域名，比如 <code>server=1.2.3.4</code>，"
+"<code>server=/domain/1.2.3.4</code>。"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2641
 msgid "File not accessible"
@@ -2552,6 +2554,10 @@ msgstr "防火墙设置"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:326
 msgid "Firewall Status"
 msgstr "防火墙状态"
+
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:178
+msgid "Firewall mark"
+msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1487
 msgid "Firmware File"
@@ -3060,13 +3066,17 @@ msgstr "IPv4"
 msgid "IPv4 Firewall"
 msgstr "IPv4 防火墙"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:240
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:252
 msgid "IPv4 Neighbours"
 msgstr ""
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:239
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:251
 msgid "IPv4 Routing"
 msgstr "IPv4 路由"
+
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:119
+msgid "IPv4 Rules"
+msgstr ""
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:29
 msgid "IPv4 Upstream"
@@ -3151,7 +3161,7 @@ msgstr "IPv6 防火墙"
 msgid "IPv6 MTU"
 msgstr "IPv6 MTU"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:250
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:262
 msgid "IPv6 Neighbours"
 msgstr "IPv6 网上邻居"
 
@@ -3159,9 +3169,13 @@ msgstr "IPv6 网上邻居"
 msgid "IPv6 RA Settings"
 msgstr "IPv6 RA 设置"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:249
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:261
 msgid "IPv6 Routing"
 msgstr "IPv6 路由"
+
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:119
+msgid "IPv6 Rules"
+msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:634
 msgid "IPv6 Settings"
@@ -3377,6 +3391,10 @@ msgstr "将当前安装的包列表备份在 /etc/backup/installed_packages.txt"
 msgid "Incoming checksum"
 msgstr "传入校验和"
 
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:143
+msgid "Incoming interface"
+msgstr ""
+
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:92
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:97
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:94
@@ -3563,11 +3581,11 @@ msgstr "无效的 TOS 值，请输入 00..FF 或继承"
 msgid "Invalid Traffic Class value, expected 00..FF or inherit"
 msgstr "无效的通信类别，请输入 00..FF 或继承"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:285
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:287
 msgid "Invalid VLAN ID given! Only IDs between %d and %d are allowed."
 msgstr "无效的 VLAN ID！只有 %d 和 %d 之间的 ID 有效。"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:294
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:296
 msgid "Invalid VLAN ID given! Only unique IDs are allowed"
 msgstr "无效的 VLAN ID！只允许唯一的 ID"
 
@@ -3592,6 +3610,10 @@ msgstr "无效 16 进制值"
 #: modules/luci-base/luasrc/view/sysauth.htm:12
 msgid "Invalid username and/or password! Please try again."
 msgstr "无效的用户名和/或密码！请重试。"
+
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:193
+msgid "Invert match"
+msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1148
 msgid "Isolate Clients"
@@ -3620,6 +3642,10 @@ msgstr "加入网络：搜索无线"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2027
 msgid "Joining Network: %q"
 msgstr "正在加入网络：%q"
+
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:173
+msgid "Jump to rule"
+msgstr ""
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:228
 msgid "Keep settings and retain the current configuration"
@@ -4272,11 +4298,11 @@ msgstr ""
 "发送主动 <abbr title=\"路由器通告，ICMPv6 类型 134\">RA</abbr> 允许的最短时间"
 "间隔。默认为 200 秒。"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:202
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:204
 msgid "Mirror monitor port"
 msgstr "数据包镜像监听端口"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:201
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:203
 msgid "Mirror source port"
 msgstr "数据包镜像源端口"
 
@@ -4598,6 +4624,15 @@ msgstr "未收到数据"
 msgid "No enforcement"
 msgstr "不强制"
 
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:229
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:232
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:235
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:238
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:241
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:244
+msgid "No entries available"
+msgstr ""
+
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2899
 msgid "No entries in this directory"
 msgstr "此目录中没有内容"
@@ -4792,13 +4827,13 @@ msgstr "关闭时间"
 msgid "On"
 msgstr "开"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:108
-msgid "On-link"
-msgstr "On-Link 路由"
-
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/timer.js:11
 msgid "On-State Delay"
 msgstr "通电时间"
+
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:108
+msgid "On-link"
+msgstr "On-Link 路由"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:592
 msgid "One of hostname or MAC address must be specified!"
@@ -4946,7 +4981,9 @@ msgid ""
 "Optional. IP addresses and prefixes that this peer is allowed to use inside "
 "the tunnel. Usually the peer's tunnel IP addresses and the networks the peer "
 "routes through the tunnel."
-msgstr "可选。此对端在隧道内被允许使用的 IP 地址和前缀。通常是对端的隧道 IP 地址和对端经由隧道的网络。"
+msgstr ""
+"可选。此对端在隧道内被允许使用的 IP 地址和前缀。通常是对端的隧道 IP 地址和对"
+"端经由隧道的网络。"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:92
 msgid "Optional. Maximum Transmission Unit of tunnel interface."
@@ -4994,6 +5031,10 @@ msgstr "出站："
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:108
 msgid "Outgoing checksum"
 msgstr "传出校验和"
+
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:154
+msgid "Outgoing interface"
+msgstr ""
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:96
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:101
@@ -5381,7 +5422,7 @@ msgstr "端口"
 msgid "Port isolation"
 msgstr "端口隔离"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:278
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:280
 msgid "Port status:"
 msgstr "端口状态："
 
@@ -5408,6 +5449,10 @@ msgstr "首选 UMTS"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:33
 msgid "Prefix Delegated"
 msgstr "分发前缀"
+
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:188
+msgid "Prefix suppressor"
+msgstr ""
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:138
 msgid "Preshared Key"
@@ -5875,7 +5920,8 @@ msgstr "恢复配置"
 msgid ""
 "Return answers to DNS queries matching the subnet from which the query was "
 "received if multiple IPs are available."
-msgstr "如果有多个 IP 可用，则应答特定的 DNS 查询，这些查询匹配接收到查询的子网。"
+msgstr ""
+"如果有多个 IP 可用，则应答特定的 DNS 查询，这些查询匹配接收到查询的子网。"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:371
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:372
@@ -5940,23 +5986,27 @@ msgid "Router Password"
 msgstr "路由器密码"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:28
+#: modules/luci-mod-network/root/usr/share/luci/menu.d/luci-mod-network.json:50
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:248
+#: modules/luci-mod-status/root/usr/share/luci/menu.d/luci-mod-status.json:15
+msgid "Routing"
+msgstr "路由"
+
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:28
 msgid ""
 "Routing defines over which interface and gateway a certain host or network "
 "can be reached."
 msgstr "路由指定通过哪个接口和网关可以到达某个主机或网络。"
-
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:28
-#: modules/luci-mod-network/root/usr/share/luci/menu.d/luci-mod-network.json:50
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:236
-#: modules/luci-mod-status/root/usr/share/luci/menu.d/luci-mod-status.json:15
-msgid "Routing"
-msgstr "路由"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:218
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:198
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:224
 msgid "Rule"
 msgstr "规则"
+
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:135
+msgid "Rule type"
+msgstr ""
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:335
 msgid "Run a filesystem check before mounting the device"
@@ -6987,7 +7037,7 @@ msgstr ""
 "刷写镜像已上传。下面是列出的校验和及文件大小，将它们与原始文件进行比较以确保"
 "数据完整性。<br />单击下面的“继续”开始刷写。"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:237
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:249
 msgid "The following rules are currently active on this system."
 msgstr "以下规则当前在系统中处于活动状态。"
 
@@ -7408,6 +7458,10 @@ msgstr "传输功率"
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/map.js:43
 msgid "Type"
 msgstr "类型"
+
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:183
+msgid "Type of service"
+msgstr ""
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:328
 msgid "UDP:"
@@ -8369,7 +8423,7 @@ msgstr "无"
 msgid "not present"
 msgstr "不存在"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:347
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:349
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:965
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:969
 msgid "off"
@@ -8432,7 +8486,7 @@ msgstr "sstpc 记录级别"
 msgid "strong security"
 msgstr "强安全性"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:352
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:354
 msgid "tagged"
 msgstr "已标记"
 
@@ -8475,7 +8529,7 @@ msgstr "未指定"
 msgid "unspecified -or- create:"
 msgstr "不指定或新建："
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:350
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:352
 msgid "untagged"
 msgstr "未标记"
 
