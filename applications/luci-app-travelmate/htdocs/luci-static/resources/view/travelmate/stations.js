@@ -308,6 +308,7 @@ return view.extend({
 		o.value('psk-mixed+tkip', _('WPA/WPA2 Pers. (TKIP)'));
 		o.value('wpa3', _('WPA3 Ent. (CCMP)'));
 		o.value('wpa3-mixed', _('WPA2/WPA3 Ent. (CCMP)'));
+		o.value('wpa2', _('WPA2 Ent.'));
 		o.value('wpa2+ccmp', _('WPA2 Ent. (CCMP)'));
 		o.value('wpa2+tkip', _('WPA2 Ent. (TKIP)'));
 		o.value('wpa+ccmp', _('WPA Ent. (CCMP)'));
@@ -350,6 +351,9 @@ return view.extend({
 				case 'wpa3-mixed':
 					cfgvalue = 'WPA2/WPA3 Ent. (CCMP)';
 					break;
+				case 'wpa2':
+					cfgvalue = 'WPA2 Ent.';
+					break;
 				case 'wpa2+ccmp':
 					cfgvalue = 'WPA2 Ent. (CCMP)';
 					break;
@@ -386,17 +390,22 @@ return view.extend({
 		o.datatype = 'wpakey';
 		o.depends({ encryption: 'sae', '!contains': true });
 		o.depends({ encryption: 'psk', '!contains': true });
+		o.modalonly = true;
+		o.password = true;
+
+		o = s.taboption('wireless', form.Value, 'password', _('Password'));
+		o.datatype = 'wpakey';
 		o.depends({ encryption: 'wpa', '!contains': true });
 		o.modalonly = true;
 		o.password = true;
 
 		o = s.taboption('wireless', form.ListValue, 'eap_type', _('EAP-Method'));
+		o.depends({ encryption: 'wpa', '!contains': true });
 		o.value('tls', _('TLS'));
 		o.value('ttls', _('TTLS'));
 		o.value('peap', _('PEAP'));
 		o.value('fast', _('FAST'));
 		o.default = 'peap';
-		o.depends({ encryption: 'wpa', '!contains': true });
 		o.modalonly = true;
 
 		o = s.taboption('wireless', form.ListValue, 'auth', _('Authentication'));
@@ -414,12 +423,39 @@ return view.extend({
 		o.depends({ encryption: 'wpa', '!contains': true });
 		o.modalonly = true;
 
-		o = s.taboption('wireless', form.Value, 'identify', _('Identify'));
+		o = s.taboption('wireless', form.Value, 'identity', _('Identity'));
 		o.depends({ encryption: 'wpa', '!contains': true });
 		o.modalonly = true;
 
+		o = s.taboption('wireless', form.Value, 'anonymous_identity', _('Anonymous Identity'));
+		o.depends({ encryption: 'wpa', '!contains': true });
+		o.modalonly = true;
+
+		o = s.taboption('wireless', form.ListValue, 'ieee80211w', _('Mgmt. Frame Protection'));
+		o.depends({ encryption: 'sae', '!contains': true });
+		o.depends({ encryption: 'owe', '!contains': true });
+		o.depends({ encryption: 'wpa', '!contains': true });
+		o.depends({ encryption: 'psk', '!contains': true });
+		o.value('', _('Disabled'));
+		o.value('1', _('Optional'));
+		o.value('2', _('Required'));
+		o.modalonly = true;
+		o.defaults = {
+			'2': [{ encryption: 'sae' }, { encryption: 'owe' }, { encryption: 'wpa3' }, { encryption: 'wpa3-mixed' }],
+			'1': [{ encryption: 'sae-mixed' }],
+			'': []
+		};
+
+		o = s.taboption('wireless', form.Flag, 'ca_cert_usesystem', _('Use system certificates'), _("Validate server certificate using built-in system CA bundle"));
+		o.depends({ encryption: 'wpa', '!contains': true });
+		o.enabled = '1';
+		o.disabled = '0';
+		o.modalonly = true;
+		o.default = o.disabled;
+
 		o = s.taboption('wireless', form.Value, 'ca_cert', _('Path to CA-Certificate'));
-		o.depends({ eap_type: 'tls' });
+		o.depends({ encryption: 'wpa', '!contains': true });
+		o.depends({ ca_cert_usesystem: '0' });
 		o.modalonly = true;
 		o.rmempty = true;
 
@@ -434,7 +470,6 @@ return view.extend({
 		o.rmempty = true;
 
 		o = s.taboption('wireless', form.Value, 'priv_key_pwd', _('Password of Private Key'));
-		o.datatype = 'wpakey';
 		o.depends({ eap_type: 'tls' });
 		o.modalonly = true;
 		o.password = true;
@@ -778,6 +813,14 @@ return view.extend({
 											encryption = 'psk-mixed+ccmp';
 											tbl_encryption = 'WPA/WPA2 Pers. (CCMP)';
 											break;
+										case 'WPA PSK (CCMP)':
+											encryption = 'psk2+ccmp';
+											tbl_encryption = 'WPA Pers. (CCMP)';
+											break;
+										case 'WPA PSK (TKIP)':
+											encryption = 'psk2+tkip';
+											tbl_encryption = 'WPA Pers. (TKIP)';
+											break;
 										case 'WPA3 802.1X (CCMP)':
 											encryption = 'wpa3';
 											tbl_encryption = 'WPA3 Ent. (CCMP)';
@@ -786,13 +829,9 @@ return view.extend({
 											encryption = 'wpa3-mixed';
 											tbl_encryption = 'WPA2/WPA3 Ent. (CCMP)';
 											break;
-										case 'WPA PSK (CCMP)':
-											encryption = 'psk2+ccmp';
-											tbl_encryption = 'WPA Pers. (CCMP)';
-											break;
-										case 'WPA PSK (TKIP)':
-											encryption = 'psk2+tkip';
-											tbl_encryption = 'WPA Pers. (TKIP)';
+										case 'WPA2 802.1X':
+											encryption = 'wpa2';
+											tbl_encryption = 'WPA2 Ent.';
 											break;
 										case 'WPA2 802.1X (CCMP)':
 											encryption = 'wpa2+ccmp';
@@ -898,6 +937,7 @@ return view.extend({
 			o2.value('psk-mixed+tkip', _('WPA/WPA2 Pers. (TKIP)'));
 			o2.value('wpa3', _('WPA3 Ent.'));
 			o2.value('wpa3-mixed', _('WPA2/WPA3 Ent.'));
+			o2.value('wpa2', _('WPA2 Ent.'));
 			o2.value('wpa2+ccmp', _('WPA2 Ent. (CCMP)'));
 			o2.value('wpa2+tkip', _('WPA2 Ent. (TKIP)'));
 			o2.value('wpa+ccmp', _('WPA Ent. (CCMP)'));
@@ -911,6 +951,10 @@ return view.extend({
 			o2 = s2.option(form.Value, 'key', _('Password'));
 			o2.depends({ encryption: 'sae', '!contains': true });
 			o2.depends({ encryption: 'psk', '!contains': true });
+			o2.datatype = 'wpakey';
+			o2.password = true;
+
+			o2 = s2.option(form.Value, 'password', _('Password'));
 			o2.depends({ encryption: 'wpa', '!contains': true });
 			o2.datatype = 'wpakey';
 			o2.password = true;
@@ -937,11 +981,36 @@ return view.extend({
 			o2.value('auth=MSCHAPV2', _('auth=MSCHAPV2'));
 			o2.default = 'EAP-MSCHAPV2';
 
-			o2 = s2.option(form.Value, 'identify', _('Identify'));
+			o2 = s2.option(form.Value, 'identity', _('Identity'));
 			o2.depends({ encryption: 'wpa', '!contains': true });
 
+			o2 = s2.option(form.Value, 'anonymous_identity', _('Anonymous Identity'));
+			o2.depends({ encryption: 'wpa', '!contains': true });
+			o2.rmempty = true;
+
+			o2 = s2.option(form.ListValue, 'ieee80211w', _('Mgmt. Frame Protection'));
+			o2.depends({ encryption: 'sae', '!contains': true });
+			o2.depends({ encryption: 'owe', '!contains': true });
+			o2.depends({ encryption: 'wpa', '!contains': true });
+			o2.depends({ encryption: 'psk', '!contains': true });	
+			o2.value('', _('Disabled'));
+			o2.value('1', _('Optional'));
+			o2.value('2', _('Required'));
+			o2.defaults = {
+				'2': [{ encryption: 'sae' }, { encryption: 'owe' }, { encryption: 'wpa3' }, { encryption: 'wpa3-mixed' }],
+				'1': [{ encryption: 'sae-mixed' }],
+				'': []
+			};
+
+			o2 = s2.option(form.Flag, 'ca_cert_usesystem', _('Use system certificates'), _("Validate server certificate using built-in system CA bundle"));
+			o2.depends({ encryption: 'wpa', '!contains': true });
+			o2.enabled = '1';
+			o2.disabled = '0';
+			o2.default = o.disabled;
+
 			o2 = s2.option(form.Value, 'ca_cert', _('Path to CA-Certificate'));
-			o2.depends({ eap_type: 'tls' });
+			o2.depends({ encryption: 'wpa', '!contains': true });
+			o2.depends({ ca_cert_usesystem: '0' });
 			o2.rmempty = true;
 
 			o2 = s2.option(form.Value, 'client_cert', _('Path to Client-Certificate'));
@@ -954,7 +1023,6 @@ return view.extend({
 
 			o2 = s2.option(form.Value, 'priv_key_pwd', _('Password of Private Key'));
 			o2.depends({ eap_type: 'tls' });
-			o2.datatype = 'wpakey';
 			o2.password = true;
 			o2.rmempty = true;
 
@@ -986,8 +1054,24 @@ return view.extend({
 				ssid = L.toArray(map.lookupOption('ssid', '_add_trm'))[0].formvalue('_add_trm'),
 				ignore_bssid = L.toArray(map.lookupOption('ignore_bssid', '_add_trm'))[0].formvalue('_add_trm'),
 				bssid = L.toArray(map.lookupOption('bssid', '_add_trm'))[0].formvalue('_add_trm'),
-				encryption = L.toArray(map.lookupOption('encryption', '_add_trm'))[0].formvalue('_add_trm'),
-				password = L.toArray(map.lookupOption('key', '_add_trm'))[0].formvalue('_add_trm');
+				encryption = L.toArray(map.lookupOption('encryption', '_add_trm'))[0].formvalue('_add_trm');
+			if (encryption.includes('wpa')) {
+				var eap_type = L.toArray(map.lookupOption('eap_type', '_add_trm'))[0].formvalue('_add_trm'),
+					auth = L.toArray(map.lookupOption('auth', '_add_trm'))[0].formvalue('_add_trm'),
+					identity = L.toArray(map.lookupOption('identity', '_add_trm'))[0].formvalue('_add_trm'),
+					anonymous_identity = L.toArray(map.lookupOption('anonymous_identity', '_add_trm'))[0].formvalue('_add_trm'),
+					password = L.toArray(map.lookupOption('password', '_add_trm'))[0].formvalue('_add_trm'),
+					ca_cert_usesystem = L.toArray(map.lookupOption('ca_cert_usesystem', '_add_trm'))[0].formvalue('_add_trm'),
+					ca_cert = L.toArray(map.lookupOption('ca_cert', '_add_trm'))[0].formvalue('_add_trm'),
+					ieee80211w = L.toArray(map.lookupOption('ieee80211w', '_add_trm'))[0].formvalue('_add_trm');
+				if (eap_type.includes('tls')) {
+					var client_cert = L.toArray(map.lookupOption('client_cert', '_add_trm'))[0].formvalue('_add_trm'),
+						priv_key = L.toArray(map.lookupOption('priv_key', '_add_trm'))[0].formvalue('_add_trm'),
+						priv_key_pwd = L.toArray(map.lookupOption('priv_key_pwd', '_add_trm'))[0].formvalue('_add_trm');
+				}
+			} else {
+				var password = L.toArray(map.lookupOption('key', '_add_trm'))[0].formvalue('_add_trm');
+			}
 			if (!ssid || ((encryption.includes('psk') || encryption.includes('wpa') || encryption.includes('sae')) && !password)) {
 				if (!ssid) {
 					ui.addNotification(null, E('p', 'Empty SSID, the uplink station could not be saved.'), 'error');
@@ -1020,7 +1104,23 @@ return view.extend({
 				uci.set('wireless', new_sid, 'bssid', bssid);
 			}
 			uci.set('wireless', new_sid, 'encryption', encryption);
-			uci.set('wireless', new_sid, 'key', password);
+			if (encryption.includes('wpa')) {
+				uci.set('wireless', new_sid, 'eap_type', eap_type);
+				uci.set('wireless', new_sid, 'auth', auth);
+				uci.set('wireless', new_sid, 'identity', identity);
+				uci.set('wireless', new_sid, 'anonymous_identity', anonymous_identity);
+				uci.set('wireless', new_sid, 'password', password);
+				uci.set('wireless', new_sid, 'ca_cert_usesystem', ca_cert_usesystem);
+				uci.set('wireless', new_sid, 'ca_cert', ca_cert);
+				uci.set('wireless', new_sid, 'ieee80211w', ieee80211w);
+				if (eap_type.includes('tls')) {
+					uci.set('wireless', new_sid, 'client_cert', client_cert);
+					uci.set('wireless', new_sid, 'priv_key', priv_key);
+					uci.set('wireless', new_sid, 'priv_key_pwd', priv_key_pwd);
+				}
+			} else {
+				uci.set('wireless', new_sid, 'key', password);
+			}
 			uci.set('wireless', new_sid, 'disabled', '1');
 			handleSectionsAdd(network);
 			uci.save()
