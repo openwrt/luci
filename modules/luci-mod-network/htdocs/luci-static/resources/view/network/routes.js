@@ -39,7 +39,7 @@ return view.extend({
 			s.tab('advanced', _('Advanced Settings'));
 
 			o = s.taboption('general', widgets.NetworkSelect, 'interface', _('Interface'));
-			o.rmempty = false;
+			o.loopback = true;
 			o.nocreate = true;
 
 			o = s.taboption('general', form.ListValue, 'type', _('Route type'));
@@ -58,12 +58,13 @@ return view.extend({
 			o.datatype = (family == 6) ? 'cidr6' : 'cidr4';
 			o.placeholder = (family == 6) ? '::/0' : '0.0.0.0/0';
 			o.cfgvalue = function(section_id) {
-				var t = uci.get('network', section_id, 'target'),
-				    m = uci.get('network', section_id, 'netmask'),
-				    s = (family == 6) ? 128 : 32,
-				    p = m ? network.maskToPrefix(m, (family == 6) ? true : false) : s;
-				if (t) {
-					return t.split('/')[1] ? t : t + '/' + p;
+				var section_type = uci.get('network', section_id, '.type'),
+				    target = uci.get('network', section_id, 'target'),
+				    mask = uci.get('network', section_id, 'netmask'),
+				    v6 = (section_type == 'route6') ? true : false,
+				    bits = mask ? network.maskToPrefix(mask, v6) : (v6 ? 128 : 32);
+				if (target) {
+					return target.split('/')[1] ? target : target + '/' + bits;
 				}
 			}
 			o.write = function(section_id, formvalue) {
@@ -166,9 +167,6 @@ return view.extend({
 			o.datatype = 'or(uinteger, string)';
 			for (var i = 0; i < rtTables.length; i++)
 				o.value(rtTables[i][1], '%s (%d)'.format(rtTables[i][1], rtTables[i][0]));
-			o.textvalue = function(section_id) {
-				return this.cfgvalue(section_id) || 'main';
-			};
 
 			o = s.taboption('advanced', form.Value, 'goto', _('Jump to rule'));
 			o.modalonly = true;
