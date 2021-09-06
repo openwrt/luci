@@ -536,7 +536,6 @@ header > .fill > .container > .status > * {
 }
 
 .main > .main-left > .nav > li {
-	padding: .5rem 1rem;
 	cursor: pointer;
 	-webkit-user-select: none;
 	-moz-user-select: none;
@@ -557,6 +556,19 @@ header > .fill > .container > .status > * {
 	color: var(--menu-color);
 }
 
+.main > .main-left > .nav > li.active > a {
+	color: #fff;
+}
+
+.main > .main-left > .nav > li.active {
+	background-color: #09c;
+	background-color: var(--submenu-bg-hover-active);
+}
+
+.main > .main-left > .nav > li.slide.active {
+	background-color: unset;
+}
+
 .main > .main-left > .nav > .slide {
 	padding: 0;
 }
@@ -570,7 +582,8 @@ header > .fill > .container > .status > * {
 }
 
 .main > .main-left > .nav > .slide > .menu,
-.main > .main-left > .nav > li > [data-title="Logout"] {
+.main > .main-left > .nav > li > [data-title="Logout"],
+.main > .main-left > .nav > li > [data-title="Dashboard"] {
 	font-size: 1.15rem;
 	font-weight: 500;
 	display: flex;
@@ -1892,7 +1905,6 @@ td > .ifacebadge,
 
 #syslog {
 	font-size: small;
-	line-height: 1.25;
 	overflow-y: hidden;
 	width: 100%;
 	min-height: 15rem;
