@@ -11,6 +11,13 @@ var generateKey = rpc.declare({
 	expect: { keys: {} }
 });
 
+var generateQrCode = rpc.declare({
+	object: 'luci.wireguard',
+	method: 'generateQrCode',
+	params: ['privkey'],
+	expect: { qr_code: '' }
+});
+
 function validateBase64(section_id, value) {
 	if (value.length == 0)
 		return true;
@@ -22,6 +29,15 @@ function validateBase64(section_id, value) {
 		return _('Invalid Base64 key string');
 
 	return true;
+}
+
+function findSection(sections, name) {
+	for (var i = 0; i < sections.length; i++) {
+		var section = sections[i];
+		if (section['.name'] == name) return section;
+	}
+
+	return null;
 }
 
 return network.registerProtocol('wireguard', {
@@ -130,6 +146,59 @@ return network.registerProtocol('wireguard', {
 		o.placeholder = 'My Peer';
 		o.datatype = 'string';
 		o.optional = true;
+
+		o = ss.option(form.Value, 'description', _('QR-Code'));
+		o.render = L.bind(function (view, section_id) {
+			var sections = uci.sections('network');
+			var serverName = this.getIfname();
+			var server = findSection(sections, serverName);
+
+			var description = '%s:<br />&#8226;&#160;[Interface] %s<br />&#8226;&#160;[Peer] %s'.format(
+				_('The QR-Code works per wg interface, it will be refreshed with every button click and transfers the following information'),
+				_('A random, on the fly generated "PrivateKey", the key will not be saved on the router'),
+				_('The "PublicKey" of that wg interface and the "AllowedIPs" with the default of "0.0.0.0/0, ::/0" to allow sending traffic to any IPv4 and IPv6 address')
+			);
+
+			return E('div', { 'class': 'cbi-value' }, [
+				E('label', { 'class': 'cbi-value-title' }, _('QR-Code')),
+				E('div', {
+					'style': 'display: flex; flex-direction: column; align-items: baseline;',
+					'id': 'qr-' + section_id
+				}, [
+					E('button', {
+						'class': 'btn cbi-button cbi-button-apply',
+						'click': ui.createHandlerFn(this, function (publicKey, section_id) {
+							var qrDiv = document.getElementById('qr-' + section_id);
+							var qrEl = qrDiv.querySelector('value');
+							var qrBtn = qrDiv.querySelector('button');
+							var qrencodeErr = '<b>%q</b>'.format(
+								_('For QR-Code support please install the qrencode package!'));
+
+							if (qrEl.innerHTML != '' && qrEl.innerHTML != qrencodeErr) {
+								qrEl.innerHTML = '';
+								qrBtn.innerHTML = _('Generate New QR-Code')
+							} else {
+								qrEl.innerHTML = _('Loading QR-Code...');
+
+								generateQrCode(publicKey).then(function (qrCode) {
+									if (qrCode == '') {
+											qrEl.innerHTML = qrencodeErr;
+									} else {
+										qrEl.innerHTML = qrCode;
+										qrBtn.innerHTML = _('Hide QR-Code');
+									}
+								});
+							}
+						}, server.private_key, section_id)
+					}, _('Generate new QR-Code')),
+					E('value', {
+						'class': 'cbi-section',
+						'style': 'margin: 0;'
+					}),
+					E('div', { 'class': 'cbi-value-description' }, description)
+				])
+			]);
+		}, this);
 
 		o = ss.option(form.Value, 'public_key', _('Public Key'), _('Required. Base64-encoded public key of peer.'));
 		o.validate = validateBase64;

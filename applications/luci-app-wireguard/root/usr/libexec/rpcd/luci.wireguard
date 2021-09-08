@@ -4,6 +4,7 @@ local json = require "luci.jsonc"
 local sys = require "luci.sys"
 local io = require "io"
 local uci = require "uci"
+local fs = require "nixio.fs"
 
 local methods = {
 	generateKeyPair = {
@@ -12,6 +13,22 @@ local methods = {
 			local pub = sys.exec("echo '" .. prv .. "' | wg pubkey 2>/dev/null"):sub(1, -2)
 
 			return {keys = {priv = prv, pub = pub}}
+		end
+	},
+	generateQrCode = {
+		args = {privkey = "privkey"},
+		call = function(args)
+			local qr_code
+
+			if fs.access("/usr/bin/qrencode") then
+				local pubkey = sys.exec("echo '" .. args.privkey .. "' | wg pubkey 2>/dev/null"):sub(1, -2)
+				local client_privkey = sys.exec("wg genkey 2>/dev/null"):sub(1, -2)
+				local qr_enc = "[Interface]\nPrivateKey = " .. client_privkey .. "\n[Peer]\nPublicKey = " .. pubkey .. "\nAllowedIPs = 0.0.0.0/0, ::/0"
+
+				qr_code = sys.exec("/usr/bin/qrencode --inline --8bit --type=SVG --output=- '" .. qr_enc .. "' 2>/dev/null")
+			end
+
+			return {qr_code = qr_code}
 		end
 	},
 	getWgInstances = {
