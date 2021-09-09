@@ -1,14 +1,14 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2021-07-23 17:34+0000\n"
-"Last-Translator: ToldYouThat <itoldyouthat@protonmail.com>\n"
+"PO-Revision-Date: 2021-08-22 19:59+0000\n"
+"Last-Translator: Erdinc <erdincbeldek@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsattendedsysupgrade/tr/>\n"
 "Language: tr\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.7.2-dev\n"
+"X-Generator: Weblate 4.8.1-dev\n"
 
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/configuration.js:16
 msgid "Address"
@@ -16,14 +16,14 @@ msgstr "Adres"
 
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/configuration.js:17
 msgid "Address of the sysupgrade server"
-msgstr "Sysupgrade sunucusunun adresi"
+msgstr "sysupgrade sunucusunun adresi"
 
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/configuration.js:27
 msgid "Advanced Mode"
 msgstr "Gelişmiş Mod"
 
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/configuration.js:9
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:357
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:371
 #: applications/luci-app-attendedsysupgrade/root/usr/share/luci/menu.d/luci-app-attendedsysupgrade.json:3
 msgid "Attended Sysupgrade"
 msgstr "Katılımlı Sysupgrade"
@@ -36,9 +36,9 @@ msgstr "Attendedsysupgrade Yapılandırması."
 msgid "Build Date"
 msgstr "Sürüm tarihi"
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:178
-msgid "Building the sysupgrade image"
-msgstr "Sistem yükseltme görüntüsünü oluşturma"
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:177
+msgid "Building firmware sysupgrade image"
+msgstr "Sistem yükseltme firmware imajı oluşturuluyor"
 
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:155
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:295
@@ -50,8 +50,9 @@ msgid "Client"
 msgstr "İstemci"
 
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:65
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:216
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:214
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:319
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:334
 msgid "Close"
 msgstr "Kapat"
 
@@ -59,17 +60,26 @@ msgstr "Kapat"
 msgid "Configuration"
 msgstr "Yapılandırma"
 
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:326
+msgid "Could not reach API at \"%s\". Please try again later."
+msgstr ""
+"\"%s\" konumunda API'ye ulaşılamadı. Lütfen daha sonra tekrar deneyiniz."
+
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:37
 msgid "Downloading firmware from server to browser"
-msgstr "Bellenim sunucudan tarayıcıya indiriliyor"
+msgstr "Firmware sunucudan tarayıcıya indiriliyor"
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:219
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:217
 msgid "Error building the sysupgrade"
 msgstr "sysupgrade oluşturulurken hata meydana geldi"
 
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:325
+msgid "Error connecting to upgrade server"
+msgstr "Yükseltme sunucusuna bağlanırken hata oluştu"
+
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:61
 msgid "Error during download of firmware. Please try again"
-msgstr "Donanım yazılımının indirilmesi sırasında hata. Lütfen tekrar deneyin"
+msgstr "Firmware indirilmesi sırasında hata oldu. Lütfen tekrar deneyin"
 
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:116
 msgid "File"
@@ -81,11 +91,11 @@ msgstr "Sysupgrade'i yükleyin"
 
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:68
 msgid "Installing the sysupgrade. Do not unpower device!"
-msgstr "Sistem yükseltmesini yükleniyor. Cihazın gücünü kesmeyin!"
+msgstr "Sysupgrade yükleniyor. Cihazın gücünü kesmeyin!"
 
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:147
 msgid "Keep settings and retain the current configuration"
-msgstr "Ayarları koruyun ve mevcut yapılandırmayı koruyun"
+msgstr "Ayarları ve mevcut yapılandırmayı koruyun"
 
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:287
 msgid "New upgrade available"
@@ -99,19 +109,19 @@ msgstr "Yeni yükseltme mevcut değil"
 msgid "Overview"
 msgstr "Genel bakış"
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:191
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:189
 msgid "Please report the error message and request"
 msgstr "Lütfen hata mesajını ve isteği bildirin"
 
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:306
 msgid "Request Sysupgrade"
-msgstr "Sistem Yükseltmesi İste"
+msgstr "Sysupgrade iste"
 
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:175
-msgid "Request in build queue"
-msgstr "Derleme kuyruğundaki istek"
+msgid "Request in build queue position %d"
+msgstr "İsteğin inşa kuyruğundaki sırası %d"
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:192
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:190
 msgid "Request to server:"
 msgstr "Sunucuya istek:"
 
@@ -121,9 +131,9 @@ msgstr "SHA256"
 
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/configuration.js:23
 msgid "Search for new sysupgrades on opening the tab"
-msgstr "Sekmeyi açarken yeni sistem yükseltmelerini arayın"
+msgstr "Sekmeyi açarken yeni sysupgrade'leri arayın"
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:371
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:385
 msgid "Search for sysupgrade"
 msgstr "Sysupgrade ara"
 
@@ -131,7 +141,7 @@ msgstr "Sysupgrade ara"
 msgid "Search on opening"
 msgstr "Açılışta ara"
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:226
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:224
 msgid "Searching for an available sysupgrade"
 msgstr "Kullanılabilir bir sistem yükseltmesi aranıyor"
 
@@ -145,34 +155,34 @@ msgstr "Paket listesi değişikliği gibi gelişmiş seçenekleri göster"
 
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:166
 msgid "Successfully created sysupgrade image"
-msgstr "Sysupgrade görüntüsü başarıyla oluşturulmuştur"
+msgstr "Sysupgrade görüntüsü başarıyla oluşturuldu"
 
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:121
 msgid "Target"
 msgstr "Hedef"
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:358
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:372
 msgid ""
 "The attended sysupgrade service allows to easily upgrade vanilla and custom "
 "firmware images."
 msgstr ""
-"Katılımlı sysupgrade hizmeti, vanilya ve özel aygıt yazılımı görüntülerini "
+"Katılımlı sysupgrade hizmeti, resmi ve özel yapım firmware imajlarını "
 "kolayca yükseltmenize olanak tanır."
 
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:312
 msgid "The device runs the latest firmware version"
 msgstr "Cihaz en son firmware sürümünü çalıştırıyor"
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:359
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:373
 msgid ""
 "This is done by building a new firmware on demand via an online service."
 msgstr ""
-"Bu, çevrimiçi bir hizmet aracılığıyla talep üzerine yeni bir ürün yazılımı "
-"oluşturarak yapılır."
+"Bu, talep üzerine çevrimiçi bir hizmet aracılığıyla yeni bir firmware "
+"oluşturularak yapılır."
 
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:51
 msgid "Uploading firmware from browser to device"
-msgstr "Donanım yazılımı tarayıcıdan cihaza yükleniyor"
+msgstr "Firmware tarayıcıdan cihaza yükleniyor"
 
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:115
 msgid "Version"
@@ -180,4 +190,4 @@ msgstr "Sürüm"
 
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:60
 msgid "Wrong checksum"
-msgstr "Yanlış sağlama toplamı"
+msgstr "Hatalı checksum"
