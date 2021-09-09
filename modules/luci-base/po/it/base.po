@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: LuCI\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-06-10 03:40+0200\n"
-"PO-Revision-Date: 2021-09-08 07:33+0000\n"
+"PO-Revision-Date: 2021-09-09 08:44+0000\n"
 "Last-Translator: pisquan8 <cimurro@outlook.de>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/openwrt/luci/it/>"
 "\n"
@@ -149,27 +149,27 @@ msgstr "stringa esadecimale di 6 byte (12 caratteri) - senza separatori"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1504
 msgid "802.11r Fast Transition"
-msgstr ""
+msgstr "802.11r transizione BSS rapida (Fast Transition)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1691
 msgid "802.11w Association SA Query maximum timeout"
-msgstr ""
+msgstr "Timeout massimo per Secure Association Query 802.11w"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1698
 msgid "802.11w Association SA Query retry timeout"
-msgstr ""
+msgstr "Tempo di attesa per retry di Secure Association Query 802.11w"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1679
 msgid "802.11w Management Frame Protection"
-msgstr ""
+msgstr "Protezione frame di gestione 802.11w"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1691
 msgid "802.11w maximum timeout"
-msgstr ""
+msgstr "Timeout massimo 802.11w"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1698
 msgid "802.11w retry timeout"
-msgstr ""
+msgstr "Tempo di attesa per retry 802.11w"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1020
 msgid "<abbr title=\"Basic Service Set Identifier\">BSSID</abbr>"
@@ -218,11 +218,11 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:370
 msgid "A configuration for the device \"%s\" already exists"
-msgstr ""
+msgstr "Esiste già una configurazione per il dispositivo \"%s\""
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2741
 msgid "A directory with the same name already exists."
-msgstr "Esiste una directory con lo stesso nome del file."
+msgstr "Esiste già una directory con lo stesso nome del file."
 
 #: modules/luci-base/htdocs/luci-static/resources/luci.js:2671
 msgid "A new login is required since the authentication session expired."
@@ -322,19 +322,21 @@ msgstr ""
 #: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:547
 #: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:551
 msgid "Absent Interface"
-msgstr ""
+msgstr "Interfaccia assente"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:312
 msgid "Accept DNS queries only from hosts whose address is on a local subnet."
 msgstr ""
+"Accetta query DNS solo da host il cui indirizzo si trova su una sottorete "
+"locale."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:647
 msgid "Accept local"
-msgstr ""
+msgstr "Accetta locale"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:647
 msgid "Accept packets with local source addresses"
-msgstr ""
+msgstr "Accetta pacchetti con indirizzo di origine locale"
 
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoe.js:47
 msgid "Access Concentrator"
@@ -454,7 +456,7 @@ msgstr "Aggiungi istanza"
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:171
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:268
 msgid "Add key"
-msgstr ""
+msgstr "Aggiungi chiave"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:401
 msgid "Add local domain suffix to names served from hosts files."
@@ -601,7 +603,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:944
 msgid "Allow legacy 802.11b rates"
-msgstr ""
+msgstr "Consenti velocità 802.11b legacy"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1088
 msgid "Allow listed only"
@@ -666,7 +668,7 @@ msgstr "Errore durante il salvataggio del form:"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:125
 msgid "An optional, short description for this device"
-msgstr ""
+msgstr "Una breve descrizione facoltativa per questo dispositivo"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1445
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:20
@@ -1884,10 +1886,9 @@ msgid ""
 "\">DHCP</abbr> server and <abbr title=\"Domain Name System\">DNS</abbr> "
 "forwarder."
 msgstr ""
-"Dnsmasq è un server <abbr title=\"Dynamic Host Configuration Protocol"
-"\">DHCP</abbr> combinato con un inoltratore <abbr title=\"Domain Name System"
-"\">DNS</abbr> per firewall <abbr title=\"Network Address Translation\">NAT</"
-"abbr>"
+"Dnsmasq è un server <abbr title=\"Dynamic Host Configuration Protocol\""
+">DHCP</abbr> leggero e un server d'inoltro <abbr title=\"Domain Name System\""
+">DNS</abbr>."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:405
 msgid "Do not cache negative replies, e.g. for non-existent domains."
@@ -2463,9 +2464,8 @@ msgid "FT protocol"
 msgstr "Protocollo FT"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js:87
-#, fuzzy
 msgid "Failed to change the system password."
-msgstr "Modifica password di sistema fallita."
+msgstr "Impossibile modificare la password di sistema."
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4145
 msgid "Failed to confirm apply within %ds, waiting for rollback…"
@@ -4056,7 +4056,7 @@ msgstr "MAC"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1406
 msgid "MAC Address"
-msgstr ""
+msgstr "Indirizzo MAC"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1084
 msgid "MAC Address Filter"
@@ -4563,7 +4563,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:706
 msgid "Never"
-msgstr ""
+msgstr "Mai"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:268
 msgid ""
@@ -4597,7 +4597,7 @@ msgstr "Nessun Server DHCP configurato per questa interfaccia"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:196
 msgid "No Data"
-msgstr ""
+msgstr "Nessun dato"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1383
 msgid "No Encryption"
@@ -5282,7 +5282,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1583
 msgid "Path to CA-Certificate"
-msgstr "Percorso al certificato CA"
+msgstr "Percorso del certificato CA"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1598
 msgid "Path to Client-Certificate"
@@ -5290,7 +5290,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1601
 msgid "Path to Private Key"
-msgstr "Percorso alla chiave privata"
+msgstr "Percorso della chiave privata"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1641
 msgid "Path to inner CA-Certificate"
@@ -5636,9 +5636,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:337
 msgid "Read <code>/etc/ethers</code> to configure the DHCP server."
-msgstr ""
-"Leggi <code>/etc/ethers</code> per configurare il server <abbr title="
-"\"Dynamic Host Configuration Protocol\">DHCP</abbr>"
+msgstr "Leggi <code>/etc/ethers</code> per configurare il server DHCP."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:559
 msgid "Really switch protocol?"
@@ -8334,7 +8332,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1538
 msgid "minutes"
-msgstr ""
+msgstr "minuti"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:797
 msgid "mobile home agent (H)"
