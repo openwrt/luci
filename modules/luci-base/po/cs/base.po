@@ -2370,11 +2370,11 @@ msgstr "Režim zapouzdřování"
 msgid "Encryption"
 msgstr "Šifrování"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:156
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:149
 msgid "Endpoint Host"
 msgstr "Koncový bod"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:160
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:153
 msgid "Endpoint Port"
 msgstr "Port koncového bodu"
 
@@ -5003,7 +5003,7 @@ msgstr ""
 "Volitelné. Předsdílený klíč v kódování Base64. Přidává další vrstvu "
 "symetrické kryptografie pro post-kvantovou odolnost."
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:154
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:147
 #, fuzzy
 msgid "Optional. Create routes for Allowed IPs for this peer."
 msgstr "Volitelné. Vytvořte trasy pro povolené IP adresy této protistrany."
@@ -5016,7 +5016,7 @@ msgstr "Volitelné. Popis protistrany."
 msgid "Optional. Do not create host routes to peers."
 msgstr ""
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:156
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:149
 msgid ""
 "Optional. Host of peer. Names are resolved prior to bringing up the "
 "interface."
@@ -5024,15 +5024,22 @@ msgstr ""
 "Volitelné. Hostitel protistrany. Názvy jsou překládány před spuštěním "
 "síťového rozhraní."
 
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:143
+msgid ""
+"Optional. IP addresses and prefixes that this peer is allowed to use inside "
+"the tunnel. Usually the peer's tunnel IP addresses and the networks the peer "
+"routes through the tunnel."
+msgstr ""
+
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:92
 msgid "Optional. Maximum Transmission Unit of tunnel interface."
 msgstr "Volitelné. Maximální přenosová jednotka (MTU) tunelového rozhraní."
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:160
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:153
 msgid "Optional. Port of peer."
 msgstr "Volitelné. Port protistrany."
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:164
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:157
 msgid ""
 "Optional. Seconds between keep alive messages. Default is 0 (disabled). "
 "Recommended value if this device is behind a NAT is 25."
@@ -5413,7 +5420,7 @@ msgstr "Provést reset"
 msgid "Permission denied"
 msgstr "Přístup zamítnut"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:164
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:157
 msgid "Persistent Keep Alive"
 msgstr "Trvalé udržování spojení (Keep Alive)"
 
@@ -5845,17 +5852,6 @@ msgstr "Povinné. Soukromý klíč tohoto rozhraní v kódování Base64."
 msgid "Required. Base64-encoded public key of peer."
 msgstr "Povinné. Veřejný klíč protistrany v kódování Base64."
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:143
-#, fuzzy
-msgid ""
-"Required. IP addresses and prefixes that this peer is allowed to use inside "
-"the tunnel. Usually the peer's tunnel IP addresses and the networks the peer "
-"routes through the tunnel."
-msgstr ""
-"Povinné. IP adresy a prefixy, které tato protistrana smí používat uvnitř "
-"tunelu. Obvykle jsou to IP adresy tunelu a sítí, které jsou směrovány přes "
-"tunel."
-
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1311
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1312
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1313
@@ -6024,7 +6020,7 @@ msgstr "Příprava kořenového adresáře"
 msgid "Round-Robin policy (balance-rr, 0)"
 msgstr ""
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:154
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:147
 msgid "Route Allowed IPs"
 msgstr "Směrovat povolené IP adresy"
 
@@ -8029,10 +8025,6 @@ msgstr ""
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:387
 msgid "Validation only for backup slaves"
 msgstr ""
-
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:149
-msgid "Value must not be empty"
-msgstr "Hodnota nesmí být prázdná"
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:73
 msgid "Vendor"

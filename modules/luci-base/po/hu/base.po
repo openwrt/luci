@@ -2386,11 +2386,11 @@ msgstr "Beágyazási mód"
 msgid "Encryption"
 msgstr "Titkosítás"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:156
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:149
 msgid "Endpoint Host"
 msgstr "Végpont gépe"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:160
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:153
 msgid "Endpoint Port"
 msgstr "Végpont portja"
 
@@ -5015,7 +5015,7 @@ msgstr ""
 "Elhagyható. Base64 kódolású előre megosztott kulcs. Egy szimmetrikus kulcsú "
 "kriptográfia további rétegében adja hozzá a kvantum utáni ellenállósághoz."
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:154
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:147
 msgid "Optional. Create routes for Allowed IPs for this peer."
 msgstr ""
 "Elhagyható. Útvonalak létrehozása az engedélyezett IP-khez ennél a "
@@ -5029,7 +5029,7 @@ msgstr "Elhagyható. A partner leírása."
 msgid "Optional. Do not create host routes to peers."
 msgstr "Elhagyható. Ne hozzon létre gépútvonalakat a partnerekhez."
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:156
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:149
 msgid ""
 "Optional. Host of peer. Names are resolved prior to bringing up the "
 "interface."
@@ -5037,15 +5037,22 @@ msgstr ""
 "Elhagyható. A partner gépe. A nevek a csatoló felhidazása előtt lesznek "
 "feloldva."
 
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:143
+msgid ""
+"Optional. IP addresses and prefixes that this peer is allowed to use inside "
+"the tunnel. Usually the peer's tunnel IP addresses and the networks the peer "
+"routes through the tunnel."
+msgstr ""
+
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:92
 msgid "Optional. Maximum Transmission Unit of tunnel interface."
 msgstr "Elhagyható. Az alagút csatoló legnagyobb átviteli egysége."
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:160
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:153
 msgid "Optional. Port of peer."
 msgstr "Elhagyható. A partner portja."
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:164
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:157
 msgid ""
 "Optional. Seconds between keep alive messages. Default is 0 (disabled). "
 "Recommended value if this device is behind a NAT is 25."
@@ -5427,7 +5434,7 @@ msgstr "Visszaállítás végrehajtása"
 msgid "Permission denied"
 msgstr "Hozzáférés megtagadva"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:164
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:157
 msgid "Persistent Keep Alive"
 msgstr "Állandó életben tartás"
 
@@ -5863,16 +5870,6 @@ msgstr "Kötelező. Base64 kódolású személyes kulcs ehhez a csatolóhoz."
 msgid "Required. Base64-encoded public key of peer."
 msgstr "Kötelező. A partner Base64 kódolású nyilvános kulcsa."
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:143
-msgid ""
-"Required. IP addresses and prefixes that this peer is allowed to use inside "
-"the tunnel. Usually the peer's tunnel IP addresses and the networks the peer "
-"routes through the tunnel."
-msgstr ""
-"Kötelező. IP-címek és előtagok, amelyeket ez a partner megenged az alagúton "
-"belüli használathoz. Általában a partner alagútjának azon IP-címei és "
-"hálózatai, amelyeken a partner az alagúton keresztül irányít."
-
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1311
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1312
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1313
@@ -6041,7 +6038,7 @@ msgstr "Gyökér előkészítés"
 msgid "Round-Robin policy (balance-rr, 0)"
 msgstr ""
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:154
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:147
 msgid "Route Allowed IPs"
 msgstr "Engedélyezett IP-k irányítása"
 
@@ -8067,10 +8064,6 @@ msgstr ""
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:387
 msgid "Validation only for backup slaves"
 msgstr ""
-
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:149
-msgid "Value must not be empty"
-msgstr "Az érték nem lehet üres"
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:73
 msgid "Vendor"

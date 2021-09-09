@@ -2383,11 +2383,11 @@ msgstr "カプセル化モード"
 msgid "Encryption"
 msgstr "暗号化"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:156
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:149
 msgid "Endpoint Host"
 msgstr "エンドポイントホスト"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:160
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:153
 msgid "Endpoint Port"
 msgstr "エンドポイントポート"
 
@@ -5009,7 +5009,7 @@ msgstr ""
 "Base64でエンコードされた事前共有キーです。ポスト量子レジスタンスのため、対称"
 "鍵暗号の追加層を追加します（オプション）。"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:154
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:147
 msgid "Optional. Create routes for Allowed IPs for this peer."
 msgstr "このピアの許可されたIPのルートを作成します（オプション）。"
 
@@ -5021,7 +5021,7 @@ msgstr "ピアの説明（オプション）。"
 msgid "Optional. Do not create host routes to peers."
 msgstr "ピアへのホストルートを作成しない（オプション）。"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:156
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:149
 msgid ""
 "Optional. Host of peer. Names are resolved prior to bringing up the "
 "interface."
@@ -5029,15 +5029,22 @@ msgstr ""
 "ピアのホストです。名前はインターフェースの起動前に解決されます（オプショ"
 "ン）。"
 
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:143
+msgid ""
+"Optional. IP addresses and prefixes that this peer is allowed to use inside "
+"the tunnel. Usually the peer's tunnel IP addresses and the networks the peer "
+"routes through the tunnel."
+msgstr ""
+
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:92
 msgid "Optional. Maximum Transmission Unit of tunnel interface."
 msgstr "トンネルインターフェースのMaximum Transmission Unit（オプション）。"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:160
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:153
 msgid "Optional. Port of peer."
 msgstr "ピアのポート（オプション）。"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:164
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:157
 #, fuzzy
 msgid ""
 "Optional. Seconds between keep alive messages. Default is 0 (disabled). "
@@ -5418,7 +5425,7 @@ msgstr "初期化する"
 msgid "Permission denied"
 msgstr "アクセス許可が拒否されました"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:164
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:157
 msgid "Persistent Keep Alive"
 msgstr "永続的なキープアライブ"
 
@@ -5856,17 +5863,6 @@ msgstr "このインターフェースに使用するBase64エンコードの秘
 msgid "Required. Base64-encoded public key of peer."
 msgstr "Base64エンコードのピアの公開鍵（必須）。"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:143
-#, fuzzy
-msgid ""
-"Required. IP addresses and prefixes that this peer is allowed to use inside "
-"the tunnel. Usually the peer's tunnel IP addresses and the networks the peer "
-"routes through the tunnel."
-msgstr ""
-"このピアがトンネル内で使用できるIPアドレスとプレフィックスです。通常、ピアの"
-"トンネルIPアドレスとネットワークはトンネルを経由してルーティングします（必"
-"須）。"
-
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1311
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1312
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1313
@@ -6036,7 +6032,7 @@ msgstr "ルートの準備"
 msgid "Round-Robin policy (balance-rr, 0)"
 msgstr "ラウンドロビンポリシー（balance-rr、0）"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:154
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:147
 msgid "Route Allowed IPs"
 msgstr "許可されたIPのルート"
 
@@ -8081,10 +8077,6 @@ msgstr "アクティブなスレーブのみを検証"
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:387
 msgid "Validation only for backup slaves"
 msgstr "バックアップスレーブのみを検証"
-
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:149
-msgid "Value must not be empty"
-msgstr "値を入力してください"
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:73
 msgid "Vendor"

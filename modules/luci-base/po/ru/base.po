@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LuCI: base\n"
 "POT-Creation-Date: 2010-05-09 01:01+0300\n"
-"PO-Revision-Date: 2021-08-23 11:24+0000\n"
+"PO-Revision-Date: 2021-09-03 03:27+0000\n"
 "Last-Translator: Anton Kikin <a.a.kikin@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/openwrt/luci/ru/"
 ">\n"
@@ -2433,11 +2433,11 @@ msgstr "Режим инкапсуляции"
 msgid "Encryption"
 msgstr "Шифрование"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:156
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:149
 msgid "Endpoint Host"
 msgstr "Конечный узел"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:160
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:153
 msgid "Endpoint Port"
 msgstr "Порт конечного узла"
 
@@ -5097,7 +5097,7 @@ msgstr ""
 "Необязательно. Base64-шифрованный общий ключ. Добавляет дополнительный слой "
 "криптографии с симметричным ключом для постквантовой устойчивости."
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:154
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:147
 msgid "Optional. Create routes for Allowed IPs for this peer."
 msgstr ""
 "Необязательно. Создавать маршруты для разрешенных IP адресов для этого узла."
@@ -5110,22 +5110,32 @@ msgstr "Необязательно. Описание узла."
 msgid "Optional. Do not create host routes to peers."
 msgstr "Необязательно. Не создавать маршруты к пирам."
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:156
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:149
 msgid ""
 "Optional. Host of peer. Names are resolved prior to bringing up the "
 "interface."
 msgstr ""
 "Необязательно. Имя хоста пира. Имена разрешаются до появления интерфейса."
 
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:143
+msgid ""
+"Optional. IP addresses and prefixes that this peer is allowed to use inside "
+"the tunnel. Usually the peer's tunnel IP addresses and the networks the peer "
+"routes through the tunnel."
+msgstr ""
+"Необязательно. IP-адреса и префиксы, которые данному узлу разрешено "
+"использовать внутри туннеля. Обычно это IP-адреса туннеля данного узла и "
+"сети, которые он маршрутизирует через туннель."
+
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:92
 msgid "Optional. Maximum Transmission Unit of tunnel interface."
 msgstr "Необязательно. MTU туннельного интерфейса."
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:160
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:153
 msgid "Optional. Port of peer."
 msgstr "Необязательно. Порт узла."
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:164
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:157
 msgid ""
 "Optional. Seconds between keep alive messages. Default is 0 (disabled). "
 "Recommended value if this device is behind a NAT is 25."
@@ -5507,7 +5517,7 @@ msgstr "Выполнить сброс"
 msgid "Permission denied"
 msgstr "Доступ запрещён"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:164
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:157
 msgid "Persistent Keep Alive"
 msgstr "Постоянно держать включенным"
 
@@ -5948,15 +5958,6 @@ msgstr "Обязательно. Приватный ключ в кодировк�
 msgid "Required. Base64-encoded public key of peer."
 msgstr "Обязательно. Публичный ключ узла в кодировке Base64."
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:143
-msgid ""
-"Required. IP addresses and prefixes that this peer is allowed to use inside "
-"the tunnel. Usually the peer's tunnel IP addresses and the networks the peer "
-"routes through the tunnel."
-msgstr ""
-"Обязательно. IP-адреса и префиксы, которые разрешено использовать этому пиру "
-"внутри туннеля. Обычно IP-адреса и сети пира маршрутизируются через туннель."
-
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1311
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1312
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1313
@@ -6125,7 +6126,7 @@ msgstr "Подготовка корневой директории"
 msgid "Round-Robin policy (balance-rr, 0)"
 msgstr "Политика round-robin (balance-rr, 0)"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:154
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:147
 msgid "Route Allowed IPs"
 msgstr "Маршрутизировать разрешенные IP-адреса"
 
@@ -8253,10 +8254,6 @@ msgstr "Проверка только для активного ведомого
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:387
 msgid "Validation only for backup slaves"
 msgstr "Проверка только для резервных ведомых"
-
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:149
-msgid "Value must not be empty"
-msgstr "Значение не должно быть пустым"
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:73
 msgid "Vendor"

@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-08-22 19:59+0000\n"
-"Last-Translator: Erdinc <erdincbeldek@gmail.com>\n"
+"PO-Revision-Date: 2021-09-04 07:10+0000\n"
+"Last-Translator: Oğuz Ersen <oguzersen@protonmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/openwrt/luci/tr/"
 ">\n"
 "Language: tr\n"
@@ -2405,11 +2405,11 @@ msgstr "Encapsulation modu"
 msgid "Encryption"
 msgstr "Şifreleme"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:156
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:149
 msgid "Endpoint Host"
 msgstr "Uç Nokta Ana Bilgisayarı"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:160
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:153
 msgid "Endpoint Port"
 msgstr "Uç Nokta Bağlantı Noktası"
 
@@ -5060,7 +5060,7 @@ msgstr ""
 "İsteğe bağlı. Base64 kodlu önceden paylaşılmış anahtar. Kuantum sonrası "
 "direnç için ek bir simetrik anahtar şifreleme katmanı ekler."
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:154
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:147
 msgid "Optional. Create routes for Allowed IPs for this peer."
 msgstr "İsteğe bağlı. Bu eş için İzin Verilen IP'ler için yollar oluşturun."
 
@@ -5072,21 +5072,31 @@ msgstr "İsteğe bağlı. Eşin tanımı."
 msgid "Optional. Do not create host routes to peers."
 msgstr "İsteğe bağlı. Eşlere ana bilgisayar yolları oluşturmayın."
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:156
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:149
 msgid ""
 "Optional. Host of peer. Names are resolved prior to bringing up the "
 "interface."
 msgstr "İsteğe bağlı. Eşin sunucusu. Arayüzü açmadan önce isimler çözümlenir."
 
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:143
+msgid ""
+"Optional. IP addresses and prefixes that this peer is allowed to use inside "
+"the tunnel. Usually the peer's tunnel IP addresses and the networks the peer "
+"routes through the tunnel."
+msgstr ""
+"İsteğe bağlı. Bu eşin tünel içerisinde kullanmasına izin verilen IP "
+"adresleri ve ön ekler. Genellikle eşin tünel IP adresleri ve tünel üzerinden "
+"yönlendirdiği ağlar."
+
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:92
 msgid "Optional. Maximum Transmission Unit of tunnel interface."
 msgstr "İsteğe bağlı. Tünel arayüzünün Maksimum İletim Birimi."
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:160
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:153
 msgid "Optional. Port of peer."
 msgstr "İsteğe bağlı. Eşin bağlantı noktası."
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:164
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:157
 msgid ""
 "Optional. Seconds between keep alive messages. Default is 0 (disabled). "
 "Recommended value if this device is behind a NAT is 25."
@@ -5467,7 +5477,7 @@ msgstr "Sistem Sıfırlaması gerçekleştir"
 msgid "Permission denied"
 msgstr "İzin reddedildi"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:164
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:157
 msgid "Persistent Keep Alive"
 msgstr "Devamlı Canlı Tut"
 
@@ -5898,16 +5908,6 @@ msgstr "Gereklidir. Bu arabirim için Base64 ile kodlanmış özel anahtar."
 msgid "Required. Base64-encoded public key of peer."
 msgstr "Gereklidir. Eşin Base64 ile kodlanmış genel anahtarı."
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:143
-msgid ""
-"Required. IP addresses and prefixes that this peer is allowed to use inside "
-"the tunnel. Usually the peer's tunnel IP addresses and the networks the peer "
-"routes through the tunnel."
-msgstr ""
-"Gereklidir. Bu eşin tünel içinde kullanmasına izin verilen IP adresleri ve "
-"önekler. Genellikle eşin tünel IP adresi ve ağlarda eş tünel boyunca yol "
-"alır."
-
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1311
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1312
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1313
@@ -6076,7 +6076,7 @@ msgstr "Kök hazırlığı"
 msgid "Round-Robin policy (balance-rr, 0)"
 msgstr "Round-Robin politikası (balance-rr, 0)"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:154
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:147
 msgid "Route Allowed IPs"
 msgstr "İzin Verilen IP'leri Yönlendir"
 
@@ -8200,10 +8200,6 @@ msgstr "Yalnızca aktif bağımlı için doğrulama"
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:387
 msgid "Validation only for backup slaves"
 msgstr "Yalnızca yedek bağımlılar için doğrulama"
-
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:149
-msgid "Value must not be empty"
-msgstr "Değer boş olmamalıdır"
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:73
 msgid "Vendor"

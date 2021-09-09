@@ -2423,11 +2423,11 @@ msgstr "Режим інкапсуляції"
 msgid "Encryption"
 msgstr "Шифрування"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:156
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:149
 msgid "Endpoint Host"
 msgstr "Кінцевий вузол"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:160
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:153
 msgid "Endpoint Port"
 msgstr "Порт кінцевого вузла"
 
@@ -5058,7 +5058,7 @@ msgstr ""
 "Додавання додатково рівня шифрування із симетричним ключем для пост-"
 "квантової стійкості."
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:154
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:147
 msgid "Optional. Create routes for Allowed IPs for this peer."
 msgstr "Необов'язково. Створити для цього вузла маршрути для дозволених IP."
 
@@ -5070,11 +5070,18 @@ msgstr "Необов'язково. Опис вузла."
 msgid "Optional. Do not create host routes to peers."
 msgstr "Необов'язково. Не створювати хост-маршрути для вузлів."
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:156
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:149
 msgid ""
 "Optional. Host of peer. Names are resolved prior to bringing up the "
 "interface."
 msgstr "Необов'язково. Хост вузла. Імена буде виділено до підняття інтерфейсу."
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:143
+msgid ""
+"Optional. IP addresses and prefixes that this peer is allowed to use inside "
+"the tunnel. Usually the peer's tunnel IP addresses and the networks the peer "
+"routes through the tunnel."
+msgstr ""
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:92
 msgid "Optional. Maximum Transmission Unit of tunnel interface."
@@ -5082,11 +5089,11 @@ msgstr ""
 "Необов'язково. <abbr title=\"Maximum Transmission Unit — максимальний блок "
 "передавання даних\">MTU</abbr> тунельного інтерфейсу."
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:160
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:153
 msgid "Optional. Port of peer."
 msgstr "Необов'язково. Порт вузла."
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:164
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:157
 msgid ""
 "Optional. Seconds between keep alive messages. Default is 0 (disabled). "
 "Recommended value if this device is behind a NAT is 25."
@@ -5473,7 +5480,7 @@ msgstr "Виконати відновлення"
 msgid "Permission denied"
 msgstr "Дозволу не надано"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:164
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:157
 msgid "Persistent Keep Alive"
 msgstr "Завжди тримати ввімкненим"
 
@@ -5909,16 +5916,6 @@ msgstr "Вимагається. Base64-кодований закритий кл�
 msgid "Required. Base64-encoded public key of peer."
 msgstr "Вимагається. Base64-кодований відкритий ключ вузла."
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:143
-msgid ""
-"Required. IP addresses and prefixes that this peer is allowed to use inside "
-"the tunnel. Usually the peer's tunnel IP addresses and the networks the peer "
-"routes through the tunnel."
-msgstr ""
-"Вимагається. IP-адреси та префікси, які цьому вузлу дозволено "
-"використовувати всередині тунелю. Зазвичай тунельні IP-адреси вузла та "
-"мережі маршрутів вузла через тунель."
-
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1311
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1312
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1313
@@ -6087,7 +6084,7 @@ msgstr "Підготовка Root"
 msgid "Round-Robin policy (balance-rr, 0)"
 msgstr "Політика round-robin (balance-rr, 0)"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:154
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:147
 msgid "Route Allowed IPs"
 msgstr "Маршрутизація дозволених IP-адрес"
 
@@ -8114,10 +8111,6 @@ msgstr ""
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:387
 msgid "Validation only for backup slaves"
 msgstr ""
-
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:149
-msgid "Value must not be empty"
-msgstr "Значення не може бути порожнім"
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:73
 msgid "Vendor"

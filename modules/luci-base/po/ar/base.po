@@ -2363,11 +2363,11 @@ msgstr "وضع التغليف"
 msgid "Encryption"
 msgstr "التشفير"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:156
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:149
 msgid "Endpoint Host"
 msgstr "مضيف نقطة النهاية"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:160
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:153
 msgid "Endpoint Port"
 msgstr "منفذ نقطة النهاية"
 
@@ -4968,7 +4968,7 @@ msgstr ""
 "خياري. مفتاح مشفر باستخدام Base64. يضيف طبقة إضافية من تشفير المفتاح "
 "المتماثل لمقاومة ما بعد الكم."
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:154
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:147
 msgid "Optional. Create routes for Allowed IPs for this peer."
 msgstr "خياري. إنشاء مسارات لعناوين IP المسموح بها لهذا النظير."
 
@@ -4980,21 +4980,28 @@ msgstr "خياري. وصف الأقران."
 msgid "Optional. Do not create host routes to peers."
 msgstr "خياري. لا تقم بإنشاء مسارات مضيفة للأقران."
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:156
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:149
 msgid ""
 "Optional. Host of peer. Names are resolved prior to bringing up the "
 "interface."
 msgstr "خياري. مضيف الأقران. يتم حل الأسماء قبل إحضار الواجهة."
 
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:143
+msgid ""
+"Optional. IP addresses and prefixes that this peer is allowed to use inside "
+"the tunnel. Usually the peer's tunnel IP addresses and the networks the peer "
+"routes through the tunnel."
+msgstr ""
+
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:92
 msgid "Optional. Maximum Transmission Unit of tunnel interface."
 msgstr "خياري. وحدة النقل القصوى لواجهة النفق."
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:160
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:153
 msgid "Optional. Port of peer."
 msgstr "خياري. بوابة الأقران."
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:164
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:157
 msgid ""
 "Optional. Seconds between keep alive messages. Default is 0 (disabled). "
 "Recommended value if this device is behind a NAT is 25."
@@ -5374,7 +5381,7 @@ msgstr "إجراء إعادة تعيين"
 msgid "Permission denied"
 msgstr "طلب الاذن مرفوض"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:164
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:157
 msgid "Persistent Keep Alive"
 msgstr "مثابرة على البقاء حيا"
 
@@ -5805,15 +5812,6 @@ msgstr "مطلوب. المفتاح الخاص بترميز Base64 لهذه ال�
 msgid "Required. Base64-encoded public key of peer."
 msgstr "مطلوب. تشفير Base64 للمفتاح العام للنظير."
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:143
-msgid ""
-"Required. IP addresses and prefixes that this peer is allowed to use inside "
-"the tunnel. Usually the peer's tunnel IP addresses and the networks the peer "
-"routes through the tunnel."
-msgstr ""
-"مطلوب. عناوين IP والبادئات التي يُسمح لهذا النظير باستخدامها داخل النفق. عادة "
-"ما تكون عناوين IP للنفق والشبكات التي يوجهها الأقران عبر النفق."
-
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1311
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1312
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1313
@@ -5982,7 +5980,7 @@ msgstr "تحضير الجذر"
 msgid "Round-Robin policy (balance-rr, 0)"
 msgstr "سياسة Round-Robin (Balance-rr، 0)"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:154
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:147
 msgid "Route Allowed IPs"
 msgstr "توجيه عناوين IP المسموح بها"
 
@@ -7994,10 +7992,6 @@ msgstr "التحقق من صحة التابع النشط فقط"
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:387
 msgid "Validation only for backup slaves"
 msgstr "التحقق فقط من صحة التابعين الاحتياطيين"
-
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:149
-msgid "Value must not be empty"
-msgstr "يجب ألا تكون القيمة فارغة"
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:73
 msgid "Vendor"

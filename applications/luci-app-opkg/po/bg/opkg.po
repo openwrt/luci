@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-06-10 03:40+0200\n"
-"PO-Revision-Date: 2021-07-05 20:29+0000\n"
+"PO-Revision-Date: 2021-08-31 01:32+0000\n"
 "Last-Translator: Iskren Mihaylov <iskren.mihaylov91@gmail.com>\n"
 "Language-Team: Bulgarian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsopkg/bg/>\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.8-dev\n"
+"X-Generator: Weblate 4.8.1-dev\n"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1044
 msgid "Actions"
@@ -33,6 +33,10 @@ msgid ""
 "custom repository entries. The configuration in the other files may be "
 "changed but is usually not preserved by <em>sysupgrade</em>."
 msgstr ""
+"Отдолу е списък с различни конфигурационни файлове използвани от <em>opkg</"
+"em>. Използвайте <em>opkg.conf</em> за глобални настройки и <em>customfeeds."
+"conf</em> за ваши записи на хранилища. Конфигурацията в други файлове може "
+"да се промени, но обикновено не се запазва при <em>sysupgrade</em>."
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:697
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:743
@@ -66,11 +70,11 @@ msgstr "Детайли за пакет <em>%h</em>"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:923
 msgid "Dismiss"
-msgstr "Откажи"
+msgstr "Затвори"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:332
 msgid "Displaying %d-%d of %d"
-msgstr ""
+msgstr "Показване %d-%d of %d"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1036
 msgid "Download and install package"
@@ -82,7 +86,7 @@ msgstr "Грешки"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:878
 msgid "Executing package manager"
-msgstr ""
+msgstr "Стартиране на пакетния мениджър"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1028
 msgid "Filter"
@@ -94,7 +98,7 @@ msgstr "Свободно място"
 
 #: applications/luci-app-opkg/root/usr/share/rpcd/acl.d/luci-app-opkg.json:3
 msgid "Grant access to opkg management"
-msgstr ""
+msgstr "Разрешаване достъп до opkg менажиране"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:705
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:721
@@ -114,6 +118,8 @@ msgid ""
 "Installing packages from untrusted sources is a potential security risk! "
 "Really attempt to install <em>%h</em>?"
 msgstr ""
+"Инсталиране на пакети от недоверени източници е потенциален риск за "
+"сигурността! Наистина ли да се опитам да инсталирам <em>%h</em>?"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:272
 msgid "Install…"
@@ -264,77 +270,81 @@ msgid ""
 "The installed version of package <em>%h</em> is not compatible, require %s "
 "while %s is installed."
 msgstr ""
+"Инсталираната версия на пакета <em>%h</em> не е съвместима, изисква се %s "
+"докато %s е инсталирана."
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:730
 msgid "The package <em>%h</em> is not available in any configured repository."
-msgstr ""
+msgstr "Пакетът <em>%h</em> не е наличен в нито едно от хранилищата."
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:502
 msgid ""
 "The repository version of package <em>%h</em> is not compatible, require %s "
 "but only %s is available."
 msgstr ""
+"Версията на пакета в хранилището <em>%h</em> не е свъместима, изисква се %s "
+"но само %s е налична."
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1030
 msgid "Type to filter…"
-msgstr ""
+msgstr "Пиши за филтър…"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:925
 msgid "Unable to execute <em>opkg %s</em> command: %s"
-msgstr ""
+msgstr "Не може да се изпълни <em>opkg %s</em> команда: %s"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:768
 msgid "Unable to read %s: %s"
-msgstr ""
+msgstr "Не може да се прочете %s: %s"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:807
 msgid "Unable to save %s: %s"
-msgstr ""
+msgstr "Не може да се запази %s: %s"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1046
 msgid "Update lists…"
-msgstr ""
+msgstr "Обновяване на списъци…"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1056
 msgid "Updates"
-msgstr ""
+msgstr "Обновления"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:249
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:278
 msgid "Upgrade…"
-msgstr ""
+msgstr "Надстройване…"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1047
 msgid "Upload Package…"
-msgstr ""
+msgstr "Качване пакет…"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:682
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:842
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1070
 msgid "Version"
-msgstr ""
+msgstr "Версия"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:491
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:509
 msgid "Version incompatible"
-msgstr ""
+msgstr "Несъвместима версия"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:880
 msgid "Waiting for the <em>opkg %h</em> command to complete…"
-msgstr ""
+msgstr "Изчкаване <em>opkg %h</em> команда да приключи…"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:643
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:831
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1024
 msgid "unknown"
-msgstr ""
+msgstr "неизвестен"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:641
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:829
 msgid "~%.1024mB compressed"
-msgstr ""
+msgstr "~%.1024mB архивирани"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:639
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:827
 msgid "~%.1024mB installed"
-msgstr ""
+msgstr "~%.1024mB инсталирани"

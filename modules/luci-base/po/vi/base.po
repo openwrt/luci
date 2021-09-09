@@ -2354,11 +2354,11 @@ msgstr "Chế độ đóng gói"
 msgid "Encryption"
 msgstr "Mã hóa"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:156
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:149
 msgid "Endpoint Host"
 msgstr ""
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:160
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:153
 msgid "Endpoint Port"
 msgstr ""
 
@@ -4955,7 +4955,7 @@ msgstr ""
 "Không bắt buộc. Khóa mã hóa Base64 được chia sẻ từ trước. Thêm vào một lớp "
 "mã hóa khóa đối xứng bổ sung cho tính kháng sau khi được lượng tử."
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:154
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:147
 msgid "Optional. Create routes for Allowed IPs for this peer."
 msgstr ""
 "Không bắt buộc. Tạo tuyến đường cho \"IP được phép\" cho mạng ngang hàng này"
@@ -4968,7 +4968,7 @@ msgstr "Không bắt buộc. Mô tả mạng ngang hàng"
 msgid "Optional. Do not create host routes to peers."
 msgstr ""
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:156
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:149
 msgid ""
 "Optional. Host of peer. Names are resolved prior to bringing up the "
 "interface."
@@ -4976,15 +4976,22 @@ msgstr ""
 "Không bắt buộc. Máy chủ của mạng ngang hàng. Tên được giải quyết trước khi "
 "đưa lên giao diện mạng. "
 
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:143
+msgid ""
+"Optional. IP addresses and prefixes that this peer is allowed to use inside "
+"the tunnel. Usually the peer's tunnel IP addresses and the networks the peer "
+"routes through the tunnel."
+msgstr ""
+
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:92
 msgid "Optional. Maximum Transmission Unit of tunnel interface."
 msgstr "Không bắt buộc. Đơn vị truyền tối đa của giao diện đường hầm mạng."
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:160
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:153
 msgid "Optional. Port of peer."
 msgstr "Không bắt buộc. Cổng sử dụng cho mạng ngang hàng"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:164
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:157
 msgid ""
 "Optional. Seconds between keep alive messages. Default is 0 (disabled). "
 "Recommended value if this device is behind a NAT is 25."
@@ -5364,7 +5371,7 @@ msgstr "Thực hiện khởi động lại"
 msgid "Permission denied"
 msgstr "Bạn không có quyền làm"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:164
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:157
 msgid "Persistent Keep Alive"
 msgstr "Giữ liên tục"
 
@@ -5797,17 +5804,6 @@ msgid "Required. Base64-encoded public key of peer."
 msgstr ""
 "Bắt buộc. Khóa công khai được mã hóa Base64 của thiết bị mạng ngang hàng"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:143
-msgid ""
-"Required. IP addresses and prefixes that this peer is allowed to use inside "
-"the tunnel. Usually the peer's tunnel IP addresses and the networks the peer "
-"routes through the tunnel."
-msgstr ""
-"Bắt buộc. Địa chỉ IP và tiền tố mà thiết bị mạng ngang hàng này được phép sử "
-"dụng bên trong đường hầm dữ liệu. Thông thường, địa chỉ IP của đường hầm dữ "
-"liệu ngang hàng và các mạng mà thiết bị mạng ngang hàng định tuyến qua đường "
-"hầm dữ liệu này."
-
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1311
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1312
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1313
@@ -5976,7 +5972,7 @@ msgstr ""
 msgid "Round-Robin policy (balance-rr, 0)"
 msgstr ""
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:154
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:147
 msgid "Route Allowed IPs"
 msgstr "Định tuyến cho các IP được cho phép"
 
@@ -7962,10 +7958,6 @@ msgstr ""
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:387
 msgid "Validation only for backup slaves"
-msgstr ""
-
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:149
-msgid "Value must not be empty"
 msgstr ""
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:73

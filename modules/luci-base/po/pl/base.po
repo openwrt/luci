@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: LuCI\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-04-20 09:40+0200\n"
-"PO-Revision-Date: 2021-08-18 10:44+0000\n"
+"PO-Revision-Date: 2021-09-06 16:34+0000\n"
 "Last-Translator: Matthaiks <kitynska@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/openwrt/luci/pl/"
 ">\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.8-dev\n"
+"X-Generator: Weblate 4.8.1-dev\n"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1484
 msgid "%.1f dB"
@@ -1137,7 +1137,7 @@ msgstr "Podnieś przy starcie"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:504
 msgid "Bring up the bridge interface even if no ports are attached"
-msgstr "Uruchom interfejs mostu  bez ustawionych portów"
+msgstr "Uruchom interfejs mostu bez ustawionych portów"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:207
 msgid "Broadcast policy (broadcast, 3)"
@@ -2416,11 +2416,11 @@ msgstr "Sposób enkapsulacji"
 msgid "Encryption"
 msgstr "Szyfrowanie"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:156
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:149
 msgid "Endpoint Host"
 msgstr "Końcowy host"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:160
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:153
 msgid "Endpoint Port"
 msgstr "Końcowy port"
 
@@ -2438,11 +2438,11 @@ msgstr "Egzekwuj IGMPv3"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:691
 msgid "Enforce MLD version 1"
-msgstr "Egzekwuj  MLD version 1"
+msgstr "Egzekwuj MLD version 1"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:692
 msgid "Enforce MLD version 2"
-msgstr "Egzekwuj  MLD version 2"
+msgstr "Egzekwuj MLD version 2"
 
 #: modules/luci-compat/luasrc/view/cbi/dropdown.htm:16
 msgid "Enter custom value"
@@ -5046,7 +5046,7 @@ msgstr "Usunięto wartość"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1680
 msgid "Optional"
-msgstr "Opcjonalny"
+msgstr "Opcjonalne"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:128
 msgid "Optional, free-form notes about this device"
@@ -5080,7 +5080,7 @@ msgstr ""
 "Opcjonalnie. Base64-zakodowany klucz współdzielony. Dodaje dodatkową warstwę "
 "symetrycznej kryptografii klucza dla uzyskania odporności po kwantowej."
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:154
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:147
 msgid "Optional. Create routes for Allowed IPs for this peer."
 msgstr "Opcjonalny. Tworzenie tras dozwolonych adresów IP dla tego peera."
 
@@ -5092,22 +5092,31 @@ msgstr "Opcjonalny. Opis peera."
 msgid "Optional. Do not create host routes to peers."
 msgstr "Opcjonalnie. Nie twórz tras hosta do peerów."
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:156
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:149
 msgid ""
 "Optional. Host of peer. Names are resolved prior to bringing up the "
 "interface."
 msgstr ""
 "Opcjonalnie. Host z peerem. Nazwy są ustalane przed wywołaniem interfejsu."
 
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:143
+msgid ""
+"Optional. IP addresses and prefixes that this peer is allowed to use inside "
+"the tunnel. Usually the peer's tunnel IP addresses and the networks the peer "
+"routes through the tunnel."
+msgstr ""
+"Opcjonalne. Adresy IP i prefiksy, których ten peer może używać w tunelu. "
+"Zwykle adresy IP tunelu peera i sieci, które peer prowadzi przez tunel."
+
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:92
 msgid "Optional. Maximum Transmission Unit of tunnel interface."
 msgstr "Opcjonalny. Maksymalna wartość transmisji interfejsu tunelowego."
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:160
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:153
 msgid "Optional. Port of peer."
 msgstr "Opcjonalny. Port dla peera."
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:164
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:157
 msgid ""
 "Optional. Seconds between keep alive messages. Default is 0 (disabled). "
 "Recommended value if this device is behind a NAT is 25."
@@ -5490,7 +5499,7 @@ msgstr "Wykonaj reset"
 msgid "Permission denied"
 msgstr "Odmowa zezwolenia"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:164
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:157
 msgid "Persistent Keep Alive"
 msgstr "Trwale trzymaj przy życiu"
 
@@ -5914,7 +5923,7 @@ msgstr "Wymagaj serializacji pakietów przychodzących (opcjonalnie)."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1681
 msgid "Required"
-msgstr "Wymagany"
+msgstr "Wymagane"
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:34
 msgid "Required for certain ISPs, e.g. Charter with DOCSIS 3"
@@ -5927,15 +5936,6 @@ msgstr "Wymagane. Klucz prywatny dla tego interfejsu Base64-encoded."
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:134
 msgid "Required. Base64-encoded public key of peer."
 msgstr "Wymagane. Klucz publiczny Base64-encodec dla peera."
-
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:143
-msgid ""
-"Required. IP addresses and prefixes that this peer is allowed to use inside "
-"the tunnel. Usually the peer's tunnel IP addresses and the networks the peer "
-"routes through the tunnel."
-msgstr ""
-"Wymagane. Adresy IP i prefiksy, które ten peer może używać wewnątrz tunelu. "
-"Zazwyczaj adresy IP tunelu, są trasą dla peera przez tunel."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1311
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1312
@@ -6105,7 +6105,7 @@ msgstr "Przygotowanie Roota"
 msgid "Round-Robin policy (balance-rr, 0)"
 msgstr "Polityka Round-Robin (bilans-rr, 0)"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:154
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:147
 msgid "Route Allowed IPs"
 msgstr "Trasuj dozwolone IPs"
 
@@ -6478,7 +6478,7 @@ msgstr "Pomiń"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:257
 msgid "Skip from backup files that are equal to those in /rom"
-msgstr "Pomiń z kopii zapasowej pliki, które są równe tym w /rom"
+msgstr "Pomiń pliki kopii zapasowej, które są równe plikom w /rom"
 
 #: themes/luci-theme-openwrt-2020/luasrc/view/themes/openwrt2020/header.htm:40
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:46
@@ -8236,10 +8236,6 @@ msgstr "Weryfikacja tylko dla aktywnego niewolnika"
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:387
 msgid "Validation only for backup slaves"
 msgstr "Weryfikacja tylko dla zapasowych niewolników"
-
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:149
-msgid "Value must not be empty"
-msgstr "Wartość nie może być pusta"
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:73
 msgid "Vendor"

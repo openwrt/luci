@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2021-08-18 10:44+0000\n"
+"PO-Revision-Date: 2021-09-06 16:34+0000\n"
 "Last-Translator: Eric <spice2wolf@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "openwrt/luci/zh_Hans/>\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.8-dev\n"
+"X-Generator: Weblate 4.8.1-dev\n"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1484
 msgid "%.1f dB"
@@ -2333,11 +2333,11 @@ msgstr "封装模式"
 msgid "Encryption"
 msgstr "加密"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:156
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:149
 msgid "Endpoint Host"
 msgstr "端点主机"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:160
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:153
 msgid "Endpoint Port"
 msgstr "端点端口"
 
@@ -4924,7 +4924,7 @@ msgstr ""
 "可选，Base64 编码的预共享密钥。添加在额外的对称密钥加密层中，用于抵抗未来的量"
 "子计算破解。"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:154
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:147
 msgid "Optional. Create routes for Allowed IPs for this peer."
 msgstr "可选，为此对端创建允许 IP 的路由。"
 
@@ -4936,21 +4936,30 @@ msgstr "可选，对端的描述。"
 msgid "Optional. Do not create host routes to peers."
 msgstr "可选，不要创建到对端的主机路由。"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:156
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:149
 msgid ""
 "Optional. Host of peer. Names are resolved prior to bringing up the "
 "interface."
 msgstr "可选，对端主机。名称将会预先被解析以启动接口。"
 
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:143
+msgid ""
+"Optional. IP addresses and prefixes that this peer is allowed to use inside "
+"the tunnel. Usually the peer's tunnel IP addresses and the networks the peer "
+"routes through the tunnel."
+msgstr ""
+"可选。此对端在隧道内被允许使用的 IP 地址和前缀。通常是对端的隧道 IP 地址和对"
+"端经由隧道的网络。"
+
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:92
 msgid "Optional. Maximum Transmission Unit of tunnel interface."
 msgstr "可选，隧道接口的最大传输单元。"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:160
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:153
 msgid "Optional. Port of peer."
 msgstr "可选，对端的端口。"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:164
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:157
 msgid ""
 "Optional. Seconds between keep alive messages. Default is 0 (disabled). "
 "Recommended value if this device is behind a NAT is 25."
@@ -5328,7 +5337,7 @@ msgstr "执行重置"
 msgid "Permission denied"
 msgstr "没有权限"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:164
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:157
 msgid "Persistent Keep Alive"
 msgstr "持续 Keep-Alive"
 
@@ -5740,7 +5749,7 @@ msgstr "需要传入数据包序列化（可选）。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1681
 msgid "Required"
-msgstr "必须"
+msgstr "必需的"
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:34
 msgid "Required for certain ISPs, e.g. Charter with DOCSIS 3"
@@ -5753,15 +5762,6 @@ msgstr "必须，此接口的 Base64 编码私钥。"
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:134
 msgid "Required. Base64-encoded public key of peer."
 msgstr "必须，对端的 Base64 编码公钥。"
-
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:143
-msgid ""
-"Required. IP addresses and prefixes that this peer is allowed to use inside "
-"the tunnel. Usually the peer's tunnel IP addresses and the networks the peer "
-"routes through the tunnel."
-msgstr ""
-"必须，允许该对端在隧道中使用的 IP 地址和前缀，通常是对端的隧道 IP 地址和对端"
-"通过隧道路由的网络。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1311
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1312
@@ -5929,7 +5929,7 @@ msgstr "根目录准备"
 msgid "Round-Robin policy (balance-rr, 0)"
 msgstr "循环策略（balance-rr，0）"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:154
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:147
 msgid "Route Allowed IPs"
 msgstr "路由允许的 IP"
 
@@ -7914,10 +7914,6 @@ msgstr "仅验证活跃的从属设备"
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:387
 msgid "Validation only for backup slaves"
 msgstr "仅验证备用的从属设备"
-
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:149
-msgid "Value must not be empty"
-msgstr "值不能为空"
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:73
 msgid "Vendor"

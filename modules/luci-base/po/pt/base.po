@@ -2431,11 +2431,11 @@ msgstr "Modo de encapsulamento"
 msgid "Encryption"
 msgstr "Encriptação"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:156
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:149
 msgid "Endpoint Host"
 msgstr "Host Terminal"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:160
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:153
 msgid "Endpoint Port"
 msgstr "Porta do Terminal"
 
@@ -5100,7 +5100,7 @@ msgstr ""
 "Opcional. Adiciona uma camada extra de cifragem simétrica para resistência "
 "pós quântica."
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:154
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:147
 msgid "Optional. Create routes for Allowed IPs for this peer."
 msgstr "Opcional. Cria rotas para endereços IP Autorizados para este parceiro."
 
@@ -5112,7 +5112,7 @@ msgstr "Opcional. Descrição do parceiro."
 msgid "Optional. Do not create host routes to peers."
 msgstr "Opcional. Não criar rotas de acolhimento para os seus pares."
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:156
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:149
 msgid ""
 "Optional. Host of peer. Names are resolved prior to bringing up the "
 "interface."
@@ -5120,15 +5120,22 @@ msgstr ""
 "Opcional. Equipamento do parceiro. Nomes serão resolvido antes de levantar a "
 "interface."
 
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:143
+msgid ""
+"Optional. IP addresses and prefixes that this peer is allowed to use inside "
+"the tunnel. Usually the peer's tunnel IP addresses and the networks the peer "
+"routes through the tunnel."
+msgstr ""
+
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:92
 msgid "Optional. Maximum Transmission Unit of tunnel interface."
 msgstr "Opcional. Unidade Máxima de Transmissão da interface do túnel."
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:160
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:153
 msgid "Optional. Port of peer."
 msgstr "Opcional. Porta do parceiro."
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:164
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:157
 msgid ""
 "Optional. Seconds between keep alive messages. Default is 0 (disabled). "
 "Recommended value if this device is behind a NAT is 25."
@@ -5512,7 +5519,7 @@ msgstr "Executar reset"
 msgid "Permission denied"
 msgstr "Permissão negada"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:164
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:157
 msgid "Persistent Keep Alive"
 msgstr "Manutenção da Conexão Persistente"
 
@@ -5949,16 +5956,6 @@ msgstr "Obrigatório. Chave privada codificada em Base64 para esta interface."
 msgid "Required. Base64-encoded public key of peer."
 msgstr "Necessário. Chave Pública do parceiro codificada como Base64."
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:143
-msgid ""
-"Required. IP addresses and prefixes that this peer is allowed to use inside "
-"the tunnel. Usually the peer's tunnel IP addresses and the networks the peer "
-"routes through the tunnel."
-msgstr ""
-"Obrigatório. Endereços IP e prefixos que este parceiro está autorizado a "
-"usar dentro do túnel. Normalmente é o endereço IP do parceiro no túnel e as "
-"redes que o parceiro roteia através do túnel."
-
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1311
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1312
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1313
@@ -6128,7 +6125,7 @@ msgstr "Prepação da raiz (/)"
 msgid "Round-Robin policy (balance-rr, 0)"
 msgstr "Política Round-Robin (balanço-rr, 0)"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:154
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:147
 msgid "Route Allowed IPs"
 msgstr "Roteie Andereços IP Autorizados"
 
@@ -8264,10 +8261,6 @@ msgstr "Validação somente para o escravo ativo"
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:387
 msgid "Validation only for backup slaves"
 msgstr "Validação apenas para os escravos backup"
-
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:149
-msgid "Value must not be empty"
-msgstr "O valor não pode ser vazio"
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:73
 msgid "Vendor"
