@@ -14,7 +14,7 @@ var generateKey = rpc.declare({
 var generateQrCode = rpc.declare({
 	object: 'luci.wireguard',
 	method: 'generateQrCode',
-	params: ['privkey'],
+	params: ['privkey', 'psk', 'allowed_ips'],
 	expect: { qr_code: '' }
 });
 
@@ -38,6 +38,15 @@ function findSection(sections, name) {
 	}
 
 	return null;
+}
+
+function generateDescription(name, texts) {
+	return E('li', { 'style': 'color: inherit;' }, [
+		E('span', name),
+		E('ul', texts.map(function (text) {
+			return E('li', { 'style': 'color: inherit;' }, text);
+		}))
+	]);
 }
 
 return network.registerProtocol('wireguard', {
@@ -150,14 +159,28 @@ return network.registerProtocol('wireguard', {
 		o = ss.option(form.Value, 'description', _('QR-Code'));
 		o.render = L.bind(function (view, section_id) {
 			var sections = uci.sections('network');
+			var client = findSection(sections, section_id);
 			var serverName = this.getIfname();
 			var server = findSection(sections, serverName);
 
-			var description = '%s:<br />&#8226;&#160;[Interface] %s<br />&#8226;&#160;[Peer] %s'.format(
-				_('The QR-Code works per wg interface, it will be refreshed with every button click and transfers the following information'),
-				_('A random, on the fly generated "PrivateKey", the key will not be saved on the router'),
-				_('The "PublicKey" of that wg interface and the "AllowedIPs" with the default of "0.0.0.0/0, ::/0" to allow sending traffic to any IPv4 and IPv6 address')
-			);
+			var interfaceTexts = [
+				'PrivateKey: ' + _('A random, on the fly generated "PrivateKey", the key will not be saved on the router')
+			];
+
+			var peerTexts = [
+				'PublicKey: ' + _('The "PublicKey" of that wg interface'),
+				'AllowedIPs: ' + _('The list of this client\'s "AllowedIPs" or "0.0.0.0/0, ::/0" if not configured'),
+				'PresharedKey: ' + _('If available, the client\'s "PresharedKey"')
+			];
+
+			var description = [
+				E('span', '%q<br>%q'.format(_('If there are any unsaved changes for this client, please save the configuration before generating a QR-Code'),
+					_('The QR-Code works per wg interface, it will be refreshed with every button click and transfers the following information:'))),
+				E('ul', [
+					generateDescription('[Interface]', interfaceTexts),
+					generateDescription('[Peer]', peerTexts)
+				])
+			];
 
 			return E('div', { 'class': 'cbi-value' }, [
 				E('label', { 'class': 'cbi-value-title' }, _('QR-Code')),
@@ -167,7 +190,7 @@ return network.registerProtocol('wireguard', {
 				}, [
 					E('button', {
 						'class': 'btn cbi-button cbi-button-apply',
-						'click': ui.createHandlerFn(this, function (publicKey, section_id) {
+						'click': ui.createHandlerFn(this, function (server, client, section_id) {
 							var qrDiv = document.getElementById('qr-' + section_id);
 							var qrEl = qrDiv.querySelector('value');
 							var qrBtn = qrDiv.querySelector('button');
@@ -180,16 +203,17 @@ return network.registerProtocol('wireguard', {
 							} else {
 								qrEl.innerHTML = _('Loading QR-Code...');
 
-								generateQrCode(publicKey).then(function (qrCode) {
-									if (qrCode == '') {
+								generateQrCode(server.private_key, client.preshared_key,
+									client.allowed_ips).then(function (qrCode) {
+										if (qrCode == '') {
 											qrEl.innerHTML = qrencodeErr;
-									} else {
-										qrEl.innerHTML = qrCode;
-										qrBtn.innerHTML = _('Hide QR-Code');
-									}
-								});
+										} else {
+											qrEl.innerHTML = qrCode;
+											qrBtn.innerHTML = _('Hide QR-Code');
+										}
+									});
 							}
-						}, server.private_key, section_id)
+						}, server, client, section_id)
 					}, _('Generate new QR-Code')),
 					E('value', {
 						'class': 'cbi-section',

@@ -16,15 +16,38 @@ local methods = {
 		end
 	},
 	generateQrCode = {
-		args = {privkey = "privkey"},
+		args = {privkey = "privkey", psk = "psk", allowed_ips = {"allowed_ips"}},
 		call = function(args)
 			local qr_code
 
 			if fs.access("/usr/bin/qrencode") then
+				local psk = args.psk
+				local listen_port = args.listen_port
+				local allowed_ips = args.allowed_ips
+
 				local pubkey = sys.exec("echo '" .. args.privkey .. "' | wg pubkey 2>/dev/null"):sub(1, -2)
 				local client_privkey = sys.exec("wg genkey 2>/dev/null"):sub(1, -2)
-				local qr_enc = "[Interface]\nPrivateKey = " .. client_privkey .. "\n[Peer]\nPublicKey = " .. pubkey .. "\nAllowedIPs = 0.0.0.0/0, ::/0"
 
+				local iface_qr = {
+					"[Interface]",
+					"PrivateKey = " .. client_privkey,
+				}
+
+				local peer_qr = {
+					"[Peer]",
+					"PublicKey = " .. pubkey,
+				}
+
+				if not allowed_ips or next(allowed_ips) == nil then
+					allowed_ips = {"0.0.0.0/0", "::/0"}
+				end
+				table.insert(peer_qr, "AllowedIPs = " .. table.concat(allowed_ips, ", "))
+
+				if psk then
+					table.insert(peer_qr, "PresharedKey = " .. psk)
+				end
+
+				qr_enc = table.concat(iface_qr, "\n") .. "\n\n" .. table.concat(peer_qr, "\n")
 				qr_code = sys.exec("/usr/bin/qrencode --inline --8bit --type=SVG --output=- '" .. qr_enc .. "' 2>/dev/null")
 			end
 
