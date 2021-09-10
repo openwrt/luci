@@ -149,7 +149,7 @@ return view.extend({
 			o.datatype = (family == 6) ? 'cidr6' : 'cidr4';
 			o.placeholder = (family == 6) ? '::/0' : '0.0.0.0/0';
 			o.textvalue = function(section_id) {
-				return E('em', _('any'));
+				return this.cfgvalue(section_id) || E('em', _('any'));
 			};
 
 			o = s.taboption('general', widgets.NetworkSelect, 'out', _('Outgoing interface'));
@@ -160,7 +160,7 @@ return view.extend({
 			o.datatype = (family == 6) ? 'cidr6' : 'cidr4';
 			o.placeholder = (family == 6) ? '::/0' : '0.0.0.0/0';
 			o.textvalue = function(section_id) {
-				return E('em', _('any'));
+				return this.cfgvalue(section_id) || E('em', _('any'));
 			};
 
 			o = s.taboption('general', form.Value, 'lookup', _('Table'));
