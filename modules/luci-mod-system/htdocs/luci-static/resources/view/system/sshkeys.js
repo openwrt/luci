@@ -95,7 +95,7 @@ var SSHPubkeyDecoder = baseclass.singleton({
 			return { type: 'DSA', bits: len1 * 8, comment: comment, options: options, fprint: fprint, src: s };
 
 		case 'ssh-ed25519':
-			return { type: 'ECDH', curve: 'Curve25519', comment: comment, options: options, fprint: fprint, src: s };
+			return { type: 'EdDSA', curve: 'Curve25519', comment: comment, options: options, fprint: fprint, src: s };
 
 		case 'ecdsa-sha2':
 			return { type: 'ECDSA', curve: curve, comment: comment, options: options, fprint: fprint, src: s };
