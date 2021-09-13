@@ -2,6 +2,7 @@
 'require view';
 'require ui';
 'require form';
+'require rpc';
 'require tools.widgets as widgets';
 
 //	[Widget, Option, Title, Description, {Param: 'Value'}],
@@ -16,7 +17,7 @@ var startupConf = [
 ];
 
 var commonConf = [
-	[form.Value, 'server_addr', _('Server address'), _('ServerAddr specifies the address of the server to connect to.<br>By default, this value is "0.0.0.0".'), {datatype: 'ipaddr'}],
+	[form.Value, 'server_addr', _('Server address'), _('ServerAddr specifies the address of the server to connect to.<br>By default, this value is "0.0.0.0".'), {datatype: 'host'}],
 	[form.Value, 'server_port', _('Server port'), _('ServerPort specifies the port to connect to the server on.<br>By default, this value is 7000.'), {datatype: 'port'}],
 	[form.Value, 'http_proxy', _('HTTP proxy'), _('HttpProxy specifies a proxy address to connect to the server through. If this value is "", the server will be connected to directly.<br>By default, this value is read from the "http_proxy" environment variable.')],
 	[form.ListValue, 'log_level', _('Log level'), _('LogLevel specifies the minimum log level. Valid values are "trace", "debug", "info", "warn", and "error".<br>By default, this value is "info".'), {values: ['trace', 'debug', 'info', 'warn', 'error']}],
@@ -51,7 +52,7 @@ var bindInfoConf = [
 
 var domainConf = [
 	[form.Value, 'custom_domains', _('Custom domains')],
-	[form.Value, 'sub_domain', _('Subdomain')],
+	[form.Value, 'subdomain', _('Subdomain')],
 ];
 
 var httpProxyConf = [
@@ -115,11 +116,59 @@ function defOpts(s, opts, params) {
 	}
 }
 
+var callServiceList = rpc.declare({
+	object: 'service',
+	method: 'list',
+	params: ['name'],
+	expect: { '': {} }
+});
+
+function getServiceStatus() {
+	return L.resolveDefault(callServiceList('frpc'), {}).then(function (res) {
+		var isRunning = false;
+		try {
+			isRunning = res['frpc']['instances']['instance1']['running'];
+		} catch (e) { }
+		return isRunning;
+	});
+}
+
+function renderStatus(isRunning) {
+	var renderHTML = "";
+	var spanTemp = "<span style=\"color:%s;font-weight:bold;margin-left:15px\">%s - %s</span>";
+
+	if (isRunning) {
+		renderHTML += String.format(spanTemp, 'green', _("frp Client"), _("RUNNING"));
+	} else {
+		renderHTML += String.format(spanTemp, 'red', _("frp Client"), _("NOT RUNNING"));
+	}
+
+	return renderHTML;
+}
+
 return view.extend({
 	render: function() {
 		var m, s, o;
 
 		m = new form.Map('frpc', _('frp Client'));
+
+		s = m.section(form.NamedSection, '_status');
+		s.anonymous = true;
+		s.render = function (section_id) {
+			L.Poll.add(function () {
+				return L.resolveDefault(getServiceStatus()).then(function(res) {
+					var view = document.getElementById("service_status");
+					view.innerHTML = renderStatus(res);
+				});
+			});
+
+			return E('div', { class: 'cbi-map' },
+				E('div', { class: 'cbi-section'}, [
+					E('div', { id: 'service_status' },
+						_('Collecting data ...'))
+				])
+			);
+		}
 
 		s = m.section(form.NamedSection, 'common', 'conf');
 		s.dynamic = true;

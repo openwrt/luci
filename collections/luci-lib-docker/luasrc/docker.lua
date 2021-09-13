@@ -307,7 +307,7 @@ local gen_api = function(_table, http_method, api_group, api_action)
 	local _api_action
 
 	if api_action == "get_archive" or api_action == "put_archive" then
-		api_action = "archive"
+		_api_action = "archive"
 	elseif api_action == "df" then
 		_api_action = "system/df"
 	elseif api_action ~= "list" and api_action ~= "inspect" and api_action ~= "remove" then
@@ -411,7 +411,8 @@ gen_api(_docker, "POST", "exec", "resize")
 gen_api(_docker, "GET", "exec", "inspect")
 gen_api(_docker, "GET", "containers", "get_archive")
 gen_api(_docker, "PUT", "containers", "put_archive")
--- TODO: export,attch
+gen_api(_docker, "GET", "containers", "export")
+-- TODO: attch
 
 gen_api(_docker, "GET", "images", "list")
 gen_api(_docker, "POST", "images", "create")

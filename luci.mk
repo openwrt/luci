@@ -12,6 +12,8 @@ LUCI_DEFAULTS:=$(notdir $(wildcard ${CURDIR}/root/etc/uci-defaults/*))
 LUCI_PKGARCH?=$(if $(realpath src/Makefile),,all)
 LUCI_SECTION?=luci
 LUCI_CATEGORY?=LuCI
+LUCI_URL?=https://github.com/openwrt/luci
+LUCI_MAINTAINER?=OpenWrt LuCI community
 
 # Language code titles
 LUCI_LANG.ar=العربية (Arabic)
@@ -121,15 +123,30 @@ PKG_GITBRANCH?=$(if $(DUMP),x,$(strip $(shell \
 
 include $(INCLUDE_DIR)/package.mk
 
+# LUCI_SUBMENU: the submenu-item below the LuCI top-level menu inside OpoenWrt menuconfig
+#               usually one of the LUCI_MENU.* definitions
+# LUCI_SUBMENU_DEFAULT: the regular SUBMENU defined by LUCI_TYPE or derrived from the packagename
+# LUCI_SUBMENU_FORCED: manually forced value SUBMENU to set to by explicit definiton
+#                      can be any string, "none" disables the creation of a submenu 
+#                      most usefull in combination with LUCI_CATEGORY, to make the package appear
+#                      anywhere in the menu structure
+LUCI_SUBMENU_DEFAULT=$(if $(LUCI_MENU.$(LUCI_TYPE)),$(LUCI_MENU.$(LUCI_TYPE)),$(LUCI_MENU.app))
+LUCI_SUBMENU=$(if $(LUCI_SUBMENU_FORCED),$(LUCI_SUBMENU_FORCED),$(LUCI_SUBMENU_DEFAULT))
+
 define Package/$(PKG_NAME)
   SECTION:=$(LUCI_SECTION)
   CATEGORY:=$(LUCI_CATEGORY)
-  SUBMENU:=$(if $(LUCI_MENU.$(LUCI_TYPE)),$(LUCI_MENU.$(LUCI_TYPE)),$(LUCI_MENU.app))
+ifneq ($(LUCI_SUBMENU),none)
+  SUBMENU:=$(LUCI_SUBMENU)
+endif
   TITLE:=$(if $(LUCI_TITLE),$(LUCI_TITLE),LuCI $(LUCI_NAME) $(LUCI_TYPE))
   DEPENDS:=$(LUCI_DEPENDS)
   VERSION:=$(if $(PKG_VERSION),$(PKG_VERSION),$(PKG_SRC_VERSION))
   $(if $(LUCI_EXTRA_DEPENDS),EXTRA_DEPENDS:=$(LUCI_EXTRA_DEPENDS))
   $(if $(LUCI_PKGARCH),PKGARCH:=$(LUCI_PKGARCH))
+  $(if $(PKG_PROVIDES),PROVIDES:=$(PKG_PROVIDES))
+  URL:=$(LUCI_URL)
+  MAINTAINER:=$(LUCI_MAINTAINER)
 endef
 
 ifneq ($(LUCI_DESCRIPTION),)
@@ -189,8 +206,7 @@ endef
 
 ifndef Package/$(PKG_NAME)/postinst
 define Package/$(PKG_NAME)/postinst
-[ -n "$${IPKG_INSTROOT}" ] || {$(foreach script,$(LUCI_DEFAULTS),
-	(. /etc/uci-defaults/$(script)) && rm -f /etc/uci-defaults/$(script))
+[ -n "$${IPKG_INSTROOT}" ] || { \
 	rm -f /tmp/luci-indexcache
 	rm -rf /tmp/luci-modulecache/
 	killall -HUP rpcd 2>/dev/null

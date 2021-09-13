@@ -148,7 +148,8 @@ body {
 }
 
 #mainmenu {
-	flex: 1 1 200px;
+	flex: 1 1 100px;
+	max-width: 250px;
 	background: var(--main-dark-color);
 	color: var(--main-bright-color);
 	padding: 1em;
@@ -167,7 +168,7 @@ body {
 
 #mainmenu ul {
 	padding: 0;
-	margin: 0 0 .5em .5em;
+	margin: 0 0 0 .5em;
 	line-height: 1.5em;
 }
 
@@ -189,6 +190,7 @@ body {
 #mainmenu li.active > ul {
 	max-height: 3000px;
 	transition: max-height 1s ease-in-out;
+	margin: 0 0 .5em .5em;
 }
 
 #mainmenu .l1 > li > a {
@@ -662,7 +664,7 @@ ul > li {
 	padding: 0;
 	text-align: center;
 	width: 100%;
-	max-width: 100px;
+	max-width: 150px;
 }
 
 .ifacebox-head {
@@ -1517,11 +1519,12 @@ div[id$=".editlist"] {
 	top: 0;
 	bottom: 0;
 	left: .4em;
-	width: 1.3em;
-	height: 1.3em;
+	width: 1.4em;
+	height: 1.4em;
 	animation: spin 1s linear infinite;
 	content: url("spinner.svg");
 	margin: auto;
+	line-height: 0;
 }
 
 button.spinning, .btn.spinning {
@@ -1553,6 +1556,10 @@ button.spinning::before, .btn.spinning::before {
 
 .label.warning {
 	background: var(--danger-color);
+}
+
+.label.success {
+	background: var(--success-color);
 }
 
 ul.deps {

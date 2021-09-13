@@ -18,12 +18,9 @@ function byte_format(byte)
 	end
 end
 
-m = Map("dockerd", translate("Docker"),
-	translate("DockerMan is a Simple Docker manager client for LuCI, If you have any issue please visit:") ..
-	" " ..
-	[[<a href="https://github.com/lisaac/luci-app-dockerman" target="_blank">]] ..
-	translate("Github") ..
-	[[</a>]])
+m = Map("dockerd",
+	translate("Docker - Overview"),
+	translate("An overview with the relevant data is displayed here with which the LuCI docker client is connected."))
 
 local docker_info_table = {}
 docker_info_table['3ServerVersion'] = {_key=translate("Docker Version"),_value='-'}
@@ -88,68 +85,6 @@ if docker.new():_ping().code == 200 then
 	s.images_total = tostring(#images_list)
 	s.networks_total = tostring(#networks_list)
 	s.volumes_total = tostring(#volumes_list)
-end
-
-s = m:section(NamedSection, "globals", "section", translate("Setting"))
-
-o = s:option(Flag, "remote_endpoint",
-	translate("Remote Endpoint"),
-	translate("Connect to remote endpoint"))
-o.rmempty = false
-
-o = s:option(Value, "socket_path",
-	translate("Docker Socket Path"))
-o.default = "unix:///var/run/docker.sock"
-o.placeholder = "unix:///var/run/docker.sock"
-o:depends("remote_endpoint", 1)
-
-o = s:option(Value, "remote_host",
-	translate("Remote Host"))
-o.placeholder = "10.1.1.2"
-o:depends("remote_endpoint", 1)
-
-o = s:option(Value, "remote_port",
-	translate("Remote Port"))
-o.placeholder = "2375"
-o.default = "2375"
-o:depends("remote_endpoint", 1)
-
-if nixio.fs.access("/usr/bin/dockerd") then
-	o = s:option(Value, "data_root",
-		translate("Docker Root Dir"))
-	o.placeholder = "/opt/docker/"
-	o:depends("remote_endpoint", 0)
-
-	o = s:option(Value, "bip",
-		translate("Default bridge"),
-		translate("Configure the default bridge network"))
-	o.placeholder = "172.17.0.1/16"
-	o.default = "172.17.0.1/16"
-	o.datatype = "ipaddr"
-	o:depends("remote_endpoint", 0)
-
-	o = s:option(DynamicList, "registry_mirrors",
-		translate("Registry Mirrors"))
-	o:value("https://hub-mirror.c.163.com", "https://hub-mirror.c.163.com")
-	o:depends("remote_endpoint", 0)
-
-	o = s:option(ListValue, "log_level",
-		translate("Log Level"),
-		translate('Set the logging level'))
-	o:value("debug", "debug")
-	o:value("info", "info")
-	o:value("warn", "warn")
-	o:value("error", "error")
-	o:value("fatal", "fatal")
-	o:depends("remote_endpoint", 0)
-
-	o = s:option(DynamicList, "hosts",
-		translate("Client connection"),
-		translate('Specifies where the Docker daemon will listen for client connections'))
-	o:value("unix:///var/run/docker.sock", "unix:///var/run/docker.sock")
-	o:value("tcp://0.0.0.0:2375", "tcp://0.0.0.0:2375")
-	o.rmempty = true
-	o:depends("remote_endpoint", 0)
 end
 
 return m

@@ -21,7 +21,7 @@ return baseclass.extend({
 		return Promise.all([
 			callLuciDHCPLeases(),
 			network.getHostHints(),
-			uci.load('dhcp')
+			L.resolveDefault(uci.load('dhcp'))
 		]);
 	},
 
@@ -31,7 +31,7 @@ return baseclass.extend({
 		ev.currentTarget.blur();
 
 		var cfg = uci.add('dhcp', 'host');
-		uci.set('dhcp', cfg, 'name', lease.hostname || '-');
+		uci.set('dhcp', cfg, 'name', lease.hostname);
 		uci.set('dhcp', cfg, 'ip', lease.ipaddr);
 		uci.set('dhcp', cfg, 'mac', lease.macaddr.toUpperCase());
 
@@ -48,7 +48,7 @@ return baseclass.extend({
 		var cfg = uci.add('dhcp', 'host'),
 		    ip6arr = lease.ip6addrs[0] ? validation.parseIPv6(lease.ip6addrs[0]) : null;
 
-		uci.set('dhcp', cfg, 'name', lease.hostname || '-');
+		uci.set('dhcp', cfg, 'name', lease.hostname);
 		uci.set('dhcp', cfg, 'duid', lease.duid.toUpperCase());
 		uci.set('dhcp', cfg, 'mac', lease.macaddr);
 		if (ip6arr)
@@ -63,7 +63,8 @@ return baseclass.extend({
 		var leases = Array.isArray(data[0].dhcp_leases) ? data[0].dhcp_leases : [],
 		    leases6 = Array.isArray(data[0].dhcp6_leases) ? data[0].dhcp6_leases : [],
 		    machints = data[1].getMACHints(false),
-		    hosts = uci.sections('dhcp', 'host');
+		    hosts = uci.sections('dhcp', 'host'),
+		    isReadonlyView = !L.hasViewPermission();
 
 		for (var i = 0; i < hosts.length; i++) {
 			var host = hosts[i];
@@ -84,10 +85,10 @@ return baseclass.extend({
 		var table = E('table', { 'class': 'table lases' }, [
 			E('tr', { 'class': 'tr table-titles' }, [
 				E('th', { 'class': 'th' }, _('Hostname')),
-				E('th', { 'class': 'th' }, _('IPv4-Address')),
-				E('th', { 'class': 'th' }, _('MAC-Address')),
+				E('th', { 'class': 'th' }, _('IPv4 address')),
+				E('th', { 'class': 'th' }, _('MAC address')),
 				E('th', { 'class': 'th' }, _('Lease time remaining')),
-				E('th', { 'class': 'th cbi-section-actions' }, _('Static Lease'))
+				isReadonlyView ? E([]) : E('th', { 'class': 'th cbi-section-actions' }, _('Static Lease'))
 			])
 		]);
 
@@ -108,7 +109,7 @@ return baseclass.extend({
 				exp
 			];
 
-			if (lease.macaddr != null) {
+			if (!isReadonlyView && lease.macaddr != null) {
 				var mac = lease.macaddr.toUpperCase();
 				rows.push(E('button', {
 					'class': 'cbi-button cbi-button-apply',
@@ -123,10 +124,10 @@ return baseclass.extend({
 		var table6 = E('table', { 'class': 'table leases6' }, [
 			E('tr', { 'class': 'tr table-titles' }, [
 				E('th', { 'class': 'th' }, _('Host')),
-				E('th', { 'class': 'th' }, _('IPv6-Address')),
+				E('th', { 'class': 'th' }, _('IPv6 address')),
 				E('th', { 'class': 'th' }, _('DUID')),
 				E('th', { 'class': 'th' }, _('Lease time remaining')),
-				E('th', { 'class': 'th cbi-section-actions' }, _('Static Lease'))
+				isReadonlyView ? E([]) : E('th', { 'class': 'th cbi-section-actions' }, _('Static Lease'))
 			])
 		]);
 
@@ -157,7 +158,7 @@ return baseclass.extend({
 				exp
 			];
 
-			if (lease.duid != null) {
+			if (!isReadonlyView && lease.duid != null) {
 				var duid = lease.duid.toUpperCase();
 				rows.push(E('button', {
 					'class': 'cbi-button cbi-button-apply',

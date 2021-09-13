@@ -22,15 +22,11 @@
 	</div>
 	<footer class="mobile-hide">
 	<a href="https://github.com/openwrt/luci">Powered by <%= ver.luciname %> (<%= ver.luciversion %>)</a> / <%= ver.distversion %>
-	<ul class="breadcrumb pull-right" id="modemenu" style="display:none"></ul>
 	</footer>
 	</div>
 </div>
-<script>
-	// thanks for Jo-Philipp Wich <jow@openwrt.org>
-	var luciLocation = <%= luci.http.write_json(luci.dispatcher.context.path) %>;
-</script>
-<script src="<%=media%>/js/jquery.min.js"></script>
-<script src="<%=media%>/js/script.js"></script>
+
+<script type="text/javascript">L.require('menu-material')</script>
+
 </body>
 </html>

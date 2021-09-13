@@ -101,6 +101,15 @@ var _init = null,
     _protocols = {},
     _protospecs = {};
 
+function strcmp(a, b) {
+	if (a > b)
+		return 1;
+	else if (a < b)
+		return -1;
+	else
+		return 0;
+}
+
 function getProtocolHandlers(cache) {
 	return callNetworkProtoHandlers().then(function(protos) {
 		/* Register "none" protocol */
@@ -384,6 +393,7 @@ function initNetworkState(refresh) {
 					name:     name,
 					rawname:  name,
 					flags:    dev.flags,
+					link:     dev.link,
 					stats:    dev.stats,
 					macaddr:  dev.mac,
 					type:     dev.type,
@@ -552,7 +562,7 @@ function ifnameOf(obj) {
 }
 
 function networkSort(a, b) {
-	return a.getName() > b.getName();
+	return strcmp(a.getName(), b.getName());
 }
 
 function deviceSort(a, b) {
@@ -563,7 +573,7 @@ function deviceSort(a, b) {
     if (weightA != weightB)
     	return weightA - weightB;
 
-	return a.getName() > b.getName();
+	return strcmp(a.getName(), b.getName());
 }
 
 function formatWifiEncryption(enc) {
@@ -1421,7 +1431,7 @@ Network = baseclass.extend(/** @lends LuCI.network.prototype */ {
 				rv.push(this.lookupWifiNetwork(wifiIfaces[i]['.name']));
 
 			rv.sort(function(a, b) {
-				return (a.getID() > b.getID());
+				return strcmp(a.getID(), b.getID());
 			});
 
 			return rv;
@@ -1522,12 +1532,7 @@ Network = baseclass.extend(/** @lends LuCI.network.prototype */ {
 				if (a.metric != b.metric)
 					return (a.metric - b.metric);
 
-				if (a.interface < b.interface)
-					return -1;
-				else if (a.interface > b.interface)
-					return 1;
-
-				return 0;
+				return strcmp(a.interface, b.interface);
 			});
 
 			return rv;
@@ -1805,7 +1810,9 @@ Hosts = baseclass.extend(/** @lends LuCI.network.Hosts.prototype */ {
 	 * the corresponding host.
 	 */
 	getHostnameByMACAddr: function(mac) {
-		return this.hosts[mac] ? this.hosts[mac].name : null;
+		return this.hosts[mac]
+			? (this.hosts[mac].name || null)
+			: null;
 	},
 
 	/**
@@ -1820,7 +1827,9 @@ Hosts = baseclass.extend(/** @lends LuCI.network.Hosts.prototype */ {
 	 * the corresponding host.
 	 */
 	getIPAddrByMACAddr: function(mac) {
-		return this.hosts[mac] ? this.hosts[mac].ipv4 : null;
+		return this.hosts[mac]
+			? (L.toArray(this.hosts[mac].ipaddrs || this.hosts[mac].ipv4)[0] || null)
+			: null;
 	},
 
 	/**
@@ -1835,7 +1844,9 @@ Hosts = baseclass.extend(/** @lends LuCI.network.Hosts.prototype */ {
 	 * the corresponding host.
 	 */
 	getIP6AddrByMACAddr: function(mac) {
-		return this.hosts[mac] ? this.hosts[mac].ipv6 : null;
+		return this.hosts[mac]
+			? (L.toArray(this.hosts[mac].ip6addrs || this.hosts[mac].ipv6)[0] || null)
+			: null;
 	},
 
 	/**
@@ -1850,9 +1861,17 @@ Hosts = baseclass.extend(/** @lends LuCI.network.Hosts.prototype */ {
 	 * the corresponding host.
 	 */
 	getHostnameByIPAddr: function(ipaddr) {
-		for (var mac in this.hosts)
-			if (this.hosts[mac].ipv4 == ipaddr && this.hosts[mac].name != null)
-				return this.hosts[mac].name;
+		for (var mac in this.hosts) {
+			if (this.hosts[mac].name == null)
+				continue;
+
+			var addrs = L.toArray(this.hosts[mac].ipaddrs || this.hosts[mac].ipv4);
+
+			for (var i = 0; i < addrs.length; i++)
+				if (addrs[i] == ipaddr)
+					return this.hosts[mac].name;
+		}
+
 		return null;
 	},
 
@@ -1868,16 +1887,21 @@ Hosts = baseclass.extend(/** @lends LuCI.network.Hosts.prototype */ {
 	 * the corresponding host.
 	 */
 	getMACAddrByIPAddr: function(ipaddr) {
-		for (var mac in this.hosts)
-			if (this.hosts[mac].ipv4 == ipaddr)
-				return mac;
+		for (var mac in this.hosts) {
+			var addrs = L.toArray(this.hosts[mac].ipaddrs || this.hosts[mac].ipv4);
+
+			for (var i = 0; i < addrs.length; i++)
+				if (addrs[i] == ipaddr)
+					return mac;
+		}
+
 		return null;
 	},
 
 	/**
 	 * Lookup the hostname associated with the given IPv6 address.
 	 *
-	 * @param {string} ipaddr
+	 * @param {string} ip6addr
 	 * The IPv6 address to lookup.
 	 *
 	 * @returns {null|string}
@@ -1886,16 +1910,24 @@ Hosts = baseclass.extend(/** @lends LuCI.network.Hosts.prototype */ {
 	 * the corresponding host.
 	 */
 	getHostnameByIP6Addr: function(ip6addr) {
-		for (var mac in this.hosts)
-			if (this.hosts[mac].ipv6 == ip6addr && this.hosts[mac].name != null)
-				return this.hosts[mac].name;
+		for (var mac in this.hosts) {
+			if (this.hosts[mac].name == null)
+				continue;
+
+			var addrs = L.toArray(this.hosts[mac].ip6addrs || this.hosts[mac].ipv6);
+
+			for (var i = 0; i < addrs.length; i++)
+				if (addrs[i] == ip6addr)
+					return this.hosts[mac].name;
+		}
+
 		return null;
 	},
 
 	/**
 	 * Lookup the MAC address associated with the given IPv6 address.
 	 *
-	 * @param {string} ipaddr
+	 * @param {string} ip6addr
 	 * The IPv6 address to lookup.
 	 *
 	 * @returns {null|string}
@@ -1904,9 +1936,14 @@ Hosts = baseclass.extend(/** @lends LuCI.network.Hosts.prototype */ {
 	 * the corresponding host.
 	 */
 	getMACAddrByIP6Addr: function(ip6addr) {
-		for (var mac in this.hosts)
-			if (this.hosts[mac].ipv6 == ip6addr)
-				return mac;
+		for (var mac in this.hosts) {
+			var addrs = L.toArray(this.hosts[mac].ip6addrs || this.hosts[mac].ipv6);
+
+			for (var i = 0; i < addrs.length; i++)
+				if (addrs[i] == ip6addr)
+					return mac;
+		}
+
 		return null;
 	},
 
@@ -1933,14 +1970,18 @@ Hosts = baseclass.extend(/** @lends LuCI.network.Hosts.prototype */ {
 	 */
 	getMACHints: function(preferIp6) {
 		var rv = [];
+
 		for (var mac in this.hosts) {
 			var hint = this.hosts[mac].name ||
-				this.hosts[mac][preferIp6 ? 'ipv6' : 'ipv4'] ||
-				this.hosts[mac][preferIp6 ? 'ipv4' : 'ipv6'];
+				L.toArray(this.hosts[mac][preferIp6 ? 'ip6addrs' : 'ipaddrs'] || this.hosts[mac][preferIp6 ? 'ipv6' : 'ipv4'])[0] ||
+				L.toArray(this.hosts[mac][preferIp6 ? 'ipaddrs' : 'ip6addrs'] || this.hosts[mac][preferIp6 ? 'ipv4' : 'ipv6'])[0];
 
 			rv.push([mac, hint]);
 		}
-		return rv.sort(function(a, b) { return a[0] > b[0] });
+
+		return rv.sort(function(a, b) {
+			return strcmp(a[0], b[0]);
+		});
 	}
 });
 
@@ -2496,14 +2537,14 @@ Protocol = baseclass.extend(/** @lends LuCI.network.Protocol.prototype */ {
 	 *
 	 * Alias interfaces are interfaces layering on top of another interface
 	 * and are denoted by a special `@interfacename` notation in the
-	 * underlying `ifname` option.
+	 * underlying `device` option.
 	 *
 	 * @returns {null|string}
 	 * Returns the name of the parent interface if this logical interface
 	 * is an alias or `null` if it is not an alias interface.
 	 */
 	isAlias: function() {
-		var ifnames = L.toArray(uci.get('network', this.sid, 'ifname')),
+		var ifnames = L.toArray(uci.get('network', this.sid, 'device')),
 		    parent = null;
 
 		for (var i = 0; i < ifnames.length; i++)
@@ -2527,9 +2568,9 @@ Protocol = baseclass.extend(/** @lends LuCI.network.Protocol.prototype */ {
 			return false;
 
 		var empty = true,
-		    ifname = this._get('ifname');
+		    device = this._get('device');
 
-		if (ifname != null && ifname.match(/\S+/))
+		if (device != null && device.match(/\S+/))
 			empty = false;
 
 		if (empty == true && getWifiNetidBySid(this.sid) != null)
@@ -2561,18 +2602,18 @@ Protocol = baseclass.extend(/** @lends LuCI.network.Protocol.prototype */ {
 	 * argument was invalid, if the device was already part of the logical
 	 * interface or if the logical interface is virtual.
 	 */
-	addDevice: function(ifname) {
-		ifname = ifnameOf(ifname);
+	addDevice: function(device) {
+		device = ifnameOf(device);
 
-		if (ifname == null || this.isFloating())
+		if (device == null || this.isFloating())
 			return false;
 
-		var wif = getWifiSidByIfname(ifname);
+		var wif = getWifiSidByIfname(device);
 
 		if (wif != null)
 			return appendValue('wireless', wif, 'network', this.sid);
 
-		return appendValue('network', this.sid, 'ifname', ifname);
+		return appendValue('network', this.sid, 'device', device);
 	},
 
 	/**
@@ -2588,20 +2629,20 @@ Protocol = baseclass.extend(/** @lends LuCI.network.Protocol.prototype */ {
 	 * argument was invalid, if the device was already part of the logical
 	 * interface or if the logical interface is virtual.
 	 */
-	deleteDevice: function(ifname) {
+	deleteDevice: function(device) {
 		var rv = false;
 
-		ifname = ifnameOf(ifname);
+		device = ifnameOf(device);
 
-		if (ifname == null || this.isFloating())
+		if (device == null || this.isFloating())
 			return false;
 
-		var wif = getWifiSidByIfname(ifname);
+		var wif = getWifiSidByIfname(device);
 
 		if (wif != null)
 			rv = removeValue('wireless', wif, 'network', this.sid);
 
-		if (removeValue('network', this.sid, 'ifname', ifname))
+		if (removeValue('network', this.sid, 'device', device))
 			rv = true;
 
 		return rv;
@@ -2627,7 +2668,7 @@ Protocol = baseclass.extend(/** @lends LuCI.network.Protocol.prototype */ {
 			return new Device(ifname, this);
 		}
 		else {
-			var ifnames = L.toArray(uci.get('network', this.sid, 'ifname'));
+			var ifnames = L.toArray(uci.get('network', this.sid, 'device'));
 
 			for (var i = 0; i < ifnames.length; i++) {
 				var m = ifnames[i].match(/^([^:/]+)/);
@@ -2682,13 +2723,10 @@ Protocol = baseclass.extend(/** @lends LuCI.network.Protocol.prototype */ {
 		if (!this.isBridge() && !(this.isVirtual() && !this.isFloating()))
 			return null;
 
-		var ifnames = L.toArray(uci.get('network', this.sid, 'ifname'));
+		var device = uci.get('network', this.sid, 'device');
 
-		for (var i = 0; i < ifnames.length; i++) {
-			if (ifnames[i].charAt(0) == '@')
-				continue;
-
-			var m = ifnames[i].match(/^([^:/]+)/);
+		if (device && device.charAt(0) != '@') {
+			var m = device.match(/^([^:/]+)/);
 			if (m != null)
 				rv.push(Network.prototype.instantiateDevice(m[1], this));
 		}
@@ -2730,25 +2768,24 @@ Protocol = baseclass.extend(/** @lends LuCI.network.Protocol.prototype */ {
 	 * Returns `true` when this logical interface contains the given network
 	 * device or `false` if not.
 	 */
-	containsDevice: function(ifname) {
-		ifname = ifnameOf(ifname);
+	containsDevice: function(device) {
+		device = ifnameOf(device);
 
-		if (ifname == null)
+		if (device == null)
 			return false;
-		else if (this.isVirtual() && '%s-%s'.format(this.getProtocol(), this.sid) == ifname)
+		else if (this.isVirtual() && '%s-%s'.format(this.getProtocol(), this.sid) == device)
 			return true;
-		else if (this.isBridge() && 'br-%s'.format(this.sid) == ifname)
+		else if (this.isBridge() && 'br-%s'.format(this.sid) == device)
 			return true;
 
-		var ifnames = L.toArray(uci.get('network', this.sid, 'ifname'));
-
-		for (var i = 0; i < ifnames.length; i++) {
-			var m = ifnames[i].match(/^([^:/]+)/);
-			if (m != null && m[1] == ifname)
+		var name = uci.get('network', this.sid, 'device');
+		if (name) {
+			var m = name.match(/^([^:/]+)/);
+			if (m != null && m[1] == device)
 				return true;
 		}
 
-		var wif = getWifiSidByIfname(ifname);
+		var wif = getWifiSidByIfname(device);
 
 		if (wif != null) {
 			var networks = L.toArray(uci.get('wireless', wif, 'network'));
@@ -2791,19 +2828,19 @@ Protocol = baseclass.extend(/** @lends LuCI.network.Protocol.prototype */ {
  * device and allows querying device details such as packet statistics or MTU.
  */
 Device = baseclass.extend(/** @lends LuCI.network.Device.prototype */ {
-	__init__: function(ifname, network) {
-		var wif = getWifiSidByIfname(ifname);
+	__init__: function(device, network) {
+		var wif = getWifiSidByIfname(device);
 
 		if (wif != null) {
 			var res = getWifiStateBySid(wif) || [],
 			    netid = getWifiNetidBySid(wif) || [];
 
-			this.wif    = new WifiNetwork(wif, res[0], res[1], netid[0], res[2], { ifname: ifname });
-			this.ifname = this.wif.getIfname();
+			this.wif    = new WifiNetwork(wif, res[0], res[1], netid[0], res[2], { ifname: device });
+			this.device = this.wif.getIfname();
 		}
 
-		this.ifname  = this.ifname || ifname;
-		this.dev     = Object.assign({}, _state.netdevs[this.ifname]);
+		this.device  = this.device || device;
+		this.dev     = Object.assign({}, _state.netdevs[this.device]);
 		this.network = network;
 	},
 
@@ -2826,7 +2863,7 @@ Device = baseclass.extend(/** @lends LuCI.network.Device.prototype */ {
 	 * Returns the name of the device, e.g. `eth0` or `wlan0`.
 	 */
 	getName: function() {
-		return (this.wif != null ? this.wif.getIfname() : this.ifname);
+		return (this.wif != null ? this.wif.getIfname() : this.device);
 	},
 
 	/**
@@ -2887,17 +2924,17 @@ Device = baseclass.extend(/** @lends LuCI.network.Device.prototype */ {
 	 *  - `ethernet` for all other device types
 	 */
 	getType: function() {
-		if (this.ifname != null && this.ifname.charAt(0) == '@')
+		if (this.device != null && this.device.charAt(0) == '@')
 			return 'alias';
-		else if (this.dev.devtype == 'wlan' || this.wif != null || isWifiIfname(this.ifname))
+		else if (this.dev.devtype == 'wlan' || this.wif != null || isWifiIfname(this.device))
 			return 'wifi';
-		else if (this.dev.devtype == 'bridge' || _state.isBridge[this.ifname])
+		else if (this.dev.devtype == 'bridge' || _state.isBridge[this.device])
 			return 'bridge';
-		else if (_state.isTunnel[this.ifname])
+		else if (_state.isTunnel[this.device])
 			return 'tunnel';
-		else if (this.dev.devtype == 'vlan' || this.ifname.indexOf('.') > -1)
+		else if (this.dev.devtype == 'vlan' || this.device.indexOf('.') > -1)
 			return 'vlan';
-		else if (this.dev.devtype == 'dsa' || _state.isSwitch[this.ifname])
+		else if (this.dev.devtype == 'dsa' || _state.isSwitch[this.device])
 			return 'switch';
 		else
 			return 'ethernet';
@@ -2914,7 +2951,7 @@ Device = baseclass.extend(/** @lends LuCI.network.Device.prototype */ {
 		if (this.wif != null)
 			return this.wif.getShortName();
 
-		return this.ifname;
+		return this.device;
 	},
 
 	/**
@@ -2954,11 +2991,11 @@ Device = baseclass.extend(/** @lends LuCI.network.Device.prototype */ {
 			return _('Bridge');
 
 		case 'switch':
-			return (_state.netdevs[this.ifname] && _state.netdevs[this.ifname].devtype == 'dsa')
+			return (_state.netdevs[this.device] && _state.netdevs[this.device].devtype == 'dsa')
 				? _('Switch port') : _('Ethernet Switch');
 
 		case 'vlan':
-			return (_state.isSwitch[this.ifname] ? _('Switch VLAN') : _('Software VLAN'));
+			return (_state.isSwitch[this.device] ? _('Switch VLAN') : _('Software VLAN'));
 
 		case 'tunnel':
 			return _('Tunnel Interface');
@@ -2977,7 +3014,7 @@ Device = baseclass.extend(/** @lends LuCI.network.Device.prototype */ {
 	 * a Linux bridge.
 	 */
 	getPorts: function() {
-		var br = _state.bridges[this.ifname],
+		var br = _state.bridges[this.device],
 		    rv = [];
 
 		if (br == null || !Array.isArray(br.ifnames))
@@ -2999,7 +3036,7 @@ Device = baseclass.extend(/** @lends LuCI.network.Device.prototype */ {
 	 * device is not a Linux bridge.
 	 */
 	getBridgeID: function() {
-		var br = _state.bridges[this.ifname];
+		var br = _state.bridges[this.device];
 		return (br != null ? br.id : null);
 	},
 
@@ -3011,7 +3048,7 @@ Device = baseclass.extend(/** @lends LuCI.network.Device.prototype */ {
 	 * enabled, else `false`.
 	 */
 	getBridgeSTP: function() {
-		var br = _state.bridges[this.ifname];
+		var br = _state.bridges[this.device];
 		return (br != null ? !!br.stp : false);
 	},
 
@@ -3098,6 +3135,47 @@ Device = baseclass.extend(/** @lends LuCI.network.Device.prototype */ {
 	},
 
 	/**
+	 * Get the carrier state of the network device.
+	 *
+	 * @returns {boolean}
+	 * Returns true if the device has a carrier, e.g. when a cable is
+	 * inserted into an ethernet port of false if there is none.
+	 */
+	getCarrier: function() {
+		var link = this._devstate('link');
+		return (link != null ? link.carrier || false : false);
+	},
+
+	/**
+	 * Get the current link speed of the network device if available.
+	 *
+	 * @returns {number|null}
+	 * Returns the current speed of the network device in Mbps. If the
+	 * device supports no ethernet speed levels, null is returned.
+	 * If the device supports ethernet speeds but has no carrier, -1 is
+	 * returned.
+	 */
+	getSpeed: function() {
+		var link = this._devstate('link');
+		return (link != null ? link.speed || null : null);
+	},
+
+	/**
+	 * Get the current duplex mode of the network device if available.
+	 *
+	 * @returns {string|null}
+	 * Returns the current duplex mode of the network device. Returns
+	 * either "full" or "half" if the device supports duplex modes or
+	 * null if the duplex mode is unknown or unsupported.
+	 */
+	getDuplex: function() {
+		var link = this._devstate('link'),
+		    duplex = link ? link.duplex : null;
+
+		return (duplex != 'unknown') ? duplex : null;
+	},
+
+	/**
 	 * Get the primary logical interface this device is assigned to.
 	 *
 	 * @returns {null|LuCI.network.Protocol}
@@ -3123,7 +3201,7 @@ Device = baseclass.extend(/** @lends LuCI.network.Device.prototype */ {
 			var networks = enumerateNetworks.apply(L.network);
 
 			for (var i = 0; i < networks.length; i++)
-				if (networks[i].containsDevice(this.ifname) || networks[i].getIfname() == this.ifname)
+				if (networks[i].containsDevice(this.device) || networks[i].getIfname() == this.device)
 					this.networks.push(networks[i]);
 
 			this.networks.sort(networkSort);
@@ -3267,6 +3345,7 @@ WifiDevice = baseclass.extend(/** @lends LuCI.network.WifiDevice.prototype */ {
 	 *  - `g` - Legacy 802.11g mode, 2.4 GHz, up to 54 Mbit/s
 	 *  - `n` - IEEE 802.11n mode, 2.4 or 5 GHz, up to 600 Mbit/s
 	 *  - `ac` - IEEE 802.11ac mode, 5 GHz, up to 6770 Mbit/s
+	 *  - `ax` - IEEE 802.11ax mode, 2.4 or 5 GHz
 	 */
 	getHWModes: function() {
 		var hwmodes = this.ubus('dev', 'iwinfo', 'hwmodes');
@@ -3288,6 +3367,10 @@ WifiDevice = baseclass.extend(/** @lends LuCI.network.WifiDevice.prototype */ {
 	 *  - `VHT40` - applicable to IEEE 802.11ac, 40 MHz wide channels
 	 *  - `VHT80` - applicable to IEEE 802.11ac, 80 MHz wide channels
 	 *  - `VHT160` - applicable to IEEE 802.11ac, 160 MHz wide channels
+	 *  - `HE20` - applicable to IEEE 802.11ax, 20 MHz wide channels
+	 *  - `HE40` - applicable to IEEE 802.11ax, 40 MHz wide channels
+	 *  - `HE80` - applicable to IEEE 802.11ax, 80 MHz wide channels
+	 *  - `HE160` - applicable to IEEE 802.11ax, 160 MHz wide channels
 	 */
 	getHTModes: function() {
 		var htmodes = this.ubus('dev', 'iwinfo', 'htmodes');
@@ -3311,7 +3394,10 @@ WifiDevice = baseclass.extend(/** @lends LuCI.network.WifiDevice.prototype */ {
 		    modestr = '';
 
 		hwmodes.sort(function(a, b) {
-			return (a.length != b.length ? a.length > b.length : a > b);
+			if (a.length != b.length)
+				return a.length - b.length;
+
+			return strcmp(a, b);
 		});
 
 		modestr = hwmodes.join('');
@@ -3982,6 +4068,17 @@ WifiNetwork = baseclass.extend(/** @lends LuCI.network.WifiNetwork.prototype */ 
 	 * @property {number} [nss]
 	 * Specifies the number of spatial streams used by the transmission.
 	 * Only applicable to VHT rates.
+	 *
+	 * @property {boolean} [he]
+	 * Specifies whether this rate is an HE (IEEE 802.11ax) rate.
+	 *
+	 * @property {number} [he_gi]
+	 * Specifies whether the guard interval used for the transmission.
+	 * Only applicable to HE rates.
+	 *
+	 * @property {number} [he_dcm]
+	 * Specifies whether dual concurrent modulation is used for the transmission.
+	 * Only applicable to HE rates.
 	 */
 
 	/**

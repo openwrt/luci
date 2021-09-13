@@ -11,21 +11,9 @@
 		}
 	},
 
-	"admin/status/iptables": {
-		"title": "Firewall",
-		"order": 2,
-		"action": {
-			"type": "view",
-			"path": "status/iptables"
-		},
-		"depends": {
-			"acl": [ "luci-mod-status-firewall" ]
-		}
-	},
-
 	"admin/status/routes": {
-		"title": "Routes",
-		"order": 3,
+		"title": "Routing",
+		"order": 2,
 		"action": {
 			"type": "view",
 			"path": "status/routes"
@@ -35,27 +23,45 @@
 		}
 	},
 
-	"admin/status/syslog": {
+	"admin/status/iptables": {
+		"title": "Firewall",
+		"order": 3,
+		"action": {
+			"type": "view",
+			"path": "status/iptables"
+		},
+		"depends": {
+			"acl": [ "luci-mod-status-firewall" ]
+		}
+	},
+
+	"admin/status/logs": {
 		"title": "System Log",
 		"order": 4,
 		"action": {
-			"type": "view",
-			"path": "status/syslog"
+			"type": "alias",
+			"path": "admin/status/logs/syslog"
 		},
 		"depends": {
 			"acl": [ "luci-mod-status-logs" ]
 		}
 	},
 
-	"admin/status/dmesg": {
+	"admin/status/logs/syslog": {
+		"title": "System Log",
+		"order": 1,
+		"action": {
+			"type": "view",
+			"path": "status/syslog"
+		}
+	},
+
+	"admin/status/logs/dmesg": {
 		"title": "Kernel Log",
-		"order": 5,
+		"order": 2,
 		"action": {
 			"type": "view",
 			"path": "status/dmesg"
-		},
-		"depends": {
-			"acl": [ "luci-mod-status-logs" ]
 		}
 	},
 

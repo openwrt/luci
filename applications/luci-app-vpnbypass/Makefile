@@ -5,10 +5,11 @@ include $(TOPDIR)/rules.mk
 
 PKG_LICENSE:=GPL-3.0-or-later
 PKG_MAINTAINER:=Stan Grishin <stangri@melmac.net>
+PKG_VERSION:=1.3.1-9
 
 LUCI_TITLE:=VPN Bypass Web UI
 LUCI_DESCRIPTION:=Provides Web UI for VPNBypass service.
-LUCI_DEPENDS:=+luci-compat +luci-mod-admin-full +vpnbypass
+LUCI_DEPENDS:=+luci-mod-admin-full +vpnbypass
 LUCI_PKGARCH:=all
 
 include ../../luci.mk

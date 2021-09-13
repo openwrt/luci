@@ -1,6 +1,7 @@
 'use strict';
 'require view';
 'require fs';
+'require uci';
 'require form';
 'require tools.widgets as widgets';
 
@@ -18,7 +19,7 @@ return view.extend({
 	render: function(stats) {
 		var m, s, o, v;
 		v = '';
-		
+
 		m = new form.Map('samba4', _('Network Shares'));
 
 		if (stats[5] && stats[5].code === 0) {
@@ -28,42 +29,56 @@ return view.extend({
 		s.anonymous = true;
 
 		s.tab('general',  _('General Settings'));
-		s.tab('template', _('Edit Template'));
+		s.tab('template', _('Edit Template'), _('Edit the template that is used for generating the samba configuration.'));
 
-		s.taboption('general', widgets.NetworkSelect, 'interface', _('Interface'),
+		o = s.taboption('general', widgets.NetworkSelect, 'interface', _('Interface'),
 			_('Listen only on the given interface or, if unspecified, on lan'));
+		o.multiple = true;
+		o.cfgvalue = function(section_id) {
+			return L.toArray(uci.get('samba4', section_id, 'interface'));
+		};
+		o.write = function(section_id, formvalue) {
+			var cfgvalue = this.cfgvalue(section_id),
+				oldNetworks = L.toArray(cfgvalue),
+				newNetworks = L.toArray(formvalue);
+			oldNetworks.sort();
+			newNetworks.sort();
+			if (oldNetworks.join(' ') == newNetworks.join(' '))
+				return;
+			return uci.set('samba4', section_id, 'interface', newNetworks.join(' '));
+		};
 
 		o = s.taboption('general', form.Value, 'workgroup', _('Workgroup'));
 		o.placeholder = 'WORKGROUP';
 
 		o = s.taboption('general', form.Value, 'description', _('Description'));
 		o.placeholder = 'Samba4 on OpenWrt';
-		
+
 		s.taboption('general', form.Flag, 'enable_extra_tuning', _('Enable extra Tuning'),
 			_('Enable some community driven tuning parameters, that may improve write speeds and better operation via WiFi.\
 			Not recommend if multiple clients write to the same files, at the same time!'));
-		
+
 		s.taboption('general', form.Flag, 'disable_async_io', _('Force synchronous  I/O'),
 			_('On lower-end devices may increase speeds, by forceing synchronous I/O instead of the default asynchronous.'));
 
 		s.taboption('general', form.Flag, 'macos', _('Enable macOS compatible shares'),
 			_('Enables Apple\'s AAPL extension globally and adds macOS compatibility options to all shares.'));
-			
+
 		s.taboption('general', form.Flag, 'allow_legacy_protocols', _('Allow legacy (insecure) protocols/authentication.'),
 			_('Allow legacy smb(v1)/Lanman connections, needed for older devices without smb(v2.1/3) support.'));
 
 		if (stats[2].type === 'file') {
-			s.taboption('general', form.Flag, 'disable_netbios', _('Disable Netbios')) 
+			s.taboption('general', form.Flag, 'disable_netbios', _('Disable Netbios'))
 		}
 		if (stats[3].type === 'file') {
-			s.taboption('general', form.Flag, 'disable_ad_dc', _('Disable Active Directory Domain Controller')) 
+			s.taboption('general', form.Flag, 'disable_ad_dc', _('Disable Active Directory Domain Controller'))
 		}
 		if (stats[4].type === 'file') {
-			s.taboption('general', form.Flag, 'disable_winbind', _('Disable Winbind')) 
+			s.taboption('general', form.Flag, 'disable_winbind', _('Disable Winbind'))
 		}
-		
+
 		o = s.taboption('template', form.TextValue, '_tmpl',
-			_('Edit the template that is used for generating the samba configuration.'),
+			null,
 			_("This is the content of the file '/etc/samba/smb.conf.template' from which your samba configuration will be generated. \
 			Values enclosed by pipe symbols ('|') should not be changed. They get their values from the 'General Settings' tab."));
 		o.rows = 20;
@@ -112,7 +127,7 @@ return view.extend({
 		o.enabled = 'yes';
 		o.disabled = 'no';
 		o.default = 'no';
-		
+
 		o = s.option(form.Flag, 'inherit_owner', _('Inherit owner'));
 		o.enabled = 'yes';
 		o.disabled = 'no';
@@ -129,12 +144,12 @@ return view.extend({
 		o.default = '0777'; // smb.conf default is '0755'
 		o.placeholder = '0777';
 		o.rmempty = false;
-		
+
 		o = s.option(form.Value, 'vfs_objects', _('Vfs objects'));
 		o.rmempty = true;
-		
+
 		s.option(form.Flag, 'timemachine', _('Apple Time-machine share'));
-		
+
 		o = s.option(form.Value, 'timemachine_maxsize', _('Time-machine size in GB'));
 		o.rmempty = true;
 		o.maxlength = 5;

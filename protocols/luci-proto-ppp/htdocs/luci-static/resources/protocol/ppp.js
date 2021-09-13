@@ -70,7 +70,8 @@ return network.registerProtocol('ppp', {
 	renderFormOptions: function(s) {
 		var dev = this.getL3Device() || this.getDevice(), o;
 
-		o = s.taboption('general', form.Value, 'device', _('Modem device'));
+		o = s.taboption('general', form.Value, '_modem_device', _('Modem device'));
+		o.ucioption = 'device';
 		o.rmempty = false;
 		o.load = function(section_id) {
 			return callFileList('/dev/').then(L.bind(function(devices) {
@@ -90,7 +91,8 @@ return network.registerProtocol('ppp', {
 		o.password = true;
 
 		if (L.hasSystemFeature('ipv6')) {
-			o = s.taboption('advanced', form.ListValue, 'ipv6', _('Obtain IPv6-Address'), _('Enable IPv6 negotiation on the PPP link'));
+			o = s.taboption('advanced', form.ListValue, 'ppp_ipv6', _('Obtain IPv6 address'), _('Enable IPv6 negotiation on the PPP link'));
+			o.ucioption = 'ipv6';
 			o.value('auto', _('Automatic'));
 			o.value('0', _('Disabled'));
 			o.value('1', _('Manual'));

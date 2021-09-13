@@ -35,7 +35,7 @@ return view.extend({
 
 		var button = '';
 		if (running && webinstalled)
-			button = '&nbsp;<a class="btn" href="http://' + window.location.hostname + ':' + port + '" target="_blank" rel="noreferrer noopener">' + _('Open Web Interface') + '</a>';
+			button = '&#160;<a class="btn" href="http://' + window.location.hostname + ':' + port + '" target="_blank" rel="noreferrer noopener">' + _('Open Web Interface') + '</a>';
 
 		var m, s, o;
 

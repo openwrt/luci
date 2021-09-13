@@ -199,13 +199,22 @@ function format_wifirate(rate) {
 	var s = '%.1f\xa0%s, %d\xa0%s'.format(rate.rate / 1000, _('Mbit/s'), rate.mhz, _('MHz')),
 	    ht = rate.ht, vht = rate.vht,
 	    mhz = rate.mhz, nss = rate.nss,
-	    mcs = rate.mcs, sgi = rate.short_gi;
+	    mcs = rate.mcs, sgi = rate.short_gi,
+	    he = rate.he, he_gi = rate.he_gi,
+	    he_dcm = rate.he_dcm;
 
 	if (ht || vht) {
 		if (vht) s += ', VHT-MCS\xa0%d'.format(mcs);
 		if (nss) s += ', VHT-NSS\xa0%d'.format(nss);
 		if (ht)  s += ', MCS\xa0%s'.format(mcs);
 		if (sgi) s += ', ' + _('Short GI').replace(/ /g, '\xa0');
+	}
+
+	if (he) {
+		s += ', HE-MCS\xa0%d'.format(mcs);
+		if (nss) s += ', HE-NSS\xa0%d'.format(nss);
+		if (he_gi) s += ', HE-GI\xa0%d'.format(he_gi);
+		if (he_dcm) s += ', HE-DCM\xa0%d'.format(he_dcm);
 	}
 
 	return s;
@@ -303,16 +312,32 @@ var CBIWifiFrequencyValue = form.Value.extend({
 			this.callFrequencyList(section_id)
 		]).then(L.bind(function(data) {
 			this.channels = {
-				'11g': L.hasSystemFeature('hostapd', 'acs') ? [ 'auto', 'auto', true ] : [],
-				'11a': L.hasSystemFeature('hostapd', 'acs') ? [ 'auto', 'auto', true ] : []
+				'2g': L.hasSystemFeature('hostapd', 'acs') ? [ 'auto', 'auto', true ] : [],
+				'5g': L.hasSystemFeature('hostapd', 'acs') ? [ 'auto', 'auto', true ] : [],
+				'6g': [],
+				'60g': []
 			};
 
-			for (var i = 0; i < data[1].length; i++)
-				this.channels[(data[1][i].mhz > 2484) ? '11a' : '11g'].push(
+			for (var i = 0; i < data[1].length; i++) {
+				var band;
+
+				if (data[1][i].mhz >= 2412 && data[1][i].mhz <= 2484)
+					band = '2g';
+				else if (data[1][i].mhz >= 5160 && data[1][i].mhz <= 5885)
+					band = '5g';
+				else if (data[1][i].mhz >= 5925 && data[1][i].mhz <= 7125)
+					band = '6g';
+				else if (data[1][i].mhz >= 58320 && data[1][i].mhz <= 69120)
+					band = '60g';
+				else
+					continue;
+
+				this.channels[band].push(
 					data[1][i].channel,
 					'%d (%d Mhz)'.format(data[1][i].channel, data[1][i].mhz),
 					!data[1][i].restricted
 				);
+			}
 
 			var hwmodelist = L.toArray(data[0] ? data[0].getHWModes() : null)
 				.reduce(function(o, v) { o[v] = true; return o }, {});
@@ -320,7 +345,8 @@ var CBIWifiFrequencyValue = form.Value.extend({
 			this.modes = [
 				'', 'Legacy', true,
 				'n', 'N', hwmodelist.n,
-				'ac', 'AC', hwmodelist.ac
+				'ac', 'AC', hwmodelist.ac,
+				'ax', 'AX', hwmodelist.ax
 			];
 
 			var htmodelist = L.toArray(data[0] ? data[0].getHTModes() : null)
@@ -337,20 +363,31 @@ var CBIWifiFrequencyValue = form.Value.extend({
 					'VHT40', '40 MHz', htmodelist.VHT40,
 					'VHT80', '80 MHz', htmodelist.VHT80,
 					'VHT160', '160 MHz', htmodelist.VHT160
+				],
+				'ax': [
+					'HE20', '20 MHz', htmodelist.HE20,
+					'HE40', '40 MHz', htmodelist.HE40,
+					'HE80', '80 MHz', htmodelist.HE80,
+					'HE160', '160 MHz', htmodelist.HE160
 				]
 			};
 
 			this.bands = {
 				'': [
-					'11g', '2.4 GHz', this.channels['11g'].length > 3,
-					'11a', '5 GHz', this.channels['11a'].length > 3
+					'2g', '2.4 GHz', this.channels['2g'].length > 3,
+					'5g', '5 GHz', this.channels['5g'].length > 3,
+					'60g', '60 GHz', this.channels['60g'].length > 0
 				],
 				'n': [
-					'11g', '2.4 GHz', this.channels['11g'].length > 3,
-					'11a', '5 GHz', this.channels['11a'].length > 3
+					'2g', '2.4 GHz', this.channels['2g'].length > 3,
+					'5g', '5 GHz', this.channels['5g'].length > 3
 				],
 				'ac': [
-					'11a', '5 GHz', true
+					'5g', '5 GHz', true
+				],
+				'ax': [
+					'2g', '2.4 GHz', this.channels['2g'].length > 3,
+					'5g', '5 GHz', this.channels['5g'].length > 3
 				]
 			};
 		}, this));
@@ -410,11 +447,14 @@ var CBIWifiFrequencyValue = form.Value.extend({
 		    bwdt = elem.querySelector('.htmode'),
 		    htval = uci.get('wireless', section_id, 'htmode'),
 		    hwval = uci.get('wireless', section_id, 'hwmode'),
-		    chval = uci.get('wireless', section_id, 'channel');
+		    chval = uci.get('wireless', section_id, 'channel'),
+		    bandval = uci.get('wireless', section_id, 'band');
 
 		this.setValues(mode, this.modes);
 
-		if (/VHT20|VHT40|VHT80|VHT160/.test(htval))
+		if (/HE20|HE40|HE80|HE160/.test(htval))
+			mode.value = 'ax';
+		else if (/VHT20|VHT40|VHT80|VHT160/.test(htval))
 			mode.value = 'ac';
 		else if (/HT20|HT40/.test(htval))
 			mode.value = 'n';
@@ -423,15 +463,24 @@ var CBIWifiFrequencyValue = form.Value.extend({
 
 		this.toggleWifiMode(elem);
 
-		if (/a/.test(hwval))
-			band.value = '11a';
-		else
-			band.value = '11g';
+		if (hwval != null) {
+			this.useBandOption = false;
+
+			if (/a/.test(hwval))
+				band.value = '5g';
+			else
+				band.value = '2g';
+		}
+		else {
+			this.useBandOption = true;
+
+			band.value = bandval;
+		}
 
 		this.toggleWifiBand(elem);
 
 		bwdt.value = htval;
-		chan.value = chval;
+		chan.value = chval || chan.options[0].value;
 
 		return elem;
 	},
@@ -485,7 +534,7 @@ var CBIWifiFrequencyValue = form.Value.extend({
 	cfgvalue: function(section_id) {
 		return [
 		    uci.get('wireless', section_id, 'htmode'),
-		    uci.get('wireless', section_id, 'hwmode'),
+		    uci.get('wireless', section_id, 'hwmode') || uci.get('wireless', section_id, 'band'),
 		    uci.get('wireless', section_id, 'channel')
 		];
 	},
@@ -502,7 +551,12 @@ var CBIWifiFrequencyValue = form.Value.extend({
 
 	write: function(section_id, value) {
 		uci.set('wireless', section_id, 'htmode', value[0] || null);
-		uci.set('wireless', section_id, 'hwmode', value[1]);
+
+		if (this.useBandOption)
+			uci.set('wireless', section_id, 'band', value[1]);
+		else
+			uci.set('wireless', section_id, 'hwmode', (value[1] == '2g') ? '11g' : '11a');
+
 		uci.set('wireless', section_id, 'channel', value[2]);
 	}
 });
@@ -888,7 +942,7 @@ return view.extend({
 
 				if (hwtype == 'mac80211') {
 					o = ss.taboption('general', form.Flag, 'legacy_rates', _('Allow legacy 802.11b rates'), _('Legacy or badly behaving devices may require legacy 802.11b rates to interoperate. Airtime efficiency may be significantly reduced where these are used. It is recommended to not allow 802.11b rates where possible.'));
-					o.depends({'_freq': '11g', '!contains': true});
+					o.depends({'_freq': '2g', '!contains': true});
 
 					o = ss.taboption('general', CBIWifiTxPowerValue, 'txpower', _('Maximum transmit power'), _('Specifies the maximum transmit power the wireless radio may use. Depending on regulatory requirements and wireless usage, the actual transmit power may be reduced by the driver.'));
 					o.wifiNetwork = radioNet;
@@ -1027,7 +1081,7 @@ return view.extend({
 					bssid.depends('mode', 'sta');
 					bssid.depends('mode', 'sta-wds');
 
-					o = ss.taboption('macfilter', form.ListValue, 'macfilter', _('MAC-Address Filter'));
+					o = ss.taboption('macfilter', form.ListValue, 'macfilter', _('MAC Address Filter'));
 					o.depends('mode', 'ap');
 					o.depends('mode', 'ap-wds');
 					o.value('', _('disable'));
@@ -2093,7 +2147,7 @@ return view.extend({
 			var table = E('table', { 'class': 'table assoclist', 'id': 'wifi_assoclist_table' }, [
 				E('tr', { 'class': 'tr table-titles' }, [
 					E('th', { 'class': 'th nowrap' }, _('Network')),
-					E('th', { 'class': 'th hide-xs' }, _('MAC-Address')),
+					E('th', { 'class': 'th hide-xs' }, _('MAC address')),
 					E('th', { 'class': 'th' }, _('Host')),
 					E('th', { 'class': 'th' }, _('Signal / Noise')),
 					E('th', { 'class': 'th' }, _('RX Rate / TX Rate'))

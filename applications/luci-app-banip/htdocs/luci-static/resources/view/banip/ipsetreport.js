@@ -142,8 +142,7 @@ return view.extend({
 				]);
 				for (var i = 0; i < content.ipsets[key].member_acc.length; i++) {
 					if (key != 'maclist' && key.substr(0,9) != 'whitelist') {
-						urlprefix = content.ipsets[key].member_acc[i].member.includes('/') ? 'prefix/' : 'ip/';
-						member = '<a href="https://api.bgpview.io/' + urlprefix + encodeURIComponent(content.ipsets[key].member_acc[i].member) + '" target="_blank" rel="noreferrer noopener" title="IP/CIDR Lookup" >' + content.ipsets[key].member_acc[i].member + '</a>';
+						member = '<a href="https://ipwhois.app/json/' + encodeURIComponent(content.ipsets[key].member_acc[i].member) + '" target="_blank" rel="noreferrer noopener" title="IP/CIDR Lookup" >' + content.ipsets[key].member_acc[i].member + '</a>';
 						button = E('button', {
 							'class': 'btn cbi-button cbi-button-apply',
 							'style': 'word-break: inherit',

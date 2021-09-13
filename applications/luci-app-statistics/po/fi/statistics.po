@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-05-19 19:35+0200\n"
-"PO-Revision-Date: 2020-06-25 19:08+0000\n"
+"PO-Revision-Date: 2021-04-05 07:56+0000\n"
 "Last-Translator: Petri Asikainen <uniluodossa@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsstatistics/fi/>\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.2-dev\n"
+"X-Generator: Weblate 4.6-dev\n"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/apcups.js:7
 #: applications/luci-app-statistics/root/usr/share/luci/statistics/plugins/apcups.json:2
@@ -464,7 +464,7 @@ msgstr ""
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/collectd.js:51
 msgid "Hostname"
-msgstr "Palvelinnimi"
+msgstr "Nimi"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/olsrd.js:15
 msgid "IP or hostname where to get the txtinfo output from"
@@ -573,6 +573,10 @@ msgstr ""
 "Jakson enimmäisarvoja voidaan käyttää keskiarvojen sijaan, kun ei käytetä "
 "\"vain keskiarvo RRA:ia\""
 
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/ping.js:36
+msgid "Maximum Missed Packets"
+msgstr ""
+
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/email.js:38
 msgid "Maximum allowed connections"
 msgstr "Sallittujen yhteyksien määrä"
@@ -668,11 +672,10 @@ msgstr "Valvotaan kohdetta %s ja %s"
 msgid "Monitoring %s, %s, %s"
 msgstr "Valvonta %s, %s, %s"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/apcups.js:29
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/apcups.js:26
+#, fuzzy
 msgid "Monitoring APC UPS at host %s, port %d"
-msgid_plural "Monitoring APC UPS at hosts %s, port %d"
-msgstr[0] "Valvotaan APC UPS isäntää %s, port %d"
-msgstr[1] "Valvotaan APC UPS isäntiä %s, port %d"
+msgstr "Valvotaan APC UPS isäntää %s, port %d"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/dhcpleases.js:19
 msgid "Monitoring DHCP leases enabled"
@@ -776,7 +779,7 @@ msgid_plural "Monitoring %d disks"
 msgstr[0] "Yhden levyn valvonta"
 msgstr[1] "Valvoo %d levyä"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/ping.js:41
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/ping.js:48
 msgid "Monitoring one host"
 msgid_plural "Monitoring %d hosts"
 msgstr[0] "Yhden isännän valvonta"
@@ -1545,6 +1548,12 @@ msgstr "Käyttäjä"
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/netlink.js:21
 msgid "Verbose monitoring"
 msgstr "Runsas valvonta"
+
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/ping.js:37
+msgid ""
+"When a host has not replied to this number of packets in a row, re-resolve "
+"the hostname in DNS. Useful for dynamic DNS hosts."
+msgstr ""
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/disk.js:16
 msgid "When none selected, all disks will be monitored."

@@ -392,12 +392,25 @@ return baseclass.extend({
 	},
 
 	transformHostHints: function(family, hosts) {
-		var choice_values = [], choice_labels = {};
+		var choice_values = [],
+		    choice_labels = {},
+		    ip6addrs = {},
+		    ipaddrs = {};
+
+		for (var mac in hosts) {
+			L.toArray(hosts[mac].ipaddrs || hosts[mac].ipv4).forEach(function(ip) {
+				ipaddrs[ip] = mac;
+			});
+
+			L.toArray(hosts[mac].ip6addrs || hosts[mac].ipv6).forEach(function(ip) {
+				ip6addrs[ip] = mac;
+			});
+		}
 
 		if (!family || family == 'ipv4') {
-			L.sortedKeys(hosts, 'ipv4', 'addr').forEach(function(mac) {
-				var val = hosts[mac].ipv4,
-				    txt = hosts[mac].name || mac;
+			L.sortedKeys(ipaddrs, null, 'addr').forEach(function(ip) {
+				var val = ip,
+				    txt = hosts[ipaddrs[ip]].name || ipaddrs[ip];
 
 				choice_values.push(val);
 				choice_labels[val] = E([], [ val, ' (', E('strong', {}, [txt]), ')' ]);
@@ -405,9 +418,9 @@ return baseclass.extend({
 		}
 
 		if (!family || family == 'ipv6') {
-			L.sortedKeys(hosts, 'ipv6', 'addr').forEach(function(mac) {
-				var val = hosts[mac].ipv6,
-				    txt = hosts[mac].name || mac;
+			L.sortedKeys(ip6addrs, null, 'addr').forEach(function(ip) {
+				var val = ip,
+				    txt = hosts[ip6addrs[ip]].name || ip6addrs[ip];
 
 				choice_values.push(val);
 				choice_labels[val] = E([], [ val, ' (', E('strong', {}, [txt]), ')' ]);
@@ -497,7 +510,10 @@ return baseclass.extend({
 
 		L.sortedKeys(hosts).forEach(function(mac) {
 			o.value(mac, E([], [ mac, ' (', E('strong', {}, [
-				hosts[mac].name || hosts[mac].ipv4 || hosts[mac].ipv6 || '?'
+				hosts[mac].name ||
+				L.toArray(hosts[mac].ipaddrs || hosts[mac].ipv4)[0] ||
+				L.toArray(hosts[mac].ip6addrs || hosts[mac].ipv6)[0] ||
+				'?'
 			]), ')' ]));
 		});
 

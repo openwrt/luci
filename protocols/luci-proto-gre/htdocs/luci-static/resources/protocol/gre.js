@@ -66,12 +66,12 @@ return network.registerProtocol('gre', {
 		o.placeholder = 1280;
 		o.datatype = 'range(68, 9200)';
 
-		o = s.taboption('advanced', form.Value, 'ttl', _("Override TTL"), _("Specify a TTL (Time to Live) for the encapsulating packet other than the default (64) (optional)."));
+		o = s.taboption('advanced', form.Value, 'ttl', _("Override TTL"), _("Specify a TTL (Time to Live) for the encapsulating packet other than the default (64)."));
 		o.optional = true;
 		o.placeholder = 64;
 		o.datatype = 'min(1)';
 
-		o = s.taboption('advanced', form.Value, 'tos', _("Override TOS"), _("Specify a TOS (Type of Service). Can be <code>inherit</code> (the outer header inherits the value of the inner header), or an hexadecimal value <code>00..FF</code> (optional)."));
+		o = s.taboption('advanced', form.Value, 'tos', _("Override TOS"), _("Specify a TOS (Type of Service). Can be <code>inherit</code> (the outer header inherits the value of the inner header) or an hexadecimal value <code>00..FF</code> (optional)."));
 		o.optional = true;
 		o.validate = function(section_id, value) {
 			if (value.length > 0 && !value.match(/^[a-f0-9]{1,2}$/i) && !value.match(/^inherit$/i))

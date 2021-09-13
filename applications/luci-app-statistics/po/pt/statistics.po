@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-05-26 19:03+0200\n"
-"PO-Revision-Date: 2021-03-06 14:44+0000\n"
+"PO-Revision-Date: 2021-08-28 13:32+0000\n"
 "Last-Translator: ssantos <ssantos@web.de>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsstatistics/pt/>\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.5.1\n"
+"X-Generator: Weblate 4.8.1-dev\n"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/apcups.js:7
 #: applications/luci-app-statistics/root/usr/share/luci/statistics/plugins/apcups.json:2
@@ -582,6 +582,10 @@ msgstr ""
 "Valores máximos para um período podem ser usados em vez de médias quando não "
 "estiver usando 'somente RRAs de médias'"
 
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/ping.js:36
+msgid "Maximum Missed Packets"
+msgstr "Quantidade máxima de pacotes perdidos"
+
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/email.js:38
 msgid "Maximum allowed connections"
 msgstr "Máximo de conexões permitidas"
@@ -677,11 +681,9 @@ msgstr "Monitorando %s e %s"
 msgid "Monitoring %s, %s, %s"
 msgstr "Monitorando %s, %s, %s"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/apcups.js:29
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/apcups.js:26
 msgid "Monitoring APC UPS at host %s, port %d"
-msgid_plural "Monitoring APC UPS at hosts %s, port %d"
-msgstr[0] "Monitorando APC UPS no host %s, porta %d"
-msgstr[1] "Monitorando APC UPS nos hosts %s, porta %d"
+msgstr "A monitorar APC UPS no host %s, porta %d"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/dhcpleases.js:19
 msgid "Monitoring DHCP leases enabled"
@@ -785,7 +787,7 @@ msgid_plural "Monitoring %d disks"
 msgstr[0] "Monitorando um disco"
 msgstr[1] "Monitorando %d discos"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/ping.js:41
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/ping.js:48
 msgid "Monitoring one host"
 msgid_plural "Monitoring %d hosts"
 msgstr[0] "Monitorando um host"
@@ -1343,7 +1345,8 @@ msgstr ""
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/ipstatistics.js:8
 msgid ""
 "The ipstatistics plugin collects IPv4 and IPv6 statistics to compare them."
-msgstr "O plugin ipstatistics coleta estatísticas IPv4 e IPv6 para compará-las."
+msgstr ""
+"O plugin ipstatistics coleta estatísticas IPv4 e IPv6 para compará-las."
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/iptables.js:9
 msgid ""
@@ -1555,7 +1558,7 @@ msgstr "Configuração do plugin Unixsock"
 #: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/uptime.js:15
 #: applications/luci-app-statistics/root/usr/share/luci/statistics/plugins/uptime.json:2
 msgid "Uptime"
-msgstr "Uptime"
+msgstr "Tempo de atividade"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/uptime.js:6
 msgid "Uptime Plugin Configuration"
@@ -1581,6 +1584,14 @@ msgstr "Utilizador"
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/netlink.js:21
 msgid "Verbose monitoring"
 msgstr "Monitoramento no modo verbose"
+
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/ping.js:37
+msgid ""
+"When a host has not replied to this number of packets in a row, re-resolve "
+"the hostname in DNS. Useful for dynamic DNS hosts."
+msgstr ""
+"Quando um host não responder a esta quantidade seguida de pacotes, resolva "
+"novamente o nome do host no DNS. É útil para DNS com hosts dinâmicos."
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/disk.js:16
 msgid "When none selected, all disks will be monitored."

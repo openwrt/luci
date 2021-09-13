@@ -603,7 +603,7 @@ var CBIMap = CBIAbstractElement.extend(/** @lends LuCI.form.Map.prototype */ {
 						E('p', {}, [ _('An error occurred while saving the form:') ]),
 						E('p', {}, [ E('em', { 'style': 'white-space:pre' }, [ e.message ]) ]),
 						E('div', { 'class': 'right' }, [
-							E('button', { 'class': 'btn', 'click': ui.hideModal }, [ _('Dismiss') ])
+							E('button', { 'class': 'cbi-button', 'click': ui.hideModal }, [ _('Dismiss') ])
 						])
 					]);
 				}
@@ -1862,6 +1862,9 @@ var CBIAbstractValue = CBIAbstractElement.extend(/** @lends LuCI.form.AbstractVa
 		if (cval == null)
 			cval = this.default;
 
+		if (Array.isArray(cval))
+			cval = cval.join(' ');
+
 		return (cval != null) ? '%h'.format(cval) : null;
 	},
 
@@ -2032,10 +2035,32 @@ var CBIAbstractValue = CBIAbstractElement.extend(/** @lends LuCI.form.AbstractVa
 	 * The configuration section ID
 	 */
 	remove: function(section_id) {
-		return this.map.data.unset(
-			this.uciconfig || this.section.uciconfig || this.map.config,
-			this.ucisection || section_id,
-			this.ucioption || this.option);
+		var this_cfg = this.uciconfig || this.section.uciconfig || this.map.config,
+		    this_sid = this.ucisection || section_id,
+		    this_opt = this.ucioption || this.option;
+
+		for (var i = 0; i < this.section.children.length; i++) {
+			var sibling = this.section.children[i];
+
+			if (sibling === this || sibling.ucioption == null)
+				continue;
+
+			var sibling_cfg = sibling.uciconfig || sibling.section.uciconfig || sibling.map.config,
+			    sibling_sid = sibling.ucisection || section_id,
+			    sibling_opt = sibling.ucioption || sibling.option;
+
+			if (this_cfg != sibling_cfg || this_sid != sibling_sid || this_opt != sibling_opt)
+				continue;
+
+			if (!sibling.isActive(section_id))
+				continue;
+
+			/* found another active option aliasing the same uci option name,
+			 * so we can't remove the value */
+			return;
+		}
+
+		this.map.data.unset(this_cfg, this_sid, this_opt);
 	}
 });
 
@@ -2178,10 +2203,8 @@ var CBITypedSection = CBIAbstractSection.extend(/** @lends LuCI.form.TypedSectio
 
 			dom.append(createEl, [
 				E('div', {}, nameEl),
-				E('input', {
+				E('button', {
 					'class': 'cbi-button cbi-button-add',
-					'type': 'submit',
-					'value': btn_title || _('Add'),
 					'title': btn_title || _('Add'),
 					'click': ui.createHandlerFn(this, function(ev) {
 						if (nameEl.classList.contains('cbi-input-invalid'))
@@ -2189,11 +2212,23 @@ var CBITypedSection = CBIAbstractSection.extend(/** @lends LuCI.form.TypedSectio
 
 						return this.handleAdd(ev, nameEl.value);
 					}),
-					'disabled': this.map.readonly || null
-				})
+					'disabled': this.map.readonly || true
+				}, [ btn_title || _('Add') ])
 			]);
 
-			ui.addValidator(nameEl, 'uciname', true, 'blur', 'keyup');
+			if (this.map.readonly !== true) {
+				ui.addValidator(nameEl, 'uciname', true, function(v) {
+					var button = document.querySelector('.cbi-section-create > .cbi-button-add');
+					if (v !== '') {
+						button.disabled = null;
+						return true;
+					}
+					else {
+						button.disabled = true;
+						return _('Expecting: %s').format(_('non-empty value'));
+					}
+				}, 'blur', 'keyup');
+			}
 		}
 
 		return createEl;
@@ -2629,9 +2664,9 @@ var CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection.p
 
 		if (this.sortable) {
 			dom.append(tdEl.lastElementChild, [
-				E('div', {
+				E('button', {
 					'title': _('Drag to reorder'),
-					'class': 'btn cbi-button drag-handle center',
+					'class': 'cbi-button drag-handle center',
 					'style': 'cursor:move',
 					'disabled': this.map.readonly || null
 				}, '☰')
@@ -2925,7 +2960,7 @@ var CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection.p
 				nodes,
 				E('div', { 'class': 'right' }, [
 					E('button', {
-						'class': 'btn',
+						'class': 'cbi-button',
 						'click': ui.createHandlerFn(this, 'handleModalCancel', m)
 					}, [ _('Dismiss') ]), ' ',
 					E('button', {
@@ -3998,11 +4033,21 @@ var CBIDummyValue = CBIValue.extend(/** @lends LuCI.form.DummyValue.prototype */
 	 * @default null
 	 */
 
+    /**
+	 * Render the UCI option value as hidden using the HTML display: none style property.
+	 *
+	 * By default, the value is displayed
+	 *
+	 * @name LuCI.form.DummyValue.prototype#hidden
+	 * @type boolean
+	 * @default null
+	 */
+
 	/** @private */
 	renderWidget: function(section_id, option_index, cfgvalue) {
 		var value = (cfgvalue != null) ? cfgvalue : this.default,
 		    hiddenEl = new ui.Hiddenfield(value, { id: this.cbid(section_id) }),
-		    outputEl = E('div');
+		    outputEl = E('div', { 'style': this.hidden ? 'display:none' : null });
 
 		if (this.href && !((this.readonly != null) ? this.readonly : this.map.readonly))
 			outputEl.appendChild(E('a', { 'href': this.href }));

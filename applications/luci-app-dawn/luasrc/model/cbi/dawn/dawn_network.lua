@@ -9,86 +9,84 @@ function s.render(self, sid)
 	local utl = require "luci.util"
 	tpl.render_string([[
 		<%
-	    local status = require "luci.tools.ieee80211"
-		local utl = require "luci.util"
-		local sys = require "luci.sys"
-		local hosts = sys.net.host_hints()
-		local stat = utl.ubus("dawn", "get_network", { })
-		local name, macs
-		for name, macs in pairs(stat) do
+			local status = require "luci.tools.ieee80211"
+			local utl = require "luci.util"
+			local sys = require "luci.sys"
+			local xml = require "luci.xml"
+			local hosts = sys.net.host_hints()
+			local stat = utl.ubus("dawn", "get_network", { })
+			local name, macs
+			for name, macs in pairs(stat) do
 		%>
-
 			<div class="cbi-section-node">
-	        <h3>SSID: <%= name %></h3>
-			<div class="table" id=network_overview_main">
-				<div class="tr table-titles">
-					<div class="th">AP</div>
-					<div class="th">Clients</div>
-				</div>
-			<%
-			local mac, data
-			for mac, data in pairs(macs) do
-			%>
-				<div class="tr">
-					<div class="td" style="vertical-align: top;">
-						<div class="table" id="ap-<%= mac %>">
-							<div class="tr table-titles">
-								<div class="th">Hostname</div>
-								<div class="th">Interface</div>
-								<div class="th">MAC</div>
-								<div class="th">Utilization</div>
-								<div class="th">Frequency</div>
-								<div class="th">Stations</div>
-								<div class="th">HT Sup</div>
-								<div class="th">VHT Sup</div>
-							</div>
-							<div class="tr">
-								<div class="td"><%= data.hostname %></div>
-								<div class="td"><%= data.iface %></div>
-								<div class="td"><%= mac %></div>
-								<div class="td"><%= "%.2f" %(data.channel_utilization / 2.55) %> %</div>
-								<div class="td"><%= "%.3f" %( data.freq / 1000 ) %> GHz (Channel: <%= "%d" %( status.frequency_to_channel(data.freq) ) %>)</div>
-								<div class="td"><%= "%d" %data.num_sta %></div>
-								<div class="td"><%= (data.ht_support == true) and "available" or "not available" %></div>
-								<div class="td"><%= (data.vht_support == true) and "available" or "not available" %></div>
-							</div>
-							</div>
-						</div>
-					<div class="td" style="vertical-align: top;">
-						<div class="table" id="clients-<%= mac %>">
-							<div class="tr table-titles">
-								<div class="th">MAC</div>
-								<div class="th">HT</div>
-								<div class="th">VHT</div>
-								<div class="th">Signal</div>
-							</div>
-							<%
-							local mac2, data2
-							for clientmac, clientvals in pairs(data) do
-								if (type(clientvals) == "table") then
-							%>
-								<div class="tr">
-									<div class="td"><%= clientmac %></div>
-									<div class="td"><%= (clientvals.ht == true) and "available" or "not available" %></div>
-									<div class="td"><%= (clientvals.vht == true) and "available" or "not available" %></div>
-									<div class="td"><%= "%d" %clientvals.signal %></div>
-								</div>
-								<%
-								end
-								%>
-							<%
-							end
-							%>
-							</div>
-						</div>
-					</div>
-			<%
-			end
-			%>
-			</div>
+				<h3>SSID: <%= xml.pcdata(name) %></h3>
+				<table class="table" id=network_overview_main">
+					<tr class="tr table-titles">
+						<th class="th">AP</th>
+						<th class="th">Clients</th>
+					</tr>
+					<%
+						local mac, data
+						for mac, data in pairs(macs) do
+					%>
+						<tr class="tr">
+							<td class="td" style="vertical-align: top;">
+								<table class="table" id="ap-<%= mac %>">
+									<tr class="tr table-titles">
+										<th class="th">Hostname</th>
+										<th class="th">Interface</th>
+										<th class="th">MAC</th>
+										<th class="th">Utilization</th>
+										<th class="th">Frequency</th>
+										<th class="th">Stations</th>
+										<th class="th">HT Sup</th>
+										<th class="th">VHT Sup</th>
+									</tr>
+									<tr class="tr">
+										<td class="td"><%= xml.pcdata(data.hostname) %></td>
+										<td class="td"><%= xml.pcdata(data.iface) %></td>
+										<td class="td"><%= mac %></td>
+										<td class="td"><%= "%.2f" %(data.channel_utilization / 2.55) %> %</td>
+										<td class="td"><%= "%.3f" %( data.freq / 1000 ) %> GHz (Channel: <%= "%d" %( status.frequency_to_channel(data.freq) ) %>)</td>
+										<td class="td"><%= "%d" % data.num_sta %></td>
+										<td class="td"><%= (data.ht_support == true) and "available" or "not available" %></td>
+										<td class="td"><%= (data.vht_support == true) and "available" or "not available" %></td>
+									</tr>
+								</table>
+							</td>
+							<td class="td" style="vertical-align: top;">
+								<table class="table" id="clients-<%= mac %>">
+									<tr class="tr table-titles">
+										<th class="th">MAC</th>
+										<th class="th">HT</th>
+										<th class="th">VHT</th>
+										<th class="th">Signal</th>
+									</tr>
+									<%
+										local mac2, data2
+										for clientmac, clientvals in pairs(data) do
+											if (type(clientvals) == "table") then
+									%>
+										<tr class="tr">
+											<td class="td"><%= clientmac %></td>
+											<td class="td"><%= (clientvals.ht == true) and "available" or "not available" %></td>
+											<td class="td"><%= (clientvals.vht == true) and "available" or "not available" %></td>
+											<td class="td"><%= "%d" % clientvals.signal %></td>
+										</tr>
+									<%
+											end
+										end
+									%>
+								</table>
+							</td>
+						</tr>
+					<%
+						end
+					%>
+				</table>
 			</div>
 		<%
-		end
+			end
 		%>
 	]])
 end

@@ -298,6 +298,8 @@ return view.extend({
 		o.value('', 'any');
 		o.value('address-mask-reply');
 		o.value('address-mask-request');
+		o.value('address-unreachable'); /* ipv6 */
+		o.value('bad-header');  /* ipv6 */
 		o.value('communication-prohibited');
 		o.value('destination-unreachable');
 		o.value('echo-reply');
@@ -315,6 +317,7 @@ return view.extend({
 		o.value('network-redirect');
 		o.value('network-unknown');
 		o.value('network-unreachable');
+		o.value('no-route');  /* ipv6 */
 		o.value('packet-too-big');
 		o.value('parameter-problem');
 		o.value('port-unreachable');
@@ -335,6 +338,8 @@ return view.extend({
 		o.value('TOS-network-unreachable');
 		o.value('ttl-zero-during-reassembly');
 		o.value('ttl-zero-during-transit');
+		o.value('unknown-header-type');  /* ipv6 */
+		o.value('unknown-option');  /* ipv6 */
 		o.depends({ proto: 'icmp', '!contains': true });
 		o.depends({ proto: 'icmpv6', '!contains': true });
 
@@ -458,11 +463,11 @@ return view.extend({
 		for (var i = 1; i <= 31; i++)
 			o.value(i);
 
-		o = s.taboption('timed', form.Value, 'start_time', _('Start Time (hh.mm.ss)'));
+		o = s.taboption('timed', form.Value, 'start_time', _('Start Time (hh:mm:ss)'));
 		o.modalonly = true;
 		o.datatype = 'timehhmmss';
 
-		o = s.taboption('timed', form.Value, 'stop_time', _('Stop Time (hh.mm.ss)'));
+		o = s.taboption('timed', form.Value, 'stop_time', _('Stop Time (hh:mm:ss)'));
 		o.modalonly = true;
 		o.datatype = 'timehhmmss';
 

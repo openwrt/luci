@@ -168,7 +168,7 @@ function handleAction(ev) {
 					'click': ui.createHandlerFn(this, async function(ev) {
 						var count = document.getElementById('count').value;
 						var search = document.getElementById('search').value.trim().replace(/[^\w\.\-\:]/g,'') || '+';
-						L.resolveDefault(fs.exec_direct('/etc/init.d/adblock', ['report', search, count, 'true', 'json']),'');
+						L.resolveDefault(fs.exec_direct('/etc/init.d/adblock', ['report', 'gen', count, search]),'');
 						var running = 1;
 						while (running === 1) {
 							await new Promise(r => setTimeout(r, 1000));
@@ -190,7 +190,7 @@ function handleAction(ev) {
 
 return view.extend({
 	load: function() {
-		return L.resolveDefault(fs.exec_direct('/etc/init.d/adblock', ['report', '+', '50', 'false', 'json']),'');
+		return L.resolveDefault(fs.exec_direct('/etc/init.d/adblock', ['report', 'json', '50', '+']),'');
 	},
 
 	render: function(dnsreport) {
@@ -204,11 +204,11 @@ return view.extend({
 		var tbl_top  = E('table', { 'class': 'table', 'id': 'top_10' }, [
 			E('tr', { 'class': 'tr table-titles' }, [
 				E('th', { 'class': 'th right' }, _('Count')),
-				E('th', { 'class': 'th' }, _('Name / IP Address')),
+				E('th', { 'class': 'th' }, _('Clients')),
 				E('th', { 'class': 'th right' }, _('Count')),
-				E('th', { 'class': 'th' }, _('Domain')),
+				E('th', { 'class': 'th' }, _('Domains')),
 				E('th', { 'class': 'th right' }, _('Count')),
-				E('th', { 'class': 'th' }, _('Blocked Domain'))
+				E('th', { 'class': 'th' }, _('Blocked Domains'))
 			])
 		]);
 

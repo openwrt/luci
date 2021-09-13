@@ -70,7 +70,8 @@ return network.registerProtocol('3g', {
 	renderFormOptions: function(s) {
 		var o;
 
-		o = s.taboption('general', form.Value, 'device', _('Modem device'));
+		o = s.taboption('general', form.Value, '_modem_device', _('Modem device'));
+		o.ucioption = 'device';
 		o.rmempty = false;
 		o.load = function(section_id) {
 			return callFileList('/dev/').then(L.bind(function(devices) {
@@ -91,8 +92,20 @@ return network.registerProtocol('3g', {
 		o.value('gprs_only', _('GPRS only'));
 		o.value('evdo', 'CDMA/EV-DO');
 
-		s.taboption('general', form.Value, 'apn', _('APN'));
-		s.taboption('general', form.Value, 'pincode', _('PIN'));
+		o = s.taboption('general', form.Value, 'apn', _('APN'));
+		o.validate = function(section_id, value) {
+			if (value == null || value == '')
+				return true;
+
+			if (!/^[a-zA-Z0-9\-.]*[a-zA-Z0-9]$/.test(value))
+				return _('Invalid APN provided');
+
+			return true;
+		};
+
+		o = s.taboption('general', form.Value, 'pincode', _('PIN'));
+		o.datatype = 'and(uinteger,minlength(4),maxlength(8))';
+
 		s.taboption('general', form.Value, 'username', _('PAP/CHAP username'));
 
 		o = s.taboption('general', form.Value, 'password', _('PAP/CHAP password'));
@@ -102,7 +115,8 @@ return network.registerProtocol('3g', {
 		o.placeholder = '*99***1#';
 
 		if (L.hasSystemFeature('ipv6')) {
-			o = s.taboption('advanced', form.ListValue, 'ipv6', _('Obtain IPv6-Address'));
+			o = s.taboption('advanced', form.ListValue, 'ppp_ipv6', _('Obtain IPv6 address'));
+			o.ucioption = 'ipv6';
 			o.value('auto', _('Automatic'));
 			o.value('0', _('Disabled'));
 			o.value('1', _('Manual'));

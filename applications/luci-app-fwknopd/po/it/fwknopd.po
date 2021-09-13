@@ -12,7 +12,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 4.4.1-dev\n"
 
-#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:599
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:602
 msgid ""
 "Allow SPA clients to request access to services through an iptables firewall "
 "instead of just to it."
@@ -20,7 +20,7 @@ msgstr ""
 "Permetti ai client SPA di richiedere accesso ai servizi tramite un firewall "
 "iptables invece che direttamente."
 
-#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:600
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:603
 msgid "Allow SPA clients to request forwarding destination by DNS name."
 msgstr ""
 "Permetti ai client SPA di richiedere la destinazione di inoltro per nome DNS."
@@ -141,8 +141,8 @@ msgstr ""
 "Forza tutti i pacchetti SPA a contenere un indirizzo IP reale all'interno "
 "dei dati crittografati. Ciò rende impossibile utilizzare l'argomento della "
 "riga di comando -s sulla riga di comando del client fwknop, quindi è "
-"necessario utilizzare -R per risolvere automaticamente l'indirizzo esterno ("
-"se il client dietro un NAT) o il client deve conoscere l'IP esterno e "
+"necessario utilizzare -R per risolvere automaticamente l'indirizzo esterno "
+"(se il client dietro un NAT) o il client deve conoscere l'IP esterno e "
 "impostalo tramite l'argomento -a."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:527
@@ -182,7 +182,7 @@ msgstr "Tipo di chiave"
 msgid "Loading…"
 msgstr "Caricando…"
 
-#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:597
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:600
 msgid ""
 "Maximum age in seconds that an SPA packet will be accepted. Defaults to 120 "
 "seconds."
@@ -215,9 +215,10 @@ msgid ""
 "and generates QR codes for all found stanzas. Handles only files in /etc/"
 "fwknop folder due to access rights restrictions."
 msgstr ""
-"Analizza il file /etc/fwknop/access.conf (e include file / cartelle / chiavi)"
-" e genera codici QR per tutte le stanze trovate. Gestisce solo i file nella "
-"cartella / etc / fwknop a causa delle limitazioni dei diritti di accesso."
+"Analizza il file /etc/fwknop/access.conf (e include file / cartelle / "
+"chiavi) e genera codici QR per tutte le stanze trovate. Gestisce solo i file "
+"nella cartella / etc / fwknop a causa delle limitazioni dei diritti di "
+"accesso."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:422
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:506
@@ -228,7 +229,7 @@ msgstr "Codice QR"
 msgid "Show access.conf QR codes"
 msgstr "Mostra i codici QR di access.conf"
 
-#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:598
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:601
 msgid "Specify the ethernet interface on which fwknopd will sniff packets."
 msgstr ""
 "Specificare l'interfaccia ethernet su cui fwknopd analizzerà i pacchetti."
@@ -290,6 +291,14 @@ msgstr "L'indirizzo di origine deve essere specificato."
 msgid "The symmetric key has to be specified."
 msgstr "La chiave simmetrica deve essere specificata."
 
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:594
+msgid ""
+"This instructs fwknopd to accept complete commands that are contained within "
+"an authorization packet. Any such command will be executed on the fwknopd "
+"server as the user specified by the “CMD_EXEC_USER” or as the user that "
+"started fwknopd if that is not set."
+msgstr ""
+
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:482
 msgid ""
 "When unchecked, the config files in /etc/fwknopd will be used as is, "
@@ -303,7 +312,7 @@ msgstr ""
 msgid "access.conf stanzas"
 msgstr ""
 
-#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:595
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:598
 msgid "fwknopd.conf config options"
 msgstr "Opzioni di configurazione di fwknopd.conf"
 

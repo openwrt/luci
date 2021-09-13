@@ -24,14 +24,16 @@ function getSelectableSlaves(section_id) {
 						var slaves = L.toArray(uci.get('network', interfaces[j]['.name'], 'slaves'));
 
 						for (var k = 0; k < slaves.length; k++) {
-							if (devices[i].ifname == slaves[k] && interfaces[j]['.name'] != section_id) {
-								in_use = true;
+							if (devices[i].ifname == slaves[k] || devices[i].device == slaves[k]) {
+								if (interfaces[j]['.name'] != section_id) {
+									in_use = true;
+								}
 							}
 						}
 					}
 				}
 				if (in_use == false) {
-					rv.push(devices[i].ifname);
+					devices[i].device == null ? rv.push(devices[i].ifname) : rv.push(devices[i].device)
 				}
 			}
 		}
@@ -322,11 +324,10 @@ return network.registerProtocol('bonding', {
 		o.value('layer3+4', _('Use upper layer protocol information (layer3+4)'));
 		o.value('encap2+3', _('Use XOR of hardware MAC addresses and IP addresses, rely on skb_flow_dissect (encap2+3)'));
 		o.value('encap3+4', _('Use upper layer protocol information, rely on skb_flow_dissect (encap3+4)'));
-		o.depends('bonding_policy', 'balance-rr');
-		o.depends('bonding_policy', 'active-backup');
-		o.depends('bonding_policy', 'balance-tlb');
-		o.depends('bonding_policy', 'balance-alb');
 		o.depends('bonding_policy', 'balance-xor');
+		o.depends('bonding_policy', 'balance-alb');
+		o.depends('bonding_policy', 'balance-tlb');
+		o.depends('bonding_policy', '802.3ad');
 
 		o = s.taboption('advanced', form.Value, 'resend_igmp',
 				_('Number of IGMP membership reports'),

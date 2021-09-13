@@ -3,8 +3,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2021-02-13 18:30+0000\n"
-"Last-Translator: Marcin Net <marcin.net@linux.pl>\n"
+"PO-Revision-Date: 2021-08-18 10:44+0000\n"
+"Last-Translator: Matthaiks <kitynska@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsstatistics/pl/>\n"
 "Language: pl\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.5-dev\n"
+"X-Generator: Weblate 4.8-dev\n"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/apcups.js:7
 #: applications/luci-app-statistics/root/usr/share/luci/statistics/plugins/apcups.json:2
@@ -587,6 +587,10 @@ msgstr ""
 "Wartości maksymalne dla okresu mogą być używane zamiast średnich, gdy nie "
 "jest używana \"tylko średnia usługa RRAs\""
 
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/ping.js:36
+msgid "Maximum Missed Packets"
+msgstr "Maksymalna liczba nieodebranych pakietów"
+
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/email.js:38
 msgid "Maximum allowed connections"
 msgstr "Maksymalne dozwolone połączenia"
@@ -682,12 +686,9 @@ msgstr "Monitorowanie %s i %s"
 msgid "Monitoring %s, %s, %s"
 msgstr "Monitorowanie %s, %s, %s"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/apcups.js:29
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/apcups.js:26
 msgid "Monitoring APC UPS at host %s, port %d"
-msgid_plural "Monitoring APC UPS at hosts %s, port %d"
-msgstr[0] "Monitorowanie APC UPS na hoście % s, port %d"
-msgstr[1] "Monitorowanie APC UPS na hostach % s, portach %d"
-msgstr[2] "Monitorowanie APC UPS na hoście % s, port %d"
+msgstr "Monitorowanie APC UPS na hoście %s, port %d"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/dhcpleases.js:19
 msgid "Monitoring DHCP leases enabled"
@@ -799,7 +800,7 @@ msgstr[0] "Monitorowanie jednego dysku"
 msgstr[1] "Monitorowanie %d dysków"
 msgstr[2] "Monitorowanie innych dysków"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/ping.js:41
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/ping.js:48
 msgid "Monitoring one host"
 msgid_plural "Monitoring %d hosts"
 msgstr[0] "Monitorowanie jednego hosta"
@@ -1594,6 +1595,14 @@ msgstr "Użytkownik"
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/netlink.js:21
 msgid "Verbose monitoring"
 msgstr "Pełny monitoring"
+
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/ping.js:37
+msgid ""
+"When a host has not replied to this number of packets in a row, re-resolve "
+"the hostname in DNS. Useful for dynamic DNS hosts."
+msgstr ""
+"Jeśli host nie odpowiedział na taką liczbę pakietów z rzędu, ponownie ustal "
+"nazwę hosta w DNS. Przydatne dla hostów dynamicznego DNS."
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/disk.js:16
 msgid "When none selected, all disks will be monitored."

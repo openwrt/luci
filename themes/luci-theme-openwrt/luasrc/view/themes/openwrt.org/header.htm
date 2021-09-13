@@ -50,7 +50,7 @@
 <h2 class="navigation"><a id="navigation" name="navigation"><%:Navigation%></a></h2>
 
 <div class="hostinfo">
-	<%=(boardinfo.hostname or "?")%> | <%=ver.distversion%> |
+	<%=striptags(boardinfo.hostname or "?")%> | <%=ver.distversion%> |
 	<%:Load%>: <%="%.2f" % (loadinfo[1] / 65535.0)%> <%="%.2f" % (loadinfo[2] / 65535.0)%> <%="%.2f" % (loadinfo[3] / 65535.0)%>
 </div>
 

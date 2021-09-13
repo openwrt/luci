@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LuCI: statistics\n"
 "POT-Creation-Date: 2017-10-17 22:00+0300\n"
-"PO-Revision-Date: 2021-01-12 22:25+0000\n"
+"PO-Revision-Date: 2021-09-03 03:27+0000\n"
 "Last-Translator: Anton Kikin <a.a.kikin@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsstatistics/ru/>\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.4.1-dev\n"
+"X-Generator: Weblate 4.8.1-dev\n"
 "Project-Info: Это технический перевод, не дословный. Главное-удобный русский "
 "интерфейс, все проверялось в графическом режиме, совместим с другими apps\n"
 
@@ -481,15 +481,15 @@ msgstr "IP-адрес или имя хоста, с которых получат
 #: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/ipstatistics.js:7
 #: applications/luci-app-statistics/root/usr/share/luci/statistics/plugins/ipstatistics.json:2
 msgid "IP-Statistics"
-msgstr ""
+msgstr "IP-Статистика"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/ipstatistics.js:7
 msgid "IP-Statistics Plugin Configuration"
-msgstr ""
+msgstr "Конфигурация плагина IP-Статистика"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/ipstatistics.js:11
 msgid "IPv4/IPv6 Statistics monitoring enabled"
-msgstr ""
+msgstr "Мониторинг статистики IPv4/IPv6 включен"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/irq.js:7
 msgid "IRQ Plugin Configuration"
@@ -586,6 +586,10 @@ msgstr ""
 "Максимальные значения для периода могут использоваться вместо средних "
 "значений, когда не используется опция «Создавать только средние RRA»"
 
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/ping.js:36
+msgid "Maximum Missed Packets"
+msgstr "Максимальное количество пропущенных пакетов"
+
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/email.js:38
 msgid "Maximum allowed connections"
 msgstr "Максимум разрешенных соединений"
@@ -681,12 +685,9 @@ msgstr "Мониторинг %s и %s"
 msgid "Monitoring %s, %s, %s"
 msgstr "Мониторинг %s, %s, %s"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/apcups.js:29
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/apcups.js:26
 msgid "Monitoring APC UPS at host %s, port %d"
-msgid_plural "Monitoring APC UPS at hosts %s, port %d"
-msgstr[0] "Мониторинг APC UPS на узле %s, порт %s"
-msgstr[1] "Мониторинг APC UPS на узлах %s, порт %s"
-msgstr[2] "Мониторинг APC UPS на узлах %s, порт %s"
+msgstr "Мониторинг APC UPS на узле %s, порт %d"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/dhcpleases.js:19
 msgid "Monitoring DHCP leases enabled"
@@ -798,7 +799,7 @@ msgstr[0] "Мониторинг одного диска"
 msgstr[1] "Мониторинг %d дисков"
 msgstr[2] "Мониторинг %d дисков"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/ping.js:41
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/ping.js:48
 msgid "Monitoring one host"
 msgid_plural "Monitoring %d hosts"
 msgstr[0] "Мониторинг одного хоста"
@@ -1355,7 +1356,7 @@ msgstr ""
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/ipstatistics.js:8
 msgid ""
 "The ipstatistics plugin collects IPv4 and IPv6 statistics to compare them."
-msgstr ""
+msgstr "Плагин ipstatistics собирает статистику IPv4 и IPv6 для их сравнения."
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/iptables.js:9
 msgid ""
@@ -1584,6 +1585,14 @@ msgstr "Пользователь"
 msgid "Verbose monitoring"
 msgstr "Расширенная статистика"
 
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/ping.js:37
+msgid ""
+"When a host has not replied to this number of packets in a row, re-resolve "
+"the hostname in DNS. Useful for dynamic DNS hosts."
+msgstr ""
+"Если хост не ответил на такое количество пакетов подряд, повторно разрешить "
+"имя хоста в DNS. Полезно для хостов с динамической DNS."
+
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/disk.js:16
 msgid "When none selected, all disks will be monitored."
 msgstr "Если ни один диск не будет выбран, будут отслеживаться все."
@@ -1610,7 +1619,7 @@ msgstr "При включении, отображаются значения в 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/iwinfo.js:7
 #: applications/luci-app-statistics/root/usr/share/luci/statistics/plugins/iwinfo.json:2
 msgid "Wireless"
-msgstr "Wi-Fi"
+msgstr "Беспроводная"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/iwinfo.js:7
 msgid "Wireless iwinfo Plugin Configuration"

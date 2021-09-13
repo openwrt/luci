@@ -325,6 +325,18 @@ header h3 a, header .brand {
 	[data-page="admin-status-processes"] .td[data-widget="button"]::before {
 		display: none;
 	}
+
+	[data-name="bridge-vlan"] > div {
+		overflow: visible !important;
+	}
+
+	[data-name="bridge-vlan"] .td[data-title] {
+		flex-basis: 33%;
+	}
+
+	[data-name="bridge-vlan"] .td[data-title]::before {
+		content: attr(data-title);
+	}
 }
 
 @media screen and (max-device-width: 375px) {
