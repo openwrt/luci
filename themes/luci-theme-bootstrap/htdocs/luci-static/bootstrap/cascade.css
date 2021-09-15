@@ -10,6 +10,75 @@
  *
  * Designed and built with all the love in the world @twitter by @mdo and @fat.
  */
+
+/* Variables
+ * --------- */
+
+:root {
+	--background-color-delta-l-sign: -1;
+	--background-color-high-h: 0;
+	--background-color-high-s: 0%;
+	--background-color-high-l: 100%;
+	--background-color-high: hsl(var(--background-color-high-h), var(--background-color-high-s), var(--background-color-high-l));
+	--background-color-medium-h: var(--background-color-high-h);
+	--background-color-medium-s: var(--background-color-high-s);
+	--background-color-medium-delta-l: calc(6 / 255 * 100%);
+	--background-color-medium-l: calc(var(--background-color-high-l) + var(--background-color-delta-l-sign) * var(--background-color-medium-delta-l));
+	--background-color-medium: hsl(var(--background-color-medium-h), var(--background-color-medium-s), var(--background-color-medium-l));
+	--background-color-low-h: var(--background-color-high-h);
+	--background-color-low-s: var(--background-color-high-s);
+	--background-color-low-delta-l: calc(10 / 255 * 100%);
+	--background-color-low-l: calc(var(--background-color-high-l) + var(--background-color-delta-l-sign) * var(--background-color-low-delta-l));
+	--background-color-low: hsl(var(--background-color-low-h), var(--background-color-low-s), var(--background-color-low-l));
+	--text-color-delta-l-sign: 1;
+	--text-color-high-h: 0;
+	--text-color-high-s: 0%;
+	--text-color-high-l: calc(64 / 255 * 100%);
+	--text-color-high: hsl(var(--text-color-high-h), var(--text-color-high-s), var(--text-color-high-l));
+	--text-color-medium-h: var(--text-color-high-h);
+	--text-color-medium-s: var(--text-color-high-s);
+	--text-color-medium-delta-l: calc(64 / 255 * 100%);
+	--text-color-medium-l: calc(var(--text-color-high-l) + var(--text-color-delta-l-sign) * var(--text-color-medium-delta-l));
+	--text-color-medium: hsl(var(--text-color-medium-h), var(--text-color-medium-s), var(--text-color-medium-l));
+	--text-color-low-h: var(--text-color-high-h);
+	--text-color-low-s: var(--text-color-high-s);
+	--text-color-low-delta-l: calc(127 / 255 * 100%);
+	--text-color-low-l: calc(var(--text-color-high-l) + var(--text-color-delta-l-sign) * var(--text-color-low-delta-l));
+	--text-color-low: hsl(var(--text-color-low-h), var(--text-color-low-s), var(--text-color-low-l));
+	--border-color-delta-l-sign: -1;
+	--border-color-high-h: var(--background-color-high-h);
+	--border-color-high-s: var(--background-color-high-s);
+	--border-color-high-delta-l: calc(51 / 255 * 100%);
+	--border-color-high-l: calc(var(--background-color-high-l) + var(--border-color-delta-l-sign) * var(--border-color-high-delta-l));
+	--border-color-high: hsl(var(--border-color-high-h), var(--border-color-high-s), var(--border-color-high-l));
+	--border-color-medium-h: var(--border-color-high-h);
+	--border-color-medium-s: var(--border-color-high-s);
+	--border-color-medium-delta-l: calc(34 / 255 * 100%);
+	--border-color-medium-l: calc(var(--background-color-high-l) + var(--border-color-delta-l-sign) * var(--border-color-medium-delta-l));
+	--border-color-medium: hsl(var(--border-color-medium-h), var(--border-color-medium-s), var(--border-color-medium-l));
+	--border-color-low-h: var(--border-color-high-h);
+	--border-color-low-s: var(--border-color-high-s);
+	--border-color-low-delta-l: calc(17 / 255 * 100%);
+	--border-color-low-l: calc(var(--background-color-high-l) + var(--border-color-delta-l-sign) * var(--border-color-low-delta-l));
+	--border-color-low: hsl(var(--border-color-low-h), var(--border-color-low-s), var(--border-color-low-l));
+
+	color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--background-color-delta-l-sign: 1;
+		--background-color-high-h: 0;
+		--background-color-high-s: 0%;
+		--background-color-high-l: calc(34 / 255 * 100%);
+		--text-color-delta-l-sign: -1;
+		--text-color-high-h: 0;
+		--text-color-high-s: 0%;
+		--text-color-high-l: 100%;
+		--border-color-delta-l-sign: 1;
+	}
+}
+
 /* Reset.less
  * Props to Eric Meyer (meyerweb.com) for his CSS reset file. We're using an adapted version here	that cuts out some of the reset HTML elements we will never need here (i.e., dfn, samp, etc).
  * ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- */
@@ -128,12 +197,12 @@ textarea {
  * Basic and global styles for generating a grid system, structural layout, and page templates
  * ------------------------------------------------------------------------------------------- */
 body {
-	background-color: #fff;
+	background-color: var(--background-color-high);
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 	font-size: 13px;
 	font-weight: normal;
 	line-height: 18px;
-	color: #404040;
+	color: var(--text-color-high);
 	padding: 18px 5px 5px 5px;
 	margin-top: 40px;
 }
@@ -195,7 +264,7 @@ p,
 
 p small {
 	font-size: 11px;
-	color: #bfbfbf;
+	color: var(--text-color-low);
 }
 
 h1,
@@ -205,7 +274,7 @@ h4,
 h5,
 h6 {
 	font-weight: bold;
-	color: #404040;
+	color: var(--text-color-high);
 }
 
 h1 small,
@@ -214,7 +283,7 @@ h3 small,
 h4 small,
 h5 small,
 h6 small {
-	color: #bfbfbf;
+	color: var(--text-color-low);
 }
 
 h1 {
@@ -265,7 +334,7 @@ h5 {
 
 h6 {
 	font-size: 13px;
-	color: #bfbfbf;
+	color: var(--text-color-low);
 	text-transform: uppercase;
 }
 
@@ -290,7 +359,7 @@ ol {
 
 li {
 	line-height: 18px;
-	color: #808080;
+	color: var(--text-color-medium);
 }
 
 ul.unstyled {
@@ -317,7 +386,7 @@ dl dd {
 hr {
 	margin: 20px 0 19px;
 	border: 0;
-	border-bottom: 1px solid #eee;
+	border-bottom: 1px solid var(--border-color-low);
 }
 
 strong {
@@ -353,14 +422,20 @@ code {
 }
 
 pre {
-	background-color: #f5f5f5;
+	--border-color-h: var(--background-color-high-h);
+	--border-color-s: var(--background-color-high-s);
+	--border-color-delta-l: 100%;
+	--border-color-l: calc(var(--background-color-high-l) + var(--background-color-delta-l-sign) * var(--border-color-delta-l));
+	--border-color-a: 0.15;
+	--border-color: hsla(var(--border-color-h), var(--border-color-s), var(--border-color-l), var(--border-color-a));
+
+	background-color: var(--background-color-low);
 	display: block;
 	padding: 8.5px;
 	margin: 0 0 18px;
 	line-height: 18px;
 	font-size: 12px;
-	border: 1px solid #ccc;
-	border: 1px solid rgba(0, 0, 0, 0.15);
+	border: 1px solid var(--border-color);
 	border-radius: 3px;
 	white-space: pre;
 	white-space: pre-wrap;
@@ -383,10 +458,10 @@ fieldset legend {
 	display: block;
 	font-size: 19.5px;
 	line-height: 1;
-	color: #404040;
+	color: var(--text-color-high);
 	padding-top: 20px;
-
 }
+
 form .cbi-tab-descr {
 	line-height: 18px;
 	margin-bottom: 18px;
@@ -433,7 +508,7 @@ form .input,
 	float: left;
 	width: 180px;
 	text-align: right;
-	color: #404040;
+	color: var(--text-color-high);
 }
 
 input[type=checkbox], input[type=radio] {
@@ -454,9 +529,11 @@ select,
 	display: inline-block;
 	width: 210px;
 	padding: 4px;
+	background: var(--background-color-high);
+	color: var(--text-color-high);
 	font-size: 13px;
 	line-height: 18px;
-	border: 1px solid #ccc;
+	border: 1px solid var(--border-color-high);
 	border-radius: 3px;
 }
 
@@ -487,11 +564,12 @@ select,
 
 .cbi-dynlist > .item {
 	margin-bottom: 4px;
-	box-shadow: 0 0 2px #ccc;
-	background: #fff;
+	box-shadow: 0 0 2px var(--border-color-high);
+	background: var(--background-color-high);
 	padding: 2px 2em 2px 4px;
-	border: 1px solid #ccc;
+	border: 1px solid var(--border-color-high);
 	border-radius: 3px;
+	color: var(--text-color-high);
 	position: relative;
 	pointer-events: none;
 	overflow: hidden;
@@ -507,7 +585,7 @@ select,
 	right: -1px;
 	bottom: -1px;
 	padding: 0 6px;
-	border: 1px solid #ccc;
+	border: 1px solid var(--border-color-high);
 	border-radius: 0 3px 3px 0;
 	font-weight: bold;
 	color: #c44;
@@ -528,7 +606,6 @@ select,
 
 select {
 	padding: initial;
-	background: #fff;
 	box-shadow: inset 0 -1px 3px rgba(0, 0, 0, 0.1);
 }
 
@@ -579,12 +656,8 @@ select[multiple] {
 	cursor: not-allowed;
 }
 
-::-moz-placeholder {
-	color: #bfbfbf;
-}
-
-::-webkit-input-placeholder {
-	color: #bfbfbf;
+::placeholder {
+	color: var(--text-color-low);
 }
 
 .item::after, .btn, .cbi-button, input, button, textarea {
@@ -614,8 +687,9 @@ input[readonly],
 button[readonly],
 select[readonly],
 textarea[readonly] {
-	background-color: #f5f5f5;
-	border-color: #ddd;
+	background-color: var(--background-color-medium);
+	color: var(--text-color-medium);
+	border-color: var(--border-color-low);
 	pointer-events: none;
 	cursor: default;
 }
@@ -648,10 +722,10 @@ textarea[readonly] {
 
 .actions,
 .cbi-page-actions {
-	background: #f5f5f5;
+	background: var(--background-color-low);
 	margin-bottom: 18px;
 	padding: 17px 20px 18px 17px;
-	border-top: 1px solid #ddd;
+	border-top: 1px solid var(--border-color-medium);
 	border-radius: 0 0 3px 3px;
 	text-align: right;
 }
@@ -679,7 +753,7 @@ textarea[readonly] {
 .help-inline, .help-block {
 	font-size: 13px;
 	line-height: 18px;
-	color: #bfbfbf;
+	color: var(--text-color-low);
 }
 
 .help-inline {
@@ -730,7 +804,7 @@ textarea[readonly] {
 }
 
 .table .td, .table .th {
-	border-top: 1px solid #ddd;
+	border-top: 1px solid var(--border-color-medium);
 }
 
 .tr.placeholder {
@@ -1041,12 +1115,26 @@ header .dropdown-menu a.hover,
 }
 
 .tabs, .cbi-tabmenu {
+	--tab-bar-background-color: var(--background-color-high);
+	--tab-inactive-background-color-h: var(--border-color-low-h);
+	--tab-inactive-background-color-s: var(--border-color-low-s);
+	--tab-inactive-background-color-l: var(--border-color-low-l);
+	--tab-inactive-background-color: var(--border-color-low);
+	--tab-inactive-border-color: var(--border-color-medium);
+	--tab-inactive-text-color-delta-l: calc(85 / 255 * 100%);
+	--tab-inactive-text-color-l: calc(var(--tab-inactive-background-color-l) + var(--background-color-delta-l-sign) * var(--tab-inactive-text-color-delta-l));
+	--tab-inactive-text-color: hsl(var(--tab-inactive-background-color-h), var(--tab-inactive-background-color-s), var(--tab-inactive-text-color-l));
+	--tab-inactive-hover-background-color: var(--background-color-high);
+	--tab-active-background-color: var(--background-color-high);
+	--tab-active-text-color: #0069d6;
+	--tab-active-border-color: var(--border-color-medium);
+
 	margin: 0 -5px 18px;
 	padding: 0 2px;
 	list-style: none;
 	display: flex;
 	flex-wrap: wrap;
-	background: linear-gradient(#fff 28px, #ddd 28px);
+	background: linear-gradient(var(--tab-bar-background-color) 28px, var(--tab-inactive-border-color) 28px);
 	background-size: 1px 29px;
 	background-position: left bottom;
 }
@@ -1058,11 +1146,11 @@ header .dropdown-menu a.hover,
 	height: 25px;
 	max-width: 48%;
 	margin: 4px 2px 0 2px;
-	background: #fff;
-	border: 1px solid #ddd;
+	background: var(--tab-active-background-color);
+	border: 1px solid var(--tab-active-border-color);
 	border-bottom: none;
 	border-radius: 4px 4px 0 0;
-	color: #0069d6;
+	color: var(--tab-active-text-color);
 }
 
 .tabs > li > a, .cbi-tabmenu > li > a {
@@ -1078,12 +1166,12 @@ header .dropdown-menu a.hover,
 }
 
 .tabs > li:not(.active):hover, .cbi-tabmenu > .cbi-tab-disabled:hover {
-	background: linear-gradient(#fff 90%, #ddd 100%);
+	background: linear-gradient(var(--tab-inactive-hover-background-color) 90%, var(--tab-inactive-border-color) 100%);
 }
 
 .tabs > li:not(.active), .cbi-tabmenu > .cbi-tab-disabled {
-	color: #999;
-	background: linear-gradient(#eee 90%, #ddd 100%);
+	color: var(--tab-inactive-text-color);
+	background: linear-gradient(var(--tab-inactive-background-color) 90%, var(--tab-inactive-border-color) 100%);
 }
 
 .cbi-tab-disabled[data-errors]::after {
@@ -1168,7 +1256,7 @@ header .dropdown-menu a.hover,
 footer {
 	margin-top: 17px;
 	padding-top: 17px;
-	border-top: 1px solid #eee;
+	border-top: 1px solid var(--border-color-low);
 }
 
 #modal_overlay {
@@ -1195,7 +1283,7 @@ footer {
 	max-width: 600px;
 	align-items: center;
 	border-radius: 3px;
-	background: #fff;
+	background: var(--background-color-high);
 	box-shadow: 0 0 3px #444;
 	padding: 1em 1em .5em 1em;
 	min-width: 270px;
@@ -1279,21 +1367,24 @@ body.modal-overlay-active #modal_overlay {
 	border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
 }
 
+.modal.alert-message {
+	color: var(--text-color-high);
+}
+
 .item::after,
 .btn,
 .cbi-button {
 	cursor: pointer;
 	display: inline-block;
-	background: linear-gradient(#fff, #fff 25%, #e6e6e6) no-repeat;
+	background: linear-gradient(var(--background-color-high), var(--background-color-high) 25%, var(--border-color-low)) no-repeat;
 	padding: 5px 14px 6px;
-	text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
-	color: #333;
+	text-shadow: 0 1px 1px hsla(var(--background-color-high-h), var(--background-color-high-s), var(--background-color-high-l), 0.75);
+	color: var(--text-color-high);
 	font-size: 13px;
 	line-height: normal;
-	border: 1px solid #ccc;
-	border-bottom-color: #bbb;
+	border: 1px solid var(--border-color-high);
 	border-radius: 4px;
-	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+	box-shadow: inset 0 1px 0 hsla(var(--background-color-high-h), var(--background-color-high-s), var(--background-color-high-l), 0.2), 0 1px 2px hsla(var(--text-color-high-h), var(--text-color-high-s), var(--text-color-high-l), 0.05);
 	white-space: pre;
 }
 
@@ -1324,7 +1415,7 @@ body.modal-overlay-active #modal_overlay {
 .cbi-button-link,
 .cbi-button-up,
 .cbi-button-down {
-	color: #444;
+	color: var(--text-color-high);
 }
 
 .btn.primary,
@@ -1383,8 +1474,8 @@ body.modal-overlay-active #modal_overlay {
 
 .cbi-page-actions .cbi-button-apply + .cbi-button-save,
 .cbi-page-actions .cbi-button-negative + .cbi-button-save {
-	background: linear-gradient(#fff, #fff 25%, #e6e6e6);
-	text-shadow: 0 -1px 0 rgba(255, 255, 255, 0.75);
+	background: linear-gradient(var(--background-color-high), var(--background-color-high) 25%, var(--border-color-low));
+	text-shadow: 0 -1px 0 hsla(var(--background-color-high-h), var(--background-color-high-s), var(--background-color-high-l), 0.75);
 	color: #4a4;
 }
 
@@ -1397,10 +1488,10 @@ body.modal-overlay-active #modal_overlay {
 }
 
 .cbi-dropdown:not(.btn):not(.cbi-button) {
-	background: linear-gradient(#fff 0%, #e9e8e6 100%);
-	border: 1px solid #ccc;
+	background: linear-gradient(var(--background-color-high) 0%, var(--border-color-low) 100%);
+	border: 1px solid var(--border-color-high);
 	border-radius: 3px;
-	color: #404040;
+	color: var(--text-color-high);
 }
 
 .cbi-dynlist > .item:focus,
@@ -1455,7 +1546,7 @@ body.modal-overlay-active #modal_overlay {
 .cbi-dropdown:not(.btn):not(.cbi-button) > ul > li[placeholder] {
 	color: #777;
 	font-weight: bold;
-	text-shadow: 1px 1px 0px #fff;
+	text-shadow: 1px 1px 0px var(--background-color-high);
 	display: none;
 	justify-content: center;
 }
@@ -1476,14 +1567,14 @@ body.modal-overlay-active #modal_overlay {
 .cbi-dropdown:not(.btn):not(.cbi-button) > ul > li {
 	min-height: 20px;
 	padding: .25em;
-	color: #404040;
+	color: var(--text-color-high);
 }
 
 .cbi-dropdown > ul > li .hide-open { display: block; display: initial; }
 .cbi-dropdown > ul > li .hide-close { display: none; }
 
 .cbi-dropdown > ul > li[display]:not([display="0"]) {
-	border-left: 1px solid #ccc;
+	border-left: 1px solid var(--border-color-high);
 }
 
 .cbi-dropdown[empty] > ul {
@@ -1516,7 +1607,7 @@ body.modal-overlay-active #modal_overlay {
 
 .cbi-dropdown[open] > ul.dropdown {
 	display: block;
-	background: #f6f6f5;
+	background: var(--background-color-low);
 	border: 1px solid #918e8c;
 	box-shadow: 0 0 4px #918e8c;
 	position: absolute;
@@ -1548,15 +1639,27 @@ body.modal-overlay-active #modal_overlay {
 .cbi-dropdown[open] > ul.dropdown > li .hide-close { display: block; display: initial; }
 
 .cbi-dropdown[open] > ul.dropdown > li {
-	border-bottom: 1px solid #ccc;
+	border-bottom: 1px solid var(--border-color-high);
 }
 
 .cbi-dropdown[open] > ul.dropdown > li[selected] {
 	background: #b0d0f0;
+	color: #404040;
+}
+
+.cbi-dropdown[open]:not(.btn):not(.cbi-button) > ul > li[selected][placeholder] {
+	color: #777;
+	text-shadow: 1px 1px 0px #fff;
 }
 
 .cbi-dropdown[open] > ul.dropdown > li.focus {
 	background: linear-gradient(90deg, #a3c2e8 0%, #84aad9 100%);
+	color: #404040;
+}
+
+.cbi-dropdown[open]:not(.btn):not(.cbi-button) > ul > li.focus[placeholder] {
+	color: #777;
+	text-shadow: 1px 1px 0px #fff;
 }
 
 .cbi-dropdown[open] > ul.dropdown > li:last-child {
@@ -1581,7 +1684,7 @@ input[type="text"] + .cbi-button,
 input[type="password"] + .cbi-button,
 select + .cbi-button {
 	border-radius: 0 3px 3px 0;
-	border-color: #ccc;
+	border-color: var(--border-color-high);
 	margin-left: -2px;
 	padding: 0 6px;
 	vertical-align: top;
@@ -1610,9 +1713,9 @@ select + .cbi-button {
 	position: absolute;
 	z-index: 1000;
 	left: -10000px;
-	box-shadow: 0 0 2px #ccc;
+	box-shadow: 0 0 2px var(--border-color-high);
 	border-radius: 3px;
-	background: #fff;
+	background: var(--background-color-high);
 	white-space: pre;
 	padding: 2px 5px;
 	opacity: 0;
@@ -1626,13 +1729,13 @@ select + .cbi-button {
 }
 
 .cbi-progressbar {
-	border: 1px solid #ccc;
+	border: 1px solid var(--border-color-high);
 	border-radius: 3px;
 	position: relative;
 	min-width: 170px;
 	height: 20px;
 	margin: 4px 0;
-	background: #f9f9f9;
+	background: var(--background-color-medium);
 }
 
 .cbi-progressbar > div {
@@ -1649,11 +1752,16 @@ select + .cbi-button {
 	right: 0;
 	left: 0;
 	text-align: center;
-	text-shadow: 0 0 2px #fff;
+	text-shadow: 0 0 2px var(--background-color-high);
 	content: attr(title);
 	white-space: pre;
 	overflow: hidden;
 	text-overflow: ellipsis;
+}
+@media (prefers-color-scheme: dark) {
+	.cbi-progressbar::after {
+		mix-blend-mode: difference;
+	}
 }
 
 .zonebadge .cbi-tooltip {
@@ -1835,7 +1943,7 @@ header .pull-right { padding-top: 8px; }
 .cbi-section-table .tr:hover .td,
 .cbi-section-table .tr:hover .th,
 .cbi-section-table .tr:hover::before {
-	background-color: #f5f5f5;
+	background-color: var(--background-color-low);
 }
 
 .cbi-section-table .tr.cbi-section-table-descr .th {
@@ -1856,7 +1964,7 @@ header .pull-right { padding-top: 8px; }
 .cbi-section-table-titles.named::before,
 .cbi-section-table-descr.named::before,
 .cbi-section-table-row[data-title]::before {
-	border-top: 1px solid #ddd;
+	border-top: 1px solid var(--border-color-medium);
 }
 
 .left { text-align: left !important; }
@@ -1920,7 +2028,7 @@ table table td,
 .cbi-rowstyle-2,
 .tr.table-titles,
 .tr.cbi-section-table-titles {
-	background: #f9f9f9;
+	background: var(--background-color-medium);
 }
 
 .cbi-value-description {
@@ -1945,13 +2053,12 @@ table table td,
 }
 
 .ifacebox {
-	background-color: #fff;
-	border: 1px solid #ccc;
+	border: 1px solid var(--border-color-high);
 	margin: 0 10px;
 	text-align: center;
 	white-space: nowrap;
-	background-image: linear-gradient(#fff, #fff 25%, #f9f9f9);
-	text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
+	background: linear-gradient(var(--background-color-high), var(--background-color-high) 25%, var(--background-color-medium));
+	text-shadow: 0 1px 1px hsla(var(--background-color-high-h), var(--background-color-high-s), var(--background-color-high-l), 0.75);
 	border-radius: 4px;
 	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
 	display: inline-flex;
@@ -1961,9 +2068,11 @@ table table td,
 }
 
 .ifacebox .ifacebox-head {
-	border-bottom: 1px solid #ccc;
+	border-bottom: 1px solid var(--border-color-high);
 	padding: 2px;
 	background: #eee;
+	color: #404040;
+	text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
 }
 
 .ifacebox .ifacebox-head.active {
@@ -1978,13 +2087,13 @@ table table td,
 	display: inline-block;
 	flex-direction: row;
 	white-space: nowrap;
-	background-color: #fff;
-	border: 1px solid #ccc;
+	border: 1px solid var(--border-color-high);
 	padding: 2px;
-	background-image: linear-gradient(#fff, #fff 25%, #f9f9f9);
-	text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
+	background: linear-gradient(var(--background-color-high), var(--background-color-high) 25%, var(--background-color-medium));
+	color: var(--text-color-high);
+	text-shadow: 0 1px 1px hsla(var(--background-color-high-h), var(--background-color-high-s), var(--background-color-high-l), 0.75);
 	border-radius: 4px;
-	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+	box-shadow: inset 0 1px 0 hsla(var(--background-color-high-h), var(--background-color-high-s), var(--background-color-high-l), 0.2), 0 1px 2px hsla(var(--text-color-high-h), var(--text-color-high-s), var(--text-color-high-l), 0.05);
 	cursor: default;
 	line-height: 1.2em;
 }
@@ -2108,7 +2217,7 @@ div.cbi-value var.cbi-tooltip-container,
 .td.cbi-value-field var.cbi-tooltip-container .cbi-tooltip {
 	font-style: normal;
 	white-space: normal;
-	color: #444;
+	color: var(--text-color-high);
 }
 
 #modal_overlay > .modal.uci-dialog,
@@ -2132,6 +2241,7 @@ div.cbi-value var.cbi-tooltip-container,
 	font-style: normal;
 	border: 1px solid #ccc;
 	background: #eee;
+	color: #404040;
 	padding: 2px;
 	display: block;
 	line-height: 15px;
@@ -2217,7 +2327,7 @@ div.cbi-value var.cbi-tooltip-container,
 	max-width: 600px;
 	align-items: center;
 	border-radius: 3px;
-	background: #fff;
+	background: var(--background-color-high);
 	box-shadow: 0 0 3px #444;
 	padding: 1em 1em .5em 1em;
 	min-width: 270px;
