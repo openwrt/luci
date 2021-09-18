@@ -121,7 +121,7 @@ return baseclass.extend({
 
 			var WPS_button = null;
 
-			if (this.isWPSEnabled[net.sid]) {
+			if (net.isWPSEnabled) {
 				if (net.wps_status == 'Active') {
 					WPS_button = E('button', {
 						'class' : 'cbi-button cbi-button-remove',
@@ -190,7 +190,7 @@ return baseclass.extend({
 				}, this, radios_networks_hints[i])));
 
 				if (hasWPS && uci.get('wireless', radios_networks_hints[i].sid, 'wps_pushbutton') == '1') {
-					this.isWPSEnabled[radios_networks_hints[i].sid] = true;
+					radios_networks_hints[i].isWPSEnabled = true;
 					tasks.push(L.resolveDefault(this.handleGetWPSStatus(radios_networks_hints[i].getIfname()), null)
 						.then(L.bind(function(net, data) {
 							net.wps_status = data ? data.pbc_status : _('No Data');
@@ -203,8 +203,6 @@ return baseclass.extend({
 			});
 		}, this));
 	},
-
-	isDeviceAdded: {},
 
 	render: function(data) {
 		var seen = {},
