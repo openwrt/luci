@@ -48,21 +48,18 @@ return baseclass.extend({
 		ev.currentTarget.disabled = true;
 		ev.currentTarget.blur();
 
+		/* Disconnect client before adding to maclist */
+		wifinet.disconnectClient(mac, true, 5, 60000);
+
 		if (exec == 'addlist') {
-			var macs = [ mac ]
+			wifinet.maclist.push(mac);
 
-			for (var mac in this.iface_maclist) {
-				macs.push(mac)
-			}
-
-			uci.set('wireless', wifinet.sid, 'maclist', macs);
+			uci.set('wireless', wifinet.sid, 'maclist', wifinet.maclist);
 
 			return uci.save()
 				.then(L.bind(L.ui.changes.init, L.ui.changes))
 				.then(L.bind(L.ui.changes.displayChanges, L.ui.changes));
 		}
-
-		wifinet.disconnectClient(mac, true, 5, 60000);
 	},
 
 	handleGetWPSStatus: function(wifinet) {
@@ -234,14 +231,14 @@ return baseclass.extend({
 		var rows = [];
 
 		for (var i = 0; i < networks.length; i++) {
-			var macfilter = uci.get('wireless', networks[i].sid, 'macfilter');
+			var macfilter = uci.get('wireless', networks[i].sid, 'macfilter'),
+			    maclist = {};
 
 			if (macfilter != null && macfilter != 'disable') {
-				this.isDeviceAdded = {};
-				var macs = L.toArray(uci.get('wireless', networks[i].sid, 'maclist'));
-				for (var j = 0; j < macs.length; j++) {
-					var mac = macs[j].toUpperCase();
-					this.isDeviceAdded[mac] = true;
+				networks[i].maclist = L.toArray(uci.get('wireless', networks[i].sid, 'maclist'));
+				for (var j = 0; j < networks[i].maclist.length; j++) {
+					var mac = networks[i].maclist[j].toUpperCase();
+					maclist[mac] = true;
 				}
 			}
 
@@ -324,7 +321,7 @@ return baseclass.extend({
 					if (assoclist.firstElementChild.childNodes.length < 6)
 						assoclist.firstElementChild.appendChild(E('th', { 'class': 'th cbi-section-actions' }));
 
-					if (macfilter != null && macfilter != 'disable' && !this.isDeviceAdded[bss.mac]) {
+					if (macfilter != null && macfilter != 'disable' && !maclist[bss.mac]) {
 						row.push(new L.ui.ComboButton('button', {
 								'addlist': macfilter == 'allow' ?  _('Add to Whitelist') : _('Add to Blacklist'),
 								'disconnect': _('Disconnect')
