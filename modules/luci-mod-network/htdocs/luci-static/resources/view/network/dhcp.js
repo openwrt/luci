@@ -7,6 +7,7 @@
 'require form';
 'require network';
 'require validation';
+'require tools.widgets as widgets';
 
 var callHostHints, callDUIDHints, callDHCPLeases, CBILeaseStatus, CBILease6Status;
 
@@ -250,7 +251,7 @@ return view.extend({
 
 		s.tab('general', _('General Settings'));
 		s.tab('files', _('Resolv and Hosts Files'));
-		s.tab('tftp', _('TFTP Settings'));
+		s.tab('pxe_tftp', _('PXE/TFTP Settings'));
 		s.tab('advanced', _('Advanced Settings'));
 		s.tab('leases', _('Static Leases'));
 		s.tab('hosts', _('Hostnames'));
@@ -474,23 +475,77 @@ return view.extend({
 		o.datatype = 'range(0,10000)';
 		o.placeholder = 150;
 
-		o = s.taboption('tftp', form.Flag, 'enable_tftp',
-			_('Enable TFTP server'));
+		o = s.taboption('pxe_tftp', form.Flag, 'enable_tftp',
+			_('Enable TFTP server'),
+			_('Enable the built-in single-instance TFTP server.'));
 		o.optional = true;
 
-		o = s.taboption('tftp', form.Value, 'tftp_root',
+		o = s.taboption('pxe_tftp', form.Value, 'tftp_root',
 			_('TFTP server root'),
-			_('Root directory for files served via TFTP.'));
+			_('Root directory for files served via TFTP.' +
+			'<br><code>Enable TFTP server</code> and <code>TFTP server root</code> turn on the TFTP server and serve files from <code>TFTP server root</code>.'));
 		o.depends('enable_tftp', '1');
 		o.optional = true;
 		o.placeholder = '/';
 
-		o = s.taboption('tftp', form.Value, 'dhcp_boot',
+		o = s.taboption('pxe_tftp', form.Value, 'dhcp_boot',
 			_('Network boot image'),
 			_('Filename of the boot image advertised to clients.'));
 		o.depends('enable_tftp', '1');
 		o.optional = true;
 		o.placeholder = 'pxelinux.0';
+
+		/* PXE - https://openwrt.org/docs/guide-user/base-system/dhcp#booting_options */
+		o = s.taboption('pxe_tftp', form.SectionValue, '__pxe__', form.GridSection, 'boot', null,
+			_('Special <abbr title="Preboot eXecution Environment">PXE</abbr> boot options for Dnsmasq.'));
+		ss = o.subsection;
+		ss.addremove = true;
+		ss.anonymous = true;
+		ss.nodescriptions = true;
+
+		so = ss.option(form.Value, 'filename',
+			_('Filename'),
+			_('Host requests this filename from the boot server.'));
+		so.optional = false;
+		so.placeholder = 'pxelinux.0';
+
+		so = ss.option(form.Value, 'servername',
+			_('Server name'),
+			_('The hostname of the boot server'));
+		so.optional = false;
+		so.placeholder = 'myNAS';
+
+		so = ss.option(form.Value, 'serveraddress',
+			_('Server address'),
+			_('The IP address of the boot server'));
+		so.optional = false;
+		so.placeholder = '192.168.1.2';
+
+		so = ss.option(form.DynamicList, 'dhcp_option',
+			_('DHCP Options'),
+			_('Options for the Network-ID. (Note: needs also Network-ID.) E.g. "<code>42,192.168.1.4</code>" for NTP server, "<code>3,192.168.4.4</code>" for default route. <code>0.0.0.0</code> means "the address of the system running dnsmasq".'));
+		so.optional = true;
+		so.placeholder = '42,192.168.1.4';
+
+		so = ss.option(widgets.DeviceSelect, 'networkid',
+			_('Network-ID'),
+			_('Apply DHCP Options to this net. (Empty = all clients).'));
+		so.optional = true;
+		so.noaliases = true;
+
+		so = ss.option(form.Flag, 'force',
+			_('Force'),
+			_('Always send DHCP Options. Sometimes needed, with e.g. PXELinux.'));
+		so.optional = true;
+
+		so = ss.option(form.Value, 'instance',
+			_('Instance'),
+			_('Dnsmasq instance to which this boot section is bound. If unspecified, the section is valid for all dnsmasq instances.'));
+		so.optional = true;
+
+		Object.values(L.uci.sections('dhcp', 'dnsmasq')).forEach(function(val, index) {
+			so.value(index, '%s (Domain: %s, Local: %s)'.format(index, val.domain || '?', val.local || '?'));
+		});
 
 		o = s.taboption('hosts', form.SectionValue, '__hosts__', form.GridSection, 'domain', null,
 			_('Hostnames are used to bind a domain name to an IP address. This setting is redundant for hostnames already configured with static leases, but it can be useful to rebind an FQDN.'));
