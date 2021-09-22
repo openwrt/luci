@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: LuCI\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-06-10 03:40+0200\n"
-"PO-Revision-Date: 2021-09-20 20:55+0000\n"
+"PO-Revision-Date: 2021-09-22 00:01+0000\n"
 "Last-Translator: pisquan8 <cimurro@outlook.de>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/openwrt/luci/it/>"
 "\n"
@@ -231,8 +231,7 @@ msgstr "Esiste già una directory con lo stesso nome del file."
 #: modules/luci-base/htdocs/luci-static/resources/luci.js:2671
 msgid "A new login is required since the authentication session expired."
 msgstr ""
-"È necessario rifare il login in quanto la sessione di autenticazione è "
-"scaduta."
+"È necessario un nuovo login poiché la sessione di autenticazione è scaduta."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1464
 msgid "A43C + J43 + A43"
@@ -964,7 +963,7 @@ msgstr "Dispositivo base"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:974
 msgid "Beacon Interval"
-msgstr ""
+msgstr "Intervallo Beacon"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:352
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/backupfiles.lua:46
@@ -1364,6 +1363,13 @@ msgid ""
 "the basic rate. Supported rates lower than the minimum basic rate are not "
 "offered."
 msgstr ""
+"Configura le velocità in base alla densità delle celle di copertura. Normale "
+"configura le velocità di base a 6, 12, 24 Mbps se le velocità 802.11b legacy "
+"non sono utilizzate, altrimenti a 5,5, 11 Mbps. Alta configura le velocità "
+"di base a 12, 24 Mbps se le velocità 802.11b legacy non sono utilizzate, "
+"altrimenti alla velocità di 11 Mbps. Molto Alta configura 24 Mbps come "
+"velocità di base. Non sono offerte velocità supportate inferiori alle "
+"velocità di base."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:775
 msgid ""
@@ -1465,7 +1471,7 @@ msgstr "Codice Nazione"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:953
 msgid "Coverage cell density"
-msgstr ""
+msgstr "Densità celle di copertura"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:580
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2023
@@ -1721,7 +1727,7 @@ msgstr ""
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:222
 msgid "Design"
-msgstr "Design"
+msgstr "Tema"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:715
 msgid "Designated master"
@@ -1794,7 +1800,7 @@ msgstr "Dispositivo irraggiungibile!"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/reboot.js:53
 msgid "Device unreachable! Still waiting for device..."
-msgstr ""
+msgstr "Dispositivo non raggiungibile! Ancora in attesa del dispositivo..."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1224
 msgid "Devices"
@@ -2631,7 +2637,7 @@ msgstr "Forza"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:971
 msgid "Force 40MHz mode"
-msgstr ""
+msgstr "Forza 40MHz"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1231
 msgid "Force CCMP (AES)"
@@ -2982,7 +2988,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:956
 msgid "High"
-msgstr ""
+msgstr "Alta"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:56
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2151
@@ -3682,7 +3688,7 @@ msgstr ""
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:228
 msgid "Keep settings and retain the current configuration"
-msgstr ""
+msgstr "Mantieni le impostazioni e conserva la configurazione corrente"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/dmesg.js:20
 #: modules/luci-mod-status/root/usr/share/luci/menu.d/luci-mod-status.json:60
@@ -3903,7 +3909,7 @@ msgstr "Elenco di domini per cui consentire risposte RFC1918."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:288
 msgid "List of domains to force to an IP address."
-msgstr ""
+msgstr "Elenco di domini da forzare a un indirizzo IP."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:281
 msgid "List of upstream resolvers to forward queries to."
@@ -4017,7 +4023,7 @@ msgstr "Server locale"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:311
 msgid "Local service only"
-msgstr ""
+msgstr "Solo servizio locale"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:383
 msgid "Localise queries"
@@ -4037,7 +4043,7 @@ msgstr "Logga richieste"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:109
 msgid "Logging"
-msgstr "Registrazione"
+msgstr "Registrazione (log)"
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:57
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:57
@@ -4592,8 +4598,8 @@ msgid ""
 "Never forward matching domains and subdomains, resolve from DHCP or hosts "
 "files only."
 msgstr ""
-"Specifiche dominio locale. I nomi di dominio corrispondenti a questi criteri "
-"non sono mai inoltrate e risolti solo da DHCP o file hosts"
+"Non inoltrare mai domini e sottodomini corrispondenti, risolvere solo da "
+"DHCP o file hosts."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1134
 msgid "New interface for \"%s\" can not be created: %s"
@@ -4953,7 +4959,7 @@ msgstr ""
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:128
 msgid "Optional, free-form notes about this device"
-msgstr ""
+msgstr "Facoltativo, note in forma libera su questo dispositivo"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:97
 msgid ""
@@ -5141,7 +5147,7 @@ msgstr "Sovrascrivi la tabella usata per le route interne"
 
 #: modules/luci-mod-status/root/usr/share/luci/menu.d/luci-mod-status.json:3
 msgid "Overview"
-msgstr "Riassunto"
+msgstr "Riepilogo"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2742
 msgid "Overwrite existing file \"%s\" ?"
@@ -5685,14 +5691,14 @@ msgstr "Protezione rebind"
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/reboot.js:20
 #: modules/luci-mod-system/root/usr/share/luci/menu.d/luci-mod-system.json:126
 msgid "Reboot"
-msgstr "Riavvia"
+msgstr "Riavvio"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:153
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:162
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/reboot.js:46
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/reboot.js:51
 msgid "Rebooting…"
-msgstr ""
+msgstr "Riavvio…"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/reboot.js:21
 msgid "Reboots the operating system of your device"
@@ -6805,7 +6811,7 @@ msgstr ""
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:75
 msgid "Sync with NTP-Server"
-msgstr ""
+msgstr "Sincronizza con il server NTP"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:67
 msgid "Sync with browser"
@@ -7148,6 +7154,13 @@ msgid ""
 "segments. Often there is by default one Uplink port for a connection to the "
 "next greater network like the internet and other ports for a local network."
 msgstr ""
+"Le porte di rete di questo dispositivo possono essere combinate in diverse "
+"<abbr title=\"LAN virtuali - Virtual Local Area Network\">VLAN</abbr> in cui "
+"i computer possono comunicare direttamente tra loro. Le <abbr title=\"LAN "
+"virtuali - Virtual Local Area Network\">VLAN</abbr> sono spesso usate per "
+"separare segmenti di rete differenti. Spesso c'è di default una porta Uplink "
+"per una connessione alla rete più ampia come internet e altre porte per una "
+"rete locale."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:569
 msgid "The query response interval must be lower than the query interval value"
@@ -7380,7 +7393,7 @@ msgstr "Fuso orario"
 
 #: modules/luci-base/htdocs/luci-static/resources/luci.js:2679
 msgid "To login…"
-msgstr ""
+msgstr "Vai al login…"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:400
 msgid ""
@@ -7894,7 +7907,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:173
 msgid "VLANs on %q"
-msgstr "VLANs su %q"
+msgstr "LAN virtuali (VLANs) su %q"
 
 #: modules/luci-base/root/usr/share/luci/menu.d/luci-base.json:54
 msgid "VPN"
@@ -7990,7 +8003,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:957
 msgid "Very High"
-msgstr ""
+msgstr "Molto Alta"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:348
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1377
@@ -8042,7 +8055,7 @@ msgstr ""
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/reboot.js:47
 msgid "Waiting for device..."
-msgstr ""
+msgstr "In attesa del dispositivo..."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:175
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:185
@@ -8052,6 +8065,8 @@ msgstr "Avviso"
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/reboot.js:26
 msgid "Warning: There are unsaved changes that will get lost on reboot!"
 msgstr ""
+"ATTENZIONE: sono presenti modifiche non salvate che andranno perse al "
+"riavvio!"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js:37
 msgid "Weak"
