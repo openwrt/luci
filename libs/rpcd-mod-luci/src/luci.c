@@ -1672,8 +1672,9 @@ rpc_luci_get_host_hints_rrdns_cb(struct ubus_request *req, int type,
 				avl_for_each_element(&rctx->avl, hint, avl) {
 					avl_for_each_element(&hint->ip6addrs, addr, avl) {
 						if (!memcmp(&addr->addr.in6, &in6, sizeof(in6))) {
-							free(hint->hostname);
-							hint->hostname = strdup(blobmsg_get_string(cur));
+							if (!hint->hostname)
+								hint->hostname = strdup(blobmsg_get_string(cur));
+
 							break;
 						}
 					}
