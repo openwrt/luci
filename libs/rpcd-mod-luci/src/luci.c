@@ -1726,7 +1726,7 @@ rpc_luci_get_host_hints_rrdns(struct reply_context *rctx)
 		avl_for_each_element(&hint->ip6addrs, addr, avl) {
 			if (!IN6_IS_ADDR_UNSPECIFIED(&addr->addr.in6) &&
 			    !IN6_IS_ADDR_LINKLOCAL(&addr->addr.in6) &&
-			    !IN6_IS_ADDR_ULA(&addr>addr.in6)) {
+			    !IN6_IS_ADDR_ULA(&addr->addr.in6)) {
 				inet_ntop(AF_INET6, &addr->addr.in6, buf, sizeof(buf));
 				blobmsg_add_string(&req, NULL, buf);
 				n++;
