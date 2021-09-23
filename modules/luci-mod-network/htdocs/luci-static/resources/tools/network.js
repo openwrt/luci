@@ -699,7 +699,7 @@ return baseclass.extend({
 			o = this.replaceOption(s, 'brport', form.Flag, 'unicast_flood', _('Enable unicast flooding'));
 			o.default = o.enabled;
 
-			o = this.replaceOption(s, 'brport', form.Flag, 'isolated', _('Port isolation'), _('Only allow communication with non-isolated bridge ports when enabled'));
+			o = this.replaceOption(s, 'brport', form.Flag, 'isolate', _('Port isolation'), _('Only allow communication with non-isolated bridge ports when enabled'));
 			o.default = o.disabled;
 
 			o = this.replaceOption(s, 'brport', form.ListValue, 'multicast_router', _('Multicast routing'));
