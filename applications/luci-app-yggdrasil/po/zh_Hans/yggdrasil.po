@@ -14,54 +14,7 @@ msgstr ""
 msgid "Active peers"
 msgstr "活跃的对等端"
 
-#: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:56
-msgid "Address to listen for incoming connections"
-msgstr "侦听传入连接的地址"
-
-#: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/session_firewall.js:16
-msgid "Allow from direct"
-msgstr "允许直连"
-
-#: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/session_firewall.js:18
-msgid "Allow from remote"
-msgstr "允许远程访问"
-
-#: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/session_firewall.js:17
-msgid "Allow network traffic from directly connected peers"
-msgstr "允许来自直接连接的对等端的网络流量"
-
-#: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/session_firewall.js:19
-msgid ""
-"Allow network traffic from remote nodes on the network that you are not "
-"directly peered with"
-msgstr "允许来自您未与之直接建立对等连接的网络远程节点的网络流量"
-
-#: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/session_firewall.js:21
-msgid ""
-"Allow outbound network traffic regardless of AllowFromDirect or "
-"AllowFromRemote"
-msgstr "无论 AllowFromDirect 还是 AllowFromRemote，都允许出站网络流量"
-
-#: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/tunnel_routing.js:14
-msgid ""
-"Allow tunneling non-Yggdrasil traffic over Yggdrasil. This effectively "
-"allows you to use Yggdrasil to route to, or to bridge other networks, "
-"similar to a VPN tunnel. Tunnelling works between any two nodes and does not "
-"require them to be directly peered."
-msgstr ""
-"允许通过 Yggdrasil 隧道传输非 Yggdrasil 流量。这有效地使您可以使用 Yggdrasil "
-"来路由或桥接其他网络，类似于 VPN 隧道。隧道在任何两个节点之间工作，并且不需要"
-"直接对等。"
-
-#: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/session_firewall.js:21
-msgid "Always allow outbound"
-msgstr "总是允许出站流量"
-
-#: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/session_firewall.js:31
-msgid "Blacklisted public keys"
-msgstr "被拉黑的公钥"
-
-#: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:23
+#: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:17
 msgid ""
 "By default, nodeinfo contains some defaults including the platform, "
 "architecture and Yggdrasil version. These can help when surveying the "
@@ -73,13 +26,24 @@ msgstr ""
 "些在调查网络和诊断网络路由问题时会有所帮助。启用 nodeinfo 隐私选项可防止这种"
 "情况，因此，如果启用，则仅发送回在“ NodeInfo”中指定的项目。"
 
-#: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:22
+#: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:45
+msgid ""
+"Configuration for which interfaces multicast peer discovery should be "
+"enabled on. Regex is a regular expression which is matched against an "
+"interface name, and interfaces use the first configuration that they match "
+"gainst. Beacon configures whether or not the node should send link-local "
+"multicast beacons to advertise their presence, while listening for incoming "
+"connections on Port. Listen controls whether or not the node listens for "
+"multicast beacons and opens outgoing connections."
+msgstr ""
+"配置在哪些接口上启用多播对等发现。Regex 是一个正则表达式，它根据接口名称进行"
+"匹配，接口使用它们所匹配的第一个配置。Beacon 配置节点是否应该发送链路本地多播"
+"信标以通告它们的存在，同时侦听端口上传入的连接。Listen 控制节点是否监听多播信"
+"标并打开传出连接。"
+
+#: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:16
 msgid "Enable NodeInfo privacy"
 msgstr "启用 NodeInfo 隐私"
-
-#: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/session_firewall.js:14
-msgid "Enable session firewall"
-msgstr "启用会话防火墙"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/keys.js:11
 #: applications/luci-app-yggdrasil/root/usr/share/luci/menu.d/luci-app-yggdrasil.json:41
@@ -102,85 +66,21 @@ msgstr "常规设置"
 msgid "Grant access to LuCI app yggdrasil"
 msgstr "授予访问 LuCI 应用 yggdrasil 的权限"
 
-#: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/tunnel_routing.js:26
-msgid "IPv4 local subnet"
-msgstr "IPv4 本地子网"
-
-#: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/tunnel_routing.js:19
-msgid "IPv4 remote subnet"
-msgstr "IPv4 远程子网"
-
-#: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/tunnel_routing.js:22
-#: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/tunnel_routing.js:29
-msgid "IPv4 subnet"
-msgstr "IPv4 子网"
-
-#: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/tunnel_routing.js:20
-msgid "IPv4 subnets belonging to remote nodes, mapped to the node's public"
-msgstr "属于远程节点的IPv4子网，映射到该节点的公共节点"
-
-#: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/tunnel_routing.js:27
-msgid ""
-"IPv4 subnets belonging to this node's end of the tunnels. Only traffic from "
-"these ranges will be tunnelled."
-msgstr "属于该节点隧道末端的IPv4子网。只有这些范围内的流量将通过隧道传输。"
-
-#: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/tunnel_routing.js:40
-msgid "IPv6 local subnet"
-msgstr "IPv6 本地子网"
-
-#: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/tunnel_routing.js:33
-msgid "IPv6 remote subnet"
-msgstr "IPv6 远程子网"
-
-#: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/tunnel_routing.js:36
-#: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/tunnel_routing.js:44
-msgid "IPv6 subnet"
-msgstr "IPv6 子网"
-
-#: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/tunnel_routing.js:34
-msgid "IPv6 subnets belonging to remote nodes, mapped to the node's public"
-msgstr "属于远程节点的 IPv6 子网，映射到该节点的公共节点"
-
-#: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/tunnel_routing.js:41
-msgid ""
-"IPv6 subnets belonging to this node's end of the tunnels. Only traffic from "
-"these ranges (or the Yggdrasil node's IPv6 address/subnet) will be tunnelled."
-msgstr ""
-"属于这个节点的隧道末端的IPv6子网。只有来自这些范围(或Yggdrasil节点的IPv6地址/"
-"子网)的流量将通过隧道。"
-
-#: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/session_firewall.js:15
-msgid ""
-"If disabled, network traffic from any node will be allowed. If enabled, the "
-"below rules apply"
-msgstr "如果禁用，将允许来自任何节点的网络流量。如果启用，将使用下面的规则"
-
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/peers.js:25
 msgid "Interface"
 msgstr "接口"
-
-#: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:45
-msgid "Interface name"
-msgstr "接口名称"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/peers.js:20
 msgid "Interface peers"
 msgstr "接口对等节点"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/keys.js:16
-#: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/keys.js:19
 msgid "Keep this private. When compromised, generate a new keypair and IPv6."
 msgstr "请保管好该信息。一旦泄露，请重新生成一个新的密钥对和 IPv6。"
 
-#: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/tunnel_routing.js:21
-#: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/tunnel_routing.js:35
-msgid "Key"
-msgstr "密钥"
-
-#: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:15
-msgid "Link-local TCP port"
-msgstr "Link-local TCP 端口"
+#: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:52
+msgid "Link-local port"
+msgstr "链路本地端口"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/peers.js:21
 msgid ""
@@ -203,11 +103,11 @@ msgstr ""
 "c.d:e/f.g.h.i:j。这些连接将遵循操作系统路由表，因此，当您可以通过不同的接口进"
 "行连接时，应使用本部分。"
 
-#: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:50
+#: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:33
 msgid "Listen addresses"
 msgstr "监听地址"
 
-#: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:51
+#: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:34
 msgid ""
 "Listen addresses for incoming connections. You will need to add listeners in "
 "order to accept incoming peerings from non-local nodes. Multicast peer "
@@ -219,35 +119,23 @@ msgstr ""
 "里设置了什么监听器，多播对等发现都可以工作。每个侦听器都应按上述 URI 格式指"
 "定，例如，tcp://0.0.0.0:0 或 tcp://[::]:0 侦听所有接口。"
 
-#: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:37
+#: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:51
+msgid "Listen for beacons"
+msgstr "监听信标"
+
+#: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:31
 msgid "MTU size for the interface"
 msgstr "接口的 MTU 大小"
 
-#: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:39
-msgid "Maximum size of all switch queues combined"
-msgstr "所有交换队列的最大大小"
-
-#: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:41
-msgid "Multicast interfaces"
+#: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:44
+msgid "Multicast interface"
 msgstr "多播接口"
 
-#: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/session_firewall.js:25
-msgid ""
-"Network traffic is always accepted from those peers, regardless of "
-"AllowFromDirect or AllowFromRemote"
-msgstr "无论AllowFromDirect还是AllowFromRemote，始终会从这些对等方接受网络流量"
-
-#: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/session_firewall.js:32
-msgid ""
-"Network traffic is always rejected from those peers, regardless of "
-"AllowFromDirect or AllowFromRemote"
-msgstr "无论AllowFromDirect还是AllowFromRemote，总是会拒绝这些对等方的网络流量"
-
-#: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:29
+#: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:23
 msgid "NodeInfo"
 msgstr "节点信息"
 
-#: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:30
+#: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:24
 msgid ""
 "Optional node info. This must be a { \"key\": \"value\", ... } map or set as "
 "null. This is entirely optional but, if set, is visible to the whole network "
@@ -261,83 +149,21 @@ msgstr ""
 msgid "Peers"
 msgstr "对端"
 
-#: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/tunnel_routing.js:21
-#: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/tunnel_routing.js:35
-msgid "Public encryption key"
-msgstr "公共加密密钥"
+#: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:49
+msgid "Regular expression"
+msgstr "正则表达式"
 
-#: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/session_firewall.js:26
-#: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/session_firewall.js:33
-msgid "Public key"
-msgstr "公钥"
-
-#: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:42
-msgid ""
-"Regular expressions for which interfaces multicast peer discovery should be "
-"enabled on. If none specified, multicast peer discovery is disabled. The "
-"default value is .* which uses all interfaces."
-msgstr ""
-"应启用多播对等方发现的接口的正则表达式。如果未指定，则禁用多播对等发现。默认"
-"值为 .* ，使用所有接口。"
-
-#: applications/luci-app-yggdrasil/root/usr/share/luci/menu.d/luci-app-yggdrasil.json:50
-msgid "Session firewall"
-msgstr "会话防火墙"
-
-#: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/session_firewall.js:11
-msgid "Session firewall settings"
-msgstr "会话防火墙设置"
-
-#: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:46
-msgid "Set .* to multicast on all interfaces"
-msgstr "将 .* 设置为所有接口上的多播"
+#: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:50
+msgid "Send beacons"
+msgstr "发送信标"
 
 #: applications/luci-app-yggdrasil/root/usr/share/luci/menu.d/luci-app-yggdrasil.json:32
 msgid "Settings"
 msgstr "设置"
 
-#: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/keys.js:18
-msgid "Signing private key"
-msgstr "签名私钥"
-
-#: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/keys.js:17
-msgid "Signing public key"
-msgstr "签名公钥"
-
 #: applications/luci-app-yggdrasil/root/usr/share/luci/menu.d/luci-app-yggdrasil.json:14
 msgid "Status"
 msgstr "状态"
-
-#: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/tunnel_routing.js:22
-#: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/tunnel_routing.js:29
-#: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/tunnel_routing.js:36
-#: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/tunnel_routing.js:44
-msgid "Subnet"
-msgstr "子网"
-
-#: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:16
-msgid ""
-"The port number to be used for the link-local TCP listeners for the "
-"configured MulticastInterfaces. This option does not affect "
-"listenersspecified in the Listen option. Unless you plan to firewall link-"
-"localtraffic, it is best to leave this as the default value of 0. This "
-"option cannot currently be changed by reloading config during runtime."
-msgstr ""
-"用于已配置的MulticastInterfaces的链接本地TCP侦听器的端口号。此选项不影响“监"
-"听”选项中指定的监听器。除非您计划对防火墙link-localtraffic进行防火墙，否则最"
-"好将其保留为默认值0。此选项当前无法通过在运行时重新加载配置来更改。"
-
-#: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/tunnel_routing.js:11
-msgid "Tunnel Routing"
-msgstr "隧道路由"
-
-#: applications/luci-app-yggdrasil/root/usr/share/luci/menu.d/luci-app-yggdrasil.json:59
-msgid "Tunnel routing"
-msgstr "隧道路由"
-
-#: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/session_firewall.js:24
-msgid "Whitelisted public keys"
-msgstr "白名单上的公钥"
 
 #: applications/luci-app-yggdrasil/root/usr/share/luci/menu.d/luci-app-yggdrasil.json:3
 msgid "Yggdrasil"
@@ -351,6 +177,6 @@ msgstr "Yggdrasil 节点状态"
 msgid "Yggdrasil's network interface name"
 msgstr "Yggdrasil 网络接口名称"
 
-#: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:58
+#: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:40
 msgid "e.g. tcp://0.0.0.0:0 or tcp://[::]:0"
 msgstr "例如 tcp://0.0.0.0:0 or tcp://[::]:0"
