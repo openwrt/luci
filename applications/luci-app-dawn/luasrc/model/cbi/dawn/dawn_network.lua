@@ -20,7 +20,7 @@ function s.render(self, sid)
 		%>
 			<div class="cbi-section-node">
 				<h3>SSID: <%= xml.pcdata(name) %></h3>
-				<table class="table" id=network_overview_main">
+				<table class="table" id="network_overview_main">
 					<tr class="tr table-titles">
 						<th class="th">AP</th>
 						<th class="th">Clients</th>
