@@ -47,12 +47,19 @@ return view.extend({
 		return this.handleCommand('nslookup', [ addr ]);
 	},
 
+	handleArpScan: function(ev, cmd) {
+		var addr = ev.currentTarget.parentNode.previousSibling.value;
+
+		return this.handleCommand('arp-scan', [ '-l', '-I', addr]);
+	},
+
 	load: function() {
 		return Promise.all([
 			L.resolveDefault(fs.stat('/bin/ping6'), {}),
 			L.resolveDefault(fs.stat('/usr/bin/ping6'), {}),
 			L.resolveDefault(fs.stat('/bin/traceroute6'), {}),
 			L.resolveDefault(fs.stat('/usr/bin/traceroute6'), {}),
+			L.resolveDefault(fs.stat('/usr/bin/arp-scan'), {}),
 			uci.load('luci')
 		]);
 	},
@@ -60,6 +67,7 @@ return view.extend({
 	render: function(res) {
 		var has_ping6 = res[0].path || res[1].path,
 		    has_traceroute6 = res[2].path || res[3].path,
+		    has_arpscan = res[4].path,
 			dns_host = uci.get('luci', 'diag', 'dns') || 'openwrt.org',
 			ping_host = uci.get('luci', 'diag', 'ping') || 'openwrt.org',
 			route_host = uci.get('luci', 'diag', 'route') || 'openwrt.org';
@@ -68,7 +76,7 @@ return view.extend({
 			E('h2', {}, [ _('Network Utilities') ]),
 			E('table', { 'class': 'table' }, [
 				E('tr', { 'class': 'tr' }, [
-					E('td', { 'class': 'td left' }, [
+					E('td', { 'class': 'td left', 'width': '25%' }, [
 						E('input', {
 							'style': 'margin:5px 0',
 							'type': 'text',
@@ -91,7 +99,7 @@ return view.extend({
 						])
 					]),
 
-					E('td', { 'class': 'td left' }, [
+					E('td', { 'class': 'td left', 'width': '25%' }, [
 						E('input', {
 							'style': 'margin:5px 0',
 							'type': 'text',
@@ -114,7 +122,7 @@ return view.extend({
 						])
 					]),
 
-					E('td', { 'class': 'td left' }, [
+					E('td', { 'class': 'td left', 'width': '25%' }, [
 						E('input', {
 							'style': 'margin:5px 0',
 							'type': 'text',
@@ -126,7 +134,26 @@ return view.extend({
 								'click': ui.createHandlerFn(this, 'handleNslookup')
 							}, [ _('Nslookup') ])
 						])
-					])
+					]),
+
+					E('td', { 'class': 'td left', 'width': '25%' }, has_arpscan ? [
+						E('input', {
+							'style': 'margin:5px 0',
+							'type': 'text',
+							'value': 'br-lan'
+						}),
+						E('span', { 'class': 'diag-action' }, [
+							E('button', {
+								'class': 'cbi-button cbi-button-action',
+								'click': ui.createHandlerFn(this, 'handleArpScan')
+							}, [ _('Arp-scan') ])
+						])] : E('p', {}, [
+							E('em', _('Missing ARP scan')), E('br'),
+							E('a', {
+								href: L.url('admin/system/opkg') + '?query=arp-scan'
+							}, _('Install `arp-scan`...'))
+						])
+					),
 				])
 			]),
 			E('pre', { 'class': 'command-output', 'style': 'display:none' })
