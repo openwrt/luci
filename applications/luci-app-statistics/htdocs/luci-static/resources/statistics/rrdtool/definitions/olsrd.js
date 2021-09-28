@@ -15,8 +15,10 @@ return baseclass.extend({
 		if (plugin_instance == "routes") {
 			g.push({
 				/* diagram data description */
-				title: "%H: Total amount of OLSR routes", vlabel: "n",
-				number_format: "%5.0lf", data: {
+				title: "%H: Total amount of OLSR routes",
+				vlabel: "n",
+				number_format: "%5.0lf",
+				data: {
 					types: [ "routes" ],
 					options: {
 						routes: {
@@ -26,8 +28,11 @@ return baseclass.extend({
 					}
 				}
 			}, {
-				title: "%H: Average route ETX", vlabel: "ETX", detail: true,
-				number_format: "%5.1lf", data: {
+				title: "%H: Average route ETX",
+				vlabel: "ETX",
+				detail: true,
+				number_format: "%5.1lf",
+				data: {
 					instances: [ "average" ], /* falls es irgendwann mal welche pro ip gibt, wie bei links, dann werden die hier excludiert */
 					types: [ "route_etx" ],
 					options: {
@@ -37,8 +42,11 @@ return baseclass.extend({
 					}
 				}
 			}, {
-				title: "%H: Average route metric", vlabel: "metric", detail: true,
-				number_format: "%5.1lf", data: {
+				title: "%H: Average route metric",
+				vlabel: "metric",
+				detail: true,
+				number_format: "%5.1lf",
+				data: {
 					instances: [ "average" ], /* falls es irgendwann mal welche pro ip gibt, wie bei links, dann werden die hier excludiert */
 					types: [ "route_metric" ],
 					options: {
@@ -52,8 +60,10 @@ return baseclass.extend({
 		else if (plugin_instance == "links") {
 			g.push({
 				/* diagram data description */
-				title: "%H: Total amount of OLSR neighbours", vlabel: "n",
-				number_format: "%5.0lf", data: {
+				title: "%H: Total amount of OLSR neighbours",
+				vlabel: "n",
+				number_format: "%5.0lf",
+				data: {
 					instances: [ "" ],
 					types: [ "links" ],
 					options: {
@@ -95,8 +105,10 @@ return baseclass.extend({
 		}
 		else if (plugin_instance == "topology") {
 			g.push({
-				title: "%H: Total amount of OLSR links", vlabel: "n",
-				number_format: "%5.0lf", data: {
+				title: "%H: Total amount of OLSR links",
+				vlabel: "n",
+				number_format: "%5.0lf",
+				data: {
 					instances: [ "" ],
 					types: [ "links" ],
 					options: {
@@ -107,8 +119,10 @@ return baseclass.extend({
 					}
 				}
 			}, {
-				title: "%H: Average signal quality", vlabel: "n",
-				number_format: "%5.2lf", detail: true,
+				title: "%H: Average signal quality",
+				vlabel: "n",
+				number_format: "%5.2lf",
+				detail: true,
 				data: {
 					instances: [ "average" ], /* exclude possible per-ip stuff */
 					types: [ "signal_quality" ],
