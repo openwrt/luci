@@ -289,6 +289,12 @@ return view.extend({
 		o.optional = true;
 		o.placeholder = '/router.local/192.168.0.1';
 
+		o = s.taboption('general', form.DynamicList, 'ipset',
+			_('IP sets'),
+			_('List of IP sets to populate with the specified domain IPs.'));
+		o.optional = true;
+		o.placeholder = '/example.org/ipset,ipset6';
+
 		o = s.taboption('general', form.Flag, 'rebind_protection',
 			_('Rebind protection'),
 			_('Discard upstream RFC1918 responses.'));
