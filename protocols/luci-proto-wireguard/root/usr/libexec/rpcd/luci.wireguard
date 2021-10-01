@@ -93,28 +93,27 @@ local methods = {
 							end
 						)
 
-						table.insert(
-							data[line[1]].peers,
-							{
-								name = peer_name,
-								public_key = line[2],
-								endpoint = line[4],
-								allowed_ips = {},
-								latest_handshake = line[6],
-								transfer_rx = line[7],
-								transfer_tx = line[8],
-								persistent_keepalive = line[9]
-							}
-						)
+						local peer = {
+							name = peer_name,
+							public_key = line[2],
+							endpoint = line[4],
+							allowed_ips = {},
+							latest_handshake = line[6],
+							transfer_rx = line[7],
+							transfer_tx = line[8],
+							persistent_keepalive = line[9]
+						}
 
 						if not (line[4] == "(none)") then
 							local ipkey, ipvalue
 							for ipkey, ipvalue in pairs(string.split(line[5], ",")) do
 								if #ipvalue > 0 then
-									table.insert(data[line[1]].peers[peer_name]["allowed_ips"], ipvalue)
+									table.insert(peer["allowed_ips"], ipvalue)
 								end
 							end
 						end
+
+						table.insert(data[line[1]].peers, peer)
 					end
 				end
 			end
