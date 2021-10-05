@@ -254,6 +254,7 @@ return view.extend({
 		s.tab('advanced', _('Advanced Settings'));
 		s.tab('leases', _('Static Leases'));
 		s.tab('hosts', _('Hostnames'));
+		s.tab('ipsets', _('IP Sets'));
 
 		s.taboption('general', form.Flag, 'domainneeded',
 			_('Domain required'),
@@ -501,12 +502,12 @@ return view.extend({
 		ss.sortable  = true;
 
 		so = ss.option(form.Value, 'name', _('Hostname'));
+		so.rmempty = false;
 		so.datatype = 'hostname';
-		so.rmempty = true;
 
 		so = ss.option(form.Value, 'ip', _('IP address'));
+		so.rmempty = false;
 		so.datatype = 'ipaddr';
-		so.rmempty = true;
 
 		var ipaddrs = {};
 
@@ -520,6 +521,23 @@ return view.extend({
 		L.sortedKeys(ipaddrs, null, 'addr').forEach(function(ipv4) {
 			so.value(ipv4, '%s (%s)'.format(ipv4, ipaddrs[ipv4]));
 		});
+
+		o = s.taboption('ipsets', form.SectionValue, '__ipsets__', form.GridSection, 'ipset', null,
+			_('List of IP sets to populate with the specified domain IPs.'));
+
+		ss = o.subsection;
+
+		ss.addremove = true;
+		ss.anonymous = true;
+		ss.sortable  = true;
+
+		so = ss.option(form.DynamicList, 'name', _('IP set'));
+		so.rmempty = false;
+		so.datatype = 'string';
+
+		so = ss.option(form.DynamicList, 'domain', _('Domain'));
+		so.rmempty = false;
+		so.datatype = 'hostname';
 
 		o = s.taboption('leases', form.SectionValue, '__leases__', form.GridSection, 'host', null,
 			_('Static leases are used to assign fixed IP addresses and symbolic hostnames to DHCP clients. They are also required for non-dynamic interface configurations where only hosts with a corresponding lease are served.') + '<br />' +
