@@ -197,7 +197,7 @@ return view.extend({
 		if (device_info.error)
 			body.appendChild(E('p', { 'class' : 'alert-message warning'}, _("ERROR: ") + this.translateTable[device_info.error]()));
 
-		body.appendChild(E('h3', device_info.device_name + _(' Partitions')));
+		body.appendChild(E('h3', (device_info.device_name || '') + _(' Partitions')));
 		if (device_info.device_name) {
 			var partitions_table = E('table', { 'class': 'table' }, [
 				E('tr', { 'class': 'tr table-titles' }, [
