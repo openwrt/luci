@@ -8,7 +8,8 @@
 return view.extend({
 	translateTable: {
 		NO_BOARD_NAME : function(args) { return _('Unable to find Device Board Name.')},
-		NO_DUAL_FLAG : function(args) {return _('Unable to find Dual Boot Flag Partition.')},
+		NO_DUAL_FLAG: function (args) { return _('Unable to find Dual Boot Flag Partition.') },
+		NO_DUAL_FLAG_BLOCK: function (args) { return _('The Dual Boot Flag Partition: %s is not a block device.').format(args[0])},
 		ERR_SET_DUAL_FLAG : function(args) { return _('Unable to set Dual Boot Flag Partition entry for partition: %s.').format(args[0])},
 		NO_FIRM_ENV : function(args) { return _('Unable to obtain firmware environment variable: %s.').format(args[0])},
 		ERR_SET_ENV : function(args) { return _('Unable to set firmware environment variable: %s to %s.').format(args[0],args[1])}
@@ -196,7 +197,7 @@ return view.extend({
 		if (device_info.error)
 			body.appendChild(E('p', { 'class' : 'alert-message warning'}, _("ERROR: ") + this.translateTable[device_info.error]()));
 
-		body.appendChild(E('h3', device_info.device_name + _(' Partitions')));
+		body.appendChild(E('h3', (device_info.device_name || '') + _(' Partitions')));
 		if (device_info.device_name) {
 			var partitions_table = E('table', { 'class': 'table' }, [
 				E('tr', { 'class': 'tr table-titles' }, [
