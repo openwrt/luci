@@ -174,8 +174,11 @@ return network.registerProtocol('wireguard', {
 			];
 
 			var description = [
-				E('span', '%q<br>%q'.format(_('If there are any unsaved changes for this client, please save the configuration before generating a QR-Code'),
-					_('The QR-Code works per wg interface, it will be refreshed with every button click and transfers the following information:'))),
+				E('span', [
+					_('If there are any unsaved changes for this client, please save the configuration before generating a QR-Code'),
+					E('br'),
+					_('The QR-Code works per wg interface, it will be refreshed with every button click and transfers the following information:')
+				]),
 				E('ul', [
 					generateDescription('[Interface]', interfaceTexts),
 					generateDescription('[Peer]', peerTexts)
