@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LuCI: base\n"
 "POT-Creation-Date: 2010-05-09 01:01+0300\n"
-"PO-Revision-Date: 2021-10-05 12:02+0000\n"
-"Last-Translator: Darin  Avdeyeva <yulyablack@inbox.lv>\n"
+"PO-Revision-Date: 2021-10-07 10:07+0000\n"
+"Last-Translator: Anton Kikin <a.a.kikin@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/openwrt/luci/ru/>"
 "\n"
 "Language: ru\n"
@@ -230,7 +230,7 @@ msgstr "Директория с таким же именем уже сущест
 
 #: modules/luci-base/htdocs/luci-static/resources/luci.js:2671
 msgid "A new login is required since the authentication session expired."
-msgstr "Время сессии истекло. Войдите заново."
+msgstr "Необходима авторизация."
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:167
 msgid ""
@@ -907,7 +907,7 @@ msgstr ""
 msgid ""
 "Automatically handle multiple uplink interfaces using source-based policy "
 "routing."
-msgstr ""
+msgstr "Автоматически задавать маршруты для выходных (uplink) портов."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:170
 msgid "Automatically mount filesystems on hotplug"
@@ -2271,7 +2271,7 @@ msgid ""
 "Enable automatic redirection of <abbr title=\"Hypertext Transfer Protocol"
 "\">HTTP</abbr> requests to <abbr title=\"Hypertext Transfer Protocol Secure"
 "\">HTTPS</abbr> port."
-msgstr ""
+msgstr "Перенаправлять запросы с HTTP на HTTPS."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:960
 msgid ""
@@ -3043,7 +3043,7 @@ msgstr "Предоставить доступ к системному журна
 
 #: modules/luci-mod-system/root/usr/share/rpcd/acl.d/luci-mod-system.json:42
 msgid "Grant access to uHTTPd configuration"
-msgstr ""
+msgstr "Разрешить настраивать uHTTPd"
 
 #: modules/luci-mod-status/root/usr/share/rpcd/acl.d/luci-mod-status.json:61
 msgid "Grant access to wireless channel status"
@@ -3072,7 +3072,7 @@ msgstr "HE.net логин"
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/uhttpd.js:9
 #: modules/luci-mod-system/root/usr/share/luci/menu.d/luci-mod-system.json:64
 msgid "HTTP(S) Access"
-msgstr ""
+msgstr "Доступ по HTTP(S)"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/processes.js:46
 msgid "Hang Up"
@@ -3208,7 +3208,7 @@ msgstr "IP-адрес не указан"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:293
 msgid "IP sets"
-msgstr ""
+msgstr "Списки IP"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:429
 msgid "IPs to override with NXDOMAIN"
@@ -3404,7 +3404,7 @@ msgstr "IPv6 направление префикса"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:956
 msgid "IPv6 source routing"
-msgstr ""
+msgstr "Явная маршрутизация IPv6"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1008
 msgid "IPv6 suffix"
@@ -3972,7 +3972,7 @@ msgstr "Файл аренд"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:623
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:679
 msgid "Lease time"
-msgstr "Время аренды адреса"
+msgstr "Срок аренды адреса"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:40
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:59
@@ -4000,10 +4000,8 @@ msgid ""
 "interoperate. Airtime efficiency may be significantly reduced where these "
 "are used. It is recommended to not allow 802.11b rates where possible."
 msgstr ""
-"Для работы устаревших или плохо функционирующих устройств могут "
-"потребоваться устаревшие скорости передачи данных 802.11b. В случае их "
-"использования эффективность эфирного времени может быть значительно снижена. "
-"Рекомендуется не допускать скорости 802.11b там, где это возможно."
+"Стандарт 802.11b может понадобиться для работы с устаревшими устройствами. "
+"Включайте его только при необходимости."
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4053
 msgid "Legend:"
@@ -4048,6 +4046,7 @@ msgstr "Список хостов, поставляющих поддельные
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:294
 msgid "List of IP sets to populate with the specified domain IPs."
 msgstr ""
+"Список наборов IP-адресов для заполнения указанными IP-адресами доменов."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1555
 msgid ""
@@ -5661,7 +5660,7 @@ msgstr "пакетов"
 
 #: modules/luci-base/luasrc/view/sysauth.htm:19
 msgid "Please enter your username and password."
-msgstr "Введите логин и пароль."
+msgstr "Пожалуйста, введите имя пользователя и пароль."
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:3791
 msgid "Please select the file to upload."
@@ -5976,7 +5975,7 @@ msgstr "Переподключить этот интерфейс"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/uhttpd.js:14
 msgid "Redirect to HTTPS"
-msgstr ""
+msgstr "Перенаправлять на HTTPS"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:57
 msgid "References"
@@ -6537,7 +6536,7 @@ msgstr "Ошибка установки режима работы"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/uhttpd.js:11
 msgid "Settings"
-msgstr ""
+msgstr "Настройки"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:646
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:662
@@ -7229,7 +7228,7 @@ msgstr "Назначение"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/10_system.js:57
 msgid "Target Platform"
-msgstr ""
+msgstr "Целевая платформа"
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:103
 msgid "Target network"
@@ -8980,6 +8979,9 @@ msgid ""
 "<abbr title=\"Hypertext Transfer Protocol Secure\">HTTPS</abbr> network "
 "access."
 msgstr ""
+"uHTTPd предоставляет <abbr title=\"Hypertext Transfer Protocol\">HTTP</abbr> "
+"или <abbr title=\"Hypertext Transfer Protocol Secure\">HTTPS</abbr> сетевой "
+"доступ."
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:563
 msgid "unique value"
