@@ -1161,12 +1161,9 @@ footer {
 	position: fixed;
 	top: 0;
 	bottom: 0;
-	left: -10000px;
-	right: 10000px;
 	background: rgba(0, 0, 0, 0.7);
 	z-index: 900;
-	overflow-y: scroll;
-	-webkit-overflow-scrolling: touch;
+	overflow: scroll;
 	transition: opacity .125s ease-in;
 	opacity: 0;
 	visibility: hidden;
@@ -1175,11 +1172,9 @@ footer {
 .modal {
 	width: 90%;
 	margin: 5em auto;
-	display: flex;
-	flex-wrap: wrap;
+	display: table;
 	min-height: 32px;
 	max-width: 600px;
-	align-items: center;
 	border-radius: 3px;
 	background: var(--background-color-high);
 	box-shadow: 0 0 3px #444;
@@ -1188,7 +1183,6 @@ footer {
 }
 
 .modal > * {
-	flex-basis: 100%;
 	line-height: normal;
 	margin-bottom: .5em;
 	max-width: 100%;
@@ -2208,58 +2202,6 @@ div.cbi-value var.cbi-tooltip-container,
 
 .uci-change-legend-label > var > * {
 	flex-basis: 100%;
-}
-
-#modal_overlay {
-	position: fixed;
-	top: 0;
-	bottom: 0;
-	left: -10000px;
-	right: 10000px;
-	background: rgba(0, 0, 0, 0.7);
-	z-index: 900;
-	overflow-y: scroll;
-	-webkit-overflow-scrolling: touch;
-	transition: opacity .125s ease-in;
-	opacity: 0;
-}
-
-#modal_overlay > .modal {
-	width: 90%;
-	margin: 5em auto;
-	display: flex;
-	flex-wrap: wrap;
-	min-height: 32px;
-	max-width: 600px;
-	align-items: center;
-	border-radius: 3px;
-	background: var(--background-color-high);
-	box-shadow: 0 0 3px #444;
-	padding: 1em 1em .5em 1em;
-	min-width: 270px;
-}
-
-#modal_overlay .modal > * {
-	flex-basis: 100%;
-	line-height: normal;
-	margin-bottom: .5em;
-}
-
-#modal_overlay .modal > pre,
-#modal_overlay .modal > textarea {
-	white-space: pre-wrap;
-	overflow: auto;
-}
-
-body.modal-overlay-active {
-	overflow: hidden;
-	height: 100vh;
-}
-
-body.modal-overlay-active #modal_overlay {
-	left: 0;
-	right: 0;
-	opacity: 1;
 }
 
 html body.apply-overlay-active {
