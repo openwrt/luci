@@ -2199,12 +2199,12 @@ div.cbi-value var.cbi-tooltip-container,
 	position: fixed;
 	top: 0;
 	bottom: 0;
-	left: -10000px;
-	right: 10000px;
+	/*left: -10000px;*/
+	/*right: 10000px;*/
 	background: rgba(0, 0, 0, 0.7);
 	z-index: 900;
-	overflow-y: scroll;
-	-webkit-overflow-scrolling: touch;
+	overflow: scroll;
+	/*-webkit-overflow-scrolling: touch;*/
 	transition: opacity .125s ease-in;
 	opacity: 0;
 }
@@ -2212,7 +2212,7 @@ div.cbi-value var.cbi-tooltip-container,
 #modal_overlay > .modal {
 	width: 90%;
 	margin: 5em auto;
-	display: flex;
+	display: table;
 	flex-wrap: wrap;
 	min-height: 32px;
 	max-width: 600px;
