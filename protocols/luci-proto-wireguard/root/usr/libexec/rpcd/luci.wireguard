@@ -1,6 +1,7 @@
 #!/usr/bin/env lua
 
 local json = require "luci.jsonc"
+local util = require "luci.util"
 local sys = require "luci.sys"
 local io = require "io"
 local uci = require "uci"
@@ -10,7 +11,7 @@ local methods = {
 	generateKeyPair = {
 		call = function()
 			local prv = sys.exec("wg genkey 2>/dev/null"):sub(1, -2)
-			local pub = sys.exec("echo '" .. prv .. "' | wg pubkey 2>/dev/null"):sub(1, -2)
+			local pub = sys.exec("echo %s | wg pubkey 2>/dev/null" % util.shellquote(prv)):sub(1, -2)
 
 			return {keys = {priv = prv, pub = pub}}
 		end
@@ -25,7 +26,7 @@ local methods = {
 				local listen_port = args.listen_port
 				local allowed_ips = args.allowed_ips
 
-				local pubkey = sys.exec("echo '" .. args.privkey .. "' | wg pubkey 2>/dev/null"):sub(1, -2)
+				local pubkey = sys.exec("echo %s | wg pubkey 2>/dev/null" % util.shellquote(args.privkey)):sub(1, -2)
 				local client_privkey = sys.exec("wg genkey 2>/dev/null"):sub(1, -2)
 
 				local iface_qr = {
@@ -48,7 +49,7 @@ local methods = {
 				end
 
 				qr_enc = table.concat(iface_qr, "\n") .. "\n\n" .. table.concat(peer_qr, "\n")
-				qr_code = sys.exec("/usr/bin/qrencode --inline --8bit --type=SVG --output=- '" .. qr_enc .. "' 2>/dev/null")
+				qr_code = sys.exec("/usr/bin/qrencode --inline --8bit --type=SVG --output=- %s 2>/dev/null" % util.shellquote(qr_enc))
 			end
 
 			return {qr_code = qr_code}
