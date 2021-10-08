@@ -37,7 +37,7 @@ local get_ports = function(d)
 
 	if d.HostConfig and d.HostConfig.PortBindings then
 		for inter, out in pairs(d.HostConfig.PortBindings) do
-			data = (data and (data .. "<br>") or "") .. out[1]["HostPort"] .. ":" .. inter
+			data = (data and (data .. "<br />") or "") .. out[1]["HostPort"] .. ":" .. inter
 		end
 	end
 
@@ -49,7 +49,7 @@ local get_env = function(d)
 
 	if d.Config and d.Config.Env then
 		for _,v in ipairs(d.Config.Env) do
-			data = (data and (data .. "<br>") or "") .. v
+			data = (data and (data .. "<br />") or "") .. v
 		end
 	end
 
@@ -90,7 +90,7 @@ local get_mounts = function(d)
 					v_dest = v_dest .."/".. v_dest_d
 				end
 			end
-			data = (data and (data .. "<br>") or "") .. v_sorce .. ":" .. v["Destination"] .. (v["Mode"] ~= "" and (":" .. v["Mode"]) or "")
+			data = (data and (data .. "<br />") or "") .. v_sorce .. ":" .. v["Destination"] .. (v["Mode"] ~= "" and (":" .. v["Mode"]) or "")
 		end
 	end
 
@@ -102,7 +102,7 @@ local get_device = function(d)
 
 	if d.HostConfig and d.HostConfig.Devices then
 		for _,v in ipairs(d.HostConfig.Devices) do
-			data = (data and (data .. "<br>") or "") .. v["PathOnHost"] .. ":" .. v["PathInContainer"] .. (v["CgroupPermissions"] ~= "" and (":" .. v["CgroupPermissions"]) or "")
+			data = (data and (data .. "<br />") or "") .. v["PathOnHost"] .. ":" .. v["PathInContainer"] .. (v["CgroupPermissions"] ~= "" and (":" .. v["CgroupPermissions"]) or "")
 		end
 	end
 
@@ -114,7 +114,7 @@ local get_links = function(d)
 
 	if d.HostConfig and d.HostConfig.Links then
 		for _,v in ipairs(d.HostConfig.Links) do
-			data = (data and (data .. "<br>") or "") .. v
+			data = (data and (data .. "<br />") or "") .. v
 		end
 	end
 
@@ -126,7 +126,7 @@ local get_tmpfs = function(d)
 
 	if d.HostConfig and d.HostConfig.Tmpfs then
 		for k, v in pairs(d.HostConfig.Tmpfs) do
-			data = (data and (data .. "<br>") or "") .. k .. (v~="" and ":" or "")..v
+			data = (data and (data .. "<br />") or "") .. k .. (v~="" and ":" or "")..v
 		end
 	end
 
@@ -138,7 +138,7 @@ local get_dns = function(d)
 
 	if d.HostConfig and d.HostConfig.Dns then
 		for _, v in ipairs(d.HostConfig.Dns) do
-			data = (data and (data .. "<br>") or "") .. v
+			data = (data and (data .. "<br />") or "") .. v
 		end
 	end
 
@@ -150,7 +150,7 @@ local get_sysctl = function(d)
 
 	if d.HostConfig and d.HostConfig.Sysctls then
 		for k, v in pairs(d.HostConfig.Sysctls) do
-			data = (data and (data .. "<br>") or "") .. k..":"..v
+			data = (data and (data .. "<br />") or "") .. k..":"..v
 		end
 	end
 
@@ -203,7 +203,7 @@ m.redirect = luci.dispatcher.build_url("admin/docker/containers")
 s = m:section(SimpleSection)
 s.template = "dockerman/apply_widget"
 s.err=docker:read_status()
-s.err=s.err and s.err:gsub("\n","<br>"):gsub(" ","&nbsp;")
+s.err=s.err and s.err:gsub("\n","<br />"):gsub(" ","&#160;")
 if s.err then
 	docker:clear_status()
 end
@@ -294,7 +294,7 @@ if action == "info" then
 		},
 		["03image"] = {
 			_key = translate("Image"),
-			_value = container_info.Config.Image .. "<br>" .. container_info.Image
+			_value = container_info.Config.Image .. "<br />" .. container_info.Image
 		},
 		["04status"] = {
 			_key = translate("Status"),

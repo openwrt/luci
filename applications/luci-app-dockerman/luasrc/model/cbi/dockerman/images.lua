@@ -40,7 +40,7 @@ function get_images()
 
 		if v.RepoTags and next(v.RepoTags)~=nil then
 			for i, v1 in ipairs(v.RepoTags) do
-				data[index]["_tags"] =(data[index]["_tags"] and ( data[index]["_tags"] .. "<br>" )or "") .. ((v1:match("<none>") or (#v.RepoTags == 1)) and v1 or ('<a href="javascript:un_tag(\''..v1..'\')" class="dockerman_link" title="'..translate("Remove tag")..'" >' .. v1 .. '</a>'))
+				data[index]["_tags"] =(data[index]["_tags"] and ( data[index]["_tags"] .. "<br />" )or "") .. ((v1:match("<none>") or (#v.RepoTags == 1)) and v1 or ('<a href="javascript:un_tag(\''..v1..'\')" class="dockerman_link" title="'..translate("Remove tag")..'" >' .. v1 .. '</a>'))
 
 				if not data[index]["tag"] then
 					data[index]["tag"] = v1
@@ -155,7 +155,7 @@ local remove_action = function(force)
 
 	for k in pairs(image_list) do
 		if image_list[k]._selected == 1 then
-			image_selected[#image_selected+1] = (image_list[k]["_tags"]:match("<br>") or image_list[k]["_tags"]:match("&lt;none&gt;")) and image_list[k].id or image_list[k].tag
+			image_selected[#image_selected+1] = (image_list[k]["_tags"]:match("<br />") or image_list[k]["_tags"]:match("&lt;none&gt;")) and image_list[k].id or image_list[k].tag
 		end
 	end
 
@@ -194,7 +194,7 @@ end
 s = m:section(SimpleSection)
 s.template = "dockerman/apply_widget"
 s.err = docker:read_status()
-s.err = s.err and s.err:gsub("\n","<br>"):gsub(" ","&nbsp;")
+s.err = s.err and s.err:gsub("\n","<br />"):gsub(" ","&#160;")
 if s.err then
 	docker:clear_status()
 end
