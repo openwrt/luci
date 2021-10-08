@@ -2489,6 +2489,8 @@ var CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection.p
 		    config_name = this.uciconfig || this.map.config,
 		    max_cols = isNaN(this.max_cols) ? this.children.length : this.max_cols,
 		    has_more = max_cols < this.children.length,
+		    drag_sort = this.sortable && !('ontouchstart' in window),
+		    touch_sort = this.sortable && ('ontouchstart' in window),
 		    sectionEl = E('div', {
 				'id': 'cbi-%s-%s'.format(config_name, this.sectiontype),
 				'class': 'cbi-section cbi-tblsection',
@@ -2517,14 +2519,16 @@ var CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection.p
 				'id': 'cbi-%s-%s'.format(config_name, cfgsections[i]),
 				'class': 'tr cbi-section-table-row',
 				'data-sid': cfgsections[i],
-				'draggable': this.sortable ? true : null,
-				'mousedown': this.sortable ? L.bind(this.handleDragInit, this) : null,
-				'dragstart': this.sortable ? L.bind(this.handleDragStart, this) : null,
-				'dragover': this.sortable ? L.bind(this.handleDragOver, this) : null,
-				'dragenter': this.sortable ? L.bind(this.handleDragEnter, this) : null,
-				'dragleave': this.sortable ? L.bind(this.handleDragLeave, this) : null,
-				'dragend': this.sortable ? L.bind(this.handleDragEnd, this) : null,
-				'drop': this.sortable ? L.bind(this.handleDrop, this) : null,
+				'draggable': (drag_sort || touch_sort) ? true : null,
+				'mousedown': drag_sort ? L.bind(this.handleDragInit, this) : null,
+				'dragstart': drag_sort ? L.bind(this.handleDragStart, this) : null,
+				'dragover': drag_sort ? L.bind(this.handleDragOver, this) : null,
+				'dragenter': drag_sort ? L.bind(this.handleDragEnter, this) : null,
+				'dragleave': drag_sort ? L.bind(this.handleDragLeave, this) : null,
+				'dragend': drag_sort ? L.bind(this.handleDragEnd, this) : null,
+				'drop': drag_sort ? L.bind(this.handleDrop, this) : null,
+				'touchmove': touch_sort ? L.bind(this.handleTouchMove, this) : null,
+				'touchend': touch_sort ? L.bind(this.handleTouchEnd, this) : null,
 				'data-title': (sectionname && (!this.anonymous || this.sectiontitle)) ? sectionname : null,
 				'data-section-id': cfgsections[i]
 			});
@@ -2794,6 +2798,160 @@ var CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection.p
 		ev.stopPropagation();
 		ev.preventDefault();
 		return false;
+	},
+
+	/** @private */
+	determineBackgroundColor: function(node) {
+		var r = 255, g = 255, b = 255;
+
+		while (node) {
+			var s = window.getComputedStyle(node),
+			    c = (s.getPropertyValue('background-color') || '').replace(/ /g, '');
+
+			if (c != '' && c != 'transparent' && c != 'rgba(0,0,0,0)') {
+				if (/^#([a-f0-9]{2})([a-f0-9]{2})([a-f0-9]{2})$/i.test(c)) {
+					r = parseInt(RegExp.$1, 16);
+					g = parseInt(RegExp.$2, 16);
+					b = parseInt(RegExp.$3, 16);
+				}
+				else if (/^rgba?\(([0-9]+),([0-9]+),([0-9]+)[,)]$/.test(c)) {
+					r = +RegExp.$1;
+					g = +RegExp.$2;
+					b = +RegExp.$3;
+				}
+
+				break;
+			}
+
+			node = node.parentNode;
+		}
+
+		return [ r, g, b ];
+	},
+
+	/** @private */
+	handleTouchMove: function(ev) {
+		if (!ev.target.classList.contains('drag-handle'))
+			return;
+
+		var touchLoc = ev.targetTouches[0],
+		    rowBtn = ev.target,
+		    rowElem = dom.parent(rowBtn, '.tr'),
+		    htmlElem = document.querySelector('html'),
+		    dragHandle = document.querySelector('.touchsort-element'),
+		    viewportHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+
+		if (!dragHandle) {
+			var rowRect = rowElem.getBoundingClientRect(),
+			    btnRect = rowBtn.getBoundingClientRect(),
+			    paddingLeft = btnRect.left - rowRect.left,
+			    paddingRight = rowRect.right - btnRect.right,
+			    colorBg = this.determineBackgroundColor(rowElem),
+			    colorFg = (colorBg[0] * 0.299 + colorBg[1] * 0.587 + colorBg[2] * 0.114) > 186 ? [ 0, 0, 0 ] : [ 255, 255, 255 ];
+
+			dragHandle = E('div', { 'class': 'touchsort-element' }, [
+				E('strong', [ rowElem.getAttribute('data-title') ]),
+				rowBtn.cloneNode(true)
+			]);
+
+			Object.assign(dragHandle.style, {
+				position: 'absolute',
+				boxShadow: '0 0 3px rgba(%d, %d, %d, 1)'.format(colorFg[0], colorFg[1], colorFg[2]),
+				background: 'rgba(%d, %d, %d, 0.8)'.format(colorBg[0], colorBg[1], colorBg[2]),
+				top: rowRect.top + 'px',
+				left: rowRect.left + 'px',
+				width: rowRect.width + 'px',
+				height: (rowBtn.offsetHeight + 4) + 'px'
+			});
+
+			Object.assign(dragHandle.firstElementChild.style, {
+				position: 'absolute',
+				lineHeight: dragHandle.style.height,
+				whiteSpace: 'nowrap',
+				overflow: 'hidden',
+				textOverflow: 'ellipsis',
+				left: (paddingRight > paddingLeft) ? '' : '5px',
+				right: (paddingRight > paddingLeft) ? '5px' : '',
+				width: (Math.max(paddingLeft, paddingRight) - 10) + 'px'
+			});
+
+			Object.assign(dragHandle.lastElementChild.style, {
+				position: 'absolute',
+				top: '2px',
+				left: paddingLeft + 'px',
+				width: rowBtn.offsetWidth + 'px'
+			});
+
+			document.body.appendChild(dragHandle);
+
+			rowElem.classList.remove('flash');
+			rowBtn.blur();
+		}
+
+		dragHandle.style.top = (touchLoc.pageY - (parseInt(dragHandle.style.height) / 2)) + 'px';
+
+		rowElem.parentNode.querySelectorAll('[draggable]').forEach(function(tr, i, trs) {
+			var trRect = tr.getBoundingClientRect(),
+			    yTop = trRect.top + window.scrollY,
+			    yBottom = trRect.bottom + window.scrollY,
+			    yMiddle = yTop + ((yBottom - yTop) / 2);
+
+			tr.classList.remove('drag-over-above', 'drag-over-below');
+
+			if ((i == 0 || touchLoc.pageY >= yTop) && touchLoc.pageY <= yMiddle)
+				tr.classList.add('drag-over-above');
+			else if ((i == (trs.length - 1) || touchLoc.pageY <= yBottom) && touchLoc.pageY > yMiddle)
+				tr.classList.add('drag-over-below');
+		});
+
+		/* prevent standard scrolling and scroll page when drag handle is
+		 * moved very close (~30px) to the viewport edge */
+
+		ev.preventDefault();
+
+		if (touchLoc.clientY < 30)
+			window.requestAnimationFrame(function() { htmlElem.scrollTop -= 30 });
+		else if (touchLoc.clientY > viewportHeight - 30)
+			window.requestAnimationFrame(function() { htmlElem.scrollTop += 30 });
+	},
+
+	/** @private */
+	handleTouchEnd: function(ev) {
+		var rowElem = dom.parent(ev.target, '.tr'),
+		    htmlElem = document.querySelector('html'),
+		    dragHandle = document.querySelector('.touchsort-element'),
+		    targetElem = rowElem.parentNode.querySelector('.drag-over-above, .drag-over-below'),
+		    viewportHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+
+		if (!dragHandle)
+			return;
+
+		if (targetElem) {
+		    var isBelow = targetElem.classList.contains('drag-over-below');
+
+			rowElem.parentNode.insertBefore(rowElem, isBelow ? targetElem.nextElementSibling : targetElem);
+
+			this.map.data.move(
+				this.uciconfig || this.map.config,
+				rowElem.getAttribute('data-sid'),
+				targetElem.getAttribute('data-sid'),
+				isBelow);
+
+			window.requestAnimationFrame(function() {
+				var rowRect = rowElem.getBoundingClientRect();
+
+				if (rowRect.top < 50)
+					htmlElem.scrollTop = (htmlElem.scrollTop + rowRect.top - 50);
+				else if (rowRect.bottom > viewportHeight - 50)
+					htmlElem.scrollTop = (htmlElem.scrollTop + viewportHeight - 50 - rowRect.height);
+
+				rowElem.classList.add('flash');
+			});
+
+			targetElem.classList.remove('drag-over-above', 'drag-over-below');
+		}
+
+		document.body.removeChild(dragHandle);
 	},
 
 	/** @private */
