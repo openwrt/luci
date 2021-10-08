@@ -47,7 +47,7 @@
 			<% for _, section in ipairs(self.children) do %>
 				<% if section.error and section.error[section.section] then -%>
 					<ul><li>
-						<%:One or more missing/invalid fields on tab%>:&nbsp;<%=section.title or section.section or section.sectiontype%>
+						<%:One or more missing/invalid fields on tab%>:&#160;<%=section.title or section.section or section.sectiontype%>
 					</li></ul>
 				<%- end %>
 			<% end %>
