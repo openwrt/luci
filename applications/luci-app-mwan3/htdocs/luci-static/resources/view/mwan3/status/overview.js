@@ -61,11 +61,11 @@ function renderMwan3Status(status) {
 		}
 
 		statusview += '<div class="alert-message %h">'.format(css);
-		statusview += '<div><strong>%h:&nbsp;</strong>%h</div>'.format(_('Interface'), iface);
-		statusview += '<div><strong>%h:&nbsp;</strong>%h</div>'.format(_('Status'), state);
+		statusview += '<div><strong>%h:&#160;</strong>%h</div>'.format(_('Interface'), iface);
+		statusview += '<div><strong>%h:&#160;</strong>%h</div>'.format(_('Status'), state);
 
 		if (time)
-			statusview += '<div><strong>%h:&nbsp;</strong>%h</div>'.format(tname, time);
+			statusview += '<div><strong>%h:&#160;</strong>%h</div>'.format(tname, time);
 
 		statusview += '</div>';
 	}
