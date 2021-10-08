@@ -187,7 +187,7 @@ ipv6:value("1", translate("Enabled"))
 
 -- Advanced Options
 config:tab("advanced", translate("Advanced Configuration"),
-	translatef("%sWARNING:%s Please make sure to check the %sREADME%s before changing anything in this section! Change any of the settings below with extreme caution!%s" , "<br/>&nbsp;&nbsp;&nbsp;&nbsp;<b>", "</b>", "<a href=\"" .. readmeURL .. "#service-configuration-settings" .. "\" target=\"_blank\">", "</a>", "<br/><br/>"))
+	translatef("%sWARNING:%s Please make sure to check the %sREADME%s before changing anything in this section! Change any of the settings below with extreme caution!%s" , "<br/>&#160;&#160;&#160;&#160;<b>", "</b>", "<a href=\"" .. readmeURL .. "#service-configuration-settings" .. "\" target=\"_blank\">", "</a>", "<br/><br/>"))
 
 supportedIface = config:taboption("advanced", DynamicList, "supported_interface", translate("Supported Interfaces"), translate("Allows to specify the list of interface names (in lower case) to be explicitly supported by the service. Can be useful if your OpenVPN tunnels have dev option other than tun* or tap*."))
 supportedIface.optional = false
