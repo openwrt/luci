@@ -91,8 +91,8 @@ var statusCBI = form.DummyValue.extend({
 var buttonsCBI = form.DummyValue.extend({
 	renderWidget: function (section) {
 
-		var btn_gap = E('span', {}, '&nbsp;&nbsp;');
-		var btn_gap_long = E('span', {}, '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;');
+		var btn_gap = E('span', {}, '&#160;&#160;');
+		var btn_gap_long = E('span', {}, '&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;');
 
 		var btn_start = E('button', {
 			'class': 'btn cbi-button cbi-button-apply',
