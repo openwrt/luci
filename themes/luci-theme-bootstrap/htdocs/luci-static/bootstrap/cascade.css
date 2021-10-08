@@ -31,19 +31,24 @@
 	--background-color-low-l: calc(var(--background-color-high-l) + var(--background-color-delta-l-sign) * var(--background-color-low-delta-l));
 	--background-color-low: hsl(var(--background-color-low-h), var(--background-color-low-s), var(--background-color-low-l));
 	--text-color-delta-l-sign: 1;
-	--text-color-high-h: 0;
-	--text-color-high-s: 0%;
-	--text-color-high-l: calc(64 / 255 * 100%);
+	--text-color-highest-h: 0;
+	--text-color-highest-s: 0%;
+	--text-color-highest-l: 0%;
+	--text-color-highest: hsl(var(--text-color-highest-h), var(--text-color-highest-s), var(--text-color-highest-l));
+	--text-color-high-h: var(--text-color-highest-h);
+	--text-color-high-s: var(--text-color-highest-s);
+	--text-color-high-delta-l: calc(64 / 255 * 100%);
+	--text-color-high-l: calc(var(--text-color-highest-l) + var(--text-color-delta-l-sign) * var(--text-color-high-delta-l));
 	--text-color-high: hsl(var(--text-color-high-h), var(--text-color-high-s), var(--text-color-high-l));
-	--text-color-medium-h: var(--text-color-high-h);
-	--text-color-medium-s: var(--text-color-high-s);
-	--text-color-medium-delta-l: calc(64 / 255 * 100%);
-	--text-color-medium-l: calc(var(--text-color-high-l) + var(--text-color-delta-l-sign) * var(--text-color-medium-delta-l));
+	--text-color-medium-h: var(--text-color-highest-h);
+	--text-color-medium-s: var(--text-color-highest-s);
+	--text-color-medium-delta-l: calc(128 / 255 * 100%);
+	--text-color-medium-l: calc(var(--text-color-highest-l) + var(--text-color-delta-l-sign) * var(--text-color-medium-delta-l));
 	--text-color-medium: hsl(var(--text-color-medium-h), var(--text-color-medium-s), var(--text-color-medium-l));
-	--text-color-low-h: var(--text-color-high-h);
-	--text-color-low-s: var(--text-color-high-s);
-	--text-color-low-delta-l: calc(127 / 255 * 100%);
-	--text-color-low-l: calc(var(--text-color-high-l) + var(--text-color-delta-l-sign) * var(--text-color-low-delta-l));
+	--text-color-low-h: var(--text-color-highest-h);
+	--text-color-low-s: var(--text-color-highest-s);
+	--text-color-low-delta-l: calc(191 / 255 * 100%);
+	--text-color-low-l: calc(var(--text-color-highest-l) + var(--text-color-delta-l-sign) * var(--text-color-low-delta-l));
 	--text-color-low: hsl(var(--text-color-low-h), var(--text-color-low-s), var(--text-color-low-l));
 	--border-color-delta-l-sign: -1;
 	--border-color-high-h: var(--background-color-high-h);
@@ -72,9 +77,9 @@
 		--background-color-high-s: 0%;
 		--background-color-high-l: calc(34 / 255 * 100%);
 		--text-color-delta-l-sign: -1;
-		--text-color-high-h: 0;
-		--text-color-high-s: 0%;
-		--text-color-high-l: 100%;
+		--text-color-highest-h: 0;
+		--text-color-highest-s: 0%;
+		--text-color-highest-l: 100%;
 		--border-color-delta-l-sign: 1;
 	}
 }
@@ -119,13 +124,6 @@ a:hover, a:active {
 	outline: 0;
 }
 
-footer,
-header,
-nav,
-section {
-	display: block;
-}
-
 sub, sup {
 	font-size: 75%;
 	line-height: 0;
@@ -154,7 +152,7 @@ textarea {
 	margin: 0;
 	box-sizing: border-box;
 	vertical-align: baseline;
-	line-height: normal;
+	line-height: 2em;
 }
 
 button::-moz-focus-inner, input::-moz-focus-inner {
@@ -203,8 +201,7 @@ body {
 	font-weight: normal;
 	line-height: 18px;
 	color: var(--text-color-high);
-	padding: 18px 5px 5px 5px;
-	margin-top: 40px;
+	padding: 5px;
 }
 
 .container {
@@ -213,16 +210,6 @@ body {
 	margin-left: auto;
 	margin-right: auto;
 	zoom: 1;
-}
-
-.container:before, .container:after {
-	display: table;
-	content: "";
-	zoom: 1;
-}
-
-.container:after {
-	clear: both;
 }
 
 a {
@@ -834,13 +821,13 @@ textarea[readonly] {
  * Repeatable UI elements outside the base styles provided from the scaffolding
  * ---------------------------------------------------------------------------- */
 header {
-	position: fixed;
+	position: sticky;
 	top: 0;
-	left: 0;
-	right: 0;
 	z-index: 800;
 	overflow: visible;
 	color: #BFBFBF;
+	margin: -5px -5px 15px -5px;
+	display: flex;
 }
 
 header a {
@@ -848,18 +835,14 @@ header a {
 	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
 }
 
-header h3 a:hover, header .brand:hover, header ul .active > a {
+header .brand:hover, header ul .active > a {
 	background-color: #333;
 	background-color: rgba(255, 255, 255, 0.05);
 	color: #fff;
 	text-decoration: none;
 }
 
-header h3 {
-	position: relative;
-}
-
-header h3 a, header .brand {
+header .brand {
 	float: left;
 	display: block;
 	padding: 8px 20px 12px;
@@ -875,7 +858,7 @@ header p {
 	line-height: 40px;
 }
 
-header .fill {
+header {
 	background-color: #222;
 	background-repeat: repeat-x;
 	background-image: linear-gradient(to bottom, #333333, #222222);
@@ -883,7 +866,7 @@ header .fill {
 	padding: 0 5px;
 }
 
-header div > ul, .nav {
+.nav {
 	display: block;
 	float: left;
 	margin: 0 10px 0 0;
@@ -891,12 +874,12 @@ header div > ul, .nav {
 	left: 0;
 }
 
-header div > ul > li, .nav > li {
+.nav > li {
 	display: block;
 	float: left;
 }
 
-header div > ul a, .nav a {
+.nav a {
 	display: block;
 	float: none;
 	padding: 10px 10px 11px;
@@ -904,83 +887,34 @@ header div > ul a, .nav a {
 	text-decoration: none;
 }
 
-header div > ul a:hover, .nav a:hover {
+.nav a:hover {
 	color: #fff;
 	text-decoration: none;
 }
 
-header div > ul .active > a, .nav .active > a {
+.nav .active > a {
 	background-color: #222;
 	background-color: rgba(0, 0, 0, 0.5);
 }
 
-header div > ul.secondary-nav, .nav.secondary-nav {
-	float: right;
-	margin-left: 10px;
-	margin-right: 0;
-}
-
-header div > ul.secondary-nav .menu-dropdown,
-.nav.secondary-nav .menu-dropdown,
-header div > ul.secondary-nav .dropdown-menu,
-.nav.secondary-nav .dropdown-menu {
-	right: 0;
-	border: 0;
-}
-
-header div > ul a.menu:hover,
-.nav a.menu:hover,
-header div > ul li.open .menu,
-.nav li.open .menu,
-header div > ul .dropdown-toggle:hover,
-.nav .dropdown-toggle:hover,
-header div > ul .dropdown.open .dropdown-toggle,
-.nav .dropdown.open .dropdown-toggle {
+.nav a.menu:hover {
 	background: #444;
 	background: rgba(255, 255, 255, 0.05);
 }
 
-header div > ul .menu-dropdown,
-.nav .menu-dropdown,
-header div > ul .dropdown-menu,
 .nav .dropdown-menu {
 	background-color: #333;
 }
 
-header div > ul .menu-dropdown a.menu,
-.nav .menu-dropdown a.menu,
-header div > ul .dropdown-menu a.menu,
-.nav .dropdown-menu a.menu,
-header div > ul .menu-dropdown .dropdown-toggle,
-.nav .menu-dropdown .dropdown-toggle,
-header div > ul .dropdown-menu .dropdown-toggle,
-.nav .dropdown-menu .dropdown-toggle {
+.nav .dropdown-menu a.menu {
 	color: #fff;
 }
 
-header div > ul .menu-dropdown a.menu.open,
-.nav .menu-dropdown a.menu.open,
-header div > ul .dropdown-menu a.menu.open,
-.nav .dropdown-menu a.menu.open,
-header div > ul .menu-dropdown .dropdown-toggle.open,
-.nav .menu-dropdown .dropdown-toggle.open,
-header div > ul .dropdown-menu .dropdown-toggle.open,
-.nav .dropdown-menu .dropdown-toggle.open {
-	background: #444;
-	background: rgba(255, 255, 255, 0.05);
-}
-
-header div > ul .menu-dropdown li a,
-.nav .menu-dropdown li a,
-header div > ul .dropdown-menu li a,
 .nav .dropdown-menu li a {
 	color: #999;
 	text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
 }
 
-header div > ul .menu-dropdown li a:hover,
-.nav .menu-dropdown li a:hover,
-header div > ul .dropdown-menu li a:hover,
 .nav .dropdown-menu li a:hover {
 	background-color: #191919;
 	background-repeat: repeat-x;
@@ -988,22 +922,11 @@ header div > ul .dropdown-menu li a:hover,
 	color: #fff;
 }
 
-header div > ul .menu-dropdown .active a,
-.nav .menu-dropdown .active a,
-header div > ul .dropdown-menu .active a,
 .nav .dropdown-menu .active a {
 	color: #fff;
 }
 
-header div > ul .menu-dropdown .divider,
-.nav .menu-dropdown .divider,
-header div > ul .dropdown-menu .divider,
-.nav .dropdown-menu .divider {
-	background-color: #222;
-	border-color: #444;
-}
-
-header ul .menu-dropdown li a, header ul .dropdown-menu li a {
+.nav .dropdown-menu li a {
 	padding: 4px 15px;
 }
 
@@ -1011,7 +934,7 @@ li.menu, .dropdown {
 	position: relative;
 }
 
-a.menu:after, .dropdown-toggle:after {
+a.menu:after {
 	width: 0;
 	height: 0;
 	display: inline-block;
@@ -1026,7 +949,7 @@ a.menu:after, .dropdown-toggle:after {
 	opacity: 0.5;
 }
 
-.menu-dropdown, .dropdown-menu {
+.dropdown-menu {
 	background-color: #fff;
 	float: left;
 	position: absolute;
@@ -1049,21 +972,13 @@ a.menu:after, .dropdown-toggle:after {
 	background-clip: padding-box;
 }
 
-.menu-dropdown li, .dropdown-menu li {
+.dropdown-menu li {
 	float: none;
 	display: block;
 	background-color: transparent;
 }
 
-.menu-dropdown .divider, .dropdown-menu .divider {
-	height: 1px;
-	margin: 5px 0;
-	overflow: hidden;
-	background-color: #eee;
-	border-bottom: 1px solid #fff;
-}
-
-header .dropdown-menu a, .dropdown-menu a {
+.dropdown-menu a {
 	display: block;
 	padding: 4px 15px;
 	clear: both;
@@ -1073,32 +988,13 @@ header .dropdown-menu a, .dropdown-menu a {
 	text-shadow: 0 1px 0 #fff;
 }
 
-header .dropdown-menu a:hover,
-.dropdown-menu a:hover,
-header .dropdown-menu a.hover,
-.dropdown-menu a.hover {
+.dropdown-menu a:hover {
 	background-color: #ddd;
 	background-repeat: repeat-x;
 	background-image: linear-gradient(to bottom, #eee, #ddd);
 	color: #404040;
 	text-decoration: none;
 	box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.025), inset 0 -1px rgba(0, 0, 0, 0.025);
-}
-
-.open .menu,
-.dropdown.open .menu,
-.open .dropdown-toggle,
-.dropdown.open .dropdown-toggle {
-	color: #fff;
-	background: #ccc;
-	background: rgba(0, 0, 0, 0.3);
-}
-
-.open .menu-dropdown,
-.dropdown.open .menu-dropdown,
-.open .dropdown-menu,
-.dropdown.open .dropdown-menu {
-	left: 0;
 }
 
 .dropdown:hover ul.dropdown-menu {
@@ -1231,32 +1127,34 @@ header .dropdown-menu a.hover,
 .breadcrumb {
 	padding: 7px 14px;
 	margin: 0 0 18px;
-	background-color: #f5f5f5;
-	background-repeat: repeat-x;
-	background-image: linear-gradient(to bottom, #fff, #f5f5f5);
-	border: 1px solid #ddd;
+	background: linear-gradient(to bottom, var(--background-color-high), var(--background-color-low));
+	border: 1px solid var(--border-color-medium);
 	border-radius: 3px;
-	box-shadow: inset 0 1px 0 #fff;
+	display: flex;
+	flex: 0;
 }
 
 .breadcrumb li {
-	display: inline;
-	text-shadow: 0 1px 0 #fff;
+	list-style: none;
 }
 
-.breadcrumb .divider {
+.breadcrumb li:not(:last-child)::after {
+	content: "|";
 	padding: 0 5px;
-	color: #bfbfbf;
 }
 
 .breadcrumb .active a {
-	color: #404040;
+	color: var(--text-color-medium);
 }
 
 footer {
-	margin-top: 17px;
 	padding-top: 17px;
+	margin-top: 17px;
 	border-top: 1px solid var(--border-color-low);
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	justify-content: space-between;
 }
 
 #modal_overlay {
@@ -1377,11 +1275,11 @@ body.modal-overlay-active #modal_overlay {
 	cursor: pointer;
 	display: inline-block;
 	background: linear-gradient(var(--background-color-high), var(--background-color-high) 25%, var(--border-color-low)) no-repeat;
-	padding: 5px 14px 6px;
+	padding: 0 14px;
 	text-shadow: 0 1px 1px hsla(var(--background-color-high-h), var(--background-color-high-s), var(--background-color-high-l), 0.75);
 	color: var(--text-color-high);
 	font-size: 13px;
-	line-height: normal;
+	line-height: 2em;
 	border: 1px solid var(--border-color-high);
 	border-radius: 4px;
 	box-shadow: inset 0 1px 0 hsla(var(--background-color-high-h), var(--background-color-high-s), var(--background-color-high-l), 0.2), 0 1px 2px hsla(var(--text-color-high-h), var(--text-color-high-s), var(--text-color-high-l), 0.05);
@@ -1935,11 +1833,14 @@ header [data-indicator][data-style="active"] {
 
 form.inline { display: inline; margin-bottom: 0; }
 
-header .pull-right { padding-top: 8px; }
+header .pull-right { padding-top: 8px; margin-left: auto; }
 
 #modemenu li:last-child span.divider { display: none }
 
-#syslog {  width: 100%; }
+#syslog {
+	width: 100%;
+	color: var(--text-color-highest);
+}
 
 .cbi-section-table .tr:hover .td,
 .cbi-section-table .tr:hover .th,
@@ -2061,7 +1962,7 @@ table table td,
 	background: linear-gradient(var(--background-color-high), var(--background-color-high) 25%, var(--background-color-medium));
 	text-shadow: 0 1px 1px hsla(var(--background-color-high-h), var(--background-color-high-s), var(--background-color-high-l), 0.75);
 	border-radius: 4px;
-	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+	box-shadow: inset 0 1px 0 hsla(var(--text-color-low-h), var(--text-color-low-s), var(--text-color-low-l), 0.2), 0 1px 2px hsla(var(--text-color-highest-h), var(--text-color-highest-s), var(--text-color-highest-l), 0.05);
 	display: inline-flex;
 	flex-direction: column;
 	line-height: 1.2em;
@@ -2070,6 +1971,7 @@ table table td,
 
 .ifacebox .ifacebox-head {
 	border-bottom: 1px solid var(--border-color-high);
+	border-radius: 4px 4px 0 0;
 	padding: 2px;
 	background: #eee;
 	color: #404040;
