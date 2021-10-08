@@ -1,6 +1,6 @@
 -- Licensed to the public under the Apache License 2.0.
 
-local rad2 = luci.controller.radicale2
+local rad2 = require "luci.controller.radicale2"
 local fs = require("nixio.fs")
 
 local m = Map("radicale2", translate("Radicale 2.x"),
