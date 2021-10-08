@@ -2230,6 +2230,28 @@ div.cbi-value var.cbi-tooltip-container,
 	white-space: pre;
 }
 
+.uci-change-list > del,
+.uci-change-list > ins,
+.uci-change-list > var,
+.uci-change-legend-label > del,
+.uci-change-legend-label > ins,
+.uci-change-legend-label > var {
+	margin-bottom: 2px;
+	border: 1px solid #ccc;
+	background: #eee;
+	line-height: 15px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	padding: 2px;
+}
+
+.uci-change-list > * > del,
+.uci-change-list > * > ins,
+.uci-change-list > * > var {
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
 .uci-change-list del,
 .uci-change-list ins,
 .uci-change-list var,
@@ -2239,13 +2261,8 @@ div.cbi-value var.cbi-tooltip-container,
 	text-decoration: none;
 	font-family: monospace;
 	font-style: normal;
-	border: 1px solid #ccc;
-	background: #eee;
 	color: #404040;
-	padding: 2px;
 	display: block;
-	line-height: 15px;
-	margin-bottom: 1px;
 }
 
 .uci-change-list ins,
@@ -2266,42 +2283,29 @@ div.cbi-value var.cbi-tooltip-container,
 	background: #eee;
 }
 
-.uci-change-list var ins,
-.uci-change-list var del {
-	display: inline-block;
-	border: none;
-	width: 100%;
-	padding: 0;
-}
-
 .uci-change-legend {
-	padding: 5px;
+	display: flex;
+	flex-wrap: wrap;
 }
 
 .uci-change-legend-label {
-	width: 150px;
-	float: left;
+	flex-basis: 150px;
+	margin: 2px;
+	display: flex;
+	align-items: center;
 }
 
 .uci-change-legend-label > ins,
 .uci-change-legend-label > del,
 .uci-change-legend-label > var {
-	float: left;
 	margin-right: 4px;
 	width: 16px;
 	height: 16px;
-	display: block;
-	position: relative;
+	display: flex;
 }
 
-.uci-change-legend-label var ins,
-.uci-change-legend-label var del {
-	border: none;
-	position: absolute;
-	top: 2px;
-	left: 2px;
-	right: 2px;
-	bottom: 2px;
+.uci-change-legend-label > var > * {
+	flex-basis: 100%;
 }
 
 #modal_overlay {
