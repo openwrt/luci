@@ -11,7 +11,7 @@ return view.extend({
 			ssl = uci.get_first('ttyd', 'ttyd', 'ssl') || '0';
 		if (port === '0')
 			return E('div', { class: 'alert-message warning' },
-					_('Random ttyd port (port=0) is not supported.<br>Change to a fixed port and try again.'));
+					_('Random ttyd port (port=0) is not supported.<br />Change to a fixed port and try again.'));
 		return E('iframe', {
 			src: (ssl === '1' ? 'https' : 'http') + '://' + window.location.hostname + ':' + port,
 			style: 'width: 100%; min-height: 500px; border: none; border-radius: 3px; resize: vertical;'
