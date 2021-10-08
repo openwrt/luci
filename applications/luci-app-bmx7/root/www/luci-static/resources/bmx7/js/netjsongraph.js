@@ -227,7 +227,7 @@
                 }
                 if(n.linkCount) { html += "<p><b>links</b>: " + n.linkCount + "</p>"; }
                 if(n.local_addresses) {
-                    html += "<p><b>local addresses</b>:<br>" + n.local_addresses.join('<br>') + "</p>";
+                    html += "<p><b>local addresses</b>:<br />" + n.local_addresses.join('<br />') + "</p>";
                 }
                 overlayInner.html(html);
                 overlay.classed("njg-hidden", false);
