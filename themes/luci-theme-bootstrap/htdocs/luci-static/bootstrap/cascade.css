@@ -682,11 +682,7 @@ input[type=file]:focus, input[type=checkbox]:focus, select:focus {
 input[disabled],
 button[disabled],
 select[disabled],
-textarea[disabled],
-input[readonly],
-button[readonly],
-select[readonly],
-textarea[readonly] {
+textarea[disabled] {
 	background-color: var(--background-color-medium);
 	color: var(--text-color-medium);
 	border-color: var(--border-color-low);
@@ -694,10 +690,11 @@ textarea[readonly] {
 	cursor: default;
 }
 
-select[readonly],
+input[readonly],
 textarea[readonly] {
-	pointer-events: auto;
-	cursor: auto;
+	background-color: var(--background-color-medium);
+	color: var(--text-color-high);
+	border-color: var(--border-color-low);
 }
 
 .cbi-optionals,
