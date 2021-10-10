@@ -1,0 +1,25 @@
+{
+  "luci-app-example": {
+    "description": "Grant UCI access to LuCI app ecample",
+    "read": {
+      "ubus": {
+        "uci": [
+          "get"
+        ]
+      },
+      "uci": [
+        "example"
+      ]
+    },
+    "write": {
+      "ubus": {
+        "uci": [
+          "set", "commit"
+        ]
+      },
+      "uci": [
+        "example"
+      ]
+    }
+  }
+}
