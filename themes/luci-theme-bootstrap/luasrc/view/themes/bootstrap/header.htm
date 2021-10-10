@@ -39,13 +39,9 @@
 
 	<body class="lang_<%=luci.i18n.context.lang%> <% if node then %><%= striptags( node.title ) %><%- end %>" data-page="<%= pcdata(table.concat(disp.context.requestpath, "-")) %>">
 		<header>
-			<div class="fill">
-				<div class="container">
-					<a class="brand" href="/"><%=striptags(boardinfo.hostname or "?")%></a>
-					<ul class="nav" id="topmenu" style="display:none"></ul>
-					<div id="indicators" class="pull-right"></div>
-				</div>
-			</div>
+			<a class="brand" href="/"><%=striptags(boardinfo.hostname or "?")%></a>
+			<ul class="nav" id="topmenu" style="display:none"></ul>
+			<div id="indicators" class="pull-right"></div>
 		</header>
 
 		<div id="maincontent" class="container">

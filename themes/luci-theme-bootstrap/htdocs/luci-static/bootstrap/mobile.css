@@ -3,10 +3,6 @@ header h3 a, header .brand {
 }
 
 @media screen and (max-device-width: 600px) {
-	#maincontent.container {
-		margin-top: 30px;
-	}
-
 	.tabs, .cbi-tabmenu {
 		background: linear-gradient(var(--background-color-high) 20%, var(--border-color-medium) 100%);
 		background-size: 1px 34px;
@@ -163,8 +159,14 @@ header h3 a, header .brand {
 
 	.cbi-value {
 		padding-bottom: .5em;
-		border-bottom: 1px solid var(--border-color-medium);
+		border-bottom: 1px solid var(--border-color-high);
 		margin-bottom: .5em;
+	}
+
+	.cbi-value .cbi-value:last-child {
+		border-bottom: none;
+		padding-bottom: inherit;
+		margin-bottom: inherit;
 	}
 
 	.cbi-value label.cbi-value-title {
@@ -221,9 +223,9 @@ header h3 a, header .brand {
 		margin: 0;
 	}
 
-	.btn, .cbi-button {
+	button, .btn, .cbi-button {
 		font-size: 14px !important;
-		padding: 4px 8px;
+		padding: 0 8px;
 	}
 
 	.actions,
@@ -277,10 +279,6 @@ header h3 a, header .brand {
 
 	.menu-dropdown, .dropdown-menu {
 		top: 23px;
-	}
-
-	body {
-		padding-top: 30px;
 	}
 
 	.cbi-optionals,
@@ -340,34 +338,34 @@ header h3 a, header .brand {
 }
 
 @media screen and (max-device-width: 375px) {
-	#maincontent.container {
-		margin-top: 55px;
-	}
-
 	.cbi-page-actions {
 		display: flex;
-		flex-wrap: wrap;
 		justify-content: space-between;
 		margin: 0 -1px;
 		padding: 0;
 	}
 
-	.cbi-page-actions .cbi-button:not(.cbi-dropdown) {
-		flex: 1 1 calc(50% - 2px);
-		margin: 1px !important;
+	.cbi-page-actions button {
 		overflow: hidden;
 		text-overflow: ellipsis;
+	}
+
+	.cbi-page-actions .cbi-button {
+		flex: 1;
+		margin: 1px !important;
+		line-height: 2em;
 	}
 
 	.cbi-page-actions .cbi-button-negative,
 	.cbi-page-actions .cbi-button-primary,
 	.cbi-page-actions .cbi-button-apply {
-		flex-basis: calc(100% - -2px);
+		flex: 3;
 	}
 
 	.cbi-section-actions .cbi-button {
 		overflow: hidden;
 		text-overflow: ellipsis;
+		margin: 1px !important;
 	}
 
 	body[data-page="admin-network-wireless"] .td[data-name="_badge"] {
@@ -391,12 +389,6 @@ header h3 a, header .brand {
 	}
 }
 
-@media screen and (max-device-width: 200px) {
-	#maincontent.container {
-		margin-top: 230px;
-	}
-}
-
 @media screen and (max-width: 375px) {
 	.td .ifacebox {
 		width: 100%;
@@ -407,6 +399,7 @@ header h3 a, header .brand {
 	.td .ifacebox .ifacebox-head {
 		min-width: 25%;
 		justify-content: space-around;
+		border-radius: 4px 0 0 4px;
 	}
 
 	.td .ifacebox .ifacebox-head,
