@@ -141,8 +141,7 @@ return view.extend({
 
 					has_arpscan ? E('td', { 'class': 'td left' }, [
 						E('select', {
-							'style': 'margin:5px 0',
-							'type': 'text'
+							'style': 'margin:5px 0'
 						}, devices.map(function(device) {
 							if (!device.isUp())
 								return E([]);
