@@ -147,12 +147,7 @@ return view.extend({
 								'class': 'cbi-button cbi-button-action',
 								'click': ui.createHandlerFn(this, 'handleArpScan')
 							}, [ _('Arp-scan') ])
-						])] : E('p', {}, [
-							E('em', _('Missing ARP scan')), E('br'),
-							E('a', {
-								href: L.url('admin/system/opkg') + '?query=arp-scan'
-							}, _('Install `arp-scan`...'))
-						])
+						])] : E('p', {}, [])
 					),
 				])
 			]),
