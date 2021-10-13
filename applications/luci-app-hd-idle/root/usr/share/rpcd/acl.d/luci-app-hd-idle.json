@@ -3,7 +3,7 @@
 		"description": "Grant UCI access for luci-app-hd-idle",
 		"read": {
 			"file": {
-				"/dev": [ "list" ]
+				"/usr/bin/lsblk -n -J -do NAME,TRAN,ROTA,RM,VENDOR,MODEL": [ "exec" ]
 			},
 			"uci": [ "hd-idle" ]
 		},
