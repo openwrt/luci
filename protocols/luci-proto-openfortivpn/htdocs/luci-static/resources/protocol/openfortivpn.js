@@ -144,6 +144,11 @@ return network.registerProtocol('openfortivpn', {
 		o.nocreate = true;
 		o.optional = true;
 
+		o = s.taboption('advanced', form.Value, 'persist_int', _('Persistent reconnect interval'), _("Optional, in seconds. If set to '0', no reconnect is attempted."));
+		o.placeholder = '0';
+		o.datatype = 'uinteger';
+		o.optional = true;
+
 		o = s.taboption('advanced', form.Value, 'trusted_cert', _("VPN Server's certificate SHA1 hash"));
 		o.datatype = 'and(hexstring,length(64))'
 		o.optional = true;
