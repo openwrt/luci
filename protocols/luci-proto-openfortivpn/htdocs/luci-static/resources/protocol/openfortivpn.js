@@ -149,7 +149,7 @@ return network.registerProtocol('openfortivpn', {
 		o.datatype = 'uinteger';
 		o.optional = true;
 
-		o = s.taboption('advanced', form.Value, 'trusted_cert', _("VPN Server's certificate SHA1 hash"));
+		o = s.taboption('advanced', form.Value, 'trusted_cert', _("VPN Server certificate's SHA256 hash"));
 		o.datatype = 'and(hexstring,length(64))'
 		o.optional = true;
 
