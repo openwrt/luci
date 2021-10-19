@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LuCI: base\n"
 "POT-Creation-Date: 2010-05-09 01:01+0300\n"
-"PO-Revision-Date: 2021-09-17 06:52+0000\n"
-"Last-Translator: masta0f1eave <lomskoff.dima@gmail.com>\n"
+"PO-Revision-Date: 2021-10-13 19:44+0000\n"
+"Last-Translator: Darin  Avdeyeva <yulyablack@inbox.lv>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/openwrt/luci/ru/"
 ">\n"
 "Language: ru\n"
@@ -252,7 +252,7 @@ msgstr "Директория с таким же именем уже сущест
 
 #: modules/luci-base/htdocs/luci-static/resources/luci.js:2645
 msgid "A new login is required since the authentication session expired."
-msgstr "Время сессии истекло, требуется повторная аутентификация."
+msgstr "Необходима авторизация."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:896
 msgid "A43C + J43 + A43"
@@ -352,17 +352,17 @@ msgstr ""
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:81
 msgid "Active Connections"
-msgstr "Активные соединения"
+msgstr "Соединения"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:33
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:92
 msgid "Active DHCP Leases"
-msgstr "Активные DHCP аренды"
+msgstr "DHCP аренды"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:52
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:94
 msgid "Active DHCPv6 Leases"
-msgstr "Активные DHCPv6 аренды"
+msgstr "DHCPv6 аренды"
 
 #: modules/luci-base/htdocs/luci-static/resources/network.js:3644
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:922
@@ -457,7 +457,7 @@ msgstr "Адрес для доступа к локальному мосту-ре
 #: modules/luci-base/root/usr/share/luci/menu.d/luci-base.json:3
 #: modules/luci-mod-system/root/usr/share/luci/menu.d/luci-mod-system.json:12
 msgid "Administration"
-msgstr "Управление"
+msgstr "Администрирование"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:164
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:322
@@ -686,7 +686,7 @@ msgstr "Применить без проверки"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4179
 msgid "Applying configuration changes… %ds"
-msgstr "Ожидание применения конфигурации... %d сек"
+msgstr "Применение изменений... %d сек"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/10_system.js:56
 msgid "Architecture"
@@ -714,7 +714,7 @@ msgstr "Подключенные клиенты"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:38
 msgid "Associations"
-msgstr "Ассоциации"
+msgstr "Клиентов"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:154
 msgid "Attempt to enable configured mount points for attached devices"
@@ -741,7 +741,7 @@ msgstr "Основной"
 
 #: modules/luci-base/luasrc/view/sysauth.htm:17
 msgid "Authorization Required"
-msgstr "Выполните аутентификацию"
+msgstr "Веб-интерфейс"
 
 #: themes/luci-theme-material/luasrc/view/themes/material/header.htm:196
 #: themes/luci-theme-material/luasrc/view/themes/material/header.htm:197
@@ -839,11 +839,11 @@ msgstr "Назад к настройкам"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:360
 msgid "Backup"
-msgstr "Резервная копия"
+msgstr "Резервная копия настроек"
 
 #: modules/luci-mod-system/root/usr/share/luci/menu.d/luci-mod-system.json:95
 msgid "Backup / Flash Firmware"
-msgstr "Резервное копирование / Перепрошивка"
+msgstr "Восстановление"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:321
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/backupfiles.lua:12
@@ -929,7 +929,7 @@ msgstr "Обзор…"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/20_memory.js:37
 msgid "Buffered"
-msgstr "Буферизировано"
+msgstr "Буфер"
 
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:137
 msgid "CA certificate; if empty it will be saved after the first connection."
@@ -946,7 +946,7 @@ msgstr "Загрузка ЦП (%)"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/20_memory.js:41
 msgid "Cached"
-msgstr "Кешировано"
+msgstr "Кеш"
 
 #: modules/luci-compat/luasrc/model/network/proto_modemmanager.lua:53
 #: modules/luci-compat/luasrc/model/network/proto_qmi.lua:53
@@ -1109,16 +1109,16 @@ msgid ""
 "Click \"Generate archive\" to download a tar archive of the current "
 "configuration files."
 msgstr ""
-"Нажмите 'Создать архив', чтобы загрузить tar-архив текущих config файлов "
-"прошивки устройства, таким образом вы сохраните его настройки."
+"Нажмите 'Создать архив', чтобы скачать резервную копию текущих настроек "
+"системы."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:393
 msgid ""
 "Click \"Save mtdblock\" to download specified mtdblock file. (NOTE: THIS "
 "FEATURE IS FOR PROFESSIONALS! )"
 msgstr ""
-"Нажмите \"Сохранить MTD раздел\" для скачивания образа указанного MTD "
-"раздела (ВНИМАНИЕ: ДАННЫЙ ФУНКЦИОНАЛ ТОЛЬКО ДЛЯ ОПЫТНЫХ ПОЛЬЗОВАТЕЛЕЙ)"
+"Нажмите \"Сохранить MTD раздел\", чтобы скачать образ выбранного MTD раздела "
+"(ВНИМАНИЕ: ТОЛЬКО ДЛЯ ОПЫТНЫХ ПОЛЬЗОВАТЕЛЕЙ)"
 
 #: modules/luci-base/htdocs/luci-static/resources/network.js:3643
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:921
@@ -1319,8 +1319,7 @@ msgid ""
 "Customizes the behaviour of the device <abbr title=\"Light Emitting Diode"
 "\">LED</abbr>s if possible."
 msgstr ""
-"Настройка поведения светодиодной индикации <abbr title=\"Светодиод\">LED</"
-"abbr> устройства, если это возможно."
+"Настройка поведения светодиодной индикации устройства, если это возможно."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1338
 msgid "DAE-Client"
@@ -3037,7 +3036,7 @@ msgstr "Интервал эхо-запросов LCP"
 
 #: modules/luci-mod-system/root/usr/share/luci/menu.d/luci-mod-system.json:83
 msgid "LED Configuration"
-msgstr "Конфигурация LED"
+msgstr "Индикаторы"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:961
 msgid "LLC"
@@ -3067,11 +3066,11 @@ msgstr "Лист"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:485
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:589
 msgid "Lease time"
-msgstr "Время аренды адреса"
+msgstr "Срок аренды адреса"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:39
 msgid "Lease time remaining"
-msgstr "Оставшееся время аренды"
+msgstr "До конца аренды"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:181
 msgid "Leasefile"
@@ -3205,7 +3204,7 @@ msgstr "Загрузка"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/10_system.js:61
 msgid "Load Average"
-msgstr "Средняя загрузка"
+msgstr "Нагрузка (1, 5, 15мин)"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2902
 msgid "Loading directory contents…"
@@ -3254,7 +3253,7 @@ msgstr "Запуск пакетов и служб пользователя, пр
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/10_system.js:59
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:115
 msgid "Local Time"
-msgstr "Местное время"
+msgstr "Время"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:243
 msgid "Local domain"
@@ -4404,7 +4403,7 @@ msgstr "пакетов"
 
 #: modules/luci-base/luasrc/view/sysauth.htm:19
 msgid "Please enter your username and password."
-msgstr "Введите логин и пароль."
+msgstr "Пожалуйста, введите имя пользователя и пароль."
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:3732
 msgid "Please select the file to upload."
@@ -4574,15 +4573,15 @@ msgstr "Порог RTS/CTS"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:46
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:81
 msgid "RX"
-msgstr "Получение (RX)"
+msgstr "Получено (RX)"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:130
 msgid "RX Rate"
-msgstr "Скорость получения"
+msgstr "Скорость приёма"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2033
 msgid "RX Rate / TX Rate"
-msgstr "Скорость получения / Скорость отправки"
+msgstr "Скорость приёма / отправки"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1328
 msgid "Radius-Accounting-Port"
@@ -4628,7 +4627,7 @@ msgstr "Вы действительно хотите изменить прото
 
 #: modules/luci-mod-status/root/usr/share/luci/menu.d/luci-mod-status.json:57
 msgid "Realtime Graphs"
-msgstr "Графики в реальном времени"
+msgstr "Мониторинг"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1433
 msgid "Reassociation Deadline"
@@ -5026,7 +5025,7 @@ msgstr "Сохранить"
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4013
 #: modules/luci-compat/luasrc/view/cbi/footer.htm:22
 msgid "Save & Apply"
-msgstr "Сохранить и применить"
+msgstr "Применить"
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:587
 msgid "Save error"
@@ -5047,7 +5046,7 @@ msgstr "Поиск"
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/crontab.js:24
 #: modules/luci-mod-system/root/usr/share/luci/menu.d/luci-mod-system.json:62
 msgid "Scheduled Tasks"
-msgstr "Запланированные задания"
+msgstr "Планировщик"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:3997
 msgid "Section added"
@@ -5392,7 +5391,7 @@ msgstr "Начато сканирование беспроводных сете�
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/startup.js:106
 #: modules/luci-mod-system/root/usr/share/luci/menu.d/luci-mod-system.json:53
 msgid "Startup"
-msgstr "Загрузка"
+msgstr "Автозапуск"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:19
 msgid "Static IPv4 Routes"
@@ -5558,7 +5557,7 @@ msgstr "TFTP сервер root"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:47
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:82
 msgid "TX"
-msgstr "Передача (TX)"
+msgstr "Передано (TX)"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:130
 msgid "TX Rate"
@@ -5957,7 +5956,7 @@ msgstr "Часовой пояс"
 
 #: modules/luci-base/htdocs/luci-static/resources/luci.js:2653
 msgid "To login…"
-msgstr "Аутентификация…"
+msgstr "Войти…"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:369
 msgid ""
@@ -5965,10 +5964,9 @@ msgid ""
 "archive here. To reset the firmware to its initial state, click \"Perform "
 "reset\" (only possible with squashfs images)."
 msgstr ""
-"Чтобы восстановить config файлы, ваши настройки прошивки устройства, вы "
-"можете загрузить ранее созданный вами архив здесь. Для сброса настроек "
-"прошивки к исходному состоянию нажмите 'Выполнить сброс' (возможно только "
-"для squashfs-образов)."
+"Для сброса к заводским настройкам нажмите 'Выполнить сброс' (возможно только "
+"для squashfs-образов).<br />Чтобы восстановить настройки из ранее созданной "
+"резервной копии, нажмите \"Выбрать архив\"."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:894
 msgid "Tone"
@@ -6203,7 +6201,7 @@ msgstr ""
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:167
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:381
 msgid "Upload archive..."
-msgstr "Загрузка архива..."
+msgstr "Выбрать архив"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2780
 msgid "Upload file"
@@ -6531,7 +6529,7 @@ msgstr "WireGuard VPN"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:79
 #: modules/luci-mod-status/root/usr/share/luci/menu.d/luci-mod-status.json:84
 msgid "Wireless"
-msgstr "Беспроводная"
+msgstr "Беспроводная сеть"
 
 #: modules/luci-base/htdocs/luci-static/resources/network.js:2852
 #: modules/luci-compat/luasrc/model/network.lua:1418
@@ -6551,7 +6549,7 @@ msgstr "Список беспроводных сетей"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:915
 msgid "Wireless Security"
-msgstr "Безопасность беспроводной сети"
+msgstr "Защита беспроводной сети"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:728
 msgid "Wireless configuration migration"
@@ -6801,7 +6799,7 @@ msgstr "Локальный <abbr title=\"Служба доменных имён\
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1301
 msgid "medium security"
-msgstr "средняя безопасность"
+msgstr "средний уровень"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1450
 msgid "minutes"
@@ -6895,7 +6893,7 @@ msgstr "без и с сохранением состояния"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1300
 msgid "strong security"
-msgstr "высокая безопасность"
+msgstr "высокий уровень"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:350
 msgid "tagged"
@@ -7112,7 +7110,7 @@ msgstr "значение длиной %d или более символов"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1302
 msgid "weak security"
-msgstr "низкая безопасность"
+msgstr "низкий уровень"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:44
 msgid "yes"
