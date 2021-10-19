@@ -29,9 +29,9 @@ callInitAction = rpc.declare({
 });
 
 callGetLocaltime = rpc.declare({
-	object: 'luci',
-	method: 'getLocaltime',
-	expect: { result: 0 }
+	object: 'system',
+	method: 'info',
+	expect: { localtime: 0 }
 });
 
 callSetLocaltime = rpc.declare({
@@ -47,6 +47,19 @@ callTimezone = rpc.declare({
 	expect: { '': {} }
 });
 
+function formatTime(epoch) {
+	var date = new Date(epoch * 1000);
+
+	return '%04d-%02d-%02d %02d:%02d:%02d'.format(
+		date.getUTCFullYear(),
+		date.getUTCMonth() + 1,
+		date.getUTCDate(),
+		date.getUTCHours(),
+		date.getUTCMinutes(),
+		date.getUTCSeconds()
+	);
+}
+
 CBILocalTime = form.DummyValue.extend({
 	renderWidget: function(section_id, option_id, cfgvalue) {
 		return E([], [
@@ -54,7 +67,7 @@ CBILocalTime = form.DummyValue.extend({
 				'id': 'localtime',
 				'type': 'text',
 				'readonly': true,
-				'value': new Date(cfgvalue * 1000).toLocaleString()
+				'value': formatTime(cfgvalue)
 			}),
 			E('br'),
 			E('span', { 'class': 'control-group' }, [
@@ -285,7 +298,7 @@ return view.extend({
 		return m.render().then(function(mapEl) {
 			poll.add(function() {
 				return callGetLocaltime().then(function(t) {
-					mapEl.querySelector('#localtime').value = new Date(t * 1000).toLocaleString();
+					mapEl.querySelector('#localtime').value = formatTime(t);
 				});
 			});
 
