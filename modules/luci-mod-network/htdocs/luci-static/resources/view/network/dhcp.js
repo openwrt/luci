@@ -547,6 +547,7 @@ return view.extend({
 
 		ss.addremove = true;
 		ss.anonymous = true;
+		ss.sortable = true;
 
 		so = ss.option(form.Value, 'name', _('Hostname'));
 		so.validate = validateHostname;
