@@ -1314,6 +1314,20 @@ return view.extend({
 			return form.GridSection.prototype.handleModalCancel.apply(this, arguments);
 		};
 
+		s.handleRemove = function(section_id /*, ... */) {
+			var name = uci.get('network', section_id, 'name'),
+			    type = uci.get('network', section_id, 'type');
+
+			if (name != null && type == 'bridge') {
+				uci.sections('network', 'bridge-vlan', function(bvs) {
+					if (bvs.device == name)
+						uci.remove('network', bvs['.name']);
+				});
+			}
+
+			return form.GridSection.prototype.handleRemove.apply(this, arguments);
+		};
+
 		function getDevice(section_id) {
 			var m = section_id.match(/^dev:(.+)$/),
 			    name = m ? m[1] : uci.get('network', section_id, 'name');
