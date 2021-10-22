@@ -31,15 +31,24 @@ return view.extend({
 			])
 		]);
 
-		for (var i = 0; i < plugin_instances.length; i++)
-			if (rrdtool.hasInstanceDetails(host.value, plugin, plugin_instances[i]))
-				render_instances.push(plugin_instances[i]);
+		for (var i = 0; i < plugin_instances.length; i++) {
+			if (rrdtool.hasInstanceDetails(host.value, plugin, plugin_instances[i])) {
+				render_instances.push([
+					plugin_instances[i],
+					plugin_instances[i] ? '%s: %s'.format(rrdtool.pluginTitle(plugin), plugin_instances[i]) : rrdtool.pluginTitle(plugin)
+				]);
+			}
+		}
 
-		if (render_instances.length == 0 || render_instances.length > 1)
-			render_instances.unshift('-');
+		if (render_instances.length == 0 || render_instances.length > 1) {
+			render_instances.unshift([
+				'-',
+				'%s: %s'.format(rrdtool.pluginTitle(plugin), _('Overview'))
+			]);
+		}
 
 		Promise.all(render_instances.map(function(instance) {
-			if (instance == '-') {
+			if (instance[0] == '-') {
 				var tasks = [];
 
 				for (var i = 0; i < plugin_instances.length; i++)
@@ -50,14 +59,14 @@ return view.extend({
 				});
 			}
 			else {
-				return rrdtool.render(plugin, instance, false, host.value, span.value, width, null, cache);
+				return rrdtool.render(plugin, instance[0], false, host.value, span.value, width, null, cache);
 			}
 		})).then(function(blobs) {
 			var multiple = blobs.length > 1;
 
 			dom.content(container, E('div', {}, blobs.map(function(blobs, i) {
-				var plugin_instance = i ? plugin_instances[i-1] : plugin_instances.join('|'),
-				    title = '%s: %s'.format(rrdtool.pluginTitle(plugin), i ? plugin_instance : _('Overview'));
+				var plugin_instance = i ? render_instances[i][0] : plugin_instances.join('|'),
+				    title = render_instances[i][1];
 
 				return E('div', {
 					'class': 'center',
