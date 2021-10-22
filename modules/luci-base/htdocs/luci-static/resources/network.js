@@ -1005,9 +1005,10 @@ Network = baseclass.extend(/** @lends LuCI.network.prototype */ {
 	 */
 	deleteNetwork: function(name) {
 		var requireFirewall = Promise.resolve(L.require('firewall')).catch(function() {}),
+		    loadDHCP = L.resolveDefault(uci.load('dhcp')),
 		    network = this.instantiateNetwork(name);
 
-		return Promise.all([ requireFirewall, initNetworkState() ]).then(function(res) {
+		return Promise.all([ requireFirewall, loadDHCP, initNetworkState() ]).then(function(res) {
 			var uciInterface = uci.get('network', name),
 			    firewall = res[0];
 
@@ -1020,19 +1021,23 @@ Network = baseclass.extend(/** @lends LuCI.network.prototype */ {
 							uci.remove('luci', s['.name']);
 					});
 
-					uci.sections('network', 'alias', function(s) {
-						if (s.interface == name)
-							uci.remove('network', s['.name']);
-					});
+					uci.sections('network', null, function(s) {
+						switch (s['.type']) {
+						case 'alias':
+						case 'route':
+						case 'route6':
+							if (s.interface == name)
+								uci.remove('network', s['.name']);
 
-					uci.sections('network', 'route', function(s) {
-						if (s.interface == name)
-							uci.remove('network', s['.name']);
-					});
+							break;
 
-					uci.sections('network', 'route6', function(s) {
-						if (s.interface == name)
-							uci.remove('network', s['.name']);
+						case 'rule':
+						case 'rule6':
+							if (s.in == name || s.out == name)
+								uci.remove('network', s['.name']);
+
+							break;
+						}
 					});
 
 					uci.sections('wireless', 'wifi-iface', function(s) {
@@ -1042,6 +1047,11 @@ Network = baseclass.extend(/** @lends LuCI.network.prototype */ {
 							uci.set('wireless', s['.name'], 'network', networks.join(' '));
 						else
 							uci.unset('wireless', s['.name'], 'network');
+					});
+
+					uci.sections('dhcp', 'dhcp', function(s) {
+						if (s.interface == name)
+							uci.remove('dhcp', s['.name']);
 					});
 
 					if (firewall)
