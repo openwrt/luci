@@ -863,7 +863,10 @@ header {
 	background-repeat: repeat-x;
 	background-image: linear-gradient(to bottom, #333333, #222222);
 	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), inset 0 -1px 0 rgba(0, 0, 0, 0.1);
-	padding: 0 calc((100% - 940px) / 2 + 5px);
+	padding: 0;
+	/* the redundant properties below work around a csstidy bug */
+	padding-left: calc((100% - 940px) / 2 + 5px);
+	padding-right: calc((100% - 940px) / 2 + 5px);
 }
 
 .nav {
