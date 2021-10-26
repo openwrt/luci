@@ -347,6 +347,7 @@ struct lease_entry {
 		struct in_addr in;
 		struct in6_addr in6;
 	} addr[10];
+	uint8_t mask;
 };
 
 static bool
@@ -480,10 +481,17 @@ lease_next(void)
 
 				p = strtok(NULL, " \t\n"); /* iaid */
 
-				if (p)
-					e.af = strcmp(p, "ipv4") ? AF_INET6 : AF_INET;
-				else
+				if (!p)
 					continue;
+
+				if (!strcmp(p, "ipv4")) {
+					e.af = AF_INET;
+					e.mask = 32;
+				}
+				else {
+					e.af = AF_INET6;
+					e.mask = 128;
+				}
 
 				e.hostname = strtok(NULL, " \t\n"); /* name */
 
@@ -505,7 +513,16 @@ lease_next(void)
 					e.expire = -1;
 
 				strtok(NULL, " \t\n"); /* id */
-				strtok(NULL, " \t\n"); /* length */
+
+				p = strtok(NULL, " \t\n"); /* length */
+
+				if (!p)
+					continue;
+
+				n = atoi(p); /* length */
+
+				if (n != 0)
+					e.mask = n;
 
 				for (e.n_addr = 0, p = strtok(NULL, "/ \t\n");
 				     e.n_addr < ARRAY_SIZE(e.addr) && p != NULL;
@@ -551,10 +568,12 @@ lease_next(void)
 
 				if (p && inet_pton(AF_INET6, p, &e.addr[0].in6)) {
 					e.af = AF_INET6;
+					e.mask = 128;
 					e.n_addr = 1;
 				}
 				else if (p && inet_pton(AF_INET, p, &e.addr[0].in)) {
 					e.af = AF_INET;
+					e.mask = 32;
 					e.n_addr = 1;
 				}
 				else {
@@ -1918,11 +1937,12 @@ rpc_luci_get_dhcp_leases(struct ubus_context *ctx, struct ubus_object *obj,
                          struct ubus_request_data *req, const char *method,
                          struct blob_attr *msg)
 {
+	char s[INET6_ADDRSTRLEN + strlen("/128")];
 	struct blob_attr *tb[__RPC_L_MAX];
 	struct lease_entry *lease;
-	char s[INET6_ADDRSTRLEN];
 	int af, family = 0;
 	void *a, *a2, *o;
+	size_t l;
 	int n;
 
 	blobmsg_parse(rpc_get_leases_policy, __RPC_L_MAX, tb,
@@ -1977,14 +1997,17 @@ rpc_luci_get_dhcp_leases(struct ubus_context *ctx, struct ubus_object *obj,
 				blobmsg_add_string(&blob, "duid", lease->duid);
 
 			inet_ntop(lease->af, &lease->addr[0].in6, s, sizeof(s));
-			blobmsg_add_string(&blob, (af == AF_INET) ? "ipaddr" : "ip6addr",
-			                   s);
+			blobmsg_add_string(&blob, (af == AF_INET) ? "ipaddr" : "ip6addr", s);
 
 			if (af == AF_INET6) {
 				a2 = blobmsg_open_array(&blob, "ip6addrs");
 
 				for (n = 0; n < lease->n_addr; n++) {
 					inet_ntop(lease->af, &lease->addr[n].in6, s, sizeof(s));
+
+					l = strlen(s);
+					snprintf(s + l, sizeof(s) - l, "/%hhu", lease->mask);
+
 					blobmsg_add_string(&blob, NULL, s);
 				}
 
