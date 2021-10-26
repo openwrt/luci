@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LuCI: base\n"
 "POT-Creation-Date: 2010-05-09 01:01+0300\n"
-"PO-Revision-Date: 2021-10-25 14:14+0000\n"
+"PO-Revision-Date: 2021-10-26 14:59+0000\n"
 "Last-Translator: Darin  Avdeyeva <yulyablack@inbox.lv>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/openwrt/luci/ru/>"
 "\n"
@@ -471,8 +471,7 @@ msgstr "Добавить ключ"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:408
 msgid "Add local domain suffix to names served from hosts files."
-msgstr ""
-"Добавить локальный суффикс домена для имен из файла хостов (/etc/hosts)."
+msgstr "Добавить локальный суффикс домена для имен из файла hosts (/etc/hosts)."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:465
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1119
@@ -497,7 +496,7 @@ msgstr "Дополнительный hosts файл"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:415
 msgid "Additional servers file"
-msgstr "Дополнительные файлы серверов"
+msgstr "Дополнительный файл серверов"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:34
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:35
@@ -630,7 +629,7 @@ msgstr "Разрешить только перечисленные"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:305
 msgid "Allow localhost"
-msgstr "Разрешить локальный хост"
+msgstr "Разрешить localhost"
 
 #: modules/luci-mod-system/root/usr/share/rpcd/acl.d/luci-mod-system.json:178
 msgid "Allow rebooting the device"
@@ -638,9 +637,7 @@ msgstr "Разрешить перезагрузку устройства"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:36
 msgid "Allow remote hosts to connect to local SSH forwarded ports"
-msgstr ""
-"Разрешить удаленным хостам подключаться к локальным перенаправленным портам "
-"SSH"
+msgstr "Разрешить удалённое подключение к локальным перенаправленным портам SSH"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:31
 msgid "Allow root logins with password"
@@ -1802,7 +1799,7 @@ msgstr "Назначенный мастер"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:386
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:71
 msgid "Destination"
-msgstr "Направление"
+msgstr "Получатель"
 
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:48
 msgid "Destination port"
@@ -2032,7 +2029,7 @@ msgstr ""
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:25
 msgid "Do not send a hostname"
-msgstr "Не отправлять имя хоста"
+msgstr "Не отправлять имя устройства"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:766
 msgid ""
@@ -3109,8 +3106,8 @@ msgid ""
 "Here you can configure the basic aspects of your device like its hostname or "
 "the timezone."
 msgstr ""
-"Здесь вы можете настроить основные параметры вашего устройства, такие как "
-"имя хоста или часовой пояс."
+"Настройка основных параметров вашего устройства, таких как имя или часовой "
+"пояс."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1139
 msgid "Hide <abbr title=\"Extended Service Set Identifier\">ESSID</abbr>"
@@ -3134,7 +3131,7 @@ msgstr "Высокая"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:126
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:225
 msgid "Host"
-msgstr "Хост"
+msgstr "Устройство"
 
 #: protocols/luci-proto-relay/htdocs/luci-static/resources/protocol/relay.js:171
 msgid "Host expiry timeout"
@@ -3151,7 +3148,7 @@ msgstr "Содержимое Host-Uniq тега"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:87
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:121
 msgid "Hostname"
-msgstr "Имя хоста"
+msgstr "Имя"
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:22
 msgid "Hostname to send when requesting DHCP"
@@ -3159,7 +3156,7 @@ msgstr "Имя хоста в DHCP-запросах"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:256
 msgid "Hostnames"
-msgstr "Имена хостов"
+msgstr "Имена устройств"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:496
 msgid ""
@@ -3167,9 +3164,9 @@ msgid ""
 "redundant for hostnames already configured with static leases, but it can be "
 "useful to rebind an FQDN."
 msgstr ""
-"Имена хостов используются для привязки доменного имени к IP-адресу. Эта "
-"настройка избыточна для имен хостов, уже настроенных со статической арендой, "
-"но может быть полезна для перепривязки FQDN."
+"Имена устройств используются для привязки доменного имени к IP-адресу. Эта "
+"настройка избыточна для устройств с бессрочной арендой, но может быть "
+"полезна для перепривязки FQDN."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:276
 msgid "Human-readable counters"
@@ -4063,7 +4060,7 @@ msgstr "Подключение"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:431
 msgid "List of IP addresses to convert into NXDOMAIN responses."
-msgstr "Список хостов, поставляющих поддельные результаты домена NX."
+msgstr "Список IP адресов, поставляющих поддельные результаты домена NX."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:295
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:526
@@ -4225,7 +4222,7 @@ msgstr "Локальный домен"
 msgid "Local domain suffix appended to DHCP names and hosts file entries."
 msgstr ""
 "Суффикс локального домена, который будет добавлен к DHCP-именам и записи "
-"файла хостов (/etc/hosts)."
+"файла hosts (/etc/hosts)."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:268
 msgid "Local server"
@@ -4827,7 +4824,7 @@ msgid ""
 msgstr ""
 "Согласно требованиям, имена соответствующие этому домену, никогда не "
 "передаются. И разрешаются только из файла DHCP (/etc/config/dhcp) или файла "
-"хостов (/etc/hosts)."
+"hosts (/etc/hosts)."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1139
 msgid "New interface for \"%s\" can not be created: %s"
@@ -4893,7 +4890,7 @@ msgstr "Данные не получены"
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:683
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:690
 msgid "No enforcement"
-msgstr "Без принуждения"
+msgstr "Любая"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:229
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:232
@@ -6708,7 +6705,7 @@ msgstr ""
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:70
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:214
 msgid "Source"
-msgstr "Источник"
+msgstr "Отправитель"
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:57
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:57
@@ -7187,11 +7184,11 @@ msgstr "Символическая ссылка"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:75
 msgid "Sync with NTP-Server"
-msgstr "Синхронизировать с NTP-сервером"
+msgstr "Синхрон. по NTP"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:67
 msgid "Sync with browser"
-msgstr "Синхронизировать с браузером"
+msgstr "Скопир. из браузера"
 
 #: modules/luci-base/root/usr/share/luci/menu.d/luci-base.json:26
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/10_system.js:17
@@ -7861,9 +7858,9 @@ msgid ""
 "archive here. To reset the firmware to its initial state, click \"Perform "
 "reset\" (only possible with squashfs images)."
 msgstr ""
-"Для сброса к заводским настройкам нажмите 'Выполнить сброс' (возможно только "
-"для squashfs-образов).<br />Чтобы восстановить настройки из ранее созданной "
-"резервной копии, нажмите \"Выбрать архив\"."
+"Для сброса настроек нажмите 'Выполнить сброс' (только для squashfs-образов)"
+".<br />Чтобы восстановить настройки из ранее созданной резервной копии, "
+"нажмите \"Выбрать архив\"."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1467
 msgid "Tone"
@@ -7892,7 +7889,7 @@ msgstr "Класс трафика (TC)"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:387
 msgid "Transfer"
-msgstr "Передача"
+msgstr "Передано"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/netdev.js:24
 msgid "Transmit"
@@ -7917,7 +7914,7 @@ msgstr "Идентификатор туннеля"
 #: modules/luci-base/htdocs/luci-static/resources/network.js:3001
 #: modules/luci-compat/luasrc/model/network.lua:1431
 msgid "Tunnel Interface"
-msgstr "Интерфейс туннеля"
+msgstr "Туннель"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/464xlat.js:44
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dslite.js:55
@@ -7927,7 +7924,7 @@ msgstr "Ссылка на туннель"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1376
 msgid "Tunnel device"
-msgstr "Устройство туннеля"
+msgstr "Туннель"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:185
 msgid "Tx-Power"
@@ -9020,9 +9017,9 @@ msgid ""
 "<abbr title=\"Hypertext Transfer Protocol Secure\">HTTPS</abbr> network "
 "access."
 msgstr ""
-"uHTTPd предоставляет <abbr title=\"Hypertext Transfer Protocol\">HTTP</abbr> "
-"или <abbr title=\"Hypertext Transfer Protocol Secure\">HTTPS</abbr> сетевой "
-"доступ."
+"uHTTPd предоставляет доступ по <abbr title=\"Hypertext Transfer Protocol\""
+">HTTP</abbr> или <abbr title=\"Hypertext Transfer Protocol Secure\""
+">HTTPS</abbr>."
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:563
 msgid "unique value"
