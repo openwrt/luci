@@ -3,12 +3,6 @@
 'require view';
 'require poll';
 
-const tableHead = '<div class="tr cbi-section-table-titles">' +
-    '<div class="th cbi-section-table-cell">' + _('Url') + '</div>' +
-    '<div class="th cbi-section-table-cell">' + _('Protocol') + '</div>' +
-    '<div class="th cbi-section-table-cell">' + _('Source') + '</div>' +
-    '</div>';
-
 var getOlsrd4Services = rpc.declare({
     object: 'olsr-services',
     method: 'services4',
@@ -21,22 +15,19 @@ var getOlsrd6Services = rpc.declare({
     expect: {}
 });
 
-function updateServicesTable(servicesArray) {
-    var table = document.getElementById("olsr_services");
-    var tempElement = document.createElement('div');
-    tempElement.innerHTML = tableHead;
-    table.replaceChildren(tempElement.firstChild);
-    servicesArray.forEach(function (service, index) {
-        var node = document.createElement('div');
-        var index = 1 + index % 2;
+function createTableData(servicesArray) {
+    var tableData = [];
+    servicesArray.forEach(function (service) {
         var sourceUrl = service.isIpv6 ? '[' + service.source + ']' : service.source;
-        node.classList.add('tr', 'cbi-section-table-row', 'cbi-rowstyle-' + index);
-        node.innerHTML =
-            '<div class="td cbi-section-table-cell left"><a href="' + service.url + '">' + service.description + '</a></div>' +
-            '<div class="td cbi-section-table-cell left">' + service.protocol + '</div>' +
-            '<div class="td cbi-section-table-cell left"><a href="http://' + sourceUrl + '/cgi-bin-status.html">' + service.source + '</a></div>';
-        table.appendChild(node);
+        tableData.push(
+            [
+                E('a', { 'href': service.url }, service.description),
+                service.protocol,
+                E('a', { 'href': 'http://' + sourceUrl + '/cgi-bin-status.html' }, service.source)
+            ]
+        );
     });
+    return tableData;
 }
 
 function extractServiceInformation(results) {
@@ -66,15 +57,19 @@ return view.extend({
         poll.add(function () {
             Promise.all([getOlsrd4Services(), getOlsrd6Services()]).then(function (results) {
                 var servicesArray = extractServiceInformation(results);
-                updateServicesTable(servicesArray);
+                cbi_update_table("#olsr_services", createTableData(servicesArray));
             });
         }, 30);
         return E([], {}, [
             E('h2', { 'name': 'content' }, [_('Services')]),
             E('legend', {}, [_('Internal services')]),
             E('fieldset', { 'class': 'cbi-section' }, [
-                E('div', { 'class': 'table cbi-section-table', 'id': 'olsr_services' }, [
-                    E(tableHead)
+                E('table', { 'id': 'olsr_services' }, [
+                    E('tr', { 'class' : 'tr table-titles'}, [
+                        E('td', { 'class' : 'th'}, _('Url')),
+                        E('td', { 'class' : 'th'}, _('Protocol')),
+                        E('td', { 'class' : 'th'}, _('Source'))
+                    ]),
                 ])
             ]),
         ]);
