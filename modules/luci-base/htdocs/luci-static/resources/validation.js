@@ -575,6 +575,18 @@ var ValidatorFactory = baseclass.extend({
 
 		string: function() {
 			return true;
+		},
+
+		directory: function() {
+			return true;
+		},
+
+		file: function() {
+			return true;
+		},
+
+		device: function() {
+			return true;
 		}
 	}
 });
