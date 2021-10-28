@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LuCI: base\n"
 "POT-Creation-Date: 2010-05-09 01:01+0300\n"
-"PO-Revision-Date: 2021-10-26 14:59+0000\n"
-"Last-Translator: Darin  Avdeyeva <yulyablack@inbox.lv>\n"
+"PO-Revision-Date: 2021-10-27 18:57+0000\n"
+"Last-Translator: Anton Kikin <a.a.kikin@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/openwrt/luci/ru/>"
 "\n"
 "Language: ru\n"
@@ -673,6 +673,8 @@ msgstr "Всегда включен (kernel: default-on)"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:538
 msgid "Always send DHCP Options. Sometimes needed, with e.g. PXELinux."
 msgstr ""
+"Всегда отправлять опции DHCP. Это требуется в некоторых случаях, например, "
+"для PXELinux."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:971
 msgid ""
@@ -813,7 +815,7 @@ msgstr "Любая зона"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:532
 msgid "Apply DHCP Options to this net. (Empty = all clients)."
-msgstr ""
+msgstr "Применить опции DHCP к этой сети (пусто = все клиенты)."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:119
 msgid "Apply backup?"
@@ -1609,7 +1611,7 @@ msgstr "DAE-секрет"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:525
 msgid "DHCP Options"
-msgstr ""
+msgstr "Опции DHCP"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:483
 msgid "DHCP Server"
@@ -1987,6 +1989,8 @@ msgid ""
 "Dnsmasq instance to which this boot section is bound. If unspecified, the "
 "section is valid for all dnsmasq instances."
 msgstr ""
+"Экземпляр dnsmasq, к которому привязан данный раздел загрузки. Если не "
+"указано, раздел действителен для всех экземпляров dnsmasq."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:246
 msgid ""
@@ -2364,7 +2368,7 @@ msgstr "Включите флаг DF (не Фрагментировать) ин�
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:480
 msgid "Enable the built-in single-instance TFTP server."
-msgstr ""
+msgstr "Включить встроенный одноэкземплярный сервер TFTP."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:895
 msgid "Enable this network"
@@ -3165,7 +3169,7 @@ msgstr "Время ожидания хоста"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:508
 msgid "Host requests this filename from the boot server."
-msgstr ""
+msgstr "Хост запрашивает указанный файл с сервера загрузки."
 
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoe.js:88
 msgid "Host-Uniq tag content"
@@ -3253,7 +3257,7 @@ msgstr "IP-адрес не указан"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:589
 msgid "IP set"
-msgstr "Установить IP"
+msgstr "Список IP"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:295
 msgid "IP sets"
@@ -3696,7 +3700,7 @@ msgstr "Установить расширения протокола..."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:542
 msgid "Instance"
-msgstr ""
+msgstr "Экземпляр"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2026
 msgid ""
@@ -4849,7 +4853,7 @@ msgstr "Сетевой интерфейс"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:531
 msgid "Network-ID"
-msgstr ""
+msgstr "Network-ID"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:706
 msgid "Never"
@@ -5339,6 +5343,10 @@ msgid ""
 "\" for default route. <code>0.0.0.0</code> means \"the address of the system "
 "running dnsmasq\"."
 msgstr ""
+"Параметры для Network-ID (примечание: необходим также Network-ID). Например, "
+"<code>42,192.168.1.4</code> для NTP-сервера, <code>3,192.168.4.4</code> для "
+"маршрута по умолчанию. <code>0.0.0.0</code> означает «адрес системы, на "
+"которой запущен dnsmasq»."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:119
 msgid "Options:"
@@ -5566,7 +5574,7 @@ msgstr "PTM/EFM (Режим передачи пакетов)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:254
 msgid "PXE/TFTP Settings"
-msgstr ""
+msgstr "Настройки PXE/TFTP"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1456
 msgid "Packet Steering"
@@ -6320,6 +6328,9 @@ msgid ""
 "and <code>TFTP server root</code> turn on the TFTP server and serve files "
 "from <code>TFTP server root</code>."
 msgstr ""
+"Корневой каталог файлов, обслуживаемых TFTP.<br><code>Включить сервер TFTP</"
+"code> и <code>Корень сервера TFTP</code> включают сервер TFTP и обслуживают "
+"файлы из <code>Корень сервера TFTP</code>."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:297
 msgid "Root preparation"
@@ -6539,11 +6550,11 @@ msgstr "Отправлять имя хоста этого устройства"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:519
 msgid "Server address"
-msgstr ""
+msgstr "Адрес сервера"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:513
 msgid "Server name"
-msgstr ""
+msgstr "Имя сервера"
 
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoe.js:50
 msgid "Service Name"
@@ -6778,6 +6789,8 @@ msgid ""
 "Special <abbr title=\"Preboot eXecution Environment\">PXE</abbr> boot "
 "options for Dnsmasq."
 msgstr ""
+"Специальные <abbr title=\"Preboot eXecution Environment\">PXE</abbr> опции "
+"загрузки для dnsmasq."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:891
 msgid ""
@@ -7408,7 +7421,7 @@ msgstr "IP-адрес находится вне диапазона пула ад
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:520
 msgid "The IP address of the boot server"
-msgstr ""
+msgstr "IP-адрес сервера загрузки"
 
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:40
 msgid "The IPv4 address or the fully-qualified domain name of the remote end."
@@ -7559,7 +7572,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:514
 msgid "The hostname of the boot server"
-msgstr ""
+msgstr "Имя хоста сервера загрузки"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1093
 msgid "The interface name is already used"
