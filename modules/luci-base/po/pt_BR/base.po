@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-06-10 03:41+0200\n"
-"PO-Revision-Date: 2021-10-23 23:47+0000\n"
+"PO-Revision-Date: 2021-10-28 03:15+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "openwrt/luci/pt_BR/>\n"
@@ -684,6 +684,7 @@ msgstr "Sempre ligado (kernel: padrão)"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:538
 msgid "Always send DHCP Options. Sometimes needed, with e.g. PXELinux."
 msgstr ""
+"Sempre envie opções DHCP. Às vezes necessário com, por exemplo, PXELinux."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:971
 msgid ""
@@ -825,7 +826,7 @@ msgstr "Qualquer zona"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:532
 msgid "Apply DHCP Options to this net. (Empty = all clients)."
-msgstr ""
+msgstr "Aplique as opções DHCP nesta rede. (Vazio = todos os clientes)."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:119
 msgid "Apply backup?"
@@ -1622,7 +1623,7 @@ msgstr "Segredo DAE"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:525
 msgid "DHCP Options"
-msgstr ""
+msgstr "Opções do DHCP"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:483
 msgid "DHCP Server"
@@ -2006,6 +2007,9 @@ msgid ""
 "Dnsmasq instance to which this boot section is bound. If unspecified, the "
 "section is valid for all dnsmasq instances."
 msgstr ""
+"A instância do Dnsmasq à qual esta seção de inicialização está vinculada. "
+"Caso não seja especificado, a seção é válida para todas as instâncias do "
+"dnsmasq."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:246
 msgid ""
@@ -2388,7 +2392,7 @@ msgstr "Ative o campo DF (Não Fragmentar) dos pacotes encapsulados."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:480
 msgid "Enable the built-in single-instance TFTP server."
-msgstr ""
+msgstr "Ative o servidor TFTP integrado com única instância."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:895
 msgid "Enable this network"
@@ -3202,7 +3206,7 @@ msgstr "Tempo limite de expiração de equipamento"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:508
 msgid "Host requests this filename from the boot server."
-msgstr ""
+msgstr "O Host solicita este nome de arquivo no servidor de inicialização."
 
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoe.js:88
 msgid "Host-Uniq tag content"
@@ -3738,7 +3742,7 @@ msgstr "Instalar extensões de protocolo..."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:542
 msgid "Instance"
-msgstr ""
+msgstr "Instância"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2026
 msgid ""
@@ -4892,7 +4896,7 @@ msgstr "Interfaces de rede"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:531
 msgid "Network-ID"
-msgstr ""
+msgstr "Network-ID"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:706
 msgid "Never"
@@ -5385,6 +5389,10 @@ msgid ""
 "\" for default route. <code>0.0.0.0</code> means \"the address of the system "
 "running dnsmasq\"."
 msgstr ""
+"Opções para o Network-ID. (Observação: também precisa do Network-ID.) Por "
+"exemplo, \"<code> 42,192.168.1.4 </code>\" para o servidor NTP, \"<code> "
+"3,192.168.4.4 </code>\" para a rota padrão. <code> 0.0.0.0 </code> significa "
+"\"o endereço do sistema executando o dnsmasq\"."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:119
 msgid "Options:"
@@ -5615,7 +5623,7 @@ msgstr "PTM/EFM (Modo de transferência dos pacotes)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:254
 msgid "PXE/TFTP Settings"
-msgstr ""
+msgstr "Configurações PXE/TFTP"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1456
 msgid "Packet Steering"
@@ -6368,6 +6376,9 @@ msgid ""
 "and <code>TFTP server root</code> turn on the TFTP server and serve files "
 "from <code>TFTP server root</code>."
 msgstr ""
+"Diretório raiz para os arquivos atendidos através do TFTP. <br><code>Ative o "
+"servidor TFTP</code> e <code>A raiz do servidor TFTP</code> ativa o servidor "
+"TFTP e serve os arquivos a partir da raiz do servidor <code>TFTP</code>."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:297
 msgid "Root preparation"
@@ -6590,11 +6601,11 @@ msgstr "Envie o nome de host deste dispositivo"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:519
 msgid "Server address"
-msgstr ""
+msgstr "Endereço do servidor"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:513
 msgid "Server name"
-msgstr ""
+msgstr "Nome do servidor"
 
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoe.js:50
 msgid "Service Name"
@@ -6833,6 +6844,8 @@ msgid ""
 "Special <abbr title=\"Preboot eXecution Environment\">PXE</abbr> boot "
 "options for Dnsmasq."
 msgstr ""
+"Opções especiais de inicialização <abbr title=\"Preboot eXecution "
+"Environment\"> PXE </abbr> para o Dnsmasq."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:891
 msgid ""
@@ -7466,7 +7479,7 @@ msgstr "O endereço IP está fora de qualquer faixa de endereços do DHCP"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:520
 msgid "The IP address of the boot server"
-msgstr ""
+msgstr "O endereço IP do servidor de inicialização"
 
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:40
 msgid "The IPv4 address or the fully-qualified domain name of the remote end."
@@ -7624,7 +7637,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:514
 msgid "The hostname of the boot server"
-msgstr ""
+msgstr "O nome do host do servidor de inicialização"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1093
 msgid "The interface name is already used"

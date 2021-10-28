@@ -4,8 +4,8 @@
 #
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2021-10-26 12:53+0000\n"
-"Last-Translator: zhanhb <zhanhb88@gmail.com>\n"
+"PO-Revision-Date: 2021-10-27 18:57+0000\n"
+"Last-Translator: Eric <spice2wolf@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "openwrt/luci/zh_Hans/>\n"
 "Language: zh_Hans\n"
@@ -651,7 +651,7 @@ msgstr "始终开启（kernel：default-on）"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:538
 msgid "Always send DHCP Options. Sometimes needed, with e.g. PXELinux."
-msgstr ""
+msgstr "始终发送 DHCP 选项。 有时需要，例如 PXELinux。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:971
 msgid ""
@@ -786,7 +786,7 @@ msgstr "任意区域"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:532
 msgid "Apply DHCP Options to this net. (Empty = all clients)."
-msgstr ""
+msgstr "将 DHCP 选项应用到此网络。（Empty = 所有客户端）。"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:119
 msgid "Apply backup?"
@@ -1536,7 +1536,7 @@ msgstr "DAE 密文"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:525
 msgid "DHCP Options"
-msgstr ""
+msgstr "DHCP 选项"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:483
 msgid "DHCP Server"
@@ -1906,7 +1906,7 @@ msgstr "最远网络用户的距离（米）。"
 msgid ""
 "Dnsmasq instance to which this boot section is bound. If unspecified, the "
 "section is valid for all dnsmasq instances."
-msgstr ""
+msgstr "此引导部分绑定到的 Dnsmasq 实例。 如果未指定，该部分对所有 dnsmasq 实例都有效。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:246
 msgid ""
@@ -2268,7 +2268,7 @@ msgstr "启用后报文的 DF（禁止分片）标志。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:480
 msgid "Enable the built-in single-instance TFTP server."
-msgstr ""
+msgstr "启用内置的单实例 TFTP 服务器。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:895
 msgid "Enable this network"
@@ -3055,7 +3055,7 @@ msgstr "主机到期超时"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:508
 msgid "Host requests this filename from the boot server."
-msgstr ""
+msgstr "主机从引导服务器请求此文件名。"
 
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoe.js:88
 msgid "Host-Uniq tag content"
@@ -3571,7 +3571,7 @@ msgstr "安装扩展协议…"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:542
 msgid "Instance"
-msgstr ""
+msgstr "实例"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2026
 msgid ""
@@ -4689,7 +4689,7 @@ msgstr "网络接口"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:531
 msgid "Network-ID"
-msgstr ""
+msgstr "网络 ID"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:706
 msgid "Never"
@@ -5158,6 +5158,9 @@ msgid ""
 "\" for default route. <code>0.0.0.0</code> means \"the address of the system "
 "running dnsmasq\"."
 msgstr ""
+"网络 ID 的选项。（注意：还需要 Network-ID。）如，“<code>42,192.168.1.4</code>”用于 NTP "
+"服务器，“</code>3,192.168.4.4</code>”用于默认路由。<code>0.0.0.0</code>表示“运行 dnsmasq "
+"的系统地址”。"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:119
 msgid "Options:"
@@ -5383,7 +5386,7 @@ msgstr "PTM/EFM（分组传输模式）"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:254
 msgid "PXE/TFTP Settings"
-msgstr ""
+msgstr "PXE/TFTP 设置"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1456
 msgid "Packet Steering"
@@ -6121,6 +6124,8 @@ msgid ""
 "and <code>TFTP server root</code> turn on the TFTP server and serve files "
 "from <code>TFTP server root</code>."
 msgstr ""
+"通过 TFTP 传送的文件的根目录。<br><code>启用 TFTP 服务器</code> 和 <code>TFTP 服务器根目录</code> 打开 "
+"TFTP 服务器并从 <code>TFTP 服务器根目录提供文件</code>。"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:297
 msgid "Root preparation"
@@ -6334,11 +6339,11 @@ msgstr "传输这台设备的主机名称"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:519
 msgid "Server address"
-msgstr ""
+msgstr "服务器地址"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:513
 msgid "Server name"
-msgstr ""
+msgstr "服务器名称"
 
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoe.js:50
 msgid "Service Name"
@@ -6565,6 +6570,7 @@ msgid ""
 "Special <abbr title=\"Preboot eXecution Environment\">PXE</abbr> boot "
 "options for Dnsmasq."
 msgstr ""
+"Dnsmasq 的特殊<abbr title=\"Preboot eXecution Environment\">PXE</abbr>启动选项。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:891
 msgid ""
@@ -7129,7 +7135,7 @@ msgstr "IP 地址不在任何 DHCP 池地址范围之内"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:520
 msgid "The IP address of the boot server"
-msgstr ""
+msgstr "引导服务器的 IP 地址"
 
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:40
 msgid "The IPv4 address or the fully-qualified domain name of the remote end."
@@ -7267,7 +7273,7 @@ msgstr "给定的 SSH 公钥无效。请提供适当的公共 RSA 或 ECDSA 密�
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:514
 msgid "The hostname of the boot server"
-msgstr ""
+msgstr "引导服务器的主机名"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1093
 msgid "The interface name is already used"

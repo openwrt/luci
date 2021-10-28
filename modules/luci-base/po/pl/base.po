@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: LuCI\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-04-20 09:40+0200\n"
-"PO-Revision-Date: 2021-10-20 14:50+0000\n"
+"PO-Revision-Date: 2021-10-27 18:57+0000\n"
 "Last-Translator: Matthaiks <kitynska@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/openwrt/luci/pl/>"
 "\n"
@@ -664,7 +664,7 @@ msgstr "Zawsze włączony (kernel: domyślnie włączone)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:538
 msgid "Always send DHCP Options. Sometimes needed, with e.g. PXELinux."
-msgstr ""
+msgstr "Zawsze wysyłaj opcje DHCP. Czasami potrzebne, np. z PXELinux."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:971
 msgid ""
@@ -804,7 +804,7 @@ msgstr "Dowolna strefa"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:532
 msgid "Apply DHCP Options to this net. (Empty = all clients)."
-msgstr ""
+msgstr "Zastosuj opcje DHCP do tej sieci. (Puste = wszystkie klienty)."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:119
 msgid "Apply backup?"
@@ -1590,7 +1590,7 @@ msgstr "Sekret DAE"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:525
 msgid "DHCP Options"
-msgstr ""
+msgstr "Opcje DHCP"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:483
 msgid "DHCP Server"
@@ -1967,6 +1967,8 @@ msgid ""
 "Dnsmasq instance to which this boot section is bound. If unspecified, the "
 "section is valid for all dnsmasq instances."
 msgstr ""
+"Instancja Dnsmasq, z którą powiązana jest ta sekcja startowa. Jeśli nie "
+"określono, sekcja obowiązuje dla wszystkich instancji dnsmasq."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:246
 msgid ""
@@ -2347,7 +2349,7 @@ msgstr "Włącz flagę DF (Nie fragmentuj) pakietów szyfrujących."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:480
 msgid "Enable the built-in single-instance TFTP server."
-msgstr ""
+msgstr "Włącz wbudowany jednoinstancyjny serwer TFTP."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:895
 msgid "Enable this network"
@@ -3154,7 +3156,7 @@ msgstr "Czas wygasania hosta"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:508
 msgid "Host requests this filename from the boot server."
-msgstr ""
+msgstr "Host żąda tej nazwy pliku z serwera startowego."
 
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoe.js:88
 msgid "Host-Uniq tag content"
@@ -3685,7 +3687,7 @@ msgstr "Instaluj rozszerzenia protokołów..."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:542
 msgid "Instance"
-msgstr ""
+msgstr "Instancja"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2026
 msgid ""
@@ -4830,7 +4832,7 @@ msgstr "Interfejs sieciowy"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:531
 msgid "Network-ID"
-msgstr ""
+msgstr "Identyfikator sieci"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:706
 msgid "Never"
@@ -5318,6 +5320,10 @@ msgid ""
 "\" for default route. <code>0.0.0.0</code> means \"the address of the system "
 "running dnsmasq\"."
 msgstr ""
+"Opcje identyfikatora sieci. (Uwaga: wymaga również identyfikatora sieci.) "
+"Np. \"<code>42,192.168.1.4</code>\" dla serwera NTP, \"<code>3,192.168.4."
+"4</code>\" dla domyślnego trasowania. <code>0.0.0.0</code> oznacza \"adres "
+"systemu z uruchomionym dnsmasq\"."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:119
 msgid "Options:"
@@ -5545,7 +5551,7 @@ msgstr "PTM/EFM (tryb transferu pakietów)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:254
 msgid "PXE/TFTP Settings"
-msgstr ""
+msgstr "Ustawienia PXE/TFTP"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1456
 msgid "Packet Steering"
@@ -6297,6 +6303,9 @@ msgid ""
 "and <code>TFTP server root</code> turn on the TFTP server and serve files "
 "from <code>TFTP server root</code>."
 msgstr ""
+"Katalog główny dla plików udostępnianych przez TFTP.<br><code>Włącz serwer "
+"TFTP</code> oraz <code>katalog główny serwera TFTP</code> włącz serwer TFTP "
+"i udostępniaj pliki z <code>katalogu głównego serwera TFTP</code>."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:297
 msgid "Root preparation"
@@ -6519,11 +6528,11 @@ msgstr "Wysyłaj nazwę hosta tego urządzenia"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:519
 msgid "Server address"
-msgstr ""
+msgstr "Adres serwera"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:513
 msgid "Server name"
-msgstr ""
+msgstr "Nazwa serwera"
 
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoe.js:50
 msgid "Service Name"
@@ -6756,6 +6765,8 @@ msgid ""
 "Special <abbr title=\"Preboot eXecution Environment\">PXE</abbr> boot "
 "options for Dnsmasq."
 msgstr ""
+"Specjalne opcje startowe <abbr title=\"Preboot eXecution Environment\">PXE</"
+"abbr> dla Dnsmasq."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:891
 msgid ""
@@ -7382,7 +7393,7 @@ msgstr "Adres IP jest poza zakresem adresów puli DHCP"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:520
 msgid "The IP address of the boot server"
-msgstr ""
+msgstr "Adres IP serwera startowego"
 
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:40
 msgid "The IPv4 address or the fully-qualified domain name of the remote end."
@@ -7538,7 +7549,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:514
 msgid "The hostname of the boot server"
-msgstr ""
+msgstr "Nazwa hosta serwera startowego"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1093
 msgid "The interface name is already used"
