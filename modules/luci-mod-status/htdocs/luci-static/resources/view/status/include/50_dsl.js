@@ -44,6 +44,9 @@ return baseclass.extend({
 	title: _('DSL'),
 
 	load: function() {
+		if (!L.hasSystemFeature('dsl'))
+			return Promise.reject();
+
 		return L.resolveDefault(callDSLMetrics(), {});
 	},
 
