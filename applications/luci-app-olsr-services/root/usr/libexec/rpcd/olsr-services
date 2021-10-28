@@ -40,10 +40,10 @@ case "$1" in
   call)
     case "$2" in
       services4)
-        echo $(load_services "olsrd")
+        load_services "olsrd"
       ;;
       services6)
-        echo $(load_services "olsrd6")
+        load_services "olsrd6"
       ;;
     esac
   ;;
