@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2021-07-03 05:21+0000\n"
-"Last-Translator: Kristoffer Grundström <swedishsailfishosuser@tutanota.com>\n"
+"PO-Revision-Date: 2021-10-29 15:23+0000\n"
+"Last-Translator: Leif Romell <leif@duck.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/openwrt/luci/sv/>"
 "\n"
 "Language: sv\n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.8-dev\n"
+"X-Generator: Weblate 4.9-dev\n"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1503
 msgid "%.1f dB"
@@ -137,7 +137,7 @@ msgstr "464XLAT (CLAT)"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/load.js:243
 msgid "5 Minute Load:"
-msgstr "Belastning senaste 5 minutrarna:"
+msgstr "Belastning senaste 5 minuterna:"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1544
 msgid "6-octet identifier as a hex string - no colons"
@@ -145,11 +145,11 @@ msgstr "treställig hexadecimal sträng utan kolon"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1504
 msgid "802.11r Fast Transition"
-msgstr "802.11r Snabb förvandling"
+msgstr "802.11r Snabb övergång"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1698
 msgid "802.11w Association SA Query maximum timeout"
-msgstr ""
+msgstr "Max tidsfrist för svar på 802.11w uppkopplingsbegäran (SA Query)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1705
 msgid "802.11w Association SA Query retry timeout"
@@ -214,7 +214,7 @@ msgstr "<abbr title=\"Router Advertisement\">RA</abbr>-tjänst"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:370
 msgid "A configuration for the device \"%s\" already exists"
-msgstr "En konfiguration för enheten \"%s\" existerar redan"
+msgstr "En konfiguration för enheten \"%s\" finns redan"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2741
 msgid "A directory with the same name already exists."
@@ -453,7 +453,7 @@ msgstr "Lägg till nyckel"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:409
 msgid "Add local domain suffix to names served from hosts files."
-msgstr "Lägg till lokala domänsuffix i namn från host-filer"
+msgstr "Lägg till lokala domänsuffix i namn från host-filer."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:465
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1119
@@ -571,7 +571,7 @@ msgid ""
 "Allocate IP addresses sequentially, starting from the lowest available "
 "address."
 msgstr ""
-"Allokera IP-adresser sekventiellt med start från den lägsta möjliga adressen"
+"Allokera IP-adresser sekventiellt med start från den lägsta möjliga adressen."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:377
 msgid "Allocate IPs sequentially"
@@ -1832,7 +1832,7 @@ msgstr "Inaktivera det här nätverket"
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoe.js:57
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pptp.js:70
 msgid "Disabled"
-msgstr "Inaktiverad"
+msgstr "Avaktiverad"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1185
 msgid "Disassociate On Low Acknowledgement"
@@ -1890,7 +1890,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:413
 msgid "Do not cache negative replies, e.g. for non-existent domains."
-msgstr "Cachea inte negativa svar, t.ex för icke-existerade domäner"
+msgstr "Cachea inte negativa svar, t.ex för icke-existerade domäner."
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:86
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:91
@@ -1903,13 +1903,13 @@ msgstr ""
 msgid "Do not forward DNS queries without dots or domain parts."
 msgstr ""
 "Vidarebefordra inte <abbr title=\"Domain Name System\">DNS</abbr>-"
-"förfrågningar utan <abbr title=\"Domain Name System\">DNS</abbr>-namn"
+"förfrågningar utan <abbr title=\"Domain Name System\">DNS</abbr>-namn."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:388
 msgid "Do not forward queries that cannot be answered by public resolvers."
 msgstr ""
 "Vidarebefordra inte förfrågningar som inte kan ta emot svar från publika "
-"namnservrar"
+"namnservrar."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:383
 msgid "Do not forward reverse lookups for local networks."
@@ -2500,7 +2500,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:357
 msgid "File with upstream resolvers."
-msgstr "lokal <abbr title=\"Domain Name System\">DNS</abbr>-fil"
+msgstr "lokal <abbr title=\"Domain Name System\">DNS</abbr>-fil."
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2832
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:507
@@ -3967,7 +3967,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:438
 msgid "Listening port for inbound DNS queries."
-msgstr "Lyssningsportar för ankommande DNS-förfrågningar"
+msgstr "Lyssningsportar för ankommande DNS-förfrågningar."
 
 #: modules/luci-mod-status/root/usr/share/luci/menu.d/luci-mod-status.json:106
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:54
@@ -5722,9 +5722,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:345
 msgid "Read <code>/etc/ethers</code> to configure the DHCP server."
-msgstr ""
-"Läs <code>/etc/ethers</code> för att ställa in <abbr title=\"Dynamic Host "
-"Configuration Protocol\">DHCP</abbr>-servern"
+msgstr "Läs <code>/etc/ethers</code> för att ställa in DHCP-servern."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:559
 msgid "Really switch protocol?"
@@ -8193,7 +8191,7 @@ msgstr "Trådlöst nätverk är aktiverat"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:278
 msgid "Write received DNS queries to syslog."
-msgstr "Skriv mottagna DNS-förfrågningar till syslogg"
+msgstr "Skriv mottagna DNS-förfrågningar till syslogg."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:180
 msgid "Write system log to file"
