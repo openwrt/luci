@@ -19,7 +19,7 @@ local ds = require "luci.dispatcher"
 local ucl = luci.model.uci.cursor()
 local valman = ucl:get_first("unbound", "unbound", "manual_conf")
 local dhcplk = ucl:get_first("unbound", "unbound", "dhcp_link")
-local lstrig = ucl:get_first("dhcp", "odhcpd", "leasetrigger")
+local lstrig = ucl:get_first("dhcp", "odhcpd", "leasetrigger") or "undefined"
 
 m1 = Map("unbound")
 s1 = m1:section(TypedSection, "unbound", translate("Recursive DNS"),
