@@ -6,7 +6,7 @@
 return baseclass.extend({
 	trigger: _("Network device activity (kernel: netdev)"),
 	kernel: true,
-	addFormOptions(s){
+	addFormOptions: function(s) {
 		var o;
 
 		o = s.option(widgets.DeviceSelect, '_net_dev', _('Device'));

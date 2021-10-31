@@ -5,7 +5,7 @@
 return baseclass.extend({
 	trigger: _('Custom flash interval (kernel: timer)'),
 	kernel: true,
-	addFormOptions(s){
+	addFormOptions: function(s) {
 		var o;
 
 		o = s.option(form.Value, 'delayon', _('On-State Delay'));
