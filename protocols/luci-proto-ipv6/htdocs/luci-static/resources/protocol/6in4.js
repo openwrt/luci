@@ -87,7 +87,19 @@ return network.registerProtocol('6in4', {
 		o.datatype    = 'range(1,255)';
 
 		o = s.taboption('advanced', form.Value, 'mtu', _('Use MTU on tunnel interface'));
-		o.placeholder = '1280';
-		o.datatype    = 'max(9200)';
+		o.value('1480', _('1480 (HE default)'));
+		o.value('1476');
+		o.value('1472', _('1472 (Some PPPoE)'));
+		o.value('1468');
+		o.value('1464');
+		o.value('1460', _('1460 (Some PPPoE)'));
+		o.value('1456');
+		o.value('1452', _('1452 (Some PPPoE)'));
+		o.value('1448');
+		o.value('1444');
+		o.value('1440');
+		o.value('1280', _('1280 (HE minimum)')); /* ip link show dev 6in4-*: default MTU 1280. */
+		o.placeholder = '--';
+		o.datatype    = 'and(uinteger,min(1280),max(9200))';
 	}
 });
