@@ -482,8 +482,7 @@ return view.extend({
 
 		o = s.taboption('pxe_tftp', form.Value, 'tftp_root',
 			_('TFTP server root'),
-			_('Root directory for files served via TFTP.' +
-			'<br><code>Enable TFTP server</code> and <code>TFTP server root</code> turn on the TFTP server and serve files from <code>TFTP server root</code>.'));
+			_('Root directory for files served via TFTP. <em>Enable TFTP server</em> and <em>TFTP server root</em> turn on the TFTP server and serve files from <em>TFTP server root</em>.'));
 		o.depends('enable_tftp', '1');
 		o.optional = true;
 		o.placeholder = '/';
