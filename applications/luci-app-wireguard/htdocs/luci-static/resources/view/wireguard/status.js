@@ -18,11 +18,11 @@ function timestampToStr(timestamp) {
 	var seconds = (now.getTime() / 1000) - timestamp;
 	var ago = '';
 	if (seconds < 60) {
-		ago = parseInt(seconds) + _('s ago');
+		ago = _('%ds ago').format(parseInt(seconds));
 	} else if (seconds < 3600) {
-		ago = parseInt(seconds / 60) + _('m ago');
+		ago = _('%dm ago').format(parseInt(seconds / 60));
 	} else if (seconds < 86401) {
-		ago = parseInt(seconds / 3600) + _('h ago');
+		ago = _('%dh ago').format(parseInt(seconds / 3600));
 	} else {
 		ago = _('over a day ago');
 	}
