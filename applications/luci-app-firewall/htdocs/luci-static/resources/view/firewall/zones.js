@@ -269,32 +269,34 @@ return view.extend({
 		o.placeholder = '10/minute';
 		o.modalonly = true;
 
-		o = s.taboption('extra', form.DummyValue, '_extrainfo');
-		o.rawhtml = true;
-		o.modalonly = true;
-		o.cfgvalue = function(section_id) {
-			return _('Passing raw iptables arguments to source and destination traffic classification rules allows to match packets based on other criteria than interfaces or subnets. These options should be used with extreme care as invalid values could render the firewall ruleset broken, completely exposing all services.');
-		};
+		if (!L.hasSystemFeature('firewall4')) {
+			o = s.taboption('extra', form.DummyValue, '_extrainfo');
+			o.rawhtml = true;
+			o.modalonly = true;
+			o.cfgvalue = function(section_id) {
+				return _('Passing raw iptables arguments to source and destination traffic classification rules allows to match packets based on other criteria than interfaces or subnets. These options should be used with extreme care as invalid values could render the firewall ruleset broken, completely exposing all services.');
+			};
 
-		o = s.taboption('extra', form.Value, 'extra_src', _('Extra source arguments'), _('Additional raw <em>iptables</em> arguments to classify zone source traffic, e.g. <code>-p tcp --sport 443</code> to only match inbound HTTPS traffic.'));
-		o.modalonly = true;
-		o.cfgvalue = function(section_id) {
-			return uci.get('firewall', section_id, 'extra_src') || uci.get('firewall', section_id, 'extra');
-		};
-		o.write = function(section_id, value) {
-			uci.unset('firewall', section_id, 'extra');
-			uci.set('firewall', section_id, 'extra_src', value);
-		};
+			o = s.taboption('extra', form.Value, 'extra_src', _('Extra source arguments'), _('Additional raw <em>iptables</em> arguments to classify zone source traffic, e.g. <code>-p tcp --sport 443</code> to only match inbound HTTPS traffic.'));
+			o.modalonly = true;
+			o.cfgvalue = function(section_id) {
+				return uci.get('firewall', section_id, 'extra_src') || uci.get('firewall', section_id, 'extra');
+			};
+			o.write = function(section_id, value) {
+				uci.unset('firewall', section_id, 'extra');
+				uci.set('firewall', section_id, 'extra_src', value);
+			};
 
-		o = s.taboption('extra', form.Value, 'extra_dest', _('Extra destination arguments'), _('Additional raw <em>iptables</em> arguments to classify zone destination traffic, e.g. <code>-p tcp --dport 443</code> to only match outbound HTTPS traffic.'));
-		o.modalonly = true;
-		o.cfgvalue = function(section_id) {
-			return uci.get('firewall', section_id, 'extra_dest') || uci.get('firewall', section_id, 'extra_src') || uci.get('firewall', section_id, 'extra');
-		};
-		o.write = function(section_id, value) {
-			uci.unset('firewall', section_id, 'extra');
-			uci.set('firewall', section_id, 'extra_dest', value);
-		};
+			o = s.taboption('extra', form.Value, 'extra_dest', _('Extra destination arguments'), _('Additional raw <em>iptables</em> arguments to classify zone destination traffic, e.g. <code>-p tcp --dport 443</code> to only match outbound HTTPS traffic.'));
+			o.modalonly = true;
+			o.cfgvalue = function(section_id) {
+				return uci.get('firewall', section_id, 'extra_dest') || uci.get('firewall', section_id, 'extra_src') || uci.get('firewall', section_id, 'extra');
+			};
+			o.write = function(section_id, value) {
+				uci.unset('firewall', section_id, 'extra');
+				uci.set('firewall', section_id, 'extra_dest', value);
+			};
+		}
 
 		o = s.taboption('general', form.DummyValue, '_forwardinfo');
 		o.rawhtml = true;

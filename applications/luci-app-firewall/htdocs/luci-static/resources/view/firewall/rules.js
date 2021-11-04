@@ -432,9 +432,11 @@ return view.extend({
 		fwtool.addLimitOption(s);
 		fwtool.addLimitBurstOption(s);
 
-		o = s.taboption('advanced', form.Value, 'extra', _('Extra arguments'),
-			_('Passes additional arguments to iptables. Use with care!'));
-		o.modalonly = true;
+		if (!L.hasSystemFeature('firewall4')) {
+			o = s.taboption('advanced', form.Value, 'extra', _('Extra arguments'),
+				_('Passes additional arguments to iptables. Use with care!'));
+			o.modalonly = true;
+		}
 
 		o = s.taboption('timed', form.MultiValue, 'weekdays', _('Week Days'));
 		o.modalonly = true;
