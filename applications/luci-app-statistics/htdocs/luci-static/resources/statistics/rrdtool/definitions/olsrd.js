@@ -86,7 +86,7 @@ return baseclass.extend({
 				    opts = {};
 
 				opts[dsn1] = { color: "00ff00", title: "LQ (%s)".format(host) };
-				opts[dns2] = { color: "0000ff", title: "NLQ (%s)".format(host), flip: true };
+				opts[dsn2] = { color: "0000ff", title: "NLQ (%s)".format(host), flip: true };
 
 				g.push({
 					title: "%H: Signal Quality (%s)".format(host), vlabel: "ETX",
