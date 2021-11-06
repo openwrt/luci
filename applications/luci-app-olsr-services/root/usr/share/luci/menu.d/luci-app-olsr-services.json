@@ -1,0 +1,13 @@
+{
+	"freifunk/services": {
+		"title": "Services",
+		"order": 1,
+        "depends": {
+            "uci" : {"olsrd": {"@LoadPlugin": {"library": "olsrd_nameservice"  }}}
+        },
+		"action": {
+			"type": "view",
+			"path": "freifunk-services/services"
+		}
+	}
+}
