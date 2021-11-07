@@ -15,14 +15,32 @@
 
 	local node = disp.context.dispatched
 
+	local darkpref
+
+	if theme == "bootstrap-dark" then
+		darkpref = "true"
+	elseif theme == "bootstrap-light" then
+		darkpref = "false"
+	end
+
 	-- send as HTML5
 	http.prepare_content("text/html")
 -%>
 <!DOCTYPE html>
-<html lang="<%=luci.i18n.context.lang%>">
+<html lang="<%=luci.i18n.context.lang%>"<%= ifattr(darkpref ~= nil, "data-darkmode", darkpref) %>>
 	<head>
 		<meta charset="utf-8">
 		<title><%=striptags( (boardinfo.hostname or "?") .. ( (node and node.title) and ' - ' .. translate(node.title) or '')) %> - LuCI</title>
+		<% if darkpref == nil then %>
+			<script type="text/javascript">
+				var mediaQuery = window.matchMedia('(prefers-color-scheme: dark)'),
+				    rootElement = document.querySelector(':root'),
+				    setDarkMode = function(match) { rootElement.setAttribute('data-darkmode', match.matches) };
+
+				mediaQuery.addEventListener('change', setDarkMode);
+				setDarkMode(mediaQuery);
+			</script>
+		<% end %>
 		<meta name="viewport" content="initial-scale=1.0">
 		<link rel="stylesheet" href="<%=media%>/cascade.css">
 		<link rel="stylesheet" media="only screen and (max-device-width: 854px)" href="<%=media%>/mobile.css" type="text/css" />
