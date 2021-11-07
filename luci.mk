@@ -21,6 +21,7 @@ LUCI_LANG.bg=български (Bulgarian)
 LUCI_LANG.bn_BD=বাংলা (Bengali)
 LUCI_LANG.ca=Català (Catalan)
 LUCI_LANG.cs=Čeština (Czech)
+LUCI_LANG.da=Dansk (Danish)
 LUCI_LANG.de=Deutsch (German)
 LUCI_LANG.el=Ελληνικά (Greek)
 LUCI_LANG.en=English
