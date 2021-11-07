@@ -70,18 +70,16 @@
 	color-scheme: light dark;
 }
 
-@media (prefers-color-scheme: dark) {
-	:root {
-		--background-color-delta-l-sign: 1;
-		--background-color-high-h: 0;
-		--background-color-high-s: 0%;
-		--background-color-high-l: calc(34 / 255 * 100%);
-		--text-color-delta-l-sign: -1;
-		--text-color-highest-h: 0;
-		--text-color-highest-s: 0%;
-		--text-color-highest-l: 100%;
-		--border-color-delta-l-sign: 1;
-	}
+:root[data-darkmode="true"] {
+	--background-color-delta-l-sign: 1;
+	--background-color-high-h: 0;
+	--background-color-high-s: 0%;
+	--background-color-high-l: calc(34 / 255 * 100%);
+	--text-color-delta-l-sign: -1;
+	--text-color-highest-h: 0;
+	--text-color-highest-s: 0%;
+	--text-color-highest-l: 100%;
+	--border-color-delta-l-sign: 1;
 }
 
 /* Reset.less
