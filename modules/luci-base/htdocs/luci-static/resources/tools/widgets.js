@@ -66,7 +66,7 @@ var CBIZoneSelect = form.ListValue.extend({
 			}, [
 				E('strong', _('Device')),
 				(this.allowany || this.allowlocal)
-					? ' (%s)'.format(this.option != 'dest' ? _('output') : _('input')) : ''
+					? E('span', ' (%s)'.format(this.option != 'dest' ? _('output') : _('input'))) : ''
 			]);
 		}
 		else if (!this.multiple && (this.rmempty || this.optional)) {
@@ -82,7 +82,7 @@ var CBIZoneSelect = form.ListValue.extend({
 				'style': 'background-color:' + firewall.getColorForName(null)
 			}, [
 				E('strong', _('Any zone')),
-				(this.allowany && this.allowlocal && !isOutputOnly) ? ' (%s)'.format(_('forward')) : ''
+				(this.allowany && this.allowlocal && !isOutputOnly) ? E('span', ' (%s)'.format(_('forward'))) : ''
 			]);
 		}
 
@@ -188,11 +188,11 @@ var CBIZoneSelect = form.ListValue.extend({
 					}
 
 					L.dom.content(emptyval.querySelector('span'), [
-						E('strong', _('Device')), ' (%s)'.format(_('input'))
+						E('strong', _('Device')), E('span', ' (%s)'.format(_('input')))
 					]);
 
 					L.dom.content(anyval.querySelector('span'), [
-						E('strong', _('Any zone')), ' (%s)'.format(_('forward'))
+						E('strong', _('Any zone')), E('span', ' (%s)'.format(_('forward')))
 					]);
 
 					anyval.parentNode.insertBefore(emptyval, anyval);
