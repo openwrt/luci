@@ -66,8 +66,7 @@
 	--border-color-low-delta-l: calc(17 / 255 * 100%);
 	--border-color-low-l: calc(var(--background-color-high-l) + var(--border-color-delta-l-sign) * var(--border-color-low-delta-l));
 	--border-color-low: hsl(var(--border-color-low-h), var(--border-color-low-s), var(--border-color-low-l));
-
-	color-scheme: light dark;
+	color-scheme: light;
 }
 
 :root[data-darkmode="true"] {
@@ -80,6 +79,7 @@
 	--text-color-highest-s: 0%;
 	--text-color-highest-l: 100%;
 	--border-color-delta-l-sign: 1;
+	color-scheme: dark;
 }
 
 /* Reset.less
@@ -1651,10 +1651,9 @@ select + .cbi-button {
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
-@media (prefers-color-scheme: dark) {
-	.cbi-progressbar::after {
-		mix-blend-mode: difference;
-	}
+
+:root[data-darkmode="true"] .cbi-progressbar::after {
+	mix-blend-mode: difference;
 }
 
 .zonebadge .cbi-tooltip {
