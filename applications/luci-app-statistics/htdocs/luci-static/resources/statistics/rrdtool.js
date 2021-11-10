@@ -149,9 +149,9 @@ return baseclass.extend({
 			    hostname = data[1];
 
 			this.opts.host      = uci.get('luci_statistics', 'collectd', 'Hostname')        || hostname;
-			this.opts.timespan  = uci.get('luci_statistics', 'rrdtool', 'default_timespan') || 900;
-			this.opts.width     = uci.get('luci_statistics', 'rrdtool', 'image_width')      || 400;
-			this.opts.height    = uci.get('luci_statistics', 'rrdtool', 'image_height')     || 100;
+			this.opts.timespan  = uci.get('luci_statistics', 'rrdtool', 'default_timespan') || 3600;
+			this.opts.width     = uci.get('luci_statistics', 'rrdtool', 'image_width')      || 600;
+			this.opts.height    = uci.get('luci_statistics', 'rrdtool', 'image_height')     || 150;
 			this.opts.rrdpath   = (uci.get('luci_statistics', 'collectd_rrdtool', 'DataDir') || '/tmp/rrd').replace(/\/$/, '');
 			this.opts.rrasingle = (uci.get('luci_statistics', 'collectd_rrdtool', 'RRASingle') == '1');
 			this.opts.rramax    = (uci.get('luci_statistics', 'collectd_rrdtool', 'RRAMax') == '1');
