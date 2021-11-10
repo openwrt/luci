@@ -1117,7 +1117,7 @@ Network = baseclass.extend(/** @lends LuCI.network.prototype */ {
 			if (name == null)
 				return null;
 
-			if (_state.netdevs.hasOwnProperty(name) || isWifiIfname(name))
+			if (_state.netdevs.hasOwnProperty(name))
 				return this.instantiateDevice(name);
 
 			var netid = getWifiNetidBySid(name);
