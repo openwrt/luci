@@ -16,6 +16,14 @@ local methods = {
 			return {keys = {priv = prv, pub = pub}}
 		end
 	},
+	getPublicAndPrivateKeyFromPrivate = {
+		args = {privkey = "privkey"},
+		call = function(args)
+			local pubkey = sys.exec("echo %s | wg pubkey 2>/dev/null" % util.shellquote(args.privkey)):sub(1, -2)
+
+			return {keys = {priv = args.privkey, pub = pubkey}}
+		end
+	},
 	generateQrCode = {
 		args = {privkey = "privkey", psk = "psk", allowed_ips = {"allowed_ips"}},
 		call = function(args)
