@@ -1177,7 +1177,7 @@ return view.extend({
 			var node = E('div', { 'class': 'ifacebox' }, [
 				E('div', {
 					'class': 'ifacebox-head',
-					'style': 'background-color:%s'.format(zone ? zone.getColor() : '#EEEEEE'),
+					'style': firewall.getZoneColorStyle(zone),
 					'title': zone ? _('Part of zone %q').format(zone.getName()) : _('No zone assigned')
 				}, E('strong', net.getName().toUpperCase())),
 				E('div', {
