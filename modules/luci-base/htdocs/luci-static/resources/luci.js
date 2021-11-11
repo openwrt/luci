@@ -764,7 +764,7 @@
 				if (opt.content != null) {
 					switch (typeof(opt.content)) {
 					case 'function':
-						content = opt.content(xhr);
+						content = opt.content(opt.xhr);
 						break;
 
 					case 'object':
