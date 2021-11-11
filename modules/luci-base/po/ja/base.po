@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-06-10 03:40+0200\n"
-"PO-Revision-Date: 2021-08-25 15:34+0000\n"
-"Last-Translator: Per-Terra <terra.persicaria@gmail.com>\n"
+"PO-Revision-Date: 2021-11-04 08:51+0000\n"
+"Last-Translator: INAGAKI Hiroshi <musashino.open@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/openwrt/luci/ja/"
 ">\n"
 "Language: ja\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.8.1-dev\n"
+"X-Generator: Weblate 4.9-dev\n"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1498
 msgid "%.1f dB"
@@ -700,11 +700,11 @@ msgstr "許可されたIP"
 msgid "Always"
 msgstr "常に"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/none.js:5
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/none.js:6
 msgid "Always off (kernel: none)"
 msgstr "常にオフ（kernel: none）"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/default-on.js:6
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/default-on.js:5
 msgid "Always on (kernel: default-on)"
 msgstr "常にオン（kernel: default-on）"
 
@@ -726,7 +726,7 @@ msgstr "フォームの保存中にエラーが発生しました:"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:138
 msgid "An optional, short description for this device"
-msgstr ""
+msgstr "このデバイスの短い説明（オプション）"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1459
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:20
@@ -791,25 +791,32 @@ msgstr "Annex M G.992.5"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:885
 msgid "Announce this device as IPv6 DNS server."
-msgstr ""
+msgstr "このデバイスを IPv6 DNS サーバーとしてアナウンスします。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:777
 msgid ""
 "Announce this device as default router if a local IPv6 default route is "
 "present."
 msgstr ""
+"ローカルの IPv6 デフォルトルートが存在する場合、このデバイスをデフォルト ルー"
+"ターとしてアナウンスします"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:779
 msgid ""
 "Announce this device as default router if a public IPv6 prefix is available, "
 "regardless of local default route availability."
 msgstr ""
+"パブリック IPv6 プレフィックスが利用可能である場合、ローカルのデフォルトルー"
+"トの利用可否にかかわらずこのデバイスをデフォルト ルーターとしてアナウンスしま"
+"す"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:781
 msgid ""
 "Announce this device as default router regardless of whether a prefix or "
 "default route is present."
 msgstr ""
+"プレフィックスまたはデフォルトルートが存在するかどうかにかかわらず、このデバ"
+"イスをデフォルト ルーターとしてアナウンスします"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:890
 msgid "Announced DNS domains"
@@ -817,7 +824,7 @@ msgstr "アナウンスされたDNSドメイン"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:878
 msgid "Announced IPv6 DNS servers"
-msgstr ""
+msgstr "アナウンスされる IPv6 DNS サーバー"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1669
 msgid "Anonymous Identity"
@@ -1446,21 +1453,25 @@ msgid ""
 "Configures the default router advertisement in <abbr title=\"Router "
 "Advertisement\">RA</abbr> messages."
 msgstr ""
+"<abbr title=\"Router Advertisement\">RA</abbr> メッセージ内の既定のルーター広"
+"告を設定します。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:764
 msgid ""
 "Configures the operation mode of the <abbr title=\"Router Advertisement"
 "\">RA</abbr> service on this interface."
 msgstr ""
+"このデバイスにおける <abbr title=\"Router Advertisement\">RA</abbr> サービス"
+"の動作モードを設定します。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:868
 msgid "Configures the operation mode of the DHCPv6 service on this interface."
-msgstr ""
+msgstr "このデバイスにおける DHCPv6 サービスの動作モードを設定します。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:898
 msgid ""
 "Configures the operation mode of the NDP proxy service on this interface."
-msgstr ""
+msgstr "このデバイスにおける NDP プロキシーサービスの動作モードを設定します。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1273
 msgid "Configure…"
@@ -1717,7 +1728,7 @@ msgstr "デフォルト %d"
 msgid "Default router"
 msgstr ""
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/default-on.js:11
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/none.js:11
 msgid "Default state"
 msgstr "デフォルト状態"
 
@@ -2005,7 +2016,7 @@ msgstr "ローカルネットワークへの逆引きを転送しない"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:870
 msgid "Do not offer DHCPv6 service on this interface."
-msgstr ""
+msgstr "このデバイスで DHCPv6 サービスを提供しません"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:158
 msgctxt "VLAN port state"
@@ -2027,6 +2038,8 @@ msgid ""
 "Do not send any <abbr title=\"Router Advertisement, ICMPv6 Type 134\">RA</"
 "abbr> messages on this interface."
 msgstr ""
+"このインターフェースでは <abbr title=\"Router Advertisement, ICMPv6 Type "
+"134\">RA</abbr> メッセージを送信しません"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2776
 msgid "Do you really want to delete \"%s\" ?"
@@ -2741,6 +2754,9 @@ msgid ""
 "messages received on the designated master interface to downstream "
 "interfaces."
 msgstr ""
+"マスターとして指定されたインターフェースで受信した <abbr title=\"Router "
+"Advertisement, ICMPv6 Type 134\">RA</abbr> メッセージをダウンストリーム イン"
+"ターフェースへ転送します"
 
 #: protocols/luci-proto-relay/htdocs/luci-static/resources/protocol/relay.js:164
 msgid "Forward DHCP traffic"
@@ -2751,6 +2767,8 @@ msgid ""
 "Forward DHCPv6 messages between the designated master interface and "
 "downstream interfaces."
 msgstr ""
+"マスターとして指定されたインターフェースとダウンストリーム インターフェースと"
+"の間で DHCPv6 メッセージを転送します"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:28
 msgid "Forward Error Correction Seconds (FECS)"
@@ -2879,7 +2897,7 @@ msgstr "全体設定"
 msgid "Global network options"
 msgstr "グローバルネットワークオプション"
 
-#: themes/luci-theme-bootstrap/luasrc/view/themes/bootstrap/header.htm:53
+#: themes/luci-theme-bootstrap/luasrc/view/themes/bootstrap/header.htm:71
 #: themes/luci-theme-openwrt-2020/luasrc/view/themes/openwrt2020/header.htm:62
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:82
 msgid "Go to password configuration..."
@@ -3228,7 +3246,7 @@ msgstr "IPv6隣接装置"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:635
 msgid "IPv6 RA Settings"
-msgstr ""
+msgstr "IPv6 RA 設定"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:634
 msgid "IPv6 Settings"
@@ -3668,7 +3686,7 @@ msgstr ""
 "フラッシュしようとしたイメージファイルはこのフラッシュメモリー向けではありま"
 "せん。イメージファイルを確認してください！"
 
-#: themes/luci-theme-bootstrap/luasrc/view/themes/bootstrap/header.htm:60
+#: themes/luci-theme-bootstrap/luasrc/view/themes/bootstrap/header.htm:78
 #: themes/luci-theme-material/luasrc/view/themes/material/header.htm:86
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:72
 msgid "JavaScript required!"
@@ -4004,7 +4022,7 @@ msgstr "ローカルIPv4アドレス"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:884
 msgid "Local IPv6 DNS server"
-msgstr ""
+msgstr "ローカル IPv6 DNS サーバー"
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:46
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:53
@@ -4714,7 +4732,7 @@ msgstr "これ以上利用可能なスレーブがないため、インターフ
 msgid "No negative cache"
 msgstr "ネガティブキャッシュなし"
 
-#: themes/luci-theme-bootstrap/luasrc/view/themes/bootstrap/header.htm:50
+#: themes/luci-theme-bootstrap/luasrc/view/themes/bootstrap/header.htm:68
 #: themes/luci-theme-openwrt-2020/luasrc/view/themes/openwrt2020/header.htm:59
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:79
 msgid "No password set!"
@@ -4815,7 +4833,7 @@ msgstr ""
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:141
 msgid "Notes"
-msgstr ""
+msgstr "備考"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:187
 msgid "Notice"
@@ -4857,7 +4875,7 @@ msgstr "難読化されたパスワード"
 msgid "Obtain IPv6 address"
 msgstr "IPv6アドレス取得"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/default-on.js:18
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/none.js:18
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:352
 msgid "Off"
 msgstr "オフ"
@@ -4866,7 +4884,7 @@ msgstr "オフ"
 msgid "Off-State Delay"
 msgstr "消灯時間"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/default-on.js:18
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/none.js:18
 msgid "On"
 msgstr "オン"
 
@@ -4971,7 +4989,7 @@ msgstr "オプション"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:141
 msgid "Optional, free-form notes about this device"
-msgstr ""
+msgstr "このデバイスについての備考（オプション）"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:97
 msgid ""
@@ -5582,6 +5600,8 @@ msgid ""
 "Provide a DHCPv6 server on this interface and reply to DHCPv6 solicitations "
 "and requests."
 msgstr ""
+"このインターフェースで DHCPv6 サーバーを提供し、 DHCPv6 の要請やリクエストに"
+"応答します"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:883
 msgid "Provide new network"
@@ -5808,7 +5828,7 @@ msgstr "削除"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1277
 msgid "Remove related device settings from the configuration"
-msgstr ""
+msgstr "関連するデバイス構成を設定から削除します"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2002
 msgid "Replace wireless configuration"
@@ -6203,6 +6223,8 @@ msgid ""
 "Send <abbr title=\"Router Advertisement, ICMPv6 Type 134\">RA</abbr> "
 "messages advertising this device as IPv6 router."
 msgstr ""
+"このデバイスを IPv6 ルーターとして広告する <abbr title=\"Router "
+"Advertisement, ICMPv6 Type 134\">RA</abbr> メッセージを送信します"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:650
 msgid "Send ICMP redirects"
@@ -6455,6 +6477,9 @@ msgid ""
 "If left unspecified, the device will announce itself as IPv6 DNS server "
 "unless the <em>Local IPv6 DNS server</em> option is disabled."
 msgstr ""
+"DHCPv6 を通してアナウンスされる IPv6 DNS サーバーアドレスの固定的なリストで"
+"す。未指定である場合、<em>ローカル IPv6 DNS サーバー</em>オプションが無効でな"
+"い限り、デバイスは自身を IPv6 DNS サーバーとしてアナウンスします。"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:343
 msgid ""
@@ -7343,7 +7368,7 @@ msgstr "アクティブなリースはありません"
 msgid "There are no changes to apply"
 msgstr "適用する変更はありません"
 
-#: themes/luci-theme-bootstrap/luasrc/view/themes/bootstrap/header.htm:51
+#: themes/luci-theme-bootstrap/luasrc/view/themes/bootstrap/header.htm:69
 #: themes/luci-theme-openwrt-2020/luasrc/view/themes/openwrt2020/header.htm:60
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:80
 msgid ""
@@ -8298,7 +8323,7 @@ msgstr ""
 "変更は再起動後に適用されます。<br /><strong>警告: \"network\"などの重要なスク"
 "リプトを無効にするとデバイスにアクセスできなくなることがあります！</strong>"
 
-#: themes/luci-theme-bootstrap/luasrc/view/themes/bootstrap/header.htm:61
+#: themes/luci-theme-bootstrap/luasrc/view/themes/bootstrap/header.htm:79
 #: themes/luci-theme-material/luasrc/view/themes/material/header.htm:87
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:73
 msgid ""
@@ -8452,7 +8477,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:780
 msgid "forced"
-msgstr ""
+msgstr "強制"
 
 #: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:85
 #: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:195
@@ -8564,7 +8589,7 @@ msgstr "オフ"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:778
 msgid "on available prefix"
-msgstr ""
+msgstr "利用可能なプレフィックス"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1390
 msgid "open network"
