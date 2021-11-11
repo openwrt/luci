@@ -224,7 +224,17 @@ Firewall = L.Class.extend({
 		}, this));
 	},
 
-	getColorForName: getColorForName
+	getColorForName: getColorForName,
+
+	getZoneColorStyle: function(zone) {
+		var hex = (zone instanceof Zone) ? zone.getColor() : getColorForName((zone != null && zone != '*') ? zone : null);
+
+		return '--zone-color-rgb:%d, %d, %d; background-color:rgb(var(--zone-color-rgb))'.format(
+			parseInt(hex.substring(1, 3), 16),
+			parseInt(hex.substring(3, 5), 16),
+			parseInt(hex.substring(5, 7), 16)
+		);
+	},
 });
 
 
