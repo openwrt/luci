@@ -32,6 +32,15 @@ msgstr "参与式系统升级"
 msgid "Attendedsysupgrade Configuration."
 msgstr "Attended系统升级 配置。"
 
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:157
+msgid "Build Date"
+msgstr "构建日期"
+
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:229
+msgid "Building firmware sysupgrade image"
+msgstr "构建固件sysupgrade 镜像"
+
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:202
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:369
 msgid "Cancel"
 msgstr "取消"
@@ -41,6 +50,8 @@ msgid "Client"
 msgstr "客户端"
 
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:54
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:94
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:263
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:396
 msgid "Close"
 msgstr "关闭"
@@ -57,13 +68,37 @@ msgstr "无法访问位于 “%s” 的 API。请稍后再试。"
 msgid "Downloading firmware from server to browser"
 msgstr "正从服务器下载固件到浏览器"
 
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:266
+msgid "Error building the sysupgrade"
+msgstr "构建 sysupgrade 时出错"
+
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:41
 msgid "Error connecting to upgrade server"
 msgstr "连接升级服务器出错"
 
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:89
+msgid "Error during download of firmware. Please try again"
+msgstr "固件下载出错。请重试"
+
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:150
+msgid "File"
+msgstr "文件"
+
 #: applications/luci-app-attendedsysupgrade/root/usr/share/rpcd/acl.d/luci-app-attendedsysupgrade.json:3
 msgid "Grant UCI access to LuCI app attendedsysupgrade"
 msgstr "授予访问 LuCI 应用 attendedsysupgrade 的权限"
+
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:211
+msgid "Install Sysupgrade"
+msgstr "安装系统升级"
+
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:100
+msgid "Installing the sysupgrade. Do not unpower device!"
+msgstr "正在安装 sysupgrade。不要切断电源！"
+
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:192
+msgid "Keep settings and retain the current configuration"
+msgstr "保持设置并保留当前配置"
 
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:359
 msgid "New upgrade available"
@@ -77,9 +112,25 @@ msgstr "无升级可用"
 msgid "Overview"
 msgstr "概览"
 
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:239
+msgid "Please report the error message and request"
+msgstr "请报告错误信息和请求"
+
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:379
 msgid "Request Sysupgrade"
 msgstr "请求进行系统升级"
+
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:225
+msgid "Request in build queue position %s"
+msgstr "构建队列位置 %s 中的请求"
+
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:240
+msgid "Request to server:"
+msgstr "向服务器发出的请求："
+
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:155
+msgid "SHA256"
+msgstr "SHA256"
 
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/configuration.js:22
 msgid "Search for new sysupgrades on opening the tab"
@@ -93,6 +144,10 @@ msgstr "搜索系统升级"
 msgid "Search on opening"
 msgstr "打开时进行搜索"
 
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:282
+msgid "Searching for an available sysupgrade of %s - %s"
+msgstr "正在搜索 %s - %s 的可用系统升级"
+
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/configuration.js:12
 msgid "Server"
 msgstr "服务器"
@@ -100,6 +155,14 @@ msgstr "服务器"
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/configuration.js:27
 msgid "Show advanced options like packge list modification"
 msgstr "显示高级选项，如包列表修改"
+
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:215
+msgid "Successfully created sysupgrade image"
+msgstr "成功创建了系统升级镜像"
+
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:159
+msgid "Target"
+msgstr "目标"
 
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:434
 msgid ""
@@ -120,56 +183,13 @@ msgstr "这是通过在线服务按需构建新的固件来实现的。"
 msgid "Uploading firmware from browser to device"
 msgstr "正将固件从浏览器上传到设备"
 
-#~ msgid "Build Date"
-#~ msgstr "构建日期"
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:148
+msgid "Version"
+msgstr "版本"
 
-#~ msgid "Building firmware sysupgrade image"
-#~ msgstr "构建固件sysupgrade 镜像"
-
-#~ msgid "Error building the sysupgrade"
-#~ msgstr "构建 sysupgrade 时出错"
-
-#~ msgid "Error during download of firmware. Please try again"
-#~ msgstr "固件下载出错。请重试"
-
-#~ msgid "File"
-#~ msgstr "文件"
-
-#~ msgid "Install Sysupgrade"
-#~ msgstr "安装系统升级"
-
-#~ msgid "Installing the sysupgrade. Do not unpower device!"
-#~ msgstr "正在安装 sysupgrade。不要切断电源！"
-
-#~ msgid "Keep settings and retain the current configuration"
-#~ msgstr "保持设置并保留当前配置"
-
-#~ msgid "Please report the error message and request"
-#~ msgstr "请报告错误信息和请求"
-
-#~ msgid "Request in build queue position %s"
-#~ msgstr "构建队列位置 %s 中的请求"
-
-#~ msgid "Request to server:"
-#~ msgstr "向服务器发出的请求："
-
-#~ msgid "SHA256"
-#~ msgstr "SHA256"
-
-#~ msgid "Searching for an available sysupgrade of %s - %s"
-#~ msgstr "正在搜索 %s - %s 的可用系统升级"
-
-#~ msgid "Successfully created sysupgrade image"
-#~ msgstr "成功创建了系统升级镜像"
-
-#~ msgid "Target"
-#~ msgstr "目标"
-
-#~ msgid "Version"
-#~ msgstr "版本"
-
-#~ msgid "Wrong checksum"
-#~ msgstr "错误的校验和"
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:87
+msgid "Wrong checksum"
+msgstr "错误的校验和"
 
 #~ msgid "Request in build queue position %d"
 #~ msgstr "位于构建队列位置 %d 的请求"

@@ -35,6 +35,16 @@ msgstr "Actualización asistida"
 msgid "Attendedsysupgrade Configuration."
 msgstr "Configuración de actualización asistida."
 
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:157
+msgid "Build Date"
+msgstr "Fecha de compilación"
+
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:229
+#, fuzzy
+msgid "Building firmware sysupgrade image"
+msgstr "Compilando imagen de firmware sysupgrade"
+
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:202
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:369
 msgid "Cancel"
 msgstr "Cancelar"
@@ -44,6 +54,8 @@ msgid "Client"
 msgstr "Cliente"
 
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:54
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:94
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:263
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:396
 msgid "Close"
 msgstr "Cerrar"
@@ -63,14 +75,38 @@ msgstr ""
 msgid "Downloading firmware from server to browser"
 msgstr "Descargando firmware del servidor al navegador"
 
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:266
+msgid "Error building the sysupgrade"
+msgstr "Error al compilar el sysupgrade"
+
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:41
 #, fuzzy
 msgid "Error connecting to upgrade server"
 msgstr "Error al conectarse al servidor de actualizaciones"
 
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:89
+msgid "Error during download of firmware. Please try again"
+msgstr "Error durante la descarga del firmware. Inténtalo de nuevo"
+
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:150
+msgid "File"
+msgstr "Archivo"
+
 #: applications/luci-app-attendedsysupgrade/root/usr/share/rpcd/acl.d/luci-app-attendedsysupgrade.json:3
 msgid "Grant UCI access to LuCI app attendedsysupgrade"
 msgstr "Otorgar acceso UCI a la aplicación LuCI actualización asistida"
+
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:211
+msgid "Install Sysupgrade"
+msgstr "Instalar Sysupgrade"
+
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:100
+msgid "Installing the sysupgrade. Do not unpower device!"
+msgstr "Instalando el archivo sysupgrade. ¡No apague el dispositivo!"
+
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:192
+msgid "Keep settings and retain the current configuration"
+msgstr "Mantener los ajustes y conservar la configuración actual"
 
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:359
 msgid "New upgrade available"
@@ -84,9 +120,26 @@ msgstr "No hay actualización disponible"
 msgid "Overview"
 msgstr "Visión general"
 
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:239
+msgid "Please report the error message and request"
+msgstr "Por favor informe el mensaje de error y solicite"
+
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:379
 msgid "Request Sysupgrade"
 msgstr "Solicitar Sysupgrade"
+
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:225
+#, fuzzy
+msgid "Request in build queue position %s"
+msgstr "Solicitud en la posición de la cola de compilación %s"
+
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:240
+msgid "Request to server:"
+msgstr "Solicitud al servidor:"
+
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:155
+msgid "SHA256"
+msgstr "SHA256"
 
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/configuration.js:22
 msgid "Search for new sysupgrades on opening the tab"
@@ -100,6 +153,10 @@ msgstr "Buscar sysupgrade"
 msgid "Search on opening"
 msgstr "Buscar al abrir"
 
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:282
+msgid "Searching for an available sysupgrade of %s - %s"
+msgstr "Buscando una actualización del sistema disponible de %s - %s"
+
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/configuration.js:12
 msgid "Server"
 msgstr "Servidor"
@@ -108,6 +165,14 @@ msgstr "Servidor"
 msgid "Show advanced options like packge list modification"
 msgstr ""
 "Mostrar opciones avanzadas como la modificación de la lista de paquetes"
+
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:215
+msgid "Successfully created sysupgrade image"
+msgstr "Imagen de actualización del sistema creada con éxito"
+
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:159
+msgid "Target"
+msgstr "Objetivo"
 
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:434
 msgid ""
@@ -132,58 +197,13 @@ msgstr ""
 msgid "Uploading firmware from browser to device"
 msgstr "Cargando firmware desde el navegador al dispositivo"
 
-#~ msgid "Build Date"
-#~ msgstr "Fecha de compilación"
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:148
+msgid "Version"
+msgstr "Versión"
 
-#, fuzzy
-#~ msgid "Building firmware sysupgrade image"
-#~ msgstr "Compilando imagen de firmware sysupgrade"
-
-#~ msgid "Error building the sysupgrade"
-#~ msgstr "Error al compilar el sysupgrade"
-
-#~ msgid "Error during download of firmware. Please try again"
-#~ msgstr "Error durante la descarga del firmware. Inténtalo de nuevo"
-
-#~ msgid "File"
-#~ msgstr "Archivo"
-
-#~ msgid "Install Sysupgrade"
-#~ msgstr "Instalar Sysupgrade"
-
-#~ msgid "Installing the sysupgrade. Do not unpower device!"
-#~ msgstr "Instalando el archivo sysupgrade. ¡No apague el dispositivo!"
-
-#~ msgid "Keep settings and retain the current configuration"
-#~ msgstr "Mantener los ajustes y conservar la configuración actual"
-
-#~ msgid "Please report the error message and request"
-#~ msgstr "Por favor informe el mensaje de error y solicite"
-
-#, fuzzy
-#~ msgid "Request in build queue position %s"
-#~ msgstr "Solicitud en la posición de la cola de compilación %s"
-
-#~ msgid "Request to server:"
-#~ msgstr "Solicitud al servidor:"
-
-#~ msgid "SHA256"
-#~ msgstr "SHA256"
-
-#~ msgid "Searching for an available sysupgrade of %s - %s"
-#~ msgstr "Buscando una actualización del sistema disponible de %s - %s"
-
-#~ msgid "Successfully created sysupgrade image"
-#~ msgstr "Imagen de actualización del sistema creada con éxito"
-
-#~ msgid "Target"
-#~ msgstr "Objetivo"
-
-#~ msgid "Version"
-#~ msgstr "Versión"
-
-#~ msgid "Wrong checksum"
-#~ msgstr "Suma de comprobación incorrecta"
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:87
+msgid "Wrong checksum"
+msgstr "Suma de comprobación incorrecta"
 
 #, fuzzy
 #~ msgid "Request in build queue position %d"
