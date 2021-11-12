@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2021-11-07 15:53+0000\n"
+"PO-Revision-Date: 2021-11-12 18:40+0000\n"
 "Last-Translator: CRISTIAN ANDREI <cristianvdr@gmail.com>\n"
 "Language-Team: Romanian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsfirewall/ro/>\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2;\n"
-"X-Generator: Weblate 4.9-dev\n"
+"X-Generator: Weblate 4.9.1-dev\n"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:48
 msgid ""
@@ -29,6 +29,20 @@ msgid ""
 "&quot;\">%{helper.val}</var>:<var data-tooltip=\"%{helper.name}\">%{helper."
 "val}</var>}}"
 msgstr ""
+"%{src?%{dest?Forwarded:Incoming}:Outgoing} %{ipv6?%{ipv4?<var>IPv4</var> și "
+"<var>IPv6</var>:<var>IPv6</var>}:<var>IPv4</var>}%{proto?, protocol "
+"%{proto#%{next?, }%{item.types?<var class=\"cbi-tooltip-container\">%{item."
+"name}<span class=\"cbi-tooltip\">ICMP cu tipuri %{item.types#%{next?, "
+"}<var>%{item}</var>}</span></var>:<var>%{item.name}</var>}}}%{mark?, mark "
+"<var%{mark.inv? data-tooltip=\"Potrivește fwmarks cu excepția %{mark.num}%{"
+"mark.mask? cu masca %{mark.mask}}.\":%{mark.mask? data-tooltip=\"Maschează "
+"valoarea fwmark cu %{mark.mask} înainte de comparație.\"}}>%{mark."
+"val}</var>}%{dscp?, DSCP %{dscp.inv?<var data-tooltip=\"Potrivește "
+"clasificările DSCP cu excepția %{dscp.num?:%{dscp.name}}\">%{dscp."
+"val}</var>:<var>%{dscp.val}</var>}}%{helper?, helper %{helper.inv?<var data-"
+"tooltip=\"Potrivește orice helper cu excepția &quot;%{helper.name}&quot;\""
+">%{helper.val}</var>:<var data-tooltip=\"%{helper.name}\">%{helper."
+"val}</var>}}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:461
 msgid "-- add IP --"
@@ -246,9 +260,8 @@ msgid "Destination zone"
 msgstr "Zonă de destinație"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:268
-#, fuzzy
 msgid "Device name"
-msgstr "Nume dispozitiv"
+msgstr "Numele dispozitivului"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:251
 msgid ""
@@ -264,7 +277,7 @@ msgstr "Descarcă pachetele invalide"
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:230
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:164
 msgid "Enable"
-msgstr "Activează"
+msgstr "Activați"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:248
 msgid "Enable NAT Loopback"
