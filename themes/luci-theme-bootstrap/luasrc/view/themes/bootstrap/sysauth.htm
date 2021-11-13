@@ -1,0 +1,24 @@
+<%#
+ Copyright 2021 Jo-Philipp Wich <jo@mein.io>
+ Licensed to the public under the Apache License 2.0.
+-%>
+
+<%
+	-- tell bootstrap's templates to not render header and footer
+	blank_page = true
+%>
+
+<%+header%>
+
+<div id="view">
+	<div class="spinning"><%:Loading view…%></div>
+	<script type="text/javascript">
+		L.env.default_login_user = <%=luci.http.write_json(duser) %>;
+
+		L.require('ui').then(function(ui) {
+			ui.instantiateView('bootstrap.sysauth');
+		});
+	</script>
+</div>
+
+<%+footer%>
