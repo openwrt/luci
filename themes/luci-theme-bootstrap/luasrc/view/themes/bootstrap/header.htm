@@ -56,6 +56,7 @@
 	</head>
 
 	<body class="lang_<%=luci.i18n.context.lang%> <% if node then %><%= striptags( node.title ) %><%- end %>" data-page="<%= pcdata(table.concat(disp.context.requestpath, "-")) %>">
+		<% if not blank_page then %>
 		<header>
 			<a class="brand" href="/"><%=striptags(boardinfo.hostname or "?")%></a>
 			<ul class="nav" id="topmenu" style="display:none"></ul>
@@ -73,16 +74,6 @@
 				</div>
 			<%- end -%>
 
-			<%- if boardinfo.rootfs_type == "initramfs" then -%>
-				<div class="alert-message warning">
-					<h4><%:System running in recovery (initramfs) mode.%></h4>
-					<p><%:No changes to settings will be stored and are lost after rebooting. This mode should only be used to install a firmware upgrade%></p>
-					<% if disp.lookup("admin/system/flash") then %>
-					  <div class="right"><a class="btn" href="<%=url("admin/system/flash")%>"><%:Go to firmware upgrade...%></a></div>
-					<% end %>
-				</div>
-			<%- end -%>
-
 			<noscript>
 				<div class="alert-message warning">
 					<h4><%:JavaScript required!%></h4>
@@ -91,3 +82,4 @@
 			</noscript>
 
 			<div id="tabmenu" style="display:none"></div>
+		<% end %>
