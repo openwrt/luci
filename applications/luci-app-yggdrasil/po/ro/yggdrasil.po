@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2021-11-12 18:41+0000\n"
+"PO-Revision-Date: 2021-11-14 17:23+0000\n"
 "Last-Translator: Simona Iacob <s@zp1.net>\n"
 "Language-Team: Romanian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsyggdrasil/ro/>\n"
@@ -23,6 +23,12 @@ msgid ""
 "prevents this, so that only items specified in \"NodeInfo\" are sent back if "
 "specified."
 msgstr ""
+"În mod implicit, nodeinfo conține câteva valori implicite, inclusiv "
+"platforma, arhitectura și versiunea Yggdrasil. Acestea pot fi de ajutor la "
+"supravegherea rețelei și la diagnosticarea problemelor de rutare a rețelei. "
+"Activarea confidențialității nodeinfo previne acest lucru, astfel încât "
+"numai elementele specificate în \"NodeInfo\" sunt trimise înapoi dacă sunt "
+"specificate."
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:45
 msgid ""
@@ -34,27 +40,34 @@ msgid ""
 "connections on Port. Listen controls whether or not the node listens for "
 "multicast beacons and opens outgoing connections."
 msgstr ""
+"Configurație pentru care interfețe trebuie să fie activată descoperirea "
+"omologilor de multicast. Regex este o expresie regulată care este comparată "
+"cu un nume de interfață, iar interfețele utilizează prima configurație cu "
+"care se potrivesc. Beacon configurează dacă nodul trebuie să trimită sau nu "
+"beacon-uri multicast locale pentru a-și anunța prezența, în timp ce ascultă "
+"conexiunile primite pe port. Listen (Ascultare) controlează dacă nodul "
+"ascultă sau nu balize multicast și deschide conexiuni de ieșire."
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:16
 msgid "Enable NodeInfo privacy"
-msgstr ""
+msgstr "Activați confidențialitatea NodeInfo"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/keys.js:11
 #: applications/luci-app-yggdrasil/root/usr/share/luci/menu.d/luci-app-yggdrasil.json:41
 msgid "Encryption keys"
-msgstr ""
+msgstr "Chei de criptare"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/keys.js:15
 msgid "Encryption private key"
-msgstr ""
+msgstr "Cheia privată de criptare"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/keys.js:14
 msgid "Encryption public key"
-msgstr ""
+msgstr "Cheia publică de criptare"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:11
 msgid "General settings"
-msgstr ""
+msgstr "Setări generale"
 
 #: applications/luci-app-yggdrasil/root/usr/share/rpcd/acl.d/luci-app-yggdrasil.json:3
 msgid "Grant access to LuCI app yggdrasil"
