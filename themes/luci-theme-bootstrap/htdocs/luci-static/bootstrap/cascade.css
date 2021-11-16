@@ -585,8 +585,7 @@ select,
 }
 
 .cbi-dropdown:not(.btn):not(.cbi-button),
-.cbi-dynlist,
-.cbi-select {
+.cbi-dynlist {
 	min-width: 210px;
 	max-width: 400px;
 	width: auto;
@@ -651,7 +650,6 @@ select,
 	padding: 0;
 	position: relative;
 	background: linear-gradient(var(--background-color-high), var(--border-color-low));
-	width: auto;
 }
 
 .cbi-select select,
@@ -663,7 +661,7 @@ select,
 	background: transparent;
 	height: 100%;
 	width: 100%;
-	padding: 0 .25em;
+	padding: 0 .3em;
 	cursor: pointer;
 	margin-right: .6em;
 }
@@ -672,12 +670,15 @@ select,
 	position: absolute;
 	top: 0;
 	right: 0;
+	bottom: 0;
 	content: "▾";
-	line-height: 2em;
-	padding: 0 .25em;
+	padding: 0 .3em;
 	background: linear-gradient(var(--background-color-high), var(--border-color-low));
 	pointer-events: none;
 	border-radius: 3px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
 }
 
 .cbi-select select option {
@@ -834,27 +835,21 @@ input[disabled],
 button[disabled],
 select[disabled],
 textarea[disabled],
-.cbi-dropdown[disabled],
+.cbi-select[disabled]::before,
+.cbi-dropdown[disabled]:not(.btn):not(.cbi-button),
 input[type="checkbox"][disabled]::before,
 input[type="checkbox"][disabled]::after,
 input[type="radio"][disabled]::before,
-input[type="radio"][disabled]::after,
-input[readonly],
-button[readonly],
-select[readonly],
-textarea[readonly],
-.cbi-dropdown[readonly],
-input[type="checkbox"][readonly]::before,
-input[type="checkbox"][readonly]::after,
-input[type="radio"][readonly]::before,
-input[type="radio"][readonly]::after {
+input[type="radio"][disabled]::after {
 	opacity: var(--disabled-opacity);
 	pointer-events: none;
 	cursor: default;
 }
 
+input[readonly],
 select[readonly],
 textarea[readonly] {
+	border-color: hsla(var(--border-color-high-hsl), var(--disabled-opacity));
 	pointer-events: auto;
 	cursor: auto;
 }
@@ -1576,7 +1571,7 @@ body.modal-overlay-active #modal_overlay {
 	justify-content: center;
 	text-align: center;
 	line-height: 2em;
-	padding: 0 .25em;
+	padding: 0 .3em;
 }
 
 .cbi-dropdown.btn > .open,
@@ -1716,7 +1711,8 @@ body.modal-overlay-active #modal_overlay {
 
 input[type="text"] + .cbi-button,
 input[type="password"] + .cbi-button,
-select + .cbi-button {
+select + .cbi-button,
+.cbi-select + .cbi-button {
 	border-radius: 0 3px 3px 0;
 	border-color: var(--border-color-high);
 	margin-left: -2px;
@@ -1727,8 +1723,9 @@ select + .cbi-button {
 	line-height: 28px;
 }
 
-select + .cbi-button {
-	border-left-color: transparent;
+select + .cbi-button,
+.cbi-select + .cbi-button {
+	position: relative;
 }
 
 .cbi-title-ref {
@@ -2286,16 +2283,34 @@ div.cbi-value var.cbi-tooltip-container,
 .uci-change-dialog div > ins,
 .uci-change-dialog div > var {
 	margin-bottom: 2px;
-	border: 1px solid #ccc;
-	background: #eee;
+	border: 1px solid hsla(var(--border-color-high-hsl), .6);
 	line-height: 15px;
 	overflow: hidden;
 	text-overflow: ellipsis;
-	padding: 0;
+	padding: 2px;
 	position: relative;
+	background-color: hsla(var(--background-color-low-hsl), .3);
 }
 
-.uci-change-list > * > * {
+.uci-change-dialog div > ins {
+	background-color: rgba(var(--success-color-high-rgb), .3);
+	border-color: rgba(var(--success-color-high-rgb), .6);
+}
+
+.uci-change-dialog div > del {
+	background-color: rgba(var(--error-color-high-rgb), .3);
+	border-color: rgba(var(--error-color-high-rgb), .6);
+}
+
+.uci-change-dialog var > ins {
+	background-color: rgba(var(--success-color-high-rgb), .3);
+}
+
+.uci-change-dialog var > del {
+	background-color: rgba(var(--error-color-high-rgb), .3);
+}
+
+.uci-change-list > var > * {
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
@@ -2308,40 +2323,6 @@ div.cbi-value var.cbi-tooltip-container,
 	font-style: normal;
 	color: var(--text-color-high);
 	display: block;
-}
-
-.uci-change-dialog div > ins {
-	border-color: rgba(var(--success-color-high-rgb), .6);
-	background: var(--border-color-low);
-}
-
-.uci-change-dialog div > del {
-	border-color: rgba(var(--error-color-high-rgb), .6);
-	background: var(--border-color-low);
-}
-
-.uci-change-dialog div > var {
-	border-color: var(--border-color-high);
-	background: var(--border-color-low);
-}
-
-.uci-change-dialog div > :not(div) > ins {
-	background: rgba(var(--success-color-high-rgb), .3);
-}
-
-.uci-change-dialog div > :not(div) > del {
-	background: rgba(var(--error-color-high-rgb), .3);
-}
-
-.uci-change-dialog div > var > * {
-	padding: 0;
-	margin: 2px;
-}
-
-.uci-change-dialog div > ins > ins,
-.uci-change-dialog div > del > del {
-	padding: 2px;
-	margin: 0;
 }
 
 .uci-change-legend {
