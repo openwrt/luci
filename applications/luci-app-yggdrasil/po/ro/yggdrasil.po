@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2021-11-15 14:07+0000\n"
+"PO-Revision-Date: 2021-11-16 17:38+0000\n"
 "Last-Translator: Simona Iacob <s@zp1.net>\n"
 "Language-Team: Romanian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsyggdrasil/ro/>\n"
@@ -79,15 +79,17 @@ msgstr "Interfață"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/peers.js:20
 msgid "Interface peers"
-msgstr ""
+msgstr "Interfață omologi"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/keys.js:16
 msgid "Keep this private. When compromised, generate a new keypair and IPv6."
 msgstr ""
+"Păstrați asta în privat. Atunci când este compromisă, generați o nouă "
+"pereche de chei și IPv6."
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:52
 msgid "Link-local port"
-msgstr ""
+msgstr "Port de legătură locală"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/peers.js:21
 msgid ""
@@ -96,6 +98,11 @@ msgid ""
 "that SOCKS peerings will NOT be affected by this option and should go in the "
 "\"Peers\" section instead."
 msgstr ""
+"Listă de șiruri de conexiuni pentru conexiunile de ieșire între omologi în "
+"format URI, aranjate în funcție de interfața sursă, de exemplu {\"eth0\": [ "
+"tcp://a.b.c.d:e ] }. Rețineți că conexiunile între omologi SOCKS NU vor fi "
+"afectate de această opțiune și ar trebui să fie incluse în secțiunea \"Peers"
+"\"."
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/peers.js:12
 msgid ""
@@ -104,10 +111,15 @@ msgid ""
 "the operating system routing table, therefore you should use this section "
 "when you may connect via different interfaces."
 msgstr ""
+"Listă de șiruri de conexiuni pentru conexiunile de ieșire între omologi în "
+"format URI, de exemplu, tcp://a.b.c.d:e sau socks://a.b.c.d:e/f.g.h.i:j. "
+"Aceste conexiuni se vor supune tabelului de rutare al sistemului de operare, "
+"prin urmare ar trebui să utilizați această secțiune atunci când este posibil "
+"să vă conectați prin interfețe diferite."
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:33
 msgid "Listen addresses"
-msgstr ""
+msgstr "Adrese de ascultare"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:34
 msgid ""
@@ -117,6 +129,12 @@ msgid ""
 "should be specified in URI format as above, e.g. tcp://0.0.0.0:0 or tcp://"
 "[::]:0 to listen on all interfaces."
 msgstr ""
+"Adrese de ascultare pentru conexiunile primite. Va trebui să adăugați "
+"ascultători pentru a accepta conexiuni de intrare de la noduri non-locale. "
+"Descoperirea de omologi multicast va funcționa indiferent de orice "
+"ascultători setați aici. Fiecare ascultător trebuie să fie specificat în "
+"format URI ca mai sus, de exemplu tcp://0.0.0.0.0:0 sau tcp://[::]:0 pentru "
+"a asculta pe toate interfețele."
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:51
 msgid "Listen for beacons"
@@ -144,7 +162,7 @@ msgstr ""
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/peers.js:11
 #: applications/luci-app-yggdrasil/root/usr/share/luci/menu.d/luci-app-yggdrasil.json:23
 msgid "Peers"
-msgstr ""
+msgstr "Perechi"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:49
 msgid "Regular expression"
