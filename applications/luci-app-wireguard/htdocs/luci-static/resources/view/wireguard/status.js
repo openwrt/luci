@@ -74,18 +74,25 @@ function generatePeerRows(peers) {
 		var peerData = parsePeerData(peer);
 		var iconSrc = getTunnelIcon(peer.latest_handshake);
 
-		peerRows.push(E('div', {
+		peerRows.push(E('tr', {
 			'class': 'tr cbi-section-table-row'
 		}, [
-			E('div', {
+			E('td', {
 				'class': 'td peer-name',
 				'style': 'width: 25%; font-size: 0.9rem;'
 			}, peer.name),
-			E('div', { 'class': 'td', 'data-section-id': peer.name },
+			E('td', { 'class': 'td', 'data-section-id': peer.name },
 				generatePeerTable(peerData, iconSrc)
 			)
 		]));
 	});
+
+	if (!peerRows.length) {
+		peerRows.push(
+			E('tr', { 'class': 'tr placeholder' },
+				E('td', { 'class': 'td' },
+					E('em', _('No peer information available')))));
+	}
 
 	return peerRows;
 }
@@ -124,6 +131,7 @@ return view.extend({
 	load: function () {
 		return callGetWgInstances();
 	},
+
 	poll_status: function (nodes, ifaces) {
 		Object.keys(ifaces).forEach(function (ifaceName) {
 			var iface = ifaces[ifaceName];
@@ -164,6 +172,7 @@ return view.extend({
 			});
 		});
 	},
+
 	render: function (ifaces) {
 		var m, s, o, ss;
 
@@ -171,6 +180,7 @@ return view.extend({
 		m.tabbed = true;
 
 		var ifaceNames = Object.keys(ifaces);
+
 		for (var i = ifaceNames.length - 1; i >= 0; i--) {
 			var ifaceName = ifaceNames[i];
 			var iface = ifaces[ifaceName];
@@ -193,13 +203,16 @@ return view.extend({
 			ss.render = L.bind(function (view, section_id) {
 				return E('div', { 'class': 'cbi-section' }, [
 					E('h3', _('Peers')),
-					E('div', { 'class': 'table cbi-section-table' },
+					E('table', { 'class': 'table cbi-section-table' },
 						generatePeerRows(this.peers))
 				]);
 			}, iface, this);
 		}
 
 		return m.render().then(L.bind(function (m, nodes) {
+			if (!ifaceNames.length)
+				nodes.appendChild(E('p', {}, E('em', _('No WireGuard interfaces configured.'))));
+
 			poll.add(L.bind(function () {
 				return callGetWgInstances().then(
 					L.bind(this.poll_status, this, nodes)
@@ -208,6 +221,7 @@ return view.extend({
 			return nodes;
 		}, this, m));
 	},
+
 	handleReset: null,
 	handleSaveApply: null,
 	handleSave: null
