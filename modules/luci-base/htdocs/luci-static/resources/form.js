@@ -601,7 +601,7 @@ var CBIMap = CBIAbstractElement.extend(/** @lends LuCI.form.Map.prototype */ {
 				if (!silent) {
 					ui.showModal(_('Save error'), [
 						E('p', {}, [ _('An error occurred while saving the form:') ]),
-						E('p', {}, [ E('em', { 'style': 'white-space:pre' }, [ e.message ]) ]),
+						E('p', {}, [ E('em', { 'style': 'white-space:pre-wrap' }, [ e.message ]) ]),
 						E('div', { 'class': 'right' }, [
 							E('button', { 'class': 'cbi-button', 'click': ui.hideModal }, [ _('Dismiss') ])
 						])
@@ -1911,6 +1911,20 @@ var CBIAbstractValue = CBIAbstractElement.extend(/** @lends LuCI.form.AbstractVa
 	},
 
 	/**
+	 * Returns the current validation error for this input.
+	 *
+	 * @param {string} section_id
+	 * The configuration section ID
+	 *
+	 * @returns {string}
+	 * The validation error at this time
+	 */
+	getValidationError: function (section_id) {
+		var elem = this.getUIElement(section_id);
+		return elem ? elem.getValidationError() : '';
+	},
+
+	/**
 	 * Test whether the option element is currently active.
 	 *
 	 * An element is active when it is not hidden due to unsatisfied dependency
@@ -1971,7 +1985,9 @@ var CBIAbstractValue = CBIAbstractElement.extend(/** @lends LuCI.form.AbstractVa
 
 		if (active && !this.isValid(section_id)) {
 			var title = this.stripTags(this.title).trim();
-			return Promise.reject(new TypeError(_('Option "%s" contains an invalid input value.').format(title || this.option)));
+			var error = this.getValidationError(section_id);
+			return Promise.reject(new TypeError(
+				_('Option "%s" contains an invalid input value.').format(title || this.option) + ' ' + error));
 		}
 
 		if (fval != '' && fval != null) {
@@ -3877,7 +3893,9 @@ var CBIFlagValue = CBIValue.extend(/** @lends LuCI.form.FlagValue.prototype */ {
 
 			if (!this.isValid(section_id)) {
 				var title = this.stripTags(this.title).trim();
-				return Promise.reject(new TypeError(_('Option "%s" contains an invalid input value.').format(title || this.option)));
+				var error = this.getValidationError(section_id);
+				return Promise.reject(new TypeError(
+					_('Option "%s" contains an invalid input value.').format(title || this.option) + ' ' + error));
 			}
 
 			if (fval == this.default && (this.optional || this.rmempty))
