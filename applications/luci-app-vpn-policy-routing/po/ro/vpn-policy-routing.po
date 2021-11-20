@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2021-11-07 15:53+0000\n"
-"Last-Translator: CRISTIAN ANDREI <cristianvdr@gmail.com>\n"
+"PO-Revision-Date: 2021-11-18 18:52+0000\n"
+"Last-Translator: Simona Iacob <s@zp1.net>\n"
 "Language-Team: Romanian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsvpn-policy-routing/ro/>\n"
 "Language: ro\n"
@@ -9,19 +9,19 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2;\n"
-"X-Generator: Weblate 4.9-dev\n"
+"X-Generator: Weblate 4.9.1-dev\n"
 
 #: applications/luci-app-vpn-policy-routing/luasrc/model/cbi/vpn-policy-routing.lua:61
 msgid "%s (disabled)"
-msgstr ""
+msgstr "%s (dezactivat)"
 
 #: applications/luci-app-vpn-policy-routing/luasrc/model/cbi/vpn-policy-routing.lua:56
 msgid "%s (strict mode)"
-msgstr ""
+msgstr "%s (mod strict)"
 
 #: applications/luci-app-vpn-policy-routing/luasrc/model/cbi/vpn-policy-routing.lua:50
 msgid "%s is not installed or not found"
-msgstr ""
+msgstr "%s nu este instalat sau nu este găsit"
 
 #: applications/luci-app-vpn-policy-routing/luasrc/model/cbi/vpn-policy-routing.lua:190
 msgid ""
@@ -29,20 +29,25 @@ msgid ""
 "anything in this section! Change any of the settings below with extreme "
 "caution!%s"
 msgstr ""
+"%sWARNING:%s Vă rugăm să verificați %sREADME%s înainte de a modifica ceva în "
+"această secțiune! Schimbați oricare dintre setările de mai jos cu mare "
+"precauție!%s"
 
 #: applications/luci-app-vpn-policy-routing/luasrc/model/cbi/vpn-policy-routing.lua:260
 msgid "Add IGNORE Target"
-msgstr ""
+msgstr "Adăugați țintă IGNORE"
 
 #: applications/luci-app-vpn-policy-routing/luasrc/model/cbi/vpn-policy-routing.lua:260
 msgid ""
 "Adds `IGNORE` to the list of interfaces for policies, allowing you to skip "
 "further processing by VPN Policy Routing."
 msgstr ""
+"Adaugă `IGNORE` la lista de interfețe pentru politici, permițându-vă să "
+"săriți peste procesarea ulterioară de către VPN Policy Routing."
 
 #: applications/luci-app-vpn-policy-routing/luasrc/model/cbi/vpn-policy-routing.lua:189
 msgid "Advanced Configuration"
-msgstr ""
+msgstr "Configurație avansată"
 
 #: applications/luci-app-vpn-policy-routing/luasrc/model/cbi/vpn-policy-routing.lua:192
 msgid ""
@@ -50,6 +55,9 @@ msgid ""
 "explicitly supported by the service. Can be useful if your OpenVPN tunnels "
 "have dev option other than tun* or tap*."
 msgstr ""
+"Permite specificarea listei de nume de interfețe (în minuscule) care trebuie "
+"să fie acceptate în mod explicit de către serviciu. Poate fi util dacă "
+"tunelurile OpenVPN au opțiunea dev, alta decât tun* sau tap*."
 
 #: applications/luci-app-vpn-policy-routing/luasrc/model/cbi/vpn-policy-routing.lua:195
 msgid ""
@@ -57,18 +65,21 @@ msgid ""
 "by the service. Can be useful if running both VPN server and VPN client on "
 "the router."
 msgstr ""
+"Permite specificarea listei de nume de interfețe (în minuscule) care trebuie "
+"ignorate de serviciu. Poate fi util dacă se execută atât serverul VPN, cât "
+"și clientul VPN pe router."
 
 #: applications/luci-app-vpn-policy-routing/luasrc/model/cbi/vpn-policy-routing.lua:215
 msgid "Append"
-msgstr ""
+msgstr "Adăugați"
 
 #: applications/luci-app-vpn-policy-routing/luasrc/model/cbi/vpn-policy-routing.lua:164
 msgid "Basic Configuration"
-msgstr ""
+msgstr "Configurație de Bază"
 
 #: applications/luci-app-vpn-policy-routing/luasrc/model/cbi/vpn-policy-routing.lua:198
 msgid "Boot Time-out"
-msgstr ""
+msgstr "Timp de așteptare la boot"
 
 #: applications/luci-app-vpn-policy-routing/luasrc/model/cbi/vpn-policy-routing.lua:326
 msgid "Chain"
@@ -85,10 +96,14 @@ msgid ""
 "Placeholders below represent just the format/syntax and will not be used if "
 "fields are left blank."
 msgstr ""
+"Comentariul, interfața și cel puțin un alt câmp sunt obligatorii. Mai multe "
+"adrese/dispozitive/domenii și porturi locale și la distanță pot fi separate "
+"prin spații. Semnele de poziție de mai jos reprezintă doar formatul/sintaxa "
+"și nu vor fi utilizate dacă câmpurile sunt lăsate goale."
 
 #: applications/luci-app-vpn-policy-routing/luasrc/model/cbi/vpn-policy-routing.lua:168
 msgid "Condensed output"
-msgstr ""
+msgstr "Ieșire condensată"
 
 #: applications/luci-app-vpn-policy-routing/luasrc/model/cbi/vpn-policy-routing.lua:159
 msgid "Configuration"
@@ -97,30 +112,31 @@ msgstr "Configurație"
 #: applications/luci-app-vpn-policy-routing/luasrc/model/cbi/vpn-policy-routing.lua:166
 msgid "Controls both system log and console output verbosity."
 msgstr ""
+"Controlează atât jurnalul de sistem, cât și verbalitatea ieșirii în consolă."
 
 #: applications/luci-app-vpn-policy-routing/luasrc/model/cbi/vpn-policy-routing.lua:364
 msgid "Custom User File Includes"
-msgstr ""
+msgstr "Fișierul de utilizator personalizat include"
 
 #: applications/luci-app-vpn-policy-routing/luasrc/model/cbi/vpn-policy-routing.lua:181
 msgid "DNSMASQ ipset"
-msgstr ""
+msgstr "DNSMASQ ipset"
 
 #: applications/luci-app-vpn-policy-routing/luasrc/model/cbi/vpn-policy-routing.lua:357
 msgid "DSCP Tag"
-msgstr ""
+msgstr "Etichetă DSCP"
 
 #: applications/luci-app-vpn-policy-routing/luasrc/model/cbi/vpn-policy-routing.lua:352
 msgid "DSCP Tagging"
-msgstr ""
+msgstr "Etichetarea DSCP"
 
 #: applications/luci-app-vpn-policy-routing/luasrc/model/cbi/vpn-policy-routing.lua:219
 msgid "Default ICMP Interface"
-msgstr ""
+msgstr "Interfață ICMP implicită"
 
 #: applications/luci-app-vpn-policy-routing/luasrc/view/vpn-policy-routing/buttons.htm:59
 msgid "Disable"
-msgstr "Dezactivează"
+msgstr "Dezactivați"
 
 #: applications/luci-app-vpn-policy-routing/luasrc/model/cbi/vpn-policy-routing.lua:180
 #: applications/luci-app-vpn-policy-routing/luasrc/model/cbi/vpn-policy-routing.lua:185
@@ -136,15 +152,15 @@ msgstr "Dezactivat"
 
 #: applications/luci-app-vpn-policy-routing/luasrc/model/cbi/vpn-policy-routing.lua:253
 msgid "Display these protocols in protocol column in Web UI."
-msgstr ""
+msgstr "Afișați aceste protocoale în coloana Protocol din Web UI."
 
 #: applications/luci-app-vpn-policy-routing/luasrc/model/cbi/vpn-policy-routing.lua:174
 msgid "Do not enforce policies when their gateway is down"
-msgstr ""
+msgstr "Nu aplicați politicile atunci când gateway-ul lor este oprit"
 
 #: applications/luci-app-vpn-policy-routing/luasrc/view/vpn-policy-routing/buttons.htm:56
 msgid "Enable"
-msgstr "Activează"
+msgstr "Activați"
 
 #: applications/luci-app-vpn-policy-routing/luasrc/model/cbi/vpn-policy-routing.lua:186
 #: applications/luci-app-vpn-policy-routing/luasrc/model/cbi/vpn-policy-routing.lua:247
@@ -155,7 +171,7 @@ msgstr "Activează"
 #: applications/luci-app-vpn-policy-routing/luasrc/model/cbi/vpn-policy-routing.lua:279
 #: applications/luci-app-vpn-policy-routing/luasrc/model/cbi/vpn-policy-routing.lua:371
 msgid "Enabled"
-msgstr ""
+msgstr "Activat"
 
 #: applications/luci-app-vpn-policy-routing/luasrc/model/cbi/vpn-policy-routing.lua:238
 msgid ""
@@ -243,7 +259,7 @@ msgstr ""
 
 #: applications/luci-app-vpn-policy-routing/luasrc/view/vpn-policy-routing/buttons.htm:46
 msgid "Restart"
-msgstr ""
+msgstr "Reporniți"
 
 #: applications/luci-app-vpn-policy-routing/luasrc/model/cbi/vpn-policy-routing.lua:365
 msgid ""
@@ -265,7 +281,7 @@ msgstr ""
 
 #: applications/luci-app-vpn-policy-routing/luasrc/model/cbi/vpn-policy-routing.lua:154
 msgid "Service Control"
-msgstr ""
+msgstr "Controlul serviciilor"
 
 #: applications/luci-app-vpn-policy-routing/luasrc/model/cbi/vpn-policy-routing.lua:144
 msgid "Service Errors"
@@ -282,7 +298,7 @@ msgstr ""
 
 #: applications/luci-app-vpn-policy-routing/luasrc/model/cbi/vpn-policy-routing.lua:135
 msgid "Service Status"
-msgstr ""
+msgstr "Starea serviciului"
 
 #: applications/luci-app-vpn-policy-routing/luasrc/model/cbi/vpn-policy-routing.lua:134
 msgid "Service Status [%s %s]"
@@ -354,7 +370,7 @@ msgstr ""
 
 #: applications/luci-app-vpn-policy-routing/luasrc/view/vpn-policy-routing/buttons.htm:49
 msgid "Stop"
-msgstr ""
+msgstr "Stop"
 
 #: applications/luci-app-vpn-policy-routing/luasrc/model/cbi/vpn-policy-routing.lua:59
 msgid "Stopped"

@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2021-11-07 15:53+0000\n"
-"Last-Translator: CRISTIAN ANDREI <cristianvdr@gmail.com>\n"
+"PO-Revision-Date: 2021-11-18 18:36+0000\n"
+"Last-Translator: Simona Iacob <s@zp1.net>\n"
 "Language-Team: Romanian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsfwknopd/ro/>\n"
 "Language: ro\n"
@@ -11,24 +11,28 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2;\n"
-"X-Generator: Weblate 4.9-dev\n"
+"X-Generator: Weblate 4.9.1-dev\n"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:602
 msgid ""
 "Allow SPA clients to request access to services through an iptables firewall "
 "instead of just to it."
 msgstr ""
+"Permiteți clienților SPA să solicite accesul la servicii prin intermediul "
+"unui firewall iptables în loc să solicite doar accesul la acesta."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:603
 msgid "Allow SPA clients to request forwarding destination by DNS name."
 msgstr ""
+"Permiteți clienților SPA să solicite destinația de redirecționare prin "
+"numele DNS."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:441
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:458
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:551
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:573
 msgid "Base64 key"
-msgstr ""
+msgstr "Cheia Base64"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:308
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:319
@@ -37,11 +41,11 @@ msgstr "Închideți"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:485
 msgid "Custom configuration"
-msgstr ""
+msgstr "Configurație personalizată"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:415
 msgid "Custom configuration read from /etc/fwknop/access.conf."
-msgstr ""
+msgstr "Configurație personalizată citită din /etc/fwknop/access.conf."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:581
 msgid ""
@@ -49,6 +53,9 @@ msgid ""
 "allowed regardless of the validity of the incoming SPA packet. Multiple "
 "entries are comma-separated."
 msgstr ""
+"Definiți un set de porturi și protocoale (tcp sau udp) care nu sunt permise "
+"în mod explicit, indiferent de validitatea pachetului SPA de intrare. Mai "
+"multe intrări sunt separate prin virgulă."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:576
 msgid ""
@@ -57,18 +64,29 @@ msgid ""
 "to honor any proto/port request specified in the SPA data (unless of it "
 "matches any “RESTRICT_PORTS” entries). Multiple entries are comma-separated."
 msgstr ""
+"Definiți un set de porturi și protocoale (tcp sau udp) care vor fi deschise "
+"în cazul în care se vede o secvență validă de ciocănit. Dacă această intrare "
+"nu este setată, fwknopd va încerca să onoreze orice solicitare de proto/port "
+"specificată în datele SPA (cu excepția cazului în care se potrivește cu "
+"orice intrare \"RESTRICT_PORTS\"). Mai multe intrări sunt separate prin "
+"virgulă."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:562
 msgid ""
 "Define the HMAC authentication key (in Base64 encoding) used for verifying "
 "the authenticity of the SPA packet before the packet is decrypted."
 msgstr ""
+"Definește cheia de autentificare HMAC (în codificare Base64) utilizată "
+"pentru verificarea autenticității pachetului SPA înainte ca pachetul să fie "
+"decriptat."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:554
 msgid ""
 "Define the HMAC authentication key used for verifying the authenticity of "
 "the SPA packet before the packet is decrypted."
 msgstr ""
+"Definiți cheia de autentificare HMAC utilizată pentru verificarea "
+"autenticității pachetului SPA înainte ca pachetul să fie decriptat."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:585
 msgid ""
@@ -77,36 +95,45 @@ msgid ""
 "“FW_ACCESS_TIMEOUT” is not set then the default timeout of 30 seconds will "
 "automatically be set."
 msgstr ""
+"Definiți perioada de timp în care accesul va fi acordat de fwknopd prin "
+"firewall după o secvență validă de apeluri de la o adresă IP sursă. Dacă "
+"\"FW_ACCESS_TIMEOUT\" nu este setat, atunci se va seta automat timpul de "
+"așteptare implicit de 30 de secunde."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:540
 msgid ""
 "Define the symmetric key (in Base64 encoding) used for decrypting an "
 "incoming SPA packet that is encrypted by the fwknop client with Rijndael."
 msgstr ""
+"Definește cheia simetrică (în codificare Base64) utilizată pentru "
+"decriptarea unui pachet SPA de intrare care este criptat de clientul fwknop "
+"cu Rijndael."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:532
 msgid ""
 "Define the symmetric key used for decrypting an incoming SPA packet that is "
 "encrypted by the fwknop client with Rijndael."
 msgstr ""
+"Definește cheia simetrică utilizată pentru decriptarea unui pachet SPA "
+"primit care este criptat de clientul fwknop cu Rijndael."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:480
 msgid "Enable Uci/Luci control"
-msgstr ""
+msgstr "Activați controlul Uci/Lights"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:482
 msgid "Enable config overwrite"
-msgstr ""
+msgstr "Activați suprascrierea configurației"
 
 #: applications/luci-app-fwknopd/root/usr/share/luci/menu.d/luci-app-fwknopd.json:3
 msgid "Firewall Knock Daemon"
-msgstr ""
+msgstr "Daemon-ul Knock Firewall"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:303
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:314
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:478
 msgid "Firewall Knock Operator Daemon"
-msgstr ""
+msgstr "Firewall pentru Knock Operator Daemon"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:590
 msgid ""
@@ -116,14 +143,20 @@ msgid ""
 "resolve the external address (if the client behind a NAT) or the client must "
 "know the external IP and set it via the -a argument."
 msgstr ""
+"Forțați toate pachetele SPA să conțină o adresă IP reală în cadrul datelor "
+"criptate. Acest lucru face imposibilă utilizarea argumentului de linie de "
+"comandă -s în linia de comandă a clientului fwknop, astfel încât fie trebuie "
+"utilizat -R pentru a rezolva automat adresa externă (în cazul în care "
+"clientul se află în spatele unui NAT), fie clientul trebuie să cunoască IP-"
+"ul extern și să îl stabilească prin intermediul argumentului -a."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:527
 msgid "Generate Keys"
-msgstr ""
+msgstr "Generarea cheilor"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:523
 msgid "Generate keys"
-msgstr ""
+msgstr "Generarea cheilor"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:523
 msgid ""
@@ -132,32 +165,38 @@ msgid ""
 "authentication key used to verify the authenticity of the incoming SPA "
 "packet before the packet is decrypted."
 msgstr ""
+"Generează cheia simetrică utilizată pentru decriptarea unui pachet SPA de "
+"intrare, care este criptat de clientul fwknop cu cifrul bloc Rijndael, și "
+"cheia de autentificare HMAC utilizată pentru a verifica autenticitatea "
+"pachetului SPA de intrare înainte ca pachetul să fie decriptat."
 
 #: applications/luci-app-fwknopd/root/usr/share/rpcd/acl.d/luci-app-fwknopd.json:3
 msgid "Grant UCI access for luci-app-fwknopd"
-msgstr ""
+msgstr "Acordă acces la UCI pentru luci-app-fwknopd"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:571
 msgid "HMAC key type"
-msgstr ""
+msgstr "Tipul de cheie HMAC"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:549
 msgid "Key type"
-msgstr ""
+msgstr "Tipul de cheie"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:178
 msgid "Loading…"
-msgstr ""
+msgstr "Încărcare…"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:600
 msgid ""
 "Maximum age in seconds that an SPA packet will be accepted. Defaults to 120 "
 "seconds."
 msgstr ""
+"Vârsta maximă în secunde în care un pachet SPA va fi acceptat. Valoarea "
+"implicită este de 120 de secunde."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:494
 msgid "Network"
-msgstr ""
+msgstr "Rețea"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:492
 msgid "Network configuration"
