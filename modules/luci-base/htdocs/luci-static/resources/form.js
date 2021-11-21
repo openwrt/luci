@@ -2972,15 +2972,44 @@ var CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection.p
 
 	/** @private */
 	handleModalCancel: function(modalMap, ev) {
-		return Promise.resolve(ui.hideModal());
+		var prevNode = this.getPreviousModalMap();
+
+		if (prevNode) {
+			var heading = prevNode.parentNode.querySelector('h4');
+
+			prevNode.classList.add('flash');
+			prevNode.classList.remove('hidden');
+			prevNode.parentNode.removeChild(prevNode.nextElementSibling);
+
+			heading.removeChild(heading.lastElementChild);
+
+			if (!this.getPreviousModalMap())
+				prevNode.parentNode
+					.querySelector('div.right > button')
+					.firstChild.data = _('Dismiss');
+		}
+		else {
+			ui.hideModal();
+		}
+
+		return Promise.resolve();
 	},
 
 	/** @private */
 	handleModalSave: function(modalMap, ev) {
-		return modalMap.save(null, true)
-			.then(L.bind(this.map.load, this.map))
-			.then(L.bind(this.map.reset, this.map))
-			.then(ui.hideModal)
+		var mapNode = this.getActiveModalMap(),
+		    activeMap = dom.findClassInstance(mapNode),
+		    saveTasks = activeMap.save(null, true);
+
+		while (activeMap.parent) {
+			activeMap = activeMap.parent;
+			saveTasks = saveTasks
+				.then(L.bind(activeMap.load, activeMap))
+				.then(L.bind(activeMap.reset, activeMap));
+		}
+
+		return saveTasks
+			.then(L.bind(this.handleModalCancel, this, modalMap, ev))
 			.catch(function() {});
 	},
 
@@ -3011,6 +3040,19 @@ var CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection.p
 	 */
 	addModalOptions: function(modalSection, section_id, ev) {
 
+	},
+
+	/** @private */
+	getActiveModalMap: function() {
+		return document.querySelector('body.modal-overlay-active > #modal_overlay > .modal.cbi-modal > .cbi-map:not(.hidden)');
+	},
+
+	/** @private */
+	getPreviousModalMap: function() {
+		var mapNode = this.getActiveModalMap(),
+		    prevNode = mapNode ? mapNode.previousElementSibling : null;
+
+		return (prevNode && prevNode.matches('.cbi-map.hidden')) ? prevNode : null;
 	},
 
 	/** @private */
@@ -3061,20 +3103,37 @@ var CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection.p
 		}
 
 		return Promise.resolve(this.addModalOptions(s, section_id, ev)).then(L.bind(m.render, m)).then(L.bind(function(nodes) {
-			ui.showModal(title, [
-				nodes,
-				E('div', { 'class': 'right' }, [
-					E('button', {
-						'class': 'cbi-button',
-						'click': ui.createHandlerFn(this, 'handleModalCancel', m)
-					}, [ _('Dismiss') ]), ' ',
-					E('button', {
-						'class': 'cbi-button cbi-button-positive important',
-						'click': ui.createHandlerFn(this, 'handleModalSave', m),
-						'disabled': m.readonly || null
-					}, [ _('Save') ])
-				])
-			], 'cbi-modal');
+			var modalMap = this.getActiveModalMap();
+
+			if (modalMap) {
+				modalMap.parentNode
+					.querySelector('h4')
+					.appendChild(E('span', title ? ' » ' + title : ''));
+
+				modalMap.parentNode
+					.querySelector('div.right > button')
+					.firstChild.data = _('Back');
+
+				modalMap.classList.add('hidden');
+				modalMap.parentNode.insertBefore(nodes, modalMap.nextElementSibling);
+				nodes.classList.add('flash');
+			}
+			else {
+				ui.showModal(title, [
+					nodes,
+					E('div', { 'class': 'right' }, [
+						E('button', {
+							'class': 'cbi-button',
+							'click': ui.createHandlerFn(this, 'handleModalCancel', m)
+						}, [ _('Dismiss') ]), ' ',
+						E('button', {
+							'class': 'cbi-button cbi-button-positive important',
+							'click': ui.createHandlerFn(this, 'handleModalSave', m),
+							'disabled': m.readonly || null
+						}, [ _('Save') ])
+					])
+				], 'cbi-modal');
+			}
 		}, this)).catch(L.error);
 	}
 });
@@ -3155,25 +3214,33 @@ var CBIGridSection = CBITableSection.extend(/** @lends LuCI.form.GridSection.pro
 	/** @private */
 	handleAdd: function(ev, name) {
 		var config_name = this.uciconfig || this.map.config,
-		    section_id = this.map.data.add(config_name, this.sectiontype, name);
+		    section_id = this.map.data.add(config_name, this.sectiontype, name),
+		    mapNode = this.getPreviousModalMap(),
+		    prevMap = mapNode ? dom.findClassInstance(mapNode) : this.map;
 
-		this.addedSection = section_id;
+		prevMap.addedSection = section_id;
+
 		return this.renderMoreOptionsModal(section_id);
 	},
 
 	/** @private */
 	handleModalSave: function(/* ... */) {
+		var mapNode = this.getPreviousModalMap(),
+		    prevMap = mapNode ? dom.findClassInstance(mapNode) : this.map;
+
 		return this.super('handleModalSave', arguments)
-			.then(L.bind(function() { this.addedSection = null }, this));
+			.then(function() { delete prevMap.addedSection });
 	},
 
 	/** @private */
 	handleModalCancel: function(/* ... */) {
-		var config_name = this.uciconfig || this.map.config;
+		var config_name = this.uciconfig || this.map.config,
+		    mapNode = this.getPreviousModalMap(),
+		    prevMap = mapNode ? dom.findClassInstance(mapNode) : this.map;
 
-		if (this.addedSection != null) {
-			this.map.data.remove(config_name, this.addedSection);
-			this.addedSection = null;
+		if (prevMap.addedSection != null) {
+			this.map.data.remove(config_name, prevMap.addedSection);
+			delete prevMap.addedSection;
 		}
 
 		return this.super('handleModalCancel', arguments);
