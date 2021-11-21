@@ -136,13 +136,15 @@ return network.registerProtocol('wireguard', {
 		}
 		catch(e) {}
 
-		o = s.taboption('peers', form.SectionValue, '_peers', form.TypedSection, 'wireguard_%s'.format(s.section));
+		o = s.taboption('peers', form.SectionValue, '_peers', form.GridSection, 'wireguard_%s'.format(s.section));
 		o.depends('proto', 'wireguard');
 
 		ss = o.subsection;
 		ss.anonymous = true;
 		ss.addremove = true;
 		ss.addbtntitle = _('Add peer');
+		ss.nodescriptions = true;
+		ss.modaltitle = _('Edit peer');
 
 		ss.renderSectionPlaceholder = function() {
 			return E([], [
@@ -153,6 +155,7 @@ return network.registerProtocol('wireguard', {
 
 		o = ss.option(form.Flag, 'disabled', _('Peer disabled'), _('Enable / Disable peer. Restart wireguard interface to apply changes.'));
 		o.optional = true;
+		o.editable = true;
 
 		o = ss.option(form.Value, 'description', _('Description'), _('Optional. Description of peer.'));
 		o.placeholder = 'My Peer';
@@ -160,6 +163,7 @@ return network.registerProtocol('wireguard', {
 		o.optional = true;
 
 		o = ss.option(form.Value, 'description', _('QR-Code'));
+		o.modalonly = true;
 		o.render = L.bind(function (view, section_id) {
 			var sections = uci.sections('network');
 			var client = findSection(sections, section_id);
@@ -232,10 +236,12 @@ return network.registerProtocol('wireguard', {
 		}, this);
 
 		o = ss.option(form.Value, 'public_key', _('Public Key'), _('Required. Base64-encoded public key of peer.'));
+		o.modalonly = true;
 		o.validate = validateBase64;
 		o.rmempty = false;
 
 		o = ss.option(form.Value, 'preshared_key', _('Preshared Key'), _('Optional. Base64-encoded preshared key. Adds in an additional layer of symmetric-key cryptography for post-quantum resistance.'));
+		o.modalonly = true;
 		o.password = true;
 		o.validate = validateBase64;
 		o.optional = true;
@@ -245,6 +251,7 @@ return network.registerProtocol('wireguard', {
 		o.optional = true;
 
 		o = ss.option(form.Flag, 'route_allowed_ips', _('Route Allowed IPs'), _('Optional. Create routes for Allowed IPs for this peer.'));
+		o.modalonly = true;
 
 		o = ss.option(form.Value, 'endpoint_host', _('Endpoint Host'), _('Optional. Host of peer. Names are resolved prior to bringing up the interface.'));
 		o.placeholder = 'vpn.example.com';
@@ -255,6 +262,7 @@ return network.registerProtocol('wireguard', {
 		o.datatype = 'port';
 
 		o = ss.option(form.Value, 'persistent_keepalive', _('Persistent Keep Alive'), _('Optional. Seconds between keep alive messages. Default is 0 (disabled). Recommended value if this device is behind a NAT is 25.'));
+		o.modalonly = true;
 		o.datatype = 'range(0,65535)';
 		o.placeholder = '0';
 	},
