@@ -191,6 +191,7 @@ return network.registerProtocol('wireguard', {
 			return E('div', { 'class': 'cbi-value' }, [
 				E('label', { 'class': 'cbi-value-title' }, _('QR-Code')),
 				E('div', {
+					'class': 'cbi-value-field',
 					'style': 'display: flex; flex-direction: column; align-items: baseline;',
 					'id': 'qr-' + section_id
 				}, [
