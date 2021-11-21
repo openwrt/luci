@@ -502,11 +502,6 @@ pre {
 /* Forms.less
  * Base styles for various input types, form layouts, and states
  * ------------------------------------------------------------- */
-form,
-.cbi-value {
-	margin-bottom: 18px;
-}
-
 fieldset {
 	margin-bottom: 9px;
 	padding-top: 9px;
@@ -536,17 +531,20 @@ textarea {
 	line-height: normal;
 }
 
-form .input,
+.cbi-value {
+	display: flex;
+	margin-bottom: 18px;
+}
+
 .cbi-value-field {
-	margin-left: 200px;
+	margin-left: 20px;
 }
 
 .cbi-value label.cbi-value-title {
 	padding-top: 6px;
 	font-size: 13px;
 	line-height: 18px;
-	float: left;
-	width: 180px;
+	flex: 0 0 180px;
 	text-align: right;
 	color: var(--text-color-high);
 }
