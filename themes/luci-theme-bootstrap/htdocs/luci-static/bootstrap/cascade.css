@@ -515,11 +515,6 @@ fieldset legend {
 	padding-top: 20px;
 }
 
-form .cbi-tab-descr {
-	line-height: 18px;
-	margin-bottom: 18px;
-}
-
 label,
 input,
 button,
@@ -533,11 +528,13 @@ textarea {
 
 .cbi-value {
 	display: flex;
+	flex-wrap: wrap;
 	margin-bottom: 18px;
 }
 
 .cbi-value-field {
 	margin-left: 20px;
+	flex: 1;
 }
 
 .cbi-value label.cbi-value-title {
@@ -547,6 +544,10 @@ textarea {
 	flex: 0 0 180px;
 	text-align: right;
 	color: var(--text-color-high);
+}
+
+.cbi-value > .cbi-tblsection {
+	width: 100%;
 }
 
 label > input[type="checkbox"],
@@ -1241,8 +1242,8 @@ a.menu:after {
 	font-weight: bold;
 }
 
-.cbi-tabcontainer > fieldset.cbi-section[id] > legend {
-	display: none;
+.cbi-tab-descr {
+	margin: -9px 0 18px 0;
 }
 
 .tabs .menu-dropdown, .tabs .dropdown-menu {
@@ -2020,6 +2021,7 @@ table table td,
 .td.cbi-section-actions {
 	text-align: right;
 	vertical-align: middle;
+	width: 15%;
 }
 
 .td.cbi-section-actions > * {
@@ -2351,10 +2353,6 @@ div.cbi-value var.cbi-tooltip-container,
 
 #applyreboot-section {
 	line-height: 300%;
-}
-
-[data-page="admin-network-dhcp"] [data-name="ip"] {
-	width: 15%;
 }
 
 @keyframes flash {
