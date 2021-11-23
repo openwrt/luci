@@ -762,7 +762,7 @@ function cbi_update_table(table, data, placeholder) {
 					var td = trow.appendChild(E('div', {
 						'class': titles[i].className,
 						'data-title': (text !== '') ? text : null
-					}, row[i] || ''));
+					}, (row[i] != null) ? row[i] : ''));
 
 					td.classList.remove('th');
 					td.classList.add('td');
