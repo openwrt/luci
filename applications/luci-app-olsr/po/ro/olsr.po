@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2021-11-18 18:36+0000\n"
+"PO-Revision-Date: 2021-11-27 03:28+0000\n"
 "Last-Translator: Simona Iacob <s@zp1.net>\n"
 "Language-Team: Romanian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsolsr/ro/>\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2;\n"
-"X-Generator: Weblate 4.9.1-dev\n"
+"X-Generator: Weblate 4.10-dev\n"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/mid.htm:13
 msgid "Active MID announcements"
@@ -162,11 +162,20 @@ msgid ""
 "value too, but does only update the hopcount if the nexthop changes too. "
 "Default is \"flat\"."
 msgstr ""
+"FIBMetric controlează valoarea metrică a seturilor de rute-gazdă OLSRd. "
+"\"flat\" înseamnă că valoarea metrică este întotdeauna 2. Aceasta este "
+"valoarea preferată, deoarece ajută nucleul Linux de rutare să curețe rutele "
+"mai vechi. \"correct\" utilizează numărul de salturi ca valoare metrică. "
+"\"approx\" utilizează hopcount-ul ca valoare metrică, dar actualizează "
+"hopcount-ul numai dacă se schimbă și hopcount-ul următor. Valoarea implicită "
+"este \"flat\"."
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:112
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:106
 msgid "Fisheye mechanism for TCs (checked means on). Default is \"on\""
 msgstr ""
+"Mecanismul Fisheye pentru TC-uri (bifat înseamnă activat). Valoarea "
+"implicită este \"on\""
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/smartgw.htm:55
 #: applications/luci-app-olsr/luasrc/view/status-olsr/smartgw.htm:107
@@ -189,11 +198,11 @@ msgstr "Setări generale"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/legend.htm:9
 msgid "Good (2 < ETX < 4)"
-msgstr ""
+msgstr "Bun (2 < ETX < 4)"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/legend.htm:18
 msgid "Good (30 > SNR > 20)"
-msgstr ""
+msgstr "Bun (30 > SNR > 20)"
 
 #: applications/luci-app-olsr/root/usr/share/rpcd/acl.d/luci-app-olsr.json:3
 msgid "Grant UCI access for luci-app-olsr"
@@ -898,7 +907,7 @@ msgstr ""
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/interfaces.htm:25
 msgid "State"
-msgstr ""
+msgstr "Stat"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/legend.htm:19
 msgid "Still usable (20 > SNR > 5)"

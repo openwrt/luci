@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2021-11-18 18:52+0000\n"
-"Last-Translator: Simona Iacob <s@zp1.net>\n"
+"PO-Revision-Date: 2021-11-22 19:53+0000\n"
+"Last-Translator: CRISTIAN ANDREI <cristianvdr@gmail.com>\n"
 "Language-Team: Romanian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsacme/ro/>\n"
 "Language: ro\n"
@@ -9,7 +9,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2;\n"
-"X-Generator: Weblate 4.9.1-dev\n"
+"X-Generator: Weblate 4.10-dev\n"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:17
 msgid "ACME certificates"
@@ -17,15 +17,15 @@ msgstr "Certificate ACME"
 
 #: applications/luci-app-acme/root/usr/share/luci/menu.d/luci-app-acme.json:3
 msgid "ACME certs"
-msgstr "Certificatele ACME"
+msgstr "Certificate ACME"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:26
 msgid "ACME global config"
-msgstr "Configurație globală ACME"
+msgstr "Configurare globală ACME"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:139
 msgid "ACME server URL"
-msgstr "URL-ul serverului ACME"
+msgstr "Adresa URL a server-ului ACME"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:34
 msgid "Account email"
@@ -49,7 +49,7 @@ msgstr "Validarea provocării"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:135
 msgid "Custom ACME CA"
-msgstr "Personalizat ACME CA"
+msgstr "Certificat ACME personalizat"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:140
 msgid "Custom ACME server directory URL."
@@ -61,7 +61,7 @@ msgstr "DNS"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:107
 msgid "DNS API"
-msgstr "API PENTRU DNS"
+msgstr "DNS API"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:115
 msgid "DNS API credentials"
@@ -73,11 +73,11 @@ msgstr "Zile până la reînnoire"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:128
 msgid "Domain Alias"
-msgstr "Alias de domeniu"
+msgstr "Aliasul domeniului"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:68
 msgid "Domain names"
-msgstr "Nume de domenii"
+msgstr "Numele domeniului"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:69
 msgid ""
@@ -85,9 +85,9 @@ msgid ""
 "subject name, subsequent names will be alt names. Note that all domain names "
 "must point at the router in the global DNS."
 msgstr ""
-"Nume de domenii care trebuie incluse în certificat. Primul nume va fi numele "
-"subiectului, iar numele ulterioare vor fi nume de alt. Rețineți că toate "
-"numele de domeniu trebuie să indice către router în DNS global."
+"Numele domeniului ce sunt incluse în certificat. Primul nume va fi cel al "
+"subiectului, următoarele nume vor fi alternative. Ține minte că toate numele "
+"domeniului trebuie să ducă la router în DNS-ul global."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:63
 msgid "ECC 256 bits"
@@ -99,11 +99,11 @@ msgstr "ECC 384 biți"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:35
 msgid "Email address to associate with account key."
-msgstr "Adresa de e-mail care se asociază cu cheia de cont."
+msgstr "Adresa de email ce va fi asociată cu cheia contului."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:39
 msgid "Enable debug logging"
-msgstr "Activați jurnalizarea de depanare"
+msgstr "Activează logging-ul pentru debug"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:50
 msgid "Enabled"
@@ -131,23 +131,23 @@ msgstr "Dimensiunea cheii"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:59
 msgid "Key size (and type) for the generated certificate."
-msgstr ""
+msgstr "Dimensiunea (și tipul) cheii pentru certificatul generat."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:60
 msgid "RSA 2048 bits"
-msgstr ""
+msgstr "RSA 2048 biți"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:61
 msgid "RSA 3072 bits"
-msgstr ""
+msgstr "RSA 3072 biți"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:62
 msgid "RSA 4096 bits"
-msgstr ""
+msgstr "RSA 4096 biți"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:95
 msgid "Standalone"
-msgstr ""
+msgstr "De sine stătător"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:92
 msgid ""
@@ -156,10 +156,14 @@ msgid ""
 "certificate. DNS mode will allow you to use the DNS API of your DNS provider "
 "to issue a certificate."
 msgstr ""
+"Modul de sine stătător va folosi webserverul incorporat al acme.sh pentru a "
+"emite un certificat. Modul webroot va folosi un webserver existent pentru a "
+"emite un certificat. Modul DNS îți va permite să folosești API-ul DNS al "
+"provider-ului DNS pentru a emite un certificat."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:29
 msgid "State directory"
-msgstr ""
+msgstr "Directorul de stat"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:123
 msgid ""
@@ -202,6 +206,12 @@ msgid ""
 "supports wildcard certificates. Using this mode requires the acme-dnsapi "
 "package to be installed."
 msgstr ""
+"Pentru a utiliza modul DNS pentru a emite certificate, setați-l la numele "
+"unui API DNS acceptat de acme.sh. Consultați https://github.com/acmesh-"
+"official/acme.sh/wiki/dnsapi pentru lista API-urilor disponibile. În modul "
+"DNS, numele de domeniu nu trebuie să se rezolve la IP-ul routerului. Modul "
+"DNS este, de asemenea, singurul mod care acceptă certificate wildcard. "
+"Utilizarea acestui mod necesită instalarea pachetului acme-dnsapi."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:84
 msgid ""
@@ -209,6 +219,10 @@ msgid ""
 "for one certificate). Nginx must support ssl, if not it won't start as it "
 "needs to be compiled with ssl support to use cert options"
 msgstr ""
+"Actualizați configurația nginx cu acest certificat odată emis (selectați-l "
+"doar pentru un certificat). Nginx trebuie să accepte ssl, în caz contrar nu "
+"va porni, deoarece trebuie să fie compilat cu suport ssl pentru a utiliza "
+"opțiunile de certificare"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:76
 msgid ""
@@ -216,26 +230,29 @@ msgid ""
 "for one certificate). Is also available luci-app-uhttpd to configure uhttpd "
 "form the LuCI interface."
 msgstr ""
+"Actualizați configurația uhttpd cu acest certificat odată ce a fost emis "
+"(selectați acest lucru doar pentru un certificat). Este disponibil și luci-"
+"app-uhttpd pentru a configura uhttpd din interfața LuCI."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:135
 msgid "Use a custom CA instead of Let's Encrypt."
-msgstr ""
+msgstr "Utilizați un CA personalizat în loc de Let's Encrypt."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:83
 msgid "Use for nginx"
-msgstr ""
+msgstr "Utilizați pentru nginx"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:75
 msgid "Use for uhttpd"
-msgstr ""
+msgstr "Utilizați pentru uhttpd"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:53
 msgid "Use staging server"
-msgstr ""
+msgstr "Utilizați serverul staging"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:91
 msgid "Validation method"
-msgstr ""
+msgstr "Metoda de validare"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:96
 msgid "Webroot"
@@ -243,7 +260,7 @@ msgstr ""
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:100
 msgid "Webroot directory"
-msgstr ""
+msgstr "Directorul webroot"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:101
 msgid ""
@@ -251,7 +268,10 @@ msgid ""
 "Acme in webroot mode. The web server must be accessible from the internet on "
 "port 80."
 msgstr ""
+"Directorul rădăcină al serverului web. Setați acest lucru la rădăcina "
+"documentului serverului web pentru a rula Acme în modul webroot. Serverul "
+"web trebuie să fie accesibil de pe internet pe portul 80."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:30
 msgid "Where certs and other state files are kept."
-msgstr ""
+msgstr "Unde se păstrează certificatele și alte dosare de stat."
