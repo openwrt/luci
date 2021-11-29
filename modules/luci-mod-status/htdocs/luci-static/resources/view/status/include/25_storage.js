@@ -21,7 +21,7 @@ function progressbar(value, max, byte) {
 }
 
 return baseclass.extend({
-	title: _('Storage usage'),
+	title: _('Storage'),
 
 	load: function() {
 		return L.resolveDefault(callSystemInfo(), {});
