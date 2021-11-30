@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2021-11-28 17:27+0000\n"
+"PO-Revision-Date: 2021-11-30 13:10+0000\n"
 "Last-Translator: Simona Iacob <s@zp1.net>\n"
 "Language-Team: Romanian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsfrpc/ro/>\n"
@@ -213,14 +213,15 @@ msgstr "Port local"
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:45
 msgid "LocalIp specifies the IP address or host name to proxy to."
 msgstr ""
+"LocalIp specifică adresa IP sau numele de gazdă către care se face proxy."
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:46
 msgid "LocalPort specifies the port to proxy to."
-msgstr ""
+msgstr "LocalPort specifică portul la care se face proxy."
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:59
 msgid "Locations"
-msgstr ""
+msgstr "Locații"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:23
 msgid "Log level"
@@ -240,6 +241,9 @@ msgid ""
 "\", \"info\", \"warn\", and \"error\".<br />By default, this value is \"info"
 "\"."
 msgstr ""
+"LogLevel specifică nivelul minim al jurnalului. Valorile valabile sunt "
+"\"trace\", \"debug\", \"info\", \"warn\" și \"error\".<br />Prin definiție, "
+"această valoare este \"info\"."
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:33
 msgid ""
@@ -247,20 +251,27 @@ msgid ""
 "login attempt. If false, the client will retry until a login attempt "
 "succeeds.<br />By default, this value is true."
 msgstr ""
+"LoginFailExit controlează dacă clientul trebuie sau nu să iasă după o "
+"încercare eșuată de conectare. Dacă este falsă, clientul va încerca din nou "
+"până când o încercare de autentificare reușește.<br />Din mod implicit, "
+"această valoare este adevărată."
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:143
 msgid "NOT RUNNING"
-msgstr ""
+msgstr "NU FUNCȚIONEAZĂ"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:195
 msgid "Name can not be \"common\""
-msgstr ""
+msgstr "Numele nu poate fi \"comun\""
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:15
 msgid ""
 "OS environments pass to frp for config file template, see <a href=\"https://"
 "github.com/fatedier/frp#configuration-file-template\">frp README</a>"
 msgstr ""
+"Mediile sistemului de operare trec la frp pentru șablonul fișierului de "
+"configurare, vezi <a href=\"https://github.com/fatedier/frp#configuration-"
+"file-template\">frp README</a>"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:34
 msgid "Protocol"
@@ -272,15 +283,18 @@ msgid ""
 "Valid values are \"tcp\", \"kcp\", and \"websocket\".<br />By default, this "
 "value is \"tcp\"."
 msgstr ""
+"Protocol specifică protocolul care trebuie utilizat la interacțiunea cu "
+"serverul. Valorile valide sunt \"tcp\", \"kcp\" și \"websocket\".<br />Prin "
+"definiție, această valoare este \"tcp\"."
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:188
 msgid "Proxy Settings"
-msgstr ""
+msgstr "Setări Proxy"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:42
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:204
 msgid "Proxy type"
-msgstr ""
+msgstr "Tipul de proxy"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:42
 msgid ""
@@ -288,10 +302,13 @@ msgid ""
 "\"udp\", \"http\", \"https\", \"stcp\", and \"xtcp\".<br />By default, this "
 "value is \"tcp\"."
 msgstr ""
+"ProxyType specifică tipul acestui proxy. Valorile valide includ \"tcp\", "
+"\"udp\", \"http\", \"https\", \"stcp\" și \"xtcp\".<br />Prin definiție, "
+"această valoare este \"tcp\"."
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:141
 msgid "RUNNING"
-msgstr ""
+msgstr "RULARE"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:50
 msgid "Remote port"
@@ -299,7 +316,7 @@ msgstr ""
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:14
 msgid "Respawn when crashed"
-msgstr ""
+msgstr "Respawn atunci când se prăbușește"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:67
 msgid "Role"
@@ -307,11 +324,11 @@ msgstr ""
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:13
 msgid "Run daemon as group"
-msgstr ""
+msgstr "Rularea daemonului ca grup"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:12
 msgid "Run daemon as user"
-msgstr ""
+msgstr "Rulați daemonul ca utilizator"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:20
 msgid "Server address"
@@ -348,7 +365,7 @@ msgstr ""
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:31
 msgid "TCP mux"
-msgstr ""
+msgstr "Mux TCP"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:35
 msgid "TLS"
@@ -400,7 +417,7 @@ msgstr ""
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:32
 msgid "User"
-msgstr ""
+msgstr "Utilizator"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:32
 msgid ""

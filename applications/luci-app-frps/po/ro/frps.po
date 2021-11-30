@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2021-11-28 17:27+0000\n"
+"PO-Revision-Date: 2021-11-30 13:10+0000\n"
 "Last-Translator: Simona Iacob <s@zp1.net>\n"
 "Language-Team: Romanian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsfrps/ro/>\n"
@@ -233,6 +233,9 @@ msgid ""
 "be used if LogWay is set appropriately.<br />By default, this value is "
 "\"console\"."
 msgstr ""
+"LogFile specifică un fișier în care vor fi scrise jurnalele. Această valoare "
+"va fi utilizată numai dacă LogWay este setat în mod corespunzător.<br />În "
+"mod implicit, această valoare este \"console\"."
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:33
 msgid ""
@@ -240,6 +243,9 @@ msgid ""
 "\", \"info\", \"warn\", and \"error\".<br />By default, this value is \"info"
 "\"."
 msgstr ""
+"LogLevel specifică nivelul minim al jurnalului. Valorile valabile sunt "
+"\"trace\", \"debug\", \"info\", \"warn\" și \"error\".<br />Prin definiție, "
+"această valoare este \"info\"."
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:34
 msgid ""
@@ -247,10 +253,13 @@ msgid ""
 "before deletion. This is only used if LogWay == \"file\".<br />By default, "
 "this value is 0."
 msgstr ""
+"LogMaxDays specifică numărul maxim de zile de stocare a informațiilor din "
+"jurnal înainte de ștergere. Aceasta este utilizată numai dacă LogWay == "
+"\"file\".<br />În mod implicit, această valoare este 0."
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:41
 msgid "Max ports per client"
-msgstr ""
+msgstr "Porturi maxime pe client"
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:41
 msgid ""
@@ -258,47 +267,56 @@ msgid ""
 "proxy to. If this value is 0, no limit will be applied.<br />By default, "
 "this value is 0."
 msgstr ""
+"MaxPortsPerClient specifică numărul maxim de porturi pe care un singur "
+"client le poate accesa prin proxy. Dacă această valoare este 0, nu se va "
+"aplica nicio limită.<br />În mod implicit, această valoare este 0."
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:118
 msgid "NOT RUNNING"
-msgstr ""
+msgstr "NU FUNCȚIONEAZĂ"
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:14
 msgid ""
 "OS environments pass to frp for config file template, see <a href=\"https://"
 "github.com/fatedier/frp#configuration-file-template\">frp README</a>"
 msgstr ""
+"Mediile sistemului de operare trec la frp pentru șablonul fișierului de "
+"configurare, vezi <a href=\"https://github.com/fatedier/frp#configuration-"
+"file-template\">frp README</a>"
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:23
 msgid "Proxy bind address"
-msgstr ""
+msgstr "Adresa de legare a proxy-ului"
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:23
 msgid ""
 "ProxyBindAddr specifies the address that the proxy binds to. This value may "
 "be the same as BindAddr.<br />By default, this value is \"0.0.0.0\"."
 msgstr ""
+"ProxyBindAddr specifică adresa la care se leagă proxy-ul. Această valoare "
+"poate fi aceeași cu BindAddr.<br />În mod implicit, această valoare este \"0."
+"0.0.0\"."
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:116
 msgid "RUNNING"
-msgstr ""
+msgstr "RULARE"
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:13
 msgid "Respawn when crashed"
-msgstr ""
+msgstr "Respawn atunci când se prăbușește"
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:12
 msgid "Run daemon as group"
-msgstr ""
+msgstr "Rularea daemonului ca grup"
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:11
 msgid "Run daemon as user"
-msgstr ""
+msgstr "Rulați daemonul ca utilizator"
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:152
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:156
 msgid "Startup settings"
-msgstr ""
+msgstr "Setări de pornire"
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:37
 msgid ""
@@ -308,14 +326,19 @@ msgid ""
 "\", the resulting URL would be \"test.frps.com\".<br />By default, this "
 "value is \"\"."
 msgstr ""
+"SubDomainHost specifică domeniul care va fi atașat la subdomeniile "
+"solicitate de client atunci când se utilizează proxy Vhost. De exemplu, dacă "
+"această valoare este setată la \"frps.com\", iar clientul a solicitat "
+"subdomeniul \"test\", URL-ul rezultat va fi \"test.frps.com\".<br />În mod "
+"implicit, această valoare este \"\"."
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:37
 msgid "Subdomain host"
-msgstr ""
+msgstr "Gazda subdomeniului"
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:38
 msgid "TCP mux"
-msgstr ""
+msgstr "Mux TCP"
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:38
 msgid ""
