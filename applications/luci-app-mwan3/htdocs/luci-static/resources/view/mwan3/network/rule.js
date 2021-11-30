@@ -39,6 +39,16 @@ return view.extend({
 		o.value('ipv6', _('IPv6 only'));
 		o.modalonly = true;
 
+		o = s.option(form.Value, 'proto', _('Protocol'),
+			_('View the content of /etc/protocols for protocol description'));
+		o.default = 'all';
+		o.rmempty = false;
+		o.value('all');
+		o.value('tcp');
+		o.value('udp');
+		o.value('icmp');
+		o.value('esp');
+
 		o = s.option(form.Value, 'src_ip', _('Source address'),
 			_('Supports CIDR notation (eg \"192.168.100.0/24\") without quotes'));
 		o.datatype = 'ipaddr';
@@ -56,16 +66,6 @@ return view.extend({
 			_('May be entered as a single or multiple port(s) (eg \"22\" or \"80,443\") or as a portrange (eg \"1024:2048\") without quotes'));
 		o.depends('proto', 'tcp');
 		o.depends('proto', 'udp');
-
-		o = s.option(form.Value, 'proto', _('Protocol'),
-			_('View the content of /etc/protocols for protocol description'));
-		o.default = 'all';
-		o.rmempty = false;
-		o.value('all');
-		o.value('tcp');
-		o.value('udp');
-		o.value('icmp');
-		o.value('esp');
 
 		o = s.option(form.ListValue, 'sticky', _('Sticky'),
 			_('Traffic from the same source IP address that previously matched this rule within the sticky timeout period will use the same WAN interface'));
