@@ -11,6 +11,13 @@ var generateKey = rpc.declare({
 	expect: { keys: {} }
 });
 
+var getPublicAndPrivateKeyFromPrivate = rpc.declare({
+	object: 'luci.wireguard',
+	method: 'getPublicAndPrivateKeyFromPrivate',
+	params: ['privkey'],
+	expect: { keys: {} }
+});
+
 var generateQrCode = rpc.declare({
 	object: 'luci.wireguard',
 	method: 'generateQrCode',
@@ -88,14 +95,34 @@ return network.registerProtocol('wireguard', {
 		o.validate = validateBase64;
 		o.rmempty = false;
 
+		var sections = uci.sections('network');
+		var serverName = this.getIfname();
+		var server = findSection(sections, serverName);
+
+		o = s.taboption('general', form.Value, 'public_key', _('Public Key'), _('Base64-encoded public key of this interface for sharing.'));
+		o.rmempty = false;
+		o.write = function() {/* write nothing */};
+
+		o.load = function(s) {
+			return getPublicAndPrivateKeyFromPrivate(server.private_key).then(
+				function(keypair) {
+					return keypair.pub || '';
+				}, 
+				function(error){
+					return _('Error getting PublicKey');
+			}, this)
+		};
+
 		o = s.taboption('general', form.Button, 'generate_key', _('Generate Key'));
 		o.inputstyle = 'apply';
 		o.onclick = ui.createHandlerFn(this, function(section_id, ev) {
 			 return generateKey().then(function(keypair) {
 				var keyInput = document.getElementById('widget.cbid.network.%s.private_key'.format(section_id)),
-				    changeEvent = new Event('change');
+					changeEvent = new Event('change'),
+					pubKeyInput = document.getElementById('widget.cbid.network.%s.public_key'.format(section_id));
 
 				keyInput.value = keypair.priv || '';
+				pubKeyInput.value = keypair.pub || '';
 				keyInput.dispatchEvent(changeEvent);
 			});
 		}, s.section);
