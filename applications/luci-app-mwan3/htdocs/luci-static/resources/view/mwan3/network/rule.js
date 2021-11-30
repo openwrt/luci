@@ -78,6 +78,7 @@ return view.extend({
 			_('Seconds. Acceptable values: 1-1000000. Defaults to 600 if not set'));
 		o.datatype = 'range(1, 1000000)';
 		o.modalonly = true;
+		o.depends('sticky', '1');
 
 		o = s.option(form.Value, 'ipset', _('IPset'),
 			_('Name of IPset rule. Requires IPset rule in /etc/dnsmasq.conf (eg \"ipset=/youtube.com/youtube\")'));
