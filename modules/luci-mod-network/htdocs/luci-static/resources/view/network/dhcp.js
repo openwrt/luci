@@ -299,7 +299,7 @@ return view.extend({
 
 		o = s.taboption('general', form.Flag, 'rebind_protection',
 			_('Rebind protection'),
-			_('Discard upstream responses containing <%s>RFC1918<%s> addresses.').format('a href="https://datatracker.ietf.org/doc/html/rfc1918" target="_blank" rel="noreferrer noopener"', '/a'));
+			_('Discard upstream responses containing <a href="%s">RFC1918</a> addresses.').format('https://datatracker.ietf.org/doc/html/rfc1918'));
 		o.rmempty = false;
 
 		o = s.taboption('general', form.Flag, 'rebind_localhost',
