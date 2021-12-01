@@ -835,15 +835,17 @@ return view.extend({
 					so.depends('ra', 'server');
 					so.depends({ ra: 'hybrid', master: '0' });
 					so.load = function(section_id) {
-						var dev = ifc.getL3Device();
+						var dev = ifc.getL3Device(),
+						    path = dev ? "/proc/sys/net/ipv6/conf/%s/mtu".format(dev.getName()) : null;
 
-						if (dev) {
-							var path = "/proc/sys/net/ipv6/conf/%s/mtu".format(dev.getName());
+						return Promise.all([
+							dev ? L.resolveDefault(fs.read(path), dev.getMTU()) : null,
+							this.super('load', [section_id])
+						]).then(L.bind(function(res) {
+							this.placeholder = +res[0];
 
-							return L.resolveDefault(fs.read(path), dev.getMTU()).then(L.bind(function(data) {
-								this.placeholder = data;
-							}, this));
-						}
+							return res[1];
+						}, this));
 					};
 
 					so = ss.taboption('ipv6-ra', form.Value, 'ra_hoplimit', _('<abbr title="Router Advertisement">RA</abbr> Hop Limit'), _('The maximum hops  to be published in <abbr title="Router Advertisement">RA</abbr> messages. Maximum is 255 hops.'));
@@ -852,15 +854,17 @@ return view.extend({
 					so.depends('ra', 'server');
 					so.depends({ ra: 'hybrid', master: '0' });
 					so.load = function(section_id) {
-						var dev = ifc.getL3Device();
+						var dev = ifc.getL3Device(),
+						    path = dev ? "/proc/sys/net/ipv6/conf/%s/hop_limit".format(dev.getName()) : null;
 
-						if (dev) {
-							var path = "/proc/sys/net/ipv6/conf/%s/hop_limit".format(dev.getName());
+						return Promise.all([
+							dev ? L.resolveDefault(fs.read(path), 64) : null,
+							this.super('load', [section_id])
+						]).then(L.bind(function(res) {
+							this.placeholder = +res[0];
 
-							return L.resolveDefault(fs.read(path), 64).then(L.bind(function(data) {
-								this.placeholder = data;
-							}, this));
-						}
+							return res[1];
+						}, this));
 					};
 
 
