@@ -1438,6 +1438,10 @@ return view.extend({
 				o.rmempty = true;
 				o.password = true;
 
+				//WPA(1) has only WPA IE. Only >= WPA2 has RSN IE Preauth frames.
+				o = ss.taboption('encryption', form.Flag, 'rsn_preauth', _('RSN Preauth'), _('Robust Security Network (RSN): Allow roaming preauth for WPA2-EAP networks (and advertise it in WLAN beacons). Only works if the specified network interface is a bridge. Shortens the time-critical reassociation process.'));
+				add_dependency_permutations(o, { mode: ['ap', 'ap-wds'], encryption: ['wpa2', 'wpa3', 'wpa3-mixed'] });
+
 
 				o = ss.taboption('encryption', form.Value, '_wpa_key', _('Key'));
 				o.depends('encryption', 'psk');
