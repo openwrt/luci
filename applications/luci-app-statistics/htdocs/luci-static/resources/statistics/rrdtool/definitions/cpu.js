@@ -28,13 +28,13 @@ return baseclass.extend({
 					instances: {
 						cpu: [
 							...(show_idle ? ["idle"] : []),
-							"interrupt",
 							"nice",
-							"softirq",
-							"steal",
-							"system",
 							"user",
-							"wait"
+							"wait",
+							"system",
+							"softirq",
+							"interrupt",
+							"steal"
 						]
 					},
 					options: {
@@ -68,7 +68,7 @@ return baseclass.extend({
 						},
 						cpu_wait: {
 							color: "ffb000",
-							title: "Wait"
+							title: "Wait I/O"
 						}
 					}
 				}
@@ -84,13 +84,13 @@ return baseclass.extend({
 					instances: {
 						percent: [
 							...(show_idle ? ["idle"] : []),
-							"interrupt",
 							"nice",
-							"softirq",
-							"steal",
-							"system",
 							"user",
-							"wait"
+							"wait",
+							"system",
+							"softirq",
+							"interrupt",
+							"steal"
 						]
 					},
 					options: {
@@ -124,7 +124,7 @@ return baseclass.extend({
 						},
 						percent_wait: {
 							color: "ffb000",
-							title: "Wait"
+							title: "Wait I/O"
 						}
 					}
 				}
