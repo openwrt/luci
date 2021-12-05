@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2021-12-03 17:34+0000\n"
+"PO-Revision-Date: 2021-12-05 17:56+0000\n"
 "Last-Translator: Simona Iacob <s@zp1.net>\n"
 "Language-Team: Romanian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsolsr/ro/>\n"
@@ -403,7 +403,7 @@ msgstr ""
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdiface.lua:122
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdiface6.lua:109
 msgid "IPv6 source"
-msgstr ""
+msgstr "Sursa IPv6"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:298
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:279
@@ -414,11 +414,14 @@ msgid ""
 "the prefix of this parameter. Default is \"0::/0\", which triggers the usage "
 "of a not-linklocal interface IP."
 msgstr ""
+"Prefixul IPv6 src. OLSRd va alege unul dintre IP-urile interfeței care se "
+"potrivește cu prefixul din acest parametru. Valoarea implicită este \"0::/0\""
+", care declanșează utilizarea unui IP de interfață nelinklocal."
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:184
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:178
 msgid "IPv6-Prefix of the uplink"
-msgstr ""
+msgstr "IPv6-Prefixul IPv6 al legăturii ascendente"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:202
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:196
@@ -429,12 +432,20 @@ msgid ""
 "if changed.<br /><b>WARNING:</b> This parameter should not be used together "
 "with the etx_ffeth metric!<br />Defaults to \"1.0\"."
 msgstr ""
+"În cazul în care traseul către poarta de acces curentă urmează să fie "
+"modificat, valoarea ETX a acestei porți de acces se înmulțește cu această "
+"valoare înainte de a fi comparată cu cea nouă. Parametrul poate fi o valoare "
+"între 0,1 și 1,0, dar ar trebui să fie aproape de 1,0 dacă este "
+"modificat.<br /><b>Atenție:</b> Acest parametru nu trebuie utilizat împreună "
+"cu metrica etx_ffeth!<br />Defectul implicit este \"1,0\"."
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:166
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:160
 msgid ""
 "If this Node uses NAT for connections to the internet. Default is \"yes\"."
 msgstr ""
+"În cazul în care acest nod utilizează NAT pentru conexiunile la internet. "
+"Valoarea implicită este \"da\"."
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdiface.lua:27
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdiface6.lua:27
@@ -455,6 +466,9 @@ msgid ""
 "ethernet interfaces. Valid modes are \"mesh\" and \"ether\". Default is "
 "\"mesh\"."
 msgstr ""
+"Modul interfață este utilizat pentru a preveni redirecționarea inutilă a "
+"pachetelor pe interfețele ethernet comutate. Modurile valabile sunt \"mesh\" "
+"și \"ether\". Valoarea implicită este \"mesh\"."
 
 #: applications/luci-app-olsr/luasrc/controller/olsr.lua:71
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:354
