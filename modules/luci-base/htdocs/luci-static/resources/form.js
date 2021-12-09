@@ -1347,6 +1347,7 @@ var CBIAbstractValue = CBIAbstractElement.extend(/** @lends LuCI.form.AbstractVa
 		this.default = null;
 		this.size = null;
 		this.optional = false;
+		this.retain = false;
 	},
 
 	/**
@@ -1365,6 +1366,17 @@ var CBIAbstractValue = CBIAbstractElement.extend(/** @lends LuCI.form.AbstractVa
 	 * or selected by the user.
 	 *
 	 * @name LuCI.form.AbstractValue.prototype#optional
+	 * @type boolean
+	 * @default false
+	 */
+
+	/**
+	 * If set to `true`, the underlying ui input widget value is not cleared
+	 * from the configuration on unsatisfied depedencies. The default behavior
+	 * is to remove the values of all options whose dependencies are not
+	 * fulfilled.
+	 *
+	 * @name LuCI.form.AbstractValue.prototype#retain
 	 * @type boolean
 	 * @default false
 	 */
@@ -1979,29 +1991,37 @@ var CBIAbstractValue = CBIAbstractElement.extend(/** @lends LuCI.form.AbstractVa
 	 * validation constraints.
 	 */
 	parse: function(section_id) {
-		var active = this.isActive(section_id),
-		    cval = this.cfgvalue(section_id),
-		    fval = active ? this.formvalue(section_id) : null;
+		var active = this.isActive(section_id);
 
 		if (active && !this.isValid(section_id)) {
-			var title = this.stripTags(this.title).trim();
-			var error = this.getValidationError(section_id);
+			var title = this.stripTags(this.title).trim(),
+			    error = this.getValidationError(section_id);
+
 			return Promise.reject(new TypeError(
 				_('Option "%s" contains an invalid input value.').format(title || this.option) + ' ' + error));
 		}
 
-		if (fval != '' && fval != null) {
-			if (this.forcewrite || !isEqual(cval, fval))
+		if (active) {
+			var cval = this.cfgvalue(section_id),
+			    fval = this.formvalue(section_id);
+
+			if (fval == null || fval == '') {
+				if (this.rmempty || this.optional) {
+					return Promise.resolve(this.remove(section_id));
+				}
+				else {
+					var title = this.stripTags(this.title).trim();
+
+					return Promise.reject(new TypeError(
+						_('Option "%s" must not be empty.').format(title || this.option)));
+				}
+			}
+			else if (this.forcewrite || !isEqual(cval, fval)) {
 				return Promise.resolve(this.write(section_id, fval));
+			}
 		}
-		else {
-			if (!active || this.rmempty || this.optional) {
-				return Promise.resolve(this.remove(section_id));
-			}
-			else if (!isEqual(cval, fval)) {
-				var title = this.stripTags(this.title).trim();
-				return Promise.reject(new TypeError(_('Option "%s" must not be empty.').format(title || this.option)));
-			}
+		else if (!this.retain) {
+			return Promise.resolve(this.remove(section_id));
 		}
 
 		return Promise.resolve();
@@ -3970,7 +3990,7 @@ var CBIFlagValue = CBIValue.extend(/** @lends LuCI.form.FlagValue.prototype */ {
 			else
 				return Promise.resolve(this.write(section_id, fval));
 		}
-		else {
+		else if (!this.retain) {
 			return Promise.resolve(this.remove(section_id));
 		}
 	},
