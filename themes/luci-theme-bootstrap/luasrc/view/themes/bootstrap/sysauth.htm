@@ -10,11 +10,40 @@
 
 <%+header%>
 
+<section hidden>
+	<form method="post" class="cbi-map">
+		<div class="cbi-section">
+			<div class="cbi-section-node">
+				<div class="cbi-value">
+					<label class="cbi-value-title" for="luci_username">Username</label>
+					<div class="cbi-value-field">
+						<input name="luci_username" type="text"<%=attr("value", duser)%>>
+					</div>
+				</div>
+				<div class="cbi-value">
+					<label class="cbi-value-title" for="luci_password">Password</label>
+					<div class="cbi-value-field">
+						<input name="luci_password" type="password">
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+
+	<hr>
+
+	<% if fuser then %>
+	<div class="alert-message error">
+		<%:Invalid username and/or password! Please try again.%>
+	</div>
+	<% end %>
+
+	<button class="btn cbi-button-positive important"><%:Login%></button>
+</section>
+
 <div id="view">
 	<div class="spinning"><%:Loading view…%></div>
 	<script type="text/javascript">
-		L.env.default_login_user = <%=luci.http.write_json(duser) %>;
-
 		L.require('ui').then(function(ui) {
 			ui.instantiateView('bootstrap.sysauth');
 		});
