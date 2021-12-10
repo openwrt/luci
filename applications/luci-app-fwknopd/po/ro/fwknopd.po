@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2021-11-27 03:28+0000\n"
+"PO-Revision-Date: 2021-11-29 14:53+0000\n"
 "Last-Translator: Simona Iacob <s@zp1.net>\n"
 "Language-Team: Romanian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsfwknopd/ro/>\n"
@@ -243,7 +243,7 @@ msgstr ""
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:559
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:568
 msgid "The HMAC authentication key has to be specified."
-msgstr ""
+msgstr "Trebuie să se specifice cheia de autentificare HMAC."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:517
 msgid ""
@@ -253,6 +253,12 @@ msgid ""
 "“192.168.10.0/24”), and individual IP addresses can be specified as well. "
 "Multiple entries are comma-separated."
 msgstr ""
+"Adresa de destinație pentru care va fi acceptat pachetul SPA. Șirul de "
+"caractere \"ANY\" este, de asemenea, acceptat în cazul în care un pachet SPA "
+"valid trebuie să fie onorat pentru orice IP de destinație. Rețelele trebuie "
+"specificate în notație CIDR (de exemplu, \"192.168.10.0/24\") și pot fi "
+"specificate și adrese IP individuale. Intrările multiple sunt separate prin "
+"virgulă."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:494
 msgid ""
@@ -260,6 +266,9 @@ msgid ""
 "when the network is up-and-running. This option has precedence over "
 "“PCAP_INTF” option."
 msgstr ""
+"Rețeaua pe care ascultă demonul. Daemonul este pornit automat atunci când "
+"rețeaua este funcțională. Această opțiune are prioritate față de opțiunea "
+"\"PCAP_INTF\"."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:508
 msgid ""
@@ -269,17 +278,22 @@ msgid ""
 "“192.168.10.0/24”), and individual IP addresses can be specified as well. "
 "Multiple entries are comma-separated."
 msgstr ""
+"Adresa sursă de la care va fi acceptat pachetul SPA. Șirul de caractere \"ANY"
+"\" este, de asemenea, acceptat în cazul în care un pachet SPA valid trebuie "
+"onorat de la orice IP sursă. Rețelele trebuie specificate în notație CIDR "
+"(de exemplu, \"192.168.10.0/24\"), dar pot fi specificate și adrese IP "
+"individuale. Intrările multiple sunt separate prin virgulă."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:514
 msgid "The source address has to be specified."
-msgstr ""
+msgstr "Adresa sursă trebuie să fie specificată."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:430
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:436
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:537
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:546
 msgid "The symmetric key has to be specified."
-msgstr ""
+msgstr "Cheia simetrică trebuie să fie specificată."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:594
 msgid ""
@@ -288,18 +302,24 @@ msgid ""
 "server as the user specified by the “CMD_EXEC_USER” or as the user that "
 "started fwknopd if that is not set."
 msgstr ""
+"Acest lucru instruiește fwknopd să accepte comenzile complete care sunt "
+"conținute într-un pachet de autorizare. Orice astfel de comandă va fi "
+"executată pe serverul fwknopd ca utilizator specificat de \"CMD_EXEC_USER\" "
+"sau ca utilizator care a pornit fwknopd, dacă acesta nu este setat."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:482
 msgid ""
 "When unchecked, the config files in /etc/fwknopd will be used as is, "
 "ignoring any settings here."
 msgstr ""
+"Atunci când nu este bifat, fișierele de configurare din /etc/fwknopd vor fi "
+"utilizate ca atare, ignorând orice setări de aici."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:419
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:502
 msgid "access.conf stanzas"
-msgstr ""
+msgstr "acces.conf stanțe"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:598
 msgid "fwknopd.conf config options"
-msgstr ""
+msgstr "opțiuni de configurare fwknopd.conf"
