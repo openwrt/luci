@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-05-26 19:03+0200\n"
-"PO-Revision-Date: 2021-11-27 23:39+0000\n"
+"PO-Revision-Date: 2021-12-10 01:37+0000\n"
 "Last-Translator: ssantos <ssantos@web.de>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/openwrt/luci/"
 "pt/>\n"
@@ -471,7 +471,7 @@ msgstr "Adicionar chave"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:409
 msgid "Add local domain suffix to names served from hosts files."
 msgstr ""
-"Adicionar um sufixo de domínio local aos nomes servidos dos ficheiros hosts"
+"Adicionar um sufixo de domínio local aos nomes servidos dos ficheiros hosts."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:465
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1129
@@ -596,8 +596,8 @@ msgid ""
 "Allocate IP addresses sequentially, starting from the lowest available "
 "address."
 msgstr ""
-"Alocar endereços IP sequencialmente, a começar pelo endereço mais baixo "
-"disponível"
+"Alocar endereços IP sequencialmente, a partir do endereço mais baixo "
+"disponível."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:377
 msgid "Allocate IPs sequentially"
@@ -1016,6 +1016,7 @@ msgstr "Aparelho base"
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:102
 msgid "Base64-encoded public key of this interface for sharing."
 msgstr ""
+"Chave pública codificada base64 desta interface para o compartilhamento."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:974
 msgid "Beacon Interval"
@@ -1034,9 +1035,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:326
 msgid "Bind dynamically to interfaces rather than wildcard address."
-msgstr ""
-"Ligar dinamicamente a interfaces ao invés de endereços wildcard (recomendado "
-"como predefinição do Linux)"
+msgstr "Ligar dinamicamente a interfaces ao invés de endereços wildcard."
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:59
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:64
@@ -1956,7 +1955,9 @@ msgstr "Desassociar quando tiver baixa confirmação"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:302
 msgid ""
 "Discard upstream responses containing <a href=\"%s\">RFC1918</a> addresses."
-msgstr "Descartar respostas RFC1918 a montante."
+msgstr ""
+"Descarta as respostas dos servidores externos que conteem endereços <a href="
+"\"%s\">RFC1918</a>."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:198
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:723
@@ -2009,14 +2010,13 @@ msgid ""
 "\">DHCP</abbr> server and <abbr title=\"Domain Name System\">DNS</abbr> "
 "forwarder."
 msgstr ""
-"Dnsmasq é um combinado de Servidor <abbr title=\"Dynamic Host Configuration "
-"Protocol\">DHCP</abbr> e encaminhador <abbr title=\"Domain Name System"
-"\">DNS</abbr> para firewalls <abbr title=\"Network Address Translation"
-"\">NAT</abbr>"
+"O Dnsmasq é um servidor leve de <abbr title=\"Dynamic Host Configuration "
+"Protocol\">DHCP</abbr> e encaminhador de <abbr title=\"Domain Name System\""
+">DNS</abbr>."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:413
 msgid "Do not cache negative replies, e.g. for non-existent domains."
-msgstr "Não por respostas negativas em cache, p.e. para domínios inexistentes"
+msgstr "Não por respostas negativas em cache, p.e. para domínios inexistentes."
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:86
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:91
@@ -2027,19 +2027,17 @@ msgstr "Não crie a rota do host para o peer (opcional)."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:262
 msgid "Do not forward DNS queries without dots or domain parts."
-msgstr ""
-"Não encaminhar consultas <abbr title=\"Domain Name System\">DNS</abbr> sem o "
-"nome do <abbr title=\"Domain Name System\">DNS</abbr>"
+msgstr "Não encaminhar consultas DNS sem pontos ou partes de domínio."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:388
 msgid "Do not forward queries that cannot be answered by public resolvers."
 msgstr ""
-"Não encaminhar pedidos que não possam ser respondidos por servidores de "
-"nomes públicos"
+"Não encaminhar pedidos que não possam ser respondidos por servidores "
+"públicos de nomes."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:383
 msgid "Do not forward reverse lookups for local networks."
-msgstr "Não encaminhar lookups reversos para as redes locais"
+msgstr "Não encaminhar buscas reversas para redes locais."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:339
 msgid "Do not listen on the specified interfaces."
@@ -2495,7 +2493,7 @@ msgstr "Erro"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:112
 msgid "Error getting PublicKey"
-msgstr ""
+msgstr "Erro ao obter a PublicKey"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:29
 msgid "Errored seconds (ES)"
@@ -2528,7 +2526,8 @@ msgid ""
 "Exempt <code>127.0.0.0/8</code> and <code>::1</code> from rebinding checks, "
 "e.g. for RBL services."
 msgstr ""
-"Permitir respostas a montante na gama 127.0.0.1/8, p.e. para serviços RBL"
+"Isentar <code>127.0.0.0/8</code> e <code> :: 1 </code> de verificações de "
+"religação, p.e. para serviços RBL."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:356
 msgid "Existing device"
@@ -2662,14 +2661,11 @@ msgstr "Ficheiro não acessível"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:349
 msgid "File to store DHCP lease information."
-msgstr ""
-"Ficheiro onde as atribuições <abbr title=\"Protocolo de Configuração "
-"Dinâmica de Hosts\">DHCP</abbr> são armazenadas"
+msgstr "Ficheiro para armazenar informações de concessão de DHCP."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:357
 msgid "File with upstream resolvers."
-msgstr ""
-"Ficheiro local de <abbr title=\"Sistema de Nomes de Domínios\">DNS</abbr>"
+msgstr "Ficheiro com os resolvedores upstream."
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2846
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:506
@@ -2678,7 +2674,7 @@ msgstr "Nome do ficheiro"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:492
 msgid "Filename of the boot image advertised to clients."
-msgstr "Nome de ficheiro da imagem de boot a anunciar aos clientes"
+msgstr "Nome do ficheiro da imagem de inicialização anunciada aos clientes."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:191
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:314
@@ -4144,9 +4140,7 @@ msgstr "Link Ativo"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:432
 msgid "List of IP addresses to convert into NXDOMAIN responses."
-msgstr ""
-"Lista de servidores <abbr title=\"Domain Name System\">DNS</abbr> que "
-"fornecem resultados errados para consultas a domínios inexistentes (NX)"
+msgstr "Lista de endereços IP a serem convertidos em respostas NXDOMAIN."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:296
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:580
@@ -4188,7 +4182,7 @@ msgstr "Lista de ficheiros de chaves SSH para autenticação"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:312
 msgid "List of domains to allow RFC1918 responses for."
-msgstr "Lista de dominios que permitem respostas RFC1918 para"
+msgstr "Lista de domínios para quais permitir respostas de RFC1918."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:290
 msgid "List of domains to force to an IP address."
@@ -4196,9 +4190,7 @@ msgstr "Lista de domínios a forçar para um endereço IP."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:283
 msgid "List of upstream resolvers to forward queries to."
-msgstr ""
-"Lista de servidores <abbr title=\"Domain Name System\">DNS</abbr> para onde "
-"encaminhar os pedidos"
+msgstr "Lista de resolvedores upstream a quem encaminhar as consultas."
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:130
 msgid "Listen Port"
@@ -4515,15 +4507,15 @@ msgstr "Intervalo de Escuta máximo permitido"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:452
 msgid "Maximum allowed number of active DHCP leases."
-msgstr "Quantidade máxima permitida de concessões DHCP ativas"
+msgstr "Quantidade máxima permitida de concessões DHCP ativas."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:466
 msgid "Maximum allowed number of concurrent DNS queries."
-msgstr "Quantidade máxima permitida de consultas DNS permitidas"
+msgstr "Quantidade máxima permitida de consultas simultâneas de DNS."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:459
 msgid "Maximum allowed size of EDNS0 UDP packets."
-msgstr "Tamanho máximo permitido dos pacotes UDP EDNS.0"
+msgstr "Tamanho máximo permitido dos pacotes UDP EDNS0."
 
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:126
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:118
@@ -4916,9 +4908,8 @@ msgid ""
 "Never forward matching domains and subdomains, resolve from DHCP or hosts "
 "files only."
 msgstr ""
-"Especificação do domínio local. Nomes que correspondem com este domínio "
-"nunca serão encaminhados e são resolvidos somente pelo DHCP ou pelo "
-"ficheiros de equipamentos conhecidos (hosts)"
+"Nunca encaminhar domínios e subdomínios que correspondem, resolver apenas a "
+"partir de DHCP ou de ficheiros hosts."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1149
 msgid "New interface for \"%s\" can not be created: %s"
@@ -5157,7 +5148,7 @@ msgstr "Quantidade de relatórios associados ao IGMP"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:473
 msgid "Number of cached DNS entries, 10000 is maximum, 0 is no caching."
 msgstr ""
-"Quantidade de entradas DNS em cache (máximo é 10000, 0 desativa o cache)"
+"Quantidade das entradas DNS em cache, 10000 é o máximo, 0 desativa o cache."
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:311
 msgid "Number of peer notifications after failover event"
@@ -5997,9 +5988,7 @@ msgstr "Qualidade"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:427
 msgid "Query all available upstream resolvers."
-msgstr ""
-"Consulte todos os servidores <abbr title=\"Domain Name System\">DNS</abbr> "
-"upstream disponíveis"
+msgstr "Consultar todos os resolvedores disponíveis upstream."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:556
 msgid "Query interval"
@@ -6074,9 +6063,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:345
 msgid "Read <code>/etc/ethers</code> to configure the DHCP server."
-msgstr ""
-"Ler <code>/etc/ethers</code> para configurar o Servidor-<abbr title="
-"\"Protocolo de Configuração Dinâmica de Hosts\">DHCP</abbr>"
+msgstr "Ler <code>/etc/ethers</code> para configurar o servidor DHCP."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:559
 msgid "Really switch protocol?"
@@ -7292,7 +7279,7 @@ msgstr "Suprimir registros (log)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:373
 msgid "Suppress logging of the routine operation for the DHCP protocol."
-msgstr "Suprimir registros (log) de operações rotineiras destes protocolos"
+msgstr "Suprimir registos (log) de operações rotineiras do protocolo DHCP."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/20_memory.js:46
 msgid "Swap free"
@@ -7969,9 +7956,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:266
 msgid "This is the only DHCP server in the local network."
-msgstr ""
-"Este é o único <abbr title=\"Protocolo de Configuração Dinâmica de Hosts"
-"\">DHCP</abbr> na rede local"
+msgstr "Este é o único servidor DHCP na rede local."
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6in4.js:73
 msgid "This is the plain username for logging into the account"
@@ -8386,9 +8371,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:422
 msgid "Upstream resolvers will be queried in the order of the resolv file."
-msgstr ""
-"Os servidores de <abbr title=\"Servidor de Nomes de Domínio\">DNS</abbr> "
-"serão consultados pela ordem no ficheiro resolv"
+msgstr "Os resolvedores upstream serão consultados na ordem do ficheiro resolv."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:82
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/10_system.js:61
@@ -8658,8 +8641,8 @@ msgid ""
 "Validate DNS replies and cache DNSSEC data, requires upstream to support "
 "DNSSEC."
 msgstr ""
-"Exige o suporte DNSSEC do servidor superior; verifica se as respostas não "
-"assinadas realmente vêm de domínios não assinados"
+"Validar respostas do DNS e o cache de dados DNSSEC, requer upstream para "
+"suportar DNSSEC."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1571
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1629
@@ -8866,7 +8849,7 @@ msgstr "A rede wireless está ativada"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:278
 msgid "Write received DNS queries to syslog."
-msgstr "Escrever os pedidos de DNS para o syslog"
+msgstr "Escrever as consultas DNS recebidas no syslog."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:180
 msgid "Write system log to file"
