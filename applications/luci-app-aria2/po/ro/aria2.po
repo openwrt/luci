@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2021-12-10 15:48+0000\n"
+"PO-Revision-Date: 2021-12-12 15:11+0000\n"
 "Last-Translator: Simona Iacob <s@zp1.net>\n"
 "Language-Team: Romanian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsaria2/ro/>\n"
@@ -577,6 +577,9 @@ msgid ""
 "if remote server responds with <code>Content-Encoding: gzip</code> or "
 "<code>Content-Encoding: deflate</code>."
 msgstr ""
+"Trimiteți <code>Trimiteți: deflate, gzip</code> antetul cererii și extinde "
+"răspunsul dacă serverul la distanță răspunde cu <code>Content-Encoding: "
+"gzip</code> or <code>Content-Encoding: deflate</code>."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:357
 msgid ""
@@ -585,6 +588,10 @@ msgid ""
 "you can add Cache-Control header with a directive you like using \"Header\" "
 "option."
 msgstr ""
+"Trimiteți antetul <code>Cache-Control: no-cache</code> și <code>Pragma: no-"
+"cache</code> pentru a evita conținutul din memoria cache. Dacă sunt "
+"dezactivate, aceste antete nu sunt trimise și puteți adăuga antetul Cache-"
+"Control cu o directivă pe care o doriți folosind opțiunea \"Header\"."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:473
 msgid ""
@@ -592,30 +599,44 @@ msgid ""
 "\"6881-6999\" and \"6881-6889,6999\". Make sure that the specified ports are "
 "open for incoming TCP traffic."
 msgstr ""
+"Setați numărul portului TCP pentru descărcările BitTorrent. Acceptă formatul:"
+" \"6881,6885\", \"6881-6999\" și \"6881-6889,6999\". Asigurați-vă că "
+"porturile specificate sunt deschise pentru traficul TCP de intrare."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:479
 msgid ""
 "Set UDP listening port used by DHT (IPv4, IPv6) and UDP tracker. Make sure "
 "that the specified ports are open for incoming UDP traffic."
 msgstr ""
+"Setați portul de ascultare UDP utilizat de DHT (IPv4, IPv6) și de UDP "
+"tracker. Asigurați-vă că porturile specificate sunt deschise pentru traficul "
+"UDP de intrare."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:614
 msgid ""
 "Set max download speed per each download in bytes/sec. 0 means unrestricted."
 msgstr ""
+"Setați viteza maximă de descărcare pentru fiecare descărcare în bytes/sec. 0 "
+"înseamnă fără restricții."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:607
 msgid "Set max overall download speed in bytes/sec. 0 means unrestricted."
 msgstr ""
+"Setați viteza maximă totală de descărcare în bytes/sec. 0 înseamnă fără "
+"restricții."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:492
 msgid "Set max overall upload speed in bytes/sec. 0 means unrestricted."
 msgstr ""
+"Setați viteza maximă totală de încărcare în bytes/sec. 0 înseamnă fără "
+"restricții."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:499
 msgid ""
 "Set max upload speed per each torrent in bytes/sec. 0 means unrestricted."
 msgstr ""
+"Setați viteza maximă de încărcare pentru fiecare torrent în bytes/sec. 0 "
+"înseamnă fără restricții."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:368
 msgid ""
@@ -623,14 +644,18 @@ msgid ""
 "server. After the connection is established, this option makes no effect and "
 "\"Timeout\" option is used instead."
 msgstr ""
+"Setați timpul de așteptare a conectării în secunde pentru stabilirea "
+"conexiunii la serverul HTTP/FTP/proxy. După stabilirea conexiunii, această "
+"opțiune nu mai are niciun efect și în locul ei se utilizează opțiunea "
+"\"Timeout\"."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:404
 msgid "Set the seconds to wait between retries."
-msgstr ""
+msgstr "Setați secundele de așteptare între reintrări."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:409
 msgid "Set user agent for HTTP(S) downloads."
-msgstr ""
+msgstr "Setați agentul utilizatorului pentru descărcările HTTP(S)."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:188
 msgid "Settings"
@@ -639,10 +664,11 @@ msgstr "Setări"
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:620
 msgid "Settings in this section will be added to config file."
 msgstr ""
+"Setările din această secțiune vor fi adăugate la fișierul de configurare."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:624
 msgid "Settings list"
-msgstr ""
+msgstr "Lista de setări"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:585
 msgid ""
@@ -654,12 +680,22 @@ msgid ""
 "FAT32 because it takes almost same time as \"prealloc\" and it blocks aria2 "
 "entirely until allocation finishes."
 msgstr ""
+"Specificați metoda de alocare a fișierelor. Dacă utilizați sisteme de "
+"fișiere mai noi, cum ar fi ext4 (cu suport pentru extents), btrfs, xfs sau "
+"NTFS (numai în versiunea MinGW), \"falloc\" este cea mai bună alegere. "
+"Aceasta alocă fișiere mari (câțiva GiB) aproape instantaneu, dar este "
+"posibil să nu fie disponibilă dacă sistemul dvs. nu are funcția "
+"posix_fallocate(3). Nu folosiți \"falloc\" cu sisteme de fișiere vechi, cum "
+"ar fi ext3 și FAT32, deoarece durează aproape la fel de mult ca \"prealloc\" "
+"și blochează aria2 în întregime până când se termină alocarea."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:505
 msgid ""
 "Specify maximum number of files to open in multi-file BitTorrent download "
 "globally."
 msgstr ""
+"Specificați numărul maxim de fișiere care urmează să fie deschise în "
+"descărcări BitTorrent cu mai multe fișiere la nivel global."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:546
 msgid ""
@@ -667,6 +703,10 @@ msgid ""
 "with this option, seeding ends when at least one of the conditions is "
 "satisfied. Specifying 0 disables seeding after download completed."
 msgstr ""
+"Specificați timpul de însămânțare în minute. Dacă opțiunea \"Seed ratio\" "
+"este specificată împreună cu această opțiune, însămânțarea se încheie atunci "
+"când cel puțin una dintre condiții este îndeplinită. Dacă se specifică 0, se "
+"dezactivează însămânțarea după finalizarea descărcării."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:539
 msgid ""
@@ -674,10 +714,14 @@ msgid ""
 "RATIO. You are strongly encouraged to specify equals or more than 1.0 here. "
 "Specify 0.0 if you intend to do seeding regardless of share ratio."
 msgstr ""
+"Precizați proporția de acțiuni. Însămânțați torrentele completate până când "
+"raportul de partajare atinge RATIO. Sunteți puternic încurajat să "
+"specificați egal sau mai mare de 1,0 aici. Specificați 0.0 dacă intenționați "
+"să efectuați însămânțarea indiferent de raportul de distribuire."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:510
 msgid "Specify the maximum number of peers per torrent, 0 means unlimited."
-msgstr ""
+msgstr "Specificați numărul maxim de colegi pe torrent, 0 înseamnă nelimitat."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:531
 msgid ""
@@ -686,42 +730,53 @@ msgid ""
 "than 20 bytes are specified, random byte data are added to make its length "
 "20 bytes."
 msgstr ""
+"Specificați prefixul ID-ului omologului. În BitTorrent, ID-ul peer are o "
+"lungime de 20 de octeți. Dacă sunt specificați mai mult de 20 de octeți, "
+"sunt utilizați doar primii 20 de octeți. Dacă sunt specificați mai puțin de "
+"20 de octeți, se adaugă date aleatorii de octeți pentru ca lungimea sa să "
+"fie de 20 de octeți."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:525
 msgid ""
 "Stop BitTorrent download if download speed is 0 in consecutive N seconds. If "
 "0 is given, this feature is disabled."
 msgstr ""
+"Oprește descărcarea BitTorrent dacă viteza de descărcare este 0 în N secunde "
+"consecutive. Dacă se dă 0, această funcție este dezactivată."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:524
 msgid "Stop timeout"
-msgstr ""
+msgstr "Oprire a timpului de așteptare"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:36
 msgid "The Aria2 service is not running."
-msgstr ""
+msgstr "Serviciul Aria2 nu este în funcțiune."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:35
 msgid "The Aria2 service is running."
-msgstr ""
+msgstr "Serviciul Aria2 este în funcțiune."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:217
 msgid "The directory to store the config file, session file and DHT file."
 msgstr ""
+"Directorul în care se stochează fișierul de configurare, fișierul de sesiune "
+"și fișierul DHT."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:213
 msgid ""
 "The directory to store the downloaded file. For example <code>/mnt/sda1</"
 "code>."
 msgstr ""
+"Directorul în care se stochează fișierul descărcat. De exemplu <code>/mnt/"
+"sda1</code>."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:224
 msgid "The file name of the log file."
-msgstr ""
+msgstr "Numele fișierului de jurnal."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:386
 msgid "The maximum number of connections to one server for each download."
-msgstr ""
+msgstr "Numărul maxim de conexiuni la un server pentru fiecare descărcare."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:418
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:428
@@ -729,6 +784,8 @@ msgstr ""
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:445
 msgid "This option will be ignored if a private flag is set in a torrent."
 msgstr ""
+"Această opțiune va fi ignorată în cazul în care un indicator privat este "
+"setat într-un torrent."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:373
 msgid "Timeout"
@@ -740,17 +797,20 @@ msgstr "Token"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:486
 msgid "True"
-msgstr ""
+msgstr "Adevărat"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:310
 msgid "Use a proxy server for all protocols."
-msgstr ""
+msgstr "Utilizați un server proxy pentru toate protocoalele."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:330
 msgid ""
 "Use the certificate authorities in FILE to verify the peers. The certificate "
 "file must be in PEM format and can contain multiple CA certificates."
 msgstr ""
+"Utilizați autoritățile de certificare din FILE pentru a verifica omologii. "
+"Fișierul de certificate trebuie să fie în format PEM și poate conține mai "
+"multe certificate CA."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:284
 msgid ""
@@ -760,6 +820,12 @@ msgid ""
 "PKCS12 files with a blank import password can be opened!<br/>When using PEM, "
 "you have to specify the \"RPC private key\" as well."
 msgstr ""
+"Utilizați certificatul din FILE pentru serverul RPC. Certificatul trebuie să "
+"fie în format PKCS12 (.p12, .pfx) sau în format PEM.<br/>Arhivele PKCS12 "
+"trebuie să conțină certificatul, o cheie și, opțional, un lanț de "
+"certificate suplimentare. Numai fișierele PKCS12 cu o parolă de import goală "
+"pot fi deschise!<br/>În cazul în care se utilizează PEM, trebuie să "
+"specificați și \"cheia privată RPC\"."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:335
 msgid ""
@@ -769,35 +835,48 @@ msgid ""
 "PKCS12 files with a blank import password can be opened!<br/>When using PEM, "
 "you have to specify the \"Private key\" as well."
 msgstr ""
+"Utilizați certificatul clientului din FILE. Certificatul trebuie să fie în "
+"format PKCS12 (.p12, .pfx) sau în format PEM.<br/>Arhivele PKCS12 trebuie să "
+"conțină certificatul, o cheie și, opțional, un lanț de certificate "
+"suplimentare. Numai fișierele PKCS12 cu o parolă de import goală pot fi "
+"deschise!<br/>În cazul în care se utilizează PEM, trebuie să specificați și "
+"\"Cheia privată\"."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:294
 msgid ""
 "Use the private key in FILE for RPC server. The private key must be "
 "decrypted and in PEM format."
 msgstr ""
+"Utilizați cheia privată din FILE pentru serverul RPC. Cheia privată trebuie "
+"să fie decriptată și în format PEM."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:342
 msgid ""
 "Use the private key in FILE. The private key must be decrypted and in PEM "
 "format. The behavior when encrypted one is given is undefined."
 msgstr ""
+"Utilizați cheia privată din FILE. Cheia privată trebuie să fie decriptată și "
+"în format PEM. Comportamentul în cazul în care este furnizată una criptată "
+"este nedefinit."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:408
 msgid "User agent"
-msgstr ""
+msgstr "Agent utilizator"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:259
 msgid "Username & Password"
-msgstr ""
+msgstr "Nume de utilizator & Parolă"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:323
 msgid ""
 "Verify the peer using certificates specified in \"CA certificate\" option."
 msgstr ""
+"Verificați omologul folosind certificatele specificate în opțiunea \"CA "
+"certificate\"."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:233
 msgid "Warn"
-msgstr ""
+msgstr "Avertizare"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:381
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:493
@@ -807,7 +886,7 @@ msgstr ""
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:608
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:615
 msgid "You can append K or M."
-msgstr ""
+msgstr "Puteți adăuga K sau M."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:594
 msgid "falloc"
