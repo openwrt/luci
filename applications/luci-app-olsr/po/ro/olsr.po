@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2021-12-12 15:11+0000\n"
+"PO-Revision-Date: 2021-12-12 23:09+0000\n"
 "Last-Translator: Simona Iacob <s@zp1.net>\n"
 "Language-Team: Romanian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsolsr/ro/>\n"
@@ -793,7 +793,7 @@ msgstr "OLSR - Plugin-uri"
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:12
 #: applications/luci-app-olsr/luasrc/view/status-olsr/error_olsr.htm:8
 msgid "OLSR Daemon"
-msgstr "OLSR Daemon"
+msgstr "OLSR Daimon"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdiface.lua:14
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdiface6.lua:14
@@ -1028,7 +1028,7 @@ msgstr "Timpul de valabilitate al TC"
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:65
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:59
 msgid "TOS value"
-msgstr ""
+msgstr "Valoarea TOS"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:13
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:13
@@ -1041,6 +1041,11 @@ msgid ""
 "device. Visit <a href='http://www.olsr.org'>olsrd.org</a> for help and "
 "documentation."
 msgstr ""
+"Daemonul OLSR este o implementare a protocolului Optimized Link State "
+"Routing. Ca atare, permite rutarea în rețea pentru orice echipament de "
+"rețea. Acesta rulează pe orice placă wifi care suportă modul ad-hoc și, "
+"desigur, pe orice dispozitiv ethernet. Vizitați <a href='http://www.olsr."
+"org'>olsrd.org</a> pentru ajutor și documentație."
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:194
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:188
@@ -1048,11 +1053,14 @@ msgid ""
 "The fixed willingness to use. If not set willingness will be calculated "
 "dynamically based on battery/power status. Default is \"3\"."
 msgstr ""
+"Voința fixă de a utiliza. Dacă nu este setată, disponibilitatea va fi "
+"calculată în mod dinamic pe baza stării bateriei/alimentației. Valoarea "
+"implicită este \"3\"."
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdiface.lua:45
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdiface6.lua:45
 msgid "The interface OLSRd should serve."
-msgstr ""
+msgstr "Interfața pe care OLSRd ar trebui să o deservească."
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:127
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:121
@@ -1060,6 +1068,8 @@ msgid ""
 "The port OLSR uses. This should usually stay at the IANA assigned port 698. "
 "It can have a value between 1 and 65535."
 msgstr ""
+"Portul utilizat de OLSR. Acesta ar trebui să rămână, de obicei, la portul "
+"698 atribuit de IANA. Poate avea o valoare cuprinsă între 1 și 65535."
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:184
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:178
@@ -1069,17 +1079,22 @@ msgid ""
 "the IPv6 gateway without any kind of address translation. The maximum prefix "
 "length is 64 bits. Default is \"::/0\" (no prefix)."
 msgstr ""
+"Aceasta poate fi utilizată pentru a semnala clienților prefixul IPv6 extern "
+"al legăturii ascendente. Acest lucru ar putea permite unui client să își "
+"schimbe adresa IPv6 locală pentru a utiliza poarta de acces IPv6 fără niciun "
+"fel de conversie de adresă. Lungimea maximă a prefixului este de 64 de biți. "
+"Valoarea implicită este \"::/0\" (fără prefix)."
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:224
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:218
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdiface.lua:33
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdiface6.lua:33
 msgid "Timing and Validity"
-msgstr ""
+msgstr "Calendarul și Validitatea"
 
 #: applications/luci-app-olsr/luasrc/controller/olsr.lua:49
 msgid "Topology"
-msgstr ""
+msgstr "Topologie"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:66
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:60
@@ -1087,10 +1102,12 @@ msgid ""
 "Type of service value for the IP header of control traffic. Default is "
 "\"16\"."
 msgstr ""
+"Valoarea tipului de serviciu pentru antetul IP al traficului de control. "
+"Valoarea implicită este \"16\"."
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/error_olsr.htm:9
 msgid "Unable to connect to the OLSR daemon!"
-msgstr ""
+msgstr "Nu se poate conecta la daemonul OLSR!"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/smartgw.htm:59
 #: applications/luci-app-olsr/luasrc/view/status-olsr/smartgw.htm:111
@@ -1100,17 +1117,17 @@ msgstr "Legătură ascendentă"
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:166
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:160
 msgid "Uplink uses NAT"
-msgstr ""
+msgstr "Legătura ascendentă utilizează NAT"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:116
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:110
 msgid "Use hysteresis"
-msgstr ""
+msgstr "Utilizați histerezis"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/hna.htm:41
 #: applications/luci-app-olsr/luasrc/view/status-olsr/hna.htm:92
 msgid "Validity Time"
-msgstr ""
+msgstr "Timpul de valabilitate"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/overview.htm:200
 msgid "Version"
@@ -1118,15 +1135,15 @@ msgstr "Versiunea"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/legend.htm:8
 msgid "Very good (ETX < 2)"
-msgstr ""
+msgstr "Foarte bun (ETX < 2)"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/legend.htm:17
 msgid "Very good (SNR > 30)"
-msgstr ""
+msgstr "Foarte bună (SNR > 30)"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/interfaces.htm:27
 msgid "WLAN"
-msgstr ""
+msgstr "WLAN"
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:44
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:44
@@ -1134,6 +1151,8 @@ msgid ""
 "Warning: kmod-ipip is not installed. Without kmod-ipip SmartGateway will not "
 "work, please install it."
 msgstr ""
+"Avertizare: kmod-ipip nu este instalat. Fără kmod-ipip SmartGateway nu va "
+"funcționa, vă rugăm să îl instalați."
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:235
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:229
@@ -1155,6 +1174,14 @@ msgid ""
 "0. For any other value of LinkQualityLevel, the interface ETX value is used "
 "instead."
 msgstr ""
+"Atunci când există mai multe legături între gazde, se utilizează ponderea "
+"interfeței pentru a determina ce legătură trebuie utilizată. În mod normal, "
+"greutatea este calculată automat de olsrd pe baza caracteristicilor "
+"interfeței, dar aici puteți specifica o valoare fixă. Olsrd va alege "
+"legăturile cu cea mai mică valoare.<br /><b>Nota:</b> Greutatea interfeței "
+"este utilizată numai atunci când LinkQualityLevel este setat la 0. Pentru "
+"orice altă valoare a LinkQualityLevel, se utilizează în schimb valoarea ETX "
+"a interfeței."
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:155
 msgid ""
@@ -1162,6 +1189,9 @@ msgid ""
 "detected by looking for a local HNA of 0.0.0.0/0, ::ffff:0:0/96 or 2000::/3. "
 "Default setting is \"both\"."
 msgstr ""
+"Ce tip de legătură ascendentă este exportată către celelalte noduri de "
+"plasă. O legătură ascendentă este detectată prin căutarea unui HNA local de 0"
+".0.0.0/0, ::ffff:0:0/96 ori 2000::/3. Setarea implicită este \"ambele\" ."
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:149
 msgid ""
@@ -1169,11 +1199,14 @@ msgid ""
 "detected by looking for a local HNA6 ::ffff:0:0/96 or 2000::/3. Default "
 "setting is \"both\"."
 msgstr ""
+"Ce tip de legătură ascendentă este exportată către celelalte noduri de "
+"plasă. O legătură ascendentă este detectată prin căutarea unui HNA6 local "
+"::ffff:0:0/96 sau 2000::/3. Setarea implicită este \"ambele\"."
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:193
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:187
 msgid "Willingness"
-msgstr ""
+msgstr "Voință"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/legend.htm:9
 #: applications/luci-app-olsr/luasrc/view/status-olsr/legend.htm:18
@@ -1182,12 +1215,12 @@ msgstr "Galben"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/interfaces.htm:38
 msgid "down"
-msgstr ""
+msgstr "jos"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/smartgw.htm:30
 #: applications/luci-app-olsr/luasrc/view/status-olsr/smartgw.htm:134
 msgid "infinite"
-msgstr ""
+msgstr "infinit"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/interfaces.htm:40
 #: applications/luci-app-olsr/luasrc/view/status-olsr/smartgw.htm:29
@@ -1201,7 +1234,7 @@ msgstr "nu"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/interfaces.htm:38
 msgid "up"
-msgstr ""
+msgstr "sus"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/interfaces.htm:40
 #: applications/luci-app-olsr/luasrc/view/status-olsr/smartgw.htm:29
