@@ -156,6 +156,18 @@ var UIElement = baseclass.extend(/** @lends LuCI.ui.AbstractElement.prototype */
 	},
 
 	/**
+	 * Returns the current validation error
+	 *
+	 * @instance
+	 * @memberof LuCI.ui.AbstractElement
+	 * @returns {string}
+	 * The validation error at this time
+	 */
+	getValidationError: function() {
+		return this.validationError || '';
+	},
+
+	/**
 	 * Force validation of the current input value.
 	 *
 	 * Usually input validation is automatically triggered by various DOM events
@@ -243,10 +255,12 @@ var UIElement = baseclass.extend(/** @lends LuCI.ui.AbstractElement.prototype */
 
 		this.node.addEventListener('validation-success', L.bind(function(ev) {
 			this.validState = true;
+			this.validationError = '';
 		}, this));
 
 		this.node.addEventListener('validation-failure', L.bind(function(ev) {
 			this.validState = false;
+			this.validationError = ev.detail.message;
 		}, this));
 	},
 
@@ -3236,7 +3250,8 @@ var UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 
 		var rect = target.getBoundingClientRect(),
 		    x = rect.left              + window.pageXOffset,
-		    y = rect.top + rect.height + window.pageYOffset;
+		    y = rect.top + rect.height + window.pageYOffset,
+		    above = false;
 
 		tooltipDiv.className = 'cbi-tooltip';
 		tooltipDiv.innerHTML = '▲ ';
@@ -3245,7 +3260,15 @@ var UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 		if (target.hasAttribute('data-tooltip-style'))
 			tooltipDiv.classList.add(target.getAttribute('data-tooltip-style'));
 
-		if ((y + tooltipDiv.offsetHeight) > (window.innerHeight + window.pageYOffset)) {
+		if ((y + tooltipDiv.offsetHeight) > (window.innerHeight + window.pageYOffset))
+			above = true;
+
+		var dropdown = target.querySelector('ul.dropdown[style]:first-child');
+
+		if (dropdown && dropdown.style.top)
+			above = true;
+
+		if (above) {
 			y -= (tooltipDiv.offsetHeight + target.offsetHeight);
 			tooltipDiv.firstChild.data = '▼ ' + tooltipDiv.firstChild.data.substr(2);
 		}

@@ -1,11 +1,12 @@
 'use strict';
+'require form';
 'require baseclass';
 
 return baseclass.extend({
 	trigger: _('Always off (kernel: none)'),
 	description: _('The LED is always in default state off.'),
 	kernel: true,
-	addFormOptions(s){
+	addFormOptions: function(s) {
 		var o;
 
 		o = s.option(form.Flag, 'default', _('Default state'));

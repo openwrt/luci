@@ -347,7 +347,7 @@ function handlePage(ev)
 	if (filter.value)
 		placeholder = [
 			E('span', {}, _('No packages matching "<strong>%h</strong>".').format(filter.value)), ' (',
-			E('a', { href: '#', onclick: 'handleReset(event)' }, _('Reset')), ')'
+			E('a', { href: '#', click: handleReset }, _('Reset')), ')'
 		];
 
 	cbi_update_table('#packages', currentDisplayRows.slice(offset, offset + 100),

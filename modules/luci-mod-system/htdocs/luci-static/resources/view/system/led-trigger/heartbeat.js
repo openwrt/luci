@@ -6,7 +6,5 @@ return baseclass.extend({
 	description: _('The LED flashes to simulate actual heart beat.') +
 		_('The frequency is in direct proportion to 1-minute average CPU load.'),
 	kernel: true,
-	addFormOptions(s){
-		var o;
-	}
+	addFormOptions: function(s) {}
 });

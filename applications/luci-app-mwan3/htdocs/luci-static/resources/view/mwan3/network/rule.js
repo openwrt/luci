@@ -39,6 +39,16 @@ return view.extend({
 		o.value('ipv6', _('IPv6 only'));
 		o.modalonly = true;
 
+		o = s.option(form.Value, 'proto', _('Protocol'),
+			_('View the content of /etc/protocols for protocol description'));
+		o.default = 'all';
+		o.rmempty = false;
+		o.value('all');
+		o.value('tcp');
+		o.value('udp');
+		o.value('icmp');
+		o.value('esp');
+
 		o = s.option(form.Value, 'src_ip', _('Source address'),
 			_('Supports CIDR notation (eg \"192.168.100.0/24\") without quotes'));
 		o.datatype = 'ipaddr';
@@ -57,16 +67,6 @@ return view.extend({
 		o.depends('proto', 'tcp');
 		o.depends('proto', 'udp');
 
-		o = s.option(form.Value, 'proto', _('Protocol'),
-			_('View the content of /etc/protocols for protocol description'));
-		o.default = 'all';
-		o.rmempty = false;
-		o.value('all');
-		o.value('tcp');
-		o.value('udp');
-		o.value('icmp');
-		o.value('esp');
-
 		o = s.option(form.ListValue, 'sticky', _('Sticky'),
 			_('Traffic from the same source IP address that previously matched this rule within the sticky timeout period will use the same WAN interface'));
 		o.default = '0';
@@ -78,6 +78,7 @@ return view.extend({
 			_('Seconds. Acceptable values: 1-1000000. Defaults to 600 if not set'));
 		o.datatype = 'range(1, 1000000)';
 		o.modalonly = true;
+		o.depends('sticky', '1');
 
 		o = s.option(form.Value, 'ipset', _('IPset'),
 			_('Name of IPset rule. Requires IPset rule in /etc/dnsmasq.conf (eg \"ipset=/youtube.com/youtube\")'));

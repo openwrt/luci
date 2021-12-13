@@ -7,7 +7,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=LuCI Support for Aria2
-LUCI_DEPENDS:=+luci-compat +aria2 +luci-lib-ipkg
+LUCI_DEPENDS:=+aria2
 LUCI_PKGARCH:=all
 
 PKG_MAINTAINER:=Xingwang Liao <kuoruan@gmail.com>

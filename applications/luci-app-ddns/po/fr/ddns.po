@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: luci-app-ddns 2.4.0-1\n"
 "POT-Creation-Date: 2016-01-30 11:07+0100\n"
-"PO-Revision-Date: 2021-04-11 16:26+0000\n"
-"Last-Translator: SRay <seb@isostorm.com>\n"
+"PO-Revision-Date: 2021-11-22 19:52+0000\n"
+"Last-Translator: Felix Braun <f.bhelicopter@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsddns/fr/>\n"
 "Language: fr\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.6-dev\n"
+"X-Generator: Weblate 4.10-dev\n"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:430
 msgid "\"../\" not allowed in path for Security Reason."
@@ -29,7 +29,7 @@ msgstr "Paramètres avancés"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:399
 msgid "Allow non-public IP's"
-msgstr "Autoriser les adresses IP privées"
+msgstr "Autoriser les adresses IP non-publiques"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:604
 msgid "Basic Settings"
@@ -70,13 +70,15 @@ msgstr ""
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:450
 msgid "Ca Certs path"
-msgstr "Chemin des certificats CA"
+msgstr "Chemin d'accès des certificats CA"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:451
 msgid ""
 "Ca Certs path that will be used to download services data. Set IGNORE to "
 "skip certificate validation."
 msgstr ""
+"Chemin d'accès Ca Certs qui sera utilisé afin de télécharger les données de "
+"service. Assigne IGNORE afin de sauter la validation de certificat."
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:537
 msgid "Cancel"
@@ -88,12 +90,12 @@ msgstr "Vérifier l'intervale"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:977
 msgid "Check Unit"
-msgstr ""
+msgstr "Vérifier l'unité"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:522
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:656
 msgid "Checking the service support..."
-msgstr ""
+msgstr "Vérifiant le support du service..."
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/status/include/70_ddns.js:27
 msgid "Configuration"
@@ -170,7 +172,7 @@ msgstr "Format de date"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:834
 msgid "Defines the Web page to read systems IP-Address from."
-msgstr ""
+msgstr "Définit la page web depuis laquelle lire les adresses IP système."
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:844
 msgid "Defines the interface to read systems IP-Address from"
@@ -293,7 +295,7 @@ msgstr "Forcer TCP sur DNS"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:1012
 msgid "Force Unit"
-msgstr ""
+msgstr "Forcer l'unité"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:929
 msgid "Format"
@@ -410,7 +412,7 @@ msgstr ""
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:669
 msgid "Install Service"
-msgstr ""
+msgstr "Installer le service"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:793
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:843
@@ -483,7 +485,7 @@ msgstr ""
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:613
 msgid "Neither from LuCI interface nor from console."
-msgstr ""
+msgstr "Ni de l'interface LuCI ni de la ligne de commande."
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:791
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:825
@@ -625,7 +627,7 @@ msgstr "Lire/Relire le fichier de journal"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:684
 msgid "Really switch service?"
-msgstr ""
+msgstr "Vraiment changer de service ?"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:1120
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/status/include/70_ddns.js:30
@@ -642,15 +644,15 @@ msgstr "Recharger ce service"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:736
 msgid "Replaces [DOMAIN] in Update-URL (URL-encoded)"
-msgstr ""
+msgstr "Remplace [DOMAIN] dans l'URL de mise à jour (encodé URL)"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:748
 msgid "Replaces [PASSWORD] in Update-URL (URL-encoded)"
-msgstr "Remplace [MOT DE PASSE] dans Update-URL (URL encodée)"
+msgstr "Remplace [MOT DE PASSE] dans l'URL de mise à jour (encodé URL)"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:742
 msgid "Replaces [USERNAME] in Update-URL (URL-encoded)"
-msgstr "Remplace [NON D'UTILISATEUR] dans Update-URL (URL encodée)"
+msgstr "Remplace [NON D'UTILISATEUR] dans l'URL de mise à jour (encodé URL)"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:288
 msgid "Restart DDns"
@@ -658,7 +660,7 @@ msgstr "Redémarrer DDns"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:1042
 msgid "Retry Unit"
-msgstr ""
+msgstr "Réessaier l'unité"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:16
 msgid "Run once"
@@ -677,18 +679,18 @@ msgstr "Script"
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:521
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:655
 msgid "Select a service"
-msgstr ""
+msgstr "Choisis un service"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:523
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:658
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:678
 msgid "Service doesn't support this ip type"
-msgstr ""
+msgstr "Le service ne supporte pas ce type d'adresse IP"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:657
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:668
 msgid "Service not installed"
-msgstr ""
+msgstr "Service non-installé"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:459
 msgid "Services"
@@ -696,11 +698,11 @@ msgstr "Services"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:454
 msgid "Services URL Download"
-msgstr ""
+msgstr "Téléchargement de l'URL de services"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:292
 msgid "Services list last update"
-msgstr ""
+msgstr "Dernière mise à jour de la liste de services"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:989
 msgid "Setting this parameter to 0 will force the script to only run once"
@@ -740,7 +742,7 @@ msgstr "Arrêté"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:685
 msgid "Switch service"
-msgstr ""
+msgstr "Change de service"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:1025
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:1035
@@ -792,7 +794,7 @@ msgstr "Inconnue"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:299
 msgid "Update DDns Services List"
-msgstr ""
+msgstr "Fait une mise à jour de la liste de services DDns"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:700
 msgid "Update URL to be used for updating your DDNS Provider."

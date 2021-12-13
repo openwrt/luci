@@ -521,8 +521,13 @@ String.prototype.format = function()
 	var quot_esc = [/"/g, '&#34;', /'/g, '&#39;'];
 
 	function esc(s, r) {
-		if (typeof(s) !== 'string' && !(s instanceof String))
+		var t = typeof(s);
+
+		if (s == null || t === 'object' || t === 'function')
 			return '';
+
+		if (t !== 'string')
+			s = String(s);
 
 		for (var i = 0; i < r.length; i += 2)
 			s = s.replace(r[i], r[i+1]);
@@ -777,7 +782,7 @@ function cbi_update_table(table, data, placeholder) {
 					var td = trow.appendChild(E('td', {
 						'class': titles[i].className,
 						'data-title': (text !== '') ? text : null
-					}, row[i] || ''));
+					}, (row[i] != null) ? row[i] : ''));
 
 					td.classList.remove('th');
 					td.classList.add('td');

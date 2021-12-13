@@ -835,15 +835,17 @@ return view.extend({
 					so.depends('ra', 'server');
 					so.depends({ ra: 'hybrid', master: '0' });
 					so.load = function(section_id) {
-						var dev = ifc.getL3Device();
+						var dev = ifc.getL3Device(),
+						    path = dev ? "/proc/sys/net/ipv6/conf/%s/mtu".format(dev.getName()) : null;
 
-						if (dev) {
-							var path = "/proc/sys/net/ipv6/conf/%s/mtu".format(dev.getName());
+						return Promise.all([
+							dev ? L.resolveDefault(fs.read(path), dev.getMTU()) : null,
+							this.super('load', [section_id])
+						]).then(L.bind(function(res) {
+							this.placeholder = +res[0];
 
-							return L.resolveDefault(fs.read(path), dev.getMTU()).then(L.bind(function(data) {
-								this.placeholder = data;
-							}, this));
-						}
+							return res[1];
+						}, this));
 					};
 
 					so = ss.taboption('ipv6-ra', form.Value, 'ra_hoplimit', _('<abbr title="Router Advertisement">RA</abbr> Hop Limit'), _('The maximum hops  to be published in <abbr title="Router Advertisement">RA</abbr> messages. Maximum is 255 hops.'));
@@ -852,15 +854,17 @@ return view.extend({
 					so.depends('ra', 'server');
 					so.depends({ ra: 'hybrid', master: '0' });
 					so.load = function(section_id) {
-						var dev = ifc.getL3Device();
+						var dev = ifc.getL3Device(),
+						    path = dev ? "/proc/sys/net/ipv6/conf/%s/hop_limit".format(dev.getName()) : null;
 
-						if (dev) {
-							var path = "/proc/sys/net/ipv6/conf/%s/hop_limit".format(dev.getName());
+						return Promise.all([
+							dev ? L.resolveDefault(fs.read(path), 64) : null,
+							this.super('load', [section_id])
+						]).then(L.bind(function(res) {
+							this.placeholder = +res[0];
 
-							return L.resolveDefault(fs.read(path), 64).then(L.bind(function(data) {
-								this.placeholder = data;
-							}, this));
-						}
+							return res[1];
+						}, this));
 					};
 
 
@@ -878,18 +882,24 @@ return view.extend({
 					so = ss.taboption('ipv6', form.DynamicList, 'dns', _('Announced IPv6 DNS servers'),
 						_('Specifies a fixed list of IPv6 DNS server addresses to announce via DHCPv6. If left unspecified, the device will announce itself as IPv6 DNS server unless the <em>Local IPv6 DNS server</em> option is disabled.'));
 					so.datatype = 'ip6addr("nomask")'; /* restrict to IPv6 only for now since dnsmasq (DHCPv4) does not honour this option */
+					so.depends('ra', 'server');
+					so.depends({ ra: 'hybrid', master: '0' });
 					so.depends('dhcpv6', 'server');
 					so.depends({ dhcpv6: 'hybrid', master: '0' });
 
 					so = ss.taboption('ipv6', form.Flag, 'dns_service', _('Local IPv6 DNS server'),
 						_('Announce this device as IPv6 DNS server.'));
 					so.default = so.enabled;
+					so.depends({ ra: 'server', dns: /^$/ });
+					so.depends({ ra: 'hybrid', dns: /^$/, master: '0' });
 					so.depends({ dhcpv6: 'server', dns: /^$/ });
 					so.depends({ dhcpv6: 'hybrid', dns: /^$/, master: '0' });
 
 					so = ss.taboption('ipv6', form.DynamicList, 'domain', _('Announced DNS domains'),
 						_('Specifies a fixed list of DNS search domains to announce via DHCPv6. If left unspecified, the local device DNS search domain will be announced.'));
 					so.datatype = 'hostname';
+					so.depends('ra', 'server');
+					so.depends({ ra: 'hybrid', master: '0' });
 					so.depends('dhcpv6', 'server');
 					so.depends({ dhcpv6: 'hybrid', master: '0' });
 
@@ -1177,7 +1187,7 @@ return view.extend({
 			var node = E('div', { 'class': 'ifacebox' }, [
 				E('div', {
 					'class': 'ifacebox-head',
-					'style': 'background-color:%s'.format(zone ? zone.getColor() : '#EEEEEE'),
+					'style': firewall.getZoneColorStyle(zone),
 					'title': zone ? _('Part of zone %q').format(zone.getName()) : _('No zone assigned')
 				}, E('strong', net.getName().toUpperCase())),
 				E('div', {

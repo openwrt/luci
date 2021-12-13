@@ -12,6 +12,7 @@ config statistics 'collectd'
 config statistics 'rrdtool'
 	option default_timespan '1hour'
 	option image_width '600'
+	option image_height '150'
 	option image_path '/tmp/rrdimg'
 
 # output plugins
@@ -19,7 +20,7 @@ config statistics 'rrdtool'
 config statistics 'collectd_rrdtool'
 	option enable '1'
 	option DataDir '/tmp/rrd'
-	option RRARows '144'
+	option RRARows '288'
 	option RRASingle '1'
 	option RRATimespans '1hour 1day 1week 1month 1year'
 

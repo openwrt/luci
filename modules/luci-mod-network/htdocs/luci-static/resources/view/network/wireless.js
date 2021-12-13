@@ -1090,6 +1090,7 @@ return view.extend({
 
 					o = ss.taboption('macfilter', form.DynamicList, 'maclist', _('MAC-List'));
 					o.datatype = 'macaddr';
+					o.retain = true;
 					o.depends('macfilter', 'allow');
 					o.depends('macfilter', 'deny');
 					o.load = function(section_id) {

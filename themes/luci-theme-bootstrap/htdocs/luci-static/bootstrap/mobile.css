@@ -161,6 +161,11 @@ header h3 a, header .brand {
 		padding-bottom: .5em;
 		border-bottom: 1px solid var(--border-color-high);
 		margin-bottom: .5em;
+		display: block;
+	}
+
+	.cbi-value.hidden {
+		display: none;
 	}
 
 	.cbi-value .cbi-value:last-child {
@@ -170,23 +175,26 @@ header h3 a, header .brand {
 	}
 
 	.cbi-value label.cbi-value-title {
-		float: none;
 		font-weight: bold;
 	}
 
-	.cbi-value-field, .cbi-dropdown {
+	.cbi-value-field, .cbi-select, .cbi-dropdown:not(.btn):not(.cbi-button) {
 		width: 100%;
 		margin: 0;
 	}
 
 	input, textarea, select,
-	.cbi-dropdown > ul > li input[type="text"] {
+	.cbi-dropdown > ul > li {
 		font-size: 16px !important;
-		line-height: 28px;
 		height: auto;
 	}
 
-	select, input[type="text"], input[type="password"] {
+	.cbi-dropdown > ul > li input[type="text"] {
+		line-height: 28px;
+	}
+
+	select, input[type="text"], input[type="password"],
+	.cbi-dropdown > ul > li input[type="text"] {
 		width: 100%;
 		height: 30px;
 	}
@@ -270,11 +278,12 @@ header h3 a, header .brand {
 	}
 
 	header .pull-right {
-		flex: 1 1 20%;
+		flex: 0 1 20%;
 		display: flex;
 		flex-direction: column;
 		padding: 0;
 		justify-content: space-around;
+		margin: .2em 5px .2em auto;
 	}
 
 	.menu-dropdown, .dropdown-menu {

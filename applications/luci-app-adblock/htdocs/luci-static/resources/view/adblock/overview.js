@@ -353,7 +353,7 @@ return view.extend({
 		o.rmempty = true;
 
 		o = s.taboption('general', form.Flag, 'adb_report', _('DNS Report'), _('Gather DNS related network traffic via tcpdump and provide a DNS Report on demand. \
-			Please note: this needs additional \'tcpdump-mini\' package installation and a full adblock service restart to take effect.'));
+			Please note: this needs additional \'tcpdump\' or \'tcpdump-mini\' package installation and a full adblock service restart to take effect.'));
 		o.rmempty = false;
 
 		o = s.taboption('general', form.Flag, 'adb_mail', _('E-Mail Notification'), _('Send adblock related notification e-mails. \

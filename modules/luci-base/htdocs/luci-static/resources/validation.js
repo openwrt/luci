@@ -61,9 +61,15 @@ var Validator = baseclass.extend({
 			valid = this.vstack[0].apply(this, this.vstack[1]);
 
 		if (valid !== true) {
-			this.field.setAttribute('data-tooltip', _('Expecting: %s').format(this.error));
+			var message = _('Expecting: %s').format(this.error);
+			this.field.setAttribute('data-tooltip', message);
 			this.field.setAttribute('data-tooltip-style', 'error');
-			this.field.dispatchEvent(new CustomEvent('validation-failure', { bubbles: true }));
+			this.field.dispatchEvent(new CustomEvent('validation-failure', {
+				bubbles: true,
+				detail: {
+					message: message
+				}
+			}));
 			return false;
 		}
 
@@ -74,7 +80,12 @@ var Validator = baseclass.extend({
 			this.assert(false, valid);
 			this.field.setAttribute('data-tooltip', valid);
 			this.field.setAttribute('data-tooltip-style', 'error');
-			this.field.dispatchEvent(new CustomEvent('validation-failure', { bubbles: true }));
+			this.field.dispatchEvent(new CustomEvent('validation-failure', {
+				bubbles: true,
+				detail: {
+					message: valid
+				}
+			}));
 			return false;
 		}
 
