@@ -1,0 +1,90 @@
+#!/bin/sh
+
+set -e
+
+#hotplug.d triggers this script on the plug {in|out} of usb printer.
+
+# change FIRMWARE to the location of the printer firmware file:
+FIRMWARE="/root/hplj1018.dl"
+# change CHAR_DEV to the /dev/usb/lpX device or the uci entry containing it.
+CHAR_DEV=`uci get p910nd.@p910nd[-1].device`
+LOGFILE=/var/log/usb_printer_hotplug
+
+# change USB_ID to match the printer USB ID
+# USB_ID is formed by: idVendor/idProduct/bcdDevice
+# Found under: /sys/bus/usb/devices/*/idVendor
+# We can avoid anchoring to bcdDevice which is like a hw version
+# the [ -z ] below matches portions of USB IDs.
+USB_ID="3f0/4117"
+DEV_TYPE="usb_device"
+
+CHAR_DEVS=uci batch << EOI
+get p910nd.@p910nd[0].device
+get p910nd.@p910nd[1].device
+get p910nd.@p910nd[2].device
+get p910nd.@p910nd[3].device
+get p910nd.@p910nd[4].device
+get p910nd.@p910nd[5].device
+get p910nd.@p910nd[6].device
+get p910nd.@p910nd[7].device
+get p910nd.@p910nd[8].device
+get p910nd.@p910nd[9].device
+EOI
+
+USB_IDS=uci batch << EOI
+get p910nd.@p910nd[0].usbvidpid
+get p910nd.@p910nd[1].usbvidpid
+get p910nd.@p910nd[2].usbvidpid
+get p910nd.@p910nd[3].usbvidpid
+get p910nd.@p910nd[4].usbvidpid
+get p910nd.@p910nd[5].usbvidpid
+get p910nd.@p910nd[6].usbvidpid
+get p910nd.@p910nd[7].usbvidpid
+get p910nd.@p910nd[8].usbvidpid
+get p910nd.@p910nd[9].usbvidpid
+EOI
+
+
+
+daemon_restart() {
+    echo "$(date) : (Re)Starting print daemon" >> $LOGFILE
+    /etc/init.d/p910nd restart
+}
+daemon_stop() {
+    echo "$(date) : Stopping print daemon" >> $LOGFILE
+    /etc/init.d/p910nd stop
+}
+send_firmware() {
+    echo "$(date) : Sending firmware to printer $USB_ID" >> $LOGFILE
+    cat $FIRMWARE > $CHAR_DEV
+    echo "$(date) : done." >> $LOGFILE
+}
+
+
+#sh: =~ => unknown operand
+#this doesn't work in ash:
+#if [ "$PRODUCT" == *"${USB_ID}"* ]; then
+#this works:
+if [ -z "${PRODUCT##*$USB_ID*}" ]; then
+    case "$ACTION" in
+        add)
+            sleep 1
+            # Check whether dev is character type
+            if [ -c $CHAR_DEV ]; then
+                # Check whether the hotplug devtype is usb_device
+                if [ "$DEVTYPE" = "${DEV_TYPE}" ]; then
+                    # send the firmware to the printer
+                    send_firmware
+                    daemon_restart
+                fi
+            fi
+            ;;
+        #if there are multiple printers, stopping the daemon might not be a good idea.
+        remove)
+            #daemon_stop
+            ;;
+        #Also available:
+        bind)
+            ;;
+    esac
+fi
