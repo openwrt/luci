@@ -131,9 +131,8 @@ o.datatype = "ipaddr"
 
 
 o = s:taboption("filter", DynamicList, "ConnectPort", translate("Allowed connect ports"),
-	translate("List of allowed ports for the CONNECT method. A single value \"0\" allows all ports"))
+	translate("List of allowed ports for the CONNECT method. A single value \"0\" disable CONNECT altogether. Leave empty allow CONNECT all ports"))
 
-o.placeholder = 0
 o.datatype = "port"
 
 
