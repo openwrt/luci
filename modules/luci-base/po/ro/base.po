@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2020-04-13 14:11+0000\n"
-"Last-Translator: Danut Vornicu <ovisadang@yahoo.com>\n"
+"PO-Revision-Date: 2021-12-15 03:52+0000\n"
+"Last-Translator: Simona Iacob <s@zp1.net>\n"
 "Language-Team: Romanian <https://hosted.weblate.org/projects/openwrt/luci/ro/"
 ">\n"
 "Language: ro\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2;\n"
-"X-Generator: Weblate 4.0-dev\n"
+"X-Generator: Weblate 4.10-dev\n"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:916
 msgid "%.1f dB"
@@ -27,7 +27,7 @@ msgstr "%d câmp(uri) nevalid(e)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:35
 msgid "%s is untagged in multiple VLANs!"
-msgstr "%s nu este etichetat în mai multe VLANuri!"
+msgstr "%s nu este etichetat în mai multe VLAN-uri!"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/bandwidth.js:294
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:403
@@ -50,11 +50,11 @@ msgstr "(gol)"
 #: modules/luci-compat/luasrc/view/cbi/network_netinfo.htm:23
 #: modules/luci-compat/luasrc/view/cbi/network_netlist.htm:58
 msgid "(no interfaces attached)"
-msgstr "(nici o interfata atasata)"
+msgstr "(nici o interfață atașată)"
 
 #: modules/luci-compat/luasrc/view/cbi/ucisection.htm:48
 msgid "-- Additional Field --"
-msgstr "-- Camp suplimentar --"
+msgstr "-- Câmp suplimentar --"
 
 #: modules/luci-base/htdocs/luci-static/resources/cbi.js:275
 #: modules/luci-base/htdocs/luci-static/resources/form.js:3189
@@ -65,24 +65,24 @@ msgstr "-- Camp suplimentar --"
 #: modules/luci-compat/luasrc/view/cbi/header.htm:5
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:88
 msgid "-- Please choose --"
-msgstr "-- Te rog sa alegi --"
+msgstr "-- Vă rugăm să alegeți --"
 
 #: modules/luci-base/htdocs/luci-static/resources/cbi.js:276
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:968
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:1939
 #: modules/luci-compat/luasrc/view/cbi/header.htm:6
 msgid "-- custom --"
-msgstr "-- particularizat --"
+msgstr "-- personalizat --"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:269
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:378
 msgid "-- match by label --"
-msgstr ""
+msgstr "-- potrivire după etichetă --"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:255
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:361
 msgid "-- match by uuid --"
-msgstr ""
+msgstr "-- potrivire după uuid --"
 
 #: modules/luci-compat/luasrc/view/cbi/firewall_zonelist.htm:27
 #: modules/luci-compat/luasrc/view/cbi/network_ifacelist.htm:44
@@ -93,31 +93,34 @@ msgstr "-- Vă rugăm să selectați --"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:932
 msgid "0 = not using RSSI threshold, 1 = do not change driver default"
 msgstr ""
+"0 = nu se utilizează pragul RSSI, 1 = nu se modifică valoarea implicită a "
+"driverului"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/load.js:231
 msgid "1 Minute Load:"
-msgstr "Incarcarea in ultimul minut"
+msgstr "Încărcarea în ultimul minut:"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/load.js:251
 msgid "15 Minute Load:"
-msgstr "Incarcarea in ultimele 15 minute"
+msgstr "Încărcarea în ultimele 15 minute:"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1427
 msgid "4-character hexadecimal ID"
-msgstr ""
+msgstr "ID-ul hexazecimal de 4 caractere"
 
 #: modules/luci-compat/luasrc/model/network/proto_4x6.lua:18
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/464xlat.js:11
 msgid "464XLAT (CLAT)"
-msgstr ""
+msgstr "464XLAT (CLAT)"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/load.js:241
 msgid "5 Minute Load:"
-msgstr "Incarcarea in ultimele 5 minute"
+msgstr "Încărcarea în ultimele 5 minute:"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1456
 msgid "6-octet identifier as a hex string - no colons"
 msgstr ""
+"Identificator de 6 octeți sub formă de șir hexazecimal - fără două puncte"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1416
 msgid "802.11r Fast Transition"
@@ -125,23 +128,24 @@ msgstr "802.11r Tranziție Rapidă"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1580
 msgid "802.11w Association SA Query maximum timeout"
-msgstr ""
+msgstr "802.11w Timp maxim de expirare pentru interogarea asocierii securizate"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1587
 msgid "802.11w Association SA Query retry timeout"
 msgstr ""
+"802.11w Timp maxim de reîncercare pentru interogarea asocierii securizate"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1568
 msgid "802.11w Management Frame Protection"
-msgstr ""
+msgstr "802.11w Protecție Frame-uri de Management"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1580
 msgid "802.11w maximum timeout"
-msgstr ""
+msgstr "802.11w timp de expirare maxim"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1587
 msgid "802.11w retry timeout"
-msgstr ""
+msgstr "802.11w timp de expirare pentru reîncercare"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:949
 msgid "<abbr title=\"Basic Service Set Identifier\">BSSID</abbr>"
@@ -178,7 +182,7 @@ msgstr "<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Poarta Acces"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:601
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:36
 msgid "<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Netmask"
-msgstr "Masca de retea <abbr title=\"Internet Protocol Version 4\">IPv4</abbr>"
+msgstr "Masca de rețea <abbr title=\"Internet Protocol Version 4\">IPv4</abbr>"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:31
 msgid ""
@@ -197,11 +201,11 @@ msgstr ""
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:41
 msgid "<abbr title=\"Light Emitting Diode\">LED</abbr> Configuration"
-msgstr "<abbr title=\"Light Emitting Diode\">LED</abbr> Configurare"
+msgstr "Configurare <abbr title=\"Light Emitting Diode\">LED</abbr>"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:52
 msgid "<abbr title=\"Light Emitting Diode\">LED</abbr> Name"
-msgstr "<abbr title=\"Light Emitting Diode\">LED</abbr> Nume"
+msgstr "Nume<abbr title=\"Light Emitting Diode\">LED</abbr>"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:424
 msgid "<abbr title=\"Media Access Control\">MAC</abbr>-Address"
@@ -246,11 +250,11 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:896
 msgid "A43C + J43 + A43"
-msgstr ""
+msgstr "A43C + J43 + A43"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:897
 msgid "A43C + J43 + A43 + V43"
-msgstr ""
+msgstr "A43C + J43 + A43 + V43"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:909
 msgid "ADSL"
@@ -272,15 +276,15 @@ msgstr "ARP"
 
 #: protocols/luci-proto-relay/htdocs/luci-static/resources/protocol/relay.js:175
 msgid "ARP retry threshold"
-msgstr "ARP prag reincercare"
+msgstr "prag de reîncercare ARP"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:904
 msgid "ATM (Asynchronous Transfer Mode)"
-msgstr ""
+msgstr "ATM (Mod de Transfer Asincron)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:925
 msgid "ATM Bridges"
-msgstr "Punti ATM"
+msgstr "Punți ATM"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:957
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoa.js:66
@@ -305,11 +309,11 @@ msgstr ""
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:964
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoa.js:62
 msgid "ATM device number"
-msgstr "ATM numar echipament"
+msgstr "Număr echipament ATM"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:37
 msgid "ATU-C System Vendor ID"
-msgstr ""
+msgstr "ID-ul furnizorului sistemului ATU-C"
 
 #: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:265
 #: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:544
@@ -319,7 +323,7 @@ msgstr "Interfață Absentă"
 
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoe.js:47
 msgid "Access Concentrator"
-msgstr "Concentrator de Access "
+msgstr "Concentrator de Access"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:920
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1025
@@ -328,7 +332,7 @@ msgstr "Punct de Acces"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:357
 msgid "Actions"
-msgstr "Actiune"
+msgstr "Acțiuni"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:200
 msgid "Active <abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Routes"
@@ -340,23 +344,23 @@ msgstr "Rute active <abbr title=\"Internet Protocol Version 6\">IPv6</abbr>"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:81
 msgid "Active Connections"
-msgstr "Conexiuni active"
+msgstr "Conexiuni Active"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:33
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:92
 msgid "Active DHCP Leases"
-msgstr "Lease-uri DHCP active"
+msgstr "Închirieri DHCP Active"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:52
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:94
 msgid "Active DHCPv6 Leases"
-msgstr "Lease-uri DHCPv6 active"
+msgstr "Închirieri DHCPv6 Active"
 
 #: modules/luci-base/htdocs/luci-static/resources/network.js:3644
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:922
 #: protocols/luci-proto-hnet/htdocs/luci-static/resources/protocol/hnet.js:23
 msgid "Ad-Hoc"
-msgstr "Ad-Hoc"
+msgstr "Ad-Hoc (descentralizate)"
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2001
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2004
@@ -371,37 +375,37 @@ msgstr "Ad-Hoc"
 #: modules/luci-compat/luasrc/view/cbi/ucisection.htm:54
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:820
 msgid "Add"
-msgstr "Adaugă"
+msgstr "Adăugați"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:929
 msgid "Add ATM Bridge"
-msgstr ""
+msgstr "Adăugați punte ATM"
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/static.js:92
 msgid "Add IPv4 address…"
-msgstr "Adaugă adresă IPv4…"
+msgstr "Adăugați adresa IPv4…"
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/static.js:207
 msgid "Add IPv6 address…"
-msgstr "Adaugă adresă IPv6…"
+msgstr "Adăugați adresa IPv6…"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:48
 msgid "Add LED action"
-msgstr "Adaugă acţiune LED"
+msgstr "Adăugați acțiunea LED"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:219
 msgid "Add VLAN"
-msgstr "Adaugă VLAN"
+msgstr "Adăugați VLAN"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:15
 msgid "Add instance"
-msgstr "Adaugă instanţă"
+msgstr "Adăugați o instanță"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:162
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:168
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:259
 msgid "Add key"
-msgstr "Adaugă cheie"
+msgstr "Adăugați cheia"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:248
 msgid "Add local domain suffix to names served from hosts files"
@@ -410,11 +414,11 @@ msgstr "Adauga un sufix local numelor servite din fisierele de tip hosts"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:309
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:755
 msgid "Add new interface..."
-msgstr "Adauga interfata noua.."
+msgstr "Adăugați o interfață nouă..."
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:100
 msgid "Add peer"
-msgstr ""
+msgstr "Adăugați un omolog"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:200
 msgid "Additional Hosts files"
@@ -422,7 +426,7 @@ msgstr "Fisiere de tip hosts aditionale"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:255
 msgid "Additional servers file"
-msgstr ""
+msgstr "Fișier suplimentar pentru servere"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:34
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:35
@@ -435,7 +439,7 @@ msgstr ""
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:42
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:43
 msgid "Address"
-msgstr "Adresa"
+msgstr "Adresă"
 
 #: protocols/luci-proto-relay/htdocs/luci-static/resources/protocol/relay.js:151
 msgid "Address to access local relay bridge"
@@ -459,21 +463,21 @@ msgstr "Setări avansate"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:28
 msgid "Aggregate Transmit Power (ACTATP)"
-msgstr ""
+msgstr "Puterea de transmisie agregată (ACTATP)"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:176
 msgid "Alert"
-msgstr "Alerta"
+msgstr "Alertă"
 
 #: modules/luci-base/htdocs/luci-static/resources/network.js:2849
 #: modules/luci-compat/luasrc/model/network.lua:1416
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:59
 msgid "Alias Interface"
-msgstr "Interfață alias"
+msgstr "Alias Interfață"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:143
 msgid "Alias of \"%s\""
-msgstr ""
+msgstr "Alias al lui \"%s\""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:263
 msgid "All Servers"
@@ -492,39 +496,40 @@ msgstr "Alocă IP-urile secvențial"
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:25
 msgid "Allow <abbr title=\"Secure Shell\">SSH</abbr> password authentication"
 msgstr ""
-"Permite autentificarea prin parola a <abbr title=\"Secure Shell\">SSH</abbr> "
+"Permite autentificarea prin parola a <abbr title=\"Secure Shell\">SSH</abbr>"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1105
 msgid "Allow AP mode to disconnect STAs based on low ACK condition"
 msgstr ""
+"Permiteți modului AP să deconecteze STA-urile pe baza stării ACK scăzute"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1009
 msgid "Allow all except listed"
-msgstr "Permite toate cu exceptia celor listate"
+msgstr "Permiteți toate, cu excepția celor enumerate"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:885
 msgid "Allow legacy 802.11b rates"
-msgstr "Permite rate de transfer legacy 802.11b"
+msgstr "Permiteți rate de transfer învechite 802.11b"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1008
 msgid "Allow listed only"
-msgstr "Permite doar cele listate"
+msgstr "Permiteți doar din listă"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:293
 msgid "Allow localhost"
-msgstr "Permite localhost"
+msgstr "Permiteți localhost"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:36
 msgid "Allow remote hosts to connect to local SSH forwarded ports"
-msgstr "Permite statiilor externe sa se conecteze la porturile SSH locale"
+msgstr "Permiteți stațiilor externe să se conecteze la porturile SSH locale"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:31
 msgid "Allow root logins with password"
-msgstr "Permite autentificarea contului root cu parola"
+msgstr "Permiteți autentificarea root cu parolă"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:31
 msgid "Allow the <em>root</em> user to login with password"
-msgstr "Permite contului <em>root</em> sa se autentifice cu parola"
+msgstr "Permiteți utilizatorului <em>root</em> să se conecteze cu parolă"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:294
 msgid ""
@@ -545,75 +550,78 @@ msgid ""
 "Always use 40MHz channels even if the secondary channel overlaps. Using this "
 "option does not comply with IEEE 802.11n-2009!"
 msgstr ""
+"Utilizați întotdeauna canale de 40 MHz, chiar dacă canalul secundar se "
+"suprapune. Utilizarea acestei opțiuni nu este conformă cu standardul IEEE "
+"802.11n-2009!"
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:588
 msgid "An error occurred while saving the form:"
-msgstr ""
+msgstr "A apărut o eroare în timpul salvării formularului:"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:123
 msgid "An optional, short description for this device"
-msgstr ""
+msgstr "O scurtă descriere opțională pentru acest dispozitiv"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:877
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:20
 msgid "Annex"
-msgstr ""
+msgstr "Anexa"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:878
 msgid "Annex A + L + M (all)"
-msgstr ""
+msgstr "Anexa A + L + M (toate)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:886
 msgid "Annex A G.992.1"
-msgstr ""
+msgstr "Anexa A G.992.1"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:887
 msgid "Annex A G.992.2"
-msgstr ""
+msgstr "Anexa A G.992.2"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:888
 msgid "Annex A G.992.3"
-msgstr ""
+msgstr "Anexa A G.992.3"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:889
 msgid "Annex A G.992.5"
-msgstr ""
+msgstr "Anexa A G.992.5"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:879
 msgid "Annex B (all)"
-msgstr ""
+msgstr "Anexa B (toate)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:882
 msgid "Annex B G.992.1"
-msgstr ""
+msgstr "Anexa B G.992.1"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:883
 msgid "Annex B G.992.3"
-msgstr ""
+msgstr "Anexa B G.992.3"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:884
 msgid "Annex B G.992.5"
-msgstr ""
+msgstr "Anexa B G.992.5"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:880
 msgid "Annex J (all)"
-msgstr ""
+msgstr "Anexa J (toate)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:890
 msgid "Annex L G.992.3 POTS 1"
-msgstr ""
+msgstr "Anexa L G.992.3 POTS 1"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:881
 msgid "Annex M (all)"
-msgstr ""
+msgstr "Anexa M (toate)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:891
 msgid "Annex M G.992.3"
-msgstr ""
+msgstr "Anexa M G.992.3"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:892
 msgid "Annex M G.992.5"
-msgstr ""
+msgstr "Anexa M G.992.5"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:652
 msgid "Announce as default router even if no public prefix is available."
@@ -621,7 +629,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:657
 msgid "Announced DNS domains"
-msgstr ""
+msgstr "Domenii DNS anunțate"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:656
 msgid "Announced DNS servers"
@@ -637,31 +645,31 @@ msgstr "Montează Anonim"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:158
 msgid "Anonymous Swap"
-msgstr "Montează Swap anonim"
+msgstr "Swap anonim"
 
 #: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:84
 #: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:174
 #: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:195
 #: modules/luci-compat/luasrc/view/cbi/firewall_zonelist.htm:60
 msgid "Any zone"
-msgstr "Orice Zona"
+msgstr "Orice zonă"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:117
 msgid "Apply backup?"
-msgstr "Aplică backup-ul?"
+msgstr "Aplicați backup?"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4240
 msgid "Apply request failed with status <code>%h</code>"
-msgstr ""
+msgstr "Solicitarea de aplicare a eșuat cu statusul <code>%h</code>"
 
 #: modules/luci-base/htdocs/luci-static/resources/luci.js:2165
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4106
 msgid "Apply unchecked"
-msgstr ""
+msgstr "Aplicați nebifate"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4179
 msgid "Applying configuration changes… %ds"
-msgstr "Se aplică schimbările configurării… %ds"
+msgstr "Aplicarea modificărilor de configurare... %ds"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/10_system.js:56
 msgid "Architecture"
@@ -672,17 +680,21 @@ msgstr "Arhitectură"
 msgid ""
 "Assign a part of given length of every public IPv6-prefix to this interface"
 msgstr ""
+"Atribuie acestei interfețe o parte din lungimea dată a fiecărui prefix IPv6 "
+"public la această interfață"
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/static.js:189
 #: protocols/luci-proto-hnet/htdocs/luci-static/resources/protocol/hnet.js:31
 msgid ""
 "Assign prefix parts using this hexadecimal subprefix ID for this interface."
 msgstr ""
+"Atribuiți părți de prefix utilizând acest ID de subprefix hexazecimal pentru "
+"această interfață."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2039
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:233
 msgid "Associated Stations"
-msgstr "Statiile asociate"
+msgstr "Stații asociate"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:38
 msgid "Associations"
@@ -691,11 +703,13 @@ msgstr "Asocieri"
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:154
 msgid "Attempt to enable configured mount points for attached devices"
 msgstr ""
+"Încercarea de a activa punctele de montare configurate pentru dispozitivele "
+"atașate"
 
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:104
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:64
 msgid "Auth Group"
-msgstr ""
+msgstr "Grup de autentificare"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1508
 msgid "Authentication"
@@ -711,7 +725,7 @@ msgstr "Autoritare"
 
 #: modules/luci-base/luasrc/view/sysauth.htm:17
 msgid "Authorization Required"
-msgstr "Necesita Autorizare"
+msgstr "Este necesară autorizarea"
 
 #: themes/luci-theme-material/luasrc/view/themes/material/header.htm:196
 #: themes/luci-theme-material/luasrc/view/themes/material/header.htm:197
@@ -728,28 +742,28 @@ msgstr "Reimprospatare automata"
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoe.js:55
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pptp.js:68
 msgid "Automatic"
-msgstr ""
+msgstr "Automat"
 
 #: modules/luci-compat/luasrc/model/network/proto_hnet.lua:7
 #: protocols/luci-proto-hnet/htdocs/luci-static/resources/protocol/hnet.js:7
 msgid "Automatic Homenet (HNCP)"
-msgstr ""
+msgstr "Homenet automat (HNCP)"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:174
 msgid "Automatically check filesystem for errors before mounting"
-msgstr ""
+msgstr "Verificați automat sistemul de fișiere pentru erori înainte de montare"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:170
 msgid "Automatically mount filesystems on hotplug"
-msgstr ""
+msgstr "Montarea automată a sistemelor de fișiere pe hotplug"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:166
 msgid "Automatically mount swap on hotplug"
-msgstr ""
+msgstr "Montarea automată a swap-ului pe hotplug"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:170
 msgid "Automount Filesystem"
-msgstr "Montează automat"
+msgstr "Montează automat sistemul de fișiere"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:166
 msgid "Automount Swap"
@@ -757,7 +771,7 @@ msgstr "Montează automat Swap-ul"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:193
 msgid "Available"
-msgstr "Disponibil"
+msgstr "Disponibile"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/bandwidth.js:268
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/bandwidth.js:278
@@ -771,7 +785,7 @@ msgstr "Disponibil"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/wireless.js:273
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/wireless.js:291
 msgid "Average:"
-msgstr "Medie:"
+msgstr "In medie:"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:898
 msgid "B43 + B43C"
@@ -795,33 +809,33 @@ msgstr "BSSID"
 #: modules/luci-compat/luasrc/view/cbi/footer.htm:14
 #: modules/luci-compat/luasrc/view/cbi/simpleform.htm:48
 msgid "Back to Overview"
-msgstr "Inapoi la sumar"
+msgstr "Înapoi la Prezentare generală"
 
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/backupfiles.lua:48
 msgid "Back to configuration"
-msgstr "Inapoi la Configurare"
+msgstr "Înapoi la configurare"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:360
 msgid "Backup"
-msgstr "Salveaza"
+msgstr "Backup"
 
 #: modules/luci-mod-system/root/usr/share/luci/menu.d/luci-mod-system.json:95
 msgid "Backup / Flash Firmware"
-msgstr "Salveaza / Scrie Firmware"
+msgstr "Salvați / Scrieți Firmware"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:321
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/backupfiles.lua:12
 msgid "Backup file list"
-msgstr "Salveaza lista fisiere"
+msgstr "Salvează lista de fișiere"
 
 #: modules/luci-compat/luasrc/view/cbi/wireless_modefreq.htm:158
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:448
 msgid "Band"
-msgstr ""
+msgstr "Bandă"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:903
 msgid "Beacon Interval"
-msgstr ""
+msgstr "Interval de semnalizare"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:322
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/backupfiles.lua:46
@@ -830,6 +844,9 @@ msgid ""
 "configuration files marked by opkg, essential base files and the user "
 "defined backup patterns."
 msgstr ""
+"Mai jos se află lista determinată de fișiere pentru backup. Aceasta este "
+"formată din fișierele de configurare modificate, marcate de opkg, fișierele "
+"de bază esențiale și modelele de backup definite de utilizator."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:388
 msgid ""
@@ -843,7 +860,7 @@ msgstr ""
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:69
 #: protocols/luci-proto-ipip/htdocs/luci-static/resources/protocol/ipip.js:48
 msgid "Bind interface"
-msgstr ""
+msgstr "Legați interfața"
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:59
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:64
@@ -851,13 +868,13 @@ msgstr ""
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:69
 #: protocols/luci-proto-ipip/htdocs/luci-static/resources/protocol/ipip.js:48
 msgid "Bind the tunnel to this interface (optional)."
-msgstr ""
+msgstr "Legați tunelul la această interfață (opțional)."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:127
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:186
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:55
 msgid "Bitrate"
-msgstr "Bitrate"
+msgstr "Rata de biți"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:266
 msgid "Bogus NX Domain Override"
@@ -879,24 +896,25 @@ msgstr "Numarul unitatii in punte"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:410
 msgid "Bring up on boot"
-msgstr "Activeaza la pornire"
+msgstr "Activează la pornire"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2774
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:3763
 msgid "Browse…"
-msgstr ""
+msgstr "Răsfoiți…"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/20_memory.js:37
 msgid "Buffered"
-msgstr "Incarcat"
+msgstr "Tamponat"
 
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:137
 msgid "CA certificate; if empty it will be saved after the first connection."
 msgstr ""
+"Certificat CA; dacă este gol, acesta va fi salvat după prima conexiune."
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/464xlat.js:7
 msgid "CLAT configuration failed"
-msgstr ""
+msgstr "Configurarea CLAT a eșuat"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/processes.js:72
 msgid "CPU usage (%)"
@@ -904,13 +922,13 @@ msgstr "Utilizarea procesorului (%)"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/20_memory.js:41
 msgid "Cached"
-msgstr ""
+msgstr "În cache"
 
 #: modules/luci-compat/luasrc/model/network/proto_modemmanager.lua:53
 #: modules/luci-compat/luasrc/model/network/proto_qmi.lua:53
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:21
 msgid "Call failed"
-msgstr ""
+msgstr "Apel eșuat"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2867
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:3772
@@ -923,27 +941,27 @@ msgstr ""
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:270
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:200
 msgid "Cancel"
-msgstr "Renunțare"
+msgstr "Anulare"
 
 #: protocols/luci-proto-hnet/htdocs/luci-static/resources/protocol/hnet.js:17
 msgid "Category"
-msgstr ""
+msgstr "Categorie"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1492
 msgid "Certificate constraint (Domain)"
-msgstr ""
+msgstr "Constrângere de certificat (Domeniu)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1489
 msgid "Certificate constraint (SAN)"
-msgstr ""
+msgstr "Constrângere de certificare (SAN)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1486
 msgid "Certificate constraint (Subject)"
-msgstr ""
+msgstr "Constrângere de certificat (Subiect)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1495
 msgid "Certificate constraint (Wildcard)"
-msgstr ""
+msgstr "Certificatul de constrângere (Wildcard)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1486
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1532
@@ -951,6 +969,8 @@ msgid ""
 "Certificate constraint substring - e.g. /CN=wifi.mycompany.com<br />See "
 "`logread -f` during handshake for actual values"
 msgstr ""
+"Certificate constraint substring - de exemplu /CN=wifi.mycompany.com<br /"
+">Vezi `logread -f` în timpul handshake pentru valorile reale"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1492
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1538
@@ -958,6 +978,8 @@ msgid ""
 "Certificate constraint(s) against DNS SAN values (if available)<br />or "
 "Subject CN (exact match)"
 msgstr ""
+"Constrângerea (constrângerile) certificatului față de valorile DNS SAN (dacă "
+"sunt disponibile)<br />sau Subject CN (potrivire exactă)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1495
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1541
@@ -965,6 +987,8 @@ msgid ""
 "Certificate constraint(s) against DNS SAN values (if available)<br />or "
 "Subject CN (suffix match)"
 msgstr ""
+"Constrângerea (constrângerile) certificatului față de valorile DNS SAN (dacă "
+"sunt disponibile)<br />sau Subject CN (potrivire sufix)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1489
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1535
@@ -972,24 +996,26 @@ msgid ""
 "Certificate constraint(s) via Subject Alternate Name values<br />(supported "
 "attributes: EMAIL, DNS, URI) - e.g. DNS:wifi.mycompany.com"
 msgstr ""
+"Constrângere(e) de certificat prin valorile Subject Alternate Name<br /"
+">(atribute acceptate: EMAIL, DNS, URI) - de exemplu, DNS:wifi.mycompany.com"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:53
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:56
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:200
 msgid "Chain"
-msgstr "Lant"
+msgstr "Legătură"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:3992
 msgid "Changes"
-msgstr "Modificari"
+msgstr "Modificări"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4275
 msgid "Changes have been reverted."
-msgstr ""
+msgstr "Modificările au fost anulate."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js:46
 msgid "Changes the administrator password for accessing the device"
-msgstr "Schimba parola administratorului pentru accesarea dispozitivului"
+msgstr "Schimbă parola de administrator pentru accesarea dispozitivului"
 
 #: modules/luci-compat/luasrc/view/cbi/wireless_modefreq.htm:162
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:126
@@ -1002,24 +1028,25 @@ msgstr "Canal"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:174
 msgid "Check filesystems before mount"
-msgstr ""
+msgstr "Verificați sistemele de fișiere înainte de montare"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1875
 msgid "Check this option to delete the existing networks from this radio."
 msgstr ""
+"Bifați această opțiune pentru a șterge rețelele existente din acest radio."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:108
 msgid "Checking archive…"
-msgstr ""
+msgstr "Se verifică arhiva…"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:191
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:193
 msgid "Checking image…"
-msgstr ""
+msgstr "Se verifică imaginea…"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:396
 msgid "Choose mtdblock"
-msgstr ""
+msgstr "Alegeți mtdblock"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:489
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1903
@@ -1029,35 +1056,43 @@ msgid ""
 "fill out the <em>custom</em> field to define a new zone and attach the "
 "interface to it."
 msgstr ""
-"Alege zona paravanului care doresti sa o aloci acestei interfete. Selecteaza "
-"<em>nespecificat</em> pentru a sterge interfata sau golire <em>creaza</em> "
-"camp ce defineste o zona noua asociata interfetei."
+"Alegeți zona de firewall pe care doriți să o atribuiți acestei interfețe. "
+"Selectați <em>nespecificat</em> pentru a elimina interfața din zona asociată "
+"sau completați câmpul <em>personalizat</em> pentru a defini o nouă zonă și a "
+"atașa interfața la aceasta."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:952
 msgid ""
 "Choose the network(s) you want to attach to this wireless interface or fill "
 "out the <em>custom</em> field to define a new network."
 msgstr ""
+"Alegeți rețeaua (rețelele) pe care doriți să o (le) atașați la această "
+"interfață fără fir sau completați câmpul <em>personalizat</em> pentru a "
+"defini o nouă rețea."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1141
 msgid "Cipher"
-msgstr ""
+msgstr "Cifru"
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:91
 msgid "Cisco UDP encapsulation"
-msgstr ""
+msgstr "Încapsularea Cisco UDP"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:360
 msgid ""
 "Click \"Generate archive\" to download a tar archive of the current "
 "configuration files."
 msgstr ""
+"Faceți clic pe \"Generați arhivă\" pentru a descărca o arhivă tar a "
+"fișierelor de configurare curente."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:393
 msgid ""
 "Click \"Save mtdblock\" to download specified mtdblock file. (NOTE: THIS "
 "FEATURE IS FOR PROFESSIONALS! )"
 msgstr ""
+"Faceți clic pe \"Salvați mtdblock\" pentru a descărca fișierul mtdblock "
+"specificat. (NOTĂ: ACEASTĂ CARACTERISTICĂ ESTE PENTRU PROFESIONIȘTI! )"
 
 #: modules/luci-base/htdocs/luci-static/resources/network.js:3643
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:921
@@ -1068,12 +1103,12 @@ msgstr "Client"
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:49
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:47
 msgid "Client ID to send when requesting DHCP"
-msgstr ""
+msgstr "ID-ul de client care se trimite la solicitarea DHCP"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:164
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:170
 msgid "Close"
-msgstr "Închide"
+msgstr "Închideți"
 
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:157
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/ppp.js:141
@@ -1085,6 +1120,8 @@ msgid ""
 "Close inactive connection after the given amount of seconds, use 0 to "
 "persist connection"
 msgstr ""
+"Închideți conexiunea inactivă după un număr de secunde dat, utilizați 0 "
+"pentru a menține conexiunea"
 
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/backupfiles.lua:49
 msgid "Close list..."
@@ -1106,15 +1143,15 @@ msgstr "Comandă"
 
 #: modules/luci-base/htdocs/luci-static/resources/rpc.js:404
 msgid "Command OK"
-msgstr ""
+msgstr "Comandă OK"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/startup.js:31
 msgid "Command failed"
-msgstr ""
+msgstr "Comandă eşuată"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:72
 msgid "Comment"
-msgstr ""
+msgstr "Comentariu"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1595
 msgid ""
@@ -1123,28 +1160,27 @@ msgid ""
 "workaround might cause interoperability issues and reduced robustness of key "
 "negotiation especially in environments with heavy traffic load."
 msgstr ""
-"Complică atacurile de reinstalare pe partea client-ului, a retransmisiei "
-"Keyframe-urilor de autentificare EAPOL care sunt folosite pentru instalarea "
-"cheilor de autentificare, dezactivându-le.\n"
-"Acest workaround poate cauza probleme de interoperabilitate si negocieri de "
-"autentificare mai puțin robuste, în special în mediile cu încărcare a "
-"traficului mare."
+"Complică atacurile de reinstalare a cheilor pe partea clientului prin "
+"dezactivarea retransmiterii cadrelor EAPOL-Key care sunt utilizate pentru "
+"instalarea cheilor. Această soluție de rezolvare ar putea cauza probleme de "
+"interoperabilitate și o robustețe redusă a negocierii cheilor, în special în "
+"mediile cu trafic intens.."
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:101
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:106
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:103
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:108
 msgid "Compute outgoing checksum (optional)."
-msgstr ""
+msgstr "Calculați suma de control de ieșire (opțional)."
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:3992
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:423
 msgid "Configuration"
-msgstr "Configurare"
+msgstr "Configurație"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4154
 msgid "Configuration changes applied."
-msgstr "Noua configurație aplicată."
+msgstr "Modificările de configurare aplicate."
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4092
 msgid "Configuration changes have been rolled back!"
@@ -1157,7 +1193,7 @@ msgstr "Configurarea a eșuat"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:173
 msgid "Confirm disconnect"
-msgstr ""
+msgstr "Confirmați deconectarea"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js:53
 msgid "Confirmation"
@@ -1171,7 +1207,7 @@ msgstr "Conectat"
 #: modules/luci-base/htdocs/luci-static/resources/network.js:9
 #: modules/luci-compat/luasrc/model/network.lua:27
 msgid "Connection attempt failed"
-msgstr ""
+msgstr "Încercarea de conectare a eșuat"
 
 #: modules/luci-base/htdocs/luci-static/resources/rpc.js:414
 msgid "Connection lost"
@@ -1199,9 +1235,9 @@ msgid ""
 "changes. You might need to reconnect if you modified network related "
 "settings such as the IP address or wireless security credentials."
 msgstr ""
-"Nu se poate restabili accesul la dispozitiv după aplicarea noilor setări. "
-"Dacă ați schimbat setări de rețea precum adresa IP sau configurația de "
-"securitate wireless, trebuie să vă reconectați."
+"Nu se poate restabili accesul la dispozitiv după aplicarea noilor setări de "
+"configurare. Dacă ați schimbat setări de rețea precum adresa IP sau "
+"configurația de securitate wireless, trebuie să vă reconectați."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:187
 msgid "Country"
@@ -1209,16 +1245,16 @@ msgstr "Țară"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:882
 msgid "Country Code"
-msgstr "Codul de țară"
+msgstr "Codul țării"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:489
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1903
 msgid "Create / Assign firewall-zone"
-msgstr ""
+msgstr "Creați / Atribuiți o zonă de firewall"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:788
 msgid "Create interface"
-msgstr "Creează interfață"
+msgstr "Creați o interfață"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:175
 msgid "Critical"
@@ -1226,11 +1262,11 @@ msgstr "Critic"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:179
 msgid "Cron Log Level"
-msgstr ""
+msgstr "Nivelul jurnalului Cron"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:527
 msgid "Current power"
-msgstr "Putere actuală"
+msgstr "Puterea actuală"
 
 #: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:569
 #: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:571
@@ -1239,7 +1275,7 @@ msgstr "Putere actuală"
 #: modules/luci-compat/luasrc/view/cbi/network_ifacelist.htm:82
 #: modules/luci-compat/luasrc/view/cbi/network_ifacelist.htm:83
 msgid "Custom Interface"
-msgstr ""
+msgstr "Interfață personalizată"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:36
 msgid "Custom delegated IPv6-prefix"
@@ -1250,24 +1286,28 @@ msgid ""
 "Custom files (certificates, scripts) may remain on the system. To prevent "
 "this, perform a factory-reset first."
 msgstr ""
+"Fișierele personalizate (certificate, scripturi) pot rămâne în sistem. "
+"Pentru a preveni acest lucru, efectuați mai întâi o resetare din fabrică."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:42
 msgid ""
 "Customizes the behaviour of the device <abbr title=\"Light Emitting Diode"
 "\">LED</abbr>s if possible."
 msgstr ""
+"Personalizați, dacă este posibil, comportamentul <abbr title=\"Light "
+"Emitting Diode\">-LED</abbr>-urilor dispozitivului."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1338
 msgid "DAE-Client"
-msgstr ""
+msgstr "DAE-Clientul"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1343
 msgid "DAE-Port"
-msgstr ""
+msgstr "Portul-DAE"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1348
 msgid "DAE-Secret"
-msgstr ""
+msgstr "Secretul-DAE"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:325
 msgid "DHCP Server"
@@ -1276,22 +1316,22 @@ msgstr "Server DHCP"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:155
 #: modules/luci-mod-network/luasrc/controller/admin/network.lua:25
 msgid "DHCP and DNS"
-msgstr "DHCP si DNS"
+msgstr "DHCP și DNS"
 
 #: modules/luci-base/htdocs/luci-static/resources/network.js:1978
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:16
 #: modules/luci-compat/luasrc/model/network.lua:968
 msgid "DHCP client"
-msgstr ""
+msgstr "Client DHCP"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:617
 msgid "DHCP-Options"
-msgstr "Optiuni DHCP"
+msgstr "Opțiuni-DHCP"
 
 #: modules/luci-compat/luasrc/model/network/proto_dhcpv6.lua:7
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:7
 msgid "DHCPv6 client"
-msgstr ""
+msgstr "Client DHCPv6"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:644
 msgid "DHCPv6-Mode"
@@ -1299,7 +1339,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:629
 msgid "DHCPv6-Service"
-msgstr "Serviciu DHCPv6"
+msgstr "Serviciul DHCPv6"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:45
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:46
@@ -1311,27 +1351,27 @@ msgstr "DNS"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:277
 msgid "DNS forwardings"
-msgstr ""
+msgstr "Redirecționări DNS"
 
 #: protocols/luci-proto-hnet/htdocs/luci-static/resources/protocol/hnet.js:37
 msgid "DNS-Label / FQDN"
-msgstr ""
+msgstr "Etichetă DNS / FQDN"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:228
 msgid "DNSSEC"
-msgstr ""
+msgstr "DNSSEC"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:232
 msgid "DNSSEC check unsigned"
-msgstr ""
+msgstr "Verificare DNSSEC nesemnată"
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:99
 msgid "DPD Idle Timeout"
-msgstr ""
+msgstr "Timpul de așteptare DPD Idle"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dslite.js:41
 msgid "DS-Lite AFTR address"
-msgstr ""
+msgstr "Adresa DS-Lite AFTR"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:874
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:45
@@ -1340,11 +1380,11 @@ msgstr "DSL"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:14
 msgid "DSL Status"
-msgstr ""
+msgstr "Starea DSL"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:907
 msgid "DSL line mode"
-msgstr ""
+msgstr "Mod linie DSL"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1081
 msgid "DTIM Interval"
@@ -1357,18 +1397,18 @@ msgstr "DUID"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:22
 msgid "Data Rate"
-msgstr ""
+msgstr "Rata de date"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:170
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:181
 msgid "Debug"
-msgstr ""
+msgstr "Depanare"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1313
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1328
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1343
 msgid "Default %d"
-msgstr ""
+msgstr "Implicit %d"
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:107
 msgid "Default Route"
@@ -1391,7 +1431,7 @@ msgstr ""
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:55
 msgid "Default state"
-msgstr "Stare implicita"
+msgstr "Stare implicită"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:617
 msgid ""
@@ -1399,6 +1439,9 @@ msgid ""
 "\"<code>6,192.168.2.1,192.168.2.2</code>\" which advertises different DNS "
 "servers to clients."
 msgstr ""
+"Definiți opțiuni DHCP suplimentare, de exemplu "
+"\"<code>6,192.168.2.1,192.168.2.2</code>\", care anunță diferite servere DNS "
+"pentru clienți."
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2071
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2496
@@ -1409,24 +1452,24 @@ msgstr ""
 #: modules/luci-compat/luasrc/view/cbi/tblsection.htm:162
 #: modules/luci-compat/luasrc/view/cbi/tsection.htm:16
 msgid "Delete"
-msgstr "Sterge"
+msgstr "Ștergeți"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:196
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:202
 msgid "Delete key"
-msgstr ""
+msgstr "Ștergeți cheia"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2733
 msgid "Delete request failed: %s"
-msgstr ""
+msgstr "Cererea de ștergere a eșuat: %s"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:840
 msgid "Delete this network"
-msgstr "Sterge aceasta retea"
+msgstr "Ștergeți această rețea"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1081
 msgid "Delivery Traffic Indication Message Interval"
-msgstr ""
+msgstr "Intervalul mesajului de indicare a traficului de livrare"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:123
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:109
@@ -1435,16 +1478,16 @@ msgstr "Descriere"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2832
 msgid "Deselect"
-msgstr ""
+msgstr "Deselectați"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:225
 msgid "Design"
-msgstr ""
+msgstr "Design"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:384
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:70
 msgid "Destination"
-msgstr "Destinatie"
+msgstr "Destinaţie"
 
 #: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:59
 #: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:165
@@ -1471,29 +1514,29 @@ msgstr "Configurarea dispozitivului"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:130
 msgid "Device is not active"
-msgstr ""
+msgstr "Dispozitivul nu este activ"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:222
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:593
 msgid "Device is restarting…"
-msgstr "Dispozitivul repornește…"
+msgstr "Se repornește dispozitivul…"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4127
 msgid "Device unreachable!"
-msgstr ""
+msgstr "Dispozitiv inaccesibil!"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/reboot.js:47
 msgid "Device unreachable! Still waiting for device..."
-msgstr ""
+msgstr "Dispozitiv inaccesibil! Încă aștept dispozitivul..."
 
 #: modules/luci-mod-network/luasrc/controller/admin/network.lua:41
 msgid "Diagnostics"
-msgstr "Diagnosticuri"
+msgstr "Diagnosticare"
 
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:101
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:93
 msgid "Dial number"
-msgstr ""
+msgstr "Formați numărul"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2629
 msgid "Directory"
@@ -1502,32 +1545,32 @@ msgstr "Director"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:832
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:872
 msgid "Disable"
-msgstr "Dezactivează"
+msgstr "Dezactivați"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:577
 msgid ""
 "Disable <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr> for "
 "this interface."
 msgstr ""
-"Dezactiveaza <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr> "
-"pentru aceasta interfata."
+"Dezactivați <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr> "
+"pentru această interfață."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:174
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:373
 msgid "Disable DNS lookups"
-msgstr ""
+msgstr "Dezactivați căutările DNS"
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:93
 msgid "Disable Encryption"
-msgstr "Dezactivează criptarea"
+msgstr "Dezactivați Criptarea"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1091
 msgid "Disable Inactivity Polling"
-msgstr "Dezactivează verificarea inactivității"
+msgstr "Dezactivați verificarea inactivității"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:830
 msgid "Disable this network"
-msgstr "Dezactivează această rețea"
+msgstr "Dezactivați această rețea"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1569
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/startup.js:63
@@ -1543,7 +1586,7 @@ msgstr "Dezactivat"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1105
 msgid "Disassociate On Low Acknowledgement"
-msgstr ""
+msgstr "Dezasociere la recunoaștere scăzută"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:287
 msgid "Discard upstream RFC1918 responses"
@@ -1553,12 +1596,12 @@ msgstr ""
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:658
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:219
 msgid "Disconnect"
-msgstr "Deconectează"
+msgstr "Deconectați"
 
 #: modules/luci-compat/luasrc/model/network/proto_ncm.lua:64
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:22
 msgid "Disconnection attempt failed"
-msgstr "Încercarea deconectării a eșuat"
+msgstr "Încercarea de deconectare a eșuat"
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:591
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2695
@@ -1568,15 +1611,15 @@ msgstr "Încercarea deconectării a eșuat"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1649
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:328
 msgid "Dismiss"
-msgstr ""
+msgstr "Închideți"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:888
 msgid "Distance Optimization"
-msgstr "Optimizarea distantei"
+msgstr "Optimizarea distanței"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:888
 msgid "Distance to farthest network member in meters."
-msgstr "Distanta catre cel mai departat membru din retea in metri."
+msgstr "Distanța până la cel mai îndepărtat membru al rețelei, în metri."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:155
 msgid ""
@@ -1595,7 +1638,7 @@ msgstr ""
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:88
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:93
 msgid "Do not create host route to peer (optional)."
-msgstr ""
+msgstr "Nu creați o rută gazdă către partener (opțional)."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:219
 msgid "Do not forward requests that cannot be answered by public name servers"
@@ -1619,21 +1662,21 @@ msgstr "Sigur doriți să ștergeți toate setările?"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2717
 msgid "Do you really want to recursively delete the directory \"%s\" ?"
-msgstr ""
+msgstr "Chiar doriți să ștergeți recursiv directorul \"%s\" ?"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:168
 msgid "Domain required"
-msgstr "Domeniul necesar"
+msgstr "Domeniul este necesar"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:300
 msgid "Domain whitelist"
-msgstr ""
+msgstr "Lista albă de domenii"
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:83
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:88
 #: protocols/luci-proto-ipip/htdocs/luci-static/resources/protocol/ipip.js:67
 msgid "Don't Fragment"
-msgstr "Nu Fragmenta"
+msgstr "Nu fragmentați"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:169
 msgid ""
@@ -1647,19 +1690,19 @@ msgstr "Oprit"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:363
 msgid "Download backup"
-msgstr "Descarca backup"
+msgstr "Descărcați backup-ul"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:401
 msgid "Download mtdblock"
-msgstr "Descarcă mtdblock-ul"
+msgstr "Descărcați mtdblock"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:912
 msgid "Downstream SNR offset"
-msgstr ""
+msgstr "Decalaj SNR în flux"
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2454
 msgid "Drag to reorder"
-msgstr ""
+msgstr "Trageți pentru a reordona"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:12
 msgid "Dropbear Instance"
@@ -1670,15 +1713,18 @@ msgid ""
 "Dropbear offers <abbr title=\"Secure Shell\">SSH</abbr> network shell access "
 "and an integrated <abbr title=\"Secure Copy\">SCP</abbr> server"
 msgstr ""
+"Dropbear oferă <abbr title=\"Secure Shell\">SSH</abbr> acces shell în rețea "
+"și un server integrat <abbr title=\"Secure Copy\">SCP</abbr>"
 
 #: modules/luci-compat/luasrc/model/network/proto_4x6.lua:14
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dslite.js:11
 msgid "Dual-Stack Lite (RFC6333)"
-msgstr ""
+msgstr "Dual-Stack Lite (RFC6333)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:593
 msgid "Dynamic <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr>"
 msgstr ""
+"<abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr> Dinamic"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6in4.js:60
 msgid "Dynamic tunnel"
@@ -1689,14 +1735,16 @@ msgid ""
 "Dynamically allocate DHCP addresses for clients. If disabled, only clients "
 "having static leases will be served."
 msgstr ""
+"Alocați în mod dinamic adrese DHCP pentru clienți. Dacă este dezactivată, "
+"vor fi deserviți numai clienții care au închirieri statice."
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/map.js:67
 msgid "EA-bits length"
-msgstr ""
+msgstr "Lungimea EA-bits"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1476
 msgid "EAP-Method"
-msgstr ""
+msgstr "Metoda-EAP"
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2474
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2477
@@ -1706,21 +1754,23 @@ msgstr ""
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:337
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:837
 msgid "Edit"
-msgstr "Modifică"
+msgstr "Modificați"
 
 #: modules/luci-compat/luasrc/view/cbi/error.htm:13
 msgid ""
 "Edit the raw configuration data above to fix any error and hit \"Save\" to "
 "reload the page."
 msgstr ""
+"Modificați datele de configurare brute de mai sus pentru a remedia orice "
+"eroare și apăsați \"Save\" pentru a reîncărca pagina."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:835
 msgid "Edit this network"
-msgstr "Editeaza aceasta retea"
+msgstr "Editați această rețea"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:786
 msgid "Edit wireless network"
-msgstr "Editează reţea wireless"
+msgstr "Editați rețeaua wireless"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:177
 msgid "Emergency"
@@ -1729,13 +1779,15 @@ msgstr "Urgență"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:832
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:872
 msgid "Enable"
-msgstr "Activează"
+msgstr "Activați"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:460
 msgid ""
 "Enable <abbr title=\"Internet Group Management Protocol\">IGMP</abbr> "
 "snooping"
 msgstr ""
+"Activați <abbr title=\"Internet Group Management Protocol\">IGMP</abbr> "
+"snooping"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:458
 msgid "Enable <abbr title=\"Spanning Tree Protocol\">STP</abbr>"
@@ -1745,15 +1797,15 @@ msgstr "Activeaza <abbr title=\"Spanning Tree Protocol\">STP</abbr>"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:367
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:373
 msgid "Enable DNS lookups"
-msgstr "Activează lookup-urile DNS"
+msgstr "Activați căutările DNS"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6in4.js:60
 msgid "Enable HE.net dynamic endpoint update"
-msgstr ""
+msgstr "Activați actualizarea dinamică a punctelor finale HE.net"
 
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:89
 msgid "Enable IPv6 negotiation"
-msgstr "Activează negociere IPv6"
+msgstr "Activați negocierea IPv6"
 
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/l2tp.js:49
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/ppp.js:93
@@ -1762,27 +1814,27 @@ msgstr "Activează negociere IPv6"
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pptp.js:67
 #: protocols/luci-proto-pppossh/htdocs/luci-static/resources/protocol/pppossh.js:93
 msgid "Enable IPv6 negotiation on the PPP link"
-msgstr ""
+msgstr "Activați negocierea IPv6 pe legătura PPP"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:192
 msgid "Enable Jumbo Frame passthrough"
-msgstr ""
+msgstr "Activați Jumbo Frame passthrough"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:245
 msgid "Enable NTP client"
-msgstr "Activează client NTP"
+msgstr "Activați clientul NTP"
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:96
 msgid "Enable Single DES"
-msgstr ""
+msgstr "Activează DES unic"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:361
 msgid "Enable TFTP server"
-msgstr "Activeaza serverul TFTP"
+msgstr "Activați serverul TFTP"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:184
 msgid "Enable VLAN functionality"
-msgstr "Activeaza VLAN-urile"
+msgstr "Activați funcționalitatea VLAN"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1599
 msgid "Enable WPS pushbutton, requires WPA(2)-PSK/WPA3-SAE"
@@ -1790,36 +1842,36 @@ msgstr "Activează butonul WPS al router-ului, necesită WPA(2)-PSK/WPA3-SAE"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1595
 msgid "Enable key reinstallation (KRACK) countermeasures"
-msgstr ""
+msgstr "Activarea contramăsurilor de reinstalare a cheilor (KRACK)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:187
 msgid "Enable learning and aging"
-msgstr ""
+msgstr "Să permită învățarea și îmbătrânirea"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:198
 msgid "Enable mirroring of incoming packets"
-msgstr ""
+msgstr "Activați oglindirea pachetelor primite"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:199
 msgid "Enable mirroring of outgoing packets"
-msgstr ""
+msgstr "Activați oglindirea pachetelor de ieșire"
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:89
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:94
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:91
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:96
 msgid "Enable support for multicast traffic (optional)."
-msgstr ""
+msgstr "Activați suportul pentru traficul multicast (opțional)."
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:83
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:88
 #: protocols/luci-proto-ipip/htdocs/luci-static/resources/protocol/ipip.js:67
 msgid "Enable the DF (Don't Fragment) flag of the encapsulating packets."
-msgstr ""
+msgstr "Activați indicatorul DF (Don't Fragment) al pachetelor încapsulate."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:830
 msgid "Enable this network"
-msgstr "Activează această rețea"
+msgstr "Activați această rețea"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:242
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:351
@@ -1829,17 +1881,19 @@ msgstr "Activat"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:460
 msgid "Enables IGMP snooping on this bridge"
-msgstr ""
+msgstr "Activează IGMP snooping pe acest pod"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1416
 msgid ""
 "Enables fast roaming among access points that belong to the same Mobility "
 "Domain"
 msgstr ""
+"Permite roaming-ul rapid între punctele de acces care aparțin aceluiași "
+"domeniu de mobilitate"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:458
 msgid "Enables the Spanning Tree Protocol on this bridge"
-msgstr ""
+msgstr "Activează protocolul Spanning Tree pe acest pod"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dslite.js:59
 msgid "Encapsulation limit"
@@ -1860,23 +1914,23 @@ msgstr "Criptare"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:129
 msgid "Endpoint Host"
-msgstr ""
+msgstr "Gazdă Endpoint"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:133
 msgid "Endpoint Port"
-msgstr ""
+msgstr "Port Endpoint"
 
 #: modules/luci-compat/luasrc/view/cbi/dropdown.htm:16
 msgid "Enter custom value"
-msgstr ""
+msgstr "Introduceți valoarea personalizată"
 
 #: modules/luci-compat/luasrc/view/cbi/dropdown.htm:16
 msgid "Enter custom values"
-msgstr ""
+msgstr "Introduceți valori personalizate"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:95
 msgid "Erasing..."
-msgstr "Stergere..."
+msgstr "Ștergere..."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:100
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:101
@@ -1889,12 +1943,12 @@ msgstr "Eroare"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:30
 msgid "Errored seconds (ES)"
-msgstr ""
+msgstr "Secunde eronate (ES)"
 
 #: modules/luci-base/htdocs/luci-static/resources/network.js:2867
 #: modules/luci-compat/luasrc/model/network.lua:1432
 msgid "Ethernet Adapter"
-msgstr "Adaptor de retea ethernet"
+msgstr "Adaptor ethernet"
 
 #: modules/luci-base/htdocs/luci-static/resources/network.js:2858
 #: modules/luci-compat/luasrc/model/network.lua:1422
@@ -1903,15 +1957,15 @@ msgstr "Switch-ul ethernet"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:399
 msgid "Exclude interfaces"
-msgstr "Exclude interfeţe"
+msgstr "Excludeți interfețele"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:247
 msgid "Expand hosts"
-msgstr ""
+msgstr "Extindeți gazdele"
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/static.js:198
 msgid "Expecting a hexadecimal assignment hint"
-msgstr ""
+msgstr "Așteptând un indiciu de atribuire hexazecimală"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:60
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:73
@@ -1923,16 +1977,18 @@ msgstr ""
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:132
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:136
 msgid "Expecting: %s"
-msgstr ""
+msgstr "Se așteaptă: %s"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:50
 msgid "Expires"
-msgstr "Expira"
+msgstr "Expiră"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:589
 msgid ""
 "Expiry time of leased addresses, minimum is 2 minutes (<code>2m</code>)."
 msgstr ""
+"Timpul de expirare a adreselor închiriate, minimul este de 2 minute "
+"(<code>2m</code>)."
 
 #: protocols/luci-proto-hnet/htdocs/luci-static/resources/protocol/hnet.js:19
 msgid "External"
@@ -1940,11 +1996,11 @@ msgstr "Extern"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1467
 msgid "External R0 Key Holder List"
-msgstr ""
+msgstr "Lista de suporturi de chei externe R0"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1471
 msgid "External R1 Key Holder List"
-msgstr ""
+msgstr "Lista de suporturi de chei R1 externe"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:151
 msgid "External system log server"
@@ -1956,11 +2012,11 @@ msgstr "Portul serverului de log-uri extern"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:161
 msgid "External system log server protocol"
-msgstr ""
+msgstr "Protocolul serverului extern de jurnal de sistem"
 
 #: protocols/luci-proto-pppossh/htdocs/luci-static/resources/protocol/pppossh.js:79
 msgid "Extra SSH command options"
-msgstr "Opțiuni suplimentare comenzi SSH"
+msgstr "Opțiuni suplimentare pentru comenzi SSH"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1441
 msgid "FT over DS"
@@ -1996,7 +2052,7 @@ msgstr "Fișierul nu este accesibil"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2775
 msgid "Filename"
-msgstr ""
+msgstr "Numele fișierului"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:374
 msgid "Filename of the boot image advertised to clients"
@@ -2005,15 +2061,15 @@ msgstr ""
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:191
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:313
 msgid "Filesystem"
-msgstr "Sistem de fisiere"
+msgstr "Sistemul de fișiere"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:213
 msgid "Filter private"
-msgstr "Filtreaza privatele"
+msgstr "Filtrați privatele"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:218
 msgid "Filter useless"
-msgstr "Filtreaza nefolositele"
+msgstr "Filtrați nefolosite"
 
 #: modules/luci-compat/luasrc/model/network/proto_ncm.lua:65
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:23
@@ -2028,7 +2084,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:813
 msgid "Find and join network"
-msgstr "Gaseste si alatura in retea"
+msgstr "Găsiți și alăturați-vă rețelei"
 
 #: modules/luci-compat/luasrc/view/cbi/delegator.htm:9
 msgid "Finish"
@@ -2040,15 +2096,15 @@ msgstr "Firewall"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:77
 msgid "Firewall Mark"
-msgstr ""
+msgstr "Marca Firewall"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:324
 msgid "Firewall Settings"
-msgstr "Setarile firewall-ului"
+msgstr "Setările firewall-ului"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:297
 msgid "Firewall Status"
-msgstr "Status la firewall"
+msgstr "Starea Firewall-ului"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:919
 msgid "Firmware File"
@@ -2056,7 +2112,7 @@ msgstr "Fișier firmware"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/10_system.js:57
 msgid "Firmware Version"
-msgstr "Versiunea de firmware"
+msgstr "Versiunea Firmware-ului"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:320
 msgid "Fixed source port for outbound DNS queries"
@@ -2065,7 +2121,7 @@ msgstr "Portul sursa pentru intrebarile DNS catre exterior"
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:281
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:418
 msgid "Flash image..."
-msgstr "Scriere imagine firmware..."
+msgstr "Scrieți imaginea firmware..."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:277
 msgid "Flash image?"
@@ -2073,7 +2129,7 @@ msgstr "Scrieți imaginea firmware?"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:408
 msgid "Flash new firmware image"
-msgstr "Scrieți imagine de firmware nouă"
+msgstr "Scrieți o imagine de firmware nouă"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:354
 msgid "Flash operations"
@@ -2086,36 +2142,35 @@ msgstr "Scriere…"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:596
 msgid "Force"
-msgstr "Forțează"
+msgstr "Forțați"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:900
 msgid "Force 40MHz mode"
-msgstr "Forțează mod 40MHz"
+msgstr "Forțați modul 40MHz"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1151
 msgid "Force CCMP (AES)"
-msgstr "Forțează CCMP (AES)"
+msgstr "Forțați CCMP (AES)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:596
 msgid "Force DHCP on this network even if another server is detected."
-msgstr ""
-"Forțează facilitatea DHCP in aceasta retea chiar daca alt server DHCP exista."
+msgstr "Forțați DHCP în această rețea chiar dacă este detectat un alt server."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1152
 msgid "Force TKIP"
-msgstr "Forțează TKIP"
+msgstr "Forțați TKIP"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1153
 msgid "Force TKIP and CCMP (AES)"
-msgstr "Forțează TKIP si CCMP (AES)"
+msgstr "Forțați TKIP și CCMP (AES)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:854
 msgid "Force link"
-msgstr "Forțează link"
+msgstr "Forțați legătura"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:253
 msgid "Force upgrade"
-msgstr "Forțează upgrade-ul"
+msgstr "Forțați upgrade-ul"
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:90
 msgid "Force use of NAT-T"
@@ -2143,11 +2198,11 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:967
 msgid "Forwarding mode"
-msgstr "Mod de forwardare"
+msgstr "Mod de redirecționare"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:892
 msgid "Fragmentation Threshold"
-msgstr ""
+msgstr "Pragul de fragmentare"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:90
 msgid ""
@@ -2184,16 +2239,16 @@ msgstr ""
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:44
 msgid "Gateway"
-msgstr "Gateway"
+msgstr "Poartă de acces"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:36
 msgid "Gateway Ports"
-msgstr "Porturile gateway"
+msgstr "Porturile porții de acces"
 
 #: modules/luci-base/htdocs/luci-static/resources/network.js:11
 #: modules/luci-compat/luasrc/model/network.lua:29
 msgid "Gateway address is invalid"
-msgstr ""
+msgstr "Adresa porții de acces este nevalidă"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:161
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:321
@@ -2212,7 +2267,7 @@ msgstr "Configurare generală"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:150
 msgid "Generate Config"
-msgstr "Generează configurație"
+msgstr "Generare configurare"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1445
 msgid "Generate PMK locally"
@@ -2220,7 +2275,7 @@ msgstr ""
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:365
 msgid "Generate archive"
-msgstr "Generează arhivă"
+msgstr "Generați arhivă"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js:77
 msgid "Given password confirmation did not match, password not changed!"
@@ -2228,11 +2283,11 @@ msgstr "Confirmarea parolei nu se potriveste cu prima, parola neschimbata !"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:146
 msgid "Global Settings"
-msgstr ""
+msgstr "Setări generale"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:865
 msgid "Global network options"
-msgstr ""
+msgstr "Opțiuni de rețea globală"
 
 #: themes/luci-theme-bootstrap/luasrc/view/themes/bootstrap/header.htm:57
 #: themes/luci-theme-material/luasrc/view/themes/material/header.htm:215
@@ -2245,7 +2300,7 @@ msgstr ""
 #: modules/luci-compat/luasrc/view/cbi/full_valueheader.htm:4
 #: modules/luci-compat/luasrc/view/cbi/tblsection.htm:58
 msgid "Go to relevant configuration page"
-msgstr ""
+msgstr "Mergeți la pagina de configurare relevantă"
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:66
 msgid "Group Password"
@@ -2265,7 +2320,7 @@ msgstr ""
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/processes.js:46
 msgid "Hang Up"
-msgstr ""
+msgstr "Închideți"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:34
 msgid "Header Error Code Errors (HEC)"
@@ -2276,8 +2331,8 @@ msgid ""
 "Here you can configure the basic aspects of your device like its hostname or "
 "the timezone."
 msgstr ""
-"Aici poti configura aspectele de baza ale dispozitivului cum ar fi numele "
-"sau fusul orar."
+"Aici puteți configura aspectele de bază ale dispozitivului dumneavoastră, "
+"cum ar fi numele de gazdă sau fusul orar."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1059
 msgid "Hide <abbr title=\"Extended Service Set Identifier\">ESSID</abbr>"
@@ -2286,14 +2341,14 @@ msgstr "Ascunde <abbr title=\"Extended Service Set Identifier\">ESSID</abbr>"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:264
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:303
 msgid "Hide empty chains"
-msgstr ""
+msgstr "Ascundeți legăturile goale"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:55
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2031
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:56
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:128
 msgid "Host"
-msgstr ""
+msgstr "Gazdă"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/hosts.js:22
 msgid "Host entries"
@@ -2322,12 +2377,12 @@ msgstr "Numele gazdei ( hostname )"
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:22
 msgid "Hostname to send when requesting DHCP"
-msgstr ""
+msgstr "Numele gazdei care trebuie trimis atunci când se solicită DHCP"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/hosts.js:20
 #: modules/luci-mod-network/luasrc/controller/admin/network.lua:31
 msgid "Hostnames"
-msgstr "Nume de host"
+msgstr "Numele gazdelor (hostnames)"
 
 #: protocols/luci-proto-hnet/htdocs/luci-static/resources/protocol/hnet.js:24
 msgid "Hybrid"
@@ -2388,15 +2443,15 @@ msgstr ""
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/static.js:181
 msgid "IPv4 broadcast"
-msgstr ""
+msgstr "Difuzarea IPv4"
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/static.js:180
 msgid "IPv4 gateway"
-msgstr ""
+msgstr "Poartă de acces IPv4"
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/static.js:179
 msgid "IPv4 netmask"
-msgstr ""
+msgstr "Masca de rețea IPv4"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:290
 msgid "IPv4 network in address/netmask notation"
@@ -2413,7 +2468,7 @@ msgstr "Lungime prefix IPv4"
 
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:83
 msgid "IPv4+IPv6"
-msgstr ""
+msgstr "IPv4+IPv6"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:37
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:30
@@ -2452,7 +2507,7 @@ msgstr "Firewall IPv6"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:203
 msgid "IPv6 Neighbours"
-msgstr ""
+msgstr "Vecini IPv6"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:552
 msgid "IPv6 Settings"
@@ -2482,7 +2537,7 @@ msgstr ""
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/static.js:210
 msgid "IPv6 gateway"
-msgstr ""
+msgstr "Poartă de acces IPv6"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:295
 msgid "IPv6 network in address/netmask notation"
@@ -2588,7 +2643,7 @@ msgstr ""
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pptp.js:77
 #: protocols/luci-proto-pppossh/htdocs/luci-static/resources/protocol/pppossh.js:100
 msgid "If unchecked, the advertised DNS server addresses are ignored"
-msgstr ""
+msgstr "Dacă nu este bifat, adresele de server DNS anunțate sunt ignorate"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:338
 msgid ""
@@ -2601,11 +2656,11 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:197
 msgid "Ignore <code>/etc/hosts</code>"
-msgstr ""
+msgstr "Ignorați <code>/etc/hosts</code>"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:577
 msgid "Ignore interface"
-msgstr "Ignoră interfața"
+msgstr "Ignorați interfața"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:185
 msgid "Ignore resolve file"
@@ -2661,11 +2716,11 @@ msgstr ""
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:171
 msgid "Info"
-msgstr "Informatii"
+msgstr "Informații"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:99
 msgid "Information"
-msgstr ""
+msgstr "Informație"
 
 #: modules/luci-compat/luasrc/model/network/proto_ncm.lua:67
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:25
@@ -2674,11 +2729,11 @@ msgstr "Inițializare eșuată"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/startup.js:74
 msgid "Initscript"
-msgstr "Script de initializare"
+msgstr "Script de inițializare"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/startup.js:108
 msgid "Initscripts"
-msgstr "Scripturi de initializare"
+msgstr "Script-uri de inițializare"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1538
 msgid "Inner certificate constraint (Domain)"
@@ -2705,6 +2760,8 @@ msgid ""
 "Instead of joining any network with a matching SSID, only connect to the "
 "BSSID <code>%h</code>."
 msgstr ""
+"În loc să vă alăturați oricărei rețele cu un SSID asemănător, conectați-vă "
+"numai la BSSID <code>%h</code>."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:462
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:469
@@ -2723,7 +2780,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:910
 msgid "Interface Configuration"
-msgstr "Configurarea interfetei"
+msgstr "Configurarea interfeței"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:108
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:149
@@ -2732,7 +2789,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:90
 msgid "Interface is disabled"
-msgstr ""
+msgstr "Interfața este dezactivată"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:62
 msgid "Interface is marked for deletion"
@@ -2740,21 +2797,21 @@ msgstr "Interfața este marcată pentru a fi ștearsă"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:207
 msgid "Interface is reconnecting..."
-msgstr "Interfata se reconecteaza.."
+msgstr "Interfața se reconectează..."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:191
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:201
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:207
 msgid "Interface is shutting down..."
-msgstr "Interfata se opreste.."
+msgstr "Se închide interfața..."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:251
 msgid "Interface is starting..."
-msgstr "Interfata se pornește.."
+msgstr "Se pornește interfața..."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:254
 msgid "Interface is stopping..."
-msgstr "Interfata se suspendă..."
+msgstr "Se oprește interfața..."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1072
 msgid "Interface name"
@@ -2763,26 +2820,26 @@ msgstr "Numele interfeței"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:120
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:270
 msgid "Interface not present or not connected yet."
-msgstr "Interfata nu e prezenta sau nu este conectata inca."
+msgstr "Interfața nu este prezentă sau nu este încă conectată."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:306
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:333
 #: modules/luci-mod-network/luasrc/controller/admin/network.lua:18
 msgid "Interfaces"
-msgstr "Interfete"
+msgstr "Interfețe"
 
 #: protocols/luci-proto-hnet/htdocs/luci-static/resources/protocol/hnet.js:20
 msgid "Internal"
-msgstr ""
+msgstr "Intern"
 
 #: modules/luci-base/luasrc/view/error500.htm:8
 msgid "Internal Server Error"
-msgstr "Eroare interna de server"
+msgstr "Eroare internă de server"
 
 #: modules/luci-compat/luasrc/view/cbi/tblsection.htm:192
 #: modules/luci-compat/luasrc/view/cbi/tsection.htm:42
 msgid "Invalid"
-msgstr "Invalid"
+msgstr "Nu este valid"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:11
 msgid "Invalid Base64 key string"
@@ -2820,55 +2877,55 @@ msgstr ""
 
 #: modules/luci-base/luasrc/view/sysauth.htm:12
 msgid "Invalid username and/or password! Please try again."
-msgstr "Utilizator si/sau parola invalide! Incearcati din nou."
+msgstr ""
+"Numele de utilizator și/sau parola nevalide! Vă rugăm să încercați din nou."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1068
 msgid "Isolate Clients"
-msgstr ""
+msgstr "Izolați clienții"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:229
-#, fuzzy
 msgid ""
 "It appears that you are trying to flash an image that does not fit into the "
 "flash memory, please verify the image file!"
 msgstr ""
-"Se pare ca ai incercat sa rescrii o imagine care nu are loc in memoria "
-"flash, verifica fisierul din nou!"
+"Se pare că încercați să scrieți o imagine care nu se încadrează în memoria "
+"flash, vă rugăm să verificați fișierul imagine!"
 
 #: themes/luci-theme-bootstrap/luasrc/view/themes/bootstrap/header.htm:64
 #: themes/luci-theme-material/luasrc/view/themes/material/header.htm:222
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:72
 msgid "JavaScript required!"
-msgstr "Ai nevoie de JavaScript !"
+msgstr "JavaScript este necesar!"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1707
 msgid "Join Network"
-msgstr "Alăturare/Conectare Rețea"
+msgstr "Alăturați-vă rețelei"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1641
 msgid "Join Network: Wireless Scan"
-msgstr ""
+msgstr "Alăturați-vă rețelei: Scanare wireless"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1907
 msgid "Joining Network: %q"
-msgstr ""
+msgstr "Conectarea la rețea: %q"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:221
 msgid "Keep settings and retain the current configuration"
-msgstr ""
+msgstr "Păstrați setările și păstrați configurația curentă"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/dmesg.js:20
 #: modules/luci-mod-status/root/usr/share/luci/menu.d/luci-mod-status.json:39
 msgid "Kernel Log"
-msgstr "Log-ul kernelului"
+msgstr "Jurnalul kernel-ului"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/10_system.js:58
 msgid "Kernel Version"
-msgstr "Versiunea de kernel"
+msgstr "Versiunea Kernel-ului"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1354
 msgid "Key"
-msgstr ""
+msgstr "Cheie"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1382
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1383
@@ -2876,7 +2933,7 @@ msgstr ""
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1385
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1397
 msgid "Key #%d"
-msgstr ""
+msgstr "Cheie #%d"
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:92
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:97
@@ -2894,7 +2951,7 @@ msgstr ""
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/processes.js:54
 msgid "Kill"
-msgstr "Opreste"
+msgstr "Opriți"
 
 #: modules/luci-compat/luasrc/model/network/proto_ppp.lua:21
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/l2tp.js:10
@@ -2925,7 +2982,7 @@ msgstr ""
 
 #: modules/luci-mod-system/root/usr/share/luci/menu.d/luci-mod-system.json:83
 msgid "LED Configuration"
-msgstr ""
+msgstr "Configurarea LED-urilor"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:961
 msgid "LLC"
@@ -2934,7 +2991,7 @@ msgstr ""
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:266
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:375
 msgid "Label"
-msgstr "Eticheta"
+msgstr "Etichetă"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:214
 msgid "Language"
@@ -2942,7 +2999,7 @@ msgstr "Limba"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:109
 msgid "Language and Style"
-msgstr "Limba si stilul interfetei"
+msgstr "Limba și stilul interfeței"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:24
 msgid "Latency"
@@ -2955,11 +3012,11 @@ msgstr ""
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:485
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:589
 msgid "Lease time"
-msgstr ""
+msgstr "Timp de închiriere"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:39
 msgid "Lease time remaining"
-msgstr ""
+msgstr "Timp de închiriere rămas"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:181
 msgid "Leasefile"
@@ -2986,11 +3043,11 @@ msgstr ""
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:3994
 msgid "Legend:"
-msgstr "Legenda:"
+msgstr "Legendă:"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:584
 msgid "Limit"
-msgstr "Limita"
+msgstr "Limită"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:382
 msgid "Limit DNS service to subnets interfaces on which we are serving DNS."
@@ -3062,7 +3119,7 @@ msgstr ""
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:55
 msgid "Listen Port"
-msgstr ""
+msgstr "Port de ascultare"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:17
 msgid "Listen only on the given interface or, if unspecified, on all"
@@ -3075,11 +3132,11 @@ msgstr ""
 #: modules/luci-mod-status/root/usr/share/luci/menu.d/luci-mod-status.json:66
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:54
 msgid "Load"
-msgstr "Incărcare"
+msgstr "Încărcare"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/10_system.js:61
 msgid "Load Average"
-msgstr "Incărcarea medie"
+msgstr "Încărcare medie"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2902
 msgid "Loading directory contents…"
@@ -3089,7 +3146,7 @@ msgstr ""
 #: modules/luci-base/luasrc/view/view.htm:4
 #: modules/luci-mod-status/luasrc/view/admin_status/index.htm:12
 msgid "Loading view…"
-msgstr ""
+msgstr "Se încarcă vizualizarea…"
 
 #: modules/luci-base/htdocs/luci-static/resources/network.js:12
 #: modules/luci-compat/luasrc/model/network.lua:30
@@ -3108,14 +3165,14 @@ msgstr ""
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6to4.js:39
 #: protocols/luci-proto-relay/htdocs/luci-static/resources/protocol/relay.js:151
 msgid "Local IPv4 address"
-msgstr "Adresa IPv4 locala"
+msgstr "Adresa IPv4 locală"
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:46
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:53
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6in4.js:54
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dslite.js:45
 msgid "Local IPv6 address"
-msgstr "Adresa IPv6 locala"
+msgstr "Adresa IPv6 locală"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:381
 msgid "Local Service Only"
@@ -3123,12 +3180,12 @@ msgstr ""
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/startup.js:112
 msgid "Local Startup"
-msgstr "Pornire la startup"
+msgstr "Local la pornire"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/10_system.js:59
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:115
 msgid "Local Time"
-msgstr "Ora locala"
+msgstr "Ora locală"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:243
 msgid "Local domain"
@@ -3168,11 +3225,11 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:274
 msgid "Log queries"
-msgstr ""
+msgstr "Scrieți in jurnal interogările"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:107
 msgid "Logging"
-msgstr ""
+msgstr "Jurnalizare"
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:57
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:57
@@ -3192,7 +3249,7 @@ msgstr "Autentificare"
 
 #: modules/luci-base/root/usr/share/luci/menu.d/luci-base.json:83
 msgid "Logout"
-msgstr "Iesire"
+msgstr "Deconectare"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:32
 msgid "Loss of Signal Seconds (LOSS)"
@@ -3200,7 +3257,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:579
 msgid "Lowest leased address as offset from the network address."
-msgstr ""
+msgstr "Cea mai joasă adresă închiriată ca decalaj față de adresa de rețea."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:45
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:80
@@ -3223,7 +3280,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:916
 msgid "MAC-Filter"
-msgstr ""
+msgstr "Filtru MAC"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1011
 msgid "MAC-List"
@@ -3279,7 +3336,7 @@ msgstr ""
 #: modules/luci-base/htdocs/luci-static/resources/network.js:3642
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:640
 msgid "Master"
-msgstr ""
+msgstr "Principal"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:23
 msgid "Max. Attainable Data Rate (ATTNDR)"
@@ -3287,7 +3344,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1100
 msgid "Maximum allowed Listen Interval"
-msgstr ""
+msgstr "Intervalul de ascultare maxim permis"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:329
 msgid "Maximum allowed number of active DHCP leases"
@@ -3309,7 +3366,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:584
 msgid "Maximum number of leased addresses."
-msgstr ""
+msgstr "Numărul maxim de adrese închiriate."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:879
 msgid "Maximum transmit power"
@@ -3324,11 +3381,11 @@ msgstr "Putere maximă de transmisie"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/wireless.js:328
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/wireless.js:329
 msgid "Mbit/s"
-msgstr ""
+msgstr "Mbiți/s"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js:35
 msgid "Medium"
-msgstr ""
+msgstr "Mediu"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/20_memory.js:24
 msgid "Memory"
@@ -3336,7 +3393,7 @@ msgstr "Memorie"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/processes.js:73
 msgid "Memory usage (%)"
-msgstr "Utilizarea memoriei (%)"
+msgstr "Memorie utilizată (%)"
 
 #: modules/luci-base/htdocs/luci-static/resources/network.js:3645
 msgid "Mesh"
@@ -3359,7 +3416,7 @@ msgstr ""
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:183
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:67
 msgid "Metric"
-msgstr "Metrica"
+msgstr "Metrică"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:202
 msgid "Mirror monitor port"
@@ -3389,7 +3446,7 @@ msgstr "Mod"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/10_system.js:55
 msgid "Model"
-msgstr ""
+msgstr "Model"
 
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:72
 msgid "Modem default"
@@ -3428,7 +3485,7 @@ msgstr "Mai mult…"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:192
 msgid "Mount Point"
-msgstr "Punct de montare"
+msgstr "Punctul de Munte"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:144
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:227
@@ -3452,7 +3509,7 @@ msgstr ""
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:154
 msgid "Mount attached devices"
-msgstr "Montare dispozitive atașate"
+msgstr "Montați dispozitivele atașate"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:162
 msgid "Mount filesystems not specifically configured"
@@ -3528,7 +3585,7 @@ msgstr "Nume"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1877
 msgid "Name of the new network"
-msgstr "Numele interfetei noi"
+msgstr "Numele noii rețele"
 
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:50
 msgid "Navigation"
@@ -3543,11 +3600,11 @@ msgstr "Navigare"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:162
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:180
 msgid "Network"
-msgstr "Retea"
+msgstr "Rețea"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/diagnostics.js:68
 msgid "Network Utilities"
-msgstr "Utilitare de retea"
+msgstr "Utilitare de rețea"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:373
 msgid "Network boot image"
@@ -3556,12 +3613,12 @@ msgstr ""
 #: modules/luci-base/htdocs/luci-static/resources/network.js:15
 #: modules/luci-compat/luasrc/model/network.lua:33
 msgid "Network device is not present"
-msgstr ""
+msgstr "Dispozitivul de rețea nu este prezent"
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:57
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:62
 msgid "Network interface"
-msgstr ""
+msgstr "Interfață de rețea"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:711
 msgid "New interface name…"
@@ -3569,7 +3626,7 @@ msgstr "Nume nou interfață…"
 
 #: modules/luci-compat/luasrc/view/cbi/delegator.htm:11
 msgid "Next »"
-msgstr "Mai departe »"
+msgstr "Următoarea →»"
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:3460
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:108
@@ -3578,11 +3635,11 @@ msgstr "Nu"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:560
 msgid "No DHCP Server configured for this interface"
-msgstr "Nici un server DHCP configurat pentru aceasta interfata"
+msgstr "Nici un server DHCP configurat pentru această interfață"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1295
 msgid "No Encryption"
-msgstr ""
+msgstr "Fără criptare"
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:89
 msgid "No NAT-T"
@@ -3598,7 +3655,7 @@ msgstr ""
 
 #: modules/luci-base/htdocs/luci-static/resources/rpc.js:409
 msgid "No data received"
-msgstr "Nu sunt date recepționate"
+msgstr "Nu s-au primit date"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2842
 msgid "No entries in this directory"
@@ -3606,7 +3663,7 @@ msgstr ""
 
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/backupfiles.lua:82
 msgid "No files found"
-msgstr "Nici un fisier gasit"
+msgstr "Nu s-au găsit fișiere"
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:86
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:91
@@ -3620,7 +3677,7 @@ msgstr ""
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:229
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/processes.js:59
 msgid "No information available"
-msgstr "Nici o informatie disponibila"
+msgstr "Nu există informații disponibile"
 
 #: modules/luci-compat/luasrc/model/network/proto_4x6.lua:63
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/map.js:8
@@ -3635,7 +3692,7 @@ msgstr ""
 #: themes/luci-theme-material/luasrc/view/themes/material/header.htm:212
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:79
 msgid "No password set!"
-msgstr "Nici o parola setata !"
+msgstr "Nu este setată nicio parolă!"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:105
 msgid "No peers defined yet"
@@ -3682,7 +3739,7 @@ msgstr ""
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:157
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:181
 msgid "None"
-msgstr ""
+msgstr "Nici unul"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:182
 msgid "Normal"
@@ -3690,11 +3747,11 @@ msgstr "Normal"
 
 #: modules/luci-base/luasrc/view/error404.htm:8
 msgid "Not Found"
-msgstr "Nu a fost gasit"
+msgstr "Nu a fost găsit"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:73
 msgid "Not associated"
-msgstr "Nu este asociat."
+msgstr "Nu este asociat"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:32
 msgid "Not connected"
@@ -3718,11 +3775,11 @@ msgstr ""
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:126
 msgid "Notes"
-msgstr ""
+msgstr "Note"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:172
 msgid "Notice"
-msgstr "Notificare"
+msgstr "Aviz"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/diagnostics.js:127
 msgid "Nslookup"
@@ -3786,7 +3843,7 @@ msgstr "Unul dintre următoarele: %s"
 #: modules/luci-compat/luasrc/view/cbi/nullsection.htm:17
 #: modules/luci-compat/luasrc/view/cbi/ucisection.htm:22
 msgid "One or more fields contain invalid values!"
-msgstr "Unul sau mai multe campuri contin valori invalide !"
+msgstr "Unul sau mai multe câmpuri conțin valori invalide!"
 
 #: modules/luci-compat/luasrc/view/cbi/map.htm:31
 msgid "One or more invalid/required values on tab"
@@ -3795,12 +3852,12 @@ msgstr ""
 #: modules/luci-compat/luasrc/view/cbi/nullsection.htm:19
 #: modules/luci-compat/luasrc/view/cbi/ucisection.htm:24
 msgid "One or more required fields have no value!"
-msgstr "Unul sau mai multe campuri nu contin valori !"
+msgstr "Unul sau mai multe câmpuri obligatorii nu au nicio valoare!"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:440
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/backupfiles.lua:19
 msgid "Open list..."
-msgstr ""
+msgstr "Deschideți lista..."
 
 #: modules/luci-compat/luasrc/model/network/proto_openconnect.lua:9
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:64
@@ -3822,11 +3879,11 @@ msgstr ""
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4001
 msgid "Option changed"
-msgstr "Optiunea schimbata"
+msgstr "Opțiune modificată"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4003
 msgid "Option removed"
-msgstr "Optiunea eliminata"
+msgstr "Opțiune eliminată"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1570
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:67
@@ -3835,7 +3892,7 @@ msgstr "Opțional"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:126
 msgid "Optional, free-form notes about this device"
-msgstr ""
+msgstr "Note opționale, în formă liberă, despre acest dispozitiv"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:77
 msgid ""
@@ -3891,7 +3948,7 @@ msgstr ""
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:71
 msgid "Options"
-msgstr "Optiuni"
+msgstr "Opțiuni"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:116
 msgid "Options:"
@@ -3903,11 +3960,11 @@ msgstr "Altele:"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:68
 msgid "Out"
-msgstr "Iesire"
+msgstr "Ieșire"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/bandwidth.js:275
 msgid "Outbound:"
-msgstr ""
+msgstr "Ieşire:"
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:101
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:106
@@ -3985,7 +4042,7 @@ msgstr ""
 
 #: protocols/luci-proto-relay/htdocs/luci-static/resources/protocol/relay.js:167
 msgid "Override the gateway in DHCP responses"
-msgstr ""
+msgstr "Suprascrieți poarta de acces în răspunsurile DHCP"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:601
 msgid ""
@@ -4061,12 +4118,12 @@ msgstr "PPP"
 
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoa.js:58
 msgid "PPPoA Encapsulation"
-msgstr "Incapsulare PPPoA"
+msgstr "Încapsulare PPPoA"
 
 #: modules/luci-compat/luasrc/model/network/proto_ppp.lua:19
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoa.js:28
 msgid "PPPoATM"
-msgstr "PPPoATM"
+msgstr "PPP prin ATM"
 
 #: modules/luci-compat/luasrc/model/network/proto_ppp.lua:17
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoe.js:28
@@ -4076,7 +4133,7 @@ msgstr "PPPoE"
 #: modules/luci-compat/luasrc/model/network/proto_pppossh.lua:9
 #: protocols/luci-proto-pppossh/htdocs/luci-static/resources/protocol/pppossh.js:28
 msgid "PPPoSSH"
-msgstr "PPPoSSH"
+msgstr "PPP prin SSH"
 
 #: modules/luci-compat/luasrc/model/network/proto_ppp.lua:15
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pptp.js:28
@@ -4110,11 +4167,11 @@ msgstr ""
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:107
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:58
 msgid "Password"
-msgstr "Parola"
+msgstr "Parolă"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:25
 msgid "Password authentication"
-msgstr "Autentificarea cu parola"
+msgstr "Autentificare prin parolă"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1504
 msgid "Password of Private Key"
@@ -4141,15 +4198,15 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1483
 msgid "Path to CA-Certificate"
-msgstr "Calea catre certificatul CA"
+msgstr "Calea către certificatul CA"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1498
 msgid "Path to Client-Certificate"
-msgstr ""
+msgstr "Cale de acces la certificatul clientului"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1501
 msgid "Path to Private Key"
-msgstr "Calea catre cheia privata"
+msgstr "Calea către cheia privată"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1529
 msgid "Path to inner CA-Certificate"
@@ -4165,7 +4222,7 @@ msgstr ""
 
 #: modules/luci-base/htdocs/luci-static/resources/luci.js:2706
 msgid "Paused"
-msgstr ""
+msgstr "Întrerupt"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/bandwidth.js:271
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/bandwidth.js:281
@@ -4192,7 +4249,7 @@ msgstr ""
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:90
 msgid "Peers"
-msgstr ""
+msgstr "Perechi"
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:80
 msgid "Perfect Forward Secrecy"
@@ -4207,11 +4264,11 @@ msgstr ""
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/reboot.js:28
 msgid "Perform reboot"
-msgstr "Restarteaza"
+msgstr "Efectuați repornirea"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:375
 msgid "Perform reset"
-msgstr "Reseteaza"
+msgstr "Efectuați resetarea"
 
 #: modules/luci-base/htdocs/luci-static/resources/rpc.js:410
 msgid "Permission denied"
@@ -4223,11 +4280,11 @@ msgstr ""
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/wireless.js:288
 msgid "Phy Rate:"
-msgstr "Rata phy:"
+msgstr "Rata fizică:"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:323
 msgid "Physical Settings"
-msgstr "Setarile fizice"
+msgstr "Setări fizice"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/diagnostics.js:79
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/diagnostics.js:80
@@ -4242,19 +4299,19 @@ msgstr ""
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:138
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:63
 msgid "Pkts."
-msgstr "Packete."
+msgstr "Pachete."
 
 #: modules/luci-base/luasrc/view/sysauth.htm:19
 msgid "Please enter your username and password."
-msgstr "Introdu utilizatorul si parola."
+msgstr "Vă rugăm să introduceți numele de utilizator și parola."
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:3732
 msgid "Please select the file to upload."
-msgstr ""
+msgstr "Vă rugăm să selectați fișierul de încărcat."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:53
 msgid "Policy"
-msgstr ""
+msgstr "Politica"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:21
 msgid "Port"
@@ -4266,7 +4323,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:278
 msgid "Port status:"
-msgstr "Stare port:"
+msgstr "Starea portului:"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:492
 msgid "Potential negation of: %s"
@@ -4294,7 +4351,7 @@ msgstr ""
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:118
 msgid "Preshared Key"
-msgstr ""
+msgstr "Cheie predistribuită"
 
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:131
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/ppp.js:115
@@ -4313,11 +4370,11 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1068
 msgid "Prevents client-to-client communication"
-msgstr ""
+msgstr "Împiedică comunicarea între clienți"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:50
 msgid "Private Key"
-msgstr ""
+msgstr "Cheie privată"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/processes.js:64
 #: modules/luci-mod-status/root/usr/share/luci/menu.d/luci-mod-status.json:48
@@ -4342,11 +4399,11 @@ msgstr "Protocol"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:270
 msgid "Provide NTP server"
-msgstr ""
+msgstr "Furnizați server NTP"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:818
 msgid "Provide new network"
-msgstr ""
+msgstr "Furnizați o nouă rețea"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:997
 msgid "Pseudo Ad-Hoc (ahdemo)"
@@ -4354,7 +4411,7 @@ msgstr ""
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:114
 msgid "Public Key"
-msgstr ""
+msgstr "Cheia publică"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:275
 msgid ""
@@ -4401,7 +4458,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:896
 msgid "RTS/CTS Threshold"
-msgstr ""
+msgstr "Pragul RTS/CTS"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:46
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:81
@@ -4414,7 +4471,7 @@ msgstr "Rată de recepție"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2033
 msgid "RX Rate / TX Rate"
-msgstr "Rată de recepție / transmisie"
+msgstr "Rată de recepție / Rată de transmisie"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1328
 msgid "Radius-Accounting-Port"
@@ -4454,35 +4511,35 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:400
 msgid "Really switch protocol?"
-msgstr ""
+msgstr "Sigur doriți să schimbați protocolul?"
 
 #: modules/luci-mod-status/root/usr/share/luci/menu.d/luci-mod-status.json:57
 msgid "Realtime Graphs"
-msgstr "Grafice in timp real"
+msgstr "Grafice în timp real"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1433
 msgid "Reassociation Deadline"
-msgstr ""
+msgstr "Termenul limită pentru reasociere"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:286
 msgid "Rebind protection"
-msgstr ""
+msgstr "Protecție de relegare"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/reboot.js:14
 #: modules/luci-mod-system/root/usr/share/luci/menu.d/luci-mod-system.json:104
 msgid "Reboot"
-msgstr "Rebooteaza"
+msgstr "Reporniți"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:151
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:160
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/reboot.js:40
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/reboot.js:45
 msgid "Rebooting…"
-msgstr "Rebootare…"
+msgstr "Repornire…"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/reboot.js:15
 msgid "Reboots the operating system of your device"
-msgstr "Rebooteaza sistemul de operare al dispozitivului tau"
+msgstr "Repornește sistemul de operare al dispozitivului dumneavoastră"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:101
 msgid "Receive"
@@ -4494,20 +4551,20 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:346
 msgid "Reconnect this interface"
-msgstr "Reconecteaza aceasta interfata"
+msgstr "Reconectați această interfață"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:56
 msgid "References"
-msgstr "Referinte"
+msgstr "Referințe"
 
 #: modules/luci-base/htdocs/luci-static/resources/luci.js:2700
 msgid "Refreshing"
-msgstr ""
+msgstr "Împrospătare"
 
 #: modules/luci-compat/luasrc/model/network/proto_relay.lua:153
 #: protocols/luci-proto-relay/htdocs/luci-static/resources/protocol/relay.js:39
 msgid "Relay"
-msgstr ""
+msgstr "Releu"
 
 #: modules/luci-compat/luasrc/model/network/proto_relay.lua:157
 #: protocols/luci-proto-relay/htdocs/luci-static/resources/protocol/relay.js:36
@@ -4516,7 +4573,7 @@ msgstr ""
 
 #: protocols/luci-proto-relay/htdocs/luci-static/resources/protocol/relay.js:154
 msgid "Relay between networks"
-msgstr ""
+msgstr "Releu între rețele"
 
 #: modules/luci-compat/luasrc/model/network/proto_relay.lua:12
 #: protocols/luci-proto-relay/htdocs/luci-static/resources/protocol/relay.js:64
@@ -4526,7 +4583,7 @@ msgstr ""
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6in4.js:50
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6rd.js:49
 msgid "Remote IPv4 address"
-msgstr ""
+msgstr "Adresa IPv4 de la distanță"
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:42
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:42
@@ -4541,11 +4598,11 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:842
 msgid "Remove"
-msgstr "Elimina"
+msgstr "Eliminați"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1875
 msgid "Replace wireless configuration"
-msgstr "Inlocuieste configuratia wireless"
+msgstr "Înlocuiți configurația wireless"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:17
 msgid "Request IPv6-address"
@@ -4575,7 +4632,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1571
 msgid "Required"
-msgstr "Necesitat"
+msgstr "Necesar"
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:31
 msgid "Required for certain ISPs, e.g. Charter with DOCSIS 3"
@@ -4610,7 +4667,7 @@ msgstr ""
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1229
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1230
 msgid "Requires hostapd with EAP support"
-msgstr ""
+msgstr "Necesită hostapd cu suport EAP"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1233
 msgid "Requires hostapd with OWE support"
@@ -4668,19 +4725,19 @@ msgstr ""
 #: modules/luci-compat/luasrc/view/cbi/footer.htm:30
 #: modules/luci-compat/luasrc/view/cbi/simpleform.htm:66
 msgid "Reset"
-msgstr "Reset"
+msgstr "Resetare"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:308
 msgid "Reset Counters"
-msgstr "Reseteaza counterii"
+msgstr "Resetați Contoarele"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:373
 msgid "Reset to defaults"
-msgstr ""
+msgstr "Resetați la valorile implicite"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:162
 msgid "Resolv and Hosts Files"
-msgstr "Fisierele de rezolvare si hosturi DNS"
+msgstr "Fișierele de rezolvare și host-uri DNS"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:188
 msgid "Resolve file"
@@ -4694,28 +4751,28 @@ msgstr "Resursa nu a fost găsită"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:810
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/startup.js:97
 msgid "Restart"
-msgstr "Restart"
+msgstr "Reporniți"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:313
 msgid "Restart Firewall"
-msgstr "Restarteaza firewallul"
+msgstr "Reporniți Firewall-ul"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:808
 msgid "Restart radio interface"
-msgstr "Repornește interfața radio"
+msgstr "Reporniți interfața radio"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:369
 msgid "Restore"
-msgstr "Restaureaza"
+msgstr "Restaurează"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:379
 msgid "Restore backup"
-msgstr "Reface backup-ul"
+msgstr "Restaurați o copie de rezervă"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:340
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:341
 msgid "Reveal/hide password"
-msgstr "Arata / ascunde parola"
+msgstr "Arată / ascunde parola"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4017
 msgid "Revert"
@@ -4723,7 +4780,7 @@ msgstr ""
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4102
 msgid "Revert changes"
-msgstr "Restabileste schimbările anterioare"
+msgstr "Restabilește la schimbările anterioare"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4284
 msgid "Revert request failed with status <code>%h</code>"
@@ -4776,7 +4833,7 @@ msgstr ""
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:206
 msgid "Rule"
-msgstr ""
+msgstr "Regula"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:334
 msgid "Run a filesystem check before mounting the device"
@@ -4784,7 +4841,7 @@ msgstr ""
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:334
 msgid "Run filesystem check"
-msgstr "Verifică sistemul de fisiere"
+msgstr "Verifică sistemul de fișiere"
 
 #: modules/luci-base/htdocs/luci-static/resources/luci.js:2345
 msgid "Runtime error"
@@ -4792,7 +4849,7 @@ msgstr ""
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:217
 msgid "SHA256"
-msgstr ""
+msgstr "SHA256"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:57
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:163
@@ -4819,7 +4876,7 @@ msgstr ""
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:274
 #: modules/luci-mod-system/root/usr/share/luci/menu.d/luci-mod-system.json:41
 msgid "SSH-Keys"
-msgstr "Cheile SSH"
+msgstr "Chei SSH"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:154
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:179
@@ -4840,13 +4897,13 @@ msgstr ""
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:431
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/startup.js:119
 msgid "Save"
-msgstr "Salvează"
+msgstr "Salvați"
 
 #: modules/luci-base/htdocs/luci-static/resources/luci.js:2164
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4013
 #: modules/luci-compat/luasrc/view/cbi/footer.htm:22
 msgid "Save & Apply"
-msgstr "Salveaza si aplica"
+msgstr "Salvați și aplicați"
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:587
 msgid "Save error"
@@ -4854,28 +4911,28 @@ msgstr ""
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:403
 msgid "Save mtdblock"
-msgstr ""
+msgstr "Salvați mtdblock"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:393
 msgid "Save mtdblock contents"
-msgstr ""
+msgstr "Salvați conținutul mtdblock"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:815
 msgid "Scan"
-msgstr "Scanează"
+msgstr "Scanați"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/crontab.js:24
 #: modules/luci-mod-system/root/usr/share/luci/menu.d/luci-mod-system.json:62
 msgid "Scheduled Tasks"
-msgstr "Operatiuni programate"
+msgstr "Operațiuni programate"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:3997
 msgid "Section added"
-msgstr "Sectiune adaugata"
+msgstr "Secțiune adăugată"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:3999
 msgid "Section removed"
-msgstr "Sectiune eliminata"
+msgstr "Secțiune eliminată"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:330
 msgid "See \"mount\" manpage for details"
@@ -4887,6 +4944,9 @@ msgid ""
 "fails. Use only if you are sure that the firmware is correct and meant for "
 "your device!"
 msgstr ""
+"Selectați \"Forțați upgrade-ul\" pentru a scrie imaginea chiar dacă "
+"verificarea formatului imaginii nu reușește. Utilizați numai dacă sunteți "
+"sigur că firmware-ul este corect și destinat dispozitivului dvs.!"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2586
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2726
@@ -4911,12 +4971,12 @@ msgstr "Setarile serverului"
 
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoe.js:50
 msgid "Service Name"
-msgstr "Nume serviciu"
+msgstr "Numele serviciului"
 
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:87
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:71
 msgid "Service Type"
-msgstr "Tip de serviciu"
+msgstr "Tipul de serviciu"
 
 #: modules/luci-base/root/usr/share/luci/menu.d/luci-base.json:45
 msgid "Services"
@@ -4963,11 +5023,11 @@ msgstr ""
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:206
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:72
 msgid "Short GI"
-msgstr "Interval de gardă scurt"
+msgstr "IG scurt"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1078
 msgid "Short Preamble"
-msgstr ""
+msgstr "Preambul scurt"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:438
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/backupfiles.lua:18
@@ -4980,7 +5040,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:352
 msgid "Shutdown this interface"
-msgstr "Opreste aceasta interfata"
+msgstr "Închideți această interfață"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:55
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:61
@@ -5008,7 +5068,7 @@ msgstr "Semnal:"
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:3750
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:215
 msgid "Size"
-msgstr "Marime"
+msgstr "Mărime"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:354
 msgid "Size of DNS query cache"
@@ -5054,12 +5114,15 @@ msgid ""
 "flashed manually. Please refer to the wiki for device specific install "
 "instructions."
 msgstr ""
+"Ne pare rău, nu există suport pentru sysupgrade; o nouă imagine firmware "
+"trebuie să fie actualizată manual. Vă rugăm să consultați wiki pentru "
+"instrucțiuni de instalare specifice dispozitivului."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:383
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:69
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:182
 msgid "Source"
-msgstr "Sursa"
+msgstr "Sursă"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:84
 msgid "Source Address"
@@ -5151,28 +5214,28 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1892
 msgid "Specify the secret encryption key here."
-msgstr ""
+msgstr "Specificați aici cheia secretă de criptare."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:579
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/startup.js:96
 msgid "Start"
-msgstr "Pornește"
+msgstr "Începeți"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/startup.js:73
 msgid "Start priority"
-msgstr "Prioritatea pornirii"
+msgstr "Prioritatea de pornire"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1726
 msgid "Start refresh"
-msgstr ""
+msgstr "Începeți reîmprospătarea"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4217
 msgid "Starting configuration apply…"
-msgstr ""
+msgstr "Se aplică configurația de pornire…"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1639
 msgid "Starting wireless scan..."
-msgstr ""
+msgstr "Se pornește scanarea wireless..."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/startup.js:106
 #: modules/luci-mod-system/root/usr/share/luci/menu.d/luci-mod-system.json:53
@@ -5189,7 +5252,7 @@ msgstr "Rute statice IPv6"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:165
 msgid "Static Leases"
-msgstr ""
+msgstr "Închirieri Statice"
 
 #: modules/luci-mod-network/luasrc/controller/admin/network.lua:36
 msgid "Static Routes"
@@ -5199,7 +5262,7 @@ msgstr "Rute statice"
 #: modules/luci-base/htdocs/luci-static/resources/protocol/static.js:172
 #: modules/luci-compat/luasrc/model/network.lua:966
 msgid "Static address"
-msgstr ""
+msgstr "Adresă statică"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:404
 msgid ""
@@ -5210,24 +5273,24 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1095
 msgid "Station inactivity limit"
-msgstr ""
+msgstr "Limita de inactivitate a stației"
 
 #: modules/luci-base/root/usr/share/luci/menu.d/luci-base.json:16
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:383
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:864
 #: modules/luci-mod-status/luasrc/view/admin_status/index.htm:9
 msgid "Status"
-msgstr "Status"
+msgstr "Stare"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:354
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/startup.js:98
 msgid "Stop"
-msgstr "Stop"
+msgstr "Opriți"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1637
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1731
 msgid "Stop refresh"
-msgstr ""
+msgstr "Opriți reîmprospătarea"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:259
 msgid "Strict order"
@@ -5235,16 +5298,16 @@ msgstr "Ordine strictă"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js:33
 msgid "Strong"
-msgstr ""
+msgstr "Puternică"
 
 #: modules/luci-compat/luasrc/view/cbi/simpleform.htm:61
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1917
 msgid "Submit"
-msgstr "Trimite"
+msgstr "Trimiteți"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:203
 msgid "Suppress logging"
-msgstr "Suprimă logarea"
+msgstr "Suprimați înregistrarea in jurnal"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:204
 msgid "Suppress logging of the routine operation of these protocols"
@@ -5293,15 +5356,15 @@ msgstr ""
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2621
 msgid "Symbolic link"
-msgstr ""
+msgstr "Legătură simbolică"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:73
 msgid "Sync with NTP-Server"
-msgstr ""
+msgstr "Sincronizați cu serverul NTP"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:66
 msgid "Sync with browser"
-msgstr ""
+msgstr "Sincronizați cu browserul"
 
 #: modules/luci-base/root/usr/share/luci/menu.d/luci-base.json:26
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/10_system.js:17
@@ -5313,19 +5376,19 @@ msgstr "Sistem"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/syslog.js:25
 #: modules/luci-mod-status/root/usr/share/luci/menu.d/luci-mod-status.json:30
 msgid "System Log"
-msgstr "Log de sistem"
+msgstr "Jurnalul de sistem"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:102
 msgid "System Properties"
-msgstr "Proprietati sistem"
+msgstr "Proprietăți sistem"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:146
 msgid "System log buffer size"
-msgstr ""
+msgstr "Dimensiunea tamponului de jurnal de sistem"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:336
 msgid "TCP:"
-msgstr ""
+msgstr "TCP:"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:163
 msgid "TFTP Settings"
@@ -5333,7 +5396,7 @@ msgstr "Setarile TFTP"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:364
 msgid "TFTP server root"
-msgstr ""
+msgstr "Rădăcina serverului TFTP"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:47
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:82
@@ -5342,28 +5405,28 @@ msgstr "TX"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:130
 msgid "TX Rate"
-msgstr ""
+msgstr "Rată de transmise"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:17
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:166
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:184
 msgid "Table"
-msgstr "Tabel"
+msgstr "Tabelul"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:31
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:65
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:163
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:181
 msgid "Target"
-msgstr "Tinta"
+msgstr "Țintă"
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:103
 msgid "Target network"
-msgstr ""
+msgstr "Rețeaua țintă"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/processes.js:50
 msgid "Terminate"
-msgstr "Termina"
+msgstr "Terminați"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:84
 msgid "The <em>block mount</em> command failed with code %d"
@@ -5399,10 +5462,13 @@ msgid ""
 "The allowed characters are: <code>A-Z</code>, <code>a-z</code>, <code>0-9</"
 "code> and <code>_</code>"
 msgstr ""
+"Caracterele permise sunt: <code>A-Z</code>, <code>a-z</code>, <code>0-9</"
+"code> și <code>_</code>"
 
 #: modules/luci-compat/luasrc/view/cbi/error.htm:6
 msgid "The configuration file could not be loaded due to the following error:"
 msgstr ""
+"Fișierul de configurare nu a putut fi încărcat din cauza următoarei erori:"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4093
 msgid ""
@@ -5414,6 +5480,13 @@ msgid ""
 "or revert all pending changes to keep the currently working configuration "
 "state."
 msgstr ""
+"Dispozitivul nu a putut fi contactat în %d secunde după aplicarea "
+"modificărilor în așteptare, ceea ce a dus la anularea configurației din "
+"motive de siguranță. Dacă totuși considerați că modificările de configurare "
+"sunt corecte, efectuați o aplicare a configurației neverificată. Alternativ, "
+"puteți respinge acest avertisment și puteți edita modificările înainte de a "
+"încerca să aplicați din nou, sau puteți anula toate modificările în "
+"așteptare pentru a păstra starea de funcționare actuală a configurației."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:279
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:391
@@ -5427,6 +5500,8 @@ msgid ""
 "The existing wireless configuration needs to be changed for LuCI to function "
 "properly."
 msgstr ""
+"Configurația wireless existentă trebuie modificată pentru ca LuCI să "
+"funcționeze corect."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:213
 msgid ""
@@ -5434,14 +5509,18 @@ msgid ""
 "compare them with the original file to ensure data integrity. <br /> Click "
 "'Continue' below to start the flash procedure."
 msgstr ""
+"Imaginea flash a fost încărcată. Mai jos sunt listate suma de control și "
+"dimensiunea fișierului, comparați-le cu fișierul original pentru a vă "
+"asigura de integritatea datelor. <br /> Faceți clic pe 'Continuă' de mai jos "
+"pentru a porni procedura de scriere."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:195
 msgid "The following rules are currently active on this system."
-msgstr ""
+msgstr "Următoarele reguli sunt în prezent active pe acest sistem."
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/static.js:154
 msgid "The gateway address must not be a local IP address"
-msgstr ""
+msgstr "Adresa porții de acces nu trebuie să fie o adresă IP locală"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:163
 msgid "The given SSH public key has already been added."
@@ -5455,11 +5534,11 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:714
 msgid "The interface name is already used"
-msgstr ""
+msgstr "Numele interfeței este deja folosit"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:720
 msgid "The interface name is too long"
-msgstr ""
+msgstr "Numele interfeței este prea lung"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6rd.js:61
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/map.js:55
@@ -5486,7 +5565,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1883
 msgid "The network name is already used"
-msgstr ""
+msgstr "Numele rețelei este deja folosit"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:139
 msgid ""
@@ -5501,25 +5580,27 @@ msgstr ""
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:156
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/reboot.js:36
 msgid "The reboot command failed with code %d"
-msgstr ""
+msgstr "Comanda de repornire a eșuat cu codul %d"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:145
 msgid "The restore command failed with code %d"
-msgstr ""
+msgstr "Comanda de restaurare a eșuat cu codul %d"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1282
 msgid "The selected %s mode is incompatible with %s encryption"
-msgstr ""
+msgstr "Modul %s selectat este incompatibil cu criptarea %s"
 
 #: modules/luci-base/luasrc/view/csrftoken.htm:11
 msgid "The submitted security token is invalid or already expired!"
-msgstr ""
+msgstr "Tokenul de securitate trimis este nevalid sau a expirat deja!"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:96
 msgid ""
 "The system is erasing the configuration partition now and will reboot itself "
 "when finished."
 msgstr ""
+"Sistemul șterge acum partiția de configurare și se va reporni singur când va "
+"termina."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:289
 msgid ""
@@ -5528,20 +5609,27 @@ msgid ""
 "address of your computer to reach the device again, depending on your "
 "settings."
 msgstr ""
+"Sistemul se programează acum.<br /> NU OPRIȚI DISPOZITIVUL!<br /> Așteptați "
+"câteva minute înainte de a încerca să vă reconectați. S-ar putea să fie "
+"necesar să reînnoiți adresa computerului dumneavoastră pentru a putea "
+"contacta dispozitivul din nou, în funcție de setările dumneavoastră."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:161
 msgid ""
 "The system is rebooting now. If the restored configuration changed the "
 "current LAN IP address, you might need to reconnect manually."
 msgstr ""
+"Sistemul se repornește acum. Dacă configurația restaurată a modificat adresa "
+"IP curentă a rețelei LAN, este posibil să fie nevoie să vă reconectați "
+"manual."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js:83
 msgid "The system password has been successfully changed."
-msgstr ""
+msgstr "Parola sistemului a fost schimbată cu succes."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:315
 msgid "The sysupgrade command failed with code %d"
-msgstr ""
+msgstr "Comanda sysupgrade a eșuat cu codul %d"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:118
 msgid ""
@@ -5549,31 +5637,36 @@ msgid ""
 "listed below. Press \"Continue\" to restore the backup and reboot, or "
 "\"Cancel\" to abort the operation."
 msgstr ""
+"Arhiva de backup încărcată pare a fi validă și conține fișierele enumerate "
+"mai jos. Apăsați \"Continuă\" pentru a restaura copia de rezervă și a "
+"reporni sau apăsați \"Anulare\" pentru a întrerupe operațiunea."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:113
 msgid "The uploaded backup archive is not readable"
-msgstr ""
+msgstr "Arhiva de backup încărcată nu poate fi citită"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:242
 msgid "The uploaded firmware does not allow keeping current configuration."
-msgstr ""
+msgstr "Firmware-ul încărcat nu permite păstrarea configurației curente."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:237
 msgid ""
 "The uploaded image file does not contain a supported format. Make sure that "
 "you choose the generic image format for your platform."
 msgstr ""
+"Fișierul de imagine încărcat nu conține un format acceptat. Asigurați-vă că "
+"ați ales formatul de imagine generic pentru platforma dvs."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:525
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:557
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:52
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:89
 msgid "There are no active leases"
-msgstr ""
+msgstr "Nu există închirieri active"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4232
 msgid "There are no changes to apply"
-msgstr ""
+msgstr "Nu există modificări de aplicat"
 
 #: themes/luci-theme-bootstrap/luasrc/view/themes/bootstrap/header.htm:55
 #: themes/luci-theme-material/luasrc/view/themes/material/header.htm:213
@@ -5582,8 +5675,8 @@ msgid ""
 "There is no password set on this router. Please configure a root password to "
 "protect the web interface."
 msgstr ""
-"Nu exista o parola pe acest router. Configureaza o parola la contul root "
-"pentru a proteja interfata web."
+"Nu există setată o parolă pe acest router. Vă rugăm configurați o parolă la "
+"contul root pentru a proteja interfața web."
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6rd.js:49
 msgid "This IPv4 address of the relay"
@@ -5623,6 +5716,8 @@ msgid ""
 "This is the content of /etc/rc.local. Insert your own commands here (in "
 "front of 'exit 0') to execute them at the end of the boot process."
 msgstr ""
+"Acesta este conținutul /etc/rc.local. Introduceți propriile comenzi aici (în "
+"fața 'exit 0') pentru a le executa la sfârșitul procesului de pornire."
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6in4.js:54
 msgid ""
@@ -5638,7 +5733,7 @@ msgstr ""
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6in4.js:73
 msgid "This is the plain username for logging into the account"
-msgstr ""
+msgstr "Acesta este numele de utilizator simplu pentru conectarea la cont"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6in4.js:57
 msgid ""
@@ -5659,21 +5754,23 @@ msgid ""
 "This list gives an overview over currently running system processes and "
 "their status."
 msgstr ""
+"Această listă oferă o imagine de ansamblu asupra proceselor de sistem care "
+"rulează în prezent și starea acestora."
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2039
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2345
 #: modules/luci-compat/luasrc/view/cbi/tblsection.htm:172
 #: modules/luci-compat/luasrc/view/cbi/tsection.htm:32
 msgid "This section contains no values yet"
-msgstr ""
+msgstr "Această secțiune nu conține încă nicio valoare"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:108
 msgid "Time Synchronization"
-msgstr ""
+msgstr "Sincronizarea Timpului"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1086
 msgid "Time interval for rekeying GTK"
-msgstr ""
+msgstr "Intervalul de timp pentru reintroducerea cheii GTK"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:129
 msgid "Timezone"
@@ -5681,7 +5778,7 @@ msgstr "Fusul orar"
 
 #: modules/luci-base/htdocs/luci-static/resources/luci.js:2653
 msgid "To login…"
-msgstr ""
+msgstr "Pentru a vă autentifica…"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:369
 msgid ""
@@ -5689,6 +5786,9 @@ msgid ""
 "archive here. To reset the firmware to its initial state, click \"Perform "
 "reset\" (only possible with squashfs images)."
 msgstr ""
+"Pentru a restabili fișierele de configurare, puteți încărca aici o arhivă de "
+"rezervă generată anterior. Pentru a reseta firmware-ul la starea inițială, "
+"faceți clic pe „Efectuați resetarea” (posibil numai cu imaginile squashfs)."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:894
 msgid "Tone"
@@ -5721,15 +5821,15 @@ msgstr "Transfer"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:100
 msgid "Transmit"
-msgstr ""
+msgstr "Transmite"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:66
 msgid "Trigger"
-msgstr ""
+msgstr "Declanșator"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:95
 msgid "Trigger Mode"
-msgstr ""
+msgstr "Mod de declanșare"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6in4.js:69
 msgid "Tunnel ID"
@@ -5738,7 +5838,7 @@ msgstr ""
 #: modules/luci-base/htdocs/luci-static/resources/network.js:2864
 #: modules/luci-compat/luasrc/model/network.lua:1430
 msgid "Tunnel Interface"
-msgstr "Interfata de tunel"
+msgstr "Interfață de tunel"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/464xlat.js:44
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dslite.js:55
@@ -5748,7 +5848,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:183
 msgid "Tx-Power"
-msgstr "Puterea TX"
+msgstr "Puterea transmisiei"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:42
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:53
@@ -5844,7 +5944,7 @@ msgstr ""
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:340
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/startup.js:55
 msgid "Unable to save contents: %s"
-msgstr ""
+msgstr "Nu se poate salva conținutul: %s"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:33
 msgid "Unavailable Seconds (UAS)"
@@ -5885,7 +5985,7 @@ msgstr ""
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:3937
 msgid "Unsaved Changes"
-msgstr "Modificari nesalvate"
+msgstr "Modificări nesalvate"
 
 #: modules/luci-base/htdocs/luci-static/resources/rpc.js:413
 msgid "Unspecified error"
@@ -5899,11 +5999,11 @@ msgstr ""
 #: modules/luci-compat/luasrc/model/network/proto_ncm.lua:69
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:27
 msgid "Unsupported modem"
-msgstr ""
+msgstr "Modem neacceptat"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:265
 msgid "Unsupported protocol type."
-msgstr "Tipul de protocol neacceptat."
+msgstr "Tipul de protocol nesuportat."
 
 #: modules/luci-compat/luasrc/view/cbi/tblsection.htm:151
 msgid "Up"
@@ -5911,36 +6011,38 @@ msgstr ""
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:3824
 msgid "Upload"
-msgstr ""
+msgstr "Încărcați"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:410
 msgid ""
 "Upload a sysupgrade-compatible image here to replace the running firmware."
 msgstr ""
+"Încărcați aici o imagine compatibilă cu sysupgrade pentru a înlocui firmware-"
+"ul actual."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:136
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:167
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:381
 msgid "Upload archive..."
-msgstr ""
+msgstr "Încărcați arhiva..."
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2780
 msgid "Upload file"
-msgstr ""
+msgstr "Încărcați fișierul"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2755
 msgid "Upload file…"
-msgstr ""
+msgstr "Încărcați fișierul…"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2702
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:3812
 msgid "Upload request failed: %s"
-msgstr ""
+msgstr "Solicitarea de încărcare a eșuat: %s"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:3731
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:3785
 msgid "Uploading file…"
-msgstr ""
+msgstr "Se încarcă fișierul…"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:730
 msgid ""
@@ -5952,19 +6054,19 @@ msgstr ""
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:79
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/10_system.js:60
 msgid "Uptime"
-msgstr "Uptime"
+msgstr "Timp de funcționare"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:177
 msgid "Use <code>/etc/ethers</code>"
-msgstr "Foloseste <code>/etc/ethers</code>"
+msgstr "Folosește <code>/etc/ethers</code>"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:274
 msgid "Use DHCP advertised servers"
-msgstr ""
+msgstr "Utilizați serverele DHCP anunțate"
 
 #: protocols/luci-proto-relay/htdocs/luci-static/resources/protocol/relay.js:167
 msgid "Use DHCP gateway"
-msgstr ""
+msgstr "Utilizați poarta de acces a DHCP"
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:37
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:124
@@ -5981,7 +6083,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:559
 msgid "Use ISO/IEC 3166 alpha2 country codes."
-msgstr "Foloseste codurile de tara ISO/IEC 3166 alpha2."
+msgstr "Folosește codurile de țară ISO/IEC 3166 alpha2."
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/464xlat.js:56
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6in4.js:97
@@ -6027,7 +6129,7 @@ msgstr ""
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pptp.js:80
 #: protocols/luci-proto-pppossh/htdocs/luci-static/resources/protocol/pppossh.js:103
 msgid "Use custom DNS servers"
-msgstr ""
+msgstr "Utilizați servere DNS personalizate"
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:34
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:116
@@ -6039,7 +6141,7 @@ msgstr ""
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pptp.js:74
 #: protocols/luci-proto-pppossh/htdocs/luci-static/resources/protocol/pppossh.js:97
 msgid "Use default gateway"
-msgstr ""
+msgstr "Utilizați poarta de acces implicită"
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:45
 #: modules/luci-base/htdocs/luci-static/resources/protocol/static.js:230
@@ -6059,7 +6161,7 @@ msgstr ""
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pptp.js:85
 #: protocols/luci-proto-pppossh/htdocs/luci-static/resources/protocol/pppossh.js:108
 msgid "Use gateway metric"
-msgstr ""
+msgstr "Utilizați metrica porții de acces"
 
 #: protocols/luci-proto-relay/htdocs/luci-static/resources/protocol/relay.js:179
 msgid "Use routing table"
@@ -6095,25 +6197,25 @@ msgstr ""
 
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:125
 msgid "User key (PEM encoded)"
-msgstr ""
+msgstr "Cheie utilizator (codare PEM)"
 
 #: modules/luci-base/luasrc/view/sysauth.htm:23
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:105
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:56
 msgid "Username"
-msgstr "Utilizator"
+msgstr "Nume Utilizator"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:962
 msgid "VC-Mux"
-msgstr "VC-Mux"
+msgstr "VC-Mux (Multiplexarea circuitelor virtuale)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:910
 msgid "VDSL"
-msgstr ""
+msgstr "VDSL"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:173
 msgid "VLANs on %q"
-msgstr "VLANuri pe %q"
+msgstr "VLAN-uri pe %q"
 
 #: modules/luci-base/root/usr/share/luci/menu.d/luci-base.json:36
 msgid "VPN"
@@ -6121,11 +6223,11 @@ msgstr "VPN"
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:42
 msgid "VPN Local address"
-msgstr ""
+msgstr "Adresă locală VPN"
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:46
 msgid "VPN Local port"
-msgstr ""
+msgstr "Port local VPN"
 
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:96
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pptp.js:58
@@ -6148,7 +6250,7 @@ msgstr ""
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:73
 msgid "Vendor"
-msgstr ""
+msgstr "Furnizor"
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:52
 msgid "Vendor Class to send when requesting DHCP"
@@ -6156,11 +6258,11 @@ msgstr ""
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:194
 msgid "Verifying the uploaded image file."
-msgstr ""
+msgstr "Se verifică fișierul imagine încărcat."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:57
 msgid "Virtual dynamic interface"
-msgstr ""
+msgstr "Interfață dinamică virtuală"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1025
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1026
@@ -6173,7 +6275,7 @@ msgstr "Sistem deschis WEP"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1294
 msgid "WEP Shared Key"
-msgstr "Sistem de cheie impartasita WEP"
+msgstr "Cheie partajată WEP"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1892
 msgid "WEP passphrase"
@@ -6185,32 +6287,33 @@ msgstr "Mod WMM"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1892
 msgid "WPA passphrase"
-msgstr "Parola WPA"
+msgstr "Fraza de acces WPA"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1198
 msgid ""
 "WPA-Encryption requires wpa_supplicant (for client mode) or hostapd (for AP "
 "and ad-hoc mode) to be installed."
 msgstr ""
-"Criptarea WPA necesita wpa_supplicant (pentru modul client) sau hostapd "
+"Criptarea WPA necesită wpa_supplicant (pentru modul client) sau hostapd "
 "(pentru modul AP sau ad-hoc) instalate."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/reboot.js:41
 msgid "Waiting for device..."
-msgstr ""
+msgstr "În așteptarea dispozitivului..."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:173
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:183
 msgid "Warning"
-msgstr "Avertizare"
+msgstr "Avertisment"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/reboot.js:20
 msgid "Warning: There are unsaved changes that will get lost on reboot!"
 msgstr ""
+"Avertisment: Există modificări nesalvate care se vor pierde la repornire!"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js:37
 msgid "Weak"
-msgstr ""
+msgstr "Slabă"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1445
 msgid ""
@@ -6222,30 +6325,30 @@ msgstr ""
 #: modules/luci-compat/luasrc/view/cbi/wireless_modefreq.htm:166
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:463
 msgid "Width"
-msgstr ""
+msgstr "Lățime"
 
 #: modules/luci-compat/luasrc/model/network/proto_wireguard.lua:9
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:18
 msgid "WireGuard VPN"
-msgstr ""
+msgstr "VPN WireGuard"
 
 #: modules/luci-mod-network/luasrc/controller/admin/network.lua:14
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:79
 #: modules/luci-mod-status/root/usr/share/luci/menu.d/luci-mod-status.json:84
 msgid "Wireless"
-msgstr "Wireless"
+msgstr "Fără fir"
 
 #: modules/luci-base/htdocs/luci-static/resources/network.js:2852
 #: modules/luci-compat/luasrc/model/network.lua:1418
 msgid "Wireless Adapter"
-msgstr "Adaptorul wireless"
+msgstr "Adaptor wireless"
 
 #: modules/luci-base/htdocs/luci-static/resources/network.js:2831
 #: modules/luci-base/htdocs/luci-static/resources/network.js:4035
 #: modules/luci-compat/luasrc/model/network.lua:1404
 #: modules/luci-compat/luasrc/model/network.lua:1865
 msgid "Wireless Network"
-msgstr "Retea wireless"
+msgstr "Rețea wireless"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:746
 msgid "Wireless Overview"
@@ -6257,7 +6360,7 @@ msgstr "Securitate wireless"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:728
 msgid "Wireless configuration migration"
-msgstr ""
+msgstr "Migrarea configurației wireless"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:151
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:191
@@ -6273,11 +6376,11 @@ msgstr "Wireless-ul este ne-asociat"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:870
 msgid "Wireless network is disabled"
-msgstr "Reteaua wireless este dezactivata"
+msgstr "Rețeaua wireless este dezactivată"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:870
 msgid "Wireless network is enabled"
-msgstr "Reteaua wireless este activata"
+msgstr "Rețeaua wireless este activată"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:275
 msgid "Write received DNS requests to syslog"
@@ -6285,7 +6388,7 @@ msgstr "Scrie cererile DNS primite in syslog"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:165
 msgid "Write system log to file"
-msgstr ""
+msgstr "Scrieți jurnalul de sistem într-un fișier"
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:3460
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:109
@@ -6311,10 +6414,12 @@ msgstr ""
 msgid ""
 "You must enable JavaScript in your browser or LuCI will not work properly."
 msgstr ""
+"Trebuie să activați JavaScript în browserul dumneavoastră, altfel LuCI nu va "
+"funcționa corect."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:197
 msgid "ZRam Compression Algorithm"
-msgstr ""
+msgstr "Algoritmul de compresie ZRam"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:204
 msgid "ZRam Compression Streams"
@@ -6322,11 +6427,11 @@ msgstr ""
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:190
 msgid "ZRam Settings"
-msgstr ""
+msgstr "Setări ZRam"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:192
 msgid "ZRam Size"
-msgstr ""
+msgstr "Dimensiunea ZRam"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:324
 msgid "any"
@@ -6345,7 +6450,7 @@ msgstr "auto"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:85
 msgid "automatic"
-msgstr ""
+msgstr "automat"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:82
 msgid "baseT"
@@ -6353,7 +6458,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:968
 msgid "bridged"
-msgstr ""
+msgstr "cu punte"
 
 #: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:146
 #: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:402
@@ -6361,11 +6466,11 @@ msgstr ""
 #: modules/luci-compat/luasrc/view/cbi/firewall_zonelist.htm:99
 #: modules/luci-compat/luasrc/view/cbi/network_netlist.htm:31
 msgid "create"
-msgstr ""
+msgstr "creați"
 
 #: modules/luci-compat/luasrc/view/cbi/network_netlist.htm:69
 msgid "create:"
-msgstr ""
+msgstr "creați:"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:414
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:728
@@ -6408,7 +6513,7 @@ msgstr "dBm"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1007
 msgid "disable"
-msgstr "dezactiveaza"
+msgstr "dezactivați"
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/static.js:185
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:624
@@ -6417,19 +6522,19 @@ msgstr "dezactiveaza"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:89
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:25
 msgid "disabled"
-msgstr ""
+msgstr "dezactivat"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:513
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:547
 msgid "driver default"
-msgstr ""
+msgstr "driver implicit"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:514
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:535
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:42
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:69
 msgid "expired"
-msgstr "expirat"
+msgstr "a expirat"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:182
 msgid ""
@@ -6445,15 +6550,15 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:84
 msgid "full-duplex"
-msgstr ""
+msgstr "full-duplex (ambele direcții)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:84
 msgid "half-duplex"
-msgstr ""
+msgstr "half-duplex (o singură direcție)"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:569
 msgid "hexadecimal encoded value"
-msgstr ""
+msgstr "valoare codificată în hexazecimal"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1699
 msgid "hidden"
@@ -6463,7 +6568,7 @@ msgstr "ascuns"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:633
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:638
 msgid "hybrid mode"
-msgstr ""
+msgstr "mod hibrid"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:36
 msgid "if target is a network"
@@ -6471,21 +6576,21 @@ msgstr "daca tinta este o retea"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dslite.js:63
 msgid "ignore"
-msgstr ""
+msgstr "ignorați"
 
 #: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:69
 #: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:191
 #: modules/luci-compat/luasrc/view/cbi/firewall_zonelist.htm:46
 msgid "input"
-msgstr ""
+msgstr "intrare"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:394
 msgid "key between 8 and 63 characters"
-msgstr ""
+msgstr "cheie între 8 și 63 de caractere"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:406
 msgid "key with either 5 or 13 characters"
-msgstr ""
+msgstr "cheie cu 5 sau 13 caractere"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:189
 msgid "local <abbr title=\"Domain Name System\">DNS</abbr> file"
@@ -6493,11 +6598,11 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1301
 msgid "medium security"
-msgstr ""
+msgstr "securitate medie"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1450
 msgid "minutes"
-msgstr ""
+msgstr "minute"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:44
 msgid "no"
@@ -6505,7 +6610,7 @@ msgstr "nu"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:76
 msgid "no link"
-msgstr ""
+msgstr "fără legătură"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:55
 msgid "non-empty value"
@@ -6513,20 +6618,20 @@ msgstr ""
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2841
 msgid "none"
-msgstr ""
+msgstr "niciunul"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:41
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:55
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:69
 msgid "not present"
-msgstr ""
+msgstr "nu este prezent"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:345
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:894
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:898
 #: themes/luci-theme-material/luasrc/view/themes/material/header.htm:197
 msgid "off"
-msgstr ""
+msgstr "oprit"
 
 #: themes/luci-theme-material/luasrc/view/themes/material/header.htm:196
 msgid "on"
@@ -6534,7 +6639,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1302
 msgid "open network"
-msgstr ""
+msgstr "rețea deschisă"
 
 #: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:69
 #: modules/luci-compat/luasrc/view/cbi/firewall_zonelist.htm:46
@@ -6587,7 +6692,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1300
 msgid "strong security"
-msgstr ""
+msgstr "securitate puternică"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:350
 msgid "tagged"
@@ -6700,7 +6805,7 @@ msgstr ""
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:339
 msgid "valid MAC address"
-msgstr ""
+msgstr "adresă MAC validă"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:410
 msgid "valid UCI identifier"
@@ -6713,24 +6818,24 @@ msgstr ""
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:382
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:385
 msgid "valid address:port"
-msgstr ""
+msgstr "adresă validă:port"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:533
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:537
 msgid "valid date (YYYY-MM-DD)"
-msgstr ""
+msgstr "data valabilă (AAAA-LL-ZZ)"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:233
 msgid "valid decimal value"
-msgstr ""
+msgstr "valoare zecimală validă"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:404
 msgid "valid hexadecimal WEP key"
-msgstr ""
+msgstr "cheie WEP hexazecimală validă"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:392
 msgid "valid hexadecimal WPA key"
-msgstr ""
+msgstr "cheie WPA hexazecimală validă"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:367
 msgid "valid host:port"
@@ -6742,11 +6847,11 @@ msgstr ""
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:79
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:107
 msgid "valid hostname"
-msgstr ""
+msgstr "nume de gazdă valid"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:344
 msgid "valid hostname or IP address"
-msgstr ""
+msgstr "nume de gazdă sau adresă IP validă"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:225
 msgid "valid integer value"
@@ -6768,27 +6873,27 @@ msgstr ""
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:323
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:136
 msgid "valid port value"
-msgstr ""
+msgstr "valoarea validă a portului"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:513
 msgid "valid time (HH:MM:SS)"
-msgstr ""
+msgstr "timp valabil (HH:MM:SS)"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:435
 msgid "value between %d and %d characters"
-msgstr ""
+msgstr "valoare între %d și %d caractere"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:415
 msgid "value between %f and %f"
-msgstr ""
+msgstr "valoare cuprinsă între %f și %f"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:419
 msgid "value greater or equal to %f"
-msgstr ""
+msgstr "valoare mai mare sau egală cu %f"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:423
 msgid "value smaller or equal to %f"
-msgstr ""
+msgstr "valoare mai mică sau egală cu %f"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:429
 msgid "value with %d characters"
@@ -6812,4 +6917,4 @@ msgstr "da"
 
 #: modules/luci-compat/luasrc/view/cbi/delegator.htm:20
 msgid "« Back"
-msgstr "« Inapoi"
+msgstr "« Înapoi"
