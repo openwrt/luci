@@ -275,8 +275,14 @@ return view.extend({
 
 		o = s.taboption('general', form.Flag, 'logqueries',
 			_('Log queries'),
-			_('Write received DNS queries to syslog.'));
+			_('Write received DNS queries to syslog by default, or log facility if defined.'));
 		o.optional = true;
+
+		o = s.taboption('general', form.Value, 'logfacility',
+			_('Log facility'),
+			_('File to log received DNS queries to. Leave empty to log to syslog.'));
+		o.optional = true;
+		o.depends('logqueries', '1');
 
 		o = s.taboption('general', form.DynamicList, 'server',
 			_('DNS forwardings'),
