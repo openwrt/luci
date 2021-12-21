@@ -21,7 +21,7 @@ function renderbox(ifc, ipv6) {
 	    active = (dev && ifc.getProtocol() != 'none'),
 	    addrs = (ipv6 ? ifc.getIP6Addrs() : ifc.getIPAddrs()) || [],
 	    dnssrv = (ipv6 ? ifc.getDNS6Addrs() : ifc.getDNSAddrs()) || [],
-	    expires = (ipv6 ? null : ifc.getExpiry()),
+	    expires = ifc.getExpiry(),
 	    uptime = ifc.getUptime();
 
 	return E('div', { class: 'ifacebox' }, [
