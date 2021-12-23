@@ -1248,7 +1248,7 @@
 		 * `null` on parsing failures or if no element could be found.
 		 */
 		parse: function(s) {
-			var elem;
+			var elem = null;
 
 			try {
 				domParser = domParser || new DOMParser();
@@ -1256,16 +1256,7 @@
 			}
 			catch(e) {}
 
-			if (!elem) {
-				try {
-					dummyElem = dummyElem || document.createElement('div');
-					dummyElem.innerHTML = s;
-					elem = dummyElem.firstChild;
-				}
-				catch (e) {}
-			}
-
-			return elem || null;
+			return elem;
 		},
 
 		/**
