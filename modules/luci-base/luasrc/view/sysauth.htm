@@ -20,15 +20,15 @@
 		</div>
 		<div class="cbi-section"><div class="cbi-section-node">
 			<div class="cbi-value">
-				<label class="cbi-value-title"><%:Username%></label>
+				<label class="cbi-value-title" for="luci_username"><%:Username%></label>
 				<div class="cbi-value-field">
-					<input class="cbi-input-text" type="text" name="luci_username" value="<%=duser%>" />
+					<input class="cbi-input-text" type="text" name="luci_username" id="luci_username" autocomplete="username" value="<%=duser%>" />
 				</div>
 			</div>
 			<div class="cbi-value cbi-value-last">
-				<label class="cbi-value-title"><%:Password%></label>
+				<label class="cbi-value-title" for="luci_password"><%:Password%></label>
 				<div class="cbi-value-field">
-					<input class="cbi-input-text" type="password" name="luci_password" />
+					<input class="cbi-input-text" type="password" name="luci_password" id="luci_password" autocomplete="current-password"/>
 				</div>
 			</div>
 		</div></div>
