@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: LuCI\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-04-20 09:40+0200\n"
-"PO-Revision-Date: 2021-12-13 23:52+0000\n"
-"Last-Translator: Josef Schlehofer <pepe@bloodkings.eu>\n"
+"PO-Revision-Date: 2021-12-30 07:50+0000\n"
+"Last-Translator: Matthaiks <kitynska@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/openwrt/luci/pl/>"
 "\n"
 "Language: pl\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.10-dev\n"
+"X-Generator: Weblate 4.10.1\n"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1513
 msgid "%.1f dB"
@@ -982,7 +982,7 @@ msgstr "Kopia zapasowa"
 
 #: modules/luci-mod-system/root/usr/share/luci/menu.d/luci-mod-system.json:128
 msgid "Backup / Flash Firmware"
-msgstr "Kopia/Aktualizacja"
+msgstr "Kopia zapasowa / Aktualizacja firmware"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:351
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/backupfiles.lua:12
@@ -1004,7 +1004,7 @@ msgstr "Klucz publiczny tego interfejsu zakodowany w Base64 do udostępniania."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:974
 msgid "Beacon Interval"
-msgstr "Interwał ramki[beacon]"
+msgstr "Interwał ramki (beacon)"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:352
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/backupfiles.lua:46
@@ -1294,8 +1294,8 @@ msgid ""
 "Click \"Generate archive\" to download a tar archive of the current "
 "configuration files."
 msgstr ""
-"Kliknij \"Twórz archiwum\" aby pobrać archiwum tar zawierające bieżące pliki "
-"konfiguracyjne."
+"Kliknij \"Twórz archiwum\", aby pobrać archiwum tar z bieżącymi plikami "
+"konfiguracyjnymi."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:424
 msgid ""
@@ -1933,7 +1933,8 @@ msgstr "Rozłączaj przy niskim stanie ramek ACK"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:302
 msgid ""
 "Discard upstream responses containing <a href=\"%s\">RFC1918</a> addresses."
-msgstr "Odrzuć odpowiedzi nadrzędne zawierające adresy RFC1918."
+msgstr ""
+"Odrzuć odpowiedzi nadrzędne zawierające adresy <a href=\"%s\">RFC1918</a>."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:198
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:723
@@ -2690,8 +2691,8 @@ msgid ""
 "Find all currently attached filesystems and swap and replace configuration "
 "with defaults based on what was detected"
 msgstr ""
-"Znajdź wszystkie podłączone systemy plików i na podstawie tego, zamień oraz "
-"zastąp konfigurację domyślnymi wartościami"
+"Znajdź wszystkie aktualnie podłączone systemy plików oraz swap i zamień "
+"konfigurację na domyślne na podstawie tego, co zostało wykryte"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:878
 msgid "Find and join network"
@@ -2982,7 +2983,7 @@ msgstr "Globalne opcje sieciowe"
 #: themes/luci-theme-openwrt-2020/luasrc/view/themes/openwrt2020/header.htm:72
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:92
 msgid "Go to firmware upgrade..."
-msgstr "Przejdź do aktualizacji oprogramowania..."
+msgstr "Przejdź do aktualizacji firmware..."
 
 #: themes/luci-theme-bootstrap/luasrc/view/themes/bootstrap/header.htm:72
 #: themes/luci-theme-openwrt-2020/luasrc/view/themes/openwrt2020/header.htm:62
@@ -3959,7 +3960,7 @@ msgstr "Klucz do pakietów wychodzących (opcjonalnie)."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/processes.js:54
 msgid "Kill"
-msgstr "Zabij"
+msgstr "Usuń"
 
 #: modules/luci-compat/luasrc/model/network/proto_ppp.lua:21
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/l2tp.js:10
@@ -4174,7 +4175,7 @@ msgstr "Nasłuchuj interfejs"
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:17
 msgid "Listen only on the given interface or, if unspecified, on all"
 msgstr ""
-"Słuchaj tylko na podanym interfejsie, lub jeśli nie podano na wszystkich"
+"Słuchaj tylko na podanym interfejsie lub, jeśli nie określono, na wszystkich"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:333
 msgid ""
@@ -4711,7 +4712,7 @@ msgid ""
 "Mount Points define at which point a memory device will be attached to the "
 "filesystem"
 msgstr ""
-"Punkty montowania definiują gdzie urządzenie pamięci zostanie podłączone do "
+"Punkty montowania definiują, gdzie urządzenie pamięci zostanie podłączone do "
 "systemu plików"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:154
@@ -4928,7 +4929,7 @@ msgid ""
 msgstr ""
 "Żadne zmiany ustawień nie będą zapisane i zostaną utracone po ponownym "
 "uruchomieniu. Ten tryb powinien być używany tylko do instalacji aktualizacji "
-"oprogramowania"
+"firmware"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:69
 msgid "No client associated"
@@ -5077,7 +5078,7 @@ msgstr "Nieobecny"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:102
 msgid "Not started on boot"
-msgstr "Nie uruchomiony przy starcie"
+msgstr "Nie uruchomiono przy starcie"
 
 #: modules/luci-base/htdocs/luci-static/resources/rpc.js:409
 msgid "Not supported"
@@ -6517,9 +6518,9 @@ msgid ""
 "fails. Use only if you are sure that the firmware is correct and meant for "
 "your device!"
 msgstr ""
-"Wybierz 'Wymuś uaktualnienie', aby wgrać obraz nawet jeśli sprawdzenie "
+"Wybierz 'Wymuś uaktualnienie', aby wgrać obraz, nawet jeśli sprawdzenie "
 "formatu obrazu nie powiodło się. Używaj tylko wtedy, gdy masz pewność że "
-"oprogramowanie jest poprawne i jest przeznaczone dla twojego urządzenia!"
+"firmware jest poprawny i przeznaczony do Twojego urządzenia!"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2657
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2797
@@ -8443,7 +8444,7 @@ msgstr ""
 "użyć, natomiast <em>Nazwa hosta</em> jest przypisana jako symboliczna nazwa "
 "do określonego hosta. Opcjonalne <em>Czas trwania dzierżawy</em> może być "
 "użyty do ustawienia niestandardowego, specyficznego dla hosta czasu "
-"dzierżawy, np. 12h, 3d lub nieskończony."
+"dzierżawy, np. 12h, 3d lub infinite (nieskończony)."
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:324
 msgid "Use upper layer protocol information (layer3+4)"
