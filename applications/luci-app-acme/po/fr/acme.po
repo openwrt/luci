@@ -1,14 +1,14 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2021-04-09 08:05+0000\n"
-"Last-Translator: khorwood <khorwood@gmail.com>\n"
+"PO-Revision-Date: 2021-12-30 07:50+0000\n"
+"Last-Translator: Samuel Chéreau <bnorus@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsacme/fr/>\n"
 "Language: fr\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.6-dev\n"
+"X-Generator: Weblate 4.10.1\n"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:17
 msgid "ACME certificates"
@@ -39,9 +39,8 @@ msgid "Certificate config"
 msgstr "Configuration du certificat"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:122
-#, fuzzy
 msgid "Challenge Alias"
-msgstr "Alias vers l'URL de challenge"
+msgstr "Alias vers l'URL de défi"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:47
 msgid "Challenge Validation"
@@ -162,9 +161,8 @@ msgstr ""
 "fournisseur de DNS pour générer le certificat."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:29
-#, fuzzy
 msgid "State directory"
-msgstr "Répertoire courant"
+msgstr "Répertoire pour les contextes"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:123
 msgid ""
@@ -207,6 +205,13 @@ msgid ""
 "address. Once configured, issuing certificates can take a while. Check the "
 "logs for progress and any errors."
 msgstr ""
+"Cela configure l'installation automatique du certificat ACME (Letsencrypt). "
+"Remplissez simplement ceci pour que le routeur soit configuré avec les "
+"certificats émis par Letsencrypt pour l'interface Web. Notez que les noms de "
+"domaine dans le certificat doivent déjà être configurés pour pointer vers "
+"l'adresse IP publique du routeur. Une fois configurés, l'émission de "
+"certificats peut prendre un certain temps. Vérifiez les journaux pour la "
+"progression et les erreurs."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:108
 msgid ""
@@ -217,6 +222,13 @@ msgid ""
 "supports wildcard certificates. Using this mode requires the acme-dnsapi "
 "package to be installed."
 msgstr ""
+"Pour utiliser le mode DNS afin d'émettre des certificats, inscrivez ici le "
+"nom d'un API DNS supportant acme.sh. Visitez https://github.com/acmesh-"
+"official/acme.sh/wiki/dnsapi pour obtenir une liste des APIs disponibles. "
+"Dans le mode DNS, il n'est pas requis que le nom du domaine soit résolu à "
+"l'IP du routeur. Le mode DNS est aussi l'unique mode supportant les "
+"certificats génériques (wildcard). L'utilisation de ce mode requiert "
+"l'installation du paquet acme-dnsapi."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:84
 msgid ""
@@ -224,6 +236,10 @@ msgid ""
 "for one certificate). Nginx must support ssl, if not it won't start as it "
 "needs to be compiled with ssl support to use cert options"
 msgstr ""
+"Actualise la configuration nginx à l'aide de ce certificat une fois émis (à "
+"ne choisir que pour un seul certificat). Nginx requiert le support SSL pour "
+"pouvoir démarrer et avoir accès aux options de certificat et doit avoir été "
+"compilé avec le support SSL."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:76
 msgid ""
@@ -231,6 +247,9 @@ msgid ""
 "for one certificate). Is also available luci-app-uhttpd to configure uhttpd "
 "form the LuCI interface."
 msgstr ""
+"Actualise la configuration uhttpd à l'aide de ce certificat une fois émis (à "
+"ne choisir que pour un seul certificat). luci-app-uhttpd permet également de "
+"configurer uhttpd à partir de l'interface LuCI."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:135
 msgid "Use a custom CA instead of Let's Encrypt."
@@ -261,16 +280,15 @@ msgid "Webroot directory"
 msgstr "Répertoire racine web"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:101
-#, fuzzy
 msgid ""
 "Webserver root directory. Set this to the webserver document root to run "
 "Acme in webroot mode. The web server must be accessible from the internet on "
 "port 80."
 msgstr ""
 "Répertoire racine du serveur web. Définir ce champ avec l'emplacement de la "
-"racine du serveur Web pour utiliser Acme en mode Racine (webroot). Le "
+"racine du serveur Web pour utiliser ACME en mode Racine (webroot). Le "
 "serveur web doit être accessible depuis internet sur le port 80."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:30
 msgid "Where certs and other state files are kept."
-msgstr ""
+msgstr "Emplacement de sauvegarde des certificats et des fichiers états."
