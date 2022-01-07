@@ -28,13 +28,22 @@ return baseclass.extend({
 		var s = '%.1f\xa0%s, %d\xa0%s'.format(rt.rate / 1000, _('Mbit/s'), rt.mhz, _('MHz')),
 		    ht = rt.ht, vht = rt.vht,
 			mhz = rt.mhz, nss = rt.nss,
-			mcs = rt.mcs, sgi = rt.short_gi;
+			mcs = rt.mcs, sgi = rt.short_gi,
+			he = rt.he, he_gi = rt.he_gi,
+			he_dcm = rt.he_dcm;
 
 		if (ht || vht) {
 			if (vht) s += ', VHT-MCS\xa0%d'.format(mcs);
 			if (nss) s += ', VHT-NSS\xa0%d'.format(nss);
 			if (ht)  s += ', MCS\xa0%s'.format(mcs);
 			if (sgi) s += ', ' + _('Short GI').replace(/ /g, '\xa0');
+		}
+
+		if (he) {
+			s += ', HE-MCS\xa0%d'.format(mcs);
+			if (nss) s += ', HE-NSS\xa0%d'.format(nss);
+			if (he_gi) s += ', HE-GI\xa0%d'.format(he_gi);
+			if (he_dcm) s += ', HE-DCM\xa0%d'.format(he_dcm);
 		}
 
 		return s;
