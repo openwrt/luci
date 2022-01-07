@@ -627,8 +627,8 @@ return baseclass.extend({
 		o.value('', _('disabled'));
 		o.value('loose', _('Loose filtering'));
 		o.value('strict', _('Strict filtering'));
-		o.cfgvalue = function(section_id) {
-			var val = form.ListValue.prototype.cfgvalue.apply(this, [section_id]);
+		o.cfgvalue = function(/* ... */) {
+			var val = form.ListValue.prototype.cfgvalue.apply(this, arguments);
 
 			switch (val || '') {
 			case 'loose':
