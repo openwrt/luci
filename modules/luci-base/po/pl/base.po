@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: LuCI\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-04-20 09:40+0200\n"
-"PO-Revision-Date: 2021-12-30 07:50+0000\n"
+"PO-Revision-Date: 2022-01-07 18:20+0000\n"
 "Last-Translator: Matthaiks <kitynska@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/openwrt/luci/pl/>"
 "\n"
@@ -382,15 +382,15 @@ msgstr "Aktywne trasy IPv4"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:258
 msgid "Active IPv4 Rules"
-msgstr "Aktywne reguły <abbr title=\"Internet Protocol Version 4\">IPv4</abbr>"
+msgstr "Aktywne reguły IPv4"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:265
 msgid "Active IPv6 Routes"
-msgstr "Aktywne trasy <abbr title=\"Internet Protocol Version 6\">IPv6</abbr>"
+msgstr "Aktywne trasy IPv6"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:268
 msgid "Active IPv6 Rules"
-msgstr "Aktywne reguły <abbr title=\"Internet Protocol Version 6\">IPv6</abbr>"
+msgstr "Aktywne reguły IPv6"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:205
 msgid "Active-Backup policy (active-backup, 1)"
@@ -2573,7 +2573,7 @@ msgstr "Zewnętrzny Klucz R1 listy właścicieli"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:166
 msgid "External system log server"
-msgstr "Serwer zewnętrzny dla logów systemowych"
+msgstr "Zewnętrzny serwer logów systemowych"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:171
 msgid "External system log server port"
@@ -4181,7 +4181,7 @@ msgstr ""
 msgid ""
 "Listen only on the specified interfaces, and loopback if not excluded "
 "explicitly."
-msgstr "Ogranicz nasłuchiwanie do tych interfesjów, oraz loopbacku."
+msgstr "Ogranicz nasłuchiwanie do tych interfesjów oraz pętli zwrotnej."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:438
 msgid "Listening port for inbound DNS queries."
@@ -6026,8 +6026,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:345
 msgid "Read <code>/etc/ethers</code> to configure the DHCP server."
-msgstr ""
-"Przejrzyj plik <code>/etc/ethers</code> , aby skonfigurować serwer DHCP."
+msgstr "Przejrzyj plik <code>/etc/ethers</code>, aby skonfigurować serwer DHCP."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:559
 msgid "Really switch protocol?"
@@ -6173,11 +6172,12 @@ msgstr "Wymagany dla niektórych dostawców internetu, np. Charter z DOCSIS 3"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:93
 msgid "Required. Base64-encoded private key for this interface."
-msgstr "Wymagane. Klucz prywatny dla tego interfejsu Base64-encoded."
+msgstr ""
+"Wymagane. Klucz prywatny zakodowany w formacie Base64 dla tego interfejsu."
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:261
 msgid "Required. Base64-encoded public key of peer."
-msgstr "Wymagane. Klucz publiczny Base64-encodec dla peera."
+msgstr "Wymagane. Klucz publiczny zakodowany w formacie Base64 dla peera."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1312
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1313
@@ -6876,15 +6876,15 @@ msgid ""
 "Specifies the maximum amount of failed ARP requests until hosts are presumed "
 "to be dead"
 msgstr ""
-"Określa maksymalną ilość błędów dla zapytania ARP przed założeniem, że host "
-"jest martwy"
+"Określa maksymalną liczbę nieudanych żądań ARP, po których hosty są uznawane "
+"za martwe"
 
 #: protocols/luci-proto-relay/htdocs/luci-static/resources/protocol/relay.js:171
 msgid ""
 "Specifies the maximum amount of seconds after which hosts are presumed to be "
 "dead"
 msgstr ""
-"Określa maksymalny czas w sekundach przed założeniem, że host jest martwy"
+"Określa maksymalną liczbę sekund, po których uznaje się, że hosty są martwe"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:947
 msgid ""
@@ -7249,7 +7249,7 @@ msgstr "Przełącznik %q"
 msgid ""
 "Switch %q has an unknown topology - the VLAN settings might not be accurate."
 msgstr ""
-"Switch %q ma nieznaną topologię - ustawienia VLAN mogą nie być dokładne."
+"Przełącznik %q ma nieznaną topologię - ustawienia VLAN mogą nie być dokładne."
 
 #: modules/luci-base/htdocs/luci-static/resources/network.js:3008
 #: modules/luci-compat/luasrc/model/network.lua:1426
@@ -7258,7 +7258,7 @@ msgstr "Przełącznik VLAN"
 
 #: modules/luci-base/htdocs/luci-static/resources/network.js:3005
 msgid "Switch port"
-msgstr "Przełącz port"
+msgstr "Port przełącznika"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:560
 msgid "Switch protocol"
@@ -8904,7 +8904,7 @@ msgstr "zmostkowany"
 #: modules/luci-compat/luasrc/view/cbi/firewall_zonelist.htm:99
 #: modules/luci-compat/luasrc/view/cbi/network_netlist.htm:31
 msgid "create"
-msgstr "Utwórz"
+msgstr "utwórz"
 
 #: modules/luci-compat/luasrc/view/cbi/network_netlist.htm:69
 msgid "create:"
@@ -9122,7 +9122,7 @@ msgstr "tryb przekaźnika"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1566
 msgid "routed"
-msgstr "Prowadzone"
+msgstr "kierowane"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1166
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1175
