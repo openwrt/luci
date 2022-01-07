@@ -100,6 +100,13 @@ o.datatype = "ipaddr"
 o:depends("limit_enable","1")
 
 --
+-- limit speed by mac address
+--
+o = s:taboption("limitmac", Flag, "limit_mac_enable", translate("Limit Enable"), translate("Enable Limit Rate Feature"))
+o.default = limit_mac_enable or o.enabled
+o.rmempty = false
+
+--
 -- Priority
 --
 o = s:taboption("priority", Flag, "priority_enable", translate("Enable Traffic Priority"), translate("Enable this feature"))
@@ -223,13 +230,6 @@ if enable_priority == "1" then
 	o.default = '?'
 
 end
-
---
--- limit speed by mac address
---
-o = s:taboption("limitmac", Flag, "limit_mac_enable", translate("Limit Enable"), translate("Enable Limit Rate Feature"))
-o.default = limit_mac_enable or o.enabled
-o.rmempty = false
 
 --
 -- Static By Mac Address
