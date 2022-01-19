@@ -66,5 +66,8 @@ return network.registerProtocol('ipip', {
 
 		o = s.taboption('advanced', form.Flag, 'df', _("Don't Fragment"), _("Enable the DF (Don't Fragment) flag of the encapsulating packets."));
 		o.optional = true;
+
+		o = s.taboption('advanced', form.Flag, 'nohostroute', _("No host route"), _("Do not create host route to peer (optional)."));
+		o.optional = true;
 	}
 });
