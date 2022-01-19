@@ -1158,6 +1158,9 @@ return view.extend({
 										protoclass.addDevice(device.formvalue('_new_'));
 
 										m.children[0].addedSection = section_id;
+
+										ui.hideModal();
+										ui.showModal(null, E('p', { 'class': 'spinning' }, [ _('Loading data…') ]));
 									}).then(L.bind(m.children[0].renderMoreOptionsModal, m.children[0], nameval));
 								});
 							})
