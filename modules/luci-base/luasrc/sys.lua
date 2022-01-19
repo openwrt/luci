@@ -566,6 +566,7 @@ function init.names()
 end
 
 function init.index(name)
+	name = fs.basename(name)
 	if fs.access(init.dir..name) then
 		return call("env -i sh -c 'source %s%s enabled; exit ${START:-255}' >/dev/null"
 			%{ init.dir, name })
@@ -573,6 +574,7 @@ function init.index(name)
 end
 
 local function init_action(action, name)
+	name = fs.basename(name)
 	if fs.access(init.dir..name) then
 		return call("env -i %s%s %s >/dev/null" %{ init.dir, name, action })
 	end
