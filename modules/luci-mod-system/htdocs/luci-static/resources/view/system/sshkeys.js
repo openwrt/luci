@@ -169,7 +169,7 @@ function addKey(ev) {
 	}
 	else if (!pubkey) {
 		ui.showModal(_('Add key'), [
-			E('div', { class: 'alert-message warning' }, _('The given SSH public key is invalid. Please supply proper public RSA or ECDSA keys.')),
+			E('div', { class: 'alert-message warning' }, _('The given SSH public key is invalid. Please supply proper public RSA, ED25519 or ECDSA keys.')),
 			E('div', { class: 'right' }, E('div', { class: 'btn', click: L.hideModal }, _('Close')))
 		]);
 	}
