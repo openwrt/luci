@@ -1965,6 +1965,8 @@ return view.extend({
 					});
 				});
 			}).then(L.bind(function() {
+				ui.showModal(null, E('p', { 'class': 'spinning' }, [ _('Loading data…') ]));
+
 				return this.renderMoreOptionsModal(section_id);
 			}, this));
 		};
