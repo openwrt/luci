@@ -1394,47 +1394,50 @@ return view.extend({
 				}
 
 
-				o = ss.taboption('encryption', form.Value, 'auth_server', _('Radius-Authentication-Server'));
+				o = ss.taboption('encryption', form.Value, 'auth_server', _('RADIUS Authentication Server'));
 				add_dependency_permutations(o, { mode: ['ap', 'ap-wds'], encryption: ['wpa', 'wpa2', 'wpa3', 'wpa3-mixed'] });
 				o.rmempty = true;
 				o.datatype = 'host(0)';
 
-				o = ss.taboption('encryption', form.Value, 'auth_port', _('Radius-Authentication-Port'), _('Default %d').format(1812));
+				o = ss.taboption('encryption', form.Value, 'auth_port', _('RADIUS Authentication Port'));
 				add_dependency_permutations(o, { mode: ['ap', 'ap-wds'], encryption: ['wpa', 'wpa2', 'wpa3', 'wpa3-mixed'] });
 				o.rmempty = true;
 				o.datatype = 'port';
+				o.placeholder = '1812';
 
-				o = ss.taboption('encryption', form.Value, 'auth_secret', _('Radius-Authentication-Secret'));
+				o = ss.taboption('encryption', form.Value, 'auth_secret', _('RADIUS Authentication Secret'));
 				add_dependency_permutations(o, { mode: ['ap', 'ap-wds'], encryption: ['wpa', 'wpa2', 'wpa3', 'wpa3-mixed'] });
 				o.rmempty = true;
 				o.password = true;
 
-				o = ss.taboption('encryption', form.Value, 'acct_server', _('Radius-Accounting-Server'));
+				o = ss.taboption('encryption', form.Value, 'acct_server', _('RADIUS Accounting Server'));
 				add_dependency_permutations(o, { mode: ['ap', 'ap-wds'], encryption: ['wpa', 'wpa2', 'wpa3', 'wpa3-mixed'] });
 				o.rmempty = true;
 				o.datatype = 'host(0)';
 
-				o = ss.taboption('encryption', form.Value, 'acct_port', _('Radius-Accounting-Port'), _('Default %d').format(1813));
+				o = ss.taboption('encryption', form.Value, 'acct_port', _('RADIUS Accounting Port'));
 				add_dependency_permutations(o, { mode: ['ap', 'ap-wds'], encryption: ['wpa', 'wpa2', 'wpa3', 'wpa3-mixed'] });
 				o.rmempty = true;
 				o.datatype = 'port';
+				o.placeholder = '1813';
 
-				o = ss.taboption('encryption', form.Value, 'acct_secret', _('Radius-Accounting-Secret'));
+				o = ss.taboption('encryption', form.Value, 'acct_secret', _('RADIUS Accounting Secret'));
 				add_dependency_permutations(o, { mode: ['ap', 'ap-wds'], encryption: ['wpa', 'wpa2', 'wpa3', 'wpa3-mixed'] });
 				o.rmempty = true;
 				o.password = true;
 
-				o = ss.taboption('encryption', form.Value, 'dae_client', _('DAE-Client'));
+				o = ss.taboption('encryption', form.Value, 'dae_client', _('DAE-Client'), _('Dynamic Authorization Extension client.'));
 				add_dependency_permutations(o, { mode: ['ap', 'ap-wds'], encryption: ['wpa', 'wpa2', 'wpa3', 'wpa3-mixed'] });
 				o.rmempty = true;
 				o.datatype = 'host(0)';
 
-				o = ss.taboption('encryption', form.Value, 'dae_port', _('DAE-Port'), _('Default %d').format(3799));
+				o = ss.taboption('encryption', form.Value, 'dae_port', _('DAE-Port'), _('Dynamic Authorization Extension port.'));
 				add_dependency_permutations(o, { mode: ['ap', 'ap-wds'], encryption: ['wpa', 'wpa2', 'wpa3', 'wpa3-mixed'] });
 				o.rmempty = true;
 				o.datatype = 'port';
+				o.placeholder = '3799';
 
-				o = ss.taboption('encryption', form.Value, 'dae_secret', _('DAE-Secret'));
+				o = ss.taboption('encryption', form.Value, 'dae_secret', _('DAE-Secret'), _('Dynamic Authorization Extension secret.'));
 				add_dependency_permutations(o, { mode: ['ap', 'ap-wds'], encryption: ['wpa', 'wpa2', 'wpa3', 'wpa3-mixed'] });
 				o.rmempty = true;
 				o.password = true;
