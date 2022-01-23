@@ -183,6 +183,11 @@ return view.extend({
 			o.datatype = 'uinteger';
 			o.placeholder = 10;
 
+			o = s.taboption('advanced', form.Value, 'uidrange', _('User identifier'));
+			o.modalonly = true;
+			o.datatype = 'string';
+			o.placeholder = '1000-1005';
+
 			o = s.taboption('advanced', form.Value, 'suppress_prefixlength', _('Prefix suppressor'));
 			o.modalonly = true;
 			o.datatype = (family == 6) ? 'ip6prefix' : 'ip4prefix';
