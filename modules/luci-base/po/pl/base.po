@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: LuCI\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-04-20 09:40+0200\n"
-"PO-Revision-Date: 2021-12-30 07:50+0000\n"
+"PO-Revision-Date: 2022-01-23 10:03+0000\n"
 "Last-Translator: Matthaiks <kitynska@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/openwrt/luci/pl/"
 ">\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.10.1\n"
+"X-Generator: Weblate 4.11-dev\n"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1508
 msgid "%.1f dB"
@@ -894,7 +894,7 @@ msgstr "Połączone urządzenia"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:142
 msgid "Associations"
-msgstr "Połączeni"
+msgstr "Połączone"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:154
 msgid "Attempt to enable configured mount points for attached devices"
@@ -1369,7 +1369,7 @@ msgid ""
 "persist connection"
 msgstr ""
 "Zamknij nieaktywne połączenia po określonym czasie podanym w sekundach, "
-"wpisz 0 aby uzyskać stałe połączenie"
+"wpisz 0, aby uzyskać stałe połączenie"
 
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/backupfiles.lua:49
 msgid "Close list..."
@@ -1453,8 +1453,8 @@ msgstr ""
 "jeśli starsze szybkości 802.11b nie są używane. W innym przypadku na 5.5, 11 "
 "Mbps. Wysoka: konfiguruje podstawowe szybkości na 12, 24 Mbps, jeśli starsze "
 "szybkości 802.11b nie są używane. W innym przypadku do szybkości 11 Mbps. "
-"Bardzo Wysoka: konfiguruje 24 Mbps jako szybkość podstawową. Obsługiwane "
-"stawki niższe niż minimalna podstawowa nie są oferowane."
+"Bardzo wysoka: konfiguruje 24 Mbps jako szybkość podstawową. Obsługiwane "
+"szybkości niższe niż minimalna podstawowa nie są oferowane."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:775
 msgid ""
@@ -2154,8 +2154,8 @@ msgid ""
 "Dynamically allocate DHCP addresses for clients. If disabled, only clients "
 "having static leases will be served."
 msgstr ""
-"Dynamicznie przydzielaj adresy DHCP klientom. Jeśli wyłączone, tylko klienci "
-"posiadający statyczne dzierżawy będą obsłużeni."
+"Dynamicznie przydzielaj adresy DHCP klientom. Jeśli wyłączone, tylko klienty "
+"posiadające statyczne dzierżawy będą obsłużone."
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/map.js:67
 msgid "EA-bits length"
@@ -2551,7 +2551,7 @@ msgstr "Zewnętrzny Klucz R1 listy właścicieli"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:166
 msgid "External system log server"
-msgstr "Serwer zewnętrzny dla logów systemowych"
+msgstr "Zewnętrzny serwer logów systemowych"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:171
 msgid "External system log server port"
@@ -5103,7 +5103,8 @@ msgstr ""
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:92
 msgid "Optional. Maximum Transmission Unit of tunnel interface."
-msgstr "Opcjonalny. Maksymalna wartość transmisji interfejsu tunelowego."
+msgstr ""
+"Opcjonalne. Maksymalna jednostka transmisji (MTU) interfejsu tunelowego."
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:153
 msgid "Optional. Port of peer."
@@ -5814,7 +5815,7 @@ msgstr "Restartowanie…"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/reboot.js:21
 msgid "Reboots the operating system of your device"
-msgstr "Uruchamia ponownie system na twoim urządzeniu"
+msgstr "Uruchamia ponownie system operacyjny urządzenia"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/netdev.js:25
 msgid "Receive"
@@ -5924,11 +5925,12 @@ msgstr "Wymagany dla niektórych dostawców internetu, np. Charter z DOCSIS 3"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:61
 msgid "Required. Base64-encoded private key for this interface."
-msgstr "Wymagane. Klucz prywatny dla tego interfejsu Base64-encoded."
+msgstr ""
+"Wymagane. Klucz prywatny zakodowany w formacie Base64 dla tego interfejsu."
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:134
 msgid "Required. Base64-encoded public key of peer."
-msgstr "Wymagane. Klucz publiczny Base64-encodec dla peera."
+msgstr "Wymagane. Klucz publiczny zakodowany w formacie Base64 dla peera."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1312
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1313
@@ -6600,15 +6602,15 @@ msgid ""
 "Specifies the maximum amount of failed ARP requests until hosts are presumed "
 "to be dead"
 msgstr ""
-"Określa maksymalną ilość błędów dla zapytania ARP przed założeniem, że host "
-"jest martwy"
+"Określa maksymalną liczbę nieudanych żądań ARP, po których hosty są uznawane "
+"za martwe"
 
 #: protocols/luci-proto-relay/htdocs/luci-static/resources/protocol/relay.js:171
 msgid ""
 "Specifies the maximum amount of seconds after which hosts are presumed to be "
 "dead"
 msgstr ""
-"Określa maksymalny czas w sekundach przed założeniem, że host jest martwy"
+"Określa maksymalną liczbę sekund, po których uznaje się, że hosty są martwe"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:947
 msgid ""
@@ -6776,7 +6778,7 @@ msgid ""
 "header inherits the value of the inner header) or an hexadecimal value "
 "<code>00..FF</code> (optional)."
 msgstr ""
-"Określ tos (typ usługi). Może to być <code>inherit</code> (zewnętrzny "
+"Określ TOS (typ usługi). Może to być <code>inherit</code> (zewnętrzny "
 "nagłówek dziedziczy wartość nagłówka wewnętrznego) lub wartość szesnastkowa "
 "<code>00..FF</code> (opcjonalnie)."
 
@@ -6819,15 +6821,15 @@ msgid ""
 "Specify an MTU (Maximum Transmission Unit) other than the default (1280 "
 "bytes) (optional)."
 msgstr ""
-"Określ jednostkę MTU (maksymalną jednostkę transmisji) inną niż domyślna "
-"(1280 bajtów) (opcjonalnie)."
+"Określ MTU (maksymalną jednostkę transmisji) inną niż domyślna (1280 bajtów) "
+"(opcjonalnie)."
 
 #: protocols/luci-proto-ipip/htdocs/luci-static/resources/protocol/ipip.js:53
 msgid ""
 "Specify an MTU (Maximum Transmission Unit) other than the default (1280 "
 "bytes)."
 msgstr ""
-"Określ MTU (Maximum Transmission Unit) inną niż domyślna (1280 bajtów)."
+"Określ MTU (maksymalną jednostkę transmisji) inną niż domyślna (1280 bajtów)."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2019
 msgid "Specify the secret encryption key here."
@@ -6973,7 +6975,7 @@ msgstr "Przełącznik %q"
 msgid ""
 "Switch %q has an unknown topology - the VLAN settings might not be accurate."
 msgstr ""
-"Switch %q ma nieznaną topologię - ustawienia VLAN mogą nie być dokładne."
+"Przełącznik %q ma nieznaną topologię - ustawienia VLAN mogą nie być dokładne."
 
 #: modules/luci-base/htdocs/luci-static/resources/network.js:3008
 #: modules/luci-compat/luasrc/model/network.lua:1426
@@ -6982,7 +6984,7 @@ msgstr "Przełącznik VLAN"
 
 #: modules/luci-base/htdocs/luci-static/resources/network.js:3005
 msgid "Switch port"
-msgstr "Przełącz port"
+msgstr "Port przełącznika"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:560
 msgid "Switch protocol"
@@ -7083,8 +7085,8 @@ msgid ""
 "<abbr title=\"Router Advertisement, ICMPv6 Type 134\">RA</abbr> messages. "
 "Minimum is 1280 bytes."
 msgstr ""
-"<abbr title=\"Maximum Transmission Unit\">MTU</abbr>, które ma być "
-"opublikowane w komunikatach <abbr title=\"Router Advertisement, ICMPv6 Type "
+"<abbr title=\"Maximum Transmission Unit\">MTU</abbr>, która ma być "
+"opublikowana w komunikatach <abbr title=\"Router Advertisement, ICMPv6 Type "
 "134\">RA</abbr>. Minimalna wartość to 1280 bajtów."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:794
@@ -7277,8 +7279,8 @@ msgstr "Podany klucz publiczny SSH został już dodany."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:172
 msgid ""
-"The given SSH public key is invalid. Please supply proper public RSA, ED25519 or "
-"ECDSA keys."
+"The given SSH public key is invalid. Please supply proper public RSA, "
+"ED25519 or ECDSA keys."
 msgstr ""
 "Podany klucz publiczny SSH jest nieprawidłowy. Podaj odpowiedni publiczny "
 "RSA lub klucze ECDSA."
@@ -8108,7 +8110,7 @@ msgstr ""
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/20_memory.js:36
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:194
 msgid "Used"
-msgstr "Użyte"
+msgstr "W użyciu"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1467
 msgid "Used Key Slot"
@@ -8352,8 +8354,8 @@ msgid ""
 "Where Wi-Fi Multimedia (WMM) Mode QoS is disabled, clients may be limited to "
 "802.11a/802.11g rates."
 msgstr ""
-"Gdy tryb QoS Wi-Fi Multimedia (WMM) jest wyłączony, klienci mogą być "
-"ograniczeni do szybkości 802.11a/802.11g."
+"Gdy funkcja QoS w trybie Wi-Fi Multimedia (WMM) jest wyłączona, klienty mogą "
+"być ograniczone do szybkości 802.11a/802.11g."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1139
 msgid ""
@@ -8533,7 +8535,7 @@ msgstr "zmostkowany"
 #: modules/luci-compat/luasrc/view/cbi/firewall_zonelist.htm:99
 #: modules/luci-compat/luasrc/view/cbi/network_netlist.htm:31
 msgid "create"
-msgstr "Utwórz"
+msgstr "utwórz"
 
 #: modules/luci-compat/luasrc/view/cbi/network_netlist.htm:69
 msgid "create:"
@@ -8767,7 +8769,7 @@ msgstr "tryb przekaźnika"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1561
 msgid "routed"
-msgstr "Prowadzone"
+msgstr "kierowane"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1166
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1175
