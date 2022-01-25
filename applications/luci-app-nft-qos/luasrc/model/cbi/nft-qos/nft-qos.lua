@@ -272,5 +272,4 @@ if limit_mac_enable == "1" then
 	o:value("mbytes", "MBytes/s")
 
 end
-
 return m
