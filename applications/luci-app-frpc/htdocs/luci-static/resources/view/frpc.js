@@ -39,6 +39,7 @@ var commonConf = [
 ];
 
 var baseProxyConf = [
+	[form.Value, 'name', _('Proxy name'), undefined, {rmempty: false, optional: false}],
 	[form.ListValue, 'type', _('Proxy type'), _('ProxyType specifies the type of this proxy. Valid values include "tcp", "udp", "http", "https", "stcp", and "xtcp".<br />By default, this value is "tcp".'), {values: ['tcp', 'udp', 'http', 'https', 'stcp', 'xtcp']}],
 	[form.Flag, 'use_encryption', _('Encryption'), _('UseEncryption controls whether or not communication with the server will be encrypted. Encryption is done using the tokens supplied in the server and client configuration.<br />By default, this value is false.'), {datatype: 'bool'}],
 	[form.Flag, 'use_compression', _('Compression'), _('UseCompression controls whether or not communication with the server will be compressed.<br />By default, this value is false.'), {datatype: 'bool'}],
@@ -65,6 +66,7 @@ var httpProxyConf = [
 
 var stcpProxyConf = [
 	[form.ListValue, 'role', _('Role'), undefined, {values: ['server', 'visitor']}],
+	[form.Value, 'server_name', _('Server name'), undefined, {depends: [{role: 'visitor'}]}],
 	[form.Value, 'sk', _('Sk')],
 ];
 
@@ -82,12 +84,20 @@ function setParams(o, params) {
 		} else if (key === 'depends') {
 			if (!Array.isArray(val))
 				val = [val];
+
+			var deps = [];
 			for (var j = 0; j < val.length; j++) {
-				var args = val[j];
-				if (!Array.isArray(args))
-					args = [args];
-				o.depends.apply(o, args);
+				var d = {};
+				for (var vkey in val[j])
+					d[vkey] = val[j][vkey];
+				for (var k = 0; k < o.deps.length; k++) {
+					for (var dkey in o.deps[k]) {
+						d[dkey] = o.deps[k][dkey];
+					}
+				}
+				deps.push(d);
 			}
+			o.deps = deps;
 		} else {
 			o[key] = params[key];
 		}
@@ -186,21 +196,17 @@ return view.extend({
 		defOpts(s, startupConf);
 
 		s = m.section(form.GridSection, 'conf', _('Proxy Settings'));
+		s.anonymous = true;
 		s.addremove = true;
+		s.sortable = true;
+		s.addbtntitle = _('Add new proxy...');
+
 		s.filter = function(s) { return s !== 'common'; };
-		s.renderSectionAdd = function(extra_class) {
-			var el = form.GridSection.prototype.renderSectionAdd.apply(this, arguments),
-				nameEl = el.querySelector('.cbi-section-create-name');
-			ui.addValidator(nameEl, 'uciname', true, function(v) {
-				if (v === 'common') return _('Name can not be "common"');
-				return true;
-			}, 'blur', 'keyup');
-			return el;
-		}
 
 		s.tab('general', _('General Settings'));
 		s.tab('http', _('HTTP Settings'));
 
+		s.option(form.Value, 'name', _('Proxy name')).modalonly = false;
 		s.option(form.Value, 'type', _('Proxy type')).modalonly = false;
 		s.option(form.Value, 'local_ip', _('Local IP')).modalonly = false;
 		s.option(form.Value, 'local_port', _('Local port')).modalonly = false;
