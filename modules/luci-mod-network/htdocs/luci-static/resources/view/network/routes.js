@@ -38,11 +38,11 @@ return view.extend({
 			s.tab('general', _('General Settings'));
 			s.tab('advanced', _('Advanced Settings'));
 
-			o = s.taboption('general', widgets.NetworkSelect, 'interface', _('Interface'));
+			o = s.taboption('general', widgets.NetworkSelect, 'interface', _('Interface'), _('Specifies the logical interface name of the parent (or master) interface this route belongs to'));
 			o.loopback = true;
 			o.nocreate = true;
 
-			o = s.taboption('general', form.ListValue, 'type', _('Route type'));
+			o = s.taboption('general', form.ListValue, 'type', _('Route type'), _('Specifies the route type to be created'));
 			o.modalonly = true;
 			o.value('', 'unicast');
 			o.value('local');
@@ -53,7 +53,7 @@ return view.extend({
 			o.value('blackhole');
 			o.value('anycast');
 
-			o = s.taboption('general', form.Value, 'target', _('Target'));
+			o = s.taboption('general', form.Value, 'target', _('Target'), _('Network address'));
 			o.rmempty = false;
 			o.datatype = (family == 6) ? 'cidr6' : 'cidr4';
 			o.placeholder = (family == 6) ? '::/0' : '0.0.0.0/0';
@@ -72,23 +72,23 @@ return view.extend({
 				uci.unset('network', section_id, 'netmask');
 			}
 
-			o = s.taboption('general', form.Value, 'gateway', _('Gateway'));
+			o = s.taboption('general', form.Value, 'gateway', _('Gateway'), _('Specifies the network gateway. If omitted, the gateway from the parent interface is taken if any, otherwise creates a link scope route. If set to 0.0.0.0 no gateway will be specified for the route'));
 			o.datatype = (family == 6) ? 'ip6addr("nomask")' : 'ip4addr("nomask")';
 			o.placeholder = (family == 6) ? 'fe80::1' : '192.168.0.1';
 
-			o = s.taboption('advanced', form.Value, 'metric', _('Metric'));
+			o = s.taboption('advanced', form.Value, 'metric', _('Metric'), _('Specifies the route metric to use'));
 			o.datatype = 'uinteger';
 			o.placeholder = 0;
 			o.textvalue = function(section_id) {
 				return this.cfgvalue(section_id) || 0;
 			};
 
-			o = s.taboption('advanced', form.Value, 'mtu', _('MTU'));
+			o = s.taboption('advanced', form.Value, 'mtu', _('MTU'), _('Defines a specific MTU for this route'));
 			o.modalonly = true;
 			o.datatype = 'and(uinteger,range(64,9000))';
 			o.placeholder = 1500;
 
-			o = s.taboption('advanced', form.Value, 'table', _('Table'));
+			o = s.taboption('advanced', form.Value, 'table', _('Table'), _('The rule target is a table lookup ID: a numeric table index ranging from 0 to 65535 or symbol alias declared in /etc/iproute2/rt_tables. Special aliases local (255), main (254) and default (253) are also valid'));
 			o.datatype = 'or(uinteger, string)';
 			for (var i = 0; i < rtTables.length; i++)
 				o.value(rtTables[i][1], '%s (%d)'.format(rtTables[i][1], rtTables[i][0]));
@@ -96,7 +96,7 @@ return view.extend({
 				return this.cfgvalue(section_id) || 'main';
 			};
 
-			o = s.taboption('advanced', form.Value, 'source', _('Source'));
+			o = s.taboption('advanced', form.Value, 'source', _('Source'), _('Specifies the preferred source address when sending to destinations covered by the target'));
 			o.modalonly = true;
 			o.datatype = (family == 6) ? 'ip6addr("nomask")' : 'ip4addr("nomask")';
 			o.placeholder = E('em', _('auto'));
@@ -106,7 +106,7 @@ return view.extend({
 					o.value(addrs[j].split('/')[0]);
 			}
 
-			o = s.taboption('advanced', form.Flag, 'onlink', _('On-link'));
+			o = s.taboption('advanced', form.Flag, 'onlink', _('On-link'), _('When enabled, gateway is on-link even if the gateway does not match any interface prefix'));
 			o.modalonly = true;
 			o.default = o.disabled;
 
@@ -126,14 +126,14 @@ return view.extend({
 			s.tab('general', _('General Settings'));
 			s.tab('advanced', _('Advanced Settings'));
 
-			o = s.taboption('general', form.Value, 'priority', _('Priority'));
+			o = s.taboption('general', form.Value, 'priority', _('Priority'), _('Specifies the ordering of the IP rules'));
 			o.datatype = 'uinteger';
 			o.placeholder = 30000;
 			o.textvalue = function(section_id) {
 				return this.cfgvalue(section_id) || E('em', _('auto'));
 			};
 
-			o = s.taboption('general', form.ListValue, 'action', _('Rule type'));
+			o = s.taboption('general', form.ListValue, 'action', _('Rule type'), _('Specifies the rule target routing action'));
 			o.modalonly = true;
 			o.value('', 'unicast');
 			o.value('unreachable');
@@ -141,59 +141,59 @@ return view.extend({
 			o.value('blackhole');
 			o.value('throw');
 
-			o = s.taboption('general', widgets.NetworkSelect, 'in', _('Incoming interface'));
+			o = s.taboption('general', widgets.NetworkSelect, 'in', _('Incoming interface'), _('Specifies the incoming logical interface name'));
 			o.loopback = true;
 			o.nocreate = true;
 
-			o = s.taboption('general', form.Value, 'src', _('Source'));
+			o = s.taboption('general', form.Value, 'src', _('Source'), _('Specifies the source subnet to match (CIDR notation)'));
 			o.datatype = (family == 6) ? 'cidr6' : 'cidr4';
 			o.placeholder = (family == 6) ? '::/0' : '0.0.0.0/0';
 			o.textvalue = function(section_id) {
 				return this.cfgvalue(section_id) || E('em', _('any'));
 			};
 
-			o = s.taboption('general', widgets.NetworkSelect, 'out', _('Outgoing interface'));
+			o = s.taboption('general', widgets.NetworkSelect, 'out', _('Outgoing interface'), _('Specifies the outgoing logical interface name'));
 			o.loopback = true;
 			o.nocreate = true;
 
-			o = s.taboption('general', form.Value, 'dest', _('Destination'));
+			o = s.taboption('general', form.Value, 'dest', _('Destination'), _('Specifies the destination subnet to match (CIDR notation)'));
 			o.datatype = (family == 6) ? 'cidr6' : 'cidr4';
 			o.placeholder = (family == 6) ? '::/0' : '0.0.0.0/0';
 			o.textvalue = function(section_id) {
 				return this.cfgvalue(section_id) || E('em', _('any'));
 			};
 
-			o = s.taboption('general', form.Value, 'lookup', _('Table'));
+			o = s.taboption('general', form.Value, 'lookup', _('Table'), _('The rule target is a table lookup ID: a numeric table index ranging from 0 to 65535 or symbol alias declared in /etc/iproute2/rt_tables. Special aliases local (255), main (254) and default (253) are also valid'));
 			o.datatype = 'or(uinteger, string)';
 			for (var i = 0; i < rtTables.length; i++)
 				o.value(rtTables[i][1], '%s (%d)'.format(rtTables[i][1], rtTables[i][0]));
 
-			o = s.taboption('advanced', form.Value, 'goto', _('Jump to rule'));
+			o = s.taboption('advanced', form.Value, 'goto', _('Jump to rule'), _('The rule target is a jump to another rule specified by its priority value'));
 			o.modalonly = true;
 			o.datatype = 'uinteger';
 			o.placeholder = 80000;
 
-			o = s.taboption('advanced', form.Value, 'mark', _('Firewall mark'));
+			o = s.taboption('advanced', form.Value, 'mark', _('Firewall mark'), _('Specifies the fwmark and optionally its mask to match, e.g. 0xFF to match mark 255 or 0x0/0x1 to match any even mark value'));
 			o.modalonly = true;
 			o.datatype = 'string';
 			o.placeholder = '0x1/0xf';
 
-			o = s.taboption('advanced', form.Value, 'tos', _('Type of service'));
+			o = s.taboption('advanced', form.Value, 'tos', _('Type of service'), _('Specifies the TOS value to match in IP headers'));
 			o.modalonly = true;
 			o.datatype = 'uinteger';
 			o.placeholder = 10;
 
-			o = s.taboption('advanced', form.Value, 'uidrange', _('User identifier'));
+			o = s.taboption('advanced', form.Value, 'uidrange', _('User identifier'), _('Specifies an individual UID or range of UIDs to match, e.g. 1000 to match corresponding UID or 1000-1005 to inclusively match all UIDs within the corresponding range'));
 			o.modalonly = true;
 			o.datatype = 'string';
 			o.placeholder = '1000-1005';
 
-			o = s.taboption('advanced', form.Value, 'suppress_prefixlength', _('Prefix suppressor'));
+			o = s.taboption('advanced', form.Value, 'suppress_prefixlength', _('Prefix suppressor'), _('Reject routing decisions that have a prefix length less than or equal to the specified value'));
 			o.modalonly = true;
 			o.datatype = (family == 6) ? 'ip6prefix' : 'ip4prefix';
 			o.placeholder = (family == 6) ? 64 : 24;
 
-			o = s.taboption('advanced', form.Flag, 'invert', _('Invert match'));
+			o = s.taboption('advanced', form.Flag, 'invert', _('Invert match'), _('If set, the meaning of the match options is inverted'));
 			o.modalonly = true;
 			o.default = o.disabled;
 
