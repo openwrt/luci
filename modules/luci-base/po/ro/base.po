@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2022-01-12 11:22+0000\n"
+"PO-Revision-Date: 2022-01-26 08:55+0000\n"
 "Last-Translator: CRISTIAN ANDREI <cristianvdr@gmail.com>\n"
 "Language-Team: Romanian <https://hosted.weblate.org/projects/openwrt/luci/ro/"
 ">\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2;\n"
-"X-Generator: Weblate 4.10.1\n"
+"X-Generator: Weblate 4.11-dev\n"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1508
 msgid "%.1f dB"
@@ -592,15 +592,16 @@ msgstr "Logica de selecție a agregării"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:263
 msgid "Aggregator: All slaves down or has no slaves (stable, 0)"
-msgstr "Agregator: Toți sclavii au căzut sau nu are sclavi (stabil, 0)"
+msgstr ""
+"Agregator: Toate secundarele au căzut sau nu există secundare (stabil, 0)"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:265
 msgid ""
 "Aggregator: Chosen by the largest number of ports + slave added/removed or "
 "state changes (count, 2)"
 msgstr ""
-"Agregator: Ales în funcție de cel mai mare număr de porturi + sclav adăugat/"
-"eliminat sau modificări de stare (număr, 2)"
+"Agregator: Ales în funcție de cel mai mare număr de porturi + secundar "
+"adăugat/eliminat sau modificări de stare (număr, 2)"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:264
 msgid "Aggregator: Slave added/removed or state changes (bandwidth, 1)"
@@ -1518,13 +1519,13 @@ msgstr "Conexiuni"
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:378
 msgid "Consider the slave up when all ARP IP targets are reachable (all, 1)"
 msgstr ""
-"Se consideră că sclavul este activat atunci când toate țintele IP ARP sunt "
-"accesibile (all, 1)"
+"Se consideră că secundarul este activat atunci când toate țintele IP ARP "
+"sunt accesibile (toate, 1)"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:377
 msgid "Consider the slave up when any ARP IP target is reachable (any, 0)"
 msgstr ""
-"Se consideră că sclavul este activat atunci când orice țintă IP ARP este "
+"Se consideră că secundarul este activat atunci când orice țintă IP ARP este "
 "accesibilă (orice, 0)"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/crontab.js:18
@@ -1539,7 +1540,7 @@ msgstr "Conţinutul a fost salvat."
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:132
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:269
 msgid "Continue"
-msgstr "Continuă"
+msgstr "Continuați"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4187
 msgid ""
@@ -3445,7 +3446,7 @@ msgid ""
 "blocked. Click \"Continue »\" below to return to the previous page."
 msgstr ""
 "Pentru a preveni accesul neautorizat la sistem, cererea dumneavoastră a fost "
-"blocată. Faceți clic pe \"Continuare »\" de mai jos pentru a reveni la "
+"blocată. Faceți clic pe \"Continuați »\" de mai jos pentru a reveni la "
 "pagina anterioară."
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:125
@@ -4546,7 +4547,7 @@ msgstr "Mutarea în sus"
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:91
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:96
 msgid "Multicast"
-msgstr "Multicast"
+msgstr "Difuzare multiplă"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:705
 msgid "Multicast routing"
@@ -4745,11 +4746,11 @@ msgstr "Fără delegație de prefix corespunzătoare"
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:142
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:145
 msgid "No more slaves available"
-msgstr "Nu mai sunt sclavi disponibili"
+msgstr "Nu mai sunt secundari disponibili"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:189
 msgid "No more slaves available, can not save interface"
-msgstr "Nu mai sunt sclavi disponibili, nu se poate salva interfața"
+msgstr "Nu mai sunt secundare disponibile, nu se poate salva interfața"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:340
 msgid "No negative cache"
@@ -4772,7 +4773,7 @@ msgstr "Fără chei publice prezente încă."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:90
 msgid "No rules in this chain."
-msgstr "Nu există reguli în acest lanț."
+msgstr "Nu există reguli în acestă legătură."
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:385
 msgid "No validation or filtering"
@@ -4864,7 +4865,7 @@ msgstr "Aviz"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/diagnostics.js:127
 msgid "Nslookup"
-msgstr "Nslookup"
+msgstr "Căutare DNS"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:333
 msgid "Number of IGMP membership reports"
@@ -4950,8 +4951,8 @@ msgstr ""
 msgid ""
 "Only if current active slave fails and the primary slave is up (failure, 2)"
 msgstr ""
-"Numai în cazul în care sclavul activ curent eșuează și sclavul primar este "
-"activ (eșec, 2)"
+"Numai în cazul în care secundarul activ curent eșuează și secundul principal "
+"este activ (eșec, 2)"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:472
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/backupfiles.lua:19
@@ -4961,11 +4962,11 @@ msgstr "Deschideți lista..."
 #: modules/luci-compat/luasrc/model/network/proto_openconnect.lua:9
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:64
 msgid "OpenConnect (CISCO AnyConnect)"
-msgstr "OpenConnect (CISCO AnyConnect)"
+msgstr "Conectare Deschisă (CISCO AnyConnect)"
 
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:12
 msgid "OpenFortivpn"
-msgstr "OpenFortivpn"
+msgstr "FortiOpenvpn"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:724
 msgid ""
@@ -5336,7 +5337,7 @@ msgstr "Pachete"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:277
 msgid "Packets To Transmit Before Moving To Next Slave"
-msgstr "Pachete de transmis înainte de a trece la următorul sclav"
+msgstr "Pachete de transmis înainte de a trece la următorul secundar"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:153
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1186
@@ -5572,25 +5573,25 @@ msgstr "Împiedică comunicarea între clienți"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:213
 msgid "Primary Slave"
-msgstr "Sclav primar"
+msgstr "Secundară Principală"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:170
 msgctxt "VLAN port state"
 msgid "Primary VLAN ID"
-msgstr "ID VLAN primar"
+msgstr "ID VLAN principal"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:230
 msgid ""
 "Primary becomes active slave when it comes back up if speed and duplex "
 "better than current slave (better, 1)"
 msgstr ""
-"Primarul devine sclav activ atunci când revine dacă viteza și duplexul sunt "
-"mai bune decât cele ale sclavului curent (mai bune, 1)"
+"Principala devine secundară activă atunci când își revine dacă viteza și "
+"duplexul sunt mai bune decât cele ale secundarei curente (mai bune, 1)"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:229
 msgid "Primary becomes active slave whenever it comes back up (always, 0)"
 msgstr ""
-"Primarul devine sclav activ ori de câte ori revine în funcțiune "
+"Principala devine secundară activă ori de câte ori revine în funcțiune "
 "(întotdeauna, 0)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:508
@@ -5613,7 +5614,7 @@ msgstr "Procese"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:66
 msgid "Prot."
-msgstr "Prot."
+msgstr "Protocol."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:80
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:554
@@ -5982,7 +5983,7 @@ msgstr "Necesită wpa-supplicant cu suport WEP"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:226
 msgid "Reselection policy for primary slave"
-msgstr "Politica de realegere pentru sclavul primar"
+msgstr "Politica de realegere pentru secundara principală"
 
 #: modules/luci-base/htdocs/luci-static/resources/luci.js:2195
 #: modules/luci-base/luasrc/view/sysauth.htm:39
@@ -6251,7 +6252,7 @@ msgstr "Selectează fișier…"
 msgid "Selects the transmit hash policy to use for slave selection"
 msgstr ""
 "Selectează politica de hașurare a transmiterii care urmează să fie utilizată "
-"pentru selectarea sclavilor"
+"pentru selectarea secundarelor"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:768
 msgid ""
@@ -6311,7 +6312,7 @@ msgstr "Setați Static"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:921
 msgid "Set interface as NDP-Proxy external slave. Default is off."
 msgstr ""
-"Setați interfața ca sclav extern NDP-Proxy. Valoarea implicită este "
+"Setați interfața ca secundară externă NDP-Proxy. Valoarea implicită este "
 "dezactivată."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1225
@@ -6348,11 +6349,11 @@ msgstr ""
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:306
 msgid "Set to currently active slave (active, 1)"
-msgstr "Setat la sclavul activ în prezent (activ, 1)"
+msgstr "Setat la secundara activă în prezent (activ, 1)"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:307
 msgid "Set to first slave added to the bond (follow, 2)"
-msgstr "Setați la primul sclav adăugat la legătură (urmați, 2)"
+msgstr "Setați la primul secundar adăugat la legătură (urmați, 2)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:646
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:662
@@ -6628,8 +6629,8 @@ msgid ""
 "Specifies the number of packets to transmit through a slave before moving to "
 "the next one"
 msgstr ""
-"Specifică numărul de pachete care trebuie transmise prin intermediul unui "
-"sclav înainte de a trece la următorul"
+"Specifică numărul de pachete care trebuie transmise prin intermediul unei "
+"secundare înainte de a trece la următorul"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:312
 msgid ""
@@ -6646,7 +6647,7 @@ msgid ""
 "sends learning packets to each slaves peer switch"
 msgstr ""
 "Specifică numărul de secunde dintre instanțele în care driverul de bonding "
-"trimite pachete de învățare către fiecare comutator pereche de sclavi"
+"trimite pachete de învățare către fiecare comutator pereche de secundare"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:375
 msgid "Specifies the quantity of ARP IP targets that must be reachable"
@@ -6665,8 +6666,8 @@ msgid ""
 "Specifies the reselection policy for the primary slave when failure of the "
 "active slave or recovery of the primary slave occurs"
 msgstr ""
-"Specifică politica de reselecție pentru sclavul principal atunci când are "
-"loc o defecțiune a sclavului activ sau o recuperare a sclavului principal"
+"Specifică politica de reselecție pentru secundara principală atunci când are "
+"loc o defecțiune a secundarei active sau o recuperare a secundarei principale"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:246
 msgid "Specifies the system priority"
@@ -6678,15 +6679,15 @@ msgid ""
 "link failure detection"
 msgstr ""
 "Specifică timpul în milisecunde care trebuie așteptat înainte de a dezactiva "
-"un sclav după detectarea unei defecțiuni a legăturii"
+"o secundară după detectarea unei defecțiuni a legăturii"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:412
 msgid ""
 "Specifies the time in milliseconds to wait before enabling a slave after a "
 "link recovery detection"
 msgstr ""
-"Specifică timpul în milisecunde care trebuie așteptat înainte de a activa un "
-"sclav după o detectare a recuperării legăturii"
+"Specifică timpul în milisecunde care trebuie așteptat înainte de a activa o "
+"secundară după o detectare a recuperării legăturii"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:494
 msgid ""
@@ -6726,7 +6727,8 @@ msgstr ""
 msgid ""
 "Specifies whether to shuffle active flows across slaves based on the load"
 msgstr ""
-"Specifică dacă se amestecă fluxurile active între sclavi pe baza încărcăturii"
+"Specifică dacă se amestecă fluxurile active între secundari pe baza "
+"încărcăturii"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:181
 msgid ""
@@ -6740,8 +6742,8 @@ msgid ""
 "Specifies which slave is the primary device. It will always be the active "
 "slave while it is available"
 msgstr ""
-"Specifică care sclav este dispozitivul principal. Acesta va fi întotdeauna "
-"sclavul activ cât timp este disponibil"
+"Specifică care secundară este dispozitivul principal. Acesta va fi "
+"întotdeauna secundara activă cât timp este disponibilă"
 
 #: protocols/luci-proto-ipip/htdocs/luci-static/resources/protocol/ipip.js:63
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:67
@@ -7252,8 +7254,8 @@ msgid ""
 msgstr ""
 "Imaginea flash a fost încărcată. Mai jos sunt listate suma de control și "
 "dimensiunea fișierului, comparați-le cu fișierul original pentru a vă "
-"asigura de integritatea datelor. <br /> Faceți clic pe 'Continuă' de mai jos "
-"pentru a porni procedura de scriere."
+"asigura de integritatea datelor. <br /> Faceți clic pe 'Continuați' de mai "
+"jos pentru a porni procedura de scriere."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:198
 msgid "The following rules are currently active on this system."
@@ -7452,7 +7454,7 @@ msgid ""
 "\"Cancel\" to abort the operation."
 msgstr ""
 "Arhiva de backup încărcată pare a fi validă și conține fișierele enumerate "
-"mai jos. Apăsați \"Continuă\" pentru a restaura copia de rezervă și a "
+"mai jos. Apăsați \"Continuați\" pentru a restaura copia de rezervă și a "
 "reporni sau apăsați \"Anulare\" pentru a întrerupe operațiunea."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:115
@@ -7940,16 +7942,16 @@ msgid ""
 "assigned with a name in the form <em>wifinet#</em> and the network will be "
 "restarted to apply the updated configuration."
 msgstr ""
-"La apăsarea butonului \"Continue\", secțiunilor anonime \"wifi-iface\" li se "
-"va atribui un nume de forma <em>wifinet#</em>, iar rețeaua va fi repornită "
-"pentru a aplica configurația actualizată."
+"La apăsarea butonului \"Continuați\", secțiunilor anonime \"wifi-iface\" li "
+"se va atribui un nume de forma <em>wifinet#</em>, iar rețeaua va fi "
+"repornită pentru a aplica configurația actualizată."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:394
 msgid ""
 "Upon pressing \"Continue\", bridges configuration will be updated and the "
 "network will be restarted to apply the updated configuration."
 msgstr ""
-"La apăsarea butonului \" Continuare \", configurația punților va fi "
+"La apăsarea butonului \" Continuați \", configurația punților va fi "
 "actualizată, iar rețeaua va fi repornită pentru a aplica configurația "
 "actualizată."
 
@@ -7958,8 +7960,8 @@ msgid ""
 "Upon pressing \"Continue\", ifname options will get renamed and the network "
 "will be restarted to apply the updated configuration."
 msgstr ""
-"La apăsarea butonului \"Continue\", opțiunile ifname vor fi redenumite, iar "
-"rețeaua va fi repornită pentru a aplica configurația actualizată."
+"La apăsarea \"Continuați\", opțiunile ifname vor fi redenumite și rețeaua va "
+"fi repornită pentru a aplica configurația actualizată."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:82
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/10_system.js:60
@@ -8232,15 +8234,15 @@ msgstr ""
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:388
 msgid "Validation for all slaves"
-msgstr "Validare pentru toți sclavii"
+msgstr "Validare pentru toate secundare"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:386
 msgid "Validation only for active slave"
-msgstr "Validare numai pentru sclavul activ"
+msgstr "Validare numai pentru secundarul activ"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:387
 msgid "Validation only for backup slaves"
-msgstr "Validare numai pentru sclavii de rezervă"
+msgstr "Validare numai pentru secundarele de rezervă"
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:73
 msgid "Vendor"
@@ -8474,8 +8476,8 @@ msgid ""
 "You must select a primary interface which is included in selected slave "
 "interfaces!"
 msgstr ""
-"Trebuie să selectați o interfață primară care să fie inclusă în interfețele "
-"secundare selectate!"
+"Trebuie să selectați o interfață principală care să fie inclusă în "
+"interfețele secundare selectate!"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:98
 msgid ""
