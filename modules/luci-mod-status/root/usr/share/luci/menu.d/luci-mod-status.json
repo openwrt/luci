@@ -24,14 +24,31 @@
 	},
 
 	"admin/status/iptables": {
-		"title": "Firewall",
+		"title": "Firewall (iptables)",
 		"order": 3,
 		"action": {
 			"type": "view",
 			"path": "status/iptables"
 		},
 		"depends": {
-			"acl": [ "luci-mod-status-firewall" ]
+			"acl": [ "luci-mod-status-firewall" ],
+			"fs": [
+				{ "/usr/sbin/iptables": "executable" },
+				{ "/usr/sbin/ip6tables": "executable" }
+			]
+		}
+	},
+
+	"admin/status/nftables": {
+		"title": "Firewall (nftables)",
+		"order": 3,
+		"action": {
+			"type": "view",
+			"path": "status/nftables"
+		},
+		"depends": {
+			"acl": [ "luci-mod-status-firewall" ],
+			"fs": { "/usr/sbin/nft": "executable" }
 		}
 	},
 
