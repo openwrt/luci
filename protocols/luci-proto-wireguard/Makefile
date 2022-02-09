@@ -7,7 +7,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=Support for WireGuard VPN
-LUCI_DEPENDS:=+kmod-wireguard +wireguard-tools
+LUCI_DEPENDS:=+wireguard-tools +libuci-lua
 LUCI_PKGARCH:=all
 
 include ../../luci.mk

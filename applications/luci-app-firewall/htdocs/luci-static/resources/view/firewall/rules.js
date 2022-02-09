@@ -62,7 +62,7 @@ function rule_src_txt(s, hosts) {
 	    d = (uci.get('firewall', s, 'direction') == 'in') ? uci.get('firewall', s, 'device') : null;
 
 	return fwtool.fmt(_('From %{src}%{src_device?, interface <var>%{src_device}</var>}%{src_ip?, IP %{src_ip#%{next?, }<var%{item.inv? data-tooltip="Match IP addresses except %{item.val}."}>%{item.ival}</var>}}%{src_port?, port %{src_port#%{next?, }<var%{item.inv? data-tooltip="Match ports except %{item.val}."}>%{item.ival}</var>}}%{src_mac?, MAC %{src_mac#%{next?, }<var%{item.inv? data-tooltip="Match MACs except %{item.val}%{item.hint.name? a.k.a. %{item.hint.name}}.":%{item.hint.name? data-tooltip="%{item.hint.name}"}}>%{item.ival}</var>}}'), {
-		src: E('span', { 'class': 'zonebadge', 'style': 'background-color:' + fwmodel.getColorForName((z && z != '*') ? z : null) }, [(z == '*') ? E('em', _('any zone')) : (z || E('em', _('this device')))]),
+		src: E('span', { 'class': 'zonebadge', 'style': fwmodel.getZoneColorStyle(z) }, [(z == '*') ? E('em', _('any zone')) : (z ? E('strong', z) : E('em', _('this device')))]),
 		src_ip: fwtool.map_invert(uci.get('firewall', s, 'src_ip'), 'toLowerCase'),
 		src_mac: fwtool.map_invert(uci.get('firewall', s, 'src_mac'), 'toUpperCase').map(function(v) { return Object.assign(v, { hint: hosts[v.val] }) }),
 		src_port: fwtool.map_invert(uci.get('firewall', s, 'src_port')),
@@ -75,7 +75,7 @@ function rule_dest_txt(s) {
 	    d = (uci.get('firewall', s, 'direction') == 'out') ? uci.get('firewall', s, 'device') : null;
 
 	return fwtool.fmt(_('To %{dest}%{dest_device?, interface <var>%{dest_device}</var>}%{dest_ip?, IP %{dest_ip#%{next?, }<var%{item.inv? data-tooltip="Match IP addresses except %{item.val}."}>%{item.ival}</var>}}%{dest_port?, port %{dest_port#%{next?, }<var%{item.inv? data-tooltip="Match ports except %{item.val}."}>%{item.ival}</var>}}'), {
-		dest: E('span', { 'class': 'zonebadge', 'style': 'background-color:' + fwmodel.getColorForName((z && z != '*') ? z : null) }, [(z == '*') ? E('em', _('any zone')) : (z || E('em', _('this device')))]),
+		dest: E('span', { 'class': 'zonebadge', 'style': fwmodel.getZoneColorStyle(z) }, [(z == '*') ? E('em', _('any zone')) : (z ? E('strong', z) : E('em', _('this device')))]),
 		dest_ip: fwtool.map_invert(uci.get('firewall', s, 'dest_ip'), 'toLowerCase'),
 		dest_port: fwtool.map_invert(uci.get('firewall', s, 'dest_port')),
 		dest_device: d
@@ -193,13 +193,8 @@ return view.extend({
 		s.handleAdd = function(ev) {
 			var config_name = this.uciconfig || this.map.config,
 			    section_id = uci.add(config_name, this.sectiontype),
-			    opt1, opt2;
-
-			for (var i = 0; i < this.children.length; i++)
-				if (this.children[i].option == 'src')
-					opt1 = this.children[i];
-				else if (this.children[i].option == 'dest')
-					opt2 = this.children[i];
+			    opt1 = this.getOption('src'),
+			    opt2 = this.getOption('dest');
 
 			opt1.default = 'wan';
 			opt2.default = 'lan';
@@ -236,7 +231,19 @@ return view.extend({
 		o.modalonly = false;
 		o.default = o.enabled;
 		o.editable = true;
+		o.tooltip = function(section_id) {
+			var weekdays = uci.get('firewall', section_id, 'weekdays');
+			var monthdays = uci.get('firewall', section_id, 'monthdays');
+			var start_time = uci.get('firewall', section_id, 'start_time');
+			var stop_time = uci.get('firewall', section_id, 'stop_time');
+			var start_date = uci.get('firewall', section_id, 'start_date');
+			var stop_date = uci.get('firewall', section_id, 'stop_date');
 
+			if (weekdays || monthdays || start_time || stop_time || start_date || stop_date )
+				return _('Time restritions are enabled for this rule');
+
+			return null;
+		};
 
 		o = s.taboption('advanced', form.ListValue, 'direction', _('Match device'));
 		o.modalonly = true;
@@ -291,6 +298,8 @@ return view.extend({
 		o.value('', 'any');
 		o.value('address-mask-reply');
 		o.value('address-mask-request');
+		o.value('address-unreachable'); /* ipv6 */
+		o.value('bad-header');  /* ipv6 */
 		o.value('communication-prohibited');
 		o.value('destination-unreachable');
 		o.value('echo-reply');
@@ -308,6 +317,7 @@ return view.extend({
 		o.value('network-redirect');
 		o.value('network-unknown');
 		o.value('network-unreachable');
+		o.value('no-route');  /* ipv6 */
 		o.value('packet-too-big');
 		o.value('parameter-problem');
 		o.value('port-unreachable');
@@ -328,6 +338,8 @@ return view.extend({
 		o.value('TOS-network-unreachable');
 		o.value('ttl-zero-during-reassembly');
 		o.value('ttl-zero-during-transit');
+		o.value('unknown-header-type');  /* ipv6 */
+		o.value('unknown-option');  /* ipv6 */
 		o.depends({ proto: 'icmp', '!contains': true });
 		o.depends({ proto: 'icmpv6', '!contains': true });
 
@@ -420,9 +432,11 @@ return view.extend({
 		fwtool.addLimitOption(s);
 		fwtool.addLimitBurstOption(s);
 
-		o = s.taboption('advanced', form.Value, 'extra', _('Extra arguments'),
-			_('Passes additional arguments to iptables. Use with care!'));
-		o.modalonly = true;
+		if (!L.hasSystemFeature('firewall4')) {
+			o = s.taboption('advanced', form.Value, 'extra', _('Extra arguments'),
+				_('Passes additional arguments to iptables. Use with care!'));
+			o.modalonly = true;
+		}
 
 		o = s.taboption('timed', form.MultiValue, 'weekdays', _('Week Days'));
 		o.modalonly = true;
@@ -451,11 +465,11 @@ return view.extend({
 		for (var i = 1; i <= 31; i++)
 			o.value(i);
 
-		o = s.taboption('timed', form.Value, 'start_time', _('Start Time (hh.mm.ss)'));
+		o = s.taboption('timed', form.Value, 'start_time', _('Start Time (hh:mm:ss)'));
 		o.modalonly = true;
 		o.datatype = 'timehhmmss';
 
-		o = s.taboption('timed', form.Value, 'stop_time', _('Stop Time (hh.mm.ss)'));
+		o = s.taboption('timed', form.Value, 'stop_time', _('Stop Time (hh:mm:ss)'));
 		o.modalonly = true;
 		o.datatype = 'timehhmmss';
 

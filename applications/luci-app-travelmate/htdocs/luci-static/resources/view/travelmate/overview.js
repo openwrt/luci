@@ -10,30 +10,33 @@
 /*
 	button handling
 */
-async function handleAction(ev) {
+function handleAction(ev) {
+	var ifaceValue;
 	if (ev === 'restart') {
-		fs.exec_direct('/etc/init.d/travelmate', [ev])
+		ifaceValue = String(uci.get('travelmate', 'global', 'trm_iface') || 'trm_wwan');
+		return fs.exec('/etc/init.d/travelmate', ['stop'])
+			.then(fs.exec('/sbin/ifup', [ifaceValue]))
+			.then(fs.exec('/etc/init.d/travelmate', ['start']))
 	}
 	if (ev === 'setup') {
-		var ifaceValue = String(uci.get('travelmate', 'global', 'trm_iface') || '');
+		ifaceValue = String(uci.get('travelmate', 'global', 'trm_iface') || '');
 		L.ui.showModal(_('Interface Wizard'), [
 			E('p', _('To use Travelmate, you have to set up an uplink interface once. This wizard creates an IPv4- and an IPv6 alias network interface with all required network- and firewall settings.')),
 			E('div', { 'class': 'left', 'style': 'display:flex; flex-direction:column' }, [
 				E('label', { 'class': 'cbi-input-text', 'style': 'padding-top:.5em' }, [
-				E('input', { 'class': 'cbi-input-text', 'id': 'iface', 'placeholder': 'trm_wwan', 'value': ifaceValue, 'maxlength': '15', 'spellcheck': 'false' }, [
-				]),
-				'\xa0\xa0\xa0',
-				_('The uplink interface name')
-				]),
-				E('label', { 'class': 'cbi-input-text', 'style': 'padding-top:.5em' }, [
-				E('input', { 'class': 'cbi-input-text', 'id': 'zone', 'placeholder': 'wan', 'maxlength': '15', 'spellcheck': 'false' }),
-				'\xa0\xa0\xa0',
-				_('The firewall zone name')
+					E('input', { 'class': 'cbi-input-text', 'id': 'iface', 'placeholder': 'trm_wwan', 'value': ifaceValue, 'maxlength': '15', 'spellcheck': 'false' }),
+					'\xa0\xa0\xa0',
+					_('The uplink interface name')
 				]),
 				E('label', { 'class': 'cbi-input-text', 'style': 'padding-top:.5em' }, [
-				E('input', { 'class': 'cbi-input-text', 'id': 'metric', 'placeholder': '100', 'maxlength': '3', 'spellcheck': 'false' }),
-				'\xa0\xa0\xa0',
-				_('The interface metric')
+					E('input', { 'class': 'cbi-input-text', 'id': 'zone', 'placeholder': 'wan', 'maxlength': '15', 'spellcheck': 'false' }),
+					'\xa0\xa0\xa0',
+					_('The firewall zone name')
+				]),
+				E('label', { 'class': 'cbi-input-text', 'style': 'padding-top:.5em' }, [
+					E('input', { 'class': 'cbi-input-text', 'id': 'metric', 'placeholder': '100', 'maxlength': '3', 'spellcheck': 'false' }),
+					'\xa0\xa0\xa0',
+					_('The interface metric')
 				])
 			]),
 			E('div', { 'class': 'right' }, [
@@ -44,18 +47,18 @@ async function handleAction(ev) {
 				' ',
 				E('button', {
 					'class': 'cbi-button cbi-button-positive important',
-					'click': ui.createHandlerFn(this, function(ev) {
+					'click': ui.createHandlerFn(this, function (ev) {
 						var iface = document.getElementById('iface').value || 'trm_wwan',
-						zone = document.getElementById('zone').value || 'wan',
-						metric = document.getElementById('metric').value || '100';
-						L.resolveDefault(fs.exec_direct('/etc/init.d/travelmate', ['setup', iface, zone, metric]))
-						.then(function(res) {
-							if (res) {
-								ui.addNotification(null, E('p', res.trim() + '.'), 'error');
-							} else {
-								ui.addNotification(null, E('p', _('The uplink interface has been updated.')), 'info');
-							}
-						});
+							zone = document.getElementById('zone').value || 'wan',
+							metric = document.getElementById('metric').value || '100';
+						L.resolveDefault(fs.exec('/etc/init.d/travelmate', ['setup', iface, zone, metric]))
+							.then(function (res) {
+								if (res) {
+									ui.addNotification(null, E('p', res.trim() + '.'), 'error');
+								} else {
+									ui.addNotification(null, E('p', _('The uplink interface has been updated.')), 'info');
+								}
+							});
 						L.hideModal();
 					})
 				}, _('Save'))
@@ -67,28 +70,28 @@ async function handleAction(ev) {
 	if (ev === 'qrcode') {
 		return Promise.all([
 			uci.load('wireless')
-		]).then(function() {
+		]).then(function () {
 			var w_sid, w_device, w_ssid, w_enc, w_key, w_hidden, result,
-			w_sections = uci.sections('wireless', 'wifi-iface'),
-			optionsAP  = [E('option', { value: '' }, [_('-- AP Selection --')])];
+				w_sections = uci.sections('wireless', 'wifi-iface'),
+				optionsAP = [E('option', { value: '' }, [_('-- AP Selection --')])];
 			for (var i = 0; i < w_sections.length; i++) {
 				if (w_sections[i].mode === 'ap' && w_sections[i].disabled !== '1') {
-					w_sid    = i;
+					w_sid = i;
 					w_device = w_sections[i].device;
-					w_ssid   = w_sections[i].ssid;
+					w_ssid = w_sections[i].ssid;
 					optionsAP.push(E('option', { value: w_sid }, w_device + ', ' + w_ssid));
 				}
 			}
 			var selectAP = E('select', {
 				id: 'selectID',
 				class: 'cbi-input-select',
-				change: function(ev) {
+				change: function (ev) {
 					result = document.getElementById('qrcode');
 					if (document.getElementById("selectID").value) {
-						w_sid    = document.getElementById("selectID").value;
-						w_ssid   = w_sections[w_sid].ssid;
-						w_enc    = w_sections[w_sid].encryption;
-						w_key    = w_sections[w_sid].key;
+						w_sid = document.getElementById("selectID").value;
+						w_ssid = w_sections[w_sid].ssid;
+						w_enc = w_sections[w_sid].encryption;
+						w_key = w_sections[w_sid].key;
 						w_hidden = (w_sections[w_sid].hidden == 1 ? 'true' : 'false');
 						if (w_enc.startsWith('psk')) {
 							w_enc = 'WPA';
@@ -97,17 +100,17 @@ async function handleAction(ev) {
 							w_enc = 'nopass';
 							w_key = 'nokey';
 						}
-						L.resolveDefault(fs.exec_direct('/usr/bin/qrencode', ['--inline', '--8bit', '--type=SVG', '--output=-', 'WIFI:S:' + w_ssid + ';T:' + w_enc + ';P:' + w_key + ';H:' + w_hidden + ';']), null).then(function(res) {
+						L.resolveDefault(fs.exec_direct('/usr/bin/qrencode', ['--inline', '--8bit', '--type=SVG', '--output=-', 'WIFI:S:' + w_ssid + ';T:' + w_enc + ';P:' + w_key + ';H:' + w_hidden + ';']), null).then(function (res) {
 							if (res) {
 								result.innerHTML = res.trim();
 							}
 							else {
-								result.innerHTML = _('The QR-Code could not be generated!');
+								result.textContent = _('The QR-Code could not be generated!');
 							}
 						});
 					}
 					else {
-						result.innerHTML = '';
+						result.textContent = '';
 					}
 				}
 			}, optionsAP);
@@ -130,32 +133,31 @@ async function handleAction(ev) {
 				])
 			]);
 		});
-		return;
 	}
 }
 
 return view.extend({
-	load: function() {
+	load: function () {
 		return Promise.all([
 			uci.load('travelmate')
 		]);
 	},
 
-	render: function(result) {
+	render: function (result) {
 		var m, s, o;
 
-		m = new form.Map('travelmate', 'Travelmate', _('Configuration of the travelmate package to to enable travel router functionality. \
+		m = new form.Map('travelmate', 'Travelmate', _('Configuration of the travelmate package to enable travel router functionality. \
 			For further information <a href="https://github.com/openwrt/packages/blob/master/net/travelmate/files/README.md" target="_blank" rel="noreferrer noopener" >check the online documentation</a>. <br /> \
 			<em>Please note:</em> On first start please call the \'Interface Wizard\' once, to make the necessary network- and firewall settings.'));
 
 		/*
 			poll runtime information
 		*/
-		pollData: poll.add(function() {
-			return L.resolveDefault(fs.stat('/tmp/trm_runtime.json'), null).then(function(res) {
+		pollData: poll.add(function () {
+			return L.resolveDefault(fs.stat('/tmp/trm_runtime.json'), null).then(function (res) {
 				var status = document.getElementById('status');
-				if (res) {
-					L.resolveDefault(fs.read_direct('/tmp/trm_runtime.json'), null).then(function(res) {
+				if (res && res.size > 0) {
+					L.resolveDefault(fs.read_direct('/tmp/trm_runtime.json'), null).then(function (res) {
 						if (res) {
 							var info = JSON.parse(res);
 							if (status && info) {
@@ -205,10 +207,9 @@ return view.extend({
 							}
 						}
 					});
-				}
-				else {
-					if (status && status.classList.contains("spinning")) {
-						status.textContent = '-';
+				} else if (status) {
+					status.textContent = '-';
+					if (status.classList.contains("spinning")) {
 						status.classList.remove("spinning");
 					}
 				}
@@ -219,53 +220,68 @@ return view.extend({
 			runtime information and buttons
 		*/
 		s = m.section(form.NamedSection, 'global');
-		s.render = L.bind(function(view, section_id) {
+		s.render = L.bind(function (view, section_id) {
 			return E('div', { 'class': 'cbi-section' }, [
-				E('h3', _('Information')), 
-				E('div', { 'class': 'cbi-value', 'style': 'margin-bottom:5px' }, [
-				E('label', { 'class': 'cbi-value-title', 'style': 'padding-top:0rem' }, _('Status / Version')),
-				E('div', { 'class': 'cbi-value-field', 'id': 'status', 'style': 'font-weight: bold;margin-bottom:5px;color:#37c' },'-')]),
-				E('div', { 'class': 'cbi-value', 'style': 'margin-bottom:5px' }, [
-				E('label', { 'class': 'cbi-value-title', 'style': 'padding-top:0rem' }, _('Station ID')),
-				E('div', { 'class': 'cbi-value-field', 'id': 'station_id', 'style': 'font-weight: bold;margin-bottom:5px;color:#37c' },'-')]),
-				E('div', { 'class': 'cbi-value', 'style': 'margin-bottom:5px' }, [
-				E('label', { 'class': 'cbi-value-title', 'style': 'padding-top:0rem' }, _('Station MAC')),
-				E('div', { 'class': 'cbi-value-field', 'id': 'station_mac', 'style': 'font-weight: bold;margin-bottom:5px;color:#37c' },'-')]),
-				E('div', { 'class': 'cbi-value', 'style': 'margin-bottom:5px' }, [
-				E('label', { 'class': 'cbi-value-title', 'style': 'padding-top:0rem' }, _('Station Interface')),
-				E('div', { 'class': 'cbi-value-field', 'id': 'station_interface', 'style': 'font-weight: bold;margin-bottom:5px;color:#37c' },'-')]),
-				E('div', { 'class': 'cbi-value', 'style': 'margin-bottom:5px' }, [
-				E('label', { 'class': 'cbi-value-title', 'style': 'padding-top:0rem' }, _('WPA Flags')),
-				E('div', { 'class': 'cbi-value-field', 'id': 'wpa_flags', 'style': 'font-weight: bold;margin-bottom:5px;color:#37c' },'-')]),
-				E('div', { 'class': 'cbi-value', 'style': 'margin-bottom:5px' }, [
-				E('label', { 'class': 'cbi-value-title', 'style': 'padding-top:0rem' }, _('Run Flags')),
-				E('div', { 'class': 'cbi-value-field', 'id': 'run_flags', 'style': 'font-weight: bold;margin-bottom:5px;color:#37c' },'-')]),
-				E('div', { 'class': 'cbi-value', 'style': 'margin-bottom:5px' }, [
-				E('label', { 'class': 'cbi-value-title', 'style': 'padding-top:0rem' }, _('Ext. Hooks')),
-				E('div', { 'class': 'cbi-value-field', 'id': 'ext_hooks', 'style': 'font-weight: bold;margin-bottom:5px;color:#37c' },'-')]),
-				E('div', { 'class': 'cbi-value', 'style': 'margin-bottom:5px' }, [
-				E('label', { 'class': 'cbi-value-title', 'style': 'padding-top:0rem' }, _('Last Run')),
-				E('div', { 'class': 'cbi-value-field', 'id': 'run', 'style': 'font-weight: bold;margin-bottom:5px;color:#37c' },'-')]),
+				E('h3', _('Information')),
+				E('div', { 'class': 'cbi-value' }, [
+					E('label', { 'class': 'cbi-value-title', 'style': 'padding-top:0rem' }, _('Status / Version')),
+					E('div', { 'class': 'cbi-value-field spinning', 'id': 'status', 'style': 'color:#37c' }, '\xa0')
+				]),
+				E('div', { 'class': 'cbi-value' }, [
+					E('label', { 'class': 'cbi-value-title', 'style': 'padding-top:0rem' }, _('Station ID')),
+					E('div', { 'class': 'cbi-value-field', 'id': 'station_id', 'style': 'color:#37c' }, '-')
+				]),
+				E('div', { 'class': 'cbi-value' }, [
+					E('label', { 'class': 'cbi-value-title', 'style': 'padding-top:0rem' }, _('Station MAC')),
+					E('div', { 'class': 'cbi-value-field', 'id': 'station_mac', 'style': 'color:#37c' }, '-')
+				]),
+				E('div', { 'class': 'cbi-value' }, [
+					E('label', { 'class': 'cbi-value-title', 'style': 'padding-top:0rem' }, _('Station Interface')),
+					E('div', { 'class': 'cbi-value-field', 'id': 'station_interface', 'style': 'color:#37c' }, '-')
+				]),
+				E('div', { 'class': 'cbi-value' }, [
+					E('label', { 'class': 'cbi-value-title', 'style': 'padding-top:0rem' }, _('WPA Flags')),
+					E('div', { 'class': 'cbi-value-field', 'id': 'wpa_flags', 'style': 'color:#37c' }, '-')
+				]),
+				E('div', { 'class': 'cbi-value' }, [
+					E('label', { 'class': 'cbi-value-title', 'style': 'padding-top:0rem' }, _('Run Flags')),
+					E('div', { 'class': 'cbi-value-field', 'id': 'run_flags', 'style': 'color:#37c' }, '-')
+				]),
+				E('div', { 'class': 'cbi-value' }, [
+					E('label', { 'class': 'cbi-value-title', 'style': 'padding-top:0rem' }, _('Ext. Hooks')),
+					E('div', { 'class': 'cbi-value-field', 'id': 'ext_hooks', 'style': 'color:#37c' }, '-')
+				]),
+				E('div', { 'class': 'cbi-value' }, [
+					E('label', { 'class': 'cbi-value-title', 'style': 'padding-top:0rem' }, _('Last Run')),
+					E('div', { 'class': 'cbi-value-field', 'id': 'run', 'style': 'color:#37c' }, '-')
+				]),
 				E('div', { class: 'right' }, [
 					E('button', {
 						'class': 'cbi-button cbi-button-apply',
 						'id': 'btn_suspend',
-						'click': ui.createHandlerFn(this, function() {
-							L.resolveDefault(fs.stat('/usr/bin/qrencode'), null).then(function(res) {
+						'click': ui.createHandlerFn(this, function () {
+							L.resolveDefault(fs.stat('/usr/bin/qrencode'), null).then(function (res) {
 								if (res) {
 									return handleAction('qrcode');
 								}
 								return ui.addNotification(null, E('p', _('Please install the separate \'qrencode\' package.')), 'info');
 							})
 						})
-					}, [ _('AP QR-Codes...') ]),
+					}, [_('AP QR-Codes...')]),
 					'\xa0',
 					E('button', {
-						'class': 'cbi-button cbi-button-reset',
-						'click': ui.createHandlerFn(this, function() {
+						'class': 'cbi-button cbi-button-negative',
+						'click': ui.createHandlerFn(this, function () {
+							return handleAction('restart');
+						})
+					}, [_('Restart Interface')]),
+					'\xa0',
+					E('button', {
+						'class': 'cbi-button cbi-button-negative',
+						'click': ui.createHandlerFn(this, function () {
 							return handleAction('setup');
 						})
-					}, [ _('Interface Wizard...') ])
+					}, [_('Interface Wizard...')])
 				])
 			]);
 		}, o, this);
@@ -276,9 +292,8 @@ return view.extend({
 		*/
 		s = m.section(form.NamedSection, 'global', 'travelmate', _('Settings'));
 		s.addremove = false;
-		s.tab('general',  _('General Settings'));
+		s.tab('general', _('General Settings'));
 		s.tab('additional', _('Additional Settings'));
-		s.tab('adv_vpn', _('VPN Settings'), _('Please note: VPN connections require the separate setup of the <em>Wireguard</em> or <em>OpenVPN</em> package.<br /><p>&#xa0;</p>'));
 		s.tab('adv_email', _('E-Mail Settings'), _('Please note: E-Mail notifications require the separate setup of the <em>mstmp</em> package.<br /><p>&#xa0;</p>'));
 
 		/*
@@ -290,8 +305,11 @@ return view.extend({
 		o = s.taboption('general', form.Flag, 'trm_debug', _('Verbose Debug Logging'), _('Enable verbose debug logging in case of any processing errors.'));
 		o.rmempty = false;
 
-		o = s.taboption('general', form.Value, 'trm_radio', _('Radio Selection'), _('Restrict travelmate to a single radio or change the overall scanning order (e.g. \'radio1 radio0\').'));
-		o.placeholder = 'radio0';
+		o = s.taboption('general', form.Value, 'trm_radio', _('Radio Selection'), _('Restrict travelmate to a single radio or change the overall scanning order.'));
+		o.value('radio0', _('use the first radio only (radio0)'));
+		o.value('radio1', _('use the second radio only (radio1)'));
+		o.value('radio0 radio1', _('use both radios, normal sort order (radio0 radio1)'));
+		o.value('radio1 radio0', _('use both radios, reverse sort order (radio1 radio0)'));
 		o.rmempty = true;
 
 		o = s.taboption('general', form.Flag, 'trm_captive', _('Captive Portal Detection'), _('Check the internet availability, handle captive portal redirections and keep the uplink connection \'alive\'.'));
@@ -307,13 +325,19 @@ return view.extend({
 		o.default = 1;
 		o.rmempty = false;
 
+		o = s.taboption('general', form.Flag, 'trm_randomize', _('Randomize MAC Addresses'), _('Generate a random unicast MAC address for each uplink connection.'));
+		o.default = 0;
+		o.rmempty = false;
+
 		o = s.taboption('general', form.Flag, 'trm_autoadd', _('AutoAdd Open Uplinks'), _('Automatically add open uplinks like hotel captive portals to your wireless config.'));
 		o.default = 0;
 		o.rmempty = false;
 
-		o = s.taboption('general', form.Flag, 'trm_randomize', _('Randomize MAC Addresses'), _('Generate a random unicast MAC address for each uplink connection.'));
-		o.default = 0;
-		o.rmempty = false;
+		o = s.taboption('general', form.Value, 'trm_maxautoadd', _('Limit AutoAdd'), _('Limit the maximum number of automatically added open uplinks. To disable this limitation set it to \'0\'.'));
+		o.depends('trm_autoadd', '1');
+		o.placeholder = '5';
+		o.datatype = 'range(0,30)';
+		o.rmempty = true;
 
 		/*
 			additional settings tab
@@ -343,25 +367,26 @@ return view.extend({
 		o.datatype = 'range(30,300)';
 		o.rmempty = true;
 
-		o = s.taboption('additional', form.Value, 'trm_scanbuffer', _('Scan Buffer Size'), _('Buffer size in bytes to prepare nearby scan results.'));
-		o.placeholder = '1024';
-		o.datatype = 'range(256,4096)';
+		o = s.taboption('additional', form.Value, 'trm_maxscan', _('Scan Limit'), _('Limit the nearby scan results to process only the strongest uplinks.'));
+		o.placeholder = '10';
+		o.datatype = 'range(1,30)';
 		o.rmempty = true;
 
 		o = s.taboption('additional', form.ListValue, 'trm_captiveurl', _('Captive Portal URL'), _('The selected URL will be used for connectivity- and captive portal checks.'));
-		o.value('http://captive.apple.com', 'Apple (default)');
+		o.value('http://detectportal.firefox.com', 'Firefox (default)');
 		o.value('http://connectivity-check.ubuntu.com', 'Ubuntu');
+		o.value('http://captive.apple.com', 'Apple');
 		o.value('http://connectivitycheck.android.com/generate_204', 'Google');
 		o.value('http://www.msftncsi.com/ncsi.txt', 'Microsoft');
 		o.optional = true;
 		o.rmempty = true;
 
 		o = s.taboption('additional', form.ListValue, 'trm_useragent', _('User Agent'), _('The selected user agent will be used for connectivity- and captive portal checks.'));
-		o.value('Mozilla/5.0 (X11; Linux x86_64; rv:80.0) Gecko/20100101 Firefox/80.0', 'Firefox (default)');
-		o.value('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.83 Safari/537.36', 'Chromium');
-		o.value('Mozilla/5.0 (iPhone; CPU iPhone OS 13_7 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/85.0.4183.92 Mobile/15E148 Safari/604.1', 'Safari');
-		o.value('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.83 Safari/537.36 Edg/85.0.564.44', 'Edge');
-		o.value('Mozilla/5.0 (Linux; Android 10; SM-G970F) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.81 Mobile Safari/537.36 OPR/59.1.2926.54067', 'Opera');
+		o.value('Mozilla/5.0 (X11; Linux x86_64; rv:90.0) Gecko/20100101 Firefox/90.0', 'Firefox (default)');
+		o.value('Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.131 Safari/537.36', 'Chromium');
+		o.value('Mozilla/5.0 (Macintosh; Intel Mac OS X 11_5_1) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.1.2 Safari/605.1.15', 'Safari');
+		o.value('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.131 Safari/537.36 Edg/92.0.902.55', 'Edge');
+		o.value('Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.131 Safari/537.36 OPR/77.0.4054.277', 'Opera');
 		o.optional = true;
 		o.rmempty = true;
 
@@ -372,30 +397,6 @@ return view.extend({
 		o.value('10', 'Less Priority');
 		o.value('19', 'Least Priority');
 		o.optional = true;
-		o.rmempty = true;
-
-		/*
-			advanced vpn settings tab
-		*/
-		o = s.taboption('adv_vpn', form.Flag, 'trm_vpn', _('VPN Hook'), _('Automatically handle VPN (re-) connections.'));
-		o.rmempty = false;
-
-		o = s.taboption('adv_vpn', form.ListValue, 'trm_vpnservice', _('VPN Service'));
-		o.depends('trm_vpn', '1');
-		o.value('wireguard');
-		o.value('openvpn');
-		o.rmempty = true;
-
-		o = s.taboption('adv_vpn', widgets.NetworkSelect, 'trm_vpniface', _('VPN Interface'), _('The logical vpn network interface, e.g. \'wg0\' or \'tun0\'.'));
-		o.depends('trm_vpn', '1');
-		o.unspecified = false;
-		o.nocreate = true;
-		o.rmempty = true;
-
-		o = s.taboption('adv_vpn', widgets.DeviceSelect, 'trm_landevice', _('LAN Device'), _('The lan network device, e.g. \'br-lan\'.'));
-		o.depends('trm_vpn', '1');
-		o.unspecified = false;
-		o.nocreate = true;
 		o.rmempty = true;
 
 		/*

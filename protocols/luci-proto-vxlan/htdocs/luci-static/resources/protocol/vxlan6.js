@@ -54,11 +54,6 @@ return network.registerProtocol('vxlan6', {
 		o.nocreate = true;
 		o.optional = true;
 
-		o = s.taboption('advanced', form.Value, 'mtu', _('Override MTU'), _('Specify an MTU (Maximum Transmission Unit) other than the default (1280 bytes).'));
-		o.optional = true;
-		o.placeholder = 1280;
-		o.datatype = 'range(68, 9200)';
-
 		o = s.taboption('advanced', form.Value, 'ttl', _('Override TTL'), _('Specify a TTL (Time to Live) for the encapsulating packet other than the default (64).'));
 		o.optional = true;
 		o.placeholder = 64;
@@ -67,10 +62,6 @@ return network.registerProtocol('vxlan6', {
 		o = s.taboption('advanced', form.Value, 'tos', _('Override TOS'), _('Specify a TOS (Type of Service).'));
 		o.optional = true;
 		o.datatype = 'range(0, 255)';
-
-		o = s.taboption('advanced', form.Value, 'macaddr', _('Override MAC address'));
-		o.optional = true;
-		o.datatype = 'macaddr';
 
 		o = s.taboption('advanced', form.Flag, 'rxcsum', _('Enable rx checksum'));
 		o.optional = true;

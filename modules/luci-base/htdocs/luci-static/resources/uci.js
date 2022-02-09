@@ -489,8 +489,28 @@ return baseclass.extend(/** @lends LuCI.uci.prototype */ {
 		}
 
 		/* requested an entire section */
-		if (v[conf])
-			return v[conf][sid];
+		if (v[conf]) {
+			/* check whether entire section was deleted */
+			if (d[conf] && d[conf][sid] === true)
+				return null;
+
+			var s = v[conf][sid] || null;
+
+			if (s) {
+				/* merge changes */
+				if (c[conf] && c[conf][sid])
+					for (var opt in c[conf][sid])
+						if (c[conf][sid][opt] != null)
+							s[opt] = c[conf][sid][opt];
+
+				/* merge deletions */
+				if (d[conf] && d[conf][sid])
+					for (var opt in d[conf][sid])
+						delete s[opt];
+			}
+
+			return s;
+		}
 
 		return null;
 	},

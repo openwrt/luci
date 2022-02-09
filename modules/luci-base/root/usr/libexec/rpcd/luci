@@ -165,7 +165,11 @@ local methods = {
 			local ok, fd = pcall(io.open, "/usr/share/fw3/helpers.conf", "r")
 			local rv = {}
 
-			if ok then
+			if not (ok and fd) then
+				ok, fd = pcall(io.open, "/usr/share/firewall4/helpers", "r")
+			end
+
+			if ok and fd then
 				local entry
 
 				while true do
@@ -207,8 +211,9 @@ local methods = {
 			local ok, fd
 
 			rv.firewall      = fs.access("/sbin/fw3")
+			rv.firewall4     = fs.access("/sbin/fw4")
 			rv.opkg          = fs.access("/bin/opkg")
-			rv.offloading    = fs.access("/sys/module/xt_FLOWOFFLOAD/refcnt")
+			rv.offloading    = fs.access("/sys/module/xt_FLOWOFFLOAD/refcnt") or fs.access("/sys/module/nft_flow_offload/refcnt")
 			rv.br2684ctl     = fs.access("/usr/sbin/br2684ctl")
 			rv.swconfig      = fs.access("/sbin/swconfig")
 			rv.odhcpd        = fs.access("/usr/sbin/odhcpd")
@@ -218,6 +223,7 @@ local methods = {
 			rv.dropbear      = fs.access("/usr/sbin/dropbear")
 			rv.cabundle      = fs.access("/etc/ssl/certs/ca-certificates.crt")
 			rv.relayd        = fs.access("/usr/sbin/relayd")
+			rv.dsl           = fs.access("/sbin/vdsl_cpe_control")
 
 			local wifi_features = { "eap", "11n", "11ac", "11r", "acs", "sae", "owe", "suiteb192", "wep", "wps" }
 
@@ -441,7 +447,7 @@ local methods = {
 		call = function(args)
 			local util = require "luci.util"
 			return {
-				result = (os.execute("(echo %s; sleep 1; echo %s) | busybox passwd %s >/dev/null 2>&1" %{
+				result = (os.execute("(echo %s; sleep 1; echo %s) | /bin/busybox passwd %s >/dev/null 2>&1" %{
 					luci.util.shellquote(args.password),
 					luci.util.shellquote(args.password),
 					luci.util.shellquote(args.username)

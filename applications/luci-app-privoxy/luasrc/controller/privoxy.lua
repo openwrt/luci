@@ -72,25 +72,25 @@ end
 function service_update()
 	local url = DISP.build_url("admin", "system", "packages")
 	if not service_version() then
-		return	[[<h3><strong><br /><font color="red">&nbsp;&nbsp;&nbsp;&nbsp;]]
+		return	[[<h3><strong><br /><font color="red">&#160;&#160;&#160;&#160;]]
 			.. I18N.translate("Software package '%s' is not installed." % srv_name)
-			.. [[</font><br /><br />&nbsp;&nbsp;&nbsp;&nbsp;]]
+			.. [[</font><br /><br />&#160;&#160;&#160;&#160;]]
 			.. I18N.translate("required") .. [[: ]] .. srv_name .. [[ ]] .. srv_ver_min .. " " .. I18N.translate("or higher")
-			.. [[<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;]]
+			.. [[<br /><br />&#160;&#160;&#160;&#160;]]
 			.. [[<a href="]] .. url ..[[">]]
 			.. I18N.translate("Please install current version !")
-			.. [[</a><br />&nbsp;</strong></h3>]]
+			.. [[</a><br />&#160;</strong></h3>]]
 	else
-		return	[[<h3><strong><br /><br /><font color="red">&nbsp;&nbsp;&nbsp;&nbsp;]]
+		return	[[<h3><strong><br /><br /><font color="red">&#160;&#160;&#160;&#160;]]
 			.. I18N.translate("Software package '%s' is outdated." % srv_name)
-			.. [[</font><br /><br />&nbsp;&nbsp;&nbsp;&nbsp;]]
+			.. [[</font><br /><br />&#160;&#160;&#160;&#160;]]
 			.. I18N.translate("installed") .. ": " .. service_version()
-			.. [[<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;]]
+			.. [[<br /><br />&#160;&#160;&#160;&#160;]]
 			.. I18N.translate("required") .. ": " .. srv_ver_min .. " " .. I18N.translate("or higher")
-			.. [[<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;]]
+			.. [[<br /><br />&#160;&#160;&#160;&#160;]]
 			.. [[<a href="]] .. url ..[[">]]
 			.. I18N.translate("Please update to the current version!")
-			.. [[</a><br /><br />&nbsp;</strong></h3>]]
+			.. [[</a><br /><br />&#160;</strong></h3>]]
 	end
 end
 

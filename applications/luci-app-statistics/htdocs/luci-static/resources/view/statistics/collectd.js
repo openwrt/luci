@@ -52,7 +52,7 @@ return view.extend({
 		o.load = function() {
 			return fs.trimmed('/proc/sys/kernel/hostname').then(L.bind(function(name) {
 				this.placeholder = name;
-				return uci.get('collectd', 'statistics', 'hostname');
+				return uci.get('luci_statistics', 'collectd', 'Hostname');
 			}, this));
 		};
 

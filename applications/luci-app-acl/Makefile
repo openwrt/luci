@@ -2,7 +2,7 @@
 
 include $(TOPDIR)/rules.mk
 
-LUCI_TITLE:=LuCI account managment module
+LUCI_TITLE:=LuCI account management module
 LUCI_DEPENDS:=+luci-base
 
 include ../../luci.mk

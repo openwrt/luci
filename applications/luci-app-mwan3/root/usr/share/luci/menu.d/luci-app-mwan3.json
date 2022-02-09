@@ -1,0 +1,103 @@
+{
+	"admin/status/mwan3": {
+		"title": "MultiWAN Manager",
+		"order": "600",
+		"action": {
+			"type": "firstchild"
+		},
+		"depends": {
+			"acl": [ "luci-app-mwan3" ]
+		}
+	},
+	"admin/status/mwan3/overview": {
+		"title": "Overview",
+		"order": 10,
+		"action": {
+			"type": "view",
+			"path": "mwan3/status/overview"
+		}
+	},
+	"admin/status/mwan3/detail": {
+		"title": "Status",
+		"order": 20,
+		"action": {
+			"type": "view",
+			"path": "mwan3/status/detail"
+		}
+	},
+	"admin/status/mwan3/diagnostics": {
+		"title": "Diagnostics",
+		"order": 30,
+		"action": {
+			"type": "view",
+			"path": "mwan3/status/diagnostics"
+		}
+	},
+	"admin/status/mwan3/troubleshooting": {
+		"title": "Troubleshooting",
+		"order": 40,
+		"action": {
+			"type": "view",
+			"path": "mwan3/status/troubleshooting"
+		}
+	},
+
+	"admin/network/mwan3": {
+		"title": "MultiWAN Manager",
+		"order": "600",
+		"action": {
+			"type": "firstchild"
+		},
+		"depends": {
+			"acl": [ "luci-app-mwan3" ]
+		}
+	},
+	"admin/network/mwan3/globals": {
+		"title": "Globals",
+		"order": 10,
+		"action": {
+			"type": "view",
+			"path": "mwan3/network/globals"
+		}
+	},
+	"admin/network/mwan3/interface": {
+		"title": "Interface",
+		"order": 20,
+		"action": {
+			"type": "view",
+			"path": "mwan3/network/interface"
+		}
+	},
+	"admin/network/mwan3/member": {
+		"title": "Member",
+		"order": 30,
+		"action": {
+			"type": "view",
+			"path": "mwan3/network/member"
+		}
+	},
+	"admin/network/mwan3/policy": {
+		"title": "Policy",
+		"order": 40,
+		"action": {
+			"type": "view",
+			"path": "mwan3/network/policy"
+		}
+	},
+	"admin/network/mwan3/rule": {
+		"title": "Rule",
+		"order": 50,
+		"action": {
+			"type": "view",
+			"path": "mwan3/network/rule"
+		}
+	},
+	"admin/network/mwan3/notify": {
+		"title": "Notify",
+		"order": 60,
+		"action": {
+			"type": "view",
+			"path": "mwan3/network/notify"
+		}
+	}
+}

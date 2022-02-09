@@ -61,7 +61,7 @@ function cache_enable(cachepath, mode)
 	package.loaders[2] = function(mod)
 		local encoded = cachepath .. "/" .. _encode_filename(mod)
 		local modcons = _load_sane(encoded)
-		
+
 		if modcons then
 			return modcons
 		end

@@ -57,21 +57,7 @@ function getColorForName(forName) {
 	else if (forName == 'wan')
 		return '#f09090';
 
-	random.seed(parseInt(sfh(forName), 16));
-
-	var r = random.get(128),
-	    g = random.get(128),
-	    min = 0,
-	    max = 128;
-
-	if ((r + g) < 128)
-		min = 128 - r - g;
-	else
-		max = 255 - r - g;
-
-	var b = min + Math.floor(random.get() * (max - min));
-
-	return '#%02x%02x%02x'.format(0xff - r, 0xff - g, 0xff - b);
+	return random.derive_color(forName);
 }
 
 
@@ -106,7 +92,6 @@ Firewall = L.Class.extend({
 			    z = uci.add('firewall', 'zone');
 
 			uci.set('firewall', z, 'name',    name);
-			uci.set('firewall', z, 'network', ' ');
 			uci.set('firewall', z, 'input',   d.getInput()   || 'DROP');
 			uci.set('firewall', z, 'output',  d.getOutput()  || 'DROP');
 			uci.set('firewall', z, 'forward', d.getForward() || 'DROP');
@@ -239,7 +224,17 @@ Firewall = L.Class.extend({
 		}, this));
 	},
 
-	getColorForName: getColorForName
+	getColorForName: getColorForName,
+
+	getZoneColorStyle: function(zone) {
+		var hex = (zone instanceof Zone) ? zone.getColor() : getColorForName((zone != null && zone != '*') ? zone : null);
+
+		return '--zone-color-rgb:%d, %d, %d; background-color:rgb(var(--zone-color-rgb))'.format(
+			parseInt(hex.substring(1, 3), 16),
+			parseInt(hex.substring(3, 5), 16),
+			parseInt(hex.substring(5, 7), 16)
+		);
+	},
 });
 
 
@@ -347,17 +342,17 @@ Zone = AbstractFirewallItem.extend({
 			return false;
 
 		newNetworks.push(network);
-		this.set('network', newNetworks.join(' '));
+		this.set('network', newNetworks);
 
 		return true;
 	},
 
 	deleteNetwork: function(network) {
 		var oldNetworks = this.getNetworks(),
-            newNetworks = oldNetworks.filter(function(net) { return net != network });
+		    newNetworks = oldNetworks.filter(function(net) { return net != network });
 
 		if (newNetworks.length > 0)
-			this.set('network', newNetworks.join(' '));
+			this.set('network', newNetworks);
 		else
 			this.set('network', null);
 
@@ -369,7 +364,7 @@ Zone = AbstractFirewallItem.extend({
 	},
 
 	clearNetworks: function() {
-		this.set('network', ' ');
+		this.set('network', null);
 	},
 
 	getDevices: function() {

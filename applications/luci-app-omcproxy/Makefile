@@ -17,6 +17,6 @@ LUCI_TITLE:=LuCI support for omcproxy
 LUCI_DEPENDS:=+omcproxy
 LUCI_PKGARCH:=all
 
-include $(TOPDIR)/feeds/luci/luci.mk
+include ../../luci.mk
 
 # call BuildPackage - OpenWrt buildroot signature

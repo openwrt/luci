@@ -90,19 +90,21 @@ end
 
 local container_list = get_containers()
 
-m = SimpleForm("docker", translate("Docker"))
+m = SimpleForm("docker",
+	translate("Docker - Containers"),
+	translate("This page displays all containers that have been created on the connected docker host."))
 m.submit=false
 m.reset=false
 
 s = m:section(SimpleSection)
 s.template = "dockerman/apply_widget"
 s.err=docker:read_status()
-s.err=s.err and s.err:gsub("\n","<br>"):gsub(" ","&nbsp;")
+s.err=s.err and s.err:gsub("\n","<br />"):gsub(" ","&#160;")
 if s.err then
 	docker:clear_status()
 end
 
-s = m:section(Table, container_list, translate("Containers"))
+s = m:section(Table, container_list, translate("Containers overview"))
 s.addremove = false
 s.sectionhead = translate("Containers")
 s.sortable = false

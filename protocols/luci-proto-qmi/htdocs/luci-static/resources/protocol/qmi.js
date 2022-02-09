@@ -54,7 +54,8 @@ return network.registerProtocol('qmi', {
 	renderFormOptions: function(s) {
 		var dev = this.getL3Device() || this.getDevice(), o;
 
-		o = s.taboption('general', form.Value, 'device', _('Modem device'));
+		o = s.taboption('general', form.Value, '_modem_device', _('Modem device'));
+		o.ucioption = 'device';
 		o.rmempty = false;
 		o.load = function(section_id) {
 			return callFileList('/dev/').then(L.bind(function(devices) {
@@ -64,8 +65,19 @@ return network.registerProtocol('qmi', {
 			}, this));
 		};
 
-		s.taboption('general', form.Value, 'apn', _('APN'));
-		s.taboption('general', form.Value, 'pincode', _('PIN'));
+		o = s.taboption('general', form.Value, 'apn', _('APN'));
+		o.validate = function(section_id, value) {
+			if (value == null || value == '')
+				return true;
+
+			if (!/^[a-zA-Z0-9\-.]*[a-zA-Z0-9]$/.test(value))
+				return _('Invalid APN provided');
+
+			return true;
+		};
+
+		o = s.taboption('general', form.Value, 'pincode', _('PIN'));
+		o.datatype = 'and(uinteger,minlength(4),maxlength(8))';
 
 		o = s.taboption('general', form.ListValue, 'auth', _('Authentication Type'));
 		o.value('both', 'PAP/CHAP');
@@ -86,7 +98,8 @@ return network.registerProtocol('qmi', {
 		o.password = true;
 
 		if (L.hasSystemFeature('ipv6')) {
-			o = s.taboption('advanced', form.Flag, 'ipv6', _('Enable IPv6 negotiation'));
+			o = s.taboption('advanced', form.Flag, 'ppp_ipv6', _('Enable IPv6 negotiation'));
+			o.ucioption = 'ipv6';
 			o.default = o.disabled;
 		}
 
@@ -97,7 +110,7 @@ return network.registerProtocol('qmi', {
 		o = s.taboption('advanced', form.Value, 'mtu', _('Override MTU'));
 		o.placeholder = dev ? (dev.getMTU() || '1500') : '1500';
 		o.datatype    = 'max(9200)';
-		
+
 		o = s.taboption('general', form.ListValue, 'pdptype', _('PDP Type'));
 		o.value('ipv4v6', 'IPv4/IPv6');
 		o.value('ipv4', 'IPv4');

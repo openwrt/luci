@@ -1,5 +1,6 @@
 'use strict';
 'require fs';
+'require ui';
 'require rpc';
 'require uci';
 'require view';
@@ -23,8 +24,8 @@ return view.extend({
 
 	load: function() {
 		return Promise.all([
-			fs.list("/var/run/sqm/available_qdiscs"),
-			fs.list("/usr/lib/sqm").then(L.bind(function(scripts) {
+			L.resolveDefault(fs.list('/var/run/sqm/available_qdiscs'), []),
+			L.resolveDefault(fs.list('/usr/lib/sqm'), []).then(L.bind(function(scripts) {
 				var tasks = [], scriptHelpTbl = {};
 
 				for (var i = 0; i < scripts.length; i++)
@@ -40,6 +41,23 @@ return view.extend({
 	render: function(data) {
 		var qdiscs = data[0],
 		    scripts = data[1];
+
+		if (qdiscs.length === 0) {
+			ui.addNotification(null,
+				E('div', { 'class': 'left' }, [
+				E('p', _("The SQM service seems to be disabled. Please use the button below to activate this service.")),
+				E('button', {
+					'class': 'btn cbi-button-active',
+					'click': ui.createHandlerFn(this, function() {
+						return fs.exec('/etc/init.d/sqm', ['enable']).then(function() {
+							return fs.exec('/etc/init.d/sqm', ['start']);
+						}).then(function() {
+							location.reload();
+						});
+					})
+				}, _('Enable SQM'))
+			]));
+		}
 
 		var m, s, o;
 
@@ -62,7 +80,7 @@ return view.extend({
 		o.write = L.bind(function(section, value) {
 			if (value == "1") {
 				this.handleEnableSQM();
-				L.ui.addNotification(null, E('p', _("The SQM GUI has just enabled the sqm initscript on your behalf. Remember to disable the sqm initscript manually under System Startup menu in case this change was not wished for.")));
+				ui.addNotification(null, E('p', _("The SQM GUI has just enabled the sqm initscript on your behalf. Remember to disable the sqm initscript manually under System Startup menu in case this change was not wished for.")));
 			}
 
 			return uci.set("sqm", section, "enabled", value);

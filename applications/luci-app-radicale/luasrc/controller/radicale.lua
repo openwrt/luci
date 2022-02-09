@@ -58,25 +58,25 @@ function app_title_back()
 end
 function app_err_value()
 	if not service_version() then
-		return [[<h3><strong><br /><font color="red">&nbsp;&nbsp;&nbsp;&nbsp;]]
+		return [[<h3><strong><br /><font color="red">&#160;&#160;&#160;&#160;]]
 			.. I18N.translate("Software package '%s' is not installed." % srv_name)
-			.. [[</font><br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]]
+			.. [[</font><br /><br />&#160;&#160;&#160;&#160;&#160;&#160;]]
 			.. I18N.translate("required") .. [[: ]] .. srv_name .. [[ ]] .. srv_ver_min
-			.. [[<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;]]
+			.. [[<br /><br />&#160;&#160;&#160;&#160;]]
 			.. [[<a href="]] .. DISP.build_url("admin", "system", "packages") ..[[">]]
 			.. I18N.translate("Please install current version !")
-			.. [[</a><br />&nbsp;</strong></h3>]]
+			.. [[</a><br />&#160;</strong></h3>]]
 	else
-		return [[<h3><strong><br /><font color="red">&nbsp;&nbsp;&nbsp;&nbsp;]]
+		return [[<h3><strong><br /><font color="red">&#160;&#160;&#160;&#160;]]
 			.. I18N.translate("Software package '%s' is outdated." % srv_name)
-			.. [[</font><br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]]
+			.. [[</font><br /><br />&#160;&#160;&#160;&#160;&#160;&#160;]]
 			.. I18N.translate("installed") .. [[: ]] .. srv_name .. [[ ]] .. service_version()
-			.. [[<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]]
+			.. [[<br />&#160;&#160;&#160;&#160;&#160;&#160;]]
 			.. I18N.translate("required") .. [[: ]] .. srv_name .. [[ ]] .. srv_ver_min
-			.. [[<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;]]
+			.. [[<br /><br />&#160;&#160;&#160;&#160;]]
 			.. [[<a href="]] .. DISP.build_url("admin", "system", "packages") ..[[">]]
 			.. I18N.translate("Please update to current version !")
-			.. [[</a><br />&nbsp;</strong></h3>]]
+			.. [[</a><br />&#160;</strong></h3>]]
 	end
 end
 

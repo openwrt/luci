@@ -4,6 +4,7 @@
 'require fs';
 'require ui';
 'require uci';
+'require network';
 
 return view.extend({
 	handleCommand: function(exec, args) {
@@ -36,7 +37,7 @@ return view.extend({
 	handleTraceroute: function(ev, cmd) {
 		var exec = cmd || 'traceroute',
 		    addr = ev.currentTarget.parentNode.previousSibling.value,
-		    args = (exec == 'traceroute') ? [ '-q', '1', '-w', '1', '-n', addr ] : [ '-q', '1', '-w', '2', '-n', addr ];
+		    args = (exec == 'traceroute') ? [ '-4', '-q', '1', '-w', '1', '-n', addr ] : [ '-q', '1', '-w', '2', '-n', addr ];
 
 		return this.handleCommand(exec, args);
 	},
@@ -47,12 +48,20 @@ return view.extend({
 		return this.handleCommand('nslookup', [ addr ]);
 	},
 
+	handleArpScan: function(ev, cmd) {
+		var addr = ev.currentTarget.parentNode.previousSibling.value;
+
+		return this.handleCommand('arp-scan', [ '-l', '-I', addr ]);
+	},
+
 	load: function() {
 		return Promise.all([
 			L.resolveDefault(fs.stat('/bin/ping6'), {}),
 			L.resolveDefault(fs.stat('/usr/bin/ping6'), {}),
 			L.resolveDefault(fs.stat('/bin/traceroute6'), {}),
 			L.resolveDefault(fs.stat('/usr/bin/traceroute6'), {}),
+			L.resolveDefault(fs.stat('/usr/bin/arp-scan'), {}),
+			network.getDevices(),
 			uci.load('luci')
 		]);
 	},
@@ -60,6 +69,8 @@ return view.extend({
 	render: function(res) {
 		var has_ping6 = res[0].path || res[1].path,
 		    has_traceroute6 = res[2].path || res[3].path,
+		    has_arpscan = res[4].path,
+		    devices = res[5],
 			dns_host = uci.get('luci', 'diag', 'dns') || 'openwrt.org',
 			ping_host = uci.get('luci', 'diag', 'ping') || 'openwrt.org',
 			route_host = uci.get('luci', 'diag', 'route') || 'openwrt.org';
@@ -126,7 +137,24 @@ return view.extend({
 								'click': ui.createHandlerFn(this, 'handleNslookup')
 							}, [ _('Nslookup') ])
 						])
-					])
+					]),
+
+					has_arpscan ? E('td', { 'class': 'td left' }, [
+						E('select', {
+							'style': 'margin:5px 0'
+						}, devices.map(function(device) {
+							if (!device.isUp())
+								return E([]);
+
+							return E('option', { 'value': device.getName() }, [ device.getI18n() ]);
+						})),
+						E('span', { 'class': 'diag-action' }, [
+							E('button', {
+								'class': 'cbi-button cbi-button-action',
+								'click': ui.createHandlerFn(this, 'handleArpScan')
+							}, [ _('Arp-scan') ])
+						])
+					]) : E([]),
 				])
 			]),
 			E('pre', { 'class': 'command-output', 'style': 'display:none' })

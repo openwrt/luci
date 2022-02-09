@@ -1,15 +1,15 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2020-03-11 01:51+0000\n"
-"Last-Translator: Olexandr Nesterenko <olexn@ukr.net>\n"
+"PO-Revision-Date: 2021-03-14 05:18+0000\n"
+"Last-Translator: Tymofij Lytvynenko <till.svit@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsbcp38/uk/>\n"
 "Language: uk\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<="
-"4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.0-dev\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 4.5.2-dev\n"
 
 #: applications/luci-app-bcp38/luasrc/model/cbi/bcp38.lua:61
 msgid "Allowed IP ranges"
@@ -21,6 +21,9 @@ msgid ""
 "configuration, and add an exception if it will. If this does not work "
 "correctly, you can add exceptions manually below."
 msgstr ""
+"Спробує автоматично виявити, якщо буде налаштоване блокування IP-адрес "
+"зовнішньої мережі, і додати подію у виключення. Якщо автоматично не вийде, "
+"можна додати виключення вручну нижче."
 
 #: applications/luci-app-bcp38/luasrc/model/cbi/bcp38.lua:33
 msgid "Auto-detect upstream IP"
@@ -45,7 +48,7 @@ msgstr "Увімкнути"
 
 #: applications/luci-app-bcp38/root/usr/share/rpcd/acl.d/luci-app-bcp38.json:3
 msgid "Grant UCI access for luci-app-bcp38"
-msgstr ""
+msgstr "Надати UCI доступ до luci-app-bcp38"
 
 #: applications/luci-app-bcp38/luasrc/model/cbi/bcp38.lua:39
 msgid "Interface name"
@@ -55,12 +58,17 @@ msgstr "Назва інтерфейсу"
 msgid ""
 "Interface to apply the blocking to (should be the upstream WAN interface)."
 msgstr ""
+"Інтерфейс для застосування блокування (повинен бути WAN інтерфейсом для "
+"зовнішньої мережі)."
 
 #: applications/luci-app-bcp38/luasrc/model/cbi/bcp38.lua:61
 msgid ""
 "Takes precedence over blocked ranges. Use to whitelist your upstream network "
 "if you're behind a double NAT and the auto-detection doesn't work."
 msgstr ""
+"Має пріоритет над заблокованими діапазонами.<br/>Використовуйте для вашого "
+"Білого списку зовнішньої мережі, якщо ви перебуваєте за подвійним NAT-ом і "
+"автоматичне виявлення не працює."
 
 #: applications/luci-app-bcp38/luasrc/model/cbi/bcp38.lua:21
 msgid ""
@@ -69,3 +77,7 @@ msgid ""
 "bcp38\">BCP 38</a>. For IPv6, only source specific default routes are "
 "installed, so no BCP38 firewall routes are needed."
 msgstr ""
+"Застосунок блокує пакети отримані з Інтернету від підроблених адрес "
+"відповідно до <a href=\"http://tools.ietf.org/html/ bcp38\">BCP 38</a>. Для "
+"IPv6 встановлюються тільки усталені вихідні маршрути, тому BCP38 не "
+"використовується мережевим екраном."

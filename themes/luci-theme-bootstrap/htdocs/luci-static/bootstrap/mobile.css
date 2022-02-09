@@ -3,12 +3,8 @@ header h3 a, header .brand {
 }
 
 @media screen and (max-device-width: 600px) {
-	#maincontent.container {
-		margin-top: 30px;
-	}
-
 	.tabs, .cbi-tabmenu {
-		background: linear-gradient(#fff 20%, #ddd 100%);
+		background: linear-gradient(var(--background-color-high) 20%, var(--border-color-medium) 100%);
 		background-size: 1px 34px;
 		margin-bottom: 10px;
 	}
@@ -33,7 +29,7 @@ header h3 a, header .brand {
 		flex-direction: row;
 		flex-wrap: wrap;
 		align-items: flex-end;
-		border-top: 1px solid #ddd;
+		border-top: 1px solid var(--border-color-medium);
 		padding: 5px 0;
 		margin: 0 -3px;
 	}
@@ -111,9 +107,9 @@ header h3 a, header .brand {
 	.tr[data-title]::before {
 		display: block;
 		flex: 1 1 100%;
-		background: #f5f5f5 !important;
+		background: var(--background-color-low) !important;
 		font-size: 16px;
-		border-bottom: 1px solid #ddd;
+		border-bottom: 1px solid var(--border-color-medium);
 	}
 
 	.td[data-title]::before,
@@ -163,28 +159,42 @@ header h3 a, header .brand {
 
 	.cbi-value {
 		padding-bottom: .5em;
-		border-bottom: 1px solid #ddd;
+		border-bottom: 1px solid var(--border-color-high);
 		margin-bottom: .5em;
+		display: block;
+	}
+
+	.cbi-value.hidden {
+		display: none;
+	}
+
+	.cbi-value .cbi-value:last-child {
+		border-bottom: none;
+		padding-bottom: inherit;
+		margin-bottom: inherit;
 	}
 
 	.cbi-value label.cbi-value-title {
-		float: none;
 		font-weight: bold;
 	}
 
-	.cbi-value-field, .cbi-dropdown {
+	.cbi-value-field, .cbi-select, .cbi-dropdown:not(.btn):not(.cbi-button) {
 		width: 100%;
 		margin: 0;
 	}
 
 	input, textarea, select,
-	.cbi-dropdown > ul > li input[type="text"] {
+	.cbi-dropdown > ul > li {
 		font-size: 16px !important;
-		line-height: 28px;
 		height: auto;
 	}
 
-	select, input[type="text"], input[type="password"] {
+	.cbi-dropdown > ul > li input[type="text"] {
+		line-height: 28px;
+	}
+
+	select, input[type="text"], input[type="password"],
+	.cbi-dropdown > ul > li input[type="text"] {
 		width: 100%;
 		height: 30px;
 	}
@@ -221,9 +231,9 @@ header h3 a, header .brand {
 		margin: 0;
 	}
 
-	.btn, .cbi-button {
+	button, .btn, .cbi-button {
 		font-size: 14px !important;
-		padding: 4px 8px;
+		padding: 0 8px;
 	}
 
 	.actions,
@@ -268,19 +278,16 @@ header h3 a, header .brand {
 	}
 
 	header .pull-right {
-		flex: 1 1 20%;
+		flex: 0 1 20%;
 		display: flex;
 		flex-direction: column;
 		padding: 0;
 		justify-content: space-around;
+		margin: .2em 5px .2em auto;
 	}
 
 	.menu-dropdown, .dropdown-menu {
 		top: 23px;
-	}
-
-	body {
-		padding-top: 30px;
 	}
 
 	.cbi-optionals,
@@ -325,37 +332,49 @@ header h3 a, header .brand {
 	[data-page="admin-status-processes"] .td[data-widget="button"]::before {
 		display: none;
 	}
+
+	[data-name="bridge-vlan"] > div {
+		overflow: visible !important;
+	}
+
+	[data-name="bridge-vlan"] .td[data-title] {
+		flex-basis: 33%;
+	}
+
+	[data-name="bridge-vlan"] .td[data-title]::before {
+		content: attr(data-title);
+	}
 }
 
 @media screen and (max-device-width: 375px) {
-	#maincontent.container {
-		margin-top: 55px;
-	}
-
 	.cbi-page-actions {
 		display: flex;
-		flex-wrap: wrap;
 		justify-content: space-between;
 		margin: 0 -1px;
 		padding: 0;
 	}
 
-	.cbi-page-actions .cbi-button:not(.cbi-dropdown) {
-		flex: 1 1 calc(50% - 2px);
-		margin: 1px !important;
+	.cbi-page-actions button {
 		overflow: hidden;
 		text-overflow: ellipsis;
+	}
+
+	.cbi-page-actions .cbi-button {
+		flex: 1;
+		margin: 1px !important;
+		line-height: 2em;
 	}
 
 	.cbi-page-actions .cbi-button-negative,
 	.cbi-page-actions .cbi-button-primary,
 	.cbi-page-actions .cbi-button-apply {
-		flex-basis: calc(100% - -2px);
+		flex: 3;
 	}
 
 	.cbi-section-actions .cbi-button {
 		overflow: hidden;
 		text-overflow: ellipsis;
+		margin: 1px !important;
 	}
 
 	body[data-page="admin-network-wireless"] .td[data-name="_badge"] {
@@ -379,12 +398,6 @@ header h3 a, header .brand {
 	}
 }
 
-@media screen and (max-device-width: 200px) {
-	#maincontent.container {
-		margin-top: 230px;
-	}
-}
-
 @media screen and (max-width: 375px) {
 	.td .ifacebox {
 		width: 100%;
@@ -395,6 +408,7 @@ header h3 a, header .brand {
 	.td .ifacebox .ifacebox-head {
 		min-width: 25%;
 		justify-content: space-around;
+		border-radius: 4px 0 0 4px;
 	}
 
 	.td .ifacebox .ifacebox-head,

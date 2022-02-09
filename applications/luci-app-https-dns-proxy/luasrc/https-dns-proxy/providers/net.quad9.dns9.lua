@@ -1,5 +1,5 @@
 return {
-	name = "Quad9-Secured",
+	name = "dns9.quad9.net",
 	label = _("Quad 9 (Secured)"),
 	resolver_url = "https://dns9.quad9.net/dns-query",
 	bootstrap_dns = "9.9.9.9,149.112.112.9,2620:fe::fe,2620:fe::9",

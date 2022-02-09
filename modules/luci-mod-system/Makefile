@@ -7,11 +7,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=LuCI Administration - Global System Settings
-LUCI_DEPENDS:=+luci-base \
-	+kmod-ledtrig-default-on \
-	+kmod-ledtrig-heartbeat \
-	+kmod-ledtrig-netdev \
-	+kmod-ledtrig-timer
+LUCI_DEPENDS:=+luci-base
 
 PKG_LICENSE:=Apache-2.0
 

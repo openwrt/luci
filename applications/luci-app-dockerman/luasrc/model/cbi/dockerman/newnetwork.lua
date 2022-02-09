@@ -9,18 +9,18 @@ local m, s, o
 
 local dk = docker.new()
 
-m = SimpleForm("docker", translate("Docker"))
+m = SimpleForm("docker", translate("Docker - Network"))
 m.redirect = luci.dispatcher.build_url("admin", "docker", "networks")
 
 s = m:section(SimpleSection)
 s.template = "dockerman/apply_widget"
 s.err=docker:read_status()
-s.err=s.err and s.err:gsub("\n","<br>"):gsub(" ","&nbsp;")
+s.err=s.err and s.err:gsub("\n","<br />"):gsub(" ","&#160;")
 if s.err then
 	docker:clear_status()
 end
 
-s = m:section(SimpleSection, translate("New Network"))
+s = m:section(SimpleSection, translate("Create new docker network"))
 s.addremove = true
 s.anonymous = true
 

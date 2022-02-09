@@ -77,14 +77,6 @@ return network.registerProtocol('map', {
 		o.nocreate = true;
 		o.exclude  = s.section;
 
-		o = s.taboption('advanced', form.Flag, 'defaultroute', _('Default gateway'), _('If unchecked, no default route is configured'));
-		o.default = o.enabled;
-
-		o = s.taboption('advanced', form.Value, 'metric', _('Use gateway metric'));
-		o.placeholder = '0';
-		o.datatype    = 'uinteger';
-		o.depends('defaultroute', '1');
-
 		o = s.taboption('advanced', form.Value, 'ttl', _('Use TTL on tunnel interface'));
 		o.placeholder = '64';
 		o.datatype    = 'range(1,255)';

@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-04-14 10:33+0200\n"
-"PO-Revision-Date: 2020-11-27 20:38+0000\n"
+"PO-Revision-Date: 2021-11-03 16:34+0000\n"
 "Last-Translator: Oğuz Ersen <oguzersen@protonmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationshd-idle/tr/>\n"
@@ -14,17 +14,25 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.4-dev\n"
+"X-Generator: Weblate 4.9-dev\n"
 
-#: applications/luci-app-hd-idle/htdocs/luci-static/resources/view/hd_idle.js:22
+#: applications/luci-app-hd-idle/htdocs/luci-static/resources/view/hd_idle.js:43
 msgid "Add new hdd setting..."
 msgstr "Yeni hdd ayarı ekle..."
 
-#: applications/luci-app-hd-idle/htdocs/luci-static/resources/view/hd_idle.js:27
+#: applications/luci-app-hd-idle/htdocs/luci-static/resources/view/hd_idle.js:61
+msgid "Bus"
+msgstr "Veri yolu"
+
+#: applications/luci-app-hd-idle/htdocs/luci-static/resources/view/hd_idle.js:53
 msgid "Disk"
 msgstr "Disk"
 
-#: applications/luci-app-hd-idle/htdocs/luci-static/resources/view/hd_idle.js:24
+#: applications/luci-app-hd-idle/htdocs/luci-static/resources/view/hd_idle.js:46
+msgid "Disk Settings"
+msgstr "Disk Ayarları"
+
+#: applications/luci-app-hd-idle/htdocs/luci-static/resources/view/hd_idle.js:49
 msgid "Enable"
 msgstr "Etkinleştir"
 
@@ -32,50 +40,71 @@ msgstr "Etkinleştir"
 msgid "Grant UCI access for luci-app-hd-idle"
 msgstr "luci-app-hd-idle için UCI erişimi verin"
 
-#: applications/luci-app-hd-idle/htdocs/luci-static/resources/view/hd_idle.js:17
+#: applications/luci-app-hd-idle/htdocs/luci-static/resources/view/hd_idle.js:37
 #: applications/luci-app-hd-idle/root/usr/share/luci/menu.d/luci-app-hd-idle.json:3
 msgid "HDD Idle"
 msgstr "Harddisk-Park"
 
-#: applications/luci-app-hd-idle/htdocs/luci-static/resources/view/hd_idle.js:17
+#: applications/luci-app-hd-idle/htdocs/luci-static/resources/view/hd_idle.js:37
 msgid ""
-"HDD Idle is a utility program for spinning-down external disks after a "
-"period of idle time."
+"HDD Idle is a utility program for spinning-down disks after a period of idle "
+"time."
 msgstr ""
 "HDD Idle, belirli bir zaman sonra diskleri beklemeye alan bir yardımcı "
 "programdır."
 
-#: applications/luci-app-hd-idle/htdocs/luci-static/resources/view/hd_idle.js:32
+#: applications/luci-app-hd-idle/htdocs/luci-static/resources/view/hd_idle.js:75
+#: applications/luci-app-hd-idle/htdocs/luci-static/resources/view/hd_idle.js:87
 msgid "Idle time"
 msgstr "Bekleme Zamanı"
 
-#: applications/luci-app-hd-idle/htdocs/luci-static/resources/view/hd_idle.js:35
+#: applications/luci-app-hd-idle/htdocs/luci-static/resources/view/hd_idle.js:79
 msgid "Idle time unit"
 msgstr "bekleme zamanı birimi"
 
-#: applications/luci-app-hd-idle/htdocs/luci-static/resources/view/hd_idle.js:19
+#: applications/luci-app-hd-idle/htdocs/luci-static/resources/view/hd_idle.js:39
 msgid "Settings"
 msgstr "Ayarlar"
 
-#: applications/luci-app-hd-idle/htdocs/luci-static/resources/view/hd_idle.js:39
+#: applications/luci-app-hd-idle/htdocs/luci-static/resources/view/hd_idle.js:68
+msgid "Vendor / Model"
+msgstr "Satıcı / Model"
+
+#: applications/luci-app-hd-idle/htdocs/luci-static/resources/view/hd_idle.js:84
 msgctxt "Abbreviation for days"
-msgid "d"
-msgstr "g"
+msgid "days"
+msgstr "gün"
 
-#: applications/luci-app-hd-idle/htdocs/luci-static/resources/view/hd_idle.js:38
+#: applications/luci-app-hd-idle/htdocs/luci-static/resources/view/hd_idle.js:83
 msgctxt "Abbreviation for hours"
-msgid "h"
-msgstr "sa"
+msgid "hours"
+msgstr "saat"
 
-#: applications/luci-app-hd-idle/htdocs/luci-static/resources/view/hd_idle.js:37
+#: applications/luci-app-hd-idle/htdocs/luci-static/resources/view/hd_idle.js:82
 msgctxt "Abbreviation for minutes"
-msgid "min"
-msgstr "dak"
+msgid "minutes"
+msgstr "dakika"
 
-#: applications/luci-app-hd-idle/htdocs/luci-static/resources/view/hd_idle.js:36
+#: applications/luci-app-hd-idle/htdocs/luci-static/resources/view/hd_idle.js:81
 msgctxt "Abbreviation for seconds"
-msgid "s"
-msgstr "sn"
+msgid "seconds"
+msgstr "saniye"
+
+#~ msgctxt "Abbreviation for days"
+#~ msgid "d"
+#~ msgstr "g"
+
+#~ msgctxt "Abbreviation for hours"
+#~ msgid "h"
+#~ msgstr "sa"
+
+#~ msgctxt "Abbreviation for minutes"
+#~ msgid "min"
+#~ msgstr "dak"
+
+#~ msgctxt "Abbreviation for seconds"
+#~ msgid "s"
+#~ msgstr "sn"
 
 # Hours
 #~ msgid "h"

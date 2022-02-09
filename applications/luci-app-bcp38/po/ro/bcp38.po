@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2020-01-10 12:23+0000\n"
-"Last-Translator: Alexandru Stan <alex9457sn@gmail.com>\n"
+"PO-Revision-Date: 2021-11-16 17:37+0000\n"
+"Last-Translator: Simona Iacob <s@zp1.net>\n"
 "Language-Team: Romanian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsbcp38/ro/>\n"
 "Language: ro\n"
@@ -9,11 +9,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2;\n"
-"X-Generator: Weblate 3.10.1\n"
+"X-Generator: Weblate 4.9.1-dev\n"
 
 #: applications/luci-app-bcp38/luasrc/model/cbi/bcp38.lua:61
 msgid "Allowed IP ranges"
-msgstr ""
+msgstr "Intervale IP permise"
 
 #: applications/luci-app-bcp38/luasrc/model/cbi/bcp38.lua:34
 msgid ""
@@ -21,31 +21,34 @@ msgid ""
 "configuration, and add an exception if it will. If this does not work "
 "correctly, you can add exceptions manually below."
 msgstr ""
+"Încearcă să detecteze automat dacă IP-ul din amonte va fi blocat de "
+"configurație și adaugă o excepție în caz afirmativ. Dacă acest lucru nu "
+"funcționează corect, puteți adăuga excepții manual mai jos."
 
 #: applications/luci-app-bcp38/luasrc/model/cbi/bcp38.lua:33
 msgid "Auto-detect upstream IP"
-msgstr ""
+msgstr "Detectarea automată a IP-ului în amonte"
 
 #: applications/luci-app-bcp38/luasrc/model/cbi/bcp38.lua:20
 #: applications/luci-app-bcp38/root/usr/share/luci/menu.d/luci-app-bcp38.json:3
 msgid "BCP38"
-msgstr ""
+msgstr "BCP38"
 
 #: applications/luci-app-bcp38/luasrc/model/cbi/bcp38.lua:27
 msgid "BCP38 config"
-msgstr ""
+msgstr "Configurație BCP38"
 
 #: applications/luci-app-bcp38/luasrc/model/cbi/bcp38.lua:56
 msgid "Blocked IP ranges"
-msgstr ""
+msgstr "Intervale IP blocate"
 
 #: applications/luci-app-bcp38/luasrc/model/cbi/bcp38.lua:30
 msgid "Enable"
-msgstr "Activează"
+msgstr "Activați"
 
 #: applications/luci-app-bcp38/root/usr/share/rpcd/acl.d/luci-app-bcp38.json:3
 msgid "Grant UCI access for luci-app-bcp38"
-msgstr ""
+msgstr "Acordă acces la UCI pentru luci-app-bcp38"
 
 #: applications/luci-app-bcp38/luasrc/model/cbi/bcp38.lua:39
 msgid "Interface name"
@@ -55,12 +58,17 @@ msgstr "Numele interfeței"
 msgid ""
 "Interface to apply the blocking to (should be the upstream WAN interface)."
 msgstr ""
+"Interfața la care se aplică blocarea (ar trebui să fie interfața WAN în "
+"amonte)."
 
 #: applications/luci-app-bcp38/luasrc/model/cbi/bcp38.lua:61
 msgid ""
 "Takes precedence over blocked ranges. Use to whitelist your upstream network "
 "if you're behind a double NAT and the auto-detection doesn't work."
 msgstr ""
+"Are prioritate față de intervalele blocate. Utilizați pentru a vă pune pe "
+"lista albă rețeaua din amonte dacă vă aflați în spatele unui NAT dublu și "
+"detecția automată nu funcționează."
 
 #: applications/luci-app-bcp38/luasrc/model/cbi/bcp38.lua:21
 msgid ""
@@ -69,3 +77,7 @@ msgid ""
 "bcp38\">BCP 38</a>. For IPv6, only source specific default routes are "
 "installed, so no BCP38 firewall routes are needed."
 msgstr ""
+"Această funcție blochează pachetele cu destinații de adrese private să iasă "
+"pe internet, conform <a href=\"http://tools.ietf.org/html/bcp38\">BCP 38</"
+"a>. Pentru IPv6, sunt instalate numai rutele implicite specifice sursei, "
+"astfel încât nu sunt necesare rutele de firewall BCP38."

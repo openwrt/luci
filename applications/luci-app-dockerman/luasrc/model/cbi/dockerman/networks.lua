@@ -47,11 +47,13 @@ end
 
 local network_list = get_networks()
 
-m = SimpleForm("docker", translate("Docker"))
+m = SimpleForm("docker",
+	translate("Docker - Networks"),
+	translate("This page displays all docker networks that have been created on the connected docker host."))
 m.submit=false
 m.reset=false
 
-s = m:section(Table, network_list, translate("Networks"))
+s = m:section(Table, network_list, translate("Networks overview"))
 s.nodescr=true
 
 o = s:option(Flag, "_selected","")
@@ -85,7 +87,7 @@ o = s:option(DummyValue, "_gateway", translate("Gateway"))
 s = m:section(SimpleSection)
 s.template = "dockerman/apply_widget"
 s.err = docker:read_status()
-s.err = s.err and s.err:gsub("\n","<br>"):gsub(" ","&nbsp;")
+s.err = s.err and s.err:gsub("\n","<br />"):gsub(" ","&#160;")
 if s.err then
 	docker:clear_status()
 end

@@ -39,9 +39,10 @@ return view.extend({
 		o = s.option(form.Flag, "debug", _("Enable debug logging"));
 		o.rmempty = false;
 
-		s = m.section(form.TypedSection, "cert", _("Certificate config"))
+		s = m.section(form.GridSection, "cert", _("Certificate config"))
 		s.anonymous = false;
 		s.addremove = true;
+		s.nodescriptions = true;
 
 		o = s.tab("general", _("General Settings"));
 		o = s.tab("challenge", _("Challenge Validation"));
@@ -54,6 +55,7 @@ return view.extend({
 			_("Get certificate from the Letsencrypt staging server " +
 				"(use for testing; the certificate won't be valid)."));
 		o.rmempty = false;
+		o.modalonly = true;
 
 		o = s.taboption('general', form.ListValue, "keylength", _("Key size"),
 			_("Key size (and type) for the generated certificate."));
@@ -77,6 +79,7 @@ return view.extend({
 					"(only select this for one certificate). " +
 					"Is also available luci-app-uhttpd to configure uhttpd form the LuCI interface."));
 			o.rmempty = false;
+			o.modalonly = true;
 		}
 
 		if (stats[0].type === 'file') {
@@ -86,6 +89,7 @@ return view.extend({
 					"Nginx must support ssl, if not it won't start as it needs to be " +
 					"compiled with ssl support to use cert options"));
 			o.rmempty = false;
+			o.modalonly = true;
 		}
 
 		o = s.taboption('challenge', form.ListValue, "validation_method", _("Validation method"),
@@ -103,6 +107,7 @@ return view.extend({
 				"server must be accessible from the internet on port 80."));
 		o.optional = true;
 		o.depends("validation_method", "webroot");
+		o.modalonly = true;
 
 		o = s.taboption('challenge', form.Value, "dns", _("DNS API"),
 			_("To use DNS mode to issue certificates, set this to the name of a DNS API supported by acme.sh. " +
@@ -111,6 +116,7 @@ return view.extend({
 				"DNS mode is also the only mode that supports wildcard certificates. " +
 				"Using this mode requires the acme-dnsapi package to be installed."));
 		o.depends("validation_method", "dns");
+		o.modalonly = true;
 
 		o = s.taboption('challenge', form.DynamicList, "credentials", _("DNS API credentials"),
 			_("The credentials for the DNS API mode selected above. " +
@@ -118,29 +124,34 @@ return view.extend({
 				"Add multiple entries here in KEY=VAL shell variable format to supply multiple credential variables."))
 		o.datatype = "list(string)";
 		o.depends("validation_method", "dns");
+		o.modalonly = true;
 
 		o = s.taboption('challenge', form.Value, "calias", _("Challenge Alias"),
 			_("The challenge alias to use for ALL domains. " +
 				"See https://github.com/acmesh-official/acme.sh/wiki/DNS-alias-mode for the details of this process. " +
 				"LUCI only supports one challenge alias per certificate."));
 		o.depends("validation_method", "dns");
+		o.modalonly = true;
 
 		o = s.taboption('challenge', form.Value, "dalias", _("Domain Alias"),
 			_("The domain alias to use for ALL domains. " +
 				"See https://github.com/acmesh-official/acme.sh/wiki/DNS-alias-mode for the details of this process. " +
 				"LUCI only supports one challenge domain per certificate."));
 		o.depends("validation_method", "dns");
+		o.modalonly = true;
 
 		o = s.taboption('advanced', form.Flag, "use_acme_server",
 			_("Custom ACME CA"), _("Use a custom CA instead of Let's Encrypt."));
 		o.depends("use_staging", "0");
 		o.default = false;
+		o.modalonly = true;
 
 		o = s.taboption('advanced', form.Value, "acme_server", _("ACME server URL"),
 			_("Custom ACME server directory URL."));
 		o.depends("use_acme_server", "1");
 		o.placeholder = "https://api.buypass.com/acme/directory";
 		o.optional = true;
+		o.modalonly = true;
 
 		o = s.taboption('advanced', form.Value, 'days', _('Days until renewal'));
 		o.optional    = true;

@@ -7,7 +7,7 @@ require "luci.json"
 
 function resolve(mod, method)
 	local path = luci.util.split(method, ".")
-	
+
 	for j=1, #path-1 do
 		if not type(mod) == "table" then
 			break
@@ -29,7 +29,7 @@ function handle(tbl, rawsource, ...)
 	local json = decoder:get()
 	local response
 	local success = false
-	
+
 	if stat then
 		if type(json.method) == "string"
 		 and (not json.params or type(json.params) == "table") then
@@ -56,23 +56,23 @@ end
 function reply(jsonrpc, id, res, err)
 	require "luci.json"
 	id = id or luci.json.null
-	
+
 	-- 1.0 compatibility
 	if jsonrpc ~= "2.0" then
 		jsonrpc = nil
 		res = res or luci.json.null
 		err = err or luci.json.null
 	end
-	
+
 	return {id=id, result=res, error=err, jsonrpc=jsonrpc}
 end
 
 function proxy(method, ...)
 	local res = {luci.util.copcall(method, ...)}
 	local stat = table.remove(res, 1)
-	
+
 	if not stat then
-		return nil, {code=-32602, message="Invalid params.", data=table.remove(res, 1)} 
+		return nil, {code=-32602, message="Invalid params.", data=table.remove(res, 1)}
 	else
 		if #res <= 1 then
 			return res[1] or luci.json.null

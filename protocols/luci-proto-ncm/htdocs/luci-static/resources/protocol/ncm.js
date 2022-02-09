@@ -58,7 +58,8 @@ return network.registerProtocol('ncm', {
 	renderFormOptions: function(s) {
 		var o;
 
-		o = s.taboption('general', form.Value, 'device', _('Modem device'));
+		o = s.taboption('general', form.Value, '_modem_device', _('Modem device'));
+		o.ucioption = 'device';
 		o.rmempty = false;
 		o.load = function(section_id) {
 			return callFileList('/dev/').then(L.bind(function(devices) {
@@ -83,8 +84,20 @@ return network.registerProtocol('ncm', {
 		o.value('IPV4V6', _('IPv4+IPv6'));
 		o.value('IPV6', _('IPv6'));
 
-		s.taboption('general', form.Value, 'apn', _('APN'));
-		s.taboption('general', form.Value, 'pincode', _('PIN'));
+		o = s.taboption('general', form.Value, 'apn', _('APN'));
+		o.validate = function(section_id, value) {
+			if (value == null || value == '')
+				return true;
+
+			if (!/^[a-zA-Z0-9\-.]*[a-zA-Z0-9]$/.test(value))
+					return _('Invalid APN provided');
+
+			return true;
+		};
+
+		o = s.taboption('general', form.Value, 'pincode', _('PIN'));
+		o.datatype = 'and(uinteger,minlength(4),maxlength(8))';
+
 		s.taboption('general', form.Value, 'username', _('PAP/CHAP username'));
 
 		o = s.taboption('general', form.Value, 'password', _('PAP/CHAP password'));
@@ -94,7 +107,8 @@ return network.registerProtocol('ncm', {
 		o.placeholder = '*99***1#';
 
 		if (L.hasSystemFeature('ipv6')) {
-			o = s.taboption('advanced', form.ListValue, 'ipv6', _('Obtain IPv6-Address'));
+			o = s.taboption('advanced', form.ListValue, 'ppp_ipv6', _('Obtain IPv6 address'));
+			o.ucioption = 'ipv6';
 			o.value('auto', _('Automatic'));
 			o.value('0', _('Disabled'));
 			o.value('1', _('Manual'));
@@ -104,20 +118,5 @@ return network.registerProtocol('ncm', {
 		o = s.taboption('advanced', form.Value, 'delay', _('Modem init timeout'), _('Maximum amount of seconds to wait for the modem to become ready'));
 		o.placeholder = '10';
 		o.datatype    = 'min(1)';
-
-		o = s.taboption('advanced', form.Flag, 'defaultroute', _('Default gateway'), _('If unchecked, no default route is configured'));
-		o.default = o.enabled;
-
-		o = s.taboption('advanced', form.Value, 'metric', _('Use gateway metric'));
-		o.placeholder = '0';
-		o.datatype    = 'uinteger';
-		o.depends('defaultroute', '1');
-
-		o = s.taboption('advanced', form.Flag, 'peerdns', _('Use DNS servers advertised by peer'), _('If unchecked, the advertised DNS server addresses are ignored'));
-		o.default = o.enabled;
-
-		o = s.taboption('advanced', form.DynamicList, 'dns', _('Use custom DNS servers'));
-		o.depends('peerdns', '0');
-		o.datatype = 'ipaddr';
 	}
 });

@@ -733,7 +733,7 @@ return view.extend({
 
 					o = s.taboption('basic', form.Value, 'domain',
 						_("Domain"),
-						_("Replaces [USERNAME] in Update-URL (URL-encoded)"));
+						_("Replaces [DOMAIN] in Update-URL (URL-encoded)"));
 					o.modalonly = true;
 					o.rmempty = false;
 

@@ -2,39 +2,23 @@
 	"luci-app-vpnbypass": {
 		"description": "Grant UCI and file access for luci-app-vpnbypass",
 		"read": {
-			"cgi-io": [
-				"exec"
-			],
-			"file": {
-				"/usr/lib/opkg/status": [
-					"read"
-				],
-				"/etc/init.d/vpnbypass *": [
-					"exec"
-				],
-				"/etc/init.d/dnsmasq restart *": [
-					"exec"
-				],
-				"/usr/bin/grep *": [
-					"exec"
-				],
-				"/usr/sbin/grep *": [
-					"exec"
-				],
-				"/usr/sbin/iptables *": [
-					"exec"
+			"ubus": {
+				"luci.vpnbypass": [
+					"getInitList",
+					"getInitStatus"
 				]
 			},
 			"uci": [
-				"dhcp",
-				"vpnbypass"
+				"vpnbypass",
+				"dnsmasq"
 			]
 		},
 		"write": {
-			"uci": [
-				"dhcp",
-				"vpnbypass"
-			]
+			"ubus": {
+				"luci.vpnbypass": [
+					"setInitAction"
+				]
+			}
 		}
 	}
 }

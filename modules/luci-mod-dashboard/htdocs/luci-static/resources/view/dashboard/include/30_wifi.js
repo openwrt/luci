@@ -147,7 +147,7 @@ return baseclass.extend({
 			for (var j = 0; j < network_items.length; j++) {
 				 var net = network_items[j],
 					 is_assoc = (net.getBSSID() != '00:00:00:00:00:00' && net.getChannel() && !net.isDisabled()),
-	 				 chan = net.getChannel(),
+					 chan = net.getChannel(),
 					 freq = net.getFrequency(),
 					 rate = net.getBitRate();
 

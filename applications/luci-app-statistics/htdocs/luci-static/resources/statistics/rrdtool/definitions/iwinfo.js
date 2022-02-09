@@ -57,8 +57,8 @@ return baseclass.extend({
 		var bitrate = {
 			title: "%H: Average phy rate on %pi",
 			detail: true,
-			vlabel: "MBit/s",
-			number_format: "%5.1lf%sBit/s",
+			vlabel: "Mbit/s",
+			number_format: "%5.1lf%sbit/s",
 			data: {
 				types: [ "bitrate" ],
 				options: {

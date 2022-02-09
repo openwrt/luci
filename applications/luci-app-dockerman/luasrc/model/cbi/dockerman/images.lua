@@ -40,7 +40,7 @@ function get_images()
 
 		if v.RepoTags and next(v.RepoTags)~=nil then
 			for i, v1 in ipairs(v.RepoTags) do
-				data[index]["_tags"] =(data[index]["_tags"] and ( data[index]["_tags"] .. "<br>" )or "") .. ((v1:match("<none>") or (#v.RepoTags == 1)) and v1 or ('<a href="javascript:un_tag(\''..v1..'\')" class="dockerman_link" title="'..translate("Remove tag")..'" >' .. v1 .. '</a>'))
+				data[index]["_tags"] =(data[index]["_tags"] and ( data[index]["_tags"] .. "<br />" )or "") .. ((v1:match("<none>") or (#v.RepoTags == 1)) and v1 or ('<a href="javascript:un_tag(\''..v1..'\')" class="dockerman_link" title="'..translate("Remove tag")..'" >' .. v1 .. '</a>'))
 
 				if not data[index]["tag"] then
 					data[index]["tag"] = v1
@@ -68,7 +68,9 @@ end
 
 local image_list = get_images()
 
-m = SimpleForm("docker", translate("Docker"))
+m = SimpleForm("docker",
+	translate("Docker - Images"),
+	translate("On this page all images are displayed that are available on the system and with which a container can be created."))
 m.submit=false
 m.reset=false
 
@@ -77,7 +79,9 @@ local pull_value={
 	_registry="index.docker.io"
 }
 
-s = m:section(SimpleSection, translate("Pull Image"))
+s = m:section(SimpleSection,
+	translate("Pull Image"),
+	translate("By entering a valid image name with the corresponding version, the docker image can be downloaded from the configured registry."))
 s.template="cbi/nullsection"
 
 o = s:option(Value, "_image_tag_name")
@@ -116,12 +120,14 @@ o.write = function(self, section)
 	luci.http.redirect(luci.dispatcher.build_url("admin/docker/images"))
 end
 
-s = m:section(SimpleSection, translate("Import Images"))
+s = m:section(SimpleSection,
+	translate("Import Image"),
+	translate("When pressing the Import button, both a local image can be loaded onto the system and a valid image tar can be downloaded from remote."))
 
 o = s:option(DummyValue, "_image_import")
 o.template = "dockerman/images_import"
 
-s = m:section(Table, image_list, translate("Images"))
+s = m:section(Table, image_list, translate("Images overview"))
 
 o = s:option(Flag, "_selected","")
 o.disabled = 0
@@ -149,7 +155,7 @@ local remove_action = function(force)
 
 	for k in pairs(image_list) do
 		if image_list[k]._selected == 1 then
-			image_selected[#image_selected+1] = (image_list[k]["_tags"]:match("<br>") or image_list[k]["_tags"]:match("&lt;none&gt;")) and image_list[k].id or image_list[k].tag
+			image_selected[#image_selected+1] = (image_list[k]["_tags"]:match("<br />") or image_list[k]["_tags"]:match("&lt;none&gt;")) and image_list[k].id or image_list[k].tag
 		end
 	end
 
@@ -188,7 +194,7 @@ end
 s = m:section(SimpleSection)
 s.template = "dockerman/apply_widget"
 s.err = docker:read_status()
-s.err = s.err and s.err:gsub("\n","<br>"):gsub(" ","&nbsp;")
+s.err = s.err and s.err:gsub("\n","<br />"):gsub(" ","&#160;")
 if s.err then
 	docker:clear_status()
 end

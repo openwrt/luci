@@ -17,17 +17,21 @@
 
 	http.prepare_content("text/html; charset=UTF-8")
 -%>
-
+<!DOCTYPE html>
 <html lang="<%=luci.i18n.context.lang%>">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta http-equiv="Content-Script-Type" content="text/javascript" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="stylesheet" type="text/css" media="screen" href="<%=media%>/cascade.css" />
-<link rel="icon" href="<%=media%>/favicon.png" type="image/svg+xml" />
+<link rel="icon" href="<%=media%>/logo.svg" type="image/svg+xml" />
 <script type="text/javascript" src="<%=url('admin/translations', luci.i18n.context.lang)%><%# ?v=PKG_VERSION %>"></script>
 <script type="text/javascript" src="<%=resource%>/cbi.js"></script>
 <title><%=striptags( (boardinfo.hostname or "?") .. ( (node and node.title) and ' - ' .. translate(node.title) or '')) %> - LuCI</title>
+<% if css then %><style title="text/css">
+<%= css %>
+</style>
+<% end -%>
 </head>
 <body class="lang_<%=luci.i18n.context.lang%>" data-page="<%= pcdata(path) %>">
 
@@ -39,7 +43,7 @@
 <div id="menubar">
 	<h2 class="navigation"><a id="navigation" name="navigation"><%:Navigation%></a></h2>
 
-	<span class="hostname"><a href="/"><%=(boardinfo.hostname or "?")%></a></span>
+	<span class="hostname"><a href="/"><%=striptags(boardinfo.hostname or "?")%></a></span>
 	<span class="distversion"><%=ver.distversion%></span>
 	<span id="indicators"></span>
 </div>
@@ -50,12 +54,22 @@
 	<div id="mainmenu"></div>
 
 	<div id="maincontent">
-		<%- if luci.sys.process.info("uid") == 0 and luci.sys.user.getuser("root") and not luci.sys.user.getpasswd("root") and category ~= "failsafe" and path ~= "admin-system-admin-password" then -%>
+		<%- if luci.sys.process.info("uid") == 0 and luci.sys.user.getuser("root") and not luci.sys.user.getpasswd("root") and path ~= "admin-system-admin-password" then -%>
 		<div class="alert-message warning">
 			<h4><%:No password set!%></h4>
 			<p><%:There is no password set on this router. Please configure a root password to protect the web interface.%></p>
 			<% if disp.lookup("admin/system/admin") then %>
 				<div class="right"><a class="btn" href="<%=url("admin/system/admin")%>"><%:Go to password configuration...%></a></div>
+			<% end %>
+		</div>
+		<%- end -%>
+
+		<%- if boardinfo.rootfs_type == "initramfs" then -%>
+		<div class="alert-message warning">
+			<h4><%:System running in recovery (initramfs) mode.%></h4>
+			<p><%:No changes to settings will be stored and are lost after rebooting. This mode should only be used to install a firmware upgrade%></p>
+			<% if disp.lookup("admin/system/flash") then %>
+			  <div class="right"><a class="btn" href="<%=url("admin/system/flash")%>"><%:Go to firmware upgrade...%></a></div>
 			<% end %>
 		</div>
 		<%- end -%>

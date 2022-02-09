@@ -50,7 +50,7 @@ return baseclass.extend({
 		};
 
 		o = s.option(form.Value, 'RRARows', _('Rows per RRA'));
-		o.default = '144';
+		o.default = '288';
 		o.datatype = 'min(1)';
 		o.depends('enable', '1');
 

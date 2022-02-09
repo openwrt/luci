@@ -1,0 +1,33 @@
+name: GitHub pages
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    if: github.repository == 'openwrt/luci'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install
+        run: npm install
+
+      - name: Build
+        run: npm run doc
+
+      - name: Archive docs as artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: docs
+          path: ./docs/
+
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs/
+          enable_jekyll: true

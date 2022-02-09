@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: luci-app-ddns 2.4.0-1\n"
 "POT-Creation-Date: 2016-01-30 11:07+0100\n"
-"PO-Revision-Date: 2020-10-17 15:26+0000\n"
-"Last-Translator: Marcin Net <marcin.net@linux.pl>\n"
+"PO-Revision-Date: 2022-01-06 10:55+0000\n"
+"Last-Translator: Matthaiks <kitynska@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsddns/pl/>\n"
 "Language: pl\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.3.1-dev\n"
+"X-Generator: Weblate 4.10.1\n"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:430
 msgid "\"../\" not allowed in path for Security Reason."
@@ -48,7 +48,7 @@ msgid ""
 "BusyBox's nslookup and Wget do not support to specify the IP version to use "
 "for communication with DDNS Provider!"
 msgstr ""
-"BusyBox nslookup i Wget nie obsługują określenia wersji IP, która ma być "
+"nslookup i Wget BusyBox nie obsługują określenia wersji IP, która ma być "
 "używana do komunikacji z dostawcą DDNS!"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:368
@@ -56,8 +56,8 @@ msgid ""
 "BusyBox's nslookup and hostip do not support to specify to use TCP instead "
 "of default UDP when requesting DNS server!"
 msgstr ""
-"Nslookup i hostip BusyBox nie obsługują określania, czy podczas żądania "
-"serwera DNS należy używać TCP zamiast domyślnego UDP!"
+"nslookup i hostip BusyBox nie obsługują określenia, czy używać TCP zamiast "
+"domyślnego UDP podczas żądania serwera DNS!"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:379
 msgid ""
@@ -76,8 +76,8 @@ msgid ""
 "Ca Certs path that will be used to download services data. Set IGNORE to "
 "skip certificate validation."
 msgstr ""
-"Ścieżka Ca Certs, która będzie używana do pobierania danych usług. Ustaw "
-"IGNORE, aby pominąć weryfikację certyfikatu."
+"Ścieżka Ca Certs, używana do pobierania danych usług. Ustaw IGNORE, aby "
+"pominąć weryfikację certyfikatu."
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:537
 msgid "Cancel"
@@ -151,7 +151,7 @@ msgstr "Dostawca usług DDNS"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:282
 msgid "DDns"
-msgstr "DDns"
+msgstr "DDNS"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:582
 msgid "DDns Service"
@@ -313,7 +313,7 @@ msgstr "Ustawienia globalne"
 
 #: applications/luci-app-ddns/root/usr/share/rpcd/acl.d/luci-app-ddns.json:3
 msgid "Grant access to ddns procedures"
-msgstr "Udziel dostępu do procedur ddns"
+msgstr "Udziel dostępu do procedur DDNS"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:318
 msgid "HTTPS not supported"
@@ -361,7 +361,7 @@ msgid ""
 "If Wget and cURL package are installed, Wget is used for communication by "
 "default."
 msgstr ""
-"Jeśli pakiet Wget i Curl są zainstalowane, Wget jest domyślnie używany do "
+"Jeśli pakiety Wget i Curl są zainstalowane, Wget jest domyślnie używany do "
 "komunikacji."
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:611
@@ -571,7 +571,7 @@ msgstr "W przypadku błędu skrypt przestanie działać po określonej liczbie p
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:754
 msgid "Optional Encoded Parameter"
-msgstr "zakodowany opcjonalny parametr"
+msgstr "Opcjonalny zakodowany parametr"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:760
 msgid "Optional Parameter"
@@ -629,11 +629,14 @@ msgstr "Przeładuj"
 msgid "Reload this service"
 msgstr "Przeładuj usługę"
 
+#: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:736
+msgid "Replaces [DOMAIN] in Update-URL (URL-encoded)"
+msgstr "Zastąp [DOMAIN] w Update-URL (zakodowany URL)"
+
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:748
 msgid "Replaces [PASSWORD] in Update-URL (URL-encoded)"
 msgstr "Zastąp [PASSWORD] w Update-URL (zakodowany URL)"
 
-#: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:736
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:742
 msgid "Replaces [USERNAME] in Update-URL (URL-encoded)"
 msgstr "Zastąp [USERNAME] w Update-URL (zakodowany URL)"
@@ -751,8 +754,8 @@ msgid ""
 "This is the default if you run DDNS scripts by yourself (i.e. via cron with "
 "force_interval set to '0')"
 msgstr ""
-"To jest ustawienie domyślne, jeśli uruchamiasz skrypty DDNS samodzielnie "
-"(tj. Za pomocą crona z force_interval ustawionym na „0”)"
+"To jest ustawienie domyślne, jeśli uruchamiasz skrypty DDNS samodzielnie ("
+"tj. za pomocą crona z force_interval ustawionym na „0”)"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:874
 msgid "This will be autoset to the selected interface"
@@ -778,7 +781,7 @@ msgstr "Nieznany"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:299
 msgid "Update DDns Services List"
-msgstr "Zaktualizuj listę usług DDns"
+msgstr "Zaktualizuj listę usług DDNS"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:700
 msgid "Update URL to be used for updating your DDNS Provider."
@@ -857,7 +860,7 @@ msgid ""
 "You should install 'bind-host' or 'knot-host' or 'drill' package for DNS "
 "requests."
 msgstr ""
-"Powinieneś zainstalować pakiet „bind-host”, „knot-host” lub „drill” dla "
+"Powinieneś zainstalować pakiet 'bind-host' lub 'knot-host' lub 'drill' dla "
 "żądań DNS."
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:359

@@ -253,7 +253,21 @@ static void umap_file(struct file_map *m)
 
 static void * iw_open(void)
 {
-	return dlopen("/usr/lib/libiwinfo.so", RTLD_LAZY);
+	void *iwlib = NULL;
+	glob_t paths;
+	int i;
+
+	if (glob("/usr/lib/libiwinfo.so*", 0, NULL, &paths) != 0)
+		return NULL;
+
+	for (i = 0; i < paths.gl_pathc && !iwlib; i++)
+		iwlib = dlopen(paths.gl_pathv[i], RTLD_LAZY | RTLD_LOCAL);
+
+	globfree(&paths);
+
+	if (!iwlib)
+		return NULL;
+	return iwlib;
 }
 
 static int iw_update(

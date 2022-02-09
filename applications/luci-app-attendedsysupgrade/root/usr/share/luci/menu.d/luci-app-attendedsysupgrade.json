@@ -1,13 +1,31 @@
 {
-	"admin/system/attended_sysupgrade": {
+	"admin/system/attendedsysupgrade": {
 		"title": "Attended Sysupgrade",
-		"order": 1,
+		"order": 60,
 		"action": {
-			"type": "template",
-			"path": "attendedsysupgrade"
+			"type": "firstchild"
 		},
 		"depends": {
-			"acl": [ "attendedsysupgrade" ]
+			"acl": [ "luci-app-attendedsysupgrade" ],
+			"uci": { "attendedsysupgrade": true }
+		}
+	},
+
+	"admin/system/attendedsysupgrade/overview": {
+		"title": "Overview",
+		"order": 1,
+		"action": {
+			"type": "view",
+			"path": "attendedsysupgrade/overview"
+		}
+	},
+
+	"admin/system/attendedsysupgrade/configuration": {
+		"title": "Configuration",
+		"order": 2,
+		"action": {
+			"type": "view",
+			"path": "attendedsysupgrade/configuration"
 		}
 	}
 }

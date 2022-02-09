@@ -346,12 +346,12 @@ return view.extend({
 
 			trafData.push({
 				value: rec.rx_bytes + rec.tx_bytes,
-				label: ["%s: %%.2mB".format(key), cell]
+				label: ["%s: %%1024.2mB".format(key), cell]
 			});
 
 			connData.push({
 				value: rec.conns,
-				label: ["%s: %%.2m".format(key), cell]
+				label: ["%s: %%1000.2m".format(key), cell]
 			});
 
 			rx_total += rec.rx_bytes;
@@ -359,13 +359,7 @@ return view.extend({
 			conn_total += rec.conns;
 		}
 
-		cbi_update_table('#host-data', rows, E('em', [
-			_('No data recorded yet.'), ' ',
-			E('a', {
-				'href': '#',
-				'click': ui.createHandlerFn(this, 'handleCommit')
-			}, _('Force reload…'))
-		]));
+		cbi_update_table('#host-data', rows, E('em', _('No data recorded yet.')));
 
 		this.pie('traf-pie', trafData);
 		this.pie('conn-pie', connData);
@@ -404,12 +398,12 @@ return view.extend({
 
 			rxData.push({
 				value: rec.rx_bytes,
-				label: ["%s: %%.2mB".format(rec.layer7 || _('other')), cell]
+				label: ["%s: %%1024.2mB".format(rec.layer7 || _('other')), cell]
 			});
 
 			txData.push({
 				value: rec.tx_bytes,
-				label: ["%s: %%.2mB".format(rec.layer7 || _('other')), cell]
+				label: ["%s: %%1024.2mB".format(rec.layer7 || _('other')), cell]
 			});
 
 			if (rec.layer7) {
@@ -419,10 +413,7 @@ return view.extend({
 			}
 		}
 
-		cbi_update_table('#layer7-data', rows, E('em', [
-			_('No data recorded yet.'), ' ',
-			E('a', { 'href': L.url('admin/nlbw/commit') }, _('Force reload…'))
-		]));
+		cbi_update_table('#layer7-data', rows, E('em', 	_('No data recorded yet.')));
 
 		this.pie('layer7-rx-pie', rxData);
 		this.pie('layer7-tx-pie', txData);
@@ -523,24 +514,21 @@ return view.extend({
 			]);
 		}
 
-		cbi_update_table('#ipv6-data', rows, E('em', [
-			_('No data recorded yet.'), ' ',
-			E('a', { 'href': L.url('admin/nlbw/commit') }, _('Force reload…'))
-		]));
+		cbi_update_table('#ipv6-data', rows, E('em', _('No data recorded yet.')));
 
 		var shareData = [], hostsData = [];
 
 		if (rx4_total > 0 || tx4_total > 0)
 			shareData.push({
 				value: rx4_total + tx4_total,
-				label: ["IPv4: %.2mB"],
+				label: ["IPv4: %1024.2mB"],
 				color: 'hsl(140, 100%, 50%)'
 		        });
 
 		if (rx6_total > 0 || tx6_total > 0)
 			shareData.push({
 				value: rx6_total + tx6_total,
-				label: ["IPv6: %.2mB"],
+				label: ["IPv6: %1024.2mB"],
 				color: 'hsl(180, 100%, 50%)'
 			});
 
@@ -595,11 +583,11 @@ return view.extend({
 		dom.content(tooltip, [
 			E('div', { 'class': 'head' }, [
 				E('div', { 'class': 'pie' }, [
-					E('label', _('Download')),
+					E('label', _('Download', 'Traffic counter')),
 					E('canvas', { 'id': 'bubble-pie1', 'width': 100, 'height': 100 })
 				]),
 				E('div', { 'class': 'pie' }, [
-					E('label', _('Upload')),
+					E('label', _('Upload', 'Traffic counter')),
 					E('canvas', { 'id': 'bubble-pie2', 'width': 100, 'height': 100 })
 				]),
 				E('div', { 'class': 'kpi' }, [
@@ -856,6 +844,13 @@ return view.extend({
 								E('em', { 'class': 'spinning' }, [ _('Collecting data...') ])
 							])
 						])
+					]),
+					E('div', { 'class': 'right' }, [
+						E('button', {
+							'class': 'cbi-button',
+							'click': ui.createHandlerFn(this, 'handleCommit')
+							}, _('Force reload…')
+						)
 					])
 				]),
 
@@ -895,6 +890,13 @@ return view.extend({
 								E('em', { 'class': 'spinning' }, [ _('Collecting data...') ])
 							])
 						])
+					]),
+					E('div', { 'class': 'right' }, [
+						E('button', {
+							'class': 'cbi-button',
+							'click': ui.createHandlerFn(this, 'handleCommit')
+							}, _('Force reload…')
+						)
 					])
 				]),
 
@@ -935,34 +937,53 @@ return view.extend({
 								E('em', { 'class': 'spinning' }, [ _('Collecting data...') ])
 							])
 						])
+					]),
+					E('div', { 'class': 'right' }, [
+						E('button', {
+							'class': 'cbi-button',
+							'click': ui.createHandlerFn(this, 'handleCommit')
+							}, _('Force reload…')
+						)
 					])
 				]),
 
 				E('div', { 'class': 'cbi-section', 'data-tab': 'export', 'data-tab-title': _('Export') }, [
-					E('ul', [
-						E('li', [
-							E('a', {
-								'href': '#',
-								'click': ui.createHandlerFn(this, 'handleDownload', 'csv', 'mac', '-rx,-tx')
-							}, [ _('CSV, grouped by MAC') ])
+					E('div', { 'class': 'cbi-section-node cbi-sction-node-tabbed' }, [
+						E('div', { 'class': 'cbi-value' }, [
+							E('label', { 'class': 'cbi-value-title' }, _('Grouped by MAC (CSV)')),
+							E('div', { 'class': 'cbi-value-field' }, [
+								E('button', {
+									'class': 'cbi-button',
+									'click': ui.createHandlerFn(this, 'handleDownload', 'csv', 'mac', '-rx,-tx')
+								}, [ _('Export') ])
+							])
 						]),
-						E('li', [
-							E('a', {
-								'href': '#',
-								'click': ui.createHandlerFn(this, 'handleDownload', 'csv', 'ip', '-rx,-tx')
-							}, [ _('CSV, grouped by IP') ])
+						E('div', { 'class': 'cbi-value' }, [
+							E('label', { 'class': 'cbi-value-title' }, _('Grouped by IP (CSV)')),
+							E('div', { 'class': 'cbi-value-field' }, [
+								E('button', {
+									'class': 'cbi-button',
+									'click': ui.createHandlerFn(this, 'handleDownload', 'csv', 'ip', '-rx,-tx')
+								}, [ _('Export') ])
+							])
 						]),
-						E('li', [
-							E('a', {
-								'href': '#',
-								'click': ui.createHandlerFn(this, 'handleDownload', 'csv', 'layer7', '-rx,-tx')
-							}, [ _('CSV, grouped by protocol') ])
+						E('div', { 'class': 'cbi-value' }, [
+							E('label', { 'class': 'cbi-value-title' }, _('Grouped by protocol (CSV)')),
+							E('div', { 'class': 'cbi-value-field' }, [
+								E('button', {
+									'class': 'cbi-button',
+									'click': ui.createHandlerFn(this, 'handleDownload', 'csv', 'layer7', '-rx,-tx')
+								}, [ _('Export') ])
+							])
 						]),
-						E('li', [
-							E('a', {
-								'href': '#',
-								'click': ui.createHandlerFn(this, 'handleDownload', 'json', null, null)
-							}, [ _('JSON dump') ])
+						E('div', { 'class': 'cbi-value' }, [
+							E('label', { 'class': 'cbi-value-title' }, _('Dump (JSON)')),
+							E('div', { 'class': 'cbi-value-field' }, [
+								E('button', {
+									'class': 'cbi-button',
+									'click': ui.createHandlerFn(this, 'handleDownload', 'json', null, null)
+								}, [ _('Export') ])
+							])
 						])
 					])
 				])

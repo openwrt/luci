@@ -3,7 +3,8 @@
 		"description": "Grant access to system configuration",
 		"read": {
 			"ubus": {
-				"luci": [ "getInitList", "getLEDs", "getLocaltime", "getTimezones", "getUSBDevices" ]
+				"luci": [ "getInitList", "getLEDs", "getTimezones", "getUSBDevices" ],
+				"system": [ "info" ]
 			},
 			"uci": [ "luci", "system" ]
 		},
@@ -37,6 +38,20 @@
 			"uci": [ "dropbear" ]
 		}
 	},
+
+	"luci-mod-system-uhttpd": {
+		"description": "Grant access to uHTTPd configuration",
+		"read": {
+			"uci": [ "uhttpd" ]
+		},
+		"write": {
+			"ubus": {
+				"luci": [ "setInitAction" ]
+			},
+			"uci": [ "uhttpd" ]
+		}
+	},
+
 
 	"luci-mod-system-init": {
 		"description": "Grant access to startup configuration",
@@ -72,7 +87,8 @@
 		},
 		"write": {
 			"file": {
-				"/etc/crontabs/root": [ "write" ]
+				"/etc/crontabs/root": [ "write" ],
+				"/etc/init.d/cron reload": [ "exec" ]
 			},
 			"ubus": {
 				"file": [ "write" ]
@@ -139,7 +155,13 @@
 				"/sbin/reboot": [ "exec" ],
 				"/sbin/sysupgrade --force /tmp/firmware.bin": [ "exec" ],
 				"/sbin/sysupgrade -n --force /tmp/firmware.bin": [ "exec" ],
+				"/sbin/sysupgrade --force -k /tmp/firmware.bin": [ "exec" ],
+				"/sbin/sysupgrade --force -u /tmp/firmware.bin": [ "exec" ],
+				"/sbin/sysupgrade --force -u -k /tmp/firmware.bin": [ "exec" ],
 				"/sbin/sysupgrade -n /tmp/firmware.bin": [ "exec" ],
+				"/sbin/sysupgrade -k /tmp/firmware.bin": [ "exec" ],
+				"/sbin/sysupgrade -u /tmp/firmware.bin": [ "exec" ],
+				"/sbin/sysupgrade -u -k /tmp/firmware.bin": [ "exec" ],
 				"/sbin/sysupgrade --restore-backup /tmp/backup.tar.gz": [ "exec" ],
 				"/sbin/sysupgrade --test /tmp/firmware.bin": [ "exec" ],
 				"/sbin/sysupgrade /tmp/firmware.bin": [ "exec" ],

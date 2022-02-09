@@ -1,0 +1,40 @@
+{
+	"admin/services/aria2": {
+		"title": "Aria2",
+		"order": 30,
+		"action": {
+			"type": "firstchild"
+		},
+		"depends": {
+			"acl": [ "luci-app-aria2" ],
+			"uci": { "aria2": true }
+		}
+	},
+
+	"admin/services/aria2/config": {
+		"title": "Configuration",
+		"order": 10,
+		"action": {
+			"type": "view",
+			"path": "aria2/config"
+		}
+	},
+
+	"admin/services/aria2/files": {
+		"title": "Files",
+		"order": 20,
+		"action": {
+			"type": "view",
+			"path": "aria2/files"
+		}
+	},
+
+	"admin/services/aria2/log": {
+		"title": "Log",
+		"order": 30,
+		"action": {
+			"type": "view",
+			"path": "aria2/log"
+		}
+	}
+}

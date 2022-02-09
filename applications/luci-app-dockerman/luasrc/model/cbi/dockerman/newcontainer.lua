@@ -436,18 +436,18 @@ elseif cmd_line and cmd_line:match("^duplicate/[^/]+$") then
 	end
 end
 
-m = SimpleForm("docker", translate("Docker"))
+m = SimpleForm("docker", translate("Docker - Containers"))
 m.redirect = luci.dispatcher.build_url("admin", "docker", "containers")
 
 s = m:section(SimpleSection)
 s.template = "dockerman/apply_widget"
 s.err=docker:read_status()
-s.err=s.err and s.err:gsub("\n","<br>"):gsub(" ","&nbsp;")
+s.err=s.err and s.err:gsub("\n","<br />"):gsub(" ","&#160;")
 if s.err then
 	docker:clear_status()
 end
 
-s = m:section(SimpleSection, translate("New Container"))
+s = m:section(SimpleSection, translate("Create new docker container"))
 s.addremove = true
 s.anonymous = true
 

@@ -12,11 +12,12 @@ var callUSB = rpc.declare({
 
 return baseclass.extend({
 	trigger: _('USB (kernel: usbport)'),
+	description: _('This LED trigger can be used for signalling to the user a presence of USB device in a given port.'),
 	kernel: true,
 	addFormOptions(s){
 		var o;
 
-		o = s.option(form.Value, 'port', _('USB Ports'));
+		o = s.option(form.MultiValue, 'port', _('USB Ports'));
 		o.depends('trigger', 'usbport');
 		o.rmempty = true;
 		o.modalonly = true;

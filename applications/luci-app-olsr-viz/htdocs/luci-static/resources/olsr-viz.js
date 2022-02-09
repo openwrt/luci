@@ -228,11 +228,11 @@ function node(ip) {
 			+ "width: 150px; height: 1px; z-index: 4; "
 			+ "position: absolute; background-color: transparent;' >"
 			+ "<div><img src='/luci-static/resources/olsr-viz/node"+(igw ? "-hna" : "")+iconvariant + ".gif'"
-			+ " alt='node " + this.ip + "' style='border: none;'><br>"
+			+ " alt='node " + this.ip + "' style='border: none;'><br />"
 			+ 	"<a href='http://" + this.ip + "/'>"
 			+ 	"<span class='label ip'>" + this.ip + "</span></a>"
 			+ 	(showdesc && this.desc != "" ? 
-						"<br><span class='label desc'>" + this.desc + "</span>" : "")
+						"<br /><span class='label desc'>" + this.desc + "</span>" : "")
 			+ "</div></div>";
 		return nh;
 	}
@@ -690,10 +690,10 @@ function declump(t) {
 	xoff=-xmin;
 	yoff=-ymin;
 	/*
-	document.getElementById('debug').innerHTML = "<br>" +
-		"offset: " + xoff + "x" + yoff + " dsum: " + dsum + "<br>" +
-		"nc: " + nc + " ec: " + ec + "xmax: " + xmax + " xmin: " + xmin +	"<br>" +
-		"optsize: " + optsize + "<br>";
+	document.getElementById('debug').innerHTML = "<br />" +
+		"offset: " + xoff + "x" + yoff + " dsum: " + dsum + "<br />" +
+		"nc: " + nc + " ec: " + ec + "xmax: " + xmax + " xmin: " + xmin +	"<br />" +
+		"optsize: " + optsize + "<br />";
 		*/
 	refresh();
 	if(auto_declump) {
@@ -765,7 +765,7 @@ function drag(ereignis) {
 
 function debug_writeln(line)
 {
-	document.getElementById('debug').innerHTML = line + "<br>" + document.getElementById('debug').innerHTML;
+	document.getElementById('debug').innerHTML = line + "<br />" + document.getElementById('debug').innerHTML;
 }
 
 /**

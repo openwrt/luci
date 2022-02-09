@@ -186,6 +186,8 @@ return view.extend({
 							y = ctx.height - Math.floor(values[i][j] * data_scale);
 							//y -= Math.floor(y % (1 / data_scale));
 
+							y = isNaN(y) ? ctx.height : y;
+
 							pt += ' ' + x + ',' + y;
 						}
 

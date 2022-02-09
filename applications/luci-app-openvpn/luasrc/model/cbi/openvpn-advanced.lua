@@ -161,8 +161,8 @@ local knownParams = {
 			translate("Policy level over usage of external programs and scripts") },
 		{ ListValue,
 			"compress",
-			{ "lzo", "lz4" },
-			translate("Enable a compression algorithm") },
+			{ "lzo", "lz4", "stub-v2"},
+			translate("Security recommendation: It is recommended to not enable compression and set this parameter to `stub-v2`") },
 	} },
 
 	{ "networking", translate("Networking"), {
@@ -254,7 +254,7 @@ local knownParams = {
 		{ ListValue,
 			"comp_lzo",
 			{ "yes", "no", "adaptive" },
-			translate("Use fast LZO compression") },
+			translate("Security recommendation: It is recommended to not enable compression and set this parameter to `no`")},
 		{ Flag,
 			"comp_noadapt",
 			0,

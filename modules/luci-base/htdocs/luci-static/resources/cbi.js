@@ -367,6 +367,17 @@ function cbi_validate_form(form, errmsg)
 	return true;
 }
 
+function cbi_validate_named_section_add(input)
+{
+	var button = input.parentNode.parentNode.querySelector('.cbi-button-add');
+	if (input.value !== '') {
+		button.disabled = false;
+	}
+	else {
+		button.disabled = true;
+	}
+}
+
 function cbi_validate_reset(form)
 {
 	window.setTimeout(
@@ -510,8 +521,13 @@ String.prototype.format = function()
 	var quot_esc = [/"/g, '&#34;', /'/g, '&#39;'];
 
 	function esc(s, r) {
-		if (typeof(s) !== 'string' && !(s instanceof String))
+		var t = typeof(s);
+
+		if (s == null || t === 'object' || t === 'function')
 			return '';
+
+		if (t !== 'string')
+			s = String(s);
 
 		for (var i = 0; i < r.length; i += 2)
 			s = s.replace(r[i], r[i+1]);
@@ -614,17 +630,17 @@ String.prototype.format = function()
 						var tm = 0;
 						var ts = (param || 0);
 
-						if (ts > 60) {
+						if (ts > 59) {
 							tm = Math.floor(ts / 60);
 							ts = (ts % 60);
 						}
 
-						if (tm > 60) {
+						if (tm > 59) {
 							th = Math.floor(tm / 60);
 							tm = (tm % 60);
 						}
 
-						if (th > 24) {
+						if (th > 23) {
 							td = Math.floor(th / 24);
 							th = (th % 24);
 						}
@@ -646,7 +662,11 @@ String.prototype.format = function()
 						for (i = 0; (i < units.length) && (val > mf); i++)
 							val /= mf;
 
-						subst = (i ? val.toFixed(pr) : val) + units[i];
+						if (i)
+							subst = val.toFixed(pr) + units[i] + (mf == 1024 ? 'i' : '');
+						else
+							subst = val + ' ';
+
 						pMinLength = null;
 						break;
 				}
@@ -752,7 +772,7 @@ function cbi_update_table(table, data, placeholder) {
 		});
 
 		if (Array.isArray(data)) {
-			var n = 0, rows = target.querySelectorAll('tr, .tr');
+			var n = 0, rows = target.querySelectorAll('tr, .tr'), trows = [];
 
 			data.forEach(function(row) {
 				var trow = E('tr', { 'class': 'tr' });
@@ -762,7 +782,7 @@ function cbi_update_table(table, data, placeholder) {
 					var td = trow.appendChild(E('td', {
 						'class': titles[i].className,
 						'data-title': (text !== '') ? text : null
-					}, row[i] || ''));
+					}, (row[i] != null) ? row[i] : ''));
 
 					td.classList.remove('th');
 					td.classList.add('td');
@@ -770,11 +790,15 @@ function cbi_update_table(table, data, placeholder) {
 
 				trow.classList.add('cbi-rowstyle-%d'.format((n++ % 2) ? 2 : 1));
 
-				if (rows[n])
-					target.replaceChild(trow, rows[n]);
-				else
-					target.appendChild(trow);
+				trows[n] = trow;
 			});
+
+			for (var i = 1; i <= n; i++) {
+				if (rows[i])
+					target.replaceChild(trows[i], rows[i]);
+				else
+					target.appendChild(trows[i]);
+			}
 
 			while (rows[++n])
 				target.removeChild(rows[n]);

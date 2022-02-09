@@ -655,7 +655,7 @@
 		 * Provides a password for HTTP basic authentication.
 		 *
 		 * @property {number} [timeout]
-		 * Specifies the request timeout in seconds.
+		 * Specifies the request timeout in milliseconds.
 		 *
 		 * @property {boolean} [credentials=false]
 		 * Whether to include credentials such as cookies in the request.
@@ -672,12 +672,12 @@
 		 * if it is an object, it will be converted to JSON, in all other
 		 * cases it is converted to a string.
 		 *
-	     * @property {Object<string, string>} [header]
-	     * Specifies HTTP headers to set for the request.
-	     *
-	     * @property {function} [progress]
-	     * An optional request callback function which receives ProgressEvent
-	     * instances as sole argument during the HTTP request transfer.
+		 * @property {Object<string, string>} [header]
+		 * Specifies HTTP headers to set for the request.
+		 *
+		 * @property {function} [progress]
+		 * An optional request callback function which receives ProgressEvent
+		 * instances as sole argument during the HTTP request transfer.
 		 */
 
 		/**
@@ -764,7 +764,7 @@
 				if (opt.content != null) {
 					switch (typeof(opt.content)) {
 					case 'function':
-						content = opt.content(xhr);
+						content = opt.content(opt.xhr);
 						break;
 
 					case 'object':
@@ -982,12 +982,13 @@
 						if (!Poll.active())
 							return;
 
+						var res_json = null;
 						try {
-							callback(res, res.json(), res.duration);
+							res_json = res.json();
 						}
-						catch (err) {
-							callback(res, null, res.duration);
-						}
+						catch (err) {}
+
+						callback(res, res_json, res.duration);
 					});
 				};
 
@@ -1247,7 +1248,7 @@
 		 * `null` on parsing failures or if no element could be found.
 		 */
 		parse: function(s) {
-			var elem;
+			var elem = null;
 
 			try {
 				domParser = domParser || new DOMParser();
@@ -1255,16 +1256,7 @@
 			}
 			catch(e) {}
 
-			if (!elem) {
-				try {
-					dummyElem = dummyElem || document.createElement('div');
-					dummyElem.innerHTML = s;
-					elem = dummyElem.firstChild;
-				}
-				catch (e) {}
-			}
-
-			return elem || null;
+			return elem;
 		},
 
 		/**
@@ -2971,7 +2963,12 @@
 			}).filter(function(e) {
 				return (e[1] != null);
 			}).sort(function(a, b) {
-				return (a[1] > b[1]);
+				if (a[1] < b[1])
+					return -1;
+				else if (a[1] > b[1])
+					return 1;
+				else
+					return 0;
 			}).map(function(e) {
 				return e[0];
 			});
