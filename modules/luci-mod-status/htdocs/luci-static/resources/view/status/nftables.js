@@ -23,7 +23,7 @@ var expr_translations = {
 	'meta.nfproto.ipv4': 'IPv4',
 	'meta.nfproto.ipv6': 'IPv6',
 
-	'meta.mark': _('Connection mark', 'nft meta mark'),
+	'meta.mark': _('Packet mark', 'nft meta mark'),
 
 	'ct.state': _('Conntrack state', 'nft ct state'),
 
