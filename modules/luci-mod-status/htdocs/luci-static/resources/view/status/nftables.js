@@ -421,7 +421,7 @@ return view.extend({
 		case 'flow':
 			return E('span', {
 				'class': 'ifacebadge'
-			}, action_translations.flow.format(spec.add));
+			}, action_translations.flow.format(spec.flowtable.replace(/^@/, '')));
 
 		default:
 			return E('span', {
@@ -460,8 +460,8 @@ return view.extend({
 		if (Array.isArray(spec.expr)) {
 			for (var i = 0; i < spec.expr.length; i++) {
 				// nftables JSON format bug, `flow` targets are currently not properly serialized
-				if (typeof(spec.expr[i]) == 'string' && spec.expr[i].match(/^flow add @(\S+)$/))
-					spec.expr[i] = { flow: { add: RegExp.$1 } };
+				if (typeof(spec.expr[i]) == 'string' && spec.expr[i].match(/^flow add (@\S+)$/))
+					spec.expr[i] = { flow: { op: "add", flowtable: RegExp.$1 } };
 
 				var res = this.renderExpr(spec.expr[i], spec.table);
 
