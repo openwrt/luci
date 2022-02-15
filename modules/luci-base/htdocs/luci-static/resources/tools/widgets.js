@@ -187,9 +187,10 @@ var CBIZoneSelect = form.ListValue.extend({
 						emptyval.setAttribute('data-value', '');
 					}
 
-					L.dom.content(emptyval.querySelector('span'), [
-						E('strong', _('Device')), E('span', ' (%s)'.format(_('input')))
-					]);
+					if (opt[0].allowlocal)
+						L.dom.content(emptyval.querySelector('span'), [
+							E('strong', _('Device')), E('span', ' (%s)'.format(_('input')))
+						]);
 
 					L.dom.content(anyval.querySelector('span'), [
 						E('strong', _('Any zone')), E('span', ' (%s)'.format(_('forward')))
