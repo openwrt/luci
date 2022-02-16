@@ -1,0 +1,31 @@
+#!/bin/sh /etc/rc.common
+START=50
+
+run_socatg()
+{
+	local v6port
+    local v4host
+    local v4port
+
+    config_get v6port $1 v6port
+    config_get v4host $1 v4host
+    config_get v4port $1 v4port
+
+    socat TCP6-LISTEN:$v6port,reuseaddr,fork TCP4:$v4host:$v4port &
+
+    echo "run_socatg has started."
+}
+
+start()
+{
+	config_load socatg
+	config_foreach run_socatg socatg
+}
+
+stop()
+{
+	# killall njit-client
+	# killall udhcpc
+	
+	echo "SocatG Client has stoped."
+}
