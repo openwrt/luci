@@ -5,16 +5,16 @@ PKG_RELEASE:=1
 
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL=https://github.com/jow-/lucihttp.git
-PKG_SOURCE_DATE:=2021-06-11
-PKG_SOURCE_VERSION:=3dc89af443410c9eae7a0ff091bd7fb4c5d48f41
-PKG_MIRROR_HASH:=6024a34c514a7231bcc36486abfb3e43e6c17490ac8d838f202a43ce259cda03
+PKG_SOURCE_DATE:=2022-02-13
+PKG_SOURCE_VERSION:=cc8518386cd37f25e574a66be63f1d62d2bd5a0a
+PKG_MIRROR_HASH:=b6288e004a93cc0de7162ee76fc792f6bddad41fe1e298b2e3e072f32e5b14b9
 CMAKE_INSTALL:=1
 
 PKG_LICENSE:=ISC
 PKG_LICENSE_FILES:=LICENSE
 
 PKG_MAINTAINER:=Jo-Philipp Wich <jo@mein.io>
-PKG_CONFIG_DEPENDS:=CONFIG_PACKAGE_liblucihttp-lua
+PKG_CONFIG_DEPENDS:=CONFIG_PACKAGE_liblucihttp-lua CONFIG_PACKAGE_liblucihttp-ucode
 
 include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/cmake.mk
@@ -33,11 +33,19 @@ define Package/liblucihttp-lua
   TITLE:=Lua binding for the LuCI HTTP utility library
 endef
 
+define Package/liblucihttp-ucode
+  SECTION:=libs
+  CATEGORY:=Libraries
+  DEPENDS:=+liblucihttp +libucode
+  TITLE:=ucode binding for the LuCI HTTP utility library
+endef
+
 TARGET_CFLAGS += -I$(STAGING_DIR)/usr/include
 
 CMAKE_OPTIONS += \
 	-DLUAPATH=/usr/lib/lua \
 	-DBUILD_LUA=$(if $(CONFIG_PACKAGE_liblucihttp-lua),ON,OFF) \
+	-DBUILD_UCODE=$(if $(CONFIG_PACKAGE_liblucihttp-ucode),ON,OFF) \
 	-DBUILD_TESTS=OFF
 
 define Build/InstallDev
@@ -57,5 +65,11 @@ define Package/liblucihttp-lua/install
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/lua/lucihttp.so $(1)/usr/lib/lua/
 endef
 
+define Package/liblucihttp-ucode/install
+	$(INSTALL_DIR) $(1)/usr/lib/ucode
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/ucode/lucihttp.so $(1)/usr/lib/ucode/
+endef
+
 $(eval $(call BuildPackage,liblucihttp))
 $(eval $(call BuildPackage,liblucihttp-lua))
+$(eval $(call BuildPackage,liblucihttp-ucode))
