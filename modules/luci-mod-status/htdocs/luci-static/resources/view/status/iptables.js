@@ -314,6 +314,15 @@ return view.extend({
 	},
 
 	render: function(has_ip6tables) {
+		var tabs = E('div', {}, [
+			E('div', { 'data-tab': 'iptables', 'data-tab-title': has_ip6tables ? _('IPv4 Firewall') : null, 'data-tab-active': has_ip6tables ? null : true }, [
+				E('p', {}, E('em', { 'class': 'spinning' }, [ _('Collecting data...') ]))
+			]),
+			has_ip6tables ? E('div', { 'data-tab': 'ip6tables', 'data-tab-title': _('IPv6 Firewall') }, [
+				E('p', {}, E('em', { 'class': 'spinning' }, [ _('Collecting data...') ]))
+			]) : E([])
+		]);
+
 		var view = E([], [
 			E('style', { 'type': 'text/css' }, [
 				'.cbi-tooltip-container, span.jump { border-bottom:1px dotted #00f;cursor:pointer }',
@@ -322,43 +331,37 @@ return view.extend({
 				'.references .cbi-tooltip { left:0!important;top:1.5em!important }',
 				'h4>span { font-size:90% }'
 			]),
-
-			E('h2', {}, [ _('Firewall Status') ]),
-			E('div', { 'class': 'right', 'style': 'margin-bottom:-1.5em' }, [
-				E('button', {
-					'class': 'cbi-button',
-					'data-hide-empty': false,
-					'click': ui.createHandlerFn(this, 'handleHideEmpty')
-				}, [ _('Hide empty chains') ]),
-				' ',
-				E('button', {
-					'class': 'cbi-button',
-					'data-raw-counters': false,
-					'click': ui.createHandlerFn(this, 'handleRawCounters')
-				}, [ _('Show raw counters') ]),
-				' ',
-				E('button', {
-					'class': 'cbi-button',
-					'click': ui.createHandlerFn(this, 'handleCounterReset', has_ip6tables)
-				}, [ _('Reset Counters') ]),
-				' ',
-				E('button', {
-					'class': 'cbi-button',
-					'click': ui.createHandlerFn(this, 'handleRestart')
-				}, [ _('Restart Firewall') ])
+			E('div', {'class' : 'cbi-title-section'}, [ 
+				E('h2', {'class': 'cbi-title-field'}, [ _('Firewall Status') ]),
+				E('div', {'class': 'cbi-title-buttons'} , [
+					E('button', {
+						'class': 'cbi-button cbi-button-neutral',
+						'data-hide-empty': false,
+						'click': ui.createHandlerFn(this, 'handleHideEmpty')
+					}, [ _('Hide empty chains') ]),
+					E('div', {}, '&#160;'),
+					E('button', {
+						'class': 'cbi-button cbi-button-neutral',
+						'data-raw-counters': false,
+						'click': ui.createHandlerFn(this, 'handleRawCounters')
+					}, [ _('Show raw counters') ]),
+					E('div', {}, '&#160;'),
+					E('button', {
+						'class': 'cbi-button cbi-button-neutral',
+						'click': ui.createHandlerFn(this, 'handleCounterReset', has_ip6tables)
+					}, [ _('Reset Counters') ]),
+					E('div', {}, '&#160;'),
+					E('button', {
+						'class': 'cbi-button cbi-button-neutral',
+						'click': ui.createHandlerFn(this, 'handleRestart')
+					}, [ _('Restart Firewall') ])
+				])
 			]),
-			E('div', {}, [
-				E('div', { 'data-tab': 'iptables', 'data-tab-title': has_ip6tables ? _('IPv4 Firewall') : null, 'data-tab-active': has_ip6tables ? null : true }, [
-					E('p', {}, E('em', { 'class': 'spinning' }, [ _('Collecting data...') ]))
-				]),
-				has_ip6tables ? E('div', { 'data-tab': 'ip6tables', 'data-tab-title': _('IPv6 Firewall') }, [
-					E('p', {}, E('em', { 'class': 'spinning' }, [ _('Collecting data...') ]))
-				]) : E([])
-			])
+			tabs
 		]);
 
 		if (has_ip6tables)
-			ui.tabs.initTabGroup(view.lastElementChild.childNodes);
+			ui.tabs.initTabGroup(tabs.childNodes);
 
 		this.pollFirewallLists(has_ip6tables);
 
