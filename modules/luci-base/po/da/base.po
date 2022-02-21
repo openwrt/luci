@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2022-01-25 09:41+0000\n"
+"PO-Revision-Date: 2022-02-21 14:06+0000\n"
 "Last-Translator: drax red <drax@outlook.dk>\n"
 "Language-Team: Danish <https://hosted.weblate.org/projects/openwrt/luci/da/>"
 "\n"
@@ -1741,7 +1741,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:86
 msgid "Defines a specific MTU for this route"
-msgstr ""
+msgstr "Definerer en specifik MTU for denne rute"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:970
 msgid "Delegate IPv6 prefixes"
@@ -3545,7 +3545,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:196
 msgid "If set, the meaning of the match options is inverted"
-msgstr ""
+msgstr "Hvis den er indstillet, bliver betydningen af matchmulighederne omvendt"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:254
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:360
@@ -4852,7 +4852,7 @@ msgstr "Netværksværktøjer"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:56
 msgid "Network address"
-msgstr ""
+msgstr "Netværksadresse"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:491
 msgid "Network boot image"
@@ -6109,6 +6109,8 @@ msgid ""
 "Reject routing decisions that have a prefix length less than or equal to the "
 "specified value"
 msgstr ""
+"Afvis routingbeslutninger, der har en præfikslængde, der er mindre end eller "
+"lig med den angivne værdi"
 
 #: modules/luci-compat/luasrc/model/network/proto_relay.lua:153
 #: protocols/luci-proto-relay/htdocs/luci-static/resources/protocol/relay.js:39
@@ -6861,6 +6863,9 @@ msgid ""
 "corresponding UID or 1000-1005 to inclusively match all UIDs within the "
 "corresponding range"
 msgstr ""
+"Angiver en individuel UID eller række af UID'er, der skal matche, f.eks. "
+"1000 for at matche tilsvarende UID eller 1000-1005 for at matche alle UID'er "
+"inden for det tilsvarende interval"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:343
 msgid ""
@@ -6884,7 +6889,7 @@ msgstr "Angiver MII-forbindelsesovervågningsfrekvensen i millisekunder"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:181
 msgid "Specifies the TOS value to match in IP headers"
-msgstr ""
+msgstr "Angiver den TOS-værdi, der skal matche i IP headers"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:261
 msgid "Specifies the aggregation selection logic to use"
@@ -6892,7 +6897,7 @@ msgstr "Angiver den aggregeringsvalglogik, der skal bruges"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:159
 msgid "Specifies the destination subnet to match (CIDR notation)"
-msgstr ""
+msgstr "Angiver det destinations subnet, der skal matche (CIDR-notation)"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:292
 msgid "Specifies the directory the device is attached to"
@@ -6913,16 +6918,20 @@ msgid ""
 "Specifies the fwmark and optionally its mask to match, e.g. 0xFF to match "
 "mark 255 or 0x0/0x1 to match any even mark value"
 msgstr ""
+"Specificerer fw-mærket og eventuelt dets maske for at matche, f.eks. 0xFF "
+"for at matche mærke 255 eller 0x0/0x1 for at matche enhver lige mærkeværdi"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:144
 msgid "Specifies the incoming logical interface name"
-msgstr ""
+msgstr "Angiver navnet på det indgående logiske interface"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:41
 msgid ""
 "Specifies the logical interface name of the parent (or master) interface "
 "this route belongs to"
 msgstr ""
+"Angiver det logiske interface navn på den overordnede (eller master) "
+"interface, som denne rute tilhører"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:254
 msgid ""
@@ -6978,6 +6987,9 @@ msgid ""
 "interface is taken if any, otherwise creates a link scope route. If set to "
 "0.0.0.0 no gateway will be specified for the route"
 msgstr ""
+"Angiver netværksgatewayen. Hvis den udelades, tages gateway fra den "
+"overordnede interface, hvis nogen, ellers opretter en link scope route. Hvis "
+"indstillet til 0.0.0.0, vil der ikke blive angivet nogen gateway for ruten"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:334
 msgid ""
@@ -7014,17 +7026,19 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:129
 msgid "Specifies the ordering of the IP rules"
-msgstr ""
+msgstr "Angiver rækkefølgen af IP-reglerne"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:155
 msgid "Specifies the outgoing logical interface name"
-msgstr ""
+msgstr "Angiver navnet på det udgående logiske interface"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:99
 msgid ""
 "Specifies the preferred source address when sending to destinations covered "
 "by the target"
 msgstr ""
+"Angiver den foretrukne kildeadresse, når der sendes til destinationer, der "
+"er dækket af målet"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:375
 msgid "Specifies the quantity of ARP IP targets that must be reachable"
@@ -7048,19 +7062,19 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:79
 msgid "Specifies the route metric to use"
-msgstr ""
+msgstr "Angiver den rutemetrik, der skal bruges"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:45
 msgid "Specifies the route type to be created"
-msgstr ""
+msgstr "Angiver den rutetype, der skal oprettes"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:136
 msgid "Specifies the rule target routing action"
-msgstr ""
+msgstr "Angiver handlingen for reglens routing"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:148
 msgid "Specifies the source subnet to match (CIDR notation)"
-msgstr ""
+msgstr "Angiver det kilde subnet, der skal matche (CIDR-notation)"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:246
 msgid "Specifies the system priority"
@@ -7857,6 +7871,8 @@ msgstr ""
 msgid ""
 "The rule target is a jump to another rule specified by its priority value"
 msgstr ""
+"Regelmålet er et spring til en anden regel, der er angivet ved dens "
+"prioritetsværdi"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:91
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:166
@@ -7865,6 +7881,9 @@ msgid ""
 "to 65535 or symbol alias declared in /etc/iproute2/rt_tables. Special "
 "aliases local (255), main (254) and default (253) are also valid"
 msgstr ""
+"Regelmålet er et tabelopslags-id: et numerisk tabelindeks, der spænder fra 0 "
+"til 65535 eller symbolalias, der er erklæret i /etc/iproute2/rt_tables. "
+"Særlige aliaser lokal (255), main (254) og standard (253) er også gyldige"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1371
 msgid "The selected %s mode is incompatible with %s encryption"
@@ -8590,7 +8609,7 @@ msgstr "Brugercertifikat (PEM kodet)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:186
 msgid "User identifier"
-msgstr ""
+msgstr "Bruger-id"
 
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:132
 msgid "User key (PEM encoded)"
@@ -8815,6 +8834,8 @@ msgid ""
 "When enabled, gateway is on link even if the gateway does not match any "
 "interface prefix"
 msgstr ""
+"Når den er aktiveret, er gatewayen på linket, selvom gatewayen ikke matcher "
+"nogen interface præfiks"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1537
 msgid ""
