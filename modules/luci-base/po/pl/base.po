@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: LuCI\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-04-20 09:40+0200\n"
-"PO-Revision-Date: 2022-01-25 09:41+0000\n"
+"PO-Revision-Date: 2022-02-18 23:01+0000\n"
 "Last-Translator: Matthaiks <kitynska@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/openwrt/luci/pl/>"
 "\n"
@@ -1744,7 +1744,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:86
 msgid "Defines a specific MTU for this route"
-msgstr ""
+msgstr "Definiuje określoną jednostkę MTU dla tej trasy"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:970
 msgid "Delegate IPv6 prefixes"
@@ -3559,7 +3559,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:196
 msgid "If set, the meaning of the match options is inverted"
-msgstr ""
+msgstr "Jeżeli jest ustawione, znaczenie opcji dopasowania jest odwrócone"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:254
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:360
@@ -4873,7 +4873,7 @@ msgstr "Narzędzia sieciowe"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:56
 msgid "Network address"
-msgstr ""
+msgstr "Adres sieci"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:491
 msgid "Network boot image"
@@ -6140,6 +6140,8 @@ msgid ""
 "Reject routing decisions that have a prefix length less than or equal to the "
 "specified value"
 msgstr ""
+"Odrzucaj decyzje dotyczące trasowania, których długość prefiksu jest "
+"mniejsza lub równa określonej wartości"
 
 #: modules/luci-compat/luasrc/model/network/proto_relay.lua:153
 #: protocols/luci-proto-relay/htdocs/luci-static/resources/protocol/relay.js:39
@@ -6896,6 +6898,9 @@ msgid ""
 "corresponding UID or 1000-1005 to inclusively match all UIDs within the "
 "corresponding range"
 msgstr ""
+"Określa indywidualny UID lub zakres UID do dopasowania, np. 1000, aby "
+"dopasować odpowiedni UID lub 1000-1005, aby łącznie dopasować wszystkie UID "
+"w odpowiednim zakresie"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:343
 msgid ""
@@ -6919,7 +6924,7 @@ msgstr "Określa częstotliwość monitorowania łącza MII w milisekundach"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:181
 msgid "Specifies the TOS value to match in IP headers"
-msgstr ""
+msgstr "Określa wartość TOS do dopasowania w nagłówkach IP"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:261
 msgid "Specifies the aggregation selection logic to use"
@@ -6927,7 +6932,7 @@ msgstr "Określa logikę wyboru agregacji, która ma być używana"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:159
 msgid "Specifies the destination subnet to match (CIDR notation)"
-msgstr ""
+msgstr "Określa docelową podsieć do dopasowania (notacja CIDR)"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:292
 msgid "Specifies the directory the device is attached to"
@@ -6948,16 +6953,21 @@ msgid ""
 "Specifies the fwmark and optionally its mask to match, e.g. 0xFF to match "
 "mark 255 or 0x0/0x1 to match any even mark value"
 msgstr ""
+"Określa fwmark i opcjonalnie jego maskę do dopasowania, np. 0xFF, aby "
+"dopasować znacznik 255 lub 0x0/0x1, aby dopasować dowolną parzystą wartość "
+"znacznika"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:144
 msgid "Specifies the incoming logical interface name"
-msgstr ""
+msgstr "Określa nazwę przychodzącego interfejsu logicznego"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:41
 msgid ""
 "Specifies the logical interface name of the parent (or master) interface "
 "this route belongs to"
 msgstr ""
+"Określa nazwę logicznego interfejsu nadrzędnego (lub głównego) interfejsu, "
+"do którego należy ta trasa"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:254
 msgid ""
@@ -7010,6 +7020,10 @@ msgid ""
 "interface is taken if any, otherwise creates a link scope route. If set to "
 "0.0.0.0 no gateway will be specified for the route"
 msgstr ""
+"Określa bramę sieciową. W przypadku pominięcia brama z interfejsu "
+"nadrzędnego jest pobierana, jeśli istnieje, w przeciwnym razie tworzy trasę "
+"zasięgu łącza. Jeśli jest ustawione na 0.0.0.0, dla trasy nie zostanie "
+"określona żadna brama"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:334
 msgid ""
@@ -7046,17 +7060,19 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:129
 msgid "Specifies the ordering of the IP rules"
-msgstr ""
+msgstr "Określa kolejność reguł IP"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:155
 msgid "Specifies the outgoing logical interface name"
-msgstr ""
+msgstr "Określa nazwę wychodzącego interfejsu logicznego"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:99
 msgid ""
 "Specifies the preferred source address when sending to destinations covered "
 "by the target"
 msgstr ""
+"Określa preferowany adres źródłowy podczas wysyłania do miejsc docelowych "
+"objętych celem"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:375
 msgid "Specifies the quantity of ARP IP targets that must be reachable"
@@ -7081,19 +7097,19 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:79
 msgid "Specifies the route metric to use"
-msgstr ""
+msgstr "Określa metrykę trasy do użycia"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:45
 msgid "Specifies the route type to be created"
-msgstr ""
+msgstr "Określa typ trasy do utworzenia"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:136
 msgid "Specifies the rule target routing action"
-msgstr ""
+msgstr "Określa akcję trasowania celu reguły"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:148
 msgid "Specifies the source subnet to match (CIDR notation)"
-msgstr ""
+msgstr "Określa podsieć źródłową do dopasowania (notacja CIDR)"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:246
 msgid "Specifies the system priority"
@@ -7892,6 +7908,7 @@ msgstr ""
 msgid ""
 "The rule target is a jump to another rule specified by its priority value"
 msgstr ""
+"Cel reguły to skok do innej reguły określonej przez jej wartość priorytetu"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:91
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:166
@@ -7900,6 +7917,10 @@ msgid ""
 "to 65535 or symbol alias declared in /etc/iproute2/rt_tables. Special "
 "aliases local (255), main (254) and default (253) are also valid"
 msgstr ""
+"Cele reguły to identyfikator wyszukiwania tabeli: numeryczny indeks tabeli z "
+"zakresu od 0 do 65535 lub alias symbolu zadeklarowany w /etc/iproute2/"
+"rt_tables. Ważne są również specjalne aliasy: lokalny (255), główny (254) i "
+"domyślny (253)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1371
 msgid "The selected %s mode is incompatible with %s encryption"
@@ -8627,7 +8648,7 @@ msgstr "Certyfikat użytkownika (zakodowany PEM)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:186
 msgid "User identifier"
-msgstr ""
+msgstr "Identyfikator użytkownika"
 
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:132
 msgid "User key (PEM encoded)"
@@ -8856,6 +8877,8 @@ msgid ""
 "When enabled, gateway is on link even if the gateway does not match any "
 "interface prefix"
 msgstr ""
+"Po włączeniu brama jest podłączona, nawet jeśli brama nie pasuje do żadnego "
+"prefiksu interfejsu"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1537
 msgid ""
