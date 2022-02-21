@@ -163,6 +163,8 @@ return view.extend({
 
 		chan_analysis.tab.addEventListener('cbi-tab-active', L.bind(function(ev) {
 			this.active_tab = ev.detail.tab;
+			if (!this.radios[this.active_tab].loadedOnce)
+				poll.start();
 		}, this));
 	},
 
@@ -170,17 +172,17 @@ return view.extend({
 		if (!this.active_tab)
 			return;
 
-		var radioDev = this.radios[this.active_tab].dev,
-		    table = this.radios[this.active_tab].table,
-		    chan_analysis = this.radios[this.active_tab].graph,
-		    scanCache = this.radios[this.active_tab].scanCache;
+		var radio = this.radios[this.active_tab];
 
 		return Promise.all([
-			radioDev.getScanList(),
-			this.callInfo(radioDev.getName())
+			radio.dev.getScanList(),
+			this.callInfo(radio.dev.getName())
 		]).then(L.bind(function(data) {
 			var results = data[0],
-			    local_wifi = data[1];
+			    local_wifi = data[1],
+			    table = radio.table,
+			    chan_analysis = radio.graph,
+			    scanCache = radio.scanCache;
 
 			var rows = [];
 
@@ -228,9 +230,7 @@ return view.extend({
 					results.push(scanCache[k].data);
 
 			results.sort(function(a, b) {
-				var diff = (b.quality - a.quality) || (a.channel - b.channel);
-
-				if (diff)
+				if (a.channel - b.channel)
 					return diff;
 
 				if (a.ssid < b.ssid)
@@ -306,6 +306,11 @@ return view.extend({
 			}
 
 			cbi_update_table(table, rows);
+
+			if (!radio.loadedOnce) {
+				radio.loadedOnce = true;
+				poll.stop();
+			}
 		}, this))
 	},
 
@@ -347,7 +352,16 @@ return view.extend({
 		var svg = data[0],
 		    wifiDevs = data[1];
 
-		var v = E('div', {}, E('div'));
+		var h2 = E('div', {'class' : 'cbi-title-section'}, [
+			E('h2', {'class': 'cbi-title-field'}, [ _('Channel Analysis') ]),
+			E('div', {'class': 'cbi-title-buttons'  }, [
+				E('button', {
+					'class': 'cbi-button cbi-button-edit',
+					'click': ui.createHandlerFn(this, 'handleScanRefresh')
+				}, [ _('Refresh Channels') ])])
+			]);
+
+		var tabs = E('div', {}, E('div'));
 
 		for (var ifname in wifiDevs) {
 			var freq_tbl = {
@@ -392,25 +406,24 @@ return view.extend({
 					dev: wifiDevs[ifname].dev,
 					graph: graph_data,
 					table: table,
-					scanCache: {}
+					scanCache: {},
+					loadedOnce: false,
 				};
 
 				cbi_update_table(table, [], E('em', { class: 'spinning' }, _('Starting wireless scan...')));
 
-				v.firstElementChild.appendChild(tab)
+				tabs.firstElementChild.appendChild(tab)
 
 				requestAnimationFrame(L.bind(this.create_channel_graph, this, graph_data, freq_tbl[freq], freq));
 			}
 		}
 
-		ui.tabs.initTabGroup(v.firstElementChild.childNodes);
+		ui.tabs.initTabGroup(tabs.firstElementChild.childNodes);
 
 		this.pollFn = L.bind(this.handleScanRefresh, this);
-
 		poll.add(this.pollFn);
-		poll.start();
 
-		return v;
+		return E('div', {}, [h2, tabs]);
 	},
 
 	handleSaveApply: null,
