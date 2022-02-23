@@ -2051,6 +2051,10 @@ table table td,
 	background: var(--background-color-medium);
 }
 
+th[data-sortable-row] { cursor: pointer; }
+th[data-sort-direction="asc"]::after { content: "\a0\25b2"; }
+th[data-sort-direction="desc"]::after { content: "\a0\25bc"; }
+
 .cbi-value-description {
 	margin: .25em 0 0 1.25em;
 	position: relative;
