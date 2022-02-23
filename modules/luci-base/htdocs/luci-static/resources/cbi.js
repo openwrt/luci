@@ -764,72 +764,14 @@ function cbi_update_table(table, data, placeholder) {
 	if (!isElem(target))
 		return;
 
-	target.querySelectorAll('tr.table-titles, .tr.table-titles, .cbi-section-table-titles').forEach(function(thead) {
-		var titles = [];
+	var t = L.dom.findClassInstance(target);
 
-		thead.querySelectorAll('th, .th').forEach(function(th) {
-			titles.push(th);
-		});
+	if (!(t instanceof L.ui.Table)) {
+		t = new L.ui.Table(target);
+		L.dom.bindClassInstance(target, t);
+	}
 
-		if (Array.isArray(data)) {
-			var n = 0, rows = target.querySelectorAll('tr, .tr'), trows = [];
-
-			data.forEach(function(row) {
-				var trow = E('tr', { 'class': 'tr' });
-
-				for (var i = 0; i < titles.length; i++) {
-					var text = (titles[i].innerText || '').trim();
-					var td = trow.appendChild(E('td', {
-						'class': titles[i].className,
-						'data-title': (text !== '') ? text : null
-					}, (row[i] != null) ? row[i] : ''));
-
-					td.classList.remove('th');
-					td.classList.add('td');
-				}
-
-				trow.classList.add('cbi-rowstyle-%d'.format((n++ % 2) ? 2 : 1));
-
-				trows[n] = trow;
-			});
-
-			for (var i = 1; i <= n; i++) {
-				if (rows[i])
-					target.replaceChild(trows[i], rows[i]);
-				else
-					target.appendChild(trows[i]);
-			}
-
-			while (rows[++n])
-				target.removeChild(rows[n]);
-
-			if (placeholder && target.firstElementChild === target.lastElementChild) {
-				var trow = target.appendChild(E('tr', { 'class': 'tr placeholder' }));
-				var td = trow.appendChild(E('td', { 'class': titles[0].className }, placeholder));
-
-				td.classList.remove('th');
-				td.classList.add('td');
-			}
-		}
-		else {
-			thead.parentNode.style.display = 'none';
-
-			thead.parentNode.querySelectorAll('tr, .tr, .cbi-section-table-row').forEach(function(trow) {
-				if (trow !== thead) {
-					var n = 0;
-					trow.querySelectorAll('th, td, .th, .td').forEach(function(td) {
-						if (n < titles.length) {
-							var text = (titles[n++].innerText || '').trim();
-							if (text !== '')
-								td.setAttribute('data-title', text);
-						}
-					});
-				}
-			});
-
-			thead.parentNode.style.display = '';
-		}
-	});
+	t.update(data, placeholder);
 }
 
 function showModal(title, children)
