@@ -2615,7 +2615,8 @@ var CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection.p
 		if (has_titles) {
 			var trEl = E('tr', {
 				'class': 'tr cbi-section-table-titles ' + anon_class,
-				'data-title': (!this.anonymous || this.sectiontitle) ? _('Name') : null
+				'data-title': (!this.anonymous || this.sectiontitle) ? _('Name') : null,
+				'click': this.sortable ? ui.createHandlerFn(this, 'handleSort') : null
 			});
 
 			for (var i = 0, opt; i < max_cols && (opt = this.children[i]) != null; i++) {
@@ -2624,7 +2625,8 @@ var CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection.p
 
 				trEl.appendChild(E('th', {
 					'class': 'th cbi-section-table-cell',
-					'data-widget': opt.__name__
+					'data-widget': opt.__name__,
+					'data-sortable-row': this.sortable ? '' : null
 				}));
 
 				if (opt.width != null)
@@ -3032,6 +3034,68 @@ var CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection.p
 		return saveTasks
 			.then(L.bind(this.handleModalCancel, this, modalMap, ev))
 			.catch(function() {});
+	},
+
+	/** @private */
+	handleSort: function(ev) {
+		if (!ev.target.matches('th[data-sortable-row]'))
+			return;
+
+		var th = ev.target,
+		    descending = (th.getAttribute('data-sort-direction') == 'desc'),
+		    config_name = this.uciconfig || this.map.config,
+		    index = 0,
+		    list = [];
+
+		ev.currentTarget.querySelectorAll('th').forEach(function(other_th, i) {
+			if (other_th !== th)
+				other_th.removeAttribute('data-sort-direction');
+			else
+				index = i;
+		});
+
+		ev.currentTarget.parentNode.querySelectorAll('tr.cbi-section-table-row').forEach(L.bind(function(tr, i) {
+			var sid = tr.getAttribute('data-sid'),
+			    opt = tr.childNodes[index].getAttribute('data-name'),
+			    val = this.cfgvalue(sid, opt);
+
+			tr.querySelectorAll('.flash').forEach(function(n) {
+				n.classList.remove('flash')
+			});
+
+			list.push([
+				ui.Table.prototype.deriveSortKey((val != null) ? val.trim() : ''),
+				tr
+			]);
+		}, this));
+
+		list.sort(function(a, b) {
+			if (a[0] < b[0])
+				return descending ? 1 : -1;
+
+			if (a[0] > b[0])
+				return descending ? -1 : 1;
+
+			return 0;
+		});
+
+		window.requestAnimationFrame(L.bind(function() {
+			var ref_sid, cur_sid;
+
+			for (var i = 0; i < list.length; i++) {
+				list[i][1].childNodes[index].classList.add('flash');
+				th.parentNode.parentNode.appendChild(list[i][1]);
+
+				cur_sid = list[i][1].getAttribute('data-sid');
+
+				if (ref_sid)
+					this.map.data.move(config_name, cur_sid, ref_sid, true);
+
+				ref_sid = cur_sid;
+			}
+
+			th.setAttribute('data-sort-direction', descending ? 'asc' : 'desc');
+		}, this));
 	},
 
 	/**
