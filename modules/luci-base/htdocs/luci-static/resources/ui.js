@@ -3140,6 +3140,299 @@ var UIMenu = baseclass.singleton(/** @lends LuCI.ui.menu.prototype */ {
 	}
 });
 
+var UITable = baseclass.extend(/** @lends LuCI.ui.table.prototype */ {
+	__init__: function(captions, options, placeholder) {
+		if (!Array.isArray(captions)) {
+			this.initFromMarkup(captions);
+
+			return;
+		}
+
+		var id = options.id || 'table%08x'.format(Math.random() * 0xffffffff);
+
+		var table = E('table', { 'id': id, 'class': 'table' }, [
+			E('tr', { 'class': 'tr table-titles', 'click': UI.prototype.createHandlerFn(this, 'handleSort') })
+		]);
+
+		this.id = id;
+		this.node = table
+		this.options = options;
+
+		var sorting = this.getActiveSortState();
+
+		for (var i = 0; i < captions.length; i++) {
+			if (captions[i] == null)
+				continue;
+
+			var th = E('th', { 'class': 'th' }, [ captions[i] ]);
+
+			if (typeof(options.captionClasses) == 'object')
+				DOMTokenList.prototype.add.apply(th.classList, L.toArray(options.captionClasses[i]));
+
+			if (options.sortable !== false && (typeof(options.sortable) != 'object' || options.sortable[i] !== false)) {
+				th.setAttribute('data-sortable-row', true);
+
+				if (sorting && sorting[0] == i)
+					th.setAttribute('data-sort-direction', sorting[1] ? 'desc' : 'asc');
+			}
+
+			table.firstElementChild.appendChild(th);
+		}
+
+		if (placeholder) {
+			var trow = table.appendChild(E('tr', { 'class': 'tr placeholder' })),
+			    td = trow.appendChild(E('td', { 'class': 'td' }, placeholder));
+
+			if (typeof(captionClasses) == 'object')
+				DOMTokenList.prototype.add.apply(td.classList, L.toArray(captionClasses[0]));
+		}
+
+		DOMTokenList.prototype.add.apply(table.classList, L.toArray(options.classes));
+	},
+
+	update: function(data, placeholder) {
+		var placeholder = placeholder || this.options.placeholder || _('No data', 'empty table placeholder'),
+		    sorting = this.getActiveSortState();
+
+		if (!Array.isArray(data))
+			return;
+
+		if (sorting) {
+			var list = data.map(L.bind(function(row) {
+				return [ this.deriveSortKey(row[sorting[0]], sorting[0]), row ];
+			}, this));
+
+			list.sort(function(a, b) {
+				if (a[0] < b[0])
+					return sorting[1] ? 1 : -1;
+
+				if (a[0] > b[0])
+					return sorting[1] ? -1 : 1;
+
+				return 0;
+			});
+
+			data.length = 0;
+
+			list.forEach(function(item) {
+				data.push(item[1]);
+			});
+		}
+
+		this.data = data;
+		this.placeholder = placeholder;
+
+		var n = 0,
+		    rows = this.node.querySelectorAll('tr'),
+		    trows = [],
+		    headings = [].slice.call(this.node.firstElementChild.querySelectorAll('th')),
+		    captionClasses = this.options.captionClasses;
+
+		data.forEach(function(row) {
+			trows[n] = E('tr', { 'class': 'tr' });
+
+			for (var i = 0; i < headings.length; i++) {
+				var text = (headings[i].innerText || '').trim();
+				var td = trows[n].appendChild(E('td', {
+					'class': 'td',
+					'data-title': (text !== '') ? text : null
+				}, (row[i] != null) ? row[i] : ''));
+
+				if (typeof(captionClasses) == 'object')
+					DOMTokenList.prototype.add.apply(td.classList, L.toArray(captionClasses[i]));
+
+				if (!td.classList.contains('cbi-section-actions'))
+					headings[i].setAttribute('data-sortable-row', true);
+			}
+
+			trows[n].classList.add('cbi-rowstyle-%d'.format((n++ % 2) ? 2 : 1));
+		});
+
+		for (var i = 0; i < n; i++) {
+			if (rows[i+1])
+				this.node.replaceChild(trows[i], rows[i+1]);
+			else
+				this.node.appendChild(trows[i]);
+		}
+
+		while (rows[++n])
+			target.removeChild(rows[n]);
+
+		if (placeholder && this.node.firstElementChild === this.node.lastElementChild) {
+			var trow = this.node.appendChild(E('tr', { 'class': 'tr placeholder' })),
+			    td = trow.appendChild(E('td', { 'class': 'td' }, placeholder));
+
+			if (typeof(captionClasses) == 'object')
+				DOMTokenList.prototype.add.apply(td.classList, L.toArray(captionClasses[0]));
+		}
+
+		return this.node;
+	},
+
+	render: function() {
+		return this.node;
+	},
+
+	/** @private */
+	initFromMarkup: function(node) {
+		if (!dom.elem(node))
+			node = document.querySelector(node);
+
+		if (!node)
+			throw 'Invalid table selector';
+
+		var options = {},
+		    headrow = node.querySelector('tr, .tr');
+
+		if (!headrow)
+			return;
+
+		options.classes = [].slice.call(node.classList).filter(function(c) { return c != 'table' });
+		options.sortable = [];
+		options.captionClasses = [];
+
+		headrow.querySelectorAll('th, .th').forEach(function(th, i) {
+			options.sortable[i] = !th.classList.contains('cbi-section-actions');
+			options.captionClasses[i] = [].slice.call(th.classList).filter(function(c) { return c != 'th' });
+		});
+
+		headrow.addEventListener('click', UI.prototype.createHandlerFn(this, 'handleSort'));
+
+		this.id = node.id;
+		this.node = node;
+		this.options = options;
+	},
+
+	/** @private */
+	deriveSortKey: function(value, index) {
+		var opts = this.options || {},
+		    hint, m;
+
+		if (opts.sortable == true || opts.sortable == null)
+			hint = 'auto';
+		else if (typeof( opts.sortable) == 'object')
+			hint =  opts.sortable[index];
+
+		if (dom.elem(value))
+			value = value.innerText.trim();
+
+		switch (hint || 'auto') {
+		case true:
+		case 'auto':
+			m = /^([0-9a-fA-F:.]+)(?:\/([0-9a-fA-F:.]+))?$/.exec(value);
+
+			if (m) {
+				var addr, mask;
+
+				addr = validation.parseIPv6(m[1]);
+				mask = m[2] ? validation.parseIPv6(m[2]) : null;
+
+				if (addr && mask != null)
+					return '%04x%04x%04x%04x%04x%04x%04x%04x%04x%04x%04x%04x%04x%04x%04x%04x'.format(
+						addr[0], addr[1], addr[2], addr[3], addr[4], addr[5], addr[6], addr[7],
+						mask[0], mask[1], mask[2], mask[3], mask[4], mask[5], mask[6], mask[7]
+					);
+				else if (addr)
+					return '%04x%04x%04x%04x%04x%04x%04x%04x%02x'.format(
+						addr[0], addr[1], addr[2], addr[3], addr[4], addr[5], addr[6], addr[7],
+						m[2] ? +m[2] : 128
+					);
+
+				addr = validation.parseIPv4(m[1]);
+				mask = m[2] ? validation.parseIPv4(m[2]) : null;
+
+				if (addr && mask != null)
+					return '%03d%03d%03d%03d%03d%03d%03d%03d'.format(
+						addr[0], addr[1], addr[2], addr[3],
+						mask[0], mask[1], mask[2], mask[3]
+					);
+				else if (addr)
+					return '%03d%03d%03d%03d%02d'.format(
+						addr[0], addr[1], addr[2], addr[3],
+						m[2] ? +m[2] : 32
+					);
+			}
+
+			m = /^(?:(\d+)d )?(\d+)h (\d+)m (\d+)s$/.exec(value);
+
+			if (m)
+				return '%05d%02d%02d%02d'.format(+m[1], +m[2], +m[3], +m[4]);
+
+			m = /^(\d+)\b(\D*)$/.exec(value);
+
+			if (m)
+				return '%010d%s'.format(+m[1], m[2]);
+
+			return String(value);
+
+		case 'ignorecase':
+			return String(value).toLowerCase();
+
+		case 'numeric':
+			return +value;
+
+		default:
+			return String(value);
+		}
+	},
+
+	/** @private */
+	getActiveSortState: function() {
+		if (this.sortState)
+			return this.sortState;
+
+		var page = document.body.getAttribute('data-page'),
+		    key = page + '.' + this.id,
+		    state = session.getLocalData('tablesort');
+
+		if (L.isObject(state) && Array.isArray(state[key]))
+			return state[key];
+
+		return null;
+	},
+
+	/** @private */
+	setActiveSortState: function(index, descending) {
+		this.sortState = [ index, descending ];
+
+		if (!this.options.id)
+			return;
+
+		var page = document.body.getAttribute('data-page'),
+		    key = page + '.' + this.id,
+		    state = session.getLocalData('tablesort');
+
+		if (!L.isObject(state))
+			state = {};
+
+		state[key] = this.sortState;
+
+		session.setLocalData('tablesort', state);
+	},
+
+	/** @private */
+	handleSort: function(ev) {
+		if (!ev.target.matches('th[data-sortable-row]'))
+			return;
+
+		var th = ev.target,
+		    direction = (th.getAttribute('data-sort-direction') == 'asc'),
+		    index = 0;
+
+		this.node.firstElementChild.querySelectorAll('th').forEach(function(other_th, i) {
+			if (other_th !== th)
+				other_th.removeAttribute('data-sort-direction');
+			else
+				index = i;
+		});
+
+		th.setAttribute('data-sort-direction', direction ? 'desc' : 'asc');
+
+		this.setActiveSortState(index, direction);
+		this.update(this.data, this.placeholder);
+	}
+});
+
 /**
  * @class ui
  * @memberof LuCI
@@ -4518,6 +4811,8 @@ var UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 	},
 
 	menu: UIMenu,
+
+	Table: UITable,
 
 	AbstractElement: UIElement,
 
