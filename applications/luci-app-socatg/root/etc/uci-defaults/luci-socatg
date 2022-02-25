@@ -1,0 +1,11 @@
+#!/bin/sh
+
+uci -q batch <<-EOF >/dev/null
+	delete ucitrack.@socatg[-1]
+	add ucitrack socatg
+	set ucitrack.@socatg[-1].init=socatg
+	commit ucitrack
+EOF
+
+rm -f /tmp/luci-indexcache
+exit 0

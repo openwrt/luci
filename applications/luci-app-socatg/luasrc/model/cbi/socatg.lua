@@ -1,9 +1,8 @@
-local sys = require("luci.sys")
-
-m = Map("socatg", "ipv6端口转发")
+m = Map("socatg")
+m.title = translate("IPv6 端口转发")
 m.description = translate('<a href=\"https://github.com/big-tooth/luci-app-socatg\" target=\"_blank\"> GitHub 项目地址 </a>')
 
-s = m:section(TypedSection, "socatg", "")
+s = m:section(TypedSection, "socatg")
 s.addremove = false
 s.anonymous = true
 
