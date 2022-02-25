@@ -442,8 +442,14 @@ static int run_daemon(void)
 	struct dirent *e;
 
 	struct stat s;
-	const char *ipc = stat("/proc/net/nf_conntrack", &s)
-		? "/proc/net/ip_conntrack" : "/proc/net/nf_conntrack";
+	char *ipc;
+	char *ipc_command;
+	if(! stat("/proc/net/nf_conntrack", &s))
+		ipc = "/proc/net/nf_conntrack";
+	else if(! stat("/proc/net/ip_conntrack", &s))
+		ipc = "/proc/net/ip_conntrack";
+	else if(! stat("/usr/sbin/conntrack" , &s))
+		ipc_command = "/usr/sbin/conntrack -L -o extended";
 
 	const struct {
 		const char *file;
@@ -535,7 +541,8 @@ static int run_daemon(void)
 			closedir(dir);
 		}
 
-		if ((info = fopen(ipc, "r")) != NULL)
+		if (((ipc != '\0') && ((info = fopen(ipc, "r")) != NULL)) ||
+			((ipc_command != '\0') && ((info=popen(ipc_command, "r")) != NULL)))
 		{
 			udp   = 0;
 			tcp   = 0;
@@ -575,7 +582,10 @@ static int run_daemon(void)
 							  (uint16_t)(lf15 * 100));
 			}
 
-			fclose(info);
+			if (ipc != '\0')
+				fclose(info);
+			if (ipc_command != '\0')
+				pclose(info);
 		}
 
 		sleep(STEP_TIME);
