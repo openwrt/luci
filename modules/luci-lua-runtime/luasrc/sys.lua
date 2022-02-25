@@ -279,10 +279,14 @@ function net.host_hints(callback)
 end
 
 function net.conntrack(callback)
-	local ok, nfct = pcall(io.lines, "/proc/net/nf_conntrack")
-	if not ok or not nfct then
+	local ok, fd = pcall(io.open, "/proc/net/nf_conntrack")
+	if not ok or not fd then
+		ok, fd = pcall(io.popen, "/usr/sbin/conntrack -L -o extended", "r")
+	end
+	if not ok or not fd then
 		return nil
 	end
+	nfct = fd:lines()
 
 	local line, connt = nil, (not callback) and { }
 	for line in nfct do
