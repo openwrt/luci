@@ -3256,7 +3256,7 @@ var UITable = baseclass.extend(/** @lends LuCI.ui.table.prototype */ {
 		}
 
 		while (rows[++n])
-			target.removeChild(rows[n]);
+			this.node.removeChild(rows[n]);
 
 		if (placeholder && this.node.firstElementChild === this.node.lastElementChild) {
 			var trow = this.node.appendChild(E('tr', { 'class': 'tr placeholder' })),
