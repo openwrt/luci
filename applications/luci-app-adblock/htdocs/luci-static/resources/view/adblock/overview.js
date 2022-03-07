@@ -581,21 +581,6 @@ return view.extend({
 
 		o = s.taboption('sources', form.DummyValue, '_sub');
 		o.rawhtml = true;
-		o.default = '<em><b>Shallalist Archive Selection</b></em>';
-
-		o = s.taboption('sources', form.DynamicList, 'adb_sha_sources', _('Categories'));
-		for (var i = 0; i < categories.length; i++) {
-			code = categories[i].match(/^(\w+);/)[1].trim();
-			if (code === 'sha') {
-				category = categories[i].match(/^\w+;(.*$)/)[1].trim();
-				o.value(category);
-			}
-		}
-		o.optional = true;
-		o.rmempty = true;
-
-		o = s.taboption('sources', form.DummyValue, '_sub');
-		o.rawhtml = true;
 		o.default = '<em><b>UTCapitole Archive Selection</b></em>';
 
 		o = s.taboption('sources', form.DynamicList, 'adb_utc_sources', _('Categories'));
