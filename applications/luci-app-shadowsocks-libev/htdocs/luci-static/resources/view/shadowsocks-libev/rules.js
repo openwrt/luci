@@ -64,6 +64,12 @@ return view.extend({
 		o.multiple = true;
 		o.noaliases = true;
 		o.noinactive = true;
+		s.taboption('general', form.Value, 'nft_tcp_extra',
+			_('Extra tcp expression'),
+			_('Extra nftables expression for matching tcp traffics, e.g. "tcp dport { 80, 443 }"'));
+		s.taboption('general', form.Value, 'nft_udp_extra',
+			_('Extra udp expression'),
+			_('Extra nftables expression for matching udp traffics, e.g. "udp dport { 53 }"'));
 
 		src_dst_option(s, 'src', form.DynamicList, 'src_ips_bypass',
 			_('Src ip/net bypass'),
