@@ -639,8 +639,16 @@ return view.extend({
 							else
 								exp = '%t'.format(lease.expires);
 
+							var hint = lease.macaddr ? hosts[lease.macaddr] : null,
+							    host = null;
+
+							if (hint && lease.hostname && lease.hostname != hint)
+								host = '%s (%s)'.format(lease.hostname, hint);
+							else if (lease.hostname)
+								host = lease.hostname;
+
 							return [
-								lease.hostname || '?',
+								host || '-',
 								lease.ipaddr,
 								lease.macaddr,
 								exp
