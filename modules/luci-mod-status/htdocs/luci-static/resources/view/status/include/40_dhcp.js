@@ -102,8 +102,16 @@ return baseclass.extend({
 			else
 				exp = '%t'.format(lease.expires);
 
+			var hint = lease.macaddr ? machints.filter(function(h) { return h[0] == lease.macaddr })[0] : null,
+			    host = null;
+
+			if (hint && lease.hostname && lease.hostname != hint[1])
+				host = '%s (%s)'.format(lease.hostname, hint[1]);
+			else if (lease.hostname)
+				host = lease.hostname;
+
 			rows = [
-				lease.hostname || '-',
+				host || '-',
 				lease.ipaddr,
 				lease.macaddr,
 				exp
