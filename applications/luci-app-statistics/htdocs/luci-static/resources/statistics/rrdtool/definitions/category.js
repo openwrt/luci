@@ -2,46 +2,79 @@
 
 'use strict';
 'require baseclass';
+'require uci';
 
 return baseclass.extend({
 	title: _('Application Category'),
 
 	rrdargs: function(graph, host, plugin, plugin_instance, dtype) {
-		/*
-		 * traffic diagram
-		 */
-		var traffic = {
+		var p = [];
 
-			/* draw this diagram for each plugin instance */
-			per_instance: true,
-			title: "%H: Transfer on %pi",
-			vlabel: "Bytes/s",
+		var title = "%H: Traffic usage";
 
-			/* diagram data description */
-			data: {
-				/* defined sources for data types, if omitted assume a single DS named "value" (optional) */
-				sources: {
-					if_octets: [ "tx", "rx" ]
-				},
+		if (plugin_instance != '')
+			title = "Category=%pi traffic";
 
-				/* special options for single data lines */
-				options: {
-					if_octets__tx: {
-						total: true,		/* report total amount of bytes */
-						color: "00ff00",	/* tx is green */
-						title: "Bytes (TX)"
+		var show_idle = uci.get("luci_statistics", "collectd_category", "ShowIdle") == "1" ? true : false;
+
+		if (uci.get("luci_statistics", "collectd_category", "ReportByState") == "1") {
+			var total_bytes = {
+				title: title,
+				y_min: "0",
+				alt_autoscale_max: true,
+				vlabel: "Total Bytes",
+				number_format: "%5.1lf%%",
+				data: {
+					instances: {
+						total_bytes: [
+							"3g_wwan",
+							"eth1"
+						]
 					},
-
-					if_octets__rx: {
-						flip : true,		/* flip rx line */
-						total: true,		/* report total amount of bytes */
-						color: "0000ff",	/* rx is blue */
-						title: "Bytes (RX)"
+					options: {
+						total_bytes_3g_wwan: {
+							color: "ffffff",
+							title: "TMobile LTE"
+						},
+						total_bytes_eth1: {
+							color: "a000a0",
+							title: "Viasat"
+						}
 					}
 				}
-			}
-		};
+			};
 
-		return [ traffic ];
+			var types = graph.dataTypes(host, plugin, plugin_instance);
+
+			for (var i = 0; i < types.length; i++)
+				if (types[i] == 'cpu')
+					p.push(cpu);
+				else if (types[i] == 'total_bytes')
+					p.push(total_bytes);
+		}
+		else {
+			p = {
+				title: title,
+				y_min: "0",
+				alt_autoscale_max: true,
+				vlabel: "Percent",
+				number_format: "%5.1lf%%",
+				data: {
+					instances: {
+						percent: [
+							"active",
+						]
+					},
+					options: {
+						percent_active: {
+							color: "00e000",
+							title: "Active"
+						}
+					}
+				}
+			};
+		}
+
+		return p;
 	}
 });
