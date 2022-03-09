@@ -401,7 +401,7 @@ return view.extend({
 		return Promise.all([
 			L.resolveDefault(callPackagelist(), {}),
 			L.resolveDefault(callSystemBoard(), {}),
-			fs.stat("/sys/firmware/efi"),
+			L.resolveDefault(fs.stat("/sys/firmware/efi"), null),
 			fs.read("/proc/mounts"),
 			uci.load('attendedsysupgrade'),
 		]);
