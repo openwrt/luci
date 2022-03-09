@@ -13,31 +13,46 @@ return baseclass.extend({
 		var title = "%H: Traffic usage";
 
 		if (plugin_instance != '')
-			title = "Category=%pi traffic";
+			title = "Category: %pi";
 
-		var show_idle = uci.get("luci_statistics", "collectd_category", "ShowIdle") == "1" ? true : false;
-
-		var total_bytes = {
+		var if_octets = {
 			title: title,
 			y_min: "0",
 			alt_autoscale_max: true,
-			vlabel: "Total Bytes",
-			number_format: "%5.1lf%%",
+			vlabel: "Bytes/s",
 			data: {
 				instances: {
-					total_bytes: [
+					category: [
 						"3g_wwan",
 						"eth1"
 					]
 				},
+				sources: {
+					if_octets: [ "tx", "rx" ]
+				},
 				options: {
-					total_bytes_3g_wwan: {
-						color: "ffffff",
-						title: "TMobile LTE"
+					if_octets_eth1__tx: {
+						total: true,		/* report total amount of bytes */
+						color: "0000ff",	/* eth1 is blue */
+						title: "Viasat Bytes (TX)"
 					},
-					total_bytes_eth1: {
-						color: "a000a0",
-						title: "Viasat"
+					if_octets_eth1__rx: {
+						flip : true,		/* flip rx line */
+						total: true,		/* report total amount of bytes */
+						color: "0000ff",	/* eth1 is blue */
+						title: "Viasat Bytes (RX)"
+					}
+
+					if_octets_3g_wwan__tx: {
+						total: true,		/* report total amount of bytes */
+						color: "00ff00",	/* 3g_wwan is green */
+						title: "TMobile LTEBytes (TX)"
+					},
+					if_octets_3g_wwan__rx: {
+						flip : true,		/* flip rx line */
+						total: true,		/* report total amount of bytes */
+						color: "00ff00",	/* 3g_wwan is green */
+						title: "TMobile LTEBytes (RX)"
 					}
 				}
 			}
@@ -48,8 +63,8 @@ return baseclass.extend({
 		for (var i = 0; i < types.length; i++)
 			if (types[i] == 'cpu')
 				p.push(cpu);
-			else if (types[i] == 'total_bytes')
-				p.push(total_bytes);
+			else if (types[i] == 'if_octets')
+				p.push(if_octets);
 
 		return p;
 	}
