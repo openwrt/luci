@@ -640,10 +640,11 @@ return view.extend({
 								exp = '%t'.format(lease.expires);
 
 							var hint = lease.macaddr ? hosts[lease.macaddr] : null,
-							    host = null;
+							name = hint ? hint.name : null,
+							host = null;
 
-							if (hint && lease.hostname && lease.hostname != hint)
-								host = '%s (%s)'.format(lease.hostname, hint);
+							if (name && lease.hostname && lease.hostname != name)
+								host = '%s (%s)'.format(lease.hostname, name);
 							else if (lease.hostname)
 								host = lease.hostname;
 
