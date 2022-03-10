@@ -87,8 +87,6 @@ return view.extend({
 
 		o = s.taboption('advanced', form.Value, 'db_dir', _('Database directory'), _('Set this if you would like to specify the directory where you want MiniDLNA to store its database and album art cache.'));
 
-		o = s.taboption('advanced', form.Value, 'log_dir', _('Log directory'), _('Set this if you would like to specify the directory where you want MiniDLNA to store its log file.'));
-
 		o = s.taboption('advanced', form.Flag, 'inotify', _('Enable inotify'), _('Set this to enable inotify monitoring to automatically discover new files.'));
 		o.default = o.enabled;
 
