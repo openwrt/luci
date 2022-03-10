@@ -15,6 +15,13 @@ return baseclass.extend({
 		if (plugin_instance != '')
 			title = "Category: %pi";
 
+		/* 
+			Todo: use uci to get the interface names and use them to replace 
+			eth1 and 3g_wwan in all of the below 
+			Example:
+			var interface_name = uci.get("network", "wan", "device");
+		*/
+
 		var if_octets = {
 			title: title,
 			y_min: "0",
