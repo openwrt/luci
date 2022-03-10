@@ -22,34 +22,31 @@ return baseclass.extend({
 			vlabel: "Bytes/s",
 			data: {
 				instances: {
-					category: [
-						"3g_wwan",
-						"eth1"
-					]
+					if_octets: [ "3g_wwan", "eth1"]
 				},
 				sources: {
-					category_3g_wwan: [ "tx", "rx" ],
-					category_eth1: [ "tx", "rx" ]
+					if_octets: [ "tx", "rx" ],
+					if_octets: [ "tx", "rx" ]
 				},
 				options: {
-					category_eth1_tx: {
+					if_octets_eth1_tx: {
 						total: true,		/* report total amount of bytes */
 						color: "0000ff",	/* eth1 is blue */
 						title: "Viasat Bytes (TX)"
 					},
-					category_eth1_rx: {
+					if_octets_eth1_rx: {
 						flip : true,		/* flip rx line */
 						total: true,		/* report total amount of bytes */
 						color: "0000ff",	/* eth1 is blue */
 						title: "Viasat Bytes (RX)"
 					},
 
-					category_3g_wwan_tx: {
+					if_octets_3g_wwan_tx: {
 						total: true,		/* report total amount of bytes */
 						color: "00ff00",	/* 3g_wwan is green */
 						title: "TMobile LTEBytes (TX)"
 					},
-					category_3g_wwan_rx: {
+					if_octets_3g_wwan_rx: {
 						flip : true,		/* flip rx line */
 						total: true,		/* report total amount of bytes */
 						color: "00ff00",	/* 3g_wwan is green */
