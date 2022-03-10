@@ -271,7 +271,8 @@ local methods = {
 
 			res['has_cacerts'] = check_certs() or false
 			
-			res['has_ipv6'] = (fs.access("/proc/net/ipv6_route") and fs.access("/usr/sbin/ip6tables"))
+			res['has_ipv6'] = (fs.access("/proc/net/ipv6_route") and
+				(fs.access("/usr/sbin/ip6tables") or fs.access("/usr/sbin/nft")))
 
 			return res
 		end
