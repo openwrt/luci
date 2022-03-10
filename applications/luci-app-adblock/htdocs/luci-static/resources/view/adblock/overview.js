@@ -53,7 +53,7 @@ function handleAction(ev) {
 				E('label', { 'class': 'cbi-input-text', 'style': 'padding-top:.5em' }, [
 				E('input', { 'class': 'cbi-input-text', 'id': 'timerD', 'maxlength': '13' }),
 				'\xa0\xa0\xa0',
-				_('The day of the week (opt., values: 1-7 possibly sep. by , or -)')
+				_('The day of the week (opt., values: 0-6 possibly sep. by , or -)')
 				])
 			]),
 			E('div', { 'class': 'left', 'style': 'display:flex; flex-direction:column' }, [
