@@ -28,8 +28,8 @@ return baseclass.extend({
 					]
 				},
 				sources: {
-					if_octets_3g_wwan: [ "tx", "rx" ],
-					if_octets_eth1: [ "tx", "rx" ]
+					category_3g_wwan: [ "tx", "rx" ],
+					category_eth1: [ "tx", "rx" ]
 				},
 				options: {
 					category_eth1_tx: {
