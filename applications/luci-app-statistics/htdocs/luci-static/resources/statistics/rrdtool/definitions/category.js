@@ -28,27 +28,28 @@ return baseclass.extend({
 					]
 				},
 				sources: {
-					if_octets: [ "tx", "rx" ]
+					category_3g_wwan: [ "tx", "rx" ],
+					category_eth1: [ "tx", "rx" ]
 				},
 				options: {
-					if_octets_eth1__tx: {
+					category_eth1_tx: {
 						total: true,		/* report total amount of bytes */
 						color: "0000ff",	/* eth1 is blue */
 						title: "Viasat Bytes (TX)"
 					},
-					if_octets_eth1__rx: {
+					category_eth1_rx: {
 						flip : true,		/* flip rx line */
 						total: true,		/* report total amount of bytes */
 						color: "0000ff",	/* eth1 is blue */
 						title: "Viasat Bytes (RX)"
 					},
-					
-					if_octets_3g_wwan__tx: {
+
+					category_3g_wwan_tx: {
 						total: true,		/* report total amount of bytes */
 						color: "00ff00",	/* 3g_wwan is green */
 						title: "TMobile LTEBytes (TX)"
 					},
-					if_octets_3g_wwan__rx: {
+					category_3g_wwan_rx: {
 						flip : true,		/* flip rx line */
 						total: true,		/* report total amount of bytes */
 						color: "00ff00",	/* 3g_wwan is green */
