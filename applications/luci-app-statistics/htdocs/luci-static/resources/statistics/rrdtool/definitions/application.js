@@ -13,11 +13,11 @@ return baseclass.extend({
 		var title = "%H: Traffic usage";
 
 		if (plugin_instance != '')
-			title = "Category: %pi";
+			title = "Application: %pi";
 
 		/* 
 			Todo: use uci to get the interface names and use them to replace 
-			eth1 and 3g_wwan in all of the below 
+			the hardcoded eth1 and 3g_wwan in all of the below 
 			Example:
 			var interface_name = uci.get("network", "wan", "device");
 		*/
@@ -37,25 +37,25 @@ return baseclass.extend({
 				},
 				options: {
 					if_octets_eth1_tx: {
-						total: true,		/* report total amount of bytes */
+						total: true,		
 						color: "0000ff",	/* eth1 is blue */
 						title: "Viasat Bytes (TX)"
 					},
 					if_octets_eth1_rx: {
 						flip : true,		/* flip rx line */
-						total: true,		/* report total amount of bytes */
+						total: true,		
 						color: "0000ff",	/* eth1 is blue */
 						title: "Viasat Bytes (RX)"
 					},
 
 					if_octets_3g_wwan_tx: {
-						total: true,		/* report total amount of bytes */
+						total: true,		
 						color: "00ff00",	/* 3g_wwan is green */
 						title: "TMobile LTEBytes (TX)"
 					},
 					if_octets_3g_wwan_rx: {
 						flip : true,		/* flip rx line */
-						total: true,		/* report total amount of bytes */
+						total: true,		
 						color: "00ff00",	/* 3g_wwan is green */
 						title: "TMobile LTEBytes (RX)"
 					}
@@ -66,10 +66,10 @@ return baseclass.extend({
 		var types = graph.dataTypes(host, plugin, plugin_instance);
 
 		for (var i = 0; i < types.length; i++)
-			if (types[i] == 'cpu')
-				p.push(cpu);
-			else if (types[i] == 'if_octets')
+			if (types[i] == 'if_octets')
 				p.push(if_octets);
+			// else if (types[i] == 'total_bytes') /* Todo: add support for total bytes */
+			// 	p.push(total_bytes);
 
 		return p;
 	}
