@@ -106,6 +106,9 @@ return network.registerProtocol('openconnect', {
 		o.placeholder = '443';
 		o.datatype    = 'port';
 
+		o = s.taboption('general', form.Value, 'request', _('VPN Server URL request additional parameter'));
+		o.placeholder = '/';
+
 		s.taboption('general', form.Value, 'serverhash', _("VPN Server's certificate SHA1 hash"));
 		s.taboption('general', form.Value, 'authgroup', _('Auth Group'));
 		s.taboption('general', form.Value, 'usergroup', _('User Group'));
