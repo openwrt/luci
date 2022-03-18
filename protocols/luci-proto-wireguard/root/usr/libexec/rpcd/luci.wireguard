@@ -8,6 +8,13 @@ local uci = require "uci"
 local fs = require "nixio.fs"
 
 local methods = {
+	generatePsk = {
+		call = function()
+			local psk = sys.exec("wg genpsk"):sub(1, -2)
+
+			return {psk = psk}
+		end
+	},
 	generateKeyPair = {
 		call = function()
 			local prv = sys.exec("wg genkey 2>/dev/null"):sub(1, -2)
