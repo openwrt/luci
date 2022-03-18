@@ -25,6 +25,12 @@ var generateQrCode = rpc.declare({
 	expect: { qr_code: '' }
 });
 
+var generatePsk = rpc.declare({
+	object: 'luci.wireguard',
+	method: 'generatePsk',
+	expect: { psk: '' }
+});
+
 function validateBase64(section_id, value) {
 	if (value.length == 0)
 		return true;
@@ -272,6 +278,18 @@ return network.registerProtocol('wireguard', {
 		o.password = true;
 		o.validate = validateBase64;
 		o.optional = true;
+
+		o = ss.option(form.Button, 'generate_key', _('Generate Key'));
+		o.inputstyle = 'apply';
+		o.onclick = ui.createHandlerFn(this, function (section_id, ev, peer_id) {
+			return generatePsk().then(function (psk) {
+				var keyInput = document.getElementById('widget.cbid.network.%s.preshared_key'.format(peer_id)),
+					changeEvent = new Event('change');
+
+				keyInput.value = psk;
+				keyInput.dispatchEvent(changeEvent);
+			});
+		}, s.section);
 
 		o = ss.option(form.DynamicList, 'allowed_ips', _('Allowed IPs'), _("Optional. IP addresses and prefixes that this peer is allowed to use inside the tunnel. Usually the peer's tunnel IP addresses and the networks the peer routes through the tunnel."));
 		o.datatype = 'ipaddr';
