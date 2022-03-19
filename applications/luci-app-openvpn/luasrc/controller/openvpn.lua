@@ -31,8 +31,7 @@ function ovpn_upload()
 
 		http.setfilehandler(
 			function(meta, chunk, eof)
-				local data = util.trim(chunk:gsub("\r\n", "\n")) .. "\n"
-				data = util.trim(data:gsub("[\128-\255]", ""))
+				local data = chunk:gsub("\r\n", "\n")
 
 				if not fp and meta and meta.name == "ovpn_file" then
 					fp = io.open(file, "w")
