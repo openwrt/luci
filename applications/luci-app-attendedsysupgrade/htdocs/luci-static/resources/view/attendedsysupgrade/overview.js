@@ -79,13 +79,14 @@ return view.extend({
 		version: '',
 		packages: [],
 		diff_packages: true,
+		filesystem: '',
 	},
 
 	handle200: function (response) {
 		res = response.json();
 		var image;
 		for (image of res.images) {
-			if (this.data.rootfs_type == image.filesystem) {
+			if (this.firmware.filesystem == image.filesystem) {
 				if (this.data.efi) {
 					if (image.type == 'combined-efi') {
 						break;
@@ -402,7 +403,6 @@ return view.extend({
 			L.resolveDefault(callPackagelist(), {}),
 			L.resolveDefault(callSystemBoard(), {}),
 			L.resolveDefault(fs.stat("/sys/firmware/efi"), null),
-			fs.read("/proc/mounts"),
 			uci.load('attendedsysupgrade'),
 		]);
 	},
@@ -418,9 +418,27 @@ return view.extend({
 		this.data.revision = res[1].release.revision;
 		this.data.efi = res[2];
 		if (res[1].rootfs_type) {
-			this.data.rootfs_type = res[1].rootfs_type;
+			this.firmware.filesystem = res[1].rootfs_type;
 		} else {
-			this.data.rootfs_type = res[3].split(/\r?\n/)[0].split(' ')[2]
+			L.resolveDefault(fs.read("/proc/mounts"), '')
+			.then(mounts => {
+				mounts = mounts.split(/\r?\n/);
+				var mount_point = '/';
+				for (var i = 0; i < mounts.length; i++) {
+					// /dev/root /rom squashfs ro,relatime 0 0
+					var [ ,path,type,,, ] = mounts[i].split(' ')
+					if (path == mount_point) {
+						if (type != 'overlay') {
+							this.firmware.filesystem = type;
+							break;
+						} else {
+							// restart search for root mountpoint
+							i = -1;
+							mount_point = '/rom';
+						}
+					}
+				}
+			});
 		}
 
 		this.data.url = uci.get_first('attendedsysupgrade', 'server', 'url');
