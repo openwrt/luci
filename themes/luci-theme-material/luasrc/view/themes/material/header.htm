@@ -25,6 +25,7 @@
 	local disp = require "luci.dispatcher"
 
 	local boardinfo = util.ubus("system", "board")
+   	local uci_system = util.ubus("uci", 'get', {config="system",section="@system[0]"}).values or { }
 
 	local request  = disp.context.path
 	local request2 = disp.context.request
@@ -180,15 +181,15 @@
 <html lang="<%=luci.i18n.context.lang%>">
 <head>
 	<meta charset="utf-8">
-	<title><%=striptags( (boardinfo.hostname or "?") .. ( (node and node.title) and ' - ' .. translate(node.title) or '')) %> - LuCI</title>
+	<title><%=striptags( (uci_system.description or boardinfo.hostname or "?") .. ( (node and node.title) and ' - ' .. translate(node.title) or '')) %> - LuCI</title>
 	<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"/>
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name="mobile-web-app-capable" content="yes">
 	<meta name="theme-color" content="#09c">
 	<meta name="msapplication-tap-highlight" content="no">
 	<meta name="msapplication-TileColor" content="#09c">
-	<meta name="application-name" content="<%=striptags( (boardinfo.hostname or "?") ) %> - LuCI">
-	<meta name="apple-mobile-web-app-title" content="<%=striptags( (boardinfo.hostname or "?") ) %> - LuCI">
+	<meta name="application-name" content="<%=striptags( (uci_system.description or boardinfo.hostname or "?") ) %> - LuCI">
+	<meta name="apple-mobile-web-app-title" content="<%=striptags( (uci_system.description or boardinfo.hostname or "?") ) %> - LuCI">
 	<link rel="stylesheet" href="<%=media%>/cascade.css">
 	<link rel="shortcut icon" href="<%=media%>/favicon.ico">
 	<% if node and node.css then %>
@@ -207,7 +208,7 @@
 		<div class="container">
 			<span class="showSide"></span>
 			<a id="logo" href="<%=url("admin/status/overview")%>"><img src="<%=media%>/brand.png" alt="OpenWrt"></a>
-			<a class="brand" href="#"><%=boardinfo.hostname or "?"%></a>
+			<a class="brand" href="#"><%=uci_system.description or boardinfo.hostname or "?"%></a>
 			<div class="status">
 				<% render_changes() %>
 				<span id="xhr_poll_status" style="display:none" onclick="XHR.running() ? XHR.halt() : XHR.run()">
