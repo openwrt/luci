@@ -22,11 +22,11 @@ msgstr "<verborgen>"
 msgid "Advanced Settings"
 msgstr "Erweiterte Einstellungen"
 
-#: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:84
+#: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:90
 msgid "Bypass ss-redir for packets with dst address in this list"
 msgstr "ss-redir-Bypass für Pakete mit Zieladressen in dieser Liste"
 
-#: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:70
+#: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:76
 msgid "Bypass ss-redir for packets with src address in this list"
 msgstr "ss-redir-Bypass für Pakete mit Quell-Adressen in dieser Liste"
 
@@ -34,7 +34,7 @@ msgstr "ss-redir-Bypass für Pakete mit Quell-Adressen in dieser Liste"
 msgid "Cancel"
 msgstr "Abbrechen"
 
-#: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:76
+#: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:82
 msgid ""
 "Continue to have dst address checked for packets with src address in this "
 "list"
@@ -46,7 +46,7 @@ msgstr ""
 msgid "Default action for locally generated TCP packets"
 msgstr "Standardaktion für lokal generierte TCP-Pakete"
 
-#: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:100
+#: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:106
 msgid ""
 "Default action for packets whose dst address do not match any of the dst ip "
 "list"
@@ -54,7 +54,7 @@ msgstr ""
 "Standardaktion für Pakete deren Ziel-Adresse auf keine der Einträge in der "
 "Ziel-IP Liste passt"
 
-#: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:79
+#: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:85
 msgid ""
 "Default action for packets whose src address do not match any of the src ip/"
 "net list"
@@ -84,23 +84,23 @@ msgstr "Deaktivieren"
 msgid "Disabled"
 msgstr "Deaktiviert"
 
-#: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:99
+#: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:105
 msgid "Dst default"
 msgstr "Ziel-Standard"
 
-#: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:83
+#: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:89
 msgid "Dst ip/net bypass"
 msgstr "Dst IP/Net-Bypass"
 
-#: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:91
+#: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:97
 msgid "Dst ip/net bypass file"
 msgstr "Dst IP/Netz Bypass-Datei"
 
-#: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:86
+#: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:92
 msgid "Dst ip/net forward"
 msgstr "Dst IP/Netz Forward"
 
-#: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:95
+#: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:101
 msgid "Dst ip/net forward file"
 msgstr "Dst IP/Netz Forward-Datei"
 
@@ -124,21 +124,41 @@ msgstr "Aktivieren/Deaktivieren"
 msgid "Enabled"
 msgstr "Aktiviert"
 
-#: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:92
+#: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:69
+msgid ""
+"Extra nftables expression for matching tcp traffics, e.g. \"tcp dport { 80, "
+"443 }\""
+msgstr ""
+
+#: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:72
+msgid ""
+"Extra nftables expression for matching udp traffics, e.g. \"udp dport "
+"{ 53 }\""
+msgstr ""
+
+#: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:68
+msgid "Extra tcp expression"
+msgstr ""
+
+#: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:71
+msgid "Extra udp expression"
+msgstr ""
+
+#: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:98
 msgid ""
 "File containing ip/net for the purposes as with <em>Dst ip/net bypass</em>"
 msgstr ""
 
-#: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:96
+#: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:102
 msgid ""
 "File containing ip/net for the purposes as with <em>Dst ip/net forward</em>"
 msgstr ""
 
-#: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:87
+#: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:93
 msgid "Forward through ss-redir for packets with dst address in this list"
 msgstr "Forward via ss-redir für Pakete mit ZIel-Adresse in dieser Liste"
 
-#: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:73
+#: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:79
 msgid "Forward through ss-redir for packets with src address in this list"
 msgstr "Forward via ss-redir für Pakete mit Quell-Adresse in dieser Liste"
 
@@ -308,19 +328,19 @@ msgstr "Shadowsocks-libev"
 msgid "Source Settings"
 msgstr "Quell-Einstellungen"
 
-#: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:78
+#: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:84
 msgid "Src default"
 msgstr "Src-Default"
 
-#: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:69
+#: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:75
 msgid "Src ip/net bypass"
 msgstr "Src IP/Net Bypass"
 
-#: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:75
+#: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:81
 msgid "Src ip/net checkdst"
 msgstr "Src IP/Net Checkdst"
 
-#: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:72
+#: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:78
 msgid "Src ip/net forward"
 msgstr "Src IP/Net Forward"
 

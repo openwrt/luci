@@ -11,26 +11,40 @@ msgstr ""
 "20)) ? 1 : 2;\n"
 "X-Generator: Weblate 4.9.1\n"
 
-#: applications/luci-app-vnstat2/htdocs/luci-static/resources/view/vnstat2/graphs.js:57
+#: applications/luci-app-vnstat2/htdocs/luci-static/resources/view/vnstat2/graphs.js:113
 msgid "5 Minute"
 msgstr "5 Minute"
 
 #: applications/luci-app-vnstat2/htdocs/luci-static/resources/view/vnstat2/config.js:21
+#: applications/luci-app-vnstat2/htdocs/luci-static/resources/view/vnstat2/graphs.js:40
 msgid "Cancel"
 msgstr "Anulare"
+
+#: applications/luci-app-vnstat2/htdocs/luci-static/resources/view/vnstat2/graphs.js:130
+msgid "Clear data for all interfaces"
+msgstr ""
 
 #: applications/luci-app-vnstat2/root/usr/share/luci/menu.d/luci-app-vnstat2.json:27
 msgid "Configuration"
 msgstr "Configurație"
 
-#: applications/luci-app-vnstat2/htdocs/luci-static/resources/view/vnstat2/graphs.js:59
+#: applications/luci-app-vnstat2/htdocs/luci-static/resources/view/vnstat2/graphs.js:78
+msgid "Could not load graph, no data available:"
+msgstr ""
+
+#: applications/luci-app-vnstat2/htdocs/luci-static/resources/view/vnstat2/graphs.js:115
 msgid "Daily"
 msgstr "Zilnic"
 
 #: applications/luci-app-vnstat2/htdocs/luci-static/resources/view/vnstat2/config.js:26
 #: applications/luci-app-vnstat2/htdocs/luci-static/resources/view/vnstat2/config.js:82
+#: applications/luci-app-vnstat2/htdocs/luci-static/resources/view/vnstat2/graphs.js:59
 msgid "Delete"
 msgstr "Ștergeți"
+
+#: applications/luci-app-vnstat2/htdocs/luci-static/resources/view/vnstat2/graphs.js:34
+msgid "Delete data for ALL interfaces"
+msgstr ""
 
 #: applications/luci-app-vnstat2/htdocs/luci-static/resources/view/vnstat2/config.js:15
 msgid "Delete interface <em>%h</em>"
@@ -48,7 +62,7 @@ msgstr "Acordarea accesului la aplicația LuCI vnstat2"
 msgid "Graphs"
 msgstr "Grafice"
 
-#: applications/luci-app-vnstat2/htdocs/luci-static/resources/view/vnstat2/graphs.js:58
+#: applications/luci-app-vnstat2/htdocs/luci-static/resources/view/vnstat2/graphs.js:114
 msgid "Hourly"
 msgstr "Pe oră"
 
@@ -60,7 +74,7 @@ msgstr "Interfață"
 msgid "Interfaces"
 msgstr "Interfețe"
 
-#: applications/luci-app-vnstat2/htdocs/luci-static/resources/view/vnstat2/graphs.js:15
+#: applications/luci-app-vnstat2/htdocs/luci-static/resources/view/vnstat2/graphs.js:71
 msgid "Loading graphs…"
 msgstr "Încărcarea graficelor…"
 
@@ -68,11 +82,11 @@ msgstr "Încărcarea graficelor…"
 msgid "Monitor interfaces"
 msgstr "Monitorizarea interfețelor"
 
-#: applications/luci-app-vnstat2/htdocs/luci-static/resources/view/vnstat2/graphs.js:60
+#: applications/luci-app-vnstat2/htdocs/luci-static/resources/view/vnstat2/graphs.js:116
 msgid "Monthly"
 msgstr "Lunară"
 
-#: applications/luci-app-vnstat2/htdocs/luci-static/resources/view/vnstat2/graphs.js:62
+#: applications/luci-app-vnstat2/htdocs/luci-static/resources/view/vnstat2/graphs.js:118
 msgid ""
 "No monitored interfaces have been found. Go to the configuration to enable "
 "monitoring for one or more interfaces."
@@ -84,9 +98,15 @@ msgstr ""
 msgid "No unconfigured interfaces found in database."
 msgstr "Nu s-au găsit interfețe neconfigurate în baza de date."
 
-#: applications/luci-app-vnstat2/htdocs/luci-static/resources/view/vnstat2/graphs.js:55
+#: applications/luci-app-vnstat2/htdocs/luci-static/resources/view/vnstat2/graphs.js:111
 msgid "Summary"
 msgstr "Rezumat"
+
+#: applications/luci-app-vnstat2/htdocs/luci-static/resources/view/vnstat2/graphs.js:35
+msgid ""
+"The data will be removed from the database permanently. This cannot be "
+"undone."
+msgstr ""
 
 #: applications/luci-app-vnstat2/htdocs/luci-static/resources/view/vnstat2/config.js:16
 msgid ""
@@ -112,15 +132,23 @@ msgstr ""
 "Aceste interfețe sunt prezente în baza de date vnStat, dar nu sunt "
 "configurate mai sus."
 
-#: applications/luci-app-vnstat2/htdocs/luci-static/resources/view/vnstat2/graphs.js:56
+#: applications/luci-app-vnstat2/htdocs/luci-static/resources/view/vnstat2/graphs.js:112
 msgid "Top"
 msgstr "Top"
+
+#: applications/luci-app-vnstat2/root/usr/share/luci/menu.d/luci-app-vnstat2.json:3
+msgid "Traffic Monitor"
+msgstr ""
 
 #: applications/luci-app-vnstat2/htdocs/luci-static/resources/view/vnstat2/config.js:102
 msgid "Unconfigured interfaces"
 msgstr "Interfețe neconfigurate"
 
-#: applications/luci-app-vnstat2/htdocs/luci-static/resources/view/vnstat2/graphs.js:61
+#: applications/luci-app-vnstat2/htdocs/luci-static/resources/view/vnstat2/graphs.js:108
+msgid "Warning: The service is not running, graphs will not be updated!"
+msgstr ""
+
+#: applications/luci-app-vnstat2/htdocs/luci-static/resources/view/vnstat2/graphs.js:117
 msgid "Yearly"
 msgstr "Anual"
 
@@ -128,13 +156,9 @@ msgstr "Anual"
 msgid "vnStat"
 msgstr "vnStat"
 
-#: applications/luci-app-vnstat2/htdocs/luci-static/resources/view/vnstat2/graphs.js:53
+#: applications/luci-app-vnstat2/htdocs/luci-static/resources/view/vnstat2/graphs.js:106
 msgid "vnStat Graphs"
 msgstr "Grafice vnStat"
-
-#: applications/luci-app-vnstat2/root/usr/share/luci/menu.d/luci-app-vnstat2.json:3
-msgid "vnStat Traffic Monitor"
-msgstr "vnStat Monitor de trafic"
 
 #: applications/luci-app-vnstat2/htdocs/luci-static/resources/view/vnstat2/config.js:43
 msgid ""
@@ -144,3 +168,6 @@ msgstr ""
 "vnStat este un monitor de trafic de rețea pentru Linux care păstrează un "
 "jurnal al traficului de rețea pentru interfața (interfețele) selectată "
 "(selectate)."
+
+#~ msgid "vnStat Traffic Monitor"
+#~ msgstr "vnStat Monitor de trafic"

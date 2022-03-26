@@ -22,11 +22,11 @@ msgstr "<隱藏>"
 msgid "Advanced Settings"
 msgstr "進階設定"
 
-#: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:84
+#: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:90
 msgid "Bypass ss-redir for packets with dst address in this list"
 msgstr "繞過 ss-redir，以取得此清單中具有目的位址的封包"
 
-#: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:70
+#: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:76
 msgid "Bypass ss-redir for packets with src address in this list"
 msgstr "在此列表中繞過具有src位址的封包的ss-redir"
 
@@ -34,7 +34,7 @@ msgstr "在此列表中繞過具有src位址的封包的ss-redir"
 msgid "Cancel"
 msgstr "取消"
 
-#: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:76
+#: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:82
 msgid ""
 "Continue to have dst address checked for packets with src address in this "
 "list"
@@ -44,13 +44,13 @@ msgstr "在此列表中繼續檢查dst位址以查找具有src位址的封包"
 msgid "Default action for locally generated TCP packets"
 msgstr "本地生成的TCP封包的預設操作"
 
-#: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:100
+#: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:106
 msgid ""
 "Default action for packets whose dst address do not match any of the dst ip "
 "list"
 msgstr "dst位址與任何dst ip列表都不匹配的封包的預設操作"
 
-#: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:79
+#: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:85
 msgid ""
 "Default action for packets whose src address do not match any of the src ip/"
 "net list"
@@ -76,23 +76,23 @@ msgstr "停用"
 msgid "Disabled"
 msgstr "已停用"
 
-#: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:99
+#: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:105
 msgid "Dst default"
 msgstr "預設Dst"
 
-#: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:83
+#: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:89
 msgid "Dst ip/net bypass"
 msgstr "DST IP/網絡旁路"
 
-#: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:91
+#: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:97
 msgid "Dst ip/net bypass file"
 msgstr "DST IP/網絡旁路文件"
 
-#: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:86
+#: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:92
 msgid "Dst ip/net forward"
 msgstr "DST IP/網絡轉發"
 
-#: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:95
+#: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:101
 msgid "Dst ip/net forward file"
 msgstr "DST IP/網絡轉發文件"
 
@@ -116,21 +116,41 @@ msgstr "啟用/禁用"
 msgid "Enabled"
 msgstr "啟用"
 
-#: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:92
+#: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:69
+msgid ""
+"Extra nftables expression for matching tcp traffics, e.g. \"tcp dport { 80, "
+"443 }\""
+msgstr ""
+
+#: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:72
+msgid ""
+"Extra nftables expression for matching udp traffics, e.g. \"udp dport "
+"{ 53 }\""
+msgstr ""
+
+#: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:68
+msgid "Extra tcp expression"
+msgstr ""
+
+#: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:71
+msgid "Extra udp expression"
+msgstr ""
+
+#: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:98
 msgid ""
 "File containing ip/net for the purposes as with <em>Dst ip/net bypass</em>"
 msgstr "包含ip/net的文件，用於與<em> Dst ip/net忽略</em>"
 
-#: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:96
+#: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:102
 msgid ""
 "File containing ip/net for the purposes as with <em>Dst ip/net forward</em>"
 msgstr "與<em>Dst ip/net 轉發</em>相同的目的，包含ip/net的文件"
 
-#: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:87
+#: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:93
 msgid "Forward through ss-redir for packets with dst address in this list"
 msgstr "通過ss-redir轉發此列表中具有dst位址的封包"
 
-#: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:73
+#: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:79
 msgid "Forward through ss-redir for packets with src address in this list"
 msgstr "通過ss-redir轉發此列表中具有src位址的封包"
 
@@ -297,19 +317,19 @@ msgstr "SS影梭翻牆分支(Shadowsocks-libev)"
 msgid "Source Settings"
 msgstr "來源設定值"
 
-#: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:78
+#: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:84
 msgid "Src default"
 msgstr "預設Src"
 
-#: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:69
+#: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:75
 msgid "Src ip/net bypass"
 msgstr "來源 ip/net 忽略"
 
-#: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:75
+#: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:81
 msgid "Src ip/net checkdst"
 msgstr "來源 ip/net 檢查"
 
-#: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:72
+#: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:78
 msgid "Src ip/net forward"
 msgstr "來源 ip/net 轉發"
 
