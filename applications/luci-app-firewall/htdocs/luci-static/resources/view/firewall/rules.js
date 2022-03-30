@@ -240,7 +240,7 @@ return view.extend({
 			var stop_date = uci.get('firewall', section_id, 'stop_date');
 
 			if (weekdays || monthdays || start_time || stop_time || start_date || stop_date )
-				return _('Time restritions are enabled for this rule');
+				return _('Time restrictions are enabled for this rule');
 
 			return null;
 		};
