@@ -6,10 +6,20 @@
 </div>
 </div>
 
-<p class="luci">
-	<% local ver = require "luci.version" -%>
+
+<%
+        local util = require "luci.util"
+        local ver  = require "luci.version"
+-%>
+
+<div class="luci">
+<p class="alignleft">
+	<%= util.ubus("system", "board").hostname or "?" %>
+</p>
+<p class="alignright">
 	Powered by <%= ver.luciname %> (<%= ver.luciversion %>)
 </p>
+</div>
 
 <script type="text/javascript">L.require('menu-openwrt2020')</script>
 

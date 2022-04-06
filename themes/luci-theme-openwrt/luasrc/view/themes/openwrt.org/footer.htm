@@ -9,8 +9,12 @@
 </div>
 
 <p class="luci">
-	<% local ver = require "luci.version" -%>
-	Powered by <%= ver.luciname %> (<%= ver.luciversion %>)
+	<%
+		local util = require "luci.util"
+		local ver  = require "luci.version"
+	-%>
+
+	<%= util.ubus("system", "board").hostname or "?" %>&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;Powered by <%= ver.luciname %> (<%= ver.luciversion %>)
 </p>
 
 <script type="text/javascript">L.require('menu-openwrt')</script>

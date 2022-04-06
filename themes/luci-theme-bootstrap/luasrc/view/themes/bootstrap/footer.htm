@@ -6,11 +6,15 @@
 -%>
 
 		<% if not blank_page then %>
-		<%   local ver = require "luci.version" %>
+<%
+	local util = require "luci.util"
+	local ver  = require "luci.version"
+-%>
+
 		</div>
 		<footer>
 			<span>
-				<a href="https://github.com/openwrt/luci">Powered by <%= ver.luciname %> (<%= ver.luciversion %>)</a> / <%= ver.distversion %>
+				<%= util.ubus("system", "board").hostname or "?" %>&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;<a href="https://github.com/openwrt/luci">Powered by <%= ver.luciname %> (<%= ver.luciversion %>)</a> / <%= ver.distversion %>
 			</span>
 			<ul class="breadcrumb pull-right" id="modemenu" style="display:none"></ul>
 		</footer>
@@ -18,4 +22,3 @@
 		<% end %>
 	</body>
 </html>
-

@@ -242,6 +242,13 @@ return view.extend({
 			if (k[i].charAt(0) != '.')
 				o.value(uci.get('luci', 'themes', k[i]), k[i]);
 
+		o = s.taboption('language', form.Value, 'userbrand', _('Custom Branding'), _('Set this to override the page title'));
+                o.optional = true;
+		o.datatype = 'maxlength(32)';
+		o.uciconfig = 'luci';
+		o.ucisection = 'main';
+		o.ucioption = 'userbrand';
+
 		/*
 		 * NTP
 		 */

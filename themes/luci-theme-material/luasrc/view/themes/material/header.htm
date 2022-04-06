@@ -26,6 +26,7 @@
 	local ver  = require "luci.version"
 
 	local boardinfo = util.ubus("system", "board") or { }
+	local userbrand = util.ubus("uci", 'get', {config="luci",section="main"}).values.userbrand or boardinfo.hostname or "?"
 
 	local node = disp.context.dispatched
 	local path = table.concat(disp.context.path, "-")
@@ -42,8 +43,8 @@
 <meta name="theme-color" content="#09c">
 <meta name="msapplication-tap-highlight" content="no">
 <meta name="msapplication-TileColor" content="#09c">
-<meta name="application-name" content="<%=striptags( (boardinfo.hostname or "?") ) %> - LuCI">
-<meta name="apple-mobile-web-app-title" content="<%=striptags( (boardinfo.hostname or "?") ) %> - LuCI">
+<meta name="application-name" content="<%=striptags(userbrand) %> - LuCI">
+<meta name="apple-mobile-web-app-title" content="<%=striptags(userbrand) %> - LuCI">
 <link rel="stylesheet" href="<%=media%>/cascade.css">
 <link rel="shortcut icon" href="<%=media%>/favicon.ico">
 <% if node and node.css then %>
@@ -51,7 +52,7 @@
 <% end -%>
 <script src="<%=url('admin/translations', luci.i18n.context.lang)%><%# ?v=PKG_VERSION %>"></script>
 <script src="<%=resource%>/cbi.js"></script>
-<title><%=striptags( (boardinfo.hostname or "?") .. ( (node and node.title) and ' - ' .. translate(node.title) or '')) %> - LuCI</title>
+<title><%=striptags(userbrand .. ( (node and node.title) and ' - ' .. translate(node.title) or '')) %> - LuCI</title>
 <% if css then %><style title="text/css">
 <%= css %>
 </style>
@@ -63,7 +64,7 @@
 		<div class="container">
 			<span class="showSide"></span>
 			<a id="logo" href="<% if luci.dispatcher.context.authsession then %><%=url('admin/status/overview')%><% else %>#<% end %>"><img src="<%=media%>/brand.png" alt="OpenWrt"></a>
-			<a class="brand" href="#"><%=striptags(boardinfo.hostname or "?")%></a>
+			<a class="brand" href="#"><%=striptags(userbrand)%></a>
 			<span class="status" id="indicators"></span>
 		</div>
 	</div>

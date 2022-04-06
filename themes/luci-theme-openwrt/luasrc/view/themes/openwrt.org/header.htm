@@ -14,6 +14,7 @@
 	local sysinfo = util.ubus("system", "info") or { }
 	local loadinfo = sysinfo.load or { 0, 0, 0 }
 	local boardinfo = util.ubus("system", "board") or { }
+	local userbrand = util.ubus("uci", 'get', {config="luci",section="main"}).values.userbrand or boardinfo.hostname or "?"
 
 	local node = disp.context.dispatched
 
@@ -37,7 +38,7 @@
 <script type="text/javascript" src="<%=url('admin/translations', luci.i18n.context.lang)%><%# ?v=PKG_VERSION %>"></script>
 <script type="text/javascript" src="<%=resource%>/cbi.js"></script>
 
-<title><%=striptags( (boardinfo.hostname or "?") .. ( (node and node.title) and ' - ' .. translate(node.title) or '')) %> - LuCI</title>
+<title><%=striptags(userbrand .. ( (node and node.title) and ' - ' .. translate(node.title) or '')) %> - LuCI</title>
 </head>
 <body class="lang_<%=luci.i18n.context.lang%>" data-page="<%= pcdata(table.concat(disp.context.requestpath, "-")) %>">
 
@@ -50,7 +51,7 @@
 <h2 class="navigation"><a id="navigation" name="navigation"><%:Navigation%></a></h2>
 
 <div class="hostinfo">
-	<%=striptags(boardinfo.hostname or "?")%> | <%=ver.distversion%> |
+	<%=striptags(userbrand)%> | <%=ver.distversion%> |
 	<%:Load%>: <%="%.2f" % (loadinfo[1] / 65535.0)%> <%="%.2f" % (loadinfo[2] / 65535.0)%> <%="%.2f" % (loadinfo[3] / 65535.0)%>
 </div>
 

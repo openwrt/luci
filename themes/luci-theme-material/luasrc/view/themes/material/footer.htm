@@ -18,9 +18,14 @@
 	Licensed to the public under the Apache License 2.0
 -%>
 
-<% local ver = require "luci.version" %>
+<%
+        local util = require "luci.util"
+        local ver  = require "luci.version"
+-%>
+
 	</div>
 	<footer class="mobile-hide">
+	<%= util.ubus("system", "board").hostname or "?" %><br>
 	<a href="https://github.com/openwrt/luci">Powered by <%= ver.luciname %> (<%= ver.luciversion %>)</a> / <%= ver.distversion %>
 	</footer>
 	</div>
