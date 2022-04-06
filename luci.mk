@@ -14,6 +14,9 @@ LUCI_SECTION?=luci
 LUCI_CATEGORY?=LuCI
 LUCI_URL?=https://github.com/openwrt/luci
 LUCI_MAINTAINER?=OpenWrt LuCI community
+LUCI_MINIFY_LUA?=1
+LUCI_MINIFY_CSS?=1
+LUCI_MINIFY_JS?=1
 
 # Language code titles
 LUCI_LANG.ar=العربية (Arabic)
@@ -217,26 +220,44 @@ endef
 endif
 
 # some generic macros that can be used by all packages
-define SrcDiet
+ifeq ($(LUCI_MINIFY_JS),1)
+  define SrcDiet
 	$(FIND) $(1) -type f -name '*.lua' | while read src; do \
 		if LUA_PATH="$(STAGING_DIR_HOSTPKG)/lib/lua/5.1/?.lua" luasrcdiet --noopt-binequiv -o "$$$$src.o" "$$$$src"; \
 		then mv "$$$$src.o" "$$$$src"; fi; \
 	done
-endef
+  endef
+else
+  define SrcDiet
+	$$(call MESSAGE,$$(LUCI_NAME) does not support Lua source minification)
+  endef
+endif
 
-define JsMin
+ifeq ($(LUCI_MINIFY_JS),1)
+  define JsMin
 	$(FIND) $(1) -type f -name '*.js' | while read src; do \
 		if jsmin < "$$$$src" > "$$$$src.o"; \
 		then mv "$$$$src.o" "$$$$src"; fi; \
 	done
-endef
+  endef
+else
+  define JsMin
+	$$(call MESSAGE,$$(LUCI_NAME) does not support JavaScript source minification)
+  endef
+endif
 
-define CssTidy
+ifeq ($(LUCI_MINIFY_CSS),1)
+  define CssTidy
 	$(FIND) $(1) -type f -name '*.css' | while read src; do \
 		if csstidy "$$$$src" --template=highest --remove_last_semicolon=true "$$$$src.o"; \
 		then mv "$$$$src.o" "$$$$src"; fi; \
 	done
-endef
+  endef
+else
+  define CssTidy
+	$$(call MESSAGE,$$(LUCI_NAME) does not support CSS source minification)
+  endef
+endif
 
 define SubstituteVersion
 	$(FIND) $(1) -type f -name '*.htm' | while read src; do \
