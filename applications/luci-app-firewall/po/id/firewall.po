@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-03-30 17:00+0200\n"
-"PO-Revision-Date: 2021-08-01 10:38+0000\n"
-"Last-Translator: Deleted User <noreply+34193@weblate.org>\n"
+"PO-Revision-Date: 2022-03-28 07:52+0000\n"
+"Last-Translator: Arief Hidayat <kekesed97@gmail.com>\n"
 "Language-Team: Indonesian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsfirewall/id/>\n"
 "Language: id\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.8-dev\n"
+"X-Generator: Weblate 4.12-dev\n"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:48
 msgid ""
@@ -122,18 +122,21 @@ msgstr ""
 "<var data-tooltip=\"REJECT\">Tolak</var> %{src?%{dest?forward:input}:output}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:81
+#, fuzzy
 msgid ""
 "<var data-tooltip=\"SNAT\">Statically rewrite</var> to source %{snat_ip?IP "
 "<var>%{snat_ip}</var>} %{snat_port?port <var>%{snat_port}</var>}"
 msgstr ""
+"<var data-tooltip=\"SNAT\">Tulis secara statis</var> ke sumber %{snat_ip?IP "
+"<var>%{snat_ip}</var>} %{snat_port?port <var>%{snat_port}</var>}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:224
 msgid "A rewrite IP must be specified!"
-msgstr ""
+msgstr "IP penulisan ulang harus ditentukan!"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:213
 msgid "ACCEPT - Disable address rewriting"
-msgstr ""
+msgstr "ACCEPT - Nonaktifkan penulisan ulang alamat"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:174
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:224
@@ -149,12 +152,18 @@ msgid ""
 "traffic, e.g. <code>-p tcp --dport 443</code> to only match outbound HTTPS "
 "traffic."
 msgstr ""
+"Argumen <em>iptables</em> mentah tambahan untuk mengklasifikasikan lalu "
+"lintas tujuan zona, misalnya <code>-p tcp --dport 443</code> agar hanya "
+"cocok dengan lalu lintas HTTPS keluar."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:280
 msgid ""
 "Additional raw <em>iptables</em> arguments to classify zone source traffic, "
 "e.g. <code>-p tcp --sport 443</code> to only match inbound HTTPS traffic."
 msgstr ""
+"Argumen mentah <em>iptables</em> tambahan untuk mengklasifikasikan lalu "
+"lintas sumber zona, mis. <code>-p tcp --sport 443</code> agar hanya "
+"mencocokkan lalu lintas HTTPS masuk."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:138
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:182
@@ -192,18 +201,23 @@ msgid ""
 "established connections. Format is value[/mask]. If a mask is specified then "
 "those bits set in the mask are zeroed out."
 msgstr ""
+"Terapkan XOR bitwise dari nilai yang diberikan dan nilai tanda yang ada pada "
+"koneksi yang dibuat. Formatnya adalah nilai[/mask]. Jika mask ditentukan "
+"maka bit-bit yang diatur dalam mask tersebut dinolkan."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:263
 msgid "Apply the given DSCP class or value to established connections."
-msgstr ""
+msgstr "Terapkan kelas atau nilai DSCP yang diberikan ke koneksi yang dibuat."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:405
 msgid "Assign the specified connection tracking helper to matched traffic."
 msgstr ""
+"Tetapkan pembantu pelacakan koneksi yang ditentukan ke lalu lintas yang "
+"cocok."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:254
 msgid "Automatic helper assignment"
-msgstr ""
+msgstr "Penetapan pembantu otomatis"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:254
 msgid ""
