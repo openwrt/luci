@@ -9,6 +9,14 @@ include $(TOPDIR)/rules.mk
 LUCI_TITLE:=LuCI modern OpenWrt theme
 LUCI_DEPENDS:=
 
+define Package/luci-theme-openwrt-2020/postrm
+#!/bin/sh
+[ -n "$${IPKG_INSTROOT}" ] || {
+	uci -q delete luci.themes.OpenWrt2020
+	uci commit luci
+}
+endef
+
 include ../../luci.mk
 
 # call BuildPackage - OpenWrt buildroot signature
