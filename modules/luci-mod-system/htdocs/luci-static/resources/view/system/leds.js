@@ -89,7 +89,7 @@ return view.extend({
 				var plugin = plugins[i];
 				if ( plugin.name === value )
 					this.map.findElement('id', 'cbid.system.%s.trigger'.format(section))
-						.nextElementSibling.innerHTML = plugin.form.description || ' ';
+						.nextElementSibling.innerHTML = plugin.form.description || '';
 			}
 		}
 		o.load = function(section_id) {
