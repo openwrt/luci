@@ -148,7 +148,7 @@ return network.registerProtocol('wireguard', {
 		// -- advanced --------------------------------------------------------------------
 
 		o = s.taboption('advanced', form.Value, 'mtu', _('MTU'), _('Optional. Maximum Transmission Unit of tunnel interface.'));
-		o.datatype = 'max(9200)';
+		o.datatype = 'range(0,8940)';
 		o.placeholder = '1420';
 		o.optional = true;
 
