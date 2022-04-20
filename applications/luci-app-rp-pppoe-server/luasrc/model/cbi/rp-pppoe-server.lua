@@ -13,7 +13,7 @@ s.addremove = true
 s.anonymous = true
 
 o = s:option(Value, "interface", translate("Interface"), translate("Interface on which to listen."))
-o.template = "cbi/network_ifacelist"
+o.template = "cbi/network_netlist"
 o.nocreate = true
 
 o = s:option(Value, "ac_name", translate("Access Concentrator Name"))
