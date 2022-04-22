@@ -31,8 +31,19 @@ local methods = {
 							intport = tonumber(intport)
 
 							if upnpf then
-								local uln = upnpf:read("*l")
-								if uln then descr = uln:match(string.format("^%s:%d:%s:%d:%%d*:(.*)$", proto:upper(), extport, intaddr, intport)) end
+								while true do
+									local uln = upnpf:read("*l")
+									if uln then
+										descr = uln:match(string.format("^%s:%d:%s:%d:%%d*:(.*)$", proto:upper(), extport, intaddr, intport))
+										if descr then
+											upnpf:seek("set", 0)
+											break
+										end
+									else
+										upnpf:seek("set", 0)
+										break
+									end
+								end
 								if not descr then descr = "" end
 							end
 
